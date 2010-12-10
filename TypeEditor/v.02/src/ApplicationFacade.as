@@ -1,7 +1,7 @@
-/* 
- create by 2010 Kotlova Elena
- Class ApplicationFacade need for register main command and 
- to listen Notification of users forms
+/*
+   create by 2010 Kotlova Elena
+   Class ApplicationFacade need for register main command and
+   to listen Notification of users forms
  */
 package 
 {	
@@ -9,14 +9,14 @@ package
 	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
 	import net.vdombox.object_editor.controller.OpenObjectCommand;
 	import net.vdombox.object_editor.controller.StartupCommand;
-	
+
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.facade.*;
 	import org.puremvc.as3.patterns.facade.Facade;
 	import org.puremvc.as3.patterns.proxy.*;
-	
-    public class ApplicationFacade extends Facade
-    {
+
+	public class ApplicationFacade extends Facade
+	{
 		public static const STARTUP					:String	= "startup";
 		public static const LOAD_XML_FILES			:String = "loadXMLFiles";	
 		public static const OPEN_OBJECT				:String = "openObject";
@@ -24,16 +24,17 @@ package
 		public static const REMOVE_ALL_OBJECT		:String	= "RemoveAllObjects";
 		public static const PARSE_XML_FILES			:String	= "ParseXMLFiles";
 		public static const OBJECT_COMPLIT			:String	= "ObjectComplit";
-				
-        public static function getInstance() : ApplicationFacade 
+		public static const OBJECT_EXIST			:String	= "objectExist";
+
+		public static function getInstance() : ApplicationFacade 
 		{
-            if ( instance == null )
+			if ( instance == null )
 			{
 				instance = new ApplicationFacade( );
 			}
-            return instance as ApplicationFacade;
-        }
-		
+			return instance as ApplicationFacade;
+		}
+
 		override protected function initializeController( ) : void 
 		{
 			super.initializeController(); 
@@ -42,10 +43,12 @@ package
 			registerCommand( PARSE_XML_FILES, 	FillController );
 			registerCommand( OPEN_OBJECT, 		OpenObjectCommand );
 		}
-		
+
 		public function startup( app:ObjectEditor2 ):void
 		{
 			sendNotification( STARTUP, app );
 		}
-    }
+	}
 }
+
+

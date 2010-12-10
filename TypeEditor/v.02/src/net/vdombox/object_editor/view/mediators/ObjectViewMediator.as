@@ -21,7 +21,12 @@ package net.vdombox.object_editor.view.mediators
 		public function ObjectViewMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{	
 			super( NAME+objTypeVO.id, viewComponent );		
-			this.objectTypeVO = objTypeVO;			
+			this.objectTypeVO = objTypeVO;
+
+			// for selected necessary tab
+			objectView.name = objTypeVO.id;
+
+
 			var information:Information  = new Information();
 			objectView.tabNavigator.addChild(information);
 
