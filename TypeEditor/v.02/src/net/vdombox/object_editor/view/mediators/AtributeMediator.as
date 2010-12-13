@@ -3,36 +3,35 @@ package net.vdombox.object_editor.view.mediators
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
-	import net.vdombox.object_editor.model.proxy.componentsProxy.SourceCodeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Atributes;
-	import net.vdombox.object_editor.view.essence.SourceCode;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
-	public class AtributeMediatior extends Mediator implements IMediator
+	public class AtributeMediator extends Mediator implements IMediator
 	{
-		public static const NAME:String = "AtributeMediatior";
+		public static const NAME:String = "AtributeMediator";
 		private var objectTypeVO:ObjectTypeVO;
 		
-		public function AtributeMediatior( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
+		public function AtributeMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
-//			sourceCode.addEventListener( FlexEvent.CONTENT_CREATION_COMPLETE, showAtribute );
+			atributes.addEventListener( FlexEvent.SHOW, showAtributes );
 		}
 		
-		private function showAtribute(event: FlexEvent): void
-		{
-			compliteSourceCode();
-		}
-	
-		protected function compliteAtribute( ):void
+		private function showAtributes(event: FlexEvent): void
 		{			
-//			atributes.
-			trace("compliteAtribute");
+			compliteAtributes();
+			atributes.validateNow();
+		}
+		
+		protected function compliteAtributes( ):void
+		{			
+//			atributes.sourceCode.text = objectTypeVO.atribute;
+			trace("compliteAtributes");
 		}		
 		
 		protected function get atributes():Atributes

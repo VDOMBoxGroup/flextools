@@ -40,21 +40,18 @@
 				[ 	{label:"Not scalable", data:0}, 
 					{label:"Scalable Horizontal", data:1}, 
 					{label:"Scalable Vertical", data:2}, 
-					{label:"Scalable on both", data:3}]);
-			
+					{label:"Scalable on both", data:3}]);			
 			
 			[Bindable]
 			public var aContainer:ArrayCollection = new ArrayCollection(
 				[ 	{label:"Ordinary Object", data:1}, 
 					{label:"Container", data:2}, 
-					{label:"Top-level container", data:3}]);
-			
+					{label:"Top-level container", data:3}]);			
 							
 			public function set  dataProvader(xml:XML):void
 			{
 				return;
-				this.enabled = true;
-				
+				this.enabled = true;				
 				/*
 				_data =  xml.descendants("Information")[0];
 				if (!_data) _data = new XML("<Information/>");
@@ -181,8 +178,7 @@
 				if (bool)
 					return "1";
 				return "0";
-			}
-				
+			}				
 
 			protected function group1_showHandler(event:FlexEvent):void
 			{
@@ -197,14 +193,10 @@
 				
 				function closeHandler(event:CloseEvent):void
 				{
-					var wordCode:String = event.target.wordCode;
-					
-					if(wordCode == "")return;
-					
-					fDisplayName.text = wordCode;
-					
-				}
-				
+					var wordCode:String = event.target.wordCode;					
+					if(wordCode == "")return;					
+					fDisplayName.text = wordCode;					
+				}				
 				saveChanges();
 			}
 		]]>

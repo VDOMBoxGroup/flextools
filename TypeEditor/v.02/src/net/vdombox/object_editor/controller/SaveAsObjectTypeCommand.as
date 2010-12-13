@@ -59,9 +59,17 @@ package net.vdombox.object_editor.controller
 				_information.Resizable = objTypeVO.resizable;
 				_information.Container = objTypeVO.container;
 				
+//TODO: надо создавть строчку: <?xml version="1.0" encoding="utf-8"?> ????????
+				
+				var _type:XML = new XML("<Type/>");
+				_type.appendChild(_information);
+			
+				_type.SourceCode = objTypeVO.sourceCode;
+				
+				//save to file
 				var newFile:File = event.target as File;
 				newFile.nativePath = newFile.nativePath + ".xml";
-				var str:String = _information.toXMLString();
+				var str:String = _type.toXMLString();
 				if (!newFile.exists)
 				{
 					var stream:FileStream = new FileStream();
