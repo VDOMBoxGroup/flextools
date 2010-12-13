@@ -20,15 +20,11 @@ package net.vdombox.object_editor.controller
 			var item:Item = note.getBody() as Item;			
 
 			var fileProxy:FileProxy = facade.retrieveProxy(FileProxy.NAME) as FileProxy;
-			var xmlFile:XML = fileProxy.getXML(item.path);			
-
+			var xmlFile:XML = fileProxy.getXML(item.path);
 			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
 
 			//можно не возвращать объект, а посылать сообщение OBJECT_COMPLIT прямо из ObjectTypeProxy
 			objTypeProxy.newObjectTypeVO(xmlFile);
-
-
-			trace("OpenObjectCommand");
 		}
 	}
 }

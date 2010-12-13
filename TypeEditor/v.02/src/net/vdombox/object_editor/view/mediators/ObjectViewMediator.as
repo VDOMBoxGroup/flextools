@@ -1,13 +1,15 @@
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.MouseEvent;
-
+	
+	import mx.controls.Alert;
+	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.essence.Information;
 	import net.vdombox.object_editor.view.essence.SourceCode;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -15,9 +17,8 @@ package net.vdombox.object_editor.view.mediators
 	public class ObjectViewMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "ObjectViewMediator";
-
 		public static const OBJECT_TYPE_CHAGED:String = "objectTypeChanged";
-//		public static const OK:String = "ok";
+
 		private var objectTypeVO:ObjectTypeVO;
 
 		public function ObjectViewMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
@@ -28,7 +29,6 @@ package net.vdombox.object_editor.view.mediators
 			// for selected necessary tab
 			objectView.name = objTypeVO.id;
 
-
 			var information:Information  = new Information();
 			objectView.tabNavigator.addChild(information);
 
@@ -38,15 +38,20 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new InformationMediator( information, objTypeVO ) );
 			facade.registerMediator( new SourceCodeMediatior( sourceCode,  objTypeVO ) );
 
-
 			objectView.saveObjectTypeButton.addEventListener( MouseEvent.CLICK, saveObjectType );
+			objectView.saveAsObjectTypeButton.addEventListener( MouseEvent.CLICK, saveAsObjectType );
 			trace("ObjectViewMediator constructor");
 			objectView.validateNow();
 		}
 
 		private function saveObjectType(event:MouseEvent):void
 		{
-			facade.sendNotification( ApplicationFacade.SAVE_OBJECT_TYPE, objectTypeVO ); 
+			facade.sendNotification( ApplicationFacade.SAVE_OBJECT_TYPE, objectTypeVO );
+		}
+		
+		private function saveAsObjectType(event:MouseEvent):void
+		{
+			facade.sendNotification( ApplicationFacade.SAVE_AS_OBJECT_TYPE, objectTypeVO );
 		}
 
 		override public function listNotificationInterests():Array 

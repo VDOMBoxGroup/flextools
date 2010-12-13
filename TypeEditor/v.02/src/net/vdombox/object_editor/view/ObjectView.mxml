@@ -69,6 +69,10 @@
 			<ns:Events/> 	</s:NavigatorContent>
 		
 	</mx:TabNavigator-->
-	<s:Button label="Save" id="saveObjectTypeButton" />
+	<s:HGroup>
+		<s:Button label="Save" 	  id="saveObjectTypeButton" />
+		<s:Button label="Save as" id="saveAsObjectTypeButton" />
+	</s:HGroup>
+	
 		
 </mx:VBox>

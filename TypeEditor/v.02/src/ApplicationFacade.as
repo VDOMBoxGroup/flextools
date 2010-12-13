@@ -8,8 +8,10 @@ package
 	import net.vdombox.object_editor.controller.FillController;
 	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
 	import net.vdombox.object_editor.controller.OpenObjectCommand;
+	import net.vdombox.object_editor.controller.SaveAsObjectTypeCommand;
+	import net.vdombox.object_editor.controller.SaveObjectTypeCommand;
 	import net.vdombox.object_editor.controller.StartupCommand;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.facade.*;
 	import org.puremvc.as3.patterns.facade.Facade;
@@ -26,6 +28,7 @@ package
 		public static const OBJECT_COMPLIT			:String	= "ObjectComplit";
 		public static const OBJECT_EXIST			:String	= "objectExist";
 		public static const SAVE_OBJECT_TYPE		:String	= "saveObjectType";
+		public static const SAVE_AS_OBJECT_TYPE		:String	= "saveAsObjectType";
 
 		public static function getInstance() : ApplicationFacade 
 		{
@@ -43,6 +46,8 @@ package
 			registerCommand( LOAD_XML_FILES,  	OpenDirectoryCommand );	
 			registerCommand( PARSE_XML_FILES, 	FillController );
 			registerCommand( OPEN_OBJECT, 		OpenObjectCommand );
+			registerCommand( SAVE_OBJECT_TYPE, 	SaveObjectTypeCommand );
+			registerCommand( SAVE_AS_OBJECT_TYPE,SaveAsObjectTypeCommand );
 		}
 
 		public function startup( app:ObjectEditor2 ):void
