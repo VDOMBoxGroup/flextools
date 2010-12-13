@@ -1,15 +1,15 @@
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
-
+	
 	import mx.collections.ArrayCollection;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.essence.Information;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -26,19 +26,31 @@ package net.vdombox.object_editor.view.mediators
 			information.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
 			information.addEventListener( Event.CHANGE, validateObjectTypeVO );
 			trace("InformationMediator: " + objTypeVO.id);
-//			information.addEventListener( FlexEvent.SHOW, showInformation );
 		}
 
 		public function validateObjectTypeVO(event:Event):void
 		{
 			information.label= "Information*";
+			trace("CHANGECHANGE");
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+		
+			objectTypeVO.name 			= information.fname.text;
+			objectTypeVO.className		= information.fClassName.text;
+			objectTypeVO.id				= information.fID.text ;
+			objectTypeVO.category		= information.fCategory.text;
+			objectTypeVO.dynamic		=  information.fDynamic.selected;
+			objectTypeVO.moveable		=  information.fMoveable.selected;
+			objectTypeVO.version 		= information.fVersion.text;
+			
+			objectTypeVO.resizable	 	= information.fResizable.selectedIndex ;
+			objectTypeVO.container 	 	=  information.fContainer.selectedIndex;			
+			objectTypeVO.interfaceType 	=  information.fInterfaceType.selectedIndex;
+			objectTypeVO.optimizationPriority  =  information.fOptimizationPriority.value;			
 		}
 
 		private function showInformation(event: FlexEvent): void
 		{
 			compliteInformation();
-
 		}
 
 		override public function listNotificationInterests():Array 
@@ -60,9 +72,6 @@ package net.vdombox.object_editor.view.mediators
 		protected function compliteInformation( ):void
 		{	
 			information.label= "Information";
-
-//			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
-//			var objType: ObjectTypeVO = objTypeProxy.getObjectTypeVO( inf.ID );
 
 			information.fname.text 			= objectTypeVO.name;
 			information.fClassName.text		= objectTypeVO.className;

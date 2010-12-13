@@ -6,6 +6,8 @@ package net.vdombox.object_editor.controller
 	import flash.filesystem.FileStream;
 	import flash.net.SharedObject;
 	
+	import mx.utils.object_proxy;
+	
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	
 	import org.osmf.utils.OSMFStrings;
@@ -38,6 +40,7 @@ package net.vdombox.object_editor.controller
 			function saveData(event:Event):void 
 			{	
 				//save information
+				/*
 				var _information:XML = new XML("<Information/>");				
 				_information.Name = objTypeVO.name;
 //				_information.DisplayName = objTypeVO.displayName;	
@@ -59,24 +62,25 @@ package net.vdombox.object_editor.controller
 				_information.Resizable = objTypeVO.resizable;
 				_information.Container = objTypeVO.container;
 				
-//TODO: надо создавть строчку: <?xml version="1.0" encoding="utf-8"?> ????????
-				
 				var _type:XML = new XML("<Type/>");
 				_type.appendChild(_information);
-			
-				_type.SourceCode = objTypeVO.sourceCode;
-				
-				//save to file
+				_type.appendChild( XML("<![CDATA[" +  objTypeVO.sourceCode +"]" +"]" +">"));
+				*/
 				var newFile:File = event.target as File;
-				newFile.nativePath = newFile.nativePath + ".xml";
-				var str:String = _type.toXMLString();
-				if (!newFile.exists)
-				{
-					var stream:FileStream = new FileStream();
-					stream.open(newFile, FileMode.WRITE);
-					stream.writeUTFBytes(str);
-					stream.close();
-				}
+				objTypeVO.filePath = newFile.nativePath + ".xml";
+				facade.sendNotification( ApplicationFacade.SAVE_OBJECT_TYPE, objTypeVO );
+				//save to file
+//				newFile.nativePath + ".xml"
+//				var newFile:File = event.target as File;
+//				newFile.nativePath = newFile.nativePath + ".xml";
+//				var str:String = '<?xml version="1.0" encoding="utf-8"?>'+_type.toXMLString();
+//				if (!newFile.exists)
+//				{
+//					var stream:FileStream = new FileStream();
+//					stream.open(newFile, FileMode.WRITE);
+//					stream.writeUTFBytes(str);
+//					stream.close();
+//				}
 			}						
 		}
 	}

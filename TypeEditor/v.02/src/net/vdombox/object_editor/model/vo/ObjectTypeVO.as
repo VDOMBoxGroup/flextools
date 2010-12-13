@@ -1,7 +1,8 @@
 package net.vdombox.object_editor.model.vo
 {
 	public class ObjectTypeVO
-	{			
+	{	
+		public var filePath:String;
 		public var sourceCode:String;
 		
 		public var actions:Array;

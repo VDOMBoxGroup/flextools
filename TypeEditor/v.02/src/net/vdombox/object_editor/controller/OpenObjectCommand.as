@@ -24,7 +24,7 @@ package net.vdombox.object_editor.controller
 			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
 
 			//можно не возвращать объект, а посылать сообщение OBJECT_COMPLIT прямо из ObjectTypeProxy
-			objTypeProxy.newObjectTypeVO(xmlFile);
+			objTypeProxy.newObjectTypeVO(xmlFile, item.path);
 		}
 	}
 }

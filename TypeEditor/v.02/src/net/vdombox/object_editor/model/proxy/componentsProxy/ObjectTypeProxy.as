@@ -21,10 +21,11 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			_objectTypeList = new Array;
 		}	
 
-		public function newObjectTypeVO(xml:XML):void
+		public function newObjectTypeVO(xml:XML, path:String):void
 		{	
 			trace("newObjectTypeVO");
 			var objType: ObjectTypeVO = new ObjectTypeVO;
+			objType.filePath = path;
 			//information
 			var information: XML = xml.Information[0];
 
@@ -47,7 +48,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				//sourceCode
 				objType.sourceCode	= xml.SourceCode.toString();
 				//atributes
-
 				var i:uint = 0;
 				for each ( var data : XML in xml.descendants("Attribute"))  //xml.descendants("Attributes") )
 				{
@@ -65,14 +65,14 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					atrib.regularExpressionValidation	= data.RegularExpressionValidation;
 
 					objType.atributes[i] = atrib;	
-					i++
+					i++;
 				}
 				_objectTypeList[objType.id] = objType;
 
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objType );
 			}
 		}
-
+		
 		public function getObjectTypeVO(id:String):ObjectTypeVO
 		{
 			return _objectTypeList[id];

@@ -48,7 +48,7 @@
 					{label:"Container", data:2}, 
 					{label:"Top-level container", data:3}]);			
 							
-			public function set  dataProvader(xml:XML):void
+			public function set dataProvader(xml:XML):void
 			{
 				return;
 				this.enabled = true;				
@@ -147,7 +147,7 @@
 					item = new XML("<"+value+"/>");
 					_data.appendChild(item);	
 				}	
-			}
+			}			
 			
 			private function saveChanges():void
 			{
@@ -182,7 +182,7 @@
 
 			protected function group1_showHandler(event:FlexEvent):void
 			{
-				// TO2DO Auto-generated method stub
+				// TODO Auto-generated method stub
 				fLanguages.text =  language.languagesList;
 			}
 			
@@ -207,7 +207,7 @@
 		<mx:FormHeading fontSize="10"  label="Enter values into the form." paddingTop="0" />
 		
 		<mx:FormItem label="Name" toolTip="Имя объекта">
-			<mx:TextInput id="fname" width="250" change="{saveChanges()}"/>
+			<mx:TextInput name="name" id="fname" width="250" change="{saveChanges()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="XMLScriptName" toolTip="Имя объекта в xml скриптах в редакторе (rtfm page 66)">
@@ -216,7 +216,7 @@
 			
 		<mx:FormItem label="DisplayName" >
 			<s:HGroup>
-				<ns:OETextInput id="fDisplayName" width="213" editable="false"/>
+				<ns:OETextInput name="displayName" id="fDisplayName" width="213" editable="false"/>
 				<s:Button label="..." width="30" click="changeDisplayName()"/>
 			</s:HGroup>
 		</mx:FormItem>
@@ -224,7 +224,7 @@
 		
 		<mx:FormItem label="Description" toolTip="писание объекта и его использования" enabled="false">
 			<s:HGroup>
-				<ns:OETextInput id="fDescription" width="213" editable="false" />
+				<ns:OETextInput name="description" id="fDescription" width="213" editable="false" />
 				<s:Button label="..." width="30"/>
 			</s:HGroup>
 		</mx:FormItem>
@@ -252,8 +252,6 @@
 			<mx:TextInput id="fCategory" width="250"  change="{saveChanges()}"/>
 		</mx:FormItem>
 		
-	
-		
 		<mx:FormItem label="Version" toolTip="Текущая версия объекта">
 			<mx:TextInput id="fVersion" width="250"  change="{saveChanges()}"/>
 		</mx:FormItem>
@@ -280,9 +278,7 @@
 		
 		<mx:FormItem label="Handlers" toolTip="Список статических функций объекта - обработчиков событий (set_attr)">
 			<mx:TextInput id="fHandlers" width="250"  change="{saveChanges()}"/>
-		</mx:FormItem>
-		
-			
+		</mx:FormItem>			
 	</mx:Form>
 	
 		<mx:Form width="100%" color="0x323232" paddingTop="0">

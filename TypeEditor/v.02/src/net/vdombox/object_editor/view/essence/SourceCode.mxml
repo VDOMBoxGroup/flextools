@@ -28,8 +28,8 @@
 			private function saveChange():void
 			{
 //				delete _data[0];
-				_data.appendChild( XML("<![CDATA[" +  sourceCode.text +"]" +"]" +">"));
-				delete _data.children()[0];
+//				_data.appendChild( XML("<![CDATA[" +  sourceCode.text +"]" +"]" +">"));
+//				delete _data.children()[0];
 				
 			}
 		]]>
