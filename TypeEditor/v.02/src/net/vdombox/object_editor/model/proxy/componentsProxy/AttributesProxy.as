@@ -8,11 +8,11 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import org.puremvc.as3.interfaces.*;
     import org.puremvc.as3.patterns.proxy.Proxy;
    
-    public class AtributesProxy extends Proxy implements IProxy, IResponder
+    public class AttributesProxy extends Proxy implements IProxy, IResponder
     {
 		public static const NAME:String = "AtributesProxy";
 
-		public function AtributesProxy ( data:Object = null ) 
+		public function AttributesProxy ( data:Object = null ) 
         {
             super ( NAME, data );
         }

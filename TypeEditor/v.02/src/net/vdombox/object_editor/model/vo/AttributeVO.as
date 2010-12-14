@@ -1,7 +1,8 @@
 package net.vdombox.object_editor.model.vo
 {	
 	public class AttributeVO
-	{		
+	{	
+		public var label		:String = "";
 		public var name			:String = "";
 		public var displayName	:String = "";
 		public var defaultValue	:String = "";		
@@ -12,9 +13,11 @@ package net.vdombox.object_editor.model.vo
 		public var colorgroup	:String = "";		
 		public var errorValidationMessage		:String = "";
 		public var regularExpressionValidation	:String = "";
-		
+
 		public function AttributeVO()
 		{				
 		}		
 	}
 }
+
+

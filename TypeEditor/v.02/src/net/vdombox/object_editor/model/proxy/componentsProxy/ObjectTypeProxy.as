@@ -5,7 +5,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
-	import net.vdombox.object_editor.view.essence.Atributes;
+	import net.vdombox.object_editor.view.essence.Attributes;
 
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
@@ -48,11 +48,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				//sourceCode
 				objTypeVO.sourceCode	= xml.SourceCode.toString();
 				//atributes
-				var i:uint = 0;
+
 				for each ( var data : XML in xml.descendants("Attribute"))  //xml.descendants("Attributes") )
 				{
 					var atrib:AttributeVO = new AttributeVO;
 
+
+//					atrib.label			= data.Name;
 					atrib.name			= data.Name;
 					atrib.displayName	= data.DisplayName;
 					atrib.defaultValue	= data.DefaultValue;
@@ -64,8 +66,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					atrib.errorValidationMessage		= data.ErrorValidationMessage;
 					atrib.regularExpressionValidation	= data.RegularExpressionValidation;
 
-					objTypeVO.atributes[i] = atrib;	
-					i++;
+					objTypeVO.attributes.addItem({label:atrib.name, data:atrib});	
 				}
 				_objectTypeList[objTypeVO.filePath] = objTypeVO;
 

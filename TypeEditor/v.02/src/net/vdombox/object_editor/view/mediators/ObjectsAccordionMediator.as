@@ -2,73 +2,71 @@ package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import mx.core.ClassFactory;
 	import mx.states.AddChild;
 	import mx.utils.object_proxy;
-	
+
 	import net.vdombox.object_editor.model.Item;
 	import net.vdombox.object_editor.view.AccordionNavigatorContent;
 	import net.vdombox.object_editor.view.ListItemRenderer;
 	import net.vdombox.object_editor.view.ObjectsAccordion;
-	
+
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
-	
+
 	import spark.components.List;
 	import spark.components.NavigatorContent;
 	import spark.components.supportClasses.ItemRenderer;
 
-//TODO: rename class to ObjectsAccordionMediator
-	public class AccordionMediator extends Mediator implements IMediator
+	public class ObjectsAccordionMediator extends Mediator implements IMediator
 	{		
 		public static const NAME:String = "AccordionMediator";			
-		
-		public function AccordionMediator( viewComponent:Object ) 
+
+		public function ObjectsAccordionMediator( viewComponent:Object ) 
 		{			
 			super( NAME, viewComponent );			
-			objAccordion.addEventListener( MouseEvent.DOUBLE_CLICK, openObject );			
+			view.addEventListener( MouseEvent.DOUBLE_CLICK, openObject );			
 		}
-		
+
 		public function openObject( event:MouseEvent = null ) : void
 		{
-			var accordioNavigatorContent:AccordionNavigatorContent =  objAccordion.accordion.selectedChild as AccordionNavigatorContent;
+			var accordioNavigatorContent:AccordionNavigatorContent =  view.accordion.selectedChild as AccordionNavigatorContent;
 			var object:Item = accordioNavigatorContent.selectedObject as Item;
 			sendNotification( ApplicationFacade.OPEN_OBJECT, object);
 		}	
-			
+
 //TODO: загрузка не по такому параметру, по note?		
 		public function newContent( item:Item ) : void
 		{
-			var list:AccordionNavigatorContent =  objAccordion.getObjectdByName(item.groupName) as AccordionNavigatorContent;
+			var list:AccordionNavigatorContent =  view.getObjectdByName(item.groupName) as AccordionNavigatorContent;
 			if (!list)
 			{
-				trace("new list: " + item.groupName)
-				 list  = new AccordionNavigatorContent();
-				 list.name = item.groupName;
-				 list.label = item.groupName;
-				 objAccordion.addObject(list);
+				list  = new AccordionNavigatorContent();
+				list.name = item.groupName;
+				list.label = item.groupName;
+				view.addObject(list);
 			}			
 			list.appendObject(item);			
 		}
-	
-		protected function get objAccordion():ObjectsAccordion
+
+		protected function get view():ObjectsAccordion
 		{
 			return viewComponent as ObjectsAccordion;
 		}		
-		
+
 		public function removeAllObjects():void
 		{
-			objAccordion.removeAllObjects();
+			view.removeAllObjects();
 		}
-		
+
 		override public function listNotificationInterests():Array 
 		{			
 			return [ ApplicationFacade.NEW_NAVIGATOR_CONTENT,
-					 ApplicationFacade.REMOVE_ALL_OBJECT ];
+				ApplicationFacade.REMOVE_ALL_OBJECT ];
 		}
-		
+
 		override public function handleNotification( note:INotification ):void 
 		{
 			switch ( note.getName() ) 
@@ -83,3 +81,4 @@ package net.vdombox.object_editor.view.mediators
 		}
 	}
 }
+

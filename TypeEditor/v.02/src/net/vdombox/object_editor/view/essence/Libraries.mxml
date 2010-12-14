@@ -92,7 +92,8 @@
 	
 	<s:HGroup width="100%" height="100%">
 		<s:VGroup width="200" height="100%">
-			<s:List id="libraries" width="100%" height="100%" dataProvider="{arLibraries}"   change="{changeLibrary(event)}"/>
+			<s:List id="libraries" width="100%"  height="100%" dataProvider="{arLibraries}"  
+					change="{changeLibrary(event)}" skinClass="spark.skins.spark.ListSkin"/>
 			
 			<s:HGroup right="0" >
 				<s:Button label="Add" click="{addLibrary()}" />

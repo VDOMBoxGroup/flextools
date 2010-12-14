@@ -1,17 +1,19 @@
 package net.vdombox.object_editor.model.vo
 {
+	import mx.collections.ArrayCollection;
+
 	public class ObjectTypeVO
 	{	
 		public var filePath:String;
 		public var sourceCode:String;
-		
+
 		public var actions:Array;
-		public var atributes:Array = [];
+		public var attributes: ArrayCollection = new ArrayCollection();
 		public var events:Array;
 		public var language:Array;
 		public var libraris:Array;
 		public var resourses:Array;
-		
+
 		//Information
 		public var name			:String = "";
 		public var className	:String = "";
@@ -24,9 +26,10 @@ package net.vdombox.object_editor.model.vo
 		public var container	:uint = 0;		
 		public var interfaceType:uint = 0;
 		public var optimizationPriority	:uint = 0;
-					
+
 		public function ObjectTypeVO()
 		{				
 		}		
 	}
 }
+

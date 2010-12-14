@@ -8,7 +8,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
-	import net.vdombox.object_editor.view.essence.Atributes;
+	import net.vdombox.object_editor.view.essence.Attributes;
 	import net.vdombox.object_editor.view.essence.Events;
 	import net.vdombox.object_editor.view.essence.Information;
 	import net.vdombox.object_editor.view.essence.Languages;
@@ -41,7 +41,7 @@ package net.vdombox.object_editor.view.mediators
 			var sourceCode:SourceCode  = new SourceCode();
 			objectView.tabNavigator.addChild(sourceCode);
 
-			var atributes:Atributes  = new Atributes();
+			var atributes:Attributes  = new Attributes();
 			objectView.tabNavigator.addChild(atributes);
 
 			var event:Events  = new Events;
@@ -58,7 +58,7 @@ package net.vdombox.object_editor.view.mediators
 
 			facade.registerMediator( new InformationMediator( information, objTypeVO ) );
 			facade.registerMediator( new SourceCodeMediatior( sourceCode,  objTypeVO ) );
-			facade.registerMediator( new AtributeMediator   ( atributes,   objTypeVO ) );
+			facade.registerMediator( new AttributeMediator   ( atributes,   objTypeVO ) );
 			facade.registerMediator( new LanguagesMediator 	( languages,   objTypeVO ) );
 			facade.registerMediator( new LibrariesMediator 	( libraries,   objTypeVO ) );
 			facade.registerMediator( new ResoursesMediator 	( resourses,   objTypeVO ) );

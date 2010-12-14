@@ -6,7 +6,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
-	import net.vdombox.object_editor.view.mediators.AccordionMediator;
+	import net.vdombox.object_editor.view.mediators.ObjectsAccordionMediator;
 
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -23,7 +23,7 @@ package net.vdombox.object_editor.view.mediators
 			super( NAME, viewComponent );	
 
 			facade.registerMediator( new OpenMediator( app.openButton ) ); 		
-			facade.registerMediator( new AccordionMediator( app.objAccordion ) );
+			facade.registerMediator( new ObjectsAccordionMediator( app.objAccordion ) );
 		}
 
 		public function newObjectView( objTypeVO:ObjectTypeVO ) : void

@@ -21,7 +21,7 @@
 	</fx:Script>
 	<s:HGroup>
 		<s:VGroup>
-			<s:List width="100%"/>
+			<s:List id="attributesList" width="100%"/>
 			<s:HGroup>
 				<s:Button label="Add"/>
 				<s:Button label="Delete"/>
