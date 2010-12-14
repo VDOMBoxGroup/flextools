@@ -2,9 +2,9 @@ package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import mx.controls.Alert;
-	
+
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
@@ -15,7 +15,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.view.essence.Libraries;
 	import net.vdombox.object_editor.view.essence.Resourses;
 	import net.vdombox.object_editor.view.essence.SourceCode;
-	
+
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -33,26 +33,26 @@ package net.vdombox.object_editor.view.mediators
 			this.objectTypeVO = objTypeVO;
 
 			// for selected necessary tab
-			objectView.name = objTypeVO.id;
+			objectView.name = objTypeVO.filePath;
 
 			var information:Information  = new Information();
 			objectView.tabNavigator.addChild(information);
 
 			var sourceCode:SourceCode  = new SourceCode();
 			objectView.tabNavigator.addChild(sourceCode);
-			
+
 			var atributes:Atributes  = new Atributes();
 			objectView.tabNavigator.addChild(atributes);
-			
+
 			var event:Events  = new Events;
 			objectView.tabNavigator.addChild(event);
-			
+
 			var languages:Languages  = new Languages();
 			objectView.tabNavigator.addChild(languages);
-			
+
 			var libraries:Libraries  = new Libraries();
 			objectView.tabNavigator.addChild(libraries);
-			
+
 			var resourses:Resourses  = new Resourses();
 			objectView.tabNavigator.addChild(resourses);
 
@@ -74,7 +74,7 @@ package net.vdombox.object_editor.view.mediators
 		{
 			facade.sendNotification( ApplicationFacade.SAVE_OBJECT_TYPE, objectTypeVO );
 		}
-		
+
 		private function saveAsObjectType(event:MouseEvent):void
 		{
 			facade.sendNotification( ApplicationFacade.SAVE_AS_OBJECT_TYPE, objectTypeVO );

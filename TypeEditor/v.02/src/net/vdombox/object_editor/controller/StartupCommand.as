@@ -13,7 +13,7 @@ package net.vdombox.object_editor.controller
 		override protected function initializeMacroCommand() :void
 		{
 			addSubCommand( PrepCommand );
-			addSubCommand( OpenLastDirectory );			
+			addSubCommand( OpenLastDirectoryCommand );			
 		}
 	}
 }

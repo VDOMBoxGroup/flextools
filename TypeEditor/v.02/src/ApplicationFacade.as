@@ -5,10 +5,10 @@
  */
 package 
 {	
-	import net.vdombox.object_editor.controller.FillController;
+	import net.vdombox.object_editor.controller.FillAccordionCommand;
 	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
 	import net.vdombox.object_editor.controller.OpenObjectCommand;
-	import net.vdombox.object_editor.controller.SaveAsObjectTypeCommand;
+	import net.vdombox.object_editor.controller.NewObjectTypePathCommand;
 	import net.vdombox.object_editor.controller.SaveObjectTypeCommand;
 	import net.vdombox.object_editor.controller.StartupCommand;
 	
@@ -44,10 +44,10 @@ package
 			super.initializeController(); 
 			registerCommand( STARTUP,			StartupCommand );
 			registerCommand( LOAD_XML_FILES,  	OpenDirectoryCommand );	
-			registerCommand( PARSE_XML_FILES, 	FillController );
+			registerCommand( PARSE_XML_FILES, 	FillAccordionCommand );
 			registerCommand( OPEN_OBJECT, 		OpenObjectCommand );
 			registerCommand( SAVE_OBJECT_TYPE, 	SaveObjectTypeCommand );
-			registerCommand( SAVE_AS_OBJECT_TYPE,SaveAsObjectTypeCommand );
+			registerCommand( SAVE_AS_OBJECT_TYPE,NewObjectTypePathCommand );
 		}
 
 		public function startup( app:ObjectEditor2 ):void

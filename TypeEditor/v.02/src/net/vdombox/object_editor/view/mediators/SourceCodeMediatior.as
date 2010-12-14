@@ -3,7 +3,6 @@ package net.vdombox.object_editor.view.mediators
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
-	import net.vdombox.object_editor.model.proxy.componentsProxy.SourceCodeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.SourceCode;
 	

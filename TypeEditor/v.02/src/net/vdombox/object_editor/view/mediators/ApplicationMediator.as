@@ -30,12 +30,11 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			var objView:ObjectView = new ObjectView();
 			objView.label = objTypeVO.name;					
-			
+
 			app.tabNavigator.addChild(objView);
 			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );	
 
 			app.tabNavigator.selectedChild = objView;
-			trace("newObjectView: " + objTypeVO.id);
 		}
 
 		override public function listNotificationInterests():Array 
@@ -48,7 +47,6 @@ package net.vdombox.object_editor.view.mediators
 			switch ( note.getName() ) 
 			{				
 				case ApplicationFacade.OBJECT_COMPLIT:
-					trace("ApplicationMediator");
 					newObjectView(note.getBody() as ObjectTypeVO);
 					break;	
 

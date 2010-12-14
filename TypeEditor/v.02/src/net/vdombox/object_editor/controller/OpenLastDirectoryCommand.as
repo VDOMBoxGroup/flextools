@@ -9,7 +9,7 @@ package net.vdombox.object_editor.controller
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
 
-	public class OpenLastDirectory extends SimpleCommand implements ICommand
+	public class OpenLastDirectoryCommand extends SimpleCommand implements ICommand
 	{
 		override public function execute(note:INotification):void    
 		{			
