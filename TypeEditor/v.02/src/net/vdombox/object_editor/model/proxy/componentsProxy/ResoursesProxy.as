@@ -19,11 +19,28 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			super ( NAME, data );
 		}
 
-		private function createNew():ResourceVO
+		public function createNew():ResourceVO
 		{
 			var  resourceVO : ResourceVO = new ResourceVO();
 			return resourceVO;
 		}
+
+		public function changeContent():void
+		{
+
+		}
+
+		public function exportToFile():void
+		{
+
+		}
+
+		public function deleteFile():void
+		{
+
+		}
+
+
 	}
 }
 
