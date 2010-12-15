@@ -22,8 +22,8 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			super( NAME, viewComponent );	
 
-			facade.registerMediator( new OpenMediator( app.openButton ) ); 		
-			facade.registerMediator( new ObjectsAccordionMediator( app.objAccordion ) );
+			facade.registerMediator( new OpenMediator( view.openButton ) ); 		
+			facade.registerMediator( new ObjectsAccordionMediator( view.objAccordion ) );
 		}
 
 		public function newObjectView( objTypeVO:ObjectTypeVO ) : void
@@ -31,10 +31,10 @@ package net.vdombox.object_editor.view.mediators
 			var objView:ObjectView = new ObjectView();
 			objView.label = objTypeVO.name;					
 
-			app.tabNavigator.addChild(objView);
+			view.tabNavigator.addChild(objView);
 			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );	
 
-			app.tabNavigator.selectedChild = objView;
+			view.tabNavigator.selectedChild = objView;
 		}
 
 		override public function listNotificationInterests():Array 
@@ -52,12 +52,12 @@ package net.vdombox.object_editor.view.mediators
 
 				case ApplicationFacade.OBJECT_EXIST:
 					var toSelectedOjectName:String = note.getBody() as String;
-					app.tabNavigator.selectedChild = app.tabNavigator.getChildByName( toSelectedOjectName) as ObjectView;
+					view.tabNavigator.selectedChild = view.tabNavigator.getChildByName( toSelectedOjectName) as ObjectView;
 					break;	
 			}
 		}
 
-		protected function get app():ObjectEditor2
+		protected function get view():ObjectEditor2
 		{
 			return viewComponent as ObjectEditor2
 		}

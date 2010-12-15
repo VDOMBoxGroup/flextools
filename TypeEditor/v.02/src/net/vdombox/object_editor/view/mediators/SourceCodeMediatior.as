@@ -19,22 +19,22 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
-			sourceCode.addEventListener( FlexEvent.SHOW, showSourceCode );
+			view.addEventListener( FlexEvent.SHOW, showSourceCode );
 		}
 		
 		private function showSourceCode(event: FlexEvent): void
 		{			
 			compliteSourceCode();
-			sourceCode.validateNow();
+			view.validateNow();
 		}
 	
 		protected function compliteSourceCode( ):void
 		{			
-			sourceCode.sourceCode.text = objectTypeVO.sourceCode;
+			view.sourceCode.text = objectTypeVO.sourceCode;
 			trace("compliteSourceCode");
 		}		
 		
-		protected function get sourceCode():SourceCode
+		protected function get view():SourceCode
 		{
 			return viewComponent as SourceCode;
 		}

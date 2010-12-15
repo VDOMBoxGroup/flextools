@@ -33,28 +33,28 @@ package net.vdombox.object_editor.view.mediators
 			this.objectTypeVO = objTypeVO;
 
 			// for selected necessary tab
-			objectView.name = objTypeVO.filePath;
+			view.name = objTypeVO.filePath;
 
 			var information:Information  = new Information();
-			objectView.tabNavigator.addChild(information);
+			view.tabNavigator.addChild(information);
 
 			var sourceCode:SourceCode  = new SourceCode();
-			objectView.tabNavigator.addChild(sourceCode);
+			view.tabNavigator.addChild(sourceCode);
 
 			var atributes:Attributes  = new Attributes();
-			objectView.tabNavigator.addChild(atributes);
+			view.tabNavigator.addChild(atributes);
 
 			var event:Events  = new Events;
-			objectView.tabNavigator.addChild(event);
+			view.tabNavigator.addChild(event);
 
 			var languages:Languages  = new Languages();
-			objectView.tabNavigator.addChild(languages);
+			view.tabNavigator.addChild(languages);
 
 			var libraries:Libraries  = new Libraries();
-			objectView.tabNavigator.addChild(libraries);
+			view.tabNavigator.addChild(libraries);
 
 			var resourses:Resourses  = new Resourses();
-			objectView.tabNavigator.addChild(resourses);
+			view.tabNavigator.addChild(resourses);
 
 			facade.registerMediator( new InformationMediator( information, objTypeVO ) );
 			facade.registerMediator( new SourceCodeMediatior( sourceCode,  objTypeVO ) );
@@ -64,10 +64,10 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new ResoursesMediator 	( resourses,   objTypeVO ) );
 			facade.registerMediator( new EventMediator   	( event,	   objTypeVO ) );
 
-			objectView.saveObjectTypeButton.addEventListener  ( MouseEvent.CLICK, saveObjectType );
-			objectView.saveAsObjectTypeButton.addEventListener( MouseEvent.CLICK, saveAsObjectType );
+			view.saveObjectTypeButton.addEventListener  ( MouseEvent.CLICK, saveObjectType );
+			view.saveAsObjectTypeButton.addEventListener( MouseEvent.CLICK, saveAsObjectType );
 			trace("ObjectViewMediator constructor");
-			objectView.validateNow();
+			view.validateNow();
 		}
 
 		private function saveObjectType(event:MouseEvent):void
@@ -91,13 +91,13 @@ package net.vdombox.object_editor.view.mediators
 			{				
 				case OBJECT_TYPE_CHAGED:
 					if (objectTypeVO == note.getBody() )
-						objectView.label = objectTypeVO.name + "*"
+						view.label = objectTypeVO.name + "*"
 //					compliteInformation();
 					break;				
 			}
 		}
 
-		protected function get objectView():ObjectView
+		protected function get view():ObjectView
 		{
 			return viewComponent as ObjectView;
 		}

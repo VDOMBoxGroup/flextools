@@ -24,7 +24,7 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
-			attributes.addEventListener( FlexEvent.SHOW, showAttributes );
+			view.addEventListener( FlexEvent.SHOW, showAttributes );
 //			attributes.addEventListener( FlexEvent.HIDE, hideAttributes );
 
 //			change="{changeLibrary(event)}"
@@ -32,32 +32,32 @@ package net.vdombox.object_editor.view.mediators
 
 		private function changeAtribute(event:Event):void
 		{ 
-			var attributeVO : AttributeVO = attributes.attributesList.selectedItem.data as AttributeVO;
-			attributes.fname.text = attributeVO.name;
+			var attributeVO : AttributeVO = view.attributesList.selectedItem.data as AttributeVO;
+			view.fname.text = attributeVO.name;
 			trace("***********  WORKAY ******");
 //			libCode.text = List(event.target).selectedItem.data; // ["data"];
 		}
 
 		private function showAttributes(event: FlexEvent): void
 		{			
-			attributes.attributesList.addEventListener(Event.CHANGE, changeAtribute);
+			view.attributesList.addEventListener(Event.CHANGE, changeAtribute);
 
 			compliteAtributes();
-			attributes.validateNow();
+			view.validateNow();
 		}
 
 		private  function hideAttributes(event: FlexEvent):void
 		{
-			attributes.attributesList.removeEventListener(Event.CHANGE, changeAtribute);
+			view.attributesList.removeEventListener(Event.CHANGE, changeAtribute);
 		}
 
 
 		protected function compliteAtributes( ):void
 		{			
-			attributes.attributesList.dataProvider = objectTypeVO.attributes;
+			view.attributesList.dataProvider = objectTypeVO.attributes;
 		}		
 
-		protected function get attributes():Attributes
+		protected function get view():Attributes
 		{
 			return viewComponent as Attributes;
 		}

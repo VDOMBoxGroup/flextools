@@ -23,29 +23,29 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
-			information.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
-			information.addEventListener( Event.CHANGE, validateObjectTypeVO );
+			view.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
+			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
 			trace("InformationMediator: " + objTypeVO.id);
 		}
 
 		public function validateObjectTypeVO(event:Event):void
 		{
-			information.label= "Information*";
+			view.label= "Information*";
 			trace("CHANGECHANGE");
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 		
-			objectTypeVO.name 			= information.fname.text;
-			objectTypeVO.className		= information.fClassName.text;
-			objectTypeVO.id				= information.fID.text ;
-			objectTypeVO.category		= information.fCategory.text;
-			objectTypeVO.dynamic		=  information.fDynamic.selected;
-			objectTypeVO.moveable		=  information.fMoveable.selected;
-			objectTypeVO.version 		= information.fVersion.text;
+			objectTypeVO.name 			= view.fname.text;
+			objectTypeVO.className		= view.fClassName.text;
+			objectTypeVO.id				= view.fID.text ;
+			objectTypeVO.category		= view.fCategory.text;
+			objectTypeVO.dynamic		= view.fDynamic.selected;
+			objectTypeVO.moveable		= view.fMoveable.selected;
+			objectTypeVO.version 		= view.fVersion.text;
 			
-			objectTypeVO.resizable	 	= information.fResizable.selectedIndex ;
-			objectTypeVO.container 	 	=  information.fContainer.selectedIndex;			
-			objectTypeVO.interfaceType 	=  information.fInterfaceType.selectedIndex;
-			objectTypeVO.optimizationPriority  =  information.fOptimizationPriority.value;			
+			objectTypeVO.resizable	 	= view.fResizable.selectedIndex ;
+			objectTypeVO.container 	 	= view.fContainer.selectedIndex;			
+			objectTypeVO.interfaceType 	= view.fInterfaceType.selectedIndex;
+			objectTypeVO.optimizationPriority  =  view.fOptimizationPriority.value;			
 		}
 
 		private function showInformation(event: FlexEvent): void
@@ -71,24 +71,24 @@ package net.vdombox.object_editor.view.mediators
 
 		protected function compliteInformation( ):void
 		{	
-			information.label= "Information";
+			view.label= "Information";
 
-			information.fname.text 			= objectTypeVO.name;
-			information.fClassName.text		= objectTypeVO.className;
-			information.fID.text 			= objectTypeVO.id;
-			information.fCategory.text		= objectTypeVO.category;
-			information.fDynamic.selected	=  objectTypeVO.dynamic;
-			information.fMoveable.selected	=  objectTypeVO.moveable;
-			information.fVersion.text 		= objectTypeVO.version;
+			view.fname.text 			= objectTypeVO.name;
+			view.fClassName.text		= objectTypeVO.className;
+			view.fID.text 			= objectTypeVO.id;
+			view.fCategory.text		= objectTypeVO.category;
+			view.fDynamic.selected	=  objectTypeVO.dynamic;
+			view.fMoveable.selected	=  objectTypeVO.moveable;
+			view.fVersion.text 		= objectTypeVO.version;
 
-			information.fResizable.selectedIndex 	 = objectTypeVO.resizable;
-			information.fContainer.selectedIndex 	 = objectTypeVO.container;			
-			information.fInterfaceType.selectedIndex = objectTypeVO.interfaceType;
-			information.fOptimizationPriority.value  = objectTypeVO.optimizationPriority;
+			view.fResizable.selectedIndex 	 = objectTypeVO.resizable;
+			view.fContainer.selectedIndex 	 = objectTypeVO.container;			
+			view.fInterfaceType.selectedIndex = objectTypeVO.interfaceType;
+			view.fOptimizationPriority.value  = objectTypeVO.optimizationPriority;
 			trace("compliteInformation");
 		}		
 
-		protected function get information():Information
+		protected function get view():Information
 		{
 			return viewComponent as Information;
 		}

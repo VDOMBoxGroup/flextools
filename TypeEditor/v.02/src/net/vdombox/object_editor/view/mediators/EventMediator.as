@@ -19,13 +19,13 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
-			events.addEventListener( FlexEvent.SHOW, showEvent );
+			view.addEventListener( FlexEvent.SHOW, showEvent );
 		}
 		
 		private function showEvent(event: FlexEvent): void
 		{			
 			compliteEvents();
-			events.validateNow();
+			view.validateNow();
 		}
 		
 		protected function compliteEvents( ):void
@@ -34,7 +34,7 @@ package net.vdombox.object_editor.view.mediators
 			trace("compliteEvents");
 		}		
 		
-		protected function get events():Events
+		protected function get view():Events
 		{
 			return viewComponent as Events;
 		}

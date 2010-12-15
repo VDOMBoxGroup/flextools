@@ -19,13 +19,13 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
-			resourses.addEventListener( FlexEvent.SHOW, showResourses );
+			view.addEventListener( FlexEvent.SHOW, showResourses );
 		}
 		
 		private function showResourses(event: FlexEvent): void
 		{			
 			compliteLibraries();
-			resourses.validateNow();
+			view.validateNow();
 		}
 		
 		protected function compliteLibraries( ):void
@@ -34,7 +34,7 @@ package net.vdombox.object_editor.view.mediators
 			trace("compliteLanguages");
 		}		
 		
-		protected function get resourses():Resourses
+		protected function get view():Resourses
 		{
 			return viewComponent as Resourses;
 		}

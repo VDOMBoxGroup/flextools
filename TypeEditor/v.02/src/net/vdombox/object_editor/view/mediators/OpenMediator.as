@@ -18,7 +18,7 @@ package net.vdombox.object_editor.view.mediators
 		public function OpenMediator( viewComponent:Object ) 
 		{			
 			super( NAME, viewComponent );
-			loadButton.addEventListener( MouseEvent.CLICK, load );			
+			view.addEventListener( MouseEvent.CLICK, load );			
 		}		
 		
 		private function load( event:Event = null ) : void
@@ -26,7 +26,7 @@ package net.vdombox.object_editor.view.mediators
 			sendNotification( ApplicationFacade.LOAD_XML_FILES );
 		}
 				
-		protected function get loadButton():Button
+		protected function get view():Button
 		{
 			return viewComponent as Button;
 		}
