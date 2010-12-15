@@ -79,7 +79,7 @@ private function createScript( name : String ) : void
 	var dataXML : XML = new XML( "<Action/>" );
 	dataXML.@Name = name;
 	dataXML.@label = name;
-	
+
 	dataXML.@Top = "5";
 	dataXML.@Left = "5";
 	dataXML.@State = "true";
@@ -98,7 +98,7 @@ private function editLibrary() : void
 {
 //	saveButton.setStyle( "color", "0x000000" );
 //	saveButton.setStyle( "borderColor", "0xAAB3B3" );
-	
+
 	var item : XML = librariesList.selectedItem as XML;
 
 	if ( item && currentEditing == "library" && currentLibraryName == item.@Name )
@@ -107,7 +107,7 @@ private function editLibrary() : void
 	if ( item )
 	{
 		serverScripts.tree.selectedIndex = -1;
-		
+
 		editArea.enabled = true;
 		editArea.content = item.toString();
 		currentEditing = "library";
@@ -143,6 +143,7 @@ private function getIcon( ID : String ) : String
 
 private function save() : void
 {
+
 	if ( !editArea.enabled )
 		return;
 
@@ -182,12 +183,12 @@ private function revert() : void
 {
 //	saveButton.setStyle( "color", "0x000000" );
 //	saveButton.setStyle( "borderColor", "0xAAB3B3" );
-	
+
 	if( currentEditing == "script" )
 		editArea.content = serverScripts.script;
 	else if( currentEditing == "library" )
 		editArea.content = librariesList.selectedItem.toString();
-		
+
 	scriptChanged = false;
 }
 
@@ -199,12 +200,12 @@ private function showHandler() : void
 	{
 		curContainerTypeID = dataManager.getTypeByObjectId( curContainerID ).Information.ID.toString();
 	}
-	
+
 	scriptLanguage = dataManager.currentApplicationInformation.ScriptingLanguage;
-	
+
 	serverScripts.scriptLanguage = scriptLanguage;
 	editArea.syntax = scriptLanguage;
-	
+
 	editArea.addEventListener( EditAreaEvent.SAVE, editArea_saveHandler );
 	dataManager.addEventListener( DataManagerEvent.PAGE_CHANGED, dataManager_pageChangedHandler );
 	dataManager.addEventListener( DataManagerEvent.OBJECT_CHANGED, dataManager_objectChangedHandler );
@@ -215,7 +216,9 @@ private function showHandler() : void
 	dataManager.getLibraries();
 
 	arrAppl.removeAll();
-	arrAppl.addItem( { label : "Session Actions", ID : "session", iconResID : "", typeID : "" } );
+	arrAppl.addItem( { label : "Session Actions", 	ID : "server", 	iconResID : "", typeID : "" });
+//	arrAppl.addItem( { label : "Application", 		ID : "application", iconResID : "", typeID : "" });
+//	arrAppl.addItem( { label : "Request", 			ID : "request", 	iconResID : "", typeID : "" });
 
 	for each ( var lavel : XML in dataManager.listPages )
 	{
@@ -253,7 +256,7 @@ private function showHandler() : void
 private function hideHandler() : void
 {
 	editArea.dispatchEvent( new FlexEvent(FlexEvent.HIDE ) );
-	
+
 	dataManager.removeEventListener( DataManagerEvent.PAGE_CHANGED, dataManager_pageChangedHandler );
 	dataManager.removeEventListener( DataManagerEvent.OBJECT_CHANGED, dataManager_objectChangedHandler );
 	dataManager.removeEventListener( DataManagerEvent.GET_LIBRARIES_COMPLETE, dataManager_getLibrariesCompleteHandler );
@@ -275,13 +278,14 @@ private function textEditor_keyDownHandler( event : KeyboardEvent ) : void
 private function pages_changeHandler( obj : Object ) : void
 {
 	selectedApplication = ComboBox( obj ).selectedItem;
-	if ( selectedApplication.ID == "session" )
+	var sel_app_ID:String = selectedApplication.ID
+	if ( sel_app_ID == "server" || sel_app_ID == "application" || sel_app_ID == "request"  )
 	{
-		containersBranch.currentPageID = selectedApplication.ID;
-		serverScripts.dataProvider = selectedApplication.ID;
+		containersBranch.currentPageID = sel_app_ID;
+		serverScripts.dataProvider = sel_app_ID;
 	}
 	else
-		dataManager.changeCurrentPage( selectedApplication.ID );
+		dataManager.changeCurrentPage( sel_app_ID );
 }
 
 private function serverScripts_scriptChangedHandler() : void
@@ -292,7 +296,7 @@ private function serverScripts_scriptChangedHandler() : void
 	if ( serverScripts.dataEnabled && serverScripts.script != null )
 	{
 		librariesList.selectedIndex = -1;
-		
+
 		editArea.enabled = true;
 		editArea.content = serverScripts.script;
 		currentEditing = "script";
@@ -327,8 +331,8 @@ private function editArea_saveHandler( event : EditAreaEvent ) : void
 private function addScript_clickHandler() : void
 {
 	var rbWnd : CreatingNewActionWindow = CreatingNewActionWindow( PopUpManager.createPopUp( this,
-																							 CreatingNewActionWindow,
-																							 true ) );
+		CreatingNewActionWindow,
+		true ) );
 	rbWnd.name = "addScript";
 
 	rbWnd.addEventListener( ScriptEditorEvent.SET_NAME, setNameHandler );
@@ -338,8 +342,8 @@ private function addScript_clickHandler() : void
 private function addLibrary_clickHandler() : void
 {
 	var rbWnd : CreatingNewActionWindow = CreatingNewActionWindow( PopUpManager.createPopUp( this,
-																							 CreatingNewActionWindow,
-																							 true ) );
+		CreatingNewActionWindow,
+		true ) );
 	rbWnd.insertLabel.text = "Input Library name:"
 	rbWnd.title = "Add Library";
 
@@ -423,7 +427,7 @@ private function dataManager_removeLibraryCompleteHandler( event : DataManagerEv
 		try
 		{
 			libraries.removeItemAt( libraries.getItemIndex( cursor.current ) );
-			
+
 			editArea.enabled = false;
 			editArea.content = "";
 			currentEditing = "none";
@@ -434,3 +438,4 @@ private function dataManager_removeLibraryCompleteHandler( event : DataManagerEv
 		}
 	}
 }
+

@@ -6,7 +6,7 @@ package vdom.components.scriptEditor.containers
 	import mx.controls.List;
 	import mx.events.ListEvent;
 	import mx.utils.UIDUtil;
-	
+
 	import vdom.containers.ClosablePanel;
 	import vdom.events.DataManagerEvent;
 	import vdom.events.ServerScriptsEvent;
@@ -48,25 +48,25 @@ package vdom.components.scriptEditor.containers
 
 		private var dataXML : XMLListCollection;
 		private var xmlToServer : XML;
-		
+
 		private var _scriptLanguage : String
-		
+
 		public function get scriptLanguage() : String
 		{
 			return _scriptLanguage;
 		}  
-		
+
 		public function set scriptLanguage( value : String ) :void
 		{
 			_scriptLanguage = value;
 		}
-		
+
 		public function set dataProvider( str : String ) : void
 		{
 			tree.dataProvider = null;
 			curContainerID = str;
 			dataManager.addEventListener( DataManagerEvent.GET_SERVER_ACTIONS_COMPLETE,
-										  getServerActionsHandler );
+				getServerActionsHandler );
 			dataManager.getServerActions( str );
 		}
 
@@ -111,12 +111,14 @@ package vdom.components.scriptEditor.containers
 
 			if ( !xmlToServer.Action[ 0 ] )
 				return null;
-			
-			if( ID == "session" )
+
+			if( ID == "server" ){
+//				trace("\n\n +++ Send Actions ++++\n " + xmlToServer.Action.( @ID == ID && @Name == name)[ 0 ].toString())
 				return xmlToServer.Action.( @ID == ID && @Name == name)[ 0 ].toString();
+			}
 			else
 				return xmlToServer.Action.( @ID == ID )[ 0 ].toString();
-			
+
 		}
 
 		public function set script( str : String ) : void
@@ -125,14 +127,14 @@ package vdom.components.scriptEditor.containers
 			{
 				var ID : String = tree.selectedItem.@ID;
 				var name : String = tree.selectedItem.@Name;
-				
+
 				var tempXML : XML;
-				
-				if( ID == "session" )
+
+				if( ID == "server" )
 					tempXML = xmlToServer.Action.( @ID == ID && @Name == name )[ 0 ];
 				else
 					tempXML = xmlToServer.Action.( @ID == ID )[ 0 ];			
-				
+
 				var xml : XML = new XML( "<Action/>" );
 				xml.@ID = tempXML.@ID;
 				xml.@Name = tempXML.@Name;
@@ -141,12 +143,13 @@ package vdom.components.scriptEditor.containers
 				xml.@State = tempXML.@State;
 				xml.appendChild( XML( "<![CDATA[" + str + "]" + "]>" ) );
 
-				if( ID == "session" )
+				if( ID == "server" )
 					delete xmlToServer.Action.( @ID == ID && @Name == name )[ 0 ];
 				else
 					delete xmlToServer.Action.( @ID == ID )[ 0 ];
-					
+
 				xmlToServer.appendChild( xml );
+
 
 				dataManager.setServerActions( xmlToServer, curContainerID );
 			}
@@ -183,8 +186,9 @@ package vdom.components.scriptEditor.containers
 
 		private function createData( xmlToTree : XML ) : void
 		{
+//			trace("\n\n    === xmlToTree === \n"+xmlToTree.toString())
 			xmlToServer = new XML( "<ServerActions/>" );
-			
+
 //			if( xmlToTree.Action.(@ID == "session")[ 0 ] )
 //			{
 //				xmlToTree = 
@@ -193,7 +197,7 @@ package vdom.components.scriptEditor.containers
 //					<Action ID="session" Name="SessionOnEnd" Top="" Left="" State="" />
 //				</ServerActions>;
 //			}
-			
+
 			dataXML = new XMLListCollection();
 
 			var continer : XML;
@@ -206,7 +210,7 @@ package vdom.components.scriptEditor.containers
 			}
 			else
 			{
-				continer = new XML( xmlToTree.toXMLString() );
+				continer = new XML( xmlToTree.Container.toXMLString() );
 			}
 
 			var tempXML : XML;
@@ -215,7 +219,7 @@ package vdom.components.scriptEditor.containers
 				for each ( var actID : XML in continer.children() )
 				{
 					tempXML = <Action/>;
-					
+
 					tempXML.@label = actID.@Name;
 					tempXML.@Name = actID.@Name;
 					tempXML.@ID = actID.@ID;
@@ -254,7 +258,7 @@ package vdom.components.scriptEditor.containers
 //			var data : Object = { typeId : xmlData.@Type, resourceId : xmlData.@resourceID }
 //
 //			return IconUtils.getClass( this, data, 16, 16 );
-			
+
 			if( _scriptLanguage == "python" )
 				return python;
 			else
@@ -278,7 +282,7 @@ package vdom.components.scriptEditor.containers
 		{
 
 			dataManager.removeEventListener( DataManagerEvent.GET_SERVER_ACTIONS_COMPLETE,
-											 getServerActionsHandler );
+				getServerActionsHandler );
 			createData( dmEvt.result );
 		}
 
@@ -288,3 +292,4 @@ package vdom.components.scriptEditor.containers
 		}
 	}
 }
+

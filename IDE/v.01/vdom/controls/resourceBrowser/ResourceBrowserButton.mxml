@@ -10,7 +10,7 @@
 			import mx.managers.PopUpManager;
 			import vdom.events.ResourceBrowserEvent;
 
-			private const regResource : RegExp = /^(?:#Res\(([-a-zA-Z0-9]*)\))|(?:([-a-zA-Z0-9]*))/;
+			private const regResource : RegExp = /^(?:#Res\(([-a-zA-Z0-9]*)\))|(?:(^[-a-zA-Z0-9]*))/;
 			private var _value : String = "";
 			private var _title : String = "";
 
@@ -35,7 +35,7 @@
 				var matchResult : Array = attrValue.match( regResource );
 				if ( matchResult )
 				{
-					_labelText = matchResult[ 1 ];
+					_labelText = matchResult[ 1 ]? matchResult[ 1 ]:matchResult[ 2 ];
 					_value = "#Res("+_labelText+")";
 					clearBtnEnabled = true;
 				}

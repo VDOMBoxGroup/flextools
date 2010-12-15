@@ -5,9 +5,9 @@ package vdom.managers
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.system.System;
-	
+
 	import mx.rpc.events.FaultEvent;
-	
+
 	import vdom.connection.Proxy;
 	import vdom.connection.SOAP;
 	import vdom.events.DataManagerErrorEvent;
@@ -328,19 +328,19 @@ package vdom.managers
 		}
 
 		public function createObject( typeId : String, parentId : String = "", objectName : String = "",
-									  attributes : String = "", applicationId : String = "" ) : void
+			attributes : String = "", applicationId : String = "" ) : void
 		{
 			proxy.flush();
 
 			if ( applicationId )
 			{
 				soap.create_object( applicationId, parentId, typeId, objectName,
-									attributes );
+					attributes );
 			}
 			else if ( currentApplicationId )
 			{
 				soap.create_object( currentApplicationId, parentId, typeId, objectName,
-									attributes );
+					attributes );
 			}
 		}
 
@@ -387,7 +387,7 @@ package vdom.managers
 		public function submitObjectScriptPresentation( objectXMLScript : String ) : void
 		{
 			soap.submit_object_script_presentation( currentApplicationId, currentObjectId,
-													objectXMLScript );
+				objectXMLScript );
 		}
 
 		public function getScript( objectId : String = "" ) : void
@@ -483,7 +483,7 @@ package vdom.managers
 			if ( newOnlyAttributes || nameChanged )
 			{
 				dme = new DataManagerEvent( DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN );
-				
+
 				dme.objectId = objectId;
 				dme.result = newOnlyAttributes;
 				dispatchEvent( dme );
@@ -514,39 +514,40 @@ package vdom.managers
 		{
 			soap.search( applicationId, searchString );
 		}
-		
+
 		public function getLibraries( applicationId : String = "") : void 
 		{
 			if( applicationId == null || applicationId == "" )
 				applicationId = currentApplicationId;
-			
+
 			if( applicationId )
 				soap.get_libraries( applicationId );
 		}
-		
+
 		public function setLibrary( name : String, data : *, applicationId : String = "" ) : void 
 		{
+			trace("----- data  to server  ----" + data.toString)
 			if( applicationId == null || applicationId == "" )
 				applicationId = currentApplicationId;
-			
+
 			if( applicationId )
 				soap.set_library( applicationId, name, data );
 		}
-		
+
 		public function removeLibrary( name : String, applicationId : String = "" ) : void 
 		{
 			if( applicationId == null || applicationId == "" )
 				applicationId = currentApplicationId;
-			
+
 			if( applicationId )
 				soap.remove_library( applicationId, name );
 		}
-		
+
 		public function modifyResource( resourceId : String, operation : String,
-										attributeName : String, attributes : XML ) : void
+			attributeName : String, attributes : XML ) : void
 		{
 			soap.modify_resource( currentApplicationId, currentObjectId, resourceId,
-								  attributeName, operation, attributes );
+				attributeName, operation, attributes );
 		}
 
 		private function cleanUp() : void
@@ -863,7 +864,7 @@ package vdom.managers
 			dme.result = 
 				<Result>
 					{result}</Result>
-			;
+				;
 			dispatchEvent( dme );
 
 			dispatchEvent( new Event( "listPagesChanged" ) );
@@ -873,7 +874,7 @@ package vdom.managers
 		{
 			var result : XML = event.result.Result.*[ 0 ];
 			dispatchEvent( new DataManagerEvent( DataManagerEvent.GET_OBJECT_SCRIPT_PRESENTATION_COMPLETE,
-												 result ) );
+				result ) );
 		}
 
 		private function soap_setObjectScriptPresentationHandler( event : SOAPEvent ) : void
@@ -885,11 +886,11 @@ package vdom.managers
 
 			_currentApplication..Objects.Object.( @ID == oldObjectId )[ 0 ] = 
 				<Object ID={newObjectId}/>
-			;
+				;
 
 			soap.get_child_objects_tree( currentApplicationId, newObjectId ); //<------
 			dispatchEvent( new DataManagerEvent( DataManagerEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_COMPLETE,
-												 result ) );
+				result ) );
 		}
 
 		private function soap_getScriptHandler( event : SOAPEvent ) : void
@@ -965,28 +966,28 @@ package vdom.managers
 			dme.result = event.result;
 			dispatchEvent( dme );
 		}
-		
+
 		private function soap_getLibrariesHandler( event : SOAPEvent ) : void 
 		{
 			var dme : DataManagerEvent = new DataManagerEvent( DataManagerEvent.GET_LIBRARIES_COMPLETE );
 			dme.result = event.result.Libraries[0];
 			dispatchEvent( dme );
 		}
-		
+
 		private function soap_setLibraryHandler( event : SOAPEvent ) : void 
 		{
 			var dme : DataManagerEvent = new DataManagerEvent( DataManagerEvent.SET_LIBRARY_COMPLETE );
 			dme.result = event.result.Library[0];
 			dispatchEvent( dme );
 		}
-		
+
 		private function soap_removeLibraryHandler( event : SOAPEvent ) : void 
 		{
 			var dme : DataManagerEvent = new DataManagerEvent( DataManagerEvent.REMOVE_LIBRARY_COMPLETE );
 			dme.result = event.result.Library[0];
 			dispatchEvent( dme );
 		}
-		
+
 		private function proxy_sendHandler( event : ProxyEvent ) : void
 		{
 			var objectId : String = event.objectId;
@@ -1074,7 +1075,7 @@ package vdom.managers
 		 *  @private
 		 */
 		public function addEventListener( type : String, listener : Function, useCapture : Boolean = false,
-										  priority : int = 0, useWeakReference : Boolean = false ) : void
+			priority : int = 0, useWeakReference : Boolean = false ) : void
 		{
 			dispatcher.addEventListener( type, listener, useCapture, priority );
 		}
@@ -1099,7 +1100,7 @@ package vdom.managers
 		 *  @private
 		 */
 		public function removeEventListener( type : String, listener : Function,
-											 useCapture : Boolean = false ) : void
+			useCapture : Boolean = false ) : void
 		{
 			dispatcher.removeEventListener( type, listener, useCapture );
 		}
@@ -1113,3 +1114,4 @@ package vdom.managers
 		}
 	}
 }
+
