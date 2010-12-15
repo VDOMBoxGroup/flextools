@@ -5,7 +5,10 @@ package net.vdombox.object_editor.controller
 {
     import net.vdombox.object_editor.model.proxy.FileProxy;
     import net.vdombox.object_editor.model.proxy.ItemProxy;
+    import net.vdombox.object_editor.model.proxy.componentsProxy.AttributesProxy;
+    import net.vdombox.object_editor.model.proxy.componentsProxy.LanguageProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
+    import net.vdombox.object_editor.model.proxy.componentsProxy.ResoursesProxy;
     import net.vdombox.object_editor.view.mediators.ApplicationMediator;
     
     import org.puremvc.as3.interfaces.*;
@@ -23,6 +26,9 @@ package net.vdombox.object_editor.controller
 			facade.registerProxy(new ItemProxy());
 			facade.registerProxy(new ObjectTypeProxy());
 			facade.registerProxy(new FileProxy());
+			facade.registerProxy(new LanguageProxy());
+			facade.registerProxy(new AttributesProxy());
+			facade.registerProxy(new ResoursesProxy());
 			facade.registerMediator( new ApplicationMediator( note.getBody() ) );			
 		} 
     }

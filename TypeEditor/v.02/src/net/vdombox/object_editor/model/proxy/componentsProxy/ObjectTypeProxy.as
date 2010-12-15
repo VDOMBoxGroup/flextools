@@ -6,7 +6,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -18,41 +18,28 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function ObjectTypeProxy ( data:Object = null ) 
 		{
 			super ( NAME, data );
-			_objectTypeList = new Array;
+			_objectTypeList = new Array;			
 		}	
 
-		public function newObjectTypeVO(xml:XML, path:String):void
-		{	
-			trace("newObjectTypeVO");
-			var objTypeVO: ObjectTypeVO = new ObjectTypeVO;
-			objTypeVO.filePath = path;
+		public function newObjectTypeVO(objTypeXML:XML, path:String):void
+		{
 			//information
-			var information: XML = xml.Information[0];
+			
 
-			if (_objectTypeList[objTypeVO.filePath])
+			if (_objectTypeList[path])
 			{
 				facade.sendNotification( ApplicationFacade.OBJECT_EXIST, objTypeVO.filePath );
-			}else
-			{
-				objTypeVO.name 		= information.Name;
-				objTypeVO.category 	= information.Category;
-				objTypeVO.className = information.ClassName;
-				objTypeVO.id		= information.ID;			
-				objTypeVO.dynamic	= information.Dynamic.toString() == "1";
-				objTypeVO.moveable	= information.Moveable.toString() == "1";			
-				objTypeVO.resizable	= information.Resizable;	
-				objTypeVO.container	= information.Container;	
-				objTypeVO.version		= information.Version;	
-				objTypeVO.interfaceType	= information.InterfaceType;	
-				objTypeVO.optimizationPriority = information.OptimizationPriority;	
+			}
+			else
+			{				
+				var objTypeVO: ObjectTypeVO = initInformation(objTypeXML);			
+				objTypeVO.filePath	= path;
 				//sourceCode
-				objTypeVO.sourceCode	= xml.SourceCode.toString();
+				objTypeVO.sourceCode = initSourceCode(objTypeXML);
 				//atributes
-				for each ( var data : XML in xml.descendants("Attribute"))  //xml.descendants("Attributes") )
+				for each ( var data : XML in objTypeXML.descendants("Attribute"))  //xml.descendants("Attributes") )
 				{
 					var atrib:AttributeVO = new AttributeVO;
-
-
 //					atrib.label			= data.Name;
 					atrib.name			= data.Name;
 					atrib.displayName	= data.DisplayName;
@@ -67,10 +54,41 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 					objTypeVO.attributes.addItem({label:atrib.name, data:atrib});	
 				}
+				//language 
+				var languageProxy:LanguageProxy = facade.retrieveProxy(LanguageProxy.NAME) as LanguageProxy;
+				objTypeVO.languages = languageProxy.createNew(objTypeXML);
+				//resource
+				var resoursesProxy:ResoursesProxy = facade.retrieveProxy(ResoursesProxy.NAME) as ResoursesProxy;
+//				objTypeVO.resourses = resoursesProxy.createNew(objTypeXML);
+				
 				_objectTypeList[objTypeVO.filePath] = objTypeVO;
 
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
 			}
+		}
+		
+		public function initInformation(objTypeXML:XML):ObjectTypeVO
+		{
+			var objTypeVO: ObjectTypeVO = new ObjectTypeVO();
+			var information: XML = objTypeXML.Information[0];			
+			
+			objTypeVO.name 		= information.Name;
+			objTypeVO.category 	= information.Category;
+			objTypeVO.className = information.ClassName;
+			objTypeVO.id		= information.ID;			
+			objTypeVO.dynamic	= information.Dynamic.toString() == "1";
+			objTypeVO.moveable	= information.Moveable.toString() == "1";			
+			objTypeVO.resizable	= information.Resizable;	
+			objTypeVO.container	= information.Container;	
+			objTypeVO.version		= information.Version;	
+			objTypeVO.interfaceType	= information.InterfaceType;	
+			objTypeVO.optimizationPriority = information.OptimizationPriority;	
+			return objTypeVO;
+		}
+		
+		public function initSourceCode(objTypeXML:XML):String
+		{
+			return objTypeXML.SourceCode.toString();
 		}
 
 		public function getObjectTypeVO(id:String):ObjectTypeVO
