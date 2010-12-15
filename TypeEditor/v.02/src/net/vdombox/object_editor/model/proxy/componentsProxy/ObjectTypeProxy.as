@@ -72,14 +72,14 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			var objTypeVO: ObjectTypeVO = new ObjectTypeVO();
 			var information: XML = objTypeXML.Information[0];			
 			
-			objTypeVO.name 		= information.Name;
-			objTypeVO.category 	= information.Category;
-			objTypeVO.className = information.ClassName;
-			objTypeVO.id		= information.ID;			
-			objTypeVO.dynamic	= information.Dynamic.toString() == "1";
-			objTypeVO.moveable	= information.Moveable.toString() == "1";			
-			objTypeVO.resizable	= information.Resizable;	
-			objTypeVO.container	= information.Container;	
+			objTypeVO.name 			= information.Name;
+			objTypeVO.category 		= information.Category;
+			objTypeVO.className 	= information.ClassName;
+			objTypeVO.id			= information.ID;			
+			objTypeVO.dynamic		= information.Dynamic.toString() == "1";
+			objTypeVO.moveable		= information.Moveable.toString() == "1";			
+			objTypeVO.resizable		= information.Resizable;	
+			objTypeVO.container		= information.Container;	
 			objTypeVO.version		= information.Version;	
 			objTypeVO.interfaceType	= information.InterfaceType;	
 			objTypeVO.optimizationPriority = information.OptimizationPriority;	

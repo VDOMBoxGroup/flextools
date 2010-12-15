@@ -25,44 +25,26 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			var arLanguages:ArrayCollection = new ArrayCollection();		
 			var countLanguages:int = data.children().length();
 			var	langEN:XML = data.Language.(@Code == "en_US")[0];
-			for each (var word:XML in langEN.children())
+		
+			for each (var wordEn:XML in langEN.children())
 			{
 				var item:Object = {};
-				var id:String = word.@ID;
+				var id:String = wordEn.@ID;
 				
 				item["ID"] = id;
 								
 				for(var i:int = 0; i < countLanguages; i++)
 				{
-					var lang:XML = data.Language[i];
-					if( lang.Sentence.@ID != id)
-					{
-						lang.appendChild(word);
-					}
-					item[lang.@Code] = lang.Sentence.(@ID == id )[0].toString();
+					var lang:XML = data.Language[i];					
+					var word:XML =  lang.Sentence.(@ID == id )[0];
+					if (!word)
+						word = wordEn;
+					item[lang.@Code] = word.toString() ;
 				}
 				arLanguages.addItem(item);
 			}
 			return arLanguages;
 		}
-		
-//		for (var item:String in arLanguages)
-//		{
-//			var word:Object = arLanguages[item];
-//			var id:String = word["ID"];
-//			for each(var lang:XML in newLangs.children())
-//			{
-//				var sentence: XML = new XML("<Sentence/>");
-//				sentence.@ID = id;
-//				sentence.appendChild(word[lang.@Code]);
-//				
-//				lang.appendChild(sentence);
-//			}
-//		}
-		
-		
-		
-		
 		
 //		public function getLanguageVO(id:String):LanguageVO
 //		{
