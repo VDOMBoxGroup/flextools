@@ -35,12 +35,34 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				for(var i:int = 0; i < countLanguages; i++)
 				{
 					var lang:XML = data.Language[i];
+					if( lang.Sentence.@ID != id)
+					{
+						lang.appendChild(word);
+					}
 					item[lang.@Code] = lang.Sentence.(@ID == id )[0].toString();
 				}
 				arLanguages.addItem(item);
 			}
 			return arLanguages;
 		}
+		
+//		for (var item:String in arLanguages)
+//		{
+//			var word:Object = arLanguages[item];
+//			var id:String = word["ID"];
+//			for each(var lang:XML in newLangs.children())
+//			{
+//				var sentence: XML = new XML("<Sentence/>");
+//				sentence.@ID = id;
+//				sentence.appendChild(word[lang.@Code]);
+//				
+//				lang.appendChild(sentence);
+//			}
+//		}
+		
+		
+		
+		
 		
 //		public function getLanguageVO(id:String):LanguageVO
 //		{
