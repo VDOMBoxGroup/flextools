@@ -1,14 +1,13 @@
 package net.vdombox.object_editor.model.vo
 {	
 	public class AttributeVO
-	{	
-		public var label		:String = "";
+	{			
 		public var name			:String = "";
 		public var displayName	:String = "";
 		public var defaultValue	:String = "";		
 		public var visible		:Boolean = false;	
 		public var help			:String = "";
-		public var interfaceType:uint = 0;
+		public var interfaceType:String = "";
 		public var codeInterface:String = "";		
 		public var colorgroup	:String = "";		
 		public var errorValidationMessage		:String = "";

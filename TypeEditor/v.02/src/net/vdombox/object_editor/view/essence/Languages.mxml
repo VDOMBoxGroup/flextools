@@ -25,52 +25,32 @@
 			
 			public function set  dataProvader(xml:XML):void
 			{
-				this.enabled = true;
-				prentXML = xml;
-//				arLanguages = new ArrayCollection();
-				
-				var cols:Array = new Array();
-				var dataGridColumn: DataGridColumn = new DataGridColumn("ID");
-				dataGridColumn.width = 50;
-//				dataGridColumn.editable = true;
-				dataGridColumn.setStyle("fontWeight", "bold");
-				cols.push(dataGridColumn);
-				
-				_data =  xml.Languages[0];
-				if (!_data) _data = new XML("<Languages/>");
-				
-				for each(var child:XML in _data.children())
-				{	
-					if (child.name() == "Language")
-					{
-						dataGridColumn = new DataGridColumn(child[0].@Code);
-						cols.push(dataGridColumn);
-					}
-				}
-				
-				languages.columns = cols;
-				
-				arLanguages.removeAll();
-				
-				//arLanguages.addItem({label:child.name(), data:child[0]});
-				
-				var countLanguages:int = _data.children().length();
-				var	langEN:XML = _data.Language.(@Code == "en_US")[0];
-				for each (var word:XML in langEN.children())
-				{
-					var item:Object = {};
-					var id:String = word.@ID;
-					
-					item["ID"] = id;
-//					item["en_US"] = word.toString();
-					
-					for(var i:int = 0; i < countLanguages; i++)
-					{
-						var lang:XML = _data.Language[i];
-						item[lang.@Code] = lang.Sentence.(@ID == id )[0].toString();
-					}
-					arLanguages.addItem(item);
-				}
+				//to mediator
+//				this.enabled = true;
+//				prentXML = xml;
+////				arLanguages = new ArrayCollection();
+//				
+//				var cols:Array = new Array();
+//				var dataGridColumn: DataGridColumn = new DataGridColumn("ID");
+//				dataGridColumn.width = 50;
+////				dataGridColumn.editable = true;
+//				dataGridColumn.setStyle("fontWeight", "bold");
+//				cols.push(dataGridColumn);
+//				
+//				data = xml.Languages[0];
+//				if (!data) data = new XML("<Languages/>");
+//				
+//				for each(var child:XML in data.children())
+//				{	
+//					if (child.name() == "Language")
+//					{
+//						dataGridColumn = new DataGridColumn(child[0].@Code);
+//						cols.push(dataGridColumn);
+//					}
+//				}
+//				languages.columns = cols;
+//				
+//				arLanguages.removeAll();
 			}
 			
 			private var dataChanged:Boolean;

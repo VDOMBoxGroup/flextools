@@ -36,9 +36,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			{
 				objTypeVO.name 		= information.Name;
 				objTypeVO.category 	= information.Category;
-				objTypeVO.className 	= information.ClassName;
-				objTypeVO.id		 	= information.ID;			
-				objTypeVO.dynamic		= information.Dynamic.toString() == "1";
+				objTypeVO.className = information.ClassName;
+				objTypeVO.id		= information.ID;			
+				objTypeVO.dynamic	= information.Dynamic.toString() == "1";
 				objTypeVO.moveable	= information.Moveable.toString() == "1";			
 				objTypeVO.resizable	= information.Resizable;	
 				objTypeVO.container	= information.Container;	
@@ -48,7 +48,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				//sourceCode
 				objTypeVO.sourceCode	= xml.SourceCode.toString();
 				//atributes
-
 				for each ( var data : XML in xml.descendants("Attribute"))  //xml.descendants("Attributes") )
 				{
 					var atrib:AttributeVO = new AttributeVO;
@@ -78,7 +77,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			return _objectTypeList[id];
 		}
-
 
 		public function createXML( objTypeVO: ObjectTypeVO):XML
 		{

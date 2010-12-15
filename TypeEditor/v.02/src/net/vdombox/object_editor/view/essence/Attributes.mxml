@@ -41,13 +41,19 @@
 				</s:HGroup>
 			</mx:FormItem>
 			
-			<mx:FormItem label="Name" toolTip="Имя объекта">
+			<mx:FormItem label="DefaultValue" toolTip="Имя объекта">
 				<mx:TextInput id="defaultValue" width="250" change="{}"/>
 			</mx:FormItem>
 			
 			<mx:FormItem label="RegExp" >
 				<s:HGroup>
 					<ns:OETextInput id="regExp" width="213" editable="false"/>
+					<s:Button label="..." width="30" click="{}"/>
+				</s:HGroup>
+			</mx:FormItem>
+			<mx:FormItem label="ErrorValidationMessage" >
+				<s:HGroup>
+					<ns:OETextInput id="fErrMessage" width="213" editable="false"/>
 					<s:Button label="..." width="30" click="{}"/>
 				</s:HGroup>
 			</mx:FormItem>

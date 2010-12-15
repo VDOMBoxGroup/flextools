@@ -75,16 +75,16 @@ package net.vdombox.object_editor.view.mediators
 
 			view.fname.text 			= objectTypeVO.name;
 			view.fClassName.text		= objectTypeVO.className;
-			view.fID.text 			= objectTypeVO.id;
-			view.fCategory.text		= objectTypeVO.category;
-			view.fDynamic.selected	=  objectTypeVO.dynamic;
-			view.fMoveable.selected	=  objectTypeVO.moveable;
-			view.fVersion.text 		= objectTypeVO.version;
+			view.fID.text 				= objectTypeVO.id;
+			view.fCategory.text			= objectTypeVO.category;
+			view.fDynamic.selected		= objectTypeVO.dynamic;
+			view.fMoveable.selected		= objectTypeVO.moveable;
+			view.fVersion.text 			= objectTypeVO.version;
 
-			view.fResizable.selectedIndex 	 = objectTypeVO.resizable;
-			view.fContainer.selectedIndex 	 = objectTypeVO.container;			
-			view.fInterfaceType.selectedIndex = objectTypeVO.interfaceType;
-			view.fOptimizationPriority.value  = objectTypeVO.optimizationPriority;
+			view.fResizable.selectedIndex		= objectTypeVO.resizable;
+			view.fContainer.selectedIndex		= objectTypeVO.container;			
+			view.fInterfaceType.selectedIndex 	= objectTypeVO.interfaceType;
+			view.fOptimizationPriority.value  	= objectTypeVO.optimizationPriority;
 			trace("compliteInformation");
 		}		
 
