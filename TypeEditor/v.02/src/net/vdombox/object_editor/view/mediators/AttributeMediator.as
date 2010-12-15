@@ -34,8 +34,6 @@ package net.vdombox.object_editor.view.mediators
 		{ 
 			var attributeVO : AttributeVO = view.attributesList.selectedItem.data as AttributeVO;
 			view.fname.text = attributeVO.name;
-			trace("***********  WORKAY ******");
-//			libCode.text = List(event.target).selectedItem.data; // ["data"];
 		}
 
 		private function showAttributes(event: FlexEvent): void
