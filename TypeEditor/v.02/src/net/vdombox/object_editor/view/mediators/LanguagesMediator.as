@@ -26,7 +26,7 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function showLanguages(event: FlexEvent): void
 		{			
-			view.languagesDataGrid.dataProvider = objectTypeVO.languages;
+			view.languagesDataGrid.dataProvider = objectTypeVO.languages.words;
 			view.validateNow();
 		}
 		

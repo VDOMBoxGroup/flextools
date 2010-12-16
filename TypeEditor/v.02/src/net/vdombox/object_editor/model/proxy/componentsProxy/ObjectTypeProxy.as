@@ -6,7 +6,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -24,8 +24,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function newObjectTypeVO(objTypeXML:XML, path:String):void
 		{
 			//information
-
-
 			if (_objectTypeList[path])
 			{
 				facade.sendNotification( ApplicationFacade.OBJECT_EXIST, objTypeVO.filePath );
@@ -125,8 +123,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 			//sourceCode
 			//TODO add <sourceCode/>
-			objTypeXML.appendChild( XML("<![CDATA[" +  objTypeVO.sourceCode +"]" +"]" +">"));				
-
+			var sourceCode:XML = XML("<SourceCode/>");
+			objTypeXML.appendChild( sourceCode );	
+			sourceCode.appendChild( XML("\n"+"<![CDATA[" +  objTypeVO.sourceCode +"]" +"]" +">") )
+				
 			//language 
 			var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 			objTypeXML.appendChild(languageProxy.createXML(objTypeVO));

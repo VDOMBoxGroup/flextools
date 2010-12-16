@@ -23,7 +23,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			super ( NAME, data );
 		}
 
-
 		public function createFromXML(objTypeXML:XML):ArrayCollection
 		{
 			var resourceVOArray : ArrayCollection = new ArrayCollection();

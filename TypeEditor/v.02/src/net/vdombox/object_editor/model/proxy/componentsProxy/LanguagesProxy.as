@@ -5,6 +5,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.collections.ArrayCollection;
 	
+	import net.vdombox.object_editor.model.vo.LanguagesVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	
 	import org.puremvc.as3.interfaces.*;
@@ -19,31 +20,38 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
             super ( NAME, data );			
         }
 		
-		public function createNew(xml:XML):ArrayCollection
+		public function createNew(objTypeXML:XML):LanguagesVO
 		{
-			data = xml.Languages[0];
-			var arLanguages:ArrayCollection = new ArrayCollection();		
-			var countLanguages:int = data.children().length();
-			var	langEN:XML = data.Language.(@Code == "en_US")[0];
-		
+			var languagesXML : XML = objTypeXML.Languages[0];
+//			var arLanguages:ArrayCollection = new ArrayCollection();
+			var languagesVO:LanguagesVO = new LanguagesVO();			
+//			var countLanguages:int = data.children().length();
+			
+			
+			var	langEN:XML = languagesXML.Language.(@Code == "en_US")[0];
+			
+			for each(var langXML:XML in languagesXML.children())
+			{
+				languagesVO.locales.push( langXML.@Code.toString() );
+			}			
+			
 			for each (var wordEn:XML in langEN.children())
 			{
 				var words:Object = {};
-				var id:String = wordEn.@ID;
-				
+				var id:String = wordEn.@ID;				
 				words["ID"] = id;
 								
-				for(var i:int = 0; i < countLanguages; i++)
+				for each(var langXML:XML in languagesXML.children())
 				{
-					var lang:XML = data.Language[i];					
-					var word:XML =  lang.Sentence.(@ID == id )[0];
+//					var langXML:XML = data.Language[i];					
+					var word:XML =  langXML.Sentence.(@ID == id )[0];
 					if (!word)
 						word = wordEn;
-					words[lang.@Code] = word.toString();
+					words[langXML.@Code] = word.toString();					
 				}
-				arLanguages.addItem(words);				
+				languagesVO.words.addItem(words);				
 			}
-			return arLanguages;
+			return languagesVO;
 		}
 		
 		public function getWord(id:String):String
@@ -53,32 +61,27 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		
 		public function createXML( objTypeVO: ObjectTypeVO ):XML
 		{						
-			var newLangs:XML = new XML("<Languages/>");
-			var languages:ArrayCollection = objTypeVO.languages;
-			
-			var language:Object = objTypeVO.languages[0];
-			for(var i:int=0; i < language.length; i++)
-			{
-				//var language:Object = objTypeVO.languages[i];
-				var lanItem:XML = new XML("<Language/>");
-				lanItem.@Code = language["Code"];
-				newLangs.appendChild(lanItem);
-			}
-			for (var item:String in languages)
-			{
-				var words:Object = languages[item];
-				var id:String = words["ID"];
-				for each(var lang:XML in newLangs.children())
+			var langsXML:XML = new XML("<Languages/>");
+			var wordsVO:ArrayCollection = objTypeVO.languages.words;
+			var localesVO:Array = objTypeVO.languages.locales;
+						
+			for each(var localeName:String in localesVO )
+			{				
+				var lanXML:XML = new XML("<Language/>");
+				lanXML.@Code = localeName;
+				
+				for each(var word:Object in wordsVO)
 				{
-					var sentence: XML = new XML("<Sentence/>");
-					sentence.@ID = id;
-					sentence.appendChild(words[lang.@Code]);
+					var id:String = word["ID"];
+					var sentXML: XML = new XML("<Sentence/>");
+						sentXML.@ID = id;
+						sentXML.appendChild(word[localeName]);
 					
-					lang.appendChild(sentence);
-				}
-			}			
-			
-			return newLangs;
+						lanXML.appendChild(sentXML);	
+				}				
+				langsXML.appendChild(lanXML);
+			}
+			return langsXML;
 		}		
 	}
 }
