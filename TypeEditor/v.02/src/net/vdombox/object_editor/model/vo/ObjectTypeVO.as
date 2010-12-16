@@ -9,6 +9,7 @@ package net.vdombox.object_editor.model.vo
 
 		public var events     : ArrayCollection = new ArrayCollection();
 		public var actions    : ArrayCollection = new ArrayCollection();
+		[Bindable]
 		public var languages  : ArrayCollection = new ArrayCollection();
 		public var libraris   : ArrayCollection = new ArrayCollection();
 		public var resourses  : ArrayCollection = new ArrayCollection();
@@ -16,6 +17,7 @@ package net.vdombox.object_editor.model.vo
 
 		//Information
 		public var id			:String = "";
+		[Bindable] 
 		public var name			:String = "";
 		public var dynamic		:Boolean = false;	
 		public var version		:String = "";

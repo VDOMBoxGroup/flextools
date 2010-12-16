@@ -24,7 +24,7 @@ package net.vdombox.object_editor.view.mediators
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
 			view.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
-			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
+//			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
 			trace("InformationMediator: " + objTypeVO.id);
 		}
 
@@ -34,7 +34,7 @@ package net.vdombox.object_editor.view.mediators
 			trace("CHANGECHANGE");
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 		
-			objectTypeVO.name 			= view.fname.text;
+//			objectTypeVO.name 			= view.fname.text;
 			objectTypeVO.className		= view.fClassName.text;
 			objectTypeVO.id				= view.fID.text ;
 			objectTypeVO.category		= view.fCategory.text;

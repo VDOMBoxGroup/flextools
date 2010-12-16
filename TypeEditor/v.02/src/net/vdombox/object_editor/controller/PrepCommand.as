@@ -8,7 +8,7 @@ package net.vdombox.object_editor.controller
     import net.vdombox.object_editor.model.proxy.componentsProxy.ActionsProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.AttributesProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.EventsProxy;
-    import net.vdombox.object_editor.model.proxy.componentsProxy.LanguageProxy;
+    import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.LibrariesProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.ResoursesProxy;
@@ -30,7 +30,7 @@ package net.vdombox.object_editor.controller
 			facade.registerProxy(new ActionsProxy());
 			facade.registerProxy(new AttributesProxy());
 			facade.registerProxy(new EventsProxy());
-			facade.registerProxy(new LanguageProxy());			
+			facade.registerProxy(new LanguagesProxy());			
 			facade.registerProxy(new LibrariesProxy());			
 			facade.registerProxy(new ResoursesProxy());
 			facade.registerMediator( new ApplicationMediator( note.getBody() ) );			

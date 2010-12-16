@@ -58,7 +58,7 @@ package net.vdombox.object_editor.view.mediators
 
 			facade.registerMediator( new InformationMediator( information, objTypeVO ) );
 			facade.registerMediator( new SourceCodeMediatior( sourceCode,  objTypeVO ) );
-			facade.registerMediator( new AttributeMediator   ( atributes,   objTypeVO ) );
+			facade.registerMediator( new AttributeMediator  ( atributes,   objTypeVO ) );
 			facade.registerMediator( new LanguagesMediator 	( languages,   objTypeVO ) );
 			facade.registerMediator( new LibrariesMediator 	( libraries,   objTypeVO ) );
 			facade.registerMediator( new ResoursesMediator 	( resourses,   objTypeVO ) );
@@ -92,7 +92,6 @@ package net.vdombox.object_editor.view.mediators
 				case OBJECT_TYPE_CHAGED:
 					if (objectTypeVO == note.getBody() )
 						view.label = objectTypeVO.name + "*"
-//					compliteInformation();
 					break;				
 			}
 		}

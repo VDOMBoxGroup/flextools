@@ -24,12 +24,13 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function showLibraries(event: FlexEvent): void
 		{			
-			compliteLibraries();
+//			view. laSnguagesDataGrid
 			view.validateNow();
 		}
 		
 		protected function compliteLibraries( ):void
-		{			
+		{	
+			
 			//			atributes.sourceCode.text = objectTypeVO.atribute;			
 			trace("compliteLanguages");
 		}		

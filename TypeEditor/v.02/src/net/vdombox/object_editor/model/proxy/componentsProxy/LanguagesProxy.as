@@ -4,17 +4,14 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.collections.ArrayCollection;
-	
-	import net.vdombox.object_editor.model.vo.LanguageVO;
-	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
    
-    public class LanguageProxy extends Proxy implements IProxy
+    public class LanguagesProxy extends Proxy implements IProxy
     {
 		public static const NAME:String = "LanguageProxy";		
 		
-		public function LanguageProxy ( data:Object = null ) 
+		public function LanguagesProxy ( data:Object = null ) 
         {
             super ( NAME, data );			
         }
@@ -28,10 +25,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		
 			for each (var wordEn:XML in langEN.children())
 			{
-				var item:Object = {};
+				var words:Object = {};
 				var id:String = wordEn.@ID;
 				
-				item["ID"] = id;
+				words["ID"] = id;
 								
 				for(var i:int = 0; i < countLanguages; i++)
 				{
@@ -39,17 +36,17 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					var word:XML =  lang.Sentence.(@ID == id )[0];
 					if (!word)
 						word = wordEn;
-					item[lang.@Code] = word.toString() ;
+					words[lang.@Code] = word.toString();
 				}
-				arLanguages.addItem(item);
+				arLanguages.addItem(words);				
 			}
 			return arLanguages;
 		}
 		
-//		public function getLanguageVO(id:String):LanguageVO
-//		{
-//			return _languageList[id];
-//		}
+		public function getWord(id:String):String
+		{
+			return "qu";
+		}
 		
 		public function createXML():void
 		{		

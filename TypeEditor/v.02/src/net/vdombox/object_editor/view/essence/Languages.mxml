@@ -100,11 +100,11 @@
 			
 			private function addWord():void
 			{
-				var num:int = Math.round(Math.random()*1000);
+			/*	var num:int = Math.round(Math.random()*1000);
 				arLanguages.addItem({"ID":num, "en_US":"New word"});
 				languages.selectedIndex = arLanguages.length - 1;
 				languages.validateNow();
-				languages.scrollToIndex(languages.selectedIndex);
+				languages.scrollToIndex(languages.selectedIndex);*/
 			}
 			
 			private function deleteWord():void
@@ -112,12 +112,12 @@
 //				languages.
 				var obj:Object = [];
 //				obj["ID"] = languages.selectedItem.ID;
-				arLanguages.removeItemAt(arLanguages.getItemIndex(languages.selectedItem));
+//				arLanguages.removeItemAt(arLanguages.getItemIndex(languages.selectedItem));
 			}
 			
 			private function addLaguage():void
 			{
-				var popup:NewLanguage = NewLanguage(PopUpManager.createPopUp(this, NewLanguage, true));
+				/*var popup:NewLanguage = NewLanguage(PopUpManager.createPopUp(this, NewLanguage, true));
 				popup.addEventListener(CloseEvent.CLOSE, closeHandler);
 				
 				function closeHandler(event:CloseEvent):void
@@ -137,7 +137,7 @@
 						var word:Object = arLanguages[i];
 						word[lan] = word["en_US"];
 					}
-				}
+				}*/
 			}
 		]]>
 	</fx:Script>
@@ -145,13 +145,13 @@
 		<s:HGroup paddingLeft="10">
 			<s:Button label="Add Language" click="{addLaguage()}" />	
 		</s:HGroup>
-	<mx:DataGrid id="languages" color="0x323232" width="100%" height="100%" rowCount="3"   itemEditEnd="languages_itemEditEndHandler(event)"
+	<mx:DataGrid id="languagesDataGrid" color="0x323232" width="100%" height="100%" rowCount="3"   itemEditEnd="languages_itemEditEndHandler(event)"
 				 editable="true" dataProvider="{arLanguages}"/>
 	<s:HGroup textAlign="right" width="100%"   paddingBottom="10" paddingRight="10">
 		<s:HGroup width="100%"/>
 		<s:Button label="Add" click="{addWord();}" />
 		
-		<s:Button label="Delete"  enabled="{languages.selectedIndex != -1}"
+		<s:Button label="Delete" enabled="{languagesDataGrid.selectedIndex != -1}" 
 				  click="{deleteWord()}"/>
 	</s:HGroup>
 	</s:VGroup>

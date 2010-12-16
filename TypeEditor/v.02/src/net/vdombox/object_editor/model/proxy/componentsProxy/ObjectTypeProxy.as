@@ -55,7 +55,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					objTypeVO.attributes.addItem({label:atrib.name, data:atrib});	
 				}
 				//language 
-				var languageProxy:LanguageProxy = facade.retrieveProxy(LanguageProxy.NAME) as LanguageProxy;
+				var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 				objTypeVO.languages = languageProxy.createNew(objTypeXML);
 				//resource
 				var resoursesProxy:ResoursesProxy = facade.retrieveProxy(ResoursesProxy.NAME) as ResoursesProxy;
