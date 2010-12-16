@@ -19,7 +19,6 @@ package net.vdombox.object_editor.model.proxy
 			super ( NAME, data );
 		}
 
-//		public function getXML( path:String ):XML 
 		public function readFile( path:String ):String
 		{	
 			var file:File = new File;
@@ -33,8 +32,7 @@ package net.vdombox.object_editor.model.proxy
 		}
 
 		public function saveFile( str:String, path:String ): void//Boolean
-		{		
-//			var str:String = '<?xml version="1.0" encoding="utf-8"?>\n'+objTypeXML.toXMLString();
+		{
 			var file:File = new File();
 			file.nativePath = path; 
 
