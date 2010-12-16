@@ -8,9 +8,11 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
 			import mx.containers.TabNavigator;
 			
-			import spark.components.Button;
+			import spark.components.Button;		
+			
 			private var _tabNavigator:TabNavigator;
 			private var _saveButton:Button;
 			
@@ -71,8 +73,6 @@
 	</mx:TabNavigator-->
 	<s:HGroup>
 		<s:Button label="Save" 	  id="saveObjectTypeButton" />
-		<s:Button label="Save as" id="saveAsObjectTypeButton" />
-	</s:HGroup>
-	
-		
+		<s:Button label="Save as" id="saveAsObjectTypeButton" />		
+	</s:HGroup>	
 </mx:VBox>

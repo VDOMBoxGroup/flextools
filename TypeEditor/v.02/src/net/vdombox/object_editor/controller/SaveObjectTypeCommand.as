@@ -21,7 +21,9 @@ package net.vdombox.object_editor.controller
 			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy( ObjectTypeProxy.NAME ) as ObjectTypeProxy;
 			var objTypeXML:XML = objTypeProxy.createXML( objTypeVO );
 			var fileProxy:FileProxy = facade.retrieveProxy( FileProxy.NAME ) as FileProxy;
-			fileProxy.saveXMLToFile( objTypeXML, objTypeVO.filePath );
+			
+			var str:String = '<?xml version="1.0" encoding="utf-8"?>\n'+objTypeXML.toXMLString();
+			fileProxy.saveFile( str, objTypeVO.filePath );
 		}
 	}
 }

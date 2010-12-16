@@ -22,12 +22,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		
 		public function createNew(objTypeXML:XML):LanguagesVO
 		{
-			var languagesXML : XML = objTypeXML.Languages[0];
-//			var arLanguages:ArrayCollection = new ArrayCollection();
-			var languagesVO:LanguagesVO = new LanguagesVO();			
-//			var countLanguages:int = data.children().length();
-			
-			
+			var languagesXML: XML = objTypeXML.Languages[0];
+			var languagesVO: LanguagesVO = new LanguagesVO();		
 			var	langEN:XML = languagesXML.Language.(@Code == "en_US")[0];
 			
 			for each(var langXML:XML in languagesXML.children())
@@ -42,8 +38,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				words["ID"] = id;
 								
 				for each(var langXML:XML in languagesXML.children())
-				{
-//					var langXML:XML = data.Language[i];					
+				{			
 					var word:XML =  langXML.Sentence.(@ID == id )[0];
 					if (!word)
 						word = wordEn;
@@ -54,7 +49,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return languagesVO;
 		}
 		
-		public function getWord(id:String):String
+		public function getWordsOnCarentLocal(id:String):String
 		{
 			return "qu";
 		}

@@ -1,5 +1,8 @@
 package net.vdombox.object_editor.view.mediators
 {
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	
 	import mx.collections.ArrayCollection;
 	import mx.events.FlexEvent;
 	
@@ -14,7 +17,8 @@ package net.vdombox.object_editor.view.mediators
 	
 	public class LanguagesMediator extends Mediator implements IMediator
 	{
-		public static const NAME:String = "LanguagesMediator";
+		public static const NAME:String 		= "LanguagesMediator";
+		public static const ADD_LANGUAGE:String = "addLaguage";
 		private var objectTypeVO:ObjectTypeVO;
 		
 		public function LanguagesMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
@@ -22,6 +26,7 @@ package net.vdombox.object_editor.view.mediators
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
 			view.addEventListener( FlexEvent.SHOW, showLanguages );
+		//	view.addLaguage.addEventListener( MouseEvent.CLICK,   addLaguage );
 		}
 		
 		private function showLanguages(event: FlexEvent): void
@@ -30,35 +35,11 @@ package net.vdombox.object_editor.view.mediators
 			view.validateNow();
 		}
 		
-		protected function compliteLanguages( ):void
+		private function addLaguage(event: FlexEvent): void
 		{			
-			//to mediator
-//				this.enabled = true;
-//				prentXML = xml;
-//				arLanguages = new ArrayCollection();
-				
-				/*var cols:Array = new Array();
-				var dataGridColumn: DataGridColumn = new DataGridColumn("ID");
-				dataGridColumn.width = 50;
-//				dataGridColumn.editable = true;
-				dataGridColumn.setStyle("fontWeight", "bold");
-				cols.push(dataGridColumn);
-				
-				var data:ArrayCollection = objectTypeVO.languages;// xml.Languages[0];
-				if (data != null)  // data = new XML("<Languages/>");
-				
-				for each(var attributeVO:AttributeVO in data)
-				{	
-					if (child.name() == "Language")
-					{
-						dataGridColumn = new DataGridColumn(child[0].@Code);
-						cols.push(dataGridColumn);
-					}
-				}
-				languages.columns = cols;
-				
-				arLanguages.removeAll();*/		
-		}		
+			view.languagesDataGrid.dataProvider = objectTypeVO.languages.words;
+			view.validateNow();
+		}
 		
 		protected function get view():Languages
 		{

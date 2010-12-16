@@ -85,6 +85,7 @@ package net.vdombox.object_editor.view.mediators
 			view.fContainer.selectedIndex		= objectTypeVO.container;			
 			view.fInterfaceType.selectedIndex 	= objectTypeVO.interfaceType;
 			view.fOptimizationPriority.value  	= objectTypeVO.optimizationPriority;
+			view.currentLocation				= objectTypeVO.languages.locales;
 			trace("compliteInformation");
 		}		
 

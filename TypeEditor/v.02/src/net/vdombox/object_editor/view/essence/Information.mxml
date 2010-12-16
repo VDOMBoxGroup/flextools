@@ -47,7 +47,10 @@
 				[ 	{label:"Ordinary Object", data:1}, 
 					{label:"Container", data:2}, 
 					{label:"Top-level container", data:3}]);			
-							
+					
+			[Bindable]
+			public var currentLocation:Array = new Array();
+			
 			public function set dataProvader(xml:XML):void
 			{
 				return;
@@ -309,6 +312,8 @@
 				<s:NumericStepper id="fOptimizationPriority" width="55" 
 							value="0" snapInterval="1" minimum="1" maximum="100"  change="{saveChanges()}"/>
 			</mx:FormItem>
+			<mx:ComboBox dataProvider="{currentLocation}" width="150" color="0x000000"/>
+			
 		</mx:Form>
 	</s:HGroup>
 </s:NavigatorContent>

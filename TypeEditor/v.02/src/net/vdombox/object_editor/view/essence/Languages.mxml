@@ -115,9 +115,9 @@
 //				arLanguages.removeItemAt(arLanguages.getItemIndex(languages.selectedItem));
 			}
 			
-			private function addLaguage():void
+/*			private function addLaguage():void
 			{
-				/*var popup:NewLanguage = NewLanguage(PopUpManager.createPopUp(this, NewLanguage, true));
+				var popup:NewLanguage = NewLanguage(PopUpManager.createPopUp(this, NewLanguage, true));
 				popup.addEventListener(CloseEvent.CLOSE, closeHandler);
 				
 				function closeHandler(event:CloseEvent):void
@@ -137,13 +137,13 @@
 						var word:Object = arLanguages[i];
 						word[lan] = word["en_US"];
 					}
-				}*/
-			}
+				}
+			}*/
 		]]>
 	</fx:Script>
 	<s:VGroup width="100%" height="100%">
 		<s:HGroup paddingLeft="10">
-			<s:Button label="Add Language" click="{addLaguage()}" />	
+			<s:Button id="addLaguage" label="Add Language"/>	
 		</s:HGroup>
 	<mx:DataGrid id="languagesDataGrid" color="0x323232" width="100%" height="100%" rowCount="3"   itemEditEnd="languages_itemEditEndHandler(event)"
 				 editable="true" dataProvider="{arLanguages}"/>

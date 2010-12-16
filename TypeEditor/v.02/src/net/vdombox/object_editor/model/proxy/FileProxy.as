@@ -19,7 +19,8 @@ package net.vdombox.object_editor.model.proxy
 			super ( NAME, data );
 		}
 
-		public function getXML( path:String ):XML 
+//		public function getXML( path:String ):XML 
+		public function readFile( path:String ):String
 		{	
 			var file:File = new File;
 			file.nativePath = path;
@@ -27,15 +28,13 @@ package net.vdombox.object_editor.model.proxy
 			var stream:FileStream = new FileStream();   
 			stream.open(file, FileMode.READ);
 			var data:String = stream.readUTFBytes(stream.bytesAvailable);
-			var objectXML:XML = new XML(data);	
-
 			stream.close();	
-			return objectXML;				
+			return data;				
 		}
 
-		public function saveXMLToFile( objTypeXML:XML, path:String ): void//Boolean
+		public function saveFile( str:String, path:String ): void//Boolean
 		{		
-			var str:String = '<?xml version="1.0" encoding="utf-8"?>\n'+objTypeXML.toXMLString();
+//			var str:String = '<?xml version="1.0" encoding="utf-8"?>\n'+objTypeXML.toXMLString();
 			var file:File = new File();
 			file.nativePath = path; 
 
