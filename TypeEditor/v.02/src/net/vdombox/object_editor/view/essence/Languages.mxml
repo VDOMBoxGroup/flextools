@@ -98,23 +98,6 @@
 				}*/
 			}
 			
-			private function addWord():void
-			{
-			/*	var num:int = Math.round(Math.random()*1000);
-				arLanguages.addItem({"ID":num, "en_US":"New word"});
-				languages.selectedIndex = arLanguages.length - 1;
-				languages.validateNow();
-				languages.scrollToIndex(languages.selectedIndex);*/
-			}
-			
-			private function deleteWord():void
-			{
-//				languages.
-				var obj:Object = [];
-//				obj["ID"] = languages.selectedItem.ID;
-//				arLanguages.removeItemAt(arLanguages.getItemIndex(languages.selectedItem));
-			}
-			
 /*			private function addLaguage():void
 			{
 				var popup:NewLanguage = NewLanguage(PopUpManager.createPopUp(this, NewLanguage, true));
@@ -149,10 +132,10 @@
 				 editable="true" dataProvider="{arLanguages}"/>
 	<s:HGroup textAlign="right" width="100%"   paddingBottom="10" paddingRight="10">
 		<s:HGroup width="100%"/>
-		<s:Button label="Add" click="{addWord();}" />
+		<s:Button id="addWord" label="Add" />
 		
-		<s:Button label="Delete" enabled="{languagesDataGrid.selectedIndex != -1}" 
-				  click="{deleteWord()}"/>
+		<s:Button id="deleteWord" label="Delete" enabled="{languagesDataGrid.selectedIndex != -1}" 
+				 />
 	</s:HGroup>
 	</s:VGroup>
 </s:NavigatorContent>

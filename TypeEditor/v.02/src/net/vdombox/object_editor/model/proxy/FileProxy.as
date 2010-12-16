@@ -1,5 +1,5 @@
 /*
-   Class FileProxy have function for returne XML for path to file and save xml to file
+   Class FileProxy wrapper over file
  */
 package net.vdombox.object_editor.model.proxy
 {
