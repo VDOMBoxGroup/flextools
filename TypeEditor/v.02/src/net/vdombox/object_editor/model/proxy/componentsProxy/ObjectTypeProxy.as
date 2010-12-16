@@ -6,7 +6,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
-	
+
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -124,13 +124,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			//sourceCode
 			//TODO add <sourceCode/>
 			var sourceCode:XML = XML("<SourceCode/>");
-			objTypeXML.appendChild( sourceCode );	
 			sourceCode.appendChild( XML("\n"+"<![CDATA[" +  objTypeVO.sourceCode +"]" +"]" +">") )
-				
+			objTypeXML.appendChild( sourceCode );	
+
 			//language 
 			var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 			objTypeXML.appendChild(languageProxy.createXML(objTypeVO));
-			
+
 			//resource
 			var resoursesProxy:ResoursesProxy = facade.retrieveProxy(ResoursesProxy.NAME) as ResoursesProxy;
 			var resoursesXML : XML = resoursesProxy.toXML(objTypeVO);

@@ -3,11 +3,14 @@
  */
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
+	import flash.filesystem.File;
+	import flash.filesystem.FileStream;
 	import flash.net.dns.AAAARecord;
 
 	import mx.collections.ArrayCollection;
 	import mx.rpc.IResponder;
 
+	import net.vdombox.object_editor.model.proxy.FileProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.model.vo.ResourceVO;
 
@@ -33,14 +36,14 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 			for each(var resXML:XML in resourcesXML.children())
 			{
-				var resourceVO : ResourceVO =  createNew(resXML);
+				var resourceVO : ResourceVO =  createNewVO(resXML);
 				resourceVOArray.addItem(resourceVO);
 			}	
 
 			return resourceVOArray;
 		}
 
-		private function createNew(resXML:XML):ResourceVO
+		private function createNewVO(resXML:XML):ResourceVO
 		{
 			var  resourceVO : ResourceVO = new ResourceVO();
 
@@ -49,6 +52,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			resourceVO.type = resXML.@Type;
 
 			// TODO: save data to filesystem
+			var location:File = File.applicationStorageDirectory.resolvePath("resources/"+resourceVO.id);
+			var fileProxy:FileProxy = facade.retrieveProxy(FileProxy.NAME) as FileProxy;
+
+			fileProxy.saveFile(resXML.toString(),  location.nativePath);
 
 			return resourceVO;
 		}
@@ -78,6 +85,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				var resXML : XML = new XML("<Resource/>");
 				resXML.@Name = resVO.name;
 				resXML.@Type = resVO.type;
+
+				var location:File = File.applicationStorageDirectory.resolvePath("resources/"+resVO.id);
+				var fileProxy:FileProxy = facade.retrieveProxy(FileProxy.NAME) as FileProxy;
+
+				var resDataStr : String =  fileProxy.readFile(location.nativePath);
+				var resDataXML : XML = new XML("\n"+"<![CDATA[" +  resDataStr +"]" +"]" +">") ;
+				resXML.appendChild(resDataXML)
 
 				resourcesXML.appendChild(resXML);
 			}
