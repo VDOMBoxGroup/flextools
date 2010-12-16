@@ -6,7 +6,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
-	
+
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -24,7 +24,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function newObjectTypeVO(objTypeXML:XML, path:String):void
 		{
 			//information
-			
+
 
 			if (_objectTypeList[path])
 			{
@@ -59,19 +59,19 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				objTypeVO.languages = languageProxy.createNew(objTypeXML);
 				//resource
 				var resoursesProxy:ResoursesProxy = facade.retrieveProxy(ResoursesProxy.NAME) as ResoursesProxy;
-//				objTypeVO.resourses = resoursesProxy.createNew(objTypeXML);
-				
+				objTypeVO.resourses = resoursesProxy.createFromXML(objTypeXML);
+
 				_objectTypeList[objTypeVO.filePath] = objTypeVO;
 
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
 			}
 		}
-		
+
 		public function initInformation(objTypeXML:XML):ObjectTypeVO
 		{
 			var objTypeVO: ObjectTypeVO = new ObjectTypeVO();
 			var information: XML = objTypeXML.Information[0];			
-			
+
 			objTypeVO.name 			= information.Name;
 			objTypeVO.category 		= information.Category;
 			objTypeVO.className 	= information.ClassName;
@@ -85,7 +85,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objTypeVO.optimizationPriority = information.OptimizationPriority;	
 			return objTypeVO;
 		}
-		
+
 		public function initSourceCode(objTypeXML:XML):String
 		{
 			return objTypeXML.SourceCode.toString();

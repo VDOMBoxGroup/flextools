@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 			xmlns:s="library://ns.adobe.com/flex/spark" 
-		 			xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" click="save()"
+		 			xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" click="{}"
 					label="Resourses">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
@@ -81,6 +81,9 @@
 			
 			private function changeResourcesContent():void
 			{
+			
+			}
+			/*
 				var fileUpload:FileReference = new FileReference();
 				fileUpload.addEventListener(Event.SELECT, fileSelected);
 				
@@ -92,7 +95,7 @@
 					fileUpload.addEventListener(Event.COMPLETE, fileDounloaded);
 					fileUpload.load();
 				}
-				
+			
 				function fileDounloaded(event:Event):void
 				{
 					fileUpload.removeEventListener(Event.COMPLETE, fileDounloaded);
@@ -109,7 +112,8 @@
 					Alert.show("ID: " +id , "Content changed"); 
 				}
 			}
-			
+				*/
+			/*
 			private function deleteResource():void
 			{
 				Alert.show("Do You want to delete ?","Delete", 3, this, deleteResourceOk);
@@ -135,7 +139,8 @@
 				}
 					
 			}
-			
+			*/
+			/*
 			private function save():void
 			{
 				if(dataChanged)
@@ -150,8 +155,9 @@
 					}
 				}
 			}
+			*/
 			
-			
+			/*
 			private function exportContent():void
 			{
 				var id:String = resources.selectedItem.ID;
@@ -178,27 +184,27 @@
 				// TODO Auto-generated method stub
 				dataChanged = true;
 			}
-
+*/
 		]]>
 	</fx:Script>
 	<s:VGroup width="100%" height="100%">
 		
-		<mx:DataGrid id="resources" color="0x323232" width="100%" height="100%" rowCount="3"   itemEditEnd="resources_itemEditEndHandler(event)"
-					 editable="true" dataProvider="{arResources}">
+		<mx:DataGrid id="resourcesDataGrid" color="0x323232" width="100%" height="100%" rowCount="3"   itemEditEnd="{}"
+					 editable="true" >
 			<mx:columns>
-				<mx:DataGridColumn dataField="ID" dataTipField="ID" width="200" editable="false" />
-				<mx:DataGridColumn dataField="Name" dataTipField="Name" width="150" />
-				<mx:DataGridColumn dataField="Type" dataTipField="Type" width="100" />
+				<mx:DataGridColumn dataField="id" dataTipField="ID" width="200" editable="false" />
+				<mx:DataGridColumn dataField="name" dataTipField="Name" width="150" />
+				<mx:DataGridColumn dataField="type" dataTipField="Type" width="100" />
 			</mx:columns>
 		</mx:DataGrid>
 		<s:HGroup textAlign="right" width="100%"   paddingBottom="10" paddingRight="10">
 			<s:HGroup width="100%"/>
 			<s:Button label="Add" click="{addResource();}" />
-			<s:Button label="Change content" click="{changeResourcesContent();}"  enabled="{resources.selectedIndex != -1}"/>
-			<s:Button label="Export"  enabled="{resources.selectedIndex != -1}"
-					  click="{exportContent()}"/>
-			<s:Button label="Delete"  enabled="{resources.selectedIndex != -1}"
-					  click="{deleteResource()}"/>
+			<s:Button label="Change content" click="{changeResourcesContent();}"  enabled="{resourcesDataGrid.selectedIndex != -1}"/>
+			<s:Button label="Export"  enabled="{resourcesDataGrid.selectedIndex != -1}"
+					  click="{}"/>
+			<s:Button label="Delete"  enabled="{resourcesDataGrid.selectedIndex != -1}"
+					  click="{}"/>
 		</s:HGroup>
 	</s:VGroup>
 </s:NavigatorContent>
