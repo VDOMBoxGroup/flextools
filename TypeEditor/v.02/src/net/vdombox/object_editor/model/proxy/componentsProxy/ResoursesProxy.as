@@ -8,6 +8,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import mx.collections.ArrayCollection;
 	import mx.rpc.IResponder;
 
+	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.model.vo.ResourceVO;
 
 	import org.puremvc.as3.interfaces.*;
@@ -69,9 +70,18 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 		}
 
-		public function toXML(resourceArrayCollection:ArrayCollection):XML
+		public function toXML(objTypeVO:ObjectTypeVO):XML
 		{	
 			var resourcesXML : XML = new XML("<Resources/>");
+
+			for each(var resVO:ResourceVO in objTypeVO.resourses)
+			{
+				var resXML : XML = new XML("<Resource/>");
+				resXML.@Name = resVO.name;
+				resXML.@Type = resVO.type;
+
+				resourcesXML.appendChild(resXML);
+			}
 
 			return resourcesXML;
 		}

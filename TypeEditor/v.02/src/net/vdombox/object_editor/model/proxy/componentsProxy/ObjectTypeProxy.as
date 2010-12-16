@@ -98,6 +98,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 		public function createXML( objTypeVO: ObjectTypeVO):XML
 		{
+			var objTypeXML:XML = new XML("<Type/>");
 
 			//save information
 			var information:XML = new XML("<Information/>");				
@@ -120,13 +121,19 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			information.InterfaceType = objTypeVO.interfaceType;
 			information.Resizable = objTypeVO.resizable;
 			information.Container = objTypeVO.container;
+			objTypeXML.appendChild(information);
 
-			var type:XML = new XML("<Type/>");
-			type.appendChild(information);
-			type.appendChild( XML("<![CDATA[" +  objTypeVO.sourceCode +"]" +"]" +">"));				
+			//sourceCode
+			objTypeXML.appendChild( XML("<![CDATA[" +  objTypeVO.sourceCode +"]" +"]" +">"));				
 
 
-			return type;
+			//resource
+			var resoursesProxy:ResoursesProxy = facade.retrieveProxy(ResoursesProxy.NAME) as ResoursesProxy;
+			var resoursesXML : XML = resoursesProxy.toXML(objTypeVO);
+			objTypeXML.appendChild(resoursesXML);
+
+
+			return objTypeXML;
 		}
 	}
 }
