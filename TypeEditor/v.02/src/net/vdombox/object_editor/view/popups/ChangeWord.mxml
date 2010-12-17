@@ -36,7 +36,7 @@
 				{
 					arWords.addItem({"label":word.toString(), "data":word.@ID});
 				}
-				words.selectedIndex = 0;
+//				words.selectedIndex = 0;
 			}
 			
 			private function closeHandler(cEvent:CloseEvent):void 
@@ -51,7 +51,7 @@
 			private function button1_clickHandler():void
 			{
 				// TODO Auto-generated method stub
-				wordCode = "#Lang("+words.selectedItem.data+")";
+//				wordCode = "#Lang("+words.selectedItem.data+")";
 				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
 			}
 			
@@ -63,7 +63,9 @@
 			
 		]]>
 	</fx:Script>
-	<s:VGroup  width="228" height="367">
+	<s:Button label="Ok" click="button1_clickHandler()"  />
+	<s:Button label="Cancel"  click="cancel()"/>
+	<!--s:VGroup  width="228" height="367">
 		<s:List id="words" width="226"   height="332" dataProvider="{arWords}" doubleClick="button1_clickHandler()"  />
 		
 		<s:HGroup right="0" >
@@ -72,6 +74,6 @@
 		</s:HGroup>
 		
 		
-	</s:VGroup>
+	</s:VGroup-->
 	
 </s:TitleWindow>
