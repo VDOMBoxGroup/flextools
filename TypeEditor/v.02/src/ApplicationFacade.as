@@ -48,6 +48,7 @@ package
 			registerCommand( OPEN_OBJECT, 		OpenObjectCommand );
 			registerCommand( SAVE_OBJECT_TYPE, 	SaveObjectTypeCommand );
 			registerCommand( SAVE_AS_OBJECT_TYPE,NewObjectTypePathCommand );
+
 		}
 
 		public function startup( app:ObjectEditor2 ):void

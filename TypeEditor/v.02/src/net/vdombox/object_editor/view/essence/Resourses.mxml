@@ -40,7 +40,7 @@
 					arResources.addItem(item);
 				}	
 			}
-			
+			/*
 			private function addResource():void
 			{
 				var fileUpload:FileReference = new FileReference();
@@ -78,7 +78,7 @@
 					arResources.addItem(item);
 				}
 			}
-			
+			*/
 			private function changeResourcesContent():void
 			{
 			
@@ -199,12 +199,12 @@
 		</mx:DataGrid>
 		<s:HGroup textAlign="right" width="100%"   paddingBottom="10" paddingRight="10">
 			<s:HGroup width="100%"/>
-			<s:Button label="Add" click="{addResource();}" />
-			<s:Button label="Change content" click="{changeResourcesContent();}"  enabled="{resourcesDataGrid.selectedIndex != -1}"/>
-			<s:Button label="Export"  enabled="{resourcesDataGrid.selectedIndex != -1}"
+			<s:Button label="Add" id="addResourceButt"  />
+			<s:Button label="Change content" id="changeContentButt"  enabled="{resourcesDataGrid.selectedIndex != -1}"/>
+			<s:Button label="Export" id="exportContentButt"  enabled="{resourcesDataGrid.selectedIndex != -1}"
 					  click="{}"/>
-			<s:Button label="Delete"  enabled="{resourcesDataGrid.selectedIndex != -1}"
-					  click="{}"/>
+			<s:Button label="Delete" id="deleteButt" enabled="{resourcesDataGrid.selectedIndex != -1}"
+					  />
 		</s:HGroup>
 	</s:VGroup>
 </s:NavigatorContent>

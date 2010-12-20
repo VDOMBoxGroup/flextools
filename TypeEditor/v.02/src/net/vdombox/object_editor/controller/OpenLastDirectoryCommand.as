@@ -1,10 +1,11 @@
 /*
-	Class CheckingPathExistence checking the existence of path and sends a notification to execute commands LOAD_XML_FILES
-*/
+   Class CheckingPathExistence checking the existence of path and sends a notification to execute commands LOAD_XML_FILES
+ */
 package net.vdombox.object_editor.controller
 {
+	import flash.filesystem.File;
 	import flash.net.SharedObject;
-	
+
 	import org.puremvc.as3.interfaces.ICommand;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
@@ -18,7 +19,10 @@ package net.vdombox.object_editor.controller
 			if( path )
 			{				
 				facade.sendNotification( ApplicationFacade.PARSE_XML_FILES, path );
-			}			
+			}	else
+			{
+				so.data.path = File.documentsDirectory.nativePath;
+			}
 		}
 	}
 }

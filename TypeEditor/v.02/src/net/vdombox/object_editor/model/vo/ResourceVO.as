@@ -9,9 +9,12 @@ package net.vdombox.object_editor.model.vo
 		public var type		:String = "";
 		public var path		:String = "";	
 
-		public function ResourceVO()
+		public function ResourceVO(id:String = "", name:String = "" , type:String = "" )
 		{
 			//Information
+			this.id = id;
+			this.name = name;
+			this.type = type;
 
 
 		}

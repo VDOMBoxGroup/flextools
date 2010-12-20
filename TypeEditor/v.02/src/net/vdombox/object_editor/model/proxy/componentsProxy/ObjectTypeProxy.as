@@ -6,7 +6,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
-	
+
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -55,14 +55,15 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				//language 
 				var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 				objTypeVO.languages = languageProxy.createNew(objTypeXML);
-				
+
 				//resource
-				var resoursesProxy:ResoursesProxy = facade.retrieveProxy(ResoursesProxy.NAME) as ResoursesProxy;
-				objTypeVO.resourses = resoursesProxy.createFromXML(objTypeXML);
+				var resoursesProxy:ResourcesProxy = facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
+				objTypeVO.resources = resoursesProxy.createFromXML(objTypeXML);
 
 				_objectTypeList[objTypeVO.filePath] = objTypeVO;
 
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
+				objTypeXML = null;
 			}
 		}
 
@@ -130,12 +131,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 			//language 
 			var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
-			objTypeXML.appendChild(languageProxy.createXML(objTypeVO));
+//			objTypeXML.appendChild(languageProxy.createXML(objTypeVO.languages));
 
 			//resource
-			var resoursesProxy:ResoursesProxy = facade.retrieveProxy(ResoursesProxy.NAME) as ResoursesProxy;
-			var resoursesXML : XML = resoursesProxy.toXML(objTypeVO);
-			objTypeXML.appendChild(resoursesXML);
+			var resourcesProxy:ResourcesProxy = facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
+			var resourcesXML : XML = resourcesProxy.toXML(objTypeVO.resources);
+			objTypeXML.appendChild(resourcesXML);
 
 
 			return objTypeXML;

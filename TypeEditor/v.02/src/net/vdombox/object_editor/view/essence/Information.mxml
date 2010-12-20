@@ -31,7 +31,9 @@
 			
 			[Bindable]
 			public var arInterfaceType:ArrayCollection = new ArrayCollection(
-				[ 	{label:"Standard", data:1}, 
+				[ 	
+					{label:"SELECT VALUE", data:0},
+					{label:"Standard", data:1}, 
 					{label:"RichText Editor", data:2}, 
 					{label:"Text Editor", data:3}, 
 					{label:"Picture", data:4}, 
@@ -46,7 +48,8 @@
 			
 			[Bindable]
 			public var aContainer:ArrayCollection = new ArrayCollection(
-				[ 	{label:"Ordinary Object", data:1}, 
+				[ 	{label:"SELECT VALUE", data:0}, 
+					{label:"Ordinary Object", data:1}, 
 					{label:"Container", data:2}, 
 					{label:"Top-level container", data:3}]);			
 						
@@ -209,20 +212,34 @@
 			
 			<mx:FormItem label="InterfaceType" 
 						 toolTip="Тип интерфейса в редакторе: 1 - Standard, 2 - RichText Editor, 3 - Text Editor, 4 - Picture, 5 - Special Table">
-				<s:ComboBox id="fInterfaceType" dataProvider="{arInterfaceType}" close="{saveChanges()}"/>
+				<s:ComboBox id="fInterfaceType" dataProvider="{arInterfaceType}" />
 			</mx:FormItem>
 		
 			<mx:FormItem label="Resizable" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
-				<s:ComboBox id="fResizable" dataProvider="{aResizable}" close="{saveChanges()}" />
+				<s:ComboBox id="fResizable" dataProvider="{aResizable}" />
 			</mx:FormItem>
 			
+			<!--mx:FormItem label="Container" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
+				<s:ComboBox id="fContainera" dataProvider="{aContainer}"  />
+			</mx:FormItem-->
 			<mx:FormItem label="Container" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
-				<s:ComboBox id="fContainer" dataProvider="{aContainer}"  close="{saveChanges()}"/>
+				<s:ComboBox id="fContainerI"   >
+					<s:dataProvider>
+						<s:ArrayList>
+							<fx:Object label="SELECT VALUE" data="0"/>
+							<fx:Object label="Ordinary Object" data="1"/>
+							<fx:Object label="Container" data="2"/>
+							<fx:Object label="Top-level container" data="3"/>
+							
+							
+						</s:ArrayList>
+					</s:dataProvider>
+				</s:ComboBox>
+					
 			</mx:FormItem>
-			
 			<mx:FormItem label="RenderType" toolTip="Для контейнеров верхнего уровня - формат, в котором контейнер отдает данные (например, HTML)"
-						 enabled="{fContainer.selectedIndex == 2}">
-				<mx:TextInput id="fRenderType" width="250"  change="{saveChanges()}"/>
+						 >
+				<mx:TextInput id="fRenderType" width="250"  enabled="{(fContainerI.selectedIndex == 2)}"/>
 			</mx:FormItem>
 			
 			<mx:FormItem label="OptimizationPriority" toolTip="Приоритет объекта при генерации его отображения в контейнере">

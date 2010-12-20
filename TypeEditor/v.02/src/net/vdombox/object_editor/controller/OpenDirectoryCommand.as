@@ -5,14 +5,14 @@ package net.vdombox.object_editor.controller
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.net.SharedObject;
-	
+
 	import net.vdombox.object_editor.model.Item;
 	import net.vdombox.object_editor.model.proxy.ItemProxy;
 	import net.vdombox.object_editor.view.mediators.ObjectsAccordionMediator;
-	
+
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
-	
+
 	import spark.components.NavigatorContent;
 
 	public class OpenDirectoryCommand extends SimpleCommand
@@ -22,7 +22,7 @@ package net.vdombox.object_editor.controller
 			var so:SharedObject = SharedObject.getLocal("directoryPath");
 			var directory:File = new File;			
 			directory.nativePath = so.data.path;		
-			
+
 			try
 			{
 				directory.browseForDirectory("Select Directory");
@@ -32,7 +32,7 @@ package net.vdombox.object_editor.controller
 			{
 				trace("Failed:", error.message);
 			}			
-			
+
 			function directorySelected(event:Event):void 
 			{
 				directory = event.target as File;

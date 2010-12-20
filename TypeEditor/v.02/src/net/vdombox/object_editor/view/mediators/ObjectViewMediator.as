@@ -59,7 +59,7 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new AttributeMediator  ( atributes,   objTypeVO ) );
 			facade.registerMediator( new LanguagesMediator 	( languages,   objTypeVO ) );
 			facade.registerMediator( new LibrariesMediator 	( libraries,   objTypeVO ) );
-			facade.registerMediator( new ResoursesMediator 	( resourses,   objTypeVO ) );
+			facade.registerMediator( new ResourcesMediator 	( resourses,   objTypeVO ) );
 			facade.registerMediator( new EventMediator   	( event,	   objTypeVO ) );
 
 			view.saveObjectTypeButton.addEventListener  ( MouseEvent.CLICK, saveObjectType );
