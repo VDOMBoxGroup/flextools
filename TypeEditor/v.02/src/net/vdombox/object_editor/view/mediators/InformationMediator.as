@@ -13,6 +13,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.essence.Information;
+	import net.vdombox.object_editor.view.essence.SelectFormItem;
 	import net.vdombox.object_editor.view.popups.ChangeWord;
 	
 	import org.puremvc.as3.interfaces.IMediator;
@@ -27,9 +28,21 @@ package net.vdombox.object_editor.view.mediators
 		public function InformationMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
-			this.objectTypeVO = objTypeVO;	
+			this.objectTypeVO = objTypeVO;
+			
+		/*	var selectFormItem:SelectFormItem  = new SelectFormItem();
+			selectFormItem.id = "ffDisplayName";
+			selectFormItem.label="====++====================================="
+			selectFormItem.x = 50;
+			selectFormItem.y = 50;
+			view.addElement(selectFormItem);
+			
+			
+			facade.registerMediator( new SelectFormItemMediator( selectFormItem, objectTypeVO ) );*/
+			
 			view.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
 			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
+			
 			trace("InformationMediator: " + objTypeVO.id);
 		}
 
@@ -76,6 +89,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function showInformation(event: FlexEvent): void
 		{
+			facade.registerMediator( new SelectFormItemMediator( view.ffDisplayName, objectTypeVO ) );
 			compliteInformation();
 		}
 		
@@ -85,11 +99,12 @@ package net.vdombox.object_editor.view.mediators
 		}
 
 		protected function compliteInformation():void
-		{	
+		{			
 			//правильно?
 //			view.removeEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
 			view.fcurrentLocation.addEventListener  ( Event.CHANGE, changeCurrentLocation );
 			view.fchangeDisplayName.addEventListener( MouseEvent.CLICK, changeDisplayName );
+			
 			view.label= "Information";
 
 			view.fname.text 			= objectTypeVO.name;
