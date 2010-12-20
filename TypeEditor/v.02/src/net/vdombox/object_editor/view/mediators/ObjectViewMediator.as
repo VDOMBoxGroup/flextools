@@ -3,8 +3,6 @@ package net.vdombox.object_editor.view.mediators
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
-	import mx.controls.Alert;
-
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;

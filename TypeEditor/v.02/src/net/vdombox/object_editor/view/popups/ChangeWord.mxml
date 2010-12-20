@@ -2,78 +2,93 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx" width="230" height="400"
-			   creationComplete="creationComplete()" title="Change word">
+			   preinitialize="creationComplete()" title="Change word">
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-		
+		<!-- Place non-visual elements (e.g., services, value objects) here -->		
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.controls.dataGridClasses.DataGridColumn;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
 			import net.vdombox.object_editor.model.Language;
+			import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 			
-			import spark.events.TextOperationEvent;
+			import org.puremvc.as3.patterns.facade.Facade;
 			
-			
+			import spark.events.TextOperationEvent;			
 			
 			[Bindable]
 			private var arWords:ArrayCollection = new ArrayCollection();
 			
 			//			[bindable]
-			public var wordCode:String = "";
+//			public var wordCode:String = "";
+			public var wordCode:Object = "";
 			private function creationComplete():void 
-			{
+			{				
 				addEventListener(CloseEvent.CLOSE, closeHandler); 
-				PopUpManager.centerPopUp(this);
+				//PopUpManager.centerPopUp(this);
+				this.x = 200;
+				this.y = 200;			
 				
-				var language:Language = Language.getInstance();
-				var languageXML:XML = language.getLanguageXML("en_US");
-				for each(var word:XML in languageXML.children())
-				{
-					arWords.addItem({"label":word.toString(), "data":word.@ID});
-				}
-//				words.selectedIndex = 0;
+				dispatchEvent( new FlexEvent( FlexEvent.CREATION_COMPLETE ));								
+			}
+			
+			public function showWordsList( wordss:ArrayCollection ):void//, lan:String):void 
+			{
+//				for each(var word:XML in languageXML.children())
+				//				{
+				//					arWords.addItem({"label":word.toString(), "data":word.@ID});
+				//				}
+//				arWords = words;
+				words.dataProvider = wordss;
+								
+				/*if(lan == "")return;				
+				var cols:Array = words.columns;
+				var dataGridColumn: DataGridColumn = new DataGridColumn(lan);
+				dataGridColumn.dataField = lan;
+				
+				cols.push(dataGridColumn);
+				words.columns = cols;	*/			
+				
+//				var language:Language = Language.getInstance();
+//				var languageXML:XML = language.getLanguageXML("en_US");
+//				for each(var word:XML in languageXML.children())
+//				{
+//					arWords.addItem({"label":word.toString(), "data":word.@ID});
+//				}
+				//				words.selectedIndex = 0;	
 			}
 			
 			private function closeHandler(cEvent:CloseEvent):void 
 			{
-				//				languageName = lnName.text;
+//				languageName = lnName.text;
 				PopUpManager.removePopUp(this);
 			}
-			
-			
-			
 			
 			private function button1_clickHandler():void
 			{
 				// TODO Auto-generated method stub
-//				wordCode = "#Lang("+words.selectedItem.data+")";
+				words.selectedItem["name"] = "#Lang("+words.selectedItem["ID"]+")";
+				wordCode = words.selectedItem;
 				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
 			}
 			
 			private function cancel():void
 			{
 				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
-			}
-			
-			
+			}			
 		]]>
 	</fx:Script>
-	<s:Button label="Ok" click="button1_clickHandler()"  />
-	<s:Button label="Cancel"  click="cancel()"/>
-	<!--s:VGroup  width="228" height="367">
-		<s:List id="words" width="226"   height="332" dataProvider="{arWords}" doubleClick="button1_clickHandler()"  />
-		
+	
+	<s:VGroup  width="228" height="367">
+		<mx:DataGrid  id="words" width="226"   height="332" dataProvider="{arWords}" doubleClick="button1_clickHandler()"  />
 		<s:HGroup right="0" >
 			<s:Button label="Ok" click="button1_clickHandler()"   enabled="{words.selectedIndex != -1}"/>
 			<s:Button label="Cancel"  click="cancel()"/>
-		</s:HGroup>
-		
-		
-	</s:VGroup-->
-	
+		</s:HGroup>		
+	</s:VGroup>	
 </s:TitleWindow>

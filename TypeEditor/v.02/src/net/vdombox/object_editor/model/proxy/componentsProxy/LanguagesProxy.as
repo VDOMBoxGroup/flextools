@@ -1,5 +1,5 @@
 /*
-	Class LanguageProxy is a wrapper over the Language
+	Class LanguageProxy is a wrapper over the LanguageVO
  */
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
@@ -23,13 +23,15 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function createNew(objTypeXML:XML):LanguagesVO
 		{
 			var languagesXML: XML = objTypeXML.Languages[0];
-			var languagesVO: LanguagesVO = new LanguagesVO();		
+			var languagesVO: LanguagesVO = new LanguagesVO();
 			var	langEN:XML = languagesXML.Language.(@Code == "en_US")[0];
 			
 			for each(var langXML:XML in languagesXML.children())
 			{
-				languagesVO.locales.push( langXML.@Code.toString() );
-			}			
+				var lan:String =  langXML.@Code.toString()
+				
+				languagesVO.locales.addItem( {label:lan, data:lan} );
+			}	
 			
 			for each (var wordEn:XML in langEN.children())
 			{
@@ -49,16 +51,48 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return languagesVO;
 		}
 		
-		public function getWordsOnCarentLocal(id:String):String
+		public function getWordsOnCarentLocal(langsVO:LanguagesVO):ArrayCollection
 		{
-			return "qu";
+			var localeName:String = langsVO.currentLocation;
+			var getArr:ArrayCollection = new ArrayCollection();
+			var wordsVO:ArrayCollection = langsVO.words;
+			var retString:String;
+//			var str:Object = {};
+			
+			for each(var word:Object in wordsVO)
+			{	
+				var str:Object = {};
+				str["ID"]   = word["ID"];	
+				str["name"] = word[localeName];	
+//				getArr.addItem( word[localeName] );	
+				getArr.addItem( str );
+				
+			}
+			return getArr;
+		}
+		
+		public function getWord(langsVO:LanguagesVO,id:String):String
+		{	
+			var localeName:String = langsVO.currentLocation;
+			var wordsVO:ArrayCollection = langsVO.words;
+			var retString:String;
+			
+			for each(var word:Object in wordsVO)
+			{		
+				if( word["ID"] == id)
+				{
+					retString = word[localeName];
+					break;
+				}
+			}
+			return retString;
 		}
 		
 		public function createXML( objTypeVO: ObjectTypeVO ):XML
 		{						
 			var langsXML:XML = new XML("<Languages/>");
 			var wordsVO:ArrayCollection = objTypeVO.languages.words;
-			var localesVO:Array = objTypeVO.languages.locales;
+			var localesVO:ArrayCollection = objTypeVO.languages.locales;
 						
 			for each(var localeName:String in localesVO )
 			{				

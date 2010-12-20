@@ -34,6 +34,7 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function showLanguages(event: FlexEvent): void
 		{			
+			view.removeEventListener( FlexEvent.SHOW, showLanguages );	
 			view.languagesDataGrid.dataProvider = objectTypeVO.languages.words;
 			//aaaaa повторяется при каждом нажатии на tab
 			view.addLaguage.addEventListener( MouseEvent.CLICK,   addLaguage );
@@ -74,15 +75,15 @@ package net.vdombox.object_editor.view.mediators
 				
 				cols.push(dataGridColumn);
 				view.languagesDataGrid.columns = cols;
-				
-//				for (var i:String in objectTypeVO.languages.words)
-//				{
-//					var word:Object = arLanguages[i];
-//					word[lan] = word["en_US"];
-//				}
+
+				objectTypeVO.languages.locales.addItem({label:lanName, data:lanName});
+				for (var i:String in objectTypeVO.languages.words)
+				{
+					var word:Object = objectTypeVO.languages.words[i];
+					word[lanName] = word["en_US"];
+				}
 			}
-		}
-		
+		}		
 		
 		protected function get view():Languages
 		{

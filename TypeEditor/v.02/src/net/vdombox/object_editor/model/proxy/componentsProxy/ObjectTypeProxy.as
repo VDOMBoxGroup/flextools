@@ -6,7 +6,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -26,10 +26,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			//information
 			if (_objectTypeList[path])
 			{
-				facade.sendNotification( ApplicationFacade.OBJECT_EXIST, objTypeVO.filePath );
+				facade.sendNotification( ApplicationFacade.OBJECT_EXIST, path );
 			}
 			else
-			{				
+			{					
 				var objTypeVO: ObjectTypeVO = initInformation(objTypeXML);			
 				objTypeVO.filePath	= path;
 				//sourceCode
@@ -55,6 +55,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				//language 
 				var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 				objTypeVO.languages = languageProxy.createNew(objTypeXML);
+				
 				//resource
 				var resoursesProxy:ResoursesProxy = facade.retrieveProxy(ResoursesProxy.NAME) as ResoursesProxy;
 				objTypeVO.resourses = resoursesProxy.createFromXML(objTypeXML);
@@ -79,8 +80,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objTypeVO.resizable		= information.Resizable;	
 			objTypeVO.container		= information.Container;	
 			objTypeVO.version		= information.Version;	
-			objTypeVO.interfaceType	= information.InterfaceType;	
-			objTypeVO.optimizationPriority = information.OptimizationPriority;	
+			objTypeVO.interfaceType	= information.InterfaceType;				
+			objTypeVO.optimizationPriority = information.OptimizationPriority;
 			return objTypeVO;
 		}
 

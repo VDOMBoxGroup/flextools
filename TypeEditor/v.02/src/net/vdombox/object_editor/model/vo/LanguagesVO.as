@@ -4,8 +4,9 @@ package net.vdombox.object_editor.model.vo
 
 	public class LanguagesVO
 	{
-		public var words:ArrayCollection 	= new ArrayCollection();
-		public var locales:Array 	= new Array();
+		public var currentLocation:String 	= "en_US";
+		public var words:ArrayCollection 	= new ArrayCollection();		
+		public var locales:ArrayCollection 	= new ArrayCollection();
 		
 		public function LanguagesVO()
 		{
