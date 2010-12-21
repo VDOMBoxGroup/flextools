@@ -57,16 +57,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			var getArr:ArrayCollection = new ArrayCollection();
 			var wordsVO:ArrayCollection = langsVO.words;
 			var retString:String;
-			//			var str:Object = {};
 
 			for each(var word:Object in wordsVO)
 			{	
 				var str:Object = {};
-				str["ID"]   = word["ID"];	
-				str["name"] = word[localeName];	
-				//				getArr.addItem( word[localeName] );	
+				str["data"]   = word["ID"];	
+				str["label"] = word[localeName];
 				getArr.addItem( str );
-
 			}
 			return getArr;
 		}
@@ -86,6 +83,18 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				}
 			}
 			return retString;
+		}
+		
+		public function getRegExpWord(langsVO:LanguagesVO,code:String):String
+		{	
+			var  regResource:RegExp = /#Lang\((\d+)\)/;
+			var matchResult:Array = code.match(regResource);			
+			if (matchResult)
+			{
+				var word:String = getWord( langsVO, matchResult[1] );
+				return word;
+			}
+			return "";
 		}
 
 		public function createXML( objTypeVO: ObjectTypeVO ):XML

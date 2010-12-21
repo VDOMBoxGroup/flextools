@@ -23,54 +23,41 @@ package net.vdombox.object_editor.view.mediators
 		public static const NAME			:String = "SelectFormItemMediator";				
 		public static const CHOSE_WORD		:String = "choseWord";
 		private var objectTypeVO:ObjectTypeVO;
-
-		public function SelectFormItemMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
+		private var fildVO:String;
+		
+		public function SelectFormItemMediator( viewComponent:Object, objTypeVO:ObjectTypeVO, fVO:String ) 
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;
-			view.fselectComboBox.addEventListener( MouseEvent.CLICK, openListWords );
-			//view.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
-			
-		}
-		
-		
-		public function openListWords( event:MouseEvent ) : void
-		{			
+			fildVO = fVO;
+			view.fselectComboBox.addEventListener( Event.CHANGE, openListWords);
 			var langsProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
-						
-			view.fselectComboBox.addEventListener( Event.CHANGE, acloseHandler);
-						
 			var arrCol:ArrayCollection = langsProxy.getWordsOnCarentLocal(objectTypeVO.languages);
-			view.fselectComboBox.dataProvider = arrCol;	
+			view.fselectComboBox.dataProvider = arrCol;
+		}		
+		
+		public function openListWords( event:Event ) : void
+		{		
+			var selectData:String = getString( view.fselectComboBox.selectedItem.data );
+			var word:Object = {};
+			word["data"]   = selectData;
+			word["fildVO"] = fildVO;
 			
-			function acloseHandler(event:Event):void
-			{
-				var wordCode:Object = event.target.wordCode;					
-				if(wordCode == null)return;					
-				view.fname.text = langsProxy.getWord(objectTypeVO.languages,wordCode["ID"]);	
-				objectTypeVO.displayName = wordCode["name"];
-			}				
+			facade.sendNotification( ApplicationFacade.CHANGE_SELECT_FORM_ITEM, word );
+			//fildVO = getString( view.fselectComboBox.selectedItem.data );
+			/*
+			var functionName:String = "foo" + bar;
+			if (this.hasOwnProperty(functionName))
+				this[functionName]()*/
+//			view.id;
+			//[objectTypeVO.fildVO] = getString( view.fselectComboBox.selectedItem.data ); 
+			//objectTypeVO.displayName = getString( view.fselectComboBox.selectedItem.data ); 
 		}
-
-		/*override public function listNotificationInterests():Array 
-		{			
-			return [ ApplicationFacade.OBJECT_COMPLIT, ApplicationFacade.OBJECT_EXIST ];
-		}
-
-		override public function handleNotification( note:INotification ):void 
+		
+		public function getString( id:String ) : String
 		{
-			switch ( note.getName() ) 
-			{				
-				case ApplicationFacade.OBJECT_COMPLIT:
-					newObjectView(note.getBody() as ObjectTypeVO);
-					break;	
-
-				case ApplicationFacade.OBJECT_EXIST:
-					var toSelectedOjectName:String = note.getBody() as String;
-					view.tabNavigator.selectedChild = view.tabNavigator.getChildByName( toSelectedOjectName) as ObjectView;
-					break;	
-			}
-		}*/
+			return "#Lang("+id+")";
+		}
 
 		protected function get view():SelectFormItem
 		{

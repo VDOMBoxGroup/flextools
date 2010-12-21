@@ -134,23 +134,8 @@
 			<mx:TextInput id="fXMLScriptName" width="250" change="{saveChanges()}"/>
 		</mx:FormItem>
 			
-		<mx:FormItem label="DisplayName" >
-			<s:HGroup>
-				<!--ns:OETextInput name="displayName" id="fDisplayName" width="213" editable="false"/-->
-				<s:TextInput id="fDisplayName" width="213" editable="false"/>
-				<s:Button id="fchangeDisplayName" label="..." width="30" />
-			</s:HGroup>
-		</mx:FormItem>
-			
-		<ns1:SelectFormItem id="ffDisplayName" label="DisplayName"/>
-		
-		
-		<mx:FormItem label="Description" toolTip="писание объекта и его использования" enabled="false">
-			<s:HGroup>
-				<ns:OETextInput name="description" id="fDescription" width="213" editable="false" />
-				<s:Button label="..." width="30"/>
-			</s:HGroup>
-		</mx:FormItem>
+		<ns1:SelectFormItem id="fDisplayName" label="DisplayName" toolTip="писание объекта и его использования" />		
+		<ns1:SelectFormItem id="fDescription" label="Description" toolTip="писание объекта и его использования" />
 		
 		<mx:FormItem label="ClassName" toolTip="Имя класса">
 			<mx:TextInput id="fClassName" width="250" change="{saveChanges()}"/>
@@ -182,14 +167,9 @@
 		<mx:FormItem label="WCAG" toolTip="">
 			<mx:TextInput id="fWCAG" width="250"  change="{saveChanges()}"/>
 		</mx:FormItem>
-		<mx:FormItem label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)"
-					 enabled="false">
-			<s:HGroup>
-				<mx:TextInput id="fContainers" width="213" editable="false" />
-				<s:Button label="..." width="30" />
-			</s:HGroup>
-		</mx:FormItem>
 		
+		<ns1:SelectFormItem id="fContainers" name="fContainers"  label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)" />	
+				
 		<mx:FormItem label="Languages" toolTip="Список поддерживаемых объектом языков (формат ISO 3168-1)" 
 					 enabled="false">
 			<mx:TextInput id="fLanguages" width="250" editable="false"/>
@@ -229,9 +209,7 @@
 							<fx:Object label="SELECT VALUE" data="0"/>
 							<fx:Object label="Ordinary Object" data="1"/>
 							<fx:Object label="Container" data="2"/>
-							<fx:Object label="Top-level container" data="3"/>
-							
-							
+							<fx:Object label="Top-level container" data="3"/>							
 						</s:ArrayList>
 					</s:dataProvider>
 				</s:ComboBox>

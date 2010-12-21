@@ -18,20 +18,24 @@ package net.vdombox.object_editor.model.vo
 
 		//Information
 		public var id			:String = "";
-		[Bindable] 
-		public var name			:String = "";
-		[Bindable]
-		public var displayName	:String = "";
-		public var dynamic		:Boolean = false;	
-		public var version		:String = "";
-		public var moveable		:Boolean = false;
 		public var category		:String = "";
 		public var className	:String = "";
+		[Bindable]
+		public var container	:uint = 0;
+		[Bindable]
+		public var containers	:String = "";		
+		[Bindable]
+		public var description	:String = "";
+		public var displayName	:String = "";
+		public var dynamic		:Boolean = false;
+		public var interfaceType:uint = 0;
+		[Bindable] 
+		public var name			:String = "";
+		public var moveable		:Boolean = false;
+		public var optimizationPriority	:uint = 0;
 		public var resizable	:uint = 0;
-		public var container	:uint = 0;		
-		public var interfaceType:uint = 0;		
-		public var optimizationPriority	:uint = 0;		
-
+		public var version		:String = "";
+		
 		public function ObjectTypeVO()
 		{				
 		}		

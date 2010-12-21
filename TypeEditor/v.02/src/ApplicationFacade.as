@@ -19,6 +19,7 @@ package
 
 	public class ApplicationFacade extends Facade
 	{		
+		public static const CHANGE_SELECT_FORM_ITEM	:String	= "changeSelectFormItem";
 		public static const LOAD_XML_FILES			:String = "loadXMLFiles";
 		public static const NEW_NAVIGATOR_CONTENT	:String = "newNavigatorContent";		
 		public static const OBJECT_COMPLIT			:String	= "objectComplit";
@@ -28,7 +29,7 @@ package
 		public static const REMOVE_ALL_OBJECT		:String	= "removeAllObjects";		
 		public static const SAVE_OBJECT_TYPE		:String	= "saveObjectType";
 		public static const SAVE_AS_OBJECT_TYPE		:String	= "saveAsObjectType";
-		public static const STARTUP					:String	= "startup";
+		public static const STARTUP					:String	= "startup";		
 
 		public static function getInstance() : ApplicationFacade 
 		{

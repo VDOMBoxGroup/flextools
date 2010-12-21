@@ -72,17 +72,21 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			var objTypeVO: ObjectTypeVO = new ObjectTypeVO();
 			var information: XML = objTypeXML.Information[0];			
 
-			objTypeVO.name 			= information.Name;
 			objTypeVO.category 		= information.Category;
 			objTypeVO.className 	= information.ClassName;
-			objTypeVO.id			= information.ID;			
+			objTypeVO.container		= information.Container;
+			objTypeVO.containers	= information.Containers;
+			objTypeVO.description	= information.Description;
+			objTypeVO.displayName	= information.DisplayName;
 			objTypeVO.dynamic		= information.Dynamic.toString() == "1";
-			objTypeVO.moveable		= information.Moveable.toString() == "1";			
+			objTypeVO.id			= information.ID;	
+			objTypeVO.interfaceType	= information.InterfaceType;			
+			objTypeVO.name 			= information.Name;
+			objTypeVO.moveable		= information.Moveable.toString() == "1";
+			objTypeVO.optimizationPriority = information.OptimizationPriority;						
 			objTypeVO.resizable		= information.Resizable;	
-			objTypeVO.container		= information.Container;	
 			objTypeVO.version		= information.Version;	
-			objTypeVO.interfaceType	= information.InterfaceType;				
-			objTypeVO.optimizationPriority = information.OptimizationPriority;
+					
 			return objTypeVO;
 		}
 
@@ -103,24 +107,24 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			//save information
 			var information:XML = new XML("<Information/>");				
 			information.Name = objTypeVO.name;
-			//				information.DisplayName = objTypeVO.displayName;	
+			information.DisplayName = objTypeVO.displayName;	
 			//				information.XMLScriptName = objTypeVO.;	
 			//				information.RenderType = objTypeVO.renderType;
-			//				information.Description = objTypeVO.description;
+			information.Description = objTypeVO.description;
 			information.ClassName = objTypeVO.className;
 			information.ID = objTypeVO.id;
 			information.Category = objTypeVO.category;
 			information.Version = objTypeVO.version;
 			information.OptimizationPriority = objTypeVO.optimizationPriority;
 			//				information.WCAG = objTypeVO;
-			information.Containers = objTypeVO.container;
+			information.Container = objTypeVO.container;
 			//				information.RemoteMethods = objTypeVO.;
 			//				information.Handlers = objTypeVO;
 			information.Moveable = objTypeVO.moveable;
 			information.Dynamic = objTypeVO.dynamic;
 			information.InterfaceType = objTypeVO.interfaceType;
 			information.Resizable = objTypeVO.resizable;
-			information.Container = objTypeVO.container;
+			information.Containers = objTypeVO.containers;
 			objTypeXML.appendChild(information);
 
 			//sourceCode

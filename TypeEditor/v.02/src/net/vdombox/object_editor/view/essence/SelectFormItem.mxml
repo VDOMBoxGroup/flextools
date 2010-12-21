@@ -6,13 +6,16 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->	
 	</fx:Declarations>
 	<fx:Script>
-		<![CDATA[		
+		<![CDATA[
 			
+			private function saveChanges():void
+			{
+				dispatchEvent(new Event( Event.CHANGE ));
+			}		
 		]]>
 	</fx:Script>
 	
 	<s:HGroup>				
-		<s:TextInput id="fname" width="213" editable="false"/>
-		<s:ComboBox	 id="fselectComboBox" width="30" />
+		<s:ComboBox	 id="fselectComboBox" selectedItem="{saveChanges()}" />
 	</s:HGroup>	
 </mx:FormItem >
