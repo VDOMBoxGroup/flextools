@@ -71,7 +71,10 @@
 			<ns:Events/> 	</s:NavigatorContent>
 		
 	</mx:TabNavigator-->
-	<s:HGroup>
+	<s:HGroup right="453" width="100%" gap="19" verticalAlign="top" paddingBottom="10" paddingRight="10">
+		<s:Group width="100%">
+		</s:Group>
+		
 		<s:Button label="Save" 	  id="saveObjectTypeButton" />
 		<s:Button label="Save as" id="saveAsObjectTypeButton" />		
 	</s:HGroup>	

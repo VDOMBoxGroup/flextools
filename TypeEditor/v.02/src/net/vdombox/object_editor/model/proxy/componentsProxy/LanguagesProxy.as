@@ -7,6 +7,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 	import net.vdombox.object_editor.model.vo.LanguagesVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
+	import net.vdombox.object_editor.model.vo.WordsVO;
 
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
@@ -35,9 +36,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 			for each (var wordEn:XML in langEN.children())
 			{
+
 				var words:Object = {};
 				var id:String = wordEn.@ID;				
 				words["ID"] = id;
+
+//				var wrdsOV  : WordsVO = new WordsVO();
+//				wrdsOV["en"] = wordEn.@ID;
 
 				for each(langXML in languagesXML.children())
 				{			

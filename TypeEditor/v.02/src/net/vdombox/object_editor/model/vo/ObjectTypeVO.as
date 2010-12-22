@@ -35,7 +35,7 @@ package net.vdombox.object_editor.model.vo
 		public var optimizationPriority	:uint = 0;
 		public var resizable	:uint = 0;
 		public var version		:String = "";
-		
+
 		public function ObjectTypeVO()
 		{				
 		}		
