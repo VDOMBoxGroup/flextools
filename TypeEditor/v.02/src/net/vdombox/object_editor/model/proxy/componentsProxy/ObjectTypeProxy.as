@@ -3,6 +3,8 @@
  */
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
+	import mx.controls.Alert;
+
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
@@ -34,27 +36,36 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				objTypeVO.filePath	= path;
 				//sourceCode
 				objTypeVO.sourceCode = initSourceCode(objTypeXML);
-				//atributes
-				for each ( var data : XML in objTypeXML.descendants("Attribute"))  //xml.descendants("Attributes") )
-				{
-					var atrib:AttributeVO = new AttributeVO;
-//					atrib.label			= data.Name;
-					atrib.name			= data.Name;
-					atrib.displayName	= data.DisplayName;
-					atrib.defaultValue	= data.DefaultValue;
-					atrib.visible		= data.Visible.toString() == "1";
-					atrib.help			= data.Help;
-					atrib.interfaceType	= data.InterfaceType;//uint
-					atrib.codeInterface	= data.CodeInterface;
-					atrib.colorgroup	= data.Colorgroup;
-					atrib.errorValidationMessage		= data.ErrorValidationMessage;
-					atrib.regularExpressionValidation	= data.RegularExpressionValidation;
 
-					objTypeVO.attributes.addItem({label:atrib.name, data:atrib});	
-				}
+
 				//language 
 				var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 				objTypeVO.languages = languageProxy.createNew(objTypeXML);
+
+
+				//atributes
+				for each ( var attrinuteXML : XML in objTypeXML.descendants("Attribute"))  //xml.descendants("Attributes") )
+				{
+					var atrib:AttributeVO = new AttributeVO;
+//					atrib.label			= data.Name;
+					atrib.name			= attrinuteXML.Name;
+
+					atrib.displayName	= attrinuteXML.DisplayName;
+
+
+
+					atrib.defaultValue	= attrinuteXML.DefaultValue;
+					atrib.visible		= attrinuteXML.Visible.toString() == "1";
+					atrib.help			= attrinuteXML.Help;
+					atrib.interfaceType	= attrinuteXML.InterfaceType;//uint
+					atrib.codeInterface	= attrinuteXML.CodeInterface;
+					atrib.colorgroup	= attrinuteXML.Colorgroup;
+					atrib.errorValidationMessage		= attrinuteXML.ErrorValidationMessage;
+					atrib.regularExpressionValidation	= attrinuteXML.RegularExpressionValidation;
+
+					objTypeVO.attributes.addItem({label:atrib.name, data:atrib});	
+				}
+
 
 				//resource
 				var resoursesProxy:ResourcesProxy = facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
@@ -76,8 +87,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objTypeVO.className 	= information.ClassName;
 			objTypeVO.container		= information.Container;
 			objTypeVO.containers	= information.Containers;
-			objTypeVO.description	= information.Description;
-			objTypeVO.displayName	= information.DisplayName;
+//			objTypeVO.description	= information.Description;
+			checkLang(information.Description, objTypeVO.description );
+
+			//objTypeVO.displayName	= information.DisplayName;
+			checkLang(information.DisplayName, objTypeVO.displayName );
+
 			objTypeVO.dynamic		= information.Dynamic.toString() == "1";
 			objTypeVO.id			= information.ID;	
 			objTypeVO.interfaceType	= information.InterfaceType;			
@@ -86,7 +101,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objTypeVO.optimizationPriority = information.OptimizationPriority;						
 			objTypeVO.resizable		= information.Resizable;	
 			objTypeVO.version		= information.Version;	
-					
+
 			return objTypeVO;
 		}
 
@@ -144,6 +159,23 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 
 			return objTypeXML;
+		}
+
+
+		private function checkLang(strXML:String, strVO:String):void
+		{
+			if (strXML != strVO)
+			{
+				var text : String = " mast be: " + strVO + " current is " + strXML;
+
+				Alert.show(text, "Wrong Lang ID")
+					//todo: делаем запись в Лангв
+					//language 
+//				var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
+
+//				languageProxy.correctWord(strXML, strVO)
+					//todo: делаем запись в лог ошибок
+			}
 		}
 	}
 }

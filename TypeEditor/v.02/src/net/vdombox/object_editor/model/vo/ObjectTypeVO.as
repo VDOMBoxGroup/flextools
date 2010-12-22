@@ -24,11 +24,11 @@ package net.vdombox.object_editor.model.vo
 		public var container	:uint = 0;
 		[Bindable]
 		public var containers	:String = "";		
-		[Bindable]
-		public var description	:String = "";
-		
-		public static const idDisplayName:String = "001";	
-		public var displayName	:String = "";
+
+		public var description	:String = "#Lang(002)";
+
+//		public static const idDisplayName:String = "001";	
+		public var displayName	:String = "#Lang(001)";
 		public var dynamic		:Boolean = false;
 		public var interfaceType:uint = 0;
 		[Bindable] 
