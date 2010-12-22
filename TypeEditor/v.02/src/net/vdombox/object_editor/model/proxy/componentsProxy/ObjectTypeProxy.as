@@ -4,11 +4,11 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
-
+	
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -37,36 +37,14 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				//sourceCode
 				objTypeVO.sourceCode = initSourceCode(objTypeXML);
 
-
 				//language 
 				var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
-				objTypeVO.languages = languageProxy.createNew(objTypeXML);
-
+				objTypeVO.languages = languageProxy.createFromXML(objTypeXML);
 
 				//atributes
-				for each ( var attrinuteXML : XML in objTypeXML.descendants("Attribute"))  //xml.descendants("Attributes") )
-				{
-					var atrib:AttributeVO = new AttributeVO;
-//					atrib.label			= data.Name;
-					atrib.name			= attrinuteXML.Name;
-
-					atrib.displayName	= attrinuteXML.DisplayName;
-
-
-
-					atrib.defaultValue	= attrinuteXML.DefaultValue;
-					atrib.visible		= attrinuteXML.Visible.toString() == "1";
-					atrib.help			= attrinuteXML.Help;
-					atrib.interfaceType	= attrinuteXML.InterfaceType;//uint
-					atrib.codeInterface	= attrinuteXML.CodeInterface;
-					atrib.colorgroup	= attrinuteXML.Colorgroup;
-					atrib.errorValidationMessage		= attrinuteXML.ErrorValidationMessage;
-					atrib.regularExpressionValidation	= attrinuteXML.RegularExpressionValidation;
-
-					objTypeVO.attributes.addItem({label:atrib.name, data:atrib});	
-				}
-
-
+				var attributesProxy:AttributesProxy = facade.retrieveProxy(AttributesProxy.NAME) as AttributesProxy;
+				objTypeVO.attributes = attributesProxy.createFromXML(objTypeXML);
+				
 				//resource
 				var resoursesProxy:ResourcesProxy = facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
 				objTypeVO.resources = resoursesProxy.createFromXML(objTypeXML);
@@ -151,16 +129,18 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			//language 
 			var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 			objTypeXML.appendChild(languageProxy.createXML(objTypeVO.languages));
+			
+			//attributes 
+			var attributesProxy:AttributesProxy = facade.retrieveProxy(AttributesProxy.NAME) as AttributesProxy;
+			objTypeXML.appendChild(attributesProxy.createXML(objTypeVO.attributes));
 
 			//resource
 			var resourcesProxy:ResourcesProxy = facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
 			var resourcesXML : XML = resourcesProxy.toXML(objTypeVO.resources);
 			objTypeXML.appendChild(resourcesXML);
 
-
 			return objTypeXML;
 		}
-
 
 		private function checkLang(strXML:String, strVO:String):void
 		{

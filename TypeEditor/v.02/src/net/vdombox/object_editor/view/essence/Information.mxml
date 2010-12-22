@@ -6,7 +6,8 @@
 		 show="group1_showHandler(event)"
 		 xmlns:ns="net.vdombox.object_editor.model.*"
 		 label="Information" 
-		 xmlns:ns1="net.vdombox.object_editor.view.essence.*" xmlns:ns2="net.vdombox.object_editor.view.*">
+		 xmlns:ns1="net.vdombox.object_editor.view.essence.*" 
+		 xmlns:ns2="net.vdombox.object_editor.view.*">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		<s:RadioButtonGroup id="group1"/>
@@ -52,14 +53,7 @@
 					{label:"Ordinary Object", data:1}, 
 					{label:"Container", data:2}, 
 					{label:"Top-level container", data:3}]);
-			
-			[Bindable]
-			public var myWords:Object = new Object();
-			[Bindable]
-			public var flan:String = "";
-			
-//			data.fmyWords  = 		
-			
+
 			public function set dataProvader(xml:XML):void
 			{
 				return;

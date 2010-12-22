@@ -21,7 +21,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			super ( NAME, data );			
 		}
 
-		public function createNew(objTypeXML:XML):LanguagesVO
+		public function createFromXML(objTypeXML:XML):LanguagesVO
 		{
 			var languagesXML: XML = objTypeXML.Languages[0];
 			var languagesVO: LanguagesVO = new LanguagesVO();

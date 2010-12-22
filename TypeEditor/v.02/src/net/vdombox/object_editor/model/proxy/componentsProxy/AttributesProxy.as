@@ -3,6 +3,8 @@
  */
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
+	import mx.collections.ArrayCollection;
+	
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	
@@ -18,29 +20,51 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
             super ( NAME, data );
         }
 		
-		public function createXML( objTypeVO: ObjectTypeVO ):void
+		public function createXML( attributesVO: ArrayCollection ):XML
 		{		
-		/*	var languagesXML: XML = objTypeXML.Languages[0];
-			var languagesVO: LanguagesVO = new LanguagesVO();
-			var	langEN:XML = languagesXML.Language.(@Code == "en_US")[0];
+			var attribsXML:XML = new XML("<Attributes/>");		
 			
-			for each ( var data : XML in objTypeXML.descendants("Attribute"))  //xml.descendants("Attributes") )
+			for each(var obj:Object in attributesVO )
+			{	
+				var attribVO:AttributeVO = obj.data;
+				var attrXML:XML = new XML("<Attribute/>");
+				attrXML.Name			= attribVO.name;
+				attrXML.DisplayName		= attribVO.displayName;
+				attrXML.DefaultValue	= attribVO.defaultValue;	
+				attrXML.Visible			= attribVO.visible;	
+				attrXML.Help			= attribVO.help;
+				attrXML.InterfaceType	= attribVO.interfaceType;
+				attrXML.CodeInterface	= attribVO.codeInterface;	
+				attrXML.Colorgroup		= attribVO.colorgroup;
+				attrXML.ErrorValidationMessage		= attribVO.errorValidationMessage;
+				attrXML.RegularExpressionValidation	= attribVO.regularExpressionValidation;
+				attribsXML.appendChild(attrXML);
+			}
+			return attribsXML;
+		}	
+		
+		public function createFromXML(objTypeXML:XML):ArrayCollection
+		{
+			var atributesCollection:ArrayCollection = new ArrayCollection();
+			
+			for each ( var attrinuteXML : XML in objTypeXML.descendants("Attribute") )
 			{
 				var atrib:AttributeVO = new AttributeVO;
-//				atrib.label			= data.Name;
-				atrib.name			= data.Name;
-				atrib.displayName	= data.DisplayName;
-				atrib.defaultValue	= data.DefaultValue;
-				atrib.visible		= data.Visible.toString() == "1";
-				atrib.help			= data.Help;
-				atrib.interfaceType	= data.InterfaceType;//uint
-				atrib.codeInterface	= data.CodeInterface;
-				atrib.colorgroup	= data.Colorgroup;
-				atrib.errorValidationMessage		= data.ErrorValidationMessage;
-				atrib.regularExpressionValidation	= data.RegularExpressionValidation;
 				
-				objTypeVO.attributes.addItem({label:atrib.name, data:atrib});	
-			}	*/		
-		}		
+				atrib.name			= attrinuteXML.Name;
+				atrib.displayName	= attrinuteXML.DisplayName;
+				atrib.defaultValue	= attrinuteXML.DefaultValue;
+				atrib.visible		= attrinuteXML.Visible.toString() == "1";
+				atrib.help			= attrinuteXML.Help;
+				atrib.interfaceType	= attrinuteXML.InterfaceType;//uint
+				atrib.codeInterface	= attrinuteXML.CodeInterface;
+				atrib.colorgroup	= attrinuteXML.Colorgroup;
+				atrib.errorValidationMessage		= attrinuteXML.ErrorValidationMessage;
+				atrib.regularExpressionValidation	= attrinuteXML.RegularExpressionValidation;
+				
+				atributesCollection.addItem({label:atrib.name, data:atrib});	
+			}			
+			return atributesCollection;
+		}
 	}
 }

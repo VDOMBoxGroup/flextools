@@ -9,11 +9,12 @@ package net.vdombox.object_editor.model.vo
 
 		public var events     : ArrayCollection = new ArrayCollection();
 		public var actions    : ArrayCollection = new ArrayCollection();
+		
 		[Bindable]
-//		public var languages  : ArrayCollection = new ArrayCollection();
 		public var languages  : LanguagesVO		= new LanguagesVO();
 		public var libraris   : ArrayCollection = new ArrayCollection();
 		public var resources  : ArrayCollection = new ArrayCollection();
+		[Bindable]
 		public var attributes : ArrayCollection = new ArrayCollection();
 
 		//Information
@@ -26,9 +27,8 @@ package net.vdombox.object_editor.model.vo
 		public var containers	:String = "";		
 
 		public var description	:String = "#Lang(002)";
-
-//		public static const idDisplayName:String = "001";	
 		public var displayName	:String = "#Lang(001)";
+		
 		public var dynamic		:Boolean = false;
 		public var interfaceType:uint = 0;
 		[Bindable] 
