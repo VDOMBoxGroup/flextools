@@ -135,7 +135,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 			//language 
 			var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
-//			objTypeXML.appendChild(languageProxy.createXML(objTypeVO.languages));
+			objTypeXML.appendChild(languageProxy.createXML(objTypeVO.languages));
 
 			//resource
 			var resourcesProxy:ResourcesProxy = facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;

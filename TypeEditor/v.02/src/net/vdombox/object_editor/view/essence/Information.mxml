@@ -6,7 +6,7 @@
 		 show="group1_showHandler(event)"
 		 xmlns:ns="net.vdombox.object_editor.model.*"
 		 label="Information" 
-		 xmlns:ns1="net.vdombox.object_editor.view.essence.*">
+		 xmlns:ns1="net.vdombox.object_editor.view.essence.*" xmlns:ns2="net.vdombox.object_editor.view.*">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		<s:RadioButtonGroup id="group1"/>
@@ -51,8 +51,15 @@
 				[ 	{label:"SELECT VALUE", data:0}, 
 					{label:"Ordinary Object", data:1}, 
 					{label:"Container", data:2}, 
-					{label:"Top-level container", data:3}]);			
-						
+					{label:"Top-level container", data:3}]);
+			
+			[Bindable]
+			public var myWords:Object = new Object();
+			[Bindable]
+			public var flan:String = "";
+			
+//			data.fmyWords  = 		
+			
 			public function set dataProvader(xml:XML):void
 			{
 				return;
@@ -133,9 +140,15 @@
 		<mx:FormItem label="XMLScriptName" toolTip="Имя объекта в xml скриптах в редакторе (rtfm page 66)">
 			<mx:TextInput id="fXMLScriptName" width="250" change="{saveChanges()}"/>
 		</mx:FormItem>
-			
-		<ns1:SelectFormItem id="fDisplayName" label="DisplayName" toolTip="писание объекта и его использования" />		
-		<ns1:SelectFormItem id="fDescription" label="Description" toolTip="писание объекта и его использования" />
+		
+		<s:HGroup>	
+			<mx:Label text="DisplayName"	width="105" />
+			<ns2:LangTextInput id="fDisplayName" width="250" toolTip="писание объекта и его использования"/>
+		</s:HGroup>
+		<s:HGroup>
+			<mx:Label text="Description"	width="105"/>
+			<ns2:LangTextInput id="fDescription" width="250" toolTip="писание объекта и его использования"/>
+		</s:HGroup>
 		
 		<mx:FormItem label="ClassName" toolTip="Имя класса">
 			<mx:TextInput id="fClassName" width="250" change="{saveChanges()}"/>
@@ -167,7 +180,7 @@
 		<mx:FormItem label="WCAG" toolTip="">
 			<mx:TextInput id="fWCAG" width="250"  change="{saveChanges()}"/>
 		</mx:FormItem>
-		
+				
 		<ns1:SelectFormItem id="fContainers" name="fContainers"  label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)" />	
 				
 		<mx:FormItem label="Languages" toolTip="Список поддерживаемых объектом языков (формат ISO 3168-1)" 

@@ -4,10 +4,10 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.collections.ArrayCollection;
-
+	
 	import net.vdombox.object_editor.model.vo.LanguagesVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
-
+	
 
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
@@ -73,7 +73,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return getArr;
 		}
 
-		public function getWord(langsVO:LanguagesVO,id:String):String
+		/*public function getWord(langsVO:LanguagesVO,id:String):String
 		{	
 			var localeName:String = langsVO.currentLocation;
 			var wordsVO:ArrayCollection = langsVO.words;
@@ -88,27 +88,61 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				}
 			}
 			return retString;
+		}*/
+		
+		public function getWord(langsVO:LanguagesVO,id:String):Object
+		{	
+			var localeName:String = langsVO.currentLocation;
+			var wordsVO:ArrayCollection = langsVO.words;
+			var retString:Object;
+			
+			for each(var word:Object in wordsVO)
+			{		
+				if( word["ID"] == id)
+				{
+					retString = word;
+					break;
+				}
+			}
+			return retString;
 		}
 
+		/*public function setWord(langsVO:LanguagesVO,newWord:String):void
+		{
+			var curLocation:String = langsVO.currentLocation;
+			var wordsVO:ArrayCollection = langsVO.words;
+						
+			for each(var word:Object in wordsVO)
+			{		
+				if( word["ID"] == id)
+				{
+					word[curLocation] == newWord;					
+					break;
+				}
+			}			
+		}*/		
+		
 		public function getRegExpWord(langsVO:LanguagesVO,code:String):String
 		{	
 			var  regResource:RegExp = /#Lang\((\d+)\)/;
 			var matchResult:Array = code.match(regResource);			
 			if (matchResult)
 			{
-				var word:String = getWord( langsVO, matchResult[1] );
-				return word;
+				//todo delete
+				//var word:String = getWord( langsVO, matchResult[1] );
+				//return word;
+				return "";				
 			}
 			return "";
 		}
 
-		public function createXML( objTypeVO: ObjectTypeVO ):XML
+		public function createXML( languagesVO: LanguagesVO ):XML
 		{						
 			var langsXML:XML = new XML("<Languages/>");
-			var wordsVO:ArrayCollection = objTypeVO.languages.words;
-			var localesVO:ArrayCollection = objTypeVO.languages.locales;
+			var wordsVO:ArrayCollection = languagesVO.words;
+			var localesVO:ArrayCollection = languagesVO.locales;
 
-			for each(var localeName:String in localesVO )
+			for each(var localeName:Object in localesVO )
 			{				
 				var lanXML:XML = new XML("<Language/>");
 				lanXML.@Code = localeName;
@@ -118,7 +152,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					var id:String = word["ID"];
 					var sentXML: XML = new XML("<Sentence/>");
 					sentXML.@ID = id;
-					sentXML.appendChild(word[localeName]);
+					sentXML.appendChild(word[localeName.data]);
 
 					lanXML.appendChild(sentXML);	
 				}				

@@ -34,7 +34,7 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function showLanguages(event: FlexEvent): void
 		{			
-			view.removeEventListener( FlexEvent.SHOW, showLanguages );	
+//			view.removeEventListener( FlexEvent.SHOW, showLanguages );	
 			view.languagesDataGrid.dataProvider = objectTypeVO.languages.words;
 			//aaaaa повторяется при каждом нажатии на tab
 			view.addLaguage.addEventListener( MouseEvent.CLICK,   addLaguage );
