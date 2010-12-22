@@ -13,7 +13,7 @@ package net.vdombox.object_editor.view
 		[Bindable]
 		public var words:Object = new Object();
 		[Bindable]
-		public var curentLanguage:String = "en_Us";
+		public var curentLanguage:String;
 		
 		public function LangTextInput()
 		{
@@ -24,6 +24,11 @@ package net.vdombox.object_editor.view
 		private function newValue( event: Event ):void
 		{
 			words[curentLanguage] = text;
+		}
+		
+		public function apdateFild( ):void
+		{
+			super.text = words[curentLanguage];			
 		}
 				
 		public function completeStructure( langsVO:LanguagesVO, fildValue:String):void

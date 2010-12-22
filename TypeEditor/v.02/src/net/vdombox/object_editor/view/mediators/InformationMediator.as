@@ -62,21 +62,15 @@ package net.vdombox.object_editor.view.mediators
 
 		public function changeCurrentLocation( event: Event ): void
 		{
-			objectTypeVO.languages.currentLocation = view.fcurrentLocation.selectedLabel;		
+			objectTypeVO.languages.currentLocation = view.fcurrentLocation.selectedLabel;
+			view.fDisplayName.curentLanguage = objectTypeVO.languages.currentLocation;
+			view.fDisplayName.apdateFild();	
+			view.fDescription.curentLanguage = objectTypeVO.languages.currentLocation;
+			view.fDescription.apdateFild();
 		}
 		
-		public function changeWord( event: Event ): void
-		{
-			//todo сделить для класса
-			var langsProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
-						
-		//	langsProxy.setWord( event.target.text );
-			objectTypeVO.languages.currentLocation = view.fcurrentLocation.selectedLabel;		
-		}
-
 		protected function compliteInformation():void
 		{			
-			//правильно?
 			view.label= "Information";
 		
 			view.fname.text 			= objectTypeVO.name;
@@ -84,22 +78,19 @@ package net.vdombox.object_editor.view.mediators
 			view.fID.text 				= objectTypeVO.id;
 			view.fCategory.text			= objectTypeVO.category;
 			view.fDynamic.selected		= objectTypeVO.dynamic;			
-			 
-			view.fDisplayName.completeStructure( objectTypeVO.languages, objectTypeVO.displayName );
-			view.fDescription.completeStructure( objectTypeVO.languages, objectTypeVO.description );
-//			view.fDescription.text 		= langsProxy.getRegExpWord(objectTypeVO.languages, objectTypeVO.description);
-//			view.fDescription.fselectComboBox.textInput.text = langsProxy.getRegExpWord(objectTypeVO.languages, objectTypeVO.description);
 			view.fMoveable.selected		= objectTypeVO.moveable;
 			view.fVersion.text 			= objectTypeVO.version;
-
+			
+			view.fDisplayName.completeStructure( objectTypeVO.languages, objectTypeVO.displayName );
+			view.fDescription.completeStructure( objectTypeVO.languages, objectTypeVO.description );
+			
 			view.fResizable.selectedIndex		= objectTypeVO.resizable;
 			view.fContainerI.selectedIndex      = objectTypeVO.container;	
-			
 //			view.fContainers.fselectComboBox.textInput.text = langsProxy.getRegExpWord(objectTypeVO.languages, objectTypeVO.containers);
 			view.fInterfaceType.selectedIndex 	= objectTypeVO.interfaceType;
 			view.fOptimizationPriority.value  	= objectTypeVO.optimizationPriority;
-
 			view.fcurrentLocation.dataProvider	= objectTypeVO.languages.locales;
+			view.fcurrentLocation.addEventListener(Event.CHANGE, changeCurrentLocation);
 			view.validateNow();
 		}
 				
