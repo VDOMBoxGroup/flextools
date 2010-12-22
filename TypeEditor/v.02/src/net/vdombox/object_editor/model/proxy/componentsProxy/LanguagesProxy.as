@@ -7,7 +7,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 	import net.vdombox.object_editor.model.vo.LanguagesVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
-	import net.vdombox.object_editor.model.vo.WordsVO;
+
 
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
@@ -89,7 +89,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			}
 			return retString;
 		}
-		
+
 		public function getRegExpWord(langsVO:LanguagesVO,code:String):String
 		{	
 			var  regResource:RegExp = /#Lang\((\d+)\)/;
