@@ -4,10 +4,10 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.collections.ArrayCollection;
-	
+
 	import net.vdombox.object_editor.model.vo.LanguagesVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
-	
+
 
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
@@ -74,28 +74,28 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		}
 
 		/*public function getWord(langsVO:LanguagesVO,id:String):String
-		{	
-			var localeName:String = langsVO.currentLocation;
-			var wordsVO:ArrayCollection = langsVO.words;
-			var retString:String;
+		   {
+		   var localeName:String = langsVO.currentLocation;
+		   var wordsVO:ArrayCollection = langsVO.words;
+		   var retString:String;
 
-			for each(var word:Object in wordsVO)
-			{		
-				if( word["ID"] == id)
-				{
-					retString = word[localeName];
-					break;
-				}
-			}
-			return retString;
-		}*/
-		
+		   for each(var word:Object in wordsVO)
+		   {
+		   if( word["ID"] == id)
+		   {
+		   retString = word[localeName];
+		   break;
+		   }
+		   }
+		   return retString;
+		 }*/
+
 		public function getWord(langsVO:LanguagesVO,id:String):Object
 		{	
 			var localeName:String = langsVO.currentLocation;
 			var wordsVO:ArrayCollection = langsVO.words;
 			var retString:Object;
-			
+
 			for each(var word:Object in wordsVO)
 			{		
 				if( word["ID"] == id)
@@ -108,20 +108,20 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		}
 
 		/*public function setWord(langsVO:LanguagesVO,newWord:String):void
-		{
-			var curLocation:String = langsVO.currentLocation;
-			var wordsVO:ArrayCollection = langsVO.words;
-						
-			for each(var word:Object in wordsVO)
-			{		
-				if( word["ID"] == id)
-				{
-					word[curLocation] == newWord;					
-					break;
-				}
-			}			
-		}*/		
-		
+		   {
+		   var curLocation:String = langsVO.currentLocation;
+		   var wordsVO:ArrayCollection = langsVO.words;
+
+		   for each(var word:Object in wordsVO)
+		   {
+		   if( word["ID"] == id)
+		   {
+		   word[curLocation] == newWord;
+		   break;
+		   }
+		   }
+		 }*/		
+
 		public function getRegExpWord(langsVO:LanguagesVO,code:String):String
 		{	
 			var  regResource:RegExp = /#Lang\((\d+)\)/;

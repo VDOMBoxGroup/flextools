@@ -15,12 +15,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	public class ObjectTypeProxy extends Proxy implements IProxy
 	{
 		public static const NAME:String = "ObjectTypeVOProxy";
-		private var  _objectTypeList:Array;
+		private var  _objectTypeList: Object;
 
 		public function ObjectTypeProxy ( data:Object = null ) 
 		{
 			super ( NAME, data );
-			_objectTypeList = new Array;			
+			_objectTypeList = new Object;			
 		}	
 
 		public function newObjectTypeVO(objTypeXML:XML, path:String):void
@@ -156,6 +156,14 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 //				languageProxy.correctWord(strXML, strVO)
 					//todo: делаем запись в лог ошибок
 			}
+		}
+
+
+		public function removeVO(objTypeVO  : ObjectTypeVO):void
+		{
+			trace("ObTyProxy remove: " + objTypeVO.name)
+			_objectTypeList[objTypeVO.filePath] = null
+			trace(_objectTypeList[objTypeVO.filePath])
 		}
 	}
 }

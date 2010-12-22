@@ -3,6 +3,11 @@ package net.vdombox.object_editor.view.mediators
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
+	import flexlib.controls.tabBarClasses.SuperTab;
+
+	import mx.controls.Alert;
+	import mx.events.ChildExistenceChangedEvent;
+
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
@@ -22,8 +27,10 @@ package net.vdombox.object_editor.view.mediators
 	{
 		public static const NAME:String = "ObjectViewMediator";
 		public static const OBJECT_TYPE_CHAGED:String = "objectTypeChanged";
+		public static const OBJECT_TYPE_VIEW_REMOVED:String = "objectTypeViewRemoved";
 
 		private var objectTypeVO:ObjectTypeVO;
+		private var _changed : Boolean = false;
 
 		public function ObjectViewMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{	
@@ -64,8 +71,11 @@ package net.vdombox.object_editor.view.mediators
 
 			view.saveObjectTypeButton.addEventListener  ( MouseEvent.CLICK, saveObjectType );
 			view.saveAsObjectTypeButton.addEventListener( MouseEvent.CLICK, saveAsObjectType );
+
 			trace("ObjectViewMediator constructor");
 			view.validateNow();
+
+			view.addEventListener(OBJECT_TYPE_VIEW_REMOVED, objectTypeViewRemoved);
 		}
 
 		private function saveObjectType(event:MouseEvent):void
@@ -78,6 +88,16 @@ package net.vdombox.object_editor.view.mediators
 			facade.sendNotification( ApplicationFacade.SAVE_AS_OBJECT_TYPE, objectTypeVO );
 		}
 
+
+		private function closeObjectType(event:Event):void
+		{
+			changed = false;
+			Alert.show(objectTypeVO.name, "Closed");
+
+//			facade.sendNotification( ApplicationFacade.SAVE_AS_OBJECT_TYPE, objectTypeVO );
+		}
+
+
 		override public function listNotificationInterests():Array 
 		{			
 			return [ OBJECT_TYPE_CHAGED ];
@@ -89,10 +109,34 @@ package net.vdombox.object_editor.view.mediators
 			{				
 				case OBJECT_TYPE_CHAGED:
 					if (objectTypeVO == note.getBody() )
-						view.label = objectTypeVO.name + "*"
+						changed = true;
 					break;				
 			}
 		}
+
+		private function  objectTypeViewRemoved(event  : Event):void
+		{
+			var objTypeProxy : ObjectTypeProxy= facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
+			objTypeProxy.removeVO(objectTypeVO);
+
+			facade.removeMediator(NAME+objectTypeVO.id)
+		}
+
+
+		private function set changed(value: Boolean):void
+		{
+			_changed = value;
+			if(value)
+				view.label = objectTypeVO.name + "*";
+			else
+				view.label = objectTypeVO.name
+		}
+
+		private function get changed():Boolean
+		{
+			return _changed ;
+		}
+
 
 		protected function get view():ObjectView
 		{

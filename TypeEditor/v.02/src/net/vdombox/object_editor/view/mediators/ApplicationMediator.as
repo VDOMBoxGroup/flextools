@@ -3,6 +3,10 @@
  */
 package net.vdombox.object_editor.view.mediators
 {
+	import flash.events.Event;
+
+	import mx.events.ChildExistenceChangedEvent;
+
 	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
@@ -24,6 +28,8 @@ package net.vdombox.object_editor.view.mediators
 
 			facade.registerMediator( new OpenMediator( view.openButton ) ); 		
 			facade.registerMediator( new ObjectsAccordionMediator( view.objAccordion ) );
+
+			view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
 		}
 
 		public function newObjectView( objTypeVO:ObjectTypeVO ) : void
@@ -56,6 +62,14 @@ package net.vdombox.object_editor.view.mediators
 					break;	
 			}
 		}
+
+		private function  objViewRemoved( event : ChildExistenceChangedEvent ):void
+		{
+			trace ("remouved is vorks!")
+			var objView : ObjectView = event.relatedObject as ObjectView;
+			objView.dispatchEvent( new Event(ObjectViewMediator.OBJECT_TYPE_VIEW_REMOVED));
+		}
+
 
 		protected function get view():ObjectEditor2
 		{
