@@ -136,7 +136,7 @@
 				fname.text = parameter.@Name;
 				fOrder.text = parameter.@Order;
 				fVbType.text = parameter.@VbType;
-				fHelp.text = parameter.@Help;
+//				fHelp.text = parameter.@Help;
 			}
 			
 			private function cleareParametr():void
@@ -144,7 +144,7 @@
 				fname.text = "";
 				fOrder.text = "";
 				fVbType.text = "";
-				fHelp.text = "";
+//				fHelp.text = "";
 			}
 			
 			private function getCurentEvent():XML
@@ -188,7 +188,7 @@
 				xmlParameter.@Name = fname.text;
 				xmlParameter.@Order = fOrder.text;
 				xmlParameter.@VbType = fVbType.text;
-				xmlParameter.@Help = fHelp.text;
+//				xmlParameter.@Help = fHelp.text;
 				
 				objParameter["label"] = objParameter["data"] = fname.text;
 				
@@ -254,7 +254,7 @@
 		
 		<mx:FormItem label="Help:" toolTip="Это Help" enabled="false">
 			<s:HGroup>
-				<ns:OETextInput id="fHelp" width="163"  editable="false" />
+				
 				<s:Button label="..." width="30" />
 			</s:HGroup>
 		</mx:FormItem>
