@@ -13,86 +13,93 @@
 			import mx.collections.ArrayCollection;
 			
 			[Bindable]
+			public var selIt:Object;
+			
+			[Bindable]
 			public var arInterfaceType:ArrayCollection = new ArrayCollection(
-				[ 	{label:"Standard", data:1}, 
-					{label:"RichText Editor", data:2}, 
-					{label:"Text Editor", data:3}, 
-					{label:"Picture", data:4}, 
-					{label:"Special Table", data:5}]);	
+				[ 	{label:"Standard", data:0}, 
+					{label:"RichText Editor", data:1}, 
+					{label:"Text Editor", data:2}, 
+					{label:"Picture", data:3}, 
+					{label:"Special Table", data:4}]);	
 			
 			[Bindable]
 			public var arColorGroup:ArrayCollection = new ArrayCollection(
-				[ 	{label:"Grey", data:1}, 
+				[ 	{label:"SELECT VALUE", data:0},
+					{label:"Grey", data:1}, 
 					{label:"Red", data:2}, 
 					{label:"Green", data:3}, 
 					{label:"Blue", data:4}, 
 				]);	
+			
+			public function saveChanges():void
+			{
+				dispatchEvent(new Event( Event.CHANGE ));
+			}
 		]]>
 	</fx:Script>
 	<s:HGroup>
 		<s:VGroup>
-			<s:List id="attributesList" width="100%"/>
+			<s:List id="attributesList" width="100%" change="this.selIt=List(event.target).selectedItem"/>
 			<s:HGroup>
-				<s:Button label="Add"/>
-				<s:Button label="Delete"/>
+				<s:Button id="addAttributeButton" label="Add"/>
+				<s:Button id="deleteAttributeButton" label="Delete" enabled="{attributesList.selectedIndex != -1}"/>
 			</s:HGroup>
 		</s:VGroup>
 		<mx:Form width="100%" color="0x323232" paddingTop="0">
 			<mx:FormHeading fontSize="10"  label="Enter values into the form." paddingTop="0" />
 			
 			<mx:FormItem label="Name" toolTip="Имя объекта">
-				<mx:TextInput id="fname" width="250" change="{}"/>
+				<mx:TextInput id="fname" width="250" change="{saveChanges()}"/>
 			</mx:FormItem>
 			
 			<s:HGroup>
-				<mx:Label text="DisplayName" width="105" toolTip="Отображаемое имя атрибута"/>
+				<mx:Label text="DisplayName" width="90" toolTip="Отображаемое имя атрибута"/>
 				<ns2:LangTextInput id="DisplayName" width="250"/>
 			</s:HGroup>
 			
 			<mx:FormItem label="DefaultValue" toolTip="Значение по умолчанию">
-				<mx:TextInput id="defaultValue" width="250" change="{}"/>
+				<mx:TextInput id="defaultValue" width="250" change="{saveChanges()}"/>
 			</mx:FormItem>
 						
 			<mx:FormItem label="RegExp" >
 				<s:HGroup>
 					<ns:OETextInput id="regExp" width="213" editable="false"/>
-					<s:Button label="..." width="30" click="{}"/>
+					<s:Button label="..." width="30" click="{}" />
 				</s:HGroup>
 			</mx:FormItem>
 			
 			<s:HGroup>
 				<mx:Label text="ErrorValidationMessage"	width="140"/>
-				<ns2:LangTextInput id="fErrMessage" width="215"/>
+				<ns2:LangTextInput id="fErrMessage" width="200"/>
 			</s:HGroup>
 			
 			<mx:FormItem label="Visible" >
-				<s:CheckBox id="visibleAtr" label="Visible atribute"  toolTip="Отображаемый в редакторе" change="{}"/>
+				<s:CheckBox id="visibleAtr" label="Visible atribute"  toolTip="Отображаемый в редакторе" change="{saveChanges()}"/>
 			</mx:FormItem>
 			
 			<s:HGroup>
-				<mx:Label text="Help"	width="105"/>
+				<mx:Label text="Help"	width="90"/>
 				<ns2:LangTextInput id="helpAtr" width="250"/>
 			</s:HGroup>
 			
-			<mx:FormItem label="InterfaceType" >
-				<s:HGroup>
-					<ns:OETextInput id="interfaceType" width="213" editable="false"/>
-					<s:Button label="..." width="30" click="{}"/>
-				</s:HGroup>
+			<mx:FormItem label="InterfaceType" 
+						 toolTip="Значения: 1 - Standard, 2 - RichText Editor, 3 - Text Editor, 4 - Picture, 5 - Special Table">
+				<s:ComboBox id="interfaceType" dataProvider="{arInterfaceType}" width="250" change="{saveChanges()}"/>
 			</mx:FormItem>
-			
+						
 			<mx:FormItem label="CodeInterface" >
 				<s:HGroup>
 					<ns:OETextInput id="codeInterface" width="213" editable="false"/>
 					<s:Button label="..." width="30" click="{}"/>
 				</s:HGroup>
 			</mx:FormItem>
-			<mx:FormItem label="Colorgroup" >
-				<s:HGroup>
-					<ns:OETextInput id="colorgroup" width="213" editable="false"/>
-					<s:Button label="..." width="30" click="{}"/>
-				</s:HGroup>
-			</mx:FormItem>		
+			
+			<mx:FormItem label="Colorgroup" 
+						 toolTip="Цветовая группа атрибута, значения: 1 - Grey, 2 - Red, 3 - Green, 4 - Blue">
+				<s:ComboBox id="colorgroup" dataProvider="{arColorGroup}" width="250" change="{saveChanges()}"/>
+			</mx:FormItem>
+					
 		</mx:Form>		
 	</s:HGroup>
 </s:NavigatorContent>

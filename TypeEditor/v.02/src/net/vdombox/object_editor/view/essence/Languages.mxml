@@ -64,10 +64,8 @@
 				 editable="true" dataProvider="{arLanguages}"/>
 	<s:HGroup textAlign="right" width="100%"   paddingBottom="10" paddingRight="10">
 		<s:HGroup width="100%"/>
-		<s:Button id="addWord" label="Add" />
-		
-		<s:Button id="deleteWord" label="Delete" enabled="{languagesDataGrid.selectedIndex != -1}" 
-				 />
+		<s:Button id="addWord" label="Add" />		
+		<s:Button id="deleteWord" label="Delete" enabled="{languagesDataGrid.selectedIndex != -1}"/>
 	</s:HGroup>
 	</s:VGroup>
 </s:NavigatorContent>

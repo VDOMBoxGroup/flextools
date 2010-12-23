@@ -30,9 +30,6 @@ package net.vdombox.object_editor.view.mediators
 
 			view.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
 			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
-//			view.addEventListener( ApplicationFacade.CHANGE_SELECT_FORM_ITEM, changeSelectFormItem );
-
-//			trace("InformationMediator: " + objTypeVO.id);
 		}
 
 		public function validateObjectTypeVO(event:Event):void
