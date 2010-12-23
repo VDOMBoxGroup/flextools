@@ -3,19 +3,19 @@ package net.vdombox.object_editor.view.mediators
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import mx.events.FlexEvent;
 	import mx.messaging.management.Attribute;
-	
+
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
-	
+
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
-	
+
 	import spark.events.IndexChangeEvent;
 
 	public class AttributeMediator extends Mediator implements IMediator
@@ -32,7 +32,7 @@ package net.vdombox.object_editor.view.mediators
 			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
 //			attributes.addEventListener( FlexEvent.HIDE, hideAttributes );
 		}
-		
+
 		public function validateObjectTypeVO(event:Event):void
 		{
 			view.label= "Attributes*";			
@@ -41,12 +41,12 @@ package net.vdombox.object_editor.view.mediators
 			{
 				if(event.target.fname.text != view.attributesList.selectedItem.label)
 				{
-					
+
 					view.attributesList.selectedItem.label = event.target.fname.text;
 					attributeVO.name = view.fname.text;
-					
+
 					view.validateNow();
-					view.saveChanges();
+					view.viewChanged();
 				}
 				else
 				{				
@@ -63,7 +63,7 @@ package net.vdombox.object_editor.view.mediators
 			attributeVO = view.attributesList.selectedItem.data as AttributeVO;
 			fillFilds(attributeVO);	
 		}
-		
+
 		private function fillFilds(attributeVO:AttributeVO):void
 		{
 			view.fname.text 					= attributeVO.name;	
@@ -74,11 +74,11 @@ package net.vdombox.object_editor.view.mediators
 			view.DisplayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );
 			view.helpAtr.completeStructure    ( objectTypeVO.languages, attributeVO.help );
 			view.fErrMessage.completeStructure( objectTypeVO.languages, attributeVO.errorValidationMessage );
-			/*view.codeInterface.text 	= attributeVO.codeInterface;		
-			view.regExp.text 			= attributeVO.regularExpressionValidation;
-			*/	
+		/*view.codeInterface.text 	= attributeVO.codeInterface;
+		   view.regExp.text 			= attributeVO.regularExpressionValidation;
+		 */	
 		}
-		
+
 
 		private function showAttributes(event: FlexEvent): void
 		{			
@@ -88,7 +88,7 @@ package net.vdombox.object_editor.view.mediators
 			compliteAtributes();
 			view.validateNow();
 		}
-		
+
 		private function addAttribute(event:MouseEvent): void
 		{			
 			var attribVO:AttributeVO = new AttributeVO( "newAttribute" );
@@ -97,16 +97,16 @@ package net.vdombox.object_editor.view.mediators
 			view.attributesList.selectedIndex = objectTypeVO.attributes.length - 1;
 			view.attributesList.validateNow();
 //			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
-						
+
 		}
-		
+
 		private function deleteAttribute(event:MouseEvent): void
 		{
 			var selectInd:uint = view.attributesList.selectedIndex;
 			var selectIt:Object = view.attributesList.selectedItem;
 			objectTypeVO.attributes.removeItemAt(selectInd);
 //и так удаляет =)	view.attributesList.dataProvider.removeItemAt(selectInd );
-			
+
 		}
 
 		private  function hideAttributes(event: FlexEvent):void
@@ -118,6 +118,21 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			view.attributesList.dataProvider = objectTypeVO.attributes;
 		}		
+		override public function listNotificationInterests():Array 
+		{			
+			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED ];
+		}
+
+		override public function handleNotification( note:INotification ):void 
+		{
+			switch ( note.getName() ) 
+			{				
+				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
+					if (objectTypeVO == note.getBody() )
+						view.label= "Attributes";
+					break;	
+			}
+		}
 
 		protected function get view():Attributes
 		{

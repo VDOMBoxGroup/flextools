@@ -32,7 +32,7 @@
 					{label:"Blue", data:4}, 
 				]);	
 			
-			public function saveChanges():void
+			public function viewChanged():void
 			{
 				dispatchEvent(new Event( Event.CHANGE ));
 			}
@@ -41,7 +41,7 @@
 	<s:HGroup>
 
 		<s:VGroup height="{300}">
-			<s:List id="attributesList" height="{height- 50}" width="100%" change="this.selIt=List(event.target).selectedItem"/>
+			<s:List id="attributesList" height="{height- 50}" width="100%" change="{selIt=attributesList.selectedItem;}"/>
 
 			<s:HGroup>
 				<s:Button id="addAttributeButton" label="Add"/>
@@ -52,16 +52,16 @@
 			<mx:FormHeading fontSize="10"  label="Enter values into the form." paddingTop="0" />
 			
 			<mx:FormItem label="Name" toolTip="Имя объекта">
-				<mx:TextInput id="fname" width="250" change="{saveChanges()}"/>
+				<mx:TextInput id="fname" width="250" change="{viewChanged()}"/>
 			</mx:FormItem>
 			
 			<s:HGroup>
 				<mx:Label text="DisplayName" width="90" toolTip="Отображаемое имя атрибута"/>
-				<ns2:LangTextInput id="DisplayName" width="250"/>
+				<ns2:LangTextInput id="DisplayName" width="250"  change="{viewChanged()}" />
 			</s:HGroup>
 			
 			<mx:FormItem label="DefaultValue" toolTip="Значение по умолчанию">
-				<mx:TextInput id="defaultValue" width="250" change="{saveChanges()}"/>
+				<mx:TextInput id="defaultValue" width="250" change="{viewChanged()}"/>
 			</mx:FormItem>
 						
 			<mx:FormItem label="RegExp" >
@@ -72,23 +72,23 @@
 			</mx:FormItem>
 			
 			<s:HGroup>
-				<mx:Label text="ErrorValidationMessage"	width="140"/>
-				<ns2:LangTextInput id="fErrMessage" width="200"/>
+				<mx:Label text="ErrorValidationMessage"	width="140"  />
+				<ns2:LangTextInput id="fErrMessage" width="200" change="{viewChanged()}"/>
 			</s:HGroup>
 			
 			<mx:FormItem label="Visible" >
-				<s:CheckBox id="visibleAtr" label="Visible atribute"  toolTip="Отображаемый в редакторе" change="{saveChanges()}"/>
+				<s:CheckBox id="visibleAtr" label="Visible atribute"  toolTip="Отображаемый в редакторе" change="{viewChanged()}"/>
 			</mx:FormItem>
 			
 			<s:HGroup>
 				<mx:Label text="Help"	width="90"/>
-				<ns2:LangTextInput id="helpAtr" width="250"/>
+				<ns2:LangTextInput id="helpAtr" width="250"  change="{viewChanged()}"/>
 			</s:HGroup>
 			
 
 			<mx:FormItem label="InterfaceType" 
 						 toolTip="Значения: 1 - Standard, 2 - RichText Editor, 3 - Text Editor, 4 - Picture, 5 - Special Table">
-				<s:ComboBox id="interfaceType" dataProvider="{arInterfaceType}" width="250" change="{saveChanges()}"/>
+				<s:ComboBox id="interfaceType" dataProvider="{arInterfaceType}" width="250" change="{viewChanged()}"/>
 
 			</mx:FormItem>
 						
@@ -102,7 +102,7 @@
 			
 			<mx:FormItem label="Colorgroup" 
 						 toolTip="Цветовая группа атрибута, значения: 1 - Grey, 2 - Red, 3 - Green, 4 - Blue">
-				<s:ComboBox id="colorgroup" dataProvider="{arColorGroup}" width="250" change="{saveChanges()}"/>
+				<s:ComboBox id="colorgroup" dataProvider="{arColorGroup}" width="250" change="{viewChanged()}"/>
 			</mx:FormItem>
 				
 		</mx:Form>		
