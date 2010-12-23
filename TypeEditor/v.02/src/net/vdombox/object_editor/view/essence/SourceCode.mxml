@@ -27,6 +27,7 @@
 			
 			private function saveChange():void
 			{
+				dispatchEvent(new Event(Event.CHANGE));
 //				delete _data[0];
 //				_data.appendChild( XML("<![CDATA[" +  sourceCode.text +"]" +"]" +">"));
 //				delete _data.children()[0];
