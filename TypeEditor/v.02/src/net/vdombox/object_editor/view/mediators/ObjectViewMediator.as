@@ -26,8 +26,10 @@ package net.vdombox.object_editor.view.mediators
 	public class ObjectViewMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "ObjectViewMediator";
+
 		public static const OBJECT_TYPE_CHAGED:String = "objectTypeChanged";
 		public static const OBJECT_TYPE_VIEW_REMOVED:String = "objectTypeViewRemoved";
+		public static const OBJECT_TYPE_VIEW_SAVED:String = "objectTypeViewSaved";
 
 		private var objectTypeVO:ObjectTypeVO;
 		private var _changed : Boolean = false;
@@ -100,7 +102,7 @@ package net.vdombox.object_editor.view.mediators
 
 		override public function listNotificationInterests():Array 
 		{			
-			return [ OBJECT_TYPE_CHAGED ];
+			return [ OBJECT_TYPE_CHAGED, OBJECT_TYPE_VIEW_SAVED ];
 		}
 
 		override public function handleNotification( note:INotification ):void 
@@ -110,7 +112,12 @@ package net.vdombox.object_editor.view.mediators
 				case OBJECT_TYPE_CHAGED:
 					if (objectTypeVO == note.getBody() )
 						changed = true;
-					break;				
+					break;		
+
+				case OBJECT_TYPE_VIEW_SAVED:
+					if (objectTypeVO == note.getBody() )
+						changed = false;
+					break;	
 			}
 		}
 

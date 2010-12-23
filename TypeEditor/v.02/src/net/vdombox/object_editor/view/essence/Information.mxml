@@ -70,28 +70,9 @@
 				}	
 			}			
 			
-			private function saveChanges():void
+			private function viewChanged():void
 			{
 				dispatchEvent(new Event( Event.CHANGE ));
-//				_data.Name = fname.text;
-//				_data.DisplayName = fDisplayName.text;	
-//				_data.XMLScriptName = fXMLScriptName.text;	
-//				_data.RenderType = fRenderType.text;
-//				_data.Description = fDescription.text;
-//				_data.ClassName = fClassName.text;
-//				_data.ID = fID.text;
-//				_data.Category = fCategory.text;
-//				_data.Version = fVersion.text;
-//				_data.OptimizationPriority = fOptimizationPriority.value;
-//				_data.WCAG = fWCAG.text;
-//				_data.Containers = fContainers.text;
-//				_data.RemoteMethods = fRemoteMethods.text;
-//				_data.Handlers = fHandlers.text;
-//				_data.Moveable = getIntFromBoolean(fMoveable.selected);
-//				_data.Dynamic = getIntFromBoolean(fDynamic.selected);
-//				_data.InterfaceType = fInterfaceType.selectedIndex;
-//				_data.Resizable = fResizable.selectedIndex;
-//				_data.Container = fContainer.selectedIndex + 1;
 			}
 			
 			private function getIntFromBoolean(bool:Boolean):String
@@ -128,28 +109,28 @@
 		<mx:FormHeading fontSize="10"  label="Enter values into the form." paddingTop="0" />
 		
 		<mx:FormItem label="Name" toolTip="Имя объекта">
-			<mx:TextInput name="name" id="fname" width="250" change="{saveChanges()}"/>
+			<mx:TextInput name="name" id="fname" width="250" change="{viewChanged()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="XMLScriptName" toolTip="Имя объекта в xml скриптах в редакторе (rtfm page 66)">
-			<mx:TextInput id="fXMLScriptName" width="250" change="{saveChanges()}"/>
+			<mx:TextInput id="fXMLScriptName" width="250" change="{viewChanged()}"/>
 		</mx:FormItem>
 		
 		<s:HGroup>	
 			<mx:Label text="DisplayName"	width="105" />
-			<ns2:LangTextInput id="fDisplayName" width="250" toolTip="писание объекта и его использования"/>
+			<ns2:LangTextInput id="fDisplayName" width="250" toolTip="писание объекта и его использования" change="{viewChanged()}"/>
 		</s:HGroup>
 		<s:HGroup>
 			<mx:Label text="Description"	width="105"/>
-			<ns2:LangTextInput id="fDescription" width="250" toolTip="писание объекта и его использования"/>
+			<ns2:LangTextInput id="fDescription" width="250" toolTip="писание объекта и его использования" change="{viewChanged()}"/>
 		</s:HGroup>
 		
 		<mx:FormItem label="ClassName" toolTip="Имя класса">
-			<mx:TextInput id="fClassName" width="250" change="{saveChanges()}"/>
+			<mx:TextInput id="fClassName" width="250" change="{viewChanged()}"/>
 		</mx:FormItem>
 		<mx:FormItem label="ID" toolTip="Уникальный идентификатор объекта"
-					 enabled="false">
-			<mx:TextInput id="fID" width="250" editable="false"/>
+					 enabled="false" >
+			<mx:TextInput id="fID" width="250" editable="false" change="{viewChanged()}"/>
 		</mx:FormItem>
 		
 		<!--mx:FormItem label="Icon" toolTip="Иконка объекта">
@@ -164,53 +145,53 @@
 			<mx:TextInput id="fStructureIcon" width="250" editable="false"/>
 		</mx:FormItem-->
 		<mx:FormItem label="Category" toolTip="Категория объекта (Usual, Standard, ...)">
-			<mx:TextInput id="fCategory" width="250"  change="{saveChanges()}"/>
+			<mx:TextInput id="fCategory" width="250"  change="{viewChanged()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Version" toolTip="Текущая версия объекта">
-			<mx:TextInput id="fVersion" width="250"  change="{saveChanges()}"/>
+			<mx:TextInput id="fVersion" width="250"  change="{viewChanged()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="WCAG" toolTip="">
-			<mx:TextInput id="fWCAG" width="250"  change="{saveChanges()}"/>
+			<mx:TextInput id="fWCAG" width="250"  change="{viewChanged()}"/>
 		</mx:FormItem>
 				
 		<ns1:SelectFormItem id="fContainers" name="fContainers"  label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)" />	
 				
 		<mx:FormItem label="Languages" toolTip="Список поддерживаемых объектом языков (формат ISO 3168-1)" 
 					 enabled="false">
-			<mx:TextInput id="fLanguages" width="250" editable="false"/>
+			<mx:TextInput id="fLanguages" width="250" editable="false" change="{viewChanged()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="RemoteMethods" toolTip="писок статических функций объекта, доступных через SOAP (execute_sql, get_data, ...)">
-			<mx:TextInput id="fRemoteMethods" width="250" change="{saveChanges()}" />
+			<mx:TextInput id="fRemoteMethods" width="250" change="{viewChanged()}" />
 		</mx:FormItem>
 		
 		<mx:FormItem label="Handlers" toolTip="Список статических функций объекта - обработчиков событий (set_attr)">
-			<mx:TextInput id="fHandlers" width="250"  change="{saveChanges()}"/>
+			<mx:TextInput id="fHandlers" width="250"  change="{viewChanged()}"/>
 		</mx:FormItem>			
 	</mx:Form>
 	
 		<mx:Form width="100%" color="0x323232" paddingTop="0">
 			<mx:FormItem >	
-				<s:CheckBox id="fMoveable" label="Moveable"  toolTip="1 - перемещаемый объект, 0 - нет" change="{saveChanges()}"/>
-				<s:CheckBox id="fDynamic" label="Dynamic"  toolTip="1 - перемещаемый объект, 0 - нет" change="{saveChanges()}"/>
+				<s:CheckBox id="fMoveable" label="Moveable"  toolTip="1 - перемещаемый объект, 0 - нет" change="{viewChanged()}"/>
+				<s:CheckBox id="fDynamic" label="Dynamic"  toolTip="1 - перемещаемый объект, 0 - нет" change="{viewChanged()}"/>
 			</mx:FormItem>
 			
 			<mx:FormItem label="InterfaceType" 
 						 toolTip="Тип интерфейса в редакторе: 1 - Standard, 2 - RichText Editor, 3 - Text Editor, 4 - Picture, 5 - Special Table">
-				<s:ComboBox id="fInterfaceType" dataProvider="{arInterfaceType}" />
+				<s:ComboBox id="fInterfaceType" dataProvider="{arInterfaceType}" change="{viewChanged()}" />
 			</mx:FormItem>
 		
 			<mx:FormItem label="Resizable" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
-				<s:ComboBox id="fResizable" dataProvider="{aResizable}" />
+				<s:ComboBox id="fResizable" dataProvider="{aResizable}" change="{viewChanged()}" />
 			</mx:FormItem>
 			
 			<!--mx:FormItem label="Container" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
 				<s:ComboBox id="fContainera" dataProvider="{aContainer}"  />
 			</mx:FormItem-->
 			<mx:FormItem label="Container" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
-				<s:ComboBox id="fContainerI"   >
+				<s:ComboBox id="fContainerI"  change="{viewChanged()}" >
 					<s:dataProvider>
 						<s:ArrayList>
 							<fx:Object label="SELECT VALUE" data="0"/>
@@ -224,14 +205,14 @@
 			</mx:FormItem>
 			<mx:FormItem label="RenderType" toolTip="Для контейнеров верхнего уровня - формат, в котором контейнер отдает данные (например, HTML)"
 						 >
-				<mx:TextInput id="fRenderType" width="250"  enabled="{(fContainerI.selectedIndex == 2)}"/>
+				<mx:TextInput id="fRenderType" width="250"  enabled="{(fContainerI.selectedIndex == 2)}" change="{viewChanged()}" />
 			</mx:FormItem>
 			
 			<mx:FormItem label="OptimizationPriority" toolTip="Приоритет объекта при генерации его отображения в контейнере">
 				<s:NumericStepper id="fOptimizationPriority" width="55" 
-							value="0" snapInterval="1" minimum="1" maximum="100"  change="{saveChanges()}"/>
+							value="0" snapInterval="1" minimum="1" maximum="100"  change="{viewChanged()}"/>
 			</mx:FormItem>
-			<mx:ComboBox id="fcurrentLocation" width="150" color="0x000000"/>
+			<mx:ComboBox id="fcurrentLocation" width="150" color="0x000000" />
 			
 		</mx:Form>
 	</s:HGroup>

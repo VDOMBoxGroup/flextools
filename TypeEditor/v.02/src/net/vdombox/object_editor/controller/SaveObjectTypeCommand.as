@@ -7,6 +7,7 @@ package net.vdombox.object_editor.controller
 	import net.vdombox.object_editor.model.proxy.FileProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
+	import net.vdombox.object_editor.view.mediators.ObjectViewMediator;
 
 	import org.osmf.utils.OSMFStrings;
 	import org.puremvc.as3.interfaces.INotification;
@@ -21,9 +22,11 @@ package net.vdombox.object_editor.controller
 			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy( ObjectTypeProxy.NAME ) as ObjectTypeProxy;
 			var objTypeXML:XML = objTypeProxy.createXML( objTypeVO );
 			var fileProxy:FileProxy = facade.retrieveProxy( FileProxy.NAME ) as FileProxy;
-			
+
 			var str:String = '<?xml version="1.0" encoding="utf-8"?>\n'+objTypeXML.toXMLString();
 			fileProxy.saveFile( str, objTypeVO.filePath );
+
+			facade.sendNotification(ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, objTypeVO);
 		}
 	}
 }
