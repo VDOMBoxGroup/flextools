@@ -3,23 +3,24 @@ package net.vdombox.object_editor.view.mediators
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.IList;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
 	import mx.events.FlexEvent;
 	import mx.messaging.management.Attribute;
-
+	
+	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
-
+	
 	import spark.events.IndexChangeEvent;
 
 	public class AttributeMediator extends Mediator implements IMediator
@@ -75,9 +76,11 @@ package net.vdombox.object_editor.view.mediators
 			view.visibleAtr.selected			= attributeVO.visible;	
 			view.interfaceType.selectedIndex 	= attributeVO.interfaceType;
 			view.colorgroup.selectedIndex 		= attributeVO.colorgroup;
+			
+			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 			view.DisplayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );
 			view.helpAtr.completeStructure    ( objectTypeVO.languages, attributeVO.help );
-			//view.fErrMessage.text =  //completeStructure( objectTypeVO.languages, attributeVO.errorValidationMessage );
+			view.fErrMessage.completeStructure( objectTypeVO.languages, attributeVO.errorValidationMessage );
 		/*view.codeInterface.text 	= attributeVO.codeInterface;
 		   view.regExp.text 			= attributeVO.regularExpressionValidation;
 		 */	
@@ -96,14 +99,30 @@ package net.vdombox.object_editor.view.mediators
 
 		private function addAttribute(event:MouseEvent): void
 		{			
-			var attribVO:AttributeVO = new AttributeVO( "newAttribute" );
-			objectTypeVO.attributes.addItem( {label:"newAttribute", data:attribVO} );
+			var attribVO:AttributeVO = new AttributeVO( "newAttribute"+ Math.round(Math.random()*100) );
+			objectTypeVO.attributes.addItem( {label:attribVO.name, data:attribVO} );
+			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
+			attribVO.displayName = langsProxy.getNextId(objectTypeVO.languages, "1");
+			attribVO.errorValidationMessage = langsProxy.getNextId(objectTypeVO.languages, "2");
+			attribVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
 			fillFilds(attribVO);
-			//todo необходимо полчить индех нового аттрибута
-			view.currentItem = objectTypeVO.attributes[objectTypeVO.attributes.length-1];
+			view.currentItem = getCurrentItem(attribVO.name);
 			view.attributesList.selectedItem = view.currentItem;
 			view.attributesList.validateNow();
 //			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
+		}
+		
+		private function getCurrentItem(nameAttib:String):Object
+		{			
+			for each(var attr:Object in objectTypeVO.attributes )
+			{
+				if( attr["label"] == nameAttib )
+				{
+					return attr;
+					break;
+				}
+			}
+			return new Object();
 		}
 
 		private function deleteAttribute(event:MouseEvent): void

@@ -31,7 +31,23 @@
 					{label:"Green", data:3}, 
 					{label:"Blue", data:4}, 
 				]);	
-						
+
+			[Bindable]
+			public var arCodeInterface:ArrayCollection = new ArrayCollection(
+				[ 	{label:"TextField(Length)", data:"TextField(Length)"},
+					{label:"Number(minValue, maxValue)", data:"Number(minValue, maxValue)"}, 
+					{label:"MultiLine(Length)", data:"MultiLine(Length)"}, 
+					{label:"!Font()", data:"!Font()"}, 
+					{label:"DropDown(Values)", data:"DropDown(Values)"}, 
+					{label:"File()", data:"File()"}, 
+					{label:"Color()", data:"Color()"}, 
+					{label:"PageLink()", data:"PageLink()"}, 
+					{label:"LinkedBase()", data:"LinkedBase()"}, 
+					{label:"ObjectList()", data:"ObjectList()"}, 
+					{label:"ObjectList(type_id)", data:"ObjectList(type_id)"}, 
+					{label:"ExternalEditor(Title, Info)", data:"ExternalEditor(Title, Info)"}
+				]);	
+			
 			public function viewChanged():void
 			{				
 				dispatchEvent(new Event( Event.CHANGE ));
@@ -62,7 +78,7 @@
 			
 			<s:HGroup>
 				<mx:Label text="DisplayName" width="90" toolTip="Отображаемое имя атрибута"/>
-				<ns2:LangTextInput id="DisplayName" width="250"  change="{viewChanged()}" />
+				<ns2:LangTextArea id="DisplayName" width="250" height="20" change="{viewChanged()}" />
 			</s:HGroup>
 			
 			<mx:FormItem label="DefaultValue" toolTip="Значение по умолчанию">
@@ -78,8 +94,8 @@
 			
 			<s:HGroup>
 				<mx:Label text="ErrorValidationMessage"	width="140"  />
-				<s:TextArea id="fErrMessage" width="200" change="{viewChanged()}"/>
-				<!--ns2:LangTextInput id="fErrMessage" width="200" change="{viewChanged()}"/-->
+				<!--s:TextArea id="fErrMessage" width="200" change="{viewChanged()}" height="40" verticalScrollPolicy="auto"/-->
+				<ns2:LangTextArea id="fErrMessage" width="200" height="40" change="{viewChanged()}"/>
 			</s:HGroup>
 			
 			<mx:FormItem label="Visible" >
@@ -88,9 +104,8 @@
 			
 			<s:HGroup>
 				<mx:Label text="Help"	width="90"/>
-				<ns2:LangTextInput id="helpAtr" width="250"  change="{viewChanged()}"/>
+				<ns2:LangTextArea id="helpAtr" width="250" height="40" change="{viewChanged()}"/>
 			</s:HGroup>
-			
 
 			<mx:FormItem label="InterfaceType" 
 						 toolTip="Значения: 1 - Standard, 2 - RichText Editor, 3 - Text Editor, 4 - Picture, 5 - Special Table">
@@ -104,7 +119,6 @@
 					<s:Button label="..." width="30" click="{}"/>
 				</s:HGroup>
 			</mx:FormItem>
-
 			
 			<mx:FormItem label="Colorgroup" 
 						 toolTip="Цветовая группа атрибута, значения: 1 - Grey, 2 - Red, 3 - Green, 4 - Blue">

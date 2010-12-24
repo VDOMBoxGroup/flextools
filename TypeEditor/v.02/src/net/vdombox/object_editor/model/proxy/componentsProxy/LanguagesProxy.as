@@ -73,24 +73,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return getArr;
 		}
 
-		/*public function getWord(langsVO:LanguagesVO,id:String):String
-		   {
-		   var localeName:String = langsVO.currentLocation;
-		   var wordsVO:ArrayCollection = langsVO.words;
-		   var retString:String;
-
-		   for each(var word:Object in wordsVO)
-		   {
-		   if( word["ID"] == id)
-		   {
-		   retString = word[localeName];
-		   break;
-		   }
-		   }
-		   return retString;
-		 }*/
-
-		public function getWord(langsVO:LanguagesVO,id:String):Object
+		public function getWords(langsVO:LanguagesVO,id:String):Object
 		{	
 			var localeName:String = langsVO.currentLocation;
 			var wordsVO:ArrayCollection = langsVO.words;
@@ -128,12 +111,27 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			var matchResult:Array = code.match(regResource);			
 			if (matchResult)
 			{
-				//todo delete
-				//var word:String = getWord( langsVO, matchResult[1] );
-				//return word;
-				return "";				
+				var word:String = getWord( langsVO, matchResult[1] );
+				return word;								
 			}
 			return "";
+		}
+		
+		private function getWord(langsVO:LanguagesVO,id:String):String
+		{
+			var localeName:String = langsVO.currentLocation;
+			var wordsVO:ArrayCollection = langsVO.words;
+			var retString:String;
+			
+			for each(var word:Object in wordsVO)
+			{
+				if( word["ID"] == id)
+				{
+					retString = word[localeName];
+					break;
+				}
+			}
+			return retString;
 		}
 
 		public function createXML( languagesVO: LanguagesVO ):XML
@@ -159,7 +157,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				langsXML.appendChild(lanXML);
 			}
 			return langsXML;
-		}		
+		}	
+		
+		public function getNextId(langsVO: LanguagesVO, startId: String):String
+		{
+			return langsVO.getNextId( startId );
+		}
 	}
 }
 
