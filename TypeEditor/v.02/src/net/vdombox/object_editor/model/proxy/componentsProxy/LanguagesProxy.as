@@ -145,7 +145,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			for each(var localeName:Object in localesVO )
 			{				
 				var lanXML:XML = new XML("<Language/>");
-				lanXML.@Code = localeName;
+				lanXML.@Code = localeName.data;
 
 				for each(var word:Object in wordsVO)
 				{
