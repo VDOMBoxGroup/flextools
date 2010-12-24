@@ -166,8 +166,20 @@
 				<s:NumericStepper id="fOptimizationPriority" width="55" 
 							value="0" snapInterval="1" minimum="1" maximum="100"  change="{viewChanged()}"/>
 			</mx:FormItem>
-			<mx:ComboBox id="fcurrentLocation" width="150" color="0x000000" />
 			
+			<mx:FormItem label="Dispalay language" toolTip="Доступные языки">
+				<mx:ComboBox id="fcurrentLocation" width="150" color="0x000000" />
+			</mx:FormItem>
+			
+			<mx:FormItem label="icon" toolTip="">
+				<mx:Image id="ficon" />
+			</mx:FormItem>
+			<mx:FormItem label="Structure Icon" toolTip="">
+				<mx:Image id="ficon2" />
+			</mx:FormItem>
+			<mx:FormItem label="Editor Icon" toolTip="">
+				<mx:Image id="ficon3"   />
+			</mx:FormItem>
 		</mx:Form>
 	</s:HGroup>
 </s:NavigatorContent>

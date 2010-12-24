@@ -4,11 +4,12 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
-	
+
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
-	
+	import net.vdombox.object_editor.view.essence.Resourses;
+
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -33,27 +34,78 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			else
 			{					
 				var objTypeVO: ObjectTypeVO = initInformation(objTypeXML);			
+
 				objTypeVO.filePath	= path;
-				//sourceCode
-				objTypeVO.sourceCode = initSourceCode(objTypeXML);
-
-				//language 
-				var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
-				objTypeVO.languages = languageProxy.createFromXML(objTypeXML);
-
-				//atributes
-				var attributesProxy:AttributesProxy = facade.retrieveProxy(AttributesProxy.NAME) as AttributesProxy;
+				objTypeVO.sourceCode = objTypeXML.SourceCode.toString();
+				objTypeVO.languages = languagesProxy.createFromXML(objTypeXML);
 				objTypeVO.attributes = attributesProxy.createFromXML(objTypeXML);
-				
-				//resource
-				var resoursesProxy:ResourcesProxy = facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
-				objTypeVO.resources = resoursesProxy.createFromXML(objTypeXML);
+				objTypeVO.resources = resourcesProxy.createFromXML(objTypeXML);
 
 				_objectTypeList[objTypeVO.filePath] = objTypeVO;
-
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
-				objTypeXML = null;
 			}
+		}
+
+
+		public function createXML( objTypeVO: ObjectTypeVO):XML
+		{
+			var objTypeXML:XML = getNewObjTypeXML(objTypeVO);
+
+			objTypeXML.appendChild( sourceCodeToXML(objTypeVO.sourceCode) );	
+			objTypeXML.appendChild( languagesProxy.createXML(objTypeVO.languages) );
+			objTypeXML.appendChild( attributesProxy.createXML(objTypeVO.attributes) );
+			objTypeXML.appendChild( resourcesProxy.toXML(objTypeVO.resources));
+
+			return objTypeXML;
+		}
+
+		public function getObjectTypeVO(id:String):ObjectTypeVO
+		{
+			return _objectTypeList[id];
+		}
+
+
+		private function sourceCodeToXML(sourceCode:String):XML
+		{
+			var sourceCodeXML:XML = XML("<SourceCode/>");
+			sourceCodeXML.appendChild( XML("\n"+"<![CDATA[" + sourceCode +"]" +"]" +">") )
+
+			return sourceCodeXML;
+		}
+
+
+		private function getNewObjTypeXML(objTypeVO : ObjectTypeVO):XML
+		{
+			var objTypeXML:XML = new XML("<Type/>");
+
+			//save information
+			var information:XML = new XML("<Information/>");
+
+			information.Category 			= objTypeVO.category;
+			information.ClassName 			= objTypeVO.className;
+			information.Container 			= objTypeVO.container;
+			information.Containers 			= objTypeVO.containers;
+			information.Description 		= objTypeVO.description;
+			information.DisplayName	 		= objTypeVO.displayName;	
+			information.Dynamic 			= objTypeVO.dynamic;
+			information.EditorIcon			= objTypeVO.editorIcon;
+			information.Handlers 			= objTypeVO.handlers;
+			information.Name 				= objTypeVO.name;
+			information.Icon				= objTypeVO.icon;
+			information.ID 					= objTypeVO.id;
+			information.InterfaceType 		= objTypeVO.interfaceType;
+			information.Languages 			= objTypeXML.appendChild(information);
+			information.Moveable 			= objTypeVO.moveable;
+			information.OptimizationPriority = objTypeVO.optimizationPriority;
+			information.RemoteMethods 		= objTypeVO.remoteMethods;
+			information.RenderType 			= objTypeVO.renderType;
+			information.Resizable 			= objTypeVO.resizable;
+			information.StructureIcon 		= objTypeVO.structureIcon;
+			information.WCAG 				= objTypeVO;
+			information.XMLScriptName 		= objTypeVO.XMLScriptName;	
+			information.Version 			= objTypeVO.version;
+
+			return objTypeXML;
 		}
 
 		public function initInformation(objTypeXML:XML):ObjectTypeVO
@@ -65,7 +117,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objTypeVO.className 	= information.ClassName;
 			objTypeVO.container		= information.Container;
 			objTypeVO.containers	= information.Containers;
-//			objTypeVO.description	= information.Description;
+			//			objTypeVO.description	= information.Description;
 			checkLang(information.Description, objTypeVO.description );
 
 			//objTypeVO.displayName	= information.DisplayName;
@@ -80,66 +132,34 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objTypeVO.resizable		= information.Resizable;	
 			objTypeVO.version		= information.Version;	
 
+			objTypeVO.icon 			= information.Icon;
+			objTypeVO.editorIcon 	= information.EditorIcon;
+			objTypeVO.structureIcon = information.StructureIcon;
+
+
 			return objTypeVO;
 		}
 
-		public function initSourceCode(objTypeXML:XML):String
+
+		public function removeVO(objTypeVO  : ObjectTypeVO):void
 		{
-			return objTypeXML.SourceCode.toString();
+			_objectTypeList[objTypeVO.filePath] = null
 		}
 
-		public function getObjectTypeVO(id:String):ObjectTypeVO
+
+		private function get languagesProxy():LanguagesProxy
 		{
-			return _objectTypeList[id];
+			return facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 		}
 
-		public function createXML( objTypeVO: ObjectTypeVO):XML
+		private function get attributesProxy():AttributesProxy
 		{
-			var objTypeXML:XML = new XML("<Type/>");
+			return facade.retrieveProxy(AttributesProxy.NAME) as AttributesProxy;
+		}
 
-			//save information
-			var information:XML = new XML("<Information/>");				
-			information.Name = objTypeVO.name;
-			information.DisplayName = objTypeVO.displayName;	
-			//				information.XMLScriptName = objTypeVO.;	
-			//				information.RenderType = objTypeVO.renderType;
-			information.Description = objTypeVO.description;
-			information.ClassName = objTypeVO.className;
-			information.ID = objTypeVO.id;
-			information.Category = objTypeVO.category;
-			information.Version = objTypeVO.version;
-			information.OptimizationPriority = objTypeVO.optimizationPriority;
-			//				information.WCAG = objTypeVO;
-			information.Container = objTypeVO.container;
-			//				information.RemoteMethods = objTypeVO.;
-			//				information.Handlers = objTypeVO;
-			information.Moveable = objTypeVO.moveable;
-			information.Dynamic = objTypeVO.dynamic;
-			information.InterfaceType = objTypeVO.interfaceType;
-			information.Resizable = objTypeVO.resizable;
-			information.Containers = objTypeVO.containers;
-			objTypeXML.appendChild(information);
-
-			//sourceCode
-			//TODO add <sourceCode/>
-			var sourceCode:XML = XML("<SourceCode/>");
-			sourceCode.appendChild( XML("\n"+"<![CDATA[" +  objTypeVO.sourceCode +"]" +"]" +">") )
-			objTypeXML.appendChild( sourceCode );	
-
-			//language 
-			var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
-			objTypeXML.appendChild(languageProxy.createXML(objTypeVO.languages));
-			
-			//attributes 
-			var attributesProxy:AttributesProxy = facade.retrieveProxy(AttributesProxy.NAME) as AttributesProxy;
-			objTypeXML.appendChild(attributesProxy.createXML(objTypeVO.attributes));
-
-			//resource
-			var resourcesProxy:ResourcesProxy = facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
-			var resourcesXML : XML = resourcesProxy.toXML(objTypeVO.resources);
-			objTypeXML.appendChild(resourcesXML);
-
-			return objTypeXML;
+		private function get resourcesProxy():ResourcesProxy
+		{
+			return facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
 		}
 
 		private function checkLang(strXML:String, strVO:String):void
@@ -151,20 +171,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				Alert.show(text, "Wrong Lang ID")
 					//todo: делаем запись в Лангв
 					//language 
-//				var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
+					//				var languageProxy:LanguagesProxy = facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 
-//				languageProxy.correctWord(strXML, strVO)
+					//				languageProxy.correctWord(strXML, strVO)
 					//todo: делаем запись в лог ошибок
 			}
 		}
 
-
-		public function removeVO(objTypeVO  : ObjectTypeVO):void
-		{
-			trace("ObTyProxy remove: " + objTypeVO.name)
-			_objectTypeList[objTypeVO.filePath] = null
-			trace(_objectTypeList[objTypeVO.filePath])
-		}
 	}
 }
 

@@ -9,6 +9,7 @@ package net.vdombox.object_editor.view.mediators
 
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
+	import net.vdombox.object_editor.model.proxy.componentsProxy.ResourcesProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.essence.Information;
@@ -87,6 +88,11 @@ package net.vdombox.object_editor.view.mediators
 			view.fInterfaceType.selectedIndex 	= objectTypeVO.interfaceType;
 			view.fOptimizationPriority.value  	= objectTypeVO.optimizationPriority;
 			view.fcurrentLocation.dataProvider	= objectTypeVO.languages.locales;
+
+			view.ficon.source = resourcesProxy.getByteArray(objectTypeVO.icon);
+			view.ficon2.source = resourcesProxy.getByteArray(objectTypeVO.structureIcon);
+			view.ficon3.source = resourcesProxy.getByteArray(objectTypeVO.editorIcon);
+
 			view.fcurrentLocation.addEventListener(Event.CHANGE, changeCurrentLocation);
 			view.validateNow();
 		}
@@ -110,6 +116,11 @@ package net.vdombox.object_editor.view.mediators
 		protected function get view():Information
 		{
 			return viewComponent as Information;
+		}
+
+		protected function get resourcesProxy():ResourcesProxy
+		{
+			return facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
 		}
 	}
 }

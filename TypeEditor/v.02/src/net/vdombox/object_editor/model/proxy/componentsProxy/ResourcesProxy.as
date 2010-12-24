@@ -7,6 +7,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import flash.filesystem.FileStream;
 	import flash.net.FileReference;
 	import flash.net.dns.AAAARecord;
+	import flash.utils.ByteArray;
 
 	import mx.collections.ArrayCollection;
 	import mx.rpc.IResponder;
@@ -21,15 +22,32 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
+	/**
+	 *
+	 * @author adelfos
+	 */
 	public class ResourcesProxy extends Proxy implements IProxy
 	{
+		/**
+		 *
+		 * @default
+		 */
 		public static const NAME:String = "ResoursesProxy";
 
+		/**
+		 *
+		 * @param data
+		 */
 		public function ResourcesProxy ( data:Object = null ) 
 		{
 			super ( NAME, data );
 		}
 
+		/**
+		 *
+		 * @param objTypeXML
+		 * @return
+		 */
 		public function createFromXML(objTypeXML:XML):ArrayCollection
 		{
 			var resourceVOArray : ArrayCollection = new ArrayCollection();
@@ -56,6 +74,11 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 
 
+		/**
+		 *
+		 * @param fileRef
+		 * @return
+		 */
 		public function createResFromFile(fileRef: FileReference):ResourceVO
 		{
 			var id:String = UIDUtil.createUID().toLowerCase();
@@ -68,6 +91,11 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		}
 
 
+		/**
+		 *
+		 * @param resVO
+		 * @param fileRef
+		 */
 		public function changeContent(resVO:ResourceVO, fileRef: FileReference):void
 		{
 			var b64:Base64Encoder = new Base64Encoder();
@@ -76,6 +104,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			writeResoucetoFileSystem(resVO.id, b64.toString());
 		}
 
+		/**
+		 *
+		 * @param resVO
+		 */
 		public function exportToFile(resVO:ResourceVO):void
 		{
 			var fileUpload:FileReference = new FileReference();
@@ -86,11 +118,31 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			fileUpload.save( b64.toByteArray(), resVO.name );
 		}
 
+
+		public function getByteArray(idRes:String):ByteArray
+		{
+			var id : String = geResourseID(idRes);
+			var b64:Base64Decoder = new Base64Decoder();
+
+			b64.decode(readResouce(id));
+
+			return  b64.toByteArray();
+		}
+
+		/**
+		 *
+		 * @param resVO
+		 */
 		public function deleteFile( resVO:ResourceVO ):void
 		{
 			locationById(resVO.id).deleteFile();
 		}
 
+		/**
+		 *
+		 * @param ressArr
+		 * @return
+		 */
 		public function toXML(ressArr:ArrayCollection):XML
 		{	
 			var resourcesXML : XML = new XML("<Resources/>");
@@ -133,6 +185,19 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			fileProxy.saveFile(dataInBase64,  nativePath);
 		}
 
+		private function geResourseID(value:String):String
+		{
+			var phraseRE:RegExp = /^(?:#Res\(([-a-zA-Z0-9]*)\))|(?:([-a-zA-Z0-9]*))/;
+
+			var imgResourseID:String = "";
+			var matchResult : Array = value.match( phraseRE );
+			if (matchResult)
+			{
+				imgResourseID = matchResult[1]
+					//				trace("imgResourseID: "+imgResourseID);
+			}
+			return imgResourseID;
+		}
 
 	}
 }

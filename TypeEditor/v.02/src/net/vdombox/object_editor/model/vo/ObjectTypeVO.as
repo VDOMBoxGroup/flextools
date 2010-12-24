@@ -9,7 +9,7 @@ package net.vdombox.object_editor.model.vo
 
 		public var events     : ArrayCollection = new ArrayCollection();
 		public var actions    : ArrayCollection = new ArrayCollection();
-		
+
 		[Bindable]
 		public var languages  : LanguagesVO		= new LanguagesVO();
 		public var libraris   : ArrayCollection = new ArrayCollection();
@@ -28,7 +28,7 @@ package net.vdombox.object_editor.model.vo
 
 		public var description	:String = "#Lang(002)";
 		public var displayName	:String = "#Lang(001)";
-		
+
 		public var dynamic		:Boolean = false;
 		public var interfaceType:uint = 0;
 		[Bindable] 
@@ -38,8 +38,21 @@ package net.vdombox.object_editor.model.vo
 		public var resizable	:uint = 0;
 		public var version		:String = "";
 
+		public var XMLScriptName	:String = "";
+		public var renderType		:String = "";
+		public var remoteMethods	:String = "";
+		public var handlers			:String = "";
+
+
+		// images
+		public var icon				:String = "";
+		public var editorIcon		:String = "";
+		public var structureIcon	:String = "";
+
+
 		public function ObjectTypeVO()
-		{				
+		{	
+
 		}		
 	}
 }
