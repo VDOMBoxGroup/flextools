@@ -48,6 +48,11 @@
 				dispatchEvent(new Event( Event.CHANGE ));
 			}
 			
+		private function doubleClick(event:MouseEvent):void
+		{
+			fID.editable = true;
+			fID.setSelection(0, fID.length);
+		}
 		]]>
 	</fx:Script>
 	
@@ -76,8 +81,9 @@
 			<mx:TextInput id="fClassName" width="250" change="{viewChanged()}"/>
 		</mx:FormItem>
 		<mx:FormItem label="ID" toolTip="Уникальный идентификатор объекта"
-					 enabled="false" >
-			<mx:TextInput id="fID" width="250" editable="false" change="{viewChanged()}"/>
+					 >
+			<mx:TextInput id="fID" width="250" editable="false" doubleClick="{doubleClick(event)}" 
+						  doubleClickEnabled="true" change="{viewChanged()}"/>
 		</mx:FormItem>
 		
 		<!--mx:FormItem label="Icon" toolTip="Иконка объекта">
