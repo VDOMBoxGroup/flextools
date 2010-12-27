@@ -56,7 +56,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				atrib.defaultValue	= attrinuteXML.DefaultValue;
 				atrib.visible		= attrinuteXML.Visible.toString() == "1";
 				atrib.help			= attrinuteXML.Help;
-				atrib.interfaceType	= attrinuteXML.InterfaceType;//uint
+				atrib.interfaceType	= attrinuteXML.InterfaceType;
 				atrib.codeInterface	= attrinuteXML.CodeInterface;
 				atrib.colorgroup	= attrinuteXML.Colorgroup;
 				atrib.errorValidationMessage		= attrinuteXML.ErrorValidationMessage;

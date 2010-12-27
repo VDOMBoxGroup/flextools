@@ -3,23 +3,28 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" 
 		 xmlns:OEComponents="OEComponents.*" xmlns:ns="net.vdombox.object_editor.model.*"
-		 label="Events">
+		 label="Events" xmlns:ns1="net.vdombox.object_editor.view.*">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
+						
+			[Bindable]
+			public var currentItem:Object;
 			
-			private var _data : XML
+			[Bindable]
+			public var currentParameter:Object;
+			
+			/*private var _data : XML
 			
 			[Bindable]
 			public var arEvent:ArrayCollection = new ArrayCollection();
 			
 			[Bindable]
-			public var arParameters:ArrayCollection = new ArrayCollection();
+			public var arParameters:ArrayCollection = new ArrayCollection();*/
 			
-			public function set  dataProvader(xml:XML):void
+			/*public function set  dataProvader(xml:XML):void
 			{
 				this.enabled = true;
 //				arLibraries.removeAll();
@@ -35,7 +40,7 @@
 				
 				events.selectedIndex = 0;
 				changeEvent();
-			}
+			}*/
 			
 			private function changeEvent():void
 			{/*
@@ -50,7 +55,7 @@
 				changeParameter();*/
 			}
 			
-			private function addEvent():void
+			/*private function addEvent():void
 			{
 				var newName: String = "name_" + arEvent.length.toString();
 				arEvent.addItem({label:newName, data:newName});
@@ -197,7 +202,7 @@
 				parameters.validateNow();
 				
 				parameters.selectedIndex = index;
-			}
+			}*/
 			
 			private function changeParametrsOrder():void
 			{
@@ -208,59 +213,69 @@
 			{
 				
 			}
+			
+			private function changeParametrsValues():void
+			{
+				dispatchEvent(new Event( Event.CHANGE ));
+			}
+			
+			private function changeEventName():void
+			{
+				dispatchEvent(new Event( Event.CHANGE ));
+			}
+						
+			public function nameChange():void
+			{
+				dispatchEvent(new Event( Event.CHANGE ));
+			}
 		]]>
 	</fx:Script>
 	
 <s:HGroup>
 	<mx:Form  width="100%" height="100%" paddingTop="0">
 		<mx:FormHeading fontSize="10"  label="Select Event:" paddingTop="0" />
-		<s:List id="events" width="200" height="100%" dataProvider="{arEvent}"   change="{changeEvent()}"/>
+		<s:List id="eventsList" width="200" height="{height- 60}" change="this.currentItem=List(event.target).selectedItem"/>
 		<s:HGroup width="100%">
 			<s:HGroup width="100%"/>
-			<s:Button label="Add" click="{addEvent()}" />
-			<s:Button label="Delete" click="deleteEvent()" enabled="{events.selectedIndex != -1}"/>
+			<s:Button id="addEvent" label="Add"/>
+			<s:Button id="deleteEvent" label="Delete" enabled="{eventsList.selectedIndex != -1}"/>
 		</s:HGroup>
 	</mx:Form >
 	<mx:Form  width="100%" height="100%" paddingTop="0" >
 		<mx:FormHeading fontSize="10"  label="Events details:" paddingTop="0" />
 		<mx:FormItem label="Name:" toolTip="Name">
-			<mx:TextInput id="tiEventName" width="150" change="{changeEventName()}" />
+			<mx:TextInput id="eventName" width="150" change="{changeEventName()}" />
 		</mx:FormItem>
 		
 		<s:HGroup width="100%"/>
 		<s:Label text="Select parameter:" />
-		<s:List id="parameters" width="100%" height="100%" dataProvider="{arParameters}"   change="{changeParameter()}"/>
+		<s:List id="parameters" width="100%" height="{height- 115}" change="this.currentParameter=List(event.target).selectedItem" /><!--dataProvider="{arParameters}"   change="{changeParameter()}"/-->
 		<s:HGroup width="100%" >
 			<s:HGroup width="100%"/>
-			<s:Button label="Add" click="{addParameter()}" />
-			<s:Button label="Delete" click="deleteParameter()" enabled="{parameters.selectedIndex != -1}"/>
+			<s:Button id="addParameter" label="Add" />
+			<s:Button id="deleteParameter" label="Delete" enabled="{parameters.selectedIndex != -1}"/>
 		</s:HGroup>
 	</mx:Form>
 	<mx:Form width="100%" color="0x323232" paddingTop="0">
 		<mx:FormHeading fontSize="10"  label="Parameters detais:" paddingTop="0" />
 		
 		<mx:FormItem label="Name:" toolTip="Имя объекта">
-			<mx:TextInput id="fname" width="200" change="{changeParametrsValues()}"/>
+			<mx:TextInput id="parName" width="200" change="{changeParametrsValues()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Order:" toolTip="Это ордер">
-			<mx:TextInput id="fOrder" width="200" change="{changeParametrsValues()}"/>
+			<mx:TextInput id="parOrder" width="200" change="{changeParametrsValues()}"/>
 		</mx:FormItem>
-		
 		
 		<mx:FormItem label="VbType:" toolTip="Это VbType">
-			<mx:TextInput id="fVbType" width="200" change="{changeParametrsValues()}" />
+			<mx:TextInput id="parVbType" width="200" change="{changeParametrsValues()}" />
 		</mx:FormItem>
 		
-		<mx:FormItem label="Help:" toolTip="Это Help" enabled="false">
+		<mx:FormItem label="Help:" toolTip="Это Help">
 			<s:HGroup>
-				
-				<s:Button label="..." width="30" />
+				<ns1:LangTextInput id="parHelp" width="200" />
 			</s:HGroup>
 		</mx:FormItem>
-		
-		
-		
 	</mx:Form>
 	</s:HGroup>
 </s:NavigatorContent>

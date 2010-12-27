@@ -12,7 +12,6 @@ package net.vdombox.object_editor.view.mediators
 	import mx.messaging.management.Attribute;
 	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
-	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
@@ -20,8 +19,6 @@ package net.vdombox.object_editor.view.mediators
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
-	
-	import spark.events.IndexChangeEvent;
 
 	public class AttributeMediator extends Mediator implements IMediator
 	{

@@ -7,6 +7,7 @@ package net.vdombox.object_editor.model.vo
 		public var filePath:String;
 		public var sourceCode:String;
 
+		[Bindable]
 		public var events     : ArrayCollection = new ArrayCollection();
 		public var actions    : ArrayCollection = new ArrayCollection();
 
@@ -43,12 +44,10 @@ package net.vdombox.object_editor.model.vo
 		public var remoteMethods	:String = "";
 		public var handlers			:String = "";
 
-
 		// images
 		public var icon				:String = "";
 		public var editorIcon		:String = "";
 		public var structureIcon	:String = "";
-
 
 		public function ObjectTypeVO()
 		{	
