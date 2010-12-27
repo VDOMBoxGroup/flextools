@@ -60,6 +60,8 @@ package net.vdombox.object_editor.view.mediators
 				attributeVO.visible			= view.visibleAtr.selected;
 				attributeVO.interfaceType	= view.interfaceType.selectedIndex;
 				attributeVO.colorgroup		= view.colorgroup.selectedIndex;
+				attributeVO.codeInterface	= view.codeInterface.selectedItem.data;
+				attributeVO.regularExpressionValidation = view.regExp.text;
 			}
 		}
 
@@ -76,6 +78,8 @@ package net.vdombox.object_editor.view.mediators
 			view.visibleAtr.selected			= attributeVO.visible;	
 			view.interfaceType.selectedIndex 	= attributeVO.interfaceType;
 			view.colorgroup.selectedIndex 		= attributeVO.colorgroup;
+			view.regExp.text					= attributeVO.regularExpressionValidation;
+			view.codeInterface.selectedItem		= attributeVO.codeInterface;
 			
 			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 			view.DisplayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );

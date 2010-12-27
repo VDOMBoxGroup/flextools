@@ -87,8 +87,8 @@
 						
 			<mx:FormItem label="RegExp" >
 				<s:HGroup>
-					
-					<s:Button label="..." width="30" click="{}" />
+					<s:TextInput id="regExp" width="250"  change="{viewChanged()}"/>
+					<!--s:Button label="..." width="30" click="{}" /-->
 				</s:HGroup>
 			</mx:FormItem>
 			
@@ -115,8 +115,8 @@
 						
 			<mx:FormItem label="CodeInterface" >
 				<s:HGroup>
-					
-					<s:Button label="..." width="30" click="{}"/>
+					<s:ComboBox id="codeInterface" dataProvider="{arCodeInterface}" width="250" change="{viewChanged()}"/>
+					<!--s:Button label="..." width="30" click="{}"/-->
 				</s:HGroup>
 			</mx:FormItem>
 			
