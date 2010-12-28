@@ -76,10 +76,10 @@
 				<mx:TextInput id="fname" width="250" change="{nameChange()}"/>
 			</mx:FormItem>
 			
-			<s:HGroup>
-				<mx:Label text="DisplayName" width="90" toolTip="Отображаемое имя атрибута"/>
+			<mx:FormItem label="DisplayName" >
+				
 				<ns2:LangTextArea id="DisplayName" width="250" height="20" change="{viewChanged()}" />
-			</s:HGroup>
+			</mx:FormItem >
 			
 			<mx:FormItem label="DefaultValue" toolTip="Значение по умолчанию">
 				<mx:TextInput id="defaultValue" width="250" change="{viewChanged()}"/>
@@ -92,20 +92,21 @@
 				</s:HGroup>
 			</mx:FormItem>
 			
-			<s:HGroup>
-				<mx:Label text="ErrorValidationMessage"	width="140"  />
+			<mx:FormItem label="Error Validation Message">
+				
 				<!--s:TextArea id="fErrMessage" width="200" change="{viewChanged()}" height="40" verticalScrollPolicy="auto"/-->
 				<ns2:LangTextArea id="fErrMessage" width="200" height="40" change="{viewChanged()}"/>
-			</s:HGroup>
+			</mx:FormItem>
 			
 			<mx:FormItem label="Visible" >
 				<s:CheckBox id="visibleAtr" label="Visible atribute"  toolTip="Отображаемый в редакторе" change="{viewChanged()}"/>
 			</mx:FormItem>
 			
-			<s:HGroup>
-				<mx:Label text="Help"	width="90"/>
+			
+			<mx:FormItem  label="Help">
+				
 				<ns2:LangTextArea id="helpAtr" width="250" height="40" change="{viewChanged()}"/>
-			</s:HGroup>
+			</mx:FormItem >
 
 			<mx:FormItem label="InterfaceType" 
 						 toolTip="Значения: 1 - Standard, 2 - RichText Editor, 3 - Text Editor, 4 - Picture, 5 - Special Table">

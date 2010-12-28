@@ -61,7 +61,7 @@ package net.vdombox.object_editor.model.proxy
 
 		private function getImgResourseID(information:XML):String
 		{
-			var iconValue:String  = information.Icon.toString();
+			var iconValue:String  = information.StructureIcon.toString();
 			var phraseRE:RegExp = /^(?:#Res\(([-a-zA-Z0-9]*)\))|(?:([-a-zA-Z0-9]*))/;
 
 			var imgResourseID:String = "";

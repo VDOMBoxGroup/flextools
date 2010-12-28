@@ -4,12 +4,12 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
-	
+
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
 	import net.vdombox.object_editor.view.essence.Resourses;
-	
+
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -55,7 +55,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objTypeXML.appendChild( attributesProxy.createXML(objTypeVO.attributes) );
 			objTypeXML.appendChild( eventsProxy.createXML(objTypeVO.events) );
 			objTypeXML.appendChild( resourcesProxy.toXML(objTypeVO.resources));
-			
+
 			return objTypeXML;
 		}
 
@@ -143,7 +143,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			return facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 		}
-		
+
 		private function get eventsProxy():EventsProxy
 		{
 			return facade.retrieveProxy(EventsProxy.NAME) as EventsProxy;
