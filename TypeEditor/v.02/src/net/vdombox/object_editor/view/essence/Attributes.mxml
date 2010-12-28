@@ -60,10 +60,8 @@
 		]]>
 	</fx:Script>
 	<s:HGroup>
-
 		<s:VGroup height="{300}">
 			<s:List id="attributesList" height="{height- 50}" width="100%" change="this.currentItem=List(event.target).selectedItem"/>
-
 			<s:HGroup>
 				<s:Button id="addAttributeButton" label="Add"/>
 				<s:Button id="deleteAttributeButton" label="Delete" enabled="{attributesList.selectedIndex != -1}"/>
@@ -77,7 +75,6 @@
 			</mx:FormItem>
 			
 			<mx:FormItem label="DisplayName" >
-				
 				<ns2:LangTextArea id="DisplayName" width="250" height="20" change="{viewChanged()}" />
 			</mx:FormItem >
 			
@@ -93,7 +90,6 @@
 			</mx:FormItem>
 			
 			<mx:FormItem label="Error Validation Message">
-				
 				<!--s:TextArea id="fErrMessage" width="200" change="{viewChanged()}" height="40" verticalScrollPolicy="auto"/-->
 				<ns2:LangTextArea id="fErrMessage" width="200" height="40" change="{viewChanged()}"/>
 			</mx:FormItem>
@@ -102,16 +98,13 @@
 				<s:CheckBox id="visibleAtr" label="Visible atribute"  toolTip="Отображаемый в редакторе" change="{viewChanged()}"/>
 			</mx:FormItem>
 			
-			
 			<mx:FormItem  label="Help">
-				
 				<ns2:LangTextArea id="helpAtr" width="250" height="40" change="{viewChanged()}"/>
 			</mx:FormItem >
 
 			<mx:FormItem label="InterfaceType" 
 						 toolTip="Значения: 1 - Standard, 2 - RichText Editor, 3 - Text Editor, 4 - Picture, 5 - Special Table">
 				<s:ComboBox id="interfaceType" dataProvider="{arInterfaceType}" width="250" change="{viewChanged()}"/>
-
 			</mx:FormItem>
 						
 			<mx:FormItem label="CodeInterface" >

@@ -1,10 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:ns2="net.vdombox.object_editor.view.*"
+		 width="100%" height="100%"
 		 label="Actions">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<s:Label text="Actions"/>
-</s:NavigatorContent
+	<fx:Script>
+		<![CDATA[
+			
+			[Bindable]
+			public var currentAction:Object;
+			
+			[Bindable]
+			public var currentParameter:Object;
+			
+			public function changeActionPar():void
+			{
+				dispatchEvent(new Event( Event.CHANGE ));
+			}
+			
+			public function changeParamsValues():void
+			{
+				dispatchEvent(new Event( Event.CHANGE ));
+			}
+			
+			//todo вроде можно все в одной ф-ции
+			public function changeCode():void
+			{
+				dispatchEvent(new Event( Event.CHANGE ));
+			}
+			
+			public function viewChanged():void
+			{
+				dispatchEvent(new Event( Event.CHANGE ));
+			}
+			
+		]]>
+	</fx:Script>
+			
+	
+	<s:HGroup>
+		<mx:Form  width="100%" height="100%" paddingTop="0">
+			<mx:FormItem label="Container" 
+						 toolTip="Toop Lavel Container">
+				<s:ComboBox id="container"  change="{viewChanged()}" />
+			</mx:FormItem>
+			<mx:FormHeading fontSize="10"  label="Select Action:" paddingTop="10" />
+			<s:List id="actionsList" width="200" height="{height- 60}" change="this.currentAction=List(event.target).selectedItem"/>
+			<s:HGroup width="100%">
+				<s:HGroup width="100%"/>
+				<s:Button id="addAction" label="Add"/>
+				<s:Button id="deleteAction" label="Delete" enabled="{actionsList.selectedIndex != -1}"/>
+			</s:HGroup>
+		</mx:Form >
+		<mx:Form  width="100%" height="100%"  paddingTop="0" paddingLeft="0" >
+			<mx:FormHeading fontSize="10"  label="Actions details:" paddingTop="0" />
+			<mx:FormItem label="Description:" toolTip="Name">
+				<ns2:LangTextArea id="description" width="150" height="40" change="{changeActionPar()}" />
+			</mx:FormItem>
+			<mx:FormItem label="InterfaceName:" toolTip="Name">
+				<ns2:LangTextArea id="interfaceName" width="150" height="40" change="{changeActionPar()}" />
+			</mx:FormItem>			
+			<mx:FormItem label="MethodName:" toolTip="Name">
+				<mx:TextInput id="methodName" width="150" change="{changeActionPar()}" />
+			</mx:FormItem>			
+			
+			<s:HGroup width="100%"/>
+			<s:Label text="Select parameter:" />
+			<s:List id="parameters" width="100%" height="{height - 205}" change="this.currentParameter=List(event.target).selectedItem" /><!--dataProvider="{arParameters}"   change="{changeParameter()}"/-->
+			<s:HGroup width="100%" >
+				<s:HGroup width="100%"/>
+				<s:Button id="addParameter" label="Add" />
+				<s:Button id="deleteParameter" label="Delete" enabled="{parameters.selectedIndex != -1}"/>
+			</s:HGroup>
+		</mx:Form>
+		<mx:Form width="100%" color="0x323232" paddingTop="0" paddingLeft="0">
+			<mx:FormHeading fontSize="10"  label="Parameters detais:" paddingTop="0" />
+			
+			<mx:FormItem label="DefaultValue:" toolTip="Имя объекта">
+				<mx:TextInput id="parDefaultValue" width="200" change="{changeParamsValues()}"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="Help:" toolTip="Это Help">
+				<s:HGroup>
+					<ns2:LangTextArea id="parHelp" width="200" height="40" change="{changeParamsValues()}"/>
+				</s:HGroup>
+			</mx:FormItem>
+			
+			<mx:FormItem label="Interface:" toolTip="Это ордер">
+				<mx:TextInput id="parInterface" width="200" change="{changeParamsValues()}"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="InterfaceName:" toolTip="Это VbType">
+				
+				<ns2:LangTextArea id="parInterfaceName" width="200" height="40" change="{changeParamsValues()}"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="ScriptName:" toolTip="Это VbType">
+				<mx:TextInput id="parScriptName" width="200" change="{changeParamsValues()}" />
+			</mx:FormItem>
+								
+			<mx:FormItem label="RegExp" >
+				<s:HGroup>
+					<s:TextInput id="parRegExp" width="200"  change="{changeParamsValues()}"/>
+					<!--s:Button label="..." width="30" click="{}" /-->
+				</s:HGroup>
+			</mx:FormItem>
+			
+			<s:VGroup >
+				<s:Label paddingLeft="10" text="Source Code:"/>
+				<s:TextArea  id="sourceCode"  width="305" height="100%" change="{changeCode()}"/>
+			</s:VGroup>
+			
+		</mx:Form>
+	</s:HGroup>
+
+</s:NavigatorContent>

@@ -35,12 +35,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				var objTypeVO: ObjectTypeVO = initInformation(objTypeXML);			
 
 				objTypeVO.filePath	 = path;
-				objTypeVO.sourceCode = objTypeXML.SourceCode.toString();
+				objTypeVO.actions	 = actionsProxy.createFromXML(objTypeXML);
+				objTypeVO.attributes = attributesProxy.createFromXML(objTypeXML);
+				objTypeVO.events	 = eventsProxy.createFromXML(objTypeXML);
 				objTypeVO.languages  = languagesProxy.createFromXML(objTypeXML);
 				objTypeVO.libraries  = librariesProxy.createFromXML(objTypeXML);
-				objTypeVO.attributes = attributesProxy.createFromXML(objTypeXML);
+				objTypeVO.sourceCode = objTypeXML.SourceCode.toString();
 				objTypeVO.resources  = resourcesProxy.createFromXML(objTypeXML);
-				objTypeVO.events	 = eventsProxy.createFromXML(objTypeXML);
 
 				_objectTypeList[objTypeVO.filePath] = objTypeVO;
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
@@ -50,14 +51,15 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function createXML( objTypeVO: ObjectTypeVO):XML
 		{
 			var objTypeXML:XML = getNewObjTypeXML(objTypeVO);
-
-			objTypeXML.appendChild( sourceCodeToXML(objTypeVO.sourceCode) );	
+			
+			objTypeXML.appendChild( attributesProxy.createXML(objTypeVO.attributes) );			
+			objTypeXML.appendChild( eventsProxy.createXML(objTypeVO.events) );//здесь важна последовательность!
+			objTypeXML.E2vdom.appendChild( actionsProxy.createXML(objTypeVO.actions) );
 			objTypeXML.appendChild( languagesProxy.createXML(objTypeVO.languages) );
-			objTypeXML.appendChild( attributesProxy.createXML(objTypeVO.attributes) );
-			objTypeXML.appendChild( eventsProxy.createXML(objTypeVO.events) );
+			objTypeXML.appendChild( librariesProxy.createXML(objTypeVO.libraries) );
+			objTypeXML.appendChild( sourceCodeToXML(objTypeVO.sourceCode) );	
 			objTypeXML.appendChild( resourcesProxy.toXML(objTypeVO.resources));
-			objTypeXML.appendChild( librariesProxy.createXML(objTypeVO.libraries));
-
+			
 			return objTypeXML;
 		}
 
@@ -140,32 +142,37 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			_objectTypeList[objTypeVO.filePath] = null
 		}
+		
+		private function get attributesProxy():AttributesProxy
+		{
+			return facade.retrieveProxy(AttributesProxy.NAME) as AttributesProxy;
+		}
+		
+		private function get actionsProxy():ActionsProxy
+		{
+			return facade.retrieveProxy(ActionsProxy.NAME) as ActionsProxy;
+		}
+		
+		private function get eventsProxy():EventsProxy
+		{
+			return facade.retrieveProxy(EventsProxy.NAME) as EventsProxy;
+		}		
 
 		private function get languagesProxy():LanguagesProxy
 		{
 			return facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 		}
 
-		private function get eventsProxy():EventsProxy
+		private function get librariesProxy():LibrariesProxy
 		{
-			return facade.retrieveProxy(EventsProxy.NAME) as EventsProxy;
+			return facade.retrieveProxy(LibrariesProxy.NAME) as LibrariesProxy;
 		}
-
-		private function get attributesProxy():AttributesProxy
-		{
-			return facade.retrieveProxy(AttributesProxy.NAME) as AttributesProxy;
-		}
-
+		
 		private function get resourcesProxy():ResourcesProxy
 		{
 			return facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
 		}
 		
-		private function get librariesProxy():LibrariesProxy
-		{
-			return facade.retrieveProxy(LibrariesProxy.NAME) as LibrariesProxy;
-		}
-
 		private function checkLang(strXML:String, strVO:String):void
 		{
 			if (strXML != strVO)

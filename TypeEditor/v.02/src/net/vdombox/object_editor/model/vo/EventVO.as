@@ -1,7 +1,6 @@
 package net.vdombox.object_editor.model.vo
 {
 	import mx.collections.ArrayCollection;
-	import mx.states.AddChild;
 
 	public class EventVO
 	{

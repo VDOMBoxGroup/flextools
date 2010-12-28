@@ -6,15 +6,18 @@ package net.vdombox.object_editor.model.proxy
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
-
+	
+	import mx.collections.ArrayCollection;
+	
 	import net.vdombox.object_editor.model.Item;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
 	public class ItemProxy extends Proxy implements IProxy
 	{
 		public static const NAME:String = "ItemProxy";
+		public var topLevelContainerList:ArrayCollection = new ArrayCollection();
 
 		public function ItemProxy ( data:Object = null ) 
 		{
@@ -48,6 +51,8 @@ package net.vdombox.object_editor.model.proxy
 			else
 			{
 				item.groupName = "Top Level Containers";
+				//arrayCollection for ComboBox in actions tab
+				topLevelContainerList.addItem({label:informationXML.Name.toString(), data:informationXML.ID.toString()});
 			}
 
 			item.label = informationXML.Name.toString();

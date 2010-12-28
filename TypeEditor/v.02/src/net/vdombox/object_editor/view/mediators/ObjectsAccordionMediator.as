@@ -37,24 +37,18 @@ package net.vdombox.object_editor.view.mediators
 			sendNotification( ApplicationFacade.OPEN_OBJECT, object);
 		}	
 
-//TODO: загрузка не по такому параметру, по note?		
 		public function newContent( item:Item ) : void
 		{
 			var list:AccordionNavigatorContent =  view.getObjectdByName(item.groupName) as AccordionNavigatorContent;
 			if (!list)
 			{
 				list  = new AccordionNavigatorContent();
-				list.name = item.groupName;
+				list.name  = item.groupName;
 				list.label = item.groupName;
 				view.addObject(list);
 			}			
 			list.appendObject(item);			
 		}
-
-		protected function get view():ObjectsAccordion
-		{
-			return viewComponent as ObjectsAccordion;
-		}		
 
 		public function removeAllObjects():void
 		{
@@ -79,6 +73,12 @@ package net.vdombox.object_editor.view.mediators
 					break;
 			}
 		}
+		
+		protected function get view():ObjectsAccordion
+		{
+			return viewComponent as ObjectsAccordion;
+		}		
+
 	}
 }
 

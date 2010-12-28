@@ -20,7 +20,7 @@ package net.vdombox.object_editor.view.mediators
 	{
 		public static const NAME:String = "LibrariesMediator";
 		private var objectTypeVO:ObjectTypeVO;
-		private var currentLibrarieVO: LibraryVO;
+		private var currentLibraryVO: LibraryVO;
 		
 		public function LibrariesMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{			
@@ -34,9 +34,9 @@ package net.vdombox.object_editor.view.mediators
 //			view.currentItem.label = event.target.text;
 			view.label= "Libraries*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
-			if( currentLibrarieVO )
+			if( currentLibraryVO )
 			{				
-				currentLibrarieVO.text	= view.libCode.text;
+				currentLibraryVO.text	= view.libCode.text;
 			}
 		}
 		
@@ -44,16 +44,16 @@ package net.vdombox.object_editor.view.mediators
 		{
 			view.label= "Libraries*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
-			if( currentLibrarieVO )
+			if( currentLibraryVO )
 			{				
-				currentLibrarieVO.text	= view.libCode.text;
+				currentLibraryVO.text	= view.libCode.text;
 			}
 		}
 		
 		private function selectLibrary(event:Event):void
 		{ 
-			currentLibrarieVO = view.librariesList.selectedItem.data as LibraryVO;
-			fillArea(currentLibrarieVO);
+			currentLibraryVO = view.librariesList.selectedItem.data as LibraryVO;
+			fillArea(currentLibraryVO);
 		}
 				
 		private function fillArea(libVO:LibraryVO):void

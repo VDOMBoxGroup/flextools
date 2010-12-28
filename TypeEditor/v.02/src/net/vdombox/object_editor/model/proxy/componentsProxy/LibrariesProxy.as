@@ -26,7 +26,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			for each(var obj:Object in librariesVO )
 			{	
 				var libVO:LibraryVO = obj.data;
-				var libXML:XML = new XML("<Librarie/>");
+				var libXML:XML = new XML("<Library/>");
 				libXML.@Target = libVO.target;
 //				libXML		   = libVO.text;
 				
