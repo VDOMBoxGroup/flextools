@@ -159,9 +159,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return langsXML;
 		}	
 		
-		public function getNextId(langsVO: LanguagesVO, startId: String):String
+		public function getNextId(langsVO: LanguagesVO, startId: String, newValue:String = ""):String
 		{
-			return langsVO.getNextId( startId );
+			return langsVO.getNextId( startId, newValue);
 		}
 	}
 }

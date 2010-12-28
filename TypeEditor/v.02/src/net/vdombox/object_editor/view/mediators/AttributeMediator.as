@@ -103,9 +103,9 @@ package net.vdombox.object_editor.view.mediators
 			var attribVO:AttributeVO = new AttributeVO( "newAttribute"+ Math.round(Math.random()*100) );
 			objectTypeVO.attributes.addItem( {label:attribVO.name, data:attribVO} );
 			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
-			attribVO.displayName = langsProxy.getNextId(objectTypeVO.languages, "1");
-			attribVO.errorValidationMessage = langsProxy.getNextId(objectTypeVO.languages, "2");
-			attribVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
+			attribVO.displayName = langsProxy.getNextId(objectTypeVO.languages, "1", attribVO.name);
+			attribVO.errorValidationMessage = langsProxy.getNextId(objectTypeVO.languages, "2", attribVO.name);
+			attribVO.help = langsProxy.getNextId(objectTypeVO.languages, "3", attribVO.name);
 			fillFilds(attribVO);
 			view.currentItem = getCurrentItem(attribVO.name);
 			view.attributesList.selectedItem = view.currentItem;

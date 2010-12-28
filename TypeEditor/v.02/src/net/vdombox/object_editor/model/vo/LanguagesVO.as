@@ -14,7 +14,7 @@ package net.vdombox.object_editor.model.vo
 			
 		}
 		
-		public function getNextId(startId: String):String
+		public function getNextId(startId: String, newValue:String = ""):String
 		{
 			var idInt:uint = 1;
 			var attrID:String = startId +"0"+ idInt;//"#Lang("+startId+"0" + idInt+")";
@@ -63,6 +63,8 @@ package net.vdombox.object_editor.model.vo
 			{
 				newWrd[localeName.data] = "";
 			}
+			newWrd[currentLocation] = newValue;
+			
 			//добавляет в конец списка
 			words.addItem( newWrd );
 			return "#Lang("+ nextInd + ")";
