@@ -34,9 +34,15 @@ package net.vdombox.object_editor.view.mediators
 
 		private function selectEvent(event:Event):void
 		{ 
-
 			curentEventVO = view.eventsList.selectedItem.data as EventVO;
 			fillFilds(curentEventVO);	
+			if( (curentParameterVO = curentEventVO.parameters.getItemAt(0).data) )
+			{
+				view.currentParameter = {label: curentParameterVO.name, data: curentParameterVO};
+				fillParameter(curentParameterVO);
+				view.parameters.selectedIndex = 0;//selectedItem = view.currentParameter;
+				view.validateNow();
+			}
 		}
 
 		private function selectParameter(event:Event):void
@@ -195,6 +201,7 @@ package net.vdombox.object_editor.view.mediators
 		{	
 			sortEvents();
 			view.eventsList.dataProvider = objectTypeVO.events;
+//			view.eventsList.selectedIndex = 0;
 		}		
 		override public function listNotificationInterests():Array 
 		{			
@@ -218,4 +225,3 @@ package net.vdombox.object_editor.view.mediators
 		}
 	}
 }
-

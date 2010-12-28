@@ -4,12 +4,12 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
-
+	
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
 	import net.vdombox.object_editor.view.essence.Resourses;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -37,6 +37,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				objTypeVO.filePath	 = path;
 				objTypeVO.sourceCode = objTypeXML.SourceCode.toString();
 				objTypeVO.languages  = languagesProxy.createFromXML(objTypeXML);
+				objTypeVO.libraries  = librariesProxy.createFromXML(objTypeXML);
 				objTypeVO.attributes = attributesProxy.createFromXML(objTypeXML);
 				objTypeVO.resources  = resourcesProxy.createFromXML(objTypeXML);
 				objTypeVO.events	 = eventsProxy.createFromXML(objTypeXML);
@@ -55,6 +56,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objTypeXML.appendChild( attributesProxy.createXML(objTypeVO.attributes) );
 			objTypeXML.appendChild( eventsProxy.createXML(objTypeVO.events) );
 			objTypeXML.appendChild( resourcesProxy.toXML(objTypeVO.resources));
+			objTypeXML.appendChild( librariesProxy.createXML(objTypeVO.libraries));
 
 			return objTypeXML;
 		}
@@ -67,7 +69,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		private function sourceCodeToXML(sourceCode:String):XML
 		{
 			var sourceCodeXML:XML = XML("<SourceCode/>");
-			sourceCodeXML.appendChild( XML("\n"+"<![CDATA[" + sourceCode +"]" +"]" +">") )
+			sourceCodeXML.appendChild( XML("\n"+"<![CDATA[" + sourceCode +"]]>") )
 
 			return sourceCodeXML;
 		}
@@ -157,6 +159,11 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		private function get resourcesProxy():ResourcesProxy
 		{
 			return facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
+		}
+		
+		private function get librariesProxy():LibrariesProxy
+		{
+			return facade.retrieveProxy(LibrariesProxy.NAME) as LibrariesProxy;
 		}
 
 		private function checkLang(strXML:String, strVO:String):void

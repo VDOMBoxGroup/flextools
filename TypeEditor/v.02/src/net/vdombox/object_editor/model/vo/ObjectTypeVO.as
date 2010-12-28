@@ -13,7 +13,8 @@ package net.vdombox.object_editor.model.vo
 
 		[Bindable]
 		public var languages  : LanguagesVO		= new LanguagesVO();
-		public var libraris   : ArrayCollection = new ArrayCollection();
+		[Bindable]
+		public var libraries  : ArrayCollection = new ArrayCollection();
 		public var resources  : ArrayCollection = new ArrayCollection();
 		[Bindable]
 		public var attributes : ArrayCollection = new ArrayCollection();

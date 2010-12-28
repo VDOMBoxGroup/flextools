@@ -8,7 +8,7 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
+		/*	import mx.collections.ArrayCollection;
 			private var _data : XML;
 			
 			[Bindable]
@@ -30,8 +30,8 @@
 					
 					if (arLibraries.length > 0)
 					{
-						libraries.selectedIndex = 0;
-						libCode.text = libraries.selectedItem["data"];
+						librariesList.selectedIndex = 0;
+						libCode.text = librariesList.selectedItem["data"];
 					}
 				}
 			}
@@ -50,7 +50,7 @@
 				}
 				
 				if (arLibraries.length > 0)
-					arLibraries[libraries.selectedIndex]["data"] = libCode.text;
+					arLibraries[librariesList.selectedIndex]["data"] = libCode.text;
 				
 //				delete _data.Library[libraries.selectedIndex] //= XML("<![CDATA[" +libCode.text +"]" +"]" +">");
 				for (i in arLibraries)
@@ -66,19 +66,19 @@
 			{
 				arLibraries.addItem({label:"Library", data:""});
 				libCode.text = "";
-				libraries.selectedIndex = arLibraries.length - 1;
+				librariesList.selectedIndex = arLibraries.length - 1;
 				saveChange();
 			}
 			
 			private function deleteLibrary():void
 			{
-				if (libraries.selectedIndex != -1)
+				if (librariesList.selectedIndex != -1)
 				{
-					arLibraries.removeItemAt(libraries.selectedIndex);
+					arLibraries.removeItemAt(librariesList.selectedIndex);
 					
 					if (arLibraries.length)
 					{
-						libraries.selectedIndex = 0;
+						librariesList.selectedIndex = 0;
 						libCode.text = arLibraries[0]["data"]
 					}
 					else
@@ -86,24 +86,36 @@
 					
 					saveChange();
 				}
+			}*/
+			[Bindable]
+			public var currentItem:Object;
+			
+			public function libsListChange():void
+			{				
+				dispatchEvent(new Event( Event.CHANGE ));
 			}
+			
+			public function saveChange():void
+			{
+				dispatchEvent(new Event( Event.CHANGE ));
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<s:HGroup width="100%" height="100%">
 		<s:VGroup width="200" height="100%">
-			<s:List id="libraries" width="100%"  height="100%" dataProvider="{arLibraries}"  
-					change="{changeLibrary(event)}" skinClass="spark.skins.spark.ListSkin"/>
+			<s:List id="librariesList" width="100%"  height="100%"   
+					change="{libsListChange()}" skinClass="spark.skins.spark.ListSkin"/>
 			
 			<s:HGroup right="0" >
-				<s:Button label="Add" click="{addLibrary()}" />
-				<s:Button label="Delete" click="deleteLibrary()"/>
+				<s:Button id="addLibraryButton" label="Add"/>
+				<s:Button id="deleteLibraryButton" label="Delete"/>
 			</s:HGroup>
 		</s:VGroup>
 		<s:VGroup width="100%" height="100%">	
 			<s:HGroup right="0">
 				<s:Label text="Target: 'HTML'"/>
-				
 			</s:HGroup>
 			<mx:TextArea  id="libCode"  width="100%" height="100%" change="{saveChange()}"/>
 		</s:VGroup>	
