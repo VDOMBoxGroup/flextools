@@ -61,9 +61,9 @@ package net.vdombox.object_editor.view.mediators
 		public function changeCurrentLocation( event: Event ): void
 		{
 			objectTypeVO.languages.currentLocation = view.fcurrentLocation.selectedLabel;
-			view.fDisplayName.curentLanguage = objectTypeVO.languages.currentLocation;
+			view.fDisplayName.currentLanguage = objectTypeVO.languages.currentLocation;
 			view.fDisplayName.apdateFild();	
-			view.fDescription.curentLanguage = objectTypeVO.languages.currentLocation;
+			view.fDescription.currentLanguage = objectTypeVO.languages.currentLocation;
 			view.fDescription.apdateFild();
 		}
 

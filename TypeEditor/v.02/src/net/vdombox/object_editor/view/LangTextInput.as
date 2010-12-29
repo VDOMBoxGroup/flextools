@@ -13,7 +13,7 @@ package net.vdombox.object_editor.view
 		[Bindable]
 		public var words:Object = new Object();
 		[Bindable]
-		public var curentLanguage:String;
+		public var currentLanguage:String;
 
 		public function LangTextInput()
 		{
@@ -23,18 +23,18 @@ package net.vdombox.object_editor.view
 
 		private function newValue( event: Event ):void
 		{
-			words[curentLanguage] = text;
+			words[currentLanguage] = text;
 		}
 
 		public function apdateFild( ):void
 		{
-			super.text = words[curentLanguage];			
+			super.text = words[currentLanguage];			
 		}
 
 		public function completeStructure( langsVO:LanguagesVO, fildValue:String):void
 		{
 			var fildID:String = getRegExpWord(fildValue);
-			curentLanguage = langsVO.currentLocation;
+			currentLanguage = langsVO.currentLocation;
 			var wordsVO:ArrayCollection = langsVO.words;
 
 			for each(var word:Object in wordsVO)
@@ -42,7 +42,7 @@ package net.vdombox.object_editor.view
 				if( word["ID"] == fildID)
 				{
 					words = word;
-					super.text = words[curentLanguage];	
+					super.text = words[currentLanguage];	
 					break;
 				}
 			}

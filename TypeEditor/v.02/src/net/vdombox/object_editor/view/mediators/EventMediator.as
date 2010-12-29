@@ -21,8 +21,8 @@ package net.vdombox.object_editor.view.mediators
 	{
 		public static const NAME:String = "EventMediator";
 		private var objectTypeVO:ObjectTypeVO;
-		private var curentEventVO: EventVO;
-		private var curentParameterVO: EventParameterVO ;
+		private var currentEventVO: EventVO;
+		private var currentParameterVO: EventParameterVO ;
 
 		public function EventMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{			
@@ -34,12 +34,12 @@ package net.vdombox.object_editor.view.mediators
 
 		private function selectEvent(event:Event):void
 		{ 
-			curentEventVO = view.eventsList.selectedItem.data as EventVO;
-			fillFilds(curentEventVO);	
-			if( (curentParameterVO = curentEventVO.parameters.getItemAt(0).data) )
+			currentEventVO = view.eventsList.selectedItem.data as EventVO;
+			fillFilds(currentEventVO);	
+			if( (currentParameterVO = currentEventVO.parameters.getItemAt(0).data) )
 			{
-				view.currentParameter = {label: curentParameterVO.name, data: curentParameterVO};
-				fillParameter(curentParameterVO);
+				view.currentParameter = {label: currentParameterVO.name, data: currentParameterVO};
+				fillParameter(currentParameterVO);
 				view.parameters.selectedIndex = 0;//selectedItem = view.currentParameter;
 				view.validateNow();
 			}
@@ -47,20 +47,20 @@ package net.vdombox.object_editor.view.mediators
 
 		private function selectParameter(event:Event):void
 		{ 
-			curentParameterVO = view.parameters.selectedItem.data as EventParameterVO;
-			fillParameter(curentParameterVO);	
+			currentParameterVO = view.parameters.selectedItem.data as EventParameterVO;
+			fillParameter(currentParameterVO);	
 		}
 
 		public function validateObjectTypeVO(event:Event):void
 		{
 			view.label= "Events*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
-			if( curentParameterVO )
+			if( currentParameterVO )
 			{				
-				curentParameterVO.name	 = view.parName.text;
-				curentParameterVO.order	 = view.parOrder.text;
-				curentParameterVO.vbType = view.parVbType.text;
-//todo			curentParameterVO.help	= view.parName.text;
+				currentParameterVO.name	 = view.parName.text;
+				currentParameterVO.order	 = view.parOrder.text;
+				currentParameterVO.vbType = view.parVbType.text;
+//todo			currentParameterVO.help	= view.parName.text;
 			}
 		}
 
@@ -68,7 +68,7 @@ package net.vdombox.object_editor.view.mediators
 		{ 
 			view.currentItem.label = event.target.text;
 
-			curentEventVO.name = view.eventName.text;
+			currentEventVO.name = view.eventName.text;
 			view.eventsList.dataProvider.itemUpdated(view.currentItem);
 			sortEvents();
 			view.eventsList.selectedItem = view.currentItem;
@@ -120,7 +120,7 @@ package net.vdombox.object_editor.view.mediators
 //todo			eventVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
 			fillFilds(eventVO);
 			view.currentItem = getCurrentItem(eventVO.name);
-			curentEventVO = view.currentItem.data;
+			currentEventVO = view.currentItem.data;
 
 			view.eventsList.selectedItem = view.currentItem;
 			view.eventsList.validateNow();
@@ -130,7 +130,7 @@ package net.vdombox.object_editor.view.mediators
 		private function addParameter(event:MouseEvent): void
 		{			
 			var parameterVO:EventParameterVO = new EventParameterVO( "newParameter"+ Math.round(Math.random()*100) );
-			curentEventVO.parameters.addItem( {label:parameterVO.name, data:parameterVO} );
+			currentEventVO.parameters.addItem( {label:parameterVO.name, data:parameterVO} );
 			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 //todo			eventVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
 			fillParameter(parameterVO);
@@ -149,7 +149,7 @@ package net.vdombox.object_editor.view.mediators
 		private function deleteParameter(event:MouseEvent): void
 		{
 			var selectInd:uint = view.parameters.selectedIndex;
-			curentEventVO.parameters.removeItemAt(selectInd);
+			currentEventVO.parameters.removeItemAt(selectInd);
 		}
 
 		private function getCurrentItem(nameEvent:String):Object
@@ -167,7 +167,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function getCurrentParameter(nameParam:String):Object
 		{			
-			for each(var param:Object in curentEventVO.parameters )
+			for each(var param:Object in currentEventVO.parameters )
 			{
 				if( param["label"] == nameParam )
 				{

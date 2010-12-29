@@ -88,7 +88,7 @@
 				}
 			}*/
 			[Bindable]
-			public var currentItem:Object;
+			public var currentLibrary:Object;
 			
 			public function libsListChange():void
 			{				
@@ -100,13 +100,17 @@
 				dispatchEvent(new Event( Event.CHANGE ));
 			}
 			
+			
+			
 		]]>
 	</fx:Script>
 	
 	<s:HGroup width="100%" height="100%">
 		<s:VGroup width="200" height="100%">
 			<s:List id="librariesList" width="100%"  height="100%"   
-					change="{libsListChange()}" skinClass="spark.skins.spark.ListSkin"/>
+					
+					change="this.currentLibrary=List(event.target).selectedItem" 
+					skinClass="spark.skins.spark.ListSkin"/>
 			
 			<s:HGroup right="0" >
 				<s:Button id="addLibraryButton" label="Add"/>
@@ -115,7 +119,8 @@
 		</s:VGroup>
 		<s:VGroup width="100%" height="100%">	
 			<s:HGroup right="0">
-				<s:Label text="Target: 'HTML'"/>
+				<s:TextInput id="target" text="this.currentLibrary.target" change="saveChange()" />
+				<!--s:Label text="Target: 'HTML'"/-->
 			</s:HGroup>
 			<mx:TextArea  id="libCode"  width="100%" height="100%" change="{saveChange()}"/>
 		</s:VGroup>	

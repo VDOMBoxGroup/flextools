@@ -18,13 +18,15 @@ package net.vdombox.object_editor.view.mediators
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
+	
+	import spark.components.ComboBox;
 
 	public class ActionMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "ActionMediator";
 		private var objectTypeVO:ObjectTypeVO;
-		private var curentActionVO: ActionVO;
-		private var curentParameterVO: ActionParameterVO ;
+		private var currentActionVO: ActionVO;
+		private var currentParameterVO: ActionParameterVO ;
 
 		public function ActionMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{			
@@ -36,12 +38,12 @@ package net.vdombox.object_editor.view.mediators
 
 		private function selectAction(event:Event):void
 		{ 
-			curentActionVO = view.actionsList.selectedItem.data as ActionVO;
-			fillFilds(curentActionVO);	
-			if( (curentParameterVO = curentActionVO.parameters.getItemAt(0).data) )
+			currentActionVO = view.actionsList.selectedItem.data as ActionVO;
+			fillFilds(currentActionVO);	
+			if( (currentParameterVO = currentActionVO.parameters.getItemAt(0).data) )
 			{
-				view.currentParameter = {label: curentParameterVO.defaultValue, data: curentParameterVO};
-				fillParameter(curentParameterVO);
+				view.currentParameter = {label: currentParameterVO.defaultValue, data: currentParameterVO};
+				fillParameter(currentParameterVO);
 				view.parameters.selectedIndex = 0;
 				view.validateNow();
 			}
@@ -49,28 +51,28 @@ package net.vdombox.object_editor.view.mediators
 
 		private function selectParameter(event:Event):void
 		{ 
-			curentParameterVO = view.parameters.selectedItem.data as ActionParameterVO;
-			fillParameter(curentParameterVO);	
+			currentParameterVO = view.parameters.selectedItem.data as ActionParameterVO;
+			fillParameter(currentParameterVO);	
 		}
 
 		public function validateObjectTypeVO(event:Event):void
 		{
 			view.label= "Actions*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
-			if( curentParameterVO )
+			if( currentParameterVO )
 			{				
-				curentParameterVO.defaultValue	= view.parDefaultValue.text;
-				curentParameterVO.interfacePar	= view.parInterface.text;
-				curentParameterVO.interfaceName	= view.parInterfaceName.text;
-				curentParameterVO.scriptName	= view.parScriptName.text;
-				curentParameterVO.help	 		= view.parHelp.text;
-				curentParameterVO.regExp	 	= view.parRegExp.text;
+				currentParameterVO.defaultValue	= view.parDefaultValue.text;
+				currentParameterVO.interfacePar	= view.parInterface.text;
+				currentParameterVO.interfaceName	= view.parInterfaceName.text;
+				currentParameterVO.scriptName	= view.parScriptName.text;
+				currentParameterVO.help	 		= view.parHelp.text;
+				currentParameterVO.regExp	 	= view.parRegExp.text;
 			}
 		}
 		
 		private function changeContainer( event:Event ):void
 		{ 
-			objectTypeVO.actions.container = event.target.text;
+			objectTypeVO.actions.container = ComboBox(event.target).selectedItem.data;
 		}
 
 		/*private function changeXZ event:Event ):void
@@ -87,8 +89,8 @@ package net.vdombox.object_editor.view.mediators
 
 		private function fillFilds(actVO:ActionVO):void
 		{
-			view.methodName.text	= actVO.methodName;
-			view.sourceCode.text	= actVO.code;
+			view.methodName.text			= actVO.methodName;
+			view.sourceCode.text			= actVO.code;
 			view.parameters.dataProvider	= actVO.parameters; 
 			
 			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
@@ -115,7 +117,7 @@ package net.vdombox.object_editor.view.mediators
 	
 			var itemProxy:ItemProxy = facade.retrieveProxy( ItemProxy.NAME ) as ItemProxy;
 			view.container.dataProvider = itemProxy.topLevelContainerList;
-			view.container.selectedItem = objectTypeVO.actions.container;
+			view.container.selectedItem = itemProxy.topLevelContainerList//objectTypeVO.actions.container;
 			view.container.addEventListener   ( Event.CHANGE, changeContainer );
 			view.addAction.addEventListener   ( MouseEvent.CLICK, addAction );
 			view.deleteAction.addEventListener( MouseEvent.CLICK, deleteAction );
@@ -135,7 +137,7 @@ package net.vdombox.object_editor.view.mediators
 //todo			eventVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
 			fillFilds(actVO);
 			view.currentAction = getCurrentItem(actVO.interfaceName);
-			curentActionVO = view.currentAction.data;
+			currentActionVO = view.currentAction.data;
 
 			view.actionsList.selectedItem = view.currentAction;
 			view.actionsList.validateNow();
@@ -145,7 +147,7 @@ package net.vdombox.object_editor.view.mediators
 		private function addParameter(event:MouseEvent): void
 		{			
 			var actVO:ActionParameterVO = new ActionParameterVO( );//"newParameter"+ Math.round(Math.random()*100) );
-			curentActionVO.parameters.addItem( {label:actVO.interfaceName, data:actVO} );
+			currentActionVO.parameters.addItem( {label:actVO.interfaceName, data:actVO} );
 			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 //todo			eventVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
 			fillParameter(actVO);
@@ -164,7 +166,7 @@ package net.vdombox.object_editor.view.mediators
 		private function deleteParameter(event:MouseEvent): void
 		{
 			var selectInd:uint = view.parameters.selectedIndex;
-			curentActionVO.parameters.removeItemAt(selectInd);
+			currentActionVO.parameters.removeItemAt(selectInd);
 		}
 
 		private function getCurrentItem(nameEvent:String):Object
@@ -182,7 +184,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function getCurrentParameter(nameParam:String):Object
 		{			
-			for each(var param:Object in curentActionVO.parameters )
+			for each(var param:Object in currentActionVO.parameters )
 			{
 				if( param["label"] == nameParam )
 				{

@@ -40,6 +40,22 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}
 		
+		private function changeTarget( event:Event ):void
+		{ 
+			//			view.currentItem.label = event.target.text;
+			view.label= "Libraries*";			
+			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+			if( currentLibraryVO )
+			{				
+				currentLibraryVO.target	= view.target.text;
+				view.currentLibrary.label  = view.target.text;
+				view.librariesList.dataProvider.itemUpdated(view.currentLibrary);
+				sortLibraries();
+				view.librariesList.selectedItem = view.currentLibrary;
+				view.librariesList.ensureIndexIsVisible(view.librariesList.selectedIndex);
+			}
+		}
+		
 		public function validateObjectTypeVO(event:Event):void
 		{
 			view.label= "Libraries*";			
@@ -59,6 +75,7 @@ package net.vdombox.object_editor.view.mediators
 		private function fillArea(libVO:LibraryVO):void
 		{
 			view.libCode.text = libVO.text;	
+			view.target.text  = libVO.target;
 		}
 		
 		private function showLibraries(event: FlexEvent): void
@@ -66,6 +83,7 @@ package net.vdombox.object_editor.view.mediators
 //			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
 			view.librariesList.addEventListener(Event.CHANGE, selectLibrary);
 			view.libCode.addEventListener( Event.CHANGE, changeCode );
+			view.target.addEventListener( Event.CHANGE, changeTarget );
 			view.addLibraryButton.addEventListener   ( MouseEvent.CLICK, addLibrary );
 			view.deleteLibraryButton.addEventListener( MouseEvent.CLICK, deleteLibrary );
 			compliteLibraries();
@@ -74,10 +92,12 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function addLibrary(event:MouseEvent): void
 		{			
-			var libVO:LibraryVO= new LibraryVO( "newLibrary"+ Math.round(Math.random()*100) );
+			var libVO:LibraryVO= new LibraryVO( "newTarget"+ Math.round(Math.random()*100) );
 			objectTypeVO.libraries.addItem( {label:libVO.target, data:libVO} );
-			view.currentItem = getCurrentItem(libVO.target);
-			view.librariesList.selectedItem = view.currentItem;
+			view.target.text = libVO.target;
+			view.currentLibrary = getCurrentItem(libVO.target);
+			currentLibraryVO = view.currentLibrary.data;
+			view.librariesList.selectedItem = view.currentLibrary;
 			view.librariesList.validateNow();
 			//			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
 		}
