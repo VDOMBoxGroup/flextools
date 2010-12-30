@@ -12,6 +12,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.vo.ActionParameterVO;
 	import net.vdombox.object_editor.model.vo.ActionVO;
+	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Actions;
 	
@@ -20,12 +21,14 @@ package net.vdombox.object_editor.view.mediators
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
 	import spark.components.ComboBox;
+	import spark.components.List;
 
 	public class ActionMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "ActionMediator";
 		private var objectTypeVO:ObjectTypeVO;
-		private var currentActionVO: ActionVO;
+		private var currentContainerVO: ActionsContainerVO;
+		private var currentActionVO   : ActionVO;
 		private var currentParameterVO: ActionParameterVO ;
 
 		public function ActionMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
@@ -35,23 +38,51 @@ package net.vdombox.object_editor.view.mediators
 			view.addEventListener( FlexEvent.SHOW, showActions );
 			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
 		}
+		
+		private function showActions(event: FlexEvent): void
+		{			
+			view.removeEventListener( FlexEvent.SHOW, showActions );
+			view.containersList.dataProvider = objectTypeVO.actionContainers;
+			view.containersList.selectedIndex = 0;
+			currentContainerVO = objectTypeVO.actionContainers[0].data;
+			
+			var itemProxy:ItemProxy = facade.retrieveProxy( ItemProxy.NAME ) as ItemProxy;
+			//			view.containersList.dataProvider = objectTypeVO.actionContainers.container
+			//			view.container.dataProvider = itemProxy.topLevelContainerList;
+			//			view.container.selectedItem = getItemContainerOnID(objectTypeVO.actions.container);//itemProxy.topLevelContainerList//objectTypeVO.actions.container;
+			//			view.container.addEventListener   	 ( Event.CHANGE, changeContainer );
+			view.addContainer.addEventListener   ( MouseEvent.CLICK, addContainer );
+			view.deleteContainer.addEventListener( MouseEvent.CLICK, deleteContainer );
+			view.addAction.addEventListener   	 ( MouseEvent.CLICK, addAction );
+			view.deleteAction.addEventListener	 ( MouseEvent.CLICK, deleteAction );
+			view.addParameter.addEventListener   ( MouseEvent.CLICK, addParameter );
+			view.deleteParameter.addEventListener( MouseEvent.CLICK, deleteParameter );
+			view.actionsList.addEventListener    (Event.CHANGE, selectAction);
+			view.parametersList.addEventListener (Event.CHANGE, selectParameter);
+			view.containersList.addEventListener (Event.CHANGE, selectContainer);
+			
+			view.methodName.addEventListener     (Event.CHANGE, changeMethodName);
+			view.parScriptName.addEventListener  (Event.CHANGE, changeScriptName);
+			
+			compliteActions();
+			view.validateNow();
+		}
+		
+		private function selectContainer(event:Event):void
+		{ 
+			currentContainerVO = view.containersList.selectedItem.data as ActionsContainerVO;
+			fillContainerFilds(currentContainerVO);	
+		}
 
 		private function selectAction(event:Event):void
 		{ 
 			currentActionVO = view.actionsList.selectedItem.data as ActionVO;
-			fillFilds(currentActionVO);	
-			if( (currentParameterVO = currentActionVO.parameters.getItemAt(0).data) )
-			{
-				view.currentParameter = {label: currentParameterVO.defaultValue, data: currentParameterVO};
-				fillParameter(currentParameterVO);
-				view.parameters.selectedIndex = 0;
-				view.validateNow();
-			}
+			fillActionFilds(currentActionVO);	
 		}
 
 		private function selectParameter(event:Event):void
 		{ 
-			currentParameterVO = view.parameters.selectedItem.data as ActionParameterVO;
+			currentParameterVO = view.parametersList.selectedItem.data as ActionParameterVO;
 			fillParameter(currentParameterVO);	
 		}
 
@@ -63,35 +94,48 @@ package net.vdombox.object_editor.view.mediators
 			{				
 				currentParameterVO.defaultValue	= view.parDefaultValue.text;
 				currentParameterVO.interfacePar	= view.parInterface.text;
-				currentParameterVO.interfaceName	= view.parInterfaceName.text;
+				currentParameterVO.interfaceName= view.parInterfaceName.text;
 				currentParameterVO.scriptName	= view.parScriptName.text;
 				currentParameterVO.help	 		= view.parHelp.text;
 				currentParameterVO.regExp	 	= view.parRegExp.text;
 			}
 		}
-		
-		private function changeContainer( event:Event ):void
+
+		private function changeMethodName ( event:Event ):void
 		{ 
-			objectTypeVO.actions.container = ComboBox(event.target).selectedItem.data;
+			view.currentAction.label   = event.target.text;
+			currentActionVO.methodName = view.methodName.text;
+			view.actionsList.dataProvider.itemUpdated(view.currentAction);
+			sortActions();
+			view.actionsList.selectedItem = view.currentAction;
+			view.actionsList.ensureIndexIsVisible(view.actionsList.selectedIndex);
 		}
-
-		/*private function changeXZ event:Event ):void
+		
+		private function changeScriptName ( event:Event ):void
 		{ 
-			view.currentItem.label = event.target.text;
-
-			curentActionVO.name = view.eventName.text;
-			view.eventsList.dataProvider.itemUpdated(view.currentItem);
-			sortEvents();
-			view.eventsList.selectedItem = view.currentItem;
-			view.eventsList.ensureIndexIsVisible(view.eventsList.selectedIndex);//(view.attributesList.selectedIndex);
-			//			view.attributesList.selectedItems //scrollRect = view.currentItem;			
-		}*/
-
-		private function fillFilds(actVO:ActionVO):void
+			view.currentParameter.label   = event.target.text;
+			currentParameterVO.scriptName = view.parScriptName.text;
+			view.parametersList.dataProvider.itemUpdated(view.currentParameter);
+			sortParameters();
+			view.parametersList.selectedItem = view.currentParameter;
+			view.parametersList.ensureIndexIsVisible(view.parametersList.selectedIndex);
+		}
+		
+		private function changeField ( event:Event ):void
+		{ 
+			//todo добавить слушателя на view и реализовать метод для все полей оставшихся
+		}
+		
+		private function fillContainerFilds(actConVO:ActionsContainerVO):void
+		{
+			view.actionsList.dataProvider = actConVO.actionsCollection;
+		}
+		
+		private function fillActionFilds(actVO:ActionVO):void
 		{
 			view.methodName.text			= actVO.methodName;
 			view.sourceCode.text			= actVO.code;
-			view.parameters.dataProvider	= actVO.parameters; 
+			view.parametersList.dataProvider	= actVO.parameters; 
 			
 			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 		    view.description.completeStructure    ( objectTypeVO.languages, actVO.description );
@@ -108,74 +152,93 @@ package net.vdombox.object_editor.view.mediators
 			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 			view.parHelp.completeStructure( objectTypeVO.languages, actParameterVO.help );
 			view.parInterfaceName.completeStructure( objectTypeVO.languages, actParameterVO.interfaceName );
-		}
-
-		private function showActions(event: FlexEvent): void
+		}		
+		
+		/*private function getItemContainerOnID(id:String): Object
+		{
+			for each(var container:Object in view.actionsList.dataProvider )
+			{
+				if( container["data"] == id )
+				{
+					return container;
+					break;
+				}
+			}
+			return new Object();
+		}*/
+		
+		private function addContainer(event:MouseEvent): void
 		{			
-			view.removeEventListener( FlexEvent.SHOW, showActions );
-			view.actionsList.addEventListener(Event.CHANGE, selectAction);
-	
-			var itemProxy:ItemProxy = facade.retrieveProxy( ItemProxy.NAME ) as ItemProxy;
-			view.container.dataProvider = itemProxy.topLevelContainerList;
-			view.container.selectedItem = itemProxy.topLevelContainerList//objectTypeVO.actions.container;
-			view.container.addEventListener   ( Event.CHANGE, changeContainer );
-			view.addAction.addEventListener   ( MouseEvent.CLICK, addAction );
-			view.deleteAction.addEventListener( MouseEvent.CLICK, deleteAction );
-			view.addParameter.addEventListener   ( MouseEvent.CLICK, addParameter );
-			view.deleteParameter.addEventListener( MouseEvent.CLICK, deleteParameter );
-			view.parameters.addEventListener(Event.CHANGE, selectParameter);
-
-			compliteActions();
-			view.validateNow();
+			var actsContVO:ActionsContainerVO = new ActionsContainerVO();
+			actsContVO.containerID = "0";//todo выбор из comboBox
+			objectTypeVO.actionContainers.addItem( {label:actsContVO.containerID, data:actsContVO} );
+				
+			currentContainerVO  = actsContVO;
+			currentActionVO		= null;
+			currentParameterVO	= null;
+			
+			view.clearContainerFields();
+			
+			view.containersList.selectedItem = view.currentContainer;
+			view.containersList.validateNow();
 		}
 
 		private function addAction(event:MouseEvent): void
 		{			
-			var actVO:ActionVO = new ActionVO();// "newAction"+ Math.round(Math.random()*100) );
-			objectTypeVO.actions.actionsCollection.addItem( {label:actVO.interfaceName, data:actVO} );
-			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
+			currentActionVO = new ActionVO();
+			currentActionVO.methodName = ( "methodName" + currentContainerVO.actionsCollection.length );
+			
+			currentContainerVO.actionsCollection.addItem( {label:currentActionVO.methodName, data:currentActionVO} );
+			currentParameterVO	= null;
+			
+			fillActionFilds(currentActionVO);
+			view.currentAction = getCurrentAction(currentActionVO.methodName);
+//			view.actionsList.dataProvider.addItem( {label: currentActionVO.methodName, data: currentActionVO} );
+//			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 //todo			eventVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
-			fillFilds(actVO);
-			view.currentAction = getCurrentItem(actVO.interfaceName);
-			currentActionVO = view.currentAction.data;
-
 			view.actionsList.selectedItem = view.currentAction;
 			view.actionsList.validateNow();
-//todo			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
 		}
-
+		
 		private function addParameter(event:MouseEvent): void
 		{			
-			var actVO:ActionParameterVO = new ActionParameterVO( );//"newParameter"+ Math.round(Math.random()*100) );
-			currentActionVO.parameters.addItem( {label:actVO.interfaceName, data:actVO} );
-			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
+			currentParameterVO = new ActionParameterVO();
+			currentParameterVO.scriptName = ( "scriptName" + currentActionVO.parameters.length );
+			
+			currentActionVO.parameters.addItem( {label:currentParameterVO.scriptName, data:currentParameterVO} );
+//			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 //todo			eventVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
-			fillParameter(actVO);
-			view.currentParameter = getCurrentParameter(actVO.interfaceName);
-			view.parameters.selectedItem = view.currentParameter;
-			view.parameters.validateNow();
-			//			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
+			fillParameter(currentParameterVO);
+			view.currentParameter = getCurrentParameter(currentParameterVO.scriptName);
+			view.parametersList.selectedItem = view.currentParameter;
+			view.parametersList.validateNow();
+		}
+		
+		private function deleteContainer(event:MouseEvent): void
+		{
+			var selectInd:uint = view.containersList.selectedIndex;
+			objectTypeVO.actionContainers.removeItemAt(selectInd);
 		}
 
 		private function deleteAction(event:MouseEvent): void
 		{
 			var selectInd:uint = view.actionsList.selectedIndex;
-			objectTypeVO.events.removeItemAt(selectInd);
+			currentContainerVO.actionsCollection.removeItemAt(selectInd);
 		}
 
 		private function deleteParameter(event:MouseEvent): void
 		{
-			var selectInd:uint = view.parameters.selectedIndex;
+			var selectInd:uint = view.parametersList.selectedIndex;
 			currentActionVO.parameters.removeItemAt(selectInd);
 		}
 
-		private function getCurrentItem(nameEvent:String):Object
+		private function getCurrentAction(methodName:String):Object
 		{			
-			for each(var event:Object in objectTypeVO.events )
+			for each(var act:Object in currentContainerVO.actionsCollection )
 			{
-				if( event["label"] == nameEvent )
+				if( act["label"] == methodName )
 				{
-					return event;
+					return act;
 					break;
 				}
 			}
@@ -197,23 +260,22 @@ package net.vdombox.object_editor.view.mediators
 
 		private function sortActions():void 
 		{
-			objectTypeVO.events.sort = new Sort();
-			objectTypeVO.events.sort.fields = [ new SortField( 'label' ) ];
-			objectTypeVO.events.refresh();
+			currentContainerVO.actionsCollection.sort 		 = new Sort();
+			currentContainerVO.actionsCollection.sort.fields = [ new SortField( 'label' ) ];
+			currentContainerVO.actionsCollection.refresh();
 		}
 
-		/*	private function sortParameters():void
-		   {
-		   objectTypeVO.events.sort = new Sort();
-		   objectTypeVO.events.sort.fields = [ new SortField( 'label' ) ];
-		   objectTypeVO.events.refresh();
-		 }*/
+		private function sortParameters():void
+		{
+		   currentActionVO.parameters.sort 		  = new Sort();
+		   currentActionVO.parameters.sort.fields = [ new SortField( 'label' ) ];
+		   currentActionVO.parameters.refresh();
+		 }
 
 		protected function compliteActions( ):void
 		{	
 			sortActions();
-			view.actionsList.dataProvider = objectTypeVO.actions.actionsCollection;
-//			view.eventsList.selectedIndex = 0;
+			view.actionsList.dataProvider = currentContainerVO.actionsCollection;
 		}		
 		override public function listNotificationInterests():Array 
 		{			

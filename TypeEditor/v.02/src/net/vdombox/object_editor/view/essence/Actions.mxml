@@ -12,44 +12,62 @@
 		<![CDATA[
 			
 			[Bindable]
-			public var currentAction:Object;
+			public var currentContainer:Object;
+			
+			[Bindable]
+			public var currentAction   :Object;
 			
 			[Bindable]
 			public var currentParameter:Object;
 			
-			public function changeActionPar():void
+			public function changeField():void
 			{
 				dispatchEvent(new Event( Event.CHANGE ));
-			}
+			}				
 			
-			public function changeParamsValues():void
+			public function clearContainerFields():void
 			{
-				dispatchEvent(new Event( Event.CHANGE ));
+				currentContainer 		= null;
+				currentAction 	 		= null;
+				currentParameter 		= null;	
+				
+				actionsList.dataProvider = null;
+				clearActionFields();
 			}
-			
-			//todo вроде можно все в одной ф-ции
-			public function changeCode():void
+				
+			public function clearActionFields():void
 			{
-				dispatchEvent(new Event( Event.CHANGE ));
+				description.text		= null;
+				interfaceName.text		= null;
+				methodName.text			= null;
+				sourceCode.text			= null;
+				
+				parametersList.dataProvider = null;
+				clearParameterFields();
 			}
 			
-			public function viewChanged():void
+			public function clearParameterFields():void
 			{
-				dispatchEvent(new Event( Event.CHANGE ));
+				parDefaultValue.text	= null;
+				parHelp.text			= null;
+				parInterface.text		= null;
+				parInterfaceName.text	= null;
+				parScriptName.text		= null;
+				parRegExp.text			= null;				
 			}
-			
 		]]>
 	</fx:Script>
-			
 	
 	<s:HGroup>
 		<mx:Form  width="100%" height="100%" paddingTop="0">
-			<mx:FormItem label="Container" 
-						 toolTip="Toop Lavel Container">
-				<s:ComboBox id="container"  change="{viewChanged()}" />
-			</mx:FormItem>
+			<s:List id="containersList" width="200" height="60" change="this.currentContainer=List(event.target).selectedItem"/>
+			<s:HGroup width="100%">
+				<s:HGroup width="100%"/>
+				<s:Button id="addContainer" label="Add"/>
+				<s:Button id="deleteContainer" label="Delete" enabled="{actionsList.selectedIndex != -1}"/>
+			</s:HGroup>
 			<mx:FormHeading fontSize="10"  label="Select Action:" paddingTop="10" />
-			<s:List id="actionsList" width="200" height="{height- 60}" change="this.currentAction=List(event.target).selectedItem"/>
+			<s:List id="actionsList" width="200" height="{height- 200}" change="this.currentAction=List(event.target).selectedItem"/>
 			<s:HGroup width="100%">
 				<s:HGroup width="100%"/>
 				<s:Button id="addAction" label="Add"/>
@@ -58,61 +76,61 @@
 		</mx:Form >
 		<mx:Form  width="100%" height="100%"  paddingTop="0" paddingLeft="0" >
 			<mx:FormHeading fontSize="10"  label="Actions details:" paddingTop="0" />
+			<mx:FormItem label="MethodName:" toolTip="Name">
+				<mx:TextInput id="methodName" width="150" change="{changeField()}" />
+			</mx:FormItem>	
 			<mx:FormItem label="Description:" toolTip="Name">
-				<ns2:LangTextArea id="description" width="150" height="40" change="{changeActionPar()}" />
+				<ns2:LangTextArea id="description" width="150" height="40" change="{changeField()}" />
 			</mx:FormItem>
 			<mx:FormItem label="InterfaceName:" toolTip="Name">
-				<ns2:LangTextArea id="interfaceName" width="150" height="40" change="{changeActionPar()}" />
-			</mx:FormItem>			
-			<mx:FormItem label="MethodName:" toolTip="Name">
-				<mx:TextInput id="methodName" width="150" change="{changeActionPar()}" />
+				<ns2:LangTextArea id="interfaceName" width="150" height="40" change="{changeField()}" />
 			</mx:FormItem>			
 			
 			<s:HGroup width="100%"/>
 			<s:Label text="Select parameter:" />
-			<s:List id="parameters" width="100%" height="{height - 205}" change="this.currentParameter=List(event.target).selectedItem" /><!--dataProvider="{arParameters}"   change="{changeParameter()}"/-->
+			<s:List id="parametersList" width="100%" height="{height - 205}" change="this.currentParameter=List(event.target).selectedItem" /><!--dataProvider="{arParameters}"   change="{changeParameter()}"/-->
 			<s:HGroup width="100%" >
 				<s:HGroup width="100%"/>
 				<s:Button id="addParameter" label="Add" />
-				<s:Button id="deleteParameter" label="Delete" enabled="{parameters.selectedIndex != -1}"/>
+				<s:Button id="deleteParameter" label="Delete" enabled="{parametersList.selectedIndex != -1}"/>
 			</s:HGroup>
 		</mx:Form>
 		<mx:Form width="100%" color="0x323232" paddingTop="0" paddingLeft="0">
 			<mx:FormHeading fontSize="10"  label="Parameters detais:" paddingTop="0" />
 			
+			<mx:FormItem label="ScriptName:" toolTip="Это VbType">
+				<mx:TextInput id="parScriptName" width="200" change="{changeField()}" />
+			</mx:FormItem>
+			
 			<mx:FormItem label="DefaultValue:" toolTip="Имя объекта">
-				<mx:TextInput id="parDefaultValue" width="200" change="{changeParamsValues()}"/>
+				<mx:TextInput id="parDefaultValue" width="200" change="{changeField()}"/>
 			</mx:FormItem>
 			
 			<mx:FormItem label="Help:" toolTip="Это Help">
 				<s:HGroup>
-					<ns2:LangTextArea id="parHelp" width="200" height="40" change="{changeParamsValues()}"/>
+					<ns2:LangTextArea id="parHelp" width="200" height="40" change="{changeField()}"/>
 				</s:HGroup>
 			</mx:FormItem>
 			
 			<mx:FormItem label="Interface:" toolTip="Это ордер">
-				<mx:TextInput id="parInterface" width="200" change="{changeParamsValues()}"/>
+				<mx:TextInput id="parInterface" width="200" change="{changeField()}"/>
 			</mx:FormItem>
 			
 			<mx:FormItem label="InterfaceName:" toolTip="Это VbType">
 				
-				<ns2:LangTextArea id="parInterfaceName" width="200" height="40" change="{changeParamsValues()}"/>
-			</mx:FormItem>
-			
-			<mx:FormItem label="ScriptName:" toolTip="Это VbType">
-				<mx:TextInput id="parScriptName" width="200" change="{changeParamsValues()}" />
+				<ns2:LangTextArea id="parInterfaceName" width="200" height="40" change="{changeField()}"/>
 			</mx:FormItem>
 								
 			<mx:FormItem label="RegExp" >
 				<s:HGroup>
-					<s:TextInput id="parRegExp" width="200"  change="{changeParamsValues()}"/>
+					<s:TextInput id="parRegExp" width="200"  change="{changeField()}"/>
 					<!--s:Button label="..." width="30" click="{}" /-->
 				</s:HGroup>
 			</mx:FormItem>
 			
 			<s:VGroup >
 				<s:Label paddingLeft="10" text="Source Code:"/>
-				<s:TextArea  id="sourceCode"  width="305" height="100%" change="{changeCode()}"/>
+				<s:TextArea  id="sourceCode"  width="305" height="100%" change="{changeField()}"/>
 			</s:VGroup>
 			
 		</mx:Form>

@@ -35,7 +35,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				var objTypeVO: ObjectTypeVO = initInformation(objTypeXML);			
 
 				objTypeVO.filePath	 = path;
-				objTypeVO.actions	 = actionsProxy.createFromXML(objTypeXML);
+				objTypeVO.actionContainers	 = actionsProxy.createFromXML(objTypeXML);
 				objTypeVO.attributes = attributesProxy.createFromXML(objTypeXML);
 				objTypeVO.events	 = eventsProxy.createFromXML(objTypeXML);
 				objTypeVO.languages  = languagesProxy.createFromXML(objTypeXML);
@@ -54,7 +54,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 			objTypeXML.appendChild( attributesProxy.createXML(objTypeVO.attributes) );			
 			objTypeXML.appendChild( eventsProxy.createXML(objTypeVO.events) );//здесь важна последовательность!
-			objTypeXML.E2vdom.appendChild( actionsProxy.createXML(objTypeVO.actions) );
+			objTypeXML.E2vdom.appendChild( actionsProxy.createXML(objTypeVO.actionContainers) );
 			objTypeXML.appendChild( languagesProxy.createXML(objTypeVO.languages) );
 			objTypeXML.appendChild( librariesProxy.createXML(objTypeVO.libraries) );
 			objTypeXML.appendChild( sourceCodeToXML(objTypeVO.sourceCode) );	
@@ -148,9 +148,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return facade.retrieveProxy(AttributesProxy.NAME) as AttributesProxy;
 		}
 
-		private function get actionsProxy():ActionsProxy
+		private function get actionsProxy():ActionContainersProxy
 		{
-			return facade.retrieveProxy(ActionsProxy.NAME) as ActionsProxy;
+			return facade.retrieveProxy(ActionContainersProxy.NAME) as ActionContainersProxy;
 		}
 
 		private function get eventsProxy():EventsProxy

@@ -5,7 +5,7 @@ package net.vdombox.object_editor.controller
 {
     import net.vdombox.object_editor.model.proxy.FileProxy;
     import net.vdombox.object_editor.model.proxy.ItemProxy;
-    import net.vdombox.object_editor.model.proxy.componentsProxy.ActionsProxy;
+    import net.vdombox.object_editor.model.proxy.componentsProxy.ActionContainersProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.AttributesProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.EventsProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
@@ -27,7 +27,7 @@ package net.vdombox.object_editor.controller
 			facade.registerProxy(new ItemProxy());
 			facade.registerProxy(new ObjectTypeProxy());
 			facade.registerProxy(new FileProxy());
-			facade.registerProxy(new ActionsProxy());
+			facade.registerProxy(new ActionContainersProxy());
 			facade.registerProxy(new AttributesProxy());
 			facade.registerProxy(new EventsProxy());
 			facade.registerProxy(new LanguagesProxy());			

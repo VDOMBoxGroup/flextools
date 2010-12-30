@@ -10,8 +10,7 @@ package net.vdombox.object_editor.model.vo
 		[Bindable]
 		public var events     : ArrayCollection = new ArrayCollection();
 		[Bindable]
-		public var actions    : ActionsVO = new ActionsVO();
-//		public var actions    : ArrayCollection = new ArrayCollection();
+		public var actionContainers    : ArrayCollection = new ArrayCollection();
 
 		[Bindable]
 		public var languages  : LanguagesVO		= new LanguagesVO();
