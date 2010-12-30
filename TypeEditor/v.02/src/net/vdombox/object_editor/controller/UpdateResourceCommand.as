@@ -5,6 +5,8 @@ package net.vdombox.object_editor.controller
 
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ResourcesProxy;
 	import net.vdombox.object_editor.model.vo.ResourceVO;
+	import net.vdombox.object_editor.view.essence.Information;
+	import net.vdombox.object_editor.view.mediators.InformationMediator;
 	import net.vdombox.object_editor.view.mediators.ResourcesMediator;
 
 	import org.puremvc.as3.interfaces.INotification;
@@ -15,7 +17,7 @@ package net.vdombox.object_editor.controller
 		override public function execute( note:INotification ) :void
 		{
 
-			var resVO: ResourceVO = note.getBody() as ResourceVO;
+			var id: String = note.getBody() as String;
 
 			var fileRef:FileReference = new FileReference();
 			fileRef.addEventListener(Event.SELECT, fileSelected);
@@ -32,7 +34,9 @@ package net.vdombox.object_editor.controller
 			{
 				var resourcesProxy:ResourcesProxy = facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
 
-				resourcesProxy.changeContent(resVO, fileRef);
+				resourcesProxy.changeContent(id, fileRef);
+
+				facade.sendNotification(Information.INFORMATION_CHANGED)
 			}
 		}
 	}

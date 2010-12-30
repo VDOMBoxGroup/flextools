@@ -103,7 +103,7 @@ package net.vdombox.object_editor.view.mediators
 		{
 			var resVO: ResourceVO = view.resourcesDataGrid.selectedItem as ResourceVO;
 
-			facade.sendNotification(UPDATE_RESOURCE, resVO);
+			facade.sendNotification(UPDATE_RESOURCE, resVO.id);
 		}
 
 

@@ -2,8 +2,10 @@ package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.utils.ByteArray;
 
 	import mx.collections.ArrayCollection;
+	import mx.controls.Image;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 
@@ -90,15 +92,42 @@ package net.vdombox.object_editor.view.mediators
 			view.fcurrentLocation.dataProvider	= objectTypeVO.languages.locales;
 
 			view.ficon.source = resourcesProxy.getByteArray(objectTypeVO.icon);
+			view.ficon.toolTip = getToolTipe(objectTypeVO.icon);
+
 			view.ficon2.source = resourcesProxy.getByteArray(objectTypeVO.structureIcon);
 			view.ficon3.source = resourcesProxy.getByteArray(objectTypeVO.editorIcon);
+
+
+			view.ficon.name = resourcesProxy.geResourseID(objectTypeVO.icon);
+			view.ficon2.name = resourcesProxy.geResourseID(objectTypeVO.structureIcon);
+			view.ficon3.name = resourcesProxy.geResourseID(objectTypeVO.editorIcon);
+
+			view.ficon.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
+			view.ficon2.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
+			view.ficon3.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
 
 			view.fcurrentLocation.addEventListener(Event.CHANGE, changeCurrentLocation);
 			view.validateNow();
 		}
+
+		private function getToolTipe(idRes:String):String
+		{
+			var img: Image = new Image();
+			img.source = resourcesProxy.getByteArray(idRes);
+
+			return img.width +' x '+ img.height;
+		}
+
+		private function changeResourse(event:MouseEvent):void
+		{
+			facade.sendNotification(ResourcesMediator.UPDATE_RESOURCE, event.currentTarget.name);
+		}
+
+
 		override public function listNotificationInterests():Array 
 		{			
-			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED ];
+			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED,
+				Information.INFORMATION_CHANGED	];
 		}
 
 		override public function handleNotification( note:INotification ):void 
@@ -108,6 +137,11 @@ package net.vdombox.object_editor.view.mediators
 				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
 					if (objectTypeVO == note.getBody() )
 						view.label= "Information";
+					break;	
+				case Information.INFORMATION_CHANGED	:
+					// todo: need optimization!
+					compliteInformation();
+					view.label= "Information*";
 					break;	
 			}
 		}

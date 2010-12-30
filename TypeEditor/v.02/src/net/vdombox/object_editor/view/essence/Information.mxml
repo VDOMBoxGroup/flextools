@@ -23,7 +23,7 @@
 			
 			import net.vdombox.object_editor.view.popups.ChangeWord;
 			
-			public static const INFORMATION_CHANGE:String = "InformationChange";
+			public static const INFORMATION_CHANGED:String = "InformationChanged";
 			
 			[Bindable]
 			public var arInterfaceType:ArrayCollection = new ArrayCollection(
@@ -98,8 +98,8 @@
 			<mx:TextInput id="fStructureIcon" width="250" editable="false"/>
 		</mx:FormItem-->
 			
-		<mx:FormItem label="Category" toolTip="Категория объекта (Usual, Standard, ...)">
-			<mx:TextInput id="fCategory" width="250"  change="{viewChanged()}"/>
+		<mx:FormItem label="Category" toolTip="Категория объекта (Usual, Standard...)" width="100%" >
+			<mx:TextInput id="fCategory" width="100%"  change="{viewChanged()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Version" toolTip="Текущая версия объекта">
@@ -172,13 +172,16 @@
 			</mx:FormItem>
 			
 			<mx:FormItem label="icon" toolTip="">
-				<mx:Image id="ficon" />
+				<mx:Image id="ficon"   doubleClickEnabled="true"
+						  maxWidth="200" maxHeight="200"/>
 			</mx:FormItem>
 			<mx:FormItem label="Structure Icon" toolTip="">
-				<mx:Image id="ficon2" />
+				<mx:Image id="ficon2" toolTip="{ficon2.width +' x '+ ficon2.height+'  '+ ficon2.name}"  doubleClickEnabled="true"
+						  maxWidth="200" maxHeight="200"/>
 			</mx:FormItem>
 			<mx:FormItem label="Editor Icon" toolTip="">
-				<mx:Image id="ficon3"   />
+				<mx:Image id="ficon3"  toolTip="{ficon3.width +' x '+ ficon3.height+'  '+ ficon3.name}" doubleClickEnabled="true" 
+						  maxWidth="200" maxHeight="200"/>
 			</mx:FormItem>
 		</mx:Form>
 	</s:HGroup>

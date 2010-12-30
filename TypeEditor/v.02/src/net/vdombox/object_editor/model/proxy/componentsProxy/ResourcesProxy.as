@@ -96,12 +96,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		 * @param resVO
 		 * @param fileRef
 		 */
-		public function changeContent(resVO:ResourceVO, fileRef: FileReference):void
+		public function changeContent(id:String, fileRef: FileReference):void
 		{
 			var b64:Base64Encoder = new Base64Encoder();
 			b64.encodeBytes(fileRef.data);
 
-			writeResoucetoFileSystem(resVO.id, b64.toString());
+			writeResoucetoFileSystem(id, b64.toString());
+
 		}
 
 		/**
@@ -185,7 +186,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			fileProxy.saveFile(dataInBase64,  nativePath);
 		}
 
-		private function geResourseID(value:String):String
+		public function geResourseID(value:String):String
 		{
 			var phraseRE:RegExp = /^(?:#Res\(([-a-zA-Z0-9]*)\))|(?:([-a-zA-Z0-9]*))/;
 

@@ -4,12 +4,12 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
-	
+
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
 	import net.vdombox.object_editor.view.essence.Resourses;
-	
+
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -51,7 +51,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function createXML( objTypeVO: ObjectTypeVO):XML
 		{
 			var objTypeXML:XML = getNewObjTypeXML(objTypeVO);
-			
+
 			objTypeXML.appendChild( attributesProxy.createXML(objTypeVO.attributes) );			
 			objTypeXML.appendChild( eventsProxy.createXML(objTypeVO.events) );//здесь важна последовательность!
 			objTypeXML.E2vdom.appendChild( actionsProxy.createXML(objTypeVO.actions) );
@@ -59,7 +59,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objTypeXML.appendChild( librariesProxy.createXML(objTypeVO.libraries) );
 			objTypeXML.appendChild( sourceCodeToXML(objTypeVO.sourceCode) );	
 			objTypeXML.appendChild( resourcesProxy.toXML(objTypeVO.resources));
-			
+
 			return objTypeXML;
 		}
 
@@ -142,17 +142,17 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			_objectTypeList[objTypeVO.filePath] = null
 		}
-		
+
 		private function get attributesProxy():AttributesProxy
 		{
 			return facade.retrieveProxy(AttributesProxy.NAME) as AttributesProxy;
 		}
-		
+
 		private function get actionsProxy():ActionsProxy
 		{
 			return facade.retrieveProxy(ActionsProxy.NAME) as ActionsProxy;
 		}
-		
+
 		private function get eventsProxy():EventsProxy
 		{
 			return facade.retrieveProxy(EventsProxy.NAME) as EventsProxy;
@@ -167,12 +167,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			return facade.retrieveProxy(LibrariesProxy.NAME) as LibrariesProxy;
 		}
-		
+
 		private function get resourcesProxy():ResourcesProxy
 		{
 			return facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
 		}
-		
+
 		private function checkLang(strXML:String, strVO:String):void
 		{
 			if (strXML != strVO)
