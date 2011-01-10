@@ -24,7 +24,7 @@ package net.vdombox.object_editor.view.mediators
 	{
 		public static const NAME:String = "AttributeMediator";
 		private var objectTypeVO:ObjectTypeVO;
-		private var attributeVO: AttributeVO;
+		private var currentAttributeVO: AttributeVO;
 
 		public function AttributeMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{			
@@ -37,12 +37,12 @@ package net.vdombox.object_editor.view.mediators
 
 		private function changeName( event:Event ):void
 		{ 
-			view.currentItem.label = event.target.text;
+			view.currentAttribute.label = event.target.text;
 			
-			attributeVO.name = view.fname.text;
-			view.attributesList.dataProvider.itemUpdated(view.currentItem);
+			currentAttributeVO.name = view.fname.text;
+			view.attributesList.dataProvider.itemUpdated(view.currentAttribute);
 			sortAttributes();
-			view.attributesList.selectedItem = view.currentItem;
+			view.attributesList.selectedItem = view.currentAttribute;
 			view.attributesList.ensureIndexIsVisible(view.attributesList.selectedIndex);//(view.attributesList.selectedIndex);
 //			view.attributesList.selectedItems //scrollRect = view.currentItem;			
 		}
@@ -51,24 +51,24 @@ package net.vdombox.object_editor.view.mediators
 		{
 			view.label= "Attributes*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
-			if( attributeVO )
+			if( currentAttributeVO )
 			{				
-				attributeVO.defaultValue	= view.defaultValue.text;
-				attributeVO.visible			= view.visibleAtr.selected;
-				attributeVO.interfaceType	= view.interfaceType.selectedIndex;
-				attributeVO.colorgroup		= view.colorgroup.selectedIndex;
-				attributeVO.codeInterface	= view.codeInterface.selectedItem.data;
-				attributeVO.regularExpressionValidation = view.regExp.text;
+				currentAttributeVO.defaultValue	= view.defaultValue.text;
+				currentAttributeVO.visible			= view.visibleAtr.selected;
+				currentAttributeVO.interfaceType	= view.interfaceType.selectedIndex;
+				currentAttributeVO.colorgroup		= view.colorgroup.selectedIndex;
+				currentAttributeVO.codeInterface	= view.codeInterface.selectedItem.data;
+				currentAttributeVO.regularExpressionValidation = view.regExp.text;
 			}
 		}
 
 		private function selectAtribute(event:Event):void
 		{ 
-			attributeVO = view.attributesList.selectedItem.data as AttributeVO;
-			fillFilds(attributeVO);	
+			currentAttributeVO = view.attributesList.selectedItem.data as AttributeVO;
+			fillAttributeFilds(currentAttributeVO);	
 		}
 
-		private function fillFilds(attributeVO:AttributeVO):void
+		private function fillAttributeFilds(attributeVO:AttributeVO):void
 		{
 			view.fname.text 					= attributeVO.name;	
 			view.defaultValue.text				= attributeVO.defaultValue;		
@@ -78,10 +78,9 @@ package net.vdombox.object_editor.view.mediators
 			view.regExp.text					= attributeVO.regularExpressionValidation;
 			view.codeInterface.selectedItem		= attributeVO.codeInterface;
 			
-			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
-			view.DisplayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );
-			view.helpAtr.completeStructure    ( objectTypeVO.languages, attributeVO.help );
-			view.fErrMessage.completeStructure( objectTypeVO.languages, attributeVO.errorValidationMessage );
+			view.displayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );
+			view.help.completeStructure       ( objectTypeVO.languages, attributeVO.help );
+			view.errMessage.completeStructure ( objectTypeVO.languages, attributeVO.errorValidationMessage );
 		/*view.codeInterface.text 	= attributeVO.codeInterface;
 		   view.regExp.text 			= attributeVO.regularExpressionValidation;
 		 */	
@@ -89,9 +88,8 @@ package net.vdombox.object_editor.view.mediators
 
 		private function showAttributes(event: FlexEvent): void
 		{			
-			view.attributesList.addEventListener(Event.CHANGE, selectAtribute);
-//			view.attributesList.
-			view.fname.addEventListener( Event.CHANGE, changeName );
+			view.attributesList.addEventListener       ( Event.CHANGE, selectAtribute);
+			view.fname.addEventListener                ( Event.CHANGE, changeName );
 			view.addAttributeButton.addEventListener   ( MouseEvent.CLICK, addAttribute );
 			view.deleteAttributeButton.addEventListener( MouseEvent.CLICK, deleteAttribute );
 			compliteAtributes();
@@ -100,20 +98,21 @@ package net.vdombox.object_editor.view.mediators
 
 		private function addAttribute(event:MouseEvent): void
 		{			
-			var attribVO:AttributeVO = new AttributeVO( "newAttribute"+ Math.round(Math.random()*100) );
+			var attribVO:AttributeVO = new AttributeVO( "newAttribute"+ objectTypeVO.attributes.length );
 			objectTypeVO.attributes.addItem( {label:attribVO.name, data:attribVO} );
-			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
-			attribVO.displayName = langsProxy.getNextId(objectTypeVO.languages, "1", attribVO.name);
-			attribVO.errorValidationMessage = langsProxy.getNextId(objectTypeVO.languages, "2", attribVO.name);
-			attribVO.help = langsProxy.getNextId(objectTypeVO.languages, "3", attribVO.name);
-			fillFilds(attribVO);
-			view.currentItem = getCurrentItem(attribVO.name);
-			view.attributesList.selectedItem = view.currentItem;
+			var langsProxy:LanguagesProxy 	= facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
+			attribVO.displayName            = langsProxy.getNextId(objectTypeVO.languages, "1", attribVO.name+" displayName");
+			attribVO.errorValidationMessage = langsProxy.getNextId(objectTypeVO.languages, "2", attribVO.name+" errValMess");
+			attribVO.help                   = langsProxy.getNextId(objectTypeVO.languages, "3", attribVO.name+" help");
+			fillAttributeFilds(attribVO);
+			view.currentAttribute = getCurrentAttribute(attribVO.name);
+			currentAttributeVO    = view.currentAttribute.data;
+			view.attributesList.selectedItem = view.currentAttribute;
 			view.attributesList.validateNow();
 //			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
 		}
 		
-		private function getCurrentItem(nameAttib:String):Object
+		private function getCurrentAttribute(nameAttib:String):Object
 		{			
 			for each(var attr:Object in objectTypeVO.attributes )
 			{
@@ -130,6 +129,28 @@ package net.vdombox.object_editor.view.mediators
 		{
 			var selectInd:uint = view.attributesList.selectedIndex;
 			objectTypeVO.attributes.removeItemAt(selectInd);
+			setCurrentAttribute(selectInd - 1);
+		}
+		
+		private function setCurrentAttribute(listIndex:int = 0):void
+		{
+			if ( listIndex < 0 )
+			{
+				listIndex = 0;
+			}
+			if( objectTypeVO.attributes.length > 0 )
+			{				
+				currentAttributeVO = objectTypeVO.attributes[listIndex].data;
+				view.attributesList.selectedIndex = listIndex;
+				view.currentAttribute = {label: currentAttributeVO.name, data: currentAttributeVO};
+				fillAttributeFilds( currentAttributeVO );
+			}			
+			else
+			{
+				view.clearAttributeFields();
+				view.currentAttribute = null;
+				currentAttributeVO	  = null;
+			}
 		}
 
 		private  function hideAttributes(event: FlexEvent):void
@@ -148,10 +169,11 @@ package net.vdombox.object_editor.view.mediators
 		{	
 			sortAttributes();
 			view.attributesList.dataProvider = objectTypeVO.attributes;
+			setCurrentAttribute();
 		}		
 		override public function listNotificationInterests():Array 
 		{			
-			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED ];
+			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];
 		}
 
 		override public function handleNotification( note:INotification ):void 
@@ -161,8 +183,24 @@ package net.vdombox.object_editor.view.mediators
 				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
 					if (objectTypeVO == note.getBody() )
 						view.label= "Attributes";
-					break;	
+					break;
+				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
+					if (view.attributesList)
+						changeFildWithCurrentLanguage( );
+					break;
 			}
+		}
+		
+		private function changeFildWithCurrentLanguage( ):void
+		{
+			view.displayName.currentLanguage = objectTypeVO.languages.currentLocation;
+			view.displayName.apdateFild();
+			
+			view.errMessage.currentLanguage = objectTypeVO.languages.currentLocation;
+			view.errMessage.apdateFild();
+			
+			view.help.currentLanguage = objectTypeVO.languages.currentLocation;
+			view.help.apdateFild();			
 		}
 
 		protected function get view():Attributes

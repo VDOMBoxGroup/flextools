@@ -3,12 +3,12 @@ package net.vdombox.object_editor.view.mediators
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.utils.ByteArray;
-
+	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Image;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ResourcesProxy;
@@ -16,7 +16,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.essence.Information;
 	import net.vdombox.object_editor.view.essence.SelectFormItem;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -67,6 +67,7 @@ package net.vdombox.object_editor.view.mediators
 			view.fDisplayName.apdateFild();	
 			view.fDescription.currentLanguage = objectTypeVO.languages.currentLocation;
 			view.fDescription.apdateFild();
+			sendNotification( ApplicationFacade.CHANGE_CURRENT_LANGUAGE );
 		}
 
 		protected function compliteInformation():void
@@ -90,19 +91,18 @@ package net.vdombox.object_editor.view.mediators
 			view.fInterfaceType.selectedIndex 	= objectTypeVO.interfaceType;
 			view.fOptimizationPriority.value  	= objectTypeVO.optimizationPriority;
 			view.fcurrentLocation.dataProvider	= objectTypeVO.languages.locales;
-
-			view.ficon.source = resourcesProxy.getByteArray(objectTypeVO.icon);
+			
+			view.ficon.source  = resourcesProxy.getByteArray(objectTypeVO.icon);
 			view.ficon.toolTip = getToolTipe(objectTypeVO.icon);
 
 			view.ficon2.source = resourcesProxy.getByteArray(objectTypeVO.structureIcon);
 			view.ficon3.source = resourcesProxy.getByteArray(objectTypeVO.editorIcon);
 
+			view.ficon.name    = resourcesProxy.geResourseID(objectTypeVO.icon);
+			view.ficon2.name   = resourcesProxy.geResourseID(objectTypeVO.structureIcon);
+			view.ficon3.name   = resourcesProxy.geResourseID(objectTypeVO.editorIcon);
 
-			view.ficon.name = resourcesProxy.geResourseID(objectTypeVO.icon);
-			view.ficon2.name = resourcesProxy.geResourseID(objectTypeVO.structureIcon);
-			view.ficon3.name = resourcesProxy.geResourseID(objectTypeVO.editorIcon);
-
-			view.ficon.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
+			view.ficon.addEventListener (MouseEvent.DOUBLE_CLICK, changeResourse);
 			view.ficon2.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
 			view.ficon3.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
 

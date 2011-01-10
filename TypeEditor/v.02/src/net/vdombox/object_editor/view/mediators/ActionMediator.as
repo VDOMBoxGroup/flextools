@@ -22,6 +22,7 @@ package net.vdombox.object_editor.view.mediators
 	
 	import spark.components.ComboBox;
 	import spark.components.List;
+	import spark.effects.SetAction;
 
 	public class ActionMediator extends Mediator implements IMediator
 	{
@@ -42,9 +43,8 @@ package net.vdombox.object_editor.view.mediators
 		private function showActions(event: FlexEvent): void
 		{			
 			view.removeEventListener( FlexEvent.SHOW, showActions );
-			view.containersList.dataProvider = objectTypeVO.actionContainers;
-			view.containersList.selectedIndex = 0;
-			currentContainerVO = objectTypeVO.actionContainers[0].data;
+						
+			setCurrentContainer();
 			
 			var itemProxy:ItemProxy = facade.retrieveProxy( ItemProxy.NAME ) as ItemProxy;
 			//			view.containersList.dataProvider = objectTypeVO.actionContainers.container
@@ -70,14 +70,17 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function selectContainer(event:Event):void
 		{ 
+			//падает!!!!!!!!!!!
 			currentContainerVO = view.containersList.selectedItem.data as ActionsContainerVO;
-			fillContainerFilds(currentContainerVO);	
+			fillContainerFilds(currentContainerVO);
+			setCurrentAction();
 		}
 
 		private function selectAction(event:Event):void
 		{ 
 			currentActionVO = view.actionsList.selectedItem.data as ActionVO;
-			fillActionFilds(currentActionVO);	
+			fillActionFilds(currentActionVO);
+			setCurrentParameter();
 		}
 
 		private function selectParameter(event:Event):void
@@ -92,12 +95,12 @@ package net.vdombox.object_editor.view.mediators
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 			if( currentParameterVO )
 			{				
-				currentParameterVO.defaultValue	= view.parDefaultValue.text;
-				currentParameterVO.interfacePar	= view.parInterface.text;
-				currentParameterVO.interfaceName= view.parInterfaceName.text;
-				currentParameterVO.scriptName	= view.parScriptName.text;
-				currentParameterVO.help	 		= view.parHelp.text;
-				currentParameterVO.regExp	 	= view.parRegExp.text;
+				currentParameterVO.defaultValue		= view.parDefaultValue.text;
+				currentParameterVO.interfacePar		= view.parInterface.text;
+				currentParameterVO.interfaceName	= view.parInterfaceName.text;
+				currentParameterVO.scriptName		= view.parScriptName.text;
+				currentParameterVO.help	 			= view.parHelp.text;
+				currentParameterVO.regExp	 		= view.parRegExp.text;
 			}
 		}
 
@@ -126,6 +129,7 @@ package net.vdombox.object_editor.view.mediators
 			//todo добавить слушателя на view и реализовать метод для все полей оставшихся
 		}
 		
+		//всегда ведь текущее событие! можно и без параметров сдеать функцию
 		private function fillContainerFilds(actConVO:ActionsContainerVO):void
 		{
 			view.actionsList.dataProvider = actConVO.actionsCollection;
@@ -133,13 +137,13 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function fillActionFilds(actVO:ActionVO):void
 		{
-			view.methodName.text			= actVO.methodName;
-			view.sourceCode.text			= actVO.code;
-			view.parametersList.dataProvider	= actVO.parameters; 
+			view.methodName.text			 = actVO.methodName;
+			view.sourceCode.text			 = actVO.code;
+			view.parametersList.dataProvider = actVO.parameters; 
 			
-			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 		    view.description.completeStructure    ( objectTypeVO.languages, actVO.description );
 			view.interfaceName.completeStructure  ( objectTypeVO.languages, actVO.interfaceName );
+//			setCurrentParameter();
 		}
 
 		private function fillParameter(actParameterVO:ActionParameterVO):void
@@ -149,7 +153,6 @@ package net.vdombox.object_editor.view.mediators
 			view.parRegExp.text			= actParameterVO.regExp;
 			view.parScriptName.text		= actParameterVO.scriptName;
 
-			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 			view.parHelp.completeStructure( objectTypeVO.languages, actParameterVO.help );
 			view.parInterfaceName.completeStructure( objectTypeVO.languages, actParameterVO.interfaceName );
 		}		
@@ -186,17 +189,19 @@ package net.vdombox.object_editor.view.mediators
 		private function addAction(event:MouseEvent): void
 		{			
 			currentActionVO = new ActionVO();
-			currentActionVO.methodName = ( "methodName" + currentContainerVO.actionsCollection.length );
+			currentActionVO.methodName 	  = ( "methodName" + currentContainerVO.actionsCollection.length );
+			currentActionVO.description   = languagesProxy.getNextId(objectTypeVO.languages, "6", currentActionVO.methodName+"description");
+			currentActionVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "7", currentActionVO.methodName+"interfaceName");
 			
 			currentContainerVO.actionsCollection.addItem( {label:currentActionVO.methodName, data:currentActionVO} );
 			currentParameterVO	= null;
 			
 			fillActionFilds(currentActionVO);
 			view.currentAction = getCurrentAction(currentActionVO.methodName);
-//			view.actionsList.dataProvider.addItem( {label: currentActionVO.methodName, data: currentActionVO} );
-//			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
-//todo			eventVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
 			view.actionsList.selectedItem = view.currentAction;
+			view.description.completeStructure   ( objectTypeVO.languages, currentActionVO.description);		
+			view.interfaceName.completeStructure ( objectTypeVO.languages, currentActionVO.interfaceName);
+			
 			view.actionsList.validateNow();
 		}
 		
@@ -206,11 +211,14 @@ package net.vdombox.object_editor.view.mediators
 			currentParameterVO.scriptName = ( "scriptName" + currentActionVO.parameters.length );
 			
 			currentActionVO.parameters.addItem( {label:currentParameterVO.scriptName, data:currentParameterVO} );
-//			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
-//todo			eventVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
+			currentParameterVO.help = languagesProxy.getNextId(objectTypeVO.languages, "8", currentParameterVO.scriptName+"help");
+			currentParameterVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "9", currentParameterVO.scriptName+"interfaceName"); 
+			
 			fillParameter(currentParameterVO);
 			view.currentParameter = getCurrentParameter(currentParameterVO.scriptName);
 			view.parametersList.selectedItem = view.currentParameter;
+			view.parHelp.completeStructure ( objectTypeVO.languages, currentParameterVO.help);		
+			view.parInterfaceName.completeStructure ( objectTypeVO.languages, currentParameterVO.interfaceName);
 			view.parametersList.validateNow();
 		}
 		
@@ -224,12 +232,14 @@ package net.vdombox.object_editor.view.mediators
 		{
 			var selectInd:uint = view.actionsList.selectedIndex;
 			currentContainerVO.actionsCollection.removeItemAt(selectInd);
+			setCurrentAction( selectInd - 1);
 		}
 
 		private function deleteParameter(event:MouseEvent): void
 		{
 			var selectInd:uint = view.parametersList.selectedIndex;
 			currentActionVO.parameters.removeItemAt(selectInd);
+			setCurrentParameter(selectInd - 1);
 		}
 
 		private function getCurrentAction(methodName:String):Object
@@ -279,7 +289,7 @@ package net.vdombox.object_editor.view.mediators
 		}		
 		override public function listNotificationInterests():Array 
 		{			
-			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED ];
+			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];
 		}
 
 		override public function handleNotification( note:INotification ):void 
@@ -290,12 +300,104 @@ package net.vdombox.object_editor.view.mediators
 					if (objectTypeVO == note.getBody() )
 						view.label= "Actions";
 					break;	
+				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
+					if( view.description) 
+						changeFildWithCurrentLanguage( );
+					break;
 			}
 		}
 
+		private function changeFildWithCurrentLanguage( ):void
+		{
+			view.description.currentLanguage = objectTypeVO.languages.currentLocation;
+			view.description.apdateFild();
+			
+			view.interfaceName.currentLanguage = objectTypeVO.languages.currentLocation;
+			view.interfaceName.apdateFild();
+			
+			view.parHelp.currentLanguage = objectTypeVO.languages.currentLocation;
+			view.parHelp.apdateFild();
+			
+			view.parInterfaceName.currentLanguage = objectTypeVO.languages.currentLocation;
+			view.parInterfaceName.apdateFild();
+		}
+		
+		private function setCurrentContainer():void
+		{			
+			if( objectTypeVO.actionContainers.length > 0 )
+			{
+				currentContainerVO	= objectTypeVO.actionContainers[0].data;
+				view.containersList.validateNow();
+				view.containersList.dataProvider = objectTypeVO.actionContainers;
+				view.containersList.validateNow();
+				view.containersList.selectedIndex = 0;
+				view.currentContainer = currentContainerVO;
+				
+				setCurrentAction();
+			}
+			else
+			{
+				view.clearContainerFields();
+			}
+		}	
+		
+		private function setCurrentAction(listIndex:int = 0):void
+		{
+			if ( listIndex < 0 )
+			{
+				listIndex = 0;
+			}
+			if( currentContainerVO.actionsCollection.length > 0 )
+			{
+				currentActionVO		= currentContainerVO.actionsCollection[listIndex].data;
+				view.actionsList.dataProvider  = currentContainerVO.actionsCollection;
+				view.actionsList.validateNow();
+				view.actionsList.selectedIndex = listIndex;
+				view.currentAction  = currentActionVO;
+				fillActionFilds( currentActionVO );
+				setCurrentParameter();
+			}
+			else
+			{
+				view.clearActionFields();
+				view.currentAction	  = null;
+				view.currentParameter = null;
+				currentActionVO		  = null;
+				currentParameterVO	  = null;
+			}
+		}
+		
+		private function setCurrentParameter(listIndex:int = 0):void
+		{
+			if ( listIndex < 0 )
+			{
+				listIndex = 0;
+			}
+			if( currentActionVO.parameters.length > 0 )
+			{				
+				currentParameterVO  = currentActionVO.parameters[listIndex].data;
+				view.parametersList.dataProvider  = currentActionVO.parameters;
+				view.parametersList.validateNow();
+				view.parametersList.selectedIndex = listIndex;
+				view.currentParameter = {label: currentParameterVO.scriptName, data: currentParameterVO};
+				fillParameter( currentParameterVO );
+			}
+			else
+			{
+				view.clearParameterFields();
+				view.currentParameter = null;
+				currentParameterVO	  = null;
+			}
+		}				
+				
 		protected function get view():Actions
 		{
 			return viewComponent as Actions;
+		}
+		
+		private function get languagesProxy():LanguagesProxy
+		{
+			return facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 		}
 	}
 }

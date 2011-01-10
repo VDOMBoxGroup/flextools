@@ -2,17 +2,18 @@ package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-
+	
 	import mx.collections.Sort;
 	import mx.collections.SortField;
+	import mx.controls.Label;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.vo.EventParameterVO;
 	import net.vdombox.object_editor.model.vo.EventVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Events;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -35,20 +36,37 @@ package net.vdombox.object_editor.view.mediators
 		private function selectEvent(event:Event):void
 		{ 
 			currentEventVO = view.eventsList.selectedItem.data as EventVO;
-			fillFilds(currentEventVO);	
-			if( (currentParameterVO = currentEventVO.parameters.getItemAt(0).data) )
-			{
-				view.currentParameter = {label: currentParameterVO.name, data: currentParameterVO};
-				fillParameter(currentParameterVO);
-				view.parameters.selectedIndex = 0;//selectedItem = view.currentParameter;
-				view.validateNow();
-			}
+			fillEventFilds(currentEventVO);	
+			setCurrentParameter();
 		}
 
 		private function selectParameter(event:Event):void
 		{ 
-			currentParameterVO = view.parameters.selectedItem.data as EventParameterVO;
+			currentParameterVO = view.parametersList.selectedItem.data as EventParameterVO;
 			fillParameter(currentParameterVO);	
+		}
+		
+		private function setCurrentParameter(listIndex:int = 0):void
+		{
+			if ( listIndex < 0 )
+			{
+				listIndex = 0;
+			}
+			if( currentEventVO.parameters.length > 0 )
+			{				
+				currentParameterVO = currentEventVO.parameters[listIndex].data;
+				view.parametersList.dataProvider = currentEventVO.parameters;
+				view.parametersList.validateNow();
+				view.parametersList.selectedIndex = listIndex;
+				view.currentParameter = {label: currentParameterVO.name, data: currentParameterVO};
+				fillParameter( currentParameterVO );
+			}			
+			else
+			{
+				view.clearParameterFields();
+				view.currentParameter = null;
+				currentParameterVO	  = null;
+			}
 		}
 
 		public function validateObjectTypeVO(event:Event):void
@@ -57,32 +75,29 @@ package net.vdombox.object_editor.view.mediators
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 			if( currentParameterVO )
 			{				
-				currentParameterVO.name	 = view.parName.text;
-				currentParameterVO.order	 = view.parOrder.text;
+				currentParameterVO.name	  = view.parName.text;
+				currentParameterVO.order  = view.parOrder.text;
 				currentParameterVO.vbType = view.parVbType.text;
-//todo			currentParameterVO.help	= view.parName.text;
+//todo			currentParameterVO.help	  = view.parName.text;
 			}
 		}
 
 		private function changeName( event:Event ):void
 		{ 
-			view.currentItem.label = event.target.text;
+			view.currentEvent.label = event.target.text;
 
 			currentEventVO.name = view.eventName.text;
-			view.eventsList.dataProvider.itemUpdated(view.currentItem);
+			view.eventsList.dataProvider.itemUpdated(view.currentEvent);
 			sortEvents();
-			view.eventsList.selectedItem = view.currentItem;
+			view.eventsList.selectedItem = view.currentEvent;
 			view.eventsList.ensureIndexIsVisible(view.eventsList.selectedIndex);//(view.attributesList.selectedIndex);
 			//			view.attributesList.selectedItems //scrollRect = view.currentItem;			
 		}
 
-		private function fillFilds(eventVO:EventVO):void
+		private function fillEventFilds(eventVO:EventVO):void
 		{
 			view.eventName.text	= eventVO.name;
-			view.parameters.dataProvider	= eventVO.parameters; 
-		/*	var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
-		   view.help.completeStructure    ( objectTypeVO.languages, attributeVO.help );
-		 */	
+			view.parametersList.dataProvider = eventVO.parameters; 
 		}
 
 		private function fillParameter(parameterVO:EventParameterVO):void
@@ -91,22 +106,20 @@ package net.vdombox.object_editor.view.mediators
 			view.parOrder.text	= parameterVO.order;
 			view.parVbType.text	= parameterVO.vbType;
 
-			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 			view.parHelp.completeStructure( objectTypeVO.languages, parameterVO.help );
 		}
 
 		private function showEvents(event: FlexEvent): void
 		{			
 			view.removeEventListener( FlexEvent.SHOW, showEvents );
-
 			view.eventsList.addEventListener(Event.CHANGE, selectEvent);
 
-			view.eventName.addEventListener  ( Event.CHANGE, changeName );
-			view.addEvent.addEventListener   ( MouseEvent.CLICK, addEvent );
-			view.deleteEvent.addEventListener( MouseEvent.CLICK, deleteEvent );
+			view.eventName.addEventListener  	 ( Event.CHANGE, changeName );
+			view.addEvent.addEventListener   	 ( MouseEvent.CLICK, addEvent );
+			view.deleteEvent.addEventListener	 ( MouseEvent.CLICK, deleteEvent );
 			view.addParameter.addEventListener   ( MouseEvent.CLICK, addParameter );
 			view.deleteParameter.addEventListener( MouseEvent.CLICK, deleteParameter );
-			view.parameters.addEventListener(Event.CHANGE, selectParameter);
+			view.parametersList.addEventListener ( Event.CHANGE, selectParameter );
 
 			compliteEvents();
 			view.validateNow();
@@ -114,45 +127,73 @@ package net.vdombox.object_editor.view.mediators
 
 		private function addEvent(event:MouseEvent): void
 		{			
-			var eventVO:EventVO = new EventVO( "newEvent"+ Math.round(Math.random()*100) );
+			var eventVO:EventVO = new EventVO( "newEvent" + objectTypeVO.events.length );
 			objectTypeVO.events.addItem( {label:eventVO.name, data:eventVO} );
-			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
-//todo			eventVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
-			fillFilds(eventVO);
-			view.currentItem = getCurrentItem(eventVO.name);
-			currentEventVO = view.currentItem.data;
+			view.clearEventFields();
+			fillEventFilds(eventVO);
+			view.currentEvent = getCurrentEvent(eventVO.name);
+			currentEventVO    = view.currentEvent.data;
 
-			view.eventsList.selectedItem = view.currentItem;
+			view.eventsList.selectedItem = view.currentEvent;
 			view.eventsList.validateNow();
-//todo			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
+			
+//todo		view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
 		}
 
 		private function addParameter(event:MouseEvent): void
 		{			
-			var parameterVO:EventParameterVO = new EventParameterVO( "newParameter"+ Math.round(Math.random()*100) );
+			var parameterVO:EventParameterVO = new EventParameterVO( "newParameter" + currentEventVO.parameters.length );
 			currentEventVO.parameters.addItem( {label:parameterVO.name, data:parameterVO} );
-			var langsProxy:LanguagesProxy = facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
-//todo			eventVO.help = langsProxy.getNextId(objectTypeVO.languages, "3");
+			parameterVO.help = languagesProxy.getNextId(objectTypeVO.languages, "3", "help for "+parameterVO.name);
 			fillParameter(parameterVO);
 			view.currentParameter = getCurrentParameter(parameterVO.name);
-			view.parameters.selectedItem = view.currentParameter;
-			view.parameters.validateNow();
-			//			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
+			view.parametersList.selectedItem = view.currentParameter;
+			view.parametersList.validateNow();
+//			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
 		}
 
 		private function deleteEvent(event:MouseEvent): void
 		{
-			var selectInd:uint = view.eventsList.selectedIndex;
+			var selectInd:int = view.eventsList.selectedIndex;
 			objectTypeVO.events.removeItemAt(selectInd);
+			selectInd --;
+			setCurrentEvent(selectInd - 1);
+		}
+		 
+		private function setCurrentEvent(listIndex:int = 0):void
+		{
+			if (listIndex < 0)
+			{
+				listIndex = 0;
+			}
+			if ( objectTypeVO.events.length > 0 )
+			{				
+				currentEventVO = objectTypeVO.events[listIndex].data;
+				setCurrentParameter();
+				fillEventFilds(currentEventVO);
+				view.currentEvent = {label:currentEventVO.name, data:currentEventVO};
+				view.eventsList.selectedIndex = listIndex;
+				view.eventsList.validateNow();
+				view.validateNow();
+			}
+			else
+			{
+				view.clearEventFields();
+				view.currentEvent		= null;
+				view.currentParameter	= null;
+				currentEventVO			= null;
+				currentParameterVO		= null;
+			}
 		}
 
 		private function deleteParameter(event:MouseEvent): void
 		{
-			var selectInd:uint = view.parameters.selectedIndex;
+			var selectInd:int = view.parametersList.selectedIndex;
 			currentEventVO.parameters.removeItemAt(selectInd);
+			setCurrentParameter(selectInd - 1);
 		}
 
-		private function getCurrentItem(nameEvent:String):Object
+		private function getCurrentEvent(nameEvent:String):Object
 		{			
 			for each(var event:Object in objectTypeVO.events )
 			{
@@ -201,11 +242,11 @@ package net.vdombox.object_editor.view.mediators
 		{	
 			sortEvents();
 			view.eventsList.dataProvider = objectTypeVO.events;
-//			view.eventsList.selectedIndex = 0;
+			setCurrentEvent();
 		}		
 		override public function listNotificationInterests():Array 
 		{			
-			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED ];
+			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];
 		}
 
 		override public function handleNotification( note:INotification ):void 
@@ -216,7 +257,22 @@ package net.vdombox.object_editor.view.mediators
 					if (objectTypeVO == note.getBody() )
 						view.label= "Events";
 					break;	
+				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
+					if( view.eventsList ) 
+						changeFildWithCurrentLanguage( );
+					break;
 			}
+		}
+		
+		private function changeFildWithCurrentLanguage( ):void
+		{
+			view.parHelp.currentLanguage = objectTypeVO.languages.currentLocation;
+			view.parHelp.apdateFild();
+		}
+		
+		private function get languagesProxy():LanguagesProxy
+		{
+			return facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 		}
 
 		protected function get view():Events

@@ -34,14 +34,14 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			{					
 				var objTypeVO: ObjectTypeVO = initInformation(objTypeXML);			
 
-				objTypeVO.filePath	 = path;
-				objTypeVO.actionContainers	 = actionsProxy.createFromXML(objTypeXML);
-				objTypeVO.attributes = attributesProxy.createFromXML(objTypeXML);
-				objTypeVO.events	 = eventsProxy.createFromXML(objTypeXML);
-				objTypeVO.languages  = languagesProxy.createFromXML(objTypeXML);
-				objTypeVO.libraries  = librariesProxy.createFromXML(objTypeXML);
-				objTypeVO.sourceCode = objTypeXML.SourceCode.toString();
-				objTypeVO.resources  = resourcesProxy.createFromXML(objTypeXML);
+				objTypeVO.filePath	 		= path;
+				objTypeVO.actionContainers	= actionsProxy.createFromXML(objTypeXML);
+				objTypeVO.attributes 		= attributesProxy.createFromXML(objTypeXML);
+				objTypeVO.events	 		= eventsProxy.createFromXML(objTypeXML);
+				objTypeVO.languages  		= languagesProxy.createFromXML(objTypeXML);
+				objTypeVO.libraries  		= librariesProxy.createFromXML(objTypeXML);
+				objTypeVO.sourceCode 		= objTypeXML.SourceCode.toString();
+				objTypeVO.resources  		= resourcesProxy.createFromXML(objTypeXML);
 
 				_objectTypeList[objTypeVO.filePath] = objTypeVO;
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );

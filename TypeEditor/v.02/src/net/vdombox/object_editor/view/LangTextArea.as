@@ -18,7 +18,7 @@ package net.vdombox.object_editor.view
 		public function LangTextArea()
 		{
 			super();
-			addEventListener( Event.CHANGE, newValue );			
+			super.addEventListener( Event.CHANGE, newValue );			
 		}
 		
 		private function newValue( event: Event ):void

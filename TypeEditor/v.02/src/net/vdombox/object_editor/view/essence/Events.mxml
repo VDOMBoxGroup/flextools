@@ -11,10 +11,25 @@
 		<![CDATA[
 						
 			[Bindable]
-			public var currentItem:Object;
+			public var currentEvent:Object;
 			
 			[Bindable]
 			public var currentParameter:Object;
+						
+			public function clearEventFields():void
+			{
+				eventName.text				= null;				
+				parametersList.dataProvider = null;
+				clearParameterFields();
+			}
+			
+			public function clearParameterFields():void
+			{
+				parHelp.text	= null;
+				parName.text	= null;
+				parOrder.text	= null;
+				parVbType.text	= null;
+			}
 			
 			/*private var _data : XML
 			
@@ -42,8 +57,8 @@
 				changeEvent();
 			}*/
 			
-			private function changeEvent():void
-			{/*
+			/*private function changeEvent():void
+			{
 				arParameters.removeAll();				
 				var eventXML:XML = getCurentEvent();
 				tiEventName.text = eventXML.@Name;				
@@ -52,8 +67,8 @@
 					arParameters.addItem({label:child.@Name, data:child.@Name});
 				}				
 				parameters.selectedIndex = 0;
-				changeParameter();*/
-			}
+				changeParameter();
+			}*/
 			
 			/*private function addEvent():void
 			{
@@ -203,38 +218,19 @@
 				
 				parameters.selectedIndex = index;
 			}*/
-			
-			private function changeParametrsOrder():void
-			{
-				
-			}
-			
-			private function changeParametrsVbType():void
-			{
-				
-			}
-			
-			private function changeParametrsValues():void
+					
+			private function changeField():void
 			{
 				dispatchEvent(new Event( Event.CHANGE ));
 			}
 			
-			private function changeEventName():void
-			{
-				dispatchEvent(new Event( Event.CHANGE ));
-			}
-						
-			public function nameChange():void
-			{
-				dispatchEvent(new Event( Event.CHANGE ));
-			}
 		]]>
 	</fx:Script>
 	
 <s:HGroup>
 	<mx:Form  width="100%" height="100%" paddingTop="0">
 		<mx:FormHeading fontSize="10"  label="Select Event:" paddingTop="0" />
-		<s:List id="eventsList" width="200" height="{height- 60}" change="this.currentItem=List(event.target).selectedItem"/>
+		<s:List id="eventsList" width="200" height="{height- 60}" change="this.currentEvent=List(event.target).selectedItem"/>
 		<s:HGroup width="100%">
 			<s:HGroup width="100%"/>
 			<s:Button id="addEvent" label="Add"/>
@@ -244,31 +240,31 @@
 	<mx:Form  width="100%" height="100%" paddingTop="0" >
 		<mx:FormHeading fontSize="10"  label="Events details:" paddingTop="0" />
 		<mx:FormItem label="Name:" toolTip="Name">
-			<mx:TextInput id="eventName" width="150" change="{changeEventName()}" />
+			<mx:TextInput id="eventName" width="150" change="{changeField()}" />
 		</mx:FormItem>
 		
 		<s:HGroup width="100%"/>
 		<s:Label text="Select parameter:" />
-		<s:List id="parameters" width="100%" height="{height- 115}" change="this.currentParameter=List(event.target).selectedItem" /><!--dataProvider="{arParameters}"   change="{changeParameter()}"/-->
+		<s:List id="parametersList" width="100%" height="{height- 115}" change="this.currentParameter=List(event.target).selectedItem" /><!--dataProvider="{arParameters}"   change="{changeParameter()}"/-->
 		<s:HGroup width="100%" >
 			<s:HGroup width="100%"/>
 			<s:Button id="addParameter" label="Add" />
-			<s:Button id="deleteParameter" label="Delete" enabled="{parameters.selectedIndex != -1}"/>
+			<s:Button id="deleteParameter" label="Delete" enabled="{parametersList.selectedIndex != -1}"/>
 		</s:HGroup>
 	</mx:Form>
 	<mx:Form width="100%" color="0x323232" paddingTop="0">
 		<mx:FormHeading fontSize="10"  label="Parameters detais:" paddingTop="0" />
 		
 		<mx:FormItem label="Name:" toolTip="Имя объекта">
-			<mx:TextInput id="parName" width="200" change="{changeParametrsValues()}"/>
+			<mx:TextInput id="parName" width="200" change="{changeField()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Order:" toolTip="Это ордер">
-			<mx:TextInput id="parOrder" width="200" change="{changeParametrsValues()}"/>
+			<mx:TextInput id="parOrder" width="200" change="{changeField()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="VbType:" toolTip="Это VbType">
-			<mx:TextInput id="parVbType" width="200" change="{changeParametrsValues()}" />
+			<mx:TextInput id="parVbType" width="200" change="{changeField()}" />
 		</mx:FormItem>
 		
 		<mx:FormItem label="Help:" toolTip="Это Help">

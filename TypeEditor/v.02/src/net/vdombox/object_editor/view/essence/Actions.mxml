@@ -27,7 +27,7 @@
 			
 			public function clearContainerFields():void
 			{
-				currentContainer 		= null;
+				currentContainer 		= null; // зачем?
 				currentAction 	 		= null;
 				currentParameter 		= null;	
 				
@@ -37,7 +37,10 @@
 				
 			public function clearActionFields():void
 			{
-				description.text		= null;
+//	todo			description.text		= null;
+//				currentAction 	 		= null;
+//				currentParameter		= null;
+				
 				interfaceName.text		= null;
 				methodName.text			= null;
 				sourceCode.text			= null;
@@ -60,7 +63,7 @@
 	
 	<s:HGroup>
 		<mx:Form  width="100%" height="100%" paddingTop="0">
-			<s:List id="containersList" width="200" height="60" change="this.currentContainer=List(event.target).selectedItem"/>
+			<s:List id="containersList" width="200" height="80" change="this.currentContainer=List(event.target).selectedItem"/>
 			<s:HGroup width="100%">
 				<s:HGroup width="100%"/>
 				<s:Button id="addContainer" label="Add"/>
@@ -78,7 +81,7 @@
 			<mx:FormHeading fontSize="10"  label="Actions details:" paddingTop="0" />
 			<mx:FormItem label="MethodName:" toolTip="Name">
 				<mx:TextInput id="methodName" width="150" change="{changeField()}" />
-			</mx:FormItem>	
+			</mx:FormItem>				
 			<mx:FormItem label="Description:" toolTip="Name">
 				<ns2:LangTextArea id="description" width="150" height="40" change="{changeField()}" />
 			</mx:FormItem>
