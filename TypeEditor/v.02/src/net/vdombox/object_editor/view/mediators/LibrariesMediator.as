@@ -78,8 +78,9 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function showLibraries(event: FlexEvent): void
 		{		
+			view.removeEventListener	( FlexEvent.SHOW, showLibraries );
 			view.librariesList.addEventListener(Event.CHANGE, selectLibrary);
-			view.code.addEventListener( Event.CHANGE, changeCode );
+			view.code.addEventListener  ( Event.CHANGE, changeCode );
 			view.target.addEventListener( Event.CHANGE, changeTarget );
 			view.addLibraryButton.addEventListener   ( MouseEvent.CLICK, addLibrary );
 			view.deleteLibraryButton.addEventListener( MouseEvent.CLICK, deleteLibrary );
@@ -105,7 +106,8 @@ package net.vdombox.object_editor.view.mediators
 			{
 				view.clearLibraryFields();
 				view.currentLibrary	= null;
-				view.target 		= null;
+				view.target.text	= "";
+				view.code.text		= null;
 				currentLibraryVO	= null;
 			}
 		}
@@ -114,15 +116,11 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			currentLibraryVO = new LibraryVO();
 			objectTypeVO.libraries.addItem( {label:"Library", data:currentLibraryVO} );
-			view.target.text 	= currentLibraryVO.target;
-			view.code.text		= currentLibraryVO.text;
+			fillArea(currentLibraryVO);			
 			view.currentLibrary = {label:"Library", data:currentLibraryVO};
 			
+			view.librariesList.selectedIndex = view.librariesList.dataProvider.length-1;
 			view.librariesList.validateNow();
-			view.librariesList.selectedItem  = view.currentLibrary;
-//			view.librariesList.selectedIndex = view.librariesList.dataProvider.length-1;
-			view.librariesList.validateNow();
-//			view.validateNow();
 			//			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
 		}
 		
@@ -141,8 +139,9 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function deleteLibrary(event:MouseEvent): void
 		{
-			var selectInd:uint = view.librariesList.selectedIndex;
+			var selectInd:int = view.librariesList.selectedIndex;
 			objectTypeVO.libraries.removeItemAt(selectInd);
+			setCurrentLibrarie(selectInd - 1);			
 		}
 				
 		protected function compliteLibraries( ):void
