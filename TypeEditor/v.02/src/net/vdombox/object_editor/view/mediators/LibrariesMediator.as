@@ -36,13 +36,12 @@ package net.vdombox.object_editor.view.mediators
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 			if( currentLibraryVO )
 			{				
-				currentLibraryVO.text	= view.libCode.text;
+				currentLibraryVO.text	= view.code.text;
 			}
 		}
 		
 		private function changeTarget( event:Event ):void
 		{ 
-			//			view.currentItem.label = event.target.text;
 			view.label= "Libraries*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 			if( currentLibraryVO )
@@ -50,7 +49,6 @@ package net.vdombox.object_editor.view.mediators
 				currentLibraryVO.target	= view.target.text;
 				view.currentLibrary.label  = view.target.text;
 				view.librariesList.dataProvider.itemUpdated(view.currentLibrary);
-				sortLibraries();
 				view.librariesList.selectedItem = view.currentLibrary;
 				view.librariesList.ensureIndexIsVisible(view.librariesList.selectedIndex);
 			}
@@ -62,7 +60,7 @@ package net.vdombox.object_editor.view.mediators
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 			if( currentLibraryVO )
 			{				
-				currentLibraryVO.text	= view.libCode.text;
+				currentLibraryVO.text	= view.code.text;
 			}
 		}
 		
@@ -74,31 +72,57 @@ package net.vdombox.object_editor.view.mediators
 				
 		private function fillArea(libVO:LibraryVO):void
 		{
-			view.libCode.text = libVO.text;	
+			view.code.text	  = libVO.text;	
 			view.target.text  = libVO.target;
 		}
 		
 		private function showLibraries(event: FlexEvent): void
 		{		
-//			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
 			view.librariesList.addEventListener(Event.CHANGE, selectLibrary);
-			view.libCode.addEventListener( Event.CHANGE, changeCode );
+			view.code.addEventListener( Event.CHANGE, changeCode );
 			view.target.addEventListener( Event.CHANGE, changeTarget );
 			view.addLibraryButton.addEventListener   ( MouseEvent.CLICK, addLibrary );
 			view.deleteLibraryButton.addEventListener( MouseEvent.CLICK, deleteLibrary );
 			compliteLibraries();
-			view.validateNow();
+			setCurrentLibrarie();
+		}
+		
+		private function setCurrentLibrarie(listIndex:int = 0):void
+		{
+			if (listIndex < 0)
+			{
+				listIndex = 0;
+			}
+			if ( objectTypeVO.libraries.length > 0 )
+			{				
+				currentLibraryVO = objectTypeVO.libraries[listIndex].data;
+				fillArea(currentLibraryVO);
+				view.currentLibrary = {label:"Library", data:currentLibraryVO};
+				view.librariesList.selectedIndex = listIndex;
+				view.validateNow();
+			}
+			else
+			{
+				view.clearLibraryFields();
+				view.currentLibrary	= null;
+				view.target 		= null;
+				currentLibraryVO	= null;
+			}
 		}
 		
 		private function addLibrary(event:MouseEvent): void
 		{			
-			var libVO:LibraryVO= new LibraryVO( "newTarget"+ Math.round(Math.random()*100) );
-			objectTypeVO.libraries.addItem( {label:libVO.target, data:libVO} );
-			view.target.text = libVO.target;
-			view.currentLibrary = getCurrentItem(libVO.target);
-			currentLibraryVO = view.currentLibrary.data;
-			view.librariesList.selectedItem = view.currentLibrary;
+			currentLibraryVO = new LibraryVO();
+			objectTypeVO.libraries.addItem( {label:"Library", data:currentLibraryVO} );
+			view.target.text 	= currentLibraryVO.target;
+			view.code.text		= currentLibraryVO.text;
+			view.currentLibrary = {label:"Library", data:currentLibraryVO};
+			
 			view.librariesList.validateNow();
+			view.librariesList.selectedItem  = view.currentLibrary;
+//			view.librariesList.selectedIndex = view.librariesList.dataProvider.length-1;
+			view.librariesList.validateNow();
+//			view.validateNow();
 			//			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
 		}
 		
@@ -120,17 +144,9 @@ package net.vdombox.object_editor.view.mediators
 			var selectInd:uint = view.librariesList.selectedIndex;
 			objectTypeVO.libraries.removeItemAt(selectInd);
 		}
-		
-		private function sortLibraries():void 
-		{
-			objectTypeVO.libraries.sort = new Sort();
-			objectTypeVO.libraries.sort.fields = [ new SortField( 'label' ) ];
-			objectTypeVO.libraries.refresh();
-		}
-		
+				
 		protected function compliteLibraries( ):void
 		{	
-			sortLibraries();
 			view.librariesList.dataProvider = objectTypeVO.libraries;
 		}
 		

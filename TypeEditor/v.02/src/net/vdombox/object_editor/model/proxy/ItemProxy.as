@@ -18,6 +18,7 @@ package net.vdombox.object_editor.model.proxy
 	{
 		public static const NAME:String = "ItemProxy";
 		public var topLevelContainerList:ArrayCollection = new ArrayCollection();
+		public var containersList		:ArrayCollection = new ArrayCollection();
 
 		public function ItemProxy ( data:Object = null ) 
 		{
@@ -40,13 +41,18 @@ package net.vdombox.object_editor.model.proxy
 
 			var contType : String = informationXML.Container.toString()
 			if (contType != "3") // is not TopLave container
-			{
+			{				
 				var categoryXML : String = informationXML.Category.toString();
 				var categoryStr : String = getRegExpWord(categoryXML);
 				if(categoryStr == "")
 					item.groupName = categoryXML;
 				else
 					item.groupName =  langEnXML.Sentence.(@ID == categoryStr)[0].toString();
+				
+				if (contType == "2")
+				{
+					containersList.addItem({label:informationXML.Name.toString(), data:informationXML.Name.toString()});
+				}
 			}
 			else
 			{

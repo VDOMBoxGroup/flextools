@@ -90,18 +90,32 @@
 			[Bindable]
 			public var currentLibrary:Object;
 			
-			public function libsListChange():void
-			{				
-				dispatchEvent(new Event( Event.CHANGE ));
+			/*private function libTarget():String
+			{
+				if( currentLibrary.target )
+				{
+					return currentLibrary.target;
+				}
+				else
+				{
+					return "";
+				}
+			}*/
+			public function clearLibraryFields():void
+			{
+				target.text	= null;				
+				clearCodeField();
 			}
 			
+			public function clearCodeField():void
+			{
+				code.text	= null;				
+			}
+
 			public function saveChange():void
 			{
 				dispatchEvent(new Event( Event.CHANGE ));
-			}
-			
-			
-			
+			}						
 		]]>
 	</fx:Script>
 	
@@ -118,11 +132,12 @@
 			</s:HGroup>
 		</s:VGroup>
 		<s:VGroup width="100%" height="100%">	
-			<s:HGroup right="0">
+			<s:HGroup  right="0">
+				<s:Label text="Target:"/>
 				<s:TextInput id="target" text="this.currentLibrary.target" change="saveChange()" />
 				<!--s:Label text="Target: 'HTML'"/-->
 			</s:HGroup>
-			<mx:TextArea  id="libCode"  width="100%" height="100%" change="{saveChange()}"/>
+			<mx:TextArea  id="code"  width="100%" height="100%" change="{saveChange()}"/>
 		</s:VGroup>	
 	</s:HGroup>
 </s:NavigatorContent>

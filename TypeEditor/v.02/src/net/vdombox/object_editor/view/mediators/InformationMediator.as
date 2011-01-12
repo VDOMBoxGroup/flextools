@@ -48,6 +48,7 @@ package net.vdombox.object_editor.view.mediators
 			objectTypeVO.dynamic		= view.fDynamic.selected;
 			objectTypeVO.moveable		= view.fMoveable.selected;
 			objectTypeVO.version 		= view.fVersion.text;
+			objectTypeVO.wcag			= view.fWCAG.text;
 
 			objectTypeVO.resizable	 	= view.fResizable.selectedIndex ;
 			objectTypeVO.container 	 	= view.fContainerI.selectedIndex;			
@@ -81,6 +82,7 @@ package net.vdombox.object_editor.view.mediators
 			view.fDynamic.selected		= objectTypeVO.dynamic;			
 			view.fMoveable.selected		= objectTypeVO.moveable;
 			view.fVersion.text 			= objectTypeVO.version;
+			view.fWCAG.text				= objectTypeVO.wcag;
 
 			view.fDisplayName.completeStructure( objectTypeVO.languages, objectTypeVO.displayName );
 			view.fDescription.completeStructure( objectTypeVO.languages, objectTypeVO.description );

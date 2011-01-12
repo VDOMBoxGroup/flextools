@@ -99,11 +99,11 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			information.Languages 			= objTypeXML.appendChild(information);
 			information.Moveable 			= objTypeVO.moveable;
 			information.OptimizationPriority = objTypeVO.optimizationPriority;
-			information.RemoteMethods 		= objTypeVO.remoteMethods;
+			information.RemoteMethods		= objTypeVO.remoteMethods;
 			information.RenderType 			= objTypeVO.renderType;
 			information.Resizable 			= objTypeVO.resizable;
 			information.StructureIcon 		= objTypeVO.structureIcon;
-			information.WCAG 				= objTypeVO;
+			information.WCAG 				= objTypeVO.wcag;
 			information.XMLScriptName 		= objTypeVO.XMLScriptName;	
 			information.Version 			= objTypeVO.version;
 
@@ -130,6 +130,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objTypeVO.optimizationPriority = information.OptimizationPriority;						
 			objTypeVO.resizable		= information.Resizable;	
 			objTypeVO.version		= information.Version;	
+			objTypeVO.wcag			= information.WCAG;
 
 			objTypeVO.icon 			= information.Icon;
 			objTypeVO.editorIcon 	= information.EditorIcon;

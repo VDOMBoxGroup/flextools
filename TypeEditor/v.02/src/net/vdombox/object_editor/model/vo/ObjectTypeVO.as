@@ -21,25 +21,26 @@ package net.vdombox.object_editor.model.vo
 		public var attributes : ArrayCollection = new ArrayCollection();
 
 		//Information
-		public var id			:String = "";
-		public var category		:String = "";
-		public var className	:String = "";
+		public var id				:String = "";
+		public var category			:String = "";
+		public var className		:String = "";
 		[Bindable]
-		public var container	:uint = 0;
+		public var container		:uint = 0;
 		[Bindable]
-		public var containers	:String = "";		
+		public var containers		:String = "";		
 
-		public var description	:String = "#Lang(002)";
-		public var displayName	:String = "#Lang(001)";
+		public var description		:String = "#Lang(002)";
+		public var displayName		:String = "#Lang(001)";
 
-		public var dynamic		:Boolean = false;
-		public var interfaceType:uint = 0;
+		public var dynamic			:Boolean = false;
+		public var interfaceType	:uint = 0;
 		[Bindable] 
-		public var name			:String = "";
-		public var moveable		:Boolean = false;
+		public var name				:String = "";
+		public var moveable			:Boolean = false;
 		public var optimizationPriority	:uint = 0;
-		public var resizable	:uint = 0;
-		public var version		:String = "";
+		public var resizable		:uint = 0;
+		public var version			:String = "";
+		public var wcag				:String = "";
 
 		public var XMLScriptName	:String = "";
 		public var renderType		:String = "";

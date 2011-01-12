@@ -28,8 +28,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				var libVO:LibraryVO = obj.data;
 				var libXML:XML = new XML("<Library/>");
 				libXML.@Target = libVO.target;
-//				libXML		   = libVO.text;
-				
 				libXML.appendChild(XML("\n"+"<![CDATA[" + libVO.text +"]]>"+"\n") );
 				librariesXML.appendChild(libXML);
 			}
@@ -47,7 +45,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				libVO.target = libXML.@Target;
 				libVO.text	 = libXML.toString();
 								
-				librariesCollection.addItem({label:libVO.target, data:libVO});	
+				librariesCollection.addItem({label:"Library", data:libVO});	
 			}			
 			return librariesCollection;
 		}
