@@ -4,11 +4,10 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.collections.ArrayCollection;
-
+	
 	import net.vdombox.object_editor.model.vo.LanguagesVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
-
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -22,9 +21,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		}
 
 		public function createFromXML(objTypeXML:XML):LanguagesVO
-		{
+		{			
 			var languagesXML: XML = objTypeXML.Languages[0];
 			var languagesVO: LanguagesVO = new LanguagesVO();
+						
 			var	langEN:XML = languagesXML.Language.(@Code == "en_US")[0];
 
 			for each(var langXML:XML in languagesXML.children())
@@ -38,7 +38,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			{
 
 				var words:Object = {};
-				var id:String = wordEn.@ID;				
+				var id:String = wordEn.@ID;	
+				languagesVO.isUsedWords[id] = false;
 				words["ID"] = id;
 
 //				var wrdsOV  : WordsVO = new WordsVO();
@@ -117,6 +118,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return "";
 		}
 		
+		public function getRegExpID(langsVO:LanguagesVO,code:String):String
+		{	
+			var  regResource:RegExp = /#Lang\((\d+)\)/;
+			var matchResult:Array = code.match(regResource);			
+			return matchResult[1] ;
+		}
+		
 		private function getWord(langsVO:LanguagesVO,id:String):String
 		{
 			var localeName:String = langsVO.currentLocation;
@@ -134,7 +142,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return retString;
 		}
 
-		public function createXML( languagesVO: LanguagesVO ):XML
+		public function createXML(languagesVO: LanguagesVO):XML
 		{						
 			var langsXML:XML = new XML("<Languages/>");
 			var wordsVO:ArrayCollection = languagesVO.words;
@@ -159,10 +167,37 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return langsXML;
 		}	
 		
-		public function getNextId(langsVO: LanguagesVO, startId: String, newValue:String = ""):String
+		public function getNextId(langsVO: LanguagesVO, startId: String, newValue: String = "", oldWord: Object = null):String
 		{
-			return langsVO.getNextId( startId, newValue);
+			return langsVO.getNextId( startId, "", oldWord ).toString();
 		}
+		
+		public function used(langsVO: LanguagesVO, idString:String):String
+		{
+			var id:String = getRegExpID(langsVO, idString);
+			if ( langsVO.isUsedWords[id] )
+			{
+				var idPart:String = id.toString().slice(0,1);
+				var newID :String = this.getNextId( langsVO, idPart, "", getWords(langsVO, id) );				
+				return newID; 				
+			}
+			else
+			{
+				langsVO.isUsedWords[id] = true;
+				return idString;
+			}
+		}
+		
+		public function deleteWord(objTypeVO:ObjectTypeVO, word:String):void//word:Object):void
+		{			
+			var id:String = getRegExpID(objTypeVO.languages, word);
+			var words:Object = getWords(objTypeVO.languages, id);
+			if (words)
+			{
+				var ind:int = objTypeVO.languages.words.getItemIndex(words)
+				objTypeVO.languages.words.removeItemAt(ind);
+			}
+		}		
 	}
 }
 

@@ -225,23 +225,42 @@ package net.vdombox.object_editor.view.mediators
 		private function deleteContainer(event:MouseEvent): void
 		{
 			var selectInd:uint = view.containersList.selectedIndex;
+			var actsCount:int = currentContainerVO.actionsCollection.length;
+			for (var i:int; i < actsCount; i++ )
+			{	
+				view.actionsList.selectedIndex = 0;
+				deleteAction();
+			}
 			objectTypeVO.actionContainers.removeItemAt(selectInd);
 		}
 
-		private function deleteAction(event:MouseEvent): void
+		private function deleteAction(event:MouseEvent = null): void
 		{
 			var selectInd:uint = view.actionsList.selectedIndex;
+			languagesProxy.deleteWord(objectTypeVO, currentActionVO.description);
+			languagesProxy.deleteWord(objectTypeVO, currentActionVO.interfaceName);
+			var parsCount:int = currentActionVO.parameters.length
+			for (var i:int; i < parsCount; i++ )
+			{	
+				view.parametersList.selectedIndex = 0;
+				deleteParameter();
+			}
 			currentContainerVO.actionsCollection.removeItemAt(selectInd);
 			setCurrentAction( selectInd - 1);
 		}
 
-		private function deleteParameter(event:MouseEvent): void
+		private function deleteParameter(event:MouseEvent = null): void
 		{
 			var selectInd:uint = view.parametersList.selectedIndex;
+			languagesProxy.deleteWord(objectTypeVO, currentActionVO.parameters[selectInd].data.help);
+			languagesProxy.deleteWord(objectTypeVO, currentActionVO.parameters[selectInd].data.interfaceName);
 			currentActionVO.parameters.removeItemAt(selectInd);
-			setCurrentParameter(selectInd - 1);
+			if (event)
+			{
+				setCurrentParameter(selectInd - 1);
+			}
 		}
-
+		
 		private function getCurrentAction(methodName:String):Object
 		{			
 			for each(var act:Object in currentContainerVO.actionsCollection )

@@ -3,10 +3,13 @@
  */
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
+	import avmplus.USE_ITRAITS;
+	
 	import flash.events.Event;
 	
 	import mx.collections.ArrayCollection;
 	
+	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.vo.EventParameterVO;
 	import net.vdombox.object_editor.model.vo.EventVO;
 	
@@ -33,18 +36,18 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			for each(var eventObj:Object in eventsVO )
 			{	
 				var eventVO:EventVO = eventObj.data;
-				var eventXML:XML = new XML("<Event/>");
-				eventXML.@Name			= eventVO.name;
+				var eventXML:XML 	  = new XML("<Event/>");
+				eventXML.@Name		  = eventVO.name;
 				var parametersXML:XML = new XML("<Parameters/>");
 				
 				for each(var evParameterObj:Object in eventVO.parameters )
 				{	
 					var evParameterVO:EventParameterVO = evParameterObj.data;
-					var parameterXML:XML = new XML("<Parameter/>");
-					parameterXML.@Name	= evParameterVO.name;
+					var parameterXML:XML	= new XML("<Parameter/>");
+					parameterXML.@Name		= evParameterVO.name;
 					parameterXML.@Order 	= evParameterVO.order;
-					parameterXML.@VbType = evParameterVO.vbType;
-					parameterXML.@Help 	= evParameterVO.help;
+					parameterXML.@VbType 	= evParameterVO.vbType;
+					parameterXML.@Help 		= evParameterVO.help;
 					parametersXML.appendChild( parameterXML );
 				}
 				eventXML.appendChild( parametersXML );
@@ -74,12 +77,17 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					eventParameter.order	= parameterXML.@Order;
 					eventParameter.vbType	= parameterXML.@VbType;
 					eventParameter.help		= parameterXML.@Help;
-					
+										
 					eventVO.parameters.addItem({label:eventParameter.name, data:eventParameter});	
 				}	
 				eventsCollection.addItem({label:eventVO.name, data:eventVO});
 			}			
 			return eventsCollection;
 		}
-	}
+		
+		private function get languagesProxy():LanguagesProxy
+		{
+			return facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
+		}
+	}	
 }

@@ -5,16 +5,18 @@ package net.vdombox.object_editor.model.vo
 
 	public class LanguagesVO
 	{
-		public var currentLocation:String 	= "en_US";
-		public var words:ArrayCollection 	= new ArrayCollection();		
-		public var locales:ArrayCollection 	= new ArrayCollection();
+		public var currentLocation:	String 			= "en_US";
+		public var words:			ArrayCollection = new ArrayCollection();		
+		public var locales:			ArrayCollection = new ArrayCollection();
+		
+		//required to verify the uniqueness of the words ID
+		public var isUsedWords:		Object			= new Object();
 		
 		public function LanguagesVO()
-		{
-			
+		{			
 		}
 		
-		public function getNextId(startId: String, newValue:String = ""):String
+		public function getNextId(startId: String, newValue:String = "", oldWord:Object = null):String
 		{
 			var idInt  :uint = 1;
 			var attrID :String = startId +"0"+ idInt;		
@@ -38,17 +40,29 @@ package net.vdombox.object_editor.model.vo
 			else
 			{
 				nextInd = startId.toString() + "00";
-			}
-				
+			}				
 			newWrd["ID"] = nextInd;
-			for each(var localeName:Object in locales )
+			
+			if( oldWord )
 			{
-				newWrd[localeName.data] = "";
+				for each( var localeName:Object in locales )
+				{
+					newWrd[localeName.data] = oldWord[localeName.data];
+				}
 			}
-			newWrd[currentLocation] = newValue;
+			else
+			{
+				for each( var localeName:Object in locales )
+				{
+					newWrd[localeName.data] = "";
+				}
+			}
+			
+			newWrd[currentLocation] = newValue;		
 			
 			//добавляет в конец списка
-			words.addItem( newWrd );
+			words.addItem( newWrd );			
+			
 			return "#Lang("+ nextInd + ")";
 		}
 	}

@@ -41,9 +41,9 @@
 //				currentAction 	 		= null;
 //				currentParameter		= null;
 				
-				interfaceName.text		= null;
-				methodName.text			= null;
-				sourceCode.text			= null;
+				interfaceName.text		= "";
+				methodName.text			= "";
+				sourceCode.text			= "";
 				
 				parametersList.dataProvider = null;
 				clearParameterFields();
@@ -51,12 +51,12 @@
 			
 			public function clearParameterFields():void
 			{
-				parDefaultValue.text	= null;
-				parHelp.text			= null;
-				parInterface.text		= null;
-				parInterfaceName.text	= null;
-				parScriptName.text		= null;
-				parRegExp.text			= null;				
+				parDefaultValue.text	= "";
+				parHelp.text			= "";
+				parInterface.text		= "";
+				parInterfaceName.text	= "";
+				parScriptName.text		= "";
+				parRegExp.text			= "";				
 			}
 		]]>
 	</fx:Script>

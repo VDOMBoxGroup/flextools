@@ -43,9 +43,11 @@ package net.vdombox.object_editor.view
 				{
 					words = word;
 					super.text = words[currentLanguage];	
-					break;
+					return;
 				}
 			}
+			words = null;
+			text  = "";
 		}
 		
 		private function getRegExpWord( code:String ):String

@@ -269,7 +269,7 @@
 		
 		<mx:FormItem label="Help:" toolTip="Это Help">
 			<s:HGroup>
-				<ns1:LangTextInput id="parHelp" width="200" />
+				<ns1:LangTextInput id="parHelp" width="200" change="{changeField()}"/>
 			</s:HGroup>
 		</mx:FormItem>
 	</mx:Form>

@@ -4,12 +4,17 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
-
+	
+	import net.vdombox.object_editor.model.vo.ActionParameterVO;
+	import net.vdombox.object_editor.model.vo.ActionVO;
+	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
 	import net.vdombox.object_editor.model.vo.AttributeVO;
+	import net.vdombox.object_editor.model.vo.EventParameterVO;
+	import net.vdombox.object_editor.model.vo.EventVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
 	import net.vdombox.object_editor.view.essence.Resourses;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -43,9 +48,70 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				objTypeVO.sourceCode 		= objTypeXML.SourceCode.toString();
 				objTypeVO.resources  		= resourcesProxy.createFromXML(objTypeXML);
 
-				_objectTypeList[objTypeVO.filePath] = objTypeVO;
+				//проверка на повторное использование id
+								
+				_objectTypeList[objTypeVO.filePath] = reuseID(objTypeVO);
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
 			}
+		}
+		
+		private function reuseID( objTypeVO: ObjectTypeVO):ObjectTypeVO
+		{
+			reuseInformationID	( objTypeVO );
+			reuseActionsID		( objTypeVO );
+			reuseAttributesID	( objTypeVO );
+			reuseEventsID		( objTypeVO );	
+			return objTypeVO;
+		}
+		
+		private function reuseInformationID( objTypeVO: ObjectTypeVO):void
+		{
+			languagesProxy.used(objTypeVO.languages, objTypeVO.description);
+			languagesProxy.used(objTypeVO.languages, objTypeVO.displayName);
+		}
+		
+		private function reuseEventsID( objTypeVO: ObjectTypeVO):void
+		{
+			for each (var eventObj:Object in objTypeVO.events)
+			{
+				var event:EventVO = eventObj.data;
+				for each (var parObj:Object in event.parameters)
+				{
+					var eventPar:EventParameterVO = parObj.data;
+					languagesProxy.used(objTypeVO.languages, eventPar.help);
+				}
+			}
+		}
+		
+		private function reuseAttributesID( objTypeVO: ObjectTypeVO):void
+		{
+			for each (var obj:Object in objTypeVO.attributes)
+			{
+				var attr:AttributeVO = obj.data;
+				languagesProxy.used(objTypeVO.languages, attr.displayName);
+				languagesProxy.used(objTypeVO.languages, attr.help);
+				languagesProxy.used(objTypeVO.languages, attr.errorValidationMessage);
+			}
+		}
+		
+		private function reuseActionsID( objTypeVO: ObjectTypeVO):void
+		{
+			for each (var contObj:Object in objTypeVO.actionContainers)
+			{
+				var cont:ActionsContainerVO = contObj.data;
+				for each (var actObj:Object in cont.actionsCollection)
+				{
+					var act:ActionVO = actObj.data;
+					languagesProxy.used(objTypeVO.languages, act.description);
+					languagesProxy.used(objTypeVO.languages, act.interfaceName);
+					for each (var parObj:Object in act.parameters)
+					{
+						var actPar:ActionParameterVO = parObj.data;
+						languagesProxy.used(objTypeVO.languages, actPar.interfaceName);
+						languagesProxy.used(objTypeVO.languages, actPar.help);
+					}
+				}
+			}			
 		}
 
 		public function createXML( objTypeVO: ObjectTypeVO):XML

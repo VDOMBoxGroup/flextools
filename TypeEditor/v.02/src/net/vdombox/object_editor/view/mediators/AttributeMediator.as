@@ -129,6 +129,9 @@ package net.vdombox.object_editor.view.mediators
 		{
 			var selectInd:uint = view.attributesList.selectedIndex;
 			objectTypeVO.attributes.removeItemAt(selectInd);
+			languagesProxy.deleteWord(objectTypeVO, currentAttributeVO.help);
+			languagesProxy.deleteWord(objectTypeVO, currentAttributeVO.displayName);
+			languagesProxy.deleteWord(objectTypeVO, currentAttributeVO.errorValidationMessage);
 			setCurrentAttribute(selectInd - 1);
 		}
 		
@@ -206,6 +209,11 @@ package net.vdombox.object_editor.view.mediators
 		protected function get view():Attributes
 		{
 			return viewComponent as Attributes;
+		}
+		
+		private function get languagesProxy():LanguagesProxy
+		{
+			return facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 		}
 	}
 }

@@ -34,24 +34,24 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function showLanguages(event: FlexEvent): void
 		{			
-//			view.removeEventListener( FlexEvent.SHOW, showLanguages );	
 			view.languagesDataGrid.dataProvider = objectTypeVO.languages.words;
-			//aaaaa повторяется при каждом нажатии на tab
 			view.addLaguage.addEventListener( MouseEvent.CLICK,   addLaguage );
 			view.addWord.addEventListener	( MouseEvent.CLICK,   addWord );
 			view.deleteWord.addEventListener( MouseEvent.CLICK,   deleteWord );
 			view.validateNow();
 		}
 		
+		//not used
 		private function addWord(event:MouseEvent): void
 		{
-			var num:int = Math.round(Math.random()*1000);
+			var num:int = objectTypeVO.languages.words.length;
 			objectTypeVO.languages.words.addItem({"ID":num, "en_US":"New word"});
 			view.languagesDataGrid.selectedIndex = objectTypeVO.languages.words.length - 1;
 			view.languagesDataGrid.validateNow();
 			view.languagesDataGrid.scrollToIndex(view.languagesDataGrid.selectedIndex);
 		}
-		
+			
+		//not used
 		private function deleteWord(event:MouseEvent): void
 		{
 			var obj:Object = [];

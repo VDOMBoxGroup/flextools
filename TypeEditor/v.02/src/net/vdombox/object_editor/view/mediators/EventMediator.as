@@ -78,7 +78,7 @@ package net.vdombox.object_editor.view.mediators
 				currentParameterVO.name	  = view.parName.text;
 				currentParameterVO.order  = view.parOrder.text;
 				currentParameterVO.vbType = view.parVbType.text;
-//todo			currentParameterVO.help	  = view.parName.text;
+				currentParameterVO.help	  = view.parHelp.text;
 			}
 		}
 
@@ -155,8 +155,13 @@ package net.vdombox.object_editor.view.mediators
 		private function deleteEvent(event:MouseEvent): void
 		{
 			var selectInd:int = view.eventsList.selectedIndex;
+			var parsCount:int = currentEventVO.parameters.length;
+			for (var i:int; i < parsCount; i++ )
+			{	
+				view.parametersList.selectedIndex = 0;
+				deleteParameter();
+			}
 			objectTypeVO.events.removeItemAt(selectInd);
-			selectInd --;
 			setCurrentEvent(selectInd - 1);
 		}
 		 
@@ -186,11 +191,15 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}
 
-		private function deleteParameter(event:MouseEvent): void
+		private function deleteParameter(event:MouseEvent = null): void
 		{
 			var selectInd:int = view.parametersList.selectedIndex;
+			languagesProxy.deleteWord(objectTypeVO, currentEventVO.parameters[selectInd].data.help);
 			currentEventVO.parameters.removeItemAt(selectInd);
-			setCurrentParameter(selectInd - 1);
+			if (event)
+			{
+				setCurrentParameter(selectInd - 1);
+			}
 		}
 
 		private function getCurrentEvent(nameEvent:String):Object
