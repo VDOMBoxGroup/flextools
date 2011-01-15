@@ -8,6 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import spark.filters.DropShadowFilter;
+			import spark.skins.spark.ComboBoxSkin;
 			[Bindable]
 			public var color : uint;
 
@@ -16,6 +17,8 @@
 		]]>
 	</fx:Script>
 
+	
+	
 	<s:Ellipse bottom="0" left="0" right="0" top="0">
 		<s:fill>
 			<mx:SolidColor color="{ color }"/>
