@@ -51,13 +51,24 @@ package net.vdombox.ide.core.controller.requests
 					break;
 				}
 
-				case PPMObjectTargetNames.SERVER_ACTIONS:
+				case PPMObjectTargetNames.SERVER_ACTIONS_LIST:
 				{
 					if( operation == PPMOperationNames.READ )
-						objectProxy.getServerActions();
-					else if( operation == PPMOperationNames.UPDATE )
-						objectProxy.setServerActions( body.serverActions );
+						objectProxy.getServerActionsList();
 
+					break;
+				}
+					
+				case PPMObjectTargetNames.SERVER_ACTION:
+				{
+					if( operation == PPMOperationNames.CREATE )
+						objectProxy.createServerAction( body.serverActionVO );
+					else if( operation == PPMOperationNames.READ )
+						objectProxy.getServerAction( body.serverActionVO );
+					else if( operation == PPMOperationNames.UPDATE )
+						objectProxy.setServerAction( body.serverActionVO );
+					else if( operation == PPMOperationNames.DELETE )
+						objectProxy.deleteServerAction( body.serverActionVO );
 					break;
 				}
 					

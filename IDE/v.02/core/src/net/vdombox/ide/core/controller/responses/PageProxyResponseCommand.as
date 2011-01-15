@@ -69,16 +69,44 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				}
 					
-				case ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED:
+				case ApplicationFacade.PAGE_SERVER_ACTIONS_LIST_GETTED:
 				{
-					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.SERVER_ACTIONS, body );
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.SERVER_ACTIONS_LIST, body );
 					
 					break;
 				}
 					
-				case ApplicationFacade.PAGE_SERVER_ACTIONS_SETTED:
+				case ApplicationFacade.PAGE_SERVER_ACTION_GETTED:
 				{
-					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTIONS, body );
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.SERVER_ACTION, body );
+					
+					break;
+				}
+				
+				case ApplicationFacade.PAGE_SERVER_ACTION_SETTED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTION, body );
+					
+					break;
+				}
+				
+				case ApplicationFacade.PAGE_SERVER_ACTION_CREATED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.SERVER_ACTION, body );
+					
+					break;
+				}
+				
+				/*case ApplicationFacade.PAGE_SERVER_ACTION_RENAMED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.SERVER_ACTION, body );
+					
+					break;
+				}*/
+					
+				case ApplicationFacade.PAGE_SERVER_ACTION_DELETED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.DELETE, PPMPageTargetNames.SERVER_ACTION, body );
 					
 					break;
 				}

@@ -88,13 +88,24 @@ package net.vdombox.ide.core.controller.requests
 					break;
 				}
 					
-				case PPMPageTargetNames.SERVER_ACTIONS:
+				case PPMPageTargetNames.SERVER_ACTIONS_LIST:
 				{
 					if( operation == PPMOperationNames.READ )
-						pageProxy.getServerActions();
-					else if( operation == PPMOperationNames.UPDATE )
-						pageProxy.setServerActions( body.serverActions );
+						pageProxy.getServerActionsList();
 					
+					break;
+				}
+					
+				case PPMPageTargetNames.SERVER_ACTION:
+				{
+					if( operation == PPMOperationNames.CREATE )
+						pageProxy.createServerAction( body.serverActionVO );
+					else if( operation == PPMOperationNames.READ )
+						pageProxy.getServerAction( body.serverActionVO );
+					else if( operation == PPMOperationNames.UPDATE )
+						pageProxy.setServerAction( body.serverActionVO );
+					else if( operation == PPMOperationNames.DELETE )
+						pageProxy.deleteServerAction( body.serverActionVO );
 					break;
 				}
 					

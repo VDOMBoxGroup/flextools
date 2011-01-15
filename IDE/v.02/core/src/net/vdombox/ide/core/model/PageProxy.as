@@ -3,7 +3,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -16,7 +16,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.vo.ErrorVO;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class PageProxy extends Proxy
@@ -132,16 +132,66 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function getServerActions() : AsyncToken
+		public function getServerActionsList() : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.get_server_actions( pageVO.applicationVO.id, pageVO.id );
+			token = soap.get_server_actions_list( pageVO.applicationVO.id, pageVO.id );
 
 			token.recipientName = proxyName;
 
 			return token;
 		}
 
+		public function getServerAction( serverActionVO : ServerActionVO ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_server_action( pageVO.applicationVO.id, pageVO.id, serverActionVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
+		public function setServerAction( serverActionVO : ServerActionVO ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.set_server_action( pageVO.applicationVO.id, pageVO.id, serverActionVO.id, serverActionVO.script );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
+		public function createServerAction( serverActionVO : ServerActionVO ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.create_server_action( pageVO.applicationVO.id, pageVO.id, serverActionVO.name, serverActionVO.script );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
+		public function renameServerAction( serverActionVO : ServerActionVO, newName : String ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.rename_server_action( pageVO.applicationVO.id, pageVO.id, serverActionVO.id, newName );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
+		public function deleteServerAction( serverActionVO : ServerActionVO ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.delete_server_action( pageVO.applicationVO.id, pageVO.id, serverActionVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
 		public function setServerActions( serverActions : Array ) : AsyncToken
 		{
 			var token : AsyncToken;
@@ -277,8 +327,14 @@ package net.vdombox.ide.core.model
 			soap.get_child_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.set_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
+			soap.get_server_actions_list.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.create_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.delete_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.rename_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
 			soap.render_wysiwyg.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -294,8 +350,14 @@ package net.vdombox.ide.core.model
 			soap.get_child_objects.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_one_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.set_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
+			soap.get_server_actions_list.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.create_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.delete_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.rename_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
 			soap.render_wysiwyg.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -437,11 +499,11 @@ package net.vdombox.ide.core.model
 					break;
 				}
 
-				case "get_server_actions":
+				case "get_server_actions_list":
 				{
 					var serverActions : Array = [];
 
-					var serverActionsXML : XMLList = result.ServerActions.Container.( @ID == pageVO.id ).Action;
+					var serverActionsXML : XMLList = result.ServerActions.Action.( @ObjectID == pageVO.id );
 
 					var serverActionVO : ServerActionVO;
 					var serverActionXML : XML;
@@ -458,18 +520,41 @@ package net.vdombox.ide.core.model
 						serverActions.push( serverActionVO );
 					}
 
-					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED, { pageVO: pageVO, serverActions: serverActions } )
+					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_LIST_GETTED, { pageVO: pageVO, serverActions: serverActions } )
 
 					break;
 				}
 
-				case "set_server_actions":
+				case "get_server_action":
 				{
-					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_SETTED, { pageVO: pageVO, serverActions: token.serverActions } )
-
+					
 					break;
 				}
-
+					
+				case "set_server_action":
+				{
+					
+					break;
+				}
+					
+				case "create_server_action":
+				{
+					
+					break;
+				}
+					
+				case "rename_server_action":
+				{
+					
+					break;
+				}
+					
+				case "delete_server_action":
+				{
+					
+					break;
+				}
+					
 				case "get_one_object":
 				{
 					if ( token.requestFunctionName == GET_OBJECT )

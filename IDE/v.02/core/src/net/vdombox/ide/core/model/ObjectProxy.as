@@ -130,16 +130,66 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function getServerActions() : AsyncToken
+		public function getServerActionsList() : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.get_server_actions( objectVO.pageVO.applicationVO.id, objectVO.id );
+			token = soap.get_server_actions_list( objectVO.pageVO.applicationVO.id, objectVO.id );
 
 			token.recipientName = proxyName;
 
 			return token;
 		}
 
+		public function getServerAction( serverActionVO : ServerActionVO ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_server_action( objectVO.pageVO.applicationVO.id, objectVO.id, serverActionVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
+		public function setServerAction( serverActionVO : ServerActionVO ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.set_server_action( objectVO.pageVO.applicationVO.id, objectVO.id, serverActionVO.id, serverActionVO.script );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
+		public function createServerAction( serverActionVO : ServerActionVO ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.create_server_action( objectVO.pageVO.applicationVO.id, objectVO.id, serverActionVO.name, serverActionVO.script );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
+		public function renameServerAction( serverActionVO : ServerActionVO, newName : String ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.rename_server_action( objectVO.pageVO.applicationVO.id, objectVO.id, serverActionVO.id, newName );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
+		public function deleteServerAction( serverActionVO : ServerActionVO ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.delete_server_action( objectVO.pageVO.applicationVO.id, objectVO.id, serverActionVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
 		public function setServerActions( serverActions : Array ) : AsyncToken
 		{
 			var token : AsyncToken;
@@ -200,8 +250,14 @@ package net.vdombox.ide.core.model
 		private function addHandlers() : void
 		{
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.set_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
+			soap.get_server_actions_list.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.create_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.delete_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.rename_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
 			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_child_objects_tree.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -213,8 +269,14 @@ package net.vdombox.ide.core.model
 		private function removeHandlers() : void
 		{
 			soap.get_one_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.set_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
+			soap.get_server_actions_list.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.create_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.delete_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.rename_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
 			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_child_objects_tree.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -312,11 +374,11 @@ package net.vdombox.ide.core.model
 
 			switch ( operationName )
 			{
-				case "get_server_actions":
+				case "get_server_actions_list":
 				{
 					var serverActions : Array = [];
 
-					var serverActionsXML : XMLList = result.ServerActions.Container.( @ID == objectVO.id ).Action;
+					var serverActionsXML : XMLList = result.ServerActions.Action.( @ID == objectVO.id );
 
 					var serverActionVO : ServerActionVO;
 					var serverActionXML : XML;
@@ -333,14 +395,7 @@ package net.vdombox.ide.core.model
 						serverActions.push( serverActionVO );
 					}
 
-					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTIONS_GETTED, { objectVO: objectVO, serverActions: serverActions } );
-
-					break;
-				}
-
-				case "set_server_actions":
-				{
-					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTIONS_SETTED, { objectVO: objectVO, serverActions: token.serverActions } )
+					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTIONS_LIST_GETTED, { objectVO: objectVO, serverActions: serverActions } );
 
 					break;
 				}

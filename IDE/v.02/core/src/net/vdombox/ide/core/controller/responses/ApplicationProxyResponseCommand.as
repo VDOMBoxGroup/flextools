@@ -63,9 +63,9 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				}
 					
-				case ApplicationFacade.APPLICATION_SERVER_ACTIONS_GETTED:
+				case ApplicationFacade.APPLICATION_SERVER_ACTIONS_LIST_GETTED:
 				{
-					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.SERVER_ACTIONS, body );
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.SERVER_ACTIONS_LIST, body );
 					
 					break;
 				}

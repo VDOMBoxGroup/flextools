@@ -55,9 +55,9 @@ package net.vdombox.ide.core.controller.requests
 					break;
 				}
 
-				case PPMApplicationTargetNames.SERVER_ACTIONS:
+				case PPMApplicationTargetNames.SERVER_ACTIONS_LIST:
 				{
-					applicationProxy.getServerActions();
+					applicationProxy.getServerActionsList();
 
 					break;
 				}
