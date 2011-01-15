@@ -67,7 +67,7 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 
-			interests.push( ApplicationFacade.SERVER_ACTIONS_GETTED );
+			interests.push( ApplicationFacade.SERVER_ACTIONS_LIST_GETTED );
 
 			return interests;
 		}
@@ -96,7 +96,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case ApplicationFacade.SERVER_ACTIONS_GETTED:
+				case ApplicationFacade.SERVER_ACTIONS_LIST_GETTED:
 				{
 					showActions( body as Array );
 					break;
@@ -128,7 +128,7 @@ package net.vdombox.ide.modules.events.view
 			currentTypeVO = currentTarget.typeVO;
 
 			eventsPanel.eventsList.dataProvider = new ArrayList( currentTypeVO.events );
-			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS, currentTarget );
+			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_LIST, currentTarget );
 		}
 
 		private function showActions( serverActions : Array ) : void

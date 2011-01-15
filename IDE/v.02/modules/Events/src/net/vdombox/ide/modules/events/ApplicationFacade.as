@@ -115,8 +115,8 @@ package net.vdombox.ide.modules.events
 		public static const BODY_START : String = "bodyStart";
 		public static const BODY_STOP : String = "bodyStop";
 		
-		public static const GET_SERVER_ACTIONS : String = "getServerActions";
-		public static const SERVER_ACTIONS_GETTED : String = "serverActionsGetted";
+		public static const GET_SERVER_ACTIONS_LIST : String = "getServerActionsList";
+		public static const SERVER_ACTIONS_LIST_GETTED : String = "serverActionsListGetted";
 		
 		public static const GET_APPLICATION_EVENTS : String = "getApplicationEvents";
 		public static const APPLICATION_EVENTS_GETTED : String = "applicationEventsGetted";

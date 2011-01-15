@@ -69,7 +69,7 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
 			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
 			
-			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
+			interests.push( ApplicationFacade.GET_SERVER_ACTIONS_LIST );
 			
 			interests.push( ApplicationFacade.GET_APPLICATION_EVENTS );
 			interests.push( ApplicationFacade.SET_APPLICATION_EVENTS );
@@ -239,7 +239,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_SERVER_ACTIONS:
+				case ApplicationFacade.GET_SERVER_ACTIONS_LIST:
 				{
 					var placeName : String;
 					var targetName : String;
@@ -247,12 +247,12 @@ package net.vdombox.ide.modules.events.view
 					if ( body is ObjectVO )
 					{
 						placeName = PPMPlaceNames.OBJECT;
-						targetName = PPMObjectTargetNames.SERVER_ACTIONS;
+						targetName = PPMObjectTargetNames.SERVER_ACTIONS_LIST;
 					}
 					else if ( body is PageVO )
 					{
 						placeName = PPMPlaceNames.PAGE;
-						targetName = PPMPageTargetNames.SERVER_ACTIONS
+						targetName = PPMPageTargetNames.SERVER_ACTIONS_LIST
 					}
 					
 					if ( placeName && targetName )

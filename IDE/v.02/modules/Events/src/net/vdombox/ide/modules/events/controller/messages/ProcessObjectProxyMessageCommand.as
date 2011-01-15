@@ -21,9 +21,9 @@ package net.vdombox.ide.modules.events.controller.messages
 
 			switch ( target )
 			{
-				case PPMObjectTargetNames.SERVER_ACTIONS:
+				case PPMObjectTargetNames.SERVER_ACTIONS_LIST:
 				{
-					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body.serverActions as Array );
+					sendNotification( ApplicationFacade.SERVER_ACTIONS_LIST_GETTED, body.serverActions as Array );
 					
 					break;
 				}
