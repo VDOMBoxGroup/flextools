@@ -78,6 +78,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				for each (var parObj:Object in event.parameters)
 				{
 					var eventPar:EventParameterVO = parObj.data;
+					if( eventPar.help == "") eventPar.help = "#Lang(105)";
 					languagesProxy.used(objTypeVO.languages, eventPar.help);
 				}
 			}
@@ -88,6 +89,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			for each (var obj:Object in objTypeVO.attributes)
 			{
 				var attr:AttributeVO = obj.data;
+				if( attr.displayName == "") attr.displayName = "#Lang(101)";
+				if( attr.help == "")attr.help = "#Lang(301)";
+				if( attr.errorValidationMessage == "") attr.errorValidationMessage = "#Lang(201)";
+				
 				languagesProxy.used(objTypeVO.languages, attr.displayName);
 				languagesProxy.used(objTypeVO.languages, attr.help);
 				languagesProxy.used(objTypeVO.languages, attr.errorValidationMessage);
@@ -102,11 +107,15 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				for each (var actObj:Object in cont.actionsCollection)
 				{
 					var act:ActionVO = actObj.data;
+					if( act.description == "")   act.description   = "#Lang(102)";
+					if( act.interfaceName == "") act.interfaceName = "#Lang(102)";
 					languagesProxy.used(objTypeVO.languages, act.description);
 					languagesProxy.used(objTypeVO.languages, act.interfaceName);
 					for each (var parObj:Object in act.parameters)
 					{
 						var actPar:ActionParameterVO = parObj.data;
+						if( actPar.interfaceName == "") actPar.interfaceName = "#Lang(202)";
+						if( actPar.help          == "") actPar.help          = "#Lang(202)";
 						languagesProxy.used(objTypeVO.languages, actPar.interfaceName);
 						languagesProxy.used(objTypeVO.languages, actPar.help);
 					}

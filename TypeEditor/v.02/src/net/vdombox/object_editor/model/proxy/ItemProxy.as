@@ -51,7 +51,7 @@ package net.vdombox.object_editor.model.proxy
 				
 				if (contType == "2")
 				{
-					containersList.addItem({label:informationXML.Name.toString(), data:informationXML.Name.toString()});
+					containersList.addItem({label:informationXML.Name.toString(), data:informationXML.ID.toString()});
 				}
 			}
 			else

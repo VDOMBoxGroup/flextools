@@ -17,11 +17,11 @@
 						
 			public function clearAttributeFields():void
 			{
-				fname.text				= null;
-				displayName.text		= null;
-				errMessage.text			= null;//надо удалять содержимое?
+				fname.text				= "";
+				displayName.text		= "";
+				errMessage.text			= "";//надо удалять содержимое?
 				visibleAtr.selected		= false;
-				help.text				= null;
+				help.text				= "";
 				
 				attributesList.dataProvider = null;
 			}

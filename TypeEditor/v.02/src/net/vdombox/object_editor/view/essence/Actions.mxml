@@ -43,6 +43,7 @@
 				
 				interfaceName.text		= "";
 				methodName.text			= "";
+				description.text		= "";
 				sourceCode.text			= "";
 				
 				parametersList.dataProvider = null;
@@ -67,7 +68,7 @@
 			<s:HGroup width="100%">
 				<s:HGroup width="100%"/>
 				<s:Button id="addContainer" label="Add"/>
-				<s:Button id="deleteContainer" label="Delete" enabled="{actionsList.selectedIndex != -1}"/>
+				<s:Button id="deleteContainer" label="Delete" enabled="{containersList.selectedIndex != -1}"/>
 			</s:HGroup>
 			<mx:FormHeading fontSize="10"  label="Select Action:" paddingTop="10" />
 			<s:List id="actionsList" width="200" height="{height- 200}" change="this.currentAction=List(event.target).selectedItem"/>

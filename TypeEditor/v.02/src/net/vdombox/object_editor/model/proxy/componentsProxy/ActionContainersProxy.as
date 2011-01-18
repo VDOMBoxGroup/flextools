@@ -5,9 +5,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.collections.ArrayCollection;
 	
-	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
 	import net.vdombox.object_editor.model.vo.ActionParameterVO;
 	import net.vdombox.object_editor.model.vo.ActionVO;
+	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
 	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
@@ -70,39 +70,49 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function createFromXML(objTypeXML:XML):ArrayCollection
 		{
 			var actionContainersCollection:ArrayCollection = new ArrayCollection();
-			var actsXML: XML = XML( objTypeXML.descendants("Actions") );
-			
-			for each ( var contXML : XML in actsXML.descendants("Container") )
+			try
 			{
-				var actsContainerVO: ActionsContainerVO = new ActionsContainerVO();
-				actsContainerVO.containerID = contXML.@ID;
-									
-				for each ( var actXML : XML in contXML.descendants("Action") )
-				{
-					var actVO:ActionVO  = new ActionVO();
-					actVO.description	= actXML.@Description;
-					actVO.interfaceName	= actXML.@InterfaceName;
-					actVO.methodName	= actXML.@MethodName;
-					actVO.code			= actXML.Sourcecode;
-					
-					for each ( var parameterXML : XML in actXML.descendants("Parameter") )
-					{
-						var actParameter:ActionParameterVO = new ActionParameterVO;
+				var actsXML: XML = XML( objTypeXML.descendants("Actions") );
 						
-						actParameter.defaultValue	= parameterXML.@DefaultValue;
-						actParameter.interfacePar	= parameterXML.@Interface;
-						actParameter.interfaceName	= parameterXML.@InterfaceName;
-						actParameter.scriptName		= parameterXML.@ScriptName;
-						actParameter.help			= parameterXML.@Help;
-						actParameter.regExp			= parameterXML.@RegularExpressionValidation;
-											
-						actVO.parameters.addItem({label:actParameter.scriptName, data:actParameter});	
-					}	
-					actsContainerVO.actionsCollection.addItem({label:actVO.methodName, data:actVO});
+				for each ( var contXML : XML in actsXML.descendants("Container") )
+				{
+					var actsContainerVO: ActionsContainerVO = new ActionsContainerVO();
+					actsContainerVO.containerID = contXML.@ID;
+										
+					for each ( var actXML : XML in contXML.descendants("Action") )
+					{
+						var actVO:ActionVO  = new ActionVO();
+						actVO.description	= actXML.@Description;
+						actVO.interfaceName	= actXML.@InterfaceName;
+						actVO.methodName	= actXML.@MethodName;
+						actVO.code			= actXML.Sourcecode;
+						
+						for each ( var parameterXML : XML in actXML.descendants("Parameter") )
+						{
+							var actParameter:ActionParameterVO = new ActionParameterVO;
+							
+							actParameter.defaultValue	= parameterXML.@DefaultValue;
+							actParameter.interfacePar	= parameterXML.@Interface;
+							actParameter.interfaceName	= parameterXML.@InterfaceName;
+							actParameter.scriptName		= parameterXML.@ScriptName;
+							actParameter.help			= parameterXML.@Help;
+							actParameter.regExp			= parameterXML.@RegularExpressionValidation;
+												
+							actVO.parameters.addItem({label:actParameter.scriptName, data:actParameter});	
+						}	
+						actsContainerVO.actionsCollection.addItem({label:actVO.methodName, data:actVO});
+					}
+					actionContainersCollection.addItem({label:actsContainerVO.containerID, data:actsContainerVO});
 				}
-				actionContainersCollection.addItem({label:actsContainerVO.containerID, data:actsContainerVO});
+						
 			}
-			return actionContainersCollection;
+			catch(err:TypeError)
+			{				
+			}
+			finally
+			{
+				return actionContainersCollection;
+			}
 		}
 	}
 }

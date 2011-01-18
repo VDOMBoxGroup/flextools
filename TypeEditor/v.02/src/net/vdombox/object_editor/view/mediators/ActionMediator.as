@@ -3,9 +3,13 @@ package net.vdombox.object_editor.view.mediators
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
+	import mx.controls.Alert;
+	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
+	import mx.managers.PopUpManager;
 	import mx.rpc.events.HeaderEvent;
 	
 	import net.vdombox.object_editor.model.proxy.ItemProxy;
@@ -15,6 +19,8 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Actions;
+	import net.vdombox.object_editor.view.popups.ChangeWord;
+	import net.vdombox.object_editor.view.popups.Containers;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -43,26 +49,20 @@ package net.vdombox.object_editor.view.mediators
 		private function showActions(event: FlexEvent): void
 		{			
 			view.removeEventListener( FlexEvent.SHOW, showActions );
-						
 			setCurrentContainer();
 			
-			var itemProxy:ItemProxy = facade.retrieveProxy( ItemProxy.NAME ) as ItemProxy;
-			//			view.containersList.dataProvider = objectTypeVO.actionContainers.container
-			//			view.container.dataProvider = itemProxy.topLevelContainerList;
-			//			view.container.selectedItem = getItemContainerOnID(objectTypeVO.actions.container);//itemProxy.topLevelContainerList//objectTypeVO.actions.container;
-			//			view.container.addEventListener   	 ( Event.CHANGE, changeContainer );
 			view.addContainer.addEventListener   ( MouseEvent.CLICK, addContainer );
 			view.deleteContainer.addEventListener( MouseEvent.CLICK, deleteContainer );
 			view.addAction.addEventListener   	 ( MouseEvent.CLICK, addAction );
 			view.deleteAction.addEventListener	 ( MouseEvent.CLICK, deleteAction );
 			view.addParameter.addEventListener   ( MouseEvent.CLICK, addParameter );
 			view.deleteParameter.addEventListener( MouseEvent.CLICK, deleteParameter );
-			view.actionsList.addEventListener    (Event.CHANGE, selectAction);
-			view.parametersList.addEventListener (Event.CHANGE, selectParameter);
-			view.containersList.addEventListener (Event.CHANGE, selectContainer);
+			view.actionsList.addEventListener    ( Event.CHANGE, selectAction);
+			view.parametersList.addEventListener ( Event.CHANGE, selectParameter);
+			view.containersList.addEventListener ( Event.CHANGE, selectContainer);
 			
-			view.methodName.addEventListener     (Event.CHANGE, changeMethodName);
-			view.parScriptName.addEventListener  (Event.CHANGE, changeScriptName);
+			view.methodName.addEventListener     ( Event.CHANGE, changeMethodName);
+			view.parScriptName.addEventListener  ( Event.CHANGE, changeScriptName);
 			
 			compliteActions();
 			view.validateNow();
@@ -70,10 +70,19 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function selectContainer(event:Event):void
 		{ 
-			//падает!!!!!!!!!!!
+			//currentContainerVO = view.containersList.dataProvider.getItemIndex(event.target.selectedItem);//view.containersList.selectedItem.data as ActionsContainerVO;
 			currentContainerVO = view.containersList.selectedItem.data as ActionsContainerVO;
-			fillContainerFilds(currentContainerVO);
-			setCurrentAction();
+			if(currentContainerVO)
+			{
+				fillContainerFilds(currentContainerVO);
+				setCurrentAction();
+			}
+			else
+			{
+				currentActionVO    = null;
+				currentParameterVO = null;
+				view.clearContainerFields();
+			}
 		}
 
 		private function selectAction(event:Event):void
@@ -123,16 +132,11 @@ package net.vdombox.object_editor.view.mediators
 			view.parametersList.selectedItem = view.currentParameter;
 			view.parametersList.ensureIndexIsVisible(view.parametersList.selectedIndex);
 		}
-		
-		private function changeField ( event:Event ):void
-		{ 
-			//todo добавить слушателя на view и реализовать метод для все полей оставшихся
-		}
-		
+
 		//всегда ведь текущее событие! можно и без параметров сдеать функцию
 		private function fillContainerFilds(actConVO:ActionsContainerVO):void
 		{
-			view.actionsList.dataProvider = actConVO.actionsCollection;
+			view.actionsList.dataProvider = actConVO.actionsCollection;			
 		}
 		
 		private function fillActionFilds(actVO:ActionVO):void
@@ -172,54 +176,99 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function addContainer(event:MouseEvent): void
 		{			
-			var actsContVO:ActionsContainerVO = new ActionsContainerVO();
-			actsContVO.containerID = "0";//todo выбор из comboBox
-			objectTypeVO.actionContainers.addItem( {label:actsContVO.containerID, data:actsContVO} );
+			var popup:Containers = Containers(PopUpManager.createPopUp(view, Containers, true));
+			popup.addEventListener(FlexEvent.CREATION_COMPLETE, setListWord);
+			popup.addEventListener(CloseEvent.CLOSE, closeHandler);
+			
+			function setListWord(event:FlexEvent):void
+			{				
+				popup.showContainersList( itemProxy.topLevelContainerList );	
+			}
+			function closeHandler(event:CloseEvent):void
+			{
+				var container:Object = event.target.container;					
+				if(container == null)return;
 				
-			currentContainerVO  = actsContVO;
-			currentActionVO		= null;
-			currentParameterVO	= null;
-			
-			view.clearContainerFields();
-			
-			view.containersList.selectedItem = view.currentContainer;
-			view.containersList.validateNow();
-		}
+				var actsContVO:ActionsContainerVO = new ActionsContainerVO();
+				
+				if( container )
+				{
+					actsContVO.containerID = container.data;//todo выбор из comboBox
+					objectTypeVO.actionContainers.addItem( {label:actsContVO.containerID, data:actsContVO} );
+					
+					currentContainerVO  = actsContVO;
+					currentActionVO		= null;
+					currentParameterVO	= null;
+					
+					view.clearContainerFields();					
+					view.currentContainer = container;
+					setLabel( objectTypeVO.actionContainers );/*
+					if(view.containersList.dataProvider == null)
+					{
+						setLabel( objectTypeVO.actionContainers );												
+					}
+					else
+					{
+						view.containersList.dataProvider.addItem( getContObj(container));
+					}*/
+				
+					view.containersList.validateNow();
+					view.containersList.selectedItem = view.currentContainer;
+					view.containersList.validateNow();
+					view.actionsList.dataProvider = currentContainerVO.actionsCollection;
+					view.validateNow();				
+				}					
+			}		
+		}	
 
 		private function addAction(event:MouseEvent): void
-		{			
-			currentActionVO = new ActionVO();
-			currentActionVO.methodName 	  = ( "methodName" + currentContainerVO.actionsCollection.length );
-			currentActionVO.description   = languagesProxy.getNextId(objectTypeVO.languages, "6", currentActionVO.methodName+"description");
-			currentActionVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "7", currentActionVO.methodName+"interfaceName");
-			
-			currentContainerVO.actionsCollection.addItem( {label:currentActionVO.methodName, data:currentActionVO} );
-			currentParameterVO	= null;
-			
-			fillActionFilds(currentActionVO);
-			view.currentAction = getCurrentAction(currentActionVO.methodName);
-			view.actionsList.selectedItem = view.currentAction;
-			view.description.completeStructure   ( objectTypeVO.languages, currentActionVO.description);		
-			view.interfaceName.completeStructure ( objectTypeVO.languages, currentActionVO.interfaceName);
-			
-			view.actionsList.validateNow();
+		{	
+			if( currentContainerVO )
+			{
+				currentActionVO = new ActionVO();
+				currentActionVO.methodName 	  = ( "methodName" + currentContainerVO.actionsCollection.length );
+				currentActionVO.description   = languagesProxy.getNextId(objectTypeVO.languages, "6", currentActionVO.methodName+"description");
+				currentActionVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "7", currentActionVO.methodName+"interfaceName");
+				
+				currentContainerVO.actionsCollection.addItem( {label:currentActionVO.methodName, data:currentActionVO} );
+				currentParameterVO	= null;
+				
+				fillActionFilds(currentActionVO);
+				view.currentAction = getCurrentAction(currentActionVO.methodName);
+				view.actionsList.selectedItem = view.currentAction;
+				view.description.completeStructure   ( objectTypeVO.languages, currentActionVO.description);		
+				view.interfaceName.completeStructure ( objectTypeVO.languages, currentActionVO.interfaceName);
+				
+				view.actionsList.validateNow();
+			}
+			else
+			{
+				Alert.show("Add container");
+			}
 		}
 		
 		private function addParameter(event:MouseEvent): void
-		{			
-			currentParameterVO = new ActionParameterVO();
-			currentParameterVO.scriptName = ( "scriptName" + currentActionVO.parameters.length );
-			
-			currentActionVO.parameters.addItem( {label:currentParameterVO.scriptName, data:currentParameterVO} );
-			currentParameterVO.help = languagesProxy.getNextId(objectTypeVO.languages, "8", currentParameterVO.scriptName+"help");
-			currentParameterVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "9", currentParameterVO.scriptName+"interfaceName"); 
-			
-			fillParameter(currentParameterVO);
-			view.currentParameter = getCurrentParameter(currentParameterVO.scriptName);
-			view.parametersList.selectedItem = view.currentParameter;
-			view.parHelp.completeStructure ( objectTypeVO.languages, currentParameterVO.help);		
-			view.parInterfaceName.completeStructure ( objectTypeVO.languages, currentParameterVO.interfaceName);
-			view.parametersList.validateNow();
+		{	
+			if(currentActionVO == null)
+			{
+				Alert.show("Add action");
+			}
+			else
+			{
+				currentParameterVO = new ActionParameterVO();
+				currentParameterVO.scriptName = ( "scriptName" + currentActionVO.parameters.length );
+				
+				currentActionVO.parameters.addItem( {label:currentParameterVO.scriptName, data:currentParameterVO} );
+				currentParameterVO.help = languagesProxy.getNextId(objectTypeVO.languages, "8", currentParameterVO.scriptName+"help");
+				currentParameterVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "9", currentParameterVO.scriptName+"interfaceName"); 
+				
+				fillParameter(currentParameterVO);
+				view.currentParameter = getCurrentParameter(currentParameterVO.scriptName);
+				view.parametersList.selectedItem = view.currentParameter;
+				view.parHelp.completeStructure ( objectTypeVO.languages, currentParameterVO.help);		
+				view.parInterfaceName.completeStructure ( objectTypeVO.languages, currentParameterVO.interfaceName);
+				view.parametersList.validateNow();
+			}
 		}
 		
 		private function deleteContainer(event:MouseEvent): void
@@ -303,8 +352,11 @@ package net.vdombox.object_editor.view.mediators
 
 		protected function compliteActions( ):void
 		{	
-			sortActions();
-			view.actionsList.dataProvider = currentContainerVO.actionsCollection;
+			if( objectTypeVO.actionContainers.length > 0)
+			{
+				sortActions();
+				view.actionsList.dataProvider = currentContainerVO.actionsCollection;
+			}
 		}		
 		override public function listNotificationInterests():Array 
 		{			
@@ -347,7 +399,7 @@ package net.vdombox.object_editor.view.mediators
 			{
 				currentContainerVO	= objectTypeVO.actionContainers[0].data;
 				view.containersList.validateNow();
-				view.containersList.dataProvider = objectTypeVO.actionContainers;
+				setLabel( objectTypeVO.actionContainers );
 				view.containersList.validateNow();
 				view.containersList.selectedIndex = 0;
 				view.currentContainer = currentContainerVO;
@@ -359,6 +411,41 @@ package net.vdombox.object_editor.view.mediators
 				view.clearContainerFields();
 			}
 		}	
+		
+		private function setLabel(actionContainers:ArrayCollection):void
+		{
+			var arr:ArrayCollection = new ArrayCollection();
+			for each (var obj:Object in actionContainers)
+			{
+				arr.addItem(getContObj(obj));
+				view.containersList.dataProvider = arr;//.addItem({label: containerName, data: obj.data});
+			}
+		}
+		
+		private function getContObj (obj:Object):Object
+		{
+			var containerName:String = "";
+			for each(var item:Object in itemProxy.topLevelContainerList)
+			{
+				if(item.data == obj.label)
+				{
+					containerName = item.label;
+					break;	
+				}						
+			}
+			if(containerName != "")
+			{
+				return {label: containerName, data: obj.data}
+//				arr.addItem({label: containerName, data: obj.data});
+				//view.containersList.dataProvider.addItem({label: containerName, data: obj.data});
+			}
+			else
+			{
+				return obj
+//				arr.addItem(obj);
+				//view.containersList.dataProvider.addItem(obj);
+			}
+		}
 		
 		private function setCurrentAction(listIndex:int = 0):void
 		{
@@ -417,6 +504,11 @@ package net.vdombox.object_editor.view.mediators
 		private function get languagesProxy():LanguagesProxy
 		{
 			return facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
+		}
+		
+		private function get itemProxy():ItemProxy
+		{
+			return facade.retrieveProxy(ItemProxy.NAME) as ItemProxy;
 		}
 	}
 }

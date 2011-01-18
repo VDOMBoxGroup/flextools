@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="230" height="400"
+			   preinitialize="creationComplete()" title="Change word">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->		
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.dataGridClasses.DataGridColumn;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			import org.puremvc.as3.patterns.facade.Facade;
+			
+			import spark.events.TextOperationEvent;			
+			
+			[Bindable]
+			private var arContainers:ArrayCollection = new ArrayCollection();			
+			public  var container:Object = "";
+			
+			private function creationComplete():void 
+			{				
+				addEventListener(CloseEvent.CLOSE, closeHandler); 
+				//PopUpManager.centerPopUp(this);
+				this.x = 200;
+				this.y = 200;			
+				
+				dispatchEvent( new FlexEvent( FlexEvent.CREATION_COMPLETE ));								
+			}
+			
+			public function showContainersList( containers:ArrayCollection ):void 
+			{
+				contList.dataProvider = containers;					
+			}
+			
+			private function closeHandler(cEvent:CloseEvent):void 
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function button1_clickHandler():void
+			{
+				container = contList.selectedItem;
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+			}
+			
+			private function cancel():void
+			{
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+			}			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup  width="228" height="367">
+		<mx:DataGrid  id="contList" width="226"   height="332"  dataProvider="{arContainers}" doubleClick="button1_clickHandler()"/>
+		<s:HGroup right="0" >
+			<s:Button label="Ok" click="button1_clickHandler()"   enabled="{contList.selectedIndex != -1}"/>
+			<s:Button label="Cancel"  click="cancel()"/>
+		</s:HGroup>		
+	</s:VGroup>	
+</s:TitleWindow>

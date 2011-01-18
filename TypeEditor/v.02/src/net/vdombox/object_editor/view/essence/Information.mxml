@@ -20,9 +20,7 @@
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			import mx.utils.UIDUtil;
-			
-			import net.vdombox.object_editor.view.popups.ChangeWord;
-			
+						
 			public static const INFORMATION_CHANGED:String = "InformationChanged";
 			
 			[Bindable]
