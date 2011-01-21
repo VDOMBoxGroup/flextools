@@ -2,12 +2,12 @@ package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import flexlib.controls.tabBarClasses.SuperTab;
-	
+
 	import mx.controls.Alert;
 	import mx.events.ChildExistenceChangedEvent;
-	
+
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
@@ -19,7 +19,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.view.essence.Libraries;
 	import net.vdombox.object_editor.view.essence.Resourses;
 	import net.vdombox.object_editor.view.essence.SourceCode;
-	
+
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -42,38 +42,32 @@ package net.vdombox.object_editor.view.mediators
 
 			// for selected necessary tab
 			view.name = objTypeVO.filePath;
-			
-			var information:Information  = new Information();
-			view.tabNavigator.addChild(information);
-						
-			var actions:Actions  = new Actions();
-			view.tabNavigator.addChild(actions);
-			
-			var atributes:Attributes  = new Attributes();
-			view.tabNavigator.addChild(atributes);
-			
-			var event:Events  = new Events;
-			view.tabNavigator.addChild(event);
 
-			
-			
-			var languages:Languages  = new Languages();
+			var actions:Actions  		= new Actions();
+			var atributes:Attributes  	= new Attributes();
+			var event:Events  			= new Events;
+			var information:Information = new Information();
+			var languages:Languages  	= new Languages();
+			var libraries:Libraries  	= new Libraries();
+			var resourses:Resourses  	= new Resourses();
+			var sourceCode:SourceCode	= new SourceCode();
+
+			view.tabNavigator.addChild(information);
+			view.tabNavigator.addChild(atributes);
 			view.tabNavigator.addChild(languages);
-			
-			var libraries:Libraries  = new Libraries();
+			view.tabNavigator.addChild(resourses);
+			view.tabNavigator.addChild(sourceCode);
+			view.tabNavigator.addChild(actions);
+			view.tabNavigator.addChild(event);
 			view.tabNavigator.addChild(libraries);
 
-			var sourceCode:SourceCode  = new SourceCode();
-			view.tabNavigator.addChild(sourceCode);
 
-			var resourses:Resourses  = new Resourses();
-			view.tabNavigator.addChild(resourses);
 
 			facade.registerMediator( new InformationMediator( information, objTypeVO ) );
 			facade.registerMediator( new ActionMediator  	( actions,	   objTypeVO ) );
 			facade.registerMediator( new AttributeMediator  ( atributes,   objTypeVO ) );
 			facade.registerMediator( new EventMediator   	( event,	   objTypeVO ) );
-			
+
 			facade.registerMediator( new LanguagesMediator 	( languages,   objTypeVO ) );
 			facade.registerMediator( new LibrariesMediator 	( libraries,   objTypeVO ) );
 			facade.registerMediator( new SourceCodeMediatior( sourceCode,  objTypeVO ) );
