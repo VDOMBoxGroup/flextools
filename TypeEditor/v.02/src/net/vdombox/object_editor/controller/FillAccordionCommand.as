@@ -3,7 +3,7 @@ package net.vdombox.object_editor.controller
 	import flash.filesystem.File;
 	
 	import net.vdombox.object_editor.model.Item;
-	import net.vdombox.object_editor.model.proxy.ItemProxy;
+	import net.vdombox.object_editor.model.proxy.ObjectsProxy;
 	import net.vdombox.object_editor.view.mediators.ObjectsAccordionMediator;
 	
 	import org.puremvc.as3.interfaces.INotification;
@@ -18,7 +18,7 @@ package net.vdombox.object_editor.controller
 			directory.nativePath = note.getBody() as String;
 			var filesArray:Array = directory.getDirectoryListing();
 			var accMediator:ObjectsAccordionMediator = facade.retrieveMediator(ObjectsAccordionMediator.NAME) as ObjectsAccordionMediator;			
-			var itemProxy:ItemProxy = facade.retrieveProxy(ItemProxy.NAME) as ItemProxy;
+			var itemProxy:ObjectsProxy = facade.retrieveProxy(ObjectsProxy.NAME) as ObjectsProxy;
 			
 			accMediator.removeAllObjects();
 			

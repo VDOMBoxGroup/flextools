@@ -7,7 +7,7 @@ package net.vdombox.object_editor.controller
 	import flash.net.SharedObject;
 
 	import net.vdombox.object_editor.model.Item;
-	import net.vdombox.object_editor.model.proxy.ItemProxy;
+	import net.vdombox.object_editor.model.proxy.ObjectsProxy;
 	import net.vdombox.object_editor.view.mediators.ObjectsAccordionMediator;
 
 	import org.puremvc.as3.interfaces.INotification;

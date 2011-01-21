@@ -4,7 +4,7 @@
 package net.vdombox.object_editor.controller
 {
     import net.vdombox.object_editor.model.proxy.FileProxy;
-    import net.vdombox.object_editor.model.proxy.ItemProxy;
+    import net.vdombox.object_editor.model.proxy.ObjectsProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.ActionContainersProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.AttributesProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.EventsProxy;
@@ -24,7 +24,7 @@ package net.vdombox.object_editor.controller
 		override public function execute(note:INotification):void    
 		{
 // Create and register proxy
-			facade.registerProxy(new ItemProxy());
+			facade.registerProxy(new ObjectsProxy());
 			facade.registerProxy(new ObjectTypeProxy());
 			facade.registerProxy(new FileProxy());
 			facade.registerProxy(new ActionContainersProxy());
