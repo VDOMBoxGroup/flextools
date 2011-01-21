@@ -27,7 +27,7 @@
 			
 			public function clearContainerFields():void
 			{
-				currentContainer 		= null; // зачем?
+				//currentContainer 		= null; // зачем?
 				currentAction 	 		= null;
 				currentParameter 		= null;	
 				

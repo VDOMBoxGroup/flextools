@@ -12,7 +12,7 @@ package net.vdombox.object_editor.view.mediators
 	import mx.managers.PopUpManager;
 	import mx.rpc.events.HeaderEvent;
 	
-	import net.vdombox.object_editor.model.proxy.ItemProxy;
+	import net.vdombox.object_editor.model.proxy.ObjectsProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.vo.ActionParameterVO;
 	import net.vdombox.object_editor.model.vo.ActionVO;
@@ -182,7 +182,7 @@ package net.vdombox.object_editor.view.mediators
 			
 			function setListWord(event:FlexEvent):void
 			{				
-				popup.showContainersList( itemProxy.topLevelContainerList );	
+				popup.showContainersList( objectsProxy.topLevelContainerList );	
 			}
 			function closeHandler(event:CloseEvent):void
 			{
@@ -193,15 +193,15 @@ package net.vdombox.object_editor.view.mediators
 				
 				if( container )
 				{
-					actsContVO.containerID = container.data;//todo выбор из comboBox
+					actsContVO.containerID = container.data;
 					objectTypeVO.actionContainers.addItem( {label:actsContVO.containerID, data:actsContVO} );
 					
-					currentContainerVO  = actsContVO;
+					currentContainerVO  = actsContVO;//{label:actsContVO.containerID, data:actsContVO};
 					currentActionVO		= null;
 					currentParameterVO	= null;
 					
 					view.clearContainerFields();					
-					view.currentContainer = container;
+					view.currentContainer = actsContVO;					
 					setLabel( objectTypeVO.actionContainers );/*
 					if(view.containersList.dataProvider == null)
 					{
@@ -213,7 +213,7 @@ package net.vdombox.object_editor.view.mediators
 					}*/
 				
 					view.containersList.validateNow();
-					view.containersList.selectedItem = view.currentContainer;
+					view.containersList.selectedItem = view.currentContainer; //исправить
 					view.containersList.validateNow();
 					view.actionsList.dataProvider = currentContainerVO.actionsCollection;
 					view.validateNow();				
@@ -281,6 +281,8 @@ package net.vdombox.object_editor.view.mediators
 				deleteAction();
 			}
 			objectTypeVO.actionContainers.removeItemAt(selectInd);
+			view.containersList.dataProvider.removeItemAt(selectInd);
+			setCurrentContainer(selectInd - 1);
 		}
 
 		private function deleteAction(event:MouseEvent = null): void
@@ -391,26 +393,7 @@ package net.vdombox.object_editor.view.mediators
 			
 			view.parInterfaceName.currentLanguage = objectTypeVO.languages.currentLocation;
 			view.parInterfaceName.apdateFild();
-		}
-		
-		private function setCurrentContainer():void
-		{			
-			if( objectTypeVO.actionContainers.length > 0 )
-			{
-				currentContainerVO	= objectTypeVO.actionContainers[0].data;
-				view.containersList.validateNow();
-				setLabel( objectTypeVO.actionContainers );
-				view.containersList.validateNow();
-				view.containersList.selectedIndex = 0;
-				view.currentContainer = currentContainerVO;
-				
-				setCurrentAction();
-			}
-			else
-			{
-				view.clearContainerFields();
-			}
-		}	
+		}		
 		
 		private function setLabel(actionContainers:ArrayCollection):void
 		{
@@ -425,7 +408,7 @@ package net.vdombox.object_editor.view.mediators
 		private function getContObj (obj:Object):Object
 		{
 			var containerName:String = "";
-			for each(var item:Object in itemProxy.topLevelContainerList)
+			for each(var item:Object in objectsProxy.topLevelContainerList)
 			{
 				if(item.data == obj.label)
 				{
@@ -446,6 +429,31 @@ package net.vdombox.object_editor.view.mediators
 				//view.containersList.dataProvider.addItem(obj);
 			}
 		}
+		
+		private function setCurrentContainer(listIndex:int = 0):void
+		{		
+			if ( listIndex < 0 )
+			{
+				listIndex = 0;
+			}
+			if( objectTypeVO.actionContainers.length > 0 )
+			{
+				currentContainerVO	= objectTypeVO.actionContainers[listIndex].data;
+				view.containersList.validateNow();
+				setLabel( objectTypeVO.actionContainers );
+				view.containersList.validateNow();
+				view.containersList.selectedIndex = listIndex;
+				view.currentContainer = currentContainerVO;
+				
+				setCurrentAction();
+			}
+			else
+			{
+				view.clearContainerFields();
+			}
+			view.validateNow();
+			view.containersList.validateNow();
+		}	
 		
 		private function setCurrentAction(listIndex:int = 0):void
 		{
@@ -506,9 +514,9 @@ package net.vdombox.object_editor.view.mediators
 			return facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
 		}
 		
-		private function get itemProxy():ItemProxy
+		private function get objectsProxy():ObjectsProxy
 		{
-			return facade.retrieveProxy(ItemProxy.NAME) as ItemProxy;
+			return facade.retrieveProxy(ObjectsProxy.NAME) as ObjectsProxy;
 		}
 	}
 }
