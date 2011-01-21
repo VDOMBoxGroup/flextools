@@ -212,8 +212,7 @@ package net.vdombox.object_editor.view.mediators
 						view.containersList.dataProvider.addItem( getContObj(container));
 					}*/
 				
-					view.containersList.validateNow();
-					view.containersList.selectedItem = view.currentContainer; //исправить
+					view.containersList.selectedIndex = view.containersList.dataProvider.length - 1;
 					view.containersList.validateNow();
 					view.actionsList.dataProvider = currentContainerVO.actionsCollection;
 					view.validateNow();				
