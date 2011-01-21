@@ -52,6 +52,7 @@ package net.vdombox.object_editor.view.mediators
 			var resourses:Resourses  	= new Resourses();
 			var sourceCode:SourceCode	= new SourceCode();
 
+
 			view.tabNavigator.addChild(information);
 			view.tabNavigator.addChild(atributes);
 			view.tabNavigator.addChild(languages);

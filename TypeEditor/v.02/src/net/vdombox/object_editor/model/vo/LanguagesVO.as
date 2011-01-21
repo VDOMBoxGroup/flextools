@@ -36,17 +36,7 @@ package net.vdombox.object_editor.model.vo
 
 			newWrd["ID"] = nextInd;
 
-			/* OLD version
-			   var localeName:Object
-			   if( oldWord )
-			   for each(localeName  in locales )
-			   newWrd[localeName.data] = oldWord[localeName.data];
-			   else
-			   for each( localeName in locales )
-			   newWrd[localeName.data] = "";
-			 */
 
-			/* mew Version */
 			for each( var localeName:Object  in locales )
 				newWrd[localeName.data] = (oldWord) ? oldWord[localeName.data] : "";
 
