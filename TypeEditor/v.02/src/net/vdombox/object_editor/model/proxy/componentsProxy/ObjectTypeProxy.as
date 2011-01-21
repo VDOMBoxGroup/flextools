@@ -4,7 +4,7 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
-	
+
 	import net.vdombox.object_editor.model.vo.ActionParameterVO;
 	import net.vdombox.object_editor.model.vo.ActionVO;
 	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
@@ -14,7 +14,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
 	import net.vdombox.object_editor.view.essence.Resourses;
-	
+
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -49,12 +49,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				objTypeVO.resources  		= resourcesProxy.createFromXML(objTypeXML);
 
 				//проверка на повторное использование id
-								
+
 				_objectTypeList[objTypeVO.filePath] = reuseID(objTypeVO);
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
 			}
 		}
-		
+
 		private function reuseID( objTypeVO: ObjectTypeVO):ObjectTypeVO
 		{
 			reuseInformationID	( objTypeVO );
@@ -63,13 +63,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			reuseEventsID		( objTypeVO );	
 			return objTypeVO;
 		}
-		
+
 		private function reuseInformationID( objTypeVO: ObjectTypeVO):void
 		{
 			languagesProxy.used(objTypeVO.languages, objTypeVO.description);
 			languagesProxy.used(objTypeVO.languages, objTypeVO.displayName);
 		}
-		
+
 		private function reuseEventsID( objTypeVO: ObjectTypeVO):void
 		{
 			for each (var eventObj:Object in objTypeVO.events)
@@ -83,7 +83,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				}
 			}
 		}
-		
+
 		private function reuseAttributesID( objTypeVO: ObjectTypeVO):void
 		{
 			for each (var obj:Object in objTypeVO.attributes)
@@ -92,13 +92,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				if( attr.displayName == "") attr.displayName = "#Lang(101)";
 				if( attr.help == "")attr.help = "#Lang(301)";
 				if( attr.errorValidationMessage == "") attr.errorValidationMessage = "#Lang(201)";
-				
+
 				languagesProxy.used(objTypeVO.languages, attr.displayName);
 				languagesProxy.used(objTypeVO.languages, attr.help);
 				languagesProxy.used(objTypeVO.languages, attr.errorValidationMessage);
 			}
 		}
-		
+
 		private function reuseActionsID( objTypeVO: ObjectTypeVO):void
 		{
 			for each (var contObj:Object in objTypeVO.actionContainers)
