@@ -31,7 +31,7 @@ package net.vdombox.object_editor.view.mediators
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
 			view.addEventListener( FlexEvent.SHOW, showAttributes );
-			view.addEventListener( Event.CHANGE, validateObjectTypeVO );			
+			view.addEventListener( Event.CHANGE,   validateObjectTypeVO );			
 //			attributes.addEventListener( FlexEvent.HIDE, hideAttributes );
 		}
 
@@ -41,9 +41,10 @@ package net.vdombox.object_editor.view.mediators
 			
 			currentAttributeVO.name = view.fname.text;
 			view.attributesList.dataProvider.itemUpdated(view.currentAttribute);
-			sortAttributes();
+//			sortAttributes();
 			view.attributesList.selectedItem = view.currentAttribute;
-			view.attributesList.ensureIndexIsVisible(view.attributesList.selectedIndex);//(view.attributesList.selectedIndex);
+			view.attributesList.ensureIndexIsVisible(view.attributesList.selectedIndex);
+			view.attributesList.validateNow();
 //			view.attributesList.selectedItems //scrollRect = view.currentItem;			
 		}
 		
@@ -53,11 +54,11 @@ package net.vdombox.object_editor.view.mediators
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 			if( currentAttributeVO )
 			{				
-				currentAttributeVO.defaultValue	= view.defaultValue.text;
+				currentAttributeVO.defaultValue		= view.defaultValue.text;
 				currentAttributeVO.visible			= view.visibleAtr.selected;
 				currentAttributeVO.interfaceType	= view.interfaceType.selectedIndex;
 				currentAttributeVO.colorgroup		= view.colorgroup.selectedIndex;
-				currentAttributeVO.codeInterface	= view.codeInterface.selectedItem.data;
+				currentAttributeVO.codeInterface	= view.codeInterface.textInput.text;//selectedItem.data;
 				currentAttributeVO.regularExpressionValidation = view.regExp.text;
 			}
 		}
@@ -76,14 +77,11 @@ package net.vdombox.object_editor.view.mediators
 			view.interfaceType.selectedIndex 	= attributeVO.interfaceType;
 			view.colorgroup.selectedIndex 		= attributeVO.colorgroup;
 			view.regExp.text					= attributeVO.regularExpressionValidation;
-			view.codeInterface.selectedItem		= attributeVO.codeInterface;
+			view.codeInterface.textInput.text	= attributeVO.codeInterface;
 			
 			view.displayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );
 			view.help.completeStructure       ( objectTypeVO.languages, attributeVO.help );
 			view.errMessage.completeStructure ( objectTypeVO.languages, attributeVO.errorValidationMessage );
-		/*view.codeInterface.text 	= attributeVO.codeInterface;
-		   view.regExp.text 			= attributeVO.regularExpressionValidation;
-		 */	
 		}
 
 		private function showAttributes(event: FlexEvent): void
@@ -145,7 +143,7 @@ package net.vdombox.object_editor.view.mediators
 			{				
 				currentAttributeVO = objectTypeVO.attributes[listIndex].data;
 				view.attributesList.selectedIndex = listIndex;
-				view.currentAttribute = {label: currentAttributeVO.name, data: currentAttributeVO};
+				view.currentAttribute = view.attributesList.dataProvider[listIndex];
 				fillAttributeFilds( currentAttributeVO );
 			}			
 			else
@@ -170,7 +168,7 @@ package net.vdombox.object_editor.view.mediators
 		
 		protected function compliteAtributes( ):void
 		{	
-			sortAttributes();
+//			sortAttributes();
 			view.attributesList.dataProvider = objectTypeVO.attributes;
 			setCurrentAttribute();
 		}		

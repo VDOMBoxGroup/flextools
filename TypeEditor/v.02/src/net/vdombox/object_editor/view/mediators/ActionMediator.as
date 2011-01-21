@@ -37,13 +37,15 @@ package net.vdombox.object_editor.view.mediators
 		private var currentContainerVO: ActionsContainerVO;
 		private var currentActionVO   : ActionVO;
 		private var currentParameterVO: ActionParameterVO ;
+		private var isActionsSort:   Boolean = false;
+		private var isParametersSort:Boolean = false;
 
 		public function ActionMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
 			view.addEventListener( FlexEvent.SHOW, showActions );
-			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
+			view.addEventListener( Event.CHANGE,   validateObjectTypeVO );
 		}
 		
 		private function showActions(event: FlexEvent): void
@@ -57,14 +59,14 @@ package net.vdombox.object_editor.view.mediators
 			view.deleteAction.addEventListener	 ( MouseEvent.CLICK, deleteAction );
 			view.addParameter.addEventListener   ( MouseEvent.CLICK, addParameter );
 			view.deleteParameter.addEventListener( MouseEvent.CLICK, deleteParameter );
-			view.actionsList.addEventListener    ( Event.CHANGE, selectAction);
-			view.parametersList.addEventListener ( Event.CHANGE, selectParameter);
-			view.containersList.addEventListener ( Event.CHANGE, selectContainer);
+			view.actionsList.addEventListener    ( Event.CHANGE, selectAction );
+			view.parametersList.addEventListener ( Event.CHANGE, selectParameter );
+			view.containersList.addEventListener ( Event.CHANGE, selectContainer );
 			
-			view.methodName.addEventListener     ( Event.CHANGE, changeMethodName);
-			view.parScriptName.addEventListener  ( Event.CHANGE, changeScriptName);
+			view.methodName.addEventListener     ( Event.CHANGE, changeMethodName );
+			view.parScriptName.addEventListener  ( Event.CHANGE, changeScriptName );
 			
-			compliteActions();
+//			compliteActions();
 			view.validateNow();
 		}
 		
@@ -351,12 +353,15 @@ package net.vdombox.object_editor.view.mediators
 		   currentActionVO.parameters.refresh();
 		 }
 
-		protected function compliteActions( ):void
+		protected function compliteActions():void
 		{	
 			if( objectTypeVO.actionContainers.length > 0)
 			{
 				sortActions();
-				view.actionsList.dataProvider = currentContainerVO.actionsCollection;
+				view.actionsList.dataProvider  = currentContainerVO.actionsCollection;
+//				view.actionsList.selectedIndex = 0;
+//				view.currentAction	= view.actionsList.dataProvider[0];
+//				currentActionVO		= view.currentAction.data;
 			}
 		}		
 		override public function listNotificationInterests():Array 
@@ -400,7 +405,7 @@ package net.vdombox.object_editor.view.mediators
 			for each (var obj:Object in actionContainers)
 			{
 				arr.addItem(getContObj(obj));
-				view.containersList.dataProvider = arr;//.addItem({label: containerName, data: obj.data});
+				view.containersList.dataProvider = arr;
 			}
 		}
 		
@@ -442,8 +447,13 @@ package net.vdombox.object_editor.view.mediators
 				setLabel( objectTypeVO.actionContainers );
 				view.containersList.validateNow();
 				view.containersList.selectedIndex = listIndex;
-				view.currentContainer = currentContainerVO;
+				view.currentContainer = view.containersList.dataProvider[listIndex];
 				
+				if(!isActionsSort)
+				{
+					compliteActions();
+					isActionsSort = true;
+				}
 				setCurrentAction();
 			}
 			else
@@ -466,7 +476,7 @@ package net.vdombox.object_editor.view.mediators
 				view.actionsList.dataProvider  = currentContainerVO.actionsCollection;
 				view.actionsList.validateNow();
 				view.actionsList.selectedIndex = listIndex;
-				view.currentAction  = currentActionVO;
+				view.currentAction = view.actionsList.dataProvider[listIndex];
 				fillActionFilds( currentActionVO );
 				setCurrentParameter();
 			}
@@ -482,6 +492,11 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function setCurrentParameter(listIndex:int = 0):void
 		{
+			if(!isParametersSort)
+			{
+				sortParameters();	
+				isParametersSort = true;
+			}
 			if ( listIndex < 0 )
 			{
 				listIndex = 0;
@@ -492,7 +507,7 @@ package net.vdombox.object_editor.view.mediators
 				view.parametersList.dataProvider  = currentActionVO.parameters;
 				view.parametersList.validateNow();
 				view.parametersList.selectedIndex = listIndex;
-				view.currentParameter = {label: currentParameterVO.scriptName, data: currentParameterVO};
+				view.currentParameter = view.parametersList.dataProvider[0];//{label: currentParameterVO.scriptName, data: currentParameterVO};
 				fillParameter( currentParameterVO );
 			}
 			else

@@ -56,7 +56,7 @@
 	</fx:Script>
 	
 	<s:VGroup  width="228" height="367">
-		<mx:DataGrid  id="contList" width="226"   height="332"  dataProvider="{arContainers}" doubleClick="button1_clickHandler()"/>
+		<s:List  id="contList" width="226"   height="332"  dataProvider="{arContainers}" doubleClick="button1_clickHandler()" />
 		<s:HGroup right="0" >
 			<s:Button label="Ok" click="button1_clickHandler()"   enabled="{contList.selectedIndex != -1}"/>
 			<s:Button label="Cancel"  click="cancel()"/>
