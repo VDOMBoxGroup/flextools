@@ -65,9 +65,10 @@
 			}
 		]]>
 	</fx:Script>
+	<s:Scroller width="{this.width}" height="{this.height}">
 	<s:HGroup>
 		<s:VGroup height="{300}">
-			<s:List id="attributesList" height="{height- 50}" width="100%" change="this.currentAttribute=List(event.target).selectedItem"/>
+			<s:List id="attributesList" height="{height- 50}" width="100%" dragMoveEnabled="true" dragEnabled="true" dropEnabled="true" change="this.currentAttribute=List(event.target).selectedItem"/>
 			<s:HGroup>
 				<s:Button id="addAttributeButton" label="Add"/>
 				<s:Button id="deleteAttributeButton" label="Delete" enabled="{attributesList.selectedIndex != -1}"/>
@@ -127,4 +128,5 @@
 				
 		</mx:Form>		
 	</s:HGroup>
+	</s:Scroller >
 </s:NavigatorContent>

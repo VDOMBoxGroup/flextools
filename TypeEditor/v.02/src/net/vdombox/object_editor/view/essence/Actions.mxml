@@ -61,6 +61,7 @@
 			}
 		]]>
 	</fx:Script>
+	<s:Scroller width="{this.width}" height="{this.height}">
 	<s:VGroup x="10"  gap="20">
 		<s:VGroup >
 			<s:Label  text="Containers:" fontSize="20"/>
@@ -74,7 +75,7 @@
 		<mx:HRule width="100%"/>
 		<s:HGroup>
 			<s:VGroup  width="100%" height="100%" paddingTop="0">
-				<s:List id="actionsList" width="200" height="{height- 250}" change="this.currentAction=List(event.target).selectedItem"/>
+				<s:List id="actionsList" width="200" height="{ 250}" change="this.currentAction=List(event.target).selectedItem"/>
 				<s:HGroup width="100%">
 					<s:HGroup width="100%"/>
 					<s:Button id="addAction" label="Add"/>
@@ -105,7 +106,7 @@
 					<s:Label text="Parameters:" />
 					<s:VGroup color="#1100ff">
 						
-						<s:List id="parametersList" width="100%" height="{height - 455}" change="this.currentParameter=List(event.target).selectedItem" /><!--dataProvider="{arParameters}"   change="{changeParameter()}"/-->
+						<s:List id="parametersList" width="100%" height="{155}" change="this.currentParameter=List(event.target).selectedItem" /><!--dataProvider="{arParameters}"   change="{changeParameter()}"/-->
 						<s:HGroup width="100%" >
 							<s:HGroup width="100%"/>
 							<s:Button id="addParameter" label="Add" />
@@ -149,4 +150,5 @@
 			</s:VGroup >
 		</s:HGroup>
 	</s:VGroup>
+	</s:Scroller >
 </s:NavigatorContent>

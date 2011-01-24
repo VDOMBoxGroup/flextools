@@ -226,18 +226,18 @@
 			
 		]]>
 	</fx:Script>
-	
+	<s:Scroller width="{this.width}" height="{this.height}">
 <s:HGroup>
-	<mx:Form  width="100%" height="100%" paddingTop="0">
+	<mx:Form   paddingTop="0" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
 		<mx:FormHeading fontSize="10"  label="Select Event:" paddingTop="0" />
-		<s:List id="eventsList" width="200" height="{height- 60}" change="this.currentEvent=List(event.target).selectedItem"/>
-		<s:HGroup width="100%">
+		<s:List id="eventsList" width="200" height="{300}" change="this.currentEvent=List(event.target).selectedItem"/>
+		<s:HGroup width="{eventsList.width}">
 			<s:HGroup width="100%"/>
 			<s:Button id="addEvent" label="Add"/>
 			<s:Button id="deleteEvent" label="Delete" enabled="{eventsList.selectedIndex != -1}"/>
 		</s:HGroup>
 	</mx:Form >
-	<mx:Form  width="100%" height="100%" paddingTop="0" >
+	<mx:Form  paddingTop="0" horizontalScrollPolicy="off" verticalScrollPolicy="off" >
 		<mx:FormHeading fontSize="10"  label="Events details:" paddingTop="0" />
 		<mx:FormItem label="Name:" toolTip="Name">
 			<mx:TextInput id="eventName" width="150" change="{changeField()}" />
@@ -245,14 +245,14 @@
 		
 		<s:HGroup width="100%"/>
 		<s:Label text="Select parameter:" />
-		<s:List id="parametersList" width="100%" height="{height- 115}" change="this.currentParameter=List(event.target).selectedItem" /><!--dataProvider="{arParameters}"   change="{changeParameter()}"/-->
+		<s:List id="parametersList" width="100%" height="{300}" change="this.currentParameter=List(event.target).selectedItem" /><!--dataProvider="{arParameters}"   change="{changeParameter()}"/-->
 		<s:HGroup width="100%" >
 			<s:HGroup width="100%"/>
 			<s:Button id="addParameter" label="Add" />
 			<s:Button id="deleteParameter" label="Delete" enabled="{parametersList.selectedIndex != -1}"/>
 		</s:HGroup>
 	</mx:Form>
-	<mx:Form width="100%" color="0x323232" paddingTop="0">
+	<mx:Form  color="0x323232" paddingTop="0"  horizontalScrollPolicy="off" verticalScrollPolicy="off">
 		<mx:FormHeading fontSize="10"  label="Parameters detais:" paddingTop="0" />
 		
 		<mx:FormItem label="Name:" toolTip="Имя объекта">
@@ -274,4 +274,5 @@
 		</mx:FormItem>
 	</mx:Form>
 	</s:HGroup>
+	</s:Scroller >
 </s:NavigatorContent>
