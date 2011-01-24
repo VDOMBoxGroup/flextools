@@ -4,7 +4,7 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
-
+	
 	import net.vdombox.object_editor.model.vo.ActionParameterVO;
 	import net.vdombox.object_editor.model.vo.ActionVO;
 	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
@@ -14,7 +14,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
 	import net.vdombox.object_editor.view.essence.Resourses;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -49,7 +49,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				objTypeVO.resources  		= resourcesProxy.createFromXML(objTypeXML);
 
 				//проверка на повторное использование id
-
+				
 				_objectTypeList[objTypeVO.filePath] = reuseID(objTypeVO);
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
 			}
@@ -66,8 +66,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 		private function reuseInformationID( objTypeVO: ObjectTypeVO):void
 		{
-			languagesProxy.used(objTypeVO.languages, objTypeVO.description);
-			languagesProxy.used(objTypeVO.languages, objTypeVO.displayName);
+			objTypeVO.description = languagesProxy.used(objTypeVO.languages, objTypeVO.description);
+			objTypeVO.displayName = languagesProxy.used(objTypeVO.languages, objTypeVO.displayName);
 		}
 
 		private function reuseEventsID( objTypeVO: ObjectTypeVO):void
@@ -79,7 +79,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				{
 					var eventPar:EventParameterVO = parObj.data;
 					if( eventPar.help == "") eventPar.help = "#Lang(105)";
-					languagesProxy.used(objTypeVO.languages, eventPar.help);
+					eventPar.help = languagesProxy.used(objTypeVO.languages, eventPar.help);
 				}
 			}
 		}
@@ -93,9 +93,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				if( attr.help == "")attr.help = "#Lang(301)";
 				if( attr.errorValidationMessage == "") attr.errorValidationMessage = "#Lang(201)";
 
-				languagesProxy.used(objTypeVO.languages, attr.displayName);
-				languagesProxy.used(objTypeVO.languages, attr.help);
-				languagesProxy.used(objTypeVO.languages, attr.errorValidationMessage);
+				attr.displayName = languagesProxy.used(objTypeVO.languages, attr.displayName);
+				attr.help		 = languagesProxy.used(objTypeVO.languages, attr.help);
+				attr.errorValidationMessage = languagesProxy.used(objTypeVO.languages, attr.errorValidationMessage);
 			}
 		}
 
@@ -107,17 +107,17 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				for each (var actObj:Object in cont.actionsCollection)
 				{
 					var act:ActionVO = actObj.data;
-					if( act.description == "")   act.description   = "#Lang(102)";
-					if( act.interfaceName == "") act.interfaceName = "#Lang(102)";
-					languagesProxy.used(objTypeVO.languages, act.description);
-					languagesProxy.used(objTypeVO.languages, act.interfaceName);
+					if( act.description == "")   act.description   = "#Lang(600)";
+					if( act.interfaceName == "") act.interfaceName = "#Lang(700)";					
+					act.description   = languagesProxy.used(objTypeVO.languages, act.description);
+					act.interfaceName = languagesProxy.used(objTypeVO.languages, act.interfaceName);
 					for each (var parObj:Object in act.parameters)
 					{
 						var actPar:ActionParameterVO = parObj.data;
-						if( actPar.interfaceName == "") actPar.interfaceName = "#Lang(202)";
-						if( actPar.help          == "") actPar.help          = "#Lang(202)";
-						languagesProxy.used(objTypeVO.languages, actPar.interfaceName);
-						languagesProxy.used(objTypeVO.languages, actPar.help);
+						if( actPar.interfaceName == "") actPar.interfaceName = "#Lang(900)";
+						if( actPar.help          == "") actPar.help          = "#Lang(800)";
+						actPar.interfaceName = languagesProxy.used(objTypeVO.languages, actPar.interfaceName);
+						actPar.help			 = languagesProxy.used(objTypeVO.languages, actPar.help);
 					}
 				}
 			}			

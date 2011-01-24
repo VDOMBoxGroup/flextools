@@ -66,13 +66,11 @@ package net.vdombox.object_editor.view.mediators
 			view.methodName.addEventListener     ( Event.CHANGE, changeMethodName );
 			view.parScriptName.addEventListener  ( Event.CHANGE, changeScriptName );
 			
-//			compliteActions();
 			view.validateNow();
 		}
 		
 		private function selectContainer(event:Event):void
 		{ 
-			//currentContainerVO = view.containersList.dataProvider.getItemIndex(event.target.selectedItem);//view.containersList.selectedItem.data as ActionsContainerVO;
 			currentContainerVO = view.containersList.selectedItem.data as ActionsContainerVO;
 			if(currentContainerVO)
 			{
@@ -108,10 +106,12 @@ package net.vdombox.object_editor.view.mediators
 			{				
 				currentParameterVO.defaultValue		= view.parDefaultValue.text;
 				currentParameterVO.interfacePar		= view.parInterface.text;
-				currentParameterVO.interfaceName	= view.parInterfaceName.text;
 				currentParameterVO.scriptName		= view.parScriptName.text;
-				currentParameterVO.help	 			= view.parHelp.text;
 				currentParameterVO.regExp	 		= view.parRegExp.text;
+			}
+			if( currentActionVO )
+			{
+				currentActionVO.code				= view.sourceCode.text;				
 			}
 		}
 
@@ -149,7 +149,6 @@ package net.vdombox.object_editor.view.mediators
 			
 		    view.description.completeStructure    ( objectTypeVO.languages, actVO.description );
 			view.interfaceName.completeStructure  ( objectTypeVO.languages, actVO.interfaceName );
-//			setCurrentParameter();
 		}
 
 		private function fillParameter(actParameterVO:ActionParameterVO):void
@@ -198,7 +197,7 @@ package net.vdombox.object_editor.view.mediators
 					actsContVO.containerID = container.data;
 					objectTypeVO.actionContainers.addItem( {label:actsContVO.containerID, data:actsContVO} );
 					
-					currentContainerVO  = actsContVO;//{label:actsContVO.containerID, data:actsContVO};
+					currentContainerVO  = actsContVO;
 					currentActionVO		= null;
 					currentParameterVO	= null;
 					
@@ -212,8 +211,7 @@ package net.vdombox.object_editor.view.mediators
 					else
 					{
 						view.containersList.dataProvider.addItem( getContObj(container));
-					}*/
-				
+					}*/				
 					view.containersList.selectedIndex = view.containersList.dataProvider.length - 1;
 					view.containersList.validateNow();
 					view.actionsList.dataProvider = currentContainerVO.actionsCollection;
@@ -358,10 +356,7 @@ package net.vdombox.object_editor.view.mediators
 			if( objectTypeVO.actionContainers.length > 0)
 			{
 				sortActions();
-				view.actionsList.dataProvider  = currentContainerVO.actionsCollection;
-//				view.actionsList.selectedIndex = 0;
-//				view.currentAction	= view.actionsList.dataProvider[0];
-//				currentActionVO		= view.currentAction.data;
+				view.actionsList.dataProvider = currentContainerVO.actionsCollection;
 			}
 		}		
 		override public function listNotificationInterests():Array 
@@ -423,14 +418,10 @@ package net.vdombox.object_editor.view.mediators
 			if(containerName != "")
 			{
 				return {label: containerName, data: obj.data}
-//				arr.addItem({label: containerName, data: obj.data});
-				//view.containersList.dataProvider.addItem({label: containerName, data: obj.data});
 			}
 			else
 			{
 				return obj
-//				arr.addItem(obj);
-				//view.containersList.dataProvider.addItem(obj);
 			}
 		}
 		
@@ -507,7 +498,7 @@ package net.vdombox.object_editor.view.mediators
 				view.parametersList.dataProvider  = currentActionVO.parameters;
 				view.parametersList.validateNow();
 				view.parametersList.selectedIndex = listIndex;
-				view.currentParameter = view.parametersList.dataProvider[0];//{label: currentParameterVO.scriptName, data: currentParameterVO};
+				view.currentParameter = view.parametersList.dataProvider[0];
 				fillParameter( currentParameterVO );
 			}
 			else

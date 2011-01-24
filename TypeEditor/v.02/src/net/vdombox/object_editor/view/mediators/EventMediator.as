@@ -78,7 +78,6 @@ package net.vdombox.object_editor.view.mediators
 				currentParameterVO.name	  = view.parName.text;
 				currentParameterVO.order  = view.parOrder.text;
 				currentParameterVO.vbType = view.parVbType.text;
-				currentParameterVO.help	  = view.parHelp.text;
 			}
 		}
 

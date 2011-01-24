@@ -118,9 +118,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return "";
 		}
 		
+		//code in formate: #Lang(word)
 		public function getRegExpID(langsVO:LanguagesVO,code:String):String
-		{	
-			var  regResource:RegExp = /#Lang\((\d+)\)/;
+		{				
+			var regResource:RegExp = /#Lang\((\d+)\)/;
 			var matchResult:Array = code.match(regResource);			
 			return matchResult[1] ;
 		}
@@ -167,6 +168,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return langsXML;
 		}	
 		
+		/** returne new word with new id, id - first not used 
+		 *  copy oldWord to newWord
+		 *  startId - first number of id 
+		**/
 		public function getNextId(langsVO: LanguagesVO, startId: String, newValue: String = "", oldWord: Object = null):String
 		{
 			return langsVO.getNextId( startId, "", oldWord ).toString();
@@ -178,24 +183,38 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			if ( langsVO.isUsedWords[id] )
 			{
 				var idPart:String = id.toString().slice(0,1);
-				var newID :String = this.getNextId( langsVO, idPart, "", getWords(langsVO, id) );				
+				var newID :String = this.getNextId( langsVO, idPart, "", getWords(langsVO, id) );
+				idString = newID;
 				return newID; 				
 			}
 			else
-			{
-				langsVO.isUsedWords[id] = true;
-				return idString;
+			{				
+				if( langsVO.isUsedWords[id] == false)
+				{
+					langsVO.isUsedWords[id] = true;
+					return idString;
+				}
+				else
+				{
+					var newID:String = getNextId(langsVO, id.toString().slice(0,1));
+					var idNumber:String = newID.toString().slice(6,newID.length-1);
+					langsVO.isUsedWords[idNumber] = true;
+					return newID;
+				}				
 			}
 		}
 		
-		public function deleteWord(objTypeVO:ObjectTypeVO, word:String):void//word:Object):void
-		{			
-			var id:String = getRegExpID(objTypeVO.languages, word);
-			var words:Object = getWords(objTypeVO.languages, id);
-			if (words)
+		public function deleteWord(objTypeVO:ObjectTypeVO, word:String):void
+		{		
+			if(word != "")
 			{
-				var ind:int = objTypeVO.languages.words.getItemIndex(words)
-				objTypeVO.languages.words.removeItemAt(ind);
+				var id:String = getRegExpID(objTypeVO.languages, word);
+				var words:Object = getWords(objTypeVO.languages, id);
+				if (words)
+				{
+					var ind:int = objTypeVO.languages.words.getItemIndex(words)
+					objTypeVO.languages.words.removeItemAt(ind);
+				}
 			}
 		}		
 	}

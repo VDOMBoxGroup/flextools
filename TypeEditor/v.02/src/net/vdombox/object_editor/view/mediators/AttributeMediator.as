@@ -58,7 +58,7 @@ package net.vdombox.object_editor.view.mediators
 				currentAttributeVO.visible			= view.visibleAtr.selected;
 				currentAttributeVO.interfaceType	= view.interfaceType.selectedIndex;
 				currentAttributeVO.colorgroup		= view.colorgroup.selectedIndex;
-				currentAttributeVO.codeInterface	= view.codeInterface.textInput.text;//selectedItem.data;
+				currentAttributeVO.codeInterface	= view.codeInterface.textInput.text;
 				currentAttributeVO.regularExpressionValidation = view.regExp.text;
 			}
 		}
