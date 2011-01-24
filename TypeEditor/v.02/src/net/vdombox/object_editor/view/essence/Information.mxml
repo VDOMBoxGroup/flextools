@@ -111,8 +111,12 @@
 			<mx:TextInput id="fWCAG" width="250"  change="{viewChanged()}"/>
 		</mx:FormItem>
 				
-		<ns1:SelectFormItem id="fContainers" name="fContainers"  label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)" />	
-				
+		<!--ns1:SelectFormItem id="fContainers" name="fContainers"  label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)" /-->	
+		<mx:FormItem label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)">
+			<mx:TextArea id="fContainers" width="250" height="60"  change="{viewChanged()}"/>
+			<s:Button id="editContainersBt" label="Edit" />
+		</mx:FormItem>		
+		
 		<mx:FormItem label="Languages" toolTip="Список поддерживаемых объектом языков (формат ISO 3168-1)" 
 					 enabled="false">
 			<mx:TextInput id="fLanguages" width="250" editable="false" change="{viewChanged()}"/>

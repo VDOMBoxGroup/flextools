@@ -2,13 +2,17 @@ package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+
+	import flash.ui.Mouse;
 	import flash.utils.ByteArray;
-	
+
 	import mx.collections.ArrayCollection;
 	import mx.controls.Image;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
-	
+	import mx.managers.PopUpManager;
+
+	import net.vdombox.object_editor.model.proxy.ObjectsProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ResourcesProxy;
@@ -16,7 +20,8 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.essence.Information;
 	import net.vdombox.object_editor.view.essence.SelectFormItem;
-	
+	import net.vdombox.object_editor.view.popups.Containers2;
+
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -33,6 +38,7 @@ package net.vdombox.object_editor.view.mediators
 
 			view.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
 			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
+
 		}
 
 		public function validateObjectTypeVO(event:Event):void
@@ -89,11 +95,11 @@ package net.vdombox.object_editor.view.mediators
 
 			view.fResizable.selectedIndex		= objectTypeVO.resizable;
 			view.fContainerI.selectedIndex      = objectTypeVO.container;	
-//			view.fContainers.fselectComboBox.textInput.text = langsProxy.getRegExpWord(objectTypeVO.languages, objectTypeVO.containers);
+			view.fContainers.text 				= objectTypeVO.containers
 			view.fInterfaceType.selectedIndex 	= objectTypeVO.interfaceType;
 			view.fOptimizationPriority.value  	= objectTypeVO.optimizationPriority;
 			view.fcurrentLocation.dataProvider	= objectTypeVO.languages.locales;
-			
+
 			view.ficon.source  = resourcesProxy.getByteArray(objectTypeVO.icon);
 			view.ficon.toolTip = getToolTipe(objectTypeVO.icon);
 
@@ -109,6 +115,7 @@ package net.vdombox.object_editor.view.mediators
 			view.ficon3.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
 
 			view.fcurrentLocation.addEventListener(Event.CHANGE, changeCurrentLocation);
+			view.editContainersBt.addEventListener(MouseEvent.CLICK, editContainersBtClick); 
 			view.validateNow();
 		}
 
@@ -118,6 +125,22 @@ package net.vdombox.object_editor.view.mediators
 			img.source = resourcesProxy.getByteArray(idRes);
 
 			return img.width +' x '+ img.height;
+		}
+
+		private function editContainersBtClick(event:MouseEvent):void
+		{
+			var popup:Containers2 = PopUpManager.createPopUp(view, Containers2, true) as Containers2;
+			popup.addEventListener(FlexEvent.CREATION_COMPLETE, setListWord);
+//			popup.addEventListener(CloseEvent.CLOSE, closeHandler);
+
+			function setListWord(event:FlexEvent):void
+			{				
+				popup.showContainersList( objectsProxy.topLevelContainerList );	
+			}
+//			function closeHandler(event:CloseEvent):void
+//			{
+//
+//			}
 		}
 
 		private function changeResourse(event:MouseEvent):void
@@ -157,6 +180,11 @@ package net.vdombox.object_editor.view.mediators
 		protected function get resourcesProxy():ResourcesProxy
 		{
 			return facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
+		}
+
+		private function get objectsProxy():ObjectsProxy
+		{
+			return facade.retrieveProxy(ObjectsProxy.NAME) as ObjectsProxy;
 		}
 	}
 }
