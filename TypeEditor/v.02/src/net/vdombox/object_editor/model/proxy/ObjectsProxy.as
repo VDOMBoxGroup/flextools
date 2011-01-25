@@ -18,6 +18,7 @@ package net.vdombox.object_editor.model.proxy
 	{
 		public static const NAME:String = "ObjectsProxy";
 		public var topLevelContainerList:ArrayCollection = new ArrayCollection();
+		public var containerList:ArrayCollection = new ArrayCollection();
 
 		public function ObjectsProxy ( data:Object = null ) 
 		{
@@ -39,6 +40,7 @@ package net.vdombox.object_editor.model.proxy
 			var item:Item = new Item;
 
 			var contType : String = informationXML.Container.toString()
+			var listItem : Object = {label:informationXML.Name.toString(), data:informationXML.ID.toString()};	
 			if (contType != "3") // is not TopLave container
 			{
 				var categoryXML : String = informationXML.Category.toString();
@@ -47,12 +49,16 @@ package net.vdombox.object_editor.model.proxy
 					item.groupName = categoryXML;
 				else
 					item.groupName =  langEnXML.Sentence.(@ID == categoryStr)[0].toString();
+
+				if (contType == "2") // container
+					containerList.addItem(listItem);
 			}
 			else
 			{
 				item.groupName = "Top Level Containers";
 				//arrayCollection for ComboBox in actions tab
-				topLevelContainerList.addItem({label:informationXML.Name.toString(), data:informationXML.ID.toString()});
+				topLevelContainerList.addItem(listItem);
+				containerList.addItem(listItem);
 			}
 
 			item.label = informationXML.Name.toString();

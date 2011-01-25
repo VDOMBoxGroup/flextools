@@ -131,16 +131,17 @@ package net.vdombox.object_editor.view.mediators
 		{
 			var popup:Containers2 = PopUpManager.createPopUp(view, Containers2, true) as Containers2;
 			popup.addEventListener(FlexEvent.CREATION_COMPLETE, setListWord);
-//			popup.addEventListener(CloseEvent.CLOSE, closeHandler);
+			popup.addEventListener(CloseEvent.CLOSE, closeHandler);
 
 			function setListWord(event:FlexEvent):void
 			{				
-				popup.showContainersList( objectsProxy.topLevelContainerList );	
+				popup.showContainersList( objectsProxy.containerList, view.fContainers.text.split(",")  );	
 			}
-//			function closeHandler(event:CloseEvent):void
-//			{
-//
-//			}
+
+			function closeHandler(event:CloseEvent):void
+			{
+				view.fContainers.text = popup.getContainers();
+			}
 		}
 
 		private function changeResourse(event:MouseEvent):void

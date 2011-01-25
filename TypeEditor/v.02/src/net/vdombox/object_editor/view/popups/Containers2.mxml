@@ -33,9 +33,43 @@
 				dispatchEvent( new FlexEvent( FlexEvent.CREATION_COMPLETE ));								
 			}
 			
-			public function showContainersList( containers:ArrayCollection ):void 
+			public function showContainersList( avalibleContainers:ArrayCollection, enUsedContainers:Array):void 
 			{
-				contList.dataProvider = containers;					
+				// TODO: may be necessary to optimize
+				var contLisrDataProv : ArrayCollection = new ArrayCollection();
+				for each(var avCont:Object in avalibleContainers)
+				{
+					contLisrDataProv.addItem( avCont)
+				}
+				
+				for each(var enUsCont:String in enUsedContainers)
+				{
+					var inList : Boolean = false;
+					enUsCont = enUsCont.replace(" ","");
+					for each( avCont in contLisrDataProv)
+						if (avCont["label"] == enUsCont || avCont["data"] == enUsCont)
+						{
+							var itemIndex: int = contLisrDataProv.getItemIndex(avCont);
+							contLisrDataProv.removeItemAt(itemIndex);
+							
+							inUsedList.dataProvider.addItem(avCont);
+							
+							inList = true;
+							continue;
+						}
+					if (!inList)	
+						inUsedList.dataProvider.addItem({label:enUsCont, data:enUsCont });
+				}
+				contList.dataProvider = contLisrDataProv;	
+			}
+			
+			public function getContainers():String
+			{
+				var contArt:Array = new Array();
+				
+				for each(var avCont:Object in inUsedList.dataProvider	)
+					contArt.push(avCont["label"]);
+				return contArt.join(); //7' ale
 			}
 			
 			private function closeHandler(cEvent:CloseEvent):void 
@@ -69,14 +103,15 @@
 				
 				<s:VGroup>
 					<s:Label text="In used:" />
-					<s:List  id="contList2"  dataProvider="{arContainers}" doubleClick="button1_clickHandler()"
+					<s:List  id="inUsedList"  dataProvider="{arContainers}" doubleClick="button1_clickHandler()"
 							 dragMoveEnabled="true" dragEnabled="true" dropEnabled="true"
 							 width="200" height="200"/>
 				</s:VGroup>
 			</s:HGroup>
 			<s:HGroup right="0" >
-				<s:Button label="Ok" click="button1_clickHandler()"   enabled="{contList.selectedIndex != -1}"/>
-				<s:Button label="Cancel"  click="cancel()"/>
+				<s:Group width="100%"/>
+				<s:Button label="Ok" click="button1_clickHandler()" />
+				
 			</s:HGroup>		
 			
 	</s:VGroup>	
