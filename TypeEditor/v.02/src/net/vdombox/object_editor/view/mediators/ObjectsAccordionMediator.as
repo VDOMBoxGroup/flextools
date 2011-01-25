@@ -9,7 +9,6 @@ package net.vdombox.object_editor.view.mediators
 
 	import net.vdombox.object_editor.model.Item;
 	import net.vdombox.object_editor.view.AccordionNavigatorContent;
-	import net.vdombox.object_editor.view.ListItemRenderer;
 	import net.vdombox.object_editor.view.ObjectsAccordion;
 
 	import org.puremvc.as3.interfaces.IMediator;
@@ -39,10 +38,10 @@ package net.vdombox.object_editor.view.mediators
 
 		public function newContent( item:Item ) : void
 		{
-			var list:AccordionNavigatorContent =  view.getObjectdByName(item.groupName) as AccordionNavigatorContent;
+			var list:AccordionNavigatorContent =  view.getObjectByName(item.groupName) as AccordionNavigatorContent;
 			if (!list)
 			{
-				list  = new AccordionNavigatorContent();
+				list  	   = new AccordionNavigatorContent();
 				list.name  = item.groupName;
 				list.label = item.groupName;
 				view.addObject(list);
@@ -77,8 +76,7 @@ package net.vdombox.object_editor.view.mediators
 		protected function get view():ObjectsAccordion
 		{
 			return viewComponent as ObjectsAccordion;
-		}		
-
+		}
 	}
 }
 

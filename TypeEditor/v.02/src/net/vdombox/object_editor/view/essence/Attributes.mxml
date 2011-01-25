@@ -12,6 +12,8 @@
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			
+			import net.vdombox.object_editor.view.AttributesListRenderer;
+			
 			[Bindable]
 			public var currentAttribute:Object;
 						
@@ -21,7 +23,7 @@
 				displayName.text		= "";
 				errMessage.text			= "";//надо удалять содержимое?
 				visibleAtr.selected		= false;
-				help.text				= "";
+				help.clearTextArea();
 				
 				attributesList.dataProvider = null;
 			}
@@ -58,17 +60,18 @@
 					{label:"ObjectList(type_id)", 		 data:"ObjectList(type_id)"}, 
 					{label:"ExternalEditor(Title, Info)",data:"ExternalEditor(Title, Info)"}
 				]);	
-					
+								
 			public function changeField():void
 			{
 				dispatchEvent(new Event( Event.CHANGE ));
 			}
+			
 		]]>
 	</fx:Script>
 	<s:Scroller width="{this.width}" height="{this.height}">
 	<s:HGroup>
 		<s:VGroup height="{300}">
-			<s:List id="attributesList" height="{height- 50}" width="100%" dragMoveEnabled="true" dragEnabled="true" dropEnabled="true" change="this.currentAttribute=List(event.target).selectedItem"/>
+			<s:List itemRenderer="net.vdombox.object_editor.view.AttributesListRenderer"  id="attributesList" height="{height- 50}" width="100%" dragMoveEnabled="true" dragEnabled="true" dropEnabled="true" change="this.currentAttribute=List(event.target).selectedItem"/>
 			<s:HGroup>
 				<s:Button id="addAttributeButton" label="Add"/>
 				<s:Button id="deleteAttributeButton" label="Delete" enabled="{attributesList.selectedIndex != -1}"/>

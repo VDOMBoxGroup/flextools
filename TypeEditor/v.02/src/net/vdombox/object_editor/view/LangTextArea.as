@@ -31,6 +31,13 @@ package net.vdombox.object_editor.view
 			super.text = words[currentLanguage];			
 		}
 		
+		public function clearTextArea( ):void
+		{
+			currentLanguage = null;
+			words 			= null;			
+			text 			= "";
+		}
+		
 		public function completeStructure( langsVO:LanguagesVO, fildValue:String):void
 		{
 			var fildID:String = getRegExpWord(fildValue);
@@ -48,6 +55,7 @@ package net.vdombox.object_editor.view
 			}
 			words = null;
 			text  = "";
+			trace("completeStructure: ", fildValue);
 		}
 		
 		private function getRegExpWord( code:String ):String

@@ -1,0 +1,64 @@
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	doubleClickEnabled="true" 
+	creationComplete="parse(event)">
+	<fx:Script>
+		<![CDATA[	
+			import mx.events.FlexEvent;	
+
+			public static const NAME: String = "AttributesListRenderer";
+			
+			[Bindable]
+			public var backColor:uint = 0xFFFFFF;  
+						
+			protected function parse(event:FlexEvent):void
+			{
+				// TODO: Auto-generated method stub
+				switch (data.color)
+				{
+					case 1:
+					{
+						backColor = 0x8289A3;
+						break;
+					}
+					case 2:
+					{
+						backColor = 0xFB1E1E;
+						break;
+					}
+					case 3:
+					{
+						backColor =0x669F60;
+						break;
+					}
+					case 4:
+					{
+						backColor = 0x7A92EB;
+						break;
+					}
+				}							
+			}
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
+	</s:states>
+	
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	
+	<s:Group doubleClickEnabled="true" width="100%" height="100%" >
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor id="bsc" color="{backColor}" />
+			</s:fill>			
+		</s:Rect>			
+		<s:Label id="txt" text="{data.label}" fontSize.selected="20"/>		
+	</s:Group>	
+</s:ItemRenderer>

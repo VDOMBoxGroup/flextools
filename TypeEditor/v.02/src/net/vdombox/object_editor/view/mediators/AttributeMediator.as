@@ -3,6 +3,7 @@ package net.vdombox.object_editor.view.mediators
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.ui.Mouse;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.IList;
@@ -14,6 +15,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
+	import net.vdombox.object_editor.view.AttributesListRenderer;
 	import net.vdombox.object_editor.view.essence.Attributes;
 	
 	import org.puremvc.as3.interfaces.IMediator;
@@ -41,11 +43,23 @@ package net.vdombox.object_editor.view.mediators
 			
 			currentAttributeVO.name = view.fname.text;
 			view.attributesList.dataProvider.itemUpdated(view.currentAttribute);
+			
 //			sortAttributes();
 			view.attributesList.selectedItem = view.currentAttribute;
 			view.attributesList.ensureIndexIsVisible(view.attributesList.selectedIndex);
 			view.attributesList.validateNow();
 //			view.attributesList.selectedItems //scrollRect = view.currentItem;			
+		}
+		
+		public function apdateBackgroundColor(event: Event):void
+		{			
+			view.currentAttribute.color = event.target.selectedIndex;
+			var selIndex:uint = view.attributesList.selectedIndex;
+			view.attributesList.dataProvider.removeItemAt(selIndex);
+			view.attributesList.dataProvider.addItemAt(view.currentAttribute,selIndex);
+			view.attributesList.selectedItem = view.currentAttribute;
+			view.attributesList.ensureIndexIsVisible(view.attributesList.selectedIndex);
+			view.attributesList.validateNow();
 		}
 		
 		public function validateObjectTypeVO(event:Event):void
@@ -90,10 +104,11 @@ package net.vdombox.object_editor.view.mediators
 			view.fname.addEventListener                ( Event.CHANGE, changeName );
 			view.addAttributeButton.addEventListener   ( MouseEvent.CLICK, addAttribute );
 			view.deleteAttributeButton.addEventListener( MouseEvent.CLICK, deleteAttribute );
+			view.colorgroup.addEventListener		   ( Event.CHANGE, apdateBackgroundColor );
 			compliteAtributes();
 			view.validateNow();
 		}
-
+		
 		private function addAttribute(event:MouseEvent): void
 		{			
 			var attribVO:AttributeVO = new AttributeVO( "newAttribute"+ objectTypeVO.attributes.length );
@@ -169,7 +184,7 @@ package net.vdombox.object_editor.view.mediators
 		protected function compliteAtributes( ):void
 		{	
 //			sortAttributes();
-			view.attributesList.dataProvider = objectTypeVO.attributes;
+			view.attributesList.dataProvider = objectTypeVO.attributes;			
 			setCurrentAttribute();
 		}		
 		override public function listNotificationInterests():Array 

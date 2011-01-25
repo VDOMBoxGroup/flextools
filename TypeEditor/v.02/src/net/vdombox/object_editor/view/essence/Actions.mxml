@@ -27,10 +27,9 @@
 			
 			public function clearContainerFields():void
 			{
-				//currentContainer 		= null; // зачем?
-				currentAction 	 		= null;
-				currentParameter 		= null;	
-				
+				//currentContainer 		 = null; // зачем?
+				currentAction 	 		 = null;
+				currentParameter 		 = null;					
 				actionsList.dataProvider = null;
 				clearActionFields();
 			}
@@ -41,10 +40,10 @@
 				//				currentAction 	 		= null;
 				//				currentParameter		= null;
 				
-				interfaceName.text		= "";
-				methodName.text			= "";
-				description.text		= "";
-				sourceCode.text			= "";
+				methodName.text		   = "";
+				sourceCode.text		   = "";
+				interfaceName.clearTextArea();
+				description.clearTextArea();				
 				
 				parametersList.dataProvider = null;
 				clearParameterFields();
@@ -52,12 +51,13 @@
 			
 			public function clearParameterFields():void
 			{
-				parDefaultValue.text	= "";
-				parHelp.text			= "";
-				parInterface.text		= "";
-				parInterfaceName.text	= "";
+				parDefaultValue.text	= "";				
+				parInterface.text		= "";				
 				parScriptName.text		= "";
-				parRegExp.text			= "";				
+				parRegExp.text			= "";
+				
+				parInterfaceName.clearTextArea();
+				parHelp.clearTextArea();
 			}
 		]]>
 	</fx:Script>

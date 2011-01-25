@@ -49,20 +49,20 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			
 			for each ( var attrinuteXML : XML in objTypeXML.descendants("Attribute") )
 			{
-				var atrib:AttributeVO = new AttributeVO;
+				var attrib:AttributeVO = new AttributeVO;
 				
-				atrib.name			= attrinuteXML.Name;
-				atrib.displayName	= attrinuteXML.DisplayName;
-				atrib.defaultValue	= attrinuteXML.DefaultValue;
-				atrib.visible		= attrinuteXML.Visible.toString() == "1";
-				atrib.help			= attrinuteXML.Help;
-				atrib.interfaceType	= attrinuteXML.InterfaceType;
-				atrib.codeInterface	= attrinuteXML.CodeInterface;
-				atrib.colorgroup	= attrinuteXML.Colorgroup;
-				atrib.errorValidationMessage		= attrinuteXML.ErrorValidationMessage;
-				atrib.regularExpressionValidation	= attrinuteXML.RegularExpressionValidation;
+				attrib.name			= attrinuteXML.Name;
+				attrib.displayName	= attrinuteXML.DisplayName;
+				attrib.defaultValue	= attrinuteXML.DefaultValue;
+				attrib.visible		= attrinuteXML.Visible.toString() == "1";
+				attrib.help			= attrinuteXML.Help;
+				attrib.interfaceType	= attrinuteXML.InterfaceType;
+				attrib.codeInterface	= attrinuteXML.CodeInterface;
+				attrib.colorgroup	= attrinuteXML.Colorgroup;
+				attrib.errorValidationMessage		= attrinuteXML.ErrorValidationMessage;
+				attrib.regularExpressionValidation	= attrinuteXML.RegularExpressionValidation;
 				
-				atributesCollection.addItem({label:atrib.name, data:atrib});	
+				atributesCollection.addItem({label:attrib.name, color:attrib.colorgroup, data:attrib});	
 			}			
 			return atributesCollection;
 		}

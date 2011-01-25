@@ -24,11 +24,11 @@
 			}
 			
 			public function clearParameterFields():void
-			{
-				parHelp.text	= null;
+			{				
 				parName.text	= null;
 				parOrder.text	= null;
 				parVbType.text	= null;
+				parHelp.clearTextArea();
 			}
 			
 			/*private var _data : XML

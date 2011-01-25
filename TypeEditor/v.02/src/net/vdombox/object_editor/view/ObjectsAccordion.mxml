@@ -19,7 +19,7 @@
 				accordion.validateNow();				
 			}	
 			
-			public function  getObjectdByName(name:String ):DisplayObject
+			public function  getObjectByName(name:String ):DisplayObject
 			{
 				return accordion.getChildByName(name);
 			}
