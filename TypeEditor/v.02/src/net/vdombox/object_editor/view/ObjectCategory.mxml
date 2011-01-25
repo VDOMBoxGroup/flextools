@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			import net.vdombox.object_editor.model.vo.LanguagesVO;
+			
+//			[Bindable]
+//			public var currentLanguage:String;
+			
+			[Bindable]
+			public var words:Object = new Object();
+			
+			[Bindable]
+			public var currentLanguage:String;
+			
+			private function viewChanged():void
+			{
+				dispatchEvent(new Event(Event.CHANGE));
+			}
+			
+			public function setData(categorys:ArrayCollection, value:String,  langsVO:LanguagesVO):void
+			{
+				fCategoryComp.dataProvider = categorys;
+				currentLanguage = langsVO.currentLocation
+				
+				var fildID:String = getRegExpWord(value);
+				if (fildID == "")
+				{
+					fCategoryComp.selectedItem = value;
+				}
+				else
+				{
+					var wordsVO:ArrayCollection = langsVO.words;
+					
+					for each(var word:Object in wordsVO)
+					{		
+						if( word["ID"] == fildID)
+						{
+							words = word;
+							txt.text = words[currentLanguage];	
+							custom.selected = true;
+							break;
+						}
+					}
+				}			
+			}
+			
+			private function getRegExpWord( code:String ):String
+			{	
+				var  regResource:RegExp = /#Lang\((\d+)\)/;
+				var matchResult:Array = code.match(regResource);			
+				if (matchResult)
+				{
+					return matchResult[1];
+				}
+				return "";
+			}
+			
+			public function getData():String
+			{
+				return (standart.selected)? fCategoryComp.selectedItem : "#Lang(003)"
+			}
+			
+			private function newValue( event: Event ):void
+			{
+				words[currentLanguage] = txt.text;
+			}
+			
+			public function apdateFild( ):void
+			{
+				txt.text = words[currentLanguage];			
+			}
+			
+			// получить данные
+		    // распределить данные
+			// редактирование
+			// отдача данных
+		]]>
+	</fx:Script>
+	
+	<s:RadioButton id="standart" label="Standart" selected="true" groupName="group1" change="{viewChanged()}" />
+	<s:ComboBox id="fCategoryComp"  change="{viewChanged()}"  enabled="{standart.selected}"/>
+	<s:RadioButton id="custom" label="Custom" groupName="group1" change="{viewChanged()}" />
+	<mx:TextInput id="txt" width="100%"  change="{viewChanged();newValue(event)}"  enabled="{custom.selected}"/>
+</s:VGroup>

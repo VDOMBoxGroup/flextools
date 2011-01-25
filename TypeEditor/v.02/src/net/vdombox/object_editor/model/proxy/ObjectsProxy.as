@@ -19,6 +19,8 @@ package net.vdombox.object_editor.model.proxy
 		public static const NAME:String = "ObjectsProxy";
 		public var topLevelContainerList:ArrayCollection = new ArrayCollection();
 		public var containerList:ArrayCollection = new ArrayCollection();
+		private var _categorys:Array = new Array();
+
 
 		public function ObjectsProxy ( data:Object = null ) 
 		{
@@ -46,9 +48,14 @@ package net.vdombox.object_editor.model.proxy
 				var categoryXML : String = informationXML.Category.toString();
 				var categoryStr : String = getRegExpWord(categoryXML);
 				if(categoryStr == "")
+				{
 					item.groupName = categoryXML;
+					_categorys[categoryXML] = categoryXML ;
+				}
 				else
+				{
 					item.groupName =  langEnXML.Sentence.(@ID == categoryStr)[0].toString();
+				}
 
 				if (contType == "2") // container
 					containerList.addItem(listItem);
@@ -68,6 +75,14 @@ package net.vdombox.object_editor.model.proxy
 			stream.close();	
 			objectXML = null;
 			return item;			
+		}
+
+		public function get categorys():ArrayCollection
+		{
+			var arr: ArrayCollection = new ArrayCollection();
+			for (var i:String in _categorys)
+				arr.addItem(i);
+			return arr;
 		}
 
 		private function getImgResourseID(information:XML):String

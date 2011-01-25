@@ -2,7 +2,6 @@ package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-
 	import flash.ui.Mouse;
 	import flash.utils.ByteArray;
 
@@ -38,6 +37,7 @@ package net.vdombox.object_editor.view.mediators
 
 			view.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
 			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
+			view.addEventListener(FlexEvent.SHOW, validateInformation );
 
 		}
 
@@ -50,7 +50,7 @@ package net.vdombox.object_editor.view.mediators
 //			objectTypeVO.name 			= view.fname.text;
 			objectTypeVO.className		= view.fClassName.text;
 			objectTypeVO.id				= view.fID.text ;
-			objectTypeVO.category		= view.fCategory.text;
+//			objectTypeVO.category		= view.fCategory.data;
 			objectTypeVO.dynamic		= view.fDynamic.selected;
 			objectTypeVO.moveable		= view.fMoveable.selected;
 			objectTypeVO.version 		= view.fVersion.text;
@@ -67,6 +67,13 @@ package net.vdombox.object_editor.view.mediators
 			compliteInformation();
 		}
 
+		private function validateInformation(event:FlexEvent):void
+		{
+			view.fDisplayName.apdateFild();	
+			view.fDescription.apdateFild();
+			view.fCategory.apdateFild();
+		}
+
 		public function changeCurrentLocation( event: Event ): void
 		{
 			objectTypeVO.languages.currentLocation = view.fcurrentLocation.selectedLabel;
@@ -74,6 +81,9 @@ package net.vdombox.object_editor.view.mediators
 			view.fDisplayName.apdateFild();	
 			view.fDescription.currentLanguage = objectTypeVO.languages.currentLocation;
 			view.fDescription.apdateFild();
+
+			view.fCategory.currentLanguage = objectTypeVO.languages.currentLocation;
+			view.fCategory.apdateFild();
 			sendNotification( ApplicationFacade.CHANGE_CURRENT_LANGUAGE );
 		}
 
@@ -84,12 +94,12 @@ package net.vdombox.object_editor.view.mediators
 			view.fname.text 			= objectTypeVO.name;
 			view.fClassName.text		= objectTypeVO.className;
 			view.fID.text 				= objectTypeVO.id;
-			view.fCategory.text			= objectTypeVO.category;
 			view.fDynamic.selected		= objectTypeVO.dynamic;			
 			view.fMoveable.selected		= objectTypeVO.moveable;
 			view.fVersion.text 			= objectTypeVO.version;
 			view.fWCAG.text				= objectTypeVO.wcag;
 
+			view.fCategory.setData(objectsProxy.categorys, objectTypeVO.category, objectTypeVO.languages);
 			view.fDisplayName.completeStructure( objectTypeVO.languages, objectTypeVO.displayName );
 			view.fDescription.completeStructure( objectTypeVO.languages, objectTypeVO.description );
 

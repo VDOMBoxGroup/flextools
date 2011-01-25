@@ -30,7 +30,7 @@ package net.vdombox.object_editor.view
 		{
 			super.text = words[currentLanguage];			
 		}
-		
+
 		public function clearTextArea( ):void
 		{
 			currentLanguage = null;
