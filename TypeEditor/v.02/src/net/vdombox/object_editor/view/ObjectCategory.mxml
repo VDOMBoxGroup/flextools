@@ -34,22 +34,22 @@
 				if (fildID == "")
 				{
 					fCategoryComp.selectedItem = value;
+					standart.selected  = true
+					fildID = "003"
 				}
-				else
-				{
-					var wordsVO:ArrayCollection = langsVO.words;
-					
-					for each(var word:Object in wordsVO)
-					{		
-						if( word["ID"] == fildID)
-						{
-							words = word;
-							txt.text = words[currentLanguage];	
-							custom.selected = true;
-							break;
-						}
+				
+				var wordsVO:ArrayCollection = langsVO.words;
+				for each(var word:Object in wordsVO)
+				{		
+					if( word["ID"] == fildID)
+					{
+						words = word;
+						txt.text = words[currentLanguage];	
+//						custom.selected = true;
+						break;
 					}
-				}			
+				}
+							
 			}
 			
 			private function getRegExpWord( code:String ):String
@@ -85,8 +85,8 @@
 		]]>
 	</fx:Script>
 	
-	<s:RadioButton id="standart" label="Standart" selected="true" groupName="group1" change="{viewChanged()}" />
+	<s:RadioButton id="standart" label="Standart"  groupName="group1" change="{viewChanged()}" />
 	<s:ComboBox id="fCategoryComp"  change="{viewChanged()}"  enabled="{standart.selected}"/>
-	<s:RadioButton id="custom" label="Custom" groupName="group1" change="{viewChanged()}" />
+	<s:RadioButton id="custom" label="Custom" groupName="group1" selected="true" change="{viewChanged()}" />
 	<mx:TextInput id="txt" width="100%"  change="{viewChanged();newValue(event)}"  enabled="{custom.selected}"/>
 </s:VGroup>
