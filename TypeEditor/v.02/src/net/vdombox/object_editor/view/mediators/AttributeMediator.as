@@ -34,17 +34,17 @@ package net.vdombox.object_editor.view.mediators
 			this.objectTypeVO = objTypeVO;	
 			view.addEventListener( FlexEvent.SHOW, showAttributes );
 			view.addEventListener( Event.CHANGE,   validateObjectTypeVO );
-			view.addEventListener( Event.SELECT,   selectCodeInterface );	
+//		todo	view.addEventListener( Event.SELECT,   selectCodeInterface );	
 //			attributes.addEventListener( FlexEvent.HIDE, hideAttributes );
 		}
 		
-		private function selectCodeInterface( event:Event ):void
+		private function selectCodeInterface( event:Event = null ):void
 		{ 			
 			view.label= "Attributes*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 			if( currentAttributeVO )
 			{
-				currentAttributeVO.codeInterface = view.codeInterface.selectedItem.data;//textInput.text;//data;				
+				currentAttributeVO.codeInterface = view.codeInterface.selectedItem.data;			
 			}			
 		}
 
@@ -84,6 +84,7 @@ package net.vdombox.object_editor.view.mediators
 				currentAttributeVO.interfaceType	= view.interfaceType.selectedIndex;
 				currentAttributeVO.colorgroup		= view.colorgroup.selectedIndex;
 				currentAttributeVO.codeInterface	= view.codeInterface.textInput.text;
+//			todo	selectCodeInterface();
 				currentAttributeVO.regularExpressionValidation = view.regExp.text;
 			}
 		}
@@ -103,12 +104,13 @@ package net.vdombox.object_editor.view.mediators
 			view.colorgroup.selectedIndex 		= attributeVO.colorgroup;
 			view.regExp.text					= attributeVO.regularExpressionValidation;
 			view.codeInterface.textInput.text	= attributeVO.codeInterface;
+//		todo	view.compliteCodeInterfaceField(attributeVO.codeInterface);
 			
 			view.displayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );
 			view.help.completeStructure       ( objectTypeVO.languages, attributeVO.help );
 			view.errMessage.completeStructure ( objectTypeVO.languages, attributeVO.errorValidationMessage );
 		}
-
+		
 		private function showAttributes(event: FlexEvent): void
 		{			
 			view.attributesList.addEventListener       ( Event.CHANGE, selectAtribute);

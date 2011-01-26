@@ -5,15 +5,35 @@
 					 xmlns:ns="net.vdombox.object_editor.model.*"
 					 xmlns:ns2="net.vdombox.object_editor.view.*"
 					 label="Attributes">
-	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	<fx:Declarations>		
+				
+		<mx:NumberValidator source="{minValue}" property="text" integerError="Enter Integer value"
+			 domain="int" trigger="{minValue}" triggerEvent="change"/>
+		
+		<mx:NumberValidator source="{maxValue}" property="text" integerError="Enter Integer value"
+							domain="int" trigger="{maxValue}" triggerEvent="change"/>
+		
+		<mx:NumberValidator source="{multiLineLength}" property="text" integerError="Enter Integer value"
+							domain="int" trigger="{multiLineLength}" triggerEvent="change"/>
+		
+		<mx:NumberValidator source="{multiLineLength}" property="text" integerError="Enter Integer value"
+							domain="int" trigger="{multiLineLength}" triggerEvent="change" minValue="0"/>
+		
+		<mx:NumberValidator source="{fieldLength}" property="text" integerError="Enter Integer value"
+							domain="int" trigger="{fieldLength}" triggerEvent="change" minValue="0"/>
+		
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.mx_internal;
+			import mx.messaging.channels.StreamingAMFChannel;
 			
 			import net.vdombox.object_editor.view.AttributesListRenderer;
 			
+			private var DEFAULT_NUMBER_VALUE:String = int.MAX_VALUE.toString();
+					
 			[Bindable]
 			public var currentAttribute:Object;
 						
@@ -47,17 +67,17 @@
 
 			[Bindable]
 			public var arCodeInterface:ArrayCollection = new ArrayCollection(
-				[ 	{label:"TextField", 		data:"TextField(Length)"},
-					{label:"Number1", 			data:"Number(minValue, maxValue)"}, 
-					{label:"MultiLine", 		data:"MultiLine(Length)"}, 
-					{label:"Font", 				data:"!Font()"}, 
-					{label:"DropDown", 			data:"DropDown(Values)"}, 
-					{label:"File", 				data:"File()"}, 
-					{label:"Color", 			data:"Color()"}, 
-					{label:"PageLink", 			data:"PageLink()"}, 
-					{label:"LinkedBase",		data:"LinkedBase()"}, 
-					{label:"ObjectList", 		data:"ObjectList(type_id)"}, 
-					{label:"ExternalEditor",	data:"ExternalEditor(Title, Info)"}
+				[ 	"TextField",					
+					"Number1", 
+					"MultiLine", 
+					"!Font", 
+					"DropDown", 
+					"File", 
+					"Color", 
+					"PageLink", 
+					"LinkedBase", 
+					"ObjectList", 
+					"ExternalEditor"
 				]);	
 								
 			private function changeField():void
@@ -65,10 +85,49 @@
 				dispatchEvent(new Event( Event.CHANGE ));
 			}
 			
-			private function changeStack():void
+			public function compliteCodeInterfaceField(value:String):void
+			{
+				var num:int = value.indexOf("(");
+				var label:String = value.slice(0,num); 
+				if( label != "!Font" &&
+					label != "File" &&
+					label != "Color" &&
+					label != "PageLink" &&
+					label != "LinkedBase" )
+				{
+					var num2:int;
+					switch ( label ) 
+					{	
+						case "TextField":
+							fieldLength.text = value.slice(num+1,value.length-1);
+							break;
+						case "Number1":
+							num2 = value.indexOf(",");
+							minValue.text = value.slice(num+1,num2);							
+							maxValue.text = value.slice(num2+1,value.length-1);
+							break;
+						case "MultiLine":
+							multiLineLength.text = value.slice(num+1,value.length-1); 
+							break;					
+						case "DropDown":
+							ddValues.text = value.slice(num+1,value.length-1); 
+							break;					
+						case "ObjectList":
+							typeId.text = value.slice(num+1,value.length-1);
+							break;
+						case "ExternalEditor":
+							num2 = value.indexOf(",");
+							title.text = value.slice(num+1,num2);	
+							info.text  = value.slice(num2+1,value.length-1);
+							break;
+					}
+				}
+				codeInterface.selectedItem = label;
+			}
+			
+			private function changeStack(isChangeStack:Boolean):void
 			{				
 				var label:String = codeInterface.selectedItem.label;
-//				var data: String = new String();
 				if( label != "Font" &&
 					label != "File" &&
 					label != "Color" &&
@@ -77,31 +136,72 @@
 				{
 					var ch:* = myViewStack.getChildByName(codeInterface.selectedItem.label);
 					myViewStack.selectedChild = ch;
-					setData(label);
+					setData(label, isChangeStack);
 				}	
 				else
 				{
 					myViewStack.selectedChild = notArguments;
+					switch ( label ) 
+					{	
+						case "Font":						
+							arCodeInterface[3].data = "!" + label + "()";
+							break;
+						case "File":
+							arCodeInterface[5].data = label + "()";		
+							break;
+						case "Color":
+							arCodeInterface[6].data = label + "()";
+							break;
+						case "PageLink":
+							arCodeInterface[7].data = label + "()";
+							break;
+						case "LinkedBase":
+							arCodeInterface[8].data = label + "()";
+							break;
+					}
 				}
 				dispatchEvent(new Event( Event.SELECT));
 			}
 			
-			private function setData( label:String ):void
-			{
-//				var obj:Object = new Object();
+			private function setData( label:String, isChangeStack:Boolean):void
+			{				
 				switch ( label ) 
-				{					
+				{	
+					case "TextField":
+						if(isChangeStack) 
+							arCodeInterface[0].data = label + "()";
+						else
+							arCodeInterface[0].data = label + "(" + fieldLength.text +")";
+						break;
 					case "Number1":
-//						obj = arCodeInterface[1];
-						arCodeInterface[1].data = label + "(" + minValue + "," + maxValue + ")";
+						if(isChangeStack) 
+							arCodeInterface[1].data = label + "()";
+						else
+							arCodeInterface[1].data = label + "(" + minValue.text + "," + maxValue.text + ")";
 						break;
 					case "MultiLine":
-//						obj = arCodeInterface[2];
-						arCodeInterface[2].data = label + "(" + multiLineLength + ")";
+						if(isChangeStack) 
+							arCodeInterface[2].data = label + "()";
+						else
+						arCodeInterface[2].data = label + "(" + multiLineLength.text + ")";
+						break;					
+					case "DropDown":
+						if(isChangeStack) 
+							arCodeInterface[4].data = label + "()";
+						else
+							arCodeInterface[4].data = label + "("+ ddValues.text +")";
+						break;					
+					case "ObjectList":
+						if(isChangeStack) 
+							arCodeInterface[9].data = label + "()";
+						else
+							arCodeInterface[9].data = label + "(" + typeId.text + ")";
 						break;
-					case "Font":
-//						obj = arCodeInterface[3];
-						arCodeInterface[3].data = "!" + label + "()";
+					case "ExternalEditor":
+						if(isChangeStack) 
+							arCodeInterface[10].data = label + "()";
+						else
+							arCodeInterface[10].data = label + "(" + title.text +","+ info.text + ")";
 						break;
 				}
 			}
@@ -164,7 +264,8 @@
 			
 			<mx:FormItem label="CodeInterface" >
 				<s:HGroup>
-					<s:ComboBox change="{changeStack()}" id="codeInterface" dataProvider="{arCodeInterface}" width="250" />
+					<!-- todo s:ComboBox change="{changeStack(true)}" id="codeInterface" dataProvider="{arCodeInterface}" width="250" /-->
+					<s:ComboBox change="{changeField()}" id="codeInterface" dataProvider="{arCodeInterface}" width="250" />
 				</s:HGroup>
 				<mx:ViewStack id="myViewStack" borderStyle="solid" width="250" height="120" color="0x323232">
 					
@@ -177,7 +278,7 @@
 						
 						<s:HGroup>
 							<s:Label 	 text="Length:"/>
-							<s:TextInput id="fieldLength" width="180" change="changeStack()"/>							
+							<s:TextInput id="fieldLength" width="180" change="changeStack(false)" text="{DEFAULT_NUMBER_VALUE}"/>							
 						</s:HGroup>
 					</s:NavigatorContent>
 					
@@ -190,9 +291,9 @@
 						
 						<s:VGroup>
 							<s:Label 	 text="min Value"/>
-							<s:TextInput id="minValue" width="200" change="changeStack()"/>
+							<s:TextInput id="minValue" width="200" change="changeStack(false)" text="{DEFAULT_NUMBER_VALUE}" />
 							<s:Label 	 text="max Value"/>
-							<s:TextInput id="maxValue" width="200" change="changeStack()"/>
+							<s:TextInput id="maxValue" width="200" change="changeStack(false)" text="{DEFAULT_NUMBER_VALUE}"/>
 						</s:VGroup>
 					</s:NavigatorContent>
 					
@@ -204,7 +305,7 @@
 						</s:layout>
 						<s:HGroup>
 							<s:Label 	 text="Length:"/>
-							<s:TextInput id="multiLineLength" width="180" change="changeStack()"/>
+							<s:TextInput id="multiLineLength" width="180" change="changeStack(false)" text="{DEFAULT_NUMBER_VALUE}"/>
 						</s:HGroup>
 					</s:NavigatorContent>
 					
@@ -216,7 +317,7 @@
 						</s:layout>
 						<s:HGroup>
 							<s:Label 	 text="Values:"/>
-							<s:TextInput id="ddValues" width="180" change="changeStack()"/>
+							<s:TextInput id="ddValues" width="180" change="changeStack(false)" text="Value"/>
 						</s:HGroup>
 					</s:NavigatorContent>
 					
@@ -228,7 +329,7 @@
 						</s:layout>
 						<s:HGroup>
 							<s:Label	 text="type id:"/>
-							<s:TextInput id="typeId" width="180" change="changeStack()"/>
+							<s:TextInput id="typeId" width="180" change="changeStack(false)"  text="Type ID"/>
 						</s:HGroup>
 					</s:NavigatorContent>
 					
@@ -240,9 +341,9 @@
 						</s:layout>
 						<s:VGroup>
 							<s:Label 		text="Title:"/>
-							<s:TextInput	id="title" width="200" change="changeStack()"/>
+							<s:TextInput	id="title" width="200" change="changeStack(false)" text="Title"/>
 							<s:Label  		text="Info:"/>
-							<s:TextInput 	id="info"  width="200" change="changeStack()"/>
+							<s:TextInput 	id="info"  width="200" change="changeStack(false)" text="Info"/>
 						</s:VGroup>
 					</s:NavigatorContent>
 					

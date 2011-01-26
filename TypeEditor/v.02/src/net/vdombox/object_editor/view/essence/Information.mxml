@@ -27,19 +27,19 @@
 			[Bindable]
 			public var arInterfaceType:ArrayCollection = new ArrayCollection(
 				[ 	
-					{label:"SELECT VALUE", data:0},
-					{label:"Standard", data:1}, 
-					{label:"RichText Editor", data:2}, 
-					{label:"Text Editor", data:3}, 
-					{label:"Picture", data:4}, 
-					{label:"Special Table", data:5}]);
+					{label:"SELECT VALUE", 			data:0},
+					{label:"Standard", 				data:1}, 
+					{label:"RichText Editor", 		data:2}, 
+					{label:"Text Editor", 			data:3}, 
+					{label:"Picture", 				data:4}, 
+					{label:"Special Table", 		data:5}]);
 		
 			[Bindable]
 			public var aResizable:ArrayCollection = new ArrayCollection(
-				[ 	{label:"Not scalable", data:0}, 
-					{label:"Scalable Horizontal", data:1}, 
-					{label:"Scalable Vertical", data:2}, 
-					{label:"Scalable on both", data:3}]);			
+				[ 	{label:"Not scalable", 			data:0}, 
+					{label:"Scalable Horizontal", 	data:1}, 
+					{label:"Scalable Vertical", 	data:2}, 
+					{label:"Scalable on both",		data:3}]);			
 			
 			
 			private function viewChanged():void
