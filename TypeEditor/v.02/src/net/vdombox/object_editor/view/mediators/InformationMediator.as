@@ -47,14 +47,20 @@ package net.vdombox.object_editor.view.mediators
 //			trace("CHANGECHANGE");
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 
-//			objectTypeVO.name 			= view.fname.text;
+			objectTypeVO.name 			= view.fname.text;
 			objectTypeVO.className		= view.fClassName.text;
 			objectTypeVO.id				= view.fID.text ;
-//			objectTypeVO.category		= view.fCategory.data;
+			objectTypeVO.category		= view.fCategory.getData();
 			objectTypeVO.dynamic		= view.fDynamic.selected;
 			objectTypeVO.moveable		= view.fMoveable.selected;
 			objectTypeVO.version 		= view.fVersion.text;
 			objectTypeVO.wcag			= view.fWCAG.text;
+
+			objectTypeVO.remoteMethods		= view.fRemoteMethods.text;
+			objectTypeVO.handlers			= view.fHandlers.text;
+			objectTypeVO.XMLScriptName		= view.fXMLScriptName.text;
+			objectTypeVO.renderType			= (view.fRenderType.enabled)?view.fRenderType.text : "";
+
 
 			objectTypeVO.resizable	 	= view.fResizable.selectedIndex ;
 			objectTypeVO.container 	 	= view.fContainerI.selectedIndex;			

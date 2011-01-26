@@ -4,7 +4,7 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
-	
+
 	import net.vdombox.object_editor.model.vo.ActionParameterVO;
 	import net.vdombox.object_editor.model.vo.ActionVO;
 	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
@@ -14,7 +14,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
 	import net.vdombox.object_editor.view.essence.Resourses;
-	
+
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -49,7 +49,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				objTypeVO.resources  		= resourcesProxy.createFromXML(objTypeXML);
 
 				//проверка на повторное использование id
-				
+
 				_objectTypeList[objTypeVO.filePath] = reuseID(objTypeVO);
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
 			}
@@ -68,6 +68,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			objTypeVO.description = languagesProxy.used(objTypeVO.languages, objTypeVO.description);
 			objTypeVO.displayName = languagesProxy.used(objTypeVO.languages, objTypeVO.displayName);
+			languagesProxy.used(objTypeVO.languages, "#Lang(003)");
+
 		}
 
 		private function reuseEventsID( objTypeVO: ObjectTypeVO):void
@@ -164,15 +166,15 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			information.Containers 			= objTypeVO.containers;
 			information.Description 		= objTypeVO.description;
 			information.DisplayName	 		= objTypeVO.displayName;	
-			information.Dynamic 			= objTypeVO.dynamic;
+			information.Dynamic 			= (objTypeVO.dynamic)? "1": "0";
 			information.EditorIcon			= objTypeVO.editorIcon;
 			information.Handlers 			= objTypeVO.handlers;
 			information.Name 				= objTypeVO.name;
 			information.Icon				= objTypeVO.icon;
 			information.ID 					= objTypeVO.id;
 			information.InterfaceType 		= objTypeVO.interfaceType;
-			information.Languages 			= objTypeXML.appendChild(information);
-			information.Moveable 			= objTypeVO.moveable;
+//			information.Languages 			= ""; //objTypeXML.appendChild(information); is not used
+			information.Moveable 			= (objTypeVO.moveable)? "1": "0";
 			information.OptimizationPriority = objTypeVO.optimizationPriority;
 			information.RemoteMethods		= objTypeVO.remoteMethods;
 			information.RenderType 			= objTypeVO.renderType;
@@ -181,6 +183,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			information.WCAG 				= objTypeVO.wcag;
 			information.XMLScriptName 		= objTypeVO.XMLScriptName;	
 			information.Version 			= objTypeVO.version;
+
+			objTypeXML.appendChild(information);
 
 			return objTypeXML;
 		}

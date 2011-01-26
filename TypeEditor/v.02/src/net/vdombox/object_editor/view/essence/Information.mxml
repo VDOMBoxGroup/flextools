@@ -119,10 +119,10 @@
 			<s:Button id="editContainersBt" label="Edit" />
 		</mx:FormItem>		
 		
-		<mx:FormItem label="Languages" toolTip="Список поддерживаемых объектом языков (формат ISO 3168-1)" 
+		<!--mx:FormItem label="Languages" toolTip="Список поддерживаемых объектом языков (формат ISO 3168-1)" 
 					 enabled="false">
 			<mx:TextInput id="fLanguages" width="250" editable="false" change="{viewChanged()}"/>
-		</mx:FormItem>
+		</mx:FormItem-->
 		
 		<mx:FormItem label="RemoteMethods" toolTip="писок статических функций объекта, доступных через SOAP (execute_sql, get_data, ...)">
 			<mx:TextInput id="fRemoteMethods" width="250" change="{viewChanged()}" />
