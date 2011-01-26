@@ -30,7 +30,20 @@ package net.vdombox.object_editor.model.vo
 			var nextInd :String = new String();
 
 			if( idList.length > 0 )
+			{
+				var lengthNextInd:int = idList[0].length; 				
 				nextInd = (int(idList[0])+1).toString();
+				
+				//for numbers: "001", "002", ..., "010"
+				lengthNextInd -=nextInd.length;
+				if(lengthNextInd > 0)
+				{
+					for(var i:int=0; i < lengthNextInd; i++)
+					{
+						nextInd = "0" + nextInd;
+					}
+				}				
+			}
 			else
 				nextInd = startId.toString() + "00";
 

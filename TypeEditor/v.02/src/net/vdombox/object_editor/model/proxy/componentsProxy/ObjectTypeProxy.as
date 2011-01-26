@@ -69,7 +69,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objTypeVO.description = languagesProxy.used(objTypeVO.languages, objTypeVO.description);
 			objTypeVO.displayName = languagesProxy.used(objTypeVO.languages, objTypeVO.displayName);			
 			languagesProxy.used(objTypeVO.languages, "#Lang(003)");
-
 		}
 
 		private function reuseEventsID( objTypeVO: ObjectTypeVO):void
