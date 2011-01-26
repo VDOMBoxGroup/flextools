@@ -33,8 +33,19 @@ package net.vdombox.object_editor.view.mediators
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
 			view.addEventListener( FlexEvent.SHOW, showAttributes );
-			view.addEventListener( Event.CHANGE,   validateObjectTypeVO );			
+			view.addEventListener( Event.CHANGE,   validateObjectTypeVO );
+			view.addEventListener( Event.SELECT,   selectCodeInterface );	
 //			attributes.addEventListener( FlexEvent.HIDE, hideAttributes );
+		}
+		
+		private function selectCodeInterface( event:Event ):void
+		{ 			
+			view.label= "Attributes*";			
+			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+			if( currentAttributeVO )
+			{
+				currentAttributeVO.codeInterface = view.codeInterface.selectedItem.data;//textInput.text;//data;				
+			}			
 		}
 
 		private function changeName( event:Event ):void

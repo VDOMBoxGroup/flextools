@@ -48,9 +48,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				objTypeVO.sourceCode 		= objTypeXML.SourceCode.toString();
 				objTypeVO.resources  		= resourcesProxy.createFromXML(objTypeXML);
 
-				//проверка на повторное использование id
-
+				//проверка на повторное использование id				
 				_objectTypeList[objTypeVO.filePath] = reuseID(objTypeVO);
+
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
 			}
 		}
@@ -60,14 +60,14 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			reuseInformationID	( objTypeVO );
 			reuseActionsID		( objTypeVO );
 			reuseAttributesID	( objTypeVO );
-			reuseEventsID		( objTypeVO );	
+			reuseEventsID		( objTypeVO );			
 			return objTypeVO;
 		}
 
 		private function reuseInformationID( objTypeVO: ObjectTypeVO):void
 		{
 			objTypeVO.description = languagesProxy.used(objTypeVO.languages, objTypeVO.description);
-			objTypeVO.displayName = languagesProxy.used(objTypeVO.languages, objTypeVO.displayName);
+			objTypeVO.displayName = languagesProxy.used(objTypeVO.languages, objTypeVO.displayName);			
 			languagesProxy.used(objTypeVO.languages, "#Lang(003)");
 
 		}
