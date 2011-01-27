@@ -105,55 +105,62 @@
 			{
 				CodeInterfaceValue = value;
 				
-//				var ci_reqex = \\gi;
 				
-				var num:int = CodeInterfaceValue.indexOf("(");
-							
-				var label:String = CodeInterfaceValue.slice(0,num); 
-				codeInterface.selectedItem = label;
+				var ciparser:RegExp = /([^\(]+)\(([^\)]*)\)/;
+				var parsed:Array = ciparser.exec(value);				
+				var codeinterfaceLabel:String = parsed[1];
+				var arguments:Array = parsed[2].split(",");
 				
-				if( label != "!Font" &&
-					label != "File" &&
-					label != "Color" &&
-					label != "PageLink" &&
-					label != "LinkedBase" )
+				
+				
+//				var num:int = CodeInterfaceValue.indexOf("(");
+//							
+//				var label:String = CodeInterfaceValue.slice(0,num); 
+				codeInterface.selectedItem = codeinterfaceLabel;
+				
+				if( codeinterfaceLabel != "!Font" &&
+					codeinterfaceLabel != "File" &&
+					codeinterfaceLabel != "Color" &&
+					codeinterfaceLabel != "PageLink" &&
+					codeinterfaceLabel != "LinkedBase" )
 				{
-					var num2:int;
-					switch ( label ) 
+//					var num2:int;
+					switch ( codeinterfaceLabel ) 
 					{	
 						case "TextField":
 							CIViewStack.selectedIndex = 0;
 							CIViewStack.validateNow();
-							fieldLength.text = CodeInterfaceValue.slice(num+1,CodeInterfaceValue.length-1);
+							fieldLength.text = arguments[0];//CodeInterfaceValue.slice(num+1,CodeInterfaceValue.length-1);
 							break;
 						case "Number1":
 							CIViewStack.selectedIndex = 1;
 							CIViewStack.validateNow();
-							num2 = 			CodeInterfaceValue.indexOf(",");
-							minValue.text = CodeInterfaceValue.slice(num+1,num2);							
-							maxValue.text = CodeInterfaceValue.slice(num2+1,CodeInterfaceValue.length-1);
+//							num2 = 			CodeInterfaceValue.indexOf(",");
+							minValue.text = arguments[0];//CodeInterfaceValue.slice(num+1,num2);							
+							maxValue.text = arguments[1];//CodeInterfaceValue.slice(num2+1,CodeInterfaceValue.length-1);
 							break;
 						case "MultiLine":
 							CIViewStack.selectedIndex = 2;
 							CIViewStack.validateNow();
-							multiLineLength.text = CodeInterfaceValue.slice(num+1,CodeInterfaceValue.length-1); 
+							multiLineLength.text = arguments[0];//CodeInterfaceValue.slice(num+1,CodeInterfaceValue.length-1); 
 							break;					
 						case "DropDown":
-							CIViewStack.selectedIndex = 4;
+							CIViewStack.selectedIndex = 3;
 							CIViewStack.validateNow();
+							var num:int = CodeInterfaceValue.indexOf("(");
 							ddValues.text = CodeInterfaceValue.slice(num+1,CodeInterfaceValue.length-1); 
 							break;					
 						case "ObjectList":
-							CIViewStack.selectedIndex = 9;
+							CIViewStack.selectedIndex = 4;
 							CIViewStack.validateNow();
-							typeId.text = CodeInterfaceValue.slice(num+1,CodeInterfaceValue.length-1);
+							typeId.text = arguments[0];//CodeInterfaceValue.slice(num+1,CodeInterfaceValue.length-1);
 							break;
 						case "ExternalEditor":
-							CIViewStack.selectedIndex = 10;
+							CIViewStack.selectedIndex = 5;
 							CIViewStack.validateNow();
-							num2 = 		 CodeInterfaceValue.indexOf(",");
-							title.text = CodeInterfaceValue.slice(num+1,num2);	
-							info.text  = CodeInterfaceValue.slice(num2+1,CodeInterfaceValue.length-1);
+//							num2 = 		 CodeInterfaceValue.indexOf(",");
+							title.text = arguments[0];//CodeInterfaceValue.slice(num+1,num2);	
+							info.text  = arguments[1];//CodeInterfaceValue.slice(num2+1,CodeInterfaceValue.length-1);
 							break;
 					}
 				}
