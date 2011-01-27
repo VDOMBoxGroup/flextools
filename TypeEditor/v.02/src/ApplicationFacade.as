@@ -50,6 +50,7 @@ package
 			registerCommand( OPEN_OBJECT, 		OpenObjectCommand );
 			registerCommand( SAVE_OBJECT_TYPE, 	SaveObjectTypeCommand );
 			registerCommand( SAVE_AS_OBJECT_TYPE,NewObjectTypePathCommand );
+			trace("qwqww");
 
 		}
 

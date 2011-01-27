@@ -124,7 +124,7 @@
 			<mx:TextInput id="fLanguages" width="250" editable="false" change="{viewChanged()}"/>
 		</mx:FormItem-->
 		
-		<mx:FormItem label="RemoteMethods" toolTip="писок статических функций объекта, доступных через SOAP (execute_sql, get_data, ...)">
+		<mx:FormItem label="RemoteMethods" toolTip="список статических функций объекта, доступных через SOAP (execute_sql, get_data, ...)">
 			<mx:TextInput id="fRemoteMethods" width="250" change="{viewChanged()}" />
 		</mx:FormItem>
 		

@@ -34,8 +34,9 @@ package net.vdombox.object_editor.view.mediators
 			this.objectTypeVO = objTypeVO;	
 			view.addEventListener( FlexEvent.SHOW, showAttributes );
 			view.addEventListener( Event.CHANGE,   validateObjectTypeVO );
-//		todo	view.addEventListener( Event.SELECT,   selectCodeInterface );	
+			view.addEventListener( Event.SELECT,   selectCodeInterface );	
 //			attributes.addEventListener( FlexEvent.HIDE, hideAttributes );
+			
 		}
 		
 		private function selectCodeInterface( event:Event = null ):void
@@ -44,7 +45,7 @@ package net.vdombox.object_editor.view.mediators
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 			if( currentAttributeVO )
 			{
-				currentAttributeVO.codeInterface = view.codeInterface.selectedItem.data;			
+				currentAttributeVO.codeInterface = view.CodeInterfaceValue.toString();//view.codeInterface.selectedItem.data;			
 			}			
 		}
 
@@ -83,8 +84,8 @@ package net.vdombox.object_editor.view.mediators
 				currentAttributeVO.visible			= view.visibleAtr.selected;
 				currentAttributeVO.interfaceType	= view.interfaceType.selectedIndex;
 				currentAttributeVO.colorgroup		= view.colorgroup.selectedIndex;
-				currentAttributeVO.codeInterface	= view.codeInterface.textInput.text;
-//			todo	selectCodeInterface();
+//				currentAttributeVO.codeInterface	= view.codeInterface.textInput.text;
+				selectCodeInterface();
 				currentAttributeVO.regularExpressionValidation = view.regExp.text;
 			}
 		}
@@ -97,22 +98,25 @@ package net.vdombox.object_editor.view.mediators
 
 		private function fillAttributeFilds(attributeVO:AttributeVO):void
 		{
+			trace("4. fillAttributeFilds begin");
 			view.fname.text 					= attributeVO.name;	
 			view.defaultValue.text				= attributeVO.defaultValue;		
 			view.visibleAtr.selected			= attributeVO.visible;	
 			view.interfaceType.selectedIndex 	= attributeVO.interfaceType;
 			view.colorgroup.selectedIndex 		= attributeVO.colorgroup;
 			view.regExp.text					= attributeVO.regularExpressionValidation;
-			view.codeInterface.textInput.text	= attributeVO.codeInterface;
-//		todo	view.compliteCodeInterfaceField(attributeVO.codeInterface);
+//			view.codeInterface.textInput.text	= attributeVO.codeInterface;
+			view.compliteCodeInterfaceField(attributeVO.codeInterface);
 			
 			view.displayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );
 			view.help.completeStructure       ( objectTypeVO.languages, attributeVO.help );
 			view.errMessage.completeStructure ( objectTypeVO.languages, attributeVO.errorValidationMessage );
+			trace("4. fillAttributeFilds end");
 		}
 		
 		private function showAttributes(event: FlexEvent): void
-		{			
+		{		
+			trace("1. showAttributes begin");
 			view.attributesList.addEventListener       ( Event.CHANGE, selectAtribute);
 			view.fname.addEventListener                ( Event.CHANGE, changeName );
 			view.addAttributeButton.addEventListener   ( MouseEvent.CLICK, addAttribute );
@@ -120,6 +124,7 @@ package net.vdombox.object_editor.view.mediators
 			view.colorgroup.addEventListener		   ( Event.CHANGE, apdateBackgroundColor );
 			compliteAtributes();
 			view.validateNow();
+			trace("1. showAttributes end");
 		}
 		
 		private function addAttribute(event:MouseEvent): void
@@ -163,6 +168,7 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function setCurrentAttribute(listIndex:int = 0):void
 		{
+			trace("3. setCurrentAttribute begin");
 			if ( listIndex < 0 )
 			{
 				listIndex = 0;
@@ -180,6 +186,7 @@ package net.vdombox.object_editor.view.mediators
 				view.currentAttribute = null;
 				currentAttributeVO	  = null;
 			}
+			trace("3. setCurrentAttribute end");
 		}
 
 		private  function hideAttributes(event: FlexEvent):void
@@ -197,8 +204,10 @@ package net.vdombox.object_editor.view.mediators
 		protected function compliteAtributes( ):void
 		{	
 //			sortAttributes();
+			trace("2. compliteAtributes begin");
 			view.attributesList.dataProvider = objectTypeVO.attributes;			
 			setCurrentAttribute();
+			trace("2. compliteAtributes end");
 		}		
 		override public function listNotificationInterests():Array 
 		{			

@@ -34,7 +34,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				attrXML.Visible			= attribVO.visible;	
 				attrXML.Help			= attribVO.help;
 				attrXML.InterfaceType	= attribVO.interfaceType;
-				attrXML.CodeInterface	= attribVO.codeInterface;	
+				attrXML.CodeInterface	= attribVO.codeInterface;
+				attrXML.CodeInterface	= attribVO.codeInterface.replace("Number1", "Number");
 				attrXML.Colorgroup		= attribVO.colorgroup;
 				attrXML.ErrorValidationMessage		= attribVO.errorValidationMessage;
 				attrXML.RegularExpressionValidation	= attribVO.regularExpressionValidation;
