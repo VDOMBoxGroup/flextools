@@ -56,10 +56,10 @@ package net.vdombox.object_editor.view.mediators
 			objectTypeVO.version 		= view.fVersion.text;
 			objectTypeVO.wcag			= view.fWCAG.text;
 
-			objectTypeVO.remoteMethods		= view.fRemoteMethods.text;
-			objectTypeVO.handlers			= view.fHandlers.text;
-			objectTypeVO.XMLScriptName		= view.fXMLScriptName.text;
-			objectTypeVO.renderType			= (view.fRenderType.enabled)?view.fRenderType.text : "";
+			objectTypeVO.remoteMethods	= view.fRemoteMethods.text;
+			objectTypeVO.handlers		= view.fHandlers.text;
+			objectTypeVO.XMLScriptName	= view.fXMLScriptName.text;
+			objectTypeVO.renderType		= (view.fRenderType.enabled)?view.fRenderType.text : "";
 
 
 			objectTypeVO.resizable	 	= view.fResizable.selectedIndex ;

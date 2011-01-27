@@ -180,6 +180,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function used(langsVO: LanguagesVO, idString:String):String
 		{
 			var id:String = getRegExpID(langsVO, idString);
+			//if langID exist and used
 			if ( langsVO.isUsedWords[id] )
 			{
 				var idPart:String = id.toString().slice(0,1);
@@ -188,12 +189,14 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				return newID; 				
 			}
 			else
-			{				
+			{	
+				//if langID exist and not used
 				if( langsVO.isUsedWords[id] == false)
 				{
 					langsVO.isUsedWords[id] = true;
 					return idString;
 				}
+				//if langID not exist
 				else
 				{
 					var newID:String = getNextId(langsVO, id.toString().slice(0,1));

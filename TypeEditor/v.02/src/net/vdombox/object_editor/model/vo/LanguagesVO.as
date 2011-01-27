@@ -53,8 +53,10 @@ package net.vdombox.object_editor.model.vo
 			for each( var localeName:Object  in locales )
 				newWrd[localeName.data] = (oldWord) ? oldWord[localeName.data] : "";
 
-
-			newWrd[currentLocation] = newValue;		
+			if(newValue != "")
+			{
+				newWrd[currentLocation] = newValue;
+			}
 
 			//добавляет в конец списка
 			words.addItem( newWrd );			

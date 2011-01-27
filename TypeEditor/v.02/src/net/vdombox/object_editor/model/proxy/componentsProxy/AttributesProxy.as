@@ -31,7 +31,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				attrXML.Name			= attribVO.name;
 				attrXML.DisplayName		= attribVO.displayName;
 				attrXML.DefaultValue	= attribVO.defaultValue;	
-				attrXML.Visible			= attribVO.visible;	
+				attrXML.Visible			= (attribVO.visible)? "1": "0";	
 				attrXML.Help			= attribVO.help;
 				attrXML.InterfaceType	= attribVO.interfaceType;
 				attrXML.CodeInterface	= attribVO.codeInterface;
