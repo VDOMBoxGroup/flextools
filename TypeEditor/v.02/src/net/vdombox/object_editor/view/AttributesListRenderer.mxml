@@ -54,11 +54,11 @@
 	</s:layout>
 	
 	<s:Group doubleClickEnabled="true" width="100%" height="100%" >
-		<s:Rect width="100%" height="100%">
+		<s:Rect width="100%" height="100%" >
 			<s:fill>
-				<s:SolidColor id="bsc" color="{backColor}" />
+				<s:SolidColor id="bsc" color.normal="{backColor}"  color.hovered="blue" color.selected="blue" />
 			</s:fill>			
 		</s:Rect>			
-		<s:Label id="txt" text="{data.label}" fontSize.selected="20"/>		
+		<s:Label id="txt" text="{data.label}" fontSize.selected="20" />		
 	</s:Group>	
 </s:ItemRenderer>
