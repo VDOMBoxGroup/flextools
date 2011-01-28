@@ -4,37 +4,27 @@
 					xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" 
 					xmlns:OEComponents="OEComponents.*"
 					xmlns:ns="net.vdombox.object_editor.model.*"
-					label="SourceCode"
+					label="SourceCode" xmlns:skins="net.vdombox.editors.skins.*" xmlns:editors="net.vdombox.editors.*"
+					
 					>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
-			private var _data : XML;
-			
-			public function set  dataProvader(xml:XML):void
-			{
-				this.enabled = true;
-//				arLibraries.removeAll();
-//				libCode.text = "";
-				
-				_data =  xml.descendants("SourceCode")[0];
-				if (!_data) _data = new XML("<SourceCode/>");
-				
-				sourceCode.text = _data.toString();
-			}
-			
-			private function saveChange():void
-			{
-				dispatchEvent(new Event(Event.CHANGE));
-//				delete _data[0];
-//				_data.appendChild( XML("<![CDATA[" +  sourceCode.text +"]" +"]" +">"));
-//				delete _data.children()[0];
-				
-			}
 		]]>
 	</fx:Script>
 	
-	<s:TextArea  id="sourceCode"  text="123" width="100%" height="100%" change="{saveChange()}"/>
+	<!--s:TextArea  id="sourceCode"  text="123" width="100%" height="100%" change="{saveChange()}"/-->
+	
+	<!--s:layout>
+		<s:HorizontalLayout /> 
+	</s:layout-->
+	
+		
+		
+	<!--editors:ScriptAreaComponent id="scriptAreaComponent" width="100%" height="100%" visible="false"/-->
+		<editors:PythonScriptEditor  id="pythonScriptEditor"  width="100%" height="100%"  scriptAreaComponent="{new ScriptAreaComponent()}" />
+	
 </s:NavigatorContent>

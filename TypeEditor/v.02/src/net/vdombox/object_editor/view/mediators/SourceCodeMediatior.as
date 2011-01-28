@@ -1,6 +1,7 @@
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 
 	import mx.events.FlexEvent;
 
@@ -21,28 +22,39 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
-			view.addEventListener( FlexEvent.SHOW, showSourceCode );
-			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
+			view.addEventListener( FlexEvent.SHOW, showHandler );
+
 		}
 
 
 		private function validateObjectTypeVO(event: Event):void
 		{
 			view.label= "SourceCode*";
-			objectTypeVO.sourceCode  = view.sourceCode.text;
+			objectTypeVO.sourceCode  = view.pythonScriptEditor.scriptAreaComponent.text;
 		}
 
-		private function showSourceCode(event: FlexEvent): void
-		{			
+		private function showHandler(event:FlexEvent):void
+		{
+			view.removeEventListener(FlexEvent.SHOW, showHandler);
 			compliteSourceCode();
-			view.validateNow();
 		}
+
 
 		protected function compliteSourceCode( ):void
-		{			
-			view.sourceCode.text = objectTypeVO.sourceCode;
-			trace("compliteSourceCode");
+		{	
+			view.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+			view.pythonScriptEditor.addEventListener( Event.CHANGE, validateObjectTypeVO );
+			view.pythonScriptEditor.addedToStageHadler(null);
+			view.pythonScriptEditor.loadSource( objectTypeVO.sourceCode, "zzz" );
 		}		
+
+		private function   keyDownHandler(event:KeyboardEvent):void
+		{
+			event.stopPropagation();
+			event.stopImmediatePropagation();
+//			view.setFocus();
+			trace("setFok");
+		}
 
 		override public function listNotificationInterests():Array 
 		{			
