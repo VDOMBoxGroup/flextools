@@ -4,7 +4,7 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
-
+	
 	import net.vdombox.object_editor.model.vo.ActionParameterVO;
 	import net.vdombox.object_editor.model.vo.ActionVO;
 	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
@@ -14,7 +14,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
 	import net.vdombox.object_editor.view.essence.Resourses;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -44,8 +44,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				objTypeVO.attributes 		= attributesProxy.createFromXML(objTypeXML);
 				objTypeVO.events	 		= eventsProxy.createFromXML(objTypeXML);
 				objTypeVO.languages  		= languagesProxy.createFromXML(objTypeXML);
-				objTypeVO.libraries  		= librariesProxy.createFromXML(objTypeXML);
-				objTypeVO.sourceCode 		= objTypeXML.SourceCode.toString();
+				objTypeVO.libraries  		= librariesProxy.createFromXML(objTypeXML);				
+				objTypeVO.sourceCode 		= getSourceCode( objTypeXML );
 				objTypeVO.resources  		= resourcesProxy.createFromXML(objTypeXML);
 
 				//проверка на повторное использование id				
@@ -53,6 +53,11 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
 			}
+		}
+		
+		private function getSourceCode( objTypeXML: XML):String
+		{
+			return (objTypeXML.SourceCode.toString() == "")? objTypeXML.sourceCode.toString(): objTypeXML.SourceCode.toString();			
 		}
 
 		private function reuseID( objTypeVO: ObjectTypeVO):ObjectTypeVO
@@ -145,10 +150,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		}
 
 		private function sourceCodeToXML(sourceCode:String):XML
-		{
+		{				
 			var sourceCodeXML:XML = XML("<SourceCode/>");
 			sourceCodeXML.appendChild( XML("\n"+"<![CDATA[" + sourceCode +"]]>") )
-
+				
 			return sourceCodeXML;
 		}
 

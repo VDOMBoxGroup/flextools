@@ -135,6 +135,7 @@ package net.vdombox.object_editor.view.mediators
 			attribVO.displayName            = langsProxy.getNextId(objectTypeVO.languages, "1", attribVO.name+" displayName");
 			attribVO.errorValidationMessage = langsProxy.getNextId(objectTypeVO.languages, "2", attribVO.name+" errValMess");
 			attribVO.help                   = langsProxy.getNextId(objectTypeVO.languages, "3", attribVO.name+" help");
+			attribVO.codeInterface			= "TextField()";
 			fillAttributeFilds(attribVO);
 			view.currentAttribute = getCurrentAttribute(attribVO.name);
 			currentAttributeVO    = view.currentAttribute.data;

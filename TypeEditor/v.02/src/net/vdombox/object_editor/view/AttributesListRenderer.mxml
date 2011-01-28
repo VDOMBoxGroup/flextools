@@ -18,6 +18,11 @@
 				// TODO: Auto-generated method stub
 				switch (data.color)
 				{
+					case 0:
+					{
+						backColor = 0xEE9511;
+						break;
+					}
 					case 1:
 					{
 						backColor = 0x8289A3;
@@ -59,6 +64,6 @@
 				<s:SolidColor id="bsc" color.normal="{backColor}"  color.hovered="blue" color.selected="blue" />
 			</s:fill>			
 		</s:Rect>			
-		<s:Label id="txt" text="{data.label}" fontSize.selected="20" />		
+		<s:Label id="txt" text="{data.label}" fontSize.selected="20" color="#DDD6D5"/>		
 	</s:Group>	
 </s:ItemRenderer>
