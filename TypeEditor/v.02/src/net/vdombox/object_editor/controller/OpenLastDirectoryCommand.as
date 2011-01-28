@@ -19,7 +19,8 @@ package net.vdombox.object_editor.controller
 			if( path )
 			{				
 				facade.sendNotification( ApplicationFacade.PARSE_XML_FILES, path );
-			}	else
+			}	
+			else
 			{
 				so.data.path = File.documentsDirectory.nativePath;
 			}

@@ -30,14 +30,14 @@
 					}
 					case 2:
 					{
-						backColor = 0xFB1E1E;
+						backColor =0x669F60;
 						break;
 					}
 					case 3:
 					{
-						backColor =0x669F60;
+						backColor = 0xFB1E1E;
 						break;
-					}
+					}					
 					case 4:
 					{
 						backColor = 0x7A92EB;

@@ -44,14 +44,13 @@ package
 		override protected function initializeController( ) : void 
 		{
 			super.initializeController(); 
-			registerCommand( STARTUP,			StartupCommand );
-			registerCommand( LOAD_XML_FILES,  	OpenDirectoryCommand );	
-			registerCommand( PARSE_XML_FILES, 	FillAccordionCommand );
-			registerCommand( OPEN_OBJECT, 		OpenObjectCommand );
-			registerCommand( SAVE_OBJECT_TYPE, 	SaveObjectTypeCommand );
-			registerCommand( SAVE_AS_OBJECT_TYPE,NewObjectTypePathCommand );
-			trace("qwqww");
-
+			registerCommand( STARTUP,			  StartupCommand );
+			registerCommand( LOAD_XML_FILES,  	  OpenDirectoryCommand );	
+			registerCommand( PARSE_XML_FILES, 	  FillAccordionCommand );
+			registerCommand( OPEN_OBJECT, 		  OpenObjectCommand );
+			registerCommand( SAVE_OBJECT_TYPE, 	  SaveObjectTypeCommand );
+			registerCommand( SAVE_AS_OBJECT_TYPE, NewObjectTypePathCommand );
+			trace("initializeController");
 		}
 
 		public function startup( app:ObjectEditor2 ):void

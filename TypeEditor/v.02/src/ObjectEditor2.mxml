@@ -6,6 +6,8 @@
 					   xmlns:vs="net.vdombox.object_editor.view.*" 
 					   minWidth="900" minHeight="600" xmlns:local="*"
 					   xmlns:containers="flexlib.containers.*"
+					   
+					   preinitialize="init();"
 					   creationComplete="facade.startup(this)">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects)  -->
@@ -22,10 +24,51 @@
 				
 		private var facade:ApplicationFacade = ApplicationFacade.getInstance();			
 
+		private function init():void
+		{
+			gotoLastPosition();
+			this.nativeWindow.addEventListener( Event.CLOSING, saveAppPosition );
+//			this.addEventListener( Event.CLOSING, saveAppPosition );
+//			this.addEventListener( Event.CLOSE, saveAppPosition );
+		}
+		
+		private function saveAppPosition(e:Event = null):void
+		{
+			var xml:XML = new XML('<position x="'+this.nativeWindow.x+'" y="'+this.nativeWindow.y+'" width="'+this.width+'" height="'+this.height+'"/>');
+			
+			var f:File = File.applicationStorageDirectory.resolvePath("appPosition.xml");
+			var s:FileStream = new FileStream();
+			try
+			{
+				s.open(f,flash.filesystem.FileMode.WRITE);
+				s.writeUTFBytes(xml.toXMLString());
+			} catch(e:Error) {
+//				logger.error( e );
+			} finally {
+				s.close();
+			}
+			
+		}
+		
+		private function gotoLastPosition():void
+		{
+			var f:File = File.applicationStorageDirectory.resolvePath("appPosition.xml");   
+			if(f.exists)
+			{
+				var s:FileStream = new FileStream();
+				s.open(f,flash.filesystem.FileMode.READ);
+				var xml:XML = XML(s.readUTFBytes(s.bytesAvailable));
+				
+				this.nativeWindow.x = xml.@x;
+				this.nativeWindow.y = xml.@y;
+				this.width = xml.@width;
+				this.height = xml.@height;
+			}
+		}
+		
 		protected function openButton_clickHandler(event:MouseEvent):void
 		{
-			// TODO Auto-generated method stub
-			
+			// TODO Auto-generated method stub			
 		}
 
 	]]>
