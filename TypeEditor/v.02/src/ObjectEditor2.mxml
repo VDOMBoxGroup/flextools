@@ -4,11 +4,13 @@
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:ns="net.vdombox.object_editor.view.essence.*"
 					   xmlns:vs="net.vdombox.object_editor.view.*" 
-					   minWidth="900" minHeight="600" xmlns:local="*"
+					   xmlns:local="*"
 					   xmlns:containers="flexlib.containers.*"
+
 					   
 					   preinitialize="init();"
 					   creationComplete="facade.startup(this)">
+
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects)  -->
 	</fx:Declarations>
