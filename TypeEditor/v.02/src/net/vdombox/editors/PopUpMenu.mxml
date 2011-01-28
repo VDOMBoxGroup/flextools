@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:List xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		maxHeight="300"
+		requireSelection="true">
+
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			import mx.managers.PopUpManager;
+
+			public function setListData( value : Array ) : void
+			{
+				value.sortOn( "label", Array.CASEINSENSITIVE );
+				dataProvider = new ArrayList( value );
+			}
+
+			public function setSelectedIndex( index : int ) : void
+			{
+				selectedIndex = index;
+			}
+
+			public function getSelectedValue() : String
+			{
+				return selectedItem.value;
+			}
+
+			public function show( owner : DisplayObjectContainer, x : int, y : int ) : void
+			{
+//				this.owner = owner;
+//				updateSize();
+				this.x = x;
+				this.y = y;
+				PopUpManager.addPopUp( this, owner.parent );
+//				(getUI() as PopupUI).resetIndex();
+			}
+
+			public function dispose() : void
+			{
+				PopUpManager.removePopUp( this );
+			}
+		]]>
+	</fx:Script>
+
+</s:List>
