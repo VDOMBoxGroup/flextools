@@ -6,8 +6,6 @@
 					   xmlns:vs="net.vdombox.object_editor.view.*" 
 					   xmlns:local="*"
 					   xmlns:containers="flexlib.containers.*"
-
-					   
 					   preinitialize="init();"
 					   creationComplete="facade.startup(this)">
 
@@ -30,63 +28,45 @@
 		{
 			gotoLastPosition();
 			this.nativeWindow.addEventListener( Event.CLOSING, saveAppPosition );
-//			this.addEventListener( Event.CLOSING, saveAppPosition );
-//			this.addEventListener( Event.CLOSE, saveAppPosition );
 		}
 		
 		private function saveAppPosition(e:Event = null):void
 		{
-			var xml:XML = new XML('<position x="'+this.nativeWindow.x+'" y="'+this.nativeWindow.y+'" width="'+this.width+'" height="'+this.height+'"/>');
-			
-			var f:File = File.applicationStorageDirectory.resolvePath("appPosition.xml");
-			var s:FileStream = new FileStream();
-			try
-			{
-				s.open(f,flash.filesystem.FileMode.WRITE);
-				s.writeUTFBytes(xml.toXMLString());
-			} catch(e:Error) {
-//				logger.error( e );
-			} finally {
-				s.close();
-			}
-			
+			var so:SharedObject = SharedObject.getLocal("directoryPath");
+							
+			so.data.windowPosition_x	= this.nativeWindow.x;
+			so.data.windowPosition_y 	= this.nativeWindow.y;
+			so.data.windowWidth			= this.width;
+			so.data.windowHeight		= this.height;					
 		}
 		
 		private function gotoLastPosition():void
 		{
-			var f:File = File.applicationStorageDirectory.resolvePath("appPosition.xml");   
-			if(f.exists)
-			{
-				var s:FileStream = new FileStream();
-				s.open(f,flash.filesystem.FileMode.READ);
-				var xml:XML = XML(s.readUTFBytes(s.bytesAvailable));
-				
-				this.nativeWindow.x = xml.@x;
-				this.nativeWindow.y = xml.@y;
-				this.width = xml.@width;
-				this.height = xml.@height;
-			}
-		}
-		
-		protected function openButton_clickHandler(event:MouseEvent):void
-		{
-			// TODO Auto-generated method stub			
-		}
+			var so:SharedObject = SharedObject.getLocal("directoryPath");
 
+			if( so.data.windowPosition_x && 
+				so.data.windowPosition_y &&
+				so.data.windowWidth &&
+				so.data.windowHeight )
+			{				
+				this.nativeWindow.x	= so.data.windowPosition_x;
+				this.nativeWindow.y = so.data.windowPosition_y;
+				this.width 			= so.data.windowWidth;
+				this.height			= so.data.windowHeight;
+			}
+		}		
 	]]>
 </fx:Script>
 	
 	<mx:HDividedBox width="100%" height="100%">
 		<mx:VBox  height="100%" width="150" >
-			<s:Button id="openButton" label="Open" />
-			
+			<s:Button id="openButton" label="Open" />			
 			<vs:ObjectsAccordion id="objAccordion" width="100%"/>		
 		</mx:VBox>
 		
 		<containers:SuperTabNavigator id="tabNavigator" width="100%" height="100%"
-									  stopScrollingEvent="{MouseEvent.MOUSE_OUT}"
-									  startScrollingEvent="{MouseEvent.MOUSE_OVER}">
-			
+									  stopScrollingEvent ="{MouseEvent.MOUSE_OUT}"
+									  startScrollingEvent="{MouseEvent.MOUSE_OVER}">			
 		</containers:SuperTabNavigator>
 	</mx:HDividedBox> 
 </s:WindowedApplication>

@@ -105,17 +105,11 @@
 			{
 				CodeInterfaceValue = value;
 				
-				
 				var ciparser:RegExp = /([^\(]+)\(([^\)]*)\)/;
 				var parsed:Array = ciparser.exec(value);				
 				var codeinterfaceLabel:String = parsed[1];
 				var arguments:Array = parsed[2].split(",");
 				
-				
-				
-//				var num:int = CodeInterfaceValue.indexOf("(");
-//							
-//				var label:String = CodeInterfaceValue.slice(0,num); 
 				codeInterface.selectedItem = codeinterfaceLabel;
 				
 				if( codeinterfaceLabel != "!Font" &&
@@ -124,25 +118,23 @@
 					codeinterfaceLabel != "PageLink" &&
 					codeinterfaceLabel != "LinkedBase" )
 				{
-//					var num2:int;
 					switch ( codeinterfaceLabel ) 
 					{	
 						case "TextField":
 							CIViewStack.selectedIndex = 0;
 							CIViewStack.validateNow();
-							fieldLength.text = arguments[0];//CodeInterfaceValue.slice(num+1,CodeInterfaceValue.length-1);
+							fieldLength.text = arguments[0];
 							break;
 						case "Number1":
 							CIViewStack.selectedIndex = 1;
 							CIViewStack.validateNow();
-//							num2 = 			CodeInterfaceValue.indexOf(",");
-							minValue.text = arguments[0];//CodeInterfaceValue.slice(num+1,num2);							
-							maxValue.text = arguments[1];//CodeInterfaceValue.slice(num2+1,CodeInterfaceValue.length-1);
+							minValue.text = arguments[0];							
+							maxValue.text = arguments[1];
 							break;
 						case "MultiLine":
 							CIViewStack.selectedIndex = 2;
 							CIViewStack.validateNow();
-							multiLineLength.text = arguments[0];//CodeInterfaceValue.slice(num+1,CodeInterfaceValue.length-1); 
+							multiLineLength.text = arguments[0]; 
 							break;					
 						case "DropDown":
 							CIViewStack.selectedIndex = 3;
@@ -153,14 +145,13 @@
 						case "ObjectList":
 							CIViewStack.selectedIndex = 4;
 							CIViewStack.validateNow();
-							typeId.text = arguments[0];//CodeInterfaceValue.slice(num+1,CodeInterfaceValue.length-1);
+							typeId.text = arguments[0];
 							break;
 						case "ExternalEditor":
 							CIViewStack.selectedIndex = 5;
 							CIViewStack.validateNow();
-//							num2 = 		 CodeInterfaceValue.indexOf(",");
-							title.text = arguments[0];//CodeInterfaceValue.slice(num+1,num2);	
-							info.text  = arguments[1];//CodeInterfaceValue.slice(num2+1,CodeInterfaceValue.length-1);
+							title.text = arguments[0];	
+							info.text  = arguments[1];
 							break;
 					}
 				}

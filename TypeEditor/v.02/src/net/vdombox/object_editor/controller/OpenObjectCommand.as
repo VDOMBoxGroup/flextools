@@ -20,8 +20,8 @@ package net.vdombox.object_editor.controller
 			var item:Item = note.getBody() as Item;			
 
 			var fileProxy:FileProxy = facade.retrieveProxy(FileProxy.NAME) as FileProxy;
-			var fileData:String = fileProxy.readFile(item.path);			
-			var xmlFile:XML = new XML(fileData);
+			var fileData: String    = fileProxy.readFile(item.path);			
+			var xmlFile:  XML       = new XML(fileData);
 			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
 			
 			objTypeProxy.newObjectTypeVO(xmlFile, item.path);
