@@ -15,7 +15,7 @@ package ro.victordramba.scriptarea
 	import flash.ui.MouseCursor;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
-	
+
 	import mx.events.IndexChangedEvent;
 
 	/*import flash.desktop.Clipboard;
@@ -204,30 +204,49 @@ package ro.victordramba.scriptarea
 
 		private function onKeyDown( e : KeyboardEvent ) : void
 		{
+
 			var c : String = String.fromCharCode( e.charCode );
 			var k : int = e.keyCode;
 			var i : int;
-			if ( k == Keyboard.INSERT && e.ctrlKey )
+			if (e.ctrlKey &&  (k == Keyboard.INSERT  || c ==  'c' || c == 'C' ))
 			{
 				onCopy();
 			}
-			else if ( k == Keyboard.INSERT && e.shiftKey )
+			else if (  e.shiftKey && k == Keyboard.INSERT 
+				|| e.ctrlKey  &&  ( c ==  'v' || c ==  'V') )
 			{
 				onPaste();
+					//dipatchChange(); //?
 			}
 
-			else if ( String.fromCharCode( e.charCode ) == 'z' && e.ctrlKey )
+			else if (  e.altKey && k == Keyboard.BACKSPACE 
+				|| e.ctrlKey  &&  ( c ==  'z' || c ==  'Z')) // z & Z ?
 			{
 				undo();
 				dipatchChange();
 				return;
 			}
-			else if ( String.fromCharCode( e.charCode ) == 'y' && e.ctrlKey )
+			else if ( e.ctrlKey &&  ( c ==  'y' || c ==  'Y') )
 			{
 				redo();
 				dipatchChange();
 				return;
+
+			}else if (  e.shiftKey && k == Keyboard.DELETE 
+				|| e.ctrlKey  &&  ( c ==  'x' || c ==  'X') )
+			{
+				onCopy();
+
+				if ( _caret < length && _selStart == _selEnd )
+					replaceText( _caret, _caret + 1, '' );
+				else
+					replaceSelection( '' );
+
+				dipatchChange();
+				return;
+
 			}
+
 
 			/*if (extChar==0 && e.charCode > 127)
 			   {
