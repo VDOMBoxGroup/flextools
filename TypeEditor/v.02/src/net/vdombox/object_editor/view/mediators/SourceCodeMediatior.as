@@ -5,6 +5,7 @@ package net.vdombox.object_editor.view.mediators
 
 	import mx.events.FlexEvent;
 
+	import net.vdombox.editors.PythonScriptEditor;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.SourceCode;
@@ -42,10 +43,11 @@ package net.vdombox.object_editor.view.mediators
 
 		protected function compliteSourceCode( ):void
 		{	
-			view.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-			view.pythonScriptEditor.addEventListener( Event.CHANGE, validateObjectTypeVO );
-			view.pythonScriptEditor.addedToStageHadler(null);
-			view.pythonScriptEditor.loadSource( objectTypeVO.sourceCode, "zzz" );
+			var pythonScriptEditor: PythonScriptEditor = view.pythonScriptEditor;
+			pythonScriptEditor.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+			pythonScriptEditor.addEventListener( Event.CHANGE, validateObjectTypeVO );
+			pythonScriptEditor.addedToStageHadler(null);
+			pythonScriptEditor.loadSource( objectTypeVO.sourceCode, "zzz" );
 		}		
 
 		private function   keyDownHandler(event:KeyboardEvent):void
@@ -53,7 +55,6 @@ package net.vdombox.object_editor.view.mediators
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 //			view.setFocus();
-			trace("setFok");
 		}
 
 		override public function listNotificationInterests():Array 

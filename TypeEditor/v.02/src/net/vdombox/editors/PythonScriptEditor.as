@@ -1,10 +1,12 @@
 package net.vdombox.editors
 {
 	import flash.events.Event;
-	
+	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
+
 	import net.vdombox.editors.parsers.python.Controller;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
-	
+
 	import spark.components.SkinnableContainer;
 
 	public class PythonScriptEditor extends SkinnableContainer
@@ -66,3 +68,4 @@ package net.vdombox.editors
 		}
 	}
 }
+
