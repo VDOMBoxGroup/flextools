@@ -63,8 +63,8 @@
 			public var arColorGroup:ArrayCollection = new ArrayCollection(
 				[ 	{label:"SELECT VALUE", 	data:0},
 					{label:"Grey", 		 	data:1}, 
-					{label:"Red", 			data:2}, 
-					{label:"Green",			data:3}, 
+					{label:"Green",			data:2}, 
+					{label:"Red",			data:3}, 
 					{label:"Blue", 			data:4}, 
 				]);	
 

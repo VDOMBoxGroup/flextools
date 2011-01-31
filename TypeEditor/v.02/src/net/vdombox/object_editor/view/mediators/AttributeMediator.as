@@ -63,9 +63,12 @@ package net.vdombox.object_editor.view.mediators
 //			view.attributesList.selectedItems //scrollRect = view.currentItem;			
 		}
 		
-		public function apdateBackgroundColor(event: Event):void
-		{			
-			view.currentAttribute.color = event.target.selectedIndex;
+		public function apdateBackgroundColor(event: Event=null):void
+		{	
+			if(event)
+			{
+				view.currentAttribute.color = event.target.selectedIndex;
+			}				
 			var selIndex:uint = view.attributesList.selectedIndex;
 			view.attributesList.dataProvider.removeItemAt(selIndex);
 			view.attributesList.dataProvider.addItemAt(view.currentAttribute,selIndex);
@@ -130,17 +133,19 @@ package net.vdombox.object_editor.view.mediators
 		private function addAttribute(event:MouseEvent): void
 		{			
 			var attribVO:AttributeVO = new AttributeVO( "newAttribute"+ objectTypeVO.attributes.length );
-			objectTypeVO.attributes.addItem( {label:attribVO.name, data:attribVO} );
+			objectTypeVO.attributes.addItem( {label:attribVO.name, data:attribVO, color:1} );
 			var langsProxy:LanguagesProxy 	= facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
 			attribVO.displayName            = langsProxy.getNextId(objectTypeVO.languages, "1", attribVO.name+" displayName");
 			attribVO.errorValidationMessage = langsProxy.getNextId(objectTypeVO.languages, "2", attribVO.name+" errValMess");
 			attribVO.help                   = langsProxy.getNextId(objectTypeVO.languages, "3", attribVO.name+" help");
 			attribVO.codeInterface			= "TextField()";
-			fillAttributeFilds(attribVO);
-			view.currentAttribute = getCurrentAttribute(attribVO.name);
-			currentAttributeVO    = view.currentAttribute.data;
-			view.attributesList.selectedItem = view.currentAttribute;
+			attribVO.colorgroup				= 1;			
+			fillAttributeFilds(attribVO);			
+			view.currentAttribute 			= getCurrentAttribute(attribVO.name);
+			currentAttributeVO    			= view.currentAttribute.data;
+			view.attributesList.selectedItem= view.currentAttribute;
 			view.attributesList.validateNow();
+//			apdateBackgroundColor();
 //			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
 		}
 		
@@ -204,12 +209,10 @@ package net.vdombox.object_editor.view.mediators
 		
 		protected function compliteAtributes( ):void
 		{	
-//			sortAttributes();
-			trace("2. compliteAtributes begin");
 			view.attributesList.dataProvider = objectTypeVO.attributes;			
-			setCurrentAttribute();
-			trace("2. compliteAtributes end");
-		}		
+			setCurrentAttribute();			
+		}	
+		
 		override public function listNotificationInterests():Array 
 		{			
 			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];
