@@ -286,7 +286,7 @@ package ro.victordramba.scriptarea
 		{
 			if( !text )
 				text = "";
-			
+
 			text = text.replace( /\r\n/g, NL );
 			text = text.replace( /\n/g, NL );
 			undoBuff.push( { s: startIndex, e: startIndex + text.length, t: _text.substring( startIndex, endIndex ) } );
@@ -347,7 +347,7 @@ package ro.victordramba.scriptarea
 
 		protected function undo() : void
 		{
-			if ( undoBuff.length == 0 )
+			if ( undoBuff.length <= 1 )
 				return;
 
 			var o : Object = undoBuff.pop();
@@ -489,14 +489,14 @@ package ro.victordramba.scriptarea
 			_maxScrollV = Math.max( 0, lineCount - visibleRows );
 
 			var newWidth : Number = Math.max( maxLength * ( letterBoxWidth + 1 ), width ); //TODO почему + 1
-			
+
 			if( tf.width != newWidth )
 			{
 				tf.width = newWidth;
 				_setSelection( selectionBeginIndex, selectionEndIndex, true )
 				updateCaret();
 			}
-			
+
 			var newX : Number = width - tf.width;
 
 			if ( tf.x < newX )
@@ -637,3 +637,4 @@ package ro.victordramba.scriptarea
 		}
 	}
 }
+
