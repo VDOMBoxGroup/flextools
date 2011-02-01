@@ -3,14 +3,18 @@
  */
 package net.vdombox.object_editor.model  
 {
-	public class Item
+	import flash.events.EventDispatcher;
+
+	public class Item extends  EventDispatcher
 	{
 		private var _groupName	:String;
-		private var _label		:String;
+
+		[Bindable]
+		public var _label		:String;
 		private var _img		:String;	
 		private var _path		:String;
 
-		public function Item()
+		public function Item() 
 		{}
 
 		public function get groupName():String
@@ -23,11 +27,13 @@ package net.vdombox.object_editor.model
 			_groupName = groupName;
 		}
 
+		[Bindable]
 		public function get label():String
 		{
 			return _label;
 		}
 
+		[Bindable]
 		public function set label(label:String):void
 		{
 			_label = label;

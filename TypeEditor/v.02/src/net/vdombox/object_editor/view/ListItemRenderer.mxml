@@ -27,7 +27,7 @@
 				
 				image.source = decoder.toByteArray();
 				image.visible = true;
-				data.img = "";
+//				data.img = "";
 			}
 		]]>
 	</fx:Script>

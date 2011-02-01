@@ -121,6 +121,7 @@ package net.vdombox.object_editor.model.proxy
 			}
 			else
 			{
+				// TODO: add messages to bugs "list"
 				trace("resource: " +imgResourseID+" not found!");
 			}			
 			return imgResourse;
