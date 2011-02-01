@@ -14,9 +14,7 @@
   </compiler>
   <applications>
     <application path="ObjectEditor2.mxml">
-      <airExcludes>
-        <airExclude path="flexlib"/>
-      </airExcludes>
+      <airExcludes/>
     </application>
   </applications>
   <modules/>

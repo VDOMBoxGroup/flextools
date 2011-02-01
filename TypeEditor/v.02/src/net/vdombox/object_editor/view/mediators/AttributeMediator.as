@@ -21,6 +21,8 @@ package net.vdombox.object_editor.view.mediators
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
+	
+	import spark.components.List;
 
 	public class AttributeMediator extends Mediator implements IMediator
 	{
@@ -70,11 +72,13 @@ package net.vdombox.object_editor.view.mediators
 				view.currentAttribute.color = event.target.selectedIndex;
 			}				
 			var selIndex:uint = view.attributesList.selectedIndex;
-			view.attributesList.dataProvider.removeItemAt(selIndex);
-			view.attributesList.dataProvider.addItemAt(view.currentAttribute,selIndex);
-			view.attributesList.selectedItem = view.currentAttribute;
-			view.attributesList.ensureIndexIsVisible(view.attributesList.selectedIndex);
-			view.attributesList.validateNow();
+			var atrList:List = view.attributesList as List;
+			
+			atrList.dataProvider.removeItemAt(selIndex);
+			atrList.dataProvider.addItemAt(view.currentAttribute,selIndex);
+			atrList.selectedItem = view.currentAttribute;
+			atrList.ensureIndexIsVisible(atrList.selectedIndex);
+			atrList.validateNow();
 		}
 		
 		public function validateObjectTypeVO(event:Event):void
@@ -145,7 +149,6 @@ package net.vdombox.object_editor.view.mediators
 			currentAttributeVO    			= view.currentAttribute.data;
 			view.attributesList.selectedItem= view.currentAttribute;
 			view.attributesList.validateNow();
-//			apdateBackgroundColor();
 //			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
 		}
 		

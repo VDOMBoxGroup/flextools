@@ -105,12 +105,13 @@
 			{
 				CodeInterfaceValue = value;
 				
-				var ciparser:RegExp = /([^\(]+)\(([^\)]*)\)/;
+				var ciparser:RegExp = /([^\(]+)\((.*)\)/;
 				var parsed:Array = ciparser.exec(value);				
 				var codeinterfaceLabel:String = parsed[1];
-				var arguments:Array = parsed[2].split(",");
+				var codeIntefaceArguments:String = parsed[2];
+				var arguments:Array = codeIntefaceArguments.split(",");
 				
-				codeInterface.selectedItem = codeinterfaceLabel;
+				codeInterface.selectedItem = codeinterfaceLabel;				
 				
 				if( codeinterfaceLabel != "!Font" &&
 					codeinterfaceLabel != "File" &&
@@ -139,8 +140,13 @@
 						case "DropDown":
 							CIViewStack.selectedIndex = 3;
 							CIViewStack.validateNow();
-							var num:int = CodeInterfaceValue.indexOf("(");
-							ddValues.text = CodeInterfaceValue.slice(num+1,CodeInterfaceValue.length-1); 
+							var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d]+)/g;
+							var langs:Array = new Array();							
+							
+							while( langs = regLangs.exec(arguments[0]))
+							{
+								addValue(null,langs[1],langs[2]);	
+							}							
 							break;					
 						case "ObjectList":
 							CIViewStack.selectedIndex = 4;
@@ -155,6 +161,11 @@
 							break;
 					}
 				}
+			}
+			
+			private function splitDropDownValue(arguments:Array):void
+			{
+				var u:uint = 1;
 			}
 			
 			private function clearFields():void
@@ -181,7 +192,7 @@
 							multiLineLength.text = ""; 
 							break;					
 						case "DropDown":
-							ddValues.text = ""; 
+//							ddValues.text = ""; 
 							break;					
 						case "ObjectList":
 							typeId.text = "";
@@ -237,7 +248,7 @@
 							CodeInterfaceValue = label + "(" + multiLineLength.text + ")";
 							break;					
 						case "DropDown":
-							CodeInterfaceValue = label + "("+ ddValues.text +")";
+//							CodeInterfaceValue = label + "("+ ddValues.text +")";
 							break;					
 						case "ObjectList":
 							CodeInterfaceValue = label + "(" + typeId.text + ")";
@@ -249,6 +260,24 @@
 				}
 			}
 						
+
+			protected function addValue(event:MouseEvent, langID:String="", langValue:String=""):void
+			{
+				var hGroup:		   HGroup		 = new HGroup();
+				var dropDownValue: DropDownValue = new DropDownValue();
+//				dispatchEvent(Event.ADDED);
+//				dropDownValue.langTextInput.completeStructure();
+				var addButton:     Button	     = new Button();
+				addButton.width = 50;
+				addButton.label = "add";
+				addButton.addEventListener( MouseEvent.CLICK, addValue);
+				
+				hGroup.addElement(dropDownValue);
+				hGroup.addElement(addButton);
+				vGroup.addElement(hGroup);
+				validateNow();
+			}
+			
 		]]>
 	</fx:Script>
 	<s:Scroller width="{this.width}" height="{this.height}">
@@ -351,16 +380,25 @@
 						</s:HGroup>
 					</s:NavigatorContent>
 					
-					<s:NavigatorContent id="DropDown" fontWeight="bold" >
+					<s:NavigatorContent id="DropDown" fontWeight="bold" >						
 						<s:layout>
 							<s:VerticalLayout horizontalAlign="center"  
 											  paddingTop="5" paddingLeft="5" 
 											  paddingRight="5" paddingBottom="5" />
 						</s:layout>
-						<s:HGroup>
+						<s:Scroller height="100" id="DropDownScroll">
+						<s:VGroup id="vGroup">
+							<s:HGroup id="dropDownGroup">
+								<ns2:DropDownValue/>
+								<s:Button label="add"  width="50" click="addValue(event)"/>   <!--ange="changeStack(false)" text=""/-->							
+							</s:HGroup>
+						</s:VGroup>
+						
+						<!--s:HGroup>
 							<s:Label 	 text="Values:"/>
 							<s:TextInput id="ddValues" width="180" change="changeStack(false)" text="" />
-						</s:HGroup>
+						</s:HGroup-->
+						</s:Scroller>	
 					</s:NavigatorContent>
 					
 					<s:NavigatorContent id="ObjectList" fontWeight="bold" >

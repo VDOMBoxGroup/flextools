@@ -43,8 +43,8 @@
 	</s:layout>
 	
 	<s:HGroup verticalAlign="middle" paddingTop="0" paddingBottom="0"  doubleClickEnabled="true" >
-		<mx:Image  id="image"  maxWidth="35" maxHeight="53"  visible="false"/>
-		<s:Label id="txt" text="{data.label}"  color.hovered="0x1313cd" color.selected="0x000000" verticalAlign="bottom"/>
+		<mx:Image  	id="image"  maxWidth="35" maxHeight="53"  visible="false"/>
+		<s:Label 	id="txt" text="{data.label}"  color.hovered="0x1313cd" color.selected="0x000000" verticalAlign="bottom"/>
 	</s:HGroup>
 	
 </s:ItemRenderer>

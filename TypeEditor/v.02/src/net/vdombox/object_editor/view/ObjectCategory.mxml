@@ -85,8 +85,8 @@
 		]]>
 	</fx:Script>
 	
-	<s:RadioButton id="standart" label="Standart"  groupName="group1" change="{viewChanged()}" />
-	<s:ComboBox id="fCategoryComp"  change="{viewChanged()}"  enabled="{standart.selected}"/>
-	<s:RadioButton id="custom" label="Custom" groupName="group1" selected="true" change="{viewChanged()}" />
-	<mx:TextInput id="txt" width="100%"  change="{viewChanged();newValue(event)}"  enabled="{custom.selected}"/>
+	<s:RadioButton	id="standart" label="Standart"  groupName="group1" change="{viewChanged()}" />
+	<s:ComboBox		id="fCategoryComp"  change="{viewChanged()}"  enabled="{standart.selected}"/>
+	<s:RadioButton 	id="custom" label="Custom" groupName="group1" selected="true" change="{viewChanged()}" />
+	<mx:TextInput	id="txt" width="100%"  change="{viewChanged();newValue(event)}"  enabled="{custom.selected}"/>
 </s:VGroup>
