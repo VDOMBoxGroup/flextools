@@ -179,7 +179,7 @@
 			</mx:FormItem>
 			
 			<mx:FormItem label="icon" toolTip="">
-				<mx:Image id="ficon"   doubleClickEnabled="true"
+				<mx:Image id="ficon1"  toolTip="{ficon1.width +' x '+ ficon1.height+'  '+ ficon1.name}"  doubleClickEnabled="true"
 						  maxWidth="200" maxHeight="200"/>
 			</mx:FormItem>
 			<mx:FormItem label="Structure Icon" toolTip="">
@@ -188,8 +188,9 @@
 			</mx:FormItem>
 			<mx:FormItem label="Editor Icon" toolTip="">
 				<mx:Image id="ficon3"  toolTip="{ficon3.width +' x '+ ficon3.height+'  '+ ficon3.name}" doubleClickEnabled="true" 
-						  maxWidth="200" maxHeight="200"/>
+						  maxWidth="200" maxHeight="200"/>				
 			</mx:FormItem>
+			<s:Label text="Double-click to change icon" paddingLeft="300" color="gray"/>
 		</mx:Form>
 	</s:HGroup>
 		</s:Scroller >

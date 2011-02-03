@@ -4,7 +4,8 @@
 					 xmlns:mx="library://ns.adobe.com/flex/mx"  
 					 xmlns:ns="net.vdombox.object_editor.model.*"
 					 xmlns:ns2="net.vdombox.object_editor.view.*"
-					 label="Attributes">
+					 label="Attributes"
+					 >
 	<fx:Declarations>		
 				
 		<mx:NumberValidator source="{minValue}" property="text" integerError="Enter Integer value"
@@ -28,13 +29,17 @@
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.core.INavigatorContent;
+			import mx.core.IVisualElement;
 			import mx.core.mx_internal;
 			import mx.events.FlexEvent;
 			import mx.messaging.channels.StreamingAMFChannel;
 			
 			import net.vdombox.object_editor.view.AttributesListRenderer;
+			import net.vdombox.object_editor.view.DropDownValue;
 			
 			private var DEFAULT_NUMBER_VALUE:String = int.MAX_VALUE.toString();
+			
+			[Bindable]
 			public  var CodeInterfaceValue:String = "";
 					
 			[Bindable]
@@ -99,183 +104,21 @@
 			private function changeField():void
 			{
 				dispatchEvent(new Event( Event.CHANGE ));
-			}					
+			}			
 			
-			public function compliteCodeInterfaceField(value:String):void
+			public function addValue(event:Event):void
+			{				
+				dispatchEvent( new FlexEvent(FlexEvent.ADD) );
+			}	
+			
+			public function changeDropDownValue(event:Event):void
+			{				
+				changeStack(false);				
+			}
+			
+			protected function changeStack(isChangeStack:Boolean):void
 			{
-				CodeInterfaceValue = value;
-				
-				var ciparser:RegExp = /([^\(]+)\((.*)\)/;
-				var parsed:Array = ciparser.exec(value);				
-				var codeinterfaceLabel:String = parsed[1];
-				var codeIntefaceArguments:String = parsed[2];
-				var arguments:Array = codeIntefaceArguments.split(",");
-				
-				codeInterface.selectedItem = codeinterfaceLabel;				
-				
-				if( codeinterfaceLabel != "!Font" &&
-					codeinterfaceLabel != "File" &&
-					codeinterfaceLabel != "Color" &&
-					codeinterfaceLabel != "PageLink" &&
-					codeinterfaceLabel != "LinkedBase" )
-				{
-					switch ( codeinterfaceLabel ) 
-					{	
-						case "TextField":
-							CIViewStack.selectedIndex = 0;
-							CIViewStack.validateNow();
-							fieldLength.text = arguments[0];
-							break;
-						case "Number1":
-							CIViewStack.selectedIndex = 1;
-							CIViewStack.validateNow();
-							minValue.text = arguments[0];							
-							maxValue.text = arguments[1];
-							break;
-						case "MultiLine":
-							CIViewStack.selectedIndex = 2;
-							CIViewStack.validateNow();
-							multiLineLength.text = arguments[0]; 
-							break;					
-						case "DropDown":
-							CIViewStack.selectedIndex = 3;
-							CIViewStack.validateNow();
-							var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d]+)/g;
-							var langs:Array = new Array();							
-							
-							while( langs = regLangs.exec(arguments[0]))
-							{
-								addValue(null,langs[1],langs[2]);	
-							}							
-							break;					
-						case "ObjectList":
-							CIViewStack.selectedIndex = 4;
-							CIViewStack.validateNow();
-							typeId.text = arguments[0];
-							break;
-						case "ExternalEditor":
-							CIViewStack.selectedIndex = 5;
-							CIViewStack.validateNow();
-							title.text = arguments[0];	
-							info.text  = arguments[1];
-							break;
-					}
-				}
-			}
-			
-			private function splitDropDownValue(arguments:Array):void
-			{
-				var u:uint = 1;
-			}
-			
-			private function clearFields():void
-			{
-				var num:int 	 = CodeInterfaceValue.indexOf("(");				
-				var label:String = CodeInterfaceValue.slice(0,num); 
-				
-				if( label != "!Font" &&
-					label != "File" &&
-					label != "Color" &&
-					label != "PageLink" &&
-					label != "LinkedBase" )
-				{
-					switch ( label ) 
-					{	
-						case "TextField":
-							fieldLength.text = "";
-							break;
-						case "Number1":							
-							minValue.text = "";							
-							maxValue.text = "";
-							break;
-						case "MultiLine":
-							multiLineLength.text = ""; 
-							break;					
-						case "DropDown":
-//							ddValues.text = ""; 
-							break;					
-						case "ObjectList":
-							typeId.text = "";
-							break;
-						case "ExternalEditor":
-							title.text = "";	
-							info.text  = "";
-							break;
-					}
-				}
-			}
-			
-			private function changeStack(isChangeStack:Boolean):void
-			{					
-				if(isChangeStack)
-				{
-					clearFields();
-				}
-				var label:String = codeInterface.selectedItem;
-				if( label != "!Font" &&
-					label != "File"  &&
-					label != "Color" &&
-					label != "PageLink" &&
-					label != "LinkedBase" )
-				{
-					var ch:* = CIViewStack.getChildByName(codeInterface.selectedItem);
-					CIViewStack.selectedChild = ch;
-					setData(label, isChangeStack);
-				}	
-				else
-				{
-					CIViewStack.selectedChild = notArguments;
-					CodeInterfaceValue = label + "()";
-				}
-				dispatchEvent(new Event( Event.SELECT));
-			}
-			
-			private function setData( label:String, isChangeStack:Boolean):void
-			{	
-				if(isChangeStack) 
-					CodeInterfaceValue = label + "()";
-				else
-				{
-					switch ( label ) 
-					{	
-						case "TextField":						
-							CodeInterfaceValue = label + "(" + fieldLength.text +")";
-							break;
-						case "Number1":						
-							CodeInterfaceValue = "Number1" + "(" + minValue.text + "," + maxValue.text + ")";
-							break;
-						case "MultiLine":						
-							CodeInterfaceValue = label + "(" + multiLineLength.text + ")";
-							break;					
-						case "DropDown":
-//							CodeInterfaceValue = label + "("+ ddValues.text +")";
-							break;					
-						case "ObjectList":
-							CodeInterfaceValue = label + "(" + typeId.text + ")";
-							break;
-						case "ExternalEditor":
-							CodeInterfaceValue = label + "(" + title.text +","+ info.text + ")";
-							break;
-					}
-				}
-			}
-						
-
-			protected function addValue(event:MouseEvent, langID:String="", langValue:String=""):void
-			{
-				var hGroup:		   HGroup		 = new HGroup();
-				var dropDownValue: DropDownValue = new DropDownValue();
-//				dispatchEvent(Event.ADDED);
-//				dropDownValue.langTextInput.completeStructure();
-				var addButton:     Button	     = new Button();
-				addButton.width = 50;
-				addButton.label = "add";
-				addButton.addEventListener( MouseEvent.CLICK, addValue);
-				
-				hGroup.addElement(dropDownValue);
-				hGroup.addElement(addButton);
-				vGroup.addElement(hGroup);
-				validateNow();
+				dispatchEvent( new FlexEvent(FlexEvent.CHANGING, isChangeStack) );
 			}
 			
 		]]>
@@ -338,7 +181,7 @@
 				<s:HGroup>
 					<s:ComboBox change="{changeStack(true)}" id="codeInterface" dataProvider="{arCodeInterface}" width="250"/>
 				</s:HGroup>
-				<mx:ViewStack id="CIViewStack" borderStyle="solid" width="250" height="120" color="0x323232">
+				<mx:ViewStack id="CIViewStack" borderStyle="solid" width="250" height="140" >
 					
 					<s:NavigatorContent id="TextField" fontWeight="bold" >						
 						<s:layout>
@@ -381,24 +224,26 @@
 					</s:NavigatorContent>
 					
 					<s:NavigatorContent id="DropDown" fontWeight="bold" >						
-						<s:layout>
-							<s:VerticalLayout horizontalAlign="center"  
-											  paddingTop="5" paddingLeft="5" 
-											  paddingRight="5" paddingBottom="5" />
-						</s:layout>
-						<s:Scroller height="100" id="DropDownScroll">
-						<s:VGroup id="vGroup">
-							<s:HGroup id="dropDownGroup">
-								<ns2:DropDownValue/>
-								<s:Button label="add"  width="50" click="addValue(event)"/>   <!--ange="changeStack(false)" text=""/-->							
+						<s:VGroup paddingLeft="10" paddingTop="5">
+							
+							<s:HGroup horizontalAlign="left">						
+								<s:Label text="Label:" width="90" horizontalCenter="left" paddingLeft="5"/>
+								<s:Label text="Value:" horizontalCenter="right" verticalCenter="right"/>	
+								<s:Group width="100%"/>
 							</s:HGroup>
+							<s:Scroller height="85" width="230" id="DropDownScroll">
+								<s:VGroup id="vGroup">	
+									
+									<!--s:HGroup id="dropDownGroup">
+									<ns2:DropDownValue/>								
+									<s:Button label="add"  width="50" click="addValue(event)"/-->   <!--ange="changeStack(false)" text=""/-->							
+									<!--/s:HGroup-->							
+									
+								</s:VGroup>
+							</s:Scroller>
+							<s:Button label="Add"  width="50" click="addValue(event)"/>
+							
 						</s:VGroup>
-						
-						<!--s:HGroup>
-							<s:Label 	 text="Values:"/>
-							<s:TextInput id="ddValues" width="180" change="changeStack(false)" text="" />
-						</s:HGroup-->
-						</s:Scroller>	
 					</s:NavigatorContent>
 					
 					<s:NavigatorContent id="ObjectList" fontWeight="bold" >

@@ -53,7 +53,7 @@ package net.vdombox.object_editor.view
 					break;
 				}
 			}
-		}
+		}		
 
 		private function getRegExpWord( code:String ):String
 		{	

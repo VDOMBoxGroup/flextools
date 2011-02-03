@@ -7,9 +7,16 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
 			
+			import spark.events.TextOperationEvent;			
+
+			protected function changeContent(event:TextOperationEvent):void
+			{
+				dispatchEvent(new Event( Event.CHANGE ));				
+			}
 		]]>
-	</fx:Script>
-	<s:Label text="Values:"/>
-	<ns:LangTextInput id="langTextInput" width="110"/>	
+	</fx:Script>	
+	<ns:LangTextInput id="langTextInput" width="85" change="changeContent(event)"/>	
+	<s:TextInput      id="textValue"     width="75" change="changeContent(event)"/>
 </s:HGroup>

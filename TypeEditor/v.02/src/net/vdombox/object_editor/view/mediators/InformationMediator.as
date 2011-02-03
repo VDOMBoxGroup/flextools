@@ -116,17 +116,17 @@ package net.vdombox.object_editor.view.mediators
 			view.fOptimizationPriority.value  	= objectTypeVO.optimizationPriority;
 			view.fcurrentLocation.dataProvider	= objectTypeVO.languages.locales;
 
-			view.ficon.source  = resourcesProxy.getByteArray(objectTypeVO.icon);
-			view.ficon.toolTip = getToolTipe(objectTypeVO.icon);
+			view.ficon1.source  = resourcesProxy.getByteArray(objectTypeVO.icon);
+			view.ficon1.toolTip = getToolTipe(objectTypeVO.icon);
 
 			view.ficon2.source = resourcesProxy.getByteArray(objectTypeVO.structureIcon);
 			view.ficon3.source = resourcesProxy.getByteArray(objectTypeVO.editorIcon);
 
-			view.ficon.name    = resourcesProxy.geResourseID(objectTypeVO.icon);
+			view.ficon1.name    = resourcesProxy.geResourseID(objectTypeVO.icon);
 			view.ficon2.name   = resourcesProxy.geResourseID(objectTypeVO.structureIcon);
 			view.ficon3.name   = resourcesProxy.geResourseID(objectTypeVO.editorIcon);
 
-			view.ficon.addEventListener (MouseEvent.DOUBLE_CLICK, changeResourse);
+			view.ficon1.addEventListener (MouseEvent.DOUBLE_CLICK, changeResourse);
 			view.ficon2.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
 			view.ficon3.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
 
