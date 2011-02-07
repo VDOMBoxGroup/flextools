@@ -40,13 +40,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				var objTypeVO: ObjectTypeVO = initInformation(objTypeXML);			
 
 				objTypeVO.filePath	 		= path;
-				objTypeVO.actionContainers	= actionsProxy.createFromXML(objTypeXML);
-				objTypeVO.attributes 		= attributesProxy.createFromXML(objTypeXML);
-				objTypeVO.events	 		= eventsProxy.createFromXML(objTypeXML);
-				objTypeVO.languages  		= languagesProxy.createFromXML(objTypeXML);
-				objTypeVO.libraries  		= librariesProxy.createFromXML(objTypeXML);				
-				objTypeVO.sourceCode 		= getSourceCode( objTypeXML );
-				objTypeVO.resources  		= resourcesProxy.createFromXML(objTypeXML);
+				objTypeVO.actionContainers	= actionsProxy.createFromXML	(objTypeXML);
+				objTypeVO.attributes 		= attributesProxy.createFromXML	(objTypeXML);
+				objTypeVO.events	 		= eventsProxy.createFromXML		(objTypeXML);
+				objTypeVO.languages  		= languagesProxy.createFromXML	(objTypeXML);
+				objTypeVO.libraries  		= librariesProxy.createFromXML	(objTypeXML);				
+				objTypeVO.sourceCode 		= getSourceCode(objTypeXML);
+				objTypeVO.resources  		= resourcesProxy.createFromXML	(objTypeXML);
 
 				//проверка на повторное использование id				
 				_objectTypeList[objTypeVO.filePath] = reuseID(objTypeVO);
@@ -84,7 +84,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				for each (var parObj:Object in event.parameters)
 				{
 					var eventPar:EventParameterVO = parObj.data;
-					if( eventPar.help == "") eventPar.help = "#Lang(105)";
+					if (eventPar.help == "") 
+						eventPar.help = "#Lang(105)";
 					eventPar.help = languagesProxy.used(objTypeVO.languages, eventPar.help);
 				}
 			}
@@ -95,9 +96,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			for each (var obj:Object in objTypeVO.attributes)
 			{
 				var attr:AttributeVO = obj.data;
-				if( attr.displayName == "") attr.displayName = "#Lang(101)";
-				if( attr.help == "")attr.help = "#Lang(301)";
-				if( attr.errorValidationMessage == "") attr.errorValidationMessage = "#Lang(201)";
+				if (attr.displayName == "") 
+					attr.displayName = "#Lang(101)";
+				if (attr.help == "")
+					attr.help = "#Lang(301)";
+				if (attr.errorValidationMessage == "") 
+					attr.errorValidationMessage = "#Lang(201)";
 
 				attr.displayName = languagesProxy.used(objTypeVO.languages, attr.displayName);
 				attr.help		 = languagesProxy.used(objTypeVO.languages, attr.help);
@@ -113,15 +117,15 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				for each (var actObj:Object in cont.actionsCollection)
 				{
 					var act:ActionVO = actObj.data;
-					if( act.description == "")   act.description   = "#Lang(600)";
-					if( act.interfaceName == "") act.interfaceName = "#Lang(700)";					
+					if (act.description == "")   act.description   = "#Lang(600)";
+					if (act.interfaceName == "") act.interfaceName = "#Lang(700)";					
 					act.description   = languagesProxy.used(objTypeVO.languages, act.description);
 					act.interfaceName = languagesProxy.used(objTypeVO.languages, act.interfaceName);
 					for each (var parObj:Object in act.parameters)
 					{
 						var actPar:ActionParameterVO = parObj.data;
-						if( actPar.interfaceName == "") actPar.interfaceName = "#Lang(900)";
-						if( actPar.help          == "") actPar.help          = "#Lang(800)";
+						if (actPar.interfaceName == "") actPar.interfaceName = "#Lang(900)";
+						if (actPar.help          == "") actPar.help          = "#Lang(800)";
 						actPar.interfaceName = languagesProxy.used(objTypeVO.languages, actPar.interfaceName);
 						actPar.help			 = languagesProxy.used(objTypeVO.languages, actPar.help);
 					}
@@ -151,7 +155,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 		private function sourceCodeToXML(sourceCode:String):XML
 		{				
-			var sourceCodeXML:XML = XML("<SourceCode/>");
+			var sourceCodeXML:XML = <SourceCode/>;
 			sourceCodeXML.appendChild( XML("\n"+"<![CDATA[" + sourceCode +"]]>") )
 				
 			return sourceCodeXML;
@@ -159,10 +163,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 		private function getNewObjTypeXML(objTypeVO : ObjectTypeVO):XML
 		{
-			var objTypeXML:XML = new XML("<Type/>");
+			var objTypeXML:XML = <Type/>;
 
 			//save information
-			var information:XML = new XML("<Information/>");
+			var information:XML = <Information/>;
 
 			information.Category 			= objTypeVO.category;
 			information.ClassName 			= objTypeVO.className;

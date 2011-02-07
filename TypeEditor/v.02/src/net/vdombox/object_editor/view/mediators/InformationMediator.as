@@ -1,3 +1,6 @@
+/*
+	Class InformationMediator is a wrapper over the Information.mxml
+*/
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
@@ -177,14 +180,18 @@ package net.vdombox.object_editor.view.mediators
 			switch ( note.getName() ) 
 			{				
 				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
+				{
 					if (objectTypeVO == note.getBody() )
 						view.label= "Information";
-					break;	
+					break;
+				}
 				case Information.INFORMATION_CHANGED	:
+				{
 					// todo: need optimization!
 					compliteInformation();
 					view.label= "Information*";
-					break;	
+					break;
+				}
 			}
 		}
 

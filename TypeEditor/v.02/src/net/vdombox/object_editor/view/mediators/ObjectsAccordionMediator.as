@@ -73,7 +73,7 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}
 		
-		protected function get view():ObjectsAccordion
+		public function get view():ObjectsAccordion
 		{
 			return viewComponent as ObjectsAccordion;
 		}

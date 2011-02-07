@@ -39,12 +39,10 @@ package net.vdombox.object_editor.model
 			_label = label;
 		}
 
-
 		public function get img():String
 		{
 			return _img;
 		}
-
 
 		public function set img(img:String):void
 		{

@@ -35,11 +35,10 @@
 //				languageName = event.target.text;
 			}
 
-
 			protected function lnName_enterHandler(event:FlexEvent):void
 			{
 				// TODO Auto-generated method stub
-				languageName = lnName.text;
+				languageName = lnNameTextInput.text;
 				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
 			}
 
@@ -47,7 +46,7 @@
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
-				languageName = lnName.text;
+				languageName = lnNameTextInput.text;
 				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
 			}
 
@@ -55,5 +54,5 @@
 	</fx:Script>
 	<s:Button label="Ok" x="143" y="39" click="button1_clickHandler(event)"/>
 	<s:Label  x="10" y="10" text="Input language like: en_US" width="203" height="25"/>
-	<s:TextInput id="lnName" x="6" y="39" change="lnName_changeHandler(event)"  enter="lnName_enterHandler(event)" width="128"/>
+	<s:TextInput id="lnNameTextInput" x="6" y="39" change="lnName_changeHandler(event)"  enter="lnName_enterHandler(event)" width="128"/>
 </s:TitleWindow>

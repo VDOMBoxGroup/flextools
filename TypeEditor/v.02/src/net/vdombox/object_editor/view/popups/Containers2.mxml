@@ -37,16 +37,16 @@
 			{
 				// TODO: may be necessary to optimize
 				var contLisrDataProv : ArrayCollection = new ArrayCollection();
-				for each(var avCont:Object in avalibleContainers)
+				for each (var avCont:Object in avalibleContainers)
 				{
 					contLisrDataProv.addItem( avCont)
 				}
 				
-				for each(var enUsCont:String in enUsedContainers)
+				for each (var enUsCont:String in enUsedContainers)
 				{
 					var inList : Boolean = false;
 					enUsCont = enUsCont.replace(" ","");
-					for each( avCont in contLisrDataProv)
+					for each ( avCont in contLisrDataProv)
 						if (avCont["label"] == enUsCont || avCont["data"] == enUsCont)
 						{
 							var itemIndex: int = contLisrDataProv.getItemIndex(avCont);
@@ -67,7 +67,7 @@
 			{
 				var contArt:Array = new Array();
 				
-				for each(var avCont:Object in inUsedList.dataProvider	)
+				for each (var avCont:Object in inUsedList.dataProvider)
 					contArt.push(avCont["label"]);
 				return contArt.join(); //7' ale
 			}
@@ -80,12 +80,12 @@
 			private function button1_clickHandler():void
 			{
 				container = contList.selectedItem;
-				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ));
 			}
 			
 			private function cancel():void
 			{
-				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ));
 			}			
 		]]>
 	</fx:Script>
@@ -100,7 +100,6 @@
 							 width="200" height="200"/>
 				</s:VGroup>
 				
-				
 				<s:VGroup>
 					<s:Label text="In used:" />
 					<s:List  id="inUsedList"  dataProvider="{arContainers}" doubleClick="button1_clickHandler()"
@@ -111,9 +110,6 @@
 			<s:HGroup right="0" >
 				<s:Group width="100%"/>
 				<s:Button label="Ok" click="button1_clickHandler()" />
-				
 			</s:HGroup>		
-			
 	</s:VGroup>	
-	
 </s:TitleWindow>

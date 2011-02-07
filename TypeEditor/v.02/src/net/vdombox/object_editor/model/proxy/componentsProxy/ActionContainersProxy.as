@@ -23,30 +23,30 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		
 		public function createXML( actionContainersVO: ArrayCollection ):XML
 		{			
-			var actionsXML  :XML = new XML("<Actions/>");
-			for each(var actContObj:Object in actionContainersVO )
+			var actionsXML  :XML = <Actions/>;
+			for each (var actContObj:Object in actionContainersVO)
 			{				
 				var actContsVO: ActionsContainerVO = actContObj.data;
-				var containerXML:XML = new XML("<Container/>");
+				var containerXML:XML = <Container/>;
 				containerXML.@ID = actContsVO.containerID;
 				actionsXML.appendChild(containerXML);
 				
 				var actsVO:ArrayCollection = actContsVO.actionsCollection;
 				
-				for each(var actObj:Object in actsVO )
+				for each (var actObj:Object in actsVO)
 				{	
 					var actVO:ActionVO = actObj.data;
-					var actXML:XML = new XML("<Action/>");
+					var actXML:XML = <Action/>;
 					actXML.@Description			= actVO.description;
 					actXML.@InterfaceName		= actVO.interfaceName;
 					actXML.@MethodName			= actVO.methodName;
 					
-					var parametersXML:XML = new XML("<Parameters/>");
+					var parametersXML:XML = <Parameters/>;
 					
-					for each(var evParameterObj:Object in actVO.parameters )
+					for each (var evParameterObj:Object in actVO.parameters)
 					{	
 						var actParameterVO:ActionParameterVO = evParameterObj.data;
-						var parameterXML:XML = new XML("<Parameter/>");
+						var parameterXML:XML = <Parameter/>;
 						parameterXML.@DefaultValue	= actParameterVO.defaultValue;
 						parameterXML.@Interface 	= actParameterVO.interfacePar;
 						parameterXML.@InterfaceName = actParameterVO.interfaceName;					
@@ -57,7 +57,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					}
 					actXML.appendChild( parametersXML );
 					
-					var sourceCodeXML:XML = XML("<SourceCode/>");
+					var sourceCodeXML:XML = <SourceCode/>;
 					sourceCodeXML.appendChild( XML("\n"+"<![CDATA[" + actVO.code +"]]>") )
 					actXML.appendChild( sourceCodeXML );
 					
@@ -74,12 +74,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			{
 				var actsXML: XML = XML( objTypeXML.descendants("Actions") );
 						
-				for each ( var contXML : XML in actsXML.descendants("Container") )
+				for each (var contXML : XML in actsXML.descendants("Container"))
 				{
 					var actsContainerVO: ActionsContainerVO = new ActionsContainerVO();
 					actsContainerVO.containerID = contXML.@ID;
 										
-					for each ( var actXML : XML in contXML.descendants("Action") )
+					for each (var actXML : XML in contXML.descendants("Action"))
 					{
 						var actVO:ActionVO  = new ActionVO();
 						actVO.description	= actXML.@Description;
@@ -87,7 +87,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 						actVO.methodName	= actXML.@MethodName;
 						actVO.code			= actXML.Sourcecode;
 						
-						for each ( var parameterXML : XML in actXML.descendants("Parameter") )
+						for each (var parameterXML : XML in actXML.descendants("Parameter"))
 						{
 							var actParameter:ActionParameterVO = new ActionParameterVO;
 							

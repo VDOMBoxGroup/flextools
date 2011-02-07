@@ -2,15 +2,20 @@ package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-
+	import flash.filesystem.File;
+	
 	import flexlib.controls.tabBarClasses.SuperTab;
-
+	
 	import mx.controls.Alert;
 	import mx.events.ChildExistenceChangedEvent;
-
+	import mx.utils.ObjectProxy;
+	
+	import net.vdombox.object_editor.model.Item;
+	import net.vdombox.object_editor.model.proxy.ObjectsProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
+	import net.vdombox.object_editor.view.ObjectsAccordion;
 	import net.vdombox.object_editor.view.essence.Actions;
 	import net.vdombox.object_editor.view.essence.Attributes;
 	import net.vdombox.object_editor.view.essence.Events;
@@ -19,7 +24,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.view.essence.Libraries;
 	import net.vdombox.object_editor.view.essence.Resourses;
 	import net.vdombox.object_editor.view.essence.SourceCode;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -28,9 +33,10 @@ package net.vdombox.object_editor.view.mediators
 	{
 		public static const NAME:String = "ObjectViewMediator";
 
-		public static const OBJECT_TYPE_CHAGED:String = "objectTypeChanged";
-		public static const OBJECT_TYPE_VIEW_REMOVED:String = "objectTypeViewRemoved";
-		public static const OBJECT_TYPE_VIEW_SAVED:String = "objectTypeViewSaved";
+		public static const OBJECT_TYPE_CHAGED:			String = "objectTypeChanged";
+		public static const OBJECT_TYPE_VIEW_REMOVED:	String = "objectTypeViewRemoved";
+		public static const OBJECT_TYPE_VIEW_SAVED:		String = "objectTypeViewSaved";
+		public static const CLOSE_OBJECT_TYPE_VIEW:		String = "closeObjectTypeView";
 
 		private var objectTypeVO:ObjectTypeVO;
 		private var _changed : Boolean = false;
@@ -63,7 +69,6 @@ package net.vdombox.object_editor.view.mediators
 			view.tabNavigator.addChild(libraries);
 
 
-
 			facade.registerMediator( new InformationMediator( information, objTypeVO ) );
 			facade.registerMediator( new ActionMediator  	( actions,	   objTypeVO ) );
 			facade.registerMediator( new AttributeMediator  ( atributes,   objTypeVO ) );
@@ -76,6 +81,7 @@ package net.vdombox.object_editor.view.mediators
 
 			view.saveObjectTypeButton.addEventListener  ( MouseEvent.CLICK, saveObjectType );
 			view.saveAsObjectTypeButton.addEventListener( MouseEvent.CLICK, saveAsObjectType );
+			view.restartButton.addEventListener			( MouseEvent.CLICK, restartObjectType );
 
 			view.validateNow();
 
@@ -92,7 +98,22 @@ package net.vdombox.object_editor.view.mediators
 			facade.sendNotification( ApplicationFacade.SAVE_AS_OBJECT_TYPE, objectTypeVO );
 		}
 
-
+		private function restartObjectType(event:MouseEvent):void
+		{
+			var objsAccordionMediator:ObjectsAccordionMediator = facade.retrieveProxy(ObjectsAccordionMediator.NAME) as ObjectsAccordionMediator;
+			var objsProxy:ObjectsProxy = facade.retrieveProxy(ObjectsProxy.NAME) as ObjectsProxy;
+			var file:File = new File();
+			file.nativePath = objectTypeVO.filePath;
+			var item:Item = objsProxy.getItem(file);
+			objectTypeViewRemoved();
+			
+			var viewInd:int = view.parent.getChildIndex(view);
+			facade.sendNotification( CLOSE_OBJECT_TYPE_VIEW, {objView:view, objVO:objectTypeVO} );
+			
+			facade.sendNotification( ApplicationFacade.RESTART_OBJECT_VIEW_MEDIATOR, {"ObjTypeVO": objectTypeVO, "MediatorName": NAME + objectTypeVO.id, "Item":item, "viewInd":viewInd} );
+		}
+		
+		//не используется нигде....
 		private function closeObjectType(event:Event):void
 		{
 			changed = false;
@@ -100,7 +121,6 @@ package net.vdombox.object_editor.view.mediators
 
 //			facade.sendNotification( ApplicationFacade.SAVE_AS_OBJECT_TYPE, objectTypeVO );
 		}
-
 
 		override public function listNotificationInterests():Array 
 		{			
@@ -112,40 +132,71 @@ package net.vdombox.object_editor.view.mediators
 			switch ( note.getName() ) 
 			{				
 				case OBJECT_TYPE_CHAGED:
+				{
 					if (objectTypeVO == note.getBody() )
 						changed = true;
 					break;		
-
+				}
+					
 				case OBJECT_TYPE_VIEW_SAVED:
-					if (objectTypeVO == note.getBody() )
+				{
+					if (objectTypeVO == note.getBody())
 						changed = false;
-					break;	
+					break;
+				}
 			}
 		}
 
-		private function  objectTypeViewRemoved(event  : Event):void
+		private function objectTypeViewRemoved():void
 		{
-			var objTypeProxy : ObjectTypeProxy= facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
+			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
 			objTypeProxy.removeVO(objectTypeVO);
-
-			facade.removeMediator(NAME+objectTypeVO.id)
+			
+			removeChildMediators();
+			removeEventListeners();
+			
+			facade.removeMediator(NAME+objectTypeVO.id)			
 		}
-
+		
+		private function removeChildMediators():void
+		{
+			facade.removeMediator( "InformationMediator" + objectTypeVO.id );
+			facade.removeMediator( "ActionMediator" 	 + objectTypeVO.id );
+			facade.removeMediator( "AttributeMediator"   + objectTypeVO.id );
+			facade.removeMediator( "EventMediator" 		 + objectTypeVO.id );			
+			facade.removeMediator( "LanguagesMediator" 	 + objectTypeVO.id );
+			facade.removeMediator( "LibrariesMediator"	 + objectTypeVO.id );
+			facade.removeMediator( "SourceCodeMediatior" + objectTypeVO.id );
+			facade.removeMediator( "ResourcesMediator"	 + objectTypeVO.id );					
+		}	
+		
+		private function removeEventListeners():void
+		{
+			view.saveObjectTypeButton.removeEventListener	( MouseEvent.CLICK, saveObjectType );
+			view.saveAsObjectTypeButton.removeEventListener	( MouseEvent.CLICK, saveAsObjectType );
+			view.restartButton.removeEventListener			( MouseEvent.CLICK, restartObjectType );			
+			view.removeEventListener						( OBJECT_TYPE_VIEW_REMOVED, objectTypeViewRemoved );
+		}
 
 		private function set changed(value: Boolean):void
 		{
 			_changed = value;
-			if(value)
+			if (value)
+			{
 				view.label = objectTypeVO.name + "*";
+				view.isEnabled = true;
+			}
 			else
+			{
 				view.label = objectTypeVO.name
+				view.isEnabled = false;	
+			}
 		}
 
 		private function get changed():Boolean
 		{
 			return _changed ;
 		}
-
 
 		protected function get view():ObjectView
 		{

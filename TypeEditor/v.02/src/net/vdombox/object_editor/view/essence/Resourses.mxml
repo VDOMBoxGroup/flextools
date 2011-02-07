@@ -27,9 +27,9 @@
 				this.enabled = true;
 					
 				_data =  xml.Resources[0];
-				if (!_data) _data = new XML("<Resources/>");
+				if (!_data) _data = <Resources/>;
 				
-				for each(var child:XML in _data.children())
+				for each (var child:XML in _data.children())
 				{
 					var item:Object = {};
 					
@@ -39,152 +39,7 @@
 					
 					arResources.addItem(item);
 				}	
-			}
-			/*
-			private function addResource():void
-			{
-				var fileUpload:FileReference = new FileReference();
-				fileUpload.addEventListener(Event.SELECT, fileSelected);
-				
-				fileUpload.browse();
-				
-				function fileSelected(event:Event):void
-				{
-					fileUpload.removeEventListener(Event.SELECT, fileSelected);
-					fileUpload.addEventListener(Event.COMPLETE, fileDounloaded);
-					fileUpload.load();
-				}
-				
-				function fileDounloaded(event:Event):void
-				{
-					fileUpload.removeEventListener(Event.COMPLETE, fileDounloaded);
-//					xmlObject = new XML(fileUpload.data.toString());
-
-					var b64:Base64Encoder = new Base64Encoder();
-					b64.encodeBytes(fileUpload.data);
-					
-					var xmlResource:XML = new XML("<Resource/>");
-					xmlResource.@ID = UIDUtil.createUID().toLowerCase(); 
-					xmlResource.@Name = fileUpload.name;
-					xmlResource.@Type = fileUpload.extension;
-					
-					xmlResource.appendChild( XML("<![CDATA[" + b64.toString()  +"]" +"]" +">"))
-					_data.appendChild(xmlResource);
-						
-					var item:Object = {};
-					item["ID"] = xmlResource.@ID;
-					item["Name"] = xmlResource.@Name;
-					item["Type"] = xmlResource.@Type;
-					arResources.addItem(item);
-				}
-			}
-			*/
-			private function changeResourcesContent():void
-			{
-			
-			}
-			/*
-				var fileUpload:FileReference = new FileReference();
-				fileUpload.addEventListener(Event.SELECT, fileSelected);
-				
-				fileUpload.browse();
-				
-				function fileSelected(event:Event):void
-				{
-					fileUpload.removeEventListener(Event.SELECT, fileSelected);
-					fileUpload.addEventListener(Event.COMPLETE, fileDounloaded);
-					fileUpload.load();
-				}
-			
-				function fileDounloaded(event:Event):void
-				{
-					fileUpload.removeEventListener(Event.COMPLETE, fileDounloaded);
-					
-					var b64:Base64Encoder = new Base64Encoder();
-					b64.encodeBytes(fileUpload.data);
-					
-					var id:String = resources.selectedItem.ID;
-					var xmlResource:XML = _data.Resource.(@ID == id)[0];
-					
-					xmlResource.appendChild( XML("<![CDATA[" + b64.toString()  +"]" +"]" +">"))
-					delete xmlResource.children()[0];
-					
-					Alert.show("ID: " +id , "Content changed"); 
-				}
-			}
-				*/
-			/*
-			private function deleteResource():void
-			{
-				Alert.show("Do You want to delete ?","Delete", 3, this, deleteResourceOk);
-				
-				function deleteResourceOk(event:CloseEvent):void
-				{
-					var selectedIndex:int  = resources.selectedIndex;
-					
-					if (event.detail==Alert.YES)
-					{
-						var id:String = resources.selectedItem.ID;
-						delete _data.Resource.(@ID == id)[0];
-						arResources.removeItemAt(arResources.getItemIndex(resources.selectedItem));
-					}
-					
-					if (arResources.length)
-					{
-						if (selectedIndex == arResources.length )
-							resources.selectedIndex = selectedIndex - 1;
-						else
-							resources.selectedIndex = selectedIndex;
-					}
-				}
-					
-			}
-			*/
-			/*
-			private function save():void
-			{
-				if(dataChanged)
-				{
-					for (var i:String in arResources)
-					{
-						var objResource:Object = arResources[i];
-						var xmlResource:XML = _data.Resource.(@ID == objResource["ID"])[0];
-						
-						xmlResource.@Name = objResource["Name"];
-						xmlResource.@Type = objResource["Type"];
-					}
-				}
-			}
-			*/
-			
-			/*
-			private function exportContent():void
-			{
-				var id:String = resources.selectedItem.ID;
-				var xmlResource:XML =  _data.Resource.(@ID == id)[0];
-				
-				var b64:Base64Decoder = new Base64Decoder();
-				b64.decode(xmlResource.toString());
-				
-				var fileUpload:FileReference = new FileReference();
-				var ba:ByteArray =  b64.toByteArray();
-				fileUpload.save( ba, xmlResource.@Name );
-				
-				fileUpload.addEventListener(Event.COMPLETE, fileDounloaded);
-				
-				function fileDounloaded(event:Event):void
-				{
-//					panel.title = "PageOne Migration - " + fileUpload.name;
-				}
-			}
-			
-			private var dataChanged:Boolean;
-			protected function resources_itemEditEndHandler(event:DataGridEvent):void
-			{
-				// TODO Auto-generated method stub
-				dataChanged = true;
-			}
-*/
+			}			
 		]]>
 	</fx:Script>
 	<s:VGroup width="100%" height="100%">
@@ -203,7 +58,7 @@
 			<s:Button label="Change content" id="changeContentButt"  enabled="{resourcesDataGrid.selectedIndex != -1}"/>
 			<s:Button label="Export" id="exportContentButt"  enabled="{resourcesDataGrid.selectedIndex != -1}"
 					  click="{}"/>
-			<s:Button label="Delete" id="deleteButt" enabled="{resourcesDataGrid.selectedIndex != -1}"
+			<s:Button label="Delete" id="deleteButton" enabled="{resourcesDataGrid.selectedIndex != -1}"
 					  />
 		</s:HGroup>
 	</s:VGroup>

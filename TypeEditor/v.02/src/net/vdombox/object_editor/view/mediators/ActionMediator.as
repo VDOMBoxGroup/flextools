@@ -1,3 +1,6 @@
+/*
+	Class ActionMediator is a wrapper over the Actions.mxml
+*/
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
@@ -53,8 +56,8 @@ package net.vdombox.object_editor.view.mediators
 			view.removeEventListener( FlexEvent.SHOW, showActions );
 			setCurrentContainer();
 
-			view.addContainer.addEventListener   ( MouseEvent.CLICK, addContainer );
-			view.deleteContainer.addEventListener( MouseEvent.CLICK, deleteContainer );
+			view.addContainerButton.addEventListener   ( MouseEvent.CLICK, addContainer );
+			view.deleteContainerButton.addEventListener( MouseEvent.CLICK, deleteContainer );
 			view.addAction.addEventListener   	 ( MouseEvent.CLICK, addAction );
 			view.deleteAction.addEventListener	 ( MouseEvent.CLICK, deleteAction );
 			view.addParameter.addEventListener   ( MouseEvent.CLICK, addParameter );
@@ -72,7 +75,7 @@ package net.vdombox.object_editor.view.mediators
 		private function selectContainer(event:Event):void
 		{ 
 			currentContainerVO = view.containersList.selectedItem.data as ActionsContainerVO;
-			if(currentContainerVO)
+			if (currentContainerVO)
 			{
 				fillContainerFilds(currentContainerVO);
 				setCurrentAction();
@@ -102,14 +105,14 @@ package net.vdombox.object_editor.view.mediators
 		{
 			view.label= "Actions*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
-			if( currentParameterVO )
+			if (currentParameterVO)
 			{				
 				currentParameterVO.defaultValue		= view.parDefaultValue.text;
 				currentParameterVO.interfacePar		= view.parInterface.text;
 				currentParameterVO.scriptName		= view.parScriptName.text;
 				currentParameterVO.regExp	 		= view.parRegExp.text;
 			}
-			if( currentActionVO )
+			if (currentActionVO)
 			{
 				currentActionVO.code				= view.sourceCode.text;				
 			}
@@ -185,14 +188,16 @@ package net.vdombox.object_editor.view.mediators
 			{				
 				popup.showContainersList( objectsProxy.topLevelContainerList );	
 			}
+			
 			function closeHandler(event:CloseEvent):void
 			{
 				var container:Object = event.target.container;					
-				if(container == null)return;
+				if (container == null)
+					return;
 
 				var actsContVO:ActionsContainerVO = new ActionsContainerVO();
 
-				if( container )
+				if (container)
 				{
 					actsContVO.containerID = container.data;
 					objectTypeVO.actionContainers.addItem( {label:actsContVO.containerID, data:actsContVO} );
@@ -222,7 +227,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function addAction(event:MouseEvent): void
 		{	
-			if( currentContainerVO )
+			if (currentContainerVO)
 			{
 				currentActionVO = new ActionVO();
 				currentActionVO.methodName 	  = ( "methodName" + currentContainerVO.actionsCollection.length );
@@ -248,7 +253,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function addParameter(event:MouseEvent): void
 		{	
-			if(currentActionVO == null)
+			if (currentActionVO == null)
 			{
 				Alert.show("Add action");
 			}
@@ -274,7 +279,7 @@ package net.vdombox.object_editor.view.mediators
 		{
 			var selectInd:uint = view.containersList.selectedIndex;
 			var actsCount:int = currentContainerVO.actionsCollection.length;
-			for (var i:int; i < actsCount; i++ )
+			for (var i:int; i < actsCount; i++)
 			{	
 				view.actionsList.selectedIndex = 0;
 				deleteAction();
@@ -290,7 +295,7 @@ package net.vdombox.object_editor.view.mediators
 			languagesProxy.deleteWord(objectTypeVO, currentActionVO.description);
 			languagesProxy.deleteWord(objectTypeVO, currentActionVO.interfaceName);
 			var parsCount:int = currentActionVO.parameters.length
-			for (var i:int; i < parsCount; i++ )
+			for (var i:int; i < parsCount; i++)
 			{	
 				view.parametersList.selectedIndex = 0;
 				deleteParameter();
@@ -313,9 +318,9 @@ package net.vdombox.object_editor.view.mediators
 
 		private function getCurrentAction(methodName:String):Object
 		{			
-			for each(var act:Object in currentContainerVO.actionsCollection )
+			for each (var act:Object in currentContainerVO.actionsCollection )
 			{
-				if( act["label"] == methodName )
+				if (act["label"] == methodName)
 				{
 					return act;
 					break;
@@ -326,9 +331,9 @@ package net.vdombox.object_editor.view.mediators
 
 		private function getCurrentParameter(nameParam:String):Object
 		{			
-			for each(var param:Object in currentActionVO.parameters )
+			for each (var param:Object in currentActionVO.parameters)
 			{
-				if( param["label"] == nameParam )
+				if ( param["label"] == nameParam )
 				{
 					return param;
 					break;
@@ -353,7 +358,7 @@ package net.vdombox.object_editor.view.mediators
 
 		protected function compliteActions():void
 		{	
-			if( objectTypeVO.actionContainers.length > 0)
+			if (objectTypeVO.actionContainers.length > 0)
 			{
 				sortActions();
 				view.actionsList.dataProvider = currentContainerVO.actionsCollection;
@@ -369,13 +374,18 @@ package net.vdombox.object_editor.view.mediators
 			switch ( note.getName() ) 
 			{				
 				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
+				{
 					if (objectTypeVO == note.getBody() )
 						view.label= "Actions";
-					break;	
+					break;
+				}
+					
 				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
+				{
 					if( view.description) 
 						changeFildWithCurrentLanguage( );
 					break;
+				}
 			}
 		}
 
@@ -407,9 +417,9 @@ package net.vdombox.object_editor.view.mediators
 		private function getContObj (obj:Object):Object
 		{
 			var containerName:String = "";
-			for each(var item:Object in objectsProxy.topLevelContainerList)
+			for each (var item:Object in objectsProxy.topLevelContainerList)
 			{
-				if(item.data == obj.label)
+				if (item.data == obj.label)
 				{
 					containerName = item.label;
 					break;	
@@ -427,11 +437,11 @@ package net.vdombox.object_editor.view.mediators
 
 		private function setCurrentContainer(listIndex:int = 0):void
 		{		
-			if ( listIndex < 0 )
+			if (listIndex < 0)
 			{
 				listIndex = 0;
 			}
-			if( objectTypeVO.actionContainers.length > 0 )
+			if (objectTypeVO.actionContainers.length > 0)
 			{
 				currentContainerVO	= objectTypeVO.actionContainers[listIndex].data;
 				view.containersList.validateNow();
@@ -440,7 +450,7 @@ package net.vdombox.object_editor.view.mediators
 				view.containersList.selectedIndex = listIndex;
 				view.currentContainer = view.containersList.dataProvider[listIndex];
 
-				if(!isActionsSort)
+				if (!isActionsSort)
 				{
 					compliteActions();
 					isActionsSort = true;
@@ -457,11 +467,11 @@ package net.vdombox.object_editor.view.mediators
 
 		private function setCurrentAction(listIndex:int = 0):void
 		{
-			if ( listIndex < 0 )
+			if (listIndex < 0)
 			{
 				listIndex = 0;
 			}
-			if( currentContainerVO.actionsCollection.length > 0 )
+			if (currentContainerVO.actionsCollection.length > 0)
 			{
 				currentActionVO		= currentContainerVO.actionsCollection[listIndex].data;
 				view.actionsList.dataProvider  = currentContainerVO.actionsCollection;
@@ -483,16 +493,16 @@ package net.vdombox.object_editor.view.mediators
 
 		private function setCurrentParameter(listIndex:int = 0):void
 		{
-			if(!isParametersSort)
+			if (!isParametersSort)
 			{
 				sortParameters();	
 				isParametersSort = true;
 			}
-			if ( listIndex < 0 )
+			if (listIndex < 0)
 			{
 				listIndex = 0;
 			}
-			if( currentActionVO.parameters.length > 0 )
+			if (currentActionVO.parameters.length > 0)
 			{				
 				currentParameterVO  = currentActionVO.parameters[listIndex].data;
 				view.parametersList.dataProvider  = currentActionVO.parameters;

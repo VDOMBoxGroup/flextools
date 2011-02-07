@@ -27,23 +27,23 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		
 		public function createXML( eventsVO: ArrayCollection ):XML
 		{	
-			var e2vdomXML:XML = new XML("<E2vdom/>");			
-			var eventsXML:XML = new XML("<Events/>");
+			var e2vdomXML:XML = <E2vdom/>;			
+			var eventsXML:XML = <Events/>;
 			e2vdomXML.appendChild(eventsXML);
-			var userInterfEvXML:XML = new XML("<Userinterfaceevents/>");
+			var userInterfEvXML:XML = <Userinterfaceevents/>;
 			eventsXML.appendChild(userInterfEvXML);
 			
-			for each(var eventObj:Object in eventsVO )
+			for each (var eventObj:Object in eventsVO)
 			{	
 				var eventVO:EventVO = eventObj.data;
-				var eventXML:XML 	  = new XML("<Event/>");
+				var eventXML:XML 	  = <Event/>;
 				eventXML.@Name		  = eventVO.name;
-				var parametersXML:XML = new XML("<Parameters/>");
+				var parametersXML:XML = <Parameters/>;
 				
-				for each(var evParameterObj:Object in eventVO.parameters )
+				for each (var evParameterObj:Object in eventVO.parameters)
 				{	
 					var evParameterVO:EventParameterVO = evParameterObj.data;
-					var parameterXML:XML	= new XML("<Parameter/>");
+					var parameterXML:XML	= <Parameter/>;
 					parameterXML.@Name		= evParameterVO.name;
 					parameterXML.@Order 	= evParameterVO.order;
 					parameterXML.@VbType 	= evParameterVO.vbType;
@@ -64,12 +64,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 //			var e2vdomXML:XML = objTypeXML.descendants("E2vdom")
 //			var eventsXML:XML = e2vdomXML.descendants("Events")
 //			var usIntEvXML:XML = objTypeXML.descendants("Userinterfaceevents")
-			for each ( var eventXML : XML in objTypeXML.descendants("Event") )
+			for each (var eventXML : XML in objTypeXML.descendants("Event"))
 			{
 				var eventVO:EventVO = new EventVO();
 				eventVO.name = eventXML.@Name;
 				
-				for each ( var parameterXML : XML in eventXML.descendants("Parameter") )
+				for each (var parameterXML : XML in eventXML.descendants("Parameter"))
 				{
 					var eventParameter:EventParameterVO = new EventParameterVO;
 					

@@ -44,9 +44,9 @@ package net.vdombox.object_editor.view
 			currentLanguage = langsVO.currentLocation;
 			var wordsVO:ArrayCollection = langsVO.words;
 
-			for each(var word:Object in wordsVO)
+			for each (var word:Object in wordsVO)
 			{		
-				if( word["ID"] == fildID)
+				if (word["ID"] == fildID)
 				{
 					words = word;
 					super.text = words[currentLanguage];	

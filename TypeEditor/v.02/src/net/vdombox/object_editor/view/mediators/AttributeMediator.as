@@ -1,3 +1,6 @@
+/*
+	Class AttributeMediator is a wrapper over the Attributes.mxml
+*/
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.display.DisplayObject;
@@ -44,10 +47,7 @@ package net.vdombox.object_editor.view.mediators
 			view.addEventListener( FlexEvent.SHOW,		showAttributes );
 			view.addEventListener( Event.CHANGE,		validateObjectTypeVO );
 			view.addEventListener( FlexEvent.CHANGING,	changeStack );
-//			view.addEventListener( Event.SELECT,		selectCodeInterface );	
 			view.addEventListener( FlexEvent.ADD,		addDropDownRow );
-//			view.addEventListener( FlexEvent.REMOVE,	removeDropDownRow );
-//			view.addEventListener( MouseEvent.CLICK,	removeDropDownRow );
 		}
 		
 		private function selectCodeInterface( event:Event = null ):void
@@ -55,9 +55,7 @@ package net.vdombox.object_editor.view.mediators
 			view.label= "Attributes*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 			if( currentAttributeVO )
-			{
 				currentAttributeVO.codeInterface = view.CodeInterfaceValue.toString();			
-			}			
 		}
 
 		private function changeName( event:Event ):void
@@ -74,12 +72,11 @@ package net.vdombox.object_editor.view.mediators
 		
 		public function apdateBackgroundColor(event: Event=null):void
 		{	
-			if(event)
-			{
+			if (event)
 				view.currentAttribute.color = event.target.selectedIndex;
-			}				
+			
 			var selIndex:uint = view.attributesList.selectedIndex;
-			var atrList:List = view.attributesList as List;
+			var atrList:List  = view.attributesList as List;
 			
 			atrList.dataProvider.removeItemAt(selIndex);
 			atrList.dataProvider.addItemAt(view.currentAttribute,selIndex);
@@ -92,13 +89,12 @@ package net.vdombox.object_editor.view.mediators
 		{
 			view.label= "Attributes*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
-			if( currentAttributeVO )
+			if (currentAttributeVO)
 			{				
 				currentAttributeVO.defaultValue		= view.defaultValue.text;
 				currentAttributeVO.visible			= view.visibleAtr.selected;
 				currentAttributeVO.interfaceType	= view.interfaceType.selectedIndex;
 				currentAttributeVO.colorgroup		= view.colorgroup.selectedIndex;
-//				currentAttributeVO.codeInterface	= view.codeInterface.textInput.text;
 				selectCodeInterface();
 				currentAttributeVO.regularExpressionValidation = view.regExp.text;
 			}
@@ -118,7 +114,6 @@ package net.vdombox.object_editor.view.mediators
 			view.interfaceType.selectedIndex 	= attributeVO.interfaceType;
 			view.colorgroup.selectedIndex 		= attributeVO.colorgroup;
 			view.regExp.text					= attributeVO.regularExpressionValidation;
-//			view.codeInterface.textInput.text	= attributeVO.codeInterface;
 			compliteCodeInterfaceField(attributeVO.codeInterface);
 			
 			view.displayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );
@@ -156,9 +151,9 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function getCurrentAttribute(nameAttib:String):Object
 		{			
-			for each(var attr:Object in objectTypeVO.attributes )
+			for each (var attr:Object in objectTypeVO.attributes)
 			{
-				if( attr["label"] == nameAttib )
+				if (attr["label"] == nameAttib)
 				{
 					return attr;
 					break;
@@ -179,11 +174,10 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function setCurrentAttribute(listIndex:int = 0):void
 		{
-			if ( listIndex < 0 )
-			{
+			if (listIndex < 0)
 				listIndex = 0;
-			}
-			if( objectTypeVO.attributes.length > 0 )
+			
+			if (objectTypeVO.attributes.length > 0)
 			{				
 				currentAttributeVO = objectTypeVO.attributes[listIndex].data;
 				view.attributesList.selectedIndex = listIndex;
@@ -226,13 +220,18 @@ package net.vdombox.object_editor.view.mediators
 			switch ( note.getName() ) 
 			{				
 				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
-					if (objectTypeVO == note.getBody() )
+				{
+					if (objectTypeVO == note.getBody())
 						view.label= "Attributes";
 					break;
+				}
+					
 				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
+				{
 					if (view.attributesList)
 						changeFildWithCurrentLanguage( );
 					break;
+				}
 			}
 		}
 		
@@ -255,7 +254,7 @@ package net.vdombox.object_editor.view.mediators
 			var i:int=0;
 			var dropDownHroup:HGroup = new HGroup();
 			var childExist:Boolean = true;
-			while(childExist)
+			while (childExist)
 			{	
 				try
 				{
@@ -282,59 +281,77 @@ package net.vdombox.object_editor.view.mediators
 			var codeIntefaceArguments:String = parsed[2];
 			var arguments:Array = codeIntefaceArguments.split(",");
 			
-			if(codeinterfaceLabel == "Number") codeinterfaceLabel+=1;
+			if (codeinterfaceLabel == "Number") 
+				codeinterfaceLabel+=1;
 			view.codeInterface.selectedItem = codeinterfaceLabel;	
 			
 			
-			if( codeinterfaceLabel != "!Font" &&
+			if (codeinterfaceLabel != "!Font" &&
 				codeinterfaceLabel != "File"  &&
 				codeinterfaceLabel != "Color" &&
 				codeinterfaceLabel != "PageLink" &&
-				codeinterfaceLabel != "LinkedBase" )
+				codeinterfaceLabel != "LinkedBase")
 			{
-				switch ( codeinterfaceLabel ) 
+				switch (codeinterfaceLabel) 
 				{	
 					case "TextField":
+					{
 						view.CIViewStack.selectedIndex = 0;
 						view.CIViewStack.validateNow();
 						view.fieldLength.text = arguments[0];
 						break;
+					}
+						
 					case "Number1":
+					{
 						view.CIViewStack.selectedIndex = 1;
 						view.CIViewStack.validateNow();
 						view.minValue.text = arguments[0];							
 						view.maxValue.text = arguments[1];
 						break;
+					}
+					
 					case "MultiLine":
+					{
 						view.CIViewStack.selectedIndex = 2;
 						view.CIViewStack.validateNow();
 						view.multiLineLength.text = arguments[0]; 
-						break;					
+						break;
+					}
+						
 					case "DropDown":
+					{
 						view.CIViewStack.selectedIndex = 3;
 						view.CIViewStack.validateNow();
 						var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d]+)/g;
 						var langs:Array = new Array();							
 						
-						while( langs = regLangs.exec(arguments[0]))
+						while (langs = regLangs.exec(arguments[0]))
 						{
 							var dropDownValue:DropDownValue = new DropDownValue();
 							dropDownValue.langTextInput.completeStructure(objectTypeVO.languages, langs[1]);
 							dropDownValue.textValue.text = langs[2];
 							addDropDownRow(null,dropDownValue);	
 						}							
-						break;					
+						break;
+					}
+						
 					case "ObjectList":
+					{
 						view.CIViewStack.selectedIndex = 4;
 						view.CIViewStack.validateNow();
 						view.typeId.text = arguments[0];
 						break;
+					}
+						
 					case "ExternalEditor":
+					{
 						view.CIViewStack.selectedIndex = 5;
 						view.CIViewStack.validateNow();
 						view.title.text = arguments[0];	
 						view.info.text  = arguments[1];
 						break;
+					}
 				}
 			}
 		}
@@ -342,7 +359,7 @@ package net.vdombox.object_editor.view.mediators
 		public function addDropDownRow(event:FlexEvent, dropDownVal:DropDownValue=null):void
 		{
 			var hGroup:HGroup = new HGroup();
-			if(!dropDownVal)
+			if (!dropDownVal)
 			{
 				dropDownVal = new DropDownValue();	
 				dropDownVal.langTextInput.completeStructure(objectTypeVO.languages, languagesProxy.getNextId(objectTypeVO.languages, "4", ""));
@@ -376,37 +393,49 @@ package net.vdombox.object_editor.view.mediators
 			changeCodeInterfaceStack(false);		
 		}
 		
-		
 		private function setData( label:String, isChangeStack:Boolean):void
 		{	
-			if(isChangeStack) 
-			{
+			if (isChangeStack) 
 				view.CodeInterfaceValue = label + "()";
-			}
 			else
-			{
-				switch ( label ) 
+				switch (label) 
 				{	
-					case "TextField":						
+					case "TextField":
+					{
 						view.CodeInterfaceValue = label + "(" + view.fieldLength.text +")";
 						break;
+					}
+						
 					case "Number1":						
+					{
 						view.CodeInterfaceValue = "Number1" + "(" + view.minValue.text + "," + view.maxValue.text + ")";
 						break;
-					case "MultiLine":						
+					}
+						
+					case "MultiLine":
+					{
 						view.CodeInterfaceValue = label + "(" +view. multiLineLength.text + ")";
-						break;					
+						break;
+					}
+						
 					case "DropDown":
+					{
 						setCodeInterfaceDropDownValue();
-						break;					
+						break;		
+					}
+						
 					case "ObjectList":
+					{
 						view.CodeInterfaceValue = label + "(" + view.typeId.text + ")";
 						break;
+					}
+						
 					case "ExternalEditor":
+					{
 						view.CodeInterfaceValue = label + "(" + view.title.text +","+ view.info.text + ")";
 						break;
+					}
 				}
-			}
 		}
 		
 		public function setCodeInterfaceDropDownValue():void
@@ -415,7 +444,7 @@ package net.vdombox.object_editor.view.mediators
 			var dropDownHroup:HGroup = new HGroup();
 			var childExist:Boolean = true;
 			var values:String = "";
-			while(childExist)
+			while (childExist)
 			{	
 				try
 				{
@@ -443,15 +472,14 @@ package net.vdombox.object_editor.view.mediators
 		public function changeCodeInterfaceStack(isChangeStack:Boolean):void
 		{					
 			if(isChangeStack)
-			{
 				clearCodeInterfaceFields();
-			}
+
 			var label:String = view.codeInterface.selectedItem;
-			if( label != "!Font" &&
+			if (label != "!Font" &&
 				label != "File"  &&
 				label != "Color" &&
 				label != "PageLink" &&
-				label != "LinkedBase" )
+				label != "LinkedBase")
 			{
 				var ch:* = view.CIViewStack.getChildByName(view.codeInterface.selectedItem);
 				view.CIViewStack.selectedChild = ch;
@@ -471,35 +499,52 @@ package net.vdombox.object_editor.view.mediators
 			var num:int 	 = view.CodeInterfaceValue.indexOf("(");				
 			var label:String = view.CodeInterfaceValue.slice(0,num); 
 			
-			if( label != "!Font"	&&
+			if (label != "!Font"	&&
 				label != "File"		&&
 				label != "Color"	&&
 				label != "PageLink"	&&
-				label != "LinkedBase" )
+				label != "LinkedBase")
 			{
 				switch ( label ) 
 				{	
 					case "TextField":
+					{
 						view.fieldLength.text = "";
 						break;
-					case "Number1":							
+					}
+						
+					case "Number1":
+					{
 						view.minValue.text = "";							
 						view.maxValue.text = "";
 						break;
+					}
+						
 					case "MultiLine":
+					{
 						view.multiLineLength.text = ""; 
-						break;					
+						break;
+					}
+						
 					case "DropDown":
+					{
 						view.vGroup.removeAllElements();
 						view.validateNow();
-						break;					
+						break;	
+					}
+						
 					case "ObjectList":
+					{
 						view.typeId.text = "";
 						break;
+					}
+						
 					case "ExternalEditor":
+					{
 						view.title.text = "";	
 						view.info.text  = "";
 						break;
+					}
 				}
 			}
 		}

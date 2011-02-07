@@ -16,7 +16,6 @@ package net.vdombox.object_editor.controller
 	{
 		override public function execute( note:INotification ) :void
 		{
-
 			var id: String = note.getBody() as String;
 
 			var fileRef:FileReference = new FileReference();

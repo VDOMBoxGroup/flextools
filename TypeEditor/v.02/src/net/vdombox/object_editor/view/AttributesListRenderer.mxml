@@ -28,16 +28,19 @@
 						backColor = 0x8289A3;
 						break;
 					}
+						
 					case 2:
 					{
 						backColor =0x669F60;
 						break;
 					}
+						
 					case 3:
 					{
 						backColor = 0xFB1E1E;
 						break;
-					}					
+					}	
+						
 					case 4:
 					{
 						backColor = 0x7A92EB;
@@ -64,6 +67,6 @@
 				<s:SolidColor id="bsc" color.normal="{backColor}"  color.hovered="blue" color.selected="{backColor}"/>
 			</s:fill>			
 		</s:Rect>			
-		<s:Label id="txt" text="{data.label}" fontSize.selected="20" color="#DDD6D5"/>		
+		<s:Label id="textLabel" text="{data.label}" fontSize.selected="20" color="#DDD6D5"/>		
 	</s:Group>	
 </s:ItemRenderer>

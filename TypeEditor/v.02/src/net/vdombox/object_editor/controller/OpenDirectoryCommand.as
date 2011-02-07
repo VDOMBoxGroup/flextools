@@ -18,8 +18,8 @@ package net.vdombox.object_editor.controller
 	{
 		override public function execute( note:INotification ) :void    
 		{	
-			var so:SharedObject = SharedObject.getLocal("directoryPath");
-			var directory:File = new File;			
+			var so:SharedObject	 = SharedObject.getLocal("directoryPath");
+			var directory:File   = new File;			
 			directory.nativePath = so.data.path;		
 
 			try

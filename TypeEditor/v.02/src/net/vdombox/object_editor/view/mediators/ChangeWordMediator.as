@@ -45,13 +45,17 @@ package net.vdombox.object_editor.view.mediators
 			switch ( note.getName() ) 
 			{				
 				case ApplicationFacade.OBJECT_COMPLIT:
+				{
 					newObjectView(note.getBody() as ObjectTypeVO);
-					break;	
+					break;
+				}
 
 				case ApplicationFacade.OBJECT_EXIST:
+				{
 					var toSelectedOjectName:String = note.getBody() as String;
 					view.tabNavigator.selectedChild = view.tabNavigator.getChildByName( toSelectedOjectName) as ObjectView;
-					break;	
+					break;
+				}
 			}
 		}
 

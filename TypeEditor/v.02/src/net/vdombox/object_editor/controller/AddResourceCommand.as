@@ -13,8 +13,7 @@ package net.vdombox.object_editor.controller
 	public class AddResourceCommand extends SimpleCommand
 	{
 		override public function execute( note:INotification ) :void
-		{
-			
+		{			
 			var fileRef:FileReference = new FileReference();
 			fileRef.addEventListener(Event.SELECT, fileSelected);
 			
@@ -24,9 +23,7 @@ package net.vdombox.object_editor.controller
 			{
 				fileRef.addEventListener(Event.COMPLETE, fileDounloaded);
 				fileRef.load();
-			}
-			
-			
+			}			
 			
 			function fileDounloaded(event:Event):void
 			{
@@ -35,7 +32,6 @@ package net.vdombox.object_editor.controller
 				
 				facade.sendNotification( ResourcesMediator.RESOURCE_UPLOADED, resVO );
 			}
-
 		}
 	}
 }

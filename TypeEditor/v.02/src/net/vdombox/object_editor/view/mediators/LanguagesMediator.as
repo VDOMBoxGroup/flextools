@@ -1,3 +1,6 @@
+/*
+	Class LanguagesMediator is a wrapper over the Languages.mxml
+*/
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
@@ -68,7 +71,8 @@ package net.vdombox.object_editor.view.mediators
 			{
 				var lanName:String = event.target.languageName;
 				
-				if(lanName == "")return;
+				if (lanName == "")
+					return;
 				
 				var cols:Array = view.languagesDataGrid.columns;
 				var dataGridColumn: DataGridColumn = new DataGridColumn(lanName);

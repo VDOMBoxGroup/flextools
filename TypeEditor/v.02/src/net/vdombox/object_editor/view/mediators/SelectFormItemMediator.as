@@ -43,7 +43,8 @@ package net.vdombox.object_editor.view.mediators
 			word["data"]   = selectData;
 			word["fildVO"] = fildVO;
 			
-			facade.sendNotification( ApplicationFacade.CHANGE_SELECT_FORM_ITEM, word );
+			//никто не перехватывает это сообщение!!!
+//			facade.sendNotification( ApplicationFacade.CHANGE_SELECT_FORM_ITEM, word );
 			//fildVO = getString( view.fselectComboBox.selectedItem.data );
 			/*
 			var functionName:String = "foo" + bar;

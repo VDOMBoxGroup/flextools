@@ -76,7 +76,7 @@ package net.vdombox.object_editor.view.mediators
 			view.removeEventListener( FlexEvent.SHOW, show );
 
 			view.addResourceButt.addEventListener(MouseEvent.CLICK, addResource);
-			view.deleteButt.addEventListener(MouseEvent.CLICK, deleteResource);
+			view.deleteButton.addEventListener(MouseEvent.CLICK, deleteResource);
 			view.changeContentButt.addEventListener(MouseEvent.CLICK, changeContent);
 			view.exportContentButt.addEventListener(MouseEvent.CLICK, exportContent);
 

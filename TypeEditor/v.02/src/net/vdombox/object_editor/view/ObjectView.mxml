@@ -15,6 +15,8 @@
 			
 			private var _tabNavigator:TabNavigator;
 			private var _saveButton:Button;
+			[Bindable]
+			public 	var	 isEnabled:Boolean = false;
 			
 			public function get tabNavigator():TabNavigator
 			{
@@ -40,42 +42,13 @@
 				addElementAt(_tabNavigator, 0)
 			}
 		]]>
-	</fx:Script>
-		
-	<!--mx:TabNavigator id="tabNavigator" >
-		
-		<s:NavigatorContent label="Information">
-			<ns:Information id="information"/>	</s:NavigatorContent>
-		
-		<s:NavigatorContent label="Atributes">
-			<ns:Atributes/>	</s:NavigatorContent>
-		
-		<s:NavigatorContent label="Languages">
-			<ns:Languages/> </s:NavigatorContent>
-		
-		<s:NavigatorContent label="Libraries">
-			<ns:Libraries/> 	</s:NavigatorContent>
-		
-		
-		<s:NavigatorContent label="Resourses">
-			<ns:Resourses/> 	</s:NavigatorContent>
-		
-		
-		<s:NavigatorContent label="SourceCode">
-			<ns:SourceCode/> 	</s:NavigatorContent>
-		
-		<s:NavigatorContent label="Actions">
-			<ns:Actions/> 	</s:NavigatorContent>
-		
-		<s:NavigatorContent label="Events">
-			<ns:Events/> 	</s:NavigatorContent>
-		
-	</mx:TabNavigator-->
+	</fx:Script>		
+	
 	<s:HGroup right="453" width="100%" gap="19" verticalAlign="top" paddingBottom="10" paddingRight="10">
-		<s:Group width="100%">
-		</s:Group>
+		<s:Group width="100%"/>
 		
-		<s:Button label="Save" 	  id="saveObjectTypeButton" />
-		<s:Button label="Save as" id="saveAsObjectTypeButton" />		
+		<s:Button label="Save"		id="saveObjectTypeButton"	enabled="{isEnabled}"/>
+		<s:Button label="Save as"	id="saveAsObjectTypeButton"	enabled="{isEnabled}"/>
+		<s:Button label="Restart"	id="restartButton"			enabled="{isEnabled}"/>
 	</s:HGroup>	
 </mx:VBox>

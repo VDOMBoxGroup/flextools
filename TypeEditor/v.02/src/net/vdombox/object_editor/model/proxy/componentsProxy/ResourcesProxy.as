@@ -54,9 +54,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			var resourcesXML : XML =  objTypeXML.Resources[0];
 
 			if (!resourcesXML) 
-				resourcesXML = new XML("<Resources/>");
+				resourcesXML = <Resources/>;
 
-			for each(var resXML:XML in resourcesXML.children())
+			for each (var resXML:XML in resourcesXML.children())
 			{
 				var resourceVO : ResourceVO =  createResFromXML(resXML);
 				resourceVOArray.addItem(resourceVO);
@@ -71,8 +71,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			return new ResourceVO(resXML.@ID, resXML.@Name, resXML.@Type );
 		}
-
-
 
 		/**
 		 *
@@ -102,7 +100,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			b64.encodeBytes(fileRef.data);
 
 			writeResoucetoFileSystem(id, b64.toString());
-
 		}
 
 		/**
@@ -146,11 +143,11 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		 */
 		public function toXML(ressArr:ArrayCollection):XML
 		{	
-			var resourcesXML : XML = new XML("<Resources/>");
+			var resourcesXML : XML = <Resources/>;
 
-			for each(var resVO:ResourceVO in ressArr)
+			for each (var resVO:ResourceVO in ressArr)
 			{
-				var resXML : XML = new XML("<Resource/>");
+				var resXML : XML = <Resource/>;
 				var resDataXML : XML = new XML("\n"+"<![CDATA[" +  readResouce(resVO.id) +"]" +"]" +">") ;
 
 				resXML.@ID = resVO.id;
@@ -199,7 +196,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			}
 			return imgResourseID;
 		}
-
 	}
 }
 

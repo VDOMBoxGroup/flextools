@@ -27,7 +27,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 						
 			var	langEN:XML = languagesXML.Language.(@Code == "en_US")[0];
 
-			for each(var langXML:XML in languagesXML.children())
+			for each (var langXML:XML in languagesXML.children())
 			{
 				var lan:String =  langXML.@Code.toString()
 
@@ -45,7 +45,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 //				var wrdsOV  : WordsVO = new WordsVO();
 //				wrdsOV["en"] = wordEn.@ID;
 
-				for each(langXML in languagesXML.children())
+				for each (langXML in languagesXML.children())
 				{			
 					var word:XML =  langXML.Sentence.(@ID == id )[0];
 					if (!word)
@@ -64,7 +64,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			var wordsVO:ArrayCollection = langsVO.words;
 			var retString:String;
 
-			for each(var word:Object in wordsVO)
+			for each (var word:Object in wordsVO)
 			{	
 				var str:Object = {};
 				str["data"]   = word["ID"];	
@@ -80,9 +80,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			var wordsVO:ArrayCollection = langsVO.words;
 			var retString:Object;
 
-			for each(var word:Object in wordsVO)
+			for each (var word:Object in wordsVO)
 			{		
-				if( word["ID"] == id)
+				if (word["ID"] == id)
 				{
 					retString = word;
 					break;
@@ -132,9 +132,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			var wordsVO:ArrayCollection = langsVO.words;
 			var retString:String;
 			
-			for each(var word:Object in wordsVO)
+			for each (var word:Object in wordsVO)
 			{
-				if( word["ID"] == id)
+				if (word["ID"] == id)
 				{
 					retString = word[localeName];
 					break;
@@ -145,19 +145,19 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 		public function createXML(languagesVO: LanguagesVO):XML
 		{						
-			var langsXML:XML = new XML("<Languages/>");
+			var langsXML:XML = <Languages/>;
 			var wordsVO:ArrayCollection = languagesVO.words;
 			var localesVO:ArrayCollection = languagesVO.locales;
 
-			for each(var localeName:Object in localesVO )
+			for each (var localeName:Object in localesVO)
 			{				
-				var lanXML:XML = new XML("<Language/>");
+				var lanXML:XML = <Language/>;
 				lanXML.@Code = localeName.data;
 
-				for each(var word:Object in wordsVO)
+				for each (var word:Object in wordsVO)
 				{
 					var id:String = word["ID"];
-					var sentXML: XML = new XML("<Sentence/>");
+					var sentXML: XML = <Sentence/>;
 					sentXML.@ID = id;
 					sentXML.appendChild(word[localeName.data]);
 
@@ -181,7 +181,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			var id:String = getRegExpID(langsVO, idString);
 			//if langID exist and used
-			if ( langsVO.isUsedWords[id] )
+			if (langsVO.isUsedWords[id])
 			{
 				var idPart:String = id.toString().slice(0,1);
 				var newID :String = this.getNextId( langsVO, idPart, "", getWords(langsVO, id) );
@@ -191,7 +191,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			else
 			{	
 				//if langID exist and not used
-				if( langsVO.isUsedWords[id] == false)
+				if (langsVO.isUsedWords[id] == false)
 				{
 					langsVO.isUsedWords[id] = true;
 					return idString;
@@ -209,7 +209,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		
 		public function deleteWord(objTypeVO:ObjectTypeVO, word:String):void
 		{		
-			if(word != "")
+			if (word != "")
 			{
 				var id:String = getRegExpID(objTypeVO.languages, word);
 				var words:Object = getWords(objTypeVO.languages, id);

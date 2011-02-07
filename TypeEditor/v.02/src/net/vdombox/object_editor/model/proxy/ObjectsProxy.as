@@ -126,12 +126,6 @@ package net.vdombox.object_editor.model.proxy
 			}			
 			return imgResourse;
 		}
-
-//		public function get item():Item
-//		{
-//			return item as Item;
-//		}
-
 	}
 }
 

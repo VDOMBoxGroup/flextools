@@ -44,7 +44,7 @@
 				//					arWords.addItem({"label":word.toString(), "data":word.@ID});
 				//				}
 //				arWords = words;
-				words.dataProvider = wordss;
+				wordsDataGrid.dataProvider = wordss;
 								
 				/*if(lan == "")return;				
 				var cols:Array = words.columns;
@@ -72,8 +72,8 @@
 			private function button1_clickHandler():void
 			{
 				// TODO Auto-generated method stub
-				words.selectedItem["name"] = "#Lang("+words.selectedItem["ID"]+")";
-				wordCode = words.selectedItem;
+				wordsDataGrid.selectedItem["name"] = "#Lang("+wordsDataGrid.selectedItem["ID"]+")";
+				wordCode = wordsDataGrid.selectedItem;
 				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
 			}
 			
@@ -85,9 +85,9 @@
 	</fx:Script>
 	
 	<s:VGroup  width="228" height="367">
-		<mx:DataGrid  id="words" width="226"   height="332" dataProvider="{arWords}" doubleClick="button1_clickHandler()"  />
+		<mx:DataGrid  id="wordsDataGrid" width="226"   height="332" dataProvider="{arWords}" doubleClick="button1_clickHandler()"  />
 		<s:HGroup right="0" >
-			<s:Button label="Ok" click="button1_clickHandler()"   enabled="{words.selectedIndex != -1}"/>
+			<s:Button label="Ok" click="button1_clickHandler()"   enabled="{wordsDataGrid.selectedIndex != -1}"/>
 			<s:Button label="Cancel"  click="cancel()"/>
 		</s:HGroup>		
 	</s:VGroup>	

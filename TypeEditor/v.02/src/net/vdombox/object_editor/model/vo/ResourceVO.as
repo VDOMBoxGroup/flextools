@@ -15,8 +15,6 @@ package net.vdombox.object_editor.model.vo
 			this.id = id;
 			this.name = name;
 			this.type = type;
-
-
 		}
 	}
 }

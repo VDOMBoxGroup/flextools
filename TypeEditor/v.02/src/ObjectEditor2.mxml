@@ -17,7 +17,6 @@
 	<![CDATA[	
 		import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 		import net.vdombox.object_editor.view.ObjectView;
-		import net.vdombox.object_editor.view.mediators.ObjectViewMediator;
 		import net.vdombox.object_editor.view.mediators.OpenMediator;
 		
 		import org.puremvc.as3.patterns.facade.Facade;

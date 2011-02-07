@@ -1,3 +1,6 @@
+/*
+	Class LibrariesMediator is a wrapper over the Libraries.mxml
+*/
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
@@ -34,7 +37,7 @@ package net.vdombox.object_editor.view.mediators
 //			view.currentItem.label = event.target.text;
 			view.label= "Libraries*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
-			if( currentLibraryVO )
+			if (currentLibraryVO)
 			{				
 				currentLibraryVO.text	= view.code.text;
 			}
@@ -44,7 +47,7 @@ package net.vdombox.object_editor.view.mediators
 		{ 
 			view.label= "Libraries*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
-			if( currentLibraryVO )
+			if (currentLibraryVO)
 			{				
 				currentLibraryVO.target	= view.target.text;
 				view.currentLibrary.label  = view.target.text;
@@ -58,7 +61,7 @@ package net.vdombox.object_editor.view.mediators
 		{
 			view.label= "Libraries*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
-			if( currentLibraryVO )
+			if (currentLibraryVO)
 			{				
 				currentLibraryVO.text	= view.code.text;
 			}
@@ -94,7 +97,7 @@ package net.vdombox.object_editor.view.mediators
 			{
 				listIndex = 0;
 			}
-			if ( objectTypeVO.libraries.length > 0 )
+			if (objectTypeVO.libraries.length > 0)
 			{				
 				currentLibraryVO = objectTypeVO.libraries[listIndex].data;
 				fillArea(currentLibraryVO);
@@ -126,9 +129,9 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function getCurrentItem(nameLib:String):Object
 		{			
-			for each(var lib:Object in objectTypeVO.libraries )
+			for each (var lib:Object in objectTypeVO.libraries)
 			{
-				if( lib["label"] == nameLib )
+				if (lib["label"] == nameLib)
 				{
 					return lib;
 					break;
@@ -159,7 +162,7 @@ package net.vdombox.object_editor.view.mediators
 			switch ( note.getName() ) 
 			{				
 				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
-					if (objectTypeVO == note.getBody() )
+					if (objectTypeVO == note.getBody())
 						view.label= "Libraries";
 					break;	
 			}

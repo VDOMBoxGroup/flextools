@@ -21,12 +21,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		
 		public function createXML( librariesVO: ArrayCollection ):XML
 		{		
-			var librariesXML:XML = new XML("<Libraries/>");		
+			var librariesXML:XML = <Libraries/>;		
 			
-			for each(var obj:Object in librariesVO )
+			for each (var obj:Object in librariesVO)
 			{	
 				var libVO:LibraryVO = obj.data;
-				var libXML:XML = new XML("<Library/>");
+				var libXML:XML = <Library/>;
 				libXML.@Target = libVO.target;
 				libXML.appendChild(XML("\n"+"<![CDATA[" + libVO.text +"]]>"+"\n") );
 				librariesXML.appendChild(libXML);
@@ -38,7 +38,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			var librariesCollection:ArrayCollection = new ArrayCollection();
 			
-			for each ( var libXML : XML in objTypeXML.descendants("Library") )
+			for each (var libXML : XML in objTypeXML.descendants("Library"))
 			{
 				var libVO:LibraryVO = new LibraryVO;
 				

@@ -39,9 +39,9 @@
 				}
 				
 				var wordsVO:ArrayCollection = langsVO.words;
-				for each(var word:Object in wordsVO)
+				for each (var word:Object in wordsVO)
 				{		
-					if( word["ID"] == fildID)
+					if (word["ID"] == fildID)
 					{
 						words = word;
 						txt.text = words[currentLanguage];	
@@ -49,7 +49,6 @@
 						break;
 					}
 				}
-							
 			}
 			
 			private function getRegExpWord( code:String ):String

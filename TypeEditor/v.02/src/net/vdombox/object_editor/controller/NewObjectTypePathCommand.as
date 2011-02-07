@@ -38,49 +38,10 @@ package net.vdombox.object_editor.controller
 			}
 			
 			function saveData(event:Event):void 
-			{	
-				//save information
-				/*
-				var _information:XML = new XML("<Information/>");				
-				_information.Name = objTypeVO.name;
-//				_information.DisplayName = objTypeVO.displayName;	
-//				_information.XMLScriptName = objTypeVO.;	
-//				_information.RenderType = objTypeVO.renderType;
-//				_information.Description = objTypeVO.description;
-				_information.ClassName = objTypeVO.className;
-				_information.ID = objTypeVO.id;
-				_information.Category = objTypeVO.category;
-				_information.Version = objTypeVO.version;
-				_information.OptimizationPriority = objTypeVO.optimizationPriority;
-//				_information.WCAG = objTypeVO;
-				_information.Containers = objTypeVO.container;
-//				_information.RemoteMethods = objTypeVO.;
-//				_information.Handlers = objTypeVO;
-				_information.Moveable = objTypeVO.moveable;
-				_information.Dynamic = objTypeVO.dynamic;
-				_information.InterfaceType = objTypeVO.interfaceType;
-				_information.Resizable = objTypeVO.resizable;
-				_information.Container = objTypeVO.container;
-				
-				var _type:XML = new XML("<Type/>");
-				_type.appendChild(_information);
-				_type.appendChild( XML("<![CDATA[" +  objTypeVO.sourceCode +"]" +"]" +">"));
-				*/
+			{					
 				var newFile:File = event.target as File;
 				objTypeVO.filePath = newFile.nativePath + ".xml";
-				facade.sendNotification( ApplicationFacade.SAVE_OBJECT_TYPE, objTypeVO );
-				//save to file
-//				newFile.nativePath + ".xml"
-//				var newFile:File = event.target as File;
-//				newFile.nativePath = newFile.nativePath + ".xml";
-//				var str:String = '<?xml version="1.0" encoding="utf-8"?>'+_type.toXMLString();
-//				if (!newFile.exists)
-//				{
-//					var stream:FileStream = new FileStream();
-//					stream.open(newFile, FileMode.WRITE);
-//					stream.writeUTFBytes(str);
-//					stream.close();
-//				}
+				facade.sendNotification( ApplicationFacade.SAVE_OBJECT_TYPE, objTypeVO );				
 			}						
 		}
 	}

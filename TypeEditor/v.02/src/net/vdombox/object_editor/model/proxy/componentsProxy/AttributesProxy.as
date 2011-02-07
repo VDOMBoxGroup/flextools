@@ -22,12 +22,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		
 		public function createXML( attributesVO: ArrayCollection ):XML
 		{		
-			var attribsXML:XML = new XML("<Attributes/>");		
+			var attribsXML:XML = <Attributes/>;		
 			
-			for each(var obj:Object in attributesVO )
+			for each (var obj:Object in attributesVO)
 			{	
 				var attribVO:AttributeVO = obj.data;
-				var attrXML:XML = new XML("<Attribute/>");
+				var attrXML:XML = <Attribute/>;
 				attrXML.Name			= attribVO.name;
 				attrXML.DisplayName		= attribVO.displayName;
 				attrXML.DefaultValue	= attribVO.defaultValue;	
@@ -48,7 +48,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			var atributesCollection:ArrayCollection = new ArrayCollection();
 			
-			for each ( var attrinuteXML : XML in objTypeXML.descendants("Attribute") )
+			for each (var attrinuteXML : XML in objTypeXML.descendants("Attribute"))
 			{
 				var attrib:AttributeVO = new AttributeVO;
 				

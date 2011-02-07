@@ -16,14 +16,10 @@ package net.vdombox.object_editor.controller
 		{			
 			var so:SharedObject = SharedObject.getLocal("directoryPath");
 			var path:String = so.data.path;
-			if( path )
-			{				
+			if (path)
 				facade.sendNotification( ApplicationFacade.PARSE_XML_FILES, path );
-			}	
 			else
-			{
 				so.data.path = File.documentsDirectory.nativePath;
-			}
 		}
 	}
 }

@@ -48,11 +48,11 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function setCurrentParameter(listIndex:int = 0):void
 		{
-			if ( listIndex < 0 )
+			if (listIndex < 0)
 			{
 				listIndex = 0;
 			}
-			if( currentEventVO.parameters.length > 0 )
+			if (currentEventVO.parameters.length > 0)
 			{				
 				currentParameterVO = currentEventVO.parameters[listIndex].data;
 				view.parametersList.dataProvider = currentEventVO.parameters;
@@ -73,7 +73,7 @@ package net.vdombox.object_editor.view.mediators
 		{
 			view.label= "Events*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
-			if( currentParameterVO )
+			if (currentParameterVO)
 			{				
 				currentParameterVO.name	  = view.parName.text;
 				currentParameterVO.order  = view.parOrder.text;
@@ -170,7 +170,7 @@ package net.vdombox.object_editor.view.mediators
 			{
 				listIndex = 0;
 			}
-			if ( objectTypeVO.events.length > 0 )
+			if (objectTypeVO.events.length > 0)
 			{				
 				currentEventVO = objectTypeVO.events[listIndex].data;
 				setCurrentParameter();
@@ -203,9 +203,9 @@ package net.vdombox.object_editor.view.mediators
 
 		private function getCurrentEvent(nameEvent:String):Object
 		{			
-			for each(var event:Object in objectTypeVO.events )
+			for each (var event:Object in objectTypeVO.events)
 			{
-				if( event["label"] == nameEvent )
+				if (event["label"] == nameEvent)
 				{
 					return event;
 					break;
@@ -216,9 +216,9 @@ package net.vdombox.object_editor.view.mediators
 
 		private function getCurrentParameter(nameParam:String):Object
 		{			
-			for each(var param:Object in currentEventVO.parameters )
+			for each (var param:Object in currentEventVO.parameters)
 			{
-				if( param["label"] == nameParam )
+				if (param["label"] == nameParam)
 				{
 					return param;
 					break;
@@ -262,13 +262,18 @@ package net.vdombox.object_editor.view.mediators
 			switch ( note.getName() ) 
 			{				
 				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
+				{
 					if (objectTypeVO == note.getBody() )
 						view.label= "Events";
-					break;	
+					break;
+				}
+					
 				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
+				{
 					if( view.eventsList ) 
 						changeFildWithCurrentLanguage( );
 					break;
+				}
 			}
 		}
 		

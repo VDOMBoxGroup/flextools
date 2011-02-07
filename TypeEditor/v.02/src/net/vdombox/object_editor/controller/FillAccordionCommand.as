@@ -22,10 +22,10 @@ package net.vdombox.object_editor.controller
 			
 			accMediator.removeAllObjects();
 			
-			for(var i:uint = 0; i < filesArray.length; i++)
+			for (var i:uint = 0; i < filesArray.length; i++)
 			{	
 				var file:File = filesArray[i] as File;
-				if ( !file.isDirectory )
+				if (!file.isDirectory)
 				{				
 					var item:Item = itemProxy.getItem(file) ;					
 					facade.sendNotification(ApplicationFacade.NEW_NAVIGATOR_CONTENT, item);												
