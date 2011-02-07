@@ -15,7 +15,9 @@ package net.vdombox.object_editor.controller
 			objTypeVO = null;
 			facade.removeMediator(note.getBody()["MediatorName"]);
 			
-			facade.sendNotification( ApplicationFacade.OPEN_OBJECT, note.getBody()["Item"] );					
+			facade.sendNotification( ApplicationFacade.OPEN_OBJECT, note.getBody()["Item"] );	
+			facade.sendNotification( ApplicationFacade.REOPEN_TAB, {"ViewInd"	:note.getBody()["ViewInd"], 
+																	"SelectTab"	:note.getBody()["SelectTab"]} );
 		}
 	}
 }

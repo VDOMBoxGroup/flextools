@@ -23,11 +23,12 @@
 				
 		private var facade:ApplicationFacade = ApplicationFacade.getInstance();			
 
+		//перенести в медиатор
 		private function init():void
 		{
 			gotoLastPosition();
 			this.nativeWindow.addEventListener( Event.CLOSING, saveAppPosition );
-		}
+		}		
 		
 		private function saveAppPosition(e:Event = null):void
 		{
@@ -43,10 +44,10 @@
 		{
 			var so:SharedObject = SharedObject.getLocal("directoryPath");
 
-			if( so.data.windowPosition_x && 
+			if (so.data.windowPosition_x && 
 				so.data.windowPosition_y &&
-				so.data.windowWidth &&
-				so.data.windowHeight )
+				so.data.windowWidth 	 &&
+				so.data.windowHeight)
 			{				
 				this.nativeWindow.x	= so.data.windowPosition_x;
 				this.nativeWindow.y = so.data.windowPosition_y;
@@ -61,11 +62,15 @@
 		<mx:VBox  height="100%" width="150" >
 			<s:Button id="openButton" label="Open" />			
 			<vs:ObjectsAccordion id="objAccordion" width="100%"/>		
+			<mx:ProgressBar id="progressBar" labelPlacement="bottom"  minimum="0" visible="false" maximum="100"
+							color="0x323232" label="CurrentProgress 0%" direction="right" mode="manual" width="100%"/>
 		</mx:VBox>
 		
 		<containers:SuperTabNavigator id="tabNavigator" width="100%" height="100%"
 									  stopScrollingEvent ="{MouseEvent.MOUSE_OUT}"
 									  startScrollingEvent="{MouseEvent.MOUSE_OVER}">			
 		</containers:SuperTabNavigator>
+		
+		
 	</mx:HDividedBox> 
 </s:WindowedApplication>

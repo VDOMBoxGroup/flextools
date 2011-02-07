@@ -29,18 +29,62 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new OpenMediator( view.openButton ) ); 		
 			facade.registerMediator( new ObjectsAccordionMediator( view.objAccordion ) );
 
-//			view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
+			view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
 		}
 
 		public function newObjectView( objTypeVO:ObjectTypeVO ) : void
-		{			
+		{	
 			var objView:ObjectView = new ObjectView();
 			objView.label = objTypeVO.name;					
-
+//			objView.name  = objTypeVO.name;
+			
 			view.tabNavigator.addChild(objView);
 			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );	
 
 			view.tabNavigator.selectedChild = objView;
+			view.validateNow();
+			trace("2 endProgress");
+			endProgress();
+		}
+		
+		private var progress:uint=10;
+		
+		// Event handler function to set the value of the 
+		// ProgressBar control.
+		private function runProgress():void
+		{
+			trace("1 RUN_PROGRESS");
+			view.enabled = false;
+			view.progressBar.visible = true;
+			if (progress <= 100)
+			{
+				view.progressBar.setProgress(progress,100);
+				view.progressBar.label= "CurrentProgress" + " " + progress + "%";
+				progress += 10;
+			}
+			if (progress>100)
+			{
+				progress=0;
+			}
+			view.validateNow();
+		}
+		
+		private function endProgress():void
+		{
+			trace("3 endProgress");
+			view.enabled = true;
+			view.progressBar.visible = false;
+		}
+		
+		public function reopenObjectView( objTabIndex:int, selTab:int) : void
+		{			
+			var countChilds:uint = view.tabNavigator.length;
+			var objView:ObjectView = view.tabNavigator.getChildAt( countChilds - 1 ) as ObjectView;
+			view.tabNavigator.removeChild( objView );
+			view.tabNavigator.addChildAt( objView, objTabIndex );
+						
+			view.tabNavigator.selectedChild = objView;
+			objView.tabNavigator.selectedIndex = selTab;
 		}
 		
 		/**
@@ -50,18 +94,14 @@ package net.vdombox.object_editor.view.mediators
 		 *   - objTypeVO
 		 **/
 		public function removeObjectView( objView:ObjectView, objTypeVO:ObjectTypeVO ) : void
-		{		
-			
+		{				
 			facade.removeMediator( "ObjectViewMediator" + objTypeVO.id );	
 			view.tabNavigator.removeChild(objView);
-//			objTypeVO
-			
-//			view.tabNavigator.selectedChild = objView;
 		}
 
 		override public function listNotificationInterests():Array 
 		{			
-			return [ ApplicationFacade.OBJECT_COMPLIT, ApplicationFacade.OBJECT_EXIST, ObjectViewMediator.CLOSE_OBJECT_TYPE_VIEW ];
+			return [ ApplicationFacade.OBJECT_COMPLIT, ApplicationFacade.REOPEN_TAB, ApplicationFacade.OBJECT_EXIST, ObjectViewMediator.CLOSE_OBJECT_TYPE_VIEW, ApplicationFacade.RUN_PROGRESS ];
 		}
 
 		override public function handleNotification( note:INotification ):void 
@@ -73,11 +113,18 @@ package net.vdombox.object_editor.view.mediators
 					newObjectView(note.getBody() as ObjectTypeVO);
 					break;	
 				}
+				
+				case ApplicationFacade.REOPEN_TAB:
+				{
+					reopenObjectView(note.getBody()["ViewInd"] as int, note.getBody()["SelectTab"] as int);
+					break;	
+				}
 					
 				case ApplicationFacade.OBJECT_EXIST:
 				{
 					var toSelectedOjectName:String = note.getBody() as String;
 					view.tabNavigator.selectedChild = view.tabNavigator.getChildByName( toSelectedOjectName) as ObjectView;
+					endProgress();
 					break;	
 				}
 					
@@ -86,12 +133,17 @@ package net.vdombox.object_editor.view.mediators
 					removeObjectView(note.getBody()["objView"], note.getBody()["objVO"]);
 					break;	
 				}
+					
+				case ApplicationFacade.RUN_PROGRESS:
+				{
+					runProgress();
+					break;	
+				}
 			}
 		}
 
 		private function  objViewRemoved( event : ChildExistenceChangedEvent ):void
 		{
-			trace ("remouved is works!")
 			var objView:ObjectView = event.relatedObject as ObjectView;
 			objView.dispatchEvent( new Event(ObjectViewMediator.OBJECT_TYPE_VIEW_REMOVED));
 		}

@@ -31,9 +31,13 @@ package net.vdombox.object_editor.view.mediators
 
 		public function openObject( event:MouseEvent = null ) : void
 		{
+			trace("0 sendNotification: RUN_PROGRESS");
+			sendNotification( ApplicationFacade.RUN_PROGRESS );
+			trace("5 ");
 			var accordioNavigatorContent:AccordionNavigatorContent =  view.accordion.selectedChild as AccordionNavigatorContent;
 			var object:Item = accordioNavigatorContent.selectedObject as Item;
 			sendNotification( ApplicationFacade.OPEN_OBJECT, object);
+			trace("6 ");
 		}	
 
 		public function newContent( item:Item ) : void

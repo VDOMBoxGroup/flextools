@@ -26,7 +26,7 @@
 				return _tabNavigator;
 			}
 			
-			public function set  tabNavigator(obj:TabNavigator):void
+			public function set tabNavigator(obj:TabNavigator):void
 			{
 				if (!_tabNavigator)
 					creatTabNavegator();

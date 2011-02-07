@@ -100,17 +100,22 @@ package net.vdombox.object_editor.view.mediators
 
 		private function restartObjectType(event:MouseEvent):void
 		{
-			var objsAccordionMediator:ObjectsAccordionMediator = facade.retrieveProxy(ObjectsAccordionMediator.NAME) as ObjectsAccordionMediator;
 			var objsProxy:ObjectsProxy = facade.retrieveProxy(ObjectsProxy.NAME) as ObjectsProxy;
-			var file:File = new File();
+			var file:File   = new File();
 			file.nativePath = objectTypeVO.filePath;
-			var item:Item = objsProxy.getItem(file);
+			var item:Item   = objsProxy.getItem(file);
+			var selectTab:int = view.tabNavigator.selectedIndex;
+			
 			objectTypeViewRemoved();
 			
 			var viewInd:int = view.parent.getChildIndex(view);
 			facade.sendNotification( CLOSE_OBJECT_TYPE_VIEW, {objView:view, objVO:objectTypeVO} );
 			
-			facade.sendNotification( ApplicationFacade.RESTART_OBJECT_VIEW_MEDIATOR, {"ObjTypeVO": objectTypeVO, "MediatorName": NAME + objectTypeVO.id, "Item":item, "viewInd":viewInd} );
+			facade.sendNotification( ApplicationFacade.RESTART_OBJECT_VIEW_MEDIATOR, {	"ObjTypeVO"		:objectTypeVO, 
+																						"MediatorName"	:NAME + objectTypeVO.id, 
+																						"Item"			:item, 
+																						"ViewInd"		:viewInd, 
+																						"SelectTab"		:selectTab} );
 		}
 		
 		//не используется нигде....
@@ -153,7 +158,7 @@ package net.vdombox.object_editor.view.mediators
 			objTypeProxy.removeVO(objectTypeVO);
 			
 			removeChildMediators();
-			removeEventListeners();
+//			removeEventListeners();
 			
 			facade.removeMediator(NAME+objectTypeVO.id)			
 		}

@@ -21,17 +21,18 @@ package
 	public class ApplicationFacade extends Facade
 	{		
 		public static const CHANGE_CURRENT_LANGUAGE	:String	= "changeCurrentLanguage";
-//		public static const CHANGE_SELECT_FORM_ITEM	:String	= "changeSelectFormItem";
 		public static const LOAD_XML_FILES			:String = "loadXMLFiles";
 		public static const NEW_NAVIGATOR_CONTENT	:String = "newNavigatorContent";		
-		public static const OBJECT_COMPLIT			:String	= "objectComplit";
+		public static const OBJECT_COMPLIT			:String	= "objectComplit";		
 		public static const OBJECT_EXIST			:String	= "objectExist";
 		public static const OPEN_OBJECT				:String = "openObject";
 		public static const PARSE_XML_FILES			:String	= "parseXMLFiles";
-		public static const REMOVE_ALL_OBJECT		:String	= "removeAllObjects";	
+		public static const REMOVE_ALL_OBJECT		:String	= "removeAllObjects";
+		public static const REOPEN_TAB				:String	= "reopenTab";
 		public static const RESTART_OBJECT_VIEW_MEDIATOR:String	= "restartObjectViewMediator";
-		public static const SAVE_OBJECT_TYPE		:String	= "saveObjectType";
+		public static const RUN_PROGRESS			:String	= "runProgress";
 		public static const SAVE_AS_OBJECT_TYPE		:String	= "saveAsObjectType";
+		public static const SAVE_OBJECT_TYPE		:String	= "saveObjectType";		
 		public static const STARTUP					:String	= "startup";		
 
 		public static function getInstance() : ApplicationFacade 
@@ -51,7 +52,6 @@ package
 			registerCommand( SAVE_OBJECT_TYPE, 	  SaveObjectTypeCommand );
 			registerCommand( SAVE_AS_OBJECT_TYPE, NewObjectTypePathCommand );
 			registerCommand( RESTART_OBJECT_VIEW_MEDIATOR, RestartObjectViewMediatorCommand );
-			trace("initializeController");
 		}
 
 		public function startup( app:ObjectEditor2 ):void
