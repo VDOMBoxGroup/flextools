@@ -1,6 +1,6 @@
-/*
-   Class ApplicationMediator register all Mediators
- */
+/**
+  * Class ApplicationMediator register all Mediators
+ **/
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
@@ -29,22 +29,21 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new OpenMediator( view.openButton ) ); 		
 			facade.registerMediator( new ObjectsAccordionMediator( view.objAccordion ) );
 
-			view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
+			//view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
 		}
 
 		public function newObjectView( objTypeVO:ObjectTypeVO ) : void
 		{	
 			var objView:ObjectView = new ObjectView();
 			objView.label = objTypeVO.name;					
-//			objView.name  = objTypeVO.name;
-			
+			objView.name  = objTypeVO.name;
+
 			view.tabNavigator.addChild(objView);
 			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );	
 
 			view.tabNavigator.selectedChild = objView;
-			view.validateNow();
-			trace("2 endProgress");
 			endProgress();
+			view.validateNow();
 		}
 		
 		private var progress:uint=10;
@@ -86,7 +85,7 @@ package net.vdombox.object_editor.view.mediators
 			view.tabNavigator.selectedChild = objView;
 			objView.tabNavigator.selectedIndex = selTab;
 		}
-		
+
 		/**
 		 * remove:
 		 *   - ObjectViewMediator

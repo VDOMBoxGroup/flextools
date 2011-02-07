@@ -17,7 +17,7 @@ package net.vdombox.object_editor.controller
 			
 			facade.sendNotification( ApplicationFacade.OPEN_OBJECT, note.getBody()["Item"] );	
 			facade.sendNotification( ApplicationFacade.REOPEN_TAB, {"ViewInd"	:note.getBody()["ViewInd"], 
-																	"SelectTab"	:note.getBody()["SelectTab"]} );
+																	"SelectTab"	:note.getBody()["SelectTab"]} );	
 		}
 	}
 }
