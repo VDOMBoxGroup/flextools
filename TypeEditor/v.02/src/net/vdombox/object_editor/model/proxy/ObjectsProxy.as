@@ -19,7 +19,7 @@ package net.vdombox.object_editor.model.proxy
 		public static const NAME:String = "ObjectsProxy";
 		public var topLevelContainerList:ArrayCollection = new ArrayCollection();
 		public var containerList:ArrayCollection = new ArrayCollection();
-		private var _categorys:Array = new Array();
+		private var _categorys:Array = [];
 
 
 		public function ObjectsProxy ( data:Object = null ) 

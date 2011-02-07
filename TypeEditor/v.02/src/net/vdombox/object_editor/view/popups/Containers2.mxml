@@ -65,7 +65,7 @@
 			
 			public function getContainers():String
 			{
-				var contArt:Array = new Array();
+				var contArt:Array = [];
 				
 				for each (var avCont:Object in inUsedList.dataProvider)
 					contArt.push(avCont["label"]);

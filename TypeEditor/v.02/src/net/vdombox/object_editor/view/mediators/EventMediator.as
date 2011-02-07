@@ -211,7 +211,7 @@ package net.vdombox.object_editor.view.mediators
 					break;
 				}
 			}
-			return new Object();
+			return {};
 		}
 
 		private function getCurrentParameter(nameParam:String):Object
@@ -224,7 +224,7 @@ package net.vdombox.object_editor.view.mediators
 					break;
 				}
 			}
-			return new Object();
+			return {};
 		}
 
 		private  function hideAttributes(event: FlexEvent):void

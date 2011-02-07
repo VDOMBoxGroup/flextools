@@ -11,7 +11,7 @@ package net.vdombox.object_editor.view
 	public class LangTextArea extends TextArea
 	{
 		[Bindable]
-		public var words:Object = new Object();
+		public var words:Object = {};
 		[Bindable]
 		public var currentLanguage:String;
 		

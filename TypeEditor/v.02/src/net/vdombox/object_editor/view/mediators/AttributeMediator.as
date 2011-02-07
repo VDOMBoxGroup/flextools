@@ -159,7 +159,7 @@ package net.vdombox.object_editor.view.mediators
 					break;
 				}
 			}
-			return new Object();
+			return {};
 		}
 
 		private function deleteAttribute(event:MouseEvent): void
@@ -324,7 +324,7 @@ package net.vdombox.object_editor.view.mediators
 						view.CIViewStack.selectedIndex = 3;
 						view.CIViewStack.validateNow();
 						var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d]+)/g;
-						var langs:Array = new Array();							
+						var langs:Array = [];							
 						
 						while (langs = regLangs.exec(arguments[0]))
 						{

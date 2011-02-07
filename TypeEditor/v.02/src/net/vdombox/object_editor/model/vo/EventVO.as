@@ -15,8 +15,6 @@ package net.vdombox.object_editor.model.vo
 		
 		public function newParameter(name:String):void
 		{
-//			parameter:EventParameterVO = new EventParameterVO();
-//			parameters[parameters.length] = parameter;
 		}
 	}
 }

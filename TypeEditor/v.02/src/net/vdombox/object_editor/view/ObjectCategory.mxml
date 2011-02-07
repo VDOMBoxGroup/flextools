@@ -15,7 +15,7 @@
 //			public var currentLanguage:String;
 			
 			[Bindable]
-			public var words:Object = new Object();
+			public var words:Object = {};
 			
 			[Bindable]
 			public var currentLanguage:String;

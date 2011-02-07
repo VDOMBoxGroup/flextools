@@ -10,7 +10,7 @@ package net.vdombox.object_editor.model.vo
 		public var locales:			ArrayCollection = new ArrayCollection();
 
 		//required to verify the uniqueness of the words ID
-		public var isUsedWords:		Object			= new Object();
+		public var isUsedWords:		Object			= {};
 
 		public function LanguagesVO()
 		{			
@@ -22,27 +22,23 @@ package net.vdombox.object_editor.model.vo
 			var attrID :String = startId +"0"+ idInt;		
 			var idList :ArrayCollection = new ArrayCollection();
 
-			for each(var word:Object in words)
-				if ( word["ID"].slice(0, 1) == startId )
+			for each (var word:Object in words)
+				if (word["ID"].slice(0, 1) == startId)
 					idList.addItemAt(word["ID"], int(word));
 
-			var newWrd  :Object = new Object();
+			var newWrd  :Object = {};
 			var nextInd :String = new String();
 
-			if( idList.length > 0 )
+			if (idList.length > 0)
 			{
 				var lengthNextInd:int = idList[0].length; 				
 				nextInd = (int(idList[0])+1).toString();
 				
 				//for numbers: "001", "002", ..., "010"
 				lengthNextInd -=nextInd.length;
-				if(lengthNextInd > 0)
-				{
-					for(var i:int=0; i < lengthNextInd; i++)
-					{
+				if (lengthNextInd > 0)
+					for (var i:int=0; i < lengthNextInd; i++)
 						nextInd = "0" + nextInd;
-					}
-				}				
 			}
 			else
 				nextInd = startId.toString() + "00";
@@ -50,13 +46,11 @@ package net.vdombox.object_editor.model.vo
 			newWrd["ID"] = nextInd;
 
 
-			for each( var localeName:Object  in locales )
+			for each (var localeName:Object  in locales)
 				newWrd[localeName.data] = (oldWord) ? oldWord[localeName.data] : "";
 
-			if(newValue != "")
-			{
+			if (newValue != "")
 				newWrd[currentLocation] = newValue;
-			}
 
 			//добавляет в конец списка
 			words.addItem( newWrd );			
