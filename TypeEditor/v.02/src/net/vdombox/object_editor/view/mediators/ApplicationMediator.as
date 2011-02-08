@@ -6,11 +6,12 @@ package net.vdombox.object_editor.view.mediators
 	import flash.events.Event;
 	
 	import mx.events.ChildExistenceChangedEvent;
+	import mx.managers.PopUpManager;
 	
-	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.mediators.ObjectsAccordionMediator;
+	import net.vdombox.object_editor.view.popups.ProgressPopUp;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -42,38 +43,19 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );	
 
 			view.tabNavigator.selectedChild = objView;
-			//endProgress();z
 			view.validateNow();
 		}
 		
-		private var progress:uint=10;
+		private var popup:ProgressPopUp;
 		
-		// Event handler function to set the value of the 
-		// ProgressBar control.
 		private function runProgress():void
 		{
-			trace("1 RUN_PROGRESS");
-			view.enabled = false;
-			view.progressBar.visible = true;
-			if (progress <= 100)
-			{
-				view.progressBar.setProgress(progress,100);
-				view.progressBar.label= "CurrentProgress" + " " + progress + "%";
-				progress += 10;
-			}
-			if (progress>100)
-			{
-				progress=0;
-			}
-			view.validateNow();
+			popup = ProgressPopUp(PopUpManager.createPopUp(view, ProgressPopUp, true));
 		}
 		
 		private function endProgress():void
 		{
-			trace("4 endProgress");
-			view.enabled = true;
-			view.progressBar.visible = false;
-			view.validateNow();
+			popup.closePopUp();		
 		}
 		
 		public function reopenObjectView( objTabIndex:int, selTab:int) : void
@@ -124,7 +106,6 @@ package net.vdombox.object_editor.view.mediators
 				{
 					var toSelectedOjectName:String = note.getBody() as String;
 					view.tabNavigator.selectedChild = view.tabNavigator.getChildByName( toSelectedOjectName) as ObjectView;
-					//endProgress();
 					break;	
 				}
 					
@@ -150,7 +131,6 @@ package net.vdombox.object_editor.view.mediators
 
 		private function  objViewRemoved( event : ChildExistenceChangedEvent ):void
 		{
-			trace("17");
 			var objView:ObjectView = event.relatedObject as ObjectView;
 			objView.dispatchEvent( new Event(ObjectViewMediator.OBJECT_TYPE_VIEW_REMOVED));
 		}

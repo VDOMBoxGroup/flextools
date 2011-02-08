@@ -31,14 +31,11 @@ package net.vdombox.object_editor.view.mediators
 
 		public function openObject( event:MouseEvent = null ) : void
 		{
-			trace("0 sendNotification: RUN_PROGRESS");
 			sendNotification( ApplicationFacade.RUN_PROGRESS );
-			trace("2 ");
 			var accordioNavigatorContent:AccordionNavigatorContent =  view.accordion.selectedChild as AccordionNavigatorContent;
 			var object:Item = accordioNavigatorContent.selectedObject as Item;
 			sendNotification( ApplicationFacade.OPEN_OBJECT, object);
 			sendNotification( ApplicationFacade.END_PROGRESS);
-			trace("6 ");
 		}	
 
 		public function newContent( item:Item ) : void
@@ -70,11 +67,16 @@ package net.vdombox.object_editor.view.mediators
 			switch ( note.getName() ) 
 			{				
 				case ApplicationFacade.NEW_NAVIGATOR_CONTENT:
+				{
 					newContent(note.getBody() as Item);
 					break;
+				}
+					
 				case ApplicationFacade.REMOVE_ALL_OBJECT:
+				{
 					removeAllObjects();
 					break;
+				}
 			}
 		}
 		
