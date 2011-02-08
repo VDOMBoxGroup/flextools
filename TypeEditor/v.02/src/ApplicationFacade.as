@@ -21,6 +21,7 @@ package
 	public class ApplicationFacade extends Facade
 	{		
 		public static const CHANGE_CURRENT_LANGUAGE	:String	= "changeCurrentLanguage";
+		public static const END_PROGRESS			:String	= "endProgress";
 		public static const LOAD_XML_FILES			:String = "loadXMLFiles";
 		public static const NEW_NAVIGATOR_CONTENT	:String = "newNavigatorContent";		
 		public static const OBJECT_COMPLIT			:String	= "objectComplit";		

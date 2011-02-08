@@ -33,10 +33,11 @@ package net.vdombox.object_editor.view.mediators
 		{
 			trace("0 sendNotification: RUN_PROGRESS");
 			sendNotification( ApplicationFacade.RUN_PROGRESS );
-			trace("5 ");
+			trace("2 ");
 			var accordioNavigatorContent:AccordionNavigatorContent =  view.accordion.selectedChild as AccordionNavigatorContent;
 			var object:Item = accordioNavigatorContent.selectedObject as Item;
 			sendNotification( ApplicationFacade.OPEN_OBJECT, object);
+			sendNotification( ApplicationFacade.END_PROGRESS);
 			trace("6 ");
 		}	
 

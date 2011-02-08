@@ -42,7 +42,7 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );	
 
 			view.tabNavigator.selectedChild = objView;
-			endProgress();
+			//endProgress();z
 			view.validateNow();
 		}
 		
@@ -70,9 +70,10 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function endProgress():void
 		{
-			trace("3 endProgress");
+			trace("4 endProgress");
 			view.enabled = true;
 			view.progressBar.visible = false;
+			view.validateNow();
 		}
 		
 		public function reopenObjectView( objTabIndex:int, selTab:int) : void
@@ -100,7 +101,7 @@ package net.vdombox.object_editor.view.mediators
 
 		override public function listNotificationInterests():Array 
 		{			
-			return [ ApplicationFacade.OBJECT_COMPLIT, ApplicationFacade.REOPEN_TAB, ApplicationFacade.OBJECT_EXIST, ObjectViewMediator.CLOSE_OBJECT_TYPE_VIEW, ApplicationFacade.RUN_PROGRESS ];
+			return [ ApplicationFacade.OBJECT_COMPLIT, ApplicationFacade.REOPEN_TAB, ApplicationFacade.OBJECT_EXIST, ObjectViewMediator.CLOSE_OBJECT_TYPE_VIEW, ApplicationFacade.RUN_PROGRESS, ApplicationFacade.END_PROGRESS ];
 		}
 
 		override public function handleNotification( note:INotification ):void 
@@ -123,7 +124,7 @@ package net.vdombox.object_editor.view.mediators
 				{
 					var toSelectedOjectName:String = note.getBody() as String;
 					view.tabNavigator.selectedChild = view.tabNavigator.getChildByName( toSelectedOjectName) as ObjectView;
-					endProgress();
+					//endProgress();
 					break;	
 				}
 					
@@ -136,6 +137,12 @@ package net.vdombox.object_editor.view.mediators
 				case ApplicationFacade.RUN_PROGRESS:
 				{
 					runProgress();
+					break;	
+				}
+					
+				case ApplicationFacade.END_PROGRESS:
+				{
+					endProgress();
 					break;	
 				}
 			}

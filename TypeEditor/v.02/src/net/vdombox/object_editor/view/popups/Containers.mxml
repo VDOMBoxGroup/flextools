@@ -42,6 +42,11 @@
 				PopUpManager.removePopUp(this);
 			}
 			
+			public function closePopUp():void
+			{				
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+			}
+			
 			private function button1_clickHandler():void
 			{
 				container = contList.selectedItem;
