@@ -28,8 +28,8 @@ package net.vdombox.object_editor.view.mediators
 
 			facade.registerMediator( new OpenMediator( view.openButton ) ); 		
 			facade.registerMediator( new ObjectsAccordionMediator( view.objAccordion ) );
-
-			//view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
+			
+			view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
 		}
 
 		public function newObjectView( objTypeVO:ObjectTypeVO ) : void
@@ -150,6 +150,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function  objViewRemoved( event : ChildExistenceChangedEvent ):void
 		{
+			trace("17");
 			var objView:ObjectView = event.relatedObject as ObjectView;
 			objView.dispatchEvent( new Event(ObjectViewMediator.OBJECT_TYPE_VIEW_REMOVED));
 		}

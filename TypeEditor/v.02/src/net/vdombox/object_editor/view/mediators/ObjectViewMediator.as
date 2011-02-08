@@ -7,7 +7,6 @@ package net.vdombox.object_editor.view.mediators
 	import flexlib.controls.tabBarClasses.SuperTab;
 	
 	import mx.controls.Alert;
-	import mx.events.ChildExistenceChangedEvent;
 	import mx.utils.ObjectProxy;
 	
 	import net.vdombox.object_editor.model.Item;
@@ -84,7 +83,7 @@ package net.vdombox.object_editor.view.mediators
 			view.restartButton.addEventListener			( MouseEvent.CLICK, restartObjectType );
 
 			view.validateNow();
-
+			trace("18");
 			view.addEventListener(OBJECT_TYPE_VIEW_REMOVED, objectTypeViewRemoved);
 		}
 
@@ -105,7 +104,7 @@ package net.vdombox.object_editor.view.mediators
 			file.nativePath = objectTypeVO.filePath;
 			var item:Item   = objsProxy.getItem(file);
 			var selectTab:int = view.tabNavigator.selectedIndex;
-			
+			trace("18");
 			objectTypeViewRemoved();
 			
 			var viewInd:int = view.parent.getChildIndex(view);
@@ -154,10 +153,11 @@ package net.vdombox.object_editor.view.mediators
 
 		private function objectTypeViewRemoved():void
 		{
+			trace("19");
 			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
 			objTypeProxy.removeVO(objectTypeVO);
 			
-			removeChildMediators();
+		//	removeChildMediators();
 //			removeEventListeners();
 			
 			facade.removeMediator(NAME+objectTypeVO.id)			
@@ -179,7 +179,7 @@ package net.vdombox.object_editor.view.mediators
 		{
 			view.saveObjectTypeButton.removeEventListener	( MouseEvent.CLICK, saveObjectType );
 			view.saveAsObjectTypeButton.removeEventListener	( MouseEvent.CLICK, saveAsObjectType );
-			view.restartButton.removeEventListener			( MouseEvent.CLICK, restartObjectType );			
+			view.restartButton.removeEventListener			( MouseEvent.CLICK, restartObjectType );	
 			view.removeEventListener						( OBJECT_TYPE_VIEW_REMOVED, objectTypeViewRemoved );
 		}
 

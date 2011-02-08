@@ -228,6 +228,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 		public function removeVO(objTypeVO  : ObjectTypeVO):void
 		{
+			trace("20")
 			_objectTypeList[objTypeVO.filePath] = null
 		}
 
