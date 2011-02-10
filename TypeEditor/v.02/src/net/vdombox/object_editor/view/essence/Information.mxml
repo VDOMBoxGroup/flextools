@@ -56,7 +56,6 @@
 	</fx:Script>
 	<s:Scroller width="{this.width}" height="{this.height}">
 	<s:HGroup  >
-		
 
 		<mx:Form color="0x323232" paddingTop="0" >
 		<mx:FormHeading fontSize="10"  label="Enter values into the form." paddingTop="0" />

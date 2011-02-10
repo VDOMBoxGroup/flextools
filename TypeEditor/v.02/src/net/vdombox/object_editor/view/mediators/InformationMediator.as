@@ -41,7 +41,6 @@ package net.vdombox.object_editor.view.mediators
 			view.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
 			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
 			view.addEventListener(FlexEvent.SHOW, validateInformation );
-
 		}
 
 		public function validateObjectTypeVO(event:Event):void
@@ -63,7 +62,6 @@ package net.vdombox.object_editor.view.mediators
 			objectTypeVO.handlers		= view.fHandlers.text;
 			objectTypeVO.XMLScriptName	= view.fXMLScriptName.text;
 			objectTypeVO.renderType		= (view.fRenderType.enabled)?view.fRenderType.text : "";
-
 
 			objectTypeVO.resizable	 	= view.fResizable.selectedIndex ;
 			objectTypeVO.container 	 	= view.fContainerI.selectedIndex;			
@@ -168,7 +166,6 @@ package net.vdombox.object_editor.view.mediators
 			facade.sendNotification(ResourcesMediator.UPDATE_RESOURCE, event.currentTarget.name);
 		}
 
-
 		override public function listNotificationInterests():Array 
 		{			
 			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED,
@@ -194,7 +191,6 @@ package net.vdombox.object_editor.view.mediators
 				}
 			}
 		}
-
 
 		protected function get view():Information
 		{
