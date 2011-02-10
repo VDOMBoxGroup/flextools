@@ -1,5 +1,5 @@
 /*
-   Class CheckingPathExistence checking the existence of path and sends a notification to execute commands LOAD_XML_FILES
+   Class OpenLastDirectoryCommand if path to types exist, loaded types
  */
 package net.vdombox.object_editor.controller
 {

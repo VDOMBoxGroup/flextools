@@ -2,18 +2,14 @@
 	Class LanguagesMediator is a wrapper over the Languages.mxml
 */
 package net.vdombox.object_editor.view.mediators
-{
-	import flash.events.Event;
+{	
 	import flash.events.MouseEvent;
 	
-	import mx.collections.ArrayCollection;
 	import mx.controls.dataGridClasses.DataGridColumn;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
-	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Languages;
 	import net.vdombox.object_editor.view.popups.NewLanguage;
@@ -57,6 +53,7 @@ package net.vdombox.object_editor.view.mediators
 		//not used
 		private function deleteWord(event:MouseEvent): void
 		{
+			addStar();
 			var obj:Object = [];
 			obj["ID"] = view.languagesDataGrid.selectedItem.ID;
 			objectTypeVO.languages.words.removeItemAt(objectTypeVO.languages.words.getItemIndex(view.languagesDataGrid.selectedItem));
@@ -64,6 +61,7 @@ package net.vdombox.object_editor.view.mediators
 				
 		private function addLaguage(event:MouseEvent): void
 		{
+			addStar();
 			var popup:NewLanguage = NewLanguage(PopUpManager.createPopUp(view, NewLanguage, true));
 			popup.addEventListener(CloseEvent.CLOSE, closeHandler);
 			
@@ -87,7 +85,13 @@ package net.vdombox.object_editor.view.mediators
 					word[lanName] = word["en_US"];
 				}
 			}
-		}		
+		}
+		
+		protected function addStar():void
+		{
+			view.label= "Languages*";			
+			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+		}
 		
 		protected function get view():Languages
 		{

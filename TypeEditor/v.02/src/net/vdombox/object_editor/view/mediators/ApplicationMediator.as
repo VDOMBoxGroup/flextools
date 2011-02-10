@@ -4,6 +4,7 @@
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
+	import flash.net.SharedObject;
 	
 	import mx.events.ChildExistenceChangedEvent;
 	import mx.managers.PopUpManager;
@@ -20,19 +21,65 @@ package net.vdombox.object_editor.view.mediators
 
 	public class ApplicationMediator extends Mediator implements IMediator
 	{
-		public static const NAME			:String = "ApplicationMediator";				
-		public static const LOAD_INFORMATION:String = "LoadInformation";
+		public static const NAME					:String = "ApplicationMediator";
+		public static const END_PROGRESS			:String	= "endProgress";
+		public static const LOAD_INFORMATION		:String = "LoadInformation";		
+		public static const OBJECT_COMPLIT			:String	= "objectComplit";
+		public static const OBJECT_ALREADY_OPEN		:String	= "objectAlreadyOpen";		
+		public static const RUN_PROGRESS			:String	= "runProgress";		
+		public static const REMOVE_ALL_OBJECT		:String	= "removeAllObjects";
+		public static const REOPEN_TAB				:String	= "reopenTab";
 
 		public function ApplicationMediator( viewComponent:Object ) 
 		{			
 			super( NAME, viewComponent );	
-
+			
+//			facade.registerMediator( new OpenMediator( view.openButton ) ); 		
+//			facade.registerMediator( new ObjectsAccordionMediator( view.objAccordion ) );			
+//			view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
+			
+			init();
+		}
+		
+		public function complit( ):void 
+		{			
 			facade.registerMediator( new OpenMediator( view.openButton ) ); 		
 			facade.registerMediator( new ObjectsAccordionMediator( view.objAccordion ) );
-			
 			view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
 		}
 
+		private function init():void
+		{
+			gotoLastPosition();
+			view.nativeWindow.addEventListener( Event.CLOSING, saveAppPosition );
+		}		
+		
+		private function saveAppPosition(e:Event = null):void
+		{
+			var so:SharedObject = SharedObject.getLocal("directoryPath");
+			
+			so.data.windowPosition_x	= view.nativeWindow.x;
+			so.data.windowPosition_y 	= view.nativeWindow.y;
+			so.data.windowWidth			= view.width;
+			so.data.windowHeight		= view.height;					
+		}
+		
+		private function gotoLastPosition():void
+		{
+			var so:SharedObject = SharedObject.getLocal("directoryPath");
+			
+			if (so.data.windowPosition_x && 
+				so.data.windowPosition_y &&
+				so.data.windowWidth 	 &&
+				so.data.windowHeight)
+			{				
+				view.nativeWindow.x	= so.data.windowPosition_x;
+				view.nativeWindow.y = so.data.windowPosition_y;
+				view.width 			= so.data.windowWidth;
+				view.height			= so.data.windowHeight;
+			}
+		}		
+		
 		public function newObjectView( objTypeVO:ObjectTypeVO ) : void
 		{	
 			var objView:ObjectView = new ObjectView();
@@ -83,26 +130,31 @@ package net.vdombox.object_editor.view.mediators
 
 		override public function listNotificationInterests():Array 
 		{			
-			return [ ApplicationFacade.OBJECT_COMPLIT, ApplicationFacade.REOPEN_TAB, ApplicationFacade.OBJECT_EXIST, ObjectViewMediator.CLOSE_OBJECT_TYPE_VIEW, ApplicationFacade.RUN_PROGRESS, ApplicationFacade.END_PROGRESS ];
+			return [ApplicationMediator.OBJECT_COMPLIT, 
+					ApplicationMediator.REOPEN_TAB, 
+					ApplicationMediator.OBJECT_ALREADY_OPEN, 
+					ObjectViewMediator.CLOSE_OBJECT_TYPE_VIEW, 
+					ApplicationMediator.RUN_PROGRESS, 
+					ApplicationMediator.END_PROGRESS ];
 		}
 
 		override public function handleNotification( note:INotification ):void 
 		{
 			switch ( note.getName() ) 
 			{				
-				case ApplicationFacade.OBJECT_COMPLIT:
+				case ApplicationMediator.OBJECT_COMPLIT:
 				{
 					newObjectView(note.getBody() as ObjectTypeVO);
 					break;	
 				}
 				
-				case ApplicationFacade.REOPEN_TAB:
+				case ApplicationMediator.REOPEN_TAB:
 				{
 					reopenObjectView(note.getBody()["ViewInd"] as int, note.getBody()["SelectTab"] as int);
 					break;	
 				}
 					
-				case ApplicationFacade.OBJECT_EXIST:
+				case ApplicationMediator.OBJECT_ALREADY_OPEN:
 				{
 					var toSelectedOjectName:String = note.getBody() as String;
 					view.tabNavigator.selectedChild = view.tabNavigator.getChildByName( toSelectedOjectName) as ObjectView;
@@ -115,20 +167,20 @@ package net.vdombox.object_editor.view.mediators
 					break;	
 				}
 					
-				case ApplicationFacade.RUN_PROGRESS:
+				case ApplicationMediator.RUN_PROGRESS:
 				{
 					runProgress();
 					break;	
 				}
 					
-				case ApplicationFacade.END_PROGRESS:
+				case ApplicationMediator.END_PROGRESS:
 				{
 					endProgress();
 					break;	
 				}
 			}
 		}
-
+		
 		private function  objViewRemoved( event : ChildExistenceChangedEvent ):void
 		{
 			var objView:ObjectView = event.relatedObject as ObjectView;

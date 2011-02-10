@@ -24,13 +24,11 @@ package net.vdombox.object_editor.view.mediators
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
 			view.addEventListener( FlexEvent.SHOW, showHandler );
-
 		}
-
 
 		private function validateObjectTypeVO(event: Event):void
 		{
-			view.label= "SourceCode*";
+			addStar();
 			objectTypeVO.sourceCode  = view.pythonScriptEditor.scriptAreaComponent.text;
 		}
 
@@ -39,7 +37,6 @@ package net.vdombox.object_editor.view.mediators
 			view.removeEventListener(FlexEvent.SHOW, showHandler);
 			compliteSourceCode();
 		}
-
 
 		protected function compliteSourceCode( ):void
 		{	
@@ -72,7 +69,13 @@ package net.vdombox.object_editor.view.mediators
 					break;	
 			}
 		}
-
+		
+		protected function addStar():void
+		{
+			view.label= "SourceCode*";			
+			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+		}
+		
 		protected function get view():SourceCode
 		{
 			return viewComponent as SourceCode;

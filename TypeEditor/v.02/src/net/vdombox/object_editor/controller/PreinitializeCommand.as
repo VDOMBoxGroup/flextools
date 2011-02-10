@@ -1,5 +1,5 @@
 /*
-	Class StartupCommand register the Proxies and AplicationMediators.
+	Class PreinitializeCommand register the Proxies and AplicationMediator.
 */
 package net.vdombox.object_editor.controller
 {
@@ -18,12 +18,12 @@ package net.vdombox.object_editor.controller
     import org.puremvc.as3.patterns.command.*;
     import org.puremvc.as3.patterns.observer.*;  
         
-    public class PrepCommand extends SimpleCommand
+    public class PreinitializeCommand extends SimpleCommand
     {        
 		// Register the Proxies and AplicationMediators
 		override public function execute(note:INotification):void    
 		{
-// Create and register proxy
+			// Create and register proxy
 			facade.registerProxy(new ObjectsProxy());
 			facade.registerProxy(new ObjectTypeProxy());
 			facade.registerProxy(new FileProxy());

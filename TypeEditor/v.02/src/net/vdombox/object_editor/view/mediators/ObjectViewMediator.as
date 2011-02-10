@@ -108,47 +108,13 @@ package net.vdombox.object_editor.view.mediators
 			var viewInd:int = view.parent.getChildIndex(view);
 			facade.sendNotification( CLOSE_OBJECT_TYPE_VIEW, {objView:view, objVO:objectTypeVO} );
 			
-			facade.sendNotification( ApplicationFacade.RESTART_OBJECT_VIEW_MEDIATOR, {	"ObjTypeVO"		:objectTypeVO, 
+			facade.sendNotification( ApplicationFacade.RESTART_OBJECT, {	"ObjTypeVO"		:objectTypeVO, 
 																						"MediatorName"	:NAME + objectTypeVO.id, 
 																						"Item"			:item, 
 																						"ViewInd"		:viewInd, 
 																						"SelectTab"		:selectTab} );
 		}
 		
-		//не используется нигде....
-		private function closeObjectType(event:Event):void
-		{
-			changed = false;
-			Alert.show(objectTypeVO.name, "Closed");
-
-//			facade.sendNotification( ApplicationFacade.SAVE_AS_OBJECT_TYPE, objectTypeVO );
-		}
-
-		override public function listNotificationInterests():Array 
-		{			
-			return [ OBJECT_TYPE_CHAGED, OBJECT_TYPE_VIEW_SAVED ];
-		}
-
-		override public function handleNotification( note:INotification ):void 
-		{
-			switch ( note.getName() ) 
-			{				
-				case OBJECT_TYPE_CHAGED:
-				{
-					if (objectTypeVO == note.getBody() )
-						changed = true;
-					break;		
-				}
-					
-				case OBJECT_TYPE_VIEW_SAVED:
-				{
-					if (objectTypeVO == note.getBody())
-						changed = false;
-					break;
-				}
-			}
-		}
-
 		private function objectTypeViewRemoved( event  : Event = null):void
 		{
 			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
@@ -198,6 +164,31 @@ package net.vdombox.object_editor.view.mediators
 		private function get changed():Boolean
 		{
 			return _changed ;
+		}
+		
+		override public function listNotificationInterests():Array 
+		{			
+			return [ OBJECT_TYPE_CHAGED, OBJECT_TYPE_VIEW_SAVED ];
+		}
+		
+		override public function handleNotification( note:INotification ):void 
+		{
+			switch ( note.getName() ) 
+			{				
+				case OBJECT_TYPE_CHAGED:
+				{
+					if (objectTypeVO == note.getBody() )
+						changed = true;
+					break;		
+				}
+					
+				case OBJECT_TYPE_VIEW_SAVED:
+				{
+					if (objectTypeVO == note.getBody())
+						changed = false;
+					break;
+				}
+			}
 		}
 
 		protected function get view():ObjectView

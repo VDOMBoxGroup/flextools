@@ -56,18 +56,18 @@ package net.vdombox.object_editor.view.mediators
 			view.removeEventListener( FlexEvent.SHOW, showActions );
 			setCurrentContainer();
 
-			view.addContainerButton.addEventListener   ( MouseEvent.CLICK, addContainer );
-			view.deleteContainerButton.addEventListener( MouseEvent.CLICK, deleteContainer );
-			view.addAction.addEventListener   	 ( MouseEvent.CLICK, addAction );
-			view.deleteAction.addEventListener	 ( MouseEvent.CLICK, deleteAction );
-			view.addParameter.addEventListener   ( MouseEvent.CLICK, addParameter );
-			view.deleteParameter.addEventListener( MouseEvent.CLICK, deleteParameter );
-			view.actionsList.addEventListener    ( Event.CHANGE, selectAction );
-			view.parametersList.addEventListener ( Event.CHANGE, selectParameter );
-			view.containersList.addEventListener ( Event.CHANGE, selectContainer );
+			view.addContainerButton.addEventListener   	( MouseEvent.CLICK, addContainer );
+			view.deleteContainerButton.addEventListener	( MouseEvent.CLICK, deleteContainer );
+			view.addAction.addEventListener   	 		( MouseEvent.CLICK, addAction );
+			view.deleteAction.addEventListener	 		( MouseEvent.CLICK, deleteAction );
+			view.addParameter.addEventListener   		( MouseEvent.CLICK, addParameter );
+			view.deleteParameter.addEventListener		( MouseEvent.CLICK, deleteParameter );
+			view.actionsList.addEventListener    		( Event.CHANGE, 	selectAction );
+			view.parametersList.addEventListener 		( Event.CHANGE, 	selectParameter );
+			view.containersList.addEventListener 		( Event.CHANGE, 	selectContainer );
 
-			view.methodName.addEventListener     ( Event.CHANGE, changeMethodName );
-			view.parScriptName.addEventListener  ( Event.CHANGE, changeScriptName );
+			view.methodName.addEventListener     		( Event.CHANGE, 	changeMethodName );
+			view.parScriptName.addEventListener  		( Event.CHANGE, 	changeScriptName );
 
 			view.validateNow();
 		}
@@ -103,13 +103,12 @@ package net.vdombox.object_editor.view.mediators
 
 		public function validateObjectTypeVO(event:Event):void
 		{
-			view.label= "Actions*";			
-			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+			addStar();
 			if (currentParameterVO)
 			{				
 				currentParameterVO.defaultValue		= view.parDefaultValue.text;
 				currentParameterVO.interfacePar		= view.parInterface.text;
-				currentParameterVO.scriptName		= view.parScriptName.text;
+				//currentParameterVO.scriptName		= view.parScriptName.text;
 				currentParameterVO.regExp	 		= view.parRegExp.text;
 			}
 			if (currentActionVO)
@@ -180,6 +179,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function addContainer(event:MouseEvent): void
 		{			
+			addStar();
 			var popup:Containers = Containers(PopUpManager.createPopUp(view, Containers, true));
 			popup.addEventListener(FlexEvent.CREATION_COMPLETE, setListWord);
 			popup.addEventListener(CloseEvent.CLOSE, closeHandler);
@@ -226,9 +226,10 @@ package net.vdombox.object_editor.view.mediators
 		}	
 
 		private function addAction(event:MouseEvent): void
-		{	
+		{				
 			if (currentContainerVO)
 			{
+				addStar();
 				currentActionVO = new ActionVO();
 				currentActionVO.methodName 	  = ( "methodName" + currentContainerVO.actionsCollection.length );
 				currentActionVO.description   = languagesProxy.getNextId(objectTypeVO.languages, "6", currentActionVO.methodName+"description");
@@ -252,13 +253,14 @@ package net.vdombox.object_editor.view.mediators
 		}
 
 		private function addParameter(event:MouseEvent): void
-		{	
+		{				
 			if (currentActionVO == null)
 			{
 				Alert.show("Add action");
 			}
 			else
 			{
+				addStar();
 				currentParameterVO = new ActionParameterVO();
 				currentParameterVO.scriptName = ( "scriptName" + currentActionVO.parameters.length );
 
@@ -277,6 +279,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function deleteContainer(event:MouseEvent): void
 		{
+			addStar();
 			var selectInd:uint = view.containersList.selectedIndex;
 			var actsCount:int = currentContainerVO.actionsCollection.length;
 			for (var i:int; i < actsCount; i++)
@@ -291,6 +294,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function deleteAction(event:MouseEvent = null): void
 		{
+			addStar();
 			var selectInd:uint = view.actionsList.selectedIndex;
 			languagesProxy.deleteWord(objectTypeVO, currentActionVO.description);
 			languagesProxy.deleteWord(objectTypeVO, currentActionVO.interfaceName);
@@ -306,6 +310,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function deleteParameter(event:MouseEvent = null): void
 		{
+			addStar();
 			var selectInd:uint = view.parametersList.selectedIndex;
 			languagesProxy.deleteWord(objectTypeVO, currentActionVO.parameters[selectInd].data.help);
 			languagesProxy.deleteWord(objectTypeVO, currentActionVO.parameters[selectInd].data.interfaceName);
@@ -519,6 +524,12 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}				
 
+		protected function addStar():void
+		{
+			view.label= "Actions*";			
+			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+		}
+		
 		protected function get view():Actions
 		{
 			return viewComponent as Actions;

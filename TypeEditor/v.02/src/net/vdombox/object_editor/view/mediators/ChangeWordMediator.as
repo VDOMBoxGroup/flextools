@@ -11,7 +11,7 @@ package net.vdombox.object_editor.view.mediators
 	import org.puremvc.as3.patterns.facade.Facade;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 
-	public class ApplicationMediator extends Mediator implements IMediator
+	public class ChangeWordMediator extends Mediator implements IMediator
 	{
 		public static const NAME			:String = "ChangeWordMediator";				
 //		public static const LOAD_INFORMATION:String = "LoadInformation";

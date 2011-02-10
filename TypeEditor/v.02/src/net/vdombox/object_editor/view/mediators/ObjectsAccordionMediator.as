@@ -31,11 +31,11 @@ package net.vdombox.object_editor.view.mediators
 
 		public function openObject( event:MouseEvent = null ) : void
 		{
-			sendNotification( ApplicationFacade.RUN_PROGRESS );
+			sendNotification( ApplicationMediator.RUN_PROGRESS );
 			var accordioNavigatorContent:AccordionNavigatorContent =  view.accordion.selectedChild as AccordionNavigatorContent;
-			var object:Item = accordioNavigatorContent.selectedObject as Item;
-			sendNotification( ApplicationFacade.OPEN_OBJECT, object);
-			sendNotification( ApplicationFacade.END_PROGRESS);
+			var item:Item = accordioNavigatorContent.selectedObject as Item;
+			sendNotification( ApplicationFacade.OPEN_OBJECT, item);
+			sendNotification( ApplicationMediator.END_PROGRESS);
 		}	
 
 		public function newContent( item:Item ) : void
@@ -59,7 +59,7 @@ package net.vdombox.object_editor.view.mediators
 		override public function listNotificationInterests():Array 
 		{			
 			return [ ApplicationFacade.NEW_NAVIGATOR_CONTENT,
-				ApplicationFacade.REMOVE_ALL_OBJECT ];
+					 ApplicationMediator.REMOVE_ALL_OBJECT ];
 		}
 
 		override public function handleNotification( note:INotification ):void 
@@ -72,7 +72,7 @@ package net.vdombox.object_editor.view.mediators
 					break;
 				}
 					
-				case ApplicationFacade.REMOVE_ALL_OBJECT:
+				case ApplicationMediator.REMOVE_ALL_OBJECT:
 				{
 					removeAllObjects();
 					break;

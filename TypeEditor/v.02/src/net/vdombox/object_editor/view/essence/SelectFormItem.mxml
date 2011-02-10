@@ -8,7 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			
-			private function saveChanges():void
+			private function changeField():void
 			{
 				dispatchEvent(new Event( Event.CHANGE ));
 			}		
@@ -16,6 +16,6 @@
 	</fx:Script>
 	
 	<s:HGroup>				
-		<s:ComboBox	 id="fselectComboBox" selectedItem="{saveChanges()}" />
+		<s:ComboBox	 id="fselectComboBox" selectedItem="{changeField()}" />
 	</s:HGroup>	
 </mx:FormItem >

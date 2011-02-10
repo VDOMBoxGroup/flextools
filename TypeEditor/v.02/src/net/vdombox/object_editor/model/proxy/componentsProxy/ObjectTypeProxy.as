@@ -14,6 +14,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Attributes;
 	import net.vdombox.object_editor.view.essence.Resourses;
+	import net.vdombox.object_editor.view.mediators.ApplicationMediator;
 	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
@@ -33,7 +34,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			if (_objectTypeList[path])
 			{
-				facade.sendNotification( ApplicationFacade.OBJECT_EXIST, path );
+				facade.sendNotification( ApplicationMediator.OBJECT_ALREADY_OPEN, path );
 			}
 			else
 			{					
@@ -51,7 +52,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				//проверка на повторное использование id				
 				_objectTypeList[objTypeVO.filePath] = reuseID(objTypeVO);
 
-				facade.sendNotification( ApplicationFacade.OBJECT_COMPLIT, objTypeVO );
+				facade.sendNotification( ApplicationMediator.OBJECT_COMPLIT, objTypeVO );
 			}
 		}
 		
@@ -228,7 +229,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 		public function removeVO(objTypeVO  : ObjectTypeVO):void
 		{
-			trace("20")
 			_objectTypeList[objTypeVO.filePath] = null
 		}
 

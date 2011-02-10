@@ -18,6 +18,7 @@ package net.vdombox.object_editor.controller
 	{
 		override public function execute( note:INotification ) :void
 		{
+			//todo заменить на 2 функции: выбор директории и сохранение данных
 			var objTypeVO:ObjectTypeVO = note.getBody() as ObjectTypeVO;
 						
 			//get content of folder

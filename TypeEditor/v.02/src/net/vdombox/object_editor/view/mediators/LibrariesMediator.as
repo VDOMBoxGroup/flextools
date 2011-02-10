@@ -35,18 +35,14 @@ package net.vdombox.object_editor.view.mediators
 		private function changeCode( event:Event ):void
 		{ 
 //			view.currentItem.label = event.target.text;
-			view.label= "Libraries*";			
-			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+			addStar();
 			if (currentLibraryVO)
-			{				
 				currentLibraryVO.text	= view.code.text;
-			}
 		}
 		
 		private function changeTarget( event:Event ):void
 		{ 
-			view.label= "Libraries*";			
-			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+			addStar();
 			if (currentLibraryVO)
 			{				
 				currentLibraryVO.target	= view.target.text;
@@ -59,12 +55,9 @@ package net.vdombox.object_editor.view.mediators
 		
 		public function validateObjectTypeVO(event:Event):void
 		{
-			view.label= "Libraries*";			
-			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+			addStar();
 			if (currentLibraryVO)
-			{				
-				currentLibraryVO.text	= view.code.text;
-			}
+				currentLibraryVO.text = view.code.text;
 		}
 		
 		private function selectLibrary(event:Event):void
@@ -94,9 +87,8 @@ package net.vdombox.object_editor.view.mediators
 		private function setCurrentLibrarie(listIndex:int = 0):void
 		{
 			if (listIndex < 0)
-			{
 				listIndex = 0;
-			}
+			
 			if (objectTypeVO.libraries.length > 0)
 			{				
 				currentLibraryVO = objectTypeVO.libraries[listIndex].data;
@@ -116,7 +108,8 @@ package net.vdombox.object_editor.view.mediators
 		}
 		
 		private function addLibrary(event:MouseEvent): void
-		{			
+		{	
+			addStar();
 			currentLibraryVO = new LibraryVO();
 			objectTypeVO.libraries.addItem( {label:"Library", data:currentLibraryVO} );
 			fillArea(currentLibraryVO);			
@@ -125,6 +118,14 @@ package net.vdombox.object_editor.view.mediators
 			view.librariesList.selectedIndex = view.librariesList.dataProvider.length-1;
 			view.librariesList.validateNow();
 			//			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
+		}
+		
+		private function deleteLibrary(event:MouseEvent): void
+		{
+			addStar();
+			var selectInd:int = view.librariesList.selectedIndex;
+			objectTypeVO.libraries.removeItemAt(selectInd);
+			setCurrentLibrarie(selectInd - 1);			
 		}
 		
 		private function getCurrentItem(nameLib:String):Object
@@ -139,14 +140,7 @@ package net.vdombox.object_editor.view.mediators
 			}
 			return new Object();
 		}
-		
-		private function deleteLibrary(event:MouseEvent): void
-		{
-			var selectInd:int = view.librariesList.selectedIndex;
-			objectTypeVO.libraries.removeItemAt(selectInd);
-			setCurrentLibrarie(selectInd - 1);			
-		}
-				
+						
 		protected function compliteLibraries( ):void
 		{	
 			view.librariesList.dataProvider = objectTypeVO.libraries;
@@ -166,8 +160,14 @@ package net.vdombox.object_editor.view.mediators
 						view.label= "Libraries";
 					break;	
 			}
-		}	
+		}
 		
+		protected function addStar():void
+		{
+			view.label= "Libraries*";			
+			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+		}
+				
 		protected function get view():Libraries
 		{
 			return viewComponent as Libraries;

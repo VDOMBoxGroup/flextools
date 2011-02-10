@@ -52,8 +52,7 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function selectCodeInterface( event:Event = null ):void
 		{ 			
-			view.label= "Attributes*";			
-			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+			addStar();
 			if( currentAttributeVO )
 				currentAttributeVO.codeInterface = view.CodeInterfaceValue.toString();			
 		}
@@ -87,8 +86,7 @@ package net.vdombox.object_editor.view.mediators
 		
 		public function validateObjectTypeVO(event:Event):void
 		{
-			view.label= "Attributes*";			
-			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+			addStar();
 			if (currentAttributeVO)
 			{				
 				currentAttributeVO.defaultValue		= view.defaultValue.text;
@@ -133,7 +131,8 @@ package net.vdombox.object_editor.view.mediators
 		}
 		
 		private function addAttribute(event:MouseEvent): void
-		{			
+		{		
+			addStar();
 			var attribVO:AttributeVO = new AttributeVO( "newAttribute"+ objectTypeVO.attributes.length );
 			objectTypeVO.attributes.addItem( {label:attribVO.name, data:attribVO, color:1} );
 			var langsProxy:LanguagesProxy 	= facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
@@ -164,6 +163,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function deleteAttribute(event:MouseEvent): void
 		{
+			addStar();
 			var selectInd:uint = view.attributesList.selectedIndex;
 			objectTypeVO.attributes.removeItemAt(selectInd);
 			languagesProxy.deleteWord(objectTypeVO, currentAttributeVO.help);
@@ -547,6 +547,12 @@ package net.vdombox.object_editor.view.mediators
 					}
 				}
 			}
+		}		
+		
+		protected function addStar():void
+		{
+			view.label= "Attributes*";			
+			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 		}
 		
 		protected function get view():Attributes

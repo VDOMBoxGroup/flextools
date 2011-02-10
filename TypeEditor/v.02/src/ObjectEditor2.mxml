@@ -6,7 +6,7 @@
 					   xmlns:vs="net.vdombox.object_editor.view.*" 
 					   xmlns:local="*"
 					   xmlns:containers="flexlib.containers.*"
-					   preinitialize="init();"
+					   preinitialize="facade.preinitialize(this)"
 					   creationComplete="facade.startup(this)">
 
 	<fx:Declarations>
@@ -15,46 +15,10 @@
 	
 <fx:Script>
 	<![CDATA[	
-		import net.vdombox.object_editor.model.vo.ObjectTypeVO;
-		import net.vdombox.object_editor.view.ObjectView;
-		import net.vdombox.object_editor.view.mediators.OpenMediator;
-		
 		import org.puremvc.as3.patterns.facade.Facade;
 				
-		private var facade:ApplicationFacade = ApplicationFacade.getInstance();			
-
-		//перенести в медиатор
-		private function init():void
-		{
-			gotoLastPosition();
-			this.nativeWindow.addEventListener( Event.CLOSING, saveAppPosition );
-		}		
+		private var facade:ApplicationFacade = ApplicationFacade.getInstance();
 		
-		private function saveAppPosition(e:Event = null):void
-		{
-			var so:SharedObject = SharedObject.getLocal("directoryPath");
-							
-			so.data.windowPosition_x	= this.nativeWindow.x;
-			so.data.windowPosition_y 	= this.nativeWindow.y;
-			so.data.windowWidth			= this.width;
-			so.data.windowHeight		= this.height;					
-		}
-		
-		private function gotoLastPosition():void
-		{
-			var so:SharedObject = SharedObject.getLocal("directoryPath");
-
-			if (so.data.windowPosition_x && 
-				so.data.windowPosition_y &&
-				so.data.windowWidth 	 &&
-				so.data.windowHeight)
-			{				
-				this.nativeWindow.x	= so.data.windowPosition_x;
-				this.nativeWindow.y = so.data.windowPosition_y;
-				this.width 			= so.data.windowWidth;
-				this.height			= so.data.windowHeight;
-			}
-		}		
 	]]>
 </fx:Script>
 	
