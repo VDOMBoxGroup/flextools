@@ -85,18 +85,6 @@
 			<mx:TextInput id="fID" width="250" editable="false" doubleClick="{doubleClick(event)}" 
 						  doubleClickEnabled="true" change="{viewChanged()}"/>
 		</mx:FormItem>
-		
-		<!--mx:FormItem label="Icon" toolTip="Иконка объекта">
-			<mx:TextInput id="fIcon" width="250" editable="false"/>
-		</mx:FormItem>
-		
-		<mx:FormItem label="EditorIcon" toolTip="Иконка объекта для редактора">
-			<mx:TextInput id="fEditorIcon" width="250" editable="false"/>
-		</mx:FormItem>
-		
-		<mx:FormItem label="StructureIcon" toolTip="Иконка структуры объекта">
-			<mx:TextInput id="fStructureIcon" width="250" editable="false"/>
-		</mx:FormItem-->
 			
 		<mx:FormItem label="Category" toolTip="Категория объекта (Usual, Standard...)" width="100%" >
 			<s:VGroup>
@@ -112,7 +100,6 @@
 			<mx:TextInput id="fWCAG" width="250"  change="{viewChanged()}"/>
 		</mx:FormItem>
 				
-		<!--ns1:SelectFormItem id="fContainers" name="fContainers"  label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)" /-->	
 		<mx:FormItem label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)">
 			<mx:TextArea id="fContainers" width="250" height="60"  change="{viewChanged()}"/>
 			<s:Button id="editContainersBt" label="Edit" />
@@ -147,9 +134,6 @@
 				<s:ComboBox id="fResizable" dataProvider="{aResizable}" change="{viewChanged()}" />
 			</mx:FormItem>
 			
-			<!--mx:FormItem label="Container" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
-				<s:ComboBox id="fContainera" dataProvider="{aContainer}"  />
-			</mx:FormItem-->
 			<mx:FormItem label="Container" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
 				<s:ComboBox id="fContainerI"  change="{viewChanged()}" >
 					<s:dataProvider>

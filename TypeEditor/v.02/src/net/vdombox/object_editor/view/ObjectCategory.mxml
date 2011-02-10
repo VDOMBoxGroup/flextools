@@ -56,9 +56,8 @@
 				var  regResource:RegExp = /#Lang\((\d+)\)/;
 				var matchResult:Array = code.match(regResource);			
 				if (matchResult)
-				{
 					return matchResult[1];
-				}
+
 				return "";
 			}
 			

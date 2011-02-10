@@ -105,9 +105,8 @@ package net.vdombox.object_editor.model.proxy
 			var  regResource:RegExp = /#Lang\((\d+)\)/;
 			var matchResult:Array = code.match(regResource);			
 			if (matchResult)
-			{
 				return matchResult[1];
-			}
+
 			return "";
 		}
 
@@ -116,16 +115,11 @@ package net.vdombox.object_editor.model.proxy
 			var imgResourse:String = "";
 			var resource: XML = objectXML.Resources.Resource.(@ID == imgResourseID)[0];	
 			if (resource) 
-			{
 				imgResourse =  resource.toString();
-			}
 			else
-			{
 				// TODO: add messages to bugs "list"
 				trace("resource: " +imgResourseID+" not found!");
-			}			
 			return imgResourse;
 		}
 	}
 }
-

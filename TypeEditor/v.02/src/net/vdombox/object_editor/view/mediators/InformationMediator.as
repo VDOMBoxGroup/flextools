@@ -39,15 +39,13 @@ package net.vdombox.object_editor.view.mediators
 			this.objectTypeVO = objTypeVO;
 
 			view.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
-			view.addEventListener( Event.CHANGE, validateObjectTypeVO );
-			view.addEventListener(FlexEvent.SHOW, validateInformation );
+			view.addEventListener( Event.CHANGE,   validateObjectTypeVO );
+			view.addEventListener( FlexEvent.SHOW, validateInformation );
 		}
 
 		public function validateObjectTypeVO(event:Event):void
 		{
-			view.label= "Information*";
-//			trace("CHANGECHANGE");
-			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+			addStar();
 
 			objectTypeVO.name 			= view.fname.text;
 			objectTypeVO.className		= view.fClassName.text;
@@ -120,17 +118,19 @@ package net.vdombox.object_editor.view.mediators
 			view.ficon1.source  = resourcesProxy.getByteArray(objectTypeVO.icon);
 			view.ficon1.toolTip = getToolTipe(objectTypeVO.icon);
 
-			view.ficon2.source = resourcesProxy.getByteArray(objectTypeVO.structureIcon);
-			view.ficon3.source = resourcesProxy.getByteArray(objectTypeVO.editorIcon);
+			view.ficon2.source	= resourcesProxy.getByteArray(objectTypeVO.structureIcon);
+			view.ficon3.source 	= resourcesProxy.getByteArray(objectTypeVO.editorIcon);
 
 			view.ficon1.name    = resourcesProxy.geResourseID(objectTypeVO.icon);
-			view.ficon2.name   = resourcesProxy.geResourseID(objectTypeVO.structureIcon);
-			view.ficon3.name   = resourcesProxy.geResourseID(objectTypeVO.editorIcon);
+			view.ficon2.name   	= resourcesProxy.geResourseID(objectTypeVO.structureIcon);
+			view.ficon3.name   	= resourcesProxy.geResourseID(objectTypeVO.editorIcon);
 
-			view.ficon1.addEventListener (MouseEvent.DOUBLE_CLICK, changeResourse);
+			view.ficon1.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
 			view.ficon2.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
 			view.ficon3.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
 
+			
+			view.fCategory.addEventListener( Event.CHANGE,validateObjectTypeVO )
 			view.fcurrentLocation.addEventListener(Event.CHANGE, changeCurrentLocation);
 			view.editContainersBt.addEventListener(MouseEvent.CLICK, editContainersBtClick); 
 			view.validateNow();
@@ -182,16 +182,23 @@ package net.vdombox.object_editor.view.mediators
 						view.label= "Information";
 					break;
 				}
+					
 				case Information.INFORMATION_CHANGED	:
 				{
 					// todo: need optimization!
 					compliteInformation();
-					view.label= "Information*";
+					addStar();
 					break;
 				}
 			}
 		}
 
+		protected function addStar():void
+		{
+			view.label= "Information*";			
+			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+		}
+		
 		protected function get view():Information
 		{
 			return viewComponent as Information;

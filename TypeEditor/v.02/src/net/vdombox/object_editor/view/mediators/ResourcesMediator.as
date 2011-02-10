@@ -4,13 +4,13 @@ package net.vdombox.object_editor.view.mediators
 	import flash.events.MouseEvent;
 	import flash.net.FileReference;
 	import flash.net.dns.AAAARecord;
-
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	import mx.controls.Alert;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.object_editor.controller.AddResourceCommand;
 	import net.vdombox.object_editor.controller.UpdateResourceCommand;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
@@ -18,7 +18,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.model.vo.ResourceVO;
 	import net.vdombox.object_editor.view.essence.Resourses;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -66,9 +66,8 @@ package net.vdombox.object_editor.view.mediators
 			this.objectTypeVO = objTypeVO;	
 			view.addEventListener( FlexEvent.SHOW, show );
 
-			facade.registerCommand(ADD_RESOURCE, AddResourceCommand);
+			facade.registerCommand(ADD_RESOURCE, 	AddResourceCommand);
 			facade.registerCommand(UPDATE_RESOURCE, UpdateResourceCommand);
-
 		}
 
 		private function show(event: FlexEvent): void
@@ -79,7 +78,6 @@ package net.vdombox.object_editor.view.mediators
 			view.deleteButton.addEventListener(MouseEvent.CLICK, deleteResource);
 			view.changeContentButt.addEventListener(MouseEvent.CLICK, changeContent);
 			view.exportContentButt.addEventListener(MouseEvent.CLICK, exportContent);
-
 
 			view.resourcesDataGrid.dataProvider = objectTypeVO.resources;
 			view.validateNow();
@@ -98,16 +96,12 @@ package net.vdombox.object_editor.view.mediators
 			resourcesProxy.exportToFile(resVO) 
 		}
 
-
 		private function changeContent(event:MouseEvent):void
 		{
 			var resVO: ResourceVO = view.resourcesDataGrid.selectedItem as ResourceVO;
 
 			facade.sendNotification(UPDATE_RESOURCE, resVO.id);
 		}
-
-
-
 
 		private function deleteResource(event:MouseEvent):void
 		{
@@ -124,8 +118,8 @@ package net.vdombox.object_editor.view.mediators
 				{
 					var indexResVO  : int =  resourcesVO.getItemIndex(resVO)
 					resourcesVO.removeItemAt(indexResVO)
-
 					resourcesProxy.deleteFile(resVO);
+					addStar();
 				}
 
 				// select a last resourse
@@ -137,22 +131,16 @@ package net.vdombox.object_editor.view.mediators
 						view.resourcesDataGrid.selectedIndex = selectedIndex;
 				}
 			}
-
-
 		}
-
-
 
 		private function get  resourcesProxy():ResourcesProxy
 		{
 			return facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
 		}
 
-
-
 		override public function listNotificationInterests():Array 
 		{			
-			return [ RESOURCE_UPLOADED ];
+			return [ RESOURCE_UPLOADED, Resourses.RESOURCES_CHANGED, ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED ];
 		}
 
 		override public function handleNotification( note:INotification ):void 
@@ -162,10 +150,30 @@ package net.vdombox.object_editor.view.mediators
 				case RESOURCE_UPLOADED:
 					var resVO: ResourceVO = note.getBody() as ResourceVO;
 					objectTypeVO.resources.addItem(resVO);
-					break;				
+					addStar();
+					break;	
+				
+				case Resourses.RESOURCES_CHANGED:
+				{
+					addStar();
+					break;
+				}
+					
+				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
+				{
+					if (objectTypeVO == note.getBody() )
+						view.label= "Resources";
+					break;
+				}
 			}
 		}
 
+		protected function addStar():void
+		{
+			view.label= "Resourses*";			
+			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
+		}
+		
 		/**
 		 *
 		 * @return

@@ -17,6 +17,8 @@
 			import mx.utils.Base64Encoder;
 			import mx.utils.UIDUtil;
 			
+			public static const RESOURCES_CHANGED:String = "ResourcesChanged";
+			
 			private var _data : XML;
 			
 			[Bindable]

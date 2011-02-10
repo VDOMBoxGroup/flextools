@@ -67,7 +67,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			for each (var word:Object in wordsVO)
 			{	
 				var str:Object = {};
-				str["data"]   = word["ID"];	
+				str["data"]  = word["ID"];	
 				str["label"] = word[localeName];
 				getArr.addItem( str );
 			}
@@ -222,4 +222,3 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		}		
 	}
 }
-

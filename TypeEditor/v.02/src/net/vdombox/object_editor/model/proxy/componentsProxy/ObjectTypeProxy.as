@@ -277,7 +277,5 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					//todo: делаем запись в лог ошибок
 			}
 		}
-
 	}
 }
-
