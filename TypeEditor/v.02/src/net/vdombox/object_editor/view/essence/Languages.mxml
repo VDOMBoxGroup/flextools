@@ -28,7 +28,7 @@
 		<s:HGroup paddingLeft="10">
 			<s:Button id="addLaguage" label="Add Language"/>	
 		</s:HGroup>
-	<mx:DataGrid id="languagesDataGrid" color="0x323232" width="100%" height="100%" rowCount="3"   itemEditEnd="languages_itemEditEndHandler(event)"
+	<mx:DataGrid id="languagesDataGrid" color="0x323232" width="100%" height="100%" itemEditEnd="languages_itemEditEndHandler(event)"
 				 editable="true" dataProvider="{arLanguages}"/>
 	<s:HGroup textAlign="right" width="100%"   paddingBottom="10" paddingRight="10">
 		<s:HGroup width="100%"/>

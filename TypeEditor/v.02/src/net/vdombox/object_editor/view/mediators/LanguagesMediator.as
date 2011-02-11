@@ -34,10 +34,43 @@ package net.vdombox.object_editor.view.mediators
 		private function showLanguages(event: FlexEvent): void
 		{			
 			view.languagesDataGrid.dataProvider = objectTypeVO.languages.words;
+			addWordsToDataGrid();
 			view.addLaguage.addEventListener( MouseEvent.CLICK,   addLaguage );
 			view.addWord.addEventListener	( MouseEvent.CLICK,   addWord );
 			view.deleteWord.addEventListener( MouseEvent.CLICK,   deleteWord );
 			view.validateNow();
+		}
+		
+		private function addWordsToDataGrid(): void
+		{
+			//new columns array
+			var cols:Array = [];
+			var col0:DataGridColumn =  view.languagesDataGrid.columns[0];
+			
+			//put in cols[0] column with "ID" 
+			for each (var dc:DataGridColumn in view.languagesDataGrid.columns)
+			{
+				if (dc.dataField == "ID")
+				{
+					cols[0] = dc;
+					break;
+				}
+			}
+					
+			//put the remaining elements 
+			cols[1] = col0;
+			var k:int = 2;
+			for(var j:int = 1; j < view.languagesDataGrid.columnCount; j++)
+			{
+				if (view.languagesDataGrid.columns[j].dataField != "ID")
+				{
+					cols[k] = view.languagesDataGrid.columns[j];
+					k++;
+				}
+			}
+			
+			cols[0].width = 50;
+			view.languagesDataGrid.columns = cols;
 		}
 		
 		//not used

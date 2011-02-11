@@ -30,13 +30,11 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			for each (var langXML:XML in languagesXML.children())
 			{
 				var lan:String =  langXML.@Code.toString()
-
 				languagesVO.locales.addItem( {label:lan, data:lan} );
 			}	
 
 			for each (var wordEn:XML in langEN.children())
 			{
-
 				var words:Object = {};
 				var id:String = wordEn.@ID;	
 				languagesVO.isUsedWords[id] = false;
