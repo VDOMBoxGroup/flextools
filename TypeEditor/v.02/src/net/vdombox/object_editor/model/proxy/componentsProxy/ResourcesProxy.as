@@ -8,17 +8,18 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import flash.net.FileReference;
 	import flash.net.dns.AAAARecord;
 	import flash.utils.ByteArray;
-
+	
 	import mx.collections.ArrayCollection;
 	import mx.rpc.IResponder;
 	import mx.utils.Base64Decoder;
 	import mx.utils.Base64Encoder;
 	import mx.utils.UIDUtil;
-
+	
+	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.proxy.FileProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.model.vo.ResourceVO;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -51,20 +52,29 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function createFromXML(objTypeXML:XML):ArrayCollection
 		{
 			var resourceVOArray : ArrayCollection = new ArrayCollection();
-			var resourcesXML : XML =  objTypeXML.Resources[0];
-
-			if (!resourcesXML) 
-				resourcesXML = <Resources/>;
-
-			for each (var resXML:XML in resourcesXML.children())
+			try
 			{
-				var resourceVO : ResourceVO =  createResFromXML(resXML);
-				resourceVOArray.addItem(resourceVO);
-
-				writeResoucetoFileSystem(resXML.@ID, resXML.toString()) 
-			}	
-
-			return resourceVOArray;
+				var resourcesXML : XML =  objTypeXML.Resources[0];
+	
+				if (!resourcesXML) 
+					resourcesXML = <Resources/>;
+	
+				for each (var resXML:XML in resourcesXML.children())
+				{
+					var resourceVO : ResourceVO =  createResFromXML(resXML);
+					resourceVOArray.addItem(resourceVO);
+	
+					writeResoucetoFileSystem(resXML.@ID, resXML.toString()) 
+				}			
+			}		
+			catch(error:TypeError)
+			{	
+				ErrorLogger.instance.logError("Failed: not teg: <Resources>", "ResourcesProxy.createFromXML()");
+			}
+			finally
+			{
+				return resourceVOArray;
+			}
 		}
 
 		private function createResFromXML(resXML:XML):ResourceVO
@@ -87,7 +97,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 			return new ResourceVO(id, fileRef.name, fileRef.extension);
 		}
-
 
 		/**
 		 *
@@ -174,7 +183,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return  fileProxy.readFile(nativePath);
 		}
 
-
 		private function writeResoucetoFileSystem(id:String, dataInBase64:String):void
 		{
 			var fileProxy:FileProxy = facade.retrieveProxy(FileProxy.NAME) as FileProxy;
@@ -194,9 +202,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				imgResourseID = matchResult[1]
 					//				trace("imgResourseID: "+imgResourseID);
 			}
+			//todo должен быть id в любом случае!!!!!!!!!!!!!
+			if 	(imgResourseID == null) imgResourseID = "";
 			return imgResourseID;
 		}
 	}
 }
-
-

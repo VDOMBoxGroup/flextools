@@ -5,13 +5,14 @@ package net.vdombox.object_editor.controller
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.net.SharedObject;
-
+	
+	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.Item;
 	import net.vdombox.object_editor.model.proxy.ObjectsProxy;
-
+	
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
-
+	
 	import spark.components.NavigatorContent;
 
 	public class OpenDirectoryCommand extends SimpleCommand
@@ -27,8 +28,9 @@ package net.vdombox.object_editor.controller
 				directory.browseForDirectory("Select Directory");
 				directory.addEventListener(Event.SELECT, directorySelected);
 			}
-			catch (error:Error)
+			catch (error:Error)	
 			{
+				ErrorLogger.instance.logError("Failed: path is not correct", "OpenDirectoryCommand.execute()");			
 				trace("Failed:", error.message);
 			}			
 

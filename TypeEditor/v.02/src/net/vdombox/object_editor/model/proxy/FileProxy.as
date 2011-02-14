@@ -6,7 +6,11 @@ package net.vdombox.object_editor.model.proxy
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
-
+	
+	import mx.controls.Alert;
+	
+	import net.vdombox.object_editor.model.ErrorLogger;
+	
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -21,25 +25,47 @@ package net.vdombox.object_editor.model.proxy
 
 		public function readFile( path:String ):String
 		{	
+			var data:String = "";
+			
 			var file:File = new File;
 			file.nativePath = path;
 
 			var stream:FileStream = new FileStream();   
-			stream.open(file, FileMode.READ);
-			var data:String = stream.readUTFBytes(stream.bytesAvailable);
-			stream.close();	
-			return data;				
+			try
+			{
+				stream.open(file, FileMode.READ);
+				data = stream.readUTFBytes(stream.bytesAvailable);
+				stream.close();	
+				return data;
+			}
+			catch (error:Error)
+			{
+				Alert.show("Failed: was changed path. Open the directory again");
+				ErrorLogger.instance.logError("Failed: The path can be changed.", "FileProxy.readFile("+path+")");
+				trace("Failed: was changed path.", error.message);				
+			}
+			return data;
 		}
 
-		public function saveFile( str:String, path:String ): void//Boolean
+		public function saveFile( str:String, path:String ): void
 		{
 			var file:File = new File();
 			file.nativePath = path; 
 
-			var stream:FileStream = new FileStream();
-			stream.open(file, FileMode.WRITE);
-			stream.writeUTFBytes(str);
-			stream.close();
+			try
+			{
+				var stream:FileStream = new FileStream();
+				stream.open(file, FileMode.WRITE);
+				stream.writeUTFBytes(str);
+				stream.close();
+			}
+			catch (error:Error)
+			{
+				//какая здесь ошибка?
+				Alert.show("Failed: was changed path. Please restart the application");
+				ErrorLogger.instance.logError("Failed: the path can be changed.", "FileProxy.saveFile("+file.nativePath+")");
+				trace("Failed: was changed path. Please restart the application", error.message);
+			}			
 		}
 	}
 }

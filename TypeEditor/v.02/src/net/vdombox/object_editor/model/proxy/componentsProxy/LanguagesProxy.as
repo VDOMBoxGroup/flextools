@@ -5,6 +5,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.collections.ArrayCollection;
 	
+	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.vo.LanguagesVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	
@@ -21,38 +22,47 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		}
 
 		public function createFromXML(objTypeXML:XML):LanguagesVO
-		{			
-			var languagesXML: XML = objTypeXML.Languages[0];
+		{	
 			var languagesVO: LanguagesVO = new LanguagesVO();
-						
-			var	langEN:XML = languagesXML.Language.(@Code == "en_US")[0];
-
-			for each (var langXML:XML in languagesXML.children())
+			try
 			{
-				var lan:String =  langXML.@Code.toString()
-				languagesVO.locales.addItem( {label:lan, data:lan} );
-			}	
-
-			for each (var wordEn:XML in langEN.children())
-			{
-				var words:Object = {};
-				var id:String = wordEn.@ID;	
-				languagesVO.isUsedWords[id] = false;
-				words["ID"] = id;
-
-//				var wrdsOV  : WordsVO = new WordsVO();
-//				wrdsOV["en"] = wordEn.@ID;
-
-				for each (langXML in languagesXML.children())
-				{			
-					var word:XML =  langXML.Sentence.(@ID == id )[0];
-					if (!word)
-						word = wordEn;
-					words[langXML.@Code] = word.toString();					
-				}
-				languagesVO.words.addItem(words);				
+				var languagesXML: XML = objTypeXML.Languages[0];
+				var	langEN:XML = languagesXML.Language.(@Code == "en_US")[0];
+	
+				for each (var langXML:XML in languagesXML.children())
+				{
+					var lan:String =  langXML.@Code.toString()
+					languagesVO.locales.addItem( {label:lan, data:lan} );
+				}	
+	
+				for each (var wordEn:XML in langEN.children())
+				{
+					var words:Object = {};
+					var id:String = wordEn.@ID;	
+					languagesVO.isUsedWords[id] = false;
+					words["ID"] = id;
+	
+	//				var wrdsOV  : WordsVO = new WordsVO();
+	//				wrdsOV["en"] = wordEn.@ID;
+	
+					for each (langXML in languagesXML.children())
+					{			
+						var word:XML =  langXML.Sentence.(@ID == id )[0];
+						if (!word)
+							word = wordEn;
+						words[langXML.@Code] = word.toString();					
+					}
+					languagesVO.words.addItem(words);				
+				}				
+			}		
+			catch(error:TypeError)
+			{	
+				ErrorLogger.instance.logError("Failed: not teg: <Language>", "LanguageProxy.createFromXML()");
 			}
-			return languagesVO;
+			finally
+			{
+				return languagesVO;
+			}
 		}
 
 		public function getWordsOnCarentLocal(langsVO:LanguagesVO):ArrayCollection
@@ -178,11 +188,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function used(langsVO: LanguagesVO, idString:String):String
 		{
 			var id:String = getRegExpID(langsVO, idString);
+			var newID:String = "";
 			//if langID exist and used
 			if (langsVO.isUsedWords[id])
 			{
 				var idPart:String = id.toString().slice(0,1);
-				var newID :String = this.getNextId( langsVO, idPart, "", getWords(langsVO, id) );
+				newID = this.getNextId( langsVO, idPart, "", getWords(langsVO, id) );
 				idString = newID;
 				return newID; 				
 			}
@@ -197,7 +208,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				//if langID not exist
 				else
 				{
-					var newID:String = getNextId(langsVO, id.toString().slice(0,1));
+					newID = getNextId(langsVO, id.toString().slice(0,1));
 					var idNumber:String = newID.toString().slice(6,newID.length-1);
 					langsVO.isUsedWords[idNumber] = true;
 					return newID;

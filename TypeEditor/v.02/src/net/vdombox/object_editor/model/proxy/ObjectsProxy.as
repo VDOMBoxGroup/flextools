@@ -6,11 +6,12 @@ package net.vdombox.object_editor.model.proxy
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
-
+	
 	import mx.collections.ArrayCollection;
-
+	
+	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.Item;
-
+	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -115,10 +116,12 @@ package net.vdombox.object_editor.model.proxy
 			var imgResourse:String = "";
 			var resource: XML = objectXML.Resources.Resource.(@ID == imgResourseID)[0];	
 			if (resource) 
-				imgResourse =  resource.toString();
+				imgResourse = resource.toString();
 			else
-				// TODO: add messages to bugs "list"
+			{
+				ErrorLogger.instance.logError("resource: " +imgResourseID+" not found!", "ObjectsProxy.getImgResourse()");
 				trace("resource: " +imgResourseID+" not found!");
+			}
 			return imgResourse;
 		}
 	}

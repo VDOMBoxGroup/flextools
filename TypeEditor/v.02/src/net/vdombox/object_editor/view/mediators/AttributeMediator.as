@@ -264,7 +264,7 @@ package net.vdombox.object_editor.view.mediators
 					dropDownValue.langTextInput.apdateFild();
 					i++;				
 				}
-				catch (e:Error) 
+				catch (error:Error) 
 				{
 					childExist = false;
 				}				
@@ -454,7 +454,7 @@ package net.vdombox.object_editor.view.mediators
 					values += ")|" + dropDownValue.textValue.text + ")|";
 					i++;				
 				}
-				catch (e:Error) 
+				catch (error:Error) 
 				{
 					childExist = false;
 				}				

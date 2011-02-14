@@ -5,6 +5,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
 	
+	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.vo.ActionParameterVO;
 	import net.vdombox.object_editor.model.vo.ActionVO;
 	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
@@ -202,28 +203,34 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			var objTypeVO: ObjectTypeVO = new ObjectTypeVO();
 			var information: XML = objTypeXML.Information[0];			
-
-			objTypeVO.category 		= information.Category;
-			objTypeVO.className 	= information.ClassName;
-			objTypeVO.container		= information.Container;
-			objTypeVO.containers	= information.Containers;
-			checkLang(information.Description, objTypeVO.description );
-			checkLang(information.DisplayName, objTypeVO.displayName );
-
-			objTypeVO.dynamic		= information.Dynamic.toString() == "1";
-			objTypeVO.id			= information.ID;	
-			objTypeVO.interfaceType	= information.InterfaceType;			
-			objTypeVO.name 			= information.Name;
-			objTypeVO.moveable		= information.Moveable.toString() == "1";
-			objTypeVO.optimizationPriority = information.OptimizationPriority;						
-			objTypeVO.resizable		= information.Resizable;	
-			objTypeVO.version		= information.Version;	
-			objTypeVO.wcag			= information.WCAG;
-
-			objTypeVO.icon 			= information.Icon;
-			objTypeVO.editorIcon 	= information.EditorIcon;
-			objTypeVO.structureIcon = information.StructureIcon;
-
+			try
+			{
+				objTypeVO.category 		= information.Category;
+				objTypeVO.className 	= information.ClassName;
+				objTypeVO.container		= information.Container;
+				objTypeVO.containers	= information.Containers;
+				checkLang(information.Description, objTypeVO.description );
+				checkLang(information.DisplayName, objTypeVO.displayName );
+	
+				objTypeVO.dynamic		= information.Dynamic.toString() == "1";
+				objTypeVO.id			= information.ID;	
+				objTypeVO.interfaceType	= information.InterfaceType;			
+				objTypeVO.name 			= information.Name;
+				objTypeVO.moveable		= information.Moveable.toString() == "1";
+				objTypeVO.optimizationPriority = information.OptimizationPriority;						
+				objTypeVO.resizable		= information.Resizable;	
+				objTypeVO.version		= information.Version;	
+				objTypeVO.wcag			= information.WCAG;
+	
+				objTypeVO.icon 			= information.Icon;
+				objTypeVO.editorIcon 	= information.EditorIcon;
+				objTypeVO.structureIcon = information.StructureIcon;
+			}
+			catch (error:Error)
+			{
+				ErrorLogger.instance.logError("Failed: not teg: <Information>", "initInformation");
+				trace("Failed: not tef <Information/>.", error.message);
+			}
 			return objTypeVO;
 		}
 

@@ -9,6 +9,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	
 	import mx.collections.ArrayCollection;
 	
+	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.vo.EventParameterVO;
 	import net.vdombox.object_editor.model.vo.EventVO;
@@ -60,29 +61,35 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			var eventsCollection:ArrayCollection = new ArrayCollection();
 			
-//todo 	var eventsXML:XML = objTypeXML.descendants("Events")
-//			var e2vdomXML:XML = objTypeXML.descendants("E2vdom")
-//			var eventsXML:XML = e2vdomXML.descendants("Events")
-//			var usIntEvXML:XML = objTypeXML.descendants("Userinterfaceevents")
-			for each (var eventXML : XML in objTypeXML.descendants("Event"))
+			try
 			{
-				var eventVO:EventVO = new EventVO();
-				eventVO.name = eventXML.@Name;
-				
-				for each (var parameterXML : XML in eventXML.descendants("Parameter"))
+				for each (var eventXML : XML in objTypeXML.descendants("Event"))
 				{
-					var eventParameter:EventParameterVO = new EventParameterVO;
+					var eventVO:EventVO = new EventVO();
+					eventVO.name = eventXML.@Name;
 					
-					eventParameter.name		= parameterXML.@Name;
-					eventParameter.order	= parameterXML.@Order;
-					eventParameter.vbType	= parameterXML.@VbType;
-					eventParameter.help		= parameterXML.@Help;
-										
-					eventVO.parameters.addItem({label:eventParameter.name, data:eventParameter});	
+					for each (var parameterXML : XML in eventXML.descendants("Parameter"))
+					{
+						var eventParameter:EventParameterVO = new EventParameterVO;
+						
+						eventParameter.name		= parameterXML.@Name;
+						eventParameter.order	= parameterXML.@Order;
+						eventParameter.vbType	= parameterXML.@VbType;
+						eventParameter.help		= parameterXML.@Help;
+											
+						eventVO.parameters.addItem({label:eventParameter.name, data:eventParameter});	
+					}	
+					eventsCollection.addItem({label:eventVO.name, data:eventVO});
 				}	
-				eventsCollection.addItem({label:eventVO.name, data:eventVO});
-			}			
-			return eventsCollection;
+			}		
+			catch(error:TypeError)
+			{	
+				ErrorLogger.instance.logError("Failed: not teg: <Event>", "EventProxy.createFromXML()");
+			}
+			finally
+			{
+				return eventsCollection;
+			}
 		}
 		
 		private function get languagesProxy():LanguagesProxy

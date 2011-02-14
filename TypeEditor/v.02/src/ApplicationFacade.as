@@ -5,6 +5,7 @@
  */
 package 
 {	
+	import net.vdombox.object_editor.controller.CreateObjectCommand;
 	import net.vdombox.object_editor.controller.FillAccordionCommand;
 	import net.vdombox.object_editor.controller.NewObjectTypePathCommand;
 	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
@@ -21,9 +22,10 @@ package
 
 	public class ApplicationFacade extends Facade
 	{		
-		public static const CHANGE_CURRENT_LANGUAGE		:String	= "changeCurrentLanguage";		
+		public static const CHANGE_CURRENT_LANGUAGE		:String	= "changeCurrentLanguage";
+		public static const CRAETE_OBJECT				:String = "createObject";
 		public static const LOAD_XML_FILES				:String = "loadXMLFiles";
-		public static const NEW_NAVIGATOR_CONTENT		:String = "newNavigatorContent";
+		public static const NEW_NAVIGATOR_CONTENT		:String = "newNavigatorContent";		
 		public static const OPEN_OBJECT					:String = "openObject";
 		public static const PARSE_XML_FILES				:String	= "parseXMLFiles";
 		public static const PREINITIALIZE				:String	= "preinitialize";
@@ -46,7 +48,8 @@ package
 		{
 			super.initializeController(); 
 			registerCommand( STARTUP,				StartupCommand );
-			registerCommand( LOAD_XML_FILES,		OpenDirectoryCommand );	
+			registerCommand( CRAETE_OBJECT,			CreateObjectCommand );
+			registerCommand( LOAD_XML_FILES,		OpenDirectoryCommand );			
 			registerCommand( PARSE_XML_FILES,		FillAccordionCommand );
 			registerCommand( PREINITIALIZE,			PreinitializeCommand );
 			registerCommand( OPEN_OBJECT,			OpenObjectCommand );

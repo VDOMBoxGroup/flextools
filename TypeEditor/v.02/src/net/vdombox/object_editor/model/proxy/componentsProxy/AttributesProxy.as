@@ -5,6 +5,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.collections.ArrayCollection;
 	
+	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	
@@ -48,24 +49,34 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			var atributesCollection:ArrayCollection = new ArrayCollection();
 			
-			for each (var attrinuteXML : XML in objTypeXML.descendants("Attribute"))
+			try
 			{
-				var attrib:AttributeVO = new AttributeVO;
-				
-				attrib.name			= attrinuteXML.Name;
-				attrib.displayName	= attrinuteXML.DisplayName;
-				attrib.defaultValue	= attrinuteXML.DefaultValue;
-				attrib.visible		= attrinuteXML.Visible.toString() == "1";
-				attrib.help			= attrinuteXML.Help;
-				attrib.interfaceType	= attrinuteXML.InterfaceType;
-				attrib.codeInterface	= attrinuteXML.CodeInterface;
-				attrib.colorgroup	= attrinuteXML.Colorgroup;
-				attrib.errorValidationMessage		= attrinuteXML.ErrorValidationMessage;
-				attrib.regularExpressionValidation	= attrinuteXML.RegularExpressionValidation;
-				
-				atributesCollection.addItem({label:attrib.name, color:attrib.colorgroup, data:attrib});	
-			}			
-			return atributesCollection;
+				for each (var attrinuteXML : XML in objTypeXML.descendants("Attribute"))
+				{
+					var attrib:AttributeVO = new AttributeVO;
+					
+					attrib.name			= attrinuteXML.Name;
+					attrib.displayName	= attrinuteXML.DisplayName;
+					attrib.defaultValue	= attrinuteXML.DefaultValue;
+					attrib.visible		= attrinuteXML.Visible.toString() == "1";
+					attrib.help			= attrinuteXML.Help;
+					attrib.interfaceType	= attrinuteXML.InterfaceType;
+					attrib.codeInterface	= attrinuteXML.CodeInterface;
+					attrib.colorgroup	= attrinuteXML.Colorgroup;
+					attrib.errorValidationMessage		= attrinuteXML.ErrorValidationMessage;
+					attrib.regularExpressionValidation	= attrinuteXML.RegularExpressionValidation;
+					
+					atributesCollection.addItem({label:attrib.name, color:attrib.colorgroup, data:attrib});	
+				}	
+			}		
+			catch(error:TypeError)
+			{	
+				ErrorLogger.instance.logError("Failed: not teg: <Attribute>", "AttributesProxy.createFromXML()");
+			}
+			finally
+			{
+				return atributesCollection;
+			}
 		}
 	}
 }

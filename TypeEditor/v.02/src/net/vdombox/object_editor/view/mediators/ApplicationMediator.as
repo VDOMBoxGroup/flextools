@@ -9,6 +9,7 @@ package net.vdombox.object_editor.view.mediators
 	import mx.events.ChildExistenceChangedEvent;
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.object_editor.controller.CreateObjectCommand;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.mediators.ObjectsAccordionMediator;
@@ -43,7 +44,8 @@ package net.vdombox.object_editor.view.mediators
 		
 		public function complit( ):void 
 		{			
-			facade.registerMediator( new OpenMediator( view.openButton ) ); 		
+			facade.registerMediator( new OpenMediator( view.openButton ) ); 
+			facade.registerMediator( new CreateObjectMediator( view.newObjectButton ) );
 			facade.registerMediator( new ObjectsAccordionMediator( view.objAccordion ) );
 			view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
 		}

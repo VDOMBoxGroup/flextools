@@ -5,6 +5,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.collections.ArrayCollection;
 	
+	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.vo.LibraryVO;
 	
 	import org.puremvc.as3.interfaces.*;
@@ -38,16 +39,26 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			var librariesCollection:ArrayCollection = new ArrayCollection();
 			
-			for each (var libXML : XML in objTypeXML.descendants("Library"))
+			try
 			{
-				var libVO:LibraryVO = new LibraryVO;
-				
-				libVO.target = libXML.@Target;
-				libVO.text	 = libXML.toString();
-								
-				librariesCollection.addItem({label:"Library", data:libVO});	
-			}			
-			return librariesCollection;
+				for each (var libXML : XML in objTypeXML.descendants("Library"))
+				{
+					var libVO:LibraryVO = new LibraryVO;
+					
+					libVO.target = libXML.@Target;
+					libVO.text	 = libXML.toString();
+									
+					librariesCollection.addItem({label:"Library", data:libVO});	
+				}					
+			}		
+			catch(error:TypeError)
+			{	
+				ErrorLogger.instance.logError("Failed: not teg: <Library>", "LibrarysProxy.createFromXML()");
+			}
+			finally
+			{
+				return librariesCollection;
+			}
 		}
 	}
 }

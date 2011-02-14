@@ -5,6 +5,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.collections.ArrayCollection;
 	
+	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.vo.ActionParameterVO;
 	import net.vdombox.object_editor.model.vo.ActionVO;
 	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
@@ -106,8 +107,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				}
 						
 			}
-			catch(err:TypeError)
-			{				
+			catch(error:TypeError)
+			{	
+				ErrorLogger.instance.logError("Failed: not teg: <Actions>", "ActionContainersProxy.createFromXML()");
 			}
 			finally
 			{
