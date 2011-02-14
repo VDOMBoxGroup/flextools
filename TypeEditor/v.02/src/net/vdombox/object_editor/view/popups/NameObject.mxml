@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="300" height="100"
+		 preinitialize="creationComplete()" title="Enter name of Object">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			public  var nameObject:String;
+			
+			private function creationComplete():void 
+			{				
+				addEventListener(CloseEvent.CLOSE, closeHandler); 
+				this.x = 200;
+				this.y = 200;			
+				
+				dispatchEvent( new FlexEvent( FlexEvent.CREATION_COMPLETE ));								
+			}
+			
+			private function closeHandler(cEvent:CloseEvent):void 
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			public function closePopUp():void
+			{				
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+			}
+
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+			}
+
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- Разместить невизуальные элементы (например, службы или объекты значений) -->
+	</fx:Declarations>
+	
+	<s:VGroup  width="100%" height="100%">
+		<s:HGroup paddingTop="10" paddingLeft="5">
+			<s:Label text="enter name of Object: " paddingTop="5"/>
+			<s:TextInput id="objName" text="{nameObject}" />
+		</s:HGroup>		
+		
+		<s:HGroup paddingLeft="5" >
+			<s:Button label="Ok" click="button1_clickHandler(event)"/>
+			<s:Button label="Cancel"  click="button2_clickHandler(event)" visible="false"/>
+		</s:HGroup>		
+	</s:VGroup>	
+</s:TitleWindow>

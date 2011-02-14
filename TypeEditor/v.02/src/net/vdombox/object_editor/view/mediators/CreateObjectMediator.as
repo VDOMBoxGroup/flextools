@@ -23,7 +23,7 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function newObject( event:Event = null ) : void
 		{
-			sendNotification( ApplicationFacade.CRAETE_OBJECT );
+			sendNotification( ApplicationFacade.CRAETE_OBJECT, view.parentApplication );
 		}
 				
 		protected function get view():Button

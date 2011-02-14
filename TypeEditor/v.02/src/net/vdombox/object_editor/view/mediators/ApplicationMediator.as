@@ -34,11 +34,6 @@ package net.vdombox.object_editor.view.mediators
 		public function ApplicationMediator( viewComponent:Object ) 
 		{			
 			super( NAME, viewComponent );	
-			
-//			facade.registerMediator( new OpenMediator( view.openButton ) ); 		
-//			facade.registerMediator( new ObjectsAccordionMediator( view.objAccordion ) );			
-//			view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
-			
 			init();
 		}
 		
@@ -120,9 +115,9 @@ package net.vdombox.object_editor.view.mediators
 
 		/**
 		 * remove:
-		 *   - ObjectViewMediator
-		 *   - ObjectView
-		 *   - objTypeVO
+		 *  - ObjectViewMediator
+		 *  - ObjectView
+		 *  - objTypeVO
 		 **/
 		public function removeObjectView( objView:ObjectView, objTypeVO:ObjectTypeVO ) : void
 		{				
@@ -132,12 +127,12 @@ package net.vdombox.object_editor.view.mediators
 
 		override public function listNotificationInterests():Array 
 		{			
-			return [ApplicationMediator.OBJECT_COMPLIT, 
-					ApplicationMediator.REOPEN_TAB, 
-					ApplicationMediator.OBJECT_ALREADY_OPEN, 
-					ObjectViewMediator.CLOSE_OBJECT_TYPE_VIEW, 
-					ApplicationMediator.RUN_PROGRESS, 
-					ApplicationMediator.END_PROGRESS ];
+			return [ApplicationMediator.END_PROGRESS,
+					ApplicationMediator.OBJECT_ALREADY_OPEN,
+					ApplicationMediator.OBJECT_COMPLIT, 
+					ApplicationMediator.REOPEN_TAB,
+					ApplicationMediator.RUN_PROGRESS,					 
+					ObjectViewMediator.CLOSE_OBJECT_TYPE_VIEW ];
 		}
 
 		override public function handleNotification( note:INotification ):void 
