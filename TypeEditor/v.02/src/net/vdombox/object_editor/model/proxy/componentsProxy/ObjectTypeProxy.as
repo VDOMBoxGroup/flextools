@@ -31,6 +31,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			_objectTypeList = new Object;			
 		}	
 
+		/**
+		 *	Create ObjectTypeVO and send Notification for add Tab
+		**/
 		public function newObjectTypeVO(objTypeXML:XML, path:String):void
 		{
 			if (_objectTypeList[path])
@@ -229,7 +232,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			catch (error:Error)
 			{
 				ErrorLogger.instance.logError("Failed: not teg: <Information>", "initInformation");
-				trace("Failed: not tef <Information/>.", error.message);
+				trace("Failed: not teg <Information/>.", error.message);
 			}
 			return objTypeVO;
 		}

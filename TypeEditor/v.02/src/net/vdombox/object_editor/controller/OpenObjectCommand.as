@@ -23,7 +23,7 @@ package net.vdombox.object_editor.controller
 			var fileData: String	= fileProxy.readFile(item.path);
 			if (fileData != "")
 			{
-				var xmlFile:  XML		= new XML(fileData);
+				var xmlFile:XML		= new XML(fileData);
 				var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
 				
 				objTypeProxy.newObjectTypeVO(xmlFile, item.path);

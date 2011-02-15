@@ -67,6 +67,22 @@ package net.vdombox.object_editor.model.proxy
 				trace("Failed: was changed path. Please restart the application", error.message);
 			}			
 		}
+		
+		public function deleteFile( path:String ): void
+		{
+			var file:File = new File();
+			file.nativePath = path; 
+			
+			try
+			{
+				file.deleteFile();
+			}
+			catch (error:Error)
+			{
+				Alert.show("Failed: file was not deleted.");
+				ErrorLogger.instance.logError("Failed: file was not deleted.", "FileProxy.deleteFile("+file.nativePath+")");
+				trace("Failed: file was not deleted.", error.message);
+			}			
+		}
 	}
 }
-

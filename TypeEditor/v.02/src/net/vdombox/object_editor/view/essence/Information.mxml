@@ -161,19 +161,19 @@
 				<mx:ComboBox id="fcurrentLocation" width="150" color="0x000000" />
 			</mx:FormItem>
 			
-			<mx:FormItem label="icon" toolTip="">
+			<mx:FormItem label="icon (58x58)" toolTip="">
 				<mx:Image id="ficon1"  toolTip="{ficon1.width +' x '+ ficon1.height+'  '+ ficon1.name}"  doubleClickEnabled="true"
 						  maxWidth="200" maxHeight="200"/>
 			</mx:FormItem>
-			<mx:FormItem label="Structure Icon" toolTip="">
+			<mx:FormItem label="Structure Icon (16x16)" toolTip="">
 				<mx:Image id="ficon2" toolTip="{ficon2.width +' x '+ ficon2.height+'  '+ ficon2.name}"  doubleClickEnabled="true"
 						  maxWidth="200" maxHeight="200"/>
 			</mx:FormItem>
-			<mx:FormItem label="Editor Icon" toolTip="">
+			<mx:FormItem label="Editor Icon (24x24)" toolTip="">
 				<mx:Image id="ficon3"  toolTip="{ficon3.width +' x '+ ficon3.height+'  '+ ficon3.name}" doubleClickEnabled="true" 
 						  maxWidth="200" maxHeight="200"/>				
 			</mx:FormItem>
-			<s:Label text="Double-click to change icon" paddingLeft="300" color="gray"/>
+			<s:Label text="Double-click to change icon" paddingLeft="135" color="gray"/>
 		</mx:Form>
 	</s:HGroup>
 		</s:Scroller >

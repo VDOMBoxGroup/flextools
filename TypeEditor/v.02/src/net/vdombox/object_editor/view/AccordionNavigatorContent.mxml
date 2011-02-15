@@ -15,6 +15,11 @@
 				arrColl.addItem(obj);
 			}
 			
+			public function removeObject(ind:int):void
+			{
+				arrColl.removeItemAt(ind)
+			}
+			
 			public function get selectedObject():Object
 			{
 				return arrColl[list.selectedIndex];

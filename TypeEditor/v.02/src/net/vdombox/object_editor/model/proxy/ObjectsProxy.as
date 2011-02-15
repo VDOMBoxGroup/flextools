@@ -36,9 +36,9 @@ package net.vdombox.object_editor.model.proxy
 			var data:String = stream.readUTFBytes(stream.bytesAvailable);
 			var objectXML:XML = new XML(data);	
 
-			var informationXML  : XML = objectXML.Information[0];
-			var langEnXML 		: XML = objectXML.Languages.Language.(@Code == "en_US")[0];
-			var imgResourseID:String =  getImgResourseID(informationXML);
+			var informationXML  :XML	= objectXML.Information[0];
+			var langEnXML 		:XML	= objectXML.Languages.Language.(@Code == "en_US")[0];
+			var imgResourseID	:String	= getImgResourseID(informationXML);
 
 			var item:Item = new Item;
 
@@ -69,9 +69,9 @@ package net.vdombox.object_editor.model.proxy
 				containerList.addItem(listItem);
 			}
 
-			item.label = informationXML.Name.toString();
-			item.img = getImgResourse(objectXML, imgResourseID);
-			item.path  = file.nativePath;// or .url
+			item.label	= informationXML.Name.toString();
+			item.img 	= getImgResourse(objectXML, imgResourseID);
+			item.path	= file.nativePath;// or .url
 
 			stream.close();	
 			objectXML = null;
@@ -94,10 +94,8 @@ package net.vdombox.object_editor.model.proxy
 			var imgResourseID:String = "";
 			var matchResult : Array = iconValue.match( phraseRE );
 			if (matchResult)
-			{
 				imgResourseID = matchResult[1]
-//				trace("imgResourseID: "+imgResourseID);
-			}
+					
 			return imgResourseID;
 		}
 
@@ -119,7 +117,8 @@ package net.vdombox.object_editor.model.proxy
 				imgResourse = resource.toString();
 			else
 			{
-				ErrorLogger.instance.logError("resource: " +imgResourseID+" not found!", "ObjectsProxy.getImgResourse()");
+				var name:String = objectXML.Information.Name;
+				ErrorLogger.instance.logError("Object: " + name + "resource: " +imgResourseID+" not found!", "ObjectsProxy.getImgResourse()");
 				trace("resource: " +imgResourseID+" not found!");
 			}
 			return imgResourse;

@@ -33,7 +33,7 @@ package net.vdombox.object_editor.model
 			return _label;
 		}
 
-		[Bindable]
+		//[Bindable]
 		public function set label(label:String):void
 		{
 			_label = label;

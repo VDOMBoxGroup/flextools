@@ -9,7 +9,6 @@ package net.vdombox.object_editor.view.mediators
 	import mx.events.ChildExistenceChangedEvent;
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.object_editor.controller.CreateObjectCommand;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.mediators.ObjectsAccordionMediator;
@@ -39,9 +38,10 @@ package net.vdombox.object_editor.view.mediators
 		
 		public function complit( ):void 
 		{			
-			facade.registerMediator( new OpenMediator( view.openButton ) ); 
-			facade.registerMediator( new CreateObjectMediator( view.newObjectButton ) );
-			facade.registerMediator( new ObjectsAccordionMediator( view.objAccordion ) );
+			facade.registerMediator( new OpenMediator				( view.openButton ) ); 
+			facade.registerMediator( new CreateObjectMediator		( view.newObjectButton ) );
+			facade.registerMediator( new DeleteObjectMediatror		( view.delObjectButton ) );
+			facade.registerMediator( new ObjectsAccordionMediator	( view.objAccordion ) );
 			view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
 		}
 
@@ -119,9 +119,13 @@ package net.vdombox.object_editor.view.mediators
 		 *  - ObjectView
 		 *  - objTypeVO
 		 **/
-		public function removeObjectView( objView:ObjectView, objTypeVO:ObjectTypeVO ) : void
+		public function removeObjectView( objView:ObjectView, objTypeVO:ObjectTypeVO = null, id:String = null ) : void
 		{				
-			facade.removeMediator( "ObjectViewMediator" + objTypeVO.id );	
+			if (objTypeVO)
+				facade.removeMediator( "ObjectViewMediator" + objTypeVO.id );
+			else if (id)
+				facade.removeMediator( "ObjectViewMediator" + id );
+			
 			view.tabNavigator.removeChild(objView);
 		}
 
@@ -160,7 +164,7 @@ package net.vdombox.object_editor.view.mediators
 					
 				case ObjectViewMediator.CLOSE_OBJECT_TYPE_VIEW:
 				{
-					removeObjectView(note.getBody()["objView"], note.getBody()["objVO"]);
+					removeObjectView(note.getBody()["objView"], note.getBody()["objVO"], note.getBody()["id"]);
 					break;	
 				}
 					
@@ -178,7 +182,7 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}
 		
-		private function  objViewRemoved( event : ChildExistenceChangedEvent ):void
+		private function  objViewRemoved( event: ChildExistenceChangedEvent ):void
 		{
 			var objView:ObjectView = event.relatedObject as ObjectView;
 			objView.dispatchEvent( new Event(ObjectViewMediator.OBJECT_TYPE_VIEW_REMOVED));
