@@ -226,55 +226,41 @@ package net.vdombox.object_editor.view.mediators
 		}	
 
 		private function addAction(event:MouseEvent): void
-		{				
-			if (currentContainerVO)
-			{
-				addStar();
-				currentActionVO = new ActionVO();
-				currentActionVO.methodName 	  = ( "methodName" + currentContainerVO.actionsCollection.length );
-				currentActionVO.description   = languagesProxy.getNextId(objectTypeVO.languages, "6", currentActionVO.methodName+"description");
-				currentActionVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "7", currentActionVO.methodName+"interfaceName");
+		{			
+			addStar();
+			currentActionVO = new ActionVO();
+			currentActionVO.methodName 	  = ( "methodName" + currentContainerVO.actionsCollection.length );
+			currentActionVO.description   = languagesProxy.getNextId(objectTypeVO.languages, "6", currentActionVO.methodName+"description");
+			currentActionVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "7", currentActionVO.methodName+"interfaceName");
 
-				currentContainerVO.actionsCollection.addItem( {label:currentActionVO.methodName, data:currentActionVO} );
-				currentParameterVO	= null;
+			currentContainerVO.actionsCollection.addItem( {label:currentActionVO.methodName, data:currentActionVO} );
+			currentParameterVO	= null;
 
-				fillActionFilds(currentActionVO);
-				view.currentAction = getCurrentAction(currentActionVO.methodName);
-				view.actionsList.selectedItem = view.currentAction;
-				view.description.completeStructure   ( objectTypeVO.languages, currentActionVO.description);		
-				view.interfaceName.completeStructure ( objectTypeVO.languages, currentActionVO.interfaceName);
+			fillActionFilds(currentActionVO);
+			view.currentAction = getCurrentAction(currentActionVO.methodName);
+			view.actionsList.selectedItem = view.currentAction;
+			view.description.completeStructure   ( objectTypeVO.languages, currentActionVO.description);		
+			view.interfaceName.completeStructure ( objectTypeVO.languages, currentActionVO.interfaceName);
 
-				view.actionsList.validateNow();
-			}
-			else
-			{
-				Alert.show("Add container");
-			}
+			view.actionsList.validateNow();			
 		}
 
 		private function addParameter(event:MouseEvent): void
-		{				
-			if (currentActionVO == null)
-			{
-				Alert.show("Add action");
-			}
-			else
-			{
-				addStar();
-				currentParameterVO = new ActionParameterVO();
-				currentParameterVO.scriptName = ( "scriptName" + currentActionVO.parameters.length );
+		{							
+			addStar();
+			currentParameterVO = new ActionParameterVO();
+			currentParameterVO.scriptName = ( "scriptName" + currentActionVO.parameters.length );
 
-				currentActionVO.parameters.addItem( {label:currentParameterVO.scriptName, data:currentParameterVO} );
-				currentParameterVO.help = languagesProxy.getNextId(objectTypeVO.languages, "8", currentParameterVO.scriptName+"help");
-				currentParameterVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "9", currentParameterVO.scriptName+"interfaceName"); 
+			currentActionVO.parameters.addItem( {label:currentParameterVO.scriptName, data:currentParameterVO} );
+			currentParameterVO.help = languagesProxy.getNextId(objectTypeVO.languages, "8", currentParameterVO.scriptName+"help");
+			currentParameterVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "9", currentParameterVO.scriptName+"interfaceName"); 
 
-				fillParameter(currentParameterVO);
-				view.currentParameter = getCurrentParameter(currentParameterVO.scriptName);
-				view.parametersList.selectedItem = view.currentParameter;
-				view.parHelp.completeStructure ( objectTypeVO.languages, currentParameterVO.help);		
-				view.parInterfaceName.completeStructure ( objectTypeVO.languages, currentParameterVO.interfaceName);
-				view.parametersList.validateNow();
-			}
+			fillParameter(currentParameterVO);
+			view.currentParameter = getCurrentParameter(currentParameterVO.scriptName);
+			view.parametersList.selectedItem = view.currentParameter;
+			view.parHelp.completeStructure ( objectTypeVO.languages, currentParameterVO.help);		
+			view.parInterfaceName.completeStructure ( objectTypeVO.languages, currentParameterVO.interfaceName);
+			view.parametersList.validateNow();			
 		}
 
 		private function deleteContainer(event:MouseEvent): void
@@ -369,30 +355,6 @@ package net.vdombox.object_editor.view.mediators
 				view.actionsList.dataProvider = currentContainerVO.actionsCollection;
 			}
 		}		
-		override public function listNotificationInterests():Array 
-		{			
-			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];
-		}
-
-		override public function handleNotification( note:INotification ):void 
-		{
-			switch ( note.getName() ) 
-			{				
-				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
-				{
-					if (objectTypeVO == note.getBody() )
-						view.label= "Actions";
-					break;
-				}
-					
-				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
-				{
-					if( view.description) 
-						changeFildWithCurrentLanguage( );
-					break;
-				}
-			}
-		}
 
 		private function changeFildWithCurrentLanguage( ):void
 		{
@@ -445,6 +407,11 @@ package net.vdombox.object_editor.view.mediators
 			if (listIndex < 0)
 			{
 				listIndex = 0;
+				if ( view.containersList.dataProvider.length == 0)
+				{
+					currentContainerVO	  = null;
+					view.currentContainer = null;
+				}
 			}
 			if (objectTypeVO.actionContainers.length > 0)
 			{
@@ -524,6 +491,31 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}				
 
+		override public function listNotificationInterests():Array 
+		{			
+			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];
+		}
+		
+		override public function handleNotification( note:INotification ):void 
+		{
+			switch ( note.getName() ) 
+			{				
+				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
+				{
+					if (objectTypeVO == note.getBody() )
+						view.label= "Actions";
+					break;
+				}
+					
+				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
+				{
+					if( view.description) 
+						changeFildWithCurrentLanguage( );
+					break;
+				}
+			}
+		}
+		
 		protected function addStar():void
 		{
 			view.label= "Actions*";			

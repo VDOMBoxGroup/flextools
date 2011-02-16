@@ -50,6 +50,58 @@ package net.vdombox.object_editor.view.mediators
 			view.addEventListener( FlexEvent.ADD,		addDropDownRow );
 		}
 		
+		private function showAttributes(event: FlexEvent): void
+		{		
+			view.attributesList.addEventListener       ( Event.CHANGE, 		selectAtribute );
+			view.fname.addEventListener                ( Event.CHANGE, 		changeName );
+			view.addAttributeButton.addEventListener   ( MouseEvent.CLICK,	addAttribute );
+			view.deleteAttributeButton.addEventListener( MouseEvent.CLICK,	deleteAttribute );
+			view.colorgroup.addEventListener		   ( Event.CHANGE, 		apdateBackgroundColor );
+			compliteAtributes();
+			view.validateNow();
+		}
+		
+		protected function compliteAtributes( ):void
+		{	
+			view.attributesList.dataProvider = objectTypeVO.attributes;				
+			setCurrentAttribute();			
+		}	
+		
+		private function setCurrentAttribute(listIndex:int = 0):void
+		{
+			if (listIndex < 0)
+				listIndex = 0;
+			
+			if (objectTypeVO.attributes.length > 0)
+			{				
+				currentAttributeVO = objectTypeVO.attributes[listIndex].data;
+				view.attributesList.selectedIndex = listIndex;
+				view.currentAttribute = view.attributesList.dataProvider[listIndex];
+				fillAttributeFilds( currentAttributeVO );
+			}			
+			else
+			{
+				view.clearAttributeFields();
+				view.currentAttribute = null;
+				currentAttributeVO	  = null;
+			}
+		}
+		
+		private function fillAttributeFilds(attributeVO:AttributeVO):void
+		{
+			view.fname.text 					= attributeVO.name;	
+			view.defaultValue.text				= attributeVO.defaultValue;		
+			view.visibleAtr.selected			= attributeVO.visible;	
+			view.interfaceType.selectedIndex 	= attributeVO.interfaceType;
+			view.colorgroup.selectedIndex 		= attributeVO.colorgroup;
+			view.regExp.text					= attributeVO.regularExpressionValidation;
+			compliteCodeInterfaceField(attributeVO.codeInterface);
+			
+			view.displayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );
+			view.help.completeStructure       ( objectTypeVO.languages, attributeVO.help );
+			view.errMessage.completeStructure ( objectTypeVO.languages, attributeVO.errorValidationMessage );
+		}		
+		
 		private function selectCodeInterface( event:Event = null ):void
 		{ 			
 			addStar();
@@ -104,32 +156,6 @@ package net.vdombox.object_editor.view.mediators
 			fillAttributeFilds(currentAttributeVO);	
 		}
 
-		private function fillAttributeFilds(attributeVO:AttributeVO):void
-		{
-			view.fname.text 					= attributeVO.name;	
-			view.defaultValue.text				= attributeVO.defaultValue;		
-			view.visibleAtr.selected			= attributeVO.visible;	
-			view.interfaceType.selectedIndex 	= attributeVO.interfaceType;
-			view.colorgroup.selectedIndex 		= attributeVO.colorgroup;
-			view.regExp.text					= attributeVO.regularExpressionValidation;
-			compliteCodeInterfaceField(attributeVO.codeInterface);
-			
-			view.displayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );
-			view.help.completeStructure       ( objectTypeVO.languages, attributeVO.help );
-			view.errMessage.completeStructure ( objectTypeVO.languages, attributeVO.errorValidationMessage );
-		}
-		
-		private function showAttributes(event: FlexEvent): void
-		{		
-			view.attributesList.addEventListener       ( Event.CHANGE, 		selectAtribute );
-			view.fname.addEventListener                ( Event.CHANGE, 		changeName );
-			view.addAttributeButton.addEventListener   ( MouseEvent.CLICK,	addAttribute );
-			view.deleteAttributeButton.addEventListener( MouseEvent.CLICK,	deleteAttribute );
-			view.colorgroup.addEventListener		   ( Event.CHANGE, 		apdateBackgroundColor );
-			compliteAtributes();
-			view.validateNow();
-		}
-		
 		private function addAttribute(event:MouseEvent): void
 		{		
 			addStar();
@@ -144,6 +170,10 @@ package net.vdombox.object_editor.view.mediators
 			fillAttributeFilds(attribVO);			
 			view.currentAttribute 			= getCurrentAttribute(attribVO.name);
 			currentAttributeVO    			= view.currentAttribute.data;
+			
+			if (view.attributesList.dataProvider == null)
+				view.attributesList.dataProvider = objectTypeVO.attributes;
+			
 			view.attributesList.selectedItem= view.currentAttribute;
 			view.attributesList.validateNow();
 		}
@@ -172,26 +202,6 @@ package net.vdombox.object_editor.view.mediators
 			setCurrentAttribute(selectInd - 1);
 		}
 		
-		private function setCurrentAttribute(listIndex:int = 0):void
-		{
-			if (listIndex < 0)
-				listIndex = 0;
-			
-			if (objectTypeVO.attributes.length > 0)
-			{				
-				currentAttributeVO = objectTypeVO.attributes[listIndex].data;
-				view.attributesList.selectedIndex = listIndex;
-				view.currentAttribute = view.attributesList.dataProvider[listIndex];
-				fillAttributeFilds( currentAttributeVO );
-			}			
-			else
-			{
-				view.clearAttributeFields();
-				view.currentAttribute = null;
-				currentAttributeVO	  = null;
-			}
-		}
-
 		private  function hideAttributes(event: FlexEvent):void
 		{
 			view.attributesList.removeEventListener(Event.CHANGE, selectAtribute);
@@ -203,13 +213,7 @@ package net.vdombox.object_editor.view.mediators
 			objectTypeVO.attributes.sort.fields = [ new SortField( 'label' ) ];
 			objectTypeVO.attributes.refresh();
 		}
-		
-		protected function compliteAtributes( ):void
-		{	
-			view.attributesList.dataProvider = objectTypeVO.attributes;			
-			setCurrentAttribute();			
-		}	
-		
+				
 		override public function listNotificationInterests():Array 
 		{			
 			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];

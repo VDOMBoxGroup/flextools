@@ -5,6 +5,7 @@ package net.vdombox.object_editor.view.mediators
 	
 	import mx.collections.Sort;
 	import mx.collections.SortField;
+	import mx.controls.Alert;
 	import mx.controls.Label;
 	import mx.events.FlexEvent;
 	
@@ -49,17 +50,37 @@ package net.vdombox.object_editor.view.mediators
 			view.validateNow();
 		}
 		
-		private function selectEvent(event:Event):void
-		{ 
-			currentEventVO = view.eventsList.selectedItem.data as EventVO;
-			fillEventFilds(currentEventVO);	
-			setCurrentParameter();
-		}
-
-		private function selectParameter(event:Event):void
-		{ 
-			currentParameterVO = view.parametersList.selectedItem.data as EventParameterVO;
-			fillParameter(currentParameterVO);	
+		protected function compliteEvents( ):void
+		{	
+			sortEvents();
+			view.eventsList.dataProvider = objectTypeVO.events;
+			setCurrentEvent();
+		}	
+		
+		private function setCurrentEvent(listIndex:int = 0):void
+		{
+			if (listIndex < 0)
+			{
+				listIndex = 0;
+			}
+			if (objectTypeVO.events.length > 0)
+			{				
+				currentEventVO = objectTypeVO.events[listIndex].data;
+				setCurrentParameter();
+				fillEventFilds(currentEventVO);
+				view.currentEvent = {label:currentEventVO.name, data:currentEventVO};
+				view.eventsList.selectedIndex = listIndex;
+				view.eventsList.validateNow();
+				view.validateNow();
+			}
+			else
+			{
+				view.clearEventFields();
+				view.currentEvent		= null;
+				view.currentParameter	= null;
+				currentEventVO			= null;
+				currentParameterVO		= null;
+			}
 		}
 		
 		private function setCurrentParameter(listIndex:int = 0):void
@@ -85,6 +106,19 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}
 
+		private function selectEvent(event:Event):void
+		{ 
+			currentEventVO = view.eventsList.selectedItem.data as EventVO;
+			fillEventFilds(currentEventVO);	
+			setCurrentParameter();
+		}
+
+		private function selectParameter(event:Event):void
+		{ 
+			currentParameterVO = view.parametersList.selectedItem.data as EventParameterVO;
+			fillParameter(currentParameterVO);	
+		}
+		
 		public function validateObjectTypeVO(event:Event):void
 		{
 			addStar();
@@ -150,16 +184,17 @@ package net.vdombox.object_editor.view.mediators
 		}
 		
 		private function addParameter(event:MouseEvent): void
-		{	
+		{								
 			addStar();
 			var parameterVO:EventParameterVO = new EventParameterVO( "newParameter" + currentEventVO.parameters.length );
 			currentEventVO.parameters.addItem( {label:parameterVO.name, data:parameterVO} );
+			currentParameterVO = parameterVO;
 			parameterVO.help = languagesProxy.getNextId(objectTypeVO.languages, "3", "help for "+parameterVO.name);
 			fillParameter(parameterVO);
 			view.currentParameter = getCurrentParameter(parameterVO.name);
 			view.parametersList.selectedItem = view.currentParameter;
 			view.parametersList.validateNow();
-			//			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
+			//			view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);			
 		}
 		
 		private function deleteEvent(event:MouseEvent): void
@@ -188,32 +223,6 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}
 		
-		private function setCurrentEvent(listIndex:int = 0):void
-		{
-			if (listIndex < 0)
-			{
-				listIndex = 0;
-			}
-			if (objectTypeVO.events.length > 0)
-			{				
-				currentEventVO = objectTypeVO.events[listIndex].data;
-				setCurrentParameter();
-				fillEventFilds(currentEventVO);
-				view.currentEvent = {label:currentEventVO.name, data:currentEventVO};
-				view.eventsList.selectedIndex = listIndex;
-				view.eventsList.validateNow();
-				view.validateNow();
-			}
-			else
-			{
-				view.clearEventFields();
-				view.currentEvent		= null;
-				view.currentParameter	= null;
-				currentEventVO			= null;
-				currentParameterVO		= null;
-			}
-		}
-
 		private function getCurrentEvent(nameEvent:String):Object
 		{			
 			for each (var event:Object in objectTypeVO.events)
@@ -259,13 +268,6 @@ package net.vdombox.object_editor.view.mediators
 		   objectTypeVO.events.refresh();
 		 }*/
 
-		protected function compliteEvents( ):void
-		{	
-			sortEvents();
-			view.eventsList.dataProvider = objectTypeVO.events;
-			setCurrentEvent();
-		}	
-		
 		override public function listNotificationInterests():Array 
 		{			
 			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];

@@ -18,14 +18,14 @@
 	<id>ObjectEditor2</id>
 
 	<!-- Used as the filename for the application. Required. -->
-	<filename>ObjectEditor2.0.7.1</filename>
+	<filename>ObjectEditor2.0.7.2</filename>
 
 	<!-- The name that is displayed in the AIR application installer. 
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
 	<name>ObjectEditor2</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-	<version>2.0.7.1</version>
+	<version>2.0.7.2</version>
 
 	<!-- Description, displayed in the AIR application installer.
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
@@ -44,7 +44,7 @@
 		<content>[This value will be overwritten by Flash Builder in the output app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
-		<title>Object Editor 2.0.7.1</title>
+		<title>Object Editor 2.0.7.2</title>
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
 		<!-- <systemChrome>none</systemChrome-->

@@ -45,8 +45,11 @@ package net.vdombox.object_editor.view.mediators
 			{
 				var xmlFile:XML = new XML(fileData);
 				
-				//set name
+				//set Name
 				xmlFile.Information.Name			=  file.name.split(".")[0];
+				
+				//set  DisplayName
+				xmlFile.Languages.Language.Sentence[0]	=  file.name.split(".")[0];
 				
 				//set ID of Object
 				xmlFile.Information.ID 				= UIDUtil.createUID();

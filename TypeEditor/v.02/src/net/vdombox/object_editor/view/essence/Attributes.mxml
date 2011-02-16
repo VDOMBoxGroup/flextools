@@ -132,7 +132,7 @@
 				<s:Button id="deleteAttributeButton" label="Delete" enabled="{attributesList.selectedIndex != -1}"/>
 			</s:HGroup>
 		</s:VGroup>
-		<mx:Form width="100%" color="0x323232" paddingTop="0">
+		<mx:Form width="100%" color="0x323232" paddingTop="0" enabled="{currentAttribute}">
 			<mx:FormHeading fontSize="10"  label="Enter values into the form." paddingTop="0" />
 			
 			<mx:FormItem label="Name" toolTip="Имя объекта">

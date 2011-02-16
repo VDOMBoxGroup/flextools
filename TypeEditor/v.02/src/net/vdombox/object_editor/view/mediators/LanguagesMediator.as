@@ -120,6 +120,24 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}
 		
+		override public function listNotificationInterests():Array 
+		{			
+			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED ];
+		}
+		
+		override public function handleNotification( note:INotification ):void 
+		{
+			switch ( note.getName() ) 
+			{				
+				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
+				{
+					if (objectTypeVO == note.getBody() )
+						view.label= "Languages";
+					break;
+				}				
+			}
+		}
+		
 		protected function addStar():void
 		{
 			view.label= "Languages*";			
