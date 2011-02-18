@@ -6,7 +6,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import flash.filesystem.File;
 	import flash.filesystem.FileStream;
 	import flash.net.FileReference;
-	import flash.net.dns.AAAARecord;
 	import flash.utils.ByteArray;
 	
 	import mx.collections.ArrayCollection;

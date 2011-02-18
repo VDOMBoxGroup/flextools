@@ -1,5 +1,5 @@
 /*
-   Class SelectFormItemMediator wrapper from SelectFormItemMediator
+   Class SelectFormItemMediator wrapper from SelectFormItem.mxml
  */
 package net.vdombox.object_editor.view.mediators
 {	

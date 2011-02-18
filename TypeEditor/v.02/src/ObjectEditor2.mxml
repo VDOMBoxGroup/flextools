@@ -36,8 +36,8 @@
 		<containers:SuperTabNavigator id="tabNavigator" width="100%" height="100%"
 									  stopScrollingEvent ="{MouseEvent.MOUSE_OUT}"
 									  startScrollingEvent="{MouseEvent.MOUSE_OVER}">			
-		</containers:SuperTabNavigator>
-		
+		</containers:SuperTabNavigator>		
 		
 	</mx:HDividedBox> 
+	
 </s:WindowedApplication>

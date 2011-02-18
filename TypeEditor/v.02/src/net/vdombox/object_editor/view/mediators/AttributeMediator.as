@@ -4,24 +4,19 @@
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.display.DisplayObject;
-	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.ui.Mouse;
 	
 	import mx.collections.ArrayCollection;
-	import mx.collections.IList;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
 	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
 	import mx.messaging.management.Attribute;
-	import mx.messaging.messages.ErrorMessage;
 	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
-	import net.vdombox.object_editor.view.AttributesListRenderer;
 	import net.vdombox.object_editor.view.DropDownValue;
 	import net.vdombox.object_editor.view.LangTextInput;
 	import net.vdombox.object_editor.view.essence.Attributes;
@@ -51,12 +46,13 @@ package net.vdombox.object_editor.view.mediators
 		}
 		
 		private function showAttributes(event: FlexEvent): void
-		{		
-			view.attributesList.addEventListener       ( Event.CHANGE, 		selectAtribute );
-			view.fname.addEventListener                ( Event.CHANGE, 		changeName );
-			view.addAttributeButton.addEventListener   ( MouseEvent.CLICK,	addAttribute );
-			view.deleteAttributeButton.addEventListener( MouseEvent.CLICK,	deleteAttribute );
-			view.colorgroup.addEventListener		   ( Event.CHANGE, 		apdateBackgroundColor );
+		{	
+			view.removeEventListener					( FlexEvent.SHOW, 	showAttributes );	
+			view.attributesList.addEventListener      	( Event.CHANGE, 	selectAtribute );
+			view.fname.addEventListener                	( Event.CHANGE, 	changeName );
+			view.addAttributeButton.addEventListener   	( MouseEvent.CLICK,	addAttribute );
+			view.deleteAttributeButton.addEventListener	( MouseEvent.CLICK,	deleteAttribute );
+			view.colorgroup.addEventListener		   	( Event.CHANGE, 	apdateBackgroundColor );
 			compliteAtributes();
 			view.validateNow();
 		}
@@ -213,44 +209,22 @@ package net.vdombox.object_editor.view.mediators
 			objectTypeVO.attributes.sort.fields = [ new SortField( 'label' ) ];
 			objectTypeVO.attributes.refresh();
 		}
-				
-		override public function listNotificationInterests():Array 
-		{			
-			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];
-		}
-
-		override public function handleNotification( note:INotification ):void 
-		{
-			switch ( note.getName() ) 
-			{				
-				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
-				{
-					if (objectTypeVO == note.getBody())
-						view.label= "Attributes";
-					break;
-				}
-					
-				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
-				{
-					if (view.attributesList)
-						changeFildWithCurrentLanguage( );
-					break;
-				}
-			}
-		}
 		
 		private function changeFildWithCurrentLanguage( ):void
 		{
-			view.displayName.currentLanguage = objectTypeVO.languages.currentLocation;
-			view.displayName.apdateFild();
-			
-			view.errMessage.currentLanguage = objectTypeVO.languages.currentLocation;
-			view.errMessage.apdateFild();
-			
-			view.help.currentLanguage = objectTypeVO.languages.currentLocation;
-			view.help.apdateFild();			
-			
-			changeDropDownFildsWithCurrentLanguage() 
+			if (currentAttributeVO)
+			{
+				view.displayName.currentLanguage = objectTypeVO.languages.currentLocation;
+				view.displayName.apdateFild();
+				
+				view.errMessage.currentLanguage = objectTypeVO.languages.currentLocation;
+				view.errMessage.apdateFild();
+				
+				view.help.currentLanguage = objectTypeVO.languages.currentLocation;
+				view.help.apdateFild();			
+				
+				changeDropDownFildsWithCurrentLanguage() 
+			}
 		}
 		
 		public function changeDropDownFildsWithCurrentLanguage():void
@@ -552,6 +526,31 @@ package net.vdombox.object_editor.view.mediators
 				}
 			}
 		}		
+		
+		override public function listNotificationInterests():Array 
+		{			
+			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];
+		}
+		
+		override public function handleNotification( note:INotification ):void 
+		{
+			switch ( note.getName() ) 
+			{				
+				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
+				{
+					if (objectTypeVO == note.getBody())
+						view.label= "Attributes";
+					break;
+				}
+					
+				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
+				{
+					if (view.attributesList)
+						changeFildWithCurrentLanguage( );
+					break;
+				}
+			}
+		}
 		
 		protected function addStar():void
 		{

@@ -68,14 +68,12 @@
 			<mx:TextInput id="fXMLScriptName" width="250" change="{viewChanged()}"/>
 		</mx:FormItem>
 		
-		<s:HGroup>	
-			<mx:Label text="DisplayName"	width="105" />
-			<ns2:LangTextInput id="fDisplayName" width="250" toolTip="писание объекта и его использования" change="{viewChanged()}"/>
-		</s:HGroup>
-		<s:HGroup>
-			<mx:Label text="Description"	width="105"/>
-			<ns2:LangTextInput id="fDescription" width="250" toolTip="писание объекта и его использования" change="{viewChanged()}"/>
-		</s:HGroup>
+		<mx:FormItem label="DisplayName" toolTip="писание объекта и его использования">	
+			<ns2:LangTextInput id="fDisplayName" width="250" change="{viewChanged()}"/>
+		</mx:FormItem>
+		<mx:FormItem label="Description" toolTip="писание объекта и его использования">
+			<ns2:LangTextInput id="fDescription" width="250" change="{viewChanged()}" paddingRight="0"/>
+		</mx:FormItem>
 		
 		<mx:FormItem label="ClassName" toolTip="Имя класса">
 			<mx:TextInput id="fClassName" width="250" change="{viewChanged()}"/>
@@ -157,7 +155,7 @@
 							value="0" snapInterval="1" minimum="1" maximum="100"  change="{viewChanged()}"/>
 			</mx:FormItem>
 			
-			<mx:FormItem label="Dispalay language" toolTip="Доступные языки">
+			<mx:FormItem label="Display language" toolTip="Доступные языки">
 				<mx:ComboBox id="fcurrentLocation" width="150" color="0x000000" />
 			</mx:FormItem>
 			

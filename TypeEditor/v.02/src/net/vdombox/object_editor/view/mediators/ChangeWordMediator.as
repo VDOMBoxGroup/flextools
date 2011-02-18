@@ -1,5 +1,5 @@
 /*
-   Class ApplicationMediator register all Mediators
+   Class ChangeWordMediator is a wrapper over the ChangeWord.mxml.
  */
 package net.vdombox.object_editor.view.mediators
 {

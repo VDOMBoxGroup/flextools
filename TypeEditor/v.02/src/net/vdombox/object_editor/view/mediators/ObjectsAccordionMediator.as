@@ -1,11 +1,9 @@
+/*
+  Class ObjectsAccordionMediator displays the objects in the list. Wrapper over the ObjectsAccordion.mxml.
+*/
 package net.vdombox.object_editor.view.mediators
 {
-	import flash.events.Event;
 	import flash.events.MouseEvent;
-
-	import mx.core.ClassFactory;
-	import mx.states.AddChild;
-	import mx.utils.object_proxy;
 
 	import net.vdombox.object_editor.model.Item;
 	import net.vdombox.object_editor.view.AccordionNavigatorContent;
@@ -14,10 +12,6 @@ package net.vdombox.object_editor.view.mediators
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
-
-	import spark.components.List;
-	import spark.components.NavigatorContent;
-	import spark.components.supportClasses.ItemRenderer;
 
 	public class ObjectsAccordionMediator extends Mediator implements IMediator
 	{		

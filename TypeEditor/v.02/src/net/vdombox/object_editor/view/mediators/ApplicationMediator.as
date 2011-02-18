@@ -9,8 +9,10 @@ package net.vdombox.object_editor.view.mediators
 	import mx.events.ChildExistenceChangedEvent;
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
+	import net.vdombox.object_editor.view.essence.ErrorLog;
 	import net.vdombox.object_editor.view.mediators.ObjectsAccordionMediator;
 	import net.vdombox.object_editor.view.popups.ProgressPopUp;
 	
@@ -42,13 +44,20 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new CreateObjectMediator		( view.newObjectButton ) );
 			facade.registerMediator( new DeleteObjectMediatror		( view.delObjectButton ) );
 			facade.registerMediator( new ObjectsAccordionMediator	( view.objAccordion ) );
+			
+			var erLog:ErrorLog = new ErrorLog();
+			view.tabNavigator.addChild(erLog);
+//			var obj:= view.tabNavigator.getChildAt(0) as ErrorLogger;
+//			obj.buttonMode = false;
+			facade.registerMediator( new ErrorLogMediator( erLog ) );
+			
 			view.tabNavigator.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, objViewRemoved);
 		}
 
 		private function init():void
 		{
 			gotoLastPosition();
-			view.nativeWindow.addEventListener( Event.CLOSING, saveAppPosition );
+			view.nativeWindow.addEventListener( Event.CLOSING, saveAppPosition );			
 		}		
 		
 		private function saveAppPosition(e:Event = null):void
@@ -182,10 +191,11 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}
 		
-		private function  objViewRemoved( event: ChildExistenceChangedEvent ):void
-		{
+		private function objViewRemoved( event: ChildExistenceChangedEvent ):void
+		{				
 			var objView:ObjectView = event.relatedObject as ObjectView;
-			objView.dispatchEvent( new Event(ObjectViewMediator.OBJECT_TYPE_VIEW_REMOVED));
+			if (objView)
+				objView.dispatchEvent( new Event(ObjectViewMediator.OBJECT_TYPE_VIEW_REMOVED));
 		}
 
 		protected function get view():ObjectEditor2

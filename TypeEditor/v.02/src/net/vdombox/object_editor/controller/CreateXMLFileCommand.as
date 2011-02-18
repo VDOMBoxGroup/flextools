@@ -1,9 +1,10 @@
 package net.vdombox.object_editor.controller
 {
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.filesystem.File;
 	import flash.net.SharedObject;
 	
-	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.object_editor.view.mediators.CreateObjectMediator;
@@ -20,7 +21,7 @@ package net.vdombox.object_editor.controller
 			//open example file in applicationDirectory
 			var original:File = File.applicationDirectory;			
 			original = original.resolvePath("assets/newObject/newObject.xml");			
-			trace(original.exists);
+			trace("original.exists "+original.exists);
 			
 			//create new file for new Object
 			var newFile:File = File.documentsDirectory;
@@ -35,16 +36,16 @@ package net.vdombox.object_editor.controller
 			
 			var viewDispl:ObjectEditor2 = note.getBody() as ObjectEditor2;
 			var popup:NameObject = NameObject(PopUpManager.createPopUp(viewDispl, NameObject, true));
-			popup.addEventListener(CloseEvent.CLOSE, closeHandler);
+			popup.addEventListener(Event.ADDED_TO_STAGE, closeHandler);
 			
-			function closeHandler(event:CloseEvent):void
+			function closeHandler(event:Event):void
 			{	
 				if (event.currentTarget.objName.text)
 				{
-					//todo проверить на существование
+//todo проверить на существование
 					newFilePath += "\\"+event.currentTarget.objName.text +".xml";
 					newFile = newFile.resolvePath(newFilePath);
-					trace(newFile.exists);
+					trace("newFile.exists "+newFile.exists);
 					original.copyTo(newFile, true);	
 					facade.sendNotification( CreateObjectMediator.CREATE_GUIDS, newFile );						
 				}

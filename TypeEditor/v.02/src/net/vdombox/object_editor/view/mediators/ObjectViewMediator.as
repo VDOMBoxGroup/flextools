@@ -1,15 +1,16 @@
+/*
+	Class ObjectViewMediator add tabs: Informarion, Events, etc; 
+							 add mediators for tabs. 
+	Wrapper over the ObjectView.mxml.
+*/
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.filesystem.File;
 	
-	import flexlib.controls.tabBarClasses.SuperTab;
-	
-	import mx.controls.Alert;
 	import mx.utils.ObjectProxy;
 	
-	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.Item;
 	import net.vdombox.object_editor.model.proxy.ObjectsProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
@@ -18,7 +19,6 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.view.ObjectsAccordion;
 	import net.vdombox.object_editor.view.essence.Actions;
 	import net.vdombox.object_editor.view.essence.Attributes;
-	import net.vdombox.object_editor.view.essence.ErrorLog;
 	import net.vdombox.object_editor.view.essence.Events;
 	import net.vdombox.object_editor.view.essence.Information;
 	import net.vdombox.object_editor.view.essence.Languages;
@@ -53,7 +53,6 @@ package net.vdombox.object_editor.view.mediators
 			var actions:Actions  		= new Actions();
 			var atributes:Attributes  	= new Attributes();
 			var event:Events  			= new Events;
-//			var errorLog:ErrorLog		= new ErrorLog();
 			var information:Information = new Information();
 			var languages:Languages  	= new Languages();
 			var libraries:Libraries  	= new Libraries();
@@ -69,15 +68,12 @@ package net.vdombox.object_editor.view.mediators
 			view.tabNavigator.addChild(actions);
 			view.tabNavigator.addChild(event);
 			view.tabNavigator.addChild(libraries);
-//			view.tabNavigator.addChild(errorLog);
 
 
 			facade.registerMediator( new InformationMediator( information, objTypeVO ) );
 			facade.registerMediator( new ActionMediator  	( actions,	   objTypeVO ) );
 			facade.registerMediator( new AttributeMediator  ( atributes,   objTypeVO ) );
 			facade.registerMediator( new EventMediator   	( event,	   objTypeVO ) );
-			//у нас ведь логи и для всей работы IDE !!!!!!!!!!!!!!
-//			facade.registerMediator( new ErrorLogMediator  	( errorLog,	   ErrorLogger.errorArray ) );
 			facade.registerMediator( new LanguagesMediator 	( languages,   objTypeVO ) );
 			facade.registerMediator( new LibrariesMediator 	( libraries,   objTypeVO ) );
 			facade.registerMediator( new SourceCodeMediatior( sourceCode,  objTypeVO ) );
@@ -119,8 +115,8 @@ package net.vdombox.object_editor.view.mediators
 																						"ViewInd"		:viewInd, 
 																						"SelectTab"		:selectTab} );
 		}
-		
-		private function objectTypeViewRemoved( event  : Event = null):void
+
+		private function objectTypeViewRemoved(event:Event=null):void
 		{
 			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
 			objTypeProxy.removeVO(objectTypeVO);

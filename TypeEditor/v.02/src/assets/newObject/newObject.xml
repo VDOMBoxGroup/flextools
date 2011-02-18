@@ -3,7 +3,7 @@
 	<Information>
 		<Category>Standard</Category>
 		<ClassName/>
-		<Container>0</Container>
+		<Container>1</Container>
 		<Containers/>
 		<Description>#Lang(002)</Description>
 		<DisplayName>#Lang(001)</DisplayName>
@@ -18,7 +18,7 @@
 		<OptimizationPriority>1</OptimizationPriority>
 		<RemoteMethods/>
 		<RenderType/>
-		<Resizable>0</Resizable>
+		<Resizable>3</Resizable>
 		<StructureIcon>#Res(ca55bd46-de38-4f77-be6c-e5340ce1e7e2)</StructureIcon>
 		<WCAG/>
 		<XMLScriptName/>

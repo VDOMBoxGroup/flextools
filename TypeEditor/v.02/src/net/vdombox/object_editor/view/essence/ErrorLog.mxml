@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					xmlns:s="library://ns.adobe.com/flex/spark" 
-					xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"					
-					label="ErrorLog">
-	<s:layout>
-		<s:BasicLayout/>
-	</s:layout>
+<mx:VBox 	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			xmlns:s="library://ns.adobe.com/flex/spark" 
+			xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" 
+			xmlns:ns="net.vdombox.object_editor.view.essence.*" 
+			label="ErrorLog" toolTip="If you close it will not open it again.">
+	
 	<fx:Declarations>
 		<!-- Разместить невизуальные элементы (например, службы или объекты значений) -->
 	</fx:Declarations>
@@ -16,6 +15,34 @@
 			
 			[Bindable]
 			public var arErrors:ArrayCollection = new ArrayCollection();
+			
+			import mx.containers.TabNavigator;
+			
+			private var _tabNavigator:TabNavigator;
+			
+			public function get tabNavigator():TabNavigator
+			{
+				if (!_tabNavigator)
+					creatTabNavegator();					
+				
+				return _tabNavigator;
+			}
+			
+			public function set tabNavigator(obj:TabNavigator):void
+			{
+				if (!_tabNavigator)
+					creatTabNavegator();
+				
+				_tabNavigator = obj;
+			}
+			
+			private function creatTabNavegator():void
+			{
+				_tabNavigator = new TabNavigator();
+				_tabNavigator.percentHeight = 100;
+				_tabNavigator.percentWidth = 100;
+				addElementAt(_tabNavigator, 0)
+			}
 		]]>
 	</fx:Script>
 	
@@ -25,4 +52,4 @@
 					 editable="true" dataProvider="{arErrors}"/>
 		
 	</s:VGroup>
-</s:NavigatorContent>
+</mx:VBox>

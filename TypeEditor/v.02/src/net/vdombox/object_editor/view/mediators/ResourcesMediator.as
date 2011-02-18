@@ -1,3 +1,6 @@
+/*
+	Class ResourcesMediator is a wrapper over the Resourses.mxml.
+*/
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
@@ -64,7 +67,7 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
-			view.addEventListener( FlexEvent.SHOW, show );
+			view.addEventListener( FlexEvent.SHOW, show );			
 
 			facade.registerCommand(ADD_RESOURCE, 	AddResourceCommand);
 			facade.registerCommand(UPDATE_RESOURCE, UpdateResourceCommand);
@@ -74,10 +77,11 @@ package net.vdombox.object_editor.view.mediators
 		{	
 			view.removeEventListener( FlexEvent.SHOW, show );
 
-			view.addResourceButt.addEventListener(MouseEvent.CLICK, addResource);
-			view.deleteButton.addEventListener(MouseEvent.CLICK, deleteResource);
-			view.changeContentButt.addEventListener(MouseEvent.CLICK, changeContent);
-			view.exportContentButt.addEventListener(MouseEvent.CLICK, exportContent);
+			view.addResourceButt.addEventListener	( MouseEvent.CLICK, addResource );
+			view.deleteButton.addEventListener		( MouseEvent.CLICK, deleteResource );
+			view.changeContentButt.addEventListener	( MouseEvent.CLICK, changeContent );
+			view.exportContentButt.addEventListener	( MouseEvent.CLICK, exportContent );
+			view.resourcesDataGrid.addEventListener	( Event.CHANGE, addStar );
 
 			view.resourcesDataGrid.dataProvider = objectTypeVO.resources;
 			view.validateNow();
@@ -168,7 +172,7 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}
 
-		protected function addStar():void
+		protected function addStar(event:Event=null):void
 		{
 			view.label= "Resourses*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);

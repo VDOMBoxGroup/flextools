@@ -41,7 +41,7 @@
 				<s:Button id="deleteLibraryButton" label="Delete" enabled="{librariesList.selectedIndex != -1}"/>
 			</s:HGroup>
 		</s:VGroup>
-		<s:VGroup width="100%" height="100%">	
+		<s:VGroup width="100%" height="100%" enabled="{currentLibrary}">	
 			<s:HGroup  right="0">
 				<s:Label text="Target:" paddingTop="5"/>
 				<s:TextInput id="target" change="changeField()" />

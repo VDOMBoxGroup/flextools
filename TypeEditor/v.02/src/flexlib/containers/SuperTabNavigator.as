@@ -27,14 +27,14 @@ package flexlib.containers
   import flash.display.DisplayObject;
   import flash.events.Event;
   import flash.events.MouseEvent;
-
+  
   import flexlib.controls.ScrollableArrowMenu;
   import flexlib.controls.SuperTabBar;
   import flexlib.controls.tabBarClasses.SuperTab;
   import flexlib.events.SuperTabEvent;
   import flexlib.events.TabReorderEvent;
   import flexlib.skins.TabPopUpButtonSkin;
-
+  
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
   import mx.containers.Box;
@@ -42,6 +42,7 @@ package flexlib.containers
   import mx.containers.Canvas;
   import mx.containers.TabNavigator;
   import mx.containers.ViewStack;
+  import mx.controls.Alert;
   import mx.controls.Menu;
   import mx.controls.PopUpButton;
   import mx.core.Container;
@@ -49,6 +50,7 @@ package flexlib.containers
   import mx.core.ScrollPolicy;
   import mx.effects.Tween;
   import mx.events.ChildExistenceChangedEvent;
+  import mx.events.CloseEvent;
   import mx.events.IndexChangedEvent;
   import mx.events.MenuEvent;
   import mx.styles.CSSStyleDeclaration;
@@ -777,13 +779,21 @@ package flexlib.containers
 
     private function handleTabClose(event:SuperTabEvent):void
     {
-      var clone:SuperTabEvent = event.clone() as SuperTabEvent;
-      dispatchEvent(clone);
-
-      if (clone.isDefaultPrevented())
-      {
-        event.preventDefault();
-      }
+		/*Alert.show("Do You want to close ?","Close",3, null, deleteResourceOk);
+		
+		function deleteResourceOk(ev:CloseEvent):void
+		{
+			if (ev.detail == Alert.YES)
+			{*/
+				var clone:SuperTabEvent = event.clone() as SuperTabEvent;
+				dispatchEvent(clone);
+				
+				if (clone.isDefaultPrevented())
+				{
+					event.preventDefault();
+				}
+			/*}				
+		}	*/	
     }
 
     private var _closePolicy:String = SuperTab.CLOSE_ROLLOVER;

@@ -23,6 +23,7 @@ package net.vdombox.object_editor.view.mediators
 		public static const NAME:String 		= "LanguagesMediator";
 		public static const ADD_LANGUAGE:String = "addLaguage";
 		private var objectTypeVO:ObjectTypeVO;
+		private var firstID:Boolean = false;
 		
 		public function LanguagesMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{			
@@ -32,9 +33,10 @@ package net.vdombox.object_editor.view.mediators
 		}
 		
 		private function showLanguages(event: FlexEvent): void
-		{			
+		{		
 			view.languagesDataGrid.dataProvider = objectTypeVO.languages.words;
-			addWordsToDataGrid();
+			if (!firstID)
+				addWordsToDataGrid();
 			view.addLaguage.addEventListener( MouseEvent.CLICK,   addLaguage );
 			view.addWord.addEventListener	( MouseEvent.CLICK,   addWord );
 			view.deleteWord.addEventListener( MouseEvent.CLICK,   deleteWord );
@@ -71,6 +73,7 @@ package net.vdombox.object_editor.view.mediators
 			
 			cols[0].width = 50;
 			view.languagesDataGrid.columns = cols;
+			firstID = true;
 		}
 		
 		//not used

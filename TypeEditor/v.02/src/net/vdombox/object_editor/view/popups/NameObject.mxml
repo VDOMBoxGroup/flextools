@@ -2,7 +2,9 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="300" height="100"
-		 preinitialize="creationComplete()" title="Enter name of Object">
+		 preinitialize="creationComplete()"	
+		 initialize="init()"
+		 title="Enter name of Object">
 	<s:layout>
 		<s:BasicLayout/>
 	</s:layout>
@@ -11,10 +13,30 @@
 		<![CDATA[
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
+			import mx.managers.FocusManager;
 			import mx.managers.PopUpManager;
-			
+
 			[Bindable]
 			public  var nameObject:String;
+				
+			private function init():void
+			{
+				objName.setFocus();
+				this.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
+			}
+			
+			private function keyDown(event:KeyboardEvent):void
+			{
+				if (event.keyCode == 13)
+				{
+					dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+					dispatchEvent( new Event( Event.ADDED_TO_STAGE ) );
+				}
+				else if (event.keyCode == 27)
+				{
+					dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+				}
+			}
 			
 			private function creationComplete():void 
 			{				
@@ -38,8 +60,9 @@
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
 				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+				dispatchEvent( new Event( Event.ADDED_TO_STAGE ) );
 			}
-
+			
 			protected function button2_clickHandler(event:MouseEvent):void
 			{
 				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
@@ -52,15 +75,17 @@
 		<!-- Разместить невизуальные элементы (например, службы или объекты значений) -->
 	</fx:Declarations>
 	
-	<s:VGroup  width="100%" height="100%">
-		<s:HGroup paddingTop="10" paddingLeft="5">
-			<s:Label text="enter name of Object: " paddingTop="5"/>
-			<s:TextInput id="objName" text="{nameObject}" />
-		</s:HGroup>		
-		
-		<s:HGroup paddingLeft="5" >
-			<s:Button label="Ok" click="button1_clickHandler(event)"/>
-			<s:Button label="Cancel"  click="button2_clickHandler(event)" visible="false"/>
-		</s:HGroup>		
-	</s:VGroup>	
+	
+		<s:VGroup  width="100%" height="100%">
+			<s:HGroup paddingTop="10" paddingLeft="5">
+				<s:Label text="enter name of Object: " paddingTop="5"/>
+				<s:TextInput id="objName" text="{nameObject}"/>
+			</s:HGroup>		
+			
+			<s:HGroup paddingLeft="5" >
+				<s:Button id="okButton" label="Ok" click="button1_clickHandler(event)" />
+				<s:Button label="Cancel"  click="button2_clickHandler(event)" />
+			</s:HGroup>		
+		</s:VGroup>	
+	
 </s:TitleWindow>

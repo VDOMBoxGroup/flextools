@@ -1,8 +1,7 @@
-/**
- *  create by 2010 Kotlova Elena
- *  Class ApplicationFacade need for register main command and
- *  to listen Notification of users forms
- */
+/*
+   Class ApplicationFacade need for register main command and
+   to listen Notification of users forms
+*/
 package 
 {		
 	import net.vdombox.object_editor.controller.CreateXMLFileCommand;

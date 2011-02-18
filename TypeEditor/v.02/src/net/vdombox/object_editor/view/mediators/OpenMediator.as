@@ -1,3 +1,6 @@
+/*
+	Class OpenMediator is a wrapper over the openButton in ObjectEditor2.mxml.
+*/
 package net.vdombox.object_editor.view.mediators
 {	
 	import flash.events.Event;

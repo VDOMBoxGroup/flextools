@@ -41,7 +41,7 @@ package net.vdombox.object_editor.model.proxy
 			catch (error:Error)
 			{
 				Alert.show("Failed: was changed path. Open the directory again");
-				ErrorLogger.instance.logError("Failed: The path can be changed.", "FileProxy.readFile("+path+")");
+				ErrorLogger.instance.logError("Failed: The path can be changed. "+error.message, "FileProxy.readFile("+path+")");
 				trace("Failed: was changed path.", error.message);				
 			}
 			return data;
@@ -63,7 +63,7 @@ package net.vdombox.object_editor.model.proxy
 			{
 				//какая здесь ошибка?
 				Alert.show("Failed: was changed path. Please restart the application");
-				ErrorLogger.instance.logError("Failed: the path can be changed.", "FileProxy.saveFile("+file.nativePath+")");
+				ErrorLogger.instance.logError("Failed: the path can be changed. "+error.message, "FileProxy.saveFile("+file.nativePath+")");
 				trace("Failed: was changed path. Please restart the application", error.message);
 			}			
 		}
@@ -80,7 +80,7 @@ package net.vdombox.object_editor.model.proxy
 			catch (error:Error)
 			{
 				Alert.show("Failed: file was not deleted.");
-				ErrorLogger.instance.logError("Failed: file was not deleted.", "FileProxy.deleteFile("+file.nativePath+")");
+				ErrorLogger.instance.logError("Failed: file was not deleted. "+error.message, "FileProxy.deleteFile("+file.nativePath+")");
 				trace("Failed: file was not deleted.", error.message);
 			}			
 		}

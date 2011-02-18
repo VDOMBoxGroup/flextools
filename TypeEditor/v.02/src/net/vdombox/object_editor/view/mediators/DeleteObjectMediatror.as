@@ -1,3 +1,8 @@
+/**
+ *  create by 2010 Kotlova Elena
+ *  Class DeleteObjectMediatror delete Object from AccordionList and delete from directory
+ */
+
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
@@ -37,18 +42,18 @@ package net.vdombox.object_editor.view.mediators
 			var selIndex:int = accNav.list.selectedIndex as int;
 			
 			if (selIndex >= 0)
-			{		
+			{	
+				var fileProxy:FileProxy = facade.retrieveProxy(FileProxy.NAME) as FileProxy;
 				var file:File = new File();
 				file.nativePath = item.path;
-				//tab close
 				
+				//tab close				
 				var tabNav:SuperTabNavigator = view.parentApplication.tabNavigator as SuperTabNavigator;
 				var obj:ObjectView = tabNav.selectedChild as ObjectView;
 				if (obj)
 				{
 					obj.dispatchEvent( new Event(ObjectViewMediator.OBJECT_TYPE_VIEW_REMOVED));
-					
-					var fileProxy:FileProxy = facade.retrieveProxy(FileProxy.NAME) as FileProxy;
+										
 					var fileData: String	= fileProxy.readFile(file.nativePath);
 					var xmlFile:XML = new XML(fileData);
 					var id:String = xmlFile.Information.ID;
@@ -57,10 +62,6 @@ package net.vdombox.object_editor.view.mediators
 				}
 				
 				//delete obj from directory
-//				var file:File = new File();
-//				file.nativePath = item.path;
-				
-				var fileProxy:FileProxy = facade.retrieveProxy(FileProxy.NAME) as FileProxy;
 				fileProxy.deleteFile(file.nativePath);
 				
 				//delete from accordion				

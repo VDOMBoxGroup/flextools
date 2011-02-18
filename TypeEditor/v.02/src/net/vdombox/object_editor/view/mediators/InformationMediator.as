@@ -5,8 +5,6 @@ package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.ui.Mouse;
-	import flash.utils.ByteArray;
 
 	import mx.collections.ArrayCollection;
 	import mx.controls.Image;
@@ -42,6 +40,55 @@ package net.vdombox.object_editor.view.mediators
 			view.addEventListener( Event.CHANGE,   validateObjectTypeVO );
 			view.addEventListener( FlexEvent.SHOW, validateInformation );
 		}
+		
+		private function showInformation( event:FlexEvent ): void
+		{			
+			compliteInformation();
+		}
+		
+		protected function compliteInformation():void
+		{			
+			view.label= "Information";
+			
+			view.fname.text 			= objectTypeVO.name;
+			view.fClassName.text		= objectTypeVO.className;
+			view.fID.text 				= objectTypeVO.id;
+			view.fDynamic.selected		= objectTypeVO.dynamic;			
+			view.fMoveable.selected		= objectTypeVO.moveable;
+			view.fVersion.text 			= objectTypeVO.version;
+			view.fWCAG.text				= objectTypeVO.wcag;
+			
+			view.fCategory.setData(objectsProxy.categorys, objectTypeVO.category, objectTypeVO.languages);
+			view.fDisplayName.completeStructure( objectTypeVO.languages, objectTypeVO.displayName );
+			view.fDescription.completeStructure( objectTypeVO.languages, objectTypeVO.description );
+			
+			view.fResizable.selectedIndex		= objectTypeVO.resizable;
+			view.fContainerI.selectedIndex      = objectTypeVO.container;	
+			view.fContainers.text 				= objectTypeVO.containers
+			view.fInterfaceType.selectedIndex 	= objectTypeVO.interfaceType;
+			view.fOptimizationPriority.value  	= objectTypeVO.optimizationPriority;
+			view.fcurrentLocation.dataProvider	= objectTypeVO.languages.locales;
+			
+			view.ficon1.source  = resourcesProxy.getByteArray(objectTypeVO.icon);
+			view.ficon1.toolTip = getToolTipe(objectTypeVO.icon);
+			
+			view.ficon2.source	= resourcesProxy.getByteArray(objectTypeVO.structureIcon);
+			view.ficon3.source 	= resourcesProxy.getByteArray(objectTypeVO.editorIcon);
+			
+			view.ficon1.name    = resourcesProxy.geResourseID(objectTypeVO.icon);
+			view.ficon2.name   	= resourcesProxy.geResourseID(objectTypeVO.structureIcon);
+			view.ficon3.name   	= resourcesProxy.geResourseID(objectTypeVO.editorIcon);
+			
+			view.ficon1.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
+			view.ficon2.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
+			view.ficon3.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
+			
+			
+			view.fCategory.addEventListener( Event.CHANGE,validateObjectTypeVO )
+			view.fcurrentLocation.addEventListener(Event.CHANGE, changeCurrentLocation);
+			view.editContainersBt.addEventListener(MouseEvent.CLICK, editContainersBtClick); 
+			view.validateNow();
+		}
 
 		public function validateObjectTypeVO(event:Event):void
 		{
@@ -67,11 +114,6 @@ package net.vdombox.object_editor.view.mediators
 			objectTypeVO.optimizationPriority  =  view.fOptimizationPriority.value;			
 		}
 
-		private function showInformation( event:FlexEvent ): void
-		{			
-			compliteInformation();
-		}
-
 		private function validateInformation(event:FlexEvent):void
 		{
 			view.fDisplayName.apdateFild();	
@@ -90,50 +132,6 @@ package net.vdombox.object_editor.view.mediators
 			view.fCategory.currentLanguage = objectTypeVO.languages.currentLocation;
 			view.fCategory.apdateFild();
 			sendNotification( ApplicationFacade.CHANGE_CURRENT_LANGUAGE );
-		}
-
-		protected function compliteInformation():void
-		{			
-			view.label= "Information";
-
-			view.fname.text 			= objectTypeVO.name;
-			view.fClassName.text		= objectTypeVO.className;
-			view.fID.text 				= objectTypeVO.id;
-			view.fDynamic.selected		= objectTypeVO.dynamic;			
-			view.fMoveable.selected		= objectTypeVO.moveable;
-			view.fVersion.text 			= objectTypeVO.version;
-			view.fWCAG.text				= objectTypeVO.wcag;
-
-			view.fCategory.setData(objectsProxy.categorys, objectTypeVO.category, objectTypeVO.languages);
-			view.fDisplayName.completeStructure( objectTypeVO.languages, objectTypeVO.displayName );
-			view.fDescription.completeStructure( objectTypeVO.languages, objectTypeVO.description );
-
-			view.fResizable.selectedIndex		= objectTypeVO.resizable;
-			view.fContainerI.selectedIndex      = objectTypeVO.container;	
-			view.fContainers.text 				= objectTypeVO.containers
-			view.fInterfaceType.selectedIndex 	= objectTypeVO.interfaceType;
-			view.fOptimizationPriority.value  	= objectTypeVO.optimizationPriority;
-			view.fcurrentLocation.dataProvider	= objectTypeVO.languages.locales;
-
-			view.ficon1.source  = resourcesProxy.getByteArray(objectTypeVO.icon);
-			view.ficon1.toolTip = getToolTipe(objectTypeVO.icon);
-
-			view.ficon2.source	= resourcesProxy.getByteArray(objectTypeVO.structureIcon);
-			view.ficon3.source 	= resourcesProxy.getByteArray(objectTypeVO.editorIcon);
-
-			view.ficon1.name    = resourcesProxy.geResourseID(objectTypeVO.icon);
-			view.ficon2.name   	= resourcesProxy.geResourseID(objectTypeVO.structureIcon);
-			view.ficon3.name   	= resourcesProxy.geResourseID(objectTypeVO.editorIcon);
-
-			view.ficon1.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
-			view.ficon2.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
-			view.ficon3.addEventListener(MouseEvent.DOUBLE_CLICK, changeResourse);
-
-			
-			view.fCategory.addEventListener( Event.CHANGE,validateObjectTypeVO )
-			view.fcurrentLocation.addEventListener(Event.CHANGE, changeCurrentLocation);
-			view.editContainersBt.addEventListener(MouseEvent.CLICK, editContainersBtClick); 
-			view.validateNow();
 		}
 
 		private function getToolTipe(idRes:String):String

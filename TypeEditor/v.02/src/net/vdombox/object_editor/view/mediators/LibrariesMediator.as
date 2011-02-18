@@ -6,8 +6,6 @@ package net.vdombox.object_editor.view.mediators
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import mx.collections.Sort;
-	import mx.collections.SortField;
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
@@ -30,6 +28,46 @@ package net.vdombox.object_editor.view.mediators
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
 			view.addEventListener( FlexEvent.SHOW, showLibraries );
+		}
+		
+		private function showLibraries(event: FlexEvent): void
+		{		
+			view.removeEventListener				 ( FlexEvent.SHOW, 	showLibraries );
+			view.librariesList.addEventListener		 ( Event.CHANGE, 	selectLibrary );
+			view.code.addEventListener  			 ( Event.CHANGE, 	changeCode );
+			view.target.addEventListener			 ( Event.CHANGE, 	changeTarget );
+			view.addLibraryButton.addEventListener   ( MouseEvent.CLICK, addLibrary );
+			view.deleteLibraryButton.addEventListener( MouseEvent.CLICK, deleteLibrary );
+			compliteLibraries();
+			setCurrentLibrarie();
+		}
+		
+		protected function compliteLibraries( ):void
+		{	
+			view.librariesList.dataProvider = objectTypeVO.libraries;
+		}
+		
+		private function setCurrentLibrarie(listIndex:int = 0):void
+		{
+			if (listIndex < 0)
+				listIndex = 0;
+			
+			if (objectTypeVO.libraries.length > 0)
+			{				
+				currentLibraryVO = objectTypeVO.libraries[listIndex].data;
+				fillArea(currentLibraryVO);
+				view.currentLibrary = {label:"Library", data:currentLibraryVO};
+				view.librariesList.selectedIndex = listIndex;
+				view.validateNow();
+			}
+			else
+			{
+				view.clearLibraryFields();
+				view.currentLibrary	= null;
+				view.target.text	= "";
+				view.code.text		= null;
+				currentLibraryVO	= null;
+			}
 		}
 		
 		private function changeCode( event:Event ):void
@@ -72,41 +110,6 @@ package net.vdombox.object_editor.view.mediators
 			view.target.text  = libVO.target;
 		}
 		
-		private function showLibraries(event: FlexEvent): void
-		{		
-			view.removeEventListener	( FlexEvent.SHOW, showLibraries );
-			view.librariesList.addEventListener(Event.CHANGE, selectLibrary);
-			view.code.addEventListener  ( Event.CHANGE, changeCode );
-			view.target.addEventListener( Event.CHANGE, changeTarget );
-			view.addLibraryButton.addEventListener   ( MouseEvent.CLICK, addLibrary );
-			view.deleteLibraryButton.addEventListener( MouseEvent.CLICK, deleteLibrary );
-			compliteLibraries();
-			setCurrentLibrarie();
-		}
-		
-		private function setCurrentLibrarie(listIndex:int = 0):void
-		{
-			if (listIndex < 0)
-				listIndex = 0;
-			
-			if (objectTypeVO.libraries.length > 0)
-			{				
-				currentLibraryVO = objectTypeVO.libraries[listIndex].data;
-				fillArea(currentLibraryVO);
-				view.currentLibrary = {label:"Library", data:currentLibraryVO};
-				view.librariesList.selectedIndex = listIndex;
-				view.validateNow();
-			}
-			else
-			{
-				view.clearLibraryFields();
-				view.currentLibrary	= null;
-				view.target.text	= "";
-				view.code.text		= null;
-				currentLibraryVO	= null;
-			}
-		}
-		
 		private function addLibrary(event:MouseEvent): void
 		{	
 			addStar();
@@ -139,11 +142,6 @@ package net.vdombox.object_editor.view.mediators
 				}
 			}
 			return new Object();
-		}
-						
-		protected function compliteLibraries( ):void
-		{	
-			view.librariesList.dataProvider = objectTypeVO.libraries;
 		}
 		
 		override public function listNotificationInterests():Array 

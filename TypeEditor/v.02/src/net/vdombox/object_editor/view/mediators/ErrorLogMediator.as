@@ -1,7 +1,11 @@
+/*
+	Class ErrorLogMediator is a wrapper over the ErrorLog.mxml.
+*/
 package net.vdombox.object_editor.view.mediators
 {
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.ErrorLog;
 	
@@ -12,19 +16,16 @@ package net.vdombox.object_editor.view.mediators
 	{
 		public static const NAME:String = "ErrorLogMediator";
 		
-		private var objectTypeVO:ObjectTypeVO;
 		
-		
-		public function ErrorLogMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
+		public function ErrorLogMediator( viewComponent:Object ) 
 		{			
-			super( NAME+objTypeVO.id, viewComponent );
-			this.objectTypeVO = objTypeVO;	
+			super( NAME, viewComponent );			
 			view.addEventListener( FlexEvent.SHOW, showErrorLog );			
 		}
 		
 		private function showErrorLog(event: FlexEvent): void
 		{			
-			view.errorLogDataGrid.dataProvider = objectTypeVO.languages.words;
+			view.errorLogDataGrid.dataProvider = ErrorLogger.errorArray;
 			view.validateNow();
 		}
 		

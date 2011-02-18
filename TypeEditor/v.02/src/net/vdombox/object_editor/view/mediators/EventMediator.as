@@ -1,3 +1,6 @@
+/*
+	Class EventMediator is a wrapper over the Events.mxml.
+*/
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
@@ -5,8 +8,6 @@ package net.vdombox.object_editor.view.mediators
 	
 	import mx.collections.Sort;
 	import mx.collections.SortField;
-	import mx.controls.Alert;
-	import mx.controls.Label;
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
@@ -46,7 +47,7 @@ package net.vdombox.object_editor.view.mediators
 			view.eventName.addEventListener  	 		( Event.CHANGE, 	changeEventName );
 			view.parName.addEventListener 	 	 		( Event.CHANGE, 	changeParameterName );
 			
-			compliteEvents();
+			compliteEvents(); // complete
 			view.validateNow();
 		}
 		
@@ -228,10 +229,7 @@ package net.vdombox.object_editor.view.mediators
 			for each (var event:Object in objectTypeVO.events)
 			{
 				if (event["label"] == nameEvent)
-				{
 					return event;
-					break;
-				}
 			}
 			return {};
 		}
@@ -241,10 +239,7 @@ package net.vdombox.object_editor.view.mediators
 			for each (var param:Object in currentEventVO.parameters)
 			{
 				if (param["label"] == nameParam)
-				{
 					return param;
-					break;
-				}
 			}
 			return {};
 		}
@@ -273,21 +268,21 @@ package net.vdombox.object_editor.view.mediators
 			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];
 		}
 
-		override public function handleNotification( note:INotification ):void 
+		override public function handleNotification(note:INotification):void
 		{
-			switch ( note.getName() ) 
-			{				
+			switch (note.getName())
+			{
 				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
 				{
-					if (objectTypeVO == note.getBody() )
-						view.label= "Events";
+					if (objectTypeVO == note.getBody())
+						view.label = "Events";
 					break;
 				}
-					
+
 				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
 				{
-					if( view.eventsList ) 
-						changeFildWithCurrentLanguage( );
+					if (view.eventsList)
+						changeFildWithCurrentLanguage();
 					break;
 				}
 			}
@@ -295,11 +290,14 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function changeFildWithCurrentLanguage( ):void
 		{
-			view.parHelp.currentLanguage = objectTypeVO.languages.currentLocation;
-			view.parHelp.apdateFild();
+			if (view.parHelp.words)
+			{
+				view.parHelp.currentLanguage = objectTypeVO.languages.currentLocation;
+				view.parHelp.apdateFild();
+			}
 		}
 		
-		protected function addStar():void
+		protected function addStar():void // mark changed
 		{
 			view.label= "Events*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);

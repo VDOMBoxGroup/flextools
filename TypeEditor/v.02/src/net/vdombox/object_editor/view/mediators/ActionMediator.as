@@ -358,17 +358,22 @@ package net.vdombox.object_editor.view.mediators
 
 		private function changeFildWithCurrentLanguage( ):void
 		{
-			view.description.currentLanguage = objectTypeVO.languages.currentLocation;
-			view.description.apdateFild();
+			if (currentActionVO)
+			{
+				view.description.currentLanguage = objectTypeVO.languages.currentLocation;
+				view.description.apdateFild();
 
-			view.interfaceName.currentLanguage = objectTypeVO.languages.currentLocation;
-			view.interfaceName.apdateFild();
-
-			view.parHelp.currentLanguage = objectTypeVO.languages.currentLocation;
-			view.parHelp.apdateFild();
-
-			view.parInterfaceName.currentLanguage = objectTypeVO.languages.currentLocation;
-			view.parInterfaceName.apdateFild();
+				view.interfaceName.currentLanguage = objectTypeVO.languages.currentLocation;
+				view.interfaceName.apdateFild();
+			}
+			if (currentParameterVO)
+			{
+				view.parHelp.currentLanguage = objectTypeVO.languages.currentLocation;
+				view.parHelp.apdateFild();
+	
+				view.parInterfaceName.currentLanguage = objectTypeVO.languages.currentLocation;
+				view.parInterfaceName.apdateFild();
+			}
 		}		
 
 		private function setLabel(actionContainers:ArrayCollection):void
