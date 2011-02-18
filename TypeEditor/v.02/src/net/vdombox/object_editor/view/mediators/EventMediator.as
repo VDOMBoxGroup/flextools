@@ -6,6 +6,7 @@ package net.vdombox.object_editor.view.mediators
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
 	import mx.events.FlexEvent;
@@ -132,7 +133,7 @@ package net.vdombox.object_editor.view.mediators
 		}
 
 		private function changeEventName( event:Event ):void
-		{ 
+		{ 		
 			view.currentEvent.label = event.target.text;
 			currentEventVO.name = view.eventName.text;
 			view.eventsList.dataProvider.itemUpdated(view.currentEvent);
@@ -143,14 +144,28 @@ package net.vdombox.object_editor.view.mediators
 
 		private function changeParameterName( event:Event ):void
 		{ 
+			languagesProxy.changeWordsOwner(objectTypeVO, [currentParameterVO.help], "Events.Parameter."+event.target.text);
+			
 			view.currentParameter.label = event.target.text;			
 			currentParameterVO.name = view.parName.text;
-			view.validateNow();
+			//view.parametersList.dataProvidervalidateNow();
 			view.parametersList.dataProvider.itemUpdated(view.currentParameter.label);
-			view.validateNow();
+			view.parametersList.validateNow();
+			
+			view.parametersList.validateNow();
+			/*
+			var ar:* = view.parametersList.dataProvider;
+			view.parametersList.dataProvider = null;
+			view.parametersList.dataProvider = ar;*/
+			
+			
 			
 			view.parametersList.selectedItem = view.currentParameter;
 			view.parametersList.ensureIndexIsVisible(view.parametersList.selectedIndex);
+			
+			
+			
+			view.parametersList.validateNow();
 		}	
 		
 		private function fillEventFilds(eventVO:EventVO):void
@@ -190,7 +205,8 @@ package net.vdombox.object_editor.view.mediators
 			var parameterVO:EventParameterVO = new EventParameterVO( "newParameter" + currentEventVO.parameters.length );
 			currentEventVO.parameters.addItem( {label:parameterVO.name, data:parameterVO} );
 			currentParameterVO = parameterVO;
-			parameterVO.help = languagesProxy.getNextId(objectTypeVO.languages, "3", "help for "+parameterVO.name);
+//			parameterVO.help = languagesProxy.getNextId(objectTypeVO.languages, "3", "help for "+parameterVO.name);
+			parameterVO.help = languagesProxy.newWords(objectTypeVO.languages, "3", "Events."+parameterVO.name+"Parameter",parameterVO.name);
 			fillParameter(parameterVO);
 			view.currentParameter = getCurrentParameter(parameterVO.name);
 			view.parametersList.selectedItem = view.currentParameter;

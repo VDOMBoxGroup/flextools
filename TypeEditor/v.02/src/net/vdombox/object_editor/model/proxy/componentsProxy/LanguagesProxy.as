@@ -176,6 +176,33 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return langsXML;
 		}	
 		
+		public function newWords(langsVO: LanguagesVO, startId: String, owner: String, newValue: String = ""):String
+		{
+			//wordID have format: "#Lang(ID)"
+			var wordID:String = langsVO.getNextId( startId, newValue ).toString();  
+			
+			var str:String = getRegExpID( langsVO,wordID );
+			langsVO.isUsedWords[str]	= true;
+			langsVO.isWordsOwner[str]	= owner;
+			return wordID;
+		}
+		
+		/**
+		 * format of id: "#Lang(ID)"
+		 * 
+		**/
+		public function changeWordsOwner(objVO: ObjectTypeVO, IDs:Object, newValue: String):void
+		{
+			for each (var id:String in IDs)
+			{
+				var s:String = getRegExpID(objVO.languages, id);
+				var st:String = objVO.languages.isWordsOwner[s] as String;
+				var ar:Array = st.split(".");
+				objVO.languages.isWordsOwner[s] = newValue + "."+ ar[ar.length-1];
+			}
+		}		
+					
+		
 		/** returne new word with new id, id - first not used 
 		 *  copy oldWord to newWord
 		 *  startId - first number of id 
@@ -185,7 +212,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return langsVO.getNextId( startId, "", oldWord ).toString();
 		}
 		
-		public function used(langsVO: LanguagesVO, idString:String):String
+		public function used(langsVO: LanguagesVO, idString:String, owner:String):String
 		{
 			var id:String = getRegExpID(langsVO, idString);
 			var newID:String = "";
@@ -194,7 +221,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			{
 				var idPart:String = id.toString().slice(0,1);
 				newID = this.getNextId( langsVO, idPart, "", getWords(langsVO, id) );
-				idString = newID;
+				langsVO.isUsedWords[newID] = true;
+				langsVO.isWordsOwner[newID]= owner;
 				return newID; 				
 			}
 			else
@@ -203,6 +231,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				if (langsVO.isUsedWords[id] == false)
 				{
 					langsVO.isUsedWords[id] = true;
+					langsVO.isWordsOwner[id]= owner;
 					return idString;
 				}
 				//if langID not exist
@@ -211,6 +240,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					newID = getNextId(langsVO, id.toString().slice(0,1));
 					var idNumber:String = newID.toString().slice(6,newID.length-1);
 					langsVO.isUsedWords[idNumber] = true;
+					langsVO.isWordsOwner[idNumber]= owner;
 					return newID;
 				}				
 			}

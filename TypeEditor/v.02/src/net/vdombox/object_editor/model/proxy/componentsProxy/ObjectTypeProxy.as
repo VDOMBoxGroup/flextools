@@ -76,9 +76,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 
 		private function reuseInformationID( objTypeVO: ObjectTypeVO):void
 		{
-			objTypeVO.description = languagesProxy.used(objTypeVO.languages, objTypeVO.description);
-			objTypeVO.displayName = languagesProxy.used(objTypeVO.languages, objTypeVO.displayName);			
-			languagesProxy.used(objTypeVO.languages, "#Lang(003)");
+			objTypeVO.description = languagesProxy.used(objTypeVO.languages, objTypeVO.description, "Information.Dscription");
+			objTypeVO.displayName = languagesProxy.used(objTypeVO.languages, objTypeVO.displayName, "Information.DisplayName");			
+			languagesProxy.used(objTypeVO.languages, "#Lang(003)", "Information.Container");
 		}
 
 		private function reuseEventsID( objTypeVO: ObjectTypeVO):void
@@ -91,7 +91,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					var eventPar:EventParameterVO = parObj.data;
 					if (eventPar.help == "") 
 						eventPar.help = "#Lang(105)";
-					eventPar.help = languagesProxy.used(objTypeVO.languages, eventPar.help);
+					eventPar.help = languagesProxy.used(objTypeVO.languages, eventPar.help, "Events.Help");
 				}
 			}
 		}
@@ -108,9 +108,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				if (attr.errorValidationMessage == "") 
 					attr.errorValidationMessage = "#Lang(201)";
 
-				attr.displayName = languagesProxy.used(objTypeVO.languages, attr.displayName);
-				attr.help		 = languagesProxy.used(objTypeVO.languages, attr.help);
-				attr.errorValidationMessage = languagesProxy.used(objTypeVO.languages, attr.errorValidationMessage);
+				attr.displayName = languagesProxy.used(objTypeVO.languages, attr.displayName, "Attributes.DisplayName");
+				attr.help		 = languagesProxy.used(objTypeVO.languages, attr.help, "Attributes.Help");
+				attr.errorValidationMessage = languagesProxy.used(objTypeVO.languages, attr.errorValidationMessage, "Attributes.ErrValMessage");
 			}
 		}
 
@@ -124,15 +124,15 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					var act:ActionVO = actObj.data;
 					if (act.description == "")   act.description   = "#Lang(600)";
 					if (act.interfaceName == "") act.interfaceName = "#Lang(700)";					
-					act.description   = languagesProxy.used(objTypeVO.languages, act.description);
-					act.interfaceName = languagesProxy.used(objTypeVO.languages, act.interfaceName);
+					act.description   = languagesProxy.used(objTypeVO.languages, act.description,   "Actions.Description");
+					act.interfaceName = languagesProxy.used(objTypeVO.languages, act.interfaceName, "Actions.InterfaceName");
 					for each (var parObj:Object in act.parameters)
 					{
 						var actPar:ActionParameterVO = parObj.data;
 						if (actPar.interfaceName == "") actPar.interfaceName = "#Lang(900)";
 						if (actPar.help          == "") actPar.help          = "#Lang(800)";
-						actPar.interfaceName = languagesProxy.used(objTypeVO.languages, actPar.interfaceName);
-						actPar.help			 = languagesProxy.used(objTypeVO.languages, actPar.help);
+						actPar.interfaceName = languagesProxy.used(objTypeVO.languages, actPar.interfaceName, "Actions.Parameter.InterfaceName");
+						actPar.help			 = languagesProxy.used(objTypeVO.languages, actPar.help, "Actions.Parameter.Help");
 					}
 				}
 			}			

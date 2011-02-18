@@ -5,11 +5,13 @@ package net.vdombox.object_editor.view.mediators
 {	
 	import flash.events.MouseEvent;
 	
+	import mx.collections.ArrayCollection;
 	import mx.controls.dataGridClasses.DataGridColumn;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.object_editor.model.vo.LanguagesVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Languages;
 	import net.vdombox.object_editor.view.popups.NewLanguage;
@@ -33,14 +35,33 @@ package net.vdombox.object_editor.view.mediators
 		}
 		
 		private function showLanguages(event: FlexEvent): void
-		{		
+		{	
+			addOwners();
 			view.languagesDataGrid.dataProvider = objectTypeVO.languages.words;
+			
 			if (!firstID)
 				addWordsToDataGrid();
 			view.addLaguage.addEventListener( MouseEvent.CLICK,   addLaguage );
 			view.addWord.addEventListener	( MouseEvent.CLICK,   addWord );
 			view.deleteWord.addEventListener( MouseEvent.CLICK,   deleteWord );
 			view.validateNow();
+		}
+		
+		private function addOwners(): void
+		{
+			var arr:ArrayCollection = objectTypeVO.languages.words;
+					
+			var owner:Object = objectTypeVO.languages.isWordsOwner;
+				
+			var str:String;
+			for each (var obj:Object in arr)
+			{
+				str = obj["ID"];
+				if (owner[str])
+				{
+					obj["Owner"] = owner[str];
+				}
+			}			
 		}
 		
 		private function addWordsToDataGrid(): void
@@ -57,8 +78,8 @@ package net.vdombox.object_editor.view.mediators
 					cols[0] = dc;
 					break;
 				}
-			}
-					
+			}			
+				
 			//put the remaining elements 
 			cols[1] = col0;
 			var k:int = 2;

@@ -10,7 +10,9 @@ package net.vdombox.object_editor.model.vo
 		public var locales:			ArrayCollection = new ArrayCollection();
 
 		//required to verify the uniqueness of the words ID
-		public var isUsedWords:		Object			= {};
+		public var isUsedWords:		Object			= {};  /* isUsedWords[ID:String] = used:Boolean */
+		
+		public var isWordsOwner:	Object			= {};  /* isWordsOwner[ID:String]= owner:String*/
 
 		public function LanguagesVO()
 		{			

@@ -107,6 +107,8 @@ package net.vdombox.object_editor.view.mediators
 
 		private function changeName( event:Event ):void
 		{ 
+			languagesProxy.changeWordsOwner(objectTypeVO, [currentAttributeVO.displayName, currentAttributeVO.help, currentAttributeVO.errorValidationMessage], "Attributes."+event.target.text);
+			
 			view.currentAttribute.label = event.target.text;
 			
 			currentAttributeVO.name = view.fname.text;
@@ -115,7 +117,19 @@ package net.vdombox.object_editor.view.mediators
 			view.attributesList.selectedItem = view.currentAttribute;
 			view.attributesList.ensureIndexIsVisible(view.attributesList.selectedIndex);
 			view.attributesList.validateNow();
+			
 		}
+		
+		/*private function qq( str:String ):void
+		{
+			var s:String = getID(currentAttributeVO.displayName);
+			objectTypeVO.languages.isWordsOwner[s] = "Attribute.name: "+str+".displayName";
+		}
+		
+		private function getID( str:String ):String
+		{
+			return languagesProxy.getRegExpID(objectTypeVO.languages, str);
+		}*/
 		
 		public function apdateBackgroundColor(event: Event=null):void
 		{	
@@ -158,9 +172,13 @@ package net.vdombox.object_editor.view.mediators
 			var attribVO:AttributeVO = new AttributeVO( "newAttribute"+ objectTypeVO.attributes.length );
 			objectTypeVO.attributes.addItem( {label:attribVO.name, data:attribVO, color:1} );
 			var langsProxy:LanguagesProxy 	= facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
-			attribVO.displayName            = langsProxy.getNextId(objectTypeVO.languages, "1", attribVO.name+" displayName");
-			attribVO.errorValidationMessage = langsProxy.getNextId(objectTypeVO.languages, "2", attribVO.name+" errValMess");
-			attribVO.help                   = langsProxy.getNextId(objectTypeVO.languages, "3", attribVO.name+" help");
+			//attribVO.displayName            = langsProxy.getNextId(objectTypeVO.languages, "1", attribVO.name+" displayName");
+			//langsProxy.used(objectTypeVO.languages, attribVO.displayName, "Attribute.DisplayName");
+			attribVO.displayName            = langsProxy.newWords(objectTypeVO.languages, "1", "Attribute."+attribVO.name+".DisplayName",attribVO.name);
+//			attribVO.errorValidationMessage = langsProxy.getNextId(objectTypeVO.languages, "2", attribVO.name+" errValMess");
+			attribVO.errorValidationMessage = langsProxy.newWords(objectTypeVO.languages, "2", "Attribute."+attribVO.name+".ErrValMess",attribVO.name);
+//			attribVO.help                   = langsProxy.getNextId(objectTypeVO.languages, "3", attribVO.name+" help");
+			attribVO.help                   = langsProxy.newWords(objectTypeVO.languages, "3", "Attribute."+attribVO.name+".Help",attribVO.name);
 			attribVO.codeInterface			= "TextField()";
 			attribVO.colorgroup				= 1;			
 			fillAttributeFilds(attribVO);			
