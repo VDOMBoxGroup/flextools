@@ -146,7 +146,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function closeAllEditors() : void
 		{
 //			затычка нада разобраться в чем дело
-			if (tabBar.dataProvider = null )
+			if (tabBar.dataProvider == null )
 				return 
 				
 			var tab : Tab;
