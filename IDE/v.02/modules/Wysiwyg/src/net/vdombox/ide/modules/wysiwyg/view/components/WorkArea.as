@@ -73,7 +73,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return null;
 
 			for ( editor in _editors )
-			{
+			{ 
 				if ( editor.vdomObjectVO && editor.vdomObjectVO.id == vdomObjectVO.id )
 				{
 					result = editor;
@@ -145,8 +145,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		public function closeAllEditors() : void
 		{
+//			затычка нада разобраться в чем дело
+			if (tabBar.dataProvider = null )
+				return 
+				
 			var tab : Tab;
-			
 			while ( tabBar.dataProvider.length  > 0 ) 
 			{
 				tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;
