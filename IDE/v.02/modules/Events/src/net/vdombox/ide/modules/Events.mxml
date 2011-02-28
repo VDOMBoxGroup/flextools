@@ -6,7 +6,8 @@
 	xmlns:common="net.vdombox.ide.common.*">
 	
 	<fx:Script>
-		<![CDATA[
+		<![CDATA[ 
+			
 			import net.vdombox.ide.modules.events.ApplicationFacade;
 
 			public static const MODULE_ID : String = "net.vdombox.ide.modules.Events";
