@@ -1,6 +1,8 @@
 package net.vdombox.ide.core.view
 {
+	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.net.SharedObject;
 	
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
@@ -33,8 +35,40 @@ package net.vdombox.ide.core.view
 
 		public function MainWindowMediator( viewComponent : Object = null )
 		{
-			super( NAME, viewComponent );
+			super( NAME, viewComponent );			
 		}
+		
+		private function init():void
+		{
+			gotoLastPosition();
+			mainWindow.nativeWindow.addEventListener( Event.CLOSING, saveAppPosition );			
+		}
+		
+		private function saveAppPosition(e:Event = null):void
+		{
+			var so:SharedObject = SharedObject.getLocal("directoryPath");
+			
+			so.data.windowPosition_x	= mainWindow.nativeWindow.x;
+			so.data.windowPosition_y 	= mainWindow.nativeWindow.y;
+			so.data.windowWidth			= mainWindow.width;
+			so.data.windowHeight		= mainWindow.height;					
+		}
+		
+		private function gotoLastPosition():void
+		{
+			var so:SharedObject = SharedObject.getLocal("directoryPath");
+			
+			if (so.data.windowPosition_x && 
+				so.data.windowPosition_y &&
+				so.data.windowWidth 	 &&
+				so.data.windowHeight)
+			{				
+				mainWindow.nativeWindow.x	= so.data.windowPosition_x;
+				mainWindow.nativeWindow.y 	= so.data.windowPosition_y;
+				mainWindow.width 			= so.data.windowWidth;
+				mainWindow.height			= so.data.windowHeight;
+			}
+		}	
 
 		private var currentModuleCategory : ModulesCategoryVO;
 
@@ -130,6 +164,7 @@ package net.vdombox.ide.core.view
 
 			mainWindow.title = "VDOM IDE (v.2b) - User: " + serverProxy.authInfo.username;
 			mainWindow.username = serverProxy.authInfo.username;
+			init();
 		}
 
 		public function closeWindow() : void

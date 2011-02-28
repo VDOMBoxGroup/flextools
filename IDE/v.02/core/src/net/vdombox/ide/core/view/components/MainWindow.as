@@ -21,12 +21,12 @@ package net.vdombox.ide.core.view.components
 		public function MainWindow()
 		{
 			setStyle( "skinClass", MainWindowSkin );
-			systemChrome = NativeWindowSystemChrome.NONE;
-			transparent = true;
-			width = 1200;
-			height = 1024;
+			systemChrome	= NativeWindowSystemChrome.NONE;
+			transparent 	= true;
+			width 			= 1000;
+			height 			= 800;			
 		}
-
+		
 		[Bindable]
 		public var username : String;
 

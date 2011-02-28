@@ -198,6 +198,7 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
+		//click save button
 		public function setEvents( applicationEventsVO : ApplicationEventsVO ) : AsyncToken
 		{
 			var token : AsyncToken;
