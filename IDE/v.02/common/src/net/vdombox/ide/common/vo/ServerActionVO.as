@@ -124,7 +124,7 @@ package net.vdombox.ide.common.vo
 			if ( testValue !== null )
 				_containerID = testValue;
 
-			testValue = propertiesXML.@ObjSrcID[ 0 ];
+			testValue = propertiesXML.@ObjectID[ 0 ];
 
 			if ( testValue !== null )
 				_objectID = testValue;
@@ -161,7 +161,7 @@ package net.vdombox.ide.common.vo
 			}
 			else
 			{
-				result = <Action Name={ _name } Language={ language } Top={top} Left={left} State={state}>{script}</Action>;
+				result = <Action Name={ _name } ObjectID={_objectID} Language={ language } Top={top} Left={left} State={state}>{script}</Action>;
 			}
 
 			if( _id && _id != "" )
