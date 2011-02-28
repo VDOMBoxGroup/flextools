@@ -37,9 +37,16 @@ package net.vdombox.ide.core
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
+	
+	
+	
+	
+	
+	
 
-	public class ApplicationFacade extends Facade implements IFacade
+	public class ApplicationFacade extends Facade  implements IFacade  
 	{
+		
 		public static const DELIMITER : String = "/";
 		
 		public static const PREINITALIZE : String = "preinitalize";

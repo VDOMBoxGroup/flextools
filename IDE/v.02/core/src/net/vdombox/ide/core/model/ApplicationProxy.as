@@ -220,7 +220,7 @@ package net.vdombox.ide.core.model
 			
 			e2vdom.appendChild( eventsXML );
 			e2vdom.appendChild( clientActionsXML );
-//			e2vdom.appendChild( serverActionsXML );
+			e2vdom.appendChild( serverActionsXML );
 			
 			token = soap.set_events_structure( applicationVO.id, applicationEventsVO.pageVO.id, e2vdom );
 //			token = soap.set_application_events( applicationVO.id, applicationEventsVO.pageVO.id, e2vdom );
