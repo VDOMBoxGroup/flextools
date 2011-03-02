@@ -10,7 +10,7 @@ package net.vdombox.ide.common.components
 		{
 			super();
 			
-			setStyle( "skinClass", WorkAreaButtonSkin );
+			setStyle( "skinClass", net.vdombox.ide.common.skins.WorkAreaButtonSkin );
 		}
 		
 		[Bindable]

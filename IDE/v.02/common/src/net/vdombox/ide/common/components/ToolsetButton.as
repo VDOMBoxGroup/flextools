@@ -10,7 +10,7 @@ package net.vdombox.ide.common.components
 		{
 			super();
 			
-			setStyle( "skinClass", ToolsetButtonSkin );
+			setStyle( "skinClass", net.vdombox.ide.common.skins.ToolsetButtonSkin );
 		}
 		
 		[Bindable]

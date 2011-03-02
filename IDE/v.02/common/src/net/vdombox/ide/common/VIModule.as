@@ -88,6 +88,7 @@ package net.vdombox.ide.common
 		 * Accept an input pipe.
 		 * <P>
 		 * Registers an input pipe with this module's Junction.
+		 * </P>
 		 */
 		public function acceptInputPipe( name : String, pipe : IPipeFitting ) : void
 		{
@@ -98,6 +99,7 @@ package net.vdombox.ide.common
 		 * Accept an output pipe.
 		 * <P>
 		 * Registers an input pipe with this module's Junction.
+		 * </P>
 		 */
 		public function acceptOutputPipe( name : String, pipe : IPipeFitting ) : void
 		{

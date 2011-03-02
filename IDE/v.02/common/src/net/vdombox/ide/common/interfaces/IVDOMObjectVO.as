@@ -1,7 +1,7 @@
 package net.vdombox.ide.common.interfaces
 {
-	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.TypeVO;
+	
 
 	public interface IVDOMObjectVO
 	{

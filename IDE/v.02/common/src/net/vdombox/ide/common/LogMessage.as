@@ -1,6 +1,7 @@
 package net.vdombox.ide.common
 {
 	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
+	
 
 	public class LogMessage extends Message
 	{

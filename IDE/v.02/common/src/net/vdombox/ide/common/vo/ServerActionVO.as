@@ -1,9 +1,8 @@
 package net.vdombox.ide.common.vo
 {
 	import mx.utils.StringUtil;
-
-	import net.vdombox.utils.StringUtils;
-
+	
+	
 	public class ServerActionVO
 	{
 		private const TO_XML_TMPL : String =
