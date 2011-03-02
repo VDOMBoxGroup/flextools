@@ -1,7 +1,10 @@
 package net.vdombox.ide.common.vo
 {
-	
-
+	/**
+	 * 
+	 * @author Administrator
+	 * 
+	 */		
 	public class EventVO
 	{
 		[Bindable]

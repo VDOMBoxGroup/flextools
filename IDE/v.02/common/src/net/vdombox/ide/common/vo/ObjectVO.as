@@ -1,7 +1,10 @@
 package net.vdombox.ide.common.vo
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-
+	/**
+	 * The ObjectVO is Visual Object of VDOM Object and instance of Type (TypeVO).
+	 * A Top Lavel Contaioner and an Object may contain many Objects.
+	 */
 	[Bindable]
 	public class ObjectVO implements IVDOMObjectVO
 	{
@@ -10,7 +13,7 @@ package net.vdombox.ide.common.vo
 			_pageVO = pageVO;
 			_typeVO = typeVO;
 		}
-
+				
 		public var parentID : String;
 		
 		private var _id : String;

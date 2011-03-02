@@ -4,7 +4,9 @@ package net.vdombox.ide.common.vo
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceBundle;
 	import mx.resources.ResourceManager;
-
+	/**
+	 *	The TypeVO is version of the Object`s description. 
+	 */
 	public class TypeVO
 	{
 		private const STANDART_CATEGORIES : Array = [ "usual", "standard", "form", "table", "database", "debug" ];

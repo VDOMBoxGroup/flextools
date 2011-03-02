@@ -1,5 +1,9 @@
 package net.vdombox.ide.common.vo
 {
+	/**
+	 * The LibraryVO is Visual Object of VDOM Library.
+	 * Library used by the Application. 
+	 */	
 	public class LibraryVO
 	{
 		public function LibraryVO( name : String, applicationVO : ApplicationVO )

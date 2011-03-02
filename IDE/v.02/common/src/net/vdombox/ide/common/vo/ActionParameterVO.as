@@ -2,7 +2,9 @@ package net.vdombox.ide.common.vo
 {
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	/**
+	 * 22222222
+	 */
 	public class ActionParameterVO
 	{
 		private const LANG_RE : RegExp = /#Lang\((\w+)\)/g;

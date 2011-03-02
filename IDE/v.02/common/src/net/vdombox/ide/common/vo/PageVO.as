@@ -11,10 +11,10 @@ package net.vdombox.ide.common.vo
 			_typeVO = typeVO;
 		}
 		
-		private var _id : String;
-		private var _applicationVO : ApplicationVO;
-		private var _typeVO : TypeVO;
-		private var _name : String;
+		private var _id 			: String;
+		private var _applicationVO	: ApplicationVO;
+		private var _typeVO 		: TypeVO;
+		private var _name 			: String;
 		
 		public function get id() : String
 		{
