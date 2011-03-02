@@ -2,17 +2,17 @@ package net.vdombox.ide.common.vo
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	/**
-	 * The VdomObjectAttributesVO is Visual Object of VDOM Library.
-	 * Library used by the Application. 
-	 */	
+	 * The VdomObjectAttributesVO is Visual Object of Object Attributes.
+	 * VdomObjectAttributesVO is contained in VDOM Object. 
+	 */		
 	public class VdomObjectAttributesVO
 	{
 		public function VdomObjectAttributesVO( vdomObjectVO : IVDOMObjectVO )
 		{
 			_objectVO = vdomObjectVO;
 			
-			_attributes = [];
-			_pageLinks = [];
+			_attributes	 = [];
+			_pageLinks	 = [];
 			_objectsList = [];
 		}
 		

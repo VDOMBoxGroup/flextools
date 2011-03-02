@@ -3,8 +3,9 @@ package net.vdombox.ide.common.vo
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	/**
-	 * 22222222
-	 */
+	 * The ActionParameterVO is Visual Object of VDOM Object.
+	 * ActionParameterVO is contained in the Object`s Action. 
+	 */		
 	public class ActionParameterVO
 	{
 		private const LANG_RE : RegExp = /#Lang\((\w+)\)/g;

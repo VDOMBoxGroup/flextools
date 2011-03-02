@@ -1,6 +1,10 @@
 package net.vdombox.ide.common.vo
 {
-
+	/**
+	 * The StructureObjectVO is Visual Object of VDOM Structure. 
+	 * For the user it is a Tree of Objects.
+	 * StructureObjectVO is contained in VDOM Application. 
+	 */
 	public class StructureObjectVO
 	{
 		public function StructureObjectVO( id : String )

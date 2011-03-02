@@ -1,5 +1,9 @@
 package net.vdombox.ide.common.vo
 {
+	/**
+	* The ApplicationEventsVO is Visual Object of VDOM Application.
+	* ApplicationEventsVO is contained in VDOM Application. 
+	*/		
 	public class ApplicationEventsVO
 	{
 		public function ApplicationEventsVO( pageVO : PageVO )

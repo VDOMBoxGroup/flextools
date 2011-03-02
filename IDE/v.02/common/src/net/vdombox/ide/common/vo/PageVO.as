@@ -1,7 +1,10 @@
 package net.vdombox.ide.common.vo
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-
+	/**
+	 * The PageVO is Visual Object of Page.
+	 * Page is contained in VDOM Application. 
+	 */	
 	[Bindable]
 	public class PageVO implements IVDOMObjectVO
 	{

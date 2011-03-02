@@ -1,5 +1,9 @@
 package net.vdombox.ide.common.vo
 {
+	/**
+	* The LevelObjectVO is Visual Object of VDOM Level.
+	* LevelObjectVO is contained in VDOM Structure (StructureObjectVO). 
+	*/
 	public class LevelObjectVO
 	{
 		public function LevelObjectVO( id : String )

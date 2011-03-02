@@ -3,7 +3,10 @@ package net.vdombox.ide.common.vo
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.ByteArray;
-
+	/**
+	 * The ResourceVO is Visual Object of VDOM Resource.
+	 * ResourceVO is contained in VDOM Application. 
+	 */	
 	[Bindable]
 	public class ResourceVO
 	{

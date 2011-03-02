@@ -1,5 +1,9 @@
 package net.vdombox.ide.common.vo
 {
+	/**
+	 * The ApplicationInformationVO is Visual Object of VDOM Application.
+	 * ApplicationInformation is contained in VDOM Application. 
+	 */	
 	public class ApplicationInformationVO
 	{
 		public var name : String

@@ -2,7 +2,7 @@ package net.vdombox.ide.common.vo
 {
 	/**
 	 * The LibraryVO is Visual Object of VDOM Library.
-	 * Library used by the Application. 
+	 * LibraryVO is contained in VDOM Application. 
 	 */	
 	public class LibraryVO
 	{

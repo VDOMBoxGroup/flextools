@@ -2,7 +2,10 @@ package net.vdombox.ide.common.vo
 {
 	import mx.utils.StringUtil;
 	
-	
+	/**
+	 * The ServerActionVO is Visual Object of VDOM Server Action.
+	 * ServerActionVO is contained in VDOM Application. 
+	 */
 	public class ServerActionVO
 	{
 		private const TO_XML_TMPL : String =

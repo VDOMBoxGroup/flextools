@@ -2,7 +2,10 @@ package net.vdombox.ide.common.vo
 {
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	/**
+	 * The TypeInformationVO is Visual Object of Information. 
+	 * TypeInformationVO is contained in VDOM Type. 
+	 */
 	public class TypeInformationVO
 	{
 		public function TypeInformationVO( typeName : String, typeInformation : XML )

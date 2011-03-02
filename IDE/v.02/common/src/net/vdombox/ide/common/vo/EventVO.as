@@ -1,9 +1,8 @@
 package net.vdombox.ide.common.vo
 {
 	/**
-	 * 
-	 * @author Administrator
-	 * 
+	 * The EventVO is Visual Object of VDOM Event.
+	 * EventVO is contained in VDOM Application. 
 	 */		
 	public class EventVO
 	{

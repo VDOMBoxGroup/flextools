@@ -1,7 +1,7 @@
 package net.vdombox.ide.common.vo
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-
+	
 	public class VdomObjectXMLPresentationVO
 	{
 		public function VdomObjectXMLPresentationVO( vdomObjectVO : IVDOMObjectVO )

@@ -1,7 +1,10 @@
 package net.vdombox.ide.common.vo
 {
 	import mx.utils.UIDUtil;
-
+	/**
+	 * The ClientActionVO is Visual Object of VDOM Client Action.
+	 * ClientAction is contained in VDOM Type (TypeVO). 
+	 */	
 	public class ClientActionVO
 	{
 		[Bindable]

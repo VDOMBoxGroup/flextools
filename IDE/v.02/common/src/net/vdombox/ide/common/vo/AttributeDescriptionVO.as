@@ -2,7 +2,10 @@ package net.vdombox.ide.common.vo
 {
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	/**
+	 * The AttributeDescriptionVO is Visual Object of VDOM Application.
+	 * AttributeDescription is contained in VDOM Application. 
+	 */
 	public class AttributeDescriptionVO
 	{
 		public function AttributeDescriptionVO( typeID : String, attributeDescriptions : XML )
