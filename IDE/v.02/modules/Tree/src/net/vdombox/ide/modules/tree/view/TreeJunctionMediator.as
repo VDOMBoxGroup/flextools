@@ -30,7 +30,14 @@ package net.vdombox.ide.modules.tree.view
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.PipeListener;
-
+	/*
+	@startuml img/sequence_img002b.png
+	Alice -> "Bob()" : Helloa slsd 
+	"Bob()" -> Alex : check
+	Alex --> "Bob()" : Back
+	"Bob()" --> Aliceasd
+	@enduml
+	*/
 	public class TreeJunctionMediator extends LoggingJunctionMediator
 	{
 		public static const NAME : String = "TreeJunctionMediator";
