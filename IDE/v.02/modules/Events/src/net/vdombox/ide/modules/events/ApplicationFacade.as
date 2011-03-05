@@ -21,7 +21,12 @@ package net.vdombox.ide.modules.events
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
-
+	/**
+	 * 
+	 * @author adelfos
+	 * ApplicationFacade basic fasad 
+	 * 
+	 */
 	public class ApplicationFacade extends Facade implements IFacade
 	{
 //		main

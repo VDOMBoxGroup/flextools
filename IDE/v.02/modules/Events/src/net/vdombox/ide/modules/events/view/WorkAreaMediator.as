@@ -112,6 +112,7 @@ package net.vdombox.ide.modules.events.view
 
 		private function removeHandlers() : void
 		{
+			//  addEventListener || remouve ? 
 			workArea.addEventListener( WorkAreaEvent.SAVE, saveHandler );
 			workArea.addEventListener( WorkAreaEvent.UNDO, undoHandler );
 		}
