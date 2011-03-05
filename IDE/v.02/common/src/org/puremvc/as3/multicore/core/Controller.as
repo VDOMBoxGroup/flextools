@@ -25,14 +25,14 @@ package org.puremvc.as3.multicore.core
 	 * <LI> Calling the <code>ICommand</code>'s <code>execute</code>
 	 * method, passing in the <code>INotification</code>.</LI> 
 	 * </UL>
-	 * 
+	 * </P>
 	 * <P>
 	 * Your application must register <code>ICommands</code> with the 
-	 * Controller.
+	 * Controller.</P>
 	 * <P>
  	 * The simplest way is to subclass </code>Facade</code>, 
 	 * and use its <code>initializeController</code> method to add your 
-	 * registrations. 
+	 * registrations. </P>
 	 * 
 	 * @see org.puremvc.as3.multicore.core.View View
 	 * @see org.puremvc.as3.multicore.patterns.observer.Observer Observer
@@ -52,7 +52,7 @@ package org.puremvc.as3.multicore.core
 		 * directly, but instead call the static Factory method, 
 		 * passing the unique key for this instance 
 		 * <code>Controller.getInstance( multitonKey )</code>
-		 * 
+		 * </P>
 		 * @throws Error Error if instance for this Multiton key has already been constructed
 		 * 
 		 */

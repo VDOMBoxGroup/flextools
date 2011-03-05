@@ -1,5 +1,6 @@
 package net.vdombox.utils
 {
+	
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;

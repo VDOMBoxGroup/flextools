@@ -8,7 +8,7 @@ package net.vdombox.editors.parsers.vdomxml
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
 
-	import net.vdombox.editors.Location;
+	
 	import net.vdombox.editors.ScriptAreaComponent;
 
 	import ro.victordramba.thread.ThreadEvent;

@@ -11,7 +11,7 @@ package net.vdombox.editors
 	{
 		public function XMLScriptEditor()
 		{
-			setStyle( "skinClass", ScriptEditorSkin );
+			setStyle( "skinClass", net.vdombox.editors.skins.ScriptEditorSkin );
 		}
 
 		[SkinPart( required="true" )]

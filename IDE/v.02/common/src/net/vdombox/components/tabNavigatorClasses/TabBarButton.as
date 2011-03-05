@@ -18,7 +18,7 @@ package net.vdombox.components.tabNavigatorClasses
 
 		public function TabBarButton() : void
 		{
-			setStyle( "skinClass", TabBarButtonSkin );
+			setStyle( "skinClass", net.vdombox.skins.TabBarButtonSkin );
 		}
 
 		[SkinPart( required="true" )]

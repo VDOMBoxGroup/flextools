@@ -92,7 +92,7 @@ public class Tree extends List
 			setStyle("defaultLeafIcon", defaultLeafIcon);
 		}
 		
-		itemRenderer = new ClassFactory(DefaultTreeItemRenderer);
+		itemRenderer = new ClassFactory(net.vdombox.components.DefaultTreeItemRenderer);
 	}
 	
 	//--------------------------------------------------------------------------

@@ -16,14 +16,16 @@ package net.vdombox.utils
 	{
 		private static const SPECIALS : Array = [ "alpha", "beta", "rc" ];
 
-		/**
-		 * Algorithm for comparing versions
-		 *   1. Every +,-,_,SPACE is replaced by DOT : 1.2+-__5 => 1.2...5
-		 *   2. All sequence of DOT are replaced by one single DOT  1.2...5 => 1.2.5
-		 *   3. A DOT is inserted between any DIGIT - ALPHANUMERIC: 1beta1 => 1.beta.1
-		 *   4. The version is split using DOT as delimiter
-		 *   5. The numbers are compared as number, the alphanumeric as string with the exception of alpha, beta and rc, where alpha < beta < rc
-		 */
+		
+//		 * <pre>
+//		 * Algorithm for comparing versions
+//		 *   1. Every +,-,_,SPACE is replaced by DOT : 1.2+-__5 => 1.2...5
+//		 *   2. All sequence of DOT are replaced by one single DOT  1.2...5 => 1.2.5
+//		 *   3. A DOT is inserted between any DIGIT - ALPHANUMERIC: 1beta1 => 1.beta.1
+//		 *   4. The version is split using DOT as delimiter
+//		 *   5. The numbers are compared as number, the alphanumeric as string with the exception of alpha, beta and rc, where alpha < beta < rc
+//		 * </pre>
+		 
 		public static function isNewerVersion( currentVersion : String, newVersion : String ) : Boolean
 		{
 			var v1 : String = currentVersion.replace( /[+\-_ ]/g, "." ).replace( /\.(\.)+/g,

@@ -19,7 +19,7 @@ package net.vdombox.components
 	{
 		public function TabNavigator()
 		{
-			setStyle( "skinClass", TabNavigatorSkin );
+			setStyle( "skinClass", net.vdombox.skins.TabNavigatorSkin );
 		}
 
 		[SkinPart( required="true" )]

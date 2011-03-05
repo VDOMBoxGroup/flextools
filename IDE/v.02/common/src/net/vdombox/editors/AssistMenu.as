@@ -7,19 +7,19 @@ package net.vdombox.editors
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	import flash.utils.setTimeout;
-
-	import mx.core.UIComponent;
-
+	import net.vdombox.editors.PopUpMenu;
+	
+	 import mx.core.UIComponent;
+	
 	import net.vdombox.editors.parsers.vdomxml.Controller;
-	import net.vdombox.editors.parsers.vdomxml.Token;
-
+	
 	import ro.victordramba.util.vectorToArray;
 
 	public class AssistMenu
 	{
 		private var menuData : Vector.<Object>
 		private var fld : ScriptAreaComponent;
-		private var menu : PopUpMenu;
+		private var menu : net.vdombox.editors.PopUpMenu;
 		private var ctrl : Controller;
 		private var onComplete : Function;
 		private var stage : Stage;
@@ -36,7 +36,7 @@ package net.vdombox.editors
 			this.onComplete = onComplete;
 			this.stage = stage;
 
-			menu = new PopUpMenu();
+			menu = new net.vdombox.editors.PopUpMenu();
 			//restore the focus to the textfield, delayed			
 			menu.addEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
 			//menu in action
