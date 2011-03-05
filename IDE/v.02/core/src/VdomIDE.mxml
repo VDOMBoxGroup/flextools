@@ -12,6 +12,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			// -source-path=locale\{locale} -locale en_US fr_FR ru_RU -link-report=report.xml
 			import mx.containers.Accordion;
 			import mx.events.FlexEvent;
 
