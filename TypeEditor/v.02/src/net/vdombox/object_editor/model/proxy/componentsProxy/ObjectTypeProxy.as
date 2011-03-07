@@ -4,6 +4,7 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.controls.Alert;
+	import mx.messaging.channels.StreamingAMFChannel;
 	
 	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.vo.ActionParameterVO;
@@ -91,7 +92,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					var eventPar:EventParameterVO = parObj.data;
 					if (eventPar.help == "") 
 						eventPar.help = "#Lang(105)";
-					eventPar.help = languagesProxy.used(objTypeVO.languages, eventPar.help, "Events.Help");
+					eventPar.help = languagesProxy.used(objTypeVO.languages, eventPar.help, "Events."+ event.name +"."+ eventPar.name +".Help");
 				}
 			}
 		}
@@ -108,12 +109,25 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				if (attr.errorValidationMessage == "") 
 					attr.errorValidationMessage = "#Lang(201)";
 
-				attr.displayName = languagesProxy.used(objTypeVO.languages, attr.displayName, "Attributes.DisplayName");
-				attr.help		 = languagesProxy.used(objTypeVO.languages, attr.help, "Attributes.Help");
-				attr.errorValidationMessage = languagesProxy.used(objTypeVO.languages, attr.errorValidationMessage, "Attributes.ErrValMessage");
+				attr.displayName = languagesProxy.used(objTypeVO.languages, attr.displayName, "Attributes."+ attr.name +".DisplayName");
+				attr.help		 = languagesProxy.used(objTypeVO.languages, attr.help, "Attributes."+ attr.name +".Help");
+				attr.errorValidationMessage = languagesProxy.used(objTypeVO.languages, attr.errorValidationMessage, "Attributes."+ attr.name +".ErrValMessage");
+				usedCodeInterface(objTypeVO, attr);
 			}
 		}
 
+		private function usedCodeInterface(objTypeVO: ObjectTypeVO, attr: AttributeVO):void
+		{			
+			var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d]+)/g;
+			var langs:Array = [];
+			while (langs = regLangs.exec(attr.codeInterface))
+			{
+				var id:String = languagesProxy.getRegExpID(objTypeVO.languages, langs[1]);
+				objTypeVO.languages.isUsedWords[id] = true;
+				objTypeVO.languages.isWordsOwner[id] = "Attributes."+ attr.name +".CodeInterface";
+			}	
+		}
+		
 		private function reuseActionsID( objTypeVO: ObjectTypeVO):void
 		{
 			for each (var contObj:Object in objTypeVO.actionContainers)
@@ -124,15 +138,15 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					var act:ActionVO = actObj.data;
 					if (act.description == "")   act.description   = "#Lang(600)";
 					if (act.interfaceName == "") act.interfaceName = "#Lang(700)";					
-					act.description   = languagesProxy.used(objTypeVO.languages, act.description,   "Actions.Description");
-					act.interfaceName = languagesProxy.used(objTypeVO.languages, act.interfaceName, "Actions.InterfaceName");
+					act.description   = languagesProxy.used(objTypeVO.languages, act.description,   "Actions."+ act.methodName +".Description");
+					act.interfaceName = languagesProxy.used(objTypeVO.languages, act.interfaceName, "Actions."+ act.methodName +".InterfaceName");
 					for each (var parObj:Object in act.parameters)
 					{
 						var actPar:ActionParameterVO = parObj.data;
 						if (actPar.interfaceName == "") actPar.interfaceName = "#Lang(900)";
 						if (actPar.help          == "") actPar.help          = "#Lang(800)";
-						actPar.interfaceName = languagesProxy.used(objTypeVO.languages, actPar.interfaceName, "Actions.Parameter.InterfaceName");
-						actPar.help			 = languagesProxy.used(objTypeVO.languages, actPar.help, "Actions.Parameter.Help");
+						actPar.interfaceName = languagesProxy.used(objTypeVO.languages, actPar.interfaceName, "Actions.Parameter."+ actPar.scriptName +".InterfaceName");
+						actPar.help			 = languagesProxy.used(objTypeVO.languages, actPar.help, "Actions.Parameter."+ actPar.scriptName +".Help");
 					}
 				}
 			}			
@@ -173,33 +187,45 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			//save information
 			var information:XML = <Information/>;
 
-			information.Category 			= objTypeVO.category;
-			information.ClassName 			= objTypeVO.className;
-			information.Container 			= objTypeVO.container;
-			information.Containers 			= objTypeVO.containers;
-			information.Description 		= objTypeVO.description;
-			information.DisplayName	 		= objTypeVO.displayName;	
-			information.Dynamic 			= (objTypeVO.dynamic)? "1": "0";
-			information.EditorIcon			= objTypeVO.editorIcon;
-			information.Handlers 			= objTypeVO.handlers;
 			information.Name 				= objTypeVO.name;
-			information.Icon				= objTypeVO.icon;
+			information.DisplayName	 		= objTypeVO.displayName;	
+			information.Description 		= objTypeVO.description;
+			information.ClassName 			= objTypeVO.className;
 			information.ID 					= objTypeVO.id;
-			information.InterfaceType 		= objTypeVO.interfaceType;
-//			information.Languages 			= ""; //objTypeXML.appendChild(information); is not used
-			information.Moveable 			= (objTypeVO.moveable)? "1": "0";
-			information.OptimizationPriority = objTypeVO.optimizationPriority;
-			information.RemoteMethods		= objTypeVO.remoteMethods;
-			information.RenderType 			= objTypeVO.renderType;
-			information.Resizable 			= objTypeVO.resizable;
+			information.Icon				= objTypeVO.icon;
+			information.EditorIcon			= objTypeVO.editorIcon;
 			information.StructureIcon 		= objTypeVO.structureIcon;
-			information.WCAG 				= objTypeVO.wcag;
-			information.XMLScriptName 		= objTypeVO.XMLScriptName;	
+			information.Moveable 			= (objTypeVO.moveable)? "1": "0";
+			information.Resizable 			= objTypeVO.resizable;
+			information.Container 			= objTypeVO.container;			
+			information.Category 			= objTypeVO.category;
+			information.Dynamic 			= (objTypeVO.dynamic)? "1": "0";
 			information.Version 			= objTypeVO.version;
+			information.InterfaceType 		= objTypeVO.interfaceType;
+			information.OptimizationPriority = objTypeVO.optimizationPriority;
+			information.Containers			= objTypeVO.containers;
+			information.Languages 			= getLanguagesName(objTypeVO);			
+			
+			information.Handlers 			= objTypeVO.handlers;			
+			information.RemoteMethods		= objTypeVO.remoteMethods;
+			information.RenderType 			= objTypeVO.renderType;			
+			information.WCAG 				= objTypeVO.wcag;
+			information.XMLScriptName 		= objTypeVO.XMLScriptName;			
 
 			objTypeXML.appendChild(information);
 
 			return objTypeXML;
+		}
+		
+		private function getLanguagesName(objVO:ObjectTypeVO): String
+		{
+			var ret: String = "";
+			for each (var lang: Object in objVO.languages.locales)
+			{
+				ret += lang["data"] + " ,";
+			}
+			ret = ret.slice(0, ret.length-2);
+			return ret;
 		}
 
 		public function initInformation(objTypeXML:XML):ObjectTypeVO

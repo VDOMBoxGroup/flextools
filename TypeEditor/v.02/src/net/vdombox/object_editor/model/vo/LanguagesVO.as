@@ -7,7 +7,7 @@ package net.vdombox.object_editor.model.vo
 	{
 		public var currentLocation:	String 			= "en_US";
 		public var words:			ArrayCollection = new ArrayCollection();		
-		public var locales:			ArrayCollection = new ArrayCollection();
+		public var locales:			ArrayCollection = new ArrayCollection(); /* {label:lang, data:lang} */
 
 		//required to verify the uniqueness of the words ID
 		public var isUsedWords:		Object			= {};  /* isUsedWords[ID:String] = used:Boolean */

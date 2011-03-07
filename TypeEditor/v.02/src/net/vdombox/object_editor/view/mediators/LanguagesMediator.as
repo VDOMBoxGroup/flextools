@@ -68,24 +68,25 @@ package net.vdombox.object_editor.view.mediators
 		{
 			//new columns array
 			var cols:Array = [];
-			var col0:DataGridColumn =  view.languagesDataGrid.columns[0];
+			var col0    :DataGridColumn =  view.languagesDataGrid.columns[0];
+			//var colOwner:DataGridColumn =  view.languagesDataGrid.columns[0]; ///add Owner
 			
 			//put in cols[0] column with "ID" 
 			for each (var dc:DataGridColumn in view.languagesDataGrid.columns)
 			{
 				if (dc.dataField == "ID")
-				{
 					cols[0] = dc;
-					break;
-				}
+				if (dc.dataField == "Owner")
+					cols[1] = dc;
 			}			
 				
 			//put the remaining elements 
-			cols[1] = col0;
-			var k:int = 2;
+			cols[2] = col0;
+			var k:int = 3;
 			for(var j:int = 1; j < view.languagesDataGrid.columnCount; j++)
-			{
-				if (view.languagesDataGrid.columns[j].dataField != "ID")
+			{				
+				if ((view.languagesDataGrid.columns[j].dataField != "ID") && 
+					(view.languagesDataGrid.columns[j].dataField != "Owner"))
 				{
 					cols[k] = view.languagesDataGrid.columns[j];
 					k++;
