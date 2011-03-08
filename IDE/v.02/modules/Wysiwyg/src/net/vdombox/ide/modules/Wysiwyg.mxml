@@ -16,7 +16,7 @@
 		@namespace controls "net.vdombox.ide.modules.wysiwyg.view.components.controls.*";
 		@namespace mx "library://ns.adobe.com/flex/mx";
 		 
-		components|ObjectRenderer
+		components|RendererBase
 		{
 			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin"); 
 		} 

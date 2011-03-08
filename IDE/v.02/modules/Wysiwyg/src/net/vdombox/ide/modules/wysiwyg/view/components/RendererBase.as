@@ -230,7 +230,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				case "container":
 				{
-					itemFactory = new ClassFactory( ObjectRenderer );
+					itemFactory = new ClassFactory( RendererBase );
 					layout = new BasicLayout();
 					layout.clipAndEnableScrolling = true;
 					itemFactory.properties = { layout: layout };
@@ -239,7 +239,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				case "table":
 				{
-					itemFactory = new ClassFactory( ObjectRenderer );
+					itemFactory = new ClassFactory( RendererBase );
 					layout = new VerticalLayout();
 					layout.clipAndEnableScrolling = true;
 					VerticalLayout( layout ).gap = 0;
@@ -249,7 +249,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				case "row":
 				{
-					itemFactory = new ClassFactory( ObjectRenderer );
+					itemFactory = new ClassFactory( RendererBase );
 					layout = new HorizontalLayout();
 					layout.clipAndEnableScrolling = true;
 					HorizontalLayout( layout ).gap = 0;
@@ -260,7 +260,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				case "cell":
 				{
-					itemFactory = new ClassFactory( ObjectRenderer );
+					itemFactory = new ClassFactory( RendererBase );
 					layout = new BasicLayout();
 					layout.clipAndEnableScrolling = true;
 					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
@@ -473,16 +473,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 
-		private function getItemByTarget( target : DisplayObjectContainer ) : ObjectRenderer
+		private function getItemByTarget( target : DisplayObjectContainer ) : RendererBase
 		{
-			var result : ObjectRenderer;
+			var result : RendererBase;
 			var item : DisplayObjectContainer = target;
 
 			while ( item && item.parent )
 			{
-				if ( item is ObjectRenderer )
+				if ( item is RendererBase )
 				{
-					result = item as ObjectRenderer;
+					result = item as RendererBase;
 					break;
 				}
 
@@ -656,15 +656,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 
-		private function findNearestItem( currentElement : DisplayObjectContainer ) : ObjectRenderer
+		private function findNearestItem( currentElement : DisplayObjectContainer ) : RendererBase
 		{
-			var result : ObjectRenderer;
+			var result : RendererBase;
 
 			while ( currentElement && currentElement.parent )
 			{
-				if ( currentElement is ObjectRenderer )
+				if ( currentElement is RendererBase )
 				{
-					result = currentElement as ObjectRenderer;
+					result = currentElement as RendererBase;
 					break;
 				}
 

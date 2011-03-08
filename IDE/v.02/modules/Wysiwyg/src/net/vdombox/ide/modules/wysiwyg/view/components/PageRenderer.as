@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 
-	public class _PageRenderer extends ObjectRenderer
+	public class PageRenderer extends RendererBase
 	{
 
 		[SkinPart( required="true" )]

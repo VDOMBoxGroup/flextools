@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+	import net.vdombox.ide.modules.wysiwyg.view.VdomObjectEditorMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -26,47 +27,31 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var renderVO : RenderVO = renderProxy.generateRenderVO( vdomObjectVO, wysiwygXML );
 
 			var renderers : Array = renderProxy.getRenderersByVO( vdomObjectVO );
-			
 			var renderer : IRenderer;
 			
-//			if( renderers && renderers.length != 0 )
-//			{
-//				for each( renderer in renderers )
-//				{
-//					renderer.renderVO = renderVO;
-//				}
-//			}
-//			
-//			if ( vdomObjectVO is PageVO )
-//			{
-//				var pageEditorMediator : PageEditorMediator;
-//
-//				for ( var pageEditorMediatorName : String in PageEditorMediator.instancesNameList )
-//				{
-//					pageEditorMediator = facade.retrieveMediator( pageEditorMediatorName ) as PageEditorMediator;
-//
-//					if ( pageEditorMediator && pageEditorMediator.pageVO && pageEditorMediator.pageVO.id == vdomObjectVO.id )
-//					{
-//						pageEditorMediator.renderVO = renderVO;
-//						break;
-//					}
-//				}
-//			}
-//			else if ( vdomObjectVO is ObjectVO )
-//			{
-//				var objectEditorMediator : ObjectEditorMediator;
-//
-//				for ( var objectEditorMediatorName : String in ObjectEditorMediator.instancesNameList )
-//				{
-//					objectEditorMediator = facade.retrieveMediator( objectEditorMediatorName ) as ObjectEditorMediator;
-//
-//					if ( objectEditorMediator.objectVO && objectEditorMediator.objectVO.id == vdomObjectVO.id )
-//					{
-//						objectEditorMediator.renderVO = renderVO;
-//						break;
-//					}
-//				}
-//			}
+			if( renderers && renderers.length != 0 )
+			{
+				for each( renderer in renderers )
+				{
+					renderer.renderVO = renderVO;
+				}
+			}
+		
+			var mediator : VdomObjectEditorMediator;
+			var mediatorName : String;
+			
+			for ( mediatorName in VdomObjectEditorMediator.instancesNameList )
+			{
+				mediator = facade.retrieveMediator( mediatorName ) as VdomObjectEditorMediator;
+
+				try
+				{
+					if( mediator.editorVO.vdomObjectVO.id == vdomObjectVO.id )
+						mediator.editorVO.renderVO = renderVO;
+				}
+				catch( error : Error )
+				{}
+			}
 		}
 	}
 }

@@ -15,6 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -42,6 +43,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 			return viewComponent as IEditor;
 		}
 
+		public function get editorVO() : EditorVO
+		{
+			return editor ? editor.editorVO : null;
+		}
+		
 //		public function get pageVO() : PageVO
 //		{
 //			return editor.vdomObjectVO as PageVO;
@@ -155,7 +161,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			editor.addEventListener( EditorEvent.XML_SAVE, xmlSaveHandler, false, 0, true );
 
-			editor.addEventListener( EditorEvent.OBJECT_CHANGED, objectChangedHandler, false, 0, true );
+			editor.addEventListener( EditorEvent.VDOM_OBJECT_VO_CHANGED, vdomObjectVOChangedHandler, false, 0, true );
 
 			editor.addEventListener( EditorEvent.RENDERER_TRANSFORMED, rendererTransformedHandler, false, 0, true );
 
@@ -181,7 +187,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			editor.removeEventListener( EditorEvent.XML_SAVE, xmlSaveHandler );
 
-			editor.removeEventListener( EditorEvent.OBJECT_CHANGED, objectChangedHandler );
+			editor.removeEventListener( EditorEvent.VDOM_OBJECT_VO_CHANGED, vdomObjectVOChangedHandler );
 
 			editor.removeEventListener( EditorEvent.RENDERER_TRANSFORMED, rendererTransformedHandler );
 
@@ -197,7 +203,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			editor.editorVO.vdomObjectVO = null;
 		}
-
+		
 		private function removedFromStageHandler( event : Event ) : void
 		{
 			facade.removeMediator( mediatorName );
@@ -222,7 +228,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 //			sendNotification( ApplicationFacade.SET_XML_PRESENTATION, editor.xmlPresentation );
 		}
 
-		private function objectChangedHandler( event : EditorEvent ) : void
+		private function vdomObjectVOChangedHandler( event : EditorEvent ) : void
 		{
 			if ( editor.editorVO.vdomObjectVO )
 				sendNotification( ApplicationFacade.GET_WYSIWYG, editor.editorVO.vdomObjectVO );

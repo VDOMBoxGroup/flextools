@@ -64,22 +64,6 @@
 	<s:HGroup gap="0" height="20"
 			  left="1" right="1" top="1">
 
-		<s:HGroup enabled="false"
-				  verticalAlign="middle"
-				  includeIn="wysiwyg, wysiwygDisabled, normal, disabled">
-			<s:CheckBox label="Show Grid" x="10" y="10"/>
-
-			<s:Label text="X:"/>
-			<s:TextInput height="18" width="30" x="124" y="10"/>
-
-			<s:Label text="Y:"/>
-			<s:TextInput height="18" width="30" x="124" y="10"/>
-
-			<libcomponents:WorkAreaButton label="lock" width="46"/>
-
-			<s:CheckBox label="Snap to Grid" x="10" y="10"/>
-		</s:HGroup>
-
 		<s:HGroup includeIn="xml, xmlDisabled">
 			<libcomponents:WorkAreaButton id="saveXMLButton"
 										  height="20" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_save_button_label' ) }"/>

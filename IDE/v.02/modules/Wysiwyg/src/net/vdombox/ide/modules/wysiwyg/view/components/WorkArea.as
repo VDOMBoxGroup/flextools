@@ -74,7 +74,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			for ( editor in _editors )
 			{ 
-				if ( editor.vdomObjectVO && editor.vdomObjectVO.id == vdomObjectVO.id )
+				if ( editor.editorVO.vdomObjectVO && editor.editorVO.vdomObjectVO.id == vdomObjectVO.id )
 				{
 					result = editor;
 					break;
@@ -109,7 +109,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var tab : Tab = new Tab();
 			tab.label = vdomObjectVO.name;
 			
-			IEventDispatcher( editor ).addEventListener( EditorEvent.OBJECT_CHANGED, editor_objectChangedHandler, false, 0, true );
+			IEventDispatcher( editor ).addEventListener( EditorEvent.VDOM_OBJECT_VO_CHANGED, editor_objectChangedHandler, false, 0, true );
 			
 			addTab( tab );
 			

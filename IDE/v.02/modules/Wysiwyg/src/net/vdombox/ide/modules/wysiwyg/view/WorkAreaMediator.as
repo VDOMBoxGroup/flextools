@@ -149,7 +149,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
 
-			workArea.addEventListener( EditorEvent.CREATED, editor_createdHandler, true, 0, true );
+			workArea.addEventListener( EditorEvent.PREINITIALIZED, editor_preinitializedHandler, true, 0, true );
 			workArea.addEventListener( EditorEvent.REMOVED, editor_removedHandler, true, 0, true );
 		}
 
@@ -160,7 +160,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			workArea.removeEventListener( WorkAreaEvent.CHANGE, changeHandler );
 
-			workArea.removeEventListener( EditorEvent.CREATED, editor_createdHandler, true );
+			workArea.removeEventListener( EditorEvent.PREINITIALIZED, editor_preinitializedHandler, true );
 			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
 		}
 
@@ -195,7 +195,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		}
 
-		private function editor_createdHandler( event : EditorEvent ) : void
+		private function editor_preinitializedHandler( event : EditorEvent ) : void
 		{
 			sendNotification( ApplicationFacade.EDITOR_CREATED, event.target as IEditor );
 		}
