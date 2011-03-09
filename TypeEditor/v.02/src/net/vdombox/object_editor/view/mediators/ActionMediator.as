@@ -234,9 +234,7 @@ package net.vdombox.object_editor.view.mediators
 			addStar();
 			currentActionVO = new ActionVO();
 			currentActionVO.methodName 	  = ( "methodName" + currentContainerVO.actionsCollection.length );
-//			currentActionVO.description   = languagesProxy.getNextId(objectTypeVO.languages, "6", currentActionVO.methodName+"description");
 			currentActionVO.description   = languagesProxy.newWords(objectTypeVO.languages, "6", "Actions."+currentActionVO.methodName+".Description",currentActionVO.methodName);
-//			currentActionVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "7", currentActionVO.methodName+"interfaceName");
 			currentActionVO.interfaceName = languagesProxy.newWords(objectTypeVO.languages, "7", "Actions."+currentActionVO.methodName+".InterfaceName",currentActionVO.methodName);
 			
 			currentContainerVO.actionsCollection.addItem( {label:currentActionVO.methodName, data:currentActionVO} );
@@ -258,9 +256,7 @@ package net.vdombox.object_editor.view.mediators
 			currentParameterVO.scriptName = ( "scriptName" + currentActionVO.parameters.length );
 
 			currentActionVO.parameters.addItem( {label:currentParameterVO.scriptName, data:currentParameterVO} );
-//			currentParameterVO.help = languagesProxy.getNextId(objectTypeVO.languages, "8", currentParameterVO.scriptName+"help");
 			currentParameterVO.help   = languagesProxy.newWords(objectTypeVO.languages, "8", "Actions.Parameter."+currentParameterVO.scriptName+".Help",currentParameterVO.scriptName);
-//			currentParameterVO.interfaceName = languagesProxy.getNextId(objectTypeVO.languages, "9", currentParameterVO.scriptName+"interfaceName"); 
 			currentParameterVO.interfaceName   = languagesProxy.newWords(objectTypeVO.languages, "9", "Actions.Parameter."+currentParameterVO.scriptName+".InterfaceName",currentParameterVO.scriptName);
 
 			fillParameter(currentParameterVO);

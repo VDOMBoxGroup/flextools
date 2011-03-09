@@ -174,8 +174,17 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				langsXML.appendChild(lanXML);
 			}
 			return langsXML;
-		}	
+		}		
 		
+		/**
+		 * 
+		 * @param langsVO - current LanguagesVO
+		 * @param startId - first number of ID in new Word
+		 * @param owner   - path to new Word
+		 * @param newValue - value of curent local Language of new Word
+		 * @return new Word
+		 * 
+		 */		
 		public function newWords(langsVO: LanguagesVO, startId: String, owner: String, newValue: String = ""):String
 		{
 			//wordID have format: "#Lang(ID)"
@@ -204,8 +213,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					
 		
 		/** returne new word with new id, id - first not used 
-		 *  copy oldWord to newWord
-		 *  startId - first number of id 
+		 *  <p> copy oldWord to newWord </p>
+		 *  <p> startId - first number of id </p>
 		**/
 		public function getNextId(langsVO: LanguagesVO, startId: String, newValue: String = "", oldWord: Object = null):String
 		{

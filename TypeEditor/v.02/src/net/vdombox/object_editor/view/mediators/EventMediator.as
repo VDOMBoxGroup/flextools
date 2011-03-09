@@ -205,7 +205,6 @@ package net.vdombox.object_editor.view.mediators
 			var parameterVO:EventParameterVO = new EventParameterVO( "newParameter" + currentEventVO.parameters.length );
 			currentEventVO.parameters.addItem( {label:parameterVO.name, data:parameterVO} );
 			currentParameterVO = parameterVO;
-//			parameterVO.help = languagesProxy.getNextId(objectTypeVO.languages, "3", "help for "+parameterVO.name);
 			parameterVO.help = languagesProxy.newWords(objectTypeVO.languages, "3", "Events."+parameterVO.name+"Parameter",parameterVO.name);
 			fillParameter(parameterVO);
 			view.currentParameter = getCurrentParameter(parameterVO.name);

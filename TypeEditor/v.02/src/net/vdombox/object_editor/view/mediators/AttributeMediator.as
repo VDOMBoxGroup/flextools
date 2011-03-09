@@ -100,7 +100,7 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function selectCodeInterface( event:Event = null ):void
 		{ 			
-			addStar();
+			//addStar();
 			if( currentAttributeVO )
 				currentAttributeVO.codeInterface = view.CodeInterfaceValue.toString();			
 		}
@@ -163,6 +163,7 @@ package net.vdombox.object_editor.view.mediators
 		private function selectAtribute(event:Event):void
 		{ 
 			currentAttributeVO = view.attributesList.selectedItem.data as AttributeVO;
+			clearCodeInterfaceFields();
 			fillAttributeFilds(currentAttributeVO);	
 		}
 
@@ -172,12 +173,8 @@ package net.vdombox.object_editor.view.mediators
 			var attribVO:AttributeVO = new AttributeVO( "newAttribute"+ objectTypeVO.attributes.length );
 			objectTypeVO.attributes.addItem( {label:attribVO.name, data:attribVO, color:1} );
 			var langsProxy:LanguagesProxy 	= facade.retrieveProxy( LanguagesProxy.NAME ) as LanguagesProxy;
-			//attribVO.displayName            = langsProxy.getNextId(objectTypeVO.languages, "1", attribVO.name+" displayName");
-			//langsProxy.used(objectTypeVO.languages, attribVO.displayName, "Attribute.DisplayName");
 			attribVO.displayName            = langsProxy.newWords(objectTypeVO.languages, "1", "Attribute."+attribVO.name+".DisplayName",attribVO.name);
-//			attribVO.errorValidationMessage = langsProxy.getNextId(objectTypeVO.languages, "2", attribVO.name+" errValMess");
 			attribVO.errorValidationMessage = langsProxy.newWords(objectTypeVO.languages, "2", "Attribute."+attribVO.name+".ErrValMess",attribVO.name);
-//			attribVO.help                   = langsProxy.getNextId(objectTypeVO.languages, "3", attribVO.name+" help");
 			attribVO.help                   = langsProxy.newWords(objectTypeVO.languages, "3", "Attribute."+attribVO.name+".Help",attribVO.name);
 			attribVO.codeInterface			= "TextField()";
 			attribVO.colorgroup				= 1;			
@@ -216,6 +213,7 @@ package net.vdombox.object_editor.view.mediators
 			setCurrentAttribute(selectInd - 1);
 		}
 		
+		//not used
 		private  function hideAttributes(event: FlexEvent):void
 		{
 			view.attributesList.removeEventListener(Event.CHANGE, selectAtribute);
@@ -358,7 +356,8 @@ package net.vdombox.object_editor.view.mediators
 			if (!dropDownVal)
 			{
 				dropDownVal = new DropDownValue();	
-				dropDownVal.langTextInput.completeStructure(objectTypeVO.languages, languagesProxy.getNextId(objectTypeVO.languages, "4", ""));
+				var newWord:String = languagesProxy.newWords(objectTypeVO.languages, "4", "Attributes."+currentAttributeVO.name+".DropDown","");
+				dropDownVal.langTextInput.completeStructure(objectTypeVO.languages, newWord);
 			}
 			
 			dropDownVal.langTextInput.addEventListener(Event.CHANGE, view.changeDropDownValue);
@@ -374,7 +373,6 @@ package net.vdombox.object_editor.view.mediators
 			view.vGroup.addElement(hGroup);
 			view.validateNow();
 			changeCodeInterfaceStack(false);		
-			//				setCodeInterfaceValue();
 		}
 		
 		public function removeDropDownRow(event:MouseEvent):void
@@ -456,17 +454,18 @@ package net.vdombox.object_editor.view.mediators
 				}				
 			}
 			
-			values = values.slice(0,view.CodeInterfaceValue.length-1);
+			values = values.slice(0,values.length-1);
 			view.CodeInterfaceValue = "DropDown(" + values + ")";	
 		}
 		
 		public function changeStack(event:FlexEvent):void
-		{					
+		{		
+			addStar();
 			changeCodeInterfaceStack(event.bubbles);
 		}		
 		
 		public function changeCodeInterfaceStack(isChangeStack:Boolean):void
-		{					
+		{			
 			if(isChangeStack)
 				clearCodeInterfaceFields();
 
@@ -487,7 +486,6 @@ package net.vdombox.object_editor.view.mediators
 				view.CodeInterfaceValue = label + "()";
 			}
 			selectCodeInterface();
-//			dispatchEvent(new Event( Event.SELECT));
 		}
 		
 		private function clearCodeInterfaceFields():void

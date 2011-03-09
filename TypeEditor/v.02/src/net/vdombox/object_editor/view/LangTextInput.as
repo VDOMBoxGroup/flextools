@@ -37,7 +37,13 @@ package net.vdombox.object_editor.view
 			words 			= null;			
 			text 			= "";
 		}
-
+		
+		/**
+		 * 
+		 * @param langsVO	- current LanguagesVO;
+		 * @param fildValue	- value in format: #Lang("ID")
+		 * 
+		 */
 		public function completeStructure( langsVO:LanguagesVO, fildValue:String):void
 		{
 			var fildID:String = getRegExpWord(fildValue);

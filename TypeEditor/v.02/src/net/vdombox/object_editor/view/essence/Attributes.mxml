@@ -232,14 +232,7 @@
 								<s:Group width="100%"/>
 							</s:HGroup>
 							<s:Scroller height="85" width="230" id="DropDownScroll">
-								<s:VGroup id="vGroup">	
-									
-									<!--s:HGroup id="dropDownGroup">
-									<ns2:DropDownValue/>								
-									<s:Button label="add"  width="50" click="addValue(event)"/-->   <!--ange="changeStack(false)" text=""/-->							
-									<!--/s:HGroup-->							
-									
-								</s:VGroup>
+								<s:VGroup id="vGroup"/>	
 							</s:Scroller>
 							<s:Button label="Add"  width="50" click="addValue(event)"/>
 							

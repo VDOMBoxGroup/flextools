@@ -156,13 +156,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			var objTypeXML:XML = getNewObjTypeXML(objTypeVO);
 
-			objTypeXML.appendChild( attributesProxy.createXML(objTypeVO.attributes) );			
+			objTypeXML.appendChild( attributesProxy.createXML(objTypeVO.attributes) );	
+			objTypeXML.appendChild( languagesProxy.createXML(objTypeVO.languages) );
+			objTypeXML.appendChild( resourcesProxy.toXML(objTypeVO.resources));
+			objTypeXML.appendChild( sourceCodeToXML(objTypeVO.sourceCode) );
+			objTypeXML.appendChild( librariesProxy.createXML(objTypeVO.libraries) );
 			objTypeXML.appendChild( eventsProxy.createXML(objTypeVO.events) );//здесь важна последовательность!
 			objTypeXML.E2vdom.appendChild( actionsProxy.createXML(objTypeVO.actionContainers) );
-			objTypeXML.appendChild( languagesProxy.createXML(objTypeVO.languages) );
-			objTypeXML.appendChild( librariesProxy.createXML(objTypeVO.libraries) );
-			objTypeXML.appendChild( sourceCodeToXML(objTypeVO.sourceCode) );	
-			objTypeXML.appendChild( resourcesProxy.toXML(objTypeVO.resources));
 
 			return objTypeXML;
 		}
@@ -243,13 +243,16 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	
 				objTypeVO.dynamic		= information.Dynamic.toString() == "1";
 				objTypeVO.id			= information.ID;	
-				objTypeVO.interfaceType	= information.InterfaceType;			
+				objTypeVO.interfaceType	= information.InterfaceType;
+				objTypeVO.handlers		= information.getLanguagesName;
 				objTypeVO.name 			= information.Name;
 				objTypeVO.moveable		= information.Moveable.toString() == "1";
 				objTypeVO.optimizationPriority = information.OptimizationPriority;						
-				objTypeVO.resizable		= information.Resizable;	
+				objTypeVO.renderType	= information.RenderType;
+				objTypeVO.resizable		= information.Resizable;				
 				objTypeVO.version		= information.Version;	
 				objTypeVO.wcag			= information.WCAG;
+				objTypeVO.XMLScriptName	= information.XMLScriptName;
 	
 				objTypeVO.icon 			= information.Icon;
 				objTypeVO.editorIcon 	= information.EditorIcon;
