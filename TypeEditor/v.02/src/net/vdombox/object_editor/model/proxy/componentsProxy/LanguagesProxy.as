@@ -42,9 +42,6 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					languagesVO.isUsedWords[id] = false;
 					words["ID"] = id;
 	
-	//				var wrdsOV  : WordsVO = new WordsVO();
-	//				wrdsOV["en"] = wordEn.@ID;
-	
 					for each (langXML in languagesXML.children())
 					{			
 						var word:XML =  langXML.Sentence.(@ID == id )[0];
@@ -65,6 +62,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			}
 		}
 
+		/**
+		 * 
+		 * @param langsVO
+		 * @return all the names of locales in LanguagesVO
+		 * 
+		 */		
 		public function getWordsOnCarentLocal(langsVO:LanguagesVO):ArrayCollection
 		{
 			var localeName:String = langsVO.currentLocation;
@@ -82,6 +85,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return getArr;
 		}
 
+		/**
+		 * 
+		 * @param langsVO
+		 * @param id - ID of word
+		 * @return object of ID and the value of ID in different locales
+		 * 
+		 */		
 		public function getWords(langsVO:LanguagesVO,id:String):Object
 		{	
 			var localeName:String = langsVO.currentLocation;
@@ -114,6 +124,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		   }
 		 }*/		
 
+		/**
+		 * 
+		 * @param langsVO
+		 * @param code in format: #Lang(ID)
+		 * @return a word in the current location
+		 * 
+		 */		
 		public function getRegExpWord(langsVO:LanguagesVO,code:String):String
 		{	
 			var  regResource:RegExp = /#Lang\((\d+)\)/;
@@ -125,8 +142,14 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			}
 			return "";
 		}
-		
-		//code in formate: #Lang(word)
+				
+		/**
+		 * 
+		 * @param langsVO - current LanguagesVO
+		 * @param code in formate: #Lang(ID)
+		 * @return ID
+		 * 
+		 */		
 		public function getRegExpID(langsVO:LanguagesVO,code:String):String
 		{				
 			var regResource:RegExp = /#Lang\((\d+)\)/;
@@ -134,6 +157,13 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return matchResult[1] ;
 		}
 		
+		/**
+		 * 
+		 * @param langsVO
+		 * @param id - ID of word
+		 * @return a word in the current location
+		 * 
+		 */		
 		private function getWord(langsVO:LanguagesVO,id:String):String
 		{
 			var localeName:String = langsVO.currentLocation;
@@ -210,17 +240,29 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				objVO.languages.isWordsOwner[s] = newValue + "."+ ar[ar.length-1];
 			}
 		}		
-					
 		
-		/** returne new word with new id, id - first not used 
-		 *  <p> copy oldWord to newWord </p>
-		 *  <p> startId - first number of id </p>
-		**/
+		/**
+		 * 
+		 * @param langsVO - current LanguagesVO;
+		 * @param startId - first number of ID;
+		 * @param newValue - value for current location language;
+		 * @param oldWord - copy to newWord;
+		 * @return new word with new ID, ID - first not used. 
+		 * 
+		 */		
 		public function getNextId(langsVO: LanguagesVO, startId: String, newValue: String = "", oldWord: Object = null):String
 		{
 			return langsVO.getNextId( startId, "", oldWord ).toString();
-		}
+		}		
 		
+		/**
+		 * 
+		 * @param langsVO - current LanguagesVO;
+		 * @param idString - ID in format: "#Lang(ID)";
+		 * @param owner - name of owner; 
+		 * @return not used ID in format: "#Lang(ID)".
+		 * 
+		 */
 		public function used(langsVO: LanguagesVO, idString:String, owner:String):String
 		{
 			var id:String = getRegExpID(langsVO, idString);
