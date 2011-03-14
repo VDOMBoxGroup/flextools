@@ -53,6 +53,9 @@
 				return true;
 			}
 
+			/**
+			 * Called by the Core (VdomIDE) after initializing this module.
+			 */
 			override public function startup() : void
 			{
 				facade = ApplicationFacade.getInstance( MODULE_ID );
@@ -69,6 +72,9 @@
 				facade.sendNotification( ApplicationFacade.CREATE_SETTINGS_SCREEN );
 			}
 
+			/**
+			 * Called by the Core (VdomIDE) after select this module.
+			 */
 			override public function getBody() : void
 			{
 				facade.sendNotification( ApplicationFacade.CREATE_BODY );

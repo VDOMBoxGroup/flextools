@@ -2,13 +2,13 @@ package net.vdombox.ide.modules.events.view
 {
 	import mx.controls.Tree;
 	import mx.events.ListEvent;
-
+	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.view.components.ObjectsTreePanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -172,6 +172,7 @@ package net.vdombox.ide.modules.events.view
 
 		private function showPages( pages : Array ) : void
 		{
+			trace("showPages");
 			pagesXMLList = new XMLList();
 			_pages = {};
 
@@ -183,6 +184,76 @@ package net.vdombox.ide.modules.events.view
 			}
 
 			objectsTree.dataProvider = pagesXMLList;
+
+			selectCurrentPage();
+		}
+		
+		private function selectCurrentPage( ) : void
+		{
+			trace("selectCurrentPage");
+															
+			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;					
+							
+			if( sessionProxy.selectedPage )
+			{
+				sendNotification( ApplicationFacade.SET_SELECTED_PAGE, sessionProxy.selectedPage );												
+				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
+				objectsTree.selectedItem = getPageXML(sessionProxy.selectedPage.id);
+				objectsTree.validateNow();
+			//	objectsTree.scrollToIndex(objectsTree.selectedIndex);
+				return;
+			}
+			else
+			{	
+				if ( objectsTree.dataProvider != null )
+				{	
+					if( sessionProxy.selectedApplication.indexPageID && sessionProxy.selectedApplication.indexPageID !== "None")
+					{
+						trace("O`k");
+					}
+					else
+					{					
+						var xml : XML = objectsTree.dataProvider[ 0 ];
+						var id : String = xml.@id;
+						sessionProxy.selectedApplication.indexPageID = _pages[ id ];
+					}
+					
+					var selectedPageVO : PageVO = getSelectPageVO(sessionProxy.selectedApplication.indexPageID);	
+					sendNotification( ApplicationFacade.SET_SELECTED_PAGE, selectedPageVO );												
+					sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, selectedPageVO );
+					objectsTree.selectedItem = getPageXML(selectedPageVO.id);
+					objectsTree.validateNow();
+					//objectsTree.scrollToIndex(objectsTree.selectedIndex);
+				}
+				else 
+				{
+					trace("Tree of objects is empty");
+				}
+			}			
+		}	
+		
+		private function getSelectPageVO( id : String ) : PageVO
+		{
+			for each ( var page:PageVO in _pages)
+			{
+				if (page.id == id)
+					return page;
+			}
+			
+			trace("Error: not exist page in _pages");
+			return null;
+		}
+		
+		private function getPageXML( id : String ) : XML
+		{			
+			for each ( var page:XML in objectsTree.dataProvider)
+			{
+				if (page.@id == id)
+					return page;
+			}
+			
+			trace("Error: not exist page in objectsTree");
+			return null;
 		}
 
 		private function objectsTree_ChangeHandler( event : ListEvent ) : void
