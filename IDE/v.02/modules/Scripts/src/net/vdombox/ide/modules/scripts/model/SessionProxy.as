@@ -13,7 +13,7 @@ package net.vdombox.ide.modules.scripts.model
 		public static const NAME : String = "SessionProxy";
 
 		public static const SELECTED_APPLICATION : String = "selectedApplication";
-		public static const SELECTED_PAGE : String = "selectedPage";
+		public static const SELECTED_PAGE   : String = "selectedPage";
 		public static const SELECTED_OBJECT : String = "selectedObject";
 		public static const NEED_FOR_UPDATE : String = "needForUpdate";
 
