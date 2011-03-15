@@ -22,6 +22,9 @@ package net.vdombox.ide.core.model
 
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
+	/**
+	 * @flowerModelElementId _DDdTgEomEeC-JfVEe_-0Aw
+	 */
 	public class ApplicationProxy extends Proxy
 	{
 		public static const NAME : String = "ApplicationProxy";
@@ -860,6 +863,10 @@ package net.vdombox.ide.core.model
 					break;
 				}
 			}
+		}
+		
+		public function operation1()
+		{
 		}
 	}
 }

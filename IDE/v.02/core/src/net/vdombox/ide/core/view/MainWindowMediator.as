@@ -10,10 +10,13 @@ package net.vdombox.ide.core.view
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
+	import net.vdombox.ide.core.model.SessionProxy;
+	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	import net.vdombox.ide.core.view.components.MainWindow;
@@ -40,6 +43,9 @@ package net.vdombox.ide.core.view
 		
 		private function init():void
 		{
+			initUser();
+			initTitle();
+			
 			gotoLastPosition();
 			mainWindow.nativeWindow.addEventListener( Event.CLOSING, saveAppPosition );			
 		}
@@ -94,6 +100,8 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
 			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
+			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
+			interests.push( StatesProxy.SELECTED_PAGE_CHANGED )
 //			interests.push( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
 
 			return interests;
@@ -124,7 +132,17 @@ package net.vdombox.ide.core.view
 					selectModule( moduleVO );
 					break;
 				}
-
+					
+				case StatesProxy.SELECTED_APPLICATION_CHANGED:
+				{
+					initTitle();
+					break;
+				}
+				case StatesProxy.SELECTED_PAGE_CHANGED:
+				{
+					initTitle();
+					break;
+				}	
 //				case ApplicationFacade.CLOSE_SETTINGS_WINDOW:
 //				{
 //					var settingsWindowMediator : SettingsWindowMediator =
@@ -159,12 +177,32 @@ package net.vdombox.ide.core.view
 		public function openWindow() : void
 		{
 			windowManager.addWindow( mainWindow );
-
-			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
-
-			mainWindow.title = "VDOM IDE (v.2b) - User: " + serverProxy.authInfo.username;
-			mainWindow.username = serverProxy.authInfo.username;
+			
 			init();
+		}
+		
+		private function initUser():void
+		{
+			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			mainWindow.username = serverProxy.authInfo.username;
+		}
+		
+		private function initTitle():void
+		{
+			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			
+			mainWindow.title = "VDOM IDE v.2.0.1.002 -  " + serverProxy.authInfo.hostname;
+			
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			
+			if (statesProxy.selectedApplication)
+			{
+				mainWindow.title += " : " + statesProxy.selectedApplication.name;
+				
+				if (statesProxy.selectedPage)
+					mainWindow.title += " : " + statesProxy.selectedPage.name;
+			}
+			
 		}
 
 		public function closeWindow() : void

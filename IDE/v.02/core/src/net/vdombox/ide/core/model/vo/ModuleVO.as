@@ -2,6 +2,9 @@ package net.vdombox.ide.core.model.vo
 {
 	import net.vdombox.ide.common.VIModule;
 
+	/**
+	 * @flowerModelElementId _DDP4IEomEeC-JfVEe_-0Aw
+	 */
 	public class ModuleVO
 	{
 		public function ModuleVO( category : ModulesCategoryVO, path : String )

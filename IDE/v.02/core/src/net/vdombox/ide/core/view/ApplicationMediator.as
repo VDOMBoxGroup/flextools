@@ -12,6 +12,9 @@ package net.vdombox.ide.core.view
 	
 	import spark.components.Window;
 
+	/**
+	 * @flowerModelElementId _DGeLQEomEeC-JfVEe_-0Aw
+	 */
 	public class ApplicationMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "ApplicationMediator";

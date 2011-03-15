@@ -20,6 +20,9 @@ package net.vdombox.ide.core.model
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
+	/**
+	 * @flowerModelElementId _DERy4EomEeC-JfVEe_-0Aw
+	 */
 	public class ResourcesProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "ResourcesProxy";

@@ -8,6 +8,9 @@ package net.vdombox.ide.core.model
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
+	/**
+	 * @flowerModelElementId _DE2aoEomEeC-JfVEe_-0Aw
+	 */
 	public class TypesProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "TypesProxy";

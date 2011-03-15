@@ -6,7 +6,11 @@ package net.vdombox.ide.core.model
 
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
+	import net.vdombox.ide.core.controller.requests.StatesProxyRequestCommand;
 
+	/**
+	 * @flowerModelElementId _DExiIEomEeC-JfVEe_-0Aw
+	 */
 	public class StatesProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "StatesProxy";
@@ -15,7 +19,13 @@ package net.vdombox.ide.core.model
 		public static const SELECTED_PAGE : String = "selectedPage";
 		public static const SELECTED_OBJECT : String = "selectedObject";
 		
+		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanget";
+		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanget";
+		
 		public static const ERROR : String = "error";
+		public var attribute1:StatesProxyRequestCommand;
+		public var attribute2:StatesProxy;
+		public var attribute3:StatesProxy;
 		
 		public function StatesProxy()
 		{
@@ -37,6 +47,8 @@ package net.vdombox.ide.core.model
 			data[ SELECTED_APPLICATION ] = value;
 			data[ SELECTED_PAGE ] = null;
 			data[ SELECTED_OBJECT ] = null;
+			
+			facade.sendNotification(SELECTED_APPLICATION_CHANGED, value);
 		}
 
 		public function get selectedPage() : PageVO
@@ -48,6 +60,9 @@ package net.vdombox.ide.core.model
 		{
 			data[ SELECTED_PAGE ] = value;
 			data[ SELECTED_OBJECT ] = null;
+			
+			facade.sendNotification(SELECTED_PAGE_CHANGED, value);
+			//
 		}
 
 		public function get selectedObject() : ObjectVO

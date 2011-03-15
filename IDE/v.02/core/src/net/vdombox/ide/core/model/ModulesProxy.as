@@ -2,42 +2,41 @@ package net.vdombox.ide.core.model
 {
 	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
-
+	
 	import mx.events.ModuleEvent;
 	import mx.modules.IModuleInfo;
 	import mx.modules.ModuleManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
+	/**
+	 * @flowerModelElementId _DDnEgEomEeC-JfVEe_-0Aw
+	 */
 	public class ModulesProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "ModulesProxy";
 
 		private static const MODULES_DIR : String = "app:/modules/";
-
-		private static const MODULES_XML : XML =
-			<modules>
-				<category name="applicationManagment">
-					<module name="ApplicationsManagment" path="app:/modules/Applications Managment/ApplicationsManagment.swf"/>
-				</category>
-				<category name="Edition">									
-							
-					<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
-					<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/> 
-					<module name="Tree" path="app:/modules/Tree/Tree.swf"/>
-					<module name="Events" path="app:/modules/Events/Events.swf"/>
-					<!--module name="ResourceBrowser" path="app:/modules/Resource Browser/ResourceBrowser.swf"/-->
-					
-				</category>
-			</modules>
+		private static const appXML: String = '<modules> '+
+			'<category name="applicationManagment">' +
+			'<module name="ApplicationsManagment" path="app:/modules/ApplicationsManagment/ApplicationsManagment.swf"/>' +
+			'</category>' +
+			'<category name="Edition">' +
+			'<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>' +
+			'			<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>' +
+			' 			<module name="Tree" path="app:/modules/Tree/Tree.swf"/>' +
+			'			<module name="Events" path="app:/modules/Events/Events.swf"/>' +
+			'			<!--module name="ResourceBrowser" path="app:/modules/Resource Browser/ResourceBrowser.swf"/-->' +
+			'</category></modules>';
+		private static const MODULES_XML : XML =new XML(appXML);
 
 		/*
 		   <module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>

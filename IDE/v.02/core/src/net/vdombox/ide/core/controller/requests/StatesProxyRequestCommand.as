@@ -13,8 +13,12 @@ package net.vdombox.ide.core.controller.requests
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
+	/**
+	 * @flowerModelElementId _DBztsEomEeC-JfVEe_-0Aw
+	 */
 	public class StatesProxyRequestCommand extends SimpleCommand
 	{
+		public var attribute1:StatesProxy;
 		override public function execute( notification : INotification ) : void
 		{
 			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;

@@ -44,9 +44,42 @@ package net.vdombox.ide.core
 	
 	
 
+	/**
+	 * @flowerModelElementId _DHYxQEomEeC-JfVEe_-0Aw
+	 * 
+	 * 
+	 */
 	public class ApplicationFacade extends Facade  implements IFacade  
 	{
+		/*
+		@startuml 
 		
+		
+		
+		title Взаимодействие между Модулем (M) и Движком (C)
+		box "in side Module"
+		participant  WorkAreaMediator  
+		participant  SaveRequestCommand 
+		participant  TreeJunctionMediator  
+		end box
+		
+		participant  Core <<(С, #ADDdB2) >>			
+		
+		
+		WorkAreaMediator -> SaveRequestCommand  : sendNotification(..) 
+		note over of SaveRequestCommand:  ApplicationFacade.\nSAVE_REQUEST
+		
+		SaveRequestCommand -> TreeJunctionMediator :  sendNotification(..) 
+		note over of TreeJunctionMediator:  	 ApplicationFacade.\nSET_APPLICATION_STRUCTURE
+		
+		
+		TreeJunctionMediator -> Core : 	junction.sendMessage(..)
+		note over of Core:  	 PipeNames.PROXIESOUT,\n message
+		
+		Core --/  a : 	junction.sendMessage(..)
+		
+		@enduml
+		*/
 		public static const DELIMITER : String = "/";
 		
 		public static const PREINITALIZE : String = "preinitalize";
@@ -267,6 +300,7 @@ package net.vdombox.ide.core
 
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";
+		private var attribute1;
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

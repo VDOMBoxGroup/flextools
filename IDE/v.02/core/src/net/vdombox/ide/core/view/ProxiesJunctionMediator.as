@@ -18,6 +18,11 @@ package net.vdombox.ide.core.view
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.TeeMerge;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.TeeSplit;
 
+	/**
+	 * @flowerModelElementId _DHGdYEomEeC-JfVEe_-0Aw
+	 * adasdas
+	 */
+	
 	public class ProxiesJunctionMediator extends JunctionMediator
 	{
 		public static const NAME : String = "ProxiesJunctionMediator";

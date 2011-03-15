@@ -19,6 +19,9 @@ package net.vdombox.ide.core.model
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
+	/**
+	 * @flowerModelElementId _DD9p0EomEeC-JfVEe_-0Aw
+	 */
 	public class PageProxy extends Proxy
 	{
 		public static const NAME : String = "PageProxy";

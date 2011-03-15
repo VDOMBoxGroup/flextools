@@ -10,6 +10,9 @@ package net.vdombox.ide.core.controller.responses
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
+	/**
+	 * @flowerModelElementId _DB_T4EomEeC-JfVEe_-0Aw
+	 */
 	public class ResourcesProxyResponseCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void

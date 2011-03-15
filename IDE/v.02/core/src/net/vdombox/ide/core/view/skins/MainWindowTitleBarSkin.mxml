@@ -105,9 +105,10 @@
 		<!-- title -->
 		<!--- Defines the Label control for displaying the title text in the title bar. -->
 
-		<s:Label id="titleText"
+		<s:Label id="titleText" 
 				 height="100%" minWidth="0" width="100%"
-				 color="#999999" fontSize="14" fontWeight="bold" paddingTop="10" textAlign="center"
+				 color="#999999" fontSize="14" fontWeight="bold" paddingTop="10" paddingLeft="100"
+				 textAlign="left"
 				 maxDisplayedLines="1"/>
 		<!-- minimize button -->
 		<!---
