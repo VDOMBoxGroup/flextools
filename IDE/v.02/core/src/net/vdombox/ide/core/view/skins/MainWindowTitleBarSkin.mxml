@@ -107,8 +107,8 @@
 
 		<s:Label id="titleText" 
 				 height="100%" minWidth="0" width="100%"
-				 color="#999999" fontSize="14" fontWeight="bold" paddingTop="10" paddingLeft="100"
-				 textAlign="left"
+				 color="#FFFFFF" fontSize="12" fontWeight="bold" paddingTop="10" 
+				 textAlign="center"
 				 maxDisplayedLines="1"/>
 		<!-- minimize button -->
 		<!---

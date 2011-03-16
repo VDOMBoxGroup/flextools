@@ -1,12 +1,15 @@
 package net.vdombox.ide.core.view
 {
+	import flash.display.Screen;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.net.SharedObject;
 	
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
+	import mx.events.AIREvent;
 	import mx.events.FlexEvent;
+	import mx.managers.PopUpManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
@@ -21,6 +24,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	import net.vdombox.ide.core.view.components.MainWindow;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
+	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -41,40 +45,7 @@ package net.vdombox.ide.core.view
 			super( NAME, viewComponent );			
 		}
 		
-		private function init():void
-		{
-			initUser();
-			initTitle();
-			
-			gotoLastPosition();
-			mainWindow.nativeWindow.addEventListener( Event.CLOSING, saveAppPosition );			
-		}
 		
-		private function saveAppPosition(e:Event = null):void
-		{
-			var so:SharedObject = SharedObject.getLocal("directoryPath");
-			
-			so.data.windowPosition_x	= mainWindow.nativeWindow.x;
-			so.data.windowPosition_y 	= mainWindow.nativeWindow.y;
-			so.data.windowWidth			= mainWindow.width;
-			so.data.windowHeight		= mainWindow.height;					
-		}
-		
-		private function gotoLastPosition():void
-		{
-			var so:SharedObject = SharedObject.getLocal("directoryPath");
-			
-			if (so.data.windowPosition_x && 
-				so.data.windowPosition_y &&
-				so.data.windowWidth 	 &&
-				so.data.windowHeight)
-			{				
-				mainWindow.nativeWindow.x	= so.data.windowPosition_x;
-				mainWindow.nativeWindow.y 	= so.data.windowPosition_y;
-				mainWindow.width 			= so.data.windowWidth;
-				mainWindow.height			= so.data.windowHeight;
-			}
-		}	
 
 		private var currentModuleCategory : ModulesCategoryVO;
 
@@ -101,7 +72,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
 			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
-			interests.push( StatesProxy.SELECTED_PAGE_CHANGED )
+			
 //			interests.push( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
 
 			return interests;
@@ -138,27 +109,8 @@ package net.vdombox.ide.core.view
 					initTitle();
 					break;
 				}
-				case StatesProxy.SELECTED_PAGE_CHANGED:
-				{
-					initTitle();
-					break;
-				}	
-//				case ApplicationFacade.CLOSE_SETTINGS_WINDOW:
-//				{
-//					var settingsWindowMediator : SettingsWindowMediator =
-//						facade.retrieveMediator( SettingsWindowMediator.NAME ) as SettingsWindowMediator;
-//
-//					if ( !settingsWindowMediator )
-//						return;
-//
-//					var settingsWindow : SettingsWindow = settingsWindowMediator.settingsWindow;
-//
-//					windowManager.removeWindow( settingsWindow );
-//
-//					facade.removeMediator( SettingsWindowMediator.NAME );
-//
-//					break;
-//				}
+				
+//				
 			}
 		}
 
@@ -178,7 +130,7 @@ package net.vdombox.ide.core.view
 		{
 			windowManager.addWindow( mainWindow );
 			
-			init();
+//			init();
 		}
 		
 		private function initUser():void
@@ -190,19 +142,17 @@ package net.vdombox.ide.core.view
 		private function initTitle():void
 		{
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
-			
-			mainWindow.title = "VDOM IDE v.2.0.1.002 -  " + serverProxy.authInfo.hostname;
-			
 			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			var title: String =  "";			
+			
+			title =  serverProxy.authInfo.hostname + "  -  VDOM IDE v.2.0.1.002";
 			
 			if (statesProxy.selectedApplication)
 			{
-				mainWindow.title += " : " + statesProxy.selectedApplication.name;
+				title = statesProxy.selectedApplication.name +"  @  "+ title;
 				
-				if (statesProxy.selectedPage)
-					mainWindow.title += " : " + statesProxy.selectedPage.name;
 			}
-			
+			mainWindow.title = title
 		}
 
 		public function closeWindow() : void
@@ -219,6 +169,7 @@ package net.vdombox.ide.core.view
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler, false, 0, true );
 			mainWindow.addEventListener( MainWindowEvent.LOGOUT, logoutHandler, false, 0, true );
+			
 		}
 
 		private function removeHandlers() : void
@@ -289,6 +240,7 @@ package net.vdombox.ide.core.view
 
 		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
 		{
+			
 			var modulesCategories : Array = modulesProxy.categories;
 			var tabBar : ButtonBar = mainWindow.tabBar;
 
@@ -304,6 +256,9 @@ package net.vdombox.ide.core.view
 			showModulesByCategory( categoryVO );
 			selectModule();
 			mainWindow.tabBar.callLater( mainWindow.tabBar.drawFocus, [ false ] );
+			
+			initUser();
+			initTitle();
 		}
 
 		private function logoutHandler( event : MainWindowEvent ) : void

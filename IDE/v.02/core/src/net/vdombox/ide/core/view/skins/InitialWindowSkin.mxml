@@ -75,7 +75,7 @@
 		<s:Rect height="100%" width="100%" y="25"
 				radiusX="10" radiusY="10">
 			<s:fill>
-				<s:SolidColor color="#CC0000"
+				<s:SolidColor color="#CC00FF"
 							  alpha="0.0"/>
 			</s:fill>
 		</s:Rect>
