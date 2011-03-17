@@ -58,7 +58,7 @@ package net.vdombox.ide.modules.events.model
 		}
 
 		public function get selectedPage() : PageVO
-		{
+		{				
 			return data[ SELECTED_PAGE ];
 		}
 

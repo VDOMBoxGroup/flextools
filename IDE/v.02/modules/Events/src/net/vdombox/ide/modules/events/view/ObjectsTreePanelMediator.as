@@ -191,19 +191,30 @@ package net.vdombox.ide.modules.events.view
 		private function selectCurrentPage( ) : void
 		{
 			trace("selectCurrentPage");
-															
-			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;					
-							
+			
+			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
 			if( sessionProxy.selectedPage )
+			{
+				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
+				objectsTree.selectedItem = getPageXML(sessionProxy.selectedPage.id);
+			}
+			else
+			{
+				trace("Error: not selected Page in Event Modul");
+			}
+							
+		/*	if( sessionProxy.selectedPage )
 			{
 				sendNotification( ApplicationFacade.SET_SELECTED_PAGE, sessionProxy.selectedPage );												
 				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
-				objectsTree.selectedItem = getPageXML(sessionProxy.selectedPage.id);
+				
+				objectsTree.selectedItem = getPageXML(sessionProxy.selectedPage.id);				
 				objectsTree.validateNow();
-			//	objectsTree.scrollToIndex(objectsTree.selectedIndex);
+				objectsTree.scrollToIndex(objectsTree.selectedIndex);
 				return;
-			}
-			else
+			}*/
+			/*else
 			{	
 				if ( objectsTree.dataProvider != null )
 				{	
@@ -229,7 +240,7 @@ package net.vdombox.ide.modules.events.view
 				{
 					trace("Tree of objects is empty");
 				}
-			}			
+			}	*/		
 		}	
 		
 		private function getSelectPageVO( id : String ) : PageVO

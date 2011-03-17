@@ -302,6 +302,7 @@ package net.vdombox.ide.modules.events.view
 										  new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( ApplicationFacade.PIPES_READY );
+
 					break;
 				}
 
