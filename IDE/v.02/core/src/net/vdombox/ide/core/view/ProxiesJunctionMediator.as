@@ -38,6 +38,7 @@ package net.vdombox.ide.core.view
 
 		override public function onRegister() : void
 		{
+			trace("onRegister ProxiesJunctionMediator");
 			moduleProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
 			pipesProxy = facade.retrieveProxy( PipesProxy.NAME ) as PipesProxy;
 
@@ -207,8 +208,9 @@ package net.vdombox.ide.core.view
 
 				case PPMPlaceNames.APPLICATION:
 				{
+					trace("PPMPlaceNames.APPLICATION");
 					sendNotification( ApplicationFacade.APPLICATION_PROXY_REQUEST, ppMessage );
-
+					
 					break;
 				}
 

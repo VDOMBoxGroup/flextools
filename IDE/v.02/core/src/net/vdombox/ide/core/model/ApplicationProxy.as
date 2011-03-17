@@ -2,7 +2,7 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
@@ -19,7 +19,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	/**
@@ -99,7 +99,7 @@ package net.vdombox.ide.core.model
 			token = soap.get_top_objects( applicationVO.id );
 
 			token.recipientName = proxyName;
-
+			trace("get_top_objects");
 			return token;
 		}
 
@@ -654,10 +654,11 @@ package net.vdombox.ide.core.model
 				}
 				case "get_top_objects":
 				{
+					trace("token key "+ token.key);
 					createPagesList( result.Objects[ 0 ] );
 
 					sendNotification( ApplicationFacade.APPLICATION_PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice() } );
-
+					
 					break;
 				}
 

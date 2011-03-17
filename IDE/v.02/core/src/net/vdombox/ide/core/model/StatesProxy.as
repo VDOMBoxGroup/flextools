@@ -16,8 +16,8 @@ package net.vdombox.ide.core.model
 		public static const NAME : String = "StatesProxy";
 
 		public static const SELECTED_APPLICATION : String = "selectedApplication";
-		public static const SELECTED_PAGE : String = "selectedPage";
-		public static const SELECTED_OBJECT : String = "selectedObject";
+		public static const SELECTED_PAGE		 : String = "selectedPage";
+		public static const SELECTED_OBJECT		 : String = "selectedObject";
 		
 		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanget";
 		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanget";
@@ -45,20 +45,20 @@ package net.vdombox.ide.core.model
 		public function set selectedApplication( value : ApplicationVO ) : void
 		{
 			data[ SELECTED_APPLICATION ] = value;
-			data[ SELECTED_PAGE ] = null;
-			data[ SELECTED_OBJECT ] = null;
+			data[ SELECTED_PAGE ] 		 = null;
+			data[ SELECTED_OBJECT ]		 = null;
 			
 			facade.sendNotification(SELECTED_APPLICATION_CHANGED, value);
 		}
 
 		public function get selectedPage() : PageVO
-		{
+		{			
 			return data[ SELECTED_PAGE ];
 		}
 
 		public function set selectedPage( value : PageVO ) : void
 		{
-			data[ SELECTED_PAGE ] = value;
+			data[ SELECTED_PAGE ]   = value;
 			data[ SELECTED_OBJECT ] = null;
 			
 			facade.sendNotification(SELECTED_PAGE_CHANGED, value);

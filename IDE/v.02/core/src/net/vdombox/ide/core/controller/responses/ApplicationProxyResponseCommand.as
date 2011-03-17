@@ -6,7 +6,7 @@ package net.vdombox.ide.core.controller.responses
 	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -33,6 +33,7 @@ package net.vdombox.ide.core.controller.responses
 
 				case ApplicationFacade.APPLICATION_PAGES_GETTED:
 				{
+					sendNotification( ApplicationFacade.PAGE_SET_SELECTED, body );
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
 
 					break;

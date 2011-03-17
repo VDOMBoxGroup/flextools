@@ -233,7 +233,7 @@ package net.vdombox.ide.core.model.business
 			var soapEvent : SOAPEvent = new SOAPEvent( SOAPEvent.RESULT );
 			soapEvent.result = resultXML;
 			soapEvent.token = event.token;
-
+			
 			event.target.dispatchEvent( soapEvent );
 		}
 		

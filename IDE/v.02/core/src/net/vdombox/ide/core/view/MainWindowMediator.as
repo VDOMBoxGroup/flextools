@@ -45,8 +45,6 @@ package net.vdombox.ide.core.view
 			super( NAME, viewComponent );			
 		}
 		
-		
-
 		private var currentModuleCategory : ModulesCategoryVO;
 
 		private var modulesList : Array;
