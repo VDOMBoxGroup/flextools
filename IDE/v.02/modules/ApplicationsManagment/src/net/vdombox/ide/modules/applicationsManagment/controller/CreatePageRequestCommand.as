@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 	 * <b>Notifies:</b><ul>
 	 *  ApplicationFacade.CREATE_PAGE</ul><br />
 	 * </ul>
-	 * 
+	 *  
 	 *  @author Alexey Andreev
 	 *  
 	 */

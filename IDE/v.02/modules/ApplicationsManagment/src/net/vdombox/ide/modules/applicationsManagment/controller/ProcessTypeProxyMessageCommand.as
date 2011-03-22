@@ -11,38 +11,34 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
 	/**
+	 * The ProcessTypeProxyMessageCommand is command to manipulate teked data   from a VDOM type content message. 
+	 *  <ul>
+	 *  <b>Registred on:</b><ul>
+	 *  ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE</ul>
+	 * </ul>
+	 * 
+	 * @see  net.vdombox.ide.modules.applicationsManagment.model.TypesProxy
 	 * 
 	 * @author Alexey Andreev
 	 * 
 	 */	
 	public class ProcessTypeProxyMessageCommand extends SimpleCommand
 	{
-		
-		
 		override public function execute( notification : INotification ) : void
 		{
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 			var body : Object = message.getBody();
 			var target : String = message.target;
 			var operation : String = message.operation;
-			
 			var typesProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME) as TypesProxy;
-			
-			
-			//				if ( body is TypeVO )
-			//					applicationVO = body as ApplicationVO;
-			//				else if ( body && body.hasOwnProperty( "applicationVO" ) )
-			//					applicationVO = body.applicationVO as ApplicationVO;
-			//				else
-			//					throw new Error( "no application VO" );
 			
 			switch ( target )
 			{
 				case PPMTypesTargetNames.TYPES:
 				{
 					if ( operation == PPMOperationNames.READ  )
-						if (body is Array) 
-							typesProxy.types = body as Array
+						if ( body is Array ) 
+							typesProxy.types = body as Array;
 					
 					break;
 				}

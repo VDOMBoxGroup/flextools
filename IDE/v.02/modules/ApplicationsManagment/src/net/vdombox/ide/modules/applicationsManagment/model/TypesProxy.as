@@ -5,9 +5,11 @@ package net.vdombox.ide.modules.applicationsManagment.model
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-	
+		
 	/**
 	 * TypeProxy for manipulate whith object of <b>TapeVO</b> class<br />
+	 * 
+	 * @see net.vdombox.ide.common.vo.TypeVO
 	 * 
 	 * @author Alexey Andreev
 	 * 
