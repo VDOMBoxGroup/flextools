@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 	import net.vdombox.ide.modules.applicationsManagment.model.GalleryProxy;
 	import net.vdombox.ide.modules.applicationsManagment.model.SessionProxy;
 	import net.vdombox.ide.modules.applicationsManagment.model.SettingsProxy;
+	import net.vdombox.ide.modules.applicationsManagment.model.TypesProxy;
 	import net.vdombox.ide.modules.applicationsManagment.view.ApplicationsManagmentJunctionMediator;
 	import net.vdombox.ide.modules.applicationsManagment.view.ApplicationsManagmentMediator;
 	
@@ -23,6 +24,7 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new SessionProxy() );
 			facade.registerProxy( new GalleryProxy() );
+			facade.registerProxy( new TypesProxy() );
 		}
 	}
 }

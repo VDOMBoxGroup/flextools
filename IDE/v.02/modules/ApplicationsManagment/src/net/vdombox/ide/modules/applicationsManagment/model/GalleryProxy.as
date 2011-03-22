@@ -11,7 +11,11 @@ package net.vdombox.ide.modules.applicationsManagment.model
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-	
+	/**
+	 * 
+	 * @author Alexey Andreev
+	 * 
+	 */	
 	public class GalleryProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "GalleryProxy";
@@ -22,7 +26,7 @@ package net.vdombox.ide.modules.applicationsManagment.model
 
 			var f : File = File.applicationDirectory;
 			
-			f = f.resolvePath( "modules/Applications Managment/gallery" );
+			f = f.resolvePath( "modules/ApplicationsManagment/gallery" );
 			
 			_items = [];
 			

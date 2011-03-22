@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
 	import mx.core.UIComponent;
-	 
+	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
@@ -10,6 +10,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.PPMServerTargetNames;
 	import net.vdombox.ide.common.PPMStatesTargetNames;
+	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.SimpleMessage;
@@ -57,10 +58,18 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 			interests.push( ApplicationFacade.CREATE_APPLICATION );
 			interests.push( ApplicationFacade.EDIT_APPLICATION_INFORMATION );
+			
+			interests.push( ApplicationFacade.CREATE_PAGE );
+			interests.push( ApplicationFacade.GET_TYPES );
 
 			return interests;
 		}
 
+		/**
+		 * Create a message to sent to <b>VDOM Core</b> 
+		 * @param notification
+		 * 
+		 */		
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var pipe : IPipeFitting;
@@ -222,6 +231,25 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 					break;
 				}
+					
+				case ApplicationFacade.CREATE_PAGE:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE,
+													PPMApplicationTargetNames.PAGE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+				case ApplicationFacade.GET_TYPES:
+				{
+					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ,
+						PPMTypesTargetNames.TYPES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
 			}
 
 			super.handleNotification( notification );
@@ -344,6 +372,13 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			}
 		}
 
+		
+		/**
+		 * Get a message  from the <b>VDOM Core</b> and operates it.
+		 * 
+		 * @param message
+		 * 
+		 */		
 		private function handleProxyMessage( message : ProxyMessage ) : void
 		{
 			var proxy : String = message.proxy;
@@ -374,6 +409,12 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case PPMPlaceNames.RESOURCES:
 				{
 					sendNotification( ApplicationFacade.PROCESS_RESOURCE_PROXY_MESSAGE, message );
+					
+					break;
+				}
+				case PPMPlaceNames.TYPES:
+				{
+					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
 					
 					break;
 				}

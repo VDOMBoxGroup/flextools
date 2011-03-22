@@ -74,7 +74,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					applicationIconResourceVO.name = "Application Icon";
 
 					sendNotification( ApplicationFacade.SET_RESOURCE, applicationIconResourceVO );
-					
+					sendNotification(ApplicationFacade.CREATE_PAGE_REQUEST, createdApplicationVO );
 					break;
 				}
 

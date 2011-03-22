@@ -2,11 +2,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 {
 	import flash.events.Event;
 	import flash.utils.ByteArray;
-
+	
 	import mx.collections.ArrayList;
 	import mx.core.ClassFactory;
 	import mx.utils.StringUtil;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -15,11 +15,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.SettingsVO;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationItemRenderer;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.EditApplicationView;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.List;
 	import spark.events.IndexChangeEvent;
 
@@ -62,6 +62,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			sendNotification( ApplicationFacade.GET_SETTINGS, mediatorName );
 			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
+			sendNotification( ApplicationFacade.GET_TYPES );
 		}
 
 		override public function onRemove() : void
