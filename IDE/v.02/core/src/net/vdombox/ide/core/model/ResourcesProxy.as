@@ -21,6 +21,11 @@ package net.vdombox.ide.core.model
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	/**
+	 * ResourcesProxy is wrapper on VDOM Resources.   
+	 * Takes data from the server through the SOAP functions.
+	 * @author Alexey Andreev
+	 * @see net.vdombox.ide.common.vo.ResourceVO
+	 * @see net.vdombox.ide.core.model.business.SOAP
 	 * @flowerModelElementId _DERy4EomEeC-JfVEe_-0Aw
 	 */
 	public class ResourcesProxy extends Proxy implements IProxy

@@ -20,6 +20,16 @@ package net.vdombox.ide.core.model
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	/**
+	 * PageProxy is wrapper on VDOM Top Level Container(Page).   
+	 * Takes data from the server through the SOAP functions.
+	 * 
+	 * @see net.vdombox.ide.common.vo.PageVO
+	 * @see net.vdombox.ide.core.model.business.SOAP
+	 * @see net.vdombox.ide.core.controller.requests.PageProxyRequestCommand
+	 * @see net.vdombox.ide.core.controller.responses.PageProxyResponseCommand
+	 * 
+	 * @author Alexey Andreev
+	 * 
 	 * @flowerModelElementId _DD9p0EomEeC-JfVEe_-0Aw
 	 */
 	public class PageProxy extends Proxy

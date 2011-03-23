@@ -29,7 +29,7 @@ package net.vdombox.ide.core.model
 		private static const MODULES_XML : XML =
 			<modules>
 				<category name="applicationManagment">
-					<module name="ApplicationsManagment" path="app:/modules/Applications Managment/ApplicationsManagment.swf"/>
+					<module name="ApplicationsManagment" path="app:/modules/ApplicationsManagment/ApplicationsManagment.swf"/>
 				</category>
 				<category name="Edition">									
 					

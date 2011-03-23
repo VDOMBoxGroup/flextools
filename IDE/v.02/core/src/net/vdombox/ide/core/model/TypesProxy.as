@@ -9,6 +9,15 @@ package net.vdombox.ide.core.model
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	/**
+	 * ObjectProxy is wrapper on VDOM Object.   
+	 * Takes data from the server through the SOAP functions.
+	 * 
+	 * @see net.vdombox.ide.common.vo.TypeVO
+	 * @see net.vdombox.ide.core.model.business.SOAP
+	 * @see net.vdombox.ide.core.controller.requests.TypesProxyRequestCommand
+	 * 
+	 *  @author Alexey Andreev
+	 * 
 	 * @flowerModelElementId _DE2aoEomEeC-JfVEe_-0Aw
 	 */
 	public class TypesProxy extends Proxy implements IProxy

@@ -1,10 +1,16 @@
 package net.vdombox.ide.core.model
 {
 	import flash.net.SharedObject;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-
+	/**
+	 *  ResourcesProxy is wrapper on SharedObject. 
+	 * Used for save <i>hostame, login and password</i>
+	 * @see  flash.net.SharedObject
+	 * @author Alexey Andreev
+	 * 
+	 */
 	public class SharedObjectProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "SharedObjectProxy";
@@ -14,16 +20,16 @@ package net.vdombox.ide.core.model
 			super( NAME, {} );
 		}
 
-		private var sharedObject : SharedObject;
+		private var shObjData : Object;
 
 		override public function onRegister() : void
 		{
-			sharedObject = SharedObject.getLocal( "userData" );
+			shObjData = SharedObject.getLocal( "userData" ).data;
 			
-			data.username = sharedObject.data.username ? sharedObject.data.username : "";
-			data.password = sharedObject.data.password ? sharedObject.data.password : "";
-			data.hostname = sharedObject.data.hostname ? sharedObject.data.hostname : "";
-			data.localeCode = sharedObject.data.localeCode ? sharedObject.data.localeCode : "";
+			data.username = shObjData.username ? shObjData.username : "";
+			data.password = shObjData.password ? shObjData.password : "";
+			data.hostname = shObjData.hostname ? shObjData.hostname : "";
+			data.localeCode = shObjData.localeCode ? shObjData.localeCode : "";
 		}
 
 		public function get username() : String
@@ -33,7 +39,7 @@ package net.vdombox.ide.core.model
 
 		public function set username( value : String ) : void
 		{
-			sharedObject.data.username = data.username = value;
+			shObjData.username = data.username = value;
 		}
 
 		public function get password() : String
@@ -43,7 +49,7 @@ package net.vdombox.ide.core.model
 
 		public function set password( value : String ) : void
 		{
-			sharedObject.data.password = data.password = value;
+			shObjData.password = data.password = value;
 		}
 
 		public function get hostname() : String
@@ -53,7 +59,7 @@ package net.vdombox.ide.core.model
 
 		public function set hostname( value : String ) : void
 		{
-			sharedObject.data.hostname = data.hostname = value;
+			shObjData.hostname = data.hostname = value;
 		}
 
 		public function get localeCode() : String
@@ -63,7 +69,7 @@ package net.vdombox.ide.core.model
 
 		public function set localeCode( value : String ) : void
 		{
-			sharedObject.data.localeCode = data.localeCode = value;
+			shObjData.localeCode = data.localeCode = value;
 		}
 	}
 }

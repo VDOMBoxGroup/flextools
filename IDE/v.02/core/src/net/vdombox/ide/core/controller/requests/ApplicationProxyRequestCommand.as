@@ -107,7 +107,6 @@ package net.vdombox.ide.core.controller.requests
 				case PPMApplicationTargetNames.PAGES:
 				{
 					applicationProxy.getPages();
-trace("applicationProxy.getPages");
 					break;
 				}
 

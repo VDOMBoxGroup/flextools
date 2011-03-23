@@ -23,8 +23,18 @@ package net.vdombox.ide.core.model
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	/**
+	 * ApplicationProxy is wrapper on VDOM Application.   
+	 * Takes data from the server through the SOAP functions.
+	 * 
+	 * @see net.vdombox.ide.common.vo.ApplicationVO
+	 * @see net.vdombox.ide.core.model.business.SOAP
+	 * @see net.vdombox.ide.core.controller.requests.ApplicationProxyRequestCommand
+	 * @see net.vdombox.ide.core.controller.responses.ApplicationProxyResponseCommand
+	 * 
+	 * @author Alexey Andreev
+	 * 
 	 * @flowerModelElementId _DDdTgEomEeC-JfVEe_-0Aw
-	 */
+	 */	
 	public class ApplicationProxy extends Proxy
 	{
 		public static const NAME : String = "ApplicationProxy";
@@ -99,7 +109,6 @@ package net.vdombox.ide.core.model
 			token = soap.get_top_objects( applicationVO.id );
 
 			token.recipientName = proxyName;
-			trace("get_top_objects");
 			return token;
 		}
 
@@ -654,7 +663,6 @@ package net.vdombox.ide.core.model
 				}
 				case "get_top_objects":
 				{
-					trace("token key "+ token.key);
 					createPagesList( result.Objects[ 0 ] );
 
 					sendNotification( ApplicationFacade.APPLICATION_PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice() } );
@@ -792,6 +800,9 @@ package net.vdombox.ide.core.model
 
 				case "create_object":
 				{
+					if (!_pages)
+						_pages = [];
+					
 					var pageXML : XML = result.Object[ 0 ];
 
 					pageID = pageXML.@ID[ 0 ];
@@ -807,7 +818,7 @@ package net.vdombox.ide.core.model
 					pageVO.setID( pageID );
 
 					pageVO.setXMLDescription( pageXML );
-
+					
 					_pages.push( pageVO );
 
 					sendNotification( ApplicationFacade.APPLICATION_PAGE_CREATED, { applicationVO: applicationVO, pageVO: pageVO } );
@@ -866,8 +877,6 @@ package net.vdombox.ide.core.model
 			}
 		}
 		
-		public function operation1()
-		{
-		}
+		
 	}
 }
