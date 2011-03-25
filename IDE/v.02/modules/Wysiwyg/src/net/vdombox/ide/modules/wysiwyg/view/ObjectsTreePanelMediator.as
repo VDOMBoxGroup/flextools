@@ -3,14 +3,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.controls.Tree;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
-
+	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectsTreePanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -26,6 +26,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var _pages : Object;
 
+		private var tempFlag : Boolean = true;
+		
 		private var sessionProxy : SessionProxy;
 
 		private var isActive : Boolean;
@@ -211,8 +213,47 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 
 			objectsTreePanel.pages = pagesXMLList;
+			
+			//selectCurrentPage();		
+		}
+	
+		private function selectCurrentPage( ) : void
+		{
+			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+			if( sessionProxy.selectedPage )
+			{
+				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
+				objectsTreePanel.selectedPageID = sessionProxy.selectedPage.id
+				//ApplicationFacade.PAGE_STRUCTURE_GETTED, objectsTreePanel.pages
+				
+					//objectsTreePanel.selectedItem = getPageXML(objectsTreePanel.selectedPageID);
+				//objectsTreePanel.selectedObjectID
+				//if( int(objectsTreePanel.selectedObjectID) >= 0 && objectsTreePanel.selectedObjectID )
+					//objectsTreePanel.objectsTree.scrollToIndex(objectsTreePanel.selectedObjectID);// objectsTree.selectedIndex);
+//				objectsTreePanel.selectedItem = getPageXML(sessionProxy.selectedPage.id);
+//				objectsTreePanel.validateNow();
+//				objectsTreePanel.scrollToIndex(objectsTree.selectedIndex);
+			}
+			else
+			{
+				trace("Error: not selected Page in Event Modul");
+			}
+		}
+		
+		private function getPageXML( id : String ) : XML
+		{			
+			for each ( var page:XML in objectsTreePanel.pages)
+			{
+				if (page.@id == id)
+					return page;
+			}
+			
+			trace("Error: not exist page in objectsTree");
+			return null;
 		}
 
+//		
 		private function clearData() : void
 		{
 			objectsTreePanel.pages = null;
