@@ -190,69 +190,19 @@ package net.vdombox.ide.modules.events.view
 		
 		private function selectCurrentPage( ) : void
 		{
-			trace("selectCurrentPage");
-			
 			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			if( sessionProxy.selectedPage )
 			{
 				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
 				objectsTree.selectedItem = getPageXML(sessionProxy.selectedPage.id);
+				objectsTree.validateNow();
+				objectsTree.scrollToIndex(objectsTree.selectedIndex);
 			}
 			else
 			{
 				trace("Error: not selected Page in Event Modul");
 			}
-							
-		/*	if( sessionProxy.selectedPage )
-			{
-				sendNotification( ApplicationFacade.SET_SELECTED_PAGE, sessionProxy.selectedPage );												
-				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
-				
-				objectsTree.selectedItem = getPageXML(sessionProxy.selectedPage.id);				
-				objectsTree.validateNow();
-				objectsTree.scrollToIndex(objectsTree.selectedIndex);
-				return;
-			}*/
-			/*else
-			{	
-				if ( objectsTree.dataProvider != null )
-				{	
-					if( sessionProxy.selectedApplication.indexPageID && sessionProxy.selectedApplication.indexPageID !== "None")
-					{
-						trace("O`k");
-					}
-					else
-					{					
-						var xml : XML = objectsTree.dataProvider[ 0 ];
-						var id : String = xml.@id;
-						sessionProxy.selectedApplication.indexPageID = _pages[ id ];
-					}
-					
-					var selectedPageVO : PageVO = getSelectPageVO(sessionProxy.selectedApplication.indexPageID);	
-					sendNotification( ApplicationFacade.SET_SELECTED_PAGE, selectedPageVO );												
-					sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, selectedPageVO );
-					objectsTree.selectedItem = getPageXML(selectedPageVO.id);
-					objectsTree.validateNow();
-					//objectsTree.scrollToIndex(objectsTree.selectedIndex);
-				}
-				else 
-				{
-					trace("Tree of objects is empty");
-				}
-			}	*/		
-		}	
-		
-		private function getSelectPageVO( id : String ) : PageVO
-		{
-			for each ( var page:PageVO in _pages)
-			{
-				if (page.id == id)
-					return page;
-			}
-			
-			trace("Error: not exist page in _pages");
-			return null;
 		}
 		
 		private function getPageXML( id : String ) : XML
