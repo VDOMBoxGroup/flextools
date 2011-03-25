@@ -11,11 +11,11 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var message : ProxyMessage = notification.getBody() as ProxyMessage;
+			var message 	: ProxyMessage = notification.getBody() as ProxyMessage;
 			
-			var body : Object = message.getBody();
-			var target : String = message.target;
-			var operation : String = message.operation;
+			var body 		: Object = message.getBody();
+			var target		: String = message.target;
+			var operation 	: String = message.operation;
 			
 			switch ( target )
 			{
