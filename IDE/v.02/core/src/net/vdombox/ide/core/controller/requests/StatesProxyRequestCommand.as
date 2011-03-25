@@ -18,7 +18,7 @@ package net.vdombox.ide.core.controller.requests
 	 */
 	public class StatesProxyRequestCommand extends SimpleCommand
 	{
-		public var attribute1:StatesProxy;
+		public var attribute1:StatesProxy; //not used
 		override public function execute( notification : INotification ) : void
 		{
 			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;

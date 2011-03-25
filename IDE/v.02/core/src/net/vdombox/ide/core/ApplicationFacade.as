@@ -303,7 +303,6 @@ package net.vdombox.ide.core
 
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";
-//		private var attribute1;
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

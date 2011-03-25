@@ -19,9 +19,12 @@ package net.vdombox.ide.core.controller
 			var indexPageID : String = statesProxy.selectedApplication.indexPageID;
 			if ( statesProxy.selectedPage == null)
 			{
-				// indexPageID not exist. set first page as indexPageID.
-				if ( !indexPageID && indexPageID == "None" )
-					statesProxy.selectedApplication.indexPageID = body.pages[0];
+				// IndexPageID not exist. Set first page as indexPageID.
+				if ( !indexPageID || indexPageID == "None" )
+				{
+					statesProxy.selectedApplication.indexPageID = body.pages[0].id;
+					indexPageID = body.pages[0].id;
+				}
 				
 				for each ( var page:PageVO in body.pages)
 				{

@@ -16,8 +16,7 @@ package net.vdombox.ide.core.controller
 	public class ServerLoginSuccessfulCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
-		{
-			
+		{			
 			var typesProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 			typesProxy.loadTypes();
 		}

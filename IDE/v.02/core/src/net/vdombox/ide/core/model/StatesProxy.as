@@ -23,7 +23,7 @@ package net.vdombox.ide.core.model
 		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanget";
 		
 		public static const ERROR : String = "error";
-		public var attribute1:StatesProxyRequestCommand;
+		public var attribute1:StatesProxyRequestCommand; //not used
 		public var attribute2:StatesProxy;
 		public var attribute3:StatesProxy;
 		
