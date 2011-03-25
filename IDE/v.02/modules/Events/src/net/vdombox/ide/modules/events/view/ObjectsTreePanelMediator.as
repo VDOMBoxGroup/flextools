@@ -172,7 +172,6 @@ package net.vdombox.ide.modules.events.view
 
 		private function showPages( pages : Array ) : void
 		{
-			trace("showPages");
 			pagesXMLList = new XMLList();
 			_pages = {};
 
