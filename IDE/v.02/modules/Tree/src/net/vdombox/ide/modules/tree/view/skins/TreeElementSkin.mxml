@@ -116,7 +116,7 @@
 				if ( value && !isSelected )
 				{
 					mainGroup.filters = selectionFilters;
-					isSelected = true;
+					isSelected = true;					
 				}
 				else if ( !value && isSelected )
 				{

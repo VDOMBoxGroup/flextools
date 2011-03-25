@@ -13,6 +13,7 @@ package net.vdombox.ide.modules.tree.controller
 	{
 		override public function execute(notification:INotification) : void
 		{
+			trace("----------  SelectedPageGettedCommand -----------");
 			var structureProxy : StructureProxy = facade.retrieveProxy( StructureProxy.NAME ) as StructureProxy;
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			

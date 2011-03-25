@@ -5,7 +5,9 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  width="200" x="@{ _treeElementVO.left }" y="@{ _treeElementVO.top }"
 					  skinClass="net.vdombox.ide.modules.tree.view.skins.TreeElementSkin"
-					  creationComplete="creationCompleteHandler()" remove="removeHandler()">
+					  creationComplete="creationCompleteHandler()" 
+					  remove="removeHandler()"				 
+					  >
 
 	<fx:Script>
 		<![CDATA[
@@ -148,8 +150,17 @@
 				{
 					_treeElementVO.width = width;
 					_treeElementVO.height = height;
+				}					
+			}
+			
+			// todo Bad decision. Remake.
+			private function show():void
+			{
+				if ( selected )
+				{
+					selected = false;
+					selected = true;
 				}
-					
 			}
 			
 			private function creationCompleteHandler() : void
@@ -158,8 +169,9 @@
 
 				BindingUtils.bindSetter( sizeChanged, this, "width" );
 				BindingUtils.bindSetter( sizeChanged, this, "height" );
-				
+								
 				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
+				show();
 			}
 
 			private function removeHandler() : void

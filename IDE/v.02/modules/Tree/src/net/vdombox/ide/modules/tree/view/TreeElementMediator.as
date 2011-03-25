@@ -83,6 +83,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_SETTED );
 			
 			interests.push( ApplicationFacade.APPLICATION_INFORMATION_SETTED );
+			//interests.push( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED );
 
 			return interests;
 		}
@@ -135,6 +136,16 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
+				/*case ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED:
+				{
+					if ( this.treeElementVO == body as TreeElementVO )
+						treeElement.selected = true;
+					else
+						treeElement.selected = false;
+					
+					break;
+				}*/
+					
 				case ApplicationFacade.EXPAND_ALL_TREE_ELEMENTS:
 				{
 					if ( treeElementVO && !treeElementVO.state )

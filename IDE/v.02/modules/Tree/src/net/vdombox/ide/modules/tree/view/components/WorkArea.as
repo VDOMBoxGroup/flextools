@@ -63,6 +63,10 @@ package net.vdombox.ide.modules.tree.view.components
 
 		private var isStatePropertyChanged : Boolean;
 
+		/**
+		 * for save current treeElement?
+		 * treeElementsObject[ treeElementVO.id ] = treeElement;
+		 */		
 		private var treeElementsObject : Object;
 		private var linkagesObject : Object;
 
@@ -74,6 +78,9 @@ package net.vdombox.ide.modules.tree.view.components
 
 //		private var selectedTreeLevelVO : TreeLevelVO;
 
+		/**
+		 * @return Array of TreeElementVO. 
+		 */		
 		public function get treeElements() : Array
 		{
 			var result : Array = [];
@@ -94,6 +101,9 @@ package net.vdombox.ide.modules.tree.view.components
 			return result;
 		}
 		
+		/**
+		 * @param treeElements - Array of treeElementVO. 
+		 */		
 		public function set treeElements( treeElements : Array ) : void
 		{
 			var treeElement : TreeElement;
@@ -504,7 +514,10 @@ package net.vdombox.ide.modules.tree.view.components
 			return { parentless: parentless, linkageless: linkageless };
 		}
 
-		private function getTreeElements() : Array
+		/** 
+		 * @return Array of TreeElements.
+		 */		
+		public function getTreeElements() : Array
 		{
 			var elements : Array = [];
 			var numElements : int = numElements;

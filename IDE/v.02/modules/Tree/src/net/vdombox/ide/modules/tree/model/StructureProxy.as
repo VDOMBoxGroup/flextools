@@ -37,9 +37,15 @@ package net.vdombox.ide.modules.tree.model
 //		-----------------------------
 		private var _treeLevels : Array;
 
+		/**
+		 * Array of TreeElementVO. 
+		 */
 		private var _treeElements : Array;
 
-		private var treeElementsObject : Object;
+		/**
+		 * treeElementsObject[ treeElementVO.id ] = treeElementVO;
+		 */
+		private var treeElementsObject : Object; 
 
 		private var _linkages : Array;
 
@@ -52,11 +58,17 @@ package net.vdombox.ide.modules.tree.model
 			return _treeLevels;
 		}
 
+		/**
+		 * Array of TreeElementVO. 
+		 */
 		public function get treeElements() : Array
 		{
 			return _treeElements;
 		}
-
+		
+		/**
+		 * @param value - Array of TreeElementVO. 
+		 */
 		public function set treeElements( value : Array ) : void
 		{
 			_treeElements = value;

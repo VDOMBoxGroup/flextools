@@ -78,7 +78,20 @@ package net.vdombox.ide.modules.tree.view
 			
 			return interests;
 		}
-
+		
+		private function getSelectTreeElement( treeElVO : TreeElementVO ) : void
+		{
+			var tes:Array = workArea.getTreeElements();
+			for each (var t:TreeElement in tes)
+			{
+				if ( t.treeElementVO == treeElVO )
+				{
+					t.selected = true;
+					break;
+				}				
+			}	
+		}
+		
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var name : String = notification.getName();
@@ -103,6 +116,11 @@ package net.vdombox.ide.modules.tree.view
 						if ( structureProxy.linkages )
 							workArea.linkages = structureProxy.linkages;
 
+						if ( sessionProxy.selectedPage )
+						{
+							sessionProxy.selectedTreeElement = structureProxy.getTreeElementByVO(sessionProxy.selectedPage); // VO
+							getSelectTreeElement( sessionProxy.selectedTreeElement );
+						}
 						break;
 					}
 				}
