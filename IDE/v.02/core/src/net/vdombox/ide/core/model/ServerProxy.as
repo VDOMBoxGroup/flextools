@@ -26,6 +26,12 @@ package net.vdombox.ide.core.model
 	 */
 	public class ServerProxy extends Proxy implements IProxy
 	{
+		/**
+		 * 900000 milliseconds = 15 minutes.
+		 * defolt SESSION-LIFETIME = 20 minutes.  
+		 */		
+		private static const PING_TIMER : uint = 900000;    
+		
 		public static const NAME : String = "ServerProxy";
 
 		public static const NOT_CONNECTED : String = "notConnected";
@@ -212,7 +218,7 @@ package net.vdombox.ide.core.model
 				
 		private function startInfiniteSession() : void
 		{
-			_pingServerTimer = new Timer(900000);
+			_pingServerTimer = new Timer(PING_TIMER);
 			_pingServerTimer.addEventListener(TimerEvent.TIMER, pingOfServer); 
 			_pingServerTimer.start();				
 		}
