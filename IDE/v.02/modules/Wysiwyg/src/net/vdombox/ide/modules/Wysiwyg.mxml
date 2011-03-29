@@ -107,7 +107,8 @@
 			override public function startup() : void
 			{
 				facade = ApplicationFacade.getInstance( MODULE_ID );
-				ApplicationFacade( facade ).startup( this );
+	
+				ApplicationFacade( facade ).startup( this );	
 			}
 
 			override public function getToolset() : void
