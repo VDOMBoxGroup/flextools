@@ -212,7 +212,7 @@ package net.vdombox.ide.core.model
 				
 		private function startInfiniteSession() : void
 		{
-			_pingServerTimer = new Timer(54000000);
+			_pingServerTimer = new Timer(900000);
 			_pingServerTimer.addEventListener(TimerEvent.TIMER, pingOfServer); 
 			_pingServerTimer.start();				
 		}
@@ -269,7 +269,6 @@ package net.vdombox.ide.core.model
 				
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{
-			trace("===== 2 ======");
 			var error : ErrorVO = new ErrorVO();
 			
 			error.code = event.fault.faultCode;
