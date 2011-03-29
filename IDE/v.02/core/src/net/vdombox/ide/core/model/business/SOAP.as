@@ -142,6 +142,7 @@ package net.vdombox.ide.core.model.business
 
 		private function faultHandler( event : FaultEvent ) : void
 		{
+			trace("===== 1 ======");
 			if( isLoadWSDLProcess )
 			{
 				isLoadWSDLProcess = false;
@@ -156,6 +157,7 @@ package net.vdombox.ide.core.model.business
 			}
 			else
 			{
+				//не зашли в редактирование
 				var faultEvent : FaultEvent = FaultEvent.createEvent( event.fault, null, event.message );
 				dispatchEvent( faultEvent );				
 			}
@@ -246,7 +248,7 @@ package net.vdombox.ide.core.model.business
 
 		/**
 		 *  @private
-		 */
+		 */		
 		public function addEventListener( type : String, listener : Function, useCapture : Boolean = false, priority : int = 0, useWeakReference : Boolean = false ) : void
 		{
 			dispatcher.addEventListener( type, listener, useCapture, priority );

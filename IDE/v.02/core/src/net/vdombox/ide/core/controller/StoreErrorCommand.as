@@ -13,7 +13,7 @@ package net.vdombox.ide.core.controller
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
-			var name : String = notification.getName();
+			var name : String = notification.getName(); //not used
 			var body : Object = notification.getBody();
 			
 			sessionProxy.errorVO = body as ErrorVO;

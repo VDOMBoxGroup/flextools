@@ -1,11 +1,17 @@
 package net.vdombox.ide.core.model
 {
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	
+	import mx.events.StateChangeEvent;
+	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
 	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.events.SOAPErrorEvent;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
@@ -46,6 +52,8 @@ package net.vdombox.ide.core.model
 		private var _authInfo : AuthInfoVO;
 
 		private var _applications : Array;
+		
+		private var _pingServerTimer : Timer;
 
 		public function get authInfo() : AuthInfoVO
 		{
@@ -78,11 +86,13 @@ package net.vdombox.ide.core.model
 
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_START );
 
-			soap.connect( _authInfo.WSDLFilePath );
+			soap.connect( _authInfo.WSDLFilePath );				
 		}
 
 		public function disconnect() : void
 		{
+			_pingServerTimer.stop()
+			
 			soap.logout();
 
 			_authInfo = null;
@@ -96,7 +106,6 @@ package net.vdombox.ide.core.model
 
 		public function createApplication( applicationInformationVO : ApplicationInformationVO ) : void
 		{
-
 			soap.create_application( applicationInformationVO.toXML() );
 		}
 
@@ -177,6 +186,7 @@ package net.vdombox.ide.core.model
 				soap.create_application.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			}
 
+			//only for ProgressViewMediator
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_SUCCESSFUL );
 			sendNotification( ApplicationFacade.SERVER_LOGIN_START );
 
@@ -188,6 +198,7 @@ package net.vdombox.ide.core.model
 			isSOAPConnected = false;
 		}
 
+		// получили ключик соединения, сессии
 		private function soap_loginOKHandler( event : SOAPEvent ) : void
 		{
 			var result : XML = event.result;
@@ -195,8 +206,22 @@ package net.vdombox.ide.core.model
 			_authInfo.setHostname( result.Hostname[ 0 ] );
 
 			sendNotification( ApplicationFacade.SERVER_LOGIN_SUCCESSFUL, _authInfo );
+			startInfiniteSession();
+			
 		}
-
+				
+		private function startInfiniteSession() : void
+		{
+			_pingServerTimer = new Timer(54000000);
+			_pingServerTimer.addEventListener(TimerEvent.TIMER, pingOfServer); 
+			_pingServerTimer.start();				
+		}
+		
+		public function pingOfServer(event:TimerEvent):void  
+		{ 	
+			soap.keep_alive();
+		} 
+		
 		private function soap_loginErrorHandler( event : SOAPErrorEvent ) : void
 		{
 			var error : ErrorVO = new ErrorVO();
@@ -241,9 +266,10 @@ package net.vdombox.ide.core.model
 				}
 			}
 		}
-		
+				
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{
+			trace("===== 2 ======");
 			var error : ErrorVO = new ErrorVO();
 			
 			error.code = event.fault.faultCode;
