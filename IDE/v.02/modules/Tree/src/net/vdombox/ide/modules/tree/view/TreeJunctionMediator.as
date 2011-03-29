@@ -456,12 +456,14 @@ package net.vdombox.ide.modules.tree.view
 
 		public function tearDown() : void
 		{
-			junction.removePipe( PipeNames.STDIN );
-			junction.removePipe( PipeNames.STDCORE );
-			junction.removePipe( PipeNames.STDLOG );
+			junction.removePipe( PipeNames.PROXIESIN );
 			junction.removePipe( PipeNames.PROXIESOUT );
+			junction.removePipe( PipeNames.STDCORE );
+			junction.removePipe( PipeNames.STDIN );
+			junction.removePipe( PipeNames.STDLOG );
+			junction.removePipe( PipeNames.STDOUT );
 		}
-
+		
 		private function processInputPipe( notification : INotification ) : void
 		{
 			var pipe : IPipeFitting;
