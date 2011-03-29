@@ -20,6 +20,9 @@ package net.vdombox.ide.common
 
 		protected var facade : IFacade;
 		
+		/**
+		 * 2. The first time called by the VIModuleMediator and JunctionMediator in load modules
+		 */		
 		public function get moduleID() : String
 		{
 			return null;
@@ -45,6 +48,9 @@ package net.vdombox.ide.common
 			return null;
 		}
 		
+		/**
+		 * 3. Called MainWindowMediator when show Modules  
+		 */		
 		public function get hasToolset() : Boolean
 		{
 			return false;
@@ -60,10 +66,16 @@ package net.vdombox.ide.common
 			return false;
 		}
 		
+		/**
+		 * 1. Called by the Core (VdomIDE) after creating module.
+		 */
 		public function startup() : void
 		{
 		}
 		
+		/**
+		 * 4. Called MainWindowMediator when show Modules  
+		 */	
 		public function getToolset() : void
 		{
 		}
@@ -72,6 +84,9 @@ package net.vdombox.ide.common
 		{
 		}
 		
+		/**
+		 * 5. Called by the Core (VdomIDE) when loading moduls and after select module.
+		 */
 		public function getBody() : void
 		{
 		}
@@ -80,6 +95,9 @@ package net.vdombox.ide.common
 		{
 		}
 		
+		/** 
+		 * Called when unload module
+		 */		
 		public function tearDown() : void
 		{
 		}
