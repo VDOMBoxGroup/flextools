@@ -76,6 +76,11 @@
 			{
 				facade.sendNotification( ApplicationFacade.CREATE_BODY );
 			}
+			
+			override public function deSelect():void
+			{
+				facade.sendNotification(ApplicationFacade.MODULE_DESELECTED);
+			}
 
 			override public function initializeSettings() : void
 			{

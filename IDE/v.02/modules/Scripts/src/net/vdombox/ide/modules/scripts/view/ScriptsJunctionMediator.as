@@ -79,6 +79,9 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.SAVE_LIBRARY );
 			
 			interests.push( ApplicationFacade.DELETE_LIBRARY );
+			
+			interests.push( ApplicationFacade.BODY_STOP );
+			 
 
 			return interests;
 		}
@@ -325,6 +328,14 @@ package net.vdombox.ide.modules.scripts.view
 					
 					break
 				}
+					
+				case ApplicationFacade.BODY_STOP :
+				{
+					junction.sendMessage( PipeNames.STDCORE,
+						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+					
+					break;
+				}
 			}
 
 			super.handleNotification( notification );
@@ -347,9 +358,9 @@ package net.vdombox.ide.modules.scripts.view
 					}
 					else
 					{
-						sendNotification( ApplicationFacade.MODULE_DESELECTED );
-						junction.sendMessage( PipeNames.STDCORE,
-											  new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+//						sendNotification( ApplicationFacade.MODULE_DESELECTED );
+//						junction.sendMessage( PipeNames.STDCORE,
+//											  new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
 					}
 
 					break;
