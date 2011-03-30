@@ -141,8 +141,7 @@ package net.vdombox.ide.core.model.business
 		}
 
 		private function faultHandler( event : FaultEvent ) : void
-		{
-			trace("===== 1 ======");
+		{			
 			if( isLoadWSDLProcess )
 			{
 				isLoadWSDLProcess = false;
