@@ -13,6 +13,12 @@ package net.vdombox.ide.modules.events.controller
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
+	
+	/**
+	 * The CreateBodyCommand creating body of Events
+	 * @author Alexey Andreev
+	 * 
+	 */
 	public class CreateBodyCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void

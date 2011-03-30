@@ -79,6 +79,8 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.GET_PAGES );
 			
 			interests.push( ApplicationFacade.GET_OBJECT );
+			interests.push( ApplicationFacade.BODY_STOP );
+			
 
 			return interests;
 		}
@@ -263,6 +265,15 @@ package net.vdombox.ide.modules.events.view
 					
 					break;
 				}
+				case ApplicationFacade.BODY_STOP :
+				{
+					junction.sendMessage( PipeNames.STDCORE,
+						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+					
+					break;
+				}					
+					
+					
 			}
 
 			super.handleNotification( notification );
@@ -278,18 +289,12 @@ package net.vdombox.ide.modules.events.view
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
-					if ( recipientKey == multitonKey )
-					{
-						sendNotification( ApplicationFacade.MODULE_SELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
-					}
-					else
-					{
-						sendNotification( ApplicationFacade.MODULE_DESELECTED );
-						junction.sendMessage( PipeNames.STDCORE,
-											  new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
-					}
+					if ( recipientKey != multitonKey )
+						return;
 
+					sendNotification( ApplicationFacade.MODULE_SELECTED );
+					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
+					
 					break;
 				}
 
