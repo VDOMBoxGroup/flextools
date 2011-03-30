@@ -10,9 +10,21 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
-
+	/**
+	 * This command gives to <b>TypesProxy</b> geted  <b>TypesVO</b><br />
+	 *  <ul><br />
+	 * 
+	 *  <b>Registred on:</b><ul>
+	 *  ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE</ul><br />
+	 * 
+	 * <b>Notifies:</b><ul>Is Missing </ul><br />
+	 * </ul> 
+	 * 
+	 * @author Alexey Andreev
+	 * 
+	 */
 	public class ProcessTypesProxyMessageCommand extends SimpleCommand
-	{
+	{	
 		override public function execute( notification : INotification ) : void
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;

@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 	public class _ObjectEditorMediator extends Mediator implements IMediator
 	{
-		public static const NAME : String = "ObjectEditorMediator";
+		public static const NAME : String = "ObjectEditorMediator"; 
 
 		public static var instancesNameList : Object = {};
 		

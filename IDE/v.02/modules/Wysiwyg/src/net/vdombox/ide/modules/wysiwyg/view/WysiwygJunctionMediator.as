@@ -92,6 +92,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.REMOTE_CALL_REQUEST );
 			interests.push( ApplicationFacade.UPDATE_ATTRIBUTES );
+		
+			interests.push( ApplicationFacade.BODY_STOP );
+			
 
 			return interests;
 		}
@@ -378,6 +381,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
+					
+				case ApplicationFacade.BODY_STOP :
+				{
+					junction.sendMessage( PipeNames.STDCORE,
+						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+					
+					break;
+				}					
+					
 			}
 
 			super.handleNotification( notification );
@@ -388,31 +400,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var simpleMessage : SimpleMessage = message as SimpleMessage;
 
 			var recipientKey : String = simpleMessage.getRecipientKey();
+			
+			if ( recipientKey != multitonKey )
+				return;
 
 			switch ( simpleMessage.getHeader() )
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
-					if ( recipientKey == multitonKey )
-					{
-						sendNotification( ApplicationFacade.MODULE_SELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
-					}
-					else
-					{
-						sendNotification( ApplicationFacade.MODULE_DESELECTED );
-						junction.sendMessage( PipeNames.STDCORE,
-							new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
-					}
+					sendNotification( ApplicationFacade.MODULE_SELECTED );
+					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 
 					break;
 				}
 
 				case SimpleMessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
-					if ( recipientKey != multitonKey )
-						return;
-
 					junction.sendMessage( PipeNames.STDLOG,
 						new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
@@ -422,9 +425,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
-					if ( recipientKey != multitonKey )
-						return;
-
 					var settingsVO : SettingsVO = new SettingsVO( simpleMessage.getBody() );
 
 					sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_PROXY, settingsVO );

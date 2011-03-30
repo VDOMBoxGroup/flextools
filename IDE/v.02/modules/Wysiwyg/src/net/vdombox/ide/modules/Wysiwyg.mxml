@@ -71,6 +71,7 @@
 
 			override public function tearDown() : void
 			{
+				trace("\nW Z V G : Wisiwig.tearDown()");
 				dispatchEvent( new Event( TEAR_DOWN ) );
 			}
 
@@ -118,6 +119,7 @@
 
 			override public function getSettingsScreen() : void
 			{
+//				trace(" \n W Z V G : Wisiwig.getSettingsScreen()");
 				facade.sendNotification( ApplicationFacade.CREATE_SETTINGS_SCREEN );
 			}
 
@@ -125,7 +127,11 @@
 			{
 				facade.sendNotification( ApplicationFacade.CREATE_BODY );
 			}
-
+			
+			override public function deSelect():void
+			{
+				facade.sendNotification(ApplicationFacade.MODULE_DESELECTED);
+			}
 			override public function initializeSettings() : void
 			{
 				facade.sendNotification( ApplicationFacade.INITIALIZE_SETTINGS );
