@@ -16,7 +16,7 @@ package net.vdombox.ide.modules.tree.controller
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
 			if( sessionProxy.selectedApplication )
-			{
+			{ 
 				facade.sendNotification( ApplicationFacade.GET_PAGES, { applicationVO: sessionProxy.selectedApplication} );
 				facade.sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, { applicationVO: sessionProxy.selectedApplication} );
 			}

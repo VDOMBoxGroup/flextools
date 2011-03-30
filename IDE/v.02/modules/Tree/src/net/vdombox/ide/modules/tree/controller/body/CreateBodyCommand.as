@@ -8,12 +8,16 @@ package net.vdombox.ide.modules.tree.controller.body
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
-
+	/**
+	 * The CreateBodyCommand creating body of Tree
+	 * @author Alexey Andreev
+	 * 
+	 */
 	public class CreateBodyCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+//			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			var body : Body;
 			var bodyMediator : BodyMediator;

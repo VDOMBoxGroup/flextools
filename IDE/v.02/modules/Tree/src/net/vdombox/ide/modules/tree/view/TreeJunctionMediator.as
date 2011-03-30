@@ -30,14 +30,7 @@ package net.vdombox.ide.modules.tree.view
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.PipeListener;
-	/*
-	@startuml img/sequence_img002b.png
-	Alice -> "Bob()" : Helloa slsd 
-	"Bob()" -> Alex : check
-	Alex --> "Bob()" : Back
-	"Bob()" --> Aliceasd
-	@enduml
-	*/
+	
 	public class TreeJunctionMediator extends LoggingJunctionMediator
 	{
 		public static const NAME : String = "TreeJunctionMediator";
@@ -102,6 +95,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.DELETE_PAGE );
 
 			interests.push( ApplicationFacade.SEND_TO_LOG );
+			interests.push( ApplicationFacade.BODY_STOP );
 
 			return interests;
 		}
@@ -272,6 +266,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.GET_PAGES:
 				{
+					
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -398,6 +393,14 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
+
+				case ApplicationFacade.BODY_STOP :
+				{
+					junction.sendMessage( PipeNames.STDCORE,
+						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+				
+					break;
+				}
 			}
 
 			super.handleNotification( notification );
@@ -413,17 +416,11 @@ package net.vdombox.ide.modules.tree.view
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
-					if ( recipientKey == multitonKey )
-					{
-						sendNotification( ApplicationFacade.MODULE_SELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
-					}
-					else
-					{
-						sendNotification( ApplicationFacade.MODULE_DESELECTED );
-						junction.sendMessage( PipeNames.STDCORE,
-											  new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
-					}
+					if ( recipientKey != multitonKey )
+						return;
+				
+					sendNotification( ApplicationFacade.MODULE_SELECTED );
+					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 
 					break;
 				}

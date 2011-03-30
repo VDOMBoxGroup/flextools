@@ -34,6 +34,7 @@
 
 			override public function tearDown() : void
 			{
+				trace("\nT R E E: Tree.tearDown()");
 				dispatchEvent( new Event( TEAR_DOWN ) );
 			}
 
@@ -86,6 +87,11 @@
 			override public function getBody() : void
 			{
 				facade.sendNotification( ApplicationFacade.CREATE_BODY );
+			}
+			
+			override public function deSelect():void
+			{
+				facade.sendNotification(ApplicationFacade.MODULE_DESELECTED);
 			}
 
 			override public function initializeSettings() : void
