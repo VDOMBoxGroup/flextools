@@ -40,7 +40,7 @@ package net.vdombox.ide.core.view
 
 //			interests.push( ApplicationFacade.MAIN_WINDOW_OPENED );
 			interests.push( ApplicationFacade.TYPES_LOADED );
-
+			
 			return interests;
 		}
 
