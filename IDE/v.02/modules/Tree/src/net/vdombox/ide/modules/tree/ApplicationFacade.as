@@ -50,6 +50,9 @@ package net.vdombox.ide.modules.tree
 		public static const CREATE_TOOLSET : String = "createToolset";
 		public static const CREATE_SETTINGS_SCREEN : String = "createSettingsScreen";
 		
+		/**
+		 * the notification  for send body of IDEModule to IDECore 
+		 */		
 		public static const CREATE_BODY : String = "createBody";
 		public static const BODY_CREATED : String = "bodyCreated";
 		
@@ -62,6 +65,10 @@ package net.vdombox.ide.modules.tree
 
 //		selection
 		public static const SELECT_MODULE : String = "selectModule";
+		
+		/**
+		 *  the notification for selected IDEModule toolset Button 
+		 */		
 		public static const MODULE_SELECTED : String = "moduleSelected";
 		public static const MODULE_DESELECTED : String = "moduleDeselected";
 

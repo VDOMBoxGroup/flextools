@@ -44,6 +44,7 @@ package net.vdombox.ide.modules.tree.controller.body
 //			statesObject[ ApplicationFacade.SELECTED_TREE_LEVEL ] = null;
 			
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
+			facade.sendNotification( ApplicationFacade.MODULE_SELECTED );
 		}
 	}
 }

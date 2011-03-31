@@ -149,9 +149,14 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.EXPORT_BODY:
 				{
+					// send self body
 					message = new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
+					
+					// tell to IDECore need to connet proxies pipe
+					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
+
 
 					break;
 				}
@@ -420,8 +425,8 @@ package net.vdombox.ide.modules.tree.view
 					if ( recipientKey != multitonKey )
 						return;
 				
-					sendNotification( ApplicationFacade.MODULE_SELECTED );
-					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
+//					sendNotification( ApplicationFacade.MODULE_SELECTED );
+//					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 
 					break;
 				}

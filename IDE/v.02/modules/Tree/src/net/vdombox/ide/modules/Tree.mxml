@@ -34,7 +34,6 @@
 
 			override public function tearDown() : void
 			{
-				trace("\nT R E E: Tree.tearDown()");
 				dispatchEvent( new Event( TEAR_DOWN ) );
 			}
 
@@ -84,9 +83,11 @@
 				facade.sendNotification( ApplicationFacade.CREATE_SETTINGS_SCREEN );
 			}
 
+			
 			override public function getBody() : void
 			{
 				facade.sendNotification( ApplicationFacade.CREATE_BODY );
+				facade.sendNotification( ApplicationFacade.MODULE_SELECTED);
 			}
 			
 			override public function deSelect():void
@@ -100,4 +101,5 @@
 			}
 		]]>
 	</fx:Script>
+	<s:Button label="asd" width="123" height="32"/>
 </common:VIModule>
