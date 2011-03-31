@@ -85,7 +85,7 @@ package net.vdombox.ide.common
 		}
 		
 		/**
-		 * 5. Called by the Core (VdomIDE) when loading moduls and after select module.
+		 * 5. Called by the IDECore  when loading moduls and after select module.
 		 */
 		public function getBody() : void
 		{
