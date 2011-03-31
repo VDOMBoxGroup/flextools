@@ -91,7 +91,6 @@ package net.vdombox.ide.common.vo
 //		
 //		public function set data( value : ByteArray ) : void
 //		{
-//			trace( "zzzzzz" );
 //		}
 
 		public var data : ByteArray;

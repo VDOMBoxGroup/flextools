@@ -63,14 +63,12 @@ package net.vdombox.components
 			if ( !tabBar.dataProvider )
 			{
 				tabBar.dataProvider = new ArrayList();
-				trace("add ArrayList into tabBar")
 			}
 
 			tab.addEventListener( TabEvent.ELEMENT_ADD, tab_elementAdd, false, 0, true );
 			tab.addEventListener( TabEvent.ELEMENT_REMOVE, tab_elementRemove, false, 0, true );
 
 			tabBar.dataProvider.addItem( tab );
-			trace("add tab into tabBar")
 			
 			if( tabBar.selectedIndex == -1 )
 				tabBar.selectedIndex = 0;
