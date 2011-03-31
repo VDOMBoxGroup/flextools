@@ -1,8 +1,14 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
+	import mx.core.Application;
+	
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StructureProxy;
+	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
+	import net.vdombox.ide.modules.tree.view.components.TreeElement;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -18,8 +24,8 @@ package net.vdombox.ide.modules.tree.controller.body
 			if ( sessionProxy.selectedApplication )
 			{
 				sendNotification( ApplicationFacade.CREATE_PAGE,
-					{ applicationVO: sessionProxy.selectedApplication, typeVO: typeVO } );
-			}
+					{ applicationVO: sessionProxy.selectedApplication, typeVO: typeVO } );				
+			}				
 		}
 	}
 }

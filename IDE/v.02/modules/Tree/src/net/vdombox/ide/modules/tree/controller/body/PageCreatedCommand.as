@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.tree.controller.body
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;
+	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -18,7 +19,18 @@ package net.vdombox.ide.modules.tree.controller.body
 			
 			sendNotification( ApplicationFacade.SEND_TO_LOG, getQualifiedClassName( this ) );
 			
-			structureProxy.cretaeTreeElementByVO( pageVO );
+			structureProxy.createTreeElementByVO( pageVO );
+			
+			
+			/* todo 
+			for each (var te:TreeElementVO in structureProxy.treeElements)
+			{
+				if (te.pageVO == pageVO)
+				{
+					sendNotification( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, te );
+				}
+			}	
+			trace("add code - select Page");*/
 		}
 	}
 }

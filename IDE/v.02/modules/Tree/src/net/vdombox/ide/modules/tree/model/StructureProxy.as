@@ -206,7 +206,7 @@ package net.vdombox.ide.modules.tree.model
 			return treeElementsObject[ pageVO.id ];
 		}
 
-		public function cretaeTreeElementByVO( pageVO : PageVO ) : void
+		public function createTreeElementByVO( pageVO : PageVO ) : void
 		{
 			var treeElementVO : TreeElementVO = treeElementsObject[ pageVO.id ];
 
@@ -221,8 +221,18 @@ package net.vdombox.ide.modules.tree.model
 			treeElementsChanged = true;
 
 			commitProperties();
-
-			sendNotification( ApplicationFacade.TREE_ELEMENTS_CHANGED, treeElements );
+			
+			sendNotification( ApplicationFacade.TREE_ELEMENT_ADD, treeElements );			
+				
+			selectTreeElementChange(treeElementVO);
+		}
+		
+		private function selectTreeElementChange(treeElementVO:TreeElementVO):void
+		{			
+			if ( treeElementVO && treeElementVO.pageVO )
+			{
+				sendNotification( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );				
+			}
 		}
 
 		public function deleteTreeElementByVO( pageVO : PageVO ) : void

@@ -369,6 +369,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.CREATE_PAGE:
 				{
+					trace("2. create Page");
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );

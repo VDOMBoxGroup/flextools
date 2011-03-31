@@ -30,7 +30,6 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.body.SelectedTreeLevelChangeRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.body.TreeElementCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.TreeElementRemovedCommand;
-	import net.vdombox.ide.modules.tree.controller.body.TreeElementSelectionCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessPageProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessResourcesProxyMessageCommand;
@@ -189,6 +188,8 @@ package net.vdombox.ide.modules.tree
 		public static const OPEN_RESOURCE_SELECTOR_REQUEST : String = "openResourceSelectorRequest";
 		
 		public static const TREE_ELEMENTS_CHANGED : String = "treeElementsChanged";
+		public static const TREE_ELEMENT_ADD : String = "treeElementAdd";
+		
 		public static const LINKAGES_CHANGED : String = "linkagesChanged";		
 		
 		public static const CREATE_PAGE_WINDOW_CREATED : String = "createPageWindowCreated";
@@ -281,9 +282,6 @@ package net.vdombox.ide.modules.tree
 			
 			registerCommand( SELECTED_TREE_LEVEL_CHANGE_REQUEST, SelectedTreeLevelChangeRequestCommand );
 			registerCommand( SELECTED_TREE_ELEMENT_CHANGE_REQUEST, SelectedTreeElementChangeRequestCommand );
-			
-			
-//			registerCommand( TREE_ELEMENT_SELECTION, TreeElementSelectionCommand );
 			
 			registerCommand( OPEN_RESOURCE_SELECTOR_REQUEST, OpenResourceSelectorRequestCommand );
 			

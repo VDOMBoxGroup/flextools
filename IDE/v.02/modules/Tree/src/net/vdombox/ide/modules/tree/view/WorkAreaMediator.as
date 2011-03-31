@@ -72,6 +72,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.SELECTED_TREE_LEVEL_CHANGED );
 
 			interests.push( ApplicationFacade.TREE_ELEMENTS_CHANGED );
+			interests.push( ApplicationFacade.TREE_ELEMENT_ADD );
 			interests.push( ApplicationFacade.LINKAGES_CHANGED );
 
 			interests.push( ApplicationFacade.APPLICATION_STRUCTURE_SETTED );
@@ -79,7 +80,7 @@ package net.vdombox.ide.modules.tree.view
 			return interests;
 		}
 		
-		private function getSelectTreeElement( treeElVO : TreeElementVO ) : void
+		private function setSelectTreeElement( treeElVO : TreeElementVO ) : void
 		{
 			var tes:Array = workArea.getTreeElements();
 			for each (var t:TreeElement in tes)
@@ -119,7 +120,7 @@ package net.vdombox.ide.modules.tree.view
 						if ( sessionProxy.selectedPage )
 						{
 							sessionProxy.selectedTreeElement = structureProxy.getTreeElementByVO(sessionProxy.selectedPage); // VO
-							getSelectTreeElement( sessionProxy.selectedTreeElement );
+							setSelectTreeElement( sessionProxy.selectedTreeElement );
 						}
 						break;
 					}
@@ -147,12 +148,21 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
-
+					
 				case ApplicationFacade.TREE_ELEMENTS_CHANGED:
-				{
-					workArea.treeElements = body as Array;
+				{					
+					workArea.treeElements = body as Array;					
+					
+					break;			
+				}
 
-					break;
+				case ApplicationFacade.TREE_ELEMENT_ADD:
+				{					
+					workArea.treeElements = body as Array;					
+					
+					setSelectTreeElement( workArea.treeElements[workArea.treeElements.length - 1]);
+					
+					break;			
 				}
 
 				case ApplicationFacade.LINKAGES_CHANGED:

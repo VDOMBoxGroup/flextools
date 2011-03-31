@@ -91,6 +91,7 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function performApplyHandler ( event : WindowEvent ) : void
 		{
+			trace("1. create Page");
 			var selectedPageType : TypeVO = createPageWindow.selectedPageType;
 			
 			sendNotification( ApplicationFacade.CLOSE_WINDOW, createPageWindow );
