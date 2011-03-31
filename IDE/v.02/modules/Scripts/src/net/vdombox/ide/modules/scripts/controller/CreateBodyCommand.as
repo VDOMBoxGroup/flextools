@@ -30,6 +30,7 @@ package net.vdombox.ide.modules.scripts.controller
 
 			body.moduleFactory = scriptsMediator.scripts.moduleFactory;
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
+			facade.sendNotification( ApplicationFacade.MODULE_SELECTED );
 		}
 	}
 }
