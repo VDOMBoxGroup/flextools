@@ -66,7 +66,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		}
 
 		/**
-		 * Create a message to sent to <b>VDOM Core</b> 
+		 * Create a message to sent to <b>IDECore</b> 
 		 * @param notification
 		 * 
 		 */		
@@ -119,6 +119,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					message = new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
+					
+					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE,
+						null, multitonKey ) );
+					
 
 					break;
 				}
@@ -265,14 +269,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
-					if ( recipientKey == multitonKey )
+					if ( recipientKey != multitonKey )
 					{
-						sendNotification( ApplicationFacade.MODULE_SELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE,
-																					null, multitonKey ) );
-					}
-					else
-					{
+//						todo: do it like IDETree
 						sendNotification( ApplicationFacade.MODULE_DESELECTED );
 						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE,
 																					null, multitonKey ) );

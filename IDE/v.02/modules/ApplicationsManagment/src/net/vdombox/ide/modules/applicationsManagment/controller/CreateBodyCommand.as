@@ -36,6 +36,7 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 			
 			body.moduleFactory = applicationsManagmentMediator.applicationsManagment.moduleFactory;
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
+			facade.sendNotification( ApplicationFacade.MODULE_SELECTED );
 		}
 	}
 }
