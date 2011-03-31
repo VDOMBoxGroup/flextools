@@ -218,7 +218,7 @@ package net.vdombox.ide.core.view
 			}
 
 			selectedModuleID = moduleVO.moduleID;
-
+// todo: delete
 			sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, moduleVO );
 		}
 

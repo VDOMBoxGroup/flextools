@@ -1,6 +1,12 @@
 // ActionScript file
 @startuml img/sequence_img001.png
-
+title Переключение между модулями Mod2 -> Mod1
+	Mod1 -> Core : Message:\nI wanna be selected
+	Core -> Mod2 : Run function:\nMod2.deSelect()
+	Core -> Mod1 : Run function:\nMod1.getBody()	
+	
+@enduml	
+	
 	
 participant  ToolsetMediator <<(W, #ADDdB2) >>
 participant  BodyMediator <<(W, #ADDdB2) >>
@@ -10,10 +16,7 @@ participant  MainWindowMediator <<(С, #ADDdB2) >>
 participant  CoreJunctionMediator <<(С, #ADDdB2) >>	
 participant  ProxiesJunctionMediator <<(С, #ADDdB2) >>
 participant  StatesProxyRequestCommand <<(С, #ADDdB2) >>
-participant  TreeJunctionMediator <<(T, #ADDdB2) >>
 	
-participant  ProcessStatesProxyMessageCommand <<(T, #ADDdB2) >>
-participant  TreeBodyMediator <<(T, #ADDdB2) >>	
 	
 		
 	
@@ -44,41 +47,11 @@ WysiwygJunctionMediator -> WysiwygJunctionMediator : GET_ALL_STATES
 WysiwygJunctionMediator -> ProxiesJunctionMediator : PROXIESOUT
 ProxiesJunctionMediator -> StatesProxyRequestCommand : STATES_PROXY_REQUEST
 StatesProxyRequestCommand -> ProxiesJunctionMediator : STATES_PROXY_RESPONSE
-ProxiesJunctionMediator -> TreeJunctionMediator : PROXIESOUT
+ProxiesJunctionMediator -> WysiwygJunctionMediator : PROXIESOUT
 	
-TreeJunctionMediator -> ProcessStatesProxyMessageCommand :   ALL_STATES
 	
-ProcessStatesProxyMessageCommand -> TreeBodyMediator :   ALL_STATES_GETTED
-note over of TreeBodyMediator:  	Пошло в не правильное русло\nначало запрашивать странички\nприложения
-
- 
-
-
-
-
-
 
 @enduml	
-title Взаимодействие между Модулем (M) и Движком (C)
-box "in side Module"
-participant  WorkAreaMediator  
-participant  SaveRequestCommand 
-participant  TreeJunctionMediator  
-end box
 
-participant  Core <<(С, #ADDdB2) >>			
-	
-	
-	WorkAreaMediator -> SaveRequestCommand  : sendNotification(..) 
-note over of SaveRequestCommand:  ApplicationFacade.\nSAVE_REQUEST
-
-SaveRequestCommand -> TreeJunctionMediator :  sendNotification(..) 
-note over of TreeJunctionMediator:  	 ApplicationFacade.\nSET_APPLICATION_STRUCTURE
-
-
-TreeJunctionMediator -> Core : 	junction.sendMessage(..)
-	note over of Core:  	 PipeNames.PROXIESOUT,\n message
-
-Core --/  a : 	junction.sendMessage(..)
 	
 	
