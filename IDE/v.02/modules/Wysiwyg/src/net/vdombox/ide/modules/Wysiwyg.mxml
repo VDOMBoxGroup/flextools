@@ -126,6 +126,7 @@
 			override public function getBody() : void
 			{
 				facade.sendNotification( ApplicationFacade.CREATE_BODY );
+				facade.sendNotification( ApplicationFacade.MODULE_SELECTED);
 			}
 			
 			override public function deSelect():void

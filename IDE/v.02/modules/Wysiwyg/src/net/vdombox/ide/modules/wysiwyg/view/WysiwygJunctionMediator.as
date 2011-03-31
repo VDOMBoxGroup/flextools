@@ -146,6 +146,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					message = new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
+					
+					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 
 					break;
 				}
@@ -408,8 +410,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
-					sendNotification( ApplicationFacade.MODULE_SELECTED );
-					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
+//					sendNotification( ApplicationFacade.MODULE_SELECTED );
+//					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 
 					break;
 				}

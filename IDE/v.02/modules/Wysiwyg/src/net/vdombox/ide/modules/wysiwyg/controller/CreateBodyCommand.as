@@ -35,6 +35,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			body.moduleFactory = wysiwygMediator.wysiwyg.moduleFactory;
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
+			facade.sendNotification( ApplicationFacade.MODULE_SELECTED );
 		}
 	}
 }
