@@ -41,6 +41,7 @@ package net.vdombox.ide.modules.events.controller
 			
 			body.moduleFactory = eventsMediator.events.moduleFactory;
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
+			facade.sendNotification( ApplicationFacade.MODULE_SELECTED );
 		}
 	}
 }
