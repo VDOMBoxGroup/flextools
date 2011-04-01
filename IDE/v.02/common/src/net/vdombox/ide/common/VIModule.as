@@ -91,6 +91,13 @@ package net.vdombox.ide.common
 		{
 		}
 		
+		/**
+		 * 5. Called by the IDECore  when loading moduls and after select module.
+		 */
+		public function deSelect() : void
+		{
+		}
+		
 		public function initializeSettings() : void
 		{
 		}
