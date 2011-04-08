@@ -184,7 +184,7 @@ package net.vdombox.ide.modules.events.view
 				}
 
 				case ApplicationFacade.SET_SELECTED_PAGE:
-				{
+				{					
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
