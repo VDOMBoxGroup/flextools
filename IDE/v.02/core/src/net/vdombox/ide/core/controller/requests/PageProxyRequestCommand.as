@@ -72,7 +72,7 @@ package net.vdombox.ide.core.controller.requests
 				}
 
 				case PPMPageTargetNames.ATTRIBUTES:
-				{
+				{					
 					if( operation == PPMOperationNames.READ )
 						pageProxy.getAttributes();
 					else if( operation == PPMOperationNames.UPDATE )

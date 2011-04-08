@@ -641,6 +641,7 @@ package net.vdombox.ide.core.model
 
 				case "create_object":
 				{
+					trace("create_object")
 					objectVO = new ObjectVO( pageVO, typesProxy.getType( result.Object.@Type ) );
 					objectVO.setID( result.Object.@ID );
 					objectVO.parentID = result.ParentId[ 0 ];

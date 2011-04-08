@@ -218,6 +218,7 @@ package net.vdombox.ide.core.model.business
 
 		private function operationResultHandler( event : ResultEvent ) : void
 		{
+			trace("SOAP resultXML");
 			var resultXML : XML = new XML( <Result/> );
 
 			try
