@@ -110,8 +110,8 @@ package net.vdombox.ide.modules.tree.view
 
 			var pageAttributesRecipientID : String;
 			var pageVO : PageVO;
-			var pageAttributesSessionName : String;
-			var pageAttributesRecipients : Object;
+			var pageAttributesSessionName : String; //not used
+			var pageAttributesRecipients : Object; //not used
 
 			switch ( notification.getName() )
 			{
@@ -343,7 +343,8 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.SET_PAGE_ATTRIBUTES:
 				{
-					pageAttributesRecipientID = body.recipientID;
+				//	code of Andrey, not used
+				/*	pageAttributesRecipientID = body.recipientID;
 					pageVO = body.pageVO;
 
 					pageAttributesSessionName = PPMPlaceNames.PAGE + ApplicationFacade.DELIMITER + PPMOperationNames.UPDATE +
@@ -354,8 +355,9 @@ package net.vdombox.ide.modules.tree.view
 					if ( !pageAttributesRecipients.hasOwnProperty( pageVO.id ) )
 						pageAttributesRecipients[ pageVO.id ] = [];
 
-					pageAttributesRecipients[ pageVO.id ].push( pageAttributesRecipientID );
-
+					pageAttributesRecipients[ pageVO.id ].push( pageAttributesRecipientID );*/
+					
+					
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -374,7 +376,6 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.CREATE_PAGE:
 				{
-					trace("2. create Page");
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );

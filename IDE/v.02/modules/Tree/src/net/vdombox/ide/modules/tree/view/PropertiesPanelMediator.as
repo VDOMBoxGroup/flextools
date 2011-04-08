@@ -121,6 +121,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + mediatorName:
 				{
+					trace("PAGE_ATTRIBUTES_SETTED")
 					propertiesPanel.vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
 					break;
@@ -169,8 +170,11 @@ package net.vdombox.ide.modules.tree.view
 			if ( propertiesPanel.vdomObjectAttributesVO )
 			{
 				sendNotification( ApplicationFacade.SET_PAGE_ATTRIBUTES,
+					propertiesPanel.vdomObjectAttributesVO);
+				
+				/*sendNotification( ApplicationFacade.SET_PAGE_ATTRIBUTES,
 					{ pageVO: propertiesPanel.vdomObjectAttributesVO.vdomObjectVO, pageAttributesVO: propertiesPanel.vdomObjectAttributesVO,
-						recipientID: mediatorName } );
+						recipientID: mediatorName } );*/
 			}
 		}
 

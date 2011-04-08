@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.tree.view
 	
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.vo.AttributeDescriptionVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.ItemRendererEvent;
@@ -91,15 +92,27 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function performApplyHandler ( event : WindowEvent ) : void
 		{
-			trace("1. create Page");
 			var selectedPageType : TypeVO = createPageWindow.selectedPageType;
 			
 			sendNotification( ApplicationFacade.CLOSE_WINDOW, createPageWindow );
+			
+			addTitle (selectedPageType);
 			
 			if( selectedPageType )
 				sendNotification( ApplicationFacade.CREATE_PAGE_REQUEST, selectedPageType );
 			
 			facade.removeMediator( NAME );
+		}
+		
+		private function addTitle(pageType: TypeVO):void
+		{
+			for each (var descr: AttributeDescriptionVO in pageType.attributeDescriptions)
+			{
+				if (descr.defaultValue == "title")
+				{
+					//descr.defaultValue = pageType.description;					
+				}
+			}			
 		}
 		
 		private function performCancelHandler ( event : WindowEvent ) : void

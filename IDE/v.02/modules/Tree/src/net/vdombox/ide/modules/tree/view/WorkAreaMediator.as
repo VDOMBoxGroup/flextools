@@ -82,8 +82,8 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function setSelectTreeElement( treeElVO : TreeElementVO ) : void
 		{
-			var tes:Array = workArea.getTreeElements();
-			for each (var t:TreeElement in tes)
+			var elements:Array = workArea.getTreeElements();
+			for each (var t:TreeElement in elements)
 			{
 				if ( t.treeElementVO == treeElVO )
 				{
@@ -145,7 +145,7 @@ package net.vdombox.ide.modules.tree.view
 				case ApplicationFacade.SELECTED_TREE_LEVEL_CHANGED:
 				{
 					workArea.selectedTreeLevelVO = sessionProxy.selectedTreeLevel;
-
+					
 					break;
 				}
 					

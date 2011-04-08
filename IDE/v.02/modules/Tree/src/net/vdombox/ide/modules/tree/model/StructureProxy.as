@@ -227,6 +227,7 @@ package net.vdombox.ide.modules.tree.model
 			selectTreeElementChange(treeElementVO);
 		}
 		
+		//todo не корректно работает надо исправить
 		private function selectTreeElementChange(treeElementVO:TreeElementVO):void
 		{			
 			if ( treeElementVO && treeElementVO.pageVO )
@@ -333,6 +334,7 @@ package net.vdombox.ide.modules.tree.model
 
 		private function updateTreeElementsProperties() : void
 		{
+			trace("добавить ниже всех элементов");
 			var treeElementVO : TreeElementVO;
 			var rawStructureObject : StructureObjectVO;
 

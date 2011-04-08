@@ -58,6 +58,12 @@
 						makeStartButton.enabled = false;
 					else
 						makeStartButton.enabled = true;
+					
+					if ( titleAttributeVO.value == "" )
+					{
+						titleAttributeVO.value = _vdomObjectAttributesVO.vdomObjectVO.typeVO.displayName;	
+						dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.SAVE_PAGE_ATTRIBUTES ) );
+					}					
 
 					saveButton.enabled = true;
 					deleteButton.enabled = true;
@@ -65,6 +71,7 @@
 				}
 				else
 				{
+					trace("\nT R E E: PropertiesPanel: _vdomObjectAttributesVO == null");
 					saveButton.enabled = false;
 					makeStartButton.enabled = false;
 					deleteButton.enabled = false;

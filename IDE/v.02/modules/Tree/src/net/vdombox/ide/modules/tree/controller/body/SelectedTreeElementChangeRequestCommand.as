@@ -11,8 +11,7 @@ package net.vdombox.ide.modules.tree.controller.body
 	public class SelectedTreeElementChangeRequestCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
-		{
-			
+		{			
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			var treeElementVO : TreeElementVO = notification.getBody() as TreeElementVO;
 
@@ -21,7 +20,6 @@ package net.vdombox.ide.modules.tree.controller.body
 			var pageVO : PageVO = treeElementVO ? treeElementVO.pageVO : null;
 
 			sendNotification( ApplicationFacade.SET_SELECTED_PAGE, pageVO );
-			trace("SelectedTreeElementChangeRequestCommand  "+pageVO.name);
 		}
 	}
 }

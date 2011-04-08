@@ -12,7 +12,6 @@ package net.vdombox.ide.modules.tree.controller.body
 		override public function execute( notification : INotification ) : void
 		{
 			var treeElement : TreeElement = notification.getBody() as TreeElement;
-			
 			facade.registerMediator( new TreeElementMediator( treeElement ) );
 		}
 	}
