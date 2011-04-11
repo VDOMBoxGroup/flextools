@@ -92,6 +92,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
+			
 
 			switch ( name )
 			{

@@ -191,6 +191,7 @@ package net.vdombox.ide.modules.tree.model
 			{
 				isSelectedPageChanged = false;
 				sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, data[ SELECTED_PAGE ] );
+
 			}
 
 			if ( isSelectedObjectChanged )

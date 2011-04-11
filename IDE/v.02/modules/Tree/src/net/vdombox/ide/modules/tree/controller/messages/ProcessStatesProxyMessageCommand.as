@@ -27,9 +27,9 @@ package net.vdombox.ide.modules.tree.controller.messages
 			{
 				case PPMStatesTargetNames.ALL_STATES:
 				{
+					
 					sessionProxy.setStates( body );
 					sendNotification( ApplicationFacade.ALL_STATES_GETTED, body );
-					
 					break;
 				}
 					

@@ -49,7 +49,7 @@
 
 			override public function get version() : String
 			{
-				return MODULE_NAME;
+				return VERSION;
 			}
 
 			override public function get hasToolset() : Boolean

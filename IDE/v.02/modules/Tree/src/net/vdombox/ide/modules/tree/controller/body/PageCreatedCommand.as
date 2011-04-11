@@ -30,7 +30,7 @@ package net.vdombox.ide.modules.tree.controller.body
 					sendNotification( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, te );
 				}
 			}	
-			trace("add code - select Page");*/
+			*/
 		}
 	}
 }

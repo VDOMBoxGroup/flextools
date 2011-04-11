@@ -69,10 +69,10 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
-
+			
 			if ( !isActive && name != ApplicationFacade.BODY_START )
 				return;
-
+			
 			switch ( name )
 			{
 				case ApplicationFacade.BODY_START:
@@ -80,7 +80,8 @@ package net.vdombox.ide.modules.tree.view
 					if ( sessionProxy.selectedApplication )
 					{
 						isActive = true;
-
+						updateAttributes();
+						
 						break;
 					}
 				}
@@ -96,11 +97,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
-					propertiesPanel.treeElementVO = null;
-					propertiesPanel.vdomObjectAttributesVO = null
-						
-					if ( sessionProxy.selectedPage )
-						sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, { pageVO: sessionProxy.selectedPage, recipientID: mediatorName } );
+					updateAttributes();
 
 					break;
 				}
@@ -142,6 +139,15 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 			}
+		}
+		
+		private function updateAttributes():void
+		{
+			propertiesPanel.treeElementVO = null;
+			propertiesPanel.vdomObjectAttributesVO = null
+			
+			if ( sessionProxy.selectedPage )
+				sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, { pageVO: sessionProxy.selectedPage, recipientID: mediatorName } );
 		}
 
 		private function addHandlers() : void
