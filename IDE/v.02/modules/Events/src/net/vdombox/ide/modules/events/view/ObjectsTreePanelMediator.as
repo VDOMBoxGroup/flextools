@@ -93,6 +93,7 @@ package net.vdombox.ide.modules.events.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
+					trace("ApplicationFacade.BODY_START");
 					if ( sessionProxy.selectedApplication )
 					{
 						isActive = true;
@@ -103,7 +104,7 @@ package net.vdombox.ide.modules.events.view
 				}
 
 				case ApplicationFacade.BODY_STOP:
-				{
+				{trace(" ApplicationFacade.BODY_STOP");
 					isActive = false;
 
 					clearData();
@@ -112,14 +113,14 @@ package net.vdombox.ide.modules.events.view
 				}
 
 				case ApplicationFacade.PAGES_GETTED:
-				{
+				{trace("PAGES_GETTED");
 					showPages( notification.getBody() as Array );
 
 					break;
 				}
 
 				case ApplicationFacade.PAGE_STRUCTURE_GETTED:
-				{
+				{trace("PAGE_STRUCTURE_GETTED");
 					var pageXMLTree : XML = notification.getBody() as XML;
 
 					currentPageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
@@ -132,7 +133,7 @@ package net.vdombox.ide.modules.events.view
 				}
 
 				case ApplicationFacade.OBJECT_GETTED:
-				{
+				{trace("OBJECT_GETTED");
 					selectedObject = body as ObjectVO;
 					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 
@@ -171,7 +172,7 @@ package net.vdombox.ide.modules.events.view
 		}
 
 		private function showPages( pages : Array ) : void
-		{
+		{trace("showPages");
 			pagesXMLList = new XMLList();
 			_pages = {};
 
@@ -188,15 +189,21 @@ package net.vdombox.ide.modules.events.view
 		}
 		
 		private function selectCurrentPage( ) : void
-		{
+		{trace("selectCurrentPage");
 			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			if( sessionProxy.selectedPage )
 			{
-				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
-				objectsTree.selectedItem = getPageXML(sessionProxy.selectedPage.id);
+				var pageVO : PageVO = sessionProxy.selectedPage;
+				
+				sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, pageVO);
+				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, pageVO );
+				
+				objectsTree.selectedItem = getPageXML(pageVO.id);
 				objectsTree.validateNow();
 				objectsTree.scrollToIndex(objectsTree.selectedIndex);
+				
+				
 			}
 			else
 			{
@@ -205,7 +212,7 @@ package net.vdombox.ide.modules.events.view
 		}
 		
 		private function getPageXML( id : String ) : XML
-		{			
+		{		trace("getPageXML");	
 			for each ( var page:XML in objectsTree.dataProvider)
 			{
 				if (page.@id == id)
@@ -217,7 +224,7 @@ package net.vdombox.ide.modules.events.view
 		}
 
 		private function objectsTree_ChangeHandler( event : ListEvent ) : void
-		{
+		{trace("objectsTree_ChangeHandler");
 			var item : XML = event.itemRenderer.data as XML;
 			var id : String = item.@id;
 

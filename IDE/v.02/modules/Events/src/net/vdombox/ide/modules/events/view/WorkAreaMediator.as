@@ -80,9 +80,10 @@ package net.vdombox.ide.modules.events.view
 				}
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
-				{
+				{trace("WA: SELECTED_PAGE_CHANGED");
 					if ( sessionProxy.selectedApplication && sessionProxy.selectedPage )
 					{
+						trace("WA: SELECTED_PAGE_CHANGED -> IF");
 						workArea.dataProvider = null;
 						sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
 										  { applicationVO: sessionProxy.selectedApplication, pageVO: sessionProxy.selectedPage } );
@@ -91,13 +92,13 @@ package net.vdombox.ide.modules.events.view
 				}
 					
 				case ApplicationFacade.APPLICATION_EVENTS_GETTED:
-				{
+				{trace("WA: ");
 					workArea.dataProvider = body as ApplicationEventsVO;
 					break;
 				}
 					
 				case ApplicationFacade.APPLICATION_EVENTS_SETTED:
-				{
+				{trace("WA: ");
 					workArea.skin.currentState = "normal"; //TODO: добавить public свойство для изменения внутреннего state
 					break;
 				}
