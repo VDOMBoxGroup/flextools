@@ -27,22 +27,10 @@ package net.vdombox.ide.modules.wysiwyg.controller
 						
 			if ( !vdomObjectAttributesVO )
 				return;
-
-			//===========
-			var result : Array = [];
 			
-			var attributeVO2 : AttributeVO;
-			for each ( attributeVO2 in vdomObjectAttributesVO.attributes )
-			{
-				if( attributeVO2.defaultValue !== attributeVO2.value )
-				{
-					result.push( attributeVO2 );
-				}
-			}
-			
-			if ( result.length == 0 )
+			if ( getChangedAttributes( vdomObjectAttributesVO ) == 0 )
 				return;
-			//=============
+		
 			var attributes : Array = vdomObjectAttributesVO.attributes;
 
 			renderers = renderProxy.getRenderersByVO( vdomObjectAttributesVO.vdomObjectVO );
@@ -112,6 +100,21 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				else
 					renderer[ attributeVO.name ] = int( attributeVO.value );
 			}
+		}
+		
+		private function getChangedAttributes( vdomObjectAttributesVO : VdomObjectAttributesVO ) : uint
+		{
+			var result : Array = [];
+			
+			var attributeVO : AttributeVO;
+			for each ( attributeVO in vdomObjectAttributesVO.attributes )
+			{
+				if( attributeVO.defaultValue !== attributeVO.value )
+				{
+					result.push( attributeVO );
+				}
+			}
+			return result.length;
 		}
 	}
 }
