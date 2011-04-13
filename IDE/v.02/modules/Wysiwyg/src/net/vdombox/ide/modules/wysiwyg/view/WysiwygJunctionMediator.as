@@ -271,7 +271,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.GET_PAGE_ATTRIBUTES:
 				{
-					trace("сюда надо зайти для отладки создания нового эл-та GET_PAGE_ATTRIBUTES")
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ATTRIBUTES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );

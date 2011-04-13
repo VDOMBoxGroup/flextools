@@ -24,10 +24,25 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var needForUpdateObject : Object = sessionProxy.needForUpdate;
 
 			var vdomObjectAttributesVO : VdomObjectAttributesVO = notification.getBody() as VdomObjectAttributesVO;
-			
+						
 			if ( !vdomObjectAttributesVO )
 				return;
 
+			//===========
+			var result : Array = [];
+			
+			var attributeVO2 : AttributeVO;
+			for each ( attributeVO2 in vdomObjectAttributesVO.attributes )
+			{
+				if( attributeVO2.defaultValue !== attributeVO2.value )
+				{
+					result.push( attributeVO2 );
+				}
+			}
+			
+			if ( result.length == 0 )
+				return;
+			//=============
 			var attributes : Array = vdomObjectAttributesVO.attributes;
 
 			renderers = renderProxy.getRenderersByVO( vdomObjectAttributesVO.vdomObjectVO );

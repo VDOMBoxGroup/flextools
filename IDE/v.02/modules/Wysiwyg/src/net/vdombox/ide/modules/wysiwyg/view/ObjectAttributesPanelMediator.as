@@ -180,6 +180,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function saveRequestHandler( event : ObjectAttributesPanelEvent ) : void
 		{
+			objectAttributesPanel.attributesVO;
 			sendNotification( ApplicationFacade.SAVE_ATTRIBUTES_REQUEST, objectAttributesPanel.attributesVO );
 		}
 
