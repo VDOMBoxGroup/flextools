@@ -73,7 +73,7 @@
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'password' ) }" width="100%"
 					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 
-			<s:TextInput text="@{ password }" width="240"/>
+			<s:TextInput text="@{ password }" width="240" displayAsPassword="true"/>
 
 		</s:HGroup>
 
