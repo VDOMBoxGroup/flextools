@@ -177,7 +177,7 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const OPEN_EXTERNAL_EDITOR_REQUEST : String = "openExternalEditorRequest";
 		public static const SAVE_ATTRIBUTES_REQUEST : String = "saveAttributesRequest";
 		
-		public static const CURRENT_ATTRIBUTE_CHANGED : String = "currentAttributeChanged";
+//		public static const CURRENT_ATTRIBUTE_CHANGED : String = "currentAttributeChanged";
 
 		public static const UPDATE_ATTRIBUTES : String = "updateAttributes";
 		public static const ATTRIBUTES_UPDATED : String = "attributesUpdated";

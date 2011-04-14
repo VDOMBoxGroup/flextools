@@ -25,6 +25,9 @@
 			[Bindable]
 			private var displayName : String;
 
+			[Bindable]
+			private var help : String;
+			
 			private var _attributeDescriptionVO : AttributeDescriptionVO;
 
 			private var codeInterfaceRE : RegExp = /^(\w*)\((.*)\)/;
@@ -39,7 +42,8 @@
 				_attributeVO = value.attributeVO;
 				_attributeDescriptionVO = value.attributeDescriptionVO;
 				displayName = _attributeDescriptionVO.displayName;
-
+				help = _attributeDescriptionVO.help;
+				
 				var codeInterface : Object = {}
 				var matches : Array = _attributeDescriptionVO.codeInterface.match( codeInterfaceRE );
 				//
@@ -169,7 +173,7 @@
 							gap="2" paddingRight="2" />
 	</s:layout>
 
-	<s:Group height="100%" width="100%">
+	<s:Group height="100%" width="100%" toolTip="{ help }">
 
 		<s:Rect bottom="0" left="0" right="0" top="0">
 
@@ -196,5 +200,6 @@
 	<attributeRenderers:ColorPicker id="valueField"
 									height="21" minWidth="10" width="90"
 									color="@{ _attributeVO.value }"
-									textAlign="left" />
+									textAlign="left" 
+									toolTip="{ help }"/>
 </s:ItemRenderer>

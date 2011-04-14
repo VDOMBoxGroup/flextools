@@ -66,9 +66,12 @@
 					if ( !attributeDescriptionVO.visible )
 						continue;
 
-					attributesArray.push( { group: attributeDescriptionVO.colorGroup, name: attributeDescriptionVO.name, attributeVO: attributeVO,
-							attributeDescriptionVO: attributeDescriptionVO, objectsList: _attributesVO.objectsList,
-							pageLinks: _attributesVO.pageLinks } );
+					attributesArray.push( { group: attributeDescriptionVO.colorGroup, 
+											name: 					attributeDescriptionVO.name, 
+											attributeVO: 			attributeVO,
+											attributeDescriptionVO: attributeDescriptionVO, 
+											objectsList:	 		_attributesVO.objectsList,
+											pageLinks: 				_attributesVO.pageLinks } );
 				}
 
 				attributes = new ArrayCollection( attributesArray );
