@@ -16,6 +16,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 		
 		public static const SELECTED_APPLICATION : String = "selectedApplication";
 		public static const SELECTED_PAGE : String = "selectedPage";
+		public static const GET_SELECTED_PAGE : String = "getSelectedPage";
 		public static const SELECTED_OBJECT : String = "selectedObject";
 		public static const NFU : String = "needForUpdate";
 		public static const OPENED_TABS : String = "openedTabs";
@@ -69,6 +70,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 		
 		public function get selectedPage() : PageVO
 		{
+			if (  data[ SELECTED_PAGE ] == null )
+				sendNotification( GET_SELECTED_PAGE );
+			
 			return data[ SELECTED_PAGE ];
 		}
 		

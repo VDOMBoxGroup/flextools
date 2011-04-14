@@ -24,6 +24,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -94,6 +95,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.UPDATE_ATTRIBUTES );
 		
 			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( SessionProxy.GET_SELECTED_PAGE );
+			
 			
 
 			return interests;
@@ -391,6 +394,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					break;
 				}
+				case SessionProxy.GET_SELECTED_PAGE :
+				{
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_PAGE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					break;
+				}	
 			}
 
 			super.handleNotification( notification );
