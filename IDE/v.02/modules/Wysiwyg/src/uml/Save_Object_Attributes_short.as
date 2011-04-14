@@ -2,11 +2,13 @@
 
 participant ObjectAttributesPanel.mxml
 participant ObjectAttributesPanel << (M,#ADD1B2) >>
-	participant RendererTransformed << (C,#ADD1B2) >>
-		participant WysiwygJunction << (M,#ADD1B2) >>
-			box "Core" #LightBlue
-participant SOAP 
-	end box
+participant RendererTransformed << (C,#ADD1B2) >>
+participant WysiwygJunction << (M,#ADD1B2) >>
+	
+box "Core" #LightBlue
+	participant SOAP 
+end box
+
 participant	ProcessPageProxyMessage << (C,#ADD1B2) >>
 	
 	
