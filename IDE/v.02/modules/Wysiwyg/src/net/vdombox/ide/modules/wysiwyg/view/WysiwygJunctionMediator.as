@@ -238,6 +238,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.GET_PAGES:
 				{
+					
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );

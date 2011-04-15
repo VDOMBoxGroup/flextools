@@ -107,7 +107,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( sessionProxy.selectedApplication )
 					{
 						isActive = true;
-
+						trace("\nsend ApplicationFacade.BODY_START")
 						sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
 
 						break;
@@ -188,23 +188,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler, false, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.OPEN, openHandler, false, 0, true );
-			objectsTreePanel.addEventListener( FlexEvent.CONTENT_CREATION_COMPLETE, showHandler, false, 0, true );
-			objectsTreePanel.addEventListener( FlexEvent.SHOW, showHandler, false, 0, true );
-//			objectsTreePanel.addEventListener( FlexEvent., showHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.OPEN, openHandler );
-//			objectsTreePanel.removeEventListener( FlexEvent., showHandler );
 		}
 		
-		private function showHandler( event : FlexEvent ):void
-		{
-			trace("showHandler")
-			selectCurrentPage();
-		}
+		
+		
 
 		private function showPages( pages : Array ) : void
 		{
@@ -221,7 +214,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			objectsTreePanel.pages = pagesXMLList;
 			
-			selectCurrentPage();		
+			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+				
 		}
 	
 		private function selectCurrentPage( ) : void
@@ -244,6 +239,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 //				objectsTreePanel.validateNow();
 //				objectsTreePanel.scrollToIndex(objectsTree.selectedIndex);
 			}
+			trace("selectCurrentPage - null");
 			
 		}
 		
