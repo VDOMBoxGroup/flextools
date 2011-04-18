@@ -5,7 +5,8 @@
 				
 				minHeight="23" width="100%"
 				creationComplete="creationCompleteHandler()"
-				xmlns:multiline="net.vdombox.ide.modules.wysiwyg.view.components.multiline.*" xmlns:attributeRenderers="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.*">
+				xmlns:multiline="net.vdombox.ide.modules.wysiwyg.view.components.multiline.*" 
+				xmlns:attributeRenderers="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.*">
 
 	<fx:Script>
 		<![CDATA[

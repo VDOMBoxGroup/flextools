@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectAttributesPanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -159,6 +159,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler, false, 0,
 				true );
 			objectAttributesPanel.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true, 0, true );
+			objectAttributesPanel.addEventListener( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE, getResourcesAndPagesHandler, true, 0, true );
 			objectAttributesPanel.addEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true, 0, true );
 		}
 
@@ -168,6 +169,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.DELETE_REQUEST, deleteRequestHandler )
 			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler );
 			objectAttributesPanel.removeEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true );
+			objectAttributesPanel.removeEventListener( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE, getResourcesAndPagesHandler, true );
 			objectAttributesPanel.removeEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true );
 		}
 
@@ -213,6 +215,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function selectResourceHandler( event : AttributeEvent ) : void
 		{
 			sendNotification( ApplicationFacade.OPEN_RESOURCE_SELECTOR_REQUEST, event.target );
+		}
+		
+		private function getResourcesAndPagesHandler( event : AttributeEvent ) : void
+		{
+			sendNotification( ApplicationFacade.GET_MULTILINE_RESOURCES, event.target );
 		}
 	}
 }

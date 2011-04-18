@@ -6,69 +6,63 @@
 
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.events.ValidationResultEvent;
 			import mx.managers.PopUpManager;
 			
+			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
+			import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
 
 			private var _value : String;
 			private var _title : String = "Multiline Window";
-			private var multilineWindow : MultilineWindow;
+			public var multilineWindow : MultilineWindow;
 			
 			public function set title( attrValue : String ) : void
 			{
-
 				_title = attrValue;
 			}
 
 			[Bindable]
 			public function get value() : String
 			{
-
 				return _value;
 			}
 
 			public function set value( value : String ) : void
 			{
-
 				_value = value;
 			}
-
-			/* 			private function openWindow() : void
-			   {
-
-			   MultiLineWindow.show_window( _title, _value, this, true );
-			 } */
-
+			
 			private function openWindow() : void
-			{
+			{				
 //				var popUpWindowManager : PopUpManager = PopUpManager.getInstance();
 				multilineWindow = new MultilineWindow();
-				multilineWindow.minWidth = 600;
+				multilineWindow.minWidth = 500;
 				multilineWindow.minHeight = 400;
 				multilineWindow.percentWidth = 100;
 				multilineWindow.percentHeight = 100;
 
 				multilineWindow.attributeValue = _value;
 				multilineWindow.title = _title;
-
+				dispatchEvent( new AttributeEvent( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE ) );				
+				
 				multilineWindow.addEventListener( "apply", multilineWindow_applyHandler, false, 0, true );
-
+				
 				PopUpManager.addPopUp( multilineWindow, DisplayObject( UIComponent( parent ).parentApplication ), true );
 				PopUpManager.centerPopUp( multilineWindow );
 			}
 
 			private function multilineWindow_applyHandler( event : MultilineWindowEvent ) : void
-			{
-				value = event.value;
-				dispatchEvent( new FlexEvent( FlexEvent.VALUE_COMMIT ) );
+			{				
+//				dispatchEvent( new FlexEvent( FlexEvent.VALUE_COMMIT ) );
 				var currentTarget : Object = event.currentTarget;
 
 				if ( currentTarget is MultilineWindow )
 				{
+					value = event.value;	//string			
+//					dispatchEvent( new MultilineWindowEvent( "setValue", value ) );
 					UIComponent( currentTarget ).removeEventListener( "apply", multilineWindow_applyHandler, false );
 				}
 

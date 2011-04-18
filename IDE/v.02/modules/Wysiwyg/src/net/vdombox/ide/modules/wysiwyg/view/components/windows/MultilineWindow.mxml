@@ -4,24 +4,36 @@
 				
 				backgroundColor="#CCCCCC" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
 				creationComplete="creationCompleteHandler()"
-				close="titlewindow1_closeHandler(event)" showCloseButton="true" xmlns="vdom.containers.*"
-				xmlns:controls="vdom.controls.*">
+				close="titlewindow1_closeHandler(event)" 
+				showCloseButton="true" 
+				xmlns="vdom.containers.*"
+				xmlns:controls="vdom.controls.*" 
+				>
 
 	<mx:Script>
 		<![CDATA[
+			import flashx.textLayout.elements.TextFlow;
+			
+			import mx.core.mx_internal;
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
-
+			
+			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
+			
+			import spark.components.Application;
 
 			private var f_apply_flag : Boolean;
-			private var par : DisplayObject;
 
 			[Bindable]
 			public var attributeValue : String;
 
 			private function creationCompleteHandler() : void
 			{
+				this.setFocus();
+				//addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );
+//				Application.addEventListener( KeyboardEvent.KEY_DOWN, close_window );
+				//dispatchEvent( new AttributeEvent( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE ) );
 //				var tf : IUITextField = textAreaContainer.mx_internal::getTextField();
 //				tf.alwaysShowSelection = true;
 
@@ -47,48 +59,55 @@
 //				resourceList.enabled = true;
 //			}
 
-			private function ok_close_window() : void
-			{
+			private function ok_close_window():void//e: KeyboardEvent = null) : void
+			{// todo
+				/*if ( e != null )
+					if ( e.charCode != Keyboard.ESCAPE )
+						return
+				*/
 				f_apply_flag = true;
-//				var tf : TextField = textAreaContainer.mx_internal::getTextField();
 //				tf.dispatchEvent( new Event( Event.CHANGE ) );
 				close_window();
+				
 			}
 
 			public function close_window() : void
 			{
 				if ( f_apply_flag )
 					dispatchEvent( new MultilineWindowEvent( "apply", textAreaContainer.text ) );
-
-				resourceList.enabled = false;
-			}
+			}			
 
 			private function insertPageLink() : void
 			{
-				var textFiled : TextField = textAreaContainer.mx_internal::getTextField();
-				var index : int = textFiled.selectionBeginIndex;
-
-				textFiled.text = textFiled.text.substring( 0, index ) + "/" + XML( pageList.selectedItem ).@Name + ".vdom" +
-					textFiled.text.substring( index );
-				textFiled.setSelection( index, index );
-				textFiled.dispatchEvent( new Event( Event.CHANGE ) );
+				var textFlow: TextFlow = textAreaContainer.textFlow;
+				
+				var index : int = textAreaContainer.selectionAnchorPosition;
+				if ( index < 0 ) index = 0;
+				var text:String = textFlow.getText(index);
+				
+				textAreaContainer.text = textFlow.getText(0, index) +  "/" + pageList.selectedLabel + ".vdom" +  text;
+				textAreaContainer.setFocus();
+//				textFiled.setSelection( index, index );
+//				textFiled.dispatchEvent( new Event( Event.CHANGE ) );*/
 			}
 
 			private function insertResourceLink() : void
 			{
-				var textFiled : TextField = textAreaContainer.mx_internal::getTextField();
-				var index : int = textFiled.selectionBeginIndex;
-
-				textFiled.text = textFiled.text.substring( 0, index ) + "#Res(" + XML( resourceList.selectedItem ).@id + ")" +
-					textFiled.text.substring( index );
-				textFiled.setSelection( index, index );
-				textFiled.dispatchEvent( new Event( Event.CHANGE ) );
+				var textFlow: TextFlow = textAreaContainer.textFlow;
+				
+				var index : int = textAreaContainer.selectionAnchorPosition;
+				if ( index < 0 ) index = 0;
+				var text:String = textFlow.getText(index);
+				
+				textAreaContainer.text = textFlow.getText(0, index) +  "#Res(" + resourceList.selectedItem["data"] + ")" +  text;
+				textAreaContainer.setFocus();
 			}
 
 			protected function titlewindow1_closeHandler( event : CloseEvent ) : void
 			{
 				PopUpManager.removePopUp( this );
 			}
+
 		]]>
 	</mx:Script>
 
@@ -96,7 +115,8 @@
 						height="100%" text="{attributeValue}" width="100%"
 						backgroundColor="#FFFFFF" bottom="65" fontFamily="Courier New" fontSize="12" left="5"
 						right="5" top="5" />
-
+<!--mx:TextArea id="textArea"/-->
+	
 	<mx:HBox height="60" width="100%"
 			 backgroundColor="#C2C2C2" borderColor="#000000" bottom="0" horizontalGap="0" paddingLeft="5"
 			 paddingRight="5" verticalAlign="middle">
@@ -108,7 +128,7 @@
 				<mx:Label text="Pages:" />
 
 				<mx:ComboBox id="pageList"
-							 labelField="@Name" width="130"
+							  width="130"
 							 cornerRadius="0" />
 
 				<mx:Button label="ok"
@@ -121,7 +141,7 @@
 				<mx:Label text="Resources:" />
 
 				<mx:ComboBox id="resourceList"
-							 enabled="false" labelField="@name" width="130"
+							 width="130"
 							 cornerRadius="0" />
 
 				<mx:Button label="ok"

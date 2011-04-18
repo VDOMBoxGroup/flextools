@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.EditorCreatedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.EditorRemovedCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.GetMultiLineCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
@@ -132,6 +133,7 @@ package net.vdombox.ide.modules.wysiwyg
 
 		public static const GET_OBJECT_ATTRIBUTES : String = "getObjectAttributes";
 		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
+		public static const GET_MULTILINE_RESOURCES : String = "getMultiLineResources";
 
 //		objectsTree notifications
 		public static const OPEN_PAGE_REQUEST : String = "openPageRequest";
@@ -247,11 +249,12 @@ package net.vdombox.ide.modules.wysiwyg
 
 			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 			registerCommand( CREATE_OBJECT_REQUEST, CreateObjectRequestCommand );
-
-			
+					
 			registerCommand( EDITOR_CREATED, EditorCreatedCommand );
 			registerCommand( EDITOR_REMOVED, EditorRemovedCommand );
 
+			registerCommand( GET_MULTILINE_RESOURCES, GetMultiLineCommand );
+			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}
 	}

@@ -73,9 +73,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					resourceSelectorWindow.resources = body as Array;
 					
-					var resourceVO : ResourceVO;
-					
-					for each( resourceVO in body )
+					for each( var resourceVO : ResourceVO in body )
 					{
 						sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 					}

@@ -4,6 +4,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 	
 	public class AttributeEvent extends Event
 	{
+		//todo rename
+		public static var CHOSE_RESOURCES_IN_MULTILINE : String = "choseResourceInMultiline";
 		public static var EDIT_MULTILINE : String = "editMultiline";
 		public static var SELECT_RESOURCE : String = "selectResource";
 		public static var OPEN_EXTERNAL : String = "openExternal";

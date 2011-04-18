@@ -8,7 +8,6 @@ package net.vdombox.ide.modules.wysiwyg.events
 
 		public function MultilineWindowEvent( type : String, value : String )
 		{
-
 			this.value = value;
 			super( type, false, false );
 		}
