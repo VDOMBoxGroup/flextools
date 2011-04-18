@@ -6,7 +6,11 @@ package net.vdombox.ide.core.controller
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 	
-	
+	/**
+	 * After getting pages selected index page 
+	 * @author Alexey Andreev
+	 * 
+	 */	
 	
 	public class SetSelectedPageCommand extends SimpleCommand
 	{
@@ -22,8 +26,9 @@ package net.vdombox.ide.core.controller
 				// IndexPageID not exist. Set first page as indexPageID.
 				if ( !indexPageID || indexPageID == "None" )
 				{
-					statesProxy.selectedApplication.indexPageID = body.pages[0].id;
+					
 					indexPageID = body.pages[0].id;
+					statesProxy.selectedApplication.indexPageID = indexPageID
 				}
 				
 				for each ( var page:PageVO in body.pages)

@@ -33,7 +33,6 @@ package net.vdombox.ide.core.controller.responses
 
 				case ApplicationFacade.APPLICATION_PAGES_GETTED:
 				{
-					sendNotification( ApplicationFacade.PAGE_SET_SELECTED, body );
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
 
 					break;

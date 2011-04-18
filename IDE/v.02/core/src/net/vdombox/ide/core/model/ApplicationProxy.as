@@ -667,6 +667,7 @@ package net.vdombox.ide.core.model
 
 					sendNotification( ApplicationFacade.APPLICATION_PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice() } );
 					
+					sendNotification( ApplicationFacade.PAGE_SET_SELECTED, { applicationVO: applicationVO, pages: _pages.slice() } );
 					break;
 				}
 

@@ -15,7 +15,7 @@ package net.vdombox.ide.core.controller
 		{
 			var logMessage : LogMessage = notification.getBody() as LogMessage;
 
-			trace( StringUtil.substitute( MESSAGE_TEMPLATE, logMessage.time,  LogMessage.LEVELS[ logMessage.logLevel ], logMessage.sender, logMessage.message ) );
+			trace( "Log: "+StringUtil.substitute( MESSAGE_TEMPLATE, logMessage.time,  LogMessage.LEVELS[ logMessage.logLevel ], logMessage.sender, logMessage.message ) );
 		}
 	}
 }

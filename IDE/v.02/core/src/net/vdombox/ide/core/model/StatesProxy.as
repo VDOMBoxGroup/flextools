@@ -1,12 +1,17 @@
 package net.vdombox.ide.core.model
 {
+	import net.vdombox.ide.common.PPMOperationNames;
+	import net.vdombox.ide.common.PPMPlaceNames;
+	import net.vdombox.ide.common.PPMStatesTargetNames;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
-
+	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.controller.requests.StatesProxyRequestCommand;
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-	import net.vdombox.ide.core.controller.requests.StatesProxyRequestCommand;
 
 	/**
 	 * @flowerModelElementId _DExiIEomEeC-JfVEe_-0Aw
@@ -61,7 +66,9 @@ package net.vdombox.ide.core.model
 			data[ SELECTED_PAGE ]   = value;
 			data[ SELECTED_OBJECT ] = null;
 			
-			facade.sendNotification(SELECTED_PAGE_CHANGED, value);
+			var ppMessage : ProxyMessage = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_PAGE, null );
+			
+			facade.sendNotification(ApplicationFacade.STATES_PROXY_REQUEST, ppMessage );
 			//
 		}
 

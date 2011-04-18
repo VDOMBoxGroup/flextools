@@ -41,7 +41,7 @@ package net.vdombox.ide.core.controller.requests
 
 			applicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + "/" + pageVO.applicationVO.id ) as ApplicationProxy;
 			pageProxy = applicationProxy.getPageProxy( pageVO ) as PageProxy;
-
+			
 			switch ( target )
 			{
 				case PPMPageTargetNames.OBJECTS:
