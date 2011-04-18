@@ -27,7 +27,6 @@
 
 			public function set pages( value : XMLList ) : void
 			{
-				trace("set pages");
 				_pages = value;
 			}
 
@@ -99,7 +98,6 @@
 
 			public function set selectedPageID( value : String ) : void
 			{
-				trace("selectedPageID");
 				var currentID : String;
 
 				if ( !_pages )
@@ -163,8 +161,6 @@
 
 			private function creationCompleteHandler() : void
 			{
-				trace("\ncreationCompleteHandler + 1");
-				addEventListener( FlexEvent.SHOW, showHandler );
 				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
 				objectsTree.addEventListener( ListEvent.CHANGE, objectsTree_changeHandler, false, 0, true );
@@ -176,10 +172,7 @@
 				objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_DOWN, objectsTree_mouseHandler, false, 0, true );
 			}
 			
-			private function showHandler( event : FlexEvent ):void
-			{
-				trace("\nshowHandler + 1");
-			}
+		
 
 			private function removedFromStageHandler( event : Event ) : void
 			{

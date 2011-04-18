@@ -107,7 +107,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( sessionProxy.selectedApplication )
 					{
 						isActive = true;
-						trace("\nsend ApplicationFacade.BODY_START")
 						sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
 
 						break;
@@ -221,14 +220,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 		private function selectCurrentPage( ) : void
 		{
-			trace("\nselectCurrentPage...");
 			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			if( sessionProxy.selectedPage )
 			{
-				trace("selectCurrentPage - Ok!");
 				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
-				objectsTreePanel.selectedPageID = sessionProxy.selectedPage.id
+				objectsTreePanel.selectedPageID = sessionProxy.selectedPage.id; 
 				//ApplicationFacade.PAGE_STRUCTURE_GETTED, objectsTreePanel.pages
 				
 					//objectsTreePanel.selectedItem = getPageXML(objectsTreePanel.selectedPageID);
@@ -239,8 +236,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 //				objectsTreePanel.validateNow();
 //				objectsTreePanel.scrollToIndex(objectsTree.selectedIndex);
 			}
-			trace("selectCurrentPage - null");
-			
 		}
 		
 		private function getPageXML( id : String ) : XML
@@ -251,7 +246,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					return page;
 			}
 			
-			trace("Error: not exist page in objectsTree");
 			return null;
 		}
 
