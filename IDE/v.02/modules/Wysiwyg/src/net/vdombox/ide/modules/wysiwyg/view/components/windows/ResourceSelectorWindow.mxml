@@ -4,13 +4,15 @@
 				
 				height="400" width="550"
 				backgroundColor="#CCCCCC" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
-				close="dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ))"
+				creationComplete="creationCompleteHandler()"
+				close="ok_close_window()"
 				showCloseButton="true">
 
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
-
+			import mx.events.FlexEvent;
+			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 
@@ -52,6 +54,29 @@
 					}
 				}
 			}
+			
+			/**
+			 * @private
+			 * close ResourceSelectorWindow if down ESCAPE or if down button "Apply"
+			 * and dispatchEvent Apply
+			 */ 
+			private function ok_close_window( event: KeyboardEvent = null ) : void
+			{
+				if ( event != null )
+					if ( event.charCode != Keyboard.ESCAPE )
+						return
+						
+				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ))
+						
+//				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.APPLY ));			
+			}		
+
+			private function creationCompleteHandler() : void
+			{
+				this.setFocus();
+				addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );				
+			}
+
 		]]>
 	</mx:Script>
 

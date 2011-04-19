@@ -21,8 +21,6 @@
 			
 			import spark.components.Application;
 
-			private var f_apply_flag : Boolean;
-
 			[Bindable]
 			public var attributeValue : String;
 
@@ -42,15 +40,8 @@
 					if ( event.charCode != Keyboard.ESCAPE )
 						return
 				
-				f_apply_flag = true;
-				close_window();				
+				dispatchEvent( new MultilineWindowEvent( "apply", textAreaContainer.text ) );			
 			}
-
-			public function close_window() : void
-			{
-				if ( f_apply_flag )
-					dispatchEvent( new MultilineWindowEvent( "apply", textAreaContainer.text ) );
-			}			
 
 			private function insertPageLink() : void
 			{
