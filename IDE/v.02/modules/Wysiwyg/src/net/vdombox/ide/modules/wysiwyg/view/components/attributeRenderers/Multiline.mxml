@@ -39,10 +39,8 @@
 			{				
 //				var popUpWindowManager : PopUpManager = PopUpManager.getInstance();
 				multilineWindow = new MultilineWindow();
-				multilineWindow.minWidth = 500;
-				multilineWindow.minHeight = 400;
-				multilineWindow.percentWidth = 100;
-				multilineWindow.percentHeight = 100;
+				multilineWindow.width = 500;
+				multilineWindow.height = 400;
 
 				multilineWindow.attributeValue = _value;
 				multilineWindow.title = _title;
@@ -56,14 +54,12 @@
 
 			private function multilineWindow_applyHandler( event : MultilineWindowEvent ) : void
 			{				
-//				dispatchEvent( new FlexEvent( FlexEvent.VALUE_COMMIT ) );
 				var currentTarget : Object = event.currentTarget;
 
 				if ( currentTarget is MultilineWindow )
 				{
-					value = event.value;	//string			
-//					dispatchEvent( new MultilineWindowEvent( "setValue", value ) );
-					UIComponent( currentTarget ).removeEventListener( "apply", multilineWindow_applyHandler, false );
+					value = event.value;				
+					UIComponent( currentTarget ).removeEventListener( "apply", multilineWindow_applyHandler, false );					
 				}
 
 //				var popUpWindowManager : PopUpManager = PopUpManager.getInstance();

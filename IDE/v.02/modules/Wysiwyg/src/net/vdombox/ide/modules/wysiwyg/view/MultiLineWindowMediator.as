@@ -1,7 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.collections.ArrayCollection;
-	import mx.resources.ResourceBundle;
 	
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -31,31 +30,33 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;			
-		
+	
 			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
 			sendNotification( ApplicationFacade.GET_PAGES,     sessionProxy.selectedApplication );
+			
+			multilineWindow.addEventListener( "apply", removeYourself, false, 0, true );
 		}
-
+		
 		override public function onRemove() : void
 		{
 			sessionProxy = null;
+			multilineWindow = null;
 		}
+		
+		private function removeYourself ( event : MultilineWindowEvent ) : void
+		{
+			multilineWindow.removeEventListener( "apply", removeYourself, false );
+			facade.removeMediator( NAME );
+		}
+		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.RESOURCES_GETTED );			
-			interests.push( ApplicationFacade.PAGES_GETTED );
-//			multilineWindow.addEventListener( "setValue", multilineWindow_setValueHandler, false, 0, true );
-			multilineWindow.addEventListener( "apply", multilineWindow_setValueHandler, false, 0, true );
-						
+			interests.push( ApplicationFacade.PAGES_GETTED );	
+			
 			return interests;
-		}
-		
-		private function multilineWindow_setValueHandler( event : MultilineWindowEvent ) : void
-		{		
-//			sendNotification( ApplicationFacade.MODIFY_RESOURCE, event.value ); //string	
-//			modifyResource( applicationVO : ApplicationVO, resourceVO : ResourceVO, attributeName : String, operation : String, attributes : XML ) : void
 		}
 		
 		override public function handleNotification( notification : INotification ) : void
@@ -78,7 +79,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					if ( multilineWindow.resourceList.dataProvider[0] )
 						 multilineWindow.resourceList.selectedIndex = 0;						
-	//	todo	sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO ); if выбрали элемент 
 
 					break;
 				}

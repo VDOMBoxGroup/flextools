@@ -1,9 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.modules.wysiwyg.view.MultiLineWindowMediator;
-	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.Multiline;
-	import net.vdombox.ide.modules.wysiwyg.view.components.main.Body;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
 				xmlns:s="library://ns.adobe.com/flex/spark"
-				
 				backgroundColor="#CCCCCC" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
 				creationComplete="creationCompleteHandler()"
 				close="titlewindow1_closeHandler(event)" 
@@ -18,7 +17,6 @@
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			
-			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 			
 			import spark.components.Application;
@@ -31,44 +29,21 @@
 			private function creationCompleteHandler() : void
 			{
 				this.setFocus();
-				//addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );
-//				Application.addEventListener( KeyboardEvent.KEY_DOWN, close_window );
-				//dispatchEvent( new AttributeEvent( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE ) );
-//				var tf : IUITextField = textAreaContainer.mx_internal::getTextField();
-//				tf.alwaysShowSelection = true;
-
-//				var listPagesCollection : XMLListCollection = new XMLListCollection( dataManager.listPages );
-//				listPagesCollection.sort = new Sort();
-//				listPagesCollection.sort.fields = [ new SortField( "@Name", true ) ];
-//				listPagesCollection.refresh();
-
-//				pageList.dataProvider = listPagesCollection;
+				addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );				
 			}
 
-//			private function fileManager_resourceListLoaded( event : FileManagerEvent ) : void
-//			{
-//				fileManager.removeEventListener( FileManagerEvent.RESOURCE_LIST_LOADED,
-//												 fileManager_resourceListLoaded );
-//
-//				var resourceListCollection : XMLListCollection = new XMLListCollection( event.result.Resources.* )
-//				resourceListCollection.sort = new Sort();
-//				resourceListCollection.sort.fields = [ new SortField( "@name", true ) ];
-//				resourceListCollection.refresh();
-//
-//				resourceList.dataProvider = resourceListCollection;
-//				resourceList.enabled = true;
-//			}
-
-			private function ok_close_window():void//e: KeyboardEvent = null) : void
-			{// todo
-				/*if ( e != null )
-					if ( e.charCode != Keyboard.ESCAPE )
+			/**
+			 * @private
+			 * close multilineWindow if down ESCAPE or if down button "Apply"
+			 */ 
+			private function ok_close_window( event: KeyboardEvent = null ) : void
+			{
+				if ( event != null )
+					if ( event.charCode != Keyboard.ESCAPE )
 						return
-				*/
-				f_apply_flag = true;
-//				tf.dispatchEvent( new Event( Event.CHANGE ) );
-				close_window();
 				
+				f_apply_flag = true;
+				close_window();				
 			}
 
 			public function close_window() : void
@@ -87,8 +62,6 @@
 				
 				textAreaContainer.text = textFlow.getText(0, index) +  "/" + pageList.selectedLabel + ".vdom" +  text;
 				textAreaContainer.setFocus();
-//				textFiled.setSelection( index, index );
-//				textFiled.dispatchEvent( new Event( Event.CHANGE ) );*/
 			}
 
 			private function insertResourceLink() : void
@@ -110,12 +83,16 @@
 
 		]]>
 	</mx:Script>
-
-	<s:RichEditableText id="textAreaContainer"
-						height="100%" text="{attributeValue}" width="100%"
-						backgroundColor="#FFFFFF" bottom="65" fontFamily="Courier New" fontSize="12" left="5"
-						right="5" top="5" />
-<!--mx:TextArea id="textArea"/-->
+	<s:Scroller width="100%" height="100%" horizontalScrollPolicy="off">
+			<s:RichEditableText id="textAreaContainer" 
+						editable="true"
+						selectable="true"
+						clipAndEnableScrolling="true"
+						text="{attributeValue}"
+						height="290" width="{this.width - 25}"
+						minHeight="0"
+						backgroundColor="#FFFFFF" bottom="65" fontFamily="Courier New" fontSize="12" left="5" right="5" top="5" />
+	</s:Scroller>
 	
 	<mx:HBox height="60" width="100%"
 			 backgroundColor="#C2C2C2" borderColor="#000000" bottom="0" horizontalGap="0" paddingLeft="5"
@@ -124,7 +101,6 @@
 		<mx:VBox horizontalAlign="right">
 
 			<mx:HBox>
-
 				<mx:Label text="Pages:" />
 
 				<mx:ComboBox id="pageList"
@@ -137,7 +113,6 @@
 			</mx:HBox>
 
 			<mx:HBox>
-
 				<mx:Label text="Resources:" />
 
 				<mx:ComboBox id="resourceList"
