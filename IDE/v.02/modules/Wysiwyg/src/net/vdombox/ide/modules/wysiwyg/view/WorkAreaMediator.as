@@ -48,6 +48,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRemove() : void
 		{
+			removeHandlers();
 			clearData();
 		}
 
@@ -76,6 +77,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			if ( !isActive && name != ApplicationFacade.BODY_START )
 				return;
+			
+			
 
 			switch ( name )
 			{
@@ -83,6 +86,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					if ( sessionProxy.selectedApplication )
 					{
+						
 						isActive = true;
 
 						break;
@@ -103,16 +107,23 @@ package net.vdombox.ide.modules.wysiwyg.view
 					vdomObjectVO = body as IVDOMObjectVO;
 					editor = workArea.getEditorByVO( vdomObjectVO );
 
-					if ( !editor )
-					{
-						if ( workArea.selectedEditor )
-							workArea.selectedEditor.editorVO.vdomObjectVO = vdomObjectVO;
-						else
-							editor = workArea.openEditor( vdomObjectVO );
+					if ( editor )
+					{ 
+						workArea.selectedEditor = editor;
+				
 					}
 					else
 					{
-						workArea.selectedEditor = editor;
+						editor = workArea.openEditor( vdomObjectVO );
+						/*	if ( workArea.selectedEditor )
+						{
+						trace("workArea.selectedEditor  == true");
+						workArea.selectedEditor.editorVO.vdomObjectVO = vdomObjectVO;
+						}
+						else
+						{	trace("workArea.selectedEditor == null");
+						editor = workArea.openEditor( vdomObjectVO );
+						}*/
 					}
 
 					break;
@@ -145,7 +156,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function addHandlers() : void
 		{
 			workArea.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
-			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
+			
+			// Alexey Andreev: delete because do not used in outher modules 
+//			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
 			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
 
@@ -166,11 +179,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function clearData() : void
 		{
-			removeHandlers();
+//			removeHandlers();
 
 			workArea.closeAllEditors();
 
-			facade.removeMediator( NAME );
+//			facade.removeMediator( NAME );
 		}
 
 		private function addedToStageHandler( event : Event ) : void
