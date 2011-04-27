@@ -87,10 +87,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function openEditor( vdomObjectVO : IVDOMObjectVO ) : IEditor
 		{
 			var editor : IEditor = getEditorByVO( vdomObjectVO );
-
 			if ( editor )
 				return editor;
-
 			editor = new VdomObjectEditor();
 			editor.editorVO.vdomObjectVO = vdomObjectVO;
 			
@@ -121,7 +119,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				_editors = new Dictionary( true );
 
 			_editors[ editor ] = tab;
-
+			
+			selectedEditor = editor;
 			return editor;
 		}
 
