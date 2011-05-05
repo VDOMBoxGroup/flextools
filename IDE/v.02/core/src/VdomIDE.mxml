@@ -5,7 +5,7 @@
 					   preinitialize="application_preinitializeHandler(event)"
 					   applicationComplete="application_applicationCompleteHandler()">
 
-	<fx:Metadata> 
+	<fx:Metadata>  
 		[ ResourceBundle( "Core_General" ) ]
 		[ ResourceBundle( "LoginForm" ) ]
 	</fx:Metadata>
