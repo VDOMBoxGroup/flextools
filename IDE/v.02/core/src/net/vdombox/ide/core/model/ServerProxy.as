@@ -76,6 +76,8 @@ package net.vdombox.ide.core.model
 				soap.disconnect();
 
 			addHandlers();
+			
+			_pingServerTimer = new Timer(PING_TIMER);
 		}
 
 		override public function onRemove() : void
@@ -97,7 +99,7 @@ package net.vdombox.ide.core.model
 
 		public function disconnect() : void
 		{
-			_pingServerTimer.stop()
+			_pingServerTimer.stop();
 			
 			soap.logout();
 
@@ -218,7 +220,7 @@ package net.vdombox.ide.core.model
 				
 		private function startInfiniteSession() : void
 		{
-			_pingServerTimer = new Timer(PING_TIMER);
+			
 			_pingServerTimer.addEventListener(TimerEvent.TIMER, pingOfServer); 
 			_pingServerTimer.start();				
 		}

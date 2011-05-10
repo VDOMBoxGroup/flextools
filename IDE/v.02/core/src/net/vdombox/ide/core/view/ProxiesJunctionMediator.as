@@ -174,7 +174,7 @@ package net.vdombox.ide.core.view
 		override public function handlePipeMessage( message : IPipeMessage ) : void
 		{
 			var ppMessage : ProxyMessage = message as ProxyMessage;
-
+			trace("                                        ->  " +  ppMessage.proxy + "  " + ppMessage.operation +"   "+ppMessage.target);
 			switch ( ppMessage.proxy )
 			{
 				case PPMPlaceNames.SERVER:
