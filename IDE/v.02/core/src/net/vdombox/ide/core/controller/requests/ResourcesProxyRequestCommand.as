@@ -56,7 +56,7 @@ package net.vdombox.ide.core.controller.requests
 						resourceVO = body.resourceVO;
 					
 					if( resourceVO )
-						resourcesProxy.loadResource( resourceVO );
+						resourcesProxy.loadResource( resourceVO ); 
 					
 					break;
 				}

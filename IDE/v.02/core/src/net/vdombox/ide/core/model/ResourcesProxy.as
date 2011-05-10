@@ -1,5 +1,6 @@
 package net.vdombox.ide.core.model
 {
+	import flash.display.Bitmap;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
@@ -16,9 +17,12 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
+	import net.vdombox.ide.core.model.icons.TypesIcons;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
+	
+	import spark.components.Application;
 
 	/**
 	 * ResourcesProxy is wrapper on VDOM Resources.   
@@ -59,6 +63,8 @@ package net.vdombox.ide.core.model
 		private var cacheManager : CacheManager = CacheManager.getInstance();
 		
 		private var loadQue : Array;
+		
+		private var typesIcons : TypesIcons = new TypesIcons();
 
 		public function deleteResource( applicationVO : ApplicationVO, resourceVO : ResourceVO ) : void
 		{
@@ -77,9 +83,11 @@ package net.vdombox.ide.core.model
 		}
 
 		public function loadResource( resourceVO : ResourceVO ) : void
-		{			
+		{		
+			trace("++++++ loadResource ++++++");
 			var resource : ByteArray = cacheManager.getCachedFileById( resourceVO.id );
 			
+			//file is located in the file system user
 			if ( resource )
 			{
 				resourceVO.setData( resource );
@@ -87,6 +95,7 @@ package net.vdombox.ide.core.model
 				
 				sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
 			}
+			//file must be downloaded from the server
 			else
 			{
 				resourceVO.setStatus( ResourceVO.LOAD_PROGRESS );
@@ -99,6 +108,7 @@ package net.vdombox.ide.core.model
 
 		public function setResource( resourceVO : ResourceVO ) : void
 		{
+			trace("+++++++++  setResource  ++++++++++");
 			if ( !loadQue )
 				loadQue = [];
 			
@@ -110,6 +120,7 @@ package net.vdombox.ide.core.model
 
 		public function setResources( resources : Array ) : void
 		{
+			trace("+++++++++  setResources  ++++++++++");
 			if ( !resources || resources.length == 0 )
 				return;
 
@@ -202,15 +213,55 @@ package net.vdombox.ide.core.model
 			{
 				resource = new ResourceVO( applicationVO.id );
 				resource.setXMLDescription( resourceDescription );
+			
+//				createIcon( resource );
 				
 				resources.push( resource );
 			}
 			
 			return resources;
 		}
+		
+		private function choseIcon( resourceVO : ResourceVO ) : void
+		{
+			if ( typesIcons.isViewable( resourceVO.type ) ) 
+			{
+				setIcon( resourceVO )
+			}
+			else // if not viewable
+			{ 
+				if ( typesIcons.icon[ resourceVO.type ] != null ) 
+//					smoothImage.source = typesIcons.icon[ resourceVO.type ];
+					resourceVO.icon = typesIcons.icon[ resourceVO.type ];
+					
+				else {}
+//					smoothImage.source = typesIcons.blank_Icon;
+//					resourceVO.icon = typesIcons.blank_Icon;  //востановить
+			}	 	
+		}		
+		
+		//reduces the image and set it to icon of resourceVO
+		private function setIcon( resourceVO : ResourceVO ) : void
+		{
+			var bitmap: Bitmap = Bitmap(resourceVO.data);
+			bitmap.smoothing = true;
+			bitmap.height = 32;
+			bitmap.width = 32;
+			
+			for( var i:uint=0; i< bitmap.width; i++ )
+			{
+				for( var j:uint=0; j< bitmap.height; j++ )
+				{
+					resourceVO.icon.writeUnsignedInt( bitmap.bitmapData.getPixel( i, j ) );
+				}
+			}			
+//			resource.icon = bitmap.bitmapData.getPixel(bitmap.bitmapData.rect.x, bitmap.bitmapData.rect.y);
+//			resource.icon = resource.name + "_icon";//? id 
+		}
 
 		private function soap_setResource() : void
 		{
+			trace("+++ soap_setResource +++");
 			if ( loadQue.length == 0 )
 				return;
 
@@ -243,6 +294,7 @@ package net.vdombox.ide.core.model
 				}
 			}
 
+			trace("data.bytesAvailable = " + data.bytesAvailable );
 			if ( !data || data.bytesAvailable == 0 )
 				return;
 
@@ -282,6 +334,7 @@ package net.vdombox.ide.core.model
 			{
 				case "get_resource":
 				{
+					trace(" get_resource ");
 					resourceVO = event.token.resourceVO as ResourceVO;
 					
 					var data : String = event.result.Resource;
@@ -296,6 +349,7 @@ package net.vdombox.ide.core.model
 					cacheManager.cacheFile( resourceVO.id, imageSource );
 					
 					resourceVO.setData( imageSource );
+					setIcon( resourceVO );
 					resourceVO.setStatus( ResourceVO.LOADED );
 					
 					sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
@@ -305,6 +359,7 @@ package net.vdombox.ide.core.model
 				
 				case "set_resource":
 				{
+					trace("\n******************set_resource ******************");
 					resourceVO = event.token.resourceVO as ResourceVO;
 
 					resourceVO.setXMLDescription( result.Resource[ 0 ] );
@@ -318,6 +373,7 @@ package net.vdombox.ide.core.model
 
 				case "list_resources":
 				{
+					trace("\n******************list_resources ******************");
 					var applicationVO : ApplicationVO = event.token.applicationVO;
 					var resources : Array = createResourcesList( applicationVO, result.Resources[ 0 ] );
 					
@@ -328,6 +384,7 @@ package net.vdombox.ide.core.model
 					
 				case "delete_resource":
 				{
+					trace("\n******************delete_resource ******************");
 					resourceVO = event.token.resourceVO as ResourceVO;
 					
 					cacheManager.deleteFile( resourceVO.id );
