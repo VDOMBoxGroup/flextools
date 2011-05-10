@@ -14,8 +14,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.SkinPartEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
+	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
+	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -29,7 +31,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		public function VdomObjectEditorMediator( editor : IEditor )
 		{
-			var instanceName : String = NAME + "/" + DisplayObject( editor ).name;
+			var instanceName : String = NAME + "/" +  editor.editorVO.vdomObjectVO.id;
 
 			super( instanceName, editor );
 
@@ -122,14 +124,29 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
-//					var renderer : IRenderer;
-//
-//					var selectedObject : ObjectVO = sessionProxy.selectedObject;
-//
-//					if ( selectedObject )
-//						renderer = editor.getRendererByID( selectedObject.id );
-//
-//					editor.selectedRenderer = renderer;
+					//  set transformMarker to selected page
+					
+//					trace("\n VdomObjectEditorMediator: - get SELECTED_OBJECT_CHANGED");
+					var editor:IEditor = viewComponent as IEditor
+					if (sessionProxy.selectedObject.pageVO.id != editor.editorVO.vdomObjectVO.id)
+						break;
+						
+					var renderProxy :RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+					var renderers : Array = renderProxy.getRenderersByVO( sessionProxy.selectedObject );
+					
+					// find nesesary renderer
+					var selRenderer : RendererBase;
+					for each ( var renderer : RendererBase in renderers )
+					{
+						if ( renderer.renderVO.vdomObjectVO.id == sessionProxy.selectedObject.id )
+						{
+							selRenderer = renderer ;
+							break;
+						}
+					}
+					
+					// mark object
+					editor.selectedRenderer = selRenderer;
 
 					break;
 				}
