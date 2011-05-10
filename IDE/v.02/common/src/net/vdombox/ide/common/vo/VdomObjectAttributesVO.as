@@ -67,9 +67,7 @@ package net.vdombox.ide.common.vo
 		
 		
 		/**
-		 * 
 		 * @return array of changed Attributes
-		 * 
 		 */		
 		public function getChangedAttributes() : Array
 		{

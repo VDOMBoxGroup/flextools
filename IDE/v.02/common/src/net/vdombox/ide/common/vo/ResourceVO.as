@@ -3,6 +3,7 @@ package net.vdombox.ide.common.vo
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.ByteArray;
+
 	/**
 	 * The ResourceVO is Visual Object of VDOM Resource.
 	 * ResourceVO is contained in VDOM Application. 
@@ -42,6 +43,12 @@ package net.vdombox.ide.common.vo
 		private var _status : uint;
 
 		private var dispatcher : EventDispatcher = new EventDispatcher();
+		
+		public var data : ByteArray;
+		
+		public var icon : ByteArray;
+		
+		private var _iconID : String;
 
 		public function get ownerID() : String
 		{
@@ -51,6 +58,11 @@ package net.vdombox.ide.common.vo
 		public function get id() : String
 		{
 			return _id;
+		}
+		
+		public function get iconId() : String
+		{
+			return _iconID;
 		}
 
 		public function get useCount() : int
@@ -91,9 +103,7 @@ package net.vdombox.ide.common.vo
 //		
 //		public function set data( value : ByteArray ) : void
 //		{
-//		}
-
-		public var data : ByteArray;
+//		}		
 
 		public function get size() : int
 		{
@@ -124,6 +134,18 @@ package net.vdombox.ide.common.vo
 		{
 			data = value;
 			dispatcher.dispatchEvent( new Event( "propertyDataChange" ) );
+		}				
+		
+		/**
+		 * reduces the resource to a size 32 to 32 pixels
+		 * 
+		 * @param value : ByteArray
+		 * 
+		 */		
+		public function setIcon( value : ByteArray ) : void
+		{			
+			icon = value;
+			_iconID = id + "_icon";
 		}
 
 		public function setPath( value : String ) : void
