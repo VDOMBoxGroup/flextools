@@ -22,6 +22,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererRemovedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererTransformedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveSettingsToProxy;
+	import net.vdombox.ide.modules.wysiwyg.controller.SelectAndLoadResourceCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.StartupCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.TearDownCommand;
@@ -45,19 +46,19 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const CREATE_TOOLSET : String = "createToolset";
 		public static const CREATE_SETTINGS_SCREEN : String = "createSettingsScreen";
 
-		public static const CREATE_BODY : String = "createBody";
+		public static const CREATE_BODY  : String = "createBody";
 		public static const BODY_CREATED : String = "bodyCreated";
 		
 		public static const BODY_START : String = "bodyStart";
-		public static const BODY_STOP : String = "bodyStop";
+		public static const BODY_STOP  : String = "bodyStop";
 
 		public static const EXPORT_TOOLSET : String = "exportToolset";
 		public static const EXPORT_SETTINGS_SCREEN : String = "exportSettingsScreen";
 		public static const EXPORT_BODY : String = "exportBody";
 
 //		selection
-		public static const SELECT_MODULE : String = "selectModule";
-		public static const MODULE_SELECTED : String = "moduleSelected";
+		public static const SELECT_MODULE     : String = "selectModule";
+		public static const MODULE_SELECTED   : String = "moduleSelected";
 		public static const MODULE_DESELECTED : String = "moduleDeselected";
 
 		public static const PIPES_READY : String = "pipesReady";
@@ -95,6 +96,9 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const GET_RESOURCES : String = "getResources";
 		public static const RESOURCES_GETTED : String = "resourcesGetted";
 
+		public static const SET_RESOURCE : String = "setResource";
+		public static const RESOURCE_SETTED : String = "resourceSetted";
+		
 		public static const LOAD_RESOURCE : String = "loadResource";
 		public static const MODIFY_RESOURCE : String = "modifyResource";
 
@@ -175,6 +179,7 @@ package net.vdombox.ide.modules.wysiwyg
 //		public static const SELECT_ITEM_REQUEST : String = "selectItemRequest";
 
 		public static const GET_RESOURCE_REQUEST : String = "getResourceRequest";
+		public static const SELECT_AND_LOAD_RESOURCE : String = "selectAndLoadResource";
 		public static const OPEN_RESOURCE_SELECTOR_REQUEST : String = "openResourceSelectorRequest";
 		public static const OPEN_EXTERNAL_EDITOR_REQUEST : String = "openExternalEditorRequest";
 		public static const SAVE_ATTRIBUTES_REQUEST : String = "saveAttributesRequest";
@@ -233,6 +238,7 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 
 			registerCommand( OPEN_RESOURCE_SELECTOR_REQUEST, OpenResourceSelectorRequestCommand );
+			registerCommand( SELECT_AND_LOAD_RESOURCE, SelectAndLoadResourceCommand );
 			registerCommand( OPEN_EXTERNAL_EDITOR_REQUEST, OpenExternalEditorRequestCommand );
 
 			registerCommand( RENDERER_CREATED, RendererCreatedCommand );

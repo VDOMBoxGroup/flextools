@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
 				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:resourceBrowser="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrouserWindow*"
 				
 				height="400" width="550"
 				backgroundColor="#CCCCCC" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
 				creationComplete="creationCompleteHandler()"
 				close="ok_close_window()"
-				showCloseButton="true">
+				showCloseButton="true"
+				title="Resource Browser">
 
 	<mx:Script>
 		<![CDATA[
@@ -14,8 +16,15 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 
+			[ Bindable ]
+			private var totalResources : int = 0;
+			
+			[ Bindable ]
+			private var filteredResources : int = 0;
+			
 			[Bindable]
 			private var _resources : ArrayList;
 
@@ -67,24 +76,107 @@
 						return
 						
 				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ))
-						
-//				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.APPLY ));			
 			}		
 
 			private function creationCompleteHandler() : void
 			{
 				this.setFocus();
-				addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );				
+//				dispatchEvent( FlexEvent.CREATION_COMPLETE );
+				addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );					
 			}
+			
+			protected function uploadFile(event:MouseEvent):void
+			{
+				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.LOAD_RESOURCE));			
+			}
+			
+			protected function refreshFile(event:MouseEvent):void
+			{
+				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCES));			
+			}
+
+// todo delete
+			/*private var fileRef:FileReference = new FileReference();
+			
+			protected function uploadFile(event:MouseEvent):void
+			{
+				fileRef.addEventListener(Event.SELECT, fileSelected);				
+				fileRef.browse();				
+			}
+			
+			protected function fileSelected(event:Event):void
+			{
+				fileRef.addEventListener(Event.COMPLETE, fileDounloaded);
+				fileRef.load();				
+			}			
+			
+			protected function fileDounloaded(event:Event):void
+			{
+				var resData : ByteArray = fileRef.data;
+				resData.compress();
+				
+				var base64Data : Base64Encoder = new Base64Encoder();
+				base64Data.insertNewLines = false;
+				base64Data.encodeBytes( resData );					
+									
+				var obj:Object = new Object;
+				obj = {"name":fileRef.name, "type":fileRef.type, "data":base64Data.toString() };
+				
+				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.LOAD_RESOURCE));
+			}*/
 
 		]]>
 	</mx:Script>
 
-	<s:List id="resourcesList"
+	<!-- header -->
+	<mx:HBox width="100%"
+			 backgroundColor="#C2C2C2" borderColor="#000000" bottom="0" horizontalGap="0" paddingLeft="5"
+			 paddingRight="5" verticalAlign="middle">
+		
+		<mx:Label text="Filter: "/>
+		
+		<mx:ComboBox id="filter"/>
+		
+		<mx:Spacer width="100%"/>
+		
+		<mx:Button label="Refresh"
+				   cornerRadius="0"
+				   click="refreshFile(event)" />
+		
+		<mx:Button label="Upload File..."
+				   cornerRadius="0"
+				   click="uploadFile(event)" />	
+	</mx:HBox>
+		
+	
+	<!-- body -->
+	<!--s:List id="resourcesList"
 			dataProvider="{ _resources }" height="100%" width="100%"
 			itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ResourceItemRenderer"
-			useVirtualLayout="false" />
+			useVirtualLayout="false" /-->
+	<mx:VBox height="100%" width="207"
+			 paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" verticalGap="0">
+		
+		<mx:HBox width="100%"
+				 horizontalGap="3" paddingBottom="3" paddingLeft="5" paddingRight="0" paddingTop="3" verticalAlign="middle">
+			
+			<mx:TextInput id="__nameFilter"
+						  text="type a filter here" width="100%"
+						  borderColor="#999999" borderStyle="solid" color="#666666"
+						  fontFamily="Tahoma" fontWeight="bold"/>
+			
+			<mx:Image id="__spinner"
+					  height="18"  width="18" visible="false"/>
+		</mx:HBox>
+		
+		<mx:List id="resourcesList" dataProvider="{ _resources }"
+				 height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="on" width="100%"
+				 borderStyle="solid" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+				 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"/>
+	</mx:VBox>
 
+	
+	<!--  temp  -->
 	<mx:HBox width="100%"
 			 backgroundColor="#C2C2C2" borderColor="#000000" bottom="0" horizontalGap="0" paddingLeft="5"
 			 paddingRight="5" verticalAlign="middle">
@@ -95,4 +187,31 @@
 				   cornerRadius="0"
 				   click="dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.APPLY ))" />
 	</mx:HBox>
+	
+	
+	<!--  futer  -->
+	<mx:HBox height="30" width="100%"
+			 backgroundColor="#858585" color="#FFFFFF" paddingBottom="2" paddingLeft="10" paddingRight="10"
+			 paddingTop="2" verticalAlign="middle">
+		
+		<mx:Label text="Total Resources:"/>
+		
+		<mx:Label text="{totalResources}"
+				  fontWeight="bold"/>
+		
+		<mx:VRule height="18"/>
+		
+		<mx:Label text="Filtered:"/>
+		
+		<mx:Label text="{filteredResources}"
+				  fontWeight="bold"/>
+		<mx:VRule height="18"/>
+		
+		<mx:Spacer width="100%"/>
+		
+		<mx:Button label="Done" />
+		
+	</mx:HBox>
+	
+	
 </mx:TitleWindow>

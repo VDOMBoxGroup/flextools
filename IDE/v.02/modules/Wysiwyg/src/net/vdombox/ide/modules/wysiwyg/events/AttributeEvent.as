@@ -6,9 +6,9 @@ package net.vdombox.ide.modules.wysiwyg.events
 	{
 		//todo rename
 		public static var CHOSE_RESOURCES_IN_MULTILINE : String = "choseResourceInMultiline";
-		public static var EDIT_MULTILINE : String = "editMultiline";
-		public static var SELECT_RESOURCE : String = "selectResource";
-		public static var OPEN_EXTERNAL : String = "openExternal";
+		public static var EDIT_MULTILINE	: String = "editMultiline";
+		public static var SELECT_RESOURCE 	: String = "selectResource";
+		public static var OPEN_EXTERNAL		: String = "openExternal";
 		
 		public function AttributeEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

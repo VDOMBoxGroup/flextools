@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	ListItem component for Resource Browser, VDOM2 Box component
+	Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
+-->
+	
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml"
+		borderColor="#FFF6EA"
+		horizontalAlign="left" borderStyle="solid"
+		verticalAlign="middle" verticalScrollPolicy="off"
+		horizontalScrollPolicy="off"
+		paddingTop="1" paddingLeft="1" paddingRight="1" paddingBottom="1"
+		cornerRadius="3" verticalGap="1" horizontalGap="1">
+
+<mx:HBox height="50" 
+		 horizontalAlign="left" borderStyle="solid"
+		 verticalAlign="middle" verticalScrollPolicy="off"
+		 horizontalScrollPolicy="off"
+		 paddingTop="3" paddingLeft="3" paddingRight="3" paddingBottom="3"
+		 cornerRadius="1" verticalGap="1" horizontalGap="3"
+		 xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*" borderColor="#ADA8A8" width="178">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Image;
+			import mx.effects.Resize;
+			import mx.messaging.channels.StreamingAMFChannel;
+			
+			import net.vdombox.ide.common.vo.ResourceVO;
+			
+//			private var typesIcons:TypesIcons = new TypesIcons();
+//			private var fileManager:FileManager = FileManager.getInstance();
+//			private var dataManager:DataManager = DataManager.getInstance();
+			
+			private var _id:String;
+			private var _objType:String = '';
+			
+			[Bindable]
+			private var resourceVO : ResourceVO;
+
+			override public function set data ( value:Object ) : void 
+			{
+				super.data = value;
+				resourceVO = value as ResourceVO;
+				
+				resName.text = '';
+				res.text = '';				
+				
+				try 
+				{
+					objName = resourceVO.name;
+					objType = resourceVO.type;
+					objID 	= resourceVO.id;
+				}
+				catch ( e : Error ) 
+				{
+					trace ("ThumbnailItem: exception at data setter!"); 
+					return;
+				}
+				
+			/*	if (typesIcons.isViewable(objType)) 
+				{
+					trace("listItem    dispatchEvent ListItemEvent.LOAD_RESOURCE");
+//					dispatchEvent( new ListItemEvent( ListItemEvent.LOAD_RESOURCE, false, true, null, null, null, resourceVO ) );
+					dispatchEvent( new Event ( "loadResource" ) );
+				}
+//					fileManager.loadResource(dataManager.currentApplicationId, this.objID, this);			
+				
+				else // if not viewable
+				{ 
+					if (typesIcons.icon[objType] != null) 
+						smoothImage.source = typesIcons.icon[objType];
+					 
+					else 
+						smoothImage.source = typesIcons.blank_Icon;
+					
+				}*/	 			
+			}
+
+			private var imageSourceLoader:Loader;
+			
+			public function set resource ( source : Object ) : void 
+			{
+				imageSourceLoader = new Loader();
+				imageSourceLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				imageSourceLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoaded);
+				
+				if( ByteArray(source.data).length )
+					imageSourceLoader.loadBytes(ByteArray(source.data));
+				else
+					var d : * = "";
+			}
+
+			private function ioErrorHandler(ioEvent:IOErrorEvent):void 
+			{
+				imageSourceLoader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				imageSourceLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoaded);
+//				smoothImage.source = typesIcons.broken_Icon;
+			}
+			
+			private function imageLoaded(e:Event):void 
+			{
+				imageSourceLoader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				imageSourceLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoaded);
+				smoothImage.source = imageSourceLoader.content;
+				res.text = imageSourceLoader.width.toString() + "x" + imageSourceLoader.height.toString();			
+				deleteButton.enabled = true;
+			}
+			
+			public function set objName(text:String):void { resName.text = text; }
+			
+			public function get objName():String { return resName.text; }
+			
+			public function set objID(objID:String):void { _id = objID; }
+			
+			public function get objID():String { return _id; }
+			
+			public function set objType(objType:String):void 
+			{
+				type.text = objType.toUpperCase() + ":";
+				_objType = objType;
+			}
+			
+			public function get objType():String 
+			{
+				return _objType.toLowerCase();
+			}
+			
+			private function deleteButton_clickHandler( event : MouseEvent ) : void
+			{
+//				dispatchEvent( new Event( 'DeleteResource' ));
+				var lie : ListItemEvent = new ListItemEvent( ListItemEvent.DELETE_RESOURCE );
+				lie.resourceID = objID;
+				lie.resourceName = objName;
+				lie.resourceType = objType;
+				owner.dispatchEvent( lie );
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Box width="44" height="44" paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0" backgroundColor="#FFFFFF"
+			verticalAlign="middle" horizontalAlign="center">
+		
+		<resourceBrowserWindow:SmoothImage id="smoothImage" height="42" width="42"
+			verticalAlign="middle" horizontalAlign="center" maintainAspectRatio="true"
+			scaleContent="true" />
+			
+	</mx:Box>
+		
+	<mx:VBox width="122" horizontalGap="0" verticalGap="1" horizontalScrollPolicy="off" verticalScrollPolicy="off" verticalAlign="middle">
+		
+		<mx:HBox width="100%" horizontalAlign="left" horizontalGap="3" paddingRight="5" verticalAlign="middle">
+			
+			<mx:Label id="type" text="JPG:" textAlign="left" fontWeight="bold" />
+			
+			<mx:Label id="res" text="" textAlign="left" />
+			
+			<mx:Spacer width="100%"/>
+			
+			<mx:Button id="deleteButton"
+					   enabled="false"
+					   cornerRadius="0" label="x" width="18" height="18" fontWeight="bold" fontSize="10"
+					   toolTip="Delete"
+					   paddingLeft="0" paddingRight="0"
+					   paddingTop="0" paddingBottom="0"
+					   color="#FF0000"
+					   click="deleteButton_clickHandler( event );"/>	
+			
+		</mx:HBox>
+		
+		<mx:Label id="resName" text="img" textAlign="left" width="122" />	
+	
+	</mx:VBox>
+	
+</mx:HBox>
+	
+</mx:Box>

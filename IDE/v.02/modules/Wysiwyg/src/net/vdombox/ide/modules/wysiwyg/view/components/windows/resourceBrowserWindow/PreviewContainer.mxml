@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Preview Container component for Resource Browser
+	Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
+-->
+<mx:Box 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	borderStyle="solid" backgroundColor="#FFF6EA" cornerRadius="3"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	horizontalAlign="center" verticalAlign="middle"
+	paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+ 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
+ 
+	<resourceBrowser:SmoothImage id="__image" horizontalAlign="center" verticalAlign="middle"
+		maintainAspectRatio="true" scaleContent="true" width="100" height="100" />
+
+	<mx:Script>
+		<![CDATA[
+			import vdom.managers.DataManager;
+			import vdom.managers.FileManager;
+			import mx.controls.Alert;
+			import mx.core.FlexLoader;
+			import mx.rpc.soap.LoadEvent;
+			import mx.events.FlexEvent;
+		
+			private var loader:Loader = new Loader();
+			private var typesIcons:TypesIcons = new TypesIcons();
+			
+			private var fileManager:FileManager = FileManager.getInstance();
+			private var dataManager:DataManager = DataManager.getInstance();
+	
+			public var imageWidth:int = 0;
+			public var imageHeight:int = 0;
+			private var _heightLimit:int = 0;
+			private var _widthLimit:int = 0;
+
+			public function set objID(value:String):void {
+				fileManager.loadResource(
+					dataManager.currentApplicationId,
+					value, this
+				);
+			}
+
+			public function set resource(source:Object):void {
+				loader = new Loader();
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
+				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				loader.loadBytes(source.data);
+			}
+			
+			private function ioErrorHandler(ioEvent:IOErrorEvent):void {
+				__image.width = 64;
+				__image.height = 64;
+				this.height = __image.height + 22;
+				this.width = __image.width + 22;
+
+				__image.source = typesIcons.broken_Icon;
+			}
+			
+			private function imageLoadComplete(event:Event):void {
+				__image.source = loader.content;			
+				imageWidth = loader.width;
+				imageHeight = loader.height;
+				
+				if (imageWidth > _widthLimit || imageHeight > _heightLimit) {
+					if (_heightLimit >= int(Math.round(_widthLimit * imageHeight / imageWidth))) {
+						__image.width = _widthLimit;
+						__image.height = int(Math.round(_widthLimit * imageHeight / imageWidth));
+					} else {
+						__image.height = _heightLimit;
+						__image.width = int(Math.round(_heightLimit * imageWidth / imageHeight));
+					}					
+				} else {
+					__image.height = imageHeight;
+					__image.width = imageWidth;
+				}
+				
+				this.height = __image.height + 22;
+				this.width = __image.width + 22;
+				
+				var completeEvent:Event = new Event(Event.COMPLETE);
+				this.dispatchEvent(completeEvent);			
+			}
+			
+			public function set imageSource(value:Object):void {
+				__image.width = 64;
+				__image.height = 64;
+				this.height = __image.height + 22;
+				this.width = __image.width + 22;
+				__image.source = value;
+			}
+			
+			public function set heightLimit(value:int):void {
+				_heightLimit = value - 22;
+			}
+			
+			public function set widthLimit(value:int):void {
+				_widthLimit = value - 22;
+			}
+		]]>
+	</mx:Script>
+
+
+</mx:Box>

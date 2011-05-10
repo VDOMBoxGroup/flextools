@@ -20,7 +20,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 
 			var resourceSelectorWindowMediator : ResourceSelectorWindowMediator = new ResourceSelectorWindowMediator( resourceSelectorWindow );
 			resourceSelectorWindowMediator.resourceSelector = resourceSelector;
-
 			
 			facade.registerMediator( resourceSelectorWindowMediator );
 

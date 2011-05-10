@@ -12,7 +12,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
+	/**
+	 * MultiLineWindowMediator is wrapper on WindowMediator.mxml.   
+	 * Get Resources and Pages and set it in combobox for chose.
+	 * @author Elena Kotlova
+	 */
 	public class MultiLineWindowMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "MultiLineWindowMediator";		
@@ -24,8 +29,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy		: SessionProxy;
-		private var multilineWindow		: MultilineWindow;
+		private var sessionProxy	: SessionProxy;
+		private var multilineWindow	: MultilineWindow;
 
 		override public function onRegister() : void
 		{

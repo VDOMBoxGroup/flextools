@@ -1,5 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.events.Event;
+	
+	import mx.collections.ArrayCollection;
+	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -8,6 +12,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -25,6 +30,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var _resourceSelector : ResourceSelector;
 		private var sessionProxy : SessionProxy;
+		private var _filters	: ArrayCollection = new ArrayCollection();
 
 		public function set resourceSelector( value : ResourceSelector ) : void
 		{
@@ -59,13 +65,28 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			interests.push( ApplicationFacade.RESOURCES_GETTED );
 			
+			interests.push( ApplicationFacade.RESOURCE_SETTED );
+			
 			return interests;
+		}
+		
+		private function set filters ( type:String ) : void
+		{
+			for each ( var obj: Object in _filters )
+			{
+				if ( obj["data"] == type )
+					return;
+			}
+
+			_filters.addItem({label: type.toUpperCase() , data: type});
 		}
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
-			var name : String = notification.getName();
-			var body : Object = notification.getBody();
+			var name 	: String = notification.getName();
+			var body 	: Object = notification.getBody();			
+			
+			_filters.addItem( { label : 'None', data : '*' } );
 			
 			switch ( name )
 			{
@@ -75,8 +96,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					for each( var resourceVO : ResourceVO in body )
 					{
-						sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+						
+						//sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+						filters = resourceVO.type;
 					}
+					
+					resourceSelectorWindow.filter.dataProvider = _filters;
+					
+					break;
+				}
+					
+				case ApplicationFacade.RESOURCE_SETTED:
+				{
+//					resourceSelectorWindow.resources = body as Array;
+//					
+//					for each( var resourceVO : ResourceVO in body )
+//					{
+//						sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+//					}
 					
 					break;
 				}
@@ -87,14 +124,38 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.CLOSE, closeHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
+			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler );
+//			resourceSelectorWindow.addEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );    
 		}
+		
+		private function addHandlersForResourcesList( event : FlexEvent ) : void
+		{
+//			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.LOAD_RESOURCE, loadResourceHandler );
+//			resourceSelectorWindow.resourcesList.addEventListener( "loadResource", loadResourceHandler );
+		}		
 
 		private function removeHandlers() : void
 		{
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.CLOSE, closeHandler );
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
+			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler );
+//			resourceSelectorWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
+//			resourceSelectorWindow.resourcesList.removeEventListener( ListItemEvent.LOAD_RESOURCE, loadResourceHandler );
+//			resourceSelectorWindow.resourcesList.removeEventListener( "loadResource", loadResourceHandler );
 		}
-
+		
+		private function loadResourceHandler( event : Event ) : void
+		{
+			trace("loadResourceHandler    sendNotification LOAD_RESOURCE");
+//			sendNotification( ApplicationFacade.LOAD_RESOURCE, event.resource );
+			sendNotification( ApplicationFacade.LOAD_RESOURCE, event.currentTarget.resource );
+		}
+		
+		private function loadFileHandler( event : ResourceSelectorWindowEvent ) : void
+		{
+			sendNotification( ApplicationFacade.SELECT_AND_LOAD_RESOURCE, sessionProxy.selectedApplication );
+		}
+		
 		private function applyHandler( event : ResourceSelectorWindowEvent ) : void
 		{
 			PopUpManager.removePopUp( resourceSelectorWindow );
