@@ -254,7 +254,8 @@ package net.vdombox.ide.core.model
 				{
 					resourceVO.icon.writeUnsignedInt( bitmap.bitmapData.getPixel( i, j ) );
 				}
-			}			
+			}
+			//test
 //			resource.icon = bitmap.bitmapData.getPixel(bitmap.bitmapData.rect.x, bitmap.bitmapData.rect.y);
 //			resource.icon = resource.name + "_icon";//? id 
 		}
