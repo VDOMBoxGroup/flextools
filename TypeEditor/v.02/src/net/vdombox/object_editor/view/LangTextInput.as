@@ -61,6 +61,12 @@ package net.vdombox.object_editor.view
 			}
 		}		
 
+		/**
+		 * 
+		 * @param code in formate: #Lang(ID)
+		 * @return ID
+		 * 
+		 */		
 		private function getRegExpWord( code:String ):String
 		{	
 			var  regResource:RegExp = /#Lang\((\d+)\)/;

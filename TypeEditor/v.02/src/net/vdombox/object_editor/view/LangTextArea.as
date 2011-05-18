@@ -38,6 +38,12 @@ package net.vdombox.object_editor.view
 			text 			= "";
 		}
 		
+		/**
+		 * 
+		 * @param langsVO	- current LanguagesVO;
+		 * @param fildValue	- value in format: #Lang("ID")
+		 * 
+		 */
 		public function completeStructure( langsVO:LanguagesVO, fildValue:String):void
 		{
 			var fildID:String = getRegExpWord(fildValue);
@@ -58,6 +64,12 @@ package net.vdombox.object_editor.view
 			trace("completeStructure: ", fildValue);
 		}
 		
+		/**
+		 * 
+		 * @param code in formate: #Lang(ID)
+		 * @return ID
+		 * 
+		 */	
 		private function getRegExpWord( code:String ):String
 		{	
 			var  regResource:RegExp = /#Lang\((\d+)\)/;
