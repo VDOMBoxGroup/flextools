@@ -10,6 +10,11 @@ package net.vdombox.object_editor.controller
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
 
+	/**
+	 * Takes a list of files from this directory and create NavigatorContent from each file.
+	 * @author Elena Kotlova
+	 * 
+	 */
 	public class FillAccordionCommand extends SimpleCommand 
 	{
 		override public function execute( note:INotification ) :void
@@ -17,29 +22,23 @@ package net.vdombox.object_editor.controller
 			//get content of folder
 			var directory:File =  new File;
 			directory.nativePath = note.getBody() as String;
-			try
-			{
-				var filesArray:Array = directory.getDirectoryListing();
-				var accMediator:ObjectsAccordionMediator = facade.retrieveMediator(ObjectsAccordionMediator.NAME) as ObjectsAccordionMediator;			
-				var itemProxy:ObjectsProxy = facade.retrieveProxy(ObjectsProxy.NAME) as ObjectsProxy;
-				
-				accMediator.removeAllObjects();
-				
-				for (var i:uint = 0; i < filesArray.length; i++)
-				{	
-					var file:File = filesArray[i] as File;
-					if (!file.isDirectory)
-					{				
-						var item:Item = itemProxy.getItem(file) ;					
+
+			var filesArray:Array = directory.getDirectoryListing();
+			var accMediator:ObjectsAccordionMediator = facade.retrieveMediator(ObjectsAccordionMediator.NAME) as ObjectsAccordionMediator;			
+			var itemProxy:ObjectsProxy = facade.retrieveProxy(ObjectsProxy.NAME) as ObjectsProxy;
+			
+			accMediator.removeAllObjects();
+			
+			for (var i:uint = 0; i < filesArray.length; i++)
+			{	
+				var file:File = filesArray[i] as File;
+				if (!file.isDirectory)
+				{				
+					var item:Item = itemProxy.getItem(file) ;
+					if ( item )
 						facade.sendNotification(ApplicationFacade.NEW_NAVIGATOR_CONTENT, item);												
-					}
 				}
 			}
-			catch (error:Error)
-			{
-				trace("Failed:", error.message);
-				ErrorLogger.instance.logError("Failed:" + error.message, "FillAccordionCommand.execute()");
-			}				
 		}
 	}
 }

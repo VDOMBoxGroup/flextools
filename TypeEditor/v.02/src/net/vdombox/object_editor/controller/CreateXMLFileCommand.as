@@ -14,6 +14,13 @@ package net.vdombox.object_editor.controller
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
 
+	/**
+	 * Command copy file "assets/newObject/newObject.xml" to users file with new name in the current directory.
+	 * Finally Command send Notification: CreateObjectMediator.CREATE_GUIDS with new file.
+	 * 
+	 * @author Elena Kotlova
+	 * 
+	 */
 	public class CreateXMLFileCommand extends SimpleCommand implements ICommand
 	{
 		override public function execute(note:INotification):void  
