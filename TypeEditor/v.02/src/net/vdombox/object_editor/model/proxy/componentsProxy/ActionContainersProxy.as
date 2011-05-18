@@ -67,7 +67,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			}
 			return actionsXML;
 		}	
-		
+				
 		public function createFromXML(objTypeXML:XML):ArrayCollection
 		{
 			var actionContainersCollection:ArrayCollection = new ArrayCollection();
@@ -86,7 +86,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 						actVO.description	= actXML.@Description;
 						actVO.interfaceName	= actXML.@InterfaceName;
 						actVO.methodName	= actXML.@MethodName;
-						actVO.code			= actXML.Sourcecode;
+						actVO.code			= getSourceCode(actXML);
 						
 						for each (var parameterXML : XML in actXML.descendants("Parameter"))
 						{
@@ -116,5 +116,23 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				return actionContainersCollection;
 			}
 		}
-	}
+		
+		private function getSourceCode( actXML: XML):String
+		{
+			//return (actXML.SourceCode.toString() == "")? actXML.sourcecode.toString(): actXML.SourceCode.toString();
+			if ( actXML.SourceCode.toString() != "" )
+				return actXML.SourceCode.toString();
+			
+			else if ( actXML.sourcecode.toString() != "" )
+				return actXML.sourcecode.toString();
+			
+			else if ( actXML.Sourcecode.toString() != "" )
+				return actXML.Sourcecode.toString();
+			
+			else if ( actXML.sourceCode.toString() != "" )
+				return actXML.sourceCode.toString();
+			
+			return "";
+		}
+	}	
 }

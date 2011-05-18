@@ -71,15 +71,16 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			reuseInformationID	( objTypeVO );
 			reuseActionsID		( objTypeVO );
 			reuseAttributesID	( objTypeVO );
-			reuseEventsID		( objTypeVO );			
+			reuseEventsID		( objTypeVO );	
+			objTypeVO.languages.tempWords = null;
 			return objTypeVO;
 		}
 
 		private function reuseInformationID( objTypeVO: ObjectTypeVO):void
 		{
-			objTypeVO.description = languagesProxy.used(objTypeVO.languages, objTypeVO.description, "Information.Dscription");
-			objTypeVO.displayName = languagesProxy.used(objTypeVO.languages, objTypeVO.displayName, "Information.DisplayName");			
-			languagesProxy.used(objTypeVO.languages, "#Lang(003)", "Information.Container");
+			objTypeVO.displayName = languagesProxy.used(objTypeVO.languages, 0, objTypeVO.displayName, "Information.DisplayName");
+			objTypeVO.description = languagesProxy.used(objTypeVO.languages, 0, objTypeVO.description, "Information.Dscription");
+			languagesProxy.used(objTypeVO.languages, 0, "#Lang(003)", "Information.Container");
 		}
 
 		private function reuseEventsID( objTypeVO: ObjectTypeVO):void
@@ -91,8 +92,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				{
 					var eventPar:EventParameterVO = parObj.data;
 					if (eventPar.help == "") 
-						eventPar.help = "#Lang(105)";
-					eventPar.help = languagesProxy.used(objTypeVO.languages, eventPar.help, "Events."+ event.name +"."+ eventPar.name +".Help");
+						eventPar.help = "#Lang(905)";
+					eventPar.help = languagesProxy.used(objTypeVO.languages, 9, eventPar.help, "Events."+ event.name +"."+ eventPar.name +".Help");
 				}
 			}
 		}
@@ -109,23 +110,49 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				if (attr.errorValidationMessage == "") 
 					attr.errorValidationMessage = "#Lang(201)";
 
-				attr.displayName = languagesProxy.used(objTypeVO.languages, attr.displayName, "Attributes."+ attr.name +".DisplayName");
-				attr.help		 = languagesProxy.used(objTypeVO.languages, attr.help, "Attributes."+ attr.name +".Help");
-				attr.errorValidationMessage = languagesProxy.used(objTypeVO.languages, attr.errorValidationMessage, "Attributes."+ attr.name +".ErrValMessage");
+				attr.displayName = languagesProxy.used(objTypeVO.languages, 1, attr.displayName, "Attributes."+ attr.name +".DisplayName");
+				attr.help		 = languagesProxy.used(objTypeVO.languages, 2, attr.help, "Attributes."+ attr.name +".Help");
+				attr.errorValidationMessage = languagesProxy.used(objTypeVO.languages, 3, attr.errorValidationMessage, "Attributes."+ attr.name +".ErrValMessage");
 				usedCodeInterface(objTypeVO, attr);
 			}
-		}
-
+		}		
+		
 		private function usedCodeInterface(objTypeVO: ObjectTypeVO, attr: AttributeVO):void
-		{			
-			var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d]+)/g;
-			var langs:Array = [];
-			while (langs = regLangs.exec(attr.codeInterface))
+		{	
+			if ( attr.codeInterface == "DropDown()" )
+				return
+				
+			var ciparser:RegExp = /([^\(]+)\((.*)\)/;
+			var parsed:Array = ciparser.exec(attr.codeInterface);				
+			var codeInterfaceLabel:String = parsed[1];
+			if ( codeInterfaceLabel == "DropDown" )
 			{
-				var id:String = languagesProxy.getRegExpID(objTypeVO.languages, langs[1]);
-				objTypeVO.languages.isUsedWords[id] = true;
-				objTypeVO.languages.isWordsOwner[id] = "Attributes."+ attr.name +".CodeInterface";
-			}	
+				var codeIntValue:String = codeInterfaceLabel + "(";
+				
+				var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d\/w.`-]+)/g;
+				var langs:Array = [];
+				var tempStr:String;
+				while (langs = regLangs.exec(attr.codeInterface))
+				{
+					var id:String = languagesProxy.getRegExpID(objTypeVO.languages, langs[1]);
+					tempStr		  = languagesProxy.used(objTypeVO.languages, 4, langs[1], "Attributes."+ attr.name +".CodeInterface."+langs[2]);
+					codeIntValue += "(" + tempStr + "|" + langs[2] + ")|";
+				}	
+				codeIntValue = codeIntValue.slice(0,codeIntValue.length-1);
+				
+				//if xml file have errors
+				if ( (codeIntValue.length + 1) != attr.codeInterface.length )
+				{
+					if (codeIntValue == "DropDown") 
+						codeIntValue = "DropDown(";
+					Alert.show( "field DropDown of attribute " + attr.name + " contains an error. IDE will not keep and show this field", "Failed:" );
+					ErrorLogger.instance.logError( "Failed: field DropDown of attribute contains an error.", "Attributes."+attr.name );
+					trace("Failed: field DropDown of attribute " + attr.name + " contains an error.");
+				}
+					
+				codeIntValue += ")";
+				attr.codeInterface = codeIntValue;
+			}
 		}
 		
 		private function reuseActionsID( objTypeVO: ObjectTypeVO):void
@@ -136,17 +163,17 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				for each (var actObj:Object in cont.actionsCollection)
 				{
 					var act:ActionVO = actObj.data;
-					if (act.description == "")   act.description   = "#Lang(600)";
-					if (act.interfaceName == "") act.interfaceName = "#Lang(700)";					
-					act.description   = languagesProxy.used(objTypeVO.languages, act.description,   "Actions."+ act.methodName +".Description");
-					act.interfaceName = languagesProxy.used(objTypeVO.languages, act.interfaceName, "Actions."+ act.methodName +".InterfaceName");
+					if (act.description == "")   act.description   = "#Lang(500)";
+					if (act.interfaceName == "") act.interfaceName = "#Lang(600)";					
+					act.description   = languagesProxy.used(objTypeVO.languages, 5, act.description,   "Actions."+ act.methodName +".Description");
+					act.interfaceName = languagesProxy.used(objTypeVO.languages, 6, act.interfaceName, "Actions."+ act.methodName +".InterfaceName");
 					for each (var parObj:Object in act.parameters)
 					{
 						var actPar:ActionParameterVO = parObj.data;
-						if (actPar.interfaceName == "") actPar.interfaceName = "#Lang(900)";
+						if (actPar.interfaceName == "") actPar.interfaceName = "#Lang(700)";
 						if (actPar.help          == "") actPar.help          = "#Lang(800)";
-						actPar.interfaceName = languagesProxy.used(objTypeVO.languages, actPar.interfaceName, "Actions.Parameter."+ actPar.scriptName +".InterfaceName");
-						actPar.help			 = languagesProxy.used(objTypeVO.languages, actPar.help, "Actions.Parameter."+ actPar.scriptName +".Help");
+						actPar.interfaceName = languagesProxy.used(objTypeVO.languages, 7, actPar.interfaceName, "Actions.Parameter."+ actPar.scriptName +".InterfaceName");
+						actPar.help			 = languagesProxy.used(objTypeVO.languages, 8, actPar.help, "Actions.Parameter."+ actPar.scriptName +".Help");
 					}
 				}
 			}			
@@ -200,15 +227,21 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			information.Container 			= objTypeVO.container;			
 			information.Category 			= objTypeVO.category;
 			information.Dynamic 			= (objTypeVO.dynamic)? "1": "0";
-			information.Version 			= objTypeVO.version;
+			information.Version 			= saveVertionType(objTypeVO);
 			information.InterfaceType 		= objTypeVO.interfaceType;
 			information.OptimizationPriority = objTypeVO.optimizationPriority;
 			information.Containers			= objTypeVO.containers;
 			information.Languages 			= getLanguagesName(objTypeVO);			
 			
+			// is top level container
+			if (objTypeVO.container == 3)
+			{
+				information.RenderType			= objTypeVO.renderType;
+				information.HTTPContentType		= objTypeVO.HTTPContentType;
+			}
+				
 			information.Handlers 			= objTypeVO.handlers;			
 			information.RemoteMethods		= objTypeVO.remoteMethods;
-			information.RenderType 			= objTypeVO.renderType;			
 			information.WCAG 				= objTypeVO.wcag;
 			information.XMLScriptName 		= objTypeVO.XMLScriptName;			
 
@@ -238,21 +271,47 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				objTypeVO.className 	= information.ClassName;
 				objTypeVO.container		= information.Container;
 				objTypeVO.containers	= information.Containers;
-				checkLang(information.Description, objTypeVO.description );
-				checkLang(information.DisplayName, objTypeVO.displayName );
+//				checkLang(information.Description, objTypeVO.description );
+//				checkLang(information.DisplayName, objTypeVO.displayName );
 	
 				objTypeVO.dynamic		= information.Dynamic.toString() == "1";
 				objTypeVO.id			= information.ID;	
 				objTypeVO.interfaceType	= information.InterfaceType;
-				objTypeVO.handlers		= information.getLanguagesName;
+				objTypeVO.handlers		= information.Handlers;
 				objTypeVO.name 			= information.Name;
 				objTypeVO.moveable		= information.Moveable.toString() == "1";
 				objTypeVO.optimizationPriority = information.OptimizationPriority;						
-				objTypeVO.renderType	= information.RenderType;
+//				objTypeVO.renderType	= information.RenderType;
 				objTypeVO.resizable		= information.Resizable;				
-				objTypeVO.version		= information.Version;	
+				setVertionType(objTypeVO, information.Version);
+				
 				objTypeVO.wcag			= information.WCAG;
-				objTypeVO.XMLScriptName	= information.XMLScriptName;
+				objTypeVO.XMLScriptName = information.XMLScriptName;
+				
+				
+				// is top level container
+				if (objTypeVO.container	== 3 )
+				{
+					try
+					{
+						objTypeVO.renderType = information.RenderType;
+					} 
+					catch (error:Error)
+					{
+						ErrorLogger.instance.logError("Failed: not teg: <XMLScriptName/>", "initInformation");
+						trace("Failed: not teg <XMLScriptName/>.", error.message);
+					}
+					
+					try
+					{
+						objTypeVO.HTTPContentType = information.HTTPContentType;
+					} 
+					catch (error:Error)
+					{
+						ErrorLogger.instance.logError("Failed: not teg: <HTTPContentType/>", "initInformation");
+						trace("Failed: not teg <HTTPContentType/>.", error.message);
+					}
+				}				
 	
 				objTypeVO.icon 			= information.Icon;
 				objTypeVO.editorIcon 	= information.EditorIcon;
@@ -265,8 +324,30 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			}
 			return objTypeVO;
 		}
+		
+		private function setVertionType( objTypeVO:ObjectTypeVO, vertion:String ):void
+		{
+			var arr: Array = vertion.split( "." );
+			if ( arr.length == 1 )
+			{
+				objTypeVO.majVersion = (vertion == "")? 1: int(vertion);			
+			}
+			else
+			{
+				objTypeVO.majVersion = arr[0];
+				objTypeVO.minVersion = arr[1];
+				objTypeVO.minServRevition = arr[2];	
+			}
+		}
+		
+		private function saveVertionType(objTypeVO:ObjectTypeVO ): String
+		{
+			return objTypeVO.majVersion + "." + 
+					  (objTypeVO.minVersion++).toString() + "." + 
+					  objTypeVO.minServRevition;
+		} 
 
-		public function removeVO(objTypeVO  : ObjectTypeVO):void
+		public function removeVO(objTypeVO : ObjectTypeVO):void
 		{
 			_objectTypeList[objTypeVO.filePath] = null
 		}

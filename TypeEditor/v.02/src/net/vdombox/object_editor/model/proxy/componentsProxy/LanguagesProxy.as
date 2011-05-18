@@ -4,6 +4,8 @@
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 	import mx.collections.ArrayCollection;
+	import mx.collections.Sort;
+	import mx.collections.SortField;
 	
 	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.vo.LanguagesVO;
@@ -28,20 +30,20 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			{
 				var languagesXML: XML = objTypeXML.Languages[0];
 				var	langEN:XML = languagesXML.Language.(@Code == "en_US")[0];
-	
+				
 				for each (var langXML:XML in languagesXML.children())
 				{
 					var lan:String =  langXML.@Code.toString()
 					languagesVO.locales.addItem( {label:lan, data:lan} );
 				}	
-	
+				
 				for each (var wordEn:XML in langEN.children())
 				{
 					var words:Object = {};
 					var id:String = wordEn.@ID;	
-					languagesVO.isUsedWords[id] = false;
+					//temp languagesVO.isUsedWords[id] = false;
 					words["ID"] = id;
-	
+					
 					for each (langXML in languagesXML.children())
 					{			
 						var word:XML =  langXML.Sentence.(@ID == id )[0];
@@ -49,7 +51,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 							word = wordEn;
 						words[langXML.@Code] = word.toString();					
 					}
-					languagesVO.words.addItem(words);				
+					languagesVO.tempWords.addItem(words);				
 				}				
 			}		
 			catch(error:TypeError)
@@ -61,7 +63,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				return languagesVO;
 			}
 		}
-
+	
 		/**
 		 * 
 		 * @param langsVO
@@ -92,6 +94,22 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		 * @return object of ID and the value of ID in different locales
 		 * 
 		 */		
+		public function tempGetWords(langsVO:LanguagesVO,id:String):Object
+		{	
+			var localeName:String = langsVO.currentLocation;
+			var wordsVO:ArrayCollection = langsVO.tempWords;
+			var retString:Object;
+			
+			for each (var word:Object in wordsVO)
+			{		
+				if (word["ID"] == id)
+				{
+					retString = word;
+					break;
+				}
+			}
+			return retString;
+		}
 		public function getWords(langsVO:LanguagesVO,id:String):Object
 		{	
 			var localeName:String = langsVO.currentLocation;
@@ -182,7 +200,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		}
 
 		public function createXML(languagesVO: LanguagesVO):XML
-		{						
+		{		
 			var langsXML:XML = <Languages/>;
 			var wordsVO:ArrayCollection = languagesVO.words;
 			var localesVO:ArrayCollection = languagesVO.locales;
@@ -247,56 +265,34 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		 * @param startId - first number of ID;
 		 * @param newValue - value for current location language;
 		 * @param oldWord - copy to newWord;
-		 * @return new word with new ID, ID - first not used. 
+		 * @return ID of new word with new ID, ID - first not used, i nformat: "#Lang(ID)". 
 		 * 
 		 */		
 		public function getNextId(langsVO: LanguagesVO, startId: String, newValue: String = "", oldWord: Object = null):String
 		{
-			return langsVO.getNextId( startId, "", oldWord ).toString();
+			return langsVO.tempGetNextId( startId, "", oldWord ).toString();
 		}		
 		
 		/**
 		 * 
-		 * @param langsVO - current LanguagesVO;
+		 * @param langsVO - current LanguagesVO;		 
+		 * @param firstNumberID - figure with which to start the ID, in format: id:uint; 
 		 * @param idString - ID in format: "#Lang(ID)";
-		 * @param owner - name of owner; 
+		 * @param owner - name of owner;  
 		 * @return not used ID in format: "#Lang(ID)".
 		 * 
 		 */
-		public function used(langsVO: LanguagesVO, idString:String, owner:String):String
-		{
+		public function used(langsVO: LanguagesVO, firstNumberID:uint, idString:String, owner:String):String
+		{	
 			var id:String = getRegExpID(langsVO, idString);
-			var newID:String = "";
-			//if langID exist and used
-			if (langsVO.isUsedWords[id])
-			{
-				var idPart:String = id.toString().slice(0,1);
-				newID = this.getNextId( langsVO, idPart, "", getWords(langsVO, id) );
-				langsVO.isUsedWords[newID] = true;
-				langsVO.isWordsOwner[newID]= owner;
-				return newID; 				
-			}
-			else
-			{	
-				//if langID exist and not used
-				if (langsVO.isUsedWords[id] == false)
-				{
-					langsVO.isUsedWords[id] = true;
-					langsVO.isWordsOwner[id]= owner;
-					return idString;
-				}
-				//if langID not exist
-				else
-				{
-					newID = getNextId(langsVO, id.toString().slice(0,1));
-					var idNumber:String = newID.toString().slice(6,newID.length-1);
-					langsVO.isUsedWords[idNumber] = true;
-					langsVO.isWordsOwner[idNumber]= owner;
-					return newID;
-				}				
-			}
+			var newID:String = getNextId(langsVO, firstNumberID.toString().slice(0,1), "", tempGetWords(langsVO, id));
+			
+			var idNumber:String = newID.toString().slice(6,newID.length-1);
+			langsVO.isUsedWords[idNumber] = true;
+			langsVO.isWordsOwner[idNumber]= owner;
+			return newID;		
 		}
-		
+				
 		public function deleteWord(objTypeVO:ObjectTypeVO, word:String):void
 		{		
 			if (word != "")
