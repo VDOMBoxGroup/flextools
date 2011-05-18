@@ -48,20 +48,38 @@ package net.vdombox.object_editor.view.mediators
 		private function showAttributes(event: FlexEvent): void
 		{	
 			view.removeEventListener					( FlexEvent.SHOW, 	showAttributes );	
-			view.attributesList.addEventListener      	( Event.CHANGE, 	selectAtribute );
+			view.attributesList.addEventListener      	( Event.CHANGE, 	selectAttribute );
 			view.fname.addEventListener                	( Event.CHANGE, 	changeName );
 			view.addAttributeButton.addEventListener   	( MouseEvent.CLICK,	addAttribute );
 			view.deleteAttributeButton.addEventListener	( MouseEvent.CLICK,	deleteAttribute );
 			view.colorgroup.addEventListener		   	( Event.CHANGE, 	apdateBackgroundColor );
+			view.currentLocation.addEventListener		( Event.CHANGE, 	changeCurrentLocation );
+			
 			compliteAtributes();
 			view.validateNow();
 		}
 		
 		protected function compliteAtributes( ):void
 		{	
-			view.attributesList.dataProvider = objectTypeVO.attributes;				
+			view.attributesList.dataProvider = objectTypeVO.attributes;	
+			
+			//set currentLocation`s value 
+			view.currentLocation.dataProvider = objectTypeVO.languages.locales;
+			view.currentLocation.selectedItem = getLocalesItem(objectTypeVO.languages.currentLocation);
+			view.currentLocation.validateNow();
+			
 			setCurrentAttribute();			
 		}	
+		
+		private function getLocalesItem(curLang:String):Object
+		{
+			for each (var obj:Object in objectTypeVO.languages.locales)
+			{
+				if (obj["label"] == curLang)
+					return obj;
+			}
+			return {};
+		}
 		
 		private function setCurrentAttribute(listIndex:int = 0):void
 		{
@@ -91,6 +109,7 @@ package net.vdombox.object_editor.view.mediators
 			view.interfaceType.selectedIndex 	= attributeVO.interfaceType;
 			view.colorgroup.selectedIndex 		= attributeVO.colorgroup;
 			view.regExp.text					= attributeVO.regularExpressionValidation;
+			clearCodeInterfaceFields();
 			compliteCodeInterfaceField(attributeVO.codeInterface);
 			
 			view.displayName.completeStructure( objectTypeVO.languages, attributeVO.displayName );
@@ -160,10 +179,9 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}
 
-		private function selectAtribute(event:Event):void
+		private function selectAttribute(event:Event):void
 		{ 
 			currentAttributeVO = view.attributesList.selectedItem.data as AttributeVO;
-			clearCodeInterfaceFields();
 			fillAttributeFilds(currentAttributeVO);	
 		}
 
@@ -216,7 +234,7 @@ package net.vdombox.object_editor.view.mediators
 		//not used
 		private  function hideAttributes(event: FlexEvent):void
 		{
-			view.attributesList.removeEventListener(Event.CHANGE, selectAtribute);
+			view.attributesList.removeEventListener(Event.CHANGE, selectAttribute);
 		}
 
 		private function sortAttributes():void 
@@ -226,7 +244,7 @@ package net.vdombox.object_editor.view.mediators
 			objectTypeVO.attributes.refresh();
 		}
 		
-		private function changeFildWithCurrentLanguage( ):void
+		private function changeFildWithCurrentLanguage( index:int ):void
 		{
 			if (currentAttributeVO)
 			{
@@ -241,6 +259,15 @@ package net.vdombox.object_editor.view.mediators
 				
 				changeDropDownFildsWithCurrentLanguage() 
 			}
+			
+			view.currentLocation.selectedIndex = index;
+			view.currentLocation.validateNow();
+		}
+		
+		public function changeCurrentLocation( event: Event ): void
+		{
+			objectTypeVO.languages.currentLocation = view.currentLocation.selectedLabel;			
+			sendNotification( ApplicationFacade.CHANGE_CURRENT_LANGUAGE, view.currentLocation.selectedIndex );
 		}
 		
 		public function changeDropDownFildsWithCurrentLanguage():void
@@ -317,7 +344,7 @@ package net.vdombox.object_editor.view.mediators
 					{
 						view.CIViewStack.selectedIndex = 3;
 						view.CIViewStack.validateNow();
-						var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d]+)/g;
+						var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d\/w.`-]+)/g;
 						var langs:Array = [];							
 						
 						while (langs = regLangs.exec(arguments[0]))
@@ -348,6 +375,12 @@ package net.vdombox.object_editor.view.mediators
 					}
 				}
 			}
+			else
+			{
+				view.CIViewStack.selectedIndex = 6;
+				view.CIViewStack.validateNow();						
+			}
+			//selectCodeInterface();			
 		}
 		
 		public function addDropDownRow(event:FlexEvent, dropDownVal:DropDownValue=null):void
@@ -562,7 +595,7 @@ package net.vdombox.object_editor.view.mediators
 				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
 				{
 					if (view.attributesList)
-						changeFildWithCurrentLanguage( );
+						changeFildWithCurrentLanguage(note.getBody() as int);
 					break;
 				}
 			}

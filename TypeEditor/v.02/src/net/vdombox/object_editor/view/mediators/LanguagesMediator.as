@@ -3,6 +3,7 @@
 */
 package net.vdombox.object_editor.view.mediators
 {	
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import mx.collections.ArrayCollection;
@@ -25,19 +26,22 @@ package net.vdombox.object_editor.view.mediators
 		public static const NAME:String 		= "LanguagesMediator";
 		public static const ADD_LANGUAGE:String = "addLaguage";
 		private var objectTypeVO:ObjectTypeVO;
+		private var isAddEventListenerForLanguagesDataGrid : Boolean = false;
 		private var firstID:Boolean = false;
 		
 		public function LanguagesMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
-			view.addEventListener( FlexEvent.SHOW, showLanguages );			
+			view.addEventListener( FlexEvent.SHOW, showLanguages );	
+			view.addEventListener( Event.CHANGE, addStar );
 		}
 		
 		private function showLanguages(event: FlexEvent): void
 		{	
 			addOwners();
 			view.languagesDataGrid.dataProvider = objectTypeVO.languages.words;
+//			addListener();
 			
 			if (!firstID)
 				addWordsToDataGrid();
@@ -45,6 +49,12 @@ package net.vdombox.object_editor.view.mediators
 			view.addWord.addEventListener	( MouseEvent.CLICK,   addWord );
 			view.deleteWord.addEventListener( MouseEvent.CLICK,   deleteWord );
 			view.validateNow();
+		}
+		
+		private function addListener(): void
+		{
+			if ( ! isAddEventListenerForLanguagesDataGrid )
+				view.languagesDataGrid.addEventListener( Event.CHANGE, addStar );
 		}
 		
 		private function addOwners(): void
@@ -163,7 +173,7 @@ package net.vdombox.object_editor.view.mediators
 			}
 		}
 		
-		protected function addStar():void
+		protected function addStar(  e: Event = null ):void
 		{
 			view.label= "Languages*";			
 			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);

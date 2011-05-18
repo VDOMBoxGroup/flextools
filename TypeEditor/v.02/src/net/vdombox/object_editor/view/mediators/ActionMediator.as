@@ -68,7 +68,8 @@ package net.vdombox.object_editor.view.mediators
 
 			view.methodName.addEventListener     		( Event.CHANGE, 	changeMethodName );
 			view.parScriptName.addEventListener  		( Event.CHANGE, 	changeScriptName );
-
+			view.currentLocation.addEventListener		( Event.CHANGE, 	changeCurrentLocation );
+			
 			view.validateNow();
 		}
 
@@ -234,8 +235,8 @@ package net.vdombox.object_editor.view.mediators
 			addStar();
 			currentActionVO = new ActionVO();
 			currentActionVO.methodName 	  = ( "methodName" + currentContainerVO.actionsCollection.length );
-			currentActionVO.description   = languagesProxy.newWords(objectTypeVO.languages, "6", "Actions."+currentActionVO.methodName+".Description",currentActionVO.methodName);
-			currentActionVO.interfaceName = languagesProxy.newWords(objectTypeVO.languages, "7", "Actions."+currentActionVO.methodName+".InterfaceName",currentActionVO.methodName);
+			currentActionVO.description   = languagesProxy.newWords(objectTypeVO.languages, "5", "Actions."+currentActionVO.methodName+".Description",currentActionVO.methodName);
+			currentActionVO.interfaceName = languagesProxy.newWords(objectTypeVO.languages, "6", "Actions."+currentActionVO.methodName+".InterfaceName",currentActionVO.methodName);
 			
 			currentContainerVO.actionsCollection.addItem( {label:currentActionVO.methodName, data:currentActionVO} );
 			currentParameterVO	= null;
@@ -256,8 +257,8 @@ package net.vdombox.object_editor.view.mediators
 			currentParameterVO.scriptName = ( "scriptName" + currentActionVO.parameters.length );
 
 			currentActionVO.parameters.addItem( {label:currentParameterVO.scriptName, data:currentParameterVO} );
-			currentParameterVO.help   = languagesProxy.newWords(objectTypeVO.languages, "8", "Actions.Parameter."+currentParameterVO.scriptName+".Help",currentParameterVO.scriptName);
-			currentParameterVO.interfaceName   = languagesProxy.newWords(objectTypeVO.languages, "9", "Actions.Parameter."+currentParameterVO.scriptName+".InterfaceName",currentParameterVO.scriptName);
+			currentParameterVO.help   = languagesProxy.newWords(objectTypeVO.languages, "7", "Actions.Parameter."+currentParameterVO.scriptName+".Help",currentParameterVO.scriptName);
+			currentParameterVO.interfaceName   = languagesProxy.newWords(objectTypeVO.languages, "8", "Actions.Parameter."+currentParameterVO.scriptName+".InterfaceName",currentParameterVO.scriptName);
 
 			fillParameter(currentParameterVO);
 			view.currentParameter = getCurrentParameter(currentParameterVO.scriptName);
@@ -354,13 +355,28 @@ package net.vdombox.object_editor.view.mediators
 		protected function compliteActions():void
 		{	
 			if (objectTypeVO.actionContainers.length > 0)
-			{
+			{				
+				//set currentLocation`s value 
+				view.currentLocation.dataProvider = objectTypeVO.languages.locales;
+				view.currentLocation.selectedItem = getLocalesItem(objectTypeVO.languages.currentLocation);
+				view.currentLocation.validateNow();
+				
 				sortActions();
 				view.actionsList.dataProvider = currentContainerVO.actionsCollection;
 			}
 		}		
-
-		private function changeFildWithCurrentLanguage( ):void
+		
+		private function getLocalesItem(curLang:String):Object
+		{
+			for each (var obj:Object in objectTypeVO.languages.locales)
+			{
+				if (obj["label"] == curLang)
+					return obj;
+			}
+			return {};
+		}
+		
+		private function changeFildWithCurrentLanguage( index:int ):void
 		{
 			if (currentActionVO)
 			{
@@ -370,6 +386,7 @@ package net.vdombox.object_editor.view.mediators
 				view.interfaceName.currentLanguage = objectTypeVO.languages.currentLocation;
 				view.interfaceName.apdateFild();
 			}
+			
 			if (currentParameterVO)
 			{
 				view.parHelp.currentLanguage = objectTypeVO.languages.currentLocation;
@@ -378,8 +395,17 @@ package net.vdombox.object_editor.view.mediators
 				view.parInterfaceName.currentLanguage = objectTypeVO.languages.currentLocation;
 				view.parInterfaceName.apdateFild();
 			}
+			
+			view.currentLocation.selectedIndex = index;
+			view.currentLocation.validateNow();
 		}		
-
+		
+		public function changeCurrentLocation( event: Event ): void
+		{
+			objectTypeVO.languages.currentLocation = view.currentLocation.selectedLabel;			
+			sendNotification( ApplicationFacade.CHANGE_CURRENT_LANGUAGE, view.currentLocation.selectedIndex );
+		}
+		
 		private function setLabel(actionContainers:ArrayCollection):void
 		{
 			var arr:ArrayCollection = new ArrayCollection();
@@ -519,7 +545,7 @@ package net.vdombox.object_editor.view.mediators
 				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
 				{
 					if( view.description) 
-						changeFildWithCurrentLanguage( );
+						changeFildWithCurrentLanguage(note.getBody() as int);
 					break;
 				}
 			}

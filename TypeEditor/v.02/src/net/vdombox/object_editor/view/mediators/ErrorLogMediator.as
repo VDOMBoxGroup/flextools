@@ -3,6 +3,8 @@
 */
 package net.vdombox.object_editor.view.mediators
 {
+	import flash.events.Event;
+	
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.object_editor.model.ErrorLogger;
@@ -20,7 +22,7 @@ package net.vdombox.object_editor.view.mediators
 		public function ErrorLogMediator( viewComponent:Object ) 
 		{			
 			super( NAME, viewComponent );			
-			view.addEventListener( FlexEvent.SHOW, showErrorLog );			
+			view.addEventListener( FlexEvent.CREATION_COMPLETE, showErrorLog );			
 		}
 		
 		private function showErrorLog(event: FlexEvent): void

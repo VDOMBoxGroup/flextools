@@ -20,6 +20,13 @@ package net.vdombox.object_editor.view.mediators
 	import spark.components.Button;
 	
 	//TODO: rename to loadButtonMediator
+	/**
+	 * Send Notification for create new xml file then 
+	 * Creates new GUIDs, Information.Name, Information.DisplayName for the new xml file.
+	 *  
+	 * @author Elena Kotlova
+	 * 
+	 */
 	public class CreateObjectMediator extends Mediator implements IMediator
 	{		
 		public static const NAME			:String = "CreateObjectMediator";
@@ -52,18 +59,18 @@ package net.vdombox.object_editor.view.mediators
 				xmlFile.Languages.Language.Sentence[0]	=  file.name.split(".")[0];
 				
 				//set ID of Object
-				xmlFile.Information.ID 				= UIDUtil.createUID();
+				xmlFile.Information.ID 				= UIDUtil.createUID().toLowerCase();
 				
 				//add uids
-				var uid:String = UIDUtil.createUID();
+				var uid:String = UIDUtil.createUID().toLowerCase();
 				xmlFile.Information.Icon			= "#Res(" + uid + ")";
 				xmlFile.Resources.Resource.@ID[0]	= uid;
 				
-				uid = UIDUtil.createUID();
+				uid = UIDUtil.createUID().toLowerCase();
 				xmlFile.Information.EditorIcon		= "#Res(" + uid + ")";
 				xmlFile.Resources.Resource.@ID[1]	= uid;
 				
-				uid = UIDUtil.createUID();
+				uid = UIDUtil.createUID().toLowerCase();
 				xmlFile.Information.StructureIcon	= "#Res(" + uid + ")";			
 				xmlFile.Resources.Resource.@ID[2]	= uid;
 				

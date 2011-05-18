@@ -47,8 +47,9 @@ package net.vdombox.object_editor.view.mediators
 			view.eventsList.addEventListener			( Event.CHANGE, 	selectEvent);			
 			view.eventName.addEventListener  	 		( Event.CHANGE, 	changeEventName );
 			view.parName.addEventListener 	 	 		( Event.CHANGE, 	changeParameterName );
+			view.currentLocation.addEventListener		( Event.CHANGE, 	changeCurrentLocation );
 			
-			compliteEvents(); // complete
+			compliteEvents(); 
 			view.validateNow();
 		}
 		
@@ -56,8 +57,24 @@ package net.vdombox.object_editor.view.mediators
 		{	
 			sortEvents();
 			view.eventsList.dataProvider = objectTypeVO.events;
+			
+			//set currentLocation`s value 
+			view.currentLocation.dataProvider = objectTypeVO.languages.locales;
+			view.currentLocation.selectedItem = getLocalesItem(objectTypeVO.languages.currentLocation);
+			view.currentLocation.validateNow();
+			
 			setCurrentEvent();
-		}	
+		}
+		
+		private function getLocalesItem(curLang:String):Object
+		{
+			for each (var obj:Object in objectTypeVO.languages.locales)
+			{
+				if (obj["label"] == curLang)
+					return obj;
+			}
+			return {};
+		}
 		
 		private function setCurrentEvent(listIndex:int = 0):void
 		{
@@ -148,23 +165,10 @@ package net.vdombox.object_editor.view.mediators
 			
 			view.currentParameter.label = event.target.text;			
 			currentParameterVO.name = view.parName.text;
-			//view.parametersList.dataProvidervalidateNow();
 			view.parametersList.dataProvider.itemUpdated(view.currentParameter.label);
-			view.parametersList.validateNow();
-			
-			view.parametersList.validateNow();
-			/*
-			var ar:* = view.parametersList.dataProvider;
-			view.parametersList.dataProvider = null;
-			view.parametersList.dataProvider = ar;*/
-			
-			
-			
+			view.parametersList.validateNow();			
 			view.parametersList.selectedItem = view.currentParameter;
 			view.parametersList.ensureIndexIsVisible(view.parametersList.selectedIndex);
-			
-			
-			
 			view.parametersList.validateNow();
 		}	
 		
@@ -205,7 +209,7 @@ package net.vdombox.object_editor.view.mediators
 			var parameterVO:EventParameterVO = new EventParameterVO( "newParameter" + currentEventVO.parameters.length );
 			currentEventVO.parameters.addItem( {label:parameterVO.name, data:parameterVO} );
 			currentParameterVO = parameterVO;
-			parameterVO.help = languagesProxy.newWords(objectTypeVO.languages, "3", "Events."+parameterVO.name+"Parameter",parameterVO.name);
+			parameterVO.help = languagesProxy.newWords(objectTypeVO.languages, "9", "Events."+parameterVO.name+"Parameter",parameterVO.name);
 			fillParameter(parameterVO);
 			view.currentParameter = getCurrentParameter(parameterVO.name);
 			view.parametersList.selectedItem = view.currentParameter;
@@ -296,20 +300,28 @@ package net.vdombox.object_editor.view.mediators
 
 				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
 				{
-					if (view.eventsList)
-						changeFildWithCurrentLanguage();
+					if (view.eventsList)						
+						changeFildWithCurrentLanguage(note.getBody() as int);
 					break;
 				}
 			}
 		}
 		
-		private function changeFildWithCurrentLanguage( ):void
+		private function changeFildWithCurrentLanguage( index:int ):void
 		{
 			if (view.parHelp.words)
 			{
 				view.parHelp.currentLanguage = objectTypeVO.languages.currentLocation;
-				view.parHelp.apdateFild();
+				view.parHelp.apdateFild();				
 			}
+			view.currentLocation.selectedIndex = index;
+			view.currentLocation.validateNow();
+		}
+		
+		public function changeCurrentLocation( event: Event ): void
+		{
+			objectTypeVO.languages.currentLocation = view.currentLocation.selectedLabel;			
+			sendNotification( ApplicationFacade.CHANGE_CURRENT_LANGUAGE, view.currentLocation.selectedIndex );
 		}
 		
 		protected function addStar():void // mark changed

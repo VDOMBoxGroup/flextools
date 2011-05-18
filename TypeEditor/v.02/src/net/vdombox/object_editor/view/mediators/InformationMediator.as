@@ -5,13 +5,13 @@ package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-
+	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Image;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
-
+	
 	import net.vdombox.object_editor.model.proxy.ObjectsProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
@@ -21,7 +21,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.view.essence.Information;
 	import net.vdombox.object_editor.view.essence.SelectFormItem;
 	import net.vdombox.object_editor.view.popups.Containers2;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -44,7 +44,7 @@ package net.vdombox.object_editor.view.mediators
 		private function showInformation( event:FlexEvent ): void
 		{			
 			compliteInformation();
-		}
+		}		
 		
 		protected function compliteInformation():void
 		{			
@@ -55,8 +55,12 @@ package net.vdombox.object_editor.view.mediators
 			view.fID.text 				= objectTypeVO.id;
 			view.fDynamic.selected		= objectTypeVO.dynamic;			
 			view.fMoveable.selected		= objectTypeVO.moveable;
-			view.fVersion.text 			= objectTypeVO.version;
+			view.fMajorVersion.text 		= objectTypeVO.majVersion.toString();
+			view.fMinorVersion.text 		= objectTypeVO.minVersion.toString();
+			view.fMinServerSupportRev.textInput.text 	= objectTypeVO.minServRevition.toString();
+			
 			view.fWCAG.text				= objectTypeVO.wcag;
+			
 			
 			view.fCategory.setData(objectsProxy.categorys, objectTypeVO.category, objectTypeVO.languages);
 			view.fDisplayName.completeStructure( objectTypeVO.languages, objectTypeVO.displayName );
@@ -68,6 +72,11 @@ package net.vdombox.object_editor.view.mediators
 			view.fInterfaceType.selectedIndex 	= objectTypeVO.interfaceType;
 			view.fOptimizationPriority.value  	= objectTypeVO.optimizationPriority;
 			view.fcurrentLocation.dataProvider	= objectTypeVO.languages.locales;
+			
+			view.fHandlers.text					= objectTypeVO.handlers;
+			view.fRenderType.text				= objectTypeVO.renderType;
+			view.fHTTPContentType.text			= objectTypeVO.HTTPContentType;
+			view.fXMLScriptName.text			= objectTypeVO.XMLScriptName;
 			
 			view.ficon1.source  = resourcesProxy.getByteArray(objectTypeVO.icon);
 			view.ficon1.toolTip = getToolTipe(objectTypeVO.icon);
@@ -100,20 +109,37 @@ package net.vdombox.object_editor.view.mediators
 			objectTypeVO.category		= view.fCategory.getData();
 			objectTypeVO.dynamic		= view.fDynamic.selected;
 			objectTypeVO.moveable		= view.fMoveable.selected;
-			objectTypeVO.version 		= view.fVersion.text;
+			
+			setVertion();
+			
 			objectTypeVO.wcag			= view.fWCAG.text;
+			objectTypeVO.containers		= view.fContainers.text;
 
 			objectTypeVO.remoteMethods	= view.fRemoteMethods.text;
 			objectTypeVO.handlers		= view.fHandlers.text;
 			objectTypeVO.XMLScriptName	= view.fXMLScriptName.text;
 			objectTypeVO.renderType		= (view.fRenderType.enabled)?view.fRenderType.text : "";
+			objectTypeVO.HTTPContentType	= view.fHTTPContentType.text;
+			
 
 			objectTypeVO.resizable	 	= view.fResizable.selectedIndex ;
-			objectTypeVO.container 	 	= view.fContainerI.selectedIndex;			
+			objectTypeVO.container 	 	= view.fContainerI.selectedItem.data as int;			
 			objectTypeVO.interfaceType 	= view.fInterfaceType.selectedIndex;
 			objectTypeVO.optimizationPriority  =  view.fOptimizationPriority.value;			
 		}
-
+		
+		private function setVertion():void
+		{
+			objectTypeVO.majVersion 	= int(view.fMajorVersion.text);
+//			objectTypeVO.minVersion 	= view.fMinorVersion.text;
+			
+			if ( view.fMinServerSupportRev.selectedItem != null )
+				if ( view.fMinServerSupportRev.selectedItem is String )
+					objectTypeVO.minServRevition	= view.fMinServerSupportRev.selectedItem;
+				else
+					objectTypeVO.minServRevition	= view.fMinServerSupportRev.selectedItem.label;
+		}
+			
 		private function validateInformation(event:FlexEvent):void
 		{
 			view.fDisplayName.apdateFild();	
@@ -123,17 +149,27 @@ package net.vdombox.object_editor.view.mediators
 
 		public function changeCurrentLocation( event: Event ): void
 		{
-			objectTypeVO.languages.currentLocation = view.fcurrentLocation.selectedLabel;
+			objectTypeVO.languages.currentLocation = view.fcurrentLocation.selectedLabel;			
+			sendNotification( ApplicationFacade.CHANGE_CURRENT_LANGUAGE, view.fcurrentLocation.selectedIndex );
+		}
+		
+		private function changeFildWithCurrentLanguage( ):void
+		{			
 			view.fDisplayName.currentLanguage = objectTypeVO.languages.currentLocation;
 			view.fDisplayName.apdateFild();	
 			view.fDescription.currentLanguage = objectTypeVO.languages.currentLocation;
 			view.fDescription.apdateFild();
-
+			
 			view.fCategory.currentLanguage = objectTypeVO.languages.currentLocation;
-			view.fCategory.apdateFild();
-			sendNotification( ApplicationFacade.CHANGE_CURRENT_LANGUAGE );
+			view.fCategory.apdateFild();			
 		}
 
+		private function newCurrentLanguage( index:int ):void
+		{			
+			view.fcurrentLocation.selectedIndex = index;
+			changeFildWithCurrentLanguage();
+		}
+		
 		private function getToolTipe(idRes:String):String
 		{
 			var img: Image = new Image();
@@ -167,7 +203,8 @@ package net.vdombox.object_editor.view.mediators
 		override public function listNotificationInterests():Array 
 		{			
 			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED,
-				Information.INFORMATION_CHANGED	];
+						       Information.INFORMATION_CHANGED, 
+					 ApplicationFacade.CHANGE_CURRENT_LANGUAGE	];
 		}
 
 		override public function handleNotification( note:INotification ):void 
@@ -177,7 +214,10 @@ package net.vdombox.object_editor.view.mediators
 				case ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED:
 				{
 					if (objectTypeVO == note.getBody() )
+					{
 						view.label= "Information";
+						view.fMinorVersion.text = objectTypeVO.minVersion.toString(); 	
+					}
 					break;
 				}
 					
@@ -187,6 +227,11 @@ package net.vdombox.object_editor.view.mediators
 					compliteInformation();
 					addStar();
 					break;
+				}
+					
+				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
+				{
+					newCurrentLanguage(note.getBody() as int);
 				}
 			}
 		}
