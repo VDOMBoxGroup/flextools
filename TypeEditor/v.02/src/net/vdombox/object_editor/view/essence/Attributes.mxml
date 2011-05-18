@@ -9,7 +9,7 @@
 	<fx:Declarations>		
 				
 		<mx:NumberValidator source="{minValue}" property="text" integerError="Enter Integer value"
-			 domain="int" trigger="{minValue}" triggerEvent="change" minValue="{int.MIN_VALUE.toString()}"/>
+			 				domain="int" trigger="{minValue}" triggerEvent="change" minValue="{int.MIN_VALUE.toString()}"/>
 		
 		<mx:NumberValidator source="{maxValue}" property="text" integerError="Enter Integer value"
 							domain="int" trigger="{maxValue}" triggerEvent="change" minValue="{int.MIN_VALUE.toString()}"/>
@@ -22,7 +22,7 @@
 		
 		<mx:NumberValidator source="{fieldLength}" property="text" integerError="Enter Integer value"
 							domain="int" trigger="{fieldLength}" triggerEvent="change" minValue="0" />
-		
+				
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
@@ -267,6 +267,10 @@
 					
 					<s:NavigatorContent id="notArguments"/>								
 				</mx:ViewStack>
+			</mx:FormItem>
+			
+			<mx:FormItem label="Display language:" toolTip="Доступные языки">
+				<mx:ComboBox id="currentLocation" width="150" color="0x000000" />
 			</mx:FormItem>
 			
 		</mx:Form>		

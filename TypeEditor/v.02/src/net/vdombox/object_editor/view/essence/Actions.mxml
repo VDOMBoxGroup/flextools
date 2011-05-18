@@ -95,12 +95,15 @@
 						</mx:FormItem>
 						<mx:FormItem label="InterfaceName:" toolTip="Name">
 							<ns2:LangTextArea id="interfaceName" width="150" height="40" change="{changeField()}"/>
-						</mx:FormItem>			
+						</mx:FormItem>	
+						<mx:FormItem label="Display language" toolTip="Доступные языки">
+							<mx:ComboBox id="currentLocation" width="150" color="0x000000" />
+						</mx:FormItem>	
 					</mx:Form>
 					<s:VGroup >
 						<s:Label paddingLeft="10" text="Source Code:"/>
 						<s:TextArea  id="sourceCode"  width="305" height="100" change="{changeField()}"/>
-					</s:VGroup>
+					</s:VGroup>									
 				</s:HGroup >
 				<s:HGroup enabled="{currentAction}">
 					<s:Label text="Parameters:" width="95" paddingLeft="16"/>
@@ -144,6 +147,7 @@
 								<!--s:Button label="..." width="30" click="{}" /-->
 							</s:HGroup>
 						</mx:FormItem>
+						
 					</mx:Form>
 				</s:HGroup >
 			</s:VGroup >

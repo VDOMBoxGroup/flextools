@@ -91,6 +91,11 @@
 				<ns1:LangTextInput id="parHelp" width="200" change="{changeField()}"/>
 			</s:HGroup>
 		</mx:FormItem>
+		
+		<mx:FormItem label="Display language:" toolTip="Доступные языки">
+			<mx:ComboBox id="currentLocation" width="150" color="0x000000" />
+		</mx:FormItem>
+		
 	</mx:Form>
 	</s:HGroup>
 	</s:Scroller >

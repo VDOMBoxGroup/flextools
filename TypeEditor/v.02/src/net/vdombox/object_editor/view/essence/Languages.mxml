@@ -16,11 +16,12 @@
 			[Bindable]
 			public var arLanguages:ArrayCollection = new ArrayCollection();
 			
-			private var dataChanged:Boolean;
+			private var dataChanged:Boolean = false; //not used
 			protected function languages_itemEditEndHandler(event:DataGridEvent):void
 			{
 				// TODO Auto-generated method stub
-				dataChanged = true;				
+				dataChanged = true;	
+				dispatchEvent(new Event( Event.CHANGE ));
 			}
 		]]>
 	</fx:Script>

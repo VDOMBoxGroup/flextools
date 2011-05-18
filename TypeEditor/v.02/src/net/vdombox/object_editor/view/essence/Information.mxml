@@ -13,6 +13,13 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		<s:RadioButtonGroup id="group1"/>
 		<s:RadioButtonGroup id="group2"/>
+		
+		<mx:NumberValidator source="{fMajorVersion}" property="text" integerError="Enter Integer value"
+							domain="int" trigger="{fMajorVersion}" triggerEvent="change"/>
+		
+		<!--mx:NumberValidator source="{fMinServerSupportRev}" property="text" integerError="Enter Integer value"
+							domain="int" trigger="{fMinServerSupportRev}" triggerEvent="change"/-->
+		
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
@@ -23,6 +30,14 @@
 			import mx.utils.UIDUtil;
 						
 			public static const INFORMATION_CHANGED:String = "InformationChanged";
+			
+			[Bindable]
+			public var vertions:ArrayCollection = new ArrayCollection(
+				[ 	
+					{label:"6223", 					data:6223},
+					{label:"6300", 					data:6300},
+					{label:"6720", 					data:6720}					
+				]);
 			
 			[Bindable]
 			public var arInterfaceType:ArrayCollection = new ArrayCollection(
@@ -89,11 +104,28 @@
 				<ns2:ObjectCategory id="fCategory"/>
 			</s:VGroup>
 		</mx:FormItem>
-		
-		<mx:FormItem label="Version" toolTip="Текущая версия объекта">
-			<mx:TextInput id="fVersion" width="250"  change="{viewChanged()}"/>
-		</mx:FormItem>
-		
+				
+		<mx:FormItem label="Version">
+			<s:VGroup paddingTop="3">
+				
+				<s:HGroup toolTip="">
+					<s:Label text="Major version"/>
+					<mx:TextInput id="fMajorVersion" width="170"  change="{viewChanged()}"/>
+				</s:HGroup>				
+			
+				<s:HGroup toolTip="">
+					<s:Label text="Minor version"/>
+					<mx:TextInput editable="false" id="fMinorVersion" width="170"  change="{viewChanged()}"/>
+				</s:HGroup>	
+						
+				<s:HGroup toolTip="">
+					<s:Label text="Minimal server revision"/>
+					<s:ComboBox id="fMinServerSupportRev" dataProvider="{vertions}" width="117"  change="{viewChanged()}"         />
+				</s:HGroup>					
+				
+			</s:VGroup  >
+		</mx:FormItem>	
+			
 		<mx:FormItem label="WCAG" toolTip="">
 			<mx:TextInput id="fWCAG" width="250"  change="{viewChanged()}"/>
 		</mx:FormItem>
@@ -101,12 +133,7 @@
 		<mx:FormItem label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)">
 			<mx:TextArea id="fContainers" width="250" height="60"  change="{viewChanged()}"/>
 			<s:Button id="editContainersBt" label="Edit" />
-		</mx:FormItem>		
-		
-		<!--mx:FormItem label="Languages" toolTip="Список поддерживаемых объектом языков (формат ISO 3168-1)" 
-					 enabled="false">
-			<mx:TextInput id="fLanguages" width="250" editable="false" change="{viewChanged()}"/>
-		</mx:FormItem-->
+		</mx:FormItem>	
 		
 		<mx:FormItem label="RemoteMethods" toolTip="список статических функций объекта, доступных через SOAP (execute_sql, get_data, ...)">
 			<mx:TextInput id="fRemoteMethods" width="250" change="{viewChanged()}" />
@@ -147,7 +174,11 @@
 			</mx:FormItem>
 			<mx:FormItem label="RenderType" toolTip="Для контейнеров верхнего уровня - формат, в котором контейнер отдает данные (например, HTML)"
 						 >
-				<mx:TextInput id="fRenderType" width="250"  enabled="{(fContainerI.selectedIndex == 2)}" change="{viewChanged()}" />
+				<mx:TextInput id="fRenderType" width="250"  enabled="{(fContainerI.selectedItem.data == '3')}" change="{viewChanged()}" />
+			</mx:FormItem>
+			<mx:FormItem label="HTTPContentType" toolTip="Для контейнеров верхнего уровня - формат,  (например, 'text/html')"
+						 >
+				<mx:TextInput id="fHTTPContentType" width="250"  enabled="{(fContainerI.selectedItem.data == '3')}" change="{viewChanged()}" />
 			</mx:FormItem>
 			
 			<mx:FormItem label="OptimizationPriority" toolTip="Приоритет объекта при генерации его отображения в контейнере">
@@ -155,7 +186,7 @@
 							value="0" snapInterval="1" minimum="1" maximum="100"  change="{viewChanged()}"/>
 			</mx:FormItem>
 			
-			<mx:FormItem label="Display language" toolTip="Доступные языки">
+			<mx:FormItem label="Display language:" toolTip="Доступные языки">
 				<mx:ComboBox id="fcurrentLocation" width="150" color="0x000000" />
 			</mx:FormItem>
 			
