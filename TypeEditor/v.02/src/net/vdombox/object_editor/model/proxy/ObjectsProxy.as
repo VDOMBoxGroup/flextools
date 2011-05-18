@@ -15,6 +15,13 @@ package net.vdombox.object_editor.model.proxy
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
+	/**
+	 * A proxy for the Item data.
+	 * ObjectsProxy create Item
+	 * 
+	 * @author Elena Kotlova
+	 * 
+	 */
 	public class ObjectsProxy extends Proxy implements IProxy
 	{
 		public static const NAME:String = "ObjectsProxy";
@@ -34,7 +41,16 @@ package net.vdombox.object_editor.model.proxy
 			stream.open(file, FileMode.READ);
 
 			var data:String = stream.readUTFBytes(stream.bytesAvailable);
-			var objectXML:XML = new XML(data);	
+			try
+			{
+				var objectXML:XML = new XML(data);
+			}
+			catch (error:Error)
+			{
+				trace("Failed:", error.message);
+				ErrorLogger.instance.logError("Failed:" + error.message, file.nativePath);
+				return null;
+			}		
 
 			var informationXML  :XML	= objectXML.Information[0];
 			var langEnXML 		:XML	= objectXML.Languages.Language.(@Code == "en_US")[0];
@@ -99,6 +115,12 @@ package net.vdombox.object_editor.model.proxy
 			return imgResourseID;
 		}
 
+		/**
+		 * 
+		 * @param code format: #Lang(ID)
+		 * @return ID 
+		 * 
+		 */		
 		private function getRegExpWord( code:String ):String
 		{	
 			var  regResource:RegExp = /#Lang\((\d+)\)/;
