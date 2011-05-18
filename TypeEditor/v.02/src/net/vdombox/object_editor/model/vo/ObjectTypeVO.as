@@ -12,11 +12,23 @@ package net.vdombox.object_editor.model.vo
 		[Bindable]
 		public var actionContainers    : ArrayCollection = new ArrayCollection();
 
+		/**
+		 * {color, data, label} 
+		 */
 		[Bindable]
 		public var languages  : LanguagesVO		= new LanguagesVO();
+				
 		[Bindable]
-		public var libraries  : ArrayCollection = new ArrayCollection();
-		public var resources  : ArrayCollection = new ArrayCollection();
+		public var libraries  : ArrayCollection = new ArrayCollection(); 
+		
+		/**
+		 * {id, name, path, type} 
+		 */
+		public var resources  : ArrayCollection = new ArrayCollection(); 
+		
+		/**
+		 * {color, data, label} 
+		 */
 		[Bindable]
 		public var attributes : ArrayCollection = new ArrayCollection();
 
@@ -39,13 +51,22 @@ package net.vdombox.object_editor.model.vo
 		public var moveable			:Boolean = false;
 		public var optimizationPriority	:uint = 0;
 		public var resizable		:uint = 0;
-		public var version			:String = "";
+//		public var version			:String = "";
+		
+		//value for new type
+		public var majVersion		:uint = 1;
+		public var minVersion		:uint = 0;
+		public var minServRevition	:uint = 6720;
+		
 		public var wcag				:String = "";
 
 		public var XMLScriptName	:String = "";
 		public var renderType		:String = "";
 		public var remoteMethods	:String = "";
 		public var handlers			:String = "";
+		
+		public var HTTPContentType	:String = "";
+		
 
 		// images
 		public var icon				:String = "";
