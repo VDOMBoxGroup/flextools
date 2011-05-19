@@ -13,5 +13,7 @@ package net.vdombox.ide.modules.wysiwyg.interfaces
 
 		function get status() : uint
 		function set status( value : uint ) : void
+			
+		function set selectedRenderer( value : IRenderer ):void
 	}
 }
