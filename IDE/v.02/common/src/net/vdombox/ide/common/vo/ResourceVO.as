@@ -14,13 +14,15 @@ package net.vdombox.ide.common.vo
 		public static const EMPTY : uint = 0;
 
 		public static const UPLOAD_PROGRESS : uint = 1;
-		public static const UPLOADED : uint = 2;
-		public static const UPLOAD_ERROR : uint = 3;
+		public static const UPLOADED 		: uint = 2;
+		public static const UPLOAD_ERROR 	: uint = 3;
 
-		public static const LOAD_PROGRESS : uint = 4;
-		public static const LOADED : uint = 5;
-		public static const LOAD_ERROR : uint = 6;
+		public static const LOAD_PROGRESS 	: uint = 4;
+		public static const LOADED 			: uint = 5;
+		public static const LOAD_ERROR 		: uint = 6;
+		public static const ICON_LOADED		: uint = 7;
 
+		public static const ICON_SIZE		: Number = 32; 
 
 		public function ResourceVO( ownerID : String )
 		{
@@ -63,6 +65,11 @@ package net.vdombox.ide.common.vo
 		public function get iconId() : String
 		{
 			return _iconID;
+		}
+		
+		public function set iconId( value : String ) : void
+		{
+			_iconID = value;
 		}
 
 		public function get useCount() : int
@@ -133,7 +140,7 @@ package net.vdombox.ide.common.vo
 		public function setData( value : ByteArray ) : void
 		{
 			data = value;
-			dispatcher.dispatchEvent( new Event( "propertyDataChange" ) );
+			dispatcher.dispatchEvent( new Event( "propertyDataChange" ) );//not used
 		}				
 		
 		/**
