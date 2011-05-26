@@ -13,7 +13,7 @@
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.events.StateChangeEvent;
-
+			
 			import net.vdombox.ide.common.components.WorkAreaButton;
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 			import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
@@ -24,7 +24,7 @@
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-
+			
 			import spark.components.Label;
 
 			public static const STATUS_NULL : uint = 0;
@@ -129,6 +129,14 @@
 
 				addEventListener( RendererEvent.MOVE, renderer_movedHandler, true, 0, true );
 				addEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformMarker_tansformCompleteHandler, true, 0, true );
+				
+				addEventListener( FlexEvent.SHOW, showHendler, true, 0, true );
+				
+			}
+			
+			private function showHendler(event : FlexEvent ): void
+			{
+				trace("\nEDITOR Showed")
 			}
 
 			private function removeHandlers() : void

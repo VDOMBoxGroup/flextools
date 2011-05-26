@@ -419,7 +419,7 @@
 
 			private function editableHTML_completeHandler( event : Event ) : void
 			{
-				trace( "(1)HTMLEditorLoader " + HTMLEditorLoader.name );
+//				trace( "(1)HTMLEditorLoader " + HTMLEditorLoader.name );
 				editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
 
 				HTMLEditorLoader.addEventListener( Event[ "HTML_DOM_INITIALIZE" ], HTMLEditorLoader_HTMLDomInitalizeHandler );
@@ -431,7 +431,6 @@
 
 			private function HTMLEditorLoader_HTMLDomInitalizeHandler( event : Event ) : void
 			{
-				trace( "(1.5)HTMLEditorLoader " + HTMLEditorLoader.name );
 
 				HTMLEditorLoader.removeEventListener( Event[ "HTML_DOM_INITIALIZE" ], HTMLEditorLoader_HTMLDomInitalizeHandler );
 
@@ -450,13 +449,10 @@
 
 				if ( !tinyMCE || !HTMLEditorLoader.loaded )
 				{
-					trace( "alert!!!" );
 					init( _item );
 					return;
 				}
 
-				trace( "(2)HTMLEditorLoader " + HTMLEditorLoader.name );
-				trace( "HTMLEditorLoader_completeHandler" );
 
 				tinyMCE.execCommand( "mceAddControl", true, "content" );
 

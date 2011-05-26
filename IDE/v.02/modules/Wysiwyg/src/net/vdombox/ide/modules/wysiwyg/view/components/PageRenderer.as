@@ -30,7 +30,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				invalidateProperties();
 			}
 		}
-
+//		RESTRICTED AUTO QUERY - start 
+//		SESSION - sesso 
 		override public function set renderVO( value : RenderVO ) : void
 		{
 			if( transformMarker )

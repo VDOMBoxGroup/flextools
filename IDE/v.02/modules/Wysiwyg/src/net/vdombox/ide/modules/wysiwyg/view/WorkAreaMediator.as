@@ -7,7 +7,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
+	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.view.components.VdomObjectEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -188,6 +190,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addedToStageHandler( event : Event ) : void
 		{
+			
 		}
 
 		private function removedFromStageHandler( event : Event ) : void
@@ -198,14 +201,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function changeHandler( event : WorkAreaEvent ) : void
 		{
 			var selectedEditor : IEditor = workArea.selectedEditor;
-
 //			if ( !selectedEditor )
 //				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, null );
-//			else if ( selectedEditor is PageEditor )
-//				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, selectedEditor.vdomObjectVO );
-//			else if ( selectedEditor is _ObjectEditor )
-//				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.vdomObjectVO );
-
+			if ( selectedEditor && selectedEditor is VdomObjectEditor )
+			{
+				var selectedRenderer : IRenderer =  selectedEditor.selectedRenderer; 
+				if(selectedRenderer)
+				{
+					// selected a objectVO 
+					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.selectedRenderer.vdomObjectVO );
+				}
+				else
+				{
+					// select a PageVO
+					sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, selectedEditor.editorVO.vdomObjectVO );
+				}
+			}
 		}
 
 		private function editor_preinitializedHandler( event : EditorEvent ) : void

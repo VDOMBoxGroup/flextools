@@ -146,7 +146,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					}
 					
 					// mark object
-					//editor.selectedRenderer = selRenderer;
+					editor.selectedRenderer = selRenderer;
 
 					break;
 				}

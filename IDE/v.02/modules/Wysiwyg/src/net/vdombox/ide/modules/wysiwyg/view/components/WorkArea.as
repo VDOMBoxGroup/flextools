@@ -180,6 +180,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function selectedTabChangedHandler( event : Event ) : void
 		{
+			// CHANGE
 			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CHANGE ) );
 		}
 		
