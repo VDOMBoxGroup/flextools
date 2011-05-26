@@ -15,17 +15,17 @@
 
 	<!-- A universally unique application identifier. Must be unique across all AIR applications.
 	     Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-	<id>VDOMIDE2</id>
+	<id>VdomIDE</id>
 
 	<!-- Used as the filename for the application. Required. -->
-	<filename>Vdom IDE.v.2</filename>
+	<filename>VdomIDE</filename>
 
 	<!-- The name that is displayed in the AIR application installer. 
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
-	<name>VDOMIDE2</name>
+	<name>VdomIDE</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-	<version>2.0.1.002</version>
+	<version>v1</version>
 
 	<!-- Description, displayed in the AIR application installer.
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
@@ -91,19 +91,19 @@
     <!-- <supportedProfiles>desktop extendedDesktop mobileDevice extendedMobileDevice</supportedProfiles> -->
 
 	<!-- The subpath of the standard default installation location to use. Optional. -->
-	<installFolder>VDOM</installFolder>
+	<!-- <installFolder></installFolder> -->
 
 	<!-- The subpath of the Programs menu to use. (Ignored on operating systems without a Programs menu.) Optional. -->
-	<programMenuFolder>VDOM</programMenuFolder> 
+	<!-- <programMenuFolder></programMenuFolder> -->
 
 	<!-- The icon the system uses for the application. For at least one resolution,
 		 specify the path to a PNG file included in the AIR package. Optional. -->
-	<icon>
-				<image16x16>icons/icon16.png</image16x16>
-				<image32x32>icons/icon32.png</image32x32>
-				<image48x48>icons/icon48.png</image48x48>
-				<image128x128>icons/icon128.png</image128x128>
-			</icon>
+	<!-- <icon>
+		<image16x16></image16x16>
+		<image32x32></image32x32>
+		<image48x48></image48x48>
+		<image128x128></image128x128>
+	</icon> -->
 
 	<!-- Whether the application handles the update when a user double-clicks an update version
 	of the AIR file (true), or the default AIR application installer handles the update (false).
@@ -133,13 +133,13 @@
 			<!-- <contentType></contentType> -->
 			
 			<!-- The icon to display for the file type. Optional. -->
-			 <!--<icon>
-				<image16x16>icon16.png</image16x16>
-				<image32x32>icon32.png</image32x32>
-				<image48x48>icon48.png</image48x48>
-				<image128x128>icon128.png</image128x128>
-			</icon>
-			 -->
+			<!-- <icon>
+				<image16x16></image16x16>
+				<image32x32></image32x32>
+				<image48x48></image48x48>
+				<image128x128></image128x128>
+			</icon> -->
+			
 		<!-- </fileType> -->
 	<!-- </fileTypes> -->
 

@@ -1,11 +1,19 @@
 package net.vdombox.ide.core.model
 {
+	import flash.desktop.Icon;
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.Loader;
+	import flash.display.LoaderInfo;
+	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
 	
+	import mx.effects.Resize;
+	import mx.graphics.codec.PNGEncoder;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
@@ -92,6 +100,8 @@ package net.vdombox.ide.core.model
 			{
 				resourceVO.setData( resource );
 				resourceVO.setStatus( ResourceVO.LOADED );
+				
+				//choseIcon(resourceVO);   // неизвестен тип!!!
 				
 				sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
 			}
@@ -214,12 +224,17 @@ package net.vdombox.ide.core.model
 				resource = new ResourceVO( applicationVO.id );
 				resource.setXMLDescription( resourceDescription );
 			
-//				createIcon( resource );
+//				choseIcon( resource );   здесь есть только описание, нет самих ресурсов
 				
 				resources.push( resource );
 			}
 			
 			return resources;
+		}
+		
+		private function getIcon( resourceVO : ResourceVO ) : void
+		{
+			choseIcon( resourceVO );
 		}
 		
 		private function choseIcon( resourceVO : ResourceVO ) : void
@@ -231,35 +246,74 @@ package net.vdombox.ide.core.model
 			else // if not viewable
 			{ 
 				if ( typesIcons.icon[ resourceVO.type ] != null ) 
-//					smoothImage.source = typesIcons.icon[ resourceVO.type ];
-					resourceVO.icon = typesIcons.icon[ resourceVO.type ];
-					
-				else {}
-//					smoothImage.source = typesIcons.blank_Icon;
-//					resourceVO.icon = typesIcons.blank_Icon;  //востановить
-			}	 	
-		}		
+					resourceVO.icon = typesIcons.icon[ resourceVO.type ];             //ERROR!!!!!!!!!!!!!!!!
+				else
+					creationIconCompleted( resourceVO, typesIcons[ "blank" ] ); //default icon
+			}	 
+		}
 		
+		private function creationIconCompleted( resourceVO : ResourceVO, file:ByteArray ) : void
+		{
+			resourceVO.icon = file;
+			resourceVO.iconId = resourceVO.id + "_icon";
+			sendNotification( ApplicationFacade.ICON_LOADED, resourceVO );
+		}
+		
+		private var tempResourceVO:ResourceVO;
+			
 		//reduces the image and set it to icon of resourceVO
 		private function setIcon( resourceVO : ResourceVO ) : void
 		{
-			var bitmap: Bitmap = Bitmap(resourceVO.data);
-			bitmap.smoothing = true;
-			bitmap.height = 32;
-			bitmap.width = 32;
+			var icon : ByteArray = cacheManager.getCachedFileById( resourceVO.id + "_icon" );
 			
-			for( var i:uint=0; i< bitmap.width; i++ )
+			//icon is located in the file system user
+			if ( icon )
 			{
-				for( var j:uint=0; j< bitmap.height; j++ )
-				{
-					resourceVO.icon.writeUnsignedInt( bitmap.bitmapData.getPixel( i, j ) );
-				}
+				creationIconCompleted( resourceVO, icon );
+			}	
+			else
+			{
+				tempResourceVO = resourceVO;
+				
+				var loader : Loader = new Loader();				
+				loader.loadBytes(resourceVO.data);				
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loaderComplete);
 			}
-			//test
-//			resource.icon = bitmap.bitmapData.getPixel(bitmap.bitmapData.rect.x, bitmap.bitmapData.rect.y);
-//			resource.icon = resource.name + "_icon";//? id 
 		}
-
+		
+		//convert to bitmapData 
+		private function loaderComplete(event:Event):void
+		{
+			var loaderInfo:LoaderInfo = LoaderInfo(event.target);
+			var bitmapData:BitmapData = new BitmapData(loaderInfo.width, loaderInfo.height, false, 0xFFFFFF);
+			bitmapData.draw(loaderInfo.loader); 
+			var bitmap:Bitmap = new Bitmap(bitmapData);
+			
+			if ( bitmap.height > ResourceVO.ICON_SIZE || bitmap.width > ResourceVO.ICON_SIZE )
+			{
+				var ratio:Number = 1; 
+				if(bitmap.width >= bitmap.height) 
+					ratio = ResourceVO.ICON_SIZE / bitmap.width; 
+				else 
+					ratio = ResourceVO.ICON_SIZE / bitmap.height; 
+				
+				var btm:BitmapData = new BitmapData( bitmap.width*ratio, bitmap.height*ratio, false); 
+				var matrix:Matrix = new Matrix(); 
+				matrix.scale(ratio, ratio); 
+				btm.draw( bitmap.bitmapData, matrix );
+				
+				var encoder:PNGEncoder = new PNGEncoder();
+//				tempResourceVO.icon   = encoder.encode( btm );
+//				tempResourceVO.iconId = tempResourceVO.id + "_icon";//? id
+				
+				cacheManager.cacheFile( tempResourceVO.iconId + "_icon",  encoder.encode( btm ) );	// not nice			
+				tempResourceVO.setStatus( ResourceVO.ICON_LOADED );
+				
+				creationIconCompleted( tempResourceVO, encoder.encode( btm ) );
+				tempResourceVO = null;
+			}
+		}
+	
 		private function soap_setResource() : void
 		{
 			trace("+++ soap_setResource +++");
@@ -333,6 +387,7 @@ package net.vdombox.ide.core.model
 			
 			switch ( operationName )
 			{
+				//save resource on user`s local disk and set resource to resourceVO
 				case "get_resource":
 				{
 					trace(" get_resource ");
@@ -350,7 +405,7 @@ package net.vdombox.ide.core.model
 					cacheManager.cacheFile( resourceVO.id, imageSource );
 					
 					resourceVO.setData( imageSource );
-					setIcon( resourceVO );
+					
 					resourceVO.setStatus( ResourceVO.LOADED );
 					
 					sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );

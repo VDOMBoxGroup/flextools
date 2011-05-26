@@ -229,6 +229,9 @@ package net.vdombox.ide.core
 		public static const RESOURCE_DELETED : String = "resourceDeleted";
 		public static const RESOURCE_MODIFIED : String = "resourceModified";
 		
+//		icon of resources
+		public static const ICON_LOADED : String = "iconLoaded";		
+		
 //		types
 		public static const TYPES_LOADING : String = "typesLoading";
 		public static const TYPES_LOADED : String = "typesLoaded";
