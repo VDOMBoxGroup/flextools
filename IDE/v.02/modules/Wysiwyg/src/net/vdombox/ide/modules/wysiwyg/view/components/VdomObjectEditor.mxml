@@ -130,14 +130,14 @@
 				addEventListener( RendererEvent.MOVE, renderer_movedHandler, true, 0, true );
 				addEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformMarker_tansformCompleteHandler, true, 0, true );
 				
-				addEventListener( FlexEvent.SHOW, showHendler, true, 0, true );
+//				addEventListener( FlexEvent.SHOW, showHendler, true, 0, true );
 				
 			}
 			
-			private function showHendler(event : FlexEvent ): void
-			{
-				trace("\nEDITOR Showed")
-			}
+//			private function showHendler(event : FlexEvent ): void
+//			{
+//				trace("\nEDITOR Showed")
+//			}
 
 			private function removeHandlers() : void
 			{
