@@ -51,7 +51,6 @@
 			
 			public function get editorVO() : EditorVO
 			{
-//				trace("...editorVO()");
 				if ( !_editorVO )
 				{
 					_editorVO = createEditorVO();
@@ -68,7 +67,6 @@
 
 			public function set selectedRenderer( value : IRenderer ) : void
 			{
-//				trace("...selectedRenderer");
 				_selectedRenderer = value;
 			}
 
@@ -87,7 +85,6 @@
 
 			override protected function commitProperties() : void
 			{
-//				trace("...commitProperties()");
 				super.commitProperties();
 
 				if ( isStatusChanged )
@@ -108,7 +105,6 @@
 
 			override protected function partAdded( partName : String, instance : Object ) : void
 			{
-//				trace("...partAdded()");
 				super.partAdded( partName, instance );
 
 				if ( instance == saveXMLButton )
@@ -124,24 +120,17 @@
 
 			private function addHandlers() : void
 			{
-//				trace("...addHandlers()");
 				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
 				addEventListener( RendererEvent.MOVE, renderer_movedHandler, true, 0, true );
 				addEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformMarker_tansformCompleteHandler, true, 0, true );
 				
-//				addEventListener( FlexEvent.SHOW, showHendler, true, 0, true );
 				
 			}
 			
-//			private function showHendler(event : FlexEvent ): void
-//			{
-//				trace("\nEDITOR Showed")
-//			}
 
 			private function removeHandlers() : void
 			{
-//				trace("...removeHandlers()");
 				removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 
 				if ( skin )
@@ -150,12 +139,11 @@
 
 			private function refreshToolbar() : void
 			{
-//				trace("...refreshToolbar)(");
+
 			}
 
 			private function createEditorVO() : EditorVO
 			{
-//				trace("...createEditorVO()");
 				var newEditorVO : EditorVO;
 
 				newEditorVO = new EditorVO();
@@ -169,26 +157,23 @@
 
 			private function vdomObjectChanged( value : IVDOMObjectVO ) : void
 			{
-//				trace("...vdomObjectChanged()");
 				isVdomObjectVOChanged = true;
 				invalidateProperties();
 			}
 
 			private function renderVOChanged( value : RenderVO ) : void
 			{
-//				trace("...renderVOChanged() ++++++++++");
 				if ( renderer )
 					renderer.renderVO = value;
 			}
 
 			private function xmlPresentationChanged( value : VdomObjectXMLPresentationVO ) : void
 			{
-//				trace("..xmlPresentationChanged()");
+
 			}
 
 			private function dispatchStateEvent() : void
 			{
-//				trace("...dispatchStateEvent()");
 				currentState = skin.currentState;
 
 				if ( skin.currentState.substr( 0, 7 ) == "wysiwyg" )
@@ -199,21 +184,18 @@
 
 			private function preinitializeHandler() : void
 			{
-//				trace("...preinitializeHandler()");
 				addHandlers();
 				dispatchEvent( new EditorEvent( EditorEvent.PREINITIALIZED ) );
 			}
 
 			private function creationCompleteHandler( event : FlexEvent ) : void
 			{
-//				trace("...creationCompleteHandler()");
 				skin.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler, false, 0, true );
 				dispatchStateEvent();
 			}
 
 			private function removedFromStageHandler( event : Event ) : void
 			{
-//				trace("...removedFromStageHandler(e)");
 				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
 
 				removeHandlers();
@@ -221,13 +203,11 @@
 
 			private function changeStateHandler( event : StateChangeEvent ) : void
 			{
-//				trace("...changeStateHandler(e)");
 				dispatchStateEvent();
 			}
 
 			private function saveXMLButton_clickHandler( event : MouseEvent ) : void
 			{
-//				trace("...saveXMLButton_clickHandler()");
 //				if( xmlPresentation )
 //				{
 //					var ee : EditorEvent = new EditorEvent( EditorEvent.XML_SAVE );
@@ -237,7 +217,6 @@
 
 			private function renderer_movedHandler( event : RendererEvent ) : void
 			{
-//				trace("...renderer_movedHandler(e)");
 				var ee : EditorEvent = new EditorEvent( EditorEvent.RENDERER_TRANSFORMED );
 
 				ee.renderer = event.target as IRenderer;
@@ -248,7 +227,6 @@
 
 			private function transformMarker_tansformCompleteHandler( event : TransformMarkerEvent ) : void
 			{
-//				trace("...transformMarker_tansformCompleteHandler(e)");
 				var ee : EditorEvent = new EditorEvent( EditorEvent.RENDERER_TRANSFORMED );
 
 				ee.renderer = TransformMarker( event.target ).renderer;

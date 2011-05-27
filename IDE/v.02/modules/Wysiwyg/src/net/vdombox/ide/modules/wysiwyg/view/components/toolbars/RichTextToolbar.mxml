@@ -170,7 +170,6 @@
 
 			public function close() : void
 			{
-				trace( "close" );
 				registerEvent( false );
 
 				var value : String;
@@ -419,7 +418,6 @@
 
 			private function editableHTML_completeHandler( event : Event ) : void
 			{
-//				trace( "(1)HTMLEditorLoader " + HTMLEditorLoader.name );
 				editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
 
 				HTMLEditorLoader.addEventListener( Event[ "HTML_DOM_INITIALIZE" ], HTMLEditorLoader_HTMLDomInitalizeHandler );

@@ -111,7 +111,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
-					if ( sessionProxy.selectedPage )
+					if ( sessionProxy.selectedPage  )
 						sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, sessionProxy.selectedPage );
 					else
 						clearData();
@@ -121,6 +121,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED:
 				{
+					if ( sessionProxy.selectedObject )
+						break;
+					
 					vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
 					if ( sessionProxy.selectedPage && vdomObjectAttributesVO &&

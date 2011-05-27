@@ -110,23 +110,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 					editor = workArea.getEditorByVO( vdomObjectVO );
 
 					if ( editor )
-					{ 
 						workArea.selectedEditor = editor;
-				
-					}
 					else
-					{
 						editor = workArea.openEditor( vdomObjectVO );
-						/*	if ( workArea.selectedEditor )
-						{
-						trace("workArea.selectedEditor  == true");
-						workArea.selectedEditor.editorVO.vdomObjectVO = vdomObjectVO;
-						}
-						else
-						{	trace("workArea.selectedEditor == null");
-						editor = workArea.openEditor( vdomObjectVO );
-						}*/
-					}
 
 					break;
 				}
@@ -201,21 +187,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function changeHandler( event : WorkAreaEvent ) : void
 		{
 			var selectedEditor : IEditor = workArea.selectedEditor;
-//			if ( !selectedEditor )
-//				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, null );
+
 			if ( selectedEditor && selectedEditor is VdomObjectEditor )
 			{
 				var selectedRenderer : IRenderer =  selectedEditor.selectedRenderer; 
-				if(selectedRenderer)
-				{
-					// selected a objectVO 
+				if ( selectedRenderer )
 					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.selectedRenderer.vdomObjectVO );
-				}
 				else
-				{
-					// select a PageVO
 					sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, selectedEditor.editorVO.vdomObjectVO );
-				}
 			}
 		}
 

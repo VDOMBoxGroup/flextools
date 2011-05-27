@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
+	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
@@ -126,22 +127,32 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					//  set transformMarker to selected page
 					
-//					trace("\n VdomObjectEditorMediator: - get SELECTED_OBJECT_CHANGED");
-					var editor:IEditor = viewComponent as IEditor
-					if (sessionProxy.selectedObject.pageVO.id != editor.editorVO.vdomObjectVO.id)
-						break;
-						
-					var renderProxy :RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-					var renderers : Array = renderProxy.getRenderersByVO( sessionProxy.selectedObject );
-					
-					// find nesesary renderer
+					var editor:IEditor = viewComponent as IEditor;
+					var selectedPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
+					var selectedObject : IVDOMObjectVO = sessionProxy.selectedObject as IVDOMObjectVO;
 					var selRenderer : RendererBase;
-					for each ( var renderer : RendererBase in renderers )
-					{
-						if ( renderer.renderVO.vdomObjectVO.id == sessionProxy.selectedObject.id )
+					
+					if ( !selectedPage )
+						break;
+					
+					
+					if ( selectedPage.id != editor.editorVO.vdomObjectVO.id )
+						break;
+
+					if ( selectedObject )
+					{	
+						var renderProxy :RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+						var renderers : Array = renderProxy.getRenderersByVO( selectedObject );
+						
+						// find nesesary renderer
+						
+						for each ( var renderer : RendererBase in renderers )
 						{
-							selRenderer = renderer ;
-							break;
+							if ( renderer.renderVO.vdomObjectVO.id == selectedObject.id )
+							{
+								selRenderer = renderer ;
+								break;
+							}
 						}
 					}
 					

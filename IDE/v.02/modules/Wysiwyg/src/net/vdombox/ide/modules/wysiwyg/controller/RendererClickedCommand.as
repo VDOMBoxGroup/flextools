@@ -28,8 +28,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 
 			if ( vdomObjectVO is ObjectVO )
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, vdomObjectVO );
-			else if ( vdomObjectVO is PageVO && sessionProxy.selectedPage == vdomObjectVO )
-				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, null );
+			else if ( vdomObjectVO is PageVO  )
+				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, vdomObjectVO );
 		}
 	}
 }
