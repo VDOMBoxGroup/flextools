@@ -480,6 +480,8 @@ package net.vdombox.ide.core.model
 
 				_pages.push( pageVO );
 			}
+			
+			_pages.sortOn("name", Array.CASEINSENSITIVE);
 		}
 
 		private function generateApplicationEvents( applicationEventsXML : XML, pageVO : PageVO ) : ApplicationEventsVO
