@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:s="library://ns.adobe.com/flex/spark" >
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 creationComplete="group1_creationCompleteHandler(event)"
+		 show="group1_showHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
-
+			import mx.events.FlexEvent;
+			
 			import net.vdombox.ide.core.events.LoginViewEvent;
 			import net.vdombox.ide.core.model.vo.LocaleVO;
-
+			
 			import spark.events.IndexChangeEvent;
 
 			[Bindable]
@@ -48,22 +51,63 @@
 
 			override protected function keyDownHandler( event : KeyboardEvent ) : void
 			{
-				if ( event.keyCode == 13 )
-					dispatchEvent( new LoginViewEvent( LoginViewEvent.SUBMIT ) );
+				if ( event.keyCode != 13 )
+					return;
+				
+				if( hostname == "" )
+				{
+					host.setFocus();
+					return;
+				}
+					
+				if( username == "" )
+				{
+					user.setFocus();
+					return;
+				}
+					
+				if( password == "" )
+				{
+					pass.setFocus();
+					return;
+				}
+					
+				dispatchEvent( new LoginViewEvent( LoginViewEvent.SUBMIT ) );
 			}
+
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				host.setFocus();
+			}
+
+
+			protected function group1_showHandler(event:FlexEvent):void
+			{
+				host.setFocus();
+			}
+
 		]]>
 	</fx:Script>
 
 	<s:VGroup gap="10" styleName="loginForm"
 			  left="20" right="100" top="50">
-
+		<s:HGroup gap="20" width="100%"
+				  verticalAlign="middle">
+			
+			<s:Label text="{ resourceManager.getString( 'LoginForm', 'hostname' ) }" width="100%"
+					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
+			
+			<s:TextInput id="host" text="@{ hostname }" width="240" keyDown="{keyDownHandler(event)}"/>
+			
+		</s:HGroup>
+		
 		<s:HGroup gap="20" width="100%"
 				  verticalAlign="middle">
 
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'username' ) }" width="100%"
 					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 
-			<s:TextInput text="@{ username }" width="240"/>
+			<s:TextInput id="user" text="@{ username }" width="240" keyDown="{keyDownHandler(event)}"/>
 
 		</s:HGroup>
 
@@ -73,19 +117,11 @@
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'password' ) }" width="100%"
 					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 
-			<s:TextInput text="@{ password }" width="240" displayAsPassword="true"/>
+			<s:TextInput id="pass" text="@{ password }" width="240" displayAsPassword="true" keyDown="{keyDownHandler(event)}" />
 
 		</s:HGroup>
 
-		<s:HGroup gap="20" width="100%"
-				  verticalAlign="middle">
 
-			<s:Label text="{ resourceManager.getString( 'LoginForm', 'hostname' ) }" width="100%"
-					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
-
-			<s:TextInput text="@{ hostname }" width="240"/>
-
-		</s:HGroup>
 
 		<s:HGroup gap="20" width="100%"
 				  verticalAlign="middle">
