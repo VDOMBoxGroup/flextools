@@ -122,16 +122,17 @@
 				return objectsTree.selectedItem as XML;
 			}
 
+			
+			private var elementForSelection : XML;
+			private var _needUpdateProperties : Boolean = false;
 			private function setSelectionByID( id : String ) : void
 			{
-				var elementForSelection : XML;
-
 				try
 				{
 					elementForSelection = _pages.( @id == id )[ 0 ];
 
 					if ( !elementForSelection )
-						_pages..object.( @id == id )[ 0 ];
+						elementForSelection = _pages..object.( @id == id )[ 0 ];
 				}
 				catch ( error : Error )
 				{
@@ -140,11 +141,43 @@
 
 				if ( elementForSelection )
 				{
-					openTree( elementForSelection );
-					objectsTree.selectedItem = elementForSelection;
-//					objectsTree.scrollToIndex( objectsTree.selectedIndex );
+					_needUpdateProperties = true;
+					
+					invalidateProperties();
 				}
 
+			}
+			
+			override public function  validateProperties():void
+			{
+				super.validateProperties();
+				
+				if ( _needUpdateProperties )
+				{
+					_needUpdateProperties 		= false;
+					_needValideteDisplayList 	= true;
+					
+					openTree( elementForSelection );
+				
+					objectsTree.selectedItem = elementForSelection;
+					
+					invalidateDisplayList();
+				}
+				
+			}
+			
+			private var _needValideteDisplayList : Boolean = false;
+			override public function  validateDisplayList():void
+			{
+				super.validateDisplayList();
+				
+				if ( _needValideteDisplayList )
+				{
+					_needValideteDisplayList = false;
+					
+					if (objectsTree.selectedIndex != -1 )
+						objectsTree.scrollToIndex( objectsTree.selectedIndex );
+				}
 			}
 
 			private function openTree( item : Object ) : void
@@ -155,7 +188,7 @@
 				{
 					openTree( parentItem );
 					objectsTree.expandItem( parentItem, true, false );
-					objectsTree.validateNow();
+					//objectsTree.validateNow();
 				}
 			}
 
