@@ -125,6 +125,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.PAGES_GETTED:
 				{
 					showPages( notification.getBody() as Array );
+					
+					selectCurrentPage();
 
 					break;
 				}
@@ -181,7 +183,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 			}
-		}
+		} 
 
 		private function addHandlers() : void
 		{
@@ -281,7 +283,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			else if ( newPageID == currentPageID && !newObjectID )
 			{
-				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, null );
+				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, _pages[ newPageID ] );
 			}
 		}
 

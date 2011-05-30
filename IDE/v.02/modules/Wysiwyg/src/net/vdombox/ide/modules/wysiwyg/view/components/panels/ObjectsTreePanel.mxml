@@ -176,13 +176,18 @@
 				_needValideteDisplayList = false;
 					
 				if (objectsTree.selectedIndex == -1 )
-					return
+					return;
 				
-				var indexTo : int =  objectsTree.selectedIndex;
-				if ( indexTo > 3 )
-					indexTo -= 3;
-					
-				objectsTree.scrollToIndex( indexTo );
+				var index : int =  objectsTree.selectedIndex;
+				var newVPos:int;
+
+				if (index >= objectsTree.verticalScrollPosition + objectsTree.rowCount 
+					|| index < objectsTree.verticalScrollPosition)
+				{
+					newVPos = Math.min((index - 2), objectsTree.maxVerticalScrollPosition);
+					trace( index +" || "+ objectsTree.maxVerticalScrollPosition + " = " +  newVPos);
+					objectsTree.verticalScrollPosition = newVPos ;
+				}
 			}
 
 			private function openTree( item : Object ) : void
@@ -218,10 +223,10 @@
 
 			private function objectsTree_changeHandler( event : ListEvent ) : void
 			{
-				var otpe : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.OPEN );
+//				var otpe : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.OPEN );
 				
-				otpe.pageID = selectedPageID;
-				otpe.objectID = selectedObjectID;
+//				otpe.pageID = selectedPageID;
+//				otpe.objectID = selectedObjectID;
 				
 				dispatchEvent( new ObjectsTreePanelEvent( ObjectsTreePanelEvent.CHANGE ) );
 			}

@@ -86,13 +86,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
-					{
-						
-						isActive = true;
-
+					if ( !sessionProxy.selectedApplication )
 						break;
-					}
+					
+						// if was opened before 
+					if ( !workArea.selectedEditor  && sessionProxy.selectedPage )
+							editor = workArea.openEditor( sessionProxy.selectedPage );
+					isActive = true;
+							
+					break;
 				}
 
 				case ApplicationFacade.BODY_STOP:
