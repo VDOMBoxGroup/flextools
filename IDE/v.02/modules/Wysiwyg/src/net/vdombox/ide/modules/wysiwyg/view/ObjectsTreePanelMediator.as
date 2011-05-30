@@ -145,6 +145,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					pageXML.setChildren( new XMLList() ); //TODO: strange construction
 					pageXML.appendChild( pageXMLTree.* );
 
+					selectCurrentPage(false);
 					break;
 				}
 
@@ -183,7 +184,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 			}
-		} 
+		}
 
 		private function addHandlers() : void
 		{
@@ -215,19 +216,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			objectsTreePanel.pages = pagesXMLList;
 			
-			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+//			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 				
 		}
 	
-		private function selectCurrentPage( ) : void
+		private function selectCurrentPage( needGetPageStructure : Boolean = true ) : void
 		{
 			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
-			if( sessionProxy.selectedPage )
-			{
-				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
-				objectsTreePanel.selectedPageID = sessionProxy.selectedPage.id; 
+			if( !sessionProxy.selectedPage )
+				return;
+				
+			objectsTreePanel.selectedPageID = sessionProxy.selectedPage.id; 
+				
+			if ( !needGetPageStructure )
+				return;
+			
+			sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
 				//ApplicationFacade.PAGE_STRUCTURE_GETTED, objectsTreePanel.pages
 				
 					//objectsTreePanel.selectedItem = getPageXML(objectsTreePanel.selectedPageID);
@@ -237,7 +243,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 //				objectsTreePanel.selectedItem = getPageXML(sessionProxy.selectedPage.id);
 //				objectsTreePanel.validateNow();
 //				objectsTreePanel.scrollToIndex(objectsTree.selectedIndex);
-			}
 		}
 		
 		private function getPageXML( id : String ) : XML
