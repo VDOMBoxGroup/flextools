@@ -1,7 +1,10 @@
 package net.vdombox.ide.core.model.icons
 {
-	import mx.managers.HistoryManager;
-
+	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
+	import flash.utils.ByteArray;
+	
 	public class TypesIcons
 	{	
 		public var icon:Array = new Array();
@@ -9,66 +12,32 @@ package net.vdombox.ide.core.model.icons
 		//		[Embed("assets/delete.png")]
 		//		private var disclosureOpenIcon:Class;
 		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/avi.png")]
-		public var avi_Icon:Class;
+//		[Embed(source="assets/resourceBrowserIcons/resourceType/avi.png")]
+//		public var avi_Icon:Class;
 		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/bin.png")]
-		public var bin_Icon:Class;
+		private static const avi_Icon 	: String = "assets/resourceBrowserIcons/resourceType/avi.png";
+		private static const bin_Icon	: String = "assets/resourceBrowserIcons/resourceType/bin.png";
+		private static const blank_Icon	: String = "assets/resourceBrowserIcons/resourceType/blank.png";
+		private static const bmp_Icon	: String = "assets/resourceBrowserIcons/resourceType/bmp.png";
+		private static const c_Icon		: String = "assets/resourceBrowserIcons/resourceType/c.png";
+		private static const cfg_Icon 	: String = "assets/resourceBrowserIcons/resourceType/cfg.png";
+		private static const cpp_Icon 	: String = "assets/resourceBrowserIcons/resourceType/cpp.png";
+		private static const css_Icon	: String = "assets/resourceBrowserIcons/resourceType/css.png";
+		private static const dll_Icon 	: String = "assets/resourceBrowserIcons/resourceType/dll.png";
+		private static const doc_Icon 	: String = "assets/resourceBrowserIcons/resourceType/doc.png";
+		private static const dvi_Icon 	: String = "assets/resourceBrowserIcons/resourceType/dvi.png";
+		private static const gif_Icon 	: String = "assets/resourceBrowserIcons/resourceType/gif.png";
+		private static const htm_Icon 	: String = "assets/resourceBrowserIcons/resourceType/htm.png";
+		private static const mid_Icon	: String = "assets/resourceBrowserIcons/resourceType/mid.png";
+		private static const pdf_Icon	: String = "assets/resourceBrowserIcons/resourceType/pdf.png";
+		private static const swf_Icon 	: String = "assets/resourceBrowserIcons/resourceType/swf.png";
+		private static const txt_Icon 	: String = "assets/resourceBrowserIcons/resourceType/txt.png";
+		private static const wav_Icon 	: String = "assets/resourceBrowserIcons/resourceType/wav.png";
+		private static const xls_Icon	: String = "assets/resourceBrowserIcons/resourceType/xls.png";
 		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/blank.png")]
-		public var blank_Icon:Class;
+		private static const file_broken_Icon : String = "assets/resourceBrowserIcons/resourceType/file_broken.png";
 		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/bmp.png")]
-		public var bmp_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/c.png")]
-		public var c_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/css.png")]
-		public var css_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/cfg.png")]
-		public var cfg_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/cpp.png")]
-		public var cpp_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/dll.png")]
-		public var dll_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/doc.png")]
-		public var doc_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/dvi.png")]
-		public var dvi_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/gif.png")]
-		public var gif_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/htm.png")]
-		public var htm_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/swf.png")]
-		public var swf_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/pdf.png")]
-		public var pdf_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/txt.png")]
-		public var txt_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/mid.png")]
-		public var mid_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/xls.png")]
-		public var xls_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/wav.png")]
-		public var wav_Icon:Class;
-		
-		[Embed(source="assets/resourceBrowserIcons/resourceType/file_broken.png")]
-		public var broken_Icon:Class;
-		
+				
 		//		[Embed(source="/assets/common/spinner.swf")]
 		//		public var spinner:Class;
 		//
@@ -93,15 +62,30 @@ package net.vdombox.ide.core.model.icons
 			icon["htm"]	= htm_Icon;
 			icon["html"]= htm_Icon;
 			icon["mht"]	= htm_Icon;
-			icon["swf"]	= swf_Icon;
-			icon["pdf"]	= pdf_Icon;
-			icon["txt"]	= txt_Icon;
 			icon["mid"]	= mid_Icon;
+			icon["pdf"]	= pdf_Icon;
+			icon["swf"]	= swf_Icon;
+			icon["txt"]	= txt_Icon;
+			icon["wav"]	= wav_Icon;
 			icon["xls"]	= xls_Icon;
 			icon["xlsx"]= xls_Icon;
-			icon["wav"]	= wav_Icon;
 		}
 		
+		private function getResource( path : String) : ByteArray
+		{
+			var file : File = File.documentsDirectory;
+			file = file.resolvePath(path);
+			
+			var stream:FileStream = new FileStream();
+			stream.open(file, FileMode.READ); 
+						
+			var data:String = stream.readUTFBytes(stream.bytesAvailable);
+			
+			stream.close();	
+			return data as ByteArray;
+//			goalStream.writeUTFBytes(name);//дозаписывает в файл				
+		}
+			
 		public function isViewable ( extension : String ) : Boolean {
 			switch (extension.toLowerCase()) 
 			{

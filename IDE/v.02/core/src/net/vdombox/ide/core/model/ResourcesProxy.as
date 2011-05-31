@@ -12,6 +12,8 @@ package net.vdombox.ide.core.model
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
 	
+	import mx.collections.ArrayCollection;
+	import mx.controls.Image;
 	import mx.effects.Resize;
 	import mx.graphics.codec.PNGEncoder;
 	import mx.rpc.AsyncToken;
@@ -108,13 +110,18 @@ package net.vdombox.ide.core.model
 			//file must be downloaded from the server
 			else
 			{
-				resourceVO.setStatus( ResourceVO.LOAD_PROGRESS );
-				var token : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
-				
-				token.recipientName = proxyName;
-				token.resourceVO = resourceVO;
+				loadResourceFromServer( resourceVO );
 			}
-		}
+		}		
+		
+		private function loadResourceFromServer( resourceVO : ResourceVO ) : void
+		{
+			resourceVO.setStatus( ResourceVO.LOAD_PROGRESS );
+			var token : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
+			
+			token.recipientName = proxyName;
+			token.resourceVO = resourceVO;
+		}		
 
 		public function setResource( resourceVO : ResourceVO ) : void
 		{
@@ -166,6 +173,11 @@ package net.vdombox.ide.core.model
 		public function cleanup() : void
 		{
 			loadQue = null;
+		}
+		
+		public function getIcon( resourceVO : ResourceVO ) : void
+		{
+			choseIcon( resourceVO );
 		}
 		
 		private function addHandlers() : void
@@ -232,11 +244,6 @@ package net.vdombox.ide.core.model
 			return resources;
 		}
 		
-		private function getIcon( resourceVO : ResourceVO ) : void
-		{
-			choseIcon( resourceVO );
-		}
-		
 		private function choseIcon( resourceVO : ResourceVO ) : void
 		{
 			if ( typesIcons.isViewable( resourceVO.type ) ) 
@@ -246,20 +253,21 @@ package net.vdombox.ide.core.model
 			else // if not viewable
 			{ 
 				if ( typesIcons.icon[ resourceVO.type ] != null ) 
-					resourceVO.icon = typesIcons.icon[ resourceVO.type ];             //ERROR!!!!!!!!!!!!!!!!
+					creationIconCompleted( resourceVO, typesIcons.icon[ resourceVO.type ] );
 				else
-					creationIconCompleted( resourceVO, typesIcons[ "blank" ] ); //default icon
+					creationIconCompleted( resourceVO, typesIcons.icon[ "blank" ] );	 //default icon
 			}	 
 		}
 		
-		private function creationIconCompleted( resourceVO : ResourceVO, file:ByteArray ) : void
+		private function creationIconCompleted( resourceVO : ResourceVO, file:Object ) : void
 		{
-			resourceVO.icon = file;
-			resourceVO.iconId = resourceVO.id + "_icon";
-			sendNotification( ApplicationFacade.ICON_LOADED, resourceVO );
+			resourceVO.icon		= file;
+			resourceVO.iconId 	= resourceVO.id + "_icon";
+			resourceVO.data 	= null;
+			sendNotification( ApplicationFacade.ICON_GETTED, resourceVO );
 		}
 		
-		private var tempResourceVO:ResourceVO;
+		private var tempResourceVO : Object = new Object(); //ResourceVO;
 			
 		//reduces the image and set it to icon of resourceVO
 		private function setIcon( resourceVO : ResourceVO ) : void
@@ -272,13 +280,22 @@ package net.vdombox.ide.core.model
 				creationIconCompleted( resourceVO, icon );
 			}	
 			else
-			{
-				tempResourceVO = resourceVO;
-				
-				var loader : Loader = new Loader();				
-				loader.loadBytes(resourceVO.data);				
-				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loaderComplete);
+			{	
+				loadableResources.addItem( resourceVO.id );
+				loadResourceFromServer( resourceVO );
 			}
+		}
+		
+		private function loadedResourceForIcon( resourceVO : ResourceVO ) : void
+		{
+			loadableResources.removeItemAt( loadableResources.getItemIndex( resourceVO.id ) );
+			
+			tempResourceVO[ resourceVO.id ] = resourceVO ;
+						
+			var loader : Loader = new Loader();	
+			loader.name = resourceVO.id;
+			loader.loadBytes(resourceVO.data);				
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loaderComplete);
 		}
 		
 		//convert to bitmapData 
@@ -297,21 +314,23 @@ package net.vdombox.ide.core.model
 				else 
 					ratio = ResourceVO.ICON_SIZE / bitmap.height; 
 				
-				var btm:BitmapData = new BitmapData( bitmap.width*ratio, bitmap.height*ratio, false); 
+				var width:	int = ( int(bitmap.width*ratio) > 0 )  ? int(bitmap.width*ratio)  : 1;
+				var height:	int = ( int(bitmap.height*ratio) > 0 ) ? int(bitmap.height*ratio) : 1;				
+		
+				var btm:BitmapData = new BitmapData( width, height, false); 
+				
 				var matrix:Matrix = new Matrix(); 
 				matrix.scale(ratio, ratio); 
 				btm.draw( bitmap.bitmapData, matrix );
 				
 				var encoder:PNGEncoder = new PNGEncoder();
-//				tempResourceVO.icon   = encoder.encode( btm );
-//				tempResourceVO.iconId = tempResourceVO.id + "_icon";//? id
+								
+				cacheManager.cacheFile( loaderInfo.loader.name + "_icon",  encoder.encode( btm ) );	// not nice			
+				tempResourceVO[ loaderInfo.loader.name ].setStatus( ResourceVO.ICON_LOADED );
 				
-				cacheManager.cacheFile( tempResourceVO.iconId + "_icon",  encoder.encode( btm ) );	// not nice			
-				tempResourceVO.setStatus( ResourceVO.ICON_LOADED );
-				
-				creationIconCompleted( tempResourceVO, encoder.encode( btm ) );
-				tempResourceVO = null;
+				creationIconCompleted( tempResourceVO[ loaderInfo.loader.name ], encoder.encode( btm ) );
 			}
+			delete tempResourceVO[ loaderInfo.loader.name ];
 		}
 	
 		private function soap_setResource() : void
@@ -369,6 +388,8 @@ package net.vdombox.ide.core.model
 			token.resourceVO = resourceVO;
 		}
 
+		private var loadableResources : ArrayCollection = new ArrayCollection;
+		
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
 			var token : AsyncToken = event.token;
@@ -408,7 +429,10 @@ package net.vdombox.ide.core.model
 					
 					resourceVO.setStatus( ResourceVO.LOADED );
 					
-					sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
+					if ( resourceForIcon( resourceVO.id ) )
+						loadedResourceForIcon( resourceVO );
+					else
+						sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
 					
 					break;
 				}
@@ -465,6 +489,17 @@ package net.vdombox.ide.core.model
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{
 			sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxy | soap_faultHandler | " + event.currentTarget.name );
+		}
+		
+		private function resourceForIcon( resourceId : String ) : Boolean
+		{
+			for each ( var iconID : String in loadableResources )
+			{
+				if ( iconID == resourceId )					
+					return true
+			}
+			
+			return false;
 		}
 	}
 }

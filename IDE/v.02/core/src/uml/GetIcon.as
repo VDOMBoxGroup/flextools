@@ -11,6 +11,7 @@ box "Core" #LightBlue
 	
 end box
 
+participant ProcessResourcesProxyMessage << (C,#ADD1B2) >>
 
 title:Get Icon of Resource\n\n( M ) - Mediator\n( C ) - Command\n( P ) - Proxy\n 
 
@@ -31,6 +32,12 @@ Resources -> Resources : createIcon()
 
 end alt
 end alt
-	
 
+
+Resources -> ResourcesProxyResponse: ICON_GETTED\n(resourceVO)
+ResourcesProxyResponse -> ProxiesJunction: RESOURCES_PROXY_\nRESPONSE
+ProxiesJunction -> WysiwygJunction: junction.sendMessage(...)
+WysiwygJunction -> ProcessResourcesProxyMessage:	PROCESS_RESOURCES_PROXY_MESSAGE(message)
+ProcessResourcesProxyMessage -> SameMediator: ICON_GETTED(body)
+	
 @enduml	

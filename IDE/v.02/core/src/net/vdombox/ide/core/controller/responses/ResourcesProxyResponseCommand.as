@@ -45,6 +45,16 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				}
 					
+				case ApplicationFacade.ICON_GETTED:
+				{
+					resourceVO = body as ResourceVO;
+					
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, 
+						PPMResourcesTargetNames.ICON, resourceVO );
+					
+					break;
+				}
+					
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
 					resourceVO = body as ResourceVO;

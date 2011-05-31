@@ -230,7 +230,8 @@ package net.vdombox.ide.core
 		public static const RESOURCE_MODIFIED : String = "resourceModified";
 		
 //		icon of resources
-		public static const ICON_LOADED : String = "iconLoaded";		
+		public static const GET_ICON	: String = "getIcon";		
+		public static const ICON_GETTED : String = "iconGetted";
 		
 //		types
 		public static const TYPES_LOADING : String = "typesLoading";
@@ -428,13 +429,15 @@ package net.vdombox.ide.core
 			registerCommand( OBJECT_XML_PRESENTATION_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_XML_PRESENTATION_SETTED, ObjectProxyResponseCommand );
 
-			registerCommand( RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
-			registerCommand( RESOURCES_GETTED, ResourcesProxyResponseCommand );
-			registerCommand( RESOURCE_LOADED, ResourcesProxyResponseCommand );
-			registerCommand( RESOURCE_SETTED, ResourcesProxyResponseCommand );
-			registerCommand( RESOURCE_DELETED, ResourcesProxyResponseCommand );
-			registerCommand( RESOURCE_MODIFIED, ResourcesProxyResponseCommand );
+			registerCommand( RESOURCES_PROXY_REQUEST,	ResourcesProxyRequestCommand );
+			registerCommand( RESOURCES_GETTED,		 	ResourcesProxyResponseCommand );
+			registerCommand( RESOURCE_LOADED, 			ResourcesProxyResponseCommand );
+			registerCommand( RESOURCE_SETTED, 			ResourcesProxyResponseCommand );
+			registerCommand( RESOURCE_DELETED,			ResourcesProxyResponseCommand );
+			registerCommand( RESOURCE_MODIFIED, 		ResourcesProxyResponseCommand );
 
+			registerCommand( ICON_GETTED,				ResourcesProxyResponseCommand );
+			
 //			errors
 			registerCommand( SERVER_ERROR, ErrorMacroCommand );
 			registerCommand( SERVER_CONNECTION_ERROR, ErrorMacroCommand );

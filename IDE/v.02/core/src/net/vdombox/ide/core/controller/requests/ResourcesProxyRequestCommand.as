@@ -21,10 +21,56 @@ package net.vdombox.ide.core.controller.requests
 		{
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
-			if ( message.target == PPMResourcesTargetNames.RESOURCES )
+			/*if ( message.target == PPMResourcesTargetNames.RESOURCES )
 				processResourcesTarget( message );
-			else
-				processResourceTarget( message );
+			else 
+				processResourceTarget( message );*/
+			
+			switch ( message.target )
+			{
+				case PPMResourcesTargetNames.RESOURCES:
+				{
+					processResourcesTarget( message );
+					
+					break;
+				}
+					
+				case PPMResourcesTargetNames.RESOURCE:
+				{
+					processResourceTarget( message );
+					
+					break;
+				}
+					
+				case PPMResourcesTargetNames.ICON:
+				{
+					processIconTarget( message );
+					
+					break;
+				}
+			}
+		}
+		
+		private function processIconTarget( message : ProxyMessage ) : void
+		{
+			var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
+			
+			var operation : String = message.operation;
+			var body : Object = message.getBody();			
+			var resourceVO : ResourceVO;
+						
+			if ( operation == PPMOperationNames.READ )
+			{
+				if( body is ResourceVO )
+					resourceVO = body as ResourceVO;
+				else if( body.hasOwnProperty( "resourceVO" ) )
+					resourceVO = body.resourceVO  as ResourceVO;
+				else
+					throw new Error( "no page VO" );
+				
+				if( resourceVO )
+					resourcesProxy.getIcon( resourceVO );
+			}
 		}
 
 		private function processResourceTarget( message : ProxyMessage ) : void
