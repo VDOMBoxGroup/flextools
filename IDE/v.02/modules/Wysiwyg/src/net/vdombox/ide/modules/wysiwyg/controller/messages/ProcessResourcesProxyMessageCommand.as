@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.ProxyMessage;
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	
@@ -41,10 +42,16 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMResourcesTargetNames.RESOURCES:
 				{
 					if ( operation == PPMOperationNames.READ )
-					{
 						sendNotification( ApplicationFacade.RESOURCES_GETTED, body );
-					}
 
+					break;
+				}
+				
+				case PPMResourcesTargetNames.ICON:
+				{
+					if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.ICON_GETTED, body );	
+					
 					break;
 				}
 			}

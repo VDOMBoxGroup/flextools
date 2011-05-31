@@ -75,6 +75,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.SET_RESOURCE );
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
 			interests.push( ApplicationFacade.MODIFY_RESOURCE );
+			
+			interests.push( ApplicationFacade.GET_ICON );
 
 			interests.push( ApplicationFacade.GET_PAGES );
 			interests.push( ApplicationFacade.GET_PAGE_SRUCTURE );
@@ -232,11 +234,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.LOAD_RESOURCE:
 				{
-					trace("LOAD_RESOURCE")
+					trace("LOAD_RESOURCE");
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break;
+				}
+					
+				case ApplicationFacade.GET_ICON:
+				{
+					trace("Get_icon");
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.ICON, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break;
 				}
 

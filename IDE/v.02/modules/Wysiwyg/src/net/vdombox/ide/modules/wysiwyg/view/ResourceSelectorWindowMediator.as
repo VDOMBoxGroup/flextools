@@ -67,6 +67,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
 			
+			interests.push( ApplicationFacade.ICON_GETTED );
+			
 			return interests;
 		}
 		
@@ -96,9 +98,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					for each( var resourceVO : ResourceVO in body )
 					{
+						sendNotification( ApplicationFacade.GET_ICON, resourceVO );
 						
 						//sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
-						filters = resourceVO.type;
+//						filters = resourceVO.type;
 					}
 					
 					resourceSelectorWindow.filter.dataProvider = _filters;
@@ -106,14 +109,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
+				case ApplicationFacade.ICON_GETTED:
+				{
+					var resourceVO3 : ResourceVO = body as ResourceVO;
+					filters = resourceVO3.type;
+				}
+					
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
-//					resourceSelectorWindow.resources = body as Array;
-//					
-//					for each( var resourceVO : ResourceVO in body )
-//					{
-//						sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
-//					}
+					resourceSelectorWindow.resources = body as Array;
+					
+					for each( var resourceVO2 : ResourceVO in body )
+					{
+						sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO2 );
+					}
 					
 					break;
 				}

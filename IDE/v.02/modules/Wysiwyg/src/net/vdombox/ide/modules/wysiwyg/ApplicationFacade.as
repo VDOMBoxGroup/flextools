@@ -99,9 +99,14 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const SET_RESOURCE : String = "setResource";
 		public static const RESOURCE_SETTED : String = "resourceSetted";
 		
-		public static const LOAD_RESOURCE : String = "loadResource";
+		public static const LOAD_RESOURCE 	: String = "loadResource";
+		public static const RESOURCE_LOADED	: String = "resourceLoaded"; //not used
 		public static const MODIFY_RESOURCE : String = "modifyResource";
 
+//		icon
+		public static const GET_ICON	: String = "getIcon";
+		public static const ICON_GETTED : String = "iconGetted";
+		
 //		states	
 		public static const GET_ALL_STATES : String = "getAllStates";
 		public static const ALL_STATES_GETTED : String = "allStatesGetted";
