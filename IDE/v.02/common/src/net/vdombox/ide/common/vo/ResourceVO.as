@@ -48,7 +48,7 @@ package net.vdombox.ide.common.vo
 		
 		public var data : ByteArray;
 		
-		public var icon : ByteArray;
+		public var icon : Object;
 		
 		private var _iconID : String;
 
