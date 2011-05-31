@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.events
 {
+	import com.zavoo.svg.nodes.SVGImageNode;
+	
 	import flash.events.Event;
 
 	public class RendererEvent extends Event
@@ -12,6 +14,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var CLICKED : String = "rendererClicked";
 		public static var MOVE : String = "rendererMove";
 		public static var MOVED : String = "rendererMoved";
+		
+		public var svgImageNode : SVGImageNode; 
 
 		public function RendererEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

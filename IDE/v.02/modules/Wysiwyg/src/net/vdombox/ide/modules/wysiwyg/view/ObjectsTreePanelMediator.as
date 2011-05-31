@@ -269,6 +269,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			objectsTreePanel.pages = null;
 			requestQue = null;
+			trace("--------------------- requestQue ------------------")
 		}
 
 		private function changeHandler( event : ObjectsTreePanelEvent ) : void

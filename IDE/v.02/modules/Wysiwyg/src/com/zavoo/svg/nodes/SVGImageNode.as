@@ -1,5 +1,7 @@
 package com.zavoo.svg.nodes
 {
+	import com.zavoo.svg.SVGViewer;
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Loader;
@@ -36,7 +38,6 @@ package com.zavoo.svg.nodes
 		 **/
 		protected override function draw() : void
 		{
-
 			if ( !_xml.@href[ 0 ] )
 				return;
 
@@ -107,7 +108,6 @@ package com.zavoo.svg.nodes
 //		 **/
 //		private function loadBytes( byteArray : ByteArray ) : void
 //		{
-//
 //			var loader : Loader = new Loader();
 //			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
 //			loader.loadBytes( byteArray );
@@ -119,8 +119,8 @@ package com.zavoo.svg.nodes
 		private function onBytesLoaded( event : Event ) : void
 		{
 			
-			loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, onBytesLoaded );
-			loader.contentLoaderInfo.removeEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+//			event.target.contentLoaderInfo.removeEventListener( Event.COMPLETE, onBytesLoaded );
+//			event.target.contentLoaderInfo.removeEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
 			
 			loader = null;
 			
@@ -170,8 +170,15 @@ package com.zavoo.svg.nodes
 
 		private function ccHandler( event : FlexEvent ) : void 
 		{
-			if( resourceID )
-				dispatchEvent( new RendererEvent( RendererEvent.GET_RESOURCE ) );
+			if( resourceID == "")
+				return;
+			
+			var svgViewer : SVGViewer = svgRoot.parent as SVGViewer;
+			
+			if ( !svgViewer )
+				return;
+				
+			svgViewer.getResource = this;
 		}
 		
 	/*private function transformImage():void {

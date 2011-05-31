@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.model.ResourcesProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -34,7 +35,13 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 //							sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, sessionProxy.selectedObject );
 //							sendNotification( ApplicationFacade.GET_OBJECT_WYSIWYG, sessionProxy.selectedObject );
 						}
+					}else if ( operation == PPMOperationNames.READ )
+					{
+//						var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
+						
+//						resourcesProxy.resourceGeted( body as ResourceVO);
 					}
+					
 					
 					break;
 				}

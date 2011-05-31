@@ -386,6 +386,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 						{
 							_editableComponent = editableAttributes[ 0 ].sourceObject;
 						}
+						svg.addEventListener( RendererEvent.GET_RESOURCE, svgGetResourseHendler, false, 0, true );
 
 						background.addElement( svg );
 
@@ -672,6 +673,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 
 			return result;
+		}
+		
+		
+		private function svgGetResourseHendler( event : RendererEvent ):void
+		{
+			var renderEvent : RendererEvent = new RendererEvent( RendererEvent.GET_RESOURCE );
+			renderEvent.svgImageNode = event.svgImageNode;
+			
+			dispatchEvent( renderEvent );
 		}
 	}
 }

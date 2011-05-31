@@ -1,12 +1,15 @@
 package com.zavoo.svg
 {
 	
+	import com.zavoo.svg.nodes.SVGImageNode;
 	import com.zavoo.svg.nodes.SVGRoot;
 	
 	import flash.events.Event;
 	import flash.geom.Transform;
 	
 	import mx.containers.Canvas;
+	
+	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 
 	/**
 	 * Flex container for the SVG Renderer
@@ -144,5 +147,13 @@ package com.zavoo.svg
 			return this._svgRoot.editableElements;
 		}
 		
+		
+		public function set getResource( svgImageNode : SVGImageNode ):void
+		{
+			var renderEvent : RendererEvent = new RendererEvent( RendererEvent.GET_RESOURCE );
+			renderEvent.svgImageNode = svgImageNode;
+			
+			dispatchEvent( renderEvent );
+		}
 	}
 }

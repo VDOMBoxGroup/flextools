@@ -196,6 +196,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
 			editor.addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0, true );
 			editor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
+			
+			editor.addEventListener( RendererEvent.GET_RESOURCE, renderer_getResourseHandler, true, 0, true );
 
 			editor.addEventListener( RendererDropEvent.DROP, renderer_dropHandler, true, 0, true );
 		}
@@ -275,6 +277,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function renderer_clickedHandler( event : RendererEvent ) : void
 		{
 			sendNotification( ApplicationFacade.RENDERER_CLICKED, event.target as IRenderer );
+		}
+		
+		private function renderer_getResourseHandler( event : RendererEvent ) : void
+		{
+			sendNotification( ApplicationFacade.GET_RESOURCE_REQUEST, event.svgImageNode );
 		}
 
 		private function renderer_dropHandler( event : RendererDropEvent ) : void
