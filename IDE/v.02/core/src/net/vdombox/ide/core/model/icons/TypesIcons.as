@@ -15,25 +15,25 @@ package net.vdombox.ide.core.model.icons
 //		[Embed(source="assets/resourceBrowserIcons/resourceType/avi.png")]
 //		public var avi_Icon:Class;
 		
-		private static const avi_Icon 	: String = "assets/resourceBrowserIcons/resourceType/avi.png";
-		private static const bin_Icon	: String = "assets/resourceBrowserIcons/resourceType/bin.png";
-		private static const blank_Icon	: String = "assets/resourceBrowserIcons/resourceType/blank.png";
-		private static const bmp_Icon	: String = "assets/resourceBrowserIcons/resourceType/bmp.png";
-		private static const c_Icon		: String = "assets/resourceBrowserIcons/resourceType/c.png";
-		private static const cfg_Icon 	: String = "assets/resourceBrowserIcons/resourceType/cfg.png";
-		private static const cpp_Icon 	: String = "assets/resourceBrowserIcons/resourceType/cpp.png";
-		private static const css_Icon	: String = "assets/resourceBrowserIcons/resourceType/css.png";
-		private static const dll_Icon 	: String = "assets/resourceBrowserIcons/resourceType/dll.png";
-		private static const doc_Icon 	: String = "assets/resourceBrowserIcons/resourceType/doc.png";
-		private static const dvi_Icon 	: String = "assets/resourceBrowserIcons/resourceType/dvi.png";
-		private static const gif_Icon 	: String = "assets/resourceBrowserIcons/resourceType/gif.png";
-		private static const htm_Icon 	: String = "assets/resourceBrowserIcons/resourceType/htm.png";
-		private static const mid_Icon	: String = "assets/resourceBrowserIcons/resourceType/mid.png";
-		private static const pdf_Icon	: String = "assets/resourceBrowserIcons/resourceType/pdf.png";
-		private static const swf_Icon 	: String = "assets/resourceBrowserIcons/resourceType/swf.png";
-		private static const txt_Icon 	: String = "assets/resourceBrowserIcons/resourceType/txt.png";
-		private static const wav_Icon 	: String = "assets/resourceBrowserIcons/resourceType/wav.png";
-		private static const xls_Icon	: String = "assets/resourceBrowserIcons/resourceType/xls.png";
+		private static const avi_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/avi.png";
+		private static const bin_Icon	: String = "./assets/resourceBrowserIcons/resourceType/bin.png";
+		private static const blank_Icon	: String = "./assets/resourceBrowserIcons/resourceType/blank.png";
+		private static const bmp_Icon	: String = "./assets/resourceBrowserIcons/resourceType/bmp.png";
+		private static const c_Icon		: String = "./assets/resourceBrowserIcons/resourceType/c.png";
+		private static const cfg_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/cfg.png";
+		private static const cpp_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/cpp.png";
+		private static const css_Icon	: String = "./assets/resourceBrowserIcons/resourceType/css.png";
+		private static const dll_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/dll.png";
+		private static const doc_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/doc.png";
+		private static const dvi_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/dvi.png";
+		private static const gif_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/gif.png";
+		private static const htm_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/htm.png";
+		private static const mid_Icon	: String = "./assets/resourceBrowserIcons/resourceType/mid.png";
+		private static const pdf_Icon	: String = "./assets/resourceBrowserIcons/resourceType/pdf.png";
+		private static const swf_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/swf.png";
+		private static const txt_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/txt.png";
+		private static const wav_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/wav.png";
+		private static const xls_Icon	: String = "./assets/resourceBrowserIcons/resourceType/xls.png";
 		
 		private static const file_broken_Icon : String = "assets/resourceBrowserIcons/resourceType/file_broken.png";
 		
@@ -71,22 +71,29 @@ package net.vdombox.ide.core.model.icons
 			icon["xlsx"]= xls_Icon;
 		}
 		
-		private function getResource( path : String) : ByteArray
+		public function getResource( path : String ) : ByteArray
 		{
-			var file : File = File.documentsDirectory;
-			file = file.resolvePath(path);
-			
+			var file:File = new File( File.applicationDirectory.resolvePath( path ).nativePath );
+
 			var stream:FileStream = new FileStream();
-			stream.open(file, FileMode.READ); 
-						
-			var data:String = stream.readUTFBytes(stream.bytesAvailable);
+			if ( file )
+			{
+				stream.open(file, FileMode.UPDATE); 
+							
+				var leng: int = stream.bytesAvailable;
+				var data:String = stream.readUTFBytes(leng);
+				
+				stream.close();	
+				
+				return data as ByteArray;
+			}
 			
-			stream.close();	
-			return data as ByteArray;
+			return null;
 //			goalStream.writeUTFBytes(name);//дозаписывает в файл				
 		}
 			
-		public function isViewable ( extension : String ) : Boolean {
+		public function isViewable ( extension : String ) : Boolean 
+		{
 			switch (extension.toLowerCase()) 
 			{
 				case "jpg":					

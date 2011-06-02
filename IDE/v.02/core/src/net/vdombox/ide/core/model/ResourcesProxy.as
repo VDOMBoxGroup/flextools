@@ -253,13 +253,13 @@ package net.vdombox.ide.core.model
 			else // if not viewable
 			{ 
 				if ( typesIcons.icon[ resourceVO.type ] != null ) 
-					creationIconCompleted( resourceVO, typesIcons.icon[ resourceVO.type ] );
+					creationIconCompleted( resourceVO, typesIcons.getResource( typesIcons.icon[ resourceVO.type ] ) );
 				else
-					creationIconCompleted( resourceVO, typesIcons.icon[ "blank" ] );	 //default icon
+					creationIconCompleted( resourceVO, typesIcons.getResource( typesIcons.icon[ "blank" ] ) );	 //default icon
 			}	 
 		}
 		
-		private function creationIconCompleted( resourceVO : ResourceVO, file:Object ) : void
+		private function creationIconCompleted( resourceVO : ResourceVO, file:ByteArray ) : void
 		{
 			resourceVO.icon		= file;
 			resourceVO.iconId 	= resourceVO.id + "_icon";
