@@ -5,6 +5,7 @@
 				
 				height="400" width="550"
 				backgroundColor="#CCCCCC" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+				
 				creationComplete="creationCompleteHandler()"
 				close="ok_close_window()"
 				showCloseButton="true"
@@ -20,10 +21,10 @@
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 
 			[ Bindable ]
-			private var totalResources : int = 0;
+			public var totalResources : int = 0;
 			
 			[ Bindable ]
-			private var filteredResources : int = 0;
+			public var filteredResources : int = 0;
 			
 			[Bindable]
 			private var _resources : ArrayList;
@@ -41,10 +42,15 @@
 				setSelectedItem();
 			}
 
-			public function set resources( value : Array ) : void
+			public function set resources( value : ArrayList ) : void
 			{
-				_resources = new ArrayList( value );
+				_resources = value;//new ArrayList( value );
 				setSelectedItem();
+			}
+			
+			public function get resources() : ArrayList
+			{
+				return _resources;
 			}
 
 			private function setSelectedItem() : void
@@ -182,10 +188,7 @@
 			 paddingRight="5" verticalAlign="middle">
 
 		<mx:Spacer width="100%" />
-
-		<mx:Button label="Apply"
-				   cornerRadius="0"
-				   click="dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.APPLY ))" />
+		
 	</mx:HBox>
 	
 	
@@ -209,8 +212,14 @@
 		
 		<mx:Spacer width="100%"/>
 		
-		<mx:Button label="Done" />
+		<mx:Button label="Apply"
+				   
+				   click="dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.APPLY ))" />
 		
+		<mx:Button id="cancelButton"
+					label="Cancel"
+				   cornerRadius="0"
+				   click="dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ))" />
 	</mx:HBox>
 	
 	

@@ -2,7 +2,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.Event;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
+	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
@@ -30,7 +32,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var _resourceSelector : ResourceSelector;
 		private var sessionProxy : SessionProxy;
-		private var _filters	: ArrayCollection = new ArrayCollection();
+		private var _filters	 : ArrayCollection = new ArrayCollection();
 
 		public function set resourceSelector( value : ResourceSelector ) : void
 		{
@@ -72,7 +74,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			return interests;
 		}
 		
-		private function set filters ( type:String ) : void
+		private function set filters ( type : String ) : void
 		{
 			for each ( var obj: Object in _filters )
 			{
@@ -85,48 +87,67 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
-			var name 	: String = notification.getName();
-			var body 	: Object = notification.getBody();			
-			
-			_filters.addItem( { label : 'None', data : '*' } );
+			var name 		: String = notification.getName();
+			var body 		: Object = notification.getBody();	
+			var resourceVO	: ResourceVO;
 			
 			switch ( name )
 			{
 				case ApplicationFacade.RESOURCES_GETTED:
 				{
-					resourceSelectorWindow.resources = body as Array;
+					_filters.addItem( { label : 'NONE', data : '*' } );
 					
-					for each( var resourceVO : ResourceVO in body )
+					resourceSelectorWindow.resources = new ArrayList ( body as Array );
+					
+					for each( resourceVO in body )
 					{
+						BindingUtils.bindSetter( dataLoaded, resourceVO, "icon" );
 						sendNotification( ApplicationFacade.GET_ICON, resourceVO );
 						
 						//sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 //						filters = resourceVO.type;
 					}
 					
-					resourceSelectorWindow.filter.dataProvider = _filters;
+					resourceSelectorWindow.filter.dataProvider	= _filters;
+					resourceSelectorWindow.totalResources		= resourceSelectorWindow.resources.length;
 					
 					break;
 				}
 					
 				case ApplicationFacade.ICON_GETTED:
 				{
-					var resourceVO3 : ResourceVO = body as ResourceVO;
-					filters = resourceVO3.type;
+					resourceVO = body as ResourceVO;
+					filters = resourceVO.type;
 				}
 					
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
-					resourceSelectorWindow.resources = body as Array;
-					
-					for each( var resourceVO2 : ResourceVO in body )
-					{
-						sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO2 );
-					}
-					
-					break;
+//					resourceSelectorWindow.resources = body as ArrayList ;
+//					
+//					for each( resourceVO in body )
+//					{
+//						sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+//					}
+//					
+//					break;
 				}
 			}
+		}
+		
+		private function dataLoaded( object : Object ) : void 
+		{
+//			loader = new Loader();
+//			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
+//			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+//			
+//			try
+//			{
+//				loader.loadBytes( _resourceVO.data );
+//			}
+//			catch ( error : Error )
+//			{
+//				// FIXME Сделать обработку исключения если не грузится изображение
+//			}
 		}
 		
 		private function addHandlers() : void

@@ -74,7 +74,8 @@
 					else 
 						smoothImage.source = typesIcons.blank_Icon;
 					
-				}*/	 			
+				}*/	 
+				smoothImage.source = resourceVO.icon;
 			}
 
 			private var imageSourceLoader:Loader;
