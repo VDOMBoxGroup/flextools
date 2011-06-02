@@ -230,6 +230,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				case "container":
 				{
+					trace("\ncontainer - RanderBase  ");
 					itemFactory = new ClassFactory( RendererBase );
 					layout = new BasicLayout();
 					layout.clipAndEnableScrolling = true;
@@ -266,6 +267,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
 					break;
 				}
+				default:
+					trace ("-------RenderBase - chooseItemRenderer - default value!!!--------")
 			}
 
 			return itemFactory;
@@ -379,6 +382,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				{
 					case "svg":
 					{
+						trace("svg - Ranvder Base");
 						var svg : SVGViewer = new SVGViewer();
 						var editableAttributes : Array = svg.setXML( contetntPart );
 

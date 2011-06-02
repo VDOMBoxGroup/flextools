@@ -94,7 +94,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 			return vdomObjectVO ? renderersIndex[ vdomObjectVO.id ] : null;
 		}
 
-		public function generateRenderVO( vdomObjectVO : IVDOMObjectVO, rawRenderData : XML ) : RenderVO
+		public function generateRenderVO( vdomObjectVO : IVDOMObjectVO, rawRenderData /*is Wysiwyg*/: XML ) : RenderVO
 		{
 			var itemID : String = rawRenderData.@id;
 			var renderVO : RenderVO;
@@ -113,7 +113,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 			data = null;
 		}
 
-		private function createAttributes( renderVO : RenderVO, rawRenderData : XML ) : void
+		private function createAttributes( renderVO : RenderVO, rawRenderData  /*is Wysiwyg*/ : XML ) : void
 		{
 			var typeVO : TypeVO;
 
@@ -152,7 +152,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 			}
 		}
 
-		private function createChildren( renderVO : RenderVO, rawRenderData : XML ) : void
+		private function createChildren( renderVO : RenderVO, rawRenderData  /*is Wysiwyg*/ : XML ) : void
 		{
 			var pageVO : PageVO = renderVO.vdomObjectVO is PageVO ? renderVO.vdomObjectVO as PageVO : ObjectVO( renderVO.vdomObjectVO ).pageVO;
 			var objectVO : ObjectVO;
@@ -173,12 +173,13 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 				typeID = childXML.@typeID;
 
-				if ( childName == "container" || childName == "table" || childName == "row" || childName == "cell" )
+				typeVO = typesProxy.getTypeVObyID( typeID );
+				
+				if ( /*typeVO &&*/( childName == "container" || childName == "table" || childName == "row" || childName == "cell" ) ) 
 				{
+					trace("\ncontainer - RanderProxy  ");
 
-					typeVO = typesProxy.getTypeVObyID( typeID );
-
-					if ( !childID || !typeVO )
+					if ( !childID )
 						continue;
 
 					objectVO = new ObjectVO( pageVO, typeVO );
@@ -200,10 +201,10 @@ package net.vdombox.ide.modules.wysiwyg.model
 				}
 				else
 				{
-					if ( !renderVO.content )
-						renderVO.content = new XMLList( childXML.copy() );
-					else
+					if ( renderVO.content )
 						renderVO.content += childXML.copy();
+					else
+						renderVO.content = new XMLList( childXML.copy() );
 				}
 			}
 

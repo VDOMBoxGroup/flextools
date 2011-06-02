@@ -164,7 +164,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 						sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, objectVO );
 
 					delete requestQue[ objectVO.id ];
-
+					
 					break;
 				}
 

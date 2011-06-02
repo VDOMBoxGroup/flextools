@@ -72,21 +72,11 @@ package com.zavoo.svg.nodes
 				return;
 			}
 			
-			loader = new Loader();
-			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
-			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
-
-			try
-			{
-				loader.loadBytes( value.data );
-			}
-			catch ( error : Error )
-			{
-				// FIXME Сделать обработку исключения если не грузится изображение
-			}
+			dataLoaded();
+			
 		}
 		
-		private function dataLoaded( object : Object ) : void 
+		private function dataLoaded( object : Object = null ) : void 
 		{
 			loader = new Loader();
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );

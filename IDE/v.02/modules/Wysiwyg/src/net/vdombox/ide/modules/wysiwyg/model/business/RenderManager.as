@@ -550,9 +550,10 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			
 			switch( itemName )
 			{
+				trace("\nRanderManage 555  ");
 				case "container" : 
 				{
-					
+					trace("container ");
 				}
 					
 				case "table" : 
@@ -746,9 +747,10 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			var container : IItem;
 			
 			switch ( itemName )
-			{	
+			{	trace("\nRanderManage 753  ");
 				case "container" :
 				{
+					trace("container ");
 					container = new Item( itemId );
 					break;
 				}
@@ -774,6 +776,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 					TableCell( container ).minHeight = 10;
 					break;
 				}
+					
 			}
 			
 			container.editableAttributes = [];

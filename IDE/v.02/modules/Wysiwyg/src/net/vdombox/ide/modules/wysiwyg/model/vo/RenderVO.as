@@ -29,7 +29,8 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		public var order : uint;
 		
 		public var attributes : Array;
-		public var content : XMLList;
+		private var _content : XMLList;
+		
 		
 		private var _vdomObjectVO : IVDOMObjectVO;
 		
@@ -54,5 +55,19 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 			
 			return result;
 		}
+		
+		
+		public function get content() : XMLList
+		{
+			return _content;
+		}
+		
+		public function set content( value : XMLList) : void
+		{
+			trace("\n"+name+":  \n"+ value)
+			 _content = value;
+		}
+		
+		
 	}
 }
