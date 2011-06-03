@@ -22,7 +22,7 @@ package net.vdombox.ide.common.vo
 		public static const LOAD_ERROR 		: uint = 6;
 		public static const ICON_LOADED		: uint = 7;
 
-		public static const ICON_SIZE		: Number = 32; 
+		public static const ICON_SIZE		: Number = 42; 
 
 		public function ResourceVO( ownerID : String )
 		{
