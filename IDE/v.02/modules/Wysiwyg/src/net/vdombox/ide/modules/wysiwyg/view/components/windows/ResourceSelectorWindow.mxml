@@ -9,12 +9,15 @@
 				creationComplete="creationCompleteHandler()"
 				close="ok_close_window()"
 				showCloseButton="true"
-				title="Resource Browser">
+				title="Resource Browser" xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*">
 
 	<mx:Script>
 		<![CDATA[
+			import flash.net.sendToURL;
+			
 			import mx.collections.ArrayList;
 			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -65,6 +68,7 @@
 					if ( resourceVO.id == _value.substring( 5, _value.length - 1 ) )
 					{
 						resourcesList.selectedItem = resourceVO;
+//						
 						break;
 					}
 				}
@@ -101,35 +105,23 @@
 				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCES));			
 			}
 
-// todo delete
-			/*private var fileRef:FileReference = new FileReference();
-			
-			protected function uploadFile(event:MouseEvent):void
+			protected function selectResource(event:Event):void
 			{
-				fileRef.addEventListener(Event.SELECT, fileSelected);				
-				fileRef.browse();				
+				event.currentTarget;
+//				resourceID.text	  = "ID: " + resourceVO.id;
+//				resourceName.text = resourceVO.name;
+//				resourceType.text = resourceVO.type;
+//						resourceResolution.text	= resourceVO.h?	
+//				var ovj:Object = event.currentTarget as Object;
+//				imagePreview.source = resourcesList.selectedItem.icon;
+				
+				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE));
 			}
-			
-			protected function fileSelected(event:Event):void
+
+			protected function resourcesList_changeHandler(event:ListEvent):void
 			{
-				fileRef.addEventListener(Event.COMPLETE, fileDounloaded);
-				fileRef.load();				
-			}			
-			
-			protected function fileDounloaded(event:Event):void
-			{
-				var resData : ByteArray = fileRef.data;
-				resData.compress();
-				
-				var base64Data : Base64Encoder = new Base64Encoder();
-				base64Data.insertNewLines = false;
-				base64Data.encodeBytes( resData );					
-									
-				var obj:Object = new Object;
-				obj = {"name":fileRef.name, "type":fileRef.type, "data":base64Data.toString() };
-				
-				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.LOAD_RESOURCE));
-			}*/
+				// TODO Auto-generated method stub
+			}
 
 		]]>
 	</mx:Script>
@@ -155,39 +147,80 @@
 	</mx:HBox>
 		
 	
-	<!-- body -->
-	<!--s:List id="resourcesList"
-			dataProvider="{ _resources }" height="100%" width="100%"
-			itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ResourceItemRenderer"
-			useVirtualLayout="false" /-->
-	<mx:VBox height="100%" width="207"
-			 paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" verticalGap="0">
-		
-		<mx:HBox width="100%"
-				 horizontalGap="3" paddingBottom="3" paddingLeft="5" paddingRight="0" paddingTop="3" verticalAlign="middle">
-			
-			<mx:TextInput id="__nameFilter"
-						  text="type a filter here" width="100%"
-						  borderColor="#999999" borderStyle="solid" color="#666666"
-						  fontFamily="Tahoma" fontWeight="bold"/>
-			
-			<mx:Image id="__spinner"
-					  height="18"  width="18" visible="false"/>
-		</mx:HBox>
-		
-		<mx:List id="resourcesList" dataProvider="{ _resources }"
-				 height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="on" width="100%"
-				 borderStyle="solid" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
-				 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"/>
-	</mx:VBox>
+	<mx:HBox height="100%" width="100%">		
 
+		<!-- body -->
+		<mx:VBox height="100%" width="207"
+				 paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" verticalGap="0">
+			
+			<mx:HBox width="100%"
+					 horizontalGap="3" paddingBottom="3" paddingLeft="5" paddingRight="0" paddingTop="3" verticalAlign="middle">
+				
+				<mx:TextInput id="__nameFilter"
+							  text="type a filter here" width="100%"
+							  borderColor="#999999" borderStyle="solid" color="#666666"
+							  fontFamily="Tahoma" fontWeight="bold"/>
+				
+				<mx:Image id="__spinner" height="18"  width="18" visible="false"/>
+			</mx:HBox>
+			
+			<mx:List id="resourcesList" dataProvider="{ _resources }"
+					 height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="on" width="100%"
+					 borderStyle="solid" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+					 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"
+					 change="selectResource(event)"/>
+		</mx:VBox>		
 	
-	<!--  temp  -->
-	<mx:HBox width="100%"
-			 backgroundColor="#C2C2C2" borderColor="#000000" bottom="0" horizontalGap="0" paddingLeft="5"
-			 paddingRight="5" verticalAlign="middle">
-
-		<mx:Spacer width="100%" />
+		<!--  preloader  -->
+		<mx:VBox height="100%" width="100%"
+				 horizontalAlign="center" verticalAlign="middle" verticalGap="2">
+			
+			<mx:Box id="previewArea"
+					height="100%" width="100%"
+					horizontalAlign="center" verticalAlign="middle">
+								
+				<mx:Box borderStyle="solid" backgroundColor="#FFF6EA" cornerRadius="3"
+						horizontalScrollPolicy="off" verticalScrollPolicy="off"
+						horizontalAlign="center" verticalAlign="middle"
+						paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+					
+					<resourceBrowserWindow:SmoothImage id="imagePreview" maintainAspectRatio="true" horizontalAlign="center" verticalAlign="middle"
+													   scaleContent="true"  maxHeight="200" maxWidth="200"
+													   />
+					
+				</mx:Box>
+					
+			</mx:Box>
+			
+			<mx:HBox width="100%" horizontalAlign="center" verticalAlign="middle">
+				
+				<mx:Box	backgroundColor="#FFF6EA" borderStyle="solid" cornerRadius="3" paddingLeft="5" paddingRight="5">
+					<mx:Label id="resourceName"
+							  height="18" maxWidth="350" text="{resourcesList.selectedItem.name}"
+							  fontWeight="bold" textAlign="center"/>
+				</mx:Box>
+				
+				<mx:Box backgroundColor="#FFF6EA" borderStyle="solid" cornerRadius="3" paddingLeft="5" paddingRight="5">
+					<mx:Label id="resourceType"
+							  height="18" text="{resourcesList.selectedItem.type}"
+							  fontWeight="bold"/>
+				</mx:Box>
+				
+				<mx:Box backgroundColor="#FFF6EA" borderStyle="solid" cornerRadius="3" paddingLeft="5" paddingRight="5">
+					<mx:Label id="resourceResolution"
+							  height="18" text=""
+							  fontWeight="bold"/>
+				</mx:Box>
+				
+			</mx:HBox>
+			
+			<mx:Box backgroundColor="#E4E2FD" borderStyle="solid" cornerRadius="3" paddingLeft="5" paddingRight="5">
+				<mx:Label id="resourceID"
+						  height="18" selectable="true" text="{'ID: ' + resourcesList.selectedItem.id}"
+						  fontWeight="bold"/>
+			</mx:Box>
+			
+		</mx:VBox>
 		
 	</mx:HBox>
 	
@@ -212,8 +245,7 @@
 		
 		<mx:Spacer width="100%"/>
 		
-		<mx:Button label="Apply"
-				   
+		<mx:Button label="Apply"				   
 				   click="dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.APPLY ))" />
 		
 		<mx:Button id="cancelButton"

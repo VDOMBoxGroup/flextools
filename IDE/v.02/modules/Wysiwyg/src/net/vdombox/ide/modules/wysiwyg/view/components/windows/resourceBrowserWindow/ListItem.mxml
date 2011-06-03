@@ -52,7 +52,7 @@
 					objType = resourceVO.type;
 					objID 	= resourceVO.id;
 				}
-				catch ( e : Error ) 
+				catch ( error : Error ) 
 				{
 					trace ("ThumbnailItem: exception at data setter!"); 
 					return;
@@ -160,7 +160,7 @@
 			<mx:Spacer width="100%"/>
 			
 			<mx:Button id="deleteButton"
-					   enabled="false"
+					   enabled="true"
 					   cornerRadius="0" label="x" width="18" height="18" fontWeight="bold" fontSize="10"
 					   toolTip="Delete"
 					   paddingLeft="0" paddingRight="0"
