@@ -245,7 +245,7 @@ package net.vdombox.ide.core.model
 		}
 		
 		private function choseIcon( resourceVO : ResourceVO ) : void
-		{
+		{			
 			if ( typesIcons.isViewable( resourceVO.type ) ) 
 			{
 				setIcon( resourceVO )
@@ -318,6 +318,7 @@ package net.vdombox.ide.core.model
 				var height:	int = ( int(bitmap.height*ratio) > 0 ) ? int(bitmap.height*ratio) : 1;				
 		
 				var btm:BitmapData = new BitmapData( width, height, false); 
+				bitmap.smoothing = true;
 				
 				var matrix:Matrix = new Matrix(); 
 				matrix.scale(ratio, ratio); 

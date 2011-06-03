@@ -38,5 +38,6 @@ note over Resources: set data to resourceVO\n resourceVO.setStatus( ResourceVO.L
 Resources -> ResourcesProxyResponse: RESOURCE_LOADED(resourceVO)
 ResourcesProxyResponse -> ProxiesJunction: RESOURCES_PROXY_RESPONSE(message)	
 	
+end alt
 
 @enduml	

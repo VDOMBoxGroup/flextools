@@ -50,19 +50,20 @@ package net.vdombox.ide.core.model.icons
 			icon["bin"]	= bin_Icon;
 			icon["blank"] = blank_Icon;
 			icon["bmp"]	= bmp_Icon;
-			icon["c"]	= c_Icon;
-			icon["css"]	= css_Icon;
+			icon["c"]	= c_Icon;			
 			icon["cfg"]	= cfg_Icon;
 			icon["cpp"]	= cpp_Icon;
+			icon["css"]	= css_Icon;
 			icon["dll"]	= dll_Icon;
 			icon["doc"]	= doc_Icon;
 			icon["docx"]= doc_Icon;
 			icon["dvi"]	= dvi_Icon;
 			icon["gif"]	= gif_Icon;
 			icon["htm"]	= htm_Icon;
-			icon["html"]= htm_Icon;
+			icon["html"]= htm_Icon;			
 			icon["mht"]	= htm_Icon;
 			icon["mid"]	= mid_Icon;
+			icon["None"]= blank_Icon;
 			icon["pdf"]	= pdf_Icon;
 			icon["swf"]	= swf_Icon;
 			icon["txt"]	= txt_Icon;
@@ -81,7 +82,7 @@ package net.vdombox.ide.core.model.icons
 				stream.open(file, FileMode.UPDATE); 
 							
 				var leng: int = stream.bytesAvailable;
-				var data:String = stream.readUTFBytes(leng);
+				var data:String = stream.readUTFBytes(leng);//error return ""
 				
 				stream.close();	
 				
