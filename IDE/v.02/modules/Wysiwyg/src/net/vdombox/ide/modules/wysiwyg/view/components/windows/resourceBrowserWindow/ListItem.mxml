@@ -27,10 +27,7 @@
 			import mx.messaging.channels.StreamingAMFChannel;
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
-			
-//			private var typesIcons:TypesIcons = new TypesIcons();
-//			private var fileManager:FileManager = FileManager.getInstance();
-//			private var dataManager:DataManager = DataManager.getInstance();
+
 			
 			private var _id:String;
 			private var _objType:String = '';
@@ -57,24 +54,7 @@
 					trace ("ThumbnailItem: exception at data setter!"); 
 					return;
 				}
-				
-			/*	if (typesIcons.isViewable(objType)) 
-				{
-					trace("listItem    dispatchEvent ListItemEvent.LOAD_RESOURCE");
-//					dispatchEvent( new ListItemEvent( ListItemEvent.LOAD_RESOURCE, false, true, null, null, null, resourceVO ) );
-					dispatchEvent( new Event ( "loadResource" ) );
-				}
-//					fileManager.loadResource(dataManager.currentApplicationId, this.objID, this);			
-				
-				else // if not viewable
-				{ 
-					if (typesIcons.icon[objType] != null) 
-						smoothImage.source = typesIcons.icon[objType];
-					 
-					else 
-						smoothImage.source = typesIcons.blank_Icon;
-					
-				}*/	 
+
 				smoothImage.source = resourceVO.icon;
 			}
 
