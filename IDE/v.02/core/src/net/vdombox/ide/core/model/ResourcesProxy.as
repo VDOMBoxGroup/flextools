@@ -331,6 +331,12 @@ package net.vdombox.ide.core.model
 				
 				creationIconCompleted( tempResourceVO[ loaderInfo.loader.name ], encoder.encode( btm ) );
 			}
+			else
+			{
+				var encoder1:PNGEncoder = new PNGEncoder();
+				creationIconCompleted( tempResourceVO[ loaderInfo.loader.name ],  encoder1.encode( bitmap.bitmapData ) );
+			}		
+			
 			delete tempResourceVO[ loaderInfo.loader.name ];
 		}
 	

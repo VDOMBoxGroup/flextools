@@ -1,9 +1,13 @@
 package net.vdombox.ide.core.model.icons
 {
+	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
+	
+	import mx.controls.Alert;
+	import mx.utils.Base64Decoder;
 	
 	public class TypesIcons
 	{	
@@ -15,9 +19,9 @@ package net.vdombox.ide.core.model.icons
 //		[Embed(source="assets/resourceBrowserIcons/resourceType/avi.png")]
 //		public var avi_Icon:Class;
 		
-		private static const avi_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/avi.png";
+		private static const avi_Icon 	: String = "./../assets/resourceBrowserIcons/resourceType/avi.png";
 		private static const bin_Icon	: String = "./assets/resourceBrowserIcons/resourceType/bin.png";
-		private static const blank_Icon	: String = "./assets/resourceBrowserIcons/resourceType/blank.png";
+		private static const blank_Icon	: String = "resourceBrowserIcons/resourceType/blank.png";
 		private static const bmp_Icon	: String = "./assets/resourceBrowserIcons/resourceType/bmp.png";
 		private static const c_Icon		: String = "./assets/resourceBrowserIcons/resourceType/c.png";
 		private static const cfg_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/cfg.png";
@@ -73,24 +77,34 @@ package net.vdombox.ide.core.model.icons
 		}
 		
 		public function getResource( path : String ) : ByteArray
-		{
+		{	
+			var data : String = null;
 			var file:File = new File( File.applicationDirectory.resolvePath( path ).nativePath );
-
-			var stream:FileStream = new FileStream();
-			if ( file )
-			{
-				stream.open(file, FileMode.UPDATE); 
-							
-				var leng: int = stream.bytesAvailable;
-				var data:String = stream.readUTFBytes(leng);//error return ""
-				
-				stream.close();	
-				
-				return data as ByteArray;
-			}
+//			file.addEventListener(Event.COMPLETE
 			
+			
+			if (file)
+			{
+//				file.load();
+				
+				
+				
+//				var stream : FileStream = new FileStream();   
+				try
+				{
+//					stream.open(file, FileMode.READ);
+//					data = stream.readUTFBytes( stream.bytesAvailable );
+//					stream.close();
+															
+					return  file.data//b64.toByteArray();
+				}
+				catch (error : Error)
+				{
+					Alert.show("Failed: was changed path. Open the directory again");
+					trace("Failed: was changed path.", error.message);				
+				}
+			}
 			return null;
-//			goalStream.writeUTFBytes(name);//дозаписывает в файл				
 		}
 			
 		public function isViewable ( extension : String ) : Boolean 
