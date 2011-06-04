@@ -160,7 +160,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function previewImage( object : Object = null ) : void 
 		{
 			resourceSelectorWindow.imagePreview.source = resourceVO.data;
-			resourceSelectorWindow.resourceResolution = resourceSelectorWindow.imagePreview.im
+//			was:
+//			resourceSelectorWindow.resourceResolution = resourceSelectorWindow.imagePreview.im
+			
+			// adelfos did:
+			resourceSelectorWindow.resourceResolution.text = resourceSelectorWindow.imagePreview.id;
 		}
 		
 		private function applyHandler( event : ResourceSelectorWindowEvent ) : void
