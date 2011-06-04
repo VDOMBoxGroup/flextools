@@ -273,6 +273,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			return itemFactory;
 		}
+		
+		
 
 		private function addHandlers() : void
 		{
@@ -307,7 +309,26 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
 			removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
 		}
-
+		
+		public function set needRefresh( value : Boolean ): void
+		{
+			if ( value )
+				refresh();
+		}
+		
+		override public function validateProperties():void
+		{
+			super.validateProperties();
+			
+			if ( !_needRefresh)
+				return;
+			
+			_needRefresh = true;
+			
+			refresh();
+		}
+		
+		private var _needRefresh : Boolean = false;
 		private function refresh() : void
 		{
 			if ( !_renderVO )
@@ -378,74 +399,105 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			for each ( contetntPart in _renderVO.content )
 			{
-				switch ( contetntPart.name().toString() )
-				{
-					case "svg":
-					{
-						trace("svg - Ranvder Base");
-						var svg : SVGViewer = new SVGViewer();
-						var editableAttributes : Array = svg.setXML( contetntPart );
-
-						if ( editableAttributes.length > 0 )
-						{
-							_editableComponent = editableAttributes[ 0 ].sourceObject;
-						}
-						svg.addEventListener( RendererEvent.GET_RESOURCE, svgGetResourseHendler, false, 0, true );
-
-						background.addElement( svg );
-
-						break
-					}
-
-					case "text":
-					{
-						var richText : UIComponent
-
-						if ( contetntPart.@editable )
-						{
-							richText = new RichEditableText();
-							_editableComponent = richText;
-						}
-						else
-						{
-							richText = new Text();
-						}
-
-						richText.x = contetntPart.@left;
-						richText.y = contetntPart.@top;
-						richText.width = contetntPart.@width;
-
-						richText[ "text" ] = contetntPart[ 0 ];
-
-						applyStyles( richText, contetntPart );
-
-						background.addElement( richText );
-
-						break;
-					}
-					case "htmltext":
-					{
-						var html : HTML = new HTML();
-
-						html.x = contetntPart.@left;
-						html.y = contetntPart.@top;
-						html.width = contetntPart.@width;
-
-						if ( contetntPart.@editable )
-							_editableComponent = html;
-
-						var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
-							"</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
-
-						html.htmlText = htmlText;
-
-						background.addElement( html );
-					}
-				}
+				choiceContentType( contetntPart );
 			}
 
 			skin.currentState = "normal";
 		}
+		
+		private function choiceContentType( contetntPart : XML ):void
+		{
+			switch ( contetntPart.name().toString() )
+			{
+				case "container":
+				{
+					caseContainer( contetntPart );
+					break;
+				}
+				case "svg":
+				{
+					caseSVG( contetntPart );
+					break;
+				}
+					
+				case "text":
+				{
+					caseText( contetntPart );
+					break;
+				}
+				case "htmltext":
+				{
+					caseHtmlText(contetntPart ); 
+					break;
+				}
+				default:
+					trace ("-ERROR------RenderBase - refresh() - default value!!!--------")
+			}
+		}
+		
+		private function caseContainer( contetntPart : XML  ):void
+		{
+			choiceContentType ( contetntPart.children()[0] );
+		}
+		
+		private function caseSVG( contetntPart : XML  ):void
+		{
+			var svg : SVGViewer = new SVGViewer();
+			var editableAttributes : Array = svg.setXML( contetntPart );
+			
+			if ( editableAttributes.length > 0 )
+			{
+				_editableComponent = editableAttributes[ 0 ].sourceObject;
+			}
+			svg.addEventListener( RendererEvent.GET_RESOURCE, svgGetResourseHendler, false, 0, true );
+			
+			background.addElement( svg );
+		}
+		
+		private function caseText( contetntPart : XML  ):void
+		{
+			var richText : UIComponent
+			
+			if ( contetntPart.@editable )
+			{
+				richText = new RichEditableText();
+				_editableComponent = richText;
+			}
+			else
+			{
+				richText = new Text();
+			}
+			
+			richText.x = contetntPart.@left;
+			richText.y = contetntPart.@top;
+			richText.width = contetntPart.@width;
+			
+			richText[ "text" ] = contetntPart[ 0 ];
+			
+			applyStyles( richText, contetntPart );
+			
+			background.addElement( richText );
+		}
+		
+		private function caseHtmlText( contetntPart : XML  ):void
+		{
+			var html : HTML = new HTML();
+			
+			html.x = contetntPart.@left;
+			html.y = contetntPart.@top;
+			html.width = contetntPart.@width;
+			
+			if ( contetntPart.@editable )
+				_editableComponent = html;
+			
+			var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
+				"</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
+			
+			html.htmlText = htmlText;
+			
+			background.addElement( html );
+		}
+		
 
 		private function applyStyles( item : UIComponent, itemXMLDescription : XML ) : void
 		{

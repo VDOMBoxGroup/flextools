@@ -112,7 +112,13 @@ package net.vdombox.ide.modules.wysiwyg.model
 			renderersIndex = null;
 			data = null;
 		}
-
+		/**
+		 * 
+		 * @param renderVO
+		 * @param rawRenderData
+		 *  
+		 *  Creating standart and selfs atributes   
+		 */
 		private function createAttributes( renderVO : RenderVO, rawRenderData  /*is Wysiwyg*/ : XML ) : void
 		{
 			var typeVO : TypeVO;
@@ -175,11 +181,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 				typeVO = typesProxy.getTypeVObyID( typeID );
 				
-				if ( /*typeVO &&*/( childName == "container" || childName == "table" || childName == "row" || childName == "cell" ) ) 
+				if ( typeVO &&( childName == "container" || childName == "table" || childName == "row" || childName == "cell" ) ) 
 				{
-					trace("\ncontainer - RanderProxy  ");
-
-					if ( !childID )
+					if ( !childID || !typeVO )
 						continue;
 
 					objectVO = new ObjectVO( pageVO, typeVO );
@@ -189,6 +193,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 					childRenderVO = new RenderVO( objectVO );
 
 					createAttributes( childRenderVO, childXML );
+					
 					createChildren( childRenderVO, childXML );
 
 					childRenderVO.parent = renderVO;
@@ -201,10 +206,10 @@ package net.vdombox.ide.modules.wysiwyg.model
 				}
 				else
 				{
-					if ( renderVO.content )
-						renderVO.content += childXML.copy();
-					else
-						renderVO.content = new XMLList( childXML.copy() );
+					if ( !renderVO.content )
+						renderVO.content = new XMLList( );
+					
+					renderVO.content += childXML.copy();
 				}
 			}
 

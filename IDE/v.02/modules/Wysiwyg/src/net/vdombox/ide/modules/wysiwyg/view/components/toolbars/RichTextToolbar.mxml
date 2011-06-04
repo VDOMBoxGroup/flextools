@@ -195,6 +195,7 @@
 				bodyTag.innerText = value;
 				HTMLEditorLoader = null;
 				UIComponent( item ).setFocus();
+			//	item.needRefresh = true;
 //				editableHTML.editabledText = value;
 
 //				selectedItem.editableAttributes[ 0 ].attributes[ "value" ] = value;

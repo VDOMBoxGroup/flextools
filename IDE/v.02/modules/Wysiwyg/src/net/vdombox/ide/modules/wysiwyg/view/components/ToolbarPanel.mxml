@@ -8,6 +8,7 @@
 		<![CDATA[
 			import mx.core.IVisualElement;
 			
+			import net.vdombox.ide.common.TypeInterface;
 			import net.vdombox.ide.common.vo.TypeVO;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar;
@@ -54,74 +55,71 @@
 
 			override protected function commitProperties() : void
 			{
-				if( isSelectedRendererChanged )
+				super.commitProperties();
+				
+				if( !isSelectedRendererChanged )
+					return;
+				
+				isSelectedRendererChanged = false;
+				
+				if ( _currentToolbar )
 				{
-					isSelectedRendererChanged = false;
+					_currentToolbar.close();
+					_currentToolbar = null;
 					
-					if ( _currentToolbar )
-					{
-						_currentToolbar.close();
-						_currentToolbar = null;
-						
-						removeAllElements();
-					}
+					removeAllElements();
+				}
 
-					if( !_selectedRenderer || !_selectedRenderer.editableComponent )
-						return;
-					
-					var typeVO : TypeVO = _selectedRenderer.typeVO;
-					
-					switch ( typeVO.interfaceType )
+				if( !_selectedRenderer || !_selectedRenderer.editableComponent )
+					return;
+				
+				var typeVO : TypeVO = _selectedRenderer.typeVO;
+				
+				switch ( typeVO.interfaceType )
+				{
+					case TypeInterface.RICH_TEXT_EDITOR:
 					{
-						case "1":
-						{
-							break;
-						}
-							
-						case "2":
-						{
-							var richTextToolbar : RichTextToolbar = new RichTextToolbar();
-							
-							_currentToolbar = richTextToolbar;
-							addElement( richTextToolbar );
-							richTextToolbar.init( _selectedRenderer );
-							
-							break;
-						}
-							
-						case "3":
-						{
-							var textToolbar : TextToolbar = new TextToolbar();
-							
-							_currentToolbar = textToolbar;
-							addElement( textToolbar );
-							textToolbar.init( _selectedRenderer );
-							
-							break;
-						}
-							
-						case "4":
-						{
-							var imageToolbar : ImageToolbar = new ImageToolbar();
-							
-							_currentToolbar = imageToolbar;
-							addElement( imageToolbar );
-							imageToolbar.init( _selectedRenderer );
-							
-							break;
-						}
+						var richTextToolbar : RichTextToolbar = new RichTextToolbar();
+						
+						_currentToolbar = richTextToolbar;
+						addElement( richTextToolbar );
+						richTextToolbar.init( _selectedRenderer );
+						
+						break;
 					}
-					
-					if( currentToolbar )
+						
+					case TypeInterface.TEXT_EDITOR:
 					{
-						visible = true;
-						includeInLayout = true;
+						var textToolbar : TextToolbar = new TextToolbar();
+						
+						_currentToolbar = textToolbar;
+						addElement( textToolbar );
+						textToolbar.init( _selectedRenderer );
+						
+						break;
 					}
-					else
+						
+					case TypeInterface.PICTURE:
 					{
-						visible = false;
-						includeInLayout = false;
+						var imageToolbar : ImageToolbar = new ImageToolbar();
+						
+						_currentToolbar = imageToolbar;
+						addElement( imageToolbar );
+						imageToolbar.init( _selectedRenderer );
+						
+						break;
 					}
+				}
+				
+				if( currentToolbar )
+				{
+					visible = true;
+					includeInLayout = true;
+				}
+				else
+				{
+					visible = false;
+					includeInLayout = false;
 				}
 			}
 		]]>
