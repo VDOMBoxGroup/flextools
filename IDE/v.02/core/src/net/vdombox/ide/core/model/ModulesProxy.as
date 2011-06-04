@@ -34,7 +34,8 @@ package net.vdombox.ide.core.model
 				<category name="Edition">									
 					
 					<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
-					
+					<module name="Tree" path="app:/modules/Tree/Tree.swf"/>
+					<module name="Events" path="app:/modules/Events/Events.swf"/>
 					
 				</category>
 			</modules>
@@ -231,6 +232,7 @@ package net.vdombox.ide.core.model
 
 		private function moduleErrorHandler( event : ModuleEvent ) : void
 		{
+			trace("\n *************** MODULES_LOADING_ERROR *********************");
 			sendNotification( ApplicationFacade.MODULES_LOADING_ERROR, event.module.data as ModuleVO );
 		}
 	}
