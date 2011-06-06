@@ -55,12 +55,12 @@ package net.vdombox.object_editor.view.mediators
 			view.fID.text 				= objectTypeVO.id;
 			view.fDynamic.selected		= objectTypeVO.dynamic;			
 			view.fMoveable.selected		= objectTypeVO.moveable;
-			view.fMajorVersion.text 		= objectTypeVO.majVersion.toString();
-			view.fMinorVersion.text 		= objectTypeVO.minVersion.toString();
+			view.fMajorVersion.text 	= objectTypeVO.majVersion.toString();
+			view.fMinorVersion.text 	= objectTypeVO.minVersion.toString();
 			view.fMinServerSupportRev.textInput.text 	= objectTypeVO.minServRevition.toString();
 			
 			view.fWCAG.text				= objectTypeVO.wcag;
-			
+			view.fRemoteMethods.text	= objectTypeVO.remoteMethods;
 			
 			view.fCategory.setData(objectsProxy.categorys, objectTypeVO.category, objectTypeVO.languages);
 			view.fDisplayName.completeStructure( objectTypeVO.languages, objectTypeVO.displayName );
