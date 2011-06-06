@@ -32,11 +32,18 @@ package net.vdombox.object_editor.controller
 			for (var i:uint = 0; i < filesArray.length; i++)
 			{	
 				var file:File = filesArray[i] as File;
-				if (!file.isDirectory)
+				if (!file.isDirectory )
 				{				
-					var item:Item = itemProxy.getItem(file) ;
-					if ( item )
-						facade.sendNotification(ApplicationFacade.NEW_NAVIGATOR_CONTENT, item);												
+					if ( file.type != ".xml" )
+					{
+						ErrorLogger.instance.logError("Failed: file type is not xml", file.nativePath );
+					}
+					else
+					{
+						var item:Item = itemProxy.getItem(file) ;
+						if ( item )
+							facade.sendNotification(ApplicationFacade.NEW_NAVIGATOR_CONTENT, item);
+					}
 				}
 			}
 		}
