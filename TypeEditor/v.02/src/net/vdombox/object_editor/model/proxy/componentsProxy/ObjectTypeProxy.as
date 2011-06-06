@@ -287,7 +287,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				
 				objTypeVO.wcag			= information.WCAG;
 				objTypeVO.XMLScriptName = information.XMLScriptName;
-				
+				objTypeVO.remoteMethods = information.RemoteMethods
 				
 				// is top level container
 				if (objTypeVO.container	== 3 )
