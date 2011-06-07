@@ -15,17 +15,17 @@
 
 	<!-- A universally unique application identifier. Must be unique across all AIR applications.
 	     Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-	<id>TypeEditor</id>
+	<id>net.vdombox.TypeEditor2</id>
 
 	<!-- Used as the filename for the application. Required. -->
-	<filename>TypeEditor2.0.8.11</filename>
+	<filename>TypeEditor2.0.8.13</filename>
 
 	<!-- The name that is displayed in the AIR application installer. 
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
 	<name>TypeEditor</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-	<version>2.0.8.11</version>
+	<version>2.0.8.13</version>
 
 	<!-- Description, displayed in the AIR application installer.
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
@@ -44,7 +44,7 @@
 		<content>[This value will be overwritten by Flash Builder in the output app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
-		<title>Type Editor 2.0.8.11</title>
+		<title>Type Editor 2.0.8.13</title>
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
 		<!-- <systemChrome>none</systemChrome-->
