@@ -19,14 +19,20 @@
 	</mx:Style>
 	<mx:Script>
 	<![CDATA[
-		import mx.utils.Base64Encoder;
-		import mx.utils.Base64Decoder;
-		import mx.utils.UIDUtil;
-		import mx.controls.Alert;
-		import mx.events.ListEvent;
-		import mx.events.CloseEvent;
-		import mx.managers.PopUpManager;
+		import flash.text.engine.EastAsianJustifier;
+		
 		import mx.collections.XMLListCollection;
+		import mx.controls.Alert;
+		import mx.events.CloseEvent;
+		import mx.events.FlexEvent;
+		import mx.events.ListEvent;
+		import mx.events.ResizeEvent;
+		import mx.managers.PopUpManager;
+		import mx.messaging.channels.StreamingAMFChannel;
+		import mx.utils.Base64Decoder;
+		import mx.utils.Base64Encoder;
+		import mx.utils.UIDUtil;
+		import mx.validators.StringValidator;
 	
 		private var sqlProxy : SQLProxy = new SQLProxy(); 
 		private var pageVersion: Number;
@@ -97,12 +103,17 @@
 		{	
 //			tree.selectedItem = XML(lstEvt.itemRenderer.data);
 //			trace(": "+lstEvt.itemRenderer.data.@name +" : "+ tree.selectedItem.@name);
-				
+			
+			if ( !tree.selectedItem )
+				return;
+			
 			var resoult : Object = sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name);
 			if(resoult)
 			{
 				pageVersion = resoult[0]["version"];
-				htmlSource.text = resoult[0]["content"];
+				if (html_wysiwyg) {
+					html_wysiwyg.setHTML(resoult[0]["content"]);
+				}
 				pageInformation.text = resoult[0]["title"] +" (v." + pageVersion +")  " + resoult[0]["name"];
 				pageInformation.toolTip =  resoult[0]["description"];
 				
@@ -167,6 +178,7 @@
 		
 		private var toc : XML = new XML();
 		private var count : int = 0; 
+		
 		private function addItem():void
 		{
 			var selectedPage : String = "";
@@ -249,7 +261,7 @@
 			{
 //				editProduct.label = "Add Product";
 				tree.dataProvider = null;
-				htmlSource.text = "";
+				html_wysiwyg.setHTML("");
 				return;
 			}
 			
@@ -270,44 +282,118 @@
 			tree.validateNow();
 			
 			tree.dispatchEvent(new ListEvent(ListEvent.CHANGE));
-			
+		}
+				
+		private function savePage():void
+		{
+			resetImagesPath();
+			sqlProxy.setPageContent(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name, html_wysiwyg.getHTML(), pageVersion);
+			getCurrentPage();
 		}
 		
-		private function addTag( tag:String, finishTag:Boolean = true):void
+		private function resetImagesPath():void
 		{
-			var resoultText : String;
-			var bgTag :String;
-			var endTag : String = "";
-			var selectionBegin : Number;
-			var selectionEnd : Number;
+			trace ("[VdomHelpEditor] resetImagesPath");
+			resetHttpImages();
+			resetLocalImages();
+		}
+		
+		private function resetLocalImages():void
+		{
+			trace ("[VdomHelpEditor] resetLocalImages");
+			var pattern:RegExp = /<[ ]*img[^>]*src[ ]*=[ ]*"[^(resources)][^"]*"/ig;
+			var arrMatch:Array = html_wysiwyg.getHTML().match(pattern);
 			
-			if(finishTag)
+			for each (var strImg:String in arrMatch) 
 			{
-				bgTag = "<" + tag + ">";
-				endTag = "</" + tag + ">";
-			} else
+				var oldPath : String = strImg.split("\"")[strImg.split("\"").length-2]
+				var newPath : String = copyImg(oldPath);
+				
+				html_wysiwyg.setHTML(html_wysiwyg.getHTML().replace(oldPath, newPath));
+			}
+		}
+		
+		private function resetHttpImages():void
+		{
+			trace ("[VdomHelpEditor] resetHttpImages");
+			var pattern:RegExp = /<[ ]*img[^>]*src[ ]*=[ ]*"(http:\/\/|https:\/\/)[^"]*"/ig;
+			var arrMatch:Array = html_wysiwyg.getHTML().match(pattern);
+			
+			for each (var strImg:String in arrMatch) 
 			{
-				bgTag = "<" + tag + "/>";
+				var oldPath : String = strImg.split("\"")[strImg.split("\"").length-2]
+				var newPath : String = loadHttpImg(oldPath);
+				
+				html_wysiwyg.setHTML(html_wysiwyg.getHTML().replace(oldPath, newPath));
+			}
+		}
+		
+		private function copyImg(aImageOldSrc_str:String):String
+		{
+			trace ("copyImg");
+			var targetPath : String; 
+			var imgFile : File;
+			
+			targetPath = "resources/" + generateFileName(aImageOldSrc_str); 
+
+			imgFile = new File(aImageOldSrc_str);
+			imgFile.copyTo(File.applicationStorageDirectory.resolvePath(targetPath));
+			
+			return targetPath;
+		}
+		
+		private function loadHttpImg(aImageOldSrc_str:String):String
+		{
+			trace ("loadHttpImg");
+			var targetPath 	: String;
+			var urlRequest	: URLRequest;
+			var urlLoader	: URLLoader;
+			
+			targetPath = "resources/" + generateFileName(aImageOldSrc_str);
+			urlRequest = new URLRequest(aImageOldSrc_str);
+			urlLoader = new URLLoader();
+
+			urlLoader.dataFormat = URLLoaderDataFormat.BINARY; 
+			urlLoader.addEventListener(Event.COMPLETE, urlLoader_complete);
+			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, urlLoader_error);
+			urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoader_error);
+			urlLoader.load(urlRequest);
+			
+			
+			function urlLoader_complete(evt:Event):void {
+				trace ("loadHttpImg: urlLoader_complete");
+				var file		: File;
+				var fileStream	: FileStream;
+				
+				file 		= File.applicationStorageDirectory.resolvePath(targetPath);
+				fileStream	= new FileStream();
+				try {
+					fileStream.open(file, FileMode.WRITE);
+					fileStream.writeBytes(urlLoader.data);
+					fileStream.close();
+				} catch(error:IOError) {
+					trace("!!! Error Write !!! \n" + error.message +"\n");
+					return;
+				}
+			}
+			
+			function urlLoader_error(evt:Event):void {
+				trace("!!! Error Loading file !!! \n");
 			}
 			
 			
-			
-			resoultText = htmlSource.text.substring( 0, htmlSource.selectionBeginIndex) 
-					+ bgTag + htmlSource.text.substring(htmlSource.selectionBeginIndex, htmlSource.selectionEndIndex )
-					+ endTag + htmlSource.text.substring(htmlSource.selectionEndIndex);
-			
-			selectionBegin = htmlSource.selectionBeginIndex;
-			selectionEnd = htmlSource.selectionEndIndex + bgTag.length + endTag.length;
-			
-			htmlSource.text = resoultText;		
-			htmlSource.setFocus();
-			htmlSource.setSelection(selectionBegin, selectionEnd);
+			return targetPath;
 		}
 		
-		private function savePage():void
+		private function generateFileName(path:String):String
 		{
-			sqlProxy.setPageContent(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name, htmlSource.text, pageVersion);
-			getCurrentPage();
+			var fileType : String;
+			var fileName:String;
+			
+			fileType = path.substring(path.lastIndexOf("."), path.length); 
+			fileName = UIDUtil.createUID() + fileType;
+			
+			return fileName;
 		}
 		
 		private function creatProductXML():void
@@ -499,59 +585,6 @@
 
 		}
 		
-		private var fileToOpen:File = File.documentsDirectory;
-		private function insertImage():void
-		{
-//			var docsDir:File = File.documentsDirectory;
-			var txtFilter:FileFilter = new FileFilter("Image (*.jpg; *.png; *,bmp) ", "*.img;*.jpg;*.bmp;*.png");
-			
-			try 
-			{
-			    fileToOpen.browseForOpen("Open", [txtFilter]);
-			    fileToOpen.addEventListener(Event.SELECT, fileSelected);
-			}
-			catch (error:Error)
-			{
-			    trace("Failed:", error.message);
-			}
-			
-			function fileSelected(event:Event):void 
-			{
-				fileToOpen.removeEventListener(Event.SELECT, fileSelected);
-				
-				var srcBytes : ByteArray = new ByteArray();
-			    var stream:FileStream = new FileStream();
-			    stream.open(event.target as File, FileMode.READ);
-//			    var fileData:String = stream.readUTFBytes(stream.bytesAvailable);
-			    
-			    stream.readBytes( srcBytes, 0, stream.bytesAvailable );
-				stream.close();
-				
-				dataManipulation(event.target.type, srcBytes);
-			}
-		}
-		
-		private function dataManipulation(type:String, srcBytes:ByteArray):void
-		{
-			// generate new file name
-			var newName : String = "resources/" + UIDUtil.createUID() + type;
-			
-			insertImageCode(newName);
-			saveFile(newName, srcBytes);
-			
-		}
-		
-		private function insertImageCode(newName:String):void
-		{
-			var resoultText : String = htmlSource.text.substring( 0, htmlSource.selectionBeginIndex) 
-					+ " <IMG src='"+newName+"'/> "
-					+ htmlSource.text.substring(htmlSource.selectionBeginIndex);
-			
-			
-			htmlSource.text = resoultText;		
-			htmlSource.setFocus();
-		}
-		
 		// save file to folder
 		public function saveFile(contentName:String, content:ByteArray):void 
 		{
@@ -576,15 +609,21 @@
 			trace("::htmlShowHandler::");
 			var fileName:String = "temp.html"	;
 			var content : ByteArray = new ByteArray();
+			
+			var sourseTxt:String = "";
+			if (html_wysiwyg) {
+				sourseTxt = html_wysiwyg.getHTML();
+			}
 			var sourse : String = 
 				"<html>" + 
 					"<head>" + 
 					"</head>" + 
 					"<body>" +
-					  htmlSource.text + 
+					  sourseTxt +
 					"</body>"	;
 				
-			content.writeUTFBytes(sourse);
+			//content.writeUTFBytes(sourse);
+			content.writeUTFBytes(sourseTxt);
 			
 			saveFile(fileName, content);
 			
@@ -595,11 +634,11 @@
 			var f : File = File.applicationStorageDirectory; 
 			if(html)
 			{
-//				html.htmlText = htmlSource.text ;
 				html.location = fullPath; 
 				html.validateDisplayList();
 			}
 		}
+	
 		
 		private function dragDropHandler(event:Event):void
 		{
@@ -623,31 +662,7 @@
 				getCurrentPage();
 			}	
 		}
-		
-		private function pageURL():void
-		{
-			var treeOfPages : TreeOfPages = TreeOfPages(PopUpManager.createPopUp(this, TreeOfPages, true));
-			treeOfPages.addEventListener(CloseEvent.CLOSE, selectPageHandler);
 			
-			treeOfPages.product = cmboxProduct.selectedItem.name;
-			
-			function selectPageHandler():void
-			{
-				 if(treeOfPages.pageName != '' && treeOfPages.pageTitle != '')
-				 {
-				 	var resoultText : String = htmlSource.text.substring( 0, htmlSource.selectionBeginIndex) 
-					+ " <a href='"+treeOfPages.pageName+".html'> "+treeOfPages.pageTitle+"</a> "
-					+ htmlSource.text.substring(htmlSource.selectionBeginIndex);
-			
-					htmlSource.text = resoultText;		
-					htmlSource.setFocus();
-				 }
-			}
-		}
-		
-	
-
-	
 	]]>
 </mx:Script>
 	
@@ -722,20 +737,12 @@
 		</mx:VBox>
 		<mx:TabNavigator width="100%" height="100%" backgroundColor="#E4E4E4"  	
 			paddingTop="0">
-			<mx:Canvas width="100%" height="100%"  label="Edit">
+			<mx:Canvas width="100%" height="100%"  label="WYSIWYG">
 				<mx:VBox width="100%" height="100%" verticalGap="0" verticalAlign="0"  >
-					<mx:HBox width="100%" color="#000000" backgroundColor="#E4E4E4"  >
-						<mx:VBox width="100%"  
-							paddingTop="3" paddingLeft="3" paddingBottom="3">
-							<mx:HBox  >
-								<mx:Button label="H1" click="{addTag('H1' )}" height="15" />
-								<mx:Button label="BR" click="{addTag('BR',false)}" height="15" />
-								<mx:Button label="IMG" click="{insertImage()}" height="15"/>
-								<mx:Button label="PAGE" click="{pageURL()}" height="15"/>
-							</mx:HBox>
-						</mx:VBox>	
-				</mx:HBox>
-					<mx:TextArea id="htmlSource" width="100%" height="100%"  focusAlpha="0" /> 
+					<!--mx:HBox width="100%" color="#000000" backgroundColor="#E4E4E4"  >
+					</mx:HBox-->
+					
+					<local:HTML_WYSIWYG id="html_wysiwyg"   width="100%" height="100%"/>
 					<mx:HBox width="100%" backgroundColor="0x373739" paddingBottom="3">
 						<mx:Canvas height="100%">
 							<mx:Label id="pageInformation" text="Title: title" color="#FFFFFF" 
@@ -761,9 +768,9 @@
 			<mx:Canvas width="100%" height="100%" label="Preview" show="{htmlShowHandler()}">
 				<mx:HTML id="html"   width="100%" height="100%"  />
 			</mx:Canvas>
-			<mx:Canvas width="100%" height="100%" label="WYSIWYG" color="#00FF00" >
-				<local:HTML_WYSIWYG id="html_wysiwyg"   width="100%" height="100%"  />
-			</mx:Canvas>
+			<!--mx:Canvas width="100%" height="100%" label="Sourse" color="#00FF00" >
+				<mx:TextArea id="htmlSource" width="100%" height="100%"  focusAlpha="0" />
+			</mx:Canvas-->
 		</mx:TabNavigator>
 	</mx:HDividedBox>
 	<mx:HBox horizontalAlign="right" width="100%">
