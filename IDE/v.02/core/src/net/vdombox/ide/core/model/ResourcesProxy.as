@@ -12,6 +12,7 @@ package net.vdombox.ide.core.model
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.controls.Image;
 	import mx.effects.Resize;
@@ -29,6 +30,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.icons.TypesIcons;
 	
+	import org.osmf.utils.BinarySearch;
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 	
@@ -252,15 +254,27 @@ package net.vdombox.ide.core.model
 			}
 			else // if not viewable
 			{ 
-				if ( typesIcons.icon[ resourceVO.type ] != null ) 
-					creationIconCompleted( resourceVO, typesIcons.getResource( typesIcons.icon[ resourceVO.type ] ) );
-				else
-					creationIconCompleted( resourceVO, typesIcons.getResource( typesIcons.icon[ "blank" ] ) );	 //default icon
+//				BindingUtils.bindSetter( aaa, typesIcons, "data" );
+				typesIcons.res = resourceVO;
+				BindingUtils.bindSetter( aaa, typesIcons, "data" );
+				typesIcons.getResource( resourceVO.type );				
 			}	 
 		}
 		
-		private function creationIconCompleted( resourceVO : ResourceVO, file:ByteArray ) : void
+		private function aaa( object : Object ) : void
 		{
+//				if ( typesIcons.res.icon )
+				if ( object )
+				{
+					creationIconCompleted( typesIcons.res, object as ByteArray );
+					typesIcons.res = null;
+					typesIcons.data = null;
+					trace(" н унаконеч-то!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				}
+		}
+		
+		private function creationIconCompleted( resourceVO : ResourceVO, file:ByteArray ) : void
+		{			
 			resourceVO.icon		= file;
 			resourceVO.iconId 	= resourceVO.id + "_icon";
 			resourceVO.data 	= null;
@@ -301,8 +315,8 @@ package net.vdombox.ide.core.model
 		//convert to bitmapData 
 		private function loaderComplete(event:Event):void
 		{
-			var loaderInfo:LoaderInfo = LoaderInfo(event.target);
-			var bitmapData:BitmapData = new BitmapData(loaderInfo.width, loaderInfo.height, false, 0xFFFFFF);
+			var loaderInfo : LoaderInfo = LoaderInfo(event.target);
+			var bitmapData : BitmapData = new BitmapData(loaderInfo.width, loaderInfo.height, false, 0xFFFFFF);
 			bitmapData.draw(loaderInfo.loader); 
 			var bitmap:Bitmap = new Bitmap(bitmapData);
 			
@@ -314,17 +328,17 @@ package net.vdombox.ide.core.model
 				else 
 					ratio = ResourceVO.ICON_SIZE / bitmap.height; 
 				
-				var width:	int = ( int(bitmap.width*ratio) > 0 )  ? int(bitmap.width*ratio)  : 1;
+				var width :	int = ( int(bitmap.width*ratio) > 0 )  ? int(bitmap.width*ratio)  : 1;
 				var height:	int = ( int(bitmap.height*ratio) > 0 ) ? int(bitmap.height*ratio) : 1;				
 		
-				var btm:BitmapData = new BitmapData( width, height, false); 
+				var btm : BitmapData = new BitmapData( width, height, false); 
 				bitmap.smoothing = true;
 				
-				var matrix:Matrix = new Matrix(); 
+				var matrix : Matrix = new Matrix(); 
 				matrix.scale(ratio, ratio); 
 				btm.draw( bitmap.bitmapData, matrix );
 				
-				var encoder:PNGEncoder = new PNGEncoder();
+				var encoder : PNGEncoder = new PNGEncoder();
 								
 				cacheManager.cacheFile( loaderInfo.loader.name + "_icon",  encoder.encode( btm ) );	// not nice			
 				tempResourceVO[ loaderInfo.loader.name ].setStatus( ResourceVO.ICON_LOADED );
@@ -333,8 +347,8 @@ package net.vdombox.ide.core.model
 			}
 			else
 			{
-				var encoder1:PNGEncoder = new PNGEncoder();
-				creationIconCompleted( tempResourceVO[ loaderInfo.loader.name ],  encoder1.encode( bitmap.bitmapData ) );
+				var encoder1 : PNGEncoder = new PNGEncoder();
+				creationIconCompleted( tempResourceVO[ loaderInfo.loader.name ], encoder1.encode( bitmap.bitmapData ) );
 			}		
 			
 			delete tempResourceVO[ loaderInfo.loader.name ];

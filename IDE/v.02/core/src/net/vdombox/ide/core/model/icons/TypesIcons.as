@@ -1,13 +1,18 @@
 package net.vdombox.ide.core.model.icons
 {
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.events.ProgressEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.controls.Alert;
 	import mx.utils.Base64Decoder;
+	
+	import net.vdombox.ide.common.vo.ResourceVO;
 	
 	public class TypesIcons
 	{	
@@ -76,37 +81,53 @@ package net.vdombox.ide.core.model.icons
 			icon["xlsx"]= xls_Icon;
 		}
 		
-		public function getResource( path : String ) : ByteArray
+		private var file : File 	  = new File();
+		public  var data : ByteArray  = null;
+		public  var res  : ResourceVO = null;
+				
+		public function getResource( type : String ) : void
 		{	
-			var data : String = null;
-			var file:File = new File( File.applicationDirectory.resolvePath( path ).nativePath );
-//			file.addEventListener(Event.COMPLETE
+			var path : String;
 			
+			if ( icon[ type ] != null )
+				path = icon[ type ]; 
+			else 
+				path = icon[ "blank" ]; //default icon
 			
-			if (file)
+//			var file:File = new File( File.applicationDirectory.resolvePath( path ).nativePath );
+			file = new File( File.applicationDirectory.resolvePath( path ).nativePath );
+
+			file.addEventListener(Event.COMPLETE, fileDounloaded);			
+			file.addEventListener( IOErrorEvent.DISK_ERROR, ioErrorHandler);
+			file.addEventListener( IOErrorEvent.IO_ERROR, ioErrorHandler);
+			file.load();
+			
+			function fileDounloaded( event : Event ):void
 			{
-//				file.load();
-				
-				
-				
-//				var stream : FileStream = new FileStream();   
-				try
+				//			var file : File = event.currentTarget as File;
+				if (file)
 				{
-//					stream.open(file, FileMode.READ);
-//					data = stream.readUTFBytes( stream.bytesAvailable );
-//					stream.close();
-															
-					return  file.data//b64.toByteArray();
+					try
+					{
+						data = file.data;
+//						res.icon = file.data;
+					}
+					catch (error : Error)
+					{
+						trace("Failed: was changed path.", error.message);				
+					}
 				}
-				catch (error : Error)
-				{
-					Alert.show("Failed: was changed path. Open the directory again");
-					trace("Failed: was changed path.", error.message);				
-				}
-			}
-			return null;
+			}			
+//			
+//			return null;
 		}
-			
+		
+		
+		public function ioErrorHandler( event : IOErrorEvent ) : void
+		{
+			trace("========================================================= error =========================================");
+		}
+				
 		public function isViewable ( extension : String ) : Boolean 
 		{
 			switch (extension.toLowerCase()) 
