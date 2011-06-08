@@ -114,7 +114,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 						sendNotification( ApplicationFacade.GET_ICON, resourceVO );
 					}
 					
-					resourceSelectorWindow.filter.dataProvider	= _filters;
+					resourceSelectorWindow.typeFilter.dataProvider	= _filters;
 					resourceSelectorWindow.totalResources		= resourceSelectorWindow.resources.length;
 					
 					break;
@@ -140,22 +140,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function addHandlersForResourcesList( event : Event ) : void
 		{
-			resourceSelectorWindow.filter.addEventListener( Event.CHANGE, applyExtensionFilter );
+			resourceSelectorWindow.typeFilter.addEventListener( Event.CHANGE, applyTypeFilter );
+			resourceSelectorWindow.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
 		}
 		
-		private function applyExtensionFilter( event : Event ) : void
+		private function applyTypeFilter( event : Event ) : void
 		{
-//			var oldSelectedResVO	: ResourceVO	= resourceSelectorWindow.resourcesList.selectedItem as ResourceVO;
-//			var oldSelectedResID	: String;
-			var typeFilter			: String		= resourceSelectorWindow.filter.selectedItem.data;
+			var typeFilter			: String		= resourceSelectorWindow.typeFilter.selectedItem.data;
 			var newResourcesList	: ArrayList 	= new ArrayList();			
 			var resVO				: ResourceVO;
-			
-//			if ( oldSelectedResVO )
-//				oldSelectedResID = oldSelectedResVO.id;
-//			else
-//				oldSelectedResID = null;			
-			
+		
 			if ( typeFilter == "*" || typeFilter == "None" )
 			{
 				resourceSelectorWindow.filteredResources = resourceSelectorWindow.totalResources;
@@ -176,55 +170,47 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 				
 				resourceSelectorWindow.resources = newResourcesList;
-			}
-			
-			// select item
-			/*
-			var countResources : int = resourceSelectorWindow.resources.length;
-			
-			if ( countResources == 0 )
-			{
-				clearFields();
-				
-				return;
-			}			
-			
-			if ( oldSelectedResID == null || oldSelectedResVO.type != typeFilter )
-			{	
-				setSelectedResource( resourceSelectorWindow.resources.source[0] as ResourceVO, 0 );
-				
-				return;
-			}
-			
-			for ( var i : int = 0; i < countResources; i++ )
-			{		
-				resVO = resourceSelectorWindow.resources.source[i] as ResourceVO;
-				
-				if ( resVO.id == oldSelectedResID )
-				{
-					setSelectedResource( resVO, i );
-					
-					break;
-				}
-			}*/				
-		}
-//		
-//		private function setSelectedResource( res : ResourceVO, index : int) : void
-//		{
-//			resourceSelectorWindow.resourcesList.selectedIndex = index;
-//			
-//			resourceVO = res;
-//			
-//			loadResource();
-//		}
+			}					
+		}		
 		
-		private function clearFields() : void
-		{
-			resourceSelectorWindow.imagePreview.source		= null;
-			resourceSelectorWindow.resourceID.text	 		= "";
-			resourceSelectorWindow.resourceName.text 		= "";
-			resourceSelectorWindow.resourceType.text		= "";
-			resourceSelectorWindow.resourceResolution.text 	= "";
+		private function applyNameFilter( event : Event ) : void
+		{			
+			var nameFilter			: String		= resourceSelectorWindow.nameFilter.text.toLowerCase();
+			var newResourcesList	: ArrayList 	= new ArrayList();			
+			var resVO				: ResourceVO;
+			
+			if ( nameFilter == '' )
+			{
+				resourceSelectorWindow.resources = allResourcesList;
+				resourceSelectorWindow.filteredResources = resourceSelectorWindow.totalResources;
+				
+				return ;
+			}
+						
+			resourceSelectorWindow.filteredResources = 0;
+			
+			for each ( resVO in allResourcesList.source )
+			{
+				if ( resVO.name.toLowerCase().indexOf( nameFilter ) >= 0 )
+				{
+					resourceSelectorWindow.filteredResources++;
+					newResourcesList.addItem( resVO );
+				}
+			}
+			
+			resourceSelectorWindow.resources = newResourcesList;
+		
+//			
+//			for ( var i : int = 0; i < tempResourcesList.Resource.length(); i++ )
+//			{
+//				if ( tempResourcesList.Resource[ i ].@id == _selectedItemID )
+//				{
+//					__thumbsList.selectedIndex = i;
+//					break;
+//				}
+//			}
+//			
+//			__spinner.visible = false;
 		}
 		
 		private function removeHandlers() : void

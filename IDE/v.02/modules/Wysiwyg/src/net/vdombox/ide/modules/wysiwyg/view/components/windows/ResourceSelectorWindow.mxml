@@ -124,7 +124,7 @@
 		
 		<mx:Label text="Filter: "/>
 		
-		<mx:ComboBox id="filter"/>
+		<mx:ComboBox id="typeFilter"/>
 		
 		<mx:Spacer width="100%"/>
 		
@@ -147,7 +147,7 @@
 			<mx:HBox width="100%"
 					 horizontalGap="3" paddingBottom="3" paddingLeft="5" paddingRight="0" paddingTop="3" verticalAlign="middle">
 				
-				<mx:TextInput id="__nameFilter"
+				<mx:TextInput id="nameFilter"
 							  text="type a filter here" width="100%"
 							  borderColor="#999999" borderStyle="solid" color="#666666"
 							  fontFamily="Tahoma" fontWeight="bold"/>
