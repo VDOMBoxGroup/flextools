@@ -13,11 +13,7 @@
 
 	<mx:Script>
 		<![CDATA[
-			import flash.net.sendToURL;
-			
 			import mx.collections.ArrayList;
-			import mx.events.FlexEvent;
-			import mx.events.ListEvent;
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -47,7 +43,7 @@
 
 			public function set resources( value : ArrayList ) : void
 			{
-				_resources = value;//new ArrayList( value );
+				_resources = value;	//new ArrayList( value );
 				setSelectedItem();
 			}
 			
@@ -68,7 +64,8 @@
 					if ( resourceVO.id == _value.substring( 5, _value.length - 1 ) )
 					{
 						resourcesList.selectedItem = resourceVO;
-//						
+						dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) )
+						
 						break;
 					}
 				}
@@ -85,7 +82,7 @@
 					if ( event.charCode != Keyboard.ESCAPE )
 						return
 						
-				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ))
+				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) )
 			}		
 
 			private function creationCompleteHandler() : void
@@ -97,31 +94,25 @@
 			
 			protected function uploadFile(event:MouseEvent):void
 			{
-				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.LOAD_RESOURCE));			
+				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.LOAD_RESOURCE ) );			
 			}
 			
 			protected function refreshFile(event:MouseEvent):void
 			{
-				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCES));			
+				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCES ) );			
 			}
 
 			protected function selectResource(event:Event):void
 			{
 				event.currentTarget;
-//				resourceID.text	  = "ID: " + resourceVO.id;
-//				resourceName.text = resourceVO.name;
-//				resourceType.text = resourceVO.type;
-//						resourceResolution.text	= resourceVO.h?	
-//				var ovj:Object = event.currentTarget as Object;
-//				imagePreview.source = resourcesList.selectedItem.icon;
 				
-				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE));
+				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) );
 			}
 
-			protected function resourcesList_changeHandler(event:ListEvent):void
-			{
-				// TODO Auto-generated method stub
-			}
+//			protected function resourcesList_changeHandler(event:ListEvent):void
+//			{
+//				// TODO Auto-generated method stub
+//			}
 
 		]]>
 	</mx:Script>
@@ -196,13 +187,13 @@
 				
 				<mx:Box	backgroundColor="#FFF6EA" borderStyle="solid" cornerRadius="3" paddingLeft="5" paddingRight="5">
 					<mx:Label id="resourceName"
-							  height="18" maxWidth="350" text="{resourcesList.selectedItem.name}"
+							  height="18" maxWidth="350" 
 							  fontWeight="bold" textAlign="center"/>
 				</mx:Box>
 				
 				<mx:Box backgroundColor="#FFF6EA" borderStyle="solid" cornerRadius="3" paddingLeft="5" paddingRight="5">
 					<mx:Label id="resourceType"
-							  height="18" text="{resourcesList.selectedItem.type}"
+							  height="18" 
 							  fontWeight="bold"/>
 				</mx:Box>
 				
@@ -216,7 +207,7 @@
 			
 			<mx:Box backgroundColor="#E4E2FD" borderStyle="solid" cornerRadius="3" paddingLeft="5" paddingRight="5">
 				<mx:Label id="resourceID"
-						  height="18" selectable="true" text="{'ID: ' + resourcesList.selectedItem.id}"
+						  height="18" selectable="true" 
 						  fontWeight="bold"/>
 			</mx:Box>
 			

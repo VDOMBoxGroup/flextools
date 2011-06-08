@@ -3,10 +3,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.net.FileFilter;
-	import flash.net.FileReference;
-	import flash.utils.ByteArray;
-	
-	import mx.utils.Base64Encoder;
 	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -31,13 +27,13 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			openFile.addEventListener(Event.SELECT, fileSelected);	
 			
-			var allFilesFilter : FileFilter = new FileFilter( "All Files (*.*)", "*.*" );
-			var imagesFilter : FileFilter = new FileFilter( 'Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png' );
-			var docFilter : FileFilter = new FileFilter( 'Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt' );			
+			var allFilesFilter 	: FileFilter = new FileFilter( "All Files (*.*)", "*.*" );
+			var imagesFilter	: FileFilter = new FileFilter( 'Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png' );
+			var docFilter 		: FileFilter = new FileFilter( 'Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt' );			
 			
 			openFile.browseForOpen( "Choose file to upload", [ imagesFilter, docFilter, allFilesFilter ] );			
 			
-			function fileSelected(event:Event):void
+			function fileSelected( event:Event ):void
 			{
 				openFile.addEventListener(Event.COMPLETE, fileDounloaded);
 				openFile.load();				
