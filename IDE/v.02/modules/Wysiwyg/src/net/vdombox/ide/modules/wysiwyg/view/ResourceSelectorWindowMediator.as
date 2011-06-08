@@ -145,14 +145,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function applyExtensionFilter( event : Event ) : void
 		{
-			var typeFilter			: String	= resourceSelectorWindow.filter.selectedItem.data;
-			var newResourcesList	: ArrayList = new ArrayList(); 
-			var selectedResID		: String
+//			var oldSelectedResVO	: ResourceVO	= resourceSelectorWindow.resourcesList.selectedItem as ResourceVO;
+//			var oldSelectedResID	: String;
+			var typeFilter			: String		= resourceSelectorWindow.filter.selectedItem.data;
+			var newResourcesList	: ArrayList 	= new ArrayList();			
+			var resVO				: ResourceVO;
 			
-			if ( resourceSelectorWindow.resourcesList.selectedItem )
-				selectedResID = resourceSelectorWindow.resourcesList.selectedItem.id;
-			else
-				selectedResID = null;			
+//			if ( oldSelectedResVO )
+//				oldSelectedResID = oldSelectedResVO.id;
+//			else
+//				oldSelectedResID = null;			
 			
 			if ( typeFilter == "*" || typeFilter == "None" )
 			{
@@ -164,36 +166,65 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{		
 				resourceSelectorWindow.filteredResources = 0;
 				
-				for each ( var res : ResourceVO in allResourcesList.source )
+				for each ( resVO in allResourcesList.source )
 				{
-					if ( res.type == typeFilter )
+					if ( resVO.type == typeFilter )
 					{
 						resourceSelectorWindow.filteredResources++;
-						newResourcesList.addItem( res );
+						newResourcesList.addItem( resVO );
 					}
 				}
 				
 				resourceSelectorWindow.resources = newResourcesList;
 			}
 			
-			if ( selectedResID == null )
-				return;
+			// select item
+			/*
+			var countResources : int = resourceSelectorWindow.resources.length;
 			
-			resourceSelectorWindow.resourcesList.selectedIndex = 0;
-			
-			var res2 : ResourceVO;
-			
-			for ( var i : int = 0; i < resourceSelectorWindow.resources.length; i++ )
-			{		
-				res2 = resourceSelectorWindow.resources.source[i] as ResourceVO;
+			if ( countResources == 0 )
+			{
+				clearFields();
 				
-				if ( res2.id == selectedResID )
+				return;
+			}			
+			
+			if ( oldSelectedResID == null || oldSelectedResVO.type != typeFilter )
+			{	
+				setSelectedResource( resourceSelectorWindow.resources.source[0] as ResourceVO, 0 );
+				
+				return;
+			}
+			
+			for ( var i : int = 0; i < countResources; i++ )
+			{		
+				resVO = resourceSelectorWindow.resources.source[i] as ResourceVO;
+				
+				if ( resVO.id == oldSelectedResID )
 				{
-					resourceSelectorWindow.resourcesList.selectedIndex = i;
+					setSelectedResource( resVO, i );
 					
 					break;
 				}
-			}
+			}*/				
+		}
+//		
+//		private function setSelectedResource( res : ResourceVO, index : int) : void
+//		{
+//			resourceSelectorWindow.resourcesList.selectedIndex = index;
+//			
+//			resourceVO = res;
+//			
+//			loadResource();
+//		}
+		
+		private function clearFields() : void
+		{
+			resourceSelectorWindow.imagePreview.source		= null;
+			resourceSelectorWindow.resourceID.text	 		= "";
+			resourceSelectorWindow.resourceName.text 		= "";
+			resourceSelectorWindow.resourceType.text		= "";
+			resourceSelectorWindow.resourceResolution.text 	= "";
 		}
 		
 		private function removeHandlers() : void
@@ -214,12 +245,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{			
 			var resVO : ResourceVO = event.currentTarget.resourcesList.selectedItem as ResourceVO;
 			resourceVO = resVO;
+		
 			displayResourceProperties();			
 			
-			if ( !resVO.data || resVO.data == null )
+			if ( !resourceVO.data || resourceVO.data == null )
 			{
-				BindingUtils.bindSetter( previewImage, resVO, "data" );
-				sendNotification( ApplicationFacade.LOAD_RESOURCE, resVO );
+				BindingUtils.bindSetter( previewImage, resourceVO, "data" );
+				sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 				
 				return;
 			}
