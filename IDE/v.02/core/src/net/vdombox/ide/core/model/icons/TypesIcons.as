@@ -42,7 +42,7 @@ package net.vdombox.ide.core.model.icons
 		private static const swf_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/swf.png";
 		private static const txt_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/txt.png";
 		private static const wav_Icon 	: String = "./assets/resourceBrowserIcons/resourceType/wav.png";
-		private static const xls_Icon	: String = "./assets/resourceBrowserIcons/resourceType/xls.png";
+		private static const xls_Icon	: String = "resourceBrowserIcons/resourceType/xls.png";
 		
 		private static const file_broken_Icon : String = "assets/resourceBrowserIcons/resourceType/file_broken.png";
 		
