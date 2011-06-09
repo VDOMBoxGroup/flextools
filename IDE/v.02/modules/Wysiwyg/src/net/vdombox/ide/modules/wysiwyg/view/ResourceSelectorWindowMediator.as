@@ -199,18 +199,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 			
 			resourceSelectorWindow.resources = newResourcesList;
-		
-//			
-//			for ( var i : int = 0; i < tempResourcesList.Resource.length(); i++ )
-//			{
-//				if ( tempResourcesList.Resource[ i ].@id == _selectedItemID )
-//				{
-//					__thumbsList.selectedIndex = i;
-//					break;
-//				}
-//			}
-//			
-//			__spinner.visible = false;
 		}
 		
 		private function removeHandlers() : void

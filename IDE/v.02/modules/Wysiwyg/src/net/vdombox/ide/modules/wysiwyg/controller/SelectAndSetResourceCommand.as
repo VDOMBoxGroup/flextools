@@ -18,7 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	 *  
 	 * @author Elena Kotlova
 	 */
-	public class SelectAndLoadResourceCommand extends SimpleCommand
+	public class SelectAndSetResourceCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
 		{
@@ -46,6 +46,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				resourceVO.setID( openFile.name );//?
 				resourceVO.data = openFile.data;
 				resourceVO.name = openFile.name;
+				resourceVO.type = openFile.type.slice(1);// type has "."
 				
 				sendNotification( ApplicationFacade.SET_RESOURCE, resourceVO );
 			}

@@ -22,7 +22,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererRemovedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererTransformedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveSettingsToProxy;
-	import net.vdombox.ide.modules.wysiwyg.controller.SelectAndLoadResourceCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.SelectAndSetResourceCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.StartupCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.TearDownCommand;
@@ -96,8 +96,8 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const GET_RESOURCES : String = "getResources";
 		public static const RESOURCES_GETTED : String = "resourcesGetted";
 
-		public static const SET_RESOURCE : String = "setResource";
-		public static const RESOURCE_SETTED : String = "resourceSetted";
+		public static const SET_RESOURCE 	: String = "setResource";
+		public static const RESOURCE_SETTED : String = "resourceSetted"; //not used because they do not need to show at once
 		
 		public static const LOAD_RESOURCE 	: String = "loadResource";
 		public static const RESOURCE_LOADED	: String = "resourceLoaded"; //not used
@@ -243,7 +243,7 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 
 			registerCommand( OPEN_RESOURCE_SELECTOR_REQUEST, OpenResourceSelectorRequestCommand );
-			registerCommand( SELECT_AND_LOAD_RESOURCE, SelectAndLoadResourceCommand );
+			registerCommand( SELECT_AND_LOAD_RESOURCE, SelectAndSetResourceCommand );
 			registerCommand( OPEN_EXTERNAL_EDITOR_REQUEST, OpenExternalEditorRequestCommand );
 
 			registerCommand( RENDERER_CREATED, RendererCreatedCommand );
