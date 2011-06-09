@@ -9,4 +9,20 @@ CKEDITOR.editorConfig = function( config )
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
 	//config.width = "810";
+	
+	config.toolbar =
+	[
+		{ name: 'clipboard',	items : [ 'Undo','Redo' ] },
+		{ name: 'editing',		items : [ 'Find','Replace','-','SelectAll' ] },
+		{ name: 'forms',		items : [ ] },
+		{ name: 'basicstyles',	items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+		{ name: 'paragraph',	items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+		{ name: 'links',		items : [ ] },
+		'/',
+		{ name: 'insert',		items : [ 'Image','Table','HorizontalRule' ] },
+		{ name: 'styles',		items : [ 'Styles','Format','Font','FontSize' ] },
+		{ name: 'colors',		items : [ 'TextColor','BGColor' ] },
+		{ name: 'tools',		items : [ ] },
+		{ name: 'document',		items : [ 'Source' ] }
+	];
 };
