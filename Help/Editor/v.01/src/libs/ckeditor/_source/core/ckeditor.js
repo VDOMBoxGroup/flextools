@@ -38,7 +38,7 @@ CKEDITOR.document = new CKEDITOR.dom.document( document );
 CKEDITOR.add = function( editor )
 {
 	CKEDITOR.instances[ editor.name ] = editor;
-
+	
 	editor.on( 'focus', function()
 		{
 			if ( CKEDITOR.currentInstance != editor )

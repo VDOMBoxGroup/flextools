@@ -154,6 +154,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 
 			editor.addCommand( 'maximize',
 				{
+				
 					modes : { wysiwyg : 1, source : 1 },
 					readOnly : 1,
 					editorFocus : false,
@@ -175,7 +176,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 							savedSelection = !CKEDITOR.env.ie && [ $textarea.selectionStart, $textarea.selectionEnd ];
 							savedScroll = [ $textarea.scrollLeft, $textarea.scrollTop ];
 						}
-
+						this.state = CKEDITOR.TRISTATE_OFF;
 						if ( this.state == CKEDITOR.TRISTATE_OFF )		// Go fullscreen if the state is off.
 						{
 							// Add event handler for resizing.
@@ -344,6 +345,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			// Restore the command state after mode change, unless it has been changed to disabled (#6467)
 			editor.on( 'mode', function()
 				{
+					editor.execCommand('maximize');
 					var command = editor.getCommand( 'maximize' );
 					command.setState( command.state == CKEDITOR.TRISTATE_DISABLED ? CKEDITOR.TRISTATE_DISABLED : savedState );
 				}, null, null, 100 );

@@ -349,7 +349,7 @@ CKEDITOR.tools.extend( CKEDITOR.dom.element.prototype,
 			// Strip <?xml:namespace> tags in IE. (#3341).
 			return CKEDITOR.env.ie ? retval.replace( /<\?[^>]*>/g, '' ) : retval;
 		},
-
+		
 		getOuterHtml : function()
 		{
 			if ( this.$.outerHTML )

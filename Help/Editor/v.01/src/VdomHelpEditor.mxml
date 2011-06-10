@@ -20,6 +20,7 @@
 	<mx:Script>
 	<![CDATA[
 		import flash.text.engine.EastAsianJustifier;
+		import flash.utils.setTimeout;
 		
 		import mx.collections.XMLListCollection;
 		import mx.controls.Alert;

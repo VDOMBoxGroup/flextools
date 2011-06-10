@@ -5,9 +5,9 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.events.ResizeEvent;
+			
 			private function init():void
 			{
-				
 			}
 			
 			public function setHTML( value : String ) : void
