@@ -10,7 +10,7 @@
 	minWidth="650" minHeight="300"
 	layout="absolute" 
 	 creationComplete="{creationCompleteHandler()}"
-	backgroundColor="0x373739"   width="700" height="600" titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Aplication" 
+	backgroundColor="0x373739"   width="1000" height="800" titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Aplication" 
 	titleTextStyleName="tbStyle" titleIcon="@Embed('../assets/bookmarks.png')" xmlns:local="*">
 	<mx:Style>
 		.tbStyle {
@@ -317,28 +317,37 @@
 		private function resetHttpImages():void
 		{
 			trace ("[VdomHelpEditor] resetHttpImages");
-			var pattern:RegExp = /<[ ]*img[^>]*src[ ]*=[ ]*"(http:\/\/|https:\/\/)[^"]*"/ig;
-			var arrMatch:Array = html_wysiwyg.getHTML().match(pattern);
+			var pattern			: RegExp;
+			var arrMatch		: Array;
+			var oldPath 		: String;
+			var newPath 		: String;
+			var newWysiwygData	: String;
+			
+			pattern = /<[ ]*img[^>]*src[ ]*=[ ]*"(http:\/\/|https:\/\/)[^"]*"/ig;
+			arrMatch = html_wysiwyg.getHTML().match(pattern);
 			
 			for each (var strImg:String in arrMatch) 
 			{
-				var oldPath : String = strImg.split("\"")[strImg.split("\"").length-2]
-				var newPath : String = loadHttpImg(oldPath);
+				oldPath = strImg.split("\"")[strImg.split("\"").length-2]
+				newPath = loadHttpImg(oldPath);
 				
-				html_wysiwyg.setHTML(html_wysiwyg.getHTML().replace(oldPath, newPath));
+				newWysiwygData = html_wysiwyg.getHTML().replace(oldPath, newPath);
+				html_wysiwyg.setHTML(newWysiwygData);
 			}
 		}
 		
 		private function copyImg(aImageOldSrc_str:String):String
 		{
 			trace ("copyImg");
-			var targetPath : String; 
-			var imgFile : File;
+			var targetPath 	: String; 
+			var imgFile 	: File;
+			var newImgFile	: File; 
 			
 			targetPath = "resources/" + generateFileName(aImageOldSrc_str); 
-
 			imgFile = new File(aImageOldSrc_str);
-			imgFile.copyTo(File.applicationStorageDirectory.resolvePath(targetPath));
+			newImgFile = File.applicationStorageDirectory.resolvePath(targetPath);
+
+			imgFile.copyTo(newImgFile);
 			
 			return targetPath;
 		}
@@ -611,23 +620,26 @@
 			var fileName:String = "temp.html"	;
 			var content : ByteArray = new ByteArray();
 			
-			var sourseTxt:String = "";
+			var sourseTxt	: String;
+			
+			sourseTxt = "";
 			if (html_wysiwyg) {
 				sourseTxt = html_wysiwyg.getHTML();
 			}
-			var sourse : String = 
+			/*var sourse : String = 
 				"<html>" + 
-					"<head>" + 
+					"<head>" +
+						"<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />" +
 					"</head>" + 
 					"<body>" +
 					  sourseTxt +
-					"</body>"	;
-				
-			//content.writeUTFBytes(sourse);
-			content.writeUTFBytes(sourseTxt);
+					"</body>"	;*/
+			
+			trace ("sourseTxt " + sourseTxt) ;
+			
+			content.writeMultiByte(sourseTxt, "utf-8");
 			
 			saveFile(fileName, content);
-			
 			
 			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
 			
@@ -635,12 +647,12 @@
 			var f : File = File.applicationStorageDirectory; 
 			if(html)
 			{
-				html.location = fullPath; 
+				html.location = fullPath;
 				html.validateDisplayList();
 			}
 		}
-	
 		
+			
 		private function dragDropHandler(event:Event):void
 		{
 //			trace('dragDropHandler');
@@ -743,7 +755,7 @@
 					<!--mx:HBox width="100%" color="#000000" backgroundColor="#E4E4E4"  >
 					</mx:HBox-->
 					
-					<local:HTML_WYSIWYG id="html_wysiwyg"   width="100%" height="100%"/>
+					<local:HTML_WYSIWYG id="html_wysiwyg"   width="100%" height="100%" />
 					<mx:HBox width="100%" backgroundColor="0x373739" paddingBottom="3">
 						<mx:Canvas height="100%">
 							<mx:Label id="pageInformation" text="Title: title" color="#FFFFFF" 
@@ -767,7 +779,7 @@
 				</mx:VBox>
 			</mx:Canvas >
 			<mx:Canvas width="100%" height="100%" label="Preview" show="{htmlShowHandler()}">
-				<mx:HTML id="html"   width="100%" height="100%"  />
+				<mx:HTML  id="html"   width="100%" height="100%"  />
 			</mx:Canvas>
 			<!--mx:Canvas width="100%" height="100%" label="Sourse" color="#00FF00" >
 				<mx:TextArea id="htmlSource" width="100%" height="100%"  focusAlpha="0" />
