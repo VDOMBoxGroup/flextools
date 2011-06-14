@@ -38,6 +38,7 @@
 		private var sqlProxy : SQLProxy = new SQLProxy(); 
 		private var pageVersion: Number;
 		
+		
 		/***
 		 * 
 		 * + сохранить экспортируемую хмл
@@ -302,9 +303,13 @@
 		private function resetLocalImages():void
 		{
 			trace ("[VdomHelpEditor] resetLocalImages");
-			var pattern:RegExp = /<[ ]*img[^>]*src[ ]*=[ ]*"[^(resources)][^"]*"/ig;
-			var arrMatch:Array = html_wysiwyg.getHTML().match(pattern);
+			var pattern		: RegExp;
+			var arrMatch	: Array;
 			
+			pattern = /<[ ]*img[^>]*src[ ]*=[ ]*"[^(app-storage:\/resources)][^"]*"/ig;
+			arrMatch = html_wysiwyg.getHTML().match(pattern);
+			
+			trace ("[VdomHelpEditor] resetLocalImages: arrMatch.length = " + arrMatch.length);
 			for each (var strImg:String in arrMatch) 
 			{
 				var oldPath : String = strImg.split("\"")[strImg.split("\"").length-2]
@@ -326,6 +331,7 @@
 			pattern = /<[ ]*img[^>]*src[ ]*=[ ]*"(http:\/\/|https:\/\/)[^"]*"/ig;
 			arrMatch = html_wysiwyg.getHTML().match(pattern);
 			
+			trace ("[VdomHelpEditor] resetHttpImages: arrMatch.length = " + arrMatch.length);
 			for each (var strImg:String in arrMatch) 
 			{
 				oldPath = strImg.split("\"")[strImg.split("\"").length-2]
@@ -346,10 +352,11 @@
 			targetPath = "resources/" + generateFileName(aImageOldSrc_str); 
 			imgFile = new File(aImageOldSrc_str);
 			newImgFile = File.applicationStorageDirectory.resolvePath(targetPath);
-
+			trace ("newImgFile: " + newImgFile.url);
 			imgFile.copyTo(newImgFile);
 			
-			return targetPath;
+			//return targetPath;
+			return newImgFile.url;
 		}
 		
 		private function loadHttpImg(aImageOldSrc_str:String):String
@@ -358,6 +365,8 @@
 			var targetPath 	: String;
 			var urlRequest	: URLRequest;
 			var urlLoader	: URLLoader;
+			var file		: File;
+			
 			
 			targetPath = "resources/" + generateFileName(aImageOldSrc_str);
 			urlRequest = new URLRequest(aImageOldSrc_str);
@@ -369,18 +378,19 @@
 			urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoader_error);
 			urlLoader.load(urlRequest);
 			
+			file = File.applicationStorageDirectory.resolvePath(targetPath);
 			
 			function urlLoader_complete(evt:Event):void {
 				trace ("loadHttpImg: urlLoader_complete");
-				var file		: File;
-				var fileStream	: FileStream;
 				
-				file 		= File.applicationStorageDirectory.resolvePath(targetPath);
+				var fileStream	: FileStream;
+								
 				fileStream	= new FileStream();
 				try {
 					fileStream.open(file, FileMode.WRITE);
 					fileStream.writeBytes(urlLoader.data);
 					fileStream.close();
+					getCurrentPage();
 				} catch(error:IOError) {
 					trace("!!! Error Write !!! \n" + error.message +"\n");
 					return;
@@ -392,7 +402,8 @@
 			}
 			
 			
-			return targetPath;
+			//return targetPath;
+			return file.url;
 		}
 		
 		private function generateFileName(path:String):String
@@ -436,7 +447,7 @@
 			
 			for (var i:String in result)
 			{
-				var pageContent : String = result[i]["content"]
+				var pageContent : String = resetPageContent(result[i]["content"]);
 				
 				var tempXML : XML = new XML("<page/>");
 					tempXML.name = result[i]["name"];
@@ -508,6 +519,15 @@
 					}
 					
 					return XML("<![CDATA[" + sourse +"]"+ "]>");
+				}
+				
+				function resetPageContent(aPageContent:String) : String 
+				{
+					var pattern : RegExp;
+					
+					pattern = /app-storage:\//g;
+					
+					return aPageContent.replace(pattern, "");	
 				}
 			}
 			
@@ -635,7 +655,7 @@
 					  sourseTxt +
 					"</body>"	;*/
 			
-			trace ("sourseTxt " + sourseTxt) ;
+			//trace ("sourseTxt " + sourseTxt) ;
 			
 			content.writeMultiByte(sourseTxt, "utf-8");
 			
