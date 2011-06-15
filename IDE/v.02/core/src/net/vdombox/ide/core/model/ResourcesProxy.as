@@ -17,6 +17,7 @@ package net.vdombox.ide.core.model
 	import mx.controls.Image;
 	import mx.effects.Resize;
 	import mx.graphics.codec.PNGEncoder;
+	import mx.resources.ResourceBundle;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
@@ -93,10 +94,30 @@ package net.vdombox.ide.core.model
 			token.recipientName = proxyName;
 			token.applicationVO = applicationVO;
 		}
+		
+		private function qqq( object : Object ) : void
+		{
+			if ( object )
+			{				
+				typesIcons.res.data = object as ByteArray;
+				sendNotification( ApplicationFacade.RESOURCE_LOADED, typesIcons.res );
+				typesIcons.res = null;
+				typesIcons.data = null;
+			}
+		}
 
 		public function loadResource( resourceVO : ResourceVO ) : void
 		{		
 			trace("++++++ loadResource ++++++");
+			
+			if ( resourceVO.type && !typesIcons.isViewable( resourceVO.type ) ) 
+			{
+				typesIcons.res = resourceVO;
+				BindingUtils.bindSetter( qqq, typesIcons, "data" );
+				typesIcons.getResource( resourceVO.type );	
+				return;
+			}
+					
 			var resource : ByteArray = cacheManager.getCachedFileById( resourceVO.id );
 			
 			//file is located in the file system user
@@ -250,11 +271,10 @@ package net.vdombox.ide.core.model
 		{			
 			if ( typesIcons.isViewable( resourceVO.type ) ) 
 			{
-				setIcon( resourceVO )
+				setIcon( resourceVO );
 			}
 			else // if not viewable
 			{ 
-//				BindingUtils.bindSetter( aaa, typesIcons, "data" );
 				typesIcons.res = resourceVO;
 				BindingUtils.bindSetter( aaa, typesIcons, "data" );
 				typesIcons.getResource( resourceVO.type );				
@@ -269,7 +289,6 @@ package net.vdombox.ide.core.model
 					creationIconCompleted( typesIcons.res, object as ByteArray );
 					typesIcons.res = null;
 					typesIcons.data = null;
-					trace(" н унаконеч-то!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				}
 		}
 		
@@ -489,6 +508,7 @@ package net.vdombox.ide.core.model
 					resourceVO = event.token.resourceVO as ResourceVO;
 					
 					cacheManager.deleteFile( resourceVO.id );
+					cacheManager.deleteFile( resourceVO.id + "_icon" );
 					
 					resourceVO.setData( null );
 					resourceVO.setPath( null );
