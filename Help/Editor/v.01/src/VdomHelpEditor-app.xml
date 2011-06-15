@@ -9,18 +9,18 @@
 		runtime required to run the application. Optional. -->
 
 	<!-- The application identifier string, unique to this application. Required. -->
-	<id>VdomHelpEditor</id>
+	<id>net.vdombox.VdomHelpEditor</id>
 
 	<!-- Used as the filename for the application. Required. -->
-	<filename>VdomHelpEditor</filename>
+	<filename>VdomHelpEditor.v1.0.1.001</filename>
 
 	<!-- The name that is displayed in the AIR application installer. May have 
 		multiple values for each language. See samples or xsd schema file. Optional. -->
-	<name>VdomHelpEditor</name>
+	<name>VdomHelpEditor.v1.0.1.001</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). 
 		Required. -->
-	<version>v1</version>
+	<version>v1.0.1.001</version>
 
 	<!-- Description, displayed in the AIR application installer. May have multiple 
 		values for each language. See samples or xsd schema file. Optional. -->
