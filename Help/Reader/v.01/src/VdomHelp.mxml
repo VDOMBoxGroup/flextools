@@ -177,7 +177,7 @@
 		
 		private function pageChangedHandler(event:Event):void
 		{
-			var fullPath:String = html.location;
+			var fullPath:String = unescape(html.location);
 			var fileName : String = fullPath.substr( 13 ); 
 			var phraseRE:RegExp = /\\/gim;
 			fileName = fileName.replace(phraseRE,"/"); 
@@ -308,7 +308,7 @@
 		
 		private function markPage():void
 		{
-			var fullPath:String = html.location;
+			var fullPath:String = unescape(html.location);
 			var fileName : String = fullPath.substr( 13 ); 
 			var phraseRE:RegExp = /\\/gim;
 			fileName = fileName.replace(phraseRE,"/"); 
