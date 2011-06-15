@@ -352,7 +352,6 @@
 			targetPath = "resources/" + generateFileName(aImageOldSrc_str); 
 			imgFile = new File(aImageOldSrc_str);
 			newImgFile = File.applicationStorageDirectory.resolvePath(targetPath);
-			trace ("newImgFile: " + newImgFile.url);
 			imgFile.copyTo(newImgFile);
 			
 			//return targetPath;
@@ -404,7 +403,7 @@
 			
 			//return targetPath;
 			return file.url;
-		}
+		} 
 		
 		private function generateFileName(path:String):String
 		{

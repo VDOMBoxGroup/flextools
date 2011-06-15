@@ -108,7 +108,8 @@
 				<mx:TextInput id="pageLabel" x="65" y="11" text="Label of product" width="211"/>
 				
 				<mx:Label x="18" y="42" text="Name:"/>
-				<mx:TextInput id="pageName" x="65" y="40" text="Like 'VDOM_IDE'" width="211"/>
+				<mx:TextInput id="pageName" x="65" y="40" width="211" editable="false"
+							  text="Like 'VDOM_IDE'"/>
 				
 				<mx:Label x="18" y="194" text="Version:"/>
 				<mx:Label id="pageVersion" x="77" y="194" text="12"  width="41"/>
