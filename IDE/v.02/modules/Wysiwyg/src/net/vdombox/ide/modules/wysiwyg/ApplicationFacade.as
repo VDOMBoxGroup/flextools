@@ -99,6 +99,8 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const SET_RESOURCE 	: String = "setResource";
 		public static const RESOURCE_SETTED : String = "resourceSetted"; //not used because they do not need to show at once
 		
+		public static const DELETE_RESOURCE : String = "deleteResource";
+		
 		public static const LOAD_RESOURCE 	: String = "loadResource";
 		public static const RESOURCE_LOADED	: String = "resourceLoaded"; //not used
 		public static const MODIFY_RESOURCE : String = "modifyResource";

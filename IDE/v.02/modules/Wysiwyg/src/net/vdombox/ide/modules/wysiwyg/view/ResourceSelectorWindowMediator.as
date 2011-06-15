@@ -8,6 +8,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
+	import mx.controls.Alert;
+	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
@@ -17,6 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -31,6 +34,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var resourceVO 			: ResourceVO = new ResourceVO( "temp owner" );
 		private var _resourceSelector 	: ResourceSelector;
 		private var sessionProxy 		: SessionProxy;
+		
 		
 		
 		public function ResourceSelectorWindowMediator( resourceSelectorWindow : ResourceSelectorWindow ) : void
@@ -142,8 +146,34 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			resourceSelectorWindow.typeFilter.addEventListener( Event.CHANGE, applyTypeFilter );
 			resourceSelectorWindow.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
+			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler );//"DeleteResource", xxx ); 
 		}
+				
+		private function deleteResourceHandler( event : ListItemEvent ) : void
+		{
+			//delete from server
+			sendNotification( ApplicationFacade.DELETE_RESOURCE, { resourceVO: event.resource, applicationVO : sessionProxy.selectedApplication} );
+			
+			//delete from view
+			resourceSelectorWindow.deleteResourceID = event.resource.id;
+			
+			resourceSelectorWindow.invalidateProperties(); //?
+			
+			allResourcesList = resourceSelectorWindow.resources;
+		}	
 		
+//		override protected function commitProperties():void
+//		{
+//			super.commitProperties();
+//			
+//			if ( _deleteResourceID )
+//			{
+//				_deleteResourceID = null;
+//				
+//				resourceSelectorWindow.resources.source = arrayWithoutResource( event.resourceID );
+//			}
+//		}
+						
 		private function applyTypeFilter( event : Event ) : void
 		{
 			var typeFilter			: String		= resourceSelectorWindow.typeFilter.selectedItem.data;
@@ -222,7 +252,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 			displayResourceProperties();			
 			
-			if ( !resourceVO.data || resourceVO.data == null )
+			if ( !resourceVO.data || resourceVO.data != null )
 			{
 				BindingUtils.bindSetter( previewImage, resourceVO, "data" );
 				sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
@@ -230,7 +260,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				return;
 			}
 			
-			previewImage();
+			previewIconImage();
 		}
 		
 		private function displayResourceProperties( ) : void
@@ -243,41 +273,56 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function loadFileHandler( event : ResourceSelectorWindowEvent ) : void
 		{
 			sendNotification( ApplicationFacade.SELECT_AND_LOAD_RESOURCE, sessionProxy.selectedApplication );
+			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
 		}
 		
-		private function previewImage( object : Object = null ) : void 
+		private function previewIconImage( ) : void 
 		{
-			//for convert to bitmapData and get width and height of resource
 			var loader : Loader = new Loader();	
 			loader.name = resourceVO.id;
 			
-			if ( resourceVO.icon != null )
-			{
-				resourceSelectorWindow.imagePreview.source = resourceVO.icon;
-				loader.loadBytes(resourceVO.icon);
-			}
-			else if ( resourceVO.data != null )
-			{
-				resourceSelectorWindow.imagePreview.source = resourceVO.data;
-				loader.loadBytes(resourceVO.data);
-			}
-			else
-				return
+			resourceSelectorWindow.imagePreview.source = resourceVO.icon;
+			loader.loadBytes(resourceVO.icon);
 			
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loaderComplete);
 		}
+		
+		private function previewImage( object : Object ) : void 
+		{
+			//for convert to bitmapData and get width and height of resource
+			if ( object )
+			{		
+				var loader : Loader = new Loader();	
+				loader.name = resourceVO.id;
+				
+				if ( resourceVO.data != null )
+				{
+					resourceSelectorWindow.imagePreview.source = resourceVO.data;
+					loader.loadBytes(resourceVO.data);
+				}
+				else
+					return
+				
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loaderComplete);
+			}
+		}
 			
-		//convert to bitmapData 
+		/**
+		 * convert to bitmapData for get resolution of Resource 
+		 */
 		private function loaderComplete( event : Event ):void
 		{
-			var loaderInfo : LoaderInfo;
-			var bitmapData : BitmapData;
-			
-			loaderInfo	= LoaderInfo( event.target );
-			bitmapData	= new BitmapData(loaderInfo.width, loaderInfo.height, false, 0xFFFFFF);
-			bitmapData.draw(loaderInfo.loader); 
-			
-			resourceSelectorWindow.resourceResolution.text = bitmapData.width + " x " + bitmapData.height;
+			if ( resourceSelectorWindow.resources.length > 0 )
+			{
+				var loaderInfo : LoaderInfo;
+				var bitmapData : BitmapData;
+				
+				loaderInfo	= LoaderInfo( event.target );
+				bitmapData	= new BitmapData(loaderInfo.width, loaderInfo.height, false, 0xFFFFFF);
+				bitmapData.draw(loaderInfo.loader); 
+				
+				resourceSelectorWindow.resourceResolution.text = bitmapData.width + " x " + bitmapData.height;
+			}
 		}		
 		
 		private function applyHandler( event : ResourceSelectorWindowEvent ) : void

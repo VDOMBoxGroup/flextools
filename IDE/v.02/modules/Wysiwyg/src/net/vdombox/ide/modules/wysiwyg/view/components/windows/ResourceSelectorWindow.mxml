@@ -25,10 +25,12 @@
 			[ Bindable ]
 			public var filteredResources : int = 0;
 			
+			public var deleteResourceID	: String = null;
+			
 			[Bindable]
 			private var _resources : ArrayList;
 
-			private var _value : String;
+			private var _value : String;		
 
 			public function get value() : String
 			{
@@ -71,6 +73,50 @@
 				}
 			}
 			
+			override protected function commitProperties():void
+			{
+				super.commitProperties();
+				
+				if ( deleteResourceID )
+				{					
+					var selInd : uint = resourcesList.selectedIndex;
+					
+					resources.source = arrayWithoutResource( deleteResourceID );
+					
+					totalResources = resources.length;
+					
+					deleteResourceID = null;
+					
+					if ( resources.length > 0 )
+					{
+						resourcesList.selectedIndex = ( selInd > 0 ) ? selInd -1 : 0;
+						selectResource();
+					}
+					else
+						clearPreloaderField();
+				}
+			}
+			
+			private function clearPreloaderField( ) : void
+			{
+				imagePreview.source		= null;
+				resourceID.text			= "";
+				resourceName.text		= "";
+				resourceResolution.text	= "";
+				resourceType.text		= "";
+			}
+			
+			private function arrayWithoutResource( idRes : String ) : Array
+			{
+				var newArray : Array = new Array();
+				for each ( var resVO : ResourceVO in resources.source )
+				{
+					if ( resVO.id != idRes )
+						newArray.push( resVO );
+				}
+				return newArray;
+			}
+			
 			/**
 			 * @private
 			 * close ResourceSelectorWindow if down ESCAPE or if down button "Apply"
@@ -102,11 +148,9 @@
 				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCES ) );			
 			}
 
-			protected function selectResource(event:Event):void
+			protected function selectResource( event:Event = null ):void
 			{
-				event.currentTarget;
-				
-				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) );
+					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) );
 			}
 
 //			protected function resourcesList_changeHandler(event:ListEvent):void

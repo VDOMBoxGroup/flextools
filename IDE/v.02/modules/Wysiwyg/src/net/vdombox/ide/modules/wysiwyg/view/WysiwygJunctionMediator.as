@@ -73,6 +73,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.GET_RESOURCES );
 			interests.push( ApplicationFacade.SET_RESOURCE );
+			interests.push( ApplicationFacade.DELETE_RESOURCE );
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
 			interests.push( ApplicationFacade.MODIFY_RESOURCE );
 			
@@ -226,6 +227,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					trace("SET_RESOURCE")
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE, PPMResourcesTargetNames.RESOURCE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+
+				case ApplicationFacade.DELETE_RESOURCE:
+				{
+					trace("DELETE_RESOURCE")
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE, PPMResourcesTargetNames.RESOURCE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

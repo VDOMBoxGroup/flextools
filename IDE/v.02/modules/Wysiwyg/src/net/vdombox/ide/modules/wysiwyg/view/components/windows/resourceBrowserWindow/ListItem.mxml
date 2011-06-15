@@ -22,12 +22,10 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mx.controls.Image;
-			import mx.effects.Resize;
-			import mx.messaging.channels.StreamingAMFChannel;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
-
 			
 			private var _id:String;
 			private var _objType:String = '';
@@ -47,7 +45,7 @@
 				{
 					objName = resourceVO.name;
 					objType = resourceVO.type;
-					objID 	= resourceVO.id;
+					objID	= resourceVO.id;
 				}
 				catch ( error : Error ) 
 				{
@@ -58,48 +56,60 @@
 				smoothImage.source = resourceVO.icon;
 			}
 
-			private var imageSourceLoader:Loader;
+//			private var imageSourceLoader:Loader;
 			
-			public function set resource ( source : Object ) : void 
-			{
-				imageSourceLoader = new Loader();
-				imageSourceLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-				imageSourceLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoaded);
-				
-				if( ByteArray(source.data).length )
-					imageSourceLoader.loadBytes(ByteArray(source.data));
-				else
-					var d : * = "";
-			}
+//			public function set resource ( source : Object ) : void 
+//			{
+//				imageSourceLoader = new Loader();
+//				imageSourceLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+//				imageSourceLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoaded);
+//				
+//				if( ByteArray(source.data).length )
+//					imageSourceLoader.loadBytes(ByteArray(source.data));
+//				else
+//					var d : * = "";
+//			}
 
-			private function ioErrorHandler(ioEvent:IOErrorEvent):void 
-			{
-				imageSourceLoader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-				imageSourceLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoaded);
-//				smoothImage.source = typesIcons.broken_Icon;
+//			private function ioErrorHandler(ioEvent:IOErrorEvent):void 
+//			{
+//				imageSourceLoader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+//				imageSourceLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoaded);
+////				smoothImage.source = typesIcons.broken_Icon;
+//			}
+//			
+//			private function imageLoaded(e:Event):void 
+//			{
+//				imageSourceLoader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+//				imageSourceLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoaded);
+//				smoothImage.source = imageSourceLoader.content;
+//				res.text = imageSourceLoader.width.toString() + "x" + imageSourceLoader.height.toString();			
+//				deleteButton.enabled = true;
+//			}
+			
+			public function set objName( text : String ):void 
+			{ 
+				resName.text = text; 
 			}
 			
-			private function imageLoaded(e:Event):void 
-			{
-				imageSourceLoader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-				imageSourceLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoaded);
-				smoothImage.source = imageSourceLoader.content;
-				res.text = imageSourceLoader.width.toString() + "x" + imageSourceLoader.height.toString();			
-				deleteButton.enabled = true;
+			public function get objName():String 
+			{ 
+				return resName.text; 
 			}
 			
-			public function set objName(text:String):void { resName.text = text; }
+			public function set objID( objID : String ) : void 
+			{
+				_id = objID; 
+			}
 			
-			public function get objName():String { return resName.text; }
+			public function get objID() : String 
+			{
+				return _id; 
+			}
 			
-			public function set objID(objID:String):void { _id = objID; }
-			
-			public function get objID():String { return _id; }
-			
-			public function set objType(objType:String):void 
+			public function set objType( objType : String) : void 
 			{
 				type.text = objType.toUpperCase() + ":";
-				_objType = objType;
+				_objType  = objType;
 			}
 			
 			public function get objType():String 
@@ -109,12 +119,23 @@
 			
 			private function deleteButton_clickHandler( event : MouseEvent ) : void
 			{
-//				dispatchEvent( new Event( 'DeleteResource' ));
-				var lie : ListItemEvent = new ListItemEvent( ListItemEvent.DELETE_RESOURCE );
-				lie.resourceID = objID;
-				lie.resourceName = objName;
-				lie.resourceType = objType;
-				owner.dispatchEvent( lie );
+				//Alert.show( "Delete resource: " +  resourceVO.name + "?", "Alert!", Alert.YES | Alert.NO,
+					//this, acceptDeleteHandler )
+				acceptDeleteHandler();
+//				owner.dispatchEvent( new Event( "DeleteResource", true, true ));
+			}
+			
+			private function acceptDeleteHandler() : void// (event : CloseEvent ) : void
+			{
+//				if ( event.detail == Alert.YES )
+//				{
+					var lie : ListItemEvent = new ListItemEvent( ListItemEvent.DELETE_RESOURCE );
+					lie.resource = resourceVO;
+//					lie.resourceID = objID;
+//					lie.resourceName = objName;
+//					lie.resourceType = objType;
+					owner.dispatchEvent( lie );
+//				}
 			}
 			
 		]]>
