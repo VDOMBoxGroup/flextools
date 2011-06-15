@@ -101,6 +101,11 @@ package net.vdombox.ide.common.vo
 		{
 			return _type;
 		}
+		
+		public function set type( value : String ) : void
+		{
+			_type = value;
+		}
 //
 //		[Bindable(event="propertyDataChange")]
 //		public function get data() : ByteArray
