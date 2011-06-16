@@ -26,8 +26,8 @@
 			import mx.managers.PopUpManager;
 			import mx.events.CloseEvent;
 			
-			private var sqlProxy:SQLProxy = new SQLProxy();
-			
+			private var sqlProxy 	: SQLProxy = new SQLProxy();
+			private var lbError 	: Label;
 			
 			private function creationComplete():void 
 			{
@@ -40,7 +40,8 @@
 				
 				productTitle.setFocus();
 				
-				var lbError : Label = new Label();
+				// set default error txt 
+				lbError = new Label();
 				lbError.text = "This Name already in Data Base";
 				lbError.setStyle("color", "#FF0000");
 				
@@ -85,7 +86,17 @@
 			private var errorFormItem : FormItem = new FormItem();
 			private function okHandler():void 
 			{
-				if(!sqlProxy.productInDB(productName.text))
+				if (productName.text.length == 0) 
+				{
+					lbError.text = "'Name' field is empty";
+					errorFormItem.label = "Error:"
+					//					formHeading.addChild(errorFormItem);
+					trace("Error: 'Name' field is empty")
+					
+					if(!form.contains(errorFormItem))
+						form.addChild(errorFormItem);
+					
+				} else if(!sqlProxy.productInDB(productName.text))
 				{
 					sqlProxy.addProduct(productName.text, '0', productTitle.text,
 						productDescription.text,  productLanguage.text );
@@ -94,6 +105,7 @@
 					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 				} else
 				{
+					lbError.text = "This Name already in Data Base";
 					errorFormItem.label = "Error:"
 //					formHeading.addChild(errorFormItem);
 					trace("Error: Wtis name already in DateBase")
