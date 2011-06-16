@@ -283,13 +283,12 @@ package net.vdombox.ide.core.model
 		
 		private function aaa( object : Object ) : void
 		{
-//				if ( typesIcons.res.icon )
-				if ( object )
-				{
-					creationIconCompleted( typesIcons.res, object as ByteArray );
-					typesIcons.res = null;
-					typesIcons.data = null;
-				}
+			if ( object )
+			{
+				creationIconCompleted( typesIcons.res, object as ByteArray );
+				typesIcons.res = null;
+				typesIcons.data = null;
+			}
 		}
 		
 		private function creationIconCompleted( resourceVO : ResourceVO, file:ByteArray ) : void
