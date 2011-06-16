@@ -35,19 +35,20 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 //							sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, sessionProxy.selectedObject );
 //							sendNotification( ApplicationFacade.GET_OBJECT_WYSIWYG, sessionProxy.selectedObject );
 						}
-					}else if ( operation == PPMOperationNames.READ )
+					}
+					else if ( operation == PPMOperationNames.READ )
 					{
 //						var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
-						
 //						resourcesProxy.resourceGeted( body as ResourceVO);
 					}
-					
+					else if ( operation == PPMOperationNames.CREATE )
+						sendNotification( ApplicationFacade.RESOURCE_SETTED, body );
 					
 					break;
 				}
 					
 				case PPMResourcesTargetNames.RESOURCES:
-				{
+				{					
 					if ( operation == PPMOperationNames.READ )
 						sendNotification( ApplicationFacade.RESOURCES_GETTED, body );
 
