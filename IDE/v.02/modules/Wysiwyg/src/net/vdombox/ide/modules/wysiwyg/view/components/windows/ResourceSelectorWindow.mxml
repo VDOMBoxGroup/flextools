@@ -26,11 +26,15 @@
 
 			public var deleteResourceID		: String = null;
 			
+			public var scrollToIndex		: int 	=  -1;
+			
+			public var selectedResourceIndex : int  = -1;
+			
 			[Bindable]
 			private var _resources : ArrayList;
 
-			private var _value : String;		
-
+			private var _value : String;	
+			
 			public function get value() : String
 			{
 				return resourcesList.selectedItem ? resourcesList.selectedItem.id : "";
@@ -44,7 +48,7 @@
 
 			public function set resources( value : ArrayList ) : void
 			{				
-				_resources = value;	//new ArrayList( value );
+				_resources = value;
 				setSelectedItem();
 			}
 						
@@ -64,7 +68,7 @@
 				{
 					if ( resourceVO.id == _value.substring( 5, _value.length - 1 ) )
 					{
-						resourcesList.selectedItem = resourceVO;
+						resourcesList.selectedItem = resourceVO;						
 						dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) )
 						
 						break;
@@ -82,19 +86,43 @@
 					
 					resources.source = arrayWithoutResource( deleteResourceID );
 					
-					totalResources = resources.length-1;
-					
-					deleteResourceID = null;
+					totalResources = resources.length-1;					
 					
 					if ( resources.length > 1 && selInd > 1)
 					{
-						resourcesList.selectedIndex = ( selInd > 0 ) ? selInd -1 : 0;
-						selectResource();
+						selInd = ( selInd > 0 ) ? selInd -1 : 0;
+						
+						selectedResourceIndex	= selInd;
+						scrollToIndex			= selInd;						
 					}
 					else
 					{						
 						clearPreloaderField();
 					}
+					
+					deleteResourceID = null;
+				}
+				
+				if ( scrollToIndex >= 0 )
+				{
+					resourcesList.scrollToIndex( scrollToIndex );
+					
+					scrollToIndex = -1;
+				}
+				
+				if ( selectedResourceIndex >= 0 )
+				{
+					if ( selectedResourceIndex == 0)
+					{
+						clearPreloaderField();
+					}
+					else
+					{	
+						resourcesList.selectedIndex = selectedResourceIndex;
+						selectResource();						
+					}
+					
+					selectedResourceIndex = -1;
 				}
 			}
 			

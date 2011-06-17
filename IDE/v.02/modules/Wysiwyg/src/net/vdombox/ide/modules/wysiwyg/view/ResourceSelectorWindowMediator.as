@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
 	import flash.utils.ByteArray;
+	import flash.utils.Timer;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
@@ -99,7 +100,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					try
 					{
-//						resourceSelectorWindow.resources.setItemAt( icon, 0 );
 						NoneIcon.name = "resource no";
 						NoneIcon.icon = file.data;
 						NoneIcon.data = file.data;
@@ -180,6 +180,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					}
 					
 					resourceSelectorWindow.resources.addItemAt( NoneIcon, 0 );
+					if ( resourceSelectorWindow.resourcesList.selectedIndex > 0 )
+						resourceSelectorWindow.resourcesList.scrollToIndex( resourceSelectorWindow.resourcesList.selectedIndex );
 					resourceSelectorWindow.typeFilter.dataProvider = _filters;
 					resourceSelectorWindow.totalResources = resourceSelectorWindow.resources.length-1;
 
@@ -189,7 +191,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
 //					sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );		
-					//resourceVO = body as ResourceVO;
 					addNewResourceInList( body as ResourceVO );
 					
 					break;
@@ -201,11 +202,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			resourceVO = resVO;
 			
-			BindingUtils.bindSetter( dataLoaded, resVO, "icon" );
-			filters = resVO.type;
-			sendNotification( ApplicationFacade.GET_ICON, resourceVO );
-//			resourceSelectorWindow.resources.addItemAt( resourceVO, resourceSelectorWindow.resources.length );
+			BindingUtils.bindSetter( iconForNewResGetted, resourceVO, "icon" );			
 			
+			sendNotification( ApplicationFacade.GET_ICON, resourceVO );			
+		}
+		
+		private function iconForNewResGetted( object : Object ) : void
+		{
+			if ( object )
+			{
+				filters = resourceVO.type;
+				resourceSelectorWindow.totalResources ++;
+				resourceSelectorWindow.resources.addItemAt( resourceVO, resourceSelectorWindow.resources.length );
+				resourceSelectorWindow.scrollToIndex = resourceSelectorWindow.resources.length-1;
+				resourceSelectorWindow.selectedResourceIndex = resourceSelectorWindow.resources.length-1;
+				resourceSelectorWindow.invalidateProperties();
+			}
 		}
 		
 		private function dataLoaded( object : Object = null ) : void
@@ -335,7 +347,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function displayResourceProperties() : void
 		{
-			resourceSelectorWindow.resourceID.text = "ID: " + resourceVO.id;
+			resourceSelectorWindow.resourceID.text 	 = "ID: " + resourceVO.id;
 			resourceSelectorWindow.resourceName.text = resourceVO.name;
 			resourceSelectorWindow.resourceType.text = resourceVO.type;
 		}
