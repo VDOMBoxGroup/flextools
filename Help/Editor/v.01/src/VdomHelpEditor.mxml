@@ -1,816 +1,958 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication
-	
-	showStatusBar="false"
-	showGripper="false"
-	showTitleBar="false"
-	
-	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	minWidth="650" minHeight="300"
-	layout="absolute" 
-	 creationComplete="{creationCompleteHandler()}"
-	backgroundColor="0x373739"   width="1000" height="800" titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Aplication" 
-	titleTextStyleName="tbStyle" titleIcon="@Embed('../assets/bookmarks.png')" xmlns:local="*">
+<mx:WindowedApplication showStatusBar="false"
+						showGripper="false"
+						showTitleBar="false"
+						xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
+						xmlns:mx="http://www.adobe.com/2006/mxml"
+						minWidth="650"
+						minHeight="300"
+						layout="absolute"
+						creationComplete="{creationCompleteHandler()}"
+						backgroundColor="0x373739"
+						width="1000"
+						height="800"
+						titleBarColors="[ 0x666666, 0x222222 ]"
+						title="VDOM Help Aplication"
+						titleTextStyleName="tbStyle"
+						titleIcon="@Embed('../assets/bookmarks.png')"
+						xmlns:local="*">
 	<mx:Style>
 		.tbStyle {
 			color : #FFFFFF;
 		}
 	</mx:Style>
 	<mx:Script>
-	<![CDATA[
-		import flash.text.engine.EastAsianJustifier;
-		import flash.utils.setTimeout;
-		
-		import mx.collections.XMLListCollection;
-		import mx.controls.Alert;
-		import mx.events.CloseEvent;
-		import mx.events.FlexEvent;
-		import mx.events.ListEvent;
-		import mx.events.ResizeEvent;
-		import mx.managers.PopUpManager;
-		import mx.messaging.channels.StreamingAMFChannel;
-		import mx.utils.Base64Decoder;
-		import mx.utils.Base64Encoder;
-		import mx.utils.UIDUtil;
-		import mx.validators.StringValidator;
-	
-		private var sqlProxy : SQLProxy = new SQLProxy(); 
-		private var pageVersion: Number;
-		
-		
-		/***
-		 * 
-		 * + сохранить экспортируемую хмл
-		 * - прогресс бар
-		 * + вывести на экран сообщение о том куда и покаким именем сохранен файл
-		 * 
-		 * + выбрать картинку
-		 * + скопировать ее в кэшь
-		 * + вставить в текст кода странички
-		 * 
-		 * = экспортировать картинки в хмл
-		 * 	+ по странично выбрать  список ресурсов странички
-		 *  + вставить ресурс в хмл
-		 * 
-		 * -------------------
-		 * + создать загрузочную хмл
-		 * + изменение свойств страницы 
-		 * + дисаблить кнопку создания продукта
-		 * + удалять все страницы, когда удаляем продукт
-		 * + сделать ссылку на страницу
-		 * - автоматически поправлять ссылки  при изменении имени и названия страницы
-		 * 
-		 */
-		 
-		 
-		
-		private function creationCompleteHandler():void
-		{
-			sqlProxy.creatDB();
-			
-			showAllProducts();
+		<![CDATA[
+			import com.adobe.crypto.MD5Stream;
+
+			import flash.text.engine.EastAsianJustifier;
+			import flash.utils.getDefinitionByName;
+			import flash.utils.setTimeout;
+
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			import mx.events.ResizeEvent;
+			import mx.managers.PopUpManager;
+			import mx.messaging.channels.StreamingAMFChannel;
+			import mx.utils.Base64Decoder;
+			import mx.utils.Base64Encoder;
+			import mx.utils.UIDUtil;
+			import mx.validators.StringValidator;
+
+			private var sqlProxy : SQLProxy = new SQLProxy();
+
+			private var pageVersion : Number;
+
+
+			/***
+			 *
+			 * + сохранить экспортируемую хмл
+			 * - прогресс бар
+			 * + вывести на экран сообщение о том куда и покаким именем сохранен файл
+			 *
+			 * + выбрать картинку
+			 * + скопировать ее в кэшь
+			 * + вставить в текст кода странички
+			 *
+			 * = экспортировать картинки в хмл
+			 * 	+ по странично выбрать  список ресурсов странички
+			 *  + вставить ресурс в хмл
+			 *
+			 * -------------------
+			 * + создать загрузочную хмл
+			 * + изменение свойств страницы
+			 * + дисаблить кнопку создания продукта
+			 * + удалять все страницы, когда удаляем продукт
+			 * + сделать ссылку на страницу
+			 * - автоматически поправлять ссылки  при изменении имени и названия страницы
+			 *
+			 */
+
+
+
+			private function creationCompleteHandler() : void
+			{
+				sqlProxy.creatDB();
+
+				showAllProducts();
 //			tree.dataProvider = XML("<page title = 'page 0' name = 'page_0' isBranch='true' />");
-		}
-		
-		private function treeChangeHandler(lstEvt:ListEvent):void
-		{
+			}
+
+			private function treeChangeHandler(lstEvt:ListEvent) : void
+			{
 //			showSelectedPage(tree.selectedItem.@name);
 //			trace("Tree Change");
-			var tocString : String = tree.dataProvider.toXMLString();
+				var tocString : String = tree.dataProvider.toXMLString();
 
-			try{
-			 // some code that could throw an error
-			 	XML(tocString);
-			}
-			catch (err:Error)
-			{
-			 // code to react to the error
-				 getTocFromDataBase();
-				 Alert.show("Impossible operation", "Error:");
-			 	return;
+				try
+				{
+					// some code that could throw an error
+					XML(tocString);
+				}
+				catch ( err : Error )
+				{
+					// code to react to the error
+					getTocFromDataBase();
+					Alert.show("Impossible operation", "Error:");
+					return;
+				}
+
+				sqlProxy.setToc(tocString, cmboxProduct.selectedItem.name);
+
+				if ( !tree.selectedItem )
+				{
+					tree.selectedItem = XML(lstEvt.itemRenderer.data.toXMLString());
+					tree.validateNow();
+				}
+
+				getCurrentPage();
+				htmlShowHandler();
 			}
 
-			sqlProxy.setToc(tocString, cmboxProduct.selectedItem.name);
-			if(!tree.selectedItem)
+			private function getCurrentPage() : void
 			{
-				tree.selectedItem = XML(lstEvt.itemRenderer.data.toXMLString());
-				tree.validateNow();
-			}
-			
-			getCurrentPage();
-			htmlShowHandler();
-		}
-		private function getCurrentPage():void
-		{	
 //			tree.selectedItem = XML(lstEvt.itemRenderer.data);
 //			trace(": "+lstEvt.itemRenderer.data.@name +" : "+ tree.selectedItem.@name);
-			
-			if ( !tree.selectedItem )
-				return;
-			
-			var resoult : Object = sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name);
-			if(resoult)
-			{
-				pageVersion = resoult[0]["version"];
-				if (html_wysiwyg) {
-					html_wysiwyg.setHTML(resoult[0]["content"]);
+
+				if ( !tree.selectedItem )
+					return;
+
+				var resoult : Object = sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name);
+
+				if ( resoult )
+				{
+					pageVersion = resoult[ 0 ][ "version" ];
+
+					if ( html_wysiwyg )
+						html_wysiwyg.setHTML(resoult[0]["content"]);
+					pageInformation.text = resoult[ 0 ][ "title" ] + " (v." + pageVersion + ")  " + resoult[ 0 ][ "name" ];
+					pageInformation.toolTip = resoult[ 0 ][ "description" ];
+
+					topTitle.htmlText = "VDOM Help Aplication - <b>" + resoult[ 0 ][ "title" ] + "</b>";
 				}
-				pageInformation.text = resoult[0]["title"] +" (v." + pageVersion +")  " + resoult[0]["name"];
-				pageInformation.toolTip =  resoult[0]["description"];
-				
-				topTitle.htmlText= "VDOM Help Aplication - <b>" +  resoult[0]["title"] +"</b>";
 			}
-		}
-		
-		private function showAllProducts():void
-		{
-			cmboxProduct.dataProvider =  sqlProxy.getAllProducts();
+
+			private function showAllProducts() : void
+			{
+				cmboxProduct.dataProvider = sqlProxy.getAllProducts();
 //			listOfProducts.selectedIndex = 0;
-			changeProduct();
-			
-		}
-		
-		private function showSelectedPage(pageName:String):void
-		{
-			
-			var fileName:String = pageName	;
-			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
-			var fullPath : String = newFile.url;
+				changeProduct();
+
+			}
+
+			private function showSelectedPage(pageName:String) : void
+			{
+
+				var fileName : String = pageName;
+				var newFile : File    = File.applicationStorageDirectory.resolvePath(fileName);
+				var fullPath : String = newFile.url;
 //			var f : File = File.applicationStorageDirectory; 
-			html.location = fullPath; 
-			html_wysiwyg.setHTML( "fullPath");
-		}
-		
-		
+				html.location = fullPath;
+				html_wysiwyg.setHTML( "fullPath");
+			}
+
+
 //		private var arrayOfPages:Array = new Array();
 
-		private function selectNecessaryItem(fileName:String):void
-		{
-			var currentElement:XML = tree.dataProvider.source..page.(@name == fileName)[0]; // tree.dataProvider.source..page.(@name == fileName)[0];
-			
-			if(currentElement)
+			private function selectNecessaryItem(fileName:String) : void
 			{
-				openTree(currentElement);
-				tree.selectedItem = currentElement;
-				tree.validateNow();
-			}
-			
-		}
-		
-		private function openTree(item:Object):void
-		{
-			var parentItem:Object = XML(item).parent();
-			if (parentItem)
-			{
-				openTree(parentItem);
-				tree.expandItem(parentItem, true, false);
-				tree.validateNow();
-			}
-		}
-		
-		private function minMaximize():void
-		{
-			if (stage.nativeWindow.displayState == NativeWindowDisplayState.MAXIMIZED)
-				restore();
-			else
-				maximize();
-		}
-		
-		
-		private var toc : XML = new XML();
-		private var count : int = 0; 
-		
-		private function addItem():void
-		{
-			var selectedPage : String = "";
-			if(tree.selectedItem)
-				selectedPage = tree.selectedItem.@name;
-			else trace("NO SELECTED PAGE");
-				
-			toc = tree.dataProvider[0];
-			
-			var pageName : String = "page_" + ++count;
-			
-//			search vacant name in dataBase
-			while(sqlProxy.checkPageName(pageName))
-			{
-				pageName = "page_" + ++count;
-//				trace("Page in data base: " + pageName);
-			}
-			
-			var pageTitle : String = "Page " + count;
-			 
-			sqlProxy.addPage(cmboxProduct.selectedItem.name, "en_US", pageName, 0, 
-								pageTitle, "write Description", "it is  "+ pageName);
-			
-			toc.appendChild(XML("<page title = 'page " + count+ "' name = 'page_" + count+ "' isBranch='true' />"));
-			tree.dataProvider = null;
-			
-			tree.validateNow();
-			tree.dataProvider = toc;
+				var currentElement : XML = tree.dataProvider.source..page.( @name == fileName )[ 0 ]; // tree.dataProvider.source..page.(@name == fileName)[0];
 
-			tree.validateNow();
-//			if(selectedPage != "")
-			selectNecessaryItem(selectedPage);
-			
-			
-			sqlProxy.setToc(tree.dataProvider.toXMLString(), cmboxProduct.selectedItem.name);
-			// if not selected index select top item
-			if(tree.selectedIndex == -1)
-			{
-				tree.expandItem(toc, true);
-				tree.selectedIndex = 0;
+				if ( currentElement )
+				{
+					openTree(currentElement);
+					tree.selectedItem = currentElement;
+					tree.validateNow();
+				}
+
 			}
-			
-		}
-		
-		private function removeItem():void
-		{
-			var selectedIndex : Number = tree.selectedIndex; 
-			if( selectedIndex > 0)
+
+			private function openTree(item:Object) : void
 			{
-				delete toc..page.(@name == tree.selectedItem.@name)[0];
+				var parentItem : Object = XML(item).parent();
+
+				if ( parentItem )
+				{
+					openTree(parentItem);
+					tree.expandItem(parentItem, true, false);
+					tree.validateNow();
+				}
+			}
+
+			private function minMaximize() : void
+			{
+				if ( stage.nativeWindow.displayState == NativeWindowDisplayState.MAXIMIZED )
+					restore();
+				else
+					maximize();
+			}
+
+
+			private var toc : XML           = new XML();
+
+			private var count : int         = 0;
+
+			private function addItem() : void
+			{
+				var selectedPage : String = "";
+
+				if ( tree.selectedItem )
+					selectedPage = tree.selectedItem.@name;
+				else
+					trace("NO SELECTED PAGE");
+
+				toc = tree.dataProvider[ 0 ];
+
+				var pageName : String = "page_" + ++count;
+
+//			search vacant name in dataBase
+				while ( sqlProxy.checkPageName(pageName) )
+				{
+					pageName = "page_" + ++count;
+//				trace("Page in data base: " + pageName);
+				}
+
+				var pageTitle : String = "Page " + count;
+
+				sqlProxy.addPage(cmboxProduct.selectedItem.name, "en_US", pageName, 0, 
+								 pageTitle, "write Description", "it is  "+ pageName);
+
+				toc.appendChild(XML("<page title = 'page " + count+ "' name = 'page_" + count+ "' isBranch='true' />"));
+				tree.dataProvider = null;
+
+				tree.validateNow();
+				tree.dataProvider = toc;
+
+				tree.validateNow();
+//			if(selectedPage != "")
+				selectNecessaryItem(selectedPage);
+
+
+				sqlProxy.setToc(tree.dataProvider.toXMLString(), cmboxProduct.selectedItem.name);
+
+				// if not selected index select top item
+				if ( tree.selectedIndex == -1 )
+				{
+					tree.expandItem(toc, true);
+					tree.selectedIndex = 0;
+				}
+
+			}
+
+			private function removeItem() : void
+			{
+				var selectedIndex : Number = tree.selectedIndex;
+
+				if ( selectedIndex > 0 )
+				{
+					delete toc..page.( @name == tree.selectedItem.@name )[ 0 ];
 //				toc = XML(tree.dataProvider);
-				
+
 					tree.dataProvider = null;
 					tree.validateNow();
 					tree.dataProvider = toc;
-					
+
 					tree.validateNow();
 					tree.expandItem(toc, true);
-					
+
 					tree.selectedIndex = selectedIndex;
-					if (!tree.selectedIndex)
+
+					if ( !tree.selectedIndex )
 						tree.selectedIndex = selectedIndex - 1;
 
-			}
-		}
-		
-		private function productEdit():void
-			{
-				var rbWnd:Products = Products(PopUpManager.createPopUp(this, Products, true));
-				rbWnd.addEventListener(CloseEvent.CLOSE, closeProductsHandler);
-			}
-		private function closeProductsHandler(evt:CloseEvent):void
-		{
-			showAllProducts();
-		}
-		
-		private function changeProduct():void
-		{
-			if(!cmboxProduct.selectedItem)
-			{
-//				editProduct.label = "Add Product";
-				tree.dataProvider = null;
-				html_wysiwyg.setHTML("");
-				return;
-			}
-			
-//			editProduct.label = "Edit Products List";
-			getTocFromDataBase();
-		}
-		
-		private function getTocFromDataBase():void
-		{	
-			var resoult : Object = sqlProxy.getToc(cmboxProduct.selectedItem.name)  ;
-			tree.dataProvider =  resoult as XML;
-			
-			toc = tree.dataProvider[0];
-			
-			tree.validateNow();
-			tree.expandItem(toc, true);
-			tree.selectedIndex = 0;
-			tree.validateNow();
-			
-			tree.dispatchEvent(new ListEvent(ListEvent.CHANGE));
-		}
-				
-		private function savePage():void
-		{
-			resetImagesPath();
-			sqlProxy.setPageContent(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name, html_wysiwyg.getHTML(), pageVersion);
-			getCurrentPage();
-		}
-		
-		private function resetImagesPath():void
-		{
-			trace ("[VdomHelpEditor] resetImagesPath");
-			resetHttpImages();
-			resetLocalImages();
-		}
-		
-		private function resetLocalImages():void
-		{
-			trace ("[VdomHelpEditor] resetLocalImages");
-			var pattern		: RegExp;
-			var arrMatch	: Array;
-			
-			pattern = /<[ ]*img[^>]*src[ ]*=[ ]*"[^(app-storage:\/resources)][^"]*"/ig;
-			arrMatch = html_wysiwyg.getHTML().match(pattern);
-			
-			trace ("[VdomHelpEditor] resetLocalImages: arrMatch.length = " + arrMatch.length);
-			for each (var strImg:String in arrMatch) 
-			{
-				var oldPath : String = strImg.split("\"")[strImg.split("\"").length-2]
-				var newPath : String = copyImg(oldPath);
-				
-				html_wysiwyg.setHTML(html_wysiwyg.getHTML().replace(oldPath, newPath));
-			}
-		}
-		
-		private function resetHttpImages():void
-		{
-			trace ("[VdomHelpEditor] resetHttpImages");
-			var pattern			: RegExp;
-			var arrMatch		: Array;
-			var oldPath 		: String;
-			var newPath 		: String;
-			var newWysiwygData	: String;
-			
-			pattern = /<[ ]*img[^>]*src[ ]*=[ ]*"(http:\/\/|https:\/\/)[^"]*"/ig;
-			arrMatch = html_wysiwyg.getHTML().match(pattern);
-			
-			trace ("[VdomHelpEditor] resetHttpImages: arrMatch.length = " + arrMatch.length);
-			for each (var strImg:String in arrMatch) 
-			{
-				oldPath = strImg.split("\"")[strImg.split("\"").length-2]
-				newPath = loadHttpImg(oldPath);
-				
-				newWysiwygData = html_wysiwyg.getHTML().replace(oldPath, newPath);
-				html_wysiwyg.setHTML(newWysiwygData);
-			}
-		}
-		
-		private function copyImg(aImageOldSrc_str:String):String
-		{
-			trace ("copyImg");
-			var targetPath 	: String; 
-			var imgFile 	: File;
-			var newImgFile	: File; 
-			
-			targetPath = "resources/" + generateFileName(aImageOldSrc_str); 
-			imgFile = new File(aImageOldSrc_str);
-			newImgFile = File.applicationStorageDirectory.resolvePath(targetPath);
-			imgFile.copyTo(newImgFile);
-			
-			//return targetPath;
-			return newImgFile.url;
-		}
-		
-		private function loadHttpImg(aImageOldSrc_str:String):String
-		{
-			trace ("loadHttpImg");
-			var targetPath 	: String;
-			var urlRequest	: URLRequest;
-			var urlLoader	: URLLoader;
-			var file		: File;
-			
-			
-			targetPath = "resources/" + generateFileName(aImageOldSrc_str);
-			urlRequest = new URLRequest(aImageOldSrc_str);
-			urlLoader = new URLLoader();
-
-			urlLoader.dataFormat = URLLoaderDataFormat.BINARY; 
-			urlLoader.addEventListener(Event.COMPLETE, urlLoader_complete);
-			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, urlLoader_error);
-			urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoader_error);
-			urlLoader.load(urlRequest);
-			
-			file = File.applicationStorageDirectory.resolvePath(targetPath);
-			
-			function urlLoader_complete(evt:Event):void {
-				trace ("loadHttpImg: urlLoader_complete");
-				
-				var fileStream	: FileStream;
-								
-				fileStream	= new FileStream();
-				try {
-					fileStream.open(file, FileMode.WRITE);
-					fileStream.writeBytes(urlLoader.data);
-					fileStream.close();
-					getCurrentPage();
-				} catch(error:IOError) {
-					trace("!!! Error Write !!! \n" + error.message +"\n");
-					return;
 				}
 			}
-			
-			function urlLoader_error(evt:Event):void {
-				trace("!!! Error Loading file !!! \n");
+
+			private function productEdit() : void
+			{
+				var rbWnd : Products = Products(PopUpManager.createPopUp(this, Products, true));
+				rbWnd.addEventListener(CloseEvent.CLOSE, closeProductsHandler);
 			}
-			
-			
-			//return targetPath;
-			return file.url;
-		} 
-		
-		private function generateFileName(path:String):String
-		{
-			var fileType : String;
-			var fileName:String;
-			
-			fileType = path.substring(path.lastIndexOf("."), path.length); 
-			fileName = UIDUtil.createUID() + fileType;
-			
-			return fileName;
-		}
-		
-		private function creatProductXML():void
-		{
-			var result :Object = sqlProxy.getProductsPages(cmboxProduct.selectedItem.name, "en_US");
-			
-			var product:XML = new XML("<product/>");
+
+			private function closeProductsHandler(evt:CloseEvent) : void
+			{
+				showAllProducts();
+			}
+
+			private function changeProduct() : void
+			{
+				if ( !cmboxProduct.selectedItem )
+				{
+//				editProduct.label = "Add Product";
+					tree.dataProvider = null;
+					html_wysiwyg.setHTML("");
+					return;
+				}
+
+//			editProduct.label = "Edit Products List";
+				getTocFromDataBase();
+			}
+
+			private function getTocFromDataBase() : void
+			{
+				var resoult : Object = sqlProxy.getToc(cmboxProduct.selectedItem.name);
+				tree.dataProvider = resoult as XML;
+
+				toc = tree.dataProvider[ 0 ];
+
+				tree.validateNow();
+				tree.expandItem(toc, true);
+				tree.selectedIndex = 0;
+				tree.validateNow();
+
+				tree.dispatchEvent(new ListEvent(ListEvent.CHANGE));
+			}
+
+			private function savePage() : void
+			{
+				resetImagesPath();
+				sqlProxy.setPageContent(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name, html_wysiwyg.getHTML(), pageVersion);
+				getCurrentPage();
+			}
+
+			private function resetImagesPath() : void
+			{
+				trace("[VdomHelpEditor] resetImagesPath");
+				resetHttpImages();
+				resetLocalImages();
+			}
+
+			private function resetLocalImages() : void
+			{
+				trace("[VdomHelpEditor] resetLocalImages");
+				var pattern : RegExp;
+				var arrMatch : Array;
+
+				pattern = /<[ ]*img[^>]*src[ ]*=[ ]*"[^(app-storage:\/resources)][^"]*"/g;
+				arrMatch = html_wysiwyg.getHTML().match(pattern);
+
+				trace("[VdomHelpEditor] resetLocalImages: arrMatch.length = " + arrMatch.length);
+
+				for each ( var strImg : String in arrMatch )
+				{
+					var oldPath : String = resetPath(strImg.split("\"")[ strImg.split("\"").length - 2 ]);
+
+					var newPath : String = copyImg(oldPath);
+
+					html_wysiwyg.setHTML(html_wysiwyg.getHTML().replace(oldPath, newPath));
+				}
+			}
+
+			private function resetPath(path:String) : String
+			{
+				path = path.substring(0 , path.lastIndexOf(".")) +
+					   path.substring(path.lastIndexOf("."), path.length).replace(" ", "");
+				
+				return path;
+			}
+
+			private function resetHttpImages() : void
+			{
+				trace("[VdomHelpEditor] resetHttpImages");
+				var pattern : RegExp;
+				var arrMatch : Array;
+				var oldPath : String;
+				var newPath : String;
+				var newWysiwygData : String;
+
+				pattern = /<[ ]*img[^>]*src[ ]*=[ ]*"(http:\/\/|https:\/\/)[^"]*"/ig;
+				arrMatch = html_wysiwyg.getHTML().match(pattern);
+
+				trace("[VdomHelpEditor] resetHttpImages: arrMatch.length = " + arrMatch.length);
+
+				for each ( var strImg : String in arrMatch )
+				{
+					oldPath = strImg.split("\"")[ strImg.split("\"").length - 2 ]
+					newPath = loadHttpImg(oldPath);
+
+					newWysiwygData = html_wysiwyg.getHTML().replace(oldPath, newPath);
+					html_wysiwyg.setHTML(newWysiwygData);
+				}
+			}
+
+			private function copyImg(aImageOldSrc_str:String) : String
+			{
+				trace("copyImg");
+				var targetPath : String;
+				var imgFile : File;
+				var newImgFile : File;
+
+				imgFile = new File(aImageOldSrc_str);
+				targetPath = "resources/" + generateFileName(aImageOldSrc_str, imgFile);
+				newImgFile = File.applicationStorageDirectory.resolvePath(targetPath);
+
+				if ( !newImgFile.exists )
+					imgFile.copyTo(newImgFile);
+
+				//return targetPath;
+				return newImgFile.url;
+			}
+
+			private function loadHttpImg(aImageOldSrc_str:String) : String
+			{
+				trace("loadHttpImg");
+				var targetPath : String;
+				var urlRequest : URLRequest;
+				var urlLoader : URLLoader;
+				var file : File;
+
+
+				targetPath = "resources/" + generateFileName(aImageOldSrc_str);
+				urlRequest = new URLRequest(aImageOldSrc_str);
+				urlLoader = new URLLoader();
+
+				urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+				urlLoader.addEventListener(Event.COMPLETE, urlLoader_complete);
+				urlLoader.addEventListener(IOErrorEvent.IO_ERROR, urlLoader_error);
+				urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoader_error);
+				urlLoader.load(urlRequest);
+
+				file = File.applicationStorageDirectory.resolvePath(targetPath);
+
+				function urlLoader_complete(evt:Event) : void {
+					trace("loadHttpImg: urlLoader_complete");
+
+					var fileStream : FileStream;
+
+					fileStream = new FileStream();
+					try {
+						fileStream.open(file, FileMode.WRITE);
+						fileStream.writeBytes(urlLoader.data);
+						fileStream.close();
+						getCurrentPage();
+					} catch ( error : IOError ) {
+						trace("!!! Error Write !!! \n" + error.message +"\n");
+						return;
+					}
+				}
+
+				function urlLoader_error(evt:Event) : void {
+					trace("!!! Error Loading file !!! \n");
+				}
+
+
+				//return targetPath;
+				return file.url;
+			}
+
+			private function generateFileName(path:String, file:File = null) : String
+			{
+				var fileType : String;
+				var fileName : String;
+				var hash : MD5Stream;
+				var fileStream : FileStream;
+				var byteArray : ByteArray;
+				var uid : String;
+
+				fileType = path.substring(path.lastIndexOf("."), path.length);
+
+				if ( !file )
+				{
+					fileName = UIDUtil.createUID() + fileType;
+
+					return fileName;
+				}
+
+
+				hash = new MD5Stream();
+				fileStream = new FileStream();
+				byteArray = new ByteArray();
+
+				fileStream.open(file, FileMode.READ);
+				fileStream.readBytes(byteArray);
+				fileStream.close();
+
+				uid = hash.complete(byteArray);
+				fileName = convertToUIDFormat(uid) + fileType;
+
+				return fileName;
+			}
+
+			private function convertToUIDFormat(strToFormat:String) : String
+			{
+				var strInUIDFormat : String = "";
+				var strDelim : String       = "-";
+				var arrParts : Array        = new Array();
+
+				if ( strToFormat.length != 32 )
+					throw Error("Incorrect type of input string");
+				else
+				{
+					arrParts[ 0 ] = strToFormat.substr(0, 8);
+					arrParts[ 1 ] = strToFormat.substr(8, 4);
+					arrParts[ 2 ] = strToFormat.substr(12, 4);
+					arrParts[ 3 ] = strToFormat.substr(16, 4);
+					arrParts[ 4 ] = strToFormat.substr(20, 12);
+
+					for ( var i : uint = 0; i < 5; i++ )
+					{
+						if ( i > 0 )
+							strInUIDFormat += strDelim;
+
+						strInUIDFormat += arrParts[ i ];
+					}
+				}
+
+				return strInUIDFormat;
+			}
+
+			private function creatProductXML() : void
+			{
+				var result : Object = sqlProxy.getProductsPages(cmboxProduct.selectedItem.name, "en_US");
+
+				var product : XML   = new XML("<product/>");
 				product.name = cmboxProduct.selectedItem.name;
 				product.version = sqlProxy.upVersion(cmboxProduct.selectedItem.name, "en_US"); // get Version
 				product.title = cmboxProduct.selectedItem.title;
 				product.description = "";
 				product.language = "en_US";
-				
+
 //			пробегаемся по дереву строим новую хмл
-			var tocXML : XML = new XML("<toc/>");
-			var tocString : String = tree.dataProvider.toString();
-			var regExp : RegExp	= /isBranch="true"/gim ;
-			
-			tocXML.appendChild(XML(tocString.replace(regExp,' ')));
-			
-			product.appendChild(tocXML);
-			
+				var tocXML : XML       = new XML("<toc/>");
+				var tocString : String = tree.dataProvider.toString();
+				var regExp : RegExp    = /isBranch="true"/gim;
+
+				tocXML.appendChild(XML(tocString.replace(regExp,' ')));
+
+				product.appendChild(tocXML);
+
 //			trace()
 //			по ходу делаем хмл для каждой странички
-			
-			var	pages : XML = new XML("<pages/>");
-			var length : Number = Number(result.length);
-//			progressBar.setProgress(0,100);
-			var guidRegExp : RegExp  = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
-			
-			for (var i:String in result)
-			{
-				var pageContent : String = resetPageContent(result[i]["content"]);
-				
-				var tempXML : XML = new XML("<page/>");
-					tempXML.name = result[i]["name"];
-					tempXML.version = result[i]["version"];
-					tempXML.title = result[i]["title"];
-					tempXML.description = result[i]["description"];
 
-					var content : XML = XML("<content/>"); 
-					content.appendChild( XML("<![CDATA[" + 
-											"<html>" + 
-												"<head>" + 
-													"<script src='app-storage:/searchhi_slim.js'></script>" +
-													"<link rel='stylesheet' href='app-storage:/main.css' type='text/css'></link> "+
-												"</head>" +
-												"<body>"+
-													pageContent +
-												"</body>" +
-											"<html>" +		
-						"]"+ "]>"));
-					
-					tempXML.appendChild(content);
-				
-//				****  get resources ****		
-				var pagesResources : Array = pageContent.match(guidRegExp);
-				var resources : XML = new XML("<resources/>");
-				for (var j:String in pagesResources)
+				var pages : XML         = new XML("<pages/>");
+				var length : Number     = Number(result.length);
+//			progressBar.setProgress(0,100); 
+				var guidRegExp : RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
+
+				for ( var i : String in result )
 				{
-					var resource : XML = new XML("<resource/>");
-					var resourceName : String = pagesResources[j];
-					
-					resource.@id = resourceName.substr(0,36);
-					resource.@type = resourceName.substr(37,3);
-					resource.appendChild(getResoucesCDATA(resourceName));
-					resources.appendChild(resource);
-				} 
-				
-				tempXML.appendChild(resources);
-				
-				pages.appendChild(tempXML);
-				
+					var pageContent : String = resetPageContent(result[i]["content"]);
+
+					var tempXML : XML        = new XML("<page/>");
+					tempXML.name = result[ i ][ "name" ];
+					tempXML.version = result[ i ][ "version" ];
+					tempXML.title = result[ i ][ "title" ];
+					tempXML.description = result[ i ][ "description" ];
+
+					var content : XML = XML("<content/>");
+					content.appendChild( XML("<![CDATA[" + 
+											 "<html>" + 
+											 "<head>" + 
+											 "<script src='app-storage:/searchhi_slim.js'></script>" +
+											 "<link rel='stylesheet' href='app-storage:/main.css' type='text/css'></link> "+
+											 "</head>" +
+											 "<body>"+
+											 pageContent +
+											 "</body>" +
+											 "<html>" +		
+											 "]"+ "]>"));
+
+					tempXML.appendChild(content);
+
+//				****  get resources ****		
+					var pagesResources : Array = pageContent.match(guidRegExp);
+					var resources : XML        = new XML("<resources/>");
+
+					for ( var j : String in pagesResources )
+					{
+						var resource : XML        = new XML("<resource/>");
+						var resourceName : String = pagesResources[ j ];
+
+						resource.@id = resourceName.substr(0,36);
+						resource.@type = resourceName.substr(37,3);
+						resource.appendChild(getResoucesCDATA(resourceName));
+						resources.appendChild(resource);
+					}
+
+					tempXML.appendChild(resources);
+
+					pages.appendChild(tempXML);
+
 //				trace("--------");
-				
+
 //				var progress : Number = Number(i)* 100/length;
 //				progressBar.setProgress(progress , 100);
 //				progressBar.label = progress.toString();
 
-				function getResoucesCDATA(fileName:String):XML
-				{
-					var location:File = File.applicationStorageDirectory.resolvePath("resources/"+fileName);
-					var fileStream:FileStream = new FileStream();
+					function getResoucesCDATA(fileName:String) : XML
+					{
+						var location : File         = File.applicationStorageDirectory.resolvePath("resources/"+fileName);
+						var fileStream : FileStream = new FileStream();
 //					var location : File = new File(docsDir.url +"/"+ fileName + ".xml");
-					
-					try
-					{
-						var byteArr : ByteArray = new ByteArray();
-						var base64:Base64Encoder = new Base64Encoder(); 
-				  		
-				  		fileStream.open( location, FileMode.READ);
-				  		fileStream.readBytes(byteArr);
-						fileStream.close(); 
-						
-						base64.encodeBytes(byteArr);
-						trace("------------------");
-						var sourse : String =  base64.toString();
+
+						try
+						{
+							var byteArr : ByteArray    = new ByteArray();
+							var base64 : Base64Encoder = new Base64Encoder();
+
+							fileStream.open( location, FileMode.READ);
+							fileStream.readBytes(byteArr);
+							fileStream.close();
+
+							base64.encodeBytes(byteArr);
+							trace("------------------");
+							var sourse : String = base64.toString();
+						}
+						catch ( error : Error )
+						{
+							Alert.show( error.message, "Failed:");
+						}
+
+						return XML("<![CDATA[" + sourse +"]"+ "]>");
 					}
-					catch (error:Error)
+
+					function resetPageContent(aPageContent:String) : String
 					{
-						Alert.show( error.message, "Failed:");
+						var pattern : RegExp;
+
+						pattern = /app-storage:\//g;
+
+						return aPageContent.replace(pattern, "");
 					}
-					
-					return XML("<![CDATA[" + sourse +"]"+ "]>");
 				}
-				
-				function resetPageContent(aPageContent:String) : String 
+
+				product.appendChild(pages);
+
+				var fileStream : FileStream = new FileStream();
+				var fileName : String       = cmboxProduct.selectedItem.name;
+				var docsDir : File          = File.documentsDirectory;
+				var productLocation : File  = new File(docsDir.url +"/VDOMHelp/"+ fileName+"/" + fileName + ".xml");
+
+				try
 				{
-					var pattern : RegExp;
-					
-					pattern = /app-storage:\//g;
-					
-					return aPageContent.replace(pattern, "");	
-				}
-			}
-			
-			product.appendChild(pages);
-		
-			var fileStream:FileStream = new FileStream();
-			var fileName:String = cmboxProduct.selectedItem.name;
-			var docsDir:File = File.documentsDirectory;
-			var productLocation : File = new File(docsDir.url +"/VDOMHelp/"+ fileName+"/" + fileName + ".xml");
-			try
-			{
-	//				fileStream.addEventListener(Event., savedData);
-			  		fileStream.open( productLocation, FileMode.WRITE);
+					//				fileStream.addEventListener(Event., savedData);
+					fileStream.open( productLocation, FileMode.WRITE);
 					fileStream.writeUTFBytes(product.toXMLString());
-					fileStream.close(); 
-					
+					fileStream.close();
+
 					Alert.show( productLocation.nativePath, "Saved to:");
-			}
-			catch (error:Error)
-			{
-				Alert.show( error.message, "Error:");
-			}
+				}
+				catch ( error : Error )
+				{
+					Alert.show( error.message, "Error:");
+				}
 
-			var fileSize : Number = productLocation.size;
-			var fileSizeStr : String;
-			var gig : Number = 1024 * 1024 * 1024;
-			var meg : Number = 1024 * 1024;
-			var kil : Number = 1024; 
-			
-			if(fileSize > gig)
-			
-				fileSizeStr = String((fileSize / gig) - (fileSize / gig) % 0.1) + " Gb";
-				
-			else if (fileSize > meg)
-			
-				fileSizeStr = String((fileSize / meg) - (fileSize / meg) % 0.1) + " Mg";
-			
-			else if (fileSize > kil)
-			
-				fileSizeStr = String((fileSize / kil) - (fileSize / kil) % 0.1) + " Kb";
-			
-			
-			var location : File  = new File(docsDir.url +"/VDOMHelp/StartXML.xml");	
-			
-			try
-			{
-			  		fileStream.open( location, FileMode.UPDATE);
-			  		var str:String = fileStream.readMultiByte(location.size, File.systemCharset);
-			  		var installXML : XML = new XML();
+				var fileSize : Number = productLocation.size;
+				var fileSizeStr : String;
+				var gig : Number      = 1024 * 1024 * 1024;
+				var meg : Number      = 1024 * 1024;
+				var kil : Number      = 1024;
 
-			  		if (str == "")
-			  			installXML =  XML("<install/>");
-			  		else
-			  			installXML = XML(str);
-					
-					var productItem :XML 	= new XML("<product/>");
-						productItem.@name 	= product.name ;
-						productItem.@version = product.version ;
-						productItem.@title 	= product.title;
-						productItem.@description = product.description;
-						productItem.@language  	= product.language;
-						productItem.@size  	= fileSizeStr;
-						productItem.@url	= productLocation.url;
-					
-					delete installXML.product.(@name == product.name)[0];
-					
+				if ( fileSize > gig )
+
+					fileSizeStr = String((fileSize / gig) - (fileSize / gig) % 0.1) + " Gb";
+
+				else if ( fileSize > meg )
+
+					fileSizeStr = String((fileSize / meg) - (fileSize / meg) % 0.1) + " Mg";
+
+				else if ( fileSize > kil )
+
+					fileSizeStr = String((fileSize / kil) - (fileSize / kil) % 0.1) + " Kb";
+
+
+				var location : File = new File(docsDir.url +"/VDOMHelp/StartXML.xml");
+
+				try
+				{
+					fileStream.open( location, FileMode.UPDATE);
+					var str : String     = fileStream.readMultiByte(location.size, File.systemCharset);
+					var installXML : XML = new XML();
+
+					if ( str == "" )
+						installXML = XML("<install/>");
+					else
+						installXML = XML(str);
+
+					var productItem : XML = new XML("<product/>");
+					productItem.@name = product.name;
+					productItem.@version = product.version;
+					productItem.@title = product.title;
+					productItem.@description = product.description;
+					productItem.@language = product.language;
+					productItem.@size = fileSizeStr;
+					productItem.@url = productLocation.url;
+
+					delete installXML.product.( @name == product.name )[ 0 ];
+
 					installXML.appendChild(productItem);
-					fileStream.close(); 
-					
+					fileStream.close();
+
 					fileStream.open( location, FileMode.WRITE);
 					fileStream.writeUTFBytes(installXML.toXMLString());
-					fileStream.close(); 
-					
-			}
-			catch (error:Error)
-			{
-				Alert.show( error.message, "Error:");
-			}
-			
-			
+					fileStream.close();
+
+				}
+				catch ( error : Error )
+				{
+					Alert.show( error.message, "Error:");
+				}
+
+
 //			<install>
 //			  <product name="" language="" version="0.1" title="" url="http://www.sample.com/help/sampe_ru_RU.xml" size="" />
 //			  <product name="" language="" version="0.2" title="" url="help/sample_en_US.xml" size="" />
 //			</install>
 
-		}
-		
-		// save file to folder
-		public function saveFile(contentName:String, content:ByteArray):void 
-		{
-			var newFileName:String = contentName;
-			var newFile:File = File.applicationStorageDirectory.resolvePath(newFileName);
-			var fileStream:FileStream = new FileStream();
+			}
 
-			try {
-				fileStream.open(newFile, FileMode.WRITE);
-				fileStream.writeBytes(content);
-				fileStream.close();
-				
-			} catch(error:IOError) {
-//				var er:* =  error;
-				trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+newFileName);
-				return;
-			}
-		}
-		
-		private function htmlShowHandler():void
-		{
-			trace("::htmlShowHandler::");
-			var fileName:String = "temp.html"	;
-			var content : ByteArray = new ByteArray();
-			
-			var sourseTxt	: String;
-			
-			sourseTxt = "";
-			if (html_wysiwyg) {
-				sourseTxt = html_wysiwyg.getHTML();
-			}
-			/*var sourse : String = 
-				"<html>" + 
-					"<head>" +
-						"<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />" +
-					"</head>" + 
-					"<body>" +
-					  sourseTxt +
-					"</body>"	;*/
-			
-			//trace ("sourseTxt " + sourseTxt) ;
-			
-			content.writeMultiByte(sourseTxt, "utf-8");
-			
-			saveFile(fileName, content);
-			
-			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
-			
-			var fullPath : String = newFile.url;
-			var f : File = File.applicationStorageDirectory; 
-			if(html)
+			// save file to folder
+			public function saveFile(contentName:String, content:ByteArray) : void
 			{
-				html.location = fullPath;
-				html.validateDisplayList();
+				var newFileName : String    = contentName;
+				var newFile : File          = File.applicationStorageDirectory.resolvePath(newFileName);
+				var fileStream : FileStream = new FileStream();
+
+				try
+				{
+					fileStream.open(newFile, FileMode.WRITE);
+					fileStream.writeBytes(content);
+					fileStream.close();
+
+				}
+				catch ( error : IOError )
+				{
+//				var er:* =  error;
+					trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+newFileName);
+					return;
+				}
 			}
-		}
-		
-			
-		private function dragDropHandler(event:Event):void
-		{
+
+			private function htmlShowHandler() : void
+			{
+				trace("::htmlShowHandler::");
+				var fileName : String   = "temp.html";
+				var content : ByteArray = new ByteArray();
+
+				var sourseTxt : String;
+
+				sourseTxt = "";
+
+				if ( html_wysiwyg )
+					sourseTxt = html_wysiwyg.getHTML();
+				/*var sourse : String =
+	"<html>" +
+"<head>" +
+"<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />" +
+"</head>" +
+"<body>" +
+sourseTxt +
+"</body>"	;*/
+
+	//trace ("sourseTxt " + sourseTxt) ;
+
+				content.writeMultiByte(sourseTxt, "utf-8");
+
+				saveFile(fileName, content);
+
+				var newFile : File    = File.applicationStorageDirectory.resolvePath(fileName);
+
+				var fullPath : String = newFile.url;
+				var f : File          = File.applicationStorageDirectory;
+
+				if ( html )
+				{
+					html.location = fullPath;
+					html.validateDisplayList();
+				}
+			}
+
+
+			private function dragDropHandler(event:Event) : void
+			{
 //			trace('dragDropHandler');
-		}
-		
-		private function editPage():void
-		{
-			var editPage : EditPage = EditPage(PopUpManager.createPopUp(this, EditPage, true));
+			}
+
+			private function editPage() : void
+			{
+				var editPage : EditPage = EditPage(PopUpManager.createPopUp(this, EditPage, true));
 				editPage.addEventListener(CloseEvent.CLOSE, editPageHandler);
-				
+
 				editPage.pageLn = "en_US"
 				editPage.curPage = tree.selectedItem;
 				editPage.productName = cmboxProduct.selectedItem.name;
-			
-			function editPageHandler(evt:CloseEvent):void
-			{
-				// сохранить дерево
-				sqlProxy.setToc( tree.dataProvider.toXMLString(), cmboxProduct.selectedItem.name);
-				// обновить данные вверху и внизу
-				getCurrentPage();
-			}	
-		}
-			
-	]]>
-</mx:Script>
-	
-<mx:VBox width="100%" height="100%"   x="0">
-	<mx:Canvas width="100%" >
-		<mx:Image source="@Embed('../assets/header.png')" width="100%" maintainAspectRatio="false" scaleContent="true" 
-			mouseDown="{nativeWindow.startMove();}" doubleClick="{minMaximize()}" doubleClickEnabled="true"/>
-		<mx:HBox paddingLeft="5" paddingTop="5" paddingRight="5" 
-				color="#FFFFFF" width="100%"  >
-			<mx:Image source="@Embed('../assets/bookmarks.png')" />
-			<mx:Label  id="topTitle" text="VDOM Help Aplication" />
-			<mx:HBox width="100%"  horizontalAlign="right" paddingTop="2">
-				<mx:Image source="@Embed('../assets/minimize.png')" right="0" click="{minimize()}"/>
-				<mx:Image source="@Embed('../assets/restore.png')" right="0" click="{minMaximize()}"/>
-				<mx:Image source="@Embed('../assets/close.png')" right="0" click="{close()}"/>
-			</mx:HBox>
-		</mx:HBox>
-	</mx:Canvas>
-	
-	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x737373" />
-		 <mx:HBox  paddingLeft="4">
-			 <mx:Button  id="editProduct" label="Edit Products List" click="{productEdit()}"
-					color="#FFFFFF" 	fillColors="#333333" 
-		    		 textSelectedColor="#FFFFFF" cornerRadius="1"
-		    		  borderColor="#999999" themeColor="#656565" 
-		    		  textRollOverColor="#FFFFFF"/>
-			
-			<mx:Button label="Creat products XML" click="{creatProductXML()}"
-						color="#FFFFFF" 	fillColors="#333333" 
-			    		 textSelectedColor="#FFFFFF" cornerRadius="1"
-			    		  borderColor="#999999" themeColor="#656565" 
-			    		  textRollOverColor="#FFFFFF" enabled="{Boolean(cmboxProduct.selectedItem)}"/>
-			 
-			 <!--    		  
-			<mx:ProgressBar id="progressBar" labelPlacement="top" themeColor="#F20D7A"
-	            minimum="0" visible="true" maximum="100" label="CurrentProgress 0%" 
-	            direction="right" mode="manual" width="100%"/>
-	          -->
-		 </mx:HBox>
-	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x4b4c4c"/>
-	<mx:HDividedBox y="60" width="100%" height="100%" horizontalGap="1">
-		<mx:VBox height="100%" minWidth="220" horizontalScrollPolicy="off">
-			<mx:HBox paddingLeft="3" paddingRight="3" color="#FFFFFF" width="100%">
-				<mx:ComboBox  id="cmboxProduct" width="100%" labelField="title" dataProvider="{{label:'VDOM Editor'}}"
-					 	fillColors="#333333" iconColor="0xCCCCCC" change="{changeProduct()}"
-		    		 textSelectedColor="#FFFFFF"  cornerRadius="1" 
-		    		  borderColor="#999999" themeColor="#656565" 
-		    		  textRollOverColor="#000000" selectionColor="#0000FF" />
-				
-			</mx:HBox>
-			<mx:Tree id="tree" width="100%" height="100%" color="#000000"  showRoot="true"
-				labelField="@title"  dragEnabled="true" dropEnabled="true"  
-				 dragDrop="dragDropHandler(event);"
-				change="{treeChangeHandler(event)}"  dragMoveEnabled="true" 	
-				folderOpenIcon="@Embed('../assets/open_folder.png')" 
-				folderClosedIcon="@Embed('../assets/close_folder.png')"
-				openDuration="0" 
-				defaultLeafIcon="@Embed('../assets/page.png')" /> 
 
-			<mx:HBox paddingLeft="3">
-				<mx:Button  label="Add Page" click="{addItem()}"
-				color="#FFFFFF" 	fillColors="#333333" 
-	    		 textSelectedColor="#FFFFFF" cornerRadius="1"
-	    		  borderColor="#999999" themeColor="#656565" 
-	    		  textRollOverColor="#FFFFFF" enabled="{Boolean(cmboxProduct.selectedItem)}"/>
-				<mx:Button label="Remove Page" click="{removeItem()}" 
-				color="#FFFFFF" 	fillColors="#333333" 
-	    		 textSelectedColor="#FFFFFF" cornerRadius="1"
-	    		  borderColor="#999999" themeColor="#656565" 
-	    		  textRollOverColor="#FFFFFF" />				
+				function editPageHandler(evt:CloseEvent) : void
+				{
+					// сохранить дерево
+					sqlProxy.setToc( tree.dataProvider.toXMLString(), cmboxProduct.selectedItem.name);
+					// обновить данные вверху и внизу
+					getCurrentPage();
+				}
+			}
+		]]>
+	</mx:Script>
+
+	<mx:VBox width="100%" height="100%" x="0">
+		<mx:Canvas width="100%">
+			<mx:Image source="@Embed('../assets/header.png')"
+					  width="100%"
+					  maintainAspectRatio="false"
+					  scaleContent="true"
+					  mouseDown="{nativeWindow.startMove();}"
+					  doubleClick="{minMaximize()}"
+					  doubleClickEnabled="true" />
+			<mx:HBox paddingLeft="5"
+					 paddingTop="5"
+					 paddingRight="5"
+					 color="#FFFFFF"
+					 width="100%">
+				<mx:Image source="@Embed('../assets/bookmarks.png')" />
+				<mx:Label id="topTitle" text="VDOM Help Aplication" />
+				<mx:HBox width="100%" horizontalAlign="right" paddingTop="2">
+					<mx:Image source="@Embed('../assets/minimize.png')" right="0" click="{minimize()}" />
+					<mx:Image source="@Embed('../assets/restore.png')" right="0" click="{minMaximize()}" />
+					<mx:Image source="@Embed('../assets/close.png')" right="0" click="{close()}" />
+				</mx:HBox>
 			</mx:HBox>
-		</mx:VBox>
-		<mx:TabNavigator width="100%" height="100%" backgroundColor="#E4E4E4"  	
-			paddingTop="0">
-			<mx:Canvas width="100%" height="100%"  label="WYSIWYG">
-				<mx:VBox width="100%" height="100%" verticalGap="0" verticalAlign="0"  >
-					<!--mx:HBox width="100%" color="#000000" backgroundColor="#E4E4E4"  >
-					</mx:HBox-->
-					
-					<local:HTML_WYSIWYG id="html_wysiwyg"   width="100%" height="100%" />
-					<mx:HBox width="100%" backgroundColor="0x373739" paddingBottom="3">
-						<mx:Canvas height="100%">
-							<mx:Label id="pageInformation" text="Title: title" color="#FFFFFF" 
-								fontSize="12"  top="5" left="5"/>
-						</mx:Canvas>
-						<mx:HBox width="100%"  horizontalAlign="right" paddingTop="3"  paddingRight="3">
-							
-							<mx:Button label="Save" click="{savePage()}"  toolTip="Save page"
-								color="#FFFFFF" 	fillColors="#333333" 
-					    		 textSelectedColor="#FFFFFF" cornerRadius="1"
-					    		  borderColor="#999999" themeColor="#656565" 
-					    		  textRollOverColor="#FFFFFF" />	
-						
-							<mx:Button label="Page Settings" click="{editPage()}" 
-								color="#FFFFFF" 	fillColors="#333333" 
-					    		 textSelectedColor="#FFFFFF" cornerRadius="1"
-					    		  borderColor="#999999" themeColor="#656565" 
-					    		  textRollOverColor="#FFFFFF" />	
+		</mx:Canvas>
+
+		<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x737373" />
+		<mx:HBox paddingLeft="4">
+			<mx:Button id="editProduct"
+					   label="Edit Products List"
+					   click="{productEdit()}"
+					   color="#FFFFFF"
+					   fillColors="#333333"
+					   textSelectedColor="#FFFFFF"
+					   cornerRadius="1"
+					   borderColor="#999999"
+					   themeColor="#656565"
+					   textRollOverColor="#FFFFFF" />
+
+			<mx:Button label="Creat products XML"
+					   click="{creatProductXML()}"
+					   color="#FFFFFF"
+					   fillColors="#333333"
+					   textSelectedColor="#FFFFFF"
+					   cornerRadius="1"
+					   borderColor="#999999"
+					   themeColor="#656565"
+					   textRollOverColor="#FFFFFF"
+					   enabled="{Boolean(cmboxProduct.selectedItem)}" />
+
+			<!--
+		   <mx:ProgressBar id="progressBar" labelPlacement="top" themeColor="#F20D7A"
+			   minimum="0" visible="true" maximum="100" label="CurrentProgress 0%"
+			   direction="right" mode="manual" width="100%"/>
+			 -->
+		</mx:HBox>
+		<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x4b4c4c" />
+		<mx:HDividedBox y="60" width="100%" height="100%" horizontalGap="1">
+			<mx:VBox height="100%" minWidth="220" horizontalScrollPolicy="off">
+				<mx:HBox paddingLeft="3" paddingRight="3" color="#FFFFFF" width="100%">
+					<mx:ComboBox id="cmboxProduct"
+								 width="100%"
+								 labelField="title"
+								 dataProvider="{{label:'VDOM Editor'}}"
+								 fillColors="#333333"
+								 iconColor="0xCCCCCC"
+								 change="{changeProduct()}"
+								 textSelectedColor="#FFFFFF"
+								 cornerRadius="1"
+								 borderColor="#999999"
+								 themeColor="#656565"
+								 textRollOverColor="#000000"
+								 selectionColor="#0000FF" />
+
+				</mx:HBox>
+				<mx:Tree id="tree"
+						 width="100%"
+						 height="100%"
+						 color="#000000"
+						 showRoot="true"
+						 labelField="@title"
+						 dragEnabled="true"
+						 dropEnabled="true"
+						 dragDrop="dragDropHandler(event);"
+						 change="{treeChangeHandler(event)}"
+						 dragMoveEnabled="true"
+						 folderOpenIcon="@Embed('../assets/open_folder.png')"
+						 folderClosedIcon="@Embed('../assets/close_folder.png')"
+						 openDuration="0"
+						 defaultLeafIcon="@Embed('../assets/page.png')" />
+
+				<mx:HBox paddingLeft="3">
+					<mx:Button label="Add Page"
+							   click="{addItem()}"
+							   color="#FFFFFF"
+							   fillColors="#333333"
+							   textSelectedColor="#FFFFFF"
+							   cornerRadius="1"
+							   borderColor="#999999"
+							   themeColor="#656565"
+							   textRollOverColor="#FFFFFF"
+							   enabled="{Boolean(cmboxProduct.selectedItem)}" />
+					<mx:Button label="Remove Page"
+							   click="{removeItem()}"
+							   color="#FFFFFF"
+							   fillColors="#333333"
+							   textSelectedColor="#FFFFFF"
+							   cornerRadius="1"
+							   borderColor="#999999"
+							   themeColor="#656565"
+							   textRollOverColor="#FFFFFF" />
+				</mx:HBox>
+			</mx:VBox>
+			<mx:TabNavigator width="100%" height="100%" backgroundColor="#E4E4E4" paddingTop="0">
+				<mx:Canvas width="100%" height="100%" label="WYSIWYG">
+					<mx:VBox width="100%" height="100%" verticalGap="0" verticalAlign="0">
+						<!--mx:HBox width="100%" color="#000000" backgroundColor="#E4E4E4"  >
+						</mx:HBox-->
+
+						<local:HTML_WYSIWYG id="html_wysiwyg" width="100%" height="100%" />
+						<mx:HBox width="100%" backgroundColor="0x373739" paddingBottom="3">
+							<mx:Canvas height="100%">
+								<mx:Label id="pageInformation"
+										  text="Title: title"
+										  color="#FFFFFF"
+										  fontSize="12"
+										  top="5"
+										  left="5" />
+							</mx:Canvas>
+							<mx:HBox width="100%" horizontalAlign="right" paddingTop="3" paddingRight="3">
+
+								<mx:Button label="Save"
+										   click="{savePage()}"
+										   toolTip="Save page"
+										   color="#FFFFFF"
+										   fillColors="#333333"
+										   textSelectedColor="#FFFFFF"
+										   cornerRadius="1"
+										   borderColor="#999999"
+										   themeColor="#656565"
+										   textRollOverColor="#FFFFFF" />
+
+								<mx:Button label="Page Settings"
+										   click="{editPage()}"
+										   color="#FFFFFF"
+										   fillColors="#333333"
+										   textSelectedColor="#FFFFFF"
+										   cornerRadius="1"
+										   borderColor="#999999"
+										   themeColor="#656565"
+										   textRollOverColor="#FFFFFF" />
+							</mx:HBox>
 						</mx:HBox>
-					</mx:HBox>
-				</mx:VBox>
-			</mx:Canvas >
-			<mx:Canvas width="100%" height="100%" label="Preview" show="{htmlShowHandler()}">
-				<mx:HTML  id="html"   width="100%" height="100%"  />
-			</mx:Canvas>
-			<!--mx:Canvas width="100%" height="100%" label="Sourse" color="#00FF00" >
-				<mx:TextArea id="htmlSource" width="100%" height="100%"  focusAlpha="0" />
-			</mx:Canvas-->
-		</mx:TabNavigator>
-	</mx:HDividedBox>
-	<mx:HBox horizontalAlign="right" width="100%">
-		<mx:VBox verticalGap="1" verticalAlign="0">
-			<mx:Label text="VDOM Help Application" color="0xFFFFFF" textAlign="right" width="100%"/>
-			<mx:Label text="Copyright© 2009 - V.D.O.M. Box Internationl - All rights reserved "  color="0xFFFFFF"/>
-		</mx:VBox>
-		<mx:Image source="@Embed('../assets/label.png')"/>
-	</mx:HBox>
-</mx:VBox>		
+					</mx:VBox>
+				</mx:Canvas>
+				<mx:Canvas width="100%" height="100%" label="Preview" show="{htmlShowHandler()}">
+					<mx:HTML id="html" width="100%" height="100%" />
+				</mx:Canvas>
+				<!--mx:Canvas width="100%" height="100%" label="Sourse" color="#00FF00" >
+					<mx:TextArea id="htmlSource" width="100%" height="100%"  focusAlpha="0" />
+				</mx:Canvas-->
+			</mx:TabNavigator>
+		</mx:HDividedBox>
+		<mx:HBox horizontalAlign="right" width="100%">
+			<mx:VBox verticalGap="1" verticalAlign="0">
+				<mx:Label text="VDOM Help Application" color="0xFFFFFF" textAlign="right" width="100%" />
+				<mx:Label text="Copyright© 2009 - V.D.O.M. Box Internationl - All rights reserved " color="0xFFFFFF" />
+			</mx:VBox>
+			<mx:Image source="@Embed('../assets/label.png')" />
+		</mx:HBox>
+	</mx:VBox>
 </mx:WindowedApplication>

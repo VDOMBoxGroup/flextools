@@ -1,4 +1,4 @@
-package 
+package
 {
 	import flash.data.SQLConnection;
 	import flash.data.SQLMode;
@@ -8,644 +8,646 @@ package
 	import flash.events.SQLErrorEvent;
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
-	
+
 	import mx.controls.Alert;
-	
-	public class SQLProxy 
+
+	public class SQLProxy
 	{
-		private var  file:File ;
-		private var connection:SQLConnection = new SQLConnection();
-		
-		
+		private var file : File;
+
+		private var connection : SQLConnection = new SQLConnection();
+
+
 		public function SQLProxy()
 		{
 			super();
 			file = File.applicationStorageDirectory.resolvePath("HelpDB.db");
 		}
-		
-		public function  creatDB():Boolean
+
+		public function creatDB() : Boolean
 		{
-			var sqlStatement:SQLStatement = new SQLStatement;
-			 		sqlStatement.sqlConnection = connection;
-					sqlStatement.addEventListener(SQLEvent.RESULT, resultHandler);
-					sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandler);
-			
-			try {
+			var sqlStatement : SQLStatement = new SQLStatement;
+			sqlStatement.sqlConnection = connection;
+			sqlStatement.addEventListener(SQLEvent.RESULT, resultHandler);
+			sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandler);
+
+			try
+			{
 				sqlStatement.sqlConnection.open(file, SQLMode.CREATE );
-				 
-				 /*****************  !!!   проверить необходимость создания каждой таблички отдельно !!!   *******************/
-				 
+
+				/*****************  !!!   проверить необходимость создания каждой таблички отдельно !!!   *******************/
+
 				//       PAGE    (id, name, version, title, description, content ) //
-				sqlStatement.text = "CREATE TABLE IF NOT EXISTS page   (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-											"name TEXT NOT NULL,  " + 
-											"version INTEGER NOT NULL,  " + 
-											"title TEXT NOT NULL,  " + 
-											"description TEXT , " + 
-											"content TEXT, " + 
-											"mark TEXT, " + 
-											"id_product INTEGER);";
+				sqlStatement.text = "CREATE TABLE IF NOT EXISTS page   (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"name TEXT NOT NULL,  " +
+					"version INTEGER NOT NULL,  " +
+					"title TEXT NOT NULL,  " +
+					"description TEXT , " +
+					"content TEXT, " +
+					"mark TEXT, " +
+					"id_product INTEGER);";
 				sqlStatement.execute();
-				
+
 				//       PRODUCT  (id, name, version, title, description, language, toc )   //
-				sqlStatement.text = "CREATE TABLE IF NOT EXISTS product (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-												"name CHAR NOT NULL, " + 
-												"version INTEGER NOT NULL,  " + 
-												"title TEXT NOT NULL,  " + 
-												"description TEXT , " + 
-												"language TEXT,"+
-												"toc XML);";
+				sqlStatement.text = "CREATE TABLE IF NOT EXISTS product (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"name CHAR NOT NULL, " +
+					"version INTEGER NOT NULL,  " +
+					"title TEXT NOT NULL,  " +
+					"description TEXT , " +
+					"language TEXT," +
+					"toc XML);";
 				sqlStatement.execute();
-			/*	
-				sqlStatement.text = "CREATE TABLE IF NOT EXISTS resource  (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-											"name TEXT NOT NULL,  " + 
-											"id_page INTEGER);";
-				sqlStatement.execute();
-				
-				sqlStatement.text = "CREATE INDEX IF NOT EXISTS index_name ON  page(content)";
-				sqlStatement.execute();
-				
-				sqlStatement.text = "CREATE TABLE IF NOT EXISTS server  (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-											"address TEXT NOT NULL,  " + 
-											"data INTEGER);";
-				sqlStatement.execute();
-				*/
+				/*
+					sqlStatement.text = "CREATE TABLE IF NOT EXISTS resource  (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+												"name TEXT NOT NULL,  " +
+												"id_page INTEGER);";
+					sqlStatement.execute();
+
+					sqlStatement.text = "CREATE INDEX IF NOT EXISTS index_name ON  page(content)";
+					sqlStatement.execute();
+
+					sqlStatement.text = "CREATE TABLE IF NOT EXISTS server  (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+												"address TEXT NOT NULL,  " +
+												"data INTEGER);";
+					sqlStatement.execute();
+					*/
 				sqlStatement.sqlConnection.close();
-				
-			} catch (err:SQLError) {
+
+			}
+			catch ( err : SQLError )
+			{
 				// since there is no column "name", an error will be thrown
 				sqlStatement.sqlConnection.close();
-				
+
 				localizeError(err);
 				return false;
 			}
-			
+
 			return true;
 		}
-		
-		public function addProduct(name:String, version:String, title:String, 
-																description:String,
-																language:String):void
-		{
-				 
-				var query:String = "SELECT product.id " + 
-						"FROM product " + 
-						"WHERE name = :name " + 
-							" AND version = :version " + 
-							" AND language = :language ;";
-							
-				var parameters:Object = new Object();
-					parameters[":name"] = name;
-					parameters[":version"] = version;
-					parameters[":language"] = language;
-					
-				var result:Object = executeQuery(query, parameters);
-				
-				if( !result)
-				{
-					query = "INSERT INTO product(name, version, title, description, language, toc) " + 
-								"VALUES(:name, :version, :title, :description, :language, :toc);";
-					
-					parameters = [];
-					parameters[":name"] = name;
-					parameters[":version"] = version;
-					parameters[":title"] = title;
-					parameters[":description"] = description;
-					parameters[":language"] = language;
-					parameters[":toc"] = "<page title = '"+
-											title + "' name = '" + name + "' isBranch='true' />";
-//					parameters[":visible"] = "true";
-													
-					executeQuery(query, parameters);				
-				}
-		}
-		
-		public function deleteProduct(productsName:String, language:String):Object
-		{
-			var query:String = "SELECT id " + 
-						"FROM product " + 
-						"WHERE name = :name  AND language = :language;";
-						
-				var parameters:Object = new Object();
-					parameters[":name"] = productsName;
-					parameters[":language"] = language;
-						
-				var result:Object = executeQuery(query, parameters);
-				
-			
-			if(result)
-			{
-				var id_product : Number = result[0]["id"];
-				query = "DELETE " + 
-						"FROM page " + 
-						"WHERE id_product = :id_product ; ";
-					
-					parameters = [];	
-					parameters[":id_product"] = id_product;
-					
-				executeQuery(query, parameters);
-					
-				query = "DELETE " + 
-						"FROM  product " + 
-						"WHERE id = :id_product ; ";	
-						
-				executeQuery(query, parameters);
-			}
-			
-			
-			
-			return result;
-		}
-		
-		public function getAllProducts():Object
-		{
-			var query:String = "SELECT * " + 
-					"FROM product;";
-						
-			var parameters:Object = new Object();
-				
-			var result:Object = executeQuery(query, parameters);
-			
-			if(!result)
-			{
-				return null;
-			}
-			return result;
-		}
-		
-		public function productInDB(productsName:String):Object
-		{
-			var query:String = "SELECT  name " + 
-					"FROM product " + 
-					"WHERE name = :name ;";
-						
-			var parameters:Object = new Object();
-				parameters[":name"] = productsName;
-				
-			var result:Object = executeQuery(query, parameters);
-			
-			return result;
-		}
-		
-		
-		public function getToc(productName:String):Object
-		{
-			 
-			var query:String = "SELECT product.toc " + 
-					"FROM product " + 
-					" WHERE   name = :name ;";
-						
-			var parameters:Object = new Object();
-				parameters[":name"] = productName;
-				
-			var result:Object = executeQuery(query, parameters);
-			
-			return result[0]["toc"];
-		}
-		
-		public function setToc(toc:String, productName:String):Object
-		{
-			var query:String = "UPDATE product " + 
-					"SET toc = :toc " + 
-					"WHERE name = :name ;";
-						
-			var parameters:Object = new Object();
-				parameters[":name"] = productName;
-				parameters[":toc"] = toc;
-//				trace(": "+ toc +": " + productName );
-						
-			var result:Object = executeQuery(query, parameters);
-			
-			return result;
-		}
-		
-		public function checkPageName(pageName:String):Object
-		{
-			var query:String = "SELECT id " + 
-					"FROM page " + 
-					" WHERE   name = :name ;";
-						
-			var parameters:Object = new Object();
-				parameters[":name"] = pageName;
-				
-			var result:Object = executeQuery(query, parameters);
-			
-			return result;
-		}
-		
-		public function addPage(productName:String, language:String, pageName:String, 
-																		version:int, 
-																		title:String,
-																		description:String,
-																		content:String):void
-		{
-				
-//				content = cleanContent(content);
-				 
-				var query:String = "SELECT id " + 
-						"FROM product " + 
-						"WHERE name = :name  AND language = :language;";
-						
-				var parameters:Object = new Object();
-					parameters[":name"] = productName;
-					parameters[":language"] = language;
-						
-				var result:Object = executeQuery(query, parameters);
-				
-				if( result)
-				{
-					var productID:int  = result[0]['id'];
-					query = "INSERT INTO page(name, version, title, description, content, id_product) " + 
-							"VALUES(:pageName , :version, :title,	:description, :content, :id_product);";
-					
-					parameters = [];
-					parameters[":pageName"] 	= pageName;
-					parameters[":version"] 		= version;
-					parameters[":title"] 		= title;
-					parameters[":description"] 	= description;
-					parameters[":content"] 		= content;
-					parameters[":id_product"] 	= productID;
 
-					executeQuery(query, parameters);			
-				}
-		}
-		
-		public function getPage(productName:String, language:String, pageName:String):Object
+		public function addProduct(name:String, version:String, title:String, 
+								   description:String,
+								   language:String) : void
 		{
-				var query:String = "SELECT id " + 
-						"FROM product " + 
-						"WHERE name = :name  AND language = :language;";
-						
-				var parameters:Object = new Object();
-					parameters[":name"] = productName;
-					parameters[":language"] = language;
-						
-				var result:Object = executeQuery(query, parameters);
-				
-				if( result)
-				{
-					var productID:int  = result[0]['id'];
-					
-					query = "SELECT * " + 
-							"FROM page " + 
-							"WHERE name = :name  AND id_product = :id_product ;";
-							
-						parameters = {};
-						parameters[":name"] = pageName;
-						parameters[":id_product"] = productID;
-							
-					 result = executeQuery(query, parameters);
-				}
-				
-				return result;
-			
+
+			var query : String      = "SELECT product.id " +
+				"FROM product " +
+				"WHERE name = :name " +
+				" AND version = :version " +
+				" AND language = :language ;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = name;
+			parameters[ ":version" ] = version;
+			parameters[ ":language" ] = language;
+
+			var result : Object = executeQuery(query, parameters);
+
+			if ( !result )
+			{
+				query = "INSERT INTO product(name, version, title, description, language, toc) " +
+					"VALUES(:name, :version, :title, :description, :language, :toc);";
+
+				parameters = [];
+				parameters[ ":name" ] = name;
+				parameters[ ":version" ] = version;
+				parameters[ ":title" ] = title;
+				parameters[ ":description" ] = description;
+				parameters[ ":language" ] = language;
+				parameters[ ":toc" ] = "<page title = '" +
+					title + "' name = '" + name + "' isBranch='true' />";
+//					parameters[":visible"] = "true";
+
+				executeQuery(query, parameters);
+			}
 		}
-			
-		public function setPageContent(productName:String, language:String, pageName:String, content:String, version:Number ):Object
+
+		public function deleteProduct(productsName:String, language:String) : Object
 		{
-				var query:String = "SELECT id " + 
-						"FROM product " + 
-						"WHERE name = :name  AND language = :language;";
-						
-				var parameters:Object = new Object();
-					parameters[":name"] = productName;
-					parameters[":language"] = language;
-						
-				var result:Object = executeQuery(query, parameters);
-				
-				if( result)
-				{
-					var productID:int  = result[0]['id'];
-					
-					query = "UPDATE page " + 
+			var query : String      = "SELECT id " +
+				"FROM product " +
+				"WHERE name = :name  AND language = :language;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productsName;
+			parameters[ ":language" ] = language;
+
+			var result : Object = executeQuery(query, parameters);
+
+
+			if ( result )
+			{
+				var id_product : Number = result[ 0 ][ "id" ];
+				query = "DELETE " +
+					"FROM page " +
+					"WHERE id_product = :id_product ; ";
+
+				parameters = [];
+				parameters[ ":id_product" ] = id_product;
+
+				executeQuery(query, parameters);
+
+				query = "DELETE " +
+					"FROM  product " +
+					"WHERE id = :id_product ; ";
+
+				executeQuery(query, parameters);
+			}
+
+
+
+			return result;
+		}
+
+		public function getAllProducts() : Object
+		{
+			var query : String      = "SELECT * " +
+				"FROM product;";
+
+			var parameters : Object = new Object();
+
+			var result : Object     = executeQuery(query, parameters);
+
+			if ( !result )
+				return null;
+			return result;
+		}
+
+		public function productInDB(productsName:String) : Object
+		{
+			var query : String      = "SELECT  name " +
+				"FROM product " +
+				"WHERE name = :name ;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productsName;
+
+			var result : Object = executeQuery(query, parameters);
+
+			return result;
+		}
+
+
+		public function getToc(productName:String) : Object
+		{
+
+			var query : String      = "SELECT product.toc " +
+				"FROM product " +
+				" WHERE   name = :name ;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productName;
+
+			var result : Object = executeQuery(query, parameters);
+
+			return result[ 0 ][ "toc" ];
+		}
+
+		public function setToc(toc:String, productName:String) : Object
+		{
+			var query : String      = "UPDATE product " +
+				"SET toc = :toc " +
+				"WHERE name = :name ;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productName;
+			parameters[ ":toc" ] = toc;
+//				trace(": "+ toc +": " + productName );
+
+			var result : Object = executeQuery(query, parameters);
+
+			return result;
+		}
+
+		public function checkPageName(pageName:String) : Object
+		{
+			var query : String      = "SELECT id " +
+				"FROM page " +
+				" WHERE   name = :name ;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = pageName;
+
+			var result : Object = executeQuery(query, parameters);
+
+			return result;
+		}
+
+		public function addPage(productName:String, language:String, pageName:String, 
+								version:int, 
+								title:String,
+								description:String,
+								content:String) : void
+		{
+
+//				content = cleanContent(content);
+
+			var query : String      = "SELECT id " +
+				"FROM product " +
+				"WHERE name = :name  AND language = :language;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productName;
+			parameters[ ":language" ] = language;
+
+			var result : Object = executeQuery(query, parameters);
+
+			if ( result )
+			{
+				var productID : int = result[ 0 ][ 'id' ];
+				query = "INSERT INTO page(name, version, title, description, content, id_product) " +
+					"VALUES(:pageName , :version, :title,	:description, :content, :id_product);";
+
+				parameters = [];
+				parameters[ ":pageName" ] = pageName;
+				parameters[ ":version" ] = version;
+				parameters[ ":title" ] = title;
+				parameters[ ":description" ] = description;
+				parameters[ ":content" ] = content;
+				parameters[ ":id_product" ] = productID;
+
+				executeQuery(query, parameters);
+			}
+		}
+
+		public function getPage(productName:String, language:String, pageName:String) : Object
+		{
+			var query : String      = "SELECT id " +
+				"FROM product " +
+				"WHERE name = :name  AND language = :language;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productName;
+			parameters[ ":language" ] = language;
+
+			var result : Object = executeQuery(query, parameters);
+
+			if ( result )
+			{
+				var productID : int = result[ 0 ][ 'id' ];
+
+				query = "SELECT * " +
+					"FROM page " +
+					"WHERE name = :name  AND id_product = :id_product ;";
+
+				parameters = {};
+				parameters[ ":name" ] = pageName;
+				parameters[ ":id_product" ] = productID;
+
+				result = executeQuery(query, parameters);
+			}
+
+			return result;
+
+		}
+
+		public function setPageContent(productName:String, language:String, pageName:String, content:String, version:Number ) : Object
+		{
+			var query : String      = "SELECT id " +
+				"FROM product " +
+				"WHERE name = :name  AND language = :language;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productName;
+			parameters[ ":language" ] = language;
+
+			var result : Object = executeQuery(query, parameters);
+
+			if ( result )
+			{
+				var productID : int = result[ 0 ][ 'id' ];
+
+				query = "UPDATE page " +
 					"SET content = :content , version = :version " +
 					"WHERE name = :name  AND id_product = :id_product ;";
-					
-						parameters = {};
-						parameters[":name"] = pageName;
-						parameters[":id_product"] = productID;
-						parameters[":content"] = content;
-						parameters[":version"] = version + 1;
-						
-							
-					 result = executeQuery(query, parameters);
-				}
-				
-				return result;
-		}
-		
-		public function getProductsPages(productName:String, language:String):Object
-		{
-			var query:String = "SELECT id " + 
-						"FROM product " + 
-						"WHERE name = :name  AND language = :language;";
-						
-			var parameters:Object = new Object();
-				parameters[":name"] = productName;
-				parameters[":language"] = language;
-					
-			var result:Object = executeQuery(query, parameters);
-			
-			if( result)
-			{
-				var productID:int  = result[0]['id'];
-				
-				query = "SELECT * " + 
-					"FROM page " + 
-					"WHERE  id_product = :id_product ;";
-				
-				parameters = [];
-				parameters[":id_product"] = productID;
-				
+
+				parameters = {};
+				parameters[ ":name" ] = pageName;
+				parameters[ ":id_product" ] = productID;
+				parameters[ ":content" ] = content;
+				parameters[ ":version" ] = version + 1;
+
+
 				result = executeQuery(query, parameters);
-					
 			}
-				
+
 			return result;
 		}
-		
-		public function upVersion(productName:String, language:String):String
+
+		public function getProductsPages(productName:String, language:String) : Object
 		{
-			var query:String = "SELECT id, version " + 
-						"FROM product " + 
-						"WHERE name = :name  AND language = :language;";
-						
-			var parameters:Object = new Object();
-				parameters[":name"] = productName;
-				parameters[":language"] = language;
-			
-			var result:Object = executeQuery(query, parameters);
-			
-			if( result)
+			var query : String      = "SELECT id " +
+				"FROM product " +
+				"WHERE name = :name  AND language = :language;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productName;
+			parameters[ ":language" ] = language;
+
+			var result : Object = executeQuery(query, parameters);
+
+			if ( result )
 			{
-				var productVersion : int  	= result[0]['version'] + 1;
-				var productID : int  		= result[0]['id'];
-				
-				
-				query = "UPDATE product " + 
+				var productID : int = result[ 0 ][ 'id' ];
+
+				query = "SELECT * " +
+					"FROM page " +
+					"WHERE  id_product = :id_product ;";
+
+				parameters = [];
+				parameters[ ":id_product" ] = productID;
+
+				result = executeQuery(query, parameters);
+
+			}
+
+			return result;
+		}
+
+		public function upVersion(productName:String, language:String) : String
+		{
+			var query : String      = "SELECT id, version " +
+				"FROM product " +
+				"WHERE name = :name  AND language = :language;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productName;
+			parameters[ ":language" ] = language;
+
+			var result : Object = executeQuery(query, parameters);
+
+			if ( result )
+			{
+				var productVersion : int = result[ 0 ][ 'version' ] + 1;
+				var productID : int      = result[ 0 ][ 'id' ];
+
+
+				query = "UPDATE product " +
 					"SET  version = :version " +
 					"WHERE id = :id;";
 
 				parameters = [];
-				parameters[":id"] = productID;
-				parameters[":version"] = productVersion;
-				
+				parameters[ ":id" ] = productID;
+				parameters[ ":version" ] = productVersion;
+
 				result = executeQuery(query, parameters);
-					
+
 			}
 			return productVersion.toString();
 		}
-		
-		public function changeProductProperties( id:Number, title:String, name:String, description:String):Object
+
+		public function changeProductProperties( id:Number, title:String, name:String, description:String) : Object
 		{
-				var	query : String = "UPDATE product " + 
-					"SET name = :name , title = :title ,  description = :description " +
-					"WHERE id = :id ;";
-						
-				var parameters:Object = new Object();
-					parameters[":id"] = id;
-					parameters[":title"] = title;
-					parameters[":name"] = name;
-					parameters[":description"] = description;
-						
-				var result:Object = executeQuery(query, parameters);
-				
-				return result;
+			var query : String      = "UPDATE product " +
+				"SET name = :name , title = :title ,  description = :description " +
+				"WHERE id = :id ;";
+
+			var parameters : Object = new Object();
+			parameters[ ":id" ] = id;
+			parameters[ ":title" ] = title;
+			parameters[ ":name" ] = name;
+			parameters[ ":description" ] = description;
+
+			var result : Object = executeQuery(query, parameters);
+
+			return result;
 		}
-		
+
 		public function changePageProperties( productName:String, ln:String, oldPageName:String, newPageName:String, title:String, 
-																	description:String ):Object
+											  description:String ) : Object
 		{
-				var query:String = "SELECT id " + 
-						"FROM product " + 
-						"WHERE name = :name  AND language = :language;";
-						
-			var parameters:Object = new Object();
-				parameters[":name"] = productName;
-				parameters[":language"] = ln;
-			
-			var result:Object = executeQuery(query, parameters);
-			
-			if(result)
-			{		
-				query   = "UPDATE page " + 
+			var query : String      = "SELECT id " +
+				"FROM product " +
+				"WHERE name = :name  AND language = :language;";
+
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productName;
+			parameters[ ":language" ] = ln;
+
+			var result : Object = executeQuery(query, parameters);
+
+			if ( result )
+			{
+				query = "UPDATE page " +
 					"SET name = :new_name , title = :title ,  description = :description " +
 					"WHERE id_product = :id_product AND name = :old_name ;";
-					
-				var id_product :Number = result[0]['id'];	
-						
-				 	parameters = {};
-					parameters[":id_product"] = id_product;
-					parameters[":title"] = title;
-					parameters[":new_name"] = newPageName;
-					parameters[":old_name"] =  oldPageName;
-					parameters[":description"] = description;
-						
-				result = executeQuery(query, parameters);
-				
-				 query = "SELECT * " + 
-						"FROM page " + 
-						"WHERE name = :new_name  AND id_product = :id_product;";
-				
+
+				var id_product : Number = result[ 0 ][ 'id' ];
+
 				parameters = {};
-					parameters[":id_product"] = id_product;
-					parameters[":new_name"] = newPageName;
-						
-						
+				parameters[ ":id_product" ] = id_product;
+				parameters[ ":title" ] = title;
+				parameters[ ":new_name" ] = newPageName;
+				parameters[ ":old_name" ] = oldPageName;
+				parameters[ ":description" ] = description;
+
 				result = executeQuery(query, parameters);
-			}	
-				return result;
+
+				query = "SELECT * " +
+					"FROM page " +
+					"WHERE name = :new_name  AND id_product = :id_product;";
+
+				parameters = {};
+				parameters[ ":id_product" ] = id_product;
+				parameters[ ":new_name" ] = newPageName;
+
+
+				result = executeQuery(query, parameters);
+			}
+			return result;
 		}
-		
-		
+
+
 		/*
 		public function getPages():Object
 		{
 			 // MAST BEE CHANGED !!!!
-			var query:String = "SELECT name " + 
+			var query:String = "SELECT name " +
 					"FROM page;";
-						
+
 			var parameters:Object = new Object();
-				
+
 			var result:Object = executeQuery(query, parameters);
-			
+
 			if(!result)
 			{
 				return null;
 			}
 			return result;
 		}
-		
-		
-		
-		
+
+
+
+
 		public function changeStatusForProduct(name:String, value:Boolean):Object
 		{
-			 
-			var query:String = "UPDATE product " + 
-					"SET visible = :value " + 
+
+			var query:String = "UPDATE product " +
+					"SET visible = :value " +
 					"WHERE name = :name ;";
-						
+
 			var parameters:Object = new Object();
 				parameters[":name"] = name;
 				parameters[":value"] = value.toString();
-						
+
 			var result:Object = executeQuery(query, parameters);
-			
+
 			if(!result)
 			{
 				return null;
 			}
 			return result;
 		}
-		
+
 		public function mark(name:String, value:Boolean = true):Object
 		{
-			var query:String = "UPDATE page " + 
-					"SET mark = :value " + 
+			var query:String = "UPDATE page " +
+					"SET mark = :value " +
 					"WHERE name = :name ;";
-						
+
 			var parameters:Object = new Object();
 				parameters[":name"] = name;
 				parameters[":value"] = value.toString();
-				
+
 			var result:Object = executeQuery(query, parameters);
-			
+
 			if(!result)
 			{
 				return null;
 			}
 			return result;
 		}
-		
+
 		public function getMarkedPage():Object
 		{
-			var query:String = "SELECT name, title " + 
-					"FROM page " + 
+			var query:String = "SELECT name, title " +
+					"FROM page " +
 					" WHERE   mark = :mark ;";
-			
+
 			var parameters:Object = new Object();
 				parameters[":mark"] = "true";
-				
+
 			var result:Object = executeQuery(query, parameters);
-			
+
 			if(!result)
 			{
 				return null;
 			}
 			return result;
 		}
-		
+
 	//       PRODUCT  (id, name, version, title, description, language, toc )   //
-	
-		/// ********* curentPruduct, curentPage ******************************	
-		
+
+		/// ********* curentPruduct, curentPage ******************************
+
 		public function getVersionOfProduct(name:String, language:String):String
 		{
-			 
-			var query:String = "SELECT product.version " + 
-					"FROM product " + 
-					"WHERE name = :name " + 
+
+			var query:String = "SELECT product.version " +
+					"FROM product " +
+					"WHERE name = :name " +
 						" AND language = :language ;";
-						
+
 			var parameters:Object = new Object();
 				parameters[":name"] = name;
 				parameters[":language"] = language;
-				
+
 			var result:Object = executeQuery(query, parameters);
-			
+
 			if(!result)
 			{
 				return "";
 			}
 			return result[0]["version"];
 		}
-		
+
 		public function getProductsPages(name:String, language:String):Object
 		{
-			 
-			var query:String = "SELECT product.id " + 
-					"FROM product " + 
-					"WHERE name = :name " + 
+
+			var query:String = "SELECT product.id " +
+					"FROM product " +
+					"WHERE name = :name " +
 						" AND language = :language ;";
-						
+
 			var parameters:Object = new Object();
 				parameters[":name"] = name;
 				parameters[":language"] = language;
-				
+
 			var result:Object = executeQuery(query, parameters);
-			
-		 	query = "SELECT page.name " + 
-					"FROM page " + 
+
+		  query = "SELECT page.name " +
+					"FROM page " +
 					"WHERE id_product = :id_product ";
-			
-			parameters = [];		
+
+			parameters = [];
 			parameters[":id_product"] = result[0]["id"];
-			
+
 			result = executeQuery(query, parameters);
-			
+
 			return result;
 		}
-		
+
 		public function deleteProduct(name:String, language:String):void
 		{
-			var query:String = "SELECT product.id " + 
-					"FROM product " + 
-					"WHERE name = :name " + 
+			var query:String = "SELECT product.id " +
+					"FROM product " +
+					"WHERE name = :name " +
 						" AND language = :language ;";
-						
+
 			var parameters:Object = new Object();
 				parameters[":name"] = name;
 				parameters[":language"] = language;
-				
+
 			var result:Object = executeQuery(query, parameters);
-			
-		 	query = "DELETE " + 
-					"FROM page " + 
+
+		  query = "DELETE " +
+					"FROM page " +
 					"WHERE id_product = :id_product ";
-			
-			parameters = [];		
+
+			parameters = [];
 			parameters[":id_product"] = result[0]["id"];
-			
+
 			result = executeQuery(query, parameters);
-			
-			
-			query = "DELETE " + 
-					"FROM product " + 
-					"WHERE name = :name " + 
+
+
+			query = "DELETE " +
+					"FROM product " +
+					"WHERE name = :name " +
 						" AND language = :language ;";
-						
+
 			parameters = [];
 			parameters[":name"] = name;
 			parameters[":language"] = language;
-				
+
 			result = executeQuery(query, parameters);
-			
+
 		}
-		
-		public function setProduct(name:String, version:String, title:String, 
+
+		public function setProduct(name:String, version:String, title:String,
 																description:String,
 																language:String,
 																toc:XML):void
 		{
-				 
-				var query:String = "SELECT product.id " + 
-						"FROM product " + 
-						"WHERE name = :name " + 
-							" AND version = :version " + 
+
+				var query:String = "SELECT product.id " +
+						"FROM product " +
+						"WHERE name = :name " +
+							" AND version = :version " +
 							" AND language = :language ;";
-							
+
 				var parameters:Object = new Object();
 					parameters[":name"] = name;
 					parameters[":version"] = version;
 					parameters[":language"] = language;
-					
+
 				var result:Object = executeQuery(query, parameters);
-				
+
 				if( !result)
 				{
-					query = "INSERT INTO product(name, version, title, description, language, visible, toc) " + 
+					query = "INSERT INTO product(name, version, title, description, language, visible, toc) " +
 								"VALUES(:name, :version, :title, :description, :language, :visible, :toc);";
-					
+
 					parameters = [];
 					parameters[":name"] = name;
 					parameters[":version"] = version;
@@ -654,19 +656,19 @@ package
 					parameters[":language"] = language;
 					parameters[":toc"] = toc.toXMLString();
 					parameters[":visible"] = "true";
-													
-					executeQuery(query, parameters);				
+
+					executeQuery(query, parameters);
 				}
-				
-				
+
+
 		}
-		
+
 		public function getVersionOfPage(pageName:String):String
 		{
-			var query:String = "SELECT page.version, page.id  FROM page WHERE name = :pageName ;"; 
+			var query:String = "SELECT page.version, page.id  FROM page WHERE name = :pageName ;";
 			var parameters:Object = new Object();
 				parameters[":pageName"] = pageName;
-								
+
 			var result:Object = executeQuery(query,parameters);
 			if(!result)
 			{
@@ -674,32 +676,32 @@ package
 			}
 			return result[0]["version"];
 		}
-		
-		public function setPage(productName:String, language:String, pageName:String, 
-																		version:String, 
+
+		public function setPage(productName:String, language:String, pageName:String,
+																		version:String,
 																		title:String,
 																		description:String,
 																		content:String):void
 		{
-				
+
 				content = cleanContent(content);
-				 
-				var query:String = "SELECT id " + 
-						"FROM product " + 
+
+				var query:String = "SELECT id " +
+						"FROM product " +
 						"WHERE name = :name  AND language = :language;";
-						
+
 				var parameters:Object = new Object();
 					parameters[":name"] = productName;
 					parameters[":language"] = language;
-						
+
 				var result:Object = executeQuery(query, parameters);
-				
+
 				if( result)
 				{
 					var productID:int  = result[0]['id'];
-					query = "INSERT INTO page(name, version, title, description, content, id_product) " + 
+					query = "INSERT INTO page(name, version, title, description, content, id_product) " +
 							"VALUES(:pageName , :version, :title,	:description, :content, :productID);";
-					
+
 					parameters = [];
 					parameters[":pageName"] 	= pageName;
 					parameters[":version"] 		= version;
@@ -708,12 +710,12 @@ package
 					parameters[":content"] 		= content;
 					parameters[":productID"] 	= productID;
 
-					executeQuery(query, parameters);			
+					executeQuery(query, parameters);
 				}
 
 
 		}
-	
+
 		public function deletePage(namePage:String):void
 		{
 			var query:String = "DELETE FROM 	page WHERE name = :namePage";
@@ -721,180 +723,185 @@ package
 				parameters[":namePage"] = namePage;
 			executeQuery(query, parameters);
 		}
-		
-		
+
+
 		public function deleteResources(namePage:String):void
 		{
-			
+
 				var query:String = "SELECT page.id FROM 	page  WHERE name = :namePage";
 				var parameters:Object = new Object();
 					parameters[":namePage"] = namePage;
-				
+
 				var result:Object = executeQuery(query, parameters);
-				var pageID:int = result[0]['id']; 
-				
+				var pageID:int = result[0]['id'];
+
 				query = "DELETE FROM 	resource WHERE id_page = :pageID";
 					parameters = [];
 					parameters[":pageID"] = pageID;
 				executeQuery(query, parameters);
 		}
-		
+
 		public function getResourcesOfPage(namePage:String):Object
 		{
 				var query:String  = "SELECT page.id FROM 	page  WHERE name = :namePage";
 				var parameters:Object = new Object();
 					parameters[":namePage"] = namePage;
-				
+
 				var result:Object = executeQuery(query, parameters);
-				var pageID:int = result[0]['id']; 
-				
+				var pageID:int = result[0]['id'];
+
 				query = "SELECT resource.name  FROM	resource WHERE id_page = :pageID";
-				
+
 				parameters = [];
 				parameters[":pageID"] = pageID;
-				
+
 				result = executeQuery(query, parameters);
 
 				return result;
 		}
-		
-		
+
+
 		public function setResource(pageName:String, resourceName:String	):void
 		{
-				var query:String = "SELECT page.id " + 
-						"FROM page " + 
+				var query:String = "SELECT page.id " +
+						"FROM page " +
 						"WHERE (name = :pageName );";
-				
+
 				var parameters:Object = new Object();
-					parameters[":pageName"] = pageName;						
+					parameters[":pageName"] = pageName;
 				var result:Object = executeQuery(query, parameters);
-				
+
 				if( result)
 				{
-					query = "INSERT INTO resource(name, id_page) " + 
+					query = "INSERT INTO resource(name, id_page) " +
 							"VALUES (:resourceName, :result);";
 					parameters = [];
 					parameters[":resourceName"] = resourceName;
 					parameters[":result"] = result[0]['id'];
 					executeQuery(query, parameters);
 				}
-				
+
 		}
-		
+
 		public function search(	value:String):Object
 		{
 			var phraseRE:RegExp = /\s+/gim;
 
 			value = " " + value + " ";
-			value = value.replace(phraseRE,"%"); 
-			
+			value = value.replace(phraseRE,"%");
+
 			var query:String = "SELECT page.name, page.title " +
 						"FROM product INNER JOIN page ON product.id = page.id_product "+
-						"WHERE product.visible = :visible " + 
+						"WHERE product.visible = :visible " +
 						"	AND ((page.content) LIKE  :value) "
-			
+
 			var parameters:Object = new Object();
 				parameters[":visible"] = "true";
 				parameters[":value"] = value;
 
 			var result:Object = executeQuery(query, parameters);
-			
+
 			return result;
 		}
-		
-		
+
+
 		private function cleanContent(value:String):String
 		{
 			var phraseRE1:RegExp = new RegExp("<script.*?>.*?<\/script>|<style.*?>.*?<\/style>|<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->|<\!\[CDATA\[.*?\]\]>|&#?[\w\d]+","gimsx");
-			
+
 			var phraseRE2:RegExp = new RegExp("[^\w]+","gimsx");
-//  
-			var words:String = value.replace(phraseRE1," "); 
+//
+			var words:String = value.replace(phraseRE1," ");
 //				words = words.replace(phraseRE2," ");
 			return words;
 		}
-		
+
 		*/
-		
-		private function executeQuery(query:String, parameters:Object):Object
+
+		private function executeQuery(query:String, parameters:Object) : Object
 		{
-			 var sqlStatement:SQLStatement = new SQLStatement;
-			 		sqlStatement.sqlConnection = connection;
-					sqlStatement.addEventListener(SQLEvent.RESULT, resultHandler);
-					sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandler);
-					
-			try {
+			var sqlStatement : SQLStatement = new SQLStatement;
+			sqlStatement.sqlConnection = connection;
+			sqlStatement.addEventListener(SQLEvent.RESULT, resultHandler);
+			sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandler);
+
+			try
+			{
 				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
 				sqlStatement.text = query;
-				
-				for(var name:String in parameters )
-					sqlStatement.parameters[name] = parameters[name];
-				
+
+				for ( var name : String in parameters )
+				{
+					sqlStatement.parameters[ name ] = parameters[ name ];
+				}
+
 				sqlStatement.execute();
-				
-				
-				var result:SQLResult = sqlStatement.getResult();
+
+
+				var result : SQLResult = sqlStatement.getResult();
 				sqlStatement.sqlConnection.close();
-			} 
-			catch (err:SQLError) 
+			}
+			catch ( err : SQLError )
 			{
 				sqlStatement.sqlConnection.close();
-				
+
 				localizeError(err);
 				return null;
 			}
-				return result.data;
+			return result.data;
 		}
-			
-		
-		
-		private function resultHandler(event:SQLEvent):void 
+
+
+
+		private function resultHandler(event:SQLEvent) : void
 		{
-			trace("  SQLEvent Ok! ");	
+			trace("  SQLEvent Ok! ");
 		}
-		
-		private function displayLocalizedDetail(str:String):void 
+
+		private function displayLocalizedDetail(str:String) : void
 		{
 			trace(str);
 			Alert.show(str, "SQL error:");
 		}
 
-		
-		private function errorHandler(event:SQLErrorEvent):void 
+
+		private function errorHandler(event:SQLErrorEvent) : void
 		{
 			trace("!!!!!!!!!!!!!!!!!  SQLErrorEvent !!!!!!!!!!!!!!!");
 		}
-		
-		private function localizeError(e:SQLError):void 
+
+		private function localizeError(e:SQLError) : void
 		{
-				var argsLength:int = e.detailArguments.length;
-				switch (e.detailID) 
-				{
-					case 2030:
+			var argsLength : int = e.detailArguments.length;
+
+			switch ( e.detailID )
+			{
+				case 2030:
 					// default details string: "trigger '%s' already exists"
 					// do stuff
-						break;
-					// ... other cases ...
-					case 2036:
+					break;
+				// ... other cases ...
+				case 2036:
+				{
 					// default details string: "no such column: '%s[.%s[.%s]]'"
-						var colPath:String = "";
-						if (argsLength == 1) 
-						{
-							colPath = e.detailArguments[0];
-						} else if (argsLength == 2) 
-						{
-							colPath = e.detailArguments[0]+"."+e.detailArguments[1];
-						} else if (argsLength == 3) 
-						{
-							colPath = e.detailArguments[0]+"."+e.detailArguments[1]+"."+e.detailArguments[2];
-						}
-			// or use the locale information to generate a localized string
-						displayLocalizedDetail("Column '" + colPath + "' does not exist.");
-						break;
+					var colPath : String = "";
+
+					if ( argsLength == 1 )
+						colPath = e.detailArguments[ 0 ];
+					else if ( argsLength == 2 )
+						colPath = e.detailArguments[ 0 ] + "." + e.detailArguments[ 1 ];
+					else if ( argsLength == 3 )
+						colPath = e.detailArguments[ 0 ] + "." + e.detailArguments[ 1 ] + "." + e.detailArguments[ 2 ];
+					// or use the locale information to generate a localized string
+					displayLocalizedDetail("Column '" + colPath + "' does not exist.");
+					break;
+				}
 				default:
+				{
 					displayLocalizedDetail(e.details);
+				}
 			}
 		}
-		
+
 	}
 }
