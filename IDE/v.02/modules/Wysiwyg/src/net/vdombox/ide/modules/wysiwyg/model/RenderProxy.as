@@ -1,3 +1,11 @@
+//------------------------------------------------------------------------------
+//
+//   Copyright 2011 
+//   VDOMBOX Resaerch  
+//   All rights reserved. 
+//
+//------------------------------------------------------------------------------
+
 package net.vdombox.ide.modules.wysiwyg.model
 {
 	import flash.events.Event;
@@ -20,43 +28,34 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 	import spark.components.IItemRenderer;
 
+	/**
+	 *
+	 * @author andreev ap
+	 */
 	public class RenderProxy extends Proxy implements IProxy
 	{
+		/**
+		 *
+		 * @default
+		 */
 		public static const NAME : String = "RenderProxy";
 
+		/**
+		 *
+		 */
 		public function RenderProxy()
 		{
 			super( NAME );
 		}
 
-		private var typesProxy : TypesProxy;
-
 		private var _renderersIndex : Object;
 
-		private function get renderersIndex() : Object
-		{
-			if ( !_renderersIndex )
-				_renderersIndex = {};
+		private var typesProxy : TypesProxy;
 
-			return _renderersIndex;
-		}
-
-		private function set renderersIndex( value : Object ) : void
-		{
-			_renderersIndex = value;
-		}
-
-		override public function onRegister() : void
-		{
-			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
-		}
-
-		override public function onRemove() : void
-		{
-			typesProxy = null;
-			cleanup();
-		}
-
+		/**
+		 *
+		 * @param renderer
+		 */
 		public function addRenderer( renderer : IRenderer ) : void
 		{
 			IEventDispatcher( renderer ).addEventListener( RendererEvent.RENDER_CHANGED, renderer_renderchangedHandler, false, 0, true );
@@ -73,6 +72,67 @@ package net.vdombox.ide.modules.wysiwyg.model
 			}
 		}
 
+		/**
+		 *
+		 */
+		public function cleanup() : void
+		{
+			renderersIndex = null;
+			data = null;
+		}
+
+		/**
+		 *
+		 * @param vdomObjectVO
+		 * @param rawRenderData
+		 * @return
+		 */
+		public function generateRenderVO( vdomObjectVO : IVDOMObjectVO, rawRenderData /*is Wysiwyg*/ : XML ) : RenderVO
+		{
+			var itemID : String;
+			var renderVO : RenderVO;
+
+			if ( !rawRenderData )
+			{
+				trace( "\n*************ERROR****************** \n generateRenderVO() - RenderProxy" );
+				return renderVO;
+			}
+
+			itemID = rawRenderData.@id
+
+			renderVO = new RenderVO( vdomObjectVO );
+
+			createAttributes( renderVO, rawRenderData );
+			createChildren( renderVO, rawRenderData );
+
+			return renderVO;
+		}
+
+		/**
+		 *
+		 * @param vdomObjectVO
+		 * @return
+		 */
+		public function getRenderersByVO( vdomObjectVO : IVDOMObjectVO ) : Array
+		{
+			return vdomObjectVO ? renderersIndex[ vdomObjectVO.id ] : null;
+		}
+
+		override public function onRegister() : void
+		{
+			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
+		}
+
+		override public function onRemove() : void
+		{
+			typesProxy = null;
+			cleanup();
+		}
+
+		/**
+		 *
+		 * @param renderer
+		 */
 		public function removeRenderer( renderer : IRenderer ) : void
 		{
 			var renderVO : RenderVO = IItemRenderer( renderer ).data as RenderVO;
@@ -89,37 +149,14 @@ package net.vdombox.ide.modules.wysiwyg.model
 			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGING, renderer_renderchangingHandler );
 		}
 
-		public function getRenderersByVO( vdomObjectVO : IVDOMObjectVO ) : Array
-		{
-			return vdomObjectVO ? renderersIndex[ vdomObjectVO.id ] : null;
-		}
-
-		public function generateRenderVO( vdomObjectVO : IVDOMObjectVO, rawRenderData /*is Wysiwyg*/: XML ) : RenderVO
-		{
-			var itemID : String = rawRenderData.@id;
-			var renderVO : RenderVO;
-
-			renderVO = new RenderVO( vdomObjectVO );
-
-			createAttributes( renderVO, rawRenderData );
-			createChildren( renderVO, rawRenderData );
-
-			return renderVO;
-		}
-
-		public function cleanup() : void
-		{
-			renderersIndex = null;
-			data = null;
-		}
 		/**
-		 * 
+		 *
 		 * @param renderVO
 		 * @param rawRenderData
-		 *  
-		 *  Creating standart and selfs atributes   
+		 *
+		 *  Creating standart and selfs atributes
 		 */
-		private function createAttributes( renderVO : RenderVO, rawRenderData  /*is Wysiwyg*/ : XML ) : void
+		private function createAttributes( renderVO : RenderVO, rawRenderData /*is Wysiwyg*/ : XML ) : void
 		{
 			var typeVO : TypeVO;
 
@@ -158,7 +195,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 			}
 		}
 
-		private function createChildren( renderVO : RenderVO, rawRenderData  /*is Wysiwyg*/ : XML ) : void
+		private function createChildren( renderVO : RenderVO, rawRenderData /*is Wysiwyg*/ : XML ) : void
 		{
 			var pageVO : PageVO = renderVO.vdomObjectVO is PageVO ? renderVO.vdomObjectVO as PageVO : ObjectVO( renderVO.vdomObjectVO ).pageVO;
 			var objectVO : ObjectVO;
@@ -174,14 +211,14 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 			for each ( childXML in rawRenderData.* )
 			{
-				childName = childXML.name();
+				childName = childXML.name().toString();
 				childID = childXML.@id;
 
 				typeID = childXML.@typeID;
 
 				typeVO = typesProxy.getTypeVObyID( typeID );
-				
-				if ( typeVO &&( childName == "container" || childName == "table" || childName == "row" || childName == "cell" ) ) 
+
+				if ( typeVO && ( childName == "container" || childName == "table" || childName == "row" || childName == "cell" ) )
 				{
 					if ( !childID || !typeVO )
 						continue;
@@ -193,7 +230,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 					childRenderVO = new RenderVO( objectVO );
 
 					createAttributes( childRenderVO, childXML );
-					
+
 					createChildren( childRenderVO, childXML );
 
 					childRenderVO.parent = renderVO;
@@ -207,8 +244,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 				else
 				{
 					if ( !renderVO.content )
-						renderVO.content = new XMLList( );
-					
+						renderVO.content = new XMLList();
+
 					renderVO.content += childXML.copy();
 				}
 			}
@@ -263,6 +300,19 @@ package net.vdombox.ide.modules.wysiwyg.model
 			if ( renderers.length == 0 )
 				delete renderersIndex[ renderer.vdomObjectVO.id ];
 
+		}
+
+		private function get renderersIndex() : Object
+		{
+			if ( !_renderersIndex )
+				_renderersIndex = {};
+
+			return _renderersIndex;
+		}
+
+		private function set renderersIndex( value : Object ) : void
+		{
+			_renderersIndex = value;
 		}
 	}
 }

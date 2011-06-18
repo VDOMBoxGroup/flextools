@@ -194,7 +194,9 @@
 				if (index >= objectsTree.verticalScrollPosition + objectsTree.rowCount 
 					|| index < objectsTree.verticalScrollPosition)
 				{
-					newVPos = Math.min((index - 2), objectsTree.maxVerticalScrollPosition);
+					if ( index > 2) 
+						index -= 2;
+					newVPos = Math.min((index), objectsTree.maxVerticalScrollPosition);
 
 //					trace("7");
 					objectsTree.verticalScrollPosition = newVPos ;

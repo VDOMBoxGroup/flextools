@@ -18,10 +18,11 @@
 			import mx.managers.FocusManager;
 			import mx.managers.IFocusManagerComponent;
 			import mx.utils.StringUtil;
-
+			
 			import net.vdombox.ide.common.vo.AttributeVO;
+			import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
-
+			
 			import spark.components.RichEditableText;
 
 			private var fonts : ArrayCollection = new ArrayCollection( [ { label: "Andale Mono", data: "andale mono" },
@@ -401,6 +402,17 @@
 					attributesObject[ "fontsize" ].value = value.data;
 					elementForEditing.setStyle( "fontSize", value.data );
 				}
+			}
+			
+			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
+			{
+				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO(_item.vdomObjectVO);
+				var attributeVO : AttributeVO = new AttributeVO( "valie" );
+				
+//				attributeVO.value = tinyMCE.getContent();
+//				vdomObjectAttributesVO.attributes = [attributeVO];
+				
+				return vdomObjectAttributesVO;
 			}
 		]]>
 	</fx:Script>

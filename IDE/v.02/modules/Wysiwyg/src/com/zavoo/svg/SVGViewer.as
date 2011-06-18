@@ -151,7 +151,7 @@ package com.zavoo.svg
 		public function set getResource( svgImageNode : SVGImageNode ):void
 		{
 			var renderEvent : RendererEvent = new RendererEvent( RendererEvent.GET_RESOURCE );
-			renderEvent.svgImageNode = svgImageNode;
+			renderEvent.object = svgImageNode;
 			
 			dispatchEvent( renderEvent );
 		}

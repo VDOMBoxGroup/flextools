@@ -10,6 +10,7 @@
 			
 			import net.vdombox.ide.common.TypeInterface;
 			import net.vdombox.ide.common.vo.TypeVO;
+			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.ImageToolbar;
@@ -81,6 +82,7 @@
 					{
 						var richTextToolbar : RichTextToolbar = new RichTextToolbar();
 						
+						richTextToolbar.addEventListener(Event.CHANGE, richTextToolbarChageHandle);
 						_currentToolbar = richTextToolbar;
 						addElement( richTextToolbar );
 						richTextToolbar.init( _selectedRenderer );
@@ -101,6 +103,9 @@
 						
 					case TypeInterface.PICTURE:
 					{
+						break;
+						
+						// todo: dos not worked
 						var imageToolbar : ImageToolbar = new ImageToolbar();
 						
 						_currentToolbar = imageToolbar;
@@ -122,6 +127,15 @@
 					includeInLayout = false;
 				}
 			}
+			
+			private function richTextToolbarChageHandle( event : Event ) : void
+			{
+					var toolBarPanel : IToolbar = event.target as IToolbar;
+					var editorEvent : EditorEvent = new EditorEvent(EditorEvent.ATTRIBUTES_CHANGED);
+					editorEvent.vdomObjectAttributesVO = toolBarPanel.vdomObjectAttributesVO ;
+					dispatchEvent( editorEvent );
+			}
+				
 		]]>
 	</fx:Script>
 </s:SkinnableContainer>

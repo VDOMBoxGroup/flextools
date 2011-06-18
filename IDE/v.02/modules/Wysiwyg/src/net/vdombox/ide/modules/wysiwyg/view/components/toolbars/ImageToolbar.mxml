@@ -10,6 +10,7 @@
 			import mx.utils.StringUtil;
 			
 			import net.vdombox.ide.common.vo.AttributeVO;
+			import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ToolbarEvent;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar;
@@ -170,6 +171,17 @@
 //				item.waitMode = true;
 //				dataManager.addEventListener( DataManagerEvent.MODIFY_RESOURCE_COMPLETE, resourceModifedHandler );
 //				dataManager.modifyResource( resourceId, operation, attributeName, attributes );
+			}
+			
+			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
+			{
+				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO(_item.vdomObjectVO);
+				var attributeVO : AttributeVO = new AttributeVO( "valie" );
+				
+//				attributeVO.value = tinyMCE.getContent();
+//				vdomObjectAttributesVO.attributes = [attributeVO];
+				
+				return vdomObjectAttributesVO;
 			}
 
 //			private function resourceModifedHandler( event : DataManagerEvent ) : void

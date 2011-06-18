@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-	
+
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -32,7 +32,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		public function VdomObjectEditorMediator( editor : IEditor )
 		{
-			var instanceName : String = NAME + "/" +  editor.editorVO.vdomObjectVO.id;
+			var instanceName : String = NAME + "/" + editor.editorVO.vdomObjectVO.id;
 
 			super( instanceName, editor );
 
@@ -50,7 +50,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			return editor ? editor.editorVO : null;
 		}
-		
+
 //		public function get pageVO() : PageVO
 //		{
 //			return editor.vdomObjectVO as PageVO;
@@ -126,36 +126,36 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
 					//  set transformMarker to selected page
-					
-					var editor:IEditor = viewComponent as IEditor;
+
+					var editor : IEditor = viewComponent as IEditor;
 					var selectedPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
 					var selectedObject : IVDOMObjectVO = sessionProxy.selectedObject as IVDOMObjectVO;
 					var selRenderer : RendererBase;
-					
+
 					if ( !selectedPage )
 						break;
-					
-					
+
+
 					if ( selectedPage.id != editor.editorVO.vdomObjectVO.id )
 						break;
 
 					if ( selectedObject )
-					{	
-						var renderProxy :RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+					{
+						var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 						var renderers : Array = renderProxy.getRenderersByVO( selectedObject );
-						
+
 						// find nesesary renderer
-						
+
 						for each ( var renderer : RendererBase in renderers )
 						{
 							if ( renderer.renderVO.vdomObjectVO.id == selectedObject.id )
 							{
-								selRenderer = renderer ;
+								selRenderer = renderer;
 								break;
 							}
 						}
 					}
-					
+
 					// mark object
 					editor.selectedRenderer = selRenderer;
 
@@ -177,10 +177,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function addHandlers() : void
 		{
 			var editor : IEventDispatcher = editor as IEventDispatcher;
-			
-			if( !editor )
+
+			if ( !editor )
 				return;
-			
+
 			editor.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
 			editor.addEventListener( SkinPartEvent.PART_ADDED, partAddedHandler, false, 0, true );
@@ -196,19 +196,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
 			editor.addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0, true );
 			editor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
-			
+
 			editor.addEventListener( RendererEvent.GET_RESOURCE, renderer_getResourseHandler, true, 0, true );
 
 			editor.addEventListener( RendererDropEvent.DROP, renderer_dropHandler, true, 0, true );
+
+			editor.addEventListener( EditorEvent.ATTRIBUTES_CHANGED, attributesChangeHandler, true, 0, true );
+
+
+
 		}
 
 		private function removeHandlers() : void
 		{
 			var editor : IEventDispatcher = editor as IEventDispatcher;
-			
-			if( !editor )
+
+			if ( !editor )
 				return;
-			
+
 			editor.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 
 			editor.removeEventListener( SkinPartEvent.PART_ADDED, partAddedHandler );
@@ -227,13 +232,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			editor.removeEventListener( RendererDropEvent.DROP, renderer_dropHandler, true );
 
+			editor.removeEventListener( EditorEvent.ATTRIBUTES_CHANGED, attributesChangeHandler, true );
+
+			editor.removeEventListener( RendererEvent.GET_RESOURCE, renderer_getResourseHandler, true );
+
+
 		}
 
 		private function clearData() : void
 		{
 			editor.editorVO.vdomObjectVO = null;
 		}
-		
+
 		private function removedFromStageHandler( event : Event ) : void
 		{
 			facade.removeMediator( mediatorName );
@@ -278,16 +288,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sendNotification( ApplicationFacade.RENDERER_CLICKED, event.target as IRenderer );
 		}
-		
+
 		private function renderer_getResourseHandler( event : RendererEvent ) : void
 		{
-			sendNotification( ApplicationFacade.GET_RESOURCE_REQUEST, event.svgImageNode );
+			sendNotification( ApplicationFacade.GET_RESOURCE_REQUEST, event.object );
 		}
 
 		private function renderer_dropHandler( event : RendererDropEvent ) : void
 		{
-			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST,
-				{ vdomObjectVO: ( event.target as IRenderer ).vdomObjectVO, typeVO: event.typeVO, point: event.point } )
+			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST, { vdomObjectVO: ( event.target as IRenderer ).vdomObjectVO, typeVO: event.typeVO, point: event.point } )
 		}
 
 		private function rendererTransformedHandler( event : EditorEvent ) : void
@@ -325,6 +334,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			vdomObjectAttributesVO.attributes = attributes;
 
 			sendNotification( ApplicationFacade.RENDERER_TRANSFORMED, vdomObjectAttributesVO );
+		}
+
+		private function attributesChangeHandler( event : EditorEvent ) : void
+		{
+
+			sendNotification( ApplicationFacade.SAVE_ATTRIBUTES_REQUEST, event.vdomObjectAttributesVO );
 		}
 	}
 }

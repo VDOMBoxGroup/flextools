@@ -9,6 +9,7 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
+	
 	import flash.display.Bitmap;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
@@ -19,6 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
@@ -33,6 +35,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
+	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -42,6 +45,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+	
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.RichEditableText;
@@ -454,7 +458,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		}
 
 
-
+		/**
+		 *
+		 * @param value
+		 */
+//		public function set selected( value : Boolean ) : void
+//		{
+//		}
 
 		/**
 		 *
@@ -555,13 +565,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 
-
-		private function createContent( contetntPart : XML ) : void
+		private function caseContainer( contetnt : XML ) : void
 		{
-			chooseContent( contetntPart.children()[ 0 ] );
+			for each (var contetntPart : XML in contetnt.children() )
+			{
+				choiceContentType( contetntPart );
+			}
+//			choiceContentType( contetntPart.children()[ 0 ] );
 		}
 
-		private function createHtmlText( contetntPart : XML ) : void
+		private function caseHtmlText( contetntPart : XML ) : void
 		{
 			var html : HTML = new HTML();
 
@@ -589,7 +602,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			background.addElement( html );
 		}
 
-		private function crateSVG( contetntPart : XML ) : void
+		private function caseSVG( contetntPart : XML ) : void
 		{
 			var svg : SVGViewer            = new SVGViewer();
 			var editableAttributes : Array = svg.setXML( contetntPart );
@@ -601,7 +614,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			background.addElement( svg );
 		}
 
-		private function createText( contetntPart : XML ) : void
+		private function caseText( contetntPart : XML ) : void
 		{
 			var richText : UIComponent
 
@@ -624,29 +637,29 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			background.addElement( richText );
 		}
 
-		private function chooseContent( contetntPart : XML ) : void
+		private function choiceContentType( contetntPart : XML ) : void
 		{
 			switch ( contetntPart.name().toString() )
 			{
 				case "container":
 				{
-					createContent( contetntPart );
+					caseContainer( contetntPart );
 					break;
 				}
 				case "svg":
 				{
-					crateSVG( contetntPart );
+					caseSVG( contetntPart );
 					break;
 				}
 
 				case "text":
 				{
-					createText( contetntPart );
+					caseText( contetntPart );
 					break;
 				}
 				case "htmltext":
 				{
-					createHtmlText( contetntPart );
+					caseHtmlText( contetntPart );
 					break;
 				}
 				default:
@@ -935,7 +948,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		}
 
 		/**
-		 * Refresh attributes .
+		 * Refresh att.
 		 *
 		 */
 		private function refresh() : void
@@ -973,7 +986,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			for each ( contetntPart in _renderVO.content )
 			{
-				chooseContent( contetntPart );
+				choiceContentType( contetntPart );
 			}
 
 			skin.currentState = "normal";

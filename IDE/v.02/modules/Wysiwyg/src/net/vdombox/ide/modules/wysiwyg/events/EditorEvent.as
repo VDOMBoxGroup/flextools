@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 {
 	import flash.events.Event;
 	
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 
 	public class EditorEvent extends Event
@@ -10,6 +11,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var REMOVED : String = "editorRemoved";
 		
 		public static var VDOM_OBJECT_VO_CHANGED : String = "objectChanged";
+		
+		public static var ATTRIBUTES_CHANGED : String = "attributesChanged";
 		
 		public static var XML_EDITOR_OPENED : String = "xmlEditorOpened";
 		public static var WYSIWYG_OPENED : String = "wysiwygOpened";
@@ -29,6 +32,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 
 		public var renderer : IRenderer;
 		public var attributes : Object;
+		public var vdomObjectAttributesVO : VdomObjectAttributesVO;
 		
 		override public function clone() : Event
 		{

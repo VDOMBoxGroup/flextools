@@ -3,7 +3,7 @@
 		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar">
+		  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar" >
 
 	<fx:Script source="richTextToolbarTemplate.as"/>
 
@@ -21,6 +21,7 @@
 			import mx.utils.StringUtil;
 			
 			import net.vdombox.ide.common.vo.AttributeVO;
+			import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditor;
@@ -29,12 +30,13 @@
 
 			private var HTMLEditorLoader : HTMLLoader;
 
-			private var attributesObject : Object;
+			public var attributesObject : Object;
 
 			private var _item : IRenderer;
 
 			public function get attributes() : Array
 			{
+				
 				var result : Array = [];
 				var attributeVO : AttributeVO;
 
@@ -47,6 +49,17 @@
 				}
 
 				return result;
+			}
+			
+			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
+			{
+				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO(_item.vdomObjectVO);
+				var attributeVO : AttributeVO = new AttributeVO( "value" );
+				
+				attributeVO.value = tinyMCE.getContent();
+				vdomObjectAttributesVO.attributes = [attributeVO];
+					
+				return vdomObjectAttributesVO;
 			}
 
 			public function get item() : IRenderer
@@ -190,6 +203,8 @@
 				{
 					value = tinyMCE.getContent();
 					attributesObject[ "value" ].value = value;
+					
+					dispatchEvent( new Event( Event.CHANGE ) );
 				}
 
 				bodyTag.innerText = value;

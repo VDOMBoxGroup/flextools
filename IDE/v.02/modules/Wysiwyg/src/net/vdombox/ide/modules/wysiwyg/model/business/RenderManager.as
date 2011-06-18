@@ -16,7 +16,11 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 	
 	import net.vdombox.ide.modules.wysiwyg.view.components.IItem;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ItemDescription;
-	
+	/**
+	 * Dos not used !?! 
+	 * @author andreev ap
+	 * 
+	 */	
 	public class RenderManager implements IEventDispatcher
 	{	
 		private static var instance : RenderManager;
@@ -489,6 +493,8 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 					item.setStyle( atrName, _style[atrName] )
 			}
 			
+			if( _style.hasOwnProperty( "backgroundColor" )
+				trace("+*+*+*+*+*+*+*+*");
 			//repeat, no-repeat, repeat-x, repeat-y
 			//item.setStyle( "repeatedBackgroundImage", "beb4fd88-7fc2-4079-8a82-ffe1b9743352" )
 			//item.setStyle( "backgroundRepeat", "repeat" );
