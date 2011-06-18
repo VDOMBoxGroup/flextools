@@ -29,13 +29,11 @@ package net.vdombox.ide.core.controller.responses
 
 					if ( !applicationVO )
 					{
-						sendNotification( ApplicationFacade.SEND_TO_LOG,
-										  "ServerProxyResponseCommand: APPLICATION_CREATED applicationVO is null." );
+						sendNotification( ApplicationFacade.SEND_TO_LOG, "ServerProxyResponseCommand: APPLICATION_CREATED applicationVO is null." );
 						return;
 					}
 
-					message =
-						new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.CREATE, PPMServerTargetNames.APPLICATION, applicationVO );
+					message = new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.CREATE, PPMServerTargetNames.APPLICATION, applicationVO );
 
 					break;
 				}
@@ -44,8 +42,7 @@ package net.vdombox.ide.core.controller.responses
 				{
 					var applications : Array = body as Array;
 
-					message =
-						new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.APPLICATIONS, applications );
+					message = new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.APPLICATIONS, applications );
 
 					break;
 				}
