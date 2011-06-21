@@ -15,17 +15,17 @@
 
 	<!-- A universally unique application identifier. Must be unique across all AIR applications.
 	     Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-	<id>VDOMIDE2</id>
+	<id>net.vdombox.ide2</id>
 
 	<!-- Used as the filename for the application. Required. -->
-	<filename>Vdom IDE.v.2.0.1.003</filename>
+	<filename>Vdom IDE.v.2.0.1.004.2</filename>
 
 	<!-- The name that is displayed in the AIR application installer. 
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
-	<name>VDOMIDE2</name>
+	<name>Vdom IDE.v.2.0.1.004.2</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-	<version>2.0.1.003</version>
+	<version>2.0.1.004.2</version>
 
 	<!-- Description, displayed in the AIR application installer.
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
@@ -44,7 +44,7 @@
 		<content>[Это значение будет перезаписано программой Flash Builder в выходном файле app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
-		<!-- <title></title> -->
+		 <title>Vdom IDE.v.2.0.1.004.2</title> 
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
 		<!-- <systemChrome></systemChrome> -->

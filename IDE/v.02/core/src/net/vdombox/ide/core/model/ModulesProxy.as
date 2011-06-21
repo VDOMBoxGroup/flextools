@@ -2,18 +2,18 @@ package net.vdombox.ide.core.model
 {
 	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
-	
+
 	import mx.events.ModuleEvent;
 	import mx.modules.IModuleInfo;
 	import mx.modules.ModuleManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -26,24 +26,26 @@ package net.vdombox.ide.core.model
 
 		private static const MODULES_DIR : String = "app:/modules/";
 
-		private static const MODULES_XML : XML =
-			<modules>
+		private static const MODULES_XML : XML = <modules>
 				<category name="applicationManagment">
 					<module name="ApplicationsManagment" path="app:/modules/ApplicationsManagment/ApplicationsManagment.swf"/>
 				</category>
 				<category name="Edition">									
-					
+
 					<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
-										
+					<module name="Tree" path="app:/modules/Tree/Tree.swf"/>
+					<module name="Events" path="app:/modules/Events/Events.swf"/>
+
 				</category>
 			</modules>
-			/*
-			<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
-			<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
-			<module name="Tree" path="app:/modules/Tree/Tree.swf"/>
-			<module name="Events" path="app:/modules/Events/Events.swf"/>
-			<module name="ResourceBrowser" path="app:/modules/Resource Browser/ResourceBrowser.swf"/>
-			*/
+
+		/*
+		<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
+		<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
+		<module name="Tree" path="app:/modules/Tree/Tree.swf"/>
+		<module name="Events" path="app:/modules/Events/Events.swf"/>
+		<module name="ResourceBrowser" path="app:/modules/Resource Browser/ResourceBrowser.swf"/>
+		*/
 
 		public function ModulesProxy( data : Object = null )
 		{
@@ -83,12 +85,12 @@ package net.vdombox.ide.core.model
 		public function getModulesListByCategory( categoryVO : ModulesCategoryVO ) : Array
 		{
 			var result : Array = modulesList.filter( function( element : ModuleVO, index : int, arr : Array ) : Boolean
-				{
-					if ( element.category == categoryVO )
-						return true;
-					else
-						return false;
-				} );
+			{
+				if ( element.category == categoryVO )
+					return true;
+				else
+					return false;
+			} );
 
 			return result;
 		}
@@ -131,14 +133,14 @@ package net.vdombox.ide.core.model
 		{
 			var moduleVO : ModuleVO;
 
-			if( modulesList && modulesList.length > 0 )
+			if ( modulesList && modulesList.length > 0 )
 			{
 				for ( var i : int = 0; i < modulesList.length; i++ )
 				{
 					moduleVO = modulesList[ i ] as ModuleVO;
-	
+
 					sendNotification( ApplicationFacade.MODULES_UNLOADING_START, moduleVO );
-	
+
 					if ( moduleVO.module )
 						moduleVO.module.tearDown();
 				}
@@ -231,7 +233,7 @@ package net.vdombox.ide.core.model
 		private function moduleErrorHandler( event : ModuleEvent ) : void
 		{
 			var moduleVO : ModuleVO = event.module.data as ModuleVO;
-			trace("\n *************** MODULES_LOADING_ERROR *********************" + moduleVO.path );
+			trace( "\n *************** MODULES_LOADING_ERROR *********************" + moduleVO.path );
 			sendNotification( ApplicationFacade.MODULES_LOADING_ERROR, moduleVO );
 		}
 	}
