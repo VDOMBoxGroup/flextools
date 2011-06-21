@@ -18,6 +18,8 @@ package
 	
 	public class Update extends UIComponent 
 	{
+		public static var PARSING_COMPLETED		: String = "PARSING_COMPLETED";
+		
 		private var sqlProxy:SQLProxy = new SQLProxy();
 		private var XML_URL:String = "StartXML.xml";
 		private var fileStream:FileStream = new FileStream();
@@ -177,12 +179,13 @@ package
 		}
 		
 		
-		private function parsingData(product:XML, lstLabel:Label):void
+		public function parsingData(product:XML, lstLabel:Label):void
 		{ 
 			if(product == null || product.name() != "product")
 			{
 //				if(product.produc[])
 				trace("!!!!!!!!!!!! not Correct data from server !!!!!!!!!!!!!");
+				this.dispatchEvent(new Event(PARSING_COMPLETED));
 				lstLabel.text = "not Correct data from server";
 				lstLabel.validateNow();
 				return;
@@ -224,7 +227,7 @@ package
 			savePages( product);
 			
 			lstLabel.text = "Fineshed ";
-			
+			this.dispatchEvent(new Event(PARSING_COMPLETED));
 //			creatTree(toc);
 			
 		}

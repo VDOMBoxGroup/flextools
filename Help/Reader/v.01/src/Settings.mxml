@@ -23,14 +23,18 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
-			import mx.controls.Alert;
 			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
 			import mx.controls.CheckBox;
-			import mx.managers.PopUpManager;
 			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
 			
-			private var sqlProxy:SQLProxy = new SQLProxy();
-			private var checkBoxArray:Array = []; 
+			private var productsXMLController	: ProductsXMLController = new ProductsXMLController();
+			private var sqlProxy				: SQLProxy = new SQLProxy();
+			private var checkBoxArray			: Array = []; 
+			private var labelComments		 	: Label;
+			
+			private var update:Update = new Update();
 			
 			private function creationComplete():void 
 			{
@@ -76,7 +80,6 @@
 				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 			}
 			
-			private var update:Update = new Update();
 			private function checkUpdate():void
 			{
 				newProducts.removeAllChildren();
@@ -171,6 +174,60 @@
 						callLater(update.load, [newProductArray[name]["url"], newProductArray[name]["stLabel"]] );
 				}
 			}
+			
+			private function chooseAndLoadProductXML():void
+			{
+				blockChooseBtn(true);
+				
+				productsXMLController.addEventListener(ProductXMLLoader.XML_FILE_LOADING_STARTED,	 onProductXMLLoadingStarted);
+				productsXMLController.addEventListener(ProductXMLLoader.XML_FILE_LOADED,			 onProductXMLLoaded);
+				productsXMLController.addEventListener(ProductXMLLoader.USER_CANCELED,				 onProductXMLLoadingCanceled);
+				productsXMLController.addExistingProductXML();
+			}
+			
+			private function onProductXMLLoadingStarted(aEvent:Event):void
+			{
+				productsXMLController.addEventListener(ProductXMLLoader.XML_FILE_LOADING_STARTED,	 onProductXMLLoadingStarted);
+				labelComments.text = "XML file loading ...";
+			}
+			
+			private function onProductXMLLoaded(aEvent:Event):void
+			{
+				productsXMLController.removeEventListener(ProductXMLLoader.XML_FILE_LOADED, onProductXMLLoaded);
+				
+				update.addEventListener(Update.PARSING_COMPLETED, onXMLParsingCompleted);
+				update.parsingData(productsXMLController.productXML, labelComments);
+			}
+			
+			private function onXMLParsingCompleted(aEvent:Event):void
+			{
+				update.removeEventListener(Update.PARSING_COMPLETED, onXMLParsingCompleted);
+				
+				blockChooseBtn(false);
+			}
+			
+			private function onProductXMLLoadingCanceled(aEvent:Event):void
+			{
+				productsXMLController.removeEventListener(ProductXMLLoader.USER_CANCELED,	 onProductXMLLoadingCanceled);
+				labelComments.text = "XML file loading canceled.";
+			}
+			
+			private function onAddProductOpened():void
+			{
+				if (!labelComments) {
+					labelComments = new Label();
+					labelComments.setStyle("color", "#0000FF");
+				
+					this.addProduct.addChild(labelComments);
+				}
+				labelComments.text = "";
+			}
+			
+			private function blockChooseBtn(b:Boolean):void
+			{
+				this.btnChoose.enabled = !b;
+				this.btnChoose.mouseEnabled = !b;
+			}
 		]]>
 		
 	
@@ -187,6 +244,12 @@
 			<mx:VBox id="newProducts" />
 			<mx:Button label="Load" click="{load()}"/>
 			
+		</mx:VBox>
+		<mx:VBox id="addProduct" width="100%" height="100%" label="Add product"
+				 creationComplete="onAddProductOpened()"
+				 show="onAddProductOpened()">
+			<mx:Label width="230" text="Choose and load product:"/>
+			<mx:Button id="btnChoose" label="Choose and Load" click="{chooseAndLoadProductXML()}"/>
 		</mx:VBox>
 	</mx:TabNavigator>
 	<mx:ControlBar horizontalAlign="right" 
