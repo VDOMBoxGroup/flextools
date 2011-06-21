@@ -10,7 +10,7 @@ CKEDITOR.editorConfig = function( config )
 	// config.uiColor = '#AADC6E';
 	//config.width = "810";
 	//config.pasteFromWordRemoveFontStyles = false;
-		
+	
 	config.toolbar =
 	[
 		{ name: 'clipboard',	items : [ 'Undo','Redo' ] },

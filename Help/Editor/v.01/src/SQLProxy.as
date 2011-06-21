@@ -8,7 +8,7 @@ package
 	import flash.events.SQLErrorEvent;
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
-
+	
 	import mx.controls.Alert;
 
 	public class SQLProxy
@@ -24,6 +24,12 @@ package
 			file = File.applicationStorageDirectory.resolvePath("HelpDB.db");
 		}
 
+		/**
+		 * create tables in DB if not exist
+		 * 
+		 * @return 
+		 * 
+		 */		
 		public function creatDB() : Boolean
 		{
 			var sqlStatement : SQLStatement = new SQLStatement;
@@ -57,20 +63,6 @@ package
 					"language TEXT," +
 					"toc XML);";
 				sqlStatement.execute();
-				/*
-					sqlStatement.text = "CREATE TABLE IF NOT EXISTS resource  (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-												"name TEXT NOT NULL,  " +
-												"id_page INTEGER);";
-					sqlStatement.execute();
-
-					sqlStatement.text = "CREATE INDEX IF NOT EXISTS index_name ON  page(content)";
-					sqlStatement.execute();
-
-					sqlStatement.text = "CREATE TABLE IF NOT EXISTS server  (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-												"address TEXT NOT NULL,  " +
-												"data INTEGER);";
-					sqlStatement.execute();
-					*/
 				sqlStatement.sqlConnection.close();
 
 			}
@@ -86,11 +78,21 @@ package
 			return true;
 		}
 
-		public function addProduct(name:String, version:String, title:String, 
+		/**
+		 * add new (empty) product to DB 
+		 * (if this product doesn't exist)
+		 * 
+		 * @param name
+		 * @param version
+		 * @param title
+		 * @param description
+		 * @param language
+		 * 
+		 */		
+		public function addProduct(name:String, version:int, title:String, 
 								   description:String,
 								   language:String) : void
 		{
-
 			var query : String      = "SELECT product.id " +
 				"FROM product " +
 				"WHERE name = :name " +
@@ -117,12 +119,20 @@ package
 				parameters[ ":language" ] = language;
 				parameters[ ":toc" ] = "<page title = '" +
 					title + "' name = '" + name + "' isBranch='true' />";
-//					parameters[":visible"] = "true";
 
 				executeQuery(query, parameters);
 			}
 		}
-
+		
+		/**
+		 * delete product from DB 
+		 * (if this product exists)
+		 * 
+		 * @param productsName
+		 * @param language
+		 * @return 
+		 * 
+		 */		
 		public function deleteProduct(productsName:String, language:String) : Object
 		{
 			var query : String      = "SELECT id " +
@@ -160,6 +170,13 @@ package
 			return result;
 		}
 
+		/**
+		 * return object that consists of all products in DB
+		 * (or null if there are no products in DB)
+		 * 
+		 * @return 
+		 * 
+		 */		
 		public function getAllProducts() : Object
 		{
 			var query : String      = "SELECT * " +
@@ -174,6 +191,43 @@ package
 			return result;
 		}
 
+		/**
+		 * get version of specific product in DB
+		 * (or "" if this product doesn't exist)
+		 *   
+		 * @param name
+		 * @param language
+		 * @return 
+		 * 
+		 */		
+		public function getVersionOfProduct(name:String, language:String):String
+		{
+			
+			var query:String = "SELECT product.version " + 
+				"FROM product " + 
+				"WHERE name = :name " + 
+				" AND language = :language ;";
+			
+			var parameters:Object = new Object();
+			parameters[":name"] = name;
+			parameters[":language"] = language;
+			
+			var result:Object = executeQuery(query, parameters);
+			
+			if(!result)
+			{
+				return "";
+			}
+			return result[0]["version"];
+		}
+		
+		/**
+		 * get product form DB by product name 
+		 *  
+		 * @param productsName
+		 * @return 
+		 * 
+		 */		
 		public function productInDB(productsName:String) : Object
 		{
 			var query : String      = "SELECT  name " +
@@ -189,6 +243,13 @@ package
 		}
 
 
+		/**
+		 * get toc of product by product name
+		 *   
+		 * @param productName
+		 * @return 
+		 * 
+		 */		
 		public function getToc(productName:String) : Object
 		{
 
@@ -204,6 +265,14 @@ package
 			return result[ 0 ][ "toc" ];
 		}
 
+		/**
+		 * set toc for specific product (by product name) in DB
+		 *  
+		 * @param toc
+		 * @param productName
+		 * @return 
+		 * 
+		 */		
 		public function setToc(toc:String, productName:String) : Object
 		{
 			var query : String      = "UPDATE product " +
@@ -213,13 +282,19 @@ package
 			var parameters : Object = new Object();
 			parameters[ ":name" ] = productName;
 			parameters[ ":toc" ] = toc;
-//				trace(": "+ toc +": " + productName );
 
 			var result : Object = executeQuery(query, parameters);
 
 			return result;
 		}
 
+		/**
+		 * checks whether there is a page with that name in DB 
+		 * 
+		 * @param pageName
+		 * @return 
+		 * 
+		 */		
 		public function checkPageName(pageName:String) : Object
 		{
 			var query : String      = "SELECT id " +
@@ -234,14 +309,25 @@ package
 			return result;
 		}
 
+		/**
+		 * add new page for specific product to DB  
+		 * (if this product exists in DB)  
+		 *  
+		 * @param productName
+		 * @param language
+		 * @param pageName
+		 * @param version
+		 * @param title
+		 * @param description
+		 * @param content
+		 * 
+		 */		
 		public function addPage(productName:String, language:String, pageName:String, 
 								version:int, 
 								title:String,
 								description:String,
 								content:String) : void
 		{
-
-//				content = cleanContent(content);
 
 			var query : String      = "SELECT id " +
 				"FROM product " +
@@ -271,6 +357,16 @@ package
 			}
 		}
 
+		/**
+		 * gets page by name for specific product from DB
+		 * (if this product exists in DB)
+		 *   
+		 * @param productName
+		 * @param language
+		 * @param pageName
+		 * @return 
+		 * 
+		 */		
 		public function getPage(productName:String, language:String, pageName:String) : Object
 		{
 			var query : String      = "SELECT id " +
@@ -301,8 +397,19 @@ package
 			return result;
 
 		}
-
-		public function setPageContent(productName:String, language:String, pageName:String, content:String, version:Number ) : Object
+		
+		/**
+		 * update page content and version for specific product from DB
+		 * 
+		 * @param productName
+		 * @param language
+		 * @param pageName
+		 * @param content
+		 * @param version
+		 * @return 
+		 * 
+		 */
+		public function setPageContent(productName:String, language:String, pageName:String, content:String, version:int ) : Object
 		{
 			var query : String      = "SELECT id " +
 				"FROM product " +
@@ -335,6 +442,14 @@ package
 			return result;
 		}
 
+		/**
+		 * get all pages for specific product
+		 * 
+		 * @param productName
+		 * @param language
+		 * @return 
+		 * 
+		 */		
 		public function getProductsPages(productName:String, language:String) : Object
 		{
 			var query : String      = "SELECT id " +
@@ -365,6 +480,14 @@ package
 			return result;
 		}
 
+		/**
+		 * increments product version
+		 * 
+		 * @param productName
+		 * @param language
+		 * @return 
+		 * 
+		 */		
 		public function upVersion(productName:String, language:String) : String
 		{
 			var query : String      = "SELECT id, version " +
@@ -397,6 +520,16 @@ package
 			return productVersion.toString();
 		}
 
+		/**
+		 * update product properties (specify product by product id)
+		 *  
+		 * @param id
+		 * @param title
+		 * @param name
+		 * @param description
+		 * @return 
+		 * 
+		 */		
 		public function changeProductProperties( id:Number, title:String, name:String, description:String) : Object
 		{
 			var query : String      = "UPDATE product " +
@@ -414,6 +547,18 @@ package
 			return result;
 		}
 
+		/**
+		 * update page properties (specify page by product name, language and page id)
+		 * 
+		 * @param productName
+		 * @param ln
+		 * @param oldPageName
+		 * @param newPageName
+		 * @param title
+		 * @param description
+		 * @return 
+		 * 
+		 */		
 		public function changePageProperties( productName:String, ln:String, oldPageName:String, newPageName:String, title:String, 
 											  description:String ) : Object
 		{
@@ -458,173 +603,19 @@ package
 			return result;
 		}
 
-
-		/*
-		public function getPages():Object
-		{
-			 // MAST BEE CHANGED !!!!
-			var query:String = "SELECT name " +
-					"FROM page;";
-
-			var parameters:Object = new Object();
-
-			var result:Object = executeQuery(query, parameters);
-
-			if(!result)
-			{
-				return null;
-			}
-			return result;
-		}
-
-
-
-
-		public function changeStatusForProduct(name:String, value:Boolean):Object
-		{
-
-			var query:String = "UPDATE product " +
-					"SET visible = :value " +
-					"WHERE name = :name ;";
-
-			var parameters:Object = new Object();
-				parameters[":name"] = name;
-				parameters[":value"] = value.toString();
-
-			var result:Object = executeQuery(query, parameters);
-
-			if(!result)
-			{
-				return null;
-			}
-			return result;
-		}
-
-		public function mark(name:String, value:Boolean = true):Object
-		{
-			var query:String = "UPDATE page " +
-					"SET mark = :value " +
-					"WHERE name = :name ;";
-
-			var parameters:Object = new Object();
-				parameters[":name"] = name;
-				parameters[":value"] = value.toString();
-
-			var result:Object = executeQuery(query, parameters);
-
-			if(!result)
-			{
-				return null;
-			}
-			return result;
-		}
-
-		public function getMarkedPage():Object
-		{
-			var query:String = "SELECT name, title " +
-					"FROM page " +
-					" WHERE   mark = :mark ;";
-
-			var parameters:Object = new Object();
-				parameters[":mark"] = "true";
-
-			var result:Object = executeQuery(query, parameters);
-
-			if(!result)
-			{
-				return null;
-			}
-			return result;
-		}
-
-	//       PRODUCT  (id, name, version, title, description, language, toc )   //
-
-		/// ********* curentPruduct, curentPage ******************************
-
-		public function getVersionOfProduct(name:String, language:String):String
-		{
-
-			var query:String = "SELECT product.version " +
-					"FROM product " +
-					"WHERE name = :name " +
-						" AND language = :language ;";
-
-			var parameters:Object = new Object();
-				parameters[":name"] = name;
-				parameters[":language"] = language;
-
-			var result:Object = executeQuery(query, parameters);
-
-			if(!result)
-			{
-				return "";
-			}
-			return result[0]["version"];
-		}
-
-		public function getProductsPages(name:String, language:String):Object
-		{
-
-			var query:String = "SELECT product.id " +
-					"FROM product " +
-					"WHERE name = :name " +
-						" AND language = :language ;";
-
-			var parameters:Object = new Object();
-				parameters[":name"] = name;
-				parameters[":language"] = language;
-
-			var result:Object = executeQuery(query, parameters);
-
-		  query = "SELECT page.name " +
-					"FROM page " +
-					"WHERE id_product = :id_product ";
-
-			parameters = [];
-			parameters[":id_product"] = result[0]["id"];
-
-			result = executeQuery(query, parameters);
-
-			return result;
-		}
-
-		public function deleteProduct(name:String, language:String):void
-		{
-			var query:String = "SELECT product.id " +
-					"FROM product " +
-					"WHERE name = :name " +
-						" AND language = :language ;";
-
-			var parameters:Object = new Object();
-				parameters[":name"] = name;
-				parameters[":language"] = language;
-
-			var result:Object = executeQuery(query, parameters);
-
-		  query = "DELETE " +
-					"FROM page " +
-					"WHERE id_product = :id_product ";
-
-			parameters = [];
-			parameters[":id_product"] = result[0]["id"];
-
-			result = executeQuery(query, parameters);
-
-
-			query = "DELETE " +
-					"FROM product " +
-					"WHERE name = :name " +
-						" AND language = :language ;";
-
-			parameters = [];
-			parameters[":name"] = name;
-			parameters[":language"] = language;
-
-			result = executeQuery(query, parameters);
-
-		}
-
-		public function setProduct(name:String, version:String, title:String,
+		/**
+		 * import product to DB
+		 * (product can be not empty)
+		 * 
+		 * @param name
+		 * @param version
+		 * @param title
+		 * @param description
+		 * @param language
+		 * @param toc
+		 * 
+		 */		
+		public function setProduct(name:String, version:int, title:String,
 																description:String,
 																language:String,
 																toc:XML):void
@@ -645,8 +636,8 @@ package
 
 				if( !result)
 				{
-					query = "INSERT INTO product(name, version, title, description, language, visible, toc) " +
-								"VALUES(:name, :version, :title, :description, :language, :visible, :toc);";
+					query = "INSERT INTO product(name, version, title, description, language, toc) " +
+								"VALUES(:name, :version, :title, :description, :language, :toc);";
 
 					parameters = [];
 					parameters[":name"] = name;
@@ -654,8 +645,7 @@ package
 					parameters[":title"] = title;
 					parameters[":description"] = description;
 					parameters[":language"] = language;
-					parameters[":toc"] = toc.toXMLString();
-					parameters[":visible"] = "true";
+					parameters[":toc"] = toc.children().toXMLString();
 
 					executeQuery(query, parameters);
 				}
@@ -663,6 +653,12 @@ package
 
 		}
 
+		/**
+		 * get version of specific page (by page name) 
+		 * @param pageName
+		 * @return 
+		 * 
+		 */		
 		public function getVersionOfPage(pageName:String):String
 		{
 			var query:String = "SELECT page.version, page.id  FROM page WHERE name = :pageName ;";
@@ -677,45 +673,11 @@ package
 			return result[0]["version"];
 		}
 
-		public function setPage(productName:String, language:String, pageName:String,
-																		version:String,
-																		title:String,
-																		description:String,
-																		content:String):void
-		{
-
-				content = cleanContent(content);
-
-				var query:String = "SELECT id " +
-						"FROM product " +
-						"WHERE name = :name  AND language = :language;";
-
-				var parameters:Object = new Object();
-					parameters[":name"] = productName;
-					parameters[":language"] = language;
-
-				var result:Object = executeQuery(query, parameters);
-
-				if( result)
-				{
-					var productID:int  = result[0]['id'];
-					query = "INSERT INTO page(name, version, title, description, content, id_product) " +
-							"VALUES(:pageName , :version, :title,	:description, :content, :productID);";
-
-					parameters = [];
-					parameters[":pageName"] 	= pageName;
-					parameters[":version"] 		= version;
-					parameters[":title"] 		= title;
-					parameters[":description"] 	= description;
-					parameters[":content"] 		= content;
-					parameters[":productID"] 	= productID;
-
-					executeQuery(query, parameters);
-				}
-
-
-		}
-
+		/**
+		 * delet specific page (by page name) form DB 
+		 * @param namePage
+		 * 
+		 */		
 		public function deletePage(namePage:String):void
 		{
 			var query:String = "DELETE FROM 	page WHERE name = :namePage";
@@ -724,100 +686,14 @@ package
 			executeQuery(query, parameters);
 		}
 
-
-		public function deleteResources(namePage:String):void
-		{
-
-				var query:String = "SELECT page.id FROM 	page  WHERE name = :namePage";
-				var parameters:Object = new Object();
-					parameters[":namePage"] = namePage;
-
-				var result:Object = executeQuery(query, parameters);
-				var pageID:int = result[0]['id'];
-
-				query = "DELETE FROM 	resource WHERE id_page = :pageID";
-					parameters = [];
-					parameters[":pageID"] = pageID;
-				executeQuery(query, parameters);
-		}
-
-		public function getResourcesOfPage(namePage:String):Object
-		{
-				var query:String  = "SELECT page.id FROM 	page  WHERE name = :namePage";
-				var parameters:Object = new Object();
-					parameters[":namePage"] = namePage;
-
-				var result:Object = executeQuery(query, parameters);
-				var pageID:int = result[0]['id'];
-
-				query = "SELECT resource.name  FROM	resource WHERE id_page = :pageID";
-
-				parameters = [];
-				parameters[":pageID"] = pageID;
-
-				result = executeQuery(query, parameters);
-
-				return result;
-		}
-
-
-		public function setResource(pageName:String, resourceName:String	):void
-		{
-				var query:String = "SELECT page.id " +
-						"FROM page " +
-						"WHERE (name = :pageName );";
-
-				var parameters:Object = new Object();
-					parameters[":pageName"] = pageName;
-				var result:Object = executeQuery(query, parameters);
-
-				if( result)
-				{
-					query = "INSERT INTO resource(name, id_page) " +
-							"VALUES (:resourceName, :result);";
-					parameters = [];
-					parameters[":resourceName"] = resourceName;
-					parameters[":result"] = result[0]['id'];
-					executeQuery(query, parameters);
-				}
-
-		}
-
-		public function search(	value:String):Object
-		{
-			var phraseRE:RegExp = /\s+/gim;
-
-			value = " " + value + " ";
-			value = value.replace(phraseRE,"%");
-
-			var query:String = "SELECT page.name, page.title " +
-						"FROM product INNER JOIN page ON product.id = page.id_product "+
-						"WHERE product.visible = :visible " +
-						"	AND ((page.content) LIKE  :value) "
-
-			var parameters:Object = new Object();
-				parameters[":visible"] = "true";
-				parameters[":value"] = value;
-
-			var result:Object = executeQuery(query, parameters);
-
-			return result;
-		}
-
-
-		private function cleanContent(value:String):String
-		{
-			var phraseRE1:RegExp = new RegExp("<script.*?>.*?<\/script>|<style.*?>.*?<\/style>|<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->|<\!\[CDATA\[.*?\]\]>|&#?[\w\d]+","gimsx");
-
-			var phraseRE2:RegExp = new RegExp("[^\w]+","gimsx");
-//
-			var words:String = value.replace(phraseRE1," ");
-//				words = words.replace(phraseRE2," ");
-			return words;
-		}
-
-		*/
-
+		/**
+		 * executes SQL query
+		 *  
+		 * @param query
+		 * @param parameters
+		 * @return 
+		 * 
+		 */		
 		private function executeQuery(query:String, parameters:Object) : Object
 		{
 			var sqlStatement : SQLStatement = new SQLStatement;
@@ -851,13 +727,16 @@ package
 			return result.data;
 		}
 
-
-
 		private function resultHandler(event:SQLEvent) : void
 		{
 			trace("  SQLEvent Ok! ");
 		}
 
+		/**
+		 * show alert that describes an error 
+		 * @param str
+		 * 
+		 */		
 		private function displayLocalizedDetail(str:String) : void
 		{
 			trace(str);
@@ -870,6 +749,12 @@ package
 			trace("!!!!!!!!!!!!!!!!!  SQLErrorEvent !!!!!!!!!!!!!!!");
 		}
 
+		/**
+		 * determines the type of SQL error
+		 *  
+		 * @param e
+		 * 
+		 */		
 		private function localizeError(e:SQLError) : void
 		{
 			var argsLength : int = e.detailArguments.length;

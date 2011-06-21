@@ -98,7 +98,7 @@
 					
 				} else if(!sqlProxy.productInDB(productName.text))
 				{
-					sqlProxy.addProduct(productName.text, '0', productTitle.text,
+					sqlProxy.addProduct(productName.text, 0, productTitle.text,
 						productDescription.text,  productLanguage.text );
 					sqlProxy.addPage(productName.text, productLanguage.text, productName.text, 0, productTitle.text,
 								"Description of " + productTitle.text, "It is " + productTitle.text); 

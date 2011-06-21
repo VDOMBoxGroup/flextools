@@ -264,6 +264,7 @@
 						tree.selectedIndex = selectedIndex - 1;
 
 				}
+				getCurrentPage();
 			}
 
 			private function productEdit() : void
@@ -333,9 +334,9 @@
 
 				for each ( var strImg : String in arrMatch )
 				{
-					var oldPath : String = resetPath(strImg.split("\"")[ strImg.split("\"").length - 2 ]);
+					var oldPath : String = strImg.split("\"")[ strImg.split("\"").length - 2 ];
 
-					var newPath : String = copyImg(oldPath);
+					var newPath : String = copyImg(resetPath(oldPath));
 
 					html_wysiwyg.setHTML(html_wysiwyg.getHTML().replace(oldPath, newPath));
 				}

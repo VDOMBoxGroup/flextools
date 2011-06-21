@@ -20,13 +20,19 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
-			import mx.controls.Alert;
-			import mx.collections.ArrayCollection;
-			import mx.controls.CheckBox;
-			import mx.managers.PopUpManager;
-			import mx.events.CloseEvent;
+			import flash.utils.setTimeout;
 			
-			private var sqlProxy:SQLProxy = new SQLProxy();
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.controls.CheckBox;
+			import mx.controls.PopUpButton;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			
+			private var sqlProxy				: SQLProxy = new SQLProxy();
+			private var productsXMLController	: ProductsXMLController = new ProductsXMLController();
+			
+			private var blockWindow				: TitleWindow;
 			
 			private function creationComplete():void 
 			{
@@ -79,6 +85,30 @@
 				rbWnd.addEventListener(CloseEvent.CLOSE, validateListOfProducts);
 			}
 			
+			private function addExistingProductClickHandler():void
+			{
+				blockBtns(true);
+				
+				productsXMLController.addEventListener(ProjectsUpdater.UPDATE_COMPLETED, onProudctListUpdated);
+				productsXMLController.addEventListener(ProjectsUpdater.UPDATE_CANCELED, onProudctListUpdateCanceled);
+				productsXMLController.addExistingProductXML();				
+			}
+			
+			private function onProudctListUpdated(aEvent:Event):void
+			{
+				productsXMLController.removeEventListener(ProjectsUpdater.UPDATE_COMPLETED, onProudctListUpdated);
+				
+				blockBtns(false);
+				validateListOfProducts(null);
+			}
+				
+			private function onProudctListUpdateCanceled(aEvent:Event):void
+			{
+				productsXMLController.removeEventListener(ProjectsUpdater.UPDATE_CANCELED, onProudctListUpdateCanceled);
+				
+				blockBtns(false);
+			}
+			
 			private function deleteClickHandler():void
 			{
 				if( listOfProducts.selectedItem)
@@ -96,6 +126,29 @@
 //		        	hide();
 		        }
 			}
+			
+			private function blockBtns(b:Boolean):void
+			{
+				try {
+					PopUpManager.removePopUp(blockWindow);
+					blockWindow = null;
+				} catch (e:Error) {
+					trace ("Error while remove popUp");
+				}
+				
+				if (b) {
+					blockWindow = new TitleWindow();
+					
+					blockWindow.width = this.width;
+					blockWindow.height = this.height;
+					blockWindow.x = this.x;
+					blockWindow.y = this.y;
+					blockWindow.alpha = 0;
+					
+					PopUpManager.addPopUp(blockWindow, this, true);
+				}
+			}
+			
 		]]>
 		
 	</mx:Script>
@@ -111,10 +164,14 @@
 				click="{cancelPressed()}" color="#FFFFFF" width="100%" borderColor="#999999"
 				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 				
-    		 <mx:Button  label="Add"  click="{addClickHandler()}"
+    		 <mx:Button  label="New"  click="{addClickHandler()}"
     		  	color="#FFFFFF"  width="100%"  borderColor="#999999"
 				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 			
+			<mx:Button label="Add" click="{addExistingProductClickHandler()}"
+			    color="#FFFFFF"  width="100%"  borderColor="#999999"
+		 	    fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
+		
 			<mx:Button  label="Edit"  click="{editClickHandler()}"
 				enabled="{ Boolean(listOfProducts.dataProvider.source.length)}"
 				color="#FFFFFF"  width="100%" borderColor="#999999"
