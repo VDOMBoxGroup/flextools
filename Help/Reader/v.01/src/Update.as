@@ -64,30 +64,18 @@ package
 				fileStream.close();
 				
 			} catch(error:IOError) {
-//				var er:* =  error;
+
 				trace("'''''Will Copy JS File  \n" + JSFileName);
-				var JSURL  : URLRequest = new URLRequest(JSFileName)
+				var JSURL  : URLRequest = new URLRequest(JSFileName);
 				var JSLoader : URLLoader  = new URLLoader(JSURL);
 				
 				JSLoader.addEventListener(Event.COMPLETE, startCopyJSFile);
 				
-				var cssData : String = ".searchword { background-color : #ffff00;}"
-			
-				var byteArray:ByteArray = new ByteArray();
-				byteArray.writeMultiByte(cssData + "\n", "UTF-8");
+				trace("'''''Will Copy css File  \n" + JSFileName);
+				var cssURL  : URLRequest = new URLRequest(cssFileName);
+				var cssLoader : URLLoader  = new URLLoader(cssURL);
 				
-				newFile = File.applicationStorageDirectory.resolvePath(cssFileName);
-				try {
-					fileStream.open(newFile, FileMode.WRITE);
-					fileStream.writeBytes(byteArray);
-					fileStream.close();
-					
-				}catch(error:IOError) {
-	//				var er:* =  error;
-					trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+ cssFileName);
-					return;
-				}
-			
+				cssLoader.addEventListener(Event.COMPLETE, startCopyCSSFile);
 			}
 			
 		}
@@ -107,6 +95,24 @@ package
 			}catch(error:IOError) {
 //				var er:* =  error;
 				trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+ JSFileName);
+				return;
+			}
+		}
+		
+		private function startCopyCSSFile(evt:Event):void
+		{
+			var byteArray:ByteArray = new ByteArray();
+			byteArray.writeMultiByte(evt.target.data + "\n", "UTF-8");
+			
+			var newFile:File = File.applicationStorageDirectory.resolvePath(cssFileName);
+			try {
+				fileStream.open(newFile, FileMode.WRITE);
+				fileStream.writeBytes(byteArray);
+				fileStream.close();
+				
+			}catch(error:IOError) {
+				//				var er:* =  error;
+				trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+ cssFileName);
 				return;
 			}
 		}
