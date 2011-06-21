@@ -21,7 +21,7 @@ package net.vdombox.ide.modules.wysiwyg.interfaces
 
 		function lock( isRemoveChildren : Boolean = false ) : void
 
-		function set needRefresh( value : Boolean ) : void
+//		function set needRefresh( value : Boolean ) : void
 		function get resourceID() : String
 
 		function get resourceVO() : ResourceVO

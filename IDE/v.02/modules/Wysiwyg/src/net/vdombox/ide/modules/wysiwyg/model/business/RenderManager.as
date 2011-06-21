@@ -493,8 +493,6 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 					item.setStyle( atrName, _style[atrName] )
 			}
 			
-			if( _style.hasOwnProperty( "backgroundColor" )
-				trace("+*+*+*+*+*+*+*+*");
 			//repeat, no-repeat, repeat-x, repeat-y
 			//item.setStyle( "repeatedBackgroundImage", "beb4fd88-7fc2-4079-8a82-ffe1b9743352" )
 			//item.setStyle( "backgroundRepeat", "repeat" );
@@ -556,10 +554,8 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			
 			switch( itemName )
 			{
-				trace("\nRanderManage 555  ");
 				case "container" : 
 				{
-					trace("container ");
 				}
 					
 				case "table" : 

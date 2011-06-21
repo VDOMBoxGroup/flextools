@@ -26,8 +26,8 @@
 					typeData.sort.fields = [ new SortField( "displayName" ) ];
 					typeData.refresh();
 				}
-
-				typeData.addItem( type );
+				if (type.container != 3)
+					typeData.addItem( type );
 			}
 		]]>
 	</fx:Script>

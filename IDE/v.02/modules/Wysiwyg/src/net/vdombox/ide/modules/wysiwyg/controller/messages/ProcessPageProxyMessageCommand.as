@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -39,6 +39,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					{
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
 						sendNotification( ApplicationFacade.GET_WYSIWYG, sessionProxy.selectedPage );
+						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
+						sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, sessionProxy.selectedPage );
 					}
 					else if ( operation == PPMOperationNames.READ )
 						sendNotification( ApplicationFacade.OBJECT_GETTED, body.objectVO );
@@ -46,6 +48,9 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					{
 						sendNotification( ApplicationFacade.OBJECT_DELETED, body.objectVO );
 						sendNotification( ApplicationFacade.GET_WYSIWYG, sessionProxy.selectedPage );
+						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
+						sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, sessionProxy.selectedPage );
+
 					}
 
 					break;
@@ -77,12 +82,12 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					}
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
-						if( pageVO )
+						if ( pageVO )
 						{
 							sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, pageVO )
 							sendNotification( ApplicationFacade.GET_WYSIWYG, pageVO )
 						}
-						
+
 						sendNotification( ApplicationFacade.XML_PRESENTATION_SETTED, body );
 					}
 

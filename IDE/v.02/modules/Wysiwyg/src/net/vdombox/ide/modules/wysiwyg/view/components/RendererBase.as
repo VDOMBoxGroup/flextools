@@ -9,7 +9,7 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
-	
+
 	import flash.display.Bitmap;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
+
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
@@ -35,7 +35,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
-	
+
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -45,12 +45,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-	
+
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.RichEditableText;
 	import spark.components.Scroller;
 	import spark.components.SkinnableDataContainer;
+	import spark.components.supportClasses.GroupBase;
 	import spark.components.supportClasses.ScrollBarBase;
 	import spark.layouts.BasicLayout;
 	import spark.layouts.HorizontalLayout;
@@ -58,14 +59,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
 
-	/**
-	 *
-	 * @author andreev ap
-	 */
-	/**
-	 *
-	 * @author andreev ap
-	 */
+
 	/**
 	 *
 	 * @author andreev ap
@@ -143,19 +137,19 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private var mDeltaY : uint;
 
-		private const styleList : Array    = [ [ "opacity", "backgroundAlpha" ], [ "backgroundcolor", "backgroundColor" ],
-											   [ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat", "backgroundRepeat" ],
-											   [ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ], [ "color", "color" ],
-											   [ "fontfamily", "fontFamily" ], [ "fontsize", "fontSize" ], [ "fontweight", "fontWeight" ],
-											   [ "fontstyle", "fontStyle" ], [ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
-											   [ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
+		private const styleList : Array = [ [ "opacity", "backgroundAlpha" ], [ "backgroundcolor", "backgroundColor" ],
+											[ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat", "backgroundRepeat" ],
+											[ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ], [ "color", "color" ],
+											[ "fontfamily", "fontFamily" ], [ "fontsize", "fontSize" ], [ "fontweight", "fontWeight" ],
+											[ "fontstyle", "fontStyle" ], [ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
+											[ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
 
 		/**
 		 *
 		 * @param renderVO
 		 * @return
 		 */
-		public function chooseItemRenderer( renderVO : RenderVO ) : IFactory
+		private function chooseItemRenderer( renderVO : RenderVO ) : IFactory
 		{
 			var itemFactory : ClassFactory;
 			var layout : LayoutBase;
@@ -164,9 +158,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				case "container":
 				{
-					var xmkl : XML;
-
-					trace( "\ncontainer - RanderBase  " );
 					itemFactory = new ClassFactory( RendererBase );
 					layout = new BasicLayout();
 					layout.clipAndEnableScrolling = true;
@@ -361,15 +352,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return result;
 		}
 
-		/**
-		 *
-		 * @param value
-		 */
-		public function set needRefresh( value : Boolean ) : void
-		{
-			if ( value )
-				refresh();
-		}
 
 		/**
 		 *
@@ -535,7 +517,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function applyStyles( item : UIComponent, itemXMLDescription : XML ) : void
 		{
-			var _style : Object    = {};
+			var _style : Object = {};
 			var hasStyle : Boolean = false;
 
 			var xmlList : XMLList;
@@ -565,16 +547,64 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 
-		private function caseContainer( contetnt : XML ) : void
+		private function caseContainer( contetnt : XML, parentContainer : Group ) : void
 		{
-			for each (var contetntPart : XML in contetnt.children() )
+			var conatiner : Group;
+
+			conatiner = getSubContainer( contetnt );
+
+			if ( !conatiner )
+				conatiner = parentContainer;
+			else
+				parentContainer.addElement( conatiner );
+
+// TODO: need sort 'contetnt.children()' by 'z-index'
+			for each ( var contetntPart : XML in contetnt.children() )
 			{
-				choiceContentType( contetntPart );
+				choiceContentType( contetntPart, conatiner );
 			}
-//			choiceContentType( contetntPart.children()[ 0 ] );
 		}
 
-		private function caseHtmlText( contetntPart : XML ) : void
+		private function getSubContainer( contetnt : XML ) : Group
+		{
+//			<container id="9723e716-cb19-4539-afc9-491b0ffbd6fb" visible="1" zindex="0" hierarchy="0" order="0" top="91" left="320" width="152" height="34">
+			var conatiner : Group;
+
+			var param : Number;
+
+			if ( contetnt.@id[ 0 ] )
+			{
+				conatiner = new Group();
+
+				if ( contetnt.@visible[ 0 ] == "0" )
+					conatiner.visible = false;
+
+				param = Number( contetnt.@top[ 0 ] )
+
+				if ( param )
+					conatiner.y = param;
+
+				param = Number( contetnt.@left[ 0 ] )
+
+				if ( param )
+					conatiner.x = param;
+
+				param = Number( contetnt.@width[ 0 ] )
+
+				if ( param )
+					conatiner.width = param;
+
+				param = Number( contetnt.@height[ 0 ] )
+
+				if ( param )
+					conatiner.height = param;
+
+
+			}
+			return conatiner;
+		}
+
+		private function caseHtmlText( contetntPart : XML, parentContainer : Group ) : void
 		{
 			var html : HTML = new HTML();
 
@@ -599,22 +629,22 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			html.htmlText = htmlText;
 
-			background.addElement( html );
+			parentContainer.addElement( html );
 		}
 
-		private function caseSVG( contetntPart : XML ) : void
+		private function caseSVG( contetntPart : XML, parentContainer : Group ) : void
 		{
-			var svg : SVGViewer            = new SVGViewer();
+			var svg : SVGViewer = new SVGViewer();
 			var editableAttributes : Array = svg.setXML( contetntPart );
 
 			if ( editableAttributes.length > 0 )
 				_editableComponent = editableAttributes[ 0 ].sourceObject;
 			svg.addEventListener( RendererEvent.GET_RESOURCE, svgGetResourseHendler, false, 0, true );
 
-			background.addElement( svg );
+			parentContainer.addElement( svg );
 		}
 
-		private function caseText( contetntPart : XML ) : void
+		private function caseText( contetntPart : XML, parentContainer : Group ) : void
 		{
 			var richText : UIComponent
 
@@ -634,32 +664,32 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			applyStyles( richText, contetntPart );
 
-			background.addElement( richText );
+			parentContainer.addElement( richText );
 		}
 
-		private function choiceContentType( contetntPart : XML ) : void
+		private function choiceContentType( contetntPart : XML, parentContainer : Group ) : void
 		{
 			switch ( contetntPart.name().toString() )
 			{
 				case "container":
 				{
-					caseContainer( contetntPart );
+					caseContainer( contetntPart, parentContainer );
 					break;
 				}
 				case "svg":
 				{
-					caseSVG( contetntPart );
+					caseSVG( contetntPart, parentContainer );
 					break;
 				}
 
 				case "text":
 				{
-					caseText( contetntPart );
+					caseText( contetntPart, parentContainer );
 					break;
 				}
 				case "htmltext":
 				{
-					caseHtmlText( contetntPart );
+					caseHtmlText( contetntPart, parentContainer );
 					break;
 				}
 				default:
@@ -699,12 +729,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			var rde : RendererDropEvent = new RendererDropEvent( RendererDropEvent.DROP );
 
-			var typeVO : TypeVO         = TypeItemRenderer( event.dragInitiator ).typeVO;
+			var typeVO : TypeVO = TypeItemRenderer( event.dragInitiator ).typeVO;
 
-			var objectLeft : Number     = this.mouseX - 25 + this.layout.horizontalScrollPosition;
-			var objectTop : Number      = this.mouseY - 25 + this.layout.verticalScrollPosition;
+			var objectLeft : Number = this.mouseX - 25 + this.layout.horizontalScrollPosition;
+			var objectTop : Number = this.mouseY - 25 + this.layout.verticalScrollPosition;
 
-			var point : Point           = new Point( objectLeft, objectTop );
+			var point : Point = new Point( objectLeft, objectTop );
 
 			rde.typeVO = typeVO;
 			rde.point = point;
@@ -719,7 +749,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( !typeDescription )
 				return;
 
-			var containersRE : RegExp     = /(\w+)/g;
+			var containersRE : RegExp = /(\w+)/g;
 			var aviableContainers : Array = typeDescription.aviableContainers.match( containersRE );
 			var currentItemName : String;
 
@@ -939,7 +969,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var rectangle : Rectangle;
 
 			content = Bitmap( event.target.content );
-			rectangle = getBackGroundRect( content);
+			rectangle = getBackGroundRect( content );
 
 			backGrSprite.graphics.clear();
 			backGrSprite.graphics.beginBitmapFill( content.bitmapData, null, true );
@@ -986,7 +1016,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			for each ( contetntPart in _renderVO.content )
 			{
-				choiceContentType( contetntPart );
+				choiceContentType( contetntPart, background );
 			}
 
 			skin.currentState = "normal";

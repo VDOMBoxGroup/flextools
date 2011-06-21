@@ -51,30 +51,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			return editor ? editor.editorVO : null;
 		}
 
-//		public function get pageVO() : PageVO
-//		{
-//			return editor.vdomObjectVO as PageVO;
-//		}
-//
-//		public function get renderVO() : RenderVO
-//		{
-//			return editor.renderVO;
-//		}
-//
-//		public function set renderVO( value : RenderVO ) : void
-//		{
-//			editor.renderVO = value;
-//		}
-//
-//		public function get xmlPresentation() : VdomObjectXMLPresentationVO
-//		{
-//			return editor.xmlPresentation;
-//		}
-//
-//		public function set xmlPresentation( value : VdomObjectXMLPresentationVO ) : void
-//		{
-//			editor.xmlPresentation = value;
-//		}
 
 		override public function onRegister() : void
 		{

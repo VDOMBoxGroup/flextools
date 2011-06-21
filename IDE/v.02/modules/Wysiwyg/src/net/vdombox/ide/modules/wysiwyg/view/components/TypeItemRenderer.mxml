@@ -55,7 +55,7 @@
 					currentState = "selected";
 				else
 					currentState = "normal";
-			}
+			} 
 
 			private function dragIt( event : MouseEvent ) : void
 			{

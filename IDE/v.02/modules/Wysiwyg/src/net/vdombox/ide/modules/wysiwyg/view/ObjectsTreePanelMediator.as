@@ -86,7 +86,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.PAGES_GETTED:
 				{
-					trace( "" );
 					showPages( notification.getBody() as Array );
 
 					selectCurrentPage();
@@ -96,7 +95,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.PAGE_STRUCTURE_GETTED:
 				{
-					trace( "" );
 
 					if ( !objectsTreePanel.pages )
 						return;
@@ -116,7 +114,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.OBJECT_GETTED:
 				{
-					trace( "" );
 					var objectVO : ObjectVO = body as ObjectVO;
 
 					var requestElement : Object = requestQue[ objectVO.id ];
@@ -133,7 +130,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
-					trace( "" );
 					selectCurrentPage();
 
 					break;
@@ -141,8 +137,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
-					trace( "" );
-
 					if ( sessionProxy.selectedObject )
 						objectsTreePanel.selectedObjectID = sessionProxy.selectedObject.id;
 					else if ( sessionProxy.selectedPage )
@@ -170,6 +164,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.OBJECT_GETTED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			
+//			interests.push( ApplicationFacade.OBJECT_DELETED );
+//			interests.push( ApplicationFacade.OBJECT_CREATED );
 
 			return interests;
 		}

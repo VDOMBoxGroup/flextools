@@ -1,67 +1,55 @@
+//------------------------------------------------------------------------------
+//
+//   Copyright 2011 
+//   VDOMBOX Resaerch  
+//   All rights reserved. 
+//
+//------------------------------------------------------------------------------
+
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.events.FlexEvent;
-	
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.view.components.main.Body;
-	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
+
+	/**
+	 *
+	 * @author andreev ap
+	 */
 	public class BodyMediator extends Mediator implements IMediator
 	{
+		/**
+		 *
+		 * @default
+		 */
 		public static const NAME : String = "BodyMediator";
 
+		/**
+		 *
+		 * @param viewComponent
+		 */
 		public function BodyMediator( viewComponent : Body )
 		{
 			super( NAME, viewComponent );
 		}
 
+		private var isAllStatesGetted : Boolean;
+
 		private var isBodyStarted : Boolean;
 
-		private var isAllStatesGetted : Boolean;
-		
 		private var isTypesChanged : Boolean;
 
+		/**
+		 *
+		 * @return
+		 */
 		public function get body() : Body
 		{
 			return viewComponent as Body;
-		}
-
-		override public function onRegister() : void
-		{
-			isBodyStarted = false;
-
-			isAllStatesGetted = false;
-			
-			isTypesChanged = false;
-
-			addHandlers();
-		}
-
-		override public function onRemove() : void
-		{
-			isBodyStarted = false;
-
-			isAllStatesGetted = false;
-			
-			isTypesChanged = false;
-			
-			removeHandlers();
-		}
-
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-			interests.push( ApplicationFacade.ALL_STATES_GETTED );
-			interests.push( ApplicationFacade.TYPES_CHANGED );
-
-			interests.push( ApplicationFacade.PIPES_READY );
-			interests.push( ApplicationFacade.MODULE_DESELECTED );
-
-			return interests;
 		}
 
 		override public function handleNotification( notification : INotification ) : void
@@ -84,13 +72,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
-					
+
 				case ApplicationFacade.TYPES_CHANGED:
 				{
 					isTypesChanged = true;
-					
+
 					checkConditions();
-					
+
 					break;
 				}
 
@@ -108,21 +96,44 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 		}
 
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+
+			interests.push( ApplicationFacade.ALL_STATES_GETTED );
+			interests.push( ApplicationFacade.TYPES_CHANGED );
+
+			interests.push( ApplicationFacade.PIPES_READY );
+			interests.push( ApplicationFacade.MODULE_DESELECTED );
+
+			return interests;
+		}
+
+		override public function onRegister() : void
+		{
+			isBodyStarted = false;
+
+			isAllStatesGetted = false;
+
+			isTypesChanged = false;
+
+			addHandlers();
+		}
+
+		override public function onRemove() : void
+		{
+			isBodyStarted = false;
+
+			isAllStatesGetted = false;
+
+			isTypesChanged = false;
+
+			removeHandlers();
+		}
+
 		private function addHandlers() : void
 		{
 			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-		}
-
-		private function removeHandlers() : void
-		{
-			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-		}
-
-		private function creationCompleteHandler( event : FlexEvent ) : void
-		{
-			sendNotification( ApplicationFacade.BODY_CREATED, body );
-
-			checkConditions();
 		}
 
 		private function checkConditions() : void
@@ -132,6 +143,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 				isBodyStarted = true;
 				sendNotification( ApplicationFacade.BODY_START );
 			}
+		}
+
+		private function creationCompleteHandler( event : FlexEvent ) : void
+		{
+			sendNotification( ApplicationFacade.BODY_CREATED, body );
+
+			checkConditions();
+		}
+
+		private function removeHandlers() : void
+		{
+			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
 	}
 }

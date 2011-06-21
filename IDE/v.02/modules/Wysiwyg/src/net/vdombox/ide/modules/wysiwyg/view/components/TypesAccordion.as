@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.collections.Sort;
 	import mx.collections.SortField;
 	import mx.containers.Accordion;
-	
+
 	import spark.components.NavigatorContent;
 
 	public class TypesAccordion extends Accordion
@@ -33,8 +33,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			super();
 		}
+
 		public function set dataProvider( value : XMLList ) : void
 		{
+			trace( "dataProvider" );
+
 			if ( !value )
 				return;
 
@@ -72,8 +75,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				currentCategory.addChild( type );
 
-				fileManager.loadResource( currentDescription.typeId, currentDescription.resourceId, type,
-										  "resource", true );
+				fileManager.loadResource( currentDescription.typeId, currentDescription.resourceId, type, "resource", true );
 				cursor.moveNext();
 			}
 
@@ -99,14 +101,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 					currentCategory.addChild( type );
 
-					fileManager.loadResource( currentDescription.typeId, currentDescription.resourceId,
-											  type, "resource", true );
+					fileManager.loadResource( currentDescription.typeId, currentDescription.resourceId, type, "resource", true );
 				}
 			}
 		}
 
 		private function createTypeDescriptions( value : XMLList ) : ArrayCollection
 		{
+			trace( "createTypeDescriptions" );
 			var typesArrayCollection : ArrayCollection = new ArrayCollection();
 			var categoryName : String, categoryNameLocalized : String, categoryPhraseId : String;
 			var typeId : String, typeName : String, typeNameLocalized : String;
@@ -115,7 +117,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			for each ( var typeDescription : XML in value )
 			{
 
-				if ( typeDescription.Information.Container == 3 )
+				if ( typeDescription.Information.Container == '3' )
 					continue;
 
 				categoryName = typeDescription.Information.Category.toLowerCase();
@@ -128,8 +130,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				{
 
 					categoryPhraseId = categoryName.match( phraseRE )[ 1 ];
-					categoryNameLocalized = resourceManager.getString( typeDescription.Information.Name,
-																	   categoryPhraseId );
+					categoryNameLocalized = resourceManager.getString( typeDescription.Information.Name, categoryPhraseId );
+
 					if ( categoryNameLocalized )
 						categoryName = "lang_" + MD5Utils.encrypt( categoryNameLocalized );
 				}
@@ -162,6 +164,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function createStandartCategories() : void
 		{
+			trace( "createStandartCategories" );
 			var labelValue : String;
 
 			for each ( var category : String in STANDART_CATEGORIES )
@@ -174,6 +177,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function insertCategory( categoryName : String, label : String ) : NavigatorContent
 		{
+			trace( "insertCategory" );
 			var currentCategory : Types;
 
 			if ( !categories[ categoryName ] )
