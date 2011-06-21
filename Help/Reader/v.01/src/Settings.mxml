@@ -210,6 +210,8 @@
 			{
 				productsXMLController.removeEventListener(ProductXMLLoader.USER_CANCELED,	 onProductXMLLoadingCanceled);
 				labelComments.text = "XML file loading canceled.";
+				
+				blockChooseBtn(false);
 			}
 			
 			private function onAddProductOpened():void

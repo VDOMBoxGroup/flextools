@@ -242,7 +242,9 @@ package
 			{
 				for each(var page:XML in xml.children())
 				{
-					page.@name = lan + "/" + product + "/"  + page.@name + ".html";
+					if (String(page.@name).indexOf(".html") < 0) {
+						page.@name = lan + "/" + product + "/"  + page.@name + ".html";
+					}
 					changeStruxcture(page);
 				}
 			}
@@ -267,7 +269,11 @@ package
 			//********* Creat PAGES ***********//
 			for each(var page:XML in product.pages.children())
 			{
-				var pageName:String = page.name.toString() + ".html"; 
+				var pageName:String = page.name.toString();
+				
+				if (pageName.indexOf(".html") < 0) {
+					pageName += ".html"; 
+				}
 				var version:String = page.version.toString(); 
 				var title:String = page.title.toString();
 				var description:String = page.description.toString();
