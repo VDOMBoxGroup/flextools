@@ -71,7 +71,7 @@ package
 				
 				JSLoader.addEventListener(Event.COMPLETE, startCopyJSFile);
 				
-				trace("'''''Will Copy css File  \n" + JSFileName);
+				trace("'''''Will Copy css File  \n" + cssFileName);
 				var cssURL  : URLRequest = new URLRequest(cssFileName);
 				var cssLoader : URLLoader  = new URLLoader(cssURL);
 				
