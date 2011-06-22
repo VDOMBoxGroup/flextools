@@ -113,9 +113,9 @@ xmlns:s="library://ns.adobe.com/flex/spark"
 					trace ("loader_completeHandler!!!");
 					loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, loader_completeHandler );
 
-					//event.currentTarget.content.addEventListener( FlexEvent.APPLICATION_COMPLETE, applicationCompleteHandler );
+					event.currentTarget.content.addEventListener( FlexEvent.APPLICATION_COMPLETE, applicationCompleteHandler );
 
-					//placer.addChild( loader.content );
+					placer.addChild( loader.content );
 				}
 
 				private function applicationCompleteHandler( event : Event ) : void
