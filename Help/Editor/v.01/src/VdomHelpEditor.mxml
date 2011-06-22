@@ -24,11 +24,11 @@
 	<mx:Script>
 		<![CDATA[
 			import com.adobe.crypto.MD5Stream;
-
+			
 			import flash.text.engine.EastAsianJustifier;
 			import flash.utils.getDefinitionByName;
 			import flash.utils.setTimeout;
-
+			
 			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
@@ -45,6 +45,8 @@
 			private var sqlProxy : SQLProxy = new SQLProxy();
 
 			private var pageVersion : Number;
+			
+			private var cssFileName : String = "main.css";
 
 
 			/***
@@ -76,9 +78,47 @@
 			private function creationCompleteHandler() : void
 			{
 				sqlProxy.creatDB();
-
+				
+				var cssFile:File = File.applicationStorageDirectory.resolvePath(cssFileName);
+				
+				if (cssFile.exists) {
+					onCssFileLoaded();
+				} else {
+					trace("'''''Will Copy css File  \n" + cssFileName);
+					var cssURL  : URLRequest = new URLRequest(cssFileName);
+					var cssLoader : URLLoader  = new URLLoader(cssURL);
+					
+					cssLoader.addEventListener(Event.COMPLETE, startCopyCSSFile);
+				}
+			}
+			
+			private function startCopyCSSFile(evt:Event):void
+			{
+				trace ("[VdomHelpEditor] startCopyCSSFile");
+				
+				var byteArray:ByteArray = new ByteArray();
+				byteArray.writeMultiByte(evt.target.data + "\n", "UTF-8");
+				
+				var newFile:File = File.applicationStorageDirectory.resolvePath(cssFileName);
+				try {
+					var fileStream : FileStream = new FileStream();
+					
+					fileStream.open(newFile, FileMode.WRITE);
+					fileStream.writeBytes(byteArray);
+					fileStream.close();
+				} catch(error:IOError) {
+					//				var er:* =  error;
+					trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+ cssFileName);
+					return;
+				}
+				
+				onCssFileLoaded();
+			}
+			
+			private function onCssFileLoaded():void
+			{
+				trace ("[VdomHelpEditor] onCssFileLoaded");
 				showAllProducts();
-//			tree.dataProvider = XML("<page title = 'page 0' name = 'page_0' isBranch='true' />");
 			}
 
 			private function treeChangeHandler(lstEvt:ListEvent) : void
@@ -734,17 +774,7 @@
 
 				if ( html_wysiwyg )
 					sourseTxt = html_wysiwyg.getHTML();
-				/*var sourse : String =
-	"<html>" +
-"<head>" +
-"<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />" +
-"</head>" +
-"<body>" +
-sourseTxt +
-"</body>"	;*/
-
-	//trace ("sourseTxt " + sourseTxt) ;
-
+				
 				content.writeMultiByte(sourseTxt, "utf-8");
 
 				saveFile(fileName, content);
@@ -899,7 +929,7 @@ sourseTxt +
 				</mx:HBox>
 			</mx:VBox>
 			<mx:TabNavigator width="100%" height="100%" backgroundColor="#E4E4E4" paddingTop="0">
-				<mx:Canvas width="100%" height="100%" label="WYSIWYG">
+				<mx:Canvas width="100%" height="100%" label="WYSIWYG" show="getCurrentPage()">
 					<mx:VBox width="100%" height="100%" verticalGap="0" verticalAlign="0">
 						<!--mx:HBox width="100%" color="#000000" backgroundColor="#E4E4E4"  >
 						</mx:HBox-->

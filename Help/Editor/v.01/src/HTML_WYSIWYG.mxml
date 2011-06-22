@@ -19,27 +19,58 @@
 				domWindow.CKEDITOR.instances.editor1.setData(value);
 			}
 			
+			private function getBodyContent(value : String) : String
+			{
+				var patternBodyOpen		: RegExp;
+				var patternBodyClose	: RegExp;
+				
+				patternBodyOpen = /<[ ]*body[ ]*>/i;
+				patternBodyClose = /<[ ]*\/[ ]*body[ ]*>/i;
+				
+				
+				var arrMatchOpen:Array = value.match(patternBodyOpen);
+				if (arrMatchOpen.length > 0) {
+					value = value.substr(arrMatchOpen.index + arrMatchOpen[0].length);
+				}
+				
+				var arrMatchClose:Array = value.match(patternBodyClose);
+				if (arrMatchClose.length > 0) {
+					value = value.substring(0, arrMatchClose.index);
+				}
+				
+				return value;
+			}
+			
 			public function getHTML(  ) : String
 			{
 				var editorData	: String;
-				var pattern		: RegExp;
+				var patternHead	: RegExp;
 				var metaTeg		: String;
+				var cssTeg		: String;
+				var htmlTxt		: String;
 				
 				metaTeg = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
-				pattern = /<[ ]*head[ ]*(>|\/[ ]*>)/i;
+				cssTeg = "<link rel='stylesheet' href='app-storage:/main.css' type='text/css'></link>";
+				patternHead = /<[ ]*head[ ]*(>|\/[ ]*>)/i;
 				
 				editorData = instancesInitialized ? domWindow.CKEDITOR.instances.editor1.getData() : "";
+				htmlTxt = editorData;
 				
-				if (editorData.search(pattern) >= 0 ) 
+				if (editorData.search(patternHead) == -1) 
 				{
-					var firstIndexAfterPattern:Number = editorData.search(pattern) + editorData.match(pattern)[0].length;
-					
-					editorData = editorData.substring(0, firstIndexAfterPattern) + 
-						metaTeg + 
-						editorData.substr(firstIndexAfterPattern);
+					htmlTxt =  
+						"<html>" + "\n" + 
+							"<head>" + "\n" +
+								metaTeg + "\n" +
+								cssTeg + "\n" +
+							"</head>" + "\n" +
+							"<body>" + "\n" +
+								editorData + "\n" +
+							"</body>" + "\n" +
+						"<html>"
 				}
 				
-				return editorData;
+				return htmlTxt;
 			}
 			
 			
