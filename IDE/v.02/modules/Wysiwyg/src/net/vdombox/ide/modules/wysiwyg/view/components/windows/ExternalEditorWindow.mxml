@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
-				xmlns:s="library://ns.adobe.com/flex/spark"
-				xmlns:mx="library://ns.adobe.com/flex/halo"
+<mx:TitleWindow  xmlns:mx="http://www.adobe.com/2006/mxml"
+xmlns:s="library://ns.adobe.com/flex/spark"
 				
 				measuredHeight="400" measuredWidth="550"
 				backgroundColor="#CCCCCC" 
@@ -9,27 +8,25 @@
 				close="dispatchEvent( new ExternalEditorWindowEvent( ExternalEditorWindowEvent.CLOSE ))"
 				>
 
-	<fx:Script>
-		<![CDATA[
-			import net.vdombox.ide.modules.wysiwyg.events.ExternalEditorWindowEvent;
-		]]>
-	</fx:Script>
 	
-	<s:layout>
+	
+	<!--s:layout>
 		<s:VerticalLayout paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" />
-	</s:layout>
+	</s:layout-->
 	
-		<fx:Script>
+		<mx:Script>
 			<![CDATA[
-				import flash.filesystem.File;
-				import net.vdombox.ide.common.interfaces.IExternalManager;
-				import mx.managers.PopUpManager;
-				import mx.managers.SystemManager;
-				import mx.events.FlexEvent;
-				import mx.binding.utils.BindingUtils;
-				import mx.core.IVisualElement;
-
-				import net.vdombox.ide.common.vo.ResourceVO;
+			import flash.filesystem.File;
+			
+			import mx.binding.utils.BindingUtils;
+			import mx.core.IVisualElement;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.managers.SystemManager;
+			
+			import net.vdombox.ide.common.interfaces.IExternalManager;
+			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.wysiwyg.events.ExternalEditorWindowEvent;
 
 				[Bindable]
 				private var _resourceVO : ResourceVO;
@@ -92,22 +89,33 @@
 					if ( !loader )
 						loader = new Loader();
 
+					loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loader_errorHandler );
+					loader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, loader_errorHandler );
 					loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loader_completeHandler );
 
 					var loaderContext : LoaderContext = new LoaderContext();
 					loaderContext.applicationDomain = new ApplicationDomain();
-					loaderContext["allowLoadBytesCodeExecution"] = true;
+//					loaderContext["allowLoadBytesCodeExecution"] = true;
+					loaderContext.allowLoadBytesCodeExecution  = true
 
-					loader.loadBytes( _resourceVO.data, loaderContext );
+					trace ("111111111111");
+					loader.loadBytes( _resourceVO.data,  loaderContext);
+					
 				}
 
+				private function loader_errorHandler( event : Event ) : void
+				{
+					trace ("loader_errorHandler!!!");
+				}
+				
 				private function loader_completeHandler( event : Event ) : void
 				{
-					loader.removeEventListener( Event.COMPLETE, loader_completeHandler );
+					trace ("loader_completeHandler!!!");
+					loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, loader_completeHandler );
 
-					event.currentTarget.content.addEventListener( FlexEvent.APPLICATION_COMPLETE, applicationCompleteHandler );
+					//event.currentTarget.content.addEventListener( FlexEvent.APPLICATION_COMPLETE, applicationCompleteHandler );
 
-					placer.addChild( loader.content );
+					//placer.addChild( loader.content );
 				}
 
 				private function applicationCompleteHandler( event : Event ) : void
@@ -141,7 +149,7 @@
 //				
 //			}
 			]]>
-		</fx:Script>
+		</mx:Script>
 
 		<s:SpriteVisualElement id="placer" />
-</s:TitleWindow>
+</mx:TitleWindow>
