@@ -223,8 +223,8 @@
 				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OVER, objectsTree_highlightChangeHandler, false, 0, true );
 				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OUT, objectsTree_highlightChangeHandler, false, 0, true );
 
-				objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_UP, objectsTree_mouseHandler, false, 0, true );
-				objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_DOWN, objectsTree_mouseHandler, false, 0, true );
+				//objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_UP, objectsTree_mouseHandler, false, 0, true );
+				//objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_DOWN, objectsTree_mouseHandler, false, 0, true );
 			}
 			
 		
@@ -257,11 +257,11 @@
 				var otpe : ObjectsTreePanelEvent;
 				var parentItem : XML;
 
-				if( event.type == MouseEvent.MIDDLE_MOUSE_DOWN )
+				/*if( event.type == MouseEvent.MIDDLE_MOUSE_DOWN )
 				{
 					isMiddleDown = true;
 					return;
-				}
+				}*/
 				
 				if ( !lastHighlightedItem && isMiddleDown )
 					return;
