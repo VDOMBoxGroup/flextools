@@ -31,7 +31,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.icons.TypesIcons;
 	
-	import org.osmf.utils.BinarySearch;
+//	import org.osmf.utils.BinarySearch;
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 	
