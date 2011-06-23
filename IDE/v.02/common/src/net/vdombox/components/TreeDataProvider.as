@@ -35,7 +35,7 @@ import mx.events.CollectionEventKind;
 import mx.events.PropertyChangeEvent;
 import mx.events.PropertyChangeEventKind;
 
-public class TreeDataProvider extends EventDispatcher implements IList, ICollectionView
+public class TreeDataProvider extends EventDispatcher implements IList
 {
 	
 	//--------------------------------------------------------------------------
