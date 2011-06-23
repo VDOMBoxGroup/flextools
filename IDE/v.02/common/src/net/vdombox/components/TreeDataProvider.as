@@ -280,7 +280,10 @@ public class TreeDataProvider extends EventDispatcher implements IList
 		return null;
 	}
 
-	public function set sort(value:Sort):void {}
+	public function set sort(value:Sort):void 
+	{
+		value
+	}
 	
 	public function createCursor():IViewCursor
 	{
