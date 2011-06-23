@@ -258,7 +258,7 @@
 				var pageTitle : String = "Page " + count;
 
 				sqlProxy.addPage(cmboxProduct.selectedItem.name, "en_US", pageName, 0, 
-								 pageTitle, "write Description", "it is  "+ pageName);
+								 pageTitle, "write Description", "");
 
 				toc.appendChild(XML("<page title = 'page " + count+ "' name = 'page_" + count+ "' isBranch='true' />"));
 				tree.dataProvider = null;
