@@ -4,6 +4,7 @@
 					xmlns:s="library://ns.adobe.com/flex/spark"
 					xmlns:components="net.vdombox.ide.modules.applicationsManagment.view.components.*"
 					
+					skinClass="spark.skins.spark.SkinnableContainerSkin"
 					creationPolicy="all" height="100%" width="100%"
 					color="white">
 
@@ -20,6 +21,7 @@
 				if ( applicationsList && applicationsList.skin )
 					applicationsList.skin[ "background" ].alpha = .1;
 			}
+			
 		]]>
 	</fx:Script>
 
