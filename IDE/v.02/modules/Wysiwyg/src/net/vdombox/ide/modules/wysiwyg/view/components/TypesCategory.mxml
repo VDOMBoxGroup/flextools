@@ -3,7 +3,8 @@
 					xmlns:mx="library://ns.adobe.com/flex/halo"
 					xmlns:s="library://ns.adobe.com/flex/spark"
 					height="100%" width="100%"
-					backgroundColor="#70737A">
+					backgroundColor="#70737A"
+					skinClass="spark.skins.spark.SkinnableContainerSkin">
 
 	<fx:Script>
 		<![CDATA[

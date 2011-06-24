@@ -13,8 +13,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.controls
 		public function ToolbarButton()
 		{
 			super();
-			setStyle( "skinClass", ToolbarButtonSkin );
+			//setStyle( "skinClass", ToolbarButtonSkin );
 		}
+		
+		override public function stylesInitialized():void {
+			super.stylesInitialized();
+			this.setStyle( "skinClass", ToolbarButtonSkin );
+		}
+
 
 		private var _iconPart : Image;
 

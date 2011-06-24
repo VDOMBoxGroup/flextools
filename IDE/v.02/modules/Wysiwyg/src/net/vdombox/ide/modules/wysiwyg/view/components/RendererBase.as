@@ -9,7 +9,7 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
@@ -35,7 +35,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
-
+	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -45,7 +45,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-
+	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
+	
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.RichEditableText;
@@ -53,6 +54,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.components.SkinnableDataContainer;
 	import spark.components.supportClasses.GroupBase;
 	import spark.components.supportClasses.ScrollBarBase;
+	import spark.components.supportClasses.Skin;
 	import spark.layouts.BasicLayout;
 	import spark.layouts.HorizontalLayout;
 	import spark.layouts.VerticalLayout;
@@ -72,6 +74,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function RendererBase()
 		{
 			super();
+			setStyle("skinClass", Class(ObjectRendererSkin));
 
 			itemRendererFunction = chooseItemRenderer;
 
