@@ -450,7 +450,7 @@ package net.vdombox.ide.core.model
 				//save resource on user`s local disk and set resource to resourceVO
 				case "get_resource":
 				{
-					trace(" get_resource ");
+					//trace(" get_resource ");
 					resourceVO = event.token.resourceVO as ResourceVO;
 					
 					var data : String = event.result.Resource;
@@ -478,7 +478,7 @@ package net.vdombox.ide.core.model
 				
 				case "set_resource":
 				{
-					trace("\n******************set_resource ******************");
+					//trace("\n******************set_resource ******************");
 					resourceVO = event.token.resourceVO as ResourceVO;
 
 					resourceVO.setXMLDescription( result.Resource[ 0 ] );
@@ -492,7 +492,7 @@ package net.vdombox.ide.core.model
 
 				case "list_resources":
 				{
-					trace("\n******************list_resources ******************");
+					//trace("\n******************list_resources ******************");
 					var applicationVO : ApplicationVO = event.token.applicationVO;
 					var resources : Array = createResourcesList( applicationVO, result.Resources[ 0 ] );
 					
@@ -503,7 +503,7 @@ package net.vdombox.ide.core.model
 					
 				case "delete_resource":
 				{
-					trace("\n******************delete_resource ******************");
+					//trace("\n******************delete_resource ******************");
 					resourceVO = event.token.resourceVO as ResourceVO;
 					
 					cacheManager.deleteFile( resourceVO.id );
