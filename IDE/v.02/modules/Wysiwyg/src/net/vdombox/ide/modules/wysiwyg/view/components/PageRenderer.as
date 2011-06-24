@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+	import net.vdombox.ide.modules.wysiwyg.view.skins.PageRendererSkin;
 
 	public class PageRenderer extends RendererBase
 	{
@@ -12,6 +13,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var _selectedRenderer : IRenderer;
 		private var isSelectedRendererChanged : Boolean;
 
+		override public function stylesInitialized():void {
+			super.stylesInitialized();
+			setStyle("skinClass", Class(PageRendererSkin));
+		}
+		
 		override protected function partAdded( partName : String, instance : Object ) : void
 		{
 			super.partAdded( partName, instance );

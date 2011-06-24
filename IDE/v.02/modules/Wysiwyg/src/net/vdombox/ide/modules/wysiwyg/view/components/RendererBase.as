@@ -74,11 +74,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function RendererBase()
 		{
 			super();
-			setStyle("skinClass", Class(ObjectRendererSkin));
+			//setStyle("skinClass", Class(ObjectRendererSkin));
 
 			itemRendererFunction = chooseItemRenderer;
 
 			addHandlers();
+		}
+		
+		override public function stylesInitialized():void {
+			super.stylesInitialized();
+			setStyle("skinClass", Class(ObjectRendererSkin));
 		}
 
 		[SkinPart( required = "true" )]

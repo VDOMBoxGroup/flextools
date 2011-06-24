@@ -253,8 +253,7 @@
 	<s:Group height="100%" width="100%">
 		<components:PageRenderer id="renderer" 
 								 height="100%" width="100%"
-								 selectedRenderer="{ selectedRenderer }" includeIn="wysiwyg, wysiwygDisabled, normal, disabled"
-								 skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PageRendererSkin"/>
+								 selectedRenderer="{ selectedRenderer }" includeIn="wysiwyg, wysiwygDisabled, normal, disabled"/>
 
 		<editors:XMLScriptEditor id="xmlScriptEditor"
 								 height="100%" width="100%"
