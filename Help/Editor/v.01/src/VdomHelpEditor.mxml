@@ -684,7 +684,7 @@
 				product.appendChild(pages);
 
 				var fileStream : FileStream = new FileStream();
-				var fileName : String       = cmboxProduct.selectedItem.name;
+				var fileName : String       = cmboxProduct.selectedItem.title;
 				var docsDir : File          = File.documentsDirectory;
 				var productLocation : File  = new File(docsDir.url +"/VDOMHelp/"+ fileName+"/" + fileName + ".xml");
 

@@ -88,6 +88,17 @@
 			
 			private function okHandler():void 
 			{
+				if (productTitle.text.length == 0) {
+					lbError.text = "'Title' field is empty";
+					errorFormItem.label = "Error:"
+					//					formHeading.addChild(errorFormItem);
+					trace("Error: 'Title' field is empty")
+					
+					if(!form.contains(errorFormItem))
+						form.addChild(errorFormItem);
+
+					return;
+				}
 				if (productName.text.length == 0) 
 				{
 					productName.text = UIDUtil.createUID();
