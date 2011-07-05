@@ -246,12 +246,12 @@
 
 				toc = tree.dataProvider[ 0 ];
 
-				var pageName : String = "page_" + ++count;
+				var pageName : String = UIDUtil.createUID();
 
 //			search vacant name in dataBase
 				while ( sqlProxy.checkPageName(pageName) )
 				{
-					pageName = "page_" + ++count;
+					pageName = UIDUtil.createUID();
 //				trace("Page in data base: " + pageName);
 				}
 
@@ -260,7 +260,7 @@
 				sqlProxy.addPage(cmboxProduct.selectedItem.name, "en_US", pageName, 0, 
 								 pageTitle, "write Description", "");
 
-				toc.appendChild(XML("<page title = 'page " + count+ "' name = 'page_" + count+ "' isBranch='true' />"));
+				toc.appendChild(XML("<page title = 'page " + count+ "' name = '" + pageName+ "' isBranch='true' />"));
 				tree.dataProvider = null;
 
 				tree.validateNow();
@@ -566,11 +566,11 @@
 				var pages : XML         = new XML("<pages/>");
 				var length : Number     = Number(result.length);
 //			progressBar.setProgress(0,100); 
-				var guidRegExp : RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
+				var guidResourseRegExp : RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
 
 				for ( var i : String in result )
 				{
-					var pageContent : String = resetPageContent(result[i]["content"]);
+					var pageContent : String = result[i]["content"];
 
 					var tempXML : XML        = new XML("<page/>");
 					tempXML.name = result[ i ][ "name" ];
@@ -586,7 +586,7 @@
 											 "<link rel='stylesheet' href='app-storage:/main.css' type='text/css'></link> "+
 											 "</head>" +
 											 "<body>"+
-											 pageContent +
+											 resetPageContent(result[i]["content"]) +
 											 "</body>" +
 											 "<html>" +		
 											 "]"+ "]>"));
@@ -594,11 +594,14 @@
 					tempXML.appendChild(content);
 
 //				****  get resources ****		
-					var pagesResources : Array = pageContent.match(guidRegExp);
+					var pagesResources : Array = pageContent.match(guidResourseRegExp);
 					var resources : XML        = new XML("<resources/>");
 
 					for ( var j : String in pagesResources )
 					{
+						if (pagesResources[ j ].indexOf(".htm") != -1) {
+							continue;
+						}
 						var resource : XML        = new XML("<resource/>");
 						var resourceName : String = pagesResources[ j ];
 
@@ -644,14 +647,37 @@
 
 						return XML("<![CDATA[" + sourse +"]"+ "]>");
 					}
-
+					
 					function resetPageContent(aPageContent:String) : String
 					{
-						var pattern : RegExp;
+						var patternRes		: RegExp;
+						var patternGUID		: RegExp;
+						var arrMatchRes		: Array;
+						var resourceGUID	: String;
+						var aPageNewContent	: String;
+						
+						aPageNewContent = aPageContent;
+						
+						patternRes = /"[ ]*(app-storage:\/resources)[^"]+"/g;
+						patternGUID = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\b/gim;
+						
+						arrMatchRes = aPageContent.match(patternRes);
+						
+						for each ( var strRes : String in arrMatchRes )
+						{
+							resourceGUID = "";
+							if (strRes.search(patternGUID) != -1)
+							{
+								resourceGUID = strRes.substr(strRes.search(patternGUID), 36);  
+							}
+									
+							var newResource : String = "\"#Res(" + resourceGUID + ")\"";
+							
+							aPageNewContent = aPageNewContent.replace(strRes, newResource);
+						}
 
-						pattern = /app-storage:\//g;
-
-						return aPageContent.replace(pattern, "");
+						
+						return aPageNewContent;
 					}
 				}
 
@@ -854,7 +880,7 @@
 					   themeColor="#656565"
 					   textRollOverColor="#FFFFFF" />
 
-			<mx:Button label="Creat products XML"
+			<mx:Button label="Create products XML"
 					   click="{creatProductXML()}"
 					   color="#FFFFFF"
 					   fillColors="#333333"

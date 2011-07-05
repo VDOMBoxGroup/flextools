@@ -8,6 +8,7 @@ package
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
 	
+	import mx.core.ContextualClassFactory;
 	import mx.utils.Base64Decoder;
 
 	public class ProjectsUpdater extends EventDispatcher
@@ -88,7 +89,7 @@ package
 				var version:String = page.version.toString(); 
 				var title:String = page.title.toString();
 				var description:String = page.description.toString();
-				var content:String = contentToBD(page.content.toString());
+				var content:String = contentToBD(page.content.toString(), page.resources.toString());
 				var pageLocation:String = location + pageName;
 				
 				//				arrayOfPages[pageLocation] = true;
@@ -132,38 +133,57 @@ package
 			
 		}  
 		
-		private function contentToBD(content:String):String
+		private function contentToBD(content:String, resources:String):String
 		{
-			var pattern 	: RegExp;
-			var arrMatch 	: Array;
-			var oldPath 	: String;
-			var newPath 	: String;
-			
-			pattern = /<[ ]*img[^>]*src[ ]*=[ ]*"[^"]+"/g;
-			arrMatch = content.match(pattern);
-			var i:uint = 0;
-			for each ( var strImg : String in arrMatch )
-			{
-				
-				oldPath = strImg.split("\"")[ strImg.split("\"").length - 2 ];
-				newPath = resetImgPath(oldPath);
-				content = content.substring(0, i) + content.substring(i, content.length).replace(oldPath, newPath);
-				
-				i = content.indexOf(newPath, i) + newPath.length;
-			}
-			return content;
+			return resetImgPath(content, resources);
 		}
 		
-		private function resetImgPath(path:String) : String
+		private function resetImgPath(content:String, resources:String) : String
 		{
-			path = path.substring(0 , path.lastIndexOf(".")) +
-				path.substring(path.lastIndexOf("."), path.length).replace(" ", "");
+			var pattern 		: RegExp;
+			var patternLastInd	: Number;
+			var arrMatch 		: Array;
+			var newResPath 		: String;
+			var newContent		: String;
+			var pageType		: String;
+			var resourceGUID	: String;
 			
-			if (path.indexOf("app-storage:/") < 0) {
-				path = "app-storage:/" + path;
+			
+			newContent = content;
+			
+			pattern = /\#Res\([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\)/ig;
+			arrMatch = content.match(pattern);
+			
+			var i:uint = 0;
+			for each ( var oldResName : String in arrMatch )
+			{
+				resourceGUID = oldResName.substr(5, 36);
+				patternLastInd = content.search(pattern) + oldResName.length; 
+				newResPath = "app-storage:/resources/" + resourceGUID + "." + getResourceType(resources, resourceGUID);
+				newContent = newContent.replace(oldResName, newResPath);
 			}
 			
-			return path;
+			return newContent;
+		}
+		
+		private function getResourceType(content:String, resourceName:String) : String
+		{
+			var pattern 		: RegExp;
+			var arrMatch 		: Array;
+			var resourceType 	: String = "";
+			
+			pattern = /type[ ]*=[ ]*"[A-Z]+"/i;
+			
+			if (content.indexOf(resourceName) != -1) {
+				content = content.substring(content.indexOf(resourceName) + resourceName.length, content.length);
+				
+				arrMatch = content.match(pattern);
+				if (arrMatch.length > 0) {
+					resourceType = String(arrMatch[0]).split("\"")[String(arrMatch[0]).split("\"").length - 2]
+				}
+			}
+				
+			return resourceType;
 		}
 		
 		public function cacheFile(contentName:String, content:ByteArray):void 

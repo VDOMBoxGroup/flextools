@@ -67,7 +67,7 @@
 							"<body>" + "\n" +
 								editorData + "\n" +
 							"</body>" + "\n" +
-						"<html>"
+						"</html>"
 				}
 				
 				return htmlTxt;

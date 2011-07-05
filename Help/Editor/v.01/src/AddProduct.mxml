@@ -20,11 +20,12 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
-			import mx.controls.Label;
 			import mx.collections.ArrayCollection;
 			import mx.controls.CheckBox;
-			import mx.managers.PopUpManager;
+			import mx.controls.Label;
 			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import mx.utils.UIDUtil;
 			
 			private var sqlProxy 	: SQLProxy = new SQLProxy();
 			private var lbError 	: Label;
@@ -84,17 +85,13 @@
 			}
 			
 			private var errorFormItem : FormItem = new FormItem();
+			
 			private function okHandler():void 
 			{
 				if (productName.text.length == 0) 
 				{
-					lbError.text = "'Name' field is empty";
-					errorFormItem.label = "Error:"
-					//					formHeading.addChild(errorFormItem);
-					trace("Error: 'Name' field is empty")
-					
-					if(!form.contains(errorFormItem))
-						form.addChild(errorFormItem);
+					productName.text = UIDUtil.createUID();
+					okHandler();
 					
 				} else if(!sqlProxy.productInDB(productName.text))
 				{
@@ -105,13 +102,8 @@
 					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 				} else
 				{
-					lbError.text = "This Name already in Data Base";
-					errorFormItem.label = "Error:"
-//					formHeading.addChild(errorFormItem);
-					trace("Error: Wtis name already in DateBase")
-					
-					if(!form.contains(errorFormItem))
-						form.addChild(errorFormItem);
+					productName.text = UIDUtil.createUID();
+					okHandler();
 				}
 				
 			}
@@ -135,7 +127,9 @@
           		 </mx:FormItem>
           		 
           		 <mx:FormItem label="Name:">
-					<mx:TextInput id="productName" x="65" y="40"  width="211" toolTip="Example: Vdom_IDE"/>
+					<mx:TextInput id="productName" x="65" y="40" width="211" editable="false"
+								  text="{UIDUtil.createUID()}"
+								  toolTip="Example: Vdom_IDE"/>
           		 </mx:FormItem>
           		 
           		 <mx:FormItem label="Language:">
