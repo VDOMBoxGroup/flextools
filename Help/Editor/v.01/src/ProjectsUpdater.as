@@ -8,6 +8,7 @@ package
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
 	
+	import mx.automation.delegates.controls.NavBarAutomationImpl;
 	import mx.core.ContextualClassFactory;
 	import mx.utils.Base64Decoder;
 
@@ -37,7 +38,7 @@ package
 			var description:String = product.description.toString();
 			var language:String = product.language.toString();
 			var toc:XML = tocToBD(product.toc[0],language, name);
-			
+			var productId : Number;
 			
 			// save product to data base
 			var curProductVersion:String = sqlProxy.getVersionOfProduct(name, language);			
@@ -56,7 +57,11 @@ package
 			}
 			
 			// выбрать странички сохранить их на диск
-			savePages( product);
+			productId= sqlProxy.getProductId(name, language);
+			
+			if (isNaN(productId)) return;
+			
+			savePages(product, productId);
 			
 			this.dispatchEvent(new Event(UPDATE_COMPLETED));
 		}
@@ -65,18 +70,22 @@ package
 		{
 			//			get All pages of product 
 			var pages:Object = sqlProxy.getProductsPages(name, language);
+			var productId : Number = sqlProxy.getProductId(name, language);
+			
+			if (isNaN(productId)) return;
+			
 			for (var page:String in pages)
-				deletePage(pages[page].name);
+				deletePage(productId, pages[page].name);
 			
 			sqlProxy.deleteProduct(name, language);
 		}
 		
-		private function deletePage(namePage:String):void
+		private function deletePage(productId:Number, namePage:String):void
 		{
-			sqlProxy.deletePage(namePage);
+			sqlProxy.deletePage(productId, namePage);
 		}
 		
-		private function savePages(product:XML):void
+		private function savePages(product:XML, productId:Number):void
 		{
 			var productName:String =  product.name.toString(); 
 			var language:String =  product.language.toString(); 
@@ -100,7 +109,7 @@ package
 				// страница найдена 1) старая - удаляем, записываем 2) такая же - пропускаем				
 				// deletePage(namePage); getResourcesOfPage(namePage):Array; deleteResorces(namePage);
 				
-				var curPageVersion:String = sqlProxy.getVersionOfPage(pageName);
+				var curPageVersion:String = sqlProxy.getVersionOfPage(productId, pageName);
 				
 				if(curPageVersion == '')
 				{
@@ -109,7 +118,7 @@ package
 				else if (Number(curPageVersion)< Number(version))
 				{
 					//delete old data
-					deletePage(pageLocation);
+					deletePage(productId, pageLocation);
 					sqlProxy.addPage(productName, language, pageName, Number(version), title, description, content);
 				} else
 				{

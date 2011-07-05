@@ -479,6 +479,33 @@ package
 
 			return result;
 		}
+		
+		/**
+		 * get id of product
+		 *  
+		 * @param productName
+		 * @param language
+		 * @return 
+		 * 
+		 */		
+		public function getProductId(productName:String, language:String) : Number
+		{
+			var query : String      = "SELECT id " +
+				"FROM product " +
+				"WHERE name = :name  AND language = :language;";
+			
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productName;
+			parameters[ ":language" ] = language;
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			if (result) {
+				return Number(result[ 0 ][ 'id' ]);
+			}
+			
+			return NaN;
+		}
 
 		/**
 		 * increments product version
@@ -659,11 +686,13 @@ package
 		 * @return 
 		 * 
 		 */		
-		public function getVersionOfPage(pageName:String):String
+		public function getVersionOfPage(productId:Number, pageName:String):String
 		{
-			var query:String = "SELECT page.version, page.id  FROM page WHERE name = :pageName ;";
+			var query:String = "SELECT page.version, page.id  FROM page WHERE name = :pageName " +
+																	   " AND id_product = :productId ;";
 			var parameters:Object = new Object();
 				parameters[":pageName"] = pageName;
+				parameters[":productId"] = productId;
 
 			var result:Object = executeQuery(query,parameters);
 			if(!result)
@@ -678,11 +707,14 @@ package
 		 * @param namePage
 		 * 
 		 */		
-		public function deletePage(namePage:String):void
+		public function deletePage(productId:Number, namePage:String):void
 		{
-			var query:String = "DELETE FROM 	page WHERE name = :namePage";
+			var query:String = "DELETE FROM 	page WHERE name = :namePage" +
+														   " AND id_product = :productId ;";
 			var parameters:Object = new Object();
 				parameters[":namePage"] = namePage;
+				parameters[":productId"] = productId;
+				
 			executeQuery(query, parameters);
 		}
 
