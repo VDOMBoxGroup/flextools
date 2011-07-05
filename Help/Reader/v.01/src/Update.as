@@ -186,7 +186,7 @@ package
 		
 		
 		public function parsingData(product:XML, lstLabel:Label):void
-		{ 
+		{
 			if(product == null || product.name() != "product")
 			{
 //				if(product.produc[])
@@ -196,6 +196,9 @@ package
 				lstLabel.validateNow();
 				return;
 			}
+			
+			product = resetProductXML(product);
+			
 			var name:String = product.name.toString();
 			var version:String = product.version.toString();
 			var title:String = product.title.toString();
@@ -236,6 +239,63 @@ package
 			this.dispatchEvent(new Event(PARSING_COMPLETED));
 //			creatTree(toc);
 			
+		}
+		
+		private function resetProductXML(productXML:XML) : XML
+		{
+			productXML = resetResourceLinksInProductXML(productXML);
+			productXML = resetPageLinksInProductXML(productXML);
+			
+			return productXML; 
+		}
+		
+		private function resetResourceLinksInProductXML(productXML:XML):XML
+		{
+			var xmlString 		: String;
+			var pattern 		: RegExp;
+			var arrMatch 		: Array;
+			var resourceGUID	: String;
+			var patternLastInd	: Number;
+			var newResPath 		: String;
+			
+			xmlString = productXML.toXMLString();
+			pattern = /\#Res\([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\)/ig;
+			arrMatch = xmlString.match(pattern);
+			
+			for each ( var oldResName : String in arrMatch )
+			{
+				resourceGUID = oldResName.substr(5, 36);
+				patternLastInd = xmlString.search(pattern) + oldResName.length; 
+				newResPath = "resources/" + resourceGUID + "." + getResourceType(xmlString.substring(patternLastInd, xmlString.length), resourceGUID);
+				xmlString = xmlString.replace(oldResName, newResPath);
+			}
+			
+			return new XML(xmlString);
+		}
+		
+		private function resetPageLinksInProductXML(productXML:XML):XML
+		{
+			return productXML;
+		}
+		
+		private function getResourceType(content:String, resourceName:String) : String
+		{
+			var pattern 		: RegExp;
+			var arrMatch 		: Array;
+			var resourceType 	: String = "";
+			
+			pattern = /type[ ]*=[ ]*"[A-Z]+"/i;
+			
+			if (content.indexOf(resourceName) != -1) {
+				content = content.substring(content.indexOf(resourceName) + resourceName.length, content.length);
+				
+				arrMatch = content.match(pattern);
+				if (arrMatch.length > 0) {
+					resourceType = String(arrMatch[0]).split("\"")[String(arrMatch[0]).split("\"").length - 2]
+				}
+			}
+			
+			return resourceType;
 		}
 		
 		private function tocToBD(value:XML, lan:String, product:String):XML
