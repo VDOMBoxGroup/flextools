@@ -30,6 +30,7 @@
 			import flash.utils.setTimeout;
 			
 			import mx.collections.XMLListCollection;
+			import mx.containers.TitleWindow;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
@@ -47,8 +48,9 @@
 			private var pageVersion : Number;
 			
 			private var cssFileName : String = "main.css";
-
-
+			
+			private var blockWindow	: TitleWindow;
+			
 			/***
 			 *
 			 * + сохранить экспортируемую хмл
@@ -540,8 +542,62 @@
 				return strInUIDFormat;
 			}
 
-			private function creatProductXML() : void
+			private function selectXMLFile():void
 			{
+				var productXMLFile:File = new File();
+				
+				productXMLFile.addEventListener(Event.SELECT, onProductXMLFileSelected); 
+				productXMLFile.addEventListener(Event.CANCEL, onCancelSelectProductXML); 
+				productXMLFile.addEventListener(IOErrorEvent.IO_ERROR, onProductXMLError); 
+				productXMLFile.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onProductXMLError);
+				productXMLFile.browseForSave("Save product as .XML");
+				
+				blockBtns(true);
+			}
+			
+			private function onProductXMLError(aEvent:Event):void
+			{
+				blockBtns(false);
+				Alert.show("Error creating product xml", "Error: ");				
+			}
+			
+			private function onProductXMLFileSelected(aEvent:Event):void
+			{
+				var productXml:File = aEvent.target as File; 
+				
+				if (!isCorrectFileFormat(productXml.type)) {
+					blockBtns(false);
+					Alert.show("The file format is incorrect. It should be in xml format.", "Error file format");
+					return;
+				}
+				creatProductXML(productXml);
+			}
+			
+			private function isCorrectFileFormat(fileFormat:String) : Boolean
+			{
+				if (!fileFormat) {
+					return false;
+				}
+				
+				if (fileFormat.toLowerCase() == ".xml") {
+					return true;
+				}
+				
+				return false;
+			}
+			
+			private function onCancelSelectProductXML(aEvent:Event):void
+			{
+				blockBtns(false);
+			}
+			
+			private function creatProductXML(productXMLFile:File) : void
+			{
+				if (!productXMLFile) {
+					return;
+				}
+				
+				trace ("[creatProductXML] productXMLFile.type = " + productXMLFile.type);
 				var result : Object = sqlProxy.getProductsPages(cmboxProduct.selectedItem.name, "en_US");
 
 				var product : XML   = new XML("<product/>");
@@ -579,7 +635,7 @@
 					tempXML.description = result[ i ][ "description" ];
 
 					var content : XML = XML("<content/>");
-					content.appendChild( XML("<![CDATA[" + 
+					/*content.appendChild( XML("<![CDATA[" + 
 											 "<html>" + 
 											 "<head>" + 
 											 "<script src='app-storage:/searchhi_slim.js'></script>" +
@@ -589,7 +645,11 @@
 											 resetPageContent(result[i]["content"]) +
 											 "</body>" +
 											 "<html>" +		
-											 "]"+ "]>"));
+											 "]"+ "]>"));*/
+					
+					content.appendChild( XML("<![CDATA[" + 
+						resetPageContent(result[i]["content"]) +
+						"]"+ "]>"));
 
 					tempXML.appendChild(content);
 
@@ -642,6 +702,7 @@
 						}
 						catch ( error : Error )
 						{
+							blockBtns(false);
 							Alert.show( error.message, "Failed:");
 						}
 
@@ -686,23 +747,26 @@
 				var fileStream : FileStream = new FileStream();
 				var fileName : String       = cmboxProduct.selectedItem.title;
 				var docsDir : File          = File.documentsDirectory;
-				var productLocation : File  = new File(docsDir.url +"/VDOMHelp/"+ fileName+"/" + fileName + ".xml");
-
+				
 				try
 				{
-					//				fileStream.addEventListener(Event., savedData);
-					fileStream.open( productLocation, FileMode.WRITE);
+					fileStream. open( productXMLFile, FileMode.WRITE);
+					fileStream.writeUTFBytes("");
+					fileStream.close();
+
+					fileStream. open( productXMLFile, FileMode.WRITE);
 					fileStream.writeUTFBytes(product.toXMLString());
 					fileStream.close();
 
-					Alert.show( productLocation.nativePath, "Saved to:");
+					Alert.show( productXMLFile.nativePath, "Saved to:");
 				}
 				catch ( error : Error )
 				{
+					blockBtns(false);
 					Alert.show( error.message, "Error:");
 				}
 
-				var fileSize : Number = productLocation.size;
+				var fileSize : Number = productXMLFile.size;
 				var fileSizeStr : String;
 				var gig : Number      = 1024 * 1024 * 1024;
 				var meg : Number      = 1024 * 1024;
@@ -741,7 +805,7 @@
 					productItem.@description = product.description;
 					productItem.@language = product.language;
 					productItem.@size = fileSizeStr;
-					productItem.@url = productLocation.url;
+					productItem.@url = productXMLFile.url;
 
 					delete installXML.product.( @name == product.name )[ 0 ];
 
@@ -751,10 +815,12 @@
 					fileStream.open( location, FileMode.WRITE);
 					fileStream.writeUTFBytes(installXML.toXMLString());
 					fileStream.close();
+					blockBtns(false);
 
 				}
 				catch ( error : Error )
 				{
+					blockBtns(false);
 					Alert.show( error.message, "Error:");
 				}
 
@@ -764,6 +830,28 @@
 //			  <product name="" language="" version="0.2" title="" url="help/sample_en_US.xml" size="" />
 //			</install>
 
+			}
+			
+			private function blockBtns(b:Boolean):void
+			{
+				try {
+					PopUpManager.removePopUp(blockWindow);
+					blockWindow = null;
+				} catch (e:Error) {
+					trace ("Error while remove popUp");
+				}
+				
+				if (b) {
+					blockWindow = new TitleWindow();
+					
+					blockWindow.width = this.width;
+					blockWindow.height = this.height;
+					blockWindow.x = this.x;
+					blockWindow.y = this.y;
+					blockWindow.alpha = 0;
+					
+					PopUpManager.addPopUp(blockWindow, this, true);
+				}
 			}
 
 			// save file to folder
@@ -881,7 +969,7 @@
 					   textRollOverColor="#FFFFFF" />
 
 			<mx:Button label="Create products XML"
-					   click="{creatProductXML()}"
+					   click="{selectXMLFile()}"
 					   color="#FFFFFF"
 					   fillColors="#333333"
 					   textSelectedColor="#FFFFFF"
