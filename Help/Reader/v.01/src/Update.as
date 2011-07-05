@@ -431,7 +431,9 @@ package
 			trace("Delete: " + location);
 			var newFileName:String = location;
 			var newFile:File = File.applicationStorageDirectory.resolvePath(newFileName);
-			newFile.deleteFile();
+			if (newFile.exists) {
+				newFile.deleteFile();
+			}
 //			trace(newFile.toString())
 		}
 		
