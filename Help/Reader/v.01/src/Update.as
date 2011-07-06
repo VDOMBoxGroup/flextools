@@ -205,7 +205,7 @@ package
 			var description:String = product.description.toString();
 			var language:String = product.language.toString();
 			var toc:XML = tocToBD(product.toc[0],language, name);
-			
+			var productId : Number;
 			
 			// save product to data base
 			
@@ -233,7 +233,12 @@ package
 			// выбрать странички сохранить их на диск
 			lstLabel.text = "Creating DB ";
 			lstLabel.validateNow();
-			savePages( product);
+			
+			productId = sqlProxy.getProductId(name, language);
+			if (isNaN(productId)) return;
+			
+			savePages(product, productId);
+			
 			
 			lstLabel.text = "Fineshed ";
 			this.dispatchEvent(new Event(PARSING_COMPLETED));
@@ -326,7 +331,7 @@ package
 		}
 		
 		
-		private function savePages(product:XML):void
+		private function savePages(product:XML, productId:Number):void
 		{
 			var productName:String =  product.name.toString(); 
 			var language:String =  product.language.toString(); 
@@ -354,7 +359,7 @@ package
 				// страница найдена 1) старая - удаляем, записываем 2) такая же - пропускаем				
 				// deletePage(namePage); getResourcesOfPage(namePage):Array; deleteResorces(namePage);
 				
-				var curPageVersion:String = sqlProxy.getVersionOfPage(pageLocation);
+				var curPageVersion:String = sqlProxy.getVersionOfPage(productId, pageLocation);
 				
 				if(curPageVersion == '')
 				{
@@ -363,7 +368,7 @@ package
 				else if (Number(curPageVersion)< Number(version))
 				{
 					//delete old data
-					deletePage(pageLocation);
+					deletePage(productId, pageLocation);
 					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
 				} else
 				{
@@ -406,13 +411,17 @@ package
 		{
 //			get All pages of product 
 			var pages:Object = sqlProxy.getProductsPages(name, language);
+			var productId : Number = sqlProxy.getProductId(name, language);
+			
+			if (isNaN(productId)) return;
+			
 			for (var page:String in pages)
-			 deletePage(pages[page].name);
+			 deletePage(productId, pages[page].name);
 			 
 			sqlProxy.deleteProduct(name, language);
 		}
 		
-		private function deletePage(namePage:String):void
+		private function deletePage(productId:Number, namePage:String):void
 		{
 			var resources:Object = sqlProxy.getResourcesOfPage(namePage);
 			
@@ -421,8 +430,8 @@ package
 				deleteFile(resources[index]['name']);
 			}
 			
-			sqlProxy.deleteResources(namePage);
-			sqlProxy.deletePage(namePage);
+			sqlProxy.deleteResources(productId, namePage);
+			sqlProxy.deletePage(productId, namePage);
 			
 		}
 		
