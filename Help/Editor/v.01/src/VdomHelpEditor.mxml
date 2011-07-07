@@ -94,6 +94,11 @@
 				}
 			}
 			
+			private function onWysiwygSaveCombinationClicked(event:Event):void
+			{
+				this.savePage();
+			}
+			
 			private function startCopyCSSFile(evt:Event):void
 			{
 				trace ("[VdomHelpEditor] startCopyCSSFile");
@@ -351,6 +356,10 @@
 
 			private function savePage() : void
 			{
+				trace("[VdomHelpEditor] savePage");
+				
+				if (!tree.selectedItem) return;
+				
 				resetImagesPath();
 				sqlProxy.setPageContent(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name, html_wysiwyg.getHTML(), pageVersion);
 				getCurrentPage();
@@ -358,21 +367,17 @@
 
 			private function resetImagesPath() : void
 			{
-				trace("[VdomHelpEditor] resetImagesPath");
 				resetHttpImages();
 				resetLocalImages();
 			}
 
 			private function resetLocalImages() : void
 			{
-				trace("[VdomHelpEditor] resetLocalImages");
 				var pattern : RegExp;
 				var arrMatch : Array;
 
 				pattern = /<[ ]*img[^>]*src[ ]*=[ ]*"[^(app-storage:\/resources)][^"]*"/g;
 				arrMatch = html_wysiwyg.getHTML().match(pattern);
-
-				trace("[VdomHelpEditor] resetLocalImages: arrMatch.length = " + arrMatch.length);
 
 				for each ( var strImg : String in arrMatch )
 				{
@@ -394,7 +399,6 @@
 
 			private function resetHttpImages() : void
 			{
-				trace("[VdomHelpEditor] resetHttpImages");
 				var pattern : RegExp;
 				var arrMatch : Array;
 				var oldPath : String;
@@ -403,8 +407,6 @@
 
 				pattern = /<[ ]*img[^>]*src[ ]*=[ ]*"(http:\/\/|https:\/\/)[^"]*"/ig;
 				arrMatch = html_wysiwyg.getHTML().match(pattern);
-
-				trace("[VdomHelpEditor] resetHttpImages: arrMatch.length = " + arrMatch.length);
 
 				for each ( var strImg : String in arrMatch )
 				{
@@ -635,17 +637,6 @@
 					tempXML.description = result[ i ][ "description" ];
 
 					var content : XML = XML("<content/>");
-					/*content.appendChild( XML("<![CDATA[" + 
-											 "<html>" + 
-											 "<head>" + 
-											 "<script src='app-storage:/searchhi_slim.js'></script>" +
-											 "<link rel='stylesheet' href='app-storage:/main.css' type='text/css'></link> "+
-											 "</head>" +
-											 "<body>"+
-											 resetPageContent(result[i]["content"]) +
-											 "</body>" +
-											 "<html>" +		
-											 "]"+ "]>"));*/
 					
 					content.appendChild( XML("<![CDATA[" + 
 						resetPageContent(result[i]["content"]) +
@@ -743,6 +734,7 @@
 				}
 
 				product.appendChild(pages);
+				product.normalize();
 
 				var fileStream : FileStream = new FileStream();
 				var fileName : String       = cmboxProduct.selectedItem.title;
@@ -755,7 +747,7 @@
 					fileStream.close();
 
 					fileStream. open( productXMLFile, FileMode.WRITE);
-					fileStream.writeUTFBytes(product.toXMLString());
+					fileStream.writeUTFBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + product.toXMLString());
 					fileStream.close();
 
 					Alert.show( productXMLFile.nativePath, "Saved to:");
@@ -928,6 +920,13 @@
 					getCurrentPage();
 				}
 			}
+			
+			protected function html_wysiwyg_initializeHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				this.html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED, onWysiwygSaveCombinationClicked);
+			}
+			
 		]]>
 	</mx:Script>
 
@@ -1048,7 +1047,7 @@
 						<!--mx:HBox width="100%" color="#000000" backgroundColor="#E4E4E4"  >
 						</mx:HBox-->
 
-						<local:HTML_WYSIWYG id="html_wysiwyg" width="100%" height="100%" />
+						<local:HTML_WYSIWYG id="html_wysiwyg" width="100%" height="100%" initialize="html_wysiwyg_initializeHandler(event)"/>
 						<mx:HBox width="100%" backgroundColor="0x373739" paddingBottom="3">
 							<mx:Canvas height="100%">
 								<mx:Label id="pageInformation"

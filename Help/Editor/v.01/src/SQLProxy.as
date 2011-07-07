@@ -761,7 +761,7 @@ package
 
 		private function resultHandler(event:SQLEvent) : void
 		{
-			trace("  SQLEvent Ok! ");
+			//trace("  SQLEvent Ok! ");
 		}
 
 		/**

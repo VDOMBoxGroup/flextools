@@ -5,10 +5,34 @@
 	htmlDOMInitialize="html1_htmlDOMInitializeHandler(event)">
 	<mx:Script>
 		<![CDATA[
-			private var instancesInitialized : Boolean;
+			private var instancesInitialized 	: Boolean;
+			
+			
+			public static const EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED : String = "EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED"; 
 			
 			private function init():void
 			{
+				this.addEventListener(KeyboardEvent.KEY_UP, onKeyboardKeyUp);
+			}
+			
+			private function onKeyboardKeyUp(keyEvent:KeyboardEvent):void
+			{
+				switch(keyEvent.keyCode)
+				{
+					case (Keyboard.S):
+					{
+						trace ("ctrl = " + keyEvent.ctrlKey);
+						if (keyEvent.ctrlKey) {
+							this.dispatchEvent(new Event(EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED));
+						}
+						break;
+					}
+					default:
+					{
+						break;
+					}
+				}
+			
 			}
 			
 			public function setHTML( value : String ) : void

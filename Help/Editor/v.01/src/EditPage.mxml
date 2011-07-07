@@ -22,8 +22,8 @@
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			import mx.controls.CheckBox;
-			import mx.managers.PopUpManager;
 			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
 			
 			public var curPage : Object;
 			public var pageLn	: String; 
@@ -36,7 +36,9 @@
 				addEventListener(CloseEvent.CLOSE, closeHandler); 
 				PopUpManager.centerPopUp(this);
 				
-				addEventListener(KeyboardEvent.KEY_UP,keyboardHandler); 
+				addEventListener(KeyboardEvent.KEY_UP, keyboardHandler);
+				this.pageDescription.addEventListener(KeyboardEvent.KEY_UP, keyboardHandler);
+				this.pageDescription.addEventListener(KeyboardEvent.KEY_DOWN, keyboardDownHandler);
 				
 				pageLabel.setFocus() ;
 				
@@ -60,11 +62,57 @@
 				}
 			}
 			
+			private function keyboardDownHandler(msEvt:KeyboardEvent):void
+			{
+				switch(msEvt.charCode)
+				{
+					case Keyboard.ENTER:
+					{
+						if (!msEvt.ctrlKey) {
+							msEvt.preventDefault();
+						}
+						break;
+					}	
+					default:
+					{
+						break;
+					}
+				}
+			}
+			
 			private function keyboardHandler(msEvt:KeyboardEvent):void
 			{
-				if(msEvt.charCode == 27)
+				switch(msEvt.charCode)
 				{
-					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+					case Keyboard.ESCAPE:
+					{
+						dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+						break;
+					}
+					case Keyboard.ENTER:
+					{
+						if (!msEvt.ctrlKey) {
+							if (this.getFocus() == this.btnCancel)
+							{
+								cancelPressed();
+								return;
+							}
+							
+							if (this.getFocus() == this.btnUndo)
+							{
+								undoClickHandler();
+								return;
+							}
+							
+							msEvt.preventDefault();
+							okHandler();
+						}
+						break;
+					}	
+					default:
+					{
+						break;
+					}
 				}
 			}
 			
@@ -97,7 +145,6 @@
 			{
 				vilidate();
 			}
-						
 			
 		]]>
 		
@@ -125,15 +172,15 @@
 	<mx:VBox horizontalAlign="center"   backgroundColor="#373739"
 			height="100%" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10" color="#FFFFFF" >
     		 
-    		  <mx:Button  label="Ok"  click="{okHandler()}"
+    		  <mx:Button id="btnOK" label="Ok"  click="{okHandler()}"
     		  	color="#FFFFFF"  width="100%"  borderColor="#999999"
 				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 			
-			<mx:Button  label="Undo"  click="{undoClickHandler()}"
+			<mx:Button  id="btnUndo" label="Undo"  click="{undoClickHandler()}"
 				color="#FFFFFF"  width="100%" borderColor="#999999"
 				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1"  themeColor="#656565" textRollOverColor="#FFFFFF"/>
 			
-			<mx:Button  label="Cancel" 
+			<mx:Button  id="btnCancel" label="Cancel" 
 				click="{cancelPressed()}" color="#FFFFFF" width="100%" borderColor="#999999"
 				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 	</mx:VBox>
