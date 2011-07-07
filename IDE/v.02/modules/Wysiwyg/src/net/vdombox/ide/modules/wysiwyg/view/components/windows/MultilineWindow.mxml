@@ -74,6 +74,7 @@
 
 		]]>
 	</mx:Script>
+	
 	<s:Scroller width="100%" height="100%" horizontalScrollPolicy="off">
 			<s:RichEditableText id="textAreaContainer" 
 						editable="true"
