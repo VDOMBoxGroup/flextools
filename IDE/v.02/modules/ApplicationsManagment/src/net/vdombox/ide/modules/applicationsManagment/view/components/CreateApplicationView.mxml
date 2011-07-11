@@ -6,7 +6,9 @@
 					
 					height="100%" width="100%"
 					color="white"
-					creationComplete="navigatorcontent1_creationCompleteHandler(event)">
+					creationComplete="navigatorcontent1_creationCompleteHandler(event)"
+					
+					skinClass="spark.skins.spark.SkinnableContainerSkin">
 
 	<fx:Script>
 		<![CDATA[
@@ -126,10 +128,12 @@
 						 fontFamily="Verdana" fontSize="14" fontWeight="bold" />
 
 				<s:RadioButton label="vscript" selected="true" value="vscript"
-							   group="{languageGroup}" />
+							   group="{languageGroup}" 
+							   skinClass="spark.skins.spark.RadioButtonSkin"/>
 
 				<s:RadioButton label="python" value="python"
-							   group="{languageGroup}" />
+							   group="{languageGroup}" 
+							   skinClass="spark.skins.spark.RadioButtonSkin"/>
 			</s:VGroup>
 		</s:Group>
 
