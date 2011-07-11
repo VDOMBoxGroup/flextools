@@ -68,6 +68,7 @@
 								 color.selectedUpStates="#96979B"/>
 			</s:LinearGradient>
 		</s:fill>
+		
 	</s:Rect>
 
 </local:SparkSkinForHalo>

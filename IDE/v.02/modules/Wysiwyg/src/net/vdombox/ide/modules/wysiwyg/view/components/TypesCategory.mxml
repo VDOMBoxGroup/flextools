@@ -3,7 +3,6 @@
 					xmlns:mx="library://ns.adobe.com/flex/halo"
 					xmlns:s="library://ns.adobe.com/flex/spark"
 					height="100%" width="100%"
-					backgroundColor="#70737A"
 					skinClass="spark.skins.spark.SkinnableContainerSkin">
 
 	<fx:Script>
@@ -39,7 +38,8 @@
 
 	<s:List dataProvider="{ typeData }" height="100%" labelField="displayName" width="100%"
 			textAlign="center"
-			contentBackgroundColor="#5E6367" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer" useVirtualLayout="false">
+			contentBackgroundAlpha="0"
+			itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer" useVirtualLayout="false">
 
 		<s:layout>
 			<s:VerticalLayout variableRowHeight="true" gap="10"/>
