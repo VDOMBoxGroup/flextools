@@ -626,9 +626,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				html.height = contetntPart.@height;
 
 			html.setStyle( "borderVisible", false );
-//			html.setStyle( "contentBackgroundAlpha", "0.0" );
-
-			html.setStyle( "backgroundAlpha", 0 );
+			html.blendMode = "darken";
 
 			if ( contetntPart.@editable )
 				_editableComponent = html;
