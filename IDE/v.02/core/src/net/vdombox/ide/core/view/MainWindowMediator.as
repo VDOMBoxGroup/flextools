@@ -145,7 +145,7 @@ package net.vdombox.ide.core.view
 			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			var title : String            = "";
 
-			title = serverProxy.authInfo.hostname + "  -  >Vdom IDE.v.2.0.1.004" ;
+			title = serverProxy.authInfo.hostname + "  -  >VDOM IDE.v.2.0.1.004" ;
 
 			if ( statesProxy.selectedApplication )
 				title = statesProxy.selectedApplication.name + "  @  " + title;

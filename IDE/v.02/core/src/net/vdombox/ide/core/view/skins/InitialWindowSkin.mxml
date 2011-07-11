@@ -81,5 +81,5 @@
 		</s:Rect>
 	</s:Group>
 
-	<s:BitmapImage height="70" source="@Embed(source='../assets/login/logo.png')" width="70" x="10"/>
+	<s:BitmapImage height="70" smooth="true" source="@Embed(source='../assets/login/logo.png')" width="70" x="10"/>
 </s:SparkSkin>

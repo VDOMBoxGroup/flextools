@@ -29,7 +29,7 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="50" width="100%">
+			 minHeight="32" width="100%">
 
 	<fx:Metadata>
 		/**
@@ -77,23 +77,14 @@
 			radiusX="2" radiusY="2">
 
 		<s:fill>
-			<!--- @private -->
-
-			<s:LinearGradient id="bgFill"
-							  rotation="90">
-
-				<s:GradientEntry color="0x4D5258"/>
-
-				<s:GradientEntry color="0x232426"/>
-			</s:LinearGradient>
+			<s:SolidColor color="0x000000" />
 		</s:fill>
 	</s:Rect>
 
-	<s:Group height="100%" minHeight="50" width.disabled="100%" width.disabledAndMaximized="100%" width.normalAndMaximized="100%"
-			 left="2" right="2" top="2">
+	<s:Group height="100%" minHeight="32" width.disabled="100%" width.disabledAndMaximized="100%" width.normalAndMaximized="100%"
+			 left="0" right="0" top="0">
 
 		<s:layout>
-
 			<s:HorizontalLayout gap="5"
 								verticalAlign="top"/>
 		</s:layout>
@@ -106,43 +97,31 @@
 		<!--- Defines the Label control for displaying the title text in the title bar. -->
 
 		<s:Label id="titleText" 
-				 height="100%" minWidth="0" width="100%"
-				 color="#FFFFFF" fontSize="12" fontWeight="bold" paddingTop="10" 
-				 textAlign="center"
+				 height="100%" minWidth="10" width="100%" 
+				 color="#6b6b6b" fontSize="10" fontWeight="bold"
+				 fontFamily="Tahoma"
+				 paddingTop="11" paddingLeft="20"
+				 textAlign="left"
 				 maxDisplayedLines="1"/>
-		<!-- minimize button -->
-		<!---
-			 Defines the Button control for the mimimized button in the title bar.
-			 By default, the button uses the spark.skins.spark.windowChrome.MinimizeButtonSkin class
-			 to define the skin for the mimimized button.
-
-			 @see spark.skins.spark.windowChrome.MinimizeButtonSkin
-		-->
-
-		<s:Button id="minimizeButton"
-				  bottom="2" skinClass="spark.skins.spark.windowChrome.MinimizeButtonSkin" top="2" verticalCenter="0"/>
-		<!-- maximize button -->
-		<!---
-			 Defines the Button control for the maximized button in the title bar.
-			 By default, the button uses the spark.skins.spark.windowChrome.MinimizeButtonSkin class
-			 to define the skin for the maximized button.
-
-			 @see spark.skins.spark.windowChrome.MaximizeButtonSkin
-		-->
-
-		<s:Button id="maximizeButton"
-				  skinClass="spark.skins.spark.windowChrome.MaximizeButtonSkin" skinClass.maximizedGroup="spark.skins.spark.windowChrome.RestoreButtonSkin" verticalCenter="0"/>
-		<!-- close button -->
-		<!---
-			 Defines the Button control for the close button in the title bar.
-			 By default, the button uses the spark.skins.spark.windowChrome.MinimizeButtonSkin class
-			 to define the skin for the close button.
-
-			 @see spark.skins.spark.windowChrome.CloseButtonSkin
-		-->
-
-		<s:Button id="closeButton"
-				  skinClass="spark.skins.spark.windowChrome.CloseButtonSkin" verticalCenter="0"
-				  click="closeButton_clickHandler(event)"/>
+		
 	</s:Group>
+	
+	<s:HGroup right="16" top="12" height="100%" minWidth="40" minHeight="20" gap="10">
+		<!-- minimize button -->
+		<s:Button id="minimizeButton"
+				  bottom="2" skinClass="net.vdombox.skins.MainMinimizeBtnSkin" verticalCenter="0"/>
+		
+		<!-- maximize button -->
+		<s:Button id="maximizeButton"
+				  skinClass="net.vdombox.skins.MainMaximizeBtnSkin" skinClass.maximizedGroup="net.vdombox.skins.MainRestoreBtnSkin" verticalCenter="0"/>
+		
+		<!-- close button -->
+		<s:Button id="closeButton"
+				  skinClass="net.vdombox.skins.MainCloseBtnSkin" verticalCenter="0"
+				  click="closeButton_clickHandler(event)"/>	
+	</s:HGroup>
+	
+	
+	
+	
 </s:SparkSkin>

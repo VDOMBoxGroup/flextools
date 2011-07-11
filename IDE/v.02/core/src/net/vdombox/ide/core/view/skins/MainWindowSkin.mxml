@@ -30,109 +30,60 @@
 		<s:State name="disabledAndInactive"
 				 stateGroups="disabledGroup, inactiveGroup" />
 	</s:states>
+		
 	<!-- layer 1: background fill -->
-
+	
 	<s:Rect id="backgroundRect"
 			bottom="0" left="0" right="0" top="0"
 			radiusX="7" radiusY="7">
-
+		
 		<s:stroke>
-
-			<s:SolidColorStroke color="0xCCCCCC" />
+			<s:SolidColorStroke color="#424242" weight="9"/>
 		</s:stroke>
 
 		<s:fill>
-
-			<s:LinearGradient id="bgFill"
-							  rotation="90">
-
-				<s:GradientEntry color="0x333333" />
-
-				<s:GradientEntry color="0x000000" />
-			</s:LinearGradient>
+			<s:SolidColor color="#1d1d1d" />	
 		</s:fill>
+		
 	</s:Rect>
+	
 	<!-- title bar background fill for when the title bar is inactive -->
-
 	<s:Group id="topMask"
-			 bottom="1" left="1" right="1" top="1">
+			 bottom="9" left="9" right="9" top="9">
 
-		<s:Rect height="100%" width="100%"
-				radiusX="7" radiusY="7">
-
+		<s:Rect height="100%" width="100%">
 			<s:fill>
-
 				<s:SolidColor color="0x000000"
 							  alpha="1" />
 			</s:fill>
 		</s:Rect>
 	</s:Group>
+	
 	<!-- layer 2: titlebar + content + status bar -->
-
-	<s:Group bottom="1" left="1" right="1" top="1"
+	<s:Group bottom="9" left="9" right="9" top="9"
 			 mask="{topMask}">
 
 		<s:TitleBar id="titleBar"
-					minHeight="50" width="100%"
+					minHeight="32" width="100%"
 					alpha.inactiveGroup="0.5"
 					skinClass="net.vdombox.ide.core.view.skins.MainWindowTitleBarSkin" />
-		<!--<s:Group height="50" width="100%">
-
-			 <s:Rect height="100%" width="100%">
-
-			 <s:fill>
-
-			 <s:LinearGradient rotation="90">
-
-			 <s:GradientEntry color="0x7B7C80" />
-
-			 <s:GradientEntry color="0x18191B" />
-			 </s:LinearGradient>
-			 </s:fill>
-			 </s:Rect>
-			 </s:Group>-->
-
-		<s:Rect height="100%" minHeight="0" minWidth="0" width="100%"
-				bottom="15" top="85">
-
+		
+		<s:Rect height="85" width="100%"
+				top="34">
 			<s:fill>
-
 				<s:LinearGradient rotation="90">
-
-					<s:GradientEntry color="0x4D5258" />
-
-					<s:GradientEntry color="0x000000" />
+					<s:GradientEntry color="#2d2d2d" />
+					<s:GradientEntry color="#000000" />
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
 
-		<s:Rect height="35" width="100%"
-				top="50">
-
-			<s:filters>
-
-				<mx:DropShadowFilter alpha=".5" angle="90" />
-			</s:filters>
-
-			<s:fill>
-
-				<s:LinearGradient rotation="90">
-
-					<s:GradientEntry color="0xB5B6B8" />
-
-					<s:GradientEntry color="0x77787C" />
-				</s:LinearGradient>
-			</s:fill>
-		</s:Rect>
-
-		<s:ButtonBar id="tabBar"
-					 height="20"
-					 left="100" top="30"
-					 requireSelection="true"
-					 skinClass="net.vdombox.ide.core.view.skins.TabBarSkin" />
-
-		<s:Group height="35" width="100%"
-				 top="50">
+		<s:ButtonBar id="tabBar" left="300" top="6" height="20" requireSelection="true"
+					 skinClass="net.vdombox.ide.core.view.skins.TabBarSkin"/>
+		
+		
+		<s:Group height="85" width="100%"
+				 top="34">
 
 			<s:layout>
 
@@ -144,7 +95,7 @@
 
 				<s:layout>
 
-					<s:HorizontalLayout gap="0" />
+					<s:HorizontalLayout gap="20" />
 				</s:layout>
 			</s:Group>
 
@@ -163,7 +114,7 @@
 				 height.disabled="100%" height.disabledAndInactive="100%"
 				 height.normalAndInactive="100%" minHeight="0" minWidth="0"
 				 width="100%"
-				 bottom="15" top="90" />
+				 bottom="15" top="118" />
 		<!-- status bar -->
 
 		<s:Group id="statusBar"
@@ -195,20 +146,24 @@
 					 right="10" top="2" verticalAlign="middle"
 					 maxDisplayedLines="1" />
 		</s:Group>
+		
+		<s:Line xFrom="0" xTo="{this.backgroundRect.width}" yFrom="33" yTo="33" >
+			<s:stroke>
+				<s:SolidColorStroke color="#424242" weight="1"/>
+			</s:stroke>
+		</s:Line>
+		
+		<mx:Image id="settingsButton" x="20" y="55" smoothBitmapContent="true"
+				  source="@Embed('assets/login/logo.png')">
+	
+			<mx:filters>
+				<s:GlowFilter color="0x000000" />
+			</mx:filters>
+		</mx:Image>
 	</s:Group>
-
-	<mx:Image id="settingsButton"
-			  source="@Embed('assets/login/logo.png')" x="20" y="10">
-
-		<mx:filters>
-
-			<s:GlowFilter color="0x000000" />
-		</mx:filters>
-	</mx:Image>
+	
 	<!-- layer 3: gripper -->
-
-	<s:Button id="gripper"
-			  bottom="3" right="3"
-			  skinClass="spark.skins.spark.windowChrome.GripperSkin"
-			  tabEnabled="false" />
+	<s:Button id="gripper" right="3" bottom="3"
+			  skinClass="spark.skins.spark.windowChrome.GripperSkin" tabEnabled="false"
+			  right.normal="8" bottom.normal="8"/>
 </s:SparkSkin>

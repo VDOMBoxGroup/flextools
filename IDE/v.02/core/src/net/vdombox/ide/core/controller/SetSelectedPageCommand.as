@@ -27,8 +27,10 @@ package net.vdombox.ide.core.controller
 				if ( !indexPageID || indexPageID == "None" )
 				{
 					
-					indexPageID = body.pages[0].id;
-					statesProxy.selectedApplication.indexPageID = indexPageID
+					if (body.pages.length > 0) {
+						indexPageID = body.pages[0].id;
+						statesProxy.selectedApplication.indexPageID = indexPageID
+					}
 				}
 				
 				for each ( var page:PageVO in body.pages)
