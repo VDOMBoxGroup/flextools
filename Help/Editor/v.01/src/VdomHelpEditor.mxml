@@ -759,7 +759,17 @@
 							pageGUID = "";
 							if (strPageLink.search(patternGUID) != -1)
 							{
-								pageGUID = strPageLink.substr(strPageLink.search(patternGUID), 36);  
+								pageGUID = strPageLink.substr(strPageLink.search(patternGUID), 36);
+								if (!pageExistsInDB(pageGUID)) {
+									continue;
+								}
+								
+								function pageExistsInDB(pageName:String) : Boolean 
+								{
+									if (sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", pageName)) 
+										return true;
+									return false;
+								}
 							}
 							
 							var newPageLink : String = "<a href=\"#Page(" + pageGUID + ")\"";
