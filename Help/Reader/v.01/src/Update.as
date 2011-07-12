@@ -249,7 +249,8 @@ package
 		private function resetProductXML(productXML:XML) : XML
 		{
 			productXML = resetResourceLinksInProductXML(productXML);
-			productXML = resetPageLinksInProductXML(productXML);
+			productXML.toc = resetPagesLinksInProductXML(productXML.toc[0]);
+			productXML.pages = resetPagesLinksInProductXML(productXML.pages[0], false);
 			
 			return productXML; 
 		}
@@ -278,9 +279,27 @@ package
 			return new XML(xmlString);
 		}
 		
-		private function resetPageLinksInProductXML(productXML:XML):XML
+		private function resetPagesLinksInProductXML(xml:XML, isToc:Boolean = true):XML
 		{
-			return productXML;
+			var xmlString 		: String;
+			var pattern 		: RegExp;
+			var arrMatch 		: Array;
+			var pageGUID		: String;
+			var newPagesPath	: String;
+			
+			xmlString = xml.toXMLString();
+			
+			pattern = /\#Page\([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\)/ig;
+			arrMatch = xmlString.match(pattern);
+			
+			for each ( var oldResName : String in arrMatch )
+			{
+				pageGUID = oldResName.substr(6, 36);
+				newPagesPath = isToc ? pageGUID : pageGUID + ".html";
+				xmlString = xmlString.replace(oldResName, newPagesPath);
+			}
+			
+			return new XML(xmlString);
 		}
 		
 		private function getResourceType(content:String, resourceName:String) : String
