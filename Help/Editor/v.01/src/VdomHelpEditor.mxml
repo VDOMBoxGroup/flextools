@@ -258,18 +258,11 @@
 
 				toc = tree.dataProvider[ 0 ];
 
-				pageName = UIDUtil.createUID();
+				pageName = generatePageName();
 
-//			search vacant name in dataBase
-				while ( sqlProxy.checkPageName(pageName) )
-				{
-					pageName = UIDUtil.createUID();
-//				trace("Page in data base: " + pageName);
-				}
-
-				
 				if (aCopiedItem) {
 					pageTitle = aCopiedItem[0]["title"];
+					pageName = aCopiedItem[0]["name"];
 					sqlProxy.addPage(cmboxProduct.selectedItem.name, "en_US", pageName, 0, 
 						pageTitle, aCopiedItem[0]["description"], aCopiedItem[0]["content"]);
 				} else {
@@ -278,7 +271,12 @@
 									 pageTitle, "write Description", "");
 				}
 
-				if (!aCopiedItem || !aCopiedItem[0]["parentPageName"] || (aCopiedItem[0]["parentPageName"] == cmboxProduct.selectedItem.name)) {
+				if (!aCopiedItem || 
+					!aCopiedItem[0]["parentPageName"] || 
+					(aCopiedItem[0]["parentPageName"] == cmboxProduct.selectedItem.name) ||
+					!sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", aCopiedItem[0]["parentPageName"]) ||
+					(toc..page.(@name == aCopiedItem[0]["parentPageName"]).length() == 0)) {
+					
 					toc.appendChild(XML("<page title = '" + pageTitle+ "' name = '" + pageName+ "' isBranch='true' />"));
 				} else {
 					toc..page.(@name == aCopiedItem[0]["parentPageName"]).appendChild(XML("<page title = '" + pageTitle+ "' name = '" + pageName+ "' isBranch='true' />"));
@@ -304,6 +302,19 @@
 
 			}
 
+			private function generatePageName():String
+			{
+				var pageName : String = UIDUtil.createUID();
+			
+				//			search vacant name in dataBase
+				while ( sqlProxy.checkPageName(pageName) )
+				{
+					pageName = UIDUtil.createUID();
+				}
+				
+				return pageName;
+			}
+			
 			private function removeItem() : void
 			{
 				var selectedIndex : Number = tree.selectedIndex;
@@ -1053,7 +1064,29 @@
 				if (resoult)
 				{
 					resoult[0]["parentPageName"] = tree.selectedItem.@name;
+					resoult[0]["name"] = generatePageName();
 					treePagesBuffer.push(resoult);
+				}
+				
+				addCopiedPage(pagesXml, treePagesBuffer.length-1);
+				
+				function addCopiedPage(xml:XML, aParentPageId : Number):void
+				{
+					for each(var page:XML in xml.children())
+					{
+						resoult = sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", page.@name);
+						if (resoult)
+						{
+							resoult[0]["parentPageName"] = treePagesBuffer[aParentPageId][0]["name"];
+							resoult[0]["name"] = generatePageName();
+							treePagesBuffer.push(resoult);
+							if (page.children().length() > 0) {
+								addCopiedPage(page, treePagesBuffer.length-1);
+							} else {
+								addCopiedPage(page, aParentPageId);
+							}
+						}
+					}
 				}
 				
 			}
