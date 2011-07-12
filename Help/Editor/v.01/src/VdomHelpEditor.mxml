@@ -628,7 +628,7 @@
 
 //			пробегаемся по дереву строим новую хмл
 				var tocXML : XML       = new XML("<toc/>");
-				var tocString : String = tree.dataProvider.toString();
+				var tocString : String = resetToc(tree.dataProvider);
 				var regExp : RegExp    = /isBranch="true"/gim;
 
 				tocXML.appendChild(XML(tocString.replace(regExp,' ')));
@@ -721,17 +721,21 @@
 					{
 						var patternRes		: RegExp;
 						var patternGUID		: RegExp;
+						var patternPageLink	: RegExp;
 						var arrMatchRes		: Array;
 						var resourceGUID	: String;
+						var pageGUID		: String;
 						var aPageNewContent	: String;
 						
 						aPageNewContent = aPageContent;
 						
 						patternRes = /"[ ]*(app-storage:\/resources)[^"]+"/g;
 						patternGUID = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\b/gim;
+						patternPageLink = /<[ ]*a[ ]*href[ ]*=[ ]*"[^"]+"/g;
 						
 						arrMatchRes = aPageContent.match(patternRes);
 						
+						// reset resources
 						for each ( var strRes : String in arrMatchRes )
 						{
 							resourceGUID = "";
@@ -744,15 +748,64 @@
 							
 							aPageNewContent = aPageNewContent.replace(strRes, newResource);
 						}
-
 						
+						arrMatchRes = [];
+						
+						// reset links to pages
+						arrMatchRes = aPageNewContent.match(patternPageLink);
+						
+						for each ( var strPageLink : String in arrMatchRes )
+						{
+							pageGUID = "";
+							if (strPageLink.search(patternGUID) != -1)
+							{
+								pageGUID = strPageLink.substr(strPageLink.search(patternGUID), 36);  
+							}
+							
+							var newPageLink : String = "<a href=\"#Page(" + pageGUID + ")\"";
+							
+							aPageNewContent = aPageNewContent.replace(strPageLink, newPageLink);
+						}
+
 						return aPageNewContent;
+					}
+					
+				}
+				
+				function resetToc(tocObject:Object) : String
+				{
+					var strToc	: String = "";
+					var xmlToc	: XML;
+					
+					try {
+						xmlToc = XML (tocObject);
+					}
+					catch (e:Error) {
+						strToc = tocObject.toString(); 				
+					}
+					
+					
+					xmlToc.@name = "#Page(" + xmlToc.@name + ")";
+					
+					changePageName(xmlToc);
+					
+					strToc = xmlToc.toXMLString();
+					
+					return strToc;
+					
+					function changePageName(xml:XML):void
+					{
+						for each(var page:XML in xml.children())
+						{
+							page.@name = "#Page(" + page.@name + ")";
+							changePageName(page);
+						}
 					}
 				}
 
 				product.appendChild(pages);
 				product.normalize();
-
+				
 				var fileStream : FileStream = new FileStream();
 				var fileName : String       = cmboxProduct.selectedItem.title;
 				var docsDir : File          = File.documentsDirectory;
@@ -764,7 +817,7 @@
 					fileStream.close();
 
 					fileStream. open( productXMLFile, FileMode.WRITE);
-					fileStream.writeUTFBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + product.toXMLString());
+					fileStream.writeUTFBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + product.toXMLString());
 					fileStream.close();
 
 					Alert.show( productXMLFile.nativePath, "Saved to:");
