@@ -25,6 +25,8 @@ package
 		
 		public function parseXMLData(product:XML):void
 		{ 
+			product = resetPagesLinks(product);
+			
 			if(product == null || product.name() != "product")
 			{
 				trace("!!!!!!!!!!!! not Correct data from server !!!!!!!!!!!!!");
@@ -64,6 +66,29 @@ package
 			savePages(product, productId);
 			
 			this.dispatchEvent(new Event(UPDATE_COMPLETED));
+		}
+		
+		private function resetPagesLinks(xml: XML):XML
+		{
+			var pattern		 : RegExp;
+			var arrMatch	 : Array;
+			var strXML		 : String;
+			var strPageGUID	 : String;
+			
+			
+			strXML = xml.toXMLString();
+			
+			pattern = /\#Page\([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\)/ig;
+			arrMatch = strXML.match(pattern);
+			
+			var i:uint = 0;
+			for each ( var oldPageName : String in arrMatch )
+			{
+				strPageGUID = oldPageName.substr(6, 36);
+				strXML = strXML.replace(oldPageName, strPageGUID);
+			}
+			
+			return new XML(strXML);
 		}
 		
 		private function deleteProduct(name:String, language:String):void
