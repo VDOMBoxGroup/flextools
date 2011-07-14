@@ -72,11 +72,13 @@
 				var metaTeg		: String;
 				var cssTeg		: String;
 				var scriptTeg	: String;
+				var titleTeg	: String;
 				var htmlTxt		: String;
 				
 				metaTeg = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
 				cssTeg = "<link rel='stylesheet' href='app-storage:/main.css' type='text/css'></link>";
 				scriptTeg = "<script src='app-storage:/searchhi_slim.js'></script>";
+				titleTeg = "<title></title>";
 				patternHead = /<[ ]*head[ ]*(>|\/[ ]*>)/i;
 				
 				editorData = instancesInitialized ? domWindow.CKEDITOR.instances.editor1.getData() : "";
@@ -90,6 +92,7 @@
 								metaTeg + "\n" +
 								cssTeg + "\n" +
 								scriptTeg + "\n" +
+								titleTeg + "\n" +
 							"</head>" + "\n" +
 							"<body>" + "\n" +
 								editorData + "\n" +
