@@ -4,11 +4,12 @@
 	borderStyle="solid" horizontalAlign="right" horizontalGap="1" verticalAlign="middle">
 	<mx:Script>
 		<![CDATA[
-			import mx.core.UIComponent;
-			import vdom.managers.PopUpWindowManager;
 			import mx.core.Application;
+			import mx.core.UIComponent;
 			import mx.managers.PopUpManager;
+			
 			import vdom.events.ResourceBrowserEvent;
+			import vdom.managers.PopUpWindowManager;
 
 			private const regResource : RegExp = /^(?:#Res\(([-a-zA-Z0-9]*)\))|(?:(^[-a-zA-Z0-9]*))/;
 			private var _value : String = "";
@@ -27,16 +28,18 @@
 			[ Bindable( event="valueCommit" ) ]
 			public function get value() : String
 			{
-				return _value;
+//				var retValue : String= _value ? ( "#Res("+_value+")") : "";
+				return _value ;
 			}
 
 			public function set value( attrValue : String ) : void
 			{
+				_value = attrValue;
+
 				var matchResult : Array = attrValue.match( regResource );
 				if ( matchResult )
 				{
 					_labelText = matchResult[ 1 ]? matchResult[ 1 ]:matchResult[ 2 ];
-					_value = "#Res("+_labelText+")";
 					clearBtnEnabled = true;
 				}
 				else
@@ -72,9 +75,17 @@
 
 			private function resourceBrowser_selectedHandler( event : ResourceBrowserEvent ) : void
 			{
-				this.value = "#Res(" + event.resourceID + ")";
-				_labelText = event.resourceName;
-
+				if (event.resourceID != "" && event.resourceID != "null" )
+				{
+					this.value = "#Res(" + event.resourceID + ")";
+					_labelText = event.resourceName;
+				}
+				else
+				{
+					this.value = "";
+					_labelText = "";
+					
+				}
 				var currentTarget : Object = event.currentTarget;
 				if ( currentTarget is ResourceBrowser )
 				{
@@ -109,7 +120,7 @@
 	<mx:LinkButton 
 		id="__clearBtn"
 		enabled="{clearBtnEnabled}" height="20" label="X" toolTip="Clear field" width="20"
-		cornerRadius="5" paddingLeft="1" paddingRight="1" click="{this.value = '';}"/>
+		cornerRadius="5" paddingLeft="1" paddingRight="1" click="{this.value = ''; _labelText = '';}"/>
 	<mx:Button 
 		height="19" label="..." toolTip="Browse for resource" width="22"
 		cornerRadius="0" paddingLeft="2" paddingRight="2" click="openWindow();"/>
