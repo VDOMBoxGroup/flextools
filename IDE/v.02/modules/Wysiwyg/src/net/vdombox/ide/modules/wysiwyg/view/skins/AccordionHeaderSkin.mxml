@@ -2,7 +2,7 @@
 <local:SparkSkinForHalo xmlns:fx="http://ns.adobe.com/mxml/2009"
 						xmlns:local="mx.skins.spark.*"
 						xmlns:s="library://ns.adobe.com/flex/spark"
-						minHeight="19" minWidth="21"
+						minWidth="21" minHeight="19" fontSize="10"
 						alpha.disabledStates="0.5">
 
 	<fx:Script>
@@ -43,29 +43,12 @@
 		<s:State name="selectedDisabled" stateGroups="selectedUpStates, disabledStates, selectedStates"/>
 	</local:states>
 
-	<!-- layer 1: shadow -->
-	<!--- @private -->
-	<s:Rect id="shadow"
-			bottom="-1" left="-1" right="-1" top="-1">
-		<s:fill>
-			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="0x000000" color.downStates="0xFFFFFF"
-								 alpha="0.01" alpha.downStates="0"/>
-				<s:GradientEntry color="0x000000" color.downStates="0xFFFFFF"
-								 alpha="0.07" alpha.downStates="0.5"/>
-			</s:LinearGradient>
-		</s:fill>
-	</s:Rect>
-
-	<!-- layer 2: fill -->
-	<!--- @private -->
 	<s:Rect id="fill"
 			bottom="0" left="0" right="0" top="0">
 		<s:fill>
 			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="#272729" color.downStates="0xAAAAAA" color.overStates="0xBBBDBD" color.selectedUpStates="#B7B8BC"/>
-				<s:GradientEntry color="#070709" color.downStates="0x929496" color.over="0x9FA0A1" color.selectedOver="0x8E8F90"
-								 color.selectedUpStates="#96979B"/>
+				<s:GradientEntry color="#b70000" />
+				<s:GradientEntry color="#a00000" />
 			</s:LinearGradient>
 		</s:fill>
 		

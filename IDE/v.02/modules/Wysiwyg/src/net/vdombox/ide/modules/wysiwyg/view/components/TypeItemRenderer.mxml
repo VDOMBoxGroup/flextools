@@ -2,9 +2,13 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				xmlns:s="library://ns.adobe.com/flex/spark"
-				width="100%"
-				creationComplete="dispatchEvent( new Event( 'TypeRendererCreated' ))" mouseDown="mouseDownHandler()"
-				autoDrawBackground="false">
+				width="100%" autoDrawBackground="false"
+				creationComplete="dispatchEvent( new Event( 'TypeRendererCreated' ))"
+				mouseDown="mouseDownHandler()"
+				includeInLayout.normal="false">
+	<s:layout>
+		<s:HorizontalLayout horizontalAlign="center"/>
+	</s:layout>
 
 	<fx:Script>
 		<![CDATA[
@@ -110,13 +114,29 @@
 		 </s:LinearGradient>
 		 </s:fill>
 		 </s:Ellipse>-->
-
-	<mx:Image id="typeIcon"
-			  height="40" source="{ _resourceVO.data }" width="40"
-			  horizontalCenter="0" top="5"
-			  filters.selected="{ [ new GlowFilter( 0xFFFFFF, 1, 6, 6, 2 ) ] }" smoothBitmapContent="true"/>
-
-	<s:RichText text="{ typeName }" width="100%"
-				color="white" fontFamily="Verdana" horizontalCenter="0" top="50"/>
+		<s:Group width="87" height="87">
+			<s:Rect width="100%" height="100%" radiusX="10" radiusY="10" visible.selected="true" visible="false">
+				<s:fill>
+					<s:SolidColor color="#121212" alpha="0.5"/>
+				</s:fill>
+				<s:stroke>
+					<s:SolidColorStroke color="#6e6e6e"/>
+				</s:stroke>
+			</s:Rect>
+			
+			<s:VGroup width="100%" height="100%" paddingTop="5" gap="5" 
+					 verticalAlign="middle" horizontalAlign="center">
+				
+				<mx:Image id="typeIcon"
+						  height="49" source="{ _resourceVO.data }" width="49"
+						  horizontalCenter="0"
+						  smoothBitmapContent="true"/>
+				<!--filters.selected="{ [ new GlowFilter( 0xFFFFFF, 1, 6, 6, 2 ) ] }" -->
+				
+				<s:RichText text="{ typeName }" width="100%" fontSize="9"
+							color="white" fontFamily="Verdana" horizontalCenter="0" top="50"/>
+			</s:VGroup>
+		</s:Group>
+		
 
 </s:ItemRenderer>

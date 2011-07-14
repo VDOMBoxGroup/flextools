@@ -4,24 +4,20 @@
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  height="100%" width="100%"
-		  paddingBottom="7" paddingLeft="7" paddingRight="7" paddingTop="7" xmlns:panels="net.vdombox.ide.modules.wysiwyg.view.components.panels.*">
+		  paddingBottom="7" paddingLeft="7" paddingRight="7" paddingTop="7" gap="0" 
+		  xmlns:panels="net.vdombox.ide.modules.wysiwyg.view.components.panels.*">
 
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.modules.wysiwyg.view.components.TypesAccordionHeader;
 		]]>
 	</fx:Script>
-	<s:Group width="90" height="100%">
-		
-		<s:Rect width="100%" height="100%">
-			<s:fill>
-				<s:SolidColor color="0x440044" />
-			</s:fill>
-		</s:Rect>
-		
-		<mx:Accordion id="typesAccordion" width="100%" height="100%" 
+	<s:Group width="127" height="100%">
+
+		<mx:Accordion id="typesAccordion" width="100%" height="100%"
+					  headerHeight="29"
 					  headerRenderer="{ new ClassFactory( TypesAccordionHeader ) }"
-					  headerStyleName="typesAccordionHeader"/>
+					  headerStyleName="typesAccordionHeader" textAlign="center" verticalGap="0"/>
 		
 	</s:Group>
 		

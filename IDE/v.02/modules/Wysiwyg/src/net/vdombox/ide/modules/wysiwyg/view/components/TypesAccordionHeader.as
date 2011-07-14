@@ -7,7 +7,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 	public class TypesAccordionHeader extends AccordionHeader
 	{
-		override public function set selected( value : Boolean ) : void
+		
+		
+		
+		/*override public function set selected( value : Boolean ) : void
 		{
 			super.selected = value;
 			
@@ -16,6 +19,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			else
 				setStyle( "color", "white");
 				
-		}
+		}*/
 	}
 }
