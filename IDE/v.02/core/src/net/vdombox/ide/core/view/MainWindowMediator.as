@@ -150,7 +150,7 @@ package net.vdombox.ide.core.view
 			if ( statesProxy.selectedApplication )
 				title = statesProxy.selectedApplication.name + "  @  " + title;
 
-			mainWindow.title = title
+			//mainWindow.title = title
 		}
 
 		public function closeWindow() : void

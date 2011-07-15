@@ -48,6 +48,8 @@ package net.vdombox.ide.core.view.components
 
 		[SkinPart( required="true" )]
 		public var loginButton : LoginButton;
+		
+		
 
 		override protected function partAdded( partName : String, instance : Object ) : void
 		{

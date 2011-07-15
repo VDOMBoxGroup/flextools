@@ -29,7 +29,7 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="32" width="100%">
+			 minHeight="32" width="100%" xmlns:mx1="library://ns.adobe.com/flex/mx">
 
 	<fx:Metadata>
 		/**
@@ -55,6 +55,7 @@
 			{
 				NativeApplication.nativeApplication.exit();
 			}
+		
 		]]>
 
 	</fx:Script>
@@ -96,15 +97,29 @@
 		<!-- title -->
 		<!--- Defines the Label control for displaying the title text in the title bar. -->
 
-		<s:Label id="titleText" 
-				 height="100%" minWidth="10" width="100%" 
-				 color="#6b6b6b" fontSize="10" fontWeight="bold"
-				 fontFamily="Tahoma"
-				 paddingTop="11" paddingLeft="20"
-				 textAlign="left"
-				 maxDisplayedLines="1"/>
-		
+		<s:HGroup gap="5" paddingTop="15" paddingLeft="20">
+			<s:RichText height="100%"
+						text="VDOM" color="#FFFFFF"
+						fontSize="10"/>
+			
+			<s:RichText height="100%" 
+						text="IDE" color="#FF0000"
+						fontSize="10"/>
+			
+			<s:RichText height="100%" 
+						text="v1.597" color="#CBCBCB"
+						fontSize="10"/>
+		</s:HGroup>
+				
 	</s:Group>
+	
+	<s:Label id="titleText" 
+			 height="100%" minWidth="10" width="100%" 
+			 color="#6b6b6b" fontSize="10" fontWeight="bold"
+			 fontFamily="Tahoma"
+			 paddingTop="11" paddingLeft="20"
+			 textAlign="left"
+			 maxDisplayedLines="1" visible="false"/>
 	
 	<s:HGroup right="16" top="12" height="100%" minWidth="40" minHeight="20" gap="10">
 		<!-- minimize button -->

@@ -1,6 +1,6 @@
 <s:SparkSkin xmlns:components="net.vdombox.ide.core.view.components.*" xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:s="library://ns.adobe.com/flex/spark"
 			 
-			 height="400" width="500"
+			 height="600" width="800"
 			 alpha.disabledGroup="0.5">
 
 	<fx:Metadata>
@@ -32,7 +32,7 @@
 	</s:states>
 		
 	<!-- layer 1: background fill -->
-	
+
 	<s:Rect id="backgroundRect"
 			bottom="0" left="0" right="0" top="0"
 			radiusX="7" radiusY="7">
@@ -53,114 +53,85 @@
 
 		<s:Rect height="100%" width="100%">
 			<s:fill>
-				<s:SolidColor color="0x000000"
-							  alpha="1" />
+				<s:SolidColor color="0x000000"/>
 			</s:fill>
 		</s:Rect>
 	</s:Group>
 	
+	
 	<!-- layer 2: titlebar + content + status bar -->
-	<s:Group bottom="9" left="9" right="9" top="9"
-			 mask="{topMask}">
+	<s:VGroup bottom="9" left="9" right="9" top="9" gap="0"
+			  >
+		<!--mask="{topMask}"-->
 
-		<s:TitleBar id="titleBar"
-					minHeight="32" width="100%"
-					alpha.inactiveGroup="0.5"
-					skinClass="net.vdombox.ide.core.view.skins.MainWindowTitleBarSkin" />
-		
-		<s:Rect height="85" width="100%"
-				top="34">
-			<s:fill>
-				<s:LinearGradient rotation="90">
-					<s:GradientEntry color="#2d2d2d" />
-					<s:GradientEntry color="#000000" />
-				</s:LinearGradient>
-			</s:fill>
-		</s:Rect>
-
-		<s:ButtonBar id="tabBar" left="300" top="6" height="20" requireSelection="true"
-					 skinClass="net.vdombox.ide.core.view.skins.TabBarSkin"/>
-		
-		
-		<s:Group height="85" width="100%"
-				 top="34">
-
-			<s:layout>
-
-				<s:HorizontalLayout paddingLeft="100" verticalAlign="middle" />
-			</s:layout>
-
-			<s:Group id="toolsetBar"
-					 height="100%" width="100%">
-
-				<s:layout>
-
-					<s:HorizontalLayout gap="20" />
-				</s:layout>
-			</s:Group>
-
-			<mx:Spacer width="100%" />
-
-			<components:LoginButton id="loginButton"
-									height="100%"
-									icon="@Embed('assets/main/logout.png')"
-									label="{ resourceManager.getString( 'Core_General', 'login_button_label' ) + ' ' + hostComponent.username.toUpperCase() }"
-									color="#292A2E"
-									skinClass="net.vdombox.ide.core.view.skins.LoginButtonSkin" />
+		<s:Group width="100%">
+			<s:TitleBar id="titleBar"
+						minHeight="32" width="100%"
+						skinClass="net.vdombox.ide.core.view.skins.MainWindowTitleBarSkin" />
+			
+			
+			<s:ButtonBar id="tabBar" left="300" top="6" height="20" requireSelection="true"
+						 skinClass="net.vdombox.ide.core.view.skins.TabBarSkin"/>
 		</s:Group>
+		
+		<s:Line width="100%" yFrom="33" yTo="33" >
+			<s:stroke>
+				<s:SolidColorStroke color="#424242" weight="3"/>
+			</s:stroke>
+		</s:Line>
+			
+		<s:Group height="85" width="100%">
+			<s:Rect height="100%" width="100%">
+				<s:fill>
+					<s:LinearGradient rotation="90">
+						<s:GradientEntry color="#2d2d2d" />
+						<s:GradientEntry color="#000000" />
+					</s:LinearGradient>
+				</s:fill>
+			</s:Rect>
+			
+			
+			<s:Group height="100%" width="100%">
+				
+				<s:layout>
+					
+					<s:HorizontalLayout paddingLeft="100" verticalAlign="middle" />
+				</s:layout>
+				
+				<s:Group id="toolsetBar"
+						 height="100%" width="100%">
+					
+					<s:layout>
+						
+						<s:HorizontalLayout gap="20" />
+					</s:layout>
+				</s:Group>
+				
+				<mx:Spacer width="100%" />
+				
+				<components:LoginButton id="loginButton"
+										height="100%"
+										icon="@Embed('assets/main/logout.png')"
+										label="{ resourceManager.getString( 'Core_General', 'login_button_label' ) + ' ' + hostComponent.username.toUpperCase() }"
+										color="#292A2E"
+										skinClass="net.vdombox.ide.core.view.skins.LoginButtonSkin" />
+			</s:Group>
+		</s:Group>
+		
 		<!-- content -->
 
 		<s:Group id="contentGroup"
-				 height.disabled="100%" height.disabledAndInactive="100%"
-				 height.normalAndInactive="100%" minHeight="0" minWidth="0"
-				 width="100%"
-				 bottom="15" top="118" />
-		<!-- status bar -->
-
-		<s:Group id="statusBar"
-				 minHeight="15" width="100%"
-				 bottom="0">
-			<!-- status bar fill -->
-
-			<s:Rect bottom="0" left="0" right="0" top="0">
-
-				<s:fill>
-
-					<s:SolidColor color="0xCCCCCC" />
-				</s:fill>
-			</s:Rect>
-			<!-- status bar highlight -->
-
-			<s:Rect bottom="0" left="1" right="1" top="1">
-
-				<s:stroke>
-
-					<s:SolidColorStroke color="0xCCCCCC" />
-				</s:stroke>
-			</s:Rect>
-			<!-- status text -->
-
-			<s:Label id="statusText"
-					 width="100%"
-					 bottom="2" color="0x585858" fontSize="10" left="10"
-					 right="10" top="2" verticalAlign="middle"
-					 maxDisplayedLines="1" />
-		</s:Group>
-		
-		<s:Line xFrom="0" xTo="{this.backgroundRect.width}" yFrom="33" yTo="33" >
-			<s:stroke>
-				<s:SolidColorStroke color="#424242" weight="1"/>
-			</s:stroke>
-		</s:Line>
-		
-		<mx:Image id="settingsButton" x="20" y="55" smoothBitmapContent="true"
-				  source="@Embed('assets/login/logo.png')">
+				 height="100%" minHeight="0" minWidth="0"
+				 width="100%"/>
+	</s:VGroup>
 	
-			<mx:filters>
-				<s:GlowFilter color="0x000000" />
-			</mx:filters>
-		</mx:Image>
-	</s:Group>
+	<mx:Image id="settingsButton" x="20" y="55" smoothBitmapContent="true"
+			  source="@Embed('assets/login/logo.png')">
+		
+		<mx:filters>
+			<s:GlowFilter color="0x000000" />
+		</mx:filters>
+	</mx:Image>
 	
 	<!-- layer 3: gripper -->
 	<s:Button id="gripper" right="3" bottom="3"
