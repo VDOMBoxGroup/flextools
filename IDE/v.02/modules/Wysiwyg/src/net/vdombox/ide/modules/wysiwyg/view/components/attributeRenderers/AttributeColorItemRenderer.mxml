@@ -53,8 +53,8 @@
 				//				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
 //				bgFill.fill = new SolidColor(uint( getColorByGroup( _attributeDescriptionVO.colorGroup ) ));
 
-				secondColor.color = getColorByGroup( _attributeDescriptionVO.colorGroup );
-				firstColor.color = secondColor.color + 0x222222;
+				//secondColor.color = getColorByGroup( _attributeDescriptionVO.colorGroup );
+				//firstColor.color = secondColor.color + 0x222222;
 
 				//				valueField.maxChars = uint( codeInterface[ "value" ] );
 				//				valueField.text = _attributeVO.value;
@@ -182,23 +182,23 @@
 				<s:LinearGradient rotation="90">
 
 					<s:GradientEntry id="firstColor"
-									 color="#D8D8D8" />
+									 color="#FFFFFF" />
 
 					<s:GradientEntry id="secondColor"
-									 color="#CDCDCD" />
+									 color="#DCDCDC" />
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
 
 		<s:RichText id="nameLabel"
 					minHeight="21" text="{ displayName }" width="100%"
-					color="#FFFFFF" fontFamily="Verdana" fontSize="10"
+					color="#000000" fontFamily="Verdana" fontSize="10"
 					fontWeight="bold" paddingBottom="2" paddingRight="5"
 					paddingTop="2" textAlign="right" verticalAlign="middle" verticalCenter="0"/>
 	</s:Group>
 	
 	<attributeRenderers:ColorPicker id="valueField"
-									height="21" minWidth="10" width="90"
+									height="21" minWidth="10" width="128"
 									color="@{ _attributeVO.value }"
 									textAlign="left" 
 									toolTip="{ help }"/>

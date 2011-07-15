@@ -49,8 +49,8 @@
 				codeInterface[ "value" ] = matches[ 2 ];
 
 //				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
-				secondColor.color = getColorByGroup( _attributeDescriptionVO.colorGroup );
-				firstColor.color = secondColor.color + 0x222222;
+				//secondColor.color = getColorByGroup( _attributeDescriptionVO.colorGroup );
+				//firstColor.color = secondColor.color + 0x222222;
 				
 //				valueField.value = _attributeVO.value;
 				valueField.title = _attributeDescriptionVO.displayName;
@@ -142,19 +142,19 @@
 		<s:Rect bottom="0" left="0" right="0" top="0">
 			<s:fill>
 				<s:LinearGradient rotation="90">
-					<s:GradientEntry id="firstColor" color="#D8D8D8" />
-					<s:GradientEntry id="secondColor" color="#CDCDCD" />
+					<s:GradientEntry id="firstColor" color="#FFFFFF" />
+					<s:GradientEntry id="secondColor" color="#DCDCDC" />
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
 		
 		<s:RichText id="nameLabel"
-					minHeight="21" text="{ displayName }" width="100%" color="#FFFFFF" fontFamily="Verdana" fontSize="10" fontWeight="bold"
+					minHeight="21" text="{ displayName }" width="100%" color="#000000" fontFamily="Verdana" fontSize="10" fontWeight="bold"
 					paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" verticalCenter="0" />
 		
 	</s:Group>
 
 	<attributeRenderers:Multiline id="valueField" value="@{ _attributeVO.value }" toolTip="{ help }"
-						 height="21" width="90"
+						 height="21" width="128"
 						 textAlign="left" />
 </s:ItemRenderer>

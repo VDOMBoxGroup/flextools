@@ -156,17 +156,17 @@
 						bottom="0" left="0" right="0" top="0">
 					<s:fill>
 						<s:LinearGradient rotation="90">
-							<s:GradientEntry color="0x46494E"/>
-							<s:GradientEntry color="0x000000"/>
+							<s:GradientEntry color="#B70000"/>
+							<s:GradientEntry color="#A00000"/>
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
 
 				<s:Label id="titleDisplay"
-						 minHeight="23"
-						 bottom="0" color="white" left="3" right="3"
-						 textAlign="center" top="1" verticalAlign="middle"
-						 maxDisplayedLines="1">
+						 minHeight="41"
+						 bottom="0" color="white" left="3" right="3" paddingLeft="10"
+						 textAlign="left" top="1" verticalAlign="middle"
+						 maxDisplayedLines="1" fontSize="15">
 				</s:Label>
 
 			</s:Group>

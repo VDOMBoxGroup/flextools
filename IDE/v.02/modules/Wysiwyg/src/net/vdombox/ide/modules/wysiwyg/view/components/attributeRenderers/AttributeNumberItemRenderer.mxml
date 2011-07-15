@@ -145,13 +145,13 @@
 		</s:Rect>
 		
 		<s:RichText id="nameLabel"
-					minHeight="21" text="{ displayName }" width="100%" color="#FFFFFF" fontFamily="Verdana" fontSize="10" fontWeight="bold"
+					minHeight="21" text="{ displayName }" width="100%" color="#000000" fontFamily="Verdana" fontSize="10" fontWeight="bold"
 					paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" verticalCenter="0" />
 		
 	</s:Group>
 	
 	<s:TextInput id="valueField"
-				 height="21" minWidth="0" text="@{_attributeVO.value}" width="90"
+				 height="21" minWidth="0" text="@{_attributeVO.value}" width="128"
 				 textAlign="left"
 				 toolTip="{ help }"/>
 	
