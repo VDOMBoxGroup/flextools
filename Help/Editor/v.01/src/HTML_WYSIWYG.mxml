@@ -92,7 +92,6 @@
 								metaTeg + "\n" +
 								cssTeg + "\n" +
 								scriptTeg + "\n" +
-								titleTeg + "\n" +
 							"</head>" + "\n" +
 							"<body>" + "\n" +
 								editorData + "\n" +
