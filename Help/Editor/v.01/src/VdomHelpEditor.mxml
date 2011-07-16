@@ -315,6 +315,20 @@
 				return pageName;
 			}
 			
+			private function removeItemClickHandler():void
+			{
+				if (tree.selectedItem && tree.selectedIndex > 0)
+					Alert.show("Delete this Page?", "Dalete Page", Alert.YES|Alert.NO, this, alertDeletPageClickHandler);
+			}
+			
+			private function alertDeletPageClickHandler(event:CloseEvent):void
+			{
+				if (event.detail == Alert.YES)
+				{
+					removeItem();
+				}
+			}
+			
 			private function removeItem() : void
 			{
 				var selectedIndex : Number = tree.selectedIndex;
@@ -1213,7 +1227,7 @@
 							   textRollOverColor="#FFFFFF"
 							   enabled="{Boolean(cmboxProduct.selectedItem)}" />
 					<mx:Button label="Remove Page"
-							   click="{removeItem()}"
+							   click="{removeItemClickHandler()}"
 							   color="#FFFFFF"
 							   fillColors="#333333"
 							   textSelectedColor="#FFFFFF"
