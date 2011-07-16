@@ -49,8 +49,8 @@
 				codeInterface[ "value" ] = matches[ 2 ];
 
 //				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
-				//secondColor.color = getColorByGroup( _attributeDescriptionVO.colorGroup );
-				//firstColor.color = secondColor.color + 0x222222;
+				secondColor.color = getColorByGroup( _attributeDescriptionVO.colorGroup );
+				firstColor.color = secondColor.color + 0x222222;
 				
 //				valueField.value = _attributeVO.value;
 				valueField.title = _attributeDescriptionVO.displayName;

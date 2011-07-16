@@ -165,7 +165,7 @@
 				<s:Label id="titleDisplay"
 						 minHeight="41"
 						 bottom="0" color="white" left="3" right="3" paddingLeft="10"
-						 textAlign="left" top="1" verticalAlign="middle"
+						 textAlign="left" top="1" verticalAlign="middle" paddingBottom="6"
 						 maxDisplayedLines="1" fontSize="15">
 				</s:Label>
 

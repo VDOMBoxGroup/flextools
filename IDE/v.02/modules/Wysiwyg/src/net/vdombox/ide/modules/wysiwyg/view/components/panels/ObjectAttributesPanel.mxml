@@ -171,19 +171,32 @@
 			}
 		]]>
 	</fx:Script>
-	<s:Label id="typeNameLabel"
-			 height="20"
-			 backgroundColor="#000000" color="#FFFFFF" left="0" paddingLeft="3" paddingTop="3" right="0" textAlign="center" verticalAlign="middle"/>
+	
+	<s:Label id="typeNameLabel" y="-18" left="9" right="1" fontSize="8"
+			 color="#FFFFFF" paddingLeft="3" paddingTop="3" textAlign="left"
+			 verticalAlign="bottom"/>
 
-	<s:List id="attributesList" top="20" bottom="0" width="220" 
-			change="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED ))"
-			itemRendererFunction="itemRendererFunction" useVirtualLayout="false">
+	<s:HGroup height="100%" width="100%" gap="0">
+		<s:Rect width="5" height="100%">
+			<s:fill>
+				<s:SolidColor color="#424242"/>
+			</s:fill>
+			<s:stroke>
+				<s:SolidColorStroke alpha="0"/>
+			</s:stroke>
+		</s:Rect>
+		<s:List id="attributesList" height="100%" width="100%" 
+				change="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED ))"
+				itemRendererFunction="itemRendererFunction" useVirtualLayout="false">
 			
-		<s:layout>
-			<s:VerticalLayout gap="0"
+			<s:layout>
+				<s:VerticalLayout gap="0"
 								  variableRowHeight="true"/>
-		</s:layout>	
-	</s:List>
+			</s:layout>	
+		</s:List>
+	</s:HGroup>
+	
+	
 	
 	<s:controlBarContent>
 
