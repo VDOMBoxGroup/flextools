@@ -83,7 +83,7 @@
 
 		<s:Label id="labelDisplay"
 				 fontWeight="bold" paddingTop="4" textAlign="left"
-				 maxDisplayedLines="1" fontFamily="Verdana"/>
+				 maxDisplayedLines="1" fontFamily="Verdana" color="#AAAAAA"/>
 	</s:Group>
 
 </s:SparkSkin>
