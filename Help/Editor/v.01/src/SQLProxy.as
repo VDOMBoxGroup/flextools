@@ -587,7 +587,7 @@ package
 		 * 
 		 */		
 		public function changePageProperties( productName:String, ln:String, oldPageName:String, newPageName:String, title:String, 
-											  description:String ) : Object
+											  description:String, newContent:String) : Object
 		{
 			var query : String      = "SELECT id " +
 				"FROM product " +
@@ -602,7 +602,7 @@ package
 			if ( result )
 			{
 				query = "UPDATE page " +
-					"SET name = :new_name , title = :title ,  description = :description " +
+					"SET name = :new_name , title = :title ,  description = :description , content = :newContent " +
 					"WHERE id_product = :id_product AND name = :old_name ;";
 
 				var id_product : Number = result[ 0 ][ 'id' ];
@@ -613,6 +613,7 @@ package
 				parameters[ ":new_name" ] = newPageName;
 				parameters[ ":old_name" ] = oldPageName;
 				parameters[ ":description" ] = description;
+				parameters[ ":newContent" ] = newContent;
 
 				result = executeQuery(query, parameters);
 

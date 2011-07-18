@@ -69,16 +69,8 @@
 			{
 				var editorData	: String;
 				var patternHead	: RegExp;
-				var metaTeg		: String;
-				var cssTeg		: String;
-				var scriptTeg	: String;
-				var titleTeg	: String;
 				var htmlTxt		: String;
 				
-				metaTeg = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
-				cssTeg = "<link rel='stylesheet' href='app-storage:/main.css' type='text/css'></link>";
-				scriptTeg = "<script src='app-storage:/searchhi_slim.js'></script>";
-				titleTeg = "<title></title>";
 				patternHead = /<[ ]*head[ ]*(>|\/[ ]*>)/i;
 				
 				editorData = instancesInitialized ? domWindow.CKEDITOR.instances.editor1.getData() : "";
@@ -86,22 +78,39 @@
 				
 				if (editorData.search(patternHead) == -1) 
 				{
-					htmlTxt =  
-						"<html>" + "\n" + 
-							"<head>" + "\n" +
-								metaTeg + "\n" +
-								cssTeg + "\n" +
-								scriptTeg + "\n" +
-							"</head>" + "\n" +
-							"<body>" + "\n" +
-								editorData + "\n" +
-							"</body>" + "\n" +
-						"</html>"
+					htmlTxt =  getHtmlSourceTxt(editorData);
+						
 				}
 				
 				return htmlTxt;
 			}
 			
+			private static function getHtmlSourceTxt(bodyContent : String) : String
+			{
+				var metaTeg		: String;
+				var cssTeg		: String;
+				var scriptTeg	: String;
+				var titleTeg	: String;
+				var htmlTxt		: String = "";
+				
+				metaTeg = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
+				cssTeg = "<link rel='stylesheet' href='app-storage:/main.css' type='text/css'></link>";
+				scriptTeg = "<script src='app-storage:/searchhi_slim.js'></script>";
+				titleTeg = "<title></title>";
+				
+				htmlTxt = "<html>" + "\n" + 
+								"<head>" + "\n" +
+									metaTeg + "\n" +
+									cssTeg + "\n" +
+									scriptTeg + "\n" +
+								"</head>" + "\n" +
+								"<body>" + "\n" +
+									bodyContent + "\n" +
+								"</body>" + "\n" +
+							"</html>";
+				
+				return htmlTxt
+			}
 			
 			private function zzzzzz( ddd : *, aaa : *, sss : *  ) : void
 			{
@@ -113,6 +122,12 @@
 			{
 				// TODO Auto-generated method stub
 				instancesInitialized = true;
+			}
+			
+			public static function getNewPageContent(aPageTitle:String) : String
+			{
+				
+				return getHtmlSourceTxt("<h1>"+aPageTitle+"</h1>");
 			}
 			
 		]]>

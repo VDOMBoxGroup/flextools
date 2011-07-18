@@ -128,9 +128,36 @@
 			
 			private function okHandler():void 
 			{
+				var pageOldContent	: String;
+				var pageNewContent	: String;
+				var curPageFromDB	: Object;
+				var pageNewH1		: String;
+					
+				pageNewH1 = "<h1>"+ pageLabel.text +"</h1>";
+				
+				curPageFromDB = sqlProxy.getPage(productName, pageLn, curPage.@name);
+				if (!curPageFromDB) {
+					return;
+				}
+				pageOldContent = curPageFromDB[0]["content"]
+					
+				if (pageOldContent.toLowerCase().indexOf("<html>") == -1) {
+					pageOldContent = HTML_WYSIWYG.getNewPageContent("");
+				}
+				
+				pageNewContent = pageOldContent;
+			
+				if (pageOldContent.toLowerCase().indexOf("<h1>") == -1) { // no <h1>
+					var patternBogy : RegExp = /<body>/i;
+					pageNewContent = pageOldContent.replace(patternBogy, "<body>\n"+pageNewH1);
+				} else { // is <h1>
+					var patternH1 : RegExp = /<h1>[^<]*<\/h1>/i;
+					pageNewContent = pageOldContent.replace(patternH1, pageNewH1);
+				}
+				
 				var result :Object = sqlProxy.changePageProperties(productName, pageLn, curPage.@name,
 																	pageName.text, pageLabel.text, 
-																	pageDescription.text );
+																	pageDescription.text, pageNewContent);
 			
 				if(result)
 				{

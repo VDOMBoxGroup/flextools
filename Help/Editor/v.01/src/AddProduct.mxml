@@ -109,7 +109,7 @@
 					sqlProxy.addProduct(productName.text, 0, productTitle.text,
 						productDescription.text,  productLanguage.text );
 					sqlProxy.addPage(productName.text, productLanguage.text, productName.text, 0, productTitle.text,
-								"", ""); 
+								"", getNewPageContent(productTitle.text)); 
 					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 				} else
 				{
@@ -117,6 +117,11 @@
 					okHandler();
 				}
 				
+			}
+			
+			private function getNewPageContent(aPageTitle:String) : String
+			{
+				return HTML_WYSIWYG.getNewPageContent(aPageTitle);
 			}
 			
 			private function editClickHandler():void

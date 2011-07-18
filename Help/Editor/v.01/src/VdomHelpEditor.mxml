@@ -268,7 +268,7 @@
 				} else {
 					pageTitle = "Page " + count;
 					sqlProxy.addPage(cmboxProduct.selectedItem.name, "en_US", pageName, 0, 
-									 pageTitle, "write Description", "");
+									 pageTitle, "", HTML_WYSIWYG.getNewPageContent(""));
 				}
 
 				if (!aCopiedItem || 
@@ -1217,7 +1217,7 @@
 
 				<mx:HBox paddingLeft="3">
 					<mx:Button label="Add Page"
-							   click="{addItem()}"
+							   click="{addItem();}"
 							   color="#FFFFFF"
 							   fillColors="#333333"
 							   textSelectedColor="#FFFFFF"
