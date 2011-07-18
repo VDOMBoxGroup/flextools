@@ -1030,6 +1030,25 @@
 			{
 				// TODO Auto-generated method stub
 				this.html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED, onWysiwygSaveCombinationClicked);
+				this.html_wysiwyg.addEventListener(KeyboardEvent.KEY_UP, onWysiwygKeyUp);		
+			}
+			
+			private function onWysiwygKeyUp(keyEvent:KeyboardEvent):void
+			{
+				switch(keyEvent.keyCode)
+				{
+					case Keyboard.V:
+					{
+						if (keyEvent.ctrlKey && keyEvent.shiftKey) {
+							pasteLinkToPage();
+						}
+						break;
+					}
+					default:
+					{					
+						break;
+					}
+				}
 			}
 			
 			private function onTreeKeyboardKeyUp(aKeyboardEvent:KeyboardEvent) : void
@@ -1042,7 +1061,7 @@
 							if (!tree.selectedItem) {
 								return;
 							}
-							copyTreePages(XML(tree.selectedItem))
+							copyTreePages(XML(tree.selectedItem), !aKeyboardEvent.shiftKey)
 						}
 						break;
 					}
@@ -1066,7 +1085,7 @@
 				tree.addEventListener(KeyboardEvent.KEY_UP, onTreeKeyboardKeyUp);
 			}
 			
-			private function copyTreePages(pagesXml : XML):void
+			private function copyTreePages(pagesXml : XML, copyTree:Boolean = true):void
 			{
 				var resoult	: Object;
 				
@@ -1078,9 +1097,14 @@
 				if (resoult)
 				{
 					resoult[0]["parentPageName"] = tree.selectedItem.@name;
-					resoult[0]["name"] = generatePageName();
+					if (copyTree) 
+					{
+						resoult[0]["name"] = generatePageName();
+					}
 					treePagesBuffer.push(resoult);
 				}
+				
+				if (!copyTree) return;
 				
 				addCopiedPage(pagesXml, treePagesBuffer.length-1);
 				
@@ -1127,6 +1151,19 @@
 			private function clearTreePagesBuffer():void
 			{
 				treePagesBuffer = null;
+			}
+			
+			private function pasteLinkToPage():void
+			{
+				if (!treePagesBuffer) return;
+				
+				if (treePagesBuffer.length > 0) { 
+					var lPageName : String =  treePagesBuffer[0][0]["name"];
+					var lPageTitle : String =  treePagesBuffer[0][0]["title"];
+					
+					html_wysiwyg.insertLinkToPage(lPageName, lPageTitle);
+					savePage();
+				}
 			}
 			
 		]]>
