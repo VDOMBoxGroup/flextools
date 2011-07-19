@@ -10,7 +10,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.utils.Timer;
 	
 	import mx.controls.NumericStepper;
-	import mx.controls.RadioButton;
 	import mx.controls.SWFLoader;
 	import mx.core.UIComponent;
 	import mx.events.CloseEvent;
@@ -22,6 +21,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ColorPickerWindowSkin;
 	
 	import spark.components.NumericStepper;
+	import spark.components.RadioButton;
 	import spark.components.TextInput;
 	import spark.components.TitleWindow;
 
@@ -95,8 +95,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[SkinPart( required="true" )]
 		public var ccrm:SWFLoader;
 		
-		[SkinPart( required="true" )]
-		public var osi_view:SWFLoader;
+		/*[SkinPart( required="true" )]
+		public var osi_view:SWFLoader;*/
 		
 		[SkinPart( required="true" )]
 		public var hexrgb:TextInput;
@@ -617,7 +617,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				ic = osi_rgb_b;
 			}
 			
-			osi_view.source = ic;
+			//osi_view.source = ic;
 			
 			position = rgb_to_position( color, sel_rgb );
 			update_hex_rgb();
@@ -648,7 +648,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				ic = osi_hsb_b;
 			}
 			
-			osi_view.source = ic;
+			//osi_view.source = ic;
 			
 			position = hsb_to_position( hsb, sel_hsb );
 			update_hex_rgb();

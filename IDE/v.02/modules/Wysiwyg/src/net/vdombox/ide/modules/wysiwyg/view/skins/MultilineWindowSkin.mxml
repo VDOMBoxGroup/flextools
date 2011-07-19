@@ -4,7 +4,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns="vdom.containers.*"
 		xmlns:controls="vdom.controls.*" 
-		width="500" height="500"
+		width="497" height="415"
 		>
 	<!-- host component -->
 	<fx:Metadata>
@@ -34,14 +34,29 @@
 	name=titleDisplay, type=spark.core.IDisplayText, required=false
 	name=controlBarGroup, type=spark.components.Group, required=false
 	-->
-	<s:Rect width="100%" height="100%">
+	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
 		<s:fill>
-			<s:SolidColor color="#C4C4C4"/>
+			<s:SolidColor color="#424242"/>
 		</s:fill>
 	</s:Rect>
 	
-	<s:VGroup width="100%" height="100%" paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5" gap="5">
+	<s:VGroup width="100%" height="100%" 
+			  top="9" bottom="9" left="9" right="9"
+			  gap="0">
 	
+	<s:Group width="100%" height="42">
+		
+		<s:Rect bottom="0" left="0" right="0" top="0">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="#B70000"/>
+					<s:GradientEntry color="#A00000"/>
+				</s:LinearGradient>
+			</s:fill>
+		</s:Rect>
+		<s:Label text="Multiline window" top="12" left="20" color="#FFFFFF" fontSize="20"/>
+	</s:Group>	
+		
 	<s:Scroller width="100%" height="100%" horizontalScrollPolicy="off">
 		<s:RichEditableText id="textAreaContainer" 
 							editable="true"
@@ -53,43 +68,33 @@
 							backgroundColor="#FFFFFF" bottom="65" fontFamily="Courier New" fontSize="12" left="5" right="5" top="5" />
 	</s:Scroller>
 	
-	<s:HGroup height="60" width="100%"
-			 bottom="0" gap="0" paddingLeft="5"
-			 paddingRight="5" verticalAlign="middle">
+	<s:Group width="100%" height="67">
 		
-		<s:VGroup horizontalAlign="right">
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:BitmapFill source = "@Embed('icons/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+			</s:fill>
+		</s:Rect>
+		
+		<s:HGroup height="100%" width="100%"
+				  bottom="0" gap="15" paddingLeft="25" paddingTop="10"
+				  paddingRight="15" verticalAlign="middle">
 			
-			<s:HGroup verticalAlign="middle">
-				<s:Label text="Pages:" />
-				
-				<mx:ComboBox id="pageList"
-							 width="130"
-							 cornerRadius="0" />
-				
-				<s:Button label="ok"
-						   cornerRadius="0"
-						   click="hostComponent.insertPageLink();" />
-			</s:HGroup>
+			<s:Button width="138" height="29" 
+					  label="Resources" cornerRadius="15" 
+					  click="hostComponent.insertResourceLink();"/>
 			
-			<s:HGroup verticalAlign="middle">
-				<s:Label text="Resources:" />
-				
-				<mx:ComboBox id="resourceList"
-							 width="130"
-							 cornerRadius="0" />
-				
-				<s:Button label="ok"
-						   cornerRadius="0"
-						   click="hostComponent.insertResourceLink();" />
-			</s:HGroup>
-		</s:VGroup>
+			<s:Spacer width="100%" />
+			
+			<s:Button width="48" height="29" cornerRadius="15"/>
+			
+			<s:Button width="88" height="29" label="Save" fontSize="18"
+					  cornerRadius="15"
+					  click="hostComponent.ok_close_window()" />
+		</s:HGroup>
 		
-		<s:Spacer width="100%" />
+	</s:Group>	
 		
-		<s:Button height="50" label="Apply" width="70"
-				   cornerRadius="0"
-				   click="hostComponent.ok_close_window()" />
-	</s:HGroup>
 	</s:VGroup>
 	
 </s:SparkSkin>

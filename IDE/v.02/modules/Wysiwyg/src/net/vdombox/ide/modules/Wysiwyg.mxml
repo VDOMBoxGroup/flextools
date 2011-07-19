@@ -60,6 +60,8 @@
 			import mx.skins.spark.ButtonSkin;
 			
 			import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+			
+			import org.puremvc.as3.multicore.patterns.facade.Facade;
 
 			public static const MODULE_ID : String = "net.vdombox.ide.modules.Wysiwyg";
 

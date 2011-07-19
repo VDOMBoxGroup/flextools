@@ -51,19 +51,19 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
 		}
 
-		[Embed( source="assets/theme/theme.swf", symbol="LeftRight" )]
+		[Embed( source="../assets/theme/theme.swf", symbol="LeftRight" )]
 		private var leftRightCursor : Class;
 
-		[Embed( source="assets/theme/theme.swf", symbol="TopDown" )]
+		[Embed( source="../assets/theme/theme.swf", symbol="TopDown" )]
 		private var topDownCursor : Class;
 
-		[Embed( source="assets/theme/theme.swf", symbol="Move" )]
+		[Embed( source="../assets/theme/theme.swf", symbol="Move" )]
 		private var moveCursor : Class;
 
-		[Embed( source="assets/theme/theme.swf", symbol="TopLDownR" )]
+		[Embed( source="../assets/theme/theme.swf", symbol="TopLDownR" )]
 		private var topLDownRCursor : Class;
 
-		[Embed( source="assets/theme/theme.swf", symbol="TopRDownL" )]
+		[Embed( source="../assets/theme/theme.swf", symbol="TopRDownL" )]
 		private var topRDownLCursor : Class;
 
 		private var tl_box : Sprite;

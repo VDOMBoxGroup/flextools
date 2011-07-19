@@ -66,7 +66,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
-			var name : String = notification.getName();
+			/*var name : String = notification.getName();
 			var body : Object = notification.getBody();
 			
 			switch ( name )
@@ -104,7 +104,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					break;
 				}
-			}
+			}*/
 		}			
 	}
 }

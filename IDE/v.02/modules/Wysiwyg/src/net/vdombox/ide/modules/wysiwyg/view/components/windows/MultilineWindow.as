@@ -26,11 +26,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[SkinPart( required="true" )]
 		public var textAreaContainer : RichEditableText;
 	
-		[SkinPart( required="true" )]
-		public var pageList : mx.controls.ComboBox;
+/*		[SkinPart( required="true" )]
+		public var pageList : mx.controls.ComboBox;*/
 	
-		[SkinPart( required="true" )]
-		public var resourceList : mx.controls.ComboBox;
+/*		[SkinPart( required="true" )]
+		public var resourceList : mx.controls.ComboBox;*/
 	
 		public function MultilineWindow()
 		{
@@ -63,7 +63,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			if ( index < 0 ) index = 0;
 			var text:String = textFlow.getText(index);
 			
-			textAreaContainer.text = textFlow.getText(0, index) +  "/" + pageList.selectedLabel + ".vdom" +  text;
+			//textAreaContainer.text = textFlow.getText(0, index) +  "/" + pageList.selectedLabel + ".vdom" +  text;
 			textAreaContainer.setFocus();
 		}
 	
@@ -75,7 +75,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			if ( index < 0 ) index = 0;
 			var text:String = textFlow.getText(index);
 		
-			textAreaContainer.text = textFlow.getText(0, index) +  "#Res(" + resourceList.selectedItem["data"] + ")" +  text;
+			//textAreaContainer.text = textFlow.getText(0, index) +  "#Res(" + resourceList.selectedItem["data"] + ")" +  text;
 			textAreaContainer.setFocus();
 		}
 	
