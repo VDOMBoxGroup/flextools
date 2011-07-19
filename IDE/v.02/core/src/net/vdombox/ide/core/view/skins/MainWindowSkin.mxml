@@ -61,7 +61,9 @@
 	
 	<!-- layer 2: titlebar + content + status bar -->
 	<s:VGroup bottom="9" left="9" right="9" top="9" gap="0"
-			  mask="{topMask}">
+			  >
+		
+		<!--mask="{topMask}"-->
 
 		<s:Group width="100%">
 			<s:TitleBar id="titleBar"
@@ -110,7 +112,7 @@
 				
 				<components:LoginButton id="loginButton"
 										height="100%"
-										icon="@Embed('assets/main/logout.png')"
+										icon="@Embed('../assets/main/logout.png')"
 										label="{ resourceManager.getString( 'Core_General', 'login_button_label' ) + ' ' + hostComponent.username.toUpperCase() }"
 										color="#292A2E"
 										skinClass="net.vdombox.ide.core.view.skins.LoginButtonSkin" />

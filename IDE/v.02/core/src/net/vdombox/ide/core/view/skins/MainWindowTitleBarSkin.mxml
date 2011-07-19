@@ -120,6 +120,7 @@
 			 paddingTop="11" paddingLeft="20"
 			 textAlign="left"
 			 maxDisplayedLines="1" visible="false"/>
+			   
 	
 	<s:HGroup right="16" top="12" height="100%" minWidth="40" minHeight="20" gap="10">
 		<!-- minimize button -->
