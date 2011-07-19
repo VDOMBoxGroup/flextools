@@ -130,11 +130,11 @@
 				return getHtmlSourceTxt("<h1>"+aPageTitle+"</h1>");
 			}
 			
-			
-			public function insertLinkToPage(aPageName:String, aPageTitle:String):void
+			public function generateLinkToPage(aPageName:String, aPageTitle:String) : void
 			{
 				var strHref:String = "<a href=\""+ aPageName +"\">"+ aPageTitle +"</a>";
-				domWindow.CKEDITOR.instances.editor1.insertHtml( strHref );
+				
+				Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, strHref);
 			}
 		]]>
 	</mx:Script>
