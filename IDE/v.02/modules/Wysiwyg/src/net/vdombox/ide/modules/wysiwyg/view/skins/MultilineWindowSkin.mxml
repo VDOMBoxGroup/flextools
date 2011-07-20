@@ -13,9 +13,13 @@
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
-			
+			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
+			 
+			[Bindable]
+			public var value:String = "";
 		]]>
 	</fx:Script>
+	
 	
 	<!-- states -->
 	<s:states>
@@ -63,7 +67,7 @@
 							editable="true"
 							selectable="true"
 							clipAndEnableScrolling="true"
-							text="{hostComponent.attributeValue}"
+							text="{hostComponent.attributeValue + value}"
 							height="100%" width="100%"
 							minHeight="0"
 							backgroundColor="#FFFFFF" bottom="65" fontFamily="Courier New" fontSize="12" left="5" right="5" top="5" />
@@ -84,7 +88,7 @@
 			<s:Button width="138" height="29" 
 					  icon="@Embed(source='icons/Add.png')"
 					  label="Resources" cornerRadius="15" 
-					  click="hostComponent.insertResourceLink();"/>
+					  click="dispatchEvent( new AttributeEvent( AttributeEvent.SELECT_RESOURCE ) )"/>
 			
 			<s:Spacer width="100%" />
 			

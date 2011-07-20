@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
@@ -40,11 +41,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sendNotification( ApplicationFacade.GET_PAGES,     sessionProxy.selectedApplication );
 			
 			multilineWindow.addEventListener( "apply", removeYourself, false, 0, true );
+			multilineWindow.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true, 0, true );
 		}
 		
 		override public function onRemove() : void
 		{
 			sessionProxy = null;
+			multilineWindow.removeEventListener(AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true);
 			multilineWindow = null;
 		}
 		
@@ -62,6 +65,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.PAGES_GETTED );	
 			
 			return interests;
+		}
+		
+		private function selectResourceHandler( event : AttributeEvent ) : void
+		{
+			sendNotification( ApplicationFacade.OPEN_RESOURCE_SELECTOR_REQUEST, event.target );
 		}
 		
 		override public function handleNotification( notification : INotification ) : void

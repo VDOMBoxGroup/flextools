@@ -26,6 +26,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
+	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -50,6 +51,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var resourceVO : ResourceVO = new ResourceVO( "temp owner" );
 
 		private var _resourceSelector : ResourceSelector;
+		
+		private var _resourceSelectorMultiline : MultilineWindowSkin;
 
 		private var sessionProxy 	: SessionProxy;
 
@@ -66,6 +69,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			_resourceSelector = value;
 		}
+		
+		public function set resourceSelectorMultiline( value : MultilineWindowSkin ) : void
+		{
+			_resourceSelectorMultiline = value;
+		}
 
 		private function get resourceSelectorWindow() : ResourceSelectorWindow
 		{
@@ -76,7 +84,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
-			resourceSelectorWindow.value = _resourceSelector.value;
+			if (_resourceSelector != null)
+				resourceSelectorWindow.value = _resourceSelector.value;
+			else
+				resourceSelectorWindow.value = _resourceSelectorMultiline.value;
 
 			addHandlers();
 			
@@ -413,10 +424,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			facade.removeMediator( mediatorName );
 			
+			var _temp:String;
+			
 			if ( resourceSelectorWindow.value )
-				_resourceSelector.value = "#Res(" + resourceSelectorWindow.value + ")";
+				_temp = "#Res(" + resourceSelectorWindow.value + ")";
 			else
-				_resourceSelector.value = "#Res()";			
+				_temp = "#Res()";	
+			
+			if (_resourceSelector != null)
+				_resourceSelector.value = _temp;
+			else
+				if (_resourceSelectorMultiline != null)
+					_resourceSelectorMultiline.value += _temp + ", ";
+				
+			
 		}
 
 		private function closeHandler( event : ResourceSelectorWindowEvent ) : void

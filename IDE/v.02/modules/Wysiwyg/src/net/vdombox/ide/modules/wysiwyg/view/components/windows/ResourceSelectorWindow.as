@@ -103,7 +103,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		private function setSelectedItem() : void
 		{
-			if ( !_resources || _resources.length == 0 )
+			if ( !_resources || _resources.length == 0 || _value == null)
 				return;
 			
 			var resourceVO : ResourceVO;
