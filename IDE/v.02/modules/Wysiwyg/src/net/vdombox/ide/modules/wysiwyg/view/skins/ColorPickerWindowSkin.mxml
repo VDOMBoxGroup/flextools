@@ -203,7 +203,8 @@
 			
 				<s:Spacer width="100%" />
 			
-				<s:Button label="Cancel"  width="48" height="29" cornerRadius="15"
+				<s:Button width="48" height="29" cornerRadius="15"
+						  icon="@Embed(source='icons/Cancel.png')" iconPlacement="top"
 					  		click="hostComponent.cancel_close_window()" />
 			
 				<s:Button label="Use" width="88" height="29" cornerRadius="15" fontSize="18"

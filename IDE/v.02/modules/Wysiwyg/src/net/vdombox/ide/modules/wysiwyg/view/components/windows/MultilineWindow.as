@@ -17,6 +17,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import spark.components.ComboBox;
 	import spark.components.RichEditableText;
 	import spark.components.TitleWindow;
+	
 	public class MultilineWindow extends TitleWindow
 	{
 
@@ -47,12 +48,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		 * @private
 		 * close multilineWindow if down ESCAPE or if down button "Apply"
 		 */ 
-		public function ok_close_window( event: KeyboardEvent = null ) : void
+		public function ok_close_window(event: KeyboardEvent = null ) : void
 		{
-			if ( event != null )
-				if ( event.charCode != Keyboard.ESCAPE )
-					return
-					dispatchEvent( new MultilineWindowEvent( "apply", textAreaContainer.text ) );			
+			dispatchEvent( new MultilineWindowEvent( "apply", textAreaContainer.text ) );
+		}
+		
+		public function cancel_close_window(event: KeyboardEvent = null ) : void
+		{			
+			if ( event != null)
+				if ( event.charCode != Keyboard.ESCAPE)
+					return;
+			dispatchEvent( new MultilineWindowEvent( "cancel", "" ) );
 		}
 	
 		public function insertPageLink() : void
@@ -87,7 +93,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		private function init() : void
 		{
 			this.setFocus();
-			addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );				
+			addEventListener( KeyboardEvent.KEY_DOWN, cancel_close_window );				
 		}
 	}
 }
