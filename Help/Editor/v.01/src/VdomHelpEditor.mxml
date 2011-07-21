@@ -53,6 +53,8 @@
 			
 			private var treePagesBuffer : Array;
 			
+			private var productXMLFile : File;
+			
 			/***
 			 *
 			 * + сохранить экспортируемую хмл
@@ -191,7 +193,7 @@
 				}
 			}
 			
-			private function getPageContentWithToc(pageContent:String, useToc:Boolean, pageChildren:XMLList) : String
+			public static function getPageContentWithToc(pageContent:String, useToc:Boolean, pageChildren:XMLList) : String
 			{
 				var xmlContent		: XML;
 				var xmlPageToc		: PageToc;
@@ -673,7 +675,7 @@
 
 			private function selectXMLFile():void
 			{
-				var productXMLFile:File = new File();
+				productXMLFile = new File();
 				
 				productXMLFile.addEventListener(Event.SELECT, onProductXMLFileSelected); 
 				productXMLFile.addEventListener(Event.CANCEL, onCancelSelectProductXML); 
@@ -692,14 +694,14 @@
 			
 			private function onProductXMLFileSelected(aEvent:Event):void
 			{
-				var productXml:File = aEvent.target as File; 
+				productXMLFile = aEvent.target as File; 
 				
-				if (!isCorrectFileFormat(productXml.type)) {
+				if (!isCorrectFileFormat(productXMLFile.type)) {
 					blockBtns(false);
 					Alert.show("The file format is incorrect. It should be in xml format.", "Error file format");
 					return;
 				}
-				creatProductXML(productXml);
+				creatProductXML();
 			}
 			
 			private function isCorrectFileFormat(fileFormat:String) : Boolean
@@ -720,240 +722,26 @@
 				blockBtns(false);
 			}
 			
-			private function getPageChildren(pageName:String) : XMLList
+			private function onProductXMLCreationComplete(aEvent:Event):void
 			{
-				var xmlToc : XML = new XML(tree.dataProvider);
-				if (xmlToc.@name == pageName) {
-					return xmlToc.children();
-				}
-				return xmlToc..page.(@name == pageName).children();
-			}
-			
-			private function creatProductXML(productXMLFile:File) : void
-			{
-				if (!productXMLFile) {
-					return;
-				}
+				ProductXMLCreator(aEvent.target).removeEventListener(ProductXMLCreator.EVENT_ON_XML_CREATION_COMPLETE, onProductXMLCreationComplete);
 				
-				trace ("[creatProductXML] productXMLFile.type = " + productXMLFile.type);
-				var result : Object = sqlProxy.getProductsPages(cmboxProduct.selectedItem.name, "en_US");
-
-				var product : XML   = new XML("<product/>");
-				product.name = cmboxProduct.selectedItem.name;
-				product.version = sqlProxy.upVersion(cmboxProduct.selectedItem.name, "en_US"); // get Version
-				product.title = cmboxProduct.selectedItem.title;
-				product.description = "";
-				product.language = "en_US";
-
-//			пробегаемся по дереву строим новую хмл
-				var tocXML : XML       = new XML("<toc/>");
-				var tocString : String = resetToc(tree.dataProvider);
-				var regExp : RegExp    = /isBranch="true"/gim;
-
-				tocXML.appendChild(XML(tocString.replace(regExp,' ')));
-
-				product.appendChild(tocXML);
-
-//			trace()
-//			по ходу делаем хмл для каждой странички
-
-				var pages : XML         = new XML("<pages/>");
-				var length : Number     = Number(result.length);
-//			progressBar.setProgress(0,100); 
-				var guidResourseRegExp : RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
-
-				for ( var i : String in result )
-				{
-					var pageContent 		: String = result[i]["content"];
-					
-					var pageContentToXml	: String = resetPageContent( getPageContentWithToc(result[i]["content"], 
-																						  	  Boolean(result[i]["useToc"]),
-																			 				  getPageChildren(result[i]["name"])) );
-					
-					var tempXML : XML        = new XML("<page/>");
-					
-					tempXML.name = result[ i ][ "name" ];
-					tempXML.version = result[ i ][ "version" ];
-					tempXML.title = result[ i ][ "title" ];
-					tempXML.description = result[ i ][ "description" ];
-
-					var content : XML = XML("<content/>");
-					
-					content.appendChild( XML("<![CDATA[" + 
-						pageContentToXml +
-						"]"+ "]>"));
-
-					tempXML.appendChild(content);
-
-//				****  get resources ****		
-					var pagesResources : Array = pageContent.match(guidResourseRegExp);
-					var resources : XML        = new XML("<resources/>");
-
-					for ( var j : String in pagesResources )
-					{
-						if (pagesResources[ j ].indexOf(".htm") != -1) {
-							continue;
-						}
-						var resource : XML        = new XML("<resource/>");
-						var resourceName : String = pagesResources[ j ];
-
-						resource.@id = resourceName.substr(0,36);
-						resource.@type = resourceName.substr(37,3);
-						resource.appendChild(getResoucesCDATA(resourceName));
-						resources.appendChild(resource);
-					}
-
-					tempXML.appendChild(resources);
-
-					pages.appendChild(tempXML);
-
-//				trace("--------");
-
-//				var progress : Number = Number(i)* 100/length;
-//				progressBar.setProgress(progress , 100);
-//				progressBar.label = progress.toString();
-
-					function getResoucesCDATA(fileName:String) : XML
-					{
-						var location : File         = File.applicationStorageDirectory.resolvePath("resources/"+fileName);
-						var fileStream : FileStream = new FileStream();
-//					var location : File = new File(docsDir.url +"/"+ fileName + ".xml");
-
-						try
-						{
-							var byteArr : ByteArray    = new ByteArray();
-							var base64 : Base64Encoder = new Base64Encoder();
-
-							fileStream.open( location, FileMode.READ);
-							fileStream.readBytes(byteArr);
-							fileStream.close();
-
-							base64.encodeBytes(byteArr);
-							trace("------------------");
-							var sourse : String = base64.toString();
-						}
-						catch ( error : Error )
-						{
-							blockBtns(false);
-							Alert.show( error.message, "Failed:");
-						}
-
-						return XML("<![CDATA[" + sourse +"]"+ "]>");
-					}
-					
-					function resetPageContent(aPageContent:String) : String
-					{
-						var patternRes		: RegExp;
-						var patternGUID		: RegExp;
-						var patternPageLink	: RegExp;
-						var arrMatchRes		: Array;
-						var resourceGUID	: String;
-						var pageGUID		: String;
-						var aPageNewContent	: String;
-						
-						aPageNewContent = aPageContent;
-						
-						patternRes = /"[ ]*(app-storage:\/resources)[^"]+"/g;
-						patternGUID = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\b/gim;
-						patternPageLink = /<[ ]*a[ ]*href[ ]*=[ ]*"[^"]+"/g;
-						
-						arrMatchRes = aPageContent.match(patternRes);
-						
-						// reset resources
-						for each ( var strRes : String in arrMatchRes )
-						{
-							resourceGUID = "";
-							if (strRes.search(patternGUID) != -1)
-							{
-								resourceGUID = strRes.substr(strRes.search(patternGUID), 36);  
-							}
-									
-							var newResource : String = "\"#Res(" + resourceGUID + ")\"";
-							
-							aPageNewContent = aPageNewContent.replace(strRes, newResource);
-						}
-						
-						arrMatchRes = [];
-						
-						// reset links to pages
-						arrMatchRes = aPageNewContent.match(patternPageLink);
-						
-						for each ( var strPageLink : String in arrMatchRes )
-						{
-							pageGUID = "";
-							if (strPageLink.search(patternGUID) != -1)
-							{
-								pageGUID = strPageLink.substr(strPageLink.search(patternGUID), 36);
-								if (!pageExistsInDB(pageGUID)) {
-									continue;
-								}
-								
-								function pageExistsInDB(pageName:String) : Boolean 
-								{
-									if (sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", pageName)) 
-										return true;
-									return false;
-								}
-							}
-							
-							var newPageLink : String = "<a href=\"#Page(" + pageGUID + ")\"";
-							
-							aPageNewContent = aPageNewContent.replace(strPageLink, newPageLink);
-						}
-
-						return aPageNewContent;
-					}
-					
-				}
+				var product		: XML = ProductXMLCreator(aEvent.target).productXML;
 				
-				function resetToc(tocObject:Object) : String
-				{
-					var strToc	: String = "";
-					var xmlToc	: XML;
-					
-					try {
-						xmlToc = XML (tocObject);
-					}
-					catch (e:Error) {
-						strToc = tocObject.toString(); 				
-					}
-					
-					
-					xmlToc.@name = "#Page(" + xmlToc.@name + ")";
-					
-					changePageName(xmlToc);
-					
-					strToc = xmlToc.toXMLString();
-					
-					return strToc;
-					
-					function changePageName(xml:XML):void
-					{
-						for each(var page:XML in xml.children())
-						{
-							page.@name = "#Page(" + page.@name + ")";
-							changePageName(page);
-						}
-					}
-				}
-
-				product.appendChild(pages);
-				product.normalize();
-				
-				var fileStream : FileStream = new FileStream();
-				var fileName : String       = cmboxProduct.selectedItem.title;
-				var docsDir : File          = File.documentsDirectory;
+				var fileStream	: FileStream	= new FileStream();
+				var fileName	: String		= cmboxProduct.selectedItem.title;
+				var docsDir		: File          = File.documentsDirectory;
 				
 				try
 				{
 					fileStream. open( productXMLFile, FileMode.WRITE);
 					fileStream.writeUTFBytes("");
 					fileStream.close();
-
+					
 					fileStream. open( productXMLFile, FileMode.WRITE);
 					fileStream.writeUTFBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + product.toXMLString());
 					fileStream.close();
-
+					
 					Alert.show( productXMLFile.nativePath, "Saved to:");
 				}
 				catch ( error : Error )
@@ -961,39 +749,39 @@
 					blockBtns(false);
 					Alert.show( error.message, "Error:");
 				}
-
+				
 				var fileSize : Number = productXMLFile.size;
 				var fileSizeStr : String;
 				var gig : Number      = 1024 * 1024 * 1024;
 				var meg : Number      = 1024 * 1024;
 				var kil : Number      = 1024;
-
+				
 				if ( fileSize > gig )
-
+					
 					fileSizeStr = String((fileSize / gig) - (fileSize / gig) % 0.1) + " Gb";
-
+					
 				else if ( fileSize > meg )
-
+					
 					fileSizeStr = String((fileSize / meg) - (fileSize / meg) % 0.1) + " Mg";
-
+					
 				else if ( fileSize > kil )
-
+					
 					fileSizeStr = String((fileSize / kil) - (fileSize / kil) % 0.1) + " Kb";
-
-
+				
+				
 				var location : File = new File(docsDir.url +"/VDOMHelp/StartXML.xml");
-
+				
 				try
 				{
 					fileStream.open( location, FileMode.UPDATE);
 					var str : String     = fileStream.readMultiByte(location.size, File.systemCharset);
 					var installXML : XML = new XML();
-
+					
 					if ( str == "" )
 						installXML = XML("<install/>");
 					else
 						installXML = XML(str);
-
+					
 					var productItem : XML = new XML("<product/>");
 					productItem.@name = product.name;
 					productItem.@version = product.version;
@@ -1002,30 +790,40 @@
 					productItem.@language = product.language;
 					productItem.@size = fileSizeStr;
 					productItem.@url = productXMLFile.url;
-
+					
 					delete installXML.product.( @name == product.name )[ 0 ];
-
+					
 					installXML.appendChild(productItem);
 					fileStream.close();
-
+					
 					fileStream.open( location, FileMode.WRITE);
 					fileStream.writeUTFBytes(installXML.toXMLString());
 					fileStream.close();
+					
 					blockBtns(false);
-
+					
 				}
 				catch ( error : Error )
 				{
 					blockBtns(false);
 					Alert.show( error.message, "Error:");
+				}		
+			}
+			
+			private function creatProductXML() : void
+			{
+				if (!productXMLFile) {
+					return;
 				}
-
-
-//			<install>
-//			  <product name="" language="" version="0.1" title="" url="http://www.sample.com/help/sampe_ru_RU.xml" size="" />
-//			  <product name="" language="" version="0.2" title="" url="help/sample_en_US.xml" size="" />
-//			</install>
-
+				
+				var productCreator : ProductXMLCreator = new ProductXMLCreator();
+				
+				blockBtns(true);
+				
+				productCreator.addEventListener(ProductXMLCreator.EVENT_ON_XML_CREATION_COMPLETE, onProductXMLCreationComplete);
+				productCreator.generateProductXML(cmboxProduct.selectedItem.name, 
+													cmboxProduct.selectedItem.title, 
+													tree.dataProvider);
 			}
 			
 			private function blockBtns(b:Boolean):void
