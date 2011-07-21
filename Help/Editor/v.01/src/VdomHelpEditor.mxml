@@ -176,15 +176,86 @@
 				{
 					pageVersion = resoult[ 0 ][ "version" ];
 
-					if ( html_wysiwyg )
-						html_wysiwyg.setHTML(resoult[0]["content"]);
+					if ( html_wysiwyg ) {
+						var htmlContent : String = resoult[0]["content"];
+						htmlContent = getPageContentWithToc(htmlContent, 
+															Boolean(resoult[0]["useToc"]), 
+															tree.selectedItem.children());
+						
+						html_wysiwyg.setHTML(htmlContent);
+					}
 					pageInformation.text = resoult[ 0 ][ "title" ] + " (v." + pageVersion + ")  " + resoult[ 0 ][ "name" ];
 					pageInformation.toolTip = resoult[ 0 ][ "description" ];
 
 					topTitle.htmlText = "VDOM Help Aplication - <b>" + resoult[ 0 ][ "title" ] + "</b>";
 				}
 			}
-
+			
+			private function getPageContentWithToc(pageContent:String, useToc:Boolean, pageChildren:XMLList) : String
+			{
+				var xmlContent		: XML;
+				var xmlPageToc		: PageToc;
+				
+				if (!useToc) return pageContent;
+				
+				if (!pageContent || pageContent.toLowerCase().indexOf("<html>") == -1) {
+					pageContent = HTML_WYSIWYG.getNewPageContent("");
+				}
+				
+				xmlContent = new XML(pageContent);
+				
+				// remove toc ...
+				for each (var xmlDiv:XML in xmlContent.body.div) {
+					if (xmlDiv.@["class"] == PageToc.TOC_BY_HEADERS_CLASS || xmlDiv.@["class"] == PageToc.TOC_BY_PAGES_CLASS) {
+						xmlPageToc = new PageToc(xmlDiv);
+						xmlPageToc.tocType = xmlDiv.@["class"];
+						
+						delete xmlDiv.parent().children()[xmlDiv.childIndex()];
+						break;
+					}
+				}
+				// ... remove toc
+				
+				// remove anchors ...
+				for each (var xmlA:XML in xmlContent.body..a) {
+					if (xmlA.@["class"] == PageToc.TOC_BY_HEADERS_CLASS || xmlA.@["class"] == PageToc.TOC_BY_PAGES_CLASS) {
+						delete xmlA.parent().children()[xmlA.childIndex()];
+					}
+				}
+				// ... remove anchors
+				
+				if (xmlPageToc) { // is toc
+					xmlPageToc.clearTocContent();
+				} else { // no toc
+					xmlPageToc = new PageToc();
+				}
+				xmlPageToc.tocType = (pageChildren && pageChildren.length() > 0) ? PageToc.TOC_BY_PAGES_CLASS : PageToc.TOC_BY_HEADERS_CLASS;
+				
+				xmlPageToc.generateTocContent(new XML(pageContent), pageChildren);
+				if (xmlContent.body.length() > 0 && xmlPageToc.tocXML && xmlPageToc.tocHasContent) {
+					xmlContent.body.insertChildAfter(xmlContent.body.h1[0], xmlPageToc.tocXML);
+				}
+				
+				if (xmlPageToc.tocType == PageToc.TOC_BY_HEADERS_CLASS && xmlPageToc.anchors) {
+					for (var ind:String in xmlPageToc.anchors) 
+					{
+						if (xmlContent.body.length() > 0) 
+						{
+							xmlContent.body.insertChildBefore(xmlContent.body.h2[Number(ind)], xmlPageToc.anchors[ind]);
+						}					
+					}
+				}
+				
+				//return xmlContent.toString();
+				var str:String = xmlContent.toString();
+				return str;
+			}
+			
+			private function setPageTocContent(pageContent:String, pageChildren:XMLList, tocType:String):XML
+			{
+				return XML(pageContent);
+			}
+			
 			private function showAllProducts() : void
 			{
 				cmboxProduct.dataProvider = sqlProxy.getAllProducts();
@@ -335,6 +406,20 @@
 
 				if ( selectedIndex > 0 )
 				{
+					sqlProxy.deletePage(sqlProxy.getProductId(cmboxProduct.selectedItem.name, "en_US"), tree.selectedItem.@name);
+					
+					removeChildPage(toc..page.( @name == tree.selectedItem.@name )[0]);
+					
+					function removeChildPage(xml:XML):void
+					{
+						for each ( var page:XML in xml.children() )
+						{
+							sqlProxy.deletePage(sqlProxy.getProductId(cmboxProduct.selectedItem.name, "en_US"), page.@name);
+							removeChildPage(page);
+						}
+					}
+					
+					
 					delete toc..page.( @name == tree.selectedItem.@name )[ 0 ];
 //				toc = XML(tree.dataProvider);
 					
@@ -635,6 +720,15 @@
 				blockBtns(false);
 			}
 			
+			private function getPageChildren(pageName:String) : XMLList
+			{
+				var xmlToc : XML = new XML(tree.dataProvider);
+				if (xmlToc.@name == pageName) {
+					return xmlToc.children();
+				}
+				return xmlToc..page.(@name == pageName).children();
+			}
+			
 			private function creatProductXML(productXMLFile:File) : void
 			{
 				if (!productXMLFile) {
@@ -670,9 +764,14 @@
 
 				for ( var i : String in result )
 				{
-					var pageContent : String = result[i]["content"];
-
+					var pageContent 		: String = result[i]["content"];
+					
+					var pageContentToXml	: String = resetPageContent( getPageContentWithToc(result[i]["content"], 
+																						  	  Boolean(result[i]["useToc"]),
+																			 				  getPageChildren(result[i]["name"])) );
+					
 					var tempXML : XML        = new XML("<page/>");
+					
 					tempXML.name = result[ i ][ "name" ];
 					tempXML.version = result[ i ][ "version" ];
 					tempXML.title = result[ i ][ "title" ];
@@ -681,7 +780,7 @@
 					var content : XML = XML("<content/>");
 					
 					content.appendChild( XML("<![CDATA[" + 
-						resetPageContent(result[i]["content"]) +
+						pageContentToXml +
 						"]"+ "]>"));
 
 					tempXML.appendChild(content);
@@ -984,7 +1083,7 @@
 				sourseTxt = "";
 
 				if ( html_wysiwyg )
-					sourseTxt = html_wysiwyg.getHTML();
+					sourseTxt = html_wysiwyg.getHTML(true);
 				
 				content.writeMultiByte(sourseTxt, "utf-8");
 

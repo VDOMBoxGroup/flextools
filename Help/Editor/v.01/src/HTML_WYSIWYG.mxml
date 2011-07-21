@@ -43,29 +43,7 @@
 				domWindow.CKEDITOR.instances.editor1.setData(value);
 			}
 			
-			private function getBodyContent(value : String) : String
-			{
-				var patternBodyOpen		: RegExp;
-				var patternBodyClose	: RegExp;
-				
-				patternBodyOpen = /<[ ]*body[ ]*>/i;
-				patternBodyClose = /<[ ]*\/[ ]*body[ ]*>/i;
-				
-				
-				var arrMatchOpen:Array = value.match(patternBodyOpen);
-				if (arrMatchOpen.length > 0) {
-					value = value.substr(arrMatchOpen.index + arrMatchOpen[0].length);
-				}
-				
-				var arrMatchClose:Array = value.match(patternBodyClose);
-				if (arrMatchClose.length > 0) {
-					value = value.substring(0, arrMatchClose.index);
-				}
-				
-				return value;
-			}
-			
-			public function getHTML(  ) : String
+			public function getHTML(showPageToc:Boolean = false) : String
 			{
 				var editorData	: String;
 				var patternHead	: RegExp;
@@ -78,14 +56,14 @@
 				
 				if (editorData.search(patternHead) == -1) 
 				{
-					htmlTxt =  getHtmlSourceTxt(editorData);
+					htmlTxt = getHtmlSourceTxt(editorData, showPageToc);
 						
 				}
 				
 				return htmlTxt;
 			}
 			
-			private static function getHtmlSourceTxt(bodyContent : String) : String
+			private static function getHtmlSourceTxt(bodyContent : String, showPageToc:Boolean = false) : String
 			{
 				var metaTeg		: String;
 				var cssTeg		: String;
@@ -109,7 +87,30 @@
 								"</body>" + "\n" +
 							"</html>";
 				
-				return htmlTxt
+				if (showPageToc) {
+					return htmlTxt;
+				}
+				return getHTMLWithoutPageToc(htmlTxt);
+				
+			}
+			
+			private static function getHTMLWithoutPageToc(value:String) : String 
+			{
+				var xml:XML = new XML(value);
+				for each (var xmlDiv:XML in xml.body.div) {
+					if (xmlDiv.@["class"] == PageToc.TOC_BY_HEADERS_CLASS || xmlDiv.@["class"] == PageToc.TOC_BY_PAGES_CLASS) {
+						delete xmlDiv.parent().children()[xmlDiv.childIndex()];
+						break;
+					}
+				}
+				
+				for each (var xmlLink:XML in xml.body..a) {
+					if (xmlLink.@["class"] == PageToc.TOC_BY_HEADERS_CLASS || xmlLink.@["class"] == PageToc.TOC_BY_PAGES_CLASS) {
+						delete xmlLink.parent().children()[xmlLink.childIndex()];
+					}
+				}
+				
+				return xml.toXMLString();
 			}
 			
 			private function zzzzzz( ddd : *, aaa : *, sss : *  ) : void

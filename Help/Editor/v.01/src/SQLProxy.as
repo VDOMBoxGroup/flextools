@@ -51,9 +51,22 @@ package
 					"description TEXT , " +
 					"content TEXT, " +
 					"mark TEXT, " +
+					"useToc INTEGER NOT NULL,  " +
 					"id_product INTEGER);";
 				sqlStatement.execute();
-
+				
+				
+				sqlStatement.text = "SELECT useToc FROM page;";
+				try {
+					sqlStatement.execute();
+				} catch (e:Error) {
+					sqlStatement.text = "ALTER TABLE page ADD COLUMN useToc INTEGER;";
+					sqlStatement.execute();
+					
+					sqlStatement.text = "UPDATE page SET useToc = 1";
+					sqlStatement.execute();
+				}
+				
 				//       PRODUCT  (id, name, version, title, description, language, toc )   //
 				sqlStatement.text = "CREATE TABLE IF NOT EXISTS product (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 					"name CHAR NOT NULL, " +
@@ -342,8 +355,8 @@ package
 			if ( result )
 			{
 				var productID : int = result[ 0 ][ 'id' ];
-				query = "INSERT INTO page(name, version, title, description, content, id_product) " +
-					"VALUES(:pageName , :version, :title,	:description, :content, :id_product);";
+				query = "INSERT INTO page(name, version, title, description, content, id_product, useToc) " +
+					"VALUES(:pageName , :version, :title,	:description, :content, :id_product, 1);";
 
 				parameters = [];
 				parameters[ ":pageName" ] = pageName;
@@ -587,7 +600,7 @@ package
 		 * 
 		 */		
 		public function changePageProperties( productName:String, ln:String, oldPageName:String, newPageName:String, title:String, 
-											  description:String, newContent:String) : Object
+											  description:String, newContent:String, useToc:Boolean) : Object
 		{
 			var query : String      = "SELECT id " +
 				"FROM product " +
@@ -602,7 +615,7 @@ package
 			if ( result )
 			{
 				query = "UPDATE page " +
-					"SET name = :new_name , title = :title ,  description = :description , content = :newContent " +
+					"SET name = :new_name , title = :title ,  description = :description , content = :newContent , useToc = :useToc " +
 					"WHERE id_product = :id_product AND name = :old_name ;";
 
 				var id_product : Number = result[ 0 ][ 'id' ];
@@ -614,6 +627,7 @@ package
 				parameters[ ":old_name" ] = oldPageName;
 				parameters[ ":description" ] = description;
 				parameters[ ":newContent" ] = newContent;
+				parameters[ ":useToc" ] = useToc;
 
 				result = executeQuery(query, parameters);
 

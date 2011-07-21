@@ -49,7 +49,8 @@
 			{
 				pageName.text = "";
 				pageLabel.text = "";
-				
+				chboxUseToc.selected = false;
+
 				if(productName != "" && curPage.@name != "" && pageLn != "")
 					var resoult : Object = sqlProxy.getPage(productName, pageLn, curPage.@name );
 				
@@ -59,6 +60,7 @@
 					pageDescription.text = resoult[0]["description"];
 					pageLabel.text = resoult[0]["title"];
 					pageName.text = resoult[0]["name"];
+					chboxUseToc.selected = Boolean(resoult[0]["useToc"]);
 				}
 			}
 			
@@ -132,6 +134,7 @@
 				var pageNewContent	: String;
 				var curPageFromDB	: Object;
 				var pageNewH1		: String;
+				var contentXML		: XML;
 					
 				pageNewH1 = "<h1>"+ pageLabel.text +"</h1>";
 				
@@ -141,23 +144,27 @@
 				}
 				pageOldContent = curPageFromDB[0]["content"]
 					
-				if (pageOldContent.toLowerCase().indexOf("<html>") == -1) {
+				if (!pageOldContent || pageOldContent.toLowerCase().indexOf("<html>") == -1) {
 					pageOldContent = HTML_WYSIWYG.getNewPageContent("");
 				}
 				
-				pageNewContent = pageOldContent;
-			
-				if (pageOldContent.toLowerCase().indexOf("<h1>") == -1) { // no <h1>
-					var patternBogy : RegExp = /<body>/i;
-					pageNewContent = pageOldContent.replace(patternBogy, "<body>\n"+pageNewH1);
-				} else { // is <h1>
-					var patternH1 : RegExp = /<h1>[^<]*<\/h1>/i;
-					pageNewContent = pageOldContent.replace(patternH1, pageNewH1);
+				contentXML = new XML(pageOldContent);
+				
+				if (contentXML.body) {
+					if (contentXML.body.h1) {
+						contentXML.body.h1 = pageLabel.text;
+					} else {
+						contentXML.prependChild(XML(pageNewH1));
+					}
+					
+					pageNewContent = contentXML.toXMLString();
+				} else {
+					pageNewContent = pageOldContent;
 				}
 				
 				var result :Object = sqlProxy.changePageProperties(productName, pageLn, curPage.@name,
 																	pageName.text, pageLabel.text, 
-																	pageDescription.text, pageNewContent);
+																	pageDescription.text, pageNewContent, chboxUseToc.selected);
 			
 				if(result)
 				{
@@ -184,15 +191,17 @@
 				<mx:Label  x="17" y="13" text="Label:" />
 				<mx:TextInput id="pageLabel" x="65" y="11" text="" width="211"/>
 				
-				<mx:Label x="18" y="42" text="Name:"/>
+				<mx:Label x="17" y="42" text="Name:"/>
 				<mx:TextInput id="pageName" x="65" y="40" width="211" editable="false"
 							  text=""/>
 				
-				<mx:Label x="18" y="194" text="Version:"/>
-				<mx:Label id="pageVersion" x="77" y="194" text="12"  width="41"/>
+				<mx:CheckBox id="chboxUseToc" x="18" y="173" label="Use table of content"/>
+					
+				<mx:Label x="17" y="203" text="Version:"/>
+				<mx:Label id="pageVersion" x="77" y="203" text="12"  width="41"/>
 				
-				<mx:Label x="16" y="67" text="Description:"/>
-				<mx:TextArea id="pageDescription" x="18" y="93" width="258" height="87"/>
+				<mx:Label x="17" y="78" text="Description:"/>
+				<mx:TextArea id="pageDescription" x="18" y="96" width="258" height="69"/>
 			</mx:Canvas>
 		</mx:VBox>
 		
