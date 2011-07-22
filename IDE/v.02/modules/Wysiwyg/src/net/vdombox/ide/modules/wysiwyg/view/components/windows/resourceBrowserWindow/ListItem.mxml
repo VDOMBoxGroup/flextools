@@ -37,14 +37,14 @@
 				super.data = value;
 				resourceVO = value as ResourceVO;
 				
-				if ( resourceVO )
+				/*if ( resourceVO )
 				{
 					if ( resourceVO.icon == null )
 						trace( "ListItem:        " + temp + "name " +resourceVO.name + "type " +resourceVO.type + "id " +resourceVO.id + " icon null   " );
 					else 
 						trace( "ListItem:        " + temp + "name " +resourceVO.name + "type " +resourceVO.type + "id " +resourceVO.id + " icon " );
 					temp++;
-				}
+				}*/
 				
 				
 				resName.text = '';

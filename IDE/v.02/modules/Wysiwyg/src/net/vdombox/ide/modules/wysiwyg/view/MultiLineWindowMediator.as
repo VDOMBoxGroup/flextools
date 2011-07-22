@@ -1,14 +1,21 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.display.DisplayObject;
+	import flash.events.Event;
+	
 	import mx.collections.ArrayCollection;
+	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
+	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -40,7 +47,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
 			sendNotification( ApplicationFacade.GET_PAGES,     sessionProxy.selectedApplication );
 			
-			multilineWindow.addEventListener( "apply", removeYourself, false, 0, true );
+			multilineWindow.addEventListener( MultilineWindowEvent.APPLY, removeYourself, false, 0, true );
 			multilineWindow.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true, 0, true );
 		}
 		
@@ -53,7 +60,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function removeYourself ( event : MultilineWindowEvent ) : void
 		{
-			multilineWindow.removeEventListener( "apply", removeYourself, false );
+			multilineWindow.removeEventListener( MultilineWindowEvent.APPLY, removeYourself, false );
 			facade.removeMediator( NAME );
 		}
 		
@@ -69,7 +76,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function selectResourceHandler( event : AttributeEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_RESOURCE_SELECTOR_REQUEST, event.target );
+			var multilineWindowSkin : MultilineWindowSkin = event.target as MultilineWindowSkin;
+			var resourceSelectorWindow : ResourceSelectorWindow = new ResourceSelectorWindow();
+			
+			var resourceSelectorWindowMediator : ResourceSelectorWindowMediator = new ResourceSelectorWindowMediator( resourceSelectorWindow );			
+			facade.registerMediator( resourceSelectorWindowMediator );
+			
+			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler);
+			
+			PopUpManager.addPopUp( resourceSelectorWindow, DisplayObject( multilineWindowSkin.parentApplication ), true);
+			PopUpManager.centerPopUp( resourceSelectorWindow );
+			
+			function applyHandler (event: Event):void
+			{
+				multilineWindowSkin.textAreaContainer.insertText((event.target as ResourceSelectorWindow).value);			
+				resourceSelectorWindow.dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) );
+			}		
 		}
 		
 		override public function handleNotification( notification : INotification ) : void

@@ -50,10 +50,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var resourceVO : ResourceVO = new ResourceVO( "temp owner" );
 
-		private var _resourceSelector : ResourceSelector;
-		
-		private var _resourceSelectorMultiline : MultilineWindowSkin;
-
 		private var sessionProxy 	: SessionProxy;
 
 		private var NoneIcon : ResourceVO = new ResourceVO( "none owner" );
@@ -65,16 +61,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			super( NAME, viewComponent );
 		}
 
-		public function set resourceSelector( value : ResourceSelector ) : void
-		{
-			_resourceSelector = value;
-		}
-		
-		public function set resourceSelectorMultiline( value : MultilineWindowSkin ) : void
-		{
-			_resourceSelectorMultiline = value;
-		}
-
 		private function get resourceSelectorWindow() : ResourceSelectorWindow
 		{
 			return viewComponent as ResourceSelectorWindow;
@@ -83,11 +69,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-
-			if (_resourceSelector != null)
-				resourceSelectorWindow.value = _resourceSelector.value;
-			else
-				resourceSelectorWindow.value = _resourceSelectorMultiline.value;
 
 			addHandlers();
 			
@@ -240,7 +221,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			resourceSelectorWindow.addEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.CLOSE, closeHandler );
-			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
+//			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, loadResourcesHandler );
@@ -327,7 +308,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function removeHandlers() : void
 		{
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.CLOSE, closeHandler );
-			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
+//			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler ); //коряво очень поменять местами
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler ); //коряво очень
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, loadResourcesHandler );
@@ -418,27 +399,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 		}
 
-		private function applyHandler( event : ResourceSelectorWindowEvent ) : void
-		{
-			PopUpManager.removePopUp( resourceSelectorWindow );
-
-			facade.removeMediator( mediatorName );
-			
-			var _temp:String;
-			
-			if ( resourceSelectorWindow.value )
-				_temp = "#Res(" + resourceSelectorWindow.value + ")";
-			else
-				_temp = "#Res()";	
-			
-			if (_resourceSelector != null)
-				_resourceSelector.value = _temp;
-			else
-				if (_resourceSelectorMultiline != null)
-					_resourceSelectorMultiline.value += _temp + ", ";
-				
-			
-		}
+//		private function applyHandler( event : ResourceSelectorWindowEvent ) : void
+//		{
+//			resourceSelectorWindow.dispatchEvent( new Event( Event.CHANGE ) );
+//			resourceSelectorWindow.dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) );
+//		}
 
 		private function closeHandler( event : ResourceSelectorWindowEvent ) : void
 		{

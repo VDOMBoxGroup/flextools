@@ -46,8 +46,8 @@
 				multilineWindow.title = _title;
 				dispatchEvent( new AttributeEvent( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE ) );				
 				
-				multilineWindow.addEventListener( "apply", multilineWindow_applyHandler, false, 0, true );
-				multilineWindow.addEventListener( "cancel", multilineWindow_applyHandler, false, 0, true );
+				multilineWindow.addEventListener( MultilineWindowEvent.APPLY, multilineWindow_applyHandler, false, 0, true );
+				multilineWindow.addEventListener( MultilineWindowEvent.CLOSE, multilineWindow_applyHandler, false, 0, true );
 				
 				PopUpManager.addPopUp( multilineWindow, DisplayObject( UIComponent( parent ).parentApplication ), true );
 				PopUpManager.centerPopUp( multilineWindow );
@@ -59,9 +59,9 @@
 
 				if ( currentTarget is MultilineWindow )
 				{
-					if (event.type == "apply")
+					if (event.type == MultilineWindowEvent.APPLY)
 						value = event.value;				
-					UIComponent( currentTarget ).removeEventListener( "apply", multilineWindow_applyHandler, false );					
+					UIComponent( currentTarget ).removeEventListener( MultilineWindowEvent.APPLY, multilineWindow_applyHandler, false );					
 				}
 
 //				var popUpWindowManager : PopUpManager = PopUpManager.getInstance();

@@ -201,14 +201,14 @@
 	<s:controlBarContent>
 
 		<components:PanelButton id="deleteButton"
-								icon="@Embed('assets/delete.png')" label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_delete') }"
+								icon="@Embed('../assets/delete.png')" label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_delete') }"
 								click="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.DELETE_REQUEST ))"
 								skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelButtonSkin"/>
 
 		<mx:Spacer width="100%"/>
 
 		<components:PanelButton id="saveButton"
-								icon="@Embed('assets/save.png')" label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_save') }"
+								icon="@Embed('../assets/save.png')" label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_save') }"
 								click="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ))"
 								skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelButtonSkin"/>
 

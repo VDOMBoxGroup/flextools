@@ -418,29 +418,29 @@
 	</fx:Script>
 
 	<controls:ToolbarButton id="weightButton"
-							focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')" styleName="toolbarButton" width="24"
+							focusEnabled="false" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_bold.png')" styleName="toolbarButton" width="24"
 							click="changeWeight()"/>
 
 	<controls:ToolbarButton id="styleButton"
-							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_italic.png')" styleName="toolbarButton" width="24"
+							height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_italic.png')" styleName="toolbarButton" width="24"
 							click="changeStyle()"/>
 
 	<controls:ToolbarButton id="decorationButton"
-							focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_underline.png')" styleName="toolbarButton" width="24"
+							focusEnabled="false" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_underline.png')" styleName="toolbarButton" width="24"
 							click="changeDecoration()"/>
 
 	<mx:VRule height="24"/>
 
 	<controls:ToolbarButton id="leftButton"
-							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_left.png')" styleName="toolbarButton" width="24"
+							height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_left.png')" styleName="toolbarButton" width="24"
 							click="changeAlign('left')"/>
 
 	<controls:ToolbarButton id="centerButton"
-							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_center.png')" styleName="toolbarButton" width="24"
+							height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_center.png')" styleName="toolbarButton" width="24"
 							click="changeAlign('center')"/>
 
 	<controls:ToolbarButton id="rightButton"
-							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_right.png')" styleName="toolbarButton" width="24"
+							height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_right.png')" styleName="toolbarButton" width="24"
 							click="changeAlign('right')"/>
 
 	<mx:VRule height="24"/>

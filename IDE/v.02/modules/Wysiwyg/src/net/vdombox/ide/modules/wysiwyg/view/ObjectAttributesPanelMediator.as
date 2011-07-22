@@ -1,11 +1,21 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.display.DisplayObject;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	
+	import mx.managers.PopUpManager;
+	
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectAttributesPanel;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
+	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -214,10 +224,29 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sendNotification( ApplicationFacade.OPEN_EXTERNAL_EDITOR_REQUEST, event.target );
 		}
+		
 
 		private function selectResourceHandler( event : AttributeEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_RESOURCE_SELECTOR_REQUEST, event.target );
+			var resourceSelector : ResourceSelector = event.target as ResourceSelector;
+			var resourceSelectorWindow : ResourceSelectorWindow = new ResourceSelectorWindow();
+			
+			var resourceSelectorWindowMediator : ResourceSelectorWindowMediator = new ResourceSelectorWindowMediator( resourceSelectorWindow );
+			
+			facade.registerMediator( resourceSelectorWindowMediator );
+				
+			resourceSelectorWindow.value = resourceSelector.value;
+				
+			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler);
+				
+			PopUpManager.addPopUp( resourceSelectorWindow, DisplayObject( resourceSelector.parentApplication ), true);
+			PopUpManager.centerPopUp( resourceSelectorWindow );
+				
+			function applyHandler (event: Event):void
+			{
+				resourceSelector.value = (event.target as ResourceSelectorWindow).value;
+				resourceSelectorWindow.dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) );
+			}		
 		}
 		
 		private function getResourcesAndPagesHandler( event : AttributeEvent ) : void

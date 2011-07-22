@@ -27,16 +27,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[SkinPart( required="true" )]
 		public var textAreaContainer : RichEditableText;
 	
-/*		[SkinPart( required="true" )]
-		public var pageList : mx.controls.ComboBox;*/
-	
-/*		[SkinPart( required="true" )]
-		public var resourceList : mx.controls.ComboBox;*/
-	
 		public function MultilineWindow()
 		{
 			super();
-			init();
+			this.setFocus();
+			addEventListener( KeyboardEvent.KEY_DOWN, cancel_close_window );	
 		}
 	
 		override public function stylesInitialized():void {
@@ -50,7 +45,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		 */ 
 		public function ok_close_window(event: KeyboardEvent = null ) : void
 		{
-			dispatchEvent( new MultilineWindowEvent( "apply", textAreaContainer.text ) );
+			dispatchEvent( new MultilineWindowEvent( MultilineWindowEvent.APPLY, textAreaContainer.text ) );
 		}
 		
 		public function cancel_close_window(event: KeyboardEvent = null ) : void
@@ -58,10 +53,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			if ( event != null)
 				if ( event.charCode != Keyboard.ESCAPE)
 					return;
-			dispatchEvent( new MultilineWindowEvent( "cancel", "" ) );
+			dispatchEvent( new MultilineWindowEvent( MultilineWindowEvent.CLOSE, "" ) );
 		}
 	
-		public function insertPageLink() : void
+		/*public function insertPageLink() : void
 		{
 			var textFlow: TextFlow = textAreaContainer.textFlow;
 		
@@ -83,17 +78,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 			//textAreaContainer.text = textFlow.getText(0, index) +  "#Res(" + resourceList.selectedItem["data"] + ")" +  text;
 			textAreaContainer.setFocus();
-		}
+		}*/
 	
 		public function titlewindow1_closeHandler( event : CloseEvent ) : void
 		{
 			PopUpManager.removePopUp( this );
-		}
-	
-		private function init() : void
-		{
-			this.setFocus();
-			addEventListener( KeyboardEvent.KEY_DOWN, cancel_close_window );				
 		}
 	}
 }

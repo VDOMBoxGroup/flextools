@@ -504,70 +504,70 @@
 
 			 <mx:VRule height="24" />-->
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_select_all.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_select_all.png')" width="24"
 								click="execCommand('selectall')"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rem_formatting.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rem_formatting.png')" width="24"
 								click="execCommand('removeformat')"/>
 
 		<mx:VRule height="24"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_ins_link.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_ins_link.png')" width="24"
 								click="insertLink()"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rem_link.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rem_link.png')" width="24"
 								click="execCommand('unlink')"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rule.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rule.png')" width="24"
 								click="execCommand('inserthorizontalrule')"/>
 
-		<controls:ToolbarButton focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_ins_char.png')" width="24"
+		<controls:ToolbarButton focusEnabled="false" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_ins_char.png')" width="24"
 								click="insertChar()"/>
 	</s:HGroup>
 
 	<s:HGroup verticalAlign="middle">
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_bold.png')" width="24"
 								fontWeight="bold"
 								click="execCommand('Bold')"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_italic.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_italic.png')" width="24"
 								click="execCommand('Italic')"/>
 
-		<controls:ToolbarButton focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_underline.png')" width="24"
+		<controls:ToolbarButton focusEnabled="false" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_underline.png')" width="24"
 								click="execCommand('Underline')"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_strikethrough.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_strikethrough.png')" width="24"
 								click="execCommand('Strikethrough')"/>
 
 		<mx:VRule height="24"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_left.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_left.png')" width="24"
 								click="execCommand('JustifyLeft')"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_center.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_center.png')" width="24"
 								click="execCommand('JustifyCenter')"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_right.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_right.png')" width="24"
 								click="execCommand('JustifyRight')"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_block.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_block.png')" width="24"
 								click="execCommand('JustifyFull')"/>
 
 		<mx:VRule height="24"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_numlist.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_numlist.png')" width="24"
 								click="execCommand('InsertOrderedList')"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bullist.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_bullist.png')" width="24"
 								click="execCommand('InsertUnorderedList')"/>
 
 		<mx:VRule height="24"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_outdent.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_outdent.png')" width="24"
 								click="execCommand('Outdent')"/>
 
-		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_indent.png')" width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_indent.png')" width="24"
 								click="execCommand('Indent')"/>
 	</s:HGroup>
 
@@ -703,7 +703,7 @@
 
 		<mx:ColorPicker focusEnabled="false" height="24" width="36"
 						change="colorTextChanged(event)"/>
-
+		
 		<s:Label text="Fill Color"/>
 
 		<mx:ColorPicker focusEnabled="false" height="24" width="36"

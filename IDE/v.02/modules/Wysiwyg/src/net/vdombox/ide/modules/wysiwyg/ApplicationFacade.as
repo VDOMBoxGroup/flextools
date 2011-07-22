@@ -16,7 +16,6 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenExternalEditorRequestCommand;
-	import net.vdombox.ide.modules.wysiwyg.controller.OpenResourceSelectorRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererClickedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererCreatedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererRemovedCommand;
@@ -244,7 +243,6 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
 			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 
-			registerCommand( OPEN_RESOURCE_SELECTOR_REQUEST, OpenResourceSelectorRequestCommand );
 			registerCommand( SELECT_AND_LOAD_RESOURCE, SelectAndSetResourceCommand );
 			registerCommand( OPEN_EXTERNAL_EDITOR_REQUEST, OpenExternalEditorRequestCommand );
 

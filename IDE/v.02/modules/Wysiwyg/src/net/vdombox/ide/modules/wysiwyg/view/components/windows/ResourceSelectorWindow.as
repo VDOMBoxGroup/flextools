@@ -81,13 +81,22 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		}
 		public function get value() : String
 		{
-			return resourcesList.selectedItem ? resourcesList.selectedItem.id : "";
+			var str:String = resourcesList.selectedItem ? resourcesList.selectedItem.id : "";
+			if ( str )
+				str = "#Res(" + str + ")";
+			else
+				str = "#Res()";	
+			
+			trace("get " + str);
+			return str;
 		}
 		
 		public function set value( value : String ) : void
 		{
+			trace( "set " + value);
 			_value = value;
 			setSelectedItem();
+			
 		}
 		
 		public function set resources( value : ArrayList ) : void
@@ -200,9 +209,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		{
 			if ( event != null )
 				if ( event.charCode != Keyboard.ESCAPE )
-					return
+					return;
 					
-					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) )
+			dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) )
+				
 		}		
 		
 		private function init() : void
@@ -224,7 +234,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		public function onApplyClick():void
 		{
-			dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.APPLY));
+			dispatchEvent( new Event( Event.CHANGE ) );
+			dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE));
 		}
 		
 		public function onCancelClick():void
@@ -244,13 +255,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				clearPreloaderField();
 			else
 				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) );
-		}
-		
-		//			protected function resourcesList_changeHandler(event:ListEvent):void
-		//			{
-		//				// TODO Auto-generated method stub
-		//			}
-
-		
+		}	
 	}
 }
