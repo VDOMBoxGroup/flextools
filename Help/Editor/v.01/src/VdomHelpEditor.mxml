@@ -939,7 +939,7 @@
 							if (!tree.selectedItem) {
 								return;
 							}
-							copyTreePages(XML(tree.selectedItem));
+							copyTreePages(XML(tree.selectedItem), !aKeyboardEvent.shiftKey);
 						}
 						break;
 					}
@@ -963,7 +963,7 @@
 				tree.addEventListener(KeyboardEvent.KEY_UP, onTreeKeyboardKeyUp);
 			}
 			
-			private function copyTreePages(pagesXml : XML):void
+			private function copyTreePages(pagesXml : XML, copyTree : Boolean = true):void
 			{
 				var resoult	: Object;
 				
@@ -980,6 +980,8 @@
 					resoult[0]["name"] = generatePageName();
 					treePagesBuffer.push(resoult);
 				}
+				
+				if (!copyTree) return;
 				
 				addCopiedPage(pagesXml, treePagesBuffer.length-1);
 				
