@@ -7,8 +7,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.ui.Keyboard;
 	
 	import mx.collections.ArrayList;
-	import mx.controls.ComboBox;
 	import mx.controls.TextInput;
+	import mx.controls.TileList;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -18,7 +18,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	
 	import spark.components.ComboBox;
 	import spark.components.Label;
-	import spark.components.List;
 	import spark.components.TextArea;
 	import spark.components.TextInput;
 	import spark.components.TitleWindow;
@@ -45,7 +44,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		private var _value : String;	
 		
 		[SkinPart( required="true" )]
-		public var resourcesList : List;
+		public var resourcesList : TileList;
 		
 		[SkinPart( required="true" )]
 		public var nameFilter: spark.components.TextInput;

@@ -96,17 +96,12 @@
 			
 			<s:VGroup width="100%" height="100%">
 				
-				<s:List id="resourcesList" dataProvider="{ hostComponent._resources }"
-						height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="on" width="100%"
+				<mx:TileList id="resourcesList" dataProvider="{ hostComponent._resources }"
+						height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="on" width="100%"
+						allowMultipleSelection="true"
 						itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"
 						change="hostComponent.selectResource(event)">
-					<s:layout>
-						<s:TileLayout requestedColumnCount="3"
-									  requestedRowCount="2"
-									  horizontalGap="5"
-									  verticalGap="8" />
-					</s:layout>
-				</s:List>
+				</mx:TileList>
 				
 				<!--  futer  -->
 				<s:HGroup width="100%" height="50"
