@@ -53,56 +53,80 @@
 			<s:Label text="Resource browser" top="12" left="20" color="#FFFFFF" fontSize="20"/>
 		</s:Group>
 		
-		<mx:Canvas width="100%" backgroundColor="#C2C2C2">
-		
-			<s:HGroup width="100%" verticalAlign="middle" paddingLeft="5">		 
+		<s:Group width="100%" height="39">
+			
+			<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:fill>
+					<s:LinearGradient rotation="90">
+						<s:GradientEntry color="#2f2f2f"/>
+						<s:GradientEntry color="#282828"/>
+					</s:LinearGradient>
+				</s:fill>
+			</s:Rect>
+			
+			<s:HGroup width="100%" verticalAlign="middle" paddingLeft="5" paddingRight="10" top="5">		 
 				<s:TextInput id="nameFilter"
-							 text="type a filter here" width="150"
+							 text="Filter resource" width="150"
 							 borderColor="#999999" color="#666666"
-							 fontFamily="Tahoma" fontWeight="bold"/>
+							 fontFamily="Tahoma" fontStyle="italic"/>
 				
 				<s:Image id="__spinner" height="18"  width="18" visible="false" skinClass="spark.skins.spark.ImageSkin"/>
 				
-				<s:Label text="Total Resources:"/>
+				<s:Label text="Total Resources:" color="#FFFFFF"/>
 				
 				<s:Label text="{hostComponent.totalResources}"
-						 fontWeight="bold"/>
+						 color="#FFFFFF" fontWeight="bold"/>
 				
 				<s:Spacer width="100%"/>
 				
 				<s:Button label="Upload File..."
-				   			cornerRadius="0"
-				   			click="hostComponent.uploadFile(event)" />	
+						  height="29" cornerRadius="14"
+						  icon="@Embed(source='icons/Add.png')"
+						  click="hostComponent.uploadFile(event)" />	
 			</s:HGroup>
-			
-		</mx:Canvas>
-	
+		</s:Group>
+
 		<!-- body -->
-		<s:List id="resourcesList" dataProvider="{ hostComponent._resources }"
-				 height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="on" width="100%"
-				 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"
-				 change="hostComponent.selectResource(event)">
-			<s:layout>
-				<s:TileLayout requestedColumnCount="3"
-							  requestedRowCount="2"
-							  horizontalGap="0"
-							  verticalGap="0" />
-			</s:layout>
-		</s:List>
+		<s:Group width="100%" height="100%">
+			<s:Rect width="100%" height="100%">
+				<s:fill>
+					<s:BitmapFill source = "@Embed('icons/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+				</s:fill>
+			</s:Rect>
+			
+			<s:VGroup width="100%" height="100%">
 				
-	<!--  futer  -->
-		<s:HGroup width="100%" height="30"
-			      paddingBottom="2" paddingLeft="10" paddingRight="10" paddingTop="2"
-			      verticalAlign="middle" horizontalAlign="right">
+				<s:List id="resourcesList" dataProvider="{ hostComponent._resources }"
+						height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="on" width="100%"
+						itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"
+						change="hostComponent.selectResource(event)">
+					<s:layout>
+						<s:TileLayout requestedColumnCount="3"
+									  requestedRowCount="2"
+									  horizontalGap="5"
+									  verticalGap="8" />
+					</s:layout>
+				</s:List>
+				
+				<!--  futer  -->
+				<s:HGroup width="100%" height="50"
+						  paddingBottom="2" paddingLeft="10" paddingRight="10" paddingTop="2"
+						  verticalAlign="middle" horizontalAlign="right">
+					
+					<s:Button id="cancelButton" 
+							  icon="@Embed(source='icons/Cancel.png')" iconPlacement="top"
+							  height="29" width="48" cornerRadius="14"
+							  click="hostComponent.onCancelClick()" />
+					
+					<s:Button label="Insert" minWidth="88" height="29" cornerRadius="14" 
+							  color="#B33535" fontSize="18"		   
+							  click="hostComponent.onApplyClick()" />
+
+				</s:HGroup>
+				
+			</s:VGroup>
 		
-			<s:Button label="Apply"				   
-				      click="hostComponent.onApplyClick()" />
-		
-			<s:Button id="cancelButton"
-				   	  label="Cancel"
-				   	  cornerRadius="0"
-				      click="hostComponent.onCancelClick()" />
-		</s:HGroup>
+		</s:Group>
 	</s:VGroup>
 	
 </s:SparkSkin>
