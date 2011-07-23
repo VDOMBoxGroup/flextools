@@ -12,7 +12,15 @@
 			
 			private function init():void
 			{
-				this.addEventListener(KeyboardEvent.KEY_UP, onKeyboardKeyUp);
+				this.addEventListener(KeyboardEvent.KEY_UP,		onKeyboardKeyUp);
+				this.addEventListener(KeyboardEvent.KEY_DOWN,	onKeyboardKeyDown);
+			}
+			
+			private function onKeyboardKeyDown(keyEvent:KeyboardEvent):void
+			{
+				if (keyEvent.ctrlKey && !(keyEvent.keyCode == Keyboard.C || keyEvent.keyCode == Keyboard.V) ) {
+					keyEvent.preventDefault();
+				}
 			}
 			
 			private function onKeyboardKeyUp(keyEvent:KeyboardEvent):void
