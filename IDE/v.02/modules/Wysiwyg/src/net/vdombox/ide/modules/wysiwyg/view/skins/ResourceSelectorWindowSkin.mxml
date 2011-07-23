@@ -4,8 +4,9 @@
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
 			 xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*"
-			 width="700" height="500" minWidth="800" minHeight="600">
-	
+			 width="700" height="500" minWidth="800" minHeight="600"
+			 alpha.disabled="0.5"
+			 focusColor.normal="#CCCCCC">
 	<fx:Metadata>
 		<![CDATA[ 
 		/** 
@@ -40,7 +41,7 @@
 	
 	<s:VGroup width="100%" height="100%" gap="0"
 			  left="9" top="9" right="9" bottom="9">
-	
+		
 		<s:Group width="100%" height="42">
 			<s:Rect bottom="0" left="0" right="0" top="0">
 				<s:fill>
@@ -65,10 +66,9 @@
 			</s:Rect>
 			
 			<s:HGroup width="100%" verticalAlign="middle" paddingLeft="5" paddingRight="10" top="5">		 
-				<s:TextInput id="nameFilter"
-							 text="Filter resource" width="150"
-							 borderColor="#999999" color="#666666"
-							 fontFamily="Tahoma" fontStyle="italic"/>
+				<s:TextInput id="nameFilter" width="150" borderColor="#999999" color="#666666"
+							 fontFamily="Tahoma" fontStyle="italic" text="Filter resource"
+							 focusColor.normal="#CCCCCC"/>
 				
 				<s:Image id="__spinner" height="18"  width="18" visible="false" skinClass="spark.skins.spark.ImageSkin"/>
 				
@@ -79,13 +79,17 @@
 				
 				<s:Spacer width="100%"/>
 				
-				<s:Button label="Upload File..."
-						  height="29" cornerRadius="14"
-						  icon="@Embed(source='icons/Add.png')"
-						  click="hostComponent.uploadFile(event)" />	
+				<s:Button height="29" label="Upload File..." click="hostComponent.uploadFile(event)"
+						  cornerRadius="14" icon="@Embed(source='icons/Add.png')"
+						  focusColor.normal="#CCCCCC"/>	
 			</s:HGroup>
 		</s:Group>
-
+		
+		<s:Line width="100%" height="1">
+			<s:stroke>
+				<s:SolidColorStroke color="#424242" alpha="1"/>
+			</s:stroke>
+		</s:Line>
 		<!-- body -->
 		<s:Group width="100%" height="100%">
 			<s:Rect width="100%" height="100%">
@@ -96,31 +100,51 @@
 			
 			<s:VGroup width="100%" height="100%">
 				
-				<mx:TileList id="resourcesList" dataProvider="{ hostComponent._resources }"
-						height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="on" width="100%"
-						allowMultipleSelection="{hostComponent.multilineSelected}"
-						itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"
-						change="hostComponent.selectResource(event)">
-				</mx:TileList>
+				<s:Group width="100%" height="100%">
+					<s:Rect width="100%" height="100%">
+						<s:fill>
+							<s:SolidColor color="#000000" alpha="0.2"/>
+						</s:fill>
+					</s:Rect>
+					
+					<s:List id="resourcesList" width="100%" height="100%"
+								 allowMultipleSelection="{hostComponent.multilineSelected}" borderVisible="false"
+								 change="hostComponent.selectResource(event)"
+								 contentBackgroundAlpha="0" contentBackgroundColor="#000000"
+								 dataProvider="{ hostComponent._resources }" enabled="true"
+								 horizontalScrollPolicy="auto"
+								 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"
+								 verticalScrollPolicy="on"
+								 x.normal="0" chromeColor.normal="#CCCCCC"
+								 focusColor.normal="#CCCCCC" rollOverColor.normal="#9AEEA2"
+								 selectionColor="#EEA8E7">
+						<s:layout>
+							<s:TileLayout horizontalGap="5" verticalGap="5" requestedColumnCount="3"  requestedRowCount="2">
+								
+							</s:TileLayout>
+						</s:layout>
+					</s:List>
+				</s:Group>
 				
 				<!--  futer  -->
 				<s:HGroup width="100%" height="50"
 						  paddingBottom="2" paddingLeft="10" paddingRight="10" paddingTop="2"
 						  verticalAlign="middle" horizontalAlign="right">
 					
-					<s:Button id="cancelButton" 
+					<s:Button id="cancelButton" width="48" height="29"
+							  click="hostComponent.onCancelClick()" cornerRadius="14"
 							  icon="@Embed(source='icons/Cancel.png')" iconPlacement="top"
-							  height="29" width="48" cornerRadius="14"
-							  click="hostComponent.onCancelClick()" />
+							  focusColor.normal="#CCCCCC"/>
 					
-					<s:Button label="Insert" minWidth="88" height="29" cornerRadius="14" 
-							  color="#B33535" fontSize="18"		   
-							  click="hostComponent.onApplyClick()" />
-
+					<s:Button height="29" minWidth="88" label="Insert"
+							  click="hostComponent.onApplyClick()" color="#B33535" cornerRadius="14"
+							  fontSize="18"
+							  focusColor.normal="#CCCCCC"/>
+					
 				</s:HGroup>
 				
 			</s:VGroup>
-		
+			
 		</s:Group>
 	</s:VGroup>
 	

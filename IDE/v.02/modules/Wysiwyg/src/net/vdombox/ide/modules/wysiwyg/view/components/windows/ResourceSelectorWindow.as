@@ -19,6 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	
 	import spark.components.ComboBox;
 	import spark.components.Label;
+	import spark.components.List;
 	import spark.components.TextArea;
 	import spark.components.TextInput;
 	import spark.components.TitleWindow;
@@ -46,7 +47,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		private var _value : String;	
 		
 		[SkinPart( required="true" )]
-		public var resourcesList : TileList;
+		public var resourcesList : List;
 		
 		[SkinPart( required="true" )]
 		public var nameFilter: TextInput;
