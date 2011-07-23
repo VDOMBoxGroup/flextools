@@ -48,13 +48,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sendNotification( ApplicationFacade.GET_PAGES,     sessionProxy.selectedApplication );
 			
 			multilineWindow.addEventListener( MultilineWindowEvent.APPLY, removeYourself, false, 0, true );
-			multilineWindow.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true, 0, true );
+			multilineWindow.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false, 0, true );
 		}
 		
 		override public function onRemove() : void
 		{
 			sessionProxy = null;
-			multilineWindow.removeEventListener(AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true);
+			multilineWindow.removeEventListener(AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false);
 			multilineWindow = null;
 		}
 		
@@ -76,21 +76,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function selectResourceHandler( event : AttributeEvent ) : void
 		{
-			var multilineWindowSkin : MultilineWindowSkin = event.target as MultilineWindowSkin;
+			var multilineWindow : MultilineWindow = event.target as MultilineWindow;
 			var resourceSelectorWindow : ResourceSelectorWindow = new ResourceSelectorWindow();
 			
 			var resourceSelectorWindowMediator : ResourceSelectorWindowMediator = new ResourceSelectorWindowMediator( resourceSelectorWindow );			
 			facade.registerMediator( resourceSelectorWindowMediator );
 			
-			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler);
+			resourceSelectorWindow.multilineSelected = true;
+			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler, false, 0, true);
 			
-			PopUpManager.addPopUp( resourceSelectorWindow, DisplayObject( multilineWindowSkin.parentApplication ), true);
+			
+			PopUpManager.addPopUp( resourceSelectorWindow, DisplayObject( multilineWindow.parentApplication ), true);
 			PopUpManager.centerPopUp( resourceSelectorWindow );
 			
 			function applyHandler (event: Event):void
 			{
-				multilineWindowSkin.textAreaContainer.insertText((event.target as ResourceSelectorWindow).value);			
-				resourceSelectorWindow.dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) );
+				multilineWindow.textAreaContainer.insertText((event.target as ResourceSelectorWindow).value);	
+				resourceSelectorWindow.removeEventListener(Event.CHANGE, applyHandler, false);
+				PopUpManager.removePopUp( resourceSelectorWindow );
+				facade.removeMediator( mediatorName );
+				//resourceSelectorWindow.dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) );
 			}		
 		}
 		

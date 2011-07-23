@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			 xmlns:mx="library://ns.adobe.com/flex/mx" 
-			 xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:mx="library://ns.adobe.com/flex/mx"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
 			 xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*"
-			 alpha.disabled="0.5" width="700" height="500" minWidth="800" minHeight="600">
+			 width="700" height="500" minWidth="800" minHeight="600">
 	
 	<fx:Metadata>
 		<![CDATA[ 
@@ -98,7 +98,7 @@
 				
 				<mx:TileList id="resourcesList" dataProvider="{ hostComponent._resources }"
 						height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="on" width="100%"
-						allowMultipleSelection="true"
+						allowMultipleSelection="{hostComponent.multilineSelected}"
 						itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"
 						change="hostComponent.selectResource(event)">
 				</mx:TileList>

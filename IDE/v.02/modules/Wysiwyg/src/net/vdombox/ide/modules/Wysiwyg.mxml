@@ -53,6 +53,10 @@
 		{
 			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.StateSelectorSkin");
 		}
+		global
+		{
+			selection-color: #0268F3;
+		}
 	</fx:Style>
 	
 	<fx:Script>

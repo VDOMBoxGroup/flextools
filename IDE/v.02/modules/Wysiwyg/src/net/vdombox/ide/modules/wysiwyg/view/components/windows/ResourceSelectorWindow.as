@@ -6,13 +6,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
-	import mx.controls.TextInput;
 	import mx.controls.TileList;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.SmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
 	
@@ -24,7 +25,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 	public class ResourceSelectorWindow extends TitleWindow
 	{
-		
+		[Bindable]
+		public var multilineSelected    : Boolean = false;
 		
 		[ Bindable ]
 		public var totalResources		: int	= 0;
@@ -47,7 +49,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public var resourcesList : TileList;
 		
 		[SkinPart( required="true" )]
-		public var nameFilter: spark.components.TextInput;
+		public var nameFilter: TextInput;
 		
 		public function ResourceSelectorWindow()
 		{
@@ -61,13 +63,23 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		}
 		public function get value() : String
 		{
-			var str:String = resourcesList.selectedItem ? resourcesList.selectedItem.id : "";
-			if ( str )
-				str = "#Res(" + str + ")";
+			var str:String = "";
+			if (!multilineSelected)
+			{
+				str = resourcesList.selectedItem ? resourcesList.selectedItem.id : "";
+				if ( str )
+					str = "#Res(" + str + ")";
+				else
+					str = "#Res()";	
+			}
 			else
-				str = "#Res()";	
-			
-			trace("get " + str);
+			{
+				for each(var item:ResourceVO in resourcesList.selectedItems)
+				{
+					str += "#Res(" + item.id + "), ";
+				}
+				str = str.substr(0, str.length - 2);
+			}
 			return str;
 		}
 		

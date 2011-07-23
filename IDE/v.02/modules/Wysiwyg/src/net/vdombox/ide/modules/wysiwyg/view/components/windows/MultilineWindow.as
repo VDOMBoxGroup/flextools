@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	
@@ -79,6 +80,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			//textAreaContainer.text = textFlow.getText(0, index) +  "#Res(" + resourceList.selectedItem["data"] + ")" +  text;
 			textAreaContainer.setFocus();
 		}*/
+		public function showResourceSelecterWindow():void
+		{
+			dispatchEvent( new AttributeEvent( AttributeEvent.SELECT_RESOURCE ) );
+		}
 	
 		public function titlewindow1_closeHandler( event : CloseEvent ) : void
 		{

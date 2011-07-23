@@ -64,7 +64,6 @@
 					UIComponent( currentTarget ).removeEventListener( MultilineWindowEvent.APPLY, multilineWindow_applyHandler, false );					
 				}
 
-//				var popUpWindowManager : PopUpManager = PopUpManager.getInstance();
 				PopUpManager.removePopUp( multilineWindow );
 			}
 
