@@ -172,9 +172,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					}
 					
 					resourceSelectorWindow.resources.addItemAt( NoneIcon, 0 );
-					if ( resourceSelectorWindow.resourcesList.selectedIndex > 0 )
-						resourceSelectorWindow.resourcesList.scrollToIndex( resourceSelectorWindow.resourcesList.selectedIndex );
-					resourceSelectorWindow.typeFilter.dataProvider = _filters;
 					resourceSelectorWindow.totalResources = resourceSelectorWindow.resources.length-1;
 
 					break;
@@ -230,7 +227,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlersForResourcesList( event : Event ) : void
 		{
-			resourceSelectorWindow.typeFilter.addEventListener( Event.CHANGE, applyTypeFilter );
 			resourceSelectorWindow.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
 			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler ); 
 		}
@@ -246,35 +242,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.invalidateProperties(); //?
 
 			allResourcesList = resourceSelectorWindow.resources;
-		}
-
-		private function applyTypeFilter( event : Event ) : void
-		{
-			var typeFilter : String = resourceSelectorWindow.typeFilter.selectedItem.data;
-			var newResourcesList : ArrayList = new ArrayList();
-			var resVO : ResourceVO;
-
-			if ( typeFilter == "*" || typeFilter == "None" )
-			{
-				resourceSelectorWindow.filteredResources = resourceSelectorWindow.totalResources;
-
-				resourceSelectorWindow.resources = allResourcesList;
-			}
-			else
-			{
-				resourceSelectorWindow.filteredResources = 0;
-
-				for each ( resVO in allResourcesList.source )
-				{
-					if ( resVO.type == typeFilter )
-					{
-						resourceSelectorWindow.filteredResources++;
-						newResourcesList.addItem( resVO );
-					}
-				}
-
-				resourceSelectorWindow.resources = newResourcesList;
-			}
 		}
 
 		private function applyNameFilter( event : Event ) : void
@@ -324,8 +291,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var resVO : ResourceVO = event.currentTarget.resourcesList.selectedItem as ResourceVO;
 			resourceVO = resVO;
 
-			displayResourceProperties();
-
 			if ( !resourceVO.data || resourceVO.data != null )
 			{
 				BindingUtils.bindSetter( previewImage, resourceVO, "data" );
@@ -335,13 +300,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 
 			previewIconImage();
-		}
-
-		private function displayResourceProperties() : void
-		{
-			resourceSelectorWindow.resourceID.text 	 = "ID: " + resourceVO.id;
-			resourceSelectorWindow.resourceName.text = resourceVO.name;
-			resourceSelectorWindow.resourceType.text = resourceVO.type;
 		}
 
 		private function loadFileHandler( event : ResourceSelectorWindowEvent ) : void
@@ -355,7 +313,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var loader : Loader = new Loader();
 			loader.name = resourceVO.id;
 
-			resourceSelectorWindow.imagePreview.source = resourceVO.icon;
 			loader.loadBytes( resourceVO.icon );
 
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loaderComplete );
@@ -371,7 +328,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				if ( resourceVO.data != null )
 				{
-					resourceSelectorWindow.imagePreview.source = resourceVO.data;
 					loader.loadBytes( resourceVO.data );
 				}
 				else
@@ -394,8 +350,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 				loaderInfo = LoaderInfo( event.target );
 				bitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
 				bitmapData.draw( loaderInfo.loader );
-
-				resourceSelectorWindow.resourceResolution.text = bitmapData.width + " x " + bitmapData.height;
 			}
 		}
 

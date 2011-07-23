@@ -8,6 +8,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	
 	import mx.collections.ArrayList;
 	import mx.controls.ComboBox;
+	import mx.controls.Label;
+	import mx.controls.List;
 	import mx.controls.TextInput;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -18,7 +20,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	
 	import spark.components.ComboBox;
 	import spark.components.Label;
-	import spark.components.List;
 	import spark.components.TextArea;
 	import spark.components.TextInput;
 	import spark.components.TitleWindow;
@@ -46,6 +47,24 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		[SkinPart( required="true" )]
 		public var resourcesList : List;
+		
+		[SkinPart( required="true" )]
+		public var imagePreview: SmoothImage;
+		
+		[SkinPart( required="true" )]
+		public var resourceID: mx.controls.Label;
+		
+		[SkinPart( required="true" )]
+		public var resourceName: mx.controls.Label;
+		
+		[SkinPart( required="true" )]
+		public var resourceResolution: mx.controls.Label;
+		
+		[SkinPart( required="true" )]
+		public var resourceType: mx.controls.Label;
+		
+		[SkinPart( required="true" )]
+		public var typeFilter: spark.components.ComboBox;
 		
 		[SkinPart( required="true" )]
 		public var nameFilter: spark.components.TextInput;
@@ -129,20 +148,44 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 					selectedResourceIndex	= selInd;
 					scrollToIndex			= selInd;						
 				}
+				else
+				{						
+					clearPreloaderField();
+				}
 				
 				deleteResourceID = null;
 			}
 			
+			if ( scrollToIndex >= 0 )
+			{
+				resourcesList.scrollToIndex( scrollToIndex );
+				
+				scrollToIndex = -1;
+			}
+			
 			if ( selectedResourceIndex >= 0 )
 			{
-				if ( selectedResourceIndex != 0)
+				if ( selectedResourceIndex == 0)
 				{
+					clearPreloaderField();
+				}
+				else
+				{	
 					resourcesList.selectedIndex = selectedResourceIndex;
 					selectResource();						
 				}
 				
 				selectedResourceIndex = -1;
 			}
+		}
+		
+		private function clearPreloaderField( ) : void
+		{
+			imagePreview.source		= null;
+			resourceID.text			= "";
+			resourceName.text		= "";
+			resourceResolution.text	= "";
+			resourceType.text		= "";
 		}
 		
 		private function arrayWithoutResource( idRes : String ) : Array
@@ -208,7 +251,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				return;
 			}
 			
-			if ( event.target.selectedIndex != 0 )
+			if ( event.target.selectedIndex == 0 )
+				clearPreloaderField();
+			else
 				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) );
 		}	
 	}

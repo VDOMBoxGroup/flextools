@@ -3,7 +3,7 @@
 		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar" >
+		  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar" xmlns:attributeRenderers="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.*" >
 
 	<fx:Script source="richTextToolbarTemplate.as"/>
 
@@ -15,13 +15,13 @@
 			import mx.core.IUIComponent;
 			import mx.core.IVisualElement;
 			import mx.core.UIComponent;
-			import mx.events.ColorPickerEvent;
 			import mx.events.ListEvent;
 			import mx.managers.PopUpManager;
 			import mx.utils.StringUtil;
 			
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditor;
@@ -380,7 +380,7 @@
 				recalculateSize();
 			}
 
-			private function colorFillChanged( event : ColorPickerEvent ) : void
+			private function colorFillChanged( event : net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent ) : void
 			{
 				var hexValue : String = event.color.toString( 16 );
 				var hexLength : int = hexValue.length;
@@ -390,7 +390,7 @@
 				tinyMCE.execCommand( "HiliteColor", false, hexValue );
 			}
 
-			private function colorTextChanged( event : ColorPickerEvent ) : void
+			private function colorTextChanged( event : net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent ) : void
 			{
 				var hexValue : String = event.color.toString( 16 );
 				var hexLength : int = hexValue.length;
@@ -701,12 +701,12 @@
 
 		<s:Label text="Text Color"/>
 
-		<mx:ColorPicker focusEnabled="false" height="24" width="36"
+		<attributeRenderers:ColorPicker focusEnabled="false" height="24" width="36"
 						change="colorTextChanged(event)"/>
 		
 		<s:Label text="Fill Color"/>
 
-		<mx:ColorPicker focusEnabled="false" height="24" width="36"
+		<attributeRenderers:ColorPicker focusEnabled="false" height="24" width="36"
 						change="colorFillChanged(event)"/>
 
 		<mx:VRule height="24"/>

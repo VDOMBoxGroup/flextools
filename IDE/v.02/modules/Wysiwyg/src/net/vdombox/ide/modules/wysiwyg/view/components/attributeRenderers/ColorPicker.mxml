@@ -9,6 +9,10 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
+	<fx:Metadata>
+		[Event(name="change", type="net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent")]
+	</fx:Metadata>
+	
 	<fx:Script>
 		<![CDATA[
 			import mx.core.UIComponent;
@@ -61,12 +65,16 @@
 				ColorPickerWindow.show_window( this, _colorInNumber, true );
 			}
 			
+			private function change(event:ColorPickerEvent):void {
+				
+			}
 			
 			private function colorCompleteHandler( event : ColorPickerEvent ) : void
 			{
 				if ( event.type == 'apply' )
 				{
 					color = event.hexcolor;
+					dispatchEvent(new ColorPickerEvent("change", event.color, color));
 					//				_colorInNumber = event.color;
 				}
 			}
