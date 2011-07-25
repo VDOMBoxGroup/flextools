@@ -11,6 +11,7 @@
 			private var _id : String;
 			private var _objType : String = '';
 			
+			
 			[Bindable]
 			private var resourceVO : ResourceVO;
 			
@@ -23,13 +24,14 @@
 				
 				resName.text = '';
 				//				проверить
-				res.text = '';				
+				//res.text = '';				
 				
 				try 
 				{
 					objName = resourceVO.name;
 					objType = resourceVO.type;
 					objID	= resourceVO.id;
+					objSize = resourceVO.size;
 				}
 				catch ( error : Error ) 
 				{
@@ -40,9 +42,19 @@
 					smoothImage.source = resourceVO.icon;
 			}
 			
+			public function set objSize(size:int):void
+			{
+				if (size >= 0) {
+					resSize.text = (size/1000).toString() + "kb"; 
+				}
+					
+			}
+
+			
 			public function set objName( text : String ):void 
 			{ 
-				resName.text = text; 
+				resName.text = text;
+				resName.toolTip = text;
 			}
 			
 			public function get objName():String 
@@ -62,7 +74,7 @@
 			
 			public function set objType( objType : String) : void 
 			{
-				type.text = objType.toUpperCase() + ":";
+				type.text = objType.toUpperCase()/* + ":"*/;
 				_objType  = objType;
 			}
 			
@@ -88,6 +100,16 @@
 				//				}
 			}
 			
+			protected function smoothImage_rollOverHandler(event:MouseEvent):void
+			{
+				this.imageMagnifier.visible = true;
+			}
+			
+			protected function smoothImage_rollOutHandler(event:MouseEvent):void
+			{
+				this.imageMagnifier.visible = false;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -98,25 +120,19 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:Group height="50" width="178">
+	<s:Group height="64" width="184">
 	
-		<!--<s:Rect height="100%" width="100%" radiusX="5" radiusY="5" includeIn="selected">
+		<s:Rect height="100%" width="100%" radiusX="4" radiusY="4">
+			<s:stroke>
+				<s:SolidColorStroke color="#424242" weight="1"/>
+			</s:stroke>
 			<s:fill>
-				<s:SolidColor color.selected="red" color.normal="green" color.hovered="blue"/>
-			</s:fill>
-		</s:Rect>-->
-		
-		<!--<s:Rect height="100%" width="100%" radiusX="5" radiusY="5" includeIn="normal">
-			<s:fill>
-				<s:SolidColor color="green"/>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="#FFFFFF" color.selected="#b50000"/>
+					<s:GradientEntry color="#bcbcbc" color.selected="#9e0000"/>
+				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
-		
-		<s:Rect height="100%" width="100%" radiusX="5" radiusY="5" includeIn="hovered">
-			<s:fill>
-				<s:SolidColor color="blue"/>
-			</s:fill>
-		</s:Rect>-->
 		
 		<s:HGroup height="100%" width="100%"  
 			 		horizontalAlign="left"
@@ -125,40 +141,62 @@
 			 		gap="3"
 			 		xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*" >
 		
-			<s:Group width="44" height="44" left="0" right="0" bottom="0" top="0">
+			<s:Spacer width="4" />
+			<s:Group width="42" height="42">
 				
-				<resourceBrowserWindow:SmoothImage id="smoothImage" height="42" width="42"
-					verticalAlign="middle" horizontalAlign="center" maintainAspectRatio="true"
-					scaleContent="true" />
-					
+				<resourceBrowserWindow:SmoothImage id="smoothImage" height="100%" width="100%"
+					verticalAlign="middle" horizontalAlign="center" 
+					maintainAspectRatio="true"
+					scaleContent="true" 
+					rollOver="smoothImage_rollOverHandler(event)"
+					rollOut="smoothImage_rollOutHandler(event)"
+					smoothBitmapContent="true"
+					/>
+				
+				<s:Group id="imageMagnifier" visible="false" height="100%" width="100%" 
+						 mouseEnabled="false" mouseFocusEnabled="false" mouseChildren="false">
+					<s:Rect id="bgMagnifier" height="100%" width="100%">
+						<s:fill>
+							<s:SolidColor color="black" alpha="0.5" />
+						</s:fill>
+					</s:Rect>
+					<s:Image height="25" width="25" 
+							 mouseEnabled="false" mouseChildren="false" mouseFocusEnabled="false"
+							 source="@Embed('assets/magnifier.png')" 
+							 smooth="true" 
+							 skinClass="spark.skins.spark.ImageSkin"
+							 verticalAlign="middle" horizontalAlign="center"/>
+				</s:Group>
+				
 			</s:Group>
+			<s:Spacer width="2" />
 				
-			<s:VGroup width="122" gap="1">
+			<s:VGroup width="100%" height="30" gap="1" verticalAlign="middle" horizontalAlign="center">
+				<s:Label id="resName" width="100%" height="100%" text="img" textAlign="left" color="black" 
+						 fontWeight="bold" fontFamily="Arial" fontSize="12" toolTip="{this.resName.text}"/>
 				
-				<s:HGroup width="100%" gap="3" right="5" verticalAlign="middle">
-					
-					<s:Label id="type" text="JPG:" textAlign="left" fontWeight="bold" />
-					
-					<s:Label id="res" text="" textAlign="left" />
-					
-					<s:Spacer width="100%"/>
-					
-					<s:Button id="deleteButton"
-							   enabled="true"
-							   label="x"
-							   width="18" height="18"
-							   cornerRadius="0" 
-							   fontWeight="bold" fontSize="10"
-							   toolTip="Delete"
-							   left="0" right="0" top="0" bottom="0"
-							   color="#FF0000"
-							   click="deleteButton_clickHandler( event );"/>	
-					
-				</s:HGroup>
-				
-				<s:Label id="resName" text="img" textAlign="left" width="122" />	
-			
+				<s:HGroup width="100%" height="100%" gap="3" right="5" verticalAlign="middle">
+					<s:Label id="type" text="JPG" textAlign="left" color="black" 
+							 fontWeight="normal" fontFamily="Arial" fontSize="10"/>
+					<!--<s:Label id="res" text="" textAlign="left" />-->
+					<s:Spacer width="1"/>
+					<s:Label id="resSize" width="100%" text="0kb" textAlign="left" color="black" 
+							 fontWeight="normal" fontFamily="Arial" fontSize="10"/>
+				</s:HGroup>	
 			</s:VGroup>
+			
+			<s:Button id="deleteButton"
+					  enabled="true"
+					  label="x"
+					  width="18" height="18"
+					  cornerRadius="0" 
+					  fontWeight="bold" fontSize="10"
+					  toolTip="Delete"
+					  left="0" right="0" top="0" bottom="0"
+					  color="#FF0000"
+					  click="deleteButton_clickHandler( event );"/>
+			
+			<s:Spacer width="1.5" />
 			
 		</s:HGroup>
 		

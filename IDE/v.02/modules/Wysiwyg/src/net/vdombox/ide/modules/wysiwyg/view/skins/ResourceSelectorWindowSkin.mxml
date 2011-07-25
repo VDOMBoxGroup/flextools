@@ -4,7 +4,7 @@
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
 			 xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*"
-			 width="700" height="500" minWidth="800" minHeight="600"
+			 width="790" height="550" minWidth="600" minHeight="500"
 			 alpha.disabled="0.5"
 			 focusColor.normal="#CCCCCC">
 	<fx:Metadata>
@@ -108,18 +108,21 @@
 					</s:Rect>
 					
 					<s:List id="resourcesList" width="100%" height="100%"
-								 allowMultipleSelection="{hostComponent.multilineSelected}" borderVisible="false"
+								 allowMultipleSelection="{hostComponent.multilineSelected}" 
+								 enabled="true"
 								 change="hostComponent.selectResource(event)"
-								 contentBackgroundAlpha="0" contentBackgroundColor="#000000"
-								 dataProvider="{ hostComponent._resources }" enabled="true"
+								 contentBackgroundAlpha="0" contentBackgroundColor="#000000" borderVisible="false"
+								 dataProvider="{ hostComponent._resources }" 
 								 horizontalScrollPolicy="auto"
 								 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"
 								 verticalScrollPolicy="on"
-								 x.normal="0" chromeColor.normal="#CCCCCC"
-								 focusColor.normal="#CCCCCC" rollOverColor.normal="#9AEEA2"
-								 selectionColor="#EEA8E7">
+								 x.normal="0" 
+								 chromeColor="#777777"
+								 focusColor="#CCCCCC" 
+								 rollOverColor="#000000" selectionColor="#000000"
+								 top="20" left="4" right="2" bottom="10">
 						<s:layout>
-							<s:TileLayout horizontalGap="5" verticalGap="5" requestedColumnCount="3"  requestedRowCount="2">
+							<s:TileLayout horizontalGap="4" verticalGap="8" requestedColumnCount="4"  requestedRowCount="2">
 								
 							</s:TileLayout>
 						</s:layout>
