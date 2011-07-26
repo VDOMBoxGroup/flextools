@@ -3,7 +3,7 @@
 <s:ItemRenderer  xmlns:fx="http://ns.adobe.com/mxml/2009"
 				 xmlns:s="library://ns.adobe.com/flex/spark"
 				 xmlns:mx="library://ns.adobe.com/flex/mx">
-
+	
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.vo.ResourceVO;
@@ -48,9 +48,9 @@
 				if (size >= 0) {
 					resSize.text = (size/1000).toString() + "kb"; 
 				}
-					
+				
 			}
-
+			
 			
 			public function set objName( text : String ):void 
 			{ 
@@ -122,7 +122,7 @@
 	</s:states>
 	
 	<s:Group height="64" width="184">
-	
+		
 		<s:Rect height="100%" width="100%" radiusX="4" radiusY="4">
 			<s:stroke>
 				<s:SolidColorStroke color="#424242" weight="1"/>
@@ -136,23 +136,23 @@
 		</s:Rect>
 		
 		<s:HGroup height="100%" width="100%"  
-			 		horizontalAlign="left"
-			 		verticalAlign="middle"
-			 		paddingTop="3" paddingLeft="3" paddingRight="3" paddingBottom="3"
-			 		gap="3"
-			 		xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*" >
-		
-			<s:Spacer width="4" />
+				  horizontalAlign="left"
+				  verticalAlign="middle"
+				  paddingTop="3" paddingLeft="3" paddingRight="3" paddingBottom="3"
+				  gap="3"
+				  xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*" >
+			
+			<mx:Spacer width="4" />
 			<s:Group width="42" height="42">
 				
 				<resourceBrowserWindow:SmoothImage id="smoothImage" height="100%" width="100%"
-					verticalAlign="middle" horizontalAlign="center" 
-					maintainAspectRatio="true"
-					scaleContent="true" 
-					rollOver="smoothImage_rollOverHandler(event)"
-					rollOut="smoothImage_rollOutHandler(event)"
-					smoothBitmapContent="true"
-					/>
+												   verticalAlign="middle" horizontalAlign="center" 
+												   maintainAspectRatio="true"
+												   scaleContent="true" 
+												   rollOver="smoothImage_rollOverHandler(event)"
+												   rollOut="smoothImage_rollOutHandler(event)"
+												   smoothBitmapContent="true"
+												   />
 				
 				<s:Group id="imageMagnifier" visible="false" height="100%" width="100%" 
 						 mouseEnabled="false" mouseFocusEnabled="false" mouseChildren="false">
@@ -163,19 +163,17 @@
 					</s:Rect>
 					
 					<s:HGroup height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
-						<s:Image height="25" width="25" 
-							 mouseEnabled="false" mouseChildren="false" mouseFocusEnabled="false"
-							 source="@Embed('assets/magnifier.png')" 
-							 smooth="true" 
-							 skinClass="spark.skins.spark.ImageSkin"
-							 verticalAlign="middle" horizontalAlign="center"/>
+						<mx:Image height="25" width="25" 
+								 mouseEnabled="false" mouseChildren="false" mouseFocusEnabled="false"
+								 source="@Embed('assets/magnifier.png')" 
+								 verticalAlign="middle" horizontalAlign="center"/>
 					</s:HGroup>
 					
 				</s:Group>
 				
 			</s:Group>
-			<s:Spacer width="2" />
-				
+			<mx:Spacer width="2" />
+			
 			<s:VGroup width="100%" height="30" gap="1" verticalAlign="middle" horizontalAlign="center">
 				<s:Label id="resName" width="100%" height="100%" text="img" textAlign="left" color="black" 
 						 fontWeight="bold" fontFamily="Arial" fontSize="12" toolTip="{this.resName.text}"/>
@@ -184,7 +182,7 @@
 					<s:Label id="type" text="JPG" textAlign="left" color="black" 
 							 fontWeight="normal" fontFamily="Arial" fontSize="10"/>
 					<!--<s:Label id="res" text="" textAlign="left" />-->
-					<s:Spacer width="1"/>
+					<mx:Spacer width="1"/>
 					<s:Label id="resSize" width="100%" text="0kb" textAlign="left" color="black" 
 							 fontWeight="normal" fontFamily="Arial" fontSize="10"/>
 				</s:HGroup>	
@@ -199,7 +197,7 @@
 					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.DeleteResourceBtnSkin"
 					  />
 			
-			<s:Spacer width="1.5" />
+			<mx:Spacer width="1.5" />
 			
 		</s:HGroup>		
 	</s:Group>

@@ -82,15 +82,15 @@
 				  bottom="0" gap="15" paddingLeft="25" paddingTop="10"
 				  paddingRight="15" verticalAlign="middle">
 			
-			<s:Button width="138" height="29" 
+			<mx:Button width="138" height="29" 
 					  icon="@Embed(source='icons/Add.png')"
 					  label="Resources" cornerRadius="15" 
 					  click="{hostComponent.showResourceSelecterWindow()}"/>
 			
-			<s:Spacer width="100%"/>
+			<mx:Spacer width="100%"/>
 			
-			<s:Button width="48" height="29" cornerRadius="15" 
-					  icon="@Embed(source='icons/Cancel.png')" iconPlacement="top"
+			<mx:Button width="48" height="29" cornerRadius="15" 
+					  icon="@Embed(source='icons/Cancel.png')"
 					  click="{hostComponent.cancel_close_window()}"/>
 			
 			<s:Button width="88" height="29" label="Save" fontSize="18"

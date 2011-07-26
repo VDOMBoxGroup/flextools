@@ -80,16 +80,16 @@
 							 fontFamily="Tahoma" fontStyle="italic" text="Filter resource"
 							 focusColor.normal="#CCCCCC"/>
 				
-				<s:Image id="__spinner" height="18"  width="18" visible="false" skinClass="spark.skins.spark.ImageSkin"/>
+				<mx:Image id="__spinner" height="18"  width="18" visible="false"/>
 				
 				<s:Label text="Total Resources:" color="#FFFFFF"/>
 				
 				<s:Label text="{hostComponent.totalResources}"
 						 color="#FFFFFF" fontWeight="bold"/>
 				
-				<s:Spacer width="100%"/>
+				<mx:Spacer width="100%"/>
 				
-				<s:Button height="29" label="Upload File..." click="hostComponent.uploadFile(event)"
+				<mx:Button height="29" label="Upload File..." click="hostComponent.uploadFile(event)"
 						  cornerRadius="14" icon="@Embed(source='icons/Add.png')"
 						  focusColor.normal="#CCCCCC"/>	
 			</s:HGroup>
@@ -122,9 +122,8 @@
 								 enabled="true"
 								 contentBackgroundAlpha="0" contentBackgroundColor="#000000" borderVisible="false"
 								 dataProvider="{ hostComponent._resources }"
-								 horizontalScrollPolicy="auto"
 								 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"
-								 verticalScrollPolicy="on"
+								 
 								 x.normal="0" 
 								 chromeColor="#777777"
 								 focusColor="#CCCCCC" 
@@ -145,9 +144,9 @@
 						  paddingBottom="2" paddingLeft="10" paddingRight="10" paddingTop="2"
 						  verticalAlign="middle" horizontalAlign="right">
 					
-					<s:Button id="cancelButton" width="48" height="29"
+					<mx:Button id="cancelButton" width="48" height="29"
 							  click="hostComponent.onCancelClick()" cornerRadius="14"
-							  icon="@Embed(source='icons/Cancel.png')" iconPlacement="top"
+							  icon="@Embed(source='icons/Cancel.png')"
 							  focusColor.normal="#CCCCCC"/>
 					
 					<s:Button height="29" minWidth="88" label="Insert"

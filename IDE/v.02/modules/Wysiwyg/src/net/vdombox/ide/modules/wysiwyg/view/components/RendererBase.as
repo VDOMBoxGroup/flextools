@@ -179,7 +179,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					itemFactory = new ClassFactory( RendererBase );
 					layout = new VerticalLayout();
 					layout.clipAndEnableScrolling = true;
-					VerticalLayout( layout ).gap = 0;
+					//VerticalLayout( layout ).gap = 0;
 					itemFactory.properties = { layout: layout };
 
 					break;
@@ -190,7 +190,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					itemFactory = new ClassFactory( RendererBase );
 					layout = new HorizontalLayout();
 					layout.clipAndEnableScrolling = true;
-					HorizontalLayout( layout ).gap = 0;
+					//HorizontalLayout( layout ).gap = 0;
 					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
 
 					break;
