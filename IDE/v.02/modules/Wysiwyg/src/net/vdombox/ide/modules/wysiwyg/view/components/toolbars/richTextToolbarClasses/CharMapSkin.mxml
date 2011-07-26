@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="{hostComponent.init()}">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap")]
+	</fx:Metadata>
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="inactiveWithControlBar" />
+		<s:State name="inactive" />
+		<s:State name="disabledWithControlBar" />
+		<s:State name="normalWithControlBar" />
+		<s:State name="disabled" />
+		<s:State name="normal" />
+	</s:states>
+	
+	<!-- SkinParts
+	name=contentGroup, type=spark.components.Group, required=false
+	name=moveArea, type=flash.display.InteractiveObject, required=false
+	name=closeButton, type=spark.components.Button, required=false
+	name=titleDisplay, type=spark.core.IDisplayText, required=false
+	name=controlBarGroup, type=spark.components.Group, required=false
+	-->
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor color="#003300"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:VGroup width="100%" height="100%">
+		<s:Group width="100%" height="40">
+			<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+				<s:Label text="Select custom character"/>			
+			</s:HGroup>
+			
+			<s:HGroup width="100%" height="100%" horizontalAlign="right" verticalAlign="middle">
+				<s:Button label="x" click="{hostComponent.closeHandler()}" skinClass="net.vdombox.skins.MainCloseBtnSkin"/>			
+			</s:HGroup>
+		</s:Group>
+		
+		<s:HGroup width="100%"
+				  paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+			
+			<mx:Grid id="charGrid"
+					 horizontalGap="3" verticalGap="3"
+					 click="{hostComponent.mouseClickHandler(event)}"
+					 mouseOver="{hostComponent.mouseOverHandler(event)}" />
+			
+			<s:VGroup horizontalAlign="center" gap="4">
+				
+				<mx:Canvas height="70" width="100"
+						   borderColor="#7C7C7C" borderStyle="solid">
+					
+					<mx:Label id="preview"
+							 width="100%" y="10"
+							 fontFamily="Times New Roman" fontSize="40" fontWeight="bold" textAlign="center" />
+				</mx:Canvas>
+				
+				<mx:Text id="description"
+						height="45" text="Text" width="100"
+						textAlign="center" />
+				
+				<mx:Canvas height="50" width="100"
+						   borderColor="#606085" borderStyle="solid">
+					
+					<mx:Label text="HTML-Code" width="100%" y="5"
+							 textAlign="center" />
+					
+					<mx:Label id="htmlCode"
+							 width="100%" y="25"
+							 fontSize="12" fontWeight="bold" textAlign="center" />
+				</mx:Canvas>
+				
+				<mx:Canvas height="50" width="100"
+						   borderColor="#606085" borderStyle="solid">
+					
+					<mx:Label text="NUM-Code" width="100%" y="5"
+							 textAlign="center" />
+					
+					<mx:Label id="numCode"
+							 width="100%" y="25"
+							 fontSize="12" fontWeight="bold" textAlign="center" />
+				</mx:Canvas>
+			</s:VGroup>
+			
+		</s:HGroup>
+		
+	</s:VGroup>
+	
+</s:SparkSkin>

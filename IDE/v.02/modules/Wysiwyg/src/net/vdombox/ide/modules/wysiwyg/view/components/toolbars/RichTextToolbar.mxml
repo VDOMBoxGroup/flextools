@@ -407,9 +407,10 @@
 			{
 				
 				event.currentTarget.removeEventListener( "charSelected", charSelectedHandler );
+				//var str : String = event.currentTarget.charCode;
 				
 				tinyMCE.execCommand( "mceInsertContent", false, event.currentTarget.charCode );
-				PopUpManager.removePopUp( UIComponent( event.currentTarget ) );
+//				PopUpManager.removePopUp( UIComponent( event.currentTarget ) );
 				recalculateSize();
 			}
 			
