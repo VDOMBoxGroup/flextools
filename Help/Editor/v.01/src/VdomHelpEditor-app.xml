@@ -85,11 +85,11 @@
 	</initialWindow>
 
 	<!-- The subpath of the standard default installation location to use. Optional. -->
-	<!-- <installFolder></installFolder> -->
+	<installFolder>VDOM</installFolder>
 
 	<!-- The subpath of the Programs menu to use. (Ignored on operating systems 
 		without a Programs menu.) Optional. -->
-	<!-- <programMenuFolder></programMenuFolder> -->
+	<programMenuFolder>VDOM</programMenuFolder>
 
 	<!-- The icon the system uses for the application. For at least one resolution, 
 		specify the path to a PNG file included in the AIR package. Optional. -->
