@@ -92,7 +92,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					try
 					{
-						NoneIcon.name = "resource no";
+						NoneIcon.name = "Empty";
 						NoneIcon.icon = file.data;
 						NoneIcon.data = file.data;
 					}

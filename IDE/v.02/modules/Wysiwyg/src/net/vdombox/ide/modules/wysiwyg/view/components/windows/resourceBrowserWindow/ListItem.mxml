@@ -28,6 +28,7 @@
 				
 				try 
 				{
+					
 					objName = resourceVO.name;
 					objType = resourceVO.type;
 					objID	= resourceVO.id;
@@ -155,17 +156,21 @@
 				
 				<s:Group id="imageMagnifier" visible="false" height="100%" width="100%" 
 						 mouseEnabled="false" mouseFocusEnabled="false" mouseChildren="false">
-					<s:Rect id="bgMagnifier" height="100%" width="100%">
+					<s:Rect height="100%" width="100%">
 						<s:fill>
 							<s:SolidColor color="black" alpha="0.5" />
 						</s:fill>
 					</s:Rect>
-					<s:Image height="25" width="25" 
+					
+					<s:HGroup height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
+						<s:Image height="25" width="25" 
 							 mouseEnabled="false" mouseChildren="false" mouseFocusEnabled="false"
 							 source="@Embed('assets/magnifier.png')" 
 							 smooth="true" 
 							 skinClass="spark.skins.spark.ImageSkin"
 							 verticalAlign="middle" horizontalAlign="center"/>
+					</s:HGroup>
+					
 				</s:Group>
 				
 			</s:Group>
@@ -187,19 +192,16 @@
 			
 			<s:Button id="deleteButton"
 					  enabled="true"
-					  label="x"
-					  width="18" height="18"
-					  cornerRadius="0" 
-					  fontWeight="bold" fontSize="10"
+					  width="16" height="16"
 					  toolTip="Delete"
 					  left="0" right="0" top="0" bottom="0"
-					  color="#FF0000"
-					  click="deleteButton_clickHandler( event );"/>
+					  click="deleteButton_clickHandler( event );"
+					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.DeleteResourceBtnSkin"
+					  />
 			
 			<s:Spacer width="1.5" />
 			
-		</s:HGroup>
-		
+		</s:HGroup>		
 	</s:Group>
 	
 </s:ItemRenderer>
