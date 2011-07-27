@@ -11,7 +11,7 @@
 	paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
  	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
  
-	<resourceBrowser:SmoothImage id="__image" horizontalAlign="center" verticalAlign="middle"
+	<resourceBrowser:SmoothImage id="image" horizontalAlign="center" verticalAlign="middle"
 		maintainAspectRatio="true" scaleContent="true" width="100" height="100" />
 
 	<mx:Script>
@@ -49,45 +49,45 @@
 			}
 			
 			private function ioErrorHandler(ioEvent:IOErrorEvent):void {
-				__image.width = 64;
-				__image.height = 64;
-				this.height = __image.height + 22;
-				this.width = __image.width + 22;
+				image.width = 64;
+				image.height = 64;
+				this.height = image.height + 22;
+				this.width = image.width + 22;
 
-				__image.source = typesIcons.broken_Icon;
+				image.source = typesIcons.broken_Icon;
 			}
 			
 			private function imageLoadComplete(event:Event):void {
-				__image.source = loader.content;			
+				image.source = loader.content;			
 				imageWidth = loader.width;
 				imageHeight = loader.height;
 				
 				if (imageWidth > _widthLimit || imageHeight > _heightLimit) {
 					if (_heightLimit >= int(Math.round(_widthLimit * imageHeight / imageWidth))) {
-						__image.width = _widthLimit;
-						__image.height = int(Math.round(_widthLimit * imageHeight / imageWidth));
+						image.width = _widthLimit;
+						image.height = int(Math.round(_widthLimit * imageHeight / imageWidth));
 					} else {
-						__image.height = _heightLimit;
-						__image.width = int(Math.round(_heightLimit * imageWidth / imageHeight));
+						image.height = _heightLimit;
+						image.width = int(Math.round(_heightLimit * imageWidth / imageHeight));
 					}					
 				} else {
-					__image.height = imageHeight;
-					__image.width = imageWidth;
+					image.height = imageHeight;
+					image.width = imageWidth;
 				}
 				
-				this.height = __image.height + 22;
-				this.width = __image.width + 22;
+				this.height = image.height + 22;
+				this.width = image.width + 22;
 				
 				var completeEvent:Event = new Event(Event.COMPLETE);
 				this.dispatchEvent(completeEvent);			
 			}
 			
 			public function set imageSource(value:Object):void {
-				__image.width = 64;
-				__image.height = 64;
-				this.height = __image.height + 22;
-				this.width = __image.width + 22;
-				__image.source = value;
+				image.width = 64;
+				image.height = 64;
+				this.height = image.height + 22;
+				this.width = image.width + 22;
+				image.source = value;
 			}
 			
 			public function set heightLimit(value:int):void {

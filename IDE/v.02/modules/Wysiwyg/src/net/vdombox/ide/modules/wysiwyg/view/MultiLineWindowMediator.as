@@ -48,7 +48,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sendNotification( ApplicationFacade.GET_PAGES,     sessionProxy.selectedApplication );
 			
 			multilineWindow.addEventListener( MultilineWindowEvent.APPLY, removeYourself, false, 0, true );
-			multilineWindow.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false, 0, true );
+			multilineWindow.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler );
 		}
 		
 		override public function onRemove() : void
@@ -94,7 +94,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				multilineWindow.textAreaContainer.insertText((event.target as ResourceSelectorWindow).value);	
 				resourceSelectorWindow.removeEventListener(Event.CHANGE, applyHandler, false);
 				PopUpManager.removePopUp( resourceSelectorWindow );
-				facade.removeMediator( mediatorName );
+//				facade.removeMediator( mediatorName );
 				//resourceSelectorWindow.dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) );
 			}		
 		}

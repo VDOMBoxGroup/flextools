@@ -129,7 +129,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		override protected function commitProperties():void
 		{
-			trace ("[ResourceSelectorWindow] commitProperties");
 			super.commitProperties();
 			
 			if ( deleteResourceID )
@@ -220,7 +219,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		public function selectResource( event:Event = null ):void
 		{				
-			trace ("[ResourceSelectorWindow] selectResource: event = " + event);
 			/*if ( event == null )
 			{
 				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) );
