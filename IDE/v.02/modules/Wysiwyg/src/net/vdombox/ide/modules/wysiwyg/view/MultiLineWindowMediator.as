@@ -60,7 +60,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function removeYourself ( event : MultilineWindowEvent ) : void
 		{
-			multilineWindow.removeEventListener( MultilineWindowEvent.APPLY, removeYourself, false );
+			//multilineWindow.removeEventListener( MultilineWindowEvent.APPLY, removeYourself, false );
 			facade.removeMediator( NAME );
 		}
 		
