@@ -212,7 +212,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function dataLoaded( object : Object = null ) : void
 		{
-			trace ("!!!!!!!!! dataLoaded !!!!!!!!!!");
+			trace ("[ResourceSelectorWindowMediator] dataLoaded: ");
 		}
 
 		private function addHandlers() : void
@@ -289,6 +289,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function loadResourceHandler( event : Event ) : void
 		{
+			trace ("[ResourceSelectorWindowMediator] loadResourceHandler");
 			var resVO : ResourceVO = event.currentTarget.resourcesList.selectedItem as ResourceVO;
 			resourceVO = resVO;
 

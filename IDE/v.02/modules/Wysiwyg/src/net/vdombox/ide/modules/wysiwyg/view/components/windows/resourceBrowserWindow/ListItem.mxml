@@ -22,7 +22,7 @@
 			
 			override public function set data ( value : Object ) : void 
 			{
-				trace ("!!!!!!!!! set data !!!!!!!!!!");
+				trace ("[ListItem] set data");
 				
 				super.data = value;
 				
