@@ -5,6 +5,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
+	import net.vdombox.ide.modules.wysiwyg.view.VdomObjectEditorMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -22,21 +24,21 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			var vdomObjectXMLPresentationVO : VdomObjectXMLPresentationVO = body.vdomObjectXMLPresentationVO;
 
-//			if ( vdomObjectVO is PageVO )
-//			{
-//				var pageEditorMediator : PageEditorMediator;
-//
-//				for ( var pageEditorMediatorName : String in PageEditorMediator.instancesNameList )
-//				{
-//					pageEditorMediator = facade.retrieveMediator( pageEditorMediatorName ) as PageEditorMediator;
-//
-//					if ( pageEditorMediator.pageVO && pageEditorMediator.pageVO.id == vdomObjectVO.id )
-//					{
-//						pageEditorMediator.xmlPresentation = vdomObjectXMLPresentationVO;
-//						break;
-//					}
-//				}
-//			}
+			if ( vdomObjectVO is PageVO )
+			{
+				var vdomObjectEditorMediator : VdomObjectEditorMediator;
+
+				for ( var pageEditorMediatorName : String in VdomObjectEditorMediator.instancesNameList )
+				{
+					vdomObjectEditorMediator = facade.retrieveMediator( pageEditorMediatorName ) as VdomObjectEditorMediator;
+
+					if ( vdomObjectEditorMediator.editorVO && vdomObjectEditorMediator.editorVO.vdomObjectVO.id== vdomObjectVO.id )
+					{
+						vdomObjectEditorMediator.vdomObjectXMLPresentationVO = vdomObjectXMLPresentationVO;
+						break;
+					}
+				}
+			}
 //			else if ( vdomObjectVO is ObjectVO )
 //			{
 //				var objectEditorMediator : ObjectEditorMediator;

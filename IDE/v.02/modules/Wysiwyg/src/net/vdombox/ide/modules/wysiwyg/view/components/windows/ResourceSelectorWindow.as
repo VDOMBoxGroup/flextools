@@ -75,11 +75,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			}
 			else
 			{
-				for each(var item:ResourceVO in resourcesList.selectedItems)
+				if (resourcesList.selectedItems.length > 0)
 				{
-					str += "#Res(" + item.id + "), ";
+					for each(var item:ResourceVO in resourcesList.selectedItems)
+					{
+						str += "#Res(" + item.id + "), ";
+					}
+					str = str.substr(0, str.length - 2);
 				}
-				str = str.substr(0, str.length - 2);
+				else
+					str = "#Res()";	
 			}
 			return str;
 		}

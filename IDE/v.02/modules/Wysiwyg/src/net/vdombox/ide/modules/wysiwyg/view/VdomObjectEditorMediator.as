@@ -3,11 +3,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-
+	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
@@ -19,7 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -49,6 +50,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 		public function get editorVO() : EditorVO
 		{
 			return editor ? editor.editorVO : null;
+		}
+
+		public function get vdomObjectXMLPresentationVO() : VdomObjectXMLPresentationVO
+		{
+			return editor.xmlPresentation;
+		}
+		
+		public function set vdomObjectXMLPresentationVO( value : VdomObjectXMLPresentationVO ) : void
+		{
+			editor.xmlPresentation = value;
 		}
 
 

@@ -15,10 +15,17 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.events.StateChangeEvent;
 			private function creationCompleteHandler() : void
 			{
 				currentState = "wysiwyg";
+				//addEventListener(StateChangeEvent.CURRENT_STATE_CHANGE, amm, false, 0, true);
 			}
+			
+			/*private function amm(event : StateChangeEvent): void
+			{
+				var tt : int = 0;
+			}*/
 
 			override protected function commitProperties() : void
 			{
@@ -78,15 +85,17 @@
 
 		<mx:Spacer width="100%"/>
 
+		<libcomponents:WorkAreaButton id="xmlButton"
+									  enabled.wysiwyg="true" enabled.xml="false" height="20" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"
+									  click="currentState='xml'"
+									  highlighted.xml="true" highlighted.wysiwyg="false"/>
+		
 		<libcomponents:WorkAreaButton id="wysiwygButton"
 									  enabled.wysiwyg="false" enabled.xml="true" height="20" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"
 									  click="currentState='wysiwyg'"
 									  highlighted.wysiwyg="true" highlighted.xml="false"/>
 
-		<libcomponents:WorkAreaButton id="xmlButton"
-									  enabled.wysiwyg="true" enabled.xml="false" height="20" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"
-									  click="currentState='xml'"
-									  highlighted.xml="true" highlighted.wysiwyg="false"/>
+		
 	</s:HGroup>
 
 	<s:Rect height="100%" width="100%"

@@ -5,8 +5,9 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  height="100%" width="100%"
 					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.EditorSkin"
-					  preinitialize="preinitializeHandler()"
-					  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IEditor">
+					  preinitialize="skinnablecontainer1_preinitializeHandler(event)"
+					  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IEditor"
+					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
@@ -47,6 +48,8 @@
 
 			private var isVdomObjectVOChanged : Boolean;
 			private var isStatusChanged : Boolean;
+			
+			private var _value : VdomObjectXMLPresentationVO;
 
 			
 			public function get editorVO() : EditorVO
@@ -81,6 +84,18 @@
 				_status = value;
 
 				isStatusChanged = true;
+			}
+			
+			public function get xmlPresentation(): VdomObjectXMLPresentationVO
+			{
+					return _value;
+			}
+			
+			public function set xmlPresentation(value: VdomObjectXMLPresentationVO): void
+			{
+				_value = value;
+				if ( xmlScriptEditor )
+					xmlScriptEditor.scriptAreaComponent.text = value.xmlPresentation;
 			}
 
 			override protected function commitProperties() : void
@@ -182,18 +197,6 @@
 					dispatchEvent( new EditorEvent( EditorEvent.XML_EDITOR_OPENED ) )
 			}
 
-			private function preinitializeHandler() : void
-			{
-				addHandlers();
-				dispatchEvent( new EditorEvent( EditorEvent.PREINITIALIZED ) );
-			}
-
-			private function creationCompleteHandler( event : FlexEvent ) : void
-			{
-				skin.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler, false, 0, true );
-				dispatchStateEvent();
-			}
-
 			private function removedFromStageHandler( event : Event ) : void
 			{
 				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
@@ -234,6 +237,21 @@
 
 				dispatchEvent( ee );
 			}
+			
+			protected function skinnablecontainer1_preinitializeHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				addHandlers();
+				dispatchEvent( new EditorEvent( EditorEvent.PREINITIALIZED ) );
+			}
+			
+			protected function skinnablecontainer1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				skin.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler, false, 0, true );
+				dispatchStateEvent();
+			}
+			
 		]]>
 	</fx:Script>
 
