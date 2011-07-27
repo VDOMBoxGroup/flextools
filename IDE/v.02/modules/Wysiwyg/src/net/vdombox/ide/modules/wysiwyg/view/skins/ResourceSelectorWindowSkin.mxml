@@ -22,10 +22,9 @@
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 			
 			
-			protected function resourcesList_initializeHandler(event:FlexEvent):void
+			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
-				trace ("11111111111111");
+				trace ("resourcesList_creationCompleteHandler !!!");
 			}
 			
 		]]>
@@ -130,7 +129,7 @@
 								 rollOverColor="#000000" selectionColor="#000000"
 								 top="20" left="4" right="2" bottom="10"
 								 change="hostComponent.selectResource(event)"
-								 initialize="resourcesList_initializeHandler(event)">
+								 creationComplete="resourcesList_creationCompleteHandler(event)">
 						<s:layout>
 							<s:TileLayout horizontalGap="4" verticalGap="8" requestedColumnCount="4"  requestedRowCount="2">
 								

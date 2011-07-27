@@ -48,11 +48,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var allResourcesList : ArrayList;
 
-		private var resourceVO : ResourceVO = new ResourceVO( "temp owner" );
+		private var resourceVO : ResourceVO = new ResourceVO( ResourceVO.RESOURCE_TEMP );
 
 		private var sessionProxy 	: SessionProxy;
 
-		private var NoneIcon : ResourceVO = new ResourceVO( "none owner" );
+		private var noneIcon : ResourceVO = new ResourceVO( ResourceVO.RESOURCE_NONE );
 
 
 		public function ResourceSelectorWindowMediator( resourceSelectorWindow : ResourceSelectorWindow ) : void
@@ -92,9 +92,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					try
 					{
-						NoneIcon.name = "Empty";
-						NoneIcon.icon = file.data;
-						NoneIcon.data = file.data;
+						noneIcon.name = "Empty";
+						noneIcon.icon = file.data;
+						noneIcon.data = file.data;
 					}
 					catch ( error : Error )
 					{
@@ -171,7 +171,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 						sendNotification( ApplicationFacade.GET_ICON, resVO );
 					}
 					
-					resourceSelectorWindow.resources.addItemAt( NoneIcon, 0 );
+					// set empty resource as null in ListItem
+					resourceSelectorWindow.resources.addItemAt( null, 0 );
 					resourceSelectorWindow.totalResources = resourceSelectorWindow.resources.length-1;
 
 					break;
@@ -211,7 +212,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function dataLoaded( object : Object = null ) : void
 		{
-
+			trace ("!!!!!!!!! dataLoaded !!!!!!!!!!");
 		}
 
 		private function addHandlers() : void
