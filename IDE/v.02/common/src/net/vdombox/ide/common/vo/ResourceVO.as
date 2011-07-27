@@ -23,6 +23,9 @@ package net.vdombox.ide.common.vo
 		public static const ICON_LOADED		: uint = 7;
 
 		public static const ICON_SIZE		: Number = 42; 
+		
+		public static const RESOURCE_TEMP	: String = "tempResource";
+		public static const RESOURCE_NONE	: String = "noneResource";
 
 		public function ResourceVO( ownerID : String )
 		{
