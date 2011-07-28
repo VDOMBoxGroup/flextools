@@ -246,7 +246,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( event.type == EditorEvent.WYSIWYG_OPENED && editor.editorVO.vdomObjectVO )
 				sendNotification( ApplicationFacade.GET_WYSIWYG, editor.editorVO.vdomObjectVO );
 			else if ( event.type == EditorEvent.XML_EDITOR_OPENED )
-				sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { pageVO: editor.editorVO.vdomObjectVO } );
+			{
+				var selectedPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
+				var selectedObject : IVDOMObjectVO = sessionProxy.selectedObject as IVDOMObjectVO;
+				
+				if (selectedObject == null)
+					sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { pageVO: editor.editorVO.vdomObjectVO } );
+				else
+					sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { objectVO: selectedObject } );
+			}
 		}
 
 		private function xmlSaveHandler( event : EditorEvent ) : void

@@ -341,6 +341,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.GET_XML_PRESENTATION:
 				{
+					
 					if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.XML_PRESENTATION, body );
 					else if ( body.hasOwnProperty( "objectVO" ) )

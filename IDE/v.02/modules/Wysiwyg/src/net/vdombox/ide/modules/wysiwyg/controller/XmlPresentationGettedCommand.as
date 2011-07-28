@@ -2,7 +2,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
@@ -18,40 +17,72 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var body : Object = notification.getBody();
 			var vdomObjectVO : IVDOMObjectVO = body.pageVO ? body.pageVO : body.objectVO;
 
+			var vdObjectVO : ObjectVO = null;
+			
 			if ( !vdomObjectVO )
 				return;
+			else if (vdomObjectVO is ObjectVO)
+				vdObjectVO = vdomObjectVO as ObjectVO;
+				
 
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			var vdomObjectXMLPresentationVO : VdomObjectXMLPresentationVO = body.vdomObjectXMLPresentationVO;
 			
 			var vdomObjectEditorMediator : VdomObjectEditorMediator;
-
-			if ( vdomObjectVO is PageVO )
+			
+			
+			var mediator : VdomObjectEditorMediator;
+			var mediatorName : String;
+			
+			for ( mediatorName in VdomObjectEditorMediator.instancesNameList )
 			{
-				for ( var pageEditorMediatorName : String in VdomObjectEditorMediator.instancesNameList )
+				mediator = facade.retrieveMediator( mediatorName ) as VdomObjectEditorMediator;
+				
+				try
 				{
-					vdomObjectEditorMediator = facade.retrieveMediator( pageEditorMediatorName ) as VdomObjectEditorMediator;
-
-					if ( vdomObjectEditorMediator.editorVO && vdomObjectEditorMediator.editorVO.vdomObjectVO.id== vdomObjectVO.id )
+					if (vdObjectVO == null)
 					{
-						vdomObjectEditorMediator.vdomObjectXMLPresentationVO = vdomObjectXMLPresentationVO;
-						break;
+						if( mediator.editorVO.vdomObjectVO.id == vdomObjectVO.id )
+							mediator.vdomObjectXMLPresentationVO = vdomObjectXMLPresentationVO;
+					}
+					else
+					{
+						if( mediator.editorVO.vdomObjectVO.id == vdObjectVO.pageVO.id )
+							mediator.vdomObjectXMLPresentationVO = vdomObjectXMLPresentationVO;
 					}
 				}
+				catch( error : Error )
+				{}
 			}
-			else if ( vdomObjectVO is ObjectVO )
-			{
-				for ( var objectEditorMediatorName : String in VdomObjectEditorMediator.instancesNameList )
-				{
-					vdomObjectEditorMediator = facade.retrieveMediator( objectEditorMediatorName ) as VdomObjectEditorMediator;
+			
+			
 
-					if ( vdomObjectEditorMediator.editorVO && vdomObjectEditorMediator.editorVO.vdomObjectVO.id== vdomObjectVO.id )
-					{
-						vdomObjectEditorMediator.vdomObjectXMLPresentationVO = vdomObjectXMLPresentationVO;
-						break;
-					}
-				}
-			}
+//			if ( vdomObjectVO is PageVO )
+//			{
+//				for ( var pageEditorMediatorName : String in VdomObjectEditorMediator.instancesNameList )
+//				{
+//					vdomObjectEditorMediator = facade.retrieveMediator( pageEditorMediatorName ) as VdomObjectEditorMediator;
+//
+//					if ( vdomObjectEditorMediator.editorVO && vdomObjectEditorMediator.editorVO.vdomObjectVO.id== vdomObjectVO.id )
+//					{
+//						vdomObjectEditorMediator.vdomObjectXMLPresentationVO = vdomObjectXMLPresentationVO;
+//						break;
+//					}
+//				}
+//			}
+//			else if ( vdomObjectVO is ObjectVO )
+//			{
+//				for ( var objectEditorMediatorName : String in VdomObjectEditorMediator.instancesNameList )
+//				{
+//					vdomObjectEditorMediator = facade.retrieveMediator( objectEditorMediatorName ) as VdomObjectEditorMediator;
+//
+//					if ( vdomObjectEditorMediator.editorVO && vdomObjectEditorMediator.editorVO.vdomObjectVO.id== vdomObjectVO.id )
+//					{
+//						vdomObjectEditorMediator.vdomObjectXMLPresentationVO = vdomObjectXMLPresentationVO;
+//						break;
+//					}
+//				}
+//			}
 		}
 	}
 }
