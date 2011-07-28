@@ -205,10 +205,11 @@
 			
 				<mx:Button width="48" height="29" cornerRadius="15"
 						  icon="@Embed(source='icons/Cancel.png')"
-					  		click="hostComponent.cancel_close_window()" />
+					  	  click="hostComponent.cancel_close_window()" />
 			
-				<s:Button label="Use" width="88" height="29" cornerRadius="15" fontSize="18"
-					  		click="hostComponent.ok_close_window()" />
+				<s:Button height="29" cornerRadius="15"
+						  label="{ resourceManager.getString( 'Wysiwyg_General', 'color_picker_window_use' ) }"
+					  	  click="hostComponent.ok_close_window()" />
 			</mx:ControlBar>	
 		
 		</s:Group>	

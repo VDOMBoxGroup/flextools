@@ -222,16 +222,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 				else
 					requestQue[ newObjectID ][ "change" ] = true;
 
+				trace("GET_OBJECT");
 				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ newPageID ], objectID: newObjectID } );
 			}
 			else if ( newPageID != currentPageID )
 			{
 				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ newPageID ] );
+				trace("CHANGE_SELECTED_PAGE_REQUEST");
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, _pages[ newPageID ] );
 			}
 
 			else if ( newPageID == currentPageID && !newObjectID )
 			{
+				
+				trace("CHANGE_SELECTED_OBJECT_REQUEST");
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, _pages[ newPageID ] );
 			}
 		}

@@ -54,35 +54,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				catch( error : Error )
 				{}
 			}
-			
-			
-
-//			if ( vdomObjectVO is PageVO )
-//			{
-//				for ( var pageEditorMediatorName : String in VdomObjectEditorMediator.instancesNameList )
-//				{
-//					vdomObjectEditorMediator = facade.retrieveMediator( pageEditorMediatorName ) as VdomObjectEditorMediator;
-//
-//					if ( vdomObjectEditorMediator.editorVO && vdomObjectEditorMediator.editorVO.vdomObjectVO.id== vdomObjectVO.id )
-//					{
-//						vdomObjectEditorMediator.vdomObjectXMLPresentationVO = vdomObjectXMLPresentationVO;
-//						break;
-//					}
-//				}
-//			}
-//			else if ( vdomObjectVO is ObjectVO )
-//			{
-//				for ( var objectEditorMediatorName : String in VdomObjectEditorMediator.instancesNameList )
-//				{
-//					vdomObjectEditorMediator = facade.retrieveMediator( objectEditorMediatorName ) as VdomObjectEditorMediator;
-//
-//					if ( vdomObjectEditorMediator.editorVO && vdomObjectEditorMediator.editorVO.vdomObjectVO.id== vdomObjectVO.id )
-//					{
-//						vdomObjectEditorMediator.vdomObjectXMLPresentationVO = vdomObjectXMLPresentationVO;
-//						break;
-//					}
-//				}
-//			}
 		}
 	}
 }

@@ -126,25 +126,34 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( selectedPage.id != editor.editorVO.vdomObjectVO.id )
 						break;
 
-					if ( selectedObject )
+					if ( editor.state.substr( 0, 7 ) == "wysiwyg")
 					{
-						var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-						var renderers : Array = renderProxy.getRenderersByVO( selectedObject );
-
-						// find nesesary renderer
-
-						for each ( var renderer : RendererBase in renderers )
+						if ( selectedObject )
 						{
-							if ( renderer.renderVO.vdomObjectVO.id == selectedObject.id )
+							var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+							var renderers : Array = renderProxy.getRenderersByVO( selectedObject );
+
+							// find nesesary renderer
+
+							for each ( var renderer : RendererBase in renderers )
 							{
-								selRenderer = renderer;
-								break;
+								if ( renderer.renderVO.vdomObjectVO.id == selectedObject.id )
+								{
+									selRenderer = renderer;
+									break;
+								}
 							}
 						}
+						// mark object
+						editor.selectedRenderer = selRenderer;
 					}
-
-					// mark object
-					editor.selectedRenderer = selRenderer;
+					else if (editor.state.substr( 0, 3 ) == "xml")
+					{
+						if (selectedObject == null)
+							sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { pageVO: editor.editorVO.vdomObjectVO } );
+						else
+							sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { objectVO: selectedObject } );
+					}
 
 					break;
 				}
@@ -227,7 +236,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		private function clearData() : void
+			
 		{
+			trace("Clear()");
 			editor.editorVO.vdomObjectVO = null;
 		}
 

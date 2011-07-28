@@ -97,6 +97,11 @@
 				if ( xmlScriptEditor )
 					xmlScriptEditor.scriptAreaComponent.text = value.xmlPresentation;
 			}
+			
+			public function get state(): String
+			{
+				return skin.currentState;
+			}
 
 			override protected function commitProperties() : void
 			{

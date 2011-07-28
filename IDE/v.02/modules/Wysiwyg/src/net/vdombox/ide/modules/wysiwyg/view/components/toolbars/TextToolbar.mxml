@@ -445,7 +445,7 @@
 
 	<mx:VRule height="24"/>
 
-	<s:Label text="Font"/>
+	<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'text_toolbar_font' ) }"/>
 
 	<mx:ComboBox id="fontSelector"
 				 focusEnabled="false" height="24" styleName="toolbarComboBox" width="100"
@@ -454,14 +454,14 @@
 
 	<mx:VRule height="24"/>
 
-	<s:Label text="Size"/>
+	<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'text_toolbar_size' ) }"/>
 
 	<mx:ComboBox id="sizeSelector"
 				 height="24" styleName="toolbarComboBox" width="100"
 				 color="black"
 				 change="changeSize(sizeSelector.selectedItem)"/>
 
-	<s:Label text="Text Color"/>
+	<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'text_toolbar_text_color' ) }"/>
 
 	<mx:ColorPicker id="textColor"
 					focusEnabled="false" height="24" width="36"

@@ -574,7 +574,7 @@
 	
 	<s:HGroup verticalAlign="middle">
 		
-		<s:Label text="Style"/>
+		<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_style' ) }"/>
 		
 		<mx:ComboBox id="styleSelector"
 					 height="24" styleName="toolbarComboBox" width="100"
@@ -620,7 +620,7 @@
 		
 		<mx:VRule height="24"/>
 		
-		<s:Label text="Font"/>
+		<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_font' ) }"/>
 		
 		<mx:ComboBox id="fontSelector"
 					 focusEnabled="false" height="24" styleName="toolbarComboBox" width="100"
@@ -670,7 +670,7 @@
 		
 		<mx:VRule height="24"/>
 		
-		<s:Label text="Size"/>
+		<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_size' ) }"/>
 		
 		<mx:ComboBox id="sizeSelector"
 					 height="24" styleName="toolbarComboBox" width="100"
@@ -700,19 +700,19 @@
 		
 		<mx:VRule height="24"/>
 		
-		<s:Label text="Text Color"/>
+		<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_text_color' ) }"/>
 		
 		<mx:ColorPicker focusEnabled="false" height="24" width="36"
 						change="colorTextChanged(event)"/>
 		
-		<s:Label text="Fill Color"/>
+		<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_fill_color' ) }"/>
 		
 		<mx:ColorPicker focusEnabled="false" height="24" width="36"
 						change="colorFillChanged(event)"/>
 		
 		<mx:VRule height="24"/>
 		
-		<s:Button height="24" label="Source"
+		<s:Button height="24" label="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_source' ) }"
 				  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.FlatButtonSkin"
 				  click="openCodeEditor()"/>
 	</s:HGroup>

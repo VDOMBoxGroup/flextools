@@ -60,7 +60,8 @@
 					</s:LinearGradient>
 				</s:fill>
 			</s:Rect>
-			<s:Label text="Resource browser" top="12" left="20" color="#FFFFFF" fontSize="20"/>
+			<s:Label top="12" left="20" color="#FFFFFF" fontSize="20"
+				text="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_title' ) }" />
 		</s:Group>
 		
 		<s:Group width="100%" height="39">
@@ -76,21 +77,25 @@
 			
 			<s:HGroup width="100%" verticalAlign="middle" paddingLeft="5" paddingRight="10" top="5">		 
 				<s:TextInput id="nameFilter" width="150" borderColor="#999999" color="#666666"
-							 fontFamily="Tahoma" fontStyle="italic" text="Filter resource"
+							 fontFamily="Tahoma" fontStyle="italic" 
+							 text="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_filter' ) }"
 							 focusColor.normal="#CCCCCC"/>
 				
 				<mx:Image id="__spinner" height="18"  width="18" visible="false"/>
 				
-				<s:Label text="Total Resources:" color="#FFFFFF"/>
+				<s:Label color="#FFFFFF"
+					text="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_total' ) }"/>
 				
 				<s:Label text="{hostComponent.totalResources}"
 						 color="#FFFFFF" fontWeight="bold"/>
 				
 				<mx:Spacer width="100%"/>
 				
-				<mx:Button height="29" label="Upload File..." click="hostComponent.uploadFile(event)"
-						  cornerRadius="14" icon="@Embed(source='icons/Add.png')"
-						  focusColor.normal="#CCCCCC"/>	
+				<mx:Button height="29" cornerRadius="14" 
+						   label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_upload' ) }" 
+						   click="hostComponent.uploadFile(event)"
+						   icon="@Embed(source='icons/Add.png')"
+						   focusColor.normal="#CCCCCC"/>	
 			</s:HGroup>
 		</s:Group>
 		
@@ -148,10 +153,10 @@
 							  icon="@Embed(source='icons/Cancel.png')"
 							  focusColor.normal="#CCCCCC"/>
 					
-					<s:Button height="29" minWidth="88" label="Insert"
+					<s:Button height="29" fontSize="18" focusColor.normal="#CCCCCC"
+							  label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_insert' ) }"
 							  click="hostComponent.onApplyClick()" color="#B33535" cornerRadius="14"
-							  fontSize="18"
-							  focusColor.normal="#CCCCCC"/>
+							  />
 					
 				</s:HGroup>
 				
