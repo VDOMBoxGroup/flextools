@@ -91,7 +91,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			function applyHandler (event: Event):void
 			{
-				multilineWindow.textAreaContainer.insertText((event.target as ResourceSelectorWindow).value);	
+				if (multilineWindow.focus)
+					multilineWindow.textAreaContainer.insertText((event.target as ResourceSelectorWindow).value);	
+				else
+					multilineWindow.attributeValue += (event.target as ResourceSelectorWindow).value;
 				resourceSelectorWindow.removeEventListener(Event.CHANGE, applyHandler, false);
 				PopUpManager.removePopUp( resourceSelectorWindow );
 //				facade.removeMediator( mediatorName );

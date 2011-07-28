@@ -24,6 +24,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 		[Bindable]
 		public var attributeValue : String;
+		
+		[Bindable]
+		public var focus : Boolean = false;
 	
 		[SkinPart( required="true" )]
 		public var textAreaContainer : RichEditableText;
