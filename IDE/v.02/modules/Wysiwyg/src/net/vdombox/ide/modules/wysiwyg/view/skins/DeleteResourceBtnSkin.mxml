@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:s="library://ns.adobe.com/flex/spark"
 		minHeight="16" minWidth="16">
-	<!-- host component -->
+
 	<fx:Metadata>
 		[HostComponent("spark.components.Button")]
 	</fx:Metadata>
 	
-	<!-- states -->
 	<s:states>
 		<s:State name="disabled" />
 		<s:State name="down" />
@@ -16,10 +14,6 @@
 		<s:State name="up" />
 	</s:states>
 	
-	<!-- SkinParts
-	name=iconDisplay, type=spark.primitives.BitmapImage, required=false
-	name=labelDisplay, type=spark.core.IDisplayText, required=false
-	-->
 	<s:BitmapImage source="@Embed('assets/btn_delete.png')"
 				   left="0" right="0" top="0" bottom="0" 
 				   width="100%" height="100%"/>

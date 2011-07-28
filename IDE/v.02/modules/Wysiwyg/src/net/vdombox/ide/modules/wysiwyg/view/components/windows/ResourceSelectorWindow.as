@@ -154,8 +154,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			{
 				if ( selectedResourceIndex != 0)
 				{
-					resourcesList.selectedIndex = selectedResourceIndex;
-					selectResource();						
+					resourcesList.selectedIndex = selectedResourceIndex;				
 				}
 				
 				selectedResourceIndex = -1;
@@ -167,7 +166,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			var newArray : Array = new Array();
 			for each ( var resVO : ResourceVO in resources.source )
 			{
-				if ( resVO.id != idRes )
+				if ( !resVO || resVO.id != idRes )
 					newArray.push( resVO );
 			}
 			
@@ -193,7 +192,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		{
 			this.setFocus();
 			//				dispatchEvent( FlexEvent.CREATION_COMPLETE );
-			addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );					
+			addKeyEvents();					
+		}
+		
+		public function addKeyEvents():void
+		{
+			addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );
+		}
+		
+		public function removeKeyEvents():void
+		{
+			removeEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );
 		}
 		
 		public function uploadFile(event:MouseEvent):void
@@ -217,16 +226,22 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ))
 		}
 		
-		public function selectResource( event:Event = null ):void
+		/*public function selectResource( event:Event = null ):void
 		{				
-			/*if ( event == null )
+			if ( event == null )
 			{
 				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) );
 				return;
 			}
 			
 			if ( event.target.selectedIndex != 0 )
-				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) );*/
-		}	
+				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) );
+		}*/	
+		
+		public function previewResource(event:Event) : void 
+		{
+			trace ("[ResourceSelectorWindow] previewResource");
+			dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
+		}
 	}
 }

@@ -25,6 +25,7 @@
 			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
 			{
 				trace ("resourcesList_creationCompleteHandler !!!");
+				resourcesList.addEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, hostComponent.previewResource, true);
 			}
 			
 		]]>
@@ -133,7 +134,6 @@
 								 focusColor="#CCCCCC" 
 								 rollOverColor="#000000" selectionColor="#000000"
 								 top="20" left="4" right="2" bottom="10"
-								 change="hostComponent.selectResource(event)"
 								 creationComplete="resourcesList_creationCompleteHandler(event)">
 						<s:layout>
 							<s:TileLayout horizontalGap="4" verticalGap="8" requestedColumnCount="4"  requestedRowCount="2">

@@ -1,7 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.desktop.Icon;
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
@@ -26,6 +28,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -54,6 +57,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var noneIcon : ResourceVO = new ResourceVO( ResourceVO.RESOURCE_NONE );
 
+		private var resourcePreviewWindow : ResourcePreviewWindow;
 
 		public function ResourceSelectorWindowMediator( resourceSelectorWindow : ResourceSelectorWindow ) : void
 		{
@@ -212,7 +216,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function dataLoaded( object : Object = null ) : void
 		{
-			trace ("[ResourceSelectorWindowMediator] dataLoaded: ");
+			trace ("[ResourceSelectorWindowMediator] dataLoaded");
 		}
 
 		private function addHandlers() : void
@@ -223,9 +227,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, loadResourcesHandler );
-//			resourceSelectorWindow.addEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );    
+//			resourceSelectorWindow.addEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
+			resourceSelectorWindow.addEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
 		}
-
+		
 		private function addHandlersForResourcesList( event : Event ) : void
 		{
 			resourceSelectorWindow.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
@@ -280,6 +285,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler ); //коряво очень поменять местами
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler ); //коряво очень
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, loadResourcesHandler );
+			
+			resourceSelectorWindow.removeEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
 		}
 
 		private function loadResourcesHandler( event : Event ) : void
@@ -287,6 +294,43 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
 		}
 
+		private function onResourcePreview( event : Event ) : void
+		{
+			trace ("[ResourceSelectorWindowMediator] onResourcePreview");
+			var resVO : ResourceVO = event.currentTarget.resourcesList.selectedItem as ResourceVO;
+			resourceVO = resVO;
+			
+			if (resourcePreviewWindow != null) {
+				onClosePreview(null);
+			}
+			
+			resourcePreviewWindow = new ResourcePreviewWindow();
+			resourcePreviewWindow.addEventListener(Event.CLOSE, onClosePreview);
+			
+			PopUpManager.addPopUp( resourcePreviewWindow, DisplayObject( this.resourceSelectorWindow ), true);
+			PopUpManager.centerPopUp( resourcePreviewWindow );
+			
+			resourceSelectorWindow.removeKeyEvents();
+			
+			resourcePreviewWindow.setName(resourceVO.name);
+			resourcePreviewWindow.setType(resourceVO.type);
+			resourcePreviewWindow.setId(resourceVO.id);
+			
+			BindingUtils.bindSetter( previewImage, resourceVO, "data" );
+			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+			
+		}
+		
+		private function onClosePreview( event : Event ) : void
+		{
+			resourcePreviewWindow.removeEventListener(Event.CLOSE, onClosePreview);
+			
+			PopUpManager.removePopUp(resourcePreviewWindow);
+			resourcePreviewWindow = null;
+			
+			resourceSelectorWindow.addKeyEvents();
+		}
+		
 		private function loadResourceHandler( event : Event ) : void
 		{
 			trace ("[ResourceSelectorWindowMediator] loadResourceHandler");
@@ -300,7 +344,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				return;
 			}
-
+			
 			previewIconImage();
 		}
 
@@ -312,6 +356,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function previewIconImage() : void
 		{
+			trace ("[ResourceSelectorWindowMediator] previewIconImage");
 			var loader : Loader = new Loader();
 			loader.name = resourceVO.id;
 
@@ -322,20 +367,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function previewImage( object : Object ) : void
 		{
+			trace ("[ResourceSelectorWindowMediator] previewImage");
 			//for convert to bitmapData and get width and height of resource
 			if ( object )
 			{
 				var loader : Loader = new Loader();
 				loader.name = resourceVO.id;
-
+				
 				if ( resourceVO.data != null )
 				{
 					loader.loadBytes( resourceVO.data );
 				}
 				else
-					return
+					return;
 
-					loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loaderComplete );
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loaderComplete );
+				
 			}
 		}
 
@@ -344,14 +391,40 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 */
 		private function loaderComplete( event : Event ) : void
 		{
+			trace ("[ResourceSelectorWindowMediator] loaderComplete");
 			if ( resourceSelectorWindow.resources.length > 0 )
 			{
 				var loaderInfo : LoaderInfo;
 				var bitmapData : BitmapData;
+				var bitmap : Bitmap;
 
 				loaderInfo = LoaderInfo( event.target );
 				bitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
 				bitmapData.draw( loaderInfo.loader );
+				
+				if (resourcePreviewWindow) {
+					bitmap = new Bitmap(bitmapData);
+					bitmap.cacheAsBitmap = true;
+					
+					bitmap.x = (resourcePreviewWindow.resourceImage.width - bitmap.width) / 2;
+					bitmap.y = (resourcePreviewWindow.resourceImage.height - bitmap.height) / 2;
+					
+					if (resourcePreviewWindow.resourceImage.width < bitmap.width)
+					{
+						bitmap.scaleX = resourcePreviewWindow.resourceImage.width / bitmap.width;
+						bitmap.x = 0;
+					}
+					if (resourcePreviewWindow.resourceImage.height < bitmap.height)
+					{
+						bitmap.scaleY = resourcePreviewWindow.resourceImage.height / bitmap.height;
+						bitmap.y = 0;
+					}
+					
+					
+						resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height);
+						resourcePreviewWindow.loadingImage.visible = false;
+						resourcePreviewWindow.resourceImage.addChild(bitmap);
+				}
 			}
 		}
 

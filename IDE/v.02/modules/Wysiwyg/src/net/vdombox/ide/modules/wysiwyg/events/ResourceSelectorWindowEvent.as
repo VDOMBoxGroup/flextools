@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var LOAD_RESOURCE 	: String = "loadResource";
 		public static var GET_RESOURCE		: String = "getResource";
 		public static var GET_RESOURCES		: String = "getResources";
+		public static var PREVIEW_RESOURCE	: String = "previewResource";
 		
 		public function ResourceSelectorWindowEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

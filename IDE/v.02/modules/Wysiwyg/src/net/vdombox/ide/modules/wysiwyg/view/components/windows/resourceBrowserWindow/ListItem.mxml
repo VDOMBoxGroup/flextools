@@ -7,8 +7,10 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 			
 			private var _id : String;
 			private var _objType : String = '';
@@ -127,6 +129,12 @@
 				this.imageMagnifier.visible = false;
 			}
 			
+			protected function smoothImage_clickHandler(event:MouseEvent):void
+			{
+				trace ("[ListItem] smoothImage_clickHandler");
+				dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -165,10 +173,7 @@
 												   verticalAlign="middle" horizontalAlign="center" 
 												   maintainAspectRatio="true"
 												   scaleContent="true" 
-												   rollOver="smoothImage_rollOverHandler(event)"
-												   rollOut="smoothImage_rollOutHandler(event)"
-												   smoothBitmapContent="true"
-												   />
+												   smoothBitmapContent="true"/>
 				
 				<s:Group id="imageMagnifier" visible="false" height="100%" width="100%" 
 						 mouseEnabled="false" mouseFocusEnabled="false" mouseChildren="false">
@@ -187,6 +192,13 @@
 					</s:HGroup>
 					
 				</s:Group>
+				
+				<mx:Canvas height="100%" width="100%"
+						   click="smoothImage_clickHandler(event)"
+						   rollOver="smoothImage_rollOverHandler(event)"
+						   rollOut="smoothImage_rollOutHandler(event)"
+						   backgroundColor="#000000" backgroundAlpha="0.01">
+				</mx:Canvas>
 				
 			</s:Group>
 			<mx:Spacer width="2" />

@@ -56,6 +56,8 @@
 		global
 		{
 			selection-color: #0268F3;
+			content-background-alpha: 0.0;
+			content-background-color: #000000;
 		}
 	</fx:Style>
 	
