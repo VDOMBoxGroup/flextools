@@ -19,7 +19,7 @@
 		<link>
 			<name>bin-debug</name>
 			<type>2</type>
-			<locationURI>DOCUMENTS/VdomIDE/src/modules/ApplicationsManagment</locationURI>
+			<location>D:/workspase4.5/VdomIDE/VdomIDE/src/modules/ApplicationsManagment</location>
 		</link>
 	</linkedResources>
 </projectDescription>

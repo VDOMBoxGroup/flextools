@@ -28,7 +28,7 @@
 	<mx:Image id="selectedIcon"
 			  height="64" width="64" />
 
-	<s:Label buttonMode="true" text="Select Icon:"
+	<s:Label buttonMode="true" text="{ resourceManager.getString( 'ApplicationsManagment_General', 'iconchooser_select_icon' ) }"
 			 fontFamily="Verdana" fontSize="14" textDecoration="underline"
 			 click="currentState = currentState == 'default' ? 'gallery' : 'default'; invalidateSize();" />
 
@@ -44,7 +44,7 @@
 		</s:layout>
 	</s:List>
 
-	<s:Label buttonMode="true" text="Load from computer"
+	<s:Label buttonMode="true" text="{ resourceManager.getString( 'ApplicationsManagment_General', 'iconchooser_load_from_computer' ) }"
 			 fontFamily="Verdana" fontSize="14" textDecoration="underline"
 			 click="dispatchEvent( new IconChooserEvent( IconChooserEvent.LOAD_ICON ))" />
 </s:VGroup>

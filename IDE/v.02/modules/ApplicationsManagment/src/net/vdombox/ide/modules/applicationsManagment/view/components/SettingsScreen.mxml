@@ -19,8 +19,8 @@
 		]]>
 	</fx:Script>
 	
-	<s:Label text="Settings application managment" fontWeight="bold" fontSize="14" left="20" top="20" fontFamily="Verdana"/>
+	<s:Label text="{ resourceManager.getString( 'ApplicationsManagment_General', 'settingscreen_title' ) }" fontWeight="bold" fontSize="14" left="20" top="20" fontFamily="Verdana"/>
 	
 	<s:CheckBox id="saveLastApplication" skinClass="spark.skins.spark.CheckBoxSkin"
-		x="20" y="42" label="Save Last Application"/>
+		x="20" y="42" label="{ resourceManager.getString( 'ApplicationsManagment_General', 'settingscreen_save' ) }"/>
 </s:Group>

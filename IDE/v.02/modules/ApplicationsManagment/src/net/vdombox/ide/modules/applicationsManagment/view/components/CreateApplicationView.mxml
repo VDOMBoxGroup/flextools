@@ -8,7 +8,7 @@
 					color="white"
 					creationComplete="navigatorcontent1_creationCompleteHandler(event)"
 					
-					skinClass="spark.skins.spark.SkinnableContainerSkin" xmlns:mx1="library://ns.adobe.com/flex/mx">
+					skinClass="spark.skins.spark.SkinnableContainerSkin">
 
 	<fx:Script>
 		<![CDATA[
@@ -43,7 +43,7 @@
 
 			<s:VGroup bottom="7" left="7" right="7" top="7">
 
-				<s:Label text="Name:"
+				<s:Label text="{ resourceManager.getString( 'ApplicationsManagment_General', 'create_application_name' ) }"
 						 fontFamily="Verdana" fontSize="14" fontWeight="bold" />
 
 				<s:TextInput id="nameField"
@@ -66,7 +66,7 @@
 
 			<s:VGroup bottom="7" left="7" right="7" top="7">
 
-				<s:Label text="Icon:"
+				<s:Label text="{ resourceManager.getString( 'ApplicationsManagment_General', 'create_application_icon' ) }"
 						 fontFamily="Verdana" fontSize="14" fontWeight="bold" />
 
 				<components:IconChooser id="iconChooser"
@@ -88,7 +88,7 @@
 
 			<s:VGroup bottom="7" left="7" right="7" top="7">
 
-				<s:Label text="Description:"
+				<s:Label text="{ resourceManager.getString( 'ApplicationsManagment_General', 'create_application_description' ) }"
 						 fontFamily="Verdana" fontSize="14" fontWeight="bold" />
 
 				<s:Group height="50" width="100%">
@@ -122,9 +122,9 @@
 				</s:fill>
 			</s:Rect>
 
-			<mx1:VDividedBox bottom="7" left="7" right="7" top="7">
+			<s:VGroup bottom="7" left="7" right="7" top="7">
 
-				<s:Label text="Language:"
+				<s:Label text="{ resourceManager.getString( 'ApplicationsManagment_General', 'create_application_language' ) }"
 						 fontFamily="Verdana" fontSize="14" fontWeight="bold" />
 
 				<s:RadioButton label="vscript" selected="true" value="vscript"
@@ -134,16 +134,16 @@
 				<s:RadioButton label="python" value="python"
 							   group="{languageGroup}" 
 							   skinClass="spark.skins.spark.RadioButtonSkin"/>
-			</mx1:VDividedBox>
+			</s:VGroup>
 		</s:Group>
 
 		<s:HGroup>
 
-			<s:Button id="saveButton"
-					  enabled="false" label="Save"
+			<s:Button id="saveButton" enabled="false" 
+					  label="{ resourceManager.getString( 'ApplicationsManagment_General', 'create_application_save' ) }"
 					  click="dispatchEvent( new CreateApplicationViewEvent( CreateApplicationViewEvent.SAVE ) )" />
 
-			<s:Button label="Cancel"
+			<s:Button label="{ resourceManager.getString( 'ApplicationsManagment_General', 'create_application_cancel' ) }"
 					  click="dispatchEvent( new CreateApplicationViewEvent( CreateApplicationViewEvent.CANCEL ) )" />
 		</s:HGroup>
 	</s:VGroup>
