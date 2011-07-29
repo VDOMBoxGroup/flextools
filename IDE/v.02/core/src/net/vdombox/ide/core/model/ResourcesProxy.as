@@ -108,9 +108,8 @@ package net.vdombox.ide.core.model
 
 		public function loadResource( resourceVO : ResourceVO ) : void
 		{		
-			trace("[ResourcesProxy] loadResource");
 			
-			if ( resourceVO.type && !resourceVO.isViewable) 
+			if ( resourceVO.type && !resourceVO.isViewable)  
 			{
 				typesIcons.res = resourceVO;
 				BindingUtils.bindSetter( qqq, typesIcons, "data" );
@@ -148,7 +147,6 @@ package net.vdombox.ide.core.model
 
 		public function setResource( resourceVO : ResourceVO ) : void
 		{
-			trace("+++++++++  setResource  ++++++++++");
 			if ( !loadQue )
 				loadQue = [];
 			
@@ -160,7 +158,6 @@ package net.vdombox.ide.core.model
 
 		public function setResources( resources : Array ) : void
 		{
-			trace("+++++++++  setResources  ++++++++++");
 			if ( !resources || resources.length == 0 )
 				return;
 
@@ -374,7 +371,6 @@ package net.vdombox.ide.core.model
 	
 		private function soap_setResource() : void
 		{
-			trace("+++ soap_setResource +++");
 			if ( loadQue.length == 0 )
 				return;
 
@@ -407,7 +403,6 @@ package net.vdombox.ide.core.model
 				}
 			}
 
-			trace("data.bytesAvailable = " + data.bytesAvailable );
 			if ( !data || data.bytesAvailable == 0 )
 				return;
 
@@ -450,7 +445,6 @@ package net.vdombox.ide.core.model
 				//save resource on user`s local disk and set resource to resourceVO
 				case "get_resource":
 				{
-					//trace(" get_resource ");
 					resourceVO = event.token.resourceVO as ResourceVO;
 					
 					var data : String = event.result.Resource;
@@ -478,7 +472,6 @@ package net.vdombox.ide.core.model
 				
 				case "set_resource":
 				{
-					//trace("\n******************set_resource ******************");
 					resourceVO = event.token.resourceVO as ResourceVO;
 
 					resourceVO.setXMLDescription( result.Resource[ 0 ] );
@@ -492,7 +485,6 @@ package net.vdombox.ide.core.model
 
 				case "list_resources":
 				{
-					//trace("\n******************list_resources ******************");
 					var applicationVO : ApplicationVO = event.token.applicationVO;
 					var resources : Array = createResourcesList( applicationVO, result.Resources[ 0 ] );
 					
@@ -503,7 +495,6 @@ package net.vdombox.ide.core.model
 					
 				case "delete_resource":
 				{
-					//trace("\n******************delete_resource ******************");
 					resourceVO = event.token.resourceVO as ResourceVO;
 					
 					cacheManager.deleteFile( resourceVO.id );

@@ -147,8 +147,6 @@ package net.vdombox.ide.core.model.icons
 				//			var file : File = event.currentTarget as File;
 				if (file)
 				{
-					trace("посмотреть здеся");
-					trace(file.type + "  "+ file.nativePath);
 					try
 					{
 						data = file.data;

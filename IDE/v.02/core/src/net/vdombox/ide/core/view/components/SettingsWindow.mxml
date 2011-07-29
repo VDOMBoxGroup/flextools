@@ -22,9 +22,9 @@
 		<mx:Spacer width="100%"/>
 		
 		<s:Button id="performOK"
-				  label="OK"/>
+				  label="{ resourceManager.getString( 'Core_General', 'settingwindow_ok' ) }"/>
 		
 		<s:Button id="performCancel"
-				  label="Cancel"/>
+				  label="{ resourceManager.getString( 'Core_General', 'settingwindow_cancel' ) }"/>
 	</s:HGroup>
 </s:Window>
