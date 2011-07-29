@@ -13,7 +13,7 @@
 	<fx:Script>
 		<![CDATA[
 			// -source-path=locale\{locale} -locale en_US fr_FR ru_RU -link-report=report.xml
-//			-source-path=locale\{locale} -locale en_US fr_FR ru_RU  -load-externs=report.xml
+//			-source-path=locale\{locale} -locale en_US fr_FR ru_RU -load-externs=../../VdomIDE/bin-debug/report.xml
 //			${DOCUMENTS}\Core\src\modules\ApplicationsManagment
 			
 			import mx.containers.Accordion;
