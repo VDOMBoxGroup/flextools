@@ -108,9 +108,9 @@ package net.vdombox.ide.core.model
 
 		public function loadResource( resourceVO : ResourceVO ) : void
 		{		
-			trace("++++++ loadResource ++++++");
+			trace("[ResourcesProxy] loadResource");
 			
-			if ( resourceVO.type && !typesIcons.isViewable( resourceVO.type ) ) 
+			if ( resourceVO.type && !resourceVO.isViewable) 
 			{
 				typesIcons.res = resourceVO;
 				BindingUtils.bindSetter( qqq, typesIcons, "data" );
@@ -269,7 +269,7 @@ package net.vdombox.ide.core.model
 		
 		private function choseIcon( resourceVO : ResourceVO ) : void
 		{			
-			if ( typesIcons.isViewable( resourceVO.type ) ) 
+			if ( resourceVO.isViewable ) 
 			{
 				setIcon( resourceVO );
 			}
