@@ -402,10 +402,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 				bitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
 				bitmapData.draw( loaderInfo.loader );
 				
+				bitmap = new Bitmap(bitmapData);
+				bitmap.cacheAsBitmap = true;
+				
 				if (resourcePreviewWindow) {
-					bitmap = new Bitmap(bitmapData);
-					bitmap.cacheAsBitmap = true;
-					
 					bitmap.x = (resourcePreviewWindow.resourceImage.width - bitmap.width) / 2;
 					bitmap.y = (resourcePreviewWindow.resourceImage.height - bitmap.height) / 2;
 					
@@ -420,11 +420,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 						bitmap.y = 0;
 					}
 					
+					resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height, resourceVO.isViewable);
+					resourcePreviewWindow.loadingImage.visible = false;
+					resourcePreviewWindow.resourceImage.addChild(bitmap);
 					
-						resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height);
-						resourcePreviewWindow.loadingImage.visible = false;
-						resourcePreviewWindow.resourceImage.addChild(bitmap);
+					return;
 				}
+				
 			}
 		}
 

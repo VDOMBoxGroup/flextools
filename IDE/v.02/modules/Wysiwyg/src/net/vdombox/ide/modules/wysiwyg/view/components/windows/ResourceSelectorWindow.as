@@ -62,6 +62,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			super.stylesInitialized();
 			this.setStyle( "skinClass", ResourceSelectorWindowSkin );
 		}
+		
 		public function get value() : String
 		{
 			var str:String = "";
@@ -71,7 +72,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				if ( str )
 					str = "#Res(" + str + ")";
 				else
-					str = "#Res()";	
+					str = "";	
 			}
 			else
 			{
@@ -84,15 +85,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 					str = str.substr(0, str.length - 2);
 				}
 				else
-					str = "#Res()";	
+					str = "";	
 			}
 			return str;
 		}
 		
 		public function set value( value : String ) : void
 		{
-			trace( "set " + value);
+			trace( "[RasourceSelectorWindow] set value: " + value);
 			_value = value;
+			trace("[RasourceSelectorWindow] (set value) -> setSelectedItem");
 			setSelectedItem();
 			
 		}
@@ -100,6 +102,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function set resources( value : ArrayList ) : void
 		{				
 			_resources = value;
+			trace("[RasourceSelectorWindow] (set resources) -> setSelectedItem");
 			setSelectedItem();
 		}
 		
@@ -110,6 +113,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		private function setSelectedItem() : void
 		{
+			trace("[RasourceSelectorWindow] setSelectedItem");
 			if ( !_resources || _resources.length == 0 || _value == null)
 				return;
 			

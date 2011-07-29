@@ -67,9 +67,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 			resourceName.toolTip = resourceName.text;
 		}
 		
-		public function setDimentions (_width:Number, _height:Number) : void 
+		public function setDimentions (_width:Number, _height:Number, _isViewable:Boolean = true) : void 
 		{
-			resourceDimentions.text = _width.toString() +"x"+ _height.toString() +" px";
+			resourceDimentions.text = _isViewable ? _width.toString() +"x"+ _height.toString() +" px" : "";
 		}
 		
 		public function copyResourceID() : void {
