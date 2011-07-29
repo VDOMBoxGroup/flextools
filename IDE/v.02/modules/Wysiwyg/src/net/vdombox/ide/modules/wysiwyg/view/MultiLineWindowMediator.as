@@ -54,7 +54,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRemove() : void
 		{
 			sessionProxy = null;
-			multilineWindow.removeEventListener(AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false);
+//			multilineWindow.removeEventListener(AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false);
 			multilineWindow = null;
 		}
 		

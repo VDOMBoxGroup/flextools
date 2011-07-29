@@ -563,16 +563,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function caseContainer( contetnt : XML, parentContainer : Group ) : void
 		{
-			var conatiner : Group;
+			var conatiner : Group = getSubContainer( contetnt );
 
-			conatiner = getSubContainer( contetnt );
-
-			if ( !conatiner )
-				conatiner = parentContainer;
-			else
+			if ( conatiner )
 				parentContainer.addElement( conatiner );
+			else
+				conatiner = parentContainer;
 
-// TODO: need sort 'contetnt.children()' by 'z-index'
+			// TODO: need sort 'contetnt.children()' by 'z-index'
 			for each ( var contetntPart : XML in contetnt.children() )
 			{
 				choiceContentType( contetntPart, conatiner );
@@ -1004,6 +1002,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var contetntPart : XML;
 
 			background.removeAllElements();
+			
 
 			refreshAttributes();
 

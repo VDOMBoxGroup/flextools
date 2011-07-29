@@ -3,6 +3,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.PageRendererSkin;
+	
+	import spark.components.Group;
 
 	public class PageRenderer extends RendererBase
 	{
@@ -75,6 +77,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					transformMarker.includeInLayout = true;
 				}
 			}
+			
+//			var lines:Group = new Group();
+//			lines.width = 200;
+//			lines.height = 200;
+//			
+//			lines.graphics.lineStyle(0);
+//			lines.graphics.beginFill(0);
+//			lines.graphics.drawCircle(50,50, 40);
+//			background.addElement(lines);
 		}
 	}
 }
