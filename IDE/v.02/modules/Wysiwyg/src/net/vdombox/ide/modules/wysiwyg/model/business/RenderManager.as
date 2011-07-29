@@ -749,10 +749,9 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			var container : IItem;
 			
 			switch ( itemName )
-			{	trace("\nRanderManage 753  ");
+			{	
 				case "container" :
 				{
-					trace("container ");
 					container = new Item( itemId );
 					break;
 				}

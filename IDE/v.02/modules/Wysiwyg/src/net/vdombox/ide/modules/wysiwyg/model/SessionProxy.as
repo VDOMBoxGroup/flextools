@@ -195,14 +195,12 @@ package net.vdombox.ide.modules.wysiwyg.model
 			if ( isSelectedPageChanged )
 			{
 				isSelectedPageChanged = false;
-				trace( "\nApplicationFacade.SELECTED_PAGE_CHANGED" );
 				sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, data[ SELECTED_PAGE ] );
 			}
 
 			if ( isSelectedObjectChanged )
 			{
 				isSelectedObjectChanged = false;
-				trace( "\nApplicationFacade.SELECTED_OBJECT_CHANGED" );
 				sendNotification( ApplicationFacade.SELECTED_OBJECT_CHANGED, data[ SELECTED_OBJECT ] );
 			}
 		}

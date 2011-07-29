@@ -44,8 +44,6 @@ package net.vdombox.ide.modules.wysiwyg.model
 					delete waitingsArray[ i ];
 
 					continue;
-
-					trace( "\n +++++++++++++++ ResourcesProxy WORKAET !  +++++++++++++++++" );
 				}
 			}
 		}

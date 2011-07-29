@@ -110,7 +110,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		public function ioErrorHandler( event : IOErrorEvent ) : void
 		{
-			trace( event.text );
+			trace( "######################ERROR" + event.text );
 		}
 
 		override public function onRemove() : void
@@ -160,7 +160,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.RESOURCES_GETTED:
 				{
-					trace("ApplicationFacade.RESOURCES_GETTED:");
 					_filters.removeAll();
 					_filters.addItem( { label: 'NONE', data: '*' } );
 					
@@ -296,7 +295,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function onResourcePreview( event : Event ) : void
 		{
-			trace ("[ResourceSelectorWindowMediator] onResourcePreview");
 			var resVO : ResourceVO = event.currentTarget.resourcesList.selectedItem as ResourceVO;
 			resourceVO = resVO;
 			
@@ -333,7 +331,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function loadResourceHandler( event : Event ) : void
 		{
-			trace ("[ResourceSelectorWindowMediator] loadResourceHandler");
 			var resVO : ResourceVO = event.currentTarget.resourcesList.selectedItem as ResourceVO;
 			resourceVO = resVO;
 
@@ -356,7 +353,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function previewIconImage() : void
 		{
-			trace ("[ResourceSelectorWindowMediator] previewIconImage");
 			var loader : Loader = new Loader();
 			loader.name = resourceVO.id;
 
@@ -367,7 +363,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function previewImage( object : Object ) : void
 		{
-			trace ("[ResourceSelectorWindowMediator] previewImage");
 			//for convert to bitmapData and get width and height of resource
 			if ( object )
 			{
@@ -391,7 +386,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 */
 		private function loaderComplete( event : Event ) : void
 		{
-			trace ("[ResourceSelectorWindowMediator] loaderComplete");
 			if ( resourceSelectorWindow.resources.length > 0 )
 			{
 				var loaderInfo : LoaderInfo;

@@ -13,13 +13,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var _selectedRenderer : IRenderer;
 		private var isSelectedRendererChanged : Boolean;
 
+		public function PageRenderer()
+		{
+			super();
+		}
+		
 		override public function stylesInitialized():void {
+			trace("stylesInitialized");
 			super.stylesInitialized();
 			setStyle("skinClass", Class(PageRendererSkin));
 		}
 		
 		override protected function partAdded( partName : String, instance : Object ) : void
 		{
+			trace("partAdded");
 			super.partAdded( partName, instance );
 
 			if ( instance == transformMarker )
@@ -28,6 +35,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		public function set selectedRenderer( value : IRenderer ) : void
 		{
+			trace("selectedRenderer");
 			if ( _selectedRenderer != value )
 			{
 				_selectedRenderer = value;
@@ -40,6 +48,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 //		SESSION - sesso 
 		override public function set renderVO( value : RenderVO ) : void
 		{
+			trace("renderVO");
 			if( transformMarker )
 				transformMarker.renderer = null;
 			
@@ -48,6 +57,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		override protected function commitProperties() : void
 		{
+			trace("commitProperties");
 			if ( isSelectedRendererChanged && transformMarker )
 			{
 				isSelectedRendererChanged = false;

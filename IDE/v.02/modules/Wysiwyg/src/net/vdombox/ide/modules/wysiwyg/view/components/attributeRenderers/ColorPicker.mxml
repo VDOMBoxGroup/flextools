@@ -61,7 +61,6 @@
 			public function mouseClickandler( event : MouseEvent ) : void
 			{
 				//		var colorInt:uint = Number('0x' + _color/* .substring(1) */);
-				trace("[ColorPicker] mouseClickandler");
 				ColorPickerWindow.show_window( this, _colorInNumber, true );
 			}
 			

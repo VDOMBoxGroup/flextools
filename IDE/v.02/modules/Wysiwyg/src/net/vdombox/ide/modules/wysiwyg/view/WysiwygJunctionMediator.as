@@ -215,7 +215,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.GET_RESOURCES:
 				{
-					trace("GET_RESOURCES")
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -225,7 +224,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 				case ApplicationFacade.SET_RESOURCE:
 				{
-					trace("SET_RESOURCE")
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE, PPMResourcesTargetNames.RESOURCE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -235,7 +233,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.DELETE_RESOURCE:
 				{
-					trace("DELETE_RESOURCE")
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE, PPMResourcesTargetNames.RESOURCE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -245,7 +242,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.LOAD_RESOURCE:
 				{
-					trace("LOAD_RESOURCE");
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -255,7 +251,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 				case ApplicationFacade.GET_ICON:
 				{
-					trace("Get_icon");
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.ICON, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );

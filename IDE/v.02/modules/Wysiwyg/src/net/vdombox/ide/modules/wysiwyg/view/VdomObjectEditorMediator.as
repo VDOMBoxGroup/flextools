@@ -236,9 +236,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		private function clearData() : void
-			
 		{
-			trace("Clear()");
 			editor.editorVO.vdomObjectVO = null;
 		}
 

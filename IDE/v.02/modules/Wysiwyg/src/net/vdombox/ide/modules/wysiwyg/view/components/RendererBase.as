@@ -213,7 +213,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					itemFactory.properties = { layout: layout };
 
 					break;
-					trace( "-------RenderBase - chooseItemRenderer - default value!!!-------- :" + renderVO.name + ":" )
 				}
 			}
 
@@ -504,22 +503,29 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		}
 
 
-
+		private var addedHandlers : Boolean = false;
+		
 		private function addHandlers() : void
 		{
-			addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
-			addEventListener( Event.REMOVED_FROM_STAGE, removeHandler, false, 0, true );
-
-			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, false, 0, true );
-			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler, false, 0, true );
-
-			addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
-
-			addEventListener( MouseEvent.CLICK, mouseClickHandler, false, 0, true );
-
-			addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler, false, 0, true );
-			addEventListener( DragEvent.DRAG_EXIT, dragExitHandler, false, 0, true );
-			addEventListener( DragEvent.DRAG_DROP, dragDropHandler, false, 0, true );
+			if (!addedHandlers)
+			{
+				trace("[RendererBase] addHandlers");
+				addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
+				addEventListener( Event.REMOVED_FROM_STAGE, removeHandler, false, 0, true );
+	
+				addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, false, 0, true );
+				addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler, false, 0, true );
+	
+				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
+	
+				addEventListener( MouseEvent.CLICK, mouseClickHandler, false, 0, true );
+	
+				addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler, false, 0, true );
+				addEventListener( DragEvent.DRAG_EXIT, dragExitHandler, false, 0, true );
+				addEventListener( DragEvent.DRAG_DROP, dragDropHandler, false, 0, true );
+				addEventListener(FlexEvent.ADD, showHandler, false, 0, false);
+				addedHandlers = true;
+			}
 		}
 
 
@@ -1103,6 +1109,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function removeHandlers() : void
 		{
+			trace("[RendrerBase] removeHandlers()");
 			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			removeEventListener( Event.REMOVED, removeHandler );
 
@@ -1116,8 +1123,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			removeEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
 			removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
 			removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
+			addedHandlers = false;
 		}
 
+		
+		private function showHandler( event : FlexEvent ) : void
+		{
+			addHandlers();
+		}
+		
 		private function stage_mouseClickHandler( event : MouseEvent ) : void
 		{
 			event.stopImmediatePropagation();
@@ -1125,7 +1139,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			stage.removeEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
 		}
-
+		
 
 		private function svgGetResourseHendler( event : RendererEvent ) : void
 		{

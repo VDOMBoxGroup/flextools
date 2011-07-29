@@ -64,7 +64,6 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		
 		public function set content( value : XMLList) : void
 		{
-			trace("\n"+name+":  \n"+ value)
 			 _content = value;
 		}
 		

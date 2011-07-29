@@ -24,7 +24,6 @@
 			
 			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
 			{
-				trace ("resourcesList_creationCompleteHandler !!!");
 				resourcesList.addEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, hostComponent.previewResource, true);
 			}
 			

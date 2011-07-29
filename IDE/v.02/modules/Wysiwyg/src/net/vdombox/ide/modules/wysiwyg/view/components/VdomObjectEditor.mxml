@@ -254,7 +254,7 @@
 			{
 				// TODO Auto-generated method stub
 				skin.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler, false, 0, true );
-				dispatchStateEvent();
+				//dispatchStateEvent();
 			}
 			
 		]]>

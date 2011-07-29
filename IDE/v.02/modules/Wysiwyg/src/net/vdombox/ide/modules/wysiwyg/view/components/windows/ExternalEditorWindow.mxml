@@ -98,19 +98,17 @@ xmlns:s="library://ns.adobe.com/flex/spark"
 //					loaderContext["allowLoadBytesCodeExecution"] = true;
 					loaderContext.allowLoadBytesCodeExecution  = true
 
-					trace ("111111111111");
 					loader.loadBytes( _resourceVO.data,  loaderContext);
 					
 				}
 
 				private function loader_errorHandler( event : Event ) : void
 				{
-					trace ("loader_errorHandler!!!");
+					trace ("#############################################loader_errorHandler!!!");
 				}
 				
 				private function loader_completeHandler( event : Event ) : void
 				{
-					trace ("loader_completeHandler!!!");
 					loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, loader_completeHandler );
 
 					event.currentTarget.content.addEventListener( FlexEvent.APPLICATION_COMPLETE, applicationCompleteHandler );
