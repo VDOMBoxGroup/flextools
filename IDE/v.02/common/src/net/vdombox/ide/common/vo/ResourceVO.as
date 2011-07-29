@@ -187,5 +187,22 @@ package net.vdombox.ide.common.vo
 			if ( description.@usecount[ 0 ] )
 				_useCount = description.@usecount;
 		}
+		
+		public function get isViewable () : Boolean 
+		{
+			switch (type.toLowerCase()) 
+			{
+				case "jpg":					
+				case "jpeg":					
+				case "png":
+				case "gif":
+				case "svg":
+					return true;
+					
+				default:
+					return false;
+			}
+		}
+		
 	}
 }
