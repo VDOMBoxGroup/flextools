@@ -215,7 +215,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function dataLoaded( object : Object = null ) : void
 		{
-			trace ("[ResourceSelectorWindowMediator] dataLoaded");
+			trace ("[ResourceSelectorWindowMediator] dataLoaded ");
 		}
 
 		private function addHandlers() : void
@@ -267,6 +267,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			for each ( resVO in allResourcesList.source )
 			{
+				if (!resVO) {
+					continue;
+				}
 				if ( resVO.name.toLowerCase().indexOf( nameFilter ) >= 0 )
 				{
 					resourceSelectorWindow.filteredResources++;

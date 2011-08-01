@@ -92,9 +92,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		public function set value( value : String ) : void
 		{
-			trace( "[RasourceSelectorWindow] set value: " + value);
 			_value = value;
-			trace("[RasourceSelectorWindow] (set value) -> setSelectedItem");
 			setSelectedItem();
 			
 		}
@@ -102,7 +100,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function set resources( value : ArrayList ) : void
 		{				
 			_resources = value;
-			trace("[RasourceSelectorWindow] (set resources) -> setSelectedItem");
 			setSelectedItem();
 		}
 		
@@ -113,7 +110,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		private function setSelectedItem() : void
 		{
-			trace("[RasourceSelectorWindow] setSelectedItem");
 			if ( !_resources || _resources.length == 0 || _value == null)
 				return;
 			
@@ -121,10 +117,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			
 			for each ( resourceVO in _resources.source )
 			{
+				if (!resourceVO) {
+					continue;
+				}
 				if ( resourceVO.id == _value.substring( 5, _value.length - 1 ) )
 				{
 					resourcesList.selectedItem = resourceVO;						
-					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) )
+					//dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) )
 					
 					break;
 				}
