@@ -5,7 +5,8 @@
 		xmlns:ClassComponents="net.vdombox.ide.modules.wysiwyg.view.components.classcomponents.*"
 		xmlns="vdom.containers.*"
 		xmlns:controls="vdom.controls.*" 
-		width="497" height="415" xmlns:ClassComponents1="net.vdombox.ide.modules.wysiwyg.view.components.ClassComponents.*"
+		width="790" height="550" minWidth="600" minHeight="500" 
+		xmlns:ClassComponents1="net.vdombox.ide.modules.wysiwyg.view.components.ClassComponents.*"
 		>
 	<!-- host component -->
 	<fx:Metadata>

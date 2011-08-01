@@ -5,8 +5,7 @@
 			 xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
 			 xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*"
 			 width="790" height="550" minWidth="600" minHeight="500"
-			 alpha.disabled="0.5"
-			 focusColor.normal="#CCCCCC">
+			 focusColor="#CCCCCC">
 	<fx:Metadata>
 		<![CDATA[ 
 		/** 

@@ -39,8 +39,8 @@
 			{				
 //				var popUpWindowManager : PopUpManager = PopUpManager.getInstance();
 				multilineWindow = new MultilineWindow();
-				multilineWindow.width = 500;
-				multilineWindow.height = 400;
+				//multilineWindow.width = 500;
+				//multilineWindow.height = 400;
 
 				multilineWindow.attributeValue = _value;
 				multilineWindow.title = _title;
