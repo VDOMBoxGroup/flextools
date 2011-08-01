@@ -42,34 +42,29 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;			
-	
-			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
-			sendNotification( ApplicationFacade.GET_PAGES,     sessionProxy.selectedApplication );
-			
 			multilineWindow.addEventListener( MultilineWindowEvent.APPLY, removeYourself, false, 0, true );
-			multilineWindow.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler );
+			multilineWindow.addEventListener( MultilineWindowEvent.CLOSE, removeYourself, false, 0, true );
+			multilineWindow.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false, 0, true  );
 		}
 		
 		override public function onRemove() : void
 		{
+			multilineWindow.removeEventListener( MultilineWindowEvent.APPLY, removeYourself, false );
+			multilineWindow.removeEventListener( MultilineWindowEvent.CLOSE, removeYourself, false);
+			multilineWindow.removeEventListener(AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false);
+
 			sessionProxy = null;
-//			multilineWindow.removeEventListener(AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false);
 			multilineWindow = null;
 		}
 		
 		private function removeYourself ( event : MultilineWindowEvent ) : void
 		{
-			//multilineWindow.removeEventListener( MultilineWindowEvent.APPLY, removeYourself, false );
 			facade.removeMediator( NAME );
 		}
 		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
-			
-			interests.push( ApplicationFacade.RESOURCES_GETTED );			
-			interests.push( ApplicationFacade.PAGES_GETTED );	
 			
 			return interests;
 		}
@@ -97,52 +92,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 					multilineWindow.attributeValue += (event.target as ResourceSelectorWindow).value;
 				resourceSelectorWindow.removeEventListener(Event.CHANGE, applyHandler, false);
 				PopUpManager.removePopUp( resourceSelectorWindow );
-//				facade.removeMediator( mediatorName );
-				//resourceSelectorWindow.dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) );
 			}		
 		}
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
-			/*var name : String = notification.getName();
-			var body : Object = notification.getBody();
 			
-			switch ( name )
-			{
-				case ApplicationFacade.RESOURCES_GETTED:
-				{									
-					var resources: ArrayCollection = new ArrayCollection();
-					
-					for each( var resVO: ResourceVO in body )
-					{
-						resources.addItem({"label":resVO.name, "data":resVO.id});
-					}
-					
-					multilineWindow.resourceList.dataProvider = resources;
-					
-					if ( multilineWindow.resourceList.dataProvider[0] )
-						 multilineWindow.resourceList.selectedIndex = 0;						
-
-					break;
-				}
-					
-				case ApplicationFacade.PAGES_GETTED:
-				{
-					var pages: ArrayCollection = new ArrayCollection();
-					
-					for each( var pageVO: PageVO in body )
-					{
-						pages.addItem({"label":pageVO.name, "data":pages.length});
-					}
-					
-					multilineWindow.pageList.dataProvider = pages;
-					
-					if ( multilineWindow.pageList.dataProvider[0] )
-						 multilineWindow.pageList.selectedIndex = 0;						
-					
-					break;
-				}
-			}*/
 		}			
 	}
 }

@@ -85,7 +85,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		}*/
 		public function showResourceSelecterWindow():void
 		{
-			trace("\n showResourceSelecterWindow");
 			dispatchEvent( new AttributeEvent( AttributeEvent.SELECT_RESOURCE ) );
 		}
 	
