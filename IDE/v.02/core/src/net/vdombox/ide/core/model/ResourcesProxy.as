@@ -97,11 +97,16 @@ package net.vdombox.ide.core.model
 		private function onResourceIconLoadingCompleted(event:Event):void
 		{
 			trace ("[ResourcesProxy] onResourceIconLoadingCompleted");
-			TypesIcons(event.target).removeEventListener(TypesIcons.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted);
-			TypesIcons(event.target).removeEventListener(TypesIcons.ICON_LOADING_ERROR, onResourceIconLoadingCompleted);
+			var typesIcon : TypesIcons	= event.target as TypesIcons;
+			var typeIndex : int			= loadableTypesIcons.getItemIndex( typesIcon )
 			
-			TypesIcons(event.target).res.data = TypesIcons(event.target).data;
-			loadableTypesIcons.removeItemAt( loadableTypesIcons.getItemIndex( TypesIcons(event.target) ));
+			typesIcon.removeEventListener(TypesIcons.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted);
+			typesIcon.removeEventListener(TypesIcons.ICON_LOADING_ERROR, onResourceIconLoadingCompleted);
+			
+			typesIcon.res.data = TypesIcons(event.target).data;
+			
+			loadableTypesIcons.removeItemAt( typeIndex );
+			
 			sendNotification( ApplicationFacade.RESOURCE_LOADED, TypesIcons(event.target).res );
 		}
 
@@ -112,12 +117,13 @@ package net.vdombox.ide.core.model
 			{
 				var icon:TypesIcons = new TypesIcons();
 				icon.res = resourceVO;
+				
 				loadableTypesIcons.addItem(icon);
 				
-				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).addEventListener(TypesIcons.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted);
-				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).addEventListener(TypesIcons.ICON_LOADING_ERROR, onResourceIconLoadingCompleted);
+				icon.addEventListener(TypesIcons.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted);
+				icon.addEventListener(TypesIcons.ICON_LOADING_ERROR, onResourceIconLoadingCompleted);
 				
-				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).getResource( resourceVO.type );
+				icon.getResource( resourceVO.type );
 				return;
 			}
 					
@@ -281,23 +287,28 @@ package net.vdombox.ide.core.model
 			{ 
 				var icon:TypesIcons = new TypesIcons();
 				icon.res = resourceVO;
+				
 				loadableTypesIcons.addItem(icon);
 				
-				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).addEventListener(TypesIcons.ICON_LOADING_COMPLETED, onTypesIconLoadingCompleted);
-				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).addEventListener(TypesIcons.ICON_LOADING_ERROR, onTypesIconLoadingCompleted);
+				icon.addEventListener(TypesIcons.ICON_LOADING_COMPLETED, onTypesIconLoadingCompleted);
+				icon.addEventListener(TypesIcons.ICON_LOADING_ERROR, onTypesIconLoadingCompleted);
 				
-				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).getResource( resourceVO.type );
+				icon.getResource( resourceVO.type );
 			}	 
 		}
 		
 		private function onTypesIconLoadingCompleted(event:Event):void
 		{
 			trace ("[ResourcesProxy] onTypesIconLoadingCompleted");
-			TypesIcons(event.target).removeEventListener(TypesIcons.ICON_LOADING_COMPLETED, onTypesIconLoadingCompleted);
-			TypesIcons(event.target).removeEventListener(TypesIcons.ICON_LOADING_ERROR, onTypesIconLoadingCompleted);
+			var typesIcon : TypesIcons	= event.target as TypesIcons;
+			var typeIndex : int			= loadableTypesIcons.getItemIndex( typesIcon );
 			
-			loadableTypesIcons.removeItemAt( loadableTypesIcons.getItemIndex( TypesIcons(event.target) ));
-			creationIconCompleted( TypesIcons(event.target).res, TypesIcons(event.target).data );
+			typesIcon.removeEventListener(TypesIcons.ICON_LOADING_COMPLETED, onTypesIconLoadingCompleted);
+			typesIcon.removeEventListener(TypesIcons.ICON_LOADING_ERROR, onTypesIconLoadingCompleted);
+			
+			loadableTypesIcons.removeItemAt( typeIndex );
+			
+			creationIconCompleted( typesIcon.res, typesIcon.data );
 		}
 		
 		private function creationIconCompleted( resourceVO : ResourceVO, file:ByteArray ) : void
