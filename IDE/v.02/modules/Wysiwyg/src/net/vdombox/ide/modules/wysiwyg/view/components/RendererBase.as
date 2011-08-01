@@ -503,13 +503,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		}
 
 
-		private var addedHandlers : Boolean = false;
 		
-		private function addHandlers() : void
+		protected function addHandlers() : void
 		{
-			if (!addedHandlers)
-			{
-				trace("[RendererBase] addHandlers");
 				addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
 				addEventListener( Event.REMOVED_FROM_STAGE, removeHandler, false, 0, true );
 	
@@ -523,9 +519,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler, false, 0, true );
 				addEventListener( DragEvent.DRAG_EXIT, dragExitHandler, false, 0, true );
 				addEventListener( DragEvent.DRAG_DROP, dragDropHandler, false, 0, true );
-				addEventListener(FlexEvent.ADD, showHandler, false, 0, false);
-				addedHandlers = true;
-			}
+				
 		}
 
 
@@ -1101,14 +1095,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			if ( event.target == this )
 			{
+				//TODO: check who is lissener
 				dispatchEvent( new RendererEvent( RendererEvent.REMOVED ) );
 				removeHandlers();
 			}
 		}
 
-		private function removeHandlers() : void
+		protected function removeHandlers() : void
 		{
-			trace("[RendrerBase] removeHandlers()");
 			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			removeEventListener( Event.REMOVED, removeHandler );
 
@@ -1122,7 +1116,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			removeEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
 			removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
 			removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
-			addedHandlers = false;
 		}
 
 		

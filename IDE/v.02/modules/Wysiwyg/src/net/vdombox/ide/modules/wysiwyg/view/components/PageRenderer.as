@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
+	import mx.events.FlexEvent;
+	
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.PageRendererSkin;
@@ -18,6 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function PageRenderer()
 		{
 			super();
+			addEventListener(FlexEvent.ADD, showHandler, false, 0, false);
 		}
 		
 		override public function stylesInitialized():void {
@@ -86,6 +89,18 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 //			lines.graphics.beginFill(0);
 //			lines.graphics.drawCircle(50,50, 40);
 //			background.addElement(lines);
+		}
+		
+		override protected function removeHandlers() : void
+		{
+			trace("\nremoveHandlers:");
+			if ( !hasEventListener( FlexEvent.ADD))
+				addEventListener(FlexEvent.ADD, showHandler, false, 0, false);
+		}
+		
+		private function showHandler(event : FlexEvent):void
+		{
+			super.addHandlers();
 		}
 	}
 }
