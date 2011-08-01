@@ -31,7 +31,6 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.icons.TypesIcons;
 	
-//	import org.osmf.utils.BinarySearch;
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 	
@@ -77,7 +76,7 @@ package net.vdombox.ide.core.model
 		
 		private var loadQue : Array;
 		
-		private var typesIcons : TypesIcons = new TypesIcons();
+		private var loadableTypesIcons : ArrayCollection = new ArrayCollection();
 
 		public function deleteResource( applicationVO : ApplicationVO, resourceVO : ResourceVO ) : void
 		{
@@ -95,15 +94,15 @@ package net.vdombox.ide.core.model
 			token.applicationVO = applicationVO;
 		}
 		
-		private function qqq( object : Object ) : void
+		private function onResourceIconLoadingCompleted(event:Event):void
 		{
-			if ( object )
-			{				
-				typesIcons.res.data = object as ByteArray;
-				sendNotification( ApplicationFacade.RESOURCE_LOADED, typesIcons.res );
-				typesIcons.res = null;
-				typesIcons.data = null;
-			}
+			trace ("[ResourcesProxy] onResourceIconLoadingCompleted");
+			TypesIcons(event.target).removeEventListener(TypesIcons.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted);
+			TypesIcons(event.target).removeEventListener(TypesIcons.ICON_LOADING_ERROR, onResourceIconLoadingCompleted);
+			
+			TypesIcons(event.target).res.data = TypesIcons(event.target).data;
+			loadableTypesIcons.removeItemAt( loadableTypesIcons.getItemIndex( TypesIcons(event.target) ));
+			sendNotification( ApplicationFacade.RESOURCE_LOADED, TypesIcons(event.target).res );
 		}
 
 		public function loadResource( resourceVO : ResourceVO ) : void
@@ -111,9 +110,14 @@ package net.vdombox.ide.core.model
 			
 			if ( resourceVO.type && !resourceVO.isViewable)  
 			{
-				typesIcons.res = resourceVO;
-				BindingUtils.bindSetter( qqq, typesIcons, "data" );
-				typesIcons.getResource( resourceVO.type );	
+				var icon:TypesIcons = new TypesIcons();
+				icon.res = resourceVO;
+				loadableTypesIcons.addItem(icon);
+				
+				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).addEventListener(TypesIcons.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted);
+				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).addEventListener(TypesIcons.ICON_LOADING_ERROR, onResourceIconLoadingCompleted);
+				
+				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).getResource( resourceVO.type );
 				return;
 			}
 					
@@ -138,6 +142,7 @@ package net.vdombox.ide.core.model
 		
 		private function loadResourceFromServer( resourceVO : ResourceVO ) : void
 		{
+			trace ("[ResourcesProxy] loadResourceFromServer");
 			resourceVO.setStatus( ResourceVO.LOAD_PROGRESS );
 			var token : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
 			
@@ -197,6 +202,7 @@ package net.vdombox.ide.core.model
 		
 		public function getIcon( resourceVO : ResourceVO ) : void
 		{
+			trace ("[ResourcesProxy] getIcon");
 			choseIcon( resourceVO );
 		}
 		
@@ -265,31 +271,38 @@ package net.vdombox.ide.core.model
 		}
 		
 		private function choseIcon( resourceVO : ResourceVO ) : void
-		{			
+		{	
+			trace ("[ResourcesProxy] choseIcon");
 			if ( resourceVO.isViewable ) 
 			{
 				setIcon( resourceVO );
 			}
 			else // if not viewable
 			{ 
-				typesIcons.res = resourceVO;
-				BindingUtils.bindSetter( aaa, typesIcons, "data" );
-				typesIcons.getResource( resourceVO.type );				
+				var icon:TypesIcons = new TypesIcons();
+				icon.res = resourceVO;
+				loadableTypesIcons.addItem(icon);
+				
+				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).addEventListener(TypesIcons.ICON_LOADING_COMPLETED, onTypesIconLoadingCompleted);
+				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).addEventListener(TypesIcons.ICON_LOADING_ERROR, onTypesIconLoadingCompleted);
+				
+				TypesIcons(loadableTypesIcons.getItemAt(loadableTypesIcons.length-1)).getResource( resourceVO.type );
 			}	 
 		}
 		
-		private function aaa( object : Object ) : void
+		private function onTypesIconLoadingCompleted(event:Event):void
 		{
-			if ( object )
-			{
-				creationIconCompleted( typesIcons.res, object as ByteArray );
-				typesIcons.res = null;
-				typesIcons.data = null;
-			}
+			trace ("[ResourcesProxy] onTypesIconLoadingCompleted");
+			TypesIcons(event.target).removeEventListener(TypesIcons.ICON_LOADING_COMPLETED, onTypesIconLoadingCompleted);
+			TypesIcons(event.target).removeEventListener(TypesIcons.ICON_LOADING_ERROR, onTypesIconLoadingCompleted);
+			
+			loadableTypesIcons.removeItemAt( loadableTypesIcons.getItemIndex( TypesIcons(event.target) ));
+			creationIconCompleted( TypesIcons(event.target).res, TypesIcons(event.target).data );
 		}
 		
 		private function creationIconCompleted( resourceVO : ResourceVO, file:ByteArray ) : void
 		{			
+			trace ("[ResourcesProxy] creationIconCompleted");
 			resourceVO.icon		= file;
 			resourceVO.iconId 	= resourceVO.id + "_icon";
 			resourceVO.data 	= null;
@@ -301,6 +314,7 @@ package net.vdombox.ide.core.model
 		//reduces the image and set it to icon of resourceVO
 		private function setIcon( resourceVO : ResourceVO ) : void
 		{
+			trace ("[ResourcesProxy] setIcon");
 			var icon : ByteArray = cacheManager.getCachedFileById( resourceVO.id + "_icon" );
 			
 			//icon is located in the file system user
@@ -317,6 +331,7 @@ package net.vdombox.ide.core.model
 		
 		private function loadedResourceForIcon( resourceVO : ResourceVO ) : void
 		{
+			trace ("[ResourcesProxy] loadedResourceForIcon");
 			loadableResources.removeItemAt( loadableResources.getItemIndex( resourceVO.id ) );
 			
 			tempResourceVO[ resourceVO.id ] = resourceVO ;
@@ -330,6 +345,7 @@ package net.vdombox.ide.core.model
 		//convert to bitmapData 
 		private function loaderComplete(event:Event):void
 		{
+			trace ("[ResourcesProxy] loaderComplete");
 			var loaderInfo : LoaderInfo = LoaderInfo(event.target);
 			var bitmapData : BitmapData = new BitmapData(loaderInfo.width, loaderInfo.height, false, 0xFFFFFF);
 			bitmapData.draw(loaderInfo.loader); 
@@ -426,6 +442,7 @@ package net.vdombox.ide.core.model
 		
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
+			trace ("[ResourcesProxy] soap_resultHandler");
 			var token : AsyncToken = event.token;
 			
 			if ( !token.hasOwnProperty( "recipientName" ) || token.recipientName != proxyName )
@@ -439,7 +456,7 @@ package net.vdombox.ide.core.model
 			
 			var operationName : String = operation.name;
 			var resourceVO : ResourceVO;
-			
+			trace ("[ResourcesProxy] soap_resultHandler: operationName = " + operationName);
 			switch ( operationName )
 			{
 				//save resource on user`s local disk and set resource to resourceVO

@@ -1,6 +1,7 @@
 package net.vdombox.ide.core.model.icons
 {
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.filesystem.File;
@@ -14,8 +15,11 @@ package net.vdombox.ide.core.model.icons
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	
-	public class TypesIcons
+	public class TypesIcons extends EventDispatcher
 	{	
+		public static const ICON_LOADING_COMPLETED:String = "iconLoadingCompleted";
+		public static const ICON_LOADING_ERROR:String	  = "iconLoadingError";
+		
 		public var icon:Array = new Array();
 		
 		//		[Embed("assets/delete.png")]
@@ -127,6 +131,7 @@ package net.vdombox.ide.core.model.icons
 				
 		public function getResource( type : String ) : void
 		{	
+			trace ("[TypesIcons] getResource");
 			var path : String;
 			
 			if ( icon[ type ] != null )
@@ -142,27 +147,36 @@ package net.vdombox.ide.core.model.icons
 			file.addEventListener( IOErrorEvent.IO_ERROR, ioErrorHandler);
 			file.load();
 			
-			function fileDounloaded( event : Event ):void
-			{
-				//			var file : File = event.currentTarget as File;
-				if (file)
-				{
-					try
-					{
-						data = file.data;
-					}
-					catch (error : Error)
-					{
-						trace("Failed: was changed path.", error.message);				
-					}
-				}
-			}			
 		}
+		
+		public function fileDounloaded( event : Event ):void
+		{
+			trace ("[TypesIcons] fileDounloaded !!!");
+			//			var file : File = event.currentTarget as File;
+			if (file)
+			{
+				trace("посмотреть здеся");
+				trace(file.type + "  "+ file.nativePath);
+				try
+				{
+					data = file.data;
+				}
+				catch (error : Error)
+				{
+					trace("Failed: was changed path.", error.message);
+					data = null;
+				}
+				this.dispatchEvent(new Event(ICON_LOADING_COMPLETED));
+			}
+		}			
+
 		
 		
 		public function ioErrorHandler( event : IOErrorEvent ) : void
 		{
-			trace("========================================================= error =========================================");
+			trace ("[TypesIcons] ioErrorHandler");
+			data = null;
+			this.dispatchEvent(new Event(ICON_LOADING_ERROR));
 		}
 		
 	}
