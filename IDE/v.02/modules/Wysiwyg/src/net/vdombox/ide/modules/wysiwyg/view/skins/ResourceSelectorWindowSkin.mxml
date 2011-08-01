@@ -132,7 +132,9 @@
 								 focusColor="#CCCCCC" 
 								 rollOverColor="#000000" selectionColor="#000000"
 								 top="20" left="4" right="2" bottom="10"
-								 creationComplete="resourcesList_creationCompleteHandler(event)">
+								 creationComplete="resourcesList_creationCompleteHandler(event)"
+								 doubleClickEnabled="true"
+								 doubleClick="hostComponent.onApplyClick()">
 						<s:layout>
 							<s:TileLayout horizontalGap="4" verticalGap="8" requestedColumnCount="4"  requestedRowCount="2">
 								
