@@ -10,15 +10,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		
 		
 		
-		/*override public function set selected( value : Boolean ) : void
+		override public function set selected( value : Boolean ) : void
 		{
 			super.selected = value;
 			
-			if( selected )
-				setStyle( "color", "black");
-			else
-				setStyle( "color", "white");
-				
-		}*/
+			setStyle( "color", "white");
+		}
+		
 	}
 }

@@ -95,7 +95,7 @@
 						   label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_upload' ) }" 
 						   click="hostComponent.uploadFile(event)"
 						   icon="@Embed(source='icons/Add.png')"
-						   focusColor.normal="#CCCCCC"/>	
+						   focusColor="#CCCCCC"/>	
 			</s:HGroup>
 		</s:Group>
 		

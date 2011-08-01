@@ -40,7 +40,7 @@
 		{
 			skin : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.AccordionHeaderSkin");
 			textAlign : center;
-			textSelectedColor : black;
+			textSelectedColor : white;
 			color : white;
 		}
 		

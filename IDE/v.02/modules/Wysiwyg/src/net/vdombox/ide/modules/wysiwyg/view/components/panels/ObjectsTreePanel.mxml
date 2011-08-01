@@ -294,5 +294,6 @@
 	</s:layout>
 
 	<mx:Tree id="objectsTree"
-			 dataProvider="{ _pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"/>
+			 dataProvider="{ _pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"
+			 contentBackgroundAlpha="0"/>
 </s:Panel>
