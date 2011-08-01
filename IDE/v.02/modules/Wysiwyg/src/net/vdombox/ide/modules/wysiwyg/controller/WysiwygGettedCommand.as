@@ -30,14 +30,14 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var renderers : Array = renderProxy.getRenderersByVO( vdomObjectVO );
 			var renderer : IRenderer;
 			
-			/*if( renderers && renderers.length != 0 )
+			if( renderers && renderers.length != 0 )
 			{
 				for each( renderer in renderers )
 				{
 					renderer.renderVO = renderVO;
 				}
 				return;
-			}*/
+			}
 		
 			var mediator : VdomObjectEditorMediator;
 			var mediatorName : String;

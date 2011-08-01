@@ -20,6 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
+	import net.vdombox.ide.modules.wysiwyg.view.components.VdomObjectEditor;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -268,8 +269,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function xmlSaveHandler( event : EditorEvent ) : void
 		{
-//			editor.status = PageEditor.STATUS_SAVING;
-//			sendNotification( ApplicationFacade.SET_XML_PRESENTATION, editor.xmlPresentation );
+			editor.status = VdomObjectEditor.STATUS_SAVING;
+			sendNotification( ApplicationFacade.SET_XML_PRESENTATION, editor.xmlPresentation );
 		}
 
 		private function vdomObjectVOChangedHandler( event : EditorEvent ) : void

@@ -21,7 +21,7 @@
 			private var _currentToolbar : IToolbar;
 			private var _selectedRenderer : IRenderer;
 
-			private var isSelectedRendererChanged : Boolean;
+			public var isSelectedRendererChanged : Boolean;
 
 			public function set selectedRenderer( value : IRenderer ) : void
 			{
@@ -30,6 +30,7 @@
 
 				_selectedRenderer = value;
 
+				
 				isSelectedRendererChanged = true;
 				invalidateProperties();
 			}

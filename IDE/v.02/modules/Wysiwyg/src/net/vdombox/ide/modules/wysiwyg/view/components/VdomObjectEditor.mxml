@@ -49,6 +49,7 @@
 			private var isVdomObjectVOChanged : Boolean;
 			private var isStatusChanged : Boolean;
 			
+			[Bindable]
 			private var _value : VdomObjectXMLPresentationVO;
 
 			
@@ -189,7 +190,7 @@
 
 			private function xmlPresentationChanged( value : VdomObjectXMLPresentationVO ) : void
 			{
-
+				//toolbarPanel.isSelectedRendererChanged = false;
 			}
 
 			private function dispatchStateEvent() : void
@@ -216,11 +217,11 @@
 
 			private function saveXMLButton_clickHandler( event : MouseEvent ) : void
 			{
-//				if( xmlPresentation )
-//				{
-//					var ee : EditorEvent = new EditorEvent( EditorEvent.XML_SAVE );
-//					dispatchEvent( ee );
-//				}
+				if( xmlPresentation )
+				{
+					_value.xmlPresentation = xmlScriptEditor.scriptAreaComponent.text;
+					dispatchEvent( new EditorEvent( EditorEvent.XML_SAVE ) );
+				}
 			}
 
 			private function renderer_movedHandler( event : RendererEvent ) : void
