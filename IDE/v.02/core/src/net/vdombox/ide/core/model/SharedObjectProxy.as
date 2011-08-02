@@ -24,12 +24,12 @@ package net.vdombox.ide.core.model
 
 		override public function onRegister() : void
 		{
-			shObjData = SharedObject.getLocal( "userData" ).data;
+			shObjData = SharedObject.getLocal( "userData" );
 			
-			data.username = shObjData.username ? shObjData.username : "";
-			data.password = shObjData.password ? shObjData.password : "";
-			data.hostname = shObjData.hostname ? shObjData.hostname : "";
-			data.localeCode = shObjData.localeCode ? shObjData.localeCode : "";
+			data.username = shObjData.data.username ? shObjData.data.username : "";
+			data.password = shObjData.data.password ? shObjData.data.password : "";
+			data.hostname = shObjData.data.hostname ? shObjData.data.hostname : "";
+			data.localeCode = shObjData.data.localeCode ? shObjData.data.localeCode : "";
 		}
 
 		public function get username() : String
@@ -39,7 +39,7 @@ package net.vdombox.ide.core.model
 
 		public function set username( value : String ) : void
 		{
-			shObjData.username = data.username = value;
+			shObjData.data.username = value;
 		}
 
 		public function get password() : String
@@ -49,7 +49,7 @@ package net.vdombox.ide.core.model
 
 		public function set password( value : String ) : void
 		{
-			shObjData.password = data.password = value;
+			shObjData.data.password = value;
 		}
 
 		public function get hostname() : String
@@ -59,7 +59,7 @@ package net.vdombox.ide.core.model
 
 		public function set hostname( value : String ) : void
 		{
-			shObjData.hostname = data.hostname = value;
+			shObjData.data.hostname = value;
 		}
 
 		public function get localeCode() : String
@@ -69,7 +69,7 @@ package net.vdombox.ide.core.model
 
 		public function set localeCode( value : String ) : void
 		{
-			shObjData.localeCode = data.localeCode = value;
+			shObjData.data.localeCode = value;
 		}
 	}
 }

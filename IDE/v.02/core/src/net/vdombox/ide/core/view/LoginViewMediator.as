@@ -95,20 +95,14 @@ package net.vdombox.ide.core.view
 		private function addedToStageHandler( event : Event ) : void
 		{
 			loginView.username = sharedObjectProxy.username;
-//			loginView.username.appendText( "" ); //FIXME убрать эту конструкцию непонятную, иначе не рефрешит поле.
 
 			loginView.hostname = sharedObjectProxy.hostname;
-//			loginView.hostname.appendText( "" );
 
 			loginView.password = sharedObjectProxy.password;
-//			loginView.password.appendText( "" );
 
 			loginView.languages = new ArrayList( localeProxy.locales );
 			
 			loginView.selectedLanguage = localeProxy.currentLocale;
-//
-//			if ( loginView.username && loginView.hostname && loginView.password )
-//				submit();
 		}
 
 		private function languageChangedHandler( event : Event ) : void
@@ -124,15 +118,11 @@ package net.vdombox.ide.core.view
 
 		private function submit() : void
 		{
-//			var loginFormData : Object = {};
-//			loginFormData.username = loginView.username.text;
-//			loginFormData.password = loginView.password.text;
-//			loginFormData.hostname = loginView.hostname.text;
 
-//			sharedObjectProxy.username = loginView.username;
-//			sharedObjectProxy.password = loginView.password;
-//			sharedObjectProxy.hostname = loginView.hostname;
-
+			sharedObjectProxy.username = loginView.username;
+			sharedObjectProxy.password = loginView.password;
+			sharedObjectProxy.hostname = loginView.hostname;
+			
 			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNUP );
 		}
 	}
