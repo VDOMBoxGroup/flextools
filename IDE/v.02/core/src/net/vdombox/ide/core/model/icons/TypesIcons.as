@@ -131,7 +131,6 @@ package net.vdombox.ide.core.model.icons
 				
 		public function getResource( type : String ) : void
 		{	
-			trace ("[TypesIcons] getResource");
 			var path : String;
 			
 			if ( icon[ type ] != null )
@@ -151,7 +150,6 @@ package net.vdombox.ide.core.model.icons
 		
 		public function fileDounloaded( event : Event ):void
 		{
-			trace ("[TypesIcons] fileDounloaded !!!");
 			//			var file : File = event.currentTarget as File;
 			if (file)
 			{
@@ -174,7 +172,6 @@ package net.vdombox.ide.core.model.icons
 		
 		public function ioErrorHandler( event : IOErrorEvent ) : void
 		{
-			trace ("[TypesIcons] ioErrorHandler");
 			data = null;
 			this.dispatchEvent(new Event(ICON_LOADING_ERROR));
 		}

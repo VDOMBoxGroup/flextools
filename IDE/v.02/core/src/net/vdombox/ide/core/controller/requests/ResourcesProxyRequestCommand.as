@@ -53,7 +53,6 @@ package net.vdombox.ide.core.controller.requests
 		
 		private function processIconTarget( message : ProxyMessage ) : void
 		{
-			trace ("[ResourcesProxyRequestCommand] processIconTarget");
 			var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
 			
 			var operation : String = message.operation;

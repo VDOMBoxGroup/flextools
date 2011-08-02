@@ -11,6 +11,8 @@ package net.vdombox.ide.core.model
 	import flash.filesystem.FileStream;
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
+	import flash.utils.clearTimeout;
+	import flash.utils.setTimeout;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
@@ -96,7 +98,6 @@ package net.vdombox.ide.core.model
 		
 		private function onResourceIconLoadingCompleted(event:Event):void
 		{
-			trace ("[ResourcesProxy] onResourceIconLoadingCompleted");
 			var typesIcon : TypesIcons	= event.target as TypesIcons;
 			var typeIndex : int			= loadableTypesIcons.getItemIndex( typesIcon )
 			
@@ -146,15 +147,24 @@ package net.vdombox.ide.core.model
 			}
 		}		
 		
+		private var timeoutGetResource : uint;
 		private function loadResourceFromServer( resourceVO : ResourceVO ) : void
 		{
-			trace ("[ResourcesProxy] loadResourceFromServer");
 			resourceVO.setStatus( ResourceVO.LOAD_PROGRESS );
+			
+			getResourceFromServer(resourceVO);
+		}		
+		
+		private function getResourceFromServer( resourceVO : ResourceVO ):void
+		{
 			var token : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
 			
 			token.recipientName = proxyName;
 			token.resourceVO = resourceVO;
-		}		
+			
+			clearTimeout(timeoutGetResource);
+			timeoutGetResource = setTimeout(getResourceFromServer, 500, resourceVO);
+		}
 
 		public function setResource( resourceVO : ResourceVO ) : void
 		{
@@ -208,7 +218,6 @@ package net.vdombox.ide.core.model
 		
 		public function getIcon( resourceVO : ResourceVO ) : void
 		{
-			trace ("[ResourcesProxy] getIcon");
 			choseIcon( resourceVO );
 		}
 		
@@ -278,7 +287,6 @@ package net.vdombox.ide.core.model
 		
 		private function choseIcon( resourceVO : ResourceVO ) : void
 		{	
-			trace ("[ResourcesProxy] choseIcon");
 			if ( resourceVO.isViewable ) 
 			{
 				setIcon( resourceVO );
@@ -299,7 +307,6 @@ package net.vdombox.ide.core.model
 		
 		private function onTypesIconLoadingCompleted(event:Event):void
 		{
-			trace ("[ResourcesProxy] onTypesIconLoadingCompleted");
 			var typesIcon : TypesIcons	= event.target as TypesIcons;
 			var typeIndex : int			= loadableTypesIcons.getItemIndex( typesIcon );
 			
@@ -313,7 +320,6 @@ package net.vdombox.ide.core.model
 		
 		private function creationIconCompleted( resourceVO : ResourceVO, file:ByteArray ) : void
 		{			
-			trace ("[ResourcesProxy] creationIconCompleted");
 			resourceVO.icon		= file;
 			resourceVO.iconId 	= resourceVO.id + "_icon";
 			resourceVO.data 	= null;
@@ -325,7 +331,6 @@ package net.vdombox.ide.core.model
 		//reduces the image and set it to icon of resourceVO
 		private function setIcon( resourceVO : ResourceVO ) : void
 		{
-			trace ("[ResourcesProxy] setIcon");
 			var icon : ByteArray = cacheManager.getCachedFileById( resourceVO.id + "_icon" );
 			
 			//icon is located in the file system user
@@ -342,7 +347,6 @@ package net.vdombox.ide.core.model
 		
 		private function loadedResourceForIcon( resourceVO : ResourceVO ) : void
 		{
-			trace ("[ResourcesProxy] loadedResourceForIcon");
 			loadableResources.removeItemAt( loadableResources.getItemIndex( resourceVO.id ) );
 			
 			tempResourceVO[ resourceVO.id ] = resourceVO ;
@@ -356,7 +360,6 @@ package net.vdombox.ide.core.model
 		//convert to bitmapData 
 		private function loaderComplete(event:Event):void
 		{
-			trace ("[ResourcesProxy] loaderComplete");
 			var loaderInfo : LoaderInfo = LoaderInfo(event.target);
 			var bitmapData : BitmapData = new BitmapData(loaderInfo.width, loaderInfo.height, false, 0xFFFFFF);
 			bitmapData.draw(loaderInfo.loader); 
@@ -453,7 +456,6 @@ package net.vdombox.ide.core.model
 		
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
-			trace ("[ResourcesProxy] soap_resultHandler");
 			var token : AsyncToken = event.token;
 			
 			if ( !token.hasOwnProperty( "recipientName" ) || token.recipientName != proxyName )
@@ -467,12 +469,14 @@ package net.vdombox.ide.core.model
 			
 			var operationName : String = operation.name;
 			var resourceVO : ResourceVO;
-			trace ("[ResourcesProxy] soap_resultHandler: operationName = " + operationName);
+
 			switch ( operationName )
 			{
 				//save resource on user`s local disk and set resource to resourceVO
 				case "get_resource":
 				{
+					clearTimeout(timeoutGetResource);
+					
 					resourceVO = event.token.resourceVO as ResourceVO;
 					
 					var data : String = event.result.Resource;
