@@ -86,13 +86,68 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			function applyHandler (event: Event):void
 			{
+				var str1 : String = multilineWindow.textAreaContainer.text;
 				if (multilineWindow.focus)
-					multilineWindow.textAreaContainer.insertText((event.target as ResourceSelectorWindow).value);	
+				{
+					multilineWindow.textAreaContainer.insertText("|%" + (event.target as ResourceSelectorWindow).value);	
+					multilineWindow.focus = false;
+				}
 				else
-					multilineWindow.attributeValue += (event.target as ResourceSelectorWindow).value;
+					multilineWindow.textAreaContainer.text += (event.target as ResourceSelectorWindow).value;
+				var str2 : String = multilineWindow.textAreaContainer.text;
+				
+				multilineWindow.attributeValue = autoPasteCommon(str1, str2);
 				resourceSelectorWindow.removeEventListener(Event.CHANGE, applyHandler, false);
 				PopUpManager.removePopUp( resourceSelectorWindow );
 			}		
+		}
+		
+		private function autoPasteCommon(str1 : String, str2 : String): String
+		{
+			var index : int;
+
+			
+			for (index = 0; index < str1.length; index++)
+			{
+				if (str1.charAt(index) != str2.charAt(index))
+					break;
+			}
+			
+			if (str2.charAt(index) == "|")
+				str2 = str2.substr(0, index) + str2.substr(index + 2, str2.length  - index);
+			else
+				if (str2.charAt(index) == "%")
+				{
+					str2 = str2.substr(0, index - 1) + str2.substr(index + 1, str2.length  - index);
+					index--;
+				}
+			
+			var index2 : int;
+			for (index2 = index - 1; index2 > 0 && str1.charAt(index2) == " "; index2--){};
+			
+			if (index2 >= 41)
+			{
+				if (str1.charAt(index2) == ")" && str1.substr(index2 - 41, 4) == "#Res")
+				{
+					str2 = str2.substr(0, index2 + 1) + ", " + str2.substr(index, str2.length - index); 
+				}
+			}
+			
+			if (index < str1.length)
+			{
+				var interval : int = str2.length - str1.length;
+				for (index2 = index; index2 < str1.length - 1 && str1.charAt(index2) == " "; index2++){};
+				if (index2 + 41 < str2.length)
+					if (str1.substr(index2, 4) == "#Res")
+					{
+						str2 = str2.substr(0, index + interval) + ", " + str2.substr(index2 + interval, str2.length); 
+					}
+				if (str2.charAt(index - 1) == ",")
+				{
+					str2 = str2.substr(0, index) + " " + str2.substr(index, str2.length  - index);
+				}
+			}
+			return str2;
 		}
 		
 		override public function handleNotification( notification : INotification ) : void

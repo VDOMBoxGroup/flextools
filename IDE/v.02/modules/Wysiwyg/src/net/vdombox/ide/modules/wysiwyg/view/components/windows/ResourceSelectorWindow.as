@@ -80,9 +80,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				{
 					for each(var item:ResourceVO in resourcesList.selectedItems)
 					{
-						str += "#Res(" + item.id + "), ";
+						if (item != null)
+							str += "#Res(" + item.id + "), ";
 					}
-					str = str.substr(0, str.length - 2);
+					if (str.length >= 2)
+						str = str.substr(0, str.length - 2);
 				}
 				else
 					str = "";	
