@@ -126,7 +126,9 @@
 				 width="100%"/>
 	</s:VGroup>
 	
-	<mx:Image id="settingsButton" x="20" y="55" smoothBitmapContent="true"
+	<mx:Image id="settingsButton" 
+			  x="30" y="62" 
+			  smoothBitmapContent="true"
 			  source="@Embed('assets/login/logo.png')">
 		
 		<mx:filters>
