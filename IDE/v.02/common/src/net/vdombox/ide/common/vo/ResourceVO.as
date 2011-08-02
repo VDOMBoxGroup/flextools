@@ -159,7 +159,6 @@ package net.vdombox.ide.common.vo
 		 */		
 		public function setIcon( value : ByteArray ) : void
 		{			
-			trace ("[ResourceVO] setIcon");
 			icon = value;
 			_iconID = id + "_icon";
 		}
