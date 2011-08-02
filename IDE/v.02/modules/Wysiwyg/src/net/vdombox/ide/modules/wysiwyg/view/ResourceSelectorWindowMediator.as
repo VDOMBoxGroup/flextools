@@ -8,9 +8,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.filesystem.File;
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
+	import flash.utils.clearInterval;
+	import flash.utils.setInterval;
+	import flash.utils.setTimeout;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
@@ -195,27 +199,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			resourceVO = resVO;
 			
-			BindingUtils.bindSetter( iconForNewResGetted, resourceVO, "icon" );			
+			filters = resourceVO.type;
+			resourceSelectorWindow.totalResources ++;
+			resourceSelectorWindow.resources.addItemAt( resourceVO, resourceSelectorWindow.resources.length );
+			resourceSelectorWindow.scrollToIndex = resourceSelectorWindow.resources.length-1;
+			resourceSelectorWindow.selectedResourceIndex = resourceSelectorWindow.resources.length-1;
+			resourceSelectorWindow.invalidateProperties();
 			
-			sendNotification( ApplicationFacade.GET_ICON, resourceVO );			
+			BindingUtils.bindSetter( iconForNewResGetted, resourceVO, "icon" );			
+			sendNotification( ApplicationFacade.GET_ICON, resourceVO );
 		}
 		
 		private function iconForNewResGetted( object : Object ) : void
 		{
 			if ( object )
 			{
-				filters = resourceVO.type;
-				resourceSelectorWindow.totalResources ++;
-				resourceSelectorWindow.resources.addItemAt( resourceVO, resourceSelectorWindow.resources.length );
-				resourceSelectorWindow.scrollToIndex = resourceSelectorWindow.resources.length-1;
-				resourceSelectorWindow.selectedResourceIndex = resourceSelectorWindow.resources.length-1;
-				resourceSelectorWindow.invalidateProperties();
 			}
 		}
 		
 		private function dataLoaded( object : Object = null ) : void
 		{
-			trace ("[ResourceSelectorWindowMediator] dataLoaded ");
 		}
 
 		private function addHandlers() : void
@@ -362,6 +365,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			loader.loadBytes( resourceVO.icon );
 
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loaderComplete );
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loaderComplete );
+			loader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, loaderComplete );
 		}
 
 		private function previewImage( object : Object ) : void
@@ -374,13 +379,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 				
 				if ( resourceVO.data != null )
 				{
+					loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loaderComplete );
+					loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loaderComplete );
+					loader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, loaderComplete );
+					
 					loader.loadBytes( resourceVO.data );
 				}
 				else
 					return;
 
-				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loaderComplete );
-				
 			}
 		}
 
@@ -389,33 +396,40 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 */
 		private function loaderComplete( event : Event ) : void
 		{
+			if (event.type != Event.COMPLETE) {
+				return;
+			}
+			
 			if ( resourceSelectorWindow.resources.length > 0 )
 			{
-				var loaderInfo : LoaderInfo;
-				var bitmapData : BitmapData;
-				var bitmap : Bitmap;
-
+				var loaderInfo				: LoaderInfo;
+				var bitmapData				: BitmapData;
+				var bitmap					: Bitmap;
+				var bmpWidthHeightRatio		: Number;
+				
 				loaderInfo = LoaderInfo( event.target );
 				bitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
 				bitmapData.draw( loaderInfo.loader );
 				
 				bitmap = new Bitmap(bitmapData);
 				bitmap.cacheAsBitmap = true;
+
+				bmpWidthHeightRatio = bitmap.width / bitmap.height;
 				
 				if (resourcePreviewWindow) {
-					bitmap.x = (resourcePreviewWindow.resourceImage.width - bitmap.width) / 2;
-					bitmap.y = (resourcePreviewWindow.resourceImage.height - bitmap.height) / 2;
+					
+					if (resourcePreviewWindow.resourceImage.height < bitmap.height) {
+						bitmap.height = resourcePreviewWindow.resourceImage.height;
+						bitmap.width = bitmap.height * bmpWidthHeightRatio;
+					}
 					
 					if (resourcePreviewWindow.resourceImage.width < bitmap.width)
 					{
-						bitmap.scaleX = resourcePreviewWindow.resourceImage.width / bitmap.width;
-						bitmap.x = 0;
+						bitmap.scaleX = bitmap.scaleY = resourcePreviewWindow.resourceImage.width / bitmap.width;
 					}
-					if (resourcePreviewWindow.resourceImage.height < bitmap.height)
-					{
-						bitmap.scaleY = resourcePreviewWindow.resourceImage.height / bitmap.height;
-						bitmap.y = 0;
-					}
+					
+					bitmap.x = (resourcePreviewWindow.resourceImage.width - bitmap.width) / 2;
+					bitmap.y = (resourcePreviewWindow.resourceImage.height - bitmap.height) / 2;
 					
 					resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height, resourceVO.isViewable);
 					resourcePreviewWindow.loadingImage.visible = false;

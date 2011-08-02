@@ -245,7 +245,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		public function previewResource(event:Event) : void 
 		{
-			trace ("[ResourceSelectorWindow] previewResource");
 			dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
 		}
 	}

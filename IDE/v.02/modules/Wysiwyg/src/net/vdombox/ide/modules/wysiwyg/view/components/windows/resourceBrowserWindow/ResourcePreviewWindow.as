@@ -54,19 +54,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 		
 		private function addKeyEvents():void
 		{
-			trace ("[ResourcePreviewWindow] addKeyEvents");
 			addEventListener( KeyboardEvent.KEY_DOWN, onKeyBtnDown );
 		}
 		
 		private function removeKeyEvents():void
 		{
-			trace ("[ResourcePreviewWindow] removeKeyEvents");
 			removeEventListener( KeyboardEvent.KEY_DOWN, onKeyBtnDown );
 		}
 		
 		private function onKeyBtnDown( event: KeyboardEvent = null ) : void
 		{
-			trace ("[ResourcePreviewWindow] onKeyBtnDown");
 			if ( event != null )
 				if ( event.charCode != Keyboard.ESCAPE )
 					return;

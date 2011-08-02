@@ -24,8 +24,6 @@
 			
 			override public function set data ( value : Object ) : void 
 			{
-				trace ("[ListItem] set data");
-				
 				super.data = value;
 				
 				if (!value) {
@@ -131,7 +129,6 @@
 			
 			protected function smoothImage_clickHandler(event:MouseEvent):void
 			{
-				trace ("[ListItem] smoothImage_clickHandler");
 				dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
 			}
 			
