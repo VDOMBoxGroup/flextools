@@ -119,9 +119,9 @@ package net.vdombox.ide.core.view
 		private function submit() : void
 		{
 
-			sharedObjectProxy.username = loginView.username;
+			/*sharedObjectProxy.username = loginView.username;
 			sharedObjectProxy.password = loginView.password;
-			sharedObjectProxy.hostname = loginView.hostname;
+			sharedObjectProxy.hostname = loginView.hostname;*/
 			
 			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNUP );
 		}
