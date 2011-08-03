@@ -1,9 +1,12 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.display.DisplayObject;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import mx.core.UIComponent;
+	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
@@ -16,6 +19,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectAttributesPanel;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
+	import net.vdombox.view.Alert;
+	import net.vdombox.view.AlertButton;
+	import net.vdombox.view.AlertIcon;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -201,8 +207,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function deleteRequestHandler( event : ObjectAttributesPanelEvent ) : void
 		{
-			if ( sessionProxy.selectedPage && sessionProxy.selectedObject )
-				sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: sessionProxy.selectedPage, objectVO: sessionProxy.selectedObject } );
+			var componentName : String = sessionProxy.selectedObject.typeVO.displayName;
+			
+			Alert.noLabel = "Cancel";
+			Alert.yesLabel = "Delete";
+			
+			Alert.Show( "Are you sure want to delete " + componentName + " ?",AlertButton.OK_No, objectAttributesPanel.parentApplication, closeHandler);
+		}
+		
+		private function closeHandler(event : CloseEvent) : void
+		{
+			if (event.detail == Alert.YES)
+			{
+				if ( sessionProxy.selectedPage && sessionProxy.selectedObject )
+					sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: sessionProxy.selectedPage, objectVO: sessionProxy.selectedObject } );
+			}
 		}
 
 		private function currentAttributeChangedHandler( event : ObjectAttributesPanelEvent ) : void

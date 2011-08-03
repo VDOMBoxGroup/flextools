@@ -37,7 +37,7 @@
 			</s:HGroup>
 			
 			<s:HGroup width="100%" height="100%" horizontalAlign="right" verticalAlign="middle">
-				<s:Button label="x" click="{hostComponent.closeHandler()}" skinClass="net.vdombox.skins.MainCloseBtnSkin"/>			
+				<s:Button label="x" click="{hostComponent.closeHandler()}" skinClass="net.vdombox.view.skins.MainCloseBtnSkin"/>			
 			</s:HGroup>
 		</s:Group>
 		
