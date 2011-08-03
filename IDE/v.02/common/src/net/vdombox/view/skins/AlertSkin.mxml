@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		maxWidth="338">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("net.vdombox.view.Alert")]
+	</fx:Metadata>
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="inactiveWithControlBar" />
+		<s:State name="inactive" />
+		<s:State name="disabledWithControlBar" />
+		<s:State name="normalWithControlBar" />
+		<s:State name="disabled" />
+		<s:State name="normal" />
+	</s:states>
+	
+	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
+		<s:fill>
+			<s:SolidColor color="#424242"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Group left="9" top="9" right="9" bottom="9">
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:BitmapFill source = "@Embed('net/vdombox/icons/texture_sidebar.png')" smooth="true" fillMode="repeat"/>
+			</s:fill>
+		</s:Rect>
+		
+		<s:VGroup width="100%" height="100%" maxWidth="320" 
+				  paddingTop="20" paddingBottom="10" paddingLeft="20" paddingRight="20" gap="30" horizontalAlign="center">
+			<s:Label id="lbltext" maxWidth="320" textAlign="center"
+					 fontSize="16" color="#FFFFFF" text="{hostComponent.text}"/>
+			
+			<s:HGroup height="29" width="100%" horizontalAlign="center" gap="40">
+				<mx:Button  id="noButton" height="100%" cornerRadius="14" 
+							fontSize="18" label="{hostComponent._noLabel}"
+							visible="{hostComponent.visibleNoButton}" includeInLayout="{hostComponent.visibleNoButton}"
+							click="hostComponent.noPush()"/>
+				<mx:Button  id="yesButton" height="100%" cornerRadius="14"
+							fontSize="18" icon="@Embed('net/vdombox/icons/Cancel.png')" label="{hostComponent._yesLabel}"
+							click="hostComponent.okPush()"/>
+			</s:HGroup>
+		</s:VGroup>
+		
+	</s:Group>
+	
+	
+	
+	
+	
+</s:SparkSkin>

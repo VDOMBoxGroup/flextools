@@ -9,7 +9,7 @@ package net.vdombox.components
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.components.tabNavigatorClasses.TabBarButton;
 	import net.vdombox.ide.common.events.TabEvent;
-	import net.vdombox.skins.TabNavigatorSkin;
+	import net.vdombox.view.skins.TabNavigatorSkin;
 	
 	import spark.components.SkinnableContainer;
 	import spark.components.TabBar;
@@ -19,7 +19,7 @@ package net.vdombox.components
 	{
 		public function TabNavigator()
 		{
-			setStyle( "skinClass", net.vdombox.skins.TabNavigatorSkin );
+			setStyle( "skinClass", net.vdombox.view.skins.TabNavigatorSkin );
 		}
 		
 		[SkinPart( required="true" )]

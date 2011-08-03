@@ -7,7 +7,7 @@ package net.vdombox.components.tabNavigatorClasses
 	import mx.binding.utils.ChangeWatcher;
 	import mx.events.ListEvent;
 	
-	import net.vdombox.skins.TabBarButtonSkin;
+	import net.vdombox.view.skins.TabBarButtonSkin;
 	
 	import spark.components.Button;
 	import spark.components.ButtonBarButton;
@@ -18,7 +18,7 @@ package net.vdombox.components.tabNavigatorClasses
 
 		public function TabBarButton() : void
 		{
-			setStyle( "skinClass", net.vdombox.skins.TabBarButtonSkin );
+			setStyle( "skinClass", net.vdombox.view.skins.TabBarButtonSkin );
 		}
 
 		[SkinPart( required="true" )]
