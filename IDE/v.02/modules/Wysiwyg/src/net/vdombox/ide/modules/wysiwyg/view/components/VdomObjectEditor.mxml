@@ -287,6 +287,7 @@
 
 	<components:ToolbarPanel id="toolbarPanel"
 							 includeInLayout="false" width="100%"
-							 selectedRenderer="{ selectedRenderer }"/>
+							 selectedRenderer="{ selectedRenderer }"
+							 excludeFrom="xml, xmlDisabled"/>
 
 </s:SkinnableContainer>
