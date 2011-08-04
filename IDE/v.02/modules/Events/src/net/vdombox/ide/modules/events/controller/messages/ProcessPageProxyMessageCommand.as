@@ -34,6 +34,11 @@ package net.vdombox.ide.modules.events.controller.messages
 					break;
 				}
 					
+				case PPMPageTargetNames.XML_PRESENTATION:
+				{
+					break;
+				}
+					
 				case PPMPageTargetNames.OBJECT:
 				{
 //					if ( operation == PPMOperationNames.CREATE )

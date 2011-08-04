@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.events.view.components
 	import flash.geom.Point;
 	
 	import mx.core.DragSource;
+	import mx.events.CloseEvent;
 	import mx.events.DragEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
@@ -16,7 +17,10 @@ package net.vdombox.ide.modules.events.view.components
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
+	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.view.skins.WorkAreaSkin;
+	import net.vdombox.view.Alert;
+	import net.vdombox.view.AlertButton;
 	
 	import spark.components.Group;
 	import spark.components.List;
@@ -605,16 +609,36 @@ package net.vdombox.ide.modules.events.view.components
 
 			addShadowHandlers();
 		}
+		
+		
 
 		private function element_deleteHandler( event : ElementEvent ) : void
 		{
-			if ( event.target is EventElement )
-				deleteEventElement( event.target as EventElement );
-			else if ( event.target is ActionElement )
-				deleteActionElement( event.target as ActionElement );
-
-			//TODO: сделать нормально
-			skin.currentState = "unsaved";
+			Alert.noLabel = "Cancel";
+			Alert.yesLabel = "Delete";
+			
+			var strName : String = "";
+			if (event.target is EventElement)
+				strName = (event.target as EventElement).data.name;
+			else if (event.target is ActionElement)
+				strName = (event.target as ActionElement).title;
+			
+			Alert.Show( "Are you sure want to delete " + strName + " ?",AlertButton.OK_No, undoButton.parentApplication, deleteHandler);
+				
+			
+			function deleteHandler(_event : CloseEvent) : void
+			{
+				if (_event.detail == Alert.YES)
+				{
+					if ( event.target is EventElement )
+						deleteEventElement( event.target as EventElement );
+					else if ( event.target is ActionElement )
+						deleteActionElement( event.target as ActionElement );
+					
+					//TODO: сделать нормально
+					skin.currentState = "unsaved";
+				}
+			}
 		}
 
 		private function element_movedHandler( event : ElementEvent ) : void
