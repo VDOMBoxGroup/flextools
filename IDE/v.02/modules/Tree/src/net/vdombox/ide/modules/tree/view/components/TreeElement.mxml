@@ -14,12 +14,15 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.controls.Image;
+			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
+			import net.vdombox.view.Alert;
+			import net.vdombox.view.AlertButton;
 			
 			import spark.components.Group;
 			import spark.filters.DropShadowFilter;
@@ -230,7 +233,19 @@
 			
 			private function deleteButton_clickHandler( event : MouseEvent ) :void
 			{
-				dispatchEvent( new TreeElementEvent( TreeElementEvent.DELETE ) );
+				Alert.noLabel = "Cancel";
+				Alert.yesLabel = "Delete";
+				
+				Alert.Show( "Are you sure want to delete " + title + " ?",AlertButton.OK_No, this.parentApplication, deleteHandler);
+				
+				function deleteHandler(event : CloseEvent) : void
+				{
+					if (event.detail == Alert.YES)
+					{
+						dispatchEvent( new TreeElementEvent( TreeElementEvent.DELETE ) );
+					}
+				}
+				
 			}
 		]]>
 	</fx:Script>
