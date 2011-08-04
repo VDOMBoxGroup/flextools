@@ -14,6 +14,7 @@
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
+			import net.vdombox.utils.WindowManager;
 
 			private var _value : String;
 			private var _title : String = "Multiline Window";
@@ -39,18 +40,17 @@
 			{				
 //				var popUpWindowManager : PopUpManager = PopUpManager.getInstance();
 				multilineWindow = new MultilineWindow();
-				//multilineWindow.width = 500;
-				//multilineWindow.height = 400;
 
 				multilineWindow.attributeValue = _value;
-				multilineWindow.title = _title;
+				multilineWindow.title = resourceManager.getString( 'Wysiwyg_General', 'multiline_window_title' );
 				dispatchEvent( new AttributeEvent( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE ) );				
 				
 				multilineWindow.addEventListener( MultilineWindowEvent.APPLY, multilineWindow_applyHandler, false, 0, true );
 				multilineWindow.addEventListener( MultilineWindowEvent.CLOSE, multilineWindow_applyHandler, false, 0, true );
 				
-				PopUpManager.addPopUp( multilineWindow, DisplayObject( UIComponent( parent ).parentApplication ), true );
-				PopUpManager.centerPopUp( multilineWindow );
+				//PopUpManager.addPopUp( multilineWindow, DisplayObject( UIComponent( parent ).parentApplication ), true );
+				//PopUpManager.centerPopUp( multilineWindow );
+				WindowManager.getInstance().addWindow(multilineWindow, UIComponent( UIComponent(parent).parentApplication ), true);
 			}
 
 			private function multilineWindow_applyHandler( event : MultilineWindowEvent ) : void
@@ -64,7 +64,8 @@
 					UIComponent( currentTarget ).removeEventListener( MultilineWindowEvent.APPLY, multilineWindow_applyHandler, false );					
 				}
 
-				PopUpManager.removePopUp( multilineWindow );
+				//PopUpManager.removePopUp( multilineWindow );
+				WindowManager.getInstance().removeWindow(multilineWindow);
 			}
 
 

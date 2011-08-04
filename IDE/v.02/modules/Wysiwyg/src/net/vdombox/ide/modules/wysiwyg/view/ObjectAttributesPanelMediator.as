@@ -19,6 +19,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectAttributesPanel;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
+	import net.vdombox.utils.WindowManager;
+
 	import net.vdombox.view.Alert;
 	import net.vdombox.view.AlertButton;
 	
@@ -242,7 +244,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sendNotification( ApplicationFacade.OPEN_EXTERNAL_EDITOR_REQUEST, event.target );
 		}
-		
 
 		private function selectResourceHandler( event : AttributeEvent ) : void
 		{
@@ -257,8 +258,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				
 			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler);
 				
-			PopUpManager.addPopUp( resourceSelectorWindow, DisplayObject( resourceSelector.parentApplication ), true);
-			PopUpManager.centerPopUp( resourceSelectorWindow );
+			WindowManager.getInstance().addWindow(resourceSelectorWindow, UIComponent(resourceSelector.parentApplication), true);
 				
 			function applyHandler (event: Event):void
 			{

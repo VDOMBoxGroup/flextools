@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.view.components.windows
 {
+	import flash.display.NativeWindowSystemChrome;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
@@ -14,12 +15,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
+	import net.vdombox.utils.WindowManager;
 	
 	import spark.components.ComboBox;
 	import spark.components.RichEditableText;
 	import spark.components.TitleWindow;
+	import spark.components.Window;
 	
-	public class MultilineWindow extends TitleWindow
+	public class MultilineWindow extends Window
 	{
 
 		[Bindable]
@@ -34,6 +37,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function MultilineWindow()
 		{
 			super();
+			
+			systemChrome	= NativeWindowSystemChrome.NONE;
+			transparent 	= true;
+			
+			width = 790;
+			height = 550;
+			
+			minWidth = 600;
+			minHeight = 500;
+			
 			this.setFocus();
 			addEventListener( KeyboardEvent.KEY_DOWN, cancel_close_window );	
 		}
@@ -88,9 +101,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			dispatchEvent( new AttributeEvent( AttributeEvent.SELECT_RESOURCE ) );
 		}
 	
-		public function titlewindow1_closeHandler( event : CloseEvent ) : void
+		/*public function titlewindow1_closeHandler( event : CloseEvent ) : void
 		{
-			PopUpManager.removePopUp( this );
-		}
+			//PopUpManager.removePopUp( this );
+			WindowManager.getInstance().removeWindow(this);
+		}*/
 	}
 }

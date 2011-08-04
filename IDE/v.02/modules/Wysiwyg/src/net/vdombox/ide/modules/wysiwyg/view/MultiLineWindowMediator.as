@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.Event;
 	
 	import mx.collections.ArrayCollection;
+	import mx.core.UIComponent;
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.vo.PageVO;
@@ -16,6 +17,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -81,8 +83,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler, false, 0, true);
 			
 			
-			PopUpManager.addPopUp( resourceSelectorWindow, DisplayObject( multilineWindow.parentApplication ), true);
-			PopUpManager.centerPopUp( resourceSelectorWindow );
+			//PopUpManager.addPopUp( resourceSelectorWindow, DisplayObject( multilineWindow.parentApplication ), true);
+			//PopUpManager.centerPopUp( resourceSelectorWindow );
+			WindowManager.getInstance().addWindow(resourceSelectorWindow, UIComponent(multilineWindow.parentApplication), true);
 			
 			function applyHandler (event: Event):void
 			{
@@ -98,7 +101,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 				
 				multilineWindow.attributeValue = autoPasteCommon(str1, str2);
 				resourceSelectorWindow.removeEventListener(Event.CHANGE, applyHandler, false);
-				PopUpManager.removePopUp( resourceSelectorWindow );
+
+				//PopUpManager.removePopUp( resourceSelectorWindow );
+				WindowManager.getInstance().removeWindow(resourceSelectorWindow);
 			}		
 		}
 		

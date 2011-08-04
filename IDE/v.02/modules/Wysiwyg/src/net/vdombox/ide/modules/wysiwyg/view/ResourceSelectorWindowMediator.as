@@ -25,6 +25,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
+	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -35,6 +36,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -243,12 +245,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, loadResourcesHandler );
-//			resourceSelectorWindow.addEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
 			resourceSelectorWindow.addEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
+		}
+		
+		private function initTitle() : void
+		{
+			resourceSelectorWindow.title = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'resource_selector_window_title' );
 		}
 		
 		private function addHandlersForResourcesList( event : Event ) : void
 		{
+			initTitle();
+			
 			resourceSelectorWindow.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
 			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler ); 
 		}
@@ -299,6 +307,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function removeHandlers() : void
 		{
+			resourceSelectorWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.CLOSE, closeHandler );
 //			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler ); //коряво очень поменять местами
@@ -464,7 +473,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function closeHandler( event : ResourceSelectorWindowEvent ) : void
 		{
-			PopUpManager.removePopUp( resourceSelectorWindow );
+			WindowManager.getInstance().removeWindow(resourceSelectorWindow);
 			facade.removeMediator( mediatorName );
 		}
 	}

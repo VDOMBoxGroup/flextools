@@ -1,6 +1,6 @@
-
 package net.vdombox.ide.modules.wysiwyg.view.components.windows
 {
+	import flash.display.NativeWindowSystemChrome;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
@@ -23,8 +23,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import spark.components.TextArea;
 	import spark.components.TextInput;
 	import spark.components.TitleWindow;
+	import spark.components.Window;
 
-	public class ResourceSelectorWindow extends TitleWindow
+	public class ResourceSelectorWindow extends Window
 	{
 		[Bindable]
 		public var multilineSelected    : Boolean = false;
@@ -55,6 +56,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function ResourceSelectorWindow()
 		{
 			super();
+			
+			systemChrome	= NativeWindowSystemChrome.NONE;
+			transparent 	= true;
+			
+			width = 790;
+			height = 550;
+			
+			minWidth = 600;
+			minHeight = 330;
+			
 			init();
 		}
 		
