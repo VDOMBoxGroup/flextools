@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
 	import mx.containers.Accordion;
@@ -136,6 +137,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				
 				category.addType( type );
 			}
+			
 		}
 		
 		private function insertCategory( categoryName : String ) : TypesCategory
@@ -149,8 +151,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 				categories[ categoryName ] = currentCategory;
 
 				currentCategory.label = categoryName;
-
-				typesAccordion.addChild( currentCategory );
+				
+				var childArray : Array = typesAccordion.getChildren();
+				var k:int = 0;
+				
+				for ( ; k < childArray.length;k++ )
+				{
+					if( categoryName < childArray[k].label )
+						break;
+				}
+				if (k >= childArray.length)
+					typesAccordion.addChild(currentCategory);
+				else
+					typesAccordion.addChildAt(currentCategory, k);
 			}
 			else
 			{
