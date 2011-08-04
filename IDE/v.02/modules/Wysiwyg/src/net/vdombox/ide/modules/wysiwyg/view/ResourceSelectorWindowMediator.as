@@ -430,6 +430,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				var bitmapData				: BitmapData;
 				var bitmap					: Bitmap;
 				var bmpWidthHeightRatio		: Number;
+				var dimentionsScale			: Number
 				
 				loaderInfo = LoaderInfo( event.target );
 				bitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
@@ -449,7 +450,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					if (resourcePreviewWindow.resourceImage.width < bitmap.width)
 					{
-						bitmap.scaleX = bitmap.scaleY = resourcePreviewWindow.resourceImage.width / bitmap.width;
+						dimentionsScale = resourcePreviewWindow.resourceImage.width / bitmap.width;
+						
+						bitmap.width *= dimentionsScale;
+						bitmap.height *= dimentionsScale;
 					}
 					
 					bitmap.x = (resourcePreviewWindow.resourceImage.width - bitmap.width) / 2;
