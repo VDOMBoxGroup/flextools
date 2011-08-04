@@ -147,7 +147,7 @@ package net.vdombox.ide.core.model
 			}
 		}		
 		
-		private var timeoutGetResource : uint;
+//		private var timeoutGetResource : uint;
 		private function loadResourceFromServer( resourceVO : ResourceVO ) : void
 		{
 			resourceVO.setStatus( ResourceVO.LOAD_PROGRESS );
@@ -162,8 +162,9 @@ package net.vdombox.ide.core.model
 			token.recipientName = proxyName;
 			token.resourceVO = resourceVO;
 			
-			clearTimeout(timeoutGetResource);
-			timeoutGetResource = setTimeout(getResourceFromServer, 500, resourceVO);
+//			clearTimeout(timeoutGetResource);
+//			timeoutGetResource = setTimeout(getResourceFromServer, 500, resourceVO);
+			
 		}
 
 		public function setResource( resourceVO : ResourceVO ) : void
@@ -450,6 +451,7 @@ package net.vdombox.ide.core.model
 
 			token.recipientName = proxyName;
 			token.resourceVO = resourceVO;
+			
 		}
 
 		private var loadableResources : ArrayCollection = new ArrayCollection;
@@ -469,13 +471,15 @@ package net.vdombox.ide.core.model
 			
 			var operationName : String = operation.name;
 			var resourceVO : ResourceVO;
-
+		
 			switch ( operationName )
 			{
+				
 				//save resource on user`s local disk and set resource to resourceVO
 				case "get_resource":
 				{
-					clearTimeout(timeoutGetResource);
+					
+//					clearTimeout(timeoutGetResource);
 					
 					resourceVO = event.token.resourceVO as ResourceVO;
 					

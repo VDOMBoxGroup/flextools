@@ -259,6 +259,7 @@ package net.vdombox.ide.core.model.business
 		 */
 		public function dispatchEvent( event : Event ) : Boolean
 		{
+			
 			return dispatcher.dispatchEvent( event );
 		}
 
