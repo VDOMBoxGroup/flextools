@@ -6,52 +6,95 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 			
 			private var _id : String;
 			private var _objType : String = '';
 			
 			
-			[Bindable]
-			private var resourceVO : ResourceVO;
+			
+			private var _resourceVO : ResourceVO;
 			
 			private var temp:int = 0;
 			
 			
+			public function get resourceVO():ResourceVO
+			{
+				return _resourceVO;
+			}
+
 			override public function set data ( value : Object ) : void 
 			{
 				super.data = value;
 				
-				if (!value) {
-					itemViewEmpty = true;
+				_resourceVO = value as ResourceVO;
+
+				if (!resourceVO) 
 					return;
-				}
+			}
+			
+			override public function validateProperties():void
+			{
+				super.validateProperties();
 				
-				itemViewEmpty = false;
-				
-				resourceVO = value as ResourceVO;
-				
-				resName.text = '';
-				
-				try 
+				if (resourceVO)
 				{
+					itemViewEmpty = false;
+					
 					objName = resourceVO.name;
 					objType = resourceVO.type;
 					objID	= resourceVO.id;
 					objSize = resourceVO.size;
+					
+					if(resourceVO.icon)
+						smoothImage.source = resourceVO.icon;
+					else
+						BindingUtils.bindSetter( iconLoaded, resourceVO, "icon" );
+//						dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
 				}
-				catch ( error : Error ) 
+				
+			}
+			
+			private var loader : Loader;
+			private function iconLoaded( object : Object = null ) : void
+			{
+				if ( !_resourceVO.icon)
 				{
-					trace ("ThumbnailItem: exception at data setter!"); 
+				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
+				return;
+					
 				}
 				
-				if ( resourceVO )
-					smoothImage.source = resourceVO.icon;
 				
+				loader = new Loader();
+				
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
+				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+				
+				try
+				{
+					loader.loadBytes( _resourceVO.icon );
+				}
+				catch ( error : Error )
+				{
+					// FIXME Сделать обработку исключения если не грузится изображение
+				}
+			}
+			
+			private function onBytesLoaded(event:Event):void
+			{
+				loader = null;
+				
+				if ( event.type == IOErrorEvent.IO_ERROR )
+					return;
+				
+				smoothImage.source = Bitmap( event.target.content );
 			}
 			
 			public function set itemViewEmpty(isEmptyType:Boolean):void
@@ -142,7 +185,7 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:Group height="64" width="184" id="gropuNotEmpty" visible="true">
+	<s:Group height="64" width="184" id="gropuNotEmpty" visible="false">
 		
 		<s:Rect height="100%" width="100%" radiusX="4" radiusY="4">
 			<s:stroke>
@@ -202,7 +245,7 @@
 			
 			<s:VGroup width="100%" height="30" gap="1" verticalAlign="middle" horizontalAlign="center" paddingTop="3">
 				<s:Label id="resName" width="100%" height="100%" text="img" textAlign="left" color="black" 
-						 fontWeight="bold" fontFamily="Arial" fontSize="12" toolTip="{this.resName.text}"/>
+						 fontWeight="bold" fontFamily="Arial" fontSize="12" />
 				
 				<s:HGroup width="100%" height="100%" gap="3" right="5" verticalAlign="middle">
 					<s:Label id="type" text="JPG" textAlign="left" color="black" 
@@ -228,7 +271,7 @@
 		</s:HGroup>		
 	</s:Group>
 
-	<s:Group height="64" width="184" id="groupEmpty" visible="false">
+	<s:Group height="64" width="184" id="groupEmpty" visible="true">
 		<s:Rect height="100%" width="100%" radiusX="4" radiusY="4">
 			<s:stroke>
 				<s:SolidColorStroke color="#424242" weight="1"/>

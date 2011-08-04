@@ -33,6 +33,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
@@ -143,7 +144,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 * @param type - type of Resource
 		 *
 		 */
-		private function set filters( type : String ) : void
+		private function addFilter( type : String ) : void
 		{
 			if ( type )
 			{			
@@ -176,9 +177,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					for each ( resVO in body )
 					{
-						BindingUtils.bindSetter( dataLoaded, resVO, "icon" );
-						filters = resVO.type;
-						sendNotification( ApplicationFacade.GET_ICON, resVO );
+//						BindingUtils.bindSetter( dataLoaded, resVO, "icon" );
+						addFilter(resVO.type);
+//						sendNotification( ApplicationFacade.GET_ICON, resVO );
 					}
 					
 					// set empty resource as null in ListItem
@@ -202,7 +203,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			resourceVO = resVO;
 			
-			filters = resourceVO.type;
+			addFilter( resourceVO.type);
 			
 			//FIXME: ???
 			resourceSelectorWindow.totalResources ++;
@@ -212,14 +213,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.invalidateProperties();
 			
 			BindingUtils.bindSetter( iconForNewResGetted, resourceVO, "icon" );			
-			sendNotification( ApplicationFacade.GET_ICON, resourceVO );
+//			sendNotification( ApplicationFacade.GET_ICON, resourceVO );
+			trace("\n+addNewResourceInList()");
 		}
 		
 		
 		private function iconForNewResGetted( object : Object ) : void
 		{
+			trace("\n-iconForNewResGetted() ");
 			if ( !object )
 			{
+				trace("OK")
 				var timer:Timer = new Timer(1000, 1);
 				timer.addEventListener(TimerEvent.TIMER, requestIcon);
 				timer.start();
@@ -229,12 +233,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				sendNotification( ApplicationFacade.GET_ICON, resourceVO );
 			}
-		}
-		
-		
-		
-		private function dataLoaded( object : Object = null ) : void
-		{
 		}
 
 		private function addHandlers() : void
@@ -246,6 +244,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, loadResourcesHandler );
 			resourceSelectorWindow.addEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
+			
+			
 		}
 		
 		private function initTitle() : void
@@ -259,6 +259,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			resourceSelectorWindow.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
 			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler ); 
+			resourceSelectorWindow.resourcesList.addEventListener( ResourceSelectorWindowEvent.GET_ICON,getIconRequestHendler, true, 0,true);
 		}
 
 		private function deleteResourceHandler( event : ListItemEvent ) : void
@@ -315,8 +316,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, loadResourcesHandler );
 			
 			resourceSelectorWindow.removeEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
+		
+			resourceSelectorWindow.resourcesList.removeEventListener( ResourceSelectorWindowEvent.GET_ICON, getIconRequestHendler);
 		}
 
+		private function getIconRequestHendler( event: ResourceSelectorWindowEvent):void
+		{
+			var listItem : ListItem = event.target as ListItem;
+			
+			sendNotification( ApplicationFacade.GET_ICON, listItem.resourceVO );
+		}
+			
 		private function loadResourcesHandler( event : Event ) : void
 		{
 			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
@@ -372,7 +382,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				return;
 			}
 			
-			previewIconImage();
+//			previewIconImage();
 		}
 
 		private function loadFileHandler( event : ResourceSelectorWindowEvent ) : void
@@ -381,17 +391,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 //			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
 		}
 
-		private function previewIconImage() : void
-		{
-			var loader : Loader = new Loader();
-			loader.name = resourceVO.id;
-
-			loader.loadBytes( resourceVO.icon );
-
-			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loaderComplete );
-			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loaderComplete );
-			loader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, loaderComplete );
-		}
+	
 
 		private function previewImage( object : Object ) : void
 		{
