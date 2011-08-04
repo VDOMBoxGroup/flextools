@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.events.TimerEvent;
 	import flash.filesystem.File;
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
@@ -200,6 +201,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceVO = resVO;
 			
 			filters = resourceVO.type;
+			
+			//FIXME: ???
 			resourceSelectorWindow.totalResources ++;
 			resourceSelectorWindow.resources.addItemAt( resourceVO, resourceSelectorWindow.resources.length );
 			resourceSelectorWindow.scrollToIndex = resourceSelectorWindow.resources.length-1;
@@ -210,12 +213,23 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sendNotification( ApplicationFacade.GET_ICON, resourceVO );
 		}
 		
+		
 		private function iconForNewResGetted( object : Object ) : void
 		{
-			if ( object )
+			if ( !object )
 			{
+				var timer:Timer = new Timer(1000, 1);
+				timer.addEventListener(TimerEvent.TIMER, requestIcon);
+				timer.start();
+			}
+			
+			function requestIcon(event:TimerEvent):void
+			{
+				sendNotification( ApplicationFacade.GET_ICON, resourceVO );
 			}
 		}
+		
+		
 		
 		private function dataLoaded( object : Object = null ) : void
 		{
@@ -316,6 +330,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			resourceSelectorWindow.removeKeyEvents();
 			
+			//FIXME: need be like this: resourcePreviewWindow.resourceVO = resourceVO;
 			resourcePreviewWindow.setName(resourceVO.name);
 			resourcePreviewWindow.setType(resourceVO.type);
 			resourcePreviewWindow.setId(resourceVO.id);
@@ -340,7 +355,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var resVO : ResourceVO = event.currentTarget.resourcesList.selectedItem as ResourceVO;
 			resourceVO = resVO;
 
-			if ( !resourceVO.data || resourceVO.data != null )
+			if ( !resourceVO.data  )
 			{
 				BindingUtils.bindSetter( previewImage, resourceVO, "data" );
 				sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
