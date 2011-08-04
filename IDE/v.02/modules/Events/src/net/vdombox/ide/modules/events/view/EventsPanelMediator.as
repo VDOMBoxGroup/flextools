@@ -126,7 +126,7 @@ package net.vdombox.ide.modules.events.view
 
 			currentTarget = newTarget;
 			currentTypeVO = currentTarget.typeVO;
-
+			
 			eventsPanel.eventsList.dataProvider = new ArrayList( currentTypeVO.events );
 			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_LIST, currentTarget );
 		}

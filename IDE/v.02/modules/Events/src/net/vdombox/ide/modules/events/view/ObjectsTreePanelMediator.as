@@ -172,7 +172,7 @@ package net.vdombox.ide.modules.events.view
 		}
 
 		private function showPages( pages : Array ) : void
-		{trace("showPages");
+		{
 			pagesXMLList = new XMLList();
 			_pages = {};
 
@@ -189,11 +189,12 @@ package net.vdombox.ide.modules.events.view
 		}
 		
 		private function selectCurrentPage( ) : void
-		{trace("selectCurrentPage");
+		{
 			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			if( sessionProxy.selectedPage )
 			{
+				
 				var pageVO : PageVO = sessionProxy.selectedPage;
 				
 				sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, pageVO);

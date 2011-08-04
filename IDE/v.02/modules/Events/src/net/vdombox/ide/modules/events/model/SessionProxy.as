@@ -67,11 +67,12 @@ package net.vdombox.ide.modules.events.model
 			if ( data[ SELECTED_PAGE ] == value )
 				return;
 
-			//FIXME: Исправить это метод во всех SessionProxy
 			if ( data[ SELECTED_PAGE ] && value && data[ SELECTED_PAGE ].id == value.id )
 				return;
 
 			data[ SELECTED_PAGE ] = value;
+			data[ SELECTED_OBJECT ] = null;
+			
 			isSelectedPageChanged = true;
 
 			sendNotifications();
