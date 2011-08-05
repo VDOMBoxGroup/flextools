@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import flash.desktop.Icon;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
@@ -9,20 +8,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
-	import flash.events.TimerEvent;
 	import flash.filesystem.File;
-	import flash.utils.ByteArray;
-	import flash.utils.Timer;
-	import flash.utils.clearInterval;
-	import flash.utils.setInterval;
-	import flash.utils.setTimeout;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
-	import mx.controls.Alert;
-	import mx.core.mx_internal;
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	import mx.resources.ResourceManager;
@@ -31,12 +21,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
-	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -53,6 +41,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 *
 		 * @default
 		 */
+		// TODO: сделать крутилку на загрузку иконки
+		// TODO: сделать крутилку на отправку файла
+		// TODO: сделать состояния
+		// TODO: кнопку "скопировать гуид" сделать нажимаемой
+		// prosmotret' slushateli addHndl and remuveHandlers
+		
 		public static const NAME : String = "ResourceSelectorWindowMediator";
 
 		private var _filters : ArrayCollection = new ArrayCollection();
@@ -83,42 +77,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
 			addHandlers();
-			
-			setIcon();
 
 			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );		
 		}
 		
-		private function setIcon() : void
-		{
-			var file : File = new File( File.applicationDirectory.resolvePath( "modules/Wysiwyg/icons/none.png" ).nativePath );
-
-			file.addEventListener( Event.COMPLETE,			fileDounloaded );
-			file.addEventListener( IOErrorEvent.DISK_ERROR, ioErrorHandler );
-			file.addEventListener( IOErrorEvent.IO_ERROR, 	ioErrorHandler );
-			file.load();
-
-			function fileDounloaded( event : Event ) : void
-			{
-				if ( file )
-				{
-					try
-					{
-						noneIcon.name = "Empty";
-						noneIcon.icon = file.data;
-						noneIcon.data = file.data;
-					}
-					catch ( error : Error )
-					{
-						trace( "Failed: was changed path.", error.message );
-					}
-				}
-			}
-		}
-
+		
 		public function ioErrorHandler( event : IOErrorEvent ) : void
 		{
-			trace( "######################ERROR" + event.text );
+			trace( "###################### ERROR" + event.text );
 		}
 
 		override public function onRemove() : void
@@ -206,34 +172,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 			addFilter( resourceVO.type);
 			
 			//FIXME: ???
-			resourceSelectorWindow.totalResources ++;
+			//resourceSelectorWindow.totalResources ++;
 			resourceSelectorWindow.resources.addItemAt( resourceVO, resourceSelectorWindow.resources.length );
 			resourceSelectorWindow.scrollToIndex = resourceSelectorWindow.resources.length-1;
 			resourceSelectorWindow.selectedResourceIndex = resourceSelectorWindow.resources.length-1;
 			resourceSelectorWindow.invalidateProperties();
 			
-			BindingUtils.bindSetter( iconForNewResGetted, resourceVO, "icon" );			
-//			sendNotification( ApplicationFacade.GET_ICON, resourceVO );
-			trace("\n+addNewResourceInList()");
 		}
 		
-		
-		private function iconForNewResGetted( object : Object ) : void
-		{
-			trace("\n-iconForNewResGetted() ");
-			if ( !object )
-			{
-				trace("OK")
-				var timer:Timer = new Timer(1000, 1);
-				timer.addEventListener(TimerEvent.TIMER, requestIcon);
-				timer.start();
-			}
-			
-			function requestIcon(event:TimerEvent):void
-			{
-				sendNotification( ApplicationFacade.GET_ICON, resourceVO );
-			}
-		}
 
 		private function addHandlers() : void
 		{
@@ -241,11 +187,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.CLOSE, closeHandler );
 //			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler );
-			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler );
-			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, loadResourcesHandler );
+//			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true );
+			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, getResourcesRequestHandler );
 			resourceSelectorWindow.addEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
-			
-			
 		}
 		
 		private function initTitle() : void
@@ -259,7 +203,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			resourceSelectorWindow.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
 			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler ); 
-			resourceSelectorWindow.resourcesList.addEventListener( ResourceSelectorWindowEvent.GET_ICON,getIconRequestHendler, true, 0,true);
+			resourceSelectorWindow.resourcesList.addEventListener( ResourceSelectorWindowEvent.GET_ICON, getIconRequestHendler, true, 0,true);
 		}
 
 		private function deleteResourceHandler( event : ListItemEvent ) : void
@@ -312,8 +256,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.CLOSE, closeHandler );
 //			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler ); //коряво очень поменять местами
-			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler ); //коряво очень
-			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, loadResourcesHandler );
+//			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true ); //коряво очень
+			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, getResourcesRequestHandler );
 			
 			resourceSelectorWindow.removeEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
 		
@@ -327,7 +271,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sendNotification( ApplicationFacade.GET_ICON, listItem.resourceVO );
 		}
 			
-		private function loadResourcesHandler( event : Event ) : void
+		private function getResourcesRequestHandler( event : Event ) : void
 		{
 			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
 		}
@@ -343,16 +287,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			resourcePreviewWindow = new ResourcePreviewWindow();
 			resourcePreviewWindow.addEventListener(Event.CLOSE, onClosePreview);
+			resourcePreviewWindow.resourceVO = resourceVO;
 			
 			PopUpManager.addPopUp( resourcePreviewWindow, DisplayObject( this.resourceSelectorWindow ), true);
-			PopUpManager.centerPopUp( resourcePreviewWindow );
 			
-			resourceSelectorWindow.removeKeyEvents();
+			
+//			resourceSelectorWindow.removeKeyEvents();
 			
 			//FIXME: need be like this: resourcePreviewWindow.resourceVO = resourceVO;
-			resourcePreviewWindow.setName(resourceVO.name);
-			resourcePreviewWindow.setType(resourceVO.type);
-			resourcePreviewWindow.setId(resourceVO.id);
+			
 			
 			BindingUtils.bindSetter( previewImage, resourceVO, "data" );
 			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
@@ -363,27 +306,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			resourcePreviewWindow.removeEventListener(Event.CLOSE, onClosePreview);
 			
-			PopUpManager.removePopUp(resourcePreviewWindow);
+			
 			resourcePreviewWindow = null;
 			
-			resourceSelectorWindow.addKeyEvents();
+			resourceSelectorWindow.addHandlers();
 		}
 		
-		private function loadResourceHandler( event : Event ) : void
-		{
-			var resVO : ResourceVO = event.currentTarget.resourcesList.selectedItem as ResourceVO;
-			resourceVO = resVO;
-
-			if ( !resourceVO.data  )
-			{
-				BindingUtils.bindSetter( previewImage, resourceVO, "data" );
-				sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
-
-				return;
-			}
-			
-//			previewIconImage();
-		}
+		
 
 		private function loadFileHandler( event : ResourceSelectorWindowEvent ) : void
 		{

@@ -2,13 +2,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 {
 	import flash.desktop.Clipboard;
 	import flash.desktop.ClipboardFormats;
-	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
 	import mx.controls.Image;
+	import mx.events.CloseEvent;
+	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourcePreviewWindowSkin;
 	
 	import spark.components.Label;
@@ -34,66 +36,104 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 		[SkinPart( required="true" )]
 		public var resourceDimentions : Label;
 		
+		private var _resourceVO : ResourceVO;
+		
 		public function ResourcePreviewWindow()
 		{
 			super();
 			
-			init();
+			addHandlers();	
 		}
 		
-		override public function stylesInitialized():void {
+
+		public function set resourceVO( resourceVO:ResourceVO ):void
+		{
+			_resourceVO = resourceVO;
+		}
+		
+		override public function validateProperties():void
+		{
+			super.validateProperties();
+			
+			if(_resourceVO)
+			{
+				resourceName.text = _resourceVO.name;
+				resourceName.toolTip = _resourceVO.name; 
+				
+				resourceId.text = _resourceVO.id;
+				resourceId.toolTip = _resourceVO.id;
+				
+				resourceType.text =  _resourceVO.type.toUpperCase();
+			}
+			
+		}
+		
+		
+
+		override public function validateDisplayList():void
+		{
+			setFocus();
+			
+			super.validateDisplayList();
+		}
+		
+		
+		
+		override public function stylesInitialized():void 
+		{
 			super.stylesInitialized();
 			this.setStyle( "skinClass", ResourcePreviewWindowSkin );
 		}
 		
-		private function init() : void
+		
+		
+		
+		private function addHandlers():void
 		{
-			setFocus();
-			addKeyEvents();					
+			addEventListener( KeyboardEvent.KEY_DOWN, onKeyBtnDown, false, 0, true );
+			addEventListener(CloseEvent.CLOSE, closeHandler, false, 0, true);
+			addEventListener(FlexEvent.CREATION_COMPLETE, createComleatHandler, false, 0, true);
+			
 		}
 		
-		private function addKeyEvents():void
+		private function createComleatHandler(event : FlexEvent):void
 		{
-			addEventListener( KeyboardEvent.KEY_DOWN, onKeyBtnDown );
+			PopUpManager.centerPopUp( this );
 		}
 		
-		private function removeKeyEvents():void
+		
+		private function closeHandler( event : CloseEvent):void
+		{
+			removeHandlers();
+			PopUpManager.removePopUp(this);
+		}
+		
+		private function removeHandlers():void
 		{
 			removeEventListener( KeyboardEvent.KEY_DOWN, onKeyBtnDown );
+			removeEventListener(CloseEvent.CLOSE, closeHandler);
+			removeEventListener(FlexEvent.CREATION_COMPLETE, createComleatHandler);
 		}
+		
+		
 		
 		private function onKeyBtnDown( event: KeyboardEvent = null ) : void
 		{
 			if ( event != null )
 				if ( event.charCode != Keyboard.ESCAPE )
 					return;
-			
-			closePreviewWindow()
+			//
+			event.stopImmediatePropagation();
+			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 		}	
 			
 		public function closePreviewWindow():void
 		{
-			removeKeyEvents();
+			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 			
-			this.dispatchEvent(new Event(Event.CLOSE));
 		}
 		
-		public function setType (_type:String) : void 
-		{
-			resourceType.text = _type.toUpperCase();
-		}
 		
-		public function setId (_id:String) : void 
-		{
-			resourceId.text = _id;
-			resourceId.toolTip = resourceId.text
-		}
-		
-		public function setName(_name:String):void
-		{
-			resourceName.text = _name;
-			resourceName.toolTip = resourceName.text;
-		}
 		
 		public function setDimentions (_width:Number, _height:Number, _isViewable:Boolean = true) : void 
 		{

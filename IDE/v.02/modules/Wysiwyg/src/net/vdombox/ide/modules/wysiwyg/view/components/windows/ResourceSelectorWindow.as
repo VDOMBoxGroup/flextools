@@ -66,8 +66,18 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			minWidth = 600;
 			minHeight = 330;
 			
-			init();
+			addHandlers();
+		
 		}
+		
+		override public function validateDisplayList():void
+		{
+			// TODO Auto Generated method stub
+			super.validateDisplayList();
+			setFocus();
+		}
+		
+		
 		
 		override public function stylesInitialized():void {
 			super.stylesInitialized();
@@ -204,15 +214,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				
 		}		
 		
-		private function init() : void
-		{
-			this.setFocus();
-			//				dispatchEvent( FlexEvent.CREATION_COMPLETE );
-			addKeyEvents();					
-		}
 		
-		public function addKeyEvents():void
+		
+		public function addHandlers():void
 		{
+			
 			addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );
 		}
 		

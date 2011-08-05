@@ -64,13 +64,16 @@
 			private var loader : Loader;
 			private function iconLoaded( object : Object = null ) : void
 			{
-				if ( !_resourceVO.icon)
-				{
-				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
-				return;
-					
-				}
 				
+				if ( !object )
+				{
+					// FIXME: сделать увеличиваюшуюся задержку (100, 200, 400,  мах = 800)  
+					var timer:Timer = new Timer(500, 1);
+					timer.addEventListener(TimerEvent.TIMER, requestIcon);
+					timer.start();
+					
+					return;
+				}
 				
 				loader = new Loader();
 				
@@ -85,6 +88,12 @@
 				{
 					// FIXME Сделать обработку исключения если не грузится изображение
 				}
+				
+				function requestIcon(event:TimerEvent):void
+				{
+					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
+				}
+				
 			}
 			
 			private function onBytesLoaded(event:Event):void
