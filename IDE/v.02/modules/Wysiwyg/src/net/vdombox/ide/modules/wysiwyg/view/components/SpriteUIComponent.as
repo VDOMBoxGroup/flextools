@@ -29,7 +29,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			explicitHeight = sprite.height;
 
-			explicitWidth = sprite.height;
+			explicitWidth = sprite.width;
 
 			addChild( sprite );
 

@@ -80,7 +80,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			facade.registerMediator( resourceSelectorWindowMediator );
 			
 			resourceSelectorWindow.multilineSelected = true;
-			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler, false, 0, true);
+			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler, false, 0, false);
 			
 			
 			//PopUpManager.addPopUp( resourceSelectorWindow, DisplayObject( multilineWindow.parentApplication ), true);
@@ -104,6 +104,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				//PopUpManager.removePopUp( resourceSelectorWindow );
 				WindowManager.getInstance().removeWindow(resourceSelectorWindow);
+				facade.removeMediator( resourceSelectorWindowMediator.getMediatorName() );
 			}		
 		}
 		

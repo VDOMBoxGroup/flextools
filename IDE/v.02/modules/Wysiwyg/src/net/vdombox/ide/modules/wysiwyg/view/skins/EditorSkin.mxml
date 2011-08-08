@@ -5,7 +5,9 @@
 			 xmlns:libcomponents="net.vdombox.ide.common.components.*"
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 creationComplete="creationCompleteHandler()">
+			 width="100%" height="100%"
+			 creationComplete="creationCompleteHandler()"
+			 resize="trace('EditorSkin')">
 
 	<fx:Metadata>
 		<![CDATA[ 

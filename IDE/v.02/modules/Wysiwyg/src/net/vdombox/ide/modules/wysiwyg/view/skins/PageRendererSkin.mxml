@@ -2,7 +2,8 @@
 <s:SparkSkin xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
-			 xmlns:s="library://ns.adobe.com/flex/spark">
+			 xmlns:s="library://ns.adobe.com/flex/spark" width="100%" height="100%" 
+			 resize="trace('PageSkin')">
 
 	<s:states>
 
@@ -18,7 +19,7 @@
 	</s:states>
 
 	<s:Rect id="backgroundRect"
-			bottom="0" left="0" right="0" top="0">
+			width="100%" height="100%">
 
 		<s:fill>
 
@@ -31,7 +32,7 @@
 		</s:stroke>
 	</s:Rect>
 
-	<s:Group id="background"/>
+	<s:Group id="background" width="100%" height="100%"/>
 
 	<s:Scroller id="scroller"
 				focusEnabled="false"

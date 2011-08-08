@@ -7,7 +7,8 @@
 					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.EditorSkin"
 					  preinitialize="skinnablecontainer1_preinitializeHandler(event)"
 					  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IEditor"
-					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)">
+					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)"
+					  resize="trace('VdomObject')">
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
@@ -274,10 +275,11 @@
 		<s:VerticalLayout/>
 	</s:layout>
 
-	<s:Group height="100%" width="100%">
+	<s:Group id="groupPageRenderer" height="100%" width="100%" >
 		<components:PageRenderer id="renderer" 
 								 height="100%" width="100%"
-								 selectedRenderer="{ selectedRenderer }" includeIn="wysiwyg, wysiwygDisabled, normal, disabled"/>
+								 selectedRenderer="{ selectedRenderer }" includeIn="wysiwyg, wysiwygDisabled, normal, disabled" 
+								 resize="trace('PageRenderer')"/>
 
 		<editors:XMLScriptEditor id="xmlScriptEditor"
 								 height="100%" width="100%"

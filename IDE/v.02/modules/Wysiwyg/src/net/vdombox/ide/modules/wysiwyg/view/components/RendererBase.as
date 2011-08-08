@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	
 	import flash.display.Bitmap;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Graphics;
 	import flash.display.Loader;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -20,6 +21,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	
+	import flashx.textLayout.factory.TruncationOptions;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
@@ -33,6 +36,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.core.UIComponent;
 	import mx.events.DragEvent;
 	import mx.events.FlexEvent;
+	import mx.events.ResizeEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
 	
@@ -713,6 +717,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			loader = new Loader();
 
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
+			parentApplication.addEventListener("rrrr", onBytesLoaded);
 			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
 
 			try
@@ -791,46 +796,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return result;
 		}
 
-		private function getBackGroundRect( content : Bitmap ) : Rectangle
-		{
-			var attributeVO : AttributeVO;
-			var rectangle : Rectangle = new Rectangle();
-
-			attributeVO = _renderVO.getAttributeByName( "backgroundrepeat" );
-
-			if ( !attributeVO )
-				return rectangle;
-
-			switch ( attributeVO.value )
-			{
-				case "repeat":
-				{
-					rectangle.width = width;
-					rectangle.height = height;
-					break;
-				}
-				case "no-repeat":
-				{
-					rectangle.width = content.width;
-					rectangle.height = content.height;
-					break;
-				}
-				case "repeat-x":
-				{
-					rectangle.width = width;
-					rectangle.height = content.height;
-					break;
-				}
-				case "repeat-y":
-				{
-					rectangle.width = content.width;
-					rectangle.height = height;
-					break;
-				}
-			}
-
-			return rectangle;
-		}
+		
 
 		/**
 		 *
@@ -952,10 +918,35 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
 			}
 		}
-
+		
+		override public function validateDisplayList():void
+		{
+			// TODO Auto Generated method stub
+			super.validateDisplayList();
+			if (backgroundRefreshNeedFlag)
+			{
+				backgroundRefreshNeedFlag = false;
+				onBytesLoaded(null);
+			}
+			
+		}
+		
+		private var backgroundRefreshNeedFlag : Boolean = false; 
+		
+		private function resizePageRenderer(event : Event): void
+		{
+			backgroundRefreshNeedFlag = true;
+			invalidateDisplayList();
+		}
+		
+		
+		
 		/**
 		 * Display image bitmap once bytes have loaded
 		 **/
+		
+		
+		private var content : Bitmap;
 		private function onBytesLoaded( event : Event ) : void
 		{
 
@@ -964,21 +955,76 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			loader = null;
 
-			if ( event.type == IOErrorEvent.IO_ERROR )
-				return;
+			if (event != null)
+			{
+				if ( event.type == IOErrorEvent.IO_ERROR )
+					return;
+				else if ( event.type != "rrrr" )
+					content = Bitmap( event.target.content );
+			}
 
-			var backGrSprite : Sprite = new Sprite();
-			var bitmapWidth : Number, bitmapHeight : Number;
-			var content : Bitmap;
-			var rectangle : Rectangle;
+			if (_renderVO != null && content != null)
+			{
+				var backGrSprite : Sprite = new Sprite();
+				var bitmapWidth : Number, bitmapHeight : Number;		
+				var rectangle : Rectangle;
+				
+				/*var graph : Graphics = new Graphics();
+				graph.beginBitmapFill( content.bitmapData, null, true );*/
+				
+				rectangle = getBackGroundRect( content );
 
-			content = Bitmap( event.target.content );
-			rectangle = getBackGroundRect( content );
-
-			backGrSprite.graphics.clear();
-			backGrSprite.graphics.beginBitmapFill( content.bitmapData, null, true );
-			backGrSprite.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
-			background.addElement( new SpriteUIComponent( backGrSprite ) );
+				backGrSprite.graphics.clear();
+				backGrSprite.graphics.beginBitmapFill( content.bitmapData, null, true );
+				backGrSprite.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
+				backGrSprite.graphics.endFill();
+				
+				/*backgroundRect.fill.begin( backGrSprite.graphics, rectangle, new Point( 0, 0 ) );
+				backgroundRect.fill.end(graphics);*/
+				background.addElement( new SpriteUIComponent( backGrSprite ) );
+				invalidateDisplayList();
+			}
+			
+			function getBackGroundRect( content : Bitmap ) : Rectangle
+			{
+				var attributeVO : AttributeVO;
+				var rectangle : Rectangle = new Rectangle();
+						
+				attributeVO = _renderVO.getAttributeByName( "backgroundrepeat" );
+				
+				if ( !attributeVO )
+					return rectangle;
+				
+				switch ( attributeVO.value )
+				{
+					case "repeat":
+					{
+						rectangle.width = width;
+						rectangle.height = height;
+						break;
+					}
+					case "no-repeat":
+					{
+						rectangle.width = content.width;
+						rectangle.height = content.height;
+						break;
+					}
+					case "repeat-x":
+					{
+						rectangle.width = width;
+						rectangle.height = content.height;
+						break;
+					}
+					case "repeat-y":
+					{
+						rectangle.width = content.width;
+						rectangle.height = height;
+						break;
+					}
+				}
+				
+				return rectangle;
+			}
 		}
 
 		/**

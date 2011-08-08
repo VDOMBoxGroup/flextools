@@ -102,5 +102,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			super.addHandlers();
 		}
+		
+		
 	}
 }

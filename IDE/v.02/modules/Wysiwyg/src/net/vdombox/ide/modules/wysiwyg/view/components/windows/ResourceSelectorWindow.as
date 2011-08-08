@@ -240,7 +240,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function onApplyClick():void
 		{
 			dispatchEvent( new Event( Event.CHANGE ) );
-			dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE));
 		}
 		
 		public function onCancelClick():void
