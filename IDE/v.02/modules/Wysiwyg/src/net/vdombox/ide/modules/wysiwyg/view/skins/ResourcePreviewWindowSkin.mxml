@@ -95,7 +95,11 @@
 								  width="14" height="16"
 								  toolTip="Copy"
 								  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.CopyResourceIdBtnSkin"
-								  click="hostComponent.copyResourceID()"/>
+								  click="hostComponent.copyResourceID()"
+								  buttonMode="true"
+								  tabEnabled="false"
+								  focusEnabled="false"
+								  useHandCursor="true"/>
 						
 					</s:HGroup>
 				</s:VGroup>

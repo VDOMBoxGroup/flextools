@@ -41,10 +41,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 *
 		 * @default
 		 */
-		// TODO: сделать крутилку на загрузку иконки	- DONE
+		// TODO: сделать крутилку на загрузку иконки			- DONE
 		// TODO: сделать крутилку на отправку файла
-		// TODO: сделать состояния						- DONE
-		// TODO: кнопку "скопировать гуид" сделать нажимаемой
+		// TODO: сделать состояния								- DONE
+		// TODO: кнопку "скопировать гуид" сделать нажимаемой	- DONE
 		// prosmotret' slushateli addHndl and remuveHandlers
 		
 		public static const NAME : String = "ResourceSelectorWindowMediator";
