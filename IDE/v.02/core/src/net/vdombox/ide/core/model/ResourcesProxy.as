@@ -321,6 +321,9 @@ package net.vdombox.ide.core.model
 		
 		private function creationIconCompleted( resourceVO : ResourceVO, file:ByteArray ) : void
 		{			
+			if (!resourceVO) 
+				return;
+			
 			resourceVO.icon		= file;
 			resourceVO.iconId 	= resourceVO.id + "_icon";
 			resourceVO.data 	= null;
