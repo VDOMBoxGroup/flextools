@@ -41,9 +41,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 *
 		 * @default
 		 */
-		// TODO: сделать крутилку на загрузку иконки
+		// TODO: сделать крутилку на загрузку иконки	- DONE
 		// TODO: сделать крутилку на отправку файла
-		// TODO: сделать состояния
+		// TODO: сделать состояния						- DONE
 		// TODO: кнопку "скопировать гуид" сделать нажимаемой
 		// prosmotret' slushateli addHndl and remuveHandlers
 		

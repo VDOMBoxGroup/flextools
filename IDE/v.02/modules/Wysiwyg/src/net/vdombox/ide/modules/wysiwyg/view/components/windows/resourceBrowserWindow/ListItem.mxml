@@ -37,6 +37,7 @@
 
 				if (!resourceVO) 
 					return;
+				
 			}
 			
 			override public function validateProperties():void
@@ -45,7 +46,7 @@
 				
 				if (resourceVO)
 				{
-					itemViewEmpty = false;
+					setItemCurrentState(false);
 					
 					objName = resourceVO.name;
 					objType = resourceVO.type;
@@ -58,7 +59,24 @@
 						BindingUtils.bindSetter( iconLoaded, resourceVO, "icon" );
 //						dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
 				}
+				setItemCurrentState(true);
 				
+			}
+			
+			private function setItemCurrentState(isEmptyResource:Boolean = false):void
+			{
+				switch (currentState) 
+				{
+					case "normal" :
+						currentState = isEmptyResource ? "emptyResource" : "normalResource";
+						break;
+					case "hovered" :
+						currentState = isEmptyResource ? "emptyResourceHovered" : "normalResourceHovered";
+						break;
+					case "selected" :
+						currentState = isEmptyResource ? "emptyResourceSelected" : "normalResourceSelected";
+						break;
+				}
 			}
 			
 			private var loader : Loader;
@@ -106,12 +124,6 @@
 				smoothImage.source = Bitmap( event.target.content );
 			}
 			
-			public function set itemViewEmpty(isEmptyType:Boolean):void
-			{
-				this.groupEmpty.visible = isEmptyType;
-				this.gropuNotEmpty.visible = !isEmptyType;
-			}
-				
 			public function set objSize(size:int):void
 			{
 				if (size >= 0) {
@@ -187,14 +199,22 @@
 		]]>
 	</fx:Script>
 	
-	
 	<s:states>
-		<s:State name="normal" />
-		<s:State name="hovered" />	
-		<s:State name="selected" />
+		<s:State name="normalResource" stateGroups="NormalResourceGroup"/>
+		<s:State name="normalResourceHovered" stateGroups="NormalResourceGroup"/>
+		<s:State name="normalResourceSelected" stateGroups="SelectedGroup, NormalResourceGroup"/>
+		
+		<s:State name="emptyResource" stateGroups="EmptyResourceGroup"/>
+		<s:State name="emptyResourceHovered" stateGroups="EmptyResourceGroup"/>
+		<s:State name="emptyResourceSelected" stateGroups="SelectedGroup, EmptyResourceGroup"/>
+		
+		<s:State name="normal"/>
+		<s:State name="hovered"/>	
+		<s:State name="selected"/>
+		
 	</s:states>
 	
-	<s:Group height="64" width="184" id="gropuNotEmpty" visible="false">
+	<s:Group height="64" width="184" id="gropuNotEmpty" excludeFrom="EmptyResourceGroup">
 		
 		<s:Rect height="100%" width="100%" radiusX="4" radiusY="4">
 			<s:stroke>
@@ -202,8 +222,8 @@
 			</s:stroke>
 			<s:fill>
 				<s:LinearGradient rotation="90">
-					<s:GradientEntry color="#FFFFFF" color.selected="#b50000"/>
-					<s:GradientEntry color="#bcbcbc" color.selected="#9e0000"/>
+					<s:GradientEntry color="#FFFFFF" color.SelectedGroup="#b50000"/>
+					<s:GradientEntry color="#bcbcbc" color.SelectedGroup="#9e0000"/>
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
@@ -217,12 +237,13 @@
 			
 			<mx:Spacer width="4" />
 			<s:Group width="42" height="42">
-				
 				<resourceBrowserWindow:SmoothImage id="smoothImage" height="100%" width="100%"
 												   verticalAlign="middle" horizontalAlign="center" 
 												   maintainAspectRatio="true"
 												   scaleContent="true" 
-												   smoothBitmapContent="true"/>
+												   smoothBitmapContent="true"
+												   cacheAsBitmap="true"
+												   source="@Embed('assets/spinner.swf')"/>
 				
 				<s:Group id="imageMagnifier" visible="false" height="100%" width="100%" 
 						 mouseEnabled="false" mouseFocusEnabled="false" mouseChildren="false">
@@ -262,7 +283,7 @@
 					<!--<s:Label id="res" text="" textAlign="left" />-->
 					<mx:Spacer width="1"/>
 					<s:Label id="resSize" width="100%" text="0kb" textAlign="left" color="black" 
-							 fontWeight="normal" fontFamily="Arial" fontSize="10"/>
+							 fontWeight="normal" fontFamily="Arial" fontSize="10" visible="false"/>
 				</s:HGroup>	
 			</s:VGroup>
 			
@@ -280,15 +301,15 @@
 		</s:HGroup>		
 	</s:Group>
 
-	<s:Group height="64" width="184" id="groupEmpty" visible="true">
+	<s:Group height="64" width="184" id="groupEmpty" includeIn="EmptyResourceGroup">
 		<s:Rect height="100%" width="100%" radiusX="4" radiusY="4">
 			<s:stroke>
 				<s:SolidColorStroke color="#424242" weight="1"/>
 			</s:stroke>
 			<s:fill>
 				<s:LinearGradient>
-					<s:GradientEntry color="#343434" color.selected="#b50000"/>
-					<s:GradientEntry color="#474747" color.selected="#9e0000"/>
+					<s:GradientEntry color="#343434" color.SelectedGroup="#b50000"/>
+					<s:GradientEntry color="#474747" color.SelectedGroup="#9e0000"/>
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
