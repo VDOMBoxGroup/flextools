@@ -711,6 +711,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			dispatchEvent( new RendererEvent( RendererEvent.CREATED ) );
+			trace("CreatedComplete111");
 		}
 
 		private function dataLoaded( object : Object = null ) : void
@@ -718,7 +719,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			loader = new Loader();
 
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
-			parentApplication.addEventListener("rrrr", resizePageRenderer);
+			parentApplication.addEventListener("resizeMainWindow", resizePageRenderer);
 			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
 
 			try
@@ -928,6 +929,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				backgroundRefreshNeedFlag = false;
 				onBytesLoaded(null);
+				refresh();
 			}
 			
 		}
@@ -939,9 +941,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			backgroundRefreshNeedFlag = true;
 			invalidateDisplayList();
 		}
-		
-		
-		
+				
 		/**
 		 * Display image bitmap once bytes have loaded
 		 **/
@@ -959,19 +959,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				if ( event.type == IOErrorEvent.IO_ERROR )
 					return;
-				else if ( event.type != "rrrr" )
+				else if ( event.type != "resizeMainWindow" )
 					content = Bitmap( event.target.content );
 			}
 
 			if (_renderVO != null && content != null)
 			{
-
 				var backGrSprite : Sprite = new Sprite();
 				var bitmapWidth : Number, bitmapHeight : Number;		
 				var rectangle : Rectangle;
-				
-				/*var graph : Graphics = new Graphics();
-				graph.beginBitmapFill( content.bitmapData, null, true );*/
 				
 				rectangle = getBackGroundRect( content );
 
@@ -979,9 +975,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				backGrSprite.graphics.beginBitmapFill( content.bitmapData, null, true );
 				backGrSprite.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
 				backGrSprite.graphics.endFill();
-				
-				/*backgroundRect.fill.begin( backGrSprite.graphics, rectangle, new Point( 0, 0 ) );
-				backgroundRect.fill.end(graphics);*/
+
 				background.removeAllElements();
 				background.addElement( new SpriteUIComponent( backGrSprite ) );
 				invalidateDisplayList();
@@ -1040,7 +1034,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				lock( true );
 				return;
 			}
-
+			
 			var contetntPart : XML;
 
 			background.removeAllElements();
