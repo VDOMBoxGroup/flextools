@@ -137,13 +137,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				return;
 			
 			var resourceVO : ResourceVO;
+			var requiredID : String;
+			
+			requiredID = _value.substring( 5, _value.length - 1 );
 			
 			for each ( resourceVO in _resources.source )
 			{
 				if (!resourceVO) {
 					continue;
 				}
-				if ( resourceVO.id == _value.substring( 5, _value.length - 1 ) )
+				if ( resourceVO.id == requiredID )
 				{
 					resourcesList.selectedItem = resourceVO;						
 					//dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) )

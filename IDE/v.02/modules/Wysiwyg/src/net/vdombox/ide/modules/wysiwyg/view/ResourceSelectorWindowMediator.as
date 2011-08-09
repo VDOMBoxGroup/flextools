@@ -22,7 +22,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem2;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.utils.WindowManager;
@@ -46,6 +46,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		// TODO: сделать состояния								- DONE
 		// TODO: кнопку "скопировать гуид" сделать нажимаемой	- DONE
 		// prosmotret' slushateli addHndl and remuveHandlers
+		// TODO: иконки загружать на визибл
 		
 		public static const NAME : String = "ResourceSelectorWindowMediator";
 
@@ -139,7 +140,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					resourceSelectorWindow.resources = new ArrayList( body as Array );
 										
-					allResourcesList = new ArrayList( body as Array );
+//					allResourcesList = new ArrayList( body as Array );
 
 					for each ( resVO in body )
 					{
@@ -266,7 +267,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function getIconRequestHendler( event: ResourceSelectorWindowEvent):void
 		{
-			var listItem : ListItem = event.target as ListItem;
+			var listItem : ListItem2 = event.target as ListItem2;
 			
 			sendNotification( ApplicationFacade.GET_ICON, listItem.resourceVO );
 		}

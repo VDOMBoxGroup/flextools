@@ -130,7 +130,7 @@
 								 enabled="true"
 								 contentBackgroundAlpha="0" contentBackgroundColor="#000000" borderVisible="false"
 								 dataProvider="{ hostComponent._resources }"
-								 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem"
+								 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem2"
 								 x.normal="0" 
 								 chromeColor="#777777"
 								 focusColor="#CCCCCC" 

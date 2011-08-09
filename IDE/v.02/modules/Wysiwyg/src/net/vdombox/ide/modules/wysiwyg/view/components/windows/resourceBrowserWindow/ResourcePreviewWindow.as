@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 	import flash.ui.Keyboard;
 	
 	import mx.controls.Image;
+	import mx.core.FlexSprite;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
@@ -45,7 +46,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 			addHandlers();	
 		}
 		
-
 		public function set resourceVO( resourceVO:ResourceVO ):void
 		{
 			_resourceVO = resourceVO;

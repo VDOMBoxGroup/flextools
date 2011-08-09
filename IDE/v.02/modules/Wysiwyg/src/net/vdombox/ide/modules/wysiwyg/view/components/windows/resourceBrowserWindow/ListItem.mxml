@@ -2,7 +2,7 @@
 
 <s:ItemRenderer  xmlns:fx="http://ns.adobe.com/mxml/2009"
 				 xmlns:s="library://ns.adobe.com/flex/spark"
-				 xmlns:mx="library://ns.adobe.com/flex/mx">
+				 xmlns:mx="library://ns.adobe.com/flex/mx"  creationComplete="itemrenderer1_creationCompleteHandler(event)" >
 	
 	<fx:Script>
 		<![CDATA[
@@ -21,9 +21,22 @@
 			
 			private var _resourceVO : ResourceVO;
 			
+			private var _imageComleated : Boolean; 
+			
 			private var temp:int = 0;
 			
 			
+			private function get imageComleated():Boolean
+			{
+				return _imageComleated;
+			}
+
+			private function set imageComleated(value:Boolean):void
+			{
+				trace("\n imageComleated(): " + resourceVO.name +" : " + value )
+				_imageComleated = value;
+			}
+
 			public function get resourceVO():ResourceVO
 			{
 				return _resourceVO;
@@ -31,27 +44,41 @@
 
 			override public function set data ( value : Object ) : void 
 			{
+//				trace("\n DATA: ");
 				super.data = value;
+				
+				if( !value )
+				{
+//					trace("!value")
+					return;
+				}
 				
 				_resourceVO = value as ResourceVO;
 
-				if (!resourceVO) 
+				if (!resourceVO)
+				{
+//					trace("!resourceVO")
 					return;
+				}
+//				trace(  resourceVO.name)
+				objName = resourceVO.name;
+				objType = resourceVO.type;
+				objID	= resourceVO.id;
+				objSize = resourceVO.size;
 				
 			}
 			
 			override public function validateProperties():void
 			{
 				super.validateProperties();
+				trace("\n validateProperties(): ")
+				trace("showsCaret: " + showsCaret)
 				
 				if (resourceVO)
 				{
 					setItemCurrentState(false);
 					
-					objName = resourceVO.name;
-					objType = resourceVO.type;
-					objID	= resourceVO.id;
-					objSize = resourceVO.size;
+					
 					
 					if(resourceVO.icon)
 						smoothImage.source = resourceVO.icon;
@@ -86,7 +113,7 @@
 				if ( !object )
 				{
 					// FIXME: сделать увеличиваюшуюся задержку (100, 200, 400,  мах = 800)  
-					var timer:Timer = new Timer(500, 1);
+					var timer:Timer = new Timer(1000, 1);
 					timer.addEventListener(TimerEvent.TIMER, requestIcon);
 					timer.start();
 					
@@ -122,6 +149,9 @@
 					return;
 				
 				smoothImage.source = Bitmap( event.target.content );
+				imageComleated = true;
+				invalidateProperties();
+				invalidateDisplayList();
 			}
 			
 			public function set objSize(size:int):void
@@ -194,6 +224,29 @@
 			protected function smoothImage_clickHandler(event:MouseEvent):void
 			{
 				dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
+			}
+			
+			protected function itemrenderer1_showHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				if (resourceVO)
+				{
+					showsCaret = true;
+					invalidateProperties();
+				trace("\n SHOW: "+ resourceVO.name )
+				}
+				
+			}
+			
+			protected function itemrenderer1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				if (resourceVO && !imageComleated )
+				{
+					
+						BindingUtils.bindSetter( iconLoaded, resourceVO, "icon", false, true );
+					//						dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
+				}
 			}
 			
 		]]>

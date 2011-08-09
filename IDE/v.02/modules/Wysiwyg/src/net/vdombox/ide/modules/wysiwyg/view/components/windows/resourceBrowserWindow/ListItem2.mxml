@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true" 
+				xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*"
+				creationComplete="itemrenderer1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+			
+			public var resourceVO : ResourceVO;
+			
+			override public function set data ( value : Object ) : void 
+			{
+				if (!value)
+					return;
+				
+				resourceVO = value as ResourceVO;
+				
+				if (resourceVO)
+				text.text = resourceVO.name;
+			}
+			
+			protected function itemrenderer1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				if (resourceVO  )
+				{
+					BindingUtils.bindSetter( iconLoaded, resourceVO, "icon", false, true );
+					//						dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
+				}
+			}
+			
+			private var loader : Loader;
+			private function iconLoaded( object : Object = null ) : void
+			{
+				
+				if ( !object )
+				{
+					// FIXME: сделать увеличиваюшуюся задержку (100, 200, 400,  мах = 800)  
+					var timer:Timer = new Timer(1000, 1);
+					timer.addEventListener(TimerEvent.TIMER, requestIcon);
+					timer.start();
+					
+					return;
+				}
+				
+				loader = new Loader();
+				
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
+				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+				
+				try
+				{
+					loader.loadBytes( resourceVO.icon );
+				}
+				catch ( error : Error )
+				{
+					// FIXME Сделать обработку исключения если не грузится изображение
+				}
+				
+				function requestIcon(event:TimerEvent):void
+				{
+					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
+				}
+				
+			}
+			
+			private function onBytesLoaded(event:Event):void
+			{
+				loader = null;
+				
+				if ( event.type == IOErrorEvent.IO_ERROR )
+					return;
+				
+				smoothImage.source = Bitmap( event.target.content );
+				
+			}
+			
+		]]>
+	</fx:Script>
+	<s:Label id="text" />
+	<resourceBrowserWindow:SmoothImage id="smoothImage" height="100%" width="100%"
+									   verticalAlign="middle" horizontalAlign="center" 
+									   maintainAspectRatio="true"
+									   scaleContent="true" 
+									   smoothBitmapContent="true"/>
+	
+	
+</s:ItemRenderer>
