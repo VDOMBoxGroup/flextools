@@ -85,8 +85,10 @@
 				
 			</s:HGroup>
 			
-			<s:HGroup gap="15" height="25" paddingRight="30" width="50%">
-				<mx:Spacer width="100%"/>
+			<s:HGroup gap="15" height="25" paddingRight="30"  paddingLeft="50" width="50%" verticalAlign="middle">
+				
+				<s:Label color="#909b95" text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_show_as' ) }"/>
+				
 				<s:VGroup id="xmlButton" enabled.wysiwyg="true" enabled.xml="false" height="25"
 						  click="currentState='xml'" verticalAlign="bottom" horizontalAlign="center" gap="0">
 					<s:Label color="#007cb6" fontWeight="bold" height="12"
@@ -114,6 +116,7 @@
 			</s:Line>
 			
 			<s:Group width="50%" visible.wysiwyg="true" visible.xml="false">
+				
 				<s:Rect height="25"
 						left="0" right="0" top="0">
 					<s:fill>
@@ -124,7 +127,7 @@
 					</s:fill>
 				</s:Rect>
 				
-				<s:HGroup height="25" paddingLeft="20" paddingRight="30" verticalAlign="middle" width="100%" gap="30">
+				<s:HGroup height="25" paddingLeft="20" paddingRight="30" verticalAlign="middle" width="100%" gap="30" horizontalAlign="right">
 					
 					<s:HGroup height="25" verticalAlign="middle" gap="5" width="80">
 						<mx:Image source="@Embed('icons/Cursor.png')" smoothBitmapContent="true" />

@@ -40,6 +40,12 @@
 
 			[SkinPart( required="true" )]
 			public var statusLabel : Label;
+			
+			[SkinPart( required="true" )]
+			public var strXWritten : Label;
+			
+			[SkinPart( required="true" )]
+			public var strYWritten : Label;
 
 			private var _editorVO : EditorVO;
 
@@ -259,6 +265,12 @@
 				//dispatchStateEvent();
 			}
 			
+			private function mouseMoveOnPageRenderer( event : MouseEvent ) : void
+			{
+				strXWritten.text = "x = " + (event.stageX - 137).toString() + "px";
+				strYWritten.text = "y = " + (event.stageY - 179).toString() + "px";
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -279,7 +291,7 @@
 		<components:PageRenderer id="renderer" 
 								 height="100%" width="100%"
 								 selectedRenderer="{ selectedRenderer }" includeIn="wysiwyg, wysiwygDisabled, normal, disabled" 
-								 resize="trace('PageRenderer')"/>
+								 resize="trace('PageRenderer')" mouseMove="mouseMoveOnPageRenderer(event)"/>
 
 		<editors:XMLScriptEditor id="xmlScriptEditor"
 								 height="100%" width="100%"
