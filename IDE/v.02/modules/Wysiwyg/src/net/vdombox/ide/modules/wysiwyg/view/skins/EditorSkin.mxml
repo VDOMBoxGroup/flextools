@@ -59,49 +59,92 @@
 		<s:State name="normal"/>
 		<s:State name="disabled"/>
 	</s:states>
-
-	<s:Rect height="20"
-			left="0" right="0" top="0">
+	
+	<s:Rect height="29"
+				left="0" right="0" top="0">
 		<s:fill>
 			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="0xCDCDCD"/>
-				<s:GradientEntry color="0xE8E8E8"/>
+				<s:GradientEntry color="0xFFFFFF"/>
+				<s:GradientEntry color="0xF6F8F8"/>
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
-
-	<s:HGroup gap="0" height="20"
-			  left="1" right="1" top="1">
-
-		<s:HGroup includeIn="xml, xmlDisabled">
-			<libcomponents:WorkAreaButton id="saveXMLButton"
-										  height="20" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_save_button_label' ) }"/>
-
-			<mx:Spacer width="20"/>
-
-			<s:Label id="statusLabel"
-					 height="20"
-					 color="gray" verticalAlign="middle"/>
-
+	
+		<s:HGroup gap="0" height="25"
+				  left="1" right="1" top="1">
+			
+			<s:HGroup includeIn="xml, xmlDisabled">
+				<libcomponents:WorkAreaButton id="saveXMLButton"
+											  height="25" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_save_button_label' ) }"/>
+				
+				<mx:Spacer width="20"/>
+				
+				<s:Label id="statusLabel"
+						 height="25"
+						 color="gray" verticalAlign="middle"/>
+				
+			</s:HGroup>
+			
+			<s:HGroup gap="15" height="25" paddingRight="30" width="50%">
+				<mx:Spacer width="100%"/>
+				<s:VGroup id="xmlButton" enabled.wysiwyg="true" enabled.xml="false" height="25"
+						  click="currentState='xml'" verticalAlign="bottom" horizontalAlign="center" gap="0">
+					<s:Label color="#007cb6" fontWeight="bold" height="12"
+							 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"/>
+					<s:HGroup>
+						<mx:Image source="@Embed('icons/triangle.png')" smoothBitmapContent="true" visible.xml="true" visible.wysiwyg="false"/>
+					</s:HGroup>
+				</s:VGroup>
+				
+				<s:VGroup id="wysiwygButton" enabled.wysiwyg="false" enabled.xml="true" height="25"
+						  click="currentState='wysiwyg'" verticalAlign="bottom" horizontalAlign="center" gap="0">
+					<s:Label color="#007cb6" fontWeight="bold"
+							 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"/>
+					<s:HGroup>
+						<mx:Image source="@Embed('icons/triangle.png')" smoothBitmapContent="true" visible.xml="false" visible.wysiwyg="true"/>
+					</s:HGroup>
+				</s:VGroup>
+				
+			</s:HGroup>
+			
+			<s:Line height="25" width="1">
+				<s:stroke>
+					<s:SolidColorStroke color="#D9DCDC"/>
+				</s:stroke>
+			</s:Line>
+			
+			<s:Group width="50%" visible.wysiwyg="true" visible.xml="false">
+				<s:Rect height="25"
+						left="0" right="0" top="0">
+					<s:fill>
+						<s:LinearGradient rotation="90">
+							<s:GradientEntry color="0xFFFFFF"/>
+							<s:GradientEntry color="0xFEFEFE"/>
+						</s:LinearGradient>
+					</s:fill>
+				</s:Rect>
+				
+				<s:HGroup height="25" paddingLeft="20" paddingRight="30" verticalAlign="middle" width="100%" gap="30">
+					
+					<s:HGroup height="25" verticalAlign="middle" gap="5" width="80">
+						<mx:Image source="@Embed('icons/Cursor.png')" smoothBitmapContent="true" />
+						<s:VGroup height="25" gap="0">
+							<s:Label height="12" id="strXWritten" text="x: 0px"/>
+							<s:Label height="12" id="strYWritten" text="y: 0px"/>
+						</s:VGroup>
+					</s:HGroup>			
+					
+					<s:CheckBox id="showguides" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_show_guides' ) }"/>
+					
+					<s:CheckBox id="showRules" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_show_rules' ) }"/>
+				</s:HGroup>
+				
+			</s:Group>
 		</s:HGroup>
-
-		<mx:Spacer width="100%"/>
-
-		<libcomponents:WorkAreaButton id="xmlButton"
-									  enabled.wysiwyg="true" enabled.xml="false" height="20" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"
-									  click="currentState='xml'"
-									  highlighted.xml="true" highlighted.wysiwyg="false"/>
-		
-		<libcomponents:WorkAreaButton id="wysiwygButton"
-									  enabled.wysiwyg="false" enabled.xml="true" height="20" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"
-									  click="currentState='wysiwyg'"
-									  highlighted.wysiwyg="true" highlighted.xml="false"/>
-
-		
-	</s:HGroup>
+	
 
 	<s:Rect height="100%" width="100%"
-			top="20">
+			top="29">
 
 		<s:stroke>
 			<s:SolidColorStroke color="0xE8E8E8"
@@ -117,6 +160,6 @@
 
 	<s:Group id="contentGroup"
 			 height="100%" width="100%"
-			 top="20"/>
+			 top="29"/>
 
 </s:SparkSkin>

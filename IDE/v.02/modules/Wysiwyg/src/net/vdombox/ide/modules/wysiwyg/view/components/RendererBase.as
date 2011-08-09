@@ -96,8 +96,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		 * @default
 		 */
 		public var background : Group;
+		
 
-		[SkinPart( required = "false" )]
+		[SkinPart( required = "true" )]
 		/**
 		 *
 		 * @default
@@ -717,7 +718,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			loader = new Loader();
 
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
-			parentApplication.addEventListener("rrrr", onBytesLoaded);
+			parentApplication.addEventListener("rrrr", resizePageRenderer);
 			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
 
 			try
@@ -945,7 +946,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		 * Display image bitmap once bytes have loaded
 		 **/
 		
-		
 		private var content : Bitmap;
 		private function onBytesLoaded( event : Event ) : void
 		{
@@ -965,6 +965,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if (_renderVO != null && content != null)
 			{
+
 				var backGrSprite : Sprite = new Sprite();
 				var bitmapWidth : Number, bitmapHeight : Number;		
 				var rectangle : Rectangle;
@@ -981,6 +982,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				
 				/*backgroundRect.fill.begin( backGrSprite.graphics, rectangle, new Point( 0, 0 ) );
 				backgroundRect.fill.end(graphics);*/
+				background.removeAllElements();
 				background.addElement( new SpriteUIComponent( backGrSprite ) );
 				invalidateDisplayList();
 			}
