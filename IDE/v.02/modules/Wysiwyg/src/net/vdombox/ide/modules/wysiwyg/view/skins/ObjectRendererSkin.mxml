@@ -26,6 +26,7 @@
 	</s:Rect>
 
 	<s:Group id="background" />
+	
 
 	<s:Scroller id="scroller"
 				focusEnabled="false"
@@ -33,7 +34,7 @@
 				minViewportInset="1">
 
 		<s:Group>
-
+			
 			<s:DataGroup id="dataGroup" />
 
 			<s:Group id="upperLayer" />

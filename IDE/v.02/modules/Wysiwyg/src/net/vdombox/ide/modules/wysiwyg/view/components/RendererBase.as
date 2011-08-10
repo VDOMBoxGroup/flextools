@@ -51,11 +51,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
 	
+	import spark.components.Button;
+	import spark.components.DataGroup;
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.RichEditableText;
 	import spark.components.Scroller;
 	import spark.components.SkinnableDataContainer;
+	import spark.components.TextArea;
 	import spark.components.supportClasses.GroupBase;
 	import spark.components.supportClasses.ScrollBarBase;
 	import spark.components.supportClasses.Skin;
@@ -78,8 +81,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function RendererBase()
 		{
 			super();
-			//setStyle("skinClass", Class(ObjectRendererSkin));
-
 			itemRendererFunction = chooseItemRenderer;
 
 			addHandlers();
@@ -928,8 +929,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if (backgroundRefreshNeedFlag)
 			{
 				backgroundRefreshNeedFlag = false;
-				onBytesLoaded(null);
 				refresh();
+				//onBytesLoaded(null);
 			}
 			
 		}
@@ -976,7 +977,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				backGrSprite.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
 				backGrSprite.graphics.endFill();
 
-				background.removeAllElements();
 				background.addElement( new SpriteUIComponent( backGrSprite ) );
 				invalidateDisplayList();
 			}
@@ -995,8 +995,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				{
 					case "repeat":
 					{
-						rectangle.width = width;
-						rectangle.height = height;
+						rectangle.width = background.width;
+						rectangle.height = background.height;
 						break;
 					}
 					case "no-repeat":
@@ -1007,14 +1007,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					}
 					case "repeat-x":
 					{
-						rectangle.width = width;
+						rectangle.width = background.width;
 						rectangle.height = content.height;
 						break;
 					}
 					case "repeat-y":
 					{
 						rectangle.width = content.width;
-						rectangle.height = height;
+						rectangle.height = background.height;
 						break;
 					}
 				}
@@ -1059,7 +1059,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 			else
 				dataProvider = null;
-
 
 			for each ( contetntPart in _renderVO.content )
 			{
