@@ -21,7 +21,6 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererRemovedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererTransformedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveSettingsToProxy;
-	import net.vdombox.ide.modules.wysiwyg.controller.SelectAndSetResourceCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.StartupCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.TearDownCommand;
@@ -104,7 +103,7 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const RESOURCE_LOADED	: String = "resourceLoaded"; //not used
 		public static const MODIFY_RESOURCE : String = "modifyResource";
 
-//		icon
+		//		icon
 		public static const GET_ICON	: String = "getIcon";
 		public static const ICON_GETTED : String = "iconGetted";
 		
@@ -185,7 +184,6 @@ package net.vdombox.ide.modules.wysiwyg
 //		public static const SELECT_ITEM_REQUEST : String = "selectItemRequest";
 
 		public static const GET_RESOURCE_REQUEST : String = "getResourceRequest";
-		public static const SELECT_AND_LOAD_RESOURCE : String = "selectAndLoadResource";
 		public static const OPEN_RESOURCE_SELECTOR_REQUEST : String = "openResourceSelectorRequest";
 		public static const OPEN_EXTERNAL_EDITOR_REQUEST : String = "openExternalEditorRequest";
 		public static const SAVE_ATTRIBUTES_REQUEST : String = "saveAttributesRequest";
@@ -243,7 +241,6 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
 			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 
-			registerCommand( SELECT_AND_LOAD_RESOURCE, SelectAndSetResourceCommand );
 			registerCommand( OPEN_EXTERNAL_EDITOR_REQUEST, OpenExternalEditorRequestCommand );
 
 			registerCommand( RENDERER_CREATED, RendererCreatedCommand );

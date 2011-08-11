@@ -13,7 +13,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemNotEmptyContent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.SmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
 	
@@ -221,7 +221,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		public function addHandlers():void
 		{
-			
 			addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );
 		}
 		

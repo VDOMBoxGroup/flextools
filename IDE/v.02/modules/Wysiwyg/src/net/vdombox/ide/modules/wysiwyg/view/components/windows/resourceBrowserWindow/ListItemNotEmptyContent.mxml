@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*"
+				autoDrawBackground="false"
+				contentBackgroundColor="#383838"
+				contentBackgroundAlpha="0"
+				creationComplete="creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+			
+			import spark.effects.AnimateTransform;
+			
+			public static const ICON_ADDED : String = "iconAdded";
+			
+			public var resourceVO					: ResourceVO;
+			
+			private var creationCompleted			: Boolean;
+			private var normalResourceIconLoaded	: Boolean;
+			
+			
+			override public function set data ( value : Object ) : void 
+			{
+				super.data = value;
+				
+				resourceVO = value as ResourceVO;
+				
+				setProperties();
+			}
+			
+			private function setProperties ():void
+			{
+				if (resourceVO  )
+				{
+					resName.text	= resourceVO.name;
+					resName.toolTip	= resourceVO.name;
+					type.text		= resourceVO.type;
+					if (resourceVO.size >= 0) {
+						resSize.text = (resourceVO.size/1000).toString() + "kb"; 
+					}
+					
+					if(resourceVO.icon)
+					{
+						normalResourceIconLoaded = true;
+						smoothImage.source = resourceVO.icon;
+						this.dispatchEvent(new Event(ICON_ADDED));
+					}
+					else
+						BindingUtils.bindSetter( iconLoaded, resourceVO, "icon", false, true );
+					
+					return;
+				}			
+			}
+				
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				creationCompleted = true;
+				
+				setProperties();
+				
+			}
+			
+			/*protected function spinner_creationCompleteHandler(event:FlexEvent):void
+			{
+				spinner.addEventListener(SpinningSmoothImage.SPINNING_STARTED, onSpinnerAnimStarted, false, 0, true);
+				spinner.rotateImage();
+			}
+			
+			private function onSpinnerAnimStarted(evt:Event):void
+			{
+				spinner.removeEventListener(SpinningSmoothImage.SPINNING_STARTED, onSpinnerAnimStarted);
+				
+				currentState = "normalResource";
+			}*/
+			
+			private var loader : Loader;
+			private function iconLoaded( object : Object = null ) : void
+			{
+				
+				if ( !object )
+				{
+					// FIXME: сделать увеличиваюшуюся задержку (100, 200, 400,  мах = 800)  
+					var timer:Timer = new Timer(1000, 1);
+					timer.addEventListener(TimerEvent.TIMER, requestIcon);
+					timer.start();
+					
+					return;
+				}
+				
+				loader = new Loader();
+				
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
+				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+				
+				try
+				{
+					loader.loadBytes( resourceVO.icon );
+				}
+				catch ( error : Error )
+				{
+					// FIXME Сделать обработку исключения если не грузится изображение
+				}
+				
+				function requestIcon(event:TimerEvent):void
+				{
+					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
+				}
+				
+			}
+			
+			private function onBytesLoaded(event:Event):void
+			{
+				loader = null;
+				
+				if ( event.type == IOErrorEvent.IO_ERROR )
+					return;
+				
+				normalResourceIconLoaded = true;
+				smoothImage.source = Bitmap( event.target.content );
+				this.dispatchEvent(new Event(ICON_ADDED));
+			}
+			
+			private function deleteButton_clickHandler( event : MouseEvent ) : void
+			{
+				acceptDeleteHandler();
+			}
+			
+			private function acceptDeleteHandler() : void// (event : CloseEvent ) : void
+			{
+				var lie : ListItemEvent = new ListItemEvent( ListItemEvent.DELETE_RESOURCE );
+				lie.resource = resourceVO;
+				owner.dispatchEvent( lie );
+			}
+			
+			protected function smoothImage_rollOverHandler(event:MouseEvent):void
+			{
+				imageMagnifier.visible = true;
+			}
+			
+			protected function smoothImage_rollOutHandler(event:MouseEvent):void
+			{
+				imageMagnifier.visible = false;
+			}
+			
+			protected function smoothImage_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hovered"/>	
+		<s:State name="selected"/>
+	</s:states>
+	
+	<s:Group height="64" width="184"
+			 xmlns:content="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*">
+		
+		<s:HGroup height="100%" width="100%"  
+				  horizontalAlign="left"
+				  verticalAlign="middle"
+				  paddingTop="3" paddingLeft="3" paddingRight="3" paddingBottom="3"
+				  gap="3"
+				  xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*" >
+			
+			<mx:Spacer width="4" />
+			<s:Group width="42" height="42">
+				<resourceBrowserWindow:SmoothImage id="smoothImage" height="100%" width="100%"
+												   verticalAlign="middle" horizontalAlign="center" 
+												   maintainAspectRatio="true"
+												   scaleContent="true" 
+												   smoothBitmapContent="true"
+												   cacheAsBitmap="true"/>
+				
+				<s:Group id="imageMagnifier" visible="false" height="100%" width="100%" 
+						 mouseEnabled="false" mouseFocusEnabled="false" mouseChildren="false">
+					<s:Rect height="100%" width="100%">
+						<s:fill>
+							<s:SolidColor color="black" alpha="0.5" />
+						</s:fill>
+					</s:Rect>
+					
+					<s:HGroup height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
+						<mx:Image height="25" width="25" 
+								  mouseEnabled="false" mouseChildren="false" mouseFocusEnabled="false"
+								  source="@Embed('assets/magnifier.png')" 
+								  verticalAlign="middle" horizontalAlign="center"
+								  smoothBitmapContent="true"/>
+					</s:HGroup>
+					
+				</s:Group>
+				
+				<mx:Canvas height="100%" width="100%"
+						   click="smoothImage_clickHandler(event)"
+						   rollOver="smoothImage_rollOverHandler(event)"
+						   rollOut="smoothImage_rollOutHandler(event)"
+						   backgroundColor="#000000" backgroundAlpha="0.01">
+				</mx:Canvas>
+				
+			</s:Group>
+			<mx:Spacer width="2" />
+			
+			<s:VGroup width="100%" height="30" gap="1" verticalAlign="middle" horizontalAlign="center" paddingTop="3">
+				<s:Label id="resName" width="100%" height="100%" text="" textAlign="left" color="black" 
+						 fontWeight="bold" fontFamily="Arial" fontSize="12" />
+				
+				<s:HGroup width="100%" height="100%" gap="3" right="5" verticalAlign="middle">
+					<s:Label id="type" text="" textAlign="left" color="black" 
+							 fontWeight="normal" fontFamily="Arial" fontSize="10"/>
+					<mx:Spacer width="1"/>
+					<s:Label id="resSize" width="100%" text="" textAlign="left" color="black" 
+							 fontWeight="normal" fontFamily="Arial" fontSize="10" visible="false"/>
+				</s:HGroup>	
+			</s:VGroup>
+			
+			<s:Button id="deleteButton"
+					  enabled="true"
+					  width="16" height="16"
+					  toolTip="Delete"
+					  left="0" right="0" top="0" bottom="0"
+					  click="deleteButton_clickHandler( event );"
+					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.DeleteResourceBtnSkin"
+					  />
+			
+			<mx:Spacer width="1.5" />
+			
+		</s:HGroup>
+	</s:Group>
+	
+</s:ItemRenderer>

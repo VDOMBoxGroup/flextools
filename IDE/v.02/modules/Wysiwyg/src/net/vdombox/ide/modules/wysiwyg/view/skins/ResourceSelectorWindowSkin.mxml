@@ -125,20 +125,18 @@
 						</s:fill>
 					</s:Rect>
 					
-					<s:List id="resourcesList" width="100%" height="100%"
-								 allowMultipleSelection="{hostComponent.multilineSelected}" 
-								 enabled="true"
-								 contentBackgroundAlpha="0" contentBackgroundColor="#000000" borderVisible="false"
-								 dataProvider="{ hostComponent._resources }"
-								 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem2"
-								 x.normal="0" 
-								 chromeColor="#777777"
-								 focusColor="#CCCCCC" 
-								 rollOverColor="#000000" selectionColor="#000000"
-								 top="20" left="4" right="2" bottom="10"
-								 creationComplete="resourcesList_creationCompleteHandler(event)"
-								 doubleClickEnabled="true"
-								 doubleClick="hostComponent.onApplyClick()">
+					<s:List id="resourcesList" left="4" right="2" top="20" bottom="10" width="100%"
+							height="100%" allowMultipleSelection="{hostComponent.multilineSelected}"
+							borderVisible="false" chromeColor="#777777" contentBackgroundAlpha="0"
+							contentBackgroundColor="#383838"
+							selectionColor="#383838"
+							rollOverColor="#383838"
+							symbolColor="#383838"
+							creationComplete="resourcesList_creationCompleteHandler(event)"
+							dataProvider="{ hostComponent._resources }"
+							doubleClick="hostComponent.onApplyClick()" doubleClickEnabled="true"
+							enabled="true" focusColor="#CCCCCC"
+							itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem">
 						<s:layout>
 							<s:TileLayout horizontalGap="4" verticalGap="8" requestedColumnCount="-1"  requestedRowCount="-1"
 										  >

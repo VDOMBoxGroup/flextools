@@ -1,388 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<s:ItemRenderer  xmlns:fx="http://ns.adobe.com/mxml/2009"
-				 xmlns:s="library://ns.adobe.com/flex/spark"
-				 xmlns:mx="library://ns.adobe.com/flex/mx"  creationComplete="itemrenderer1_creationCompleteHandler(event)" >
-	
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*"
+				autoDrawBackground="false"
+				contentBackgroundColor="#383838"
+				contentBackgroundAlpha="0"
+				creationComplete="creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import flash.utils.setTimeout;
+			
 			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
-			import mx.managers.PopUpManager;
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
-			import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 			
-			private var _id : String;
-			private var _objType : String = '';
+			public var resourceVO					: ResourceVO;
 			
+			private var creationCompleted			: Boolean;
+			private var itemElement					: *;
 			
-			
-			private var _resourceVO : ResourceVO;
-			
-			private var _imageComleated : Boolean; 
-			
-			private var temp:int = 0;
-			
-			
-			private function get imageComleated():Boolean
-			{
-				return _imageComleated;
-			}
-
-			private function set imageComleated(value:Boolean):void
-			{
-				trace("\n imageComleated(): " + resourceVO.name +" : " + value )
-				_imageComleated = value;
-			}
-
-			public function get resourceVO():ResourceVO
-			{
-				return _resourceVO;
-			}
-
 			override public function set data ( value : Object ) : void 
 			{
-//				trace("\n DATA: ");
 				super.data = value;
 				
-				if( !value )
-				{
-//					trace("!value")
-					return;
-				}
-				
-				_resourceVO = value as ResourceVO;
+				resourceVO = value as ResourceVO;
 
-				if (!resourceVO)
-				{
-//					trace("!resourceVO")
-					return;
-				}
-//				trace(  resourceVO.name)
-				objName = resourceVO.name;
-				objType = resourceVO.type;
-				objID	= resourceVO.id;
-				objSize = resourceVO.size;
-				
-			}
-			
-			override public function validateProperties():void
-			{
-				super.validateProperties();
-				trace("\n validateProperties(): ")
-				trace("showsCaret: " + showsCaret)
-				
-				if (resourceVO)
-				{
-					setItemCurrentState(false);
-					
-					
-					
-					if(resourceVO.icon)
-						smoothImage.source = resourceVO.icon;
-					else
-						BindingUtils.bindSetter( iconLoaded, resourceVO, "icon" );
-//						dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
-				}
-				setItemCurrentState(true);
-				
-			}
-			
-			private function setItemCurrentState(isEmptyResource:Boolean = false):void
-			{
-				switch (currentState) 
-				{
-					case "normal" :
-						currentState = isEmptyResource ? "emptyResource" : "normalResource";
-						break;
-					case "hovered" :
-						currentState = isEmptyResource ? "emptyResourceHovered" : "normalResourceHovered";
-						break;
-					case "selected" :
-						currentState = isEmptyResource ? "emptyResourceSelected" : "normalResourceSelected";
-						break;
-				}
-			}
-			
-			private var loader : Loader;
-			private function iconLoaded( object : Object = null ) : void
-			{
-				
-				if ( !object )
-				{
-					// FIXME: сделать увеличиваюшуюся задержку (100, 200, 400,  мах = 800)  
-					var timer:Timer = new Timer(1000, 1);
-					timer.addEventListener(TimerEvent.TIMER, requestIcon);
-					timer.start();
-					
-					return;
-				}
-				
-				loader = new Loader();
-				
-				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
-				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
-				
-				try
-				{
-					loader.loadBytes( _resourceVO.icon );
-				}
-				catch ( error : Error )
-				{
-					// FIXME Сделать обработку исключения если не грузится изображение
-				}
-				
-				function requestIcon(event:TimerEvent):void
-				{
-					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
-				}
-				
-			}
-			
-			private function onBytesLoaded(event:Event):void
-			{
-				loader = null;
-				
-				if ( event.type == IOErrorEvent.IO_ERROR )
+				if (!creationCompleted)
 					return;
 				
-				smoothImage.source = Bitmap( event.target.content );
-				imageComleated = true;
-				invalidateProperties();
-				invalidateDisplayList();
-			}
-			
-			public function set objSize(size:int):void
-			{
-				if (size >= 0) {
-					resSize.text = (size/1000).toString() + "kb"; 
-				}
-			}
-			
-			
-			public function set objName( text : String ):void 
-			{ 
-				resName.text = text;
-				resName.toolTip = text;
-			}
-			
-			public function get objName():String 
-			{ 
-				return resName.text; 
-			}
-			
-			public function set objID( objID : String ) : void 
-			{
-				_id = objID; 
-			}
-			
-			public function get objID() : String 
-			{
-				return _id; 
-			}
-			
-			public function set objType( objType : String) : void 
-			{
-				type.text = objType.toUpperCase()/* + ":"*/;
-				_objType  = objType;
-			}
-			
-			public function get objType():String 
-			{
-				return _objType.toLowerCase();
-			}
-			
-			private function deleteButton_clickHandler( event : MouseEvent ) : void
-			{
-				//Alert.show( "Delete resource: " +  resourceVO.name + "?", "Alert!", Alert.YES | Alert.NO, this, acceptDeleteHandler )
-				acceptDeleteHandler();
-				//				owner.dispatchEvent( new Event( "DeleteResource", true, true ));
-			}
-			
-			private function acceptDeleteHandler() : void// (event : CloseEvent ) : void
-			{
-				//				if ( event.detail == Alert.YES )
-				//				{
-				var lie : ListItemEvent = new ListItemEvent( ListItemEvent.DELETE_RESOURCE );
-				lie.resource = resourceVO;
-				owner.dispatchEvent( lie );
-				//				}
-			}
-			
-			protected function smoothImage_rollOverHandler(event:MouseEvent):void
-			{
-				this.imageMagnifier.visible = true;
-			}
-			
-			protected function smoothImage_rollOutHandler(event:MouseEvent):void
-			{
-				this.imageMagnifier.visible = false;
-			}
-			
-			protected function smoothImage_clickHandler(event:MouseEvent):void
-			{
-				dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
-			}
-			
-			protected function itemrenderer1_showHandler(event:FlexEvent):void
-			{
-				// TODO Auto-generated method stub
-				if (resourceVO)
-				{
-					showsCaret = true;
-					invalidateProperties();
-				trace("\n SHOW: "+ resourceVO.name )
-				}
+				addContentElement();
 				
 			}
 			
-			protected function itemrenderer1_creationCompleteHandler(event:FlexEvent):void
+			override protected function stateChanged(oldState:String, newState:String, recursive:Boolean):void
 			{
-				// TODO Auto-generated method stub
-				if (resourceVO && !imageComleated )
-				{
-					
-						BindingUtils.bindSetter( iconLoaded, resourceVO, "icon", false, true );
-					//						dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
+				super.stateChanged(oldState, newState, recursive);
+				if (itemElement)
+					itemElement.selected = selected;
+			}
+			
+			private function addContentElement():void
+			{
+				if (itemElement && contains(itemElement)) {
+					removeElement(itemElement);
+					itemElement = null;
 				}
+				
+				if (resourceVO) 
+				{
+					itemElement = new ListItemNotEmptyContent();
+					ListItemNotEmptyContent(itemElement).addEventListener(ListItemNotEmptyContent.ICON_ADDED, onContentIconAdded, false, 0, true);
+					itemElement.data = resourceVO;
+					
+				} else {
+					itemElement = new ListItemEmptyContent();
+					removeSpinner();
+				}
+				this.addElement(itemElement);
+			}
+			
+			protected function spinner_creationCompleteHandler(event:FlexEvent):void
+			{
+				spinner.addEventListener(SpinningSmoothImage.SPINNING_STARTED, onSpinnerAnimStarted, false, 0, true);
+				spinner.rotateImage();
+			}
+			
+			private function onSpinnerAnimStarted(evt:Event):void
+			{
+				spinner.removeEventListener(SpinningSmoothImage.SPINNING_STARTED, onSpinnerAnimStarted);
+			}
+			
+			private function onContentIconAdded(evt:Event):void
+			{
+				ListItemNotEmptyContent(itemElement).removeEventListener(ListItemNotEmptyContent.ICON_ADDED, onContentIconAdded);
+				
+				removeSpinner();
+			}
+			
+			private function removeSpinner():void
+			{
+				spinner.stopRotateImage();
+				try 
+				{
+					groupBG.removeElement(spinner);
+				} catch(e:Error)
+				{
+				}
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				creationCompleted = true;
+				addContentElement();
 			}
 			
 		]]>
 	</fx:Script>
 	
 	<s:states>
-		<s:State name="normalResource" stateGroups="NormalResourceGroup"/>
-		<s:State name="normalResourceHovered" stateGroups="NormalResourceGroup"/>
-		<s:State name="normalResourceSelected" stateGroups="SelectedGroup, NormalResourceGroup"/>
-		
-		<s:State name="emptyResource" stateGroups="EmptyResourceGroup"/>
-		<s:State name="emptyResourceHovered" stateGroups="EmptyResourceGroup"/>
-		<s:State name="emptyResourceSelected" stateGroups="SelectedGroup, EmptyResourceGroup"/>
-		
 		<s:State name="normal"/>
 		<s:State name="hovered"/>	
 		<s:State name="selected"/>
-		
 	</s:states>
 	
-	<s:Group height="64" width="184" id="gropuNotEmpty" excludeFrom="EmptyResourceGroup">
-		
+	<s:Group height="64" width="184" id="groupBG">
 		<s:Rect height="100%" width="100%" radiusX="4" radiusY="4">
 			<s:stroke>
 				<s:SolidColorStroke color="#424242" weight="1"/>
 			</s:stroke>
 			<s:fill>
 				<s:LinearGradient rotation="90">
-					<s:GradientEntry color="#FFFFFF" color.SelectedGroup="#b50000"/>
-					<s:GradientEntry color="#bcbcbc" color.SelectedGroup="#9e0000"/>
+					<s:GradientEntry color="#FFFFFF" color.selected="#b50000"/>
+					<s:GradientEntry color="#bcbcbc" color.selected="#9e0000"/>
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
 		
-		<s:HGroup height="100%" width="100%"  
-				  horizontalAlign="left"
-				  verticalAlign="middle"
-				  paddingTop="3" paddingLeft="3" paddingRight="3" paddingBottom="3"
-				  gap="3"
-				  xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*" >
-			
-			<mx:Spacer width="4" />
-			<s:Group width="42" height="42">
-				<resourceBrowserWindow:SmoothImage id="smoothImage" height="100%" width="100%"
-												   verticalAlign="middle" horizontalAlign="center" 
+		<resourceBrowserWindow:SpinningSmoothImage id="spinner" height="42" width="42"
+												   left="10" top="10"
 												   maintainAspectRatio="true"
 												   scaleContent="true" 
 												   smoothBitmapContent="true"
 												   cacheAsBitmap="true"
-												   source="@Embed('assets/spinner.swf')"/>
-				
-				<s:Group id="imageMagnifier" visible="false" height="100%" width="100%" 
-						 mouseEnabled="false" mouseFocusEnabled="false" mouseChildren="false">
-					<s:Rect height="100%" width="100%">
-						<s:fill>
-							<s:SolidColor color="black" alpha="0.5" />
-						</s:fill>
-					</s:Rect>
-					
-					<s:HGroup height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
-						<mx:Image height="25" width="25" 
-								  mouseEnabled="false" mouseChildren="false" mouseFocusEnabled="false"
-								  source="@Embed('assets/magnifier.png')" 
-								  verticalAlign="middle" horizontalAlign="center"
-								  smoothBitmapContent="true"/>
-					</s:HGroup>
-					
-				</s:Group>
-				
-				<mx:Canvas height="100%" width="100%"
-						   click="smoothImage_clickHandler(event)"
-						   rollOver="smoothImage_rollOverHandler(event)"
-						   rollOut="smoothImage_rollOutHandler(event)"
-						   backgroundColor="#000000" backgroundAlpha="0.01">
-				</mx:Canvas>
-				
-			</s:Group>
-			<mx:Spacer width="2" />
-			
-			<s:VGroup width="100%" height="30" gap="1" verticalAlign="middle" horizontalAlign="center" paddingTop="3">
-				<s:Label id="resName" width="100%" height="100%" text="img" textAlign="left" color="black" 
-						 fontWeight="bold" fontFamily="Arial" fontSize="12" />
-				
-				<s:HGroup width="100%" height="100%" gap="3" right="5" verticalAlign="middle">
-					<s:Label id="type" text="JPG" textAlign="left" color="black" 
-							 fontWeight="normal" fontFamily="Arial" fontSize="10"/>
-					<!--<s:Label id="res" text="" textAlign="left" />-->
-					<mx:Spacer width="1"/>
-					<s:Label id="resSize" width="100%" text="0kb" textAlign="left" color="black" 
-							 fontWeight="normal" fontFamily="Arial" fontSize="10" visible="false"/>
-				</s:HGroup>	
-			</s:VGroup>
-			
-			<s:Button id="deleteButton"
-					  enabled="true"
-					  width="16" height="16"
-					  toolTip="Delete"
-					  left="0" right="0" top="0" bottom="0"
-					  click="deleteButton_clickHandler( event );"
-					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.DeleteResourceBtnSkin"
-					  />
-			
-			<mx:Spacer width="1.5" />
-			
-		</s:HGroup>		
-	</s:Group>
+												   source="@Embed('assets/spinner.png')"
+												   creationComplete="spinner_creationCompleteHandler(event)"/>
 
-	<s:Group height="64" width="184" id="groupEmpty" includeIn="EmptyResourceGroup">
-		<s:Rect height="100%" width="100%" radiusX="4" radiusY="4">
-			<s:stroke>
-				<s:SolidColorStroke color="#424242" weight="1"/>
-			</s:stroke>
-			<s:fill>
-				<s:LinearGradient>
-					<s:GradientEntry color="#343434" color.SelectedGroup="#b50000"/>
-					<s:GradientEntry color="#474747" color.SelectedGroup="#9e0000"/>
-				</s:LinearGradient>
-			</s:fill>
-		</s:Rect>
-		
-		<s:HGroup height="100%" width="100%"  
-				  horizontalAlign="left" verticalAlign="middle">
-			
-			<s:VGroup width="100%" height="30" gap="4"
-					  horizontalAlign="left"
-					  paddingLeft="20" paddingTop="3">
-				<s:Label text="Empty" 
-						 textAlign="left" color="#ffffff" 
-						 fontWeight="bold" fontFamily="Arial" fontSize="12"/>
-			
-				<s:Label text="Select no recource" 
-						 textAlign="left" color="#ffffff" 
-						 fontWeight="normal" fontFamily="Arial" fontSize="10"/>
-			</s:VGroup>
-		</s:HGroup>
 	</s:Group>
-		
 	
 </s:ItemRenderer>

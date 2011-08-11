@@ -9,10 +9,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.filesystem.File;
+	import flash.net.FileFilter;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
+	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	import mx.resources.ResourceManager;
@@ -22,7 +24,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem2;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.SpinnerPopup;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemNotEmptyContent;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.utils.WindowManager;
@@ -41,8 +45,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 *
 		 * @default
 		 */
-		// TODO: сделать крутилку на загрузку иконки			- DONE
-		// TODO: сделать крутилку на отправку файла
+		// TODO: сделать крутилку на загрузку иконки			- CHANGE swf -> gif
+		// TODO: сделать крутилку на отправку файла				- IN PROGRESS
 		// TODO: сделать состояния								- DONE
 		// TODO: кнопку "скопировать гуид" сделать нажимаемой	- DONE
 		// prosmotret' slushateli addHndl and remuveHandlers
@@ -102,7 +106,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.RESOURCES_GETTED );
 			
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
-
+			
 			return interests;
 		}
 
@@ -163,7 +167,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					break;
 				}	
+				
 			}
+		}
+		
+		private var spinnerPopup : SpinnerPopup;
+		private function createSpinnerPopup():void
+		{
+			trace ("[ResSelWindMediator] createSpinnerPopup");
+			spinnerPopup = new SpinnerPopup();
+			spinnerPopup.width	= resourceSelectorWindow.width;
+			spinnerPopup.height	= resourceSelectorWindow.height;
+			
+			PopUpManager.addPopUp(spinnerPopup, DisplayObject(resourceSelectorWindow), true);
+		}
+		
+		private function removeSpinnerPopup():void
+		{
+			trace ("[ResSelWindMediator] removeSpinnerPopup");
+			spinnerPopup.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			spinnerPopup = null;
 		}
 		
 		private function addNewResourceInList( resVO : ResourceVO ) : void
@@ -179,6 +202,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.selectedResourceIndex = resourceSelectorWindow.resources.length-1;
 			resourceSelectorWindow.invalidateProperties();
 			
+			removeSpinnerPopup();
 		}
 		
 
@@ -191,6 +215,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 //			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, getResourcesRequestHandler );
 			resourceSelectorWindow.addEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
+			
 		}
 		
 		private function initTitle() : void
@@ -203,10 +228,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 			initTitle();
 			
 			resourceSelectorWindow.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
-			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler ); 
+			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler, true, 0, true ); 
 			resourceSelectorWindow.resourcesList.addEventListener( ResourceSelectorWindowEvent.GET_ICON, getIconRequestHendler, true, 0,true);
 		}
-
+		
+		
 		private function deleteResourceHandler( event : ListItemEvent ) : void
 		{
 			//delete from server
@@ -263,11 +289,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.removeEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
 		
 			resourceSelectorWindow.resourcesList.removeEventListener( ResourceSelectorWindowEvent.GET_ICON, getIconRequestHendler);
+			
 		}
 
 		private function getIconRequestHendler( event: ResourceSelectorWindowEvent):void
 		{
-			var listItem : ListItem2 = event.target as ListItem2;
+			var listItem : ListItem = event.target.parent as ListItem;
 			
 			sendNotification( ApplicationFacade.GET_ICON, listItem.resourceVO );
 		}
@@ -317,8 +344,40 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function loadFileHandler( event : ResourceSelectorWindowEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SELECT_AND_LOAD_RESOURCE, sessionProxy.selectedApplication );
-//			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
+			var openFile : File     = new File();
+			
+			openFile.addEventListener(Event.SELECT, fileSelected);
+			
+			var allFilesFilter  : FileFilter = new FileFilter( "All Files (*.*)", "*.*" );
+			var imagesFilter	: FileFilter = new FileFilter( 'Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png' );
+			var docFilter 		: FileFilter = new FileFilter( 'Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt' );
+			
+			openFile.browseForOpen( "Choose file to upload", [ imagesFilter, docFilter, allFilesFilter ] );
+			
+			function fileSelected( event:Event ) : void
+			{
+				createSpinnerPopup();
+				
+				openFile.removeEventListener(Event.SELECT, fileSelected);
+				
+				openFile.addEventListener(Event.COMPLETE, fileDownloaded);
+				openFile.load();
+				
+			}
+			
+			function fileDownloaded(event:Event) : void
+			{
+				// compress and encode to base64 in Server
+				openFile.removeEventListener(Event.COMPLETE, fileDownloaded);
+				
+				var resourceVO : ResourceVO = new ResourceVO( sessionProxy.selectedApplication.id );
+				resourceVO.setID( openFile.name ); //?
+				resourceVO.data = openFile.data;
+				resourceVO.name = openFile.name;
+				resourceVO.type = openFile.type.slice(1); // type has "."
+				
+				sendNotification( ApplicationFacade.SET_RESOURCE, resourceVO );
+			}
 		}
 
 	
