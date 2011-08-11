@@ -9,6 +9,7 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.collections.Sort;
 			import mx.controls.ComboBox;
 			import mx.core.UIComponent;
 			
@@ -19,7 +20,6 @@
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
 			import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
 			
-			import spark.collections.Sort;
 			import spark.collections.SortField;
 			import spark.components.TextInput;
 			
