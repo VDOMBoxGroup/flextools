@@ -38,9 +38,9 @@
 				minViewportInset="1">
 
 		<s:Group>
-			<s:Group id="background" width="{dataGroup.width}" height="{dataGroup.height}" resize="trace('Group')"/>
+			<s:Group id="background" width="{dataGroup.width}" height="{dataGroup.height}" resize="trace('Group')"/> <!-- setbackground image and not set all element-->
 
-			<s:DataGroup id="dataGroup" width="100%" height="100%" resize="trace('DataGroup')"/>
+			<s:DataGroup id="dataGroup" width="100%" height="100%" resize="trace('DataGroup')"/>   <!-- set all element-->
 
 			<s:Group id="upperLayer"/>
 

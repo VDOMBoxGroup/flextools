@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
-		 
-		 height="20" width="100%"
-		 borderColor="#FFFFFF" borderStyle="solid" horizontalAlign="right" verticalAlign="middle">
-
-	<mx:Script>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  height="20" width="100%" horizontalAlign="right" verticalAlign="middle">
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
 		<![CDATA[
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
@@ -15,7 +19,7 @@
 			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
 			import net.vdombox.utils.WindowManager;
-
+			
 			private var _value : String;
 			private var _title : String = "Multiline Window";
 			public var multilineWindow : MultilineWindow;
@@ -24,13 +28,13 @@
 			{
 				_title = attrValue;
 			}
-
+			
 			[Bindable]
 			public function get value() : String
 			{
 				return _value;
 			}
-
+			
 			public function set value( value : String ) : void
 			{
 				_value = value;
@@ -38,9 +42,8 @@
 			
 			private function openWindow() : void
 			{				
-//				var popUpWindowManager : PopUpManager = PopUpManager.getInstance();
 				multilineWindow = new MultilineWindow();
-
+				
 				multilineWindow.attributeValue = _value;
 				multilineWindow.title = resourceManager.getString( 'Wysiwyg_General', 'multiline_window_title' );
 				dispatchEvent( new AttributeEvent( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE ) );				
@@ -48,15 +51,13 @@
 				multilineWindow.addEventListener( MultilineWindowEvent.APPLY, multilineWindow_applyHandler, false, 0, true );
 				multilineWindow.addEventListener( MultilineWindowEvent.CLOSE, multilineWindow_applyHandler, false, 0, true );
 				
-				//PopUpManager.addPopUp( multilineWindow, DisplayObject( UIComponent( parent ).parentApplication ), true );
-				//PopUpManager.centerPopUp( multilineWindow );
 				WindowManager.getInstance().addWindow(multilineWindow, UIComponent( UIComponent(parent).parentApplication ), true);
 			}
-
+			
 			private function multilineWindow_applyHandler( event : MultilineWindowEvent ) : void
 			{				
 				var currentTarget : Object = event.currentTarget;
-
+				
 				if ( currentTarget is MultilineWindow )
 				{
 					if (event.type == MultilineWindowEvent.APPLY)
@@ -64,11 +65,10 @@
 					UIComponent( currentTarget ).removeEventListener( MultilineWindowEvent.APPLY, multilineWindow_applyHandler, false );					
 				}
 
-				//PopUpManager.removePopUp( multilineWindow );
 				WindowManager.getInstance().removeWindow(multilineWindow);
 			}
-
-
+			
+			
 			override public function validationResultHandler( event : ValidationResultEvent ) : void
 			{
 				super.validationResultHandler( event );
@@ -78,12 +78,22 @@
 					setStyle( "borderColor", "red" );
 			}
 		]]>
-	</mx:Script>
-
-	<mx:Label id="lbl"
-			  text="Multiline" />
-
-	<mx:Button height="19" label="..." width="22"
-			   cornerRadius="0" paddingLeft="2" paddingRight="2"
+	</fx:Script>
+	<s:Group width="100%" height="20">
+		
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="#FFFFFF"/>
+			</s:fill>
+		</s:Rect>
+		
+		<s:TextInput id="lbl"
+				 text="Multiline" editable="false" width="100%" height="100%"/>
+		
+	</s:Group>
+	
+	
+	<s:Button height="19" label="..." fontSize="8" width="28"
+			   cornerRadius="0" textAlignLast="center"
 			   click="openWindow()" />
-</mx:HBox>
+</s:HGroup>

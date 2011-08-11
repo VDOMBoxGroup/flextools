@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" minHeight="23">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.ComboBox;
+			import mx.core.UIComponent;
+			
+			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
+			import net.vdombox.ide.common.vo.AttributeVO;
+			import net.vdombox.ide.common.vo.ObjectListVO;
+			import net.vdombox.ide.common.vo.PageLinkVO;
+			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
+			import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
+			
+			import spark.collections.Sort;
+			import spark.collections.SortField;
+			import spark.components.TextInput;
+			
+			[Bindable]
+			private var _attributeVO : AttributeVO;
+			
+			[Bindable]
+			private var help : String;
+			
+			private var _attributeDescriptionVO : AttributeDescriptionVO;
+			
+			private var codeInterfaceRE : RegExp = /^(\w*)\((.*)\)/;
+			
+			private var regExpValidator : AttributeValidator = new AttributeValidator();
+			
+			protected var valueField : Object;
+			
+			private var codeInterface : Object = {};
+			
+			override public function set data( value : Object ) : void
+			{
+				
+				
+				
+				super.data = value;
+				
+				if ( !value )
+					return;
+				
+				_attributeVO = value.attributeVO;
+				_attributeDescriptionVO = value.attributeDescriptionVO;
+				nameLabel = _attributeDescriptionVO.displayName;
+				help = _attributeDescriptionVO.help;
+				
+				codeInterface = {}
+				var matches : Array = _attributeDescriptionVO.codeInterface.match( codeInterfaceRE );
+				
+				codeInterface[ "type" ] = matches[ 1 ].toLowerCase();
+				codeInterface[ "value" ] = matches[ 2 ];
+				
+				rectColor.color = getColorByGroup( _attributeDescriptionVO.colorGroup );
+				secondColor.color = getColorByGroupRect( _attributeDescriptionVO.colorGroup ); 
+				
+				switch ( codeInterface[ "type" ] )
+				{			
+					case "multiline":
+					{
+						newMultiline();
+						break;
+					}
+						
+					case "color":
+					{
+						newColorPicker();
+						break;
+					}
+						
+					case "dropdown":
+					{
+						newDropdown();
+						break;
+					}
+						
+					case "externaleditor":
+					{
+						newExternalEdition();
+						break;
+					}
+						
+					case "file":
+					{
+						newFile();
+						break;
+					}
+						
+					case "number":
+					{
+						newNumber();
+						break;
+					}
+						
+					case "objectlist":
+					{
+						newObjectList( value );
+						break;
+					}
+						
+					case "pagelink":
+					{
+						newPageLink( value );
+						break;
+					}
+						
+					case "textfield":
+					{
+						newTextField();
+						break;
+					}
+
+				}
+				
+			}
+			
+			private function newMultiline() : void
+			{
+				valueField = new Multiline();
+				valueField.value =  _attributeVO.value;
+				valueField.toolTip = help;
+				valueField.width = 128;
+				valueField.height = 21;
+				valueField.setStyle("textAlign", "left");
+
+				secondElement = valueField as UIComponent;
+			}
+			
+			private function newColorPicker() : void
+			{
+				valueField = new ColorPicker;
+				valueField.value =  _attributeVO.value ;
+				valueField.toolTip = help;
+				valueField.width = 128;
+				valueField.height = 21;
+				valueField.setStyle("textAlign", "left");
+				secondElement = valueField as UIComponent;
+			}
+			
+			private function newDropdown() : void
+			{
+				valueField = new ComboBox;
+				valueField.toolTip = help;
+				valueField.width = 128;
+				valueField.height = 21; 
+				valueField.setStyle("textAlign", "left");
+				secondElement = valueField as UIComponent;
+				
+				var comboBoxData : ArrayCollection = new ArrayCollection();
+				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
+				
+				var listValues : Array = [];
+				var selectedItem : Object = {};
+				
+				while ( listValues = codeInterfaceValueRE.exec( codeInterface[ "value" ] ) )
+				{
+					
+					var listItem : Object = { label: listValues[ 1 ], data: listValues[ 2 ] };
+					
+					comboBoxData.addItem( listItem );
+					
+					if ( _attributeVO.value == listValues[ 2 ] )
+						selectedItem = comboBoxData[ comboBoxData.length - 1 ];
+				}
+				
+				comboBoxData.sort = new Sort();
+				comboBoxData.sort.fields = [ new SortField( "label", true ) ];
+				comboBoxData.refresh();
+				
+				valueField.dataProvider = comboBoxData;
+				valueField.selectedItem = selectedItem;
+				
+				valueField.addEventListener(Event.CHANGE, comboboxChange);
+			}
+			
+			private function comboboxChange(event : Event) : void
+			{
+				_attributeVO.value = valueField.value.toString();
+			}
+			
+			private function comboboxChange2(event : Event) : void
+			{
+				_attributeVO.value = valueField.selectedItem.id;
+			}
+			
+			private function newExternalEdition() : void
+			{
+				valueField = new ExternalEditor;
+				valueField.value =  _attributeVO.value ;
+				valueField.toolTip = help;
+				valueField.width = 128;
+				valueField.height = 21;
+				valueField.setStyle("textAlign", "left");
+				secondElement = valueField as UIComponent;
+				
+				var resourceID : String = codeInterface[ "value" ];
+				resourceID = resourceID.substr( resourceID.indexOf( "," ) + 1 );
+				valueField.value = _attributeVO.value;	
+				valueField.resourceID = resourceID;
+			}
+			
+			private function newFile() : void
+			{
+				valueField = new ResourceSelector;
+				valueField.value =  _attributeVO.value ;
+				valueField.toolTip = help;
+				valueField.width = 128;
+				valueField.height = 21;
+				valueField.setStyle("textAlign", "left");
+				secondElement = valueField as UIComponent;
+			}
+			
+			private function newNumber() : void
+			{
+				valueField = new TextInput;
+				valueField.text =  _attributeVO.value ;
+				valueField.toolTip = help;
+				valueField.width = 128;
+				valueField.height = 21;
+				valueField.setStyle("textAlign", "left");
+				secondElement = valueField as UIComponent;
+				
+				valueField.maxChars = uint( codeInterface[ "value" ] );
+				//				valueField.text = _attributeVO.value;
+				
+				
+				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
+				regExpValidator.noMatchError = _attributeDescriptionVO.errorValidationMessage;
+				regExpValidator.validate();
+				
+				addEventListener(Event.COMPLETE, eventCompleleHandler);
+			}
+			
+			private function eventCompleleHandler(event : Event) : void
+			{
+				regExpValidator.source = valueField;
+				regExpValidator.property = "text";
+				regExpValidator.required = false;
+				//regExpValidator.trigger = valueField;
+				
+				regExpValidator.triggerEvent = Event.CHANGE;
+				
+				regExpValidator.validate();
+			}
+			
+			private function newObjectList( value : Object ) : void
+			{
+				valueField = new ComboBox;
+				valueField.toolTip = help;
+				valueField.width = 128;
+				valueField.height = 21;
+				valueField.setStyle("textAlign", "left");
+				valueField.labelField = "name"
+				secondElement = valueField as UIComponent;
+				
+				var comboBoxData : ArrayCollection = new ArrayCollection();
+				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
+				
+				var listValues : Array = [];
+				var selectedItem : Object = {};
+				
+				var objectListVO : ObjectListVO;
+				
+				for each ( objectListVO in value.objectsList )
+				{
+					comboBoxData.addItem( objectListVO );
+					
+					if ( _attributeVO.value == objectListVO.id )
+						selectedItem = objectListVO;
+				}
+				
+				comboBoxData.sort = new Sort();
+				comboBoxData.sort.fields = [ new SortField( "name", true ) ];
+				comboBoxData.refresh();
+				
+				valueField.dataProvider = comboBoxData;
+				valueField.selectedItem = selectedItem;
+				
+				valueField.addEventListener(Event.CHANGE, comboboxChange2);
+			}
+			
+			private function newPageLink( value : Object ) : void
+			{
+				valueField = new ComboBox;
+				valueField.toolTip = help;
+				valueField.width = 128;
+				valueField.height = 21;
+				valueField.setStyle("textAlign", "left");
+				valueField.labelField = "name"
+				secondElement = valueField as UIComponent;
+				
+				var comboBoxData : ArrayCollection = new ArrayCollection();
+				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
+				
+				var listValues : Array = [];
+				var selectedItem : Object = {};
+				
+				var pageLinkVO : PageLinkVO;
+				
+				for each ( pageLinkVO in value.pageLinks )
+				{
+					comboBoxData.addItem( pageLinkVO );
+					
+					if ( _attributeVO.value == pageLinkVO.id )
+						selectedItem = pageLinkVO;
+				}
+				
+				comboBoxData.sort = new Sort();
+				comboBoxData.sort.fields = [ new SortField( "name", true ) ];
+				comboBoxData.refresh();
+				
+				valueField.dataProvider = comboBoxData;
+				valueField.selectedItem = selectedItem;
+				
+				valueField.addEventListener(Event.CHANGE, comboboxChange2);
+			}
+			
+			private function newTextField() : void
+			{
+				valueField = new TextInput;
+				valueField.text =  _attributeVO.value ;
+				valueField.toolTip = help;
+				valueField.width = 128;
+				valueField.height = 21;
+				valueField.setStyle("textAlign", "left");
+				secondElement = valueField as UIComponent;
+				
+				valueField.maxChars = uint( codeInterface[ "value" ] );
+				//				valueField.text = _attributeVO.value;
+				
+				
+				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
+				regExpValidator.noMatchError = _attributeDescriptionVO.errorValidationMessage;
+				regExpValidator.validate();
+				
+				addEventListener(Event.COMPLETE, eventCompleleHandler);
+			}
+			
+			protected function getColorByGroup( groupNumber : uint ) : uint
+			{
+				var colorGroup : uint;
+				
+				switch ( groupNumber )
+				{
+					case 1:
+					{
+						colorGroup = 0x3a3a3a;
+						break;
+					}
+						
+					case 2:
+					{
+						colorGroup = 0x41611f;
+						break;
+					}
+						
+					case 3:
+					{
+						colorGroup = 0x611f1f;
+						break;
+					}
+						
+					case 4:
+					{
+						colorGroup = 0x1f4461;
+						break;
+					}
+						
+					default:
+					{
+						colorGroup = 0x3a3a3a;
+					}
+				}
+				
+				return colorGroup;
+			}
+			
+			protected function getColorByGroupRect( groupNumber : uint ) : uint
+			{
+				var colorGroup : uint;
+				
+				switch ( groupNumber )
+				{
+					case 1:
+					{
+						colorGroup = 0x3a3a3a;
+						break;
+					}
+						
+					case 2:
+					{
+						colorGroup = 0x77dc0b;
+						break;
+					}
+						
+					case 3:
+					{
+						colorGroup = 0xdc0b0b;
+						break;
+					}
+						
+					case 4:
+					{
+						colorGroup = 0x0b77dc;
+						break;
+					}
+						
+					default:
+					{
+						colorGroup = 0x3a3a3a;
+					}
+				}
+				
+				return colorGroup;
+			}
+			
+			public function set nameLabel(value : String):void
+			{
+				
+				rtextLabel.text = value;
+			}
+			
+			public function set secondElement(object : UIComponent):void
+			{
+				group.removeAllElements();
+				group.addElement(rtextLabel);
+				group.addElement(object);
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Rect bottom="0" left="0" right="0" top="0">
+		<s:fill>
+			<s:SolidColor id="rectColor" color="#3a3a3a"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup id="group" width="100%" height="100%" verticalAlign="middle" gap="2" paddingRight="2">
+		<s:RichText id="rtextLabel" minHeight="21" width="100%" color="#000000" fontFamily="Verdana" fontSize="10" fontWeight="bold"
+					paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" verticalCenter="0"/>
+	</s:HGroup>
+	
+	<s:Rect width="5" height="100%">
+		<s:fill>
+			<s:SolidColor id="secondColor" color="#FFFFFF"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Line top="0" width="100%">
+		<s:stroke>
+			<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1"/>
+		</s:stroke>
+	</s:Line>
+	
+	<s:Line bottom="0" width="100%">
+		<s:stroke>
+			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1"/>
+		</s:stroke>
+	</s:Line>
+	
+</s:ItemRenderer>

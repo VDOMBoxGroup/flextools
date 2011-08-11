@@ -42,12 +42,12 @@
 			}
 			
 			[Bindable( event="valueCommit" )]
-			public function get color() : String
+			public function get value() : String
 			{
 				return _color;
 			}
 			
-			public function set color( colorValue : String ) : void
+			public function set value( colorValue : String ) : void
 			{
 				var newColor : uint = uint( ( colorValue == "" ) ? "0" : "0x" + colorValue )
 				
@@ -72,8 +72,8 @@
 			{
 				if ( event.type == 'apply' )
 				{
-					color = event.hexcolor;
-					dispatchEvent(new ColorPickerEvent("change", event.color, color));
+					value = event.hexcolor;
+					dispatchEvent(new ColorPickerEvent("change", event.color, value));
 					//				_colorInNumber = event.color;
 				}
 			}

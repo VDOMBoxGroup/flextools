@@ -16,15 +16,6 @@
 			import net.vdombox.ide.common.vo.TypeVO;
 			import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeColorItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeDropdownItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeExternalEditorItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeFileItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeMultilineItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeNumberItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeObjectlistItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributePagelinkItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeTextFiledItemRenderer;
 
 			private var _attributesVO : VdomObjectAttributesVO;
 			private var _typeVO : TypeVO;
@@ -79,9 +70,9 @@
 				attributesList.dataProvider = attributes;
 			}
 
-			private function itemRendererFunction( data : Object ) : IFactory
+			/*private function itemRendererFunction( data : Object ) : IFactory
 			{
-				var attributeDescriptionVO : AttributeDescriptionVO = data.attributeDescriptionVO;
+				var attributeDescriptionVO : AttributeDescriptionVO = data.attributeDescriptionVo;
 
 				var codeInterface : Object = {}
 				var matches : Array = attributeDescriptionVO.codeInterface.match( codeInterfaceRE );
@@ -151,7 +142,7 @@
 				factory.properties = { autoDrawBackground: false };
 
 				return factory;
-			}
+			}*/
 
 			private function getAttributeDesctriptionVOByName( name : String ) : AttributeDescriptionVO
 			{
@@ -179,7 +170,7 @@
 	<s:HGroup height="100%" width="100%" gap="0">
 		<s:List id="attributesList" height="100%" width="100%" 
 				change="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED ))"
-				itemRendererFunction="itemRendererFunction" useVirtualLayout="false"
+				useVirtualLayout="false" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase"
 				contentBackgroundAlpha="0">
 			
 			<s:layout>
