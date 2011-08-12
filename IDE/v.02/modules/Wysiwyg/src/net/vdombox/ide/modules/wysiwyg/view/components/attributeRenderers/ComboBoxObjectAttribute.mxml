@@ -2,6 +2,9 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="20">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -20,37 +23,41 @@
 			{
 				return _value;
 			}
-
-			public function init( _interface : Object, element : String ) : void
+			
+			public function set labelField ( label : String ) : void
+			{
+				valueField.labelField = label;
+			}
+			
+			public function init( _interface : Object, element : String) : void
 			{
 				var comboBoxData : ArrayCollection = new ArrayCollection();
 				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
 				
 				var listValues : Array = [];
 				var selectedItem : Object = {};
-
-				while ( listValues = codeInterfaceValueRE.exec( String(_interface) ) )
+				
+				var objectListVO : Object;
+				for each ( objectListVO in _interface )
 				{
-					var listItem : Object = { label: listValues[ 1 ], data: listValues[ 2 ] };
-					
-					comboBoxData.addItem( listItem );
-				
-					if ( element == listValues[ 2 ] )
-						selectedItem = comboBoxData[ comboBoxData.length - 1 ];
+					comboBoxData.addItem( objectListVO );
+							
+					if ( element == objectListVO.id )
+						selectedItem = objectListVO;
 				}
-				
 				comboBoxData.sort = new Sort();
-				comboBoxData.sort.fields = [ new SortField( "label", true ) ];
+				comboBoxData.sort.fields = [ new SortField( "name", true ) ];
 				comboBoxData.refresh();
 				
 				valueField.dataProvider = comboBoxData;
 				valueField.selectedItem = selectedItem;
-				_value = selectedItem.data;
+				_value = selectedItem.id;
+
 			}
 			
 			private function changeHandler() : void
 			{
-				_value = valueField.selectedItem.data;
+				_value = valueField.selectedItem.id;
 				dispatchEvent( new Event( Event.CHANGE ) );
 			}
 			
@@ -67,6 +74,7 @@
 	</s:Rect>
 	<mx:Text id="txt"/>
 	<s:ComboBox id="valueField" width="100%" height="100%"
-				change="changeHandler()" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ComboBoxItemRenderer"/>
+				change="changeHandler()" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ComboBoxObjectItemRenderer"/>
+	
 	
 </s:Group>

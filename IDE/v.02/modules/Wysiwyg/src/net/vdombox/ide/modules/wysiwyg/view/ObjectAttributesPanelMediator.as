@@ -203,7 +203,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function saveRequestHandler( event : ObjectAttributesPanelEvent ) : void
 		{
 			objectAttributesPanel.attributesVO;
-			trace("3 Save");
 			sendNotification( ApplicationFacade.SAVE_ATTRIBUTES_REQUEST, objectAttributesPanel.attributesVO );
 		}
 

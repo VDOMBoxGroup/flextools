@@ -2,7 +2,7 @@
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
 		 
 		 height="20" width="100%"
-		 borderColor="#FFFFFF" borderStyle="solid" horizontalAlign="right" verticalAlign="middle">
+		 borderColor="#FFFFFF" borderStyle="solid" horizontalAlign="right" verticalAlign="middle" xmlns:s="library://ns.adobe.com/flex/spark">
 
 	<mx:Script>
 		<![CDATA[
@@ -18,13 +18,30 @@
 
 			public function set value( value : String ) : void
 			{
-				_value = value;
+				if ( _value != null )
+				{
+					_value = value;
+					dispatchEvent( new Event( Event.CHANGE ) );
+				}
+				else
+					_value = value;
 			}
+			
+			
 		]]>
 	</mx:Script>
-
-	<mx:Label id="lbl"
-			  text="Resource" />
+	<s:Group width="100%" height="20">
+		
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="#FFFFFF"/>
+			</s:fill>
+		</s:Rect>
+		
+		<s:TextInput id="lbl"
+					 text="Resources" editable="false" width="100%" height="100%"/>
+		
+	</s:Group>
 
 	<mx:Button height="19" label="..." width="22"
 			   cornerRadius="0" paddingLeft="2" paddingRight="2"

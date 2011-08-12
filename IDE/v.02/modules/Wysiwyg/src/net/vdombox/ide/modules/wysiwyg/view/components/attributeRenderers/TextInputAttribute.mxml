@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import flash.utils.flash_proxy;
+			[Bindable]
+			private var _value : String;
+
+			public function get value():String
+			{
+				return _value;
+			}
+
+			public function set value(value:String):void
+			{
+				_value = value;
+			}
+			
+			public function initChars(_interface : uint, reg : String) : void
+			{
+				lbl.maxChars = _interface;
+				if (reg.indexOf("d") != -1)
+					lbl.restrict = "0-9\\-";
+			}
+			
+			private function changeHandler() : void
+			{
+				_value = lbl.text;
+				dispatchEvent( new Event( Event.CHANGE ));
+			}
+			
+			private function keyDownEnterHandler( event : KeyboardEvent ) : void
+			{
+				if ( event.keyCode == Keyboard.ENTER )
+					changeHandler();
+			}
+
+		]]>
+	</fx:Script>
+	<s:Group>
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="#FFFFFF"/>
+			</s:fill>
+		</s:Rect>
+		
+		<s:TextInput id="lbl"
+					 text="{_value}" width="100%" height="100%"
+					 keyDown="keyDownEnterHandler(event)" focusOut="changeHandler()"/>
+	</s:Group>
+	
+</s:Group>

@@ -197,27 +197,28 @@
 				valueField.height = 21;
 				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
+				
+				valueField.addEventListener(Event.CHANGE, changeHandler);
 			}
 			
 			private function newNumber() : void
 			{
-				valueField = new TextInput;
-				valueField.text =  _attributeVO.value ;
+				valueField = new TextInputAttribute;
+				valueField.value =  _attributeVO.value ;
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
 				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
-				valueField.maxChars = uint( codeInterface[ "value" ] );
-				//				valueField.text = _attributeVO.value;
-				
-				
+				valueField.initChars(uint( codeInterface[ "value" ] ), _attributeDescriptionVO.regularExpressionValidation.toString());
+
 				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
 				regExpValidator.noMatchError = _attributeDescriptionVO.errorValidationMessage;
 				regExpValidator.validate();
 				
 				addEventListener(Event.COMPLETE, eventCompleleHandler);
+				
 			}
 			
 			private function eventCompleleHandler(event : Event) : void
@@ -234,89 +235,46 @@
 			
 			private function newObjectList( value : Object ) : void
 			{
-				valueField = new ComboBox;
+				valueField = new ComboBoxObjectAttribute;
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
 				valueField.setStyle("textAlign", "left");
-				valueField.setStyle("skinClass", ComboBoxSkin);
-				valueField.labelField = "name"
+				valueField.labelField = "name";
 				secondElement = valueField as UIComponent;
 				
-				var comboBoxData : ArrayCollection = new ArrayCollection();
-				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
+				valueField.init(value.objectsList, _attributeVO.value);
 				
-				var listValues : Array = [];
-				var selectedItem : Object = {};
 				
-				var objectListVO : ObjectListVO;
-				
-				for each ( objectListVO in value.objectsList )
-				{
-					comboBoxData.addItem( objectListVO );
-					
-					if ( _attributeVO.value == objectListVO.id )
-						selectedItem = objectListVO;
-				}
-				
-				comboBoxData.sort = new Sort();
-				comboBoxData.sort.fields = [ new SortField( "name", true ) ];
-				comboBoxData.refresh();
-				
-				valueField.dataProvider = comboBoxData;
-				valueField.selectedItem = selectedItem;
-				
-				valueField.addEventListener(Event.CHANGE, comboboxChange2);
+				valueField.addEventListener(Event.CHANGE, changeHandler);
 			}
 			
 			private function newPageLink( value : Object ) : void
 			{
-				valueField = new ComboBox;
+				valueField = new ComboBoxObjectAttribute;
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
 				valueField.setStyle("textAlign", "left");
-				valueField.setStyle("skinClass", ComboBoxSkin);
 				valueField.labelField = "name"
 				secondElement = valueField as UIComponent;
 				
-				var comboBoxData : ArrayCollection = new ArrayCollection();
-				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
+				valueField.init(value.pageLinks, _attributeVO.value);
 				
-				var listValues : Array = [];
-				var selectedItem : Object = {};
-				
-				var pageLinkVO : PageLinkVO;
-				
-				for each ( pageLinkVO in value.pageLinks )
-				{
-					comboBoxData.addItem( pageLinkVO );
-					
-					if ( _attributeVO.value == pageLinkVO.id )
-						selectedItem = pageLinkVO;
-				}
-				
-				comboBoxData.sort = new Sort();
-				comboBoxData.sort.fields = [ new SortField( "name", true ) ];
-				comboBoxData.refresh();
-				
-				valueField.dataProvider = comboBoxData;
-				valueField.selectedItem = selectedItem;
-				
-				valueField.addEventListener(Event.CHANGE, comboboxChange2);
+				valueField.addEventListener(Event.CHANGE, changeHandler);
 			}
 			
 			private function newTextField() : void
 			{
-				valueField = new TextInput;
-				valueField.text =  _attributeVO.value ;
+				valueField = new TextInputAttribute;
+				valueField.value =  _attributeVO.value ;
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
 				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
-				valueField.maxChars = uint( codeInterface[ "value" ] );
+				valueField.initChars(uint( codeInterface[ "value" ] ), _attributeDescriptionVO.regularExpressionValidation.toString());
 				//				valueField.text = _attributeVO.value;
 				
 				
@@ -325,6 +283,8 @@
 				regExpValidator.validate();
 				
 				addEventListener(Event.COMPLETE, eventCompleleHandler);
+				
+				valueField.addEventListener(Event.CHANGE, changeHandler);
 			}
 			
 			private function changeHandler(event : Event) : void
