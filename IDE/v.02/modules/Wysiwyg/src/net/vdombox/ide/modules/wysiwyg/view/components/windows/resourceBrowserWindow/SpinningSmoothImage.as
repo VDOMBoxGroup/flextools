@@ -16,7 +16,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 	{
 		public static const SPINNING_STARTED : String = "spinningStarted";
 		
-		private var rotate:Rotate = new Rotate();
+		private var rotate		: Rotate = new Rotate();
+		
+		public var duration	: Number = 5000;
+		public var angle	: Number = -3600;
 		
 		public function SpinningSmoothImage()
 		{
@@ -40,10 +43,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 			
 			rotate.target = content;
 			
-			rotate.duration = 5000;
+			rotate.duration = duration;
 			
 			rotate.angleFrom = 0;
-			rotate.angleTo = -3600;
+			rotate.angleTo = angle;
 			
 			rotate.easingFunction = null;
 			

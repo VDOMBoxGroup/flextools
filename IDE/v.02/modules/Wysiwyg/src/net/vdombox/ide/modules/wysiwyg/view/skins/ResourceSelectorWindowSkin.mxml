@@ -19,11 +19,13 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+			import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
 			
 			
 			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
 			{
 				resourcesList.addEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, hostComponent.previewResource, true);
+				resourcesList.addEventListener(ListItem.ITEM_DOUBLE_CLICKED, hostComponent.onApplyClick, true);
 			}
 			
 		]]>
@@ -134,7 +136,6 @@
 							symbolColor="#383838"
 							creationComplete="resourcesList_creationCompleteHandler(event)"
 							dataProvider="{ hostComponent._resources }"
-							doubleClick="hostComponent.onApplyClick()" doubleClickEnabled="true"
 							enabled="true" focusColor="#CCCCCC"
 							itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem">
 						<s:layout>

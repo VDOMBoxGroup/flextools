@@ -6,7 +6,9 @@
 				autoDrawBackground="false"
 				contentBackgroundColor="#383838"
 				contentBackgroundAlpha="0"
-				creationComplete="creationCompleteHandler(event)">
+				creationComplete="creationCompleteHandler(event)"
+				doubleClickEnabled="true"
+				doubleClick="doubleClickHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import flash.utils.setTimeout;
@@ -16,6 +18,8 @@
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+			
+			public static var ITEM_DOUBLE_CLICKED	: String = "itemDoubleClicked";
 			
 			public var resourceVO					: ResourceVO;
 			
@@ -95,6 +99,11 @@
 			{
 				creationCompleted = true;
 				addContentElement();
+			}
+			
+			protected function doubleClickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new Event( ITEM_DOUBLE_CLICKED ) );
 			}
 			
 		]]>

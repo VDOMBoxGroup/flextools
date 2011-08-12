@@ -239,7 +239,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCES ) );			
 		}
 		
-		public function onApplyClick():void
+		public function onApplyClick(event:Event = null):void
 		{
 			dispatchEvent( new Event( Event.CHANGE ) );
 		}
