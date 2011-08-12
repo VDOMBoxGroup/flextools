@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 
 		public var color : uint;
 		public var hexcolor : String;
+		public static var CHANGE	: String = "change";
 
 		public function ColorPickerEvent( type : String, color : uint, hexcolor : String )
 		{

@@ -60,7 +60,6 @@
 			
 			public function mouseClickandler( event : MouseEvent ) : void
 			{
-				//		var colorInt:uint = Number('0x' + _color/* .substring(1) */);
 				ColorPickerWindow.show_window( this, _colorInNumber, true );
 			}
 			
@@ -73,8 +72,7 @@
 				if ( event.type == 'apply' )
 				{
 					value = event.hexcolor;
-					dispatchEvent(new ColorPickerEvent("change", event.color, value));
-					//				_colorInNumber = event.color;
+					dispatchEvent(new ColorPickerEvent(ColorPickerEvent.CHANGE, event.color, value));
 				}
 			}
 		]]>
@@ -86,7 +84,5 @@
 			</s:fill>
 		</s:Rect>
 	</s:Group>
-	
-	
-	
+
 </mx:Canvas>

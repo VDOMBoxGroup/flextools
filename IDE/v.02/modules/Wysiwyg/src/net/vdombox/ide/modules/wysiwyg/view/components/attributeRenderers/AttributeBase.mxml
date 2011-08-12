@@ -13,11 +13,15 @@
 			import mx.collections.SortField;
 			import mx.controls.ComboBox;
 			import mx.core.UIComponent;
+			import mx.skins.halo.ComboBoxArrowSkin;
+			import mx.skins.spark.ComboBoxSkin;
 			
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.common.vo.ObjectListVO;
 			import net.vdombox.ide.common.vo.PageLinkVO;
+			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
+			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
 			import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
 			
@@ -131,8 +135,9 @@
 				valueField.width = 128;
 				valueField.height = 21;
 				valueField.setStyle("textAlign", "left");
-
 				secondElement = valueField as UIComponent;
+				
+				valueField.addEventListener(Event.CHANGE, changeHandler);
 			}
 			
 			private function newColorPicker() : void
@@ -144,47 +149,22 @@
 				valueField.height = 21;
 				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
+				
+				valueField.addEventListener(ColorPickerEvent.CHANGE, changeHandler);
 			}
 			
 			private function newDropdown() : void
 			{
-				valueField = new ComboBox;
+				valueField = new ComboBoxAttribute;
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21; 
 				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
-				var comboBoxData : ArrayCollection = new ArrayCollection();
-				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
+				valueField.init(codeInterface[ "value" ], _attributeVO.value);
 				
-				var listValues : Array = [];
-				var selectedItem : Object = {};
-				
-				while ( listValues = codeInterfaceValueRE.exec( codeInterface[ "value" ] ) )
-				{
-					
-					var listItem : Object = { label: listValues[ 1 ], data: listValues[ 2 ] };
-					
-					comboBoxData.addItem( listItem );
-					
-					if ( _attributeVO.value == listValues[ 2 ] )
-						selectedItem = comboBoxData[ comboBoxData.length - 1 ];
-				}
-				
-				comboBoxData.sort = new Sort();
-				comboBoxData.sort.fields = [ new SortField( "label", true ) ];
-				comboBoxData.refresh();
-				
-				valueField.dataProvider = comboBoxData;
-				valueField.selectedItem = selectedItem;
-				
-				valueField.addEventListener(Event.CHANGE, comboboxChange);
-			}
-			
-			private function comboboxChange(event : Event) : void
-			{
-				_attributeVO.value = valueField.value.toString();
+				valueField.addEventListener(Event.CHANGE, changeHandler);
 			}
 			
 			private function comboboxChange2(event : Event) : void
@@ -192,7 +172,7 @@
 				_attributeVO.value = valueField.selectedItem.id;
 			}
 			
-			private function newExternalEdition() : void
+			private function newExternalEdition() : void //
 			{
 				valueField = new ExternalEditor;
 				valueField.value =  _attributeVO.value ;
@@ -259,6 +239,7 @@
 				valueField.width = 128;
 				valueField.height = 21;
 				valueField.setStyle("textAlign", "left");
+				valueField.setStyle("skinClass", ComboBoxSkin);
 				valueField.labelField = "name"
 				secondElement = valueField as UIComponent;
 				
@@ -295,6 +276,7 @@
 				valueField.width = 128;
 				valueField.height = 21;
 				valueField.setStyle("textAlign", "left");
+				valueField.setStyle("skinClass", ComboBoxSkin);
 				valueField.labelField = "name"
 				secondElement = valueField as UIComponent;
 				
@@ -343,6 +325,12 @@
 				regExpValidator.validate();
 				
 				addEventListener(Event.COMPLETE, eventCompleleHandler);
+			}
+			
+			private function changeHandler(event : Event) : void
+			{
+				_attributeVO.value = valueField.value;
+				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ) );
 			}
 			
 			protected function getColorByGroup( groupNumber : uint ) : uint

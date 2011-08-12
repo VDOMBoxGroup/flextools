@@ -10,7 +10,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
-
+			
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.common.vo.TypeVO;
@@ -22,7 +22,8 @@
 
 			private var attributes : ArrayCollection;
 			private var codeInterfaceRE : RegExp = /^(\w*)\((.*)\)/;
-
+			
+			
 			public function get attributesVO() : VdomObjectAttributesVO
 			{
 				return _attributesVO;
@@ -69,80 +70,6 @@
 
 				attributesList.dataProvider = attributes;
 			}
-
-			/*private function itemRendererFunction( data : Object ) : IFactory
-			{
-				var attributeDescriptionVO : AttributeDescriptionVO = data.attributeDescriptionVo;
-
-				var codeInterface : Object = {}
-				var matches : Array = attributeDescriptionVO.codeInterface.match( codeInterfaceRE );
-
-				var factory : ClassFactory;
-
-				codeInterface[ "type" ] = matches[ 1 ].toLowerCase();
-				codeInterface[ "value" ] = matches[ 2 ];
-
-				switch ( codeInterface[ "type" ] )
-				{
-					case "number":
-					{
-						factory = new ClassFactory( AttributeNumberItemRenderer );
-						break;
-					}
-
-					case "textfield":
-					{
-						factory = new ClassFactory( AttributeTextFiledItemRenderer );
-						break;
-					}
-
-					case "multiline":
-					{
-						factory = new ClassFactory( AttributeMultilineItemRenderer );
-						break;
-					}
-
-					case "file":
-					{
-						factory = new ClassFactory( AttributeFileItemRenderer );
-						break;
-					}
-
-					case "color":
-					{
-						factory = new ClassFactory( AttributeColorItemRenderer );
-						break;
-					}
-
-					case "dropdown":
-					{
-						factory = new ClassFactory( AttributeDropdownItemRenderer );
-						break;
-					}
-
-					case "pagelink":
-					{
-						factory = new ClassFactory( AttributePagelinkItemRenderer );
-						break;
-					}
-
-					case "objectlist":
-					{
-						factory = new ClassFactory( AttributeObjectlistItemRenderer );
-						break;
-					}
-
-					case "externaleditor":
-					{
-						factory = new ClassFactory( AttributeExternalEditorItemRenderer );
-						break;
-					}
-				}
-
-				factory.properties = { autoDrawBackground: false };
-
-				return factory;
-			}*/
 
 			private function getAttributeDesctriptionVOByName( name : String ) : AttributeDescriptionVO
 			{

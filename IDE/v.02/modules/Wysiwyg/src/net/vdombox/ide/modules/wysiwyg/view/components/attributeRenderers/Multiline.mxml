@@ -17,6 +17,7 @@
 			
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
+			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
 			import net.vdombox.utils.WindowManager;
 			
@@ -61,7 +62,13 @@
 				if ( currentTarget is MultilineWindow )
 				{
 					if (event.type == MultilineWindowEvent.APPLY)
-						value = event.value;				
+					{
+						if (value != event.value)
+						{	
+							value = event.value;
+							dispatchEvent( new Event( Event.CHANGE));
+						}
+					}
 					UIComponent( currentTarget ).removeEventListener( MultilineWindowEvent.APPLY, multilineWindow_applyHandler, false );					
 				}
 
