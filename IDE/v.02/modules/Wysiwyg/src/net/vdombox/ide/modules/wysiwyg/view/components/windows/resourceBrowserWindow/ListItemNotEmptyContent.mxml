@@ -66,19 +66,6 @@
 				
 			}
 			
-			/*protected function spinner_creationCompleteHandler(event:FlexEvent):void
-			{
-				spinner.addEventListener(SpinningSmoothImage.SPINNING_STARTED, onSpinnerAnimStarted, false, 0, true);
-				spinner.rotateImage();
-			}
-			
-			private function onSpinnerAnimStarted(evt:Event):void
-			{
-				spinner.removeEventListener(SpinningSmoothImage.SPINNING_STARTED, onSpinnerAnimStarted);
-				
-				currentState = "normalResource";
-			}*/
-			
 			private var loader : Loader;
 			private function iconLoaded( object : Object = null ) : void
 			{

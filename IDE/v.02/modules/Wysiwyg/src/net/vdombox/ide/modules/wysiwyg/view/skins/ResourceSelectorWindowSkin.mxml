@@ -127,8 +127,10 @@
 						</s:fill>
 					</s:Rect>
 					
-					<s:List id="resourcesList" left="4" right="2" top="20" bottom="10" width="100%"
-							height="100%" allowMultipleSelection="{hostComponent.multilineSelected}"
+					<s:List id="resourcesList" 
+							left="4" right="2" top="4" bottom="0" 
+							width="100%" height="100%" 
+							allowMultipleSelection="{hostComponent.multilineSelected}"
 							borderVisible="false" chromeColor="#777777" contentBackgroundAlpha="0"
 							contentBackgroundColor="#383838"
 							selectionColor="#383838"
@@ -148,7 +150,7 @@
 				</s:Group>
 				
 				<!--  futer  -->
-				<s:HGroup width="100%" height="50"
+				<s:HGroup width="100%" height="55"
 						  paddingBottom="2" paddingLeft="10" paddingRight="10" paddingTop="2"
 						  verticalAlign="middle" horizontalAlign="right">
 					

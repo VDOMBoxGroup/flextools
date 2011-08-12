@@ -45,12 +45,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 *
 		 * @default
 		 */
-		// TODO: сделать крутилку на загрузку иконки			- CHANGE swf -> gif
-		// TODO: сделать крутилку на отправку файла				- IN PROGRESS
-		// TODO: сделать состояния								- DONE
-		// TODO: кнопку "скопировать гуид" сделать нажимаемой	- DONE
+		// TODO: сделать крутилку на загрузку иконки			- CHANGE swf -> png
+		// TODO: сделать крутилку на отправку файла				- CHANGE swf -> png
+		// TODO: сделать свой rotation класс
+		// TODO: загружать спиннер на creationComplete listItem
+		// TODO: перед удалением ресурса показывать диалог 
 		// prosmotret' slushateli addHndl and remuveHandlers
-		// TODO: иконки загружать на визибл
 		
 		public static const NAME : String = "ResourceSelectorWindowMediator";
 

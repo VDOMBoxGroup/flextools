@@ -32,7 +32,7 @@
 				
 				resourceVO = value as ResourceVO;
 
-				if (!creationCompleted)
+				if (!creationCompleted || !visible)
 					return;
 				
 				addContentElement();
@@ -49,8 +49,15 @@
 			private function addContentElement():void
 			{
 				if (itemElement && contains(itemElement)) {
-					removeElement(itemElement);
-					itemElement = null;
+					if (resourceVO && (itemElement is ListItemNotEmptyContent))
+					{
+						ListItemNotEmptyContent(itemElement).addEventListener(ListItemNotEmptyContent.ICON_ADDED, onContentIconAdded, false, 0, true);
+						itemElement.data = resourceVO;
+						return;
+					} else  {		// remove element -> add empty element
+						removeElement(itemElement);
+						itemElement = null;
+					}
 				}
 				
 				if (resourceVO) 
@@ -58,10 +65,9 @@
 					itemElement = new ListItemNotEmptyContent();
 					ListItemNotEmptyContent(itemElement).addEventListener(ListItemNotEmptyContent.ICON_ADDED, onContentIconAdded, false, 0, true);
 					itemElement.data = resourceVO;
-					
 				} else {
-					itemElement = new ListItemEmptyContent();
 					removeSpinner();
+					itemElement = new ListItemEmptyContent();
 				}
 				this.addElement(itemElement);
 			}
@@ -77,13 +83,6 @@
 				spinner.removeEventListener(SpinningSmoothImage.SPINNING_STARTED, onSpinnerAnimStarted);
 			}
 			
-			private function onContentIconAdded(evt:Event):void
-			{
-				ListItemNotEmptyContent(itemElement).removeEventListener(ListItemNotEmptyContent.ICON_ADDED, onContentIconAdded);
-				
-				removeSpinner();
-			}
-			
 			private function removeSpinner():void
 			{
 				spinner.stopRotateImage();
@@ -95,9 +94,20 @@
 				}
 			}
 			
+			private function onContentIconAdded(evt:Event):void
+			{
+				ListItemNotEmptyContent(itemElement).removeEventListener(ListItemNotEmptyContent.ICON_ADDED, onContentIconAdded);
+				
+				removeSpinner();
+			}
+			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				creationCompleted = true;
+				
+				if (!visible)
+					return;
+				
 				addContentElement();
 			}
 			

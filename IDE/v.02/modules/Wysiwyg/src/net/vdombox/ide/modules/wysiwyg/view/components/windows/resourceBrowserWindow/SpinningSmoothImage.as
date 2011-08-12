@@ -18,8 +18,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 		
 		private var rotate		: Rotate = new Rotate();
 		
-		public var duration	: Number = 5000;
-		public var angle	: Number = -3600;
+		public var duration	: Number = 500;
+		public var angle	: Number = -360;
 		
 		public function SpinningSmoothImage()
 		{
