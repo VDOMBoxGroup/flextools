@@ -146,9 +146,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( sessionProxy.selectedPage && vdomObjectAttributesVO &&
 						sessionProxy.selectedPage.id == vdomObjectAttributesVO.vdomObjectVO.id )
 					{
-
-						objectAttributesPanel.saveButton.enabled = true;
-						objectAttributesPanel.deleteButton.enabled = false;
 						objectAttributesPanel.attributesVO = body as VdomObjectAttributesVO;
 					}
 
@@ -162,8 +159,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( sessionProxy.selectedObject && vdomObjectAttributesVO &&
 						sessionProxy.selectedObject.id == vdomObjectAttributesVO.vdomObjectVO.id )
 					{
-						objectAttributesPanel.saveButton.enabled = true;
-						objectAttributesPanel.deleteButton.enabled = true;
 						objectAttributesPanel.attributesVO = vdomObjectAttributesVO;
 					}
 
@@ -196,8 +191,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function clearData() : void
 		{
 			objectAttributesPanel.attributesVO = null;
-			objectAttributesPanel.saveButton.enabled = false;
-			objectAttributesPanel.deleteButton.enabled = false;
 		}
 
 		private function saveRequestHandler( event : ObjectAttributesPanelEvent ) : void

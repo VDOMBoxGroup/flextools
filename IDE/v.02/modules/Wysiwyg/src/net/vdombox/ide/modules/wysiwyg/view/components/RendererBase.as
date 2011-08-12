@@ -17,6 +17,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -528,7 +529,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				
 		}
 
-
 		private function applyStyles( item : UIComponent, itemXMLDescription : XML ) : void
 		{
 			var _style : Object = {};
@@ -859,6 +859,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
+			setFocus();
 			if ( movable && !isScroller( event.target as DisplayObjectContainer ) )
 			{
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, false, 0, true );

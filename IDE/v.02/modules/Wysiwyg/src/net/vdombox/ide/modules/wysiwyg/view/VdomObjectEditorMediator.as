@@ -3,6 +3,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
+	
+	import mx.events.CloseEvent;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
@@ -21,10 +25,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.VdomObjectEditor;
+	import net.vdombox.view.Alert;
+	import net.vdombox.view.AlertButton;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.components.Application;
+
 
 	public class VdomObjectEditorMediator extends Mediator implements IMediator
 	{
@@ -42,6 +51,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		private var sessionProxy : SessionProxy;
+		
+		public function get component() : VdomObjectEditor
+		{
+			return viewComponent as VdomObjectEditor;
+		}
 
 		public function get editor() : IEditor
 		{
@@ -147,6 +161,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 						}
 						// mark object
 						editor.selectedRenderer = selRenderer;
+						if (editor.selectedRenderer != null)
+							editor.selectedRenderer.setFocus();
 					}
 					else if (editor.state.substr( 0, 3 ) == "xml")
 					{
@@ -177,6 +193,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			if ( !editor )
 				return;
+			
+			editor.addEventListener( KeyboardEvent.KEY_DOWN, keyDownDeleteHandler, true);
 
 			editor.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
@@ -199,9 +217,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererDropEvent.DROP, renderer_dropHandler, true, 0, true );
 
 			editor.addEventListener( EditorEvent.ATTRIBUTES_CHANGED, attributesChangeHandler, true, 0, true );
-
-
-
 		}
 
 		private function removeHandlers() : void
@@ -235,7 +250,29 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 
 		}
+		
+		private function keyDownDeleteHandler(event : KeyboardEvent) : void
+		{
+			if (event.keyCode == Keyboard.DELETE && sessionProxy.selectedObject != null)
+			{
+				var componentName : String = sessionProxy.selectedObject.typeVO.displayName;
+				
+				Alert.noLabel = "Cancel";
+				Alert.yesLabel = "Delete";
+				
+				Alert.Show( "Are you sure want to delete " + componentName + " ?",AlertButton.OK_No, component.parentApplication, closeHandler);
+			}
+		}
 
+		private function closeHandler(event : CloseEvent) : void
+		{
+			if (event.detail == Alert.YES)
+			{
+				if ( sessionProxy.selectedPage && sessionProxy.selectedObject )
+					sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: sessionProxy.selectedPage, objectVO: sessionProxy.selectedObject } );
+			}
+		}
+		
 		private function clearData() : void
 		{
 			editor.editorVO.vdomObjectVO = null;

@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
+	import flash.events.KeyboardEvent;
+	
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
