@@ -32,7 +32,7 @@
 				
 				resourceVO = value as ResourceVO;
 
-				if (!creationCompleted || !visible)
+				if (!creationCompleted)
 					return;
 				
 				addContentElement();
@@ -48,6 +48,9 @@
 			
 			private function addContentElement():void
 			{
+				if (!visible)
+					return;
+				
 				if (itemElement && contains(itemElement)) {
 					if (resourceVO && (itemElement is ListItemNotEmptyContent))
 					{
@@ -104,9 +107,6 @@
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				creationCompleted = true;
-				
-				if (!visible)
-					return;
 				
 				addContentElement();
 			}

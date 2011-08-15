@@ -22,20 +22,30 @@
 			public var resourceVO					: ResourceVO;
 			
 			private var creationCompleted			: Boolean;
-			private var normalResourceIconLoaded	: Boolean;
-			
+			private var _iconRequested				: Boolean;
 			
 			override public function set data ( value : Object ) : void 
 			{
 				super.data = value;
 				
+				var prevResVO : ResourceVO = resourceVO;
 				resourceVO = value as ResourceVO;
+				
+				if (!resourceVO ||
+					!prevResVO ||
+					(resourceVO && prevResVO && resourceVO.id != prevResVO.id))
+				{
+					_iconRequested = false;
+				}
 				
 				setProperties();
 			}
 			
 			private function setProperties ():void
 			{
+				if (!creationCompleted)
+					return;
+				
 				if (resourceVO  )
 				{
 					resName.text	= resourceVO.name;
@@ -47,17 +57,19 @@
 					
 					if(resourceVO.icon)
 					{
-						normalResourceIconLoaded = true;
 						smoothImage.source = resourceVO.icon;
 						this.dispatchEvent(new Event(ICON_ADDED));
 					}
 					else
-						BindingUtils.bindSetter( iconLoaded, resourceVO, "icon", false, true );
+					{
+						if (!_iconRequested) 
+							BindingUtils.bindSetter( iconLoaded, resourceVO, "icon", false, true );
+					}
 					
 					return;
 				}			
 			}
-				
+			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				creationCompleted = true;
@@ -96,6 +108,7 @@
 				
 				function requestIcon(event:TimerEvent):void
 				{
+					_iconRequested = true;
 					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
 				}
 				
@@ -108,7 +121,6 @@
 				if ( event.type == IOErrorEvent.IO_ERROR )
 					return;
 				
-				normalResourceIconLoaded = true;
 				smoothImage.source = Bitmap( event.target.content );
 				this.dispatchEvent(new Event(ICON_ADDED));
 			}
