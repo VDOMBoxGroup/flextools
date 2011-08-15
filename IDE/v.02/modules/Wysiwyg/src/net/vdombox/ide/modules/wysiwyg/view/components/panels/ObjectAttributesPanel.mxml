@@ -93,6 +93,11 @@
 	<s:Label id="typeNameLabel" y="-18" left="9" right="1" fontSize="8"
 			 color="#FFFFFF" paddingLeft="3" paddingTop="3" textAlign="left"
 			 verticalAlign="bottom"/>
+	<s:Rect height="100%" width="100%">
+		<s:fill>
+			<s:SolidColor color="#3A3A3A"/>
+		</s:fill>
+	</s:Rect>
 
 	<s:HGroup height="100%" width="100%" gap="0">
 		<s:List id="attributesList" height="100%" width="100%" 

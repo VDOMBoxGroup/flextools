@@ -182,6 +182,8 @@
 				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
+				valueField.addEventListener(Event.CHANGE, changeHandler);
+				
 				var resourceID : String = codeInterface[ "value" ];
 				resourceID = resourceID.substr( resourceID.indexOf( "," ) + 1 );
 				valueField.value = _attributeVO.value;	

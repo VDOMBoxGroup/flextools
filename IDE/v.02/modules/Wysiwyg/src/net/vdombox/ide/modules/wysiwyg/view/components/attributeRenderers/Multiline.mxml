@@ -100,7 +100,7 @@
 	</s:Group>
 	
 	
-	<s:Button height="19" label="..." fontSize="8" width="28"
-			   cornerRadius="0" textAlignLast="center"
+	<mx:Button height="19" label="..." width="22"
+			   cornerRadius="0" paddingLeft="2" paddingRight="2"
 			   click="openWindow()" />
 </s:HGroup>

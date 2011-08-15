@@ -29,7 +29,13 @@
 
 			public function set value( value : String ) : void
 			{
-				_value = value;
+				if ( _value != null )
+				{
+					_value = value;
+					dispatchEvent( new Event( Event.CHANGE ) );
+				}
+				else
+					_value = value;
 			}
 		]]>
 	</mx:Script>

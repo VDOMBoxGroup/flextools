@@ -712,7 +712,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			dispatchEvent( new RendererEvent( RendererEvent.CREATED ) );
-			trace("CreatedComplete111");
 		}
 
 		private function dataLoaded( object : Object = null ) : void
@@ -972,7 +971,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				var rectangle : Rectangle;
 				
 				rectangle = getBackGroundRect( content );
-
+			
 				backGrSprite.graphics.clear();
 				backGrSprite.graphics.beginBitmapFill( content.bitmapData, null, true );
 				backGrSprite.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
@@ -980,6 +979,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				background.addElement( new SpriteUIComponent( backGrSprite ) );
 				invalidateDisplayList();
+				invalidateProperties();
 			}
 			
 			function getBackGroundRect( content : Bitmap ) : Rectangle
