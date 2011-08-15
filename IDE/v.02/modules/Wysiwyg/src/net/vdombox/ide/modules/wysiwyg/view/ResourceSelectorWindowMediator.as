@@ -25,11 +25,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.SpinnerPopup;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemNotEmptyContent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemNotEmptyContent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.utils.WindowManager;
+	import net.vdombox.view.Alert;
+	import net.vdombox.view.AlertButton;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -45,26 +47,25 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 *
 		 * @default
 		 */
+		// TODO: сделать свой rotation класс
 		// TODO: сделать крутилку на загрузку иконки			- CHANGE swf -> png
 		// TODO: сделать крутилку на отправку файла				- CHANGE swf -> png
-		// TODO: сделать свой rotation класс
 		// TODO: загружать спиннер на creationComplete listItem
-		// TODO: перед удалением ресурса показывать диалог 
 		// prosmotret' slushateli addHndl and remuveHandlers
 		
-		public static const NAME : String = "ResourceSelectorWindowMediator";
+		public static const NAME			: String = "ResourceSelectorWindowMediator";
 
-		private var _filters : ArrayCollection = new ArrayCollection();
+		private var _filters				: ArrayCollection = new ArrayCollection();
 
-		private var allResourcesList : ArrayList;
+		private var allResourcesList		: ArrayList;
 
-		private var resourceVO : ResourceVO = new ResourceVO( ResourceVO.RESOURCE_TEMP );
+		private var resourceVO 				: ResourceVO = new ResourceVO( ResourceVO.RESOURCE_TEMP );
+		private var delResVO				: ResourceVO;
+		private var noneIcon				: ResourceVO = new ResourceVO( ResourceVO.RESOURCE_NONE );
+		
+		private var sessionProxy 			: SessionProxy;
 
-		private var sessionProxy 	: SessionProxy;
-
-		private var noneIcon : ResourceVO = new ResourceVO( ResourceVO.RESOURCE_NONE );
-
-		private var resourcePreviewWindow : ResourcePreviewWindow;
+		private var resourcePreviewWindow	: ResourcePreviewWindow;
 
 		public function ResourceSelectorWindowMediator( resourceSelectorWindow : ResourceSelectorWindow ) : void
 		{
@@ -235,16 +236,37 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function deleteResourceHandler( event : ListItemEvent ) : void
 		{
-			//delete from server
-			sendNotification( ApplicationFacade.DELETE_RESOURCE, { resourceVO: event.resource, applicationVO: sessionProxy.selectedApplication } );
-
-			//delete from view
-			resourceSelectorWindow.deleteResourceID = event.resource.id;
-
-			resourceSelectorWindow.invalidateProperties(); //?
-
-			allResourcesList = resourceSelectorWindow.resources;
+			trace ("[ResSelWindowMediator] deleteResourceHandler");
+			var componentName : String = event.resource ? event.resource.name : "";
+			
+			delResVO = event.resource;
+			
+			Alert.noLabel = "Cancel";
+			Alert.yesLabel = "Delete";
+			
+			Alert.Show( "Are you sure want to delete\n " + componentName + " ?", 
+						AlertButton.OK_No, 
+						resourceSelectorWindow, deleteResourceCloseHandler);
+			
 		}
+		
+		private function deleteResourceCloseHandler(event : CloseEvent) : void
+		{
+			if (event.detail == Alert.YES)
+			{
+				//delete from server
+				sendNotification( ApplicationFacade.DELETE_RESOURCE, { resourceVO: delResVO, applicationVO: sessionProxy.selectedApplication } );
+				
+				//delete from view
+				resourceSelectorWindow.deleteResourceID = delResVO.id;
+				
+				resourceSelectorWindow.invalidateProperties(); //?
+				
+				allResourcesList = resourceSelectorWindow.resources;
+
+			}
+		}
+
 
 		private function applyNameFilter( event : Event ) : void
 		{
