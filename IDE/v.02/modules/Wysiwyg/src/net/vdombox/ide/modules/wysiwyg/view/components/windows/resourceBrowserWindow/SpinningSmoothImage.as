@@ -4,11 +4,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 	
 	import mx.effects.Rotate;
 	import mx.effects.Tween;
+	import mx.effects.easing.Linear;
 	import mx.events.EffectEvent;
 	import mx.events.FlexEvent;
 	
 	import spark.components.Group;
 	import spark.effects.animation.RepeatBehavior;
+	import spark.effects.easing.EaseInOutBase;
 	import spark.effects.easing.EasingFraction;
 	
 
@@ -48,7 +50,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 			rotate.angleFrom = 0;
 			rotate.angleTo = angle;
 			
-			rotate.easingFunction = null;
+			rotate.easingFunction = Linear.easeNone;
 			
 			rotate.originX = content.width / 2;
 			rotate.originY = content.height / 2;
@@ -62,6 +64,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 			
 		}
 		
+	
 		public function stopRotateImage():void
 		{
 			rotate.stop();
