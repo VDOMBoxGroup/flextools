@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.SpinningSmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.SpinnerPopupSkin;
 	
 	import spark.components.TitleWindow;
@@ -14,6 +15,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	
 	public class SpinnerPopup extends TitleWindow
 	{
+		[SkinPart( required="true" )]
+		public var spinner : SpinningSmoothImage;
+		
 		public function SpinnerPopup()
 		{
 			super();
@@ -45,11 +49,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		private function createComleatHandler(event : FlexEvent):void
 		{
 			PopUpManager.centerPopUp( this );
+			
+			spinner.rotateImage();
 		}
 		
 		private function closeHandler( event : CloseEvent):void
 		{
-			trace ("[SpinnerPopup] closeHandler");
+			spinner.stopRotateImage();
+			
 			removeHandlers();
 			PopUpManager.removePopUp(this);
 		}

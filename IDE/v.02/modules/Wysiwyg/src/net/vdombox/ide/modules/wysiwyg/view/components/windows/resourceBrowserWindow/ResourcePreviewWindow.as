@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 		public var resourceImage : Image;
 		
 		[SkinPart( required="true" )]
-		public var loadingImage : Image;
+		public var loadingImage : SpinningSmoothImage;
 		
 		[SkinPart( required="true" )]
 		public var resourceName : Label;
@@ -68,8 +68,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 			
 		}
 		
-		
-
 		override public function validateDisplayList():void
 		{
 			setFocus();
@@ -77,16 +75,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 			super.validateDisplayList();
 		}
 		
-		
-		
 		override public function stylesInitialized():void 
 		{
 			super.stylesInitialized();
 			this.setStyle( "skinClass", ResourcePreviewWindowSkin );
 		}
-		
-		
-		
 		
 		private function addHandlers():void
 		{
@@ -99,11 +92,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 		private function createComleatHandler(event : FlexEvent):void
 		{
 			PopUpManager.centerPopUp( this );
+			
+			loadingImage.rotateImage();
 		}
 		
 		
 		private function closeHandler( event : CloseEvent):void
 		{
+			loadingImage.stopRotateImage();
+			
 			removeHandlers();
 			PopUpManager.removePopUp(this);
 		}

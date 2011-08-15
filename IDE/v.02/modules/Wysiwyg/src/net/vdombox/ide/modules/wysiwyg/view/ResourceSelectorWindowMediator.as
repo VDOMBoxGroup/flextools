@@ -47,11 +47,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 *
 		 * @default
 		 */
-		// TODO: сделать свой rotation класс
-		// TODO: сделать крутилку на загрузку иконки			- CHANGE swf -> png
-		// TODO: сделать крутилку на отправку файла				- CHANGE swf -> png
-		// TODO: загружать спиннер на creationComplete listItem
-		// prosmotret' slushateli addHndl and remuveHandlers
 		
 		public static const NAME			: String = "ResourceSelectorWindowMediator";
 
@@ -175,7 +170,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var spinnerPopup : SpinnerPopup;
 		private function createSpinnerPopup():void
 		{
-			trace ("[ResSelWindMediator] createSpinnerPopup");
 			spinnerPopup = new SpinnerPopup();
 			spinnerPopup.width	= resourceSelectorWindow.width;
 			spinnerPopup.height	= resourceSelectorWindow.height;
@@ -185,7 +179,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function removeSpinnerPopup():void
 		{
-			trace ("[ResSelWindMediator] removeSpinnerPopup");
 			spinnerPopup.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 			spinnerPopup = null;
 		}
@@ -215,7 +208,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler );
 //			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, getResourcesRequestHandler );
-			resourceSelectorWindow.addEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
+			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview );
 			
 		}
 		
@@ -310,7 +303,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			resourceSelectorWindow.removeEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
 		
-			resourceSelectorWindow.resourcesList.removeEventListener( ResourceSelectorWindowEvent.GET_ICON, getIconRequestHendler);
+			resourceSelectorWindow.nameFilter.removeEventListener( Event.CHANGE, applyNameFilter );
+			resourceSelectorWindow.resourcesList.removeEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler );
+			resourceSelectorWindow.resourcesList.removeEventListener( ResourceSelectorWindowEvent.GET_ICON, getIconRequestHendler );
 			
 		}
 

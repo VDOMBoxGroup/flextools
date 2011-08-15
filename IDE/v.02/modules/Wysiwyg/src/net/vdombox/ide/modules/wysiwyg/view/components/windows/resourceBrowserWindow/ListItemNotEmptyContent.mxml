@@ -17,8 +17,6 @@
 			
 			import spark.effects.AnimateTransform;
 			
-			public static const ICON_ADDED : String = "iconAdded";
-			
 			public var resourceVO					: ResourceVO;
 			
 			private var creationCompleted			: Boolean;
@@ -58,7 +56,7 @@
 					if(resourceVO.icon)
 					{
 						smoothImage.source = resourceVO.icon;
-						this.dispatchEvent(new Event(ICON_ADDED));
+						removeSpinner();
 					}
 					else
 					{
@@ -84,7 +82,10 @@
 				
 				if ( !object )
 				{
-					// FIXME: сделать увеличиваюшуюся задержку (100, 200, 400,  мах = 800)  
+					// FIXME: сделать увеличиваюшуюся задержку (100, 200, 400,  мах = 800)
+					smoothImage.source = null;
+					addSpinner();
+					
 					var timer:Timer = new Timer(1000, 1);
 					timer.addEventListener(TimerEvent.TIMER, requestIcon);
 					timer.start();
@@ -122,7 +123,7 @@
 					return;
 				
 				smoothImage.source = Bitmap( event.target.content );
-				this.dispatchEvent(new Event(ICON_ADDED));
+				removeSpinner();
 			}
 			
 			private function deleteButton_clickHandler( event : MouseEvent ) : void
@@ -152,8 +153,37 @@
 				dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
 			}
 			
+			private function addSpinner():void
+			{
+				spinner.width = spinnerContainer.width;
+				spinner.height = spinnerContainer.height;
+				
+				spinnerContainer.addElement(spinner);
+				
+				spinner.rotateImage();
+			}
+			
+			private function removeSpinner():void
+			{
+				spinner.stopRotateImage();
+				try {
+					spinnerContainer.removeElement(spinner);
+				} catch (e:Error) {
+					
+				}
+			}
 		]]>
 	</fx:Script>
+	
+	<fx:Declarations>
+		<resourceBrowserWindow:SpinningSmoothImage id="spinner" height="100%" width="100%"
+												   maintainAspectRatio="true"
+												   scaleContent="true" 
+												   smoothBitmapContent="true"
+												   cachePolicy="on"
+												   cacheAsBitmap="true"
+												   source="@Embed('assets/spinner.png')"/>
+	</fx:Declarations>
 	
 	<s:states>
 		<s:State name="normal"/>
@@ -198,6 +228,12 @@
 					
 				</s:Group>
 				
+				<s:HGroup id="spinnerContainer"
+						  height="20" width="20"
+						  left="10" top="10"
+						  horizontalAlign="center" verticalAlign="middle">
+				</s:HGroup>
+				
 				<mx:Canvas height="100%" width="100%"
 						   click="smoothImage_clickHandler(event)"
 						   rollOver="smoothImage_rollOverHandler(event)"
@@ -233,6 +269,7 @@
 			<mx:Spacer width="1.5" />
 			
 		</s:HGroup>
+					
 	</s:Group>
 	
 </s:ItemRenderer>

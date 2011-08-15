@@ -3,6 +3,7 @@
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
+			 xmlns:content="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*"
 			 width="700" height="500" minWidth="600" minHeight="450"
 			 focusColor="#CCCCCC">
 	
@@ -47,9 +48,13 @@
 			
 			<s:HGroup width="100%" height="100%" 
 					  verticalAlign="middle" horizontalAlign="center">
-				<mx:Image id="loadingImage" width="20" height="20" 
-						  smoothBitmapContent="true"
-						  source="@Embed('assets/spinner.swf')"/>
+				<content:SpinningSmoothImage id="loadingImage" width="20" height="20" 
+											 maintainAspectRatio="true"
+											 scaleContent="true" 
+											 smoothBitmapContent="true"
+											 cachePolicy="on"
+											 cacheAsBitmap="true"
+											 source="@Embed('assets/spinner.png')"/>
 			</s:HGroup>
 			
 			<s:HGroup width="100%" height="100%" 

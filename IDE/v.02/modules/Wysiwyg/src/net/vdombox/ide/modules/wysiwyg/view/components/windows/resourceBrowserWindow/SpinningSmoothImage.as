@@ -52,8 +52,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 			
 			rotate.easingFunction = Linear.easeNone;
 			
-			rotate.originX = content.width / 2;
-			rotate.originY = content.height / 2;
+			if ((content.width < width) || (content.height < height))
+			{
+				rotate.originX = content.width / 2;
+				rotate.originY = content.height / 2;
+			} else {
+				rotate.originX = width / 2;
+				rotate.originY = height / 2;
+			}
 			
 			rotate.repeatCount = 0;
 			rotate.repeatDelay = 0;
