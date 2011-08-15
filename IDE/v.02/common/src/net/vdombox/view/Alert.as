@@ -97,6 +97,9 @@ package net.vdombox.view
 							  parent:Object = null, 
 							  closeHandler:Function = null): net.vdombox.view.Alert
 		{
+			if (!parent) 
+				return null;
+			
 			if (buttonView == AlertButton.OK_No)
 				_visibleNoButton = true;
 			
@@ -134,25 +137,13 @@ package net.vdombox.view
 			instance = null;
 		}
 		
-		public function noPush() : void
+		public function btnClickHandler(type : uint) : void
 		{
 			var alert : Alert = Alert.getInstance();
 			alert.visible = false;
 			
 			var closeEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
-			closeEvent.detail = Alert.NO;
-			alert.dispatchEvent(closeEvent);
-			
-			
-		}
-		
-		public function okPush() : void
-		{
-			var alert : Alert = Alert.getInstance();
-			alert.visible = false;
-			
-			var closeEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
-			closeEvent.detail = Alert.YES;
+			closeEvent.detail = type;
 			alert.dispatchEvent(closeEvent);
 		}
 	}

@@ -7,6 +7,11 @@
 	<fx:Metadata>
 		[HostComponent("net.vdombox.view.Alert")]
 	</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.view.Alert;
+		]]>
+	</fx:Script>
 	
 	<!-- states -->
 	<s:states>
@@ -40,10 +45,10 @@
 				<mx:Button  id="noButton" height="100%" cornerRadius="14" 
 							fontSize="18" label="{hostComponent._noLabel}"
 							visible="{hostComponent.visibleNoButton}" includeInLayout="{hostComponent.visibleNoButton}"
-							click="hostComponent.noPush()"/>
+							click="hostComponent.btnClickHandler(Alert.NO)"/>
 				<mx:Button  id="yesButton" height="100%" cornerRadius="14"
 							fontSize="18" icon="@Embed('net/vdombox/icons/Cancel.png')" label="{hostComponent._yesLabel}"
-							click="hostComponent.okPush()"/>
+							click="hostComponent.btnClickHandler(Alert.YES)"/>
 			</s:HGroup>
 		</s:VGroup>
 		
