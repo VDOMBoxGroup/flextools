@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.controls.TileList;
+	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -72,12 +73,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		override public function validateDisplayList():void
 		{
-			// TODO Auto Generated method stub
 			super.validateDisplayList();
 			setFocus();
 		}
-		
-		
 		
 		override public function stylesInitialized():void {
 			super.stylesInitialized();
@@ -216,8 +214,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) )
 				
 		}		
-		
-		
 		
 		public function addHandlers():void
 		{

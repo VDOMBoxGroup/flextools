@@ -10,6 +10,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.SpinningSmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.SpinnerPopupSkin;
 	
+	import spark.components.Label;
 	import spark.components.TitleWindow;
 	
 	
@@ -18,9 +19,18 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[SkinPart( required="true" )]
 		public var spinner : SpinningSmoothImage;
 		
-		public function SpinnerPopup()
+		[SkinPart( required="true" )]
+		public var spinnerLabel : Label;
+		
+		private var spinnerText : String = "";
+		private var removePopup	: Boolean;
+		
+		
+		public function SpinnerPopup(txt : String = null)
 		{
 			super();
+			
+			spinnerText = txt;
 			
 			addHandlers();
 		}
@@ -43,13 +53,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			addEventListener( KeyboardEvent.KEY_DOWN, onKeyBtnDown, false, 0, true );
 			addEventListener(CloseEvent.CLOSE, closeHandler, false, 0, true);
 			addEventListener(FlexEvent.CREATION_COMPLETE, createComleatHandler, false, 0, true);
-			
 		}
 		
 		private function createComleatHandler(event : FlexEvent):void
 		{
 			PopUpManager.centerPopUp( this );
 			
+			spinnerLabel.text = spinnerText;
 			spinner.rotateImage();
 		}
 		
@@ -58,7 +68,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			spinner.stopRotateImage();
 			
 			removeHandlers();
-			PopUpManager.removePopUp(this);
+			
+			removePopup = true;
+			invalidateDisplayList();
+		}
+		
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			
+			if (removePopup)
+			{
+				removePopup = false;
+				PopUpManager.removePopUp(this);
+			}
 		}
 		
 		private function removeHandlers():void

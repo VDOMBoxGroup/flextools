@@ -168,9 +168,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 		
 		private var spinnerPopup : SpinnerPopup;
-		private function createSpinnerPopup():void
+		
+		private function createSpinnerPopup(spinnerTxt : String):void
 		{
-			spinnerPopup = new SpinnerPopup();
+			if (spinnerPopup) 
+				removeSpinnerPopup();
+			
+			spinnerPopup = new SpinnerPopup(spinnerTxt);
 			spinnerPopup.width	= resourceSelectorWindow.width;
 			spinnerPopup.height	= resourceSelectorWindow.height;
 			
@@ -179,6 +183,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function removeSpinnerPopup():void
 		{
+			if (!spinnerPopup)
+				return;
 			spinnerPopup.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 			spinnerPopup = null;
 		}
@@ -210,6 +216,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, getResourcesRequestHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview );
 			
+			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.CREATION_COMPLETE, onResourceWindowCreationComplete );
+			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE, onResourceWindowListItemCreationComplete, true, 0, true );
+			
+		}
+		
+		public function onResourceWindowCreationComplete (event : Event):void
+		{
+			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.CREATION_COMPLETE, onResourceWindowCreationComplete );
+			
+			var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_create_resources' );
+			createSpinnerPopup(spinnerTxt);
+		}
+		
+		public function onResourceWindowListItemCreationComplete (event : Event):void
+		{
+			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE, onResourceWindowListItemCreationComplete );
+			
+			removeSpinnerPopup();
 		}
 		
 		private function initTitle() : void
@@ -373,7 +397,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			function fileSelected( event:Event ) : void
 			{
-				createSpinnerPopup();
+				var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_new_resource' );
+				createSpinnerPopup(spinnerTxt);
 				
 				openFile.removeEventListener(Event.SELECT, fileSelected);
 				

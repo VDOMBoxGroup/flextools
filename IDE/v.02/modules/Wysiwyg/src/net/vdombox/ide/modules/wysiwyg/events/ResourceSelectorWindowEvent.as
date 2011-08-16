@@ -14,6 +14,9 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var RESOURCE_FILE_LOADING_STARTED		: String = "resourceFileLoadingStarted";
 		public static var RESOURCE_FILE_LOADING_COMPLETED	: String = "resourceFileLoadingCompleted";
 		
+		public static var CREATION_COMPLETE					: String = "creationComplete";
+		public static var LIST_ITEM_CREATION_COMPLETE		: String = "listItemCreationComplete";
+		
 		public function ResourceSelectorWindowEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{
 			super( type, bubbles, cancelable );

@@ -22,6 +22,9 @@
 			private var creationCompleted			: Boolean;
 			private var _iconRequested				: Boolean;
 			
+			private var needToAddSpinner			: Boolean;
+			private var needToDeleteSpinner			: Boolean;
+			
 			override public function set data ( value : Object ) : void 
 			{
 				super.data = value;
@@ -37,6 +40,25 @@
 				}
 				
 				setProperties();
+			}
+			
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				
+				if (needToAddSpinner)
+				{
+					needToAddSpinner = false;
+					addSpinner();
+					return;
+				}
+				
+				if (needToDeleteSpinner)
+				{
+					needToDeleteSpinner = false;
+					removeSpinner();
+					return;
+				}
 			}
 			
 			private function setProperties ():void
@@ -56,7 +78,10 @@
 					if(resourceVO.icon)
 					{
 						smoothImage.source = resourceVO.icon;
-						removeSpinner();
+						
+						needToDeleteSpinner = true;
+						invalidateDisplayList();
+						//removeSpinner();
 					}
 					else
 					{
@@ -84,7 +109,10 @@
 				{
 					// FIXME: сделать увеличиваюшуюся задержку (100, 200, 400,  мах = 800)
 					smoothImage.source = null;
-					addSpinner();
+					
+					needToAddSpinner = true;
+					invalidateDisplayList();
+					//addSpinner();
 					
 					var timer:Timer = new Timer(1000, 1);
 					timer.addEventListener(TimerEvent.TIMER, requestIcon);
@@ -123,7 +151,10 @@
 					return;
 				
 				smoothImage.source = Bitmap( event.target.content );
-				removeSpinner();
+				
+				needToDeleteSpinner = true;
+				invalidateDisplayList();
+				//removeSpinner();
 			}
 			
 			private function deleteButton_clickHandler( event : MouseEvent ) : void
@@ -172,6 +203,7 @@
 					
 				}
 			}
+			
 		]]>
 	</fx:Script>
 	

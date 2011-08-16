@@ -78,6 +78,7 @@
 				creationCompleted = true;
 				
 				addContentElement();
+				this.dispatchEvent(new ResourceSelectorWindowEvent(ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE));
 			}
 			
 			protected function doubleClickHandler(event:MouseEvent):void
