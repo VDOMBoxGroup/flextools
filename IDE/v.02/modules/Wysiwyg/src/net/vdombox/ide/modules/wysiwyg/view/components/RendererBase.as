@@ -979,7 +979,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				background.addElement( new SpriteUIComponent( backGrSprite ) );
 				invalidateDisplayList();
-				invalidateProperties();
 			}
 			
 			function getBackGroundRect( content : Bitmap ) : Rectangle

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
-				xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" minHeight="23">
+				xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" minHeight="23" >
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -20,6 +20,7 @@
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.common.vo.ObjectListVO;
 			import net.vdombox.ide.common.vo.PageLinkVO;
+			import net.vdombox.ide.common.vo.PageVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
@@ -41,18 +42,46 @@
 			
 			protected var valueField : Object;
 			
+			private var idNameField : Object;
+			
 			private var codeInterface : Object = {};
 			
 			override public function set data( value : Object ) : void
 			{
-				
-				
-				
 				super.data = value;
 				
 				if ( !value )
 					return;
 				
+				if (!(value.attributeVO is AttributeVO))
+				{
+					idNameField = value.attributeVO;
+					nameLabel = value.name;
+					if (value.name == "id")
+					{
+						valueField = new TextInput;
+						valueField.editable = false;
+						valueField.setStyle("color", "#FFFFFF");
+						valueField.text =  value.attributeVO.id;
+						valueField.width = 128;
+						valueField.height = 21;
+						valueField.setStyle("textAlign", "left");
+						secondElement = valueField as UIComponent;
+					}
+					else
+					{
+						valueField = new TextInputAttribute;
+						valueField.value =  value.attributeVO.name ;
+						valueField.width = 128;
+						valueField.height = 21;
+						valueField.setStyle("textAlign", "left");
+						secondElement = valueField as UIComponent;
+						
+						valueField.addEventListener(Event.CHANGE, changeHandler2);
+					}
+				}
+				else
+				{
 				_attributeVO = value.attributeVO;
 				_attributeDescriptionVO = value.attributeDescriptionVO;
 				nameLabel = _attributeDescriptionVO.displayName;
@@ -124,6 +153,7 @@
 					}
 
 				}
+				}
 				
 			}
 			
@@ -165,11 +195,6 @@
 				valueField.init(codeInterface[ "value" ], _attributeVO.value);
 				
 				valueField.addEventListener(Event.CHANGE, changeHandler);
-			}
-			
-			private function comboboxChange2(event : Event) : void
-			{
-				_attributeVO.value = valueField.selectedItem.id;
 			}
 			
 			private function newExternalEdition() : void //
@@ -295,6 +320,12 @@
 				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ) );
 			}
 			
+			private function changeHandler2(event : Event) : void
+			{
+				idNameField.name = valueField.value;
+				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ) );
+			}
+			
 			protected function getColorByGroup( groupNumber : uint ) : uint
 			{
 				var colorGroup : uint;
@@ -390,18 +421,18 @@
 	
 	<s:Rect bottom="0" left="0" right="0" top="0">
 		<s:fill>
-			<s:SolidColor id="rectColor" color="#3a3a3a"/>
+			<s:SolidColor id="rectColor" color="#3A3A3A"/>
 		</s:fill>
 	</s:Rect>
 	
-	<s:HGroup id="group" width="100%" height="100%" verticalAlign="middle" gap="2" paddingRight="2">
-		<s:RichText id="rtextLabel" minHeight="21" width="100%" color="#000000" fontFamily="Verdana" fontSize="10" fontWeight="bold"
+	<s:HGroup id="group" width="100%" height="100%" verticalAlign="middle" gap="2" paddingRight="2" paddingTop="5" paddingBottom="5">
+		<s:RichText id="rtextLabel" minHeight="21" width="100%" color="#FFFFFF" fontFamily="Verdana" fontSize="10" fontWeight="bold"
 					paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" verticalCenter="0"/>
 	</s:HGroup>
 	
 	<s:Rect width="5" height="100%">
 		<s:fill>
-			<s:SolidColor id="secondColor" color="#FFFFFF"/>
+			<s:SolidColor id="secondColor" color="#3A3A3A"/>
 		</s:fill>
 	</s:Rect>
 	

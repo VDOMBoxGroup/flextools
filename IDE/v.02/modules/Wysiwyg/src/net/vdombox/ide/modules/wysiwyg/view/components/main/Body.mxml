@@ -4,8 +4,7 @@
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  height="100%" width="100%" gap="0" 
-		  xmlns:panels="net.vdombox.ide.modules.wysiwyg.view.components.panels.*"
-		  resize="parentApplication.dispatchEvent(new Event('resizeMainWindow'))">
+		  xmlns:panels="net.vdombox.ide.modules.wysiwyg.view.components.panels.*">
 
 	<fx:Script>
 		<![CDATA[
@@ -25,9 +24,20 @@
 		
 	</s:Group>
 		
+	<s:Rect width="5" height="100%">
+		<s:fill>
+			<s:SolidColor color="#424242"/>
+		</s:fill>
+	</s:Rect>
 	
 	<components:WorkArea id="workArea"
 						 height="100%" width="100%" resize="trace('WorkArea')"/>
+	
+	<s:Rect width="5" height="100%">
+		<s:fill>
+			<s:SolidColor color="#424242"/>
+		</s:fill>
+	</s:Rect>
 
 	<mx:VDividedBox height="100%" width="228">
 		

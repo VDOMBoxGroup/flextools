@@ -47,6 +47,20 @@
 				var attributesArray : Array = [];
 				var attributeVO : AttributeVO;
 				var attributeDescriptionVO : AttributeDescriptionVO;
+				
+				attributesArray.push( { group: 0, 
+					name: 					"id", 
+					attributeVO: 			_attributesVO.vdomObjectVO,
+					attributeDescriptionVO: null, 
+					objectsList:	 		null,
+					pageLinks: 				null } );
+				
+				attributesArray.push( { group: 0, 
+					name: 					"name", 
+					attributeVO: 			_attributesVO.vdomObjectVO,
+					attributeDescriptionVO: null, 
+					objectsList:	 		null,
+					pageLinks: 				null } );
 
 				for each ( attributeVO in _attributesVO.attributes )
 				{
@@ -111,11 +125,5 @@
 			</s:layout>	
 		</s:List>
 	</s:HGroup>
-	
-	
-	
-	<s:controlBarContent>
-
-	</s:controlBarContent>
 
 </s:Panel>

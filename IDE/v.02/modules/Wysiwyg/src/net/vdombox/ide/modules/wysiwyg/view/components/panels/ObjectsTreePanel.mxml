@@ -2,10 +2,11 @@
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 creationComplete="creationCompleteHandler()">
+		 creationComplete="creationCompleteHandler()" xmlns:components="net.vdombox.components.*">
 
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.IList;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
 			
@@ -289,11 +290,17 @@
 		]]>
 	</fx:Script>
 
-	<s:layout>
-		<s:VerticalLayout/>
-	</s:layout>
+	
+	
+	<s:Rect height="100%" width="100%">
+		<s:fill>
+			<s:SolidColor color="#3A3A3A"/>
+		</s:fill>
+	</s:Rect>
 	
 	<mx:Tree id="objectsTree"
 			 dataProvider="{ _pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"
-			 contentBackgroundAlpha="0"/>
+			 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer"/>
+	
+	
 </s:Panel>

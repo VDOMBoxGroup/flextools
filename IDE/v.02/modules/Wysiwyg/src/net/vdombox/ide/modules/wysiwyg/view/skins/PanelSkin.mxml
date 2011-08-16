@@ -153,6 +153,8 @@
 					 mask="{topGroupMask}">
 
 				<!-- layer 0: title bar fill -->
+				
+				
 				<s:Rect id="tbFill"
 						bottom="0" left="0" right="0" top="0">
 					<s:fill>
@@ -169,6 +171,18 @@
 						 textAlign="left" top="1" verticalAlign="middle" paddingBottom="6"
 						 maxDisplayedLines="1" fontSize="15">
 				</s:Label>
+				
+				<s:Line top="0" width="100%">
+					<s:stroke>
+						<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1"/>
+					</s:stroke>
+				</s:Line>
+				
+				<s:Line bottom="0" width="100%">
+					<s:stroke>
+						<s:SolidColorStroke color="#000000" alpha="0.5" weight="1"/>
+					</s:stroke>
+				</s:Line>
 
 			</s:Group>
 
@@ -189,18 +203,6 @@
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
-
-
-				<!-- layer 3: control bar -->
-				<s:Group id="controlBarGroup"
-						 minHeight="10" minWidth="0"
-						 bottom="0" left="0" right="0" top="0"
-						 clipAndEnableScrolling="true">
-
-					<s:layout>
-						<s:HorizontalLayout gap="1"/>
-					</s:layout>
-				</s:Group>
 
 			</s:Group>
 

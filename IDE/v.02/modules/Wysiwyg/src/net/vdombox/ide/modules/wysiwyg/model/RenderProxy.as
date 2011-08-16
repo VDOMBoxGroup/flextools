@@ -225,7 +225,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 					objectVO = new ObjectVO( pageVO, typeVO );
 					objectVO.setID( childID );
-					objectVO.name = childName;
+					//objectVO.name = childName;
 
 					childRenderVO = new RenderVO( objectVO );
 
