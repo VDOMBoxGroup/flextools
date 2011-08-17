@@ -31,7 +31,8 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
-	import net.vdombox.ide.core.model.icons.TypesIcons;
+	import net.vdombox.ide.core.model.managers.CacheManager;
+	import net.vdombox.ide.core.model.managers.IconManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -39,7 +40,7 @@ package net.vdombox.ide.core.model
 	import spark.components.Application;
 
 	/**
-	 * ResourcesProxy is wrapper on VDOM Resources.   
+	 * ResourcesProxy is wrapper on VDOM Resources.
 	 * Takes data from the server through the SOAP functions.
 	 * @author Alexey Andreev
 	 * @see net.vdombox.ide.common.vo.ResourceVO
@@ -48,96 +49,120 @@ package net.vdombox.ide.core.model
 	 */
 	public class ResourcesProxy extends Proxy implements IProxy
 	{
+		/**
+		 *
+		 * @default
+		 */
 		public static const NAME : String = "ResourcesProxy";
 
+		/**
+		 *
+		 */
 		public function ResourcesProxy()
 		{
 			super( NAME, data );
 		}
-		
-		override public function onRegister():void
+
+		override public function onRegister() : void
 		{
 			if ( soap.ready )
 				addHandlers();
 			else
 				soap.addEventListener( SOAPEvent.CONNECTION_OK, soap_connectedHandler, false, 0, true );
-			
+
 			soap.addEventListener( SOAPEvent.DISCONNECTON_OK, soap_disconnectedHandler );
 		}
-		
+
 		override public function onRemove() : void
 		{
 			cleanup();
-			
+
 			removeHandlers();
 		}
-		
-		private var soap : SOAP = SOAP.getInstance();
-		
-		private var cacheManager : CacheManager = CacheManager.getInstance();
-		
-		private var loadQue : Array;
-		
-		private var loadableTypesIcons : ArrayCollection = new ArrayCollection();
 
+		private var soap : SOAP = SOAP.getInstance();
+
+		private var cacheManager : CacheManager = CacheManager.getInstance();
+
+		private var loadQue : Array;
+
+//		private var loadableTypesIcons : ArrayCollection = new ArrayCollection();
+
+		/**
+		 *
+		 * @param applicationVO
+		 * @param resourceVO
+		 */
 		public function deleteResource( applicationVO : ApplicationVO, resourceVO : ResourceVO ) : void
 		{
 			var token : AsyncToken = soap.delete_resource( applicationVO.id, resourceVO.id );
-			
+
 			token.recipientName = proxyName;
 			token.resourceVO = resourceVO;
 		}
 
+		/**
+		 *
+		 * @param applicationVO
+		 */
 		public function getListResources( applicationVO : ApplicationVO ) : void
 		{
 			var token : AsyncToken = soap.list_resources( applicationVO.id );
-			
+
 			token.recipientName = proxyName;
 			token.applicationVO = applicationVO;
 		}
-		
-		private function onResourceIconLoadingCompleted(event:Event):void
-		{
-			var typesIcon : TypesIcons	= event.target as TypesIcons;
-			var typeIndex : int			= loadableTypesIcons.getItemIndex( typesIcon )
-			
-			typesIcon.removeEventListener(TypesIcons.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted);
-			typesIcon.removeEventListener(TypesIcons.ICON_LOADING_ERROR, onResourceIconLoadingCompleted);
-			
-			typesIcon.res.data = TypesIcons(event.target).data;
-			
-			loadableTypesIcons.removeItemAt( typeIndex );
-			
-			sendNotification( ApplicationFacade.RESOURCE_LOADED, TypesIcons(event.target).res );
-		}
 
+		/**
+		 *
+		 * @param event
+		 */
+//		private function onResourceIconLoadingCompleted( event : Event ) : void
+//		{
+//			var typesIcon : TypesIcon = event.target as TypesIcon;
+//			var typeIndex : int = loadableTypesIcons.getItemIndex( typesIcon )
+//
+//			typesIcon.removeEventListener( TypesIcon.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted );
+//			typesIcon.removeEventListener( TypesIcon.ICON_LOADING_ERROR, onResourceIconLoadingCompleted );
+//
+//			typesIcon.res.data = TypesIcon( event.target ).data;
+//
+//			loadableTypesIcons.removeItemAt( typeIndex );
+//
+//			sendNotification( ApplicationFacade.RESOURCE_LOADED, TypesIcon( event.target ).res );
+//		}
+
+		/**
+		 *
+		 * @param resourceVO
+		 */
 		public function loadResource( resourceVO : ResourceVO ) : void
-		{		
-			
-			if ( resourceVO.type && !resourceVO.isViewable)  
+		{
+
+			if ( resourceVO.type && !resourceVO.hasPreview )
 			{
-				var icon:TypesIcons = new TypesIcons();
-				icon.res = resourceVO;
-				
-				loadableTypesIcons.addItem(icon);
-				
-				icon.addEventListener(TypesIcons.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted);
-				icon.addEventListener(TypesIcons.ICON_LOADING_ERROR, onResourceIconLoadingCompleted);
-				
-				icon.getResource( resourceVO.type );
+//				var icon : IconManager = new IconManager();
+//				icon.resourceVO = resourceVO;
+
+//				loadableTypesIcons.addItem( icon );
+
+//				icon.addEventListener( TypesIcon.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted );
+//				icon.addEventListener( TypesIcon.ICON_LOADING_ERROR, onResourceIconLoadingCompleted );
+
+//				icon.load( resourceVO );
 				return;
 			}
-					
+
 			var resource : ByteArray = cacheManager.getCachedFileById( resourceVO.id );
-			
+
 			//file is located in the file system user
 			if ( resource )
 			{
 				resourceVO.setData( resource );
 				resourceVO.setStatus( ResourceVO.LOADED );
-				
+
 				//choseIcon(resourceVO);   // неизвестен тип!!!
-				
+
 				sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
 			}
 			//file must be downloaded from the server
@@ -145,39 +170,47 @@ package net.vdombox.ide.core.model
 			{
 				loadResourceFromServer( resourceVO );
 			}
-		}		
-		
+		}
+
 //		private var timeoutGetResource : uint;
 		private function loadResourceFromServer( resourceVO : ResourceVO ) : void
 		{
 			resourceVO.setStatus( ResourceVO.LOAD_PROGRESS );
-			
-			getResourceFromServer(resourceVO);
-		}		
-		
-		private function getResourceFromServer( resourceVO : ResourceVO ):void
-		{
-			var token : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
-			
-			token.recipientName = proxyName;
-			token.resourceVO = resourceVO;
-			
-//			clearTimeout(timeoutGetResource);
-//			timeoutGetResource = setTimeout(getResourceFromServer, 500, resourceVO);
-			
+
+			getResourceFromServer( resourceVO );
 		}
 
+		private function getResourceFromServer( resourceVO : ResourceVO ) : void
+		{
+			var token : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
+
+			token.recipientName = proxyName;
+			token.resourceVO = resourceVO;
+
+//			clearTimeout(timeoutGetResource);
+//			timeoutGetResource = setTimeout(getResourceFromServer, 500, resourceVO);
+
+		}
+
+		/**
+		 *
+		 * @param resourceVO
+		 */
 		public function setResource( resourceVO : ResourceVO ) : void
 		{
 			if ( !loadQue )
 				loadQue = [];
-			
+
 			if ( loadQue.indexOf( resourceVO ) == -1 )
 				loadQue.push( resourceVO );
 
 			soap_setResource();
 		}
 
+		/**
+		 *
+		 * @param resources
+		 */
 		public function setResources( resources : Array ) : void
 		{
 			if ( !resources || resources.length == 0 )
@@ -203,30 +236,58 @@ package net.vdombox.ide.core.model
 
 			soap_setResource();
 		}
-		
+
+		/**
+		 *
+		 * @param applicationVO
+		 * @param resourceVO
+		 * @param attributeName
+		 * @param operation
+		 * @param attributes
+		 */
 		public function modifyResource( applicationVO : ApplicationVO, resourceVO : ResourceVO, attributeName : String, operation : String, attributes : XML ) : void
 		{
 			var token : AsyncToken = soap.modify_resource( applicationVO.id, resourceVO.ownerID, resourceVO.id, attributeName, operation, attributes );
-			
+
 			token.recipientName = proxyName;
 			token.resourceVO = resourceVO;
 		}
 
+		/**
+		 *
+		 */
 		public function cleanup() : void
 		{
 			loadQue = null;
 		}
-		
+
+		/**
+		 *
+		 * @param resourceVO
+		 */
 		public function getIcon( resourceVO : ResourceVO ) : void
 		{
-			choseIcon( resourceVO );
+			var iconManager : IconManager = new IconManager( resourceVO );
+			iconManager.addEventListener( "loadResourceRequest", loadResourceRequestHandler )
+			iconManager.setIconForResourceVO();
+
+			function loadResourceRequestHandler( event : Event ) : void
+			{
+				var rIconManager : IconManager = event.target as IconManager;
+				var resourceVO : ResourceVO = rIconManager.resourceVO;
+				
+				resourceVO.setStatus(ResourceVO.LOAD_ICON);
+				
+				getResourceFromServer( rIconManager.resourceVO );
+			}
+
 		}
-		
+
 		private function addHandlers() : void
 		{
 			soap.get_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
-			
+
 			soap.list_resources.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.list_resources.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 
@@ -235,25 +296,25 @@ package net.vdombox.ide.core.model
 
 			soap.delete_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
-			
+
 			soap.modify_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.modify_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
-		
+
 		private function removeHandlers() : void
 		{
 			soap.get_resource.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_resource.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
-			
+
 			soap.list_resources.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.list_resources.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
-			
+
 			soap.set_resource.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_resource.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
-			
+
 			soap.delete_resource.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_resource.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
-			
+
 			soap.modify_resource.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.modify_resource.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
@@ -262,147 +323,94 @@ package net.vdombox.ide.core.model
 		{
 			addHandlers();
 		}
-		
+
 		private function soap_disconnectedHandler( event : SOAPEvent ) : void
 		{
-			
+
 		}
-		
+
 		private function createResourcesList( applicationVO : ApplicationVO, resourcesXML : XML ) : Array
 		{
 			var resources : Array = [];
 			var resource : ResourceVO;
-			
+
 			for each ( var resourceDescription : XML in resourcesXML.* )
 			{
 				resource = new ResourceVO( applicationVO.id );
 				resource.setXMLDescription( resourceDescription );
-			
+
 //				choseIcon( resource );   здесь есть только описание, нет самих ресурсов
-				
+
 				resources.push( resource );
 			}
-			
+
 			return resources;
 		}
-		
+
 		private function choseIcon( resourceVO : ResourceVO ) : void
-		{	
-			if ( resourceVO.isViewable ) 
-			{
-				setIcon( resourceVO );
-			}
-			else // if not viewable
-			{ 
-				var icon:TypesIcons = new TypesIcons();
-				icon.res = resourceVO;
-				
-				loadableTypesIcons.addItem(icon);
-				
-				icon.addEventListener(TypesIcons.ICON_LOADING_COMPLETED, onTypesIconLoadingCompleted);
-				icon.addEventListener(TypesIcons.ICON_LOADING_ERROR, onTypesIconLoadingCompleted);
-				
-				icon.getResource( resourceVO.type );
-			}	 
-		}
-		
-		private function onTypesIconLoadingCompleted(event:Event):void
 		{
-			var typesIcon : TypesIcons	= event.target as TypesIcons;
-			var typeIndex : int			= loadableTypesIcons.getItemIndex( typesIcon );
-			
-			typesIcon.removeEventListener(TypesIcons.ICON_LOADING_COMPLETED, onTypesIconLoadingCompleted);
-			typesIcon.removeEventListener(TypesIcons.ICON_LOADING_ERROR, onTypesIconLoadingCompleted);
-			
-			loadableTypesIcons.removeItemAt( typeIndex );
-			
-			creationIconCompleted( typesIcon.res, typesIcon.data );
+
 		}
-		
-		private function creationIconCompleted( resourceVO : ResourceVO, file:ByteArray ) : void
-		{			
-			if (!resourceVO) 
+
+
+//		private function onTypesIconLoadingCompleted( event : Event ) : void
+//		{
+//			var typesIcon : TypesIcon = event.target as TypesIcon;
+//			var typeIndex : int = loadableTypesIcons.getItemIndex( typesIcon );
+//
+//			typesIcon.removeEventListener( TypesIcon.ICON_LOADING_COMPLETED, onTypesIconLoadingCompleted );
+//			typesIcon.removeEventListener( TypesIcon.ICON_LOADING_ERROR, onTypesIconLoadingCompleted );
+//
+//			loadableTypesIcons.removeItemAt( typeIndex );
+//
+//			creationIconCompleted( typesIcon.res, typesIcon.data );
+//		}
+
+//		private function creationIconCompleted( resourceVO : ResourceVO, file : ByteArray ) : void
+//		{
+//			resourceVO.icon = file;
+//			resourceVO.data = null;
+//			sendNotification( ApplicationFacade.ICON_GETTED, resourceVO );
+//		}
+
+//		private var requestedResourceForIcon : Object = new Object(); //ResourceVO;
+
+
+
+		private function creationIconCompleted( resourceVO : ResourceVO, file : ByteArray ) : void
+		{
+			if ( !resourceVO )
 				return;
-			
-			resourceVO.icon		= file;
-			resourceVO.iconId 	= resourceVO.id + "_icon";
-			resourceVO.data 	= null;
+
+			resourceVO.icon = file;
+//			resourceVO.iconId 	= resourceVO.id + "_icon";
+			resourceVO.setData( null);
 			sendNotification( ApplicationFacade.ICON_GETTED, resourceVO );
 		}
-		
+
 		private var tempResourceVO : Object = new Object(); //ResourceVO;
-			
+
+
 		//reduces the image and set it to icon of resourceVO
 		private function setIcon( resourceVO : ResourceVO ) : void
 		{
-			var icon : ByteArray = cacheManager.getCachedFileById( resourceVO.id + "_icon" );
-			
+			var cachedIcon : ByteArray = cacheManager.getCachedFileById( resourceVO.iconId );
+
 			//icon is located in the file system user
-			if ( icon )
+			if ( cachedIcon )
 			{
-				creationIconCompleted( resourceVO, icon );
-			}	
+				resourceVO.icon = cachedIcon;
+			}
 			else
-			{	
-				loadableResources.addItem( resourceVO.id );
+			{
+//				loadableResources.addItem( resourceVO.id );
 				loadResourceFromServer( resourceVO );
 			}
+
 		}
-		
-		private function loadedResourceForIcon( resourceVO : ResourceVO ) : void
-		{
-			loadableResources.removeItemAt( loadableResources.getItemIndex( resourceVO.id ) );
-			
-			tempResourceVO[ resourceVO.id ] = resourceVO ;
-						
-			var loader : Loader = new Loader();	
-			loader.name = resourceVO.id;
-			loader.loadBytes(resourceVO.data);				
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loaderComplete);
-		}
-		
-		//convert to bitmapData 
-		private function loaderComplete(event:Event):void
-		{
-			var loaderInfo : LoaderInfo = LoaderInfo(event.target);
-			var bitmapData : BitmapData = new BitmapData(loaderInfo.width, loaderInfo.height, false, 0xFFFFFF);
-			bitmapData.draw(loaderInfo.loader); 
-			var bitmap:Bitmap = new Bitmap(bitmapData);
-			
-			if ( bitmap.height > ResourceVO.ICON_SIZE || bitmap.width > ResourceVO.ICON_SIZE )
-			{
-				var ratio:Number = 1; 
-				if(bitmap.width >= bitmap.height) 
-					ratio = ResourceVO.ICON_SIZE / bitmap.width; 
-				else 
-					ratio = ResourceVO.ICON_SIZE / bitmap.height; 
-				
-				var width :	int = ( int(bitmap.width*ratio) > 0 )  ? int(bitmap.width*ratio)  : 1;
-				var height:	int = ( int(bitmap.height*ratio) > 0 ) ? int(bitmap.height*ratio) : 1;				
-		
-				var btm : BitmapData = new BitmapData( width, height, false); 
-				bitmap.smoothing = true;
-				
-				var matrix : Matrix = new Matrix(); 
-				matrix.scale(ratio, ratio); 
-				btm.draw( bitmap.bitmapData, matrix );
-				
-				var encoder : PNGEncoder = new PNGEncoder();
-								
-				cacheManager.cacheFile( loaderInfo.loader.name + "_icon",  encoder.encode( btm ) );	// not nice			
-				tempResourceVO[ loaderInfo.loader.name ].setStatus( ResourceVO.ICON_LOADED );
-				
-				creationIconCompleted( tempResourceVO[ loaderInfo.loader.name ], encoder.encode( btm ) );
-			}
-			else
-			{
-				var encoder1 : PNGEncoder = new PNGEncoder();
-				creationIconCompleted( tempResourceVO[ loaderInfo.loader.name ], encoder1.encode( bitmap.bitmapData ) );
-			}		
-			
-			delete tempResourceVO[ loaderInfo.loader.name ];
-		}
-	
+
+
+
 		private function soap_setResource() : void
 		{
 			if ( loadQue.length == 0 )
@@ -443,79 +451,85 @@ package net.vdombox.ide.core.model
 			data.compress();
 
 			data.position = 0;
-			
+
 			var base64Data : Base64Encoder = new Base64Encoder();
 			base64Data.insertNewLines = false;
 			base64Data.encodeBytes( data );
 
 			resourceVO.setStatus( ResourceVO.UPLOAD_PROGRESS );
-			
-			var token : AsyncToken = soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString());
+
+			var token : AsyncToken = soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString() );
 
 			token.recipientName = proxyName;
 			token.resourceVO = resourceVO;
-			
+
 		}
 
 		private var loadableResources : ArrayCollection = new ArrayCollection;
-		
+
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
 			var token : AsyncToken = event.token;
-			
+
 			if ( !token.hasOwnProperty( "recipientName" ) || token.recipientName != proxyName )
 				return;
-			
+
 			var operation : Operation = event.currentTarget as Operation;
 			var result : XML = event.result[ 0 ] as XML;
-			
+
 			if ( !operation || !result )
 				return;
-			
+
 			var operationName : String = operation.name;
 			var resourceVO : ResourceVO;
-		
+
 			switch ( operationName )
 			{
-				
+
 				//save resource on user`s local disk and set resource to resourceVO
 				case "get_resource":
 				{
-					
+
 //					clearTimeout(timeoutGetResource);
-					
+
 					resourceVO = event.token.resourceVO as ResourceVO;
-					
+
 					var data : String = event.result.Resource;
-					
+
 					var decoder : Base64Decoder = new Base64Decoder();
 					decoder.decode( data );
-					
+
 					var imageSource : ByteArray = decoder.toByteArray();
-					
+
 					imageSource.uncompress();
-					
+					// TODO: resourceVO.icon = img
 					cacheManager.cacheFile( resourceVO.id, imageSource );
-					
+
 					resourceVO.setData( imageSource );
 					
+					if (resourceVO.status == ResourceVO.LOAD_ICON)
+					{
+						var iconManager : IconManager = new IconManager(resourceVO);
+						iconManager.setIconForResourceVO();
+					}
+
 					resourceVO.setStatus( ResourceVO.LOADED );
-					
-					if ( resourceForIcon( resourceVO.id ) )
-						loadedResourceForIcon( resourceVO );
-					else
-						sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
-					
+
+					resourceVO.icon = null;
+
+
+					sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
+
 					break;
 				}
-				
+
 				case "set_resource":
 				{
 					resourceVO = event.token.resourceVO as ResourceVO;
 
 					resourceVO.setXMLDescription( result.Resource[ 0 ] );
 					resourceVO.setStatus( ResourceVO.UPLOADED );
-					
+
 					sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
 					soap_setResource();
 
@@ -526,31 +540,31 @@ package net.vdombox.ide.core.model
 				{
 					var applicationVO : ApplicationVO = event.token.applicationVO;
 					var resources : Array = createResourcesList( applicationVO, result.Resources[ 0 ] );
-					
+
 					sendNotification( ApplicationFacade.RESOURCES_GETTED, resources );
-					
+
 					break;
 				}
-					
+
 				case "delete_resource":
 				{
 					resourceVO = event.token.resourceVO as ResourceVO;
-					
+
 					cacheManager.deleteFile( resourceVO.id );
 					cacheManager.deleteFile( resourceVO.id + "_icon" );
-					
+
 					resourceVO.setData( null );
 					resourceVO.setPath( null );
-					
+
 					sendNotification( ApplicationFacade.RESOURCE_DELETED, resourceVO );
-					
+
 					break;
 				}
-					
+
 				case "modify_resource":
 				{
 					sendNotification( ApplicationFacade.RESOURCE_MODIFIED, token.resourceVO );
-					
+
 					break;
 				}
 			}
@@ -560,243 +574,16 @@ package net.vdombox.ide.core.model
 		{
 			sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxy | soap_faultHandler | " + event.currentTarget.name );
 		}
-		
+
 		private function resourceForIcon( resourceId : String ) : Boolean
 		{
 			for each ( var iconID : String in loadableResources )
 			{
-				if ( iconID == resourceId )					
+				if ( iconID == resourceId )
 					return true
 			}
-			
+
 			return false;
-		}
-	}
-}
-
-import flash.errors.IOError;
-import flash.filesystem.File;
-import flash.filesystem.FileMode;
-import flash.filesystem.FileStream;
-import flash.utils.ByteArray;
-
-import mx.collections.ArrayCollection;
-import mx.collections.IViewCursor;
-import mx.collections.Sort;
-import mx.collections.SortField;
-
-class CacheManager
-{
-
-	private static var instance : CacheManager;
-
-	public static function getInstance() : CacheManager
-	{
-		if ( !instance )
-			instance = new CacheManager();
-
-		return instance;
-	}
-
-	public function CacheManager()
-	{
-		if ( instance )
-			throw new Error( "Instance already exists." );
-
-		init();
-	}
-
-	private const CACHE_SIZE : uint = 100000000;
-
-	private var applicationId : String;
-
-	private var cacheFolder : File;
-
-	private var cacheSize : int;
-
-	private var cachedFiles : ArrayCollection = new ArrayCollection();
-
-	private var cursor : IViewCursor;
-
-	private var fileStream : FileStream = new FileStream();
-
-	public function cacheFile( contentName : String, content : ByteArray ) : void
-	{
-
-		var fileSize : uint = content.bytesAvailable;
-
-		if ( fileSize > 90000000 )
-			return;
-
-		var newFileName : String = contentName;
-
-		if ( cursor.findAny({ name: applicationPrefix + "" + contentName }))
-		{
-
-			cacheSize -= cursor.current.size;
-			cursor.remove();
-
-			try
-			{
-				cacheFolder.resolvePath( newFileName ).deleteFile();
-			}
-			catch ( error : IOError )
-			{
-				return;
-			}
-		}
-
-		cleanupCache( fileSize );
-
-		var newFile : File = cacheFolder.resolvePath( newFileName );
-
-		try
-		{
-
-			fileStream.open( newFile, FileMode.WRITE );
-			fileStream.writeBytes( content );
-			fileStream.close();
-
-		}
-		catch ( error : IOError )
-		{
-
-			return;
-		}
-
-		cachedFiles.addItem({ create: newFile.creationDate.time, name: newFile.name, size: newFile.size })
-	}
-
-	public function deleteFile( fileName : String ) : Boolean
-	{
-		var isDone : Boolean = false;
-
-		fileName = applicationPrefix + fileName;
-
-		var isFind : Boolean = cursor.findAny({ name: fileName })
-
-		if ( isFind )
-		{
-
-			cacheSize -= cursor.current.size;
-			cursor.remove();
-
-			try
-			{
-
-				cacheFolder.resolvePath( fileName ).deleteFile();
-				isDone = true
-			}
-			catch ( error : Error )
-			{
-			}
-		}
-
-		return isDone;
-	}
-
-	public function getCachedFileById( resourceId : String ) : ByteArray
-	{
-
-		var fileName : String = resourceId;
-
-		var result : Boolean = cursor.findFirst({ name: fileName });
-		if ( result )
-		{
-
-			var file : File = cacheFolder.resolvePath( fileName );
-			var fileBytes : ByteArray = new ByteArray();
-
-			fileStream.open( file, FileMode.READ );
-			fileStream.readBytes( fileBytes );
-			fileStream.close();
-
-			return fileBytes;
-		}
-		else
-			return null;
-	}
-
-	public function init() : void
-	{
-		cursor = cachedFiles.createCursor();
-
-		cachedFiles.sort = new Sort();
-		cachedFiles.sort.fields = [ new SortField( "name" )];
-		cachedFiles.refresh();
-
-		cacheFolder = File.applicationStorageDirectory.resolvePath( "cache" );
-
-		if ( !cacheFolder.exists )
-		{
-			cacheFolder.createDirectory();
-			return;
-		}
-
-		var currentDate : Number = new Date().getTime();
-		var fileList : Array = cacheFolder.getDirectoryListing();
-
-		for each ( var file : File in fileList )
-		{
-
-			var days : Number = ( currentDate - file.creationDate.time ) / 1000 / 60 / 60 / 24;
-			if ( days > 4 )
-			{
-				file.deleteFile();
-				continue;
-			}
-
-			cacheSize += file.size;
-			cachedFiles.addItem({ create: file.creationDate.time, name: file.name, size: file.size });
-		}
-	}
-
-
-	private function get applicationPrefix() : String
-	{
-
-		if ( applicationId )
-			return applicationId.substr( 0, 8 );
-		else
-			return "";
-	}
-
-	private function cleanupCache( size : uint ) : void
-	{
-
-		var newCacheSize : uint = cacheSize + size;
-
-		if ( newCacheSize > CACHE_SIZE )
-		{
-
-			cachedFiles.sort = new Sort();
-			cachedFiles.sort.fields = [ new SortField( "create" )];
-			cachedFiles.refresh();
-
-			var item : Object = {}
-
-			while ( cacheSize > 10000 )
-			{
-
-				item = cachedFiles.getItemAt( 0 )
-
-				cacheSize -= item.size;
-				cachedFiles.removeItemAt( 0 );
-
-				var removeFile : File = cacheFolder.resolvePath( item.name );
-				try
-				{
-					removeFile.deleteFile();
-				}
-				catch ( error : Error )
-				{
-
-				}
-			}
-
-			cachedFiles.sort = new Sort();
-			cachedFiles.sort.fields = [ new SortField( "name" )];
-			cachedFiles.refresh();
 		}
 	}
 }

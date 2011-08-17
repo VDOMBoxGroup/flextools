@@ -8,7 +8,7 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.core.model.ObjectProxy;
 	import net.vdombox.ide.core.model.PageProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -46,9 +46,9 @@ package net.vdombox.ide.core.controller.requests
 			{
 				case PPMObjectTargetNames.ATTRIBUTES:
 				{
-					if( operation == PPMOperationNames.READ )
+					if ( operation == PPMOperationNames.READ )
 						objectProxy.getAttributes();
-					else if( operation == PPMOperationNames.UPDATE )
+					else if ( operation == PPMOperationNames.UPDATE )
 						objectProxy.setAttributes( body as VdomObjectAttributesVO );
 
 					break;
@@ -56,56 +56,56 @@ package net.vdombox.ide.core.controller.requests
 
 				case PPMObjectTargetNames.SERVER_ACTIONS_LIST:
 				{
-					if( operation == PPMOperationNames.READ )
+					if ( operation == PPMOperationNames.READ )
 						objectProxy.getServerActionsList();
 
 					break;
 				}
-					
+
 				case PPMObjectTargetNames.SERVER_ACTION:
 				{
-					if( operation == PPMOperationNames.CREATE )
+					if ( operation == PPMOperationNames.CREATE )
 						objectProxy.createServerAction( body.serverActionVO );
-					else if( operation == PPMOperationNames.READ )
+					else if ( operation == PPMOperationNames.READ )
 						objectProxy.getServerAction( body.serverActionVO );
-					else if( operation == PPMOperationNames.UPDATE )
+					else if ( operation == PPMOperationNames.UPDATE )
 						objectProxy.setServerAction( body.serverActionVO );
-					else if( operation == PPMOperationNames.DELETE )
+					else if ( operation == PPMOperationNames.DELETE )
 						objectProxy.deleteServerAction( body.serverActionVO );
 					break;
 				}
-					
+
 				case PPMObjectTargetNames.OBJECT:
 				{
-					if( operation == PPMOperationNames.CREATE )
+					if ( operation == PPMOperationNames.CREATE )
 						objectProxy.createObject( body.typeVO, body.attributes );
-					
+
 					break;
 				}
-					
+
 				case PPMObjectTargetNames.WYSIWYG:
 				{
-					if( operation == PPMOperationNames.READ )
+					if ( operation == PPMOperationNames.READ )
 						objectProxy.getWYSIWYG();
-					
+
 					break;
 				}
-					
+
 				case PPMObjectTargetNames.XML_PRESENTATION:
 				{
-					if( operation == PPMOperationNames.READ )
+					if ( operation == PPMOperationNames.READ )
 						objectProxy.getXMLPresentation();
-					else if( operation == PPMOperationNames.UPDATE )
-						objectProxy.setXMLPresentation( body as VdomObjectXMLPresentationVO);
-					
+					else if ( operation == PPMOperationNames.UPDATE )
+						objectProxy.setXMLPresentation( body as VdomObjectXMLPresentationVO );
+
 					break;
 				}
-					
+
 				case PPMObjectTargetNames.NAME:
 				{
-					if( operation == PPMOperationNames.UPDATE )
+					if ( operation == PPMOperationNames.UPDATE )
 						objectProxy.setName();
-					
+
 					break;
 				}
 			}
