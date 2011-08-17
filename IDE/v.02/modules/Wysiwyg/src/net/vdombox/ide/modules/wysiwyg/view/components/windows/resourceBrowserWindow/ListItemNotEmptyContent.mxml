@@ -37,6 +37,8 @@
 					(resourceVO && prevResVO && resourceVO.id != prevResVO.id))
 				{
 					_iconRequested = false;
+				} else {
+					_iconRequested = true;
 				}
 				
 				setProperties();

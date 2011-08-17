@@ -62,6 +62,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var sessionProxy 			: SessionProxy;
 
 		private var resourcePreviewWindow	: ResourcePreviewWindow;
+		
+		private var showSpinnerOnListCreation : Boolean = true;
 
 		public function ResourceSelectorWindowMediator( resourceSelectorWindow : ResourceSelectorWindow ) : void
 		{
@@ -172,6 +174,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function createSpinnerPopup(spinnerTxt : String):void
 		{
+			trace ("createSpinnerPopup");
 			if (spinnerPopup) 
 				removeSpinnerPopup();
 			
@@ -184,6 +187,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function removeSpinnerPopup():void
 		{
+			trace ("removeSpinnerPopup");
 			if (!spinnerPopup)
 				return;
 			spinnerPopup.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
@@ -226,13 +230,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.CREATION_COMPLETE, onResourceWindowCreationComplete );
 			
+			if (!showSpinnerOnListCreation)
+			{
+				showSpinnerOnListCreation = true;
+				return;
+			}
+			
 			var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_create_resources' );
 			createSpinnerPopup(spinnerTxt);
 		}
 		
 		public function onResourceWindowListItemCreationComplete (event : Event):void
 		{
-			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE, onResourceWindowListItemCreationComplete );
+			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE, onResourceWindowListItemCreationComplete, true );
+			showSpinnerOnListCreation = false;
 			
 			removeSpinnerPopup();
 		}
