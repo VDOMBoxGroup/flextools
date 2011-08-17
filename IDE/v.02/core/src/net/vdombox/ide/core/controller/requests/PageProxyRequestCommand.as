@@ -91,6 +91,14 @@ package net.vdombox.ide.core.controller.requests
 					break;
 				}
 					
+				case PPMPageTargetNames.NAME:
+				{
+					if( operation == PPMOperationNames.UPDATE )
+						pageProxy.setName(  );
+					
+					break;
+				}
+					
 				case PPMPageTargetNames.SERVER_ACTIONS_LIST:
 				{
 					if( operation == PPMOperationNames.READ )

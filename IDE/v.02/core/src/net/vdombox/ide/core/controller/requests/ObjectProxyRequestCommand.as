@@ -100,6 +100,14 @@ package net.vdombox.ide.core.controller.requests
 					
 					break;
 				}
+					
+				case PPMObjectTargetNames.NAME:
+				{
+					if( operation == PPMOperationNames.UPDATE )
+						objectProxy.setName();
+					
+					break;
+				}
 			}
 		}
 	}

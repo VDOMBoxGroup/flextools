@@ -72,6 +72,13 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				}
 					
+				case ApplicationFacade.PAGE_NAME_SETTED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.NAME, body );
+					
+					break;
+				}
+					
 				case ApplicationFacade.PAGE_SERVER_ACTIONS_LIST_GETTED:
 				{
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.SERVER_ACTIONS_LIST, body );

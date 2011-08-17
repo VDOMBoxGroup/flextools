@@ -37,6 +37,13 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				}
 					
+				case ApplicationFacade.OBJECT_NAME_SETTED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.NAME, body );
+					
+					break;
+				}	
+					
 				case ApplicationFacade.OBJECT_SERVER_ACTIONS_LIST_GETTED:
 				{
 					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.SERVER_ACTIONS_LIST, body );

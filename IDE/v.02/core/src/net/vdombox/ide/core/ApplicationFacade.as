@@ -286,6 +286,8 @@ package net.vdombox.ide.core
 		
 		public static const PAGE_XML_PRESENTATION_GETTED : String = "pageXMLPresentationGetted";
 		public static const PAGE_XML_PRESENTATION_SETTED : String = "pageXMLPresentationSetted";
+		
+		public static const PAGE_NAME_SETTED : String = "pageNameSetted";
 
 //		object
 		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
@@ -304,6 +306,8 @@ package net.vdombox.ide.core
 		
 		public static const OBJECT_XML_PRESENTATION_GETTED : String = "objectXMLPresentationGetted";
 		public static const OBJECT_XML_PRESENTATION_SETTED : String = "objectXMLPresentationSetted";
+		
+		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
 
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";
@@ -401,6 +405,7 @@ package net.vdombox.ide.core
 			registerCommand( PAGE_STRUCTURE_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_ATTRIBUTES_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_ATTRIBUTES_SETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_NAME_SETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_OBJECTS_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_OBJECT_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_OBJECT_CREATED, PageProxyResponseCommand );
@@ -418,6 +423,7 @@ package net.vdombox.ide.core
 			registerCommand( OBJECT_PROXY_REQUEST, ObjectProxyRequestCommand );
 			registerCommand( OBJECT_ATTRIBUTES_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_ATTRIBUTES_SETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_NAME_SETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTIONS_LIST_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTION_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTION_SETTED, ObjectProxyResponseCommand );

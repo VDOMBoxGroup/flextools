@@ -1,8 +1,9 @@
 package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
+	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
@@ -13,7 +14,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	/**
@@ -277,6 +278,15 @@ package net.vdombox.ide.core.model
 			soap.render_wysiwyg.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.submit_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
+			soap.set_name.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
+			soap.set_attributes.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+		}
+		
+		private function soap_faultHandler() : void
+		{
+			var ig : int = 5;
 		}
 
 		private function removeHandlers() : void
@@ -296,6 +306,8 @@ package net.vdombox.ide.core.model
 			soap.render_wysiwyg.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_object_script_presentation.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.submit_object_script_presentation.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
+			soap.set_name.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function generateObjectAttributes( attributesXML : XML ) : Array
@@ -363,6 +375,17 @@ package net.vdombox.ide.core.model
 			}
 
 			return structureObject;
+		}
+		
+		public function setName(  ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.set_name( objectVO.pageVO.applicationVO.id, objectVO.id, objectVO.name );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+			
 		}
 
 		private function soap_resultHandler( event : SOAPEvent ) : void
@@ -449,6 +472,15 @@ package net.vdombox.ide.core.model
 
 					break;
 				}
+					
+				case "set_name":
+				{
+					objectVO.name = result.Object[ 0 ].@Name;
+					notification = new ProxyNotification( ApplicationFacade.OBJECT_NAME_SETTED, objectVO );
+					notification.token = token;
+					
+					break;
+				}
 
 				case "get_child_objects_tree":
 				{
@@ -520,6 +552,8 @@ package net.vdombox.ide.core.model
 
 					break;
 				}
+					
+					
 			}
 
 			if ( notification )

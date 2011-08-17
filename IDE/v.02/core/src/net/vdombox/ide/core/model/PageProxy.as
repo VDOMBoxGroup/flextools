@@ -346,6 +346,7 @@ package net.vdombox.ide.core.model
 			soap.get_child_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_attributes.addEventListener(  FaultEvent.FAULT, soap_faultHandler);
 			
 			soap.get_server_actions_list.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -361,10 +362,14 @@ package net.vdombox.ide.core.model
 
 			soap.submit_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.submit_object_script_presentation.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.set_name.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_name.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function removeHandlers() : void
 		{
+			soap.set_attributes.removeEventListener(  FaultEvent.FAULT, soap_faultHandler);
 			soap.get_child_objects_tree.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_child_objects.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_one_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -382,6 +387,9 @@ package net.vdombox.ide.core.model
 			soap.delete_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_object_script_presentation.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.submit_object_script_presentation.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
+			soap.set_name.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_name.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function createObjectsList( objects : XML ) : void
@@ -462,6 +470,17 @@ package net.vdombox.ide.core.model
 
 			return structureObject;
 		}
+		
+		public function setName(  ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.set_name( pageVO.applicationVO.id, pageVO.id, pageVO.name );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+			
+		}
 
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
@@ -506,6 +525,15 @@ package net.vdombox.ide.core.model
 						token.requestFunctionName = GET_WYSIWYG;
 					}
 
+					break;
+				}
+					
+				case "set_name":
+				{
+					pageVO.name = result.Object[ 0 ].@Name;
+					notification = new ProxyNotification( ApplicationFacade.PAGE_NAME_SETTED, pageVO );
+					notification.token = token;
+					
 					break;
 				}
 
@@ -703,10 +731,14 @@ package net.vdombox.ide.core.model
 
 			if ( !operation )
 				return;
+			
 
 			var operationName : String = operation.name;
 			var errorVO : ErrorVO;
-
+			
+			var notification : ProxyNotification;
+			var token : AsyncToken = event.token;
+			
 			switch ( operationName )
 			{
 				case "submit_object_script_presentation":
@@ -719,7 +751,19 @@ package net.vdombox.ide.core.model
 
 					break;
 				}
+					
+				case "set_name":
+				{
+					var pageVO : PageVO = soap.get_one_object( pageVO.applicationVO.id, pageVO.id );;
+					notification = new ProxyNotification( ApplicationFacade.PAGE_NAME_SETTED, pageVO );
+					notification.token = token;
+					
+					break;
+				}
+
 			}
+			if ( notification )
+				facade.notifyObservers( notification );
 		}
 	}
 }
