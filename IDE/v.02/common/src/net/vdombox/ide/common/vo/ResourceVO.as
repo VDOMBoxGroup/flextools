@@ -6,26 +6,34 @@ package net.vdombox.ide.common.vo
 
 	/**
 	 * The ResourceVO is Visual Object of VDOM Resource.
-	 * ResourceVO is contained in VDOM Application. 
-	 */	
+	 * ResourceVO is contained in VDOM Application.
+	 */
 	[Bindable]
 	public class ResourceVO
 	{
 		public static const EMPTY : uint = 0;
 
 		public static const UPLOAD_PROGRESS : uint = 1;
-		public static const UPLOADED 		: uint = 2;
-		public static const UPLOAD_ERROR 	: uint = 3;
 
-		public static const LOAD_PROGRESS 	: uint = 4;
-		public static const LOADED 			: uint = 5;
-		public static const LOAD_ERROR 		: uint = 6;
-		public static const ICON_LOADED		: uint = 7;
+		public static const UPLOADED : uint = 2;
 
-		public static const ICON_SIZE		: Number = 42; 
-		
-		public static const RESOURCE_TEMP	: String = "tempResource";
-		public static const RESOURCE_NONE	: String = "noneResource";
+		public static const UPLOAD_ERROR : uint = 3;
+
+		public static const LOAD_PROGRESS : uint = 4;
+
+		public static const LOADED : uint = 5;
+
+		public static const LOAD_ERROR : uint = 6;
+
+		public static const ICON_LOADED : uint = 7;
+
+		public static const LOAD_ICON : uint = 8;
+
+		public static const ICON_SIZE : Number = 42;
+
+		public static const RESOURCE_TEMP : String = "tempResource";
+
+		public static const RESOURCE_NONE : String = "noneResource";
 
 		public function ResourceVO( ownerID : String )
 		{
@@ -48,12 +56,24 @@ package net.vdombox.ide.common.vo
 		private var _status : uint;
 
 		private var dispatcher : EventDispatcher = new EventDispatcher();
-		
-		public var data : ByteArray;
-		
+
+		private var _data : ByteArray;
+
 		public var icon : ByteArray;
-		
+
 		private var _iconID : String;
+
+		public function set data( value : ByteArray ) : void
+		{
+			_data = value;
+		}
+
+		public function get data() : ByteArray
+		{
+			return _data;
+		}
+
+
 
 		public function get ownerID() : String
 		{
@@ -64,16 +84,13 @@ package net.vdombox.ide.common.vo
 		{
 			return _id;
 		}
-		
+
 		public function get iconId() : String
 		{
-			return _iconID;
+			return _id + "_icon";
 		}
-		
-		public function set iconId( value : String ) : void
-		{
-			_iconID = value;
-		}
+
+
 
 		public function get useCount() : int
 		{
@@ -94,21 +111,22 @@ package net.vdombox.ide.common.vo
 		{
 			return _status;
 		}
-		
+
 		public function set status( value : uint ) : void
 		{
 			_status = value;
 		}
-		
+
 		public function get type() : String
 		{
 			return _type;
 		}
-		
+
 		public function set type( value : String ) : void
 		{
 			_type = value;
 		}
+
 //
 //		[Bindable(event="propertyDataChange")]
 //		public function get data() : ByteArray
@@ -122,12 +140,12 @@ package net.vdombox.ide.common.vo
 
 		public function get size() : int
 		{
-			if ( !data )
+			if ( !_data )
 				return -1;
 
-			data.position = 0;
+			_data.position = 0;
 
-			return data.bytesAvailable;
+			return _data.bytesAvailable;
 		}
 
 		public function get path() : String
@@ -148,17 +166,17 @@ package net.vdombox.ide.common.vo
 		public function setData( value : ByteArray ) : void
 		{
 			data = value;
-			dispatcher.dispatchEvent( new Event( "propertyDataChange" ) );//not used
-		}				
-		
+			dispatcher.dispatchEvent( new Event( "propertyDataChange" ) ); //not used
+		}
+
 		/**
 		 * reduces the resource to a size 32 to 32 pixels
-		 * 
+		 *
 		 * @param value : ByteArray
-		 * 
-		 */		
+		 *
+		 */
 		public function setIcon( value : ByteArray ) : void
-		{			
+		{
 			icon = value;
 			_iconID = id + "_icon";
 		}
@@ -187,25 +205,25 @@ package net.vdombox.ide.common.vo
 			if ( description.@usecount[ 0 ] )
 				_useCount = description.@usecount;
 		}
-		
-		public function get isViewable () : Boolean 
+
+		public function get hasPreview() : Boolean
 		{
-			if (!_type) 
+			if ( !_type )
 				return false;
-			
-			switch (type.toLowerCase()) 
+
+			switch ( type.toLowerCase() )
 			{
-				case "jpg":					
-				case "jpeg":					
+				case "jpg":
+				case "jpeg":
 				case "png":
 				case "gif":
 				case "svg":
 					return true;
-					
+
 				default:
 					return false;
 			}
 		}
-		
+
 	}
 }
