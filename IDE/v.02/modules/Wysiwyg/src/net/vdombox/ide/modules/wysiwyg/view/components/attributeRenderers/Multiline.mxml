@@ -94,7 +94,7 @@
 			</s:fill>
 		</s:Rect>
 		
-		<s:TextInput id="lbl"
+		<s:TextInput id="lbl" textAlign="left"
 				 text="Multiline" editable="false" width="100%" height="100%"/>
 		
 	</s:Group>

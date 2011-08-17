@@ -41,7 +41,7 @@
 	</mx:Script>
 
 	<mx:Label id="lbl"
-			  text="External" />
+			  text="External" textAlign="left" />
 
 	<mx:Button height="19" label="..." width="22"
 			   cornerRadius="0" paddingLeft="2" paddingRight="2"

@@ -60,6 +60,7 @@
 					{
 						valueField = new TextInput;
 						valueField.editable = false;
+						valueField.setStyle("borderAlpha", "0");
 						valueField.setStyle("color", "#FFFFFF");
 						valueField.text =  objectVO.id;
 						valueField.width = 128;
@@ -73,7 +74,6 @@
 						valueField.value =  objectVO.name ;
 						valueField.width = 128;
 						valueField.height = 21;
-						valueField.setStyle("textAlign", "left");
 						secondElement = valueField as UIComponent;
 						
 						valueField.addEventListener(Event.CHANGE, changeHandler);
@@ -163,7 +163,6 @@
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
-				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
 				valueField.addEventListener(Event.CHANGE, changeHandler);
@@ -176,7 +175,6 @@
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
-				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
 				valueField.addEventListener(ColorPickerEvent.CHANGE, changeHandler);
@@ -188,7 +186,6 @@
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21; 
-				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
 				valueField.init(codeInterface[ "value" ], _attributeVO.value);
@@ -203,7 +200,6 @@
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
-				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
 				valueField.addEventListener(Event.CHANGE, changeHandler);
@@ -221,7 +217,6 @@
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
-				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
 				valueField.addEventListener(Event.CHANGE, changeHandler);
@@ -234,7 +229,6 @@
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
-				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
 				valueField.initChars(uint( codeInterface[ "value" ] ),_attributeDescriptionVO);
@@ -260,7 +254,6 @@
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
-				valueField.setStyle("textAlign", "left");
 				valueField.labelField = "name";
 				secondElement = valueField as UIComponent;
 				
@@ -276,7 +269,6 @@
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
-				valueField.setStyle("textAlign", "left");
 				valueField.labelField = "name"
 				secondElement = valueField as UIComponent;
 				
@@ -292,7 +284,6 @@
 				valueField.toolTip = help;
 				valueField.width = 128;
 				valueField.height = 21;
-				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
 				valueField.initChars(uint( codeInterface[ "value" ] ), _attributeDescriptionVO);
@@ -410,9 +401,9 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:HGroup id="group" width="100%" height="100%" verticalAlign="middle" gap="2" paddingRight="2" paddingTop="5" paddingBottom="5">
+	<s:HGroup id="group" width="100%" height="100%" verticalAlign="middle" gap="2" paddingLeft="8" paddingTop="5" paddingBottom="5">
 		<s:RichText id="rtextLabel" minHeight="21" width="100%" color="#FFFFFF" fontFamily="Verdana" fontSize="10" fontWeight="bold"
-					paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" verticalCenter="0"/>
+					paddingBottom="2" paddingTop="2" textAlign="left" verticalAlign="middle" verticalCenter="0"/>
 	</s:HGroup>
 	
 	<s:Rect width="5" height="100%">
@@ -423,13 +414,13 @@
 	
 	<s:Line top="0" width="100%">
 		<s:stroke>
-			<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1"/>
+			<s:SolidColorStroke color="#FFFFFF" alpha="0.2" weight="1"/>
 		</s:stroke>
 	</s:Line>
 	
 	<s:Line bottom="0" width="100%">
 		<s:stroke>
-			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1"/>
+			<s:SolidColorStroke color="#000000" alpha="0.7" weight="1"/>
 		</s:stroke>
 	</s:Line>
 	
