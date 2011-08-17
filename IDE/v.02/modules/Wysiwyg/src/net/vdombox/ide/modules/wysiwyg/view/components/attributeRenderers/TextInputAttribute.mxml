@@ -24,14 +24,17 @@
 			public function initChars(_interface : uint, reg : String) : void
 			{
 				lbl.maxChars = _interface;
-				if (reg.indexOf("d") != -1)
-					lbl.restrict = "0-9\\-";
+				/*if (reg.indexOf("d") != -1)
+					lbl.restrict = "0-9\\-";*/
 			}
 			
 			private function changeHandler() : void
 			{
-				_value = lbl.text;
-				dispatchEvent( new Event( Event.CHANGE ));
+				if (_value != lbl.text)
+				{
+					_value = lbl.text;
+					dispatchEvent( new Event( Event.CHANGE ));
+				}
 			}
 			
 			private function keyDownEnterHandler( event : KeyboardEvent ) : void

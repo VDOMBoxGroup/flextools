@@ -101,6 +101,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.BODY_STOP );
 			interests.push( SessionProxy.GET_SELECTED_PAGE );
 			
+			interests.push( ApplicationFacade.SET_OBJECT_NAME );
+			
 			
 
 			return interests;
@@ -417,6 +419,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break;
+				}
+					
+				case ApplicationFacade.SET_OBJECT_NAME:
+				{
+					if ( body is PageVO )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.NAME, body );
+					else if ( body is ObjectVO )
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.NAME, body );
+					
+					if ( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break;
 				}
 					

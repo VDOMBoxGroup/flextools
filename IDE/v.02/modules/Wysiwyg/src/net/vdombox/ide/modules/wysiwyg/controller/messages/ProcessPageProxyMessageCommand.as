@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -28,7 +28,12 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 			var target : String = message.target;
 			var operation : String = message.operation;
 
-			var pageVO : PageVO = body.pageVO as PageVO;
+			
+			var pageVO : PageVO;
+			if (body is PageVO)
+				pageVO = body as PageVO;
+			else
+				pageVO = body.pageVO as PageVO;
 			var renderer : *;
 
 			switch ( target )
@@ -126,6 +131,16 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 
 					break;
 				}
+					
+				case PPMPageTargetNames.NAME:
+				{
+					if ( operation == PPMOperationNames.UPDATE )
+					{
+						sendNotification( ApplicationFacade.PAGE_NAME_SETTED, body );
+					}
+					break;
+				}
+					
 			}
 		}
 	}

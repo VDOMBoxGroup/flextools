@@ -153,6 +153,7 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const EDITOR_REMOVED : String = "editorRemoved";
 		
 //		other
+		public static const SET_OBJECT_NAME : String = "setObjectName";
 		public static const DELIMITER : String = "/";
 		public static const STATES : String = "states";
 
@@ -195,6 +196,9 @@ package net.vdombox.ide.modules.wysiwyg
 
 		public static const REMOTE_CALL_REQUEST : String = "remoteCallRequest";
 		public static const REMOTE_CALL_RESPONSE : String = "remoteСallResponse";
+		
+		public static const PAGE_NAME_SETTED : String = "pageNameSetted";
+		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

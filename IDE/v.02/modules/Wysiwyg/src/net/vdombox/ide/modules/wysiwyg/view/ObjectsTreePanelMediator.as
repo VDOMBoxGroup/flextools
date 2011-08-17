@@ -11,14 +11,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.controls.Tree;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
-
+	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectsTreePanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -146,6 +146,30 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
+					
+				case ApplicationFacade.PAGE_NAME_SETTED:
+				{
+					var pageVO : PageVO = body as PageVO;
+					
+					if ( sessionProxy.selectedPage )
+					{
+						objectsTreePanel.selectedItem.@name = pageVO.name;
+					}
+					
+					break;
+				}
+					
+				case ApplicationFacade.OBJECT_NAME_SETTED:
+				{
+					var _objectVO : ObjectVO = body as ObjectVO;
+					
+					if ( sessionProxy.selectedObject )
+					{
+						objectsTreePanel.selectedItem.@name = _objectVO.name;
+					}
+					
+					break;
+				}
 			}
 		}
 
@@ -164,6 +188,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.OBJECT_GETTED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			
+			interests.push( ApplicationFacade.PAGE_NAME_SETTED );
+			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
 			
 //			interests.push( ApplicationFacade.OBJECT_DELETED );
 //			interests.push( ApplicationFacade.OBJECT_CREATED );

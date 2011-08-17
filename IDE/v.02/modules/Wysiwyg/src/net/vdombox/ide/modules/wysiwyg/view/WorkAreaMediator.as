@@ -9,7 +9,10 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.Event;
+	
+	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.WorkAreaEvent;
@@ -18,6 +21,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.VdomObjectEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -111,6 +115,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
+					
+				case ApplicationFacade.PAGE_NAME_SETTED:
+				{
+					var pageVO : PageVO = body as PageVO;
+					workArea.selectedTab.label = pageVO.name;
+					break;
+				}
 			}
 		}
 
@@ -125,6 +136,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.OPEN_PAGE_REQUEST );
 			interests.push( ApplicationFacade.OPEN_OBJECT_REQUEST );
+			
+			interests.push( ApplicationFacade.PAGE_NAME_SETTED);
 
 			return interests;
 		}

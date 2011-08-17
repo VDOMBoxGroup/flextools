@@ -5,22 +5,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import mx.collections.ArrayCollection;
+	import mx.collections.IList;
 	import mx.core.UIComponent;
 	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectAttributesPanel;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	import net.vdombox.utils.WindowManager;
-
 	import net.vdombox.view.Alert;
 	import net.vdombox.view.AlertButton;
 	
@@ -74,6 +78,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED );
 			interests.push( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED );
+			
+			interests.push( ApplicationFacade.PAGE_NAME_SETTED );
+			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
 
 			return interests;
 		}
@@ -87,6 +94,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 				return;
 
 			var vdomObjectAttributesVO : VdomObjectAttributesVO;
+			
+			var attributesRenderer : IList;
+			var attributeBase : Object;
 
 			switch ( name )
 			{
@@ -164,6 +174,48 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
+					
+				case ApplicationFacade.PAGE_NAME_SETTED:
+				{
+					var pageVO : PageVO = body as PageVO;
+					
+					if ( sessionProxy.selectedPage && pageVO &&
+						sessionProxy.selectedPage.id == pageVO.id )
+					{
+						attributesRenderer = objectAttributesPanel.attributesList.dataProvider;
+						for each (attributeBase in attributesRenderer)
+						{
+							if (attributeBase.hasOwnProperty( "objectVO") && attributeBase.name == "name")
+							{
+								attributeBase.objectVO = pageVO;
+								break;
+							}
+						}
+					}
+					
+					break;
+				}
+					
+				case ApplicationFacade.OBJECT_NAME_SETTED:
+				{
+					var objectVO : ObjectVO = body as ObjectVO;
+					
+					if ( sessionProxy.selectedObject && objectVO &&
+						sessionProxy.selectedObject.id == objectVO.id )
+					{
+						attributesRenderer = objectAttributesPanel.attributesList.dataProvider;
+						for each (attributeBase in attributesRenderer)
+						{
+							if (attributeBase.hasOwnProperty( "objectVO") && attributeBase.name == "name")
+							{
+								attributeBase.objectVO = objectVO;
+								break;
+							}
+						}
+					}
+					
+					break;
+				}
 			}
 		}
 
@@ -180,8 +232,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function removeHandlers() : void
 		{
-			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.SAVE_REQUEST, saveRequestHandler, true )
-			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.DELETE_REQUEST, deleteRequestHandler )
+			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.SAVE_REQUEST, saveRequestHandler, true );
+			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.DELETE_REQUEST, deleteRequestHandler );
 			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler );
 			objectAttributesPanel.removeEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true );
 			objectAttributesPanel.removeEventListener( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE, getResourcesAndPagesHandler, true );
@@ -195,8 +247,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function saveRequestHandler( event : ObjectAttributesPanelEvent ) : void
 		{
-			objectAttributesPanel.attributesVO;
-			sendNotification( ApplicationFacade.SAVE_ATTRIBUTES_REQUEST, objectAttributesPanel.attributesVO );
+			//objectAttributesPanel.attributesVO;
+			var attributeRander : AttributeBase = event.target as AttributeBase;
+			if ( attributeRander.objectVO )
+				sendNotification( ApplicationFacade.SET_OBJECT_NAME, attributeRander.objectVO );
+			else
+				sendNotification( ApplicationFacade.SAVE_ATTRIBUTES_REQUEST, objectAttributesPanel.attributesVO );
 		}
 
 		private function deleteRequestHandler( event : ObjectAttributesPanelEvent ) : void

@@ -42,7 +42,7 @@
 			
 			protected var valueField : Object;
 			
-			private var idNameField : Object;
+			public var objectVO : Object;
 			
 			private var codeInterface : Object = {};
 			
@@ -52,17 +52,16 @@
 				
 				if ( !value )
 					return;
-				
-				if (!(value.attributeVO is AttributeVO))
+				if (value.hasOwnProperty( "objectVO"))
 				{
-					idNameField = value.attributeVO;
+					objectVO = value.objectVO;
 					nameLabel = value.name;
 					if (value.name == "id")
 					{
 						valueField = new TextInput;
 						valueField.editable = false;
 						valueField.setStyle("color", "#FFFFFF");
-						valueField.text =  value.attributeVO.id;
+						valueField.text =  objectVO.id;
 						valueField.width = 128;
 						valueField.height = 21;
 						valueField.setStyle("textAlign", "left");
@@ -71,13 +70,13 @@
 					else
 					{
 						valueField = new TextInputAttribute;
-						valueField.value =  value.attributeVO.name ;
+						valueField.value =  objectVO.name ;
 						valueField.width = 128;
 						valueField.height = 21;
 						valueField.setStyle("textAlign", "left");
 						secondElement = valueField as UIComponent;
 						
-						valueField.addEventListener(Event.CHANGE, changeHandler2);
+						valueField.addEventListener(Event.CHANGE, changeHandler);
 					}
 				}
 				else
@@ -316,13 +315,10 @@
 			
 			private function changeHandler(event : Event) : void
 			{
-				_attributeVO.value = valueField.value;
-				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ) );
-			}
-			
-			private function changeHandler2(event : Event) : void
-			{
-				idNameField.name = valueField.value;
+				if (objectVO)
+					objectVO.name = valueField.value;
+				else
+					_attributeVO.value = valueField.value;
 				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ) );
 			}
 			

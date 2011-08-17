@@ -50,14 +50,14 @@
 				
 				attributesArray.push( { group: 0, 
 					name: 					"id", 
-					attributeVO: 			_attributesVO.vdomObjectVO,
+					objectVO: 			_attributesVO.vdomObjectVO,
 					attributeDescriptionVO: null, 
 					objectsList:	 		null,
 					pageLinks: 				null } );
 				
 				attributesArray.push( { group: 0, 
 					name: 					"name", 
-					attributeVO: 			_attributesVO.vdomObjectVO,
+					objectVO: 			_attributesVO.vdomObjectVO,
 					attributeDescriptionVO: null, 
 					objectsList:	 		null,
 					pageLinks: 				null } );

@@ -28,8 +28,14 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 			var body : Object = message.getBody();
 			var target : String = message.target;
 			var operation : String = message.operation;
-
-			var objectVO : ObjectVO = body.objectVO as ObjectVO;
+			
+			var objectVO : ObjectVO;
+			if (body is ObjectVO)
+				objectVO = body as ObjectVO;
+			else
+				objectVO = body.objectVO as ObjectVO;
+			
+			
 			var renderer : *;
 
 			switch ( target )
@@ -116,6 +122,15 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						sendNotification( ApplicationFacade.XML_PRESENTATION_SETTED, body );
 					}
 
+					break;
+				}
+					
+				case PPMObjectTargetNames.NAME:
+				{
+					if ( operation == PPMOperationNames.UPDATE )
+					{
+						sendNotification( ApplicationFacade.OBJECT_NAME_SETTED, body );
+					}
 					break;
 				}
 			}
