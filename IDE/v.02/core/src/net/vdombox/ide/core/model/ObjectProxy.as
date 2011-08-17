@@ -280,13 +280,6 @@ package net.vdombox.ide.core.model
 			soap.submit_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			
 			soap.set_name.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			
-			soap.set_attributes.addEventListener( FaultEvent.FAULT, soap_faultHandler );
-		}
-		
-		private function soap_faultHandler() : void
-		{
-			var ig : int = 5;
 		}
 
 		private function removeHandlers() : void
