@@ -20,12 +20,13 @@ package net.vdombox.ide.core.view.components
 	{
 		public function MainWindow()
 		{
-			//setStyle( "skinClass", MainWindowSkin );
 			super();
 			systemChrome	= NativeWindowSystemChrome.NONE;
 			transparent 	= true;
 			width 			= 800;
-			height 			= 600;			
+			height 			= 600;	
+			minWidth		= 800;
+			minHeight		= 600;
 		}
 
 		override public function stylesInitialized():void {
