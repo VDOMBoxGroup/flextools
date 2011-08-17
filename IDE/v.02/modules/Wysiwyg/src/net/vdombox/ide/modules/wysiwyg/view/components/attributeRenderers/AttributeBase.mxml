@@ -237,13 +237,8 @@
 				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
-				valueField.initChars(uint( codeInterface[ "value" ] ), _attributeDescriptionVO.regularExpressionValidation.toString());
+				valueField.initChars(uint( codeInterface[ "value" ] ),_attributeDescriptionVO);
 
-				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
-				regExpValidator.noMatchError = _attributeDescriptionVO.errorValidationMessage;
-				regExpValidator.validate();
-				
-				addEventListener(Event.COMPLETE, eventCompleleHandler);
 				
 			}
 			
@@ -300,15 +295,9 @@
 				valueField.setStyle("textAlign", "left");
 				secondElement = valueField as UIComponent;
 				
-				valueField.initChars(uint( codeInterface[ "value" ] ), _attributeDescriptionVO.regularExpressionValidation.toString());
+				valueField.initChars(uint( codeInterface[ "value" ] ), _attributeDescriptionVO);
 				//				valueField.text = _attributeVO.value;
-				
-				
-				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
-				regExpValidator.noMatchError = _attributeDescriptionVO.errorValidationMessage;
-				regExpValidator.validate();
-				
-				addEventListener(Event.COMPLETE, eventCompleleHandler);
+
 				
 				valueField.addEventListener(Event.CHANGE, changeHandler);
 			}
