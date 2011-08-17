@@ -3,6 +3,8 @@ package net.vdombox.view
 	import flash.desktop.Icon;
 	import flash.display.Sprite;
 	import flash.events.EventPhase;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Button;
@@ -136,6 +138,18 @@ package net.vdombox.view
 			mx.managers.PopUpManager.removePopUp(alert);
 			instance = null;
 		}
+			
+		public function keyNoPush(event : KeyboardEvent) : void
+		{
+			if (event.keyCode == Keyboard.ENTER)
+				btnClickHandler(Alert.NO);
+		}
+		
+		public function keyYesPush(event : KeyboardEvent) : void
+		{
+			if (event.keyCode == Keyboard.ENTER)
+				btnClickHandler(Alert.YES);
+		}
 		
 		public function btnClickHandler(type : uint) : void
 		{
@@ -146,5 +160,6 @@ package net.vdombox.view
 			closeEvent.detail = type;
 			alert.dispatchEvent(closeEvent);
 		}
+
 	}
 }

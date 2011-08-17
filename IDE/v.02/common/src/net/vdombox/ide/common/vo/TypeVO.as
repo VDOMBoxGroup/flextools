@@ -51,6 +51,7 @@ package net.vdombox.ide.common.vo
 				{
 					_attributeDescriptions.push( new AttributeDescriptionVO( _typeID, child ) );
 				}
+				
 			}
 			
 			if( eventsXML )

@@ -9,5 +9,6 @@ package net.vdombox.ide.common
 		public static const OBJECT : String = "object";
 		public static const WYSIWYG : String = "WYSIWYG";
 		public static const XML_PRESENTATION : String = "XMLPresentation";
+		public static const NAME : String = "name";
 	}
 }
