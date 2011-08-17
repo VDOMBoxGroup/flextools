@@ -250,7 +250,7 @@
 			private function eventCompleleHandler(event : Event) : void
 			{
 				regExpValidator.source = valueField;
-				regExpValidator.property = "text";
+				regExpValidator.property = "value";
 				regExpValidator.required = false;
 				//regExpValidator.trigger = valueField;
 				
