@@ -18,6 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	import mx.resources.ResourceManager;
+	import mx.validators.Validator;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -244,7 +245,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function addHandlersForResourcesList( event : Event ) : void
 		{
 			initTitle();
-			
+			var avl : Validator
 			resourceSelectorWindow.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
 			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler, true, 0, true ); 
 			resourceSelectorWindow.resourcesList.addEventListener( ResourceSelectorWindowEvent.GET_ICON, getIconRequestHendler, true, 0,true);
@@ -414,7 +415,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				
 				var resourceVO : ResourceVO = new ResourceVO( sessionProxy.selectedApplication.id );
 				resourceVO.setID( openFile.name ); //?
-				resourceVO.data = openFile.data;
+				resourceVO.setData( openFile.data);
 				resourceVO.name = openFile.name;
 				resourceVO.type = openFile.type.slice(1); // type has "."
 				
@@ -490,7 +491,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					bitmap.x = (resourcePreviewWindow.resourceImage.width - bitmap.width) / 2;
 					bitmap.y = (resourcePreviewWindow.resourceImage.height - bitmap.height) / 2;
 					
-					resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height, resourceVO.isViewable);
+					resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height, resourceVO.hasPreview);
 					resourcePreviewWindow.loadingImage.visible = false;
 					resourcePreviewWindow.resourceImage.addChild(bitmap);
 					
