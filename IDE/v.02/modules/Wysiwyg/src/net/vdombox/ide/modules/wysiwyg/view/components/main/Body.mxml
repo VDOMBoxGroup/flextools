@@ -39,18 +39,34 @@
 		</s:fill>
 	</s:Rect>
 
-	<mx:VDividedBox height="100%" width="228">
+	<s:Group height="100%" width="228">
+		<mx:VDividedBox height="100%" width="228"
+						dividerSkin="net.vdombox.ide.modules.wysiwyg.view.components.main.DividerSkin">
+			
+			<panels:ObjectAttributesPanel id="objectAttributesPanel"
+										  width="100%" height="60%"
+										  backgroundAlpha="0" cornerRadius="0" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
+										  title="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_title') }" borderAlpha="0" borderVisible="false"/>
+			
+			<panels:ObjectsTreePanel id="objectsTreePanel"
+									 width="100%" height="40%"
+									 backgroundAlpha="1" cornerRadius="0" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
+									 title="{ resourceManager.getString( 'Wysiwyg_General', 'pages_panel_title') }" borderAlpha="0" borderVisible="false"/>
+			
+			
+		</mx:VDividedBox>
 		
-		<panels:ObjectAttributesPanel id="objectAttributesPanel"
-									  width="100%" height="60%"
-									  backgroundAlpha="0" cornerRadius="0" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
-									  title="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_title') }" borderAlpha="0" borderVisible="false"/>
+		<s:Line left="0" height="100%">
+			<s:stroke>
+				<s:SolidColorStroke color="#FFFFFF" alpha="0.2" weight="1"/>
+			</s:stroke>
+		</s:Line>
 		
-		<panels:ObjectsTreePanel id="objectsTreePanel"
-								 width="100%" height="40%"
-								 backgroundAlpha="1" cornerRadius="0" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
-								 title="{ resourceManager.getString( 'Wysiwyg_General', 'pages_panel_title') }" borderAlpha="0" borderVisible="false"/>
+		<s:Line right="0" height="100%">
+			<s:stroke>
+				<s:SolidColorStroke color="#000000" alpha="0.2" weight="1"/>
+			</s:stroke>
+		</s:Line>
+	</s:Group>
 	
-
-	</mx:VDividedBox>
 </s:HGroup>

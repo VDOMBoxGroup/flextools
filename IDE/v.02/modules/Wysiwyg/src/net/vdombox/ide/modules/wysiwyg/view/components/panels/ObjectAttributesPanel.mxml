@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Panel xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
+<panels:PanelBase xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
+		 xmlns:panels="net.vdombox.ide.modules.wysiwyg.view.components.panels.*"
 		 xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 xmlns:s="library://ns.adobe.com/flex/spark">
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 creationComplete="creationCompleteHandler(event)">
 
 
 	<fx:Script>
@@ -10,6 +12,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
+			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.vo.AttributeVO;
@@ -101,6 +104,12 @@
 
 				return result;
 			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				tbFill.minHeight = 41;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -114,7 +123,7 @@
 	</s:Rect>
 
 	<s:HGroup height="100%" width="100%" gap="0">
-		<s:List id="attributesList" height="100%" width="100%" 
+		<s:List id="attributesList" height="100%" width="100%"  borderVisible="false"
 				change="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED ))"
 				useVirtualLayout="false" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase"
 				contentBackgroundAlpha="0">
@@ -126,4 +135,4 @@
 		</s:List>
 	</s:HGroup>
 
-</s:Panel>
+</panels:PanelBase>

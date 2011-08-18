@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
+<panels:PanelBase xmlns:panels="net.vdombox.ide.modules.wysiwyg.view.components.panels.*"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 creationComplete="creationCompleteHandler()" xmlns:components="net.vdombox.components.*">
@@ -217,6 +218,7 @@
 				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OVER, objectsTree_highlightChangeHandler, false, 0, true );
 				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OUT, objectsTree_highlightChangeHandler, false, 0, true );
 
+				tbFill.height = 30;
 				//objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_UP, objectsTree_mouseHandler, false, 0, true );
 				//objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_DOWN, objectsTree_mouseHandler, false, 0, true );
 			}
@@ -298,9 +300,9 @@
 		</s:fill>
 	</s:Rect>
 	
-	<mx:Tree id="objectsTree"
+	<mx:Tree id="objectsTree" borderVisible="false"
 			 dataProvider="{ _pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"
 			 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer"/>
 	
 	
-</s:Panel>
+</panels:PanelBase>

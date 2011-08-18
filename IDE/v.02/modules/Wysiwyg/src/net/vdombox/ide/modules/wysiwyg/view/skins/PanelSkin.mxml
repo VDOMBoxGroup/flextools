@@ -26,7 +26,7 @@
 		/** 
 		* @copy spark.skins.spark.ApplicationSkin#hostComponent
 		*/
-		[HostComponent("spark.components.Panel")]
+		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.panels.PanelBase")]
 		]]>
 	</fx:Metadata>
 
@@ -166,21 +166,20 @@
 				</s:Rect>
 
 				<s:Label id="titleDisplay"
-						 minHeight="41"
-						 bottom="0" color="white" left="3" right="3" paddingLeft="10"
-						 textAlign="left" top="1" verticalAlign="middle" paddingBottom="6"
+						 top="7" color="white" left="3" right="3" paddingLeft="10"
+						 textAlign="left" verticalAlign="middle" paddingBottom="6"
 						 maxDisplayedLines="1" fontSize="15" fontWeight="bold">
 				</s:Label>
 				
 				<s:Line top="0" width="100%">
 					<s:stroke>
-						<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1"/>
+						<s:SolidColorStroke color="#FFFFFF" alpha="0.2" weight="1"/>
 					</s:stroke>
 				</s:Line>
 				
 				<s:Line bottom="0" width="100%">
 					<s:stroke>
-						<s:SolidColorStroke color="#000000" alpha="0.5" weight="1"/>
+						<s:SolidColorStroke color="#000000" alpha="0.2" weight="1"/>
 					</s:stroke>
 				</s:Line>
 
@@ -190,21 +189,6 @@
 					 height="100%" minHeight="0" minWidth="0" width="100%">
 			</s:Group>
 
-			<s:Group id="bottomGroup"
-					 minHeight="10" minWidth="0"
-					 mask="{bottomGroupMask}">
-
-				<!-- layer 2: control bar fill -->
-				<s:Rect bottom="0" left="0" right="0" top="0">
-					<s:fill>
-						<s:LinearGradient rotation="90">
-							<s:GradientEntry color="0xEAEAE8"/>
-							<s:GradientEntry color="0xCCCCCC"/>
-						</s:LinearGradient>
-					</s:fill>
-				</s:Rect>
-
-			</s:Group>
 
 		</s:Group>
 	</s:Group>
