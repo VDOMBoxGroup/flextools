@@ -8,7 +8,10 @@
 				contentBackgroundAlpha="0"
 				creationComplete="creationCompleteHandler(event)"
 				doubleClickEnabled="true"
-				doubleClick="doubleClickHandler(event)">
+				doubleClick="doubleClickHandler(event)"
+				visible="false"
+				show="showHandler(event)"
+				hide="hideHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import flash.utils.setTimeout;
@@ -20,15 +23,19 @@
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 			
+			import spark.events.ElementExistenceEvent;
+			
 			public static var ITEM_DOUBLE_CLICKED	: String = "itemDoubleClicked";
 			
 			public var resourceVO					: ResourceVO;
 			
 			private var creationCompleted			: Boolean;
+			
 			private var itemElement					: *;
 			
+			
 			override public function set data ( value : Object ) : void 
-			{
+			{	
 				super.data = value;
 				
 				resourceVO = value as ResourceVO;
@@ -36,8 +43,8 @@
 				if (!creationCompleted)
 					return;
 				
+				//trace ("set data -> addContentElement");
 				addContentElement();
-				
 			}
 			
 			override protected function stateChanged(oldState:String, newState:String, recursive:Boolean):void
@@ -51,39 +58,68 @@
 			{
 				if (!visible)
 					return;
-				
-				if (itemElement && contains(itemElement)) {
-					if (resourceVO && (itemElement is ListItemNotEmptyContent))
-					{
-						itemElement.data = resourceVO;
-						return;
-					} else  {		// remove element -> add empty element
-						removeElement(itemElement);
-						itemElement = null;
-					}
-				}
-				
-				if (resourceVO) 
+			
+				if (resourceVO) // new element is not empty
 				{
+					if (itemElement) // old element exists
+					{
+						if (itemElement is ListItemNotEmptyContent) // old element is NOT empty
+						{
+							ListItemNotEmptyContent(itemElement).data = resourceVO;
+							//trace ("addContentElement_1");
+							return;
+						}
+						// old element is empty -> remove it
+						removeElement(itemElement);
+						//trace ("addContentElement_2");
+					} 
+				
 					itemElement = new ListItemNotEmptyContent();
-					itemElement.data = resourceVO;
-				} else {
+					ListItemNotEmptyContent(itemElement).data = resourceVO;
+					this.addElement(itemElement);
+					//trace ("addContentElement_3");
+				} 
+				else // new element is empty 
+				{
+					if (itemElement) // old element exists
+					{
+						if (itemElement is ListItemEmptyContent) // old element is empty
+						{
+							//trace ("addContentElement_4");
+							return;
+						}
+							
+						// old element is NOT empty -> remove it
+						removeElement(itemElement);
+						//trace ("addContentElement_5");
+					}
 					itemElement = new ListItemEmptyContent();
+					this.addElement(itemElement);
+					//trace ("addContentElement_6");
 				}
-				this.addElement(itemElement);
+				
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				creationCompleted = true;
 				
-				addContentElement();
 				this.dispatchEvent(new ResourceSelectorWindowEvent(ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE));
 			}
 			
 			protected function doubleClickHandler(event:MouseEvent):void
 			{
 				dispatchEvent( new Event( ITEM_DOUBLE_CLICKED ) );
+			}
+			
+			protected function showHandler(event:FlexEvent):void
+			{
+				//trace ("showHandler -> addContentElement");
+				addContentElement();
+			}
+			
+			protected function hideHandler(event:FlexEvent):void
+			{
 			}
 			
 		]]>

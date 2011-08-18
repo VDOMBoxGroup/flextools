@@ -6,7 +6,8 @@
 				autoDrawBackground="false"
 				contentBackgroundColor="#383838"
 				contentBackgroundAlpha="0"
-				creationComplete="creationCompleteHandler(event)">
+				creationComplete="creationCompleteHandler(event)"
+				visible="true">
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
@@ -18,6 +19,7 @@
 			import spark.effects.AnimateTransform;
 			
 			public var resourceVO					: ResourceVO;
+			public var prevResVO					: ResourceVO;
 			
 			private var creationCompleted			: Boolean;
 			private var _iconRequested				: Boolean;
@@ -29,16 +31,16 @@
 			{
 				super.data = value;
 				
-				var prevResVO : ResourceVO = resourceVO;
 				resourceVO = value as ResourceVO;
 				
-				if (!resourceVO ||
-					!prevResVO ||
-					(resourceVO && prevResVO && resourceVO.id != prevResVO.id))
+				if (resourceVO && 
+					prevResVO &&
+					resourceVO.id == prevResVO.id) 
+				{
+					_iconRequested = true;
+				} else 
 				{
 					_iconRequested = false;
-				} else {
-					_iconRequested = true;
 				}
 				
 				setProperties();
@@ -79,6 +81,7 @@
 					
 					if(resourceVO.icon)
 					{
+						//trace ("smoothImage.source _1");
 						smoothImage.source = resourceVO.icon;
 						
 						needToDeleteSpinner = true;
@@ -92,12 +95,17 @@
 					}
 					
 					return;
-				}			
+				} else {			
+					trace ("Error: null resource in notEmptyElement");
+				}
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				creationCompleted = true;
+				
+				needToAddSpinner = true;
+				invalidateDisplayList();
 				
 				setProperties();
 				
@@ -110,6 +118,7 @@
 				if ( !object )
 				{
 					// FIXME: сделать увеличиваюшуюся задержку (100, 200, 400,  мах = 800)
+					//trace ("smoothImage.source _2 (null)");
 					smoothImage.source = null;
 					
 					needToAddSpinner = true;
@@ -140,6 +149,7 @@
 				function requestIcon(event:TimerEvent):void
 				{
 					_iconRequested = true;
+					prevResVO = resourceVO;
 					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
 				}
 				
@@ -153,6 +163,7 @@
 					return;
 				
 				smoothImage.source = Bitmap( event.target.content );
+				//trace ("smoothImage.source _3");
 				
 				needToDeleteSpinner = true;
 				invalidateDisplayList();
@@ -188,6 +199,13 @@
 			
 			private function addSpinner():void
 			{
+				try {
+					if (spinnerContainer.getElementIndex(spinner) != -1) {
+						return;
+					}
+				} catch (e:Error) {
+				}
+				
 				spinner.width = spinnerContainer.width;
 				spinner.height = spinnerContainer.height;
 				
@@ -198,10 +216,15 @@
 			
 			private function removeSpinner():void
 			{
+				if (!spinner)
+					return;
+				
 				spinner.stopRotateImage();
+				
 				try {
 					spinnerContainer.removeElement(spinner);
-				} catch (e:Error) {
+				} catch (e:Error)
+				{
 					
 				}
 			}

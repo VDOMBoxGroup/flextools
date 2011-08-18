@@ -174,9 +174,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function createSpinnerPopup(spinnerTxt : String):void
 		{
-			trace ("createSpinnerPopup");
 			if (spinnerPopup) 
-				removeSpinnerPopup();
+				return;
 			
 			spinnerPopup = new SpinnerPopup(spinnerTxt);
 			spinnerPopup.width	= resourceSelectorWindow.width;
@@ -187,7 +186,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function removeSpinnerPopup():void
 		{
-			trace ("removeSpinnerPopup");
 			if (!spinnerPopup)
 				return;
 			spinnerPopup.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));

@@ -5,7 +5,8 @@
 				xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*"
 				autoDrawBackground="false"
 				contentBackgroundColor="#383838"
-				contentBackgroundAlpha="0">
+				contentBackgroundAlpha="0"
+				visible="true">
 	
 	<s:states>
 		<s:State name="normal"/>
