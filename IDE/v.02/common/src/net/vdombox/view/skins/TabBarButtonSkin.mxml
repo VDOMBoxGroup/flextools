@@ -2,7 +2,7 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 minHeight="21" minWidth="100"
-			 alpha.disabledStates="0.5">
+			 alpha.disabledStates="0.5" creationComplete="creationCompleteHandler()">
 
 	<!-- host component -->
 	<fx:Metadata>
@@ -11,6 +11,7 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
 			override protected function updateDisplayList( unscaledWidth : Number, unscaleHeight : Number ) : void
 			{
 				closeButton.visible = hostComponent.canClose;
@@ -26,6 +27,14 @@
 
 				super.updateDisplayList( unscaledWidth, unscaledHeight );
 			}
+
+			
+			protected function creationCompleteHandler():void
+			{
+				// TODO Auto-generated method stub
+				//transform.matrix = new Matrix(1, .5, .5, 1, 150, 200);;
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -42,27 +51,31 @@
 	</s:states>
 
 	<!-- layer 1: fill -->
-	<s:Rect bottom="0" left="0" right="0" top="0">
 
+	<s:Rect id="backgroundRect" bottom="0" left="0" right="0" top="0">
+			
 		<s:stroke>
 			<s:SolidColorStroke color="black"/>
 		</s:stroke>
-
+			
 		<s:fill>
-			<s:SolidColor color="#353535" color.downStates="#949494" color.overStates="#949494" color.selectedUpStates="#7E7E7E"/>
+			<s:LinearGradient>
+				<s:GradientEntry color="#353535" color.downStates="#949494" color.overStates="#949494" color.selectedUpStates="#FCFDFD"/>
+				<s:GradientEntry color="#353535" color.downStates="#949494" color.overStates="#949494" color.selectedUpStates="#FFFFFF"/>
+			</s:LinearGradient>
 		</s:fill>
-
+			
 	</s:Rect>
-
 	<!-- layer 2: text -->
 	<!--- Defines the appearance of the label(s) for the middle button(s) in the ButtonBar component. -->
-
+	
 	<s:Label id="labelDisplay"
-			 bottom="2" color="#686868" color.down="white" color.over="white" color.selectedStates="white" fontFamily="Verdana" left="5" right="10" textAlign="left" top="2" verticalAlign="middle"
+			 bottom="2" color="#686868" color.down="white" color.over="white" color.selectedStates="#000000" fontFamily="Verdana" left="5" right="10" textAlign="left" top="2" verticalAlign="middle"
 			 verticalCenter="1"
 			 maxDisplayedLines="1"/>
-
+	
 	<s:Button id="closeButton"
 			  right="2" skinClass="net.vdombox.view.skins.CloseButtonSkin" verticalCenter="1"/>
+	
 
 </s:SparkSkin>
