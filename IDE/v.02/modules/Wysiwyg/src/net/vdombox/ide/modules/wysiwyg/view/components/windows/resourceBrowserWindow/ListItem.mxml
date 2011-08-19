@@ -15,55 +15,58 @@
 	<fx:Script>
 		<![CDATA[
 			import flash.utils.setTimeout;
-			
+
 			import mx.binding.utils.BindingUtils;
 			import mx.core.UIComponentCachePolicy;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
-			
+
 			import spark.events.ElementExistenceEvent;
-			
-			public static var ITEM_DOUBLE_CLICKED	: String = "itemDoubleClicked";
-			
-			public var resourceVO					: ResourceVO;
-			
-			private var creationCompleted			: Boolean;
-			
-			private var itemElement					: *;
-			
-			
-			override public function set data ( value : Object ) : void 
-			{	
+
+			public static var ITEM_DOUBLE_CLICKED : String = "itemDoubleClicked";
+
+			public var resourceVO : ResourceVO;
+
+			private var creationCompleted : Boolean;
+
+			//FIXME: need to used interface
+			private var itemElement : *;
+
+
+			override public function set data( value : Object ) : void
+			{
+
 				super.data = value;
-				
+
 				resourceVO = value as ResourceVO;
 
-				if (!creationCompleted)
+				if ( !creationCompleted )
 					return;
-				
+
 				//trace ("set data -> addContentElement");
 				addContentElement();
 			}
-			
-			override protected function stateChanged(oldState:String, newState:String, recursive:Boolean):void
+
+			override protected function stateChanged(oldState:String, newState:String, recursive:Boolean) : void
 			{
 				super.stateChanged(oldState, newState, recursive);
-				if (itemElement)
+
+				if ( itemElement )
 					itemElement.selected = selected;
 			}
-			
-			private function addContentElement():void
+
+			private function addContentElement() : void
 			{
-				if (!visible)
+				if ( !visible )
 					return;
-			
-				if (resourceVO) // new element is not empty
+
+				if ( resourceVO ) // new element is not empty
 				{
-					if (itemElement) // old element exists
+					if ( itemElement ) // old element exists
 					{
-						if (itemElement is ListItemNotEmptyContent) // old element is NOT empty
+						if ( itemElement is ListItemNotEmptyContent ) // old element is NOT empty
 						{
 							ListItemNotEmptyContent(itemElement).data = resourceVO;
 							//trace ("addContentElement_1");
@@ -71,88 +74,90 @@
 						}
 						// old element is empty -> remove it
 						removeElement(itemElement);
-						//trace ("addContentElement_2");
-					} 
-				
+							//trace ("addContentElement_2");
+					}
+
 					itemElement = new ListItemNotEmptyContent();
 					ListItemNotEmptyContent(itemElement).data = resourceVO;
-					this.addElement(itemElement);
-					//trace ("addContentElement_3");
-				} 
-				else // new element is empty 
+					addElement(itemElement);
+						//trace ("addContentElement_3");
+				}
+				else // new element is empty `
 				{
-					if (itemElement) // old element exists
+					if ( itemElement ) // old element exists
 					{
-						if (itemElement is ListItemEmptyContent) // old element is empty
+						if ( itemElement is ListItemEmptyContent ) // old element is empty
 						{
 							//trace ("addContentElement_4");
 							return;
 						}
-							
+
 						// old element is NOT empty -> remove it
 						removeElement(itemElement);
-						//trace ("addContentElement_5");
+							//trace ("addContentElement_5");
 					}
 					itemElement = new ListItemEmptyContent();
-					this.addElement(itemElement);
-					//trace ("addContentElement_6");
+					addElement(itemElement);
+						//trace ("addContentElement_6");
 				}
-				
+
 			}
-			
-			protected function creationCompleteHandler(event:FlexEvent):void
+
+			protected function creationCompleteHandler(event:FlexEvent) : void
 			{
 				creationCompleted = true;
-				
+
 				addContentElement();
 				
 				this.dispatchEvent(new ResourceSelectorWindowEvent(ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE));
 			}
-			
-			protected function doubleClickHandler(event:MouseEvent):void
+
+			protected function doubleClickHandler(event:MouseEvent) : void
 			{
 				dispatchEvent( new Event( ITEM_DOUBLE_CLICKED ) );
 			}
-			
-			protected function showHandler(event:FlexEvent):void
+
+			protected function showHandler(event:FlexEvent) : void
 			{
 				//trace ("showHandler -> addContentElement");
 				addContentElement();
 			}
-			
-			protected function hideHandler(event:FlexEvent):void
+
+			protected function hideHandler(event:FlexEvent) : void
 			{
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<s:states>
-		<s:State name="normal"/>
-		<s:State name="hovered"/>	
-		<s:State name="selected"/>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
 	</s:states>
-	
+
 	<s:Group height="64" width="184" id="groupBG">
 		<s:Rect height="100%" width="100%" radiusX="4" radiusY="4">
 			<s:stroke>
-				<s:SolidColorStroke color="#424242" weight="1"/>
+				<s:SolidColorStroke color="#424242" weight="1" />
 			</s:stroke>
 			<s:fill>
 				<s:LinearGradient rotation="90">
-					<s:GradientEntry color="#FFFFFF" color.selected="#b50000"/>
-					<s:GradientEntry color="#bcbcbc" color.selected="#9e0000"/>
+					<s:GradientEntry color="#FFFFFF" color.selected="#b50000" />
+					<s:GradientEntry color="#bcbcbc" color.selected="#9e0000" />
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
-		
+
 		<s:HGroup id="spinnerContainer"
-				  height="42" width="42"
-				  left="10" top="10"
-				  horizontalAlign="center" verticalAlign="middle">
-			
+				  height="42"
+				  width="42"
+				  left="10"
+				  top="10"
+				  horizontalAlign="center"
+				  verticalAlign="middle">
+
 		</s:HGroup>
-		
+
 	</s:Group>
-	
+
 </s:ItemRenderer>

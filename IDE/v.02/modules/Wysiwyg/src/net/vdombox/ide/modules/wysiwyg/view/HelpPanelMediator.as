@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.HelpPanel;
+	import net.vdombox.view.Alert;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -86,10 +87,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 				case ApplicationFacade.CURRENT_ATTRIBUTE_CHANGED:
 				{
+					Alert
 					var currentAttribute : Object = body as Object;
 					var attributeDescription : AttributeDescriptionVO;
 					
-					if( currentAttribute && currentAttribute.hasOwnProperty( "attributeDescriptionVO" ) )
+					if( currentAttribute && currentAttribute.hasOwnProperty( "attributeDescriptionVO" ) && currentAttribute.attributeDescriptionVO )
 					{
 						attributeDescription = currentAttribute.attributeDescriptionVO;
 						helpPanel.text = attributeDescription.help;

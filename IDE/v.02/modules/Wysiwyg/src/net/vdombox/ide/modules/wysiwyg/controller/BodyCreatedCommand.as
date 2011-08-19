@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
+	import net.vdombox.ide.modules.wysiwyg.view.HelpPanelMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.ObjectAttributesPanelMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.ObjectsTreePanelMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.TypesAccordionMediator;
@@ -14,7 +15,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var body : Body = notification.getBody() as Body;
-
+			
+			facade.registerMediator( new HelpPanelMediator( body.helpPanel ) );
+			
 			facade.registerMediator( new TypesAccordionMediator( body.typesAccordion ) );
 			facade.registerMediator( new ObjectsTreePanelMediator( body.objectsTreePanel ) );
 			facade.registerMediator( new ObjectAttributesPanelMediator( body.objectAttributesPanel ) );

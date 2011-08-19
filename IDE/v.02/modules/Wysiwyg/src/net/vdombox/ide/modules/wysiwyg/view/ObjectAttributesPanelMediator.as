@@ -286,7 +286,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 			}
 
-//			sendNotification( ApplicationFacade.CURRENT_ATTRIBUTE_CHANGED, attributeDescription );
+			sendNotification( ApplicationFacade.CURRENT_ATTRIBUTE_CHANGED, attributeDescription );
 		}
 
 		private function openExternalHandler( event : AttributeEvent ) : void

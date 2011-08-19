@@ -1,3 +1,11 @@
+//------------------------------------------------------------------------------
+//
+//   Copyright 2011 
+//   VDOMBOX Resaerch  
+//   All rights reserved. 
+//
+//------------------------------------------------------------------------------
+
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.display.Bitmap;
@@ -28,7 +36,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.SpinnerPopup;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemNotEmptyContent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.utils.WindowManager;
 	import net.vdombox.view.Alert;
@@ -37,7 +44,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
 	/**
 	 *
 	 * @author Elena Kotlova
@@ -48,86 +54,54 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 *
 		 * @default
 		 */
-		
-		public static const NAME			: String = "ResourceSelectorWindowMediator";
 
-		private var _filters				: ArrayCollection = new ArrayCollection();
+		public static const NAME : String               = "ResourceSelectorWindowMediator";
 
-		private var allResourcesList		: ArrayList;
-
-		private var resourceVO 				: ResourceVO = new ResourceVO( ResourceVO.RESOURCE_TEMP );
-		private var delResVO				: ResourceVO;
-		private var noneIcon				: ResourceVO = new ResourceVO( ResourceVO.RESOURCE_NONE );
-		
-		private var sessionProxy 			: SessionProxy;
-
-		private var resourcePreviewWindow	: ResourcePreviewWindow;
-		
-		private var showSpinnerOnListCreation : Boolean = true;
-
+		/**
+		 * 
+		 * @param resourceSelectorWindow
+		 */
 		public function ResourceSelectorWindowMediator( resourceSelectorWindow : ResourceSelectorWindow ) : void
 		{
 			viewComponent = resourceSelectorWindow;
 			super( NAME, viewComponent );
 		}
 
-		private function get resourceSelectorWindow() : ResourceSelectorWindow
+		private var _filters : ArrayCollection          = new ArrayCollection();
+
+		private var allResourcesList : ArrayList;
+
+		private var delResVO : ResourceVO;
+
+		private var noneIcon : ResourceVO               = new ResourceVO( ResourceVO.RESOURCE_NONE );
+
+		private var resourcePreviewWindow : ResourcePreviewWindow;
+
+		private var resourceVO : ResourceVO             = new ResourceVO( ResourceVO.RESOURCE_TEMP );
+
+		private var sessionProxy : SessionProxy;
+
+		private var showSpinnerOnListCreation : Boolean = true;
+
+		private var spinnerPopup : SpinnerPopup;
+
+		private function updateData(resources: Array):void
 		{
-			return viewComponent as ResourceSelectorWindow;
-		}
-
-		override public function onRegister() : void
-		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-
-			addHandlers();
-
-			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );		
-		}
-		
-		
-		public function ioErrorHandler( event : IOErrorEvent ) : void
-		{
-			trace( "###################### ERROR" + event.text );
-		}
-
-		override public function onRemove() : void
-		{
-			removeHandlers();
-
-			sessionProxy = null;
-		}
-
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-			interests.push( ApplicationFacade.RESOURCES_GETTED );
+			trace("myFun")
+			_filters.removeAll();
+			_filters.addItem( { label: 'NONE', data: '*' } );
 			
-			interests.push( ApplicationFacade.RESOURCE_SETTED );
+			allResourcesList = new ArrayList( resources );
+			resourceSelectorWindow.resources = new ArrayList( resources );
 			
-			return interests;
-		}
+			for each ( var resVO : ResourceVO in resources )
+				addFilter(resVO.type);
+			
+			// set empty resource as null in ListItem
+			resourceSelectorWindow.resources.addItemAt( null, 0 );
+			resourceSelectorWindow.totalResources = resourceSelectorWindow.resources.length - 1;
 
-		/**
-		 * Add type in filter list
-		 * @param type - type of Resource
-		 *
-		 */
-		private function addFilter( type : String ) : void
-		{
-			if ( type )
-			{			
-				for each ( var obj : Object in _filters )
-				{
-					if ( obj[ "data" ] == type )
-						return;
-				}
-	
-				_filters.addItem( { label: type.toUpperCase(), data: type } );
-			}
 		}
-
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var name : String = notification.getName();
@@ -138,76 +112,109 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.RESOURCES_GETTED:
 				{
-					_filters.removeAll();
-					_filters.addItem( { label: 'NONE', data: '*' } );
-					
-					resourceSelectorWindow.resources = new ArrayList( body as Array );
-										
-//					allResourcesList = new ArrayList( body as Array );
+					trace("1");
+					resourceSelectorWindow.callLater(updateData, [body]);
+				
+					break;
+				}
 
-					for each ( resVO in body )
-					{
-//						BindingUtils.bindSetter( dataLoaded, resVO, "icon" );
-						addFilter(resVO.type);
-//						sendNotification( ApplicationFacade.GET_ICON, resVO );
-					}
-					
-					// set empty resource as null in ListItem
-					resourceSelectorWindow.resources.addItemAt( null, 0 );
-					resourceSelectorWindow.totalResources = resourceSelectorWindow.resources.length-1;
+				case ApplicationFacade.RESOURCE_SETTED:
+				{
+					addNewResourceInList( body as ResourceVO );
 
 					break;
 				}
-					
-				case ApplicationFacade.RESOURCE_SETTED:
-				{
-//					sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );		
-					addNewResourceInList( body as ResourceVO );
-					
-					break;
-				}	
-				
+
 			}
 		}
+
+
 		
-		private var spinnerPopup : SpinnerPopup;
-		
-		private function createSpinnerPopup(spinnerTxt : String):void
+		/**
+		 * 
+		 * @param event
+		 */
+		public function ioErrorHandler( event : IOErrorEvent ) : void
 		{
-			if (spinnerPopup) 
+			trace( "###################### ERROR" + event.text );
+		}
+
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+
+			interests.push( ApplicationFacade.RESOURCES_GETTED );
+
+			interests.push( ApplicationFacade.RESOURCE_SETTED );
+
+			return interests;
+		}
+
+		override public function onRegister() : void
+		{
+			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+
+			addHandlers();
+
+			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
+		}
+
+		override public function onRemove() : void
+		{
+			removeHandlers();
+
+			sessionProxy = null;
+		}
+
+		/**
+		 * 
+		 * @param event
+		 */
+		public function onResourceWindowCreationComplete(event : Event) : void
+		{
+			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.CREATION_COMPLETE, onResourceWindowCreationComplete );
+
+			if ( !showSpinnerOnListCreation )
+			{
+				showSpinnerOnListCreation = true;
 				return;
-			
-			spinnerPopup = new SpinnerPopup(spinnerTxt);
-			spinnerPopup.width	= resourceSelectorWindow.width;
-			spinnerPopup.height	= resourceSelectorWindow.height;
-			
-			PopUpManager.addPopUp(spinnerPopup, DisplayObject(resourceSelectorWindow), true);
+			}
+
+			var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_create_resources' );
+//			createSpinnerPopup(spinnerTxt);
 		}
-		
-		private function removeSpinnerPopup():void
+
+		/**
+		 * 
+		 * @param event
+		 */
+		public function onResourceWindowListItemCreationComplete(event : Event) : void
 		{
-			if (!spinnerPopup)
-				return;
-			spinnerPopup.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
-			spinnerPopup = null;
+			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE, onResourceWindowListItemCreationComplete, true );
+			showSpinnerOnListCreation = false;
+
+//			removeSpinnerPopup();
 		}
-		
-		private function addNewResourceInList( resVO : ResourceVO ) : void
+
+		/**
+		 * Add type in filter list
+		 * @param type - type of Resource
+		 *
+		 */
+		private function addFilter( type : String ) : void
 		{
-			resourceVO = resVO;
-			
-			addFilter( resourceVO.type);
-			
-			//FIXME: ???
-			//resourceSelectorWindow.totalResources ++;
-			resourceSelectorWindow.resources.addItemAt( resourceVO, resourceSelectorWindow.resources.length );
-			resourceSelectorWindow.scrollToIndex = resourceSelectorWindow.resources.length-1;
-			resourceSelectorWindow.selectedResourceIndex = resourceSelectorWindow.resources.length-1;
-			resourceSelectorWindow.invalidateProperties();
-			
-			removeSpinnerPopup();
+			if ( type )
+			{
+				for each ( var obj : Object in _filters )
+				{
+					if ( obj[ "data" ] == type )
+						return;
+				}
+
+				_filters.addItem( { label: type.toUpperCase(), data: type } );
+			}
 		}
-		
+
 
 		private function addHandlers() : void
 		{
@@ -218,86 +225,41 @@ package net.vdombox.ide.modules.wysiwyg.view
 //			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, getResourcesRequestHandler );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview );
-			
+
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.CREATION_COMPLETE, onResourceWindowCreationComplete );
 			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE, onResourceWindowListItemCreationComplete, true, 0, true );
-			
+
 		}
-		
-		public function onResourceWindowCreationComplete (event : Event):void
-		{
-			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.CREATION_COMPLETE, onResourceWindowCreationComplete );
-			
-			if (!showSpinnerOnListCreation)
-			{
-				showSpinnerOnListCreation = true;
-				return;
-			}
-			
-			var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_create_resources' );
-			createSpinnerPopup(spinnerTxt);
-		}
-		
-		public function onResourceWindowListItemCreationComplete (event : Event):void
-		{
-			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE, onResourceWindowListItemCreationComplete, true );
-			showSpinnerOnListCreation = false;
-			
-			removeSpinnerPopup();
-		}
-		
-		private function initTitle() : void
-		{
-			resourceSelectorWindow.title = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'resource_selector_window_title' );
-		}
-		
+
 		private function addHandlersForResourcesList( event : Event ) : void
 		{
 			initTitle();
-			var avl : Validator
+
 			resourceSelectorWindow.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
-			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler, true, 0, true ); 
+			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler, true, 0, true );
 			resourceSelectorWindow.resourcesList.addEventListener( ResourceSelectorWindowEvent.GET_ICON, getIconRequestHendler, true, 0,true);
 		}
-		
-		
-		private function deleteResourceHandler( event : ListItemEvent ) : void
-		{
-			trace ("[ResSelWindowMediator] deleteResourceHandler");
-			var componentName : String = event.resource ? event.resource.name : "";
-			
-			delResVO = event.resource;
-			
-			Alert.noLabel = "Cancel";
-			Alert.yesLabel = "Delete";
-			
-			Alert.Show( "Are you sure want to delete\n " + componentName + " ?", 
-						AlertButton.OK_No, 
-						resourceSelectorWindow, deleteResourceCloseHandler);
-			
-		}
-		
-		private function deleteResourceCloseHandler(event : CloseEvent) : void
-		{
-			if (event.detail == Alert.YES)
-			{
-				//delete from server
-				sendNotification( ApplicationFacade.DELETE_RESOURCE, { resourceVO: delResVO, applicationVO: sessionProxy.selectedApplication } );
-				
-				//delete from view
-				resourceSelectorWindow.deleteResourceID = delResVO.id;
-				
-				resourceSelectorWindow.invalidateProperties(); //?
-				
-				allResourcesList = resourceSelectorWindow.resources;
 
-			}
+		private function addNewResourceInList( resVO : ResourceVO ) : void
+		{
+			resourceVO = resVO;
+
+			addFilter( resourceVO.type);
+
+			//FIXME: ???
+			//resourceSelectorWindow.totalResources ++;
+			resourceSelectorWindow.resources.addItemAt( resourceVO, resourceSelectorWindow.resources.length );
+			resourceSelectorWindow.scrollToIndex = resourceSelectorWindow.resources.length - 1;
+			resourceSelectorWindow.selectedResourceIndex = resourceSelectorWindow.resources.length - 1;
+			resourceSelectorWindow.invalidateProperties();
+
+			removeSpinnerPopup();
 		}
 
 
 		private function applyNameFilter( event : Event ) : void
 		{
-			var nameFilter : String = resourceSelectorWindow.nameFilter.text.toLowerCase();
+			var nameFilter : String          = resourceSelectorWindow.nameFilter.text.toLowerCase();
 			var newResourcesList : ArrayList = new ArrayList();
 			var resVO : ResourceVO;
 
@@ -313,9 +275,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			for each ( resVO in allResourcesList.source )
 			{
-				if (!resVO) {
+				if ( !resVO )
 					continue;
-				}
+
 				if ( resVO.name.toLowerCase().indexOf( nameFilter ) >= 0 )
 				{
 					resourceSelectorWindow.filteredResources++;
@@ -324,190 +286,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 
 			resourceSelectorWindow.resources = newResourcesList;
-		}
-
-		private function removeHandlers() : void
-		{
-			resourceSelectorWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
-			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.CLOSE, closeHandler );
-//			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
-			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler ); //коряво очень поменять местами
-//			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true ); //коряво очень
-			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, getResourcesRequestHandler );
-			
-			resourceSelectorWindow.removeEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
-		
-			resourceSelectorWindow.nameFilter.removeEventListener( Event.CHANGE, applyNameFilter );
-			resourceSelectorWindow.resourcesList.removeEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler );
-			resourceSelectorWindow.resourcesList.removeEventListener( ResourceSelectorWindowEvent.GET_ICON, getIconRequestHendler );
-			
-		}
-
-		private function getIconRequestHendler( event: ResourceSelectorWindowEvent):void
-		{
-			var listItem : ListItem = event.target.parent as ListItem;
-			
-			sendNotification( ApplicationFacade.GET_ICON, listItem.resourceVO );
-		}
-			
-		private function getResourcesRequestHandler( event : Event ) : void
-		{
-			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
-		}
-
-		private function onResourcePreview( event : Event ) : void
-		{
-			var resVO : ResourceVO = event.currentTarget.resourcesList.selectedItem as ResourceVO;
-			resourceVO = resVO;
-			
-			if (resourcePreviewWindow != null) {
-				onClosePreview(null);
-			}
-			
-			resourcePreviewWindow = new ResourcePreviewWindow();
-			resourcePreviewWindow.addEventListener(Event.CLOSE, onClosePreview);
-			resourcePreviewWindow.resourceVO = resourceVO;
-			
-			PopUpManager.addPopUp( resourcePreviewWindow, DisplayObject( this.resourceSelectorWindow ), true);
-			
-			
-//			resourceSelectorWindow.removeKeyEvents();
-			
-			//FIXME: need be like this: resourcePreviewWindow.resourceVO = resourceVO;
-			
-			
-			BindingUtils.bindSetter( previewImage, resourceVO, "data" );
-			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
-			
-		}
-		
-		private function onClosePreview( event : Event ) : void
-		{
-			resourcePreviewWindow.removeEventListener(Event.CLOSE, onClosePreview);
-			
-			
-			resourcePreviewWindow = null;
-			
-			resourceSelectorWindow.addHandlers();
-		}
-		
-		
-
-		private function loadFileHandler( event : ResourceSelectorWindowEvent ) : void
-		{
-			var openFile : File     = new File();
-			
-			openFile.addEventListener(Event.SELECT, fileSelected);
-			
-			var allFilesFilter  : FileFilter = new FileFilter( "All Files (*.*)", "*.*" );
-			var imagesFilter	: FileFilter = new FileFilter( 'Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png' );
-			var docFilter 		: FileFilter = new FileFilter( 'Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt' );
-			
-			openFile.browseForOpen( "Choose file to upload", [ imagesFilter, docFilter, allFilesFilter ] );
-			
-			function fileSelected( event:Event ) : void
-			{
-				var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_new_resource' );
-				createSpinnerPopup(spinnerTxt);
-				
-				openFile.removeEventListener(Event.SELECT, fileSelected);
-				
-				openFile.addEventListener(Event.COMPLETE, fileDownloaded);
-				openFile.load();
-				
-			}
-			
-			function fileDownloaded(event:Event) : void
-			{
-				// compress and encode to base64 in Server
-				openFile.removeEventListener(Event.COMPLETE, fileDownloaded);
-				
-				var resourceVO : ResourceVO = new ResourceVO( sessionProxy.selectedApplication.id );
-				resourceVO.setID( openFile.name ); //?
-				resourceVO.setData( openFile.data);
-				resourceVO.name = openFile.name;
-				resourceVO.type = openFile.type.slice(1); // type has "."
-				
-				sendNotification( ApplicationFacade.SET_RESOURCE, resourceVO );
-			}
-		}
-
-	
-
-		private function previewImage( object : Object ) : void
-		{
-			//for convert to bitmapData and get width and height of resource
-			if ( object )
-			{
-				var loader : Loader = new Loader();
-				loader.name = resourceVO.id;
-				
-				if ( resourceVO.data != null )
-				{
-					loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loaderComplete );
-					loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loaderComplete );
-					loader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, loaderComplete );
-					
-					loader.loadBytes( resourceVO.data );
-				}
-				else
-					return;
-
-			}
-		}
-
-		/**
-		 * convert to bitmapData for get resolution of Resource
-		 */
-		private function loaderComplete( event : Event ) : void
-		{
-			if (event.type != Event.COMPLETE) {
-				return;
-			}
-			
-			if ( resourceSelectorWindow.resources.length > 0 )
-			{
-				var loaderInfo				: LoaderInfo;
-				var bitmapData				: BitmapData;
-				var bitmap					: Bitmap;
-				var bmpWidthHeightRatio		: Number;
-				var dimentionsScale			: Number
-				
-				loaderInfo = LoaderInfo( event.target );
-				bitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
-				bitmapData.draw( loaderInfo.loader );
-				
-				bitmap = new Bitmap(bitmapData);
-				bitmap.cacheAsBitmap = true;
-
-				bmpWidthHeightRatio = bitmap.width / bitmap.height;
-				
-				if (resourcePreviewWindow) {
-					
-					if (resourcePreviewWindow.resourceImage.height < bitmap.height) {
-						bitmap.height = resourcePreviewWindow.resourceImage.height;
-						bitmap.width = bitmap.height * bmpWidthHeightRatio;
-					}
-					
-					if (resourcePreviewWindow.resourceImage.width < bitmap.width)
-					{
-						dimentionsScale = resourcePreviewWindow.resourceImage.width / bitmap.width;
-						
-						bitmap.width *= dimentionsScale;
-						bitmap.height *= dimentionsScale;
-					}
-					
-					bitmap.x = (resourcePreviewWindow.resourceImage.width - bitmap.width) / 2;
-					bitmap.y = (resourcePreviewWindow.resourceImage.height - bitmap.height) / 2;
-					
-					resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height, resourceVO.hasPreview);
-					resourcePreviewWindow.loadingImage.visible = false;
-					resourcePreviewWindow.resourceImage.addChild(bitmap);
-					
-					return;
-				}
-				
-			}
 		}
 
 //		private function applyHandler( event : ResourceSelectorWindowEvent ) : void
@@ -520,6 +298,254 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			WindowManager.getInstance().removeWindow(resourceSelectorWindow);
 			facade.removeMediator( mediatorName );
+		}
+
+		private function createSpinnerPopup(spinnerTxt : String) : void
+		{
+			if ( spinnerPopup )
+				return;
+
+			spinnerPopup = new SpinnerPopup(spinnerTxt);
+			spinnerPopup.width = resourceSelectorWindow.width;
+			spinnerPopup.height = resourceSelectorWindow.height;
+
+			PopUpManager.addPopUp(spinnerPopup, DisplayObject(resourceSelectorWindow), true);
+		}
+
+		private function deleteResourceCloseHandler(event : CloseEvent) : void
+		{
+			if ( event.detail == Alert.YES )
+			{
+				//delete from server
+				sendNotification( ApplicationFacade.DELETE_RESOURCE, { resourceVO: delResVO, applicationVO: sessionProxy.selectedApplication } );
+
+				//delete from view
+				resourceSelectorWindow.deleteResourceID = delResVO.id;
+
+				resourceSelectorWindow.invalidateProperties(); //?
+
+				allResourcesList = resourceSelectorWindow.resources;
+
+			}
+		}
+
+
+		private function deleteResourceHandler( event : ListItemEvent ) : void
+		{
+			trace("[ResSelWindowMediator] deleteResourceHandler");
+			var componentName : String = event.resource ? event.resource.name : "";
+
+			delResVO = event.resource;
+
+			Alert.noLabel = "Cancel";
+			Alert.yesLabel = "Delete";
+
+			Alert.Show( "Are you sure want to delete\n " + componentName + " ?", 
+						AlertButton.OK_No, 
+						resourceSelectorWindow, deleteResourceCloseHandler);
+
+		}
+
+		private function getIconRequestHendler( event: ResourceSelectorWindowEvent) : void
+		{
+			var listItem : ListItem = event.target.parent as ListItem;
+
+			sendNotification( ApplicationFacade.GET_ICON, listItem.resourceVO );
+		}
+
+		private function getResourcesRequestHandler( event : Event ) : void
+		{
+			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
+		}
+
+		private function initTitle() : void
+		{
+			resourceSelectorWindow.title = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'resource_selector_window_title' );
+		}
+
+
+
+		private function loadFileHandler( event : ResourceSelectorWindowEvent ) : void
+		{
+			var openFile : File = new File();
+
+			openFile.addEventListener(Event.SELECT, fileSelected);
+
+			var allFilesFilter : FileFilter = new FileFilter( "All Files (*.*)", "*.*" );
+			var imagesFilter : FileFilter   = new FileFilter( 'Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png' );
+			var docFilter : FileFilter      = new FileFilter( 'Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt' );
+
+			openFile.browseForOpen( "Choose file to upload", [ imagesFilter, docFilter, allFilesFilter ] );
+
+			function fileSelected( event:Event ) : void
+			{
+				var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_new_resource' );
+				createSpinnerPopup(spinnerTxt);
+
+				openFile.removeEventListener(Event.SELECT, fileSelected);
+
+				openFile.addEventListener(Event.COMPLETE, fileDownloaded);
+				openFile.load();
+
+			}
+
+			function fileDownloaded(event:Event) : void
+			{
+				// compress and encode to base64 in Server
+				openFile.removeEventListener(Event.COMPLETE, fileDownloaded);
+
+				var resourceVO : ResourceVO = new ResourceVO( sessionProxy.selectedApplication.id );
+				resourceVO.setID( openFile.name ); //?
+				resourceVO.setData( openFile.data);
+				resourceVO.name = openFile.name;
+				resourceVO.type = openFile.type.slice(1); // type has "."
+
+				sendNotification( ApplicationFacade.SET_RESOURCE, resourceVO );
+			}
+		}
+
+		/**
+		 * convert to bitmapData for get resolution of Resource
+		 */
+		private function loaderComplete( event : Event ) : void
+		{
+			if ( event.type != Event.COMPLETE )
+				return;
+
+			if ( resourceSelectorWindow.resources.length > 0 )
+			{
+				var loaderInfo : LoaderInfo;
+				var bitmapData : BitmapData;
+				var bitmap : Bitmap;
+				var bmpWidthHeightRatio : Number;
+				var dimentionsScale : Number
+
+				loaderInfo = LoaderInfo( event.target );
+				bitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
+				bitmapData.draw( loaderInfo.loader );
+
+				bitmap = new Bitmap(bitmapData);
+				bitmap.cacheAsBitmap = true;
+
+				bmpWidthHeightRatio = bitmap.width / bitmap.height;
+
+				if ( resourcePreviewWindow )
+				{
+
+					if ( resourcePreviewWindow.resourceImage.height < bitmap.height )
+					{
+						bitmap.height = resourcePreviewWindow.resourceImage.height;
+						bitmap.width = bitmap.height * bmpWidthHeightRatio;
+					}
+
+					if ( resourcePreviewWindow.resourceImage.width < bitmap.width )
+					{
+						dimentionsScale = resourcePreviewWindow.resourceImage.width / bitmap.width;
+
+						bitmap.width *= dimentionsScale;
+						bitmap.height *= dimentionsScale;
+					}
+
+					bitmap.x = ( resourcePreviewWindow.resourceImage.width - bitmap.width ) / 2;
+					bitmap.y = ( resourcePreviewWindow.resourceImage.height - bitmap.height ) / 2;
+
+					resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height, resourceVO.hasPreview);
+					resourcePreviewWindow.loadingImage.visible = false;
+					resourcePreviewWindow.resourceImage.addChild(bitmap);
+
+					return;
+				}
+
+			}
+		}
+
+		private function onClosePreview( event : Event ) : void
+		{
+			resourcePreviewWindow.removeEventListener(Event.CLOSE, onClosePreview);
+
+
+			resourcePreviewWindow = null;
+
+			resourceSelectorWindow.addHandlers();
+		}
+
+		private function onResourcePreview( event : Event ) : void
+		{
+			var resVO : ResourceVO = event.currentTarget.resourcesList.selectedItem as ResourceVO;
+			resourceVO = resVO;
+
+			if ( resourcePreviewWindow != null )
+				onClosePreview(null);
+
+			resourcePreviewWindow = new ResourcePreviewWindow();
+			resourcePreviewWindow.addEventListener(Event.CLOSE, onClosePreview);
+			resourcePreviewWindow.resourceVO = resourceVO;
+
+			PopUpManager.addPopUp( resourcePreviewWindow, DisplayObject( this.resourceSelectorWindow ), true);
+
+
+//			resourceSelectorWindow.removeKeyEvents();
+
+			//FIXME: need be like this: resourcePreviewWindow.resourceVO = resourceVO;
+
+
+			BindingUtils.bindSetter( previewImage, resourceVO, "data" );
+			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+
+		}
+
+
+
+		private function previewImage( object : Object ) : void
+		{
+			//for convert to bitmapData and get width and height of resource
+			if ( object )
+			{
+				var loader : Loader = new Loader();
+				loader.name = resourceVO.id;
+
+				if ( resourceVO.data != null )
+				{
+					loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loaderComplete );
+					loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loaderComplete );
+					loader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, loaderComplete );
+
+					loader.loadBytes( resourceVO.data );
+				}
+				else
+					return;
+
+			}
+		}
+
+		private function removeHandlers() : void
+		{
+			resourceSelectorWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
+			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.CLOSE, closeHandler );
+//			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
+			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LOAD_RESOURCE, loadFileHandler ); //коряво очень поменять местами
+//			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true ); //коряво очень
+			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCES, getResourcesRequestHandler );
+
+			resourceSelectorWindow.removeEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, onResourcePreview);
+
+			resourceSelectorWindow.nameFilter.removeEventListener( Event.CHANGE, applyNameFilter );
+			resourceSelectorWindow.resourcesList.removeEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler );
+			resourceSelectorWindow.resourcesList.removeEventListener( ResourceSelectorWindowEvent.GET_ICON, getIconRequestHendler );
+
+		}
+
+		private function removeSpinnerPopup() : void
+		{
+			if ( !spinnerPopup )
+				return;
+			spinnerPopup.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			spinnerPopup = null;
+		}
+
+		private function get resourceSelectorWindow() : ResourceSelectorWindow
+		{
+			return viewComponent as ResourceSelectorWindow;
 		}
 	}
 }
