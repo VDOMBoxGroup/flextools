@@ -34,7 +34,7 @@ package net.vdombox.ide.core.model.managers
 		 *
 		 * @default
 		 */
-		public var icon : Object = { avi: avi_Icon, bin: bin_Icon, blank: blank_Icon, bmp: bmp_Icon, c: c_Icon, cfg: cfg_Icon, cpp: cpp_Icon, css: css_Icon, dll: dll_Icon, doc: doc_Icon, docx: doc_Icon
+		public var icon : Object = { avi: avi_Icon, bin: bin_Icon, blank: bmp_Icon, bmp: bmp_Icon, c: c_Icon, cfg: cfg_Icon, cpp: cpp_Icon, css: css_Icon, dll: dll_Icon, doc: doc_Icon, docx: doc_Icon
 				, dvi: dvi_Icon
 				, gif: gif_Icon, jv: java_Icon, htm: htm_Icon, html: htm_Icon, mht: htm_Icon, mid: htm_Icon, None: blank_Icon, pdf: pdf_Icon, swf: swf_Icon, txt: txt_Icon, wav: wav_Icon, xls: xls_Icon
 				, xlsx: xls_Icon };

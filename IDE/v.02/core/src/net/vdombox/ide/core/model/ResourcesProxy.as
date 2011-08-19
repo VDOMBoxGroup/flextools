@@ -491,7 +491,7 @@ package net.vdombox.ide.core.model
 				{
 
 //					clearTimeout(timeoutGetResource);
-
+					
 					resourceVO = event.token.resourceVO as ResourceVO;
 
 					var data : String = event.result.Resource;
