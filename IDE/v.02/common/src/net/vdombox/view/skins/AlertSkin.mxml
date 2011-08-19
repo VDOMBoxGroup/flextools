@@ -43,11 +43,11 @@
 			
 			<s:HGroup height="29" width="100%" horizontalAlign="center" gap="40">
 				<mx:Button  id="noButton" height="100%" cornerRadius="14" tabIndex="1"
-							fontSize="18" label="{hostComponent._noLabel}"
-							visible="{hostComponent.visibleNoButton}" includeInLayout="{hostComponent.visibleNoButton}"
+							fontSize="18" label="{hostComponent.getNoLabel()}"
+							visible="{hostComponent.getVisibleNoButton()}" includeInLayout="{hostComponent.getVisibleNoButton()}"
 							click="hostComponent.btnClickHandler(Alert.NO)" keyDown="hostComponent.keyNoPush(event)"/>
 				<mx:Button  id="yesButton" height="100%" cornerRadius="14" tabIndex="2"
-							fontSize="18" icon="@Embed('net/vdombox/icons/Cancel.png')" label="{hostComponent._yesLabel}"
+							fontSize="18" icon="@Embed('net/vdombox/icons/Cancel.png')" label="{hostComponent.getYesLabel()}"
 							click="hostComponent.btnClickHandler(Alert.YES)" keyDown="hostComponent.keyYesPush(event)"/>
 			</s:HGroup>
 		</s:VGroup>

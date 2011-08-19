@@ -51,17 +51,17 @@ package net.vdombox.view
 		
 		private static var instance : Alert;
 		
-		public function get _noLabel() : String
+		public function getNoLabel() : String
 		{
 			return noLabel;
 		}
 		
-		public function get _yesLabel() : String
+		public function getYesLabel() : String
 		{
 			return yesLabel;
 		}
 		
-		public function get visibleNoButton() : Boolean
+		public function getVisibleNoButton() : Boolean
 		{
 			return _visibleNoButton;
 		}
