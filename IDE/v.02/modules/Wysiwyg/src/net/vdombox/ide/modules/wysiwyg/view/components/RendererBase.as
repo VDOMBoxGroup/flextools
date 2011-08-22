@@ -22,6 +22,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.ui.Keyboard;
 	
 	import flashx.textLayout.factory.TruncationOptions;
 	
@@ -527,6 +528,25 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				addEventListener( DragEvent.DRAG_EXIT, dragExitHandler, false, 0, true );
 				addEventListener( DragEvent.DRAG_DROP, dragDropHandler, false, 0, true );
 				
+				addEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
+				
+		}
+		
+		private function keyNavigationHandler( event : KeyboardEvent ) : void
+		{
+			if (event.keyCode == Keyboard.LEFT)
+				x = x - 5 > 0 ? x - 5 : 0;
+			else if (event.keyCode == Keyboard.RIGHT)
+				x = x + 5;
+			else if (event.keyCode == Keyboard.UP)
+				y = y - 5 > 0 ? y - 5 : 0;
+			else if (event.keyCode == Keyboard.DOWN)
+				y = y + 5;
+			else
+				return;
+			
+			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
+				
 		}
 
 		private function applyStyles( item : UIComponent, itemXMLDescription : XML ) : void
@@ -877,14 +897,31 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
+			
 			if ( !event.buttonDown )
 				return;
 
 			var dx : int = mouseX - mDeltaX;
 			var dy : int = mouseY - mDeltaY;
-
-			x = x + dx > 0 ? x + dx : 0;
-			y = y + dy > 0 ? y + dy : 0;
+			
+			if (event.ctrlKey)
+			{
+				if (Math.abs( dx ) >= Math.abs( dy ))
+				{
+					x = x + dx > 0 ? x + dx : 0;
+					y = y;
+				}
+				else
+				{
+					x = x;
+					y = y + dy > 0 ? y + dy : 0;
+				}
+			}
+			else
+			{
+				x = x + dx > 0 ? x + dx : 0;
+				y = y + dy > 0 ? y + dy : 0;
+			}
 
 			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
 		}
@@ -1157,6 +1194,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			removeEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
 			removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
 			removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
+			
+			removeEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
 		}
 
 		
