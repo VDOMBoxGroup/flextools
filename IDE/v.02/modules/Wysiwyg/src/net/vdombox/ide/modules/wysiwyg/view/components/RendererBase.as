@@ -535,14 +535,19 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		
 		private function keyNavigationHandler( event : KeyboardEvent ) : void
 		{
+			var step : Number = 1;
+			
+			if (event.shiftKey)
+				step = 10;
+			
 			if (event.keyCode == Keyboard.LEFT)
-				x = x - 5 > 0 ? x - 5 : 0;
+				x = x - step > 0 ? x - step : 0;
 			else if (event.keyCode == Keyboard.RIGHT)
-				x = x + 5;
+				x = x + step;
 			else if (event.keyCode == Keyboard.UP)
-				y = y - 5 > 0 ? y - 5 : 0;
+				y = y - step > 0 ? y - step : 0;
 			else if (event.keyCode == Keyboard.DOWN)
-				y = y + 5;
+				y = y + step;
 			else
 				return;
 			
