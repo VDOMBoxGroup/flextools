@@ -36,6 +36,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.core.ClassFactory;
 	import mx.core.IFactory;
 	import mx.core.UIComponent;
+	import mx.core.mx_internal;
 	import mx.events.DragEvent;
 	import mx.events.FlexEvent;
 	import mx.events.ResizeEvent;
@@ -878,12 +879,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
+			
 			setFocus();
 			if ( movable && !isScroller( event.target as DisplayObjectContainer ) )
 			{
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, false, 0, true );
 				stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
 
+//				trace(" " + event.)
 				mDeltaX = mouseX;
 				mDeltaY = mouseY;
 
@@ -897,30 +900,29 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
-			
 			if ( !event.buttonDown )
 				return;
 
 			var dx : int = mouseX - mDeltaX;
 			var dy : int = mouseY - mDeltaY;
 			
-			if (event.ctrlKey)
+			x = x + dx > 0 ? x + dx : 0;
+			y = y + dy > 0 ? y + dy : 0;
+			
+			if ( event.ctrlKey )
 			{
+				dx = x - beforeX;
+				dy = y - beforeY;
 				if (Math.abs( dx ) >= Math.abs( dy ))
 				{
-					x = x + dx > 0 ? x + dx : 0;
-					y = y;
+					x = beforeX + dx > 0 ? beforeX + dx : 0;
+					y = beforeY;
 				}
 				else
 				{
-					x = x;
-					y = y + dy > 0 ? y + dy : 0;
+					x = beforeX;
+					y = beforeY + dy > 0 ? beforeY + dy : 0;
 				}
-			}
-			else
-			{
-				x = x + dx > 0 ? x + dx : 0;
-				y = y + dy > 0 ? y + dy : 0;
 			}
 
 			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
