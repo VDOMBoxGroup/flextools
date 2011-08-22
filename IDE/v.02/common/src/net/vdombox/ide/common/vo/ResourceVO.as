@@ -155,6 +155,9 @@ package net.vdombox.ide.common.vo
 
 		public function setID( value : String ) : void
 		{
+			if (value == "")
+				throw new Error( "no resource ID" );
+				
 			_id = value;
 		}
 
@@ -206,7 +209,7 @@ package net.vdombox.ide.common.vo
 				_useCount = description.@usecount;
 		}
 
-		public function get hasPreview() : Boolean
+		public function get mastHasPreview() : Boolean
 		{
 			if ( !_type )
 				return false;
