@@ -162,6 +162,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 			removeHandlers();
 
 			sessionProxy = null;
+			
+			allResourcesList = null;
+			
+			resourceSelectorWindow.resources = null;
+			resourceSelectorWindow.resourcesList.dataProvider = null;
+			
+			_filters = null;
+			
+			delResVO = null;
+			
+			noneIcon = null;
+			
+			resourceVO = null;
+			
+			spinnerPopup = null;
 		}
 
 		/**
@@ -294,7 +309,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function closeHandler( event : ResourceSelectorWindowEvent ) : void
 		{
+			allResourcesList = null;
+			
+			resourceSelectorWindow.resources = null;
+			
+			
 			WindowManager.getInstance().removeWindow(resourceSelectorWindow);
+			
+			
 			facade.removeMediator( mediatorName );
 		}
 
@@ -446,7 +468,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					bitmap.x = ( resourcePreviewWindow.resourceImage.width - bitmap.width ) / 2;
 					bitmap.y = ( resourcePreviewWindow.resourceImage.height - bitmap.height ) / 2;
 
-					resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height, resourceVO.hasPreview);
+					resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height, resourceVO.mastHasPreview);
 					resourcePreviewWindow.loadingImage.visible = false;
 					resourcePreviewWindow.resourceImage.addChild(bitmap);
 

@@ -1165,7 +1165,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			// Get BackgroundImage attribute
 			attributeVO = _renderVO.getAttributeByName( "backgroundimage" );
 
-			if ( attributeVO )
+			if ( attributeVO &&  attributeVO.value != "" )
 			{
 				_resourceID = attributeVO.value;
 				var renderEvent : RendererEvent = new RendererEvent( RendererEvent.GET_RESOURCE );
