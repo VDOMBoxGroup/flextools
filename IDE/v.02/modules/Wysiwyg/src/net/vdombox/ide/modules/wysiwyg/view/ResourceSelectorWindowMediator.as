@@ -87,7 +87,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function updateData(resources: Array):void
 		{
-			trace("myFun")
 			_filters.removeAll();
 			_filters.addItem( { label: 'NONE', data: '*' } );
 			
@@ -112,7 +111,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.RESOURCES_GETTED:
 				{
-					trace("1");
 					resourceSelectorWindow.callLater(updateData, [body]);
 				
 					break;
@@ -181,7 +179,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 
 			var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_create_resources' );
-//			createSpinnerPopup(spinnerTxt);
+			createSpinnerPopup(spinnerTxt);
 		}
 
 		/**
@@ -193,7 +191,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE, onResourceWindowListItemCreationComplete, true );
 			showSpinnerOnListCreation = false;
 
-//			removeSpinnerPopup();
+			removeSpinnerPopup();
 		}
 
 		/**
@@ -332,7 +330,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function deleteResourceHandler( event : ListItemEvent ) : void
 		{
-			trace("[ResSelWindowMediator] deleteResourceHandler");
 			var componentName : String = event.resource ? event.resource.name : "";
 
 			delResVO = event.resource;

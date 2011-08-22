@@ -81,7 +81,6 @@
 					
 					if(resourceVO.icon)
 					{
-						//trace ("smoothImage.source _1");
 						smoothImage.source = resourceVO.icon;
 						
 						needToDeleteSpinner = true;
@@ -118,8 +117,10 @@
 				if ( !object )
 				{
 					// FIXME: сделать увеличиваюшуюся задержку (100, 200, 400,  мах = 800)
-					//trace ("smoothImage.source _2 (null)");
 					smoothImage.source = null;
+					
+					_iconRequested = true;
+					prevResVO = resourceVO;
 					
 					needToAddSpinner = true;
 					invalidateDisplayList();
@@ -148,8 +149,7 @@
 				
 				function requestIcon(event:TimerEvent):void
 				{
-					_iconRequested = true;
-					prevResVO = resourceVO;
+					trace ("requestIcon : " + resourceVO.name);
 					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
 				}
 				
@@ -163,7 +163,6 @@
 					return;
 				
 				smoothImage.source = Bitmap( event.target.content );
-				//trace ("smoothImage.source _3");
 				
 				needToDeleteSpinner = true;
 				invalidateDisplayList();

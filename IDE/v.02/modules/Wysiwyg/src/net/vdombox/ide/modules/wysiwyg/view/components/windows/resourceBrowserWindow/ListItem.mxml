@@ -45,7 +45,6 @@
 				if ( !creationCompleted )
 					return;
 
-				//trace ("set data -> addContentElement");
 				addContentElement();
 			}
 
@@ -69,18 +68,15 @@
 						if ( itemElement is ListItemNotEmptyContent ) // old element is NOT empty
 						{
 							ListItemNotEmptyContent(itemElement).data = resourceVO;
-							//trace ("addContentElement_1");
 							return;
 						}
 						// old element is empty -> remove it
 						removeElement(itemElement);
-							//trace ("addContentElement_2");
 					}
 
 					itemElement = new ListItemNotEmptyContent();
 					ListItemNotEmptyContent(itemElement).data = resourceVO;
 					addElement(itemElement);
-						//trace ("addContentElement_3");
 				}
 				else // new element is empty `
 				{
@@ -88,17 +84,14 @@
 					{
 						if ( itemElement is ListItemEmptyContent ) // old element is empty
 						{
-							//trace ("addContentElement_4");
 							return;
 						}
 
 						// old element is NOT empty -> remove it
 						removeElement(itemElement);
-							//trace ("addContentElement_5");
 					}
 					itemElement = new ListItemEmptyContent();
 					addElement(itemElement);
-						//trace ("addContentElement_6");
 				}
 
 			}
@@ -119,7 +112,6 @@
 
 			protected function showHandler(event:FlexEvent) : void
 			{
-				//trace ("showHandler -> addContentElement");
 				addContentElement();
 			}
 
