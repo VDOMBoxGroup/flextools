@@ -139,7 +139,7 @@ package net.vdombox.ide.core.model
 		public function loadResource( resourceVO : ResourceVO ) : void
 		{
 
-			if ( resourceVO.type && !resourceVO.hasPreview )
+			if ( resourceVO.type && !resourceVO.mastHasPreview )
 			{
 //				var icon : IconManager = new IconManager();
 //				icon.resourceVO = resourceVO;

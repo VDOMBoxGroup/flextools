@@ -11,9 +11,9 @@ package net.vdombox.ide.core.model.managers
 	import flash.filesystem.FileStream;
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
-	
+
 	import mx.graphics.codec.PNGEncoder;
-	
+
 	import net.vdombox.ide.common.vo.ResourceVO;
 
 	public class IconManager extends EventDispatcher
@@ -124,16 +124,62 @@ package net.vdombox.ide.core.model.managers
 
 		private function loadLocalIcon() : Boolean
 		{
+
+			return true;
+
+		}
+
+		private function getCahedFile( name : String ) : File
+		{
+			var fileIcon : File;
+
+			fileIcon = File.applicationStorageDirectory.resolvePath( "cache" );
+
+			return fileIcon.resolvePath( name );
+		}
+
+		private function getStandartIcon() : File
+		{
+			trace( "6" );
+			var fileIcon : File;
+
+			fileIcon = File.applicationDirectory;
+
+			return fileIcon.resolvePath( path );
+		}
+
+		private function fileExists( file : File ) : Boolean
+		{
+			return file && file.exists;
+		}
+
+		public function setIconForResourceVO() : void
+		{
 			var data : ByteArray = new ByteArray();
-			var file : File = getIconFile();
+
+			var file : File; // = getIconFile();
 			var fileStream : FileStream = new FileStream();
 
-			if ( !file || !file.exists )
+			trace( "1" );
+
+			if ( _resourceVO.mastHasPreview )
 			{
-				if ( _resourceVO.hasPreview )
+				trace( "2" );
+				file = getCahedFile( _resourceVO.iconId );
+				trace( "3" );
+
+				if ( !fileExists( file ) )
+				{
+					trace( "4" );
 					createIcon();
-				return false;
+					
+				}
 			}
+
+			trace( "5" );
+
+			if ( !fileExists( file ) )
+				file = getStandartIcon();
 
 
 			try
@@ -143,23 +189,13 @@ package net.vdombox.ide.core.model.managers
 			}
 			catch ( error : Error )
 			{
-				return false;
+				return;
 			}
 
 			if ( !data || data.bytesAvailable == 0 )
-				return false;
+				return;
 
 			_resourceVO.icon = data;
-
-			return true;
-
-		}
-
-		public function setIconForResourceVO() : void
-		{
-			var hasLocalIcon : Boolean;
-
-			hasLocalIcon = loadLocalIcon();
 
 		}
 
@@ -172,7 +208,7 @@ package net.vdombox.ide.core.model.managers
 		{
 			var fileIcon : File;
 
-			if ( _resourceVO.hasPreview )
+			if ( _resourceVO.mastHasPreview )
 			{
 				fileIcon = File.applicationStorageDirectory.resolvePath( "cache" );
 				return fileIcon.resolvePath( _resourceVO.iconId );
@@ -190,21 +226,19 @@ package net.vdombox.ide.core.model.managers
 
 		private function createIcon() : void
 		{
-			
-				var resourceData : ByteArray = cacheManager.getCachedFileById( _resourceVO.id );
+			var resourceData : ByteArray = cacheManager.getCachedFileById( _resourceVO.id );
 
-				//file is located in the file system user
-				if ( resourceData )
-				{
-					resourceVO.setData( resourceData );
-					resourceVO.setStatus( ResourceVO.LOADED );
-					createIconFromResourceVO();
-				}
-				else {
-					dispatchEvent(new Event("loadResourceRequest"));
-				}
-			// load from server
-
+			//file is located in the file system user
+			if ( resourceData )
+			{
+				resourceVO.setData( resourceData );
+				resourceVO.setStatus( ResourceVO.LOADED );
+				createIconFromResourceVO();
+			}
+			else
+			{
+				dispatchEvent( new Event( "loadResourceRequest" ) );
+			}
 		}
 
 		private function createIconFromResourceVO() : void
@@ -216,10 +250,6 @@ package net.vdombox.ide.core.model.managers
 		}
 
 
-		private function createIconFromLocalHash() : void
-		{
-
-		}
 
 
 		private function contentLoaderInfoCompleteHandler( event : Event ) : void
@@ -227,12 +257,15 @@ package net.vdombox.ide.core.model.managers
 			var loaderInfo : LoaderInfo = event.target as LoaderInfo;
 
 
-			var icon : ByteArray  = getResizedData( loaderInfo );
+			var icon : ByteArray = getResizedData( loaderInfo );
 			var cacheManager : CacheManager = CacheManager.getInstance();
-			
+
+			if ( !icon )
+				return;
+
 			_resourceVO.icon = icon;
-			cacheManager.cacheFile( _resourceVO.iconId, icon);
-			
+			cacheManager.cacheFile( _resourceVO.iconId, icon );
+
 		}
 
 		//convert to bitmapData 
@@ -253,9 +286,17 @@ package net.vdombox.ide.core.model.managers
 			var cacheManager : CacheManager = CacheManager.getInstance();
 
 
+			try
+			{
+				originalBitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
 
-			originalBitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
-			originalBitmapData.draw( loaderInfo.loader );
+
+				originalBitmapData.draw( loaderInfo.loader );
+			}
+			catch ( e : Error )
+			{
+				return null;
+			}
 
 			resultBitmap = new Bitmap( originalBitmapData );
 
