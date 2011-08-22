@@ -127,7 +127,7 @@
 					</s:fill>
 				</s:Rect>
 				
-				<s:HGroup height="25" paddingLeft="20" paddingRight="20" verticalAlign="middle" width="100%" gap="15" horizontalAlign="right">
+				<s:HGroup height="25" paddingLeft="20" verticalAlign="middle" width="100%" gap="15" horizontalAlign="right">
 					
 					<s:HGroup height="25" verticalAlign="middle" gap="5" width="80">
 						<mx:Image source="@Embed('icons/Cursor.png')" smoothBitmapContent="true" />
@@ -136,10 +136,7 @@
 							<s:Label height="12" id="strYWritten" text="y: 0px"/>
 						</s:VGroup>
 					</s:HGroup>			
-					
-					<s:CheckBox id="showguides" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_show_guides' ) }"/>
-					
-					<s:CheckBox id="showRules" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_show_rules' ) }"/>
+			
 				</s:HGroup>
 				
 			</s:Group>
