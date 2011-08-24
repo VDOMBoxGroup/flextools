@@ -9,6 +9,7 @@
 		<s:State name="highlighted" />
 		<s:State name="locked" />
 		<s:State name="disabled" />
+		<s:State name="select" />
 	</s:states>
 
 	<s:Rect id="backgroundRect"
@@ -63,12 +64,12 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:Rect bottom="0" left="0" right="0" top="0"
-			includeIn="highlighted, hovered">
+	<s:Rect  bottom="0" left="0" right="0" top="0"
+			includeIn="highlighted, hovered, select">
 
 		<s:stroke>
 
-			<s:SolidColorStroke color.highlighted="green" color.hovered="gray"
+			<s:SolidColorStroke color.highlighted="green" color.hovered="gray" color.select="gray"
 								weight="2" />
 		</s:stroke>
 	</s:Rect>

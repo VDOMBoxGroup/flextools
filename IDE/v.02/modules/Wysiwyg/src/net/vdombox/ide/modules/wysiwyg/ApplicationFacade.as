@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.ChangeSelectedObjectRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ChangeSelectedPageRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateBodyCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.CreateLineLinkingCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateObjectRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateToolsetCommand;
@@ -135,6 +136,7 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const OBJECT_GETTED : String = "objectGetted";
 		public static const GET_OBJECTS : String = "getObjects";
 		public static const OBJECTS_GETTED : String = "objectsGetted";
+		public static const OBJECT_MOVED : String = "objectMoved";
 
 //		attributes
 		public static const GET_PAGE_ATTRIBUTES : String = "getPageAttributes";
@@ -199,6 +201,8 @@ package net.vdombox.ide.modules.wysiwyg
 		
 		public static const PAGE_NAME_SETTED : String = "pageNameSetted";
 		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
+		
+		public static const LINE_LIST_GETTED : String = "lineListGetted";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -268,6 +272,8 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( GET_MULTILINE_RESOURCES, GetMultiLineCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
+			
+			registerCommand( OBJECT_MOVED, CreateLineLinkingCommand );
 		}
 	}
 }

@@ -902,10 +902,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			event.stopImmediatePropagation();
 			event.preventDefault();
 		}
+		
+		public var canMoveFlag : Boolean = true;
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
-			if ( !event.buttonDown )
+			if ( !event.buttonDown || !canMoveFlag)
 				return;
 
 			var dx : int = mouseX - mDeltaX;
@@ -914,7 +916,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			x = x + dx > 0 ? x + dx : 0;
 			y = y + dy > 0 ? y + dy : 0;
 			
-			if ( event.ctrlKey )
+			if ( event.shiftKey )
 			{
 				dx = x - beforeX;
 				dy = y - beforeY;
@@ -931,6 +933,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 
 			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
+			dispatchEvent( new RendererEvent( RendererEvent.MOVE_MEDIATOR ) );
+			
 		}
 
 		private function mouseOutHandler( event : MouseEvent ) : void
@@ -964,6 +968,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
 			}
+			
+			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );
 		}
 		
 		override public function validateDisplayList():void
@@ -1205,6 +1211,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			removeEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
 		}
 
+		public function set setState ( state : String ) : void
+		{
+			skin.currentState = state;
+		}
+		
+		public function get getState () : String
+		{
+			return skin.currentState;
+		}
 		
 		private function showHandler( event : FlexEvent ) : void
 		{

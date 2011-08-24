@@ -18,7 +18,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var body : Object = notification.getBody();
 			var vdomObjectVO : IVDOMObjectVO = body.pageVO ? body.pageVO : body.objectVO;
 			
-			
 			if ( !vdomObjectVO )
 				return;
 

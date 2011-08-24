@@ -6,7 +6,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
+	import mx.collections.ArrayList;
 	import mx.events.CloseEvent;
+	import mx.graphics.SolidColorStroke;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
@@ -23,6 +25,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
+	import net.vdombox.ide.modules.wysiwyg.model.vo.LineVO;
+	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.VdomObjectEditor;
 	import net.vdombox.view.Alert;
@@ -33,6 +37,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
 	import spark.components.Application;
+	import spark.primitives.Line;
 
 
 	public class VdomObjectEditorMediator extends Mediator implements IMediator
@@ -105,9 +110,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 
 			interests.push( ApplicationFacade.XML_PRESENTATION_SETTED );
+			
+			interests.push( ApplicationFacade.LINE_LIST_GETTED );
 
 			return interests;
 		}
+		
+		private var listStates : Array = new Array();
 
 		override public function handleNotification( notification : INotification ) : void
 		{
@@ -184,6 +193,66 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
+					
+				case ApplicationFacade.LINE_LIST_GETTED:
+				{
+					
+					for ( var i : int = 0; i < listStates.length; i++ )
+					{
+						listStates[i].render.setState = listStates[i].state;
+					}
+					
+					var listLines : Array = body.listLines as Array;
+					var render : RendererBase = body.render as RendererBase;
+					var lineVO : LineVO;
+					var line : Line;
+					
+					var selectPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
+					var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+					var pageRender : PageRenderer = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
+					pageRender.linegroup.removeAllElements();
+					
+					var strokeColor : SolidColorStroke = new SolidColorStroke();
+					strokeColor.color = 0x0000FF;
+					strokeColor.weight = 1;
+					
+					var stepX : Number = body.stepX as Number;
+					var stepY : Number = body.stepY as Number;
+					
+					if ( listLines.length == 0 )
+					{
+						break;
+					}
+					
+					var step : Number = listLines[0].eps;
+					render.x = render.x - stepX;
+					render.y = render.y - stepY;
+					render.dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
+					
+					listStates = new Array();
+					for each ( lineVO in listLines)
+					{
+						listStates.push({ render : lineVO.renderTo, state : lineVO.renderTo.getState } );
+						line = new Line();
+						if ( lineVO.orientationH )
+						{
+							line.xFrom = lineVO.x1 - stepX;
+							line.yFrom = lineVO.y1;
+						}
+						else
+						{
+							line.xFrom = lineVO.x1;
+							line.yFrom = lineVO.y1 - stepY;
+						}
+						line.xTo = lineVO.x2;
+						line.yTo = lineVO.y2;
+						lineVO.renderTo.setState = "hovered";
+						line.stroke = strokeColor;
+						pageRender.linegroup.addElement( line );
+					}
+					
+					break;
+				}
 			}
 		}
 
@@ -195,6 +264,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 				return;
 			
 			editor.addEventListener( KeyboardEvent.KEY_DOWN, keyDownDeleteHandler, true);
+			
+			editor.addEventListener( RendererEvent.MOVE_MEDIATOR, moveRendererHandler, true);
+			
+			editor.addEventListener( RendererEvent.MOUSE_UP_MEDIATOR, mouseUpRendererHandler, true);
 
 			editor.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
@@ -227,6 +300,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 				return;
 
 			editor.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+			
+			editor.removeEventListener( RendererEvent.MOVE_MEDIATOR, moveRendererHandler, true);
+			editor.removeEventListener( RendererEvent.MOUSE_UP_MEDIATOR, mouseUpRendererHandler, true);
+			
+			editor.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownDeleteHandler, true);
 
 			editor.removeEventListener( SkinPartEvent.PART_ADDED, partAddedHandler );
 			editor.removeEventListener( EditorEvent.WYSIWYG_OPENED, partOpenedHandler );
@@ -249,6 +327,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.removeEventListener( RendererEvent.GET_RESOURCE, renderer_getResourseHandler, true );
 
 
+		}
+		
+		private function mouseUpRendererHandler ( event : RendererEvent ) : void
+		{
+			var selectPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
+			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+			var pageRender : PageRenderer = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
+			pageRender.linegroup.removeAllElements();
+		}
+		
+		private function moveRendererHandler ( event : RendererEvent ) : void
+		{
+			sendNotification( ApplicationFacade.OBJECT_MOVED, event.target );
 		}
 		
 		private function keyDownDeleteHandler(event : KeyboardEvent) : void

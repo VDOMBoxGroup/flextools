@@ -9,10 +9,12 @@ package net.vdombox.ide.modules.wysiwyg.utils
 	import mx.controls.scrollClasses.ScrollBar;
 	import mx.core.Container;
 	import mx.core.FlexGlobals;
+	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
 	
 	import spark.components.Application;
+	import spark.components.supportClasses.GroupBase;
 
 	public class DisplayUtils
 	{
@@ -68,14 +70,14 @@ package net.vdombox.ide.modules.wysiwyg.utils
 			return stack;
 		}
 
-		public static function getConvertedPoint( target : DisplayObject, destinationContainer : Container ) : Point
+		public static function getConvertedPoint( target : DisplayObject, destinationContainer : UIComponent ) : Point
 		{
 			if ( target == null || target.parent == null || destinationContainer == null )
 				return null;
 
 			var pt : Point = new Point( target.x, target.y );
-			var tc : Container = Container( target.parent );
-			var dc : Container = Container( destinationContainer.parent );
+			var tc : GroupBase = GroupBase( target.parent );
+			var dc : GroupBase = GroupBase( destinationContainer.parent );
 
 			pt = tc.contentToGlobal( pt );
 			pt = destinationContainer.globalToContent( pt );

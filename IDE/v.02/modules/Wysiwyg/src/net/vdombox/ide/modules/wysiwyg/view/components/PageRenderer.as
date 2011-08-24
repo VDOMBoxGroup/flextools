@@ -15,9 +15,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		[SkinPart( required="true" )]
 		public var transformMarker : TransformMarker;
+		
+		[SkinPart( required="true" )]
+		public var linegroup : Group;
 
 		private var _selectedRenderer : IRenderer;
 		private var isSelectedRendererChanged : Boolean;
+		
+		
 
 		public function PageRenderer()
 		{
