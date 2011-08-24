@@ -89,6 +89,11 @@ package net.vdombox.ide.common.vo
 			if( testValue !== null )
 				_objectID = testValue;
 			
+			testValue = propertiesXML.@ObjTgtName[ 0 ];
+			
+			if( testValue !== null )
+				_objectName = testValue;
+			
 			testValue = propertiesXML.@MethodName[ 0 ];
 			
 			if( testValue !== null )

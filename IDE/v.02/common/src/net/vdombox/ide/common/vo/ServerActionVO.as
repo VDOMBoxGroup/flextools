@@ -131,6 +131,12 @@ package net.vdombox.ide.common.vo
 			if ( testValue !== null )
 				_objectID = testValue;
 
+			testValue = propertiesXML.@ObjectName[ 0 ];
+			
+			if ( testValue !== null )
+				_objectName = testValue;
+
+			
 			script = propertiesXML[ 0 ];
 		}
 

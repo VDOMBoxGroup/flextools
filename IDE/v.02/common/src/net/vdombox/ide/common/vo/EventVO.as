@@ -108,6 +108,11 @@ package net.vdombox.ide.common.vo
 			if( testValue !== null )
 				_objectID = testValue;
 			
+			testValue = propertiesXML.@ObjSrcName[ 0 ];
+			
+			if( testValue !== null )
+				_objectName = testValue;
+			
 			var parametersXML : XML = propertiesXML.Parameters[ 0 ];
 			var parameterXML : XML;
 			var eventParameterVO : EventParameterVO;
