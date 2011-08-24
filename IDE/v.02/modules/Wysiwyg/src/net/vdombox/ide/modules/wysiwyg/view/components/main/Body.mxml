@@ -31,7 +31,7 @@
 	</s:Rect>
 	
 	<components:WorkArea id="workArea"
-						 height="100%" width="100%" resize="trace('WorkArea')"/>
+						 height="100%" width="100%"/>
 	
 	<s:Rect width="5" height="100%">
 		<s:fill>
