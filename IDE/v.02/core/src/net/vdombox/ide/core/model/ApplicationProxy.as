@@ -561,20 +561,23 @@ package net.vdombox.ide.core.model
 			for each ( eventXML in eventsXMLList )
 			{
 				objectID = eventXML.@ObjSrcID[ 0 ];
+				objectName = "";
+				if (eventXML.@ObjSrcName[ 0 ] != null)
+					objectName = eventXML.@ObjSrcName[ 0 ];
 				eventName = eventXML.@Name[ 0 ];
 
 
 				if ( pageVO.id == objectID )
 				{
 					typeVO = pageVO.typeVO
-					objectName = pageVO.name;
+					//objectName = pageVO.name;
 				}
 				else
 				{
 //					objectXML = pageStructureXML.descendants( "object" ).( @id == objectID )[ 0 ];
 					typeID = eventXML.@TypeID[ 0 ];
 					typeVO = typesProxy.getType( typeID );
-					objectName = "" /*objectXML.@name*/;
+					//objectName = "" /*objectXML.@name*/;
 				}
 
 				if ( !typeVO )
