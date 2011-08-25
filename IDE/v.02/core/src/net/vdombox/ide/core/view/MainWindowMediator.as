@@ -1,19 +1,22 @@
 package net.vdombox.ide.core.view
 {
+	import flash.desktop.NativeApplication;
 	import flash.display.Screen;
+	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.net.SharedObject;
-
+	
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
+	import mx.core.mx_internal;
 	import mx.events.AIREvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	import mx.managers.SystemManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.MainWindowEvent;
@@ -26,16 +29,20 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.components.MainWindow;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
 	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
+	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
-
+	
+	import org.osmf.utils.Version;
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
 	import spark.skins.spark.ButtonSkin;
+	
+	use namespace mx_internal;
 
 	public class MainWindowMediator extends Mediator implements IMediator
 	{
@@ -141,18 +148,18 @@ package net.vdombox.ide.core.view
 
 		private function initTitle() : void
 		{
-			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			/*var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			var title : String            = "";
 
-			title = serverProxy.authInfo.hostname + "  -  >VDOM IDE.v.2.0.1.004" ;
-
+			title = serverProxy.authInfo.hostname + "  -  >VDOM IDE.v.2.0.1008" ;
+			
 			if ( statesProxy.selectedApplication )
-				title = statesProxy.selectedApplication.name + "  @  " + title;
+				title = statesProxy.selectedApplication.name + "  @  " + title;*/
 
-			//mainWindow.title = title
+			mainWindow.title = VersionUtils.getApplicationName(); 
 		}
-
+		
 		public function closeWindow() : void
 		{
 			windowManager.removeWindow( mainWindow );

@@ -15,6 +15,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
 	import net.vdombox.ide.core.view.components.InitialWindow;
+	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -142,6 +143,12 @@ package net.vdombox.ide.core.view
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			sendNotification( ApplicationFacade.INITIAL_WINDOW_CREATED, initialWindow );
+			initTitle();
+		}
+		
+		private function initTitle():void
+		{
+			initialWindow.title = VersionUtils.getApplicationName();
 		}
 
 		private function windowCompleteHandler( event : AIREvent ) : void
