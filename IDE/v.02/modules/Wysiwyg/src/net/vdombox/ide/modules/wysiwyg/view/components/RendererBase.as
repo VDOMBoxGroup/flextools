@@ -933,7 +933,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 
 			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
-			dispatchEvent( new RendererEvent( RendererEvent.MOVE_MEDIATOR ) );
+			
+			var moveEvent : RendererEvent =  new RendererEvent( RendererEvent.MOVE_MEDIATOR ) ;
+			moveEvent.ctrlKey = event.ctrlKey;
+			dispatchEvent( moveEvent );
 			
 		}
 

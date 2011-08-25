@@ -199,7 +199,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					for ( var i : int = 0; i < listStates.length; i++ )
 					{
-						listStates[i].render.setState = listStates[i].state;
+						listStates[i].setState = "normal";
 					}
 					
 					var listLines : Array = body.listLines as Array;
@@ -224,31 +224,90 @@ package net.vdombox.ide.modules.wysiwyg.view
 						break;
 					}
 					
-					var step : Number = listLines[0].eps;
 					render.x = render.x - stepX;
 					render.y = render.y - stepY;
 					render.dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
 					
 					listStates = new Array();
+					var step : Number = 15;
+					var delta : Number = 7;
+					
 					for each ( lineVO in listLines)
 					{
-						listStates.push({ render : lineVO.renderTo, state : lineVO.renderTo.getState } );
-						line = new Line();
-						if ( lineVO.orientationH )
+						listStates.push( lineVO.renderTo );
+						if (lineVO.type == 0)
 						{
-							line.xFrom = lineVO.x1 - stepX;
-							line.yFrom = lineVO.y1;
+							line = new Line();
+							if ( lineVO.orientationH )
+							{
+								line.xFrom = lineVO.x1 - stepX;
+								line.yFrom = lineVO.y1;
+							}
+							else
+							{
+								line.xFrom = lineVO.x1;
+								line.yFrom = lineVO.y1 - stepY;
+							}
+							line.xTo = lineVO.x2;
+							line.yTo = lineVO.y2;
+							lineVO.renderTo.setState = "select";
+							line.stroke = strokeColor;
+							pageRender.linegroup.addElement( line );
 						}
 						else
 						{
-							line.xFrom = lineVO.x1;
-							line.yFrom = lineVO.y1 - stepY;
+							if ( !lineVO.orientationH )
+							{
+								var y1 : Number = lineVO.y1;
+								var y2 : Number = lineVO.y2;
+								if ( lineVO.y1 > lineVO.y2 )
+								{
+									y1 = lineVO.y2;
+									y2 = lineVO.y1;
+								}
+								
+								for ( ; y1 < y2; y1 += step + delta)
+								{
+									line = new Line();
+									line.xFrom = lineVO.x2;
+									line.yFrom = y1;
+									line.xTo = lineVO.x2;
+									if ( y1 < (y2 - step - delta))
+										line.yTo = y1 + step;
+									else
+										line.yTo = y2;
+									line.stroke = strokeColor;
+									pageRender.linegroup.addElement( line );
+								}
+								
+							}
+							else
+							{
+								var x1 : Number = lineVO.x1;
+								var x2 : Number = lineVO.x2;
+								if ( lineVO.x1 > lineVO.x2 )
+								{
+									x1 = lineVO.x2;
+									x2 = lineVO.x1;
+								}
+								
+								for ( ; x1 < x2; x1 += step + delta)
+								{
+									line = new Line();
+									line.xFrom = x1;
+									line.yFrom = lineVO.y2;
+									if ( x1 < (x2 - step - delta))
+										line.xTo = x1 + step;
+									else
+										line.xTo = x2;
+									line.yTo = lineVO.y2;
+									line.stroke = strokeColor;
+									pageRender.linegroup.addElement( line );
+								}
+							}
+							
+							lineVO.renderTo.setState = "select";
 						}
-						line.xTo = lineVO.x2;
-						line.yTo = lineVO.y2;
-						lineVO.renderTo.setState = "hovered";
-						line.stroke = strokeColor;
-						pageRender.linegroup.addElement( line );
 					}
 					
 					break;
@@ -335,11 +394,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			var pageRender : PageRenderer = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
 			pageRender.linegroup.removeAllElements();
+			
+			for ( var i : int = 0; i < listStates.length; i++ )
+			{
+				listStates[i].setState = "normal";
+			}
+			listStates = new Array();
 		}
 		
 		private function moveRendererHandler ( event : RendererEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OBJECT_MOVED, event.target );
+			sendNotification( ApplicationFacade.OBJECT_MOVED, { render : event.target, ctrlKey : event.ctrlKey } );
 		}
 		
 		private function keyDownDeleteHandler(event : KeyboardEvent) : void

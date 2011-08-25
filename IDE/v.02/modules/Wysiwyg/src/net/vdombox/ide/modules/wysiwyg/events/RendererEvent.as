@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.events
 {
 	import com.zavoo.svg.nodes.SVGImageNode;
-
+	
 	import flash.events.Event;
 
 	public class RendererEvent extends Event
@@ -27,6 +27,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var MOUSE_UP_MEDIATOR : String = "rendererMouseUpMediator";
 
 		public var object : Object;
+		
+		public var ctrlKey : Boolean;
 
 		public function RendererEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

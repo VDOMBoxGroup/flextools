@@ -22,18 +22,25 @@ package net.vdombox.ide.modules.wysiwyg.controller
 
 	public class CreateLineLinkingCommand extends SimpleCommand
 	{
+		private var render : RendererBase;
 		private var pageRenderer : PageRenderer;
 		private var minEpsX : Number = 100;
 		private var minEpsY : Number = 100;
 		
 		override public function execute( notification : INotification ) : void
 		{
-			var render : RendererBase = notification.getBody() as RendererBase;
+			var body : Object = notification.getBody();
+			render = body.render as RendererBase;
 			
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+			var rr : Array =  renderProxy.getRenderersByVO( (render.renderVO.vdomObjectVO as ObjectVO).pageVO );
 			pageRenderer = renderProxy.getRenderersByVO( (render.renderVO.vdomObjectVO as ObjectVO).pageVO )[0] as PageRenderer;
 			
-			var listComponents : Array = foundComponents( pageRenderer.renderVO );
+			var listComponents : Array;
+			if ( body.ctrlKey as Boolean )
+				listComponents = foundComponents( pageRenderer.renderVO );
+			else
+				listComponents = foundComponentsPackage( pageRenderer.renderVO );
 			
 			var renderer : RendererBase;
 			var renderVO : RenderVO;
@@ -127,6 +134,39 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 		}
 		
+		private function foundComponentsPackage ( renderVO : RenderVO ) : Array
+		{
+			if (renderVO.children == null)
+				return null;
+			
+			var listComponents : Array = renderVO.children;
+			var component : RenderVO;
+			var tempComponent : RenderVO;
+			var components : Array;
+			
+			for each (component in listComponents)
+			{
+				if (component.vdomObjectVO.id == render.vdomObjectVO.id)
+					return listComponents;
+			}
+			
+			for each (component in listComponents)
+			{
+				components = foundComponentsPackage( component );
+				if (components != null)
+				{
+					for each ( tempComponent in components )
+					{
+						listComponents.push( tempComponent );
+					}
+					return listComponents;
+				}
+			}
+			
+			return null;
+			
+		}
+		
 		private function getCoordinateComponent ( rendererBase : RendererBase ) : Array
 		{
 			var pointCoordinateComponent : Array = new Array();
@@ -156,7 +196,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 						if ( point1[i].x == point2[j].x + k )
 						{
 							if ( i == 1 && j == 1 )
-								line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[j].y, k, 0, false, render );
+								line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[j].y, k, 1, false, render );
 							else if ( i != 1 && j == 1 )
 							{
 								if ( point1[i].y < point2[j].y )
@@ -167,9 +207,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 							else if ( i == 1 && j != 1 )
 							{
 								if ( point1[i].y < point2[j].y )
-									line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[2].y, k, 0, false, render );
+									line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[2].y, k, 1, false, render );
 								else
-									line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[0].y, k, 0, false, render );
+									line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[0].y, k, 1, false, render );
 							}
 							else
 							{
@@ -186,7 +226,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 						else if ( point1[i].x == point2[j].x - k )
 						{
 							if ( i == 1 && j == 1 )
-								line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[j].y, -k, 0, false, render );
+								line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[j].y, -k, 1, false, render );
 							else if ( i != 1 && j == 1 )
 							{
 								if ( point1[i].y < point2[j].y )
@@ -197,9 +237,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 							else if ( i == 1 && j != 1 )
 							{
 								if ( point1[i].y < point2[j].y )
-									line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[2].y, -k, 0, false, render );
+									line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[2].y, -k, 1, false, render );
 								else
-									line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[0].y, -k, 0, false, render );
+									line = new LineVO( point2[j].x, point1[i].y, point2[j].x, point2[0].y, -k, 1, false, render );
 							}
 							else
 							{
@@ -238,7 +278,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 						if ( point1[i].y == point2[j].y + k )
 						{
 							if ( i == 1 && j == 1 )
-								line = new LineVO( point1[i].x, point2[j].y, point2[j].x, point2[j].y, k, 0, true, render );
+								line = new LineVO( point1[i].x, point2[j].y, point2[j].x, point2[j].y, k, 1, true, render );
 							else if ( i != 1 && j == 1 )
 							{
 								if ( point1[i].x < point2[j].x )
@@ -249,9 +289,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 							else if ( i == 1 && j != 1 )
 							{
 								if ( point1[i].x < point2[j].x )
-									line = new LineVO( point1[i].x, point2[j].y, point2[2].x, point2[j].y, k, 0, true, render );
+									line = new LineVO( point1[i].x, point2[j].y, point2[2].x, point2[j].y, k, 1, true, render );
 								else
-									line = new LineVO( point1[i].x, point2[j].y, point2[0].x, point2[j].y, k, 0, true, render );
+									line = new LineVO( point1[i].x, point2[j].y, point2[0].x, point2[j].y, k, 1, true, render );
 							}
 							else
 							{
@@ -268,7 +308,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 						else if ( point1[i].y == point2[j].y - k )
 						{
 							if ( i == 1 && j == 1 )
-								line = new LineVO( point1[i].x, point2[j].y, point2[j].x, point2[j].y, -k, 0, true, render );
+								line = new LineVO( point1[i].x, point2[j].y, point2[j].x, point2[j].y, -k, 1, true, render );
 							else if ( i != 1 && j == 1 )
 							{
 								if ( point1[i].x < point2[j].x )
@@ -279,9 +319,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 							else if ( i == 1 && j != 1 )
 							{
 								if ( point1[i].x < point2[j].x )
-									line = new LineVO( point1[i].x, point2[j].y, point2[2].x, point2[j].y, -k, 0, true, render );
+									line = new LineVO( point1[i].x, point2[j].y, point2[2].x, point2[j].y, -k, 1, true, render );
 								else
-									line = new LineVO( point1[i].x, point2[j].y, point2[0].x, point2[j].y, -k, 0, true, render );
+									line = new LineVO( point1[i].x, point2[j].y, point2[0].x, point2[j].y, -k, 1, true, render );
 							}
 							else
 							{

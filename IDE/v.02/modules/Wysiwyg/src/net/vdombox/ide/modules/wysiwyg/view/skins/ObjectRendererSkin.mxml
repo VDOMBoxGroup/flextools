@@ -69,7 +69,7 @@
 
 		<s:stroke>
 
-			<s:SolidColorStroke color.highlighted="green" color.hovered="gray" color.select="gray"
+			<s:SolidColorStroke color.highlighted="green" color.hovered="gray" color.select="#0000FF"
 								weight="2" />
 		</s:stroke>
 	</s:Rect>
