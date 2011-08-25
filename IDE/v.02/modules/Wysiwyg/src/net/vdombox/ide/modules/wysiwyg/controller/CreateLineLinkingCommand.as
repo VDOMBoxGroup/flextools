@@ -33,7 +33,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			render = body.render as RendererBase;
 			
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-			var rr : Array =  renderProxy.getRenderersByVO( (render.renderVO.vdomObjectVO as ObjectVO).pageVO );
 			pageRenderer = renderProxy.getRenderersByVO( (render.renderVO.vdomObjectVO as ObjectVO).pageVO )[0] as PageRenderer;
 			
 			var listComponents : Array;
@@ -113,13 +112,16 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			if (renderVO.children == null)
 				return null;
 			
-			var listComponents : Array = renderVO.children;
+			var listComponents : Array = new Array();
+			
 			var component : RenderVO;
 			var tempComponent : RenderVO;
 			var components : Array;
 			
-			for each (component in listComponents)
+			for each (component in renderVO.children)
 			{
+				listComponents.push( component );
+				
 				components = foundComponents( component );
 				if (components != null)
 				{
@@ -144,6 +146,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var tempComponent : RenderVO;
 			var components : Array;
 			
+			
 			for each (component in listComponents)
 			{
 				if (component.vdomObjectVO.id == render.vdomObjectVO.id)
@@ -154,17 +157,10 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			{
 				components = foundComponentsPackage( component );
 				if (components != null)
-				{
-					for each ( tempComponent in components )
-					{
-						listComponents.push( tempComponent );
-					}
-					return listComponents;
-				}
+					return components;
 			}
 			
 			return null;
-			
 		}
 		
 		private function getCoordinateComponent ( rendererBase : RendererBase ) : Array
