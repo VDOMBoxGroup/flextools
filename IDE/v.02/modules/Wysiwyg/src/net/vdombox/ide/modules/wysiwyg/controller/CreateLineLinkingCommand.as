@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	
 	import mx.collections.ArrayList;
 	import mx.core.Container;
+	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -14,6 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.utils.PointCoordinateComponent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
+	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -23,6 +25,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	public class CreateLineLinkingCommand extends SimpleCommand
 	{
 		private var render : RendererBase;
+		private var component : UIComponent;
 		private var pageRenderer : PageRenderer;
 		private var minEpsX : Number = 100;
 		private var minEpsY : Number = 100;
@@ -30,7 +33,22 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
-			render = body.render as RendererBase;
+			if (  body.component is RendererBase )
+			{
+				render = body.component as RendererBase;
+				component = render as UIComponent;
+				trace("renderer");
+			}
+			else if (  body.component is TransformMarker )
+			{
+				render = body.component.renderer as RendererBase;
+				if ( render == null )
+					return;
+				component = body.component as UIComponent;
+				trace("marker");
+			}
+
+			trace( component.measuredWidth + " " + component.measuredHeight );
 			
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			pageRenderer = renderProxy.getRenderersByVO( (render.renderVO.vdomObjectVO as ObjectVO).pageVO )[0] as PageRenderer;
@@ -43,7 +61,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			var renderer : RendererBase;
 			var renderVO : RenderVO;
-			var pointRender : Array = getCoordinateComponent( render );
+			var pointRender : Array = getCoordinateComponent( component );
 			var point : Array;
 			
 			var linesLinkingX : Array = new Array();
@@ -104,7 +122,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				minEpsY = 0;
 			}
 			
-			sendNotification( ApplicationFacade.LINE_LIST_GETTED, { listLines : listLines, render : render, stepX : minEpsX, stepY : minEpsY } );
+			sendNotification( ApplicationFacade.LINE_LIST_GETTED, { listLines : listLines, component : component, stepX : minEpsX, stepY : minEpsY } );
 		}
 		
 		private function foundComponents ( renderVO : RenderVO ) : Array
@@ -146,7 +164,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var tempComponent : RenderVO;
 			var components : Array;
 			
-			
 			for each (component in listComponents)
 			{
 				if (component.vdomObjectVO.id == render.vdomObjectVO.id)
@@ -163,15 +180,27 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			return null;
 		}
 		
-		private function getCoordinateComponent ( rendererBase : RendererBase ) : Array
+		private function getCoordinateComponent ( _component : UIComponent ) : Array
 		{
 			var pointCoordinateComponent : Array = new Array();
-			var point : Point = DisplayUtils.getConvertedPoint( rendererBase, pageRenderer.background);
-			var temp : Point = point;
+			var point : Point = DisplayUtils.getConvertedPoint( _component, pageRenderer.background);
+			var temp : Point = new Point( point.x , point.y );
+			var _width : Number;
+			var _height : Number;
+			if ( _component is TransformMarker )
+			{
+				_width = _component.measuredWidth;
+				_height = _component.measuredHeight;
+			}
+			else
+			{
+				_width = _component.width;
+				_height = _component.height;
+			}
 			pointCoordinateComponent.push( point );
-			point = new Point( temp.x + rendererBase.width / 2, temp.y + rendererBase.height / 2 );
+			point = new Point( temp.x +_width / 2, temp.y + _height / 2 );
 			pointCoordinateComponent.push( point );
-			point = new Point( temp.x + rendererBase.width , temp.y + rendererBase.height );
+			point = new Point( temp.x + _width , temp.y + _height );
 			pointCoordinateComponent.push( point );
 			return pointCoordinateComponent;
 		}

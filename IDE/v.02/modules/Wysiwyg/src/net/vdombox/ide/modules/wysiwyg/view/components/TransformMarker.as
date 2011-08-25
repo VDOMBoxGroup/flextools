@@ -101,7 +101,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private var transformation : Boolean;
 
-		private var beforeTransform : Object;
+		public var beforeTransform : Object;
 
 		private var timer : Timer;
 		
@@ -210,6 +210,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			itemChanged = true;
 			invalidateSize();
 			invalidateDisplayList();
+			
 		}
 
 		override protected function createChildren() : void
@@ -239,6 +240,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			this.addChild( bl_box );
 			this.addChild( bc_box );
 			this.addChild( br_box );
+			
 		}
 
 		override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
@@ -760,6 +762,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				mouseUpHandler( null );
 			}
+			
+			var moveEvent : RendererEvent =  new RendererEvent( RendererEvent.MOVE_MEDIATOR ) ;
+			moveEvent.ctrlKey = event.ctrlKey;
+			dispatchEvent( moveEvent );
 		}
 
 		private function stage_mouseClickHandler( event : MouseEvent ) : void
@@ -813,6 +819,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			if( inMovedObject )
 				refresh();
+		
+			
 		}
 		
 		private function timerHandler( event : TimerEvent ) : void

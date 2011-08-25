@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.ui.Keyboard;
 	
 	import mx.collections.ArrayList;
+	import mx.core.UIComponent;
 	import mx.events.CloseEvent;
 	import mx.graphics.SolidColorStroke;
 	
@@ -28,6 +29,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.vo.LineVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
+	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
 	import net.vdombox.ide.modules.wysiwyg.view.components.VdomObjectEditor;
 	import net.vdombox.view.Alert;
 	import net.vdombox.view.AlertButton;
@@ -203,7 +205,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					}
 					
 					var listLines : Array = body.listLines as Array;
-					var render : RendererBase = body.render as RendererBase;
+					var component : UIComponent = body.component as UIComponent;
 					var lineVO : LineVO;
 					var line : Line;
 					
@@ -224,9 +226,30 @@ package net.vdombox.ide.modules.wysiwyg.view
 						break;
 					}
 					
-					render.x = render.x - stepX;
-					render.y = render.y - stepY;
-					render.dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
+					if ( component is TransformMarker )
+					{
+						var marker : TransformMarker = component as TransformMarker;
+						
+						if ( marker.beforeTransform.x == component.x && marker.beforeTransform.y == component.y )
+						{
+							component.measuredWidth = component.measuredWidth - stepX;
+							component.measuredHeight = component.measuredHeight - stepY;
+
+						}
+						else
+						{
+							component.measuredWidth = component.measuredWidth + stepX;
+							component.measuredHeight = component.measuredHeight + stepY;
+							component.x = component.x - stepX;
+							component.y = component.y - stepY;
+						}
+					}
+					else
+					{
+						component.x = component.x - stepX;
+						component.y = component.y - stepY;
+					}
+					component.dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
 					
 					listStates = new Array();
 					var step : Number = 15;
@@ -404,7 +427,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function moveRendererHandler ( event : RendererEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OBJECT_MOVED, { render : event.target, ctrlKey : event.ctrlKey } );
+			sendNotification( ApplicationFacade.OBJECT_MOVED, { component : event.target, ctrlKey : event.ctrlKey } );
 		}
 		
 		private function keyDownDeleteHandler(event : KeyboardEvent) : void

@@ -823,9 +823,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			return result;
 		}
-
-		
-
 		/**
 		 *
 		 * @param target
@@ -902,12 +899,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			event.stopImmediatePropagation();
 			event.preventDefault();
 		}
-		
-		public var canMoveFlag : Boolean = true;
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
-			if ( !event.buttonDown || !canMoveFlag)
+			if ( !event.buttonDown )
 				return;
 
 			var dx : int = mouseX - mDeltaX;
@@ -1029,7 +1024,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				backGrSprite.graphics.beginBitmapFill( content.bitmapData, null, true );
 				backGrSprite.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
 				backGrSprite.graphics.endFill();
-
+				
 				background.addElement( new SpriteUIComponent( backGrSprite ) );
 				invalidateDisplayList();
 			}
