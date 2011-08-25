@@ -22,9 +22,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
+	import mx.core.UIComponent;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
+	import mx.managers.PopUpManagerChildList;
 	import mx.resources.ResourceManager;
 	import mx.validators.Validator;
 	
@@ -44,6 +46,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+
 	/**
 	 *
 	 * @author Elena Kotlova
@@ -480,12 +483,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function onClosePreview( event : Event ) : void
 		{
-			resourcePreviewWindow.removeEventListener(Event.CLOSE, onClosePreview);
-
-
+			resourcePreviewWindow.removeEventListener(ResourcePreviewWindow.CLOSE, onClosePreview);
 			resourcePreviewWindow = null;
-
-			resourceSelectorWindow.addHandlers();
 		}
 
 		private function onResourcePreview( event : Event ) : void
@@ -497,17 +496,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 				onClosePreview(null);
 
 			resourcePreviewWindow = new ResourcePreviewWindow();
-			resourcePreviewWindow.addEventListener(Event.CLOSE, onClosePreview);
+			resourcePreviewWindow.addEventListener(ResourcePreviewWindow.CLOSE, onClosePreview);
 			resourcePreviewWindow.resourceVO = resourceVO;
 
-			PopUpManager.addPopUp( resourcePreviewWindow, DisplayObject( this.resourceSelectorWindow ), true);
-
-
-//			resourceSelectorWindow.removeKeyEvents();
-
-			//FIXME: need be like this: resourcePreviewWindow.resourceVO = resourceVO;
-
-
+			WindowManager.getInstance().addWindow(resourcePreviewWindow, UIComponent(resourceSelectorWindow), true);
+			
 			BindingUtils.bindSetter( previewImage, resourceVO, "data" );
 			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 

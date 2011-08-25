@@ -85,7 +85,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			//PopUpManager.addPopUp( resourceSelectorWindow, DisplayObject( multilineWindow.parentApplication ), true);
 			//PopUpManager.centerPopUp( resourceSelectorWindow );
-			WindowManager.getInstance().addWindow(resourceSelectorWindow, UIComponent(multilineWindow.parentApplication), true);
+			WindowManager.getInstance().addWindow(resourceSelectorWindow, UIComponent(multilineWindow), true);
 			
 			function applyHandler (event: Event):void
 			{

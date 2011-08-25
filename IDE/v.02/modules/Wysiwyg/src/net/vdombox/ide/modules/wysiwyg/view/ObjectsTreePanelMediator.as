@@ -114,6 +114,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.OBJECT_GETTED:
 				{
+					trace ("[ObjTreePanelMediator] OBJECT_GETTED");
 					var objectVO : ObjectVO = body as ObjectVO;
 
 					var requestElement : Object = requestQue[ objectVO.id ];

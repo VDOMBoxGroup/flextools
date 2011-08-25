@@ -34,14 +34,14 @@
 	<s:states>
 		<s:State name="normal"/>
 		<s:State name="inactive"/>
-		<s:State name="disabled"/>
+		<s:State name="disabled" stateGroups="disabledGroup"/>
 		<s:State name="closed" stateGroups="closedGroup"/>
-		<s:State name="disabledAndClosed" stateGroups="closedGroup"/>
-		<s:State name="disabledWithControlBar"/>
-		<s:State name="inactiveWithControlBar"/>
+		<s:State name="disabledAndClosed" stateGroups="closedGroup, disabledGroup"/>
+		<s:State name="disabledWithControlBar" stateGroups="disabledGroup"/>
+		<s:State name="inactiveWithControlBar" stateGroups="disabledGroup"/>
 		<s:State name="normalWithControlBar"/>
 		<s:State name="normalAndInactive"/>
-		<s:State name="disabledAndInactive"/>
+		<s:State name="disabledAndInactive" stateGroups="disabledGroup"/>
 	</s:states>
 	
 	<!-- Transitions for open and close -->

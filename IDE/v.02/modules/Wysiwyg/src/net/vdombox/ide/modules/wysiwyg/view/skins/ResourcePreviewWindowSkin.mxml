@@ -28,6 +28,8 @@
 		<s:State name="disabledWithControlBar"/>
 		<s:State name="inactiveWithControlBar"/>
 		<s:State name="normalWithControlBar"/>
+		<s:State name="normalAndInactive"/>
+		<s:State name="disabledAndInactive"/>
 	</s:states>
 	
 	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">

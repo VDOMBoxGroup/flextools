@@ -2,6 +2,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 {
 	import flash.desktop.Clipboard;
 	import flash.desktop.ClipboardFormats;
+	import flash.display.NativeWindowSystemChrome;
+	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
@@ -13,12 +15,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourcePreviewWindowSkin;
+	import net.vdombox.utils.WindowManager;
 	
 	import spark.components.Label;
 	import spark.components.TitleWindow;
+	import spark.components.Window;
 	
-	public class ResourcePreviewWindow extends TitleWindow
+	public class ResourcePreviewWindow extends Window
 	{
+		public static var CLOSE 							: String = "closeWindow";
+		
 		[SkinPart( required="true" )]
 		public var resourceImage : Image;
 		
@@ -43,6 +49,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 		{
 			super();
 			
+			systemChrome	= NativeWindowSystemChrome.NONE;
+			transparent 	= true;
+			
+			width = 700;
+			height = 500;
+			
+			minWidth = 600;
+			minHeight = 450;
+			
+			maximize();
 			addHandlers();	
 		}
 		
@@ -84,15 +100,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 		private function addHandlers():void
 		{
 			addEventListener( KeyboardEvent.KEY_DOWN, onKeyBtnDown, false, 0, true );
-			addEventListener(CloseEvent.CLOSE, closeHandler, false, 0, true);
+			addEventListener(CLOSE, closeHandler, false, 0, true);
 			addEventListener(FlexEvent.CREATION_COMPLETE, createComleatHandler, false, 0, true);
 			
 		}
 		
 		private function createComleatHandler(event : FlexEvent):void
 		{
-			PopUpManager.centerPopUp( this );
-			
 			loadingImage.rotateImage();
 		}
 		
@@ -102,13 +116,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 			loadingImage.stopRotateImage();
 			
 			removeHandlers();
-			PopUpManager.removePopUp(this);
+			
+			WindowManager.getInstance().removeWindow(this);
 		}
 		
 		private function removeHandlers():void
 		{
 			removeEventListener( KeyboardEvent.KEY_DOWN, onKeyBtnDown );
-			removeEventListener(CloseEvent.CLOSE, closeHandler);
+			removeEventListener(CLOSE, closeHandler);
 			removeEventListener(FlexEvent.CREATION_COMPLETE, createComleatHandler);
 		}
 		
@@ -121,12 +136,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 					return;
 			//
 			event.stopImmediatePropagation();
-			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			dispatchEvent(new CloseEvent(CLOSE));
 		}	
 			
 		public function closePreviewWindow():void
 		{
-			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			dispatchEvent(new CloseEvent(CLOSE));
 			
 		}
 		
