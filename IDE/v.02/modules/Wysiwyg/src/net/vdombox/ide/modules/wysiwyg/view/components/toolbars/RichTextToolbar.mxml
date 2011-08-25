@@ -303,17 +303,20 @@
 				var hght : Number = 0;
 				var chi : * = elementForEditing.contentDocument.body.lastChild;
 				
-				var i : uint = 0;
-				while ( chi[ i ] )
-				{
-					hght += chi[ i ].offsetHeight + chi[ i ].offsetTop;
-					i++;
+				if (chi != null) {
+					var i : uint = 0;
+					
+					while ( chi[ i ] )
+					{
+						hght += chi[ i ].offsetHeight + chi[ i ].offsetTop;
+						i++;
+					}
+					
+					if ( chi.offsetHeight )
+						hght = chi.offsetHeight + chi.offsetTop + 15;
+					else
+						hght = elementForEditing.contentDocument.body.offsetHeight + elementForEditing.contentDocument.body.offsetTop + 15;
 				}
-				
-				if ( chi.offsetHeight )
-					hght = chi.offsetHeight + chi.offsetTop + 15;
-				else
-					hght = elementForEditing.contentDocument.body.offsetHeight + elementForEditing.contentDocument.body.offsetTop + 15;
 				
 				if ( Math.abs( editableHTML.height - hght ) > 16 && hght > 10 )
 				{
