@@ -115,9 +115,17 @@ package net.vdombox.view
 			
 			alert.addEventListener(FlexEvent.CREATION_COMPLETE, static_creationCompleteHandler);
 			alert.addEventListener(CloseEvent.CLOSE, removeAlert);
+			alert.addEventListener(KeyboardEvent.KEY_DOWN, keysHandler);
 			PopUpManager.addPopUp( alert, parent as UIComponent , true);
 			return alert;
 		}
+		
+		private static function keysHandler ( event : KeyboardEvent ) : void
+		{
+			if ( event.keyCode == Keyboard.ESCAPE )
+				removeAlert( null );
+		}
+		
 		
 		private static function static_creationCompleteHandler(event:FlexEvent):void
 		{
