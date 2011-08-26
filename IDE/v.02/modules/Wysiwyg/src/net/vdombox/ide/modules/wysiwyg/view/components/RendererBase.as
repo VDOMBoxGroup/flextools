@@ -885,7 +885,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			setFocus();
 			if ( movable && !isScroller( event.target as DisplayObjectContainer ) )
 			{
-				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, false, 0, true );
+				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
 				stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
 
 //				trace(" " + event.)
@@ -932,7 +932,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var moveEvent : RendererEvent =  new RendererEvent( RendererEvent.MOVE_MEDIATOR ) ;
 			moveEvent.ctrlKey = event.ctrlKey;
 			dispatchEvent( moveEvent );
-			
 		}
 
 		private function mouseOutHandler( event : MouseEvent ) : void
@@ -954,7 +953,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseUpHandler( event : MouseEvent ) : void
 		{
-			stage.removeEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler );
+			stage.removeEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 			stage.removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler );
 
 			if ( x != beforeX || y != beforeY )

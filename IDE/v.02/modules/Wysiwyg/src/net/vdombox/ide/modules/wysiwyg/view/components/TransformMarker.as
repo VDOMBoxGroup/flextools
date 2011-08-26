@@ -770,9 +770,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				mouseUpHandler( null );
 			}
 			
-			var moveEvent : RendererEvent =  new RendererEvent( RendererEvent.MOVE_MEDIATOR ) ;
-			moveEvent.ctrlKey = event.ctrlKey;
-			dispatchEvent( moveEvent );
+			/*if ( rect.width != width || rect.height != height )
+			{*/
+				var moveEvent : RendererEvent =  new RendererEvent( RendererEvent.MOVE_MEDIATOR ) ;
+				moveEvent.ctrlKey = event.ctrlKey;
+				dispatchEvent( moveEvent );
+			//}
 		}
 
 		private function stage_mouseClickHandler( event : MouseEvent ) : void
