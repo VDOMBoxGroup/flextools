@@ -230,7 +230,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					{
 						var marker : TransformMarker = component as TransformMarker;
 						
-						if ( marker.beforeTransform.x == component.x && marker.beforeTransform.y == component.y )
+						if ( marker.equallyPoint( component.x, component.y ) )
 						{
 							component.measuredWidth = component.measuredWidth - stepX;
 							component.measuredHeight = component.measuredHeight - stepY;
@@ -249,7 +249,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 						component.x = component.x - stepX;
 						component.y = component.y - stepY;
 					}
-					component.dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
 					
 					listStates = new Array();
 					var step : Number = 15;

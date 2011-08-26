@@ -101,7 +101,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private var transformation : Boolean;
 
-		public var beforeTransform : Object;
+		private var beforeTransform : Object;
 
 		private var timer : Timer;
 		
@@ -563,6 +563,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			timer.reset();
 			timer.addEventListener( TimerEvent.TIMER, timerHandler )
 			timer.start();
+		}
+		
+		public function equallyPoint( _x : Number, _y : Number ) : Boolean
+		{
+			if ( _x == beforeTransform.x && _y == beforeTransform.y )
+				return true;
+			return false;
 		}
 
 		private function mouseMoveHandler( event : MouseEvent ) : void

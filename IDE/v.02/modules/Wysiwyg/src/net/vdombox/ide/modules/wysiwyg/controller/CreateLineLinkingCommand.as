@@ -37,7 +37,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			{
 				render = body.component as RendererBase;
 				component = render as UIComponent;
-				trace("renderer");
 			}
 			else if (  body.component is TransformMarker )
 			{
@@ -45,10 +44,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				if ( render == null )
 					return;
 				component = body.component as UIComponent;
-				trace("marker");
 			}
-
-			trace( component.measuredWidth + " " + component.measuredHeight );
 			
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			pageRenderer = renderProxy.getRenderersByVO( (render.renderVO.vdomObjectVO as ObjectVO).pageVO )[0] as PageRenderer;
