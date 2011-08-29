@@ -40,6 +40,7 @@
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.utils.VersionUtils;
 			static private const exclusions : Array = [ "titleIconImage", "titleText" ];
 
 			/**
@@ -107,7 +108,7 @@
 						fontSize="10"/>
 			
 			<s:RichText height="100%" 
-						text="v.2.0.1008" color="#CBCBCB"
+						text="{VersionUtils.getApplicationVersion()}" color="#CBCBCB"
 						fontSize="10"/>
 		</s:HGroup>
 				
