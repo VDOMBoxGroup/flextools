@@ -30,6 +30,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		private var minEpsX : Number = 100;
 		private var minEpsY : Number = 100;
 		
+		private var minEpsX2 : Number = 100;
+		private var minEpsY2 : Number = 100;
+		
 		override public function execute( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
@@ -92,11 +95,29 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			}
 			
 			var listLines : Array = new Array();
+			var marker : TransformMarker;
+			var equallyXFlag : Boolean;
+			var equallyYFlag : Boolean;
+			if ( component is TransformMarker )
+			{
+				marker = component as TransformMarker;
+				equallyXFlag = marker.equallyWidth( component.measuredWidth );
+				if ( equallyXFlag )
+					minEpsX2 = 0;
+				
+				equallyYFlag = marker.equallyHeight( component.measuredHeight );
+				if ( equallyYFlag )
+					minEpsY2 = 0;
+			}
+			
+				
 			if ( linesLinkingX.length > 0)
 			{
 				for each ( line in linesLinkingX )
 				{
 					if (line.eps == minEpsX)
+						listLines.push( line );
+					if ( component is TransformMarker && !equallyXFlag && line.eps == minEpsX2 )
 						listLines.push( line );
 				}
 			}
@@ -104,12 +125,14 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			{
 				minEpsX = 0;
 			}
-			
+				
 			if ( linesLinkingY.length > 0)
 			{
 				for each ( line in linesLinkingY )
 				{
 					if (line.eps == minEpsY)
+						listLines.push( line );
+					if ( component is TransformMarker && !equallyYFlag && line.eps == minEpsY2 )
 						listLines.push( line );
 				}
 			}
@@ -118,7 +141,15 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				minEpsY = 0;
 			}
 			
-			sendNotification( ApplicationFacade.LINE_LIST_GETTED, { listLines : listLines, component : component, stepX : minEpsX, stepY : minEpsY } );
+			if ( minEpsX2 == 100 )
+				minEpsX2 = 0;
+			if ( minEpsY2 == 100 )
+				minEpsY2 = 0;
+			
+			if ( component is TransformMarker && !marker.equallySize( component.measuredWidth, component.measuredHeight ))
+				sendNotification( ApplicationFacade.LINE_LIST_GETTED, { listLines : listLines, component : component, stepX : minEpsX2, stepY : minEpsY2 } );
+			else	
+				sendNotification( ApplicationFacade.LINE_LIST_GETTED, { listLines : listLines, component : component, stepX : minEpsX, stepY : minEpsY } );
 		}
 		
 		private function foundComponents ( renderVO : RenderVO ) : Array
@@ -194,7 +225,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				_height = _component.height;
 			}
 			pointCoordinateComponent.push( point );
-			point = new Point( temp.x +_width / 2, temp.y + _height / 2 );
+			point = new Point( temp.x + Math.round( _width / 2 ), temp.y + Math.round( _height / 2 ) );
 			pointCoordinateComponent.push( point );
 			point = new Point( temp.x + _width , temp.y + _height );
 			pointCoordinateComponent.push( point );
@@ -208,7 +239,20 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var k : int;
 			var lines : Array = new Array();
 			var line : LineVO;
-			for ( i = 0; i < 3; i++ )
+			var startI : int = 0;
+			var finishI : int = 3;
+			if ( component is TransformMarker )
+			{
+				var marker : TransformMarker = component as TransformMarker;
+				if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
+				{
+					if ( marker.equallyPoint( component.x, component.y ) )
+						startI = 1;
+					else
+						finishI = 2;
+				}
+			}
+			for ( i = startI; i < finishI; i++ )
 			{
 				for ( j = 0; j < 3; j++ )
 				{
@@ -242,6 +286,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 							lines.push( line );
 							if ( Math.abs( minEpsX) > Math.abs( k ) )
 								minEpsX = k;
+							if ( Math.abs( minEpsX2) > Math.abs( k ) && k != 0 )
+								minEpsX2 = k;
 							break;
 						}
 						else if ( point1[i].x == point2[j].x - k )
@@ -272,6 +318,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 							lines.push( line );
 							if ( Math.abs( minEpsX) > Math.abs( k ) )
 								minEpsX = -k;
+							if ( Math.abs( minEpsX2) > Math.abs( k ) && k != 0 )
+								minEpsX2 = -k;
 							break;
 						}
 					}
@@ -290,7 +338,20 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var k : int;
 			var lines : Array = new Array();
 			var line : LineVO;
-			for ( i = 0; i < 3; i++ )
+			var startI : int = 0;
+			var finishI : int = 3;
+			if ( component is TransformMarker )
+			{
+				var marker : TransformMarker = component as TransformMarker;
+				if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
+				{
+					if ( marker.equallyPoint( component.x, component.y ) )
+						startI = 1;
+					else
+						finishI = 2;
+				}
+			}
+			for ( i = startI; i < finishI; i++ )
 			{
 				for ( j = 0; j < 3; j++ )
 				{
@@ -324,6 +385,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 							lines.push( line );
 							if ( Math.abs( minEpsY) > Math.abs( k ) )
 								minEpsY = k;
+							if ( Math.abs( minEpsY2) > Math.abs( k ) && k != 0 )
+								minEpsY2 = k;
 							break;
 						}
 						else if ( point1[i].y == point2[j].y - k )
@@ -356,6 +419,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 							lines.push( line );
 							if ( Math.abs( minEpsY) > Math.abs( k ) )
 								minEpsY = -k;
+							if ( Math.abs( minEpsY2) > Math.abs( k ) && k != 0 )
+								minEpsY2 = -k;
 							break;
 						}
 					}

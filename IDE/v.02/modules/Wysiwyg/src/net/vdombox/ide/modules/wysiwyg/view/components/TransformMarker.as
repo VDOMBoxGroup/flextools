@@ -563,6 +563,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			timer.reset();
 			timer.addEventListener( TimerEvent.TIMER, timerHandler )
 			timer.start();
+			
+			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );
 		}
 		
 		public function equallyPoint( _x : Number, _y : Number ) : Boolean
@@ -575,6 +577,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function equallySize( _width : Number, _height : Number ) : Boolean
 		{
 			if ( _width == beforeTransform.width && _height == beforeTransform.height ) 
+				return true;
+			return false;
+		}
+		
+		public function equallyWidth( _width : Number ) : Boolean
+		{
+			if ( _width == beforeTransform.width ) 
+				return true;
+			return false;
+		}
+		
+		public function equallyHeight( _height : Number ) : Boolean
+		{
+			if ( _height == beforeTransform.height ) 
 				return true;
 			return false;
 		}

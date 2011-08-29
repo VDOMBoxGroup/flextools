@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
 	import flash.utils.getQualifiedClassName;
 	
@@ -198,187 +199,189 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 					
 				case ApplicationFacade.LINE_LIST_GETTED:
-				{				
-					if ( !selectedPage )
-						break;		
+				{			
+					drawLine( body );
+				}
 					
-					if ( selectedPage.id != editor.editorVO.vdomObjectVO.id )
-						break;
-
-					for ( var i : int = 0; i < listStates.length; i++ )
+			}
+		}
+		
+		private function drawLine( body : Object ) : void
+		{
+			var selectedPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
+			if ( !selectedPage )
+				return;		
+			
+			if ( selectedPage.id != editor.editorVO.vdomObjectVO.id )
+				return;
+			
+			for ( var i : int = 0; i < listStates.length; i++ )
+			{
+				listStates[i].setState = "normal";
+			}
+			
+			var listLines : Array = body.listLines as Array;
+			var component : UIComponent = body.component as UIComponent;
+			var lineVO : LineVO;
+			var line : Line;
+			
+			var selectPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
+			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+			var pageRender : PageRenderer = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
+			pageRender.linegroup.removeAllElements();
+			
+			var strokeColor : SolidColorStroke = new SolidColorStroke();
+			strokeColor.color = 0x0000FF;
+			strokeColor.weight = 1;
+			
+			var stepX : Number = body.stepX as Number;
+			var stepY : Number = body.stepY as Number;
+			
+			if ( listLines.length == 0 )
+				return;
+			
+			if ( component is TransformMarker )
+			{
+				var marker : TransformMarker = component as TransformMarker;
+				
+				if ( marker.equallyPoint( component.x, component.y ) )
+				{
+					component.measuredWidth = component.measuredWidth - stepX;
+					component.measuredHeight = component.measuredHeight - stepY;
+					
+				}
+				else
+				{
+					component.x = component.x - stepX;
+					component.y = component.y - stepY;
+					if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
 					{
-						listStates[i].setState = "normal";
-					}
-					
-					var listLines : Array = body.listLines as Array;
-					var component : UIComponent = body.component as UIComponent;
-					var lineVO : LineVO;
-					var line : Line;
-					
-					var selectPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
-					var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-					var pageRender : PageRenderer = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
-					pageRender.linegroup.removeAllElements();
-					
-					var strokeColor : SolidColorStroke = new SolidColorStroke();
-					strokeColor.color = 0x0000FF;
-					strokeColor.weight = 1;
-					
-					var stepX : Number = body.stepX as Number;
-					var stepY : Number = body.stepY as Number;
-					
-					if ( listLines.length == 0 )
-					{
-						break;
-					}
-					
-					if ( component is TransformMarker )
-					{
-						var marker : TransformMarker = component as TransformMarker;
-						
-						if ( marker.equallyPoint( component.x, component.y ) )
-						{
-							component.measuredWidth = component.measuredWidth - stepX;
-							component.measuredHeight = component.measuredHeight - stepY;
-
-						}
-						else
-						{
-							component.x = component.x - stepX;
-							component.y = component.y - stepY;
-							if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
-							{
-								component.measuredWidth = component.measuredWidth + stepX;
-								component.measuredHeight = component.measuredHeight + stepY;
-							}
-							else
-							{
-								var _renderer : RendererBase =  marker.renderer as RendererBase;
-								_renderer.x -= stepX;
-								_renderer.y -= stepY;
-							}
-						}
+						component.measuredWidth = component.measuredWidth + stepX;
+						component.measuredHeight = component.measuredHeight + stepY;
 					}
 					else
 					{
-						component.x = component.x - stepX;
-						component.y = component.y - stepY;
+						var _renderer : RendererBase = marker.renderer as RendererBase;
+						_renderer.x -= stepX;
+						_renderer.y -= stepY;
 					}
-
-					listStates = new Array();
-					var step : Number = 15;
-					var delta : Number = 7;
-					
-					for each ( lineVO in listLines )
+				}
+			}
+			else
+			{
+				component.x = component.x - stepX;
+				component.y = component.y - stepY;
+			}
+			
+			listStates = new Array();
+			var step : Number = 15;
+			var delta : Number = 7;
+			
+			for each ( lineVO in listLines )
+			{
+				
+				listStates.push( lineVO.renderTo );
+				if (lineVO.type == 0)
+				{
+					line = new Line();
+					if ( lineVO.orientationH )
 					{
-						
-						listStates.push( lineVO.renderTo );
-						if (lineVO.type == 0)
+						line.xFrom = lineVO.x1 - stepX;
+						line.yFrom = lineVO.y1;
+					}
+					else
+					{
+						line.xFrom = lineVO.x1;
+						line.yFrom = lineVO.y1 - stepY;
+					}
+					line.xTo = lineVO.x2;
+					line.yTo = lineVO.y2;
+					lineVO.renderTo.setState = "select";
+					line.stroke = strokeColor;
+					pageRender.linegroup.addElement( line );
+				}
+				else
+				{
+					if ( !lineVO.orientationH )
+					{
+						var y1 : Number = lineVO.y1;
+						var y2 : Number = lineVO.y2;
+						if ( y1 < y2 )
 						{
-							line = new Line();
-							if ( lineVO.orientationH )
+							for ( y1 -= stepY; y1 < y2; y1 += step + delta)
 							{
-								line.xFrom = lineVO.x1 - stepX;
-								line.yFrom = lineVO.y1;
+								line = new Line();
+								line.xFrom = lineVO.x2;
+								line.yFrom = y1;
+								line.xTo = lineVO.x2;
+								if ( y1 < (y2 - step - delta))
+									line.yTo = y1 + step;
+								else
+									line.yTo = y2;
+								line.stroke = strokeColor;
+								pageRender.linegroup.addElement( line );
 							}
-							else
-							{
-								line.xFrom = lineVO.x1;
-								line.yFrom = lineVO.y1 - stepY;
-							}
-							line.xTo = lineVO.x2;
-							line.yTo = lineVO.y2;
-							lineVO.renderTo.setState = "select";
-							line.stroke = strokeColor;
-							pageRender.linegroup.addElement( line );
 						}
 						else
 						{
-							if ( !lineVO.orientationH )
+							for ( y1 -= stepY; y2 < y1; y1 -= step + delta)
 							{
-								var y1 : Number = lineVO.y1;
-								var y2 : Number = lineVO.y2;
-								if ( y1 < y2 )
-								{
-									for ( y1 -= stepY; y1 < y2; y1 += step + delta)
-									{
-										line = new Line();
-										line.xFrom = lineVO.x2;
-										line.yFrom = y1;
-										line.xTo = lineVO.x2;
-										if ( y1 < (y2 - step - delta))
-											line.yTo = y1 + step;
-										else
-											line.yTo = y2;
-										line.stroke = strokeColor;
-										pageRender.linegroup.addElement( line );
-									}
-								}
+								line = new Line();
+								line.xFrom = lineVO.x2;
+								line.yFrom = y1;
+								line.xTo = lineVO.x2;
+								if ( y1 > (y2 + step + delta))
+									line.yTo = y1 - step;
 								else
-								{
-									for ( y1 -= stepY; y2 < y1; y1 -= step + delta)
-									{
-										line = new Line();
-										line.xFrom = lineVO.x2;
-										line.yFrom = y1;
-										line.xTo = lineVO.x2;
-										if ( y1 > (y2 + step + delta))
-											line.yTo = y1 - step;
-										else
-											line.yTo = y2;
-										line.stroke = strokeColor;
-										pageRender.linegroup.addElement( line );
-									}
-								}
-								
-								
-								
+									line.yTo = y2;
+								line.stroke = strokeColor;
+								pageRender.linegroup.addElement( line );
 							}
-							else
+						}
+						
+						
+						
+					}
+					else
+					{
+						var x1 : Number = lineVO.x1;
+						var x2 : Number = lineVO.x2;
+						if ( x1 < x2 )
+						{
+							for ( x1 -= stepX ; x1 < x2; x1 += step + delta)
 							{
-								var x1 : Number = lineVO.x1;
-								var x2 : Number = lineVO.x2;
-								if ( x1 < x2 )
-								{
-									for ( x1 -= stepX ; x1 < x2; x1 += step + delta)
-									{
-										line = new Line();
-										line.xFrom = x1;
-										line.yFrom = lineVO.y2;
-										if ( x1 < (x2 - step - delta))
-											line.xTo = x1 + step;
-										else
-											line.xTo = x2;
-										line.yTo = lineVO.y2;
-										line.stroke = strokeColor;
-										pageRender.linegroup.addElement( line );
-									}
-								}
+								line = new Line();
+								line.xFrom = x1;
+								line.yFrom = lineVO.y2;
+								if ( x1 < (x2 - step - delta))
+									line.xTo = x1 + step;
 								else
-								{
-									for ( x1 -= stepX; x2 < x1; x1 -= step + delta)
-									{
-										line = new Line();
-										line.xFrom = x1;
-										line.yFrom = lineVO.y2;
-										if ( x1 > (x2 + step + delta))
-											line.xTo = x1 - step;
-										else
-											line.xTo = x2;
-										line.yTo = lineVO.y2;
-										line.stroke = strokeColor;
-										pageRender.linegroup.addElement( line );
-									}
-								}
+									line.xTo = x2;
+								line.yTo = lineVO.y2;
+								line.stroke = strokeColor;
+								pageRender.linegroup.addElement( line );
 							}
-							
-							lineVO.renderTo.setState = "select";
+						}
+						else
+						{
+							for ( x1 -= stepX; x2 < x1; x1 -= step + delta)
+							{
+								line = new Line();
+								line.xFrom = x1;
+								line.yFrom = lineVO.y2;
+								if ( x1 > (x2 + step + delta))
+									line.xTo = x1 - step;
+								else
+									line.xTo = x2;
+								line.yTo = lineVO.y2;
+								line.stroke = strokeColor;
+								pageRender.linegroup.addElement( line );
+							}
 						}
 					}
 					
-					
+					lineVO.renderTo.setState = "select";
 				}
-					
 			}
 		}
 
@@ -394,6 +397,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererEvent.MOVE_MEDIATOR, moveRendererHandler, true );
 			
 			editor.addEventListener( RendererEvent.MOUSE_UP_MEDIATOR, mouseUpRendererHandler, true);
+			
+			component.addEventListener( MouseEvent.MOUSE_UP, mouseUpRendererHandler, true);
 
 			editor.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
@@ -430,6 +435,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.removeEventListener( RendererEvent.MOVE_MEDIATOR, moveRendererHandler, true);
 			editor.removeEventListener( RendererEvent.MOUSE_UP_MEDIATOR, mouseUpRendererHandler, true);
 			
+			component.removeEventListener( MouseEvent.MOUSE_UP, mouseUpRendererHandler, true);
+			
 			editor.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownDeleteHandler, true);
 
 			editor.removeEventListener( SkinPartEvent.PART_ADDED, partAddedHandler );
@@ -455,7 +462,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		}
 		
-		private function mouseUpRendererHandler ( event : RendererEvent ) : void
+		private function mouseUpRendererHandler ( event : Event ) : void
 		{
 			var selectPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
 			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
