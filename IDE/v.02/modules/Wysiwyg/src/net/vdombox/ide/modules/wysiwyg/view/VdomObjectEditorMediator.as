@@ -244,10 +244,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 						}
 						else
 						{
-							component.measuredWidth = component.measuredWidth + stepX;
-							component.measuredHeight = component.measuredHeight + stepY;
 							component.x = component.x - stepX;
 							component.y = component.y - stepY;
+							if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
+							{
+								component.measuredWidth = component.measuredWidth + stepX;
+								component.measuredHeight = component.measuredHeight + stepY;
+							}
+							else
+							{
+								var _renderer : RendererBase =  marker.renderer as RendererBase;
+								_renderer.x -= stepX;
+								_renderer.y -= stepY;
+							}
 						}
 					}
 					else

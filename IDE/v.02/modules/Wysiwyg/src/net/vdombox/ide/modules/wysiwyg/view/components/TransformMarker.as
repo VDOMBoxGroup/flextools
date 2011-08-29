@@ -571,6 +571,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return true;
 			return false;
 		}
+		
+		public function equallySize( _width : Number, _height : Number ) : Boolean
+		{
+			if ( _width == beforeTransform.width && _height == beforeTransform.height ) 
+				return true;
+			return false;
+		}
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
