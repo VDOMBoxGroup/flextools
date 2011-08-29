@@ -204,7 +204,13 @@ package net.vdombox.utils
 		{
 			var appXML : XML = NativeApplication.nativeApplication.applicationDescriptor;
 			var ns : Namespace = appXML.namespace();
-			return appXML.ns::version;
+			var str:String = ""; 
+			
+			str = appXML.ns::version;
+			if (!str)
+				str = appXML.ns::versionNumber;
+			
+			return str;
 		}
 		
 		public static function getApplicationName() : String
