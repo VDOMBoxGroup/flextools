@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<application xmlns="http://ns.adobe.com/air/application/1.5">
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<application xmlns="http://ns.adobe.com/air/application/1.5.3">
 
 <!-- Adobe AIR Application Descriptor File Template.
 
 	Specifies parameters for identifying, installing, and launching AIR applications.
-	See http://www.adobe.com/go/air_1.0_application_descriptor for complete documentation.
 
-	xmlns - The Adobe AIR namespace: http://ns.adobe.com/air/application/1.0
+	xmlns - The Adobe AIR namespace: http://ns.adobe.com/air/application/1.5.3
 			The last segment of the namespace specifies the version 
 			of the AIR runtime required for this application to run.
 			
@@ -15,37 +14,42 @@
 -->
 
 	<!-- The application identifier string, unique to this application. Required. -->
-	<id>Generator</id>
+	<id>Soap-test</id>
 
 	<!-- Used as the filename for the application. Required. -->
-	<filename>Generator</filename>
+	<filename>Soap_test</filename>
 
-	<!-- The name that is displayed in the AIR application installer. Optional. -->
-	<name>Generator</name>
+	<!-- The name that is displayed in the AIR application installer. 
+	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
+	<name>Soap_test</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-	<version>Alpha 0.5.0</version>
+	<version>v1</version>
 
-	<!-- Description, displayed in the AIR application installer. Optional. -->
+	<!-- Description, displayed in the AIR application installer.
+	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
 	<!-- <description></description> -->
 
 	<!-- Copyright information. Optional -->
 	<!-- <copyright></copyright> -->
 
+	<!-- Publisher ID. Used if you're updating an application created prior to 1.5.3 -->
+	<!-- <publisherID></publisherID> -->
+
 	<!-- Settings for the application's initial window. Required. -->
 	<initialWindow>
 		<!-- The main SWF or HTML file of the application. Required. -->
-		<!-- Note: In Flex Builder, the SWF reference is set automatically. -->
-		<content>[This value will be overwritten by Flex Builder in the output app.xml]</content>
+		<!-- Note: In Flash Builder, the SWF reference is set automatically. -->
+		<content>[Это значение будет перезаписано программой Flash Builder в выходном файле app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
 		<!-- <title></title> -->
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
-		<systemChrome>none</systemChrome>
+		<!-- <systemChrome></systemChrome> -->
 
-		<!-- Whether the window is transparent. Only applicable when systemChrome is false. Optional. Default false. -->
-		<transparent>true</transparent>
+		<!-- Whether the window is transparent. Only applicable when systemChrome is none. Optional. Default false. -->
+		<!-- <transparent></transparent> -->
 
 		<!-- Whether the window is initially visible. Optional. Default false. -->
 		<!-- <visible></visible> -->
@@ -54,10 +58,10 @@
 		<!-- <minimizable></minimizable> -->
 
 		<!-- Whether the user can maximize the window. Optional. Default true. -->
-		<maximizable>false</maximizable>
+		<!-- <maximizable></maximizable> -->
 
 		<!-- Whether the user can resize the window. Optional. Default true. -->
-		<resizable>false</resizable>
+		<!-- <resizable></resizable> -->
 
 		<!-- The window's initial width. Optional. -->
 		<!-- <width></width> -->
@@ -81,17 +85,17 @@
 	<!-- The subpath of the standard default installation location to use. Optional. -->
 	<!-- <installFolder></installFolder> -->
 
-	<!-- The subpath of the Windows Start/Programs menu to use. Optional. -->
+	<!-- The subpath of the Programs menu to use. (Ignored on operating systems without a Programs menu.) Optional. -->
 	<!-- <programMenuFolder></programMenuFolder> -->
 
 	<!-- The icon the system uses for the application. For at least one resolution,
 		 specify the path to a PNG file included in the AIR package. Optional. -->
-	<icon>
-		<image16x16>icons/icon_16.png</image16x16>
-		<image32x32>icons/icon_32.png</image32x32>
-		<image48x48>icons/icon_48.png</image48x48>
-		<image128x128>icons/icon_128.png</image128x128>
-	</icon>
+	<!-- <icon>
+		<image16x16></image16x16>
+		<image32x32></image32x32>
+		<image48x48></image48x48>
+		<image128x128></image128x128>
+	</icon> -->
 
 	<!-- Whether the application handles the update when a user double-clicks an update version
 	of the AIR file (true), or the default AIR application installer handles the update (false).
@@ -117,7 +121,7 @@
 			<!-- The description of the file type. Optional. -->
 			<!-- <description></description> -->
 			
-			<!-- The MIME type. Optional. -->
+			<!-- The MIME content type. -->
 			<!-- <contentType></contentType> -->
 			
 			<!-- The icon to display for the file type. Optional. -->

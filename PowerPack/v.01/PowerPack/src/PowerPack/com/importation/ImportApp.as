@@ -174,7 +174,7 @@ package PowerPack.com.importation
 
 						prev = node;
 						node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
-							StringUtil.substitute('$ans = [question "Do you want to personalize the Application {0}?" "Yes,No"]', 
+							StringUtil.substitute('$ans = [question "Do you want to personalize the Application {0}?" "Yes" "No"]', 
 							infElm.name()));
 						node.x = xOffset; node.y = yOffset;
 						newGraph.addChild(node);

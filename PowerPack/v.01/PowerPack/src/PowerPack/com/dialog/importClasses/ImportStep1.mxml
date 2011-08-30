@@ -14,8 +14,8 @@
 				import_from_server: "server",
 				default_port: "Default port",
 				save_password: "Save password"			
-			}			
-			
+			}		
+
 			static private var _classConstructed:Boolean = classConstruct(); 
 			
 			static private function classConstruct():Boolean

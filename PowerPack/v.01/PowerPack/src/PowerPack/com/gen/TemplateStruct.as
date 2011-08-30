@@ -539,10 +539,10 @@ public class TemplateStruct extends EventDispatcher
 		do
 		{			
 			// check for current node	
-			if(!curGraphContext.curNode) {
+			if(!curGraphContext.curNode) 
+			{
 				isRunning = false;
-				throw new ValidationError(null, 9002, 
-					[curGraphContext.curGraph.name]);
+				throw new ValidationError(null, 9002, [curGraphContext.curGraph.name]);
 			}
 								
 			switch(step)

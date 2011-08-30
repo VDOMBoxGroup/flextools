@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="windowedapplication1_creationCompleteHandler(event)">
+	<mx:Script>
+		<![CDATA[
+			import connection.SOAP;
+			import connection.SOAPEvent;
+			
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+	private var soap:SOAP = SOAP.getInstance();
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				var hostname :String = '192.168.0.41'
+				var wsdl : String = "http://" + hostname + "/vdom.wsdl";
+				soap.addEventListener( "loadWsdlComplete", soap_initCompleteHandler );
+				soap.init( wsdl );
+				
+				trace("1");
+				// TODO Auto-generated method stub
+			}
+			
+			private function soap_initCompleteHandler(event:Event):void
+			{
+				soap.addEventListener(SOAPEvent.LOGIN_OK, soap_loginOKHandler);
+				soap.addEventListener(SOAPEvent.LOGIN_ERROR, soap_loginErrorHandler);
+				trace("2");
+				soap.login('root','root');
+			}
+
+			private function soap_loginOKHandler(event:SOAPEvent):void
+			{
+				trace("OK");
+				GetObjectScriptPresentation();
+				//soap
+			}
+			private function soap_loginErrorHandler(event:SOAPEvent):void
+			{
+				trace("ERROR");
+			}
+			
+			private function GetObjectScriptPresentation():void
+			{
+				var appId:String = "07a65e19-ccce-471b-9087-f07716f5e5f2"; 
+				var objId:String = "4252b2f6-6967-46de-9f8b-62d10282c954";
+				var soap:SOAP = SOAP.getInstance();
+				var returnValue: String;
+				
+				soap.get_object_script_presentation.addEventListener( ResultEvent.RESULT, resultHandler );
+				soap.get_object_script_presentation.addEventListener( FaultEvent.FAULT, resultHandler );
+				soap.get_object_script_presentation(appId, objId);
+				
+				function resultHandler(event:*):void
+				{
+					soap.removeEventListener(SOAPEvent.RESULT, resultHandler);
+					soap.removeEventListener(FaultEvent.FAULT, resultHandler);
+					
+					if (event.type == ResultEvent.RESULT)
+					{
+						returnValue = "['result' '"+event.result+"']";
+					}
+					else
+					{
+						if ("faultstring" in event.fault)
+							returnValue =  "['error' '"+event.fault.faultstring+"']";
+						else
+							returnValue =  "['error' '"+event.fault.faultString+"']";
+					}
+				}
+				
+//				return resultHandler;
+			}
+
+		]]>
+	</mx:Script>
+	
+</mx:WindowedApplication>

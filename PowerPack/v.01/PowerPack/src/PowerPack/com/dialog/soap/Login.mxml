@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+	<mx:Canvas 
+		xmlns:mx="http://www.adobe.com/2006/mxml" 
+		width="404" height="218" 
+		xmlns:controls="ExtendedAPI.com.controls.*"
+	>
+	
+	
+
+	<mx:Script>
+		<![CDATA[
+			import PowerPack.com.managers.ContextManager;
+			import PowerPack.com.managers.LanguageManager;
+			
+			import connection.SOAP;
+			import connection.SOAPEvent;
+			
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+//			import mx.events.ItemClickEvent;
+			
+			private static var _dialog:Login;
+			
+
+			
+/* 			public static function show(	parent:Sprite = null, 
+											closeHandler:Function = null):void
+			{
+				var dialog:Login = new Login();		            
+				
+				PopUpManager.addPopUp(dialog, parent, true);
+				PopUpManager.centerPopUp(dialog);
+			} */
+			
+			
+			
+			
+			
+			/////////////////////////////
+			private var soap:SOAP = SOAP.getInstance();
+			
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				var hostname:String = '192.168.0.41'
+				var wsdl:String = "http://" + hostname + "/vdom.wsdl";
+				soap.addEventListener( "loadWsdlComplete", soap_initCompleteHandler );
+				soap.init(wsdl);
+			}
+			
+			private function soap_initCompleteHandler(event:Event):void
+			{
+				soap.addEventListener(SOAPEvent.LOGIN_OK, soap_loginOKHandler);
+				soap.addEventListener(SOAPEvent.LOGIN_ERROR, soap_loginErrorHandler);
+				
+				soap.login('root','root');
+			}
+			
+			private function soap_loginOKHandler(event:SOAPEvent):void
+			{
+				trace("OK");
+			}
+			private function soap_loginErrorHandler(event:SOAPEvent):void
+			{
+				trace("ERROR");
+			}
+		]]>
+	</mx:Script>
+	
+	
+	<mx:Grid x="10" y="10">
+		
+		<mx:GridRow>
+			<mx:GridItem colSpan="2">
+				<controls:HDivider label="{LanguageManager.sentences.connection}:" 
+								   enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:Label text="{LanguageManager.sentences.host}:"
+						  enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:TextInput width="200" id="txtHost" 
+							  text="{ContextManager.instance.host}" 
+							  enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem colSpan="2">
+				<controls:HDivider label="{LanguageManager.sentences.authentication}:" 
+								   enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:Label text="{LanguageManager.sentences.login}:"
+						  enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:TextInput width="200" id="txtLogin" 
+							  text="{ContextManager.instance.login}" 
+							  enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+		</mx:GridRow>		
+		
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:Label text="{LanguageManager.sentences.password}:"
+						  enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:TextInput width="200" id="txtPass"  
+							  text="{ContextManager.instance.pass}"					
+							  enabled="{gridServer.enabled}" 
+							  displayAsPassword="true"/>
+			</mx:GridItem>
+		</mx:GridRow>		
+		
+		<mx:GridRow>
+			<mx:GridItem/>
+			<mx:GridItem>
+				<mx:CheckBox id="chkSavePass" 
+							 label="{LanguageManager.sentences.save_password}"
+							 selected="{ContextManager.instance.save_pass}" 
+							 enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+	</mx:Grid>
+</mx:Canvas>

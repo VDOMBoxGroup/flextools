@@ -70,6 +70,34 @@
 				return _dialog;
 			}
 			
+				//////////////////////////////////////////////////////////////////!!!
+			static public function conshow(closeHandler:Function = null):Import
+			{
+				if(!_dialog || _dialog.closed) 
+				{
+					_dialog = new Import();	
+					_dialog.open();
+					_dialog.show(CANCEL|OK, closeHandler, null, CANCEL);					
+					_dialog.defaultButton = _dialog.btnNext;
+					Button(_dialog.ctrlBar.getChildByName("OK")).label = LanguageManager.sentences["finish"];
+					Button(_dialog.ctrlBar.getChildByName("OK")).enabled = false;
+					ConnectionManager.instance.window = _dialog;
+					
+					var CaptionsVImport:Object = {
+						lbl_import: "Connect",
+						import_template: "Connect:"
+					};
+					
+					LanguageManager.setSentences(CaptionsVImport);
+				}				
+				else 
+				{
+					_dialog.activate();
+				}	
+				
+				return _dialog;
+			}
+			
 			private function onShow():void
 			{				
 				

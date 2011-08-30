@@ -129,7 +129,8 @@
 			{
 				addEventListener(Event.CLOSING, closingApplicationHandler);
 	       		
-	       		function closingApplicationHandler(event:Event):void {
+	       		function closingApplicationHandler(event:Event):void 
+				{
 	       			event.preventDefault();
 	       			exitApplication();	   
 	       		}
@@ -139,21 +140,19 @@
 				var file:File;
 				var fileStream:FileStream;
 				
-        	    for each ( file in [ContextManager.instance.dataStorage, 
-        	    					ContextManager.instance.settingStorage] )
+        	    for each ( file in [ContextManager.instance.dataStorage, ContextManager.instance.settingStorage] )
         	    {
-        	    	if(!file.exists)
-        	    		file.createDirectory();
+        	    	if(!file.exists) file.createDirectory();
         	    }
         	    
 				// Load application settings
 	            ContextManager.loadSettings();
 	            
 	            // Fill language menu
-	            MenuGeneral.updateLangMenu();
+//	            MenuGeneral.updateLangMenu();
 	            
 	            // fill last files menu
-	            MenuGeneral.updateLastFilesMenu();
+//	            MenuGeneral.updateLastFilesMenu();
 	            
 				// Load language file
 				file = File.applicationDirectory.resolvePath("lang/"+ContextManager.instance.lang.file);
@@ -500,7 +499,8 @@
 					else
 						runTemplate();
 						
-					function isError(element:*, index:int, arr:Array):Boolean {
+					function isError(element:*, index:int, arr:Array):Boolean 
+					{
             			return (element.error.severity == BasicError.FATAL);
         			}						
 				}
@@ -564,14 +564,16 @@
            		processStep(cGeneral);
            	}            						            
 
-            private function stepCompleteHandler(event:Event):void {
+            private function stepCompleteHandler(event:Event):void 
+			{
             	if(progressBar.value+1<progressBar.maximum/2+1);
             		progressBar.setProgress(progressBar.value+1, progressBar.maximum);
 				
 				//ContextManager.templateStruct.generate(true);	            		
             }	           	
            	
-           	private function generationComplete(event:Event):void {
+           	private function generationComplete(event:Event):void 
+			{
            		timer = getTimer() - timer;
            		
            		appGenerated = true;

@@ -5,11 +5,18 @@ import ExtendedAPI.com.utils.FileToBase64;
 import ExtendedAPI.com.utils.Utils;
 
 import PowerPack.com.BasicError;
+import PowerPack.com.dialog.Import;
+import PowerPack.com.dialog.soap.Login;
 import PowerPack.com.gen.errorClasses.RunTimeError;
+import PowerPack.com.gen.parse.ListParser;
 import PowerPack.com.gen.structs.GraphStruct;
 import PowerPack.com.gen.structs.NodeStruct;
 import PowerPack.com.managers.LanguageManager;
 import PowerPack.com.panel.Question;
+
+import connection.SOAP;
+import connection.SOAPBaseLevel;
+import connection.SOAPEvent;
 
 import flash.display.Bitmap;
 import flash.events.Event;
@@ -18,9 +25,13 @@ import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
+import mx.controls.Alert;
 import mx.core.Application;
 import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
+import mx.rpc.events.FaultEvent;
+import mx.rpc.events.ResultEvent;
+import mx.states.RemoveChild;
 import mx.utils.Base64Encoder;
 import mx.utils.UIDUtil;
 
@@ -35,7 +46,8 @@ public function subPrefix(graph:String, prefix:String, ...args):*
 {
 	var subgraph:GraphStruct;
 	
-	for each (var graphStruct:GraphStruct in tplStruct.graphs) {
+	for each (var graphStruct:GraphStruct in tplStruct.graphs) 
+	{
 		if(graphStruct.name == graph)
 			subgraph = graphStruct;
 	}
@@ -120,7 +132,8 @@ public function qSwitch(question:String, ...args):Function
 {
 	return __question(questionCloseHandler, question, args);
 	
-	function questionCloseHandler(event:Event):void {
+	function questionCloseHandler(event:Event):void 
+	{
 		var retVal:String = LanguageManager.sentences['other']+'...';
 		
 		for each (var arg:String in args)
@@ -332,3 +345,22 @@ public function random(value:int):String
 	return rnd.toString();
 }
 
+public function alert(strr:String):void
+{
+	Alert.show(strr);
+}
+
+public function soapBase(funct:String, ...args):Function
+{
+	var soapBaseLevel:SOAPBaseLevel = new SOAPBaseLevel();
+	
+	soapBaseLevel.addEventListener(SOAPBaseLevel.RESULT_GETTED, rusulGettedHandler, false, 0, true);
+	soapBaseLevel.execute(funct,args);
+		
+	function rusulGettedHandler(event:Event):void
+	{
+		soapBaseLevel.removeEventListener(SOAPBaseLevel.RESULT_GETTED,rusulGettedHandler);
+		setReturnValue(soapBaseLevel.result);
+	}
+	return rusulGettedHandler;
+}

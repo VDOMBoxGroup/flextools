@@ -44,6 +44,9 @@ public class Parser
 			"random":			{ pattern:/^\[n[viVNA]\]$/, 						argNum:1 },
 			"imageToBase64":	{ pattern:/^\[n[v][vscVSA]\]$/, 					argNum:2 },
 			
+			"alert":			{ pattern:/^\[n[vscVSA]*\]$/, 						argNum:1 },
+			"soapBase":			{ pattern:/^\[n[vscVSA][nsc]*\]$/, 					argNum:-1 },
+			
 			//*********************
 			// List manipulation
 			//*********************
