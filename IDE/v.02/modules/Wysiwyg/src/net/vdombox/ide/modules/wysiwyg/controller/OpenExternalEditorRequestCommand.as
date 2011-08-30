@@ -2,11 +2,13 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import flash.display.DisplayObject;
 	
+	import mx.core.UIComponent;
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.modules.wysiwyg.view.ExternalEditorWindowMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ExternalEditorWindow;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -24,8 +26,10 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			facade.registerMediator( externalEditorWindowMediator );
 			
-			PopUpManager.addPopUp( externalEditorWindow, DisplayObject( externalEditor.parentApplication ), true );
-			PopUpManager.centerPopUp( externalEditorWindow );
+			/*PopUpManager.addPopUp( externalEditorWindow, DisplayObject( externalEditor.parentApplication ), true );
+			PopUpManager.centerPopUp( externalEditorWindow );*/
+			
+			WindowManager.getInstance().addWindow(externalEditorWindow, UIComponent(externalEditor.parentApplication), true);
 		}
 	}
 }

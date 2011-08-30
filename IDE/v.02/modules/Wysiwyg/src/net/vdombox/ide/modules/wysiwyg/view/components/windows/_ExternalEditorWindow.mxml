@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow  xmlns:mx="http://www.adobe.com/2006/mxml"
-xmlns:s="library://ns.adobe.com/flex/spark"
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/halo"
 				
 				measuredHeight="400" measuredWidth="550"
 				backgroundColor="#CCCCCC" 
@@ -8,25 +9,27 @@ xmlns:s="library://ns.adobe.com/flex/spark"
 				close="dispatchEvent( new ExternalEditorWindowEvent( ExternalEditorWindowEvent.CLOSE ))"
 				>
 
-	
-	
-	<!--s:layout>
-		<s:VerticalLayout paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" />
-	</s:layout-->
-	
-		<mx:Script>
-			<![CDATA[
-			import flash.filesystem.File;
-			
-			import mx.binding.utils.BindingUtils;
-			import mx.core.IVisualElement;
-			import mx.events.FlexEvent;
-			import mx.managers.PopUpManager;
-			import mx.managers.SystemManager;
-			
-			import net.vdombox.ide.common.interfaces.IExternalManager;
-			import net.vdombox.ide.common.vo.ResourceVO;
+	<fx:Script>
+		<![CDATA[
 			import net.vdombox.ide.modules.wysiwyg.events.ExternalEditorWindowEvent;
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:VerticalLayout paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" />
+	</s:layout>
+	
+		<fx:Script>
+			<![CDATA[
+				import flash.filesystem.File;
+				import net.vdombox.ide.common.interfaces.IExternalManager;
+				import mx.managers.PopUpManager;
+				import mx.managers.SystemManager;
+				import mx.events.FlexEvent;
+				import mx.binding.utils.BindingUtils;
+				import mx.core.IVisualElement;
+
+				import net.vdombox.ide.common.vo.ResourceVO;
 
 				[Bindable]
 				private var _resourceVO : ResourceVO;
@@ -89,27 +92,18 @@ xmlns:s="library://ns.adobe.com/flex/spark"
 					if ( !loader )
 						loader = new Loader();
 
-					loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loader_errorHandler );
-					loader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, loader_errorHandler );
 					loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loader_completeHandler );
 
 					var loaderContext : LoaderContext = new LoaderContext();
 					loaderContext.applicationDomain = new ApplicationDomain();
-//					loaderContext["allowLoadBytesCodeExecution"] = true;
-					loaderContext.allowLoadBytesCodeExecution  = true
+					loaderContext["allowLoadBytesCodeExecution"] = true;
 
-					loader.loadBytes( _resourceVO.data,  loaderContext);
-					
+					loader.loadBytes( _resourceVO.data, loaderContext );
 				}
 
-				private function loader_errorHandler( event : Event ) : void
-				{
-					trace ("#############################################loader_errorHandler!!!");
-				}
-				
 				private function loader_completeHandler( event : Event ) : void
 				{
-					loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, loader_completeHandler );
+					loader.removeEventListener( Event.COMPLETE, loader_completeHandler );
 
 					event.currentTarget.content.addEventListener( FlexEvent.APPLICATION_COMPLETE, applicationCompleteHandler );
 
@@ -147,7 +141,7 @@ xmlns:s="library://ns.adobe.com/flex/spark"
 //				
 //			}
 			]]>
-		</mx:Script>
+		</fx:Script>
 
 		<s:SpriteVisualElement id="placer" />
-</mx:TitleWindow>
+</s:TitleWindow>
