@@ -65,7 +65,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-//			interests.push( ApplicationFacade.RESOURCES_GETTED );
+			interests.push( ApplicationFacade.RESOURCES_GETTED );
 			
 			return interests;
 		}
@@ -74,23 +74,23 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
-//			
-//			switch ( name )
-//			{
-//				case ApplicationFacade.RESOURCES_GETTED:
-//				{
+			
+			switch ( name )
+			{
+				case ApplicationFacade.RESOURCES_GETTED:
+				{
 //					externalEditorWindow.resourceVO = body as Array;
-//					
+					
 //					var resourceVO : ResourceVO;
 //					
 //					for each( resourceVO in body )
 //					{
 //						sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 //					}
-//					
-//					break;
-//				}
-//			}
+					
+					break;
+				}
+			}
 		}
 		
 		private function addHandlers() : void

@@ -9,8 +9,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.utils.getQualifiedClassName;
 	
 	import mx.collections.ArrayList;
+	import mx.controls.CheckBox;
 	import mx.core.UIComponent;
 	import mx.events.CloseEvent;
+	import mx.events.FlexEvent;
 	import mx.graphics.SolidColorStroke;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
@@ -27,6 +29,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.SharedObjectProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.LineVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
@@ -61,6 +64,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var sessionProxy : SessionProxy;
 		
+		private var sharedObjectProxy : SharedObjectProxy;
+		
 		public function get component() : VdomObjectEditor
 		{
 			return viewComponent as VdomObjectEditor;
@@ -90,6 +95,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
 
 			addHandlers();
 		}
@@ -384,6 +391,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 			}
 		}
+		
+		private function addOptions( event : Event ) :void
+		{
+			component.showLinking = sharedObjectProxy.showLinking;
+		}
+		
+		private function saveOptions( event : Event ) :void
+		{
+			sharedObjectProxy.showLinking = component.showLinking;
+		}
 
 		private function addHandlers() : void
 		{
@@ -421,6 +438,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererDropEvent.DROP, renderer_dropHandler, true, 0, true );
 
 			editor.addEventListener( EditorEvent.ATTRIBUTES_CHANGED, attributesChangeHandler, true, 0, true );
+			
+			component.addEventListener( FlexEvent.CREATION_COMPLETE, addOptions, true );
+			
+			component.addEventListener( Event.CHANGE, saveOptions);
 		}
 
 		private function removeHandlers() : void
@@ -458,8 +479,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.removeEventListener( EditorEvent.ATTRIBUTES_CHANGED, attributesChangeHandler, true );
 
 			editor.removeEventListener( RendererEvent.GET_RESOURCE, renderer_getResourseHandler, true );
-
-
+			
+			component.removeEventListener( FlexEvent.CREATION_COMPLETE, addOptions, true );
+			
+			component.removeEventListener( Event.CHANGE, saveOptions);
 		}
 		
 		private function mouseUpRendererHandler ( event : Event ) : void
@@ -478,8 +501,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function moveRendererHandler ( event : RendererEvent ) : void
 		{
-			trace ( event.eventPhase );
-			sendNotification( ApplicationFacade.OBJECT_MOVED, { component : event.target, ctrlKey : event.ctrlKey } );
+			if ( component.showLinking )
+				sendNotification( ApplicationFacade.OBJECT_MOVED, { component : event.target, ctrlKey : event.ctrlKey } );
 		}
 		
 		private function keyDownDeleteHandler(event : KeyboardEvent) : void

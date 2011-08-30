@@ -25,7 +25,9 @@
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+			import net.vdombox.ide.modules.wysiwyg.view.skins.EditorSkin;
 			
+			import spark.components.CheckBox;
 			import spark.components.Label;
 
 			public static const STATUS_NULL : uint = 0;
@@ -259,15 +261,32 @@
 			
 			protected function skinnablecontainer1_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
 				skin.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler, false, 0, true );
-				//dispatchStateEvent();
+				skin.addEventListener( "nerrr", changeHandler ); 
+			}
+			
+			private function changeHandler( event : Event ) : void
+			{
+				dispatchEvent( new Event( Event.CHANGE ) );
 			}
 			
 			private function mouseMoveOnPageRenderer( event : MouseEvent ) : void
 			{
 				strXWritten.text = "x = " + (event.stageX - 137).toString() + "px";
 				strYWritten.text = "y = " + (event.stageY - 179).toString() + "px";
+			}
+			
+			public function set showLinking( value : Boolean ) : void
+			{
+				var editor : EditorSkin = skin as EditorSkin;
+				editor.showLinking.selected = value;
+			}
+			
+			public function get showLinking() : Boolean
+			{
+				var editor : EditorSkin = skin as EditorSkin;
+				
+				return editor.showLinking.selected;
 			}
 			
 		]]>

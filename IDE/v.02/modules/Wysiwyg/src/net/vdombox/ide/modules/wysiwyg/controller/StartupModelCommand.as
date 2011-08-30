@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.model.ResourcesProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SettingsProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.SharedObjectProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.TypesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -13,6 +14,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	{
 		override public function execute( note : INotification ) : void
 		{
+			facade.registerProxy( new SharedObjectProxy() );
 			facade.registerProxy( new TypesProxy() );
 			facade.registerProxy( new SessionProxy() );
 			facade.registerProxy( new SettingsProxy() );

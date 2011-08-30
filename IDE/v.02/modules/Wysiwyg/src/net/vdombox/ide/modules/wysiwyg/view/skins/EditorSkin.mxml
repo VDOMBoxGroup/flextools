@@ -20,13 +20,13 @@
 			private function creationCompleteHandler() : void
 			{
 				currentState = "wysiwyg";
-				//addEventListener(StateChangeEvent.CURRENT_STATE_CHANGE, amm, false, 0, true);
+				showLinking.addEventListener( Event.CHANGE, changeHandler );
 			}
 			
-			/*private function amm(event : StateChangeEvent): void
+			private function changeHandler ( event : Event ) : void
 			{
-				var tt : int = 0;
-			}*/
+				dispatchEvent( new Event( "nerrr" ));
+			}
 
 			override protected function commitProperties() : void
 			{
@@ -127,6 +127,8 @@
 				</s:Rect>
 				
 				<s:HGroup height="25" paddingLeft="20" verticalAlign="middle" width="100%" gap="15" horizontalAlign="right">
+					
+					<s:CheckBox id="showLinking" label="Show linking"/>
 					
 					<s:HGroup height="25" verticalAlign="middle" gap="5" width="80">
 						<mx:Image source="@Embed('icons/Cursor.png')" smoothBitmapContent="true" />
