@@ -309,6 +309,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 				else
 				{
+					if ( component is TransformMarker && lineVO.eps != 0 )
+						continue;
 					if ( !lineVO.orientationH )
 					{
 						var y1 : Number = lineVO.y1;

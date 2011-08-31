@@ -256,6 +256,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			{
 				for ( j = 0; j < 3; j++ )
 				{
+					if ( Math.abs( point1[i].x - point2[j].x ) > 10 )
+						continue;
 					for ( k = 0; k <= 10; k++ )
 					{
 						if ( point1[i].x == point2[j].x + k )
@@ -357,6 +359,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				{
 					for ( k = 0; k <= 10; k++ )
 					{
+						if ( Math.abs( point1[i].y - point2[j].y ) > 10 )
+							continue;
 						if ( point1[i].y == point2[j].y + k )
 						{
 							if ( i == 1 && j == 1 )

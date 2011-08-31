@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	
 	import net.vdombox.ide.common.interfaces.IExternalManager;
 	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.modules.wysiwyg.events.ExternalEditorWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ExternalEditorWindowSkin;
 	
 	import spark.components.Window;
@@ -50,6 +51,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		private function addHandlers() : void
 		{
 			addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+			addEventListener( Event.CLOSE, closeWindowHandler );
+		}
+		
+		private function closeWindowHandler( event : Event ) : void
+		{
+			dispatchEvent( new ExternalEditorWindowEvent( ExternalEditorWindowEvent.CLOSE ));
 		}
 		
 		public function get value() : String

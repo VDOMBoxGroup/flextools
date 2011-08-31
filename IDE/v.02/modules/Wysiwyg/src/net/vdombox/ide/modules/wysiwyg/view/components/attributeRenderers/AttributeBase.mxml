@@ -42,10 +42,22 @@
 			
 			protected var valueField : Object;
 			
-			public var objectVO : Object;
+			private var _objectVO : Object;
 			
 			private var codeInterface : Object = {};
 			
+			public function get objectVO():Object
+			{
+				return _objectVO;
+			}
+
+			public function set objectVO(value:Object):void
+			{
+				_objectVO = value;
+				if ( valueField != null )
+					valueField.value = _objectVO.name;
+			}
+
 			override public function set data( value : Object ) : void
 			{
 				super.data = value;
@@ -54,7 +66,7 @@
 					return;
 				if (value.hasOwnProperty( "objectVO"))
 				{
-					objectVO = value.objectVO;
+					_objectVO = value.objectVO;
 					nameLabel = value.name;
 					if (value.name == "id")
 					{
@@ -62,7 +74,7 @@
 						valueField.editable = false;
 						valueField.setStyle("borderVisible", "false");
 						valueField.setStyle("color", "#FFFFFF");
-						valueField.text =  objectVO.id;
+						valueField.text =  _objectVO.id;
 						valueField.width = 128;
 						valueField.height = 21;
 						valueField.setStyle("textAlign", "left");
@@ -71,7 +83,7 @@
 					else
 					{
 						valueField = new TextInputAttribute;
-						valueField.value =  objectVO.name ;
+						valueField.value =  _objectVO.name ;
 						valueField.width = 128;
 						valueField.height = 21;
 						secondElement = valueField as UIComponent;
@@ -295,8 +307,8 @@
 			
 			private function changeHandler(event : Event) : void
 			{
-				if (objectVO)
-					objectVO.name = valueField.value;
+				if (_objectVO)
+					_objectVO.name = valueField.value;
 				else
 					_attributeVO.value = valueField.value;
 				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ) );

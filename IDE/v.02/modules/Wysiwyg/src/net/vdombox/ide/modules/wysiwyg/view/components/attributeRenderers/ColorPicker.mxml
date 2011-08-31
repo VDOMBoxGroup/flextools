@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		   xmlns:s="library://ns.adobe.com/flex/spark" 
 		   xmlns:mx="library://ns.adobe.com/flex/mx" 
 		   click="mouseClickandler(event)"
 		   creationComplete="ColorPickerInit()"
-		   width="100%" height="20" >
+		   width="100%" height="20" verticalAlign="middle">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -29,16 +29,12 @@
 			
 			public function ColorPickerInit():void
 			{
-								
 				buttonMode = true;
 				
 				addEventListener( MouseEvent.CLICK, mouseClickandler );
 				
 				addEventListener( "apply", colorCompleteHandler );
 				addEventListener( "cancel", colorCompleteHandler );
-				
-				setStyle( "borderStyle", "solid" );
-				
 			}
 			
 			[Bindable( event="valueCommit" )]
@@ -50,8 +46,6 @@
 			public function set value( colorValue : String ) : void
 			{
 				var newColor : uint = uint( ( colorValue == "" ) ? "0" : "0x" + colorValue )
-				
-				setStyle( 'backgroundColor', newColor );
 				_color = colorValue;
 				_colorInNumber = newColor;
 				
@@ -63,7 +57,8 @@
 				ColorPickerWindow.show_window( this, _colorInNumber, true );
 			}
 			
-			private function change(event:ColorPickerEvent):void {
+			private function change(event:ColorPickerEvent):void 
+			{
 				
 			}
 			
@@ -77,15 +72,12 @@
 			}
 		]]>
 	</fx:Script>
-	<s:HGroup width="100%" height="100%" verticalAlign="middle">
-		<s:Rect width="100%" height="100%" id="rectColorPicker">
-			<s:fill>
-				<s:SolidColor color="{_colorInNumber}"/>
-			</s:fill>
-		</s:Rect>
+	<s:Rect width="100%" height="100%" id="rectColorPicker">
+		<s:fill>
+			<s:SolidColor color="{_colorInNumber}"/>
+		</s:fill>
+	</s:Rect>
 		
-		<mx:Image source="@Embed('icons/colorpicker.png')" smoothBitmapContent="true"/>
-		
-	</s:HGroup>
+	<mx:Image source="@Embed('icons/colorpicker.png')" smoothBitmapContent="true"/>
 
-</mx:Canvas>
+</s:HGroup>

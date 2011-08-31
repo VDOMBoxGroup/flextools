@@ -529,7 +529,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				addEventListener( DragEvent.DRAG_EXIT, dragExitHandler, false, 0, true );
 				addEventListener( DragEvent.DRAG_DROP, dragDropHandler, false, 0, true );
 				
-				addEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
+				//addEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
 				
 		}
 		
@@ -1205,7 +1205,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
 			removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
 			
-			removeEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
+			//removeEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
 		}
 
 		public function set setState ( state : String ) : void

@@ -95,7 +95,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			var vdomObjectAttributesVO : VdomObjectAttributesVO;
 			
-			var attributesRenderer : IList;
+			var attributesRenderer : IList = new ArrayCollection();
 			var attributeBase : Object;
 
 			switch ( name )
@@ -177,43 +177,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 				case ApplicationFacade.PAGE_NAME_SETTED:
 				{
-					var pageVO : PageVO = body as PageVO;
-					
-					if ( sessionProxy.selectedPage && pageVO &&
-						sessionProxy.selectedPage.id == pageVO.id )
-					{
-						attributesRenderer = objectAttributesPanel.attributesList.dataProvider;
-						for each (attributeBase in attributesRenderer)
-						{
-							if (attributeBase.hasOwnProperty( "objectVO") && attributeBase.name == "name")
-							{
-								attributeBase.objectVO = pageVO;
-								break;
-							}
-						}
-					}
-					
+					objectAttributesPanel.attributesVO = objectAttributesPanel.attributesVO;
 					break;
 				}
 					
 				case ApplicationFacade.OBJECT_NAME_SETTED:
 				{
-					var objectVO : ObjectVO = body as ObjectVO;
-					
-					if ( sessionProxy.selectedObject && objectVO &&
-						sessionProxy.selectedObject.id == objectVO.id )
-					{
-						attributesRenderer = objectAttributesPanel.attributesList.dataProvider;
-						for each (attributeBase in attributesRenderer)
-						{
-							if (attributeBase.hasOwnProperty( "objectVO") && attributeBase.name == "name")
-							{
-								attributeBase.objectVO = objectVO;
-								break;
-							}
-						}
-					}
-					
 					break;
 				}
 			}

@@ -27,6 +27,7 @@
 			public function set value(value:String):void
 			{
 				_value = value;
+				lbl.text = value;
 			}
 			
 			public function initChars(_interface : uint, _attributeDescriptionVO : AttributeDescriptionVO) : void

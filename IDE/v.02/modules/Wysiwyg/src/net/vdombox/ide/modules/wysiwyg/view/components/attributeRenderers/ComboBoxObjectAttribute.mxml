@@ -73,7 +73,7 @@
 		</s:fill>
 	</s:Rect>
 	<mx:Text id="txt"/>
-	<s:ComboBox id="valueField" width="100%" height="100%"
+	<s:DropDownList id="valueField" width="100%" height="100%"
 				change="changeHandler()" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ComboBoxObjectItemRenderer"/>
 	
 	
