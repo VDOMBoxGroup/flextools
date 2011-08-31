@@ -22,6 +22,9 @@
 			import net.vdombox.utils.WindowManager;
 			
 			private var _value : String;
+			
+			[Bindable]
+			private var _toolTipValue : String;
 			private var _title : String = "Multiline Window";
 			public var multilineWindow : MultilineWindow;
 			
@@ -39,6 +42,10 @@
 			public function set value( value : String ) : void
 			{
 				_value = value;
+				if ( value.length > 50 )
+					_toolTipValue = value.substr( 0, 50 );
+				else
+					_toolTipValue = value;
 			}
 			
 			private function openWindow() : void
@@ -95,7 +102,7 @@
 		</s:Rect>
 		
 		<s:TextInput id="lbl" textAlign="left"
-				 text="Multiline" editable="false" width="100%" height="100%"/>
+				 text="Multiline" editable="false" width="100%" height="100%" toolTip="{_toolTipValue}"/>
 		
 	</s:Group>
 	

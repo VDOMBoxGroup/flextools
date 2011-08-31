@@ -21,6 +21,7 @@
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.windows.ColorPickerWindow;
+			[Bindable]
 			private var _color : String = "0";
 			
 			[Bindable]
@@ -72,11 +73,14 @@
 			}
 		]]>
 	</fx:Script>
-	<s:Rect width="100%" height="100%" id="rectColorPicker">
-		<s:fill>
-			<s:SolidColor color="{_colorInNumber}"/>
-		</s:fill>
-	</s:Rect>
+	<s:Group width="100%" height="100%" toolTip="{_color}">
+		<s:Rect width="100%" height="100%" id="rectColorPicker">
+			<s:fill>
+				<s:SolidColor color="{_colorInNumber}"/>
+			</s:fill>
+		</s:Rect>
+	</s:Group>
+	
 		
 	<mx:Image source="@Embed('icons/colorpicker.png')" smoothBitmapContent="true"/>
 
