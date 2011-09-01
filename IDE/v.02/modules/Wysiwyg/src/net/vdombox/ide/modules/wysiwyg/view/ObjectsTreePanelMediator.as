@@ -117,14 +117,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 					trace ("[ObjTreePanelMediator] OBJECT_GETTED");
 					var objectVO : ObjectVO = body as ObjectVO;
 
-					var requestElement : Object = requestQue[ objectVO.id ];
+					var requestElement : Object = requestQue ? requestQue[ objectVO.id ] : null;
 
 					if ( requestElement && requestElement[ "open" ] )
 						sendNotification( ApplicationFacade.OPEN_OBJECT_REQUEST, objectVO );
 					else
 						sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, objectVO );
 
-					delete requestQue[ objectVO.id ];
+					if (requestQue)
+						delete requestQue[ objectVO.id ];
 
 					break;
 				}
