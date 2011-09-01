@@ -8,6 +8,7 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.vo.LibraryVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
 	
@@ -114,8 +115,9 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if ( operation == PPMOperationNames.UPDATE )
 					{
-						var applicationInformationVO : ApplicationInformationVO = body.applicationInformationVO;
-						applicationProxy.changeApplicationInformation( applicationInformationVO );
+						//var applicationInformationVO : ApplicationInformationVO = body.applicationInformationVO;
+						//applicationProxy.changeApplicationInformation( applicationInformationVO );
+						sendNotification(ApplicationFacade.PAGE_SET_AS_INDEX, { pageID: body.pageID} );
 					}
 
 					break;

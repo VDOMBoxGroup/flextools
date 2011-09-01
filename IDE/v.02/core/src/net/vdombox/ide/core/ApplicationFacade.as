@@ -1,6 +1,8 @@
 package net.vdombox.ide.core
 {
 	import net.vdombox.ide.core.controller.ChangeLocaleCommand;
+	import net.vdombox.ide.core.controller.CheckIndexPageCommand;
+	import net.vdombox.ide.core.controller.CheckSelectedPageCommand;
 	import net.vdombox.ide.core.controller.CloseInitialWindowCommand;
 	import net.vdombox.ide.core.controller.CloseMainWindowCommand;
 	import net.vdombox.ide.core.controller.CloseWindowCommand;
@@ -21,6 +23,8 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.controller.SaveModuleSettings;
 	import net.vdombox.ide.core.controller.ServerLoginSuccessfulCommand;
+	import net.vdombox.ide.core.controller.SetIndexPageCommand;
+	import net.vdombox.ide.core.controller.SetSelectedPageCommand;
 	import net.vdombox.ide.core.controller.StartupCommand;
 	import net.vdombox.ide.core.controller.requests.ApplicationProxyRequestCommand;
 	import net.vdombox.ide.core.controller.requests.ObjectProxyRequestCommand;
@@ -34,7 +38,6 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.responses.PageProxyResponseCommand;
 	import net.vdombox.ide.core.controller.responses.ResourcesProxyResponseCommand;
 	import net.vdombox.ide.core.controller.responses.ServerProxyResponseCommand;
-	import net.vdombox.ide.core.controller.SetSelectedPageCommand;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -273,7 +276,11 @@ package net.vdombox.ide.core
 		public static const PAGE_OBJECT_CREATED : String = "pageObjectCreated";
 		public static const PAGE_OBJECT_DELETED : String = "pageObjectDeleted";
 		
-		public static const PAGE_SET_SELECTED : String = "pageSetSelected";
+		public static const PAGE_CHECK_SELECTED			: String = "pageCheckSelected";
+		public static const PAGE_SET_SELECTED 			: String = "pageSetSelected";
+		
+		public static const PAGE_CHECK_INDEX			: String = "pageCheckIndex";
+		public static const PAGE_SET_AS_INDEX 			: String = "pageSetAsIndex";
 		
 		public static const PAGE_SERVER_ACTIONS_LIST_GETTED : String = "pageServerActionsListGetted";
 		public static const PAGE_SERVER_ACTION_GETTED : String = "pageServerActionGetted";
@@ -401,7 +408,13 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_REMOTE_CALL_GETTED, ApplicationProxyResponseCommand );
 
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
+			
+			registerCommand( PAGE_CHECK_SELECTED, CheckSelectedPageCommand );
 			registerCommand( PAGE_SET_SELECTED, SetSelectedPageCommand );
+			
+			registerCommand( PAGE_CHECK_INDEX, CheckIndexPageCommand );
+			registerCommand( PAGE_SET_AS_INDEX, SetIndexPageCommand );
+			
 			registerCommand( PAGE_STRUCTURE_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_ATTRIBUTES_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_ATTRIBUTES_SETTED, PageProxyResponseCommand );

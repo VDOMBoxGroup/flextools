@@ -8,8 +8,9 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -25,7 +26,7 @@ package net.vdombox.ide.core.controller.requests
 
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 			var resultMessage : ProxyMessage;
-
+			
 			var body : Object = message.getBody();
 			var target : String = message.target;
 			var operation : String = message.operation;
@@ -70,6 +71,7 @@ package net.vdombox.ide.core.controller.requests
 					if ( operation == PPMOperationNames.READ )
 					{
 						properties = statesProxy.selectedPage;
+						
 					}
 					else if ( operation == PPMOperationNames.UPDATE )
 					{

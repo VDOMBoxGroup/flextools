@@ -21,7 +21,6 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.business.SOAP;
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-
 	/**
 	 * ApplicationProxy is wrapper on VDOM Application.   
 	 * Takes data from the server through the SOAP functions.
@@ -39,13 +38,13 @@ package net.vdombox.ide.core.model
 	{
 		public static const NAME : String = "ApplicationProxy";
 
-		private static const GET_EVENTS : String = "getEvents";
-		private static const SET_EVENTS : String = "setEvents";
+		public static var instances : Object = {};
 
 		private static const CREATE_LIBRARY : String = "createLibrary";
-		private static const UPDATE_LIBRARY : String = "updateLibrary";
 
-		public static var instances : Object = {};
+		private static const GET_EVENTS : String = "getEvents";
+		private static const SET_EVENTS : String = "setEvents";
+		private static const UPDATE_LIBRARY : String = "updateLibrary";
 
 		public function ApplicationProxy( applicationVO : ApplicationVO )
 		{
@@ -54,40 +53,19 @@ package net.vdombox.ide.core.model
 			instances[ this.proxyName ] = "";
 		}
 
+		private var _pages : Array;
+
 		private var _selectedPage : PageVO;
 
-		private var _pages : Array;
+		private var serverProxy : ServerProxy;
 
 		private var soap : SOAP = SOAP.getInstance();
 
 		private var typesProxy : TypesProxy;
 
-		private var serverProxy : ServerProxy;
-
-		public function get id() : String
-		{
-			return applicationVO.id;
-		}
-
 		public function get applicationVO() : ApplicationVO
 		{
 			return data as ApplicationVO;
-		}
-
-		override public function onRegister() : void
-		{
-			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
-
-			addHandlers();
-		}
-
-		override public function onRemove() : void
-		{
-			typesProxy = null;
-
-			removeHandlers();
-
-			delete instances[ proxyName ];
 		}
 
 		public function changeApplicationInformation( applicationInformationVO : ApplicationInformationVO ) : AsyncToken
@@ -96,58 +74,6 @@ package net.vdombox.ide.core.model
 			var token : AsyncToken;
 
 			token = soap.set_application_info( applicationVO.id, applicationInformationXML );
-
-			token.recipientName = proxyName;
-
-			return token;
-		}
-
-		public function getPages() : AsyncToken
-		{
-			var token : AsyncToken;
-
-			token = soap.get_top_objects( applicationVO.id );
-
-			token.recipientName = proxyName;
-			return token;
-		}
-
-		public function getStructure() : AsyncToken
-		{
-			var token : AsyncToken;
-
-			token = soap.get_application_structure( applicationVO.id );
-
-			token.recipientName = proxyName;
-
-			return token;
-		}
-
-		public function setStructure( strucrure : Array ) : AsyncToken
-		{
-			var token : AsyncToken;
-
-			var structureXML : XML =
-				<Structure/>
-				;
-			var structureObjectVO : StructureObjectVO;
-
-			for each ( structureObjectVO in strucrure )
-			{
-				structureXML.appendChild( structureObjectVO.toXML() );
-			}
-
-			token = soap.set_application_structure( applicationVO.id, structureXML );
-
-			token.recipientName = proxyName;
-
-			return token;
-		}
-
-		public function getServerActionsList() : AsyncToken
-		{
-			var token : AsyncToken;
-			token = soap.get_server_actions_list( applicationVO.id, applicationVO.id );
 
 			token.recipientName = proxyName;
 
@@ -165,13 +91,28 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function updateLibrary( libraryVO : LibraryVO ) : AsyncToken
+		public function createPage( typeVO : TypeVO, name : String = "", pageAttributesVO : VdomObjectAttributesVO = null ) : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.set_library( applicationVO.id, libraryVO.name, libraryVO.script );
+
+			var attributesXML : XML
+
+			if ( pageAttributesVO && pageAttributesVO.attributes.length > 0 )
+			{
+				attributesXML =
+					<Attributes/>;
+
+				var attributeVO : AttributeVO;
+
+				for each ( attributeVO in pageAttributesVO.attributes )
+				{
+					attributesXML.appendChild( attributeVO.toXML() );
+				}
+			}
+
+			token = soap.create_object( applicationVO.id, "", typeVO.id, name, attributesXML ? attributesXML : "" );
 
 			token.recipientName = proxyName;
-			token.requestFunctionName = UPDATE_LIBRARY;
 
 			return token;
 		}
@@ -186,14 +127,19 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function getLibraries() : AsyncToken
+		public function deletePage( pageVO : PageVO ) : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.get_libraries( applicationVO.id );
+
+			token = soap.delete_object( applicationVO.id, pageVO.id );
 
 			token.recipientName = proxyName;
 
 			return token;
+		}
+
+		public function deletePageAt( pageID : String ) : void
+		{
 		}
 
 		public function getEvents( pageVO : PageVO ) : AsyncToken
@@ -206,6 +152,102 @@ package net.vdombox.ide.core.model
 			token.recipientName = proxyName;
 //			token.requestFunctionName = GET_EVENTS;
 			token.pageVO = pageVO;
+
+			return token;
+		}
+
+		public function getLibraries() : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_libraries( applicationVO.id );
+
+			token.recipientName = proxyName;
+
+			return token;
+		}
+
+		public function getPageAt( pageID : String ) : PageVO
+		{
+			return null;
+		}
+
+		public function getPageProxy( pageVO : PageVO ) : PageProxy
+		{
+			var pageProxy : PageProxy = facade.retrieveProxy( PageProxy.NAME + "/" + pageVO.applicationVO.id + "/" + pageVO.id ) as PageProxy;
+
+			if ( !pageProxy )
+			{
+				pageProxy = new PageProxy( pageVO ) as PageProxy;
+				facade.registerProxy( pageProxy );
+			}
+
+			return pageProxy;
+		}
+
+		public function getPageProxyAt( pageID : String ) : IPageProxy
+		{
+			return null;
+		}
+
+		public function getPages() : AsyncToken
+		{
+			var token : AsyncToken;
+
+			token = soap.get_top_objects( applicationVO.id );
+
+			token.recipientName = proxyName;
+			return token;
+		}
+
+		public function getServerActionsList() : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_server_actions_list( applicationVO.id, applicationVO.id );
+
+			token.recipientName = proxyName;
+
+			return token;
+		}
+
+		public function getStructure() : AsyncToken
+		{
+			var token : AsyncToken;
+
+			token = soap.get_application_structure( applicationVO.id );
+
+			token.recipientName = proxyName;
+
+			return token;
+		}
+
+		public function get id() : String
+		{
+			return applicationVO.id;
+		}
+		
+		override public function onRegister() : void
+		{
+			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
+
+			addHandlers();
+		}
+
+		override public function onRemove() : void
+		{
+			typesProxy = null;
+
+			removeHandlers();
+
+			delete instances[ proxyName ];
+		}
+
+		public function remoteCall( objectID : String, functionName : String, value : String ) : AsyncToken
+		{
+			var token : AsyncToken;
+
+			token = soap.remote_method_call( applicationVO.id, objectID, functionName, value, "" );
+
+			token.recipientName = proxyName;
 
 			return token;
 		}
@@ -246,79 +288,36 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function createPage( typeVO : TypeVO, name : String = "", pageAttributesVO : VdomObjectAttributesVO = null ) : AsyncToken
+		public function setStructure( strucrure : Array ) : AsyncToken
 		{
 			var token : AsyncToken;
 
-			var attributesXML : XML
+			var structureXML : XML =
+				<Structure/>
+				;
+			var structureObjectVO : StructureObjectVO;
 
-			if ( pageAttributesVO && pageAttributesVO.attributes.length > 0 )
+			for each ( structureObjectVO in strucrure )
 			{
-				attributesXML =
-					<Attributes/>;
-
-				var attributeVO : AttributeVO;
-
-				for each ( attributeVO in pageAttributesVO.attributes )
-				{
-					attributesXML.appendChild( attributeVO.toXML() );
-				}
+				structureXML.appendChild( structureObjectVO.toXML() );
 			}
 
-			token = soap.create_object( applicationVO.id, "", typeVO.id, name, attributesXML ? attributesXML : "" );
+			token = soap.set_application_structure( applicationVO.id, structureXML );
 
 			token.recipientName = proxyName;
 
 			return token;
 		}
 
-		public function deletePage( pageVO : PageVO ) : AsyncToken
+		public function updateLibrary( libraryVO : LibraryVO ) : AsyncToken
 		{
 			var token : AsyncToken;
-
-			token = soap.delete_object( applicationVO.id, pageVO.id );
-
-			token.recipientName = proxyName;
-
-			return token;
-		}
-
-		public function remoteCall( objectID : String, functionName : String, value : String ) : AsyncToken
-		{
-			var token : AsyncToken;
-
-			token = soap.remote_method_call( applicationVO.id, objectID, functionName, value, "" );
+			token = soap.set_library( applicationVO.id, libraryVO.name, libraryVO.script );
 
 			token.recipientName = proxyName;
+			token.requestFunctionName = UPDATE_LIBRARY;
 
 			return token;
-		}
-
-		public function deletePageAt( pageID : String ) : void
-		{
-		}
-
-		public function getPageAt( pageID : String ) : PageVO
-		{
-			return null;
-		}
-
-		public function getPageProxy( pageVO : PageVO ) : PageProxy
-		{
-			var pageProxy : PageProxy = facade.retrieveProxy( PageProxy.NAME + "/" + pageVO.applicationVO.id + "/" + pageVO.id ) as PageProxy;
-
-			if ( !pageProxy )
-			{
-				pageProxy = new PageProxy( pageVO ) as PageProxy;
-				facade.registerProxy( pageProxy );
-			}
-
-			return pageProxy;
-		}
-
-		public function getPageProxyAt( pageID : String ) : IPageProxy
-		{
-			return null;
 		}
 
 		private function addHandlers() : void
@@ -353,108 +352,6 @@ package net.vdombox.ide.core.model
 
 		}
 
-		private function removeHandlers() : void
-		{
-			soap.get_top_objects.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.delete_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-			soap.get_application_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.set_application_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-			soap.set_application_info.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-			soap.get_server_actions_list.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.set_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-			soap.set_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.remove_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-			soap.get_libraries.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-//			soap.get_child_objects_tree.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-//			soap.get_application_events.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-//			soap.set_application_events.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-			soap.get_events_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.set_events_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-			soap.remote_method_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-		}
-
-		private function createStructure( sourceStructure : XMLList ) : Array
-		{
-			if ( sourceStructure.length() == 0 )
-				return null;
-
-			var resultStructure : Array = [];
-			var structureObjectVO : StructureObjectVO;
-
-			for each ( var structureObjectXML : XML in sourceStructure )
-			{
-				structureObjectVO = new StructureObjectVO( structureObjectXML.@ID )
-				structureObjectVO.setDescription( structureObjectXML );
-
-				resultStructure.push( structureObjectVO );
-			}
-
-			return resultStructure;
-		}
-
-		private function generatePageStructure( rawPage : XML ) : XML
-		{
-			var structure : XML =
-				<page/>
-
-			var rawObjects : XMLList = rawPage.Objects.Object;
-
-			var object : XML;
-
-			structure.@id = rawPage.@ID;
-			structure.@name = rawPage.@Name;
-			structure.@typeID = rawPage.@Type;
-
-			if ( rawObjects.length() == 0 )
-				return structure;
-
-			for each ( var rawObject : XML in rawObjects )
-			{
-				object = createStructureObject( rawObject );
-
-				structure.appendChild( object );
-			}
-
-			return structure;
-		}
-
-		private function createStructureObject( rawXML : XML ) : XML
-		{
-			var structureObject : XML =
-				<object/>
-				;
-			var rawChildren : XMLList = rawXML.Objects.Object;
-
-			var child : XML;
-
-			structureObject.@id = rawXML.@ID;
-			structureObject.@name = rawXML.@Name;
-			structureObject.@typeID = rawXML.@Type;
-
-			if ( rawChildren.length() == 0 )
-				return structureObject;
-
-			for each ( var rawChild : XML in rawChildren )
-			{
-				child = createStructureObject( rawChild );
-
-				structureObject.appendChild( child );
-			}
-
-			return structureObject;
-		}
-
 		private function createPagesList( pages : XML ) : void
 		{
 			_pages = [];
@@ -482,6 +379,51 @@ package net.vdombox.ide.core.model
 			}
 			
 			_pages.sortOn("name", Array.CASEINSENSITIVE);
+		}
+
+		private function createStructure( sourceStructure : XMLList ) : Array
+		{
+			if ( sourceStructure.length() == 0 )
+				return null;
+
+			var resultStructure : Array = [];
+			var structureObjectVO : StructureObjectVO;
+
+			for each ( var structureObjectXML : XML in sourceStructure )
+			{
+				structureObjectVO = new StructureObjectVO( structureObjectXML.@ID )
+				structureObjectVO.setDescription( structureObjectXML );
+
+				resultStructure.push( structureObjectVO );
+			}
+
+			return resultStructure;
+		}
+
+		private function createStructureObject( rawXML : XML ) : XML
+		{
+			var structureObject : XML =
+				<object/>
+				;
+			var rawChildren : XMLList = rawXML.Objects.Object;
+
+			var child : XML;
+
+			structureObject.@id = rawXML.@ID;
+			structureObject.@name = rawXML.@Name;
+			structureObject.@typeID = rawXML.@Type;
+
+			if ( rawChildren.length() == 0 )
+				return structureObject;
+
+			for each ( var rawChild : XML in rawChildren )
+			{
+				child = createStructureObject( rawChild );
+
+				structureObject.appendChild( child );
+			}
+
+			return structureObject;
 		}
 
 		private function generateApplicationEvents( applicationEventsXML : XML, pageVO : PageVO ) : ApplicationEventsVO
@@ -616,6 +558,63 @@ package net.vdombox.ide.core.model
 			return applicationEvents;
 		}
 
+		private function generatePageStructure( rawPage : XML ) : XML
+		{
+			var structure : XML =
+				<page/>
+
+			var rawObjects : XMLList = rawPage.Objects.Object;
+
+			var object : XML;
+
+			structure.@id = rawPage.@ID;
+			structure.@name = rawPage.@Name;
+			structure.@typeID = rawPage.@Type;
+
+			if ( rawObjects.length() == 0 )
+				return structure;
+
+			for each ( var rawObject : XML in rawObjects )
+			{
+				object = createStructureObject( rawObject );
+
+				structure.appendChild( object );
+			}
+
+			return structure;
+		}
+
+		private function removeHandlers() : void
+		{
+			soap.get_top_objects.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+
+			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.delete_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+
+			soap.get_application_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_application_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+
+			soap.set_application_info.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+
+			soap.get_server_actions_list.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+
+			soap.set_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.remove_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+
+			soap.get_libraries.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+
+//			soap.get_child_objects_tree.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+
+//			soap.get_application_events.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+//			soap.set_application_events.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+
+			soap.get_events_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_events_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+
+			soap.remote_method_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+		}
+
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
 			var token : AsyncToken = event.token;
@@ -672,7 +671,8 @@ package net.vdombox.ide.core.model
 
 					sendNotification( ApplicationFacade.APPLICATION_PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice() } );
 					
-					sendNotification( ApplicationFacade.PAGE_SET_SELECTED, { applicationVO: applicationVO, pages: _pages.slice() } );
+					sendNotification( ApplicationFacade.PAGE_CHECK_SELECTED, { pagesVO: _pages.slice() } );
+					sendNotification( ApplicationFacade.PAGE_CHECK_INDEX, { pagesVO: _pages.slice() } );
 					break;
 				}
 
@@ -827,7 +827,7 @@ package net.vdombox.ide.core.model
 					
 					_pages.push( pageVO );
 
-					sendNotification( ApplicationFacade.APPLICATION_PAGE_CREATED, { applicationVO: applicationVO, pageVO: pageVO } );
+					sendNotification( ApplicationFacade.APPLICATION_PAGE_CREATED, { applicationVO: applicationVO, pageVO: pageVO, pagesVO: _pages.slice() } );
 
 					break;
 				}
@@ -848,10 +848,10 @@ package net.vdombox.ide.core.model
 							break;
 						}
 					}
-
+					
 					if ( deletedPageVO )
 					{
-						sendNotification( ApplicationFacade.APPLICATION_PAGE_DELETED, { applicationVO: applicationVO, pageVO: deletedPageVO } );
+						sendNotification( ApplicationFacade.APPLICATION_PAGE_DELETED, { applicationVO: applicationVO, pageVO: deletedPageVO, pagesVO: _pages.slice() } );
 					}
 
 					break;
@@ -882,7 +882,5 @@ package net.vdombox.ide.core.model
 				}
 			}
 		}
-		
-		
 	}
 }

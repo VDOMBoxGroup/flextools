@@ -54,6 +54,9 @@ package net.vdombox.ide.core.controller.responses
 					
 				case ApplicationFacade.APPLICATION_PAGE_CREATED:
 				{
+					sendNotification(ApplicationFacade.PAGE_CHECK_SELECTED, {pagesVO: body.pagesVO});
+					sendNotification(ApplicationFacade.PAGE_CHECK_INDEX, {pagesVO: body.pagesVO});
+					
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
 					
 					break;
@@ -61,6 +64,9 @@ package net.vdombox.ide.core.controller.responses
 					
 				case ApplicationFacade.APPLICATION_PAGE_DELETED:
 				{
+					sendNotification(ApplicationFacade.PAGE_CHECK_SELECTED, {pagesVO: body.pagesVO});
+					sendNotification(ApplicationFacade.PAGE_CHECK_INDEX, {pagesVO: body.pagesVO});
+					
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.PAGE, body );
 					
 					break;
