@@ -1,8 +1,10 @@
 package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
+	import mx.rpc.Fault;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
+	import mx.rpc.soap.SOAPFault;
 	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
@@ -738,6 +740,7 @@ package net.vdombox.ide.core.model
 			
 			var notification : ProxyNotification;
 			var token : AsyncToken = event.token;
+			var fault : SOAPFault = event.fault as SOAPFault;
 			
 			switch ( operationName )
 			{
@@ -754,7 +757,10 @@ package net.vdombox.ide.core.model
 					
 				case "set_name":
 				{
-					
+					var detailXML : XML = new XML(fault.detail);
+					pageVO.name = detailXML.Name;
+					notification = new ProxyNotification( ApplicationFacade.PAGE_NAME_SETTED, pageVO );
+					notification.token = token;
 					break;
 				}
 

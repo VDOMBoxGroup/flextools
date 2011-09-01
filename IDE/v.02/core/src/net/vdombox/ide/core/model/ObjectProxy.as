@@ -3,6 +3,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
+	import mx.rpc.soap.SOAPFault;
 	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
@@ -280,6 +281,7 @@ package net.vdombox.ide.core.model
 			soap.submit_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			
 			soap.set_name.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_name.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function removeHandlers() : void
@@ -301,6 +303,7 @@ package net.vdombox.ide.core.model
 			soap.submit_object_script_presentation.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			
 			soap.set_name.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_name.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function generateObjectAttributes( attributesXML : XML ) : Array
@@ -549,6 +552,35 @@ package net.vdombox.ide.core.model
 					
 			}
 
+			if ( notification )
+				facade.notifyObservers( notification );
+		}
+		
+		private function soap_faultHandler( event : FaultEvent ) : void
+		{	
+			var operation : Operation = event.currentTarget as Operation;
+			var fault : SOAPFault = event.fault as SOAPFault;
+			
+			if ( !operation || !fault )
+				return;
+			
+			var operationName : String = operation.name;
+			var notification : ProxyNotification;
+			var token : AsyncToken = event.token;
+			
+			switch ( operationName )
+			{
+				case "set_name":
+				{
+					var detailXML : XML = new XML(fault.detail);
+					objectVO.name = detailXML.Name;
+					notification = new ProxyNotification( ApplicationFacade.OBJECT_NAME_SETTED, objectVO );
+					notification.token = token;
+					
+					break;
+				}	
+			}
+			
 			if ( notification )
 				facade.notifyObservers( notification );
 		}
