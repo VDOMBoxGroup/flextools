@@ -190,6 +190,12 @@ package net.vdombox.ide.modules.tree.model
 			if ( isSelectedPageChanged )
 			{
 				isSelectedPageChanged = false;
+				
+				if (selectedPage){
+					var structureProxy : StructureProxy = facade.retrieveProxy( StructureProxy.NAME ) as StructureProxy;
+					selectedTreeElement = structureProxy.getTreeElementByVO( selectedPage );
+				}
+							
 				sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, data[ SELECTED_PAGE ] );
 
 			}

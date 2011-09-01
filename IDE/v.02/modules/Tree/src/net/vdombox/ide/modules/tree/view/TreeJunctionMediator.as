@@ -86,6 +86,8 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.GET_PAGE_ATTRIBUTES );
 			interests.push( ApplicationFacade.SET_PAGE_ATTRIBUTES );
 
+			interests.push( ApplicationFacade.SET_PAGE_NAME );
+			
 			interests.push( ApplicationFacade.OPEN_WINDOW );
 			interests.push( ApplicationFacade.CLOSE_WINDOW );
 
@@ -343,25 +345,21 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.SET_PAGE_ATTRIBUTES:
 				{
-				//	code of Andrey, not used
-				/*	pageAttributesRecipientID = body.recipientID;
-					pageVO = body.pageVO;
-
-					pageAttributesSessionName = PPMPlaceNames.PAGE + ApplicationFacade.DELIMITER + PPMOperationNames.UPDATE +
-						ApplicationFacade.DELIMITER + PPMPageTargetNames.ATTRIBUTES;
-
-					pageAttributesRecipients = sessionProxy.getObject( pageAttributesSessionName );
-
-					if ( !pageAttributesRecipients.hasOwnProperty( pageVO.id ) )
-						pageAttributesRecipients[ pageVO.id ] = [];
-
-					pageAttributesRecipients[ pageVO.id ].push( pageAttributesRecipientID );*/
-					
-					
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break;
+				}
+					
+				case ApplicationFacade.SET_PAGE_NAME:
+				{
+					if ( body is PageVO )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.NAME, body );
+					
+					if ( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break;
 				}
 

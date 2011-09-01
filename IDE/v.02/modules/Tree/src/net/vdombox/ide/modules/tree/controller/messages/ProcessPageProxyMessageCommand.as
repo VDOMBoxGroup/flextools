@@ -56,6 +56,15 @@ package net.vdombox.ide.modules.tree.controller.messages
 
 					break;
 				}
+					
+				case PPMPageTargetNames.NAME:
+				{
+					if ( operation == PPMOperationNames.UPDATE )
+					{
+						sendNotification( ApplicationFacade.PAGE_NAME_SETTED, body );
+					}
+					break;
+				}
 			}
 		}
 	}

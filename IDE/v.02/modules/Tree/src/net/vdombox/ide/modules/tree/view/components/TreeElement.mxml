@@ -46,6 +46,8 @@
 			private var _treeElementVO : TreeElementVO;
 
 			private var _title : String;
+			
+			private var _nameAttribute : String;
 
 			[Bindable]
 			private var _description : String;
@@ -96,6 +98,17 @@
 			}
 
 			[Bindable]
+			public function get nameAttribute() : String
+			{
+				return _nameAttribute;
+			}
+			
+			public function set nameAttribute(name:String) : void
+			{
+				_nameAttribute = name;
+			}
+						
+			[Bindable]
 			public function get typeName() : String
 			{
 				return _typeName;
@@ -119,6 +132,9 @@
 					isIndexPage = true;
 				else
 					isIndexPage = false;
+				
+				if (treeElementVO)
+					nameAttribute = treeElementVO.pageVO.name;
 			}
 
 			[Bindable]

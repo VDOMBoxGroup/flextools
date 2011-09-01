@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.tree.view
 {
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
@@ -85,6 +86,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.APPLICATION_INFORMATION_SETTED );
 			//interests.push( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED );
 
+			interests.push( ApplicationFacade.PAGE_NAME_SETTED );
 			return interests;
 		}
 
@@ -129,7 +131,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
-					if ( sessionProxy.selectedPage == treeElementVO.pageVO )
+					if ( sessionProxy.selectedPage && sessionProxy.selectedPage.id == treeElementVO.pageVO.id )
 						treeElement.selected = true;
 					else
 						treeElement.selected = false;
@@ -171,6 +173,16 @@ package net.vdombox.ide.modules.tree.view
 						treeElement.isIndexPage = true;
 					else
 						treeElement.isIndexPage = false;
+					
+					break;
+				}
+					
+				case ApplicationFacade.PAGE_NAME_SETTED:
+				{
+					var treeElementPageVO : PageVO = body as PageVO;
+					
+					if (treeElement.treeElementVO && treeElementPageVO.id == treeElement.treeElementVO.pageVO.id)
+						treeElement.nameAttribute = treeElementPageVO.name;
 					
 					break;
 				}

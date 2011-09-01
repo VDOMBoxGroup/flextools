@@ -26,11 +26,11 @@
 			 skinClass="net.vdombox.ide.modules.tree.view.skins.PanelSkin"/>-->
 
 		<components:PropertiesPanel id="propertiesPanel"
-									width="100%"
+									width="100%" height="45%"
 									cornerRadius="5" skinClass="net.vdombox.ide.modules.tree.view.skins.PanelSkin"/>
 
 		<components:LevelsFilterPanel id="levelsPanel"
-									  width="100%"
+									  width="100%" height="55%"
 									  cornerRadius="5" skinClass="net.vdombox.ide.modules.tree.view.skins.PanelSkin"/>
 	</s:VGroup>
 </s:Group>

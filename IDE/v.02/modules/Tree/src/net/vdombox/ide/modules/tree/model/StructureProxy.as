@@ -334,7 +334,6 @@ package net.vdombox.ide.modules.tree.model
 
 		private function updateTreeElementsProperties() : void
 		{
-			trace("добавить ниже всех элементов");
 			var treeElementVO : TreeElementVO;
 			var rawStructureObject : StructureObjectVO;
 

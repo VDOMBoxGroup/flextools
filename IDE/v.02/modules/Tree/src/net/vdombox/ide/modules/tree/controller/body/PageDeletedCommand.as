@@ -19,9 +19,6 @@ package net.vdombox.ide.modules.tree.controller.body
 			
 			if( !pageVO )
 				sendNotification( ApplicationFacade.SEND_TO_LOG, Object(this).constructor.toString );
-			
-			if( sessionProxy.selectedPage && pageVO && sessionProxy.selectedPage.id == pageVO.id )
-				sendNotification( ApplicationFacade.SET_SELECTED_PAGE );
 				
 			if( pageVO )
 				structureProxy.deleteTreeElementByVO( pageVO );

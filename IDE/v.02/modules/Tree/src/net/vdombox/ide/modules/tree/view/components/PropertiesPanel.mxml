@@ -17,16 +17,41 @@
 			import net.vdombox.ide.modules.tree.view.skins.TextAreaShadowedSkin;
 			import net.vdombox.ide.modules.tree.view.skins.TextInputShadowedSkin;
 
-			[Bindable]
-			public var treeElementVO : TreeElementVO;
+			private var _treeElementVO : TreeElementVO;
 			
 			private var _vdomObjectAttributesVO : VdomObjectAttributesVO;
 
 			[Bindable]
-			private var titleAttributeVO : AttributeVO;
+			private var _nameAttribute : String = "";
 
 			[Bindable]
 			private var descriptionAttributeVO : AttributeVO;
+
+			
+			[Bindable]
+			public function get treeElementVO():TreeElementVO
+			{
+				return _treeElementVO;
+			}
+
+			public function set treeElementVO(value:TreeElementVO):void
+			{
+				_treeElementVO = value;
+				
+				if (_treeElementVO)
+				{
+					_nameAttribute = _treeElementVO.pageVO.name;
+				} else 
+					_nameAttribute = "";
+			}
+			
+			public function set nameAttribute(name:String):void
+			{
+				_nameAttribute = name;
+				
+				if (treeElementVO)
+					treeElementVO.pageVO.name = name;
+			}
 
 			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
 			{
@@ -44,7 +69,6 @@
 			{
 				if ( _vdomObjectAttributesVO )
 				{
-					titleAttributeVO = getAttributeByName( "title" );
 					descriptionAttributeVO = getAttributeByName( "description" );
 					
 					var indexPageID : String;
@@ -59,12 +83,6 @@
 					else
 						makeStartButton.enabled = true;
 					
-					if ( titleAttributeVO.value == "" )
-					{
-						titleAttributeVO.value = _vdomObjectAttributesVO.vdomObjectVO.typeVO.displayName;	
-						dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.SAVE_PAGE_ATTRIBUTES ) );
-					}					
-
 					saveButton.enabled = true;
 					deleteButton.enabled = true;
 
@@ -95,6 +113,16 @@
 
 				return result;
 			}
+			
+			private function saveProperties():void
+			{
+				if (treeElementVO && treeElementVO.pageVO)
+				{
+					treeElementVO.pageVO.name = txtPageName.text;
+					dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.SAVE_PAGE_NAME ) );
+				}
+				dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.SAVE_PAGE_ATTRIBUTES ) )
+			}
 		]]>
 	</fx:Script>
 
@@ -124,9 +152,10 @@
 		<s:HGroup height="100%" width="100%"
 				  paddingLeft="5" paddingRight="5" verticalAlign="middle">
 
-			<s:Label text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_title' ) }" width="35" />
+			<s:Label text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_name' ) }" width="35" />
 			
-			<s:TextInput text="@{ titleAttributeVO.value }" width="100%"
+			<s:TextInput id="txtPageName"
+						 text="@{ _nameAttribute }" width="100%"
 						 borderColor="0xC5C5C5" focusAlpha="0" skinClass="net.vdombox.ide.modules.tree.view.skins.TextInputShadowedSkin"
 						 borderVisible="true" />
 		</s:HGroup>
@@ -231,7 +260,7 @@
 								  enabled="false" height="20" icon="@Embed('assets/save.png')" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_save' ) }"
 								  width="100%"
 								  skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
-								  click="dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.SAVE_PAGE_ATTRIBUTES ) )"/>
+								  click="saveProperties()"/>
 
 	</s:controlBarContent>
 </s:Panel>

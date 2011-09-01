@@ -158,6 +158,8 @@ package net.vdombox.ide.modules.tree
 		public static const SET_PAGE_ATTRIBUTES : String = "setPageAttributes";
 		public static const PAGE_ATTRIBUTES_SETTED : String = "pageAttributesSetted";
 
+		public static const SET_PAGE_NAME : String = "setPageName";
+		public static const PAGE_NAME_SETTED : String = "pageNameSetted";
 //		resources
 		public static const GET_RESOURCE : String = "getResource";
 

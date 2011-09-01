@@ -191,9 +191,13 @@
 				</s:Rect>
 
 
-				<s:Label id="titleLabel"
-						 text="{ hostComponent.title }"
-						 bottom="5" color="#FFFFFF" left="50" textAlign="left"
+				<s:Label id="pageNameLabel"
+						 text="{ hostComponent.nameAttribute }"
+						 toolTip="{ hostComponent.nameAttribute }"
+						 bottom="5" left="45" right="5"
+						 width="100%"
+						 color="#FFFFFF"
+						 textAlign="left"
 						 maxDisplayedLines="1"/>
 
 			</s:Group>
