@@ -44,19 +44,9 @@ package net.vdombox.ide.common.vo
 			return _name;
 		}
 		
-		public function set name( value : String ) : void
-		{
-			
-		}
-		
 		public function get description() : String
 		{
 			return _description;
-		}
-		
-		public function set description( value : String ) : void
-		{
-			
 		}
 		
 		public function get serverVersion() : String
@@ -69,9 +59,9 @@ package net.vdombox.ide.common.vo
 			return _iconID;
 		}
 		
-		public function set iconID( value : String ) : void
+		public function set indexPageID(index:String):void
 		{
-			
+			_indexPageID = index;
 		}
 		
 		public function get indexPageID() : String
@@ -79,58 +69,31 @@ package net.vdombox.ide.common.vo
 			return _indexPageID;
 		}
 
-		public function set indexPageID( value : String ) : void
-		{
-			
-		}
-		
 		public function get numberOfPages() : int
 		{
 			return _numberOfPages;
 		}
 
-		public function set numberOfPages( value : int ) : void
-		{
-			
-		}
-		
 		public function get numberOfObjects() : int
 		{
 			return _numberOfObjects;
 		}
 
-		public function set numberOfObjects( value : int ) : void
-		{
-			
-		}
-		
 		public function get scriptingLanguage() : String
 		{
 			return _scriptingLanguage;
 		}
 		
-		public function set scriptingLanguage( value : String ) : void
-		{
-			
-		}
-		
 		public function setInformation( information : XML ) : void
 		{
 			_name				= information.Name[ 0 ];
-			name 				= information.Name[ 0 ];
 			_description 		= information.Description[ 0 ];
-			description 		= information.Description[ 0 ];
 			_serverVersion 		= information.ServerVersion[ 0 ];
 			_iconID 			= information.Icon[ 0 ];
-			iconID				= information.Icon[ 0 ];
 			_indexPageID 		= information.Index[ 0 ];
-			indexPageID 		= information.Index[ 0 ];
 			_numberOfPages 		= information.Numberofpages[ 0 ];
-			numberOfPages		= information.Numberofpages[ 0 ];
 			_numberOfObjects 	= information.Numberofobjects[ 0 ];
-			numberOfObjects 	= information.Numberofobjects[ 0 ];
 			_scriptingLanguage	= information.ScriptingLanguage[ 0 ];
-			scriptingLanguage 	= information.ScriptingLanguage[ 0 ];
 		}
 	}
 }
