@@ -758,6 +758,8 @@ package net.vdombox.ide.core.model
 				case "set_name":
 				{
 					var detailXML : XML = new XML(fault.detail);
+					if (pageVO.id != detailXML.ObjectID)
+						break;
 					pageVO.name = detailXML.Name;
 					notification = new ProxyNotification( ApplicationFacade.PAGE_NAME_SETTED, pageVO );
 					notification.token = token;

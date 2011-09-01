@@ -354,6 +354,13 @@ package net.vdombox.ide.core.model
 
 		private function createPagesList( pages : XML ) : void
 		{
+			var pageVO : PageVO;
+			var pageVOInd : Number = -1;
+			
+			var oldPages : Array = [];
+			
+			if (_pages)
+				oldPages = _pages.slice();
 			_pages = [];
 
 			var pageID : String;
@@ -370,7 +377,8 @@ package net.vdombox.ide.core.model
 
 				var typeVO : TypeVO = typesProxy.getType( typeID );
 
-				var pageVO : PageVO = new PageVO( applicationVO, typeVO );
+				pageVOInd = pageVOIndex(oldPages, pageID); 
+				pageVO = pageVOInd >= 0 ? oldPages[pageVOInd] : new PageVO( applicationVO, typeVO );
 				pageVO.setID( pageID );
 
 				pageVO.setXMLDescription( page );
@@ -379,6 +387,20 @@ package net.vdombox.ide.core.model
 			}
 			
 			_pages.sortOn("name", Array.CASEINSENSITIVE);
+		}
+		
+		private function pageVOIndex(pagesVO : Array, pageID : String) : Number
+		{
+			var i : uint = 0;
+			for each (var pageVO : PageVO in pagesVO)
+			{
+				if (pageVO.id == pageID)
+					return i;
+				
+				i++;
+			}
+				
+			return -1;
 		}
 
 		private function createStructure( sourceStructure : XMLList ) : Array
