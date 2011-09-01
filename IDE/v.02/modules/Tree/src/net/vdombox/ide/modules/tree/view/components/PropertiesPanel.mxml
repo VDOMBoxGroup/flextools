@@ -150,9 +150,9 @@
 		</s:Rect>
 
 		<s:HGroup height="100%" width="100%"
-				  paddingLeft="5" paddingRight="5" verticalAlign="middle">
+				  paddingLeft="3" paddingRight="5" verticalAlign="middle">
 
-			<s:Label text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_name' ) }" width="35" />
+			<s:Label text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_name' ) }" width="37" />
 			
 			<s:TextInput id="txtPageName"
 						 text="@{ _nameAttribute }" width="100%"
@@ -181,8 +181,8 @@
 		</s:Rect>
 
 		<s:HGroup height="100%" width="100%"
-				  paddingLeft="5" paddingRight="5" verticalAlign="middle">
-			<s:Label text="Img" width="35"/>
+				  paddingLeft="3" paddingRight="5" verticalAlign="middle">
+			<s:Label text="Img" width="37"/>
 			<components:ResourceSelector value="@{ treeElementVO.resourceVO }" width="100%" />
 		</s:HGroup>
 
@@ -207,13 +207,14 @@
 		</s:Rect>
 
 		<s:VGroup width="100%"
-				  paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+				  paddingBottom="5" paddingLeft="3" paddingRight="5" paddingTop="5">
 			
 			<s:Label height="15" text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_description' ) }"/>
 			
 			<s:TextArea height="55" text="@{ descriptionAttributeVO.value }" width="100%"
 						borderColor="0xC5C5C5" focusAlpha="0" skinClass="net.vdombox.ide.modules.tree.view.skins.TextAreaShadowedSkin"
-						borderVisible="true"/>
+						borderVisible="true"
+						left="2"/>
 		</s:VGroup>
 
 	</s:Group>
