@@ -953,6 +953,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseUpHandler( event : MouseEvent ) : void
 		{
+			if ( !stage )
+				return;
 			stage.removeEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 			stage.removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler );
 
@@ -976,8 +978,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if (backgroundRefreshNeedFlag)
 			{
 				backgroundRefreshNeedFlag = false;
-				refresh();
-				//onBytesLoaded(null);
+				//refresh();
+				onBytesLoaded(null);
 			}
 			
 		}
@@ -1007,6 +1009,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				if ( event.type == IOErrorEvent.IO_ERROR )
 					return;
+				else if ( event.type == "emptyResource" )
+					content = null;
 				else if ( event.type != "resizeMainWindow" )
 					content = Bitmap( event.target.content );
 			}
@@ -1023,7 +1027,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				backGrSprite.graphics.beginBitmapFill( content.bitmapData, null, true );
 				backGrSprite.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
 				backGrSprite.graphics.endFill();
-				
+				background.removeAllElements();
 				background.addElement( new SpriteUIComponent( backGrSprite ) );
 				invalidateDisplayList();
 			}
@@ -1174,6 +1178,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				var renderEvent : RendererEvent = new RendererEvent( RendererEvent.GET_RESOURCE );
 				renderEvent.object = this;
 				dispatchEvent( renderEvent );
+			} else
+			{
+				onBytesLoaded( new Event( "emptyResource" ) );
 			}
 
 

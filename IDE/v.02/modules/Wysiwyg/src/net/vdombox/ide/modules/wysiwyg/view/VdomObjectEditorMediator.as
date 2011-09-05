@@ -632,6 +632,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			vdomObjectAttributesVO.attributes = attributes;
 
 			sendNotification( ApplicationFacade.RENDERER_TRANSFORMED, vdomObjectAttributesVO );
+			sendNotification( ApplicationFacade.GET_WYSIWYG, vdomObjectAttributesVO.vdomObjectVO );
 		}
 
 		private function attributesChangeHandler( event : EditorEvent ) : void

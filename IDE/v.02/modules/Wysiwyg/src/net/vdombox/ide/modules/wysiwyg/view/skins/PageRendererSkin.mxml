@@ -30,21 +30,23 @@
 			<s:SolidColorStroke alpha=".0"/>
 		</s:stroke>
 	</s:Rect>
-
+	
 	<s:Scroller id="scroller"
 				focusEnabled="false"
 				bottom="0" left="0" right="0" top="0"
 				minViewportInset="1">
 
 		<s:Group>
-			<s:Group id="background" width="{dataGroup.width}" height="{dataGroup.height}" resize="parentApplication.dispatchEvent(new Event('resizeMainWindow'))"/> <!-- setbackground image and not set all element-->
+			<s:Group id="background" width="{dataGroup.width}" height="{dataGroup.height}"
+					 resize="parentApplication.dispatchEvent(new Event('resizeMainWindow'))"/> <!-- setbackground image and not set all element-->
 
+			
 			<s:DataGroup id="dataGroup" width="100%" height="100%"/>   <!-- set all element-->
 			
 			<s:Group id="linegroup" width="{dataGroup.width}" height="{dataGroup.height}" />
 
 			<s:Group id="upperLayer"/>
-
+			
 			<components:TransformMarker id="transformMarker"/>
 		</s:Group>
 	</s:Scroller>

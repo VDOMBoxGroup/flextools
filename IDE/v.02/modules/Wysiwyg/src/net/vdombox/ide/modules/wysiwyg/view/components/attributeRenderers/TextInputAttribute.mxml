@@ -28,6 +28,7 @@
 			{
 				_value = value;
 				lbl.text = value;
+				dispatchEvent( new Event( Event.CHANGE ));
 			}
 			
 			public function initChars(_interface : uint, _attributeDescriptionVO : AttributeDescriptionVO) : void
