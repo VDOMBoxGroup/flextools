@@ -7,7 +7,7 @@
 						layout="absolute" showGripper="false" showStatusBar="false"
 						showTitleBar="false" title="VDOM Help Aplication"
 						titleBarColors="[ 0x666666, 0x222222 ]"
-						titleIcon="@Embed('../assets/bookmarks.png')" titleTextStyleName="tbStyle">
+						titleIcon="@Embed('icons/16_vdom_icon.png')" titleTextStyleName="tbStyle">
 	<mx:Style>
 		.tbStyle {
 			color : #FFFFFF;
@@ -374,7 +374,7 @@
 			mouseDown="{nativeWindow.startMove();}" doubleClick="{minMaximize()}" doubleClickEnabled="true"/>
 		<mx:HBox paddingLeft="5" paddingTop="5" paddingRight="5" 
 				color="#FFFFFF" width="100%">
-			<mx:Image source="@Embed('../assets/bookmarks.png')" />
+			<mx:Image source="@Embed('icons/16_vdom_icon.png')" />
 			<mx:Label text="VDOM Help Aplication" />
 			<mx:HBox width="100%"  horizontalAlign="right" paddingTop="2">
 				<mx:Image source="@Embed('../assets/minimize.png')" right="0" click="{minimize()}"/>
