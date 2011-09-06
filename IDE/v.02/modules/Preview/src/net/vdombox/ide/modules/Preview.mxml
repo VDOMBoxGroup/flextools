@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<common:VIModule 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/halo"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:common="net.vdombox.ide.common.*">
+	
+	<fx:Script>
+		<![CDATA[ 
+			
+			import net.vdombox.ide.modules.events.ApplicationFacade;
+
+			public static const MODULE_ID : String = "net.vdombox.ide.modules.Events";
+
+			public static const MODULE_NAME : String = "Events";
+
+			public static const VERSION : String = "0.0.1";
+
+			public static const TEAR_DOWN : String = "tearDown";
+
+			override public function tearDown() : void
+			{
+				trace("\nE V N T: Event.tearDown()");
+				dispatchEvent( new Event( TEAR_DOWN ) );
+			}
+
+			override public function get moduleID() : String
+			{
+				return MODULE_ID;
+			}
+
+			override public function get moduleName() : String
+			{
+				return MODULE_NAME;
+			}
+
+			override public function get version() : String
+			{
+				return MODULE_NAME;
+			}
+
+			override public function get hasToolset() : Boolean
+			{
+				return true;
+			}
+
+			override public function get hasSettings() : Boolean
+			{
+				return false;
+			}
+
+			override public function get hasBody() : Boolean
+			{
+				return true;
+			}
+
+			/**
+			 * Called by the Core (VdomIDE) after initializing this module.
+			 */
+			override public function startup() : void
+			{
+				facade = ApplicationFacade.getInstance( MODULE_ID );
+				ApplicationFacade( facade ).startup( this );
+			}
+
+			override public function getToolset() : void
+			{
+				facade.sendNotification( ApplicationFacade.CREATE_TOOLSET );
+			}
+
+			override public function getSettingsScreen() : void
+			{
+				facade.sendNotification( ApplicationFacade.CREATE_SETTINGS_SCREEN );
+			}
+
+			/**
+			 * Called by the Core (VdomIDE) after select this module.
+			 */
+			override public function getBody() : void
+			{
+				facade.sendNotification( ApplicationFacade.CREATE_BODY );
+				facade.sendNotification( ApplicationFacade.MODULE_SELECTED)
+			}
+			
+			override public function deSelect():void
+			{
+				facade.sendNotification(ApplicationFacade.MODULE_DESELECTED);
+			}
+
+			override public function initializeSettings() : void
+			{
+				facade.sendNotification( ApplicationFacade.INITIALIZE_SETTINGS );
+			}
+		]]>
+	</fx:Script>
+</common:VIModule>

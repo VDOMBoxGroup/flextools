@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Button xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  skinClass="net.vdombox.ide.modules.events.view.skins.WorkAreaButtonSkin">
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.events.view.skins.WorkAreaButtonSkin;
+			
+			import spark.components.supportClasses.ToggleButtonBase;
+			import spark.skins.spark.ToggleButtonSkin;
+			
+			[Bindable]
+			public var icon : Object;
+			
+			private var _highlighted : Boolean;
+			
+			public function get highlighted() : Boolean
+			{
+				return _highlighted;
+			}
+			
+			public function set highlighted( value : Boolean ) : void
+			{
+				_highlighted = value;
+				
+				invalidateSkinState();
+			}
+			
+			override protected function getCurrentSkinState():String
+			{
+				if (!_highlighted)
+					return super.getCurrentSkinState();
+				else
+					return super.getCurrentSkinState() + "AndHighlighted";
+			}
+		]]>
+	</fx:Script>
+</s:Button>
