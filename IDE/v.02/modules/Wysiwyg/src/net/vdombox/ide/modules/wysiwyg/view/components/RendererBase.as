@@ -883,7 +883,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			
 			setFocus();
-			trace(x + " " + y);
 			if ( movable && !isScroller( event.target as DisplayObjectContainer ) )
 			{
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
@@ -964,7 +963,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				beforeX = x;
 				beforeY = y;
 				
-				trace(x + " " + y);
+				trace(x + " " + y + " mouse");
 
 				dispatchEvent( new RendererEvent( RendererEvent.MOVE ) );
 
@@ -1115,6 +1114,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				choiceContentType( contetntPart, background );
 			}
 
+			trace(x + " " + y);
 			skin.currentState = "normal";
 		}
 

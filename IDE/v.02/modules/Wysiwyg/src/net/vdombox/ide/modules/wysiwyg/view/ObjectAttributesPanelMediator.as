@@ -183,6 +183,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 				case ApplicationFacade.OBJECT_NAME_SETTED:
 				{
+					objectAttributesPanel.attributesVO = objectAttributesPanel.attributesVO;
 					break;
 				}
 			}

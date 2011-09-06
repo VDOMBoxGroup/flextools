@@ -265,8 +265,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 						component.y = component.y - stepY;
 					if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
 					{
-						component.measuredWidth = component.measuredWidth + stepX;
-						component.measuredHeight = component.measuredHeight - stepY;
+						if ( marker.equallyX( component.x ) )
+							component.measuredWidth = component.measuredWidth - stepX;
+						else
+							component.measuredWidth = component.measuredWidth + stepX;
+						if ( marker.equallyY( component.y ) )
+							component.measuredHeight = component.measuredHeight - stepY;
+						else
+							component.measuredHeight = component.measuredHeight + stepY;
 					}
 					else
 					{
@@ -613,13 +619,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 				if ( attributeName == "x" )
 				{
 					attributeValue = event.attributes[ attributeName ];
-					trace(attributeValue);
 					attributeName = "left";
 				}
 				else if ( attributeName == "y" )
 				{
 					attributeValue = event.attributes[ attributeName ];
-					trace(attributeValue);
 					attributeName = "top"
 				}
 				else
@@ -636,7 +640,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			vdomObjectAttributesVO.attributes = attributes;
 
 			sendNotification( ApplicationFacade.RENDERER_TRANSFORMED, vdomObjectAttributesVO );
-			sendNotification( ApplicationFacade.GET_WYSIWYG, vdomObjectAttributesVO.vdomObjectVO );
+			//sendNotification( ApplicationFacade.GET_WYSIWYG, vdomObjectAttributesVO.vdomObjectVO );
 		}
 
 		private function attributesChangeHandler( event : EditorEvent ) : void

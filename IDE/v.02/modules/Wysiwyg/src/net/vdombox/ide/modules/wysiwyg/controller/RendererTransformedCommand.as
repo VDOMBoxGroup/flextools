@@ -83,8 +83,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 					needForUpdateObject[ renderer ] = true;
 				}
 			}
-			
-			trace("1");
 
 			sendNotification( ApplicationFacade.UPDATE_ATTRIBUTES, vdomObjectAttributesVO );
 		}
