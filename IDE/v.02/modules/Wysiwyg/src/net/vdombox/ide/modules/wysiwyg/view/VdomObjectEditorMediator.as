@@ -123,12 +123,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.XML_PRESENTATION_SETTED );
 			
 			interests.push( ApplicationFacade.LINE_LIST_GETTED );
-
+			
 			return interests;
 		}
 		
 		private var listStates : Array = new Array();
-
+		
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var name : String = notification.getName();
@@ -201,13 +201,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 //					{
 //						editor.status = PageEditor.STATUS_SAVING_OK;
 //					}
-
+					
 					break;
 				}
 					
 				case ApplicationFacade.LINE_LIST_GETTED:
 				{			
 					drawLine( body );
+					break;
 				}
 					
 			}
@@ -577,7 +578,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function vdomObjectVOChangedHandler( event : EditorEvent ) : void
 		{
 			if ( editor.editorVO.vdomObjectVO )
+			{
 				sendNotification( ApplicationFacade.GET_WYSIWYG, editor.editorVO.vdomObjectVO );
+			}
 		}
 
 		private function renderer_createdHandler( event : RendererEvent ) : void
