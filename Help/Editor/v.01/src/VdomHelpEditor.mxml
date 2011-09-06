@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication showStatusBar="false"
-						showGripper="false"
-						showTitleBar="false"
+<mx:WindowedApplication showStatusBar="false" showGripper="false" showTitleBar="false"
 						xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
 						xmlns:mx="http://www.adobe.com/2006/mxml"
-						minWidth="650"
-						minHeight="300"
+						minWidth="650" minHeight="300" width="1000" height="800"
 						layout="absolute"
 						creationComplete="{creationCompleteHandler()}"
 						backgroundColor="0x373739"
-						width="1000"
-						height="800"
-						titleBarColors="[ 0x666666, 0x222222 ]"
-						title="VDOM Help Aplication"
+						titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Aplication"
 						titleTextStyleName="tbStyle"
-						titleIcon="@Embed('../assets/bookmarks.png')"
+						titleIcon="@Embed('icons/16_vdom_icon_editor.png')"
 						xmlns:local="*">
 	<mx:Style>
 		.tbStyle {
@@ -1047,7 +1041,7 @@
 					 paddingRight="5"
 					 color="#FFFFFF"
 					 width="100%">
-				<mx:Image source="@Embed('../assets/bookmarks.png')" />
+				<mx:Image source="@Embed('icons/16_vdom_icon_editor.png')" />
 				<mx:Label id="topTitle" text="VDOM Help Aplication" />
 				<mx:HBox width="100%" horizontalAlign="right" paddingTop="2">
 					<mx:Image source="@Embed('../assets/minimize.png')" right="0" click="{minimize()}" />
