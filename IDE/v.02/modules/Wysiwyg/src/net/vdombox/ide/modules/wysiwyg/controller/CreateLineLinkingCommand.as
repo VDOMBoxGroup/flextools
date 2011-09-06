@@ -241,7 +241,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var line : LineVO;
 			var startI : int = 0;
 			var finishI : int = 3;
-			if ( component is TransformMarker )
+			/*if ( component is TransformMarker )
 			{
 				var marker : TransformMarker = component as TransformMarker;
 				if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
@@ -251,7 +251,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 					else
 						finishI = 2;
 				}
-			}
+			}*/
 			for ( i = startI; i < finishI; i++ )
 			{
 				for ( j = 0; j < 3; j++ )
@@ -342,7 +342,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var line : LineVO;
 			var startI : int = 0;
 			var finishI : int = 3;
-			if ( component is TransformMarker )
+			/*if ( component is TransformMarker )
 			{
 				var marker : TransformMarker = component as TransformMarker;
 				if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
@@ -352,7 +352,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 					else
 						finishI = 2;
 				}
-			}
+			}*/
 			for ( i = startI; i < finishI; i++ )
 			{
 				for ( j = 0; j < 3; j++ )

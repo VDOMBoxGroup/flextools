@@ -259,12 +259,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 				else
 				{
-					component.x = component.x - stepX;
-					component.y = component.y - stepY;
+					if ( !marker.equallyX( component.x ) )
+						component.x = component.x - stepX;
+					if ( !marker.equallyY( component.y ) )
+						component.y = component.y - stepY;
 					if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
 					{
 						component.measuredWidth = component.measuredWidth + stepX;
-						component.measuredHeight = component.measuredHeight + stepY;
+						component.measuredHeight = component.measuredHeight - stepY;
 					}
 					else
 					{
@@ -611,11 +613,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 				if ( attributeName == "x" )
 				{
 					attributeValue = event.attributes[ attributeName ];
+					trace(attributeValue);
 					attributeName = "left";
 				}
 				else if ( attributeName == "y" )
 				{
 					attributeValue = event.attributes[ attributeName ];
+					trace(attributeValue);
 					attributeName = "top"
 				}
 				else

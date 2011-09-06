@@ -744,9 +744,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			loader = new Loader();
 
-			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
+			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, backgroundContentLoaded );
 			parentApplication.addEventListener("resizeMainWindow", resizePageRenderer);
-			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, backgroundContentLoaded );
 
 			try
 			{
@@ -883,6 +883,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			
 			setFocus();
+			trace(x + " " + y);
 			if ( movable && !isScroller( event.target as DisplayObjectContainer ) )
 			{
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
@@ -962,6 +963,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				beforeX = x;
 				beforeY = y;
+				
+				trace(x + " " + y);
 
 				dispatchEvent( new RendererEvent( RendererEvent.MOVE ) );
 
@@ -979,7 +982,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				backgroundRefreshNeedFlag = false;
 				//refresh();
-				onBytesLoaded(null);
+				backgroundContentLoaded(null);
 			}
 			
 		}
@@ -997,12 +1000,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		 **/
 		
 		private var content : Bitmap;
-		private function onBytesLoaded( event : Event ) : void
+		private function backgroundContentLoaded( event : Event ) : void
 		{
-
-			//			event.target.contentLoaderInfo.removeEventListener( Event.COMPLETE, onBytesLoaded );
-			//			event.target.contentLoaderInfo.removeEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
-
 			loader = null;
 
 			if (event != null)
@@ -1180,7 +1179,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				dispatchEvent( renderEvent );
 			} else
 			{
-				onBytesLoaded( new Event( "emptyResource" ) );
+				backgroundContentLoaded( new Event( "emptyResource" ) );
 			}
 
 

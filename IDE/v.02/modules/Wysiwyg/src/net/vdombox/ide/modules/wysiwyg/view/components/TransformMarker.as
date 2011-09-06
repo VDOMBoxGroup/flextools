@@ -574,6 +574,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return false;
 		}
 		
+		public function equallyX( _x : Number ) : Boolean
+		{
+			if ( _x == beforeTransform.x )
+				return true;
+			return false;
+		}
+		
+		public function equallyY( _y : Number ) : Boolean
+		{
+			if ( _y == beforeTransform.y )
+				return true;
+			return false;
+		}
+		
 		public function equallySize( _width : Number, _height : Number ) : Boolean
 		{
 			if ( _width == beforeTransform.width && _height == beforeTransform.height ) 
