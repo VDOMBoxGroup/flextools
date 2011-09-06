@@ -448,6 +448,7 @@ package net.vdombox.ide.core.model
 				{
 					vdomObjectAttributesVO = new VdomObjectAttributesVO( objectVO );
 					vdomObjectAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
+					objectVO.name = result.Objects.Object[ 0 ].@Name;
 
 					notification = new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED,
 						{ objectVO: objectVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
@@ -461,6 +462,7 @@ package net.vdombox.ide.core.model
 				{
 					vdomObjectAttributesVO = new VdomObjectAttributesVO( objectVO );
 					vdomObjectAttributesVO.setXMLDescription( result.Object[ 0 ] );
+					
 
 					notification = new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_SETTED,
 						{ objectVO: objectVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
