@@ -39,9 +39,9 @@
 
 			private var sqlProxy : SQLProxy = new SQLProxy();
 
-			private var pageVersion : Number;
+			private var stylesManager : CSSStyleManager = new CSSStyleManager();
 			
-			private var cssFileName : String = "main.css";
+			private var pageVersion : Number;
 			
 			private var blockWindow	: TitleWindow;
 			
@@ -79,17 +79,14 @@
 			{
 				sqlProxy.creatDB();
 				
-				var cssFile:File = File.applicationStorageDirectory.resolvePath(cssFileName);
-				
-				if (cssFile.exists) {
-					onCssFileLoaded();
-				} else {
-					trace("'''''Will Copy css File  \n" + cssFileName);
-					var cssURL  : URLRequest = new URLRequest(cssFileName);
-					var cssLoader : URLLoader  = new URLLoader(cssURL);
-					
-					cssLoader.addEventListener(Event.COMPLETE, startCopyCSSFile);
-				}
+				stylesManager.addEventListener(CSSStyleManager.STYLE_SETTED, onStylesLoaded);
+				stylesManager.setStyle();
+			}
+			
+			private function onStylesLoaded(evt : Event):void
+			{
+				stylesManager.removeEventListener(CSSStyleManager.STYLE_SETTED, onStylesLoaded);
+				showAllProducts();
 			}
 			
 			private function onWysiwygSaveCombinationClicked(event:Event):void
@@ -97,35 +94,6 @@
 				this.savePage();
 			}
 			
-			private function startCopyCSSFile(evt:Event):void
-			{
-				trace ("[VdomHelpEditor] startCopyCSSFile");
-				
-				var byteArray:ByteArray = new ByteArray();
-				byteArray.writeMultiByte(evt.target.data + "\n", "UTF-8");
-				
-				var newFile:File = File.applicationStorageDirectory.resolvePath(cssFileName);
-				try {
-					var fileStream : FileStream = new FileStream();
-					
-					fileStream.open(newFile, FileMode.WRITE);
-					fileStream.writeBytes(byteArray);
-					fileStream.close();
-				} catch(error:IOError) {
-					//				var er:* =  error;
-					trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+ cssFileName);
-					return;
-				}
-				
-				onCssFileLoaded();
-			}
-			
-			private function onCssFileLoaded():void
-			{
-				trace ("[VdomHelpEditor] onCssFileLoaded");
-				showAllProducts();
-			}
-
 			private function treeChangeHandler(lstEvt:ListEvent) : void
 			{
 				trace ("[VdomHelpEditor] treeChangeHandler");	
