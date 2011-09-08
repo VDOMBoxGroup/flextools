@@ -16,6 +16,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.ObjectVisibleCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenExternalEditorRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererClickedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererCreatedCommand;
@@ -137,6 +138,7 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const GET_OBJECTS : String = "getObjects";
 		public static const OBJECTS_GETTED : String = "objectsGetted";
 		public static const OBJECT_MOVED : String = "objectMoved";
+		public static const OBJECT_VISIBLE : String = "objectVisible";
 
 //		attributes
 		public static const GET_PAGE_ATTRIBUTES : String = "getPageAttributes";
@@ -261,6 +263,7 @@ package net.vdombox.ide.modules.wysiwyg
 			
 			registerCommand( RENDERER_TRANSFORMED, RendererTransformedCommand );
 			registerCommand( SAVE_ATTRIBUTES_REQUEST, RendererTransformedCommand );
+			registerCommand( OBJECT_VISIBLE, ObjectVisibleCommand );
 //			registerCommand( SELECT_ITEM_REQUEST, SelectItemRequestCommand );
 
 			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );

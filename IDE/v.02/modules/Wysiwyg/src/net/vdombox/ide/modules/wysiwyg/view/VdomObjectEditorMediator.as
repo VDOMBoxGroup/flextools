@@ -29,7 +29,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.SharedObjectProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.SettingsApplicationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.LineVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
@@ -64,7 +64,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var sessionProxy : SessionProxy;
 		
-		private var sharedObjectProxy : SharedObjectProxy;
+		private var sharedObjectProxy : SettingsApplicationProxy;
 		
 		public function get component() : VdomObjectEditor
 		{
@@ -96,7 +96,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
-			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
+			sharedObjectProxy = facade.retrieveProxy( SettingsApplicationProxy.NAME ) as SettingsApplicationProxy;
 
 			addHandlers();
 		}
@@ -180,7 +180,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 							}
 						}
 						// mark object
-						editor.selectedRenderer = selRenderer;
+						if ( selRenderer && selRenderer.visible )
+							editor.selectedRenderer = selRenderer;
+						else
+							editor.selectedRenderer = null;
 						if (editor.selectedRenderer != null)
 							editor.selectedRenderer.setFocus();
 					}
@@ -421,6 +424,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			if ( !editor )
 				return;
+			editor.addEventListener( FlexEvent.HIDE, hideRendererHandler, true );
+			
+			editor.addEventListener( FlexEvent.SHOW, showRendererHandler, true );
 			
 			editor.addEventListener( KeyboardEvent.KEY_DOWN, keyDownDeleteHandler, true );
 			
@@ -464,6 +470,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( !editor )
 				return;
 
+			editor.removeEventListener( FlexEvent.HIDE, hideRendererHandler, true );
+			editor.removeEventListener( FlexEvent.SHOW, showRendererHandler, true );
 			editor.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 			
 			editor.removeEventListener( RendererEvent.MOVE_MEDIATOR, moveRendererHandler, true);
@@ -496,6 +504,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 			component.removeEventListener( FlexEvent.CREATION_COMPLETE, addOptions, true );
 			
 			component.removeEventListener( Event.CHANGE, saveOptions);
+		}
+		
+		private function hideRendererHandler ( event : FlexEvent ) : void
+		{
+			var _renderer : RendererBase = event.target as RendererBase;
+			if ( _renderer == editor.selectedRenderer )
+				editor.selectedRenderer = null;
+		}
+		
+		private function showRendererHandler ( event : FlexEvent ) : void
+		{
+			var _renderer : RendererBase = event.target as RendererBase;
+			if ( !_renderer )
+				return;
+			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+			if ( !sessionProxy.selectedObject )
+				return;
+			
+			if ( _renderer.renderVO.vdomObjectVO.id == sessionProxy.selectedObject.id )
+				editor.selectedRenderer = _renderer;
 		}
 		
 		private function mouseUpRendererHandler ( event : Event ) : void

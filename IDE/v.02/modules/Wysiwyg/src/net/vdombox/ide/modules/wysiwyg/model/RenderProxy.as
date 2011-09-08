@@ -10,9 +10,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 {
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-
+	
 	import mx.collections.XMLListCollection;
-
+	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
@@ -22,10 +22,11 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-
+	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-
+	
 	import spark.components.IItemRenderer;
 
 	/**
@@ -117,6 +118,15 @@ package net.vdombox.ide.modules.wysiwyg.model
 		{
 			return vdomObjectVO ? renderersIndex[ vdomObjectVO.id ] : null;
 		}
+		
+		public function setVisibleRenderer( rendererID : String ) : void
+		{
+			var _renderer : RendererBase = renderersIndex[ rendererID][0] as RendererBase;
+			
+			if ( _renderer )
+				_renderer.visible = !_renderer.visible;
+		}
+		
 
 		override public function onRegister() : void
 		{

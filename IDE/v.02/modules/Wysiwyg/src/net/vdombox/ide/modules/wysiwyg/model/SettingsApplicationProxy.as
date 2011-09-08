@@ -5,11 +5,11 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
-	public class SharedObjectProxy extends Proxy implements IProxy
+	public class SettingsApplicationProxy extends Proxy implements IProxy
 	{
-		public static const NAME : String = "SharedObjectProxy";
+		public static const NAME : String = "SettingsApplicationProxy";
 		
-		public function SharedObjectProxy()
+		public function SettingsApplicationProxy()
 		{
 			super( NAME, {} );
 		}

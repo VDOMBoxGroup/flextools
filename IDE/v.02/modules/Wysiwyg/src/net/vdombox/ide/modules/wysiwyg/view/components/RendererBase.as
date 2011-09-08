@@ -881,7 +881,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
-			
 			setFocus();
 			if ( movable && !isScroller( event.target as DisplayObjectContainer ) )
 			{
@@ -1098,8 +1097,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( _renderVO && _renderVO.children && _renderVO.children.length > 0 )
 			{
 				// sort children by Z-index
-				var childrenDataProvider : ArrayCollection;
-				childrenDataProvider = new ArrayCollection( _renderVO.children );
+				var childrenDataProvider : ArrayCollection = new ArrayCollection( _renderVO.children );
 				childrenDataProvider.sort = new Sort();
 				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
 				childrenDataProvider.refresh();
@@ -1116,6 +1114,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			skin.currentState = "normal";
 		}
+		
 
 		/**
 		 * Refresh all atributes contens in  current RenderVO

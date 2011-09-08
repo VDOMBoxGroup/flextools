@@ -253,6 +253,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler, false, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.OPEN, openHandler, false, 0, true );
 			objectsTreePanel.addEventListener( "TreeItemRendererComplete", LoadResourceHandler, true, 0, false );
+			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.EYE, eyeChangeHandler, true, 0, false );
+		}
+		
+		private function eyeChangeHandler( event : ObjectsTreePanelEvent ) : void
+		{
+			var itemRenderer : ObjectTreePanelItemRenderer = event.target as ObjectTreePanelItemRenderer;
+			
+			sendNotification( ApplicationFacade.OBJECT_VISIBLE, itemRenderer.rendererID );
 		}
 		
 		private function LoadResourceHandler( event : Event ) : void
@@ -342,6 +350,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.OPEN, openHandler );
+			objectsTreePanel.removeEventListener( "TreeItemRendererComplete", LoadResourceHandler, true );
+			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.EYE, eyeChangeHandler, true );
 		}
 
 		private function selectCurrentPage( needGetPageStructure : Boolean = true ) : void
