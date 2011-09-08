@@ -36,7 +36,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		public function set dataProvider( value : XMLList ) : void
 		{
-
 			if ( !value )
 				return;
 

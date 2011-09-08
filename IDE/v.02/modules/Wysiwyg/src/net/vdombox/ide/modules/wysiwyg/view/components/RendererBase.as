@@ -1113,8 +1113,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				choiceContentType( contetntPart, background );
 			}
-
-			trace(x + " " + y);
+			
 			skin.currentState = "normal";
 		}
 

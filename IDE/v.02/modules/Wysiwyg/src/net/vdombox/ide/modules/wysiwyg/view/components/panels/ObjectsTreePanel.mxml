@@ -7,6 +7,9 @@
 
 	<fx:Script>
 		<![CDATA[
+			import flash.sampler.NewObjectSample;
+			
+			import mx.collections.ArrayList;
 			import mx.collections.IList;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
@@ -14,6 +17,7 @@
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 			
 			import spark.components.IItemRenderer;
+			import spark.components.List;
 
 			[Bindable]
 			private var _pages : XMLList;
@@ -30,6 +34,7 @@
 			public function set pages( value : XMLList ) : void
 			{
 				_pages = value;
+				trace( value );
 			}
 
 			public function get selectedObjectID() : String
@@ -187,7 +192,7 @@
 				var newVPos:int;
 				
 				// claculate new index scroll to
-				if (index >= objectsTree.verticalScrollPosition + objectsTree.rowCount 
+				/*if (index >= objectsTree.verticalScrollPosition + objectsTree.rowCount 
 					|| index < objectsTree.verticalScrollPosition)
 				{
 					if ( index > 2) 
@@ -195,7 +200,7 @@
 					newVPos = Math.min((index), objectsTree.maxVerticalScrollPosition);
 
 					objectsTree.verticalScrollPosition = newVPos ;
-				}
+				}*/
 			}
 
 			private function openTree( item : Object ) : void
@@ -205,9 +210,16 @@
 				if ( parentItem )
 				{
 					openTree( parentItem );
-					objectsTree.expandItem( parentItem, true, false );
+					/*objectsTree.expandItem( parentItem, true, false );*/
 				}
 			}
+			
+			[Embed(source="icons/disclosureClosedIcon.png")]
+			public var plus:Class;
+			
+			[Embed(source="icons/disclosureOpenIcon.png")]
+			public var minus:Class;
+			
 
 			private function creationCompleteHandler() : void
 			{
@@ -218,6 +230,9 @@
 				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OVER, objectsTree_highlightChangeHandler, false, 0, true );
 				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OUT, objectsTree_highlightChangeHandler, false, 0, true );
 
+				objectsTree.setStyle("disclosureOpenIcon", minus);
+				objectsTree.setStyle("disclosureClosedIcon", plus);
+				
 				tbFill.height = 30;
 				//objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_UP, objectsTree_mouseHandler, false, 0, true );
 				//objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_DOWN, objectsTree_mouseHandler, false, 0, true );
@@ -300,6 +315,9 @@
 		</s:fill>
 	</s:Rect>
 	
+	<!--<components:Tree id="objectsTree" borderVisible="false"
+					 dataProvider="{ _pag }" doubleClickEnabled="true" height="100%" labelField="@name" width="100%"
+					 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer" />-->
 	<mx:Tree id="objectsTree" borderVisible="false"
 			 dataProvider="{ _pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"
 			 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer"/>

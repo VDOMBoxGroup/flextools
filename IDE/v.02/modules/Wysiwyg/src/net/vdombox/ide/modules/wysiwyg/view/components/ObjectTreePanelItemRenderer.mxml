@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
-					  xmlns:mx="library://ns.adobe.com/flex/mx">
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  height="25" contentBackgroundColor="#FF0000">
 	
 	<s:states>
 		<s:State name="normal" />            
@@ -9,10 +10,76 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:Group left="0" right="0" top="0" bottom="0">
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			
+			import net.vdombox.ide.common.vo.ResourceVO;
+			private var _resourceID : String;
+			private var _resourceVO : ResourceVO;
+			private var loader : Loader;
+			
+			public function get resourceID():String
+			{
+				return _resourceID;
+			}
+			
+			override public function set data( value : Object ) : void
+			{
+				super.data = value;
+				if ( value != null )
+				{
+					_resourceID = XML(value).@iconID;
+					dispatchEvent( new Event('TreeItemRendererComplete') );
+				}
+				
+			}
+			
+			public function set resourceVO(value:ResourceVO):void
+			{
+				_resourceVO = value;
+				if( !value.data )
+				{
+					BindingUtils.bindSetter( dataLoaded, value, "data" );
+					return;
+				}
+				
+				dataLoaded();
+			}
+			
+			private function dataLoaded( object : Object = null ) : void 
+			{
+				loader = new Loader();
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
+				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+				
+				try
+				{
+					loader.loadBytes( _resourceVO.data );
+				}
+				catch ( error : Error )
+				{
+					// FIXME Сделать обработку исключения если не грузится изображение
+				}
+			}
+			
+			private function onBytesLoaded( event : Event ) : void
+			{
+				loader = null;
+				
+				if ( event.type == IOErrorEvent.IO_ERROR )
+					return;
+				componentIcon.source = 	Bitmap( event.target.content )
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Group left="-2" right="0" top="-2" bottom="-2">
 		<s:Rect bottom="0" left="0" right="0" top="0">
 			<s:fill>
-				<s:SolidColor id="rectColor" color="#3A3A3A"/>
+				<s:SolidColor id="rectColor" color.normal="#3A3A3A" color.hovered="#0000FF" color.selected="#00000A"/>
 			</s:fill>
 		</s:Rect>
 		
@@ -28,7 +95,7 @@
 				<s:BitmapImage source="{treeListData.disclosureIcon}" visible="{treeListData.hasChildren}" />
 			</s:Group>
 			
-			<s:BitmapImage source="{treeListData.icon}" />
+			<s:BitmapImage id="componentIcon" />
 			
 			<s:Label id="labelField" color="#FFFFFF" text="{treeListData.label}" paddingTop="2"/>
 		</s:HGroup>

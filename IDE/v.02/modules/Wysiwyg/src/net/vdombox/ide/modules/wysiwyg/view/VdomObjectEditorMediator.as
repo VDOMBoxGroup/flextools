@@ -254,8 +254,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 				
 				if ( marker.equallyPoint( component.x, component.y ) )
 				{
-					component.measuredWidth = component.measuredWidth - stepX;
-					component.measuredHeight = component.measuredHeight - stepY;
+					if ( !marker.equallyWidth( component.measuredWidth) )
+						component.measuredWidth = component.measuredWidth - stepX;
+					if ( !marker.equallyHeight( component.measuredHeight) )
+						component.measuredHeight = component.measuredHeight - stepY;
 					
 				}
 				else

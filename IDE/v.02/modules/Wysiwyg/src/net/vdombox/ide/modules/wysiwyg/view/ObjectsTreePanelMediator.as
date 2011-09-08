@@ -8,15 +8,20 @@
 
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.events.Event;
+	
 	import mx.controls.Tree;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.TypesProxy;
+	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectsTreePanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -88,6 +93,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					showPages( notification.getBody() as Array );
 
+					
+					
 					selectCurrentPage();
 
 					break;
@@ -103,6 +110,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					if ( !pageXMLTree )
 						pageXMLTree = new XML();
+					else
+					{
+						var xmlList : XMLList = pageXMLTree..object;;
+						var objectXML : XML;
+						var typeID : String;
+						var typeProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy ;
+						
+						for each( objectXML in xmlList)
+						{
+							typeID = objectXML.@typeID;
+							objectXML.@iconID = typeProxy.getTypeVObyID( typeID ).structureIconID;
+						}
+					}
 
 					pageXML = objectsTreePanel.pages.( @id == pageXMLTree.@id )[ 0 ];
 					pageXML.setChildren( new XMLList() ); //TODO: strange construction
@@ -174,6 +194,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 			}
 		}
+		
 
 		override public function listNotificationInterests() : Array
 		{
@@ -231,6 +252,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler, false, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.OPEN, openHandler, false, 0, true );
+			objectsTreePanel.addEventListener( "TreeItemRendererComplete", LoadResourceHandler, true, 0, false );
+		}
+		
+		private function LoadResourceHandler( event : Event ) : void
+		{
+			var itemRenderer : ObjectTreePanelItemRenderer = event.target as ObjectTreePanelItemRenderer;
+			sessionProxy  = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var resourceVO : ResourceVO;
+			resourceVO = new ResourceVO( sessionProxy.selectedApplication.id );
+			resourceVO.setID( itemRenderer.resourceID );
+			itemRenderer.resourceVO = resourceVO;
+			
+			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 		}
 
 		private function changeHandler( event : ObjectsTreePanelEvent ) : void
@@ -349,7 +383,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				_pages[ pages[ i ].id ] = pages[ i ];
 
-				pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}/>;
+				pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}  iconID={pages[ i ].typeVO.structureIconID}  />;
 			}
 
 			objectsTreePanel.pages = pagesXMLList;
