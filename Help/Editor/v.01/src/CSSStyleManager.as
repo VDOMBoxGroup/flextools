@@ -52,7 +52,7 @@ package
 			{
 				if ( !storageFile.exists || sourceFileChanged(sourceFile, storageFile) ) 
 				{
-					sourceFile.copyTo(storageFile);
+					sourceFile.copyTo(storageFile, true);
 				}
 			}
 				
