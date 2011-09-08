@@ -2,7 +2,7 @@
 <mx:WindowedApplication showStatusBar="false" showGripper="false" showTitleBar="false"
 						xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
 						xmlns:mx="http://www.adobe.com/2006/mxml"
-						minWidth="650" minHeight="300" width="1000" height="800"
+						minWidth="800" minHeight="600" width="1000" height="800"
 						layout="absolute"
 						creationComplete="{creationCompleteHandler()}"
 						backgroundColor="0x373739"
@@ -148,7 +148,7 @@
 						
 						html_wysiwyg.setHTML(htmlContent);
 					}
-					pageInformation.text = resoult[ 0 ][ "title" ] + " (v." + pageVersion + ")  " + resoult[ 0 ][ "name" ];
+					pageInformation.text = /*resoult[ 0 ][ "title" ] + */" (v." + pageVersion + ")  " + resoult[ 0 ][ "name" ];
 					pageInformation.toolTip = resoult[ 0 ][ "description" ];
 
 					topTitle.htmlText = "VDOM Help Aplication - <b>" + resoult[ 0 ][ "title" ] + "</b>";
