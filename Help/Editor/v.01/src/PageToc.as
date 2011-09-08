@@ -4,6 +4,7 @@ package
 
 	public class PageToc
 	{
+		public static const TOC_CLASS_FOR_STYLES	: String = "tocClassForStyles";
 		public static const TOC_BY_HEADERS_CLASS	: String = "tocByHeaders"; 
 		public static const TOC_BY_PAGES_CLASS		: String = "tocByPages";
 		
@@ -53,8 +54,11 @@ package
 
 		public function set tocType(value:String):void
 		{
+			if (value.indexOf(" ") >= 0) {
+				value = value.split(" ")[0];
+			}
 			_tocType = value;
-			tocXML.@["class"] = _tocType;
+			tocXML.@["class"] = _tocType + " " + TOC_CLASS_FOR_STYLES;
 		}
 		
 		public function clearTocContent():void

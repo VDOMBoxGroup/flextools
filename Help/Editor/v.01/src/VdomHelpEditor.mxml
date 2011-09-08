@@ -170,7 +170,9 @@
 				
 				// remove toc ...
 				for each (var xmlDiv:XML in xmlContent.body.div) {
-					if (xmlDiv.@["class"] == PageToc.TOC_BY_HEADERS_CLASS || xmlDiv.@["class"] == PageToc.TOC_BY_PAGES_CLASS) {
+					if (String(xmlDiv.@["class"]).indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
+						String(xmlDiv.@["class"]).indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 
+						) {
 						xmlPageToc = new PageToc(xmlDiv);
 						xmlPageToc.tocType = xmlDiv.@["class"];
 						
@@ -182,7 +184,9 @@
 				
 				// remove anchors ...
 				for each (var xmlA:XML in xmlContent.body..a) {
-					if (xmlA.@["class"] == PageToc.TOC_BY_HEADERS_CLASS || xmlA.@["class"] == PageToc.TOC_BY_PAGES_CLASS) {
+					if (String(xmlA.@["class"]).indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
+						String(xmlA.@["class"]).indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 
+						) {
 						delete xmlA.parent().children()[xmlA.childIndex()];
 					}
 				}

@@ -106,14 +106,18 @@
 			{
 				var xml:XML = new XML(value);
 				for each (var xmlDiv:XML in xml.body.div) {
-					if (xmlDiv.@["class"] == PageToc.TOC_BY_HEADERS_CLASS || xmlDiv.@["class"] == PageToc.TOC_BY_PAGES_CLASS) {
+					if (String(xmlDiv.@["class"]).indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
+						String(xmlDiv.@["class"]).indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 
+						) {
 						delete xmlDiv.parent().children()[xmlDiv.childIndex()];
 						break;
 					}
 				}
 				
 				for each (var xmlLink:XML in xml.body..a) {
-					if (xmlLink.@["class"] == PageToc.TOC_BY_HEADERS_CLASS || xmlLink.@["class"] == PageToc.TOC_BY_PAGES_CLASS) {
+					if (String(xmlLink.@["class"]).indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
+						String(xmlLink.@["class"]).indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0
+						) {
 						delete xmlLink.parent().children()[xmlLink.childIndex()];
 					}
 				}
