@@ -82,7 +82,7 @@
 			
 			private function checkUpdate():void
 			{
-				newProducts.removeAllChildren();
+				//newProducts.removeAllChildren();
 				newProductArray.removeAll();
 				
 				update.addEventListener(HelpEvent.INSTALL_FILE_LOADED, installFileLoadedHandler); 
@@ -123,7 +123,7 @@
 					showNewProducts(hlEvt.dataEvent);
 				} else if(hlEvt.type == HelpEvent.INSTALL_FILE_LOADED_ERROR)
 				{
-					statu.text = "Check Error";
+					//statu.text = "Check Error";
 					
 				}
 			}
@@ -142,12 +142,12 @@
 						var chBox:CheckBox = new CheckBox();
 							chBox.label = product.@title + " ("+ product.@size + ")" ;
 							chBox.selected = true;
-						newProducts.addChild(chBox);
+						//newProducts.addChild(chBox);
 						
 						var stLabel:Label = new Label();
 						
 						
-						newProducts.addChild(stLabel);
+						//newProducts.addChild(stLabel);
 						
 						newProductArray.addItem({chBox:chBox, url:product.@url, productName:product.@name, stLabel:stLabel });
 					} 
@@ -156,7 +156,7 @@
 			
 			private function updateDisplayListHandler(hlEvt:HelpEvent):void
 			{
-				newProducts.validateNow();
+				//newProducts.validateNow();
 			}
 			
 			private function load():void
@@ -169,7 +169,7 @@
 //						update.load(newProductArray[name]["url"], newProductArray[name]["stLabel"]);
 					}
 
-					newProducts.validateNow();
+					//newProducts.validateNow();
 					if(newProductArray[name]["chBox"]["selected"])
 						callLater(update.load, [newProductArray[name]["url"], newProductArray[name]["stLabel"]] );
 				}
@@ -241,12 +241,12 @@
 			<mx:Label text="Select Necessary Products: " width="100%" textAlign="center" fontSize="20"/>
 			<mx:VBox id="applications" paddingLeft="5"   borderStyle="solid" width="100%" height="100%" />
 		</mx:VBox>
-		<mx:VBox   label="Update" width="100%" height="100%" creationComplete="checkUpdate()" >
+		<!--<mx:VBox   label="Update" width="100%" height="100%" creationComplete="checkUpdate()">
 			<mx:Label id="statu" />
 			<mx:VBox id="newProducts" />
 			<mx:Button label="Load" click="{load()}"/>
 			
-		</mx:VBox>
+		</mx:VBox>-->
 		<mx:VBox id="addProduct" width="100%" height="100%" label="Add product"
 				 creationComplete="onAddProductOpened()"
 				 show="onAddProductOpened()">

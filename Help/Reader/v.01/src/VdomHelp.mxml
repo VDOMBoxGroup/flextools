@@ -44,6 +44,7 @@
 		private var pageList : List = new List();
 		private var markList : List = new List();
 		
+		private var stylesManager : CSSStyleManager = new CSSStyleManager();
 		
 		[Embed(source='../assets/bookmarks.png')]
 		[Bindable]
@@ -58,6 +59,19 @@
 		
 		private function creatComleatHandler():void
 		{
+			sqlProxy.creatDB();
+			
+			updateToc();
+			
+			stylesManager.addEventListener(CSSStyleManager.STYLE_SETTED, onStylesLoaded);
+			stylesManager.setStyle();
+			
+		}
+		
+		private function onStylesLoaded(evt : Event):void
+		{
+			stylesManager.removeEventListener(CSSStyleManager.STYLE_SETTED, onStylesLoaded);
+			
 			pageList.percentWidth = 100; 
 			pageList.percentHeight = 100; 
 			pageList.labelField = "title";
@@ -71,10 +85,6 @@
 			markList.addEventListener(ListEvent.CHANGE, markListChangeHandler); 
 			markList.setStyle("color", "#000000");
 			bookMarks.addChild(markList);
-			
-			updateToc();
-			
-			
 			
 		}
 		
