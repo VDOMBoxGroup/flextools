@@ -22,6 +22,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
@@ -62,6 +63,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 			IEventDispatcher( renderer ).addEventListener( RendererEvent.RENDER_CHANGED, renderer_renderchangedHandler, false, 0, true );
 			IEventDispatcher( renderer ).addEventListener( RendererEvent.RENDER_CHANGING, renderer_renderchangingHandler, false, 0, true );
 
+			var visibleRendererProxy : VisibleRendererProxy = facade.retrieveProxy( VisibleRendererProxy.NAME ) as VisibleRendererProxy;
+			if ( !(renderer is PageRenderer) )
+				(renderer as RendererBase).visible = visibleRendererProxy.getVisible(  renderer.vdomObjectVO.id );
 			var renderVO : RenderVO = renderer.renderVO;
 
 			if ( renderVO && renderVO.vdomObjectVO )
@@ -119,12 +123,12 @@ package net.vdombox.ide.modules.wysiwyg.model
 			return vdomObjectVO ? renderersIndex[ vdomObjectVO.id ] : null;
 		}
 		
-		public function setVisibleRenderer( rendererID : String ) : void
+		public function setVisibleRenderer( rendererID : String, flag : Boolean ) : void
 		{
 			var _renderer : RendererBase = renderersIndex[ rendererID][0] as RendererBase;
 			
 			if ( _renderer )
-				_renderer.visible = !_renderer.visible;
+				_renderer.visible = flag;
 		}
 		
 

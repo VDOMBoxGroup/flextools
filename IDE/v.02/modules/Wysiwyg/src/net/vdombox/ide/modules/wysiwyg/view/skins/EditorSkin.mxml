@@ -84,18 +84,7 @@
 				
 			</s:HGroup>
 			
-			<s:HGroup gap="15" height="25" paddingRight="20"  paddingLeft="50" width="50%" verticalAlign="middle">
-				
-				<s:Label color="#909b95" text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_show_as' ) }"/>
-				
-				<s:VGroup id="xmlButton" enabled.wysiwyg="true" enabled.xml="false" height="25"
-						  click="currentState='xml'" verticalAlign="bottom" horizontalAlign="center" gap="0">
-					<s:Label color="#007cb6" fontWeight="bold" height="12"
-							 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"/>
-					<s:HGroup>
-						<mx:Image source="@Embed('icons/triangle.png')" smoothBitmapContent="true" visible.xml="true" visible.wysiwyg="false"/>
-					</s:HGroup>
-				</s:VGroup>
+			<s:HGroup gap="15" height="25" paddingRight="20"  paddingLeft="30" width="50%" verticalAlign="middle">
 				
 				<s:VGroup id="wysiwygButton" enabled.wysiwyg="false" enabled.xml="true" height="25"
 						  click="currentState='wysiwyg'" verticalAlign="bottom" horizontalAlign="center" gap="0">
@@ -103,6 +92,15 @@
 							 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"/>
 					<s:HGroup>
 						<mx:Image source="@Embed('icons/triangle.png')" smoothBitmapContent="true" visible.xml="false" visible.wysiwyg="true"/>
+					</s:HGroup>
+				</s:VGroup>
+				
+				<s:VGroup id="xmlButton" enabled.wysiwyg="true" enabled.xml="false" height="25"
+						  click="currentState='xml'" verticalAlign="bottom" horizontalAlign="center" gap="0">
+					<s:Label color="#007cb6" fontWeight="bold" height="12"
+							 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"/>
+					<s:HGroup>
+						<mx:Image source="@Embed('icons/triangle.png')" smoothBitmapContent="true" visible.xml="true" visible.wysiwyg="false"/>
 					</s:HGroup>
 				</s:VGroup>
 				

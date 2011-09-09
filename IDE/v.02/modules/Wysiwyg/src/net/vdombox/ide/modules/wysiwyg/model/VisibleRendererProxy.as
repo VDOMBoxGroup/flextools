@@ -7,33 +7,36 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 	public class VisibleRendererProxy extends Proxy implements IProxy
 	{
-		public static const NAME : String = "VisibleRendererProxy";
-		private var _appName : String;
+		public static const NAME : String = "visibleRendererProxy";
 		
-		public function VisibleRendererProxy( appName : String )
+		public function VisibleRendererProxy()
 		{
+			
 			super( NAME, {} );
-			_appName = appName;
 		}
 		
 		private var shObjData : Object;
-		
-		override public function onRegister() : void
-		{
-			shObjData = SharedObject.getLocal( _appName );
-		}
+		private var sessionProxy : SessionProxy;
 		
 		public function getVisible( rendererID : String ) : Boolean
 		{
-			if ( shObjData.data.rendererID != null )
-				return shObjData.data.rendererID;
+			shObjData = getSharedObject();
+			if ( shObjData.data[rendererID] != null )
+				return shObjData.data[rendererID];
 			else
 				return true;
 		}
 		
 		public function setVisible( rendererID : String, value : Boolean ) : void
 		{
-			shObjData.data.rendererID = value;
+			shObjData = getSharedObject();
+			shObjData.data[rendererID] = value;
+		}
+		
+		private function getSharedObject():SharedObject
+		{
+			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			return SharedObject.getLocal( sessionProxy.selectedApplication.id );
 		}
 	}
 }

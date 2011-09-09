@@ -807,12 +807,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				mouseUpHandler( null );
 			}
 			
-			/*if ( rect.width != width || rect.height != height )
-			{*/
+			if ( rect.width != beforeTransform.width || rect.height != beforeTransform.height || 
+				_selectedItem.x != beforeTransform.x || _selectedItem.y != beforeTransform.y )
+			{
 				var moveEvent : RendererEvent =  new RendererEvent( RendererEvent.MOVE_MEDIATOR ) ;
 				moveEvent.ctrlKey = event.ctrlKey;
 				dispatchEvent( moveEvent );
-			//}
+			}
 		}
 
 		private function stage_mouseClickHandler( event : MouseEvent ) : void

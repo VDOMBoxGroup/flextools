@@ -80,6 +80,7 @@
 			public function set selectedRenderer( value : IRenderer ) : void
 			{
 				_selectedRenderer = value;
+				
 			}
 
 			[Bindable]

@@ -18,7 +18,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 
 		public var pageID : String;
 		public var objectID : String;
-
+		public var visible : Boolean;
+		
 		override public function clone() : Event
 		{
 			return new ObjectsTreePanelEvent( type, bubbles, cancelable, pageID, objectID );

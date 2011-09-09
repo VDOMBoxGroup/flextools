@@ -21,6 +21,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.TypesProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.VisibleRendererProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectsTreePanel;
 	
@@ -35,6 +36,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		public function ObjectsTreePanelMediator( viewComponent : Object )
 		{
 			super( NAME, viewComponent );
+			
 		}
 
 		private var _pages : Object;
@@ -44,6 +46,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var requestQue : Object;
 
 		private var sessionProxy : SessionProxy;
+		
+		private var visibleRendererProxy : VisibleRendererProxy;
 
 		private var tempFlag : Boolean = true;
 
@@ -92,8 +96,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.PAGES_GETTED:
 				{
 					showPages( notification.getBody() as Array );
-
-					
 					
 					selectCurrentPage();
 
@@ -121,6 +123,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 						{
 							typeID = objectXML.@typeID;
 							objectXML.@iconID = typeProxy.getTypeVObyID( typeID ).structureIconID;
+							objectXML.@visible = visibleRendererProxy.getVisible(  String(objectXML.@id) );
 						}
 					}
 
@@ -229,6 +232,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+			visibleRendererProxy = facade.retrieveProxy( VisibleRendererProxy.NAME ) as VisibleRendererProxy;
 
 			isActive = false;
 
@@ -253,14 +258,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler, false, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.OPEN, openHandler, false, 0, true );
 			objectsTreePanel.addEventListener( "TreeItemRendererComplete", LoadResourceHandler, true, 0, false );
-			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.EYE, eyeChangeHandler, true, 0, false );
+			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.EYE, eyeChangeHandler, true, 0, true );
 		}
 		
 		private function eyeChangeHandler( event : ObjectsTreePanelEvent ) : void
 		{
 			var itemRenderer : ObjectTreePanelItemRenderer = event.target as ObjectTreePanelItemRenderer;
 			
-			sendNotification( ApplicationFacade.OBJECT_VISIBLE, itemRenderer.rendererID );
+			sendNotification( ApplicationFacade.OBJECT_VISIBLE, {rendererID : itemRenderer.rendererID, visible : event.visible });
 		}
 		
 		private function LoadResourceHandler( event : Event ) : void

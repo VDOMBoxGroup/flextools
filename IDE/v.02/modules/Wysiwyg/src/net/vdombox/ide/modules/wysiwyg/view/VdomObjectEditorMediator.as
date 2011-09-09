@@ -430,11 +430,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			editor.addEventListener( KeyboardEvent.KEY_DOWN, keyDownDeleteHandler, true );
 			
+			editor.addEventListener( RendererEvent.CLEAR_RENDERER, clearLineGroup, true );
+			
 			editor.addEventListener( RendererEvent.MOVE_MEDIATOR, moveRendererHandler, true );
 			
-			editor.addEventListener( RendererEvent.MOUSE_UP_MEDIATOR, mouseUpRendererHandler, true);
+			editor.addEventListener( RendererEvent.MOUSE_UP_MEDIATOR, clearLineGroup, true);
 			
-			component.addEventListener( MouseEvent.MOUSE_UP, mouseUpRendererHandler, true);
+			component.addEventListener( MouseEvent.MOUSE_UP, clearLineGroup, true);
 
 			editor.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
@@ -475,11 +477,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 			
 			editor.removeEventListener( RendererEvent.MOVE_MEDIATOR, moveRendererHandler, true);
-			editor.removeEventListener( RendererEvent.MOUSE_UP_MEDIATOR, mouseUpRendererHandler, true);
+			editor.removeEventListener( RendererEvent.MOUSE_UP_MEDIATOR, clearLineGroup, true);
 			
-			component.removeEventListener( MouseEvent.MOUSE_UP, mouseUpRendererHandler, true);
+			component.removeEventListener( MouseEvent.MOUSE_UP, clearLineGroup, true);
 			
 			editor.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownDeleteHandler, true);
+			editor.removeEventListener( RendererEvent.CLEAR_RENDERER, clearLineGroup, true );
 
 			editor.removeEventListener( SkinPartEvent.PART_ADDED, partAddedHandler );
 			editor.removeEventListener( EditorEvent.WYSIWYG_OPENED, partOpenedHandler );
@@ -511,6 +514,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var _renderer : RendererBase = event.target as RendererBase;
 			if ( _renderer == editor.selectedRenderer )
 				editor.selectedRenderer = null;
+			if ( _renderer )
+				clearLineGroup();
 		}
 		
 		private function showRendererHandler ( event : FlexEvent ) : void
@@ -526,7 +531,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				editor.selectedRenderer = _renderer;
 		}
 		
-		private function mouseUpRendererHandler ( event : Event ) : void
+		private function clearLineGroup ( event : Event = null ) : void
 		{
 			var selectPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
 			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;

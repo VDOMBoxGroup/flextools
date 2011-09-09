@@ -156,7 +156,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		
 		private function foundComponents ( renderVO : RenderVO ) : Array
 		{
-			if (renderVO.children == null)
+			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+			var renderer : RendererBase = renderProxy.getRenderersByVO( renderVO.vdomObjectVO )[0] as RendererBase;
+			if (renderVO.children == null || !renderer.visible )
 				return null;
 			
 			var listComponents : Array = new Array();
