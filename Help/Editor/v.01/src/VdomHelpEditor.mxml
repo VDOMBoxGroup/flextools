@@ -144,21 +144,26 @@
 						var htmlContent : String = resoult[0]["content"];
 						htmlContent = getPageContentWithToc(htmlContent, 
 															Boolean(resoult[0]["useToc"]), 
-															tree.selectedItem.children());
+															tree.selectedItem.children(),
+															false);
 						
 						html_wysiwyg.setHTML(htmlContent);
 					}
 					pageInformation.text = /*resoult[ 0 ][ "title" ] + */" (v." + pageVersion + ")  " + resoult[ 0 ][ "name" ];
 					pageInformation.toolTip = resoult[ 0 ][ "description" ];
 
-					topTitle.htmlText = "VDOM Help Aplication - <b>" + resoult[ 0 ][ "title" ] + "</b>";
+					topTitle.htmlText = "VDOM Help Application - <b>" + resoult[ 0 ][ "title" ] + "</b>";
 				}
 			}
 			
-			public static function getPageContentWithToc(pageContent:String, useToc:Boolean, pageChildren:XMLList) : String
+			public static function getPageContentWithToc(pageContent:String, useToc:Boolean, pageChildren:XMLList, useAnchors:Boolean = true) : String
 			{
 				var xmlContent		: XML;
 				var xmlPageToc		: PageToc;
+				
+				var divClass		: String = "";
+				var ulClass			: String = "";
+				var linkClass		: String = "";
 				
 				if (!useToc) return pageContent;
 				
@@ -170,13 +175,27 @@
 				
 				// remove toc ...
 				for each (var xmlDiv:XML in xmlContent.body.div) {
-					if (String(xmlDiv.@["class"]).indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
-						String(xmlDiv.@["class"]).indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 
-						) {
-						xmlPageToc = new PageToc(xmlDiv);
-						xmlPageToc.tocType = xmlDiv.@["class"];
+					
+					divClass = String(xmlDiv.@["class"]);
+					
+					if (divClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
+						divClass.indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 ) {
 						
 						delete xmlDiv.parent().children()[xmlDiv.childIndex()];
+					}
+				}
+				
+				for each (var xmlUl:XML in xmlContent.body.ul) {
+					
+					ulClass = String(xmlUl.@["class"]);
+					
+					if (ulClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
+						ulClass.indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 ) {
+						
+						xmlPageToc = new PageToc(xmlUl);
+						xmlPageToc.tocType = xmlUl.@["class"];
+						
+						delete xmlUl.parent().children()[xmlUl.childIndex()];
 						break;
 					}
 				}
@@ -184,11 +203,15 @@
 				
 				// remove anchors ...
 				for each (var xmlA:XML in xmlContent.body..a) {
-					if (String(xmlA.@["class"]).indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
-						String(xmlA.@["class"]).indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 
-						) {
+					
+					linkClass = String(xmlA.@["class"]);
+					
+					if (linkClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
+						linkClass.indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 ) {
+						
 						delete xmlA.parent().children()[xmlA.childIndex()];
 					}
+					
 				}
 				// ... remove anchors
 				
@@ -197,9 +220,10 @@
 				} else { // no toc
 					xmlPageToc = new PageToc();
 				}
+				
 				xmlPageToc.tocType = (pageChildren && pageChildren.length() > 0) ? PageToc.TOC_BY_PAGES_CLASS : PageToc.TOC_BY_HEADERS_CLASS;
 				
-				xmlPageToc.generateTocContent(new XML(pageContent), pageChildren);
+				xmlPageToc.generateTocContent(new XML(pageContent), pageChildren, useAnchors);
 				if (xmlContent.body.length() > 0 && xmlPageToc.tocXML && xmlPageToc.tocHasContent) {
 					xmlContent.body.insertChildAfter(xmlContent.body.h1[0], xmlPageToc.tocXML);
 				}
@@ -216,6 +240,7 @@
 				
 				//return xmlContent.toString();
 				var str:String = xmlContent.toString();
+				
 				return str;
 			}
 			

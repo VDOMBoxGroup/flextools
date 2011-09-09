@@ -69,8 +69,7 @@ package
 				
 				pageContectWithToc = VdomHelpEditor.getPageContentWithToc(result[i]["content"], 
 																		  Boolean(result[i]["useToc"]),
-																		  getPageChildren(result[i]["name"], 
-																		  treeData));
+																		  getPageChildren(result[i]["name"], treeData));
 				
 				pageContentToXml = resetPageContent(pageContectWithToc,	productName );
 				

@@ -8,13 +8,18 @@ package
 		public static const TOC_BY_HEADERS_CLASS	: String = "tocByHeaders"; 
 		public static const TOC_BY_PAGES_CLASS		: String = "tocByPages";
 		
+		public static const ANCOR_CLASS				: String = "tocByHeaders ancor";
+		
 		private var _tocType	:String = TOC_BY_HEADERS_CLASS;
 		private var _tocXML		: XML;
 		private var _anchors	: Object;
 		
 		public function PageToc(value:*=null)
 		{
-			if (!value) value = "<div/>";
+			XML.ignoreWhitespace = true;
+			XML.ignoreComments = true;
+			
+			if (!value) value = "<ul/>";
 			tocXML = new XML(value);
 			
 			anchors = {};
@@ -69,7 +74,7 @@ package
 			anchors = {};
 		}
 		
-		public function generateTocContent(sourcePageContent:XML, childPages:XMLList):void
+		public function generateTocContent(sourcePageContent:XML, childPages:XMLList, useAnchors:Boolean = true):void
 		{
 			var tocLink		: String;
 			var anchorUID	: String;
@@ -79,7 +84,7 @@ package
 					return;
 				}
 				for each (var childPage:XML in childPages) {
-					tocLink = "<p><a href=\"" + childPage.@name + "\">" + childPage.@title + "</a></p>"; 
+					tocLink = "<li><a href=\"" + childPage.@name + "\">" + childPage.@title + "</a></li>"; 
 					tocXML.appendChild(new XML(tocLink));
 				}
 			} else { // toc by headers
@@ -89,21 +94,24 @@ package
 				var i:uint = 0;
 				for each (var xmlHeader2:XML in sourcePageContent.body.h2) {
 					anchorUID = UIDUtil.createUID();
-					tocLink = "<p><a href=\"#" + anchorUID + "\">" + xmlHeader2.text().toString() + "</a></p>";
+					tocLink = "<li><a href=\"#" + anchorUID + "\">" + xmlHeader2.text().toString() + "</a></li>";
 					
 					tocXML.appendChild(new XML(tocLink));
-					addHeaderAnchor(i, anchorUID);
+					addHeaderAnchor(i, anchorUID, useAnchors);
 					
 					i++;
 				}
 			}
 		}
 		
-		private function addHeaderAnchor(headerIndex:int, anchorUID:String):void
+		private function addHeaderAnchor(headerIndex:int, anchorUID:String, useAnchors:Boolean = true):void
 		{
-			var link		: String = "<a class=\""+TOC_BY_HEADERS_CLASS+"\" name=\""+anchorUID+"\">&nbsp;</a>";
+			var link	: String;
+			var xml		:XML;
 			
-			anchors[headerIndex] = new XML(link);
+			xml = <a class={ANCOR_CLASS} name={anchorUID}>&nbsp;</a>;
+				
+			anchors[headerIndex] = xml;
 		}
 
 	}

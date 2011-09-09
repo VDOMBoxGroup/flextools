@@ -29,7 +29,6 @@
 				{
 					case (Keyboard.S):
 					{
-						trace ("ctrl = " + keyEvent.ctrlKey);
 						if (keyEvent.ctrlKey) {
 							this.dispatchEvent(new Event(EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED));
 						}
@@ -104,22 +103,48 @@
 			
 			private static function getHTMLWithoutPageToc(value:String) : String 
 			{
-				var xml:XML = new XML(value);
+				var xml			:XML = new XML(value);
+				var ulClass		: String = "";
+				var divClass	: String = "";
+				var linkClass	: String = "";
+				
+				// delete old variant of toc ...
 				for each (var xmlDiv:XML in xml.body.div) {
-					if (String(xmlDiv.@["class"]).indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
-						String(xmlDiv.@["class"]).indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 
-						) {
+					
+					divClass = String(xmlDiv.@["class"]);
+					
+					if (divClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
+						divClass.indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 ) {
+						
 						delete xmlDiv.parent().children()[xmlDiv.childIndex()];
+					}
+					
+				}
+				// ... delete old variant of toc
+				
+				for each (var xmlUl:XML in xml.body.ul) {
+					
+					ulClass = String(xmlUl.@["class"]);
+					
+					if (ulClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
+						ulClass.indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 ) {
+						
+						delete xmlUl.parent().children()[xmlUl.childIndex()];
 						break;
 					}
+					
 				}
 				
 				for each (var xmlLink:XML in xml.body..a) {
-					if (String(xmlLink.@["class"]).indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
-						String(xmlLink.@["class"]).indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0
-						) {
+					
+					linkClass = String(xmlLink.@["class"]);
+					
+					if (linkClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
+						linkClass.indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 ) {
+						
 						delete xmlLink.parent().children()[xmlLink.childIndex()];
 					}
+					
 				}
 				
 				return xml.toXMLString();
