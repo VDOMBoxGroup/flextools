@@ -182,7 +182,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 						// mark object
 						
 						
-						if ( selRenderer && selRenderer.visible )
+						if ( selRenderer && canSelected( selRenderer ) )
 							editor.selectedRenderer = selRenderer;
 						else
 							editor.selectedRenderer = null;
@@ -216,6 +216,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
+			}
+		}
+		
+		private function canSelected( render : RendererBase ) : Boolean
+		{
+			if ( !render.visible )
+				return false;
+			
+			if ( render.renderVO.parent )
+			{
+				var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+				var parentRenderer : RendererBase = renderProxy.getRenderersByVO( render.renderVO.parent.vdomObjectVO )[0] as RendererBase;
+				if ( parentRenderer )
+					return canSelected( parentRenderer );
+				else
+					return true;
+			}
+			else
+			{
+				return true
 			}
 		}
 		
@@ -514,7 +534,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function hideRendererHandler ( event : FlexEvent ) : void
 		{
 			var _renderer : RendererBase = event.target as RendererBase;
-			if ( _renderer == editor.selectedRenderer )
+			if ( _renderer == editor.selectedRenderer || editor.selectedRenderer && !canSelected( editor.selectedRenderer as RendererBase) )
 				editor.selectedRenderer = null;
 			if ( _renderer )
 				clearLineGroup();

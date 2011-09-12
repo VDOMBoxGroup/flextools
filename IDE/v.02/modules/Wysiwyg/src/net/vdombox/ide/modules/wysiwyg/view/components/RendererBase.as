@@ -1246,6 +1246,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			dispatchEvent( renderEvent );
 		}
+		
 	}
 }
 
