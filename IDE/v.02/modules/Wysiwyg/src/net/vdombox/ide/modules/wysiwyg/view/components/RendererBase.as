@@ -530,7 +530,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				addEventListener( DragEvent.DRAG_DROP, dragDropHandler, false, 0, true );
 				
 				addEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
-				
 		}
 		
 		private function keyNavigationHandler( event : KeyboardEvent ) : void
@@ -551,9 +550,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			else
 				return;
 			
+			mouseUpHandler( null );
+			
+			//stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
 			event.stopImmediatePropagation()
 			
-			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
+			/*dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
+			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );*/
 			dispatchEvent( new RendererEvent( RendererEvent.CLEAR_RENDERER ) );
 		}
 
@@ -963,8 +966,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				beforeX = x;
 				beforeY = y;
-				
-				trace(x + " " + y + " mouse");
 
 				dispatchEvent( new RendererEvent( RendererEvent.MOVE ) );
 

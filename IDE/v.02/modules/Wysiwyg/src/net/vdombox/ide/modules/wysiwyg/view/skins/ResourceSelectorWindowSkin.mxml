@@ -28,6 +28,12 @@
 				resourcesList.addEventListener(ListItem.ITEM_DOUBLE_CLICKED, hostComponent.onApplyClick, true);
 			}
 			
+			protected function nameFilter_focusInHandler(event:FocusEvent):void
+			{
+				// TODO Auto-generated method stub
+				nameFilter.text = "";
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -85,7 +91,7 @@
 				<s:TextInput id="nameFilter" width="150" borderColor="#999999" color="#666666"
 							 fontFamily="Tahoma" fontStyle="italic" 
 							 text="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_filter' ) }"
-							 focusColor.normal="#CCCCCC"/>
+							 focusColor.normal="#CCCCCC" focusIn="nameFilter_focusInHandler(event)" />
 				
 				<mx:Image id="__spinner" height="18"  width="18" visible="false"/>
 				

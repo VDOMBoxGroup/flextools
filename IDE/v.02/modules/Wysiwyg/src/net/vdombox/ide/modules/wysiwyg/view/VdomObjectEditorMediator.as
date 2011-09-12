@@ -163,9 +163,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					if ( editor.state.substr( 0, 7 ) == "wysiwyg")
 					{
+						var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 						if ( selectedObject )
 						{
-							var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 							var renderers : Array = renderProxy.getRenderersByVO( selectedObject );
 
 							// find nesesary renderer
@@ -180,6 +180,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 							}
 						}
 						// mark object
+						
+						
 						if ( selRenderer && selRenderer.visible )
 							editor.selectedRenderer = selRenderer;
 						else

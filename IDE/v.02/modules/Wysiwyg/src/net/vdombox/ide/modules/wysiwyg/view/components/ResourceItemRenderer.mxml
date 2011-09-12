@@ -15,6 +15,7 @@
 				super.data = value;
 				resourceVO = value as ResourceVO;
 			}
+			
 		]]>
 	</fx:Script>
 

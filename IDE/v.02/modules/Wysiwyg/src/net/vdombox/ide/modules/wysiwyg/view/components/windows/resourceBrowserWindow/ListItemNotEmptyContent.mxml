@@ -27,6 +27,39 @@
 			private var needToAddSpinner			: Boolean;
 			private var needToDeleteSpinner			: Boolean;
 			
+			private var showingPreview : Boolean = false;
+			
+			private var timerStarted : Boolean = false;
+			private var timer : Timer;
+			protected function mouseOverHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				if ( timerStarted )
+					return;
+				
+				timer = new Timer( 800 );
+				timer.addEventListener( TimerEvent.TIMER, timerHandler );
+				timer.start();
+				timerStarted = true;
+			}
+			
+			private function timerHandler ( event : TimerEvent ) : void
+			{
+				showingPreview = true;
+				imageMagnifier.visible = true;
+				timer.stop();
+				timer.removeEventListener( TimerEvent.TIMER, timerHandler );
+			}
+			
+			protected function mouseOutHandler( event : MouseEvent ):void
+			{
+				// TODO Auto-generated method stub
+				showingPreview = false;
+				timerStarted = false;
+				timer.stop();
+				timer.removeEventListener( TimerEvent.TIMER, timerHandler );
+			}
+			
 			override public function set data ( value : Object ) : void 
 			{
 				super.data = value;
@@ -181,11 +214,6 @@
 				owner.dispatchEvent( lie );
 			}
 			
-			protected function smoothImage_rollOverHandler(event:MouseEvent):void
-			{
-				imageMagnifier.visible = true;
-			}
-			
 			protected function smoothImage_rollOutHandler(event:MouseEvent):void
 			{
 				imageMagnifier.visible = false;
@@ -193,7 +221,8 @@
 			
 			protected function smoothImage_clickHandler(event:MouseEvent):void
 			{
-				dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
+				if ( showingPreview )
+					dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
 			}
 			
 			private function addSpinner():void
@@ -290,9 +319,9 @@
 						  horizontalAlign="center" verticalAlign="middle">
 				</s:HGroup>
 				
-				<mx:Canvas height="100%" width="100%"
+				<mx:Canvas height="100%" width="100%" mouseOver="mouseOverHandler(event)"
+						   mouseOut="mouseOutHandler(event)"
 						   click="smoothImage_clickHandler(event)"
-						   rollOver="smoothImage_rollOverHandler(event)"
 						   rollOut="smoothImage_rollOutHandler(event)"
 						   backgroundColor="#000000" backgroundAlpha="0.01">
 				</mx:Canvas>
