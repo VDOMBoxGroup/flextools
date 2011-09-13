@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 creationComplete="creationCompleteHandler()">
+
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.collections.ArrayList;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.common.vo.ServerActionVO;
+			import net.vdombox.ide.modules.preview.events.ServerScriptsPanelEvent;
+			
+			import spark.events.IndexChangeEvent;
+
+			[Bindable]
+			private var _scripts : ArrayList;
+
+			public function get selectedScript() : ServerActionVO
+			{
+				return actionList.selectedItem as ServerActionVO;
+			}
+
+			public function set selectedScript( value : ServerActionVO ) : void
+			{
+				actionList.selectedItem = value;
+			}
+
+			public function get scripts() : Array
+			{
+				return _scripts ? _scripts.source : null;
+			}
+
+			public function set scripts( value : Array ) : void
+			{
+				var oldSelectedItem : ServerActionVO;
+				var oldSelectedIndex : int;
+				var isSelectedItemChanged : Boolean = true;
+				
+				if( actionList )
+				{
+					oldSelectedIndex = actionList.selectedIndex;
+					oldSelectedItem = actionList.selectedItem as ServerActionVO;
+				}
+				
+				if ( value && value.length > 0 )
+				{
+					var newSelectedIndex : int = 0;
+
+					if ( oldSelectedItem )
+					{
+						var i : uint;
+						for ( i = 0; i < value.length; i++ )
+						{
+							if ( ServerActionVO( value[ i ] ).objectID == oldSelectedItem.objectID ||
+								ServerActionVO( value[ i ] ).name == oldSelectedItem.name )
+							{
+								newSelectedIndex = i;
+								isSelectedItemChanged = false;
+								
+								break;
+							}
+						}
+					}
+					else
+					{
+						isSelectedItemChanged = false;
+					}
+					
+					_scripts = new ArrayList( value );
+					
+					if( newSelectedIndex != -1 )
+						actionList.validateNow();
+					
+					actionList.selectedIndex = newSelectedIndex;
+				}
+				else
+				{
+					_scripts = null;
+					
+					if( actionList.selectedIndex != -1 )
+						actionList.selectedIndex = -1;
+					
+					if( oldSelectedIndex == -1 )
+						isSelectedItemChanged = false;
+				}
+
+//				if( isSelectedItemChanged )
+					dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) );
+			}
+
+			protected function actionList_changeHandler() : void
+			{
+				dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) )
+			}
+
+			protected function creationCompleteHandler() : void
+			{
+				BindingUtils.bindSetter( indexChanged, actionList, "selectedIndex", true );
+			}
+
+			protected function deleteButton_clickHandler() : void
+			{
+				dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION ) )
+			}
+
+			private function indexChanged( value : int ) : void
+			{
+				if ( value == -1 && deleteButton.enabled )
+					deleteButton.enabled = false;
+				else if ( !deleteButton.enabled && value != -1 )
+					deleteButton.enabled = true;
+			}
+		]]>
+	</fx:Script>
+
+	<s:List id="actionList"
+			dataProvider="{ _scripts }" height="100%" labelField="name" width="100%"
+			change="actionList_changeHandler()"/>
+
+	<s:controlBarContent>
+
+		<mx:Spacer width="100%"/>
+
+		<s:Button label="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_add' ) }"
+				  click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.CREATE_ACTION ) )"/>
+
+		<s:Button id="deleteButton"
+				  label="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_delete' ) }"
+				  click="deleteButton_clickHandler()"/>
+	</s:controlBarContent>
+</s:Panel>

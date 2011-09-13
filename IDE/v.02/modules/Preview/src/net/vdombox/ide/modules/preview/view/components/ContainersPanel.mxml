@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+
+	<fx:Script>
+		<![CDATA[
+			import mx.events.DragEvent;
+			import mx.managers.DragManager;
+			
+			import net.vdombox.ide.modules.preview.events.ContainersPanelEvent;
+
+			[Bindable]
+			private var _structure : XML;
+
+			public function get selectedObjectID() : String
+			{
+				return containersTree.selectedItem ? containersTree.selectedItem.@id : null;
+			}
+
+			public function set selectedObjectID( value : String ) : void
+			{
+				var newSelectedItem : XML;
+
+				if ( value != "" && _structure )
+					newSelectedItem = _structure..object.( @id == value )[ 0 ];
+
+				if ( containersTree.selectedItem == newSelectedItem )
+					return;
+
+				if ( newSelectedItem )
+					containersTree.selectedItem = newSelectedItem;
+				else
+					containersTree.selectedIndex = -1;
+			}
+
+			public function get selectedItem() : XML
+			{
+				return containersTree.selectedItem as XML;
+			}
+
+			public function set structure( value : XML ) : void
+			{
+				_structure = value;
+			}
+		]]>
+	</fx:Script>
+
+	<mx:Tree id="containersTree"
+			 dataProvider="{ _structure }" height="100%" labelField="@name"
+			 showRoot="true" width="100%"
+			 change="dispatchEvent( new ContainersPanelEvent( ContainersPanelEvent.CONTAINER_CHANGED ) )" />
+</s:Panel>
