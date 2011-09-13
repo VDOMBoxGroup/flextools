@@ -24,11 +24,11 @@ package
 		public static const STYLE_SETTED	: String = "styleSetted";
 		
 		private const cssFileName		: String = "main.css";
-		private const cssImage1			: String = "images/button-bg.png";
-		private const cssImage2			: String = "images/table-th.png";
-		private const JSFileName		: String = "searchhi_slim.js";
+		private const cssImagesFolder	: String = "images";
 		
 		private var currentFileName		: String = "";
+		
+		private var imagesDirectoryContent : Array;
 		
 		private var fileStream : FileStream = new FileStream();
 		
@@ -40,28 +40,42 @@ package
 		
 		public function setStyle():void
 		{
+			imagesDirectoryContent = [];
 			currentFileName = cssFileName;
 			loadFile();
 		}
 		
-		private function loadFile():void
+		private function loadFile(fileFromImagesDirectory : Boolean = false):void
 		{
-			var sourceFile:File = File.applicationDirectory.resolvePath(currentFileName);
-			var storageFile:File = File.applicationStorageDirectory.resolvePath(currentFileName);
+			var sourceFile	: File;
+			var storageFile	: File;
 			
-			if (sourceFile.exists)
+			if (currentFileName == cssImagesFolder && fileFromImagesDirectory)
+			{	
+				sourceFile = File(imagesDirectoryContent.pop());
+				storageFile = File.applicationStorageDirectory.resolvePath(currentFileName+"/"+sourceFile.name);
+			} else 
+			{
+				sourceFile = File.applicationDirectory.resolvePath(currentFileName);
+				storageFile = File.applicationStorageDirectory.resolvePath(currentFileName);
+			}
+			
+			if (!sourceFile.isDirectory && sourceFile.exists)
 			{
 				if ( !storageFile.exists || sourceFileChanged(sourceFile, storageFile) ) 
 				{
 					sourceFile.copyTo(storageFile, true);
 				}
 			}
-				
+			
 			onFileCreated();
 		}
 		
 		private function sourceFileChanged(sourceFile : File, storageFile : File) : Boolean
 		{
+			if (sourceFile.isDirectory)
+				return false;
+			
 			var md5StreamForSourceFile : MD5Stream;
 			var md5StreamStorageFile : MD5Stream;
 			var fileStream : FileStream;
@@ -90,11 +104,11 @@ package
 			fileStream.readBytes(byteArray);
 			uidForStorageFile = md5StreamForSourceFile.complete(byteArray);
 			fileStream.close();
-
+			
 			
 			if (uidForSourceFile == uidForStorageFile)
 				return false;
-				
+			
 			
 			return true;
 		}
@@ -106,34 +120,23 @@ package
 			{
 				case cssFileName:
 				{
-					currentFileName = cssImage1;
-					loadFile();
+					currentFileName = cssImagesFolder;
+					if (File.applicationDirectory.resolvePath(currentFileName).isDirectory)
+						imagesDirectoryContent = File.applicationDirectory.resolvePath(currentFileName).getDirectoryListing();
+					
+					loadFile(true);
 					break;
 				}
 					
-				case cssImage1:
-				{
-					currentFileName = cssImage2;
-					loadFile();
-					break;
-				}
-					
-				case cssImage2:
-				{
-					currentFileName = JSFileName;
-					loadFile();
-					break;
-				}
-					
-				case JSFileName:
-				{
-					dispatchEvent(new Event(STYLE_SETTED));
-					break;
-				}
-				
 				default:
 				{
-					dispatchEvent(new Event(STYLE_SETTED));
+					if (!imagesDirectoryContent || imagesDirectoryContent.length == 0)
+					{
+						dispatchEvent(new Event(STYLE_SETTED));
+						return;
+					}
+					loadFile(true);
+					
 					break;
 				}
 			}
