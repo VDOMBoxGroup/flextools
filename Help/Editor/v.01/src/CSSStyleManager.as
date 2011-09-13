@@ -121,8 +121,9 @@ package
 				case cssFileName:
 				{
 					currentFileName = cssImagesFolder;
-					if (File.applicationDirectory.resolvePath(currentFileName).isDirectory)
-						imagesDirectoryContent = File.applicationDirectory.resolvePath(currentFileName).getDirectoryListing();
+					var  file : File = File.applicationDirectory.resolvePath(currentFileName) 
+					if (file && file.isDirectory)
+						imagesDirectoryContent = file.getDirectoryListing();
 					
 					loadFile(true);
 					break;
