@@ -144,7 +144,18 @@ package net.vdombox.ide.core.model
 
 			return token;
 		}
-
+		
+		
+		public function getServerActions() : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_server_actions( objectVO.pageVO.applicationVO.id, objectVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
 		public function getServerActionsList() : AsyncToken
 		{
 			var token : AsyncToken;
@@ -282,6 +293,11 @@ package net.vdombox.ide.core.model
 			
 			soap.set_name.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_name.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			
 		}
 
 		private function removeHandlers() : void
@@ -304,6 +320,11 @@ package net.vdombox.ide.core.model
 			
 			soap.set_name.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_name.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			
 		}
 
 		private function generateObjectAttributes( attributesXML : XML ) : Array
@@ -404,18 +425,21 @@ package net.vdombox.ide.core.model
 
 			var xmlPresentation : String;
 
+			var serverActions : Array = [];
+			var serverActionsXMLList : XMLList ;
+			var serverActionVO : ServerActionVO;
+			var serverActionXML : XML;
+
+
 			switch ( operationName )
 			{
 				case "get_server_actions_list":
 				{
-					var serverActions : Array = [];
 
-					var serverActionsXML : XMLList = result.ServerActions.Action.( @ID == objectVO.id );
+					 serverActionsXMLList  = result.ServerActions.Action.( @ObjectID == objectVO.id );
 
-					var serverActionVO : ServerActionVO;
-					var serverActionXML : XML;
-
-					for each ( serverActionXML in serverActionsXML )
+					
+					for each ( serverActionXML in serverActionsXMLList )
 					{
 						serverActionVO = new ServerActionVO();
 
@@ -429,6 +453,30 @@ package net.vdombox.ide.core.model
 
 					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTIONS_LIST_GETTED, { objectVO: objectVO, serverActions: serverActions } );
 
+					break;
+				}
+					
+				case "get_server_actions":
+				{
+					
+					 serverActionsXMLList = result.ServerActions.Container.( @ID == objectVO.id )[0].children();
+					
+					for each ( serverActionXML in serverActionsXMLList )
+					{
+						serverActionVO = new ServerActionVO();
+						
+						serverActionVO.setContainerID( objectVO.id );
+						serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
+						
+						serverActionVO.setProperties( serverActionXML )
+						
+						serverActionVO.script = serverActionXML.children();
+						
+						serverActions.push( serverActionVO );
+					}
+					
+					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTIONS_GETTED, { objectVO: objectVO, serverActions: serverActions } );
+					
 					break;
 				}
 

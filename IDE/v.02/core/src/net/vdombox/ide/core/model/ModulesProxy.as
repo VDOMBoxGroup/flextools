@@ -33,8 +33,10 @@ package net.vdombox.ide.core.model
 				<category name="Edition">									
 
 					<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
-					<module name="Events" path="app:/modules/Events/Events.swf"/>
+					<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
 					<module name="Trees" path="app:/modules/Tree/Tree.swf"/>
+					<module name="Events" path="app:/modules/Events/Events.swf"/>
+					
 
 				</category>
 			</modules>
@@ -194,10 +196,11 @@ package net.vdombox.ide.core.model
 
 		private function loadModuleFromQue() : void
 		{
+			trace("\n Loaded");
 			if ( modulesForLoadQue.length == 0 )
 			{
+				trace("ALL");
 				sendNotification( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
-
 				return;
 			}
 

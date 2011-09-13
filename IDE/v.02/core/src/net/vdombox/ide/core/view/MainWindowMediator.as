@@ -207,6 +207,7 @@ package net.vdombox.ide.core.view
 
 		private function selectModule( moduleVO : ModuleVO = null ) : void
 		{
+			trace("\n selectModule");
 			mainWindow.removeAllElements();
 
 			for each ( var modVO : ModuleVO in modulesList )

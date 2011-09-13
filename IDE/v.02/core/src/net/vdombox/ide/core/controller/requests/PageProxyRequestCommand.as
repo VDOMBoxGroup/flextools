@@ -103,6 +103,15 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if( operation == PPMOperationNames.READ )
 						pageProxy.getServerActionsList();
+					else if( operation == PPMOperationNames.UPDATE )
+						pageProxy.setServerActions(body.serverActions as Array);
+					
+					break;
+				}
+				case PPMPageTargetNames.SERVER_ACTIONS:
+				{
+					if ( operation == PPMOperationNames.READ )
+						pageProxy.getServerActions();
 					
 					break;
 				}

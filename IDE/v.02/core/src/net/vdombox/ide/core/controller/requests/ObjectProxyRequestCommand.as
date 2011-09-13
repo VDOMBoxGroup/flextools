@@ -61,6 +61,14 @@ package net.vdombox.ide.core.controller.requests
 
 					break;
 				}
+					
+				case PPMObjectTargetNames.SERVER_ACTIONS:
+				{
+					if ( operation == PPMOperationNames.READ )
+						objectProxy.getServerActions();
+					
+					break;
+				}
 
 				case PPMObjectTargetNames.SERVER_ACTION:
 				{

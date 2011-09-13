@@ -162,6 +162,17 @@ package net.vdombox.ide.core.model
 
 			return token;
 		}
+		
+		public function getServerActions() : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_server_actions( pageVO.applicationVO.id, pageVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
 
 		public function getServerAction( serverActionVO : ServerActionVO ) : AsyncToken
 		{
@@ -353,6 +364,9 @@ package net.vdombox.ide.core.model
 			soap.get_server_actions_list.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_actions.addEventListener( FaultEvent.FAULT, soap_resultHandler );
+			
 			soap.create_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.rename_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -367,6 +381,9 @@ package net.vdombox.ide.core.model
 			
 			soap.set_name.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_name.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function removeHandlers() : void
@@ -380,6 +397,9 @@ package net.vdombox.ide.core.model
 			soap.get_server_actions_list.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_actions.removeEventListener( FaultEvent.FAULT, soap_resultHandler );
+			
 			soap.create_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.rename_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -392,6 +412,11 @@ package net.vdombox.ide.core.model
 			
 			soap.set_name.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_name.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			
 		}
 
 		private function createObjectsList( objects : XML ) : void
@@ -504,6 +529,12 @@ package net.vdombox.ide.core.model
 			var objectVO : ObjectVO;
 
 			var xmlPresentation : String;
+			var serverActions : Array = [];
+			
+			var serverActionsXMLList : XMLList 
+			var serverActionVO : ServerActionVO;
+			var serverActionXML : XML;
+
 
 			switch ( operationName )
 			{
@@ -550,14 +581,17 @@ package net.vdombox.ide.core.model
 
 				case "get_server_actions_list":
 				{
-					var serverActions : Array = [];
+					/*<ServerActions>
+					      <Action ID="" Name=""  ObjectID="" ObjectName=""/>
+					       ...
+					 </ServerActions>*/
+					
+					
 
-					var serverActionsXML : XMLList = result.ServerActions.Action.( @ObjectID == pageVO.id );
+					 serverActionsXMLList  = result.ServerActions.Action.( @ObjectID == pageVO.id );
 
-					var serverActionVO : ServerActionVO;
-					var serverActionXML : XML;
-
-					for each ( serverActionXML in serverActionsXML )
+					
+					for each ( serverActionXML in serverActionsXMLList )
 					{
 						serverActionVO = new ServerActionVO();
 
@@ -573,6 +607,30 @@ package net.vdombox.ide.core.model
 
 					break;
 				}
+					
+				case "get_server_actions":
+				{
+					
+					serverActionsXMLList = result.ServerActions.Container.( @ID == pageVO.id )[0].children();
+					
+					for each ( serverActionXML in serverActionsXMLList )
+					{
+						serverActionVO = new ServerActionVO();
+						
+						serverActionVO.setContainerID( pageVO.id );
+						serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
+						
+						serverActionVO.setProperties( serverActionXML )
+						
+						serverActionVO.script = serverActionXML.children();
+						
+						serverActions.push( serverActionVO );
+					}
+					
+					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTIONS_GETTED, { objectVO: objectVO, serverActions: serverActions } );
+					
+					break;
+				}
 
 				case "get_server_action":
 				{
@@ -580,7 +638,8 @@ package net.vdombox.ide.core.model
 					break;
 				}
 					
-				case "set_server_action":
+				
+				case "set_server_actions":
 				{
 					
 					break;

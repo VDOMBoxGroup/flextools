@@ -281,6 +281,7 @@ package net.vdombox.ide.core
 		public static const PAGE_SET_AS_INDEX 			: String = "pageSetAsIndex";
 		
 		public static const PAGE_SERVER_ACTIONS_LIST_GETTED : String = "pageServerActionsListGetted";
+		public static const PAGE_SERVER_ACTIONS_GETTED : String = "pageServerActionsGetted";
 		public static const PAGE_SERVER_ACTION_GETTED : String = "pageServerActionGetted";
 		public static const PAGE_SERVER_ACTION_SETTED : String = "pageServerActionSetted";
 		public static const PAGE_SERVER_ACTION_CREATED : String = "pageServerActionCreated";
@@ -299,6 +300,8 @@ package net.vdombox.ide.core
 		public static const OBJECT_ATTRIBUTES_SETTED : String = "objectAttributesSetted";
 		
 		public static const OBJECT_SERVER_ACTIONS_LIST_GETTED : String = "objectServerActionsListGetted";
+		public static const OBJECT_SERVER_ACTIONS_GETTED : String = "objectServerActionsGetted";
+			
 		public static const OBJECT_SERVER_ACTION_GETTED : String = "objectServerActionGetted";
 		public static const OBJECT_SERVER_ACTION_SETTED : String = "objectServerActionSetted";
 		public static const OBJECT_SERVER_ACTION_CREATED : String = "objectServerActionCreated";
@@ -422,6 +425,7 @@ package net.vdombox.ide.core
 			registerCommand( PAGE_OBJECT_CREATED, PageProxyResponseCommand );
 			registerCommand( PAGE_OBJECT_DELETED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTIONS_LIST_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_SERVER_ACTIONS_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTION_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTION_SETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTION_CREATED, PageProxyResponseCommand );
@@ -436,6 +440,7 @@ package net.vdombox.ide.core
 			registerCommand( OBJECT_ATTRIBUTES_SETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_NAME_SETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTIONS_LIST_GETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_SERVER_ACTIONS_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTION_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTION_SETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTION_CREATED, ObjectProxyResponseCommand );
