@@ -69,6 +69,8 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
+			
+			interests.push( ApplicationFacade.PAGES_GETTED );
 
 			interests.push( ApplicationFacade.SELECTED_LIBRARY_CHANGED );
 
@@ -110,7 +112,19 @@ package net.vdombox.ide.modules.scripts.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
+					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					
+					break;
 				}
+					
+				case ApplicationFacade.PAGES_GETTED:
+				{
+					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					
+					break;
+				}
+					
+					 
 
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
@@ -121,6 +135,7 @@ package net.vdombox.ide.modules.scripts.view
 
 				case ApplicationFacade.SERVER_ACTIONS_GETTED:
 				{
+					serverScriptsPanel.scripts = body as Array;
 				}
 					
 				case ApplicationFacade.SERVER_ACTIONS_SETTED:

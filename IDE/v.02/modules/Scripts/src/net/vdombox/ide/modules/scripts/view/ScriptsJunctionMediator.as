@@ -269,12 +269,12 @@ package net.vdombox.ide.modules.scripts.view
 					else if ( body is PageVO )
 					{
 						placeName = PPMPlaceNames.PAGE;
-						targetName = PPMPageTargetNames.SERVER_ACTIONS
+						targetName = PPMPageTargetNames.SERVER_ACTIONS;
 					}
 					else if ( body is ApplicationVO )
 					{
 						placeName = PPMPlaceNames.APPLICATION;
-						targetName = PPMApplicationTargetNames.SERVER_ACTIONS
+						targetName = PPMApplicationTargetNames.SERVER_ACTIONS;
 					}
 
 					if ( placeName && targetName )
@@ -297,9 +297,9 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.SET_SERVER_ACTIONS:
 				{
 					if ( body.hasOwnProperty( "objectVO" ) )
-						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTIONS, body );
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTIONS_LIST, body );
 					else if ( body.hasOwnProperty( "pageVO" ) )
-						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTIONS, body );
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTIONS_LIST, body );
 
 					if( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );

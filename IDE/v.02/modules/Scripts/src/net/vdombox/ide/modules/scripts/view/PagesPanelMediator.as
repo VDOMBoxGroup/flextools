@@ -94,6 +94,10 @@ package net.vdombox.ide.modules.scripts.view
 					pages.unshift( { id: "application", name: "-applications scripts-", applicationVO: sessionProxy.selectedApplication } );
 
 					pagesPanel.pages = pages;
+					
+					pagesPanel.selectedPage = sessionProxy.selectedPage;
+					
+					
 
 					break;
 				}

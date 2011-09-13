@@ -47,7 +47,7 @@
 				
 				if ( value && value.length > 0 )
 				{
-					var newSelectedIndex : int = -1;
+					var newSelectedIndex : int = 0;
 
 					if ( oldSelectedItem )
 					{
@@ -87,7 +87,7 @@
 						isSelectedItemChanged = false;
 				}
 
-				if( isSelectedItemChanged )
+//				if( isSelectedItemChanged )
 					dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) );
 			}
 
