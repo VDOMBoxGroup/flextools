@@ -259,6 +259,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.OPEN, openHandler, false, 0, true );
 			objectsTreePanel.addEventListener( "TreeItemRendererComplete", LoadResourceHandler, true, 0, false );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.EYE, eyeChangeHandler, true, 0, true );
+			
 		}
 		
 		private function eyeChangeHandler( event : ObjectsTreePanelEvent ) : void
@@ -266,6 +267,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var itemRenderer : ObjectTreePanelItemRenderer = event.target as ObjectTreePanelItemRenderer;
 			
 			sendNotification( ApplicationFacade.OBJECT_VISIBLE, {rendererID : itemRenderer.rendererID, visible : event.visible });
+		
+			var xmlList : XMLList = objectsTreePanel.pages;
+			var objectXML : XML;
+			var typeProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy ;
+			
+			var renderID : String = ( event.target as ObjectTreePanelItemRenderer ).rendererID;
+			
+			for each( objectXML in xmlList)
+			{
+				var XMLl : XMLList = objectXML..object;
+				var objectXML2 : XML;
+				for each( objectXML2 in XMLl)
+				{
+					if ( objectXML2.@visible[0] && objectXML2.@id == renderID )
+					{
+						objectXML2.@visible = visibleRendererProxy.getVisible(  String(objectXML2.@id) );
+					}
+				}
+			}
+		
 		}
 		
 		private function LoadResourceHandler( event : Event ) : void

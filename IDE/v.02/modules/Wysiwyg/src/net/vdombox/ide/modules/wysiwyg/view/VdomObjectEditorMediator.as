@@ -549,7 +549,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( !sessionProxy.selectedObject )
 				return;
 			
-			if ( _renderer.renderVO.vdomObjectVO.id == sessionProxy.selectedObject.id )
+			if ( _renderer.renderVO.vdomObjectVO.id == sessionProxy.selectedObject.id && canSelected( _renderer ) )
 				editor.selectedRenderer = _renderer;
 		}
 		
