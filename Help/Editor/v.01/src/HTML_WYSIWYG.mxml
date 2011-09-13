@@ -7,6 +7,7 @@
 		<![CDATA[
 			private var instancesInitialized 	: Boolean;
 			
+			public static const MAX_IMAGE_WIDTH : Number = 500;
 			
 			public static const EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED : String = "EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED"; 
 			
@@ -68,6 +69,12 @@
 				}
 				
 				return htmlTxt;
+			}
+			
+			private function getHTML_toSave():void
+			{
+				// TODO: перенести из VdomHelpEditor:
+				// resetImagesPath();
 			}
 			
 			private static function getHtmlSourceTxt(bodyContent : String, showPageToc:Boolean = false) : String
@@ -139,8 +146,7 @@
 					
 					linkClass = String(xmlLink.@["class"]);
 					
-					if (linkClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
-						linkClass.indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 ) {
+					if (linkClass.indexOf(PageToc.ANCOR_CLASS) >= 0) {
 						
 						delete xmlLink.parent().children()[xmlLink.childIndex()];
 					}
@@ -150,15 +156,8 @@
 				return xml.toXMLString();
 			}
 			
-			private function zzzzzz( ddd : *, aaa : *, sss : *  ) : void
-			{
-				//dispatchEvent( new Event("onSave") );
-			}
-		
-			
 			protected function html1_htmlDOMInitializeHandler(event:Event):void
 			{
-				// TODO Auto-generated method stub
 				instancesInitialized = true;
 			}
 			
@@ -173,6 +172,18 @@
 				var strHref:String = "<a href=\""+ aPageName +"\">"+ aPageTitle +"</a>";
 				
 				Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, strHref);
+			}
+			
+			private function resetImagesWidth():void
+			{
+				// TODO: set image width <= MAX_IMAGE_WIDTH
+				/*
+					1) width задана: <= MAX_IMAGE_WIDTH -> OK,
+								 > MAX_IMAGE_WIDTH -> width = 500;
+				
+				 	2) width НЕ задана: то же самое, только смотрим размерность файла. 
+				*/
+				
 			}
 		]]>
 	</mx:Script>

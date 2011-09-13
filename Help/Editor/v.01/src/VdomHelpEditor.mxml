@@ -152,7 +152,7 @@
 					pageInformation.text = /*resoult[ 0 ][ "title" ] + */" (v." + pageVersion + ")  " + resoult[ 0 ][ "name" ];
 					pageInformation.toolTip = resoult[ 0 ][ "description" ];
 
-					topTitle.htmlText = "VDOM Help Application - <b>" + resoult[ 0 ][ "title" ] + "</b>";
+					topTitle.htmlText = "VDOM Help Editor Application - <b>" + resoult[ 0 ][ "title" ] + "</b>";
 				}
 			}
 			
@@ -204,12 +204,22 @@
 				// ... remove toc
 				
 				// remove anchors ...
+				for each (var xmlP:XML in xmlContent.body..p) {
+					
+					linkClass = String(xmlP.@["class"]);
+					
+					if (linkClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0) {
+						
+						delete xmlP.parent().children()[xmlP.childIndex()];
+					}
+					
+				}
+				
 				for each (var xmlA:XML in xmlContent.body..a) {
 					
 					linkClass = String(xmlA.@["class"]);
 					
-					if (linkClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 || 
-						linkClass.indexOf(PageToc.TOC_BY_PAGES_CLASS) >= 0 ) {
+					if (linkClass.indexOf(PageToc.ANCOR_CLASS) >= 0) {
 						
 						delete xmlA.parent().children()[xmlA.childIndex()];
 					}
@@ -510,7 +520,7 @@
 					html_wysiwyg.setHTML(html_wysiwyg.getHTML().replace(oldPath, newPath));
 				}
 			}
-
+			
 			private function resetPath(path:String) : String
 			{
 				path = path.substring(0 , path.lastIndexOf(".")) +
@@ -551,9 +561,10 @@
 				targetPath = "resources/" + generateFileName(aImageOldSrc_str, imgFile);
 				newImgFile = File.applicationStorageDirectory.resolvePath(targetPath);
 
+				
 				if ( !newImgFile.exists )
 					imgFile.copyTo(newImgFile);
-
+				
 				//return targetPath;
 				return newImgFile.url;
 			}
@@ -638,7 +649,7 @@
 				return fileName;
 			}
 
-			private function convertToUIDFormat(strToFormat:String) : String
+			public static function convertToUIDFormat(strToFormat:String) : String
 			{
 				var strInUIDFormat : String = "";
 				var strDelim : String       = "-";

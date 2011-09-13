@@ -1,22 +1,54 @@
 package
 {
+	
+	import com.adobe.crypto.MD5Stream;
+	
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
 	
 	import mx.controls.Alert;
+	import mx.graphics.codec.PNGEncoder;
 	import mx.utils.Base64Encoder;
 
 	public class ProductXMLCreator extends EventDispatcher
 	{
 		public static const EVENT_ON_XML_CREATION_COMPLETE	: String = "onXMLCreationComplete";
 		
+		private const guidResourseRegExp	: RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
+		private const imgTagRegExp			: RegExp = /<[ ]*img[^>]*[ ]*\/[ ]*>/g;
+		
+		private const WIDTH_TYPE			: Number = 0;
+		private const HEIGHT_TYPE			: Number = 1;
+		
 		private var sqlProxy	: SQLProxy = new SQLProxy();
 		
-		private var _productXML	: XML;
+		private var _productXML			: XML;
+		
+		private var pagesObj		: Object;
+		private var pagesXML		: XML;
+		private var pagesCounter	: Number = 0;
+		
+		private var pageXML				: XML;
+		private var pageResourcesArr	: Array;
+		private var pageResourcesXML	: XML;
+		private var pageResourceXML		: XML;
+		private var pageResourcesCounter: Number = 0;
+		private var pageContentForXml	: String;
+		
+		private var pageContent			: String;
+		
+		private var productName			: String;
+		private var productTitle		: String;
+		private var treeData			: *;
 		
 		public function ProductXMLCreator()
 		{
@@ -33,8 +65,12 @@ package
 		}
 
 		
-		public function generateProductXML(productName:String, productTitle:String, treeData:*):void
+		public function generateProductXML(aProductName:String, aProductTitle:String, aTreeData:*):void
 		{
+			productName = aProductName;
+			productTitle = aProductTitle;
+			treeData = aTreeData;
+			
 			productXML  = new XML("<product/>");
 			
 			productXML.name = productName;
@@ -42,8 +78,6 @@ package
 			productXML.title = productTitle;
 			productXML.description = "";
 			productXML.language = "en_US";
-			
-			var result : Object = sqlProxy.getProductsPages(productName, "en_US");
 			
 			// generate toc ...
 			var tocXML : XML       = new XML("<toc/>");
@@ -54,72 +88,144 @@ package
 			productXML.appendChild(tocXML);
 			// ... generate toc
 			
+			generatePages();
+			
+		}
+			
+		private function generatePages() : void
+		{
+			pagesCounter = 0;
+			pagesObj = {};
+			pagesXML = null;
+			
+			pagesObj = sqlProxy.getProductsPages(productName, "en_US");
+			pagesXML	= new XML("<pages/>");
+			
 			// generate pages ...
-			var pages				: XML		= new XML("<pages/>");
-			var length 				: Number	= Number(result.length);
-			var guidResourseRegExp	: RegExp	= /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
+			if (!pagesObj || pagesObj.length <= 0) {
+				
+				onLastPageGenerated();
+				return;
 			
-			for ( var i : String in result )
-			{
-				var pageContent			: String;
-				var pageContectWithToc	: String;
-				var pageContentToXml	: String;
-				
-				pageContent = result[i]["content"];
-				
-				pageContectWithToc = VdomHelpEditor.getPageContentWithToc(result[i]["content"], 
-																		  Boolean(result[i]["useToc"]),
-																		  getPageChildren(result[i]["name"], treeData));
-				
-				pageContentToXml = resetPageContent(pageContectWithToc,	productName );
-				
-				var pageXML : XML        = new XML("<page/>");
-				
-				pageXML.name = result[ i ][ "name" ];
-				pageXML.version = result[ i ][ "version" ];
-				pageXML.title = result[ i ][ "title" ];
-				pageXML.description = result[ i ][ "description" ];
-				
-				var content : XML = XML("<content/>");
-				
-				content.appendChild( XML("<![CDATA[" + 
-					pageContentToXml +
-					"]"+ "]>"));
-				
-				pageXML.appendChild(content);
-				
-				// get resources ...		
-				var pagesResources : Array = pageContent.match(guidResourseRegExp);
-				var resources : XML        = new XML("<resources/>");
-				
-				for ( var j : String in pagesResources )
-				{
-					if (pagesResources[ j ].indexOf(".htm") != -1) {
-						continue;
-					}
-					var resource : XML        = new XML("<resource/>");
-					var resourceName : String = pagesResources[ j ];
-					
-					resource.@id = resourceName.substr(0,36);
-					resource.@type = resourceName.substr(37,3);
-					resource.appendChild(getResoucesCDATA(resourceName));
-					resources.appendChild(resource);
-				}
-				
-				pageXML.appendChild(resources);
-				// ... get resources
-				
-				pages.appendChild(pageXML);
-				
 			}
-			// ... generate pages
+				
+			generateNextPage();
 			
-			productXML.appendChild(pages);
+		}
+		
+		private function generateNextPage():void
+		{
+			if (pagesCounter >= pagesObj.length)
+			{
+				pagesCounter = 0;
+				onLastPageGenerated(); 
+				return;
+			}
+			
+			var currentPageObj : Object = pagesObj[pagesCounter];
+				
+			var pageContectWithToc	: String;
+				
+			pageContent = currentPageObj["content"];
+				
+			pageContectWithToc = VdomHelpEditor.getPageContentWithToc(currentPageObj["content"], 
+																	  Boolean(currentPageObj["useToc"]),
+																	  getPageChildren(currentPageObj["name"])
+																	  );
+			
+			pageContentForXml = resetLinksToResourcesAndPages(pageContectWithToc);
+			
+			pageXML = new XML("<page/>");
+			
+			pageXML.name = currentPageObj[ "name" ];
+			pageXML.version = currentPageObj[ "version" ];
+			pageXML.title = currentPageObj[ "title" ];
+			pageXML.description = currentPageObj[ "description" ];
+			
+			var content : XML = XML("<content/>");
+			
+			pageXML.appendChild(content);
+			
+			// get resources ...	
+			pageResourcesXML = new XML("<resources/>");
+			
+			pageResourcesArr  = pageContent.match(guidResourseRegExp);
+			
+			if (!pageResourcesArr || pageResourcesArr.length <= 0) {
+				onLastPageResourceGenerated();
+				return;			
+			}
+			
+			generateNextPageResource();
+			// ... get resources
+			
+				
+		}
+		
+		private function onPageGenerated():void
+		{
+			pagesXML.appendChild(pageXML);
+			
+			pagesCounter ++;
+			
+			generateNextPage();
+		}
+		
+		private function onLastPageGenerated():void
+		{
+			productXML.appendChild(pagesXML);
 			productXML.normalize();
 			
 			this.dispatchEvent(new Event(EVENT_ON_XML_CREATION_COMPLETE));
 		}
-				
+		
+		private function generateNextPageResource():void
+		{
+			if (pageResourcesCounter >= pageResourcesArr.length)
+			{
+				pageResourcesCounter = 0;
+				onLastPageResourceGenerated(); 
+				return;
+			}
+			
+			var currentResource : String = pageResourcesArr[pageResourcesCounter];
+			
+			if (currentResource.indexOf(".htm") != -1) 
+			{
+				onPageResourceGenerated();
+				return;
+			}
+			
+			pageResourceXML = new XML("<resource/>");
+			
+			pageResourceXML.@id = currentResource.substr(0,36);
+			pageResourceXML.@type = currentResource.substr(37,3);
+			
+			getResourceCDATA(currentResource);
+			
+		}
+		
+		private function onPageResourceGenerated():void
+		{
+			var curResourceId : String = String(pageResourceXML.@id);
+			var resourcesListByID : XMLList = pageResourcesXML.resource.(@id == curResourceId);
+			
+			if (pageResourcesXML.resource.length() == 0 || resourcesListByID.length() == 0)
+				pageResourcesXML.appendChild(pageResourceXML);
+			
+			pageResourcesCounter ++;
+			
+			generateNextPageResource();
+		}
+		
+		private function onLastPageResourceGenerated ():void
+		{
+			pageXML.content.appendChild( XML("<![CDATA[" + pageContentForXml + "]"+ "]>"));
+			pageXML.appendChild(pageResourcesXML);
+			
+			onPageGenerated();
+		}
+		
 		private function resetToc(tocObject:Object) : String
 		{
 			var strToc	: String = "";
@@ -152,7 +258,7 @@ package
 			}
 		}
 		
-		private function getPageChildren(pageName:String, treeData:*) : XMLList
+		private function getPageChildren(pageName:String) : XMLList
 		{
 			var xmlToc : XML = new XML(treeData);
 			if (xmlToc.@name == pageName) {
@@ -161,32 +267,207 @@ package
 			return xmlToc..page.(@name == pageName).children();
 		}
 		
-		private function getResoucesCDATA(fileName:String) : XML
+		private function getImagePropertiesForCurrentResource () : ImageProperties
 		{
-			var location : File         = File.applicationStorageDirectory.resolvePath("resources/"+fileName);
-			var fileStream : FileStream = new FileStream();
-			//					var location : File = new File(docsDir.url +"/"+ fileName + ".xml");
+			var imageProperties : ImageProperties = new ImageProperties();
 			
-			try
+			var xmlContent : XML = XML(pageContentForXml);
+			var resourcesList	: XMLList	= xmlContent..img; 
+			
+			if (resourcesList.length() == 0 || pageResourcesCounter >= resourcesList.length())
 			{
-				var byteArr : ByteArray    = new ByteArray();
-				var base64 : Base64Encoder = new Base64Encoder();
-				
-				fileStream.open( location, FileMode.READ);
-				fileStream.readBytes(byteArr);
-				fileStream.close();
-				
-				base64.encodeBytes(byteArr);
-				var sourse : String = base64.toString();
-			}
-			catch ( error : Error )
-			{
+				return imageProperties;
 			}
 			
-			return XML("<![CDATA[" + sourse +"]"+ "]>");
+			var imgTag : XML = xmlContent..img[pageResourcesCounter];
+				
+			if ( String(imgTag.@width) != "" && !isNaN(Number(imgTag.@width)) )
+				imageProperties.width = Number(imgTag.@width);
+						
+			if ( String(imgTag.@height) != "" && !isNaN(Number(imgTag.@height)) )
+				imageProperties.height = Number(imgTag.@height);
+			
+			if (String(imgTag.@style) != "")
+			{
+				imageProperties.width = getSizeFromStyle(String(imgTag.@style).toLowerCase(), WIDTH_TYPE); 
+				imageProperties.height = getSizeFromStyle(String(imgTag.@style).toLowerCase(), HEIGHT_TYPE);
+			}
+
+			return imageProperties;
 		}
 		
-		private function resetPageContent(aPageContent:String, productName:String) : String
+		private function getSizeFromStyle(strStyle:String, type : Number = WIDTH_TYPE) : Number
+		{
+			var strWidth : String = "width";
+			var strHeight : String = "height";
+			var regExpDigitVal	: RegExp = /[\d]+/i;
+			
+			var firstInd : int;
+			var sizeStr : String;
+			var sizeNumber : Number = -1;
+			
+			var str : String = type == WIDTH_TYPE ? strWidth : strHeight;
+			
+			firstInd = strStyle.search(str);
+			
+			if (firstInd != -1) 
+				sizeStr = strStyle.substring(firstInd);
+			
+			try {
+				sizeNumber = Number(sizeStr.match(regExpDigitVal)[0]);
+			} catch (e:Error)
+			{
+				sizeNumber = -1;
+			}
+			
+			return sizeNumber;
+		}
+		
+		private function getResourceCDATA(fileName:String) : void
+		{
+			var imageProperties : ImageProperties = getImagePropertiesForCurrentResource();
+			var imageWidth	: Number = imageProperties.width;
+			var imageHeight : Number = imageProperties.height;
+			
+			var resourceType : String = fileName.substr(37,3);
+			
+			var newFileName	: String;
+			
+			var fileStream	: FileStream;
+			var location	: File;
+			
+			newFileName = fileName;
+			
+			location   = File.applicationStorageDirectory.resolvePath("resources/"+fileName);
+			fileStream = new FileStream();
+			
+			var originalByteArray : ByteArray    = new ByteArray();
+			var base64 : Base64Encoder = new Base64Encoder();
+			
+			fileStream.open( location, FileMode.READ);
+			fileStream.readBytes(originalByteArray);
+			fileStream.close();
+			
+			base64.encodeBytes(originalByteArray);
+			
+			var source : String = "";
+			
+			if (imageWidth <= 0 && imageHeight <= 0)
+			{
+				source = base64.toString();
+				onResourceDataGenerated(fileName, newFileName, source);
+				return;
+			} 
+			
+			// image width and height are declared 
+			var loader : Loader = new Loader();
+			loader.loadBytes( originalByteArray );
+			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, contentLoaderInfoCompleteHandler );
+			
+			function contentLoaderInfoCompleteHandler (evt:Event) : void 
+			{
+				var loaderInfo : LoaderInfo = evt.target as LoaderInfo;
+				
+				var originalBitmapData	: BitmapData;
+				var originalBitmap		: Bitmap;
+				var resultBitmapData	: BitmapData;
+				
+				var encoder : PNGEncoder = new PNGEncoder();
+				var matrix : Matrix = new Matrix();
+
+				var newWidth	: Number;
+				var newHeight	: Number;
+				
+				var ratioX		: Number = 1;
+				var ratioY		: Number = 1;
+				
+				try
+				{
+					originalBitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
+					originalBitmapData.draw( loaderInfo.loader );
+					
+					originalBitmap = new Bitmap( originalBitmapData );
+				}
+				catch ( e : Error )
+				{
+					source = base64.toString();
+					onResourceDataGenerated(fileName, newFileName, source);
+					return;
+				}
+				
+				// scale
+				ratioX = (imageWidth <= 0) ?  1 : imageWidth / originalBitmap.width;
+				ratioY = (imageHeight <= 0) ? ratioX : imageHeight / originalBitmap.height;
+				
+				newWidth = ( (ratioX != 1) && int( originalBitmap.width * ratioX ) > 0 ) ? int( originalBitmap.width * ratioX ) : 1;
+				newHeight = ( (ratioY != 1) && int( originalBitmap.height * ratioY ) > 0 ) ? int( originalBitmap.height * ratioY ) : 1;
+				
+				try
+				{
+					resultBitmapData = new BitmapData( newWidth, newHeight, false );
+					originalBitmap.smoothing = true;
+				}
+				catch ( e : Error )
+				{
+					source = base64.toString();
+					onResourceDataGenerated(fileName, newFileName, source);
+					return;
+				}
+				
+				
+				matrix.scale( ratioX, ratioY );
+				resultBitmapData.draw( originalBitmap.bitmapData, matrix );
+				
+				var resultByteArray : ByteArray = encoder.encode(resultBitmapData);
+				base64.reset();
+				base64.encodeBytes(resultByteArray);
+				
+				source = base64.toString();
+				
+				var uid			: String;
+				var md5Stream	: MD5Stream;
+				
+				md5Stream = new MD5Stream();
+				uid = md5Stream.complete(resultByteArray);
+				
+				newFileName = VdomHelpEditor.convertToUIDFormat(uid) + resourceType;
+				onResourceDataGenerated(fileName, newFileName, source);
+			}
+			
+		}
+		
+		private function onResourceDataGenerated(oldFileName:String, newFileName:String, source:String):void
+		{
+			
+			if (oldFileName != newFileName)
+			{
+				pageResourceXML.@id = newFileName.substr(0,36);
+				
+				var oldResourceSrc : String = "#Res(" + oldFileName.substr(0, 36) + ")";
+				var newResourceSrc : String = "#Res(" + newFileName.substr(0, 36) + ")";
+				
+				// rename resource in page content
+				var xmlContent		: XML		= XML(pageContentForXml);
+				var resourcesList	: XMLList	= xmlContent..img; 
+				
+				if (resourcesList.length() == 0 || pageResourcesCounter >= resourcesList.length())
+				{
+					onPageResourceGenerated();
+					return;
+				}
+				
+				var imgTag : XML = xmlContent..img[pageResourcesCounter];
+				imgTag.@src = newResourceSrc;
+				pageContentForXml = xmlContent.toString();
+			
+			}
+			
+			pageResourceXML.appendChild(XML("<![CDATA[" + source +"]"+ "]>"));
+			
+			onPageResourceGenerated();
+		}
+		
+		private function resetLinksToResourcesAndPages(aPageContent:String) : String
 		{
 			var patternRes		: RegExp;
 			var patternGUID		: RegExp;

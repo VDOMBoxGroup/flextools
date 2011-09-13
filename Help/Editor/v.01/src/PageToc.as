@@ -4,11 +4,11 @@ package
 
 	public class PageToc
 	{
-		public static const TOC_CLASS_FOR_STYLES	: String = "tocClassForStyles";
+		public static const TOC_CLASS_FOR_STYLES	: String = "contents";
 		public static const TOC_BY_HEADERS_CLASS	: String = "tocByHeaders"; 
 		public static const TOC_BY_PAGES_CLASS		: String = "tocByPages";
 		
-		public static const ANCOR_CLASS				: String = "tocByHeaders ancor";
+		public static const ANCOR_CLASS				: String = "ancor";
 		
 		private var _tocType	:String = TOC_BY_HEADERS_CLASS;
 		private var _tocXML		: XML;
