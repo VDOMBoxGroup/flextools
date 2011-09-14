@@ -9,6 +9,8 @@ package
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
@@ -25,10 +27,7 @@ package
 		
 		private const guidResourseRegExp	: RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
 		private const imgTagRegExp			: RegExp = /<[ ]*img[^>]*[ ]*\/[ ]*>/g;
-		
-		private const WIDTH_TYPE			: Number = 0;
-		private const HEIGHT_TYPE			: Number = 1;
-		
+				
 		private var sqlProxy	: SQLProxy = new SQLProxy();
 		
 		private var _productXML			: XML;
@@ -289,39 +288,14 @@ package
 			
 			if (String(imgTag.@style) != "")
 			{
-				imageProperties.width = getSizeFromStyle(String(imgTag.@style).toLowerCase(), WIDTH_TYPE); 
-				imageProperties.height = getSizeFromStyle(String(imgTag.@style).toLowerCase(), HEIGHT_TYPE);
+				imageProperties.width = HTML_WYSIWYG.getSizeFromStyle(String(imgTag.@style).toLowerCase(), HTML_WYSIWYG.WIDTH_TYPE); 
+				imageProperties.height = HTML_WYSIWYG.getSizeFromStyle(String(imgTag.@style).toLowerCase(), HTML_WYSIWYG.HEIGHT_TYPE);
 			}
 
 			return imageProperties;
 		}
 		
-		private function getSizeFromStyle(strStyle:String, type : Number = WIDTH_TYPE) : Number
-		{
-			var strWidth : String = "width";
-			var strHeight : String = "height";
-			var regExpDigitVal	: RegExp = /[\d]+/i;
-			
-			var firstInd : int;
-			var sizeStr : String;
-			var sizeNumber : Number = -1;
-			
-			var str : String = type == WIDTH_TYPE ? strWidth : strHeight;
-			
-			firstInd = strStyle.search(str);
-			
-			if (firstInd != -1) 
-				sizeStr = strStyle.substring(firstInd);
-			
-			try {
-				sizeNumber = Number(sizeStr.match(regExpDigitVal)[0]);
-			} catch (e:Error)
-			{
-				sizeNumber = -1;
-			}
-			
-			return sizeNumber;
-		}
+		
 		
 		private function getResourceCDATA(fileName:String) : void
 		{
@@ -362,7 +336,17 @@ package
 			// image width and height are declared 
 			var loader : Loader = new Loader();
 			loader.loadBytes( originalByteArray );
+			
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, contentLoaderInfoCompleteHandler );
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, contentLoaderInfoErrorHandler );
+			loader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, contentLoaderInfoErrorHandler );
+			
+			function contentLoaderInfoErrorHandler (evt:Event) : void 
+			{
+				source = base64.toString();
+				onResourceDataGenerated(fileName, newFileName, source);
+				return;
+			}
 			
 			function contentLoaderInfoCompleteHandler (evt:Event) : void 
 			{

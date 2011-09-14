@@ -5,12 +5,26 @@
 	htmlDOMInitialize="html1_htmlDOMInitializeHandler(event)">
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.images.PNGEncoder;
+			
+			import mx.utils.Base64Encoder;
 			private var instancesInitialized 	: Boolean;
 			
 			public static const MAX_IMAGE_WIDTH : Number = 500;
 			
+			public static const WIDTH_TYPE		: Number = 0;
+			public static const HEIGHT_TYPE		: Number = 1;
+
+			private var imgCounter : Number = 0;
+			private var resourcesList : XMLList;
+			private var xmlContent : XML;
+			
+			private var imageWidthInTag		: Number = 0;
+			private var imageHeightInTag	: Number = 0;
+			
 			public static const EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED	: String = "EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED"; 
 			public static const EVENT_WYSIWYG_HTTP_IMAGE_LOADED			: String = "EVENT_WYSIWYG_HTTP_IMAGE_LOADED";
+			public static const EVENT_WYSIWYG_IMAGES_WIDTH_SETTED		: String = "EVENT_WYSIWYG_IMAGES_WIDTH_SETTED";
 			
 			private function init():void
 			{
@@ -279,15 +293,173 @@
 			}
 			
 			public function resetImagesWidth():void
+			{				
+				 xmlContent = XML(getHTML());
+				resourcesList = xmlContent..img;
+				
+				imgCounter = 0;
+				
+				if (!resourcesList || resourcesList.length() <= 0)
+				{
+					onLastImageWidthSetted();
+					return;
+				}
+				
+				resetNextImageWidth();
+			}
+			
+			private function resetNextImageWidth():void
 			{
-				// TODO: set image width <= MAX_IMAGE_WIDTH
-				/*
-					1) width задана: <= MAX_IMAGE_WIDTH -> OK,
-								 > MAX_IMAGE_WIDTH -> width = 500;
+				if (imgCounter >= resourcesList.length())
+				{
+					imgCounter = 0;
+					onLastImageWidthSetted(); 
+					return;
+				}
 				
-				 	2) width НЕ задана: то же самое, только смотрим размерность файла. 
-				*/
+				imageWidthInTag = 0;
+				imageHeightInTag = 0;
 				
+				var ratioX		: Number = 1;
+				
+				var xmlImg:XML = resourcesList[imgCounter];
+				
+				if ( String(xmlImg.@width) != "" && !isNaN(Number(xmlImg.@width)) )
+					imageWidthInTag = Number(xmlImg.@width);
+				
+				if ( String(xmlImg.@height) != "" && !isNaN(Number(xmlImg.@height)) )
+					imageHeightInTag = Number(xmlImg.@height);
+				
+				if (String(xmlImg.@style) != "")
+				{
+					imageWidthInTag = getSizeFromStyle(String(xmlImg.@style).toLowerCase(), WIDTH_TYPE); 
+					imageHeightInTag = getSizeFromStyle(String(xmlImg.@style).toLowerCase(), HEIGHT_TYPE);
+				}
+				
+				if (imageWidthInTag > 0) // width is defined in <img>
+				{
+					if (imageWidthInTag <= MAX_IMAGE_WIDTH) // width is good
+					{
+						onImageWidthSetted();
+						return;
+					}
+				}
+				
+				if (imageWidthInTag > 0 && imageHeightInTag > 0)
+				{
+					// set width = MAX_IMAGE_WIDTH and scale height
+					
+					ratioX =  MAX_IMAGE_WIDTH / imageWidthInTag;
+					imageWidthInTag = MAX_IMAGE_WIDTH;
+					imageHeightInTag = Math.floor(imageHeightInTag * ratioX);
+					
+					onImageWidthSetted();
+					return;
+				}
+				
+				var imagePath : String = String(xmlImg.@src);
+				var file : File = new File(imagePath);
+				
+				if (!imagePath || !file.exists)
+				{
+					onImageWidthSetted();
+					return;
+				}
+					
+				var fileStream : FileStream = new FileStream();
+				var originalByteArray : ByteArray    = new ByteArray();
+				var base64 : Base64Encoder = new Base64Encoder();
+				
+				fileStream.open( file, FileMode.READ);
+				fileStream.readBytes(originalByteArray);
+				fileStream.close();
+				
+				base64.encodeBytes(originalByteArray);
+				
+				var loader : Loader = new Loader();
+				loader.loadBytes( originalByteArray );
+				
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, contentLoaderInfoCompleteHandler );
+				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, contentLoaderInfoErrorHandler );
+				loader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, contentLoaderInfoErrorHandler );
+				
+				function contentLoaderInfoCompleteHandler (evt:Event) : void 
+				{
+					var loaderInfo : LoaderInfo = evt.target as LoaderInfo;
+					
+					imageWidthInTag = (imageWidthInTag > 0) ? imageWidthInTag : loaderInfo.width;
+					imageHeightInTag = (imageHeightInTag > 0) ? imageHeightInTag : loaderInfo.height;
+					
+					if (imageWidthInTag > MAX_IMAGE_WIDTH)
+					{
+						ratioX =  MAX_IMAGE_WIDTH / imageWidthInTag;
+						imageWidthInTag = MAX_IMAGE_WIDTH;
+						imageHeightInTag = Math.floor(imageHeightInTag * ratioX);
+						
+						onImageWidthSetted();
+						return;
+					}
+				}
+				
+				function contentLoaderInfoErrorHandler (evt:Event) : void 
+				{
+					onImageWidthSetted();
+					return;
+				}
+			}
+			
+			private function onImageWidthSetted():void
+			{
+				resourcesList[imgCounter].@width = imageWidthInTag;
+				resourcesList[imgCounter].@height = imageHeightInTag;
+				
+				try {
+					delete resourcesList[imgCounter].@style;
+				} catch (e:Error) {
+				}
+				
+				if (!resourcesList || resourcesList.length() <= 0) {
+					onLastImageWidthSetted();
+					return;			
+				}
+				
+				imgCounter ++;
+				resetNextImageWidth();
+			}
+			
+			private function onLastImageWidthSetted():void
+			{
+				imgCounter = 0;
+				
+				setHTML(xmlContent.toString());
+				this.dispatchEvent(new Event(EVENT_WYSIWYG_IMAGES_WIDTH_SETTED));
+			}
+			
+			public static function getSizeFromStyle(strStyle:String, type:Number) : Number
+			{
+				var strWidth : String = "width";
+				var strHeight : String = "height";
+				var regExpDigitVal	: RegExp = /[\d]+/i;
+				
+				var firstInd : int;
+				var sizeStr : String;
+				var sizeNumber : Number = -1;
+				
+				var str : String = type == HTML_WYSIWYG.WIDTH_TYPE ? strWidth : strHeight;
+				
+				firstInd = strStyle.search(str);
+				
+				if (firstInd != -1) 
+					sizeStr = strStyle.substring(firstInd);
+				
+				try {
+					sizeNumber = Number(sizeStr.match(regExpDigitVal)[0]);
+				} catch (e:Error)
+				{
+					sizeNumber = -1;
+				}
+				
+				return sizeNumber;
 			}
 		]]>
 	</mx:Script>

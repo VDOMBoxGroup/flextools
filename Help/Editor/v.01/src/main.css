@@ -31,9 +31,22 @@ h1 {
 	margin: 0;
 }
 
-.contents, .tocByPages, .tocByHeaders {
-	
+.contents, .tocByHeaders {
 	list-style-image: url(../images/list-style-toc.png);
+	margin:0px;
+	padding:25px;
+	margin-top:15px;
+	margin-bottom:15px;
+	border:1px solid #dddddd;
+	padding-bottom:15px;
+	background:#f6f6f6;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	display:table-cell;
+}
+.tocByPages {
+	list-style-image: url(../images/list-style-tocpages.png);
 	margin:0px;
 	padding:25px;
 	margin-top:15px;

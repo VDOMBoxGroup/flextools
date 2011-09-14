@@ -485,9 +485,17 @@
 				trace("[VdomHelpEditor] savePage");
 				
 				if (!tree.selectedItem) return;
+
+				html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, onWysiwygImagesWidthSetted);
 				
 				html_wysiwyg.resetImagesPath();
 				html_wysiwyg.resetImagesWidth();
+			}
+			
+			private function onWysiwygImagesWidthSetted(evt:Event):void
+			{
+				html_wysiwyg.removeEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, onWysiwygImagesWidthSetted);
+				
 				sqlProxy.setPageContent(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name, html_wysiwyg.getHTML(), pageVersion);
 				getCurrentPage();
 			}
