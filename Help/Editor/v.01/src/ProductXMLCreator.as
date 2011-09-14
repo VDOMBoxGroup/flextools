@@ -399,8 +399,21 @@ package
 				ratioX = (imageWidth <= 0) ?  1 : imageWidth / originalBitmap.width;
 				ratioY = (imageHeight <= 0) ? ratioX : imageHeight / originalBitmap.height;
 				
-				newWidth = ( (ratioX != 1) && int( originalBitmap.width * ratioX ) > 0 ) ? int( originalBitmap.width * ratioX ) : 1;
-				newHeight = ( (ratioY != 1) && int( originalBitmap.height * ratioY ) > 0 ) ? int( originalBitmap.height * ratioY ) : 1;
+				if (ratioX == 1)
+				{
+					newWidth = originalBitmap.width;
+				} else
+				{
+					newWidth = ( int( originalBitmap.width * ratioX ) > 0 ) ? int( originalBitmap.width * ratioX ) : 1;
+				}
+				
+				if (ratioY == 1)
+				{
+					newHeight = originalBitmap.height;
+				} else 
+				{
+					newHeight = ( int( originalBitmap.height * ratioY ) > 0 ) ? int( originalBitmap.height * ratioY ) : 1;
+				}
 				
 				try
 				{

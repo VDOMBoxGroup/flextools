@@ -9,7 +9,8 @@
 			
 			public static const MAX_IMAGE_WIDTH : Number = 500;
 			
-			public static const EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED : String = "EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED"; 
+			public static const EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED	: String = "EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED"; 
+			public static const EVENT_WYSIWYG_HTTP_IMAGE_LOADED			: String = "EVENT_WYSIWYG_HTTP_IMAGE_LOADED";
 			
 			private function init():void
 			{
@@ -174,7 +175,110 @@
 				Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, strHref);
 			}
 			
-			private function resetImagesWidth():void
+			public function resetImagesPath() : void
+			{
+				var xmlContent : XML = XML(getHTML());
+				var resourcesList	: XMLList	= xmlContent..img;
+				
+				for each (var xmlImg:XML in resourcesList)
+				{
+					var newPath : String;
+					var imgSrc : String = String(xmlImg.@src);
+					
+					if ( !imgSrc || imgSrc.indexOf("app-storage:/resources") >= 0 || imgSrc.indexOf("app-storage:\resources") >= 0 ) // resource exists
+						continue;
+					
+					if ( imgSrc.indexOf("http://") >= 0 || imgSrc.indexOf("https://") >= 0 ) // image from http
+					{
+						newPath = loadHttpImg(imgSrc);
+					} else 
+					{
+						newPath = copyImg(removeWhiteSpacingAfterFileName(imgSrc)); // image from file system
+					}
+					
+					if (!newPath)
+						delete xmlImg.parent().children()[xmlImg.childIndex()];
+					else
+						xmlImg.@src = newPath;
+					
+					setHTML(xmlContent.toString());
+				}
+			}
+			
+			private function removeWhiteSpacingAfterFileName(path:String) : String
+			{
+				path = path.substring(0 , path.lastIndexOf(".")) +
+					path.substring(path.lastIndexOf("."), path.length).replace(" ", "");
+				
+				return path;
+			}
+			
+			private function copyImg(aImageOldSrc_str:String) : String
+			{
+				var targetPath : String;
+				var imgFile : File;
+				var newImgFile : File;
+				
+				imgFile = new File(aImageOldSrc_str);
+				
+				if (!imgFile.exists)
+					return null;
+				
+				targetPath = "resources/" + VdomHelpEditor.generateFileName(aImageOldSrc_str, imgFile);
+				newImgFile = File.applicationStorageDirectory.resolvePath(targetPath);
+				
+				
+				if ( !newImgFile.exists )
+					imgFile.copyTo(newImgFile);
+				
+				return newImgFile.url;
+			}
+			
+			private function loadHttpImg(aImageOldSrc_str:String) : String
+			{
+				var targetPath : String;
+				var urlRequest : URLRequest;
+				var urlLoader : URLLoader;
+				var file : File;
+				
+				
+				targetPath = "resources/" + VdomHelpEditor.generateFileName(aImageOldSrc_str);
+				urlRequest = new URLRequest(aImageOldSrc_str);
+				urlLoader = new URLLoader();
+				
+				urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+				urlLoader.addEventListener(Event.COMPLETE, urlLoader_complete);
+				urlLoader.addEventListener(IOErrorEvent.IO_ERROR, urlLoader_error);
+				urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoader_error);
+				urlLoader.load(urlRequest);
+				
+				file = File.applicationStorageDirectory.resolvePath(targetPath);
+				
+				function urlLoader_complete(evt:Event) : void {
+					var fileStream : FileStream;
+					
+					fileStream = new FileStream();
+					try {
+						fileStream.open(file, FileMode.WRITE);
+						fileStream.writeBytes(urlLoader.data);
+						fileStream.close();
+						
+						this.dispatchEvent(new Event(EVENT_WYSIWYG_HTTP_IMAGE_LOADED));
+						
+					} catch ( error : IOError ) {
+						trace("!!! Error Write !!! \n" + error.message +"\n");
+						return;
+					}
+				}
+				
+				function urlLoader_error(evt:Event) : void {
+					trace("!!! Error Loading file !!! \n");
+				}
+				
+				return file.url;
+			}
+			
+			public function resetImagesWidth():void
 			{
 				// TODO: set image width <= MAX_IMAGE_WIDTH
 				/*
