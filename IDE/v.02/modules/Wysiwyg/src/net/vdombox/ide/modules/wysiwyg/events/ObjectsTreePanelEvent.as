@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 	{
 		public static var CHANGE : String = "otpe_change";
 		public static var OPEN : String = "otpe_open";
-		public static var EYE : String = "eye";
+		public static var EYE_CHANGED : String = "eyeChanged";
 
 		public function ObjectsTreePanelEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, pageID : String = null,
 											   objectID : String = null )
