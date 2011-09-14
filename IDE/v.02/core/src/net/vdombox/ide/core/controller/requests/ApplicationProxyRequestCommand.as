@@ -140,6 +140,16 @@ package net.vdombox.ide.core.controller.requests
 
 					break;
 				}
+					
+				case PPMApplicationTargetNames.WEB_PAGE:
+				{
+					if ( operation == PPMOperationNames.READ )
+					{
+						facade.sendNotification( ApplicationFacade.OPEN_PAGE_IN_EXTERNAL_BROWSER );
+					}
+					
+					break;
+				}
 			}
 		}
 	}

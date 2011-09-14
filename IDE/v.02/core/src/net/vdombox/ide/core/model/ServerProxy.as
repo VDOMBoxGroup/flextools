@@ -65,6 +65,11 @@ package net.vdombox.ide.core.model
 		{
 			return _authInfo;
 		}
+		
+		public function get server() : String
+		{
+			return _authInfo.hostname;
+		}
 
 		override public function onRegister() : void
 		{

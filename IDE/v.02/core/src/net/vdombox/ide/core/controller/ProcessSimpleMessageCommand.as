@@ -58,6 +58,12 @@ package net.vdombox.ide.core.controller
 					sendNotification( ApplicationFacade.CLOSE_WINDOW, body );
 					break;
 				}
+					
+				case SimpleMessageHeaders.OPEN_BROWSER:
+				{
+					sendNotification( ApplicationFacade.OPEN_PAGE_IN_EXTERNAL_BROWSER );
+					break;
+				}
 			}
 		}
 	}

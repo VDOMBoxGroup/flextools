@@ -13,6 +13,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ModuleUnloadingStartCommand;
 	import net.vdombox.ide.core.controller.OpenInitialWindowCommand;
 	import net.vdombox.ide.core.controller.OpenMainWindowCommand;
+	import net.vdombox.ide.core.controller.OpenPageInExternalBrowserCommand;
 	import net.vdombox.ide.core.controller.OpenWindowCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.ProcessLogMessage;
@@ -316,6 +317,8 @@ package net.vdombox.ide.core
 		public static const OBJECT_XML_PRESENTATION_SETTED : String = "objectXMLPresentationSetted";
 		
 		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
+		
+		public static const OPEN_PAGE_IN_EXTERNAL_BROWSER  : String = "openPageInExternalBrowser";
 
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";
@@ -468,6 +471,10 @@ package net.vdombox.ide.core
 			
 			registerCommand( OPEN_WINDOW, OpenWindowCommand );
 			registerCommand( CLOSE_WINDOW, CloseWindowCommand );
+			
+			registerCommand( OPEN_PAGE_IN_EXTERNAL_BROWSER, OpenPageInExternalBrowserCommand );
+			
+			
 			
 //			registerCommand( LOGOFF_REQUEST, LogoffRequestCommand );
 		}
