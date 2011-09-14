@@ -7,8 +7,7 @@ package net.vdombox.ide.modules.preview.view
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.modules.preview.ApplicationFacade;
-	import net.vdombox.ide.modules.preview.model.SessionProxy;
+	import net.vdombox.ide.modules.preview.ApplicationFacade; 
 	import net.vdombox.ide.modules.preview.view.components.Toolset;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

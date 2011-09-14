@@ -10,9 +10,6 @@ package net.vdombox.ide.modules.preview
 	import net.vdombox.ide.modules.preview.controller.messages.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.preview.controller.messages.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.preview.controller.messages.ProcessTypesProxyMessageCommand;
-	import net.vdombox.ide.modules.preview.controller.settings.GetSettingsCommand;
-	import net.vdombox.ide.modules.preview.controller.settings.InitializeSettingsCommand;
-	import net.vdombox.ide.modules.preview.controller.settings.SaveSettingsToProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;

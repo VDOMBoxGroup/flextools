@@ -2,8 +2,7 @@ package net.vdombox.ide.modules.preview.controller
 {
 	
 	import net.vdombox.ide.modules.Preview2;
-	import net.vdombox.ide.modules.preview.view.ScriptsJunctionMediator;
-	import net.vdombox.ide.modules.preview.view.ScriptsMediator;
+	import net.vdombox.ide.modules.preview.view.PreviewJunctionMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -14,8 +13,7 @@ package net.vdombox.ide.modules.preview.controller
 		{
 			var application : Preview2 = note.getBody() as Preview2;
 
-			facade.registerMediator( new ScriptsJunctionMediator() );
-			facade.registerMediator( new ScriptsMediator( application ) )
+			facade.registerMediator( new PreviewJunctionMediator() );
 		}
 	}
 }
