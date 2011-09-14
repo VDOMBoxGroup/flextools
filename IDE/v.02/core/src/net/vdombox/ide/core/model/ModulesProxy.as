@@ -37,6 +37,7 @@ package net.vdombox.ide.core.model
 					<module name="Trees" path="app:/modules/Tree/Tree.swf"/>
 					<module name="Events" path="app:/modules/Events/Events.swf"/>
 					
+					<module name="Trees" path="app:/modules/Scripts/Scripts.swf"/>
 
 				</category>
 			</modules>

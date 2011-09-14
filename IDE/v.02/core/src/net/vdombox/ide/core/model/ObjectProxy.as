@@ -458,8 +458,8 @@ package net.vdombox.ide.core.model
 					
 				case "get_server_actions":
 				{
-					
-					 serverActionsXMLList = result.ServerActions.Container.( @ID == objectVO.id )[0].children();
+					if ( result.ServerActions.Container ) 
+						serverActionsXMLList = result.ServerActions.Container.( @ID == objectVO.id )[0].children();
 					
 					for each ( serverActionXML in serverActionsXMLList )
 					{

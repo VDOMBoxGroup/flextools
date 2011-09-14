@@ -634,7 +634,7 @@ package net.vdombox.ide.core.model
 
 				case "get_server_action":
 				{
-					
+					var iyt : int = 3;
 					break;
 				}
 					
@@ -642,6 +642,9 @@ package net.vdombox.ide.core.model
 				case "set_server_actions":
 				{
 					
+					sendNotification( ApplicationFacade.PAGE_SERVER_ACTION_CREATED , { pageVO: pageVO } );
+					
+
 					break;
 				}
 					
