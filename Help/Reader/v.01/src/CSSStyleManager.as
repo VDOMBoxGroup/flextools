@@ -23,6 +23,7 @@ package
 	{
 		public static const STYLE_SETTED	: String = "styleSetted";
 		
+		private const JSFileName		: String = "searchhi_slim.js";
 		private const cssFileName		: String = "main.css";
 		private const cssImagesFolder	: String = "images";
 		
@@ -41,7 +42,7 @@ package
 		public function setStyle():void
 		{
 			imagesDirectoryContent = [];
-			currentFileName = cssFileName;
+			currentFileName = JSFileName;
 			loadFile();
 		}
 		
@@ -118,11 +119,18 @@ package
 			trace ("[CSSStyleManager] onFileCreated");
 			switch(currentFileName)
 			{
+				case JSFileName:
+				{
+					currentFileName = cssFileName;
+					loadFile();
+					break;
+				}
 				case cssFileName:
 				{
 					currentFileName = cssImagesFolder;
-					if (File.applicationDirectory.resolvePath(currentFileName).isDirectory)
-						imagesDirectoryContent = File.applicationDirectory.resolvePath(currentFileName).getDirectoryListing();
+					var file : File = File.applicationDirectory.resolvePath(currentFileName); 
+					if (file.isDirectory)
+						imagesDirectoryContent = file.getDirectoryListing();
 					
 					loadFile(true);
 					break;
