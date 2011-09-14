@@ -44,43 +44,10 @@ package net.vdombox.ide.modules.preview.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.EXPORT_TOOLSET );
-			interests.push( ApplicationFacade.EXPORT_SETTINGS_SCREEN );
-			interests.push( ApplicationFacade.EXPORT_BODY );
-
-			interests.push( ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE );
-			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
-
 			interests.push( ApplicationFacade.SELECT_MODULE );
-
 			interests.push( ApplicationFacade.OPEN_WINDOW );
 			interests.push( ApplicationFacade.CLOSE_WINDOW );
 
-			interests.push( ApplicationFacade.GET_TYPES );
-
-			interests.push( ApplicationFacade.GET_PAGES );
-
-			interests.push( ApplicationFacade.GET_OBJECTS );
-
-			interests.push( ApplicationFacade.GET_STRUCTURE );
-
-			interests.push( ApplicationFacade.GET_ALL_STATES );
-			interests.push( ApplicationFacade.SET_ALL_STATES );
-			
-			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
-
-			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
-
-			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
-			interests.push( ApplicationFacade.SET_SERVER_ACTIONS );
-			
-			interests.push( ApplicationFacade.GET_LIBRARIES );
-
-			interests.push( ApplicationFacade.CREATE_LIBRARY );
-			interests.push( ApplicationFacade.SAVE_LIBRARY );
-			
-			interests.push( ApplicationFacade.DELETE_LIBRARY );
-			
-			interests.push( ApplicationFacade.BODY_STOP );
 			 
 
 			return interests;
@@ -119,57 +86,11 @@ package net.vdombox.ide.modules.preview.view
 					break;
 				}
 
-				case ApplicationFacade.EXPORT_SETTINGS_SCREEN:
-				{
-					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ), multitonKey );
-
-					junction.sendMessage( PipeNames.STDCORE, message );
-
-					break;
-				}
-
-				case ApplicationFacade.EXPORT_BODY:
-				{
-					message = new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( body ), multitonKey );
-
-					junction.sendMessage( PipeNames.STDCORE, message );
-					
-					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
-
-					break;
-				}
-
-				case ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE:
-				{
-					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE, null, multitonKey );
-
-					junction.sendMessage( PipeNames.STDCORE, message );
-
-					break;
-				}
-
-				case ApplicationFacade.SAVE_SETTINGS_TO_STORAGE:
-				{
-					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body, multitonKey );
-
-					junction.sendMessage( PipeNames.STDCORE, message );
-
-					break;
-				}
-
-				case ApplicationFacade.SELECT_MODULE:
-				{
-					message = new SimpleMessage( SimpleMessageHeaders.OPEN_BROWSER, null, multitonKey );
-					
-					junction.sendMessage( PipeNames.STDCORE, message );
-
-
-					break;
-				}
-
+			
+		
 				case ApplicationFacade.OPEN_WINDOW:
 				{
-					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, body, multitonKey );
+					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, null, multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -185,161 +106,21 @@ package net.vdombox.ide.modules.preview.view
 					break;
 				}
 
-				case ApplicationFacade.GET_ALL_STATES:
+				case ApplicationFacade.SELECT_MODULE:
 				{
-					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
+					message = new SimpleMessage( SimpleMessageHeaders.OPEN_BROWSER, null, multitonKey );
 					
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
-					break;
-				}
-					
-				case ApplicationFacade.SET_ALL_STATES:
-				{
-					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
-					
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					junction.sendMessage( PipeNames.STDCORE, message );
 					
 					break;
-				}
-					
-				case ApplicationFacade.SET_SELECTED_PAGE:
-				{
-					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
-
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
-					break;
-				}
-
-				case ApplicationFacade.SET_SELECTED_OBJECT:
-				{
-					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
-
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
-					break;
-				}
-
-				case ApplicationFacade.GET_PAGES:
-				{
-					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
-
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
-					break;
-				}
-
-				case ApplicationFacade.GET_OBJECTS:
-				{
-					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECTS, body );
-
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
-					break;
-				}
-
-				case ApplicationFacade.GET_STRUCTURE:
-				{
-					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
-
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
-					break;
-				}
-
-				case ApplicationFacade.GET_TYPES:
-				{
-					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES, body );
-
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
-					break;
-				}
-
-				case ApplicationFacade.GET_SERVER_ACTIONS:
-				{
-					var placeName : String;
-					var targetName : String;
-
-					if ( body is ObjectVO )
-					{
-						placeName = PPMPlaceNames.OBJECT;
-						targetName = PPMObjectTargetNames.SERVER_ACTIONS;
+				}	
+		
+		
+		
+		
+		
+		
 					}
-					else if ( body is PageVO )
-					{
-						placeName = PPMPlaceNames.PAGE;
-						targetName = PPMPageTargetNames.SERVER_ACTIONS;
-					}
-					else if ( body is ApplicationVO )
-					{
-						placeName = PPMPlaceNames.APPLICATION;
-						targetName = PPMApplicationTargetNames.SERVER_ACTIONS;
-					}
-
-					if ( placeName && targetName )
-					{
-						message = new ProxyMessage( placeName, PPMOperationNames.READ, targetName, body );
-						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					}
-
-					break;
-				}
-
-				case ApplicationFacade.GET_LIBRARIES:
-				{
-					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.LIBRARIES, body );
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
-					break
-				}
-
-				case ApplicationFacade.SET_SERVER_ACTIONS:
-				{
-					if ( body.hasOwnProperty( "objectVO" ) )
-						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTIONS_LIST, body );
-					else if ( body.hasOwnProperty( "pageVO" ) )
-						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTIONS_LIST, body );
-
-					if( message )
-						junction.sendMessage( PipeNames.PROXIESOUT, message );
-
-					break
-				}
-
-				case ApplicationFacade.CREATE_LIBRARY:
-				{
-					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.LIBRARY, body );
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
-					break
-				}
-				
-				case ApplicationFacade.SAVE_LIBRARY:
-				{
-					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.LIBRARY, body );
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
-					break
-				}
-					
-				case ApplicationFacade.DELETE_LIBRARY:
-				{
-					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.LIBRARY, body );
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
-					break
-				}
-					
-				case ApplicationFacade.BODY_STOP :
-				{
-					junction.sendMessage( PipeNames.STDCORE,
-						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
-					
-					break;
-				}
-			}
 
 			super.handleNotification( notification );
 		}
@@ -380,17 +161,6 @@ package net.vdombox.ide.modules.preview.view
 					break;
 				}
 
-				case SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE:
-				{
-					if ( recipientKey != multitonKey )
-						return;
-
-					var settingsVO : SettingsVO = new SettingsVO( simpleMessage.getBody() );
-
-					sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_PROXY, settingsVO );
-
-					break;
-				}
 			}
 		}
 

@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.preview.controller
 {
+	
 	import net.vdombox.ide.modules.Preview2;
 	import net.vdombox.ide.modules.preview.view.ScriptsJunctionMediator;
 	import net.vdombox.ide.modules.preview.view.ScriptsMediator;

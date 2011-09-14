@@ -69,23 +69,23 @@
 
 			override public function getSettingsScreen() : void
 			{
-				facade.sendNotification( ApplicationFacade.CREATE_SETTINGS_SCREEN );
+//				facade.sendNotification( ApplicationFacade.CREATE_SETTINGS_SCREEN );
 			}
 
 			override public function getBody() : void
 			{
-				facade.sendNotification( ApplicationFacade.CREATE_BODY );
-				facade.sendNotification( ApplicationFacade.MODULE_SELECTED)
+//				facade.sendNotification( ApplicationFacade.CREATE_BODY );
+//				facade.sendNotification( ApplicationFacade.MODULE_SELECTED)
 			}
 			
 			override public function deSelect():void
 			{
-				facade.sendNotification(ApplicationFacade.MODULE_DESELECTED);
+//				facade.sendNotification(ApplicationFacade.MODULE_DESELECTED);
 			}
 
 			override public function initializeSettings() : void
 			{
-				facade.sendNotification( ApplicationFacade.INITIALIZE_SETTINGS );
+//				facade.sendNotification( ApplicationFacade.INITIALIZE_SETTINGS );
 			}
 		]]>
 	</fx:Script>

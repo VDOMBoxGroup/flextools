@@ -40,8 +40,8 @@ package net.vdombox.ide.modules.preview.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.MODULE_SELECTED );
-			interests.push( ApplicationFacade.MODULE_DESELECTED );
+//			interests.push( ApplicationFacade.MODULE_SELECTED );
+//			interests.push( ApplicationFacade.MODULE_DESELECTED );
 
 			return interests;
 		}
@@ -50,19 +50,7 @@ package net.vdombox.ide.modules.preview.view
 		{
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.MODULE_SELECTED:
-				{
-					toolset.toolsetButton.selected = true;
-					
-					break;
-				}
-					
-				case ApplicationFacade.MODULE_DESELECTED:
-				{
-					toolset.toolsetButton.selected = false;
-					
-					break;
-				}
+				
 			}
 		}
 

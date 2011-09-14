@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.preview.controller
 	{
 		override protected function initializeMacroCommand() : void
 		{
-			addSubCommand( StartupModelCommand );
+//			addSubCommand( StartupModelCommand );
 			addSubCommand( StartupViewCommand );
 		}
 	}
