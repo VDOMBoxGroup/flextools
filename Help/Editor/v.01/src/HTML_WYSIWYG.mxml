@@ -8,6 +8,7 @@
 			import com.adobe.images.PNGEncoder;
 			
 			import mx.utils.Base64Encoder;
+			
 			private var instancesInitialized 	: Boolean;
 			
 			public static const MAX_IMAGE_WIDTH : Number = 500;
@@ -17,15 +18,22 @@
 
 			private var imgCounter : Number = 0;
 			private var resourcesList : XMLList;
-			private var xmlContent : XML;
+			private var _xmlContent : XML;
 			
 			private var imageWidthInTag		: Number = 0;
 			private var imageHeightInTag	: Number = 0;
+			
+			private var rewritePageContent	: Boolean;
 			
 			public static const EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED	: String = "EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED"; 
 			public static const EVENT_WYSIWYG_HTTP_IMAGE_LOADED			: String = "EVENT_WYSIWYG_HTTP_IMAGE_LOADED";
 			public static const EVENT_WYSIWYG_IMAGES_WIDTH_SETTED		: String = "EVENT_WYSIWYG_IMAGES_WIDTH_SETTED";
 			
+			public function get xmlContent():XML
+			{
+				return _xmlContent;
+			}
+
 			private function init():void
 			{
 				this.addEventListener(KeyboardEvent.KEY_UP,		onKeyboardKeyUp);
@@ -161,7 +169,7 @@
 					
 					linkClass = String(xmlLink.@["class"]);
 					
-					if (linkClass.indexOf(PageToc.ANCOR_CLASS) >= 0) {
+					if (linkClass.indexOf(PageToc.ANCOR_CLASS) >= 0 || linkClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS)) {
 						
 						delete xmlLink.parent().children()[xmlLink.childIndex()];
 					}
@@ -191,7 +199,7 @@
 			
 			public function resetImagesPath() : void
 			{
-				var xmlContent : XML = XML(getHTML());
+				_xmlContent = XML(getHTML());
 				var resourcesList	: XMLList	= xmlContent..img;
 				
 				for each (var xmlImg:XML in resourcesList)
@@ -292,9 +300,21 @@
 				return file.url;
 			}
 			
-			public function resetImagesWidth():void
+			public function resetImagesWidth(content : XML = null):void
 			{				
-				 xmlContent = XML(getHTML());
+				trace ("[HTML_WYSIWYG] resetImagesWidth");
+				rewritePageContent = true;
+				_xmlContent = null;
+				
+				if (content != null)
+				{
+					_xmlContent = content;
+					rewritePageContent = false;
+				} else 
+				{
+					_xmlContent = XML(getHTML());
+				}
+				
 				resourcesList = xmlContent..img;
 				
 				imgCounter = 0;
@@ -310,6 +330,7 @@
 			
 			private function resetNextImageWidth():void
 			{
+				trace ("[HTML_WYSIWYG] resetNextImageWidth");
 				if (imgCounter >= resourcesList.length())
 				{
 					imgCounter = 0;
@@ -344,6 +365,7 @@
 						return;
 					}
 				}
+				trace ("imageWidthInTag = " + imageWidthInTag + "; imageHeightInTag = " +imageHeightInTag );
 				
 				if (imageWidthInTag > 0 && imageHeightInTag > 0)
 				{
@@ -352,6 +374,8 @@
 					ratioX =  MAX_IMAGE_WIDTH / imageWidthInTag;
 					imageWidthInTag = MAX_IMAGE_WIDTH;
 					imageHeightInTag = Math.floor(imageHeightInTag * ratioX);
+					
+					trace ("imageWidthInTag = " + imageWidthInTag + "; imageHeightInTag = " +imageHeightInTag );
 					
 					onImageWidthSetted();
 					return;
@@ -385,6 +409,7 @@
 				
 				function contentLoaderInfoCompleteHandler (evt:Event) : void 
 				{
+					trace ("[HTML_WYSIWYG] contentLoaderInfoCompleteHandler");
 					var loaderInfo : LoaderInfo = evt.target as LoaderInfo;
 					
 					imageWidthInTag = (imageWidthInTag > 0) ? imageWidthInTag : loaderInfo.width;
@@ -396,13 +421,18 @@
 						imageWidthInTag = MAX_IMAGE_WIDTH;
 						imageHeightInTag = Math.floor(imageHeightInTag * ratioX);
 						
-						onImageWidthSetted();
-						return;
+						//onImageWidthSetted();
+						//return;
 					}
+					
+					trace ("imageWidthInTag = " + imageWidthInTag + "; imageHeightInTag = " +imageHeightInTag );
+					
+					onImageWidthSetted();
 				}
 				
 				function contentLoaderInfoErrorHandler (evt:Event) : void 
 				{
+					trace ("[HTML_WYSIWYG] contentLoaderInfoErrorHandler");
 					onImageWidthSetted();
 					return;
 				}
@@ -410,6 +440,7 @@
 			
 			private function onImageWidthSetted():void
 			{
+				trace ("[HTML_WYSIWYG] onImageWidthSetted");
 				resourcesList[imgCounter].@width = imageWidthInTag;
 				resourcesList[imgCounter].@height = imageHeightInTag;
 				
@@ -429,16 +460,19 @@
 			
 			private function onLastImageWidthSetted():void
 			{
+				trace ("[HTML_WYSIWYG] onLastImageWidthSetted");
 				imgCounter = 0;
 				
-				setHTML(xmlContent.toString());
+				if (rewritePageContent)
+					setHTML(xmlContent.toString());
+				
 				this.dispatchEvent(new Event(EVENT_WYSIWYG_IMAGES_WIDTH_SETTED));
 			}
 			
 			public static function getSizeFromStyle(strStyle:String, type:Number) : Number
 			{
-				var strWidth : String = "width";
-				var strHeight : String = "height";
+				var strWidth : String = " width";
+				var strHeight : String = " height";
 				var regExpDigitVal	: RegExp = /[\d]+/i;
 				
 				var firstInd : int;

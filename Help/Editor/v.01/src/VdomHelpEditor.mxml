@@ -207,7 +207,7 @@
 					
 					linkClass = String(xmlP.@["class"]);
 					
-					if (linkClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0) {
+					if (linkClass.indexOf(PageToc.ANCOR_CLASS) >= 0 || linkClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0) {
 						
 						delete xmlP.parent().children()[xmlP.childIndex()];
 					}
@@ -218,7 +218,7 @@
 					
 					linkClass = String(xmlA.@["class"]);
 					
-					if (linkClass.indexOf(PageToc.ANCOR_CLASS) >= 0) {
+					if (linkClass.indexOf(PageToc.ANCOR_CLASS) >= 0 || linkClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0) {
 						
 						delete xmlA.parent().children()[xmlA.childIndex()];
 					}
@@ -623,10 +623,6 @@
 				try
 				{
 					fileStream. open( productXMLFile, FileMode.WRITE);
-					fileStream.writeUTFBytes("");
-					fileStream.close();
-					
-					fileStream. open( productXMLFile, FileMode.WRITE);
 					fileStream.writeUTFBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + product.toXMLString());
 					fileStream.close();
 					
@@ -711,7 +707,8 @@
 				productCreator.addEventListener(ProductXMLCreator.EVENT_ON_XML_CREATION_COMPLETE, onProductXMLCreationComplete);
 				productCreator.generateProductXML(cmboxProduct.selectedItem.name, 
 													cmboxProduct.selectedItem.title, 
-													tree.dataProvider);
+													tree.dataProvider, 
+													html_wysiwyg);
 			}
 			
 			private function blockBtns(b:Boolean):void
