@@ -69,7 +69,6 @@ package
 		
 		public function generateProductXML(aProductName:String, aProductTitle:String, aTreeData:*, htmlWysiwyg:HTML_WYSIWYG):void
 		{
-			trace ("[ProductXMLCreator] generateProductXML");
 			html_wysiwyg = htmlWysiwyg;
 			
 			productName = aProductName;
@@ -99,7 +98,6 @@ package
 			
 		private function generatePages() : void
 		{
-			trace ("[ProductXMLCreator] generatePages");
 			pagesCounter = 0;
 			pagesObj = {};
 			pagesXML = null;
@@ -121,7 +119,6 @@ package
 		
 		private function generateNextPage():void
 		{
-			trace ("[ProductXMLCreator] generateNextPage");
 			if (pagesCounter >= pagesObj.length)
 			{
 				pagesCounter = 0;
@@ -145,7 +142,6 @@ package
 		
 		private function onImageMaxWidthChecked(aEvent : Event):void
 		{
-			trace ("[ProductXMLCreator] onImageMaxWidthChecked");
 			if (aEvent)
 				html_wysiwyg.removeEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, onImageMaxWidthChecked);
 			
@@ -187,7 +183,6 @@ package
 		
 		private function onPageGenerated():void
 		{
-			trace ("[ProductXMLCreator] onPageGenerated");
 			pagesXML.appendChild(pageXML);
 			
 			pagesCounter ++;
@@ -197,7 +192,6 @@ package
 		
 		private function onLastPageGenerated():void
 		{
-			trace ("[ProductXMLCreator] onLastPageGenerated");
 			productXML.appendChild(pagesXML);
 			productXML.normalize();
 			
@@ -206,7 +200,6 @@ package
 		
 		private function generateNextPageResource():void
 		{
-			trace ("[ProductXMLCreator] generateNextPageResource");
 			if (pageResourcesCounter >= pageResourcesArr.length)
 			{
 				pageResourcesCounter = 0;
@@ -233,7 +226,6 @@ package
 		
 		private function onPageResourceGenerated():void
 		{
-			trace ("[ProductXMLCreator] onPageResourceGenerated");
 			var curResourceId : String = String(pageResourceXML.@id);
 			var resourcesListByID : XMLList = pageResourcesXML.resource.(@id == curResourceId);
 			
@@ -247,7 +239,6 @@ package
 		
 		private function onLastPageResourceGenerated ():void
 		{
-			trace ("[ProductXMLCreator] onLastPageResourceGenerated");
 			pageXML.content.appendChild( XML("<![CDATA[" + pageContentForXml + "]"+ "]>"));
 			pageXML.appendChild(pageResourcesXML);
 			
@@ -256,7 +247,6 @@ package
 		
 		private function resetToc(tocObject:Object) : String
 		{
-			trace ("[ProductXMLCreator] resetToc");
 			var strToc	: String = "";
 			var xmlToc	: XML;
 			
@@ -289,7 +279,6 @@ package
 		
 		private function getPageChildren(pageName:String) : XMLList
 		{
-			trace ("[ProductXMLCreator] getPageChildren");
 			var xmlToc : XML = new XML(treeData);
 			if (xmlToc.@name == pageName) {
 				return xmlToc.children();
@@ -299,7 +288,6 @@ package
 		
 		private function getImagePropertiesForCurrentResource () : ImageProperties
 		{
-			trace ("[ProductXMLCreator] getImagePropertiesForCurrentResource");
 			var imageProperties : ImageProperties = new ImageProperties();
 			
 			var xmlContent : XML = XML(pageContentForXml);
@@ -331,7 +319,6 @@ package
 		
 		private function getResourceCDATA(fileName:String) : void
 		{
-			trace ("[ProductXMLCreator] getResourceCDATA");
 			var imageProperties : ImageProperties = getImagePropertiesForCurrentResource();
 			var imageWidth	: Number = imageProperties.width;
 			var imageHeight : Number = imageProperties.height;
@@ -376,7 +363,6 @@ package
 			
 			function contentLoaderInfoErrorHandler (evt:Event) : void 
 			{
-				trace ("[ProductXMLCreator] contentLoaderInfoErrorHandler");
 				source = base64.toString();
 				onResourceDataGenerated(fileName, newFileName, source);
 				return;
@@ -384,7 +370,6 @@ package
 			
 			function contentLoaderInfoCompleteHandler (evt:Event) : void 
 			{
-				trace ("[ProductXMLCreator] contentLoaderInfoCompleteHandler");
 				var loaderInfo : LoaderInfo = evt.target as LoaderInfo;
 				
 				var originalBitmapData	: BitmapData;
@@ -434,9 +419,6 @@ package
 					newHeight = ( int( originalBitmap.height * ratioY ) > 0 ) ? int( originalBitmap.height * ratioY ) : 1;
 				}
 				
-				//if ( String(xmlImg.@src).indexOf("3b200438-9273-5a00-f6e1-0ba66b0b1a5e") >= 0)
-					trace ("newWidth = " + newWidth + "; newHeight = " +newHeight );
-				
 				try
 				{
 					resultBitmapData = new BitmapData( newWidth, newHeight, false );
@@ -473,7 +455,6 @@ package
 		
 		private function onResourceDataGenerated(oldFileName:String, newFileName:String, source:String):void
 		{
-			trace ("[ProductXMLCreator] onResourceDataGenerated");	
 			if (oldFileName != newFileName)
 			{
 				pageResourceXML.@id = newFileName.substr(0,36);
@@ -504,7 +485,6 @@ package
 		
 		private function resetLinksToResourcesAndPages(aPageContent:String) : String
 		{
-			trace ("[ProductXMLCreator] resetLinksToResourcesAndPages");
 			var patternRes		: RegExp;
 			var patternGUID		: RegExp;
 			var patternPageLink	: RegExp;

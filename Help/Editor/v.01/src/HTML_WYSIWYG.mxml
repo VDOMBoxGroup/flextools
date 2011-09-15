@@ -302,7 +302,6 @@
 			
 			public function resetImagesWidth(content : XML = null):void
 			{				
-				trace ("[HTML_WYSIWYG] resetImagesWidth");
 				rewritePageContent = true;
 				_xmlContent = null;
 				
@@ -330,7 +329,6 @@
 			
 			private function resetNextImageWidth():void
 			{
-				trace ("[HTML_WYSIWYG] resetNextImageWidth");
 				if (imgCounter >= resourcesList.length())
 				{
 					imgCounter = 0;
@@ -365,7 +363,6 @@
 						return;
 					}
 				}
-				trace ("imageWidthInTag = " + imageWidthInTag + "; imageHeightInTag = " +imageHeightInTag );
 				
 				if (imageWidthInTag > 0 && imageHeightInTag > 0)
 				{
@@ -374,8 +371,6 @@
 					ratioX =  MAX_IMAGE_WIDTH / imageWidthInTag;
 					imageWidthInTag = MAX_IMAGE_WIDTH;
 					imageHeightInTag = Math.floor(imageHeightInTag * ratioX);
-					
-					trace ("imageWidthInTag = " + imageWidthInTag + "; imageHeightInTag = " +imageHeightInTag );
 					
 					onImageWidthSetted();
 					return;
@@ -409,7 +404,6 @@
 				
 				function contentLoaderInfoCompleteHandler (evt:Event) : void 
 				{
-					trace ("[HTML_WYSIWYG] contentLoaderInfoCompleteHandler");
 					var loaderInfo : LoaderInfo = evt.target as LoaderInfo;
 					
 					imageWidthInTag = (imageWidthInTag > 0) ? imageWidthInTag : loaderInfo.width;
@@ -425,14 +419,11 @@
 						//return;
 					}
 					
-					trace ("imageWidthInTag = " + imageWidthInTag + "; imageHeightInTag = " +imageHeightInTag );
-					
 					onImageWidthSetted();
 				}
 				
 				function contentLoaderInfoErrorHandler (evt:Event) : void 
 				{
-					trace ("[HTML_WYSIWYG] contentLoaderInfoErrorHandler");
 					onImageWidthSetted();
 					return;
 				}
@@ -440,7 +431,6 @@
 			
 			private function onImageWidthSetted():void
 			{
-				trace ("[HTML_WYSIWYG] onImageWidthSetted");
 				resourcesList[imgCounter].@width = imageWidthInTag;
 				resourcesList[imgCounter].@height = imageHeightInTag;
 				
@@ -460,7 +450,6 @@
 			
 			private function onLastImageWidthSetted():void
 			{
-				trace ("[HTML_WYSIWYG] onLastImageWidthSetted");
 				imgCounter = 0;
 				
 				if (rewritePageContent)
