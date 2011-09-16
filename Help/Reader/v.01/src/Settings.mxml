@@ -196,14 +196,22 @@
 				productsXMLController.removeEventListener(ProductXMLLoader.XML_FILE_LOADED, onProductXMLLoaded);
 				
 				update.addEventListener(Update.PARSING_COMPLETED, onXMLParsingCompleted);
+				update.addEventListener(Update.PARSING_NOT_REQUIED, onXMLParsingCompleted);
 				update.parsingData(productsXMLController.productXML, labelComments);
 			}
 			
 			private function onXMLParsingCompleted(aEvent:Event):void
 			{
 				update.removeEventListener(Update.PARSING_COMPLETED, onXMLParsingCompleted);
+				update.removeEventListener(Update.PARSING_NOT_REQUIED, onXMLParsingCompleted);
 				
 				blockChooseBtn(false);
+				
+				if (aEvent.type == Update.PARSING_NOT_REQUIED)
+				{
+					labelComments.text = "XML file loading canceled.";
+					Alert.show( "You try to load old version of existing product.", "Error:");
+				}
 			}
 			
 			private function onProductXMLLoadingCanceled(aEvent:Event):void

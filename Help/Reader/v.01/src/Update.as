@@ -19,6 +19,7 @@ package
 	public class Update extends UIComponent 
 	{
 		public static var PARSING_COMPLETED		: String = "PARSING_COMPLETED";
+		public static var PARSING_NOT_REQUIED	: String = "PARSING_NOT_REQUIED";
 		
 		private var sqlProxy:SQLProxy = new SQLProxy();
 		private var XML_URL:String = "StartXML.xml";
@@ -145,13 +146,20 @@ package
 //					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
 					sqlProxy.setProduct(name,version,title,description, language,toc);
 				}
-				else if (Number(curProductVersion)< Number(version))
+				else 
 				{
-					//delete old data Find nessasri page 
-					deleteProduct(name, language);
-//					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
-					
-					sqlProxy.setProduct(name, version, title, description, language,toc);
+					if (Number(curProductVersion)< Number(version))
+					{
+						//delete old data Find nessasri page 
+						deleteProduct(name, language);
+	//					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
+						
+						sqlProxy.setProduct(name, version, title, description, language,toc);
+					} else
+					{
+						this.dispatchEvent(new Event(PARSING_NOT_REQUIED));
+						return;
+					}
 				}
 			
 			// save loaded data to local diskDrive 
