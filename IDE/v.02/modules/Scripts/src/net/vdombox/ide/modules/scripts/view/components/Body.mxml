@@ -15,11 +15,6 @@
 
 	<s:VGroup height="100%" width="250">
 
-		<components:PagesPanel id="pagesPanel"
-							   width="100%"
-							   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
-							   title="{ resourceManager.getString( 'Scripts_General', 'pages_panel_title' ) }"/>
-
 		<components:ContainersPanel id="containersPanel"
 									width="100%"
 									skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"

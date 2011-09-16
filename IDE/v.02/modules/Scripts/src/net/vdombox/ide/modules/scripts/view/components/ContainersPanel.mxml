@@ -11,7 +11,7 @@
 			import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
 
 			[Bindable]
-			private var _structure : XML;
+			private var _structure : XMLList;
 
 			public function get selectedObjectID() : String
 			{
@@ -39,9 +39,14 @@
 				return containersTree.selectedItem as XML;
 			}
 
-			public function set structure( value : XML ) : void
+			public function set structure( value : XMLList ) : void
 			{
 				_structure = value;
+			}
+			
+			public function get structure() : XMLList
+			{
+				return _structure;
 			}
 		]]>
 	</fx:Script>

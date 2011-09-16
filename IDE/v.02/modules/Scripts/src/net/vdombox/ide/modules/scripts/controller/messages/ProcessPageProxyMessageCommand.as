@@ -48,7 +48,7 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					
 				case PPMPageTargetNames.SERVER_ACTION:
 				{
-					sendNotification( ApplicationFacade.BODY_START, body );
+					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
 					
 					break;
 				}	

@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.ContainersPanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -22,6 +22,7 @@ package net.vdombox.ide.modules.scripts.view
 		}
 
 		private var types : Array;
+		private var _pages : Object;
 
 		private var currentPageVO : PageVO;
 		private var currentObjectVO : ObjectVO;
@@ -66,6 +67,8 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
+			
+			interests.push( ApplicationFacade.PAGES_GETTED );
 
 			return interests;
 		}
@@ -103,6 +106,7 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.TYPES_GETTED:
 				{
 					types = body as Array;
+					break;
 				}
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
@@ -115,32 +119,72 @@ package net.vdombox.ide.modules.scripts.view
 
 					break;
 				}
+					
+				case ApplicationFacade.PAGES_GETTED:
+				{
+					var pages : Array = body as Array;
+
+					showPages( pages );
+					
+					commitProperties();
+					
+					break;
+				}
 
 				case ApplicationFacade.STRUCTURE_GETTED:
 				{
+					if ( !containersPanel.structure )
+						return;
+					
 					var structure : XML = body as XML;
-					var typeVO : TypeVO;
-
-					var objects : XMLList = structure..object;
-
-					var i : uint;
-
-					for ( i = 0; i < objects.length(); i++ )
+					if ( !structure )
+						structure = new XML();
+					else
 					{
-						typeVO = getTypeByID( objects[ i ].@typeID );
-						if ( typeVO.container == 1 )
+						var typeVO : TypeVO;
+						
+						var objects : XMLList = structure..object;
+						
+						var i : uint;
+						
+						for ( i = 0; i < objects.length(); i++ )
 						{
-							delete objects[ i ];
-							i--;
+							typeVO = getTypeByID( objects[ i ].@typeID );
+							if ( typeVO.container == 1 )
+							{
+								delete objects[ i ];
+								i--;
+							}
 						}
+						
+						//containersPanel.structure = structure;
+						
+						
+						var pageXML : XML = containersPanel.structure.( @id == structure.@id )[ 0 ];
+						pageXML.setChildren( new XMLList() ); //TODO: strange construction
+						pageXML.appendChild( structure.* );
+						//containersPanel.validateNow();
 					}
-
-					containersPanel.structure = structure;
-					containersPanel.validateNow();
-
 					break;
 				}
 			}
+		}
+		
+		private function showPages( pages : Array ) : void
+		{
+			var pagesXMLList : XMLList = new XMLList();
+			_pages = {};
+			
+			for ( var i : int = 0; i < pages.length; i++ )
+			{
+				_pages[ pages[ i ].id ] = pages[ i ];
+				
+				pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} />;
+				
+			}
+			
+			containersPanel.structure = pagesXMLList;
+			
 		}
 
 		private function addHandlers() : void
@@ -220,6 +264,7 @@ package net.vdombox.ide.modules.scripts.view
 		private function containerChangedHandler( event : ContainersPanelEvent ) : void
 		{
 			var selectedItem : XML = containersPanel.selectedItem;
+			var selectedItemID : String = selectedItem.@id;
 			var selectedObject : ObjectVO;
 			
 			var typeVO : TypeVO;
@@ -228,14 +273,23 @@ package net.vdombox.ide.modules.scripts.view
 				return;
 			
 			 typeVO = getTypeByID( selectedItem.@typeID )
+				 
+			 var pageVO : PageVO = null;
+			 if ( _pages.hasOwnProperty( selectedItemID ) )
+				 pageVO = _pages[selectedItemID];;
+			 
+			 if( pageVO )
+				 sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
+			 else
+			 {
+				if ( selectedItem.name() == "object" )
+				{
+					selectedObject = new ObjectVO( sessionProxy.selectedPage, typeVO );
+					selectedObject.setID( selectedItem.@id );
+				}
 
-			if ( selectedItem.name() == "object" )
-			{
-				selectedObject = new ObjectVO( sessionProxy.selectedPage, typeVO );
-				selectedObject.setID( selectedItem.@id );
-			}
-
-			sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
+				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
+			 }
 		}
 	}
 }
