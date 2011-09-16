@@ -29,20 +29,20 @@ package
 			this.productXMLLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADED, onProductXMLLoaded);
 			
 			var productXML : XML = new XML(productXMLLoader.xmlFile.data);
-			projectsUpdater.addEventListener(ProjectsUpdater.UPDATE_COMPLETED, this.onProjectsDBUpdated);
-			projectsUpdater.addEventListener(ProjectsUpdater.UPDATE_CANCELED, this.onProjectsDBUpdateCanceled);
+			
+			projectsUpdater.addEventListener(ProjectsUpdater.UPDATE_COMPLETED, this.projectsDBUpdateHandler);
+			projectsUpdater.addEventListener(ProjectsUpdater.UPDATE_CANCELED, this.projectsDBUpdateHandler);
+			projectsUpdater.addEventListener(ProjectsUpdater.UPDATE_NOT_REQUIRED, this.projectsDBUpdateHandler);
+			
 			projectsUpdater.parseXMLData(productXML);			
 		}
 		
-		private function onProjectsDBUpdated(aEvent:Event):void
+		private function projectsDBUpdateHandler(aEvent:Event):void
 		{
-			projectsUpdater.removeEventListener(ProjectsUpdater.UPDATE_COMPLETED, this.onProjectsDBUpdated);
-			this.dispatchEvent(aEvent);
-		}
-		
-		private function onProjectsDBUpdateCanceled(aEvent:Event):void
-		{
-			projectsUpdater.removeEventListener(ProjectsUpdater.UPDATE_CANCELED, this.onProjectsDBUpdateCanceled);
+			projectsUpdater.removeEventListener(ProjectsUpdater.UPDATE_COMPLETED, this.projectsDBUpdateHandler);
+			projectsUpdater.removeEventListener(ProjectsUpdater.UPDATE_CANCELED, this.projectsDBUpdateHandler);
+			projectsUpdater.removeEventListener(ProjectsUpdater.UPDATE_NOT_REQUIRED, this.projectsDBUpdateHandler);
+			
 			this.dispatchEvent(aEvent);
 		}
 		

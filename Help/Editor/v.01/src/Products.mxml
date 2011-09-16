@@ -89,25 +89,41 @@
 			{
 				blockBtns(true);
 				
-				productsXMLController.addEventListener(ProjectsUpdater.UPDATE_COMPLETED, onProudctListUpdated);
-				productsXMLController.addEventListener(ProjectsUpdater.UPDATE_CANCELED, onProudctListUpdateCanceled);
+				productsXMLController.addEventListener(ProjectsUpdater.UPDATE_COMPLETED, proudctListUpdateHandler);
+				productsXMLController.addEventListener(ProjectsUpdater.UPDATE_CANCELED, proudctListUpdateHandler);
+				productsXMLController.addEventListener(ProjectsUpdater.UPDATE_NOT_REQUIRED, proudctListUpdateHandler);
+				
 				productsXMLController.addExistingProductXML();				
 			}
 			
-			private function onProudctListUpdated(aEvent:Event):void
+			private function proudctListUpdateHandler(aEvent:Event):void
 			{
-				productsXMLController.removeEventListener(ProjectsUpdater.UPDATE_COMPLETED, onProudctListUpdated);
+				productsXMLController.removeEventListener(ProjectsUpdater.UPDATE_COMPLETED, proudctListUpdateHandler);
+				productsXMLController.removeEventListener(ProjectsUpdater.UPDATE_CANCELED, proudctListUpdateHandler);
+				productsXMLController.removeEventListener(ProjectsUpdater.UPDATE_NOT_REQUIRED, proudctListUpdateHandler);
 				
 				blockBtns(false);
-				validateListOfProducts(null);
+				
+				switch(aEvent.type)
+				{
+					case ProjectsUpdater.UPDATE_COMPLETED:
+					{
+						validateListOfProducts(null);
+						break;
+					}
+					case ProjectsUpdater.UPDATE_NOT_REQUIRED:
+					{
+						Alert.show( "You try to load old version of existing product.", "Error:");
+						break;
+					}
+					default:
+					{
+						break;
+					}
+				}
+				
 			}
 				
-			private function onProudctListUpdateCanceled(aEvent:Event):void
-			{
-				productsXMLController.removeEventListener(ProjectsUpdater.UPDATE_CANCELED, onProudctListUpdateCanceled);
-				
-				blockBtns(false);
-			}
 			
 			private function deleteClickHandler():void
 			{

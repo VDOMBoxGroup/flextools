@@ -38,6 +38,7 @@ package
 		private var pagesXML		: XML;
 		private var pagesCounter	: Number = 0;
 		
+		private var tocXML				: XML;
 		private var pageXML				: XML;
 		private var pageResourcesArr	: Array;
 		private var pageResourcesXML	: XML;
@@ -84,7 +85,7 @@ package
 			productXML.language = "en_US";
 			
 			// generate toc ...
-			var tocXML : XML       = new XML("<toc/>");
+			tocXML      = new XML("<toc/>");
 			var tocString : String = resetToc(treeData);
 			var regExp : RegExp    = /isBranch="true"/gim;
 			
@@ -127,7 +128,13 @@ package
 			}
 			
 			currentPageObj = pagesObj[pagesCounter];
-				
+			
+			if (tocXML.toString().indexOf(currentPageObj["name"]) == -1) // page doesn't exist in toc 
+			{
+				onPageGenerated(false);
+				return;
+			}
+			
 			pageContent = currentPageObj["content"];
 				
 			if (html_wysiwyg)
@@ -181,9 +188,10 @@ package
 			// ... get resources
 		}
 		
-		private function onPageGenerated():void
+		private function onPageGenerated(appendPage : Boolean = true):void
 		{
-			pagesXML.appendChild(pageXML);
+			if (appendPage)
+				pagesXML.appendChild(pageXML);
 			
 			pagesCounter ++;
 			

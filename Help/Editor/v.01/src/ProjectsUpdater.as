@@ -14,8 +14,9 @@ package
 
 	public class ProjectsUpdater extends EventDispatcher
 	{
-		public static var UPDATE_COMPLETED	: String = "UPDATE_COMPLETED";
-		public static var UPDATE_CANCELED	: String = "UPDATE_CANCELED";
+		public static var UPDATE_COMPLETED		: String = "UPDATE_COMPLETED";
+		public static var UPDATE_CANCELED		: String = "UPDATE_CANCELED";
+		public static var UPDATE_NOT_REQUIRED	: String = "UPDATE_NOT_REQUIRED";
 		
 		private var sqlProxy : SQLProxy = new SQLProxy();
 		
@@ -49,13 +50,20 @@ package
 				//sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
 				sqlProxy.setProduct(name,version,title,description, language, toc);
 			}
-			else if (int(curProductVersion)< version)
+			else 
 			{
-				//delete old data Find nessasri page 
-				deleteProduct(name, language);
-				//					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
-				
-				sqlProxy.setProduct(name, version, title, description, language, toc);
+				if (int(curProductVersion)< version)
+				{
+					//delete old data Find nessasri page 
+					deleteProduct(name, language);
+					//					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
+					
+					sqlProxy.setProduct(name, version, title, description, language, toc);
+				} else
+				{
+					this.dispatchEvent(new Event(UPDATE_NOT_REQUIRED));
+					return;
+				}
 			}
 			
 			// выбрать странички сохранить их на диск
