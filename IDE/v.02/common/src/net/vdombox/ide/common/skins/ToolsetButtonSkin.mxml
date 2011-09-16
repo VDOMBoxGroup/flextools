@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+
+ADOBE SYSTEMS INCORPORATED
+Copyright 2008 Adobe Systems Incorporated
+All Rights Reserved.
+
+NOTICE: Adobe permits you to use, modify, and distribute this file
+in accordance with the terms of the license agreement accompanying it.
+
+-->
+<!--- The default skin class for a Spark ToggleButton component.
+
+@langversion 3.0
+@playerversion Flash 10
+@playerversion AIR 1.5
+@productversion Flex 4
+-->
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 
 			 minHeight="21" minWidth="21"
 			 alpha.disabledStates="0.5">
 	<!-- host component -->
-
+	
 	<fx:Metadata>
 		<![CDATA[ 
 		/** 
@@ -14,12 +32,12 @@
 		[HostComponent("net.vdombox.ide.common.components.ToolsetButton")]
 		]]>
 	</fx:Metadata>
-
+	
 	<fx:Script>
 		/* Define the skin elements that should not be colorized.
-		 For toggle button, the graphics are colorized but the label is not. */
+		For toggle button, the graphics are colorized but the label is not. */
 		static private const exclusions : Array = [ "labelDisplay" ];
-
+		
 		/**
 		 * @copy spark.skins.SparkSkin#colorizeExclusions
 		 */
@@ -27,92 +45,70 @@
 		{
 			return exclusions;
 		}
-
+		
 		/**
 		 * @private
 		 */
 		override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 		{
 			var cr : Number = getStyle( "cornerRadius" );
-
+			
 			if ( cornerRadius != cr )
 				cornerRadius = cr;
-
+			
 			super.updateDisplayList( unscaledWidth, unscaledHeight );
 		}
-
+		
 		[Bindable]
 		public var cornerRadius : Number = 2;
 	</fx:Script>
-
 	<!-- states -->
+	
 	<s:states>
-		<s:State name="up"/>
-		<s:State name="over" stateGroups="overStates"/>
-		<s:State name="down" stateGroups="downStates"/>
-		<s:State name="disabled" stateGroups="disabledStates"/>
-		<s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates"/>
-		<s:State name="overAndSelected" stateGroups="overStates, selectedStates"/>
-		<s:State name="downAndSelected" stateGroups="downStates, selectedStates"/>
-		<s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates"/>
+		
+		<s:State name="up" />
+		
+		<s:State name="over" stateGroups="overStates" />
+		
+		<s:State name="down" stateGroups="downStates" />
+		
+		<s:State name="disabled" stateGroups="disabledStates" />
+		
+		<s:State name="upAndSelected"
+				 stateGroups="selectedStates, selectedUpStates" />
+		
+		<s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
+		
+		<s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
+		
+		<s:State name="disabledAndSelected"
+				 stateGroups="selectedUpStates, disabledStates, selectedStates" />
 	</s:states>
-
-	<s:Rect bottom="0" left="0" right="0" top="0"
-			radiusX="{cornerRadius}">
-
-		<s:fill>
-
-			<s:LinearGradient rotation="90">
-
-				<s:GradientEntry color="0xB5B6B8" color.downStates="0x77787C" color.overStates="0xBBBDBD" color.selectedUpStates="0x77787C"
-								 alpha="1" alpha.overAndSelected="1"/>
-
-				<s:GradientEntry color="0x77787C" color.downStates="0x464950" color.over="0x9FA0A1" color.overAndSelected="0x8E8F90" color.selectedUpStates="0x464950"
-								 alpha="1" alpha.overAndSelected="1"/>
-			</s:LinearGradient>
-		</s:fill>
-	</s:Rect>
-
-	<s:HGroup gap="0" height="100%"
-			  verticalAlign="middle">
-
-		<s:Rect height="100%" width="1">
-
-			<s:fill>
-
-				<s:LinearGradient rotation="90">
-
-					<s:GradientEntry color="0x8C8D91" color.selectedUpStates="0x75767A"/>
-
-					<s:GradientEntry color="0x8B8C90" color.selectedUpStates="0x747579"/>
-				</s:LinearGradient>
-			</s:fill>
-		</s:Rect>
-
-		<mx:Spacer width="5"/>
-
-		<mx:Image id="buttonIcon"
-				  height="24" source="{ hostComponent.icon }"/>
-
-		<!-- layer 8: text -->
-
+	
+	<s:VGroup height="100%"
+			  horizontalAlign="center"
+			  gap="3"
+			  top="35">
+		
+		<!--<mx:Image id="buttonIcon"
+		height="24" source="{ hostComponent.icon }" />-->
+		
 		<s:Label id="labelDisplay"
-				 color="black" color.selectedUpStates="white" fontWeight="bold"
-				 maxDisplayedLines="1"/>
-
-		<mx:Spacer width="5"/>
-
-		<s:Rect height="100%" width="1">
-
-			<s:fill>
-
-				<s:LinearGradient rotation="90">
-
-					<s:GradientEntry color="0x75767A" color.selectedUpStates="0x8C8D91"/>
-
-					<s:GradientEntry color="0x747579" color.selectedUpStates="0x8B8C90"/>
-				</s:LinearGradient>
-			</s:fill>
-		</s:Rect>
-	</s:HGroup>
+				 width="100%"
+				 fontFamily="Tahoma"
+				 fontSize="14"
+				 color="#9b9b9b" color.down="white" color.over="white" 
+				 color.selectedStates="white"
+				 horizontalCenter="0" 
+				 textAlign="center"
+				 maxDisplayedLines="1" />
+		
+		<s:Line width="80%"
+				includeIn="selectedStates">
+			<s:stroke>
+				<s:SolidColorStroke color="#b0b0b0" weight="0.3"/>
+			</s:stroke>
+		</s:Line>
+	</s:VGroup>
+	
 </s:SparkSkin>
