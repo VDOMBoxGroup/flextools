@@ -58,7 +58,8 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if ( operation == PPMOperationNames.READ )
 						objectProxy.getServerActionsList();
-
+					else if( operation == PPMOperationNames.UPDATE )
+						objectProxy.setServerActions(body.serverActions as Array);
 					break;
 				}
 					
@@ -66,7 +67,7 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if ( operation == PPMOperationNames.READ )
 						objectProxy.getServerActions();
-					
+	
 					break;
 				}
 

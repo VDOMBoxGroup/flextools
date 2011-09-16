@@ -278,6 +278,7 @@ package net.vdombox.ide.core.model
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			
 			soap.get_server_actions_list.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.create_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -476,6 +477,14 @@ package net.vdombox.ide.core.model
 					}
 					
 					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTIONS_GETTED, { objectVO: objectVO, serverActions: serverActions } );
+					
+					break;
+				}
+					
+				case "set_server_actions":
+				{
+					
+					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTION_CREATED , { objectVO: objectVO, serverActions: serverActions } );
 					
 					break;
 				}

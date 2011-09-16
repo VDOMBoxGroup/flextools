@@ -202,7 +202,7 @@ package net.vdombox.ide.core.model
 		public function getServerActionsList() : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.get_server_actions_list( applicationVO.id, applicationVO.id );
+			token = soap.get_server_actions( applicationVO.id, "application" );
 
 			token.recipientName = proxyName;
 
@@ -332,7 +332,7 @@ package net.vdombox.ide.core.model
 
 			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 
-			soap.get_server_actions_list.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.set_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 
 			soap.set_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
@@ -618,7 +618,7 @@ package net.vdombox.ide.core.model
 
 			soap.set_application_info.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 
-			soap.get_server_actions_list.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 
 			soap.set_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -714,11 +714,11 @@ package net.vdombox.ide.core.model
 					break;
 				}
 
-				case "get_server_actions_list":
+				case "get_server_actions":
 				{
 					var serverActions : Array = [];
 
-					serverActionsXML = result.ServerActions.Action.( @ID == applicationVO.id );
+					serverActionsXML = result.ServerActions.Container.Action.( @ID == applicationVO.id )[0];
 
 					var serverActionVO : ServerActionVO;
 					var serverActionXML : XML;

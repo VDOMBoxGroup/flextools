@@ -53,7 +53,9 @@ package net.vdombox.ide.core.model
 			data[ SELECTED_PAGE ] 		 = null;
 			data[ SELECTED_OBJECT ]		 = null;
 			
-			facade.sendNotification(SELECTED_APPLICATION_CHANGED, value);
+			var ppMessage : ProxyMessage = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION, value );
+			
+			facade.sendNotification(ApplicationFacade.STATES_PROXY_REQUEST, ppMessage);
 		}
 
 		public function get selectedPage() : PageVO
