@@ -243,9 +243,10 @@
 				if (xmlPageToc.tocType == PageToc.TOC_BY_HEADERS_CLASS && xmlPageToc.anchors) {
 					for (var ind:String in xmlPageToc.anchors) 
 					{
-						if (xmlContent.body.length() > 0) 
+						if (xmlContent.body.length() > 0 && useAnchors) 
 						{
-							xmlContent.body.insertChildBefore(xmlContent.body.h2[Number(ind)], xmlPageToc.anchors[ind]);
+							//xmlContent.body.insertChildBefore(xmlContent.body.h2[Number(ind)], xmlPageToc.anchors[ind]);
+							XML(xmlContent.body.h2[Number(ind)]).appendChild(xmlPageToc.anchors[ind]);
 						}					
 					}
 				}
