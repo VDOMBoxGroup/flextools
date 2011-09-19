@@ -110,6 +110,9 @@ package net.vdombox.ide.modules.scripts
 		public static const GET_STRUCTURE : String = "getStructure";
 		public static const STRUCTURE_GETTED : String = "structureGetted";
 		
+		public static const GET_GLOBAL_ACTIONS : String = "getGlobalActions";
+		public static const GLOBAL_ACTIONS_GETTED : String = "globalActionsGetted";
+		
 		public static const GET_SERVER_ACTIONS_REQUEST : String = "getServerActionsRequest";
 		public static const GET_SERVER_ACTIONS : String = "getServerActions";
 		public static const SERVER_ACTIONS_GETTED : String = "serverActionsGetted";
@@ -122,6 +125,7 @@ package net.vdombox.ide.modules.scripts
 		
 		public static const SELECTED_SERVER_ACTION_CHANGED : String = "selectedServerActionChanged";
 		public static const SELECTED_LIBRARY_CHANGED : String = "selectedLibraryChanged";
+		public static const SELECTED_GLOBAL_ACTION_CHANGED : String = "selectedGlobalActionChanged";
 		
 		public static const ACTION : String = "action";
 		public static const LIBRARY : String = "library";
@@ -136,6 +140,9 @@ package net.vdombox.ide.modules.scripts
 		
 		public static const SAVE_LIBRARY : String = "saveLibrary";
 		public static const LIBRARY_SAVED : String = "librarySaved";
+		
+		public static const SAVE_GLOBAL_ACTION : String = "saveGlobalAction";
+		public static const GLOBAL_ACTION_SAVED : String = "globalActionSaved";
 		
 		public static const DELETE_LIBRARY_REQUEST : String = "deleteLibraryRequest";
 		

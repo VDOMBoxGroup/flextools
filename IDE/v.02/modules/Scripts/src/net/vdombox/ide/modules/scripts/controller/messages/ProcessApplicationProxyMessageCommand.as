@@ -62,6 +62,13 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					
 					break;
 				}
+					
+				case PPMApplicationTargetNames.SERVER_ACTIONS_LIST:
+				{
+					sendNotification( ApplicationFacade.GLOBAL_ACTIONS_GETTED, body );
+					
+					break;
+				}
 			}
 		}
 	}

@@ -78,6 +78,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.CREATE_LIBRARY );
 			interests.push( ApplicationFacade.SAVE_LIBRARY );
 			
+			interests.push( ApplicationFacade.SAVE_GLOBAL_ACTION );
+			
 			interests.push( ApplicationFacade.DELETE_LIBRARY );
 			
 			interests.push( ApplicationFacade.BODY_STOP );
@@ -318,6 +320,14 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.SAVE_LIBRARY:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.LIBRARY, body );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break
+				}
+					
+				case ApplicationFacade.SAVE_GLOBAL_ACTION:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.GLOBAL_ACTION, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break

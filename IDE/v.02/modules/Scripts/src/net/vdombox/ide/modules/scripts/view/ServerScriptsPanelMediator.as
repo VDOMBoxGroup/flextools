@@ -23,14 +23,6 @@ package net.vdombox.ide.modules.scripts.view
 
 		private var isActive : Boolean;
 
-//		
-//		
-//		public var selectedPageVO : PageVO;
-//
-//		public var selectedObjectVO : ObjectVO;
-//
-//		public var serverActions : Array;
-
 		public function get serverScriptsPanel() : ServerScriptsPanel
 		{
 			return viewComponent as ServerScriptsPanel;

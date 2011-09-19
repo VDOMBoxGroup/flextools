@@ -29,5 +29,11 @@
 								   width="100%"
 								   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
 								   title="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_title' ) }"/>
+		
+		<components:GlobalScriptsPanel id="globalScriptsPanel"
+								   width="100%"
+								   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
+								   title="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_title' ) }"/>
+		
 	</s:VGroup>
 </s:HGroup>

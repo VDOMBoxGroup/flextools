@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.scripts.view
 {
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.GlobalActionVO;
 	import net.vdombox.ide.common.vo.LibraryVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
@@ -27,6 +28,7 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private var serverActionVO : ServerActionVO;
 		private var libraryVO : LibraryVO;
+		private var globalActionVO : GlobalActionVO;
 
 		private var currentVO : Object;
 		
@@ -62,6 +64,7 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_LIBRARY_CHANGED );
+			interests.push( ApplicationFacade.SELECTED_GLOBAL_ACTION_CHANGED );
 
 			return interests;
 		}
@@ -137,6 +140,26 @@ package net.vdombox.ide.modules.scripts.view
 
 					break;
 				}
+					
+				case ApplicationFacade.SELECTED_GLOBAL_ACTION_CHANGED:
+				{
+					globalActionVO = body as GlobalActionVO;
+					
+					if ( globalActionVO )
+					{
+						scriptEditor.enabled = true;
+						scriptEditor.script = globalActionVO.script;
+						currentVO = globalActionVO;
+					}
+					else
+					{
+						scriptEditor.enabled = false;
+						scriptEditor.script = "";
+						currentVO = null;
+					}
+					
+					break;
+				}
 			}
 		}
 
@@ -159,7 +182,7 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private function scriptEditor_saveHandler( event : ScriptEditorEvent ) : void
 		{
-			if( currentVO is ServerActionVO || currentVO is LibraryVO )
+			if( currentVO is ServerActionVO || currentVO is LibraryVO || currentVO is GlobalActionVO )
 				currentVO.script = scriptEditor.script;
 			
 			sendNotification( ApplicationFacade.SAVE_SCRIPT_REQUEST, currentVO );

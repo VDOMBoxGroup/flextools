@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.scripts.controller
 	import mx.utils.UIDUtil;
 	
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.GlobalActionVO;
 	import net.vdombox.ide.common.vo.LibraryVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
@@ -57,10 +58,16 @@ package net.vdombox.ide.modules.scripts.controller
 				}
 
 			}
+			else if ( body is GlobalActionVO )
+			{
+				sendNotification( ApplicationFacade.SAVE_GLOBAL_ACTION, { applicationVO: selectedApplicationVO, globalActionVO : body as GlobalActionVO } );
+			}
+			
 			else if ( body is LibraryVO )
 			{
 				sendNotification( ApplicationFacade.SAVE_LIBRARY, { applicationVO: selectedApplicationVO, libraryVO : body as LibraryVO } );
 			}
+			
 		}
 	}
 }
