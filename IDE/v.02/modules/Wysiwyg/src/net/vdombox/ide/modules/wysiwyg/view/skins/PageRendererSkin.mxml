@@ -73,7 +73,7 @@
 		</s:fill>
 	</s:Rect>
 
-	<s:Rect bottom="0" left="0" right="0" top="0"
+	<!--s:Rect bottom="0" left="0" right="0" top="0"
 			includeIn="highlighted, hovered">
 
 		<s:stroke>
@@ -81,5 +81,5 @@
 			<s:SolidColorStroke color.highlighted="green" color.hovered="gray"
 								weight="2"/>
 		</s:stroke>
-	</s:Rect>
+	</s:Rect-->
 </s:SparkSkin>
