@@ -128,8 +128,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 					}
 
 					pageXML = objectsTreePanel.pages.( @id == pageXMLTree.@id )[ 0 ];
-					pageXML.setChildren( new XMLList() ); //TODO: strange construction
-					pageXML.appendChild( pageXMLTree.* );
+					if (pageXML)
+					{
+						pageXML.setChildren( new XMLList() ); //TODO: strange construction
+						pageXML.appendChild( pageXMLTree.* );
+					}
 
 					selectCurrentPage( false );
 					break;
