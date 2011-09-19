@@ -34,7 +34,6 @@
 			public function set pages( value : XMLList ) : void
 			{
 				_pages = value;
-				trace( value );
 			}
 
 			public function get selectedObjectID() : String
@@ -315,9 +314,6 @@
 		</s:fill>
 	</s:Rect>
 	
-	<!--<components:Tree id="objectsTree" borderVisible="false"
-					 dataProvider="{ _pag }" doubleClickEnabled="true" height="100%" labelField="@name" width="100%"
-					 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer" />-->
 	<mx:Tree id="objectsTree" borderVisible="false"
 			 dataProvider="{ _pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"
 			 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer"/>

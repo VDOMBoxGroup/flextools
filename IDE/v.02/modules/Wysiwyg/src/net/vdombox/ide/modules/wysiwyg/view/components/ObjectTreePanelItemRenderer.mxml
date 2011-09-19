@@ -190,7 +190,7 @@
 
 		<s:Rect width="100%" top="0" bottom="-2">
 			<s:fill>
-				<s:SolidColor color.normal="#585858" color.hovered="#00000A" alpha.hovered="0.8" color.selected="#00000A" />
+				<s:SolidColor color="#585858" />
 			</s:fill>
 		</s:Rect>
 
