@@ -120,7 +120,18 @@ package net.vdombox.ide.modules.wysiwyg.model
 		 */
 		public function getRenderersByVO( vdomObjectVO : IVDOMObjectVO ) : Array
 		{
-			return vdomObjectVO ? renderersIndex[ vdomObjectVO.id ] : null;
+			return vdomObjectVO ? renderersIndex[ vdomObjectVO.id ] : [null];
+		}
+		
+		public function getRendererByVO( vdomObjectVO : IVDOMObjectVO ) : RendererBase
+		{
+			// ???
+			var rendererBase : RendererBase = null;
+				
+			if (vdomObjectVO && renderersIndex[ vdomObjectVO.id ] && renderersIndex[ vdomObjectVO.id ][0] )
+				rendererBase = renderersIndex[ vdomObjectVO.id ][0];
+			
+			return rendererBase;
 		}
 		
 		public function setVisibleRenderer( rendererID : String, flag : Boolean ) : void

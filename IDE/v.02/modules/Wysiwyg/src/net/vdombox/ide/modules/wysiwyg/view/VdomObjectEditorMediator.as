@@ -32,6 +32,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.SettingsApplicationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.LineVO;
+	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
@@ -47,6 +48,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import spark.primitives.Line;
 
 
+	/**
+	 * 
+	 * @author andreev ap
+	 */
 	public class VdomObjectEditorMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "VdomObjectEditorMediator";
@@ -182,7 +187,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 						// mark object
 						
 						
-						if ( selRenderer && canSelected( selRenderer ) )
+						if ( selRenderer && visibleOnStage( selRenderer ) )
 							editor.selectedRenderer = selRenderer;
 						else
 							editor.selectedRenderer = null;
@@ -219,24 +224,41 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 		}
 		
-		private function canSelected( render : RendererBase ) : Boolean
+		
+		/**
+		 * Whether or not the display object or his parent is visible. Display objects that are not visible are disabled.
+		 *	For example, if self or pernt visible=false   for an InteractiveObject instance, it cannot be selected. 
+		 * 
+		 * @param render
+		 * @return 
+		 */
+		private function visibleOnStage( render : RendererBase ) : Boolean
 		{
 			if ( !render.visible )
 				return false;
 			
-			if ( render.renderVO.parent )
-			{
-				var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-				var parentRenderer : RendererBase = renderProxy.getRenderersByVO( render.renderVO.parent.vdomObjectVO )[0] as RendererBase;
-				if ( parentRenderer )
-					return canSelected( parentRenderer );
-				else
-					return true;
-			}
-			else
-			{
-				return true
-			}
+			var parentRenderer : RendererBase; 
+			var renderers : Array ;
+
+			var renderProxy : RenderProxy;
+			var parentRenderVO : RenderVO;
+			
+			parentRenderVO = render.renderVO.parent;
+			
+			// it is top item, can not by invisible
+			if ( !parentRenderVO )
+				return true;
+			
+			renderProxy  = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+			parentRenderer  = renderProxy.getRendererByVO( parentRenderVO.vdomObjectVO );
+			
+			// it is top item, can not by invisible
+			if ( !parentRenderer )
+				return true;
+
+			// this render is visible and has parent, need chek parent render.
+			return visibleOnStage( parentRenderer );
+			
 		}
 		
 		private function drawLine( body : Object ) : void
@@ -430,6 +452,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 		}
 		
+		
+		// TODO: rename function
 		private function addOptions( event : Event ) :void
 		{
 			component.showLinking = sharedObjectProxy.showLinking;
@@ -534,23 +558,33 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function hideRendererHandler ( event : FlexEvent ) : void
 		{
 			var _renderer : RendererBase = event.target as RendererBase;
-			if ( _renderer == editor.selectedRenderer || editor.selectedRenderer && !canSelected( editor.selectedRenderer as RendererBase) )
+			if ( _renderer == editor.selectedRenderer || editor.selectedRenderer && !visibleOnStage( editor.selectedRenderer as RendererBase) )
 				editor.selectedRenderer = null;
 			if ( _renderer )
 				clearLineGroup();
 		}
 		
+		
 		private function showRendererHandler ( event : FlexEvent ) : void
 		{
+			var renderProxy : RenderProxy;
 			var _renderer : RendererBase = event.target as RendererBase;
+			
 			if ( !_renderer )
 				return;
-			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+			
+			renderProxy  = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+			
 			if ( !sessionProxy.selectedObject )
 				return;
 			
-			if ( _renderer.renderVO.vdomObjectVO.id == sessionProxy.selectedObject.id && canSelected( _renderer ) )
-				editor.selectedRenderer = _renderer;
+			if ( _renderer.renderVO.vdomObjectVO.id != sessionProxy.selectedObject.id )
+				return;
+			
+			if ( !visibleOnStage( _renderer ) )
+				return;
+			
+			editor.selectedRenderer = _renderer;
 		}
 		
 		private function clearLineGroup ( event : Event = null ) : void
@@ -558,6 +592,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var selectPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
 			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			var pageRender : PageRenderer = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
+			
 			pageRender.linegroup.removeAllElements();
 			
 			for ( var i : int = 0; i < listStates.length; i++ )

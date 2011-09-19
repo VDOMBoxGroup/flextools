@@ -125,6 +125,8 @@
 				enabled = false;
 				isInited = false;
 				attributesObject[ "value" ].value = elementForEditing.text;
+				
+				dispatchEvent( new Event( Event.CHANGE ) );
 
 				var attributeValue : String;
 
@@ -407,10 +409,10 @@
 			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
 			{
 				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO(_item.vdomObjectVO);
-				var attributeVO : AttributeVO = new AttributeVO( "valie" );
+				var attributeVO : AttributeVO = new AttributeVO( "value" );
 				
-//				attributeVO.value = tinyMCE.getContent();
-//				vdomObjectAttributesVO.attributes = [attributeVO];
+				attributeVO.value = attributesObject[ "value" ].value;
+				vdomObjectAttributesVO.attributes = [attributeVO];
 				
 				return vdomObjectAttributesVO;
 			}
