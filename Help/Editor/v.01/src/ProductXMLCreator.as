@@ -7,6 +7,7 @@ package
 	import flash.display.BitmapData;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
+	import flash.display.PixelSnapping;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -396,9 +397,9 @@ package
 				try
 				{
 					originalBitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
-					originalBitmapData.draw( loaderInfo.loader );
+					originalBitmapData.draw( loaderInfo.loader, null, null, null, null, true );
 					
-					originalBitmap = new Bitmap( originalBitmapData );
+					originalBitmap = new Bitmap( originalBitmapData, PixelSnapping.AUTO, true );
 				}
 				catch ( e : Error )
 				{
@@ -441,7 +442,7 @@ package
 				
 				
 				matrix.scale( ratioX, ratioY );
-				resultBitmapData.draw( originalBitmap.bitmapData, matrix );
+				resultBitmapData.draw( originalBitmap.bitmapData, matrix, null, null, null, true );
 				
 				var resultByteArray : ByteArray = encoder.encode(resultBitmapData);
 				base64.reset();

@@ -250,8 +250,8 @@
 				newImgFile = File.applicationStorageDirectory.resolvePath(targetPath);
 				
 				
-				if ( !newImgFile.exists )
-					imgFile.copyTo(newImgFile);
+				if ( !newImgFile.exists || Utils.sourceFileChanged(imgFile, newImgFile))
+					imgFile.copyTo(newImgFile, true);
 				
 				return newImgFile.url;
 			}
@@ -269,9 +269,11 @@
 				urlLoader = new URLLoader();
 				
 				urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+				
 				urlLoader.addEventListener(Event.COMPLETE, urlLoader_complete);
 				urlLoader.addEventListener(IOErrorEvent.IO_ERROR, urlLoader_error);
 				urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoader_error);
+				
 				urlLoader.load(urlRequest);
 				
 				file = File.applicationStorageDirectory.resolvePath(targetPath);
@@ -289,12 +291,14 @@
 						
 					} catch ( error : IOError ) {
 						trace("!!! Error Write !!! \n" + error.message +"\n");
+						this.dispatchEvent(new Event(EVENT_WYSIWYG_HTTP_IMAGE_LOADED));
 						return;
 					}
 				}
 				
 				function urlLoader_error(evt:Event) : void {
 					trace("!!! Error Loading file !!! \n");
+					this.dispatchEvent(new Event(EVENT_WYSIWYG_HTTP_IMAGE_LOADED));
 				}
 				
 				return file.url;

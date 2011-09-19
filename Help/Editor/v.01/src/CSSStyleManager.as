@@ -62,55 +62,13 @@ package
 			
 			if (!sourceFile.isDirectory && sourceFile.exists)
 			{
-				if ( !storageFile.exists || sourceFileChanged(sourceFile, storageFile) ) 
+				if ( !storageFile.exists || Utils.sourceFileChanged(sourceFile, storageFile) ) 
 				{
 					sourceFile.copyTo(storageFile, true);
 				}
 			}
 				
 			onFileCreated();
-		}
-		
-		private function sourceFileChanged(sourceFile : File, storageFile : File) : Boolean
-		{
-			if (sourceFile.isDirectory)
-				return false;
-			
-			var md5StreamForSourceFile : MD5Stream;
-			var md5StreamStorageFile : MD5Stream;
-			var fileStream : FileStream;
-			var byteArray : ByteArray;
-			
-			var uidForSourceFile : String;
-			var uidForStorageFile : String;
-			
-			if (!sourceFile.exists || !storageFile.exists)
-				return true;
-			
-			md5StreamForSourceFile  = new MD5Stream();
-			md5StreamStorageFile = new MD5Stream();
-			
-			fileStream = new FileStream();
-			byteArray = new ByteArray();
-			
-			fileStream.open(sourceFile, FileMode.READ);
-			fileStream.readBytes(byteArray);
-			uidForSourceFile = md5StreamForSourceFile.complete(byteArray);
-			fileStream.close();
-			
-			byteArray.clear();
-			
-			fileStream.open(storageFile, FileMode.READ);
-			fileStream.readBytes(byteArray);
-			uidForStorageFile = md5StreamForSourceFile.complete(byteArray);
-			fileStream.close();
-
-			
-			if (uidForSourceFile == uidForStorageFile)
-				return false;
-				
-			
-			return true;
 		}
 		
 		private function onFileCreated():void
