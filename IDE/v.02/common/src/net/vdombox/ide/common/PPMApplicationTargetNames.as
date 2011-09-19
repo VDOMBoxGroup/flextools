@@ -61,11 +61,7 @@ package net.vdombox.ide.common
 		 * To open selected page in external browser
 		 * @default 
 		 */
-		public static const WEB_PAGE : String = "webPage";
-		/**
-		 * 
-		 * @default 
-		 */
+	
 		public static const REMOTE_CALL : String = "remoteCall";
 	}
 }
