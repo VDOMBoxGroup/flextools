@@ -9,6 +9,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ClientActionVO;
 	import net.vdombox.ide.common.vo.EventVO;
+	import net.vdombox.ide.common.vo.GlobalActionVO;
 	import net.vdombox.ide.common.vo.LibraryVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
@@ -21,6 +22,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.business.SOAP;
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
+
 	/**
 	 * ApplicationProxy is wrapper on VDOM Application.   
 	 * Takes data from the server through the SOAP functions.
@@ -199,10 +201,10 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function getServerActionsList() : AsyncToken
+		public function getServerActions( typeAction : String ) : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.get_server_actions( applicationVO.id, "application" );
+			token = soap.get_server_actions( applicationVO.id, typeAction );
 
 			token.recipientName = proxyName;
 
@@ -317,6 +319,18 @@ package net.vdombox.ide.core.model
 			token.recipientName = proxyName;
 			token.requestFunctionName = UPDATE_LIBRARY;
 
+			return token;
+		}
+		
+		public function updateGlobal( globalActionVO : GlobalActionVO ) : AsyncToken
+		{
+			var token : AsyncToken;
+			//token = soap.set_library( applicationVO.id, globalActionVO.name, globalActionVO.script );
+			token = soap.set_server_action( applicationVO.id, globalActionVO.scriptsGroupName, globalActionVO.name, globalActionVO.script );
+			
+			token.recipientName = proxyName;
+			token.requestFunctionName = UPDATE_LIBRARY;
+			
 			return token;
 		}
 
@@ -658,8 +672,6 @@ package net.vdombox.ide.core.model
 			var libraryVO : LibraryVO;
 			var libraryXML : XML;
 
-			var serverActionsXML : XML;
-
 			switch ( operationName )
 			{
 //				case "get_child_objects_tree":
@@ -716,9 +728,8 @@ package net.vdombox.ide.core.model
 
 				case "get_server_actions":
 				{
-					var serverActions : Array = [];
-
-					serverActionsXML = result.ServerActions.Container.Action.( @ID == applicationVO.id )[0];
+					
+					/*var groupActionsName : String = result.ServerActions.Container;
 
 					var serverActionVO : ServerActionVO;
 					var serverActionXML : XML;
@@ -727,16 +738,15 @@ package net.vdombox.ide.core.model
 					{
 						serverActionVO = new ServerActionVO();
 
-						serverActionVO.setContainerID( applicationVO.id );
-						serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
+						serverActionVO.setID( serverActionXML.@ID[ 0 ] );
 
 						serverActionVO.script = serverActionXML[ 0 ];
 
 						serverActions.push( serverActionVO );
 					}
-
+*/
 					sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_LIST_GETTED,
-						{ applicationVO: applicationVO, serverActions: serverActions } );
+						{ applicationVO: applicationVO, serverActionsXML: result } );
 
 					break;
 				}

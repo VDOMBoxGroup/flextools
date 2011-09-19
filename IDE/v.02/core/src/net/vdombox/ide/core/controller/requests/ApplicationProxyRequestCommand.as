@@ -5,6 +5,7 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.GlobalActionVO;
 	import net.vdombox.ide.common.vo.LibraryVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
@@ -32,6 +33,7 @@ package net.vdombox.ide.core.controller.requests
 
 			var applicationVO : ApplicationVO;
 			var libraryVO : LibraryVO;
+			var globalActionVO : GlobalActionVO;
 
 			if ( body is ApplicationVO )
 				applicationVO = body as ApplicationVO;
@@ -61,8 +63,12 @@ package net.vdombox.ide.core.controller.requests
 
 				case PPMApplicationTargetNames.SERVER_ACTIONS:
 				{
-					applicationProxy.getServerActionsList();
-
+					if ( operation == PPMOperationNames.READ )
+					{
+						applicationProxy.getServerActions("application");
+						applicationProxy.getServerActions("session");
+						applicationProxy.getServerActions("request");
+					}
 					break;
 				}
 
@@ -92,6 +98,16 @@ package net.vdombox.ide.core.controller.requests
 				{
 					applicationProxy.getLibraries();
 
+					break;
+				}
+					
+				case PPMApplicationTargetNames.GLOBAL_ACTION:
+				{
+					globalActionVO = body.globalActionVO as GlobalActionVO;
+					
+					if ( operation == PPMOperationNames.UPDATE )
+						applicationProxy.updateGlobal( globalActionVO );
+					
 					break;
 				}
 
