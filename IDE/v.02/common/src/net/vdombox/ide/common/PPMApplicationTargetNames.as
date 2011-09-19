@@ -56,6 +56,11 @@ package net.vdombox.ide.common
 		 * 
 		 * @default 
 		 */
+		public static const GLOBAL_ACTION : String = "globalAction";
+		/**
+		 * 
+		 * @default 
+		 */
 		public static const EVENTS : String = "events";
 		/**
 		 * To open selected page in external browser
