@@ -464,8 +464,12 @@
 			
 			public static function getSizeFromStyle(strStyle:String, type:Number) : Number
 			{
-				var strWidth : String = " width";
-				var strHeight : String = " height";
+				var strWidth				: String = " width";
+				var strWidthInZeroIndex		: String = "width";
+				
+				var strHeight				: String = " height";
+				var strHeightInZeroIndex	: String = "height";
+				
 				var regExpDigitVal	: RegExp = /[\d]+/i;
 				
 				var firstInd : int;
@@ -473,10 +477,18 @@
 				var sizeNumber : Number = -1;
 				
 				var str : String = type == HTML_WYSIWYG.WIDTH_TYPE ? strWidth : strHeight;
+				var strInZeroIndex : String = type == HTML_WYSIWYG.WIDTH_TYPE ? strWidthInZeroIndex : strHeightInZeroIndex;
 				
 				firstInd = strStyle.search(str);
 				
-				if (firstInd != -1) 
+				if (firstInd == -1) 
+				{
+					firstInd = strStyle.search(strInZeroIndex); // we need to get 0
+					if (firstInd > 0)
+						firstInd = -1;
+				}
+				
+				if (firstInd != -1)
 					sizeStr = strStyle.substring(firstInd);
 				
 				try {
