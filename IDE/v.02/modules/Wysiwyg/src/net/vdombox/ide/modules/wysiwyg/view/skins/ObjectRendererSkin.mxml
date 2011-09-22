@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 xmlns:mx="library://ns.adobe.com/flex/halo">
+			 xmlns:mx="library://ns.adobe.com/flex/halo" >
 	
 	<s:transitions>
 		<s:Transition autoReverse="true">
@@ -25,7 +25,7 @@
 
 		<s:fill>
 
-			<s:SolidColor alpha=".0" />
+			<s:SolidColor alpha=".0" /> 
 		</s:fill>
 
 		<s:stroke>
@@ -34,18 +34,21 @@
 		</s:stroke>
 	</s:Rect>
 
-	<s:Group id="background" />
+	<s:Group id="background" >
+		
+	</s:Group>
 	
 
 	<s:Scroller id="scroller"
 				focusEnabled="false"
 				bottom="0" left="0" right="0" top="0"
-				minViewportInset="1">
+				minViewportInset="0">
 
 		<s:Group>
 			
-			<s:DataGroup id="dataGroup" />
-
+			<s:DataGroup id="dataGroup">
+			</s:DataGroup>
+				
 			<s:Group id="upperLayer" />
 		</s:Group>
 	</s:Scroller>

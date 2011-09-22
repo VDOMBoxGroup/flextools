@@ -243,6 +243,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var renderProxy : RenderProxy;
 			var parentRenderVO : RenderVO;
 			
+			if ( !render.renderVO )
+			{
+				trace("\nERROR: render has not renderVO !")
+				return true;
+			}
+			
 			parentRenderVO = render.renderVO.parent;
 			
 			// it is top item, can not by invisible
