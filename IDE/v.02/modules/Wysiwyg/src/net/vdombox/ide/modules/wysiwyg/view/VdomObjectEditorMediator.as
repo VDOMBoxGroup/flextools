@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.IEventDispatcher;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	import flash.utils.getQualifiedClassName;
 	
@@ -33,6 +34,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.LineVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+	import net.vdombox.ide.modules.wysiwyg.utils.DisplayUtils;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
@@ -282,7 +284,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 			
 			var listLines : Array = body.listLines as Array;
-			var component : UIComponent = body.component as UIComponent;
+			var element : UIComponent = body.component as UIComponent;
 			var lineVO : LineVO;
 			var line : Line;
 			
@@ -301,34 +303,55 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( listLines.length == 0 )
 				return;
 			
-			if ( component is TransformMarker )
+			if ( element is TransformMarker )
 			{
-				var marker : TransformMarker = component as TransformMarker;
-				
-				if ( marker.equallyPoint( component.x, component.y ) )
+				var marker : TransformMarker = element as TransformMarker;
+				if ( marker.equallySize( element.measuredWidth, element.measuredHeight ) )
 				{
-					if ( !marker.equallyWidth( component.measuredWidth) )
-						component.measuredWidth = component.measuredWidth - stepX;
-					if ( !marker.equallyHeight( component.measuredHeight) )
-						component.measuredHeight = component.measuredHeight - stepY;
+					var _renderer : RendererBase = marker.renderer as RendererBase;
+					_renderer.x -= stepX;
+					_renderer.y -= stepY;
+					element.x -= stepX;
+					element.y -= stepY;
+				}
+				
+				/*var marker : TransformMarker = element as TransformMarker;
+				var rend : RendererBase;
+				var point : Point = new Point( element.x, element.y );
+				if ( marker.renderer.renderVO.parent )
+				{
+					rend = rendProxy.getRenderersByVO( marker.renderer.renderVO.parent.vdomObjectVO )[0] as RendererBase;
+					point = DisplayUtils.getConvertedPoint( element, rend );
+					point.x--;
+					point.y--;
+				}
+				
+				
+				if ( marker.equallyPoint( point.x, point.y ) )
+				{
+					trace("123");
+					if ( !marker.equallyWidth( element.measuredWidth) )
+						element.measuredWidth = element.measuredWidth - stepX;
+					if ( !marker.equallyHeight( element.measuredHeight) )
+						element.measuredHeight = element.measuredHeight - stepY;
 					
 				}
 				else
 				{
-					if ( !marker.equallyX( component.x ) )
-						component.x = component.x - stepX;
-					if ( !marker.equallyY( component.y ) )
-						component.y = component.y - stepY;
-					if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
+					if ( !marker.equallyX( point.x ) )
+						element.x = element.x - stepX;
+					if ( !marker.equallyY( point.y ) )
+						element.y = element.y - stepY;
+					if ( !marker.equallySize( element.measuredWidth, element.measuredHeight ) )
 					{
-						if ( marker.equallyX( component.x ) )
-							component.measuredWidth = component.measuredWidth - stepX;
+						if ( marker.equallyX( point.x ) )
+							element.measuredWidth = element.measuredWidth - stepX;
 						else
-							component.measuredWidth = component.measuredWidth + stepX;
-						if ( marker.equallyY( component.y ) )
-							component.measuredHeight = component.measuredHeight - stepY;
+							element.measuredWidth = element.measuredWidth + stepX;
+						if ( marker.equallyY( point.y ) )
+							element.measuredHeight = element.measuredHeight - stepY;
 						else
-							component.measuredHeight = component.measuredHeight + stepY;
+							element.measuredHeight = element.measuredHeight + stepY;
 					}
 					else
 					{
@@ -336,12 +359,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 						_renderer.x -= stepX;
 						_renderer.y -= stepY;
 					}
-				}
+				}*/
 			}
 			else
 			{
-				component.x = component.x - stepX;
-				component.y = component.y - stepY;
+				element.x = element.x - stepX;
+				element.y = element.y - stepY;
 			}
 			
 			listStates = new Array();
@@ -354,6 +377,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 				listStates.push( lineVO.renderTo );
 				if (lineVO.type == 0)
 				{
+					if ( element is TransformMarker && !(element as TransformMarker).equallySize( element.measuredWidth, element.measuredHeight ) && lineVO.eps != 0 )
+						continue;
 					line = new Line();
 					if ( lineVO.orientationH )
 					{
@@ -373,7 +398,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 				else
 				{
-					if ( component is TransformMarker && lineVO.eps != 0 )
+					if ( element is TransformMarker && !(element as TransformMarker).equallySize( element.measuredWidth, element.measuredHeight ) && lineVO.eps != 0 )
 						continue;
 					if ( !lineVO.orientationH )
 					{

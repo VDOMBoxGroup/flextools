@@ -174,7 +174,7 @@
 						 editable="false"
 						 borderVisible="false" />
 
-			<mx:Spacer width="100%" />
+			<mx:Spacer width="100%"/>
 
 		</s:HGroup>
 

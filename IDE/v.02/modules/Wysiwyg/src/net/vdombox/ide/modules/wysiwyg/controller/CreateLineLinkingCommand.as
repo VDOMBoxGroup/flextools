@@ -33,6 +33,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		private var minEpsX2 : Number = 100;
 		private var minEpsY2 : Number = 100;
 		
+		private var renderProxy : RenderProxy
+		
 		override public function execute( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
@@ -49,7 +51,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				component = body.component as UIComponent;
 			}
 			
-			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+			renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			pageRenderer = renderProxy.getRenderersByVO( (render.renderVO.vdomObjectVO as ObjectVO).pageVO )[0] as PageRenderer;
 			
 			var listComponents : Array;
@@ -248,9 +250,19 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			if ( component is TransformMarker )
 			{
 				var marker : TransformMarker = component as TransformMarker;
+				var point : Point = new Point( marker.x, marker.y );
+				if ( marker.renderer.renderVO.parent )
+				{
+					var rend : RendererBase;
+					rend = renderProxy.getRenderersByVO( marker.renderer.renderVO.parent.vdomObjectVO )[0] as RendererBase;
+					point = DisplayUtils.getConvertedPoint( marker, rend );
+					point.x--;
+					point.y--;
+				}
+			
 				if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
 				{
-					if ( marker.equallyX( component.x ) )
+					if ( marker.equallyX( point.x ) )
 						startI = 1;
 					else
 						finishI = 2;
@@ -349,12 +361,22 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			if ( component is TransformMarker )
 			{
 				var marker : TransformMarker = component as TransformMarker;
+				var point : Point = new Point( marker.x, marker.y );
+				if ( marker.renderer.renderVO.parent )
+				{
+					var rend : RendererBase;
+					rend = renderProxy.getRenderersByVO( marker.renderer.renderVO.parent.vdomObjectVO )[0] as RendererBase;
+					point = DisplayUtils.getConvertedPoint( marker, rend );
+					point.x--;
+					point.y--;
+				}
+				
 				if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
 				{
-					if ( marker.equallyY( component.y ) )
-						startI = 1;
+					if ( marker.equallyY( point.y ) )
+						startI = 2;
 					else
-						finishI = 2;
+						finishI = 1;
 				}
 			}
 			for ( i = startI; i < finishI; i++ )

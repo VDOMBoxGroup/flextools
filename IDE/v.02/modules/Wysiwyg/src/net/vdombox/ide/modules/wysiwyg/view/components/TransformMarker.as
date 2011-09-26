@@ -569,21 +569,21 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		
 		public function equallyPoint( _x : Number, _y : Number ) : Boolean
 		{
-			if ( _x == beforeTransform.x && _y == beforeTransform.y )
+			if ( Math.abs( _x - beforeTransform.x ) < 1 && Math.abs( _y - beforeTransform.y ) < 1 )
 				return true;
 			return false;
 		}
 		
 		public function equallyX( _x : Number ) : Boolean
 		{
-			if ( _x == beforeTransform.x )
+			if ( Math.abs( _x - beforeTransform.x ) < 1 )
 				return true;
 			return false;
 		}
 		
 		public function equallyY( _y : Number ) : Boolean
 		{
-			if ( _y == beforeTransform.y )
+			if ( Math.abs( _y - beforeTransform.y ) < 1 )
 				return true;
 			return false;
 		}
