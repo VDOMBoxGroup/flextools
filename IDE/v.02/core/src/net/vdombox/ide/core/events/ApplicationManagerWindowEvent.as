@@ -5,6 +5,7 @@ package net.vdombox.ide.core.events
 	public class ApplicationManagerWindowEvent extends Event
 	{
 		public static var CLOSE_WINDOW : String = "closeWindow";
+		public static var OPEN_IN_EDITOR : String = "openInEditor";
 		
 		public function ApplicationManagerWindowEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

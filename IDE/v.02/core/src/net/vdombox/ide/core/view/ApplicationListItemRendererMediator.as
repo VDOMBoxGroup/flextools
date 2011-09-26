@@ -88,6 +88,8 @@ package net.vdombox.ide.core.view
 			{
 				applicationListItemRenderer.nameLabel.text = applicationVO.name;
 				
+				sendNotification( ApplicationFacade.CHANGE_RESOURCE, applicationVO );
+				
 				if ( applicationVO.iconID && ( !resourceVO || resourceVO.id != applicationVO.iconID ) )
 				{
 					resourceVO = new ResourceVO( applicationVO.id );

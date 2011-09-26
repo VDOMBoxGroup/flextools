@@ -2,6 +2,18 @@
 <s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" gap="2">
+	
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+			protected function btnOpenInEditor_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.OPEN_IN_EDITOR ) );
+			}
+		]]>
+	</fx:Script>
+	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -16,12 +28,18 @@
 		</s:VGroup>
 	</s:VGroup>
 	
-	<s:Group width="50%" height="100%">
-		<s:Label text="123" left="10" top="20"/>
-		<s:Label text="123" left="10" top="80"/>
-		<s:Label text="123" left="10" top="140"/>
+	<s:VGroup width="50%" height="100%" paddingBottom="30">
+		<s:Label id="applicationName"/>
+		<s:Label id="applicationDescription"/>
 		
-	</s:Group>
+		<mx:Spacer height="100%"/>
+		
+		<s:HGroup width="100%" horizontalAlign="center">
+			<s:Button />
+			<s:Button id="btnOpenInEditor" label="Open in Editor" click="btnOpenInEditor_clickHandler(event)"/>
+		</s:HGroup>
+		
+	</s:VGroup>
 	
 	
 

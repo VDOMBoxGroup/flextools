@@ -78,6 +78,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
 			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
+			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR);
 
 //			interests.push( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
 
@@ -114,6 +115,11 @@ package net.vdombox.ide.core.view
 				case StatesProxy.SELECTED_APPLICATION_CHANGED:
 				{
 					initTitle();
+					break;
+				}
+				case ApplicationFacade.OPEN_APPLICATION_IN_EDITOR:
+				{
+					openApplicationInEditor();
 					break;
 				}
 
@@ -288,6 +294,15 @@ package net.vdombox.ide.core.view
 			showModulesByCategory( categoryVO );
 			selectModule();
 			mainWindow.tabBar.callLater( mainWindow.tabBar.drawFocus, [ false ] );
+		}
+		
+		private function openApplicationInEditor() : void
+		{
+			var categoryVO : ModulesCategoryVO = mainWindow.tabBar.dataProvider.getItemAt( 1 ) as ModulesCategoryVO;
+			
+			showModulesByCategory( categoryVO );
+			selectModule();
+			//mainWindow.tabBar.callLater( mainWindow.tabBar.drawFocus, [ false ] );
 		}
 
 		private function settingsButton_clickHandler( event : MouseEvent ) : void

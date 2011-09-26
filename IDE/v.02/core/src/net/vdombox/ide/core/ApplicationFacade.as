@@ -9,6 +9,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ErrorMacroCommand;
 	import net.vdombox.ide.core.controller.GetApplicationListCommand;
 	import net.vdombox.ide.core.controller.GetResourceItemRendererCommand;
+	import net.vdombox.ide.core.controller.GetSelectedApplicationCommand;
 	import net.vdombox.ide.core.controller.InitialWindowCreatedCommand;
 	import net.vdombox.ide.core.controller.LoadModulesRequestCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadingSuccessfulCommand;
@@ -28,6 +29,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.SaveModuleSettings;
 	import net.vdombox.ide.core.controller.ServerLoginSuccessfulCommand;
 	import net.vdombox.ide.core.controller.SetIndexPageCommand;
+	import net.vdombox.ide.core.controller.SetSelectedApplicationCommand;
 	import net.vdombox.ide.core.controller.SetSelectedPageCommand;
 	import net.vdombox.ide.core.controller.StartupCommand;
 	import net.vdombox.ide.core.controller.requests.ApplicationProxyRequestCommand;
@@ -228,6 +230,7 @@ package net.vdombox.ide.core
 		
 //		resources
 		public static const LOAD_RESOURCE : String = "loadResource";
+		public static const CHANGE_RESOURCE : String = "loadResource";
 		
 		public static const RESOURCES_GETTED : String = "resourcesGetted";
 		
@@ -267,6 +270,10 @@ package net.vdombox.ide.core
 		
 		public static const APPLICATION_EVENTS_GETTED : String = "applicationEventsGetted";
 		public static const APPLICATION_EVENTS_SETTED : String = "applicationEventsSetted";
+		
+		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
+		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
+		public static const SET_SELECTED_APPLICATION : String = "setSelectedApplication";
 		
 //		page		
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
@@ -324,6 +331,7 @@ package net.vdombox.ide.core
 		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
 		
 		public static const OPEN_PAGE_IN_EXTERNAL_BROWSER  : String = "openPageInExternalBrowser";
+		public static const OPEN_APPLICATION_IN_EDITOR  : String = "openApplicationInEditor";
 
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";
@@ -489,6 +497,8 @@ package net.vdombox.ide.core
 			registerCommand( GET_APPLICATIONS_LIST, GetApplicationListCommand );
 			
 			registerCommand( LOAD_RESOURCE, GetResourceItemRendererCommand );
+			registerCommand( GET_SELECTED_APPLICATION, GetSelectedApplicationCommand );
+			registerCommand( SET_SELECTED_APPLICATION, SetSelectedApplicationCommand );
 			
 //			registerCommand( LOGOFF_REQUEST, LogoffRequestCommand );
 		}

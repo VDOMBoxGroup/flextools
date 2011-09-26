@@ -124,7 +124,21 @@ package net.vdombox.ide.core.model
 
 		public function getApplicationProxy( applicationVO : ApplicationVO ) : ApplicationProxy
 		{
-			if ( _applications.indexOf( applicationVO ) == -1 )
+			/*if ( _applications.indexOf( applicationVO ) == -1 )
+				return null;*/
+			
+			var appVO : ApplicationVO;
+			var flag : Boolean = false;
+			for each ( appVO in _applications )
+			{
+				if ( appVO.id == applicationVO.id )
+				{
+					flag = true;
+					break;
+				}
+			}
+			
+			if ( !flag )
 				return null;
 
 			var applicationProxy : ApplicationProxy =
