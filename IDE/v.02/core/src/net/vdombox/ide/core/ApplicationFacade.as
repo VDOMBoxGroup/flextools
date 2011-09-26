@@ -7,10 +7,13 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.CloseMainWindowCommand;
 	import net.vdombox.ide.core.controller.CloseWindowCommand;
 	import net.vdombox.ide.core.controller.ErrorMacroCommand;
+	import net.vdombox.ide.core.controller.GetApplicationListCommand;
+	import net.vdombox.ide.core.controller.GetResourceItemRendererCommand;
 	import net.vdombox.ide.core.controller.InitialWindowCreatedCommand;
 	import net.vdombox.ide.core.controller.LoadModulesRequestCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadingSuccessfulCommand;
 	import net.vdombox.ide.core.controller.ModuleUnloadingStartCommand;
+	import net.vdombox.ide.core.controller.OpenApplicationManagerCommand;
 	import net.vdombox.ide.core.controller.OpenInitialWindowCommand;
 	import net.vdombox.ide.core.controller.OpenMainWindowCommand;
 	import net.vdombox.ide.core.controller.OpenPageInExternalBrowserCommand;
@@ -224,6 +227,8 @@ package net.vdombox.ide.core
 		public static const SERVER_APPLICATIONS_GETTED : String = "serverApplicationsGetted";
 		
 //		resources
+		public static const LOAD_RESOURCE : String = "loadResource";
+		
 		public static const RESOURCES_GETTED : String = "resourcesGetted";
 		
 		public static const RESOURCE_LOADED : String = "resourceLoaded";
@@ -322,6 +327,11 @@ package net.vdombox.ide.core
 
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";
+		
+//		applicationManager
+		
+		public static const OPEN_APPLICATION_MANAGER : String = "openApplicationManager";
+		public static const GET_APPLICATIONS_LIST : String = "getApplicationList";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -474,7 +484,11 @@ package net.vdombox.ide.core
 			
 			registerCommand( OPEN_PAGE_IN_EXTERNAL_BROWSER, OpenPageInExternalBrowserCommand );
 			
+			registerCommand( OPEN_APPLICATION_MANAGER, OpenApplicationManagerCommand );
 			
+			registerCommand( GET_APPLICATIONS_LIST, GetApplicationListCommand );
+			
+			registerCommand( LOAD_RESOURCE, GetResourceItemRendererCommand );
 			
 //			registerCommand( LOGOFF_REQUEST, LogoffRequestCommand );
 		}

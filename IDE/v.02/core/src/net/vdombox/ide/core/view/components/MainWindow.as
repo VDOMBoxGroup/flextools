@@ -11,6 +11,7 @@ package net.vdombox.ide.core.view.components
 	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 	
+	import spark.components.Button;
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.components.Window;
@@ -50,13 +51,20 @@ package net.vdombox.ide.core.view.components
 		[SkinPart( required="true" )]
 		public var loginButton : LoginButton;
 		
+		[SkinPart( required="true" )]
+		public var applicationManagerButton : Button;
+		
 		
 
 		override protected function partAdded( partName : String, instance : Object ) : void
 		{
 			super.partAdded( partName, instance );
 
-			if ( instance === loginButton )
+			if ( instance === applicationManagerButton )
+			{
+				applicationManagerButton.addEventListener( MouseEvent.CLICK, applicationManagerButton_clickHandler );
+			}
+			else if ( instance === loginButton )
 			{
 				loginButton.addEventListener( MouseEvent.CLICK, loginButton_clickHandler );
 			}
@@ -65,6 +73,11 @@ package net.vdombox.ide.core.view.components
 		private function loginButton_clickHandler( event : MouseEvent ) : void
 		{
 			dispatchEvent( new MainWindowEvent( MainWindowEvent.LOGOUT ) );
+		}
+		
+		private function applicationManagerButton_clickHandler( event : MouseEvent ) : void
+		{
+			dispatchEvent( new MainWindowEvent( MainWindowEvent.SHOW_APP_MANAGER ) );
 		}
 	}
 }

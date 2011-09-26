@@ -174,7 +174,7 @@ package net.vdombox.ide.core.view
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler, false, 0, true );
 			mainWindow.addEventListener( MainWindowEvent.LOGOUT, logoutHandler, false, 0, true );
-
+			mainWindow.addEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -268,6 +268,11 @@ package net.vdombox.ide.core.view
 
 			initUser();
 			initTitle();
+		}
+		
+		private function appManagerHandler( event : MainWindowEvent ) : void
+		{
+			sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER, event.target );
 		}
 
 		private function logoutHandler( event : MainWindowEvent ) : void

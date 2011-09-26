@@ -5,6 +5,7 @@ package net.vdombox.ide.core.events
 	public class MainWindowEvent extends Event
 	{
 		public static var LOGOUT : String = "logout";
+		public static var SHOW_APP_MANAGER : String = "showAppManager";
 		
 		public function MainWindowEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

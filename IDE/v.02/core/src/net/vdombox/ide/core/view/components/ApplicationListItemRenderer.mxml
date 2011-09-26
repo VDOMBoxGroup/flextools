@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true"
+				creationComplete="creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			public static const RENDERER_CREATED : String = "rendererCreated";
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				dispatchEvent( new Event( RENDERER_CREATED ) );
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:HGroup width="100%" height="100%" verticalAlign="middle">
+		<mx:Image id="imageHolder"
+				  width="50" height="50"/>
+		
+		<s:Label id="nameLabel"/>
+	</s:HGroup>
+	
+	
+	
+</s:ItemRenderer>

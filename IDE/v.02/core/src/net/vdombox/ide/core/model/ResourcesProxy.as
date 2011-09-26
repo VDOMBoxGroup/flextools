@@ -171,6 +171,30 @@ package net.vdombox.ide.core.model
 				loadResourceFromServer( resourceVO );
 			}
 		}
+		
+		public function loadResource2( resourceVO : ResourceVO, nameMed : String ) : void
+		{
+			
+			if ( resourceVO.type && !resourceVO.mastHasPreview )
+			{
+				return;
+			}
+			
+			var resource : ByteArray = cacheManager.getCachedFileById( resourceVO.id );
+			
+			//file is located in the file system user
+			if ( resource )
+			{
+				resourceVO.setData( resource );
+				resourceVO.setStatus( ResourceVO.LOADED );
+				
+				sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + nameMed, resourceVO );
+			}
+			else
+			{
+				loadResourceFromServer( resourceVO );
+			}
+		}
 
 //		private var timeoutGetResource : uint;
 		private function loadResourceFromServer( resourceVO : ResourceVO ) : void

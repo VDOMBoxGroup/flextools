@@ -109,6 +109,10 @@
 				
 				<mx:Spacer width="100%" />
 				
+				<s:Button id="applicationManagerButton"
+						  label="App Manager"
+						  height="100%"/>
+				
 				<components:LoginButton id="loginButton"
 										height="100%"
 										icon="@Embed('../assets/main/logout.png')"
