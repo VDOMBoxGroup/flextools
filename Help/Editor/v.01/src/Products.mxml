@@ -108,7 +108,7 @@
 					}
 					case ProjectsUpdater.UPDATE_NOT_REQUIRED:
 					{
-						Alert.show( "You try to load old version of existing product.", "Error:");
+						Alert.show( AlertMessages.MSG_INCORRECT_PRODUCT_VERSION, AlertMessages.MSG_TYPE_ERROR);
 						break;
 					}
 					default:
@@ -123,7 +123,7 @@
 			private function deleteClickHandler():void
 			{
 				if( listOfProducts.selectedItem)
-					Alert.show("Delete this Product?", "Dalete", 3, this, alertClickHandler);
+					Alert.show(AlertMessages.MSG_ASK_DELETE_PRODUCT, AlertMessages.MSG_TYPE_DELETE, 3, this, alertClickHandler);
 			}
 			
 			private function alertClickHandler(event:CloseEvent):void

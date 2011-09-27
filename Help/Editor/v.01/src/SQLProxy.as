@@ -787,7 +787,7 @@ package
 		private function displayLocalizedDetail(str:String) : void
 		{
 			trace(str);
-			Alert.show(str, "SQL error:");
+			Alert.show(str, AlertMessages.MSG_TYPE_SQL_ERROR);
 		}
 
 

@@ -111,7 +111,7 @@
 				{
 					// code to react to the error
 					getTocFromDataBase();
-					Alert.show("Impossible operation", "Error:");
+					Alert.show(AlertMessages.MSG_IMPOSSIBLE_OPERATION, AlertMessages.MSG_TYPE_ERROR);
 					return;
 				}
 
@@ -390,7 +390,7 @@
 			private function removeItemClickHandler():void
 			{
 				if (tree.selectedItem && tree.selectedIndex > 0)
-					Alert.show("Delete this Page?", "Dalete Page", Alert.YES|Alert.NO, this, alertDeletPageClickHandler);
+					Alert.show(AlertMessages.MSG_ASK_DELETE_PAGE, AlertMessages.MSG_TYPE_DELETE, Alert.YES|Alert.NO, this, alertDeletPageClickHandler);
 			}
 			
 			private function alertDeletPageClickHandler(event:CloseEvent):void
@@ -577,7 +577,7 @@
 			
 			private function onProductXMLError(aEvent:Event):void
 			{
-				Alert.show("Error creating product xml", "Error: ");				
+				Alert.show(AlertMessages.MSG_XML_CREATING_ERROR, AlertMessages.MSG_TYPE_ERROR);				
 			}
 			
 			private function onProductXMLFileSelected(aEvent:Event):void
@@ -585,7 +585,7 @@
 				productXMLFile = aEvent.target as File; 
 				
 				if (!isCorrectFileFormat(productXMLFile.type)) {
-					Alert.show("The file format is incorrect. It should be in xml format.", "Error file format");
+					Alert.show(AlertMessages.MSG_INCORRECT_XML_FILE_FORMAT, AlertMessages.MSG_TYPE_ERROR);
 					return;
 				}
 				creatProductXML();
@@ -624,31 +624,12 @@
 					fileStream.writeUTFBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + product.toXMLString());
 					fileStream.close();
 					
-					Alert.show( productXMLFile.nativePath, "Saved to:");
+					Alert.show( productXMLFile.nativePath, AlertMessages.MSG_TYPE_SAVED_TO);
 				}
 				catch ( error : Error )
 				{
-					Alert.show( error.message, "Error:");
+					Alert.show( error.message, AlertMessages.MSG_TYPE_ERROR);
 				}
-				
-				var fileSize : Number = productXMLFile.size;
-				var fileSizeStr : String;
-				var gig : Number      = 1024 * 1024 * 1024;
-				var meg : Number      = 1024 * 1024;
-				var kil : Number      = 1024;
-				
-				if ( fileSize > gig )
-					
-					fileSizeStr = String((fileSize / gig) - (fileSize / gig) % 0.1) + " Gb";
-					
-				else if ( fileSize > meg )
-					
-					fileSizeStr = String((fileSize / meg) - (fileSize / meg) % 0.1) + " Mg";
-					
-				else if ( fileSize > kil )
-					
-					fileSizeStr = String((fileSize / kil) - (fileSize / kil) % 0.1) + " Kb";
-				
 				
 				var location : File = new File(docsDir.url +"/VDOMHelp/StartXML.xml");
 				
@@ -669,7 +650,7 @@
 					productItem.@title = product.title;
 					productItem.@description = product.description;
 					productItem.@language = product.language;
-					productItem.@size = fileSizeStr;
+					productItem.@size = Utils.formatFileSize(productXMLFile.size);
 					productItem.@url = productXMLFile.url;
 					
 					delete installXML.product.( @name == product.name )[ 0 ];
@@ -684,7 +665,7 @@
 				}
 				catch ( error : Error )
 				{
-					Alert.show( error.message, "Error:");
+					Alert.show( error.message, AlertMessages.MSG_TYPE_ERROR);
 				}		
 			}
 			
