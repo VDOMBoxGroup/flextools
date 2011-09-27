@@ -17,14 +17,34 @@ package
 	import flash.filesystem.FileStream;
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
+	import flash.utils.setTimeout;
 	
 	import mx.controls.Alert;
+	import mx.core.Application;
 	import mx.graphics.codec.PNGEncoder;
 	import mx.utils.Base64Encoder;
+	
+	import spinnerFolder.SpinnerPopUp;
+	import spinnerFolder.SpinnerPopUpManager;
+	import spinnerFolder.SpinnerPopupMessages;
 
 	public class ProductXMLCreator extends EventDispatcher
 	{
-		public static const EVENT_ON_XML_CREATION_COMPLETE	: String = "onXMLCreationComplete";
+		// states ...
+		private static const STATE_PRODUCT_XML_CREATING					: String = "stateProductXMLCreating";
+		private static const STATE_PAGES_GENERATING						: String = "statePagesGenerating";
+		private static const STATE_NEXT_PAGE_GENERATING_START			: String = "stateNextPageGeneratingStart";
+		private static const STATE_PAGE_GENERATING_COMPLETE				: String = "statePageGeneratingComplete";
+		private static const STATE_LAST_PAGE_GENERATED					: String = "stateLastPageGenerated";
+		
+		private static const STATE_NEXT_PAGE_RESOURCE_GENERATING_START	: String = "stateNextPageResourceGeneratingStart";
+		private static const STATE_PAGE_RESOURCE_GENERATING_COMPLETE	: String = "statePageResourceGeneratingComplete";
+		private static const STATE_LAST_PAGE_RESOURCE_GENERATED			: String = "stateLastPageResourceGenerated";
+		
+		private static const STATE_XML_CREATION_COMPLETE				: String = "stateXMLCreationComplete";
+		// ... states
+		
+		public static const EVENT_ON_XML_CREATION_COMPLETE	: String = "eventXMLCreationComplete";
 		
 		private const guidResourseRegExp	: RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
 		private const imgTagRegExp			: RegExp = /<[ ]*img[^>]*[ ]*\/[ ]*>/g;
@@ -54,8 +74,17 @@ package
 		private var productTitle		: String;
 		private var treeData			: *;
 		
+		private var appendPage			: Boolean = true;
+		private var spinnerManager		: SpinnerPopUpManager = SpinnerPopUpManager.getInstance();
+		
+		private var curState			: String;
+		
+		private var curPageMsg			: String = "";
+		private var curPageResourceMsg	: String = "";
+		
 		public function ProductXMLCreator()
 		{
+			curState = STATE_PRODUCT_XML_CREATING;
 		}
 		
 		public function get productXML():XML
@@ -77,6 +106,109 @@ package
 			productTitle = aProductTitle;
 			treeData = aTreeData;
 			
+			spinnerManager.addEventListener(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_ADDED, onSpinnerAdded);
+			spinnerManager.showSpinner();
+			
+		}
+		
+		private function onSpinnerAdded(evt:Event):void
+		{
+			spinnerManager.removeEventListener(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_ADDED, onSpinnerAdded);
+			
+			curState = STATE_PRODUCT_XML_CREATING;
+			
+			Application.application.addEventListener(Event.ENTER_FRAME, onAppEnterFrame);
+		}
+		
+		private function onAppEnterFrame(aEvent : Event):void
+		{
+			switch (curState)
+			{
+				case STATE_PRODUCT_XML_CREATING : 
+				{
+					spinnerManager.setSpinnerText(SpinnerPopupMessages.MSG_PRODUCT_XML_CREATING);
+					spinnerManager.setSpinnerResourceText("");
+					
+					createXML();
+					break;
+				}
+					
+				case STATE_PAGES_GENERATING : 
+				{
+					spinnerManager.setSpinnerText(SpinnerPopupMessages.MSG_PAGES_GENERATING);
+					
+					generatePages();
+					break;
+				}
+				case STATE_NEXT_PAGE_GENERATING_START : 
+				{
+					if (pagesCounter < pagesObj.length)
+					{
+						curPageMsg = SpinnerPopupMessages.MSG_PAGE_GENERATING;
+						
+						curPageMsg = curPageMsg.replace(SpinnerPopupMessages.TEMPLATE_CUR_PAGE, (pagesCounter+1));
+						curPageMsg = curPageMsg.replace(SpinnerPopupMessages.TEMPLATE_TOTAL_PAGES, pagesObj.length);
+						
+						spinnerManager.setSpinnerText(curPageMsg);
+					}
+					
+					generateNextPage();
+					break;
+				}
+				
+				case STATE_NEXT_PAGE_RESOURCE_GENERATING_START : 
+				{
+					/*if (pageResourcesCounter < pageResourcesArr.length)
+					{
+						curPageResourceMsg = SpinnerPopupMessages.MSG_RESOURCE_CREATING;
+						
+						curPageResourceMsg = curPageResourceMsg.replace(SpinnerPopupMessages.TEMPLATE_CUR_RESOURCE, (pageResourcesCounter+1));
+						curPageResourceMsg = curPageResourceMsg.replace(SpinnerPopupMessages.TEMPLATE_TOTAL_RESOURCES, pageResourcesArr.length);
+						
+						spinnerManager.setSpinnerResourceText(curPageResourceMsg);
+					}*/
+					
+					generateNextPageResource();
+					break;
+				}
+				case STATE_PAGE_RESOURCE_GENERATING_COMPLETE : 
+				{
+					onPageResourceGenerated();
+					break;
+				}
+				case STATE_LAST_PAGE_RESOURCE_GENERATED : 
+				{
+					spinnerManager.setSpinnerResourceText("");
+					
+					onLastPageResourceGenerated();
+					break;
+				}
+					
+				case STATE_PAGE_GENERATING_COMPLETE : 
+				{
+					onPageGenerated();
+					break;
+				}
+				case STATE_LAST_PAGE_GENERATED : 
+				{
+					onLastPageGenerated();
+					break;
+				}
+					
+				case STATE_XML_CREATION_COMPLETE : 
+				{
+					spinnerManager.setSpinnerText(SpinnerPopupMessages.MSG_PRODUCT_XML_CREATION_COMPLETE);
+					
+					Application.application.removeEventListener(Event.ENTER_FRAME, onAppEnterFrame);
+					
+					setTimeout(onXMLCreationComplete, 1000);
+					break;
+				}
+			}
+		}
+			
+		private function createXML():void
+		{
 			productXML  = new XML("<product/>");
 			
 			productXML.name = productName;
@@ -94,10 +226,10 @@ package
 			productXML.appendChild(tocXML);
 			// ... generate toc
 			
-			generatePages();
-			
+			//generatePages();
+			curState = STATE_PAGES_GENERATING;
 		}
-			
+		
 		private function generatePages() : void
 		{
 			pagesCounter = 0;
@@ -108,15 +240,14 @@ package
 			pagesXML = new XML("<pages/>");
 			
 			// generate pages ...
-			if (!pagesObj || pagesObj.length <= 0) {
-				
-				onLastPageGenerated();
+			if (!pagesObj || pagesObj.length <= 0) 
+			{
+				curState = STATE_LAST_PAGE_GENERATED;
 				return;
 			
 			}
-				
-			generateNextPage();
 			
+			curState = STATE_NEXT_PAGE_GENERATING_START;
 		}
 		
 		private function generateNextPage():void
@@ -124,20 +255,25 @@ package
 			if (pagesCounter >= pagesObj.length)
 			{
 				pagesCounter = 0;
-				onLastPageGenerated(); 
+				
+				curState = STATE_LAST_PAGE_GENERATED;
 				return;
 			}
 			
 			currentPageObj = pagesObj[pagesCounter];
 			
+			appendPage = true;
+			
 			if (tocXML.toString().indexOf(currentPageObj["name"]) == -1) // page doesn't exist in toc 
 			{
-				onPageGenerated(false);
+				appendPage = false;
+
+				curState = STATE_PAGE_GENERATING_COMPLETE;
 				return;
 			}
 			
 			pageContent = currentPageObj["content"];
-				
+			
 			if (html_wysiwyg)
 			{
 				html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, onImageMaxWidthChecked);
@@ -146,6 +282,7 @@ package
 			}
 			
 			onImageMaxWidthChecked(null);
+
 		}
 		
 		private function onImageMaxWidthChecked(aEvent : Event):void
@@ -181,28 +318,42 @@ package
 			pageResourcesArr  = pageContent.match(guidResourseRegExp);
 			
 			if (!pageResourcesArr || pageResourcesArr.length <= 0) {
-				onLastPageResourceGenerated();
+				curState = STATE_LAST_PAGE_RESOURCE_GENERATED;
 				return;			
 			}
 			
-			generateNextPageResource();
+			curState = STATE_NEXT_PAGE_RESOURCE_GENERATING_START;
 			// ... get resources
 		}
 		
-		private function onPageGenerated(appendPage : Boolean = true):void
+		private function onPageGenerated():void
 		{
 			if (appendPage)
 				pagesXML.appendChild(pageXML);
 			
 			pagesCounter ++;
+			pageResourcesCounter = 0;
 			
-			generateNextPage();
+			curState = STATE_NEXT_PAGE_GENERATING_START;
 		}
 		
 		private function onLastPageGenerated():void
 		{
 			productXML.appendChild(pagesXML);
 			productXML.normalize();
+			
+			curState = STATE_XML_CREATION_COMPLETE;
+		}
+		
+		private function onXMLCreationComplete():void
+		{
+			spinnerManager.addEventListener(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_HIDE, spinnerHideHandler);
+			setTimeout(spinnerManager.hideSpinner, 50);
+		}
+		
+		private function spinnerHideHandler(evt:Event):void
+		{
+			spinnerManager.removeEventListener(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_HIDE, spinnerHideHandler);
 			
 			this.dispatchEvent(new Event(EVENT_ON_XML_CREATION_COMPLETE));
 		}
@@ -211,8 +362,7 @@ package
 		{
 			if (pageResourcesCounter >= pageResourcesArr.length)
 			{
-				pageResourcesCounter = 0;
-				onLastPageResourceGenerated(); 
+				curState = STATE_LAST_PAGE_RESOURCE_GENERATED;
 				return;
 			}
 			
@@ -220,7 +370,7 @@ package
 			
 			if (currentResource.indexOf(".htm") != -1) 
 			{
-				onPageResourceGenerated();
+				curState = STATE_PAGE_RESOURCE_GENERATING_COMPLETE;
 				return;
 			}
 			
@@ -243,15 +393,17 @@ package
 			
 			pageResourcesCounter ++;
 			
-			generateNextPageResource();
+			curState = STATE_NEXT_PAGE_RESOURCE_GENERATING_START;
 		}
 		
 		private function onLastPageResourceGenerated ():void
 		{
+			pageResourcesCounter = 0;
+			
 			pageXML.content.appendChild( XML("<![CDATA[" + pageContentForXml + "]"+ "]>"));
 			pageXML.appendChild(pageResourcesXML);
 			
-			onPageGenerated();
+			curState = STATE_PAGE_GENERATING_COMPLETE;
 		}
 		
 		private function resetToc(tocObject:Object) : String
@@ -317,8 +469,8 @@ package
 			
 			if (String(imgTag.@style) != "")
 			{
-				imageProperties.width = HTML_WYSIWYG.getSizeFromStyle(String(imgTag.@style).toLowerCase(), HTML_WYSIWYG.WIDTH_TYPE); 
-				imageProperties.height = HTML_WYSIWYG.getSizeFromStyle(String(imgTag.@style).toLowerCase(), HTML_WYSIWYG.HEIGHT_TYPE);
+				imageProperties.width = HTML_WYSIWYG.getSizeFromStyle(String(imgTag.@style).toLowerCase(), HTML_WYSIWYG.TYPE_WIDTH); 
+				imageProperties.height = HTML_WYSIWYG.getSizeFromStyle(String(imgTag.@style).toLowerCase(), HTML_WYSIWYG.TYPE_HEIGHT);
 			}
 
 			return imageProperties;
@@ -477,7 +629,7 @@ package
 				
 				if (resourcesList.length() == 0 || pageResourcesCounter >= resourcesList.length())
 				{
-					onPageResourceGenerated();
+					curState = STATE_PAGE_RESOURCE_GENERATING_COMPLETE;
 					return;
 				}
 				
@@ -489,7 +641,7 @@ package
 			
 			pageResourceXML.appendChild(XML("<![CDATA[" + source +"]"+ "]>"));
 			
-			onPageResourceGenerated();
+			curState = STATE_PAGE_RESOURCE_GENERATING_COMPLETE;
 		}
 		
 		private function resetLinksToResourcesAndPages(aPageContent:String) : String

@@ -29,10 +29,11 @@
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			
-			private var sqlProxy				: SQLProxy = new SQLProxy();
-			private var productsXMLController	: ProductsXMLController = new ProductsXMLController();
+			import spinnerFolder.SpinnerPopUpManager;
 			
-			private var blockWindow				: TitleWindow;
+			private var sqlProxy				: SQLProxy = new SQLProxy();
+			
+			private var projectsUpdater			: ProjectsUpdater = new ProjectsUpdater();
 			
 			private function creationComplete():void 
 			{
@@ -46,8 +47,6 @@
 			{
 				listOfProducts.dataProvider =  sqlProxy.getAllProducts();
 				listOfProducts.selectedIndex = 0;
-				
-//				trace(": "+ listOfProducts.dataProvider.source.length);
 			}
 			
 			private function validateListOfProducts(evt:Event):void
@@ -85,24 +84,20 @@
 				rbWnd.addEventListener(CloseEvent.CLOSE, validateListOfProducts);
 			}
 			
-			private function addExistingProductClickHandler():void
+			private function addProductFromXMLClickHandler():void
 			{
-				blockBtns(true);
+				projectsUpdater.addEventListener(ProjectsUpdater.UPDATE_COMPLETED, proudctListUpdateHandler);
+				projectsUpdater.addEventListener(ProjectsUpdater.UPDATE_CANCELED, proudctListUpdateHandler);
+				projectsUpdater.addEventListener(ProjectsUpdater.UPDATE_NOT_REQUIRED, proudctListUpdateHandler);
 				
-				productsXMLController.addEventListener(ProjectsUpdater.UPDATE_COMPLETED, proudctListUpdateHandler);
-				productsXMLController.addEventListener(ProjectsUpdater.UPDATE_CANCELED, proudctListUpdateHandler);
-				productsXMLController.addEventListener(ProjectsUpdater.UPDATE_NOT_REQUIRED, proudctListUpdateHandler);
-				
-				productsXMLController.addExistingProductXML();				
+				projectsUpdater.addProductFromXML();				
 			}
 			
 			private function proudctListUpdateHandler(aEvent:Event):void
 			{
-				productsXMLController.removeEventListener(ProjectsUpdater.UPDATE_COMPLETED, proudctListUpdateHandler);
-				productsXMLController.removeEventListener(ProjectsUpdater.UPDATE_CANCELED, proudctListUpdateHandler);
-				productsXMLController.removeEventListener(ProjectsUpdater.UPDATE_NOT_REQUIRED, proudctListUpdateHandler);
-				
-				blockBtns(false);
+				projectsUpdater.removeEventListener(ProjectsUpdater.UPDATE_COMPLETED, proudctListUpdateHandler);
+				projectsUpdater.removeEventListener(ProjectsUpdater.UPDATE_CANCELED, proudctListUpdateHandler);
+				projectsUpdater.removeEventListener(ProjectsUpdater.UPDATE_NOT_REQUIRED, proudctListUpdateHandler);
 				
 				switch(aEvent.type)
 				{
@@ -143,28 +138,6 @@
 		        }
 			}
 			
-			private function blockBtns(b:Boolean):void
-			{
-				try {
-					PopUpManager.removePopUp(blockWindow);
-					blockWindow = null;
-				} catch (e:Error) {
-					trace ("Error while remove popUp");
-				}
-				
-				if (b) {
-					blockWindow = new TitleWindow();
-					
-					blockWindow.width = this.width;
-					blockWindow.height = this.height;
-					blockWindow.x = this.x;
-					blockWindow.y = this.y;
-					blockWindow.alpha = 0;
-					
-					PopUpManager.addPopUp(blockWindow, this, true);
-				}
-			}
-			
 		]]>
 		
 	</mx:Script>
@@ -184,7 +157,7 @@
     		  	color="#FFFFFF"  width="100%"  borderColor="#999999"
 				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 			
-			<mx:Button label="Add" click="{addExistingProductClickHandler()}"
+			<mx:Button label="Add" click="{addProductFromXMLClickHandler()}"
 			    color="#FFFFFF"  width="100%"  borderColor="#999999"
 		 	    fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 		

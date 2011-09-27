@@ -13,8 +13,8 @@
 			
 			public static const MAX_IMAGE_WIDTH : Number = 500;
 			
-			public static const WIDTH_TYPE		: Number = 0;
-			public static const HEIGHT_TYPE		: Number = 1;
+			public static const TYPE_WIDTH		: Number = 0;
+			public static const TYPE_HEIGHT		: Number = 1;
 
 			private var imgCounter : Number = 0;
 			private var resourcesList : XMLList;
@@ -355,8 +355,8 @@
 				
 				if (String(xmlImg.@style) != "")
 				{
-					imageWidthInTag = getSizeFromStyle(String(xmlImg.@style).toLowerCase(), WIDTH_TYPE); 
-					imageHeightInTag = getSizeFromStyle(String(xmlImg.@style).toLowerCase(), HEIGHT_TYPE);
+					imageWidthInTag = getSizeFromStyle(String(xmlImg.@style).toLowerCase(), TYPE_WIDTH); 
+					imageHeightInTag = getSizeFromStyle(String(xmlImg.@style).toLowerCase(), TYPE_HEIGHT);
 				}
 				
 				if (imageWidthInTag > 0) // width is defined in <img>
@@ -476,8 +476,8 @@
 				var sizeStr : String;
 				var sizeNumber : Number = -1;
 				
-				var str : String = type == HTML_WYSIWYG.WIDTH_TYPE ? strWidth : strHeight;
-				var strInZeroIndex : String = type == HTML_WYSIWYG.WIDTH_TYPE ? strWidthInZeroIndex : strHeightInZeroIndex;
+				var str : String = type == HTML_WYSIWYG.TYPE_WIDTH ? strWidth : strHeight;
+				var strInZeroIndex : String = type == HTML_WYSIWYG.TYPE_WIDTH ? strWidthInZeroIndex : strHeightInZeroIndex;
 				
 				firstInd = strStyle.search(str);
 				

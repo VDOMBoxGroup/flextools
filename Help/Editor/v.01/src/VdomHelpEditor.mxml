@@ -6,7 +6,7 @@
 						layout="absolute"
 						creationComplete="{creationCompleteHandler()}"
 						backgroundColor="0x373739"
-						titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Editor Aplication"
+						titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Editor Application"
 						titleTextStyleName="tbStyle"
 						titleIcon="@Embed('icons/16_vdom_icon_editor.png')"
 						xmlns:local="*">
@@ -36,14 +36,16 @@
 			import mx.utils.Base64Encoder;
 			import mx.utils.UIDUtil;
 			import mx.validators.StringValidator;
+			
+			import spinnerFolder.SpinnerPopUpManager;
 
 			private var sqlProxy : SQLProxy = new SQLProxy();
 
+			private var spinnerManager		: SpinnerPopUpManager = SpinnerPopUpManager.getInstance();
+			
 			private var stylesManager : CSSStyleManager = new CSSStyleManager();
 			
 			private var pageVersion : Number;
-			
-			private var blockWindow	: TitleWindow;
 			
 			private var treePagesBuffer : Array;
 			
@@ -96,9 +98,8 @@
 			
 			private function treeChangeHandler(lstEvt:ListEvent) : void
 			{
-				trace ("[VdomHelpEditor] treeChangeHandler");	
 //			showSelectedPage(tree.selectedItem.@name);
-//			trace("Tree Change");
+				
 				var tocString : String = tree.dataProvider.toXMLString();
 
 				try
@@ -171,7 +172,7 @@
 					pageContent = HTML_WYSIWYG.getNewPageContent("");
 				}
 				
-				xmlContent = new XML(pageContent);
+				xmlContent = new XML (pageContent);
 				
 				// remove toc ...
 					// remove old variant of toc ...
@@ -572,12 +573,10 @@
 				productXMLFile.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onProductXMLError);
 				productXMLFile.browseForSave("Save product as .XML");
 				
-				blockBtns(true);
 			}
 			
 			private function onProductXMLError(aEvent:Event):void
 			{
-				blockBtns(false);
 				Alert.show("Error creating product xml", "Error: ");				
 			}
 			
@@ -586,7 +585,6 @@
 				productXMLFile = aEvent.target as File; 
 				
 				if (!isCorrectFileFormat(productXMLFile.type)) {
-					blockBtns(false);
 					Alert.show("The file format is incorrect. It should be in xml format.", "Error file format");
 					return;
 				}
@@ -608,7 +606,6 @@
 			
 			private function onCancelSelectProductXML(aEvent:Event):void
 			{
-				blockBtns(false);
 			}
 			
 			private function onProductXMLCreationComplete(aEvent:Event):void
@@ -631,7 +628,6 @@
 				}
 				catch ( error : Error )
 				{
-					blockBtns(false);
 					Alert.show( error.message, "Error:");
 				}
 				
@@ -685,12 +681,9 @@
 					fileStream.writeUTFBytes(installXML.toXMLString());
 					fileStream.close();
 					
-					blockBtns(false);
-					
 				}
 				catch ( error : Error )
 				{
-					blockBtns(false);
 					Alert.show( error.message, "Error:");
 				}		
 			}
@@ -703,8 +696,6 @@
 				
 				var productCreator : ProductXMLCreator = new ProductXMLCreator();
 				
-				blockBtns(true);
-				
 				productCreator.addEventListener(ProductXMLCreator.EVENT_ON_XML_CREATION_COMPLETE, onProductXMLCreationComplete);
 				productCreator.generateProductXML(cmboxProduct.selectedItem.name, 
 													cmboxProduct.selectedItem.title, 
@@ -712,28 +703,6 @@
 													html_wysiwyg);
 			}
 			
-			private function blockBtns(b:Boolean):void
-			{
-				try {
-					PopUpManager.removePopUp(blockWindow);
-					blockWindow = null;
-				} catch (e:Error) {
-					trace ("Error while remove popUp");
-				}
-				
-				if (b) {
-					blockWindow = new TitleWindow();
-					
-					blockWindow.width = this.width;
-					blockWindow.height = this.height;
-					blockWindow.x = this.x;
-					blockWindow.y = this.y;
-					blockWindow.alpha = 0;
-					
-					PopUpManager.addPopUp(blockWindow, this, true);
-				}
-			}
-
 			// save file to folder
 			public function saveFile(contentName:String, content:ByteArray) : void
 			{
@@ -935,7 +904,7 @@
 					 color="#FFFFFF"
 					 width="100%">
 				<mx:Image source="@Embed('icons/16_vdom_icon_editor.png')" />
-				<mx:Label id="topTitle" text="VDOM Help Editor Aplication" />
+				<mx:Label id="topTitle" text="VDOM Help Editor" />
 				<mx:HBox width="100%" horizontalAlign="right" paddingTop="2">
 					<mx:Image source="@Embed('../assets/minimize.png')" right="0" click="{minimize()}" />
 					<mx:Image source="@Embed('../assets/restore.png')" right="0" click="{minMaximize()}" />
