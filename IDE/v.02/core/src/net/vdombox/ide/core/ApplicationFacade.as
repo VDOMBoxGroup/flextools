@@ -6,6 +6,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.CloseInitialWindowCommand;
 	import net.vdombox.ide.core.controller.CloseMainWindowCommand;
 	import net.vdombox.ide.core.controller.CloseWindowCommand;
+	import net.vdombox.ide.core.controller.EditApplicationInformationCommand;
 	import net.vdombox.ide.core.controller.ErrorMacroCommand;
 	import net.vdombox.ide.core.controller.GetApplicationListCommand;
 	import net.vdombox.ide.core.controller.GetResourceItemRendererCommand;
@@ -289,6 +290,8 @@ package net.vdombox.ide.core
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
 		public static const SET_SELECTED_APPLICATION : String = "setSelectedApplication";
 		
+		public static const EDIT_APPLICATION_INFORMATION : String = "editApplicationInformation";
+		
 //		page		
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
 		
@@ -346,6 +349,8 @@ package net.vdombox.ide.core
 		
 		public static const OPEN_PAGE_IN_EXTERNAL_BROWSER  : String = "openPageInExternalBrowser";
 		public static const OPEN_APPLICATION_IN_EDITOR  : String = "openApplicationInEditor";
+		public static const OPEN_APPLICATION_IN_EDIT_VIEW  : String = "openApplicationInEditView";
+		public static const OPEN_APPLICATION_IN_CHANGE_VIEW  : String = "openApplicationInChangeView";
 
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";
@@ -521,6 +526,9 @@ package net.vdombox.ide.core
 			registerCommand( GET_SETTINGS, GetSettingsCommand );
 			registerCommand( SETTINGS_CHANGED, SettingsChangedCommand );
 			registerCommand( GET_SETTINGS_MANAGER, RetrievModuleSettingsCopy );
+			
+			
+			registerCommand( EDIT_APPLICATION_INFORMATION, EditApplicationInformationCommand );
 			
 			
 			

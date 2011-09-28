@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:components="net.vdombox.ide.core.view.components" 
+		 width="100%" height="100%" gap="2" xmlns:components1="net.vdombox.ide.core.view.components.*">
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:VGroup width="50%" height="100%" gap="2" 
+			  paddingTop="10" paddingLeft="20">
+		<s:Label id="lblapplicationName" color="#FFFFFF" 
+				 text="{resourceManager.getString( 'Core_General', 'create_edit_application_name' )}"/>
+		<s:TextInput id="txtapplicationName" color="#FFFFFF"/>
+		<mx:Spacer height="10" />
+		<s:Label id="lblapplicationDescription" color="#FFFFFF" 
+				 text="{resourceManager.getString( 'Core_General', 'create_edit_application_description' )}"/>
+		<s:TextInput id="txtapplicationDescription" color="#FFFFFF"/>
+	</s:VGroup>
+	
+	<s:VGroup width="50%" height="100%" gap="2" 
+			  paddingTop="10" paddingLeft="20" paddingBottom="30">
+		<components1:IconChooser id="iconChooser" width="100%" />
+		
+		<mx:Spacer height="100%" />
+		
+		<s:HGroup width="100%" height="25" horizontalAlign="right">
+			
+			<s:Button id="btnSave" 
+					  label="{resourceManager.getString( 'Core_General', 'create_edit_application_save' )}"
+					  click="{dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.SAVE_INFORMATION ) ) }"/>
+			
+			<s:Button id="btnCancel" 
+					  label="{resourceManager.getString( 'Core_General', 'create_edit_application_cancel' )}"/>
+		</s:HGroup>
+	</s:VGroup>
+</s:HGroup>

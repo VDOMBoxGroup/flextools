@@ -13,10 +13,13 @@ package net.vdombox.ide.core.view.components
 		[SkinPart( required="true" )]
 		public var changeApplicationView : ChangeApplicationView;
 		
+		[SkinPart( required="true" )]
+		public var createEditApplicationView : CreateEditApplicationView;
+		
 		public function ApplicationManagerWindow()
 		{
-			systemChrome	= NativeWindowSystemChrome.NONE;
-			transparent 	= true;
+			systemChrome = NativeWindowSystemChrome.NONE;
+			transparent = true;
 			width = 550;
 			height = 340;
 			minWidth = 550;

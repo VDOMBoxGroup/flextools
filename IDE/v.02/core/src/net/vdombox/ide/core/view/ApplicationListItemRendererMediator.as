@@ -43,7 +43,7 @@ package net.vdombox.ide.core.view
 			
 			interests.push( ApplicationFacade.RESOURCE_LOADED + "/" + mediatorName );
 			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
-			//interests.push( ApplicationFacade.APPLICATION_EDITED );
+			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED );
 			
 			return interests;
 		}
@@ -57,6 +57,14 @@ package net.vdombox.ide.core.view
 					var resourceVO : ResourceVO = notification.getBody() as ResourceVO;
 					
 					BindingUtils.bindSetter( setIcon, resourceVO, "data" );
+					
+					break;
+				}
+					
+				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
+				{
+					if ( notification.getBody() === applicationListItemRenderer.data )
+						refreshProperties();
 					
 					break;
 				}

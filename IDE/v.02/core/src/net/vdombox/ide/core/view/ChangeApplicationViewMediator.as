@@ -56,6 +56,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			interests.push( ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName);
 			interests.push( ApplicationFacade.SETTINGS_CHANGED);
+			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED);
 			
 			return interests;
 		}
@@ -63,6 +64,7 @@ package net.vdombox.ide.core.view
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
+			var applicationVO : ApplicationVO;
 			
 			switch ( notification.getName() )
 			{
@@ -90,7 +92,7 @@ package net.vdombox.ide.core.view
 					
 				case ApplicationFacade.CHANGE_RESOURCE:
 				{
-					var applicationVO : ApplicationVO = notification.getBody() as ApplicationVO;
+					applicationVO = notification.getBody() as ApplicationVO;
 					setInfoApplication( applicationVO );
 					
 					break;
@@ -117,6 +119,16 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}	
+				
+				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
+				{
+					applicationVO = body as ApplicationVO;
+					
+					if ( applicationVO === selectedApplicationVO )
+						refreshApplicationProperties();
+					
+					break;
+				}
 			
 			}
 			
@@ -221,6 +233,7 @@ package net.vdombox.ide.core.view
 			applicationList.addEventListener( ApplicationListItemRenderer.RENDERER_CREATED, rendererCreatedHandler, true );
 			applicationList.addEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler );
 			changeApplicationView.addEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDITOR, openApplicationInEditor );
+			changeApplicationView.addEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDIT_VIEW, openApplicationInEditView );
 		}
 		
 		private function removeHandlers() : void
@@ -228,11 +241,17 @@ package net.vdombox.ide.core.view
 			applicationList.removeEventListener( ApplicationListItemRenderer.RENDERER_CREATED, rendererCreatedHandler, true );
 			applicationList.removeEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler );
 			changeApplicationView.removeEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDITOR, openApplicationInEditor );
+			changeApplicationView.removeEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDIT_VIEW, openApplicationInEditView );
 		}
 		
 		private function openApplicationInEditor( event : ApplicationManagerWindowEvent ) : void
 		{
 			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR);
+		}
+		
+		private function openApplicationInEditView( event : ApplicationManagerWindowEvent ) : void
+		{
+			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW, selectedApplicationVO );
 		}
 		
 		private function applicationList_changeHandler( event : IndexChangeEvent ) : void

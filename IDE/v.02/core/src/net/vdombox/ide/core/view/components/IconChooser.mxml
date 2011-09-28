@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx" >
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.core.events.IconChooserEvent;
+			
+			import spark.skins.spark.ListSkin;
+			
+			protected function iconsList_creationCompleteHandler( event : FlexEvent ) : void
+			{
+				var d : * = "";
+				if ( iconsList.skin && iconsList.skin[ "background" ] )
+					iconsList.skin[ "background" ].alpha = 0;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		
+		<s:State name="default" />
+		
+		<s:State name="gallery" />
+	</s:states>
+	
+	<mx:Image id="selectedIcon"
+			  height="64" width="64" />
+	
+	<s:Label buttonMode="true" text="{ resourceManager.getString( 'ApplicationsManagment_General', 'iconchooser_select_icon' ) }"
+			 fontFamily="Verdana" fontSize="14" textDecoration="underline"
+			 click="currentState = currentState == 'default' ? 'gallery' : 'default'; invalidateSize();" />
+	
+	<s:List id="iconsList"
+			height="100%" width="100%"
+			creationComplete="iconsList_creationCompleteHandler(event)"
+			includeIn="gallery" itemCreationPolicy="immediate"
+			itemRenderer="net.vdombox.ide.core.view.components.GalleryItemRenderer">
+		
+		<s:layout>
+			
+			<s:TileLayout />
+		</s:layout>
+	</s:List>
+	
+	<s:Label buttonMode="true" text="{ resourceManager.getString( 'ApplicationsManagment_General', 'iconchooser_load_from_computer' ) }"
+			 fontFamily="Verdana" fontSize="14" textDecoration="underline"
+			 click="dispatchEvent( new IconChooserEvent( IconChooserEvent.LOAD_ICON ))" />
+</s:VGroup>

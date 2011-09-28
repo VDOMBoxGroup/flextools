@@ -2,17 +2,21 @@ package net.vdombox.ide.core.view
 {
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+	import net.vdombox.ide.core.model.GalleryProxy;
 	import net.vdombox.ide.core.model.SettingsProxy;
 	import net.vdombox.ide.core.view.components.ApplicationManagerWindow;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
+	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
 	public class ApplicationManagerWindowMediator extends Mediator implements IMediator
 	{
+		
 		public function ApplicationManagerWindowMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
@@ -23,9 +27,45 @@ package net.vdombox.ide.core.view
 			return viewComponent as ApplicationManagerWindow;
 		}
 		
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW );
+			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
+			
+			return interests;
+		}
+		
+		override public function handleNotification( notification : INotification ) : void
+		{
+			var body : Object = notification.getBody();
+			
+			switch ( notification.getName() )
+			{
+				case ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW:
+				{
+					applicationManagerWindow.changeApplicationView.visible = false;
+					applicationManagerWindow.createEditApplicationView.visible = true;
+					
+					break;
+				}
+					
+				case ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW:
+				{
+					applicationManagerWindow.changeApplicationView.visible = true;
+					applicationManagerWindow.createEditApplicationView.visible = false;
+					
+					break;
+				}
+					
+			}
+		}
+		
 		override public function onRegister() : void
 		{
 			facade.registerProxy( new SettingsProxy() );
+			facade.registerProxy( new GalleryProxy() );
 			addHandlers();
 		}
 		
@@ -48,6 +88,7 @@ package net.vdombox.ide.core.view
 		private function createCompleteHandler ( event : FlexEvent ) : void
 		{
 			facade.registerMediator( new ChangeApplicationViewMediator ( applicationManagerWindow.changeApplicationView ) );
+			facade.registerMediator( new CreateEditApplicationViewMediator ( applicationManagerWindow.createEditApplicationView ) );
 		}
 		
 		private function closeHandler ( event : ApplicationManagerWindowEvent ) : void
@@ -56,6 +97,7 @@ package net.vdombox.ide.core.view
 			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			facade.removeMediator( mediatorName );
 			facade.removeProxy( SettingsProxy.NAME );
+			facade.removeProxy( GalleryProxy.NAME );
 		}
 	}
 }
