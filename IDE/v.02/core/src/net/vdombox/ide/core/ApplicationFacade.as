@@ -10,6 +10,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.GetApplicationListCommand;
 	import net.vdombox.ide.core.controller.GetResourceItemRendererCommand;
 	import net.vdombox.ide.core.controller.GetSelectedApplicationCommand;
+	import net.vdombox.ide.core.controller.GetSettingsCommand;
 	import net.vdombox.ide.core.controller.InitialWindowCreatedCommand;
 	import net.vdombox.ide.core.controller.LoadModulesRequestCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadingSuccessfulCommand;
@@ -25,12 +26,15 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ProcessUIQueryMessageCommand;
 	import net.vdombox.ide.core.controller.RequestForSignoutMacroCommand;
 	import net.vdombox.ide.core.controller.RequestForSignupCommand;
+	import net.vdombox.ide.core.controller.RetrievModuleSettingsCopy;
 	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.controller.SaveModuleSettings;
+	import net.vdombox.ide.core.controller.SaveModuleSettingsCopy;
 	import net.vdombox.ide.core.controller.ServerLoginSuccessfulCommand;
 	import net.vdombox.ide.core.controller.SetIndexPageCommand;
 	import net.vdombox.ide.core.controller.SetSelectedApplicationCommand;
 	import net.vdombox.ide.core.controller.SetSelectedPageCommand;
+	import net.vdombox.ide.core.controller.SettingsChangedCommand;
 	import net.vdombox.ide.core.controller.StartupCommand;
 	import net.vdombox.ide.core.controller.requests.ApplicationProxyRequestCommand;
 	import net.vdombox.ide.core.controller.requests.ObjectProxyRequestCommand;
@@ -212,7 +216,17 @@ package net.vdombox.ide.core
 		public static const MODULE_SETTINGS_GETTED : String = "moduleSettingsGetted";
 		
 		public static const SAVE_MODULE_SETTINGS : String = "setModuleSettings";
+		public static const SAVE_MODULE_SETTINGS2 : String = "setModuleSettings2";
 		public static const MODULE_SETTINGS_SETTED : String = "moduleSettingsSetted";
+		
+		public static const GET_SETTINGS : String = "getSettings";
+		public static const GET_SETTINGS_MANAGER : String = "settingsGettedManager";
+		public static const SETTINGS_GETTED : String = "settingsGetted";
+		
+		public static const SETTINGS_CHANGED : String = "settingsChanged";
+		public static const SETTINGS_SETTED : String = "settingsSetted";
+		
+		public static const MANAGER_SETTINGS_GETTED : String = "managerSettingsSetted";
 		
 //		server
 		public static const SERVER_CONNECTION_START : String = "serverСonnectionStart";
@@ -339,7 +353,10 @@ package net.vdombox.ide.core
 //		applicationManager
 		
 		public static const OPEN_APPLICATION_MANAGER : String = "openApplicationManager";
+		public static const CLOSE_APPLICATION_MANAGER : String = "closeApplicationManager";
 		public static const GET_APPLICATIONS_LIST : String = "getApplicationList";
+		
+		
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -401,6 +418,7 @@ package net.vdombox.ide.core
 //			message requests & responses
 			registerCommand( RETRIEVE_MODULE_SETTINGS, RetrieveModuleSettings );
 			registerCommand( SAVE_MODULE_SETTINGS, SaveModuleSettings );
+			registerCommand( SAVE_MODULE_SETTINGS2, SaveModuleSettingsCopy );
 
 			registerCommand( PROCESS_SIMPLE_MESSAGE, ProcessSimpleMessageCommand );
 			registerCommand( PROCESS_UIQUERY_MESSAGE, ProcessUIQueryMessageCommand );
@@ -499,6 +517,12 @@ package net.vdombox.ide.core
 			registerCommand( LOAD_RESOURCE, GetResourceItemRendererCommand );
 			registerCommand( GET_SELECTED_APPLICATION, GetSelectedApplicationCommand );
 			registerCommand( SET_SELECTED_APPLICATION, SetSelectedApplicationCommand );
+			
+			registerCommand( GET_SETTINGS, GetSettingsCommand );
+			registerCommand( SETTINGS_CHANGED, SettingsChangedCommand );
+			registerCommand( GET_SETTINGS_MANAGER, RetrievModuleSettingsCopy );
+			
+			
 			
 //			registerCommand( LOGOFF_REQUEST, LogoffRequestCommand );
 		}

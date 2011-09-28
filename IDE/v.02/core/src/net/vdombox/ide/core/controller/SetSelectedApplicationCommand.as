@@ -17,7 +17,7 @@ package net.vdombox.ide.core.controller
 			
 			statesProxy.selectedApplication = body as ApplicationVO;
 			
-			sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, body )	
+			sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, body );	
 		}
 	}
 }

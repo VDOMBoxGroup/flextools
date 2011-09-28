@@ -2,26 +2,18 @@ package net.vdombox.ide.core.controller
 {
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.SettingsProxy;
-	import net.vdombox.ide.core.model.vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
-	public class GetSettingsCommand extends SimpleCommand
+	public class SettingsChangedCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
 		{
 			var settingsProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
+			var settingsObject : Object = settingsProxy.exportSettings();
 			
-			var mediatorName : String = notification.getBody().toString();
-			var settingsVO : SettingsVO = settingsProxy.settings;
-			
-			var notificationName : String = ApplicationFacade.SETTINGS_GETTED;
-			
-			if ( mediatorName )
-				notificationName = notificationName + "/" + mediatorName;
-			
-			sendNotification( notificationName, settingsVO );
+			sendNotification( ApplicationFacade.SAVE_MODULE_SETTINGS2, settingsObject );
 		}
 	}
 }

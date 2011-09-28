@@ -42,6 +42,7 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.RESOURCE_LOADED + "/" + mediatorName );
+			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			//interests.push( ApplicationFacade.APPLICATION_EDITED );
 			
 			return interests;
@@ -59,6 +60,13 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}
+					
+				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
+				{
+					facade.removeMediator( mediatorName );
+					
+					break;
+				}	
 			}	
 		}
 		

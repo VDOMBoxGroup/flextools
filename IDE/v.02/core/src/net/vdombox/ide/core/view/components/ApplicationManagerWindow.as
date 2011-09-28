@@ -16,13 +16,14 @@ package net.vdombox.ide.core.view.components
 		public function ApplicationManagerWindow()
 		{
 			systemChrome	= NativeWindowSystemChrome.NONE;
+			transparent 	= true;
 			width = 550;
 			height = 340;
 			minWidth = 550;
 			minHeight = 340;
 			maxWidth = 550;
 			maxHeight = 340;
-			title = resourceManager.getString( 'Core_General', 'application_manager_window_title' ) 
+			title = resourceManager.getString( 'Core_General', 'application_manager_window_title' ) ;
 		}
 		
 		override public function stylesInitialized():void {

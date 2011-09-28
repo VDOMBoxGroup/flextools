@@ -28,15 +28,22 @@
 		</s:VGroup>
 	</s:VGroup>
 	
-	<s:VGroup width="50%" height="100%" paddingBottom="30">
-		<s:Label id="applicationName"/>
+	<s:VGroup width="50%" height="100%" 
+			  paddingTop="12" paddingBottom="30" gap="10">
+		<s:Label id="applicationName" 
+				 fontSize="20" color="#FFFFFF"/>
 		<s:Label id="applicationDescription"/>
 		
+		<s:Label id="applicationEditor" 
+				 text="Change application settings" textDecoration="underline"
+				 fontSize="12" color="#25D9FF"/>
 		<mx:Spacer height="100%"/>
 		
-		<s:HGroup width="100%" horizontalAlign="center">
+		<s:HGroup height="25" width="100%" horizontalAlign="center" gap="20">
 			<s:Button />
-			<s:Button id="btnOpenInEditor" label="Open in Editor" click="btnOpenInEditor_clickHandler(event)"/>
+			<s:Button id="btnOpenInEditor" 
+					  width="100" height="100%"
+					  label="{resourceManager.getString( 'Core_General', 'change_application_open_in_editor' )}" click="btnOpenInEditor_clickHandler(event)"/>
 		</s:HGroup>
 		
 	</s:VGroup>

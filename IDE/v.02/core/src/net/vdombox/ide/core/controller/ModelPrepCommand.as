@@ -6,6 +6,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.model.ResourcesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.SessionProxy;
+	import net.vdombox.ide.core.model.SettingsProxy;
 	import net.vdombox.ide.core.model.SettingsStorageProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	import net.vdombox.ide.core.model.StatesProxy;

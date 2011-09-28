@@ -53,6 +53,9 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SERVER_APPLICATIONS_GETTED );
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
 			interests.push( ApplicationFacade.CHANGE_RESOURCE );
+			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+			interests.push( ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName);
+			interests.push( ApplicationFacade.SETTINGS_CHANGED);
 			
 			return interests;
 		}
@@ -92,6 +95,28 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}	
+					
+				case ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName:
+				{
+					settings = body as SettingsVO;
+					
+					selectedApplicationChanged = true;
+					break;
+				}		
+					
+				case ApplicationFacade.SETTINGS_CHANGED:
+				{
+					selectedApplicationChanged = true;
+					
+					break;
+				}
+					
+				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
+				{
+					facade.removeMediator( mediatorName );
+					
+					break;
+				}	
 			
 			}
 			
@@ -122,12 +147,13 @@ package net.vdombox.ide.core.view
 				{
 					applicationList.selectedItem = selectedApplicationVO;
 					
-					//refreshApplicationProperties();
 					
-					/*if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplicationVO.id )
+					refreshApplicationProperties();
+					
+					if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplicationVO.id )
 					{
 						settings.lastApplicationID = selectedApplicationVO.id
-					}*/
+					}
 					
 					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
 				}
@@ -138,7 +164,7 @@ package net.vdombox.ide.core.view
 					if ( !applications || applications.length == 0 )
 						return;
 					
-					/*if ( settings )
+					if ( settings )
 					{
 						for ( var i : int = 0; i < applications.length; i++ )
 						{
@@ -150,7 +176,7 @@ package net.vdombox.ide.core.view
 						}
 						
 						
-					}*/
+					}
 					
 					if( !newSelectedApplication )
 						newSelectedApplication = applications[ 0 ];
@@ -160,11 +186,28 @@ package net.vdombox.ide.core.view
 			}
 		}
 		
+		private function refreshApplicationProperties() : void
+		{
+			changeApplicationView.applicationName.text = selectedApplicationVO.name;
+			
+			
+			changeApplicationView.applicationDescription.text = selectedApplicationVO.description;
+
+			
+			/*if ( selectedApplicationVO.scriptingLanguage == "python" )
+				editApplicationView.python.selected = true;
+			else
+				editApplicationView.vbscript.selected = true;*/
+			
+		}
+		
 		override public function onRegister() : void
 		{
+			sendNotification( ApplicationFacade.GET_SETTINGS_MANAGER, mediatorName );
 			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
-			//sendNotification( ApplicationFacade.GET_SETTINGS, mediatorName );
+			sendNotification( ApplicationFacade.GET_SETTINGS, mediatorName );
+
 			addHandlers();
 		}
 		

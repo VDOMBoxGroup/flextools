@@ -10,7 +10,7 @@ package net.vdombox.ide.core.model
 
 	public class SettingsStorageProxy extends Proxy implements IProxy
 	{
-		public static const NAME : String = "SettingsProxy";
+		public static const NAME : String = "SettingsStorageProxy";
 
 		private const SETTINGS_PATH : String = "app-storage";
 

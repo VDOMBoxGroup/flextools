@@ -185,6 +185,14 @@ package net.vdombox.ide.core.model
 
 		private function createApplicationList( applications : XML ) : void
 		{
+			var applicationVO : ApplicationVO;
+			var applicationVOInd : Number = -1;
+			
+			var oldapplications : Array = [];
+			
+			if (_applications)
+				oldapplications = _applications.slice();
+			
 			_applications = [];
 
 			var applicationID : String;
@@ -196,11 +204,31 @@ package net.vdombox.ide.core.model
 				if ( !applicationID )
 					continue;
 
-				var applicationVO : ApplicationVO = new ApplicationVO( applicationID );
+				applicationVOInd = applicationVOIndex(oldapplications, applicationID); 
+			
+				applicationVO = applicationVOInd >= 0 ? oldapplications[applicationVOInd] : new ApplicationVO( applicationID );
+				
 				applicationVO.setInformation( application.Information[ 0 ] );
 
 				_applications.push( applicationVO );
+				
 			}
+			
+			_applications.sortOn("name", Array.CASEINSENSITIVE);
+		}
+		
+		private function applicationVOIndex(applicationsVO : Array, applicationID : String) : Number
+		{
+			var i : uint = 0;
+			for each (var applicationVO : ApplicationVO in applicationsVO)
+			{
+				if (applicationVO.id == applicationID)
+					return i;
+				
+				i++;
+			}
+			
+			return -1;
 		}
 
 		private function soap_connectionOKHandler( event : SOAPEvent ) : void
