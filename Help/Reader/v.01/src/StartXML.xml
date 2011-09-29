@@ -1,7 +1,0 @@
-<install>
-  <!--product name="not_loaded" language="ru_RU" version="0.1" title="Not Loaded resourse" url="http://www.sample.com/help/sampe_ru_RU.xml" size="1.250 Mb"/>
-  <product name="sample" language="en_US" version="0.2" title="Sample "url="http://infonet.tsu.ru/wwwcsd/vdom/sample_en_US.xml" size="0.03 Mb" />
-  <product name="VdomHelp"  language="en_US" version="0.1" title="VdomHelp en US" url="VdomHelp_en_US.xml" size="0.2 Mb" />
-  <product name="tEST"  language="en_US" version="0.1" title="Test en US" url="sample_en_US.xml" size="12 Mb" /-->
-  
-</install>
