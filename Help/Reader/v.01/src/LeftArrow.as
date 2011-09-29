@@ -46,7 +46,6 @@ package
 		
 		private function locationChangeHandler(evt:Event):void
 		{
-			trace("locationChangeHandler " +  _htmlPage.historyPosition + " of "+ _htmlPage.historyLength);
 			if(_htmlPage.historyPosition)
 			{
 				image.source = active;

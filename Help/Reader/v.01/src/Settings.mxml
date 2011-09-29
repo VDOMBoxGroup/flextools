@@ -29,12 +29,15 @@
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			
-			private var productsXMLController	: ProductsXMLController = new ProductsXMLController();
-			private var sqlProxy				: SQLProxy = new SQLProxy();
-			private var checkBoxArray			: Array = []; 
-			private var labelComments		 	: Label;
+			private var xmlLoader				: ProductXMLLoader = new ProductXMLLoader();
 			
-			private var update:Update = new Update();
+			private var productsUpdator			: ProductsUpdator = new ProductsUpdator();
+			
+			private var newProductArray			: ArrayCollection = new ArrayCollection();
+			
+			private var checkBoxArray			: Array = [];
+			
+			private var sqlProxy				: SQLProxy = new SQLProxy();
 			
 			private function creationComplete():void 
 			{
@@ -49,13 +52,18 @@
 			{
 				applications.removeAllChildren();
 				
+				var chBox : CheckBox;
 				var result:Object = sqlProxy.getAllProducts();
+				
 				for(var i:String in result)
 				{
-					var chBox:CheckBox = new CheckBox();
+					chBox = new CheckBox();
+					
 					chBox.label = result[i]["title"];
 					chBox.selected = result[i]["visible"] == "true" ;
+					
 					applications.addChild(chBox);
+					
 					checkBoxArray[result[i]["name"]] = chBox;
 				}
 			}
@@ -82,162 +90,195 @@
 			
 			private function checkUpdate():void
 			{
-				//newProducts.removeAllChildren();
 				newProductArray.removeAll();
 				
-				update.addEventListener(HelpEvent.INSTALL_FILE_LOADED, installFileLoadedHandler); 
-				update.addEventListener(HelpEvent.INSTALL_FILE_LOADED_ERROR, installFileLoadedHandler); 
-				update.frstLoadXML();
-				
-				loadLocalHelp();
+				//loadLocalHelp();
 			}
 			
 			private function loadLocalHelp():void
 			{
-				var fileStream:FileStream = new FileStream();
-				var docsDir:File = File.documentsDirectory;
-				var location : File =new File(docsDir.url +"/VDOMHelp/StartXML.xml");	
+				var startXMLContent	: String = "";
+				
+				var fileStream		: FileStream = new FileStream();
+				var startXmlFile : File = new File(File.documentsDirectory.url +"/VDOMHelp/StartXML.xml");	
 				
 				try
 				{
-			  		fileStream.open( location, FileMode.READ);
-			  		var str:String = fileStream.readMultiByte(location.size, File.systemCharset);
-			  		fileStream.close();
+					if (startXmlFile.exists)
+					{
+				  		fileStream.open( startXmlFile, FileMode.READ);
+				  		startXMLContent = fileStream.readMultiByte(startXmlFile.size, File.systemCharset);
+						fileStream.close();
+					}
+					
+					if(startXMLContent != "")
+						showNewProducts(startXMLContent);
 			 	}
 			 	catch (error:Error)
 				{
-					Alert.show( error.message, "Error:");
-				}
-				
-				if(str != "")
-				showNewProducts(str);
-			}
-			
-			private function installFileLoadedHandler(hlEvt:HelpEvent):void
-			{
-				update.removeEventListener(HelpEvent.INSTALL_FILE_LOADED, installFileLoadedHandler); 
-				update.removeEventListener(HelpEvent.INSTALL_FILE_LOADED_ERROR, installFileLoadedHandler); 
-				
-				if(hlEvt.type == HelpEvent.INSTALL_FILE_LOADED)
-				{
-					showNewProducts(hlEvt.dataEvent);
-				} else if(hlEvt.type == HelpEvent.INSTALL_FILE_LOADED_ERROR)
-				{
-					//statu.text = "Check Error";
-					
+					Alert.show( error.message, AlertMessages.MSG_TYPE_ERROR);
 				}
 			}
 			
-			private var newProductArray:ArrayCollection = new ArrayCollection();
-			private function showNewProducts(object:Object):void
+			private function showNewProducts(products:Object):void
 			{
+				var install : XML = XML(products);
 				
-				var install:XML = XML(object);
-				update.addEventListener(HelpEvent.UPDATE_DISPLAY_LIST, updateDisplayListHandler);
+				if	(install == null || install.name() != "install")
+					return;
+				
 				for each(var product:XML in install.children())
 				{
-					var curProductVersion:String = sqlProxy.getVersionOfProduct(product.@name, product.@language);
-					if(curProductVersion == '' || Number(curProductVersion)< Number(product.@version))
-					{
-						var chBox:CheckBox = new CheckBox();
-							chBox.label = product.@title + " ("+ product.@size + ")" ;
-							chBox.selected = true;
-						//newProducts.addChild(chBox);
-						
-						var stLabel:Label = new Label();
-						
-						
-						//newProducts.addChild(stLabel);
-						
-						newProductArray.addItem({chBox:chBox, url:product.@url, productName:product.@name, stLabel:stLabel });
-					} 
+					showProduct(product.@title, product.@name, Number(product.@version), product.@size, product.@url);
 				}
 			}
 			
-			private function updateDisplayListHandler(hlEvt:HelpEvent):void
+			private function showProduct(title:String, name:String, version:Number, size:String, url:String, productXMLContent:XML = null):void
 			{
-				//newProducts.validateNow();
-			}
-			
-			private function load():void
-			{
-				for(var name:String in newProductArray)
+				var productFromUpdateList : Object = getProductByNameFromUpdateList(name); 
+				if ( productFromUpdateList && productXMLContent)
 				{
-					if(newProductArray[name]["chBox"]["selected"])
+					var alertMsg : String = AlertMessages.MSG_PRODUCT_EXISTS_IN_UPDATE_LIST;
+					
+					alertMsg = alertMsg.replace(AlertMessages.TEMPLATE_EXISTING_PRODUCT_VERSION, productFromUpdateList["productVersion"]);
+					alertMsg = alertMsg.replace(AlertMessages.TEMPLATE_NEW_PRODUCT_VERSION, version);
+					
+					Alert.show( alertMsg, AlertMessages.MSG_TYPE_WARNING, Alert.YES|Alert.NO, this, onAlertClickHandler, null, Alert.YES);
+					return;
+				}
+				
+				addProductToUpdateList();
+				
+				function onAlertClickHandler(evt:CloseEvent) : void
+				{
+					if (evt.detail == Alert.YES)
 					{
-						newProductArray[name]["stLabel"]["text"] = "Loading...";
-//						update.load(newProductArray[name]["url"], newProductArray[name]["stLabel"]);
+						var productIndex : int = newProductArray.getItemIndex(productFromUpdateList); 
+						
+						newProductArray.removeItemAt(productIndex);
+						newProducts.removeChildAt(productIndex);
+						
+						addProductToUpdateList();
 					}
-
-					//newProducts.validateNow();
-					if(newProductArray[name]["chBox"]["selected"])
-						callLater(update.load, [newProductArray[name]["url"], newProductArray[name]["stLabel"]] );
+				}
+				
+				function addProductToUpdateList () : void 
+				{
+					var chBox : CheckBox = new CheckBox();
+					
+					chBox.label = title + " (" + size + ")" + " (" + unescape(url) + ")";
+					chBox.selected = true;
+					
+					newProducts.addChild(chBox);
+					
+					newProductArray.addItem({chBox:chBox, url:url, productName:name, productTitle:title, productVersion:version, xmlContent:productXMLContent});
+				}
+				
+			}
+			
+			private function loadSelectedProducts():void
+			{
+				productsUpdator.addEventListener(ProductsUpdatorEvent.UPDATE_COMPLETE, productsUpdateHandler);
+				productsUpdator.addEventListener(ProductsUpdatorEvent.UPDATE_ERROR, productsUpdateHandler);
+				productsUpdator.addEventListener(ProductsUpdatorEvent.UPDATE_PRODUCTS_SELECTION_ERROR, productsUpdateHandler);
+				
+				productsUpdator.updateProducts(newProductArray);
+			}
+			
+			private function productsUpdateHandler(evt:ProductsUpdatorEvent):void
+			{
+				productsUpdator.removeEventListener(ProductsUpdatorEvent.UPDATE_COMPLETE, productsUpdateHandler);
+				productsUpdator.removeEventListener(ProductsUpdatorEvent.UPDATE_ERROR, productsUpdateHandler);
+				
+				switch (evt.type)
+				{
+					case ProductsUpdatorEvent.UPDATE_COMPLETE :
+						break;
+					
+					case ProductsUpdatorEvent.UPDATE_PRODUCTS_SELECTION_ERROR :
+						Alert.show(AlertMessages.MSG_PRODUCTS_UPDATE_SELECTED_ERROR, AlertMessages.MSG_TYPE_ERROR);
+						break;
+					
+					case ProductsUpdatorEvent.UPDATE_ERROR :
+						Alert.show(AlertMessages.MSG_PRODUCTS_UPDATE_ERROR, AlertMessages.MSG_TYPE_ERROR);
+						break;
 				}
 			}
 			
-			private function chooseAndLoadProductXML():void
+			private function selectProduct():void
 			{
-				blockChooseBtn(true);
+				xmlLoader.addEventListener(ProductXMLLoader.XML_FILE_LOADING_STARTED,	 onProductXMLLoadingStarted);
+				xmlLoader.addEventListener(ProductXMLLoader.XML_FILE_LOADED,			 onProductXMLLoaded);
+				xmlLoader.addEventListener(ProductXMLLoader.USER_CANCELED,				 onProductXMLLoadingCanceled);
+				xmlLoader.addEventListener(ProductXMLLoader.XML_FILE_LOADING_ERROR,		 onProductXMLLoadingError);
 				
-				productsXMLController.addEventListener(ProductXMLLoader.XML_FILE_LOADING_STARTED,	 onProductXMLLoadingStarted);
-				productsXMLController.addEventListener(ProductXMLLoader.XML_FILE_LOADED,			 onProductXMLLoaded);
-				productsXMLController.addEventListener(ProductXMLLoader.USER_CANCELED,				 onProductXMLLoadingCanceled);
-				productsXMLController.addExistingProductXML();
+				xmlLoader.selectAndLoadXMLFile();
 			}
 			
 			private function onProductXMLLoadingStarted(aEvent:Event):void
 			{
-				productsXMLController.addEventListener(ProductXMLLoader.XML_FILE_LOADING_STARTED,	 onProductXMLLoadingStarted);
-				labelComments.text = "XML file loading ...";
+				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADING_STARTED,	 onProductXMLLoadingStarted);
+				
+				// TODO: showSpinner
 			}
 			
 			private function onProductXMLLoaded(aEvent:Event):void
 			{
-				productsXMLController.removeEventListener(ProductXMLLoader.XML_FILE_LOADED, onProductXMLLoaded);
+				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADING_STARTED,	 onProductXMLLoadingStarted);
+				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADED,				 onProductXMLLoaded);
+				xmlLoader.removeEventListener(ProductXMLLoader.USER_CANCELED,				 onProductXMLLoadingCanceled);
+				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADING_ERROR,		 onProductXMLLoadingError);
 				
-				update.addEventListener(Update.PARSING_COMPLETED, onXMLParsingCompleted);
-				update.addEventListener(Update.PARSING_NOT_REQUIED, onXMLParsingCompleted);
-				update.parsingData(productsXMLController.productXML, labelComments);
+				// TODO: hideSpinner
+				
+				var productXMLFile		: File = xmlLoader.xmlFile;
+				var productXMLContent	: XML = new XML(productXMLFile.data);
+				
+				if ( productXMLContent == null || productXMLContent.name() != "product" )
+				{
+					Alert.show( AlertMessages.MSG_INCORRECT_XML_FORMAT, AlertMessages.MSG_TYPE_ERROR);
+					return;
+				}
+
+				showProduct ( productXMLContent.title.toString(), 
+								productXMLContent.name.toString(), 
+								productXMLContent.version, 
+								Utils.formatFileSize(productXMLFile.size), 
+								productXMLFile.url, 
+								new XML(productXMLFile.data) );
+
 			}
 			
-			private function onXMLParsingCompleted(aEvent:Event):void
+			private function getProductByNameFromUpdateList(productName:String) : Object
 			{
-				update.removeEventListener(Update.PARSING_COMPLETED, onXMLParsingCompleted);
-				update.removeEventListener(Update.PARSING_NOT_REQUIED, onXMLParsingCompleted);
-				
-				blockChooseBtn(false);
-				
-				if (aEvent.type == Update.PARSING_NOT_REQUIED)
+				for(var name:String in newProductArray)
 				{
-					labelComments.text = "XML file loading canceled.";
-					Alert.show( "You try to load old version of existing product.", "Error:");
+					if(newProductArray[name]["productName"] == productName)
+						return newProductArray[name];
+						
 				}
+				return null;
+			}
+			
+			private function onProductXMLLoadingError(aEvent:Event):void
+			{
+				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADING_STARTED,	 onProductXMLLoadingStarted);
+				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADED,				 onProductXMLLoaded);
+				xmlLoader.removeEventListener(ProductXMLLoader.USER_CANCELED,				 onProductXMLLoadingCanceled);
+				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADING_ERROR,		 onProductXMLLoadingError);
+				
+				// TODO: hideSpinner
+				
+				Alert.show( AlertMessages.MSG_ERROR_ON_LOAD_XML, AlertMessages.MSG_TYPE_ERROR);
 			}
 			
 			private function onProductXMLLoadingCanceled(aEvent:Event):void
 			{
-				productsXMLController.removeEventListener(ProductXMLLoader.USER_CANCELED,	 onProductXMLLoadingCanceled);
-				labelComments.text = "XML file loading canceled.";
-				
-				blockChooseBtn(false);
+				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADING_STARTED, onProductXMLLoadingStarted);
+				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADED,			 onProductXMLLoaded);
+				xmlLoader.removeEventListener(ProductXMLLoader.USER_CANCELED,			 onProductXMLLoadingCanceled);
 			}
-			
-			private function onAddProductOpened():void
-			{
-				if (!labelComments) {
-					labelComments = new Label();
-					labelComments.setStyle("color", "#0000FF");
-				
-					this.addProduct.addChild(labelComments);
-				}
-				labelComments.text = "";
-			}
-			
-			private function blockChooseBtn(b:Boolean):void
-			{
-				this.btnChoose.enabled = !b;
-				this.btnChoose.mouseEnabled = !b;
-			}
+						
 		]]>
 		
 	
@@ -246,27 +287,49 @@
 	<mx:TabNavigator width="100%" height="100%">
 		<mx:VBox label="Products" width="100%" height="100%" show="{getAllProducts()}" 
 				paddingBottom="10" paddingLeft="10" paddingRight="10">
+			
 			<mx:Label text="Select Necessary Products: " width="100%" textAlign="center" fontSize="20"/>
 			<mx:VBox id="applications" paddingLeft="5"   borderStyle="solid" width="100%" height="100%" />
 		</mx:VBox>
-		<!--<mx:VBox   label="Update" width="100%" height="100%" creationComplete="checkUpdate()">
-			<mx:Label id="statu" />
-			<mx:VBox id="newProducts" />
-			<mx:Button label="Load" click="{load()}"/>
+		<mx:VBox   label="Update" 
+				   height="100%"
+				   verticalGap="2"
+				   paddingLeft="5" paddingRight="5" paddingBottom="10"
+				   creationComplete="checkUpdate()">
+			<mx:HBox height="35"
+					   horizontalGap="3" 
+					   verticalAlign="middle"
+					   borderStyle="none">
+				
+				<mx:Button label="Add product"
+						   click="{selectProduct()}"
+						   borderColor="#DDDDDD"
+						   cornerRadius="1" 
+						   themeColor="#181818"/>
+				
+				<mx:Button label="Load selected products"
+						   click="{loadSelectedProducts()}"
+						   borderColor="#DDDDDD"  
+						   cornerRadius="1"
+						   themeColor="#181818"/>
+				
+			</mx:HBox>
 			
-		</mx:VBox>-->
-		<mx:VBox id="addProduct" width="100%" height="100%" label="Add product"
-				 creationComplete="onAddProductOpened()"
-				 show="onAddProductOpened()">
-			<mx:Label width="230" text="Choose and load product:"/>
-			<mx:Button id="btnChoose" label="Choose and Load" click="{chooseAndLoadProductXML()}"/>
+			<mx:VBox id="newProducts" 
+					 borderStyle="solid"
+					 width="100%" height="100%"
+					 paddingLeft="3" paddingRight="3"/>
+			
 		</mx:VBox>
 	</mx:TabNavigator>
 	<mx:ControlBar horizontalAlign="right" 
-			height="35" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10" color="#FFFFFF" >
-    		<mx:Button  label="OK" click="{okHandler()}"  color="#FFFFFF" 
-			fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
+					height="35" color="#FFFFFF"
+					paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10">
+		
+			<mx:Button  label="OK" click="{okHandler()}"  color="#FFFFFF" 
+					fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
+		
 			<mx:Button  label="Cancel" click="{cancelPressed()}" color="#FFFFFF" 
-			fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
+						fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 	</mx:ControlBar>
 </mx:TitleWindow>

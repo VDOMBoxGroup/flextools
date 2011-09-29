@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+				creationComplete="creationCompleteHandler(event)"
+				backgroundColor="black"
+				backgroundAlpha="0.3" xmlns:local="*" xmlns:spinnerFolder="spinnerFolder.*"
+				alpha="0">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.effects.Tween;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.events.TweenEvent;
+			import mx.managers.PopUpManager;
+
+			[Bindable]
+			private var spinnerTxt : String = "";
+			
+			[Bindable]
+			private var spinnerProductTxt : String = "";
+			
+			[Bindable]
+			private var spinnerResourceTxt : String = "";
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				PopUpManager.centerPopUp( this );
+				
+				startIntroAnimation();
+			}
+			
+			private function startIntroAnimation():void
+			{
+				new Tween(this, 0, 1, 500, -1, onAnimationUpdate, onIntroAnimationComplete);
+			}
+			
+			public function startOutroAnimation():void
+			{
+				new Tween(this, 1, 0, 500, -1, onAnimationUpdate, onOutroAnimationComplete);
+			}
+			
+			private function onAnimationUpdate(value:Number):void
+			{
+				this.alpha = value;
+			}
+			
+			private function onIntroAnimationComplete(value:Number):void
+			{
+				this.alpha = value;
+				
+				spinner.rotateImage();
+				
+				this.dispatchEvent(new Event(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_ADDED));
+			}
+			
+			private function onOutroAnimationComplete(value:Number):void
+			{
+				this.alpha = value;
+				
+				spinner.stopRotateImage();
+				
+				this.dispatchEvent(new Event(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_HIDE));
+			}
+			
+			public function setSpinnerText (txt:String) : void 
+			{
+				spinnerTxt = txt;
+			}
+			
+			public function setSpinnerProductText (txt:String) : void 
+			{
+				trace ("-- setSpinnerProductText");
+				spinnerProductTxt = txt;
+			}
+			
+			public function setSpinnerResourceText (txt:String) : void 
+			{
+				spinnerResourceTxt = txt;
+			}
+			
+		]]>
+	</mx:Script>
+		
+	<mx:VBox width="100%" height="100%"
+			 verticalAlign="middle" horizontalAlign="center"
+			 verticalGap="-1">
+		
+		<spinnerFolder:SpinnerImage id="spinner"
+									width="20" height="20" 
+									source="@Embed('assets/spinner.png')"
+									maintainAspectRatio="true"
+									scaleContent="true" 
+									smoothBitmapContent="true"
+									cachePolicy="on"
+									cacheAsBitmap="true"/>
+		
+		<mx:Spacer height="5"/>
+
+		<mx:Label text="{spinnerProductTxt}"
+				  color="white" textAlign="center"/>
+
+		<mx:Label text="{spinnerTxt}"
+				  color="white" textAlign="center"/>
+		
+		<!--<mx:Label text="{spinnerResourceTxt}"
+				  color="white" textAlign="center"/>-->
+					
+	</mx:VBox>
+	
+</mx:Canvas>
