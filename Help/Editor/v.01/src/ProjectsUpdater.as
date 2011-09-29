@@ -282,7 +282,11 @@ package
 			
 			productId= sqlProxy.getProductId(name, language);
 			
-			if (isNaN(productId)) return;
+			if (isNaN(productId))
+			{
+				curState = STATE_PROJECT_UPDATE_CANCELED;
+				return;
+			}
 			
 			curState = STATE_PAGES_GENERATING;
 		}

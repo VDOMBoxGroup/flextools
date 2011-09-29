@@ -73,7 +73,6 @@ package
 		
 		private function onFileCreated():void
 		{
-			trace ("[CSSStyleManager] onFileCreated");
 			switch(currentFileName)
 			{
 				case cssFileName:
