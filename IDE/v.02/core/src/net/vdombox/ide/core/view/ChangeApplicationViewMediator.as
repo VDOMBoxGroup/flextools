@@ -56,8 +56,8 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			interests.push( ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName);
 			interests.push( ApplicationFacade.SETTINGS_CHANGED);
-			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED);
-			
+			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED);	
+			//interests.push( ApplicationFacade.RESOURCE_SETTED );
 			return interests;
 		}
 		
@@ -129,6 +129,12 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}
+					
+				/*case ApplicationFacade.RESOURCE_SETTED:
+				{
+					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
+					return;
+				}*/
 			
 			}
 			
@@ -204,7 +210,6 @@ package net.vdombox.ide.core.view
 			
 			
 			changeApplicationView.applicationDescription.text = selectedApplicationVO.description;
-
 			
 			/*if ( selectedApplicationVO.scriptingLanguage == "python" )
 				editApplicationView.python.selected = true;

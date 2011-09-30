@@ -188,7 +188,7 @@ package net.vdombox.ide.core.model
 				resourceVO.setData( resource );
 				resourceVO.setStatus( ResourceVO.LOADED );
 				
-				sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + nameMed, resourceVO );
+				sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
 			}
 			else
 			{
@@ -555,7 +555,7 @@ package net.vdombox.ide.core.model
 					resourceVO.setStatus( ResourceVO.UPLOADED );
 
 					sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
-					soap_setResource();
+					//soap_setResource();
 
 					break;
 				}
@@ -596,6 +596,24 @@ package net.vdombox.ide.core.model
 
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{
+			var operation : Operation = event.currentTarget as Operation;
+			
+			
+			var operationName : String = operation.name;
+			var resourceVO : ResourceVO;
+			
+			switch ( operationName )
+			{
+				case "get_resource":
+				{
+					
+					sendNotification( ApplicationFacade.RESOURCE_SETTED_ERROR );
+					//soap_setResource();
+					return
+					break;
+				}
+			}
+
 			sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxy | soap_faultHandler | " + event.currentTarget.name );
 		}
 

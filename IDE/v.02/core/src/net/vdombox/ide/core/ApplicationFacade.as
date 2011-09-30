@@ -33,6 +33,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.SaveModuleSettingsCopy;
 	import net.vdombox.ide.core.controller.ServerLoginSuccessfulCommand;
 	import net.vdombox.ide.core.controller.SetIndexPageCommand;
+	import net.vdombox.ide.core.controller.SetResourceIconCommand;
 	import net.vdombox.ide.core.controller.SetSelectedApplicationCommand;
 	import net.vdombox.ide.core.controller.SetSelectedPageCommand;
 	import net.vdombox.ide.core.controller.SettingsChangedCommand;
@@ -251,8 +252,11 @@ package net.vdombox.ide.core
 		
 		public static const RESOURCE_LOADED : String = "resourceLoaded";
 		public static const RESOURCE_SETTED : String = "resourceSetted";
+		public static const RESOURCE_SETTED_ERROR : String = "resourceSettedError";
 		public static const RESOURCE_DELETED : String = "resourceDeleted";
 		public static const RESOURCE_MODIFIED : String = "resourceModified";
+		
+		public static const SET_RESOURCE : String = "setResource";
 		
 //		icon of resources
 		public static const GET_ICON	: String = "getIcon";		
@@ -530,6 +534,7 @@ package net.vdombox.ide.core
 			
 			registerCommand( EDIT_APPLICATION_INFORMATION, EditApplicationInformationCommand );
 			
+			registerCommand( SET_RESOURCE, SetResourceIconCommand );
 			
 			
 //			registerCommand( LOGOFF_REQUEST, LogoffRequestCommand );

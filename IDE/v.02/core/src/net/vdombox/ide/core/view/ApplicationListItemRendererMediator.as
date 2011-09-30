@@ -1,5 +1,10 @@
 package net.vdombox.ide.core.view
 {
+	import flash.display.Bitmap;
+	import flash.display.Loader;
+	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.events.FlexEvent;
 	
@@ -41,22 +46,30 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.RESOURCE_LOADED + "/" + mediatorName );
+			interests.push( ApplicationFacade.RESOURCE_LOADED );
 			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED );
+			interests.push( ApplicationFacade.RESOURCE_SETTED );
+			interests.push( ApplicationFacade.RESOURCE_SETTED_ERROR );
 			
 			return interests;
 		}
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
+			var resVO : ResourceVO;
+			var applicationVO : ApplicationVO = applicationListItemRenderer.data as ApplicationVO;
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.RESOURCE_LOADED + "/" + mediatorName:
+				case ApplicationFacade.RESOURCE_LOADED:
 				{
-					var resourceVO : ResourceVO = notification.getBody() as ResourceVO;
-					
-					BindingUtils.bindSetter( setIcon, resourceVO, "data" );
+					resVO = notification.getBody() as ResourceVO;
+					trace("1111111");
+					if ( resVO.ownerID != applicationVO.id )
+						return;
+					trace("321");
+					resourceVO = notification.getBody() as ResourceVO;
+					BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
 					
 					break;
 				}
@@ -75,12 +88,56 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}	
+					
+				case ApplicationFacade.RESOURCE_SETTED:
+				{
+					
+					resVO = notification.getBody() as ResourceVO;
+					
+					if ( applicationVO.id == resVO.ownerID )
+					{
+						resourceVO = new ResourceVO(applicationVO.id );
+						resourceVO.setID(resVO.id);
+						//BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
+						sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
+					}
+					
+					break;
+				}
+					
+				case ApplicationFacade.RESOURCE_SETTED_ERROR:
+				{
+					
+					sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
+					
+					break;
+				}
 			}	
 		}
 		
+		
 		private function setIcon( value : * ) : void
 		{
-			applicationListItemRenderer.imageHolder.source = value;
+			var loader : Loader = new Loader();
+			
+			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, setIconLoaded );
+			
+			try
+			{
+				loader.loadBytes( resourceVO.data );
+			}
+			catch ( error : Error )
+			{
+				// FIXME Сделать обработку исключения если не грузится изображение
+			}
+		}
+		
+		private function setIconLoaded( event : Event ) : void
+		{
+			if ( event.type == IOErrorEvent.IO_ERROR )
+				return;
+			applicationListItemRenderer.imageHolder.source = event.target.content;
 		}
 		
 		override public function onRegister() : void
