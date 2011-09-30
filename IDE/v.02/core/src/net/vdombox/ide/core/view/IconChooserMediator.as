@@ -92,7 +92,7 @@ package net.vdombox.ide.core.view
 			iconChooserWindow.addEventListener( IconChooserEvent.CLOSE_ICON_LIST, closeIconListHandler );
 			iconChooserWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
 			
-			WindowManager.getInstance().addWindow( iconChooserWindow, null, true );
+			WindowManager.getInstance().addWindow( iconChooserWindow, iconChooser, true );
 		}
 		
 		private function createCompleteIconListHandler( event : FlexEvent ) : void

@@ -8,6 +8,7 @@
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.core.events.MainWindowEvent;
 			static private const exclusions : Array = [ "backgroundRect", "contentGroup", "titleBar",
 														"titleBarBackgroundRect", "statusText", "borderBgFill" ];
 
@@ -111,7 +112,8 @@
 				
 				<s:Button id="applicationManagerButton"
 						  label="App Manager"
-						  height="100%"/>
+						  height="100%"
+						  click="dispatchEvent( new MainWindowEvent( MainWindowEvent.SHOW_APP_MANAGER ) )"/>
 				
 				<components:LoginButton id="loginButton"
 										height="100%"

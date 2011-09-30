@@ -57,7 +57,8 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName);
 			interests.push( ApplicationFacade.SETTINGS_CHANGED);
 			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED);	
-			//interests.push( ApplicationFacade.RESOURCE_SETTED );
+			interests.push( ApplicationFacade.SERVER_APPLICATION_CREATED);	
+			
 			return interests;
 		}
 		
@@ -130,11 +131,12 @@ package net.vdombox.ide.core.view
 					break;
 				}
 					
-				/*case ApplicationFacade.RESOURCE_SETTED:
+				case ApplicationFacade.SERVER_APPLICATION_CREATED:
 				{
 					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
-					return;
-				}*/
+					sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
+				}	
+					
 			
 			}
 			
@@ -211,11 +213,6 @@ package net.vdombox.ide.core.view
 			
 			changeApplicationView.applicationDescription.text = selectedApplicationVO.description;
 			
-			/*if ( selectedApplicationVO.scriptingLanguage == "python" )
-				editApplicationView.python.selected = true;
-			else
-				editApplicationView.vbscript.selected = true;*/
-			
 		}
 		
 		override public function onRegister() : void
@@ -224,6 +221,7 @@ package net.vdombox.ide.core.view
 			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 			sendNotification( ApplicationFacade.GET_SETTINGS, mediatorName );
+			sendNotification( ApplicationFacade.GET_TYPES);
 
 			addHandlers();
 		}
@@ -239,6 +237,7 @@ package net.vdombox.ide.core.view
 			applicationList.addEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler );
 			changeApplicationView.addEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDITOR, openApplicationInEditor );
 			changeApplicationView.addEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDIT_VIEW, openApplicationInEditView );
+			changeApplicationView.addEventListener( ApplicationManagerWindowEvent.OPEN_IN_CREATE_VIEW, openApplicationInCreateView );
 		}
 		
 		private function removeHandlers() : void
@@ -247,16 +246,23 @@ package net.vdombox.ide.core.view
 			applicationList.removeEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler );
 			changeApplicationView.removeEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDITOR, openApplicationInEditor );
 			changeApplicationView.removeEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDIT_VIEW, openApplicationInEditView );
+			changeApplicationView.removeEventListener( ApplicationManagerWindowEvent.OPEN_IN_CREATE_VIEW, openApplicationInCreateView );
 		}
 		
 		private function openApplicationInEditor( event : ApplicationManagerWindowEvent ) : void
 		{
 			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR);
+			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 		}
 		
 		private function openApplicationInEditView( event : ApplicationManagerWindowEvent ) : void
 		{
 			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW, selectedApplicationVO );
+		}
+		
+		private function openApplicationInCreateView( event : ApplicationManagerWindowEvent ) : void
+		{
+			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW );
 		}
 		
 		private function applicationList_changeHandler( event : IndexChangeEvent ) : void

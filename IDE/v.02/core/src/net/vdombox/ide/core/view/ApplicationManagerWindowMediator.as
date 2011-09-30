@@ -32,7 +32,9 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW );
+			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW );
 			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
+			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			
 			return interests;
 		}
@@ -51,10 +53,25 @@ package net.vdombox.ide.core.view
 					break;
 				}
 					
+				case ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW:
+				{
+					applicationManagerWindow.changeApplicationView.visible = false;
+					applicationManagerWindow.createEditApplicationView.visible = true;
+					
+					break;
+				}
+					
 				case ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW:
 				{
 					applicationManagerWindow.changeApplicationView.visible = true;
 					applicationManagerWindow.createEditApplicationView.visible = false;
+					
+					break;
+				}
+					
+				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
+				{
+					closeWindows();
 					
 					break;
 				}
@@ -93,8 +110,13 @@ package net.vdombox.ide.core.view
 		
 		private function closeHandler ( event : ApplicationManagerWindowEvent ) : void
 		{
-			WindowManager.getInstance().removeWindow( event.target );
 			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+			closeWindows();
+		}
+		
+		private function closeWindows () : void
+		{
+			WindowManager.getInstance().removeWindow( applicationManagerWindow );
 			facade.removeMediator( mediatorName );
 			facade.removeProxy( SettingsProxy.NAME );
 			facade.removeProxy( GalleryProxy.NAME );

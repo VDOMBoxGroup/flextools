@@ -6,12 +6,14 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.CloseInitialWindowCommand;
 	import net.vdombox.ide.core.controller.CloseMainWindowCommand;
 	import net.vdombox.ide.core.controller.CloseWindowCommand;
+	import net.vdombox.ide.core.controller.CreateApplicationCommand;
 	import net.vdombox.ide.core.controller.EditApplicationInformationCommand;
 	import net.vdombox.ide.core.controller.ErrorMacroCommand;
 	import net.vdombox.ide.core.controller.GetApplicationListCommand;
 	import net.vdombox.ide.core.controller.GetResourceItemRendererCommand;
 	import net.vdombox.ide.core.controller.GetSelectedApplicationCommand;
 	import net.vdombox.ide.core.controller.GetSettingsCommand;
+	import net.vdombox.ide.core.controller.GetTypesCommand;
 	import net.vdombox.ide.core.controller.InitialWindowCreatedCommand;
 	import net.vdombox.ide.core.controller.LoadModulesRequestCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadingSuccessfulCommand;
@@ -241,12 +243,13 @@ package net.vdombox.ide.core
 		public static const SERVER_LOGIN_SUCCESSFUL : String = "serverLoginSuccessful";
 		public static const SERVER_LOGIN_ERROR : String = "serverLoginError";
 		
+		public static const CREATE_APPLICATION : String = "createApplication";
 		public static const SERVER_APPLICATION_CREATED : String = "serverApplicationCreated";
 		public static const SERVER_APPLICATIONS_GETTED : String = "serverApplicationsGetted";
 		
 //		resources
 		public static const LOAD_RESOURCE : String = "loadResource";
-		public static const CHANGE_RESOURCE : String = "loadResource";
+		public static const CHANGE_RESOURCE : String = "changeResource";
 		
 		public static const RESOURCES_GETTED : String = "resourcesGetted";
 		
@@ -265,6 +268,7 @@ package net.vdombox.ide.core
 //		types
 		public static const TYPES_LOADING : String = "typesLoading";
 		public static const TYPES_LOADED : String = "typesLoaded";
+		public static const GET_TYPES : String = "getTypes";
 		
 //		application
 		public static const APPLICATION_INFORMATION_UPDATED : String = "applicationInfrmationUpdated";
@@ -354,6 +358,7 @@ package net.vdombox.ide.core
 		public static const OPEN_PAGE_IN_EXTERNAL_BROWSER  : String = "openPageInExternalBrowser";
 		public static const OPEN_APPLICATION_IN_EDITOR  : String = "openApplicationInEditor";
 		public static const OPEN_APPLICATION_IN_EDIT_VIEW  : String = "openApplicationInEditView";
+		public static const OPEN_APPLICATION_IN_CREATE_VIEW  : String = "openApplicationInCreateView";
 		public static const OPEN_APPLICATION_IN_CHANGE_VIEW  : String = "openApplicationInChangeView";
 
 //		log
@@ -535,6 +540,10 @@ package net.vdombox.ide.core
 			registerCommand( EDIT_APPLICATION_INFORMATION, EditApplicationInformationCommand );
 			
 			registerCommand( SET_RESOURCE, SetResourceIconCommand );
+			
+			registerCommand( CREATE_APPLICATION, CreateApplicationCommand );
+			
+			registerCommand( GET_TYPES, GetTypesCommand );
 			
 			
 //			registerCommand( LOGOFF_REQUEST, LogoffRequestCommand );

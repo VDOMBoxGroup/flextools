@@ -7,7 +7,9 @@ package net.vdombox.ide.core.events
 		public static var CLOSE_WINDOW : String = "closeWindow";
 		public static var OPEN_IN_EDITOR : String = "openInEditor";
 		public static var OPEN_IN_EDIT_VIEW : String = "openInEditView";
+		public static var OPEN_IN_CREATE_VIEW : String = "openInCreateView";
 		public static var SAVE_INFORMATION : String = "saveInformation";
+		public static var CANCEL : String = "CancelEdit";
 		
 		public function ApplicationManagerWindowEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

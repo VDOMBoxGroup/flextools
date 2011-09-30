@@ -23,6 +23,8 @@ package net.vdombox.ide.core.view
 		
 		private var newIconResourceVO : ResourceVO;
 		
+		private var newApplicationInformation : Object;
+		
 		public function CreateEditApplicationViewMediator(viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
@@ -38,9 +40,11 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW );	
+			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW );
 			interests.push( ApplicationFacade.RESOURCE_LOADED );
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
 			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+			interests.push( ApplicationFacade.SERVER_APPLICATION_CREATED);	
 			
 			return interests;
 		}
@@ -55,6 +59,13 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW:
 				{
 					applicationVO = body as ApplicationVO;
+					
+					break;
+				}
+					
+				case ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW:
+				{
+					applicationVO = null;
 					
 					break;
 				}
@@ -88,8 +99,6 @@ package net.vdombox.ide.core.view
 						sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: applicationVO,
 							applicationInformationVO: applicationInformationVO } );
 					}
-					/*if ( applicationVO )
-						editApplicationView.applicationsList.dataProvider.addItem( applicationVO );*/
 					
 					break;
 				}
@@ -99,6 +108,23 @@ package net.vdombox.ide.core.view
 					facade.removeMediator( mediatorName );
 					
 					break;
+				}	
+					
+				case ApplicationFacade.SERVER_APPLICATION_CREATED:
+				{
+					var newApplicationIcon : ByteArray = newApplicationInformation.icon;
+					applicationVO = body as ApplicationVO;
+					
+					if ( !newApplicationIcon || !applicationVO)
+						return;
+					
+					newIconResourceVO = new ResourceVO( applicationVO.id );
+					
+					newIconResourceVO.name = "Application Icon";
+					newIconResourceVO.setData( newApplicationIcon );
+					newIconResourceVO.setType( "png" );
+					
+					sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
 				}	
 					
 			}
@@ -117,6 +143,13 @@ package net.vdombox.ide.core.view
 				createEditApplicationView.txtapplicationName.text = applicationVO.name;
 				createEditApplicationView.txtapplicationDescription.text = applicationVO.description;
 				
+				if ( applicationVO.scriptingLanguage == "python" )
+					createEditApplicationView.python.selected = true;
+				else
+					createEditApplicationView.vbscript.selected = true;
+				
+				createEditApplicationView.iconChooser.selectedIcon.source = null;
+				
 				if ( applicationVO.iconID )
 				{
 					var resourceVO : ResourceVO = new ResourceVO( applicationVO.id );
@@ -124,6 +157,15 @@ package net.vdombox.ide.core.view
 				
 					sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
 				}
+			}
+			else
+			{
+				createEditApplicationView.txtapplicationName.text = "";
+				createEditApplicationView.txtapplicationDescription.text = "";
+				createEditApplicationView.iconChooser.selectedIcon.source = null;
+				
+				createEditApplicationView.python.selected = true;
+				createEditApplicationView.vbscript.selected = false;
 			}
 			
 		}
@@ -141,17 +183,22 @@ package net.vdombox.ide.core.view
 		private function addHandlers() : void
 		{
 			createEditApplicationView.addEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
+			createEditApplicationView.addEventListener( ApplicationManagerWindowEvent.CANCEL, cancelInformationHandler );
 			facade.registerMediator( new IconChooserMediator( createEditApplicationView.iconChooser ) );
 		}
 		
 		private function removeHandlers() : void
 		{
 			createEditApplicationView.removeEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
+			createEditApplicationView.removeEventListener( ApplicationManagerWindowEvent.CANCEL, cancelInformationHandler );
 			facade.removeMediator( IconChooserMediator.NAME );
 		}
 		
 		private function saveInformationHandler( event : ApplicationManagerWindowEvent ) : void
 		{
+			var iconChooserMediator : IconChooserMediator = facade.retrieveMediator( IconChooserMediator.NAME ) as IconChooserMediator;
+			var applicationInformationVO : ApplicationInformationVO = new ApplicationInformationVO();
+			
 			if ( applicationVO )
 			{
 				// Name
@@ -160,8 +207,6 @@ package net.vdombox.ide.core.view
 				
 				if ( newApplicationName == "" )
 					return;
-				
-				var applicationInformationVO : ApplicationInformationVO = new ApplicationInformationVO();
 				
 				if ( newApplicationName != applicationVO.name )
 					applicationInformationVO.name = newApplicationName;
@@ -173,12 +218,19 @@ package net.vdombox.ide.core.view
 				if ( newApplicationDescription != applicationVO.description )
 					applicationInformationVO.description = newApplicationDescription;
 				
+
+				
+				//Language
+				
+				var newApplicationLanguage : String = createEditApplicationView.languageRBGroup.selectedValue.toString();
+				
+				if ( newApplicationLanguage && newApplicationLanguage != applicationVO.scriptingLanguage )
+					applicationInformationVO.scriptingLanguage = newApplicationLanguage;
+				
 				sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: applicationVO,
 					applicationInformationVO: applicationInformationVO } );
 				
 				//Icon
-				
-				var iconChooserMediator : IconChooserMediator = facade.retrieveMediator( IconChooserMediator.NAME ) as IconChooserMediator;
 				
 				var newApplicationIcon : ByteArray = iconChooserMediator.selectedIcon;
 				
@@ -193,6 +245,30 @@ package net.vdombox.ide.core.view
 				
 				sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
 			}
+			else
+			{
+				newApplicationInformation = new Object();
+				newApplicationInformation.name = createEditApplicationView.txtapplicationName.text;
+				newApplicationInformation.description = createEditApplicationView.txtapplicationDescription.text;
+				
+				
+				if ( iconChooserMediator.selectedIcon )
+					newApplicationInformation.icon = iconChooserMediator.selectedIcon;
+				else
+					newApplicationInformation.icon = iconChooserMediator.defaultIcon;
+				
+				applicationInformationVO.name = newApplicationInformation.name;
+				applicationInformationVO.description = newApplicationInformation.description;
+				applicationInformationVO.scriptingLanguage = createEditApplicationView.languageRBGroup.selectedValue.toString();
+				
+				if ( newApplicationInformation.hasOwnProperty( "name" ) )
+					sendNotification( ApplicationFacade.CREATE_APPLICATION, applicationInformationVO );
+			}
+			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
+		}
+		
+		private function cancelInformationHandler( event : ApplicationManagerWindowEvent ) : void
+		{
 			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
 		}
 		

@@ -60,11 +60,7 @@ package net.vdombox.ide.core.view.components
 		{
 			super.partAdded( partName, instance );
 
-			if ( instance === applicationManagerButton )
-			{
-				applicationManagerButton.addEventListener( MouseEvent.CLICK, applicationManagerButton_clickHandler );
-			}
-			else if ( instance === loginButton )
+			if ( instance === loginButton )
 			{
 				loginButton.addEventListener( MouseEvent.CLICK, loginButton_clickHandler );
 			}
@@ -74,10 +70,6 @@ package net.vdombox.ide.core.view.components
 		{
 			dispatchEvent( new MainWindowEvent( MainWindowEvent.LOGOUT ) );
 		}
-		
-		private function applicationManagerButton_clickHandler( event : MouseEvent ) : void
-		{
-			dispatchEvent( new MainWindowEvent( MainWindowEvent.SHOW_APP_MANAGER ) );
-		}
+
 	}
 }

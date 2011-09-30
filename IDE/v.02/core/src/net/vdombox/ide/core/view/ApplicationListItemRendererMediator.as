@@ -30,6 +30,8 @@ package net.vdombox.ide.core.view
 		
 		private var resourceVO : ResourceVO;
 		
+		private var applicationVO : ApplicationVO;
+		
 		private static function getNextID() : String
 		{
 			var id : String = NAME + "/" + serial;
@@ -51,23 +53,24 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED );
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
 			interests.push( ApplicationFacade.RESOURCE_SETTED_ERROR );
+			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
 			
 			return interests;
 		}
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
+			if ( !applicationVO )
+				return;
 			var resVO : ResourceVO;
-			var applicationVO : ApplicationVO = applicationListItemRenderer.data as ApplicationVO;
+			
 			switch ( notification.getName() )
 			{
 				case ApplicationFacade.RESOURCE_LOADED:
 				{
 					resVO = notification.getBody() as ResourceVO;
-					trace("1111111");
 					if ( resVO.ownerID != applicationVO.id )
 						return;
-					trace("321");
 					resourceVO = notification.getBody() as ResourceVO;
 					BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
 					
@@ -88,6 +91,13 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}	
+				
+				case ApplicationFacade.GET_APPLICATIONS_LIST:
+				{
+					facade.removeMediator( mediatorName );
+					
+					break;
+				}
 					
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
@@ -129,6 +139,7 @@ package net.vdombox.ide.core.view
 			}
 			catch ( error : Error )
 			{
+				var iny : int = 6;
 				// FIXME Сделать обработку исключения если не грузится изображение
 			}
 		}
@@ -142,26 +153,36 @@ package net.vdombox.ide.core.view
 		
 		override public function onRegister() : void
 		{
-			applicationListItemRenderer.addEventListener( FlexEvent.DATA_CHANGE, dataChangeHandler );
+			applicationListItemRenderer.addEventListener( ApplicationListItemRenderer.RENDERER_CHANGE, dataChangeHandler );
 			
 			refreshProperties();
 		}
 		
-		
-		private function dataChangeHandler( event : FlexEvent ) : void
+		override public function onRemove() : void
 		{
+			applicationListItemRenderer.removeEventListener( ApplicationListItemRenderer.RENDERER_CHANGE, dataChangeHandler );
+		}
+		
+		
+		private function dataChangeHandler( event : Event ) : void
+		{
+			applicationVO = applicationListItemRenderer.data as ApplicationVO;
 			refreshProperties();
 		}
 		
 		private function refreshProperties() : void
 		{
-			var applicationVO : ApplicationVO = applicationListItemRenderer.data as ApplicationVO;
-			
+			applicationVO = applicationListItemRenderer.data as ApplicationVO;
 			if ( applicationVO )
 			{
 				applicationListItemRenderer.nameLabel.text = applicationVO.name;
 				
 				sendNotification( ApplicationFacade.CHANGE_RESOURCE, applicationVO );
+				
+				if ( !applicationVO.iconID )
+				{
+					applicationListItemRenderer.imageHolder.source = null;
+				}
 				
 				if ( applicationVO.iconID && ( !resourceVO || resourceVO.id != applicationVO.iconID ) )
 				{

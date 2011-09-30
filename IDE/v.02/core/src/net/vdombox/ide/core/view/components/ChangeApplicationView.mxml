@@ -8,14 +8,17 @@
 			import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
 			protected function btnOpenInEditor_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
 				dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.OPEN_IN_EDITOR ) );
 			}
 			
 			protected function applicationEditor_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
 				dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.OPEN_IN_EDIT_VIEW ) );
+			}
+			
+			protected function btnOpenInCreateView_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.OPEN_IN_CREATE_VIEW ) );
 			}
 			
 		]]>
@@ -25,14 +28,19 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:VGroup width="50%" height="100%" gap="2">
+	<s:VGroup width="50%" height="100%" paddingBottom="30" gap="2">
 		<s:List id="applicationList"
 				width="100%" height="100%"
 				itemRenderer="net.vdombox.ide.core.view.components.ApplicationListItemRenderer"/>
 		
-		<s:VGroup width="100%" height="80">
-			<s:Button label="12345" />
-		</s:VGroup>
+		<mx:Spacer height="25" />
+		
+		<s:HGroup width="100%" height="25" horizontalAlign="center">
+			<s:Button id="btnOpenInCreateView"
+					  height="100%"
+					  label="{resourceManager.getString( 'Core_General', 'change_application_add_new_application' )}" 
+					  click="btnOpenInCreateView_clickHandler(event)"/>
+		</s:HGroup>
 	</s:VGroup>
 	
 	<s:VGroup width="50%" height="100%" 
@@ -49,9 +57,11 @@
 		
 		<s:HGroup height="25" width="100%" horizontalAlign="center" gap="20">
 			<s:Button />
+			
 			<s:Button id="btnOpenInEditor" 
 					  width="100" height="100%"
-					  label="{resourceManager.getString( 'Core_General', 'change_application_open_in_editor' )}" click="btnOpenInEditor_clickHandler(event)"/>
+					  label="{resourceManager.getString( 'Core_General', 'change_application_open_in_editor' )}" 
+					  click="btnOpenInEditor_clickHandler(event)"/>
 		</s:HGroup>
 		
 	</s:VGroup>

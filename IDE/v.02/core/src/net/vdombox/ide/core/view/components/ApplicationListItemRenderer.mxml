@@ -14,10 +14,20 @@
 			import mx.events.FlexEvent;
 			
 			public static const RENDERER_CREATED : String = "rendererCreated";
+			public static const RENDERER_CHANGE : String = "rendererCreated";
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				dispatchEvent( new Event( RENDERER_CREATED ) );
+			}
+			
+			override public function set data( value : Object ) : void
+			{
+				if ( super.data != value )
+				{
+					super.data = value;
+					dispatchEvent( new Event( RENDERER_CHANGE ) );
+				}
 			}
 			
 		]]>

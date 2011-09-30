@@ -9,11 +9,12 @@
 			import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
 		]]>
 	</fx:Script>
+	
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:RadioButtonGroup id="languageRBGroup" />
 	</fx:Declarations>
 	
-	<s:VGroup width="50%" height="100%" gap="2" 
+	<s:VGroup width="65%" height="100%" gap="2" 
 			  paddingTop="10" paddingLeft="20">
 		<s:Label id="lblapplicationName" color="#FFFFFF" 
 				 text="{resourceManager.getString( 'Core_General', 'create_edit_application_name' )}"/>
@@ -21,10 +22,29 @@
 		<mx:Spacer height="10" />
 		<s:Label id="lblapplicationDescription" color="#FFFFFF" 
 				 text="{resourceManager.getString( 'Core_General', 'create_edit_application_description' )}"/>
-		<s:TextInput id="txtapplicationDescription" color="#FFFFFF"/>
+		<s:TextArea id="txtapplicationDescription" 
+					height="80" width="100%" color="#FFFFFF"/>
+		
+		<mx:Spacer height="15" />
+		
+		<s:Label buttonMode="true" text="Edit Script Language:"
+				 fontFamily="Verdana" fontSize="14"
+				 textDecoration="underline"/>
+		
+		<s:VGroup width="100%">
+			
+			<s:RadioButton id="vbscript"
+						   label="vbscript" value="vbscript"
+						   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
+			
+			<s:RadioButton id="python"
+						   label="python" value="python"
+						   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
+			
+		</s:VGroup>
 	</s:VGroup>
 	
-	<s:VGroup width="50%" height="100%" gap="2" 
+	<s:VGroup width="35%" height="100%" gap="2" 
 			  paddingTop="10" paddingLeft="20" paddingBottom="30">
 		<components1:IconChooser id="iconChooser" width="100%" />
 		
@@ -37,7 +57,8 @@
 					  click="{dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.SAVE_INFORMATION ) ) }"/>
 			
 			<s:Button id="btnCancel" 
-					  label="{resourceManager.getString( 'Core_General', 'create_edit_application_cancel' )}"/>
+					  label="{resourceManager.getString( 'Core_General', 'create_edit_application_cancel' )}"
+					  click="{dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.CANCEL ) ) }"/>
 		</s:HGroup>
 	</s:VGroup>
 </s:HGroup>

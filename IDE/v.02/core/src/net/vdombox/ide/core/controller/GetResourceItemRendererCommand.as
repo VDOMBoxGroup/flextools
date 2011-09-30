@@ -24,7 +24,6 @@ package net.vdombox.ide.core.controller
 			if( body.hasOwnProperty( "recipientKey" ) )
 				nameMed = body.recipientKey as String;
 			
-			
 			if( resourceVO )
 				resourcesProxy.loadResource2( resourceVO, nameMed ); 
 
