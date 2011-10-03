@@ -514,8 +514,7 @@
 				if (refreshPageAfterInit) {
 					setHTML(pageContentToRefresh);
 					
-					pageContentToRefresh = null;
-					refreshPageAfterInit = false;
+					preventRefresh();
 				}
 			}
 			
