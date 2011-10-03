@@ -48,7 +48,8 @@
 			private function vilidate():void
 			{
 				pageName.text = "";
-				pageLabel.text = "";
+				pageLabel.htmlText = "";
+				//pageLabel.text = "";
 				chboxUseToc.selected = false;
 
 				if(productName != "" && curPage.@name != "" && pageLn != "")
@@ -58,7 +59,8 @@
 				{	
 					pageVersion.text = resoult[0]["version"];
 					pageDescription.text = resoult[0]["description"];
-					pageLabel.text = resoult[0]["title"];
+					pageLabel.htmlText = resoult[0]["title"];
+					//pageLabel.text = resoult[0]["title"];
 					pageName.text = resoult[0]["name"];
 					chboxUseToc.selected = Boolean(resoult[0]["useToc"]);
 				}

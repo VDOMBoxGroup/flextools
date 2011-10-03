@@ -97,9 +97,7 @@
 			}
 			
 			private function treeChangeHandler(lstEvt:ListEvent) : void
-			{
-//			showSelectedPage(tree.selectedItem.@name);
-				
+			{	
 				var tocString : String = tree.dataProvider.toXMLString();
 
 				try
@@ -123,6 +121,8 @@
 					tree.validateNow();
 				}
 
+				html_wysiwyg.preventRefresh();
+				
 				getCurrentPage();
 				htmlShowHandler();
 			}
@@ -260,24 +260,9 @@
 			private function showAllProducts() : void
 			{
 				cmboxProduct.dataProvider = sqlProxy.getAllProducts();
-//			listOfProducts.selectedIndex = 0;
+				
 				changeProduct();
-
 			}
-
-			private function showSelectedPage(pageName:String) : void
-			{
-
-				var fileName : String = pageName;
-				var newFile : File    = File.applicationStorageDirectory.resolvePath(fileName);
-				var fullPath : String = newFile.url;
-//			var f : File = File.applicationStorageDirectory; 
-				html.location = fullPath;
-				html_wysiwyg.setHTML( "fullPath");
-			}
-
-
-//		private var arrayOfPages:Array = new Array();
 
 			private function selectNecessaryItem(fileName:String) : void
 			{
@@ -289,7 +274,6 @@
 					tree.selectedItem = currentElement;
 					tree.validateNow();
 				}
-
 			}
 
 			private function openTree(item:Object) : void
@@ -457,13 +441,11 @@
 			{
 				if ( !cmboxProduct.selectedItem )
 				{
-//				editProduct.label = "Add Product";
 					tree.dataProvider = null;
 					html_wysiwyg.setHTML("");
 					return;
 				}
 
-//			editProduct.label = "Edit Products List";
 				getTocFromDataBase();
 			}
 
@@ -708,7 +690,6 @@
 
 			private function htmlShowHandler() : void
 			{
-				trace("::htmlShowHandler::");
 				var fileName : String   = "temp.html";
 				var content : ByteArray = new ByteArray();
 

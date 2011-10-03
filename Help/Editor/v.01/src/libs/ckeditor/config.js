@@ -11,6 +11,8 @@ CKEDITOR.editorConfig = function( config )
 	//config.width = "810";
 	//config.pasteFromWordRemoveFontStyles = false;
 	
+	config.stylesSet = 'vdomclasses';
+	
 	config.toolbar =
 	[
 		{ name: 'clipboard',	items : [ 'Undo','Redo' ] },
@@ -21,10 +23,14 @@ CKEDITOR.editorConfig = function( config )
 		{ name: 'links',		items : [ ] },
 		'/',
 		{ name: 'insert',		items : [ 'Image','Table','HorizontalRule' ] },
-		{ name: 'styles',		items : [ 'Format','Font','FontSize' ] },
+		{ name: 'styles',		items : [ 'Format','Styles','Font','FontSize' ] },
 		{ name: 'colors',		items : [ 'TextColor','BGColor' ] },
 		{ name: 'tools',		items : [ /*'Maximize'*/ ] },
 		{ name: 'document',		items : [ 'Source' ] }
 	];
 	
 };
+
+CKEDITOR.stylesSet.add('vdomclasses', [
+  { name: 'Button', element: 'span', attributes: { 'class': 'button' } },
+  { name: 'Image title', element: 'span', attributes: { 'class': 'img_title' } } ]);
