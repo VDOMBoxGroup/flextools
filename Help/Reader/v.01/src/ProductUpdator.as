@@ -68,7 +68,6 @@ package
 		
 		private function onAppEnterFrame(aEvent : Event):void
 		{
-			trace ("== onAppEnterFrame: " + curState);
 			switch(curState)
 			{
 				case STATE_PRODUCT_XML_LOADING:
@@ -165,14 +164,12 @@ package
 					break;
 				}
 				default:
-					trace ("== default");
 					break;
 			}
 		}
 		
 		public function load(url:String, title:String = ""):void
 		{
-			trace ("== load");
 			productTitle = title;
 			xmlLoader.addEventListener(ProductXMLLoader.XML_FILE_LOADED,			 xmlLoaderHandler);
 			xmlLoader.addEventListener(ProductXMLLoader.XML_FILE_LOADING_ERROR,		 xmlLoaderHandler);
@@ -186,7 +183,6 @@ package
 		
 		private function xmlLoaderHandler(evt:Event):void
 		{
-			trace ("== xmlLoaderHandler");
 			xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADED,			 xmlLoaderHandler);
 			xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADING_ERROR,	 xmlLoaderHandler);
 			
@@ -205,7 +201,6 @@ package
 		
 		public function parseData(product:XML):void
 		{
-			trace ("== parseData");
 			productXML = null;
 			
 			if (!Application.application.hasEventListener(Event.ENTER_FRAME))
@@ -226,7 +221,6 @@ package
 		
 		private function createProduct () : void 
 		{
-			trace ("== createProduct");
 			productXML = resetProductXML();
 			
 			var name:String = productXML.name.toString();
@@ -377,7 +371,6 @@ package
 		
 		private function savePages():void
 		{
-			trace ("== savePages");
 			productName =  productXML.name.toString(); 
 			language =  productXML.language.toString(); 
 			
@@ -395,7 +388,6 @@ package
 		
 		private function generateNextPage():void
 		{
-			trace ("== generateNextPage");
 			if (pagesCounter >= productPages.length())
 			{
 				curState = STATE_LAST_PAGE_GENERATED;
@@ -457,7 +449,6 @@ package
 		
 		private function onPageGenerated():void
 		{
-			trace ("== onPageGenerated");
 			pagesCounter ++;
 			
 			curState = STATE_PAGE_START_GENERATING;
@@ -465,8 +456,6 @@ package
 		
 		private function onLastPageGenerated():void
 		{
-			trace ("== onLastPageGenerated");
-			
 			productPages = null;
 			productXML = null;
 			pagesCounter = 0;

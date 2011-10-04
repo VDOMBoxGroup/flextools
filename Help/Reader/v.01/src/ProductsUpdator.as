@@ -63,7 +63,6 @@ package
 		
 		private function updateNextProduct():void
 		{
-			trace ("++ updateNextProduct");
 			if (currentProductIndex >= selectedProducts.length)
 			{
 				onLastProductUpdated();
@@ -84,7 +83,6 @@ package
 		
 		private function productUpdateHandler(evt:ProductsUpdatorEvent):void
 		{
-			trace ("++ productUpdateHandler");
 			productUpdator.removeEventListener(ProductsUpdatorEvent.UPDATE_COMPLETE, productUpdateHandler);
 			productUpdator.removeEventListener(ProductsUpdatorEvent.UPDATE_ERROR, productUpdateHandler);
 			productUpdator.removeEventListener(ProductsUpdatorEvent.UPDATE_NOT_REQUIED, productUpdateHandler);
@@ -116,7 +114,6 @@ package
 		
 		private function onProductUpdated():void
 		{
-			trace ("++ onProductUpdated");
 			currentProductIndex ++;
 			
 			updateNextProduct();
@@ -124,7 +121,6 @@ package
 		
 		private function onLastProductUpdated():void
 		{
-			trace ("++ onLastProductUpdated");
 			spinnerManager.setSpinnerText(SpinnerPopupMessages.MSG_PRODUCTS_UPDATION_COMPLETE);
 			
 			spinnerManager.addEventListener(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_HIDE, spinnerHideHandler);
