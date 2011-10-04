@@ -281,6 +281,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.GET_PAGE_SRUCTURE:
 				{
+					
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -566,6 +567,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function handleProxyMessage( message : ProxyMessage ) : void
 		{
 			var proxy : String = message.proxy;
+			var now:Date = new Date();
+			trace("                                        <<  "+ now.toLocaleTimeString()+" : "+message.proxy +" : "+message.operation +" : "+  message.target);
 
 			switch ( proxy )
 			{

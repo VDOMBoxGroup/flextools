@@ -98,7 +98,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		{
 			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			if ( !_resourceVO.data )
-				BindingUtils.bindSetter( addExternalEditor, _resourceVO, "data" );
+				BindingUtils.bindSetter( addExternalEditor, _resourceVO, "data", false, true  );
 			else
 				addExternalEditor();
 			

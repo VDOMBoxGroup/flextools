@@ -9,7 +9,6 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
-	
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -24,9 +23,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
-	
 	import flashx.textLayout.factory.TruncationOptions;
-	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
@@ -44,7 +41,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.ResizeEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
-	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -55,7 +51,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
-	
 	import spark.components.Button;
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
@@ -72,8 +67,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
 	import spark.skins.spark.ScrollerSkin;
-
-
 	/**
 	 *
 	 * @author andreev ap
@@ -89,12 +82,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			itemRendererFunction = chooseItemRenderer;
 
 			addHandlers();
-		}
-
-		override public function stylesInitialized() : void
-		{
-			super.stylesInitialized();
-			setStyle("skinClass", Class(ObjectRendererSkin));
 		}
 
 		[SkinPart( required = "true" )]
@@ -139,17 +126,24 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private var _isLocked : Boolean;
 
-		private var _needRefresh : Boolean              = false;
-
 		private var _renderVO : RenderVO;
 
 		private var _resourceID : String;
 
 		private var _resourceVO : ResourceVO;
 
+		// TODO: delete 
+		private var backgroundRefreshNeedFlag : Boolean = false;
+
 		private var beforeX : uint;
 
 		private var beforeY : uint;
+
+		/**
+		 * Display image bitmap once bytes have loaded
+		 **/
+
+		private var content : Bitmap;
 
 		private var loader : Loader;
 
@@ -157,79 +151,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private var mDeltaY : uint;
 
+		private var needRefresh : Boolean               = false;
+
 		private const styleList : Array                 = [ [ "opacity", "backgroundAlpha" ], [ "backgroundcolor", "backgroundColor" ],
 															[ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat", "backgroundRepeat" ],
 															[ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ], [ "color", "color" ],
 															[ "fontfamily", "fontFamily" ], [ "fontsize", "fontSize" ], [ "fontweight", "fontWeight" ],
 															[ "fontstyle", "fontStyle" ], [ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
 															[ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
-
-		/**
-		 *
-		 * @param renderVO
-		 * @return
-		 */
-		private function chooseItemRenderer( renderVO : RenderVO ) : IFactory
-		{
-			var itemFactory : ClassFactory;
-			var layout : LayoutBase;
-
-			switch ( renderVO.name )
-			{
-				case "container":
-				{
-					itemFactory = new ClassFactory( RendererBase );
-					layout = new BasicLayout();
-					layout.clipAndEnableScrolling = true;
-					itemFactory.properties = { layout: layout };
-
-					break;
-				}
-
-				case "table":
-				{
-					itemFactory = new ClassFactory( RendererBase );
-					layout = new VerticalLayout();
-					layout.clipAndEnableScrolling = true;
-					//VerticalLayout( layout ).gap = 0;
-					itemFactory.properties = { layout: layout };
-
-					break;
-				}
-
-				case "row":
-				{
-					itemFactory = new ClassFactory( RendererBase );
-					layout = new HorizontalLayout();
-					layout.clipAndEnableScrolling = true;
-					//HorizontalLayout( layout ).gap = 0;
-					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
-
-					break;
-				}
-
-				case "cell":
-				{
-					itemFactory = new ClassFactory( RendererBase );
-					layout = new BasicLayout();
-					layout.clipAndEnableScrolling = true;
-					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
-
-					break;
-				}
-				default:
-				{
-					itemFactory = new ClassFactory( RendererBase );
-					layout = new BasicLayout();
-					layout.clipAndEnableScrolling = false;
-					itemFactory.properties = { layout: layout };
-
-					break;
-				}
-			}
-
-			return itemFactory;
-		}
 
 		/**
 		 *
@@ -275,6 +204,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function get editableComponent() : Object
 		{
 			return _editableComponent;
+		}
+
+		public function get getState() : String
+		{
+			return skin.currentState;
 		}
 
 		/**
@@ -385,15 +319,24 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		 *
 		 * @param value
 		 */
+
 		public function set renderVO( value : RenderVO ) : void
 		{
+			if ( _renderVO == value )
+				return;
+
 			dispatchEvent( new RendererEvent( RendererEvent.RENDER_CHANGING ) );
 
 			_renderVO = value;
 
+			if ( _renderVO )
+				dataProvider = _renderVO.sortedChildren;
+
 			dispatchEvent( new RendererEvent( RendererEvent.RENDER_CHANGED ) );
 
-			refresh();
+			needRefresh = true;
+			invalidateProperties()
+//			refresh();
 		}
 
 		/**
@@ -433,7 +376,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( !value.data )
 			{
-				BindingUtils.bindSetter( dataLoaded, value, "data" );
+				BindingUtils.bindSetter( dataLoaded, value, "data", false, true  );
 				return;
 			}
 
@@ -456,6 +399,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set selected( value : Boolean ) : void
 		{
 
+		}
+
+		public function set setState( state : String ) : void
+		{
+			skin.currentState = state;
 		}
 
 
@@ -484,6 +432,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 		}
 
+		override public function stylesInitialized() : void
+		{
+			super.stylesInitialized();
+			setStyle("skinClass", Class(ObjectRendererSkin));
+		}
+
 		/**
 		 *
 		 * @return
@@ -493,14 +447,31 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return _renderVO ? _renderVO.vdomObjectVO.typeVO : null;
 		}
 
+		override public function validateDisplayList() : void
+		{
+			// TODO Auto Generated method stub
+//			if( _renderVO && _renderVO.children && _renderVO.children.length > 0)
+
+
+			super.validateDisplayList();
+
+			if ( backgroundRefreshNeedFlag )
+			{
+				backgroundRefreshNeedFlag = false;
+				//refresh();
+				backgroundContentLoaded(null);
+			}
+
+		}
+
 		override public function validateProperties() : void
 		{
 			super.validateProperties();
 
-			if ( !_needRefresh )
+			if ( !needRefresh )
 				return;
 
-			_needRefresh = true;
+			needRefresh = false;
 
 			refresh();
 		}
@@ -535,32 +506,23 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			addEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
 		}
 
-		private function keyNavigationHandler( event : KeyboardEvent ) : void
+		protected function removeHandlers() : void
 		{
-			var step : Number = 1;
+			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+			removeEventListener( Event.REMOVED, removeHandler );
 
-			if ( event.shiftKey )
-				step = 10;
+			removeEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
+			removeEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
 
-			if ( event.keyCode == Keyboard.LEFT )
-				x = x - step > 0 ? x - step : 0;
-			else if ( event.keyCode == Keyboard.RIGHT )
-				x = x + step;
-			else if ( event.keyCode == Keyboard.UP )
-				y = y - step > 0 ? y - step : 0;
-			else if ( event.keyCode == Keyboard.DOWN )
-				y = y + step;
-			else
-				return;
+			removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 
-			mouseUpHandler( null );
+			removeEventListener( MouseEvent.CLICK, mouseClickHandler );
 
-			//stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
-			event.stopImmediatePropagation()
+			removeEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
+			removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
+			removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
 
-			/*dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
-			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );*/
-			dispatchEvent( new RendererEvent( RendererEvent.CLEAR_RENDERER ) );
+			removeEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
 		}
 
 		private function applyStyles( item : UIComponent, itemXMLDescription : XML ) : void
@@ -595,9 +557,87 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 
+		private function backgroundContentLoaded( event : Event ) : void
+		{
+			loader = null;
+
+			if ( event != null )
+			{
+				if ( event.type == IOErrorEvent.IO_ERROR )
+					return;
+				else if ( event.type == "emptyResource" )
+					content = null;
+				else if ( event.type != "resizeMainWindow" )
+					content = Bitmap( event.target.content );
+			}
+
+			if ( _renderVO != null && content != null )
+			{
+				var backGrSprite : Sprite = new Sprite();
+				var bitmapWidth : Number, bitmapHeight : Number;
+				var rectangle : Rectangle;
+
+				rectangle = getBackGroundRect( content );
+
+//				backGrSprite.graphics.clear();
+//				backGrSprite.graphics.beginBitmapFill( content.bitmapData, null, true );
+//				backGrSprite.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
+//				backGrSprite.graphics.endFill();
+//				background.removeAllElements();
+//				background.addElement( new SpriteUIComponent( backGrSprite ) );
+				
+				background.graphics.clear();
+				background.graphics.beginBitmapFill( content.bitmapData, null, true );
+				background.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
+				background.graphics.endFill();
+//				invalidateDisplayList();
+			}
+
+			function getBackGroundRect( content : Bitmap ) : Rectangle
+			{
+				var attributeVO : AttributeVO;
+				var rectangle : Rectangle = new Rectangle();
+
+				attributeVO = _renderVO.getAttributeByName( "backgroundrepeat" );
+
+				if ( !attributeVO )
+					return rectangle;
+
+				switch ( attributeVO.value )
+				{
+					case "repeat":
+					{
+						rectangle.width = background.width;
+						rectangle.height = background.height;
+						break;
+					}
+					case "no-repeat":
+					{
+						rectangle.width = content.width;
+						rectangle.height = content.height;
+						break;
+					}
+					case "repeat-x":
+					{
+						rectangle.width = background.width;
+						rectangle.height = content.height;
+						break;
+					}
+					case "repeat-y":
+					{
+						rectangle.width = content.width;
+						rectangle.height = background.height;
+						break;
+					}
+				}
+
+				return rectangle;
+			}
+		}
+
 		private function caseContainer( contetnt : XML, parentContainer : Group ) : void
 		{
-			var conatiner : Group = getSubContainer( contetnt, parentContainer  ) ;
+			var conatiner : Group = getSubContainer( contetnt, parentContainer  );
 
 			if ( !conatiner )
 				conatiner = parentContainer;
@@ -608,54 +648,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				choiceContentType( contetntPart, conatiner );
 			}
 		}
-
-		private function getSubContainer( contetnt : XML , parentContainer : Group ) : Group
-		{
-//			<container id="9723e716-cb19-4539-afc9-491b0ffbd6fb" visible="1" zindex="0" hierarchy="0" order="0" top="91" left="320" width="152" height="34">
-			//var scroller : Scroller = new Scroller();
-			
-			var conatiner : Group;
-			
-
-			var param : Number;
-
-			if ( !contetnt.@id[ 0 ] )
-				return null;
-			
-	
-			conatiner = new Group();
-			conatiner.clipAndEnableScrolling = true;
-
-			parentContainer.addElement( conatiner );
-			
-
-			if ( contetnt.@visible[ 0 ] == "0" )
-				conatiner.visible = false;
-
-			param = Number( contetnt.@top[ 0 ] )
-
-			if ( param )
-				conatiner.y = param;
-
-			param = Number( contetnt.@left[ 0 ] )
-
-			if ( param )
-				conatiner.x = param;
-
-			param = Number( contetnt.@width[ 0 ] )
-
-			if ( param )
-				conatiner.width = param;
-
-			param = Number( contetnt.@height[ 0 ] )
-
-			if ( param )
-				conatiner.height = param;
-
-			
-			return conatiner ;
-		}
-
+		
 		private function caseHtmlText( contetntPart : XML, parentContainer : Group ) : void
 		{
 			var html : HTML = new HTML();
@@ -680,7 +673,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			html.htmlText = htmlText;
 
 			parentContainer.addElement(html);
-			
+
 		}
 
 		private function caseSVG( contetntPart : XML, parentContainer : Group ) : void
@@ -692,7 +685,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				_editableComponent = editableAttributes[ 0 ].sourceObject;
 			svg.addEventListener( RendererEvent.GET_RESOURCE, svgGetResourseHendler, false, 0, true );
 
-			parentContainer. addElement( svg );
+			parentContainer.addElement( svg );
 		}
 
 		private function caseText( contetntPart : XML, parentContainer : Group ) : void
@@ -745,9 +738,78 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				}
 				default:
 				{
-					trace( "-ERROR------RenderBase - refresh() - default value!!!--------:" + contetntPart.name().toString() + ":\n" + contetntPart.toXMLString())
+					trace( "-ERROR------RenderBase - refresh() - default value!!!--------:" + contetntPart.name().toString() + ":\n")
+					caseContainer( contetntPart, parentContainer );
 				}
 			}
+		}
+
+		/**
+		 *
+		 * @param renderVO
+		 * @return
+		 */
+		private function chooseItemRenderer( renderVO : RenderVO ) : IFactory
+		{
+			var itemFactory : ClassFactory;
+			var layout : LayoutBase;
+			trace("WORK! " + renderVO.name);
+
+			switch ( renderVO.name )
+			{
+				case "container":
+				{
+					itemFactory = new ClassFactory( RendererBase );
+					layout = new BasicLayout();
+					layout.clipAndEnableScrolling = true;
+					itemFactory.properties = { layout: layout };
+
+					break;
+				}
+
+				case "table":
+				{
+					itemFactory = new ClassFactory( RendererBase );
+					layout = new VerticalLayout();
+					layout.clipAndEnableScrolling = true;
+					//VerticalLayout( layout ).gap = 0;
+					itemFactory.properties = { layout: layout };
+
+					break;
+				}
+
+				case "row":
+				{
+					itemFactory = new ClassFactory( RendererBase );
+					layout = new HorizontalLayout();
+					layout.clipAndEnableScrolling = true;
+					//HorizontalLayout( layout ).gap = 0;
+					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
+
+					break;
+				}
+
+				case "cell":
+				{
+					itemFactory = new ClassFactory( RendererBase );
+					layout = new BasicLayout();
+					layout.clipAndEnableScrolling = true;
+					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
+
+					break;
+				}
+				default:
+				{
+					itemFactory = new ClassFactory( RendererBase );
+					layout = new BasicLayout();
+					layout.clipAndEnableScrolling = false;
+					itemFactory.properties = { layout: layout };
+
+					break;
+				}
+			}
+
+			return itemFactory;
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
@@ -863,6 +925,53 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return result;
 		}
 
+		private function getSubContainer( contetnt : XML , parentContainer : Group ) : Group
+		{
+//			<container id="9723e716-cb19-4539-afc9-491b0ffbd6fb" visible="1" zindex="0" hierarchy="0" order="0" top="91" left="320" width="152" height="34">
+			//var scroller : Scroller = new Scroller();
+
+			var conatiner : Group;
+
+
+			var param : Number;
+
+			if ( !contetnt.@id[ 0 ] )
+				return null;
+
+
+			conatiner = new Group();
+			conatiner.clipAndEnableScrolling = true;
+
+			parentContainer.addElement( conatiner );
+
+
+			if ( contetnt.@visible[ 0 ] == "0" )
+				conatiner.visible = false;
+
+			param = Number( contetnt.@top[ 0 ] )
+
+			if ( param )
+				conatiner.y = param;
+
+			param = Number( contetnt.@left[ 0 ] )
+
+			if ( param )
+				conatiner.x = param;
+
+			param = Number( contetnt.@width[ 0 ] )
+
+			if ( param )
+				conatiner.width = param;
+
+			param = Number( contetnt.@height[ 0 ] )
+
+			if ( param )
+				conatiner.height = param;
+
+
+			return conatiner;
+		}
+
 		private function isScroller( target : DisplayObjectContainer ) : Boolean
 		{
 			var result : Boolean = false;
@@ -885,6 +994,34 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 
 			return result;
+		}
+
+		private function keyNavigationHandler( event : KeyboardEvent ) : void
+		{
+			var step : Number = 1;
+
+			if ( event.shiftKey )
+				step = 10;
+
+			if ( event.keyCode == Keyboard.LEFT )
+				x = x - step > 0 ? x - step : 0;
+			else if ( event.keyCode == Keyboard.RIGHT )
+				x = x + step;
+			else if ( event.keyCode == Keyboard.UP )
+				y = y - step > 0 ? y - step : 0;
+			else if ( event.keyCode == Keyboard.DOWN )
+				y = y + step;
+			else
+				return;
+
+			mouseUpHandler( null );
+
+			//stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
+			event.stopImmediatePropagation()
+
+			/*dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
+			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );*/
+			dispatchEvent( new RendererEvent( RendererEvent.CLEAR_RENDERER ) );
 		}
 
 		private function mouseClickHandler( event : MouseEvent ) : void
@@ -988,107 +1125,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );
 		}
 
-		override public function validateDisplayList() : void
-		{
-			// TODO Auto Generated method stub
-			super.validateDisplayList();
-
-			if ( backgroundRefreshNeedFlag )
-			{
-				backgroundRefreshNeedFlag = false;
-				//refresh();
-				backgroundContentLoaded(null);
-			}
-
-		}
-
-		private var backgroundRefreshNeedFlag : Boolean = false;
-
-		private function resizePageRenderer(event : Event) : void
-		{
-			backgroundRefreshNeedFlag = true;
-			invalidateDisplayList();
-		}
-
-		/**
-		 * Display image bitmap once bytes have loaded
-		 **/
-
-		private var content : Bitmap;
-
-		private function backgroundContentLoaded( event : Event ) : void
-		{
-			loader = null;
-
-			if ( event != null )
-			{
-				if ( event.type == IOErrorEvent.IO_ERROR )
-					return;
-				else if ( event.type == "emptyResource" )
-					content = null;
-				else if ( event.type != "resizeMainWindow" )
-					content = Bitmap( event.target.content );
-			}
-
-			if ( _renderVO != null && content != null )
-			{
-				var backGrSprite : Sprite = new Sprite();
-				var bitmapWidth : Number, bitmapHeight : Number;
-				var rectangle : Rectangle;
-
-				rectangle = getBackGroundRect( content );
-
-				backGrSprite.graphics.clear();
-				backGrSprite.graphics.beginBitmapFill( content.bitmapData, null, true );
-				backGrSprite.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
-				backGrSprite.graphics.endFill();
-				background.removeAllElements();
-				background.addElement( new SpriteUIComponent( backGrSprite ) );
-				invalidateDisplayList();
-			}
-
-			function getBackGroundRect( content : Bitmap ) : Rectangle
-			{
-				var attributeVO : AttributeVO;
-				var rectangle : Rectangle = new Rectangle();
-
-				attributeVO = _renderVO.getAttributeByName( "backgroundrepeat" );
-
-				if ( !attributeVO )
-					return rectangle;
-
-				switch ( attributeVO.value )
-				{
-					case "repeat":
-					{
-						rectangle.width = background.width;
-						rectangle.height = background.height;
-						break;
-					}
-					case "no-repeat":
-					{
-						rectangle.width = content.width;
-						rectangle.height = content.height;
-						break;
-					}
-					case "repeat-x":
-					{
-						rectangle.width = background.width;
-						rectangle.height = content.height;
-						break;
-					}
-					case "repeat-y":
-					{
-						rectangle.width = content.width;
-						rectangle.height = background.height;
-						break;
-					}
-				}
-
-				return rectangle;
-			}
-		}
-
 		/**
 		 * Refresh att.
 		 *
@@ -1101,37 +1137,21 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 			}
 
-			var contetntPart : XML;
-
-			background.removeAllElements();
-
-
 			refreshAttributes();
+
+			refreshContent();
 
 
 			if ( _renderVO.staticFlag )
 				locker.visible = true;
 
-			if ( _renderVO && _renderVO.children && _renderVO.children.length > 0 )
-			{
-				// sort children by Z-index
-				var childrenDataProvider : ArrayCollection = new ArrayCollection( _renderVO.children );
-				childrenDataProvider.sort = new Sort();
-				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
-				childrenDataProvider.refresh();
 
-				dataProvider = childrenDataProvider;
-			}
-			else
-				dataProvider = null;
 
-			for each ( contetntPart in _renderVO.content )
-			{
-				choiceContentType( contetntPart, background );
-			}
+
 
 			skin.currentState = "normal";
 		}
+
 
 
 		/**
@@ -1141,6 +1161,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function refreshAttributes() : void
 		{
 			var attributeVO : AttributeVO;
+
 
 			attributeVO = _renderVO.getAttributeByName( "width" );
 
@@ -1200,6 +1221,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		}
 
+		private function refreshContent() : void
+		{
+			background.removeAllElements();
+
+			for each ( var contetntPart : XML in _renderVO.content )
+			{
+				choiceContentType( contetntPart, background );
+			}
+		}
+
 		private function removeHandler( event : Event ) : void
 		{
 			if ( event.target == this )
@@ -1210,33 +1241,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 
-		protected function removeHandlers() : void
+		private function resizePageRenderer(event : Event) : void
 		{
-			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-			removeEventListener( Event.REMOVED, removeHandler );
-
-			removeEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
-			removeEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
-
-			removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-
-			removeEventListener( MouseEvent.CLICK, mouseClickHandler );
-
-			removeEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
-			removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
-			removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
-
-			removeEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
-		}
-
-		public function set setState( state : String ) : void
-		{
-			skin.currentState = state;
-		}
-
-		public function get getState() : String
-		{
-			return skin.currentState;
+			backgroundRefreshNeedFlag = true;
+			invalidateDisplayList();
 		}
 
 		private function showHandler( event : FlexEvent ) : void
@@ -1260,7 +1268,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			dispatchEvent( renderEvent );
 		}
-
 	}
 }
 

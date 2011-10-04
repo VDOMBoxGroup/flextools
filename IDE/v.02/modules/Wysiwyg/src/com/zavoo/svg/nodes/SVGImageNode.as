@@ -68,7 +68,7 @@ package com.zavoo.svg.nodes
 			
 			if( !value.data )
 			{
-				BindingUtils.bindSetter( dataLoaded, value, "data" );
+				BindingUtils.bindSetter( dataLoaded, value, "data",false, true );
 				return;
 			}
 			
@@ -111,7 +111,6 @@ package com.zavoo.svg.nodes
 			
 //			event.target.contentLoaderInfo.removeEventListener( Event.COMPLETE, onBytesLoaded );
 //			event.target.contentLoaderInfo.removeEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
-			
 			loader = null;
 			
 			if ( event.type == IOErrorEvent.IO_ERROR )

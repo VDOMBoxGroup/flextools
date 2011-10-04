@@ -9,34 +9,38 @@ package net.vdombox.ide.modules.wysiwyg.model
 	{
 		public static const NAME : String = "visibleRendererProxy";
 		
+		private var sessionProxy : SessionProxy;
+		private var sharedObjects : Object = {};
+		
 		public function VisibleRendererProxy()
 		{
 			
 			super( NAME, {} );
 		}
 		
-		private var shObjData : Object;
-		private var sessionProxy : SessionProxy;
 		
 		public function getVisible( rendererID : String ) : Boolean
 		{
-			shObjData = getSharedObject();
-			if ( shObjData.data[rendererID] != null )
-				return shObjData.data[rendererID];
-			else
-				return true;
+			return sharedObject.data[rendererID] ? sharedObject.data[rendererID] : true
 		}
 		
 		public function setVisible( rendererID : String, value : Boolean ) : void
 		{
-			shObjData = getSharedObject();
-			shObjData.data[rendererID] = value;
+			sharedObject.data[rendererID] = value;
 		}
 		
-		private function getSharedObject():SharedObject
+		private function get sharedObject():SharedObject
 		{
+			var id : String; 
+			
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			return SharedObject.getLocal( sessionProxy.selectedApplication.id );
+			
+			id = sessionProxy.selectedApplication.id;
+			
+			if (!sharedObjects[ id ])
+				sharedObjects[ id ] =  SharedObject.getLocal( id )
+			
+			return sharedObjects[ id ]
 		}
 	}
 }

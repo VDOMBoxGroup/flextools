@@ -64,8 +64,12 @@ package net.vdombox.ide.modules.wysiwyg.model
 			IEventDispatcher( renderer ).addEventListener( RendererEvent.RENDER_CHANGING, renderer_renderchangingHandler, false, 0, true );
 
 			var visibleRendererProxy : VisibleRendererProxy = facade.retrieveProxy( VisibleRendererProxy.NAME ) as VisibleRendererProxy;
+			
+			
+			//TODO: rewrite
 			if ( !(renderer is PageRenderer) )
 				(renderer as RendererBase).visible = visibleRendererProxy.getVisible(  renderer.vdomObjectVO.id );
+			
 			var renderVO : RenderVO = renderer.renderVO;
 
 			if ( renderVO && renderVO.vdomObjectVO )

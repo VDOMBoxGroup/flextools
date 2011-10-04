@@ -4,7 +4,7 @@
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
 					  height="25"
 					  width="100%"
-					  contentBackgroundAlpha="0">
+					  contentBackgroundAlpha="0" creationComplete="{dispatchEvent( new Event('TreeItemRendererComplete') );}">
 
 	<s:states>
 		<s:State name="normal" />
@@ -74,7 +74,7 @@
 						eyesGroup.visible = false;
 						groupContent.left = -2;
 					}
-					dispatchEvent( new Event('TreeItemRendererComplete') );
+					
 
 				}
 
@@ -86,7 +86,7 @@
 
 				if ( !value.data )
 				{
-					BindingUtils.bindSetter( dataLoaded, value, "data" );
+					BindingUtils.bindSetter( dataLoaded, value, "data",false, true );
 					return;
 				}
 

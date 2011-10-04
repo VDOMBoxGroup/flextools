@@ -12,7 +12,6 @@
 			import mx.collections.SortField;
 			
 			import net.vdombox.ide.common.vo.ObjectListVO;
-			import net.vdombox.ide.common.vo.PageLinkVO;
 			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 			
 			import spark.events.IndexChangeEvent;
@@ -29,25 +28,27 @@
 				valueField.labelField = label;
 			}
 			
+			private var comboBoxData : ArrayCollection = new ArrayCollection();
+			
 			public function init( _interface : Object, element : String) : void
 			{
-				var comboBoxData : ArrayCollection = new ArrayCollection();
+				
 				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
 				
 				var listValues : Array = [];
 				var selectedItem : Object = {};
 				
-				var objectListVO : Object;
+				var objectListVO : ObjectListVO;
 				for each ( objectListVO in _interface )
 				{
-					comboBoxData.addItem( objectListVO );
+					comboBoxData.addItem( objectListVO  );
 							
 					if ( element == objectListVO.id )
 						selectedItem = objectListVO;
 				}
-				comboBoxData.sort = new Sort();
-				comboBoxData.sort.fields = [ new SortField( "name", true ) ];
-				comboBoxData.refresh();
+//				comboBoxData.sort = new Sort();
+//				comboBoxData.sort.fields = [ new SortField( "name", true ) ];
+//				comboBoxData.refresh();
 				
 				valueField.dataProvider = comboBoxData;
 				valueField.selectedItem = selectedItem;

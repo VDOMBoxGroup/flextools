@@ -44,7 +44,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					{
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
 						sendNotification( ApplicationFacade.GET_WYSIWYG, sessionProxy.selectedPage );
-						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
+						//sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
 						sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, sessionProxy.selectedPage );
 					}
 					else if ( operation == PPMOperationNames.READ )
@@ -89,8 +89,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					{
 						if ( pageVO )
 						{
-							sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, pageVO )
 							sendNotification( ApplicationFacade.GET_WYSIWYG, pageVO )
+							sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, pageVO )
 						}
 
 						sendNotification( ApplicationFacade.XML_PRESENTATION_SETTED, body );

@@ -65,27 +65,25 @@
 					objectsList:	 		null,
 					pageLinks: 				null } );
 
-				for each ( attributeVO in _attributesVO.attributes )
+				for each (var attrDescrVO : AttributeDescriptionVO in _typeVO.attributeDescriptions )
 				{
-					attributeDescriptionVO = getAttributeDesctriptionVOByName( attributeVO.name );
-
-					if ( !attributeDescriptionVO.visible )
+					if ( !attrDescrVO.visible )
 						continue;
-
-					attributesArray.push( { group: attributeDescriptionVO.colorGroup, 
-											name: 					attributeDescriptionVO.name, 
-											attributeVO: 			attributeVO,
-											attributeDescriptionVO: attributeDescriptionVO, 
-											objectsList:	 		_attributesVO.objectsList,
-											pageLinks: 				_attributesVO.pageLinks } );
+					
+					attributeVO = _attributesVO.getAttributeVOByName( attrDescrVO.name );
+					 
+					// TODO: Why so many arguments? ( attrDescrVO.colorGroup,  attrDescrVO)
+					
+					attributesArray.push( { group: attrDescrVO.colorGroup, 
+						name: 					attrDescrVO.name, 
+						attributeVO: 			attributeVO,
+						attributeDescriptionVO: attrDescrVO, 
+						objectsList:	 		_attributesVO.objectsList,
+						pageLinks: 				_attributesVO.pageLinks } );
 				}
-
-				attributes = new ArrayCollection( attributesArray );
-				attributes.sort = new Sort();
-				attributes.sort.fields = [ new SortField( "group" ), new SortField( "name" ) ];
-				attributes.refresh();
-
-				attributesList.dataProvider = attributes;
+				
+//				// TODO: need used "attributesList.dataProvider = attributesArray"
+				attributesList.dataProvider = new ArrayCollection( attributesArray );
 			}
 
 			private function getAttributeDesctriptionVOByName( name : String ) : AttributeDescriptionVO

@@ -182,7 +182,7 @@
 				
 				function requestIcon(event:TimerEvent):void
 				{
-					trace ("requestIcon : " + resourceVO.name);
+//					trace ("requestIcon : " + resourceVO.name);
 					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
 				}
 				

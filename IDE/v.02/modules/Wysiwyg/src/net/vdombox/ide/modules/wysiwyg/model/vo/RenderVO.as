@@ -1,5 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.model.vo
 {
+	import mx.collections.ArrayCollection;
+	import mx.collections.Sort;
+	import mx.collections.SortField;
+	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -17,7 +21,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		
 		public var staticFlag : Boolean;
 		
-		public var name : String;
+		private var _name : String;
 		
 		public var parent : RenderVO;
 		public var children : Array;
@@ -34,6 +38,16 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		
 		private var _vdomObjectVO : IVDOMObjectVO;
 		
+		public function get name():String
+		{
+			return _name;
+		}
+
+		public function set name(value:String):void
+		{
+			_name = value;
+		}
+
 		public function get vdomObjectVO() : IVDOMObjectVO
 		{
 			return _vdomObjectVO;
@@ -66,6 +80,20 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		{
 			 _content = value;
 		}
+		
+		public function get sortedChildren(): ArrayCollection
+		{
+			
+			var childrenDataProvider : ArrayCollection = new ArrayCollection( children );
+			
+			childrenDataProvider.sort = new Sort();
+			childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
+			childrenDataProvider.refresh();
+			
+			return childrenDataProvider;
+			 
+		}
+		
 		
 		
 	}

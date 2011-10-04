@@ -501,7 +501,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			WindowManager.getInstance().addWindow(resourcePreviewWindow, UIComponent(resourceSelectorWindow), true);
 			
-			BindingUtils.bindSetter( previewImage, resourceVO, "data" );
+			BindingUtils.bindSetter( previewImage, resourceVO, "data", false, true  );
 			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 
 		}

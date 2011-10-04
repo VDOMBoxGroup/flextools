@@ -306,8 +306,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 			else if ( newPageID != currentPageID )
 			{
-				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ newPageID ] );
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, _pages[ newPageID ] );
+				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ newPageID ] );
 			}
 
 			else if ( newPageID == currentPageID && !newObjectID )

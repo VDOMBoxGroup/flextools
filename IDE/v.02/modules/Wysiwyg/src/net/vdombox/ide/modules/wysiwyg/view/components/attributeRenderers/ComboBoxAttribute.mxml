@@ -9,7 +9,6 @@
 			import mx.collections.SortField;
 			
 			import net.vdombox.ide.common.vo.ObjectListVO;
-			import net.vdombox.ide.common.vo.PageLinkVO;
 			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 			
 			import spark.events.IndexChangeEvent;

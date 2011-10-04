@@ -38,7 +38,7 @@
 			
 			private function creationCompleteHandler() : void
 			{
-				BindingUtils.bindSetter( iconChanged, hostComponent, "icon" );
+				BindingUtils.bindSetter( iconChanged, hostComponent, "icon", false, true  );
 			}
 			
 			private function iconChanged( value : Object ) : void
