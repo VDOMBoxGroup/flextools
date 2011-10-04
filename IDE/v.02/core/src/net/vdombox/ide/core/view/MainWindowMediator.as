@@ -1,3 +1,11 @@
+//------------------------------------------------------------------------------
+//
+//   Copyright 2011 
+//   VDOMBOX Resaerch  
+//   All rights reserved. 
+//
+//------------------------------------------------------------------------------
+
 package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
@@ -6,7 +14,6 @@ package net.vdombox.ide.core.view
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.net.SharedObject;
-	
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.core.mx_internal;
@@ -16,7 +23,6 @@ package net.vdombox.ide.core.view
 	import mx.managers.SystemManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.MainWindowEvent;
@@ -31,23 +37,32 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
 	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
-	
 	import org.osmf.utils.Version;
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
 	import spark.skins.spark.ButtonSkin;
-	
-	use namespace mx_internal;
 
+	use namespace mx_internal;
+	/**
+	 *
+	 * @author andreev ap
+	 */
 	public class MainWindowMediator extends Mediator implements IMediator
 	{
-		public static const NAME : String              = "MainScreenMediator";
+		/**
+		 *
+		 * @default
+		 */
+		public static const NAME : String = "MainScreenMediator";
 
+		/**
+		 *
+		 * @param viewComponent
+		 */
 		public function MainWindowMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
@@ -61,28 +76,16 @@ package net.vdombox.ide.core.view
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
-		private var windowManager : WindowManager      = WindowManager.getInstance();
+		private var selectedModuleID : String = "";
 
-		private var selectedModuleID : String          = "";
+		private var windowManager : WindowManager = WindowManager.getInstance();
 
-		public function get mainWindow() : MainWindow
+		/**
+		 *
+		 */
+		public function closeWindow() : void
 		{
-			return viewComponent as MainWindow;
-		}
-
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
-			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
-			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
-			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
-			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR);
-
-//			interests.push( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
-
-			return interests;
+			windowManager.removeWindow( mainWindow );
 		}
 
 		override public function handleNotification( notification : INotification ) : void
@@ -106,25 +109,40 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.CHANGE_SELECTED_MODULE:
 				{
 					var newSelectedModuleID : String = body as String;
-					var moduleVO : ModuleVO          = modulesProxy.getModuleByID( newSelectedModuleID );
+					var moduleVO : ModuleVO = modulesProxy.getModuleByID( newSelectedModuleID );
 
 					selectModule( moduleVO );
 					break;
 				}
 
-				case StatesProxy.SELECTED_APPLICATION_CHANGED:
-				{
-					initTitle();
-					break;
-				}
+
 				case ApplicationFacade.OPEN_APPLICATION_IN_EDITOR:
 				{
 					openApplicationInEditor();
 					break;
 				}
-
-//				
 			}
+		}
+
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+
+			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
+			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
+			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
+			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR );
+
+			return interests;
+		}
+
+		/**
+		 *
+		 * @return
+		 */
+		public function get mainWindow() : MainWindow
+		{
+			return viewComponent as MainWindow;
 		}
 
 		override public function onRegister() : void
@@ -139,41 +157,12 @@ package net.vdombox.ide.core.view
 			removeHandlers();
 		}
 
+		/**
+		 *
+		 */
 		public function openWindow() : void
 		{
 			windowManager.addWindow( mainWindow );
-
-//			init();
-		}
-
-		private function initUser() : void
-		{
-			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
-			mainWindow.username = serverProxy.authInfo.username;
-		}
-
-		private function initTitle() : void
-		{
-			/*var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
-			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-			var title : String            = "";
-
-			title = serverProxy.authInfo.hostname + "  -  >VDOM IDE.v.2.0.1008" ;
-			
-			if ( statesProxy.selectedApplication )
-				title = statesProxy.selectedApplication.name + "  @  " + title;*/
-
-			mainWindow.title = VersionUtils.getApplicationName(); 
-		}
-		
-		public function closeWindow() : void
-		{
-			windowManager.removeWindow( mainWindow );
-		}
-
-		private function get toolsetBar() : Group
-		{
-			return mainWindow.toolsetBar;
 		}
 
 		private function addHandlers() : void
@@ -183,16 +172,56 @@ package net.vdombox.ide.core.view
 			mainWindow.addEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true, 0, true );
 		}
 
-		private function removeHandlers() : void
+		private function appManagerHandler( event : MainWindowEvent ) : void
 		{
-			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
-			mainWindow.removeEventListener( MainWindowEvent.LOGOUT, logoutHandler );
+			sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER, event.target );
 		}
 
 		private function cleanup() : void
 		{
 			toolsetBar.removeAllElements();
 			mainWindow.removeAllElements();
+		}
+
+		private function initTitle() : void
+		{
+			/*var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			var title : String            = "";
+
+			title = serverProxy.authInfo.hostname + "  -  >VDOM IDE.v.2.0.1008" ;
+
+			if ( statesProxy.selectedApplication )
+				title = statesProxy.selectedApplication.name + "  @  " + title;*/
+
+			mainWindow.title = VersionUtils.getApplicationName();
+		}
+
+		private function initUser() : void
+		{
+			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			mainWindow.username = serverProxy.authInfo.username;
+		}
+
+		private function logoutHandler( event : MainWindowEvent ) : void
+		{
+			cleanup();
+			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNOUT );
+		}
+
+		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
+		{
+
+			showModules();
+			selectModule();
+
+			initUser();
+			initTitle();
+		}
+
+		private function openApplicationInEditor() : void
+		{
+			selectModule();
 		}
 
 		private function placeToolsets() : void
@@ -211,98 +240,33 @@ package net.vdombox.ide.core.view
 			}
 		}
 
+		private function removeHandlers() : void
+		{
+			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
+			mainWindow.removeEventListener( MainWindowEvent.LOGOUT, logoutHandler );
+			mainWindow.removeEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true );
+		}
+
 		private function selectModule( moduleVO : ModuleVO = null ) : void
 		{
-			trace("\n selectModule");
 			mainWindow.removeAllElements();
 
+			// deselect all modules
 			for each ( var modVO : ModuleVO in modulesList )
 			{
 				modVO.module.deSelect();
 			}
 
+			// choose module to select
 			if ( !moduleVO )
-			{
 				moduleVO = modulesList[ 0 ] as ModuleVO;
-				moduleVO.module.getBody();
-			}
-			else
-				moduleVO.module.getBody();
+
+			moduleVO.module.getBody();
+
 
 			selectedModuleID = moduleVO.moduleID;
 // todo: delete
 			sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, moduleVO );
-		}
-
-		private function showModulesByCategory( categoryVO : ModulesCategoryVO ) : void
-		{
-			cleanup();
-
-			modulesList = modulesProxy.getModulesListByCategory( categoryVO );
-
-			currentModuleCategory = categoryVO;
-
-			if ( modulesList.length == 0 )
-				return;
-
-//			for ( var i : int = 0; i < modulesList.length; i++ )
-//			{
-//				sendNotification( ApplicationFacade.CONNECT_MODULE_TO_CORE, modulesList[ i ] );
-//			}
-
-			placeToolsets();
-		}
-
-		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
-		{
-
-			var modulesCategories : Array = modulesProxy.categories;
-			var tabBar : ButtonBar        = mainWindow.tabBar;
-
-			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
-//			mainWindow.settingsButton.addEventListener( MouseEvent.CLICK, settingsButton_clickHandler );
-
-			tabBar.labelField = "name";
-			tabBar.dataProvider = new ArrayList( modulesCategories );
-			tabBar.selectedIndex = 0;
-
-			var categoryVO : ModulesCategoryVO = tabBar.selectedItem as ModulesCategoryVO;
-
-			showModulesByCategory( categoryVO );
-			selectModule();
-			mainWindow.tabBar.callLater( mainWindow.tabBar.drawFocus, [ false ] );
-
-			initUser();
-			initTitle();
-		}
-		
-		private function appManagerHandler( event : MainWindowEvent ) : void
-		{
-			sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER, event.target );
-		}
-
-		private function logoutHandler( event : MainWindowEvent ) : void
-		{
-			cleanup();
-			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNOUT );
-		}
-
-		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void
-		{
-			var categoryVO : ModulesCategoryVO = event.target.selectedItem as ModulesCategoryVO;
-
-			showModulesByCategory( categoryVO );
-			selectModule();
-			mainWindow.tabBar.callLater( mainWindow.tabBar.drawFocus, [ false ] );
-		}
-		
-		private function openApplicationInEditor() : void
-		{
-			var categoryVO : ModulesCategoryVO = mainWindow.tabBar.dataProvider.getItemAt( 0 ) as ModulesCategoryVO;
-			
-			showModulesByCategory( categoryVO );
-			selectModule();
-			//mainWindow.tabBar.callLater( mainWindow.tabBar.drawFocus, [ false ] );
 		}
 
 		private function settingsButton_clickHandler( event : MouseEvent ) : void
@@ -314,6 +278,30 @@ package net.vdombox.ide.core.view
 			facade.registerMediator( new SettingsWindowMediator( settingsWindow ) );
 
 			windowManager.addWindow( settingsWindow, mainWindow, true );
+		}
+
+		private function showModules() : void
+		{
+
+			cleanup();
+
+			modulesList = modulesProxy.modules;
+
+			if ( modulesList.length == 0 )
+				return;
+
+			placeToolsets();
+		}
+
+		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void
+		{
+			showModules();
+			selectModule();
+		}
+
+		private function get toolsetBar() : Group
+		{
+			return mainWindow.toolsetBar;
 		}
 	}
 }

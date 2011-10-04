@@ -65,14 +65,13 @@
 		
 		<!--mask="{topMask}"-->
 
-		<s:Group width="100%">
+		<s:Group width="100%" >
 			<s:TitleBar id="titleBar"
 						minHeight="32" width="100%"
 						skinClass="net.vdombox.ide.core.view.skins.MainWindowTitleBarSkin" />
 			
 			
-			<s:ButtonBar id="tabBar" left="300" top="6" height="20" requireSelection="true"
-						 skinClass="net.vdombox.ide.core.view.skins.TabBarSkin"/>
+			
 		</s:Group>
 		
 		<s:Line width="100%" yFrom="33" yTo="33" >

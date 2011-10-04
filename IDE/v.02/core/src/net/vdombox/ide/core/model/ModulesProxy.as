@@ -52,7 +52,7 @@ package net.vdombox.ide.core.model
 			super( NAME, data );
 		}
 
-		private var _categories : Array;
+//		private var _categories : Array;
 
 		private var loadedModules : Dictionary;
 
@@ -62,10 +62,10 @@ package net.vdombox.ide.core.model
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
-		public function get categories() : Array
-		{
-			return _categories.slice();
-		}
+//		public function get categories() : Array
+//		{
+//			return _categories.slice();
+//		}
 
 		public function get modules() : Array
 		{
@@ -152,7 +152,7 @@ package net.vdombox.ide.core.model
 		public function cleanup() : void
 		{
 			modulesList = null;
-			_categories = null;
+//			_categories = null;
 			modulesForLoadQue = null;
 			loadedModules = null;
 		}
@@ -160,7 +160,7 @@ package net.vdombox.ide.core.model
 		private function generateModulesList() : void
 		{
 			modulesList = [];
-			_categories = [];
+//			_categories = [];
 			modulesForLoadQue = [];
 			loadedModules = new Dictionary();
 
@@ -171,14 +171,13 @@ package net.vdombox.ide.core.model
 
 			var modulePath : String;
 
-			for each ( var categoryXML : XML in MODULES_XML.* ) //TODO Добавить проверку наличия локализованного имени и т.д.
-			{
+			var categoryXML : XML =  MODULES_XML.children()[0] //TODO Добавить проверку наличия локализованного имени и т.д.
 				categoryName = categoryXML.@name;
 				categoryLocalizedName = resourceManager.getString( "Core_General", categoryName );
 
 				category = new ModulesCategoryVO( categoryName, categoryLocalizedName );
 
-				_categories.push();
+			//	_categories.push();
 
 				categoryModulesList = [];
 
@@ -188,9 +187,8 @@ package net.vdombox.ide.core.model
 					modulesList.push( new ModuleVO( category, modulePath ) );
 				}
 
-				_categories.push( category );
+				//_categories.push( category );
 			}
-		}
 
 		private function loadModuleFromQue() : void
 		{

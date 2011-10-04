@@ -40,9 +40,6 @@ package net.vdombox.ide.core.view.components
 		public var username : String;
 
 		[SkinPart( required="true" )]
-		public var tabBar : ButtonBar;
-
-		[SkinPart( required="true" )]
 		public var toolsetBar : Group;
 
 		[SkinPart( required="true" )]
