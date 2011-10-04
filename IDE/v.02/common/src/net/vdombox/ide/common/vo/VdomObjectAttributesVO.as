@@ -19,6 +19,7 @@ package net.vdombox.ide.common.vo
 		private var _objectVO : IVDOMObjectVO;
 		
 		private var _attributes : Array;
+		private var _attributesObject : Object;
 		
 		private var _pageLinks : Array;
 		
@@ -37,6 +38,17 @@ package net.vdombox.ide.common.vo
 		public function set attributes( value : Array ) : void
 		{
 			_attributes = value;
+			_attributesObject = {};
+
+			for each (var attributeVO : AttributeVO in _attributes )
+			{
+				_attributesObject[attributeVO.name] = attributeVO
+			}
+		}
+		
+		public function getAttributeVOByName(name : String): AttributeVO
+		{
+			return _attributesObject[name];	
 		}
 		
 		public function get pageLinks() : Array
@@ -88,24 +100,25 @@ package net.vdombox.ide.common.vo
 		private function processAttributes( attributesXML : XML ) : void
 		{
 			var attributeVO : AttributeVO;
-			
+			_attributesObject = {};
 			for each ( var attributeXML : XML in attributesXML.* )
 			{
 				attributeVO = new AttributeVO( attributeXML.@Name, attributeXML[ 0 ] );
 				_attributes.push( attributeVO );
+				_attributesObject[attributeVO.name] = attributeVO
 			}
 		}
 		
 		private function processPageLink( pageLinksXML : XML ) : void
 		{
-			var pageLinkVO : PageLinkVO;
+			var objectListVO : ObjectListVO;
 			
 			for each ( var pageLinkXML : XML in pageLinksXML.* )
 			{
-				pageLinkVO = new PageLinkVO();
-				pageLinkVO.id = pageLinkXML.@ID;
-				pageLinkVO.name = pageLinkXML.@Name;
-				_pageLinks.push( pageLinkVO );
+				objectListVO = new ObjectListVO();
+				objectListVO.id = pageLinkXML.@ID;
+				objectListVO.name = pageLinkXML.@Name;
+				_pageLinks.push( objectListVO );
 			}
 		}
 		
