@@ -39,7 +39,6 @@
 
 			private function init():void
 			{
-				trace ("init");
 				this.addEventListener(KeyboardEvent.KEY_UP,		onKeyboardKeyUp);
 				this.addEventListener(KeyboardEvent.KEY_DOWN,	onKeyboardKeyDown);
 			}
@@ -100,12 +99,6 @@
 				return htmlTxt;
 			}
 			
-			private function getHTML_toSave():void
-			{
-				// TODO: перенести из VdomHelpEditor:
-				// resetImagesPath();
-			}
-			
 			private static function getHtmlSourceTxt(bodyContent : String, showPageToc:Boolean = false) : String
 			{
 				var metaTeg		: String;
@@ -133,16 +126,20 @@
 				if (showPageToc) {
 					return htmlTxt;
 				}
+				
 				return getHTMLWithoutPageToc(htmlTxt);
 				
 			}
 			
 			private static function getHTMLWithoutPageToc(value:String) : String 
 			{
-				var xml			:XML = new XML(value);
+				value = Utils.convertEntities(value);
+				
+				var xml			: XML = new XML(value);
 				var ulClass		: String = "";
 				var divClass	: String = "";
 				var linkClass	: String = "";
+				
 				
 				// delete old variant of toc ...
 				for each (var xmlDiv:XML in xml.body.div) {
@@ -181,6 +178,8 @@
 					}
 					
 				}
+				
+				xml.normalize();
 				
 				return xml.toXMLString();
 			}
