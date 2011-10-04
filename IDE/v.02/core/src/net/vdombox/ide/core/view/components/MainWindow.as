@@ -14,6 +14,7 @@ package net.vdombox.ide.core.view.components
 	import spark.components.Button;
 	import spark.components.ButtonBar;
 	import spark.components.Group;
+	import spark.components.Label;
 	import spark.components.Window;
 	import spark.components.windowClasses.TitleBar;
 
@@ -44,29 +45,16 @@ package net.vdombox.ide.core.view.components
 
 		[SkinPart( required="true" )]
 		public var settingsButton : Image;
-
-		[SkinPart( required="true" )]
-		public var loginButton : LoginButton;
 		
 		[SkinPart( required="true" )]
-		public var applicationManagerButton : Button;
+		public var nameApplication : Label;
 		
+		[SkinPart( required="true" )]
+		public var iconApplication : Image;
 		
+		/*[SkinPart( required="true" )]
+		public var applicationManagerButton : Button;*/
 
-		override protected function partAdded( partName : String, instance : Object ) : void
-		{
-			super.partAdded( partName, instance );
-
-			if ( instance === loginButton )
-			{
-				loginButton.addEventListener( MouseEvent.CLICK, loginButton_clickHandler );
-			}
-		}
-
-		private function loginButton_clickHandler( event : MouseEvent ) : void
-		{
-			dispatchEvent( new MainWindowEvent( MainWindowEvent.LOGOUT ) );
-		}
 
 	}
 }

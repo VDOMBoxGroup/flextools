@@ -32,6 +32,7 @@ package net.vdombox.ide.core.controller
 			facade.registerProxy( new ResourcesProxy() );
 			
 			facade.registerProxy( new ServerProxy() );
+			facade.registerProxy( new SettingsProxy() );
 		}
 	}
 }

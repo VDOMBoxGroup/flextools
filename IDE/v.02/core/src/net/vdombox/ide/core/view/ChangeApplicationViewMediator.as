@@ -221,7 +221,7 @@ package net.vdombox.ide.core.view
 			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 			sendNotification( ApplicationFacade.GET_SETTINGS, mediatorName );
-			sendNotification( ApplicationFacade.GET_TYPES);
+
 
 			addHandlers();
 		}
@@ -251,7 +251,7 @@ package net.vdombox.ide.core.view
 		
 		private function openApplicationInEditor( event : ApplicationManagerWindowEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR);
+			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR, selectedApplicationVO );
 			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 		}
 		

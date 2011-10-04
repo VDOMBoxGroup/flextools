@@ -172,7 +172,7 @@ package net.vdombox.ide.core.model
 			}
 		}
 		
-		public function loadResource2( resourceVO : ResourceVO, nameMed : String ) : void
+		public function loadResource2( resourceVO : ResourceVO ) : void
 		{
 			
 			if ( resourceVO.type && !resourceVO.mastHasPreview )

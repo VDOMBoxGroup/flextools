@@ -21,11 +21,11 @@
 	<mx:Image id="selectedIcon"
 			  height="64" width="64" />
 	
-	<s:Label buttonMode="true" text="{ resourceManager.getString( 'ApplicationsManagment_General', 'iconchooser_select_icon' ) }"
+	<s:Label buttonMode="true" text="{ resourceManager.getString( 'Core_General', 'iconchooser_select_icon' ) }"
 			 fontFamily="Verdana" fontSize="14" textDecoration="underline"
 			 click="dispatchEvent( new IconChooserEvent (IconChooserEvent.OPEN_ICON_LIST ) );" />
 	
-	<s:Label buttonMode="true" text="{ resourceManager.getString( 'ApplicationsManagment_General', 'iconchooser_load_from_computer' ) }"
+	<s:Label buttonMode="true" text="{ resourceManager.getString( 'Core_General', 'iconchooser_load_from_computer' ) }"
 			 fontFamily="Verdana" fontSize="14" textDecoration="underline"
 			 click="dispatchEvent( new IconChooserEvent( IconChooserEvent.LOAD_ICON ))" />
 </s:VGroup>

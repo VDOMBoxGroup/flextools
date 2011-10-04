@@ -46,6 +46,7 @@
 	
 	<s:VGroup width="35%" height="100%" gap="2" 
 			  paddingTop="10" paddingLeft="20" paddingBottom="30">
+		
 		<components1:IconChooser id="iconChooser" width="100%" />
 		
 		<mx:Spacer height="100%" />

@@ -81,7 +81,6 @@ package net.vdombox.ide.core.view
 		
 		override public function onRegister() : void
 		{
-			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new GalleryProxy() );
 			addHandlers();
 		}
@@ -118,7 +117,6 @@ package net.vdombox.ide.core.view
 		{
 			WindowManager.getInstance().removeWindow( applicationManagerWindow );
 			facade.removeMediator( mediatorName );
-			facade.removeProxy( SettingsProxy.NAME );
 			facade.removeProxy( GalleryProxy.NAME );
 		}
 	}

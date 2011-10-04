@@ -20,12 +20,8 @@ package net.vdombox.ide.core.controller
 			else if( body.hasOwnProperty( "resourceVO" ) )
 				resourceVO = body.resourceVO;
 			
-			var nameMed : String;
-			if( body.hasOwnProperty( "recipientKey" ) )
-				nameMed = body.recipientKey as String;
-			
 			if( resourceVO )
-				resourcesProxy.loadResource2( resourceVO, nameMed ); 
+				resourcesProxy.loadResource2( resourceVO ); 
 
 		}
 		

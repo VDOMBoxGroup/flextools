@@ -17,10 +17,6 @@ package net.vdombox.ide.core.controller
 			
 			var mediatorName : String = notification.getBody() as String;
 			
-			var settingsProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
-			
-			settingsProxy.importSettings( settings );
-			
 			sendNotification( ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName, settings )
 		}
 	}

@@ -189,7 +189,7 @@ package net.vdombox.ide.core.view
 					resourceVO = new ResourceVO( applicationVO.id );
 					resourceVO.setID( applicationVO.iconID );
 					
-					sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
+					sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 				}
 			}
 			else

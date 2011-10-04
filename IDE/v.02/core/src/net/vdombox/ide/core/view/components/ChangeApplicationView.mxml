@@ -55,8 +55,7 @@
 				 fontSize="12" color="#25D9FF" click="applicationEditor_clickHandler(event)"/>
 		<mx:Spacer height="100%"/>
 		
-		<s:HGroup height="25" width="100%" horizontalAlign="center" gap="20">
-			<s:Button />
+		<s:HGroup height="25" width="100%" horizontalAlign="right" gap="20" paddingRight="20">
 			
 			<s:Button id="btnOpenInEditor" 
 					  width="100" height="100%"

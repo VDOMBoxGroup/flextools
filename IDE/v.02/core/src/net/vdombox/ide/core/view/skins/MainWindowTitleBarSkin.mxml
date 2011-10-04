@@ -40,6 +40,7 @@
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.core.events.MainWindowEvent;
 			import net.vdombox.utils.VersionUtils;
 			static private const exclusions : Array = [ "titleIconImage", "titleText" ];
 
@@ -127,6 +128,11 @@
 		<!-- minimize button -->
 		<s:Button id="minimizeButton"
 				  bottom="2" skinClass="net.vdombox.view.skins.MainMinimizeBtnSkin" verticalCenter="0"/>
+		
+		<!-- close button -->
+		<s:Button id="logoutButton"
+				  skinClass="net.vdombox.view.skins.MainLogoutBtnSkin" verticalCenter="0"
+				  click="dispatchEvent( new MainWindowEvent( MainWindowEvent.LOGOUT ) )"/>	
 		
 		<!-- maximize button -->
 		<s:Button id="maximizeButton"

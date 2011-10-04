@@ -53,10 +53,14 @@ package net.vdombox.ide.core.model
 				return;
 			
 			if ( rawSettings.hasOwnProperty( "saveLastApplication" ) )
+			{
 				_settings.saveLastApplication = rawSettings.saveLastApplication;
+			}
 			
 			if ( rawSettings.hasOwnProperty( "lastApplicationID" ) )
+			{
 				_settings.lastApplicationID = rawSettings.lastApplicationID;
+			}
 		}
 		
 		public function exportSettings() : Object
@@ -72,7 +76,8 @@ package net.vdombox.ide.core.model
 		
 		private function settingsChanged( object : Object ) : void
 		{
-			sendNotification( ApplicationFacade.SETTINGS_CHANGED, _settings );
+			if ( _settings.lastApplicationID != DEFAULT_LAST_APPLICATION )
+				sendNotification( ApplicationFacade.SETTINGS_CHANGED, _settings );
 		}
 	}
 }

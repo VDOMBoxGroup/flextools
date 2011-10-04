@@ -9,11 +9,15 @@
 package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
+	import flash.display.Loader;
 	import flash.display.Screen;
 	import flash.display.Stage;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.net.SharedObject;
+	
+	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.core.mx_internal;
@@ -23,7 +27,10 @@ package net.vdombox.ide.core.view
 	import mx.managers.SystemManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
+	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
+	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.model.ModulesProxy;
@@ -37,10 +44,12 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
 	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
+	
 	import org.osmf.utils.Version;
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
@@ -79,6 +88,8 @@ package net.vdombox.ide.core.view
 		private var selectedModuleID : String = "";
 
 		private var windowManager : WindowManager = WindowManager.getInstance();
+		
+		private var applicationVO : ApplicationVO;
 
 		/**
 		 *
@@ -103,6 +114,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.SHOW_MODULE_BODY:
 				{
 					mainWindow.addElement( body.component as IVisualElement );
+					setApplicationInfo();
 					break;
 				}
 
@@ -118,7 +130,26 @@ package net.vdombox.ide.core.view
 
 				case ApplicationFacade.OPEN_APPLICATION_IN_EDITOR:
 				{
+					applicationVO = body as ApplicationVO;
+					
 					openApplicationInEditor();
+					break;
+				}
+					
+				case ApplicationFacade.RESOURCE_LOADED:
+				{
+					if ( !applicationVO )
+						return;
+					
+					var resVO : ResourceVO  = notification.getBody() as ResourceVO;
+					if ( resVO.ownerID != applicationVO.id )
+						return;
+					
+					if ( resVO.id != applicationVO.iconID )
+						return;
+					
+					BindingUtils.bindSetter( setIcon, resVO, "data", false, true );
+					
 					break;
 				}
 			}
@@ -132,8 +163,58 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
 			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR );
+			interests.push( ApplicationFacade.RESOURCE_LOADED );
 
 			return interests;
+		}
+		
+		private function setApplicationInfo() : void
+		{
+			
+			if (!applicationVO)
+			{
+				var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+				
+				applicationVO = statesProxy.selectedApplication;
+			}
+			mainWindow.nameApplication.text = applicationVO.name;
+			
+			if ( !applicationVO.iconID )
+			{
+				mainWindow.iconApplication.source = null;
+			}
+			
+			if ( applicationVO.iconID )
+			{
+				var resourceVO : ResourceVO = new ResourceVO( applicationVO.id );
+				resourceVO.setID( applicationVO.iconID );
+				
+				sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+			}
+		}
+		
+		private function setIcon( value : * ) : void
+		{
+			var loader : Loader = new Loader();
+			
+			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, setIconLoaded );
+			
+			try
+			{
+				loader.loadBytes( value );
+			}
+			catch ( error : Error )
+			{
+				// FIXME Сделать обработку исключения если не грузится изображение
+			}
+		}
+		
+		private function setIconLoaded( event : Event ) : void
+		{
+			if ( event.type == IOErrorEvent.IO_ERROR )
+				return;
+			mainWindow.iconApplication.source = event.target.content;
 		}
 
 		/**
@@ -168,7 +249,7 @@ package net.vdombox.ide.core.view
 		private function addHandlers() : void
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler, false, 0, true );
-			mainWindow.addEventListener( MainWindowEvent.LOGOUT, logoutHandler, false, 0, true );
+			mainWindow.addEventListener( MainWindowEvent.LOGOUT, logoutHandler, true, 0, true );
 			mainWindow.addEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true, 0, true );
 		}
 
@@ -243,7 +324,7 @@ package net.vdombox.ide.core.view
 		private function removeHandlers() : void
 		{
 			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
-			mainWindow.removeEventListener( MainWindowEvent.LOGOUT, logoutHandler );
+			mainWindow.removeEventListener( MainWindowEvent.LOGOUT, logoutHandler, true );
 			mainWindow.removeEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true );
 		}
 
