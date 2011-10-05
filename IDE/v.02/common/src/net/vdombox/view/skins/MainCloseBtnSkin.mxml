@@ -21,12 +21,12 @@
 		<s:State name="disabled"/>
 	</s:states>
 	
-	<!--<s:Rect id="fill"
+	<s:Rect id="fill"
 			height="10" width="10">
 		<s:fill>
 			<s:SolidColor color="0x000000" alpha="1"/>
 		</s:fill>
-	</s:Rect>-->
+	</s:Rect>
 	
 	<s:Line xFrom="1.5" yFrom="1.5" xTo="8.5" yTo="8.5" stroke="{stroke1}"/>
 	<s:Line xFrom="8.5" yFrom="1.5" xTo="1.5" yTo="8.5" stroke="{stroke1}"/>
