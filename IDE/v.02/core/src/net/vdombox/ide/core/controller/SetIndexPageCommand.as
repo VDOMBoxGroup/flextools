@@ -41,6 +41,8 @@ package net.vdombox.ide.core.controller
 				applicationInformationVO.description = applicationVO.description;
 				applicationInformationVO.iconID = applicationVO.iconID;
 				applicationInformationVO.scriptingLanguage = applicationVO.scriptingLanguage;
+				applicationInformationVO.active = applicationVO.active;
+				
 				
 				var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 				var applicationProxy : ApplicationProxy;

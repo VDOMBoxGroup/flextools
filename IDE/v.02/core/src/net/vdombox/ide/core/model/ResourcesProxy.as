@@ -113,24 +113,6 @@ package net.vdombox.ide.core.model
 			token.applicationVO = applicationVO;
 		}
 
-		/**
-		 *
-		 * @param event
-		 */
-//		private function onResourceIconLoadingCompleted( event : Event ) : void
-//		{
-//			var typesIcon : TypesIcon = event.target as TypesIcon;
-//			var typeIndex : int = loadableTypesIcons.getItemIndex( typesIcon )
-//
-//			typesIcon.removeEventListener( TypesIcon.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted );
-//			typesIcon.removeEventListener( TypesIcon.ICON_LOADING_ERROR, onResourceIconLoadingCompleted );
-//
-//			typesIcon.res.data = TypesIcon( event.target ).data;
-//
-//			loadableTypesIcons.removeItemAt( typeIndex );
-//
-//			sendNotification( ApplicationFacade.RESOURCE_LOADED, TypesIcon( event.target ).res );
-//		}
 
 		/**
 		 *
@@ -141,15 +123,6 @@ package net.vdombox.ide.core.model
 
 			if ( resourceVO.type && !resourceVO.mastHasPreview )
 			{
-//				var icon : IconManager = new IconManager();
-//				icon.resourceVO = resourceVO;
-
-//				loadableTypesIcons.addItem( icon );
-
-//				icon.addEventListener( TypesIcon.ICON_LOADING_COMPLETED, onResourceIconLoadingCompleted );
-//				icon.addEventListener( TypesIcon.ICON_LOADING_ERROR, onResourceIconLoadingCompleted );
-
-//				icon.load( resourceVO );
 				return;
 			}
 
@@ -171,7 +144,9 @@ package net.vdombox.ide.core.model
 				loadResourceFromServer( resourceVO );
 			}
 		}
-		
+
+		//WHY: зачем еще один лоадер?
+		//TODO: избавиться от этого метода!
 		public function loadResource2( resourceVO : ResourceVO ) : void
 		{
 			
@@ -210,10 +185,6 @@ package net.vdombox.ide.core.model
 
 			token.recipientName = proxyName;
 			token.resourceVO = resourceVO;
-
-//			clearTimeout(timeoutGetResource);
-//			timeoutGetResource = setTimeout(getResourceFromServer, 500, resourceVO);
-
 		}
 
 		/**
@@ -377,30 +348,6 @@ package net.vdombox.ide.core.model
 		}
 
 
-//		private function onTypesIconLoadingCompleted( event : Event ) : void
-//		{
-//			var typesIcon : TypesIcon = event.target as TypesIcon;
-//			var typeIndex : int = loadableTypesIcons.getItemIndex( typesIcon );
-//
-//			typesIcon.removeEventListener( TypesIcon.ICON_LOADING_COMPLETED, onTypesIconLoadingCompleted );
-//			typesIcon.removeEventListener( TypesIcon.ICON_LOADING_ERROR, onTypesIconLoadingCompleted );
-//
-//			loadableTypesIcons.removeItemAt( typeIndex );
-//
-//			creationIconCompleted( typesIcon.res, typesIcon.data );
-//		}
-
-//		private function creationIconCompleted( resourceVO : ResourceVO, file : ByteArray ) : void
-//		{
-//			resourceVO.icon = file;
-//			resourceVO.data = null;
-//			sendNotification( ApplicationFacade.ICON_GETTED, resourceVO );
-//		}
-
-//		private var requestedResourceForIcon : Object = new Object(); //ResourceVO;
-
-
-
 		private function creationIconCompleted( resourceVO : ResourceVO, file : ByteArray ) : void
 		{
 			if ( !resourceVO )
@@ -555,7 +502,9 @@ package net.vdombox.ide.core.model
 					resourceVO.setStatus( ResourceVO.UPLOADED );
 
 					sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
+					//WHY: зачем закоментировал?
 					//soap_setResource();
+					soap_setResource();
 
 					break;
 				}
@@ -606,10 +555,9 @@ package net.vdombox.ide.core.model
 			{
 				case "get_resource":
 				{
-					
-					sendNotification( ApplicationFacade.RESOURCE_SETTED_ERROR );
+					// WHY:  заеме запрашивать ресурс еще раз? почему на case "get_resource" посылается RESOURCE_SETTED_ERROR ?
+//					sendNotification( ApplicationFacade.RESOURCE_SETTED_ERROR );
 					//soap_setResource();
-					return
 					break;
 				}
 			}

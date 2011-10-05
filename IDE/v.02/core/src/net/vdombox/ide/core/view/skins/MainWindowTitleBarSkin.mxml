@@ -130,7 +130,7 @@
 				  bottom="2" skinClass="net.vdombox.view.skins.MainMinimizeBtnSkin" verticalCenter="0"/>
 		
 		<!-- close button -->
-		<s:Button id="logoutButton"
+		<s:Button id="logoutButton" 
 				  skinClass="net.vdombox.view.skins.MainLogoutBtnSkin" verticalCenter="0"
 				  click="dispatchEvent( new MainWindowEvent( MainWindowEvent.LOGOUT ) )"/>	
 		
