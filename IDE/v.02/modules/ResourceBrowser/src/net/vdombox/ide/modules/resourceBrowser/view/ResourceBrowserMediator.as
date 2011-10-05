@@ -13,9 +13,10 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	{
 		public static const NAME : String = "ResourceBrowserMediator";
 
-		public function ResourceBrowserMediator( viewComponent : ResourceBrowser )
+		public function ResourceBrowserMediator( vObject : ResourceBrowser )
 		{
-			super( NAME, viewComponent );
+			trace("ResourceBrowserMediator");
+			super( NAME, vObject );
 		}
 
 		override public function onRegister() : void
