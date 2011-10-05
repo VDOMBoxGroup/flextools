@@ -12,15 +12,15 @@
 	<id>net.vdombox.VdomHelpEditor</id>
 
 	<!-- Used as the filename for the application. Required. -->
-	<filename>VdomHelpEditor.v1.0.1.004a</filename>
+	<filename>VdomHelpEditor.v1.0.1.005</filename>
 
 	<!-- The name that is displayed in the AIR application installer. May have 
 		multiple values for each language. See samples or xsd schema file. Optional. -->
-	<name>VdomHelpEditor.v1.0.1.004a</name>
+	<name>VdomHelpEditor.v1.0.1.005</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). 
 		Required. -->
-	<version>v1.0.1.004a</version>
+	<version>v1.0.1.005</version>
 
 	<!-- Description, displayed in the AIR application installer. May have multiple 
 		values for each language. See samples or xsd schema file. Optional. -->

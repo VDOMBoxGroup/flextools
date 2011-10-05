@@ -172,7 +172,7 @@
 					
 					linkClass = String(xmlLink.@["class"]);
 					
-					if (linkClass.indexOf(PageToc.ANCOR_CLASS) >= 0 || linkClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS)) {
+					if ( linkClass.indexOf(PageToc.ANCOR_CLASS) >= 0 || linkClass.indexOf(PageToc.TOC_BY_HEADERS_CLASS) >= 0 ) {
 						
 						delete xmlLink.parent().children()[xmlLink.childIndex()];
 					}
