@@ -5,8 +5,15 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
+			
 			import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
 			protected function btnOpenInEditor_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.OPEN_IN_EDITOR ) );
+			}
+			
+			private function openInEditor(event:Event):void
 			{
 				dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.OPEN_IN_EDITOR ) );
 			}
@@ -21,6 +28,11 @@
 				dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.OPEN_IN_CREATE_VIEW ) );
 			}
 			
+			protected function applicationList_creationCompleteHandler(event:FlexEvent):void
+			{
+				applicationList.addEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICKED, openInEditor, true, 0, true);
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -31,7 +43,8 @@
 	<s:VGroup width="50%" height="100%" paddingBottom="30" gap="2">
 		<s:List id="applicationList"
 				width="100%" height="100%"
-				itemRenderer="net.vdombox.ide.core.view.components.ApplicationListItemRenderer"/>
+				itemRenderer="net.vdombox.ide.core.view.components.ApplicationListItemRenderer"
+				creationComplete="applicationList_creationCompleteHandler(event)"/>
 		
 		<mx:Spacer height="25" />
 		

@@ -143,7 +143,7 @@ package net.vdombox.ide.core.view
 		private function backgroundContentLoaded( event : Event ) : void
 		{
 			iconChooser.selectedIcon.source = event.target.content;
-			selectIcon2 = iconChooserWindow.iconsList.selectedItem.content;
+			//selectIcon2 = iconChooserWindow.iconsList.selectedItem.content;
 		}*/
 		
 		private function loadIconHandler( CreateApplicationEvent : Event ) : void

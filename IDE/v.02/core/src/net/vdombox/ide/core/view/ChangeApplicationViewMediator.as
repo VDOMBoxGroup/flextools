@@ -170,10 +170,10 @@ package net.vdombox.ide.core.view
 					
 					refreshApplicationProperties();
 					
-					if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplicationVO.id )
+					/*if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplicationVO.id )
 					{
 						settings.lastApplicationID = selectedApplicationVO.id
-					}
+					}*/
 					
 					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
 				}
@@ -251,6 +251,11 @@ package net.vdombox.ide.core.view
 		
 		private function openApplicationInEditor( event : ApplicationManagerWindowEvent ) : void
 		{
+			if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplicationVO.id )
+			{
+				settings.lastApplicationID = selectedApplicationVO.id
+			}
+			
 			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR, selectedApplicationVO );
 			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 		}

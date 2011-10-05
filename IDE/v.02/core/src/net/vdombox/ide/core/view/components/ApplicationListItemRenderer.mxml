@@ -3,6 +3,8 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true"
+				doubleClickEnabled="true"
+				doubleClick="doubleClickHandle(event)"
 				creationComplete="creationCompleteHandler(event)">
 	<s:states>
 		<s:State name="normal" />
@@ -15,6 +17,12 @@
 			
 			public static const RENDERER_CREATED : String = "rendererCreated";
 			public static const RENDERER_CHANGE : String = "rendererCreated";
+			public static const RENDERER_DOUBLE_CLICKED : String = "rendererDoubleClicked";
+			
+			protected function doubleClickHandle(event:MouseEvent) : void
+			{
+				dispatchEvent( new Event( RENDERER_DOUBLE_CLICKED ) );
+			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{

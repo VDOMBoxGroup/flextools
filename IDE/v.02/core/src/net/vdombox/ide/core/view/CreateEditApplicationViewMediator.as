@@ -234,16 +234,18 @@ package net.vdombox.ide.core.view
 				
 				var newApplicationIcon : ByteArray = iconChooserMediator.selectedIcon;
 				
-				if ( !newApplicationIcon )
-					return;
 				
-				newIconResourceVO = new ResourceVO( applicationVO.id );
+				if ( newApplicationIcon )
+				{
 				
-				newIconResourceVO.name = "Application Icon";
-				newIconResourceVO.setData( newApplicationIcon );
-				newIconResourceVO.setType( "png" );
+					newIconResourceVO = new ResourceVO( applicationVO.id );
 				
-				sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
+					newIconResourceVO.name = "Application Icon";
+					newIconResourceVO.setData( newApplicationIcon );
+					newIconResourceVO.setType( "png" );
+				
+					sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
+				}
 			}
 			else
 			{
