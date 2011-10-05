@@ -499,6 +499,13 @@ package
 			var originalByteArray : ByteArray    = new ByteArray();
 			var base64 : Base64Encoder = new Base64Encoder();
 			
+			if (!location.exists)
+			{
+				source = base64.toString();
+				onResourceDataGenerated(fileName, newFileName, source);
+				return;
+			}
+				
 			fileStream.open( location, FileMode.READ);
 			fileStream.readBytes(originalByteArray);
 			fileStream.close();

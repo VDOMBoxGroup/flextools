@@ -109,7 +109,7 @@ package
 			var link	: String;
 			var xml		:XML;
 			
-			xml = <a class={ANCOR_CLASS} name={anchorUID}>&nbsp;</a>;
+			xml = <a class={ANCOR_CLASS} name={anchorUID}>&#160;</a>;
 				
 			anchors[headerIndex] = xml;
 		}
