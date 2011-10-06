@@ -742,7 +742,6 @@
 			
 			protected function html_wysiwyg_initializeHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
 				this.html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED, onWysiwygSaveCombinationClicked);
 				this.html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_HTTP_IMAGE_LOADED, getCurrentPage);
 			}
@@ -777,7 +776,6 @@
 			
 			protected function tree_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
 				tree.addEventListener(KeyboardEvent.KEY_UP, onTreeKeyboardKeyUp);
 			}
 			
@@ -829,7 +827,6 @@
 				if (!treePagesBuffer) return;
 				if (!tree.selectedItem) return;
 				
-				// TODO
 				var i:uint=0;
 				for each (var treePage:Object in treePagesBuffer) 
 				{
@@ -846,12 +843,6 @@
 			private function clearTreePagesBuffer():void
 			{
 				treePagesBuffer = null;
-			}
-			
-			protected function html_test_showHandler(event:FlexEvent):void
-			{
-				// TODO Auto-generated method stub
-				
 			}
 			
 		]]>
