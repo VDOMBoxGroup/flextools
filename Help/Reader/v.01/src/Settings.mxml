@@ -218,8 +218,6 @@
 			private function onProductXMLLoadingStarted(aEvent:Event):void
 			{
 				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADING_STARTED,	 onProductXMLLoadingStarted);
-				
-				// TODO: showSpinner
 			}
 			
 			private function onProductXMLLoaded(aEvent:Event):void
@@ -228,8 +226,6 @@
 				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADED,				 onProductXMLLoaded);
 				xmlLoader.removeEventListener(ProductXMLLoader.USER_CANCELED,				 onProductXMLLoadingCanceled);
 				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADING_ERROR,		 onProductXMLLoadingError);
-				
-				// TODO: hideSpinner
 				
 				var productXMLFile		: File = xmlLoader.xmlFile;
 				var productXMLContent	: XML = new XML(productXMLFile.data);
@@ -266,8 +262,6 @@
 				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADED,				 onProductXMLLoaded);
 				xmlLoader.removeEventListener(ProductXMLLoader.USER_CANCELED,				 onProductXMLLoadingCanceled);
 				xmlLoader.removeEventListener(ProductXMLLoader.XML_FILE_LOADING_ERROR,		 onProductXMLLoadingError);
-				
-				// TODO: hideSpinner
 				
 				Alert.show( AlertMessages.MSG_ERROR_ON_LOAD_XML, AlertMessages.MSG_TYPE_ERROR);
 			}
