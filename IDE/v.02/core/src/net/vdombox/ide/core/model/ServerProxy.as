@@ -330,7 +330,9 @@ package net.vdombox.ide.core.model
 			error.string = event.fault.faultString;
 			error.detail = event.fault.faultDetail;
 			
-			sendNotification( ApplicationFacade.SERVER_ERROR, error );
+			//TODO: creat alert
+//			sendNotification( ApplicationFacade.SERVER_ERROR, error );
+			
 		}
 		
 		private function soap_connectionErrorHandler( event : SOAPErrorEvent ) : void
