@@ -421,29 +421,35 @@
 
 	<controls:ToolbarButton id="weightButton"
 							focusEnabled="false" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_bold.png')" styleName="toolbarButton" width="24"
-							click="changeWeight()"/>
+							click="changeWeight()"
+							toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_bold' ) }"/>
 
 	<controls:ToolbarButton id="styleButton"
 							height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_italic.png')" styleName="toolbarButton" width="24"
-							click="changeStyle()"/>
+							click="changeStyle()"
+							toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_italic' ) }"/>
 
 	<controls:ToolbarButton id="decorationButton"
 							focusEnabled="false" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_underline.png')" styleName="toolbarButton" width="24"
-							click="changeDecoration()"/>
+							click="changeDecoration()"
+							toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_underline' ) }"/>
 
 	<mx:VRule height="24"/>
 
 	<controls:ToolbarButton id="leftButton"
 							height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_left.png')" styleName="toolbarButton" width="24"
-							click="changeAlign('left')"/>
+							click="changeAlign('left')"
+							toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_justify_left' ) }"/>
 
 	<controls:ToolbarButton id="centerButton"
 							height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_center.png')" styleName="toolbarButton" width="24"
-							click="changeAlign('center')"/>
+							click="changeAlign('center')"
+							toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_justify_center' ) }"/>
 
 	<controls:ToolbarButton id="rightButton"
 							height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_right.png')" styleName="toolbarButton" width="24"
-							click="changeAlign('right')"/>
+							click="changeAlign('right')"
+							toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_justify_right' ) }"/>
 
 	<mx:VRule height="24"/>
 

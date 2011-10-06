@@ -509,70 +509,88 @@
 		<mx:VRule height="24" />-->
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_select_all.png')" width="24"
-								click="execCommand('selectall')"/>
+								click="execCommand('selectall')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_select_all' ) }"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rem_formatting.png')" width="24"
-								click="execCommand('removeformat')"/>
+								click="execCommand('removeformat')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_remove_format' ) }"/>
 		
 		<mx:VRule height="24"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_ins_link.png')" width="24"
-								click="insertLink()"/>
+								click="insertLink()"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_insert_link' ) }"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rem_link.png')" width="24"
-								click="execCommand('unlink')"/>
+								click="execCommand('unlink')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_unlink' ) }"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rule.png')" width="24"
-								click="execCommand('inserthorizontalrule')"/>
+								click="execCommand('inserthorizontalrule')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_insert_horizontal_rule' ) }"/>
 		
 		<controls:ToolbarButton focusEnabled="false" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_ins_char.png')" width="24"
-								click="insertChar()"/>
+								click="insertChar()"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_insert_char' ) }"/>
 	</s:HGroup>
 	
 	<s:HGroup verticalAlign="middle">
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_bold.png')" width="24"
 								fontWeight="bold"
-								click="execCommand('Bold')"/>
+								click="execCommand('Bold')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_bold' ) }"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_italic.png')" width="24"
-								click="execCommand('Italic')"/>
+								click="execCommand('Italic')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_italic' ) }"/>
 		
 		<controls:ToolbarButton focusEnabled="false" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_underline.png')" width="24"
-								click="execCommand('Underline')"/>
+								click="execCommand('Underline')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_underline' ) }"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_strikethrough.png')" width="24"
-								click="execCommand('Strikethrough')"/>
+								click="execCommand('Strikethrough')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_strikethrough' ) }"/>
 		
 		<mx:VRule height="24"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_left.png')" width="24"
-								click="execCommand('JustifyLeft')"/>
+								click="execCommand('JustifyLeft')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_justify_left' ) }"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_center.png')" width="24"
-								click="execCommand('JustifyCenter')"/>
+								click="execCommand('JustifyCenter')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_justify_center' ) }"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_right.png')" width="24"
-								click="execCommand('JustifyRight')"/>
+								click="execCommand('JustifyRight')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_justify_right' ) }"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_block.png')" width="24"
-								click="execCommand('JustifyFull')"/>
+								click="execCommand('JustifyFull')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_justify_full' ) }"/>
 		
 		<mx:VRule height="24"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_numlist.png')" width="24"
-								click="execCommand('InsertOrderedList')"/>
+								click="execCommand('InsertOrderedList')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_insert_ordered_list' ) }"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_bullist.png')" width="24"
-								click="execCommand('InsertUnorderedList')"/>
+								click="execCommand('InsertUnorderedList')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_insert_unordered_list' ) }"/>
 		
 		<mx:VRule height="24"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_outdent.png')" width="24"
-								click="execCommand('Outdent')"/>
+								click="execCommand('Outdent')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_outdent' ) }"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_indent.png')" width="24"
-								click="execCommand('Indent')"/>
+								click="execCommand('Indent')"
+								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_indent' ) }"/>
 	</s:HGroup>
 	
 	<s:HGroup verticalAlign="middle">
