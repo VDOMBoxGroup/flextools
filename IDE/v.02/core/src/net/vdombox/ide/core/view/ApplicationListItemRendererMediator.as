@@ -118,7 +118,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.RESOURCE_SETTED_ERROR:
 				{
 					
-					sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
+					//sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
 					
 					break;
 				}

@@ -37,6 +37,7 @@ package net.vdombox.ide.core.controller
 
 				case UIQueryMessageNames.BODY_UI:
 				{
+					
 					sendNotification( ApplicationFacade.SHOW_MODULE_BODY, { component: component, recipientKey: recipientKey } );
 
 					break;

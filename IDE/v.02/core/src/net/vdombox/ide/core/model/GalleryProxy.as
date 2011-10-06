@@ -22,7 +22,7 @@ package net.vdombox.ide.core.model
 			
 			var f : File = File.applicationDirectory;
 			
-			f = f.resolvePath( "modules/ApplicationsManagment/gallery" );
+			f = f.resolvePath( "gallery" );
 			
 			_items = [];
 			
@@ -33,9 +33,10 @@ package net.vdombox.ide.core.model
 			if ( f.exists )
 			{
 				_galleryItemsQue = f.getDirectoryListing();
+				
 			}
-			
-			loadFile( _galleryItemsQue.pop() )
+			if ( _galleryItemsQue )
+				loadFile( _galleryItemsQue.pop() )
 			
 		}
 		

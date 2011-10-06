@@ -18,8 +18,14 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
+			var applicationManagerWindowMediator : ApplicationManagerWindowMediator = facade.retrieveMediator( ApplicationManagerWindowMediator.NAME) as ApplicationManagerWindowMediator;
+				
+			if ( applicationManagerWindowMediator ) 
+				return;
+			
 			var applicationManagerWindow : ApplicationManagerWindow = new ApplicationManagerWindow();
-			var applicationManagerWindowMediator : ApplicationManagerWindowMediator = new ApplicationManagerWindowMediator( applicationManagerWindow );
+			applicationManagerWindowMediator = new ApplicationManagerWindowMediator( applicationManagerWindow );
+
 			
 			facade.registerMediator( applicationManagerWindowMediator );
 			

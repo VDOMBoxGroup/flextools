@@ -80,9 +80,14 @@ package net.vdombox.ide.core.controller.responses
 						}
 						
 						if( !newSelectedApplication )
-							newSelectedApplication = applications[ 0 ];
-						
-						sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, newSelectedApplication );
+						{
+							sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER, null );
+						}
+						else
+						{
+							sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, newSelectedApplication );
+							
+						}
 						//sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR, newSelectedApplication );
 					}
 				}

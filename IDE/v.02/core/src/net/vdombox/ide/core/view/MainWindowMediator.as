@@ -152,6 +152,7 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}
+					
 			}
 		}
 
@@ -177,6 +178,9 @@ package net.vdombox.ide.core.view
 				
 				applicationVO = statesProxy.selectedApplication;
 			}
+			
+			if ( !applicationVO )
+				return;
 			mainWindow.nameApplication.text = applicationVO.name;
 			
 			if ( !applicationVO.iconID )

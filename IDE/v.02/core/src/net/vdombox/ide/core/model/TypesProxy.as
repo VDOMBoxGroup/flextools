@@ -96,6 +96,23 @@ package net.vdombox.ide.core.model
 			_topLevelTypes = null;
 		}
 		
+		public function getTypeVObyID( typeID : String ) : TypeVO
+		{
+			var result : TypeVO;
+			var typeVO : TypeVO;
+			
+			for each ( typeVO in _types )
+			{
+				if ( typeVO.id == typeID )
+				{
+					result = typeVO;
+					break;
+				}
+			}
+			
+			return result;
+		}
+		
 		public function getType( typeID : String ) : TypeVO
 		{
 			if( !typeID || !_types || _types.length == 0 )

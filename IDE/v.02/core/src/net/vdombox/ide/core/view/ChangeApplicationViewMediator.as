@@ -133,6 +133,7 @@ package net.vdombox.ide.core.view
 					
 				case ApplicationFacade.SERVER_APPLICATION_CREATED:
 				{
+					sendNotification( ApplicationFacade.CREATE_FIRST_PAGE, body );
 					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 					sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 				}	

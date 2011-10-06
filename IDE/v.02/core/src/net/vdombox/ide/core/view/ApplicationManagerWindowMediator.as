@@ -16,6 +16,7 @@ package net.vdombox.ide.core.view
 
 	public class ApplicationManagerWindowMediator extends Mediator implements IMediator
 	{
+		public static const NAME : String = "ApplicationManagerWindowMediator";
 		
 		public function ApplicationManagerWindowMediator( viewComponent : Object = null )
 		{
@@ -34,7 +35,6 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW );
 			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW );
 			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
-			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			
 			return interests;
 		}
@@ -69,13 +69,6 @@ package net.vdombox.ide.core.view
 					break;
 				}
 					
-				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
-				{
-					closeWindows();
-					
-					break;
-				}
-					
 			}
 		}
 		
@@ -87,6 +80,7 @@ package net.vdombox.ide.core.view
 		
 		override public function onRemove() : void
 		{
+			closeWindows();
 			removeHandlers();
 		}
 		
@@ -116,7 +110,7 @@ package net.vdombox.ide.core.view
 		private function closeWindows () : void
 		{
 			WindowManager.getInstance().removeWindow( applicationManagerWindow );
-			facade.removeMediator( mediatorName );
+			
 			facade.removeProxy( GalleryProxy.NAME );
 		}
 	}

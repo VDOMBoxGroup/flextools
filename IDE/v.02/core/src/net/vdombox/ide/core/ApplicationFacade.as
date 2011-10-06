@@ -7,6 +7,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.CloseMainWindowCommand;
 	import net.vdombox.ide.core.controller.CloseWindowCommand;
 	import net.vdombox.ide.core.controller.CreateApplicationCommand;
+	import net.vdombox.ide.core.controller.CreateFirstPageCommand;
 	import net.vdombox.ide.core.controller.EditApplicationInformationCommand;
 	import net.vdombox.ide.core.controller.ErrorMacroCommand;
 	import net.vdombox.ide.core.controller.GetApplicationListCommand;
@@ -18,6 +19,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.LoadModulesRequestCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadingSuccessfulCommand;
 	import net.vdombox.ide.core.controller.ModuleUnloadingStartCommand;
+	import net.vdombox.ide.core.controller.OpenAppInEditorCommand;
 	import net.vdombox.ide.core.controller.OpenApplicationManagerCommand;
 	import net.vdombox.ide.core.controller.OpenInitialWindowCommand;
 	import net.vdombox.ide.core.controller.OpenMainWindowCommand;
@@ -332,7 +334,8 @@ package net.vdombox.ide.core
 		public static const PAGE_XML_PRESENTATION_SETTED : String = "pageXMLPresentationSetted";
 		
 		public static const PAGE_NAME_SETTED : String = "pageNameSetted";
-
+		public static const CREATE_FIRST_PAGE : String = "createFirstPage";
+		
 //		object
 		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
 		public static const OBJECT_ATTRIBUTES_SETTED : String = "objectAttributesSetted";
@@ -545,7 +548,9 @@ package net.vdombox.ide.core
 			
 			registerCommand( GET_TYPES, GetTypesCommand );
 			
+			registerCommand( OPEN_APPLICATION_IN_EDITOR, OpenAppInEditorCommand );
 			
+			registerCommand( CREATE_FIRST_PAGE, CreateFirstPageCommand );
 //			registerCommand( LOGOFF_REQUEST, LogoffRequestCommand );
 		}
 	}
