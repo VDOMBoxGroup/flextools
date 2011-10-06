@@ -622,7 +622,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var selectPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
 			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-			var pageRender : PageRenderer = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
+			
+			
+			
+			var pageRender : PageRenderer = rendProxy.getRendererByVO( selectPage ) as PageRenderer;
+			
+			if ( !pageRender )
+				return;
 			
 			pageRender.linegroup.removeAllElements();
 			
@@ -630,7 +636,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				listStates[i].setState = "normal";
 			}
-			listStates = new Array();
+			listStates = [];
 		}
 		
 		private function moveRendererHandler ( event : RendererEvent ) : void

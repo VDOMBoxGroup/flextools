@@ -566,6 +566,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function handleProxyMessage( message : ProxyMessage ) : void
 		{
+			
 			var proxy : String = message.proxy;
 			var now:Date = new Date();
 			trace("                                        <<  "+ now.toLocaleTimeString()+" : "+message.proxy +" : "+message.operation +" : "+  message.target);
