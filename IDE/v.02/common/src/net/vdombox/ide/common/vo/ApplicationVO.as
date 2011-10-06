@@ -1,5 +1,13 @@
+//------------------------------------------------------------------------------
+//
+//   Copyright 2011 
+//   VDOMBOX Resaerch  
+//   All rights reserved. 
+//
+//------------------------------------------------------------------------------
+
 package net.vdombox.ide.common.vo
-{	
+{
 	/**
 	 * The ApplicationVO is Visual Object of Application.
 	 * The application consists of:
@@ -24,39 +32,45 @@ package net.vdombox.ide.common.vo
 			_id = id;
 		}
 
-		private var _id 				: String
-		private var _name				: String
+		private var _active				: String
 		private var _description 		: String
-		private var _serverVersion 		: String
 		private var _iconID 			: String
+		private var _id 				: String
 		private var _indexPageID 		: String
-		private var _numberOfPages 		: int
+		private var _name				: String
 		private var _numberOfObjects 	: int
+		private var _numberOfPages 		: int
 		private var _scriptingLanguage	: String
+		private var _serverVersion 		: String
 
-		public function get id() : String
+		public function get active():String
 		{
-			return _id;
+			return _active;
 		}
-		
-		public function get name() : String
+
+		public function set active(value:String):void
 		{
-			return _name;
+			_active = value;
 		}
 		
 		public function get description() : String
 		{
 			return _description;
 		}
-		
-		public function get serverVersion() : String
-		{
-			return _serverVersion;
-		}
 
 		public function get iconID() : String
 		{
 			return _iconID;
+		}
+
+		public function get id() : String
+		{
+			return _id;
+		}
+		
+		public function get indexPageID() : String
+		{
+			return _indexPageID;
 		}
 		
 		public function set indexPageID(index:String):void
@@ -64,14 +78,9 @@ package net.vdombox.ide.common.vo
 			_indexPageID = index;
 		}
 		
-		public function get indexPageID() : String
+		public function get name() : String
 		{
-			return _indexPageID;
-		}
-
-		public function get numberOfPages() : int
-		{
-			return _numberOfPages;
+			return _name;
 		}
 
 		public function get numberOfObjects() : int
@@ -79,9 +88,19 @@ package net.vdombox.ide.common.vo
 			return _numberOfObjects;
 		}
 
+		public function get numberOfPages() : int
+		{
+			return _numberOfPages;
+		}
+
 		public function get scriptingLanguage() : String
 		{
 			return _scriptingLanguage;
+		}
+		
+		public function get serverVersion() : String
+		{
+			return _serverVersion;
 		}
 		
 		public function setInformation( information : XML ) : void
@@ -94,6 +113,7 @@ package net.vdombox.ide.common.vo
 			_numberOfPages 		= information.Numberofpages[ 0 ];
 			_numberOfObjects 	= information.Numberofobjects[ 0 ];
 			_scriptingLanguage	= information.ScriptingLanguage[ 0 ];
+			_active				= information.Active[ 0 ];
 		}
 	}
 }
