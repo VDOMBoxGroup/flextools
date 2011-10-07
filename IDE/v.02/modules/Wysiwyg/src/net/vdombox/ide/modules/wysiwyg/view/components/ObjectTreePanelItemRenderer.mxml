@@ -47,10 +47,11 @@
 
 			override public function set data( value : Object ) : void
 			{
-				if ( super.data != value )
+				super.data = value;
+
+//				if ( super.data != value )
 					dataChanged = true
 
-				super.data = value;
 
 				_data = value as XML;
 			}
@@ -95,7 +96,7 @@
 
 				dataChanged = false;
 
-				componentIcon.source = null;
+//				componentIcon.source = null;
 
 				if ( !_data )
 					return
