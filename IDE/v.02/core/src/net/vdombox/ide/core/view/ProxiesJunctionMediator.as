@@ -175,7 +175,7 @@ package net.vdombox.ide.core.view
 		{
 			var ppMessage : ProxyMessage = message as ProxyMessage;
 			var now:Date = new Date();
-			trace("                                        >>  " +now.toLocaleTimeString()+"  "+  ppMessage.proxy + "  " + ppMessage.operation +"   "+ppMessage.target);
+			trace("                                       " +now.toLocaleTimeString()+"  ->>  "+  ppMessage.proxy.toLocaleUpperCase() + "  " + ppMessage.operation.toLocaleUpperCase() +"  "+ppMessage.target.toLocaleUpperCase());
 			switch ( ppMessage.proxy )
 			{
 				case PPMPlaceNames.SERVER:

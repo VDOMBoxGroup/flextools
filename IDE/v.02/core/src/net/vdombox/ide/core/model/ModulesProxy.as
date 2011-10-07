@@ -195,10 +195,8 @@ package net.vdombox.ide.core.model
 
 		private function loadModuleFromQue() : void
 		{
-			trace("\n Loaded");
 			if ( modulesForLoadQue.length == 0 )
 			{
-				trace("ALL");
 				sendNotification( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
 				return;
 			}
