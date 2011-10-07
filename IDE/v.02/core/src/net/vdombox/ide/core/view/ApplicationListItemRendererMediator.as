@@ -68,11 +68,11 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.RESOURCE_LOADED:
 				{
-					resVO = notification.getBody() as ResourceVO;
-					if ( resVO.ownerID != applicationVO.id )
-						return;
-					resourceVO = notification.getBody() as ResourceVO;
-					BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
+//					resVO = notification.getBody() as ResourceVO;
+//					if ( resVO.ownerID != applicationVO.id )
+//						return;
+//					resourceVO = notification.getBody() as ResourceVO;
+//					BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
 					
 					break;
 				}
@@ -108,7 +108,7 @@ package net.vdombox.ide.core.view
 					{
 						resourceVO = new ResourceVO(applicationVO.id );
 						resourceVO.setID(resVO.id);
-						//BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
+						BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
 						sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
 					}
 					
@@ -128,6 +128,12 @@ package net.vdombox.ide.core.view
 		
 		private function setIcon( value : * ) : void
 		{
+			if (!value)
+			{
+				sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
+				
+				return;
+			}
 			var loader : Loader = new Loader();
 			
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
@@ -148,6 +154,7 @@ package net.vdombox.ide.core.view
 		{
 			if ( event.type == IOErrorEvent.IO_ERROR )
 				return;
+			trace("yes");
 			applicationListItemRenderer.imageHolder.source = event.target.content;
 		}
 		
@@ -189,6 +196,7 @@ package net.vdombox.ide.core.view
 					resourceVO = new ResourceVO( applicationVO.id );
 					resourceVO.setID( applicationVO.iconID );
 					
+					BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
 					sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 				}
 			}

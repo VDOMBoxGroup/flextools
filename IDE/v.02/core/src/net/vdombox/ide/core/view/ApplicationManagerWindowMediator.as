@@ -104,6 +104,7 @@ package net.vdombox.ide.core.view
 		private function closeHandler ( event : ApplicationManagerWindowEvent ) : void
 		{
 			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+			facade.removeMediator( mediatorName );
 			closeWindows();
 		}
 		

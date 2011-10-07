@@ -21,7 +21,7 @@ package net.vdombox.ide.core.controller
 				resourceVO = body.resourceVO;
 			
 			if( resourceVO )
-				resourcesProxy.loadResource2( resourceVO ); 
+				resourcesProxy.loadResource( resourceVO ); 
 
 		}
 		

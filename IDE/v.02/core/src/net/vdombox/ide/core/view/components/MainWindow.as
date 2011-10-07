@@ -11,10 +11,9 @@ package net.vdombox.ide.core.view.components
 	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 	
-	import spark.components.Button;
-	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.components.Label;
+	import spark.components.TextInput;
 	import spark.components.Window;
 	import spark.components.windowClasses.TitleBar;
 
@@ -47,7 +46,7 @@ package net.vdombox.ide.core.view.components
 		public var settingsButton : Image;
 		
 		[SkinPart( required="true" )]
-		public var nameApplication : Label;
+		public var nameApplication : TextInput;
 		
 		[SkinPart( required="true" )]
 		public var iconApplication : Image;

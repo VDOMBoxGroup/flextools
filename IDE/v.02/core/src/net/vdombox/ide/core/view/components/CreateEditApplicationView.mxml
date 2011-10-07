@@ -16,29 +16,33 @@
 	
 	<s:VGroup width="65%" height="100%" gap="2" 
 			  paddingTop="10" paddingLeft="20">
+		
 		<s:Label id="lblapplicationName" color="#FFFFFF" 
 				 text="{resourceManager.getString( 'Core_General', 'create_edit_application_name' )}"/>
-		<s:TextInput id="txtapplicationName" color="#FFFFFF"/>
+		<s:TextInput id="txtapplicationName" 
+					 width="100%" color="#FFFFFF"/>
+		
 		<mx:Spacer height="10" />
+		
 		<s:Label id="lblapplicationDescription" color="#FFFFFF" 
 				 text="{resourceManager.getString( 'Core_General', 'create_edit_application_description' )}"/>
 		<s:TextArea id="txtapplicationDescription" 
-					height="80" width="100%" color="#FFFFFF"/>
+					height="100%" width="100%" color="#FFFFFF"/>
 		
 		<mx:Spacer height="15" />
 		
 		<s:Label buttonMode="true" text="Edit Script Language:"
 				 fontFamily="Verdana" fontSize="14"
-				 textDecoration="underline"/>
+				 color="#FFFFFF" textDecoration="underline"/>
 		
-		<s:VGroup width="100%">
+		<s:VGroup width="100%" paddingBottom="10">
 			
 			<s:RadioButton id="vbscript"
-						   label="vbscript" value="vbscript"
+						   label="vbscript" value="vbscript" color="#FFFFFF"
 						   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
 			
 			<s:RadioButton id="python"
-						   label="python" value="python"
+						   label="python" value="python" color="#FFFFFF"
 						   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
 			
 		</s:VGroup>
@@ -51,7 +55,7 @@
 		
 		<mx:Spacer height="100%" />
 		
-		<s:HGroup width="100%" height="25" horizontalAlign="right">
+		<s:HGroup width="100%" height="25" horizontalAlign="right" paddingRight="10">
 			
 			<s:Button id="btnSave" 
 					  label="{resourceManager.getString( 'Core_General', 'create_edit_application_save' )}"

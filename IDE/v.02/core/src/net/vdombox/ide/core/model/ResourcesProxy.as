@@ -120,7 +120,6 @@ package net.vdombox.ide.core.model
 		 */
 		public function loadResource( resourceVO : ResourceVO ) : void
 		{
-
 			if ( resourceVO.type && !resourceVO.mastHasPreview )
 			{
 				return;
@@ -139,32 +138,6 @@ package net.vdombox.ide.core.model
 				sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
 			}
 			//file must be downloaded from the server
-			else
-			{
-				loadResourceFromServer( resourceVO );
-			}
-		}
-
-		//WHY: зачем еще один лоадер?
-		//TODO: избавиться от этого метода!
-		public function loadResource2( resourceVO : ResourceVO ) : void
-		{
-			
-			if ( resourceVO.type && !resourceVO.mastHasPreview )
-			{
-				return;
-			}
-			
-			var resource : ByteArray = cacheManager.getCachedFileById( resourceVO.id );
-			
-			//file is located in the file system user
-			if ( resource )
-			{
-				resourceVO.setData( resource );
-				resourceVO.setStatus( ResourceVO.LOADED );
-				
-				sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
-			}
 			else
 			{
 				loadResourceFromServer( resourceVO );
@@ -555,6 +528,7 @@ package net.vdombox.ide.core.model
 			{
 				case "get_resource":
 				{
+					trace("error loaded");
 					// WHY:  заеме запрашивать ресурс еще раз? почему на case "get_resource" посылается RESOURCE_SETTED_ERROR ?
 //					sendNotification( ApplicationFacade.RESOURCE_SETTED_ERROR );
 					//soap_setResource();

@@ -30,6 +30,7 @@
 			
 			protected function applicationList_creationCompleteHandler(event:FlexEvent):void
 			{
+				applicationList.scroller.setStyle( "horizontalScrollPolicy", "off" );
 				applicationList.addEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICKED, openInEditor, true, 0, true);
 			}
 			
@@ -40,7 +41,7 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:VGroup width="50%" height="100%" paddingBottom="30" gap="2">
+	<s:VGroup width="50%" minWidth="266" height="100%" paddingBottom="30" gap="2">
 		<s:List id="applicationList"
 				width="100%" height="100%"
 				itemRenderer="net.vdombox.ide.core.view.components.ApplicationListItemRenderer"
@@ -56,17 +57,21 @@
 		</s:HGroup>
 	</s:VGroup>
 	
-	<s:VGroup width="50%" height="100%" 
+	<s:VGroup width="50%" minWidth="266" height="100%" 
 			  paddingTop="12" paddingBottom="30" gap="10">
-		<s:Label id="applicationName" 
-				 fontSize="20" color="#FFFFFF"/>
-		<s:Label id="applicationDescription"
-				 color="#FFFFFF"/>
+		<s:TextInput id="applicationName" 
+					 width="100%"
+					 borderVisible="false" editable="false" selectable="false"
+				 	 fontSize="20" color="#FFFFFF"/>
+		
+		<s:TextArea id="applicationDescription" 
+					width="100%" height="100%" editable="false"  selectable="false"
+					borderVisible="false" color="#FFFFFF"/>
 		
 		<s:Label id="applicationEditor" 
 				 text="Change application settings" textDecoration="underline"
 				 fontSize="12" color="#25D9FF" click="applicationEditor_clickHandler(event)"/>
-		<mx:Spacer height="100%"/>
+		<mx:Spacer height="20"/>
 		
 		<s:HGroup height="25" width="100%" horizontalAlign="right" gap="20" paddingRight="20">
 			
