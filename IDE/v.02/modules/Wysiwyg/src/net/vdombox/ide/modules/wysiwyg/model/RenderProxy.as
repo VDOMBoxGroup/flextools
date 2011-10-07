@@ -130,17 +130,24 @@ package net.vdombox.ide.modules.wysiwyg.model
 		public function getRendererByVO( vdomObjectVO : IVDOMObjectVO ) : RendererBase
 		{
 			// ???
+			return getRendererByID( vdomObjectVO.id )
+			
+		}
+		
+		private function getRendererByID( ID : String ) : RendererBase
+		{
 			var rendererBase : RendererBase = null;
-				
-			if (vdomObjectVO && renderersIndex[ vdomObjectVO.id ] && renderersIndex[ vdomObjectVO.id ][0] )
-				rendererBase = renderersIndex[ vdomObjectVO.id ][0];
+			
+			if ( renderersIndex[ ID ] && renderersIndex[ ID  ][0] )
+				rendererBase = renderersIndex[ID ][0];
 			
 			return rendererBase;
 		}
 		
 		public function setVisibleRenderer( rendererID : String, flag : Boolean ) : void
 		{
-			var _renderer : RendererBase = renderersIndex[ rendererID][0] as RendererBase;
+			
+			var _renderer : RendererBase = getRendererByID( rendererID );
 			
 			if ( _renderer )
 				_renderer.visible = flag;

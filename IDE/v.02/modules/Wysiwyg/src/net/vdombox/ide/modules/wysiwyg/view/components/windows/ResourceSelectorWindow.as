@@ -13,7 +13,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemNotEmptyContent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.SmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
@@ -211,7 +211,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				if ( event.charCode != Keyboard.ESCAPE )
 					return;
 					
-			dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) )
+			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.CLOSE ) )
 				
 		}		
 		
@@ -227,12 +227,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		public function uploadFile(event:MouseEvent):void
 		{
-			dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.LOAD_RESOURCE ) );			
+			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.LOAD_RESOURCE ) );			
 		}
 		
 		public function refreshFile(event:MouseEvent):void
 		{
-			dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCES ) );			
+			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCES ) );			
 		}
 		
 		public function onApplyClick(event:Event = null):void
@@ -242,7 +242,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		public function onCancelClick():void
 		{
-			dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ))
+			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.CLOSE ))
 		}
 		
 		/*public function selectResource( event:Event = null ):void
@@ -259,7 +259,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		
 		public function previewResource(event:Event) : void 
 		{
-			dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
+			dispatchEvent(new Event(ResourceVOEvent.PREVIEW_RESOURCE));
 		}
 	}
 }

@@ -753,7 +753,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			var itemFactory : ClassFactory;
 			var layout : LayoutBase;
-			trace("WORK! " + renderVO.name);
 
 			switch ( renderVO.name )
 			{

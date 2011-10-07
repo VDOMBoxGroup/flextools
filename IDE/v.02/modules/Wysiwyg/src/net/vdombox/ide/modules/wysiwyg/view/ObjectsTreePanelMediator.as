@@ -19,6 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.TypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.VisibleRendererProxy;
@@ -29,10 +30,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
+	/**
+	 * 
+	 * @author andreev ap
+	 */
 	public class ObjectsTreePanelMediator extends Mediator implements IMediator
 	{
+		/**
+		 * 
+		 * @default 
+		 */
 		public static const NAME : String = "ObjectsTreePanelMediator";
 
+		/**
+		 * 
+		 * @param viewComponent
+		 */
 		public function ObjectsTreePanelMediator( viewComponent : Object )
 		{
 			super( NAME, viewComponent );
@@ -42,7 +55,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var _pages : Object;
 
 		private var isActive : Boolean;
-
+		/**
+		 *  Array of asked objects/pages to get objectsVO/pageVO
+		 *  
+		 */
 		private var requestQue : Object;
 
 		private var sessionProxy : SessionProxy;
@@ -51,11 +67,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var tempFlag : Boolean = true;
 
+		/**
+		 * 
+		 * @return 
+		 */
 		public function get currentObjectID() : String
 		{
 			return sessionProxy.selectedObject ? sessionProxy.selectedObject.id : null;
 		}
 
+		/**
+		 * 
+		 * @return 
+		 */
 		public function get currentPageID() : String
 		{
 			return sessionProxy.selectedPage ? sessionProxy.selectedPage.id : null;
@@ -110,24 +134,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					var pageXMLTree : XML = notification.getBody() as XML;
 
-					if ( !pageXMLTree )
-						pageXMLTree = new XML();
+					if ( pageXMLTree )
+					{
+						setVisibleForElements( pageXMLTree );
+						
+					}
 					else
 					{
-						var xmlList : XMLList = pageXMLTree..object;;
-						var objectXML : XML;
-						var typeID : String;
-						var typeProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy ;
-						
-						for each( objectXML in xmlList)
-						{
-							typeID = objectXML.@typeID;
-							objectXML.@iconID = typeProxy.getTypeVObyID( typeID ).structureIconID;
-							objectXML.@visible = visibleRendererProxy.getVisible(  String(objectXML.@id) );
-						}
+						pageXMLTree = new XML();
 					}
 
 					pageXML = objectsTreePanel.pages.( @id == pageXMLTree.@id )[ 0 ];
+					
 					if (pageXML)
 					{
 						pageXML.setChildren( new XMLList() ); //TODO: strange construction
@@ -140,7 +158,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.OBJECT_GETTED:
 				{
-					trace ("[ObjTreePanelMediator] OBJECT_GETTED");
 					var objectVO : ObjectVO = body as ObjectVO;
 
 					var requestElement : Object = requestQue ? requestQue[ objectVO.id ] : null;
@@ -227,6 +244,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 			return interests;
 		}
 
+		/**
+		 * 
+		 * @return 
+		 */
 		public function get objectsTreePanel() : ObjectsTreePanel
 		{
 			return viewComponent as ObjectsTreePanel;
@@ -260,7 +281,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler, false, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.OPEN, openHandler, false, 0, true );
-			objectsTreePanel.addEventListener( "TreeItemRendererComplete", loadResourceRequestHandler, true, 0, false );
+			objectsTreePanel.addEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true, 0, true );
 			
 		}
@@ -269,21 +290,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var itemRenderer : ObjectTreePanelItemRenderer = event.target as ObjectTreePanelItemRenderer;
 			
-			sendNotification( ApplicationFacade.OBJECT_VISIBLE, {rendererID : itemRenderer.rendererID, visible : event.visible });
+			sendNotification( ApplicationFacade.OBJECT_VISIBLE, {rendererID : itemRenderer.rendererID, visible : itemRenderer.eyeOpened });
 		}
 		
-		private function loadResourceRequestHandler( event : Event ) : void
+		private function getResourceRequestHandler( event : ResourceVOEvent ) : void
 		{
-			var itemRenderer : ObjectTreePanelItemRenderer = event.target as ObjectTreePanelItemRenderer;
-			sessionProxy  = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var resourceVO : ResourceVO;
-			resourceVO = new ResourceVO( sessionProxy.selectedApplication.id );
-			resourceVO.setID( itemRenderer.resourceID );
-			itemRenderer.resourceVO = resourceVO;
-			
-			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+			sendNotification( ApplicationFacade.GET_RESOURCE_REQUEST, event.target );
 		}
 
+		
+		/**
+		 *  For set selected an object/page need an objectVO/pageVO, this function send request to selected  object/page 
+		 *  if objectVO/pageVO already exist, or send request to get objectVO/pageVO to send request to selected  object/page
+		 * @return 
+		 */
 		private function changeHandler( event : ObjectsTreePanelEvent ) : void
 		{
 			var newPageID : String = objectsTreePanel.selectedPageID;
@@ -297,6 +317,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				if ( !requestQue )
 					requestQue = {};
 
+				
 				if ( !requestQue.hasOwnProperty( newObjectID ) )
 					requestQue[ newObjectID ] = { open: false, change: true };
 				else
@@ -337,6 +358,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function openHandler( event : ObjectsTreePanelEvent ) : void
 		{
+			trace("openHandler")
 			if ( !event.pageID || !_pages.hasOwnProperty( event.pageID ) )
 				return;
 
@@ -357,9 +379,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function removeHandlers() : void
 		{
-			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler );
+//			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.OPEN, openHandler );
-			objectsTreePanel.removeEventListener( "TreeItemRendererComplete", loadResourceRequestHandler, true );
+			objectsTreePanel.removeEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true );
 		}
 
@@ -392,7 +414,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 
 
-
+		private function setVisibleForElements( pageXML : XML) : void
+		{
+			var xmlList : XMLList = pageXML..object;
+			var objectXML : XML;
+			var typeID : String;
+			var typeProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy ;
+			
+			for each( objectXML in xmlList)
+			{
+				typeID = objectXML.@typeID;
+				objectXML.@iconID = typeProxy.getTypeVObyID( typeID ).structureIconID;
+				objectXML.@visible = visibleRendererProxy.getVisible(  String(objectXML.@id) );
+				trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
+			}
+		}
+		
 		private function showPages( pages : Array ) : void
 		{
 			var pagesXMLList : XMLList = new XMLList();
@@ -406,10 +443,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 
 			objectsTreePanel.pages = pagesXMLList;
-
-//			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-
-
 		}
 	}
 }

@@ -18,13 +18,13 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+			import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
 			
 			
 			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
 			{
-				resourcesList.addEventListener(ResourceSelectorWindowEvent.PREVIEW_RESOURCE, hostComponent.previewResource, true);
+				resourcesList.addEventListener(ResourceVOEvent.PREVIEW_RESOURCE, hostComponent.previewResource, true);
 				resourcesList.addEventListener(ListItem.ITEM_DOUBLE_CLICKED, hostComponent.onApplyClick, true);
 			}
 			

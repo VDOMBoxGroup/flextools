@@ -108,6 +108,7 @@
 
 				if ( !_pages )
 					return;
+				
 				try
 				{
 					currentID = objectsTree.selectedItem.@id;
@@ -189,6 +190,8 @@
 				
 				var index : int =  objectsTree.selectedIndex;
 				var newVPos:int;
+				
+				objectsTree.scrollToIndex(index);
 				
 				// claculate new index scroll to
 				/*if (index >= objectsTree.verticalScrollPosition + objectsTree.rowCount 

@@ -44,7 +44,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					{
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
 						sendNotification( ApplicationFacade.GET_WYSIWYG, sessionProxy.selectedPage );
-						//sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
+						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
 						sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, sessionProxy.selectedPage );
 					}
 					else if ( operation == PPMOperationNames.READ )
@@ -57,23 +57,20 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, sessionProxy.selectedPage );
 
 					}
-
 					break;
 				}
 
 				case PPMPageTargetNames.WYSIWYG:
 				{
-					if ( operation == PPMOperationNames.READ )
-					{
-						sendNotification( ApplicationFacade.WYSIWYG_GETTED, body );
+					if ( operation != PPMOperationNames.READ )
+						break
+						
+					sendNotification( ApplicationFacade.WYSIWYG_GETTED, body );
 
-						for ( renderer in needForUpdateObject )
-						{
-							if ( IRenderer( renderer ).vdomObjectVO.id == pageVO.id )
-							{
-								delete needForUpdateObject[ renderer ];
-							}
-						}
+					for ( renderer in needForUpdateObject )
+					{
+						if ( IRenderer( renderer ).vdomObjectVO.id == pageVO.id )
+							delete needForUpdateObject[ renderer ];
 					}
 
 					break;

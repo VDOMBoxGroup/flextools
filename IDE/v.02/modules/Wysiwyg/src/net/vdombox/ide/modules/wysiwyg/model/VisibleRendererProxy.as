@@ -21,7 +21,12 @@ package net.vdombox.ide.modules.wysiwyg.model
 		
 		public function getVisible( rendererID : String ) : Boolean
 		{
-			return sharedObject.data[rendererID] ? sharedObject.data[rendererID] : true
+			if (rendererID in sharedObject.data)
+				trace(sharedObject.data[rendererID])
+			if (  sharedObject.data.hasOwnProperty(rendererID))
+				trace(sharedObject.data[rendererID])
+				
+			return sharedObject.data.hasOwnProperty(rendererID) ? sharedObject.data[rendererID] : true
 		}
 		
 		public function setVisible( rendererID : String, value : Boolean ) : void

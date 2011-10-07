@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ExternalEditorWindowEvent;
-	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ExternalEditorWindow;
@@ -95,14 +95,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function addHandlers() : void
 		{
-			externalEditorWindow.addEventListener( ResourceSelectorWindowEvent.CLOSE, closeHandler );
-			externalEditorWindow.addEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
+			externalEditorWindow.addEventListener( ResourceVOEvent.CLOSE, closeHandler );
+			externalEditorWindow.addEventListener( ResourceVOEvent.APPLY, applyHandler );
 		}
 		
 		private function removeHandlers() : void
 		{
-			externalEditorWindow.removeEventListener( ResourceSelectorWindowEvent.CLOSE, closeHandler );
-			externalEditorWindow.removeEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
+			externalEditorWindow.removeEventListener( ResourceVOEvent.CLOSE, closeHandler );
+			externalEditorWindow.removeEventListener( ResourceVOEvent.APPLY, applyHandler );
 		}
 		
 		private function applyHandler( event : ExternalEditorWindowEvent ) : void

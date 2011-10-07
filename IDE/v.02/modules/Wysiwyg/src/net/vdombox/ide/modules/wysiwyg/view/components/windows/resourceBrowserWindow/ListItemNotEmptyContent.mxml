@@ -14,7 +14,7 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
-			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+			import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 			
 			import spark.effects.AnimateTransform;
 			
@@ -183,7 +183,7 @@
 				function requestIcon(event:TimerEvent):void
 				{
 //					trace ("requestIcon : " + resourceVO.name);
-					dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_ICON ) );
+					dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_ICON ) );
 				}
 				
 			}
@@ -222,7 +222,7 @@
 			protected function smoothImage_clickHandler(event:MouseEvent):void
 			{
 				if ( showingPreview )
-					dispatchEvent(new Event(ResourceSelectorWindowEvent.PREVIEW_RESOURCE));
+					dispatchEvent(new Event(ResourceVOEvent.PREVIEW_RESOURCE));
 			}
 			
 			private function addSpinner():void

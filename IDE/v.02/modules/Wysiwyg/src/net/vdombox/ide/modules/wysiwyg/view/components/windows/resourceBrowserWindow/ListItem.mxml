@@ -21,7 +21,7 @@
 			import mx.events.FlexEvent;
 
 			import net.vdombox.ide.common.vo.ResourceVO;
-			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+			import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 
 			import spark.events.ElementExistenceEvent;
 
@@ -102,7 +102,7 @@
 
 				addContentElement();
 				
-				this.dispatchEvent(new ResourceSelectorWindowEvent(ResourceSelectorWindowEvent.LIST_ITEM_CREATION_COMPLETE));
+				this.dispatchEvent(new ResourceVOEvent(ResourceVOEvent.LIST_ITEM_CREATION_COMPLETE));
 			}
 
 			protected function doubleClickHandler(event:MouseEvent) : void

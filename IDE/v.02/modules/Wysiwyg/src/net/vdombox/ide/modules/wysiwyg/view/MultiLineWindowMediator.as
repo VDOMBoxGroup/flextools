@@ -12,7 +12,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
-	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;

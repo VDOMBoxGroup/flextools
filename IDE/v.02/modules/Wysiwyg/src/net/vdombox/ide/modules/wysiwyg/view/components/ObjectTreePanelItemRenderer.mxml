@@ -4,7 +4,7 @@
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
 					  height="25"
 					  width="100%"
-					  contentBackgroundAlpha="0" creationComplete="{dispatchEvent( new Event('TreeItemRendererComplete') );}">
+					  contentBackgroundAlpha="0" toolTip="{treeListData.label}" >
 
 	<s:states>
 		<s:State name="normal" />
@@ -15,19 +15,52 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
-
+			import mx.events.ResourceEvent;
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
+			import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
+			import spark.components.Button;
+
+			[Embed( source = "icons/eye_0.png" )]
+			public var noVisibleEye : Class;
+
+			[Embed( source = "icons/eye_1.png" )]
+			public var visibleEye : Class;
+
+			private var _eyeOpened : Boolean  = true;
+
+			private var _rendererID : String;
 
 			private var _resourceID : String;
 
 			private var _resourceVO : ResourceVO;
 
-			private var _rendererID : String;
+			private var dataChanged : Boolean = false;
 
 			private var loader : Loader;
 
-			private var _visible : Boolean;
+			/**
+			 *  Self data
+			 * 
+			 */ 
+			private var _data : XML;
+
+			override public function set data( value : Object ) : void
+			{
+				if ( super.data != value )
+					dataChanged = true
+
+				super.data = value;
+
+				_data = value as XML;
+			}
+
+
+			public function get eyeOpened() : Boolean
+			{
+				return _eyeOpened;
+			}
+
 
 
 			public function get rendererID() : String
@@ -40,57 +73,51 @@
 				return _resourceID;
 			}
 
-			[Embed( source = "icons/eye_1.png" )]
-			public var visibleEye : Class;
-
-			[Embed( source = "icons/eye_0.png" )]
-			public var noVisibleEye : Class;
-
-			override public function set data( value : Object ) : void
-			{
-
-				super.data = value;
-
-				if ( value != null )
-				{
-					var valueXML : XML = value as XML;
-					_resourceID = valueXML.@iconID;
-					_rendererID = valueXML.@id;
-
-					if ( valueXML.@visible[ 0 ] )
-					{
-						eyesGroup.visible = true;
-						groupContent.left = 20;
-						_visible = valueXML.@visible == "true";
-
-						eyes.source = _visible ? visibleEye : noVisibleEye;
-//						if ( _visible )
-//							eyes.source = visibleEye;
-//						else
-//							eyes.source = noVisibleEye;
-					}
-					else
-					{
-						eyesGroup.visible = false;
-						groupContent.left = -2;
-					}
-					
-
-				}
-
-			}
-
 			public function set resourceVO(value:ResourceVO) : void
 			{
 				_resourceVO = value;
 
 				if ( !value.data )
 				{
-					BindingUtils.bindSetter( dataLoaded, value, "data",false, true );
+					BindingUtils.bindSetter( dataLoaded, value, "data", false, true );
 					return;
 				}
 
 				dataLoaded();
+			}
+
+			override public function validateProperties() : void
+			{
+				super.validateProperties();
+
+				if ( !dataChanged )
+					return;
+
+				dataChanged = false;
+
+				componentIcon.source = null;
+
+				if ( !_data )
+					return
+
+				_resourceID = _data.@iconID;
+				_rendererID = _data.@id;
+
+				dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCE_REQUEST));
+
+				// if can content an eye
+				if ( _data.@visible[ 0 ] )
+				{
+					eyesGroup.visible = true;
+					groupContent.left = 20;
+
+					setEyeState( _data.@visible == "true");
+				}
+				else
+				{
+					eyesGroup.visible = false;
+					groupContent.left = -2;
+				}
 			}
 
 			private function dataLoaded( object : Object = null ) : void
@@ -102,11 +129,20 @@
 				try
 				{
 					loader.loadBytes( _resourceVO.data );
+
 				}
 				catch ( error : Error )
 				{
 					// FIXME Сделать обработку исключения если не грузится изображение
 				}
+			}
+
+			private function eyeClickHandler( event : Event ) : void
+			{
+				// invert state of eye
+				setEyeState(!_eyeOpened);
+
+				dispatchEvent(  new ObjectsTreePanelEvent( ObjectsTreePanelEvent.EYE_CHANGED ) );
 			}
 
 			private function onBytesLoaded( event : Event ) : void
@@ -115,24 +151,19 @@
 
 				if ( event.type == IOErrorEvent.IO_ERROR )
 					return;
-				componentIcon.source = Bitmap( event.target.content )
 
+				componentIcon.source = Bitmap( event.target.content )
 			}
 
-			private function visibleClickHandler( event : Event ) : void
+			private function setEyeState( value : Boolean ) : void
 			{
-				_visible = !_visible;
-				eyes.source = _visible ? visibleEye : noVisibleEye;
-				
-//				if ( _visible )
-//					eyes.source = visibleEye;
-//				else
-//					eyes.source = noVisibleEye;
-				var treePanelEvent : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.EYE_CHANGED );
-				
-				treePanelEvent.visible = _visible;
-				dispatchEvent( treePanelEvent );
+				_eyeOpened = value;
 
+				eyes.source = _eyeOpened ? visibleEye : noVisibleEye;
+
+				// 
+				if ( _data.@visible[ 0 ] )
+					_data.@visible = _eyeOpened
 			}
 		]]>
 	</fx:Script>
@@ -172,9 +203,9 @@
 						 text="{treeListData.label}"
 						 paddingTop="2"
 						 editable="false"
-						 borderVisible="false" />
+						 borderVisible="false" selectable="false"/>
 
-			<mx:Spacer width="100%"/>
+			<mx:Spacer width="100%" />
 
 		</s:HGroup>
 
@@ -186,7 +217,7 @@
 			 left="-2"
 			 width="22"
 			 height="100%"
-			 mouseDown="{ visibleClickHandler(event); event.stopImmediatePropagation() }">
+			 mouseDown="{ eyeClickHandler(event); event.stopImmediatePropagation() }">
 
 		<s:Rect width="100%" top="0" bottom="-2">
 			<s:fill>
