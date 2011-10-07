@@ -155,7 +155,7 @@ package net.vdombox.ide.common.vo
 
 		public function setID( value : String ) : void
 		{
-			if (value == "")
+			if (value == "" || value == null)
 				throw new Error( "no resource ID" );
 				
 			_id = value;
