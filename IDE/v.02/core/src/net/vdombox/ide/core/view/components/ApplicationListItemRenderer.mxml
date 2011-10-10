@@ -26,7 +26,7 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				dispatchEvent( new Event( RENDERER_CREATED ) );
+//				dispatchEvent( new Event( RENDERER_CREATED ) );
 			}
 			
 			override public function set data( value : Object ) : void

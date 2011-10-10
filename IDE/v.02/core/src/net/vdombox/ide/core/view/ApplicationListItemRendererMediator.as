@@ -109,7 +109,8 @@ package net.vdombox.ide.core.view
 						resourceVO = new ResourceVO(applicationVO.id );
 						resourceVO.setID(resVO.id);
 						BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
-						sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
+						
+//						sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
 					}
 					
 					break;
@@ -130,12 +131,12 @@ package net.vdombox.ide.core.view
 		{
 			if (!value)
 			{
-				sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
+				sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO} );
 				
 				return;
 			}
 			var loader : Loader = new Loader();
-			
+			trace("setIcon:  " + resourceVO.id)
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
 			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, setIconLoaded );
 			
@@ -154,7 +155,7 @@ package net.vdombox.ide.core.view
 		{
 			if ( event.type == IOErrorEvent.IO_ERROR )
 				return;
-			trace("yes");
+			trace("yes: " + applicationListItemRenderer.name);
 			applicationListItemRenderer.imageHolder.source = event.target.content;
 		}
 		
@@ -197,7 +198,7 @@ package net.vdombox.ide.core.view
 					resourceVO.setID( applicationVO.iconID );
 					
 					BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
-					sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+//					sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 				}
 			}
 			else

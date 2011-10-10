@@ -87,17 +87,20 @@ package net.vdombox.ide.core.view
 					
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
+					trace("RESOURCE_SETTED")
 					resourceVO = body as ResourceVO;
 					
 					if ( resourceVO == newIconResourceVO )
 					{
 						newIconResourceVO = null;
 						
-						var applicationInformationVO : ApplicationInformationVO = new ApplicationInformationVO();
 						applicationInformationVO.iconID = resourceVO.id;
 						
+						trace("send EDIT_APPLICATION_INFORMATION");
 						sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: applicationVO,
 							applicationInformationVO: applicationInformationVO } );
+						
+						applicationInformationVO = null;
 					}
 					
 					break;
@@ -112,21 +115,19 @@ package net.vdombox.ide.core.view
 					
 				case ApplicationFacade.SERVER_APPLICATION_CREATED:
 				{
-					var newApplicationIcon : ByteArray = newApplicationInformation.icon;
+					var newAppIcon : ByteArray;
+					
 					applicationVO = body as ApplicationVO;
 					
-					if ( !newApplicationIcon || !applicationVO)
-						return;
+					// get icon, selected or default
+					newAppIcon = iconChooserMediator.selectedIcon ? iconChooserMediator.selectedIcon : iconChooserMediator.defaultIcon;
 					
-					newIconResourceVO = new ResourceVO( applicationVO.id );
-					
-					newIconResourceVO.name = "Application Icon";
-					newIconResourceVO.setData( newApplicationIcon );
-					newIconResourceVO.setType( "png" );
+					newIconResourceVO = createIconResourceVO( newAppIcon ); 
 					
 					sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
-				}	
 					
+					break
+				}	
 			}
 			commitProperties();
 		}
@@ -194,78 +195,39 @@ package net.vdombox.ide.core.view
 			facade.removeMediator( IconChooserMediator.NAME );
 		}
 		
+		private var applicationInformationVO : ApplicationInformationVO ;
 		private function saveInformationHandler( event : ApplicationManagerWindowEvent ) : void
 		{
-			var iconChooserMediator : IconChooserMediator = facade.retrieveMediator( IconChooserMediator.NAME ) as IconChooserMediator;
-			var applicationInformationVO : ApplicationInformationVO = new ApplicationInformationVO();
+			var newAppIcon : ByteArray ;
+			applicationInformationVO = getApplicationInformationVO();
 			
+			if (applicationInformationVO.name == "" )
+				return;
+			
+			// if is editing of  applicationVO
 			if ( applicationVO )
 			{
-				// Name
-				
-				var newApplicationName : String = createEditApplicationView.txtapplicationName.text;
-				
-				if ( newApplicationName == "" )
-					return;
-				
-				if ( newApplicationName != applicationVO.name )
-					applicationInformationVO.name = newApplicationName;
-				
-				//Description
-				
-				var newApplicationDescription : String = createEditApplicationView.txtapplicationDescription.text;
-				
-				if ( newApplicationDescription != applicationVO.description )
-					applicationInformationVO.description = newApplicationDescription;
-				
-
-				
-				//Language
-				
-				var newApplicationLanguage : String = createEditApplicationView.languageRBGroup.selectedValue.toString();
-				
-				if ( newApplicationLanguage && newApplicationLanguage != applicationVO.scriptingLanguage )
-					applicationInformationVO.scriptingLanguage = newApplicationLanguage;
-				
-				sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: applicationVO,
-					applicationInformationVO: applicationInformationVO } );
-				
 				//Icon
+				 newAppIcon = iconChooserMediator.selectedIcon;
 				
-				var newApplicationIcon : ByteArray = iconChooserMediator.selectedIcon;
-				
-				
-				if ( newApplicationIcon )
+				if ( newAppIcon )
 				{
-				
-					newIconResourceVO = new ResourceVO( applicationVO.id );
-				
-					newIconResourceVO.name = "Application Icon";
-					newIconResourceVO.setData( newApplicationIcon );
-					newIconResourceVO.setType( "png" );
+					newIconResourceVO = createIconResourceVO( newAppIcon ); 
 				
 					sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
 				}
-			}
-			else
-			{
-				newApplicationInformation = new Object();
-				newApplicationInformation.name = createEditApplicationView.txtapplicationName.text;
-				newApplicationInformation.description = createEditApplicationView.txtapplicationDescription.text;
-				
-				
-				if ( iconChooserMediator.selectedIcon )
-					newApplicationInformation.icon = iconChooserMediator.selectedIcon;
 				else
-					newApplicationInformation.icon = iconChooserMediator.defaultIcon;
-				
-				applicationInformationVO.name = newApplicationInformation.name;
-				applicationInformationVO.description = newApplicationInformation.description;
-				applicationInformationVO.scriptingLanguage = createEditApplicationView.languageRBGroup.selectedValue.toString();
-				
-				if ( newApplicationInformation.hasOwnProperty( "name" ) )
-					sendNotification( ApplicationFacade.CREATE_APPLICATION, applicationInformationVO );
+				{
+					sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: applicationVO,
+						applicationInformationVO: applicationInformationVO } );
+					
+				}
 			}
+			else // creating new applicationVO
+			{
+				sendNotification( ApplicationFacade.CREATE_APPLICATION, applicationInformationVO );
+			}
+
 			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
 		}
 		
@@ -274,6 +236,35 @@ package net.vdombox.ide.core.view
 			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
 		}
 		
+		private function getApplicationInformationVO() : ApplicationInformationVO
+		{
+			trace("getApplicationInformationVO");
+			var appInfVO : ApplicationInformationVO = new ApplicationInformationVO();
+			
+			appInfVO = new ApplicationInformationVO()
+			appInfVO.name = createEditApplicationView.txtapplicationName.text;
+			appInfVO.description = createEditApplicationView.txtapplicationDescription.text;
+			appInfVO.scriptingLanguage = createEditApplicationView.languageRBGroup.selectedValue.toString();
+			
+			return appInfVO;
+		}
+		
+		private function  get iconChooserMediator():IconChooserMediator
+		{
+			return facade.retrieveMediator( IconChooserMediator.NAME ) as IconChooserMediator;
+		}
+		
+		private function createIconResourceVO( icon : ByteArray ):ResourceVO
+		{
+			trace("createIconResourceVO")
+			var resourceVO: ResourceVO = new ResourceVO( applicationVO.id );
+			
+			resourceVO.name = "Application Icon";
+			resourceVO.setData( icon );
+			resourceVO.setType( "png" );
+			
+			return resourceVO;
+		}
 		
 	}
 }
