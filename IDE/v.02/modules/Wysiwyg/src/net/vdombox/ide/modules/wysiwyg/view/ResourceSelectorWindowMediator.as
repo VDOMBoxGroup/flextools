@@ -101,7 +101,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			// set empty resource as null in ListItem
 			resourceSelectorWindow.resources.addItemAt( null, 0 );
-			resourceSelectorWindow.totalResources = resourceSelectorWindow.resources.length - 1;
+			resourceSelectorWindow.totalResources = allResourcesList.source.length - 1;
 
 		}
 		override public function handleNotification( notification : INotification ) : void
@@ -263,7 +263,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			addFilter( resourceVO.type);
 
 			//FIXME: ???
-			//resourceSelectorWindow.totalResources ++;
+			resourceSelectorWindow.totalResources++;
 			resourceSelectorWindow.resources.addItemAt( resourceVO, resourceSelectorWindow.resources.length );
 			resourceSelectorWindow.scrollToIndex = resourceSelectorWindow.resources.length - 1;
 			resourceSelectorWindow.selectedResourceIndex = resourceSelectorWindow.resources.length - 1;
@@ -347,9 +347,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				resourceSelectorWindow.invalidateProperties(); //?
 
-				allResourcesList = resourceSelectorWindow.resources;
+				//delete from array
+				//allResourcesList = resourceSelectorWindow.resources;
+				deleteResourceInArray( delResVO.id );
+				resourceSelectorWindow.totalResources--;
+				
 
 			}
+		}
+		
+		private function deleteResourceInArray( idRes : String ) : void
+		{
+			var i : int;
+			for( i = 1; i < allResourcesList.source.length; i++ )
+				if ( allResourcesList.getItemAt( i ).id == idRes )
+				{
+					allResourcesList.removeItemAt( i );
+					break;
+				}
 		}
 
 

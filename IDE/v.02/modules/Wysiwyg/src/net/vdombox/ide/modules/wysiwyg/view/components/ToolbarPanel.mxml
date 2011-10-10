@@ -6,6 +6,8 @@
 
 	<fx:Script>
 		<![CDATA[
+			import com.zavoo.svg.nodes.SVGNode;
+			
 			import mx.core.IVisualElement;
 			
 			import net.vdombox.ide.common.TypeInterface;
@@ -93,6 +95,8 @@
 						
 					case TypeInterface.TEXT_EDITOR:
 					{
+						if ( _selectedRenderer.editableComponent is SVGNode )
+								return;
 						var textToolbar : TextToolbar = new TextToolbar();
 						
 						textToolbar.addEventListener(Event.CHANGE, toolbarChageHandle);

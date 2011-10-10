@@ -18,6 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 	import net.vdombox.utils.WindowManager;
 	
 	import spark.components.Label;
+	import spark.components.TextInput;
 	import spark.components.TitleWindow;
 	import spark.components.Window;
 	
@@ -35,7 +36,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 		public var resourceName : Label;
 		
 		[SkinPart( required="true" )]
-		public var resourceId : Label;
+		public var resourceId : TextInput;
 		
 		[SkinPart( required="true" )]
 		public var resourceType : Label;

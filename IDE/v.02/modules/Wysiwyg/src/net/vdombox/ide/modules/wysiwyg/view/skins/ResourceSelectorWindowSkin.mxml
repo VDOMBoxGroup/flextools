@@ -31,7 +31,8 @@
 			protected function nameFilter_focusInHandler(event:FocusEvent):void
 			{
 				// TODO Auto-generated method stub
-				nameFilter.text = "";
+				if ( nameFilter.text == resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_filter' )  )
+					nameFilter.text = "";
 			}
 			
 		]]>

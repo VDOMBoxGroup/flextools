@@ -90,11 +90,10 @@
 					
 					<s:HGroup width="100%" height="100%"
 							  gap="3">
-						<s:Label id="resourceId" height="100%" color="#fefefe"
-								 fontFamily="Arial" fontSize="13" fontWeight="normal"
-								 text="" textAlign="left"
+						<s:TextInput id="resourceId" height="100%" width="250" color="#fefefe"
+								 fontFamily="Arial" fontSize="13" fontWeight="normal" contentBackgroundAlpha="0" borderVisible="false"
+								 text="" textAlign="left" editable="false"
 								 toolTip="{this.resourceId.text}"
-								 maxDisplayedLines="1"
 								 paddingTop="2"/>
 						
 						<s:Button id="copyIdButton"

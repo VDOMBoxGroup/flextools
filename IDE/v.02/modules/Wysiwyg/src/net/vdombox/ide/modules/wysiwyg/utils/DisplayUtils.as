@@ -76,11 +76,11 @@ package net.vdombox.ide.modules.wysiwyg.utils
 				return null;
 
 			var pt : Point = new Point( target.x, target.y );
-			var tc : GroupBase = GroupBase( target.parent );
-			var dc : GroupBase = GroupBase( destinationContainer.parent );
+			var tc : UIComponent = target.parent as UIComponent;
+			var dc : UIComponent = destinationContainer.parent as UIComponent;
 
 			pt = tc.contentToGlobal( pt );
-			pt = destinationContainer.globalToContent( pt );
+			pt = dc.globalToContent( pt );
 
 			return pt;
 		}

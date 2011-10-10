@@ -164,7 +164,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				
 				resources.source = arrayWithoutResource( deleteResourceID );
 				
-				totalResources = resources.length-1;					
+				//totalResources = resources.length-1;					
 				
 				if ( resources.length > 1 && selInd > 1)
 				{

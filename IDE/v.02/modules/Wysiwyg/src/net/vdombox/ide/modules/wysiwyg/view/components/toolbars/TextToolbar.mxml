@@ -9,6 +9,8 @@
 
 	<fx:Script>
 		<![CDATA[
+			import com.zavoo.svg.nodes.SVGNode;
+			
 			import mx.collections.ArrayCollection;
 			import mx.collections.IViewCursor;
 			import mx.collections.Sort;
@@ -86,7 +88,7 @@
 				_item = item;
 
 				elementForEditing = item.editableComponent;
-
+					
 				elementForEditing.setStyle( "paddingTop", 5 );
 				elementForEditing.setStyle( "paddingBottom", 5 );
 				elementForEditing.setStyle( "paddingLeft", 5 );
@@ -99,8 +101,10 @@
 
 				applyDefaultStates();
 
+
 				elementForEditing.editable = true;
 				elementForEditing.selectable = true;
+				
 
 				RichEditableText( elementForEditing ).setFocus();
 				focusManager.setFocus( elementForEditing as IFocusManagerComponent );
