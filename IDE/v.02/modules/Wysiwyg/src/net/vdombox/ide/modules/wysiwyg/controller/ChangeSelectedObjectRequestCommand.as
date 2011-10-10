@@ -28,7 +28,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				else if ("pageVO" in objectVO )
 					pageVO =  objectVO["pageVO"];
 					
-				if ( pageVO && selectedPage.id != pageVO.id )
+				if ( (!selectedPage && pageVO ) || ( selectedPage && pageVO && selectedPage.id != pageVO.id ) )
 					sendNotification(ApplicationFacade.SET_SELECTED_PAGE, pageVO);
 				
 				sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, objectVO );
