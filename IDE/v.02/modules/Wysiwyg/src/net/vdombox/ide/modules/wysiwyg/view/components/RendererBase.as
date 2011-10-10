@@ -9,6 +9,7 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
+	
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -23,7 +24,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
+	
 	import flashx.textLayout.factory.TruncationOptions;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
@@ -41,6 +44,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.ResizeEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
+	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -51,6 +55,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
+	
 	import spark.components.Button;
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
@@ -671,7 +676,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + "</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
 
 			html.htmlText = htmlText;
-
+			
 			parentContainer.addElement(html);
 
 		}
@@ -710,6 +715,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			parentContainer.addElement( richText );
 		}
+		
 
 		private function choiceContentType( contetntPart : XML, parentContainer : Group ) : void
 		{
@@ -997,6 +1003,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function keyNavigationHandler( event : KeyboardEvent ) : void
 		{
+			//trace ("[RendererBase] keyNavigationHandler: " + event.keyCode + "; PHASE = " + event.eventPhase);
 			var step : Number = 1;
 
 			if ( event.shiftKey )
@@ -1016,7 +1023,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			mouseUpHandler( null );
 
 			//stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
-			event.stopImmediatePropagation()
+			event.stopImmediatePropagation();
 
 			/*dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
 			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );*/

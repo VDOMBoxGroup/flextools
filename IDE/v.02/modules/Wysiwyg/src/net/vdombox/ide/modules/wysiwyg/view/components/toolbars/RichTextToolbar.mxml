@@ -157,22 +157,8 @@
 				
 				HTMLEditorLoader = new HTMLLoader();
 				HTMLEditorLoader.placeLoadStringContentInApplicationSandbox = true;
-				//
-				//				if ( selectedItem && selectedItem.editableAttributes[ 0 ].sourceObject === item.editableAttributes[ 0 ].sourceObject )
-				//				{
-				//					item.editableAttributes[ 0 ].sourceObject.editabledText = oldValue;
-				//				}
 				
-				/* HTMLEditorLoader.addEventListener(
-				Event.HTML_DOM_INITIALIZE,
-				HTMLEditorLoader_HTMLDomInitalizeHandler ); */
-				
-				HTMLEditorLoader.addEventListener( HTMLUncaughtScriptExceptionEvent.UNCAUGHT_SCRIPT_EXCEPTION,
-					HTMLEditorLoader_uncaughtScriptException );
-				
-				//HTMLEditorLoader.addEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
-				
-				//				oldValue = editableHTML.editabledText;
+				HTMLEditorLoader.addEventListener( HTMLUncaughtScriptExceptionEvent.UNCAUGHT_SCRIPT_EXCEPTION, HTMLEditorLoader_uncaughtScriptException );
 				
 				if ( !editableHTML.loaded )
 					editableHTML.addEventListener( Event.COMPLETE, editableHTML_completeHandler );
@@ -274,6 +260,8 @@
 					if ( editableHTML )
 					{
 						editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
+						
+						editableHTML.removeEventListener( KeyboardEvent.KEY_DOWN, editableElement_KeyDownHandler, true );
 						editableHTML.removeEventListener( KeyboardEvent.KEY_UP, editableElement_KeyUpHandler );
 					}
 					
@@ -334,6 +322,7 @@
 			
 			private function insertLink() : void
 			{
+				btnLink.selected = false;
 				var currentSelection : * = elementForEditing.contentWindow.getSelection();
 				try
 				{
@@ -471,7 +460,6 @@
 					return;
 				}
 				
-				
 				tinyMCE.execCommand( "mceAddControl", true, "content" );
 				
 				if ( !elementForEditing )
@@ -479,6 +467,7 @@
 				
 				elementForEditing.focus();
 				
+				editableHTML.addEventListener( KeyboardEvent.KEY_DOWN, editableElement_KeyDownHandler, true );
 				editableHTML.addEventListener( KeyboardEvent.KEY_UP, editableElement_KeyUpHandler );
 				
 				var body : * = elementForEditing.contentWindow.document.getElementsByTagName( "body" )[ 0 ];
@@ -499,6 +488,23 @@
 			{
 				recalculateSize();
 			}
+			
+			private function editableElement_KeyDownHandler( event : KeyboardEvent ) : void
+			{
+				switch (event.keyCode)
+				{
+					case Keyboard.DELETE :
+						break;
+					case Keyboard.B :
+						if (event.ctrlKey)
+						{
+							btnBold.selected = !btnBold.selected;
+						}
+						break;
+				}
+			}
+			
+			
 		]]>
 	</fx:Script>
 	
@@ -508,22 +514,22 @@
 		
 		<mx:VRule height="24" />-->
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_select_all.png')" width="24"
-								click="execCommand('selectall')"
+		<controls:ToolbarButton id="btnSelectAll" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_select_all.png')" width="24"
+								click="{execCommand('selectall'); btnSelectAll.selected = false;}"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_select_all' ) }"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rem_formatting.png')" width="24"
-								click="execCommand('removeformat')"
+		<controls:ToolbarButton id="btnRemoveFormat" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rem_formatting.png')" width="24"
+								click="{execCommand('removeformat'); btnRemoveFormat.selected = false;}"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_remove_format' ) }"/>
 		
 		<mx:VRule height="24"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_ins_link.png')" width="24"
+		<controls:ToolbarButton id="btnLink" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_ins_link.png')" width="24"
 								click="insertLink()"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_insert_link' ) }"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rem_link.png')" width="24"
-								click="execCommand('unlink')"
+		<controls:ToolbarButton id="btnUnlink" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rem_link.png')" width="24"
+								click="{execCommand('unlink'); btnUnlink.selected=false;}"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_unlink' ) }"/>
 		
 		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rule.png')" width="24"
@@ -537,7 +543,7 @@
 	
 	<s:HGroup verticalAlign="middle">
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_bold.png')" width="24"
+		<controls:ToolbarButton id="btnBold" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_bold.png')" width="24"
 								fontWeight="bold"
 								click="execCommand('Bold')"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_bold' ) }"/>

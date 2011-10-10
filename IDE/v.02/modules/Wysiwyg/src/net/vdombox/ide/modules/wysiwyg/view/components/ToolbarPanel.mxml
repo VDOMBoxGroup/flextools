@@ -138,7 +138,9 @@
 			{
 					var toolBarPanel : IToolbar = event.target as IToolbar;
 					var editorEvent : EditorEvent = new EditorEvent(EditorEvent.ATTRIBUTES_CHANGED);
+					
 					editorEvent.vdomObjectAttributesVO = toolBarPanel.vdomObjectAttributesVO ;
+					
 					dispatchEvent( editorEvent );
 			}
 				

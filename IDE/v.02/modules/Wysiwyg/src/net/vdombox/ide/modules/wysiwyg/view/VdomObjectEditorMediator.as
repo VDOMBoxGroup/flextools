@@ -193,6 +193,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 							editor.selectedRenderer = selRenderer;
 						else
 							editor.selectedRenderer = null;
+						
 						if (editor.selectedRenderer != null)
 							editor.selectedRenderer.setFocus();
 					}
@@ -505,7 +506,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			editor.addEventListener( FlexEvent.SHOW, showRendererHandler, true );
 			
-			editor.addEventListener( KeyboardEvent.KEY_DOWN, keyDownDeleteHandler, true );
+			editor.addEventListener( KeyboardEvent.KEY_DOWN, keyDownDeleteHandler );
 			
 			editor.addEventListener( RendererEvent.CLEAR_RENDERER, clearLineGroup, true );
 			
@@ -647,6 +648,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function keyDownDeleteHandler(event : KeyboardEvent) : void
 		{
+			//trace ("[VdomObjectEditorMediator] keyDownDeleteHandler: " + event.keyCode + "; PHASE = " + event.eventPhase);
 			if (event.keyCode == Keyboard.DELETE && sessionProxy.selectedObject != null)
 			{
 				var componentName : String = sessionProxy.selectedObject.typeVO.displayName;

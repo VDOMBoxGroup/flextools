@@ -69,7 +69,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 
 					for ( renderer in needForUpdateObject )
 					{
-						if ( IRenderer( renderer ).vdomObjectVO.id == pageVO.id )
+						if ( IRenderer( renderer ).vdomObjectVO && IRenderer( renderer ).vdomObjectVO.id == pageVO.id )
 							delete needForUpdateObject[ renderer ];
 					}
 

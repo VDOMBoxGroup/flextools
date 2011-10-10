@@ -227,6 +227,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function deleteRequestHandler( event : ObjectAttributesPanelEvent ) : void
 		{
+			trace ("[ObjAttributesPanelMediator] deleteRequestHandler");
 			var componentName : String = sessionProxy.selectedObject.typeVO.displayName;
 			
 			Alert.noLabel = "Cancel";

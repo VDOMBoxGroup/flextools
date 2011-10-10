@@ -83,6 +83,18 @@
 				return _item;
 			}
 
+			private function onKeyDown(evt:KeyboardEvent):void
+			{
+				trace ("[TextToolbar] onKeyDown");
+				
+				switch (evt.keyCode)
+				{
+					case Keyboard.DELETE :
+						evt.stopImmediatePropagation();
+						break;
+				}
+			}
+			
 			public function init( item : IRenderer ) : void
 			{
 				_item = item;
@@ -104,7 +116,11 @@
 
 				elementForEditing.editable = true;
 				elementForEditing.selectable = true;
-				
+
+				if (elementForEditing is RichEditableText)
+				{
+					RichEditableText(elementForEditing).addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown, true);
+				}
 
 				RichEditableText( elementForEditing ).setFocus();
 				focusManager.setFocus( elementForEditing as IFocusManagerComponent );
