@@ -755,10 +755,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( !conatiner )
 				conatiner = parentContainer;
 			
+			var xml1: XML = new XML('<text top="0" left="3" height="76" fontweight="bold" fontsize="11">  <![CDATA[ id]]></text>');
+			var xml2 : XML = new XML("<text top='0' left='0' width='400' color='#000000' fontstyle='normal' fontweight='normal' fontfamily='tahoma' fontsize='12' textalign='left' textdecoration='none' editable='value,color,fontfamily,fontsize,fontstyle,fontweight,align,textdecoration'><![CDATA[jrejre]]></text>");
 			// TODO: need sort 'contetnt.children()' by 'z-index'
 			for each ( var contetntPart : XML in contetnt.children() )
 			{
-				choiceContentType( contetntPart, conatiner );
+				// dos not worked
+				choiceContentType(xml1, conatiner );
+				//  worked !!!
+				choiceContentType(xml2, conatiner );
+				// dos not worked
+				choiceContentType(contetntPart, conatiner );
 			}
 		}
 		
@@ -791,19 +798,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					
 				case "table":
 				{
-					var s : XML = new XML("<text top='0' left='0' width='400' color='#000000' fontstyle='normal' fontweight='normal' fontfamily='tahoma' fontsize='12' textalign='left' textdecoration='none' editable='value,color,fontfamily,fontsize,fontstyle,fontweight,align,textdecoration'><![CDATA[jrejre]]></text>");
+					
 					caseTable( contetntPart, parentContainer );
 					break;
 				}
 					
 				case "row":
-				{ 
+				{
 					caseRow( contetntPart, parentContainer );
 					break;
 				}
 					
 				case "cell":
 				{
+					
 					caseCell( contetntPart, parentContainer );
 					break;
 				}
@@ -815,6 +823,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				}
 			}
 		}
+		
+		
 
 		/**
 		 *
