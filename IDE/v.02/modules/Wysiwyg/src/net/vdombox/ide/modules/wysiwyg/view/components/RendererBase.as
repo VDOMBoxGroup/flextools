@@ -699,7 +699,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			var richText : UIComponent
 
-			if ( contetntPart.@editable )
+			if ( contetntPart.@editable[0] && contetntPart.@editable )
 			{
 				richText = new RichEditableText();
 				_editableComponent = richText;
@@ -709,7 +709,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			richText.x = contetntPart.@left;
 			richText.y = contetntPart.@top;
-			richText.width = contetntPart.@width;
+			
+			if (contetntPart.@width[0] )
+				richText.width = contetntPart.@width;
+			else 
+				richText.percentWidth = 100;
 			
 			richText.setStyle( "borderVisible", false );
 
@@ -755,16 +759,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( !conatiner )
 				conatiner = parentContainer;
 			
-			var xml1: XML = new XML('<text top="0" left="3" height="76" fontweight="bold" fontsize="11">  <![CDATA[ id]]></text>');
-			var xml2 : XML = new XML("<text top='0' left='0' width='400' color='#000000' fontstyle='normal' fontweight='normal' fontfamily='tahoma' fontsize='12' textalign='left' textdecoration='none' editable='value,color,fontfamily,fontsize,fontstyle,fontweight,align,textdecoration'><![CDATA[jrejre]]></text>");
 			// TODO: need sort 'contetnt.children()' by 'z-index'
 			for each ( var contetntPart : XML in contetnt.children() )
 			{
-				// dos not worked
-				choiceContentType(xml1, conatiner );
-				//  worked !!!
-				choiceContentType(xml2, conatiner );
-				// dos not worked
 				choiceContentType(contetntPart, conatiner );
 			}
 		}
