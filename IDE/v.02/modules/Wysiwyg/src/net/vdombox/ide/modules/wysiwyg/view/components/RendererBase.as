@@ -722,7 +722,35 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		
 		private function caseTable( contetnt : XML, parentContainer : Group ) : void
 		{
-			var conatiner : Group = getSubContainer( contetnt, parentContainer  );
+			var conatiner : Group = getSubTable( contetnt, parentContainer  );
+			
+			if ( !conatiner )
+				conatiner = parentContainer;
+			
+			// TODO: need sort 'contetnt.children()' by 'z-index'
+			for each ( var contetntPart : XML in contetnt.children() )
+			{
+				choiceContentType( contetntPart, conatiner );
+			}
+		}
+		
+		private function caseRow( contetnt : XML, parentContainer : Group ) : void
+		{
+			var conatiner : Group = getSubRow( contetnt, parentContainer  );
+			
+			if ( !conatiner )
+				conatiner = parentContainer;
+			
+			// TODO: need sort 'contetnt.children()' by 'z-index'
+			for each ( var contetntPart : XML in contetnt.children() )
+			{
+				choiceContentType( contetntPart, conatiner );
+			}
+		}
+		
+		private function caseCell( contetnt : XML, parentContainer : Group ) : void
+		{
+			var conatiner : Group = getSubCell( contetnt, parentContainer  );
 			
 			if ( !conatiner )
 				conatiner = parentContainer;
@@ -763,19 +791,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					
 				case "table":
 				{
+					var s : XML = new XML("<text top='0' left='0' width='400' color='#000000' fontstyle='normal' fontweight='normal' fontfamily='tahoma' fontsize='12' textalign='left' textdecoration='none' editable='value,color,fontfamily,fontsize,fontstyle,fontweight,align,textdecoration'><![CDATA[jrejre]]></text>");
 					caseTable( contetntPart, parentContainer );
 					break;
 				}
 					
 				case "row":
-				{
-					caseTable( contetntPart, parentContainer );
+				{ 
+					caseRow( contetntPart, parentContainer );
 					break;
 				}
 					
 				case "cell":
 				{
-					caseTable( contetntPart, parentContainer );
+					caseCell( contetntPart, parentContainer );
 					break;
 				}
 					
@@ -1011,6 +1040,116 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				conatiner.height = param;
 
 
+			return conatiner;
+		}
+		
+		private function getSubTable( contetnt : XML , parentContainer : Group ) : Group
+		{
+			
+			var conatiner : Group;
+			var param : Number;
+			
+			conatiner = new Group();
+			
+			conatiner.layout = new VerticalLayout();
+			
+			conatiner.clipAndEnableScrolling = true;
+			
+			parentContainer.addElement( conatiner );
+			
+			param = Number( contetnt.@top[ 0 ] )
+			
+			if ( param )
+				conatiner.y = param;
+			
+			param = Number( contetnt.@left[ 0 ] )
+			
+			if ( param )
+				conatiner.x = param;
+			
+			param = Number( contetnt.@width[ 0 ] )
+			
+			if ( param )
+				conatiner.width = param;
+			
+			param = Number( contetnt.@height[ 0 ] )
+			
+			if ( param )
+				conatiner.height = param;
+			return conatiner;
+		}
+		
+		private function getSubRow( contetnt : XML , parentContainer : Group ) : Group
+		{
+			
+			var conatiner : Group;
+			var param : Number;
+
+			conatiner = new Group();
+			
+			conatiner.layout = new HorizontalLayout();
+			
+			conatiner.clipAndEnableScrolling = true;
+			
+			parentContainer.addElement( conatiner );
+			
+			param = Number( contetnt.@top[ 0 ] )
+			
+			if ( param )
+				conatiner.y = param;
+			
+			param = Number( contetnt.@left[ 0 ] )
+			
+			if ( param )
+				conatiner.x = param;
+			
+			param = Number( contetnt.@width[ 0 ] )
+			
+			if ( param )
+				conatiner.width = param;
+			
+			param = Number( contetnt.@height[ 0 ] )
+			
+			if ( param )
+				conatiner.height = param;
+			return conatiner;
+		}
+		
+		private function getSubCell( contetnt : XML , parentContainer : Group ) : Group
+		{
+			
+			var conatiner : Group;
+			var param : Number;
+			
+			conatiner = new Group();
+			
+			conatiner.layout = new BasicLayout();
+			
+			conatiner.clipAndEnableScrolling = true;
+			
+			parentContainer.addElement( conatiner );
+			
+			
+			param = Number( contetnt.@top[ 0 ] )
+			
+			if ( param )
+				conatiner.y = param;
+			
+			param = Number( contetnt.@left[ 0 ] )
+			
+			if ( param )
+				conatiner.x = param;
+			
+			param = Number( contetnt.@width[ 0 ] )
+			
+			if ( param )
+				conatiner.width = param;
+			
+			param = Number( contetnt.@height[ 0 ] )
+			
+			if ( param )
+				conatiner.height = param;
+			
 			return conatiner;
 		}
 
