@@ -506,7 +506,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			editor.addEventListener( FlexEvent.SHOW, showRendererHandler, true );
 			
-			editor.addEventListener( KeyboardEvent.KEY_DOWN, keyDownDeleteHandler );
+			editor.addEventListener( "deleteObjectOnScreen", keyDownDeleteHandler, true );
 			
 			editor.addEventListener( RendererEvent.CLEAR_RENDERER, clearLineGroup, true );
 			
@@ -559,7 +559,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			component.removeEventListener( MouseEvent.MOUSE_UP, clearLineGroup, true);
 			
-			editor.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownDeleteHandler, true);
+			editor.removeEventListener( "deleteObjectOnScreen", keyDownDeleteHandler, true);
 			editor.removeEventListener( RendererEvent.CLEAR_RENDERER, clearLineGroup, true );
 
 			editor.removeEventListener( SkinPartEvent.PART_ADDED, partAddedHandler );
@@ -649,7 +649,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function keyDownDeleteHandler(event : KeyboardEvent) : void
 		{
 			//trace ("[VdomObjectEditorMediator] keyDownDeleteHandler: " + event.keyCode + "; PHASE = " + event.eventPhase);
-			if (event.keyCode == Keyboard.DELETE && sessionProxy.selectedObject != null)
+			if ( sessionProxy.selectedObject != null)
 			{
 				var componentName : String = sessionProxy.selectedObject.typeVO.displayName;
 				

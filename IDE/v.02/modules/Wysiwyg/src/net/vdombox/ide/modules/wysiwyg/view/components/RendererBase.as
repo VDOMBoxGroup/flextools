@@ -459,6 +459,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 
 			super.validateDisplayList();
+			
+			if ( editableComponent && ( typeVO.name == "text" || typeVO.name == "richtext" ) 
+				&& editableComponent.height != 0 && editableComponent.width != 0)
+			{
+				width = editableComponent.width;
+				height = editableComponent.height;
+				measuredWidth = editableComponent.width;
+				measuredHeight = editableComponent.height;
+			}
 
 			if ( backgroundRefreshNeedFlag )
 			{
@@ -583,13 +592,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				var rectangle : Rectangle;
 
 				rectangle = getBackGroundRect( content );
-
-//				backGrSprite.graphics.clear();
-//				backGrSprite.graphics.beginBitmapFill( content.bitmapData, null, true );
-//				backGrSprite.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
-//				backGrSprite.graphics.endFill();
-//				background.removeAllElements();
-//				background.addElement( new SpriteUIComponent( backGrSprite ) );
 				
 				background.graphics.clear();
 				background.graphics.beginBitmapFill( content.bitmapData, null, true );
@@ -708,12 +710,28 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			richText.x = contetntPart.@left;
 			richText.y = contetntPart.@top;
 			richText.width = contetntPart.@width;
+			
+			richText.setStyle( "borderVisible", false );
 
 			richText[ "text" ] = contetntPart[ 0 ];
 
 			applyStyles( richText, contetntPart );
 
 			parentContainer.addElement( richText );
+		}
+		
+		private function caseTable( contetnt : XML, parentContainer : Group ) : void
+		{
+			var conatiner : Group = getSubContainer( contetnt, parentContainer  );
+			
+			if ( !conatiner )
+				conatiner = parentContainer;
+			
+			// TODO: need sort 'contetnt.children()' by 'z-index'
+			for each ( var contetntPart : XML in contetnt.children() )
+			{
+				choiceContentType( contetntPart, conatiner );
+			}
 		}
 		
 
@@ -742,6 +760,25 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					caseHtmlText( contetntPart, parentContainer );
 					break;
 				}
+					
+				case "table":
+				{
+					caseTable( contetntPart, parentContainer );
+					break;
+				}
+					
+				case "row":
+				{
+					caseTable( contetntPart, parentContainer );
+					break;
+				}
+					
+				case "cell":
+				{
+					caseTable( contetntPart, parentContainer );
+					break;
+				}
+					
 				default:
 				{
 					trace( "-ERROR------RenderBase - refresh() - default value!!!--------:" + contetntPart.name().toString() + ":\n")
@@ -1004,6 +1041,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function keyNavigationHandler( event : KeyboardEvent ) : void
 		{
 			//trace ("[RendererBase] keyNavigationHandler: " + event.keyCode + "; PHASE = " + event.eventPhase);
+			if ( event.target != event.currentTarget )
+				return;
+			
 			var step : Number = 1;
 
 			if ( event.shiftKey )
@@ -1018,15 +1058,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			else if ( event.keyCode == Keyboard.DOWN )
 				y = y + step;
 			else
+			{
+				if ( event.keyCode == Keyboard.DELETE )
+					dispatchEvent( new KeyboardEvent( "deleteObjectOnScreen" ) );
 				return;
+			}
 
 			mouseUpHandler( null );
 
-			//stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
 			event.stopImmediatePropagation();
 
-			/*dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
-			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );*/
 			dispatchEvent( new RendererEvent( RendererEvent.CLEAR_RENDERER ) );
 		}
 
@@ -1105,6 +1146,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( skin.currentState == "highlighted" )
 				return;
 
+			invalidateDisplayList();
 			if ( findNearestItem( event.target as DisplayObjectContainer ) == this )
 				skin.currentState = "hovered";
 			else
@@ -1252,7 +1294,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			backgroundRefreshNeedFlag = true;
 			invalidateDisplayList();
 		}
-
+		
 		private function showHandler( event : FlexEvent ) : void
 		{
 			addHandlers();

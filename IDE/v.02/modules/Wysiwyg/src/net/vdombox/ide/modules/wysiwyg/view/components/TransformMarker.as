@@ -24,6 +24,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	
+	import spark.components.RichEditableText;
 	import spark.components.VScrollBar;
 	import spark.components.supportClasses.ScrollBarBase;
 
@@ -376,12 +377,34 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( !_selectedItem )
 				return;
+			var editComponent : Object = (_selectedItem as RendererBase).editableComponent;
+			if (  editComponent && (_selectedItem as RendererBase).typeVO.name == "text" || (_selectedItem as RendererBase).typeVO.name == "richtext" )
+			{
+				
+				if ( editComponent )
+				{
+					if ( measuredWidth != editComponent.width )
+					{
+						measuredWidth = editComponent.width;
+						_selectedItem.width = measuredWidth;
+					}
+				
+					if ( measuredHeight != editComponent.height )
+					{
+						measuredHeight = editComponent.height;
+						_selectedItem.height = measuredHeight;
+					}
+				}
+			}
+			else
+			{
 
-			if ( measuredWidth != _selectedItem.width )
-				measuredWidth = _selectedItem.width;
+				if ( measuredWidth != _selectedItem.width )
+					measuredWidth = _selectedItem.width;
 
-			if ( measuredHeight != _selectedItem.height )
-				measuredHeight = _selectedItem.height;
+				if ( measuredHeight != _selectedItem.height )
+					measuredHeight = _selectedItem.height;
+			}
 
 			var rectangle : Rectangle = getContentRectangle( _selectedItem, this );
 
@@ -397,7 +420,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			graphics.clear();
 			graphics.beginFill( backgroundColor, backgroundAlpha );
 			graphics.lineStyle( .25, borderColor, 1, true, LineScaleMode.NONE );
-			graphics.drawRect( 0, 0, measuredWidth, measuredHeight );
+			graphics.drawRect( 0, 0,  measuredWidth, measuredHeight );
 			graphics.endFill();
 		}
 
