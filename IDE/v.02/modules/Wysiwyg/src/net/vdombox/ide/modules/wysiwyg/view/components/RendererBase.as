@@ -63,6 +63,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.components.Scroller;
 	import spark.components.SkinnableDataContainer;
 	import spark.components.TextArea;
+	import spark.components.VGroup;
 	import spark.components.supportClasses.GroupBase;
 	import spark.components.supportClasses.ScrollBarBase;
 	import spark.components.supportClasses.Skin;
@@ -72,6 +73,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
 	import spark.skins.spark.ScrollerSkin;
+
 	/**
 	 *
 	 * @author andreev ap
@@ -454,13 +456,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		override public function validateDisplayList() : void
 		{
-			// TODO Auto Generated method stub
-//			if( _renderVO && _renderVO.children && _renderVO.children.length > 0)
-
-
 			super.validateDisplayList();
 			
-			if ( editableComponent && ( typeVO.name == "text" || typeVO.name == "richtext" ) 
+			if ( editableComponent && typeVO && ( typeVO.name == "text" || typeVO.name == "richtext" ) 
 				&& editableComponent.height != 0 && editableComponent.width != 0)
 			{
 				width = editableComponent.width;
@@ -705,7 +703,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				_editableComponent = richText;
 			}
 			else
+			{
 				richText = new Text();
+				richText.height = 22;
+			}
 
 			richText.x = contetntPart.@left;
 			richText.y = contetntPart.@top;
@@ -738,12 +739,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 		
+		private var numberColl : int = 0;
+		
 		private function caseRow( contetnt : XML, parentContainer : Group ) : void
 		{
 			var conatiner : Group = getSubRow( contetnt, parentContainer  );
 			
 			if ( !conatiner )
 				conatiner = parentContainer;
+			
+			numberColl = contetnt.children().length();
 			
 			// TODO: need sort 'contetnt.children()' by 'z-index'
 			for each ( var contetntPart : XML in contetnt.children() )
@@ -762,7 +767,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			// TODO: need sort 'contetnt.children()' by 'z-index'
 			for each ( var contetntPart : XML in contetnt.children() )
 			{
-				choiceContentType(contetntPart, conatiner );
+				choiceContentType( contetntPart, conatiner );
 			}
 		}
 		
@@ -795,20 +800,18 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					
 				case "table":
 				{
-					
 					caseTable( contetntPart, parentContainer );
 					break;
 				}
 					
 				case "row":
-				{
+				{ 
 					caseRow( contetntPart, parentContainer );
 					break;
 				}
 					
 				case "cell":
 				{
-					
 					caseCell( contetntPart, parentContainer );
 					break;
 				}
@@ -820,8 +823,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				}
 			}
 		}
-		
-		
 
 		/**
 		 *
@@ -1078,6 +1079,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			if ( param )
 				conatiner.width = param;
+			else 
+				conatiner.percentWidth = 100;
+
 			
 			param = Number( contetnt.@height[ 0 ] )
 			
@@ -1111,9 +1115,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				conatiner.x = param;
 			
 			param = Number( contetnt.@width[ 0 ] )
-			
+				
 			if ( param )
 				conatiner.width = param;
+			else 
+				conatiner.percentWidth = 100;
 			
 			param = Number( contetnt.@height[ 0 ] )
 			
@@ -1151,6 +1157,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			if ( param )
 				conatiner.width = param;
+			else 
+				conatiner.percentWidth = 100 / numberColl;
 			
 			param = Number( contetnt.@height[ 0 ] )
 			
@@ -1163,7 +1171,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function isScroller( target : DisplayObjectContainer ) : Boolean
 		{
 			var result : Boolean = false;
-
+			
 			while ( target )
 			{
 				if ( target is ScrollBarBase )
