@@ -17,6 +17,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.vo.AuthInfoVO;
 	import net.vdombox.ide.core.model.vo.ErrorVO;
+	import net.vdombox.ide.core.model.vo.HostVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -93,9 +94,11 @@ package net.vdombox.ide.core.model
 		public function connect() : void
 		{
 			_authInfo = new AuthInfoVO();
+			
+			var host : HostVO = sharedObjectProxy.getHost( sharedObjectProxy.selectedHost );
 
-			_authInfo.setHostname( sharedObjectProxy.hostname );
-			_authInfo.setUsername( sharedObjectProxy.username );
+			_authInfo.setHostname( host.host );
+			_authInfo.setUsername( host.user );
 
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_START );
 
@@ -244,8 +247,10 @@ package net.vdombox.ide.core.model
 			//only for ProgressViewMediator
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_SUCCESSFUL );
 			sendNotification( ApplicationFacade.SERVER_LOGIN_START );
+			
+			var hostVO : HostVO = sharedObjectProxy.getHost( sharedObjectProxy.selectedHost );
 
-			soap.logon( sharedObjectProxy.username, sharedObjectProxy.password );
+			soap.logon( hostVO.user, hostVO.password );
 		}
 
 		private function soap_disconnectionOKHandler( event : SOAPEvent ) : void

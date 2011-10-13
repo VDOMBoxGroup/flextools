@@ -13,6 +13,7 @@
 			import net.vdombox.ide.core.model.vo.LocaleVO;
 			
 			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
 
 			[Bindable]
 			public var languages : ArrayList;
@@ -54,11 +55,11 @@
 				if ( event.keyCode != 13 )
 					return;
 				
-				if( hostname == "" )
+				/*if( hostname == "" )
 				{
 					host.setFocus();
 					return;
-				}
+				}*/
 					
 				if( username == "" )
 				{
@@ -85,7 +86,7 @@
 			{
 				host.setFocus();
 			}
-
+			
 		]]>
 	</fx:Script>
 
@@ -97,7 +98,7 @@
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'hostname' ) }" width="100%"
 					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 			
-			<s:TextInput id="host" text="@{ hostname }" width="240" keyDown="{keyDownHandler(event)}"/>
+			<s:ComboBox id="host" labelField="host" width="240" keyDown="{keyDownHandler(event)}"/>
 			
 		</s:HGroup>
 		

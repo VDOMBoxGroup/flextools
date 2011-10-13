@@ -80,8 +80,6 @@ package net.vdombox.ide.core.model.business
 
 		public function logon( username : String, password : String ) : AsyncToken
 		{
-			var password : String = MD5Utils.encrypt( password );
-
 			webService.open_session.addEventListener( ResultEvent.RESULT, logonCompleteHandler );
 			webService.open_session.addEventListener( FaultEvent.FAULT, logonErrorHandler );
 

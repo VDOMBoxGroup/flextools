@@ -2,8 +2,10 @@ package net.vdombox.ide.core.controller
 {
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
+	import net.vdombox.ide.core.model.vo.HostVO;
 	import net.vdombox.ide.core.view.InitialWindowMediator;
 	import net.vdombox.ide.core.view.LoginViewMediator;
+	import net.vdombox.utils.MD5Utils;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -15,10 +17,28 @@ package net.vdombox.ide.core.controller
 			var loginViewMediator : LoginViewMediator = facade.retrieveMediator( LoginViewMediator.NAME ) as LoginViewMediator;
 			var sharedObjectProxy : SharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
-			
-			sharedObjectProxy.username = loginViewMediator.username;
-			sharedObjectProxy.password = loginViewMediator.password;
-			sharedObjectProxy.hostname = loginViewMediator.hostname;
+			var hostVO : HostVO;
+			if ( loginViewMediator.selectedHost )
+			{
+				hostVO = sharedObjectProxy.equalHost( loginViewMediator.selectedHost );
+			}
+			else
+			{
+				hostVO = new HostVO( loginViewMediator.hostname, loginViewMediator.username, MD5Utils.encrypt( loginViewMediator.password ), loginViewMediator.selectedLanguage );
+				hostVO = sharedObjectProxy.equalHost( hostVO );
+			}
+				
+				
+			if ( hostVO )
+			{
+				sharedObjectProxy.selectedHost = loginViewMediator.selectedHostIndex;
+			}
+			else
+			{
+				hostVO = new HostVO( loginViewMediator.hostname, loginViewMediator.username, MD5Utils.encrypt( loginViewMediator.password ), loginViewMediator.selectedLanguage );
+				sharedObjectProxy.setHost( hostVO );
+			}
+				
 			
 			serverProxy.connect();
 		}

@@ -210,8 +210,7 @@ package net.vdombox.ide.core.view
 		private function refreshApplicationProperties() : void
 		{
 			changeApplicationView.applicationName.text = selectedApplicationVO.name;
-			
-			
+		
 			changeApplicationView.applicationDescription.text = selectedApplicationVO.description;
 			
 		}

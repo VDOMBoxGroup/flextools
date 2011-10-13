@@ -5,6 +5,7 @@ package net.vdombox.ide.core.view
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	
+	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
@@ -13,6 +14,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.events.LoginViewEvent;
 	import net.vdombox.ide.core.model.LocalesProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
+	import net.vdombox.ide.core.model.vo.HostVO;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
 	import net.vdombox.ide.core.view.components.LoginView;
 	
@@ -34,6 +36,10 @@ package net.vdombox.ide.core.view
 		private var localeProxy : LocalesProxy;
 
 		private var sharedObjectProxy : SharedObjectProxy;
+		
+		public var selectedHost : HostVO;
+		
+		public var selectedHostIndex : int;
 
 		public function get username() : String
 		{
@@ -47,7 +53,7 @@ package net.vdombox.ide.core.view
 		
 		public function get hostname() : String
 		{
-			return loginView.hostname;
+			return loginView.host.textInput.text;
 		}
 		
 		override public function onRegister() : void
@@ -76,11 +82,15 @@ package net.vdombox.ide.core.view
 
 		private function addHandlers() : void
 		{
-			loginView.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
+			loginView.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler);
 
+			loginView.addEventListener( LoginViewEvent.SUBMIT, submitHandler, false, 0, true );
+			
 			loginView.addEventListener( LoginViewEvent.SUBMIT, submitHandler, false, 0, true );
 
 			loginView.addEventListener( LoginViewEvent.LANGUAGE_CHANGED, languageChangedHandler, false, 0, true );
+			
+			loginView.user.addEventListener( Event.CHANGE, usernameChangeHandler );
 		}
 
 		private function removeHandlers() : void
@@ -90,15 +100,74 @@ package net.vdombox.ide.core.view
 			loginView.removeEventListener( LoginViewEvent.SUBMIT, submitHandler );
 
 			loginView.removeEventListener( LoginViewEvent.LANGUAGE_CHANGED, languageChangedHandler );
+			
+			loginView.host.removeEventListener( Event.CHANGE, setLoginInformation);
+			
+			loginView.user.removeEventListener( Event.CHANGE, usernameChangeHandler );
+		}
+		
+		private function usernameChangeHandler( event : Event ) : void
+		{
+			if ( loginView.username != selectedHost.user )
+				loginView.password = "";
+			else
+				loginView.password = selectedHost.password;
+		}
+		
+		private function setLoginInformation( event : Event ) : void
+		{
+			if ( loginView.host.selectedItem is HostVO )
+			{
+				selectedHost = loginView.host.selectedItem as HostVO ; 
+			
+				loginView.username = selectedHost.user;
+				
+				loginView.password = selectedHost.password;
+				
+				selectedHostIndex = loginView.host.selectedIndex;
+			}
+		}
+		
+		private function delSelectedHost( event : Event ) : void
+		{
+			selectedHost = null;
+			selectedHostIndex = -1;
 		}
 
 		private function addedToStageHandler( event : Event ) : void
 		{
-			loginView.username = sharedObjectProxy.username;
+			
+			var hostVO :  HostVO;
+			
+			loginView.host.dataProvider = sharedObjectProxy.hosts;
+			selectedHost = null;
+			selectedHostIndex = -1;
+			
+			if ( sharedObjectProxy.selectedHost != -1 )
+			{
+				loginView.host.selectedIndex = sharedObjectProxy.selectedHost;
+				selectedHost = loginView.host.selectedItem as HostVO;
+				selectedHostIndex = sharedObjectProxy.selectedHost;
+			}
+			
+			loginView.host.addEventListener( Event.CHANGE, setLoginInformation);
+			
+			if ( selectedHost )
+			{
+				loginView.username = selectedHost.user;
 
-			loginView.hostname = sharedObjectProxy.hostname;
+				loginView.hostname = selectedHost.host;
 
-			loginView.password = sharedObjectProxy.password;
+				loginView.password = selectedHost.password;
+			}
+			else
+			{
+				loginView.username = "";
+				
+				loginView.hostname = "";
+				
+				loginView.password = "";
+			}
 
 			loginView.languages = new ArrayList( localeProxy.locales );
 			
@@ -110,19 +179,26 @@ package net.vdombox.ide.core.view
 			if( loginView.selectedLanguage is LocaleVO )
 				sendNotification( ApplicationFacade.CHANGE_LOCALE, loginView.selectedLanguage );
 		}
+		
+		public function get selectedLanguage() : LocaleVO
+		{
+			return loginView.selectedLanguage;
+		}
 
 		private function submitHandler( event : Event ) : void
 		{
 			submit();
+			
 		}
 
 		private function submit() : void
 		{
-
-			/*sharedObjectProxy.username = loginView.username;
-			sharedObjectProxy.password = loginView.password;
-			sharedObjectProxy.hostname = loginView.hostname;*/
-			
+			if ( selectedHost && (loginView.host.textInput.text != selectedHost.host || loginView.username != selectedHost.user 
+			|| loginView.password != selectedHost.password ) )
+			{
+				selectedHost = null;
+				selectedHostIndex = -1;
+			}
 			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNUP );
 		}
 	}

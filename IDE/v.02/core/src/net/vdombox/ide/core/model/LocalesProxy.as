@@ -55,7 +55,7 @@ package net.vdombox.ide.core.model
 			
 			_locales = [];
 			
-			var lastLocaleCode : String = sharedObjectProxy.localeCode as String;
+			var lastLocaleCode : String = "";//sharedObjectProxy.localeCode as String;
 			
 			var localeVO : LocaleVO;
 			var code : String;
@@ -98,7 +98,7 @@ package net.vdombox.ide.core.model
 					resourceManager.localeChain = [ localeVO.code, defaultLocale.code ];
 				
 				_currentLocale = localeVO;
-				sharedObjectProxy.localeCode = localeVO.code;
+				//sharedObjectProxy.localeCode = localeVO.code;
 			}
 
 		}
