@@ -2,7 +2,8 @@
 <s:Window xmlns:components="net.vdombox.ide.core.view.components.*"
 		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  height="300" width="550"
+		  height="410" width="583"
+		  minHeight="410" minWidth="583"
 		  skinClass="net.vdombox.ide.core.view.skins.InitialWindowSkin"
 		  mouseDown="window_mouseDownHandler( event )"
 		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true">

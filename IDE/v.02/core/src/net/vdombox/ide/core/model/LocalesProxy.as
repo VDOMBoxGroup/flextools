@@ -87,17 +87,28 @@ package net.vdombox.ide.core.model
 				resourceManager.localeChain = [ _defaultLocale.code ];
 		}
 		
+		private function findLocal( localVO : LocaleVO ) : LocaleVO
+		{
+			var local : LocaleVO;
+			for each ( local in locales )
+			{
+				if ( local.code == localVO.code && local.description == localVO.description )
+					return local;
+			}
+			return null;
+		}
+		
 		public function changeLocale( localeVO : LocaleVO ) : void
 		{
-			if ( _currentLocale !== localeVO && 
-				 locales.indexOf( localeVO ) != -1 )
+			var local : LocaleVO = findLocal( localeVO );
+			if ( local && local !== currentLocale )
 			{
-				if ( localeVO === defaultLocale )
+				if ( local === defaultLocale )
 					resourceManager.localeChain = [ defaultLocale.code ];
 				else
-					resourceManager.localeChain = [ localeVO.code, defaultLocale.code ];
+					resourceManager.localeChain = [ local.code, defaultLocale.code ];
 				
-				_currentLocale = localeVO;
+				_currentLocale = local;
 				//sharedObjectProxy.localeCode = localeVO.code;
 			}
 

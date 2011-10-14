@@ -27,41 +27,39 @@ package net.vdombox.ide.core.model
 		}
 
 		private var shObjData : Object;
-		private var selObjData : Object;
 		private var i : int;
 		private var hostVO : HostVO;
 
 		override public function onRegister() : void
 		{
-			selObjData = SharedObject.getLocal( "userData" );
+			shObjData = SharedObject.getLocal( "userData" );
 		}
 		
 		public function get selectedHost() : int
 		{
-			return selObjData.data.selectHost ? int (selObjData.data.selectHost as String) : -1;
+			return shObjData.data.selectHost ? int (shObjData.data.selectHost as String) : -1;
 		}
 		
 		public function set selectedHost( value : int ) : void
 		{
-			selObjData.data.selectHost = value.toString();
+			shObjData.data.selectHost = value.toString();
 		}
 
 		public function get hosts() : ArrayCollection
 		{
 			var hostList : ArrayCollection = new ArrayCollection();
 			i = 0;
-			shObjData = SharedObject.getLocal( i.toString() );
-			for ( i = 0; shObjData.data.host; )
+			while ( shObjData.data["host" + i.toString()] )
 			{
-				var host : String = shObjData.data.host as String;
-				var user : String = shObjData.data.user as String;
-				var password : String = shObjData.data.password as String;
-				var local : LocaleVO = new LocaleVO( shObjData.data.local as String, "" );
+				var host : String = shObjData.data["host" + i.toString()] as String;
+				var user : String = shObjData.data["user" + i.toString()] as String;
+				var password : String = shObjData.data["password" + i.toString()] as String;
+				var local : LocaleVO = new LocaleVO( shObjData.data["localcode" + i.toString()] as String, shObjData.data["localdescription" + i.toString()] as String );
 				
 				hostVO = new HostVO( host, user, password, local);
 				hostList.addItem( hostVO );
 				
-				shObjData = SharedObject.getLocal( (++i).toString() );
+				i++;
 	
 			}
 			return hostList;
@@ -70,60 +68,66 @@ package net.vdombox.ide.core.model
 		public function equalHost( hostValue : HostVO ) : HostVO
 		{
 			i = 0;
-			shObjData = SharedObject.getLocal( i.toString() );
-			for ( i = 0; shObjData.data.host;)
+			while ( shObjData.data["host" + i.toString()] )
 			{
-				if ( hostValue.host ==  shObjData.data.host as String &&
-					hostValue.user ==  shObjData.data.user as String &&
-					hostValue.password ==  shObjData.data.password as String &&
-					hostValue.local.code ==  shObjData.data.local as String)
+				if ( hostValue.host ==  shObjData.data["host" + i.toString()] as String &&
+					hostValue.user ==  shObjData.data["user" + i.toString()] as String &&
+					hostValue.password ==  shObjData.data["password" + i.toString()] as String &&
+					hostValue.local.code ==  shObjData.data["localcode" + i.toString()] as String)
 				{
-					var host : String = shObjData.data.host as String;
-					var user : String = shObjData.data.user as String;
-					var password : String = shObjData.data.password as String;
-					var local : LocaleVO = new LocaleVO( shObjData.data.host as String, "" );
+					var host : String = shObjData.data["host" + i.toString()] as String;
+					var user : String = shObjData.data["user" + i.toString()] as String;
+					var password : String = shObjData.data["password" + i.toString()] as String;
+					var local : LocaleVO = new LocaleVO( shObjData.data["localcode" + i.toString()] as String, shObjData.data["localdescription" + i.toString()] as String );
 					
 					hostVO = new HostVO( host, user, password, local);
 					return hostVO;
 				}		
-				shObjData = SharedObject.getLocal( (++i).toString() );
+				i++;
 			}
 			return null;
 		}
 		
 		public function getHost( index : Number ) : HostVO
 		{
-			shObjData = SharedObject.getLocal( index.toString() );
-			var host : String = shObjData.data.host as String;
-			var user : String = shObjData.data.user as String;
-			var password : String = shObjData.data.password as String;
-			var local : LocaleVO = new LocaleVO( shObjData.data.host as String, "" );
+			var host : String = shObjData.data["host" + index.toString()] as String;
+			var user : String = shObjData.data["user" + index.toString()] as String;
+			var password : String = shObjData.data["password" + index.toString()] as String;
+			var local : LocaleVO = new LocaleVO( shObjData.data["localcode" + i.toString()] as String, shObjData.data["localdescription" + i.toString()] as String );
 					
 			hostVO = new HostVO( host, user, password, local);
 			return hostVO;
+		}
+		
+		public function setLocal( index : Number, localVO : LocaleVO ) : void
+		{
+			shObjData.data["localcode" + index.toString()] = localVO.code
+			shObjData.data["localdescription" + index.toString()] = localVO.description;
 		}
 
 		public function setHost( value : HostVO ) : void
 		{
 			i = 0;
-			shObjData = SharedObject.getLocal( i.toString() );
-			for ( i = 0; shObjData.data.host; )
+			while ( shObjData.data["host" + i.toString()] )
 			{
-				if ( shObjData.data.host == value.host )
+				if ( shObjData.data["host" + i.toString()] == value.host )
 				{
-					shObjData.data.user = value.user;
-					shObjData.data.password = value.password;
-					selObjData.data.selectHost = i.toString();
+					shObjData.data["user" + i.toString()] = value.user;
+					shObjData.data["password" + i.toString()] = value.password;
+					shObjData.data["localcode" + i.toString()] = value.local.code;
+					shObjData.data["localdescription" + i.toString()] = value.local.description;
+					shObjData.data.selectHost = i.toString();
 					return;
 				}
-				shObjData = SharedObject.getLocal( (++i).toString() );
+				i++;
 			}
 			
-			shObjData.data.host = value.host;
-			shObjData.data.user = value.user;
-			shObjData.data.password = value.password;
-			shObjData.data.local = value.local.code;
-			selObjData.data.selectHost = i.toString();
+			shObjData.data["host" + i.toString()] = value.host;
+			shObjData.data["user" + i.toString()] = value.user;
+			shObjData.data["password" + i.toString()] = value.password;
+			shObjData.data["localcode" + i.toString()] = value.local.code;
+			shObjData.data["localdescription" + i.toString()] = value.local.description;
+			shObjData.data.selectHost = i.toString();
 		}
 
 	/*	public function get password() : String

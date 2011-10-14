@@ -91,6 +91,7 @@ package net.vdombox.ide.core.view
 			loginView.addEventListener( LoginViewEvent.LANGUAGE_CHANGED, languageChangedHandler, false, 0, true );
 			
 			loginView.user.addEventListener( Event.CHANGE, usernameChangeHandler );
+			
 		}
 
 		private function removeHandlers() : void
@@ -108,10 +109,13 @@ package net.vdombox.ide.core.view
 		
 		private function usernameChangeHandler( event : Event ) : void
 		{
-			if ( loginView.username != selectedHost.user )
-				loginView.password = "";
-			else
-				loginView.password = selectedHost.password;
+			if ( selectedHost )
+			{
+				if ( loginView.username != selectedHost.user )
+					loginView.password = "";
+				else
+					loginView.password = selectedHost.password;
+			}
 		}
 		
 		private function setLoginInformation( event : Event ) : void
@@ -123,6 +127,12 @@ package net.vdombox.ide.core.view
 				loginView.username = selectedHost.user;
 				
 				loginView.password = selectedHost.password;
+				
+				loginView.password = selectedHost.password;
+				
+				localeProxy.changeLocale( selectedHost.local );
+				
+				loginView.selectedLanguage = localeProxy.currentLocale;
 				
 				selectedHostIndex = loginView.host.selectedIndex;
 			}
@@ -148,9 +158,10 @@ package net.vdombox.ide.core.view
 				loginView.host.selectedIndex = sharedObjectProxy.selectedHost;
 				selectedHost = loginView.host.selectedItem as HostVO;
 				selectedHostIndex = sharedObjectProxy.selectedHost;
+				
+				loginView.host.addEventListener( Event.CHANGE, setLoginInformation);
 			}
 			
-			loginView.host.addEventListener( Event.CHANGE, setLoginInformation);
 			
 			if ( selectedHost )
 			{
@@ -159,6 +170,8 @@ package net.vdombox.ide.core.view
 				loginView.hostname = selectedHost.host;
 
 				loginView.password = selectedHost.password;
+				
+				localeProxy.changeLocale( selectedHost.local );
 			}
 			else
 			{
@@ -177,7 +190,9 @@ package net.vdombox.ide.core.view
 		private function languageChangedHandler( event : Event ) : void
 		{
 			if( loginView.selectedLanguage is LocaleVO )
+			{
 				sendNotification( ApplicationFacade.CHANGE_LOCALE, loginView.selectedLanguage );
+			}
 		}
 		
 		public function get selectedLanguage() : LocaleVO
@@ -194,7 +209,7 @@ package net.vdombox.ide.core.view
 		private function submit() : void
 		{
 			if ( selectedHost && (loginView.host.textInput.text != selectedHost.host || loginView.username != selectedHost.user 
-			|| loginView.password != selectedHost.password ) )
+			|| loginView.password != selectedHost.password )  )
 			{
 				selectedHost = null;
 				selectedHostIndex = -1;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 height="300" width="550">
+			 height="410" width="583">
 
 	<fx:Metadata>
 		[HostComponent("Object")]
@@ -15,8 +15,7 @@
 	</s:states>
 
 	<!-- main layer -->
-	<s:Group bottom="0" left="0" right="0" top="0"
-			 mask="{topMask}">
+	<s:Group bottom="0" left="0" right="0" top="0">
 
 		<!-- layer 1: background fill -->
 		<!--- Defines the background color of the skin. -->
@@ -64,22 +63,12 @@
 		
 		<!-- layer 4: contentGroup -->
 		<s:Group id="contentGroup"
-				 height="100%" width="100%"
-				 top="25"/>
+				 height="100%" width="100%"/>
 		
 	</s:Group>
 
 	<!-- mask for main layer -->
-	<s:Group id="topMask"
-			 bottom="1" left="1" right="1" top="1">
-		<s:Rect height="100%" width="100%" y="25"
-				radiusX="10" radiusY="10">
-			<s:fill>
-				<s:SolidColor color="#CC00FF"
-							  alpha="0.0"/>
-			</s:fill>
-		</s:Rect>
-	</s:Group>
+	
 
-	<s:BitmapImage height="70" smooth="true" source="@Embed(source='../assets/login/logo.png')" width="70" x="10"/>
+	
 </s:SparkSkin>

@@ -34,6 +34,11 @@ package net.vdombox.ide.core.model.vo
 		{
 			return _local;
 		}
+		
+		public function set local( value : LocaleVO ): void
+		{
+			 _local = value;
+		}
 
 
 	}
