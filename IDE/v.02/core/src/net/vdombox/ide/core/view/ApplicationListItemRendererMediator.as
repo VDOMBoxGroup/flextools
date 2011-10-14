@@ -71,8 +71,10 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
 				{
 					if ( notification.getBody() === applicationListItemRenderer.data )
+					{
+						resourceVO = null;
 						refreshProperties();
-					
+					}
 					break;
 				}
 					
@@ -93,22 +95,22 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
 					
-					resVO = notification.getBody() as ResourceVO;
-					
-					if ( applicationVO.id == resVO.ownerID )
-					{
-						resourceVO = new ResourceVO(applicationVO.id );
-						resourceVO.setID(resVO.id);
-						BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
-						
-					}
+//					resVO = notification.getBody() as ResourceVO;
+//					
+//					if ( applicationVO.id == resVO.ownerID )
+//					{
+//						resourceVO = new ResourceVO(applicationVO.id );
+//						resourceVO.setID(resVO.id);
+//						BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
+//						
+//					}
 					
 					break;
 				}
 			}	
 		}
 		
-		
+		private var loader : Loader;
 		private function setIcon( value : * ) : void
 		{
 			if (!value)
@@ -117,7 +119,7 @@ package net.vdombox.ide.core.view
 				
 				return;
 			}
-			var loader : Loader = new Loader();
+			loader = new Loader();
 			trace("setIcon:  " + resourceVO.id)
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
 			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, setIconLoaded );
@@ -167,7 +169,7 @@ package net.vdombox.ide.core.view
 			{
 				applicationListItemRenderer.nameLabel.text = applicationVO.name;
 				
-				sendNotification( ApplicationFacade.CHANGE_RESOURCE, applicationVO );
+//				sendNotification( ApplicationFacade.CHANGE_RESOURCE, applicationVO );
 				
 				if ( !applicationVO.iconID )
 				{

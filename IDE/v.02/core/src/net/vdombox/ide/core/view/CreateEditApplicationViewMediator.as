@@ -89,16 +89,14 @@ package net.vdombox.ide.core.view
 					
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
-					trace("RESOURCE_SETTED")
 					resourceVO = body as ResourceVO;
 					
-					if ( resourceVO == newIconResourceVO )
+					if ( resourceVO.id == newIconResourceVO.id )
 					{
 						newIconResourceVO = null;
 						
 						applicationInformationVO.iconID = resourceVO.id;
 						
-						trace("send EDIT_APPLICATION_INFORMATION");
 						sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: applicationVO,
 							applicationInformationVO: applicationInformationVO } );
 						
@@ -176,11 +174,15 @@ package net.vdombox.ide.core.view
 		
 		override public function onRegister() : void
 		{
+			facade.registerMediator( new IconChooserMediator( createEditApplicationView.iconChooser ) );
+
 			addHandlers();
 		}
 		
 		override public function onRemove() : void
 		{
+			facade.removeMediator( IconChooserMediator.NAME );
+
 			removeHandlers();
 		}
 		
@@ -188,14 +190,12 @@ package net.vdombox.ide.core.view
 		{
 			createEditApplicationView.addEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
 			createEditApplicationView.addEventListener( ApplicationManagerWindowEvent.CANCEL, cancelInformationHandler );
-			facade.registerMediator( new IconChooserMediator( createEditApplicationView.iconChooser ) );
 		}
 		
 		private function removeHandlers() : void
 		{
 			createEditApplicationView.removeEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
 			createEditApplicationView.removeEventListener( ApplicationManagerWindowEvent.CANCEL, cancelInformationHandler );
-			facade.removeMediator( IconChooserMediator.NAME );
 		}
 		
 		private var applicationInformationVO : ApplicationInformationVO ;
@@ -211,16 +211,17 @@ package net.vdombox.ide.core.view
 			if ( applicationVO )
 			{
 				//Icon
-				 newAppIcon = iconChooserMediator.selectedIcon;
 				
-				if ( newAppIcon )
+				if ( iconChooserMediator.iconChanged )
 				{
-					newIconResourceVO = createIconResourceVO( newAppIcon ); 
+					trace(" + iconChanged")
+					newIconResourceVO = createIconResourceVO( iconChooserMediator.selectedIcon ); 
 				
 					sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
 				}
 				else
 				{
+					trace(" - iconChanged")
 					sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: applicationVO,
 						applicationInformationVO: applicationInformationVO } );
 				}
@@ -240,7 +241,6 @@ package net.vdombox.ide.core.view
 		
 		private function getApplicationInformationVO() : ApplicationInformationVO
 		{
-			trace("getApplicationInformationVO");
 			var appInfVO : ApplicationInformationVO = new ApplicationInformationVO();
 			
 			appInfVO.name = createEditApplicationView.txtapplicationName.text;
@@ -257,7 +257,6 @@ package net.vdombox.ide.core.view
 		
 		private function createIconResourceVO( icon : ByteArray ):ResourceVO
 		{
-			trace("createIconResourceVO")
 			var resourceVO: ResourceVO = new ResourceVO( applicationVO.id );
 			
 			resourceVO.name = "Application Icon";

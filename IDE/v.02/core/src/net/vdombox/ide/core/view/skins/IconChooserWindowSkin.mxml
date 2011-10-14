@@ -24,7 +24,7 @@
 			
 			private function doubleClickedFun( event : Event ) : void
 			{
-				hostComponent.closeHandler();
+				hostComponent.selectIcon();
 			}
 			
 		]]>
@@ -60,7 +60,7 @@
 			<s:VGroup right="10" height="42" verticalAlign="middle" >
 				<s:Button id="closeButton"
 						  skinClass="net.vdombox.view.skins.MainCloseBtnSkin"
-						  click="hostComponent.closeHandler()"/>	
+						  click="hostComponent.closeWindow()"/>	
 			</s:VGroup>
 			
 		</s:Group>	
@@ -79,7 +79,7 @@
 		
 		<s:Button id="btnOK" 
 			label="OK" right="20"
-			click="hostComponent.closeHandler()"/>
+			click="hostComponent.selectIcon()"/>
 		
 	</s:VGroup>
 	

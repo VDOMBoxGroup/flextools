@@ -20,6 +20,18 @@ package net.vdombox.ide.core.model
 		{
 			super( NAME );
 			
+			init();
+			
+		}
+		
+		private var _galleryItemsQue : Array
+		private var _items : Array
+		
+		private var fileStream : FileStream;
+		private var currentFile : File;
+		
+		private function init():void
+		{
 			var f : File = File.applicationDirectory;
 			
 			f = f.resolvePath( "gallery" );
@@ -37,14 +49,8 @@ package net.vdombox.ide.core.model
 			}
 			if ( _galleryItemsQue )
 				loadFile( _galleryItemsQue.pop() )
-			
 		}
 		
-		private var _galleryItemsQue : Array
-		private var _items : Array
-		
-		private var fileStream : FileStream;
-		private var currentFile : File;
 		
 		public function get items () : Array
 		{

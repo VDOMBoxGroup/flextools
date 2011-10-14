@@ -35,8 +35,13 @@ package net.vdombox.ide.core.view.components
 			this.setStyle( "skinClass", IconChooserWindowSkin );
 		}
 
+		public function selectIcon() : void
+		{
+			dispatchEvent( new IconChooserEvent( IconChooserEvent.SELECT_ICON ) );
+			close();
+		}
 		
-		public function closeHandler() : void
+		public function closeWindow() : void
 		{
 			dispatchEvent( new IconChooserEvent( IconChooserEvent.CLOSE_ICON_LIST ) );
 		}

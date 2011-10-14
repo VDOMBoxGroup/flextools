@@ -16,10 +16,12 @@ package net.vdombox.ide.core.view
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	import mx.graphics.codec.PNGEncoder;
+	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.IconChooserEvent;
 	import net.vdombox.ide.core.model.GalleryProxy;
+	import net.vdombox.ide.core.model.vo.GalleryItemVO;
 	import net.vdombox.ide.core.view.components.IconChooser;
 	import net.vdombox.ide.core.view.components.IconChooserWindow;
 	import net.vdombox.utils.WindowManager;
@@ -43,6 +45,11 @@ package net.vdombox.ide.core.view
 		private var loader : Loader;
 		private var iconChooserWindow : IconChooserWindow
 		
+		public function get iconChanged():Boolean
+		{
+			return _iconChanged;
+		}
+
 		public function get iconChooser() : IconChooser
 		{
 			return viewComponent as IconChooser;
@@ -53,8 +60,19 @@ package net.vdombox.ide.core.view
 			return null;
 		}
 		
+		private var _iconChanged : Boolean = false;
+		
 		public function get selectedIcon() : ByteArray
 		{
+//			var source : Object = iconChooser.selectedIcon.source;
+//			
+//			 if(source as ByteArray)
+//			 	return source as ByteArray
+//			 else if (source as Bitmap)
+//				 Bitmap().
+				 
+				 
+			
 			return iconChooser.selectedIcon.source as ByteArray;
 		}
 		
@@ -112,6 +130,7 @@ package net.vdombox.ide.core.view
 		{
 			iconChooserWindow = new IconChooserWindow();
 			iconChooserWindow.addEventListener( IconChooserEvent.CLOSE_ICON_LIST, closeIconListHandler );
+			iconChooserWindow.addEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
 			iconChooserWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
 			
 			WindowManager.getInstance().addWindow( iconChooserWindow, iconChooser, true );
@@ -120,53 +139,33 @@ package net.vdombox.ide.core.view
 		private function createCompleteIconListHandler( event : FlexEvent ) : void
 		{	
 			var gp : GalleryProxy = facade.retrieveProxy( GalleryProxy.NAME ) as GalleryProxy;
-			iconChooserWindow.iconsList.addEventListener( IndexChangeEvent.CHANGE, iconList_changeHandler );
 			
 			iconChooserWindow.iconsList.dataProvider = new ArrayList( gp.items );
-			iconChooserWindow.iconsList.selectedIndex = 0;
+		}
+		
+		private function selectIconHandler(event : IconChooserEvent) : void
+		{
+			var selectedItem : GalleryItemVO = iconChooserWindow.iconsList.selectedItem as GalleryItemVO;
+			if( !selectedItem )
+				return;
+		
+			iconChooser.selectedIcon.source = ObjectUtil.copy( selectedItem.content );
+			_iconChanged = true;
 			
-			showIcon();
 		}
 		
 		private function closeIconListHandler( event : IconChooserEvent ) : void
 		{			
 			iconChooserWindow.removeEventListener( IconChooserEvent.CLOSE_ICON_LIST, closeIconListHandler );
+			iconChooserWindow.removeEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
 			iconChooserWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
 			
 			WindowManager.getInstance().removeWindow( iconChooserWindow );
-		}
-		
-		private function showIcon() : void
-		{
-			if( iconChooserWindow.iconsList.selectedItem )
-				iconChooser.selectedIcon.source = iconChooserWindow.iconsList.selectedItem.content;
-		}
-		
-		/*private function showIcon() : void
-		{
-			if( iconChooserWindow.iconsList.selectedItem )
-			{
-				var loader : Loader = new Loader();
 			
-				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, backgroundContentLoaded );
-				//loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, backgroundContentLoaded );
-			
-				try
-				{
-					loader.loadBytes( iconChooserWindow.iconsList.selectedItem.content );
-				}
-				catch ( error : Error )
-				{
-					// FIXME Сделать обработку исключения если не грузится изображение
-				}
-			}
 		}
 		
-		private function backgroundContentLoaded( event : Event ) : void
-		{
-			iconChooser.selectedIcon.source = event.target.content;
-			//selectIcon2 = iconChooserWindow.iconsList.selectedItem.content;
-		}*/
+		
+		
 		
 		private function loadIconHandler( CreateApplicationEvent : Event ) : void
 		{
@@ -177,10 +176,7 @@ package net.vdombox.ide.core.view
 			file.browseForOpen( "Load image", [ fileFilter ] );
 		}
 		
-		private function iconList_changeHandler( event : IndexChangeEvent ) : void
-		{
-			showIcon();
-		}
+		
 		
 		private function file_selectHandler( event : Event ) : void
 		{
@@ -240,6 +236,7 @@ package net.vdombox.ide.core.view
 			var pnge : PNGEncoder = new PNGEncoder();
 			var iconByteArray : ByteArray = pnge.encode( scaledImage.bitmapData );
 			
+			_iconChanged = true;
 			iconChooser.selectedIcon.source = iconByteArray;
 			//iconChooser.iconsList.selectedIndex = -1;
 		}

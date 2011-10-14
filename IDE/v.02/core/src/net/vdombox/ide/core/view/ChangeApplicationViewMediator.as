@@ -53,14 +53,20 @@ package net.vdombox.ide.core.view
 			if ( value )
 			{
 				changeApplicationView.applicationName.text = selectedApplicationVO.name;
-				changeApplicationView.applicationDescription.text = selectedApplicationVO.description;
+				changeApplicationView.applicationDescription.text = selectedApplicationDescriptions
 			}
 			else
 			{
 				changeApplicationView.applicationName.text = "";
 				changeApplicationView.applicationDescription.text = "";
 			}
-			
+		}
+		
+		private function get selectedApplicationDescriptions():String
+		{
+			return selectedApplicationVO.numberOfPages +" - pages, "
+				+selectedApplicationVO.numberOfObjects +" - objects \n\n"
+				+selectedApplicationVO.description;
 		}
 
 		public function get changeApplicationView() : ChangeApplicationView
