@@ -19,7 +19,6 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.LoadModulesRequestCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadingSuccessfulCommand;
 	import net.vdombox.ide.core.controller.ModuleUnloadingStartCommand;
-	import net.vdombox.ide.core.controller.OpenAppInEditorCommand;
 	import net.vdombox.ide.core.controller.OpenApplicationManagerCommand;
 	import net.vdombox.ide.core.controller.OpenInitialWindowCommand;
 	import net.vdombox.ide.core.controller.OpenMainWindowCommand;
@@ -359,7 +358,7 @@ package net.vdombox.ide.core
 		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
 		
 		public static const OPEN_PAGE_IN_EXTERNAL_BROWSER  : String = "openPageInExternalBrowser";
-		public static const OPEN_APPLICATION_IN_EDITOR  : String = "openApplicationInEditor";
+//		public static const OPEN_APPLICATION_IN_EDITOR  : String = "openApplicationInEditor";
 		public static const OPEN_APPLICATION_IN_EDIT_VIEW  : String = "openApplicationInEditView";
 		public static const OPEN_APPLICATION_IN_CREATE_VIEW  : String = "openApplicationInCreateView";
 		public static const OPEN_APPLICATION_IN_CHANGE_VIEW  : String = "openApplicationInChangeView";
@@ -548,7 +547,7 @@ package net.vdombox.ide.core
 			
 			registerCommand( GET_TYPES, GetTypesCommand );
 			
-			registerCommand( OPEN_APPLICATION_IN_EDITOR, OpenAppInEditorCommand );
+//			registerCommand( OPEN_APPLICATION_IN_EDITOR, OpenAppInEditorCommand );
 			
 			registerCommand( CREATE_FIRST_PAGE, CreateFirstPageCommand );
 //			registerCommand( LOGOFF_REQUEST, LogoffRequestCommand );

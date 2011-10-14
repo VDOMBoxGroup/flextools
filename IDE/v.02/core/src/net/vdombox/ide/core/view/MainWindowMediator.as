@@ -9,6 +9,7 @@
 package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
+	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.display.Screen;
 	import flash.display.Stage;
@@ -16,7 +17,7 @@ package net.vdombox.ide.core.view
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.net.SharedObject;
-	
+	import flashx.textLayout.elements.BreakElement;
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
@@ -27,7 +28,6 @@ package net.vdombox.ide.core.view
 	import mx.managers.SystemManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -44,12 +44,10 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
 	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
-	
 	import org.osmf.utils.Version;
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
@@ -77,6 +75,8 @@ package net.vdombox.ide.core.view
 			super( NAME, viewComponent );
 		}
 
+		private var applicationVO : ApplicationVO;
+
 		private var currentModuleCategory : ModulesCategoryVO;
 
 		private var modulesList : Array;
@@ -85,11 +85,11 @@ package net.vdombox.ide.core.view
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
+		private var resourceVO : ResourceVO;
+
 		private var selectedModuleID : String = "";
 
 		private var windowManager : WindowManager = WindowManager.getInstance();
-		
-		private var applicationVO : ApplicationVO;
 
 		/**
 		 *
@@ -128,31 +128,13 @@ package net.vdombox.ide.core.view
 				}
 
 
-				case ApplicationFacade.OPEN_APPLICATION_IN_EDITOR:
+				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
 				{
 					applicationVO = body as ApplicationVO;
-					
-					openApplicationInEditor();
+
+					setApplicationInfo();
 					break;
 				}
-					
-				case ApplicationFacade.RESOURCE_LOADED:
-				{
-					if ( !applicationVO )
-						return;
-					
-					var resVO : ResourceVO  = notification.getBody() as ResourceVO;
-					if ( resVO.ownerID != applicationVO.id )
-						return;
-					
-					if ( resVO.id != applicationVO.iconID )
-						return;
-					
-					BindingUtils.bindSetter( setIcon, resVO, "data", false, true );
-					
-					break;
-				}
-					
 			}
 		}
 
@@ -163,63 +145,12 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
 			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
-			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR );
-			interests.push( ApplicationFacade.RESOURCE_LOADED );
+			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
 
 			return interests;
 		}
-		
-		private function setApplicationInfo() : void
-		{
-			
-			if (!applicationVO)
-			{
-				var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-				
-				applicationVO = statesProxy.selectedApplication;
-			}
-			
-			if ( !applicationVO )
-				return;
-			mainWindow.nameApplication.text = applicationVO.name;
-			
-			if ( !applicationVO.iconID )
-			{
-				mainWindow.iconApplication.source = null;
-			}
-			
-			if ( applicationVO.iconID )
-			{
-				var resourceVO : ResourceVO = new ResourceVO( applicationVO.id );
-				resourceVO.setID( applicationVO.iconID );
-				
-				sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
-			}
-		}
-		
-		private function setIcon( value : * ) : void
-		{
-			var loader : Loader = new Loader();
-			
-			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
-			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, setIconLoaded );
-			
-			try
-			{
-				loader.loadBytes( value );
-			}
-			catch ( error : Error )
-			{
-				// FIXME Сделать обработку исключения если не грузится изображение
-			}
-		}
-		
-		private function setIconLoaded( event : Event ) : void
-		{
-			if ( event.type == IOErrorEvent.IO_ERROR )
-				return;
-			mainWindow.iconApplication.source = event.target.content;
-		}
+
+
 
 		/**
 		 *
@@ -350,8 +281,37 @@ package net.vdombox.ide.core.view
 
 
 			selectedModuleID = moduleVO.moduleID;
-// todo: delete
+
 			sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, moduleVO );
+		}
+
+		private function setApplicationInfo() : void
+		{
+			if ( !applicationVO )
+			{
+				var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+
+				applicationVO = statesProxy.selectedApplication;
+			}
+
+			if ( !applicationVO )
+				return;
+			
+			mainWindow.nameApplication.text = applicationVO.name;
+
+			if ( !applicationVO.iconID )
+			{
+				mainWindow.iconApplication.source = null;
+			}
+			else
+			{
+				resourceVO = new ResourceVO( applicationVO.id );
+				resourceVO.setID( applicationVO.iconID );
+
+				mainWindow.resourceVO = resourceVO;
+
+				sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+			}
 		}
 
 		private function settingsButton_clickHandler( event : MouseEvent ) : void

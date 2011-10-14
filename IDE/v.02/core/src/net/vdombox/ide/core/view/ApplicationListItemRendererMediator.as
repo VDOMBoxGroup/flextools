@@ -21,7 +21,7 @@ package net.vdombox.ide.core.view
 	{
 		public function ApplicationListItemRendererMediator( viewComponent : Object = null )
 		{
-			super( getNextID(), viewComponent );
+			super( NAME +"/"+viewComponent.name, viewComponent );
 		}
 		
 		private static const NAME : String = "ApplicationListItemRendererMediator";
@@ -32,12 +32,12 @@ package net.vdombox.ide.core.view
 		
 		private var applicationVO : ApplicationVO;
 		
-		private static function getNextID() : String
-		{
-			var id : String = NAME + "/" + serial;
-			serial++;
-			return id;
-		}
+//		private static function getNextID() : String
+//		{
+//			var id : String = NAME + "/" + serial;
+//			serial++;
+//			return id;
+//		}
 		
 		private function get applicationListItemRenderer() : ApplicationListItemRenderer
 		{
@@ -66,16 +66,7 @@ package net.vdombox.ide.core.view
 			
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.RESOURCE_LOADED:
-				{
-//					resVO = notification.getBody() as ResourceVO;
-//					if ( resVO.ownerID != applicationVO.id )
-//						return;
-//					resourceVO = notification.getBody() as ResourceVO;
-//					BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
-					
-					break;
-				}
+				
 					
 				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
 				{
@@ -110,16 +101,7 @@ package net.vdombox.ide.core.view
 						resourceVO.setID(resVO.id);
 						BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
 						
-//						sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
 					}
-					
-					break;
-				}
-					
-				case ApplicationFacade.RESOURCE_SETTED_ERROR:
-				{
-					
-					//sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
 					
 					break;
 				}
@@ -198,7 +180,6 @@ package net.vdombox.ide.core.view
 					resourceVO.setID( applicationVO.iconID );
 					
 					BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
-//					sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 				}
 			}
 			else

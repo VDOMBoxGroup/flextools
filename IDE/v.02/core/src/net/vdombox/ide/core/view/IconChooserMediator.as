@@ -60,8 +60,21 @@ package net.vdombox.ide.core.view
 		
 		override public function onRegister() : void
 		{
+			facade.registerProxy( new GalleryProxy() );
+			
+			addHandlers()
+		}
+		
+		private function addHandlers() : void
+		{
 			iconChooser.addEventListener( IconChooserEvent.LOAD_ICON, loadIconHandler );
 			iconChooser.addEventListener( IconChooserEvent.OPEN_ICON_LIST, openIconListHandler );
+		}
+		
+		private function removeHandlers() : void
+		{
+			iconChooser.removeEventListener( IconChooserEvent.LOAD_ICON, loadIconHandler );
+			iconChooser.removeEventListener( IconChooserEvent.OPEN_ICON_LIST, openIconListHandler );
 		}
 		
 		override public function listNotificationInterests() : Array
@@ -84,6 +97,15 @@ package net.vdombox.ide.core.view
 					break;
 				}	
 			}
+		}
+		
+		override public function onRemove() : void
+		{
+//			closeWindows();
+//			removeHandlers();
+			facade.removeProxy( GalleryProxy.NAME );
+			
+			removeHandlers();
 		}
 		
 		private function openIconListHandler( event : IconChooserEvent ) : void

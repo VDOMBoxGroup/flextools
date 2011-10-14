@@ -72,6 +72,8 @@ package net.vdombox.ide.core.view
 					
 				case ApplicationFacade.RESOURCE_LOADED:
 				{
+					
+					// todo: чето не то, не должно быть так(?)
 					if ( !applicationVO )
 						return;
 					
@@ -125,6 +127,7 @@ package net.vdombox.ide.core.view
 					newIconResourceVO = createIconResourceVO( newAppIcon ); 
 					
 					sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
+					sendNotification( ApplicationFacade.CREATE_FIRST_PAGE, applicationVO );
 					
 					break
 				}	
@@ -220,7 +223,6 @@ package net.vdombox.ide.core.view
 				{
 					sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: applicationVO,
 						applicationInformationVO: applicationInformationVO } );
-					
 				}
 			}
 			else // creating new applicationVO
@@ -241,7 +243,6 @@ package net.vdombox.ide.core.view
 			trace("getApplicationInformationVO");
 			var appInfVO : ApplicationInformationVO = new ApplicationInformationVO();
 			
-			appInfVO = new ApplicationInformationVO()
 			appInfVO.name = createEditApplicationView.txtapplicationName.text;
 			appInfVO.description = createEditApplicationView.txtapplicationDescription.text;
 			appInfVO.scriptingLanguage = createEditApplicationView.languageRBGroup.selectedValue.toString();

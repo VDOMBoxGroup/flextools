@@ -28,7 +28,7 @@ package net.vdombox.ide.core.view
 		
 		private var settings : SettingsVO;
 		
-		private var selectedApplicationVO : ApplicationVO;
+		private var _selectedApplicationVO : ApplicationVO;
 		private var selectedApplicationChanged : Boolean;
 		
 		public function ChangeApplicationViewMediator(viewComponent : Object = null )
@@ -36,6 +36,33 @@ package net.vdombox.ide.core.view
 			super( NAME, viewComponent );
 		}
 		
+		public function get selectedApplicationVO():ApplicationVO
+		{
+			return _selectedApplicationVO;
+		}
+
+		public function set selectedApplicationVO(value:ApplicationVO):void
+		{
+			_selectedApplicationVO = value;
+			applicationList.selectedItem = value;
+
+			// scroll to index
+			applicationList.validateNow();
+			applicationList.ensureIndexIsVisible(applicationList.selectedIndex);
+			
+			if ( value )
+			{
+				changeApplicationView.applicationName.text = selectedApplicationVO.name;
+				changeApplicationView.applicationDescription.text = selectedApplicationVO.description;
+			}
+			else
+			{
+				changeApplicationView.applicationName.text = "";
+				changeApplicationView.applicationDescription.text = "";
+			}
+			
+		}
+
 		public function get changeApplicationView() : ChangeApplicationView
 		{
 			return viewComponent as ChangeApplicationView;
@@ -51,11 +78,8 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.SERVER_APPLICATIONS_GETTED );
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
-			interests.push( ApplicationFacade.CHANGE_RESOURCE );
+			interests.push( ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName); //(?)
 			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
-			interests.push( ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName);
-			interests.push( ApplicationFacade.SETTINGS_CHANGED);
 			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED);	
 			interests.push( ApplicationFacade.SERVER_APPLICATION_CREATED);	
 			
@@ -72,50 +96,23 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.SERVER_APPLICATIONS_GETTED:
 				{
 					applications = notification.getBody() as Array;
-					applicationsChanged = true;
-					selectedApplicationChanged = true;
-					
+					applicationList.dataProvider = new ArrayList( applications );
+					selectApplication();
 					break;
 				}
 					
-				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
-				{
-					var newSelectedApplication : ApplicationVO = notification.getBody() as ApplicationVO;
 					
-					if ( newSelectedApplication && newSelectedApplication == selectedApplicationVO )
-						return;
-					
-					selectedApplicationVO = newSelectedApplication;
-					selectedApplicationChanged = true;
-					
-					break;
-				}	
-					
-				case ApplicationFacade.CHANGE_RESOURCE:
-				{
-					applicationVO = notification.getBody() as ApplicationVO;
-					setInfoApplication( applicationVO );
-					
-					break;
-				}	
 					
 				case ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName:
 				{
 					settings = body as SettingsVO;
 					
-					selectedApplicationChanged = true;
 					break;
 				}		
 					
-				case ApplicationFacade.SETTINGS_CHANGED:
-				{
-					selectedApplicationChanged = true;
-					
-					break;
-				}
-					
 				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
 				{
+					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
 					facade.removeMediator( mediatorName );
 					
 					break;
@@ -123,105 +120,47 @@ package net.vdombox.ide.core.view
 				
 				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
 				{
-					applicationVO = body as ApplicationVO;
-					
-					if ( applicationVO === selectedApplicationVO )
-						refreshApplicationProperties();
+					selectedApplicationVO = body as ApplicationVO;
 					
 					break;
 				}
 					
 				case ApplicationFacade.SERVER_APPLICATION_CREATED:
 				{
-					sendNotification( ApplicationFacade.CREATE_FIRST_PAGE, body );
 					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
-					sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 				}	
-					
-			
 			}
-			
-			commitProperties();
 		}
 		
-		private function setInfoApplication( applicationVO : ApplicationVO ) : void
-		{
-			if ( !applicationVO )
-				return;
-			changeApplicationView.applicationName.text = applicationVO.name;
-			changeApplicationView.applicationDescription.text = applicationVO.description;
-			selectedApplicationChanged = true;
-		}
 		
-		private function commitProperties() : void
+		
+		
+		private function  selectApplication(): void
 		{
-			if ( applicationsChanged )
+			if ( !applications || applications.length == 0 )
+				return ;
+			
+			if ( settings )
 			{
-				applicationsChanged = false;
-				applicationList.dataProvider = new ArrayList( applications );
-			}
-			if ( selectedApplicationChanged )
-			{
-				selectedApplicationChanged = false;
-				
-				if ( selectedApplicationVO )
+				for ( var i : int = 0; i < applications.length; i++ )
 				{
-					applicationList.selectedItem = selectedApplicationVO;
-					
-					
-					refreshApplicationProperties();
-					
-					/*if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplicationVO.id )
+					if ( applications[ i ].id == settings.lastApplicationID )
 					{
-						settings.lastApplicationID = selectedApplicationVO.id
-					}*/
-					
-					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
-				}
-				else
-				{
-					var newSelectedApplication : ApplicationVO;
-					
-					if ( !applications || applications.length == 0 )
+						selectedApplicationVO = applications[ i ];
 						return;
-					
-					if ( settings )
-					{
-						for ( var i : int = 0; i < applications.length; i++ )
-						{
-							if ( applications[ i ].id == settings.lastApplicationID )
-							{
-								newSelectedApplication = applications[ i ];
-								break;
-							}
-						}
-						
-						
 					}
-					
-					if( !newSelectedApplication )
-						newSelectedApplication = applications[ 0 ];
-					
-					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, newSelectedApplication );
 				}
 			}
+
+			selectedApplicationVO = applications[ 0 ];
 		}
 		
-		private function refreshApplicationProperties() : void
-		{
-			changeApplicationView.applicationName.text = selectedApplicationVO.name;
-		
-			changeApplicationView.applicationDescription.text = selectedApplicationVO.description;
-			
-		}
+
 		
 		override public function onRegister() : void
 		{
-			sendNotification( ApplicationFacade.GET_SETTINGS_MANAGER, mediatorName );
 			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
-			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 			sendNotification( ApplicationFacade.GET_SETTINGS, mediatorName );
-
 
 			addHandlers();
 		}
@@ -256,7 +195,6 @@ package net.vdombox.ide.core.view
 				settings.lastApplicationID = selectedApplicationVO.id
 			}
 			
-			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR, selectedApplicationVO );
 			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 		}
 		
@@ -278,12 +216,7 @@ package net.vdombox.ide.core.view
 				newSelectedApplication = applications[ event.newIndex ] as ApplicationVO;
 			
 			if ( selectedApplicationVO != newSelectedApplication )
-			{
 				selectedApplicationVO = newSelectedApplication;
-				selectedApplicationChanged = true;
-				setInfoApplication( selectedApplicationVO );
-				commitProperties();
-			}
 		}
 		
 		private function rendererCreatedHandler( event : Event ) : void

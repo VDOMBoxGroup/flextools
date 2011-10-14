@@ -35,6 +35,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW );
 			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW );
 			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
+			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			
 			return interests;
 		}
@@ -69,12 +70,19 @@ package net.vdombox.ide.core.view
 					break;
 				}
 					
+				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
+				{
+					facade.removeMediator( mediatorName );
+					closeWindows();
+					
+					sendNotification(ApplicationFacade.OPEN_MAIN_WINDOW); 
+					break;
+				}
 			}
 		}
 		
 		override public function onRegister() : void
 		{
-			facade.registerProxy( new GalleryProxy() );
 			addHandlers();
 		}
 		
@@ -104,15 +112,12 @@ package net.vdombox.ide.core.view
 		private function closeHandler ( event : ApplicationManagerWindowEvent ) : void
 		{
 			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
-			facade.removeMediator( mediatorName );
-			closeWindows();
+			
 		}
 		
 		private function closeWindows () : void
 		{
 			WindowManager.getInstance().removeWindow( applicationManagerWindow );
-			
-			facade.removeProxy( GalleryProxy.NAME );
 		}
 	}
 }
