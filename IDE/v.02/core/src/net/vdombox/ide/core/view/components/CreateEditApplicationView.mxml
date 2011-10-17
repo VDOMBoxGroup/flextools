@@ -3,7 +3,8 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:components="net.vdombox.ide.core.view.components" 
-		 width="100%" height="100%" gap="2" xmlns:components1="net.vdombox.ide.core.view.components.*">
+		 width="100%" height="100%" gap="2" xmlns:components1="net.vdombox.ide.core.view.components.*"
+		 paddingBottom="10" paddingRight="10">
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
@@ -33,9 +34,9 @@
 		
 		<s:Label buttonMode="true" text="Edit Script Language:"
 				 fontFamily="Verdana" fontSize="14"
-				 color="#FFFFFF" textDecoration="underline"/>
+				 color="#FFFFFF" />
 		
-		<s:VGroup width="100%" paddingBottom="10">
+		<s:HGroup width="100%" paddingBottom="10">
 			
 			<s:RadioButton id="vbscript"
 						   label="vbscript" value="vbscript" color="#FFFFFF"
@@ -45,25 +46,26 @@
 						   label="python" value="python" color="#FFFFFF"
 						   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
 			
-		</s:VGroup>
+		</s:HGroup>
 	</s:VGroup>
 	
 	<s:VGroup width="35%" height="100%" gap="2" 
-			  paddingTop="10" paddingLeft="20" paddingBottom="30">
+			  paddingTop="10" paddingLeft="20" >
 		
 		<components1:IconChooser id="iconChooser" width="100%" />
 		
 		<mx:Spacer height="100%" />
 		
-		<s:HGroup width="100%" height="25" horizontalAlign="right" paddingRight="10">
+		<s:HGroup width="100%" horizontalAlign="right" >
 			
-			<s:Button id="btnSave" 
+			<s:Button id="btnCancel" skinClass="net.vdombox.view.skins.OvalButtonSkin"
+					  label="{resourceManager.getString( 'Core_General', 'create_edit_application_cancel' )}"
+					  click="{dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.CANCEL ) ) }"/>
+
+			<s:Button id="btnSave" skinClass="net.vdombox.view.skins.OvalButtonSkin"
 					  label="{resourceManager.getString( 'Core_General', 'create_edit_application_save' )}"
 					  click="{dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.SAVE_INFORMATION ) ) }"/>
 			
-			<s:Button id="btnCancel" 
-					  label="{resourceManager.getString( 'Core_General', 'create_edit_application_cancel' )}"
-					  click="{dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.CANCEL ) ) }"/>
 		</s:HGroup>
 	</s:VGroup>
 </s:HGroup>

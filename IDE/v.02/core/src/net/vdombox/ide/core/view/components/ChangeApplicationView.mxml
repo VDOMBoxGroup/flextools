@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" gap="2">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" paddingBottom="10" paddingRight="10">
 	
 	<fx:Script>
 		<![CDATA[
@@ -41,50 +41,44 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:VGroup width="50%" minWidth="266" height="100%" paddingBottom="30" gap="2">
+	<s:VGroup width="50%" minWidth="25" height="100%" gap="2">
 		<s:List id="applicationList"
 				width="100%" height="100%"
 				itemRenderer="net.vdombox.ide.core.view.components.ApplicationListItemRenderer"
 				creationComplete="applicationList_creationCompleteHandler(event)"/>
 		
-		<mx:Spacer height="25" />
 		
-		<s:HGroup width="100%" height="25" horizontalAlign="center">
-			<s:Button id="btnOpenInCreateView"
-					  height="100%"
+		<s:Button id="btnOpenInCreateView" skinClass="net.vdombox.view.skins.OvalButtonSkin"
 					  label="{resourceManager.getString( 'Core_General', 'change_application_add_new_application' )}" 
 					  click="btnOpenInCreateView_clickHandler(event)"/>
-		</s:HGroup>
 	</s:VGroup>
 	
-	<s:VGroup width="50%" minWidth="266" height="100%" 
-			  paddingTop="12" paddingBottom="30" gap="10">
+	<s:VGroup width="50%"  height="100%" 
+			  paddingTop="12"  gap="10">
 		<s:TextInput id="applicationName" 
 					 width="100%"
-					 borderVisible="false" editable="false" selectable="false"
-				 	 fontSize="20" color="#FFFFFF"/>
+					 borderVisible="false" editable="false" selectable="false" fontFamily="Arial" 
+				 	 fontSize="18" color="#FFFFFF" fontWeight="bold"/>
 		
 		<s:TextArea id="applicationDescription" 
 					width="100%" height="100%" editable="false"  selectable="false"
-					borderVisible="false" color="#FFFFFF"/>
+					borderVisible="false" color="#CACACA" fontFamily="Arial" fontSize="10"/>
 		
-		<s:Label id="applicationEditor" 
-				 text="Change application settings" textDecoration="underline"
-				 fontSize="12" color="#25D9FF" click="applicationEditor_clickHandler(event)"/>
+		
 		<mx:Spacer height="20"/>
 		
-		<s:HGroup height="25" width="100%" horizontalAlign="right" gap="20" paddingRight="20">
+		<s:HGroup horizontalAlign="right" gap="10" width="100%" >
+			
+			
+			<s:Button id="applicationEditor" 
+					  label="Change " 
+					  click="applicationEditor_clickHandler(event)" skinClass="net.vdombox.view.skins.OvalButtonSkin"/>
 			
 			<s:Button id="btnOpenInEditor" 
-					  width="100" height="100%"
 					  label="{resourceManager.getString( 'Core_General', 'change_application_open_in_editor' )}" 
+					  skinClass="net.vdombox.view.skins.OvalButtonSkin"
 					  click="btnOpenInEditor_clickHandler(event)"/>
 		</s:HGroup>
 		
 	</s:VGroup>
-	
-	
-
-	
-	
 </s:HGroup>

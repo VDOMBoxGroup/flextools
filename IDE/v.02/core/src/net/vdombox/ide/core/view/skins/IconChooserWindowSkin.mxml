@@ -11,6 +11,7 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.core.view.components.GalleryItemRenderer;
+			import net.vdombox.view.skins.OvalButtonSkin;
 			
 			protected function iconsList_creationCompleteHandler(event:FlexEvent):void
 			{
@@ -72,14 +73,14 @@
 				creationComplete="iconsList_creationCompleteHandler(event)">
 			
 			<s:layout>
-				
 				<s:TileLayout />
 			</s:layout>
 		</s:List>
 		
-		<s:Button id="btnOK" 
-			label="OK" right="20"
-			click="hostComponent.selectIcon()"/>
+		<s:Group width="100%">
+			<s:Button id="btnOK" skinClass="net.vdombox.view.skins.OvalButtonSkin"
+				label="OK" right="10" 	click="hostComponent.selectIcon()" />
+		</s:Group>
 		
 	</s:VGroup>
 	
