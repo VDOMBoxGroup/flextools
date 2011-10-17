@@ -41,11 +41,11 @@ package net.vdombox.ide.core.controller
 			else
 			{
 				hostVO = new HostVO( loginViewMediator.hostname, loginViewMediator.username, MD5Utils.encrypt( loginViewMediator.password ), loginViewMediator.selectedLanguage );
-				sharedObjectProxy.setHost( hostVO );
+
 			}
 				
 			
-			serverProxy.connect();
+			serverProxy.connect( hostVO );
 		}
 	}
 }

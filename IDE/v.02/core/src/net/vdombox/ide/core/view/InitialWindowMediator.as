@@ -78,10 +78,7 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.MODULES_LOADING_SUCCESSFUL:
 				{
-					if( sessionProxy.errorVO )
-						initialWindow.currentState = ERROR_VIEW_STATE_NAME;
-					else
-						initialWindow.currentState = LOGIN_VIEW_STATE_NAME;
+					initialWindow.currentState = sessionProxy.errorVO ? ERROR_VIEW_STATE_NAME : LOGIN_VIEW_STATE_NAME; 
 					
 					break;
 				}
@@ -128,6 +125,8 @@ package net.vdombox.ide.core.view
 			initialWindow.addEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler, false, 0, true );
 
 			initialWindow.addEventListener( InitialWindowEvent.EXIT, exitHandler, false, 0, true );
+			
+			initialWindow.addEventListener( InitialWindowEvent.SUBMIT, submitHandler);
 		}
 
 		private function removeHandlers() : void
@@ -138,6 +137,8 @@ package net.vdombox.ide.core.view
 			initialWindow.removeEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler );
 
 			initialWindow.removeEventListener( InitialWindowEvent.EXIT, exitHandler );
+			
+			initialWindow.removeEventListener( InitialWindowEvent.SUBMIT, submitHandler );
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
@@ -169,6 +170,11 @@ package net.vdombox.ide.core.view
 		private function exitHandler( event : InitialWindowEvent ) : void
 		{
 			NativeApplication.nativeApplication.exit();
+		}
+		
+		private function submitHandler( event : InitialWindowEvent ) : void
+		{
+			sendNotification( ApplicationFacade.SUBMIN_CLICK );
 		}
 	}
 }

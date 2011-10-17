@@ -63,17 +63,30 @@ package net.vdombox.ide.core.view
 
 			addHandlers();
 		}
+		
+		
 
-//		override public function listNotificationInterests() : Array
-//		{
-//			var interests : Array = super.listNotificationInterests();
-//			
-//			return interests;
-//		}
-//
-//		override public function handleNotification( notification : INotification ) : void
-//		{
-//		}
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.SUBMIN_CLICK );
+			
+			return interests;
+		}
+
+		override public function handleNotification( notification : INotification ) : void
+		{
+			switch ( notification.getName() )
+			{
+				case ApplicationFacade.SUBMIN_CLICK:
+				{
+					submit();
+					
+					break;
+				}
+			}
+		}
 		
 		private function get loginView() : LoginView
 		{
@@ -83,21 +96,21 @@ package net.vdombox.ide.core.view
 		private function addHandlers() : void
 		{
 			loginView.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler);
-
-			loginView.addEventListener( LoginViewEvent.SUBMIT, submitHandler, false, 0, true );
 			
-			loginView.addEventListener( LoginViewEvent.SUBMIT, submitHandler, false, 0, true );
+			loginView.addEventListener( LoginViewEvent.SUBMIT, submitHandler );
 
 			loginView.addEventListener( LoginViewEvent.LANGUAGE_CHANGED, languageChangedHandler, false, 0, true );
 			
 			loginView.user.addEventListener( Event.CHANGE, usernameChangeHandler );
+			
+			loginView.host.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHostHandler );
 			
 		}
 
 		private function removeHandlers() : void
 		{
 			loginView.removeEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
-
+			
 			loginView.removeEventListener( LoginViewEvent.SUBMIT, submitHandler );
 
 			loginView.removeEventListener( LoginViewEvent.LANGUAGE_CHANGED, languageChangedHandler );
@@ -105,13 +118,31 @@ package net.vdombox.ide.core.view
 			loginView.host.removeEventListener( Event.CHANGE, setLoginInformation);
 			
 			loginView.user.removeEventListener( Event.CHANGE, usernameChangeHandler );
+			
+			loginView.host.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHostHandler );
+		}
+		
+		private function createCompleteHostHandler( event : FlexEvent ) : void
+		{
+			loginView.host.textInput.addEventListener( Event.CHANGE, hostnameChangeHandler, false, 0, true );
 		}
 		
 		private function usernameChangeHandler( event : Event ) : void
 		{
 			if ( selectedHost )
 			{
-				if ( loginView.username != selectedHost.user )
+				if ( loginView.username != selectedHost.user || loginView.host.textInput.text != selectedHost.host )
+					loginView.password = "";
+				else
+					loginView.password = selectedHost.password;
+			}
+		}
+		
+		private function hostnameChangeHandler( event : Event ) : void
+		{
+			if ( selectedHost )
+			{
+				if ( loginView.host.textInput.text != selectedHost.host || loginView.username != selectedHost.user)
 					loginView.password = "";
 				else
 					loginView.password = selectedHost.password;
@@ -203,7 +234,6 @@ package net.vdombox.ide.core.view
 		private function submitHandler( event : Event ) : void
 		{
 			submit();
-			
 		}
 
 		private function submit() : void

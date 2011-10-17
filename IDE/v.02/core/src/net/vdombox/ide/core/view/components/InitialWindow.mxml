@@ -2,9 +2,10 @@
 <s:Window xmlns:components="net.vdombox.ide.core.view.components.*"
 		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  height="410" width="583"
-		  minHeight="410" minWidth="583"
-		  skinClass="net.vdombox.ide.core.view.skins.InitialWindowSkin"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  height="410" width="580"
+		  minHeight="410" minWidth="580"
+		 
 		  mouseDown="window_mouseDownHandler( event )"
 		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true">
 
@@ -12,26 +13,14 @@
 		<![CDATA[
 			import flash.display.NativeWindowSystemChrome;
 			import flash.events.MouseEvent;
-
+			
 			import mx.controls.SWFLoader;
 			import mx.modules.ModuleLoader;
 			import mx.modules.ModuleManager;
-
+			
 			import net.vdombox.ide.core.events.InitialWindowEvent;
-
-			import spark.components.Button;
+			
 			import spark.components.RichEditableText;
-
-			[SkinPart( required="true" )]
-			public var exitButton : Button;
-
-			override protected function partAdded( partName : String, instance : Object ) : void
-			{
-				super.partAdded( partName, instance );
-
-				if ( instance === exitButton )
-					exitButton.addEventListener( MouseEvent.CLICK, exitButton_clickHandler, false, 0, true );
-			}
 
 			private function window_mouseDownHandler( event : MouseEvent ) : void
 			{
@@ -48,6 +37,11 @@
 			{
 				dispatchEvent( new InitialWindowEvent( InitialWindowEvent.EXIT ) );
 			}
+		
+			private function submitButton_clickHandler( event : MouseEvent ) : void
+			{
+				dispatchEvent( new InitialWindowEvent( InitialWindowEvent.SUBMIT ) );
+			}
 		]]>
 	</fx:Script>
 
@@ -56,17 +50,50 @@
 		<s:State name="loginView"/>
 		<s:State name="errorView"/>
 	</s:states>
+	
+	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
+		<s:fill>
+			<s:SolidColor color="#424242"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Group left="9" top="9" right="9" bottom="9">
+		
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:BitmapFill source = "@Embed('icons/bg_logo.png')" smooth="true" fillMode="repeat"/>
+			</s:fill>
+		</s:Rect>
+		
+		<components:ProgressView id="progressView"
+								 height="100%" width="100%"
+								 itemCreationPolicy="immediate" includeIn="progressView"/>
+		
+		<components:LoginView id="loginView"
+							  height="100%" width="100%"
+							  itemCreationPolicy="immediate" includeIn="loginView"/>
+		
+		<components:ErrorView id="errorView"
+							  height="100%" width="100%"
+							  itemCreationPolicy="immediate" includeIn="errorView"/>
+		
+		<s:HGroup width="100%" horizontalAlign="right" paddingRight="40" gap="10" bottom="37">
+			
+			<mx:Button id="exitButton" cornerRadius="15" includeIn="loginView, progressView"
+					  height="29" label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }" minWidth="100"
+					  fontFamily="Arial" fontSize="14" bottom="50" left="300" 
+					  click="exitButton_clickHandler(event)"/>
+			
+			<mx:Button id="submitButton" cornerRadius="15" includeIn="loginView" 
+					   icon="@Embed('icons/connect.png')"
+					   height="29" label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
+					   fontFamily="Arial" fontSize="14"
+					   click="submitButton_clickHandler(event)" />
+		</s:HGroup>
+		
+		
+	</s:Group>
 
-	<components:ProgressView id="progressView"
-							 height="100%" width="100%"
-							 itemCreationPolicy="immediate" includeIn="progressView"/>
-
-	<components:LoginView id="loginView"
-						  height="100%" width="100%"
-						  itemCreationPolicy="immediate" includeIn="loginView"/>
-
-	<components:ErrorView id="errorView"
-						  height="100%" width="100%"
-						  itemCreationPolicy="immediate" includeIn="errorView"/>
+	
 
 </s:Window>

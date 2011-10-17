@@ -61,6 +61,8 @@ package net.vdombox.ide.core.model
 		private var _applications : Array;
 		
 		private var _pingServerTimer : Timer;
+		
+		private var hostVO : HostVO;
 
 		public function get authInfo() : AuthInfoVO
 		{
@@ -91,14 +93,14 @@ package net.vdombox.ide.core.model
 			removeHandlers();
 		}
 
-		public function connect() : void
+		public function connect( host : HostVO ) : void
 		{
 			_authInfo = new AuthInfoVO();
 			
-			var host : HostVO = sharedObjectProxy.getHost( sharedObjectProxy.selectedHost );
+			hostVO = host;
 
-			_authInfo.setHostname( host.host );
-			_authInfo.setUsername( host.user );
+			_authInfo.setHostname( hostVO.host );
+			_authInfo.setUsername( hostVO.user );
 
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_START );
 
@@ -247,8 +249,6 @@ package net.vdombox.ide.core.model
 			//only for ProgressViewMediator
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_SUCCESSFUL );
 			sendNotification( ApplicationFacade.SERVER_LOGIN_START );
-			
-			var hostVO : HostVO = sharedObjectProxy.getHost( sharedObjectProxy.selectedHost );
 
 			soap.logon( hostVO.user, hostVO.password );
 		}
@@ -267,7 +267,13 @@ package net.vdombox.ide.core.model
 
 			sendNotification( ApplicationFacade.SERVER_LOGIN_SUCCESSFUL, _authInfo );
 			startInfiniteSession();
-			
+			addHostInSharedObject();
+		}
+		
+		private function addHostInSharedObject() : void
+		{
+			if ( !sharedObjectProxy.equalHost( hostVO ) )	
+				sharedObjectProxy.setHost( hostVO );
 		}
 				
 		private function startInfiniteSession() : void

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:components="net.vdombox.ide.core.view.components.*"
 		 creationComplete="group1_creationCompleteHandler(event)"
-		 show="group1_showHandler(event)">
+		 show="group1_showHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:skins="net.vdombox.ide.core.view.skins.*">
 
 	<fx:Script>
 		<![CDATA[
@@ -44,22 +45,17 @@
 			{
 				dispatchEvent( new LoginViewEvent( LoginViewEvent.LANGUAGE_CHANGED ) );
 			}
-
-			private function submitButton_clickHandler() : void
-			{
-				dispatchEvent( new LoginViewEvent( LoginViewEvent.SUBMIT ) );
-			}
-
+			
 			override protected function keyDownHandler( event : KeyboardEvent ) : void
 			{
 				if ( event.keyCode != 13 )
 					return;
 				
-				/*if( hostname == "" )
+				if( host.textInput.text == "" )
 				{
 					host.setFocus();
 					return;
-				}*/
+				}
 					
 				if( username == "" )
 				{
@@ -90,80 +86,67 @@
 		]]>
 	</fx:Script>
 	
-	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
-		<s:fill>
-			<s:SolidColor color="#424242"/>
-		</s:fill>
-	</s:Rect>
-
-	<s:Group left="9" top="9" right="9" bottom="9">
-		
-		<s:Rect width="100%" height="100%">
-			<s:fill>
-				<s:BitmapFill source = "@Embed('icons/bg_logo.png')" smooth="true" fillMode="repeat"/>
-			</s:fill>
-		</s:Rect>
-		
-		
-		<s:VGroup gap="10" styleName="loginForm"
-				  left="20" right="100" top="50">
-			<s:HGroup gap="20" width="100%"
-					  verticalAlign="middle">
+	
+		<s:VGroup gap="20" styleName="loginForm"
+				  height="100%" left="180" right="40" top="34">
+			<s:VGroup gap="3" width="100%">
 				
 				<s:Label text="{ resourceManager.getString( 'LoginForm', 'hostname' ) }" width="100%"
-						 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
+						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
 				
-				<s:ComboBox id="host" openOnInput="false" labelField="host" width="240" 
+				<s:ComboBox id="host" openOnInput="false" labelField="host" width="100%" height="31"
+							fontSize="18" fontFamily="Arial" color="#5A5A5A"
 							keyDown="{keyDownHandler(event)}"/>
 				
-			</s:HGroup>
+			</s:VGroup>
 			
-			<s:HGroup gap="20" width="100%"
-					  verticalAlign="middle">
+			<s:VGroup gap="3" width="100%">
 				
 				<s:Label text="{ resourceManager.getString( 'LoginForm', 'username' ) }" width="100%"
-						 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
+						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
 				
-				<s:TextInput id="user" text="@{ username }" width="240" keyDown="{keyDownHandler(event)}"/>
+				<s:TextInput id="user" text="@{ username }" skinClass="net.vdombox.ide.core.view.skins.TextInputCornerSkin"
+							 width="100%" height="31" 
+							 fontSize="18" fontFamily="Arial" color="#5A5A5A"
+							 keyDown="{keyDownHandler(event)}"/>
 				
-			</s:HGroup>
+			</s:VGroup>
 			
-			<s:HGroup gap="20" width="100%"
-					  verticalAlign="middle">
+			<s:VGroup gap="3" width="100%">
 				
 				<s:Label text="{ resourceManager.getString( 'LoginForm', 'password' ) }" width="100%"
-						 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
+						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
+				 
+				<s:HGroup>
+					<s:TextInput id="pass" text="@{ password }" skinClass="net.vdombox.ide.core.view.skins.TextInputCornerSkin"
+								 width="100%" height="31" displayAsPassword="true" 
+								 fontSize="18" fontFamily="Arial" color="#5A5A5A" 
+								 keyDown="{keyDownHandler(event)}"/>
+					
+					<components:SaveButton height="31"/>
+					
+				</s:HGroup>
 				
-				<s:TextInput id="pass" text="@{ password }" width="240" displayAsPassword="true" keyDown="{keyDownHandler(event)}" />
 				
-			</s:HGroup>
+			</s:VGroup>
 			
 			
 			
-			<s:HGroup gap="20" width="100%"
-					  verticalAlign="middle">
+			<s:VGroup gap="3" width="100%">
 				
 				<s:Label text="{ resourceManager.getString( 'LoginForm', 'language' ) }" width="100%"
-						 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
+						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
 				
-				<s:ComboBox id="selectLang"
-							dataProvider="{ languages }" labelField="description" width="240"
+				<s:DropDownList id="selectLang"
+							dataProvider="{ languages }" labelField="description" width="100%" height="31"
 							change="selectLang_changeHandler()"
+							fontSize="18" fontFamily="Arial" color="#5A5A5A"
 							selectedItem="@{ _selectedLanguage }"/>
 				
-			</s:HGroup>
+			</s:VGroup>
 			
 		</s:VGroup>
 		
-		<s:Group height="35" width="100%"
-				 bottom="0">
-			
-			<s:Button id="submitButton"
-					  height="35" label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
-					  fontFamily="Verdana" fontSize="14" right="-2" skinClass="net.vdombox.ide.core.view.skins.InitialWindowButtonSkin"
-					  click="submitButton_clickHandler()"/>
-		</s:Group>
-	</s:Group>
 	
 	
 </s:Group>

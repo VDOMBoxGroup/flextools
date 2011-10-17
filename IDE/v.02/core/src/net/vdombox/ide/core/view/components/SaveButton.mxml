@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="save" />
+		<s:State name="notsave" />
+	</s:states>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="#FFFFFF" />
+				<s:GradientEntry color="#A9A9A9" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup width="100%" height="100%" gap="2" verticalAlign="middle"
+			  paddingLeft="5" paddingRight="5">
+		<mx:Image source.notsave="@Embed('icons/check_0.png')"
+				  source.save="@Embed('icons/check_1.png')" />
+		
+		<s:Label id="labelDisplay"
+				 textAlign="center"
+				 verticalAlign="middle"
+				 maxDisplayedLines="1"
+				 horizontalCenter="0" verticalCenter="1"
+				 text="{ resourceManager.getString( 'LoginForm', 'save_button' ) }">
+		</s:Label>
+	</s:HGroup>
+	
+	
+</s:Group>

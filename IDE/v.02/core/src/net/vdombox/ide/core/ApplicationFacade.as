@@ -151,6 +151,7 @@ package net.vdombox.ide.core
 		
 		public static const SHOW_LOGIN_VIEW_REQUEST : String = "showLoginViewRequest";
 		
+		public static const SUBMIN_CLICK : String = "submitClick";
 //		*****
 		public static const CONNECT_MODULE_TO_CORE : String = "connectModuleToCore";
 		public static const DISCONNECT_MODULE_TO_CORE : String = "disconnectModuleToCore";

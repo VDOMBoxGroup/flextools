@@ -5,6 +5,7 @@ package net.vdombox.ide.core.events
 	public class InitialWindowEvent extends Event
 	{
 		public static var EXIT : String = "exit";
+		public static var SUBMIT : String = "submit";
 		
 		public function InitialWindowEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{
