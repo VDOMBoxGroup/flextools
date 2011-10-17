@@ -83,6 +83,14 @@
 				host.setFocus();
 			}
 			
+			protected function saveButton_clickHandler(event:MouseEvent):void
+			{
+				if ( saveButton.currentState == "save" )
+					saveButton.currentState = "notsave";
+				else
+					saveButton.currentState = "save";
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -117,13 +125,14 @@
 				<s:Label text="{ resourceManager.getString( 'LoginForm', 'password' ) }" width="100%"
 						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
 				 
-				<s:HGroup>
+				<s:HGroup width="100%" gap="4">
 					<s:TextInput id="pass" text="@{ password }" skinClass="net.vdombox.ide.core.view.skins.TextInputCornerSkin"
 								 width="100%" height="31" displayAsPassword="true" 
 								 fontSize="18" fontFamily="Arial" color="#5A5A5A" 
 								 keyDown="{keyDownHandler(event)}"/>
 					
-					<components:SaveButton height="31"/>
+					<components:SaveButton id="saveButton" height="31" width="58" 
+										   click="saveButton_clickHandler(event)"/>
 					
 				</s:HGroup>
 				

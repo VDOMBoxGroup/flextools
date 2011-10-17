@@ -7,15 +7,15 @@
 	</fx:Declarations>
 	
 	<s:states>
-		<s:State name="save" />
 		<s:State name="notsave" />
+		<s:State name="save" />
 	</s:states>
 	
-	<s:Rect width="100%" height="100%">
+	<s:Rect width="100%" height="100%" radiusX="5" radiusY="5">
 		<s:fill>
 			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="#FFFFFF" />
-				<s:GradientEntry color="#A9A9A9" />
+				<s:GradientEntry color.notsave="#FFFFFF" color.save="#2B2B2B"/>
+				<s:GradientEntry color.notsave="#A9A9A9" color.save="#404040"/>
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
@@ -26,7 +26,7 @@
 				  source.save="@Embed('icons/check_1.png')" />
 		
 		<s:Label id="labelDisplay"
-				 textAlign="center"
+				 textAlign="center" color.save="#FFFFFF" color.notsave="#000000"
 				 verticalAlign="middle"
 				 maxDisplayedLines="1"
 				 horizontalCenter="0" verticalCenter="1"

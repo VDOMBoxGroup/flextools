@@ -272,6 +272,8 @@ package net.vdombox.ide.core.model
 		
 		private function addHostInSharedObject() : void
 		{
+			if ( !hostVO.save )
+				hostVO.password = "";
 			if ( !sharedObjectProxy.equalHost( hostVO ) )	
 				sharedObjectProxy.setHost( hostVO );
 		}

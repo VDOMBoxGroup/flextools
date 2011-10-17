@@ -4,8 +4,8 @@
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  height="410" width="580"
+		  skinClass="net.vdombox.ide.core.view.skins.InitialWindowSkin"
 		  minHeight="410" minWidth="580"
-		 
 		  mouseDown="window_mouseDownHandler( event )"
 		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true">
 
@@ -51,49 +51,30 @@
 		<s:State name="errorView"/>
 	</s:states>
 	
-	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
-		<s:fill>
-			<s:SolidColor color="#424242"/>
-		</s:fill>
-	</s:Rect>
-	
-	<s:Group left="9" top="9" right="9" bottom="9">
+	<components:ProgressView id="progressView"
+						height="100%" width="100%"
+						itemCreationPolicy="immediate" includeIn="progressView"/>
 		
-		<s:Rect width="100%" height="100%">
-			<s:fill>
-				<s:BitmapFill source = "@Embed('icons/bg_logo.png')" smooth="true" fillMode="repeat"/>
-			</s:fill>
-		</s:Rect>
+	<components:LoginView id="loginView"
+						height="100%" width="100%"
+						itemCreationPolicy="immediate" includeIn="loginView"/>
 		
-		<components:ProgressView id="progressView"
-								 height="100%" width="100%"
-								 itemCreationPolicy="immediate" includeIn="progressView"/>
+	<components:ErrorView id="errorView"
+						height="100%" width="100%"
+						itemCreationPolicy="immediate" includeIn="errorView"/>
 		
-		<components:LoginView id="loginView"
-							  height="100%" width="100%"
-							  itemCreationPolicy="immediate" includeIn="loginView"/>
-		
-		<components:ErrorView id="errorView"
-							  height="100%" width="100%"
-							  itemCreationPolicy="immediate" includeIn="errorView"/>
-		
-		<s:HGroup width="100%" horizontalAlign="right" paddingRight="40" gap="10" bottom="37">
+	<s:HGroup width="100%" horizontalAlign="right" paddingRight="40" gap="10" bottom="37">
 			
-			<mx:Button id="exitButton" cornerRadius="15" includeIn="loginView, progressView"
-					  height="29" label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }" minWidth="100"
-					  fontFamily="Arial" fontSize="14" bottom="50" left="300" 
-					  click="exitButton_clickHandler(event)"/>
+		<mx:Button id="exitButton" cornerRadius="15" includeIn="loginView, progressView"
+				height="29" label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }" minWidth="100"
+				fontFamily="Arial" fontSize="14" bottom="50" left="300" 
+				click="exitButton_clickHandler(event)"/>
 			
-			<mx:Button id="submitButton" cornerRadius="15" includeIn="loginView" 
-					   icon="@Embed('icons/connect.png')"
-					   height="29" label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
-					   fontFamily="Arial" fontSize="14"
-					   click="submitButton_clickHandler(event)" />
-		</s:HGroup>
+		<mx:Button id="submitButton" cornerRadius="15" includeIn="loginView" 
+				icon="@Embed('icons/connect.png')"
+				height="29" label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
+				fontFamily="Arial" fontSize="14"
+				click="submitButton_clickHandler(event)" />
+	</s:HGroup>
 		
-		
-	</s:Group>
-
-	
-
 </s:Window>

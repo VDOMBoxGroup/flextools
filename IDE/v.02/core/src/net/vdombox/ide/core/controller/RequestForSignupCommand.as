@@ -43,7 +43,9 @@ package net.vdombox.ide.core.controller
 				hostVO = new HostVO( loginViewMediator.hostname, loginViewMediator.username, MD5Utils.encrypt( loginViewMediator.password ), loginViewMediator.selectedLanguage );
 
 			}
-				
+			
+			if ( loginViewMediator.needSave )
+				hostVO.save = true;
 			
 			serverProxy.connect( hostVO );
 		}

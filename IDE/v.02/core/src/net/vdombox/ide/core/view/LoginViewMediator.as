@@ -56,6 +56,14 @@ package net.vdombox.ide.core.view
 			return loginView.host.textInput.text;
 		}
 		
+		public function get needSave() : Boolean
+		{
+			if ( loginView.saveButton.currentState == "save" )
+				return true;
+			else
+				return false;
+		}
+		
 		override public function onRegister() : void
 		{
 			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
@@ -166,6 +174,11 @@ package net.vdombox.ide.core.view
 				loginView.selectedLanguage = localeProxy.currentLocale;
 				
 				selectedHostIndex = loginView.host.selectedIndex;
+				
+				if ( selectedHost.password == "" )
+					loginView.saveButton.currentState = "notsave";
+				else
+					loginView.saveButton.currentState = "save";
 			}
 		}
 		
@@ -202,6 +215,11 @@ package net.vdombox.ide.core.view
 
 				loginView.password = selectedHost.password;
 				
+				if ( selectedHost.password == "" )
+					loginView.saveButton.currentState = "notsave";
+				else
+					loginView.saveButton.currentState = "save";
+				
 				localeProxy.changeLocale( selectedHost.local );
 			}
 			else
@@ -211,6 +229,8 @@ package net.vdombox.ide.core.view
 				loginView.hostname = "";
 				
 				loginView.password = "";
+				
+				loginView.saveButton.currentState = "notsave";
 			}
 
 			loginView.languages = new ArrayList( localeProxy.locales );

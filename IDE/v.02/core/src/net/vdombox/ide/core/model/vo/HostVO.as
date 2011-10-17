@@ -8,12 +8,15 @@ package net.vdombox.ide.core.model.vo
 			_user = user;
 			_password = password;
 			_local = local;
+			save = false;
 		}
 		
 		private var _host : String;
 		private var _user : String;
 		private var _password : String;
 		private var _local : LocaleVO;
+		
+		public var save : Boolean;
 		
 		public function get host():String
 		{
@@ -28,6 +31,11 @@ package net.vdombox.ide.core.model.vo
 		public function get password():String
 		{
 			return _password;
+		}
+		
+		public function set password(value : String) : void
+		{
+			_password = value;
 		}
 
 		public function get local():LocaleVO
