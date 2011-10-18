@@ -4,7 +4,7 @@
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
 					  height="25"
 					  width="100%"
-					  contentBackgroundAlpha="0" toolTip="{treeListData.label}" >
+					  contentBackgroundAlpha="0"  >
 
 	<s:states>
 		<s:State name="normal" />
@@ -103,8 +103,9 @@
 
 				_resourceID = _data.@iconID;
 				_rendererID = _data.@id;
-
-				dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCE_REQUEST));
+				
+				
+				
 
 				// if can content an eye
 				if ( _data.@visible[ 0 ] )
@@ -119,6 +120,9 @@
 					eyesGroup.visible = false;
 					groupContent.left = -2;
 				}
+				
+				if ( !_resourceVO ||( _resourceVO && _resourceVO.id != _resourceID ) )
+					dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCE_REQUEST));
 			}
 
 			private function dataLoaded( object : Object = null ) : void

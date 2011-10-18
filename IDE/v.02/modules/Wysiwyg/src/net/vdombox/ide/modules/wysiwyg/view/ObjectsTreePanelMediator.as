@@ -215,6 +215,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					break;
 				}
+					
+				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
+				{
+					objectsTreePanel.pages = null;
+					sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
+					
+					break;
+				}	
+					
 			}
 		}
 		
@@ -238,7 +247,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.PAGE_NAME_SETTED );
 			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
 			
-//			interests.push( ApplicationFacade.OBJECT_DELETED );
+			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
 //			interests.push( ApplicationFacade.OBJECT_CREATED );
 
 			return interests;
@@ -426,7 +435,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				typeID = objectXML.@typeID;
 				objectXML.@iconID = typeProxy.getTypeVObyID( typeID ).structureIconID;
 				objectXML.@visible = visibleRendererProxy.getVisible(  String(objectXML.@id) );
-				trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
+//				trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
 			}
 		}
 		

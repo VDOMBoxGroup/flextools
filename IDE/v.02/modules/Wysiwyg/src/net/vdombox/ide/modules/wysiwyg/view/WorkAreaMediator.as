@@ -119,8 +119,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.PAGE_NAME_SETTED:
 				{
 					var pageVO : PageVO = body as PageVO;
+					
 					workArea.selectedTab.label = pageVO.name;
+					
 					break;
+				}
+				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
+				{
+					workArea.closeAllEditors();
+					
+					break
 				}
 			}
 		}
@@ -138,6 +146,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.OPEN_OBJECT_REQUEST );
 			
 			interests.push( ApplicationFacade.PAGE_NAME_SETTED);
+			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED);
 
 			return interests;
 		}

@@ -27,6 +27,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMStatesTargetNames.ALL_STATES:
 				{
 					sessionProxy.setStates( body );
+					
 					sendNotification( ApplicationFacade.ALL_STATES_GETTED, body );
 					
 					break;
@@ -34,27 +35,21 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				
 				case PPMStatesTargetNames.SELECTED_APPLICATION:
 				{
-					var selectedApplicationVO : ApplicationVO = body as ApplicationVO;
-					
-					sessionProxy.selectedApplication = selectedApplicationVO
+					sessionProxy.selectedApplication = body as ApplicationVO;
 					
 					break;
 				}
 					
 				case PPMStatesTargetNames.SELECTED_PAGE:
 				{
-					var selectedPageVO : PageVO = body as PageVO;
-					
-					sessionProxy.selectedPage = selectedPageVO
+					sessionProxy.selectedPage = body as PageVO;
 					
 					break;
 				}
 					
 				case PPMStatesTargetNames.SELECTED_OBJECT:
 				{
-					var selectedObjectVO : ObjectVO = body as ObjectVO;
-					
-					sessionProxy.selectedObject = selectedObjectVO
+					sessionProxy.selectedObject = body as ObjectVO;
 					
 					break;
 				}
