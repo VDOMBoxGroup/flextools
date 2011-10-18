@@ -8,6 +8,11 @@
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+			
+			private function getLocalesWord( word : String): String
+			{
+				return resourceManager.getString( 'Core_General', word );
+			}
 		]]>
 	</fx:Script>
 	
@@ -19,20 +24,20 @@
 			  paddingTop="10" paddingLeft="20">
 		
 		<s:Label id="lblapplicationName" color="#FFFFFF" 
-				 text="{resourceManager.getString( 'Core_General', 'create_edit_application_name' )}"/>
+				 text="{getLocalesWord('create_edit_application_name' )}"/>
 		<s:TextInput id="txtapplicationName" 
 					 width="100%" color="#FFFFFF"/>
 		
 		<mx:Spacer height="10" />
 		
 		<s:Label id="lblapplicationDescription" color="#FFFFFF" 
-				 text="{resourceManager.getString( 'Core_General', 'create_edit_application_description' )}"/>
+				 text="{getLocalesWord( 'create_edit_application_description' )}"/>
 		<s:TextArea id="txtapplicationDescription" 
 					height="100%" width="100%" color="#FFFFFF"/>
 		
 		<mx:Spacer height="15" />
 		
-		<s:Label buttonMode="true" text="Edit Script Language:"
+		<s:Label buttonMode="true" text="{getLocalesWord('create_edit_application_script_language')}"
 				 fontFamily="Verdana" fontSize="14"
 				 color="#FFFFFF" />
 		
@@ -59,11 +64,11 @@
 		<s:HGroup width="100%" horizontalAlign="right" >
 			
 			<s:Button id="btnCancel" skinClass="net.vdombox.view.skins.OvalButtonSkin"
-					  label="{resourceManager.getString( 'Core_General', 'create_edit_application_cancel' )}"
+					  label="{getLocalesWord('create_edit_application_cancel' )}"
 					  click="{dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.CANCEL ) ) }"/>
 
 			<s:Button id="btnSave" skinClass="net.vdombox.view.skins.OvalButtonSkin"
-					  label="{resourceManager.getString( 'Core_General', 'create_edit_application_save' )}"
+					  label="{getLocalesWord('create_edit_application_save' )}"
 					  click="{dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.SAVE_INFORMATION ) ) }"/>
 			
 		</s:HGroup>

@@ -34,6 +34,11 @@
 				applicationList.addEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICKED, openInEditor, true, 0, true);
 			}
 			
+			private function getLocalesWord( word : String): String
+			{
+				return resourceManager.getString( 'Core_General', word );
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -49,7 +54,7 @@
 		
 		
 		<s:Button id="btnOpenInCreateView" skinClass="net.vdombox.view.skins.OvalButtonSkin"
-					  label="{resourceManager.getString( 'Core_General', 'change_application_add_new_application' )}" 
+					  label="{getLocalesWord( 'change_application_add_new_application' )}" 
 					  click="btnOpenInCreateView_clickHandler(event)"/>
 	</s:VGroup>
 	
@@ -71,11 +76,11 @@
 			
 			
 			<s:Button id="applicationEditor" 
-					  label="Change " 
+					  label="{getLocalesWord('change_application_edit')}" 
 					  click="applicationEditor_clickHandler(event)" skinClass="net.vdombox.view.skins.OvalButtonSkin"/>
 			
 			<s:Button id="btnOpenInEditor" 
-					  label="{resourceManager.getString( 'Core_General', 'change_application_open_in_editor' )}" 
+					  label="{getLocalesWord('change_application_open_in_editor' )}" 
 					  skinClass="net.vdombox.view.skins.OvalButtonSkin"
 					  click="btnOpenInEditor_clickHandler(event)"/>
 		</s:HGroup>

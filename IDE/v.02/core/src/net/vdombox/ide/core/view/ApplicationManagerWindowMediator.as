@@ -1,5 +1,7 @@
 package net.vdombox.ide.core.view
 {
+	import flash.events.Event;
+	
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.ApplicationVO;
@@ -88,19 +90,18 @@ package net.vdombox.ide.core.view
 		
 		override public function onRemove() : void
 		{
-			closeWindows();
 			removeHandlers();
 		}
 		
 		private function addHandlers() : void
 		{
 			applicationManagerWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHandler );
-			applicationManagerWindow.addEventListener( ApplicationManagerWindowEvent.CLOSE_WINDOW, closeHandler );
+			applicationManagerWindow.addEventListener(Event.CLOSE, closeHandler );
 		}
 		
 		private function removeHandlers() : void
 		{
-			applicationManagerWindow.removeEventListener( ApplicationManagerWindowEvent.CLOSE_WINDOW, closeHandler );
+			applicationManagerWindow.removeEventListener( Event.CLOSE, closeHandler );
 		}
 		
 		private function createCompleteHandler ( event : FlexEvent ) : void
@@ -109,7 +110,7 @@ package net.vdombox.ide.core.view
 			facade.registerMediator( new CreateEditApplicationViewMediator ( applicationManagerWindow.createEditApplicationView ) );
 		}
 		
-		private function closeHandler ( event : ApplicationManagerWindowEvent ) : void
+		private function closeHandler ( event : Event ) : void
 		{
 			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			

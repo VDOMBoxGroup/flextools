@@ -1,6 +1,7 @@
 package net.vdombox.ide.core.view.components
 {
 	import flash.display.NativeWindowSystemChrome;
+	import flash.events.Event;
 	
 	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
 	import net.vdombox.ide.core.view.skins.ApplicationManagerWindowSkin;
@@ -32,11 +33,6 @@ package net.vdombox.ide.core.view.components
 		override public function stylesInitialized():void {
 			super.stylesInitialized();
 			this.setStyle( "skinClass", ApplicationManagerWindowSkin );
-		}
-		
-		public function closeHandler() : void
-		{
-			dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.CLOSE_WINDOW ) );
 		}
 	}
 }
