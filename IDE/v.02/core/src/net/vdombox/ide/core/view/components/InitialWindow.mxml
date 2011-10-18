@@ -7,7 +7,7 @@
 		  skinClass="net.vdombox.ide.core.view.skins.InitialWindowSkin"
 		  minHeight="410" minWidth="580"
 		  mouseDown="window_mouseDownHandler( event )"
-		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true">
+		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true" xmlns:components1="net.vdombox.components.*">
 
 	<fx:Script>
 		<![CDATA[
@@ -20,6 +20,7 @@
 			
 			import net.vdombox.ide.core.events.InitialWindowEvent;
 			
+			import spark.components.Button;
 			import spark.components.RichEditableText;
 
 			private function window_mouseDownHandler( event : MouseEvent ) : void
@@ -65,15 +66,13 @@
 		
 	<s:HGroup width="100%" horizontalAlign="right" paddingRight="40" gap="10" bottom="37">
 			
-		<mx:Button id="exitButton" cornerRadius="15" includeIn="loginView, progressView"
-				height="29" label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }" minWidth="100"
-				fontFamily="Arial" fontSize="14" bottom="50" left="300" 
+		<components1:VdomButton id="exitButton" includeIn="loginView, progressView" 
+				label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }" minWidth="100"
 				click="exitButton_clickHandler(event)"/>
 			
-		<mx:Button id="submitButton" cornerRadius="15" includeIn="loginView" 
+		<components1:VdomButton id="submitButton" includeIn="loginView"
 				icon="@Embed('icons/connect.png')"
-				height="29" label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
-				fontFamily="Arial" fontSize="14"
+				label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
 				click="submitButton_clickHandler(event)" />
 	</s:HGroup>
 		
