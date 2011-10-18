@@ -2,7 +2,7 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="32" width="100%" xmlns:mx1="library://ns.adobe.com/flex/mx">
+			  height="29" width="100%" xmlns:mx1="library://ns.adobe.com/flex/mx">
 	
 	<fx:Metadata>
 		/**
@@ -41,31 +41,44 @@
 	
 	<s:Rect bottom="0" left="0" right="0" top="0"
 			id="background">
+		
 		<s:fill>
 			<s:LinearGradient rotation="90">
 				<s:GradientEntry color="#B70000"/>
-				<s:GradientEntry color="#A00000"/>
+				<s:GradientEntry color="#8e0001"/>
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
 	
+	<s:Rect left="0" right="0" top="0" bottom="0" >
+		<s:stroke>
+			<s:LinearGradientStroke rotation="90" weight="1">
+				<s:GradientEntry color="#c63f3c"/>
+				<s:GradientEntry color="#512023"/>
+			</s:LinearGradientStroke>
+		</s:stroke>
+	</s:Rect>
+	
 	<s:HGroup width="100%" height="100%"
 			  verticalAlign="middle"
-			  left="20">
+			  left="20" right="10">
 		
 		<s:Label id="titleText"
-				 color="#FFFFFF" fontSize="20"
+				 color="#FFFFFF" fontSize="14" fontWeight="bold" fontFamily="Arial"
 				 text="" 
 				 visible="true"/>
-	</s:HGroup>
-		
-	
-	
-	<s:HGroup right="16" top="12" height="100%" minWidth="40" minHeight="20" gap="10">
-		
+		<mx1:Spacer  width="100%"/>
 		<!-- close button -->
-		<s:Button id="closeButton" visible="false"/>	
+		<s:Button id="closeButton" 
+				  skinClass="net.vdombox.view.skins.MainCloseBtnSkin"
+				  />	
 	</s:HGroup>
+		
+	
+	
+		
+		<!--s:Button id="closeButton" visible="true"/-->	
+		
 	
 	
 	

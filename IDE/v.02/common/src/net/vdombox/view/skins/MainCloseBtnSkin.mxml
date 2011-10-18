@@ -24,7 +24,7 @@
 	<s:Rect id="fill"
 			height="10" width="10">
 		<s:fill>
-			<s:SolidColor color="0x000000" alpha="1"/>
+			<s:SolidColor color="0x000000" alpha="0.01"/>
 		</s:fill>
 	</s:Rect>
 	
