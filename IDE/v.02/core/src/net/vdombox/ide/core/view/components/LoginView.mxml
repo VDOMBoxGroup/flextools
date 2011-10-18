@@ -101,11 +101,11 @@
 				
 				<s:Label text="{ resourceManager.getString( 'LoginForm', 'hostname' ) }" width="100%"
 						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
-				
-				<s:ComboBox id="host" openOnInput="false" labelField="host" width="100%" height="31"
-							fontSize="18" fontFamily="Arial" color="#5A5A5A"
-							keyDown="{keyDownHandler(event)}"/>
-				
+
+				<components:ComboBoxLogin id="host" openOnInput="false" labelField="host" width="100%" height="31"
+								fontSize="18" fontFamily="Arial"
+								keyDown="{keyDownHandler(event)}"/>
+	
 			</s:VGroup>
 			
 			<s:VGroup gap="3" width="100%">
@@ -114,8 +114,8 @@
 						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
 				
 				<s:TextInput id="user" text="@{ username }" skinClass="net.vdombox.ide.core.view.skins.TextInputCornerSkin"
-							 width="100%" height="31" 
-							 fontSize="18" fontFamily="Arial" color="#5A5A5A"
+							 width="100%" height="31"
+							 fontSize="18" fontFamily="Arial" 
 							 keyDown="{keyDownHandler(event)}"/>
 				
 			</s:VGroup>
@@ -128,7 +128,7 @@
 				<s:HGroup width="100%" gap="4">
 					<s:TextInput id="pass" text="@{ password }" skinClass="net.vdombox.ide.core.view.skins.TextInputCornerSkin"
 								 width="100%" height="31" displayAsPassword="true" 
-								 fontSize="18" fontFamily="Arial" color="#5A5A5A" 
+								 fontSize="18" fontFamily="Arial" 
 								 keyDown="{keyDownHandler(event)}"/>
 					
 					<components:SaveButton id="saveButton" height="31" width="58" 
@@ -146,10 +146,10 @@
 				<s:Label text="{ resourceManager.getString( 'LoginForm', 'language' ) }" width="100%"
 						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
 				
-				<s:DropDownList id="selectLang"
+				<components:ComboBoxLogin id="selectLang" editable="false" selecteble="false"
 							dataProvider="{ languages }" labelField="description" width="100%" height="31"
-							change="selectLang_changeHandler()"
-							fontSize="18" fontFamily="Arial" color="#5A5A5A"
+							change="selectLang_changeHandler()" 
+							fontSize="18" fontFamily="Arial"
 							selectedItem="@{ _selectedLanguage }"/>
 				
 			</s:VGroup>
