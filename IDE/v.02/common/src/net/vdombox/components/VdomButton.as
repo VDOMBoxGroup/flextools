@@ -10,6 +10,8 @@ package net.vdombox.components
 		{
 			super();
 			_icon = null;
+			minHeight = 29;
+			height = 29;
 		}
 		
 		private var _icon : Object;
