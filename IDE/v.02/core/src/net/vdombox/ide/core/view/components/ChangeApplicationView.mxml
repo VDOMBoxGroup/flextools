@@ -8,30 +8,11 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
-			protected function btnOpenInEditor_clickHandler(event:MouseEvent):void
-			{
-				dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.OPEN_IN_EDITOR ) );
-			}
 			
-			private function openInEditor(event:Event):void
-			{
-				dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.OPEN_IN_EDITOR ) );
-			}
-			
-			protected function applicationEditor_clickHandler(event:MouseEvent):void
-			{
-				dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.OPEN_IN_EDIT_VIEW ) );
-			}
-			
-			protected function btnOpenInCreateView_clickHandler(event:MouseEvent):void
-			{
-				dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.OPEN_IN_CREATE_VIEW ) );
-			}
 			
 			protected function applicationList_creationCompleteHandler(event:FlexEvent):void
 			{
 				applicationList.scroller.setStyle( "horizontalScrollPolicy", "off" );
-				applicationList.addEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICKED, openInEditor, true, 0, true);
 			}
 			
 			private function getLocalesWord( word : String): String
@@ -51,11 +32,13 @@
 				width="100%" height="100%"
 				itemRenderer="net.vdombox.ide.core.view.components.ApplicationListItemRenderer"
 				creationComplete="applicationList_creationCompleteHandler(event)"/>
+
 		
 		
-		<components:VdomButton id="btnOpenInCreateView"
+		<components:VdomButton id="addApplication"
 					  label="{getLocalesWord( 'change_application_add_new_application' )}" 
-					  click="btnOpenInCreateView_clickHandler(event)"/>
+					 />
+
 	</s:VGroup>
 	
 	<s:VGroup width="50%"  height="100%" 
@@ -63,25 +46,25 @@
 		<s:TextInput id="applicationName" 
 					 width="100%"
 					 borderVisible="false" editable="false" selectable="false" fontFamily="Arial" 
-				 	 fontSize="18" color="#FFFFFF" fontWeight="bold"/>
-		
+				 	 fontSize="18" color="#FFFFFF" fontWeight="bold"
+					 />
 		<s:TextArea id="applicationDescription" 
 					width="100%" height="100%" editable="false"  selectable="false"
-					borderVisible="false" color="#CACACA" fontFamily="Arial" fontSize="10"/>
-		
-		
+					borderVisible="false" color="#CACACA" fontFamily="Arial" fontSize="10"
+					/>
 		<mx:Spacer height="20"/>
 		
 		<s:HGroup horizontalAlign="right" gap="10" width="100%" >
 			
 			
-			<components:VdomButton id="applicationEditor"
+			<components:VdomButton id="changeApplication"
 					  label="{getLocalesWord('change_application_edit')}" 
-					  click="applicationEditor_clickHandler(event)"/>
+					 
+					  />
 			
-			<components:VdomButton id="btnOpenInEditor" 
+			<components:VdomButton id="setSelectApplication" 
 					  label="{getLocalesWord('change_application_open_in_editor' )}" 
-					  click="btnOpenInEditor_clickHandler(event)"/>
+					  />
 		</s:HGroup>
 		
 	</s:VGroup>

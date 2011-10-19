@@ -1,12 +1,17 @@
 package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	import mx.collections.ArrayList;
+	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+	import net.vdombox.ide.core.model.SettingsProxy;
+	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	import net.vdombox.ide.core.model.vo.SettingsVO;
 	import net.vdombox.ide.core.view.components.ApplicationListItemRenderer;
@@ -26,7 +31,7 @@ package net.vdombox.ide.core.view
 		private var applications : Array;
 		private var applicationsChanged : Boolean;
 		
-		private var settings : SettingsVO;
+		private var _settingsVO : SettingsVO;
 		
 		private var _selectedApplicationVO : ApplicationVO;
 		private var selectedApplicationChanged : Boolean;
@@ -36,6 +41,19 @@ package net.vdombox.ide.core.view
 			super( NAME, viewComponent );
 		}
 		
+		public function get settingsVO():SettingsVO
+		{
+			var settingsProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
+			return  settingsProxy.settings;
+		}
+		
+		public function get statesProxy():StatesProxy
+		{
+			return facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+		}
+		
+			
+
 		public function get selectedApplicationVO():ApplicationVO
 		{
 			return _selectedApplicationVO;
@@ -84,10 +102,7 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.SERVER_APPLICATIONS_GETTED );
-			interests.push( ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName); //(?)
 			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
-			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED);	
-			interests.push( ApplicationFacade.SERVER_APPLICATION_CREATED);	
 			
 			return interests;
 		}
@@ -101,72 +116,61 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.SERVER_APPLICATIONS_GETTED:
 				{
+					changeApplicationView.visible = true;
+					
 					applications = notification.getBody() as Array;
 					applicationList.dataProvider = new ArrayList( applications );
 					selectApplication();
+					
 					break;
 				}
-					
-					
-					
-				case ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName:
-				{
-					settings = body as SettingsVO;
-					
-					break;
-				}		
 					
 				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
 				{
-					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
 					facade.removeMediator( mediatorName );
 					
 					break;
-				}	
-				
-				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
-				{
-					selectedApplicationVO = body as ApplicationVO;
-					
-					break;
-				}
-					
-				case ApplicationFacade.SERVER_APPLICATION_CREATED:
-				{
-					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 				}	
 			}
 		}
 		
 		
 		
-		
+		/**
+		 * 
+		 *  Set selected Application. It is a selectedApplication or last opened 
+		 * or first of existed.
+		 * 
+		 */
 		private function  selectApplication(): void
 		{
 			if ( !applications || applications.length == 0 )
 				return ;
 			
-			if ( settings )
-			{
-				for ( var i : int = 0; i < applications.length; i++ )
-				{
-					if ( applications[ i ].id == settings.lastApplicationID )
-					{
-						selectedApplicationVO = applications[ i ];
-						return;
-					}
-				}
-			}
-
-			selectedApplicationVO = applications[ 0 ];
+			selectedApplicationVO = statesProxy.selectedApplication
+									|| getApplicationsFromSettings()
+									|| applications[ 0 ];
 		}
 		
-
+		/**
+		 * 
+		 * Get last opened application.
+		 * 
+		 */ 
+		private function getApplicationsFromSettings() : ApplicationVO
+		{
+			for ( var i : int = 0; i < applications.length; i++ )
+			{
+				if ( applications[ i ].id == settingsVO.lastApplicationID )
+					return	applications[ i ] as ApplicationVO;
+			}
+			
+			return null;
+		}
 		
 		override public function onRegister() : void
 		{
 			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
-			sendNotification( ApplicationFacade.GET_SETTINGS, mediatorName );
 
 			addHandlers();
 		}
@@ -178,42 +182,65 @@ package net.vdombox.ide.core.view
 		
 		private function addHandlers() : void
 		{
-			applicationList.addEventListener( ApplicationListItemRenderer.RENDERER_CREATED, rendererCreatedHandler, true );
-			applicationList.addEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler );
-			changeApplicationView.addEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDITOR, openApplicationInEditor );
-			changeApplicationView.addEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDIT_VIEW, openApplicationInEditView );
-			changeApplicationView.addEventListener( ApplicationManagerWindowEvent.OPEN_IN_CREATE_VIEW, openApplicationInCreateView );
+			applicationList.addEventListener( FlexEvent.CREATION_COMPLETE, rendererCreatedHandler, true );
+			applicationList.addEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler, false, 0, true );
+			applicationList.addEventListener( MouseEvent.DOUBLE_CLICK, applicationList_dubleClickHandler, true );
+			
+			changeApplicationView.addApplication.addEventListener(MouseEvent.CLICK, addApplicationClickHandler, false, 0, true );
+			changeApplicationView.changeApplication.addEventListener(MouseEvent.CLICK, changeApplicationClikHandler, false, 0, true );
+			changeApplicationView.setSelectApplication.addEventListener(MouseEvent.CLICK, setSelectApplication, false, 0, true );
 		}
 		
 		private function removeHandlers() : void
 		{
-			applicationList.removeEventListener( ApplicationListItemRenderer.RENDERER_CREATED, rendererCreatedHandler, true );
+			applicationList.removeEventListener( FlexEvent.CREATION_COMPLETE, rendererCreatedHandler, true );
 			applicationList.removeEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler );
-			changeApplicationView.removeEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDITOR, openApplicationInEditor );
-			changeApplicationView.removeEventListener( ApplicationManagerWindowEvent.OPEN_IN_EDIT_VIEW, openApplicationInEditView );
-			changeApplicationView.removeEventListener( ApplicationManagerWindowEvent.OPEN_IN_CREATE_VIEW, openApplicationInCreateView );
-		}
-		
-		private function openApplicationInEditor( event : ApplicationManagerWindowEvent ) : void
-		{
-			if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplicationVO.id )
-			{
-				settings.lastApplicationID = selectedApplicationVO.id
-			}
+			applicationList.removeEventListener( MouseEvent.DOUBLE_CLICK, applicationList_dubleClickHandler, true );
 			
-			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+			changeApplicationView.addApplication.removeEventListener(MouseEvent.CLICK, addApplicationClickHandler);
+			changeApplicationView.changeApplication.removeEventListener(MouseEvent.CLICK, changeApplicationClikHandler);
+			changeApplicationView.setSelectApplication.removeEventListener(MouseEvent.CLICK, setSelectApplication);
 		}
 		
-		private function openApplicationInEditView( event : ApplicationManagerWindowEvent ) : void
+		
+		private function setSelectApplication( event : MouseEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW, selectedApplicationVO );
+			sendNotification(ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO); 
+//			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 		}
 		
-		private function openApplicationInCreateView( event : ApplicationManagerWindowEvent ) : void
+		private function changeApplicationClikHandler( event : MouseEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW );
+			changeApplicationView.visible = false;
+			sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY, selectedApplicationVO );
 		}
 		
+		
+		private function applicationList_dubleClickHandler ( event : MouseEvent ) : void
+		{
+			var applicationListItemRenderer : ApplicationListItemRenderer = event.target as ApplicationListItemRenderer;
+			
+			if ( applicationListItemRenderer )
+			{
+				changeApplicationView.visible = false;
+				
+				sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY, applicationListItemRenderer.resourceVO );
+			}
+		}
+		
+		private function addApplicationClickHandler( event : MouseEvent ) : void
+		{
+			changeApplicationView.visible = false;
+			
+			sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
+		}
+		
+		/**
+		 * 
+		 * Function for change value selectedApplicationVO on change selectedItem 
+		 * of applicationList. 
+		 * 
+		 */ 
 		private function applicationList_changeHandler( event : IndexChangeEvent ) : void
 		{
 			var newSelectedApplication : ApplicationVO;
@@ -225,12 +252,18 @@ package net.vdombox.ide.core.view
 				selectedApplicationVO = newSelectedApplication;
 		}
 		
+		/**
+		 * 
+		 *  To registred mediators for ApplicationListItemRenderer
+		 * 
+		 */ 
 		private function rendererCreatedHandler( event : Event ) : void
 		{
-			var renderer : ApplicationListItemRenderer = event.target as ApplicationListItemRenderer;
-			
-			var mediator : ApplicationListItemRendererMediator = new ApplicationListItemRendererMediator( renderer );
-			facade.registerMediator( mediator );
+			if( event.target is ApplicationListItemRenderer)
+			{
+				var mediator : ApplicationListItemRendererMediator = new ApplicationListItemRendererMediator(  event.target );
+				facade.registerMediator( mediator );
+			}
 		}
 	}
 }

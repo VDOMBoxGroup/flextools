@@ -4,8 +4,8 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true"
 				doubleClickEnabled="true"
-				doubleClick="doubleClickHandle(event)"
-				creationComplete="creationCompleteHandler(event)">
+				
+				>
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="selected" />
@@ -13,29 +13,104 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
+			import mx.utils.ObjectUtil;
 			
-			public static const RENDERER_CREATED : String = "rendererCreated";
-			public static const RENDERER_CHANGE : String = "rendererCreated";
-			public static const RENDERER_DOUBLE_CLICKED : String = "rendererDoubleClicked";
+			import net.vdombox.ide.common.vo.ApplicationVO;
+			import net.vdombox.ide.common.vo.ResourceVO;
 			
-			protected function doubleClickHandle(event:MouseEvent) : void
+			public static const RENDERER_CHANGED : String = "rendererChanged";
+			public static const ICON_REQUEST : String = "iconRequest1";
+			
+			private var _resourceVO : ResourceVO;
+			
+			public function get resourceVO():ResourceVO
 			{
-				dispatchEvent( new Event( RENDERER_DOUBLE_CLICKED ) );
+				return _resourceVO;
 			}
 			
-			protected function creationCompleteHandler(event:FlexEvent):void
+			public function validateResourceVO():void
 			{
-//				dispatchEvent( new Event( RENDERER_CREATED ) );
+				if (!applicationVO.iconID)
+				{
+					imageHolder.source = null;
+					return;
+				}
+				
+				if ( _resourceVO && _resourceVO.id != applicationVO.iconID )
+				{
+					createResourse();
+				}
+				
+				if (!_resourceVO)
+					createResourse();
 			}
-			
+
+			public function set resourceVO( value : ResourceVO ) : void
+			{
+				_resourceVO = value;
+				
+			}
+
 			override public function set data( value : Object ) : void
 			{
-				if ( super.data != value )
-				{
 					super.data = value;
-					dispatchEvent( new Event( RENDERER_CHANGE ) );
+					
+					nameLabel.text = applicationVO ?  applicationVO.name : "";
+					
+					validateResourceVO();
+//					dispatchEvent( new Event( ICON_REQUEST ));
+					
+						
+			}
+			
+			private function createResourse():void
+			{
+				_resourceVO = new ResourceVO( applicationVO.id );
+				_resourceVO.setID( applicationVO.iconID );
+				
+				BindingUtils.bindSetter( setIcon, _resourceVO, "data", false, true );
+			}
+			
+			public function get applicationVO(): ApplicationVO
+			{
+				return data as ApplicationVO;
+			}
+			
+			private var loader : Loader;
+			private function setIcon( value : Object ) : void
+			{
+				if (!value)
+				{
+//					imageHolder.source = null;
+					dispatchEvent( new Event( ICON_REQUEST ));
+					return;
 				}
+				
+				imageHolder.source = ObjectUtil.copy(value);
+				
+				loader = new Loader();
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
+				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, setIconLoaded );
+				
+				try
+				{
+					loader.loadBytes( resourceVO.data );
+				}
+				catch ( error : Error )
+				{
+					// FIXME Сделать обработку исключения если не грузится изображение
+				}
+			}
+			
+			private function setIconLoaded( event : Event ) : void
+			{
+				loader = null;
+				if ( event.type == IOErrorEvent.IO_ERROR )
+					return;
+				
+				imageHolder.source = event.target.content;
 			}
 			
 		]]>

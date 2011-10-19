@@ -39,12 +39,12 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW );	
-			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW );
-			interests.push( ApplicationFacade.RESOURCE_LOADED );
+			interests.push( ApplicationFacade.EDIT_APPLICATION_PROPERTY );	
+//			interests.push( ApplicationFacade.RESOURCE_LOADED );
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
 			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			interests.push( ApplicationFacade.SERVER_APPLICATION_CREATED);	
+			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED);
 			
 			return interests;
 		}
@@ -56,36 +56,19 @@ package net.vdombox.ide.core.view
 
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW:
+				case ApplicationFacade.EDIT_APPLICATION_PROPERTY:
 				{
+					// if body "null" then cratin new Application
+					
+					createEditApplicationView.visible = true;
+					createEditApplicationView.invalidateProperties();
+					
 					applicationVO = body as ApplicationVO;
 					
 					break;
 				}
+				
 					
-				case ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW:
-				{
-					applicationVO = null;
-					
-					break;
-				}
-					
-				case ApplicationFacade.RESOURCE_LOADED:
-				{
-					
-					// todo: чето не то, не должно быть так(?)
-					if ( !applicationVO )
-						return;
-					
-					resourceVO = body as ResourceVO;
-					
-					if ( resourceVO.ownerID != applicationVO.id )
-						return;
-					
-					BindingUtils.bindSetter( setIcon, resourceVO, "data" );
-					
-					return;
-				}
 					
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
@@ -129,6 +112,14 @@ package net.vdombox.ide.core.view
 					
 					break
 				}	
+				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
+				{
+					applicationVO = null
+					createEditApplicationView.visible = false;
+					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
+					
+					break 
+				}
 			}
 			commitProperties();
 		}
@@ -214,14 +205,12 @@ package net.vdombox.ide.core.view
 				
 				if ( iconChooserMediator.iconChanged )
 				{
-					trace(" + iconChanged")
 					newIconResourceVO = createIconResourceVO( iconChooserMediator.selectedIcon ); 
 				
 					sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
 				}
 				else
 				{
-					trace(" - iconChanged")
 					sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: applicationVO,
 						applicationInformationVO: applicationInformationVO } );
 				}
@@ -231,12 +220,14 @@ package net.vdombox.ide.core.view
 				sendNotification( ApplicationFacade.CREATE_APPLICATION, applicationInformationVO );
 			}
 
-			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
+//			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
 		}
 		
 		private function cancelInformationHandler( event : ApplicationManagerWindowEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
+			createEditApplicationView.visible = false;
+			
+			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 		}
 		
 		private function getApplicationInformationVO() : ApplicationInformationVO

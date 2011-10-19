@@ -16,15 +16,32 @@ package net.vdombox.ide.core.view
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
+	/**
+	 * Description 
+	 * 
+	 * @author andreev ap
+	 */
 	public class ApplicationManagerWindowMediator extends Mediator implements IMediator
 	{
+		/**
+		 * 
+		 * @default 
+		 */
 		public static const NAME : String = "ApplicationManagerWindowMediator";
 		
+		/**
+		 * 
+		 * @param viewComponent
+		 */
 		public function ApplicationManagerWindowMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
 		}
 		
+		/**
+		 * 
+		 * @return 
+		 */
 		public function get applicationManagerWindow() : ApplicationManagerWindow
 		{
 			return viewComponent as ApplicationManagerWindow;
@@ -34,10 +51,7 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW );
-			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW );
-			interests.push( ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW );
-			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+			interests.push( ApplicationFacade.SET_SELECTED_APPLICATION );
 			
 			return interests;
 		}
@@ -48,33 +62,9 @@ package net.vdombox.ide.core.view
 			
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.OPEN_APPLICATION_IN_EDIT_VIEW:
+				case ApplicationFacade.SET_SELECTED_APPLICATION:
 				{
-					applicationManagerWindow.changeApplicationView.visible = false;
-					applicationManagerWindow.createEditApplicationView.visible = true;
 					
-					break;
-				}
-					
-				case ApplicationFacade.OPEN_APPLICATION_IN_CREATE_VIEW:
-				{
-					applicationManagerWindow.changeApplicationView.visible = false;
-					applicationManagerWindow.createEditApplicationView.visible = true;
-					
-					break;
-				}
-					
-				case ApplicationFacade.OPEN_APPLICATION_IN_CHANGE_VIEW:
-				{
-					applicationManagerWindow.changeApplicationView.visible = true;
-					applicationManagerWindow.createEditApplicationView.visible = false;
-					
-					break;
-				}
-					
-				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
-				{
-					facade.removeMediator( mediatorName );
 					closeWindows();
 					
 					sendNotification(ApplicationFacade.OPEN_MAIN_WINDOW); 
@@ -96,7 +86,9 @@ package net.vdombox.ide.core.view
 		private function addHandlers() : void
 		{
 			applicationManagerWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHandler );
-			applicationManagerWindow.addEventListener(Event.CLOSE, closeHandler );
+			applicationManagerWindow.addEventListener( FlexEvent.REMOVE, closeHandler );
+			applicationManagerWindow.addEventListener( Event.CLOSE, closeHandler );
+			
 		}
 		
 		private function removeHandlers() : void
@@ -110,14 +102,17 @@ package net.vdombox.ide.core.view
 			facade.registerMediator( new CreateEditApplicationViewMediator ( applicationManagerWindow.createEditApplicationView ) );
 		}
 		
-		private function closeHandler ( event : Event ) : void
+		private function closeHandler ( event : * ) : void
 		{
-			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
-			
+			closeWindows();
 		}
 		
 		private function closeWindows () : void
 		{
+			facade.removeMediator( mediatorName );
+			
+			sendNotification(ApplicationFacade.CLOSE_APPLICATION_MANAGER); 
+			
 			WindowManager.getInstance().removeWindow( applicationManagerWindow );
 		}
 	}

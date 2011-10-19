@@ -360,9 +360,9 @@ package net.vdombox.ide.core
 		
 		public static const OPEN_PAGE_IN_EXTERNAL_BROWSER  : String = "openPageInExternalBrowser";
 //		public static const OPEN_APPLICATION_IN_EDITOR  : String = "openApplicationInEditor";
-		public static const OPEN_APPLICATION_IN_EDIT_VIEW  : String = "openApplicationInEditView";
-		public static const OPEN_APPLICATION_IN_CREATE_VIEW  : String = "openApplicationInCreateView";
-		public static const OPEN_APPLICATION_IN_CHANGE_VIEW  : String = "openApplicationInChangeView";
+		public static const EDIT_APPLICATION_PROPERTY  : String = "openApplicationInEditView";
+//		public static const OPEN_APPLICATION_IN_CREATE_VIEW  : String = "openApplicationInCreateView";
+//		public static const OPEN_APPLICATION_IN_CHANGE_VIEW  : String = "openApplicationInChangeView";
 
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";

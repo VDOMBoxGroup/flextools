@@ -140,7 +140,6 @@ package net.vdombox.ide.core.model.managers
 
 		private function getStandartIcon() : File
 		{
-			trace( "6" );
 			var fileIcon : File;
 
 			fileIcon = File.applicationDirectory;
@@ -160,23 +159,17 @@ package net.vdombox.ide.core.model.managers
 			var file : File; // = getIconFile();
 			var fileStream : FileStream = new FileStream();
 
-			trace( "1" );
 
 			if ( _resourceVO.mastHasPreview )
 			{
-				trace( "2" );
 				file = getCahedFile( _resourceVO.iconId );
-				trace( "3" );
 
 				if ( !fileExists( file ) )
 				{
-					trace( "4" );
 					createIcon();
 					
 				}
 			}
-
-			trace( "5" );
 
 			if ( !fileExists( file ) )
 				file = getStandartIcon();

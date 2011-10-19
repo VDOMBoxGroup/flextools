@@ -6,9 +6,9 @@ package net.vdombox.ide.core.events
 	{
 		// FIXME: need to rename
 		public static var CLOSE_WINDOW : String = "closeWindow";
-		public static var OPEN_IN_EDITOR : String = "openInEditor";
-		public static var OPEN_IN_EDIT_VIEW : String = "openInEditView";
-		public static var OPEN_IN_CREATE_VIEW : String = "openInCreateView";
+		public static var SET_SELECTED_APPLICATION_REQUEST : String = "setSelectedApplicationRequest";
+		public static var EDIT_SELECTED_APPLICATION_REQUEST : String = "editSelectedApplicationRequest";
+		public static var CREATE_NEW_APPLICATION_REQUEST : String = "createNewApplicationRequest";
 		public static var SAVE_INFORMATION : String = "saveInformation";
 		public static var CANCEL : String = "CancelEdit";
 		

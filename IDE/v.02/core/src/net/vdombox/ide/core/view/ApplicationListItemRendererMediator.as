@@ -22,15 +22,16 @@ package net.vdombox.ide.core.view
 		public function ApplicationListItemRendererMediator( viewComponent : Object = null )
 		{
 			super( NAME +"/"+viewComponent.name, viewComponent );
+
+			addHandlers();
 		}
 		
 		private static const NAME : String = "ApplicationListItemRendererMediator";
 		
 		private static var serial : Number = 0;
 		
-		private var resourceVO : ResourceVO;
 		
-		private var applicationVO : ApplicationVO;
+		private var _applicationVO : ApplicationVO;
 		
 //		private static function getNextID() : String
 //		{
@@ -39,6 +40,20 @@ package net.vdombox.ide.core.view
 //			return id;
 //		}
 		
+		public function get resourceVO():ResourceVO
+		{
+			return applicationListItemRenderer.resourceVO;
+		}
+
+		
+
+		private function get applicationVO():ApplicationVO
+		{
+			return applicationListItemRenderer.applicationVO;
+		}
+
+		
+
 		private function get applicationListItemRenderer() : ApplicationListItemRenderer
 		{
 			return viewComponent as ApplicationListItemRenderer;
@@ -48,11 +63,8 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.RESOURCE_LOADED );
 			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED );
-			interests.push( ApplicationFacade.RESOURCE_SETTED );
-			interests.push( ApplicationFacade.RESOURCE_SETTED_ERROR );
 			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
 			
 			return interests;
@@ -60,8 +72,9 @@ package net.vdombox.ide.core.view
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
-			if ( !applicationVO )
+			if ( !applicationListItemRenderer.resourceVO )
 				return;
+			
 			var resVO : ResourceVO;
 			
 			switch ( notification.getName() )
@@ -70,11 +83,9 @@ package net.vdombox.ide.core.view
 					
 				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
 				{
-					if ( notification.getBody() === applicationListItemRenderer.data )
-					{
-						resourceVO = null;
-						refreshProperties();
-					}
+//					if ( notification.getBody() === applicationListItemRenderer.data )
+//						iconRequest()
+
 					break;
 				}
 					
@@ -87,107 +98,52 @@ package net.vdombox.ide.core.view
 				
 				case ApplicationFacade.GET_APPLICATIONS_LIST:
 				{
-					facade.removeMediator( mediatorName );
+//					facade.removeMediator( mediatorName );
 					
 					break;
 				}
 					
-				case ApplicationFacade.RESOURCE_SETTED:
-				{
-					
-//					resVO = notification.getBody() as ResourceVO;
-//					
-//					if ( applicationVO.id == resVO.ownerID )
-//					{
-//						resourceVO = new ResourceVO(applicationVO.id );
-//						resourceVO.setID(resVO.id);
-//						BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
-//						
-//					}
-					
-					break;
-				}
 			}	
 		}
 		
-		private var loader : Loader;
-		private function setIcon( value : * ) : void
+		private function addHandlers(): void
 		{
-			if (!value)
-			{
-				sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO} );
-				
-				return;
-			}
-			loader = new Loader();
-			trace("setIcon:  " + resourceVO.id)
-			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
-			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, setIconLoaded );
-			
-			try
-			{
-				loader.loadBytes( resourceVO.data );
-			}
-			catch ( error : Error )
-			{
-				var iny : int = 6;
-				// FIXME Сделать обработку исключения если не грузится изображение
-			}
-		}
-		
-		private function setIconLoaded( event : Event ) : void
-		{
-			if ( event.type == IOErrorEvent.IO_ERROR )
-				return;
-			trace("yes: " + applicationListItemRenderer.name);
-			applicationListItemRenderer.imageHolder.source = event.target.content;
+			applicationListItemRenderer.addEventListener( ApplicationListItemRenderer.ICON_REQUEST, iconRequestHandler );
+			applicationListItemRenderer.addEventListener(FlexEvent.REMOVE, renderRemoveHandler);
 		}
 		
 		override public function onRegister() : void
 		{
-			applicationListItemRenderer.addEventListener( ApplicationListItemRenderer.RENDERER_CHANGE, dataChangeHandler );
-			
-			refreshProperties();
+			iconRequest();
+			//refreshProperties();
 		}
 		
 		override public function onRemove() : void
 		{
-			applicationListItemRenderer.removeEventListener( ApplicationListItemRenderer.RENDERER_CHANGE, dataChangeHandler );
+			applicationListItemRenderer.removeEventListener( ApplicationListItemRenderer.ICON_REQUEST, iconRequestHandler );
+			applicationListItemRenderer.removeEventListener(FlexEvent.REMOVE, renderRemoveHandler);
 		}
 		
-		
-		private function dataChangeHandler( event : Event ) : void
+		private function iconRequest():void
 		{
-			applicationVO = applicationListItemRenderer.data as ApplicationVO;
-			refreshProperties();
+			if (resourceVO)
+				sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO} );
 		}
 		
-		private function refreshProperties() : void
+		private function iconRequestHandler( event : Event ) : void
 		{
-			applicationVO = applicationListItemRenderer.data as ApplicationVO;
-			if ( applicationVO )
-			{
-				applicationListItemRenderer.nameLabel.text = applicationVO.name;
-				
-//				sendNotification( ApplicationFacade.CHANGE_RESOURCE, applicationVO );
-				
-				if ( !applicationVO.iconID )
-				{
-					applicationListItemRenderer.imageHolder.source = null;
-				}
-				
-				if ( applicationVO.iconID && ( !resourceVO || resourceVO.id != applicationVO.iconID ) )
-				{
-					resourceVO = new ResourceVO( applicationVO.id );
-					resourceVO.setID( applicationVO.iconID );
-					
-					BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
-				}
-			}
-			else
-			{
-				applicationListItemRenderer.nameLabel.text = "";
-			}
+			iconRequest();
+//			setIcon();
+			
 		}
+		
+		private function renderRemoveHandler ( event : FlexEvent ) : void
+		{
+			facade.removeMediator( mediatorName );
+		}
+		
+		
+		
+		
 	}
 }
