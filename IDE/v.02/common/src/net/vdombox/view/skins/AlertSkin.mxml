@@ -2,7 +2,7 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/mx"
-		maxWidth="338">
+		maxWidth="338" xmlns:components="net.vdombox.components.*">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.view.Alert")]
@@ -42,12 +42,12 @@
 					 fontSize="16" color="#FFFFFF" text="{hostComponent.text}"/>
 			
 			<s:HGroup height="29" width="100%" horizontalAlign="center" gap="40">
-				<mx:Button  id="noButton" height="100%" cornerRadius="14" tabIndex="1"
-							fontSize="18" label="{hostComponent.getNoLabel()}"
+				<components:VdomButton  id="noButton" tabIndex="1"
+							label="{hostComponent.getNoLabel()}"
 							visible="{hostComponent.getVisibleNoButton()}" includeInLayout="{hostComponent.getVisibleNoButton()}"
 							click="hostComponent.btnClickHandler(Alert.NO)" keyDown="hostComponent.keyNoPush(event)"/>
-				<mx:Button  id="yesButton" height="100%" cornerRadius="14" tabIndex="2"
-							fontSize="18" icon="@Embed('net/vdombox/icons/Cancel.png')" label="{hostComponent.getYesLabel()}"
+				<components:VdomButton  id="yesButton" tabIndex="2"
+							icon="@Embed('net/vdombox/icons/Cancel.png')" label="{hostComponent.getYesLabel()}"
 							click="hostComponent.btnClickHandler(Alert.YES)" keyDown="hostComponent.keyYesPush(event)"/>
 			</s:HGroup>
 		</s:VGroup>
