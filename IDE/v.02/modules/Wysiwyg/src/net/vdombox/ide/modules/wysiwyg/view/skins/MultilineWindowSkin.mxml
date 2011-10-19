@@ -6,7 +6,7 @@
 		xmlns="vdom.containers.*"
 		xmlns:controls="vdom.controls.*" 
 		width="790" height="550" minWidth="600" minHeight="500" 
-		xmlns:ClassComponents1="net.vdombox.ide.modules.wysiwyg.view.components.ClassComponents.*"
+		xmlns:ClassComponents1="net.vdombox.ide.modules.wysiwyg.view.components.ClassComponents.*" xmlns:components="net.vdombox.components.*"
 		>
 	<!-- host component -->
 	<fx:Metadata>
@@ -78,19 +78,17 @@
 				  bottom="0" gap="15" paddingLeft="25" paddingTop="10"
 				  paddingRight="15" verticalAlign="middle">
 			
-			<mx:Button height="29" cornerRadius="15" 
-					  icon="@Embed(source='icons/Add.png')"
+			<components:VdomButton icon="@Embed(source='icons/Add.png')"
 					  label="{ resourceManager.getString( 'Wysiwyg_General', 'multiline_window_add_resource' ) }"
 					  click="{hostComponent.showResourceSelecterWindow()}"/>
 			
 			<mx:Spacer width="100%"/>
 			
-			<mx:Button width="48" height="29" cornerRadius="15" 
+			<components:VdomButton width="48"
 					  icon="@Embed(source='icons/Cancel.png')"
 					  click="{hostComponent.cancel_close_window()}"/>
 			
-			<s:Button height="29" label="{ resourceManager.getString( 'Wysiwyg_General', 'multiline_window_save' ) }"
-					  cornerRadius="15"
+			<components:VdomButton label="{ resourceManager.getString( 'Wysiwyg_General', 'multiline_window_save' ) }"
 					  click="hostComponent.ok_close_window()" />
 		</s:HGroup>
 		

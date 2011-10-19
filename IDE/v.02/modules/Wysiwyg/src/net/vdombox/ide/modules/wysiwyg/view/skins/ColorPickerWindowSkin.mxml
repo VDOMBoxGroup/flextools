@@ -4,7 +4,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:colorPicker="net.vdombox.ide.modules.wysiwyg.view.components.colorPicker.*" 
 		xmlns:attributeRenderers="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.*"
-		width="460" height="360">
+		width="460" height="360" xmlns:components="net.vdombox.components.*">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.windows.ColorPickerWindow")]
@@ -203,12 +203,11 @@
 			
 				<mx:Spacer width="100%" />
 			
-				<mx:Button width="48" height="29" cornerRadius="15"
+				<components:VdomButton width="48"
 						  icon="@Embed(source='icons/Cancel.png')"
 					  	  click="hostComponent.cancel_close_window()" />
 			
-				<s:Button height="29" cornerRadius="15"
-						  label="{ resourceManager.getString( 'Wysiwyg_General', 'color_picker_window_use' ) }"
+				<components:VdomButton label="{ resourceManager.getString( 'Wysiwyg_General', 'color_picker_window_use' ) }"
 					  	  click="hostComponent.ok_close_window()" />
 			</mx:ControlBar>	
 		
