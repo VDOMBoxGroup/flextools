@@ -69,6 +69,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.components.supportClasses.Skin;
 	import spark.layouts.BasicLayout;
 	import spark.layouts.HorizontalLayout;
+	import spark.layouts.RowAlign;
 	import spark.layouts.VerticalLayout;
 	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
@@ -583,7 +584,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					content = Bitmap( event.target.content );
 			}
 
-			if ( _renderVO != null && content != null )
+			if ( _renderVO && content )
 			{
 				var backGrSprite : Sprite = new Sprite();
 				var bitmapWidth : Number, bitmapHeight : Number;
@@ -597,6 +598,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				background.graphics.endFill();
 //				invalidateDisplayList();
 			}
+			else if ( !content )
+				background.graphics.clear();
 
 			function getBackGroundRect( content : Bitmap ) : Rectangle
 			{
@@ -705,8 +708,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			else
 			{
 				richText = new Text();
-				richText.height = 22;
+				richText.maxHeight = 22;
 			}
+			
+			
 
 			richText.x = contetntPart.@left;
 			richText.y = contetntPart.@top;
@@ -1041,6 +1046,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( param )
 				conatiner.width = param;
+			else 
+				conatiner.percentWidth = 100;
 
 			param = Number( contetnt.@height[ 0 ] )
 
@@ -1053,7 +1060,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		
 		private function getSubTable( contetnt : XML , parentContainer : Group ) : Group
 		{
-			
 			var conatiner : Group;
 			var param : Number;
 			
@@ -1082,7 +1088,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			else 
 				conatiner.percentWidth = 100;
 
-			
 			param = Number( contetnt.@height[ 0 ] )
 			
 			if ( param )
@@ -1099,6 +1104,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			conatiner = new Group();
 			
 			conatiner.layout = new HorizontalLayout();
+			
 			
 			conatiner.clipAndEnableScrolling = true;
 			
@@ -1142,7 +1148,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			parentContainer.addElement( conatiner );
 			
-			
 			param = Number( contetnt.@top[ 0 ] )
 			
 			if ( param )
@@ -1158,7 +1163,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( param )
 				conatiner.width = param;
 			else 
-				conatiner.percentWidth = 100 / numberColl;
+				conatiner.percentWidth = 100;
 			
 			param = Number( contetnt.@height[ 0 ] )
 			

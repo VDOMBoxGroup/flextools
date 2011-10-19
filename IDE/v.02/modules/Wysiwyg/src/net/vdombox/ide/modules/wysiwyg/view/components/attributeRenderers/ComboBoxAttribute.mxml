@@ -38,9 +38,10 @@
 						selectedItem = comboBoxData[ comboBoxData.length - 1 ];
 				}
 				
-				comboBoxData.sort = new Sort();
+				/*comboBoxData.sort = new Sort();
 				comboBoxData.sort.fields = [ new SortField( "label", true ) ];
-				comboBoxData.refresh();
+				comboBoxData.refresh();*/
+				
 				
 				valueField.dataProvider = comboBoxData;
 				valueField.selectedItem = selectedItem;

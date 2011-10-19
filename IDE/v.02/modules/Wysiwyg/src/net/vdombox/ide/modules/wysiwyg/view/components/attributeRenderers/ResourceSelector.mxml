@@ -18,13 +18,8 @@
 
 			public function set value( value : String ) : void
 			{
-				if ( _value != null )
-				{
-					_value = value;
-					dispatchEvent( new Event( Event.CHANGE ) );
-				}
-				else
-					_value = value;
+				_value = value;
+				dispatchEvent( new Event( Event.CHANGE ) );
 			}
 			
 			
