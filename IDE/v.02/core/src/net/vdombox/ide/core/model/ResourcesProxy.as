@@ -128,7 +128,7 @@ package net.vdombox.ide.core.model
 			var resource : ByteArray = cacheManager.getCachedFileById( resourceVO.id );
 
 			//file is located in the file system user
-			if ( resource )
+			if ( resource && resource.length > 0 )
 			{
 				resourceVO.setData( resource );
 				resourceVO.setStatus( ResourceVO.LOADED );
@@ -439,6 +439,8 @@ package net.vdombox.ide.core.model
 					resourceVO = event.token.resourceVO as ResourceVO;
 
 					var data : String = event.result.Resource;
+					
+					trace( "\n*************************************\n" + data );
 
 					var decoder : Base64Decoder = new Base64Decoder();
 					decoder.decode( data );

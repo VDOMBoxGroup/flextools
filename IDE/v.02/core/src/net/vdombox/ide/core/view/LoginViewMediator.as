@@ -151,9 +151,18 @@ package net.vdombox.ide.core.view
 			if ( selectedHost )
 			{
 				if ( loginView.host.textInput.text != selectedHost.host || loginView.username != selectedHost.user)
+				{
 					loginView.password = "";
+					loginView.saveButton.currentState = "notsave";
+				}
 				else
+				{
 					loginView.password = selectedHost.password;
+					if ( selectedHost.password == "" )
+						loginView.saveButton.currentState = "notsave";
+					else
+						loginView.saveButton.currentState = "save";
+				}
 			}
 		}
 		
