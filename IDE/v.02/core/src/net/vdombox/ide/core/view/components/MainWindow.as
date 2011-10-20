@@ -16,11 +16,14 @@ package net.vdombox.ide.core.view.components
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.system.LoaderContext;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
+	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
+	
 	import spark.components.Group;
 	import spark.components.Label;
 	import spark.components.TextInput;
@@ -44,6 +47,8 @@ package net.vdombox.ide.core.view.components
 			height = 600;
 			minWidth = 800;
 			minHeight = 600;
+			
+			addEventListener( Event.CLOSE, closeEvent);
 		}
 
 		[SkinPart( required = "true" )]
@@ -134,6 +139,11 @@ package net.vdombox.ide.core.view.components
 				return;
 			
 			iconApplication.source = Bitmap( event.target.content );
+		}
+		
+		private function closeEvent( event : Event ) : void
+		{
+			NativeApplication.nativeApplication.exit();
 		}
 	}
 }

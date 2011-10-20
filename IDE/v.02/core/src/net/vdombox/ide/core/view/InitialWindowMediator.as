@@ -1,6 +1,7 @@
 package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import mx.controls.ComboBox;
@@ -36,6 +37,8 @@ package net.vdombox.ide.core.view
 		public function InitialWindowMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
+			
+			initialWindow.addEventListener(Event.CLOSE, closeHandler ); 
 		}
 
 		private var windowManager : WindowManager = WindowManager.getInstance();
@@ -175,6 +178,11 @@ package net.vdombox.ide.core.view
 		private function submitHandler( event : InitialWindowEvent ) : void
 		{
 			sendNotification( ApplicationFacade.SUBMIN_CLICK );
+		}
+		
+		private function closeHandler( event : Event ) : void
+		{
+				NativeApplication.nativeApplication.exit();
 		}
 	}
 }
