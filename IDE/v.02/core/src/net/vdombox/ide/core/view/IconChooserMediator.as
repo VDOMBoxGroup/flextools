@@ -99,7 +99,7 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+//			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			
 			return interests;
 		}
@@ -108,12 +108,12 @@ package net.vdombox.ide.core.view
 		{
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
-				{
-					facade.removeMediator( mediatorName );
-					
-					break;
-				}	
+//				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
+//				{
+//					facade.removeMediator( mediatorName );
+//					
+//					break;
+//				}	
 			}
 		}
 		

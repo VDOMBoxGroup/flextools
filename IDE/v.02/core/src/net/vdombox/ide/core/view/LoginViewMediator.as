@@ -58,10 +58,7 @@ package net.vdombox.ide.core.view
 		
 		public function get needSave() : Boolean
 		{
-			if ( loginView.saveButton.currentState == "save" )
-				return true;
-			else
-				return false;
+			return  loginView.saveButton.currentState == "save" ;
 		}
 		
 		override public function onRegister() : void
@@ -72,7 +69,10 @@ package net.vdombox.ide.core.view
 			addHandlers();
 		}
 		
-		
+		override public function onRemove() : void
+		{
+			removeHandlers();
+		}
 
 		override public function listNotificationInterests() : Array
 		{
@@ -117,6 +117,7 @@ package net.vdombox.ide.core.view
 
 		private function removeHandlers() : void
 		{
+			trace("! removeHandlers()");
 			loginView.removeEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
 			
 			loginView.removeEventListener( LoginViewEvent.SUBMIT, submitHandler );

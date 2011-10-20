@@ -3,6 +3,7 @@ package net.vdombox.ide.core.view
 	import flash.desktop.NativeApplication;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.view.components.InitialWindow;
 	import net.vdombox.ide.core.view.components.MainWindow;
 	
@@ -52,7 +53,10 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.TYPES_LOADED:
 				{
-					sendNotification( ApplicationFacade.OPEN_MAIN_WINDOW );
+					if (statesProxy.selectedApplication)
+						sendNotification( ApplicationFacade.OPEN_MAIN_WINDOW );
+					else
+						sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER );
 
 					break;
 				}
@@ -71,6 +75,12 @@ package net.vdombox.ide.core.view
 //						break;
 //					}
 			}
+			
+		}
+		
+		private function get statesProxy() : StatesProxy
+		{
+			return facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 		}
 	}
 }

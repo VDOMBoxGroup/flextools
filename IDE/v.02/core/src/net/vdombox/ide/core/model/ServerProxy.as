@@ -64,6 +64,11 @@ package net.vdombox.ide.core.model
 		
 		private var hostVO : HostVO;
 
+		public function get applications():Array
+		{
+			return _applications;
+		}
+
 		public function get authInfo() : AuthInfoVO
 		{
 			return _authInfo;

@@ -82,12 +82,12 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
-				{
-					facade.removeMediator( mediatorName );
-
-					break;
-				}
+//				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
+//				{
+//					facade.removeMediator( mediatorName );
+//
+//					break;
+//				}
 
 				case ApplicationFacade.SERVER_APPLICATION_CREATED:
 				{
@@ -123,7 +123,7 @@ package net.vdombox.ide.core.view
 
 			interests.push( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
-			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+//			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			interests.push( ApplicationFacade.SERVER_APPLICATION_CREATED );
 			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED );
 

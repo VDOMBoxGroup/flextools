@@ -45,51 +45,14 @@ package net.vdombox.ide.core.controller.responses
 				case ApplicationFacade.SERVER_APPLICATIONS_GETTED:
 				{
 					var applications : Array = body as Array;
+					var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 //
 					message = new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.APPLICATIONS, applications );
-//
-//					break;
-					var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-					
-					var settingsStorageProxy : SettingsStorageProxy = facade.retrieveProxy( SettingsStorageProxy.NAME ) as SettingsStorageProxy;
-					
-					var settings : Object = settingsStorageProxy.loadSettings( "applicationManagerWindow" );
 					
 					if ( !statesProxy.selectedApplication )
-					{
-						var settingsProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
-						
-						settingsProxy.importSettings( settings );
-						var settingsVO : SettingsVO = settingsProxy.settings;
-						
-						var newSelectedApplication : ApplicationVO;
-						
-						if ( !applications || applications.length == 0 )
-							break;
-						
-						if ( settingsVO )
-						{
-							for ( var i : int = 0; i < applications.length; i++ )
-							{
-								if ( applications[ i ].id == settingsVO.lastApplicationID )
-								{
-									newSelectedApplication = applications[ i ];
-									break;
-								}
-							}
-						}
-						
-						if( !newSelectedApplication )
-						{
-							sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER, null );
-						}
-						else
-						{
-							sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, newSelectedApplication );
-							
-						}
-						//sendNotification( ApplicationFacade.OPEN_APPLICATION_IN_EDITOR, newSelectedApplication );
-					}
+						sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION );
+					break;
+				
 				}
 			}
 

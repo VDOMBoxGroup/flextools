@@ -9,6 +9,8 @@
 package net.vdombox.ide.core.controller
 {
 	import mx.core.UIComponent;
+	
+	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
 	import net.vdombox.ide.core.view.components.ApplicationManagerWindow;
@@ -16,8 +18,10 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.view.skins.ApplicationManagerWindowSkin;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 	import net.vdombox.utils.WindowManager;
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
+	
 	import spark.components.Button;
 
 	/**
@@ -29,6 +33,8 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
+			facade.sendNotification( ApplicationFacade.CLOSE_INITIAL_WINDOW );
+			
 			var applicationManagerWindowMediator : ApplicationManagerWindowMediator = facade.retrieveMediator( ApplicationManagerWindowMediator.NAME ) as ApplicationManagerWindowMediator;
 			// if already opened do nothing
 			if ( applicationManagerWindowMediator )

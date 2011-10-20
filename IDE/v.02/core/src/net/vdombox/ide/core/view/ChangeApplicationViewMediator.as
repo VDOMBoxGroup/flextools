@@ -10,8 +10,10 @@ package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -22,9 +24,12 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.vo.SettingsVO;
 	import net.vdombox.ide.core.view.components.ApplicationListItemRenderer;
 	import net.vdombox.ide.core.view.components.ChangeApplicationView;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.components.Application;
 	import spark.components.List;
 	import spark.events.IndexChangeEvent;
 
@@ -95,12 +100,12 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
-				{
-					facade.removeMediator( mediatorName );
-
-					break;
-				}
+//				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
+//				{
+//					facade.removeMediator( mediatorName );
+//
+//					break;
+//				}
 			}
 		}
 
@@ -109,7 +114,7 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.SERVER_APPLICATIONS_GETTED );
-			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+//			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 
 			return interests;
 		}
@@ -123,6 +128,7 @@ package net.vdombox.ide.core.view
 
 		override public function onRemove() : void
 		{
+			trace("1 - onRemove");
 			removeHandlers();
 		}
 
@@ -190,9 +196,9 @@ package net.vdombox.ide.core.view
 
 		private function addHandlers() : void
 		{
-			applicationList.addEventListener( FlexEvent.CREATION_COMPLETE, rendererCreatedHandler, true );
+			applicationList.addEventListener( FlexEvent.CREATION_COMPLETE, rendererCreatedHandler, true, 0, true );
 			applicationList.addEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler, false, 0, true );
-			applicationList.addEventListener( MouseEvent.DOUBLE_CLICK, applicationList_dubleClickHandler, true );
+			applicationList.addEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICK, applicationList_dubleClickHandler, true, 0, true );
 
 			changeApplicationView.addApplication.addEventListener( MouseEvent.CLICK, addApplicationClickHandler, false, 0, true );
 			changeApplicationView.changeApplication.addEventListener( MouseEvent.CLICK, changeApplicationClikHandler, false, 0, true );
@@ -217,7 +223,7 @@ package net.vdombox.ide.core.view
 		}
 
 
-		private function applicationList_dubleClickHandler( event : MouseEvent ) : void
+		private function applicationList_dubleClickHandler( event : Event ) : void
 		{
 			var applicationListItemRenderer : ApplicationListItemRenderer = event.target as ApplicationListItemRenderer;
 
@@ -225,7 +231,8 @@ package net.vdombox.ide.core.view
 			{
 				changeApplicationView.visible = false;
 
-				sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY, applicationListItemRenderer.resourceVO );
+				sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applicationListItemRenderer.applicationVO );
+				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			}
 		}
 
@@ -255,7 +262,7 @@ package net.vdombox.ide.core.view
 		{
 			applicationList.removeEventListener( FlexEvent.CREATION_COMPLETE, rendererCreatedHandler, true );
 			applicationList.removeEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler );
-			applicationList.removeEventListener( MouseEvent.DOUBLE_CLICK, applicationList_dubleClickHandler, true );
+			applicationList.removeEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICK, applicationList_dubleClickHandler, true );
 
 			changeApplicationView.addApplication.removeEventListener( MouseEvent.CLICK, addApplicationClickHandler );
 			changeApplicationView.changeApplication.removeEventListener( MouseEvent.CLICK, changeApplicationClikHandler );
@@ -301,7 +308,7 @@ package net.vdombox.ide.core.view
 		private function setSelectApplication( event : MouseEvent ) : void
 		{
 			sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
-//			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 		}
 	}
 }

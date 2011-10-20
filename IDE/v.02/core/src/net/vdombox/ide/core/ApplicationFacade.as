@@ -3,6 +3,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ChangeLocaleCommand;
 	import net.vdombox.ide.core.controller.CheckIndexPageCommand;
 	import net.vdombox.ide.core.controller.CheckSelectedPageCommand;
+	import net.vdombox.ide.core.controller.CloseApplicationManagerCommand;
 	import net.vdombox.ide.core.controller.CloseInitialWindowCommand;
 	import net.vdombox.ide.core.controller.CloseMainWindowCommand;
 	import net.vdombox.ide.core.controller.CloseWindowCommand;
@@ -552,6 +553,8 @@ package net.vdombox.ide.core
 			
 			registerCommand( CREATE_FIRST_PAGE, CreateFirstPageCommand );
 //			registerCommand( LOGOFF_REQUEST, LogoffRequestCommand );
+			
+			registerCommand( CLOSE_APPLICATION_MANAGER, CloseApplicationManagerCommand );
 		}
 	}
 }

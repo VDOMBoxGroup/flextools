@@ -1,6 +1,7 @@
 package net.vdombox.ide.core.controller
 {
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
 	import net.vdombox.ide.core.view.MainWindowMediator;
 	import net.vdombox.ide.core.view.components.MainWindow;
@@ -28,6 +29,11 @@ package net.vdombox.ide.core.controller
 			mainWindowMediator = new MainWindowMediator( new MainWindow() );
 			facade.registerMediator( mainWindowMediator );
 			mainWindowMediator.openWindow();
+		}
+		
+		private function get statesProxy() : StatesProxy
+		{
+			return facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 		}
 	}
 }

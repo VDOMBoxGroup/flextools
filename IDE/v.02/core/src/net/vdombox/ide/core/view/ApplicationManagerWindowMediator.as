@@ -61,9 +61,8 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.SET_SELECTED_APPLICATION:
 				{
 
-					closeWindows();
+//					closeWindows();
 
-					sendNotification( ApplicationFacade.OPEN_MAIN_WINDOW );
 					break;
 				}
 			}
@@ -73,7 +72,7 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.SET_SELECTED_APPLICATION );
+//			interests.push( ApplicationFacade.SET_SELECTED_APPLICATION );
 
 			return interests;
 		}
@@ -103,11 +102,7 @@ package net.vdombox.ide.core.view
 
 		private function closeWindows() : void
 		{
-			facade.removeMediator( mediatorName );
-
 			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
-
-			WindowManager.getInstance().removeWindow( applicationManagerWindow );
 		}
 
 		private function createCompleteHandler( event : FlexEvent ) : void

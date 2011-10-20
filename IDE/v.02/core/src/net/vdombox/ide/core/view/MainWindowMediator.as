@@ -17,7 +17,9 @@ package net.vdombox.ide.core.view
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.net.SharedObject;
+	
 	import flashx.textLayout.elements.BreakElement;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
@@ -28,6 +30,7 @@ package net.vdombox.ide.core.view
 	import mx.managers.SystemManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
+	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -44,10 +47,12 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
 	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
+	
 	import org.osmf.utils.Version;
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
@@ -166,6 +171,12 @@ package net.vdombox.ide.core.view
 			addHandlers();
 
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
+			
+			// TODO: Если нет выделенного приложения запустить Выбрать Приолжение
+			if ( !statesProxy.selectedApplication )
+				sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER );
+				
+			
 		}
 
 		override public function onRemove() : void
@@ -197,6 +208,11 @@ package net.vdombox.ide.core.view
 		{
 			toolsetBar.removeAllElements();
 			mainWindow.removeAllElements();
+		}
+
+		public function get statesProxy() : StatesProxy
+		{
+			return facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 		}
 
 		private function initTitle() : void
