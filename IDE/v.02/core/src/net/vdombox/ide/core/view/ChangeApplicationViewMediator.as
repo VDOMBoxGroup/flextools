@@ -94,8 +94,18 @@ package net.vdombox.ide.core.view
 					changeApplicationView.visible = true;
 
 					applications = notification.getBody() as Array;
-					applicationList.dataProvider = new ArrayList( applications );
-					selectApplication();
+					
+					if (applications.length == 0)
+					{
+						changeApplicationView.applicationDescription.text = "PleAce Add nEw AppLicAtIonS";
+					}
+					else
+					{
+						applicationList.dataProvider = new ArrayList( applications );
+						selectApplication();
+					}
+						
+						
 
 					break;
 				}

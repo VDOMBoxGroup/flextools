@@ -16,13 +16,19 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var applicationVO : ApplicationVO = notification.getBody() as ApplicationVO;
+			var applicationVO : ApplicationVO;
+			var body : ApplicationVO = notification.getBody() as ApplicationVO;
 			
-			statesProxy.selectedApplication = applicationVO || lastOpenedApplication ||  firstOfListApplications;
+			applicationVO = body || lastOpenedApplication ||  firstOfListApplications;
+			
+			if( !applicationVO )
+				return;
 				
+			statesProxy.selectedApplication = applicationVO;
+			
 			sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, statesProxy.selectedApplication );	
 			
-			settingsProxy.settings.lastApplicationID = statesProxy.selectedApplication.id;
+			settingsProxy.settings.lastApplicationID = applicationVO.id;
 			
 		}
 		
