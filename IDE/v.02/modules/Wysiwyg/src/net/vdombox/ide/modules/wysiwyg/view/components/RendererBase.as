@@ -1065,8 +1065,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			conatiner = new Group();
 			
-			conatiner.layout = new VerticalLayout();
-			
 			conatiner.clipAndEnableScrolling = true;
 			
 			parentContainer.addElement( conatiner );
@@ -1092,7 +1090,28 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			if ( param )
 				conatiner.height = param;
-			return conatiner;
+			else 
+				conatiner.percentHeight = 100;
+			
+			setStyleField( contetnt, conatiner );
+			
+			
+			var conatiner2 : Group = new Group();
+			
+			var groupLayout : VerticalLayout = new VerticalLayout();
+			groupLayout.gap = 0;
+			conatiner2.layout = groupLayout;
+			
+			conatiner2.clipAndEnableScrolling = true;
+			
+			conatiner2.percentWidth = 100;
+			conatiner2.percentHeight = 100;
+			
+			conatiner.addElement( conatiner2 );
+			
+			parentContainer.addElement( conatiner );
+			
+			return conatiner2;
 		}
 		
 		private function getSubRow( contetnt : XML , parentContainer : Group ) : Group
@@ -1102,9 +1121,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var param : Number;
 
 			conatiner = new Group();
-			
-			conatiner.layout = new HorizontalLayout();
-			
 			
 			conatiner.clipAndEnableScrolling = true;
 			
@@ -1131,7 +1147,63 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			if ( param )
 				conatiner.height = param;
-			return conatiner;
+			else 
+				conatiner.percentHeight = 100;
+			
+			setStyleField( contetnt, conatiner );
+			
+			var conatiner2 : Group = new Group();
+			
+			var groupLayout : HorizontalLayout = new HorizontalLayout();
+			groupLayout.gap = -1;
+			conatiner2.layout = groupLayout;
+			
+			conatiner2.clipAndEnableScrolling = true;
+			
+			
+			conatiner2.percentWidth = 100;
+			conatiner2.percentHeight = 100;
+			
+//			conatiner2.left = 0;
+//			conatiner2.right = 0;
+//			conatiner2.top = 0;
+//			conatiner2.bottom = 0;
+			
+			conatiner.addElement( conatiner2 );
+			
+			
+			parentContainer.addElement( conatiner );
+			
+			return conatiner2;
+		}
+		
+		private function setStyleField( contetnt : XML , conatiner : Group ) : void
+		{
+			var rect : Rect = new Rect();
+			if ( contetnt.@backgroundcolor[ 0 ] )
+				rect.fill = new SolidColor( colorToUint(  contetnt.@backgroundcolor[ 0 ] ) );
+			if ( contetnt.@bordercolor[ 0 ] )
+			{
+				rect.stroke = new SolidColorStroke( colorToUint( contetnt.@bordercolor[ 0 ] ) );
+				if ( contetnt.@borderwidth[ 0 ] )
+					rect.stroke.weight = Number ( contetnt.@borderwidth[ 0 ] );
+			}
+			
+			rect.left = 0;
+			rect.top = 0;
+			rect.right = 0;
+			rect.bottom = 0;
+			conatiner.addElement( rect );
+		}
+		
+		private function colorToUint( color : String ) : uint
+		{
+			if ( color.charAt(0) == "#" )
+			{
+				color = color.substr( 1, color.length - 1);
+				color = "0x" + color;
+			}
+			return uint( color );
 		}
 		
 		private function getSubCell( contetnt : XML , parentContainer : Group ) : Group
@@ -1169,6 +1241,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			if ( param )
 				conatiner.height = param;
+			else 
+				conatiner.percentHeight = 100;
+			
+			setStyleField( contetnt, conatiner );
 			
 			return conatiner;
 		}
