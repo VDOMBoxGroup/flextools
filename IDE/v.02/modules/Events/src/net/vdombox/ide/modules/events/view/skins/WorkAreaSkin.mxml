@@ -2,7 +2,7 @@
 <s:SparkSkin xmlns:components="net.vdombox.ide.modules.events.view.components.*"
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
-			 xmlns:s="library://ns.adobe.com/flex/spark">
+			 xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx1="library://ns.adobe.com/flex/mx">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -44,7 +44,7 @@
 
 	<s:HGroup height="20"
 			  left="1" right="1" top="1"
-			  gap="0">
+			  gap="0" paddingRight="20">
 		<components:WorkAreaButton id="saveButton"
 								   enabled="true" enabled.disabled="false" height="20" icon="@Embed('assets/save.png')"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_save' ) }"
@@ -52,6 +52,8 @@
 		<components:WorkAreaButton id="undoButton"
 								   enabled="false" enabled.unsaved="true" height="20" icon="@Embed('assets/undo.png')"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_undo' ) }"/>
+		<mx1:Spacer width="100%" />
+		<s:CheckBox id="showElement" height="20" label="Show hidden" change="hostComponent.showHandler()"/>
 	</s:HGroup>
 
 	<s:Group id="workLayers"

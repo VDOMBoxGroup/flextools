@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.events.events
 		public static var DELETE_LINKAGE : String = "deleteLinkage";
 		public static var DELETE : String = "delete";
 		public static var MOVED : String = "moved";
+		public static var SHOW_ELEMENT	 : String = "showElement";
 		
 		public function ElementEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{

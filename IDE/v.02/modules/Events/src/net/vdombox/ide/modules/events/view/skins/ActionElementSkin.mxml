@@ -3,7 +3,7 @@
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minWidth="200" creationComplete="sparkskin1_creationCompleteHandler(event)">
+			 minWidth="200" creationComplete="sparkskin1_creationCompleteHandler(event)" xmlns:mx1="library://ns.adobe.com/flex/mx">
 
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.events.view.components.ActionElement")]
@@ -177,9 +177,14 @@
 
 				<s:Label id="titleLabel"
 						 text="{ hostComponent.title }"
-						 color="#FFFFFF" left="5" right="5" textAlign="center"
+						 color="#FFFFFF" left="5" right="20" textAlign="center"
 						 verticalCenter="0"
 						 maxDisplayedLines="1"/>
+				
+				<mx1:Image id="showElement" 
+						   right="4" top="4"
+						   source="@Embed('assets/eye_1.png')"
+						   click="hostComponent.showHandler()"/>
 			</s:Group>
 
 			<s:Group id="contentGroup"
@@ -216,6 +221,7 @@
 											  width="100%"
 											  cornerRadius="0" skinClass="net.vdombox.ide.modules.events.view.skins.ElementButtonSkin"
 											  click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )"/>
+					
 				</s:HGroup>
 			</s:Group>
 		</s:VGroup>

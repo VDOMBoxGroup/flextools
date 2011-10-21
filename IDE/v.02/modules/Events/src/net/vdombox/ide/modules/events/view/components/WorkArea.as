@@ -22,6 +22,8 @@ package net.vdombox.ide.modules.events.view.components
 	import net.vdombox.view.Alert;
 	import net.vdombox.view.AlertButton;
 	
+	import spark.components.Button;
+	import spark.components.CheckBox;
 	import spark.components.Group;
 	import spark.components.List;
 	import spark.components.SkinnableContainer;
@@ -53,6 +55,9 @@ package net.vdombox.ide.modules.events.view.components
 		
 		[SkinPart]
 		public var undoButton : WorkAreaButton;
+		
+		[SkinPart]
+		public var showElement : CheckBox;
 		
 		private var applicationEventsVO : ApplicationEventsVO;
 
@@ -688,6 +693,33 @@ package net.vdombox.ide.modules.events.view.components
 			
 			if( linkage.parent == linkagesLayer )
 				linkagesLayer.removeElement( linkage );
+		}
+		
+		public function showHandler() : void
+		{
+			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.SHOW_ELEMENTS ) );
+		}
+		
+		public function setVisibleLinkage( showNotVisible : Boolean ) : void
+		{
+			var i : Number;
+			var linkage : Linkage;
+			for ( i = 0; i < linkagesLayer.numElements; i++ )
+			{
+				linkage = linkagesLayer.getElementAt( i ) as Linkage;
+				
+				if ( linkage )
+				{
+					if ( !showNotVisible && ( !linkage.target.showElements || !linkage.source.showElements ) )
+						linkage.visible = false;
+					else
+						linkage.visible = true;
+				}
+				linkage.source.x += 1;
+				linkage.source.x -= 1;
+			}
+
+
 		}
 
 	}

@@ -8,6 +8,8 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.controls.Image;
+			
 			import net.vdombox.ide.common.vo.EventParameterVO;
 			import net.vdombox.ide.common.vo.EventVO;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
@@ -22,16 +24,54 @@
 
 			[SkinPart( required="true" )]
 			public var headerGroup : Group;
+			
+			[SkinPart( required="true" )]
+			public var showElement : Image;
 
 			[Bindable]
 			public var title : String;
 
 			private var _data : EventVO;
+			
+			private var _showElements : Boolean = true;
 
 			private var isNeedUpdateParameters : Boolean;
 
 			private var mouseOffcetX : int;
 			private var mouseOffcetY : int;
+			
+			[Embed( source = "assets/eye_0w.png" )]
+			public var noVisibleEye : Class;
+			
+			[Embed( source = "assets/eye_1.png" )]
+			public var visibleEye : Class;
+			
+			public function get showElements():Boolean
+			{
+				return _showElements;
+			}
+			
+			public function set showElements(value:Boolean):void
+			{
+				_showElements = value;
+				if ( _showElements )
+					showElement.source = visibleEye;
+				else
+					showElement.source = noVisibleEye;
+			}
+			
+			public function set visibleElements(value:Boolean):void
+			{
+				visible = value;
+			}
+			
+			public function get idElement() : String
+			{
+				if ( _data )
+					return _data.name + _data.objectID;
+				else
+					return "";
+			}
 
 			[Bindable]
 			public function get data() : EventVO
@@ -55,7 +95,7 @@
 			{
 				super.updateDisplayList( unscaledWidth, unscaledHeight );
 
-				if ( parametersContainer && isNeedUpdateParameters )
+				/*if ( parametersContainer && isNeedUpdateParameters )
 				{
 					isNeedUpdateParameters = false;
 					parametersContainer.removeAllElements();
@@ -77,7 +117,7 @@
 
 						parametersContainer.addElement( parameterRenderer );
 					}
-				}
+				}*/
 			}
 
 			override protected function partAdded( partName : String, instance : Object ) : void
@@ -124,6 +164,12 @@
 			{
 				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
 				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
+			}
+			
+			public function showHandler() : void
+			{
+				showElements = !_showElements;
+				dispatchEvent( new ElementEvent ( ElementEvent.SHOW_ELEMENT ) );
 			}
 		]]>
 	</fx:Script>

@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.events.controller
 {
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.model.SettingsProxy;
+	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -12,6 +13,7 @@ package net.vdombox.ide.modules.events.controller
 		{
 			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new SessionProxy() );
+			facade.registerProxy( new VisibleElementProxy() );
 		}
 	}
 }
