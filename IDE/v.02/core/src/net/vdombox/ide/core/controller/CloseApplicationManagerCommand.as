@@ -4,8 +4,8 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.view.ApplicationListItemRendererMediator;
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
-	import net.vdombox.ide.core.view.ChangeApplicationViewMediator;
-	import net.vdombox.ide.core.view.CreateEditApplicationViewMediator;
+	import net.vdombox.ide.core.view.ApplicationsViewMediator;
+	import net.vdombox.ide.core.view.ApplicationPropertiesViewMediator;
 	import net.vdombox.ide.core.view.IconChooserMediator;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 	import net.vdombox.utils.WindowManager;
@@ -18,12 +18,12 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			if ( facade.hasMediator( ChangeApplicationViewMediator.NAME ) )
-				facade.removeMediator( ChangeApplicationViewMediator.NAME );
+			if ( facade.hasMediator( ApplicationsViewMediator.NAME ) )
+				facade.removeMediator( ApplicationsViewMediator.NAME );
 			
 			
-			if ( facade.hasMediator( CreateEditApplicationViewMediator.NAME ) )
-				facade.removeMediator( CreateEditApplicationViewMediator.NAME );
+			if ( facade.hasMediator( ApplicationPropertiesViewMediator.NAME ) )
+				facade.removeMediator( ApplicationPropertiesViewMediator.NAME );
 			
 			if ( facade.hasMediator( IconChooserMediator.NAME ) )
 				facade.removeMediator( IconChooserMediator.NAME );

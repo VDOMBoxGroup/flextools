@@ -15,16 +15,16 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
-	import net.vdombox.ide.core.view.components.CreateEditApplicationView;
+	import net.vdombox.ide.core.view.components.ApplicationPropertiesView;
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
-	public class CreateEditApplicationViewMediator extends Mediator implements IMediator
+	public class ApplicationPropertiesViewMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "CreateEditApplicationViewMediator";
 
-		public function CreateEditApplicationViewMediator( viewComponent : Object = null )
+		public function ApplicationPropertiesViewMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
 		}
@@ -37,9 +37,9 @@ package net.vdombox.ide.core.view
 
 		private var newIconResourceVO : ResourceVO;
 
-		public function get createEditApplicationView() : CreateEditApplicationView
+		public function get applicationPropertiesView() : ApplicationPropertiesView
 		{
-			return viewComponent as CreateEditApplicationView;
+			return viewComponent as ApplicationPropertiesView;
 		}
 
 		override public function handleNotification( notification : INotification ) : void
@@ -53,8 +53,8 @@ package net.vdombox.ide.core.view
 				{
 					// if body "null" then cratin new Application
 
-					createEditApplicationView.visible = true;
-					createEditApplicationView.invalidateProperties();
+					applicationPropertiesView.visible = true;
+					applicationPropertiesView.invalidateProperties();
 
 					applicationVO = body as ApplicationVO;
 
@@ -108,7 +108,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
 				{
 					applicationVO = null
-					createEditApplicationView.visible = false;
+					applicationPropertiesView.visible = false;
 					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 
 					break
@@ -132,7 +132,7 @@ package net.vdombox.ide.core.view
 
 		override public function onRegister() : void
 		{
-			facade.registerMediator( new IconChooserMediator( createEditApplicationView.iconChooser ) );
+			facade.registerMediator( new IconChooserMediator( applicationPropertiesView.iconChooser ) );
 
 			addHandlers();
 		}
@@ -146,13 +146,13 @@ package net.vdombox.ide.core.view
 
 		private function addHandlers() : void
 		{
-			createEditApplicationView.addEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
-			createEditApplicationView.addEventListener( ApplicationManagerWindowEvent.CANCEL, cancelInformationHandler );
+			applicationPropertiesView.addEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
+			applicationPropertiesView.addEventListener( ApplicationManagerWindowEvent.CANCEL, cancelInformationHandler );
 		}
 
 		private function cancelInformationHandler( event : ApplicationManagerWindowEvent ) : void
 		{
-			createEditApplicationView.visible = false;
+			applicationPropertiesView.visible = false;
 
 			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 		}
@@ -161,15 +161,15 @@ package net.vdombox.ide.core.view
 		{
 			if ( applicationVO )
 			{
-				createEditApplicationView.txtapplicationName.text = applicationVO.name;
-				createEditApplicationView.txtapplicationDescription.text = applicationVO.description;
+				applicationPropertiesView.txtapplicationName.text = applicationVO.name;
+				applicationPropertiesView.txtapplicationDescription.text = applicationVO.description;
 
 				if ( applicationVO.scriptingLanguage == "python" )
-					createEditApplicationView.python.selected = true;
+					applicationPropertiesView.python.selected = true;
 				else
-					createEditApplicationView.vbscript.selected = true;
+					applicationPropertiesView.vbscript.selected = true;
 
-				createEditApplicationView.iconChooser.selectedIcon.source = null;
+				applicationPropertiesView.iconChooser.selectedIcon.source = null;
 
 				if ( applicationVO.iconID )
 				{
@@ -181,12 +181,12 @@ package net.vdombox.ide.core.view
 			}
 			else
 			{
-				createEditApplicationView.txtapplicationName.text = "";
-				createEditApplicationView.txtapplicationDescription.text = "";
-				createEditApplicationView.iconChooser.selectedIcon.source = null;
+				applicationPropertiesView.txtapplicationName.text = "";
+				applicationPropertiesView.txtapplicationDescription.text = "";
+				applicationPropertiesView.iconChooser.selectedIcon.source = null;
 
-				createEditApplicationView.python.selected = true;
-				createEditApplicationView.vbscript.selected = false;
+				applicationPropertiesView.python.selected = true;
+				applicationPropertiesView.vbscript.selected = false;
 			}
 
 		}
@@ -206,9 +206,9 @@ package net.vdombox.ide.core.view
 		{
 			var appInfVO : ApplicationInformationVO = new ApplicationInformationVO();
 
-			appInfVO.name = createEditApplicationView.txtapplicationName.text;
-			appInfVO.description = createEditApplicationView.txtapplicationDescription.text;
-			appInfVO.scriptingLanguage = createEditApplicationView.languageRBGroup.selectedValue.toString();
+			appInfVO.name = applicationPropertiesView.txtapplicationName.text;
+			appInfVO.description = applicationPropertiesView.txtapplicationDescription.text;
+			appInfVO.scriptingLanguage = applicationPropertiesView.languageRBGroup.selectedValue.toString();
 
 			return appInfVO;
 		}
@@ -220,8 +220,8 @@ package net.vdombox.ide.core.view
 
 		private function removeHandlers() : void
 		{
-			createEditApplicationView.removeEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
-			createEditApplicationView.removeEventListener( ApplicationManagerWindowEvent.CANCEL, cancelInformationHandler );
+			applicationPropertiesView.removeEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
+			applicationPropertiesView.removeEventListener( ApplicationManagerWindowEvent.CANCEL, cancelInformationHandler );
 		}
 
 		private function saveInformationHandler( event : ApplicationManagerWindowEvent ) : void
@@ -256,7 +256,7 @@ package net.vdombox.ide.core.view
 
 		private function setIcon( value : * ) : void
 		{
-			createEditApplicationView.iconChooser.selectedIcon.source = value;
+			applicationPropertiesView.iconChooser.selectedIcon.source = value;
 		}
 	}
 }

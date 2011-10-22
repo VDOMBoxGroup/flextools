@@ -60,9 +60,7 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.SET_SELECTED_APPLICATION:
 				{
-
 //					closeWindows();
-
 					break;
 				}
 			}
@@ -107,8 +105,8 @@ package net.vdombox.ide.core.view
 
 		private function createCompleteHandler( event : FlexEvent ) : void
 		{
-			facade.registerMediator( new ChangeApplicationViewMediator( applicationManagerWindow.changeApplicationView ) );
-			facade.registerMediator( new CreateEditApplicationViewMediator( applicationManagerWindow.createEditApplicationView ) );
+			facade.registerMediator( new ApplicationsViewMediator(  applicationManagerWindow.applicationsView   ) );
+			facade.registerMediator( new ApplicationPropertiesViewMediator( applicationManagerWindow.applicationPropertiesView ) );
 		}
 
 		private function removeHandlers() : void

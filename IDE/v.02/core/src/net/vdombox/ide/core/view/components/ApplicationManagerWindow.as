@@ -4,7 +4,7 @@ package net.vdombox.ide.core.view.components
 	import flash.events.Event;
 	
 	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
-	import net.vdombox.ide.core.view.skins.ApplicationManagerWindowSkin;
+	import net.vdombox.ide.core.view.skins.ApplicationManagerSkin;
 	
 	import spark.components.Window;
 
@@ -12,10 +12,10 @@ package net.vdombox.ide.core.view.components
 	{
 		
 		[SkinPart( required="true" )]
-		public var changeApplicationView : ChangeApplicationView;
+		public var applicationsView : ApplicationsView;
 		
 		[SkinPart( required="true" )]
-		public var createEditApplicationView : CreateEditApplicationView;
+		public var applicationPropertiesView : ApplicationPropertiesView;
 		
 		public function ApplicationManagerWindow()
 		{
@@ -32,7 +32,7 @@ package net.vdombox.ide.core.view.components
 		
 		override public function stylesInitialized():void {
 			super.stylesInitialized();
-			this.setStyle( "skinClass", ApplicationManagerWindowSkin );
+			this.setStyle( "skinClass", ApplicationManagerSkin );
 		}
 	}
 }

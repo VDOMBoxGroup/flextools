@@ -19,7 +19,7 @@ package net.vdombox.ide.core.controller
 			var applicationVO : ApplicationVO;
 			var body : ApplicationVO = notification.getBody() as ApplicationVO;
 			
-			applicationVO = body || lastOpenedApplication ||  firstOfListApplications;
+			applicationVO = body || lastOpenedApplication ;
 			
 			if( !applicationVO )
 				return;
@@ -50,10 +50,10 @@ package net.vdombox.ide.core.controller
 			return null;
 		}
 		
-		private function get firstOfListApplications():  ApplicationVO
-		{
-			return ( applications.length > 0 ) ? applications[0] : null;
-		}
+//		private function get firstOfListApplications():  ApplicationVO
+//		{
+//			return ( applications.length > 0 ) ? applications[0] : null;
+//		}
 		
 		private function get serverProxy():ServerProxy
 		{

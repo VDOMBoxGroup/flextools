@@ -23,7 +23,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	import net.vdombox.ide.core.model.vo.SettingsVO;
 	import net.vdombox.ide.core.view.components.ApplicationListItemRenderer;
-	import net.vdombox.ide.core.view.components.ChangeApplicationView;
+	import net.vdombox.ide.core.view.components.ApplicationsView;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -37,7 +37,7 @@ package net.vdombox.ide.core.view
 	 *
 	 * @author andreev ap
 	 */
-	public class ChangeApplicationViewMediator extends Mediator implements IMediator
+	public class ApplicationsViewMediator extends Mediator implements IMediator
 	{
 		/**
 		 *
@@ -49,7 +49,7 @@ package net.vdombox.ide.core.view
 		 *
 		 * @param viewComponent
 		 */
-		public function ChangeApplicationViewMediator( viewComponent : Object = null )
+		public function ApplicationsViewMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
 		}
@@ -70,16 +70,16 @@ package net.vdombox.ide.core.view
 		 */
 		public function get applicationList() : List
 		{
-			return changeApplicationView.applicationList as List;
+			return applicationsView.applicationList as List;
 		}
 
 		/**
 		 *
 		 * @return
 		 */
-		public function get changeApplicationView() : ChangeApplicationView
+		public function get applicationsView() : ApplicationsView
 		{
-			return viewComponent as ChangeApplicationView;
+			return viewComponent as ApplicationsView;
 		}
 
 		override public function handleNotification( notification : INotification ) : void
@@ -91,13 +91,13 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.SERVER_APPLICATIONS_GETTED:
 				{
-					changeApplicationView.visible = true;
+					applicationsView.visible = true;
 
 					applications = notification.getBody() as Array;
 					
 					if (applications.length == 0)
 					{
-						changeApplicationView.applicationDescription.text = "PleAce Add nEw AppLicAtIonS";
+						applicationsView.applicationDescription.text = "PleAce Add nEw AppLicAtIonS";
 					}
 					else
 					{
@@ -143,7 +143,6 @@ package net.vdombox.ide.core.view
 		}
 
 
-
 		/**
 		 *
 		 * @return
@@ -168,13 +167,13 @@ package net.vdombox.ide.core.view
 
 			if ( value )
 			{
-				changeApplicationView.applicationName.text = selectedApplicationVO.name;
-				changeApplicationView.applicationDescription.text = selectedApplicationDescriptions
+				applicationsView.applicationName.text = selectedApplicationVO.name;
+				applicationsView.applicationDescription.text = selectedApplicationDescriptions
 			}
 			else
 			{
-				changeApplicationView.applicationName.text = "";
-				changeApplicationView.applicationDescription.text = "";
+				applicationsView.applicationName.text = "";
+				applicationsView.applicationDescription.text = "";
 			}
 		}
 
@@ -199,7 +198,7 @@ package net.vdombox.ide.core.view
 
 		private function addApplicationClickHandler( event : MouseEvent ) : void
 		{
-			changeApplicationView.visible = false;
+			applicationsView.visible = false;
 
 			sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
 		}
@@ -210,9 +209,9 @@ package net.vdombox.ide.core.view
 			applicationList.addEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler, false, 0, true );
 			applicationList.addEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICK, applicationList_dubleClickHandler, true, 0, true );
 
-			changeApplicationView.addApplication.addEventListener( MouseEvent.CLICK, addApplicationClickHandler, false, 0, true );
-			changeApplicationView.changeApplication.addEventListener( MouseEvent.CLICK, changeApplicationClikHandler, false, 0, true );
-			changeApplicationView.setSelectApplication.addEventListener( MouseEvent.CLICK, setSelectApplication, false, 0, true );
+			applicationsView.addApplication.addEventListener( MouseEvent.CLICK, addApplicationClickHandler, false, 0, true );
+			applicationsView.changeApplication.addEventListener( MouseEvent.CLICK, changeApplicationClikHandler, false, 0, true );
+			applicationsView.setSelectApplication.addEventListener( MouseEvent.CLICK, setSelectApplication, false, 0, true );
 		}
 
 		/**
@@ -239,7 +238,7 @@ package net.vdombox.ide.core.view
 
 			if ( applicationListItemRenderer )
 			{
-				changeApplicationView.visible = false;
+				applicationsView.visible = false;
 
 				sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applicationListItemRenderer.applicationVO );
 				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
@@ -248,7 +247,7 @@ package net.vdombox.ide.core.view
 
 		private function changeApplicationClikHandler( event : MouseEvent ) : void
 		{
-			changeApplicationView.visible = false;
+			applicationsView.visible = false;
 			sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY, selectedApplicationVO );
 		}
 
@@ -274,9 +273,9 @@ package net.vdombox.ide.core.view
 			applicationList.removeEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler );
 			applicationList.removeEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICK, applicationList_dubleClickHandler, true );
 
-			changeApplicationView.addApplication.removeEventListener( MouseEvent.CLICK, addApplicationClickHandler );
-			changeApplicationView.changeApplication.removeEventListener( MouseEvent.CLICK, changeApplicationClikHandler );
-			changeApplicationView.setSelectApplication.removeEventListener( MouseEvent.CLICK, setSelectApplication );
+			applicationsView.addApplication.removeEventListener( MouseEvent.CLICK, addApplicationClickHandler );
+			applicationsView.changeApplication.removeEventListener( MouseEvent.CLICK, changeApplicationClikHandler );
+			applicationsView.setSelectApplication.removeEventListener( MouseEvent.CLICK, setSelectApplication );
 		}
 
 		/**
