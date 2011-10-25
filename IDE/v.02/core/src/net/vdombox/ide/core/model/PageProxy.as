@@ -581,14 +581,7 @@ package net.vdombox.ide.core.model
 
 				case "get_server_actions_list":
 				{
-					/*<ServerActions>
-					      <Action ID="" Name=""  ObjectID="" ObjectName=""/>
-					       ...
-					 </ServerActions>*/
-					
-					
-
-					 serverActionsXMLList  = result.ServerActions.Action.( @ObjectID == pageVO.id );
+					serverActionsXMLList  = result.ServerActions.Action.( @ObjectID == pageVO.id );
 
 					
 					for each ( serverActionXML in serverActionsXMLList )
@@ -600,7 +593,8 @@ package net.vdombox.ide.core.model
 
 						serverActionVO.setProperties( serverActionXML );
 
-						serverActions.push( serverActionVO );
+						if ( serverActionVO.name != "onload" )
+							serverActions.push( serverActionVO );
 					}
 
 					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_LIST_GETTED, { pageVO: pageVO, serverActions: serverActions } )

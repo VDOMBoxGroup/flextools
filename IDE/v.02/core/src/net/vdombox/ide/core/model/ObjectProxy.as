@@ -449,7 +449,8 @@ package net.vdombox.ide.core.model
 
 						serverActionVO.setProperties( serverActionXML )
 
-						serverActions.push( serverActionVO );
+						if ( serverActionVO.name != "onload" )	
+							serverActions.push( serverActionVO );
 					}
 
 					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTIONS_LIST_GETTED, { objectVO: objectVO, serverActions: serverActions } );
