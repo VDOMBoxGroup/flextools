@@ -34,6 +34,13 @@ package net.vdombox.ide.common.vo
 		private var _objectName : String;
 
 		private var _containerID : String;
+		
+		private var _visibleEvent : Boolean = true;
+
+		public function get visibleEvent():Boolean
+		{
+			return _visibleEvent;
+		}
 
 		public function get name() : String
 		{
@@ -60,6 +67,11 @@ package net.vdombox.ide.common.vo
 			return _containerID;
 		}
 
+		public function set visibleEvent( value : Boolean ) : void
+		{
+			_visibleEvent = value;
+		}
+		
 		public function setID( value : String ) : void
 		{
 			_id = value;

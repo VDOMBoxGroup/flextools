@@ -23,8 +23,16 @@ package net.vdombox.ide.common.vo
 		
 		private var _name : String;
 		
+		private var _visibleEvent : Boolean = true;
+		
 		private var _parameters : Array = [];
 		
+
+		public function get visibleEvent():Boolean
+		{
+			return _visibleEvent;
+		}
+
 		public function get id() : String
 		{
 			return _id;
@@ -48,6 +56,11 @@ package net.vdombox.ide.common.vo
 		public function get parameters() : Array
 		{
 			return _parameters;
+		}
+		
+		public function set visibleEvent(value : Boolean) : void
+		{
+			_visibleEvent = value;
 		}
 		
 		public function setID( value : String ) : void
