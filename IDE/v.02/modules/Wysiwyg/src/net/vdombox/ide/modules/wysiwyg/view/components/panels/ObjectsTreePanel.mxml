@@ -317,7 +317,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<mx:Tree id="objectsTree" borderVisible="false"
+	<mx:Tree id="objectsTree" borderVisible="false" maxHorizontalScrollPosition="140" horizontalScrollPolicy="auto"
 			 dataProvider="{ _pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"
 			 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer"/>
 	
