@@ -21,10 +21,10 @@
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 			import spark.components.Button;
 
-			[Embed( source = "icons/eye_0.png" )]
+			[Embed( source = "icons/eye_0t.png" )]
 			public var noVisibleEye : Class;
 
-			[Embed( source = "icons/eye_1.png" )]
+			[Embed( source = "icons/eye_1t.png" )]
 			public var visibleEye : Class;
 
 			private var _eyeOpened : Boolean  = true;
@@ -231,7 +231,7 @@
 		</s:Rect>
 
 		<s:VGroup width="22" height="100%" verticalAlign="middle" horizontalAlign="center">
-			<mx:Image id="eyes" width="16" height="14" source="@Embed('icons/eye_1.png')" />
+			<mx:Image id="eyes" width="16" height="14" source="@Embed('icons/eye_1t.png')" />
 		</s:VGroup>
 
 	</s:Group>
