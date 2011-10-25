@@ -57,23 +57,21 @@ package net.vdombox.ide.core.view
 		
 		public function get defaultIcon() : ByteArray
 		{
-			return null;
+			var galleryItemVO : GalleryItemVO = galleryProxy.items[0] as GalleryItemVO;
+			
+			return ObjectUtil.copy( galleryItemVO.content ) as ByteArray;
 		}
 		
 		private var _iconChanged : Boolean = false;
 		
 		public function get selectedIcon() : ByteArray
 		{
-//			var source : Object = iconChooser.selectedIcon.source;
-//			
-//			 if(source as ByteArray)
-//			 	return source as ByteArray
-//			 else if (source as Bitmap)
-//				 Bitmap().
-				 
-				 
-			
-			return iconChooser.selectedIcon.source as ByteArray;
+			return iconChooser.icon.source as ByteArray;
+		}
+		
+		public function get icon() : ByteArray
+		{
+			return selectedIcon || defaultIcon;
 		}
 		
 		override public function onRegister() : void
@@ -99,8 +97,6 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-//			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
-			
 			return interests;
 		}
 		
@@ -108,19 +104,12 @@ package net.vdombox.ide.core.view
 		{
 			switch ( notification.getName() )
 			{
-//				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
-//				{
-//					facade.removeMediator( mediatorName );
-//					
-//					break;
-//				}	
+				
 			}
 		}
 		
 		override public function onRemove() : void
 		{
-//			closeWindows();
-//			removeHandlers();
 			facade.removeProxy( GalleryProxy.NAME );
 			
 			removeHandlers();
@@ -138,18 +127,16 @@ package net.vdombox.ide.core.view
 		
 		private function createCompleteIconListHandler( event : FlexEvent ) : void
 		{	
-			var gp : GalleryProxy = facade.retrieveProxy( GalleryProxy.NAME ) as GalleryProxy;
-			
-			iconChooserWindow.iconsList.dataProvider = new ArrayList( gp.items );
+			iconChooserWindow.iconsList.dataProvider = new ArrayList( galleryProxy.items );
 		}
 		
 		private function selectIconHandler(event : IconChooserEvent) : void
 		{
-			var selectedItem : GalleryItemVO = iconChooserWindow.iconsList.selectedItem as GalleryItemVO;
-			if( !selectedItem )
+			var galleryItemVO : GalleryItemVO = iconChooserWindow.iconsList.selectedItem as GalleryItemVO;
+			if( !galleryItemVO )
 				return;
 		
-			iconChooser.selectedIcon.source = ObjectUtil.copy( selectedItem.content );
+			iconChooser.icon.source = ObjectUtil.copy( galleryItemVO.content );
 			_iconChanged = true;
 			
 		}
@@ -237,12 +224,16 @@ package net.vdombox.ide.core.view
 			var iconByteArray : ByteArray = pnge.encode( scaledImage.bitmapData );
 			
 			_iconChanged = true;
-			iconChooser.selectedIcon.source = iconByteArray;
+			iconChooser.icon.source = iconByteArray;
 			//iconChooser.iconsList.selectedIndex = -1;
 		}
 		
 		private function loader_ioErrorHandler( event : IOErrorEvent ) : void
 		{
+		}
+		private function get galleryProxy(): GalleryProxy
+		{
+			return facade.retrieveProxy( GalleryProxy.NAME ) as GalleryProxy;
 		}
 	}
 }

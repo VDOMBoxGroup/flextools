@@ -477,8 +477,7 @@ package net.vdombox.ide.core.model
 					resourceVO.setStatus( ResourceVO.UPLOADED );
 
 					sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
-					//WHY: зачем закоментировал?
-					//soap_setResource();
+				
 					soap_setResource();
 
 					break;
@@ -530,10 +529,10 @@ package net.vdombox.ide.core.model
 			{
 				case "get_resource":
 				{
-					trace("error loaded");
-					// WHY:  заеме запрашивать ресурс еще раз? почему на case "get_resource" посылается RESOURCE_SETTED_ERROR ?
-//					sendNotification( ApplicationFacade.RESOURCE_SETTED_ERROR );
-					//soap_setResource();
+					trace("error get_resource");
+					resourceVO = event.token.resourceVO as ResourceVO;
+					resourceVO.setData( null );
+//					soap_setResource();
 					break;
 				}
 			}

@@ -39,13 +39,11 @@
 					return;
 				}
 				
-				if ( _resourceVO && _resourceVO.id != applicationVO.iconID )
-				{
+//				if ( _resourceVO && _resourceVO.id != applicationVO.iconID )
 					createResourse();
-				}
 				
-				if (!_resourceVO)
-					createResourse();
+//				if (!_resourceVO)
+//					createResourse();
 			}
 
 			public function set resourceVO( value : ResourceVO ) : void
@@ -91,18 +89,18 @@
 				
 				imageHolder.source = ObjectUtil.copy(value);
 				
-				loader = new Loader();
-				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
-				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, setIconLoaded );
-				
-				try
-				{
-					loader.loadBytes( resourceVO.data );
-				}
-				catch ( error : Error )
-				{
-					// FIXME Сделать обработку исключения если не грузится изображение
-				}
+//				loader = new Loader();
+//				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
+//				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, setIconLoaded );
+//				
+//				try
+//				{
+//					loader.loadBytes( resourceVO.data );
+//				}
+//				catch ( error : Error )
+//				{
+//					// FIXME Сделать обработку исключения если не грузится изображение
+//				}
 			}
 			
 			private function setIconLoaded( event : Event ) : void

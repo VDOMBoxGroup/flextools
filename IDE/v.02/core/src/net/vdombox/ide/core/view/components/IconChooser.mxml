@@ -18,7 +18,7 @@
 		<s:State name="gallery" />
 	</s:states>
 	
-	<mx:Image id="selectedIcon"
+	<mx:Image id="icon"
 			  height="64" width="64" />
 	
 	<s:Label buttonMode="true" text="{ resourceManager.getString( 'Core_General', 'iconchooser_select_icon' ) }"

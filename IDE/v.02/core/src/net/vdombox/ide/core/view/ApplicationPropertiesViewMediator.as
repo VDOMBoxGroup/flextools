@@ -10,9 +10,9 @@ package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
 	import flash.utils.ByteArray;
-
 	import mx.binding.utils.BindingUtils;
-
+	import mx.controls.Image;
+	import mx.utils.ObjectUtil;
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -20,7 +20,6 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.view.components.ApplicationPropertiesView;
-
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -34,17 +33,31 @@ package net.vdombox.ide.core.view
 			super( NAME, viewComponent );
 		}
 
-		private var applicationInformationVO : ApplicationInformationVO;
+		private var _applicationVO : ApplicationVO;
 
-		private var applicationVO : ApplicationVO;
+		private var applicationInformationVO : ApplicationInformationVO;
 
 		private var newApplicationInformation : Object;
 
 		private var newIconResourceVO : ResourceVO;
 
+		private var resourceVO : ResourceVO;
+
 		public function get applicationPropertiesView() : ApplicationPropertiesView
 		{
 			return viewComponent as ApplicationPropertiesView;
+		}
+
+		public function get applicationVO() : ApplicationVO
+		{
+			return _applicationVO;
+		}
+
+		public function set applicationVO( value : ApplicationVO ) : void
+		{
+			_applicationVO = value;
+
+			commitProperties();
 		}
 
 		override public function handleNotification( notification : INotification ) : void
@@ -57,24 +70,19 @@ package net.vdombox.ide.core.view
 
 				case ApplicationFacade.OPEN_APPLICATIONS_VIEW:
 				{
-
 					applicationPropertiesView.visible = false;
 
 					break;
 				}
+
 				case ApplicationFacade.EDIT_APPLICATION_PROPERTY:
 				{
-					// if body "null" then cratin new Application
-
 					applicationPropertiesView.visible = true;
-					applicationPropertiesView.invalidateProperties();
 
 					applicationVO = body as ApplicationVO;
 
 					break;
 				}
-
-
 
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
@@ -97,32 +105,23 @@ package net.vdombox.ide.core.view
 
 				case ApplicationFacade.SERVER_APPLICATION_CREATED:
 				{
-					var newAppIcon : ByteArray;
-
-					applicationVO = body as ApplicationVO;
-
-					// get icon, selected or default
-					newAppIcon = iconChooserMediator.selectedIcon ? iconChooserMediator.selectedIcon : iconChooserMediator.defaultIcon;
-
-					newIconResourceVO = createIconResourceVO( newAppIcon );
+					applicationVO =  body as ApplicationVO
+					newIconResourceVO = createIconResourceVO( iconChooserMediator.icon );
 
 					sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
 					sendNotification( ApplicationFacade.CREATE_FIRST_PAGE, applicationVO );
 
 					break
 				}
+
 				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
 				{
-					applicationVO = null
-//					applicationPropertiesView.visible = false;
 					sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
-
-
 
 					break
 				}
 			}
-			commitProperties();
+
 		}
 
 		override public function listNotificationInterests() : Array
@@ -163,6 +162,11 @@ package net.vdombox.ide.core.view
 			applicationPropertiesView.addEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
 		}
 
+		private function get applicationsIcon() : Image
+		{
+			return applicationPropertiesView.iconChooser.icon;
+		}
+
 		private function cancelInformationHandler( event : ApplicationManagerWindowEvent ) : void
 		{
 			canselView();
@@ -176,43 +180,12 @@ package net.vdombox.ide.core.view
 				NativeApplication.nativeApplication.exit();
 		}
 
-		private function get serverProxy() : ServerProxy
-		{
-			return facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
-		}
-
 		private function commitProperties() : void
 		{
 			if ( applicationVO )
-			{
-				applicationPropertiesView.txtapplicationName.text = applicationVO.name;
-				applicationPropertiesView.txtapplicationDescription.text = applicationVO.description;
-
-				if ( applicationVO.scriptingLanguage == "python" )
-					applicationPropertiesView.python.selected = true;
-				else
-					applicationPropertiesView.vbscript.selected = true;
-
-				applicationPropertiesView.iconChooser.selectedIcon.source = null;
-
-				if ( applicationVO.iconID )
-				{
-					var resourceVO : ResourceVO = new ResourceVO( applicationVO.id );
-					resourceVO.setID( applicationVO.iconID );
-
-					sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
-				}
-			}
+				setApplicationVOValue();
 			else
-			{
-				applicationPropertiesView.txtapplicationName.text = "";
-				applicationPropertiesView.txtapplicationDescription.text = "";
-				applicationPropertiesView.iconChooser.selectedIcon.source = null;
-
-				applicationPropertiesView.python.selected = true;
-				applicationPropertiesView.vbscript.selected = false;
-			}
-
+				setVoidValue();
 		}
 
 		private function createIconResourceVO( icon : ByteArray ) : ResourceVO
@@ -278,9 +251,50 @@ package net.vdombox.ide.core.view
 			}
 		}
 
-		private function setIcon( value : * ) : void
+		private function get serverProxy() : ServerProxy
 		{
-			applicationPropertiesView.iconChooser.selectedIcon.source = value;
+			return facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+		}
+
+		private function setApplicationVOValue() : void
+		{
+			applicationPropertiesView.txtapplicationName.text = applicationVO.name;
+			applicationPropertiesView.txtapplicationDescription.text = applicationVO.description;
+
+			if ( applicationVO.scriptingLanguage == "python" )
+				applicationPropertiesView.python.selected = true;
+			else
+				applicationPropertiesView.vbscript.selected = true;
+
+			// set icon 
+			applicationPropertiesView.iconChooser.icon.source = null;
+
+			if ( applicationVO.iconID )
+			{
+				resourceVO = new ResourceVO( applicationVO.id );
+				resourceVO.setID( applicationVO.iconID );
+
+				BindingUtils.bindSetter( setIcon, resourceVO, "data", false, true );
+			}
+		}
+
+		private function setIcon( value : Object ) : void
+		{
+			if ( value )
+				applicationsIcon.source = ObjectUtil.copy( value );
+			else
+				sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
+		}
+
+		private function setVoidValue() : void
+		{
+			applicationPropertiesView.txtapplicationName.text = "";
+			applicationPropertiesView.txtapplicationDescription.text = "";
+
+			applicationsIcon.source = iconChooserMediator.defaultIcon;
+
+			applicationPropertiesView.python.selected = true;
+			applicationPropertiesView.vbscript.selected = false;
 		}
 	}
 }
