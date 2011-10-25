@@ -4,11 +4,13 @@
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  width="200" x="@{ data.left }" y="@{ data.top }"
-					  skinClass="net.vdombox.ide.modules.events.view.skins.EventElementSkin">
+					  skinClass="net.vdombox.ide.modules.events.view.skins.EventElementSkin"
+					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.Image;
+			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.vo.EventParameterVO;
 			import net.vdombox.ide.common.vo.EventVO;
@@ -33,7 +35,6 @@
 
 			private var _data : EventVO;
 			
-			private var _showElements : Boolean = true;
 
 			private var isNeedUpdateParameters : Boolean;
 
@@ -48,13 +49,13 @@
 			
 			public function get showElements():Boolean
 			{
-				return _showElements;
+				return _data.visibleEvent;
 			}
 			
 			public function set showElements(value:Boolean):void
 			{
-				_showElements = value;
-				if ( _showElements )
+				_data.visibleEvent = value;
+				if ( _data.visibleEvent )
 					showElement.source = visibleEye;
 				else
 					showElement.source = noVisibleEye;
@@ -69,6 +70,14 @@
 			{
 				if ( _data )
 					return _data.name + _data.objectID;
+				else
+					return "";
+			}
+			
+			public function get objectID() : String
+			{
+				if ( _data )
+					return _data.objectID;
 				else
 					return "";
 			}
@@ -168,9 +177,16 @@
 			
 			public function showHandler() : void
 			{
-				showElements = !_showElements;
+				showElements = !_data.visibleEvent;
 				dispatchEvent( new ElementEvent ( ElementEvent.SHOW_ELEMENT ) );
 			}
+			
+			protected function skinnablecontainer1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				dispatchEvent( new ElementEvent ( ElementEvent.CREATE_ELEMENT ) );
+			}
+			
 		]]>
 	</fx:Script>
 

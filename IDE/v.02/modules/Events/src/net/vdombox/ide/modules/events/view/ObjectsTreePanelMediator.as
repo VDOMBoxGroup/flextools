@@ -6,7 +6,10 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.modules.events.events.PanelsEvent;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
+	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
+	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.ObjectsTreePanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -35,6 +38,8 @@ package net.vdombox.ide.modules.events.view
 		private var pagesXMLList : XMLList;
 		
 		private var currentPageXML : XML;
+		
+		private var visibleElementProxy : VisibleElementProxy;
 
 		public function get objectsTreePanel() : ObjectsTreePanel
 		{
@@ -54,6 +59,7 @@ package net.vdombox.ide.modules.events.view
 			objectsTree.showRoot = true;
 
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			visibleElementProxy = facade.retrieveProxy( VisibleElementProxy.NAME ) as VisibleElementProxy;
 			
 			addHandlers();
 		}
@@ -75,6 +81,8 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.PAGE_STRUCTURE_GETTED );
 
 			interests.push( ApplicationFacade.OBJECT_GETTED );
+			
+			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_WORK_AREA );
 
 			return interests;
 		}
@@ -122,6 +130,13 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.PAGE_STRUCTURE_GETTED:
 				{trace("PAGE_STRUCTURE_GETTED");
 					var pageXMLTree : XML = notification.getBody() as XML;
+					
+					if ( pageXMLTree )
+						setVisibleForElements( pageXMLTree );
+					else
+					{
+						pageXMLTree = new XML();
+					}
 
 					currentPageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
 					currentPageXML.setChildren( new XMLList() );
@@ -139,6 +154,35 @@ package net.vdombox.ide.modules.events.view
 
 					break;
 				}
+					
+				case ApplicationFacade.SET_VISIBLE_ELEMENT_IN_WORK_AREA:
+				{
+					var eventElement : String = body as String;
+					var objectXML : XML;
+						
+					for each( objectXML in pagesXMLList)
+					{
+						if ( objectXML.@id == eventElement )
+						{
+							objectXML.@visible = true;
+							break;
+						}
+							
+					}
+				
+					break;
+				}
+			}
+		}
+		
+		private function setVisibleForElements( pageXML : XML) : void
+		{
+			var xmlList : XMLList = pageXML..object;
+			var objectXML : XML;
+			
+			for each( objectXML in xmlList)
+			{
+				objectXML.@visible = visibleElementProxy.getObjectVisible( String(objectXML.@id) );
 			}
 		}
 
@@ -164,11 +208,13 @@ package net.vdombox.ide.modules.events.view
 		private function addHandlers() : void
 		{
 			objectsTree.addEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler, false, 0, true );
+			objectsTree.addEventListener( PanelsEvent.EYES_CLICK, eyesClickHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			objectsTree.removeEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler );
+			objectsTree.removeEventListener( PanelsEvent.EYES_CLICK, eyesClickHandler, true );
 		}
 
 		private function showPages( pages : Array ) : void
@@ -180,7 +226,7 @@ package net.vdombox.ide.modules.events.view
 			{
 				_pages[ pages[ i ].id ] = pages[ i ];
 				pagesXMLList +=
-					<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}/>
+					<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id} visible={visibleElementProxy.getObjectVisible( pages[ i ].id) } />
 			}
 
 			objectsTree.dataProvider = pagesXMLList;
@@ -256,6 +302,14 @@ package net.vdombox.ide.modules.events.view
 
 				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ pageID ], objectID: id } );
 			}
+		}
+		
+		private function eyesClickHandler( event : PanelsEvent ) : void
+		{
+			var objectID : String = event.target.objectID;
+			var eyeOpened : Boolean = event.target.eyeOpened;
+			visibleElementProxy.setObjectVisible( objectID, eyeOpened);
+			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENTS_FOR_OBJECT, { objectID: objectID, visible: eyeOpened } );
 		}
 	}
 }

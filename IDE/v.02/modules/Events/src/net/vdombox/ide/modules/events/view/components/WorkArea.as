@@ -241,14 +241,14 @@ package net.vdombox.ide.modules.events.view.components
 			// if action created before do nothing
 			var aviableClientActionVO : ClientActionVO;
 
-			if( applicationEventsVO && applicationEventsVO.clientActions )
+			/*if( applicationEventsVO && applicationEventsVO.clientActions )
 			{
 				for each ( aviableClientActionVO in applicationEventsVO.clientActions )
 				{
 					if ( aviableClientActionVO.name == clientActionVO.name )
 						return;
 				}
-			}
+			}*/
 
 			clientActionVO.left = coordinates.x;
 			clientActionVO.top = coordinates.y;
@@ -458,6 +458,8 @@ package net.vdombox.ide.modules.events.view.components
 				createClientAction( newElementVO as ClientActionVO, coordinates );
 			else if ( newElementVO is ServerActionVO )
 				createServerAction( newElementVO as ServerActionVO, coordinates );
+			
+			dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.CREATE_ELEMENTS ) );
 		}
 
 		private function mouseDownHandler( event : MouseEvent ) : void
@@ -642,6 +644,7 @@ package net.vdombox.ide.modules.events.view.components
 					
 					//TODO: сделать нормально
 					skin.currentState = "unsaved";
+					dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.DELETE_ELEMENT ) );
 				}
 			}
 		}

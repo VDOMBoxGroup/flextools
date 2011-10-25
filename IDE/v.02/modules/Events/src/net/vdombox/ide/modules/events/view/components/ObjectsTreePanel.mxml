@@ -19,7 +19,7 @@
 	</fx:Script>
 
 	<mx:Tree id="objectsTree"
-			 itemRenderer="{new ClassFactory( TreeItemRenderer )}"
+			 itemRenderer="net.vdombox.ide.modules.events.view.components.ObjectsTreePanelItemRenderer"
 			 height="100%"
 			 width="100%"/>
 

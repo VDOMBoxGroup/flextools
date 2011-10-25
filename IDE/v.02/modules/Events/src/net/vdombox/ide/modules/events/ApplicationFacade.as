@@ -128,6 +128,12 @@ package net.vdombox.ide.modules.events
 		
 		public static const SET_APPLICATION_EVENTS 		: String = "setApplicationEvents";
 		public static const APPLICATION_EVENTS_SETTED 	: String = "applicationEventsSetted";
+		public static const SET_VISIBLE_ELEMENT_IN_WORK_AREA 	: String = "setVisibleElementInWorkArea";
+		public static const SET_VISIBLE_NAME_ELEMENT_IN_WORK_AREA 	: String = "setVisibleNameElementInWorkArea";
+		public static const SET_VISIBLE_ELEMENT_IN_PANEL 	: String = "setVisibleElementInPanel";
+		public static const SET_VISIBLE_ELEMENTS_FOR_OBJECT 	: String = "setVisibleElementsForObject";
+		public static const SET_VISIBLE_ELEMENTS_IN_WORK_AREA 	: String = "setVisibleElementsInWorkArea";
+		public static const GET_VISIBLE_ELEMENTS_IN_WORK_AREA 	: String = "getVisibleElementsInWorkArea";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

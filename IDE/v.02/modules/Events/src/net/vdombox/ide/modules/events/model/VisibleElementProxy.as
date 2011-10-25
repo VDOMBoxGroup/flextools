@@ -20,6 +20,11 @@ package net.vdombox.ide.modules.events.model
 		}
 		
 		
+		public function getRenderer( rendererID : String ) : Boolean
+		{	
+			return sharedObject.data.hasOwnProperty( rendererID );
+		}
+		
 		public function getVisible( rendererID : String ) : Boolean
 		{	
 			return sharedObject.data.hasOwnProperty(rendererID) ? sharedObject.data[rendererID] : true
@@ -28,6 +33,16 @@ package net.vdombox.ide.modules.events.model
 		public function setVisible( rendererID : String, value : Boolean ) : void
 		{
 			sharedObject.data[rendererID] = value;
+		}
+		
+		public function getObjectVisible( objectID : String ) : Boolean
+		{	
+			return sharedObject.data.hasOwnProperty(objectID) ? sharedObject.data[objectID] : true
+		}
+		
+		public function setObjectVisible( objectID : String, value : Boolean ) : void
+		{
+			sharedObject.data[objectID] = value;
 		}
 		
 		public function getShowNotVisible() : Boolean
