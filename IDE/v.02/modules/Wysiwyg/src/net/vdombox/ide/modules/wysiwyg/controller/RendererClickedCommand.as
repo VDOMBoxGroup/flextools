@@ -13,6 +13,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 
 	public class RendererClickedCommand extends SimpleCommand
 	{
+		private var vdomObjectVO : IVDOMObjectVO 
 		override public function execute( notification : INotification ) : void
 		{
 			var body : IRenderer = notification.getBody() as IRenderer;
@@ -22,9 +23,12 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			if ( !renderVO )
 				return;
 
-			var vdomObjectVO : IVDOMObjectVO = renderVO.vdomObjectVO;
+			vdomObjectVO  = renderVO.vdomObjectVO;
 
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+			
+			if ( alreadySelected )
+				return;
 
 			if ( vdomObjectVO is ObjectVO )
 			{
@@ -36,10 +40,17 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			}
 			else if ( vdomObjectVO is PageVO  )
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, vdomObjectVO );
+		}
+		
+		private function get alreadySelected(): Boolean
+		{
+			return (!sessionProxy.selectedObject && sessionProxy.selectedPage.id == vdomObjectVO.id)
+			|| (sessionProxy.selectedObject && sessionProxy.selectedObject.id == vdomObjectVO.id)
 			
-			
-			
-			
+		}
+		private function  get sessionProxy() : SessionProxy
+		{
+			return facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 		}
 	}
 }

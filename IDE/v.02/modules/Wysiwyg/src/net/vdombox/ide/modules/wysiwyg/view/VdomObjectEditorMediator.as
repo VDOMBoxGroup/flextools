@@ -726,6 +726,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function renderer_clickedHandler( event : RendererEvent ) : void
 		{
+			
 			sendNotification( ApplicationFacade.RENDERER_CLICKED, event.target as IRenderer );
 		}
 
