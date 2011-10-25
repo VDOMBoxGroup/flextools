@@ -80,5 +80,6 @@ package net.vdombox.ide.core.controller
 		{
 			return serverProxy.applications;
 		}
+		
 	}
 }

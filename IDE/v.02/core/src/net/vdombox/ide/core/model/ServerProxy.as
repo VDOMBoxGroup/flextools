@@ -8,6 +8,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
 	
+	import net.vdombox.editors.AssistMenu;
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -28,10 +29,10 @@ package net.vdombox.ide.core.model
 	public class ServerProxy extends Proxy implements IProxy
 	{
 		/**
-		 * 900000 milliseconds = 15 minutes.
+		 * 15 minutes.
 		 * defolt SESSION-LIFETIME = 20 minutes.  
 		 */		
-		private static const PING_TIMER : uint = 900000;    
+		private static const PING_TIMER : uint = 1000 * 60 * 15;    
 		
 		public static const NAME : String = "ServerProxy";
 
@@ -73,6 +74,7 @@ package net.vdombox.ide.core.model
 		{
 			return _authInfo;
 		}
+		 
 		
 		public function get server() : String
 		{

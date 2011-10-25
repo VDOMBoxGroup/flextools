@@ -91,7 +91,7 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.SERVER_APPLICATIONS_GETTED:
 				{
-					applicationsView.visible = true;
+//					applicationsView.visible = true;
 
 					applications = notification.getBody() as Array;
 					
@@ -105,17 +105,24 @@ package net.vdombox.ide.core.view
 						selectApplication();
 					}
 						
-						
 
 					break;
 				}
 
-//				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
-//				{
-//					facade.removeMediator( mediatorName );
-//
-//					break;
-//				}
+				case ApplicationFacade.EDIT_APPLICATION_PROPERTY :
+				{
+					applicationsView.visible = false;
+
+					break;
+				}
+				case ApplicationFacade.OPEN_APPLICATIONS_VIEW :
+				{
+					applicationsView.visible = true;
+					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
+					
+					break;
+				}
+					
 			}
 		}
 
@@ -124,14 +131,15 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.SERVER_APPLICATIONS_GETTED );
-//			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+			interests.push( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
+			interests.push( ApplicationFacade.OPEN_APPLICATIONS_VIEW ); 
 
 			return interests;
 		}
 
 		override public function onRegister() : void
 		{
-			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
+//			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 
 			addHandlers();
 		}
@@ -198,7 +206,7 @@ package net.vdombox.ide.core.view
 
 		private function addApplicationClickHandler( event : MouseEvent ) : void
 		{
-			applicationsView.visible = false;
+//			applicationsView.visible = false;
 
 			sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
 		}
@@ -247,7 +255,7 @@ package net.vdombox.ide.core.view
 
 		private function changeApplicationClikHandler( event : MouseEvent ) : void
 		{
-			applicationsView.visible = false;
+//			applicationsView.visible = false;
 			sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY, selectedApplicationVO );
 		}
 

@@ -13,6 +13,10 @@
 			{
 				return resourceManager.getString( 'Core_General', word );
 			}
+//			override public function set visible(value:Boolean):void
+//			{
+//				trace("2 visible:" + value)
+//			}
 		]]>
 	</fx:Script>
 	

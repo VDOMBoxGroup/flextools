@@ -1,6 +1,6 @@
 package net.vdombox.ide.core.controller
 {	
-	import net.vdombox.ide.core.view.ApplicationMediator;
+	import net.vdombox.ide.core.view.VdomIDEMediator;
 	import net.vdombox.ide.core.view.CoreJunctionMediator;
 	import net.vdombox.ide.core.view.ProxiesJunctionMediator;
 	
@@ -16,7 +16,7 @@ package net.vdombox.ide.core.controller
 			facade.registerMediator( new CoreJunctionMediator() );
 			facade.registerMediator( new ProxiesJunctionMediator() );
 			
-			facade.registerMediator( new ApplicationMediator( application ) );
+			facade.registerMediator( new VdomIDEMediator( application ) );
 		}
 	}
 }

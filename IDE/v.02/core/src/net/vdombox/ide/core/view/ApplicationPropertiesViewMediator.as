@@ -8,14 +8,19 @@
 
 package net.vdombox.ide.core.view
 {
+	import flash.desktop.NativeApplication;
 	import flash.utils.ByteArray;
+
 	import mx.binding.utils.BindingUtils;
+
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.view.components.ApplicationPropertiesView;
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -49,6 +54,14 @@ package net.vdombox.ide.core.view
 
 			switch ( notification.getName() )
 			{
+
+				case ApplicationFacade.OPEN_APPLICATIONS_VIEW:
+				{
+
+					applicationPropertiesView.visible = false;
+
+					break;
+				}
 				case ApplicationFacade.EDIT_APPLICATION_PROPERTY:
 				{
 					// if body "null" then cratin new Application
@@ -82,13 +95,6 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-//				case ApplicationFacade.CLOSE_APPLICATION_MANAGER:
-//				{
-//					facade.removeMediator( mediatorName );
-//
-//					break;
-//				}
-
 				case ApplicationFacade.SERVER_APPLICATION_CREATED:
 				{
 					var newAppIcon : ByteArray;
@@ -108,8 +114,10 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
 				{
 					applicationVO = null
-					applicationPropertiesView.visible = false;
-					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
+//					applicationPropertiesView.visible = false;
+					sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
+
+
 
 					break
 				}
@@ -122,9 +130,13 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
+
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
-//			interests.push( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+
+			interests.push( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
+
 			interests.push( ApplicationFacade.SERVER_APPLICATION_CREATED );
+
 			interests.push( ApplicationFacade.APPLICATION_INFORMATION_UPDATED );
 
 			return interests;
@@ -146,15 +158,27 @@ package net.vdombox.ide.core.view
 
 		private function addHandlers() : void
 		{
-			applicationPropertiesView.addEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
 			applicationPropertiesView.addEventListener( ApplicationManagerWindowEvent.CANCEL, cancelInformationHandler );
+
+			applicationPropertiesView.addEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
 		}
 
 		private function cancelInformationHandler( event : ApplicationManagerWindowEvent ) : void
 		{
-			applicationPropertiesView.visible = false;
+			canselView();
+		}
 
-			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
+		private function canselView() : void
+		{
+			if ( serverProxy.applications.length > 0 )
+				sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
+			else
+				NativeApplication.nativeApplication.exit();
+		}
+
+		private function get serverProxy() : ServerProxy
+		{
+			return facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 		}
 
 		private function commitProperties() : void
