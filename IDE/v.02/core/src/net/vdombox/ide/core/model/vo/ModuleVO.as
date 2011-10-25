@@ -7,15 +7,13 @@ package net.vdombox.ide.core.model.vo
 	 */
 	public class ModuleVO
 	{
-		public function ModuleVO( category : ModulesCategoryVO, path : String )
+		public function ModuleVO(  path : String )
 		{
-			_category = category;
 			_path = path;
 		}
 
 		private var _module : VIModule;
 
-		private var _category : ModulesCategoryVO;
 
 		private var _path : String;
 
@@ -24,10 +22,6 @@ package net.vdombox.ide.core.model.vo
 			return _module;
 		}
 
-		public function get category() : ModulesCategoryVO
-		{
-			return _category;
-		}
 
 		public function get moduleID() : String
 		{

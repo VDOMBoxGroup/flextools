@@ -22,7 +22,7 @@
 
 	<!-- The name that is displayed in the AIR application installer. 
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
-	<name>Vdom IDE.v.2.0.1012 beta</name>
+	<name>Vdom IDE.v.2.0.1012</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
 	
@@ -48,7 +48,7 @@
 		<content>[Это значение будет перезаписано программой Flash Builder в выходном файле app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
-		 <title>Vdom IDE.v.2.0.1011 beta</title> 
+		 <title>Vdom IDE.v.2.0.1012</title> 
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
 		<!-- <systemChrome></systemChrome> -->

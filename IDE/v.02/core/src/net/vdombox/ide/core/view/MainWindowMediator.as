@@ -41,7 +41,6 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.SessionProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
-	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	import net.vdombox.ide.core.view.components.MainWindow;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
 	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
@@ -82,7 +81,6 @@ package net.vdombox.ide.core.view
 
 		private var applicationVO : ApplicationVO;
 
-		private var currentModuleCategory : ModulesCategoryVO;
 
 		private var modulesList : Array;
 

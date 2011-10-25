@@ -12,7 +12,6 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
-	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -85,19 +84,7 @@ package net.vdombox.ide.core.model
 			cleanup();
 		}
 
-		public function getModulesListByCategory( categoryVO : ModulesCategoryVO ) : Array
-		{
-			var result : Array = modulesList.filter( function( element : ModuleVO, index : int, arr : Array ) : Boolean
-			{
-				if ( element.category == categoryVO )
-					return true;
-				else
-					return false;
-			} );
-
-			return result;
-		}
-
+		
 		public function getModuleByID( moduleID : String ) : ModuleVO
 		{
 			var modulesListLength : int = modulesList.length;
@@ -167,7 +154,6 @@ package net.vdombox.ide.core.model
 			modulesForLoadQue = [];
 			loadedModules = new Dictionary();
 
-			var category : ModulesCategoryVO;
 			var categoryName : String;
 			var categoryLocalizedName : String;
 			var categoryModulesList : Array;
@@ -178,19 +164,14 @@ package net.vdombox.ide.core.model
 				categoryName = categoryXML.@name;
 				categoryLocalizedName = resourceManager.getString( "Core_General", categoryName );
 
-				category = new ModulesCategoryVO( categoryName, categoryLocalizedName );
-
-			//	_categories.push();
-
 				categoryModulesList = [];
 
 				for each ( var module : XML in categoryXML.* )
 				{
 					modulePath = module.@path;
-					modulesList.push( new ModuleVO( category, modulePath ) );
+					modulesList.push( new ModuleVO(  modulePath ) );
 				}
 
-				//_categories.push( category );
 			}
 
 		private function loadModuleFromQue() : void

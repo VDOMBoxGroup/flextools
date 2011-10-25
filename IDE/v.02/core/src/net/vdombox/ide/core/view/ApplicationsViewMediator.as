@@ -20,7 +20,6 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
 	import net.vdombox.ide.core.model.SettingsProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
-	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	import net.vdombox.ide.core.model.vo.SettingsVO;
 	import net.vdombox.ide.core.view.components.ApplicationListItemRenderer;
 	import net.vdombox.ide.core.view.components.ApplicationsView;
