@@ -241,14 +241,14 @@ package net.vdombox.ide.modules.events.view.components
 			// if action created before do nothing
 			var aviableClientActionVO : ClientActionVO;
 
-			/*if( applicationEventsVO && applicationEventsVO.clientActions )
+			if( applicationEventsVO && applicationEventsVO.clientActions )
 			{
 				for each ( aviableClientActionVO in applicationEventsVO.clientActions )
 				{
 					if ( aviableClientActionVO.name == clientActionVO.name )
 						return;
 				}
-			}*/
+			}
 
 			clientActionVO.left = coordinates.x;
 			clientActionVO.top = coordinates.y;

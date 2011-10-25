@@ -8,23 +8,21 @@
 		 borderVisible="false"
 		 skinClass="net.vdombox.ide.modules.events.view.skins.PanelSkin">
 
-	<s:layout>
-
-		<s:VerticalLayout/>
-	</s:layout>
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.treeClasses.TreeItemRenderer;
 		]]>
 	</fx:Script>
+	
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:BitmapFill source = "@Embed('assets/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+		</s:fill>
+	</s:Rect>
 
 	<mx:Tree id="objectsTree"
 			 itemRenderer="net.vdombox.ide.modules.events.view.components.ObjectsTreePanelItemRenderer"
 			 height="100%"
-			 width="100%"/>
-
-	<s:controlBarContent>
-
-		<mx:Spacer height="1"/>
-	</s:controlBarContent>
+			 width="100%" contentBackgroundAlpha="0"/>
 </s:Panel>

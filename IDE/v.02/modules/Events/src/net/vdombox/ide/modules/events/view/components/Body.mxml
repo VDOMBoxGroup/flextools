@@ -5,12 +5,12 @@
 		  xmlns:components="net.vdombox.ide.modules.events.view.components.*"
 		  
 		  height="100%" width="100%"
-		  paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+		  paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" xmlns:mx1="library://ns.adobe.com/flex/mx">
 
 	<components:WorkArea id="workArea"
 						 height="100%" width="100%" />
 
-	<s:VGroup height="100%" width="220">
+	<mx1:VDividedBox height="100%" width="220">
 
 		<components:ObjectsTreePanel id="objectsTreePanel"
 									 height="100%" width="100%" 
@@ -18,5 +18,5 @@
 
 		<components:EventsPanel id="eventsPanel"
 								width="100%" height="100%"/>
-	</s:VGroup>
+	</mx1:VDividedBox>
 </s:HGroup>
