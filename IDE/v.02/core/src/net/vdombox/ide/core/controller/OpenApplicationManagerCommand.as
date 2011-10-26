@@ -16,7 +16,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
 	import net.vdombox.ide.core.view.components.ApplicationManagerWindow;
 	import net.vdombox.ide.core.view.components.MainWindow;
-	import net.vdombox.ide.core.view.skins.ApplicationManagerSkin;
+	import net.vdombox.ide.core.view.skins.ApplicationManagerWindowSkin;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 	import net.vdombox.utils.WindowManager;
 	

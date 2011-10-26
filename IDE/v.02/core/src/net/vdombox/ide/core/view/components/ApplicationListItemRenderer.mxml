@@ -63,7 +63,7 @@
 			
 			private function createResourse():void
 			{
-				_resourceVO = new ResourceVO( applicationVO.id );
+				_resourceVO = new ResourceVO( applicationVO.id ); 
 				_resourceVO.setID( applicationVO.iconID );
 				
 				BindingUtils.bindSetter( setIcon, _resourceVO, "data", false );

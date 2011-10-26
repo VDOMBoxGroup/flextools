@@ -43,7 +43,7 @@ package net.vdombox.ide.core.view
 		}
 		
 		private var loader : Loader;
-		private var iconChooserWindow : ApplicationsIconsChoosWindow
+		private var applicationsIconsChoosWindow : ApplicationsIconsChoosWindow
 		
 		public function get iconChanged():Boolean
 		{
@@ -114,22 +114,22 @@ package net.vdombox.ide.core.view
 		
 		private function openIconListHandler( event : IconChooserEvent ) : void
 		{
-			iconChooserWindow = new ApplicationsIconsChoosWindow();
-			iconChooserWindow.addEventListener( IconChooserEvent.CLOSE_ICON_LIST, closeIconListHandler );
-			iconChooserWindow.addEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
-			iconChooserWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
+			applicationsIconsChoosWindow = new ApplicationsIconsChoosWindow();
+			applicationsIconsChoosWindow.addEventListener( IconChooserEvent.CLOSE_ICON_LIST, closeIconListHandler );
+			applicationsIconsChoosWindow.addEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
+			applicationsIconsChoosWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
 			
-			WindowManager.getInstance().addWindow( iconChooserWindow, applicationsIconView, true );
+			WindowManager.getInstance().addWindow( applicationsIconsChoosWindow, applicationsIconView, true );
 		}
 		
 		private function createCompleteIconListHandler( event : FlexEvent ) : void
 		{	
-			iconChooserWindow.iconsList.dataProvider = new ArrayList( galleryProxy.items );
+			applicationsIconsChoosWindow.iconsList.dataProvider = new ArrayList( galleryProxy.items );
 		}
 		
 		private function selectIconHandler(event : IconChooserEvent) : void
 		{
-			var galleryItemVO : GalleryItemVO = iconChooserWindow.iconsList.selectedItem as GalleryItemVO;
+			var galleryItemVO : GalleryItemVO = applicationsIconsChoosWindow.iconsList.selectedItem as GalleryItemVO;
 			if( !galleryItemVO )
 				return;
 		
@@ -140,15 +140,12 @@ package net.vdombox.ide.core.view
 		
 		private function closeIconListHandler( event : IconChooserEvent ) : void
 		{			
-			iconChooserWindow.removeEventListener( IconChooserEvent.CLOSE_ICON_LIST, closeIconListHandler );
-			iconChooserWindow.removeEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
-			iconChooserWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
+			applicationsIconsChoosWindow.removeEventListener( IconChooserEvent.CLOSE_ICON_LIST, closeIconListHandler );
+			applicationsIconsChoosWindow.removeEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
+			applicationsIconsChoosWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
 			
-			WindowManager.getInstance().removeWindow( iconChooserWindow );
-			
+			WindowManager.getInstance().removeWindow( applicationsIconsChoosWindow );
 		}
-		
-		
 		
 		
 		private function loadIconHandler( CreateApplicationEvent : Event ) : void
@@ -188,10 +185,8 @@ package net.vdombox.ide.core.view
 			{
 				loader = new Loader();
 				
-				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loader_completeHandler, false,
-					0, true );
-				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loader_ioErrorHandler,
-					false, 0, true );
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loader_completeHandler, false, 0, true );
+				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loader_ioErrorHandler, false, 0, true );
 				
 				try
 				{

@@ -4,7 +4,7 @@ package net.vdombox.ide.core.view.components
 	import flash.events.Event;
 	
 	import net.vdombox.ide.core.events.ApplicationManagerEvent;
-	import net.vdombox.ide.core.view.skins.ApplicationManagerSkin;
+	import net.vdombox.ide.core.view.skins.ApplicationManagerWindowSkin;
 	
 	import spark.components.Window;
 
@@ -32,7 +32,7 @@ package net.vdombox.ide.core.view.components
 		
 		override public function stylesInitialized():void {
 			super.stylesInitialized();
-			this.setStyle( "skinClass", ApplicationManagerSkin );
+			this.setStyle( "skinClass", ApplicationManagerWindowSkin );
 		}
 	}
 }
