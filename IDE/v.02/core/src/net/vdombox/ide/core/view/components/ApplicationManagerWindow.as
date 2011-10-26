@@ -3,7 +3,7 @@ package net.vdombox.ide.core.view.components
 	import flash.display.NativeWindowSystemChrome;
 	import flash.events.Event;
 	
-	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+	import net.vdombox.ide.core.events.ApplicationManagerEvent;
 	import net.vdombox.ide.core.view.skins.ApplicationManagerSkin;
 	
 	import spark.components.Window;

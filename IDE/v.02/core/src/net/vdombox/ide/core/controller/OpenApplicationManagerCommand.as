@@ -11,6 +11,7 @@ package net.vdombox.ide.core.controller
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.GalleryProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
 	import net.vdombox.ide.core.view.components.ApplicationManagerWindow;
@@ -44,6 +45,8 @@ package net.vdombox.ide.core.controller
 			var applicationManagerWindow : ApplicationManagerWindow = new ApplicationManagerWindow();
 			applicationManagerWindowMediator = new ApplicationManagerWindowMediator( applicationManagerWindow );
 			facade.registerMediator( applicationManagerWindowMediator );
+			
+			facade.registerProxy( new GalleryProxy() );
 
 			// popup Window
 			var mainWindowSkin : MainWindowSkin = notification.getBody() as MainWindowSkin;

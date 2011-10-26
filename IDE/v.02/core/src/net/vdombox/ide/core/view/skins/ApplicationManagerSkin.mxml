@@ -12,7 +12,7 @@
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+			import net.vdombox.ide.core.events.ApplicationManagerEvent;
 		]]>
 	</fx:Script>
 	

@@ -7,7 +7,7 @@
 		 paddingBottom="10" paddingRight="10" xmlns:components2="net.vdombox.components.*">
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+			import net.vdombox.ide.core.events.ApplicationManagerEvent;
 			
 			private function getLocalesWord( word : String): String
 			{
@@ -61,7 +61,7 @@
 	<s:VGroup width="35%" height="100%" gap="2" 
 			  paddingTop="10" paddingLeft="20" >
 		
-		<components1:IconChooser id="iconChooser" width="100%" />
+		<components1:ApplicationsIconView id="iconChooser" width="100%" />
 		
 		<mx:Spacer height="100%" />
 		
@@ -69,11 +69,11 @@
 			
 			<components2:VdomButton id="btnCancel"
 					  label="{getLocalesWord('create_edit_application_cancel' )}"
-					  click="{dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.CANCEL ) ) }"/>
+					  click="{dispatchEvent( new ApplicationManagerEvent( ApplicationManagerEvent.CANCEL ) ) }"/>
 
 			<components2:VdomButton id="btnSave" 
 					  label="{getLocalesWord('create_edit_application_save' )}"
-					  click="{dispatchEvent( new ApplicationManagerWindowEvent( ApplicationManagerWindowEvent.SAVE_INFORMATION ) ) }"/>
+					  click="{dispatchEvent( new ApplicationManagerEvent( ApplicationManagerEvent.SAVE_INFORMATION ) ) }"/>
 			
 		</s:HGroup>
 	</s:VGroup>

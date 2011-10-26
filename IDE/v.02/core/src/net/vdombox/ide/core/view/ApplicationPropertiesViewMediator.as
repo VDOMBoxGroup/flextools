@@ -10,16 +10,19 @@ package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
 	import flash.utils.ByteArray;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
 	import mx.utils.ObjectUtil;
+	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+	import net.vdombox.ide.core.events.ApplicationManagerEvent;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.view.components.ApplicationPropertiesView;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -106,7 +109,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.SERVER_APPLICATION_CREATED:
 				{
 					applicationVO =  body as ApplicationVO
-					newIconResourceVO = createIconResourceVO( iconChooserMediator.icon );
+					newIconResourceVO = createIconResourceVO( applicationsIcon.source as ByteArray );
 
 					sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
 					sendNotification( ApplicationFacade.CREATE_FIRST_PAGE, applicationVO );
@@ -143,23 +146,19 @@ package net.vdombox.ide.core.view
 
 		override public function onRegister() : void
 		{
-			facade.registerMediator( new IconChooserMediator( applicationPropertiesView.iconChooser ) );
-
 			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
-			facade.removeMediator( IconChooserMediator.NAME );
-
 			removeHandlers();
 		}
 
 		private function addHandlers() : void
 		{
-			applicationPropertiesView.addEventListener( ApplicationManagerWindowEvent.CANCEL, cancelInformationHandler );
+			applicationPropertiesView.addEventListener( ApplicationManagerEvent.CANCEL, cancelInformationHandler );
 
-			applicationPropertiesView.addEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
+			applicationPropertiesView.addEventListener( ApplicationManagerEvent.SAVE_INFORMATION, saveInformationHandler );
 		}
 
 		private function get applicationsIcon() : Image
@@ -167,7 +166,7 @@ package net.vdombox.ide.core.view
 			return applicationPropertiesView.iconChooser.icon;
 		}
 
-		private function cancelInformationHandler( event : ApplicationManagerWindowEvent ) : void
+		private function cancelInformationHandler( event : ApplicationManagerEvent ) : void
 		{
 			canselView();
 		}
@@ -210,18 +209,18 @@ package net.vdombox.ide.core.view
 			return appInfVO;
 		}
 
-		private function get iconChooserMediator() : IconChooserMediator
+		private function get iconChooserMediator() : ApplicationsIconViewMediator
 		{
-			return facade.retrieveMediator( IconChooserMediator.NAME ) as IconChooserMediator;
+			return facade.retrieveMediator( ApplicationsIconViewMediator.NAME ) as ApplicationsIconViewMediator;
 		}
 
 		private function removeHandlers() : void
 		{
-			applicationPropertiesView.removeEventListener( ApplicationManagerWindowEvent.SAVE_INFORMATION, saveInformationHandler );
-			applicationPropertiesView.removeEventListener( ApplicationManagerWindowEvent.CANCEL, cancelInformationHandler );
+			applicationPropertiesView.removeEventListener( ApplicationManagerEvent.SAVE_INFORMATION, saveInformationHandler );
+			applicationPropertiesView.removeEventListener( ApplicationManagerEvent.CANCEL, cancelInformationHandler );
 		}
 
-		private function saveInformationHandler( event : ApplicationManagerWindowEvent ) : void
+		private function saveInformationHandler( event : ApplicationManagerEvent ) : void
 		{
 			var newAppIcon : ByteArray;
 			applicationInformationVO = getApplicationInformationVO();

@@ -4,7 +4,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:components="net.vdombox.components.*">
 	<!-- host component -->
 	<fx:Metadata>
-		[HostComponent("net.vdombox.ide.core.view.components.IconChooserWindow")]
+		[HostComponent("net.vdombox.ide.core.view.components.ApplicationsIconsChoosWindow")]
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[

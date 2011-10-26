@@ -15,7 +15,7 @@ package net.vdombox.ide.core.view
 	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+	import net.vdombox.ide.core.events.ApplicationManagerEvent;
 	import net.vdombox.ide.core.model.GalleryProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.SettingsProxy;
@@ -92,7 +92,6 @@ package net.vdombox.ide.core.view
 			applicationManagerWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHandler );
 			applicationManagerWindow.addEventListener( FlexEvent.REMOVE, closeHandler );
 			applicationManagerWindow.addEventListener( Event.CLOSE, closeHandler );
-
 		}
 
 		private function closeHandler( event : * ) : void
@@ -127,6 +126,7 @@ package net.vdombox.ide.core.view
 		{
 			facade.registerMediator( new ApplicationsViewMediator(  applicationManagerWindow.applicationsView   ) );
 			facade.registerMediator( new ApplicationPropertiesViewMediator( applicationManagerWindow.applicationPropertiesView ) );
+			facade.registerMediator( new ApplicationsIconViewMediator( applicationManagerWindow.applicationPropertiesView.iconChooser ) );
 		}
 
 		private function removeHandlers() : void

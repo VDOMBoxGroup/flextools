@@ -17,7 +17,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.events.ApplicationManagerWindowEvent;
+	import net.vdombox.ide.core.events.ApplicationManagerEvent;
 	import net.vdombox.ide.core.model.SettingsProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.vo.SettingsVO;
@@ -130,7 +130,9 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.SERVER_APPLICATIONS_GETTED );
+			
 			interests.push( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
+			
 			interests.push( ApplicationFacade.OPEN_APPLICATIONS_VIEW ); 
 
 			return interests;
@@ -145,7 +147,6 @@ package net.vdombox.ide.core.view
 
 		override public function onRemove() : void
 		{
-			trace("1 - onRemove");
 			removeHandlers();
 		}
 
@@ -313,6 +314,7 @@ package net.vdombox.ide.core.view
 				return;
 
 			selectedApplicationVO = statesProxy.selectedApplication || getApplicationsFromSettings() || applications[ 0 ];
+			
 		}
 
 		private function get selectedApplicationDescriptions() : String

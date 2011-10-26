@@ -39,11 +39,11 @@
 					return;
 				}
 				
-//				if ( _resourceVO && _resourceVO.id != applicationVO.iconID )
+				if ( _resourceVO && _resourceVO.id != applicationVO.iconID )
 					createResourse();
 				
-//				if (!_resourceVO)
-//					createResourse();
+				if (!_resourceVO || !_resourceVO.data )
+					createResourse();
 			}
 
 			public function set resourceVO( value : ResourceVO ) : void
@@ -59,9 +59,6 @@
 					nameLabel.text = applicationVO ?  applicationVO.name : "";
 					
 					validateResourceVO();
-//					dispatchEvent( new Event( ICON_REQUEST ));
-					
-						
 			}
 			
 			private function createResourse():void
@@ -69,7 +66,7 @@
 				_resourceVO = new ResourceVO( applicationVO.id );
 				_resourceVO.setID( applicationVO.iconID );
 				
-				BindingUtils.bindSetter( setIcon, _resourceVO, "data", false, true );
+				BindingUtils.bindSetter( setIcon, _resourceVO, "data", false );
 			}
 			
 			public function get applicationVO(): ApplicationVO
@@ -82,25 +79,14 @@
 			{
 				if (!value)
 				{
-//					imageHolder.source = null;
+					imageHolder.source = null;
 					dispatchEvent( new Event( ICON_REQUEST ));
-					return;
+				}
+				else
+				{
+					imageHolder.source = ObjectUtil.copy(value);
 				}
 				
-				imageHolder.source = ObjectUtil.copy(value);
-				
-//				loader = new Loader();
-//				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
-//				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, setIconLoaded );
-//				
-//				try
-//				{
-//					loader.loadBytes( resourceVO.data );
-//				}
-//				catch ( error : Error )
-//				{
-//					// FIXME Сделать обработку исключения если не грузится изображение
-//				}
 			}
 			
 			private function setIconLoaded( event : Event ) : void

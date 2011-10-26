@@ -2,7 +2,7 @@ package net.vdombox.ide.core.events
 {
 	import flash.events.Event;
 
-	public class ApplicationManagerWindowEvent extends Event
+	public class ApplicationManagerEvent extends Event
 	{
 		// FIXME: need to rename
 		public static var CLOSE_WINDOW : String = "closeWindow";
@@ -12,14 +12,14 @@ package net.vdombox.ide.core.events
 		public static var SAVE_INFORMATION : String = "saveInformation";
 		public static var CANCEL : String = "CancelEdit";
 		
-		public function ApplicationManagerWindowEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
+		public function ApplicationManagerEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{
 			super( type, bubbles, cancelable );
 		}
 		
 		override public function clone() : Event
 		{
-			return new ApplicationManagerWindowEvent( type, bubbles, cancelable );
+			return new ApplicationManagerEvent( type, bubbles, cancelable );
 		}
 	}
 }

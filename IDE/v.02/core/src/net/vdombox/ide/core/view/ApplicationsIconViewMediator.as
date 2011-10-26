@@ -22,8 +22,8 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.events.IconChooserEvent;
 	import net.vdombox.ide.core.model.GalleryProxy;
 	import net.vdombox.ide.core.model.vo.GalleryItemVO;
-	import net.vdombox.ide.core.view.components.IconChooser;
-	import net.vdombox.ide.core.view.components.IconChooserWindow;
+	import net.vdombox.ide.core.view.components.ApplicationsIconView;
+	import net.vdombox.ide.core.view.components.ApplicationsIconsChoosWindow;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -33,26 +33,26 @@ package net.vdombox.ide.core.view
 	import spark.components.Window;
 	import spark.events.IndexChangeEvent;
 
-	public class IconChooserMediator extends Mediator implements IMediator
+	public class ApplicationsIconViewMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "IconChooserMediator";
 		
-		public function IconChooserMediator( viewComponent : Object = null )
+		public function ApplicationsIconViewMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
 		}
 		
 		private var loader : Loader;
-		private var iconChooserWindow : IconChooserWindow
+		private var iconChooserWindow : ApplicationsIconsChoosWindow
 		
 		public function get iconChanged():Boolean
 		{
 			return _iconChanged;
 		}
 
-		public function get iconChooser() : IconChooser
+		public function get applicationsIconView() : ApplicationsIconView
 		{
-			return viewComponent as IconChooser;
+			return viewComponent as ApplicationsIconView;
 		}
 		
 		public function get defaultIcon() : ByteArray
@@ -66,7 +66,7 @@ package net.vdombox.ide.core.view
 		
 		public function get selectedIcon() : ByteArray
 		{
-			return iconChooser.icon.source as ByteArray;
+			return applicationsIconView.icon.source as ByteArray;
 		}
 		
 		public function get icon() : ByteArray
@@ -76,21 +76,20 @@ package net.vdombox.ide.core.view
 		
 		override public function onRegister() : void
 		{
-			facade.registerProxy( new GalleryProxy() );
 			
 			addHandlers()
 		}
 		
 		private function addHandlers() : void
 		{
-			iconChooser.addEventListener( IconChooserEvent.LOAD_ICON, loadIconHandler );
-			iconChooser.addEventListener( IconChooserEvent.OPEN_ICON_LIST, openIconListHandler );
+			applicationsIconView.addEventListener( IconChooserEvent.LOAD_ICON, loadIconHandler );
+			applicationsIconView.addEventListener( IconChooserEvent.OPEN_ICON_LIST, openIconListHandler );
 		}
 		
 		private function removeHandlers() : void
 		{
-			iconChooser.removeEventListener( IconChooserEvent.LOAD_ICON, loadIconHandler );
-			iconChooser.removeEventListener( IconChooserEvent.OPEN_ICON_LIST, openIconListHandler );
+			applicationsIconView.removeEventListener( IconChooserEvent.LOAD_ICON, loadIconHandler );
+			applicationsIconView.removeEventListener( IconChooserEvent.OPEN_ICON_LIST, openIconListHandler );
 		}
 		
 		override public function listNotificationInterests() : Array
@@ -110,19 +109,17 @@ package net.vdombox.ide.core.view
 		
 		override public function onRemove() : void
 		{
-			facade.removeProxy( GalleryProxy.NAME );
-			
 			removeHandlers();
 		}
 		
 		private function openIconListHandler( event : IconChooserEvent ) : void
 		{
-			iconChooserWindow = new IconChooserWindow();
+			iconChooserWindow = new ApplicationsIconsChoosWindow();
 			iconChooserWindow.addEventListener( IconChooserEvent.CLOSE_ICON_LIST, closeIconListHandler );
 			iconChooserWindow.addEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
 			iconChooserWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
 			
-			WindowManager.getInstance().addWindow( iconChooserWindow, iconChooser, true );
+			WindowManager.getInstance().addWindow( iconChooserWindow, applicationsIconView, true );
 		}
 		
 		private function createCompleteIconListHandler( event : FlexEvent ) : void
@@ -136,7 +133,7 @@ package net.vdombox.ide.core.view
 			if( !galleryItemVO )
 				return;
 		
-			iconChooser.icon.source = ObjectUtil.copy( galleryItemVO.content );
+			applicationsIconView.icon.source = ObjectUtil.copy( galleryItemVO.content );
 			_iconChanged = true;
 			
 		}
@@ -224,7 +221,7 @@ package net.vdombox.ide.core.view
 			var iconByteArray : ByteArray = pnge.encode( scaledImage.bitmapData );
 			
 			_iconChanged = true;
-			iconChooser.icon.source = iconByteArray;
+			applicationsIconView.icon.source = iconByteArray;
 			//iconChooser.iconsList.selectedIndex = -1;
 		}
 		

@@ -2,11 +2,12 @@ package net.vdombox.ide.core.controller
 {
 	
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.GalleryProxy;
 	import net.vdombox.ide.core.view.ApplicationListItemRendererMediator;
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
-	import net.vdombox.ide.core.view.ApplicationsViewMediator;
 	import net.vdombox.ide.core.view.ApplicationPropertiesViewMediator;
-	import net.vdombox.ide.core.view.IconChooserMediator;
+	import net.vdombox.ide.core.view.ApplicationsViewMediator;
+	import net.vdombox.ide.core.view.ApplicationsIconViewMediator;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 	import net.vdombox.utils.WindowManager;
 	
@@ -25,8 +26,11 @@ package net.vdombox.ide.core.controller
 			if ( facade.hasMediator( ApplicationPropertiesViewMediator.NAME ) )
 				facade.removeMediator( ApplicationPropertiesViewMediator.NAME );
 			
-			if ( facade.hasMediator( IconChooserMediator.NAME ) )
-				facade.removeMediator( IconChooserMediator.NAME );
+			if ( facade.hasMediator( ApplicationsIconViewMediator.NAME ) )
+				facade.removeMediator( ApplicationsIconViewMediator.NAME );
+			
+			if ( facade.hasProxy( GalleryProxy.NAME ) )
+				facade.removeProxy( GalleryProxy.NAME );
 			
 			var mainWindowSkin : MainWindowSkin = notification.getBody() as MainWindowSkin;
 			var windowManager : WindowManager = WindowManager.getInstance();

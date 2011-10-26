@@ -3,14 +3,14 @@ package net.vdombox.ide.core.view.components
 	import flash.display.NativeWindowSystemChrome;
 	
 	import net.vdombox.ide.core.events.IconChooserEvent;
-	import net.vdombox.ide.core.view.skins.IconChooserWindowSkin;
+	import net.vdombox.ide.core.view.skins.ApplicationsIconsChoosWindowSkin;
 	
 	import spark.components.Button;
 	import spark.components.List;
 	import spark.components.Window;
 	
 
-	public class IconChooserWindow extends Window
+	public class ApplicationsIconsChoosWindow extends Window
 	{
 		[SkinPart( required="true" )]
 		public var iconsList : List;
@@ -18,7 +18,7 @@ package net.vdombox.ide.core.view.components
 		[SkinPart( required="true" )]
 		public var btnOK : Button;
 		
-		public function IconChooserWindow()
+		public function ApplicationsIconsChoosWindow()
 		{
 			width = 550;
 			height = 340;
@@ -32,7 +32,7 @@ package net.vdombox.ide.core.view.components
 		
 		override public function stylesInitialized():void {
 			super.stylesInitialized();
-			this.setStyle( "skinClass", IconChooserWindowSkin );
+			this.setStyle( "skinClass", ApplicationsIconsChoosWindowSkin );
 		}
 
 		public function selectIcon() : void
