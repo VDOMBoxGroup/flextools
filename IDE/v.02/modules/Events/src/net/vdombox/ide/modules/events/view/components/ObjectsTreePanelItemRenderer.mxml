@@ -51,7 +51,6 @@
 				
 				eyes.source = _eyeOpened ? visibleEye : noVisibleEye;
 				
-				// 
 				if ( _data.@visible[ 0 ] )
 					_data.@visible = _eyeOpened
 			}

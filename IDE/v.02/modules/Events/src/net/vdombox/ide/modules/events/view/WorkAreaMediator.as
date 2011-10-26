@@ -63,8 +63,8 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.APPLICATION_EVENTS_SETTED );
 			
 			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENTS_FOR_OBJECT );
-			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL );
-			interests.push( ApplicationFacade.GET_VISIBLE_ELEMENTS_IN_WORK_AREA );
+			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA );
+			interests.push( ApplicationFacade.GET_ELEMENTS_LIST_IN_WORK_AREA );
 
 			return interests;
 		}
@@ -107,7 +107,7 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.APPLICATION_EVENTS_GETTED:
 				{
 					workArea.dataProvider = body as ApplicationEventsVO;
-					setVisibleElement();
+					setShow();
 					break;
 				}
 					
@@ -123,13 +123,13 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL:
+				case ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA:
 				{
 					setVisibleElementInObject( body );
 					break;
 				}
 					
-				case ApplicationFacade.GET_VISIBLE_ELEMENTS_IN_WORK_AREA:
+				case ApplicationFacade.GET_ELEMENTS_LIST_IN_WORK_AREA:
 				{
 					sentElementsList();
 					break;
@@ -187,11 +187,11 @@ package net.vdombox.ide.modules.events.view
 					if ( actionElement.objectID == objectID )
 					{
 						visibleElementProxy.setVisible( actionElement.idElement, showElement );
-						actionElement.showElements = visibleElementProxy.getVisible( actionElement.idElement );
+						actionElement.visibleElement = visibleElementProxy.getVisible( actionElement.idElement );
 						if ( !showNotVisible )
-							actionElement.visibleElements = visibleElementProxy.getVisible( actionElement.idElement );
+							actionElement.setVisibleElement = visibleElementProxy.getVisible( actionElement.idElement );
 						if ( actionElement.objectID == newTarget.id )
-							sendNotification( ApplicationFacade.SET_VISIBLE_NAME_ELEMENT_IN_WORK_AREA, { element: actionElement, visible: actionElement.showElements } );
+							sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { element: actionElement, visible: actionElement.visibleElement } );
 						
 					}
 				}
@@ -201,11 +201,11 @@ package net.vdombox.ide.modules.events.view
 					if ( eventElement.objectID== objectID )
 					{
 						visibleElementProxy.setVisible( eventElement.idElement, showElement );
-						eventElement.showElements = visibleElementProxy.getVisible( eventElement.idElement );
+						eventElement.visibleElement = visibleElementProxy.getVisible( eventElement.idElement );
 						if ( !showNotVisible )
-							eventElement.visibleElements = visibleElementProxy.getVisible( eventElement.idElement );
+							eventElement.setVisibleElement = visibleElementProxy.getVisible( eventElement.idElement );
 						if ( eventElement.objectID == newTarget.id )
-							sendNotification( ApplicationFacade.SET_VISIBLE_NAME_ELEMENT_IN_WORK_AREA, { element: eventElement, visible: eventElement.showElements } );
+							sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { element: eventElement, visible: eventElement.visibleElement } );
 					}
 				}
 			}
@@ -241,9 +241,9 @@ package net.vdombox.ide.modules.events.view
 					if ( actionElement.objectID == objectID && actionElement.actionName == nameElement )
 					{
 						visibleElementProxy.setVisible( actionElement.idElement, showElement );
-						actionElement.showElements = visibleElementProxy.getVisible( actionElement.idElement );
+						actionElement.visibleElement = visibleElementProxy.getVisible( actionElement.idElement );
 						if ( !showNotVisible )
-							actionElement.visibleElements = visibleElementProxy.getVisible( actionElement.idElement );
+							actionElement.setVisibleElement = visibleElementProxy.getVisible( actionElement.idElement );
 					}
 				}
 				else if ( element is EventElement )
@@ -252,40 +252,10 @@ package net.vdombox.ide.modules.events.view
 					if ( eventElement.objectID== objectID && eventElement.data.name == nameElement )
 					{
 						visibleElementProxy.setVisible( eventElement.idElement, showElement );
-						eventElement.showElements = visibleElementProxy.getVisible( eventElement.idElement );
+						eventElement.visibleElement = visibleElementProxy.getVisible( eventElement.idElement );
 						if ( !showNotVisible )
-							eventElement.visibleElements = visibleElementProxy.getVisible( eventElement.idElement );
+							eventElement.setVisibleElement = visibleElementProxy.getVisible( eventElement.idElement );
 					}
-				}
-			}
-			workArea.setVisibleLinkage( showNotVisible );
-		}
-		
-		private function setVisibleElement() : void
-		{
-			var leng : Number = workArea.contentGroup.numElements;
-			var i : Number;
-			var element : Object;
-			var actionElement : ActionElement;
-			var eventElement : EventElement;
-			var showNotVisible : Boolean = visibleElementProxy.getShowNotVisible();
-			workArea.showElement.selected = showNotVisible;
-			for ( i = 0; i < leng; i++ )
-			{
-				element = workArea.contentGroup.getElementAt( i );
-				if ( element is ActionElement )
-				{
-					actionElement = element as ActionElement;
-					actionElement.showElements = visibleElementProxy.getVisible( actionElement.idElement );
-					if ( !showNotVisible )
-						actionElement.visibleElements = visibleElementProxy.getVisible( actionElement.idElement );
-				}
-				else if ( element is EventElement )
-				{
-					eventElement = element as EventElement;
-					eventElement.showElements = visibleElementProxy.getVisible( eventElement.idElement );
-					if ( !showNotVisible )
-						eventElement.visibleElements = visibleElementProxy.getVisible( eventElement.idElement );
 				}
 			}
 			workArea.setVisibleLinkage( showNotVisible );
@@ -313,7 +283,7 @@ package net.vdombox.ide.modules.events.view
 				newTarget = sessionProxy.selectedObject;
 			else if ( sessionProxy.selectedPage )
 				newTarget = sessionProxy.selectedPage;
-			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_WORK_AREA, newTarget.id as String );
+			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, newTarget.id as String );
 			sentElementsList();
 			
 		}
@@ -333,7 +303,7 @@ package net.vdombox.ide.modules.events.view
 				listElements.push( workArea.contentGroup.getElementAt( i ) ); 
 			}
 			
-			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENTS_IN_WORK_AREA, listElements);
+			sendNotification( ApplicationFacade.ELEMENTS_LIST_IN_WORK_AREA_GETTED, listElements);
 		}
 		
 		private function showHandler( event : WorkAreaEvent ) : void
@@ -356,20 +326,20 @@ package net.vdombox.ide.modules.events.view
 				if ( element is ActionElement )
 				{
 					actionElement = element as ActionElement;
-					actionElement.showElements = visibleElementProxy.getVisible( actionElement.idElement );
+					actionElement.visibleElement = visibleElementProxy.getVisible( actionElement.idElement );
 					if ( !showNotVisible )
-						actionElement.visibleElements = visibleElementProxy.getVisible( actionElement.idElement );
+						actionElement.setVisibleElement = visibleElementProxy.getVisible( actionElement.idElement );
 					else
-						actionElement.visibleElements = true;
+						actionElement.setVisibleElement = true;
 				}
 				else if ( element is EventElement )
 				{
 					eventElement = element as EventElement;
-					eventElement.showElements = visibleElementProxy.getVisible( eventElement.idElement );
+					eventElement.visibleElement = visibleElementProxy.getVisible( eventElement.idElement );
 					if ( !showNotVisible )
-						eventElement.visibleElements = visibleElementProxy.getVisible( eventElement.idElement );
+						eventElement.setVisibleElement = visibleElementProxy.getVisible( eventElement.idElement );
 					else
-						eventElement.visibleElements = true;
+						eventElement.setVisibleElement = true;
 				}
 			}
 			workArea.setVisibleLinkage( showNotVisible );
@@ -388,18 +358,18 @@ package net.vdombox.ide.modules.events.view
 			if ( element is ActionElement )
 			{
 				var actionElement : ActionElement = element as ActionElement;
-				visibleElementProxy.setVisible( actionElement.idElement, actionElement.showElements );
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_WORK_AREA, actionElement.objectID );
+				visibleElementProxy.setVisible( actionElement.idElement, actionElement.visibleElement );
+				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, actionElement.objectID );
 				if ( actionElement.objectID == newTarget.id )
-					sendNotification( ApplicationFacade.SET_VISIBLE_NAME_ELEMENT_IN_WORK_AREA, { element: actionElement, visible: actionElement.showElements } );
+					sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { element: actionElement, visible: actionElement.visibleElement } );
 			}
 			else if ( element is EventElement )
 			{
 				var eventElement : EventElement = element as EventElement;
-				visibleElementProxy.setVisible( eventElement.idElement, eventElement.showElements );
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_WORK_AREA, eventElement.objectID );
+				visibleElementProxy.setVisible( eventElement.idElement, eventElement.visibleElement );
+				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, eventElement.objectID );
 				if ( eventElement.objectID == newTarget.id )
-					sendNotification( ApplicationFacade.SET_VISIBLE_NAME_ELEMENT_IN_WORK_AREA, { element: eventElement, visible: eventElement.showElements } );
+					sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { element: eventElement, visible: eventElement.visibleElement } );
 			}
 			setShow();
 			

@@ -82,7 +82,7 @@ package net.vdombox.ide.modules.events.view
 
 			interests.push( ApplicationFacade.OBJECT_GETTED );
 			
-			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_WORK_AREA );
+			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE );
 
 			return interests;
 		}
@@ -101,7 +101,6 @@ package net.vdombox.ide.modules.events.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					trace("ApplicationFacade.BODY_START");
 					if ( sessionProxy.selectedApplication )
 					{
 						isActive = true;
@@ -112,7 +111,7 @@ package net.vdombox.ide.modules.events.view
 				}
 
 				case ApplicationFacade.BODY_STOP:
-				{trace(" ApplicationFacade.BODY_STOP");
+				{
 					isActive = false;
 
 					clearData();
@@ -121,14 +120,14 @@ package net.vdombox.ide.modules.events.view
 				}
 
 				case ApplicationFacade.PAGES_GETTED:
-				{trace("PAGES_GETTED");
+				{
 					showPages( notification.getBody() as Array );
 
 					break;
 				}
 
 				case ApplicationFacade.PAGE_STRUCTURE_GETTED:
-				{trace("PAGE_STRUCTURE_GETTED");
+				{
 					var pageXMLTree : XML = notification.getBody() as XML;
 					
 					if ( pageXMLTree )
@@ -148,14 +147,14 @@ package net.vdombox.ide.modules.events.view
 				}
 
 				case ApplicationFacade.OBJECT_GETTED:
-				{trace("OBJECT_GETTED");
+				{
 					selectedObject = body as ObjectVO;
 					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 
 					break;
 				}
 					
-				case ApplicationFacade.SET_VISIBLE_ELEMENT_IN_WORK_AREA:
+				case ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE:
 				{
 					var eventElement : String = body as String;
 					var objectXML : XML;
@@ -185,18 +184,6 @@ package net.vdombox.ide.modules.events.view
 				objectXML.@visible = visibleElementProxy.getObjectVisible( String(objectXML.@id) );
 			}
 		}
-
-//		private function openTree( item : Object ) : void
-//		{
-//			//			trace('openTree');
-//			var parentItem : Object = XML( item ).parent();
-//			if ( parentItem )
-//			{
-//				openTree( parentItem );
-//				objectsTree.expandItem( parentItem, true, false );
-//				objectsTree.validateNow();
-//			}
-//		}
 
 		private function clearData() : void
 		{
@@ -259,19 +246,18 @@ package net.vdombox.ide.modules.events.view
 		}
 		
 		private function getPageXML( id : String ) : XML
-		{		trace("getPageXML");	
+		{	
 			for each ( var page:XML in objectsTree.dataProvider)
 			{
 				if (page.@id == id)
 					return page;
 			}
 			
-			trace("Error: not exist page in objectsTree");
 			return null;
 		}
 
 		private function objectsTree_ChangeHandler( event : ListEvent ) : void
-		{trace("objectsTree_ChangeHandler");
+		{
 			var item : XML = event.itemRenderer.data as XML;
 			var id : String = item.@id;
 

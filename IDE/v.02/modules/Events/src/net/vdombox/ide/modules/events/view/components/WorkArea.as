@@ -713,11 +713,12 @@ package net.vdombox.ide.modules.events.view.components
 				
 				if ( linkage )
 				{
-					if ( !showNotVisible && ( !linkage.target.showElements || !linkage.source.showElements ) )
+					if ( !showNotVisible && ( !linkage.target.visibleElement || !linkage.source.visibleElement ) )
 						linkage.visible = false;
 					else
 						linkage.visible = true;
 				}
+				// для того чтобы линки стали видны необходимо передвинуть компанент. НАдо бы пофмксить
 				linkage.source.x += 1;
 				linkage.source.x -= 1;
 			}

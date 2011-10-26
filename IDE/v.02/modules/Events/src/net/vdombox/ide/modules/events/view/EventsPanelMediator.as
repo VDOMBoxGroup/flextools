@@ -82,8 +82,8 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 
 			interests.push( ApplicationFacade.SERVER_ACTIONS_LIST_GETTED );
-			interests.push( ApplicationFacade.SET_VISIBLE_NAME_ELEMENT_IN_WORK_AREA );
-			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENTS_IN_WORK_AREA );
+			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL );
+			interests.push( ApplicationFacade.ELEMENTS_LIST_IN_WORK_AREA_GETTED );
 			
 
 			return interests;
@@ -119,13 +119,13 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.SET_VISIBLE_NAME_ELEMENT_IN_WORK_AREA:
+				case ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL:
 				{
 					setEye( body );
 					return;
 				}
 					
-				case ApplicationFacade.SET_VISIBLE_ELEMENTS_IN_WORK_AREA:
+				case ApplicationFacade.ELEMENTS_LIST_IN_WORK_AREA_GETTED:
 				{
 					newEye( body );
 					return;
@@ -217,7 +217,7 @@ package net.vdombox.ide.modules.events.view
 			
 			eventsPanel.eventsList.dataProvider = new ArrayList( currentTypeVO.events );
 			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_LIST, currentTarget );
-			sendNotification( ApplicationFacade.GET_VISIBLE_ELEMENTS_IN_WORK_AREA );
+			sendNotification( ApplicationFacade.GET_ELEMENTS_LIST_IN_WORK_AREA );
 		}
 
 		private function showActions( serverActions : Array ) : void
@@ -241,7 +241,6 @@ package net.vdombox.ide.modules.events.view
 		{
 			eventsPanel.eventsList.addEventListener( DragEvent.DRAG_START, dragStartHandler );
 			eventsPanel.actionsList.addEventListener( DragEvent.DRAG_START, dragStartHandler );
-			eventsPanel.eventsList.addEventListener( FlexEvent.CREATION_COMPLETE, createList, true );
 			eventsPanel.eventsList.addEventListener( PanelsEvent.DATE_SETTED, createEyeItemRenderer, true );
 			eventsPanel.actionsList.addEventListener( PanelsEvent.DATE_SETTED, createEyeItemRenderer, true );
 			eventsPanel.eventsList.addEventListener( PanelsEvent.EYES_CLICK, eyesClickHandler, true );
@@ -260,11 +259,6 @@ package net.vdombox.ide.modules.events.view
 			eventsPanel.actionsList.removeEventListener( PanelsEvent.EYES_CLICK, eyesClickHandler, true );
 		}
 		
-		private function createList( event : FlexEvent ) : void
-		{
-			sendNotification( ApplicationFacade.GET_VISIBLE_ELEMENTS_IN_WORK_AREA );
-		}
-		
 		private function eyesClickHandler( event : PanelsEvent ) : void
 		{
 			var newTarget : Object;
@@ -274,11 +268,11 @@ package net.vdombox.ide.modules.events.view
 			else if ( sessionProxy.selectedPage )
 				newTarget = sessionProxy.selectedPage;
 			
-			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_WORK_AREA, newTarget.id );
+			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, newTarget.id );
 			if ( event.target is EventItemRenderer )
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { name: event.target.eventName, objectID: newTarget.id , visible: event.target.eyeOpened } );
+				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.eventName, objectID: newTarget.id , visible: event.target.eyeOpened } );
 			else
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { name: event.target.actionName, objectID: newTarget.id , visible: event.target.eyeOpened } );
+				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.actionName, objectID: newTarget.id , visible: event.target.eyeOpened } );
 		}
 		
 		
@@ -294,7 +288,6 @@ package net.vdombox.ide.modules.events.view
 			{
 				var nameEvent : String = event.target.eventName as String;
 				
-			
 				nameEvent += ( newTarget.id as String );
 			
 				if ( findInElementsEvent( nameEvent ) )
@@ -341,6 +334,7 @@ package net.vdombox.ide.modules.events.view
 				return null;
 			var i : int;
 			var actionList : Array = new Array();
+			
 			for ( i = 0; i < elements.length; i++ )
 			{
 				if ( elements[i] is ActionElement )
@@ -354,11 +348,11 @@ package net.vdombox.ide.modules.events.view
 			
 			if ( actionList.length == 0 )
 					return null;
-			var flag : Boolean = (actionList[ 0 ] as ActionElement).showElements;
+			var flag : Boolean = (actionList[ 0 ] as ActionElement).visibleElement;
 			
 			for each ( actionElement in actionList )
 			{
-				if ( flag != actionElement.showElements )
+				if ( flag != actionElement.visibleElement )
 					return new ActionElement();
 			}
 	
