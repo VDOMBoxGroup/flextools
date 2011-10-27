@@ -63,7 +63,11 @@
 		
 		<components1:ApplicationsIconView id="iconChooser" width="100%" />
 		
+		<s:Label id="selectIcon" buttonMode="true" text="{ resourceManager.getString( 'Core_General', 'iconchooser_select_icon' ) }"
+				 fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF" />
+		
 		<mx:Spacer height="100%" />
+		
 		
 		<s:HGroup width="100%" horizontalAlign="right" >
 			

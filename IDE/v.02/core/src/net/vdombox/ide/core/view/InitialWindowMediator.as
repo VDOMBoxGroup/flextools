@@ -127,7 +127,7 @@ package net.vdombox.ide.core.view
 
 			initialWindow.addEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler, false, 0, true );
 
-			initialWindow.addEventListener( InitialWindowEvent.EXIT, exitHandler, false, 0, true );
+			initialWindow.addEventListener( InitialWindowEvent.EXIT, exitHandler, false  );
 			
 			initialWindow.addEventListener( InitialWindowEvent.SUBMIT, submitHandler);
 		}

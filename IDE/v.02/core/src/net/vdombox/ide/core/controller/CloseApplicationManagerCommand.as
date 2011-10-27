@@ -7,7 +7,6 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
 	import net.vdombox.ide.core.view.ApplicationPropertiesViewMediator;
 	import net.vdombox.ide.core.view.ApplicationsViewMediator;
-	import net.vdombox.ide.core.view.ApplicationsIconViewMediator;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 	import net.vdombox.utils.WindowManager;
 	
@@ -26,8 +25,6 @@ package net.vdombox.ide.core.controller
 			if ( facade.hasMediator( ApplicationPropertiesViewMediator.NAME ) )
 				facade.removeMediator( ApplicationPropertiesViewMediator.NAME );
 			
-			if ( facade.hasMediator( ApplicationsIconViewMediator.NAME ) )
-				facade.removeMediator( ApplicationsIconViewMediator.NAME );
 			
 			if ( facade.hasProxy( GalleryProxy.NAME ) )
 				facade.removeProxy( GalleryProxy.NAME );

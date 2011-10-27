@@ -1,8 +1,13 @@
 package net.vdombox.ide.core.view.components
 {
 	import flash.display.NativeWindowSystemChrome;
+	import flash.utils.ByteArray;
+	
+	import mx.collections.ArrayList;
+	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.ide.core.events.IconChooserEvent;
+	import net.vdombox.ide.core.model.vo.GalleryItemVO;
 	import net.vdombox.ide.core.view.skins.ApplicationsIconsChoosWindowSkin;
 	
 	import spark.components.Button;
@@ -30,6 +35,12 @@ package net.vdombox.ide.core.view.components
 			transparent = true;
 		}
 		
+		public function get imageSource():ByteArray
+		{
+			var galleryItemVO : GalleryItemVO = iconsList.selectedItem as GalleryItemVO;
+			
+			return ObjectUtil.copy( galleryItemVO.content ) as ByteArray;
+		}
 		override public function stylesInitialized():void {
 			super.stylesInitialized();
 			this.setStyle( "skinClass", ApplicationsIconsChoosWindowSkin );
@@ -44,6 +55,11 @@ package net.vdombox.ide.core.view.components
 		public function closeWindow() : void
 		{
 			dispatchEvent( new IconChooserEvent( IconChooserEvent.CLOSE_ICON_LIST ) );
+		}
+		
+		public function set dataProvider ( value : Array ) : void
+		{
+			iconsList.dataProvider = new ArrayList( value );
 		}
 	}
 }

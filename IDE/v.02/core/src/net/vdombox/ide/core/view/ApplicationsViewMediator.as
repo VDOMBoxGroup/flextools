@@ -314,7 +314,6 @@ package net.vdombox.ide.core.view
 				return;
 
 			selectedApplicationVO = statesProxy.selectedApplication || getApplicationsFromSettings() || applications[ 0 ];
-			
 		}
 
 		private function get selectedApplicationDescriptions() : String

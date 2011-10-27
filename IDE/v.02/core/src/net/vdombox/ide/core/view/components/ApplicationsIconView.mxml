@@ -4,7 +4,40 @@
 		  xmlns:mx="library://ns.adobe.com/flex/mx" >
 	<fx:Script>
 		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.utils.ObjectUtil;
+			
+			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.core.events.IconChooserEvent;
+			
+			private var _resourceVO : ResourceVO;
+
+			public function get resourceVO():ResourceVO
+			{
+				return _resourceVO;
+			}
+
+			public function set resourceVO(value:ResourceVO):void
+			{
+				_resourceVO = value;
+				BindingUtils.bindSetter( setIcon, _resourceVO, "data", false, true );
+			}
+			
+			private function setIcon( value : Object ) : void
+			{
+					icon.source = ObjectUtil.copy( value );
+			}
+			
+			public function set source( object : Object):void
+			{
+				icon.source = object;
+			}
+			
+			public function get source( ) : Object
+			{
+				return icon.source ;
+			}
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -21,11 +54,7 @@
 	<mx:Image id="icon"
 			  height="64" width="64" />
 	
-	<s:Label buttonMode="true" text="{ resourceManager.getString( 'Core_General', 'iconchooser_select_icon' ) }"
-			 fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF"
-			 click="{dispatchEvent( new IconChooserEvent (IconChooserEvent.OPEN_ICON_LIST ) );}" />
 	
-	<s:Label buttonMode="true" text="{ resourceManager.getString( 'Core_General', 'iconchooser_load_from_computer' ) }"
-			 fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF"
-			 click="{dispatchEvent( new IconChooserEvent( IconChooserEvent.LOAD_ICON ))}" />
+	
+	
 </s:VGroup>

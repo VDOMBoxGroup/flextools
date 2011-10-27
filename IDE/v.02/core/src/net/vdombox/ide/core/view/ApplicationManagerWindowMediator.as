@@ -126,7 +126,6 @@ package net.vdombox.ide.core.view
 		{
 			facade.registerMediator( new ApplicationsViewMediator(  applicationManagerWindow.applicationsView   ) );
 			facade.registerMediator( new ApplicationPropertiesViewMediator( applicationManagerWindow.applicationPropertiesView ) );
-			facade.registerMediator( new ApplicationsIconViewMediator( applicationManagerWindow.applicationPropertiesView.iconChooser ) );
 		}
 
 		private function removeHandlers() : void
