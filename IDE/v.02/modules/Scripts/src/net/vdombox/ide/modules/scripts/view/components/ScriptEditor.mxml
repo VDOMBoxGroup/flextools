@@ -3,23 +3,22 @@
 		 xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 height="100%" width="100%"
-		 creationComplete="creationCompleteHandler()">
+		 height="100%" width="100%" xmlns:editors="net.vdombox.editors.*"
+		>
 
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.modules.scripts.events.EditAreaEvent;
-			import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
+			import net.vdombox.editors.ScriptAreaComponent;
 			
 			private var _script : String;
 
 			private var _syntax : String = "vscript";
 
-			public function get script() : String
+			/*public function get script() : String
 			{
-				return editArea ? editArea.content : null;
+				return pythonScriptEditor ? pythonScriptEditor.scriptAreaComponent.text : null;
 			}
 
 			public function set script( value : String ) : void
@@ -40,10 +39,10 @@
 			private function editArea_saveHandler( event : EditAreaEvent ) : void
 			{
 				dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SAVE ) );
-			}
+			}*/
 		]]>
 	</fx:Script>
 
-	<components:EditArea id="editArea"
-						 height="100%" width="100%"/>
+	<editors:PythonScriptEditor id="pythonScriptEditor"
+						 height="100%" width="100%"  scriptAreaComponent="{new ScriptAreaComponent()}"/>
 </s:Group>

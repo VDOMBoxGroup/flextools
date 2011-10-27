@@ -1,5 +1,11 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	
+	import mx.events.FlexEvent;
+	
+	import net.vdombox.editors.PythonScriptEditor;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.GlobalActionVO;
 	import net.vdombox.ide.common.vo.LibraryVO;
@@ -20,6 +26,8 @@ package net.vdombox.ide.modules.scripts.view
 		public function ScriptEditorMediator( viewComponent : Object )
 		{
 			super( NAME, viewComponent );
+			scriptEditor.addEventListener( FlexEvent.SHOW, showHandler );
+			compliteSourceCode();
 		}
 
 		private var sessionProxy : SessionProxy;
@@ -73,6 +81,7 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
+			//var pythonScriptEditor: PythonScriptEditor = scriptEditor.pythonScriptEditor;
 
 			if ( !isActive && name != ApplicationFacade.BODY_START )
 				return;
@@ -86,7 +95,7 @@ package net.vdombox.ide.modules.scripts.view
 						isActive = true;
 
 						if( sessionProxy.selectedApplication )
-							scriptEditor.syntax = sessionProxy.selectedApplication.scriptingLanguage;
+							//scriptEditor.syntax = sessionProxy.selectedApplication.scriptingLanguage;
 						
 						break;
 					}
@@ -108,13 +117,15 @@ package net.vdombox.ide.modules.scripts.view
 					if ( serverActionVO )
 					{
 						scriptEditor.enabled = true;
-						scriptEditor.script = serverActionVO.script;
+						//scriptEditor.script = serverActionVO.script;
+						//pythonScriptEditor.loadSource( serverActionVO.script, "zzz" );
 						currentVO = serverActionVO;
 					}
 					else
 					{
 						scriptEditor.enabled = false;
-						scriptEditor.script = "";
+						//scriptEditor.script = "";
+						//pythonScriptEditor.loadSource( "", "zzz" );
 						currentVO = null;
 					}
 
@@ -128,13 +139,15 @@ package net.vdombox.ide.modules.scripts.view
 					if ( libraryVO )
 					{
 						scriptEditor.enabled = true;
-						scriptEditor.script = libraryVO.script;
+						//scriptEditor.script = libraryVO.script;
+						//pythonScriptEditor.loadSource( libraryVO.script, "zzz" );
 						currentVO = libraryVO;
 					}
 					else
 					{
 						scriptEditor.enabled = false;
-						scriptEditor.script = "";
+						//scriptEditor.script = "";
+						//pythonScriptEditor.loadSource( "", "zzz" );
 						currentVO = null;
 					}
 
@@ -148,13 +161,15 @@ package net.vdombox.ide.modules.scripts.view
 					if ( globalActionVO )
 					{
 						scriptEditor.enabled = true;
-						scriptEditor.script = globalActionVO.script;
+						//scriptEditor.script = globalActionVO.script;
+						//pythonScriptEditor.loadSource( globalActionVO.script, "zzz" );
 						currentVO = globalActionVO;
 					}
 					else
 					{
 						scriptEditor.enabled = false;
-						scriptEditor.script = "";
+						//scriptEditor.script = "";
+						//pythonScriptEditor.loadSource( "", "zzz" );
 						currentVO = null;
 					}
 					
@@ -166,6 +181,27 @@ package net.vdombox.ide.modules.scripts.view
 		private function addHandlers() : void
 		{
 			scriptEditor.addEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler, false, 0, true );
+		}
+		
+		private function showHandler(event:FlexEvent):void
+		{
+			scriptEditor.removeEventListener(FlexEvent.SHOW, showHandler);
+			compliteSourceCode();
+		}
+		
+		protected function compliteSourceCode( ):void
+		{	
+			var pythonScriptEditor: PythonScriptEditor = scriptEditor.pythonScriptEditor;
+			pythonScriptEditor.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+			//pythonScriptEditor.addEventListener( Event.CHANGE, validateObjectTypeVO );
+			pythonScriptEditor.addedToStageHadler(null);
+			pythonScriptEditor.loadSource( "", "zzz" );
+		}	
+		
+		private function keyDownHandler(event:KeyboardEvent):void
+		{
+			event.stopPropagation();
+			event.stopImmediatePropagation();
 		}
 
 		private function removeHandlers() : void
@@ -183,7 +219,7 @@ package net.vdombox.ide.modules.scripts.view
 		private function scriptEditor_saveHandler( event : ScriptEditorEvent ) : void
 		{
 			if( currentVO is ServerActionVO || currentVO is LibraryVO || currentVO is GlobalActionVO )
-				currentVO.script = scriptEditor.script;
+				//currentVO.script = scriptEditor.script;
 			
 			sendNotification( ApplicationFacade.SAVE_SCRIPT_REQUEST, currentVO );
 		}
