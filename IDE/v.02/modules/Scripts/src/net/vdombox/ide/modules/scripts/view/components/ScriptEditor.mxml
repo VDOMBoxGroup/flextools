@@ -4,42 +4,45 @@
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 height="100%" width="100%" xmlns:editors="net.vdombox.editors.*"
-		>
+		 creationComplete="creationCompleteHandler()">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.editors.ScriptAreaComponent;
+			import net.vdombox.ide.modules.scripts.events.EditAreaEvent;
+			import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 			
 			private var _script : String;
 
 			private var _syntax : String = "vscript";
 
-			/*public function get script() : String
+			public function get script() : String
 			{
 				return pythonScriptEditor ? pythonScriptEditor.scriptAreaComponent.text : null;
 			}
 
 			public function set script( value : String ) : void
 			{
-				editArea.content = value;
+				pythonScriptEditor.scriptAreaComponent.text = value;
+				pythonScriptEditor.dispatchEvent( new Event ( Event.CHANGE ) );
 			}
 
-			public function set syntax( value : String ) : void
+			/*public function set syntax( value : String ) : void
 			{
-				editArea.syntax = _syntax;
-			}
+				pythonScriptEditor.syntax = _syntax;
+			}*/
 
 			protected function creationCompleteHandler() : void
 			{
-				editArea.addEventListener( EditAreaEvent.SAVE, editArea_saveHandler, false, 0, true );
+				pythonScriptEditor.addEventListener( EditAreaEvent.SAVE, scriptEditor_saveHandler, false, 0, true );
 			}
 			
-			private function editArea_saveHandler( event : EditAreaEvent ) : void
+			private function scriptEditor_saveHandler( event : EditAreaEvent ) : void
 			{
 				dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SAVE ) );
-			}*/
+			}
 		]]>
 	</fx:Script>
 

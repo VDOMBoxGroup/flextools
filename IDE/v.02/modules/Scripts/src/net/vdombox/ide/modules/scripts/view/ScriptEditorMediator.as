@@ -117,14 +117,14 @@ package net.vdombox.ide.modules.scripts.view
 					if ( serverActionVO )
 					{
 						scriptEditor.enabled = true;
-						//scriptEditor.script = serverActionVO.script;
+						scriptEditor.script = serverActionVO.script;
 						//pythonScriptEditor.loadSource( serverActionVO.script, "zzz" );
 						currentVO = serverActionVO;
 					}
 					else
 					{
 						scriptEditor.enabled = false;
-						//scriptEditor.script = "";
+						scriptEditor.script = "";
 						//pythonScriptEditor.loadSource( "", "zzz" );
 						currentVO = null;
 					}
@@ -139,14 +139,14 @@ package net.vdombox.ide.modules.scripts.view
 					if ( libraryVO )
 					{
 						scriptEditor.enabled = true;
-						//scriptEditor.script = libraryVO.script;
+						scriptEditor.script = libraryVO.script;
 						//pythonScriptEditor.loadSource( libraryVO.script, "zzz" );
 						currentVO = libraryVO;
 					}
 					else
 					{
 						scriptEditor.enabled = false;
-						//scriptEditor.script = "";
+						scriptEditor.script = "";
 						//pythonScriptEditor.loadSource( "", "zzz" );
 						currentVO = null;
 					}
@@ -161,14 +161,14 @@ package net.vdombox.ide.modules.scripts.view
 					if ( globalActionVO )
 					{
 						scriptEditor.enabled = true;
-						//scriptEditor.script = globalActionVO.script;
+						scriptEditor.script = globalActionVO.script;
 						//pythonScriptEditor.loadSource( globalActionVO.script, "zzz" );
 						currentVO = globalActionVO;
 					}
 					else
 					{
 						scriptEditor.enabled = false;
-						//scriptEditor.script = "";
+						scriptEditor.script = "";
 						//pythonScriptEditor.loadSource( "", "zzz" );
 						currentVO = null;
 					}
@@ -219,7 +219,7 @@ package net.vdombox.ide.modules.scripts.view
 		private function scriptEditor_saveHandler( event : ScriptEditorEvent ) : void
 		{
 			if( currentVO is ServerActionVO || currentVO is LibraryVO || currentVO is GlobalActionVO )
-				//currentVO.script = scriptEditor.script;
+				currentVO.script = scriptEditor.script;
 			
 			sendNotification( ApplicationFacade.SAVE_SCRIPT_REQUEST, currentVO );
 		}
