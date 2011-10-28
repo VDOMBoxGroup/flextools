@@ -32,7 +32,7 @@
 
 		<mx:Image source="{ icon }" width="16" height="16"/>
 
-		<s:Label text="{ title }" />
+		<s:TextInput text="{ title }" width="100%" editable="false" contentBackgroundAlpha="0" borderVisible="false" />
 	</s:HGroup>
 	
 	<s:Line xFrom="24" xTo="24" yFrom="0" yTo="20">

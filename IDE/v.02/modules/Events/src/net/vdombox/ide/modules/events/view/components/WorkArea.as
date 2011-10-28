@@ -10,6 +10,7 @@ package net.vdombox.ide.modules.events.view.components
 	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
 	import mx.utils.NameUtil;
+	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.ide.common.vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.vo.ClientActionVO;
@@ -249,14 +250,17 @@ package net.vdombox.ide.modules.events.view.components
 						return;
 				}
 			}*/
+			
+			var newClientActionVO : ClientActionVO = clientActionVO.copy();
+			
 
-			clientActionVO.left = coordinates.x;
-			clientActionVO.top = coordinates.y;
+			newClientActionVO.left = coordinates.x;
+			newClientActionVO.top = coordinates.y;
 
-			applicationEventsVO.clientActions.push( clientActionVO );
+			applicationEventsVO.clientActions.push( newClientActionVO );
 
 			var actionElement : ActionElement = new ActionElement();
-			actionElement.data = clientActionVO;
+			actionElement.data = newClientActionVO;
 
 			addElement( actionElement );
 			
