@@ -10,10 +10,10 @@ package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -23,11 +23,11 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.vo.SettingsVO;
 	import net.vdombox.ide.core.view.components.ApplicationListItemRenderer;
 	import net.vdombox.ide.core.view.components.ApplicationsView;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.Application;
 	import spark.components.List;
 	import spark.events.IndexChangeEvent;
@@ -84,17 +84,16 @@ package net.vdombox.ide.core.view
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
-			var applicationVO : ApplicationVO;
-
+			
 			switch ( notification.getName() )
 			{
 				case ApplicationFacade.SERVER_APPLICATIONS_GETTED:
 				{
-//					applicationsView.visible = true;
-
-					applications = notification.getBody() as Array;
+					var applicationVO : ApplicationVO;
 					
-					if (applications.length == 0)
+					applications = notification.getBody() as Array;
+
+					if ( applications.length == 0 )
 					{
 						applicationsView.applicationDescription.text = "PleAce Add nEw AppLicAtIonS";
 					}
@@ -103,25 +102,24 @@ package net.vdombox.ide.core.view
 						applicationList.dataProvider = new ArrayList( applications );
 						selectApplication();
 					}
-						
 
 					break;
 				}
 
-				case ApplicationFacade.EDIT_APPLICATION_PROPERTY :
+				case ApplicationFacade.EDIT_APPLICATION_PROPERTY:
 				{
 					applicationsView.visible = false;
 
 					break;
 				}
-				case ApplicationFacade.OPEN_APPLICATIONS_VIEW :
+
+				case ApplicationFacade.OPEN_APPLICATIONS_VIEW:
 				{
 					applicationsView.visible = true;
-					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
-					
+
+					validateApplicationList();
 					break;
 				}
-					
 			}
 		}
 
@@ -130,17 +128,17 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.SERVER_APPLICATIONS_GETTED );
-			
+
 			interests.push( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
-			
-			interests.push( ApplicationFacade.OPEN_APPLICATIONS_VIEW ); 
+
+			interests.push( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
 
 			return interests;
 		}
 
 		override public function onRegister() : void
 		{
-//			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
+			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 
 			addHandlers();
 		}
@@ -150,6 +148,22 @@ package net.vdombox.ide.core.view
 			removeHandlers();
 		}
 
+
+		private function validateApplicationList() : void
+		{
+			//valie is empty
+			if ( !applicationList.dataProvider )
+				return;
+
+			var selctedIndex : int = applicationList.selectedIndex;
+			var dataProvaider : ArrayList = new ArrayList( applicationList.dataProvider.toArray() );
+
+			applicationList.dataProvider = dataProvaider;
+
+			applicationList.validateNow();
+			applicationList.selectedIndex = selctedIndex;
+			applicationList.ensureIndexIsVisible( selctedIndex );
+		}
 
 		/**
 		 *
@@ -173,16 +187,8 @@ package net.vdombox.ide.core.view
 			applicationList.validateNow();
 			applicationList.ensureIndexIsVisible( applicationList.selectedIndex );
 
-			if ( value )
-			{
-				applicationsView.applicationName.text = selectedApplicationVO.name;
-				applicationsView.applicationDescription.text = selectedApplicationDescriptions
-			}
-			else
-			{
-				applicationsView.applicationName.text = "";
-				applicationsView.applicationDescription.text = "";
-			}
+			applicationsView.applicationName.text = value ? selectedApplicationVO.name : "";
+			applicationsView.applicationDescription.text = value ? selectedApplicationDescriptions : "";
 		}
 
 		/**
@@ -206,20 +212,26 @@ package net.vdombox.ide.core.view
 
 		private function addApplicationClickHandler( event : MouseEvent ) : void
 		{
-//			applicationsView.visible = false;
-
 			sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
 		}
 
 		private function addHandlers() : void
 		{
-			applicationList.addEventListener( FlexEvent.CREATION_COMPLETE, rendererCreatedHandler, true, 0, true );
 			applicationList.addEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler, false, 0, true );
 			applicationList.addEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICK, applicationList_dubleClickHandler, true, 0, true );
 
 			applicationsView.addApplication.addEventListener( MouseEvent.CLICK, addApplicationClickHandler, false, 0, true );
 			applicationsView.changeApplication.addEventListener( MouseEvent.CLICK, changeApplicationClikHandler, false, 0, true );
 			applicationsView.setSelectApplication.addEventListener( MouseEvent.CLICK, setSelectApplication, false, 0, true );
+
+			applicationsView.addEventListener( ApplicationListItemRenderer.ICON_REQUEST, iconRequestHandler, true, 0, true );
+		}
+
+		private function iconRequestHandler( event : Event ) : void
+		{
+			var applicationListItemRenderer : ApplicationListItemRenderer = event.target as ApplicationListItemRenderer;
+
+			sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: applicationListItemRenderer.resourceVO } );
 		}
 
 		/**
@@ -255,7 +267,6 @@ package net.vdombox.ide.core.view
 
 		private function changeApplicationClikHandler( event : MouseEvent ) : void
 		{
-//			applicationsView.visible = false;
 			sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY, selectedApplicationVO );
 		}
 
@@ -277,28 +288,17 @@ package net.vdombox.ide.core.view
 
 		private function removeHandlers() : void
 		{
-			applicationList.removeEventListener( FlexEvent.CREATION_COMPLETE, rendererCreatedHandler, true );
 			applicationList.removeEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler );
 			applicationList.removeEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICK, applicationList_dubleClickHandler, true );
 
 			applicationsView.addApplication.removeEventListener( MouseEvent.CLICK, addApplicationClickHandler );
 			applicationsView.changeApplication.removeEventListener( MouseEvent.CLICK, changeApplicationClikHandler );
 			applicationsView.setSelectApplication.removeEventListener( MouseEvent.CLICK, setSelectApplication );
+
+			applicationsView.removeEventListener( ApplicationListItemRenderer.ICON_REQUEST, iconRequestHandler, true );
 		}
 
-		/**
-		 *
-		 *  To registred mediators for ApplicationListItemRenderer
-		 *
-		 */
-		private function rendererCreatedHandler( event : Event ) : void
-		{
-			if ( event.target is ApplicationListItemRenderer )
-			{
-				var mediator : ApplicationListItemRendererMediator = new ApplicationListItemRendererMediator( event.target );
-				facade.registerMediator( mediator );
-			}
-		}
+
 
 
 

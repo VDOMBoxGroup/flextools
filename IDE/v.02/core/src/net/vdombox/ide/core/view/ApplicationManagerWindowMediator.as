@@ -72,8 +72,6 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-//			interests.push( ApplicationFacade.SET_SELECTED_APPLICATION );
-
 			return interests;
 		}
 

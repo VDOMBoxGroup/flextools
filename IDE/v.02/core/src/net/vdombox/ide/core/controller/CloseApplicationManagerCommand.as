@@ -3,7 +3,6 @@ package net.vdombox.ide.core.controller
 	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.GalleryProxy;
-	import net.vdombox.ide.core.view.ApplicationListItemRendererMediator;
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
 	import net.vdombox.ide.core.view.ApplicationPropertiesViewMediator;
 	import net.vdombox.ide.core.view.ApplicationsViewMediator;
@@ -21,17 +20,15 @@ package net.vdombox.ide.core.controller
 			if ( facade.hasMediator( ApplicationsViewMediator.NAME ) )
 				facade.removeMediator( ApplicationsViewMediator.NAME );
 			
-			
 			if ( facade.hasMediator( ApplicationPropertiesViewMediator.NAME ) )
 				facade.removeMediator( ApplicationPropertiesViewMediator.NAME );
-			
 			
 			if ( facade.hasProxy( GalleryProxy.NAME ) )
 				facade.removeProxy( GalleryProxy.NAME );
 			
 			var mainWindowSkin : MainWindowSkin = notification.getBody() as MainWindowSkin;
 			var windowManager : WindowManager = WindowManager.getInstance();
-//				.addWindow( applicationManagerWindow, mainWindowSkin, true );
+
 			if ( facade.hasMediator( ApplicationManagerWindowMediator.NAME ) )
 			{				
 				var applicationManagerWindowMediator : ApplicationManagerWindowMediator = facade.retrieveMediator( ApplicationManagerWindowMediator.NAME) as ApplicationManagerWindowMediator;

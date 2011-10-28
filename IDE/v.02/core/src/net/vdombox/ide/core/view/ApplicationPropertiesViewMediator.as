@@ -9,6 +9,7 @@
 package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.utils.ByteArray;
 	
@@ -126,7 +127,10 @@ package net.vdombox.ide.core.view
 
 				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
 				{
-					sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
+					applicationVO =  body as ApplicationVO
+					sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW, applicationVO );
+					
+					applicationVO = null;
 
 					break
 				}
@@ -173,20 +177,25 @@ package net.vdombox.ide.core.view
 		private function openIconListHandler( event : MouseEvent ) : void
 		{
 			applicationsIconsChoosWindow = new ApplicationsIconsChoosWindow();
-			applicationsIconsChoosWindow.addEventListener( IconChooserEvent.CLOSE_ICON_LIST, closeIconListHandler );
+			
+			applicationsIconsChoosWindow.addEventListener( Event.CLOSE, closeIconListHandler );
+			
 			applicationsIconsChoosWindow.addEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
+			
 			applicationsIconsChoosWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
 			
 			WindowManager.getInstance().addWindow( applicationsIconsChoosWindow, applicationPropertiesView, true );
 		} 
 		
-		private function closeIconListHandler( event : IconChooserEvent ) : void
+		private function closeIconListHandler( event : Event ) : void
 		{			
-			applicationsIconsChoosWindow.removeEventListener( IconChooserEvent.CLOSE_ICON_LIST, closeIconListHandler );
+			applicationsIconsChoosWindow.removeEventListener( Event.CLOSE, closeIconListHandler );
+			
 			applicationsIconsChoosWindow.removeEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
+			
 			applicationsIconsChoosWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
 			
-			WindowManager.getInstance().removeWindow( applicationsIconsChoosWindow );
+//			WindowManager.getInstance().removeWindow( applicationsIconsChoosWindow );
 		}
 		
 		private var iconChanged : Boolean = false;

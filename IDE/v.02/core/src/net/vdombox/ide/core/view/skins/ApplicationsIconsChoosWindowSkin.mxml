@@ -50,7 +50,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:VGroup left="9" top="9" right="9" bottom="9" gap="0">
+	<s:VGroup left="9" top="9" right="9" bottom="9" gap="10">
 		
 		<s:Group width="100%" height="42">
 			<s:TitleBar id="titleBar"
@@ -60,25 +60,48 @@
 			<s:VGroup right="10" height="42" verticalAlign="middle" >
 				<s:Button id="closeButton"
 						  skinClass="net.vdombox.view.skins.MainCloseBtnSkin"
-						  click="hostComponent.closeWindow()"/>	
+						  click="hostComponent.close()"/>	
 			</s:VGroup>
 			
 		</s:Group>	
-		
-		<s:List id="iconsList"
+	<s:Group width="100%" height="100%" >
+		<s:List id="iconsList" borderVisible="false" x="10"
 				width="100%" height="100%"
 				
 				itemRenderer="net.vdombox.ide.core.view.components.GalleryItemRenderer"
-				creationComplete="iconsList_creationCompleteHandler(event)">
+				creationComplete="iconsList_creationCompleteHandler(event)" >
 			
 			<s:layout>
 				<s:TileLayout />
 			</s:layout>
 		</s:List>
-		
-		<s:Group width="100%">
-			<components:VdomButton id="btnOK"
-				label="OK" right="10" 	click="hostComponent.selectIcon()" />
+	</s:Group>	
+		<s:Group width="100%" height="50" >
+			<s:Rect width="100%" height="100%">
+				<s:fill>
+					<s:BitmapFill source = "@Embed('/assets/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+				</s:fill>
+			</s:Rect>
+			<s:Rect width="100%" height="10">
+				<s:fill>
+					<!--<s:SolidColor color="black" alpha="0." />-->
+					<s:LinearGradient rotation="90">
+						<s:GradientEntry color="black" alpha=".2"/>
+						<s:GradientEntry color="black" alpha=".0"/>
+					</s:LinearGradient>
+				</s:fill>
+			</s:Rect>	
+			
+		<s:HGroup width="100%" paddingLeft="13" paddingRight="13" paddingTop="13" paddingBottom="13">
+			
+			<components:VdomButton id="canselBt"
+								   label="cAnSel" click="hostComponent.close()"  />
+			<mx:Spacer width="100%"/>
+			<components:VdomButton id="addImageBt" width="45"
+								   label="+"  fontWeight="bold"	 />
+			<components:VdomButton id="selectBt"
+				label="oK"  	click="hostComponent.selectIcon()" />
+		</s:HGroup>
 		</s:Group>
 		
 	</s:VGroup>
