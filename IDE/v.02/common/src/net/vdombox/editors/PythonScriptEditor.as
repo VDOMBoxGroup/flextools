@@ -44,7 +44,7 @@ package net.vdombox.editors
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
 		}
 
-		private function addedToStageHadler( event : Event ) : void
+		public function addedToStageHadler( event : Event ) : void
 		{
 			if ( scriptAreaComponent )
 				initiaize();

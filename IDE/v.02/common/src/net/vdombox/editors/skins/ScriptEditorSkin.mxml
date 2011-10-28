@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Skin xmlns:editors="net.vdombox.editors.*"
+<s:SparkSkin xmlns:editors="net.vdombox.editors.*"
 		xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:s="library://ns.adobe.com/flex/spark"
@@ -118,4 +118,4 @@
 				  minimum="1"
 				  bottom="{ hsb.height }" right="0" top="0"
 				  change="vsb_changeHandler(event)"/>
-</s:Skin>
+</s:SparkSkin>
