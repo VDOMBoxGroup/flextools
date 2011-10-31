@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
-					  xmlns:mx="library://ns.adobe.com/flex/mx">
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  width="100%" minWidth="225">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
@@ -94,7 +95,7 @@
 	
 	<s:Group id="groupContent"
 			 left="20"
-			 width="100%"
+			 width="100%" minWidth="200"
 			 top="-2"
 			 bottom="-2">
 		
@@ -115,6 +116,7 @@
 			<s:TextInput id="labelField"
 						 color="#FFFFFF"
 						 text="{treeListData.label}"
+						 width="100%"
 						 paddingTop="2"
 						 editable="false" contentBackgroundAlpha="0"
 						 borderVisible="false" selectable="false"/>
