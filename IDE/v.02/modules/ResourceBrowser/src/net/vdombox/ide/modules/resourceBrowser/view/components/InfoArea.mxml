@@ -132,8 +132,8 @@
 					 fontFamily="Verdana" fontWeight="normal" verticalAlign="middle"/>
 			<s:Label height="20" text="{ _resourceVO.type.toUpperCase() }" width="100%"
 					 fontFamily="Verdana" fontWeight="normal" verticalAlign="middle"/>
-			<s:Label height="20" text="{ _resourceVO.id }" width="100%"
-					 fontFamily="Verdana" fontWeight="normal" verticalAlign="middle"/>
+			<s:TextInput height="20" text="{ _resourceVO.id }" width="280" editable="false" contentBackgroundAlpha="0" borderVisible="false"
+					 fontFamily="Verdana" fontWeight="normal"/>
 			<s:Label id="size"
 					 height="20" width="100%"
 					 fontFamily="Verdana" fontWeight="normal" verticalAlign="middle"/>
