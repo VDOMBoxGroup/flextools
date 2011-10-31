@@ -28,7 +28,7 @@ package net.vdombox.ide.core.view.components
 	import spark.components.Label;
 	import spark.components.TextInput;
 	import spark.components.Window;
-	import spark.components.windowClasses.TitleBar;
+//	import spark.components.windowClasses.TitleBar;
 	/**
 	 *
 	 * @author andreev ap

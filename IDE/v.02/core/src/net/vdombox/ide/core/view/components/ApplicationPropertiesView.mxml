@@ -7,16 +7,20 @@
 		 paddingBottom="10" paddingRight="10" xmlns:components2="net.vdombox.components.*">
 	<fx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
+			
 			import net.vdombox.ide.core.events.ApplicationManagerEvent;
 			
 			private function getLocalesWord( word : String): String
 			{
 				return resourceManager.getString( 'Core_General', word );
 			}
-//			override public function set visible(value:Boolean):void
-//			{
-//				trace("2 visible:" + value)
-//			}
+			
+			protected function selectIcon_creationCompleteHandler(event:FlexEvent):void
+			{
+				selectIcon.width = selectIcon.text.length * 6;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -61,10 +65,10 @@
 	<s:VGroup width="35%" height="100%" gap="2" 
 			  paddingTop="10" paddingLeft="20" >
 		
-		<components1:ApplicationsIconView id="iconChooser"  />
+			<components1:ApplicationsIconView id="iconChooser"  />
 		
-		<s:Label id="selectIcon" buttonMode="true" text="{ resourceManager.getString( 'Core_General', 'iconchooser_select_icon' ) }"
-				 fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF" />
+			<s:Label id="selectIcon" buttonMode="true" text="{getLocalesWord( 'iconchooser_select_icon' ) }" creationComplete="selectIcon_creationCompleteHandler(event)"
+				 fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF"  />
 		
 		<mx:Spacer height="100%" />
 		

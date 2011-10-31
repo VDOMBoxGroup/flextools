@@ -53,10 +53,10 @@ package net.vdombox.ide.core.view.components
 			systemChrome = NativeWindowSystemChrome.NONE;
 			transparent = true;
 			
+			title = resourceManager.getString( 'Core_General', 'iconchooser_select_icon' ) ;
+			
 			addEventListener(FlexEvent.CREATION_COMPLETE , creatComleateHandler, false, 0, true );
 			addEventListener(FlexEvent.REMOVE, removeHandler, false, 0, true );
-			
-			
 		}
 		
 		[SkinPart( required="true" )]
