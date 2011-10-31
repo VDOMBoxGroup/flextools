@@ -77,6 +77,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.ALL_STATES_GETTED );
 			interests.push( ApplicationFacade.PAGES_GETTED );
 			interests.push( ApplicationFacade.APPLICATION_STRUCTURE_GETTED );
+			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
 
 			interests.push( ApplicationFacade.PIPES_READY );
 			interests.push( ApplicationFacade.MODULE_DESELECTED );
@@ -97,7 +98,22 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
-
+				
+				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
+				{
+					isAllStatesGetted = true;
+					
+					if ( sessionProxy.selectedApplication )
+					{
+						sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
+						sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, sessionProxy.selectedApplication );
+					}
+					
+					checkConditions();
+					
+					break;
+				}
+					
 				case ApplicationFacade.ALL_STATES_GETTED:
 				{
 					isAllStatesGetted = true;
