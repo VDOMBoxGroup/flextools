@@ -47,8 +47,8 @@
 		
 		<s:HGroup width="100%" paddingBottom="10">
 			
-			<s:RadioButton id="vbscript"
-						   label="vscript" value="vbscript" color="#FFFFFF"
+			<s:RadioButton id="vscript"
+						   label="vscript" value="vscript" color="#FFFFFF"
 						   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
 			
 			<s:RadioButton id="python"

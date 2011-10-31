@@ -137,7 +137,20 @@ package net.vdombox.ide.core.view.components
 			
 			if ( _newImage.length > 0 )
 			{
-				dispatchEvent( new Event( ADD_IMAGE));
+				loader = new Loader();
+				
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, scaleImage, false, 0, true );
+				
+				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loader_ioErrorHandler, false, 0, true );
+				
+				try
+				{
+					loader.loadBytes( _newImage );
+				}
+				catch ( error : Error )
+				{
+					
+				}
 			}
 		}
 		
@@ -151,6 +164,42 @@ package net.vdombox.ide.core.view.components
 			file.browseForOpen( "Load image", [ fileFilter ] );
 		}
 		
+		private function scaleImage( event : Event ) : void
+		{
+			var originalImage : Bitmap;
+			var scaledImageBtm : Bitmap;
+			var scaledImageBtAr : ByteArray;
+			
+			var newWidth : Number = 55;
+			var newHeight : Number = 55;
+			var matrix : Matrix = new Matrix();
+			var pngEncoder : PNGEncoder = new PNGEncoder();
+			var bitmapData : BitmapData;
+			
+			originalImage = loader.content as Bitmap;
+			
+			matrix.scale( newWidth / originalImage.width, newHeight / originalImage.height );
+			
+			bitmapData = new BitmapData( newWidth, newHeight, true, 0x00ffffff );
+			
+			scaledImageBtm = new Bitmap( bitmapData, PixelSnapping.AUTO, true );
+			scaledImageBtm.bitmapData.draw( originalImage.bitmapData, matrix );
+			
+			scaledImageBtAr = pngEncoder.encode( scaledImageBtm.bitmapData );
+			
+			addIcon( scaledImageBtAr );
+		}
+		
+		private function addIcon( value : ByteArray ):void
+		{
+			var galleryItemVO : GalleryItemVO = new GalleryItemVO("name",  value );
+			
+			iconsList.dataProvider.addItem( galleryItemVO );
+		}
+		
+		private function loader_ioErrorHandler( event : IOErrorEvent ) : void
+		{
+		}
 		
 	}
 }

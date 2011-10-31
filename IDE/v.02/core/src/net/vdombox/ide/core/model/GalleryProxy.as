@@ -55,71 +55,13 @@ package net.vdombox.ide.core.model
 
 		private var loader : Loader;
 
-		public function addImage( image : ByteArray ) : void
-		{
-			loader = new Loader();
+		
 
-			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, scaleImage, false, 0, true );
+		
 
-			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loader_ioErrorHandler, false, 0, true );
+		
 
-			try
-			{
-				loader.loadBytes( image );
-			}
-			catch ( error : Error )
-			{
-
-			}
-		}
-
-		private function scaleImage( event : Event ) : void
-		{
-			var originalImage : Bitmap;
-			var scaledImageBtm : Bitmap;
-			var scaledImageBtAr : ByteArray;
-
-			var newWidth : Number = 55;
-			var newHeight : Number = 55;
-			var matrix : Matrix = new Matrix();
-			var pngEncoder : PNGEncoder = new PNGEncoder();
-			var bitmapData : BitmapData;
-
-			originalImage = loader.content as Bitmap;
-
-			matrix.scale( newWidth / originalImage.width, newHeight / originalImage.height );
-
-			bitmapData = new BitmapData( newWidth, newHeight, true, 0x00ffffff );
-
-			scaledImageBtm = new Bitmap( bitmapData, PixelSnapping.AUTO, true );
-			scaledImageBtm.bitmapData.draw( originalImage.bitmapData, matrix );
-
-			scaledImageBtAr = pngEncoder.encode( scaledImageBtm.bitmapData );
-
-			saveIcon( scaledImageBtAr );
-		}
-
-		private function loader_ioErrorHandler( event : IOErrorEvent ) : void
-		{
-		}
-
-		private function saveIcon( content : ByteArray ) : void
-		{
-			var file : File = File.applicationDirectory;
-			file = file.resolvePath( "gallery/newName" );
-
-			try
-			{
-				// FixMe: cannot to write
-				fileStream.open( file, FileMode.WRITE );
-				fileStream.writeBytes( content );
-				fileStream.close();
-			}
-			catch ( error : IOError )
-			{
-				return;
-			}
-		}
+		
 
 		private function fileStream_completeHandler( event : Event ) : void
 		{
