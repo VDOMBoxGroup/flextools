@@ -34,7 +34,6 @@ package net.vdombox.ide.core.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
 	public class ApplicationPropertiesViewMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "CreateEditApplicationViewMediator";
@@ -48,6 +47,10 @@ package net.vdombox.ide.core.view
 
 		private var applicationInformationVO : ApplicationInformationVO;
 
+		private  var applicationsIconsChoosWindow : ApplicationsIconsChoosWindow;
+		
+		private var iconChanged : Boolean = false;
+
 		private var newApplicationInformation : Object;
 
 		private var newIconResourceVO : ResourceVO;
@@ -59,6 +62,8 @@ package net.vdombox.ide.core.view
 			return viewComponent as ApplicationPropertiesView;
 		}
 
+		
+		
 		public function get applicationVO() : ApplicationVO
 		{
 			return _applicationVO;
@@ -69,6 +74,13 @@ package net.vdombox.ide.core.view
 			_applicationVO = value;
 
 			commitProperties();
+		}
+		
+		public function get defaultIcon() : ByteArray
+		{
+			var galleryItemVO : GalleryItemVO = galleryProxy.items[0] as GalleryItemVO;
+			
+			return ObjectUtil.copy( galleryItemVO.content ) as ByteArray;
 		}
 
 		override public function handleNotification( notification : INotification ) : void
@@ -172,43 +184,6 @@ package net.vdombox.ide.core.view
 			applicationPropertiesView.addEventListener( ApplicationManagerEvent.SAVE_INFORMATION, saveInformationHandler );
 			applicationPropertiesView.selectIcon.addEventListener(MouseEvent.CLICK, openIconListHandler);
 		}
-
-		private  var applicationsIconsChoosWindow : ApplicationsIconsChoosWindow;
-		private function openIconListHandler( event : MouseEvent ) : void
-		{
-			applicationsIconsChoosWindow = new ApplicationsIconsChoosWindow();
-			
-			applicationsIconsChoosWindow.addEventListener( Event.CLOSE, closeIconListHandler );
-			
-			applicationsIconsChoosWindow.addEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
-			
-			applicationsIconsChoosWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
-			
-			WindowManager.getInstance().addWindow( applicationsIconsChoosWindow, applicationPropertiesView, true );
-		} 
-		
-		private function closeIconListHandler( event : Event ) : void
-		{			
-			applicationsIconsChoosWindow.removeEventListener( Event.CLOSE, closeIconListHandler );
-			
-			applicationsIconsChoosWindow.removeEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
-			
-			applicationsIconsChoosWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
-			
-//			WindowManager.getInstance().removeWindow( applicationsIconsChoosWindow );
-		}
-		
-		private var iconChanged : Boolean = false;
-		private function selectIconHandler(event : IconChooserEvent) : void
-		{
-			applicationPropertiesView.iconChooser.source = applicationsIconsChoosWindow.imageSource
-			iconChanged = true;
-		}
-		
-		private function createCompleteIconListHandler( event : FlexEvent ) : void
-		{	
-			applicationsIconsChoosWindow.dataProvider =  galleryProxy.items;
-		}
 		
 		private function cancelInformationHandler( event : ApplicationManagerEvent ) : void
 		{
@@ -222,6 +197,19 @@ package net.vdombox.ide.core.view
 			else
 				NativeApplication.nativeApplication.exit();
 		}
+		
+		private function closeIconListHandler( event : Event ) : void
+		{			
+			applicationsIconsChoosWindow.removeEventListener( Event.CLOSE, closeIconListHandler );
+			
+			applicationsIconsChoosWindow.removeEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler );
+			
+			applicationsIconsChoosWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
+			
+			applicationsIconsChoosWindow.removeEventListener( ApplicationsIconsChoosWindow.ADD_IMAGE, addImageHandler);
+			
+//			WindowManager.getInstance().removeWindow( applicationsIconsChoosWindow );
+		}
 
 		private function commitProperties() : void
 		{
@@ -229,6 +217,11 @@ package net.vdombox.ide.core.view
 				setApplicationVOValue();
 			else
 				setVoidValue();
+		}
+		
+		private function createCompleteIconListHandler( event : FlexEvent ) : void
+		{	
+			applicationsIconsChoosWindow.dataProvider =  galleryProxy.items;
 		}
 
 		private function createIconResourceVO( icon : Object ) : ResourceVO
@@ -241,6 +234,11 @@ package net.vdombox.ide.core.view
 
 			return resourceVO;
 		}
+		
+		private function get galleryProxy() : GalleryProxy
+		{
+			return facade.retrieveProxy( GalleryProxy.NAME ) as GalleryProxy;
+		}
 
 		private function getApplicationInformationVO() : ApplicationInformationVO
 		{
@@ -252,12 +250,29 @@ package net.vdombox.ide.core.view
 
 			return appInfVO;
 		}
+		private function openIconListHandler( event : MouseEvent ) : void
+		{
+			applicationsIconsChoosWindow = new ApplicationsIconsChoosWindow();
+			
+			applicationsIconsChoosWindow.addEventListener( Event.CLOSE, closeIconListHandler, false, 0, true );
+			
+			applicationsIconsChoosWindow.addEventListener( IconChooserEvent.SELECT_ICON, selectIconHandler, false, 0, true );
+			
+			applicationsIconsChoosWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler, false, 0, true );
+			
+			applicationsIconsChoosWindow.addEventListener( ApplicationsIconsChoosWindow.ADD_IMAGE, addImageHandler, false, 0, true );
+			
+			WindowManager.getInstance().addWindow( applicationsIconsChoosWindow, applicationPropertiesView, true );
+		}
 
 //		private function get iconChooserMediator() : ApplicationsIconViewMediator
 //		{
 //			return facade.retrieveMediator( ApplicationsIconViewMediator.NAME ) as ApplicationsIconViewMediator;
 //		}
-
+		private function addImageHandler( event : Event) : void
+		{
+			galleryProxy.addImage(  applicationsIconsChoosWindow.newImage );
+		}
 		private function removeHandlers() : void
 		{
 			applicationPropertiesView.removeEventListener( ApplicationManagerEvent.SAVE_INFORMATION, saveInformationHandler );
@@ -292,6 +307,11 @@ package net.vdombox.ide.core.view
 			{
 				sendNotification( ApplicationFacade.CREATE_APPLICATION, applicationInformationVO );
 			}
+		}
+		private function selectIconHandler(event : IconChooserEvent) : void
+		{
+			applicationPropertiesView.iconChooser.source = applicationsIconsChoosWindow.imageSource
+			iconChanged = true;
 		}
 
 		private function get serverProxy() : ServerProxy
@@ -330,18 +350,6 @@ package net.vdombox.ide.core.view
 
 			applicationPropertiesView.python.selected = true;
 			applicationPropertiesView.vbscript.selected = false;
-		}
-		
-		public function get defaultIcon() : ByteArray
-		{
-			var galleryItemVO : GalleryItemVO = galleryProxy.items[0] as GalleryItemVO;
-			
-			return ObjectUtil.copy( galleryItemVO.content ) as ByteArray;
-		}
-		
-		private function get galleryProxy() : GalleryProxy
-		{
-			return facade.retrieveProxy( GalleryProxy.NAME ) as GalleryProxy;
 		}
 	}
 }

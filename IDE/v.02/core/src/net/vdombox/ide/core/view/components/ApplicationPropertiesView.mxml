@@ -48,7 +48,7 @@
 		<s:HGroup width="100%" paddingBottom="10">
 			
 			<s:RadioButton id="vbscript"
-						   label="vbscript" value="vbscript" color="#FFFFFF"
+						   label="vscript" value="vbscript" color="#FFFFFF"
 						   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
 			
 			<s:RadioButton id="python"
@@ -61,7 +61,7 @@
 	<s:VGroup width="35%" height="100%" gap="2" 
 			  paddingTop="10" paddingLeft="20" >
 		
-		<components1:ApplicationsIconView id="iconChooser" width="100%" />
+		<components1:ApplicationsIconView id="iconChooser"  />
 		
 		<s:Label id="selectIcon" buttonMode="true" text="{ resourceManager.getString( 'Core_General', 'iconchooser_select_icon' ) }"
 				 fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF" />
