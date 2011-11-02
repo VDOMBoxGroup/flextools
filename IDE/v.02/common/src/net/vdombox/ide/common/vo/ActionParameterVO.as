@@ -1,7 +1,10 @@
 package net.vdombox.ide.common.vo
 {
+	import flash.net.dns.AAAARecord;
+	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
+
 	/**
 	 * The ActionParameterVO is Visual Object of VDOM Object.
 	 * ActionParameterVO is contained in the Object`s Action. 
@@ -22,7 +25,19 @@ package net.vdombox.ide.common.vo
 		private var _defaultValue : String;
 		private var _help : String;
 		private var _regularExpressionValidation : String;
+		private var _properties : XML;
 		
+		public function get properties():XML
+		{
+			return _properties;
+		}
+
+		public function set properties(value:XML):void
+		{
+			_properties = value;
+			setProperties()
+		}
+
 		public function get typeID() : String
 		{
 			return _typeID;
@@ -53,23 +68,23 @@ package net.vdombox.ide.common.vo
 			return _regularExpressionValidation;
 		}
 		
-		public function setProperties( propertiesXML : XML ) : void
+		private function setProperties(  ) : void
 		{
 			//TODO: Гонимая локализация атрибутов "InterfaceName" и "Help"
 			
 			var defaultValue : String;
 			
-			_name = propertiesXML.@ScriptName[ 0 ];
+			_name = _properties.@ScriptName[ 0 ];
 			
-			defaultValue = propertiesXML.@DefaultValue[ 0 ];
+			defaultValue = _properties.@DefaultValue[ 0 ];
 			
 			if( defaultValue === null )
-				defaultValue = propertiesXML[ 0 ];
+				defaultValue = _properties[ 0 ];
 			
 			_defaultValue = defaultValue;
 			value = defaultValue;
 			
-			_regularExpressionValidation = propertiesXML.@RegularExpressionValidation[ 0 ];
+			_regularExpressionValidation = _properties.@RegularExpressionValidation[ 0 ];
 		}
 		
 		public function toXML() : XML
@@ -90,6 +105,13 @@ package net.vdombox.ide.common.vo
 			}
 			
 			return result;
+		}
+		
+		public function copy() : ActionParameterVO
+		{
+			var copy : ActionParameterVO = new ActionParameterVO();
+			copy.properties = _properties;
+			return copy;
 		}
 		
 //		private function getValue( value : String ) : String

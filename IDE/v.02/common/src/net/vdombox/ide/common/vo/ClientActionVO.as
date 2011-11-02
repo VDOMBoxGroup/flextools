@@ -143,7 +143,7 @@ package net.vdombox.ide.common.vo
 				for each ( parameterXML in parametersXMLList )
 				{
 					actionParameterVO = new ActionParameterVO();
-					actionParameterVO.setProperties( parameterXML );
+					actionParameterVO.properties = parameterXML ;
 					
 					_parameters.push( actionParameterVO );
 				}
@@ -161,9 +161,20 @@ package net.vdombox.ide.common.vo
 			copy.setObjectID( _objectID );
 			copy.setObjectName( _objectName );
 			
-			copy.setParameters( _parameters.slice() );
+			copy.setParameters( copyParametrs().slice() );
 			
 			return copy;
+		}
+		
+		private function copyParametrs() : Array
+		{
+			var parametr : ActionParameterVO;
+			var newparametrs : Array = new Array();
+			for each ( parametr in parameters )
+			{
+				newparametrs.push( parametr.copy() );
+			}
+			return newparametrs;
 		}
 		
 		public function toXML() : XML
