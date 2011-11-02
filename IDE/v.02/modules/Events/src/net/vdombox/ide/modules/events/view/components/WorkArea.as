@@ -274,6 +274,10 @@ package net.vdombox.ide.modules.events.view.components
 			if ( serverActionElements && serverActionElements.hasOwnProperty( serverActionVO.id ) )
 				return;
 			
+			serverActionVO = applicationEventsVO.getServetActionByID( serverActionVO.id );
+			if ( !serverActionVO )
+				return;
+			
 			serverActionVO.left = coordinates.x;
 			serverActionVO.top = coordinates.y;
 
