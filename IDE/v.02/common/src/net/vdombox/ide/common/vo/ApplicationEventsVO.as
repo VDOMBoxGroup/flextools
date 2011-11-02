@@ -26,6 +26,17 @@ package net.vdombox.ide.common.vo
 			return _pageVO;
 		}
 		
+		public function getServetActionByID( actionID : String ) : ServerActionVO
+		{
+			var serverAction : ServerActionVO;
+			for each ( serverAction in serverActions )
+			{
+				if ( serverAction.id == actionID )
+					return serverAction;
+			}
+			return null;
+		}
+		
 		public function getEventsXML() : XML
 		{
 			var result : XML = <Events />;

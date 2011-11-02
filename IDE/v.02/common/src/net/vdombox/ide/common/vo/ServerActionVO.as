@@ -11,8 +11,7 @@ package net.vdombox.ide.common.vo
 		private const TO_XML_TMPL : String =
 			"<Action Name=\"{0}\" Language=\"{1}\" Top=\"{2}\" Left=\"{3}\" State=\"{4}\"><![CDATA[{5}]\]></Action>";
 
-		[Bindable]
-		public var top : int = 0;
+		private var _top : int = 0;
 
 		[Bindable]
 		public var left : int = 0;
@@ -36,6 +35,17 @@ package net.vdombox.ide.common.vo
 		private var _containerID : String;
 		
 		private var _visibleEvent : Boolean = true;
+
+		[Bindable]
+		public function get top():int
+		{
+			return _top;
+		}
+
+		public function set top(value:int):void
+		{
+			_top = value;
+		}
 
 		public function get visibleEvent():Boolean
 		{
@@ -119,12 +129,16 @@ package net.vdombox.ide.common.vo
 				language = testValue;
 
 			testValue = propertiesXML.@Top[ 0 ];
-
+			
+			trace( "vvod" + testValue );
+			
 			if ( testValue !== null )
 				top = int( testValue );
 
 			testValue = propertiesXML.@Left[ 0 ];
-
+			
+			trace( testValue );
+			
 			if ( testValue !== null )
 				left = int( testValue );
 
@@ -186,7 +200,7 @@ package net.vdombox.ide.common.vo
 
 			if( _id && _id != "" )
 				result.@ID = _id;
-			
+			trace(result.toXMLString());
 			return result;
 		}
 	}
