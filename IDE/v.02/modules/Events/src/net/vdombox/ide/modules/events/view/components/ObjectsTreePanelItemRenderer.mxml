@@ -121,8 +121,6 @@
 						 editable="false" contentBackgroundAlpha="0"
 						 borderVisible="false" selectable="false"/>
 			
-			<mx:Spacer width="100%" />
-			
 		</s:HGroup>
 		
 	</s:Group>
