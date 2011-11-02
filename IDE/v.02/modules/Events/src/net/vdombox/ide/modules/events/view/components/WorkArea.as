@@ -351,7 +351,8 @@ package net.vdombox.ide.modules.events.view.components
 			{
 				for ( i = 0; i < clientActions.length; i++ )
 				{
-					if ( clientActions[ i ].name == actionVO.name )
+					if ( clientActions[ i ].name == actionVO.name && clientActions[ i ].objectID == actionVO.objectID 
+					&& clientActions[ i ].id == actionVO.id)
 						clientActions.splice( i, 1 );
 				}
 				
@@ -371,7 +372,7 @@ package net.vdombox.ide.modules.events.view.components
 				for ( j = 0; j < actions.length; j++ )
 				{
 					if ( NameUtil.getUnqualifiedClassName( actions[ j ] ) == NameUtil.getUnqualifiedClassName( actionVO ) &&
-						actions[ j ].name == actionVO.name )
+						actions[ j ].name == actionVO.name && actions[ j ].objectID == actionVO.objectID && actions[ j ].id == actionVO.id)
 						actions.splice( j, 1 );
 				}
 			}
@@ -562,9 +563,15 @@ package net.vdombox.ide.modules.events.view.components
 						for each ( aviableActionVO in eventObject.actions )
 						{
 							if ( NameUtil.getUnqualifiedClassName( aviableActionVO ) == NameUtil.getUnqualifiedClassName( actionVO ) &&
-								aviableActionVO.name == actionVO.name )
+								aviableActionVO.name == actionVO.name && aviableActionVO.objectID == actionVO.objectID )
 							{
 								isAviable = true;
+								removeEventListener( MouseEvent.CLICK, mouseClickHandler, true );
+								removeShadowHandlers();
+									
+								if ( shadowLinkage && shadowLinkage.parent == linkagesLayer )
+										linkagesLayer.removeElement( shadowLinkage );
+
 								break;
 							}
 						}
