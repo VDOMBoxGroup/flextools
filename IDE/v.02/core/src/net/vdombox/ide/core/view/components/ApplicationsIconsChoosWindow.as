@@ -10,6 +10,7 @@ package net.vdombox.ide.core.view.components
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.NativeWindowSystemChrome;
 	import flash.display.PixelSnapping;
@@ -139,7 +140,7 @@ package net.vdombox.ide.core.view.components
 			{
 				loader = new Loader();
 				
-				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, scaleImage, false, 0, true );
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loaderCompleteHandler, false, 0, true );
 				
 				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loader_ioErrorHandler, false, 0, true );
 				
@@ -164,11 +165,20 @@ package net.vdombox.ide.core.view.components
 			file.browseForOpen( "Load image", [ fileFilter ] );
 		}
 		
-		private function scaleImage( event : Event ) : void
+		
+		private function loaderCompleteHandler(  event : Event ):void
 		{
-			var originalImage : Bitmap;
+			var content : Bitmap = loader.content as Bitmap;
+			
+			var scaledImage :ByteArray = scaleImage( content );
+			
+			addIcon( scaledImage );
+		}
+		
+		private function scaleImage( originalImage : Bitmap ) : ByteArray
+		{
 			var scaledImageBtm : Bitmap;
-			var scaledImageBtAr : ByteArray;
+			
 			
 			var newWidth : Number = 55;
 			var newHeight : Number = 55;
@@ -185,9 +195,9 @@ package net.vdombox.ide.core.view.components
 			scaledImageBtm = new Bitmap( bitmapData, PixelSnapping.AUTO, true );
 			scaledImageBtm.bitmapData.draw( originalImage.bitmapData, matrix );
 			
-			scaledImageBtAr = pngEncoder.encode( scaledImageBtm.bitmapData );
+			return pngEncoder.encode( scaledImageBtm.bitmapData );
 			
-			addIcon( scaledImageBtAr );
+			
 		}
 		
 		private function addIcon( value : ByteArray ):void

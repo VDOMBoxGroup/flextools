@@ -361,7 +361,7 @@ package net.vdombox.ide.core
 		
 		public static const OPEN_PAGE_IN_EXTERNAL_BROWSER  : String = "openPageInExternalBrowser";
 //		public static const OPEN_APPLICATION_IN_EDITOR  : String = "openApplicationInEditor";
-		public static const EDIT_APPLICATION_PROPERTY  : String = "openApplicationInEditView";
+		public static const OPEN_APPLICATION_PROPERTY_VIEW  : String = "openApplicationPropertyView";
 		public static const OPEN_APPLICATIONS_VIEW  : String = "openApplicationsView";
 //		public static const OPEN_APPLICATION_IN_CHANGE_VIEW  : String = "openApplicationInChangeView";
 
