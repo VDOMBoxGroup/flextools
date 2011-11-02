@@ -50,7 +50,7 @@ package net.vdombox.ide.core.view
 		 */
 		public function ApplicationsViewMediator( viewComponent : Object = null )
 		{
-			super( NAME, viewComponent );
+			super( NAME, viewComponent ); 
 		}
 
 		private var _selectedApplicationVO : ApplicationVO;
@@ -106,10 +106,10 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-				case ApplicationFacade.EDIT_APPLICATION_PROPERTY:
+				case ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW:
 				{
 					applicationsView.visible = false;
-
+ 
 					break;
 				}
 
@@ -117,11 +117,11 @@ package net.vdombox.ide.core.view
 				{
 					applicationsView.visible = true;
 
-					validateApplicationList();
+					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 					break;
-				}
+				} 
 			}
-		}
+		} 
 
 		override public function listNotificationInterests() : Array
 		{
@@ -129,7 +129,7 @@ package net.vdombox.ide.core.view
 
 			interests.push( ApplicationFacade.SERVER_APPLICATIONS_GETTED );
 
-			interests.push( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
+			interests.push( ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW );
 
 			interests.push( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
 
@@ -138,7 +138,7 @@ package net.vdombox.ide.core.view
 
 		override public function onRegister() : void
 		{
-			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
+//			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 
 			addHandlers();
 		}
@@ -212,7 +212,7 @@ package net.vdombox.ide.core.view
 
 		private function addApplicationClickHandler( event : MouseEvent ) : void
 		{
-			sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
+			sendNotification( ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW );
 		}
 
 		private function addHandlers() : void
@@ -267,7 +267,7 @@ package net.vdombox.ide.core.view
 
 		private function changeApplicationClikHandler( event : MouseEvent ) : void
 		{
-			sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY, selectedApplicationVO );
+			sendNotification( ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW, selectedApplicationVO );
 		}
 
 		/**

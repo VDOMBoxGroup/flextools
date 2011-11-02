@@ -117,7 +117,7 @@ package net.vdombox.ide.core.view
 			if ( serverProxy.applications.length > 0 )
 				sendNotification(ApplicationFacade.OPEN_APPLICATIONS_VIEW);
 			else
-				sendNotification( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
+				sendNotification( ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW );
 		}
 		
 		private function registerMediators():void

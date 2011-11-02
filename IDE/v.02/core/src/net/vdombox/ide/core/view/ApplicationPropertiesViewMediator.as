@@ -101,7 +101,7 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-				case ApplicationFacade.EDIT_APPLICATION_PROPERTY:
+				case ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW:
 				{
 					applicationPropertiesView.visible = true;
 
@@ -154,7 +154,7 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.EDIT_APPLICATION_PROPERTY );
+			interests.push( ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW );
 
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
 

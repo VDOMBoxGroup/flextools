@@ -195,6 +195,7 @@ package net.vdombox.ide.core.view.components
 			var galleryItemVO : GalleryItemVO = new GalleryItemVO("name",  value );
 			
 			iconsList.dataProvider.addItem( galleryItemVO );
+			iconsList.selectedItem = galleryItemVO;
 		}
 		
 		private function loader_ioErrorHandler( event : IOErrorEvent ) : void
