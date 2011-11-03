@@ -61,7 +61,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			tab = _editors[ value ];
 
 			if ( tab )
-				selectedTab = tab;
+ 				selectedTab = tab;
 		}
 
 		public function getEditorByVO( vdomObjectVO : IVDOMObjectVO ) : IEditor

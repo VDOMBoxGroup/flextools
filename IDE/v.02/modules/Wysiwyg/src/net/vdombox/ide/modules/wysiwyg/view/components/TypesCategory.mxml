@@ -12,8 +12,10 @@
 			import mx.collections.ArrayList;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
+			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.vo.TypeVO;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 
 			[Bindable]
 			private var typeData : ArrayCollection;
@@ -30,6 +32,15 @@
 				if (type.container != 3)
 					typeData.addItem( type );
 			}
+			
+			protected function list_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+
+					
+				types.scroller.verticalScrollBar.setStyle("skinClass", VDOMVScrollBarSkin);
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -45,10 +56,11 @@
 		</s:Rect>
 		
 		<s:HGroup width="100%" height="100%" gap="0">
-			<s:List width="100%" height="100%" borderVisible="false" contentBackgroundAlpha="0"
+			<s:List id="types" width="100%" height="100%" borderVisible="false" contentBackgroundAlpha="0"
 					dataProvider="{ typeData }"
 					itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer"
-					labelField="displayName" textAlign="center">
+					labelField="displayName" textAlign="center"
+					creationComplete="list_creationCompleteHandler(event)">
 				
 				<s:layout>
 					<s:VerticalLayout variableRowHeight="true" gap="0" horizontalAlign="center"/>

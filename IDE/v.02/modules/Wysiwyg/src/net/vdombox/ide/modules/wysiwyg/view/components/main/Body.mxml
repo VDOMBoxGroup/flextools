@@ -15,7 +15,7 @@
 
 		<mx:Accordion id="typesAccordion" width="100%" height="100%" 
 					  borderVisible="false"
-					  color="white" 
+					  color="white"
 					  textRollOverColor="white" textSelectedColor="white"
 					  headerHeight="29"
 					  headerRenderer="{ new ClassFactory( TypesAccordionHeader ) }"
