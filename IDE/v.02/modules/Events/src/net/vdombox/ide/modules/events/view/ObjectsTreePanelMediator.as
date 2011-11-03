@@ -181,7 +181,7 @@ package net.vdombox.ide.modules.events.view
 			
 			for each( objectXML in xmlList)
 			{
-				objectXML.@visible = visibleElementProxy.getObjectVisible( String(objectXML.@id) );
+				objectXML.@visible = visibleElementProxy.getObjectEyeOpened( String(objectXML.@id) );
 			}
 		}
 
@@ -195,13 +195,13 @@ package net.vdombox.ide.modules.events.view
 		private function addHandlers() : void
 		{
 			objectsTree.addEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler, false, 0, true );
-			objectsTree.addEventListener( PanelsEvent.EYES_CLICK, eyesClickHandler, true, 0, true );
+			objectsTree.addEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			objectsTree.removeEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler );
-			objectsTree.removeEventListener( PanelsEvent.EYES_CLICK, eyesClickHandler, true );
+			objectsTree.removeEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true );
 		}
 
 		private function showPages( pages : Array ) : void
@@ -213,7 +213,7 @@ package net.vdombox.ide.modules.events.view
 			{
 				_pages[ pages[ i ].id ] = pages[ i ];
 				pagesXMLList +=
-					<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id} visible={visibleElementProxy.getObjectVisible( pages[ i ].id) } />
+					<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id} visible={visibleElementProxy.getObjectEyeOpened( pages[ i ].id) } />
 			}
 
 			objectsTree.dataProvider = pagesXMLList;
@@ -290,11 +290,13 @@ package net.vdombox.ide.modules.events.view
 			}
 		}
 		
-		private function eyesClickHandler( event : PanelsEvent ) : void
+		private function eyeClickHandler( event : PanelsEvent ) : void
 		{
-			var objectID : String = event.target.objectID;
-			var eyeOpened : Boolean = event.target.eyeOpened;
-			visibleElementProxy.setObjectVisible( objectID, eyeOpened);
+			var objectID		: String = event.target.objectID;
+			var eyeOpened		: Boolean = event.target.eyeOpened;
+			
+			visibleElementProxy.setObjectEyeOpened( objectID, eyeOpened);
+			
 			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENTS_FOR_OBJECT, { objectID: objectID, visible: eyeOpened } );
 		}
 	}

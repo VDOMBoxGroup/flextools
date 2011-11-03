@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+<components:BaseItemRenderer xmlns:components="net.vdombox.ide.modules.events.view.components.*"
+				xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				
-				focusEnabled="false">
+				focusEnabled="false" xmlns:view="net.vdombox.view.*">
 
 	<fx:Script>
 		<![CDATA[
@@ -13,146 +14,25 @@
 			import net.vdombox.ide.common.vo.EventVO;
 			import net.vdombox.ide.modules.events.events.PanelsEvent;
 			
-			[Embed( source = "assets/eye_0t.png" )]
-			public var noVisibleEye : Class;
-			
-			[Embed( source = "assets/eye_1t.png" )]
-			public var visibleEye : Class;
-			
-			[Bindable]
-			private var _data : Object;
-			
-			[Bindable]
-			private var _visible : Object;
-			
+			[Embed(source='assets/events.png')]
+			public var EventsIcon:Class;
+						
 			override public function set data( value : Object ) : void
 			{
+				currentIcon = EventsIcon;
+				
 				super.data = value;
-				_data = value;
-				BindingUtils.bindSetter( visibleEventHandler, _data, "visibleEvent", false, false );
-				dispatchEvent( new PanelsEvent ( PanelsEvent.DATE_SETTED ) );
 			}
 			
 			public function get eventName() : String
 			{
 				if ( _data )
 					return _data.name as String;
-				else
-					return "";
-			}
-			
-			public function get eyeOpened() : Boolean
-			{
-				return _data.visibleEvent;
-			}
-			
-			public function visibleEventHandler( value : Object ) : void
-			{
-				if ( _data )
-					setEyeState(!_data.visibleEvent);
-			}
-			
-			protected function eyeClickHandler(event:MouseEvent):void
-			{
-				if ( eyes.source )
-				{
-					setEyeState(!_data.visibleEvent);
 				
-					dispatchEvent(  new PanelsEvent( PanelsEvent.EYES_CLICK ) );
-				}
-			}
-			
-			public function setEyeState( value : Boolean ) : void
-			{
-				_data.visibleEvent = value;
-				
-				eyes.source = eyeOpened ? visibleEye : noVisibleEye;
-			}
-			
-			public function setEyeNull() : void
-			{	
-				eyes.source = null;
+				return "";
 			}
 			
 		]]>
 	</fx:Script>
 
-	<s:states>
-
-		<s:State name="normal" />
-
-		<s:State name="hovered" />
-
-		<s:State name="selected" />
-
-		<s:State name="normalAndShowsCaret" />
-
-		<s:State name="hoveredAndShowsCaret" />
-
-		<s:State name="selectedAndShowsCaret" />
-	</s:states>
-
-	<s:Rect left="-2" width="100%" top="-2" bottom="-2">
-		<s:fill>
-			<s:SolidColor id="rectColor"
-						  color.normal="#3A3A3A"
-						  color.hovered="#00000A"
-						  alpha.hovered="0.8"
-						  color.selected="#00000A" />
-		</s:fill>
-	</s:Rect>
-	
-	<s:Group id="groupContent"
-			 left="20"
-			 width="100%"
-			 top="-2"
-			 bottom="-2">
-		
-		<s:HGroup width="100%" height="100%" verticalAlign="middle">
-			
-			<s:HGroup height="20"
-					  left="0" right="0" verticalAlign="middle">
-				
-				<mx:Image height="16" source="@Embed(source='assets/events.png')" width="16" />
-				
-				<s:Label id="labelDisplay" color="#FFFFFF" />
-			</s:HGroup>
-			
-			<mx:Spacer width="100%" />
-			
-		</s:HGroup>
-		
-	</s:Group>
-	
-	<s:Group id="eyesGroup"
-			 top="-2"
-			 bottom="-2"
-			 left="-2"
-			 width="22"
-			 height="100%"
-			 mouseDown="{ eyeClickHandler(event); event.stopImmediatePropagation() }">
-		
-		<s:Rect width="100%" top="0" bottom="-2">
-			<s:fill>
-				<s:SolidColor color="#585858" />
-			</s:fill>
-		</s:Rect>
-		
-		<s:VGroup width="22" height="100%" verticalAlign="middle" horizontalAlign="center">
-			<mx:Image id="eyes" width="16" height="14" source="@Embed('assets/eye_1.png')" />
-		</s:VGroup>
-		
-	</s:Group>
-	
-	<s:Line top="-2" left="-2" width="100%">
-		<s:stroke>
-			<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1" />
-		</s:stroke>
-	</s:Line>
-	
-	<s:Line bottom="-2" left="-2" width="100%">
-		<s:stroke>
-			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1" />
-		</s:stroke>
-	</s:Line>
-</s:ItemRenderer>
+</components:BaseItemRenderer>

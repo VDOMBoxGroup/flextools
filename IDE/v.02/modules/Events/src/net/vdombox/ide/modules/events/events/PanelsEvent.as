@@ -5,8 +5,7 @@ package net.vdombox.ide.modules.events.events
 	public class PanelsEvent extends Event
 	{
 		
-		public static var EYES_CLICK : String = "eyesClick";
-		public static var DATE_SETTED : String = "dataSetted";
+		public static var EYE_CLICK : String = "eyeClick";
 		
 		public function PanelsEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{

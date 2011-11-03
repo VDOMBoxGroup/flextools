@@ -139,7 +139,7 @@ package net.vdombox.ide.modules.events.view
 		{
 			var i : int;
 			var element : Object = body.element as Object;
-			var visibleElement : Boolean = body.visible as Boolean;
+			var eyeOpened : Boolean = body.eyeOpened as Boolean;
 			var dataProvaider : ArrayList;
 			
 			if ( element is EventElement )
@@ -150,7 +150,7 @@ package net.vdombox.ide.modules.events.view
 				{
 					if ( eventVO.name == elementEvent.data.name )
 					{
-						eventVO.visibleEvent = visibleElement;
+						eventVO.eyeOpened = eyeOpened;
 						break;
 					}
 				}
@@ -165,7 +165,7 @@ package net.vdombox.ide.modules.events.view
 				{
 					if ( object.name == elementAction.actionName )
 					{
-						object.visibleEvent = visibleElement;
+						object.eyeOpened = eyeOpened;
 						break;
 					}
 				}
@@ -216,6 +216,7 @@ package net.vdombox.ide.modules.events.view
 			currentTypeVO = currentTarget.typeVO;
 			
 			eventsPanel.eventsList.dataProvider = new ArrayList( currentTypeVO.events );
+			
 			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_LIST, currentTarget );
 			sendNotification( ApplicationFacade.GET_ELEMENTS_LIST_IN_WORK_AREA );
 		}
@@ -241,10 +242,12 @@ package net.vdombox.ide.modules.events.view
 		{
 			eventsPanel.eventsList.addEventListener( DragEvent.DRAG_START, dragStartHandler );
 			eventsPanel.actionsList.addEventListener( DragEvent.DRAG_START, dragStartHandler );
-			eventsPanel.eventsList.addEventListener( PanelsEvent.DATE_SETTED, createEyeItemRenderer, true );
-			eventsPanel.actionsList.addEventListener( PanelsEvent.DATE_SETTED, createEyeItemRenderer, true );
-			eventsPanel.eventsList.addEventListener( PanelsEvent.EYES_CLICK, eyesClickHandler, true );
-			eventsPanel.actionsList.addEventListener( PanelsEvent.EYES_CLICK, eyesClickHandler, true );
+			
+			eventsPanel.eventsList.addEventListener( FlexEvent.DATA_CHANGE, createEyeInItemRenderer, true );
+			eventsPanel.actionsList.addEventListener( FlexEvent.DATA_CHANGE, createEyeInItemRenderer, true );
+			
+			eventsPanel.eventsList.addEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true );
+			eventsPanel.actionsList.addEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true );
 		}
 		
 		
@@ -253,13 +256,15 @@ package net.vdombox.ide.modules.events.view
 		{
 			eventsPanel.eventsList.removeEventListener( DragEvent.DRAG_START, dragStartHandler );
 			eventsPanel.actionsList.removeEventListener( DragEvent.DRAG_START, dragStartHandler );
-			eventsPanel.eventsList.removeEventListener( PanelsEvent.DATE_SETTED, createEyeItemRenderer, true );
-			eventsPanel.actionsList.removeEventListener( PanelsEvent.DATE_SETTED, createEyeItemRenderer, true );
-			eventsPanel.eventsList.removeEventListener( PanelsEvent.EYES_CLICK, eyesClickHandler, true );
-			eventsPanel.actionsList.removeEventListener( PanelsEvent.EYES_CLICK, eyesClickHandler, true );
+			
+			eventsPanel.eventsList.removeEventListener( FlexEvent.DATA_CHANGE, createEyeInItemRenderer, true );
+			eventsPanel.actionsList.removeEventListener( FlexEvent.DATA_CHANGE, createEyeInItemRenderer, true );
+			
+			eventsPanel.eventsList.removeEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true );
+			eventsPanel.actionsList.removeEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true );
 		}
 		
-		private function eyesClickHandler( event : PanelsEvent ) : void
+		private function eyeClickHandler( event : PanelsEvent ) : void
 		{
 			var newTarget : Object;
 			
@@ -269,14 +274,15 @@ package net.vdombox.ide.modules.events.view
 				newTarget = sessionProxy.selectedPage;
 			
 			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, newTarget.id );
+			
 			if ( event.target is EventItemRenderer )
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.eventName, objectID: newTarget.id , visible: event.target.eyeOpened } );
+				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.eventName, objectID: newTarget.id , eyeOpened: event.target.eyeOpened } );
 			else
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.actionName, objectID: newTarget.id , visible: event.target.eyeOpened } );
+				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.actionName, objectID: newTarget.id , eyeOpened: event.target.eyeOpened } );
 		}
 		
 		
-		private function createEyeItemRenderer( event : PanelsEvent ) : void
+		private function createEyeInItemRenderer( event : FlexEvent ) : void
 		{
 			var newTarget : Object;
 			
@@ -284,6 +290,7 @@ package net.vdombox.ide.modules.events.view
 				newTarget = sessionProxy.selectedObject;
 			else if ( sessionProxy.selectedPage )
 				newTarget = sessionProxy.selectedPage;
+			
 			if ( event.target is EventItemRenderer )
 			{
 				var nameEvent : String = event.target.eventName as String;
@@ -291,23 +298,24 @@ package net.vdombox.ide.modules.events.view
 				nameEvent += ( newTarget.id as String );
 			
 				if ( findInElementsEvent( nameEvent ) )
-					event.target.setEyeState( visibleElementProxy.getVisible( nameEvent ) );
+					event.target.eyeOpened = visibleElementProxy.getElementEyeOpened( nameEvent );
 				else
-					event.target.setEyeNull();
+					event.target.removeEye();
 			}
 			else
 			{
 				var actionName : String = event.target.actionName as String;
 				var actionElement : ActionElement = findInElementsAction( actionName, newTarget.id as String );
+				
 				if ( actionElement )
 				{
-					if ( actionElement.idElement )
-						event.target.setEyeState( visibleElementProxy.getVisible( actionElement.idElement ) );
+					if ( actionElement.uniqueName )
+						event.target.eyeOpened = visibleElementProxy.getElementEyeOpened( actionElement.uniqueName );
 					else
-						event.target.setEyeState( true );
+						event.target.eyeOpened = true;
 				}
 				else
-					event.target.setEyeNull();
+					event.target.removeEye();
 			}
 
 		}
@@ -321,7 +329,7 @@ package net.vdombox.ide.modules.events.view
 			{
 				if ( elements[i] is EventElement )
 				{
-					if ( elements[i].idElement == value )
+					if ( EventElement(elements[i]).uniqueName == value )
 						return true;
 				}
 			}
@@ -348,11 +356,11 @@ package net.vdombox.ide.modules.events.view
 			
 			if ( actionList.length == 0 )
 					return null;
-			var flag : Boolean = (actionList[ 0 ] as ActionElement).visibleElement;
+			var flag : Boolean = (actionList[ 0 ] as ActionElement).eyeOpened;
 			
 			for each ( actionElement in actionList )
 			{
-				if ( flag != actionElement.visibleElement )
+				if ( flag != actionElement.eyeOpened )
 					return new ActionElement();
 			}
 	

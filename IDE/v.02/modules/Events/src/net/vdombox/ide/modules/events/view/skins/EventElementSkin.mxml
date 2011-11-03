@@ -4,7 +4,7 @@
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 minWidth="200"
-			 creationComplete="sparkskin1_creationCompleteHandler(event)" xmlns:mx1="library://ns.adobe.com/flex/mx">
+			 creationComplete="sparkskin1_creationCompleteHandler(event)" xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:view="net.vdombox.view.*">
 
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.events.view.components.EventElement")]
@@ -175,10 +175,10 @@
 						 verticalCenter="0"
 						 maxDisplayedLines="1"/>
 				
-				<mx1:Image id="showElement" 
-						   right="4" top="4"
-						   source="@Embed('assets/eye_1.png')"
-						   click="hostComponent.showHandler()"/>
+				<view:EyeImage id="eye" 
+							   right="4" top="4"
+							   closedEyeType="{EyeImage.TYPE_WHITE}"
+							   click="hostComponent.eyeClickHandler()"/>
 			</s:Group>
 
 			<s:Group id="contentGroup"

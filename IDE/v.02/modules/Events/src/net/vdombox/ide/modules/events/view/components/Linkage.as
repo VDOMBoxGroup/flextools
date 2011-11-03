@@ -6,15 +6,15 @@ package net.vdombox.ide.modules.events.view.components
 	import flash.display.LineScaleMode;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
 	import mx.core.BitmapAsset;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.modules.events.events.ElementEvent;
-
+	
 	import spark.components.Group;
 
 	public class Linkage extends UIComponent
@@ -396,5 +396,15 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			dispatchEvent( new ElementEvent( ElementEvent.DELETE_LINKAGE ) );
 		}
+		
+		public function setVisibleState(showHidden : Boolean):void
+		{
+			visible = showHidden || target.eyeOpened && source.eyeOpened;
+			
+			// для того чтобы линки стали видны необходимо передвинуть компанент. НАдо бы пофмксить
+			source.x += 1;
+			source.x -= 1;
+		}
+		
 	}
 }

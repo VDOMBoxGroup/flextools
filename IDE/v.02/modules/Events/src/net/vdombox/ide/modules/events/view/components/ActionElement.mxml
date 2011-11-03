@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SkinnableContainer xmlns:components="net.vdombox.ide.modules.events.view.components.*"
+<components:BaseElement xmlns:components="net.vdombox.ide.modules.events.view.components.*"
 					  xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
@@ -19,6 +19,7 @@
 			import net.vdombox.ide.common.vo.ServerActionVO;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 			import net.vdombox.ide.modules.events.view.skins.EventElementSkin;
+			import net.vdombox.view.EyeImage;
 			
 			import spark.components.Group;
 			import spark.components.Label;
@@ -29,61 +30,7 @@
 
 			[SkinPart( required="true" )]
 			public var hideButton : ElementButton;
-			
-			[SkinPart( required="true" )]
-			public var showElement : Image;
-
-			[Bindable]
-			public var title : String;
-
-			private var _data : Object;
-
-			private var isNeedUpdateParameters : Boolean;
-
-			private var mouseOffcetX : int;
-			private var mouseOffcetY : int;
-			
-			[Embed( source = "assets/eye_0w.png" )]
-			public var noVisibleEye : Class;
-			
-			[Embed( source = "assets/eye_1.png" )]
-			public var visibleEye : Class;
-
-			public function get visibleElement():Boolean
-			{
-				return _data.visibleEvent;
-			}
-
-			public function set visibleElement(value:Boolean):void
-			{
-				_data.visibleEvent = value ;
-				if ( _data.visibleEvent )
-					showElement.source = visibleEye;
-				else
-					showElement.source = noVisibleEye;
-			}
-			
-			public function set setVisibleElement(value:Boolean):void
-			{
-				visible = value;
-			}
-			
-			public function get idElement() : String
-			{
-				if ( _data )
-					return _data.id;
-				else
-					return "";
-			}
-			
-			public function get objectID() : String
-			{
-				if ( _data )
-					return _data.objectID;
-				else
-					return "";
-			}
-			
+		
 			public function get actionName() : String
 			{
 				return _data.name as String;
@@ -105,6 +52,14 @@
 					title = null;
 
 				isNeedUpdateParameters = true;
+			}
+			
+			public override function get uniqueName() : String
+			{
+				if ( _data )
+					return _data.name + _data.objectID + _data.id;
+				else
+					return "";
 			}
 
 			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
@@ -163,17 +118,7 @@
 				else if ( instance == hideButton )
 					hideButton.removeEventListener( MouseEvent.CLICK, hideButton_clickHandler );
 			}
-
-			private function header_mouseDownHandler( event : MouseEvent ) : void
-			{
-				stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
-				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
-				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
-
-				mouseOffcetX = mouseX;
-				mouseOffcetY = mouseY;
-			}
-
+		
 			private function hideButton_clickHandler( event : MouseEvent ) : void
 			{
 				if ( !_data || !_data.hasOwnProperty( "state" ) )
@@ -185,53 +130,14 @@
 					_data.state = false;
 
 			}
-
-			private function stage_mouseMoveHandler( event : MouseEvent ) : void
-			{
-				var newX : int = parent.mouseX - mouseOffcetX;
-				var newY : int = parent.mouseY - mouseOffcetY;
-
-				if ( newX < 0 )
-					x = 0;
-				else
-					x = newX;
-
-				if ( newY < 0 )
-					y = 0;
-				else
-					y = newY;
-			}
-
-			private function stage_mouseMoveHandlerExt( event : MouseEvent ) : void
-			{
-				dispatchEvent( new ElementEvent( ElementEvent.MOVED ) );
-				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
-			}
-
-			private function stage_mouseUpHandler( event : MouseEvent ) : void
-			{
-				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
-				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
-			}
-			
-			public function showHandler() : void
-			{
-				visibleElement = !visibleElement;
-				dispatchEvent( new ElementEvent ( ElementEvent.SHOW_ELEMENT ) );
-			}
-			
-			protected function skinnablecontainer1_creationCompleteHandler(event:FlexEvent):void
-			{
-				dispatchEvent( new ElementEvent ( ElementEvent.CREATE_ELEMENT ) );
-			}
 			
 		]]>
 	</fx:Script>
 
-	<s:layout>
+	<components:layout>
 
 		<s:VerticalLayout gap="1"/>
-	</s:layout>
+	</components:layout>
 
 	<s:Group height="20" width="100%" id="objectNameGroup">
 
@@ -257,4 +163,4 @@
 	<s:VGroup id="parametersContainer"
 			  width="100%"
 			  gap="1"/>
-</s:SkinnableContainer>
+</components:BaseElement>

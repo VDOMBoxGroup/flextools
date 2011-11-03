@@ -2,7 +2,7 @@
 <s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
-					  width="100%" minWidth="225">
+					  width="100%" minWidth="225" xmlns:view="net.vdombox.view.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
@@ -12,25 +12,28 @@
 			private var _eyeOpened : Boolean  = true;
 			
 			private var dataChanged : Boolean = false;
+			
 			private var _data : XML;
-			
-			[Embed( source = "assets/eye_0t.png" )]
-			public var noVisibleEye : Class;
-			
-			[Embed( source = "assets/eye_1t.png" )]
-			public var visibleEye : Class;
 			
 			override public function set data( value : Object ) : void
 			{
 				super.data = value;
 				
-				dataChanged = true
+				dataChanged = true;
+				
 				_data = value as XML;
 			}
 			
 			public function get eyeOpened() : Boolean
 			{
 				return _eyeOpened;
+			}
+			
+			public function set eyeOpened( opened : Boolean) : void
+			{
+				_eyeOpened = opened;
+				
+				eyes.setOpenState(eyeOpened);
 			}
 			
 			public function get objectID() : String
@@ -40,20 +43,14 @@
 			
 			private function eyeClickHandler( event : Event ) : void
 			{
-				// invert state of eye
-				setEyeState(!_eyeOpened);
+				swapEyeState();
 				
-				dispatchEvent(  new PanelsEvent( PanelsEvent.EYES_CLICK ) );
+				dispatchEvent(  new PanelsEvent( PanelsEvent.EYE_CLICK ) );
 			}
 			
-			private function setEyeState( value : Boolean ) : void
+			private function swapEyeState():void
 			{
-				_eyeOpened = value;
-				
-				eyes.source = _eyeOpened ? visibleEye : noVisibleEye;
-				
-				if ( _data.@visible[ 0 ] )
-					_data.@visible = _eyeOpened
+				eyeOpened = !eyeOpened;
 			}
 			
 			override public function validateProperties() : void
@@ -66,11 +63,13 @@
 				dataChanged = false;
 				
 				if ( !_data )
-					return
+					return;
 				
 				if ( _data.@visible[ 0 ] )
 				{
-					setEyeState( _data.@visible == "true");
+					eyeOpened = (_data.@visible == "true");
+					
+					_data.@visible = eyeOpened;
 				}
 			}
 			
@@ -140,7 +139,7 @@
 		</s:Rect>
 		
 		<s:VGroup width="22" height="100%" verticalAlign="middle" horizontalAlign="center">
-			<mx:Image id="eyes" width="16" height="14" source="@Embed('assets/eye_1t.png')" />
+			<view:EyeImage id="eyes" width="16" height="14" />
 		</s:VGroup>
 		
 	</s:Group>

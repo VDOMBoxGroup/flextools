@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.ActionElement;
+	import net.vdombox.ide.modules.events.view.components.BaseElement;
 	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.WorkArea;
 	
@@ -107,7 +108,7 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.APPLICATION_EVENTS_GETTED:
 				{
 					workArea.dataProvider = body as ApplicationEventsVO;
-					setShow();
+					setElementsVisibleState();
 					break;
 				}
 					
@@ -131,7 +132,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.GET_ELEMENTS_LIST_IN_WORK_AREA:
 				{
-					sentElementsList();
+					sendElementsList();
 					break;
 				}	
 			}
@@ -141,8 +142,8 @@ package net.vdombox.ide.modules.events.view
 		{
 			workArea.addEventListener( WorkAreaEvent.SAVE, saveHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.UNDO, undoHandler, false, 0, true );
-			workArea.addEventListener( WorkAreaEvent.SHOW_ELEMENTS, showHandler, false, 0, true );
-			workArea.addEventListener( ElementEvent.SHOW_ELEMENT, showElementHandler, true );
+			workArea.addEventListener( WorkAreaEvent.SHOW_HIDDEN_ELEMENTS_STATE_CHANGED, showHiddenElementsStateChanged, false, 0, true );
+			workArea.addEventListener( ElementEvent.EYE_CLICKED, elementEyeClicked, true );
 			workArea.addEventListener( ElementEvent.CREATE_ELEMENT, createElementHandler, true );
 			workArea.addEventListener( WorkAreaEvent.DELETE_ELEMENT, element_deleteHandler );
 		}
@@ -152,113 +153,10 @@ package net.vdombox.ide.modules.events.view
 			//  addEventListener || remouve ? 
 			workArea.removeEventListener( WorkAreaEvent.SAVE, saveHandler );
 			workArea.removeEventListener( WorkAreaEvent.UNDO, undoHandler );
-			workArea.removeEventListener( WorkAreaEvent.SHOW_ELEMENTS, showHandler );
-			workArea.removeEventListener( ElementEvent.SHOW_ELEMENT, showElementHandler, true );
+			workArea.removeEventListener( WorkAreaEvent.SHOW_HIDDEN_ELEMENTS_STATE_CHANGED, showHiddenElementsStateChanged );
+			workArea.removeEventListener( ElementEvent.EYE_CLICKED, elementEyeClicked, true );
 			workArea.removeEventListener( ElementEvent.CREATE_ELEMENT, createElementHandler, true );
 			workArea.removeEventListener( WorkAreaEvent.DELETE_ELEMENT, element_deleteHandler );
-		}
-		
-		private function setVisibleElementsForObject( body : Object ) : void
-		{
-			var leng : Number = workArea.contentGroup.numElements;
-			var i : Number;
-			var element : Object;
-			var actionElement : ActionElement;
-			var eventElement : EventElement;
-			var showNotVisible : Boolean = visibleElementProxy.getShowNotVisible();
-			workArea.showElement.selected = showNotVisible;
-			
-			var showElement : Boolean = body.visible as Boolean;
-			var objectID : String = body.objectID as String;
-			
-			var newTarget : Object;
-			
-			if ( sessionProxy.selectedObject )
-				newTarget = sessionProxy.selectedObject;
-			else if ( sessionProxy.selectedPage )
-				newTarget = sessionProxy.selectedPage;
-			
-			for ( i = 0; i < leng; i++ )
-			{
-				element = workArea.contentGroup.getElementAt( i );
-				if ( element is ActionElement )
-				{
-					actionElement = element as ActionElement;
-					if ( actionElement.objectID == objectID )
-					{
-						visibleElementProxy.setVisible( actionElement.idElement, showElement );
-						actionElement.visibleElement = visibleElementProxy.getVisible( actionElement.idElement );
-						if ( !showNotVisible )
-							actionElement.setVisibleElement = visibleElementProxy.getVisible( actionElement.idElement );
-						if ( actionElement.objectID == newTarget.id )
-							sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { element: actionElement, visible: actionElement.visibleElement } );
-						
-					}
-				}
-				else if ( element is EventElement )
-				{
-					eventElement = element as EventElement;
-					if ( eventElement.objectID== objectID )
-					{
-						visibleElementProxy.setVisible( eventElement.idElement, showElement );
-						eventElement.visibleElement = visibleElementProxy.getVisible( eventElement.idElement );
-						if ( !showNotVisible )
-							eventElement.setVisibleElement = visibleElementProxy.getVisible( eventElement.idElement );
-						if ( eventElement.objectID == newTarget.id )
-							sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { element: eventElement, visible: eventElement.visibleElement } );
-					}
-				}
-			}
-			
-			workArea.setVisibleLinkage( showNotVisible );
-			
-			
-			
-			
-		}
-		
-		private function setVisibleElementInObject( body : Object ) : void
-		{
-			var leng : Number = workArea.contentGroup.numElements;
-			var i : Number;
-			var element : Object;
-			var actionElement : ActionElement;
-			var eventElement : EventElement;
-			var showNotVisible : Boolean = visibleElementProxy.getShowNotVisible();
-			workArea.showElement.selected = showNotVisible;
-			
-			var showElement : Boolean = body.visible as Boolean;
-			var nameElement : String = body.name as String;
-			var objectID : String = body.objectID as String;
-				
-			
-			for ( i = 0; i < leng; i++ )
-			{
-				element = workArea.contentGroup.getElementAt( i );
-				if ( element is ActionElement )
-				{
-					actionElement = element as ActionElement;
-					if ( actionElement.objectID == objectID && actionElement.actionName == nameElement )
-					{
-						visibleElementProxy.setVisible( actionElement.idElement, showElement );
-						actionElement.visibleElement = visibleElementProxy.getVisible( actionElement.idElement );
-						if ( !showNotVisible )
-							actionElement.setVisibleElement = visibleElementProxy.getVisible( actionElement.idElement );
-					}
-				}
-				else if ( element is EventElement )
-				{
-					eventElement = element as EventElement;
-					if ( eventElement.objectID== objectID && eventElement.data.name == nameElement )
-					{
-						visibleElementProxy.setVisible( eventElement.idElement, showElement );
-						eventElement.visibleElement = visibleElementProxy.getVisible( eventElement.idElement );
-						if ( !showNotVisible )
-							eventElement.setVisibleElement = visibleElementProxy.getVisible( eventElement.idElement );
-					}
-				}
-			}
-			workArea.setVisibleLinkage( showNotVisible );
 		}
 		
 		private function saveHandler( event : WorkAreaEvent ) : void
@@ -279,22 +177,20 @@ package net.vdombox.ide.modules.events.view
 		{
 			var newTarget : Object;
 			
-			if ( sessionProxy.selectedObject )
-				newTarget = sessionProxy.selectedObject;
-			else if ( sessionProxy.selectedPage )
-				newTarget = sessionProxy.selectedPage;
+			newTarget = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;  
+			
 			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, newTarget.id as String );
-			sentElementsList();
+			
+			sendElementsList();
 			
 		}
 		
-		
 		private function element_deleteHandler( event : WorkAreaEvent ) : void
 		{
-			sentElementsList();
+			sendElementsList();
 		}
 		
-		private function sentElementsList() : void
+		private function sendElementsList() : void
 		{
 			var listElements : Array = new Array();
 			var leng : Number = workArea.contentGroup.numElements;
@@ -306,47 +202,73 @@ package net.vdombox.ide.modules.events.view
 			sendNotification( ApplicationFacade.ELEMENTS_LIST_IN_WORK_AREA_GETTED, listElements);
 		}
 		
-		private function showHandler( event : WorkAreaEvent ) : void
+		private function showHiddenElementsStateChanged( event : WorkAreaEvent ) : void
 		{
-			setShow();
+			setElementsVisibleState();
 		}
 		
-		private function setShow() : void
+		private function setElementsVisibleState() : void
+		{
+			var numElements : Number = workArea.contentGroup.numElements;
+			
+			var element		: Object;
+			var baseElement	: BaseElement;
+			var eyeOpened	: Boolean;
+			
+			visibleElementProxy.showHidden = workArea.showHidden ;
+			
+			for ( var i:uint = 0; i < numElements; i++ )
+			{
+				element = workArea.contentGroup.getElementAt( i );
+				
+				if (element is BaseElement)
+				{
+					baseElement = element as BaseElement;
+					
+					eyeOpened = visibleElementProxy.getElementEyeOpened( baseElement.uniqueName );
+					
+					baseElement.eyeOpened = eyeOpened;
+					baseElement.visibleState = visibleElementProxy.showHidden;
+				}
+			}
+			
+			workArea.setVisibleStateForAllLinkages();
+		}
+		
+		private function elementEyeClicked( event : ElementEvent ) : void
+		{
+			var element		: Object = event.target;
+			var newTarget : Object = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;
+			
+			if ( element is BaseElement )
+			{
+				var baseElement : BaseElement = element as BaseElement;
+				
+				visibleElementProxy.setElementEyeOpened( baseElement.uniqueName, baseElement.eyeOpened );
+				
+				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, baseElement.objectID );
+				
+				if ( baseElement.objectID == newTarget.id )
+					sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { element: baseElement, eyeOpened: baseElement.eyeOpened } );
+			}
+			
+			setElementsVisibleState();
+			
+		}
+		
+		private function setVisibleElementsForObject( body : Object ) : void
 		{
 			var leng : Number = workArea.contentGroup.numElements;
 			var i : Number;
 			var element : Object;
 			var actionElement : ActionElement;
 			var eventElement : EventElement;
-			var showNotVisible : Boolean = workArea.showElement.selected;
-			visibleElementProxy.setShowNotVisible( showNotVisible );
-			for ( i = 0; i < leng; i++ )
-			{
-				element = workArea.contentGroup.getElementAt( i );
-				if ( element is ActionElement )
-				{
-					actionElement = element as ActionElement;
-					actionElement.visibleElement = visibleElementProxy.getVisible( actionElement.idElement );
-					if ( !showNotVisible )
-						actionElement.setVisibleElement = visibleElementProxy.getVisible( actionElement.idElement );
-					else
-						actionElement.setVisibleElement = true;
-				}
-				else if ( element is EventElement )
-				{
-					eventElement = element as EventElement;
-					eventElement.visibleElement = visibleElementProxy.getVisible( eventElement.idElement );
-					if ( !showNotVisible )
-						eventElement.setVisibleElement = visibleElementProxy.getVisible( eventElement.idElement );
-					else
-						eventElement.setVisibleElement = true;
-				}
-			}
-			workArea.setVisibleLinkage( showNotVisible );
-		}
-
-		private function showElementHandler( event : ElementEvent ) : void
-		{
+			var showNotVisible : Boolean = visibleElementProxy.showHidden;
+			workArea.showHiddenElements.selected = showNotVisible;
+			
+			var showElement : Boolean = body.visible as Boolean;
+			var objectID : String = body.objectID as String;
+			
 			var newTarget : Object;
 			
 			if ( sessionProxy.selectedObject )
@@ -354,27 +276,85 @@ package net.vdombox.ide.modules.events.view
 			else if ( sessionProxy.selectedPage )
 				newTarget = sessionProxy.selectedPage;
 			
-			var element : Object = event.target;
-			if ( element is ActionElement )
+			for ( i = 0; i < leng; i++ )
 			{
-				var actionElement : ActionElement = element as ActionElement;
-				visibleElementProxy.setVisible( actionElement.idElement, actionElement.visibleElement );
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, actionElement.objectID );
-				if ( actionElement.objectID == newTarget.id )
-					sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { element: actionElement, visible: actionElement.visibleElement } );
+				element = workArea.contentGroup.getElementAt( i );
+				if ( element is ActionElement )
+				{
+					actionElement = element as ActionElement;
+					if ( actionElement.objectID == objectID )
+					{
+						visibleElementProxy.setElementEyeOpened( actionElement.uniqueName, showElement );
+						actionElement.eyeOpened = visibleElementProxy.getElementEyeOpened( actionElement.uniqueName );
+						if ( !showNotVisible )
+							actionElement.visibleState = visibleElementProxy.getElementEyeOpened( actionElement.uniqueName );
+						
+						if ( actionElement.objectID == newTarget.id )
+							sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { element: actionElement, visible: actionElement.eyeOpened } );
+						
+					}
+				}
+				else if ( element is EventElement )
+				{
+					eventElement = element as EventElement;
+					if ( eventElement.objectID== objectID )
+					{
+						visibleElementProxy.setElementEyeOpened( eventElement.uniqueName, showElement );
+						eventElement.eyeOpened = visibleElementProxy.getElementEyeOpened( eventElement.uniqueName );
+						if ( !showNotVisible )
+							eventElement.visibleState = visibleElementProxy.getElementEyeOpened( eventElement.uniqueName );
+						if ( eventElement.objectID == newTarget.id )
+							sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { element: eventElement, visible: eventElement.eyeOpened } );
+					}
+				}
 			}
-			else if ( element is EventElement )
+			
+			workArea.setVisibleStateForAllLinkages();
+			
+		}
+		
+		private function setVisibleElementInObject( body : Object ) : void
+		{
+			var leng : Number = workArea.contentGroup.numElements;
+			var i : Number;
+			var element : Object;
+			var actionElement : ActionElement;
+			var eventElement : EventElement;
+			var showNotVisible : Boolean = visibleElementProxy.showHidden;
+			workArea.showHiddenElements.selected = showNotVisible;
+			
+			var showElement : Boolean = body.eyeOpened as Boolean;
+			var nameElement : String = body.name as String;
+			var objectID : String = body.objectID as String;
+			
+			
+			for ( i = 0; i < leng; i++ )
 			{
-				var eventElement : EventElement = element as EventElement;
-				visibleElementProxy.setVisible( eventElement.idElement, eventElement.visibleElement );
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, eventElement.objectID );
-				if ( eventElement.objectID == newTarget.id )
-					sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL, { element: eventElement, visible: eventElement.visibleElement } );
+				element = workArea.contentGroup.getElementAt( i );
+				if ( element is ActionElement )
+				{
+					actionElement = element as ActionElement;
+					if ( actionElement.objectID == objectID && actionElement.actionName == nameElement )
+					{
+						visibleElementProxy.setElementEyeOpened( actionElement.uniqueName, showElement );
+						actionElement.eyeOpened = visibleElementProxy.getElementEyeOpened( actionElement.uniqueName );
+						if ( !showNotVisible )
+							actionElement.visibleState = visibleElementProxy.getElementEyeOpened( actionElement.uniqueName );
+					}
+				}
+				else if ( element is EventElement )
+				{
+					eventElement = element as EventElement;
+					if ( eventElement.objectID== objectID && eventElement.data.name == nameElement )
+					{
+						visibleElementProxy.setElementEyeOpened( eventElement.uniqueName, showElement );
+						eventElement.eyeOpened = visibleElementProxy.getElementEyeOpened( eventElement.uniqueName );
+						if ( !showNotVisible )
+							eventElement.visibleState = visibleElementProxy.getElementEyeOpened( eventElement.uniqueName );
+					}
+				}
 			}
-			setShow();
-			
-			
-			
+			workArea.setVisibleStateForAllLinkages();
 		}
 	}
 }

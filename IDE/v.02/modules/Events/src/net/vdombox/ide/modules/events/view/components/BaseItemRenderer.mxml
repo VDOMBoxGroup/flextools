@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				
+				focusEnabled="false" xmlns:view="net.vdombox.view.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.common.vo.EventVO;
+			import net.vdombox.ide.modules.events.events.PanelsEvent;
+			
+			[Bindable]
+			protected var currentIcon : Class;
+			
+			[Bindable]
+			protected var _data : Object;
+			
+			override public function set data( value : Object ) : void
+			{
+				_data = value;
+				
+				BindingUtils.bindSetter( onVisibilityChanged, _data, "eyeOpened", false, false );
+				
+				super.data = value;
+			}
+			
+			public function get eyeOpened() : Boolean
+			{
+				return _data.eyeOpened;
+			}
+			
+			public function set eyeOpened( opened : Boolean) : void
+			{
+				_data.eyeOpened = opened;
+				
+				eye.setOpenState(eyeOpened);
+			}
+			
+			public function onVisibilityChanged( value : Object ) : void
+			{
+				if ( _data ) 
+				{ 
+					trace ('onVisibilityChanged : ' + _data.name);
+					eye.setOpenState(eyeOpened);
+				}
+			}
+			
+			protected function eyeClickHandler(event:MouseEvent):void
+			{
+				if ( eye.exists )
+				{
+					swapEyeState();
+					
+					dispatchEvent(  new PanelsEvent( PanelsEvent.EYE_CLICK ) );
+				}
+			}
+			
+			private function swapEyeState():void
+			{
+				eyeOpened = !eyeOpened;
+			}
+			
+			public function removeEye() : void
+			{	
+				eye.remove();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		
+		<s:State name="normal" />
+		
+		<s:State name="hovered" />
+		
+		<s:State name="selected" />
+		
+		<s:State name="normalAndShowsCaret" />
+		
+		<s:State name="hoveredAndShowsCaret" />
+		
+		<s:State name="selectedAndShowsCaret" />
+	</s:states>
+	
+	<s:Rect left="-2" width="100%" top="-2" bottom="-2">
+		<s:fill>
+			<s:SolidColor id="rectColor"
+						  color.normal="#3A3A3A"
+						  color.hovered="#00000A"
+						  alpha.hovered="0.8"
+						  color.selected="#00000A" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:Group id="groupContent"
+			 left="20"
+			 width="100%"
+			 top="-2"
+			 bottom="-2">
+		
+		<s:HGroup width="100%" height="100%" verticalAlign="middle">
+			
+			<s:HGroup height="20"
+					  left="0" right="0" verticalAlign="middle">
+				
+				<mx:Image height="16" source="{currentIcon}" width="16" />
+				
+				<s:Label id="labelDisplay" color="#FFFFFF" />
+			</s:HGroup>
+			
+			<mx:Spacer width="100%" />
+			
+		</s:HGroup>
+		
+	</s:Group>
+	
+	<s:Group id="eyesGroup"
+			 top="-2"
+			 bottom="-2"
+			 left="-2"
+			 width="22"
+			 height="100%"
+			 mouseDown="{ eyeClickHandler(event); event.stopImmediatePropagation() }">
+		
+		<s:Rect width="100%" top="0" bottom="-2">
+			<s:fill>
+				<s:SolidColor color="#585858" />
+			</s:fill>
+		</s:Rect>
+		
+		<s:VGroup width="22" height="100%" verticalAlign="middle" horizontalAlign="center">
+			<view:EyeImage id="eye" width="16" height="14"/>
+		</s:VGroup>
+		
+	</s:Group>
+	
+	<s:Line top="-2" left="-2" width="100%">
+		<s:stroke>
+			<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1" />
+		</s:stroke>
+	</s:Line>
+	
+	<s:Line bottom="-2" left="-2" width="100%">
+		<s:stroke>
+			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1" />
+		</s:stroke>
+	</s:Line>
+</s:ItemRenderer>

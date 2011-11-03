@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.events.model
 		public static const NAME : String = "VisibleElementProxy";
 		
 		private var sessionProxy : SessionProxy;
+		
 		private var sharedObjects : Object = {};
 		
 		public function VisibleElementProxy()
@@ -25,48 +26,48 @@ package net.vdombox.ide.modules.events.model
 			return sharedObject.data.hasOwnProperty( rendererID );
 		}
 		
-		public function getVisible( rendererID : String ) : Boolean
+		public function getElementEyeOpened( rendererID : String ) : Boolean
 		{	
-			return sharedObject.data.hasOwnProperty(rendererID) ? sharedObject.data[rendererID] : true
+			return sharedObject.data.hasOwnProperty(rendererID) ? sharedObject.data[rendererID] : true;
 		}
 		
-		public function setVisible( rendererID : String, value : Boolean ) : void
+		public function setElementEyeOpened( rendererID : String, opened : Boolean ) : void
 		{
-			sharedObject.data[rendererID] = value;
+			sharedObject.data[rendererID] = opened;
 		}
 		
-		public function getObjectVisible( objectID : String ) : Boolean
+		public function getObjectEyeOpened( objectID : String ) : Boolean
 		{	
-			return sharedObject.data.hasOwnProperty(objectID) ? sharedObject.data[objectID] : true
+			return sharedObject.data.hasOwnProperty(objectID) ? sharedObject.data[objectID] : true;
 		}
 		
-		public function setObjectVisible( objectID : String, value : Boolean ) : void
+		public function setObjectEyeOpened( objectID : String, _visible : Boolean ) : void
 		{
-			sharedObject.data[objectID] = value;
+			sharedObject.data[objectID] = _visible;
 		}
 		
-		public function getShowNotVisible() : Boolean
+		public function get showHidden() : Boolean
 		{	
-			return sharedObject.data.showNotVisible ? sharedObject.data.showNotVisible : false;
+			return sharedObject.data.showHidden ? sharedObject.data.showHidden : false;
 		}
 		
-		public function setShowNotVisible( value : Boolean ) : void
+		public function set showHidden( value : Boolean ) : void
 		{
-			sharedObject.data.showNotVisible = value;
+			sharedObject.data.showHidden = value;
 		}
 		
 		private function get sharedObject():SharedObject
 		{
-			var id : String; 
+			var selectedApplicationId : String; 
 			
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
-			id = sessionProxy.selectedApplication.id;
+			selectedApplicationId = sessionProxy.selectedApplication.id;
 			
-			if (!sharedObjects[ id ])
-				sharedObjects[ id ] =  SharedObject.getLocal( id )
+			if (!sharedObjects[ selectedApplicationId ])
+				sharedObjects[ selectedApplicationId ] =  SharedObject.getLocal( selectedApplicationId );
 			
-			return sharedObjects[ id ]
+			return sharedObjects[ selectedApplicationId ]
 		}
 	}
 }

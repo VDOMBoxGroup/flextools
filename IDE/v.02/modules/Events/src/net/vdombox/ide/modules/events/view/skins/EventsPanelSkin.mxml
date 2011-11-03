@@ -22,10 +22,6 @@
 
 			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 			{
-				//			var cr : Number = getStyle( "cornerRadius" );
-				//
-				//			if ( cornerRadius != cr )
-				//				cornerRadius = cr;
 				super.updateDisplayList( unscaledWidth, unscaledHeight );
 			}
 

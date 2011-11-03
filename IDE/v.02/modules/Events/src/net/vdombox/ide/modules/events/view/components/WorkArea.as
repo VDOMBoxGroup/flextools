@@ -58,7 +58,7 @@ package net.vdombox.ide.modules.events.view.components
 		public var undoButton : WorkAreaButton;
 		
 		[SkinPart]
-		public var showElement : CheckBox;
+		public var showHiddenElements : CheckBox;
 		
 		private var applicationEventsVO : ApplicationEventsVO;
 
@@ -68,7 +68,7 @@ package net.vdombox.ide.modules.events.view.components
 
 		private var clientActionElements : Object;
 		private var serverActionElements : Object;
-		
+			
 		public function get dataProvider() : ApplicationEventsVO
 		{
 			return applicationEventsVO;
@@ -713,29 +713,31 @@ package net.vdombox.ide.modules.events.view.components
 				linkagesLayer.removeElement( linkage );
 		}
 		
-		public function showHandler() : void
+		public function showHiddenElementsStateChanged() : void
 		{
-			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.SHOW_ELEMENTS ) );
+			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.SHOW_HIDDEN_ELEMENTS_STATE_CHANGED ) );
 		}
 		
-		public function setVisibleLinkage( showNotVisible : Boolean ) : void
+		public function get showHidden():Boolean
+		{
+			return showHiddenElements.selected;
+		}
+		
+		public function setVisibleStateForAllLinkages() : void
 		{
 			var i : Number;
 			var linkage : Linkage;
+			
 			for ( i = 0; i < linkagesLayer.numElements; i++ )
 			{
 				linkage = linkagesLayer.getElementAt( i ) as Linkage;
 				
-				if ( linkage )
+				if ( !linkage )
 				{
-					if ( !showNotVisible && ( !linkage.target.visibleElement || !linkage.source.visibleElement ) )
-						linkage.visible = false;
-					else
-						linkage.visible = true;
+					return;
 				}
-				// для того чтобы линки стали видны необходимо передвинуть компанент. НАдо бы пофмксить
-				linkage.source.x += 1;
-				linkage.source.x -= 1;
+				
+				linkage.setVisibleState( showHidden );
 			}
 
 
