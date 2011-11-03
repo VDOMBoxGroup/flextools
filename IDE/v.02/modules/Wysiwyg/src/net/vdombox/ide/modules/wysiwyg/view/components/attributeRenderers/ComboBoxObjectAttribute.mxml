@@ -46,12 +46,12 @@
 					if ( element == objectListVO.id )
 						selectedItem = objectListVO;
 				}
-				if ( comboBoxData )
+				/*if ( comboBoxData )
 				{
 					comboBoxData.sort = new Sort();
 					comboBoxData.sort.fields = [ new SortField( "name", true ) ];
 					comboBoxData.refresh();
-				}
+				}*/
 				
 				valueField.dataProvider = comboBoxData;
 				valueField.selectedItem = selectedItem;
