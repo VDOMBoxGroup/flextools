@@ -51,11 +51,34 @@
     </s:states>
 
     <!-- background -->
-    <s:Rect left="0" top="1" right="0" bottom="2" minWidth="7" maxHeight="58" minHeight="58">
-		<s:fill>
-			<s:BitmapFill source = "@Embed('net/vdombox/icons/scroll_self.png')" smooth="true" fillMode="repeat"/>
-		</s:fill>
-    </s:Rect>
+	<s:VGroup height="100%" gap="0" verticalAlign="middle">
+		<s:Rect left="0" top="1" right="0" minWidth="7" minHeight="8" maxHeight="8">
+			<s:fill>
+				<s:BitmapFill source = "@Embed('net/vdombox/icons/scroll_top.png')" smooth="true"/>
+			</s:fill>
+		</s:Rect>
+		<s:Rect left="0" right="0" minWidth="7" height="100%">
+			<s:fill>
+				<s:BitmapFill source = "@Embed('net/vdombox/icons/scroll_rezinka.png')" smooth="true" fillMode="scale"/>
+			</s:fill>
+		</s:Rect>
+		<s:Rect left="0" right="0" minWidth="7" minHeight="26" maxHeight="26">
+			<s:fill>
+				<s:BitmapFill source = "@Embed('net/vdombox/icons/scroll_center.png')" smooth="true"/>
+			</s:fill>
+		</s:Rect>
+		<s:Rect left="0" right="0" minWidth="7" height="100%">
+			<s:fill>
+				<s:BitmapFill source = "@Embed('net/vdombox/icons/scroll_rezinka.png')" smooth="true" fillMode="scale"/>
+			</s:fill>
+		</s:Rect>
+		<s:Rect left="0" right="0" bottom="2" minWidth="7" minHeight="8" maxHeight="8">
+			<s:fill>
+				<s:BitmapFill source = "@Embed('net/vdombox/icons/scroll_bottom.png')" smooth="true"/>
+			</s:fill>
+		</s:Rect>
+	</s:VGroup>
+	
 
     <!-- drop shadow -->
     <s:Rect left="1" top="0" right="1" height="1">
