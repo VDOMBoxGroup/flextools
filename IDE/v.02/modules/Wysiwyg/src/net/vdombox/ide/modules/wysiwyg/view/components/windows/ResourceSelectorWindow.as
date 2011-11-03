@@ -1,3 +1,11 @@
+//------------------------------------------------------------------------------
+//
+//   Copyright 2011 
+//   VDOMBOX Resaerch  
+//   All rights reserved. 
+//
+//------------------------------------------------------------------------------
+
 package net.vdombox.ide.modules.wysiwyg.view.components.windows
 {
 	import flash.display.NativeWindowSystemChrome;
@@ -5,19 +13,18 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
-	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.controls.TileList;
 	import mx.events.FlexEvent;
-	
+	import mx.managers.PopUpManager;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemNotEmptyContent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.SmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
-	
+	import net.vdombox.utils.WindowManager;
 	import spark.components.ComboBox;
 	import spark.components.Label;
 	import spark.components.List;
@@ -28,238 +35,235 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 	public class ResourceSelectorWindow extends Window
 	{
-		[Bindable]
-		public var multilineSelected    : Boolean = false;
-		
-		[ Bindable ]
-		public var totalResources		: int	= 0;
-		
-		[Bindable]
-		public var filteredResources	: int   = 0;
-		
-		public var deleteResourceID		: String = null;
-		
-		public var scrollToIndex		: int 	=  -1;
-		
-		public var selectedResourceIndex : int  = -1;
-		
-		[Bindable]
-		public var _resources : ArrayList;
-		
-		private var _value : String;	
-		
-		[SkinPart( required="true" )]
-		public var resourcesList : List;
-		
-		[SkinPart( required="true" )]
-		public var nameFilter: TextInput;
-		
+
 		public function ResourceSelectorWindow()
 		{
 			super();
-			
-			systemChrome	= NativeWindowSystemChrome.NONE;
-			transparent 	= true;
-			
+
+			systemChrome = NativeWindowSystemChrome.NONE;
+			transparent = true;
+
 			width = 790;
 			height = 550;
-			
+
 			minWidth = 600;
 			minHeight = 330;
-			
+
 			addHandlers();
-		
+
 		}
-		
-		override public function validateDisplayList():void
+
+		[Bindable]
+		public var _resources : ArrayList;
+
+		public var deleteResourceID : String   = null;
+
+		[Bindable]
+		public var filteredResources : int     = 0;
+
+		[Bindable]
+		public var multilineSelected : Boolean = false;
+
+		[SkinPart( required = "true" )]
+		public var nameFilter : TextInput;
+
+		[SkinPart( required = "true" )]
+		public var resourcesList : List;
+
+		public var scrollToIndex : int         = -1;
+
+		public var selectedResourceIndex : int = -1;
+
+		[Bindable]
+		public var totalResources : int        = 0;
+
+		private var _value : String;
+
+		public function addHandlers() : void
 		{
-			super.validateDisplayList();
-			setFocus();
+			addEventListener( KeyboardEvent.KEY_DOWN, keyDownWindowHendler );
 		}
-		
-		override public function stylesInitialized():void {
-			super.stylesInitialized();
-			this.setStyle( "skinClass", ResourceSelectorWindowSkin );
-		}
-		
-		public function get value() : String
+
+		public function onApplyClick(event:Event = null) : void
 		{
-			var str:String = "";
-			if (!multilineSelected)
-			{
-				str = resourcesList.selectedItem ? resourcesList.selectedItem.id : "";
-				if ( str )
-					str = "#Res(" + str + ")";
-				else
-					str = "";	
-			}
-			else
-			{
-				if (resourcesList.selectedItems.length > 0)
-				{
-					for each(var item:ResourceVO in resourcesList.selectedItems)
-					{
-						if (item != null)
-							str += "#Res(" + item.id + "), ";
-					}
-					if (str.length >= 2)
-						str = str.substr(0, str.length - 2);
-				}
-				else
-					str = "";	
-			}
-			return str;
+			dispatchEvent( new Event( Event.CHANGE ) );
+			close();
 		}
-		
-		public function set value( value : String ) : void
+
+		public function onCancelClick() : void
 		{
-			_value = value;
-			setSelectedItem();
-			
+			close();
 		}
-		
-		public function set resources( value : ArrayList ) : void
-		{				
-			_resources = value;
-			setSelectedItem();
+
+		public function previewResource(event:Event) : void
+		{
+			dispatchEvent(new Event(ResourceVOEvent.PREVIEW_RESOURCE));
 		}
-		
+
+		public function refreshFile(event:MouseEvent) : void
+		{
+			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCES ) );
+		}
+
+		public function removeKeyEvents() : void
+		{
+			removeEventListener( KeyboardEvent.KEY_DOWN, keyDownWindowHendler );
+		}
+
 		public function get resources() : ArrayList
 		{
 			return _resources;
 		}
-		
-		private function setSelectedItem() : void
+
+		public function set resources( value : ArrayList ) : void
 		{
-			if ( !_resources || _resources.length == 0 || _value == null)
-				return;
-			
-			var resourceVO : ResourceVO;
-			var requiredID : String;
-			
-			requiredID = _value.substring( 5, _value.length - 1 );
-			
-			for each ( resourceVO in _resources.source )
-			{
-				if (!resourceVO) {
-					continue;
-				}
-				if ( resourceVO.id == requiredID )
-				{
-					resourcesList.selectedItem = resourceVO;						
-					//dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) )
-					
-					break;
-				}
-			}
+			_resources = value;
+			setSelectedItem();
 		}
-		
-		override protected function commitProperties():void
+
+		override public function stylesInitialized() : void
+		{
+			super.stylesInitialized();
+			this.setStyle( "skinClass", ResourceSelectorWindowSkin );
+		}
+
+
+
+
+		public function uploadFile(event:MouseEvent) : void
+		{
+			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.LOAD_RESOURCE ) );
+		}
+
+		override public function validateDisplayList() : void
+		{
+			super.validateDisplayList();
+			setFocus();
+		}
+
+		public function get value() : String
+		{
+			var str : String = "";
+
+			if ( !multilineSelected )
+			{
+				str = resourcesList.selectedItem ? resourcesList.selectedItem.id : "";
+
+				if ( str )
+					str = "#Res(" + str + ")";
+				else
+					str = "";
+			}
+			else
+			{
+				if ( resourcesList.selectedItems.length > 0 )
+				{
+					for each ( var item : ResourceVO in resourcesList.selectedItems )
+					{
+						if ( item != null )
+							str += "#Res(" + item.id + "), ";
+					}
+
+					if ( str.length >= 2 )
+						str = str.substr(0, str.length - 2);
+				}
+				else
+					str = "";
+			}
+			return str;
+		}
+
+		public function set value( value : String ) : void
+		{
+			_value = value;
+			setSelectedItem();
+
+		}
+
+		override protected function commitProperties() : void
 		{
 			super.commitProperties();
-			
+
 			if ( deleteResourceID )
-			{					
+			{
 				var selInd : uint = resourcesList.selectedIndex;
-				
+
 				resources.source = arrayWithoutResource( deleteResourceID );
-				
+
 				//totalResources = resources.length-1;					
-				
-				if ( resources.length > 1 && selInd > 1)
+
+				if ( resources.length > 1 && selInd > 1 )
 				{
-					selInd = ( selInd > 0 ) ? selInd -1 : 0;
-					
-					selectedResourceIndex	= selInd;
-					scrollToIndex			= selInd;						
+					selInd = ( selInd > 0 ) ? selInd - 1 : 0;
+
+					selectedResourceIndex = selInd;
+					scrollToIndex = selInd;
 				}
-				
+
 				deleteResourceID = null;
 			}
-			
+
 			if ( selectedResourceIndex >= 0 )
 			{
-				if ( selectedResourceIndex != 0)
-				{
-					resourcesList.selectedIndex = selectedResourceIndex;				
-				}
-				
+				if ( selectedResourceIndex != 0 )
+					resourcesList.selectedIndex = selectedResourceIndex;
+
 				selectedResourceIndex = -1;
 			}
 		}
-		
+
 		private function arrayWithoutResource( idRes : String ) : Array
 		{
 			var newArray : Array = new Array();
+
 			for each ( var resVO : ResourceVO in resources.source )
 			{
 				if ( !resVO || resVO.id != idRes )
 					newArray.push( resVO );
 			}
-			
+
 			return newArray;
 		}
-		
+
 		/**
 		 * @private
 		 * close ResourceSelectorWindow if down ESCAPE or if down button "Apply"
 		 * and dispatchEvent Apply
-		 */ 
-		private function ok_close_window( event: KeyboardEvent = null ) : void
+		 */
+		private function keyDownWindowHendler( event: KeyboardEvent = null ) : void
 		{
 			if ( event != null )
+			{
 				if ( event.charCode != Keyboard.ESCAPE )
 					return;
-					
-			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.CLOSE ) )
-				
-		}		
-		
-		public function addHandlers():void
-		{
-			addEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );
-		}
-		
-		public function removeKeyEvents():void
-		{
-			removeEventListener( KeyboardEvent.KEY_DOWN, ok_close_window );
-		}
-		
-		public function uploadFile(event:MouseEvent):void
-		{
-			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.LOAD_RESOURCE ) );			
-		}
-		
-		public function refreshFile(event:MouseEvent):void
-		{
-			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCES ) );			
-		}
-		
-		public function onApplyClick(event:Event = null):void
-		{
-			dispatchEvent( new Event( Event.CHANGE ) );
-		}
-		
-		public function onCancelClick():void
-		{
-			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.CLOSE ))
-		}
-		
-		/*public function selectResource( event:Event = null ):void
-		{				
-			if ( event == null )
-			{
-				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) );
-				return;
 			}
-			
-			if ( event.target.selectedIndex != 0 )
-				dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) );
-		}*/	
-		
-		public function previewResource(event:Event) : void 
+
+			close();
+		}
+
+		private function setSelectedItem() : void
 		{
-			dispatchEvent(new Event(ResourceVOEvent.PREVIEW_RESOURCE));
+			if ( !_resources || _resources.length == 0 || _value == null )
+				return;
+
+			var resourceVO : ResourceVO;
+			var requiredID : String;
+
+			requiredID = _value.substring( 5, _value.length - 1 );
+
+			for each ( resourceVO in _resources.source )
+			{
+				if ( !resourceVO )
+					continue;
+
+				if ( resourceVO.id == requiredID )
+				{
+					resourcesList.selectedItem = resourceVO;
+					//dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) )
+
+					break;
+				}
+			}
 		}
 	}
 }

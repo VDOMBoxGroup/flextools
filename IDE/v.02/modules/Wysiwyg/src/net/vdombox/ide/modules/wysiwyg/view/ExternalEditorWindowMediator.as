@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.events.Event;
+	
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.interfaces.IExternalManager;
@@ -95,29 +97,29 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function addHandlers() : void
 		{
-			externalEditorWindow.addEventListener( ResourceVOEvent.CLOSE, closeHandler );
+			externalEditorWindow.addEventListener( Event.CLOSE, closeHandler );
 			externalEditorWindow.addEventListener( ResourceVOEvent.APPLY, applyHandler );
 		}
 		
 		private function removeHandlers() : void
 		{
-			externalEditorWindow.removeEventListener( ResourceVOEvent.CLOSE, closeHandler );
+			externalEditorWindow.removeEventListener( Event.CLOSE, closeHandler );
 			externalEditorWindow.removeEventListener( ResourceVOEvent.APPLY, applyHandler );
 		}
 		
 		private function applyHandler( event : ExternalEditorWindowEvent ) : void
 		{
-			PopUpManager.removePopUp( externalEditorWindow );
+//			PopUpManager.removePopUp( externalEditorWindow );
 			
 			facade.removeMediator( mediatorName );
 			_externalEditor.value = externalEditorWindow.value;
 		}
 		
-		private function closeHandler( event : ExternalEditorWindowEvent ) : void
+		private function closeHandler( event : Event ) : void
 		{
 			_externalEditor.value = externalEditorWindow.value;
 			
-			PopUpManager.removePopUp( externalEditorWindow );
+			
 			facade.removeMediator( mediatorName );
 		}
 	}

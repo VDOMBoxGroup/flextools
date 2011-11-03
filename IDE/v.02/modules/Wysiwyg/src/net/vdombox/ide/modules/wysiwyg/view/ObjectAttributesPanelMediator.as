@@ -283,7 +283,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			function applyHandler (event: Event):void
 			{
 				resourceSelector.value = (event.target as ResourceSelectorWindow).value;
-				resourceSelectorWindow.dispatchEvent( new ResourceVOEvent( ResourceVOEvent.CLOSE ) );
+//				resourceSelectorWindow.dispatchEvent( new ResourceVOEvent( ResourceVOEvent.CLOSE ) );
 			}		
 		}
 		

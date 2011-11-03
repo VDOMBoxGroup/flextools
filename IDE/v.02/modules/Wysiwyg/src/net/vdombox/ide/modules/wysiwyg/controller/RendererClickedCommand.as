@@ -24,8 +24,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				return;
 
 			vdomObjectVO  = renderVO.vdomObjectVO;
-
-			
 			
 			if ( alreadySelected )
 				return;
@@ -33,8 +31,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			if ( vdomObjectVO is ObjectVO )
 			{
 				//sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, vdomObjectVO );
-				
-				
 				
 				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: ObjectVO(vdomObjectVO).pageVO, objectID: vdomObjectVO.id } );
 			}

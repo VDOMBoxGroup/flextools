@@ -235,7 +235,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function addHandlers() : void
 		{
 			resourceSelectorWindow.addEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
-			resourceSelectorWindow.addEventListener( ResourceVOEvent.CLOSE, closeHandler );
+			resourceSelectorWindow.addEventListener( Event.CLOSE, closeHandler );
 //			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
 			resourceSelectorWindow.addEventListener( ResourceVOEvent.LOAD_RESOURCE, loadFileHandler );
 //			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true );
@@ -310,14 +310,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 //			resourceSelectorWindow.dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) );
 //		}
 
-		private function closeHandler( event : ResourceVOEvent ) : void
+		private function closeHandler( event : Event ) : void
 		{
 			allResourcesList = null;
 			
-			resourceSelectorWindow.resources = null;
+//			resourceSelectorWindow.resources = null;
 			
 			
-			WindowManager.getInstance().removeWindow(resourceSelectorWindow);
+//			WindowManager.getInstance().removeWindow(resourceSelectorWindow);
 			
 			
 			facade.removeMediator( mediatorName );
@@ -548,7 +548,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function removeHandlers() : void
 		{
 			resourceSelectorWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
-			resourceSelectorWindow.removeEventListener( ResourceVOEvent.CLOSE, closeHandler );
+			resourceSelectorWindow.removeEventListener( Event.CLOSE, closeHandler );
 //			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
 			resourceSelectorWindow.removeEventListener( ResourceVOEvent.LOAD_RESOURCE, loadFileHandler ); //коряво очень поменять местами
 //			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true ); //коряво очень
