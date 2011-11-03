@@ -34,7 +34,7 @@ package net.vdombox.ide.common.vo
 
 		private var _containerID : String;
 		
-		private var _visibleEvent : Boolean = true;
+		private var _eyeOpened : Boolean = true;
 
 		[Bindable]
 		public function get top():int
@@ -47,9 +47,9 @@ package net.vdombox.ide.common.vo
 			_top = value;
 		}
 
-		public function get visibleEvent():Boolean
+		public function get eyeOpened():Boolean
 		{
-			return _visibleEvent;
+			return _eyeOpened;
 		}
 
 		public function get name() : String
@@ -77,9 +77,9 @@ package net.vdombox.ide.common.vo
 			return _containerID;
 		}
 
-		public function set visibleEvent( value : Boolean ) : void
+		public function set eyeOpened( value : Boolean ) : void
 		{
-			_visibleEvent = value;
+			_eyeOpened = value;
 		}
 		
 		public function setID( value : String ) : void
