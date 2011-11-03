@@ -36,9 +36,14 @@
 			protected function list_creationCompleteHandler(event:FlexEvent):void
 			{
 				// TODO Auto-generated method stub
-
-					
+				types.addEventListener(MouseEvent.MOUSE_WHEEL, list_mouseWheelHandler, true);
+	
 				types.scroller.verticalScrollBar.setStyle("skinClass", VDOMVScrollBarSkin);
+			}
+			
+			private function list_mouseWheelHandler( event : MouseEvent ) : void
+			{
+				event.delta = event.delta > 0 ? 1 : -1;
 			}
 			
 		]]>
@@ -66,12 +71,6 @@
 					<s:VerticalLayout variableRowHeight="true" gap="0" horizontalAlign="center"/>
 				</s:layout>
 			</s:List>
-			
-			<s:Rect width="3" height="100%">
-				<s:fill>
-					<s:SolidColor color="#424242"/>
-				</s:fill>
-			</s:Rect>
 		</s:HGroup>
 		
 	</s:Group>

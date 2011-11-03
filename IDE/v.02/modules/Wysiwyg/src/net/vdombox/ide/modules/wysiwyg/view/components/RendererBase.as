@@ -186,6 +186,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			_data = value;
 
 			renderVO = value as RenderVO;
+			
+			
+			
+		}
+		
+		private function entHandler( value : Object ) : void
+		{
+				if ( value )
+					toolTip = value.toString();
 		}
 
 		/**
@@ -1382,10 +1391,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 
 			invalidateDisplayList();
+			if ( !(this is PageRenderer) )
+				dispatchEvent( new RendererEvent( RendererEvent.TOOLTIP ) );
 			if ( findNearestItem( event.target as DisplayObjectContainer ) == this )
 				skin.currentState = "hovered";
 			else
 				skin.currentState = "normal";
+			
+			
 		}
 
 		private function mouseUpHandler( event : MouseEvent ) : void

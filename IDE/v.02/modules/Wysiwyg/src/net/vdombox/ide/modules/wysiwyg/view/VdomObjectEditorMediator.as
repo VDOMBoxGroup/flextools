@@ -515,6 +515,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererEvent.MOUSE_UP_MEDIATOR, clearLineGroup, true);
 			
 			component.addEventListener( MouseEvent.MOUSE_UP, clearLineGroup, true);
+			
+			editor.addEventListener( RendererEvent.TOOLTIP, getTooltip, true);
 
 			editor.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
@@ -617,6 +619,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 				return;
 			
 			editor.selectedRenderer = _renderer;
+		}
+		
+		
+		private function getTooltip ( event : RendererEvent = null ) : void
+		{
+			sendNotification( ApplicationFacade.GET_OBJECT_NAME, event.target );
 		}
 		
 		private function clearLineGroup ( event : Event = null ) : void

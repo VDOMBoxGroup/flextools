@@ -205,6 +205,12 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
 		
 		public static const LINE_LIST_GETTED : String = "lineListGetted";
+		
+		public static const GET_OBJECT_NAME : String = "getObjectName";
+		
+		
+		
+		
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
