@@ -22,13 +22,13 @@ package net.vdombox.ide.common.vo
 		
 		private var _containerID : String;
 		
-		private var _visibleEvent : Boolean;
+		private var _eyeOpened : Boolean = true;
 		
 		private var _parameters : Array = [];
 
-		public function get visibleEvent():Boolean
+		public function get eyeOpened():Boolean
 		{
-			return _visibleEvent;
+			return _eyeOpened;
 		}
 
 		public function get name() : String
@@ -56,9 +56,9 @@ package net.vdombox.ide.common.vo
 			return _parameters;
 		}
 		
-		public function set visibleEvent( value : Boolean ) : void
+		public function set eyeOpened( value : Boolean ) : void
 		{
-			_visibleEvent = value;
+			_eyeOpened = value;
 		}
 		
 		public function setName( value : String ) : void
