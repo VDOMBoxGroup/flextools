@@ -34,8 +34,8 @@
 				
 				addEventListener( MouseEvent.CLICK, mouseClickandler );
 				
-				addEventListener( "apply", colorCompleteHandler );
-				addEventListener( "cancel", colorCompleteHandler );
+				addEventListener( ColorPickerEvent.APPLY, applyHandler );
+//				addEventListener( "cancel", colorCompleteHandler );
 			}
 			
 			[Bindable( event="valueCommit" )]
@@ -63,13 +63,10 @@
 				
 			}
 			
-			private function colorCompleteHandler( event : ColorPickerEvent ) : void
+			private function applyHandler( event : ColorPickerEvent ) : void
 			{
-				if ( event.type == 'apply' )
-				{
 					value = event.hexcolor;
 					dispatchEvent(new ColorPickerEvent(ColorPickerEvent.CHANGE, event.color, value));
-				}
 			}
 		]]>
 	</fx:Script>

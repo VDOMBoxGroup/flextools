@@ -192,7 +192,7 @@
 				valueField.height = 21;
 				secondElement = valueField as UIComponent;
 
-				valueField.addEventListener(ColorPickerEvent.CHANGE, changeHandler);
+				valueField.addEventListener(Event.CHANGE, changeHandler);
 			}
 
 			private function newDropdown() : void
@@ -311,6 +311,7 @@
 					_objectVO.name = valueField.value;
 				else
 					_attributeVO.value = valueField.value;
+				
 				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ) );
 			}
 
