@@ -13,13 +13,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
-	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.controls.TileList;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
-	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
@@ -27,7 +25,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.SmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
 	import net.vdombox.utils.WindowManager;
-	
 	import spark.components.ComboBox;
 	import spark.components.Label;
 	import spark.components.List;
@@ -35,7 +32,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import spark.components.TextInput;
 	import spark.components.TitleWindow;
 	import spark.components.Window;
-
 	public class ResourceSelectorWindow extends Window
 	{
 
@@ -65,7 +61,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public var filteredResources : int     = 0;
 
 		[Bindable]
-		public var multiSelect : Boolean = false;
+		public var multiSelect : Boolean       = false;
 
 		[SkinPart( required = "true" )]
 		public var nameFilter : TextInput;
@@ -146,14 +142,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 		public function get value() : String
 		{
-			var resources : Array = []; 
+			var resources : Array = [];
+
 			for each ( var item : ResourceVO in resourcesList.selectedItems )
 			{
 				if ( item != null )
 					resources.push( "#Res(" + item.id + ")");
 			}
 
-			
 			return resources.toString();
 		}
 
