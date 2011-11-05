@@ -29,6 +29,7 @@
 					typeData.sort.fields = [ new SortField( "displayName" ) ];
 					typeData.refresh();
 				}
+			
 				if (type.container != 3)
 					typeData.addItem( type );
 			}

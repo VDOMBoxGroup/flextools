@@ -44,22 +44,33 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRegister() : void
 		{
+			trace("MULT: onRegister()");
+			
 			multilineWindow.addEventListener( MultilineWindowEvent.APPLY, removeYourself, false, 0, true );
 			multilineWindow.addEventListener( MultilineWindowEvent.CLOSE, removeYourself, false, 0, true );
+			multilineWindow.addEventListener( Event.CLOSE, closeHandler, false, 0, true );
 			multilineWindow.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false, 0, true  );
 		}
 		
 		override public function onRemove() : void
 		{
+			trace("MULT: onRemove()");
+			
 			multilineWindow.removeEventListener( MultilineWindowEvent.APPLY, removeYourself, false );
 			multilineWindow.removeEventListener( MultilineWindowEvent.CLOSE, removeYourself, false);
+			multilineWindow.addEventListener( Event.CLOSE, closeHandler, false, 0, true );
 			multilineWindow.removeEventListener(AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false);
 
-			sessionProxy = null;
-			multilineWindow = null;
+//			sessionProxy = null;
+//			multilineWindow = null;
 		}
 		
 		private function removeYourself ( event : MultilineWindowEvent ) : void
+		{
+			facade.removeMediator( NAME );
+		}
+		
+		private function closeHandler( event : Event ):void
 		{
 			facade.removeMediator( NAME );
 		}
@@ -73,39 +84,43 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function selectResourceHandler( event : AttributeEvent ) : void
 		{
+			var windowManager : WindowManager = WindowManager.getInstance();
 			var multilineWindow : MultilineWindow = event.target as MultilineWindow;
 			var resourceSelectorWindow : ResourceSelectorWindow = new ResourceSelectorWindow();
-			
 			var resourceSelectorWindowMediator : ResourceSelectorWindowMediator = new ResourceSelectorWindowMediator( resourceSelectorWindow );			
+
 			facade.registerMediator( resourceSelectorWindowMediator );
 			
-			resourceSelectorWindow.multilineSelected = true;
-			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler, false, 0, false);
+			resourceSelectorWindow.multiSelect = true;
+			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler, false, 0, true);
 			
+			windowManager.addWindow(resourceSelectorWindow, UIComponent(multilineWindow), true);
 			
-			//PopUpManager.addPopUp( resourceSelectorWindow, DisplayObject( multilineWindow.parentApplication ), true);
-			//PopUpManager.centerPopUp( resourceSelectorWindow );
-			WindowManager.getInstance().addWindow(resourceSelectorWindow, UIComponent(multilineWindow), true);
-			
-			function applyHandler (event: Event):void
+					
+		}
+		
+		private function applyHandler (event: Event):void
+		{
+			var resourceSelectorWindow : ResourceSelectorWindow = event.target as ResourceSelectorWindow;
+			var str1 : String = multilineWindow.textAreaContainer.text;
+			if (multilineWindow.focus)
 			{
-				var str1 : String = multilineWindow.textAreaContainer.text;
-				if (multilineWindow.focus)
-				{
-					multilineWindow.textAreaContainer.insertText("|%" + (event.target as ResourceSelectorWindow).value);	
-					multilineWindow.focus = false;
-				}
-				else
-					multilineWindow.textAreaContainer.text += (event.target as ResourceSelectorWindow).value;
-				var str2 : String = multilineWindow.textAreaContainer.text;
-				
-				multilineWindow.attributeValue = autoPasteCommon(str1, str2);
-				resourceSelectorWindow.removeEventListener(Event.CHANGE, applyHandler, false);
-
-				//PopUpManager.removePopUp( resourceSelectorWindow );
-				WindowManager.getInstance().removeWindow(resourceSelectorWindow);
-				facade.removeMediator( resourceSelectorWindowMediator.getMediatorName() );
-			}		
+				multilineWindow.textAreaContainer.insertText("|%" + resourceSelectorWindow.value);	
+				multilineWindow.focus = false;
+			}
+			else
+			{
+				multilineWindow.textAreaContainer.text += resourceSelectorWindow.value;
+			}
+			
+			var str2 : String = multilineWindow.textAreaContainer.text;
+			
+			multilineWindow.attributeValue = autoPasteCommon(str1, str2);
+//			resourceSelectorWindow.removeEventListener(Event.CHANGE, applyHandler, false);
+			
+			//PopUpManager.removePopUp( resourceSelectorWindow );
+			WindowManager.getInstance().removeWindow(resourceSelectorWindow);
+//			facade.removeMediator( resourceSelectorWindowMediator.getMediatorName() );
 		}
 		
 		private function autoPasteCommon(str1 : String, str2 : String): String

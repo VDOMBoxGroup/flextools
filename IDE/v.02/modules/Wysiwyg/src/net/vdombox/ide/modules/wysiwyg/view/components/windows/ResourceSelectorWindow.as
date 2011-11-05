@@ -13,11 +13,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.controls.TileList;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
+	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
@@ -25,6 +27,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.SmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
 	import net.vdombox.utils.WindowManager;
+	
 	import spark.components.ComboBox;
 	import spark.components.Label;
 	import spark.components.List;
@@ -62,7 +65,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public var filteredResources : int     = 0;
 
 		[Bindable]
-		public var multilineSelected : Boolean = false;
+		public var multiSelect : Boolean = false;
 
 		[SkinPart( required = "true" )]
 		public var nameFilter : TextInput;
@@ -143,34 +146,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 		public function get value() : String
 		{
-			var str : String = "";
-
-			if ( !multilineSelected )
+			var resources : Array = []; 
+			for each ( var item : ResourceVO in resourcesList.selectedItems )
 			{
-				str = resourcesList.selectedItem ? resourcesList.selectedItem.id : "";
-
-				if ( str )
-					str = "#Res(" + str + ")";
-				else
-					str = "";
+				if ( item != null )
+					resources.push( "#Res(" + item.id + ")");
 			}
-			else
-			{
-				if ( resourcesList.selectedItems.length > 0 )
-				{
-					for each ( var item : ResourceVO in resourcesList.selectedItems )
-					{
-						if ( item != null )
-							str += "#Res(" + item.id + "), ";
-					}
 
-					if ( str.length >= 2 )
-						str = str.substr(0, str.length - 2);
-				}
-				else
-					str = "";
-			}
-			return str;
+			
+			return resources.toString();
 		}
 
 		public function set value( value : String ) : void
