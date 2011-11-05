@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.Event;
 	
 	import mx.containers.Accordion;
+	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
@@ -106,12 +107,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
-			typesAccordion.addEventListener( "TypeRendererCreated", typeRendererCreatedHandler, true, 0, false );
+			
+			typesAccordion.addEventListener( FlexEvent.DATA_CHANGE, typeRendererCreatedHandler, true, 0, false );
+//			typesAccordion.addEventListener( "TypeRendererCreated", typeRendererCreatedHandler, true, 0, false );
 		}
 
 		private function removeHandlers() : void
 		{
-			typesAccordion.removeEventListener( "TypeRendererCreated", typeRendererCreatedHandler, true );
+			typesAccordion.removeEventListener( FlexEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
+//			typesAccordion.removeEventListener( "TypeRendererCreated", typeRendererCreatedHandler, true );
 		}
 
 		private function clearData() : void
@@ -173,7 +177,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			return currentCategory;
 		}
 
-		private function typeRendererCreatedHandler( event : Event ) : void
+		private function typeRendererCreatedHandler( event : FlexEvent ) : void
 		{
 			var typeItemRenderer : TypeItemRenderer = event.target as TypeItemRenderer;
 

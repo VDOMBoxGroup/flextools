@@ -3,7 +3,6 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				width="100%" autoDrawBackground="false"
-				creationComplete="dispatchEvent( new Event( 'TypeRendererCreated' ))"
 				mouseDown="mouseDownHandler()"
 				includeInLayout.normal="false">
 	<s:layout>
@@ -41,12 +40,16 @@
 
 			override public function set data( value : Object ) : void
 			{
+				if ( value == _typeVO )
+				{
+					invalidateDisplayList();
+					
+					return;
+				}
+				
 				_typeVO = value as TypeVO;
 
-				if ( value )
-					typeName = value.displayName;
-				else
-					typeName = "";
+				typeName = value ?  value.displayName : ""
 
 				super.data = value;
 			}
@@ -55,10 +58,7 @@
 			{
 				super.selected = value;
 
-				if ( value )
-					currentState = "selected";
-				else
-					currentState = "normal";
+				currentState = value ? "selected" : "normal"
 			} 
 
 			private function dragIt( event : MouseEvent ) : void
