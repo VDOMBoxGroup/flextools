@@ -198,9 +198,9 @@ package net.vdombox.object_editor.view.mediators
 				objView.dispatchEvent( new Event(ObjectViewMediator.OBJECT_TYPE_VIEW_REMOVED));
 		}
 
-		protected function get view():ObjectEditor2
+		protected function get view():TypeEditor
 		{
-			return viewComponent as ObjectEditor2
+			return viewComponent as TypeEditor
 		}
 	}
 }

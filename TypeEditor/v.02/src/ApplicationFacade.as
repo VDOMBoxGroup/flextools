@@ -57,12 +57,12 @@ package
 			registerCommand( RESTART_OBJECT,		RestartObjectCommand );
 		}
 		
-		public function preinitialize( app:ObjectEditor2 ):void
+		public function preinitialize( app:TypeEditor ):void
 		{
 			sendNotification( PREINITIALIZE, app );
 		}
 
-		public function startup( app:ObjectEditor2 ):void
+		public function startup( app:TypeEditor ):void
 		{
 			sendNotification( STARTUP, app );
 		}		

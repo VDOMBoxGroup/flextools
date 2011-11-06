@@ -41,7 +41,7 @@ package net.vdombox.object_editor.controller
 			else
 				newFilePath = File.documentsDirectory.nativePath;															
 			
-			var viewDispl:ObjectEditor2 = note.getBody() as ObjectEditor2;
+			var viewDispl:TypeEditor = note.getBody() as TypeEditor;
 			var popup:NameObject = NameObject(PopUpManager.createPopUp(viewDispl, NameObject, true));
 			popup.addEventListener(Event.ADDED_TO_STAGE, closeHandler);
 			
