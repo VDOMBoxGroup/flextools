@@ -10,6 +10,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 {
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
+	import flash.utils.Dictionary;
 	
 	import mx.collections.XMLListCollection;
 	
@@ -41,6 +42,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 		 * @default
 		 */
 		public static const NAME : String = "RenderProxy";
+		
+		private var rendererNames : Object = [];
 
 		/**
 		 *
@@ -77,7 +80,14 @@ package net.vdombox.ide.modules.wysiwyg.model
 				if ( !renderersIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
 					renderersIndex[ renderVO.vdomObjectVO.id ] = [];
 
+				if ( rendererNames[ renderVO.vdomObjectVO.id ] )
+				{
+					renderVO.vdomObjectVO.name = rendererNames[ renderVO.vdomObjectVO.id ];
+					delete rendererNames[ renderVO.vdomObjectVO.id ];
+				}
+				
 				renderersIndex[ renderVO.vdomObjectVO.id ].push( renderer );
+				
 			}
 		}
 
@@ -349,6 +359,26 @@ package net.vdombox.ide.modules.wysiwyg.model
 		private function set renderersIndex( value : Object ) : void
 		{
 			_renderersIndex = value;
+		}
+		
+		public function setToolTipRenderers( pageXMLTree : XML ) : void
+		{
+			var xmlList : XMLList = pageXMLTree..object;
+			var xmlObject : XML;
+			for each ( xmlObject in xmlList )
+			{
+				var objectID : String = xmlObject.@id;
+				var objectName : String = xmlObject.@name;
+				var renderer :RendererBase = getRendererByID(  objectID );
+				if ( renderer ) 
+				{
+					renderer.renderVO.vdomObjectVO.name = objectName;
+				}
+				else
+				{
+					rendererNames[objectID] = objectName;
+				}
+			}
 		}
 	}
 }

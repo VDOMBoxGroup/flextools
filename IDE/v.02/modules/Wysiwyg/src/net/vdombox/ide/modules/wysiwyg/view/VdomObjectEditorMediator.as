@@ -19,6 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -131,6 +132,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			interests.push( ApplicationFacade.LINE_LIST_GETTED );
 			
+			interests.push( ApplicationFacade.PAGE_STRUCTURE_GETTED );
+			
 			return interests;
 		}
 		
@@ -221,6 +224,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.LINE_LIST_GETTED:
 				{			
 					drawLine( body );
+					break;
+				}
+					
+				case ApplicationFacade.PAGE_STRUCTURE_GETTED:
+				{
+					var pageXMLTree : XML = notification.getBody() as XML;
+					var selectedPageVO : PageVO = sessionProxy.selectedPage as PageVO;
 					break;
 				}
 					
@@ -515,8 +525,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererEvent.MOUSE_UP_MEDIATOR, clearLineGroup, true);
 			
 			component.addEventListener( MouseEvent.MOUSE_UP, clearLineGroup, true);
-			
-			editor.addEventListener( RendererEvent.TOOLTIP, getTooltip, true);
 
 			editor.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
@@ -619,12 +627,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 				return;
 			
 			editor.selectedRenderer = _renderer;
-		}
-		
-		
-		private function getTooltip ( event : RendererEvent = null ) : void
-		{
-			sendNotification( ApplicationFacade.GET_OBJECT_NAME, event.target );
 		}
 		
 		private function clearLineGroup ( event : Event = null ) : void

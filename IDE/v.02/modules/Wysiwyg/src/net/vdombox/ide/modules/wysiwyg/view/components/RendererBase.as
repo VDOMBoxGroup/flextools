@@ -34,6 +34,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.controls.HTML;
 	import mx.controls.Image;
 	import mx.controls.Text;
+	import mx.controls.ToolTip;
 	import mx.core.ClassFactory;
 	import mx.core.IFactory;
 	import mx.core.IVisualElement;
@@ -44,6 +45,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.ResizeEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
+	import mx.managers.ToolTipManager;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
@@ -54,6 +56,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+	import net.vdombox.ide.modules.wysiwyg.view.components.controls.ToolbarButton;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
 	
 	import spark.components.Button;
@@ -88,6 +91,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			super();
 			itemRendererFunction = chooseItemRenderer;
+			
+			ToolTip.maxWidth = 200;
 
 			addHandlers();
 		}
@@ -536,6 +541,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			removeEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
 			removeEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
 
+
 			removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 
 			removeEventListener( MouseEvent.CLICK, mouseClickHandler );
@@ -753,16 +759,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 		
-		private var numberColl : int = 0;
-		
 		private function caseRow( contetnt : XML, parentContainer : Group ) : void
 		{
 			var conatiner : Group = getSubRow( contetnt, parentContainer  );
 			
 			if ( !conatiner )
 				conatiner = parentContainer;
-			
-			numberColl = contetnt.children().length();
 			
 			// TODO: need sort 'contetnt.children()' by 'z-index'
 			for each ( var contetntPart : XML in contetnt.children() )
@@ -1329,6 +1331,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( movable && !isScroller( event.target as DisplayObjectContainer ) )
 			{
+				toolTip = "";
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
 				stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
 
@@ -1384,6 +1387,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( skin.currentState == "hovered" )
 				skin.currentState = "normal";
 		}
+		
 
 		private function mouseOverHandler( event : MouseEvent ) : void
 		{
@@ -1391,8 +1395,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 
 			invalidateDisplayList();
-			if ( !(this is PageRenderer) )
-				dispatchEvent( new RendererEvent( RendererEvent.TOOLTIP ) );
+			
+			if ( !( this is PageRenderer ) )
+				toolTip = "NameIma : " + renderVO.vdomObjectVO.name;
+			
 			if ( findNearestItem( event.target as DisplayObjectContainer ) == this )
 				skin.currentState = "hovered";
 			else
@@ -1432,7 +1438,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				lock( true );
 				return;
 			}
-
 			refreshAttributes();
 
 			refreshContent();

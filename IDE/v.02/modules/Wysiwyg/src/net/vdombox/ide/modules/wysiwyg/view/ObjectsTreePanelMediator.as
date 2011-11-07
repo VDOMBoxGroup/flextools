@@ -225,27 +225,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}	
 					
-				case ApplicationFacade.GET_OBJECT_NAME:
-				{
-					var renderBase : RendererBase = body as RendererBase;
-					var XMLPages : XMLList = objectsTreePanel.pages;
-					var objectXML : XML;
-					
-					
-					for each( objectXML in XMLPages)
-					{
-						var XMLObject : XMLList = objectXML..object;
-						var object2XML : XML;
-						
-						for each( object2XML in XMLObject)
-						{
-							if ( object2XML.@id == renderBase.renderVO.vdomObjectVO.id )
-								renderBase.toolTip = "Name: \n" + object2XML.@name;
-						}
-					}
-					break;
-				}	
-					
 			}
 		}
 		
@@ -270,7 +249,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
 			
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
-			interests.push( ApplicationFacade.GET_OBJECT_NAME );
 
 			return interests;
 		}

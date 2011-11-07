@@ -24,6 +24,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererTransformedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.wysiwyg.controller.SetSettingsCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.SetToolTipCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.StartupCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.TearDownCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.WysiwygGettedCommand;
@@ -206,8 +207,6 @@ package net.vdombox.ide.modules.wysiwyg
 		
 		public static const LINE_LIST_GETTED : String = "lineListGetted";
 		
-		public static const GET_OBJECT_NAME : String = "getObjectName";
-		
 		
 		
 		
@@ -283,6 +282,9 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( TEAR_DOWN, TearDownCommand );
 			
 			registerCommand( OBJECT_MOVED, CreateLineLinkingCommand );
+			
+			registerCommand( PAGE_STRUCTURE_GETTED, SetToolTipCommand );
+			
 		}
 	}
 }
