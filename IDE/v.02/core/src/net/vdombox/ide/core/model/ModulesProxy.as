@@ -34,12 +34,13 @@ package net.vdombox.ide.core.model
 					<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
 					<module name="Trees" path="app:/modules/Tree/Tree.swf"/>
 					<module name="Events" path="app:/modules/Events/Events.swf"/>
-					<module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/>
+					
 
 				</category>
 			</modules>
 
 		/*//<module name="DB" path="app:/modules/DataBase/DataBase.swf"/>
+			<module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/>
 				<module name="ApplicationsSearch" path="app:/modules/ApplicationsSearch/ApplicationsSearch.swf"/>
 		<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
 		<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
