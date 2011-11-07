@@ -645,7 +645,7 @@ package net.vdombox.ide.modules.events.view.components
 			else if (event.target is ActionElement)
 				strName = (event.target as ActionElement).title;
 			
-			Alert.Show( "Are you sure want to delete " + strName + " ?",AlertButton.OK_No, undoButton.parentApplication, deleteHandler);
+			Alert.Show( resourceManager.getString( 'Wysiwyg_General', 'delete_Renderer' ) + strName + " ?",AlertButton.OK_No, undoButton.parentApplication, deleteHandler);
 				
 			
 			function deleteHandler(_event : CloseEvent) : void
