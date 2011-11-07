@@ -11,8 +11,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.Event;
 	
 	import mx.controls.Tree;
+	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
+	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -20,12 +22,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
+	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.TypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.VisibleRendererProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectsTreePanel;
+	import net.vdombox.view.Alert;
+	import net.vdombox.view.AlertButton;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -292,8 +297,35 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.OPEN, openHandler, false, 0, true );
 			objectsTreePanel.addEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true, 0, true );
+			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true, 0, true );
 			
 		}
+		
+		private function keyDownDeleteHandler(event : ObjectsTreePanelEvent) : void
+		{
+			//trace ("[VdomObjectEditorMediator] keyDownDeleteHandler: " + event.keyCode + "; PHASE = " + event.eventPhase);
+			
+			var objectID : String = event.objectID;
+			var pageID : String = event.pageID;
+			if ( pageID && objectID )
+			{
+				Alert.noLabel = "Cancel";
+				Alert.yesLabel = "Delete";
+				var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+				
+				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + "?",AlertButton.OK_No, objectsTreePanel.parentApplication, closeHandler);
+			}
+			
+			function closeHandler( event : CloseEvent ) : void
+			{
+				if (event.detail == Alert.YES)
+				{
+					sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: renderProxy.getRendererByID( pageID ).renderVO.vdomObjectVO, objectVO: renderProxy.getRendererByID( objectID ).renderVO.vdomObjectVO } );
+				}
+			}
+		}
+		
+		
 		
 		private function eyeChangeHandler( event : ObjectsTreePanelEvent ) : void
 		{
@@ -392,6 +424,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.OPEN, openHandler );
 			objectsTreePanel.removeEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true );
+			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true );
 		}
 
 		private function selectCurrentPage( needGetPageStructure : Boolean = true ) : void

@@ -5,7 +5,9 @@
 					  height="25"
 					  width="100%"
 					  minWidth="225"
-					  contentBackgroundAlpha="0"  >
+					  contentBackgroundAlpha="0" 
+					  creationComplete="creationCompleteHandler(event)"
+					  contextMenu="mxtreeitemrenderer1_contextMenuHandler(event)">
 
 	<s:states>
 		<s:State name="normal" />
@@ -16,10 +18,15 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Tree;
+			import mx.events.FlexEvent;
 			import mx.events.ResourceEvent;
+			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
+			
 			import spark.components.Button;
 
 			[Embed( source = "icons/eye_0t.png" )]
@@ -45,6 +52,8 @@
 			 * 
 			 */ 
 			private var _data : XML;
+			
+			private var _contextMenu : ContextMenu = new ContextMenu();
 
 			override public function set data( value : Object ) : void
 			{
@@ -56,7 +65,8 @@
 
 				_data = value as XML;
 			}
-
+			
+			
 
 			public function get eyeOpened() : Boolean
 			{
@@ -171,6 +181,40 @@
 				if ( _data.@visible[ 0 ] )
 					_data.@visible = _eyeOpened
 			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				var deleteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_delete' ));
+				deleteItem.addEventListener( Event.SELECT, deleteContextMenuHandler, false, 0, true );
+				_contextMenu.addItem( deleteItem );
+			}
+			
+			protected function mxtreeitemrenderer1_contextMenuHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				_contextMenu.display( this.stage, event.stageX, event.stageY );
+			}
+			
+			private function deleteContextMenuHandler( event : Event ) : void
+			{
+				var deleteEvent : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.DELETE );
+				deleteEvent.objectID = _data.@id;
+				var xmlListCollection : XMLListCollection = (owner as Tree).dataProvider as XMLListCollection;
+				var xml : XML;
+				for each ( xml in xmlListCollection )
+				{
+					var xmlList : XMLList = xml..object;
+					var xml2 : XML;
+					for each ( xml2 in xmlList )
+					{
+						if ( xml2.@id == _data.@id )
+							deleteEvent.pageID = xml.@id;
+					}
+				}
+				dispatchEvent( deleteEvent );
+			}
+			
 		]]>
 	</fx:Script>
 

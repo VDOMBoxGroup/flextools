@@ -17,6 +17,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var EYE_CHANGED : String = "eyeChanged";
 
 		public static var OPEN : String        = "otpe_open";
+		
+		public static var DELETE : String        = "otpe_delete";
 
 		public function ObjectsTreePanelEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, pageID : String = null,
 											   objectID : String = null )

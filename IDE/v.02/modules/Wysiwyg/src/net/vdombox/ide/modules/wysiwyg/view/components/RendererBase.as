@@ -192,14 +192,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			renderVO = value as RenderVO;
 			
-			
-			
-		}
-		
-		private function entHandler( value : Object ) : void
-		{
-				if ( value )
-					toolTip = value.toString();
 		}
 
 		/**
@@ -758,6 +750,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				choiceContentType( contetntPart, conatiner );
 			}
 		}
+		
 		
 		private function caseRow( contetnt : XML, parentContainer : Group ) : void
 		{
@@ -1387,7 +1380,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( skin.currentState == "hovered" )
 				skin.currentState = "normal";
 		}
-		
 
 		private function mouseOverHandler( event : MouseEvent ) : void
 		{
@@ -1397,7 +1389,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			invalidateDisplayList();
 			
 			if ( !( this is PageRenderer ) )
-				toolTip = "NameIma : " + renderVO.vdomObjectVO.name;
+				toolTip =  resourceManager.getString( 'Wysiwyg_General', 'renderer_toolTip' ) + renderVO.vdomObjectVO.name;
 			
 			if ( findNearestItem( event.target as DisplayObjectContainer ) == this )
 				skin.currentState = "hovered";

@@ -83,7 +83,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 				if ( rendererNames[ renderVO.vdomObjectVO.id ] )
 				{
 					renderVO.vdomObjectVO.name = rendererNames[ renderVO.vdomObjectVO.id ];
-					delete rendererNames[ renderVO.vdomObjectVO.id ];
+					
 				}
 				
 				renderersIndex[ renderVO.vdomObjectVO.id ].push( renderer );
@@ -144,7 +144,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 			
 		}
 		
-		private function getRendererByID( ID : String ) : RendererBase
+		public function getRendererByID( ID : String ) : RendererBase
 		{
 			var rendererBase : RendererBase = null;
 			

@@ -15,6 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColorStroke;
+	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
@@ -666,7 +667,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				Alert.noLabel = "Cancel";
 				Alert.yesLabel = "Delete";
 				
-				Alert.Show( "Are you sure want to delete " + componentName + " ?",AlertButton.OK_No, component.parentApplication, closeHandler);
+				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + componentName + " ?",AlertButton.OK_No, component.parentApplication, closeHandler);
 			}
 		}
 
