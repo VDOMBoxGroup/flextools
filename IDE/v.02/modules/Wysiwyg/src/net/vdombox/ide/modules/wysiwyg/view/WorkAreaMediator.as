@@ -205,7 +205,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 				if ( selectedRenderer )
 					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.selectedRenderer.vdomObjectVO );
 				else
+				{
 					sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, selectedEditor.editorVO.vdomObjectVO );
+					//sendNotification( ApplicationFacade.GET_WYSIWYG, selectedEditor.editorVO.vdomObjectVO );
+				}
 			}
 		}
 

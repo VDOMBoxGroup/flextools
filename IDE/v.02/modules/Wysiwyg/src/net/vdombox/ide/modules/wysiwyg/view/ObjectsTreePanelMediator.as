@@ -319,9 +319,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			function closeHandler( event : CloseEvent ) : void
 			{
 				if (event.detail == Alert.YES)
-				{
 					sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: renderProxy.getRendererByID( pageID ).renderVO.vdomObjectVO, objectVO: renderProxy.getRendererByID( objectID ).renderVO.vdomObjectVO } );
-				}
 			}
 		}
 		
