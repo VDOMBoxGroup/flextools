@@ -55,13 +55,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[Bindable]
 		public var _resources : ArrayList;
 
-		public var deleteResourceID : String   = null;
+		public var deleteResourceID : String = null;
 
 		[Bindable]
-		public var filteredResources : int     = 0;
+		public var filteredResources : int = 0;
 
 		[Bindable]
-		public var multiSelect : Boolean       = false;
+		public var multiSelect : Boolean = false;
 
 		[SkinPart( required = "true" )]
 		public var nameFilter : TextInput;
@@ -69,12 +69,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[SkinPart( required = "true" )]
 		public var resourcesList : List;
 
-		public var scrollToIndex : int         = -1;
+		public var scrollToIndex : int = -1;
 
 		public var selectedResourceIndex : int = -1;
 
 		[Bindable]
-		public var totalResources : int        = 0;
+		public var totalResources : int = 0;
 
 		private var _value : String;
 
@@ -86,6 +86,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function onApplyClick(event:Event = null) : void
 		{
 			dispatchEvent( new Event( Event.CHANGE ) );
+			
 			close();
 		}
 
@@ -210,15 +211,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		 * close ResourceSelectorWindow if down ESCAPE or if down button "Apply"
 		 * and dispatchEvent Apply
 		 */
-		private function keyDownWindowHendler( event: KeyboardEvent = null ) : void
+		private function keyDownWindowHendler( event: KeyboardEvent ) : void
 		{
-			if ( event != null )
-			{
-				if ( event.charCode != Keyboard.ESCAPE )
-					return;
-			}
-
-			close();
+				if ( event.charCode == Keyboard.ESCAPE )
+					close();
 		}
 
 		private function setSelectedItem() : void
@@ -229,6 +225,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			var resourceVO : ResourceVO;
 			var requiredID : String;
 
+			//TODO: need regexp
 			requiredID = _value.substring( 5, _value.length - 1 );
 
 			for each ( resourceVO in _resources.source )
@@ -245,5 +242,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				}
 			}
 		}
+		
+		
+//		public function set 
 	}
 }

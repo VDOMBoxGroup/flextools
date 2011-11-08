@@ -13,6 +13,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import flash.utils.Dictionary;
 	
 	import mx.collections.XMLListCollection;
+	import mx.core.IUIComponent;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
@@ -43,7 +44,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 		 */
 		public static const NAME : String = "RenderProxy";
 		
-		private var rendererNames : Object = [];
+		private var vdomObjectsName : Dictionary = new Dictionary(true);
 
 		/**
 		 *
@@ -71,23 +72,25 @@ package net.vdombox.ide.modules.wysiwyg.model
 			
 			//TODO: rewrite
 			if ( !(renderer is PageRenderer) )
-				(renderer as RendererBase).visible = visibleRendererProxy.getVisible(  renderer.vdomObjectVO.id );
+			{
+				var visible : Boolean = visibleRendererProxy.getVisible(  renderer.vdomObjectVO.id );
+				
+				IUIComponent(renderer).visible = visible;
+			}
 			
 			var renderVO : RenderVO = renderer.renderVO;
 
 			if ( renderVO && renderVO.vdomObjectVO )
-			{
-				if ( !renderersIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
-					renderersIndex[ renderVO.vdomObjectVO.id ] = [];
+			{ 
+				var objectID : String = renderVO.vdomObjectVO.id;
+				
+				if ( !renderersIndex.hasOwnProperty( objectID ) )
+					renderersIndex[ objectID ] = [];
 
-				if ( rendererNames[ renderVO.vdomObjectVO.id ] )
-				{
-					renderVO.vdomObjectVO.name = rendererNames[ renderVO.vdomObjectVO.id ];
-					
-				}
-				
-				renderersIndex[ renderVO.vdomObjectVO.id ].push( renderer );
-				
+				renderersIndex[ objectID ].push( renderer );
+
+				if ( vdomObjectsName[ objectID ] )
+					renderVO.vdomObjectVO.name = vdomObjectsName[ objectID ];
 			}
 		}
 
@@ -348,6 +351,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 		}
 
+//		var dic : Dictionary
 		private function get renderersIndex() : Object
 		{
 			if ( !_renderersIndex )
@@ -365,19 +369,17 @@ package net.vdombox.ide.modules.wysiwyg.model
 		{
 			var xmlList : XMLList = pageXMLTree..object;
 			var xmlObject : XML;
+
 			for each ( xmlObject in xmlList )
 			{
 				var objectID : String = xmlObject.@id;
-				var objectName : String = xmlObject.@name;
+				var name : String = xmlObject.@name;
 				var renderer :RendererBase = getRendererByID(  objectID );
+				
 				if ( renderer ) 
-				{
-					renderer.renderVO.vdomObjectVO.name = objectName;
-				}
+					renderer.renderVO.vdomObjectVO.name = name;
 				else
-				{
-					rendererNames[objectID] = objectName;
-				}
+					vdomObjectsName[objectID] = name;
 			}
 		}
 	}

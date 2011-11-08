@@ -65,7 +65,7 @@
 						  smoothBitmapContent="true"/>	
 			</s:HGroup>
 			
-			<mx:Canvas width="100%" height="100%" click="hostComponent.closePreviewWindow()"
+			<mx:Canvas width="100%" height="100%" click="hostComponent.close()"
 					   backgroundColor="#000000" backgroundAlpha="0.01"/>
 		</s:Group>
 		

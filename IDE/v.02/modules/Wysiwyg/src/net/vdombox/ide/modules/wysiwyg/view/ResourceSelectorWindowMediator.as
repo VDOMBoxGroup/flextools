@@ -13,12 +13,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
+	import flash.display.PixelSnapping;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.filesystem.File;
+	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
-	
+
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
@@ -29,7 +31,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.managers.PopUpManagerChildList;
 	import mx.resources.ResourceManager;
 	import mx.validators.Validator;
-	
+
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
@@ -42,7 +44,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.utils.WindowManager;
 	import net.vdombox.view.Alert;
 	import net.vdombox.view.AlertButton;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -61,7 +63,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		public static const NAME : String               = "ResourceSelectorWindowMediator";
 
 		/**
-		 * 
+		 *
 		 * @param resourceSelectorWindow
 		 */
 		public function ResourceSelectorWindowMediator( resourceSelectorWindow : ResourceSelectorWindow ) : void
@@ -88,22 +90,25 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var spinnerPopup : SpinnerPopup;
 
-		private function updateData(resources: Array):void
+		private function updateData(resources: Array) : void
 		{
 			_filters.removeAll();
 			_filters.addItem( { label: 'NONE', data: '*' } );
-			
+
 			allResourcesList = new ArrayList( resources );
 			resourceSelectorWindow.resources = new ArrayList( resources );
-			
+
 			for each ( var resVO : ResourceVO in resources )
+			{
 				addFilter(resVO.type);
-			
+			}
+
 			// set empty resource as null in ListItem
 			resourceSelectorWindow.resources.addItemAt( null, 0 );
 			resourceSelectorWindow.totalResources = allResourcesList.source.length - 1;
 
 		}
+
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var name : String = notification.getName();
@@ -115,7 +120,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.RESOURCES_GETTED:
 				{
 					resourceSelectorWindow.callLater(updateData, [body]);
-				
+
 					break;
 				}
 
@@ -125,14 +130,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
-
 			}
 		}
 
 
-		
+
 		/**
-		 * 
+		 *
 		 * @param event
 		 */
 		public function ioErrorHandler( event : IOErrorEvent ) : void
@@ -153,6 +157,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRegister() : void
 		{
+			trace("Res: onRegister()");
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
 			addHandlers();
@@ -162,28 +167,29 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRemove() : void
 		{
+			trace("Res: onRemove()");
 			removeHandlers();
 
 			sessionProxy = null;
-			
+
 			allResourcesList = null;
-			
+
 			resourceSelectorWindow.resources = null;
 			resourceSelectorWindow.resourcesList.dataProvider = null;
-			
+
 			_filters = null;
-			
+
 			delResVO = null;
-			
+
 			noneIcon = null;
-			
+
 			resourceVO = null;
-			
+
 			spinnerPopup = null;
 		}
 
 		/**
-		 * 
+		 *
 		 * @param event
 		 */
 		public function onResourceWindowCreationComplete(event : Event) : void
@@ -201,7 +207,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		/**
-		 * 
+		 *
 		 * @param event
 		 */
 		public function onResourceWindowListItemCreationComplete(event : Event) : void
@@ -234,6 +240,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
+			trace("Res: addHandlers()");
 			resourceSelectorWindow.addEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
 			resourceSelectorWindow.addEventListener( Event.CLOSE, closeHandler );
 //			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
@@ -313,13 +320,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function closeHandler( event : Event ) : void
 		{
 			allResourcesList = null;
-			
+
 //			resourceSelectorWindow.resources = null;
-			
-			
+
+
 //			WindowManager.getInstance().removeWindow(resourceSelectorWindow);
-			
-			
+
+
 			facade.removeMediator( mediatorName );
 		}
 
@@ -351,20 +358,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 				//allResourcesList = resourceSelectorWindow.resources;
 				deleteResourceInArray( delResVO.id );
 				resourceSelectorWindow.totalResources--;
-				
-
 			}
 		}
-		
+
 		private function deleteResourceInArray( idRes : String ) : void
 		{
 			var i : int;
-			for( i = 1; i < allResourcesList.source.length; i++ )
+
+			for ( i = 1; i < allResourcesList.source.length; i++ )
+			{
 				if ( allResourcesList.getItemAt( i ).id == idRes )
 				{
 					allResourcesList.removeItemAt( i );
 					break;
 				}
+			}
 		}
 
 
@@ -449,6 +457,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( event.type != Event.COMPLETE )
 				return;
 
+
+			// TODO: do it in resourcePreviewWindow
 			if ( resourceSelectorWindow.resources.length > 0 )
 			{
 				var loaderInfo : LoaderInfo;
@@ -456,49 +466,65 @@ package net.vdombox.ide.modules.wysiwyg.view
 				var bitmap : Bitmap;
 				var bmpWidthHeightRatio : Number;
 				var dimentionsScale : Number
+				var rectangle : Rectangle;
+
 
 				loaderInfo = LoaderInfo( event.target );
-				bitmapData = new BitmapData( loaderInfo.width, loaderInfo.height, false, 0xFFFFFF );
+
+				rectangle = getImageRectangle( loaderInfo );
+
+				bitmapData = new BitmapData( rectangle.width, rectangle.height, false, 0xFFFFFF );
 				bitmapData.draw( loaderInfo.loader );
 
-				bitmap = new Bitmap(bitmapData);
+				bitmap = new Bitmap(bitmapData, PixelSnapping.AUTO, true);
 				bitmap.cacheAsBitmap = true;
 
-				bmpWidthHeightRatio = bitmap.width / bitmap.height;
 
 				if ( resourcePreviewWindow )
 				{
-
-					if ( resourcePreviewWindow.resourceImage.height < bitmap.height )
+					// размер height пространства меньше height картинки
+					if ( resourcePreviewWindow.resourceImage.height < bitmap.height 
+						||	 resourcePreviewWindow.resourceImage.width < bitmap.width )
 					{
-						bitmap.height = resourcePreviewWindow.resourceImage.height;
-						bitmap.width = bitmap.height * bmpWidthHeightRatio;
+							resourcePreviewWindow.resourceImage.maintainAspectRatio = true;
+							resourcePreviewWindow.resourceImage.scaleContent = true;
+
 					}
-
-					if ( resourcePreviewWindow.resourceImage.width < bitmap.width )
-					{
-						dimentionsScale = resourcePreviewWindow.resourceImage.width / bitmap.width;
-
-						bitmap.width *= dimentionsScale;
-						bitmap.height *= dimentionsScale;
-					}
-
-					bitmap.x = ( resourcePreviewWindow.resourceImage.width - bitmap.width ) / 2;
-					bitmap.y = ( resourcePreviewWindow.resourceImage.height - bitmap.height ) / 2;
+					
+					resourcePreviewWindow.resourceImage.source = bitmap;
 
 					resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height, resourceVO.mastHasPreview);
 					resourcePreviewWindow.loadingImage.visible = false;
-					resourcePreviewWindow.resourceImage.addChild(bitmap);
-
-					return;
 				}
 
 			}
 		}
 
+		private function getImageRectangle( loaderInfo : LoaderInfo ) : Rectangle
+		{
+			var maxPisels : Number = 16777215;
+
+			var width : Number     = loaderInfo.width;
+			var height : Number    = loaderInfo.height;
+
+			if ( width * height > maxPisels )
+			{
+				var proportioWidth : Number  = 1 / height;
+				var proportioHeight : Number = 1 / width;
+
+				width = maxPisels * proportioWidth;
+				height = maxPisels * proportioHeight;
+			}
+
+			return new Rectangle(0, 0, width, height);
+		}
+
 		private function onClosePreview( event : Event ) : void
 		{
-			resourcePreviewWindow.removeEventListener(ResourcePreviewWindow.CLOSE, onClosePreview);
+			resourcePreviewWindow.removeEventListener( Event.CLOSE, onClosePreview );
+			
+			WindowManager.getInstance().removeWindow( resourcePreviewWindow );
+
 			resourcePreviewWindow = null;
 		}
 
@@ -511,14 +537,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 				onClosePreview(null);
 
 			resourcePreviewWindow = new ResourcePreviewWindow();
-			resourcePreviewWindow.addEventListener(ResourcePreviewWindow.CLOSE, onClosePreview);
+			resourcePreviewWindow.addEventListener( Event.CLOSE, onClosePreview );
 			resourcePreviewWindow.resourceVO = resourceVO;
 
-			WindowManager.getInstance().addWindow(resourcePreviewWindow, UIComponent(resourceSelectorWindow), true);
-			
-			BindingUtils.bindSetter( previewImage, resourceVO, "data", false, true  );
-			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+			WindowManager.getInstance().addWindow( resourcePreviewWindow, null, true );
 
+			BindingUtils.bindSetter( previewImage, resourceVO, "data", false, true  );
+
+			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 		}
 
 
@@ -531,7 +557,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				var loader : Loader = new Loader();
 				loader.name = resourceVO.id;
 
-				if ( resourceVO.data != null )
+				if ( resourceVO.data )
 				{
 					loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loaderComplete );
 					loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loaderComplete );
@@ -539,14 +565,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					loader.loadBytes( resourceVO.data );
 				}
-				else
-					return;
 
 			}
 		}
 
 		private function removeHandlers() : void
 		{
+			trace("Res: removeHandlers()");
 			resourceSelectorWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
 			resourceSelectorWindow.removeEventListener( Event.CLOSE, closeHandler );
 //			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
@@ -566,7 +591,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			if ( !spinnerPopup )
 				return;
-			spinnerPopup.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			
+			spinnerPopup.close();
+			
 			spinnerPopup = null;
 		}
 

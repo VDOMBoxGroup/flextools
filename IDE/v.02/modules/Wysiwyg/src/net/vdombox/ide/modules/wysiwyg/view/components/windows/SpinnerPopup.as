@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
+	import mx.core.Window;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
@@ -51,7 +52,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		private function addHandlers():void
 		{
 			addEventListener( KeyboardEvent.KEY_DOWN, onKeyBtnDown, false, 0, true );
-			addEventListener(CloseEvent.CLOSE, closeHandler, false, 0, true);
 			addEventListener(FlexEvent.CREATION_COMPLETE, createComleatHandler, false, 0, true);
 		}
 		
@@ -63,7 +63,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			spinner.rotateImage();
 		}
 		
-		private function closeHandler( event : CloseEvent):void
+	
+		
+		public function close():void
 		{
 			spinner.stopRotateImage();
 			
@@ -72,6 +74,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			removePopup = true;
 			invalidateDisplayList();
 		}
+		
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
@@ -87,7 +90,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		private function removeHandlers():void
 		{
 			removeEventListener( KeyboardEvent.KEY_DOWN, onKeyBtnDown );
-			removeEventListener(CloseEvent.CLOSE, closeHandler);
+
 			removeEventListener(FlexEvent.CREATION_COMPLETE, createComleatHandler);
 		}
 		
@@ -100,7 +103,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 					return;
 			//
 			event.stopImmediatePropagation();
-			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			close();
 		}	
 	}
 }
