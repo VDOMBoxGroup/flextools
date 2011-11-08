@@ -35,6 +35,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.controls.Image;
 	import mx.controls.Text;
 	import mx.controls.ToolTip;
+	import mx.core.Application;
 	import mx.core.ClassFactory;
 	import mx.core.IFactory;
 	import mx.core.IVisualElement;
@@ -45,6 +46,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.ResizeEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
+	import mx.managers.SystemManager;
 	import mx.managers.ToolTipManager;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
@@ -59,6 +61,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.view.components.controls.ToolbarButton;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
 	
+	import spark.components.Application;
 	import spark.components.Button;
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
@@ -92,7 +95,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			super();
 			itemRendererFunction = chooseItemRenderer;
 			
-			ToolTip.maxWidth = 200;
+			ToolTip.maxWidth = 180;
 
 			addHandlers();
 		}
@@ -219,6 +222,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return _editableComponent;
 		}
+		
+		public function set setState( value : String ) : void
+		{
+			skin.currentState = value;
+			if ( value != "hovered" )
+				showToolTip();
+		}
 
 		public function get getState() : String
 		{
@@ -285,7 +295,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			isLocked = true;
 
-			skin.currentState = "locked";
+			setState = "locked";
 
 			if ( isRemoveChildren )
 			{
@@ -413,11 +423,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set selected( value : Boolean ) : void
 		{
 
-		}
-
-		public function set setState( state : String ) : void
-		{
-			skin.currentState = state;
 		}
 
 
@@ -903,6 +908,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			dispatchEvent( new RendererEvent( RendererEvent.CREATED ) );
+			createToolTip();
 		}
 
 		private function dataLoaded( object : Object = null ) : void
@@ -927,7 +933,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function dragDropHandler( event : DragEvent ) : void
 		{
-			skin.currentState = "normal";
+			setState = "normal";
 
 			var rde : RendererDropEvent = new RendererDropEvent( RendererDropEvent.DROP );
 
@@ -962,13 +968,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				var vdomDragManager : VdomDragManager = VdomDragManager.getInstance();
 				vdomDragManager.acceptDragDrop( UIComponent( this ) );
-				skin.currentState = "highlighted";
+				setState = "highlighted";
 			}
 		}
 
 		private function dragExitHandler( event : DragEvent ) : void
 		{
-			skin.currentState = "normal";
+			setState = "normal";
 		}
 
 		private function findNearestItem( currentElement : DisplayObjectContainer ) : RendererBase
@@ -1378,7 +1384,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function mouseOutHandler( event : MouseEvent ) : void
 		{
 			if ( skin.currentState == "hovered" )
-				skin.currentState = "normal";
+				setState = "normal";
+			else
+				showToolTip();
 		}
 
 		private function mouseOverHandler( event : MouseEvent ) : void
@@ -1388,13 +1396,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			invalidateDisplayList();
 			
-			if ( !( this is PageRenderer ) )
-				toolTip =  resourceManager.getString( 'Wysiwyg_General', 'renderer_toolTip' ) + renderVO.vdomObjectVO.name;
-			
 			if ( findNearestItem( event.target as DisplayObjectContainer ) == this )
-				skin.currentState = "hovered";
+			{
+				setState = "hovered";
+				if ( !( this is PageRenderer ) )
+				{ 
+					showToolTip( resourceManager.getString( 'Wysiwyg_General', 'renderer_toolTip' ) + renderVO.vdomObjectVO.name );
+					trace(renderVO.vdomObjectVO.name);
+					event.stopImmediatePropagation();
+				}
+			}
 			else
-				skin.currentState = "normal";
+			{
+				setState = "normal";
+			}
 			
 			
 		}
@@ -1437,12 +1452,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( _renderVO.staticFlag )
 				locker.visible = true;
-
-
-
-
-
-			skin.currentState = "normal";
+			
+			setState = "normal";
 		}
 
 
@@ -1560,6 +1571,47 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			renderEvent.object = event.object;
 
 			dispatchEvent( renderEvent );
+		}
+		
+		private var tip : ToolTip;
+		
+		private function createToolTip() : void
+		{
+			if( tip )
+				ToolTipManager.destroyToolTip( tip );
+			
+			tip = ToolTip( ToolTipManager.createToolTip( "", 0, 0, null, skin.parentApplication as UIComponent ));
+			tip.visible = false;
+			tip.setStyle( "backgroundColor", 0xFFFFFF );
+			tip.setStyle( "fontSize", 9 );
+			tip.setStyle( "cornerRadius", 0 );
+		}
+		
+		private function showToolTip( text : String = "") : void
+		{
+			if( text != "")
+			{
+				addEventListener(
+					MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler );
+				
+				tip.text = text;
+				//tip.visible = true;
+			}
+			else
+			{
+				removeEventListener(
+					MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler );
+				if ( tip )
+					tip.visible = false;
+			}
+		}
+		
+		private function systemManager_mouseMoveHandler( event : MouseEvent ) : void 
+		{
+			tip.x =	event.stageX + 15;
+			tip.y = event.stageY + 15;
+			if ( !tip.visible )
+				tip.visible = true;
 		}
 	}
 }
