@@ -65,10 +65,7 @@
 					
 					if( objectNameGroup )
 					{
-						if( data is ClientActionVO )
-							objectNameGroup.visible = true;
-						else
-							objectNameGroup.visible = false;
+						objectNameGroup.visible = data is ClientActionVO;
 					}
 				}
 			}
@@ -98,11 +95,7 @@
 				if ( !data )
 					return;
 
-				if ( skin.currentState == "normal" || skin.currentState == "disabled" )
-					data.state = true;
-				else
-					data.state = false;
-
+				data.state = skin.currentState == "normal" || skin.currentState == "disabled" ;
 			}
 			
 		]]>

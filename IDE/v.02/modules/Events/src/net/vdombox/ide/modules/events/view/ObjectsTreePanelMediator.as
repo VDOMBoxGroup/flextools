@@ -137,6 +137,7 @@ package net.vdombox.ide.modules.events.view
 						pageXMLTree = new XML();
 					}
 
+					// XXX: doun on quck switch (pagesXMLList == null)
 					currentPageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
 					currentPageXML.setChildren( new XMLList() );
 					currentPageXML.appendChild( pageXMLTree.* );
@@ -166,7 +167,6 @@ package net.vdombox.ide.modules.events.view
 							objectXML.@visible = true;
 							break;
 						}
-							
 					}
 				
 					break;
@@ -233,6 +233,8 @@ package net.vdombox.ide.modules.events.view
 				sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, pageVO);
 				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, pageVO );
 				
+				
+				// XXX: doun on quck switch
 				objectsTree.selectedItem = getPageXML(pageVO.id);
 				objectsTree.validateNow();
 				objectsTree.scrollToIndex(objectsTree.selectedIndex);
