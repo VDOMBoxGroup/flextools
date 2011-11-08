@@ -1,19 +1,18 @@
 package net.vdombox.ide.common.vo
 {
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
+
 	/**
 	 * The EventVO is Visual Object of VDOM Event.
 	 * EventVO is contained in VDOM Application. 
 	 */		
-	public class EventVO
+	public class EventVO  implements IEventBaseVO
 	{
-		[Bindable]
-		public var top : int;
+		private var _top : int;
 		
-		[Bindable]
-		public var left : int;
+		private var _left : int;
 		
-		[Bindable]
-		public var state : Boolean = true;
+		private var _state : Boolean = true;
 		
 		private var _name : String;
 		
@@ -31,11 +30,49 @@ package net.vdombox.ide.common.vo
 			return _eyeOpened;
 		}
 
+		public function get id() : String
+		{
+			return "";
+		}
+		
 		public function get name() : String
 		{
 			return _name;
 		}
 
+		[Bindable]
+		public function get state() : Boolean
+		{
+			return _state;
+		}
+		
+		public function set state(value : Boolean) : void
+		{
+			_state = value;
+		}
+		
+		[Bindable]
+		public function get left() : int
+		{
+			return _left;
+		}
+		
+		public function set left(value : int) : void
+		{
+			_left = value;
+		}
+		
+		[Bindable]
+		public function get top() : int
+		{
+			return _top;
+		}
+		
+		public function set top(value : int) : void
+		{
+			_top = value;
+		}
+		
 		public function get objectID() : String
 		{
 			return _objectID;

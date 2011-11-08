@@ -1,20 +1,20 @@
 package net.vdombox.ide.common.vo
 {
 	import mx.utils.UIDUtil;
+	
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
+
 	/**
 	 * The ClientActionVO is Visual Object of VDOM Client Action.
 	 * ClientAction is contained in VDOM Type (TypeVO). 
 	 */	
-	public class ClientActionVO
+	public class ClientActionVO implements IEventBaseVO
 	{
-		[Bindable]
-		public var top : int;
+		private var _top : int;
 		
-		[Bindable]
-		public var left : int;
+		private var _left : int;
 		
-		[Bindable]
-		public var state : Boolean;
+		private var _state : Boolean;
 		
 		private var _id : String;
 		
@@ -56,6 +56,39 @@ package net.vdombox.ide.common.vo
 		public function get parameters() : Array
 		{
 			return _parameters;
+		}
+		
+		[Bindable]
+		public function get state() : Boolean
+		{
+			return _state;
+		}
+		
+		public function set state(value : Boolean) : void
+		{
+			_state = value;
+		}
+		
+		[Bindable]
+		public function get left() : int
+		{
+			return _left;
+		}
+		
+		public function set left(value : int) : void
+		{
+			_left = value;
+		}
+		
+		[Bindable]
+		public function get top() : int
+		{
+			return _top;
+		}
+		
+		public function set top(value : int) : void
+		{
+			_top = value;
 		}
 		
 		public function set eyeOpened(value : Boolean) : void

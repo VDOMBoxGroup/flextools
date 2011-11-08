@@ -2,22 +2,22 @@ package net.vdombox.ide.common.vo
 {
 	import mx.utils.StringUtil;
 	
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
+	
 	/**
 	 * The ServerActionVO is Visual Object of VDOM Server Action.
 	 * ServerActionVO is contained in VDOM Application. 
 	 */
-	public class ServerActionVO
+	public class ServerActionVO  implements IEventBaseVO
 	{
 		private const TO_XML_TMPL : String =
 			"<Action Name=\"{0}\" Language=\"{1}\" Top=\"{2}\" Left=\"{3}\" State=\"{4}\"><![CDATA[{5}]\]></Action>";
 
 		private var _top : int = 0;
 
-		[Bindable]
-		public var left : int = 0;
+		private var _left : int = 0;
 
-		[Bindable]
-		public var state : Boolean = true;
+		private var _state : Boolean = true;
 
 		[Bindable]
 		public var script : String = "";
@@ -46,7 +46,18 @@ package net.vdombox.ide.common.vo
 		{
 			_top = value;
 		}
-
+		
+		[Bindable]
+		public function get left() : int
+		{
+			return _left;
+		}
+		
+		public function set left(value : int) : void
+		{
+			_left = value;
+		}
+		
 		public function get eyeOpened():Boolean
 		{
 			return _eyeOpened;
@@ -62,6 +73,22 @@ package net.vdombox.ide.common.vo
 			return _id;
 		}
 
+		public function get parameters() : Array
+		{
+			return [];
+		}
+		
+		[Bindable]
+		public function get state() : Boolean
+		{
+			return _state;
+		}
+		
+		public function set state(value : Boolean) : void
+		{
+			_state = value;
+		}
+		
 		public function get objectID() : String
 		{
 			return _objectID;
