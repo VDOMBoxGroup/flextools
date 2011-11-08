@@ -299,6 +299,8 @@ package net.vdombox.ide.modules.events.view
 			var newTarget : Object = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;
 			
 			// TODO : избавиться от дублирования (базовый класс - BaseItemRenderer)
+			if ( event.target.data )
+				return;
 			
 			if ( event.target is EventItemRenderer )
 			{
