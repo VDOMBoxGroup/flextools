@@ -3,7 +3,7 @@
 					  xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
-					  width="180" x="@{ data.left }" y="@{ data.top }"
+					  width="180"
 					  skinClass="net.vdombox.ide.modules.events.view.skins.EventElementSkin"
 					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)">
 
@@ -31,24 +31,6 @@
 			private var mouseOffcetX : int;
 			private var mouseOffcetY : int;
 			
-			[Bindable]
-			public function get data() : EventVO
-			{
-				return _data as EventVO;
-			}
-
-			public function set data( value : EventVO ) : void
-			{
-				_data = value as EventVO;
-
-				if ( _data )
-					title = _data.name;
-				else
-					title = null;
-
-				isNeedUpdateParameters = true;
-			}
-
 			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 			{
 				super.updateDisplayList( unscaledWidth, unscaledHeight );

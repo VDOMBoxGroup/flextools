@@ -24,13 +24,6 @@
 				super.data = value;
 			}
 			
-			public function get eventName() : String
-			{
-				if ( _data )
-					return _data.name as String;
-				
-				return "";
-			}
 			
 		]]>
 	</fx:Script>

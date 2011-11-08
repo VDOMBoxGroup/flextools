@@ -65,7 +65,7 @@ package net.vdombox.ide.modules.events.view
 			
 			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENTS_FOR_OBJECT );
 			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA );
-			interests.push( ApplicationFacade.GET_ELEMENTS_LIST_IN_WORK_AREA );
+			interests.push( ApplicationFacade.GET_EXISTING_ELEMENTS_IN_WORK_AREA );
 
 			return interests;
 		}
@@ -130,7 +130,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_ELEMENTS_LIST_IN_WORK_AREA:
+				case ApplicationFacade.GET_EXISTING_ELEMENTS_IN_WORK_AREA:
 				{
 					sendElementsList();
 					break;
@@ -199,7 +199,7 @@ package net.vdombox.ide.modules.events.view
 				listElements.push( workArea.contentGroup.getElementAt( i ) ); 
 			}
 			
-			sendNotification( ApplicationFacade.ELEMENTS_LIST_IN_WORK_AREA_GETTED, listElements);
+			sendNotification( ApplicationFacade.EXISTING_ELEMENTS_IN_WORK_AREA_GETTED, listElements);
 		}
 		
 		private function showHiddenElementsStateChanged( event : WorkAreaEvent ) : void
@@ -212,8 +212,6 @@ package net.vdombox.ide.modules.events.view
 			var numElements : Number = workArea.contentGroup.numElements;
 			
 			var element		: Object;
-			var baseElement	: BaseElement;
-			var eyeOpened	: Boolean;
 			
 			visibleElementProxy.showHidden = workArea.showHidden ;
 			
@@ -222,22 +220,24 @@ package net.vdombox.ide.modules.events.view
 				element = workArea.contentGroup.getElementAt( i );
 				
 				if (element is BaseElement)
-				{
-					baseElement = element as BaseElement;
-					
-					eyeOpened = visibleElementProxy.getElementEyeOpened( baseElement.uniqueName );
-					
-					baseElement.eyeOpened = eyeOpened;
-					baseElement.visibleState = visibleElementProxy.showHidden;
-				}
+					setElementVisibleState (element as BaseElement);
 			}
 			
 			workArea.setVisibleStateForAllLinkages();
 		}
 		
+		private function setElementVisibleState(element : BaseElement):void
+		{
+			var eyeOpened : Boolean = visibleElementProxy.getElementEyeOpened( element.uniqueName );
+			
+			element.eyeOpened = eyeOpened;
+			element.visibleState = visibleElementProxy.showHidden;
+		}
+		
 		private function elementEyeClicked( event : ElementEvent ) : void
 		{
-			var element		: Object = event.target;
+			var element	: Object = event.target;
+			
 			var newTarget : Object = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;
 			
 			if ( element is BaseElement )
@@ -246,6 +246,7 @@ package net.vdombox.ide.modules.events.view
 				
 				visibleElementProxy.setElementEyeOpened( baseElement.uniqueName, baseElement.eyeOpened );
 				
+				// TODO : см. комменты в ApplicationFacade
 				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, baseElement.objectID );
 				
 				if ( baseElement.objectID == newTarget.id )
@@ -256,6 +257,10 @@ package net.vdombox.ide.modules.events.view
 			
 		}
 		
+		// TODO :  убрать дублирование (базовый класс BaseElement)
+		// TODO :  переименовать newTarget
+		// TODO :  переименовать showNotVisible -> showHidden
+		// TODO :  название функции мне тоже не особо нравится 
 		private function setVisibleElementsForObject( body : Object ) : void
 		{
 			var leng : Number = workArea.contentGroup.numElements;
@@ -313,6 +318,10 @@ package net.vdombox.ide.modules.events.view
 			
 		}
 		
+		// TODO :  убрать дублирование (базовый класс BaseElement)
+		// TODO :  переименовать newTarget
+		// TODO :  переименовать showNotVisible -> showHidden
+		// TODO :  название функции мне тоже не особо нравится 
 		private function setVisibleElementInObject( body : Object ) : void
 		{
 			var leng : Number = workArea.contentGroup.numElements;
@@ -334,7 +343,7 @@ package net.vdombox.ide.modules.events.view
 				if ( element is ActionElement )
 				{
 					actionElement = element as ActionElement;
-					if ( actionElement.objectID == objectID && actionElement.actionName == nameElement )
+					if ( actionElement.objectID == objectID && actionElement.data.name == nameElement )
 					{
 						visibleElementProxy.setElementEyeOpened( actionElement.uniqueName, showElement );
 						actionElement.eyeOpened = visibleElementProxy.getElementEyeOpened( actionElement.uniqueName );

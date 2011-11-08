@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.events.view.components
 	import mx.utils.NameUtil;
 	import mx.utils.ObjectUtil;
 	
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.vo.ClientActionVO;
 	import net.vdombox.ide.common.vo.EventVO;
@@ -134,7 +135,7 @@ package net.vdombox.ide.modules.events.view.components
 			var eventVO : EventVO;
 			var eventElement : EventElement;
 			
-			var actionVO : Object;
+			var actionVO : IEventBaseVO;
 			var actionElement : ActionElement;
 			
 			var linkage : Linkage;
@@ -297,7 +298,7 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			var events : Array = applicationEventsVO.events;
 
-			var eventVO : EventVO = eventElement.data;
+			var eventVO : EventVO = eventElement.data as EventVO;
 			var eventObject : Object;
 
 			var i : uint;
@@ -536,8 +537,8 @@ package net.vdombox.ide.modules.events.view.components
 
 		private function stage_mouseUpHandler( event : MouseEvent ) : void
 		{
-			var eventVO : EventVO;
-			var actionVO : Object;
+			var eventVO : IEventBaseVO;
+			var actionVO : IEventBaseVO;
 
 			try
 			{
@@ -733,9 +734,7 @@ package net.vdombox.ide.modules.events.view.components
 				linkage = linkagesLayer.getElementAt( i ) as Linkage;
 				
 				if ( !linkage )
-				{
 					return;
-				}
 				
 				linkage.setVisibleState( showHidden );
 			}

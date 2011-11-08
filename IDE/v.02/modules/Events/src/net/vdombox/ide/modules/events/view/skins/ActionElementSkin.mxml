@@ -14,16 +14,17 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.common.interfaces.IEventBaseVO;
 			import net.vdombox.ide.common.vo.ClientActionVO;
 			import net.vdombox.ide.common.vo.ServerActionVO;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 
-			private var _data : Object;
+			private var _data : IEventBaseVO;
 			
 			private var isDataChanged : Boolean = false;
 			private var isStateChanged : Boolean = false;
 			
-			public function set data( value : Object ) : void
+			public function set data( value : IEventBaseVO ) : void
 			{
 				_data = value;
 				

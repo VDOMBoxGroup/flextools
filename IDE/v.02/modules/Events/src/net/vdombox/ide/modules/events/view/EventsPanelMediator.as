@@ -18,6 +18,8 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.ActionElement;
+	import net.vdombox.ide.modules.events.view.components.BaseElement;
+	import net.vdombox.ide.modules.events.view.components.BaseItemRenderer;
 	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.EventItemRenderer;
 	import net.vdombox.ide.modules.events.view.components.EventsPanel;
@@ -83,7 +85,7 @@ package net.vdombox.ide.modules.events.view
 
 			interests.push( ApplicationFacade.SERVER_ACTIONS_LIST_GETTED );
 			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL );
-			interests.push( ApplicationFacade.ELEMENTS_LIST_IN_WORK_AREA_GETTED );
+			interests.push( ApplicationFacade.EXISTING_ELEMENTS_IN_WORK_AREA_GETTED );
 			
 
 			return interests;
@@ -125,7 +127,7 @@ package net.vdombox.ide.modules.events.view
 					return;
 				}
 					
-				case ApplicationFacade.ELEMENTS_LIST_IN_WORK_AREA_GETTED:
+				case ApplicationFacade.EXISTING_ELEMENTS_IN_WORK_AREA_GETTED:
 				{
 					newEye( body );
 					return;
@@ -135,6 +137,9 @@ package net.vdombox.ide.modules.events.view
 			commitProperties();
 		}
 		
+		
+		// TODO :  убрать дублирование (базовый класс BaseElement)
+		// TODO :  переименовать функцию 
 		private function setEye( body : Object ) : void
 		{
 			var i : int;
@@ -145,10 +150,12 @@ package net.vdombox.ide.modules.events.view
 			if ( element is EventElement )
 			{
 				dataProvaider = new ArrayList( eventsPanel.eventsList.dataProvider.toArray());
-				var elementEvent : EventElement = element as EventElement;
+				
+				var eventElement : EventElement = element as EventElement;
+				
 				for each(var eventVO : EventVO in dataProvaider.source )
 				{
-					if ( eventVO.name == elementEvent.data.name )
+					if ( eventVO.name == eventElement.data.name )
 					{
 						eventVO.eyeOpened = eyeOpened;
 						break;
@@ -163,7 +170,7 @@ package net.vdombox.ide.modules.events.view
 				var elementAction : ActionElement = element as ActionElement;
 				for each(var object : Object in dataProvaider.source )
 				{
-					if ( object.name == elementAction.actionName )
+					if ( object.name == elementAction.data.name )
 					{
 						object.eyeOpened = eyeOpened;
 						break;
@@ -178,9 +185,14 @@ package net.vdombox.ide.modules.events.view
 		
 		private function newEye( body : Object ) : void
 		{
+			// TODO : переименовать функцию 
+			
+			// TODO : вынести строку в отдельную функцию 
 			elements = body as Array;
+			
 			var dataProvaider : ArrayList;
 			
+			// TODO : if вынести в отдельную функцию, параметром ей передавать лист 
 			if ( eventsPanel.eventsList.dataProvider )
 			{
 				dataProvaider = new ArrayList( eventsPanel.eventsList.dataProvider.toArray());
@@ -218,7 +230,7 @@ package net.vdombox.ide.modules.events.view
 			eventsPanel.eventsList.dataProvider = new ArrayList( currentTypeVO.events );
 			
 			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_LIST, currentTarget );
-			sendNotification( ApplicationFacade.GET_ELEMENTS_LIST_IN_WORK_AREA );
+			sendNotification( ApplicationFacade.GET_EXISTING_ELEMENTS_IN_WORK_AREA );
 		}
 
 		private function showActions( serverActions : Array ) : void
@@ -266,34 +278,31 @@ package net.vdombox.ide.modules.events.view
 		
 		private function eyeClickHandler( event : PanelsEvent ) : void
 		{
-			var newTarget : Object;
+			// TODO : переименовать
+			var newTarget : Object = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;
 			
-			if ( sessionProxy.selectedObject )
-				newTarget = sessionProxy.selectedObject;
-			else if ( sessionProxy.selectedPage )
-				newTarget = sessionProxy.selectedPage;
-			
+			// TODO : вместо всего что ниже отправлять только одно событие (sendNotification): EVENT_IN_PANEL_EYE_STATE_CHANGED
+			// и слушать его везде где надо (WORK_AREA и OBJECT_TREE, как я понимаю) 
 			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, newTarget.id );
 			
+			// TODO : см. комменты в ApplicationFacade
 			if ( event.target is EventItemRenderer )
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.eventName, objectID: newTarget.id , eyeOpened: event.target.eyeOpened } );
+				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.data.name, objectID: newTarget.id , eyeOpened: event.target.eyeOpened } );
 			else
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.actionName, objectID: newTarget.id , eyeOpened: event.target.eyeOpened } );
+				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.data.name, objectID: newTarget.id , eyeOpened: event.target.eyeOpened } );
 		}
 		
 		
 		private function createEyeInItemRenderer( event : FlexEvent ) : void
 		{
-			var newTarget : Object;
+			// TODO : переименовать
+			var newTarget : Object = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;
 			
-			if ( sessionProxy.selectedObject )
-				newTarget = sessionProxy.selectedObject;
-			else if ( sessionProxy.selectedPage )
-				newTarget = sessionProxy.selectedPage;
+			// TODO : избавиться от дублирования (базовый класс - BaseItemRenderer)
 			
 			if ( event.target is EventItemRenderer )
 			{
-				var nameEvent : String = event.target.eventName as String;
+				var nameEvent : String = event.target.data.name as String;
 				
 				nameEvent += ( newTarget.id as String );
 			
@@ -304,7 +313,7 @@ package net.vdombox.ide.modules.events.view
 			}
 			else
 			{
-				var actionName : String = event.target.actionName as String;
+				var actionName : String = event.target.data.name as String;
 				var actionElement : ActionElement = findInElementsAction( actionName, newTarget.id as String );
 				
 				if ( actionElement )
@@ -320,12 +329,13 @@ package net.vdombox.ide.modules.events.view
 
 		}
 		
+		// TODO : rename function
 		private function findInElementsEvent( value : String ) : Boolean
 		{
 			if ( !elements )
 				return false;
-			var i : int;
-			for ( i = 0; i < elements.length; i++ )
+			
+			for ( var i:uint = 0; i < elements.length; i++ )
 			{
 				if ( elements[i] is EventElement )
 				{
@@ -336,29 +346,30 @@ package net.vdombox.ide.modules.events.view
 			return false;
 		}
 		
+		// TODO : rename function
 		private function findInElementsAction( value : String, objectID : String ) : ActionElement
 		{
+			// TODO : разбить на функции, упростить
 			if ( !elements )
 				return null;
-			var i : int;
+			
 			var actionList : Array = new Array();
 			
-			for ( i = 0; i < elements.length; i++ )
+			for ( var i:uint = 0; i < elements.length; i++ )
 			{
 				if ( elements[i] is ActionElement )
 				{
-					if ( elements[i].actionName == value && elements[i].objectID == objectID )
+					if ( elements[i].data.name == value && elements[i].objectID == objectID )
 						actionList.push( elements[ i ] );
 				}
 			}
 			
-			var actionElement : ActionElement;
-			
 			if ( actionList.length == 0 )
 					return null;
+			
 			var flag : Boolean = (actionList[ 0 ] as ActionElement).eyeOpened;
 			
-			for each ( actionElement in actionList )
+			for each ( var actionElement : ActionElement in actionList )
 			{
 				if ( flag != actionElement.eyeOpened )
 					return new ActionElement();

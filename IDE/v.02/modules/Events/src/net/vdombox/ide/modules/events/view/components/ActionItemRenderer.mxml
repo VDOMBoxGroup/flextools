@@ -33,22 +33,6 @@
 				super.data = value;
 			}
 			
-			public function get actionName() : String
-			{
-				if ( _data )
-					return _data.name as String;
-				else
-					return "";
-			}
-			
-			public function get actionID() : String
-			{
-				if ( _data )
-					return _data.id as String;
-				else
-					return "";
-			}
-		
 		]]>
 	</fx:Script>
 

@@ -17,7 +17,7 @@
 			protected var currentIcon : Class;
 			
 			[Bindable]
-			protected var _data : Object;
+			private var _data : Object;
 			
 			override public function set data( value : Object ) : void
 			{
@@ -44,7 +44,6 @@
 			{
 				if ( _data ) 
 				{ 
-					trace ('onVisibilityChanged : ' + _data.name);
 					eye.setOpenState(eyeOpened);
 				}
 			}

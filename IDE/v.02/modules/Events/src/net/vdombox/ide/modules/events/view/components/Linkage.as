@@ -401,6 +401,7 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			visible = showHidden || target.eyeOpened && source.eyeOpened;
 			
+			// FIXME
 			// для того чтобы линки стали видны необходимо передвинуть компанент. НАдо бы пофмксить
 			source.x += 1;
 			source.x -= 1;

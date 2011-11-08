@@ -297,6 +297,7 @@ package net.vdombox.ide.modules.events.view
 			
 			visibleElementProxy.setObjectEyeOpened( objectID, eyeOpened);
 			
+			// FIXME : см. комменты в ApplicationFacade 
 			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENTS_FOR_OBJECT, { objectID: objectID, visible: eyeOpened } );
 		}
 	}

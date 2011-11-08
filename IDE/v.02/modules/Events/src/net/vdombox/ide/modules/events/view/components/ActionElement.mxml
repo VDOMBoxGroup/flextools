@@ -3,7 +3,7 @@
 					  xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
-					  width="180" x="@{ data.left }" y="@{ data.top }"
+					  width="180"
 					  skinClass="net.vdombox.ide.modules.events.view.skins.ActionElementSkin"
 					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)">
 
@@ -31,35 +31,9 @@
 			[SkinPart( required="true" )]
 			public var hideButton : ElementButton;
 		
-			public function get actionName() : String
-			{
-				return _data.name as String;
-			}
-
-			[Bindable]
-			public function get data() : Object
-			{
-				return _data;
-			}
-
-			public function set data( value : Object ) : void
-			{
-				_data = value;
-
-				if ( _data )
-					title = _data.name;
-				else
-					title = null;
-
-				isNeedUpdateParameters = true;
-			}
-			
 			public override function get uniqueName() : String
 			{
-				if ( _data )
-					return _data.name + _data.objectID + _data.id;
-				else
-					return "";
+				return data ? data.name + data.objectID + data.id : "";
 			}
 
 			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
@@ -71,7 +45,7 @@
 					isNeedUpdateParameters = false;
 					parametersContainer.removeAllElements();
 
-					if ( !_data.hasOwnProperty( "parameters" ) || _data.parameters.length == 0 )
+					if ( data.parameters.length == 0 )
 						return;
 
 					var parameter : ActionParameterVO;
@@ -80,7 +54,7 @@
 					var parameterRendererFactory : ClassFactory = new ClassFactory( EditableParameterRenderer );
 					parameterRendererFactory.properties = { percentWidth: 100 };
 
-					for each ( parameter in _data.parameters )
+					for each ( parameter in data.parameters )
 					{
 						parameterRenderer = parameterRendererFactory.newInstance();
 
@@ -91,7 +65,7 @@
 					
 					if( objectNameGroup )
 					{
-						if( _data is ClientActionVO )
+						if( data is ClientActionVO )
 							objectNameGroup.visible = true;
 						else
 							objectNameGroup.visible = false;
@@ -121,13 +95,13 @@
 		
 			private function hideButton_clickHandler( event : MouseEvent ) : void
 			{
-				if ( !_data || !_data.hasOwnProperty( "state" ) )
+				if ( !data )
 					return;
 
 				if ( skin.currentState == "normal" || skin.currentState == "disabled" )
-					_data.state = true;
+					data.state = true;
 				else
-					_data.state = false;
+					data.state = false;
 
 			}
 			
