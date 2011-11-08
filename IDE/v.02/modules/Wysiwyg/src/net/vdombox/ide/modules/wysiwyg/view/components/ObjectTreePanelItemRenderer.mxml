@@ -193,7 +193,8 @@
 			protected function mxtreeitemrenderer1_contextMenuHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
-				_contextMenu.display( this.stage, event.stageX, event.stageY );
+				if ( _data.@visible[ 0 ] )
+					_contextMenu.display( this.stage, event.stageX, event.stageY );
 			}
 			
 			private function deleteContextMenuHandler( event : Event ) : void
