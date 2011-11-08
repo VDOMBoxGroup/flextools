@@ -2,7 +2,7 @@
 <s:SparkSkin xmlns:components="net.vdombox.ide.modules.events.view.components.*"
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
-			 xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx1="library://ns.adobe.com/flex/mx">
+			 xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:components1="net.vdombox.components.*">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -65,11 +65,11 @@
 			</s:fill>
 		</s:Rect>
 
-		<s:Scroller height="100%" width="100%">
+		<components1:VDOMScroller height="100%" width="100%">
 			<s:Group>
 				<s:Group id="linkagesLayer"/>
 				<s:Group id="contentGroup"/>
 			</s:Group>
-		</s:Scroller>
+		</components1:VDOMScroller>
 	</s:Group>
 </s:SparkSkin>
