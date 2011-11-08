@@ -13,11 +13,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.controls.TileList;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
+	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
@@ -25,6 +27,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.SmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
 	import net.vdombox.utils.WindowManager;
+	
 	import spark.components.ComboBox;
 	import spark.components.Label;
 	import spark.components.List;
@@ -118,6 +121,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function set resources( value : ArrayList ) : void
 		{
 			_resources = value;
+			
 			setSelectedItem();
 		}
 
@@ -243,6 +247,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			}
 		}
 		
+		public function addResource( resourceVO : ResourceVO ) : void
+		{
+			totalResources++;
+			
+			resources.addItem( resourceVO );
+			
+			selectedResourceIndex = scrollToIndex = resources.length - 1;
+			
+			invalidateProperties();
+		}
 		
 //		public function set 
 	}

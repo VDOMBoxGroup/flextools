@@ -72,23 +72,25 @@ package net.vdombox.ide.modules.wysiwyg.view
 			super( NAME, viewComponent );
 		}
 
-		private var _filters : ArrayCollection          = new ArrayCollection();
+		private var _filters : ArrayCollection = new ArrayCollection();
 
 		private var allResourcesList : ArrayList;
 
 		private var delResVO : ResourceVO;
 
-		private var noneIcon : ResourceVO               = new ResourceVO( ResourceVO.RESOURCE_NONE );
+		private var noneIcon : ResourceVO  = new ResourceVO( ResourceVO.RESOURCE_NONE );
 
 		private var resourcePreviewWindow : ResourcePreviewWindow;
 
-		private var resourceVO : ResourceVO             = new ResourceVO( ResourceVO.RESOURCE_TEMP );
+		private var resourceVO : ResourceVO  = new ResourceVO( ResourceVO.RESOURCE_TEMP );
 
 		private var sessionProxy : SessionProxy;
 
 		private var showSpinnerOnListCreation : Boolean = true;
 
 		private var spinnerPopup : SpinnerPopup;
+		
+		
 
 		private function updateData(resources: Array) : void
 		{
@@ -158,6 +160,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			trace("Res: onRegister()");
+			
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
 			addHandlers();
@@ -168,6 +171,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRemove() : void
 		{
 			trace("Res: onRemove()");
+			
 			removeHandlers();
 
 			sessionProxy = null;
@@ -199,10 +203,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( !showSpinnerOnListCreation )
 			{
 				showSpinnerOnListCreation = true;
+				
 				return;
 			}
 
 			var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_create_resources' );
+			
 			createSpinnerPopup(spinnerTxt);
 		}
 
@@ -269,12 +275,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			addFilter( resourceVO.type);
 
-			//FIXME: ???
-			resourceSelectorWindow.totalResources++;
-			resourceSelectorWindow.resources.addItemAt( resourceVO, resourceSelectorWindow.resources.length );
-			resourceSelectorWindow.scrollToIndex = resourceSelectorWindow.resources.length - 1;
-			resourceSelectorWindow.selectedResourceIndex = resourceSelectorWindow.resources.length - 1;
-			resourceSelectorWindow.invalidateProperties();
+			resourceSelectorWindow.addResource(  resourceVO );
 
 			removeSpinnerPopup();
 		}
@@ -311,21 +312,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.resources = newResourcesList;
 		}
 
-//		private function applyHandler( event : ResourceSelectorWindowEvent ) : void
-//		{
-//			resourceSelectorWindow.dispatchEvent( new Event( Event.CHANGE ) );
-//			resourceSelectorWindow.dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ) );
-//		}
 
 		private function closeHandler( event : Event ) : void
 		{
 			allResourcesList = null;
-
-//			resourceSelectorWindow.resources = null;
-
-
-//			WindowManager.getInstance().removeWindow(resourceSelectorWindow);
-
 
 			facade.removeMediator( mediatorName );
 		}
@@ -388,7 +378,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			Alert.Show( "Are you sure want to delete\n " + componentName + " ?", 
 						AlertButton.OK_No, 
 						resourceSelectorWindow, deleteResourceCloseHandler);
-
 		}
 
 		private function getIconRequestHendler( event: ResourceVOEvent) : void
@@ -410,6 +399,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 
 
+		// TODO: put in resourceSelectorWindow
 		private function loadFileHandler( event : ResourceVOEvent ) : void
 		{
 			var openFile : File = new File();
@@ -574,9 +564,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			trace("Res: removeHandlers()");
 			resourceSelectorWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
 			resourceSelectorWindow.removeEventListener( Event.CLOSE, closeHandler );
-//			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
 			resourceSelectorWindow.removeEventListener( ResourceVOEvent.LOAD_RESOURCE, loadFileHandler ); //коряво очень поменять местами
-//			resourceSelectorWindow.removeEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true ); //коряво очень
 			resourceSelectorWindow.removeEventListener( ResourceVOEvent.GET_RESOURCES, getResourcesRequestHandler );
 
 			resourceSelectorWindow.removeEventListener(ResourceVOEvent.PREVIEW_RESOURCE, onResourcePreview);
