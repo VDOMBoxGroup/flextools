@@ -13,7 +13,6 @@ package net.vdombox.ide.modules.events.view.components
 	
 	public class BaseElement extends SkinnableContainer
 	{
-		[Bindable]
 		private var _data : IEventBaseVO;
 		
 		[SkinPart( required="true" )]
@@ -33,6 +32,7 @@ package net.vdombox.ide.modules.events.view.components
 			super();
 		}
 		
+		[Bindable]
 		public function get data() : IEventBaseVO
 		{
 			return _data;
