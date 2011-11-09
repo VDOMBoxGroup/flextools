@@ -1075,9 +1075,29 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			conatiner = new Group();
 			
-			conatiner.clipAndEnableScrolling = true;
+			var conatiner2 : Group = new Group();
+			
+			var groupLayout : VerticalLayout = new VerticalLayout();
+			groupLayout.gap = 0;
+			conatiner2.layout = groupLayout;
+			
+			//conatiner2.clipAndEnableScrolling = true;
+			
+			conatiner2.percentWidth = 100;
+			conatiner2.percentHeight = 100;
+			
+			var scroll : Scroller = new Scroller();
+			scroll.percentWidth = 100;
+			scroll.percentHeight = 100; 
+			scroll.viewport = conatiner2;
+			scroll.focusEnabled = false;
+			
+			//conatiner2.addElement( scroll );
+		
 			
 			parentContainer.addElement( conatiner );
+			
+			//conatiner.clipAndEnableScrolling = true;
 			
 			param = Number( contetnt.@top[ 0 ] )
 			
@@ -1106,20 +1126,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			setStyleField( contetnt, conatiner );
 			
 			
-			var conatiner2 : Group = new Group();
+			conatiner.addElement( scroll );
 			
-			var groupLayout : VerticalLayout = new VerticalLayout();
-			groupLayout.gap = 0;
-			conatiner2.layout = groupLayout;
-			
-			conatiner2.clipAndEnableScrolling = true;
-			
-			conatiner2.percentWidth = 100;
-			conatiner2.percentHeight = 100;
-			
-			conatiner.addElement( conatiner2 );
-			
-			parentContainer.addElement( conatiner );
 			
 			return conatiner2;
 		}
@@ -1182,7 +1190,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			conatiner.addElement( conatiner2 );
 			
 			
-			parentContainer.addElement( conatiner );
+
 			
 			return conatiner2;
 		}
