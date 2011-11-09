@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 xmlns:components="net.vdombox.ide.modules.resourceBrowser.view.components.*"
+		 
+		 implements="net.vdombox.ide.common.interfaces.IToolset"
+		 
+		 height="100%" xmlns:components1="net.vdombox.ide.modules.dataBase.view.components.*">
+
+	<fx:Metadata> 
+		[ResourceBundle("DataBase_General")] 
+	</fx:Metadata>
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.common.interfaces.IToolset;
+			import net.vdombox.ide.modules.dataBase.events.ToolsetEvent;
+		]]>
+	</fx:Script>
+
+	<s:layout>
+
+		<s:HorizontalLayout />
+	</s:layout>
+
+	<components1:ToolsetButton id="toolsetButton"
+							  height="100%"
+							  label="{ resourceManager.getString( 'DataBase_General', 'toolset_button_label' ) }"
+							  skinClass="net.vdombox.ide.common.skins.ToolsetButtonSkin" />
+</s:Group>

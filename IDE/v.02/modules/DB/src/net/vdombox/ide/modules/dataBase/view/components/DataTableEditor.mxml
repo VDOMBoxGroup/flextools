@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
+					  preinitialize="preinitializeHandler(event)"
+					  implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.common.vo.ObjectVO;
+			import net.vdombox.ide.modules.dataBase.events.EditorEvent;
+			[Bindable]
+			private var _dataGridProvider:ArrayCollection = new ArrayCollection();
+			private var _objectVO : ObjectVO;
+			
+			public function get editorID() : String
+			{
+				return _objectVO ? _objectVO.id : "";
+			}
+			
+			public function get editorName() : String
+			{
+				return _objectVO ? _objectVO.name : "";
+			}
+			
+			public function get objectVO() : ObjectVO
+			{
+				return _objectVO ? _objectVO : null;
+			}
+			
+			public function set objectVO( value : ObjectVO ) : void
+			{
+				_objectVO = value;
+			}
+			
+			
+			protected function preinitializeHandler(event:FlexEvent):void
+			{
+				addHandlers();
+			}
+			
+			private function addHandlers() : void
+			{
+				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
+			}
+			
+			private function removeHandlers() : void
+			{
+				removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+			}
+			
+			private function removedFromStageHandler( event : Event ) : void
+			{
+				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
+				
+				removeHandlers();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<mx:DataGrid id="dataTable"
+				 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
+				 editable="true"
+				 doubleClickEnabled="true" 
+				  draggableColumns="false" sortableColumns="false" />
+</s:SkinnableContainer>
