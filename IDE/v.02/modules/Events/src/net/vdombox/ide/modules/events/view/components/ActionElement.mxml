@@ -50,8 +50,8 @@
 
 					var parameter : ActionParameterVO;
 					var parameterRenderer : EditableParameterRenderer;
-
 					var parameterRendererFactory : ClassFactory = new ClassFactory( EditableParameterRenderer );
+				
 					parameterRendererFactory.properties = { percentWidth: 100 };
 
 					for each ( parameter in data.parameters )
