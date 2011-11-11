@@ -3,16 +3,10 @@
 		xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:local="*"
 		xmlns:s="library://ns.adobe.com/flex/spark"
-		xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*"
-		alpha.disabled="0.5">
+		xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*">
 
 	<fx:Metadata>
-		<![CDATA[ 
-		/** 
-		* @copy spark.skins.spark.ApplicationSkin#hostComponent
-		*/
 		[HostComponent("spark.components.TabBar")]
-		]]>
 	</fx:Metadata>
 
 	<fx:Script fb:purpose="styling">
@@ -27,11 +21,15 @@
 			{
 				const numElements : int = dataGroup.numElements;
 				const cornerRadius : int = hostComponent.getStyle( "cornerRadius" );
+				
 				for ( var i : int = 0; i < numElements; i++ )
 				{
-					var elt : UIComponent = dataGroup.getElementAt( i ) as UIComponent;
-					if ( elt )
-						elt.setStyle( "cornerRadius", cornerRadius );
+					var tabBarBtn : UIComponent = dataGroup.getElementAt( i ) as UIComponent;
+					
+					if ( tabBarBtn ) {
+						tabBarBtn.setStyle( "cornerRadius", cornerRadius );
+						tabBarBtn["firstBtn"] = i == 0;
+					}
 				}
 
 				super.updateDisplayList( unscaledWidth, unscaledHeight );
@@ -48,13 +46,12 @@
 	<s:DataGroup id="dataGroup"
 				 height="100%" width="100%">
 		<s:layout>
-			<s:ButtonBarHorizontalLayout gap="-1"/>
+			<s:ButtonBarHorizontalLayout gap="-16"/>
 		</s:layout>
 
 		<s:itemRenderer>
 			<fx:Component>
-				<tabNavigatorClasses:TabBarButton maxWidth="100"
-												  mouseChildren="true"/>
+				<tabNavigatorClasses:TabBarButton mouseChildren="true" skinClass="net.vdombox.view.skins.TabBarButtonSkin"/>
 			</fx:Component>
 		</s:itemRenderer>
 

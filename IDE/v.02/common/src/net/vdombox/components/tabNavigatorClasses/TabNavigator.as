@@ -1,13 +1,13 @@
-package net.vdombox.components
+package net.vdombox.components.tabNavigatorClasses
 {
 	import flash.events.Event;
 	
 	import mx.collections.ArrayList;
+	import mx.core.ClassFactory;
+	import mx.core.IFactory;
 	import mx.core.IVisualElement;
 	import mx.events.ListEvent;
 	
-	import net.vdombox.components.tabNavigatorClasses.Tab;
-	import net.vdombox.components.tabNavigatorClasses.TabBarButton;
 	import net.vdombox.ide.common.events.TabEvent;
 	import net.vdombox.view.skins.TabNavigatorSkin;
 	
@@ -35,6 +35,24 @@ package net.vdombox.components
 			return tabBar.selectedItem as Tab;
 		}
 		
+		public function myItemRendererFunction(item:Object):IFactory
+		{
+			var itemFactory : ClassFactory;
+			var skinType : Number;
+				
+			skinType = isFirstTab ? 1 : 0;
+			
+			itemFactory = new ClassFactory( TabBarButton );
+			itemFactory.properties = { mouseChildren: true , index : skinType};
+				
+			return itemFactory;
+		}
+		
+		private function get isFirstTab() : Boolean
+		{
+			return tabBar.dataProvider && tabBar.dataProvider.length == 1;
+		}
+			
 		public function set selectedTab( tab : Tab ) : void
 		{
 			var currentTab : Tab = tabBar.selectedItem as Tab;
@@ -120,7 +138,6 @@ package net.vdombox.components
 				selectedTab = historyStack[ historyStack.length - 1 ];
 			
 			tabBar.dataProvider.removeItemAt( index );
-			
 			
 		}
 		
@@ -312,7 +329,6 @@ package net.vdombox.components
 		
 		private function tab_elementRemove( event : TabEvent ) : void
 		{
-			
 		}
 	}
 }

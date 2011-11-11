@@ -21,7 +21,7 @@
 				if ( dWidth < 0 && !hsb.visible )
 				{
 					hsb.visible = true;
-					tabBarGroup.left = tabBarGroup.right = 18;
+					tabBarGroup.left = tabBarGroup.right = 16;
 				}
 				else if ( dWidth >= 0 && hsb.visible )
 				{
@@ -36,26 +36,33 @@
 			}
 		]]>
 	</fx:Script>
-
+	
+	<fx:Metadata>
+		[HostComponent("net.vdombox.components.tabNavigatorClasses.TabNavigator")]
+	</fx:Metadata>
+	
 	<s:states>
 		<s:State name="normal"/>
 		<s:State name="disabled"/>
 	</s:states>
 
 	<s:Group id="tabBarGroup"
-			 left="0" right="0"
+			 left="0" right="0" top="-20"
 			 updateComplete="checkScrollbar()">
+		
 		<s:TabBar id="tabBar"
 				  skinClass="net.vdombox.view.skins.TabBarSkin"
-				  requireSelection="true"/>
+				  requireSelection="true" top=""/>
 	</s:Group>
 
-	<s:Scroller height="100%" width="100%" y="{ tabBarGroup.height }">
+	<s:Scroller height="100%" width="100%" y="0">
 		<s:Group id="contentGroup"/>
 	</s:Scroller>
 
-	<tabNavigatorClasses:TabNavigatorScrollBar id="hsb"
-											   height="24" pageSize="60" stepSize="2" width="100%"
+	<tabNavigatorClasses:TabNavigatorScrollBar id="hsb" 
+											   top="-22"
+											   height="24" width="100%"
+											   pageSize="60" stepSize="2" 
 											   repeatInterval="150" skinClass="net.vdombox.view.skins.TabNavigatorScrollBarSkin"
 											   visible="false" smoothScrolling="true" viewport="{ tabBarGroup }"/>
 

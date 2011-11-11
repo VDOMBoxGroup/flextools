@@ -11,6 +11,7 @@ package net.vdombox.components.tabNavigatorClasses
 	
 	import spark.components.Button;
 	import spark.components.ButtonBarButton;
+	import spark.primitives.Graphic;
 
 	public class TabBarButton extends ButtonBarButton
 	{
@@ -18,15 +19,35 @@ package net.vdombox.components.tabNavigatorClasses
 
 		public function TabBarButton() : void
 		{
-			setStyle( "skinClass", net.vdombox.view.skins.TabBarButtonSkin );
 		}
 
 		[SkinPart( required="true" )]
 		public var closeButton : Button;
+		
+		[SkinPart( required="true" )]
+		public var bgUsualBtn : Graphic;
+		
+		[SkinPart( required="true" )]
+		public var bgFirstBtn : Graphic;
+		
 
 		private var _closeIncluded : Boolean = true;
+		private var _firstBtn : Boolean = true;
+		
 		private var cw : ChangeWatcher;
 
+		[Bindable]
+		public function get firstBtn():Boolean
+		{
+			return _firstBtn;
+		}
+
+		public function set firstBtn(value:Boolean):void
+		{
+			_firstBtn = value;
+		}
+
+		[Bindable]
 		public function get canClose() : Boolean
 		{
 			return _closeIncluded;
@@ -35,9 +56,6 @@ package net.vdombox.components.tabNavigatorClasses
 		public function set canClose( value : Boolean ) : void
 		{
 			_closeIncluded = value;
-
-			if ( skin )
-				skin.invalidateDisplayList();
 		}
 
 		override public function set data( value : Object ) : void
@@ -58,6 +76,7 @@ package net.vdombox.components.tabNavigatorClasses
 		override protected function partAdded( partName : String, instance : Object ) : void
 		{
 			super.partAdded( partName, instance );
+			
 			if ( instance == closeButton )
 				closeButton.addEventListener( MouseEvent.CLICK, closeButton_clickHandler, false, 0, true );
 		}

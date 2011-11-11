@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="21" minWidth="100"
-			 alpha.disabledStates="0.5" creationComplete="creationCompleteHandler()">
+			 minHeight="22" maxHeight="22" minWidth="115" maxWidth="115"
+			 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*">
 
 	<!-- host component -->
 	<fx:Metadata>
@@ -12,70 +12,98 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			override protected function updateDisplayList( unscaledWidth : Number, unscaleHeight : Number ) : void
-			{
-				closeButton.visible = hostComponent.canClose;
-
-				if ( !closeButton.visible )
-				{
-					labelDisplay.right = 8;
-				}
-				else
-				{
-					labelDisplay.right = 18;
-				}
-
-				super.updateDisplayList( unscaledWidth, unscaledHeight );
-			}
-
 			
-			protected function creationCompleteHandler():void
-			{
-				// TODO Auto-generated method stub
-				//transform.matrix = new Matrix(1, .5, .5, 1, 150, 200);;
-			}
 			
 		]]>
 	</fx:Script>
 
 	<!-- states -->
 	<s:states>
-		<s:State name="up"/>
+		<s:State name="up" stateGroups="invisibleStates"/>
 		<s:State name="over" stateGroups="overStates"/>
 		<s:State name="down" stateGroups="downStates"/>
-		<s:State name="disabled" stateGroups="disabledStates"/>
-		<s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates"/>
+		<s:State name="disabled" stateGroups="disabledStates, invisibleStates"/>
+		<s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates, invisibleStates"/>
 		<s:State name="overAndSelected" stateGroups="overStates, selectedStates"/>
 		<s:State name="downAndSelected" stateGroups="downStates, selectedStates"/>
-		<s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates"/>
+		<s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates, invisibleStates"/>
 	</s:states>
 
 	<!-- layer 1: fill -->
 
-	<s:Rect id="backgroundRect" bottom="0" left="0" right="0" top="0">
-			
-		<s:stroke>
-			<s:SolidColorStroke color="black"/>
-		</s:stroke>
+	<!--<s:Rect id="backgroundRect" bottom="0" left="0" right="0" top="0">
 			
 		<s:fill>
 			<s:LinearGradient>
 				<s:GradientEntry color="#353535" color.downStates="#949494" color.overStates="#949494" color.selectedUpStates="#FCFDFD"/>
 				<s:GradientEntry color="#353535" color.downStates="#949494" color.overStates="#949494" color.selectedUpStates="#FFFFFF"/>
 			</s:LinearGradient>
-		</s:fill>
+		</s:fill>		
 			
-	</s:Rect>
+	</s:Rect>-->
+	
+	<s:Graphic id="bgUsualBtn" x="0" y="0" visible="{!hostComponent.firstBtn}">
+		<s:Path data="M 4 0
+				H 100
+				Q 101 1 102 1.5
+				L 112 21.5
+				Q 113 22.5 112 24
+				H 13.5
+				Q 12 23.7 11 22
+				L 2.5 4.5
+				C 2 0.5 0 1.5 4 0">
+			<s:stroke>
+				<s:LinearGradientStroke weight="1" rotation="90">
+					<s:GradientEntry color="#595959" color.selectedStates="#f8fafa"/>
+					<s:GradientEntry color="#4b4b4b" color.selectedStates="#ffffff"/>
+				</s:LinearGradientStroke>
+			</s:stroke>
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="#3e3e3e" color.selectedStates="#f9fafa"/>
+					<s:GradientEntry color="#343434" color.selectedStates="#ffffff"/>
+				</s:LinearGradient>
+			</s:fill>
+		</s:Path>
+	</s:Graphic>
+	
+	<s:Graphic id="bgFirstBtn" x="0" y="0" visible="{hostComponent.firstBtn}">
+		<s:Path data="M 6 0
+				H 100
+				Q 101 1 102 1.5
+				L 112 21.5
+				Q 113 22.5 112 24
+				H 3.5
+				Q 2 23.7 1 22
+				L 0 4.5
+				C 1 0.7 0.5 0.5 6.2 0">
+			<s:stroke>
+				<s:LinearGradientStroke weight="1" rotation="90">
+					<s:GradientEntry color="#595959" color.selectedStates="#f8fafa"/>
+					<s:GradientEntry color="#4b4b4b" color.selectedStates="#ffffff"/>
+				</s:LinearGradientStroke>
+			</s:stroke>
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="#3e3e3e" color.selectedStates="#f9fafa"/>
+					<s:GradientEntry color="#343434" color.selectedStates="#ffffff"/>
+				</s:LinearGradient>
+			</s:fill>
+		</s:Path>
+	</s:Graphic>
+	
 	<!-- layer 2: text -->
 	<!--- Defines the appearance of the label(s) for the middle button(s) in the ButtonBar component. -->
 	
-	<s:Label id="labelDisplay"
-			 bottom="2" color="#686868" color.down="white" color.over="white" color.selectedStates="#000000" fontFamily="Verdana" left="5" right="10" textAlign="left" top="2" verticalAlign="middle"
-			 verticalCenter="1"
-			 maxDisplayedLines="1"/>
+	<s:HGroup bottom="2" left="10" right="15" top="2" gap="1" verticalAlign="middle">
+		<s:Label id="labelDisplay" width="100%"
+				 color.selectedStates="#000000" color="#aeaeae" 
+				 fontFamily="Verdana" textAlign="center" 
+				 maxDisplayedLines="1"/>
+		
+		<tabNavigatorClasses:TabBarCloseButton id="closeButton" visible="{hostComponent.canClose}"/>
+	</s:HGroup>
 	
-	<s:Button id="closeButton"
-			  right="2" skinClass="net.vdombox.view.skins.CloseButtonSkin" verticalCenter="1"/>
 	
 
 </s:SparkSkin>
