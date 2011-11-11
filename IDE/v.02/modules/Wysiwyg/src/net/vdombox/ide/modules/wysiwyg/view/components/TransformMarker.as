@@ -378,7 +378,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( !_selectedItem )
 				return;
 			var editComponent : Object = (_selectedItem as RendererBase).editableComponent;
-			if (  editComponent && (_selectedItem as RendererBase).typeVO.name == "text" || (_selectedItem as RendererBase).typeVO.name == "richtext" )
+			if (  editComponent &&( (_selectedItem as RendererBase).typeVO.name == "text" || (_selectedItem as RendererBase).typeVO.name == "richtext" ))
 			{
 				
 				if ( editComponent )
