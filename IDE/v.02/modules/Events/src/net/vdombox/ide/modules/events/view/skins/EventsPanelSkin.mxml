@@ -14,10 +14,14 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
+			import mx.events.FlexEvent;
 			import mx.resources.IResourceManager;
 			import mx.resources.ResourceManager;
 			import mx.utils.ObjectProxy;
-
+			
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
+			
 			import spark.skins.spark.DefaultItemRenderer;
 
 			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
@@ -40,6 +44,21 @@
 				else
 					currentState = "events";
 			}
+			
+			protected function eventsList_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				eventsList.scroller.verticalScrollBar.setStyle("skinClass", VDOMVScrollBarSkin );
+				eventsList.scroller.horizontalScrollBar.setStyle("skinClass", VDOMHScrollBarSkin );
+			}
+			
+			protected function actionsList_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				actionsList.scroller.verticalScrollBar.setStyle("skinClass", VDOMVScrollBarSkin );
+				actionsList.scroller.horizontalScrollBar.setStyle("skinClass", VDOMHScrollBarSkin );
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -75,11 +94,13 @@
 
 			<s:List id="eventsList"
 					height="100%" labelField="name" width="100%" contentBackgroundAlpha="0"
-					dragEnabled="true" includeIn="events" itemCreationPolicy="immediate" itemRenderer="net.vdombox.ide.modules.events.view.components.EventItemRenderer"/>
+					dragEnabled="true" includeIn="events" itemCreationPolicy="immediate" itemRenderer="net.vdombox.ide.modules.events.view.components.EventItemRenderer"
+					creationComplete="eventsList_creationCompleteHandler(event)"/>
 
 			<s:List id="actionsList"
 					height="100%" labelField="name" width="100%" contentBackgroundAlpha="0"
-					dragEnabled="true" includeIn="actions" itemCreationPolicy="immediate" itemRenderer="net.vdombox.ide.modules.events.view.components.ActionItemRenderer"/>
+					dragEnabled="true" includeIn="actions" itemCreationPolicy="immediate" itemRenderer="net.vdombox.ide.modules.events.view.components.ActionItemRenderer"
+					creationComplete="actionsList_creationCompleteHandler(event)"/>
 		</s:Group>
 
 		

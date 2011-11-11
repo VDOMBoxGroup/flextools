@@ -9,6 +9,22 @@
 		[HostComponent("net.vdombox.ide.modules.events.view.components.WorkArea")]
 		]]>
 	</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
+			
+			protected function scroller_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
+				scroller.horizontalScrollBar.setStyle( "skinClass", VDOMHScrollBarSkin );
+			}
+			
+		]]>
+	</fx:Script>
 
 	<s:states>
 
@@ -57,7 +73,7 @@
 	</s:HGroup>
 
 	<s:Group id="workLayers"
-			 bottom="10" left="10" right="10" top="30">
+			 bottom="0" left="10" right="3" top="30">
 		<s:Rect height="100%" width="100%">
 			<s:fill>
 				<s:SolidColor color="black"
@@ -65,7 +81,7 @@
 			</s:fill>
 		</s:Rect>
 
-		<components1:VDOMScroller height="100%" width="100%">
+		<components1:VDOMScroller id="scroller" height="100%" width="100%" creationComplete="scroller_creationCompleteHandler(event)">
 			<s:Group>
 				<s:Group id="linkagesLayer"/>
 				<s:Group id="contentGroup"/>
