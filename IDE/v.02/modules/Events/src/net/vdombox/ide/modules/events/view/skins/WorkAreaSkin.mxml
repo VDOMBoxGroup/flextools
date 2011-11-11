@@ -69,7 +69,7 @@
 								   enabled="false" enabled.unsaved="true" height="20" icon="@Embed('assets/undo.png')"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_undo' ) }"/>
 		<mx1:Spacer width="100%" />
-		<s:CheckBox id="showHiddenElements" height="20" label="Show hidden" change="hostComponent.showHiddenElementsStateChanged()"/>
+		<s:CheckBox id="showHiddenElements" height="20" label="{ resourceManager.getString( 'Events_General', 'work_area_show_hidden' ) }" change="hostComponent.showHiddenElementsStateChanged()"/>
 	</s:HGroup>
 
 	<s:Group id="workLayers"

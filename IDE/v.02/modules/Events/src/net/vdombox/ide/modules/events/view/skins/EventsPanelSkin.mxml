@@ -47,14 +47,12 @@
 			
 			protected function eventsList_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
 				eventsList.scroller.verticalScrollBar.setStyle("skinClass", VDOMVScrollBarSkin );
 				eventsList.scroller.horizontalScrollBar.setStyle("skinClass", VDOMHScrollBarSkin );
 			}
 			
 			protected function actionsList_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
 				actionsList.scroller.verticalScrollBar.setStyle("skinClass", VDOMVScrollBarSkin );
 				actionsList.scroller.horizontalScrollBar.setStyle("skinClass", VDOMHScrollBarSkin );
 			}
