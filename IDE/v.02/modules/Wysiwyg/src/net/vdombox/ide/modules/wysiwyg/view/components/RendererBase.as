@@ -1338,7 +1338,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( movable && !isScroller( event.target as DisplayObjectContainer ) )
 			{
-				toolTip = "";
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
 				stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
 

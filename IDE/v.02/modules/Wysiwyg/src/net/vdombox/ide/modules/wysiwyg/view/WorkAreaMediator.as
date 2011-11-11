@@ -214,11 +214,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function clearData() : void
 		{
-//			removeHandlers();
-
 			workArea.closeAllEditors();
-
-//			facade.removeMediator( NAME );
 		}
 
 		private function editor_preinitializedHandler( event : EditorEvent ) : void

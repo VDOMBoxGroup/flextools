@@ -215,10 +215,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					var _objectVO : ObjectVO = body as ObjectVO;
 					
 					if ( sessionProxy.selectedObject && objectsTreePanel.selectedItem )
-					{
 						objectsTreePanel.selectedItem.@name = _objectVO.name;
-					}
-					
+
 					break;
 				}
 					

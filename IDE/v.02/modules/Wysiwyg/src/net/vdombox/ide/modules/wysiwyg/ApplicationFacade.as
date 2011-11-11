@@ -23,6 +23,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererRemovedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererTransformedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveSettingsToProxy;
+	import net.vdombox.ide.modules.wysiwyg.controller.SetNewNameObjectCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SetToolTipCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.StartupCommand;
@@ -284,6 +285,7 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( OBJECT_MOVED, CreateLineLinkingCommand );
 			
 			registerCommand( PAGE_STRUCTURE_GETTED, SetToolTipCommand );
+			registerCommand( OBJECT_NAME_SETTED, SetNewNameObjectCommand );
 			
 		}
 	}

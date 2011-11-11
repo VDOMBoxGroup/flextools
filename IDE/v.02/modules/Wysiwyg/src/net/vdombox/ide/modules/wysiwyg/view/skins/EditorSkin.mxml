@@ -84,7 +84,7 @@
 				
 			</s:HGroup>
 			
-			<s:HGroup gap="15" height="25" paddingRight="20"  paddingLeft="30" width="50%" verticalAlign="middle">
+			<s:HGroup gap="15" height="25" paddingRight="15"  paddingLeft="15" width="50%" verticalAlign="middle">
 				
 				<s:VGroup id="wysiwygButton" enabled.wysiwyg="false" enabled.xml="true" height="25"
 						  click="currentState='wysiwyg'" verticalAlign="bottom" horizontalAlign="center" gap="0">
@@ -124,9 +124,9 @@
 					</s:fill>
 				</s:Rect>
 				
-				<s:HGroup height="25" paddingLeft="20" verticalAlign="middle" width="100%" gap="15" horizontalAlign="right">
+				<s:HGroup height="25" paddingRight="0" paddingLeft="15" verticalAlign="middle" width="100%" gap="10" horizontalAlign="right">
 					
-					<s:CheckBox id="showLinking" label="Show linking"/>
+					<s:CheckBox id="showLinking" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_show_linking' ) }"/>
 					
 					<s:HGroup height="25" verticalAlign="middle" gap="5" width="80">
 						<mx:Image source="@Embed('icons/Cursor.png')" smoothBitmapContent="true" />

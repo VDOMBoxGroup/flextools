@@ -148,7 +148,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var pageXML : XML;
 			
 			var editor : IEditor = viewComponent as IEditor;
-			var selectedPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
+			
 
 			switch ( name )
 			{
@@ -162,6 +162,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
 					//  set transformMarker to selected page
+					var selectedPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
 					var selectedObject : IVDOMObjectVO = sessionProxy.selectedObject as IVDOMObjectVO;
 					var selRenderer : RendererBase;
 

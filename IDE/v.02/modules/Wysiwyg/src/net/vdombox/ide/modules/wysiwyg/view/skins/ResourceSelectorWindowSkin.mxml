@@ -20,12 +20,17 @@
 			
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			
 			
 			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
 			{
 				resourcesList.addEventListener(ResourceVOEvent.PREVIEW_RESOURCE, hostComponent.previewResource, true);
 				resourcesList.addEventListener(ListItem.ITEM_DOUBLE_CLICKED, hostComponent.onApplyClick, true);
+				
+				resourcesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
+				resourcesList.scroller.horizontalScrollBar.setStyle( "skinClass", VDOMHScrollBarSkin );
 			}
 			
 			protected function nameFilter_focusInHandler(event:FocusEvent):void

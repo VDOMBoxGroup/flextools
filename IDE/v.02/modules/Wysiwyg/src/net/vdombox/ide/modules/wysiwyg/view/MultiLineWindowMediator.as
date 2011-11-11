@@ -45,8 +45,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRegister() : void
 		{
-			trace("MULT: onRegister()");
-
 			multilineWindow.addEventListener( MultilineWindowEvent.APPLY, removeYourself, false, 0, true );
 			multilineWindow.addEventListener( MultilineWindowEvent.CLOSE, removeYourself, false, 0, true );
 			multilineWindow.addEventListener( Event.CLOSE, closeHandler, false, 0, true );
@@ -55,8 +53,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRemove() : void
 		{
-			trace("MULT: onRemove()");
-
 			multilineWindow.removeEventListener( MultilineWindowEvent.APPLY, removeYourself, false );
 			multilineWindow.removeEventListener( MultilineWindowEvent.CLOSE, removeYourself, false);
 			multilineWindow.addEventListener( Event.CLOSE, closeHandler, false, 0, true );

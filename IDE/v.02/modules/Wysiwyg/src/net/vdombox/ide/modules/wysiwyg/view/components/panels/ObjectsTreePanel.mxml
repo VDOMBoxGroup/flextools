@@ -306,6 +306,13 @@
 				
 				dispatchEvent( otpe );
 			}
+			
+			protected function objectsTree_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -319,7 +326,8 @@
 	
 	<mx:Tree id="objectsTree" borderVisible="false" maxHorizontalScrollPosition="140" horizontalScrollPolicy="auto"
 			 dataProvider="{ _pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"
-			 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer"/>
+			 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer"
+			 creationComplete="objectsTree_creationCompleteHandler(event)"/>
 	
 	
 </panels:PanelBase>

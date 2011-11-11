@@ -21,11 +21,6 @@ package net.vdombox.ide.modules.wysiwyg.model
 		
 		public function getVisible( rendererID : String ) : Boolean
 		{
-			if (rendererID in sharedObject.data)
-				trace(sharedObject.data[rendererID])
-			if (  sharedObject.data.hasOwnProperty(rendererID))
-				trace(sharedObject.data[rendererID])
-				
 			return sharedObject.data.hasOwnProperty(rendererID) ? sharedObject.data[rendererID] : true
 		}
 		

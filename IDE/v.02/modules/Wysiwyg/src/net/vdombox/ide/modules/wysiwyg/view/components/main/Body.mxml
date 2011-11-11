@@ -33,7 +33,7 @@
 	<components:WorkArea id="workArea"
 						 height="100%" width="100%"/>
 	
-	<s:Rect width="5" height="100%">
+	<s:Rect width="8" height="100%">
 		<s:fill>
 			<s:SolidColor color="#424242"/>
 		</s:fill>
