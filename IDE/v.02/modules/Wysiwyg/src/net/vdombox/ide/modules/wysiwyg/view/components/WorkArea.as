@@ -12,7 +12,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.core.UIComponent;
 	import mx.utils.UIDUtil;
 	
-	import net.vdombox.components.TabNavigator;
+	import net.vdombox.components.tabNavigatorClasses.TabNavigator;
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.components.tabNavigatorClasses.TabBarButton;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
