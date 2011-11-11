@@ -1334,9 +1334,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
-			if (event.target != event.currentTarget)
-				return;
-				
 			setFocus();
 
 			if ( movable && !isScroller( event.target as DisplayObjectContainer ) )
