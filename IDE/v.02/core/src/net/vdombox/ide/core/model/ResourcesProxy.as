@@ -440,7 +440,6 @@ package net.vdombox.ide.core.model
 
 					var data : String = event.result.Resource;
 					
-					trace( "\n*************************************\n" + data );
 
 					var decoder : Base64Decoder = new Base64Decoder();
 					decoder.decode( data );
