@@ -125,8 +125,10 @@ package net.vdombox.ide.core.view
 				{
 					var newSelectedModuleID : String = body as String;
 					var moduleVO : ModuleVO = modulesProxy.getModuleByID( newSelectedModuleID );
-
-					selectModule( moduleVO );
+					
+					if ( currentModule != moduleVO )
+						selectModule( moduleVO );
+					
 					break;
 				}
 
@@ -136,6 +138,12 @@ package net.vdombox.ide.core.view
 					applicationVO = body as ApplicationVO;
 
 					setApplicationInfo();
+					break;
+				}
+					
+				case ApplicationFacade.OPEN_MAIN_WINDOW:
+				{
+					selectModule( currentModule );
 					break;
 				}
 			}
@@ -149,6 +157,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
+			interests.push( ApplicationFacade.OPEN_MAIN_WINDOW );
 
 			return interests;
 		}
@@ -169,11 +178,6 @@ package net.vdombox.ide.core.view
 			addHandlers();
 
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
-			
-			// TODO: Если нет выделенного приложения запустить Выбрать Приолжение
-			if ( !statesProxy.selectedApplication )
-				sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER );
-				
 			
 		}
 
@@ -199,7 +203,9 @@ package net.vdombox.ide.core.view
 
 		private function appManagerHandler( event : MainWindowEvent ) : void
 		{
+			currentModule.module.deSelect();
 			sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER, event.target );
+			
 		}
 
 		private function cleanup() : void
@@ -247,11 +253,6 @@ package net.vdombox.ide.core.view
 
 			initUser();
 			initTitle();
-		}
-
-		private function openApplicationInEditor() : void
-		{
-			selectModule();
 		}
 
 		private function placeToolsets() : void
@@ -361,6 +362,12 @@ package net.vdombox.ide.core.view
 		private function get toolsetBar() : Group
 		{
 			return mainWindow.toolsetBar;
+		}
+		
+		private function get currentModule() : ModuleVO
+		{
+			return  modulesProxy.getModuleByID( selectedModuleID );
+;
 		}
 	}
 }

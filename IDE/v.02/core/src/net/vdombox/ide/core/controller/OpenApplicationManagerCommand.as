@@ -51,6 +51,7 @@ package net.vdombox.ide.core.controller
 			// popup Window
 			var mainWindowSkin : MainWindowSkin = notification.getBody() as MainWindowSkin;
 			WindowManager.getInstance().addWindow( applicationManagerWindow, mainWindowSkin, true );
+			
 		}
 	}
 }

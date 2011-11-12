@@ -39,6 +39,7 @@ package net.vdombox.ide.core.controller
 		
 			sendNotification(ApplicationFacade.OPEN_MAIN_WINDOW);
 			
+			
 		}
 	}
 }
