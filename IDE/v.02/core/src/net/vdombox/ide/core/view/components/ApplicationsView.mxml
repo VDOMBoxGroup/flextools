@@ -26,6 +26,11 @@
 				applicationList.scroller.setStyle( "horizontalScrollPolicy", "off" );
 				
 				applicationList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
+				
+				applicationList.scroller.verticalScrollBar.addEventListener( FlexEvent.UPDATE_COMPLETE, updateScroll );
+				
+				//applicationList.scroller.addEventListener( FlexEvent.UPDATE_COMPLETE, updateScroll );*/
+
 			}
 
 			private function getLocalesWord( word : String ) : String
@@ -43,21 +48,21 @@
 			}
 			
 			
-			protected override function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
-			{
-				super.updateDisplayList( unscaledWidth, unscaledHeight );
-				
-				if( verticalScrollBar && verticalScrollBar.visible )
-				{
-					verticalScrollBar.x = 0;
-				}
-			}
 			
 			private function get verticalScrollBar() : VScrollBar 
 			{
 				return applicationList.scroller.verticalScrollBar; 
 			}
 			
+			
+			private function updateScroll(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stup
+				if( verticalScrollBar && verticalScrollBar.visible )
+				{
+					verticalScrollBar.x = 0;
+				}
+			}
 			
 		]]>
 	</fx:Script>
@@ -74,7 +79,7 @@
 				width="100%"
 				height="100%"
 				itemRenderer="net.vdombox.ide.core.view.components.ApplicationListItemRenderer"
-				creationComplete="applicationList_creationCompleteHandler(event)" 
+				creationComplete="applicationList_creationCompleteHandler(event)"
 				/>
 
 		<components:VDOMButton id="addApplication" label="{getLocalesWord( 'change_application_add_new_application' )}" />

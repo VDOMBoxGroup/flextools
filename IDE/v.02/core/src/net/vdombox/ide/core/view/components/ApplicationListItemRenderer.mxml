@@ -4,8 +4,7 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true"
 				doubleClickEnabled="true"
-				doubleClick="doubleClickHandler(event)"
-				>
+				doubleClick="doubleClickHandler(event)">
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="selected" />
