@@ -109,7 +109,7 @@
 				
 				<mx:Spacer width="100%"/>
 				
-				<components:VdomButton label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_upload' ) }" 
+				<components:VDOMButton label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_upload' ) }" 
 						   click="hostComponent.uploadFile(event)"
 						   icon="@Embed(source='icons/Add.png')"
 						   focusColor="#CCCCCC"/>	
@@ -165,12 +165,12 @@
 						  paddingBottom="2" paddingLeft="10" paddingRight="10" paddingTop="2"
 						  verticalAlign="middle" horizontalAlign="right">
 					
-					<components:VdomButton id="cancelButton" width="48"
+					<components:VDOMButton id="cancelButton" width="48"
 							  click="hostComponent.onCancelClick()"
 							  icon="@Embed(source='icons/Cancel.png')"
 							  focusColor.normal="#CCCCCC"/>
 					
-					<components:VdomButton focusColor.normal="#CCCCCC"
+					<components:VDOMButton focusColor.normal="#CCCCCC"
 							  label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_insert' ) }"
 							  click="hostComponent.onApplyClick()" color="#B33535"
 							  />

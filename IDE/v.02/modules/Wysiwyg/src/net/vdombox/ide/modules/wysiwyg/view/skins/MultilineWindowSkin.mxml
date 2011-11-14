@@ -78,17 +78,17 @@
 				  bottom="0" gap="15" paddingLeft="25" paddingTop="10"
 				  paddingRight="15" verticalAlign="middle">
 			
-			<components:VdomButton icon="@Embed(source='icons/Add.png')"
+			<components:VDOMButton icon="@Embed(source='icons/Add.png')"
 					  label="{ resourceManager.getString( 'Wysiwyg_General', 'multiline_window_add_resource' ) }"
 					  click="{hostComponent.showResourceSelecterWindow()}"/>
 			
 			<mx:Spacer width="100%"/>
 			
-			<components:VdomButton width="48"
+			<components:VDOMButton width="48"
 					  icon="@Embed(source='icons/Cancel.png')"
 					  click="{hostComponent.cancel_close_window()}"/>
 			
-			<components:VdomButton label="{ resourceManager.getString( 'Wysiwyg_General', 'multiline_window_save' ) }"
+			<components:VDOMButton label="{ resourceManager.getString( 'Wysiwyg_General', 'multiline_window_save' ) }"
 					  click="hostComponent.ok_close_window()" />
 		</s:HGroup>
 		
