@@ -55,6 +55,9 @@
 			{
 					super.data = value;
 					
+					if (!value)
+						return;
+					
 					nameLabel.text = applicationVO ?  applicationVO.name : "";
 					
 					validateResourceVO();
@@ -99,7 +102,6 @@
 			protected function doubleClickHandler(event:MouseEvent):void
 			{
 				dispatchEvent( new Event( RENDERER_DOUBLE_CLICK ) );
-				
 			}
 			
 		]]>

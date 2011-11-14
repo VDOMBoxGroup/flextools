@@ -1,77 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" paddingBottom="10"
-		 paddingRight="10" xmlns:components="net.vdombox.components.*">
-	
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  width="100%"
+		  height="100%"
+		  paddingBottom="10"
+		  paddingRight="10"
+		  xmlns:components="net.vdombox.components.*">
+
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.components.VDOMScroller;
+			import net.vdombox.ide.common.vo.ApplicationVO;
 			import net.vdombox.ide.core.events.ApplicationManagerEvent;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			
-			
-			protected function applicationList_creationCompleteHandler(event:FlexEvent):void
+			import spark.components.Application;
+			import spark.components.Scroller;
+			import spark.components.VScrollBar;
+
+
+			protected function applicationList_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				applicationList.scroller.setStyle( "horizontalScrollPolicy", "off" );
+				
+				applicationList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 			}
-			
-			private function getLocalesWord( word : String): String
+
+			private function getLocalesWord( word : String ) : String
 			{
 				return resourceManager.getString( 'Core_General', word );
 			}
+
+			public function set selectedApplication( value : ApplicationVO ) : void
+			{
+				applicationList.selectedItem = value;
+				
+				invalidateProperties();
+			}
 			
-//			override public function set visible(value:Boolean):void
-//			{
-//				trace("1 visible:" + value);
-//			}
+			override public function validateProperties():void
+			{
+				super.validateProperties();
+
+				applicationList.ensureIndexIsVisible( applicationList.selectedIndex );
+				
+			}
+			
+			protected override function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void
+			{
+				super.updateDisplayList( unscaledWidth, unscaledHeight );
+				
+				if( verticalScrollBar && verticalScrollBar.visible )
+				{
+					verticalScrollBar.x = 0;
+				}
+			}
+			
+			private function get verticalScrollBar() : VScrollBar 
+			{
+				return applicationList.scroller.verticalScrollBar; 
+			}
+			
+			
 		]]>
 	</fx:Script>
-	
+
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
+
 	<s:VGroup width="50%" minWidth="25" height="100%" gap="2">
 		<s:List id="applicationList"
-				width="100%" height="100%"
+				width="100%"
+				height="100%"
 				itemRenderer="net.vdombox.ide.core.view.components.ApplicationListItemRenderer"
-				creationComplete="applicationList_creationCompleteHandler(event)"/>
+				creationComplete="applicationList_creationCompleteHandler(event)" 
+				/>
 
-		
-		
-		<components:VdomButton id="addApplication"
-					  label="{getLocalesWord( 'change_application_add_new_application' )}" 
-					 />
+		<components:VdomButton id="addApplication" label="{getLocalesWord( 'change_application_add_new_application' )}" />
 
 	</s:VGroup>
-	
-	<s:VGroup width="50%"  height="100%" 
-			  paddingTop="12"  gap="10">
-		<s:TextInput id="applicationName" 
+
+	<s:VGroup width="50%" height="100%" paddingTop="12" gap="10">
+		<s:TextInput id="applicationName"
 					 width="100%"
-					 borderVisible="false" editable="false" selectable="false" fontFamily="Arial" 
-				 	 fontSize="18" color="#FFFFFF" fontWeight="bold"
-					 />
-		<s:TextArea id="applicationDescription" 
-					width="100%" height="100%" editable="false"  selectable="false"
-					borderVisible="false" color="#CACACA" fontFamily="Arial" fontSize="10"
-					/>
-		<mx:Spacer height="20"/>
-		
-		<s:HGroup horizontalAlign="right" gap="10" width="100%" >
-			
-			
-			<components:VdomButton id="changeApplication"
-					  label="{getLocalesWord('change_application_edit')}" 
-					 
-					  />
-			
-			<components:VdomButton id="setSelectApplication" 
-					  label="{getLocalesWord('change_application_open_in_editor' )}" 
-					  />
+					 borderVisible="false"
+					 editable="false"
+					 selectable="false"
+					 fontFamily="Arial"
+					 fontSize="18"
+					 color="#FFFFFF"
+					 fontWeight="bold" />
+		<s:TextArea id="applicationDescription"
+					width="100%"
+					height="100%"
+					editable="false"
+					selectable="false"
+					borderVisible="false"
+					color="#CACACA"
+					fontFamily="Arial"
+					fontSize="10" />
+		<mx:Spacer height="20" />
+
+		<s:HGroup horizontalAlign="right" gap="10" width="100%">
+
+			<components:VdomButton id="changeApplication" label="{getLocalesWord('change_application_edit')}" />
+
+			<components:VdomButton id="setSelectApplication" label="{getLocalesWord('change_application_open_in_editor' )}" />
 		</s:HGroup>
-		
+
 	</s:VGroup>
 </s:HGroup>

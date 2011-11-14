@@ -26,7 +26,12 @@
 			{
 				hostComponent.selectIcon();
 			}
-//			resourceManager.getString( 'Core_General', 'iconchooser_select_icon' )
+			
+			private function getLocalesWord( word : String): String
+			{
+				return resourceManager.getString( 'Core_General', word );
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -95,12 +100,14 @@
 		<s:HGroup width="100%" paddingLeft="13" paddingRight="13" paddingTop="13" paddingBottom="13">
 			
 			<components:VdomButton id="canselBt"
-								   label="cAnSel" click="hostComponent.close()"  />
+								   label="{getLocalesWord('iconchooser_cancel')}"
+								   click="hostComponent.close()"  />
 			<mx:Spacer width="100%"/>
 			<components:VdomButton id="addImageBt" width="45"
 								   label="+"  fontWeight="bold"	 />
 			<components:VdomButton id="selectBt"
-				label="oK"  	click="hostComponent.selectIcon()" />
+									label="{getLocalesWord('iconchooser_ok')}"  	
+									click="hostComponent.selectIcon()" />
 		</s:HGroup>
 		</s:Group>
 		

@@ -34,6 +34,7 @@ package net.vdombox.ide.core.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+
 	public class ApplicationPropertiesViewMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "CreateEditApplicationViewMediator";
@@ -76,7 +77,7 @@ package net.vdombox.ide.core.view
 			
 			commitProperties();
 			
-			setApplicationIcon();
+			
 		}
 		
 		public function get defaultIcon() : ByteArray
@@ -106,6 +107,8 @@ package net.vdombox.ide.core.view
 					applicationPropertiesView.visible = true;
 
 					applicationVO = body as ApplicationVO;
+					
+					setApplicationIcon();
 
 					break;
 				}
@@ -139,7 +142,10 @@ package net.vdombox.ide.core.view
 
 				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
 				{
-					applicationVO =  body as ApplicationVO
+					applicationVO =  body as ApplicationVO;
+					
+//					setApplicationIcon();
+					
 					sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW, applicationVO );
 					
 					applicationVO = null;
@@ -219,17 +225,17 @@ package net.vdombox.ide.core.view
 				applicationPropertiesView.vscript.selected = true;
 			
 			// set icon 
-			applicationPropertiesView.iconChooser.source = defaultIcon;
+//			applicationPropertiesView.iconChooser.source = defaultIcon;
 		}
 		
 		
 		private function setApplicationIcon() : void
 		{
-			if ( !applicationVO )
+			if ( !applicationVO || !applicationVO.iconID)
+			{
+				applicationPropertiesView.iconChooser.source = defaultIcon;
 				return;
-				
-			if ( !applicationVO.iconID )
-				return;
+			}				
 			
 			var resourceVO : ResourceVO = new ResourceVO( applicationVO.id );;
 			

@@ -54,7 +54,4 @@
 	<mx:Image id="icon"
 			  height="64" width="64" />
 	
-	
-	
-	
 </s:VGroup>

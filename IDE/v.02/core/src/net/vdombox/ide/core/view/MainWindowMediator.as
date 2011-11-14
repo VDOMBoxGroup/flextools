@@ -17,9 +17,9 @@ package net.vdombox.ide.core.view
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.net.SharedObject;
-	
+
 	import flashx.textLayout.elements.BreakElement;
-	
+
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
@@ -30,7 +30,7 @@ package net.vdombox.ide.core.view
 	import mx.managers.SystemManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -46,18 +46,19 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
 	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import org.osmf.utils.Version;
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
 	import spark.skins.spark.ButtonSkin;
 
 	use namespace mx_internal;
+
 	/**
 	 *
 	 * @author andreev ap
@@ -111,13 +112,16 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.SHOW_MODULE_TOOLSET:
 				{
 					toolsetBar.addElement( body.component as IVisualElement );
+
 					break;
 				}
 
 				case ApplicationFacade.SHOW_MODULE_BODY:
 				{
 					mainWindow.addElement( body.component as IVisualElement );
+
 					setApplicationInfo();
+
 					break;
 				}
 
@@ -125,10 +129,11 @@ package net.vdombox.ide.core.view
 				{
 					var newSelectedModuleID : String = body as String;
 					var moduleVO : ModuleVO = modulesProxy.getModuleByID( newSelectedModuleID );
-					
+
 					if ( currentModule != moduleVO )
 						selectModule( moduleVO );
-					
+
+
 					break;
 				}
 
@@ -138,9 +143,10 @@ package net.vdombox.ide.core.view
 					applicationVO = body as ApplicationVO;
 
 					setApplicationInfo();
+
 					break;
 				}
-					
+
 				case ApplicationFacade.OPEN_MAIN_WINDOW:
 				{
 					selectModule( currentModule );
@@ -178,7 +184,6 @@ package net.vdombox.ide.core.view
 			addHandlers();
 
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
-			
 		}
 
 		override public function onRemove() : void
@@ -205,7 +210,7 @@ package net.vdombox.ide.core.view
 		{
 			currentModule.module.deSelect();
 			sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER, event.target );
-			
+
 		}
 
 		private function cleanup() : void
@@ -221,15 +226,6 @@ package net.vdombox.ide.core.view
 
 		private function initTitle() : void
 		{
-			/*var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
-			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-			var title : String            = "";
-
-			title = serverProxy.authInfo.hostname + "  -  >VDOM IDE.v.2.0.1008" ;
-
-			if ( statesProxy.selectedApplication )
-				title = statesProxy.selectedApplication.name + "  @  " + title;*/
-
 			mainWindow.title = VersionUtils.getApplicationName();
 		}
 
@@ -242,6 +238,7 @@ package net.vdombox.ide.core.view
 		private function logoutHandler( event : MainWindowEvent ) : void
 		{
 			cleanup();
+
 			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNOUT );
 		}
 
@@ -303,15 +300,11 @@ package net.vdombox.ide.core.view
 		private function setApplicationInfo() : void
 		{
 			if ( !applicationVO )
-			{
-				var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-
 				applicationVO = statesProxy.selectedApplication;
-			}
 
 			if ( !applicationVO )
 				return;
-			
+
 			mainWindow.nameApplication.text = applicationVO.name;
 
 			if ( !applicationVO.iconID )
@@ -363,11 +356,11 @@ package net.vdombox.ide.core.view
 		{
 			return mainWindow.toolsetBar;
 		}
-		
+
 		private function get currentModule() : ModuleVO
 		{
-			return  modulesProxy.getModuleByID( selectedModuleID );
-;
+			return modulesProxy.getModuleByID( selectedModuleID );
+			;
 		}
 	}
 }

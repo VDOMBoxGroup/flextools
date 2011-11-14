@@ -93,15 +93,11 @@ package net.vdombox.ide.core.view
 					
 					applications = notification.getBody() as Array;
 
-					if ( applications.length == 0 )
-					{
-						applicationsView.applicationDescription.text = "PleAce Add nEw AppLicAtIonS";
-					}
-					else
-					{
-						applicationList.dataProvider = new ArrayList( applications );
-						selectApplication();
-					}
+					applicationList.dataProvider = new ArrayList( applications );
+					
+					applicationList.validateNow();
+					
+					selectApplication();
 
 					break;
 				}
@@ -109,6 +105,8 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW:
 				{
 					applicationsView.visible = false;
+					
+					applicationList.dataProvider  = null;
  
 					break;
 				}
@@ -118,6 +116,7 @@ package net.vdombox.ide.core.view
 					applicationsView.visible = true;
 
 					sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
+					
 					break;
 				} 
 			}
@@ -181,11 +180,8 @@ package net.vdombox.ide.core.view
 		public function set selectedApplicationVO( value : ApplicationVO ) : void
 		{
 			_selectedApplicationVO = value;
-			applicationList.selectedItem = value;
-
-			// scroll to index
-			applicationList.validateNow();
-			applicationList.ensureIndexIsVisible( applicationList.selectedIndex );
+			
+			applicationsView.selectedApplication = _selectedApplicationVO;
 
 			applicationsView.applicationName.text = value ? selectedApplicationVO.name : "";
 			applicationsView.applicationDescription.text = value ? selectedApplicationDescriptions : "";
@@ -198,6 +194,7 @@ package net.vdombox.ide.core.view
 		public function get settingsVO() : SettingsVO
 		{
 			var settingsProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
+			
 			return settingsProxy.settings;
 		}
 
@@ -260,13 +257,15 @@ package net.vdombox.ide.core.view
 			{
 				applicationsView.visible = false;
 
-				sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applicationListItemRenderer.applicationVO );
+//				sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applicationListItemRenderer.applicationVO );
 				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			}
 		}
 
 		private function changeApplicationClikHandler( event : MouseEvent ) : void
 		{
+			sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
+			
 			sendNotification( ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW, selectedApplicationVO );
 		}
 
@@ -313,7 +312,7 @@ package net.vdombox.ide.core.view
 			if ( !applications || applications.length == 0 )
 				return;
 
-			selectedApplicationVO = statesProxy.selectedApplication || getApplicationsFromSettings() || applications[ 0 ];
+			selectedApplicationVO = statesProxy.selectedApplication;
 		}
 
 		private function get selectedApplicationDescriptions() : String
