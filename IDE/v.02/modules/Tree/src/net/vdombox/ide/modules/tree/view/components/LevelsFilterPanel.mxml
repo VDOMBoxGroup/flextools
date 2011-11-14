@@ -9,10 +9,12 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayList;
+			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			
 			import spark.events.IndexChangeEvent;
 
@@ -87,6 +89,13 @@
 			{
 				structureLevelsList.addEventListener( Event.CHANGE, changeHandler, true, 0, true );
 			}
+			
+			protected function structureLevelsList_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				structureLevelsList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -127,5 +136,6 @@
 
 	<s:List id="structureLevelsList"
 			dataProvider="{ levels }" height="100%" width="100%" y="25" change="changeHandler( event )"
-			borderVisible="false" itemRenderer="{ new ClassFactory( StructureLevelItemRenderer ) }" selectedItem="@{ _currentStructuretLevel }"/>
+			borderVisible="false" itemRenderer="{ new ClassFactory( StructureLevelItemRenderer ) }" selectedItem="@{ _currentStructuretLevel }"
+			creationComplete="structureLevelsList_creationCompleteHandler(event)"/>
 </s:Panel>
