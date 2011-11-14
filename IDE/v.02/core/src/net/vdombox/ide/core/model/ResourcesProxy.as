@@ -433,14 +433,11 @@ package net.vdombox.ide.core.model
 				//save resource on user`s local disk and set resource to resourceVO
 				case "get_resource":
 				{
-
-//					clearTimeout(timeoutGetResource);
-					
 					resourceVO = event.token.resourceVO as ResourceVO;
 
 					var data : String = event.result.Resource;
 					
-
+					trace("get_resource: lenght -  " +data.length);
 					var decoder : Base64Decoder = new Base64Decoder();
 					decoder.decode( data );
 

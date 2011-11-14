@@ -35,6 +35,32 @@ package net.vdombox.ide.core.view
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
+	/**
+	 * <P>
+	 *   <b>Notification Interests:</b>
+	 * <UL>
+	 *   <LI>ApplicationFacade.APPLICATION_INFORMATION_UPDATED
+	 *   <LI>ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW 
+	 *   <LI>ApplicationFacade.OPEN_APPLICATIONS_VIEW
+	 *   <LI>ApplicationFacade.RESOURCE_SETTED
+	 *   <LI>ApplicationFacade.SERVER_APPLICATION_CREATED
+	 * </UL></P>
+	 * 
+	 * <P>
+	 *  <b>Notification send:</b>
+	 * <UL>
+	 *   <LI>ApplicationFacade.CREATE_APPLICATION
+	 *   <LI>ApplicationFacade.CREATE_FIRST_PAGE
+	 *   <LI>ApplicationFacade.EDIT_APPLICATION_INFORMATION
+	 *   <LI>ApplicationFacade.LOAD_RESOURCE
+	 *   <LI>ApplicationFacade.OPEN_APPLICATIONS_VIEW
+	 *   <LI>ApplicationFacade.SET_RESOURCE
+	 * </UL>
+	 * </P>
+	 * 
+	 * @author andreev ap
+	 */
+	
 	public class ApplicationPropertiesViewMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "CreateEditApplicationViewMediator";

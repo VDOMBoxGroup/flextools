@@ -10,9 +10,9 @@ package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
-	
+
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.ApplicationManagerEvent;
@@ -22,13 +22,20 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.view.components.ApplicationManagerWindow;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
 	/**
-	 * Description
+	 *  <P>
+	 *  <b>Notification send:</b>
+	 * <UL>
+	 *   <LI>ApplicationFacade.CLOSE_APPLICATION_MANAGER
+	 *   <LI>ApplicationFacade.OPEN_APPLICATIONS_VIEW
+	 *   <LI>ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW
+	 * </UL>
+	 * </P>
 	 *
 	 * @author andreev ap
 	 */
@@ -64,7 +71,7 @@ package net.vdombox.ide.core.view
 
 			switch ( notification.getName() )
 			{
-				
+
 			}
 		}
 
@@ -97,7 +104,7 @@ package net.vdombox.ide.core.view
 			closeWindow();
 		}
 
-		
+
 		private function closeWindow() : void
 		{
 			if ( serverProxy.applications.length > 0 && statesProxy.selectedApplication )
@@ -111,18 +118,18 @@ package net.vdombox.ide.core.view
 			registerMediators();
 			openNecessaryView();
 		}
-		
-		private function openNecessaryView():void
+
+		private function openNecessaryView() : void
 		{
 			if ( serverProxy.applications.length > 0 )
-				sendNotification(ApplicationFacade.OPEN_APPLICATIONS_VIEW);
+				sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
 			else
 				sendNotification( ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW );
 		}
-		
-		private function registerMediators():void
+
+		private function registerMediators() : void
 		{
-			facade.registerMediator( new ApplicationsViewMediator(  applicationManagerWindow.applicationsView   ) );
+			facade.registerMediator( new ApplicationsViewMediator( applicationManagerWindow.applicationsView ) );
 			facade.registerMediator( new ApplicationPropertiesViewMediator( applicationManagerWindow.applicationPropertiesView ) );
 		}
 
@@ -130,13 +137,13 @@ package net.vdombox.ide.core.view
 		{
 			applicationManagerWindow.removeEventListener( Event.CLOSE, closeHandler );
 		}
-		
+
 		public function get statesProxy() : StatesProxy
 		{
 			return facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 		}
-		
-		private function get serverProxy():ServerProxy
+
+		private function get serverProxy() : ServerProxy
 		{
 			return facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 		}

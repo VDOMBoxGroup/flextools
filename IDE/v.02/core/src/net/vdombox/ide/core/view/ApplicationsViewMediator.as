@@ -33,7 +33,24 @@ package net.vdombox.ide.core.view
 	import spark.events.IndexChangeEvent;
 
 	/**
-	 *
+	 * <P>
+	 *   <b>Notification Interests:</b>
+	 * <UL>
+	 *   <LI>ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW
+	 *   <LI>ApplicationFacade.OPEN_APPLICATIONS_VIEW
+	 *   <LI>ApplicationFacade.SERVER_APPLICATIONS_GETTED
+	 * </UL></P>
+	 * <P>
+	 *  <b>Notification send:</b>
+	 * <UL>
+	 *   <LI>ApplicationFacade.CLOSE_APPLICATION_MANAGER
+	 *   <LI>ApplicationFacade.GET_APPLICATIONS_LIST 
+	 *   <LI>ApplicationFacade.LOAD_RESOURCE
+	 *   <LI>ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW
+	 *   <LI>ApplicationFacade.SET_SELECTED_APPLICATION
+	 * </UL>
+	 * </P>
+	 * 
 	 * @author andreev ap
 	 */
 	public class ApplicationsViewMediator extends Mediator implements IMediator
@@ -97,8 +114,6 @@ package net.vdombox.ide.core.view
 					
 					selectApplication();
 
-					
-
 					break;
 				}
 
@@ -137,8 +152,6 @@ package net.vdombox.ide.core.view
 
 		override public function onRegister() : void
 		{
-//			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
-
 			addHandlers();
 		}
 
@@ -184,6 +197,7 @@ package net.vdombox.ide.core.view
 			applicationsView.selectedApplication = _selectedApplicationVO;
 
 			applicationsView.applicationName.text = value ? selectedApplicationVO.name : "";
+			
 			applicationsView.applicationDescription.text = value ? selectedApplicationDescriptions : "";
 		}
 
@@ -241,9 +255,6 @@ package net.vdombox.ide.core.view
 		{
 			var newSelectedApplication : ApplicationVO = event.target.selectedItem as ApplicationVO;
 
-//			if ( event.newIndex != -1 )
-//				newSelectedApplication = applications[ event.newIndex ] as ApplicationVO;
-
 			if ( selectedApplicationVO != newSelectedApplication )
 				selectedApplicationVO = newSelectedApplication;
 		}
@@ -299,8 +310,6 @@ package net.vdombox.ide.core.view
 
 
 
-
-
 		/**
 		 *
 		 *  Set selected Application. It is a selectedApplication or last opened
@@ -312,7 +321,7 @@ package net.vdombox.ide.core.view
 			if ( !applications || applications.length == 0 )
 				return;
 
-			selectedApplicationVO = statesProxy.selectedApplication;
+			selectedApplicationVO = statesProxy.selectedApplication || applications[0];
 		}
 
 		private function get selectedApplicationDescriptions() : String

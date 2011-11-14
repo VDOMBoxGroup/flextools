@@ -4,7 +4,7 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true"
 				doubleClickEnabled="true"
-				doubleClick="doubleClickHandler(event)">
+				doubleClick="doubleClickHandler(event)" height="55" >
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="selected" />
@@ -33,10 +33,7 @@
 			public function validateResourceVO():void
 			{
 				if (!applicationVO.iconID)
-				{
-					imageHolder.source = null;
 					return;
-				}
 				
 				if ( _resourceVO && _resourceVO.id != applicationVO.iconID )
 					createResourse();
@@ -116,9 +113,9 @@
 		
 	</s:Rect>
 	
-	<s:HGroup width="100%" height="100%" verticalAlign="middle">
+	<s:HGroup width="100%" height="100%" verticalAlign="middle" x="10">
 		<mx:Image id="imageHolder"
-				  width="50" height="50"/>
+				  width="40" height="40"/>
 		
 		<s:Label id="nameLabel" 
 				 fontSize="15" color.normal="#FFFFFF" color.selected="#000000"/>
