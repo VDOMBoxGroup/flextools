@@ -14,7 +14,6 @@
 			import mx.collections.SortField;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.components.VDOMScroller;
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.common.vo.TypeVO;
@@ -112,7 +111,6 @@
 			
 			protected function attributesList_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
 				attributesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 			}
 			
