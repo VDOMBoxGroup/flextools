@@ -1,5 +1,12 @@
 package
 {
+	import com.adobe.crypto.MD5Stream;
+	
+	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
+	import flash.utils.ByteArray;
+
 	public class Utils
 	{
 		public static const KB : Number = 1024;
@@ -41,6 +48,49 @@ package
 			
 			return fileSizeStr;
 		}
+		
+		public static function identicalFiles(sourceFile : File, targetFile : File) : Boolean
+		{
+			if (sourceFile.isDirectory)
+				return false;
+			
+			var md5StreamForSourceFile : MD5Stream;
+			var md5StreamStorageFile : MD5Stream;
+			var fileStream : FileStream;
+			var byteArray : ByteArray;
+			
+			var uidForSourceFile : String;
+			var uidForStorageFile : String;
+			
+			if (!sourceFile.exists || !targetFile.exists)
+				return true;
+			
+			md5StreamForSourceFile  = new MD5Stream();
+			md5StreamStorageFile = new MD5Stream();
+			
+			fileStream = new FileStream();
+			byteArray = new ByteArray();
+			
+			fileStream.open(sourceFile, FileMode.READ);
+			fileStream.readBytes(byteArray);
+			uidForSourceFile = md5StreamForSourceFile.complete(byteArray);
+			fileStream.close();
+			
+			byteArray.clear();
+			
+			fileStream.open(targetFile, FileMode.READ);
+			fileStream.readBytes(byteArray);
+			uidForStorageFile = md5StreamForSourceFile.complete(byteArray);
+			fileStream.close();
+			
+			
+			if (uidForSourceFile == uidForStorageFile)
+				return false;
+			
+			
+			return true;
+		}
+		
 		
 	}
 }

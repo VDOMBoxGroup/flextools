@@ -24,12 +24,17 @@ package
 		public static const STYLE_SETTED	: String = "styleSetted";
 		
 		private const JSFileName		: String = "searchhi_slim.js";
-		private const cssFileName		: String = "main.css";
-		private const cssImagesFolder	: String = "images";
+		
+		private const cssFileName				: String = "main.css";
+		private const cssImagesFolder			: String = "images";
+		
+		private const syntaxHighliterJSFolder	: String = "assets/syntax_highlighter/js";
+		private const syntaxHighliterCSSFolder	: String = "assets/syntax_highlighter/css";
+		
 		
 		private var currentFileName		: String = "";
 		
-		private var imagesDirectoryContent : Array;
+		private var directoryContent : Array;
 		
 		private var fileStream : FileStream = new FileStream();
 		
@@ -41,19 +46,19 @@ package
 		
 		public function setStyle():void
 		{
-			imagesDirectoryContent = [];
+			directoryContent = [];
 			currentFileName = JSFileName;
 			loadFile();
 		}
 		
-		private function loadFile(fileFromImagesDirectory : Boolean = false):void
+		private function loadFile(fileFromDirectory : Boolean = false):void
 		{
 			var sourceFile	: File;
 			var storageFile	: File;
 			
-			if (currentFileName == cssImagesFolder && fileFromImagesDirectory)
+			if (fileFromDirectory)
 			{	
-				sourceFile = File(imagesDirectoryContent.pop());
+				sourceFile = File(directoryContent.pop());
 				storageFile = File.applicationStorageDirectory.resolvePath(currentFileName+"/"+sourceFile.name);
 			} else 
 			{
@@ -63,55 +68,13 @@ package
 			
 			if (!sourceFile.isDirectory && sourceFile.exists)
 			{
-				if ( !storageFile.exists || sourceFileChanged(sourceFile, storageFile) ) 
+				if ( !storageFile.exists || Utils.identicalFiles(sourceFile, storageFile) ) 
 				{
 					sourceFile.copyTo(storageFile, true);
 				}
 			}
 			
 			onFileCreated();
-		}
-		
-		private function sourceFileChanged(sourceFile : File, storageFile : File) : Boolean
-		{
-			if (sourceFile.isDirectory)
-				return false;
-			
-			var md5StreamForSourceFile : MD5Stream;
-			var md5StreamStorageFile : MD5Stream;
-			var fileStream : FileStream;
-			var byteArray : ByteArray;
-			
-			var uidForSourceFile : String;
-			var uidForStorageFile : String;
-			
-			if (!sourceFile.exists || !storageFile.exists)
-				return true;
-			
-			md5StreamForSourceFile  = new MD5Stream();
-			md5StreamStorageFile = new MD5Stream();
-			
-			fileStream = new FileStream();
-			byteArray = new ByteArray();
-			
-			fileStream.open(sourceFile, FileMode.READ);
-			fileStream.readBytes(byteArray);
-			uidForSourceFile = md5StreamForSourceFile.complete(byteArray);
-			fileStream.close();
-			
-			byteArray.clear();
-			
-			fileStream.open(storageFile, FileMode.READ);
-			fileStream.readBytes(byteArray);
-			uidForStorageFile = md5StreamForSourceFile.complete(byteArray);
-			fileStream.close();
-			
-			
-			if (uidForSourceFile == uidForStorageFile)
-				return false;
-			
-			
-			return true;
 		}
 		
 		private function onFileCreated():void
@@ -125,29 +88,61 @@ package
 					break;
 				}
 				case cssFileName:
-				{
 					currentFileName = cssImagesFolder;
-					var file : File = File.applicationDirectory.resolvePath(currentFileName); 
-					if (file.isDirectory)
-						imagesDirectoryContent = file.getDirectoryListing();
 					
+					addDirectoryContent();
+					loadFile(true);
+					break;
+				case cssImagesFolder:
+				{
+					if (isEmptyDirectory)
+					{
+						currentFileName = syntaxHighliterJSFolder;
+						
+						addDirectoryContent();
+					}
+					loadFile(true);
+					break;
+				}
+					
+				case syntaxHighliterJSFolder:
+				{
+					if (isEmptyDirectory)
+					{
+						currentFileName = syntaxHighliterCSSFolder;
+						
+						addDirectoryContent();
+					}
 					loadFile(true);
 					break;
 				}
 					
 				default:
 				{
-					if (!imagesDirectoryContent || imagesDirectoryContent.length == 0)
+					if (isEmptyDirectory)
 					{
 						dispatchEvent(new Event(STYLE_SETTED));
 						return;
 					}
 					loadFile(true);
-					
-					break;
+					return;
 				}
 			}
 			
+			
+		}
+		
+		private function get isEmptyDirectory() : Boolean
+		{
+			return !directoryContent || directoryContent.length == 0;
+		}
+		
+		private function addDirectoryContent():void
+		{
+			var  file : File = File.applicationDirectory.resolvePath(currentFileName);
+			
+			if (file && file.isDirectory)
+				directoryContent = file.getDirectoryListing();
 		}
 		
 	}
