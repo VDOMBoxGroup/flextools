@@ -75,11 +75,11 @@
 		
 		<s:HGroup width="100%" horizontalAlign="right" >
 			
-			<components2:VdomButton id="btnCancel"
+			<components2:VDOMButton id="btnCancel"
 					  label="{getLocalesWord('create_edit_application_cancel' )}"
 					  click="{dispatchEvent( new ApplicationManagerEvent( ApplicationManagerEvent.CANCEL ) ) }"/>
 
-			<components2:VdomButton id="btnSave" 
+			<components2:VDOMButton id="btnSave" 
 					  label="{getLocalesWord('create_edit_application_save' )}"
 					  click="{dispatchEvent( new ApplicationManagerEvent( ApplicationManagerEvent.SAVE_INFORMATION ) ) }"/>
 			

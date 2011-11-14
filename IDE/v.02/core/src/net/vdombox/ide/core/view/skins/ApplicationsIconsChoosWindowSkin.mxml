@@ -99,13 +99,13 @@
 			
 		<s:HGroup width="100%" paddingLeft="13" paddingRight="13" paddingTop="13" paddingBottom="13">
 			
-			<components:VdomButton id="canselBt"
+			<components:VDOMButton id="canselBt"
 								   label="{getLocalesWord('iconchooser_cancel')}"
 								   click="hostComponent.close()"  />
 			<mx:Spacer width="100%"/>
-			<components:VdomButton id="addImageBt" width="45"
+			<components:VDOMButton id="addImageBt" width="45"
 								   label="+"  fontWeight="bold"	 />
-			<components:VdomButton id="selectBt"
+			<components:VDOMButton id="selectBt"
 									label="{getLocalesWord('iconchooser_ok')}"  	
 									click="hostComponent.selectIcon()" />
 		</s:HGroup>

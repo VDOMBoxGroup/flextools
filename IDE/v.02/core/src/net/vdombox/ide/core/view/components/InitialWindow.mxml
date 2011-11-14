@@ -66,11 +66,11 @@
 		
 	<s:HGroup width="100%" horizontalAlign="right" paddingRight="40" gap="10" bottom="37">
 			
-		<components1:VdomButton id="exitButton" includeIn="loginView, progressView" 
+		<components1:VDOMButton id="exitButton" includeIn="loginView, progressView" 
 				label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }" minWidth="100"
 				click="exitButton_clickHandler(event)"/>
 			
-		<components1:VdomButton id="submitButton" includeIn="loginView"
+		<components1:VDOMButton id="submitButton" includeIn="loginView"
 				icon="@Embed('icons/connect.png')"
 				label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
 				click="submitButton_clickHandler(event)" />

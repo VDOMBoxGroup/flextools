@@ -79,7 +79,7 @@
 				creationComplete="applicationList_creationCompleteHandler(event)" 
 				/>
 
-		<components:VdomButton id="addApplication" label="{getLocalesWord( 'change_application_add_new_application' )}" />
+		<components:VDOMButton id="addApplication" label="{getLocalesWord( 'change_application_add_new_application' )}" />
 
 	</s:VGroup>
 
@@ -106,9 +106,9 @@
 
 		<s:HGroup horizontalAlign="right" gap="10" width="100%">
 
-			<components:VdomButton id="changeApplication" label="{getLocalesWord('change_application_edit')}" />
+			<components:VDOMButton id="changeApplication" label="{getLocalesWord('change_application_edit')}" />
 
-			<components:VdomButton id="setSelectApplication" label="{getLocalesWord('change_application_open_in_editor' )}" />
+			<components:VDOMButton id="setSelectApplication" label="{getLocalesWord('change_application_open_in_editor' )}" />
 		</s:HGroup>
 
 	</s:VGroup>
