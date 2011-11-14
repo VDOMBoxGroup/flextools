@@ -36,19 +36,14 @@
 			public function set selectedApplication( value : ApplicationVO ) : void
 			{
 				applicationList.selectedItem = value;
-				
-				invalidateProperties();
-			}
-			
-			override public function validateProperties():void
-			{
-				super.validateProperties();
 
-				applicationList.ensureIndexIsVisible( applicationList.selectedIndex );
+				applicationList.validateNow();
 				
+				applicationList.ensureIndexIsVisible(  applicationList.selectedIndex );
 			}
 			
-			protected override function updateDisplayList( unscaledWidth:Number, unscaledHeight:Number ):void
+			
+			protected override function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 			{
 				super.updateDisplayList( unscaledWidth, unscaledHeight );
 				
@@ -71,7 +66,10 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 
-	<s:VGroup width="50%" minWidth="25" height="100%" gap="2">
+	<s:VGroup width="50%" 
+			  minWidth="25" 
+			  height="100%" 
+			  gap="2">
 		<s:List id="applicationList"
 				width="100%"
 				height="100%"
@@ -92,7 +90,8 @@
 					 fontFamily="Arial"
 					 fontSize="18"
 					 color="#FFFFFF"
-					 fontWeight="bold" />
+					 fontWeight="bold" 
+					 />
 		<s:TextArea id="applicationDescription"
 					width="100%"
 					height="100%"
@@ -101,14 +100,18 @@
 					borderVisible="false"
 					color="#CACACA"
 					fontFamily="Arial"
-					fontSize="10" />
+					fontSize="10" 
+					/>
 		<mx:Spacer height="20" />
 
-		<s:HGroup horizontalAlign="right" gap="10" width="100%">
+		<s:HGroup horizontalAlign="right" 
+				  gap="10" 
+				  width="100%">
+			<components:VDOMButton id="changeApplication" 
+								   label="{getLocalesWord('change_application_edit')}" />
 
-			<components:VDOMButton id="changeApplication" label="{getLocalesWord('change_application_edit')}" />
-
-			<components:VDOMButton id="setSelectApplication" label="{getLocalesWord('change_application_open_in_editor' )}" />
+			<components:VDOMButton id="setSelectApplication" 
+								   label="{getLocalesWord('change_application_open_in_editor' )}" />
 		</s:HGroup>
 
 	</s:VGroup>

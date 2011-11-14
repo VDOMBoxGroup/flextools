@@ -10,10 +10,10 @@ package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-
+	
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -23,11 +23,11 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.vo.SettingsVO;
 	import net.vdombox.ide.core.view.components.ApplicationListItemRenderer;
 	import net.vdombox.ide.core.view.components.ApplicationsView;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.Application;
 	import spark.components.List;
 	import spark.events.IndexChangeEvent;
@@ -95,9 +95,9 @@ package net.vdombox.ide.core.view
 
 					applicationList.dataProvider = new ArrayList( applications );
 					
-					applicationList.validateNow();
-					
 					selectApplication();
+
+					
 
 					break;
 				}
@@ -214,7 +214,7 @@ package net.vdombox.ide.core.view
 
 		private function addHandlers() : void
 		{
-			applicationList.addEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler, false, 0, true );
+			applicationList.addEventListener( Event.CHANGE, applicationList_changeHandler, false, 0, true );
 			applicationList.addEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICK, applicationList_dubleClickHandler, true, 0, true );
 
 			applicationsView.addApplication.addEventListener( MouseEvent.CLICK, addApplicationClickHandler, false, 0, true );
@@ -237,12 +237,12 @@ package net.vdombox.ide.core.view
 		 * of applicationList.
 		 *
 		 */
-		private function applicationList_changeHandler( event : IndexChangeEvent ) : void
+		private function applicationList_changeHandler( event : Event ) : void
 		{
-			var newSelectedApplication : ApplicationVO;
+			var newSelectedApplication : ApplicationVO = event.target.selectedItem as ApplicationVO;
 
-			if ( event.newIndex != -1 )
-				newSelectedApplication = applications[ event.newIndex ] as ApplicationVO;
+//			if ( event.newIndex != -1 )
+//				newSelectedApplication = applications[ event.newIndex ] as ApplicationVO;
 
 			if ( selectedApplicationVO != newSelectedApplication )
 				selectedApplicationVO = newSelectedApplication;
@@ -257,7 +257,7 @@ package net.vdombox.ide.core.view
 			{
 				applicationsView.visible = false;
 
-//				sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applicationListItemRenderer.applicationVO );
+				sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applicationListItemRenderer.applicationVO );
 				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			}
 		}
@@ -287,7 +287,7 @@ package net.vdombox.ide.core.view
 
 		private function removeHandlers() : void
 		{
-			applicationList.removeEventListener( IndexChangeEvent.CHANGE, applicationList_changeHandler );
+			applicationList.removeEventListener( Event.CHANGE, applicationList_changeHandler );
 			applicationList.removeEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICK, applicationList_dubleClickHandler, true );
 
 			applicationsView.addApplication.removeEventListener( MouseEvent.CLICK, addApplicationClickHandler );
