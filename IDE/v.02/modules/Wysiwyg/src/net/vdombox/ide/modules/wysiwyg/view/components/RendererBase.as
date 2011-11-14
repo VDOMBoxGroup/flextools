@@ -227,7 +227,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			skin.currentState = value;
 			if ( value != "hovered" )
-				showToolTip();
+				hideToolTip();
 		}
 
 		public function get getState() : String
@@ -1393,7 +1393,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( skin.currentState == "hovered" )
 				setState = "normal";
 			else
-				showToolTip();
+				hideToolTip();
 		}
 
 		private function mouseOverHandler( event : MouseEvent ) : void
@@ -1594,23 +1594,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			tip.setStyle( "cornerRadius", 0 );
 		}
 		
-		private function showToolTip( text : String = "") : void
+		private function showToolTip( text : String) : void
 		{
-			if( text != "")
-			{
-				addEventListener(
-					MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler );
-				
-				tip.text = text;
-				//tip.visible = true;
-			}
-			else
-			{
-				removeEventListener(
-					MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler );
-				if ( tip )
-					tip.visible = false;
-			}
+			addEventListener( MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler );
+			tip.text = text;
+		}
+	
+		private function hideToolTip() : void
+		{
+			removeEventListener( MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler );
+			if ( tip )
+				tip.visible = false;
 		}
 		
 		private function systemManager_mouseMoveHandler( event : MouseEvent ) : void 
