@@ -95,7 +95,9 @@ package net.vdombox.ide.core.view
 		private function addHandlers() : void
 		{
 			applicationManagerWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHandler );
+		
 			applicationManagerWindow.addEventListener( FlexEvent.REMOVE, closeHandler );
+			
 			applicationManagerWindow.addEventListener( Event.CLOSE, closeHandler );
 		}
 
@@ -130,6 +132,7 @@ package net.vdombox.ide.core.view
 		private function registerMediators() : void
 		{
 			facade.registerMediator( new ApplicationsViewMediator( applicationManagerWindow.applicationsView ) );
+			
 			facade.registerMediator( new ApplicationPropertiesViewMediator( applicationManagerWindow.applicationPropertiesView ) );
 		}
 

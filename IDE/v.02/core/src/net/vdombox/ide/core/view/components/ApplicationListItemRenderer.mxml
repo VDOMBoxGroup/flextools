@@ -62,6 +62,7 @@
 			private function createResourse():void
 			{
 				_resourceVO = new ResourceVO( applicationVO.id ); 
+				
 				_resourceVO.setID( applicationVO.iconID );
 				
 				BindingUtils.bindSetter( setIcon, _resourceVO, "data", false );
@@ -75,20 +76,22 @@
 			private var loader : Loader;
 			private function setIcon( value : Object ) : void
 			{
-				if (!value)
+				if (value)
 				{
-					imageHolder.source = null;
-					dispatchEvent( new Event( ICON_REQUEST ));
+					imageHolder.source = ObjectUtil.copy(value);
 				}
 				else
 				{
-					imageHolder.source = ObjectUtil.copy(value);
+					imageHolder.source = null;
+					
+					dispatchEvent( new Event( ICON_REQUEST ));
 				}
 			}
 			
 			private function setIconLoaded( event : Event ) : void
 			{
 				loader = null;
+				
 				if ( event.type == IOErrorEvent.IO_ERROR )
 					return;
 				
