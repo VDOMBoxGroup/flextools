@@ -16,7 +16,7 @@ package net.vdombox.view
 	import mx.managers.ISystemManager;
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.components.VdomButton;
+	import net.vdombox.components.VDOMButton;
 	import net.vdombox.view.skins.AlertSkin;
 	
 	import spark.components.Label;
@@ -26,10 +26,10 @@ package net.vdombox.view
 	{
 		
 		[SkinPart( required="true" )]
-		public var noButton : VdomButton;
+		public var noButton : VDOMButton;
 		
 		[SkinPart( required="true" )]
-		public var yesButton : VdomButton; 
+		public var yesButton : VDOMButton; 
 		
 		[SkinPart( required="true" )]
 		public var lbltext : Label;
