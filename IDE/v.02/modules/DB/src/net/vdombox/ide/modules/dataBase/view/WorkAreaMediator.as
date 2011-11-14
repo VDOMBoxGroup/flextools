@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.dataBase.view
 {
+	import flash.events.Event;
+	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.EditorEvent;
@@ -33,7 +35,8 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		override public function onRemove() : void
 		{
-			
+			removeHandlers();
+			clearData();
 		}
 		
 		override public function listNotificationInterests() : Array
@@ -44,6 +47,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.BODY_STOP );
 			
 			interests.push( ApplicationFacade.TABLE_GETTED);
+			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED);
 			
 			return interests;
 		}
@@ -72,6 +76,8 @@ package net.vdombox.ide.modules.dataBase.view
 					
 				case ApplicationFacade.BODY_STOP:
 				{
+					clearData();
+					
 					isActive = false;
 					
 					break;
@@ -89,18 +95,42 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
+				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
+				{
+					workArea.closeAllEditors();
+					
+					break
+				}
+					
 			}
 		}
 		
 		private function addHandlers() : void
 		{
 			workArea.addEventListener( EditorEvent.REMOVED, editor_removedHandler, true, 0, true );
+			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+		}
+		
+		private function removeHandlers() : void
+		{
+			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
+			workArea.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+		}
+		
+		private function removedFromStageHandler( event : Event ) : void
+		{
+			clearData();
 		}
 		
 		private function editor_removedHandler( event : EditorEvent ) : void
 		{
 			//sendNotification( ApplicationFacade.EDITOR_REMOVED, event.target as IEditor );
 			//workArea.closeEditor( );
+		}
+		
+		private function clearData() : void
+		{
+			workArea.closeAllEditors();
 		}
 		
 		

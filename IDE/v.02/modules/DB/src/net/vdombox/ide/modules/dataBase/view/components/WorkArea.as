@@ -6,14 +6,14 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColor;
 	
-	import net.vdombox.components.TabNavigator;
 	import net.vdombox.components.tabNavigatorClasses.Tab;
+	import net.vdombox.components.tabNavigatorClasses.TabNavigator;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
 	
 	import spark.primitives.Rect;
 
-	public class WorkArea extends TabNavigator
+	public class WorkArea extends net.vdombox.components.tabNavigatorClasses.TabNavigator
 	{
 		private var _editors : Dictionary;
 		
@@ -44,6 +44,8 @@ package net.vdombox.ide.modules.dataBase.view.components
 			
 			_editors[ editor ] = tab;
 			
+			selectedEditor = editor;
+			
 			return editor;
 		}
 		
@@ -63,6 +65,20 @@ package net.vdombox.ide.modules.dataBase.view.components
 			}
 			
 			return result;
+		}
+		
+		public function closeAllEditors() : void
+		{
+			//			затычка нада разобраться в чем дело
+			if (tabBar.dataProvider == null )
+				return 
+			
+			var tab : Tab;
+			while ( tabBar.dataProvider.length  > 0 ) 
+			{
+				tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;
+				removeTab( tab );
+			}			
 		}
 		
 		public function getEditorByVO( objectVO : ObjectVO ) : IEditor
