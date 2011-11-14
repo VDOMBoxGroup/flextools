@@ -292,14 +292,14 @@ package
 			
 			pageContent = html_wysiwyg.xmlContent.toString();
 			
-			var pageContectWithToc	: String;
+			var pageContentWithToc	: String;
 			
-			pageContectWithToc = VdomHelpEditor.getPageContentWithToc(pageContent, 
+			pageContentWithToc = VdomHelpEditor.getPageContentWithToc(pageContent, 
 																		Boolean(currentPageObj["useToc"]),
 																		getPageChildren(currentPageObj["name"])
 																		);
 			
-			pageContentForXml = resetLinksToResourcesAndPages(pageContectWithToc);
+			pageContentForXml = resetLinksToResourcesAndPages(pageContentWithToc);
 			
 			pageXML = new XML("<page/>");
 			
@@ -400,10 +400,20 @@ package
 		{
 			pageResourcesCounter = 0;
 			
-			pageXML.content.appendChild( XML("<![CDATA[" + pageContentForXml + "]"+ "]>"));
+			pageXML.content.appendChild( XML("<![CDATA[" + appendHighlightScriptToPageContent(pageContentForXml) + "]"+ "]>"));
 			pageXML.appendChild(pageResourcesXML);
 			
 			curState = STATE_PAGE_GENERATING_COMPLETE;
+		}
+		
+		private function appendHighlightScriptToPageContent(pageContent : String) : String
+		{
+			if (!pageContent)
+				return pageContent.toString();
+			
+			var pageBodyEndWithHighkightAllScript : String = HtmlPageProperties.highlightAllTemplate.concat("\n</body>");
+			
+			return pageContent.replace("</body>",pageBodyEndWithHighkightAllScript);
 		}
 		
 		private function resetToc(tocObject:Object) : String

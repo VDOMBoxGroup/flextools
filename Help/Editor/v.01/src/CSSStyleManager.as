@@ -23,12 +23,15 @@ package
 	{
 		public static const STYLE_SETTED	: String = "styleSetted";
 		
-		private const cssFileName		: String = "main.css";
-		private const cssImagesFolder	: String = "images";
+		private const cssFileName				: String = "main.css";
+		private const cssImagesFolder			: String = "images";
+		private const syntaxHighliterJSFolder	: String = "assets/syntax_highlighter/js";
+		private const syntaxHighliterCSSFolder	: String = "assets/syntax_highlighter/css";
+		
 		
 		private var currentFileName		: String = "";
 		
-		private var imagesDirectoryContent : Array;
+		private var directoryContent : Array;
 		
 		private var fileStream : FileStream = new FileStream();
 		
@@ -40,19 +43,19 @@ package
 		
 		public function setStyle():void
 		{
-			imagesDirectoryContent = [];
+			directoryContent = [];
 			currentFileName = cssFileName;
 			loadFile();
 		}
 		
-		private function loadFile(fileFromImagesDirectory : Boolean = false):void
+		private function loadFile(fileFromDirectory : Boolean = false):void
 		{
 			var sourceFile	: File;
 			var storageFile	: File;
 			
-			if (currentFileName == cssImagesFolder && fileFromImagesDirectory)
+			if (fileFromDirectory)
 			{	
-				sourceFile = File(imagesDirectoryContent.pop());
+				sourceFile = File(directoryContent.pop());
 				storageFile = File.applicationStorageDirectory.resolvePath(currentFileName+"/"+sourceFile.name);
 			} else 
 			{
@@ -62,7 +65,7 @@ package
 			
 			if (!sourceFile.isDirectory && sourceFile.exists)
 			{
-				if ( !storageFile.exists || Utils.sourceFileChanged(sourceFile, storageFile) ) 
+				if ( !storageFile.exists || Utils.identicalFiles(sourceFile, storageFile) ) 
 				{
 					sourceFile.copyTo(storageFile, true);
 				}
@@ -76,29 +79,59 @@ package
 			switch(currentFileName)
 			{
 				case cssFileName:
-				{
 					currentFileName = cssImagesFolder;
-					var  file : File = File.applicationDirectory.resolvePath(currentFileName) 
-					if (file && file.isDirectory)
-						imagesDirectoryContent = file.getDirectoryListing();
 					
-					loadFile(true);
+					addDirectoryContent();
+					break;
+				case cssImagesFolder:
+				{
+					if (isEmptyDirectory)
+					{
+						currentFileName = syntaxHighliterJSFolder;
+						
+						addDirectoryContent();
+					}
+					break;
+				}
+					
+				case syntaxHighliterJSFolder:
+				{
+					if (isEmptyDirectory)
+					{
+						currentFileName = syntaxHighliterCSSFolder;
+						
+						addDirectoryContent();
+					}
 					break;
 				}
 				
 				default:
 				{
-					if (!imagesDirectoryContent || imagesDirectoryContent.length == 0)
+					if (isEmptyDirectory)
 					{
 						dispatchEvent(new Event(STYLE_SETTED));
 						return;
 					}
 					loadFile(true);
-					
-					break;
+					return;
 				}
 			}
 			
+			loadFile(true);
+			
+		}
+		
+		private function get isEmptyDirectory() : Boolean
+		{
+			return !directoryContent || directoryContent.length == 0;
+		}
+		
+		private function addDirectoryContent():void
+		{
+			var  file : File = File.applicationDirectory.resolvePath(currentFileName);
+			
+			if (file && file.isDirectory)
+				directoryContent = file.getDirectoryListing();
 		}
 		
 	}

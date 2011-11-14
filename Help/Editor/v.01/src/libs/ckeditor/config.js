@@ -33,4 +33,19 @@ CKEDITOR.editorConfig = function( config )
 
 CKEDITOR.stylesSet.add('vdomclasses', [
   { name: 'Button', element: 'span', attributes: { 'class': 'button' } },
-  { name: 'Image title', element: 'span', attributes: { 'class': 'img_title' } } ]);
+  { name: 'Image title', element: 'span', attributes: { 'class': 'img_title' } },
+  
+  { name: 'Syntax: Python', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: python' } }, 
+  { name: 'Syntax: AS3', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: as3' } }, 
+  { name: 'Syntax: C++', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: cpp' } }, 
+  { name: 'Syntax: C#', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: csharp' } }, 
+  { name: 'Syntax: CSS', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: css' } }, 
+  { name: 'Syntax: Delphi', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: delphi' } }, 
+  { name: 'Syntax: Java', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: java' } }, 
+  { name: 'Syntax: JS', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: js' } }, 
+  { name: 'Syntax: Perl', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: perl' } }, 
+  { name: 'Syntax: Php', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: php' } }, 
+  { name: 'Syntax: Sql', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: sql' } }, 
+  { name: 'Syntax: Vb', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: vb' } }, 
+  { name: 'Syntax: XML', element: 'pre', attributes: { 'name': 'code', 'class': 'brush: xml' } }, 
+  ]);

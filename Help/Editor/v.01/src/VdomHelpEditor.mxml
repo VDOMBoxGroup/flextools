@@ -711,11 +711,19 @@
 
 				if ( html )
 				{
+					//html.addEventListener(Event.COMPLETE, onPreviewLoadingComplete);
 					html.location = fullPath;
 					html.validateDisplayList();
 				}
 			}
-
+			
+			/*private function onPreviewLoadingComplete(event:Event) : void
+			{
+				html.removeEventListener(Event.COMPLETE, onPreviewLoadingComplete);
+				
+				//if(html.domWindow.dp.SyntaxHighlighter.HighlightAll)
+					//html.domWindow.dp.SyntaxHighlighter.HighlightAll('code', true, false, false);
+			}*/
 
 			private function dragDropHandler(event:Event) : void
 			{

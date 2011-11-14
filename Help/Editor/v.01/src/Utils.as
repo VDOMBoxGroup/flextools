@@ -36,7 +36,7 @@ package
 		{
 		}
 		
-		public static function sourceFileChanged(sourceFile : File, storageFile : File) : Boolean
+		public static function identicalFiles(sourceFile : File, targetFile : File) : Boolean
 		{
 			if (sourceFile.isDirectory)
 				return false;
@@ -49,7 +49,7 @@ package
 			var uidForSourceFile : String;
 			var uidForStorageFile : String;
 			
-			if (!sourceFile.exists || !storageFile.exists)
+			if (!sourceFile.exists || !targetFile.exists)
 				return true;
 			
 			md5StreamForSourceFile  = new MD5Stream();
@@ -65,7 +65,7 @@ package
 			
 			byteArray.clear();
 			
-			fileStream.open(storageFile, FileMode.READ);
+			fileStream.open(targetFile, FileMode.READ);
 			fileStream.readBytes(byteArray);
 			uidForStorageFile = md5StreamForSourceFile.complete(byteArray);
 			fileStream.close();

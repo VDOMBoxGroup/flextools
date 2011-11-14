@@ -4,6 +4,7 @@
 	creationComplete="init()" width="100%" height="100%"
 	uncaughtScriptException="onJavaScriptException(event)"
 	complete="htmlCompleteHandler(event)">
+	
 	<mx:Script>
 		<![CDATA[
 			import com.adobe.images.PNGEncoder;
@@ -101,25 +102,15 @@
 			
 			private static function getHtmlSourceTxt(bodyContent : String, showPageToc:Boolean = false) : String
 			{
-				var metaTeg		: String;
-				var cssTeg		: String;
-				var scriptTeg	: String;
-				var titleTeg	: String;
 				var htmlTxt		: String = "";
 				
-				metaTeg = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
-				cssTeg = "<link rel='stylesheet' href='app-storage:/main.css' type='text/css'></link>";
-				scriptTeg = "<script src='app-storage:/searchhi_slim.js'></script>";
-				titleTeg = "<title></title>";
+				var highlightAllScript : String = showPageToc ? HtmlPageProperties.highlightAllTemplate : "";
 				
 				htmlTxt = "<html>" + "\n" + 
-								"<head>" + "\n" +
-									metaTeg + "\n" +
-									cssTeg + "\n" +
-									scriptTeg + "\n" +
-								"</head>" + "\n" +
+								HtmlPageProperties.headTemplate +
 								"<body>" + "\n" +
 									bodyContent + "\n" +
+									highlightAllScript + "\n" +
 								"</body>" + "\n" +
 							"</html>";
 				
@@ -250,7 +241,7 @@
 				newImgFile = File.applicationStorageDirectory.resolvePath(targetPath);
 				
 				
-				if ( !newImgFile.exists || Utils.sourceFileChanged(imgFile, newImgFile))
+				if ( !newImgFile.exists || Utils.identicalFiles(imgFile, newImgFile))
 					imgFile.copyTo(newImgFile, true);
 				
 				return newImgFile.url;
