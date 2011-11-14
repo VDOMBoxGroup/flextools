@@ -33,6 +33,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private var _editors : Dictionary;
 
+		public function get editors():Dictionary
+		{
+			return _editors;
+		}
+
+		public function set editors(value:Dictionary):void
+		{
+			_editors = value;
+		}
+
 		public function get selectedEditor() : IEditor
 		{
 			var result : IEditor;
@@ -40,9 +50,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			var sTab : Tab = selectedTab;
 
-			for ( editor in _editors )
+			for ( editor in editors )
 			{
-				if ( _editors[ editor ] == sTab )
+				if ( editors[ editor ] == sTab )
 				{
 					result = editor as IEditor;
 				}
@@ -58,7 +68,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			var tab : Tab;
 
-			tab = _editors[ value ];
+			tab = editors[ value ];
 
 			if ( tab )
  				selectedTab = tab;
@@ -72,7 +82,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( !vdomObjectVO )
 				return null;
 
-			for ( editor in _editors )
+			for ( editor in editors )
 			{ 
 				if ( editor.editorVO.vdomObjectVO && editor.editorVO.vdomObjectVO.id == vdomObjectVO.id )
 				{
@@ -115,10 +125,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 //			tab.id = "tab_" + uid;
 			
-			if ( !_editors )
-				_editors = new Dictionary( true );
+			if ( !editors )
+				editors = new Dictionary( true );
 
-			_editors[ editor ] = tab;
+			editors[ editor ] = tab;
 			
 			selectedEditor = editor;
 			return editor;

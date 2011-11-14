@@ -1408,7 +1408,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				setState = "hovered";
 				if ( !( this is PageRenderer ) )
 				{ 
-					showToolTip( resourceManager.getString( 'Wysiwyg_General', 'renderer_toolTip' ) + renderVO.vdomObjectVO.name );
+					showToolTip( typeVO.name + ": " + renderVO.vdomObjectVO.name );
 					trace(renderVO.vdomObjectVO.name);
 					event.stopImmediatePropagation();
 				}
