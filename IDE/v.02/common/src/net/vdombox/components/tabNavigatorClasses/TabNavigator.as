@@ -35,19 +35,6 @@ package net.vdombox.components.tabNavigatorClasses
 			return tabBar.selectedItem as Tab;
 		}
 		
-		public function myItemRendererFunction(item:Object):IFactory
-		{
-			var itemFactory : ClassFactory;
-			var skinType : Number;
-				
-			skinType = isFirstTab ? 1 : 0;
-			
-			itemFactory = new ClassFactory( TabBarButton );
-			itemFactory.properties = { mouseChildren: true , index : skinType};
-				
-			return itemFactory;
-		}
-		
 		private function get isFirstTab() : Boolean
 		{
 			return tabBar.dataProvider && tabBar.dataProvider.length == 1;

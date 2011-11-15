@@ -52,7 +52,7 @@
 		
 		<s:TabBar id="tabBar"
 				  skinClass="net.vdombox.view.skins.TabBarSkin"
-				  requireSelection="true" top=""/>
+				  requireSelection="true"/>
 	</s:Group>
 
 	<s:Scroller height="100%" width="100%" y="0">

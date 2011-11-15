@@ -5,6 +5,7 @@ package net.vdombox.components.tabNavigatorClasses
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.binding.utils.ChangeWatcher;
+	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	
 	import net.vdombox.view.skins.TabBarButtonSkin;
@@ -20,7 +21,7 @@ package net.vdombox.components.tabNavigatorClasses
 		public function TabBarButton() : void
 		{
 		}
-
+		
 		[SkinPart( required="true" )]
 		public var closeButton : Button;
 		
@@ -95,6 +96,6 @@ package net.vdombox.components.tabNavigatorClasses
 
 			dispatchEvent( new ListEvent( CLOSE_TAB, true, false, -1, itemIndex ) );
 		}
-
+		
 	}
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="22" maxHeight="22" minWidth="115" maxWidth="115"
+			 minHeight="24" maxHeight="24" minWidth="125" maxWidth="125"
 			 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*">
 
 	<!-- host component -->
@@ -43,15 +43,14 @@
 	</s:Rect>-->
 	
 	<s:Graphic id="bgUsualBtn" x="0" y="0" visible="{!hostComponent.firstBtn}">
-		<s:Path data="M 4 0
-				H 100
-				Q 101 1 102 1.5
-				L 112 21.5
-				Q 113 22.5 112 24
-				H 13.5
-				Q 12 23.7 11 22
-				L 2.5 4.5
-				C 2 0.5 0 1.5 4 0">
+		<s:Path data="M 2 0
+				H 110
+				M 110 0.3
+				Q 112 1.5 112 1.5
+				L 125 24
+				H 15
+				L 3 2
+				Q 3 1.5 2 0.3">
 			<s:stroke>
 				<s:LinearGradientStroke weight="1" rotation="90">
 					<s:GradientEntry color="#595959" color.selectedStates="#f8fafa"/>
@@ -68,15 +67,14 @@
 	</s:Graphic>
 	
 	<s:Graphic id="bgFirstBtn" x="0" y="0" visible="{hostComponent.firstBtn}">
-		<s:Path data="M 6 0
-				H 100
-				Q 101 1 102 1.5
-				L 112 21.5
-				Q 113 22.5 112 24
-				H 3.5
-				Q 2 23.7 1 22
-				L 0 4.5
-				C 1 0.7 0.5 0.5 6.2 0">
+		<s:Path data="M 2 0
+				H 110
+				M 110 0.3
+				Q 112 1.5 112 1.5
+				L 125 24
+				H 0
+				L 0 3
+				Q 0.7 0.7 2 0.5">
 			<s:stroke>
 				<s:LinearGradientStroke weight="1" rotation="90">
 					<s:GradientEntry color="#595959" color.selectedStates="#f8fafa"/>
@@ -95,15 +93,18 @@
 	<!-- layer 2: text -->
 	<!--- Defines the appearance of the label(s) for the middle button(s) in the ButtonBar component. -->
 	
-	<s:HGroup bottom="2" left="10" right="15" top="2" gap="1" verticalAlign="middle">
-		<s:Label id="labelDisplay" width="100%"
-				 color.selectedStates="#000000" color="#aeaeae" 
-				 fontFamily="Verdana" textAlign="center" 
-				 maxDisplayedLines="1"/>
-		
-		<tabNavigatorClasses:TabBarCloseButton id="closeButton" visible="{hostComponent.canClose}"/>
-	</s:HGroup>
+	<s:Label id="labelDisplay"
+			 left="14" right="20" top="6"
+			 color.selectedStates="#000000" color="#aeaeae" 
+			 fontFamily="Arial" fontSize="12" 
+			 textAlign="center" 
+			 verticalAlign="middle"
+			 maxDisplayedLines="1"/>
 	
+	<tabNavigatorClasses:TabBarCloseButton id="closeButton"
+										   right="11" top="6"
+										   visible="{hostComponent.canClose}" 
+										   alpha="1" alpha.invisibleStates="0"/>
 	
 
 </s:SparkSkin>
