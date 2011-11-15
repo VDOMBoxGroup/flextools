@@ -273,8 +273,8 @@
 			
 			private function mouseMoveOnPageRenderer( event : MouseEvent ) : void
 			{
-				strXWritten.text = "x = " + (event.stageX - 137).toString() + "px";
-				strYWritten.text = "y = " + (event.stageY - 179).toString() + "px";
+				strXWritten.text = "x: " + (event.stageX - 137).toString() + "px";
+				strYWritten.text = "y: " + (event.stageY - 179).toString() + "px";
 			}
 			
 			public function set showLinking( value : Boolean ) : void
