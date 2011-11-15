@@ -214,6 +214,8 @@ package net.vdombox.ide.core.view
 			applicationPropertiesView.addEventListener( ApplicationManagerEvent.CANCEL, cancelInformationHandler );
 
 			applicationPropertiesView.addEventListener( ApplicationManagerEvent.SAVE_INFORMATION, saveInformationHandler );
+			
+			applicationPropertiesView.selectIcon.addEventListener(MouseEvent.CLICK, openIconListHandler);
 		}
 
 		private function cancelInformationHandler( event : ApplicationManagerEvent ) : void
