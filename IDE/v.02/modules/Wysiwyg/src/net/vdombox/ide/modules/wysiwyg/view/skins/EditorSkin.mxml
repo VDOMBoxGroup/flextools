@@ -69,6 +69,18 @@
 		</s:fill>
 	</s:Rect>
 	
+	<s:Line width="100%" y="28">
+		<s:stroke>
+			<s:SolidColorStroke color="#e8ebeb" weight="1"/>
+		</s:stroke>
+	</s:Line>
+	
+	<s:Line width="100%" y="29">
+		<s:stroke>
+			<s:SolidColorStroke color="#cacece" weight="1"/>
+		</s:stroke>
+	</s:Line>
+	
 		<s:HGroup gap="0" height="25"
 				  left="1" right="1" top="1">
 			
@@ -84,23 +96,44 @@
 				
 			</s:HGroup>
 			
-			<s:HGroup gap="13" height="25" paddingRight="15"  paddingLeft="14" width="50%" verticalAlign="middle">
+			<s:HGroup gap="13" 
+					  height="100%" width="50%"
+					  paddingRight="15"  paddingLeft="14"  
+					  verticalAlign="middle">
 				
-				<s:VGroup id="wysiwygButton" enabled.wysiwyg="false" enabled.xml="true" height="25"
-						  click="currentState='wysiwyg'" verticalAlign="bottom" horizontalAlign="center" gap="0">
-					<s:Label color="#007cb6" fontWeight="bold"
+				<s:VGroup id="wysiwygButton" 
+						  enabled.wysiwyg="false" enabled.xml="true"
+						  height="100%"
+						  paddingTop="10"
+						  verticalAlign="middle" horizontalAlign="center"
+						  gap="0"
+						  click="currentState='wysiwyg'">
+					<s:Label color="#007cb6"
+							 fontWeight="bold" fontFamily="Tahoma" fontSize="12"
 							 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"/>
+					<mx:Spacer height="100%"/>
 					<s:HGroup>
-						<mx:Image source="@Embed('icons/triangle.png')" smoothBitmapContent="true" visible.xml="false" visible.wysiwyg="true"/>
+						<mx:Image source="@Embed('icons/triangle.png')" 
+								  smoothBitmapContent="true" 
+								  visible.xml="false" visible.wysiwyg="true"/>
 					</s:HGroup>
 				</s:VGroup>
 				
-				<s:VGroup id="xmlButton" enabled.wysiwyg="true" enabled.xml="false" height="25"
-						  click="currentState='xml'" verticalAlign="bottom" horizontalAlign="center" gap="0">
-					<s:Label color="#007cb6" fontWeight="bold" height="12"
+				<s:VGroup id="xmlButton" 
+						  enabled.wysiwyg="true" enabled.xml="false" 
+						  height="100%"
+						  paddingTop="10"
+						  verticalAlign="middle" horizontalAlign="center" 
+						  gap="0"
+						  click="currentState='xml'">
+					<s:Label color="#007cb6" 
+							 fontWeight="bold" fontFamily="Tahoma" fontSize="12"
 							 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"/>
+					<mx:Spacer height="100%"/>
 					<s:HGroup>
-						<mx:Image source="@Embed('icons/triangle.png')" smoothBitmapContent="true" visible.xml="true" visible.wysiwyg="false"/>
+						<mx:Image source="@Embed('icons/triangle.png')" 
+								  smoothBitmapContent="true" 
+								  visible.xml="true" visible.wysiwyg="false"/>
 					</s:HGroup>
 				</s:VGroup>
 				
@@ -124,15 +157,28 @@
 					</s:fill>
 				</s:Rect>
 				
-				<s:HGroup height="25" paddingRight="0" paddingLeft="15" verticalAlign="middle" width="100%" gap="10" horizontalAlign="right">
+				<s:HGroup height="25" width="100%"
+						  paddingRight="0" paddingLeft="15" paddingTop="2" 
+						  verticalAlign="middle" horizontalAlign="right"
+						  gap="13">
 					
-					<s:CheckBox id="showLinking" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_show_linking' ) }"/>
+					<s:CheckBox id="showLinking" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_show_linking' ) }" 
+								color="#909b95"
+								fontFamily="Tahoma" fontSize="12"/>
 					
 					<s:HGroup height="25" verticalAlign="middle" gap="5" width="80">
 						<mx:Image source="@Embed('icons/Cursor.png')" smoothBitmapContent="true" />
-						<s:VGroup height="25" gap="0">
-							<s:Label height="12" id="strXWritten" text="x: 0px"/>
-							<s:Label height="12" id="strYWritten" text="y: 0px"/>
+						<s:VGroup height="25" gap="0" verticalAlign="middle">
+							<s:Label height="12" 
+									 id="strXWritten" 
+									 text="x: 0px" 
+									 fontFamily="Tahoma" fontSize="10" 
+									 color="#909b95"/>
+							<s:Label height="12" 
+									 id="strYWritten" 
+									 text="y: 0px" 
+									 fontFamily="Tahoma" fontSize="10" 
+									 color="#909b95"/>
 						</s:VGroup>
 					</s:HGroup>			
 			
