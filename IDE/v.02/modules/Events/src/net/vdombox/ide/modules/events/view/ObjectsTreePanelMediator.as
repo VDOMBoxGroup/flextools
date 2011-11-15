@@ -157,15 +157,24 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE:
 				{
-					var eventElement : String = body as String;
-					var objectXML : XML;
+					var eventElementID : String = body as String;
 						
-					for each( objectXML in pagesXMLList)
+					for each( pageXML in pagesXMLList)
 					{
-						if ( objectXML.@id == eventElement )
+						if ( pageXML.@id == eventElementID )
 						{
-							objectXML.@visible = true;
+							pageXML.@visible = true;
 							break;
+						}
+						var xmlList : XMLList = pageXML..object;
+						var objectXML : XML;
+						for each( objectXML in xmlList)
+						{
+							if ( objectXML.@id == eventElementID )
+							{
+								objectXML.@visible = true;
+								break;
+							}
 						}
 					}
 				

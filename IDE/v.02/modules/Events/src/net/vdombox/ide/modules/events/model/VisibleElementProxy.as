@@ -48,12 +48,12 @@ package net.vdombox.ide.modules.events.model
 		
 		public function get showHidden() : Boolean
 		{	
-			return sharedObject.data.showHidden ? sharedObject.data.showHidden : false;
+			return sharedObject.data.hasOwnProperty( "showHidden" ) ? sharedObject.data["showHidden"] : false;
 		}
 		
 		public function set showHidden( value : Boolean ) : void
 		{
-			sharedObject.data.showHidden = value;
+			sharedObject.data["showHidden"] = value;
 		}
 		
 		private function get sharedObject():SharedObject

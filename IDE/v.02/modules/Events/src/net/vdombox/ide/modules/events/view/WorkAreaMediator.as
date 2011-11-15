@@ -108,7 +108,7 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.APPLICATION_EVENTS_GETTED:
 				{
 					workArea.dataProvider = body as ApplicationEventsVO;
-					setElementsVisibleState();
+					getElementsVisibleState();
 					break;
 				}
 					
@@ -214,6 +214,24 @@ package net.vdombox.ide.modules.events.view
 			var element		: Object;
 			
 			visibleElementProxy.showHidden = workArea.showHidden ;
+			
+			for ( var i:uint = 0; i < numElements; i++ )
+			{
+				element = workArea.contentGroup.getElementAt( i );
+				
+				if (element is BaseElement)
+					setElementVisibleState (element as BaseElement);
+			}
+			
+			workArea.setVisibleStateForAllLinkages();
+		}
+		
+		private function getElementsVisibleState() : void
+		{
+			workArea.showHidden = visibleElementProxy.showHidden;
+			var numElements : Number = workArea.contentGroup.numElements;
+			
+			var element		: Object;
 			
 			for ( var i:uint = 0; i < numElements; i++ )
 			{

@@ -724,6 +724,11 @@ package net.vdombox.ide.modules.events.view.components
 			return showHiddenElements.selected;
 		}
 		
+		public function set showHidden( value : Boolean ) : void
+		{
+			showHiddenElements.selected = value;
+		}
+		
 		public function setVisibleStateForAllLinkages() : void
 		{
 			var i : Number;
