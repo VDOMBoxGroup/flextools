@@ -40,6 +40,9 @@
 
 			private function init():void
 			{
+				XML.prettyPrinting = false;
+				XML.ignoreWhitespace = true;
+				
 				this.addEventListener(KeyboardEvent.KEY_UP,		onKeyboardKeyUp);
 				this.addEventListener(KeyboardEvent.KEY_DOWN,	onKeyboardKeyDown);
 			}
