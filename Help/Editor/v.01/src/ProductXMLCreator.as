@@ -72,6 +72,7 @@ package
 		
 		private var productName			: String;
 		private var productTitle		: String;
+		private var productLanguage		: String;
 		private var treeData			: *;
 		
 		private var appendPage			: Boolean = true;
@@ -98,12 +99,13 @@ package
 		}
 
 		
-		public function generateProductXML(aProductName:String, aProductTitle:String, aTreeData:*, htmlWysiwyg:HTML_WYSIWYG):void
+		public function generateProductXML(aProductName:String, aProductTitle:String, aProductLang:String, aTreeData:*, htmlWysiwyg:HTML_WYSIWYG):void
 		{
 			html_wysiwyg = htmlWysiwyg;
 			
 			productName = aProductName;
 			productTitle = aProductTitle;
+			productLanguage = aProductLang;
 			treeData = aTreeData;
 			
 			spinnerManager.addEventListener(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_ADDED, onSpinnerAdded);
@@ -212,10 +214,10 @@ package
 			productXML  = new XML("<product/>");
 			
 			productXML.name = productName;
-			productXML.version = sqlProxy.upVersion(productName, "en_US"); // get Version
+			productXML.version = sqlProxy.upVersion(productName, productLanguage); // get Version
 			productXML.title = productTitle;
 			productXML.description = "";
-			productXML.language = "en_US";
+			productXML.language = productLanguage;
 			
 			// generate toc ...
 			tocXML      = new XML("<toc/>");
@@ -236,7 +238,7 @@ package
 			pagesObj = {};
 			pagesXML = null;
 			
-			pagesObj = sqlProxy.getProductsPages(productName, "en_US");
+			pagesObj = sqlProxy.getProductsPages(productName, productLanguage);
 			pagesXML = new XML("<pages/>");
 			
 			// generate pages ...
@@ -409,9 +411,16 @@ package
 		private function appendHighlightScriptToPageContent(pageContent : String) : String
 		{
 			if (!pageContent)
-				return pageContent.toString();
+				return "";
 			
+			if (pageContent.indexOf(HtmlPageProperties.highlightAllTemplate) >= 0)
+				pageContent = pageContent.replace(HtmlPageProperties.highlightAllTemplate, "");
+			
+			if (pageContent.indexOf(HtmlPageProperties.jsCoreFileName) == -1)
+				return pageContent; 
+				
 			var pageBodyEndWithHighkightAllScript : String = HtmlPageProperties.highlightAllTemplate.concat("\n</body>");
+			
 			
 			return pageContent.replace("</body>",pageBodyEndWithHighkightAllScript);
 		}
@@ -710,7 +719,7 @@ package
 					
 					function pageExistsInDB(pageName:String) : Boolean 
 					{
-						if (sqlProxy.getPage(productName, "en_US", pageName)) 
+						if (sqlProxy.getPage(productName, productLanguage, pageName)) 
 							return true;
 						return false;
 					}

@@ -77,7 +77,10 @@
 					pageContentToRefresh = value;
 					return;
 				}
-				domWindow.CKEDITOR.instances.editor1.setData(value);
+				
+				var pageContentWithoutHighlightAllScript : String = value.replace(HtmlPageProperties.highlightAllTemplate, ""); 
+				
+				domWindow.CKEDITOR.instances.editor1.setData(pageContentWithoutHighlightAllScript);
 			}
 			
 			public function getHTML(showPageToc:Boolean = false) : String
@@ -89,6 +92,7 @@
 				patternHead = /<[ ]*head[ ]*(>|\/[ ]*>)/i;
 				
 				editorData = instancesInitialized ? domWindow.CKEDITOR.instances.editor1.getData() : "";
+				
 				htmlTxt = editorData;
 				
 				if (editorData.search(patternHead) == -1) 
@@ -103,6 +107,8 @@
 			private static function getHtmlSourceTxt(bodyContent : String, showPageToc:Boolean = false) : String
 			{
 				var htmlTxt		: String = "";
+				
+				bodyContent = bodyContent.replace(HtmlPageProperties.highlightAllTemplate, "");
 				
 				var highlightAllScript : String = showPageToc ? HtmlPageProperties.highlightAllTemplate : "";
 				

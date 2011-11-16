@@ -135,7 +135,7 @@
 				if ( !tree.selectedItem )
 					return;
 
-				var resoult : Object = sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name);
+				var resoult : Object = sqlProxy.getPage(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, tree.selectedItem.@name);
 
 				if ( resoult )
 				{
@@ -319,18 +319,18 @@
 				if (aCopiedItem) {
 					pageTitle = aCopiedItem[0]["title"];
 					pageName = aCopiedItem[0]["name"];
-					sqlProxy.addPage(cmboxProduct.selectedItem.name, "en_US", pageName, 0, 
+					sqlProxy.addPage(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, pageName, 0, 
 						pageTitle, aCopiedItem[0]["description"], aCopiedItem[0]["content"]);
 				} else {
 					pageTitle = "Page " + count;
-					sqlProxy.addPage(cmboxProduct.selectedItem.name, "en_US", pageName, 0, 
+					sqlProxy.addPage(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, pageName, 0, 
 									 pageTitle, "", HTML_WYSIWYG.getNewPageContent(""));
 				}
 
 				if (!aCopiedItem || 
 					!aCopiedItem[0]["parentPageName"] || 
 					(aCopiedItem[0]["parentPageName"] == cmboxProduct.selectedItem.name) ||
-					!sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", aCopiedItem[0]["parentPageName"]) ||
+					!sqlProxy.getPage(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, aCopiedItem[0]["parentPageName"]) ||
 					(toc..page.(@name == aCopiedItem[0]["parentPageName"]).length() == 0)) {
 					
 					toc.appendChild(XML("<page title = '" + pageTitle+ "' name = '" + pageName+ "' isBranch='true' />"));
@@ -391,7 +391,7 @@
 
 				if ( selectedIndex > 0 )
 				{
-					sqlProxy.deletePage(sqlProxy.getProductId(cmboxProduct.selectedItem.name, "en_US"), tree.selectedItem.@name);
+					sqlProxy.deletePage(sqlProxy.getProductId(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language), tree.selectedItem.@name);
 					
 					removeChildPage(toc..page.( @name == tree.selectedItem.@name )[0]);
 					
@@ -399,7 +399,7 @@
 					{
 						for each ( var page:XML in xml.children() )
 						{
-							sqlProxy.deletePage(sqlProxy.getProductId(cmboxProduct.selectedItem.name, "en_US"), page.@name);
+							sqlProxy.deletePage(sqlProxy.getProductId(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language), page.@name);
 							removeChildPage(page);
 						}
 					}
@@ -480,7 +480,7 @@
 			{
 				html_wysiwyg.removeEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, onWysiwygImagesWidthSetted);
 				
-				sqlProxy.setPageContent(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name, html_wysiwyg.getHTML(), pageVersion);
+				sqlProxy.setPageContent(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, tree.selectedItem.@name, html_wysiwyg.getHTML(), pageVersion);
 				getCurrentPage();
 			}
 
@@ -661,7 +661,8 @@
 				
 				productCreator.addEventListener(ProductXMLCreator.EVENT_ON_XML_CREATION_COMPLETE, onProductXMLCreationComplete);
 				productCreator.generateProductXML(cmboxProduct.selectedItem.name, 
-													cmboxProduct.selectedItem.title, 
+													cmboxProduct.selectedItem.title,
+													cmboxProduct.selectedItem.language,
 													tree.dataProvider, 
 													html_wysiwyg);
 			}
@@ -735,7 +736,7 @@
 				var editPage : EditPage = EditPage(PopUpManager.createPopUp(this, EditPage, true));
 				editPage.addEventListener(CloseEvent.CLOSE, editPageHandler);
 
-				editPage.pageLn = "en_US"
+				editPage.pageLn = cmboxProduct.selectedItem.language;
 				editPage.curPage = tree.selectedItem;
 				editPage.productName = cmboxProduct.selectedItem.name;
 
@@ -795,7 +796,7 @@
 				
 				treePagesBuffer = [];
 				
-				resoult = sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", pagesXml.@name);
+				resoult = sqlProxy.getPage(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, pagesXml.@name);
 				if (resoult)
 				{
 					html_wysiwyg.generateLinkToPage(resoult[0]["name"], resoult[0]["title"]);
@@ -813,7 +814,7 @@
 				{
 					for each(var page:XML in xml.children())
 					{
-						resoult = sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", page.@name);
+						resoult = sqlProxy.getPage(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, page.@name);
 						if (resoult)
 						{
 							resoult[0]["parentPageName"] = treePagesBuffer[aParentPageId][0]["name"];

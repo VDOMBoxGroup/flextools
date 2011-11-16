@@ -130,7 +130,7 @@
 			{
 				if (event.detail==Alert.YES)
 		        {
-		        	sqlProxy.deleteProduct(listOfProducts.selectedItem.name, "en_US");
+		        	sqlProxy.deleteProduct(listOfProducts.selectedItem.name, listOfProducts.selectedItem.language);
 		        	showAllProducts();
 		        }else
 		        {
