@@ -914,20 +914,15 @@
 		<mx:HDividedBox y="60" width="100%" height="100%" horizontalGap="1">
 			<mx:VBox height="100%" minWidth="220" width="220" horizontalScrollPolicy="off">
 				<mx:HBox paddingLeft="3" paddingRight="3" color="#FFFFFF" width="100%">
-					<mx:ComboBox id="cmboxProduct"
-								 width="{tree.width}"
-								 labelField="title"
-								 toolTip="{cmboxProduct.selectedItem.title}"
-								 dataProvider="{{label:'VDOM Editor'}}"
-								 fillColors="#333333"
-								 iconColor="0xCCCCCC"
-								 change="{changeProduct()}"
-								 textSelectedColor="#FFFFFF"
-								 cornerRadius="1"
-								 borderColor="#999999"
-								 themeColor="#656565"
-								 textRollOverColor="#000000"
-								 selectionColor="#0000FF"/>
+					<mx:ComboBox id="cmboxProduct" width="{tree.width}"
+								 alternatingItemColors="#999999" borderColor="#333333"
+								 change="{changeProduct()}" color="#ffffff" cornerRadius="1"
+								 dataProvider="{{label:'VDOM Editor'}}" dropdownWidth="{tree.width}"
+								 errorColor="#3F3535" fillAlphas="[0.6, 0.6, 0.6, 0.6]"
+								 fillColors="[#333333, #333333]" iconColor="#CCCCCC"
+								 labelField="title" rollOverColor="#cccccc" selectionColor="#666666"
+								 textRollOverColor="#000000" textSelectedColor="#FFFFFF"
+								 themeColor="#000000" toolTip="{cmboxProduct.selectedItem.title}"/>
 
 				</mx:HBox>
 				<mx:Tree id="tree" width="100%" height="100%" color="#000000" showRoot="true" labelField="@title"
