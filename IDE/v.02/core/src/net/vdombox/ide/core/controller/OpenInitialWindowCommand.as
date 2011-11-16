@@ -16,6 +16,8 @@ package net.vdombox.ide.core.controller
 			
 			var initialWindowMediator : InitialWindowMediator;
 			
+			
+			
 			initialWindowMediator = new InitialWindowMediator( new InitialWindow() );
 			facade.registerMediator( initialWindowMediator );
 			initialWindowMediator.openWindow();
