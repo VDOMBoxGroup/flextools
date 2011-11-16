@@ -153,10 +153,10 @@
 				contentXML = new XML(pageOldContent);
 				
 				if (contentXML.body) {
-					if (contentXML.body.h1) {
+					if (contentXML.body.h1 && contentXML.body.h1.length() > 0) {
 						contentXML.body.h1 = pageLabel.text;
 					} else {
-						contentXML.prependChild(XML(pageNewH1));
+						contentXML.body.prependChild(XML(pageNewH1));
 					}
 					
 					pageNewContent = contentXML.toXMLString();
