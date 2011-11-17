@@ -37,8 +37,6 @@ package net.vdombox.ide.core.view
 		public function InitialWindowMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
-			
-			initialWindow.addEventListener(Event.CLOSE, closeHandler ); 
 		}
 		
 		private var windowManager : WindowManager = WindowManager.getInstance();
@@ -59,6 +57,8 @@ package net.vdombox.ide.core.view
 		
 		override public function onRemove() : void
 		{
+			trace("***** onRemove *****");
+			
 			removeHandlers();
 		}
 		
@@ -130,6 +130,8 @@ package net.vdombox.ide.core.view
 			initialWindow.addEventListener( InitialWindowEvent.EXIT, exitHandler, false  );
 			
 			initialWindow.addEventListener( InitialWindowEvent.SUBMIT, submitHandler);
+			
+			initialWindow.addEventListener(Event.CLOSE, closeHandler, false, 0, true  ); 
 		}
 		
 		private function removeHandlers() : void
@@ -142,6 +144,8 @@ package net.vdombox.ide.core.view
 			initialWindow.removeEventListener( InitialWindowEvent.EXIT, exitHandler );
 			
 			initialWindow.removeEventListener( InitialWindowEvent.SUBMIT, submitHandler );
+			
+			initialWindow.removeEventListener( Event.CLOSE, closeHandler ); 
 		}
 		
 		private function creationCompleteHandler( event : FlexEvent ) : void
@@ -172,7 +176,8 @@ package net.vdombox.ide.core.view
 		
 		private function exitHandler( event : InitialWindowEvent ) : void
 		{
-			NativeApplication.nativeApplication.exit();
+//			NativeApplication.nativeApplication.exit();
+			sendNotification( ApplicationFacade.CLOSE_IDE );
 		}
 		
 		private function submitHandler( event : InitialWindowEvent ) : void
@@ -182,7 +187,9 @@ package net.vdombox.ide.core.view
 		
 		private function closeHandler( event : Event ) : void
 		{
+			removeHandlers();	
 			NativeApplication.nativeApplication.exit();
+			sendNotification( ApplicationFacade.CLOSE_IDE );
 		}
 	}
 }
