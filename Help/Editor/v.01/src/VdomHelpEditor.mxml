@@ -79,6 +79,8 @@
 
 			private function creationCompleteHandler() : void
 			{
+				Utils.configureXMLForDisplaying();
+				
 				sqlProxy.creatDB();
 				
 				stylesManager.addEventListener(CSSStyleManager.STYLE_SETTED, onStylesLoaded);
@@ -397,6 +399,9 @@
 					
 					function removeChildPage(xml:XML):void
 					{
+						if (!xml)
+							return;
+						
 						for each ( var page:XML in xml.children() )
 						{
 							sqlProxy.deletePage(sqlProxy.getProductId(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language), page.@name);
@@ -602,6 +607,8 @@
 				
 				try
 				{
+					Utils.configureXMLForPrinting();
+					
 					fileStream. open( productXMLFile, FileMode.WRITE);
 					fileStream.writeUTFBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + product.toXMLString());
 					fileStream.close();
@@ -612,6 +619,8 @@
 				{
 					Alert.show( error.message, AlertMessages.MSG_TYPE_ERROR);
 				}
+				
+				Utils.configureXMLForDisplaying();
 				
 				var location : File = new File(docsDir.url +"/VDOMHelp/StartXML.xml");
 				

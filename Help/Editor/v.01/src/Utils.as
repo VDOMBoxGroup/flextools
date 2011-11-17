@@ -159,5 +159,17 @@ package
 			return str;
 		}
 		
+		public static function configureXMLForDisplaying():void
+		{
+			XML.prettyPrinting = false;
+			XML.ignoreWhitespace = true;
+		}
+		
+		public static function configureXMLForPrinting():void
+		{
+			XML.prettyPrinting = true;
+			XML.ignoreWhitespace = false;
+		}
+		
 	}
 }
