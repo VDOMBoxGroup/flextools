@@ -38,7 +38,7 @@ package net.vdombox.ide.core.view
 		{
 			super( NAME, viewComponent );
 			
-			initialWindow.addEventListener(Event.CLOSE, closeHandler ); 
+			
 		}
 
 		private var windowManager : WindowManager = WindowManager.getInstance();
@@ -55,6 +55,8 @@ package net.vdombox.ide.core.view
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			addHandlers();
+			
+			sendNotification( ApplicationFacade.CHECK_UPDATE );
 		}
 
 		override public function onRemove() : void
@@ -130,6 +132,8 @@ package net.vdombox.ide.core.view
 			initialWindow.addEventListener( InitialWindowEvent.EXIT, exitHandler, false  );
 			
 			initialWindow.addEventListener( InitialWindowEvent.SUBMIT, submitHandler);
+			
+			initialWindow.addEventListener(Event.CLOSE, closeHandler ); 
 		}
 
 		private function removeHandlers() : void
@@ -172,7 +176,8 @@ package net.vdombox.ide.core.view
 
 		private function exitHandler( event : InitialWindowEvent ) : void
 		{
-			NativeApplication.nativeApplication.exit();
+			sendNotification( ApplicationFacade.CLOSE_IDE );
+//			NativeApplication.nativeApplication.exit();
 		}
 		
 		private function submitHandler( event : InitialWindowEvent ) : void
@@ -182,7 +187,9 @@ package net.vdombox.ide.core.view
 		
 		private function closeHandler( event : Event ) : void
 		{
-				NativeApplication.nativeApplication.exit();
+//			sendNotification( ApplicationFacade.CLOSE_IDE );
+			
+//				NativeApplication.nativeApplication.exit();
 		}
 	}
 }

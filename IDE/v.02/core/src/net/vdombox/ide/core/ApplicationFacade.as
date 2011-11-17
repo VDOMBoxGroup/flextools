@@ -5,6 +5,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.CheckSelectedPageCommand;
 	import net.vdombox.ide.core.controller.CheckUpdateCommand;
 	import net.vdombox.ide.core.controller.CloseApplicationManagerCommand;
+	import net.vdombox.ide.core.controller.CloseIDECommand;
 	import net.vdombox.ide.core.controller.CloseInitialWindowCommand;
 	import net.vdombox.ide.core.controller.CloseMainWindowCommand;
 	import net.vdombox.ide.core.controller.CloseWindowCommand;
@@ -134,7 +135,11 @@ package net.vdombox.ide.core
 //		public static const APPLICATION_CHANGED : String = "applicationChanged";
 		
 //		windows and views
+		
+		public static const CLOSE_IDE : String = "closeIDE";
+		
 		public static const INITIAL_WINDOW_CREATED : String = "initialWindowCreated";
+		
 		
 		public static const OPEN_INITIAL_WINDOW : String = "openInitialWindow";
 		public static const INITIAL_WINDOW_OPENED : String = "initialWindowOpened";
@@ -409,6 +414,8 @@ package net.vdombox.ide.core
 			super.initializeController();
 
 //			core
+			
+			registerCommand( CLOSE_IDE, CloseIDECommand ); 
 			registerCommand( PREINITALIZE, PreinitalizeMacroCommand );
 			registerCommand( STARTUP, StartupCommand );
 
