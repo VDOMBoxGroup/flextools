@@ -7,7 +7,7 @@
 					  minWidth="225"
 					  contentBackgroundAlpha="0" 
 					  creationComplete="creationCompleteHandler(event)"
-					  contextMenu="mxtreeitemrenderer1_contextMenuHandler(event)">
+					  contextMenu="mxtreeitemrenderer1_contextMenuHandler(event)" xmlns:view="net.vdombox.view.*">
 
 	<s:states>
 		<s:State name="normal" />
@@ -28,12 +28,6 @@
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 			
 			import spark.components.Button;
-
-			[Embed( source = "icons/eye_0t.png" )]
-			public var noVisibleEye : Class;
-
-			[Embed( source = "icons/eye_1t.png" )]
-			public var visibleEye : Class;
 
 			private var _eyeOpened : Boolean  = true;
 
@@ -175,7 +169,7 @@
 			{
 				_eyeOpened = value;
 
-				eyes.source = _eyeOpened ? visibleEye : noVisibleEye;
+				eyes.setOpenState( _eyeOpened );
 
 				// 
 				if ( _data.@visible[ 0 ] )
@@ -277,7 +271,7 @@
 		</s:Rect>
 
 		<s:VGroup width="22" height="100%" verticalAlign="middle" horizontalAlign="center">
-			<mx:Image id="eyes" width="16" height="14" source="@Embed('icons/eye_1t.png')" />
+			<view:EyeImage id="eyes" width="16" height="14" />
 		</s:VGroup>
 
 	</s:Group>
