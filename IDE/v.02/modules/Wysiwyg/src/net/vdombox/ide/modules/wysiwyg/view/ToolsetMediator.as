@@ -71,6 +71,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function toolsetButton_click( event : MouseEvent ) : void
 		{
+			toolset.toolsetButton.selected = true;
 			sendNotification( ApplicationFacade.SELECT_MODULE );
 		}
 	}

@@ -39,7 +39,7 @@
 				}
 				
 				/*comboBoxData.sort = new Sort();
-				comboBoxData.sort.fields = [ new SortField( "label", true ) ];
+				comboBoxData.sort.fields = [ new SortField( "label", true ), new SortField("name",true) ];
 				comboBoxData.refresh();*/
 				
 				
