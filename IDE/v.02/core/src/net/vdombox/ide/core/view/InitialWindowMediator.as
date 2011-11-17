@@ -25,58 +25,56 @@ package net.vdombox.ide.core.view
 	
 	import spark.components.Button;
 	import spark.components.RichEditableText;
-
+	
 	public class InitialWindowMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "LoginFormMediator";
-
+		
 		public static const PROGRESS_VIEW_STATE_NAME : String = "progressView";
 		public static const LOGIN_VIEW_STATE_NAME : String = "loginView";
 		public static const ERROR_VIEW_STATE_NAME : String = "errorView";
-
+		
 		public function InitialWindowMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
 			
-			
+			initialWindow.addEventListener(Event.CLOSE, closeHandler ); 
 		}
-
+		
 		private var windowManager : WindowManager = WindowManager.getInstance();
 		
 		private var sessionProxy : SessionProxy;
-
+		
 		public function get initialWindow() : InitialWindow
 		{
 			return viewComponent as InitialWindow;
 		}
-
+		
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			addHandlers();
-			
-			sendNotification( ApplicationFacade.CHECK_UPDATE );
 		}
-
+		
 		override public function onRemove() : void
 		{
 			removeHandlers();
 		}
-
+		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
-
+			
 			interests.push( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
 			
 			interests.push( ApplicationFacade.SHOW_LOGIN_VIEW_REQUEST );
-
+			
 			interests.push( ApplicationFacade.REQUEST_FOR_SIGNUP );
-
+			
 			return interests;
 		}
-
+		
 		override public function handleNotification( notification : INotification ) : void
 		{
 			switch ( notification.getName() )
@@ -111,12 +109,12 @@ package net.vdombox.ide.core.view
 			windowManager.addWindow( initialWindow );
 			initialWindow.activate();
 		}
-
+		
 		public function closeWindow() : void
 		{
 			windowManager.removeWindow( initialWindow );
 		}
-
+		
 		public function openViewState( viewStateName : String ) : void
 		{
 			initialWindow.currentState = viewStateName;
@@ -126,28 +124,26 @@ package net.vdombox.ide.core.view
 		{
 			initialWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
 			initialWindow.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
-
+			
 			initialWindow.addEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler, false, 0, true );
-
+			
 			initialWindow.addEventListener( InitialWindowEvent.EXIT, exitHandler, false  );
 			
 			initialWindow.addEventListener( InitialWindowEvent.SUBMIT, submitHandler);
-			
-			initialWindow.addEventListener(Event.CLOSE, closeHandler ); 
 		}
-
+		
 		private function removeHandlers() : void
 		{
 			initialWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			initialWindow.removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-
+			
 			initialWindow.removeEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler );
-
+			
 			initialWindow.removeEventListener( InitialWindowEvent.EXIT, exitHandler );
 			
 			initialWindow.removeEventListener( InitialWindowEvent.SUBMIT, submitHandler );
 		}
-
+		
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			sendNotification( ApplicationFacade.INITIAL_WINDOW_CREATED, initialWindow );
@@ -158,26 +154,25 @@ package net.vdombox.ide.core.view
 		{
 			initialWindow.title = VersionUtils.getApplicationName();
 		}
-
+		
 		private function windowCompleteHandler( event : AIREvent ) : void
 		{
 			sendNotification( ApplicationFacade.INITIAL_WINDOW_OPENED );
 		}
-
+		
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
 			if ( event.target is Button || event.target is RichEditableText || event.target.parent is ComboBox )
 				return;
-
+			
 			initialWindow.nativeWindow.startMove();
-
+			
 			event.stopImmediatePropagation();
 		}
-
+		
 		private function exitHandler( event : InitialWindowEvent ) : void
 		{
-			sendNotification( ApplicationFacade.CLOSE_IDE );
-//			NativeApplication.nativeApplication.exit();
+			NativeApplication.nativeApplication.exit();
 		}
 		
 		private function submitHandler( event : InitialWindowEvent ) : void
@@ -187,9 +182,7 @@ package net.vdombox.ide.core.view
 		
 		private function closeHandler( event : Event ) : void
 		{
-//			sendNotification( ApplicationFacade.CLOSE_IDE );
-			
-//				NativeApplication.nativeApplication.exit();
+			NativeApplication.nativeApplication.exit();
 		}
 	}
 }
