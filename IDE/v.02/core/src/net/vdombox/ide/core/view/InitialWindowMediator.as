@@ -1,14 +1,20 @@
+//------------------------------------------------------------------------------
+//
+//   Copyright 2011 
+//   VDOMBOX Resaerch  
+//   All rights reserved. 
+//
+//------------------------------------------------------------------------------
+
 package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
 	import mx.controls.ComboBox;
 	import mx.core.INavigatorContent;
 	import mx.events.AIREvent;
 	import mx.events.FlexEvent;
-	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.InitialWindowEvent;
 	import net.vdombox.ide.core.model.LocalesProxy;
@@ -18,61 +24,31 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.components.InitialWindow;
 	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
-	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
 	import spark.components.Button;
 	import spark.components.RichEditableText;
-	
 	public class InitialWindowMediator extends Mediator implements IMediator
 	{
+		public static const ERROR_VIEW_STATE_NAME : String = "errorView";
+		public static const LOGIN_VIEW_STATE_NAME : String = "loginView";
 		public static const NAME : String = "LoginFormMediator";
 		
 		public static const PROGRESS_VIEW_STATE_NAME : String = "progressView";
-		public static const LOGIN_VIEW_STATE_NAME : String = "loginView";
-		public static const ERROR_VIEW_STATE_NAME : String = "errorView";
 		
 		public function InitialWindowMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
 		}
 		
-		private var windowManager : WindowManager = WindowManager.getInstance();
-		
 		private var sessionProxy : SessionProxy;
 		
-		public function get initialWindow() : InitialWindow
-		{
-			return viewComponent as InitialWindow;
-		}
+		private var windowManager : WindowManager = WindowManager.getInstance();
 		
-		override public function onRegister() : void
+		public function closeWindow() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			
-			addHandlers();
-		}
-		
-		override public function onRemove() : void
-		{
-			trace("***** onRemove *****");
-			
-			removeHandlers();
-		}
-		
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-			
-			interests.push( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
-			
-			interests.push( ApplicationFacade.SHOW_LOGIN_VIEW_REQUEST );
-			
-			interests.push( ApplicationFacade.REQUEST_FOR_SIGNUP );
-			
-			return interests;
+			windowManager.removeWindow( initialWindow );
 		}
 		
 		override public function handleNotification( notification : INotification ) : void
@@ -104,21 +80,46 @@ package net.vdombox.ide.core.view
 			initialWindow.validateNow();
 		}
 		
-		public function openWindow() : void
+		public function get initialWindow() : InitialWindow
 		{
-			windowManager.addWindow( initialWindow );
-			initialWindow.activate();
+			return viewComponent as InitialWindow;
 		}
 		
-		public function closeWindow() : void
+		override public function listNotificationInterests() : Array
 		{
-			windowManager.removeWindow( initialWindow );
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
+			
+			interests.push( ApplicationFacade.SHOW_LOGIN_VIEW_REQUEST );
+			
+			interests.push( ApplicationFacade.REQUEST_FOR_SIGNUP );
+			
+			return interests;
+		}
+		
+		override public function onRegister() : void
+		{
+			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+			addHandlers();
+		}
+		
+		override public function onRemove() : void
+		{
+			removeHandlers();
 		}
 		
 		public function openViewState( viewStateName : String ) : void
 		{
 			initialWindow.currentState = viewStateName;
-		}		
+		}
+		
+		public function openWindow() : void
+		{
+			windowManager.addWindow( initialWindow );
+			initialWindow.activate();
+		}
 		
 		private function addHandlers() : void
 		{
@@ -132,6 +133,41 @@ package net.vdombox.ide.core.view
 			initialWindow.addEventListener( InitialWindowEvent.SUBMIT, submitHandler);
 			
 			initialWindow.addEventListener(Event.CLOSE, closeHandler, false, 0, true  ); 
+		}
+		
+		private function closeHandler( event : Event ) : void
+		{
+			removeHandlers();
+			
+			NativeApplication.nativeApplication.exit();
+			
+			sendNotification( ApplicationFacade.CLOSE_IDE );
+		}
+		
+		private function creationCompleteHandler( event : FlexEvent ) : void
+		{
+			sendNotification( ApplicationFacade.INITIAL_WINDOW_CREATED, initialWindow );
+			initTitle();
+		}
+		
+		private function exitHandler( event : InitialWindowEvent ) : void
+		{
+			sendNotification( ApplicationFacade.CLOSE_IDE );
+		}
+		
+		private function initTitle():void
+		{
+			initialWindow.title = VersionUtils.getApplicationName();
+		}
+		
+		private function mouseDownHandler( event : MouseEvent ) : void
+		{
+			if ( event.target is Button || event.target is RichEditableText || event.target.parent is ComboBox )
+				return;
+			
+			initialWindow.nativeWindow.startMove();
+			
+			event.stopImmediatePropagation();
 		}
 		
 		private function removeHandlers() : void
@@ -148,48 +184,14 @@ package net.vdombox.ide.core.view
 			initialWindow.removeEventListener( Event.CLOSE, closeHandler ); 
 		}
 		
-		private function creationCompleteHandler( event : FlexEvent ) : void
-		{
-			sendNotification( ApplicationFacade.INITIAL_WINDOW_CREATED, initialWindow );
-			initTitle();
-		}
-		
-		private function initTitle():void
-		{
-			initialWindow.title = VersionUtils.getApplicationName();
-		}
-		
-		private function windowCompleteHandler( event : AIREvent ) : void
-		{
-			sendNotification( ApplicationFacade.INITIAL_WINDOW_OPENED );
-		}
-		
-		private function mouseDownHandler( event : MouseEvent ) : void
-		{
-			if ( event.target is Button || event.target is RichEditableText || event.target.parent is ComboBox )
-				return;
-			
-			initialWindow.nativeWindow.startMove();
-			
-			event.stopImmediatePropagation();
-		}
-		
-		private function exitHandler( event : InitialWindowEvent ) : void
-		{
-//			NativeApplication.nativeApplication.exit();
-			sendNotification( ApplicationFacade.CLOSE_IDE );
-		}
-		
 		private function submitHandler( event : InitialWindowEvent ) : void
 		{
 			sendNotification( ApplicationFacade.SUBMIN_CLICK );
 		}
 		
-		private function closeHandler( event : Event ) : void
+		private function windowCompleteHandler( event : AIREvent ) : void
 		{
-			removeHandlers();	
-			NativeApplication.nativeApplication.exit();
-			sendNotification( ApplicationFacade.CLOSE_IDE );
+			sendNotification( ApplicationFacade.INITIAL_WINDOW_OPENED );
 		}
 	}
 }

@@ -17,9 +17,7 @@ package net.vdombox.ide.core.view
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.net.SharedObject;
-
 	import flashx.textLayout.elements.BreakElement;
-
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
@@ -30,7 +28,6 @@ package net.vdombox.ide.core.view
 	import mx.managers.SystemManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -46,12 +43,10 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
 	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
-
 	import org.osmf.utils.Version;
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
@@ -184,7 +179,7 @@ package net.vdombox.ide.core.view
 			addHandlers();
 
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
-			
+
 			sendNotification( ApplicationFacade.CHECK_UPDATE );
 		}
 
@@ -201,11 +196,20 @@ package net.vdombox.ide.core.view
 			windowManager.addWindow( mainWindow );
 		}
 
+		public function get statesProxy() : StatesProxy
+		{
+			return facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+		}
+
 		private function addHandlers() : void
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler, false, 0, true );
+
 			mainWindow.addEventListener( MainWindowEvent.LOGOUT, logoutHandler, true, 0, true );
+
 			mainWindow.addEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true, 0, true );
+
+			mainWindow.addEventListener( Event.CLOSE, closeWindowHandler, false, 0, true );
 		}
 
 		private function appManagerHandler( event : MainWindowEvent ) : void
@@ -221,9 +225,17 @@ package net.vdombox.ide.core.view
 			mainWindow.removeAllElements();
 		}
 
-		public function get statesProxy() : StatesProxy
+		private function closeWindowHandler( event : Event ) : void
 		{
-			return facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			removeHandlers();
+
+			NativeApplication.nativeApplication.exit();
+		}
+
+		private function get currentModule() : ModuleVO
+		{
+			return modulesProxy.getModuleByID( selectedModuleID );
+			;
 		}
 
 		private function initTitle() : void
@@ -275,6 +287,7 @@ package net.vdombox.ide.core.view
 			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 			mainWindow.removeEventListener( MainWindowEvent.LOGOUT, logoutHandler, true );
 			mainWindow.removeEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true );
+			mainWindow.removeEventListener( Event.CLOSE, closeWindowHandler );
 		}
 
 		private function selectModule( moduleVO : ModuleVO = null ) : void
@@ -357,12 +370,6 @@ package net.vdombox.ide.core.view
 		private function get toolsetBar() : Group
 		{
 			return mainWindow.toolsetBar;
-		}
-
-		private function get currentModule() : ModuleVO
-		{
-			return modulesProxy.getModuleByID( selectedModuleID );
-			;
 		}
 	}
 }

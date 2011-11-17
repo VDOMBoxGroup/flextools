@@ -48,7 +48,7 @@ package net.vdombox.ide.core.view.components
 			minWidth = 800;
 			minHeight = 600;
 			
-			addEventListener( Event.CLOSE, closeEvent);
+//			addEventListener( Event.CLOSE, closeEvent);
 		}
 
 		[SkinPart( required = "true" )]
