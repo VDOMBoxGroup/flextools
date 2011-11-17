@@ -32,7 +32,7 @@ package net.vdombox.ide.core.view
 		{
 			return viewComponent as VdomIDE
 		}
-
+		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();

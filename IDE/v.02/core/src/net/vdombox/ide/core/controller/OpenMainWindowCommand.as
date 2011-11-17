@@ -25,10 +25,11 @@ package net.vdombox.ide.core.controller
 				return;
 			
 			
-			sendNotification( ApplicationFacade.CLOSE_MAIN_WINDOW );
+			
 			mainWindowMediator = new MainWindowMediator( new MainWindow() );
 			facade.registerMediator( mainWindowMediator );
 			mainWindowMediator.openWindow();
+			//sendNotification( ApplicationFacade.CHECK_UPDATE );
 		}
 		
 		private function get statesProxy() : StatesProxy

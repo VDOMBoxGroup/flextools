@@ -134,6 +134,7 @@ package net.vdombox.ide.core.view
 		private function createCompleteHostHandler( event : FlexEvent ) : void
 		{
 			loginView.host.textInput.addEventListener( Event.CHANGE, hostnameChangeHandler, false, 0, true );
+			
 		}
 		
 		private function usernameChangeHandler( event : Event ) : void

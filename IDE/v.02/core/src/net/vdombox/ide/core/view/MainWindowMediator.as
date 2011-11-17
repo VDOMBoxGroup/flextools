@@ -184,6 +184,8 @@ package net.vdombox.ide.core.view
 			addHandlers();
 
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
+			
+			sendNotification( ApplicationFacade.CHECK_UPDATE );
 		}
 
 		override public function onRemove() : void

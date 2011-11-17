@@ -9,7 +9,7 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			sendNotification( ApplicationFacade.CHECK_UPDATE );
+			//sendNotification( ApplicationFacade.CHECK_UPDATE );
 			sendNotification( ApplicationFacade.OPEN_INITIAL_WINDOW );
 		}
 	}
