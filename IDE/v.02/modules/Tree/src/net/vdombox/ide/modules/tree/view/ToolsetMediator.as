@@ -70,7 +70,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private function toolsetButton_clickHandler( event : MouseEvent ) : void
 		{
-			toolset.toolsetButton.selected = false;
+			toolset.toolsetButton.selected = true;
 			sendNotification( ApplicationFacade.SELECT_MODULE );
 		}
 	}
