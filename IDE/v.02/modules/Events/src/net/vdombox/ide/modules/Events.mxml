@@ -20,7 +20,6 @@
 
 			override public function tearDown() : void
 			{
-				trace("\nE V N T: Event.tearDown()");
 				dispatchEvent( new Event( TEAR_DOWN ) );
 			}
 
