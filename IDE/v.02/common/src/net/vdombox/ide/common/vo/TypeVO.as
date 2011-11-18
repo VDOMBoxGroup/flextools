@@ -85,8 +85,6 @@ package net.vdombox.ide.common.vo
 					_actions.push( clientActionVO );
 				}
 			}
-			
-			resourceManager.update();
 		}
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
