@@ -99,9 +99,30 @@
 				{
 					htmlTxt = getHtmlSourceTxt(editorData, showPageToc);
 						
+				} else {
+					if (showPageToc)
+						htmlTxt = appendHighlightScriptToPageContent (htmlTxt);
+						
 				}
 				
 				return htmlTxt;
+			}
+			
+			private function appendHighlightScriptToPageContent(pageContent : String) : String
+			{
+				if (!pageContent)
+					return "";
+				
+				if (pageContent.indexOf(HtmlPageProperties.highlightAllTemplate) >= 0)
+					pageContent = pageContent.replace(HtmlPageProperties.highlightAllTemplate, "");
+				
+				if (pageContent.indexOf(HtmlPageProperties.jsCoreFileName) == -1)
+					return pageContent; 
+				
+				var pageBodyEndWithHighkightAllScript : String = HtmlPageProperties.highlightAllTemplate.concat("\n</body>");
+				
+				
+				return pageContent.replace("</body>",pageBodyEndWithHighkightAllScript);
 			}
 			
 			private static function getHtmlSourceTxt(bodyContent : String, showPageToc:Boolean = false) : String
@@ -127,6 +148,7 @@
 				return getHTMLWithoutPageToc(htmlTxt);
 				
 			}
+			
 			
 			private static function getHTMLWithoutPageToc(value:String) : String 
 			{
