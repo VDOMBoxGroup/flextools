@@ -14,8 +14,6 @@ package net.vdombox.ide.core.controller
 		{
 			var initialWindow : InitialWindow = notification.getBody() as InitialWindow;
 			
-			if( !initialWindow )
-				return;
 
 			if ( !facade.hasMediator( ProgressViewMediator.NAME ) )
 			{

@@ -152,6 +152,8 @@ package net.vdombox.ide.core.view
 		
 		private function exitHandler( event : InitialWindowEvent ) : void
 		{
+			removeHandlers();
+			
 			sendNotification( ApplicationFacade.CLOSE_IDE );
 		}
 		

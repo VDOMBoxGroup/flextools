@@ -3,7 +3,8 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:components="net.vdombox.ide.core.view.components.*"
 		 creationComplete="group1_creationCompleteHandler(event)"
-		 show="group1_showHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:skins="net.vdombox.ide.core.view.skins.*">
+		 show="group1_showHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:skins="net.vdombox.ide.core.view.skins.*"
+		 >
 
 	<fx:Script>
 		<![CDATA[
@@ -75,6 +76,7 @@
 			protected function group1_creationCompleteHandler(event:FlexEvent):void
 			{
 				host.setFocus();
+				
 			}
 
 

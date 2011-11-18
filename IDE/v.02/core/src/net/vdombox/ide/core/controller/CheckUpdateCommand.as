@@ -21,6 +21,7 @@ package net.vdombox.ide.core.controller
 
 		override public function execute( notification : INotification ) : void
 		{
+			return;
 
 			var appUpdater : ApplicationUpdaterUI = new ApplicationUpdaterUI();
 
@@ -30,6 +31,7 @@ package net.vdombox.ide.core.controller
 			appUpdater.addEventListener( UpdateEvent.INITIALIZED, onUpdate ); // Once initialized, run onUpdate
 			appUpdater.addEventListener( ErrorEvent.ERROR, onError ); // If something goes wrong, run onError
 
+			appUpdater.addEventListener( Event.DEACTIVATE, onDeactive, false, 0, true );
 			appUpdater.initialize(); // Initialize the update framework
 
 
@@ -42,6 +44,11 @@ package net.vdombox.ide.core.controller
 			function onUpdate( event : UpdateEvent ) : void
 			{
 				appUpdater.checkNow(); // Go check for an update now
+			}
+			
+			function onDeactive( event : Event ) : void
+			{
+				trace("************* !  onDeactive  ************************");
 			}
 
 		}
