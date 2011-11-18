@@ -57,12 +57,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 			result = getEditorByVO( objectVO );
 			
 			if ( result )
-			{
-				tab = _editors[ result ];
-				removeTab( tab );
-				
 				delete _editors[ result ];
-			}
 			
 			return result;
 		}

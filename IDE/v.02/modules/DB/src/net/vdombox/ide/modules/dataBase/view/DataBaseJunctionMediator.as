@@ -64,7 +64,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.GET_DATA_BASE_TABLES );
 			
 			interests.push( ApplicationFacade.GET_TABLE );
-		
+			interests.push( ApplicationFacade.REMOTE_CALL_REQUEST );
 
 			return interests;
 		}
@@ -192,6 +192,15 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.GET_TABLE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECT, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.REMOTE_CALL_REQUEST:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.REMOTE_CALL, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

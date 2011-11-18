@@ -120,6 +120,12 @@ package net.vdombox.ide.modules.dataBase
 		public static const BODY_CREATED : String = "bodyCreated";
 		public static const BODY_START : String = "bodyStart";
 		public static const BODY_STOP : String = "bodyStop";
+		
+		
+//		removecall
+		
+		public static const REMOTE_CALL_REQUEST : String = "removeCallRequest";
+		public static const REMOTE_CALL_RESPONSE : String = "removeCallResponse";
 
 
 		public static function getInstance( key : String ) : ApplicationFacade

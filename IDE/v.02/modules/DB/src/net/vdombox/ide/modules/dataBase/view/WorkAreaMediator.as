@@ -92,6 +92,8 @@ package net.vdombox.ide.modules.dataBase.view
 						editor = workArea.openEditor( objectVO );
 					else
 						workArea.selectedEditor = editor;
+					
+					facade.registerMediator( new DataTableEditorMediator( editor ) );
 					break;
 				}
 					
@@ -124,6 +126,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function editor_removedHandler( event : EditorEvent ) : void
 		{
+			workArea.closeEditor( (event.target as IEditor).objectVO );
 			//sendNotification( ApplicationFacade.EDITOR_REMOVED, event.target as IEditor );
 			//workArea.closeEditor( );
 		}
