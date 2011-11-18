@@ -65,7 +65,8 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			interests.push( ApplicationFacade.GET_TABLE );
 			interests.push( ApplicationFacade.REMOTE_CALL_REQUEST );
-
+			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
+			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
 			return interests;
 		}
 
@@ -201,6 +202,24 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.REMOTE_CALL_REQUEST:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.REMOTE_CALL, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SET_SELECTED_PAGE:
+				{
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SET_SELECTED_OBJECT:
+				{
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

@@ -9,6 +9,7 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.controls.LinkButton;
 			import mx.controls.dataGridClasses.DataGridColumn;
 			import mx.events.FlexEvent;
 			import mx.utils.UIDUtil;
@@ -31,6 +32,11 @@
 			private var dataGridColumnsProps:Array = [];
 			private var currentPage:int;
 			private var pages:Array = []; /* of XML */
+			private var externalValue:String;
+			private var thereAreGlobalChanges:Boolean = false;
+			
+			[Bindable]
+			private var dataGridProvider:ArrayCollection = new ArrayCollection();
 			
 			private var AMOUNT:int = 500;
 			
@@ -91,6 +97,17 @@
 				manager = ref;
 				
 				onLoadInit();
+			}
+			
+			public function set value(value:String):void {
+				externalValue = value;
+			}
+			
+			public function get value():String {
+				if (thereAreGlobalChanges)
+					return "modified";
+				else
+					return externalValue;
 			}
 			
 			private function onLoadInit():void 
@@ -227,10 +244,125 @@
 			
 			private function showPageData():void {
 				trace (':: Show page data function executed');
-				if (!pages[currentPage]) {
+				if (!pages[currentPage]) 
+				{
 					getPageRequest();
 					return;		
 				}
+				
+				/* Show current page */
+				trace (':: Constuct DataGrid data provider');
+				dataGridProvider = new ArrayCollection();
+				for each (var xmlRow:XML in pages[currentPage].row) {
+					/* Create tableRow object */
+					var tableRow:Object = new Object();
+					var cellIndex:int = 0;
+					for each (var xmlCell:XML in xmlRow.cell) {
+						tableRow[dataGridColumns[cellIndex].dataField] = xmlCell.toString();
+						cellIndex++;
+					}
+					
+					tableRow["fnew"] = false;
+					tableRow["changed"] = false;
+					tableRow["GUID"] = UIDUtil.createUID(); 
+					dataGridProvider.addItem(tableRow);
+				}
+				
+				buildPagesTickets();
+
+			}
+			
+			private function buildPagesTickets():void {
+				trace (':: Building pages tickets');
+				
+				/* (Re)Build pages tickets */
+				/*__amount.text = AMOUNT.toString();
+				__pagesArea.removeAllChildren();*/
+				
+				var lastPageNumber:int = Math.floor(totalRecords / AMOUNT) - 1;
+				if (totalRecords % AMOUNT > 0)
+					lastPageNumber++;  			
+				
+				var fp:int;
+				var lp:int;
+				
+				fp = currentPage - 5;
+				lp = currentPage + 5;
+				
+				if (fp < 0 && lp <= lastPageNumber) {
+					lp += Math.abs(fp);
+					if (lp > lastPageNumber) {
+						lp = lastPageNumber;
+					}
+					fp = 0;
+				}
+				
+				if (fp >= 0 && lp > lastPageNumber) {
+					fp -= lp - lastPageNumber;
+					if (fp < 0) {
+						fp = 0;
+					}
+					lp = lastPageNumber;
+				}
+				
+				if (fp < 0 && lp > lastPageNumber) {
+					fp = 0;
+					lp = lastPageNumber;
+				}
+				
+				
+				if (fp != 0) {
+					var leftShift:LinkButton = new LinkButton();
+					leftShift.label = "1";
+					leftShift.height = 18;
+					leftShift.setStyle("paddingLeft", 1);
+					leftShift.setStyle("paddingRight", 1);
+					//leftShift.addEventListener(MouseEvent.CLICK, pageClickHandler);
+					//__pagesArea.addChild(leftShift);
+					
+					pageItem = new LinkButton();
+					pageItem.label = '...';
+					pageItem.height = 18;
+					pageItem.setStyle("paddingLeft", 1);
+					pageItem.setStyle("paddingRight", 1);
+					pageItem.enabled = false;
+					//__pagesArea.addChild(pageItem);
+				}
+				
+				var pageItem:LinkButton;
+				for (var p:int = fp; p <= lp; p++)  {
+					pageItem = new LinkButton();
+					pageItem.label = (p + 1).toString();
+					pageItem.height = 18;
+					pageItem.setStyle("paddingLeft", 1);
+					pageItem.setStyle("paddingRight", 1);
+					/*if (p == currentPage)
+						pageItem.setStyle("textDecoration", "underline");
+					else
+						pageItem.addEventListener(MouseEvent.CLICK, pageClickHandler);*/
+					
+					//__pagesArea.addChild(pageItem);
+				}
+				
+				if (lp != lastPageNumber) {
+					pageItem = new LinkButton();
+					pageItem.label = '...';
+					pageItem.height = 18;
+					pageItem.setStyle("paddingLeft", 1);
+					pageItem.setStyle("paddingRight", 1);
+					pageItem.enabled = false;
+					//__pagesArea.addChild(pageItem);
+					
+					var rightShift:LinkButton = new LinkButton();
+					rightShift.label = String(lastPageNumber + 1);
+					rightShift.height = 18;
+					rightShift.setStyle("paddingLeft", 1);
+					rightShift.setStyle("paddingRight", 1);
+					//rightShift.addEventListener(MouseEvent.CLICK, pageClickHandler);
+					//__pagesArea.addChild(rightShift);
+				}
+				
+				//__commitBtn.enabled = false;
 			}
 			
 			private function getPageRequest():void {
@@ -264,7 +396,7 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<mx:DataGrid id="dataTable"
+	<mx:DataGrid id="dataTable" dataProvider="{dataGridProvider}"
 				 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
 				 editable="true"
 				 doubleClickEnabled="true" 

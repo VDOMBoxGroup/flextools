@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.dataBase.view
 {
+	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
@@ -101,6 +102,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.DATA_BASES_GETTED );
 			interests.push( ApplicationFacade.DATA_BASE_TABLES_GETTED );
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			interests.push( ApplicationFacade.TABLE_GETTED);
 			
 			return interests;
 		}
@@ -156,6 +158,15 @@ package net.vdombox.ide.modules.dataBase.view
 					}
 					
 					selectCurrentPage( false );
+					break;
+				}
+					
+				case ApplicationFacade.TABLE_GETTED:
+				{
+					var objectVO : ObjectVO = body as ObjectVO;
+					
+					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, objectVO );
+					
 					break;
 				}
 					

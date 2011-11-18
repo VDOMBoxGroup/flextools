@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.dataBase.controller
 {
 	import net.vdombox.ide.modules.dataBase.view.DataTablesTreeMediator;
+	import net.vdombox.ide.modules.dataBase.view.ExternalManagerMediator;
 	import net.vdombox.ide.modules.dataBase.view.WorkAreaMediator;
 	import net.vdombox.ide.modules.dataBase.view.components.Body;
 	
@@ -15,6 +16,7 @@ package net.vdombox.ide.modules.dataBase.controller
 
 			facade.registerMediator( new DataTablesTreeMediator( body.dataTablesTree ) );
 			facade.registerMediator( new WorkAreaMediator( body.workArea ) );
+			facade.registerMediator( new ExternalManagerMediator() );
 		}
 	}
 }

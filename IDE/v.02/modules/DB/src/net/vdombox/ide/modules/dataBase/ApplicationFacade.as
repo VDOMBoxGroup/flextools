@@ -167,7 +167,7 @@ package net.vdombox.ide.modules.dataBase
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
 			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 
-			registerCommand( CHANGE_SELECTED_RESOURCE_REQUEST, ChangeSelectedObjectRequestCommand );
+			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 			
 			
 			registerCommand( BODY_CREATED, BodyCreatedCommand );

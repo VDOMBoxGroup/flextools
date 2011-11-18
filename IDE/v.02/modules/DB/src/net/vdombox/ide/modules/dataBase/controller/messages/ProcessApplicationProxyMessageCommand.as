@@ -28,6 +28,14 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 					
 					break;
 				}
+					
+				case PPMApplicationTargetNames.REMOTE_CALL:
+				{
+					if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.REMOTE_CALL_RESPONSE, body.result );
+					
+					break;
+				}
 			}
 		}
 	}
