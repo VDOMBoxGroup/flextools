@@ -159,6 +159,23 @@ package
 			return str;
 		}
 		
+		public static function convertSpaces(str : String) : String
+		{
+			var regExp		: RegExp = />[^<]*[^>]*</g;
+			var expSpaces	: RegExp = / /g;
+			
+			var matches : Array = str.match(regExp);
+			
+			for each (var match:String in matches)
+			{
+				var newValue : String = match.replace(expSpaces, "&nbsp;");
+				
+				str = str.replace(match, newValue);
+			}
+			
+			return str;
+		}
+		
 		public static function configureXMLForDisplaying():void
 		{
 			XML.prettyPrinting = false;

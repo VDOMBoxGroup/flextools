@@ -92,6 +92,7 @@
 				patternHead = /<[ ]*head[ ]*(>|\/[ ]*>)/i;
 				
 				editorData = instancesInitialized ? domWindow.CKEDITOR.instances.editor1.getData() : "";
+				editorData = Utils.convertSpaces(editorData);
 				
 				htmlTxt = editorData;
 				
