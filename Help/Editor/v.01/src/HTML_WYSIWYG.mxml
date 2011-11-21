@@ -92,7 +92,6 @@
 				patternHead = /<[ ]*head[ ]*(>|\/[ ]*>)/i;
 				
 				editorData = instancesInitialized ? domWindow.CKEDITOR.instances.editor1.getData() : "";
-				editorData = Utils.convertSpaces(editorData);
 				
 				htmlTxt = editorData;
 				
@@ -134,6 +133,11 @@
 				
 				var highlightAllScript : String = showPageToc ? HtmlPageProperties.highlightAllTemplate : "";
 				
+				if (showPageToc) {
+					bodyContent = Utils.convertSpaces(bodyContent);
+				}
+				
+				
 				htmlTxt = "<html>" + "\n" + 
 								HtmlPageProperties.headTemplate +
 								"<body>" + "\n" +
@@ -141,6 +145,7 @@
 									highlightAllScript + "\n" +
 								"</body>" + "\n" +
 							"</html>";
+				
 				
 				if (showPageToc) {
 					return htmlTxt;
@@ -154,6 +159,7 @@
 			private static function getHTMLWithoutPageToc(value:String) : String 
 			{
 				value = Utils.convertEntities(value);
+				value = Utils.convertSpaces(value);
 				
 				var xml			: XML = new XML(value);
 				var ulClass		: String = "";

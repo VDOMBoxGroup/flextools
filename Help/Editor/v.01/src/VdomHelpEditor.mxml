@@ -473,7 +473,7 @@
 
 			private function savePage() : void
 			{
-				trace("[VdomHelpEditor] savePage");
+				//trace("[VdomHelpEditor] savePage");
 				
 				if (!tree.selectedItem) return;
 

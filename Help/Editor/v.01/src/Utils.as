@@ -168,7 +168,7 @@ package
 			
 			for each (var match:String in matches)
 			{
-				var newValue : String = match.replace(expSpaces, "&nbsp;");
+				var newValue : String = match.replace(expSpaces, "&#160;");
 				
 				str = str.replace(match, newValue);
 			}
