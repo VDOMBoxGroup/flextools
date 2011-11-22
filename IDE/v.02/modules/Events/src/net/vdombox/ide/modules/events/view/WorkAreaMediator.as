@@ -1,5 +1,9 @@
 package net.vdombox.ide.modules.events.view
 {
+	import flash.desktop.NativeApplication;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
+	
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.ApplicationEventsVO;
@@ -66,6 +70,10 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENTS_FOR_OBJECT );
 			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA );
 			interests.push( ApplicationFacade.GET_EXISTING_ELEMENTS_IN_WORK_AREA );
+			
+			
+			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 
 			return interests;
 		}
@@ -74,6 +82,10 @@ package net.vdombox.ide.modules.events.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
+			
+			var objectID : String;
+			var element : Object;
+			var leng : Number;
 
 			if ( !isActive && name != ApplicationFacade.BODY_START )
 				return;
@@ -135,6 +147,20 @@ package net.vdombox.ide.modules.events.view
 					sendElementsList();
 					break;
 				}	
+					
+				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				{
+					setVisibleElementsForAllObjects();
+					setElementsCurrentVisibleState();
+					break;
+				}
+					
+				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
+				{
+					setVisibleElementsForAllObjects();
+					setElementsCurrentVisibleState();
+					break;
+				}
 			}
 		}
 
@@ -143,9 +169,12 @@ package net.vdombox.ide.modules.events.view
 			workArea.addEventListener( WorkAreaEvent.SAVE, saveHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.UNDO, undoHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.SHOW_HIDDEN_ELEMENTS_STATE_CHANGED, showHiddenElementsStateChanged, false, 0, true );
+			workArea.addEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged, true, 0, true );
 			workArea.addEventListener( ElementEvent.EYE_CLICKED, elementEyeClicked, true );
 			workArea.addEventListener( ElementEvent.CREATE_ELEMENT, createElementHandler, true );
 			workArea.addEventListener( WorkAreaEvent.DELETE_ELEMENT, element_deleteHandler );
+			NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_DOWN, shiftClickHandler );
+			NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_UP, shiftOffHandler );
 		}
 
 		private function removeHandlers() : void
@@ -154,9 +183,99 @@ package net.vdombox.ide.modules.events.view
 			workArea.removeEventListener( WorkAreaEvent.SAVE, saveHandler );
 			workArea.removeEventListener( WorkAreaEvent.UNDO, undoHandler );
 			workArea.removeEventListener( WorkAreaEvent.SHOW_HIDDEN_ELEMENTS_STATE_CHANGED, showHiddenElementsStateChanged );
+			workArea.removeEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged );
 			workArea.removeEventListener( ElementEvent.EYE_CLICKED, elementEyeClicked, true );
 			workArea.removeEventListener( ElementEvent.CREATE_ELEMENT, createElementHandler, true );
 			workArea.removeEventListener( WorkAreaEvent.DELETE_ELEMENT, element_deleteHandler );
+			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, shiftClickHandler );	
+			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_UP, shiftOffHandler );
+		}
+		
+		private function set showElementsView ( value : String ) : void
+		{
+			visibleElementProxy.showCurrent = value;
+			workArea.showElementsView = value;
+		}
+		
+		private function shiftClickHandler( event : KeyboardEvent ) : void
+		{
+			trace("1");
+			if ( !event.ctrlKey )
+				return;
+			trace("2");
+			if ( event.keyCode == Keyboard.M )
+			{
+				showElementsView = "Middle";
+				setVisibleElementsForCurrentObject( false );
+			}
+			else if ( event.keyCode == Keyboard.D )
+			{
+				showElementsView = "Shot";
+				setVisibleElementsForCurrentObject( true );
+			}
+			else if ( event.keyCode == Keyboard.F )
+			{
+				showElementsView = "Full";
+				setVisibleElementsForAllObjects();
+			}
+		}
+		
+		private function shiftOffHandler( event : KeyboardEvent ) : void
+		{
+			//setElementsCurrentVisibleState();
+		}
+		
+		private function setVisibleElementsForCurrentObject( altKey : Boolean ) : void
+		{
+			var leng : Number = workArea.contentGroup.numElements;
+			var element : BaseElement;
+			
+			var newTarget : Object = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;
+			var objectID : String = newTarget.id;
+
+			for ( var i : int = 0; i < leng; i++ )
+			{
+				element = workArea.contentGroup.getElementAt( i ) as BaseElement;
+				element.alpha = 1;
+				if ( element && element.objectID != objectID )
+					element.visible = false;
+				
+			}
+			
+			if ( altKey )
+				workArea.setVisibleStateForAllLinkages( false );
+			else
+				workArea.setVisibleStateForCurrnetLinkages( objectID );
+
+		}
+		
+		private function setVisibleElementsForAllObjects() : void
+		{
+			var leng : Number = workArea.contentGroup.numElements;
+			var element : BaseElement;
+			
+			var newTarget : Object = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;
+			var objectID : String;
+			if ( newTarget is PageVO )
+				objectID = newTarget.id;
+			else if ( newTarget is BaseElement )
+				objectID = newTarget.objectID;
+
+			var showNotVisible : Boolean = visibleElementProxy.showHidden;
+			
+			for ( var i : int = 0; i < leng; i++ )
+			{
+				element = workArea.contentGroup.getElementAt( i ) as BaseElement;
+				if ( element )
+				{
+					element.alpha = 1;
+					if (  !showNotVisible )
+						element.visible = visibleElementProxy.getElementEyeOpened( element.uniqueName );
+					else
+						element.visible = true;
+				}
+			}
+			workArea.setVisibleStateForAllLinkages( false );
 		}
 		
 		private function saveHandler( event : WorkAreaEvent ) : void
@@ -207,6 +326,23 @@ package net.vdombox.ide.modules.events.view
 			setElementsVisibleState();
 		}
 		
+		private function showCurrentElementsStateChanged( event : WorkAreaEvent ) : void
+		{
+			visibleElementProxy.showCurrent = workArea.showElementsView ;
+			setElementsCurrentVisibleState();
+		}
+		
+		private function setElementsCurrentVisibleState() : void
+		{
+			visibleElementProxy.showCurrent = workArea.showElementsView ;
+			if ( workArea.showElementsView == "Middle" )
+				setVisibleElementsForCurrentObject( false );
+			else if ( workArea.showElementsView == "Shot" )
+				setVisibleElementsForCurrentObject( true );
+			else if ( workArea.showElementsView == "Full" )
+				setVisibleElementsForAllObjects();
+		}
+		
 		private function setElementsVisibleState() : void
 		{
 			var numElements : Number = workArea.contentGroup.numElements;
@@ -229,6 +365,7 @@ package net.vdombox.ide.modules.events.view
 		private function getElementsVisibleState() : void
 		{
 			workArea.showHidden = visibleElementProxy.showHidden;
+			workArea.showElementsView = visibleElementProxy.showCurrent;
 			var numElements : Number = workArea.contentGroup.numElements;
 			
 			var element		: Object;
@@ -241,7 +378,12 @@ package net.vdombox.ide.modules.events.view
 					setElementVisibleState (element as BaseElement);
 			}
 			
-			workArea.setVisibleStateForAllLinkages();
+			if ( workArea.showElementsView == "Middle" )
+				setVisibleElementsForCurrentObject( false );
+			else if ( workArea.showElementsView == "Shot" )
+				setVisibleElementsForCurrentObject( true );
+			else if ( workArea.showElementsView == "Full" )
+				setVisibleElementsForAllObjects();
 		}
 		
 		private function setElementVisibleState(element : BaseElement):void
@@ -287,7 +429,8 @@ package net.vdombox.ide.modules.events.view
 			var actionElement : ActionElement;
 			var eventElement : EventElement;
 			var showNotVisible : Boolean = visibleElementProxy.showHidden;
-			workArea.showHiddenElements.selected = showNotVisible;
+			workArea.showHidden= showNotVisible;
+			workArea.showElementsView = visibleElementProxy.showCurrent;
 			
 			var showElement : Boolean = body.visible as Boolean;
 			var objectID : String = body.objectID as String;
@@ -348,7 +491,8 @@ package net.vdombox.ide.modules.events.view
 			var actionElement : ActionElement;
 			var eventElement : EventElement;
 			var showNotVisible : Boolean = visibleElementProxy.showHidden;
-			workArea.showHiddenElements.selected = showNotVisible;
+			workArea.showHidden = showNotVisible;
+			workArea.showElementsView = visibleElementProxy.showCurrent;
 			
 			var showElement : Boolean = body.eyeOpened as Boolean;
 			var nameElement : String = body.name as String;

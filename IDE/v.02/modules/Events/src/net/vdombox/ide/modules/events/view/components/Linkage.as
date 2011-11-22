@@ -399,7 +399,8 @@ package net.vdombox.ide.modules.events.view.components
 		
 		public function setVisibleState(showHidden : Boolean):void
 		{
-			visible = showHidden || target.eyeOpened && source.eyeOpened;
+			alpha = 1;
+			visible = showHidden || target.visible && source.visible;
 			
 			// FIXME
 			// для того чтобы линки стали видны необходимо передвинуть компанент. НАдо бы пофмксить

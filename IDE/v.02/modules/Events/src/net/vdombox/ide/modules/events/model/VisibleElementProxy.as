@@ -56,6 +56,16 @@ package net.vdombox.ide.modules.events.model
 			sharedObject.data["showHidden"] = value;
 		}
 		
+		public function get showCurrent() : String
+		{	
+			return sharedObject.data.hasOwnProperty( "showCurrent" ) ? sharedObject.data["showCurrent"] : "Full";
+		}
+		
+		public function set showCurrent( value : String ) : void
+		{
+			sharedObject.data["showCurrent"] = value;
+		}
+		
 		private function get sharedObject():SharedObject
 		{
 			var selectedApplicationId : String; 

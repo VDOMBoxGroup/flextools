@@ -7,6 +7,8 @@ package net.vdombox.ide.modules.events.events
 		
 		public static var EYE_CLICK : String = "eyeClick";
 		
+		public var ctrlKey : Boolean = false;
+		
 		public function PanelsEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{
 			super( type, bubbles, cancelable );

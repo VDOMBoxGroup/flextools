@@ -26,7 +26,9 @@ package net.vdombox.ide.modules.events.view.components
 	
 	import spark.components.Button;
 	import spark.components.CheckBox;
+	import spark.components.DropDownList;
 	import spark.components.Group;
+	import spark.components.Label;
 	import spark.components.List;
 	import spark.components.SkinnableContainer;
 	import spark.skins.spark.PanelSkin;
@@ -61,6 +63,9 @@ package net.vdombox.ide.modules.events.view.components
 		[SkinPart]
 		public var showHiddenElements : CheckBox;
 		
+		[SkinPart]
+		public var _showElementsView : DropDownList;
+		
 		private var applicationEventsVO : ApplicationEventsVO;
 
 		private var shadowLinkage : Linkage;
@@ -69,6 +74,16 @@ package net.vdombox.ide.modules.events.view.components
 
 		private var clientActionElements : Object;
 		private var serverActionElements : Object;
+		
+		public function get showElementsView() : String
+		{
+			return _showElementsView.selectedItem as String;
+		}
+		
+		public function set showElementsView( value : String ) : void
+		{
+			_showElementsView.selectedItem = value;
+		}
 			
 		public function get dataProvider() : ApplicationEventsVO
 		{
@@ -488,8 +503,11 @@ package net.vdombox.ide.modules.events.view.components
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
-			shadowActionVO.left = linkagesLayer.contentMouseX;
-			shadowActionVO.top = linkagesLayer.contentMouseY;
+			/*shadowActionVO.left = linkagesLayer.contentMouseX;
+			shadowActionVO.top = linkagesLayer.contentMouseY;*/
+			shadowActionElement.x = linkagesLayer.contentMouseX;
+			shadowActionElement.y = linkagesLayer.contentMouseY;
+			
 		}
 
 		private function mouseOverHandler( event : MouseEvent ) : void
@@ -622,6 +640,9 @@ package net.vdombox.ide.modules.events.view.components
 			shadowActionVO.top = eventElement.y;
 
 			shadowActionElement.data = shadowActionVO;
+			
+			shadowActionElement.x = eventElement.x;
+			shadowActionElement.y = eventElement.y;
 
 			shadowLinkage.alpha = 0.4;
 
@@ -729,7 +750,7 @@ package net.vdombox.ide.modules.events.view.components
 			showHiddenElements.selected = value;
 		}
 		
-		public function setVisibleStateForAllLinkages() : void
+		public function setVisibleStateForAllLinkages( showHiddedNeed : Boolean = true ) : void
 		{
 			var i : Number;
 			var linkage : Linkage;
@@ -741,10 +762,50 @@ package net.vdombox.ide.modules.events.view.components
 				if ( !linkage )
 					return;
 				
-				linkage.setVisibleState( showHidden );
+				if ( showHiddedNeed )
+					linkage.setVisibleState( showHidden );
+				else
+					linkage.setVisibleState( false );
 			}
-
-
+		}
+		
+		public function setVisibleStateForCurrnetLinkages( objectID : String ) : void
+		{
+			var i : Number;
+			var linkage : Linkage;
+			var baseElement : BaseElement;
+			
+			for ( i = 0; i < linkagesLayer.numElements; i++ )
+			{
+				linkage = linkagesLayer.getElementAt( i ) as Linkage;
+				
+				if ( !linkage )
+					return;
+				
+				if ( linkage.source.objectID == objectID && linkage.target.objectID != objectID)
+				{
+					baseElement = linkage.target;
+					baseElement.visible = true;
+					baseElement.alpha = 0.3;
+					linkage.visible = true;
+					linkage.alpha = 0.3;
+				}
+				else if ( linkage.source.objectID != objectID && linkage.target.objectID == objectID )
+				{
+					baseElement = linkage.source;
+					baseElement.visible = true;
+					baseElement.alpha = 0.3;
+					linkage.visible = true;
+					linkage.alpha = 0.3;
+				}
+				else
+				{
+					linkage.setVisibleState( false );	
+				}
+			}
+			
+			
+			
 		}
 
 	}

@@ -11,16 +11,36 @@
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.modules.events.events.WorkAreaEvent;
 			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
 			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
+			
+			import spark.events.IndexChangeEvent;
 			
 			protected function scroller_creationCompleteHandler(event:FlexEvent):void
 			{
 				// TODO Auto-generated method stub
 				scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 				scroller.horizontalScrollBar.setStyle( "skinClass", VDOMHScrollBarSkin );
+			}
+			
+			protected function showElementsView_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				var sourceDropDownList : ArrayCollection = new ArrayCollection();
+				sourceDropDownList.addItem( "Full" );
+				sourceDropDownList.addItem( "Middle" );
+				sourceDropDownList.addItem( "Shot" );
+				_showElementsView.dataProvider = sourceDropDownList;
+			}
+			
+			protected function _showElementsView_changeHandler(event:IndexChangeEvent):void
+			{
+				// TODO Auto-generated method stub
+				dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED ) );
 			}
 			
 		]]>
@@ -60,7 +80,7 @@
 
 	<s:HGroup height="20"
 			  left="1" right="1" top="1"
-			  gap="0" paddingRight="20">
+			  gap="0" paddingRight="20" verticalAlign="middle">
 		<components:WorkAreaButton id="saveButton"
 								   enabled="true" enabled.disabled="false" height="20" icon="@Embed('assets/save.png')"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_save' ) }"
@@ -69,6 +89,15 @@
 								   enabled="false" enabled.unsaved="true" height="20" icon="@Embed('assets/undo.png')"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_undo' ) }"/>
 		<mx1:Spacer width="100%" />
+		
+		<s:Label text="{ resourceManager.getString( 'Events_General', 'work_area_show_current' ) }" />
+		
+		<mx1:Spacer width="5" />
+		
+		<s:DropDownList id="_showElementsView" height="20" creationComplete="showElementsView_creationCompleteHandler(event)" change="_showElementsView_changeHandler(event)"/>
+		
+		<mx1:Spacer width="15" />
+		
 		<s:CheckBox id="showHiddenElements" height="20" label="{ resourceManager.getString( 'Events_General', 'work_area_show_hidden' ) }" change="hostComponent.showHiddenElementsStateChanged()"/>
 	</s:HGroup>
 

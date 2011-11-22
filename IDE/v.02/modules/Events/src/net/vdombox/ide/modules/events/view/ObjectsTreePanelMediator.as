@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.events.view
 {
+	import flash.events.MouseEvent;
+	
 	import mx.controls.Tree;
 	import mx.events.ListEvent;
 	
@@ -11,6 +13,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.ObjectsTreePanel;
+	import net.vdombox.ide.modules.events.view.components.ObjectsTreePanelItemRenderer;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -212,6 +215,7 @@ package net.vdombox.ide.modules.events.view
 			objectsTree.removeEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler );
 			objectsTree.removeEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true );
 		}
+		
 
 		private function showPages( pages : Array ) : void
 		{
@@ -299,6 +303,7 @@ package net.vdombox.ide.modules.events.view
 
 				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ pageID ], objectID: id } );
 			}
+			
 		}
 		
 		private function eyeClickHandler( event : PanelsEvent ) : void

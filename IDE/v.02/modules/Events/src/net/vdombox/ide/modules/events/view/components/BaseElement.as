@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.events.view.components
 {
 	import flash.events.MouseEvent;
+	import flash.system.Capabilities;
 	
 	import mx.events.FlexEvent;
 	
@@ -45,6 +46,8 @@ package net.vdombox.ide.modules.events.view.components
 			title = data ? data.name : null;
 			
 			isNeedUpdateParameters = true;
+			
+			updateDisplayList( width, height );
 		}
 
 		public function get eyeOpened():Boolean
