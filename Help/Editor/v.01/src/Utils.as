@@ -161,7 +161,7 @@ package
 		
 		public static function convertSpaces(str : String) : String
 		{
-			var regExp		: RegExp = />[^<]*[^>]*</g;
+			var regExp		: RegExp = />[^<>]*</g;
 			var expSpaces	: RegExp = / /g;
 			
 			var matches : Array = str.match(regExp);
