@@ -22,7 +22,7 @@
 
 			private var imgCounter : Number = 0;
 			private var resourcesList : XMLList;
-			private var _xmlContent : XML;
+			private var _pageContent : XML;
 			
 			private var imageWidthInTag		: Number = 0;
 			private var imageHeightInTag	: Number = 0;
@@ -33,9 +33,25 @@
 			public static const EVENT_WYSIWYG_HTTP_IMAGE_LOADED			: String = "EVENT_WYSIWYG_HTTP_IMAGE_LOADED";
 			public static const EVENT_WYSIWYG_IMAGES_WIDTH_SETTED		: String = "EVENT_WYSIWYG_IMAGES_WIDTH_SETTED";
 			
-			public function get xmlContent():XML
+			public function get pageContentXML():XML
 			{
-				return _xmlContent;
+				return _pageContent;
+			}
+			
+			public function get pageContent() : String
+			{
+				return Utils.restoreSpaces(_pageContent.toXMLString());
+			}
+			
+			public function set pageContent(strContent : String) : void
+			{
+				if (!strContent)
+				{
+					_pageContent = null;
+					return;
+				}
+				
+				_pageContent = new XML(Utils.convertSpaces(strContent));
 			}
 
 			private function init():void
@@ -133,9 +149,9 @@
 				
 				var highlightAllScript : String = showPageToc ? HtmlPageProperties.highlightAllTemplate : "";
 				
-				if (showPageToc) {
+				/*if (showPageToc) {
 					bodyContent = Utils.convertSpaces(bodyContent);
-				}
+				}*/
 				
 				
 				htmlTxt = "<html>" + "\n" + 
@@ -162,10 +178,10 @@
 				value = Utils.convertSpaces(value);
 				
 				var xml			: XML = new XML(value);
+				
 				var ulClass		: String = "";
 				var divClass	: String = "";
 				var linkClass	: String = "";
-				
 				
 				// delete old variant of toc ...
 				for each (var xmlDiv:XML in xml.body.div) {
@@ -207,7 +223,7 @@
 				
 				xml.normalize();
 				
-				return xml.toXMLString();
+				return Utils.restoreSpaces(xml.toXMLString());
 			}
 			
 			public static function getNewPageContent(aPageTitle:String) : String
@@ -225,8 +241,9 @@
 			
 			public function resetImagesPath() : void
 			{
-				_xmlContent = XML(getHTML());
-				var resourcesList	: XMLList	= xmlContent..img;
+				pageContent = getHTML();
+
+				var resourcesList	: XMLList	= pageContentXML..img;
 				
 				for each (var xmlImg:XML in resourcesList)
 				{
@@ -249,7 +266,7 @@
 					else
 						xmlImg.@src = newPath;
 					
-					setHTML(xmlContent.toString());
+					setHTML(pageContent);
 				}
 			}
 			
@@ -330,21 +347,21 @@
 				return file.url;
 			}
 			
-			public function resetImagesWidth(content : XML = null):void
+			public function resetImagesWidth(content : String = null):void
 			{				
 				rewritePageContent = true;
-				_xmlContent = null;
+				pageContent = null;
 				
 				if (content != null)
 				{
-					_xmlContent = content;
+					pageContent = content;
 					rewritePageContent = false;
 				} else 
 				{
-					_xmlContent = XML(getHTML());
+					pageContent = getHTML();
 				}
 				
-				resourcesList = xmlContent..img;
+				resourcesList = pageContentXML..img;
 				
 				imgCounter = 0;
 				
@@ -483,7 +500,7 @@
 				imgCounter = 0;
 				
 				if (rewritePageContent)
-					setHTML(xmlContent.toString());
+					setHTML(pageContent);
 				
 				this.dispatchEvent(new Event(EVENT_WYSIWYG_IMAGES_WIDTH_SETTED));
 			}

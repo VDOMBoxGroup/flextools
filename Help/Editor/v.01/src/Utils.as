@@ -168,12 +168,20 @@ package
 			
 			for each (var match:String in matches)
 			{
-				var newValue : String = match.replace(expSpaces, "&#160;");
+				//var newValue : String = match.replace(expSpaces, "&#160;");
+				var newValue : String = match.replace(expSpaces, "_SPAC_REPL_");
 				
 				str = str.replace(match, newValue);
 			}
 			
 			return str;
+		}
+		
+		public static function restoreSpaces(str : String) : String
+		{
+			var expSpaces	: RegExp = /_SPAC_REPL_/g;
+			
+			return str.replace(expSpaces, " ");
 		}
 		
 		public static function configureXMLForDisplaying():void

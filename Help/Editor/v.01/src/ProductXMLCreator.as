@@ -279,7 +279,7 @@ package
 			if (html_wysiwyg)
 			{
 				html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, onImageMaxWidthChecked);
-				html_wysiwyg.resetImagesWidth(XML(pageContent));
+				html_wysiwyg.resetImagesWidth(pageContent);
 				return;
 			}
 			
@@ -292,7 +292,7 @@ package
 			if (aEvent)
 				html_wysiwyg.removeEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, onImageMaxWidthChecked);
 			
-			pageContent = html_wysiwyg.xmlContent.toString();
+			pageContent = html_wysiwyg.pageContent;
 			
 			var pageContentWithToc	: String;
 			

@@ -176,7 +176,7 @@
 					pageContent = HTML_WYSIWYG.getNewPageContent("");
 				}
 				
-				xmlContent = new XML (pageContent);
+				xmlContent = new XML (Utils.convertSpaces(pageContent));
 				
 				// remove toc ...
 					// remove old variant of toc ...
@@ -256,7 +256,7 @@
 					}
 				}
 				
-				var str:String = xmlContent.toString();
+				var str:String = Utils.restoreSpaces(xmlContent.toXMLString());
 				
 				return str;
 			}

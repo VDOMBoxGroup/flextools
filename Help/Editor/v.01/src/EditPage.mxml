@@ -141,16 +141,18 @@
 				pageNewH1 = "<h1>"+ pageLabel.text +"</h1>";
 				
 				curPageFromDB = sqlProxy.getPage(productName, pageLn, curPage.@name);
+				
 				if (!curPageFromDB) {
 					return;
 				}
-				pageOldContent = curPageFromDB[0]["content"]
+				
+				pageOldContent = curPageFromDB[0]["content"];
 					
 				if (!pageOldContent || pageOldContent.toLowerCase().indexOf("<html>") == -1) {
 					pageOldContent = HTML_WYSIWYG.getNewPageContent("");
 				}
 				
-				contentXML = new XML(pageOldContent);
+				contentXML = new XML(Utils.convertSpaces(pageOldContent));
 				
 				if (contentXML.body) {
 					if (contentXML.body.h1 && contentXML.body.h1.length() > 0) {
@@ -159,7 +161,7 @@
 						contentXML.body.prependChild(XML(pageNewH1));
 					}
 					
-					pageNewContent = contentXML.toXMLString();
+					pageNewContent = Utils.restoreSpaces(contentXML.toXMLString());
 				} else {
 					pageNewContent = pageOldContent;
 				}
