@@ -339,7 +339,7 @@ package
 								version:int, 
 								title:String,
 								description:String,
-								content:String) : void
+								content:String) : Boolean
 		{
 
 			var query : String      = "SELECT id " +
@@ -367,7 +367,11 @@ package
 				parameters[ ":id_product" ] = productID;
 
 				executeQuery(query, parameters);
-			}
+				
+				return true;
+			} 
+			
+			return false;
 		}
 
 		/**

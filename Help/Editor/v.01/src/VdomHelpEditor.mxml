@@ -317,17 +317,22 @@
 
 				pageName = generatePageName();
 
+				var pageAdded : Boolean = false;
+				
 				if (aCopiedItem) {
 					pageTitle = aCopiedItem[0]["title"];
 					pageName = aCopiedItem[0]["name"];
-					sqlProxy.addPage(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, pageName, 0, 
+					pageAdded = sqlProxy.addPage(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, pageName, 0, 
 						pageTitle, aCopiedItem[0]["description"], aCopiedItem[0]["content"]);
 				} else {
 					pageTitle = "Page " + count;
-					sqlProxy.addPage(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, pageName, 0, 
+					pageAdded = sqlProxy.addPage(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, pageName, 0, 
 									 pageTitle, "", HTML_WYSIWYG.getNewPageContent(""));
 				}
 
+				if (!pageAdded)
+					return;
+					
 				if (!aCopiedItem || 
 					!aCopiedItem[0]["parentPageName"] || 
 					(aCopiedItem[0]["parentPageName"] == cmboxProduct.selectedItem.name) ||
