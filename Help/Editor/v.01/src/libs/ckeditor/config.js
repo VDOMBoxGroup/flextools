@@ -22,7 +22,7 @@ CKEDITOR.editorConfig = function( config )
 		{ name: 'paragraph',	items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
 		{ name: 'links',		items : [ ] },
 		'/',
-		{ name: 'insert',		items : [ 'Image','Table','HorizontalRule' ] },
+		{ name: 'insert',		items : [ 'Image','PasteImage','Table','HorizontalRule' ] },
 		{ name: 'styles',		items : [ 'Format','Styles','RemoveFormat' ,'Font','FontSize' ] },
 		{ name: 'colors',		items : [ 'TextColor','BGColor' ] },
 		{ name: 'tools',		items : [ /*'Maximize'*/ ] },

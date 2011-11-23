@@ -488,8 +488,8 @@ package
 			
 			if (String(imgTag.@style) != "")
 			{
-				imageProperties.width = HTML_WYSIWYG.getSizeFromStyle(String(imgTag.@style).toLowerCase(), HTML_WYSIWYG.TYPE_WIDTH); 
-				imageProperties.height = HTML_WYSIWYG.getSizeFromStyle(String(imgTag.@style).toLowerCase(), HTML_WYSIWYG.TYPE_HEIGHT);
+				imageProperties.width = Utils.getSizeFromStyle(String(imgTag.@style).toLowerCase(), Utils.TYPE_WIDTH); 
+				imageProperties.height = Utils.getSizeFromStyle(String(imgTag.@style).toLowerCase(), Utils.TYPE_HEIGHT);
 			}
 
 			return imageProperties;
@@ -634,7 +634,7 @@ package
 				md5Stream = new MD5Stream();
 				uid = md5Stream.complete(resultByteArray);
 				
-				newFileName = VdomHelpEditor.convertToUIDFormat(uid) + resourceType;
+				newFileName = ResourceImageUtils.convertToUIDFormat(uid) + resourceType;
 				onResourceDataGenerated(fileName, newFileName, source);
 			}
 			

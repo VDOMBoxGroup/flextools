@@ -9,7 +9,11 @@
 		<![CDATA[
 			import com.adobe.images.PNGEncoder;
 			
+			import mx.controls.Alert;
 			import mx.utils.Base64Encoder;
+			
+			private var clipboardManager : ClipboardManager = ClipboardManager.getInstance();
+			private var resourceImageUtils : ResourceImageUtils = ResourceImageUtils.getInstance(); 
 			
 			private var instancesInitialized 	: Boolean;
 			private var pageContentToRefresh	: String;
@@ -17,9 +21,6 @@
 			
 			public static const MAX_IMAGE_WIDTH : Number = 500;
 			
-			public static const TYPE_WIDTH		: Number = 0;
-			public static const TYPE_HEIGHT		: Number = 1;
-
 			private var imgCounter : Number = 0;
 			private var resourcesList : XMLList;
 			private var _pageContent : XML;
@@ -65,6 +66,8 @@
 				if (keyEvent.ctrlKey && !(keyEvent.keyCode == Keyboard.C || keyEvent.keyCode == Keyboard.V) ) {
 					keyEvent.preventDefault();
 				}
+				if (keyEvent.ctrlKey && keyEvent.shiftKey && keyEvent.keyCode == Keyboard.V)
+					pasteImageFromClipboard();
 			}
 			
 			private function onKeyboardKeyUp(keyEvent:KeyboardEvent):void
@@ -86,6 +89,11 @@
 			
 			}
 			
+			public function get editor():*
+			{
+				return domWindow.CKEDITOR.instances.editor1;
+			}
+			
 			public function setHTML( value : String ) : void
 			{
 				if (!instancesInitialized) {
@@ -96,7 +104,12 @@
 				
 				var pageContentWithoutHighlightAllScript : String = value.replace(HtmlPageProperties.highlightAllTemplate, ""); 
 				
-				domWindow.CKEDITOR.instances.editor1.setData(pageContentWithoutHighlightAllScript);
+				editor.setData(pageContentWithoutHighlightAllScript);
+			}
+			
+			private function setElement(element : String):void
+			{
+				editor.insertHtml(element);
 			}
 			
 			public function getHTML(showPageToc:Boolean = false) : String
@@ -107,7 +120,7 @@
 				
 				patternHead = /<[ ]*head[ ]*(>|\/[ ]*>)/i;
 				
-				editorData = instancesInitialized ? domWindow.CKEDITOR.instances.editor1.getData() : "";
+				editorData = instancesInitialized ? editor.getData() : "";
 				
 				htmlTxt = editorData;
 				
@@ -255,10 +268,11 @@
 					
 					if ( imgSrc.indexOf("http://") >= 0 || imgSrc.indexOf("https://") >= 0 ) // image from http
 					{
-						newPath = loadHttpImg(imgSrc);
+						this.addEventListener(ResourceImageUtils.HTTP_IMAGE_LOADED, this.dispatchEvent);
+						newPath = resourceImageUtils.loadHttpImg(imgSrc);
 					} else 
 					{
-						newPath = copyImg(removeWhiteSpacingAfterFileName(imgSrc)); // image from file system
+						newPath = resourceImageUtils.copyImg(removeWhiteSpacingAfterFileName(imgSrc)); // image from file system
 					}
 					
 					if (!newPath)
@@ -276,75 +290,6 @@
 					path.substring(path.lastIndexOf("."), path.length).replace(" ", "");
 				
 				return path;
-			}
-			
-			private function copyImg(aImageOldSrc_str:String) : String
-			{
-				var targetPath : String;
-				var imgFile : File;
-				var newImgFile : File;
-				
-				imgFile = new File(aImageOldSrc_str);
-				
-				if (!imgFile.exists)
-					return null;
-				
-				targetPath = "resources/" + VdomHelpEditor.generateFileName(aImageOldSrc_str, imgFile);
-				newImgFile = File.applicationStorageDirectory.resolvePath(targetPath);
-				
-				
-				if ( !newImgFile.exists || Utils.identicalFiles(imgFile, newImgFile))
-					imgFile.copyTo(newImgFile, true);
-				
-				return newImgFile.url;
-			}
-			
-			private function loadHttpImg(aImageOldSrc_str:String) : String
-			{
-				var targetPath : String;
-				var urlRequest : URLRequest;
-				var urlLoader : URLLoader;
-				var file : File;
-				
-				
-				targetPath = "resources/" + VdomHelpEditor.generateFileName(aImageOldSrc_str);
-				urlRequest = new URLRequest(aImageOldSrc_str);
-				urlLoader = new URLLoader();
-				
-				urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
-				
-				urlLoader.addEventListener(Event.COMPLETE, urlLoader_complete);
-				urlLoader.addEventListener(IOErrorEvent.IO_ERROR, urlLoader_error);
-				urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoader_error);
-				
-				urlLoader.load(urlRequest);
-				
-				file = File.applicationStorageDirectory.resolvePath(targetPath);
-				
-				function urlLoader_complete(evt:Event) : void {
-					var fileStream : FileStream;
-					
-					fileStream = new FileStream();
-					try {
-						fileStream.open(file, FileMode.WRITE);
-						fileStream.writeBytes(urlLoader.data);
-						fileStream.close();
-						
-						this.dispatchEvent(new Event(EVENT_WYSIWYG_HTTP_IMAGE_LOADED));
-						
-					} catch ( error : IOError ) {
-						trace("!!! Error Write !!! \n" + error.message +"\n");
-						this.dispatchEvent(new Event(EVENT_WYSIWYG_HTTP_IMAGE_LOADED));
-						return;
-					}
-				}
-				
-				function urlLoader_error(evt:Event) : void {
-					trace("!!! Error Loading file !!! \n");
-					this.dispatchEvent(new Event(EVENT_WYSIWYG_HTTP_IMAGE_LOADED));
-				}
-				
-				return file.url;
 			}
 			
 			public function resetImagesWidth(content : String = null):void
@@ -398,8 +343,8 @@
 				
 				if (String(xmlImg.@style) != "")
 				{
-					imageWidthInTag = getSizeFromStyle(String(xmlImg.@style).toLowerCase(), TYPE_WIDTH); 
-					imageHeightInTag = getSizeFromStyle(String(xmlImg.@style).toLowerCase(), TYPE_HEIGHT);
+					imageWidthInTag = Utils.getSizeFromStyle(String(xmlImg.@style).toLowerCase(), Utils.TYPE_WIDTH); 
+					imageHeightInTag = Utils.getSizeFromStyle(String(xmlImg.@style).toLowerCase(), Utils.TYPE_HEIGHT);
 				}
 				
 				if (imageWidthInTag > 0) // width is defined in <img>
@@ -505,45 +450,6 @@
 				this.dispatchEvent(new Event(EVENT_WYSIWYG_IMAGES_WIDTH_SETTED));
 			}
 			
-			public static function getSizeFromStyle(strStyle:String, type:Number) : Number
-			{
-				var strWidth				: String = " width";
-				var strWidthInZeroIndex		: String = "width";
-				
-				var strHeight				: String = " height";
-				var strHeightInZeroIndex	: String = "height";
-				
-				var regExpDigitVal	: RegExp = /[\d]+/i;
-				
-				var firstInd : int;
-				var sizeStr : String;
-				var sizeNumber : Number = -1;
-				
-				var str : String = type == HTML_WYSIWYG.TYPE_WIDTH ? strWidth : strHeight;
-				var strInZeroIndex : String = type == HTML_WYSIWYG.TYPE_WIDTH ? strWidthInZeroIndex : strHeightInZeroIndex;
-				
-				firstInd = strStyle.search(str);
-				
-				if (firstInd == -1) 
-				{
-					firstInd = strStyle.search(strInZeroIndex); // we need to get 0
-					if (firstInd > 0)
-						firstInd = -1;
-				}
-				
-				if (firstInd != -1)
-					sizeStr = strStyle.substring(firstInd);
-				
-				try {
-					sizeNumber = Number(sizeStr.match(regExpDigitVal)[0]);
-				} catch (e:Error)
-				{
-					sizeNumber = -1;
-				}
-				
-				return sizeNumber;
-			}
-			
 			protected function onJavaScriptException(event:HTMLUncaughtScriptExceptionEvent):void
 			{
 				trace ("JavaScriptException");
@@ -552,6 +458,8 @@
 			protected function htmlCompleteHandler(event:Event):void
 			{
 				instancesInitialized = true;
+				
+				domWindow.pasteImageFromClipboard = pasteImageFromClipboard;
 				
 				if (refreshPageAfterInit) {
 					setHTML(pageContentToRefresh);
@@ -564,6 +472,35 @@
 			{
 				refreshPageAfterInit = false;
 				pageContentToRefresh = null;
+			}
+			
+			public function pasteImageFromClipboard():void
+			{
+				var wysiwygImage : WysiwygImage = clipboardManager.getImageFromClipboard();
+				var imageTeg : XML = getImageTag(wysiwygImage);
+				
+				if (!imageTeg)
+					return;
+				
+				setElement(imageTeg.toXMLString());
+			}
+			
+			private function getImageTag(wysiwygImage : WysiwygImage) : XML
+			{
+				if (!wysiwygImage || !wysiwygImage.src)
+					return null;
+					
+				var imageTag : XML = new XML("<img/>");
+				
+				imageTag.@src = wysiwygImage.src;
+				
+				if (wysiwygImage.width)
+					imageTag.@width = wysiwygImage.width;
+				
+				if (wysiwygImage.height)
+					imageTag.@height = wysiwygImage.height;
+				
+				return imageTag;
 			}
 			
 		]]>

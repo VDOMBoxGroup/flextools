@@ -133,9 +133,6 @@
 
 			private function getCurrentPage(aEvent : Event = null) : void
 			{
-//			tree.selectedItem = XML(lstEvt.itemRenderer.data);
-//			trace(": "+lstEvt.itemRenderer.data.@name +" : "+ tree.selectedItem.@name);
-
 				if ( !tree.selectedItem )
 					return;
 
@@ -487,69 +484,13 @@
 			{
 				html_wysiwyg.removeEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, onWysiwygImagesWidthSetted);
 				
+				refreshPageContent();
+			}
+			
+			private function refreshPageContent(aEvent : Event = null):void
+			{
 				sqlProxy.setPageContent(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, tree.selectedItem.@name, html_wysiwyg.getHTML(), pageVersion);
 				getCurrentPage();
-			}
-
-			public static function generateFileName(path:String, file:File = null) : String
-			{
-				var fileType : String;
-				var fileName : String;
-				var hash : MD5Stream;
-				var fileStream : FileStream;
-				var byteArray : ByteArray;
-				var uid : String;
-
-				fileType = path.substring(path.lastIndexOf("."), path.length);
-
-				if ( !file || !file.exists)
-				{
-					fileName = UIDUtil.createUID() + fileType;
-
-					return fileName;
-				}
-
-
-				hash = new MD5Stream();
-				fileStream = new FileStream();
-				byteArray = new ByteArray();
-
-				fileStream.open(file, FileMode.READ);
-				fileStream.readBytes(byteArray);
-				fileStream.close();
-
-				uid = hash.complete(byteArray);
-				fileName = convertToUIDFormat(uid) + fileType;
-
-				return fileName;
-			}
-
-			public static function convertToUIDFormat(strToFormat:String) : String
-			{
-				var strInUIDFormat : String = "";
-				var strDelim : String       = "-";
-				var arrParts : Array        = new Array();
-
-				if ( strToFormat.length != 32 )
-					throw Error("Incorrect type of input string");
-				else
-				{
-					arrParts[ 0 ] = strToFormat.substr(0, 8);
-					arrParts[ 1 ] = strToFormat.substr(8, 4);
-					arrParts[ 2 ] = strToFormat.substr(12, 4);
-					arrParts[ 3 ] = strToFormat.substr(16, 4);
-					arrParts[ 4 ] = strToFormat.substr(20, 12);
-
-					for ( var i : uint = 0; i < 5; i++ )
-					{
-						if ( i > 0 )
-							strInUIDFormat += strDelim;
-
-						strInUIDFormat += arrParts[ i ];
-					}
-				}
-
-				return strInUIDFormat;
 			}
 
 			private function selectXMLFile():void
@@ -763,7 +704,7 @@
 			protected function html_wysiwyg_initializeHandler(event:FlexEvent):void
 			{
 				this.html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED, onWysiwygSaveCombinationClicked);
-				this.html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_HTTP_IMAGE_LOADED, getCurrentPage);
+				this.html_wysiwyg.addEventListener(ResourceImageUtils.HTTP_IMAGE_LOADED, refreshPageContent);
 			}
 			
 			private function onTreeKeyboardKeyUp(aKeyboardEvent:KeyboardEvent) : void

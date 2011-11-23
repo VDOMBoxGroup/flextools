@@ -15,7 +15,7 @@ package
 		public static const MSG_XML_CREATING_ERROR				: String = "Error on product xml creating";
 		public static const MSG_INCORRECT_XML_FILE_FORMAT		: String = "The file format is incorrect. It should be in xml format.";
 		
-		
+		public static const MSG_CLIPBOARD_HAS_NO_IMAGES			: String = "No images in clipboard.";
 		
 		public function AlertMessages()
 		{
