@@ -103,14 +103,15 @@ package net.vdombox.ide.modules.events.view.components
 			var newY : int = parent.mouseY - mouseOffcetY;
 			
 			if ( newX < 0 )
-				x = 0;
-			else
-				x = newX;
+				newX = 0;
+			x = newX;
 			
 			if ( newY < 0 )
-				y = 0;
-			else
-				y = newY;
+				newY = 0;
+			y = newY;
+			
+			data.left = x;
+			data.top = y;
 		}
 		
 		protected function stage_mouseMoveHandlerExt( event : MouseEvent ) : void

@@ -195,25 +195,30 @@ package net.vdombox.ide.modules.events.view
 		{
 			visibleElementProxy.showCurrent = value;
 			workArea.showElementsView = value;
+			if ( value == "Full" )
+				workArea._showElementsView.toolTip = "ctrl + 1";
+			else if ( value == "Middle" )
+				workArea._showElementsView.toolTip = "ctrl + 2";
+			else if ( value == "Short" )
+				workArea._showElementsView.toolTip = "ctrl + 3";
 		}
 		
 		private function shiftClickHandler( event : KeyboardEvent ) : void
 		{
-			trace("1");
 			if ( !event.ctrlKey )
 				return;
-			trace("2");
-			if ( event.keyCode == Keyboard.M )
+				
+			if ( event.keyCode == Keyboard.NUMBER_2 )
 			{
 				showElementsView = "Middle";
 				setVisibleElementsForCurrentObject( false );
 			}
-			else if ( event.keyCode == Keyboard.D )
+			else if ( event.keyCode == Keyboard.NUMBER_3 )
 			{
-				showElementsView = "Shot";
+				showElementsView = "Short";
 				setVisibleElementsForCurrentObject( true );
 			}
-			else if ( event.keyCode == Keyboard.F )
+			else if ( event.keyCode == Keyboard.NUMBER_1 )
 			{
 				showElementsView = "Full";
 				setVisibleElementsForAllObjects();
@@ -328,16 +333,16 @@ package net.vdombox.ide.modules.events.view
 		
 		private function showCurrentElementsStateChanged( event : WorkAreaEvent ) : void
 		{
-			visibleElementProxy.showCurrent = workArea.showElementsView ;
+			showElementsView = workArea.showElementsView ;
 			setElementsCurrentVisibleState();
 		}
 		
 		private function setElementsCurrentVisibleState() : void
 		{
-			visibleElementProxy.showCurrent = workArea.showElementsView ;
+			showElementsView = workArea.showElementsView ;
 			if ( workArea.showElementsView == "Middle" )
 				setVisibleElementsForCurrentObject( false );
-			else if ( workArea.showElementsView == "Shot" )
+			else if ( workArea.showElementsView == "Short" )
 				setVisibleElementsForCurrentObject( true );
 			else if ( workArea.showElementsView == "Full" )
 				setVisibleElementsForAllObjects();
@@ -365,7 +370,7 @@ package net.vdombox.ide.modules.events.view
 		private function getElementsVisibleState() : void
 		{
 			workArea.showHidden = visibleElementProxy.showHidden;
-			workArea.showElementsView = visibleElementProxy.showCurrent;
+			showElementsView = visibleElementProxy.showCurrent;
 			var numElements : Number = workArea.contentGroup.numElements;
 			
 			var element		: Object;
@@ -380,7 +385,7 @@ package net.vdombox.ide.modules.events.view
 			
 			if ( workArea.showElementsView == "Middle" )
 				setVisibleElementsForCurrentObject( false );
-			else if ( workArea.showElementsView == "Shot" )
+			else if ( workArea.showElementsView == "Short" )
 				setVisibleElementsForCurrentObject( true );
 			else if ( workArea.showElementsView == "Full" )
 				setVisibleElementsForAllObjects();
@@ -430,7 +435,7 @@ package net.vdombox.ide.modules.events.view
 			var eventElement : EventElement;
 			var showNotVisible : Boolean = visibleElementProxy.showHidden;
 			workArea.showHidden= showNotVisible;
-			workArea.showElementsView = visibleElementProxy.showCurrent;
+			showElementsView = visibleElementProxy.showCurrent;
 			
 			var showElement : Boolean = body.visible as Boolean;
 			var objectID : String = body.objectID as String;
@@ -492,7 +497,7 @@ package net.vdombox.ide.modules.events.view
 			var eventElement : EventElement;
 			var showNotVisible : Boolean = visibleElementProxy.showHidden;
 			workArea.showHidden = showNotVisible;
-			workArea.showElementsView = visibleElementProxy.showCurrent;
+			showElementsView = visibleElementProxy.showCurrent;
 			
 			var showElement : Boolean = body.eyeOpened as Boolean;
 			var nameElement : String = body.name as String;
