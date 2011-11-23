@@ -15,6 +15,12 @@
 			{
 				scroller.verticalScrollBar.setStyle("skinClass", VDOMVScrollBarSkin );
 				scroller.horizontalScrollBar.setStyle("skinClass", VDOMHScrollBarSkin );
+				addEventListener( MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
+			}
+			
+			private function mouseWheelHandler( event : MouseEvent ) : void
+			{
+				event.delta = event.delta > 0 ? 20 : -20;
 			}
 			
 		]]>
