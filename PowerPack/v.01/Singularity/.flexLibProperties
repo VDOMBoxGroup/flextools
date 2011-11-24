@@ -1,62 +1,62 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<flexLibProperties version="1">
-<includeClasses>
-<classEntry path="Singularity.Events.Dispatcher"/>
-<classEntry path="Singularity.Events.SingularityEvent"/>
-<classEntry path="Singularity.Geom.BZFactory"/>
-<classEntry path="Singularity.Geom.Bezier"/>
-<classEntry path="Singularity.Geom.Bezier2"/>
-<classEntry path="Singularity.Geom.Bezier3"/>
-<classEntry path="Singularity.Geom.BezierSpline"/>
-<classEntry path="Singularity.Geom.BezierSplineControl"/>
-<classEntry path="Singularity.Geom.CatmullRom"/>
-<classEntry path="Singularity.Geom.Coef"/>
-<classEntry path="Singularity.Geom.Composite"/>
-<classEntry path="Singularity.Geom.Cubic"/>
-<classEntry path="Singularity.Geom.CubicCage"/>
-<classEntry path="Singularity.Geom.Ellipse"/>
-<classEntry path="Singularity.Geom.FastBezier"/>
-<classEntry path="Singularity.Geom.FastCubicSpline"/>
-<classEntry path="Singularity.Geom.IParametric"/>
-<classEntry path="Singularity.Geom.IPoly"/>
-<classEntry path="Singularity.Geom.Knot"/>
-<classEntry path="Singularity.Geom.P3D.BezierSpline"/>
-<classEntry path="Singularity.Geom.P3D.CatmullRom"/>
-<classEntry path="Singularity.Geom.P3D.Composite"/>
-<classEntry path="Singularity.Geom.P3D.Cubic"/>
-<classEntry path="Singularity.Geom.P3D.CubicCage"/>
-<classEntry path="Singularity.Geom.P3D.FastBezier"/>
-<classEntry path="Singularity.Geom.P3D.FastCubicSpline"/>
-<classEntry path="Singularity.Geom.P3D.IPoly"/>
-<classEntry path="Singularity.Geom.P3D.Knot"/>
-<classEntry path="Singularity.Geom.PSpline3"/>
-<classEntry path="Singularity.Geom.Parametric"/>
-<classEntry path="Singularity.Geom.Quad"/>
-<classEntry path="Singularity.Geom.Spline3"/>
-<classEntry path="Singularity.Geom.Wedge"/>
-<classEntry path="Singularity.Interactive.PointSelector"/>
-<classEntry path="Singularity.Interactive.RectangleSelector"/>
-<classEntry path="Singularity.Numeric.Binomial"/>
-<classEntry path="Singularity.Numeric.Consts"/>
-<classEntry path="Singularity.Numeric.Gauss"/>
-<classEntry path="Singularity.Rigs.Arm"/>
-<classEntry path="Singularity.Rigs.BaseBone"/>
-<classEntry path="Singularity.Rigs.Biped"/>
-<classEntry path="Singularity.Rigs.Bone"/>
-<classEntry path="Singularity.Rigs.Chain"/>
-<classEntry path="Singularity.Rigs.Clavicle"/>
-<classEntry path="Singularity.Rigs.Connector"/>
-<classEntry path="Singularity.Rigs.Foot"/>
-<classEntry path="Singularity.Rigs.Hand"/>
-<classEntry path="Singularity.Rigs.Head"/>
-<classEntry path="Singularity.Rigs.IBone"/>
-<classEntry path="Singularity.Rigs.IChain"/>
-<classEntry path="Singularity.Rigs.Leg"/>
-<classEntry path="Singularity.Rigs.Neck"/>
-<classEntry path="Singularity.Rigs.Pelvis"/>
-<classEntry path="Singularity.Rigs.SimpleSpine"/>
-<classEntry path="Singularity.Rigs.Template"/>
-</includeClasses>
-<includeResources/>
-<namespaceManifests/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="false" useMultiPlatformConfig="false" version="1">
+  <includeClasses>
+    <classEntry path="Singularity.Events.Dispatcher"/>
+    <classEntry path="Singularity.Events.SingularityEvent"/>
+    <classEntry path="Singularity.Geom.BZFactory"/>
+    <classEntry path="Singularity.Geom.Bezier"/>
+    <classEntry path="Singularity.Geom.Bezier2"/>
+    <classEntry path="Singularity.Geom.Bezier3"/>
+    <classEntry path="Singularity.Geom.BezierSpline"/>
+    <classEntry path="Singularity.Geom.BezierSplineControl"/>
+    <classEntry path="Singularity.Geom.CatmullRom"/>
+    <classEntry path="Singularity.Geom.Coef"/>
+    <classEntry path="Singularity.Geom.Composite"/>
+    <classEntry path="Singularity.Geom.Cubic"/>
+    <classEntry path="Singularity.Geom.CubicCage"/>
+    <classEntry path="Singularity.Geom.Ellipse"/>
+    <classEntry path="Singularity.Geom.FastBezier"/>
+    <classEntry path="Singularity.Geom.FastCubicSpline"/>
+    <classEntry path="Singularity.Geom.IParametric"/>
+    <classEntry path="Singularity.Geom.IPoly"/>
+    <classEntry path="Singularity.Geom.Knot"/>
+    <classEntry path="Singularity.Geom.P3D.BezierSpline"/>
+    <classEntry path="Singularity.Geom.P3D.CatmullRom"/>
+    <classEntry path="Singularity.Geom.P3D.Composite"/>
+    <classEntry path="Singularity.Geom.P3D.Cubic"/>
+    <classEntry path="Singularity.Geom.P3D.CubicCage"/>
+    <classEntry path="Singularity.Geom.P3D.FastBezier"/>
+    <classEntry path="Singularity.Geom.P3D.FastCubicSpline"/>
+    <classEntry path="Singularity.Geom.P3D.IPoly"/>
+    <classEntry path="Singularity.Geom.P3D.Knot"/>
+    <classEntry path="Singularity.Geom.PSpline3"/>
+    <classEntry path="Singularity.Geom.Parametric"/>
+    <classEntry path="Singularity.Geom.Quad"/>
+    <classEntry path="Singularity.Geom.Spline3"/>
+    <classEntry path="Singularity.Geom.Wedge"/>
+    <classEntry path="Singularity.Interactive.PointSelector"/>
+    <classEntry path="Singularity.Interactive.RectangleSelector"/>
+    <classEntry path="Singularity.Numeric.Binomial"/>
+    <classEntry path="Singularity.Numeric.Consts"/>
+    <classEntry path="Singularity.Numeric.Gauss"/>
+    <classEntry path="Singularity.Rigs.Arm"/>
+    <classEntry path="Singularity.Rigs.BaseBone"/>
+    <classEntry path="Singularity.Rigs.Biped"/>
+    <classEntry path="Singularity.Rigs.Bone"/>
+    <classEntry path="Singularity.Rigs.Chain"/>
+    <classEntry path="Singularity.Rigs.Clavicle"/>
+    <classEntry path="Singularity.Rigs.Connector"/>
+    <classEntry path="Singularity.Rigs.Foot"/>
+    <classEntry path="Singularity.Rigs.Hand"/>
+    <classEntry path="Singularity.Rigs.Head"/>
+    <classEntry path="Singularity.Rigs.IBone"/>
+    <classEntry path="Singularity.Rigs.IChain"/>
+    <classEntry path="Singularity.Rigs.Leg"/>
+    <classEntry path="Singularity.Rigs.Neck"/>
+    <classEntry path="Singularity.Rigs.Pelvis"/>
+    <classEntry path="Singularity.Rigs.SimpleSpine"/>
+    <classEntry path="Singularity.Rigs.Template"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
 </flexLibProperties>
