@@ -13,7 +13,10 @@
 			{
 				event.stopImmediatePropagation();
 				
-				verticalScrollBar.viewport.verticalScrollPosition -= event.delta;
+				if ( event.shiftKey )
+					horizontalScrollBar.viewport.horizontalScrollPosition -= event.delta;
+				else
+					verticalScrollBar.viewport.verticalScrollPosition -= event.delta;
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
