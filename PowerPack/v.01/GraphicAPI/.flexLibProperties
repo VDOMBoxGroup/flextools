@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<flexLibProperties version="1">
-<includeClasses>
-<classEntry path="GraphicAPI.GraphicUtils"/>
-<classEntry path="GraphicAPI.drawing.BrushPatternStyle"/>
-<classEntry path="GraphicAPI.drawing.Draw"/>
-<classEntry path="GraphicAPI.drawing.DrawContext"/>
-<classEntry path="GraphicAPI.drawing.GraphicsContext"/>
-<classEntry path="GraphicAPI.drawing.PStroke"/>
-<classEntry path="GraphicAPI.drawing.StrokePatternStyle"/>
-<classEntry path="GraphicAPI.gapi_internal"/>
-<classEntry path="GraphicAPI.imageProcessing.Adjustment"/>
-<classEntry path="GraphicAPI.imageProcessing.Filters"/>
-<classEntry path="GraphicAPI.imageProcessing.Transform"/>
-</includeClasses>
-<includeResources/>
-<namespaceManifests/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="false" useMultiPlatformConfig="false" version="1">
+  <includeClasses>
+    <classEntry path="GraphicAPI.GraphicUtils"/>
+    <classEntry path="GraphicAPI.drawing.BrushPatternStyle"/>
+    <classEntry path="GraphicAPI.drawing.Draw"/>
+    <classEntry path="GraphicAPI.drawing.DrawContext"/>
+    <classEntry path="GraphicAPI.drawing.GraphicsContext"/>
+    <classEntry path="GraphicAPI.drawing.PStroke"/>
+    <classEntry path="GraphicAPI.drawing.StrokePatternStyle"/>
+    <classEntry path="GraphicAPI.gapi_internal"/>
+    <classEntry path="GraphicAPI.imageProcessing.Adjustment"/>
+    <classEntry path="GraphicAPI.imageProcessing.Filters"/>
+    <classEntry path="GraphicAPI.imageProcessing.Transform"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
 </flexLibProperties>
