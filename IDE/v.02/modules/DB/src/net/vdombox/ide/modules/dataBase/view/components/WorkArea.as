@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.components.tabNavigatorClasses.TabNavigator;
 	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.modules.dataBase.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
 	
 	import spark.primitives.Rect;
@@ -19,15 +20,14 @@ package net.vdombox.ide.modules.dataBase.view.components
 		
 		public function WorkArea()
 		{
-			//addEventListener( "selectedTabChanged", selectedTabChangedHandler );
+			addEventListener( "selectedTabChanged", selectedTabChangedHandler );
 			addEventListener( "tabAdded", numTabChangedHandler );
 			addEventListener( "tabRemoved", numTabChangedHandler );
-
 		}
 		
 		public function openEditor( objectVO : ObjectVO ) : IEditor
 		{
-			var editor : DataTableEditor = new DataTableEditor();
+			var editor : DataTable = new DataTable();
 			editor.percentHeight = 100;
 			editor.percentWidth = 100;
 			editor.objectVO = objectVO;
@@ -96,6 +96,23 @@ package net.vdombox.ide.modules.dataBase.view.components
 			return result;
 		}
 		
+		public function get selectedEditor() : IEditor
+		{
+			var result : IEditor;
+			var editor : *;
+			
+			for ( editor in _editors )
+			{
+				if ( _editors[ editor ] == selectedTab )
+				{
+					result = editor as IEditor;
+					break;
+				}
+			}
+			
+			return result;
+		}
+		
 		public function set selectedEditor( value : IEditor ) : void
 		{
 			if ( !value )
@@ -112,7 +129,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 		
 		private function numTabChangedHandler( event : Event ) : void
 		{
-			if( !tabBar.dataProvider || tabBar.dataProvider.length == 0 )
+			if( tabBar.dataProvider && tabBar.dataProvider.length == 0 )
 				return;
 			
 			var tab0 : Tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;
@@ -130,6 +147,12 @@ package net.vdombox.ide.modules.dataBase.view.components
 				if( tab1 )
 					tab1.closable = true;
 			}
+		}
+		
+		private function selectedTabChangedHandler( event : Event ) : void
+		{
+			// CHANGE
+			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CHANGE ) );
 		}
 		
 	}

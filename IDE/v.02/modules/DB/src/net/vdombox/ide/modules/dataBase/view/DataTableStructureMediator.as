@@ -2,47 +2,41 @@ package net.vdombox.ide.modules.dataBase.view
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
 	
 	import net.vdombox.ide.common.events.ExternalManagerEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
-	import net.vdombox.ide.modules.dataBase.view.components.DataTableEditor;
+	import net.vdombox.ide.modules.dataBase.view.components.DataTableStructure;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
-	public class DataTableEditorMediator extends Mediator implements IMediator, IExternalManager, IEventDispatcher
+	public class DataTableStructureMediator extends Mediator implements IMediator, IExternalManager
 	{
-		public static const NAME : String = "DataTableEditorMediator";
+		public static const NAME : String = "DataTableStructureMediator";
 		
 		private var dispatcher : EventDispatcher;
 		private var sessionProxy : SessionProxy;
 		
-		public function DataTableEditorMediator( viewComponent : Object = null )
+		public function DataTableStructureMediator( viewComponent : Object = null )
 		{
 			var instanceName : String = NAME + viewComponent.editorID;
 			super( instanceName, viewComponent );
 		}
 		
-		private function get dataTableEditor() : DataTableEditor
+		private function get dataTableStructure() : DataTableStructure
 		{
-			return viewComponent as DataTableEditor;
+			return viewComponent as DataTableStructure;
 		}
 		
 		override public function onRegister() : void
 		{
 			dispatcher = new EventDispatcher();
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			dataTableEditor.externalManager = this as IExternalManager;
-		}
-		
-		private function setExternalManager( event : DataTablesEvents ) : void
-		{
-			dataTableEditor.externalManager = this as IExternalManager;
+			dataTableStructure.externalManager = this as IExternalManager;
 		}
 		
 		override public function onRemove() : void
@@ -113,7 +107,5 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			return dispatcher.willTrigger( type );
 		}
-		
-		
 	}
 }

@@ -5,10 +5,11 @@
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  height="100%" width="100%">
 
-	<components:DataTablesTree id="dataTablesTree" 
-							   width="180" height="100%" />
-	
+
 	<components:WorkArea id="workArea" 
 		width="100%" height="100%" />
+	
+	<components:DataTablesTree id="dataTablesTree" 
+							   width="180" height="100%" />
 
 </s:HGroup>

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
+		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.events.ListEvent;
+			import mx.utils.UIDUtil;
+			
+			import net.vdombox.ide.common.vo.ObjectVO;
+			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
+			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
+			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;
+			import net.vdombox.view.Alert;
+			import net.vdombox.view.AlertButton;
+			
+			private var _objectVO : ObjectVO;
+			
+			private var manager : *;
+			private var queue : QueueManager;
+			private var tableStructure:XML;			/* XML got by vdom IDE (of existing table) */
+			private var tableID:String;
+			private var tableName:String;
+			
+			[Bindable]
+			private var columnsProvider:Array = [];	/* of Object */
+			private var columnsProviderOld:Array = [];	/* of Object */
+			
+			private var selectedItem : StructureVO;
+			
+			public function get editorID() : String
+			{
+				return _objectVO ? _objectVO.id : "";
+			}
+			
+			public function get editorName() : String
+			{
+				return _objectVO ? _objectVO.name : "";
+			}
+			
+			public function get objectVO() : ObjectVO
+			{
+				return _objectVO ? _objectVO : null;
+			}
+			
+			public function set objectVO( value : ObjectVO ) : void
+			{
+				_objectVO = value;
+			}
+			
+			public function set externalManager( ref: * ) : void 
+			{
+				manager = ref;
+				
+				requestTableStructure();
+			}
+			
+			private function requestTableStructure()  :void 
+			{
+				/* Init getting data from External Manager */
+				queue = new QueueManager( manager );
+				queue.reset();
+				
+				//manager.addEventListener( "callComplete", getTableStructureHandler );
+				
+				queue.addRequest(UIDUtil.createUID(), 'get_structure', '', getTableStructureHandler, null);
+				queue.execute();
+			}
+			
+			private function getTableStructureHandler( event : * ) : void 
+			{
+				
+				/* Applying structure data after 'get_structure' remote method */
+				var queryResult : XML = new XML( event.Result );
+				tableStructure = new XML( queryResult.tablestructure );		
+				
+				columnsProvider = []; /* Array of Object */
+				tableID = tableStructure.table.@id;
+				tableName = tableStructure.table.@name;
+				
+				var columnDef : XML;
+				for each ( columnDef in tableStructure.table.header.column ) 
+				{
+
+					var column : StructureVO = new StructureVO( columnDef );
+						
+					columnsProvider.push( column );	
+					columnsProviderOld.push( column.copy() );
+				}
+				
+				dataTable.dataProvider = columnsProvider;
+			}
+			
+			private function findRecordInOldDataProvider( structureID : String ) : StructureVO
+			{
+				var structureVO : StructureVO;
+				for each ( structureVO in columnsProviderOld )
+				{
+					if ( structureVO.id == structureID )
+						return structureVO;
+				}
+				return null;
+			}
+			
+			private function applyBtnClickHandler() : void 
+			{
+				var tt : int = 0;
+				
+				var newStructureVO : StructureVO;
+				var oldStructureVO : StructureVO;
+				var requestXML : XML;
+				
+				for each ( newStructureVO in columnsProvider )
+				{
+					requestXML =
+						<tableStructure>
+							<column 
+								id={newStructureVO.id}
+								name={newStructureVO.name}
+								type={newStructureVO.type}
+								notnull={newStructureVO.notnull.toString()}
+								primary={newStructureVO.primary.toString()}
+								autoincrement={newStructureVO.aincrement.toString()}
+								unique={newStructureVO.unique.toString()}
+								default={""}
+							/>
+						</tableStructure>;
+					
+					oldStructureVO = findRecordInOldDataProvider( newStructureVO.id );
+					
+					if ( oldStructureVO )
+					{
+						if ( newStructureVO.name != oldStructureVO.name || newStructureVO.type != oldStructureVO.type || newStructureVO.primary != oldStructureVO.primary || 
+							newStructureVO.aincrement != oldStructureVO.aincrement || newStructureVO.notnull != oldStructureVO.notnull || newStructureVO.unique != oldStructureVO.unique )
+						{
+							queue.addRequest( UIDUtil.createUID(), "update_column", requestXML.toXMLString(), null, null) ;
+						}
+					}
+					else
+					{
+						queue.addRequest( UIDUtil.createUID(), "add_column", requestXML.toXMLString(), null, null) ;
+					}
+				}
+				queue.execute();
+			}
+			
+			private function queueCommitCompleteHandler( event : QueueEvent ) : void 
+			{
+				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
+				//commit.enabled = false;
+				//__alertArea.selectedChild = __normal;
+				//updateQueueLength();
+				
+				/* ReRequest rows count */
+				/*queue.reset();
+				queue.addRequest( "callComplete", getTableStructureHandler );
+				queue.addRequest( UIDUtil.createUID(), 'get_count', '', countResponseHandler, null );
+				
+				/* ReRequest page */
+				/*queue.addRequest(
+					UIDUtil.createUID(),
+					'get_data',
+					'<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset></range>',
+					refreshDataGrid, null);
+				
+				verticalScrollPositionStore = dataTable.verticalScrollPosition;
+				
+				queue.execute();*/
+			}
+			
+			private function addBtnHandler() : void 
+			{
+				columnsProvider.push( new StructureVO() );
+				
+				dataTable.dataProvider = columnsProvider;
+				dataTable.selectedIndex = columnsProvider.length - 1;
+			}
+			
+			private function removeBtnHandler() : void 
+			{
+				
+				if (selectedItem.name == "id")
+					return;
+				
+				Alert.Show( "Remove: You might lose data! Do you really want to remove?", AlertButton.OK_No, this, removeSelectedColRequest );
+			}
+			
+			private function removeSelectedColRequest( event : CloseEvent ) : void 
+			{
+				/* Applying changes */
+				queue.addRequest( UIDUtil.createUID(), "delete_column", "<delete><column id='" + selectedItem.id + "' /></delete>", removeSelectedColOkHandler, null) ;
+				var newColsProvider:Array = [];
+				for each ( var item:Object in columnsProvider ) 
+				{
+					if ( item != selectedItem ) 
+						newColsProvider.push(item);
+				}
+				columnsProvider = newColsProvider;
+				
+				dataTable.dataProvider = columnsProvider;
+			}
+			
+			private function queueDeleteCompleteHandler() : void 
+			{
+				/* Remove the element */
+				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueDeleteCompleteHandler );
+				var newColsProvider:Array = [];
+				for each ( var item:Object in columnsProvider ) 
+				{
+					if ( item != selectedItem ) 
+						newColsProvider.push(item);
+				}
+				columnsProvider = newColsProvider;
+				
+				dataTable.dataProvider = columnsProvider;
+				
+			}
+			
+			private function removeSelectedColOkHandler() : void 
+			{
+				/* Remove the element */
+				var newColsProvider:Array = [];
+				for each ( var item:Object in columnsProvider ) 
+				{
+					if ( item != selectedItem ) 
+						newColsProvider.push(item);
+				}
+				columnsProvider = newColsProvider;
+				
+				dataTable.dataProvider = columnsProvider;
+				//enablePropertiesPanel(false);
+				//__removeBtn.enabled = false;
+			}
+			
+			protected function dataTable_changeHandler(event:ListEvent):void
+			{
+				// TODO Auto-generated method stub
+				selectedItem = dataTable.selectedItem as StructureVO;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:VGroup width="100%" height="100%" gap="0">
+		<mx:DataGrid id="dataTable" width="100%" height="100%" dataProvider="{columnsProvider}" 
+					 sortableColumns="false" editable="true" change="dataTable_changeHandler(event)">
+			<mx:columns>
+				<mx:DataGridColumn dataField="name" headerText="Name"/>
+				<mx:DataGridColumn dataField="type" headerText="Type"/>
+				
+				<mx:DataGridColumn dataField="primary" headerText="Primary key" editable="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.primary}" change="{data.primary = selectedCheck}"/>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				
+				<mx:DataGridColumn dataField="aincrement" headerText="Auto increment" editable="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.aincrement}" change="{data.aincrement = selectedCheck}"/>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				
+				<mx:DataGridColumn dataField="unique" headerText="Unique" editable="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.unique}" change="{data.unique = selectedCheck}"/>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				
+				<mx:DataGridColumn dataField="notnull" headerText="notnull" editable="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.notnull}" change="{data.notnull = selectedCheck}"/>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				
+			</mx:columns>
+		</mx:DataGrid>
+		
+		<s:Group width="100%" height="50">
+			<s:Rect width="100%" height="100%">
+				<s:fill>
+					<s:SolidColor color="#F0F0F0"/>
+				</s:fill>
+			</s:Rect>
+			
+			<s:HGroup width="100%" height="20" horizontalAlign="left" verticalAlign="middle" paddingLeft="10">
+			
+				<s:Button id="commit" label="commit" click="applyBtnClickHandler()" />
+			
+				<s:Button id="addNew" label="add" click="addBtnHandler()" />
+			
+				<s:Button id="delete" label="delete" click="removeBtnHandler()" />
+			</s:HGroup>
+		</s:Group>
+	</s:VGroup>
+	
+</s:Group>

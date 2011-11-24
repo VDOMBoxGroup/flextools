@@ -73,7 +73,6 @@ package net.vdombox.ide.modules.dataBase.view
 				if ( !requestQue )
 					requestQue = {};
 				
-				
 				if ( !requestQue.hasOwnProperty( newTableID ) )
 					requestQue[ newTableID ] = { open: false, change: true };
 				else
@@ -103,6 +102,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.DATA_BASE_TABLES_GETTED );
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.TABLE_GETTED);
+			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED);
 			
 			return interests;
 		}
@@ -166,6 +166,18 @@ package net.vdombox.ide.modules.dataBase.view
 					var objectVO : ObjectVO = body as ObjectVO;
 					
 					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, objectVO );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
+				{
+					if ( sessionProxy.selectedTable )
+						dataTablesTree.selectedObjectID = sessionProxy.selectedTable.id;
+					else if ( sessionProxy.selectedBase )
+						dataTablesTree.selectedPageID = sessionProxy.selectedBase.id;
+					else
+						dataTablesTree.selectedPageID = "";
 					
 					break;
 				}

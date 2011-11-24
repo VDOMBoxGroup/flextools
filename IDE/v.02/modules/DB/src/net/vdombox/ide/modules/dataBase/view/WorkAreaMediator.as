@@ -5,7 +5,10 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.EditorEvent;
+	import net.vdombox.ide.modules.dataBase.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
+	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
+	import net.vdombox.ide.modules.dataBase.view.components.DataTableEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.WorkArea;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -58,7 +61,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var body : Object = notification.getBody();
 			
 			var objectVO : ObjectVO;
-			var editor : IEditor;
+			var editor : DataTable;
 			
 			if ( !isActive && name != ApplicationFacade.BODY_START )
 				return;
@@ -86,14 +89,14 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.TABLE_GETTED:
 				{
 					objectVO = body as ObjectVO;
-					editor = workArea.getEditorByVO( objectVO );
+					editor = workArea.getEditorByVO( objectVO ) as DataTable;
 					
 					if ( !editor )
 					{
-						editor = workArea.openEditor( objectVO );
-						if ( facade.retrieveMediator( DataTableEditorMediator.NAME + editor.editorID ) != null )
-							facade.removeMediator( DataTableEditorMediator.NAME + editor.editorID  );
-						facade.registerMediator( new DataTableEditorMediator( editor ) );
+						editor = workArea.openEditor( objectVO ) as DataTable;
+						if ( facade.retrieveMediator( DataTableMediator.NAME + editor.editorID ) != null )
+							facade.removeMediator( DataTableMediator.NAME + editor.editorID  );
+						facade.registerMediator( new DataTableMediator( editor ) );
 					}
 					else
 						workArea.selectedEditor = editor;
@@ -114,12 +117,27 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			workArea.addEventListener( EditorEvent.REMOVED, editor_removedHandler, true, 0, true );
 			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
 		}
 		
 		private function removeHandlers() : void
 		{
 			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
 			workArea.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
+		}
+		
+		private function changeHandler( event : WorkAreaEvent ) : void
+		{
+			var selectedEditor : IEditor = workArea.selectedEditor;
+			
+			if ( selectedEditor && selectedEditor is DataTable )
+			{
+				
+				if ( selectedEditor.objectVO )
+					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.objectVO );
+			}
+			
 		}
 		
 		private function removedFromStageHandler( event : Event ) : void
@@ -129,20 +147,17 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function editor_removedHandler( event : EditorEvent ) : void
 		{
-			workArea.closeEditor( (event.target as IEditor).objectVO );
-			//facade.removeMediator( DataTableEditorMediator.NAME + ( event.target as IEditor ).editorID  );
-			//sendNotification( ApplicationFacade.EDITOR_REMOVED, event.target as IEditor );
-			//workArea.closeEditor( );
+			var editor : IEditor = event.target as IEditor;
+			if ( editor is DataTable )
+			{
+				facade.removeMediator( DataTableMediator.NAME + editor.editorID  );
+				workArea.closeEditor( editor.objectVO );
+			}
 		}
 		
 		private function clearData() : void
 		{
 			workArea.closeAllEditors();
 		}
-		
-		
-		
-		
-		
 	}
 }

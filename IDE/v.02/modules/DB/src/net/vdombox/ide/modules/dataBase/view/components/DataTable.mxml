@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
+		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
+		 xmlns:components="net.vdombox.ide.modules.dataBase.view.components.*"
+		 removedFromStage="group1_removedFromStageHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.common.vo.ObjectVO;
+			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
+			import net.vdombox.ide.modules.dataBase.events.EditorEvent;
+			
+			[Bindable]
+			private var _objectVO : ObjectVO;
+			
+			public function get editorID() : String
+			{
+				return _objectVO ? _objectVO.id : "";
+			}
+			
+			public function get editorName() : String
+			{
+				return _objectVO ? _objectVO.name : "";
+			}
+			
+			public function get objectVO() : ObjectVO
+			{
+				return _objectVO ? _objectVO : null;
+			}
+			
+			public function set objectVO( value : ObjectVO ) : void
+			{
+				_objectVO = value;
+				if ( dataEditor )
+					dataEditor.objectVO = value;
+			}
+			
+			protected function group1_removedFromStageHandler(event:Event):void
+			{
+				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
+			}
+			
+			protected function data_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				dataEditor.visible = true; 
+				DataStructure.visible = false
+			}
+			
+			protected function structure_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				dataEditor.visible = false; 
+				DataStructure.visible = true;
+			}
+			
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	<s:VGroup paddingTop="5" width="100%" height="100%" gap="0">
+		<s:HGroup width="100%" height="20" horizontalAlign="right" paddingRight="15">
+			
+			<s:Button id="data" label="Data" click="data_clickHandler(event)" />
+			
+			<s:Button id="structure" label="Structure" click="structure_clickHandler(event)"/>
+			
+		</s:HGroup>
+		
+		<s:Group width="100%" height="100%">
+			
+			<components:DataTableEditor  id="dataEditor" width="100%" height="100%" objectVO="{_objectVO}" visible="true"/>
+			
+			<components:DataTableStructure id="DataStructure" width="100%" height="100%" objectVO="{_objectVO}" visible="false"/>
+			
+		</s:Group>
+		
+	</s:VGroup>
+</s:Group>

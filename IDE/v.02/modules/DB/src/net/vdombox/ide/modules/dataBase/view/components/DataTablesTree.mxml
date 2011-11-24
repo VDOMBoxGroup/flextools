@@ -163,6 +163,56 @@
 					lastHighlightedItem = null;
 			}
 			
+			override public function  validateProperties():void
+			{
+				super.validateProperties();
+				
+				if ( _needUpdateProperties )
+				{
+					_needUpdateProperties 		= false;
+					_needValideteDisplayList 	= true;
+					
+					openTree( elementForSelection );
+					
+					tablesTree.selectedItem = elementForSelection;
+					
+					invalidateDisplayList();
+				}
+				
+			}
+			
+			private var _needValideteDisplayList : Boolean = false;
+			override public function  validateDisplayList():void
+			{
+				// scrolling to necessary position
+				super.validateDisplayList();
+				
+				if ( !_needValideteDisplayList )
+					return
+					
+					_needValideteDisplayList = false;
+				
+				if (tablesTree.selectedIndex == -1 )
+					return;
+				
+				var index : int =  tablesTree.selectedIndex;
+				var newVPos:int;
+				
+				tablesTree.scrollToIndex(index);
+
+			}
+			
+			private function openTree( item : Object ) : void
+			{
+				var parentItem : Object = XML( item ).parent();
+				
+				if ( parentItem )
+				{
+					openTree( parentItem );
+					tablesTree.expandItem( parentItem, true, false );
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
