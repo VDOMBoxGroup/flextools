@@ -566,7 +566,7 @@
 
             private function stepCompleteHandler(event:Event):void 
 			{
-            	if(progressBar.value+1<progressBar.maximum/2+1);
+            	if((progressBar.value+1) < (progressBar.maximum/2+1))
             		progressBar.setProgress(progressBar.value+1, progressBar.maximum);
 				
 				//ContextManager.templateStruct.generate(true);	            		
