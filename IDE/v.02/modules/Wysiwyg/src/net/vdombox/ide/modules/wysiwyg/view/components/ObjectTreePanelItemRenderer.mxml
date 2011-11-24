@@ -53,10 +53,7 @@
 			{
 				super.data = value;
 
-//				if ( super.data != value )
-					dataChanged = true
-
-
+				dataChanged = true
 				_data = value as XML;
 			}
 			
