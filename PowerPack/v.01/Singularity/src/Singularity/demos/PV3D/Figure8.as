@@ -14,7 +14,7 @@
 //
 //
 
-package org.papervision3d.examples
+package Singularity.demos.PV3D
 {
   // flash
   import flash.display.Sprite;

@@ -1,4 +1,4 @@
-package org.papervision3d.flex
+package Singularity.demos.PV3D
 {
 	import flash.display.Graphics;
 	import flash.display.Sprite;

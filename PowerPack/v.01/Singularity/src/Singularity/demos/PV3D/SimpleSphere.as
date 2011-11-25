@@ -14,7 +14,7 @@
 //
 //
 
-package org.papervision3d.examples
+package Singularity.demos.PV3D
 {
   // flash
   import flash.display.Sprite;
@@ -22,12 +22,7 @@ package org.papervision3d.examples
   import flash.events.Event;
 
   // Papervision
-  import org.papervision3d.cameras.Camera3D;
-  import org.papervision3d.materials.ColorMaterial;
-  import org.papervision3d.objects.DisplayObject3D;
-  import org.papervision3d.objects.Sphere;
-  import org.papervision3d.objects.Cube;
-  import org.papervision3d.scenes.Scene3D;
+ 
 	
   // Singularity
   import Singularity.Events.SingularityEvent;
@@ -40,7 +35,7 @@ package org.papervision3d.examples
   {
   	// core
   	private var __pv3dSprite:Sprite;        // main container for P3D Scene
-    private var __camera:Camera3D;          // target camera for the scene
+    private var __camera:Camera3;          // target camera for the scene
     private var __scene:Scene3D;            // our very simple scene :)
     private var __rootNode:DisplayObject3D; // root node of the scene
     
