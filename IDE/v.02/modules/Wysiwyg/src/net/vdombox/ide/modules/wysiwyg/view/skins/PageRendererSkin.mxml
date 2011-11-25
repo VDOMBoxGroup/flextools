@@ -10,17 +10,19 @@
 			import net.vdombox.components.VDOMScroller;
 			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
 			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			
 			protected function scroller_creationCompleteHandler(event:FlexEvent):void
 			{
-				scroller.verticalScrollBar.setStyle("skinClass", VDOMVScrollBarSkin );
-				scroller.horizontalScrollBar.setStyle("skinClass", VDOMHScrollBarSkin );
+				scroller.verticalScrollBar.setStyle("skinClass", VDOMWorkAreaVScrollBarSkin );
+				scroller.horizontalScrollBar.setStyle("skinClass", VDOMWorkAreaHScrollBarSkin );
 				addEventListener( MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 			}
 			
 			private function mouseWheelHandler( event : MouseEvent ) : void
 			{
-				event.delta = event.delta > 0 ? 20 : -20;
+				event.delta = event.delta > 0 ? 30 : -30;
 			}
 			
 		]]>
@@ -56,9 +58,9 @@
 	
 	<components1:VDOMScroller id="scroller"
 				focusEnabled="false"
-				bottom="0" left="0" right="0" top="0" 
+				bottom="0" left="0" right="0" top="0"
 				minViewportInset="1" creationComplete="scroller_creationCompleteHandler(event)">
-
+				
 		<s:Group>
 			<s:Group id="background" width="{dataGroup.width}" height="{dataGroup.height}"
 					 resize="parentApplication.dispatchEvent(new Event('resizeMainWindow'))"/> <!-- setbackground image and not set all element-->
