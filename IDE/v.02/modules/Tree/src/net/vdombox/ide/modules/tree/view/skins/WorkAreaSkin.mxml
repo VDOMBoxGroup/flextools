@@ -148,7 +148,7 @@
 	</s:HGroup>
 
 	<s:Group id="workLayers"
-			 bottom="10" left="10" right="10" top="30">
+			 bottom="0" left="0" right="0" top="22">
 		<s:Rect height="100%" width="100%">
 			<s:fill>
 				<s:SolidColor color="black"
