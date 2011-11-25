@@ -53,8 +53,18 @@
 				var resRegExp : RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
 			}
 
+			public function refresh( item : IRenderer ) : void
+			{
+				
+			}
+			
 			public function close() : void
 			{
+			}
+			
+			public function saveValue() : String
+			{
+				return "";
 			}
 
 			private function extractAttributes( item : IRenderer ) : Object

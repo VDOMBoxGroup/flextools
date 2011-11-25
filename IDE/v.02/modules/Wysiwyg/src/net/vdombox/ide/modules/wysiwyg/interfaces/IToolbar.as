@@ -12,8 +12,12 @@ package net.vdombox.ide.modules.wysiwyg.interfaces
 //		function get vdomObjectAttributesVO() : VdomObjectAttributesVO 	
 
 		function init( item : IRenderer ) : void
+			
+		function refresh( item : IRenderer ) : void
 
 		function close() : void
+			
+		function saveValue() : String
 			
 		function get vdomObjectAttributesVO(): VdomObjectAttributesVO 	
 	}

@@ -153,8 +153,10 @@
 				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
 				addEventListener( RendererEvent.MOVE, renderer_movedHandler, true, 0, true );
-				addEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformMarker_tansformCompleteHandler, true, 0, true );
+				addEventListener( RendererEvent.HTML_ADDED, renderer_htmlAddedHandler, true, 0, true );
 				
+				addEventListener( TransformMarkerEvent.TRANSFORM_BEGIN, transformMarker_tansformBeginHandler, true, 0, true );
+				addEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformMarker_tansformCompleteHandler, true, 0, true );
 				
 			}
 			
@@ -169,7 +171,7 @@
 
 			private function refreshToolbar() : void
 			{
-
+				toolbarPanel.refresh();
 			}
 
 			private function createEditorVO() : EditorVO
@@ -242,7 +244,18 @@
 
 				dispatchEvent( ee );
 			}
+			
+			private function renderer_htmlAddedHandler(event : RendererEvent):void
+			{
+				refreshToolbar();
+			}
 
+			private function transformMarker_tansformBeginHandler( event : TransformMarkerEvent ) : void
+			{
+				trace ("-- [VdomObjectEditor] transformMarker_tansformBegin");
+				toolbarPanel.saveProperties();
+			}
+			
 			private function transformMarker_tansformCompleteHandler( event : TransformMarkerEvent ) : void
 			{
 				var ee : EditorEvent = new EditorEvent( EditorEvent.RENDERER_TRANSFORMED );

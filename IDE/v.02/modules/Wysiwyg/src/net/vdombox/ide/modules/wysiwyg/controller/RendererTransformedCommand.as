@@ -18,6 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		
 		override public function execute( notification : INotification ) : void
 		{
+			trace ('--- Wysiwyg: RendererTransformedCommand');
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			

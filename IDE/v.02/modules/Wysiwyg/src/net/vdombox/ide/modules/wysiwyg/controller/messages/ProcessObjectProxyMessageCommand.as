@@ -79,7 +79,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 							if ( vdomObjectVO && vdomObjectVO.id == vdomObjectAttributesVO.vdomObjectVO.id )
 							{
 								sendNotification( ApplicationFacade.GET_WYSIWYG, vdomObjectAttributesVO.vdomObjectVO );
-								trace("Wysiwig");
+								trace("sendNotification: ApplicationFacade.GET_WYSIWYG");
 								break;
 							}
 						}

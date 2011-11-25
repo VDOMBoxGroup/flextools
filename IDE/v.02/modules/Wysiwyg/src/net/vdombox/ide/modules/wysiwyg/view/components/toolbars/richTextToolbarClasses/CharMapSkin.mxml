@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="{hostComponent.init()}">
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" 
+		creationComplete="{hostComponent.init()}"
+		width="575" minWidth="575">
+	
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap")]
@@ -30,7 +34,9 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:VGroup width="100%" height="100%">
+	<s:VGroup width="100%" height="100%"
+			  verticalAlign="middle"
+			  horizontalAlign="center">
 		<s:Group width="100%" height="40">
 			<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
 				<s:Label text="Select custom character"/>			
@@ -46,7 +52,8 @@
 			
 			<mx:Grid id="charGrid"
 					 horizontalGap="3" verticalGap="3"
-					 click="{hostComponent.mouseClickHandler(event)}"
+					 doubleClickEnabled="true"
+					 doubleClick="{hostComponent.mouseClickHandler(event)}"
 					 mouseOver="{hostComponent.mouseOverHandler(event)}" />
 			
 			<s:VGroup horizontalAlign="center" gap="4">

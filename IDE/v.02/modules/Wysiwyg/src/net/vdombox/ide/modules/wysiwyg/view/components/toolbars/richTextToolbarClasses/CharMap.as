@@ -3,7 +3,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbar
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.ui.Keyboard;
 	
 	import mx.containers.Grid;
 	import mx.containers.GridItem;
@@ -14,17 +16,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbar
 	import mx.states.OverrideBase;
 	
 	import spark.components.TitleWindow;
+	import spark.components.VGroup;
 	
 
 
 	public class CharMap extends TitleWindow
 	{
+		public static const EVENT_CHAR_SELECTED : String = "charSelected";
+		
+		
 		public function CharMap()
 		{
 		}
 		
 
-		
 		[SkinPart( required="true" )]
 		public var charGrid : Grid;
 		
@@ -60,6 +65,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbar
 		
 		public function init() : void
 		{
+			setFocus();
+			addHandlers();
 			
 			var charsPerRow : uint = 20, tdWidth : uint = 20, tdHeight : uint = 20;
 			var gridRow : GridRow, gridItem : GridItem;
@@ -67,6 +74,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbar
 			
 			gridRow = new GridRow();
 			charGrid.addChild( gridRow );
+			
 			var cols : uint = 0;
 			var charLabel : Label;
 			for ( var i : uint = 0; i < charMapLength; i++ )
@@ -103,8 +111,33 @@ package net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbar
 					charGrid.addChild( gridRow );
 				}
 			}
+			
 		}
 		
+		private function addHandlers() : void
+		{
+			addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		}
+		
+		private function removeHandlers() : void
+		{
+			removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		}
+		
+		private function onKeyDown(keyEvent : KeyboardEvent):void
+		{
+			switch(keyEvent.keyCode)
+			{
+				case Keyboard.ESCAPE:
+				{
+					keyEvent.stopImmediatePropagation();
+					
+					closeHandler();
+					break;
+				}
+			}
+			
+		}
 		
 		public function getElementByClass( target : DisplayObject, classElement : Class, container : DisplayObjectContainer ) : DisplayObject
 		{
@@ -174,13 +207,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbar
 			{
 				
 				_charCode = currentElement.data[ 1 ].toString();
-				dispatchEvent( new Event( 'charSelected' ) );
-				PopUpManager.removePopUp( this );
+				dispatchEvent( new Event( EVENT_CHAR_SELECTED ) );
+				
+				closeHandler();
 			}
 		}
 		
-		public function closeHandler() : void
+		public function closeHandler(event:Event = null) : void
 		{
+			removeHandlers();
 			
 			PopUpManager.removePopUp( this );
 		}

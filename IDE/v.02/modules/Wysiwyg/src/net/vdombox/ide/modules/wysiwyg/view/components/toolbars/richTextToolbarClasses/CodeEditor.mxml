@@ -3,7 +3,12 @@
 				
 				height="300" title="HTML Source Editor" width="400"
 				cornerRadius="0"
-				borderAlpha="1" close="closeWithoutSave()" showCloseButton="true" titleStyleName="titleStyle">
+				borderAlpha="1" 
+				close="closeWithoutSave()" 
+				showCloseButton="true" 
+				
+				titleStyleName="titleStyle"
+				creationComplete="setFocus(); addHandlers();">
 
 	<mx:Style>
 		.titleStyle {
@@ -15,6 +20,8 @@
 		<![CDATA[
 			import mx.managers.PopUpManager;
 
+			public static const EVENT_CODE_CHANGED : String = "codeChanged";
+			
 			[Bindable]
 			private var _codeText : String
 
@@ -30,12 +37,46 @@
 
 			private function closeWithSave() : void
 			{
-				dispatchEvent( new Event( 'updateCode' ) );
+				this.dispatchEvent(new Event(EVENT_CODE_CHANGED));
+				
+				closeHandler();
 			}
 
 			private function closeWithoutSave() : void
 			{
+				closeHandler();
+			}
+			
+			private function closeHandler():void
+			{
+				removeHandlers();
+				
 				PopUpManager.removePopUp( this );
+			}
+			
+			private function addHandlers() : void
+			{
+				addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			}
+			
+			private function removeHandlers() : void
+			{
+				removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			}
+			
+			private function onKeyDown(keyEvent : KeyboardEvent):void
+			{
+				switch(keyEvent.keyCode)
+				{
+					case Keyboard.ESCAPE:
+					{
+						keyEvent.stopImmediatePropagation();
+						
+						closeWithoutSave();
+						break;
+					}
+				}
+				
 			}
 		]]>
 	</mx:Script>

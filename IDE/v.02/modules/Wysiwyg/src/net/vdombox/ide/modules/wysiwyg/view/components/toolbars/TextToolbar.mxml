@@ -137,6 +137,11 @@
 				}
 			}
 
+			public function refresh( item : IRenderer ) : void
+			{
+				
+			}
+			
 			public function close() : void
 			{
 				if ( !isInited )
@@ -158,6 +163,11 @@
 				elementForEditing.selectable = false;
 
 				UIComponent( item ).setFocus();
+			}
+			
+			public function saveValue() : String
+			{
+				return "";
 			}
 
 			private function extractAttributes( item : IRenderer ) : Object

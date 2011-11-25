@@ -29,6 +29,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var MOUSE_UP_MEDIATOR : String = "rendererMouseUpMediator";
 		
 		public static var CLEAR_RENDERER : String = "clearRenderer";
+		
+		public static var HTML_ADDED	: String = "rendererHTMLAdded";
 
 		public var object : Object;
 		

@@ -21,10 +21,51 @@
 		import mx.managers.PopUpManager;
 		
 		private var currentValue:String;
+		private var _hostName : String;
 		
-		public function get url():String
+		public static const EVENT_LINK_SELECTED : String = "linkSelected";
+		
+		private const HTTP_PREFIX	: String = "http://";
+		private const PAGE_PREFIX	: String = "/";
+		private const PAGE_POSTFIX	: String = ".vdom";
+		
+		public function get url() : String
 		{
 			return currentValue;
+		}
+		
+		[Bindable]
+		public function get hostName() : String
+		{
+			if (!_hostName)
+				return "";
+			
+			return _hostName; 
+		}
+		
+		public function set hostName(aHostName : String):void
+		{
+			_hostName = aHostName;
+		}
+		
+		private function get isLinkUrl() : Boolean
+		{
+			if (currentValue.indexOf(HTTP_PREFIX) >= 0)
+			{
+				return true;
+			}
+			
+			return false;
+		}
+		
+		private function get isPageUrl() : Boolean
+		{
+			if (currentValue.indexOf(PAGE_PREFIX) == 0 && currentValue.indexOf(PAGE_POSTFIX) >= 0)
+			{
+				return true;
+			}
+			
+			return false;
 		}
 		
 		private function closeWithSave():void
@@ -37,23 +78,56 @@
 					return;
 				}
 					
-				currentValue = "http://" + linkURL.text;
+				currentValue = HTTP_PREFIX + linkURL.text;
 			}
 			else
 			{
-				currentValue = "/"+XML(pageURL.selectedItem).@data+".vdom";
+				currentValue = PAGE_PREFIX + XML(pageURL.selectedItem).@data + PAGE_POSTFIX;
 			}
 				
-			dispatchEvent(new Event('linkSelected'));
+			dispatchEvent(new Event(EVENT_LINK_SELECTED));
+			
+			closeHandler();
 		}
 		
 		private function closeHandler():void
 		{
+			removeHandlers();
+			
 			PopUpManager.removePopUp(this);
+		}
+		
+		private function addHandlers() : void
+		{
+			addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		}
+		
+		private function removeHandlers() : void
+		{
+			removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		}
+		
+		private function onKeyDown(keyEvent : KeyboardEvent):void
+		{
+			switch(keyEvent.keyCode)
+			{
+				case Keyboard.ESCAPE:
+				{
+					keyEvent.stopImmediatePropagation();
+					
+					closeHandler();
+					break;
+				}
+				
+			}
+			
 		}
 		
 		private function creationCompleteHandler():void
 		{
+			setFocus();
+			addHandlers();
+			
 //			var dataProvider:XMLList =  new XMLList();
 //			
 //			var lp:XMLList = dataManager.listPages;
@@ -77,7 +151,7 @@
 				pageURL.enabled = false;
 			}"/>
 		<mx:Label  text="http://" fontWeight="bold"/>
-		<mx:TextInput id="linkURL" width="200" fontWeight="bold" enabled="true"/>
+		<mx:TextInput id="linkURL" text="{hostName}" width="200" fontWeight="bold" enabled="true"/>
 	</mx:HBox>
 	
 	<mx:HBox width="100%" label="Link URL:">

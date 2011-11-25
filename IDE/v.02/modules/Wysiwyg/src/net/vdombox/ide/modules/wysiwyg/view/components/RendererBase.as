@@ -693,6 +693,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			html.htmlText = htmlText;
 			
 			parentContainer.addElement(html);
+			
+			dispatchEvent(new RendererEvent(RendererEvent.HTML_ADDED));
 
 		}
 

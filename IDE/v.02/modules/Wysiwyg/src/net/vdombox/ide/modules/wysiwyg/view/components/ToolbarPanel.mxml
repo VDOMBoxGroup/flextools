@@ -122,16 +122,8 @@
 					}
 				}
 				
-				if( currentToolbar )
-				{
-					visible = true;
-					includeInLayout = true;
-				}
-				else
-				{
-					visible = false;
-					includeInLayout = false;
-				}
+				visible = currentToolbar ? true : false;
+				includeInLayout = currentToolbar ? true : false;
 			}
 			
 			private function toolbarChageHandle( event : Event ) : void
@@ -143,7 +135,21 @@
 					
 					dispatchEvent( editorEvent );
 			}
-				
+			
+			public function refresh() : void 
+			{
+				trace ('ToolbarPanel refresh: _currentToolbar = ' + _currentToolbar);
+				if (currentToolbar)
+					currentToolbar.refresh(_selectedRenderer);
+			}
+			
+			public function saveProperties():void
+			{
+				trace ('ToolbarPanel saveProperties');
+				if (currentToolbar)
+					currentToolbar.saveValue();
+			}
+			
 		]]>
 	</fx:Script>
 </s:SkinnableContainer>

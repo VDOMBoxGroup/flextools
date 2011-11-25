@@ -636,8 +636,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var selectPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
 			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			
-			
-			
 			var pageRender : PageRenderer = rendProxy.getRendererByVO( selectPage ) as PageRenderer;
 			
 			if ( !pageRender )

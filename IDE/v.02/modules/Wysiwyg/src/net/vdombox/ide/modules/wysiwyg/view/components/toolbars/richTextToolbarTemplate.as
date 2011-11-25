@@ -7,11 +7,11 @@ private var template:String =
 		"<script>tinyMCE.init(" + 
 			"{" + 
 				"mode: \"none\", " +
-				"force_br_newlines: \"true\", " + 
 				"theme: \"advanced\", " + 
 				"browsers: \"gecko\", " + 
 				"dialog_type : \"modal\", " + 
 				"src_mode: \"_src\", " + 
+				
 				"height:\"100%\",  " + 
 				"width:\"100%\"" + 
 			"});" + 
@@ -19,7 +19,7 @@ private var template:String =
 	"</head>" + 
 "<body>" + 
 	"<div>" + 
-		"<textarea id=\"content\" name=\"content\"></textarea>" + 
+		"<textarea id=\"elm1\" name=\"elm1\"></textarea>" + 
 	"</div>" + 
 "</body>" + 
 "</html>"

@@ -470,6 +470,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			transformation = true;
 
+			this.dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN));
+			
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
 
@@ -538,6 +540,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseUpHandler( event : MouseEvent ) : void
 		{
+			trace ("-- mouseUpHandler");
 			if ( !stage )
 				return;
 
@@ -634,6 +637,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
+			trace ("-- mouseMoveHandler");
 			if ( itemChanged )
 				return;
 
@@ -841,6 +845,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function stage_mouseClickHandler( event : MouseEvent ) : void
 		{
+			trace ("-- stage_mouseClickHandler");
 			stage.removeEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
 			
 			event.stopImmediatePropagation();

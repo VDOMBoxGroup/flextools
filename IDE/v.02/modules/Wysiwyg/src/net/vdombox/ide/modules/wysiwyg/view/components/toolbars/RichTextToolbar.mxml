@@ -28,8 +28,6 @@
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.LinkSelection;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.FlatButtonSkin;
 			
-			private var HTMLEditorLoader : HTMLLoader;
-			
 			public var attributesObject : Object;
 			
 			private var _item : IRenderer;
@@ -56,7 +54,7 @@
 				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO(_item.vdomObjectVO);
 				var attributeVO : AttributeVO = new AttributeVO( "value" );
 				
-				attributeVO.value = tinyMCE.getContent();
+				attributeVO.value = activeEditor.getContent();
 				vdomObjectAttributesVO.attributes = [attributeVO];
 				
 				return vdomObjectAttributesVO;
@@ -67,18 +65,13 @@
 				return _item;
 			}
 			
-			//			public function set selectedItem( value : Item ) : void
-			//			{
-			//				_selectedItem = value;
-			//			}
-			
 			private function get editableHTML() : HTML
 			{
 				var edHTML : Object;
 				
 				try
 				{
-					edHTML = _item.editableComponent
+					edHTML = _item.editableComponent;
 				}
 				catch ( error : Error )
 				{
@@ -106,7 +99,7 @@
 				var tnMCE : *;
 				try
 				{
-					tnMCE = HTMLEditorLoader.window.tinyMCE;
+					tnMCE = item.editableComponent.domWindow.tinyMCE;
 				}
 				catch ( error : Error )
 				{
@@ -115,34 +108,33 @@
 				return tnMCE;
 			}
 			
-			private function get elementForEditing() : *
+			private function get activeEditor() : *
 			{
-				var efEditing : *;
-				try
-				{
-					efEditing = editableHTML.domWindow.document.getElementById( "xEditingArea" );
-				}
-				catch ( error : Error )
-				{
-				}
+				if (!tinyMCE)
+					return null;
 				
-				return efEditing;
+				return tinyMCE.activeEditor;
+			}
+			
+			private function get selection() : *
+			{
+				if (!activeEditor)
+					return null;
+				
+				return activeEditor.selection;
 			}
 			
 			private var currentRange : *;
 			
-			public function init( item : IRenderer ) : void
+			public function init( item_ : IRenderer ) : void
 			{
-				registerEvent( false );
-				HTMLEditorLoader = null;
-				
-				if ( !item.editableComponent )
+				if ( !item_.editableComponent )
 				{
-					_item = null
+					_item = null;
 					return;
 				}
 				
-				_item = item;
+				_item = item_;
 				
 				try
 				{
@@ -155,11 +147,6 @@
 				
 				attributesObject = extractAttributes( _item );
 				
-				HTMLEditorLoader = new HTMLLoader();
-				HTMLEditorLoader.placeLoadStringContentInApplicationSandbox = true;
-				
-				HTMLEditorLoader.addEventListener( HTMLUncaughtScriptExceptionEvent.UNCAUGHT_SCRIPT_EXCEPTION, HTMLEditorLoader_uncaughtScriptException );
-				
 				if ( !editableHTML.loaded )
 					editableHTML.addEventListener( Event.COMPLETE, editableHTML_completeHandler );
 				else
@@ -167,39 +154,38 @@
 				
 			}
 			
+			public function refresh( item_ : IRenderer ) : void
+			{
+				init(item_);
+			}
+			
 			public function close() : void
 			{
-				registerEvent( false );
+				removeAllHandlers();
 				
-				var value : String;
-				
-				try
-				{
-					var body : * = elementForEditing.contentWindow.document.getElementsByTagName( "body" )[ 0 ];
-					body.style.marginLeft = "0";
-					body.style.marginRight = "0";
-					body.style.paddingTop = "0";
-					body.style.paddingBottom = "0";
-				}
-				catch( error : Error )
-				{
-				}
+				bodyTag.innerText = saveValue();
+				UIComponent( item ).setFocus();
+			}
+			
+			public function saveValue() : String
+			{
+				var value : String = "";
 				
 				if ( tinyMCE )
 				{
-					value = tinyMCE.getContent();
+					value = activeEditor.getContent();
 					attributesObject[ "value" ].value = value;
 					
 					dispatchEvent( new Event( Event.CHANGE ) );
 				}
 				
-				bodyTag.innerText = value;
-				HTMLEditorLoader = null;
-				UIComponent( item ).setFocus();
-				//	item.needRefresh = true;
-				//				editableHTML.editabledText = value;
-				
-				//				selectedItem.editableAttributes[ 0 ].attributes[ "value" ] = value;
+				return value;
+			}
+			
+			private function removeAllHandlers() : void
+			{
+				editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
+				editableHTML.removeEventListener( Event.HTML_DOM_INITIALIZE, onTinyHTMLDomInitalize );
 			}
 			
 			private function extractAttributes( item : IRenderer ) : Object
@@ -241,6 +227,12 @@
 					
 					if ( attributeName == "textalign" )
 						attributesObject[ "align" ] = new AttributeVO( "align", editableContentAttribute[ 0 ] );
+					
+					if ( attributeName == "width" )
+						attributesObject[ "width" ] = new AttributeVO( "width", editableContentAttribute[ 0 ] );
+					
+					if ( attributeName == "height" )
+						attributesObject[ "height" ] = new AttributeVO( "height", editableContentAttribute[ 0 ] );
 				}
 				
 				if ( attributesObject.hasOwnProperty( "value" ) )
@@ -249,91 +241,28 @@
 				return attributesObject;
 			}
 			
-			private function registerEvent( flag : Boolean ) : void
-			{
-				if ( flag )
-				{
-					HTMLEditorLoader.addEventListener( Event[ "HTML_DOM_INITIALIZE" ], HTMLEditorLoader_HTMLDomInitalizeHandler );
-				}
-				else
-				{
-					if ( editableHTML )
-					{
-						editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
-						
-						editableHTML.removeEventListener( KeyboardEvent.KEY_DOWN, editableElement_KeyDownHandler, true );
-						editableHTML.removeEventListener( KeyboardEvent.KEY_UP, editableElement_KeyUpHandler );
-					}
-					
-					if ( HTMLEditorLoader )
-					{
-						HTMLEditorLoader.removeEventListener( Event[ "HTML_DOM_INITIALIZE" ], HTMLEditorLoader_HTMLDomInitalizeHandler );
-						
-						HTMLEditorLoader.removeEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
-					}
-				}
-			}
-			
-			private function setIFrame( iFrameValue : *, contentDocumentValue : * ) : void
-			{
-				if ( iFrameValue )
-					var iFrame : * = iFrameValue;
-				
-				if ( contentDocumentValue )
-					var contentDocument : * = contentDocumentValue;
-			}
-			
-			private function recalculateSize() : void
-			{
-				if ( !elementForEditing || !elementForEditing.contentDocument )
-					return;
-				
-				var hght : Number = 0;
-				var chi : * = elementForEditing.contentDocument.body.lastChild;
-				
-				if (chi != null) {
-					var i : uint = 0;
-					
-					while ( chi[ i ] )
-					{
-						hght += chi[ i ].offsetHeight + chi[ i ].offsetTop;
-						i++;
-					}
-					
-					if ( chi.offsetHeight )
-						hght = chi.offsetHeight + chi.offsetTop + 15;
-					else
-						hght = elementForEditing.contentDocument.body.offsetHeight + elementForEditing.contentDocument.body.offsetTop + 15;
-				}
-				
-				if ( Math.abs( editableHTML.height - hght ) > 16 && hght > 10 )
-				{
-					editableHTML.height = hght;
-					UIComponent( _item ).invalidateSize();
-				}
-			}
-			
-			
-			
 			private function execCommand( commandName : String, commandAttributes : String = null ) : void
 			{
 				tinyMCE.execCommand( commandName, false, commandAttributes );
 			}
 			
-			private function insertLink() : void
+			private function tryToOpenInsertLinkPopup():void
 			{
-				btnLink.selected = false;
-				var currentSelection : * = elementForEditing.contentWindow.getSelection();
-				try
-				{
-					currentRange = currentSelection.getRangeAt( 0 );
-				}
-				catch ( error : Error )
-				{
-				}
+				if (!selection)
+					return;
 				
+				if (selection.getContent() || selection.getNode().href)
+				{
+					openInsertLinkPopUp();
+				}
+			}
+			
+			private function openInsertLinkPopUp() : void
+			{
 				var linkSelection : LinkSelection = new LinkSelection();
-				linkSelection.addEventListener( "linkSelected", linkSelection_linkSelectedHandler );
+				linkSelection.hostName = selection.getNode().hostname;
+				
+				linkSelection.addEventListener( LinkSelection.EVENT_LINK_SELECTED, linkSelection_linkSelectedHandler );
 				
 				PopUpManager.addPopUp( linkSelection, DisplayObject( this.parentApplication ), true );
 				PopUpManager.centerPopUp( linkSelection );
@@ -341,14 +270,22 @@
 			
 			private function linkSelection_linkSelectedHandler( event : Event ) : void
 			{
-				event.currentTarget.removeEventListener( "linkSelected", linkSelection_linkSelectedHandler );
+				event.currentTarget.removeEventListener( LinkSelection.EVENT_LINK_SELECTED, linkSelection_linkSelectedHandler );
 				
-				var currentSelection : * = elementForEditing.contentWindow.getSelection();
-				currentSelection.addRange( currentRange );
+				var href : String = event.currentTarget.url;
 				
-				tinyMCE.themes[ "advanced" ]._insertLink( event.currentTarget.url, "_blank" );
+				if (selection.getNode().href)
+				{
+					var elm : * = activeEditor.dom.getParent(selection.getNode(), "A");
+					
+					activeEditor.dom.setAttrib(elm, 'href', href)
+					
+					return;
+				}
+					
+				var htmlLink : String = "<a href=\""+href+"\" target=\"_blank\" >"+selection.getContent()+"</a>";
+				tinyMCE.execCommand('insertHTML', false, htmlLink);
 				
-				PopUpManager.removePopUp( UIComponent( event.currentTarget ) );
 			}
 			
 			private function unLink() : void
@@ -356,20 +293,28 @@
 				tinyMCE.execCommand( "unlink", false );
 			}
 			
-			private function insertChar() : void
+			private function openInsertCharPopup() : void
 			{
 				var charMap : CharMap = new CharMap();
-				charMap.addEventListener( "charSelected", charSelectedHandler );
+				
+				charMap.addEventListener( CharMap.EVENT_CHAR_SELECTED, charSelectedHandler );
 				
 				PopUpManager.addPopUp( charMap, DisplayObject( this.parentApplication ), true );
 				PopUpManager.centerPopUp( charMap );
 			}
 			
+			private function charSelectedHandler( event : Event ) : void
+			{
+				event.currentTarget.removeEventListener( CharMap.EVENT_CHAR_SELECTED, charSelectedHandler );
+				
+				tinyMCE.execCommand( "mceInsertContent", false, event.currentTarget.charCode );
+			}
+			
 			private function changeFont( event : ListEvent ) : void
 			{
 				var val : String = fontSelector.selectedItem.data
+
 				tinyMCE.execCommand( "FontName", false, val );
-				recalculateSize();
 			}
 			
 			private function colorFillChanged( event : ColorPickerEvent ) : void
@@ -395,22 +340,12 @@
 				tinyMCE.execCommand( "forecolor", false, hexValue );
 			}
 			
-			private function charSelectedHandler( event : Event ) : void
-			{
-				
-				event.currentTarget.removeEventListener( "charSelected", charSelectedHandler );
-				//var str : String = event.currentTarget.charCode;
-				
-				tinyMCE.execCommand( "mceInsertContent", false, event.currentTarget.charCode );
-//				PopUpManager.removePopUp( UIComponent( event.currentTarget ) );
-				recalculateSize();
-			}
-			
 			private function openCodeEditor() : void
 			{
 				var codeEditor : CodeEditor = new CodeEditor();
-				codeEditor.code = tinyMCE.getContent( tinyMCE.getWindowArg( "editor_id" ) );
-				codeEditor.addEventListener( "updateCode", updateCodeHandler );
+				
+				codeEditor.code = activeEditor.getContent();
+				codeEditor.addEventListener( CodeEditor.EVENT_CODE_CHANGED, updateCodeHandler );
 				
 				PopUpManager.addPopUp( codeEditor, DisplayObject( parentApplication ), true );
 				PopUpManager.centerPopUp( codeEditor );
@@ -418,92 +353,397 @@
 			
 			private function updateCodeHandler( event : Event ) : void
 			{
-				event.currentTarget.removeEventListener( "updateCode", updateCodeHandler );
+				event.currentTarget.removeEventListener( CodeEditor.EVENT_CODE_CHANGED, updateCodeHandler );
 				
-				tinyMCE.setContent( event.currentTarget.code );
-				PopUpManager.removePopUp( UIComponent( event.currentTarget ) );
-				recalculateSize();
+				activeEditor.setContent( event.currentTarget.code );
 			}
 			
+			private var startContent : String;
+
 			private function editableHTML_completeHandler( event : Event ) : void
 			{
 				editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
 				
-				HTMLEditorLoader.addEventListener( Event[ "HTML_DOM_INITIALIZE" ], HTMLEditorLoader_HTMLDomInitalizeHandler );
+				if (attributesObject[ "width" ])
+					editableHTML.width = Number(attributesObject[ "width" ].value);
 				
-				HTMLEditorLoader.addEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
+				if (attributesObject[ "height" ])
+					editableHTML.height = Number(attributesObject[ "height" ].value);
 				
-				HTMLEditorLoader.loadString( template );
+				startContent = editableHTML.htmlText;
+				
+				editableHTML.addEventListener( Event.HTML_DOM_INITIALIZE, onTinyHTMLDomInitalize );
+
+				editableHTML.location = "app:/modules/wysiwyg/libs/tinymce/examples/full.html";
 			}
 			
-			private function HTMLEditorLoader_HTMLDomInitalizeHandler( event : Event ) : void
+			private function onTinyHTMLDomInitalize(event : Event):void
 			{
+				editableHTML.removeEventListener( Event.HTML_DOM_INITIALIZE, onTinyHTMLDomInitalize );
 				
-				HTMLEditorLoader.removeEventListener( Event[ "HTML_DOM_INITIALIZE" ], HTMLEditorLoader_HTMLDomInitalizeHandler );
-				
-				if ( !bodyTag )
-					return;
-				
-				bodyTag.innerHTML = "<span id=\"xEditingArea\">" + bodyTag.innerHTML + "</span>";
-				
-				HTMLEditorLoader.window.elementForEditing = bodyTag.firstChild;
-				HTMLEditorLoader.window.setIFrame = setIFrame;
+				editableHTML.domWindow.onEditorAdded = onEditorAdded;
+				editableHTML.domWindow.tinyOnNodeChange = tinyOnNodeChange;
+				editableHTML.domWindow.tracer = tracer;
 			}
 			
-			private function HTMLEditorLoader_completeHandler( event : Event ) : void
+			private function tracer(p1:*, p2:*=null, p3:*=null):void
 			{
-				HTMLEditorLoader.removeEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
-				
-				if ( !tinyMCE || !HTMLEditorLoader.loaded )
+				trace ('tracer: ' + p1);				
+			}
+			
+			private function onEditorAdded():void
+			{
+				if (tinyMCE && activeEditor)
 				{
-					init( _item );
+					activeEditor.startContent = startContent;
+					activeEditor.setContent(startContent);
+				}
+			}
+			
+			private function tinyOnNodeChange():void
+			{
+				btnBold.selected = activeEditor.queryCommandState('Bold');
+				btnItalic.selected = activeEditor.queryCommandState('Italic');
+				btnUnderline.selected = activeEditor.queryCommandState('Underline');
+				btnStrikeThrough.selected = activeEditor.queryCommandState('Strikethrough');
+				
+				btnJustifyLeft.selected = activeEditor.queryCommandState('JustifyLeft');
+				btnJustifyRight.selected = activeEditor.queryCommandState('JustifyRight');
+				btnJustifyCenter.selected = activeEditor.queryCommandState('JustifyCenter');
+				btnJustifyFull.selected = activeEditor.queryCommandState('JustifyFull');
+				
+				btnInsertOrderedList.selected = activeEditor.queryCommandState('InsertOrderedList');
+				btnInsertUnorderedList.selected = activeEditor.queryCommandState('InsertUnorderedList');
+				
+				updateBlockFormat();
+				
+				updateFontFamily();
+				updateFontSize();
+				
+				updateTextColor();
+				updateFillColor();
+				
+			}
+			
+			private function updateTextColor():void
+			{
+				var rgbGetted : String = activeEditor.queryCommandValue('ForeColor');
+				
+				if (rgbGetted.indexOf('rgb') == -1) // color is undefined
+				{
+					foreColorPicker.selectedColor = 0x000000;
 					return;
 				}
 				
-				tinyMCE.execCommand( "mceAddControl", true, "content" );
+				var resoultColor : Number = parseRGBFromTiny(rgbGetted);
 				
-				if ( !elementForEditing )
+				if (resoultColor < 0)
 					return;
 				
-				elementForEditing.focus();
-				
-				editableHTML.addEventListener( KeyboardEvent.KEY_DOWN, editableElement_KeyDownHandler, true );
-				editableHTML.addEventListener( KeyboardEvent.KEY_UP, editableElement_KeyUpHandler );
-				
-				var body : * = elementForEditing.contentWindow.document.getElementsByTagName( "body" )[ 0 ];
-				body.style.marginLeft = "5px";
-				body.style.marginRight = "5px";
-				body.style.paddingTop = "5px";
-				body.style.paddingBottom = "5px";
-				
-				callLater( recalculateSize );
+				foreColorPicker.selectedColor = resoultColor; 
+					
 			}
 			
+			private function updateFillColor():void
+			{
+				var rgbGetted : String = activeEditor.queryCommandValue('HiliteColor');
+				
+				if (rgbGetted.indexOf('rgb') == -1) // color is undefined
+				{
+					fillColorPicker.selectedColor = 0x000000;
+					return;
+				}
+				
+				var resoultColor : Number = parseRGBFromTiny(rgbGetted);
+				
+				if (resoultColor < 0)
+					return;
+				
+				fillColorPicker.selectedColor = resoultColor; 
+				
+			}
+			
+			private function updateBlockFormat():void
+			{
+				var formatRecieved : String = activeEditor.queryCommandValue('FormatBlock');
+				
+				if (!formatRecieved)
+				{
+					formatRecieved = RichTextToolbarConstants.FORMAT_TYPE_P;
+				}
+				
+				switch(formatRecieved.toLowerCase())
+				{
+					case RichTextToolbarConstants.FORMAT_TYPE_P:
+					{
+						styleSelector.selectedIndex = 0;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_ADDRESS:
+					{
+						styleSelector.selectedIndex = 1;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_PREFORMATTED:
+					{
+						styleSelector.selectedIndex = 2;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_H1:
+					{
+						styleSelector.selectedIndex = 3;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_H2:
+					{
+						styleSelector.selectedIndex = 4;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_H3:
+					{
+						styleSelector.selectedIndex = 5;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_H4:
+					{
+						styleSelector.selectedIndex = 6;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_H5:
+					{
+						styleSelector.selectedIndex = 7;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_H6:
+					{
+						styleSelector.selectedIndex = 8;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_DIV:
+					{
+						styleSelector.selectedIndex = 9;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_BLOCKQUOTE:
+					{
+						styleSelector.selectedIndex = 10;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_CODE:
+					{
+						styleSelector.selectedIndex = 11;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_DD:
+					{
+						styleSelector.selectedIndex = 12;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_DT:
+					{
+						styleSelector.selectedIndex = 13;
+						break;
+					}
+					case RichTextToolbarConstants.FORMAT_TYPE_SAMPLE:
+					{
+						styleSelector.selectedIndex = 14;
+						break;
+					}
+						
+					default:
+					{
+						styleSelector.selectedIndex = 0;
+						break;
+					}
+				}
+			}
+			
+			private function updateFontFamily():void
+			{
+				var fontFamilyRecieved : String = activeEditor.queryCommandValue('FontName');
+				
+				if (!fontFamilyRecieved)
+				{
+					fontFamilyRecieved = RichTextToolbarConstants.FONT_NAME_VERDANA;
+				}
+				
+				switch(fontFamilyRecieved.toLowerCase())
+				{
+					case RichTextToolbarConstants.FONT_NAME_ANDALE_MONO:
+					{
+						fontSelector.selectedIndex = 0;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_ARIAL_HELVETICA:
+					{
+						fontSelector.selectedIndex = 1;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_ARIAL_BLACK:
+					{
+						fontSelector.selectedIndex = 2;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_BOOK_ANTIQUA:
+					{
+						fontSelector.selectedIndex = 3;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_COMIC_SANS:
+					{
+						fontSelector.selectedIndex = 4;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_COURIER_NEW:
+					{
+						fontSelector.selectedIndex = 5;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_GEORGIA:
+					{
+						fontSelector.selectedIndex = 6;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_HELVETICA:
+					{
+						fontSelector.selectedIndex = 7;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_IMPACT_CHICAGO:
+					{
+						fontSelector.selectedIndex = 8;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_SYMBOL:
+					{
+						fontSelector.selectedIndex = 9;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_TAHOMA:
+					{
+						fontSelector.selectedIndex = 10;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_TERMINAL_MONACO:
+					{
+						fontSelector.selectedIndex = 11;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_TIMES_NEW_ROMAN:
+					{
+						fontSelector.selectedIndex = 12;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_TREBUCHET:
+					{
+						fontSelector.selectedIndex = 13;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_VERDANA:
+					{
+						fontSelector.selectedIndex = 14;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_WEBDINGS:
+					{
+						fontSelector.selectedIndex = 15;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_NAME_WINGDINGS:
+					{
+						fontSelector.selectedIndex = 16;
+						break;
+					}
+						
+					default:
+					{
+						fontSelector.selectedIndex = 14;
+						break;
+					}
+				}
+			}
+			
+			private function updateFontSize():void
+			{
+				var fontSizeRecieved : String = activeEditor.queryCommandValue('FontSize');
+					
+				if (!fontSizeRecieved)
+				{
+					fontSizeRecieved = RichTextToolbarConstants.FONT_STR_SIZE_4;
+				}
+				
+				switch(fontSizeRecieved.toLowerCase())
+				{
+					case RichTextToolbarConstants.FONT_STR_SIZE_1:
+					{
+						sizeSelector.selectedIndex = 0;
+						break;
+					}
+						
+					case RichTextToolbarConstants.FONT_STR_SIZE_2:
+					{
+						sizeSelector.selectedIndex = 1;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_STR_SIZE_3:
+					{
+						sizeSelector.selectedIndex = 2;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_STR_SIZE_4:
+					{
+						sizeSelector.selectedIndex = 3;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_STR_SIZE_5:
+					{
+						sizeSelector.selectedIndex = 4;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_STR_SIZE_6:
+					{
+						sizeSelector.selectedIndex = 5;
+						break;
+					}
+					case RichTextToolbarConstants.FONT_STR_SIZE_7:
+					{
+						sizeSelector.selectedIndex = 6;
+						break;
+					}
+						
+					default:
+					{
+						sizeSelector.selectedIndex = 3;
+						break;
+					}
+				}
+			}
+			
+			private function parseRGBFromTiny(colorString : String) : Number
+			{
+				var colorOutputString : String = '0x';
+				
+				var regExpDigitVal	: RegExp = /[\d]+/g;
+				var arrColorDigits	: Array = colorString.match(regExpDigitVal);
+				
+				if (!arrColorDigits || arrColorDigits.length != 3)
+				{
+					return -1;	
+				}
+				
+				colorOutputString += rgb2hex (arrColorDigits[0], arrColorDigits[1], arrColorDigits[2]).toString(16);
+				
+				return int(colorOutputString); 
+				
+			}
+			
+			private function rgb2hex(r:Number, g:Number, b:Number):Number {
+				return(r<<16 | g<<8 | b);
+			}
+		
 			private function HTMLEditorLoader_uncaughtScriptException( event : HTMLUncaughtScriptExceptionEvent ) : void
 			{
-				var dummy : * = "";
 			}
-			
-			private function editableElement_KeyUpHandler( event : KeyboardEvent ) : void
-			{
-				recalculateSize();
-			}
-			
-			private function editableElement_KeyDownHandler( event : KeyboardEvent ) : void
-			{
-				switch (event.keyCode)
-				{
-					case Keyboard.DELETE :
-						break;
-					case Keyboard.B :
-						if (event.ctrlKey)
-						{
-							btnBold.selected = !btnBold.selected;
-						}
-						break;
-				}
-			}
-			
 			
 		]]>
 	</fx:Script>
@@ -515,29 +755,37 @@
 		<mx:VRule height="24" />-->
 		
 		<controls:ToolbarButton id="btnSelectAll" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_select_all.png')" width="24"
+								focusEnabled="false"
 								click="{execCommand('selectall'); btnSelectAll.selected = false;}"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_select_all' ) }"/>
 		
 		<controls:ToolbarButton id="btnRemoveFormat" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rem_formatting.png')" width="24"
+								focusEnabled="false"
 								click="{execCommand('removeformat'); btnRemoveFormat.selected = false;}"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_remove_format' ) }"/>
 		
 		<mx:VRule height="24"/>
 		
 		<controls:ToolbarButton id="btnLink" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_ins_link.png')" width="24"
-								click="insertLink()"
+								focusEnabled="false"
+								click="tryToOpenInsertLinkPopup(); btnLink.selected = false;"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_insert_link' ) }"/>
 		
 		<controls:ToolbarButton id="btnUnlink" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rem_link.png')" width="24"
+								focusEnabled="false"
 								click="{execCommand('unlink'); btnUnlink.selected=false;}"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_unlink' ) }"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rule.png')" width="24"
-								click="execCommand('inserthorizontalrule')"
+		<controls:ToolbarButton id="btnInsertHorizontalRule"
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_rule.png')" width="24"
+								click="execCommand('inserthorizontalrule'); btnInsertHorizontalRule.selected = false;"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_insert_horizontal_rule' ) }"/>
 		
-		<controls:ToolbarButton focusEnabled="false" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_ins_char.png')" width="24"
-								click="insertChar()"
+		<controls:ToolbarButton id="btnInsertChar" 
+								focusEnabled="false" 
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_ins_char.png')" width="24"
+								click="openInsertCharPopup(); btnInsertChar.selected = false;"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_insert_char' ) }"/>
 	</s:HGroup>
 	
@@ -545,57 +793,80 @@
 		
 		<controls:ToolbarButton id="btnBold" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_bold.png')" width="24"
 								fontWeight="bold"
+								focusEnabled="false"
 								click="execCommand('Bold')"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_bold' ) }"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_italic.png')" width="24"
+		<controls:ToolbarButton id="btnItalic" 
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_italic.png')" width="24"
 								click="execCommand('Italic')"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_italic' ) }"/>
 		
-		<controls:ToolbarButton focusEnabled="false" height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_underline.png')" width="24"
+		<controls:ToolbarButton id="btnUnderline" 
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_underline.png')" width="24"
 								click="execCommand('Underline')"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_underline' ) }"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_strikethrough.png')" width="24"
+		<controls:ToolbarButton id="btnStrikeThrough"
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_strikethrough.png')" width="24"
 								click="execCommand('Strikethrough')"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_strikethrough' ) }"/>
 		
 		<mx:VRule height="24"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_left.png')" width="24"
+		<controls:ToolbarButton id="btnJustifyLeft" 
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_left.png')" width="24"
 								click="execCommand('JustifyLeft')"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_justify_left' ) }"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_center.png')" width="24"
+		<controls:ToolbarButton id="btnJustifyCenter" 
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_center.png')" width="24"
 								click="execCommand('JustifyCenter')"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_justify_center' ) }"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_right.png')" width="24"
+		<controls:ToolbarButton id="btnJustifyRight" 
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_right.png')" width="24"
 								click="execCommand('JustifyRight')"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_justify_right' ) }"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_block.png')" width="24"
+		<controls:ToolbarButton id="btnJustifyFull" 
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_block.png')" width="24"
 								click="execCommand('JustifyFull')"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_justify_full' ) }"/>
 		
 		<mx:VRule height="24"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_numlist.png')" width="24"
+		<controls:ToolbarButton id="btnInsertOrderedList" 
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_numlist.png')" width="24"
 								click="execCommand('InsertOrderedList')"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_insert_ordered_list' ) }"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_bullist.png')" width="24"
+		<controls:ToolbarButton id="btnInsertUnorderedList" 
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_bullist.png')" width="24"
 								click="execCommand('InsertUnorderedList')"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_insert_unordered_list' ) }"/>
 		
 		<mx:VRule height="24"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_outdent.png')" width="24"
-								click="execCommand('Outdent')"
+		<controls:ToolbarButton id="btnOutdent" 
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_outdent.png')" width="24"
+								click="execCommand('Outdent'); btnOutdent.selected = false;"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_outdent' ) }"/>
 		
-		<controls:ToolbarButton height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_indent.png')" width="24"
-								click="execCommand('Indent')"
+		<controls:ToolbarButton id="btnIndent" 
+								focusEnabled="false"
+								height="24" icon="@Embed(source='../assets/toolbars/richTextToolbar/icon_indent.png')" width="24"
+								click="execCommand('Indent'); btnIndent.selected = false;"
 								toolTip="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_indent' ) }"/>
 	</s:HGroup>
 	
@@ -604,6 +875,7 @@
 		<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_style' ) }"/>
 		
 		<mx:ComboBox id="styleSelector"
+					 focusEnabled="false"
 					 height="24" styleName="toolbarComboBox" width="100"
 					 color="black"
 					 change="{tinyMCE.execCommand('FormatBlock', false, styleSelector.selectedItem.data)}">
@@ -612,35 +884,35 @@
 				
 				<mx:ArrayCollection>
 					
-					<fx:Object data="p" label="Paragraph"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_P}" label="Paragraph"/>
 					
-					<fx:Object data="address" label="Address"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_ADDRESS}" label="Address"/>
 					
-					<fx:Object data="pre" label="Preformatted"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_PREFORMATTED}" label="Preformatted"/>
 					
-					<fx:Object data="h1" label="Heading 1"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_H1}" label="Heading 1"/>
 					
-					<fx:Object data="h2" label="Heading 2"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_H2}" label="Heading 2"/>
 					
-					<fx:Object data="h3" label="Heading 3"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_H3}" label="Heading 3"/>
 					
-					<fx:Object data="h4" label="Heading 4"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_H4}" label="Heading 4"/>
 					
-					<fx:Object data="h5" label="Heading 5"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_H5}" label="Heading 5"/>
 					
-					<fx:Object data="h6" label="Heading 6"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_H6}" label="Heading 6"/>
 					
-					<fx:Object data="div" label="Div"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_DIV}" label="Div"/>
 					
-					<fx:Object data="blockquote" label="Blockquote"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_BLOCKQUOTE}" label="Blockquote"/>
 					
-					<fx:Object data="code" label="Code"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_CODE}" label="Code"/>
 					
-					<fx:Object data="dt" label="Definition term"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_DT}" label="Definition term"/>
 					
-					<fx:Object data="dd" label="Definition description"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_DD}" label="Definition description"/>
 					
-					<fx:Object data="samp" label="Code sample"/>
+					<fx:Object data="{RichTextToolbarConstants.FORMAT_TYPE_SAMPLE}" label="Code sample"/>
 				</mx:ArrayCollection>
 			</mx:dataProvider>
 		</mx:ComboBox>
@@ -658,39 +930,39 @@
 				
 				<mx:ArrayCollection>
 					
-					<fx:Object data="andale mono,times" label="Andale Mono"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_ANDALE_MONO}" label="Andale Mono"/>
 					
-					<fx:Object data="arial,helvetica,sans-serif" label="Arial"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_ARIAL_HELVETICA}" label="Arial"/>
 					
-					<fx:Object data="arial black,avant garde" label="Arial Black"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_ARIAL_BLACK}" label="Arial Black"/>
 					
-					<fx:Object data="book antiqua,palatino" label="Book Antiqua"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_BOOK_ANTIQUA}" label="Book Antiqua"/>
 					
-					<fx:Object data="comic sans ms,sans-serif" label="Comic Sans MS"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_COMIC_SANS}" label="Comic Sans MS"/>
 					
-					<fx:Object data="courier new,courier" label="Courier New"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_COURIER_NEW}" label="Courier New"/>
 					
-					<fx:Object data="georgia,palatino" label="Georgia"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_GEORGIA}" label="Georgia"/>
 					
-					<fx:Object data="helvetica" label="Helvetica"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_HELVETICA}" label="Helvetica"/>
 					
-					<fx:Object data="impact,chicago" label="Impact"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_IMPACT_CHICAGO}" label="Impact"/>
 					
-					<fx:Object data="symbol" label="Symbol"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_SYMBOL}" label="Symbol"/>
 					
-					<fx:Object data="tahoma,arial,helvetica,sans-serif" label="Tahoma"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_TAHOMA}" label="Tahoma"/>
 					
-					<fx:Object data="terminal,monaco" label="Terminal"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_TERMINAL_MONACO}" label="Terminal"/>
 					
-					<fx:Object data="times new roman,times" label="Times New Roman"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_TIMES_NEW_ROMAN}" label="Times New Roman"/>
 					
-					<fx:Object data="trebuchet ms,geneva" label="Trebuchet MS"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_TREBUCHET}" label="Trebuchet MS"/>
 					
-					<fx:Object data="verdana,geneva" label="Verdana"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_VERDANA}" label="Verdana"/>
 					
-					<fx:Object data="webdings" label="Webdings"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_WEBDINGS}" label="Webdings"/>
 					
-					<fx:Object data="wingdings,zapf dingbats" label="Wingdings"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_WINGDINGS}" label="Wingdings"/>
 				</mx:ArrayCollection>
 			</mx:dataProvider>
 		</mx:ComboBox>
@@ -700,9 +972,10 @@
 		<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_size' ) }"/>
 		
 		<mx:ComboBox id="sizeSelector"
+					 focusEnabled="false"
 					 height="24" styleName="toolbarComboBox" width="100"
 					 color="black"
-					 change="{tinyMCE.execCommand('FontSize', false, sizeSelector.selectedItem.data); recalculateSize();}">
+					 change="{tinyMCE.execCommand('FontSize', false, sizeSelector.selectedItem.data);}">
 			
 			<mx:dataProvider>
 				
@@ -729,12 +1002,15 @@
 		
 		<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_text_color' ) }"/>
 		
-		<mx:ColorPicker focusEnabled="false" height="24" width="36"
-						change="colorTextChanged(event)"/>
+		<mx:ColorPicker id="foreColorPicker" 
+						focusEnabled="false" height="24" width="36"
+						change="colorTextChanged(event);"
+						/>
 		
 		<s:Label text="{ resourceManager.getString( 'Wysiwyg_General', 'richtext_toolbar_fill_color' ) }"/>
 		
-		<mx:ColorPicker focusEnabled="false" height="24" width="36"
+		<mx:ColorPicker id="fillColorPicker" 
+						focusEnabled="false" height="24" width="36"
 						change="colorFillChanged(event)"/>
 		
 		<mx:VRule height="24"/>
