@@ -769,43 +769,91 @@ package net.vdombox.ide.modules.events.view.components
 			}
 		}
 		
-		public function setVisibleStateForCurrnetLinkages( objectID : String ) : void
+		public function setVisibleStateForCurrnetLinkages( itemID : Object ) : void
 		{
 			var i : Number;
 			var linkage : Linkage;
 			var baseElement : BaseElement;
 			
-			for ( i = 0; i < linkagesLayer.numElements; i++ )
+			
+			
+			if ( itemID is String )
 			{
-				linkage = linkagesLayer.getElementAt( i ) as Linkage;
+				var objectID : String = itemID as String;
 				
-				if ( !linkage )
-					return;
+				for ( i = 0; i < linkagesLayer.numElements; i++ )
+				{
+					linkage = linkagesLayer.getElementAt( i ) as Linkage;
 				
-				if ( linkage.source.objectID == objectID && linkage.target.objectID != objectID)
-				{
-					baseElement = linkage.target;
-					baseElement.visible = true;
-					baseElement.alpha = 0.3;
-					linkage.visible = true;
-					linkage.alpha = 0.3;
-				}
-				else if ( linkage.source.objectID != objectID && linkage.target.objectID == objectID )
-				{
-					baseElement = linkage.source;
-					baseElement.visible = true;
-					baseElement.alpha = 0.3;
-					linkage.visible = true;
-					linkage.alpha = 0.3;
-				}
-				else
-				{
-					linkage.setVisibleState( false );	
+					if ( !linkage )
+						return;
+					
+					if ( linkage.source.objectID == objectID && linkage.target.objectID != objectID)
+					{
+						baseElement = linkage.target;
+						baseElement.visible = true;
+						baseElement.alpha = 0.3;
+						linkage.visible = true;
+						linkage.alpha = 0.3;
+					}
+					else if ( linkage.source.objectID != objectID && linkage.target.objectID == objectID )
+					{
+						baseElement = linkage.source;
+						baseElement.visible = true;
+						baseElement.alpha = 0.3;
+						linkage.visible = true;
+						linkage.alpha = 0.3;
+					}
+					else
+					{
+						linkage.setVisibleState( false );	
+					}
 				}
 			}
-			
-			
-			
+			else if ( itemID is Array )
+			{
+				var objectsID : Array = itemID as Array;
+				
+				for ( i = 0; i < linkagesLayer.numElements; i++ )
+				{
+					linkage = linkagesLayer.getElementAt( i ) as Linkage;
+					
+					if ( !linkage )
+						return;
+					
+					if ( findIDinArray( linkage.source.objectID, objectsID) && !findIDinArray( linkage.target.objectID, objectsID ) )
+					{
+						baseElement = linkage.target;
+						baseElement.visible = true;
+						baseElement.alpha = 0.3;
+						linkage.visible = true;
+						linkage.alpha = 0.3;
+					}
+					else if ( !findIDinArray( linkage.source.objectID, objectsID) && findIDinArray( linkage.target.objectID, objectsID ) )
+					{
+						baseElement = linkage.source;
+						baseElement.visible = true;
+						baseElement.alpha = 0.3;
+						linkage.visible = true;
+						linkage.alpha = 0.3;
+					}
+					else
+					{
+						linkage.setVisibleState( false );	
+					}
+				}
+			}
+		}
+		
+		private function findIDinArray( objectID : String, arrayID : Array ) : Boolean
+		{
+			var itemID : String;
+			for each ( itemID in arrayID )
+			{
+				if ( itemID == objectID)
+					return true;
+			}
+			return false;
 		}
 
 	}

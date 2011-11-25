@@ -139,7 +139,9 @@ package net.vdombox.ide.modules.events
 		
 		public static const GET_EXISTING_ELEMENTS_IN_WORK_AREA		: String = "getElementsListInWorkArea";
 		public static const EXISTING_ELEMENTS_IN_WORK_AREA_GETTED 	: String = "ElementsListInWorkAreaGetted";
-
+		
+		public static const GET_CHILDREN_ELEMENTS 	: String = "getChildrenElements";
+		public static const CHILDREN_ELEMENTS_GETTED 	: String = "childrenElementsGetted";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

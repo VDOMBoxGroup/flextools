@@ -15,16 +15,16 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.modules.events.events.WorkAreaEvent;
-			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
-			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			
 			import spark.events.IndexChangeEvent;
 			
 			protected function scroller_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				// TODO Auto-generated method stub
-				scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
-				scroller.horizontalScrollBar.setStyle( "skinClass", VDOMHScrollBarSkin );
+				scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
+				scroller.horizontalScrollBar.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
 				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 			}
 			

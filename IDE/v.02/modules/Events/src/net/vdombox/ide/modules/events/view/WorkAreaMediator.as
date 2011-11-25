@@ -74,6 +74,8 @@ package net.vdombox.ide.modules.events.view
 			
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
+			
+			interests.push( ApplicationFacade.CHILDREN_ELEMENTS_GETTED );
 
 			return interests;
 		}
@@ -161,7 +163,52 @@ package net.vdombox.ide.modules.events.view
 					setElementsCurrentVisibleState();
 					break;
 				}
+					
+				case ApplicationFacade.CHILDREN_ELEMENTS_GETTED:
+				{
+					setVisibleElementsForContainer( body as XML );
+					break;
+				}
 			}
+		}
+		
+		private function setVisibleElementsForContainer( item : XML ) : void
+		{
+			setVisibleElementsForAllObjects();
+			var leng : Number = workArea.contentGroup.numElements;
+			var element : BaseElement;
+			var objectsID : Array = new Array();
+
+			var xmlList : XMLList = item..object;
+			objectsID.push( item.@id );
+			
+			var objectXML : XML;
+			
+			for each( objectXML in xmlList)
+			{
+				objectsID.push( objectXML.@id );
+			}
+			
+			for ( var i : int = 0; i < leng; i++ )
+			{
+				element = workArea.contentGroup.getElementAt( i ) as BaseElement;
+				element.alpha = 1;
+				if ( element && !findIDinArray( element.objectID, objectsID ) )
+					element.visible = false;
+			}
+			
+			workArea.setVisibleStateForCurrnetLinkages( objectsID );
+		}
+		
+		private function findIDinArray( objectID : String, arrayID : Array ) : Boolean
+		{
+			var itemID : String;
+			for each ( itemID in arrayID )
+			{
+				if ( itemID == objectID)
+					return true;
+			}
+			return false;
 		}
 
 		private function addHandlers() : void
@@ -205,6 +252,12 @@ package net.vdombox.ide.modules.events.view
 		
 		private function shiftClickHandler( event : KeyboardEvent ) : void
 		{
+			if ( event.keyCode == Keyboard.SHIFT )
+			{
+				sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
+				return;
+			}
+			
 			if ( !event.ctrlKey )
 				return;
 				
@@ -222,12 +275,12 @@ package net.vdombox.ide.modules.events.view
 			{
 				showElementsView = "Full";
 				setVisibleElementsForAllObjects();
-			}
+			} 
 		}
 		
 		private function shiftOffHandler( event : KeyboardEvent ) : void
 		{
-			//setElementsCurrentVisibleState();
+			setElementsCurrentVisibleState();
 		}
 		
 		private function setVisibleElementsForCurrentObject( altKey : Boolean ) : void

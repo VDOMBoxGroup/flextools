@@ -86,6 +86,8 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.OBJECT_GETTED );
 			
 			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE );
+			
+			interests.push( ApplicationFacade.GET_CHILDREN_ELEMENTS );
 
 			return interests;
 		}
@@ -181,6 +183,13 @@ package net.vdombox.ide.modules.events.view
 						}
 					}
 				
+					break;
+				}
+					
+				case ApplicationFacade.GET_CHILDREN_ELEMENTS:
+				{
+					sendNotification( ApplicationFacade.CHILDREN_ELEMENTS_GETTED, objectsTree.selectedItem );
+					
 					break;
 				}
 			}
