@@ -15,16 +15,16 @@
 -->
 
 	<!-- The application identifier string, unique to this application. Required. -->
-	<id>Builder</id>
+	<id>net.vdom.powerpack.builder</id>
 
 	<!-- Used as the filename for the application. Required. -->
 	<filename>Builder</filename>
 
 	<!-- The name that is displayed in the AIR application installer. Optional. -->
-	<name>Builder</name>
+	<name>Builder 1.1.0.0 (7410)</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-	<version>0.2.5</version>
+	<version>1.1.0.0</version>
 
 	<!-- Description, displayed in the AIR application installer. Optional. -->
 	<!-- <description></description> -->
@@ -39,7 +39,6 @@
 		<content>[This value will be overwritten by Flex Builder in the output app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
-		<title>Power Pack Builder</title>
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
 		<systemChrome>standard</systemChrome>
@@ -79,10 +78,10 @@
 	</initialWindow>
 
 	<!-- The subpath of the standard default installation location to use. Optional. -->
-	<!-- <installFolder></installFolder> -->
+	<installFolder>VDOM/PowerPack</installFolder>
 
 	<!-- The subpath of the Windows Start/Programs menu to use. Optional. -->
-	<!-- <programMenuFolder></programMenuFolder> -->
+	<programMenuFolder>VDOM/PowerPack</programMenuFolder>
 
 	<!-- The icon the system uses for the application. For at least one resolution,
 		 specify the path to a PNG file included in the AIR package. Optional. -->
