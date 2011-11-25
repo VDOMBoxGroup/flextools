@@ -63,10 +63,7 @@ package ExtendedAPI.com.utils
 
   			pattern = /([\\\/\|\?\"*:><]|^\.)/;
   			
-  			if(pattern.test(str))
-  				return false;
-
-			return true;			
+  			return !pattern.test( str );
 		}		
 		
 		public static function isValidPath(fullpath:String):Boolean

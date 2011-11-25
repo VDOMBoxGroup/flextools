@@ -425,7 +425,7 @@ public class SuperFlexNativeMenu extends FlexNativeMenu
 				
 				if (data is XML) {
 					SuperNativeMenuItem(nativeMenuItem).name = data.@id.toString();
-					SuperNativeMenuItem(nativeMenuItem).isRequired = data.@isRequired.toString().toLowerCase()=='true'?true:false;
+					SuperNativeMenuItem(nativeMenuItem).isRequired = data.@isRequired.toString().toLowerCase() == 'true';
 				}
 	        	else if (data is Object)
 	        	{

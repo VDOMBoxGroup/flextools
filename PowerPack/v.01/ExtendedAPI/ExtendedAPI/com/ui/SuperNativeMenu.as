@@ -186,7 +186,7 @@ public class SuperNativeMenu extends NativeMenu
 			groupName = dataDescriptor.getGroupName(item.data);
 			
 			if (item.data is XML)
-				isRequired = item.data.@isRequired.toString().toLowerCase()=='true'?true:false;
+				isRequired = item.data.@isRequired.toString().toLowerCase() == 'true';
         	else if (item.data is Object)
         	{
             	try {

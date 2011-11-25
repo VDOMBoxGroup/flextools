@@ -62,7 +62,7 @@ public class SuperNativeMenuItem extends NativeMenuItem
 				isRequired:Boolean=false, 
 				enabled:Boolean=true)
 	{
-		super(label, type=='separator'?true:false);
+		super(label, type == 'separator');
 		
 		if(name)
 			this.name = name;
