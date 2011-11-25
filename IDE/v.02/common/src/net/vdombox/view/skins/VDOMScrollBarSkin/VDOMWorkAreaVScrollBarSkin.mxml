@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" minWidth="7" minHeight="35" height="100%"
+    alpha.disabled="0.5" alpha.inactive="0.5" >
+
+    <fx:Metadata>
+    <![CDATA[ 
+        /** 
+         * @copy spark.skins.spark.ApplicationSkin#hostComponent
+         */
+        [HostComponent("spark.components.VScrollBar")]
+    ]]>
+    </fx:Metadata> 
+    
+    <fx:Script fb:purpose="styling">
+
+		import mx.events.StateChangeEvent;
+		/* Define the skin elements that should not be colorized. 
+           For scroll bar, the skin itself is colorized but the individual parts are not. */
+        static private const exclusions:Array = ["track", "thumb"];
+
+        /**
+         * @private
+         */
+        override public function get colorizeExclusions():Array {return exclusions;}
+        
+        /**
+         * @private
+         */
+        override protected function initializationComplete():void
+        {
+            useChromeColor = true;
+            super.initializationComplete();
+			thumb.skin.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, setTrackAlpha );
+        }
+		
+		private function setTrackAlpha( event : StateChangeEvent ) : void
+		{
+			if ( event.newState == "down" || event.newState == "over" )
+				track.skin.alpha = 0.25;
+			else
+				track.skin.alpha = 0.15;
+		}
+    </fx:Script>
+     
+    <s:states>
+        <s:State name="normal" />
+        <s:State name="disabled" />
+        <s:State name="inactive" />
+    </s:states>
+   
+ 
+    <s:Button id="track" top="0" bottom="0" height="100%"
+              focusEnabled="false" 
+              skinClass="net.vdombox.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarTrackSkin" />
+    
+
+    <s:Button id="thumb" 
+              focusEnabled="false" visible.inactive="false"
+              skinClass="net.vdombox.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarThumbSkin" />
+
+</s:SparkSkin>

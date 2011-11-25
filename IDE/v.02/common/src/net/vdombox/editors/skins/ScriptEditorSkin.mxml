@@ -11,6 +11,9 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.ResizeEvent;
+			
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
+			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 
 
 			private var hcw : ChangeWatcher;
@@ -35,6 +38,9 @@
 				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 				addEventListener( Event.RESIZE, resizeHandler, false, 0, true );
 				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
+				
+				hsb.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
+				vsb.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
 
 				if ( scriptAreaComponent )
 				{
