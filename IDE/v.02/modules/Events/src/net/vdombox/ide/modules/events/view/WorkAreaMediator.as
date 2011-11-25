@@ -242,40 +242,35 @@ package net.vdombox.ide.modules.events.view
 		{
 			visibleElementProxy.showCurrent = value;
 			workArea.showElementsView = value;
-			if ( value == "Full" )
+			if ( value == "Full View" )
 				workArea._showElementsView.toolTip = "ctrl + 1";
-			else if ( value == "Middle" )
+			else if ( value == "Active + Embedded" )
 				workArea._showElementsView.toolTip = "ctrl + 2";
-			else if ( value == "Short" )
+			else if ( value == "Active" )
 				workArea._showElementsView.toolTip = "ctrl + 3";
 		}
 		
 		private function shiftClickHandler( event : KeyboardEvent ) : void
 		{
-			if ( event.keyCode == Keyboard.SHIFT )
-			{
-				sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
-				return;
-			}
 			
 			if ( !event.ctrlKey )
 				return;
 				
-			if ( event.keyCode == Keyboard.NUMBER_2 )
+			if ( event.keyCode == Keyboard.NUMBER_1 )
 			{
-				showElementsView = "Middle";
-				setVisibleElementsForCurrentObject( false );
+				showElementsView = "Full View";
+				setVisibleElementsForAllObjects();
+			} 
+			else if ( event.keyCode == Keyboard.NUMBER_2 )
+			{
+				showElementsView = "Active + Embedded";
+				sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
 			}
 			else if ( event.keyCode == Keyboard.NUMBER_3 )
 			{
-				showElementsView = "Short";
-				setVisibleElementsForCurrentObject( true );
+				showElementsView = "Active";
+				setVisibleElementsForCurrentObject();
 			}
-			else if ( event.keyCode == Keyboard.NUMBER_1 )
-			{
-				showElementsView = "Full";
-				setVisibleElementsForAllObjects();
-			} 
 		}
 		
 		private function shiftOffHandler( event : KeyboardEvent ) : void
@@ -283,7 +278,7 @@ package net.vdombox.ide.modules.events.view
 			setElementsCurrentVisibleState();
 		}
 		
-		private function setVisibleElementsForCurrentObject( altKey : Boolean ) : void
+		private function setVisibleElementsForCurrentObject() : void
 		{
 			var leng : Number = workArea.contentGroup.numElements;
 			var element : BaseElement;
@@ -300,10 +295,7 @@ package net.vdombox.ide.modules.events.view
 				
 			}
 			
-			if ( altKey )
-				workArea.setVisibleStateForAllLinkages( false );
-			else
-				workArea.setVisibleStateForCurrnetLinkages( objectID );
+			workArea.setVisibleStateForCurrnetLinkages( objectID );
 
 		}
 		
@@ -393,12 +385,12 @@ package net.vdombox.ide.modules.events.view
 		private function setElementsCurrentVisibleState() : void
 		{
 			showElementsView = workArea.showElementsView ;
-			if ( workArea.showElementsView == "Middle" )
-				setVisibleElementsForCurrentObject( false );
-			else if ( workArea.showElementsView == "Short" )
-				setVisibleElementsForCurrentObject( true );
-			else if ( workArea.showElementsView == "Full" )
+			if ( workArea.showElementsView == "Full View" )
 				setVisibleElementsForAllObjects();
+			else if ( workArea.showElementsView == "Active + Embedded" )
+				sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
+			else if ( workArea.showElementsView == "Active" )
+				setVisibleElementsForCurrentObject();
 		}
 		
 		private function setElementsVisibleState() : void
@@ -436,12 +428,7 @@ package net.vdombox.ide.modules.events.view
 					setElementVisibleState (element as BaseElement);
 			}
 			
-			if ( workArea.showElementsView == "Middle" )
-				setVisibleElementsForCurrentObject( false );
-			else if ( workArea.showElementsView == "Short" )
-				setVisibleElementsForCurrentObject( true );
-			else if ( workArea.showElementsView == "Full" )
-				setVisibleElementsForAllObjects();
+			setElementsCurrentVisibleState();
 		}
 		
 		private function setElementVisibleState(element : BaseElement):void

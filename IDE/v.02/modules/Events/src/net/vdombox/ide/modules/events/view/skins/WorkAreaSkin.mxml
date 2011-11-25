@@ -32,9 +32,9 @@
 			{
 				// TODO Auto-generated method stub
 				var sourceDropDownList : ArrayCollection = new ArrayCollection();
-				sourceDropDownList.addItem( "Full" );
-				sourceDropDownList.addItem( "Middle" );
-				sourceDropDownList.addItem( "Short" );
+				sourceDropDownList.addItem( "Full View" );
+				sourceDropDownList.addItem( "Active + Embedded" );
+				sourceDropDownList.addItem( "Active" );
 				_showElementsView.dataProvider = sourceDropDownList;
 			}
 			
@@ -100,7 +100,7 @@
 		
 		<mx1:Spacer width="5" />
 		
-		<s:DropDownList id="_showElementsView" height="20" creationComplete="showElementsView_creationCompleteHandler(event)" change="_showElementsView_changeHandler(event)"/>
+		<s:DropDownList id="_showElementsView" width="140" height="20" creationComplete="showElementsView_creationCompleteHandler(event)" change="_showElementsView_changeHandler(event)"/>
 		
 		<mx1:Spacer width="15" />
 		
@@ -108,7 +108,7 @@
 	</s:HGroup>
 
 	<s:Group id="workLayers"
-			 bottom="0" left="10" right="3" top="30">
+			 bottom="0" left="0" right="0" top="22">
 		<s:Rect height="100%" width="100%">
 			<s:fill>
 				<s:SolidColor color="black"

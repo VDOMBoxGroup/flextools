@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+<mx1:HDividedBox xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/halo"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  xmlns:components="net.vdombox.ide.modules.events.view.components.*"
@@ -19,4 +19,4 @@
 		<components:EventsPanel id="eventsPanel"
 								width="100%" height="100%"/>
 	</mx1:VDividedBox>
-</s:HGroup>
+</mx1:HDividedBox>
