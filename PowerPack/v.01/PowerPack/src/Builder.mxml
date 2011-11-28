@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication 
 	title="{LanguageManager.sentences.app_title}{ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).file ? ' - '+ContextManager.templates.getItemAt(0).file.nativePath : ''} - {ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).name ? ContextManager.templates.getItemAt(0).name : LanguageManager.sentences.noname}{ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).modified ? '*' : ''}"
-	titleIcon="@Embed(source='assets/icons/icon_16.png')" 
+	titleIcon="@Embed(source='/assets/icons/icon_16.png')"
 	layout="absolute" 
 	statusBarFactory="PowerPack.customize.core.windowClasses.SuperStatusBar"
 	preinitialize="preinit()"
