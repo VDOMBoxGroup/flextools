@@ -386,9 +386,9 @@
 				var columnIndex:int = 0;
 				for each ( var dgColumn:DataGridColumn in dataGridColumns ) 
 				{
-					if ( dataGridColumnsProps[columnIndex].autoincrement.toLowerCase() == 'false' ) 
+					if ( !dataGridColumnsProps[columnIndex].aincrement ) 
 					{
-						if ( dataGridColumnsProps[columnIndex].notnull.toLowerCase() == 'true' )
+						if ( dataGridColumnsProps[columnIndex].notnull )
 							tableRow[ dgColumn.dataField ] = 'REQUIRED';
 						else
 							tableRow[ dgColumn.dataField ] = 'NULL';
@@ -446,8 +446,12 @@
 			private function queueCommitCompleteHandler( event : QueueEvent ) : void 
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
+				updateTable();
+			}
+			
+			public function updateTable() : void
+			{
 				commit.enabled = false;
-				//__alertArea.selectedChild = __normal;
 				updateQueueLength();
 				
 				/* ReRequest rows count */
@@ -482,7 +486,7 @@
 				if ( event.currentTarget.itemEditorInstance.text != editableValue ) 
 				{
 					/* check entered data over database integrity */
-					if ( dataGridColumnsProps[ event.columnIndex ][ 'autoincrement' ].toLowerCase() == 'true' ) 
+					if ( dataGridColumnsProps[ event.columnIndex ][ 'aincrement' ] ) 
 					{
 						event.currentTarget.itemEditorInstance.text = editableValue;
 					} 

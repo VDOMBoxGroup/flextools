@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.dataBase.view
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.MouseEvent;
 	
 	import net.vdombox.ide.common.events.ExternalManagerEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
@@ -37,12 +38,19 @@ package net.vdombox.ide.modules.dataBase.view
 			dispatcher = new EventDispatcher();
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			dataTableStructure.externalManager = this as IExternalManager;
+			dataTableStructure.addEventListener( DataTablesEvents.UPDATE_STRUCTURE,  sendCommit );
+		}
+		
+		private function sendCommit( event : DataTablesEvents ) : void
+		{
+			sendNotification( ApplicationFacade.COMMIT_DATA_STRUCTURE, dataTableStructure.editorID );
 		}
 		
 		override public function onRemove() : void
 		{
 			sessionProxy = null;
 			dispatcher = null;
+			dataTableStructure.removeEventListener( DataTablesEvents.UPDATE_STRUCTURE,  sendCommit );
 		}
 		
 		override public function listNotificationInterests() : Array

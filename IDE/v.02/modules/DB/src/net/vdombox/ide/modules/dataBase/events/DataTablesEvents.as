@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.dataBase.events
 	public class DataTablesEvents extends Event
 	{
 		public static var CHANGE : String = "change";
+		public static var UPDATE_STRUCTURE : String = "updateSrtucture";
 		
 		public function DataTablesEvents( type : String, bubbles : Boolean = false,
 										  cancelable : Boolean = false )

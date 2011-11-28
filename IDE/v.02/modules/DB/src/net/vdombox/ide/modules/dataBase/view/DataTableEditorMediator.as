@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.dataBase.view
 {
+	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
@@ -56,6 +57,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE );
+			interests.push( ApplicationFacade.COMMIT_DATA_STRUCTURE );
 			
 			return interests;
 		}
@@ -72,6 +74,14 @@ package net.vdombox.ide.modules.dataBase.view
 					var event : ExternalManagerEvent = new ExternalManagerEvent( ExternalManagerEvent.CALL_COMPLETE );
 					event.result = body;
 					dispatchEvent( event );
+					
+					break;
+				}
+					
+				case ApplicationFacade.COMMIT_DATA_STRUCTURE:
+				{
+					if ( dataTableEditor.editorID == body as String )
+						dataTableEditor.updateTable();
 					
 					break;
 				}
