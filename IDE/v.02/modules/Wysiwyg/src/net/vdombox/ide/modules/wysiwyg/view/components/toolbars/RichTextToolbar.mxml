@@ -14,6 +14,7 @@
 			import mx.controls.HTML;
 			import mx.core.IUIComponent;
 			import mx.core.IVisualElement;
+			import mx.core.ScrollPolicy;
 			import mx.core.UIComponent;
 			import mx.events.ColorPickerEvent;
 			import mx.events.ListEvent;
@@ -164,6 +165,9 @@
 				removeAllHandlers();
 				
 				bodyTag.innerText = saveValue();
+				
+				editableHTML.horizontalScrollPolicy = ScrollPolicy.AUTO;
+				
 				UIComponent( item ).setFocus();
 			}
 			
@@ -171,7 +175,7 @@
 			{
 				var value : String = "";
 				
-				if ( tinyMCE )
+				if ( tinyMCE && activeEditor)
 				{
 					value = activeEditor.getContent();
 					attributesObject[ "value" ].value = value;
@@ -363,6 +367,8 @@
 			private function editableHTML_completeHandler( event : Event ) : void
 			{
 				editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
+				
+				editableHTML.horizontalScrollPolicy = ScrollPolicy.OFF;
 				
 				if (attributesObject[ "width" ])
 					editableHTML.width = Number(attributesObject[ "width" ].value);

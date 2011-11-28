@@ -31,14 +31,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
+	import mx.controls.HScrollBar;
 	import mx.controls.HTML;
 	import mx.controls.Image;
 	import mx.controls.Text;
 	import mx.controls.ToolTip;
+	import mx.controls.VScrollBar;
 	import mx.core.Application;
 	import mx.core.ClassFactory;
 	import mx.core.IFactory;
 	import mx.core.IVisualElement;
+	import mx.core.ScrollPolicy;
 	import mx.core.UIComponent;
 	import mx.core.mx_internal;
 	import mx.events.DragEvent;
@@ -676,7 +679,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			html.x = contetntPart.@left;
 			html.y = contetntPart.@top;
 			html.width = contetntPart.@width;
-
+			html.height = contetntPart.@height;
+			
 			html.paintsDefaultBackground = true;
 
 			if ( contetntPart.@height[ 0 ] )
@@ -692,10 +696,22 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			html.htmlText = htmlText;
 			
+			disableContainerScroller();
+			
 			parentContainer.addElement(html);
 			
 			dispatchEvent(new RendererEvent(RendererEvent.HTML_ADDED));
 
+		}
+		
+		private function disableContainerScroller():void
+		{
+			scroller.enabled = false;
+		}
+		
+		private function enableContainerScroller():void
+		{
+			scroller.enabled = true;
 		}
 
 		private function caseSVG( contetntPart : XML, parentContainer : Group ) : void
@@ -1023,11 +1039,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function getSubContainer( contetnt : XML , parentContainer : Group ) : Group
 		{
-//			<container id="9723e716-cb19-4539-afc9-491b0ffbd6fb" visible="1" zindex="0" hierarchy="0" order="0" top="91" left="320" width="152" height="34">
-			//var scroller : Scroller = new Scroller();
-
 			var conatiner : Group;
-
 
 			var param : Number;
 
@@ -1127,6 +1139,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			setStyleField( contetnt, conatiner );
 			
+			
+			disableContainerScroller();
 			
 			conatiner.addElement( scroll );
 			
@@ -1275,7 +1289,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			while ( target )
 			{
-				if ( target is ScrollBarBase )
+				if ( isScrollBarObject(target) )
 				{
 					result = true;
 					break;
@@ -1293,9 +1307,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return result;
 		}
 
+		private function isScrollBarObject(target : DisplayObjectContainer) : Boolean
+		{
+			return target is ScrollBarBase || target is HScrollBar || target is VScrollBar;
+		}
+		
 		private function keyNavigationHandler( event : KeyboardEvent ) : void
 		{
-			//trace ("[RendererBase] keyNavigationHandler: " + event.keyCode + "; PHASE = " + event.eventPhase);
 			if ( event.target != event.currentTarget )
 				return;
 			
@@ -1337,20 +1355,21 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
 			setFocus();
-
-			if ( movable && !isScroller( event.target as DisplayObjectContainer ) )
+			
+			var isScroller : Boolean = isScroller( event.target as DisplayObjectContainer ); 
+			
+			if ( movable && !isScroller )
 			{
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
 				stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
 
-//				trace(" " + event.)
 				mDeltaX = mouseX;
 				mDeltaY = mouseY;
 
 				beforeX = x;
 				beforeY = y;
 			}
-
+			
 			event.stopImmediatePropagation();
 			event.preventDefault();
 		}
@@ -1411,7 +1430,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				if ( !( this is PageRenderer ) )
 				{ 
 					showToolTip( typeVO.name + ": " + renderVO.vdomObjectVO.name );
-					trace(renderVO.vdomObjectVO.name);
 					event.stopImmediatePropagation();
 				}
 			}
