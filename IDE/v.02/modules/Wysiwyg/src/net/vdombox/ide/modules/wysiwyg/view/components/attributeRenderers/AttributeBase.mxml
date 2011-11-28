@@ -270,7 +270,7 @@
 				valueField.labelField = "name";
 				secondElement = valueField as UIComponent;
 
-				valueField.init(value.objectsList, _attributeVO.value);
+				valueField.init( value.objectsList, _attributeVO.value);
 
 
 				valueField.addEventListener(Event.CHANGE, changeHandler);

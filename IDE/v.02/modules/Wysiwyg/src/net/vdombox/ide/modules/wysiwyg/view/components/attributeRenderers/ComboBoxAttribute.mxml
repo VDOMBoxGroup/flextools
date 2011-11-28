@@ -27,10 +27,13 @@
 				
 				var listValues : Array = [];
 				var selectedItem : Object = {};
+				
+				var listItem : Object = { label: "", data: "" };
+				//comboBoxData.addItem( listItem );
 
 				while ( listValues = codeInterfaceValueRE.exec( String(_interface) ) )
 				{
-					var listItem : Object = { label: listValues[ 1 ], data: listValues[ 2 ] };
+					listItem = { label: listValues[ 1 ], data: listValues[ 2 ] };
 					
 					comboBoxData.addItem( listItem );
 				
@@ -38,9 +41,9 @@
 						selectedItem = comboBoxData[ comboBoxData.length - 1 ];
 				}
 				
-				/*comboBoxData.sort = new Sort();
-				comboBoxData.sort.fields = [ new SortField( "label", true ), new SortField("name",true) ];
-				comboBoxData.refresh();*/
+				comboBoxData.sort = new Sort();
+				comboBoxData.sort.fields = [ new SortField( "label", true ) ];
+				comboBoxData.refresh();
 				
 				
 				valueField.dataProvider = comboBoxData;

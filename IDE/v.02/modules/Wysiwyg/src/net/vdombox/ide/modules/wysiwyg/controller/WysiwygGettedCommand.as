@@ -36,7 +36,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				{
 					renderer.renderVO = renderVO;
 				}
-				return;
+				//return;
 			}
 		
 			var mediator : VdomObjectEditorMediator;
