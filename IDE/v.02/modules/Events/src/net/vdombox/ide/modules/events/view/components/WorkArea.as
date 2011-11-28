@@ -485,8 +485,6 @@ package net.vdombox.ide.modules.events.view.components
 				createClientAction( newElementVO as ClientActionVO, coordinates );
 			else if ( newElementVO is ServerActionVO )
 				createServerAction( newElementVO as ServerActionVO, coordinates );
-			
-			dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.CREATE_ELEMENTS ) );
 		}
 
 		private function mouseDownHandler( event : MouseEvent ) : void
@@ -683,7 +681,6 @@ package net.vdombox.ide.modules.events.view.components
 					
 					//TODO: сделать нормально
 					skin.currentState = "unsaved";
-					dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.DELETE_ELEMENT ) );
 				}
 			}
 		}
@@ -735,11 +732,6 @@ package net.vdombox.ide.modules.events.view.components
 			
 			if( linkage.parent == linkagesLayer )
 				linkagesLayer.removeElement( linkage );
-		}
-		
-		public function showHiddenElementsStateChanged() : void
-		{
-			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.SHOW_HIDDEN_ELEMENTS_STATE_CHANGED ) );
 		}
 		
 		public function get showHidden():Boolean

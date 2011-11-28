@@ -12,7 +12,6 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.vo.EventVO;
-			import net.vdombox.ide.modules.events.events.PanelsEvent;
 			
 			[Embed(source='assets/events.png')]
 			public var EventsIcon:Class;

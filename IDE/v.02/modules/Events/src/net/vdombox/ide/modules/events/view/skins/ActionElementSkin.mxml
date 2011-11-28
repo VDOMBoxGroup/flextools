@@ -181,11 +181,7 @@
 						 color="#FFFFFF" left="5" right="20" textAlign="center"
 						 verticalCenter="0"
 						 maxDisplayedLines="1"/>
-				
-				<view:EyeImage id="eye" 
-							   right="4" top="4"
-							   closedEyeType="{EyeImage.TYPE_WHITE}"
-							   click="hostComponent.eyeClickHandler()"/>
+
 			</s:Group>
 
 			<s:Group id="contentGroup"

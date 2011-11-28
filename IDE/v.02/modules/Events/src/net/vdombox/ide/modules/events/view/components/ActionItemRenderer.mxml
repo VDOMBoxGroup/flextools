@@ -12,7 +12,6 @@
 			import mx.binding.utils.BindingUtils;
 			
 			import net.vdombox.ide.common.vo.ServerActionVO;
-			import net.vdombox.ide.modules.events.events.PanelsEvent;
 			
 			[Embed(source='assets/action.png')]
 			public var ActionIcon:Class;

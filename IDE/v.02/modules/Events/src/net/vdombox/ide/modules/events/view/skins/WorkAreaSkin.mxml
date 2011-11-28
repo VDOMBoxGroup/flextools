@@ -102,9 +102,6 @@
 		
 		<s:DropDownList id="_showElementsView" width="140" height="20" creationComplete="showElementsView_creationCompleteHandler(event)" change="_showElementsView_changeHandler(event)"/>
 		
-		<mx1:Spacer width="15" />
-		
-		<s:CheckBox id="showHiddenElements" height="20" label="{ resourceManager.getString( 'Events_General', 'work_area_show_hidden' ) }" change="hostComponent.showHiddenElementsStateChanged()"/>
 	</s:HGroup>
 
 	<s:Group id="workLayers"

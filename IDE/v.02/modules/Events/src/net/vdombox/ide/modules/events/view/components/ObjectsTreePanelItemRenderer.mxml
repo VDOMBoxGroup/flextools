@@ -7,10 +7,6 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.modules.events.events.PanelsEvent;
-			
-			private var _eyeOpened : Boolean  = true;
-			
 			private var dataChanged : Boolean = false;
 			
 			private var _data : XML;
@@ -24,33 +20,9 @@
 				_data = value as XML;
 			}
 			
-			public function get eyeOpened() : Boolean
-			{
-				return _eyeOpened;
-			}
-			
-			public function set eyeOpened( opened : Boolean) : void
-			{
-				_eyeOpened = opened;
-				
-				eyes.setOpenState(eyeOpened);
-			}
-			
 			public function get objectID() : String
 			{
 				return _data.@id;
-			}
-			
-			private function eyeClickHandler( event : Event ) : void
-			{
-				swapEyeState();
-				
-				dispatchEvent(  new PanelsEvent( PanelsEvent.EYE_CLICK ) );
-			}
-			
-			private function swapEyeState():void
-			{
-				eyeOpened = !eyeOpened;
 			}
 			
 			override public function validateProperties() : void
@@ -64,13 +36,6 @@
 				
 				if ( !_data )
 					return;
-				
-				if ( _data.@visible[ 0 ] )
-				{
-					eyeOpened = (_data.@visible == "true");
-					
-					_data.@visible = eyeOpened;
-				}
 			}
 			
 		]]>
@@ -93,7 +58,6 @@
 	</s:Rect>
 	
 	<s:Group id="groupContent"
-			 left="20"
 			 width="100%" minWidth="200"
 			 top="-2"
 			 bottom="-2">
@@ -121,26 +85,6 @@
 						 borderVisible="false" selectable="false"/>
 			
 		</s:HGroup>
-		
-	</s:Group>
-	
-	<s:Group id="eyesGroup"
-			 top="-2"
-			 bottom="-2"
-			 left="-2"
-			 width="22"
-			 height="100%"
-			 mouseDown="{ eyeClickHandler(event); event.stopImmediatePropagation() }">
-		
-		<s:Rect width="100%" top="0" bottom="-2">
-			<s:fill>
-				<s:SolidColor color="#585858" />
-			</s:fill>
-		</s:Rect>
-		
-		<s:VGroup width="22" height="100%" verticalAlign="middle" horizontalAlign="center">
-			<view:EyeImage id="eyes" width="16" height="14" />
-		</s:VGroup>
 		
 	</s:Group>
 	

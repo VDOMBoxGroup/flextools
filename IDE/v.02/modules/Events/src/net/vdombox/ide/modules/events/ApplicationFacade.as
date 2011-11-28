@@ -129,16 +129,8 @@ package net.vdombox.ide.modules.events
 		public static const SET_APPLICATION_EVENTS 		: String = "setApplicationEvents";
 		public static const APPLICATION_EVENTS_SETTED 	: String = "applicationEventsSetted";
 		
-		// TODO : убрать эти 4 ивента. 
-		// заменить на 3 (как-то так обозваны будут): EVENT_IN_PANEL_EYE_STATE_CHANGED, OBJECT_IN_TREE_EYE_STATE_CHANGED, ELEMENT_IN_WORKAREA_EYE_STATE_CHANGED
-		// то есть, говорить не что надо сделать, а что что-то изменилось (состояние глаза изменилось)
-		public static const SET_VISIBLE_ELEMENT_IN_OBJECT_TREE 	: String = "setVisibleElementInObjectTree";
-		public static const SET_VISIBLE_ELEMENT_IN_PANEL 		: String = "setVisibleElementInPanel";
-		public static const SET_VISIBLE_ELEMENT_WORK_AREA 		: String = "setVisibleElementInWorkArea";
-		public static const SET_VISIBLE_ELEMENTS_FOR_OBJECT 	: String = "setVisibleElementsForObject";
-		
-		public static const GET_EXISTING_ELEMENTS_IN_WORK_AREA		: String = "getElementsListInWorkArea";
-		public static const EXISTING_ELEMENTS_IN_WORK_AREA_GETTED 	: String = "ElementsListInWorkAreaGetted";
+		/*public static const GET_EXISTING_ELEMENTS_IN_WORK_AREA		: String = "getElementsListInWorkArea";
+		public static const EXISTING_ELEMENTS_IN_WORK_AREA_GETTED 	: String = "ElementsListInWorkAreaGetted";*/
 		
 		public static const GET_CHILDREN_ELEMENTS 	: String = "getChildrenElements";
 		public static const CHILDREN_ELEMENTS_GETTED 	: String = "childrenElementsGetted";

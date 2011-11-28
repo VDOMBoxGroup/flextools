@@ -16,9 +16,6 @@ package net.vdombox.ide.modules.events.view.components
 	{
 		private var _data : IEventBaseVO;
 		
-		[SkinPart( required="true" )]
-		public var eye : EyeImage;
-		
 		[Bindable]
 		public var title : String;
 		
@@ -49,23 +46,6 @@ package net.vdombox.ide.modules.events.view.components
 			
 			updateDisplayList( width, height );
 		}
-
-		public function get eyeOpened():Boolean
-		{
-			return data.eyeOpened;
-		}
-		
-		public function set eyeOpened(value:Boolean):void
-		{
-			data.eyeOpened = value;
-			
-			eye.setOpenState(eyeOpened);
-		}
-		
-		public function set visibleState(showHidden : Boolean):void
-		{
-			visible = showHidden ? true : eyeOpened;
-		}
 		
 		public function get uniqueName() : String
 		{
@@ -78,13 +58,6 @@ package net.vdombox.ide.modules.events.view.components
 				return data.objectID;
 			else
 				return "";
-		}
-		
-		public function eyeClickHandler() : void
-		{
-			eyeOpened = !data.eyeOpened;
-			
-			dispatchEvent( new ElementEvent ( ElementEvent.EYE_CLICKED ) );
 		}
 		
 		protected function header_mouseDownHandler( event : MouseEvent ) : void
@@ -130,8 +103,6 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			x = data.left; 
 			y = data.top;
-				
-			dispatchEvent( new ElementEvent ( ElementEvent.CREATE_ELEMENT ) );
 		}
 		
 	}

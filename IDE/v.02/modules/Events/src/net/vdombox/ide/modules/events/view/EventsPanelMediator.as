@@ -14,7 +14,6 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
-	import net.vdombox.ide.modules.events.events.PanelsEvent;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.ActionElement;
@@ -84,8 +83,6 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 
 			interests.push( ApplicationFacade.SERVER_ACTIONS_LIST_GETTED );
-			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL );
-			interests.push( ApplicationFacade.EXISTING_ELEMENTS_IN_WORK_AREA_GETTED );
 			
 
 			return interests;
@@ -121,89 +118,9 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.SET_VISIBLE_ELEMENT_IN_PANEL:
-				{
-					setEye( body );
-					return;
-				}
-					
-				case ApplicationFacade.EXISTING_ELEMENTS_IN_WORK_AREA_GETTED:
-				{
-					newEye( body );
-					return;
-				}
 			}
 
 			commitProperties();
-		}
-		
-		
-		// TODO :  убрать дублирование (базовый класс BaseElement)
-		// TODO :  переименовать функцию 
-		private function setEye( body : Object ) : void
-		{
-			var i : int;
-			var element : Object = body.element as Object;
-			var eyeOpened : Boolean = body.eyeOpened as Boolean;
-			var dataProvaider : ArrayList;
-			
-			if ( element is EventElement )
-			{
-				dataProvaider = new ArrayList( eventsPanel.eventsList.dataProvider.toArray());
-				
-				var eventElement : EventElement = element as EventElement;
-				
-				for each(var eventVO : EventVO in dataProvaider.source )
-				{
-					if ( eventVO.name == eventElement.data.name )
-					{
-						eventVO.eyeOpened = eyeOpened;
-						break;
-					}
-				}
-				eventsPanel.eventsList.dataProvider = dataProvaider;
-				eventsPanel.eventsList.invalidateProperties();
-			}
-			else
-			{
-				dataProvaider = new ArrayList( eventsPanel.actionsList.dataProvider.toArray());
-				var elementAction : ActionElement = element as ActionElement;
-				for each(var object : Object in dataProvaider.source )
-				{
-					if ( object.name == elementAction.data.name )
-					{
-						object.eyeOpened = eyeOpened;
-						break;
-					}
-				}
-				eventsPanel.actionsList.dataProvider = dataProvaider;
-				eventsPanel.actionsList.invalidateProperties();
-			}
-						
-
-		}
-		
-		private function newEye( body : Object ) : void
-		{
-			// TODO : переименовать функцию 
-			
-			// TODO : вынести строку в отдельную функцию 
-			elements = body as Array;
-			
-			var dataProvaider : ArrayList;
-			
-			// TODO : if вынести в отдельную функцию, параметром ей передавать лист 
-			if ( eventsPanel.eventsList.dataProvider )
-			{
-				dataProvaider = new ArrayList( eventsPanel.eventsList.dataProvider.toArray());
-				eventsPanel.eventsList.dataProvider = dataProvaider;
-			}
-			
-			if ( eventsPanel.actionsList.dataProvider )
-			{
-				dataProvaider = new ArrayList( eventsPanel.actionsList.dataProvider.toArray());
-				eventsPanel.actionsList.dataProvider = dataProvaider;
-			}
 		}
 
 		private function commitProperties() : void
@@ -228,9 +145,6 @@ package net.vdombox.ide.modules.events.view
 			currentTypeVO = currentTarget.typeVO;
 			
 			eventsPanel.eventsList.dataProvider = new ArrayList( currentTypeVO.events );
-			
-			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_LIST, currentTarget );
-			sendNotification( ApplicationFacade.GET_EXISTING_ELEMENTS_IN_WORK_AREA );
 		}
 
 		private function showActions( serverActions : Array ) : void
@@ -254,12 +168,6 @@ package net.vdombox.ide.modules.events.view
 		{
 			eventsPanel.eventsList.addEventListener( DragEvent.DRAG_START, dragStartHandler );
 			eventsPanel.actionsList.addEventListener( DragEvent.DRAG_START, dragStartHandler );
-			
-			eventsPanel.eventsList.addEventListener( FlexEvent.DATA_CHANGE, createEyeInItemRenderer, true );
-			eventsPanel.actionsList.addEventListener( FlexEvent.DATA_CHANGE, createEyeInItemRenderer, true );
-			
-			eventsPanel.eventsList.addEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true );
-			eventsPanel.actionsList.addEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true );
 		}
 		
 		
@@ -268,116 +176,6 @@ package net.vdombox.ide.modules.events.view
 		{
 			eventsPanel.eventsList.removeEventListener( DragEvent.DRAG_START, dragStartHandler );
 			eventsPanel.actionsList.removeEventListener( DragEvent.DRAG_START, dragStartHandler );
-			
-			eventsPanel.eventsList.removeEventListener( FlexEvent.DATA_CHANGE, createEyeInItemRenderer, true );
-			eventsPanel.actionsList.removeEventListener( FlexEvent.DATA_CHANGE, createEyeInItemRenderer, true );
-			
-			eventsPanel.eventsList.removeEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true );
-			eventsPanel.actionsList.removeEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true );
-		}
-		
-		private function eyeClickHandler( event : PanelsEvent ) : void
-		{
-			// TODO : переименовать
-			var newTarget : Object = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;
-			
-			// TODO : вместо всего что ниже отправлять только одно событие (sendNotification): EVENT_IN_PANEL_EYE_STATE_CHANGED
-			// и слушать его везде где надо (WORK_AREA и OBJECT_TREE, как я понимаю) 
-			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE, newTarget.id );
-			
-			// TODO : см. комменты в ApplicationFacade
-			if ( event.target is EventItemRenderer )
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.data.name, objectID: newTarget.id , eyeOpened: event.target.eyeOpened } );
-			else
-				sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENT_WORK_AREA, { name: event.target.data.name, objectID: newTarget.id , eyeOpened: event.target.eyeOpened } );
-		}
-		
-		
-		private function createEyeInItemRenderer( event : FlexEvent ) : void
-		{
-			// TODO : переименовать
-			var newTarget : Object = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;
-			
-			// TODO : избавиться от дублирования (базовый класс - BaseItemRenderer)
-			if ( !event.target.data )
-				return;
-			
-			if ( event.target is EventItemRenderer )
-			{
-				var nameEvent : String = event.target.data.name as String;
-				
-				nameEvent += ( newTarget.id as String );
-			
-				if ( findInElementsEvent( nameEvent ) )
-					event.target.eyeOpened = visibleElementProxy.getElementEyeOpened( nameEvent );
-				else
-					event.target.removeEye();
-			}
-			else
-			{
-				var actionName : String = event.target.data.name as String;
-				var actionElement : ActionElement = findInElementsAction( actionName, newTarget.id as String );
-				
-				if ( actionElement )
-				{
-					if ( actionElement.uniqueName )
-						event.target.eyeOpened = visibleElementProxy.getElementEyeOpened( actionElement.uniqueName );
-					else
-						event.target.eyeOpened = true;
-				}
-				else
-					event.target.removeEye();
-			}
-
-		}
-		
-		// TODO : rename function
-		private function findInElementsEvent( value : String ) : Boolean
-		{
-			if ( !elements )
-				return false;
-			
-			for ( var i:uint = 0; i < elements.length; i++ )
-			{
-				if ( elements[i] is EventElement )
-				{
-					if ( EventElement(elements[i]).uniqueName == value )
-						return true;
-				}
-			}
-			return false;
-		}
-		
-		// TODO : rename function
-		private function findInElementsAction( value : String, objectID : String ) : ActionElement
-		{
-			// TODO : разбить на функции, упростить
-			if ( !elements )
-				return null;
-			
-			var actionList : Array = new Array();
-			
-			for ( var i:uint = 0; i < elements.length; i++ )
-			{
-				if ( elements[i] is ActionElement )
-				{
-					if ( elements[i].data.name == value && elements[i].objectID == objectID )
-						actionList.push( elements[ i ] );
-				}
-			}
-			
-			if ( actionList.length == 0 )
-					return null;
-			
-			var flag : Boolean = (actionList[ 0 ] as ActionElement).eyeOpened;
-			
-			for each ( var actionElement : ActionElement in actionList )
-			{
-				if ( flag != actionElement.eyeOpened )
-					return new ActionElement();
-			}
-	
-			return actionElement;
 		}
 
 		private function dragStartHandler( event : DragEvent ) : void

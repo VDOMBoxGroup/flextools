@@ -8,7 +8,6 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
-	import net.vdombox.ide.modules.events.events.PanelsEvent;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.EventElement;
@@ -85,8 +84,6 @@ package net.vdombox.ide.modules.events.view
 
 			interests.push( ApplicationFacade.OBJECT_GETTED );
 			
-			interests.push( ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE );
-			
 			interests.push( ApplicationFacade.GET_CHILDREN_ELEMENTS );
 
 			return interests;
@@ -135,12 +132,8 @@ package net.vdombox.ide.modules.events.view
 				{
 					var pageXMLTree : XML = notification.getBody() as XML;
 					
-					if ( pageXMLTree )
-						setVisibleForElements( pageXMLTree );
-					else
-					{
+					if ( !pageXMLTree )
 						pageXMLTree = new XML();
-					}
 
 					// XXX: doun on quck switch (pagesXMLList == null)
 					currentPageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
@@ -160,32 +153,6 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.SET_VISIBLE_ELEMENT_IN_OBJECT_TREE:
-				{
-					var eventElementID : String = body as String;
-						
-					for each( pageXML in pagesXMLList)
-					{
-						if ( pageXML.@id == eventElementID )
-						{
-							pageXML.@visible = true;
-							break;
-						}
-						var xmlList : XMLList = pageXML..object;
-						var objectXML : XML;
-						for each( objectXML in xmlList)
-						{
-							if ( objectXML.@id == eventElementID )
-							{
-								objectXML.@visible = true;
-								break;
-							}
-						}
-					}
-				
-					break;
-				}
-					
 				case ApplicationFacade.GET_CHILDREN_ELEMENTS:
 				{
 					sendNotification( ApplicationFacade.CHILDREN_ELEMENTS_GETTED, objectsTree.selectedItem );
@@ -195,16 +162,6 @@ package net.vdombox.ide.modules.events.view
 			}
 		}
 		
-		private function setVisibleForElements( pageXML : XML) : void
-		{
-			var xmlList : XMLList = pageXML..object;
-			var objectXML : XML;
-			
-			for each( objectXML in xmlList)
-			{
-				objectXML.@visible = visibleElementProxy.getObjectEyeOpened( String(objectXML.@id) );
-			}
-		}
 
 		private function clearData() : void
 		{
@@ -216,13 +173,11 @@ package net.vdombox.ide.modules.events.view
 		private function addHandlers() : void
 		{
 			objectsTree.addEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler, false, 0, true );
-			objectsTree.addEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			objectsTree.removeEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler );
-			objectsTree.removeEventListener( PanelsEvent.EYE_CLICK, eyeClickHandler, true );
 		}
 		
 
@@ -235,7 +190,7 @@ package net.vdombox.ide.modules.events.view
 			{
 				_pages[ pages[ i ].id ] = pages[ i ];
 				pagesXMLList +=
-					<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id} visible={visibleElementProxy.getObjectEyeOpened( pages[ i ].id) } />
+					<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}/>
 			}
 
 			objectsTree.dataProvider = pagesXMLList;
@@ -313,17 +268,6 @@ package net.vdombox.ide.modules.events.view
 				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ pageID ], objectID: id } );
 			}
 			
-		}
-		
-		private function eyeClickHandler( event : PanelsEvent ) : void
-		{
-			var objectID		: String = event.target.objectID;
-			var eyeOpened		: Boolean = event.target.eyeOpened;
-			
-			visibleElementProxy.setObjectEyeOpened( objectID, eyeOpened);
-			
-			// FIXME : см. комменты в ApplicationFacade 
-			sendNotification( ApplicationFacade.SET_VISIBLE_ELEMENTS_FOR_OBJECT, { objectID: objectID, visible: eyeOpened } );
 		}
 	}
 }
