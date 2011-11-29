@@ -270,6 +270,7 @@ package
 			}
 			
 			pageContent = currentPageObj["content"];
+			pageContent = Utils.clearASCII(pageContent);
 			
 			if (html_wysiwyg)
 			{
