@@ -38,6 +38,7 @@ package
 		private static const STATE_LAST_PAGE_GENERATED					: String = "stateLastPageGenerated";
 		
 		private static const STATE_NEXT_PAGE_RESOURCE_GENERATING_START	: String = "stateNextPageResourceGeneratingStart";
+		private static const STATE_PAGE_RESOURCE_GENERATING_IN_PROGRESS	: String = "statePageResourceGeneratingInProgress";
 		private static const STATE_PAGE_RESOURCE_GENERATING_COMPLETE	: String = "statePageResourceGeneratingComplete";
 		private static const STATE_LAST_PAGE_RESOURCE_GENERATED			: String = "stateLastPageResourceGenerated";
 		
@@ -160,17 +161,11 @@ package
 				
 				case STATE_NEXT_PAGE_RESOURCE_GENERATING_START : 
 				{
-					/*if (pageResourcesCounter < pageResourcesArr.length)
-					{
-						curPageResourceMsg = SpinnerPopupMessages.MSG_RESOURCE_CREATING;
-						
-						curPageResourceMsg = curPageResourceMsg.replace(SpinnerPopupMessages.TEMPLATE_CUR_RESOURCE, (pageResourcesCounter+1));
-						curPageResourceMsg = curPageResourceMsg.replace(SpinnerPopupMessages.TEMPLATE_TOTAL_RESOURCES, pageResourcesArr.length);
-						
-						spinnerManager.setSpinnerResourceText(curPageResourceMsg);
-					}*/
-					
 					generateNextPageResource();
+					break;
+				}
+				case STATE_PAGE_RESOURCE_GENERATING_IN_PROGRESS :
+				{
 					break;
 				}
 				case STATE_PAGE_RESOURCE_GENERATING_COMPLETE : 
@@ -499,6 +494,8 @@ package
 		
 		private function getResourceCDATA(fileName:String) : void
 		{
+			curState = STATE_PAGE_RESOURCE_GENERATING_IN_PROGRESS;
+			
 			var imageProperties : ImageProperties = getImagePropertiesForCurrentResource();
 			var imageWidth	: Number = imageProperties.width;
 			var imageHeight : Number = imageProperties.height;
@@ -541,6 +538,13 @@ package
 			} 
 			
 			// image width and height are declared 
+			if (!originalByteArray || originalByteArray.length == 0)
+			{
+				source = base64.toString();
+				onResourceDataGenerated(fileName, newFileName, source);
+				return;
+			}
+			
 			var loader : Loader = new Loader();
 			loader.loadBytes( originalByteArray );
 			

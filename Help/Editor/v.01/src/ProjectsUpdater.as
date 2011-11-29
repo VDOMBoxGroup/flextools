@@ -28,8 +28,10 @@ package
 		private static const STATE_XML_LOADING							: String = "stateXMLLoading";
 		private static const STATE_XML_PARSING							: String = "stateXMLParsing";
 		private static const STATE_PRODUCT_CREATING						: String = "stateProductCreating";
+		
 		private static const STATE_PAGES_GENERATING						: String = "statePagesGenerating";
 		private static const STATE_NEXT_PAGE_GENERATING_START			: String = "stateNextPageGeneratingStart";
+		private static const STATE_PAGE_GENERATING_IN_PROGRESS			: String = "statePageGeneratingInProgress";
 		private static const STATE_PAGE_GENERATING_COMPLETE				: String = "statePageGeneratingComplete";
 		private static const STATE_LAST_PAGE_GENERATED					: String = "stateLastPageGenerated";
 		
@@ -113,6 +115,10 @@ package
 					}
 					
 					generateNextPage();
+					break;
+				}
+				case STATE_PAGE_GENERATING_IN_PROGRESS :
+				{
 					break;
 				}
 				case STATE_PAGE_GENERATING_COMPLETE : 
@@ -362,6 +368,8 @@ package
 				curState = STATE_LAST_PAGE_GENERATED;
 				return;
 			}
+			
+			curState = STATE_PAGE_GENERATING_IN_PROGRESS;
 			
 			currentPage = productPages[pagesCounter];
 			
