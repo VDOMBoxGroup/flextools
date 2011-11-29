@@ -26,10 +26,12 @@ package
 		private static const STATE_PRODUCT_XML_PARSING		: String = "stateProductXMLParsing";
 		
 		private static const STATE_PRODUCT_CREATING			: String = "stateProductCreating";
-		private static const STATE_PAGES_GENERATING			: String = "statePagesGenerating";
-		private static const STATE_PAGE_START_GENERATING	: String = "statePageStartGenerating";
-		private static const STATE_PAGE_GENERATING_COMPLETE	: String = "statePageGeneratingComplete";
-		private static const STATE_LAST_PAGE_GENERATED		: String = "stateLastPageGenerated";
+		
+		private static const STATE_PAGES_GENERATING				: String = "statePagesGenerating";
+		private static const STATE_PAGE_START_GENERATING		: String = "statePageStartGenerating";
+		private static const STATE_PAGE_GENERATING_IN_PROGRESS	: String = "statePageGeneratingInProgress";
+		private static const STATE_PAGE_GENERATING_COMPLETE		: String = "statePageGeneratingComplete";
+		private static const STATE_LAST_PAGE_GENERATED			: String = "stateLastPageGenerated";
 		
 		private static const STATE_PROJECT_UPDATE_COMPLETE				: String = "stateProjectUpdateComplete";
 		private static const STATE_PROJECT_UPDATE_CANCELED				: String = "stateProjectUpdateCanceled";
@@ -121,6 +123,10 @@ package
 					}
 					
 					generateNextPage();
+					break;
+				}
+				case STATE_PAGE_GENERATING_IN_PROGRESS:
+				{
 					break;
 				}
 				case STATE_PAGE_GENERATING_COMPLETE:
@@ -393,6 +399,8 @@ package
 				curState = STATE_LAST_PAGE_GENERATED;
 				return;
 			}
+			
+			curState = STATE_PAGE_GENERATING_IN_PROGRESS;
 			
 			currentPage = productPages[pagesCounter];
 			
