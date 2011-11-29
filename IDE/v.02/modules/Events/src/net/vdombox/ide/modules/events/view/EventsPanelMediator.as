@@ -145,6 +145,8 @@ package net.vdombox.ide.modules.events.view
 			currentTypeVO = currentTarget.typeVO;
 			
 			eventsPanel.eventsList.dataProvider = new ArrayList( currentTypeVO.events );
+			
+			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_LIST, currentTarget );
 		}
 
 		private function showActions( serverActions : Array ) : void
