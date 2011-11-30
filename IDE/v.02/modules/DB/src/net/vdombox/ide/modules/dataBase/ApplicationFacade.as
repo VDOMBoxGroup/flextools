@@ -128,6 +128,14 @@ package net.vdombox.ide.modules.dataBase
 		public static const REMOTE_CALL_RESPONSE : String = "removeCallResponse";
 		
 		public static const COMMIT_DATA_STRUCTURE : String = "commitDataStructure";
+		
+		
+// add Bases and Tables
+		public static const GET_TOP_LEVEL_TYPES : String = "getTopLevelTypes";
+		public static const TOP_LEVEL_TYPES_GETTED : String = "topLevelTypesGetted";
+		public static const CREATE_PAGE : String = "createPage";
+		public static const PAGE_CREATED : String = "pageCreate";
+		
 
 
 		public static function getInstance( key : String ) : ApplicationFacade

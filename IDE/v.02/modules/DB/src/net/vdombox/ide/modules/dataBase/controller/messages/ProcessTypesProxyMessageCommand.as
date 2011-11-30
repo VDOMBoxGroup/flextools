@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -18,15 +19,15 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 			var target : String = message.target;
 			var operation : String = message.operation;
 
-//			switch ( target )
-//			{
-//				case PPMTypesTargetNames.:
-//				{
-//					if ( operation == PPMOperationNames.READ )
-//
-//					break;
-//				}
-//			}
+				switch ( target )
+				{
+					case PPMTypesTargetNames.TOP_LEVEL_TYPES:
+					{
+						sendNotification( ApplicationFacade.TOP_LEVEL_TYPES_GETTED, body );
+						
+						break;
+					}
+				}
 		}
 	}
 }

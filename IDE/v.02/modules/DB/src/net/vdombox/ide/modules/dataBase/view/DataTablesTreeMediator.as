@@ -1,6 +1,10 @@
 package net.vdombox.ide.modules.dataBase.view
 {
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	
 	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
@@ -19,6 +23,8 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private var _dataBases : Object;
 		private var requestQue : Object;
+		
+		private var typeVO : TypeVO;
 		
 		public function DataTablesTreeMediator( viewComponent : Object = null )
 		{
@@ -54,45 +60,6 @@ package net.vdombox.ide.modules.dataBase.view
 			isActive = false;
 		}
 		
-		private function addHandlers() : void
-		{
-			dataTablesTree.addEventListener( DataTablesEvents.CHANGE, changeHandler, false, 0, true );
-			
-		}
-		
-		private function changeHandler( event : DataTablesEvents ) : void
-		{
-			var newBaseID : String = dataTablesTree.selectedPageID;
-			var newTableID : String = dataTablesTree.selectedObjectID;
-			
-			if ( !_dataBases.hasOwnProperty( newBaseID ) )
-				return;
-			
-			if ( newTableID && newTableID != currentTableID )
-			{
-				if ( !requestQue )
-					requestQue = {};
-				
-				if ( !requestQue.hasOwnProperty( newTableID ) )
-					requestQue[ newTableID ] = { open: false, change: true };
-				else
-					requestQue[ newTableID ][ "change" ] = true;
-				
-				sendNotification( ApplicationFacade.GET_TABLE, { pageVO: _dataBases[ newBaseID ], objectID: newTableID } );
-			}
-			else if ( newBaseID != currentBaseID )
-			{
-				sendNotification( ApplicationFacade.CHANGE_SELECTED_DATA_BASE_REQUEST, _dataBases[ newBaseID ] );
-				sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, _dataBases[ newBaseID ] );
-			}
-				
-			else if ( newBaseID == currentBaseID && !newTableID )
-			{
-				
-				//sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, _pages[ newPageID ] );
-			}
-		}
-		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
@@ -101,8 +68,10 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.DATA_BASES_GETTED );
 			interests.push( ApplicationFacade.DATA_BASE_TABLES_GETTED );
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
-			interests.push( ApplicationFacade.TABLE_GETTED);
-			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED);
+			interests.push( ApplicationFacade.TABLE_GETTED );
+			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
+			interests.push( ApplicationFacade.TOP_LEVEL_TYPES_GETTED );
+			interests.push( ApplicationFacade.PAGE_CREATED );
 			
 			return interests;
 		}
@@ -188,6 +157,96 @@ package net.vdombox.ide.modules.dataBase.view
 					
 					break;
 				}
+					
+				case ApplicationFacade.TOP_LEVEL_TYPES_GETTED:
+				{
+					var typesVO : Array = body as Array;
+					var itemVO : TypeVO;
+					
+					for each ( itemVO in typesVO )
+					{
+						if ( itemVO.id == "753ea72c-475d-4a29-96be-71c522ca2097" )
+						{
+							typeVO = itemVO;
+							break;
+						}
+					}
+					
+					if ( !typeVO )
+						return;
+					
+					if ( sessionProxy.selectedApplication )
+					{
+						sendNotification( ApplicationFacade.CREATE_PAGE,
+							{ applicationVO: sessionProxy.selectedApplication, typeVO: typeVO } );				
+					}		
+						
+					
+					break;
+				}
+					
+				case ApplicationFacade.PAGE_CREATED:
+				{
+					sendNotification( ApplicationFacade.GET_DATA_BASES, sessionProxy.selectedApplication );
+					
+					break;
+				}	
+					
+					
+					
+					
+			}
+		}
+		
+		private function addHandlers() : void
+		{
+			dataTablesTree.addEventListener( DataTablesEvents.CHANGE, changeHandler, false, 0, true );
+			dataTablesTree.addBase.addEventListener( MouseEvent.CLICK, addNewBase, false, 0, true );
+		}
+		
+		private function addNewBase( event : MouseEvent ) : void
+		{
+			if ( !typeVO )
+				sendNotification( ApplicationFacade.GET_TOP_LEVEL_TYPES );
+			else if ( sessionProxy.selectedApplication )
+			{
+				sendNotification( ApplicationFacade.CREATE_PAGE,
+					{ applicationVO: sessionProxy.selectedApplication, typeVO: typeVO } );				
+			}
+		}
+		
+		
+		
+		private function changeHandler( event : DataTablesEvents ) : void
+		{
+			var newBaseID : String = dataTablesTree.selectedPageID;
+			var newTableID : String = dataTablesTree.selectedObjectID;
+			
+			if ( !_dataBases.hasOwnProperty( newBaseID ) )
+				return;
+			
+			if ( newTableID && newTableID != currentTableID )
+			{
+				if ( !requestQue )
+					requestQue = {};
+				
+				if ( !requestQue.hasOwnProperty( newTableID ) )
+					requestQue[ newTableID ] = { open: false, change: true };
+				else
+					requestQue[ newTableID ][ "change" ] = true;
+				
+				sendNotification( ApplicationFacade.GET_TABLE, { pageVO: _dataBases[ newBaseID ], objectID: newTableID } );
+			}
+			else if ( newBaseID != currentBaseID )
+			{
+				sendNotification( ApplicationFacade.CHANGE_SELECTED_DATA_BASE_REQUEST, _dataBases[ newBaseID ] );
+				sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, _dataBases[ newBaseID ] );
+			}
+				
+			else if ( newBaseID == currentBaseID && !newTableID )
+			{
+				
+				//sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, _pages[ newPageID ] );
 			}
 		}
 		

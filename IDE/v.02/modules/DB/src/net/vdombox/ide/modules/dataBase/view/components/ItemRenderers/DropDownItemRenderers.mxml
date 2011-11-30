@@ -3,5 +3,45 @@
 						  xmlns:s="library://ns.adobe.com/flex/spark" 
 						  xmlns:mx="library://ns.adobe.com/flex/mx" 
 						  focusEnabled="true">
-	<s:DropDownList id="types" />
+	
+	<fx:Metadata>
+		[Event(name="change", type="flash.events.Event")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.events.IndexChangeEvent;
+			
+			private var _selectedType : String;
+			
+			public function get selectedType():String
+			{
+				return _selectedType;
+			}
+
+			public function set selectedType(value:String):void
+			{
+				_selectedType = value;
+				types.selectedItem = value;
+				dispatchEvent( new Event ( Event.CHANGE ) );
+			}
+
+			protected function types_changeHandler(event:IndexChangeEvent):void
+			{
+				// TODO Auto-generated method stub
+				selectedType = types.selectedItem as String;
+			}
+			
+		]]>
+	</fx:Script>
+	<s:DropDownList id="types" change="types_changeHandler(event)" minWidth="30" width="100%">
+		<s:dataProvider>
+			<mx:ArrayList>
+				<fx:String>TEXT</fx:String>
+				<fx:String>INTEGER</fx:String>
+				<fx:String>REAL</fx:String>
+				<fx:String>BLOB</fx:String>
+			</mx:ArrayList>
+		</s:dataProvider>
+	</s:DropDownList>
 </s:MXDataGridItemRenderer>

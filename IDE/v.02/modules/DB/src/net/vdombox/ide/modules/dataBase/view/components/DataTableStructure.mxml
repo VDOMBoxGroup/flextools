@@ -6,6 +6,7 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.events.CloseEvent;
+			import mx.events.DataGridEvent;
 			import mx.events.ListEvent;
 			import mx.utils.UIDUtil;
 			
@@ -78,6 +79,7 @@
 				tableName = tableStructure.table.@name;
 				
 				var columnDef : XML;
+				columnsProviderOld = [];
 				for each ( columnDef in tableStructure.table.header.column ) 
 				{
 
@@ -240,11 +242,18 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	<s:VGroup width="100%" height="100%" gap="0">
-		<mx:DataGrid id="dataTable" width="100%" height="100%" dataProvider="{columnsProvider}" 
+		<mx:DataGrid id="dataTable" width="100%" height="100%" dataProvider="{columnsProvider}"
 					 sortableColumns="false" editable="true" change="dataTable_changeHandler(event)">
 			<mx:columns>
 				<mx:DataGridColumn dataField="name" headerText="Name"/>
-				<mx:DataGridColumn dataField="type" headerText="Type" itemRenderer="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.DropDownItemRenderers"/>
+				
+				<mx:DataGridColumn dataField="type" headerText="Type" editable="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<ItemRenderers:DropDownItemRenderers selectedType="{data.type}" change="{data.type = selectedType}" width="100%"/>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
 				
 				<mx:DataGridColumn dataField="primary" headerText="Primary key" editable="false">
 					<mx:itemRenderer>

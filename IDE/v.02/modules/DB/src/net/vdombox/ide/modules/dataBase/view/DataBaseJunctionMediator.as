@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.PPMStatesTargetNames;
+	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.SimpleMessage;
@@ -67,6 +68,10 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.REMOTE_CALL_REQUEST );
 			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
 			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
+			
+			interests.push( ApplicationFacade.GET_TOP_LEVEL_TYPES );
+			interests.push( ApplicationFacade.CREATE_PAGE );
+			
 			return interests;
 		}
 
@@ -220,6 +225,24 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.SET_SELECTED_OBJECT:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_TOP_LEVEL_TYPES:
+				{
+					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TOP_LEVEL_TYPES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.CREATE_PAGE:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
