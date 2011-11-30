@@ -33,8 +33,8 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 				{
 					if ( operation == PPMOperationNames.CREATE )
 						sendNotification( ApplicationFacade.PAGE_CREATED, body );
-					/*else if ( operation == PPMOperationNames.DELETE )
-						sendNotification( ApplicationFacade.PAGE_DELETED, body );*/
+					else if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.PAGE_GETTED, body );
 					
 					break;
 				}

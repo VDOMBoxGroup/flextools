@@ -42,14 +42,14 @@
 				return _objectVO ? _objectVO.name : "";
 			}
 			
-			public function get objectVO() : ObjectVO
+			public function get objectVO() : Object
 			{
 				return _objectVO ? _objectVO : null;
 			}
 			
-			public function set objectVO( value : ObjectVO ) : void
+			public function set objectVO( value : Object ) : void
 			{
-				_objectVO = value;
+				_objectVO = value as ObjectVO;
 			}
 			
 			public function set externalManager( ref: * ) : void 

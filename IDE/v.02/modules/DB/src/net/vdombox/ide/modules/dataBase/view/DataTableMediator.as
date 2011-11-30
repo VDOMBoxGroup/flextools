@@ -4,6 +4,8 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -13,6 +15,8 @@ package net.vdombox.ide.modules.dataBase.view
 	{
 		public static const NAME : String = "DataTableEditor";
 		private var notRegisterDataStructureMediator : Boolean = true;
+		private var notRegisterDataEditorMediator : Boolean = true;
+		private var notRegisterBaseQueryMediator : Boolean = true;
 		
 		public function DataTableMediator( viewComponent : Object = null )
 		{
@@ -27,24 +31,29 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		override public function onRegister() : void
 		{
+			if ( dataTable.objectVO is ObjectVO )
+				facade.registerMediator( new DataTableEditorMediator( dataTable.dataEditor ) );
+			else 
+				registerBaseQueryMediator();
 			addHandlers();
+			
+		}
+
+		private function addHandlers() : void
+		{
+			dataTable.DataStructure.addEventListener( FlexEvent.SHOW,  registerDataStructureMediator );
 		}
 		
 		override public function onRemove() : void
 		{
 			facade.removeMediator( DataTableEditorMediator.NAME + dataTable.editorID );
 			facade.removeMediator( DataTableStructureMediator.NAME + dataTable.editorID );
-			dataTable.removeEventListener( FlexEvent.CREATION_COMPLETE, registerDataTadleMediators );
-		}
-		
-		private function addHandlers() : void
-		{
-			dataTable.addEventListener( FlexEvent.CREATION_COMPLETE, registerDataTadleMediators );
-			dataTable.DataStructure.addEventListener( FlexEvent.SHOW,  registerDataStructureMediator );
+			facade.removeMediator( DataTableQueryMediator.NAME + dataTable.editorID );
 		}
 		
 		private function registerDataStructureMediator( event : FlexEvent ) : void
 		{
+			dataTable.DataStructure.removeEventListener( FlexEvent.SHOW,  registerDataStructureMediator );
 			if ( notRegisterDataStructureMediator )
 			{
 				notRegisterDataStructureMediator = false;
@@ -53,9 +62,9 @@ package net.vdombox.ide.modules.dataBase.view
 			
 		}
 		
-		private function registerDataTadleMediators( event : FlexEvent ) : void
+		private function registerBaseQueryMediator() : void
 		{
-			facade.registerMediator( new DataTableEditorMediator( dataTable.dataEditor ) );
+			facade.registerMediator( new DataTableQueryMediator( dataTable.baseQuery ) );
 		}
 	}
 }

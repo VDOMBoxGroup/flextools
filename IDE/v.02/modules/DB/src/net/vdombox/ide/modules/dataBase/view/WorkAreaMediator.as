@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import flash.events.Event;
 	
 	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.EditorEvent;
 	import net.vdombox.ide.modules.dataBase.events.WorkAreaEvent;
@@ -49,6 +50,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 			
+			interests.push( ApplicationFacade.PAGE_GETTED);
 			interests.push( ApplicationFacade.TABLE_GETTED);
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED);
 			
@@ -83,6 +85,23 @@ package net.vdombox.ide.modules.dataBase.view
 					
 					isActive = false;
 					
+					break;
+				}
+					
+				case ApplicationFacade.PAGE_GETTED:
+				{
+					var pageVO : PageVO = body as PageVO;
+					editor = workArea.getEditorByVO( pageVO ) as DataTable;
+					
+					if ( !editor )
+					{
+						editor = workArea.openEditor( pageVO ) as DataTable;
+						if ( facade.retrieveMediator( DataTableMediator.NAME + editor.editorID ) != null )
+							facade.removeMediator( DataTableMediator.NAME + editor.editorID  );
+						facade.registerMediator( new DataTableMediator( editor ) );
+					}
+					else
+						workArea.selectedEditor = editor;
 					break;
 				}
 					

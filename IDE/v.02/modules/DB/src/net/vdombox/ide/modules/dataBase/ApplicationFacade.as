@@ -108,6 +108,8 @@ package net.vdombox.ide.modules.dataBase
 		
 		public static const CHANGE_SELECTED_DATA_BASE_REQUEST : String = "changeSelectedDataBaseRequest";
 		
+		public static const GET_PAGE : String = "getPage";
+		public static const PAGE_GETTED : String = "pageGetted";
 		public static const GET_TABLE : String = "getTable";
 		public static const TABLE_GETTED : String = "tableGetted";
 		

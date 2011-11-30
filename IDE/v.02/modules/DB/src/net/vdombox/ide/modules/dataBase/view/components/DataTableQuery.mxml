@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
+		 width="400" height="300">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.utils.UIDUtil;
+			
+			import net.vdombox.ide.common.vo.PageVO;
+			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
+			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;
+			
+			private var _objectVO : PageVO;
+			
+			private var manager : *;
+			private var queue : QueueManager;
+			private var queryResult:XML;
+			
+			[Bindable]
+			private var dataGridProvider:ArrayCollection = new ArrayCollection();
+			
+			public function get editorID() : String
+			{
+				return _objectVO ? _objectVO.id : "";
+			}
+			
+			public function get editorName() : String
+			{
+				return _objectVO ? _objectVO.name : "";
+			}
+			
+			public function get objectVO() : Object
+			{
+				return _objectVO ? _objectVO : null;
+			}
+			
+			public function set objectVO( value : Object ) : void
+			{
+				_objectVO = value as PageVO;
+			}
+			
+			public function set externalManager( ref: * ) : void 
+			{
+				manager = ref;
+				queue = new QueueManager( manager );
+				
+				/* Permanent event listener */
+				queue.addEventListener( QueueEvent.QUEUE_INTERRUPT, errorHandler );	
+				
+				queue.reset();
+			}
+			
+			private function errorHandler( event : QueueEvent ) : void 
+			{
+				//showMessage( event.message );
+			}
+			
+			protected function sendQuery_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				var textQuery : String = query.text;
+				queue.addRequest( UIDUtil.createUID(), "execute_query_xml",
+					'<query_sql>' + textQuery + '</query_sql>', writeQueryResultOnDataGrid, writeQueryErrorOnDataGrid );
+				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
+				queue.execute();
+			}
+			
+			private function writeQueryResultOnDataGrid( message : String ) : void 
+			{
+				try 
+				{
+					queryResult = new XML( message );	
+				}
+				catch ( err : Error ) 
+				{ 
+					return;	
+				}
+			}
+			
+			private function writeQueryErrorOnDataGrid( message : String ) : void 
+			{
+				try 
+				{
+					queryResult = new XML( message );	
+				}
+				catch ( err : Error ) 
+				{ 
+					return;	
+				}
+			}
+			
+			private function queueOnLoadCompleteHandler( message : String ) : void 
+			{
+				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
+				//__alertArea.selectedChild = __normal;
+				//updateQueueLength();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:VGroup width="100%" height="100%">
+		<mx:DataGrid id="dataTable" dataProvider="{dataGridProvider}"
+					 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
+					 editable="false" sortableColumns="false" />
+		
+		<s:Group width="100%" height="100">
+			
+			<s:VGroup width="100%" height="100%" gap="3" paddingBottom="4" horizontalAlign="right">
+				
+				<s:TextArea id="query" width="100%" height="100%" />
+				
+				<s:Button id="sendQuery" click="sendQuery_clickHandler(event)" />
+				
+			</s:VGroup>
+			
+		</s:Group>
+		
+	</s:VGroup>
+	
+</s:Group>

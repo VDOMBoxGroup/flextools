@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.components.tabNavigatorClasses.TabNavigator;
 	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.dataBase.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
 	
@@ -25,7 +26,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 			addEventListener( "tabRemoved", numTabChangedHandler );
 		}
 		
-		public function openEditor( objectVO : ObjectVO ) : IEditor
+		public function openEditor( objectVO : Object ) : IEditor
 		{
 			var editor : DataTable = new DataTable();
 			editor.percentHeight = 100;
@@ -49,7 +50,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 			return editor;
 		}
 		
-		public function closeEditor( objectVO : ObjectVO ) : IEditor
+		public function closeEditor( objectVO : Object ) : IEditor
 		{
 			var result : IEditor;
 			var tab : Tab;
@@ -76,7 +77,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 			}			
 		}
 		
-		public function getEditorByVO( objectVO : ObjectVO ) : IEditor
+		public function getEditorByVO( objectVO : Object ) : IEditor
 		{
 			var result : IEditor;
 			var editor : *;

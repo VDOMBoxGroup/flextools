@@ -243,10 +243,10 @@ package net.vdombox.ide.modules.dataBase.view
 				sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, _dataBases[ newBaseID ] );
 			}
 				
-			else if ( newBaseID == currentBaseID && !newTableID )
+			else if ( !newTableID )
 			{
 				
-				//sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, _pages[ newPageID ] );
+				sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : sessionProxy.selectedApplication, pageID : newBaseID } );
 			}
 		}
 		

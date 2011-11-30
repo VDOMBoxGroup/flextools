@@ -73,6 +73,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.CREATE_PAGE );
 			
 			interests.push( ApplicationFacade.GET_TYPES );
+			interests.push( ApplicationFacade.GET_PAGE );
 			
 			return interests;
 		}
@@ -181,6 +182,16 @@ package net.vdombox.ide.modules.dataBase.view
 				{
 					
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_PAGE:
+				{
+					
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

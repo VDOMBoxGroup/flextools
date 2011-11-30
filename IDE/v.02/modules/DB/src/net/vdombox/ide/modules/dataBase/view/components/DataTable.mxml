@@ -5,16 +5,23 @@
 		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
 		 xmlns:components="net.vdombox.ide.modules.dataBase.view.components.*"
 		 removedFromStage="group1_removedFromStageHandler(event)">
+	
+	<s:states>
+		<s:State name="tableEditor"/>
+		<s:State name="tableStructure"/>
+		<s:State name="basaQuery"/>
+	</s:states>
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.vo.ObjectVO;
+			import net.vdombox.ide.common.vo.PageVO;
 			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 			import net.vdombox.ide.modules.dataBase.events.EditorEvent;
 			
 			[Bindable]
-			private var _objectVO : ObjectVO;
+			private var _objectVO : Object;
 			
 			public function get editorID() : String
 			{
@@ -26,16 +33,20 @@
 				return _objectVO ? _objectVO.name : "";
 			}
 			
-			public function get objectVO() : ObjectVO
+			public function get objectVO() : Object
 			{
 				return _objectVO ? _objectVO : null;
 			}
 			
-			public function set objectVO( value : ObjectVO ) : void
+			public function set objectVO( value : Object ) : void
 			{
 				_objectVO = value;
-				if ( dataEditor )
-					dataEditor.objectVO = value;
+				if ( _objectVO as PageVO )
+					currentState = "basaQuery";
+				else
+					currentState = "tableEditor";
+				/*if ( dataEditor )
+					dataEditor.objectVO = value;*/
 			}
 			
 			protected function group1_removedFromStageHandler(event:Event):void
@@ -45,16 +56,12 @@
 			
 			protected function data_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
-				dataEditor.visible = true; 
-				DataStructure.visible = false
+				currentState = "tableEditor"
 			}
 			
 			protected function structure_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
-				dataEditor.visible = false; 
-				DataStructure.visible = true;
+				currentState = "tableStructure"
 			}
 			
 			
@@ -66,7 +73,7 @@
 	
 	
 	<s:VGroup paddingTop="5" width="100%" height="100%" gap="0">
-		<s:HGroup width="100%" height="20" horizontalAlign="right" paddingRight="15">
+		<s:HGroup width="100%" height="20" horizontalAlign="right" paddingRight="15" includeIn="tableEditor,tableStructure">
 			
 			<s:Button id="data" label="Data" click="data_clickHandler(event)" />
 			
@@ -76,9 +83,11 @@
 		
 		<s:Group width="100%" height="100%">
 			
-			<components:DataTableEditor  id="dataEditor" width="100%" height="100%" objectVO="{_objectVO}" visible="true"/>
+			<components:DataTableEditor  id="dataEditor" width="100%" height="100%" objectVO="{_objectVO as ObjectVO}" visible="false" visible.tableEditor="true"/>
 			
-			<components:DataTableStructure id="DataStructure" width="100%" height="100%" objectVO="{_objectVO}" visible="false"/>
+			<components:DataTableStructure id="DataStructure" width="100%" height="100%" objectVO="{_objectVO as ObjectVO}" visible="false" visible.tableStructure="true"/>
+			
+			<components:DataTableQuery id="baseQuery" width="100%" height="100%" objectVO="{ _objectVO as PageVO }" visible="false" visible.basaQuery="true" />
 			
 		</s:Group>
 		
