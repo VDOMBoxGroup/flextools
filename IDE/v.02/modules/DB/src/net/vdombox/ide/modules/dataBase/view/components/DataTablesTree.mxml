@@ -218,9 +218,17 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:BitmapFill source = "@Embed('assets/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+		</s:fill>
+	</s:Rect>
+	
 	<s:VGroup width="100%" height="100%">
-		<mx:Tree id="tablesTree" width="100%" height="100%"
-				 dataProvider="{ _dataBases }" labelField="@name" />
+		<mx:Tree id="tablesTree" width="100%" height="100%" doubleClickEnabled="true"
+				 dataProvider="{ _dataBases }" labelField="@name" contentBackgroundAlpha="0"
+				 itemRenderer="net.vdombox.components.ObjectsTreePanelItemRenderer"/>
 		
 		<s:HGroup width="100%" height="20" verticalAlign="middle" horizontalAlign="center">
 			

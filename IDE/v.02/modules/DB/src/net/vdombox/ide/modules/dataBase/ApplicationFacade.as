@@ -136,6 +136,9 @@ package net.vdombox.ide.modules.dataBase
 		public static const CREATE_PAGE : String = "createPage";
 		public static const PAGE_CREATED : String = "pageCreate";
 		
+		public static const GET_TYPES : String = "getTypes";
+		public static const TYPES_CHANGED : String = "typesChanged";
+		
 
 
 		public static function getInstance( key : String ) : ApplicationFacade

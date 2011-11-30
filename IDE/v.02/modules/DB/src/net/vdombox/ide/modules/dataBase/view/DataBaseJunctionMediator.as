@@ -72,6 +72,8 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.GET_TOP_LEVEL_TYPES );
 			interests.push( ApplicationFacade.CREATE_PAGE );
 			
+			interests.push( ApplicationFacade.GET_TYPES );
+			
 			return interests;
 		}
 
@@ -243,6 +245,15 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.CREATE_PAGE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_TYPES:
+				{
+					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

@@ -26,6 +26,8 @@ package net.vdombox.ide.modules.dataBase.view
 		}
 
 		private var isReady : Boolean;
+		private var isAllStatesGetted : Boolean;
+		private var isTypesChanged : Boolean;
 		
 		public var selectedResource : ResourceVO;
 
@@ -39,6 +41,8 @@ package net.vdombox.ide.modules.dataBase.view
 		override public function onRegister() : void
 		{
 			isReady = false;
+			isAllStatesGetted = false;
+			isTypesChanged = false;
 			
 			addHandlers();
 		}
@@ -55,6 +59,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.ALL_STATES_GETTED );
+			interests.push( ApplicationFacade.TYPES_CHANGED );
 			
 			interests.push( ApplicationFacade.PIPES_READY );
 			interests.push( ApplicationFacade.MODULE_DESELECTED );
@@ -71,13 +76,23 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.PIPES_READY:
 				{
 					sendNotification( ApplicationFacade.GET_ALL_STATES );
+					sendNotification( ApplicationFacade.GET_TYPES );
 					
 					break;
 				}
 					
 				case ApplicationFacade.ALL_STATES_GETTED:
 				{
-					isReady = true;
+					isAllStatesGetted = true;
+					
+					checkConditions();
+					
+					break;
+				}
+					
+				case ApplicationFacade.TYPES_CHANGED:
+				{
+					isTypesChanged = true;
 					
 					checkConditions();
 					
@@ -107,8 +122,11 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function checkConditions() : void
 		{
-			if ( isReady && body.initialized )
+			if ( isTypesChanged && isAllStatesGetted && body.initialized )
+			{
+				isReady = true;
 				sendNotification( ApplicationFacade.BODY_START );
+			}
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
