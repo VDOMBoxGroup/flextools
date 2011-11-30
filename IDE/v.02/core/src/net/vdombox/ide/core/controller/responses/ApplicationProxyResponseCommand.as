@@ -52,6 +52,13 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				}
 					
+				case ApplicationFacade.APPLICATION_PAGE_GETTED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGE, body );
+					
+					break;
+				}	
+					
 				case ApplicationFacade.APPLICATION_PAGE_CREATED:
 				{
 					sendNotification(ApplicationFacade.PAGE_CHECK_SELECTED, {pagesVO: body.pagesVO});
@@ -127,6 +134,7 @@ package net.vdombox.ide.core.controller.responses
 					
 					break;
 				}
+				
 			}
 
 			if ( message )

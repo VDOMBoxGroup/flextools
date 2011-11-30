@@ -35,6 +35,7 @@ package net.vdombox.ide.core.model.vo
 		
 		public function setHostname( value : String ) : void
 		{
+			trace( "setHostname: " + value );
 			_hostname = value;
 		}
 		

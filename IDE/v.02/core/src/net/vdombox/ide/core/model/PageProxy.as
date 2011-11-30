@@ -534,6 +534,12 @@ package net.vdombox.ide.core.model
 			var serverActionsXMLList : XMLList 
 			var serverActionVO : ServerActionVO;
 			var serverActionXML : XML;
+			
+			if ( result.hasOwnProperty( "Error" ) )
+			{
+				trace(result.toXMLString());
+				return;
+			}
 
 
 			switch ( operationName )

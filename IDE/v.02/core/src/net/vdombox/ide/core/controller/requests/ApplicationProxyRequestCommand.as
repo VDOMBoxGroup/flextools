@@ -153,6 +153,12 @@ package net.vdombox.ide.core.controller.requests
 
 						applicationProxy.deletePage( pageVO );
 					}
+					else if ( operation == PPMOperationNames.READ )
+					{
+						var pageID : String = body.pageID as String;
+						
+						applicationProxy.getPageAt( pageID );
+					}
 
 					break;
 				}

@@ -269,8 +269,8 @@ package net.vdombox.ide.core.model
 		private function soap_loginOKHandler( event : SOAPEvent ) : void
 		{
 			var result : XML = event.result;
-			_authInfo.setUsername( result.Username[ 0 ] );
-			_authInfo.setHostname( result.Hostname[ 0 ] );
+			/*_authInfo.setUsername( result.Username[ 0 ] );
+			_authInfo.setHostname( result.Hostname[ 0 ] );*/
 
 			sendNotification( ApplicationFacade.SERVER_LOGIN_SUCCESSFUL, _authInfo );
 			startInfiniteSession();

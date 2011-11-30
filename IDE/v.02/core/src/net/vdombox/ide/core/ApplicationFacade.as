@@ -286,6 +286,7 @@ package net.vdombox.ide.core
 		public static const APPLICATION_STRUCTURE_SETTED : String = "applicationStructureSetted";
 		
 		public static const APPLICATION_PAGES_GETTED : String = "applicationPagesGetted";
+		public static const APPLICATION_PAGE_GETTED : String = "applicationPageGetted";
 		
 		public static const APPLICATION_PAGE_CREATED : String = "applicationPageCreated";
 		public static const APPLICATION_PAGE_DELETED : String = "applicationPageDeleted";
@@ -466,7 +467,8 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_INFORMATION_UPDATED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_STRUCTURE_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_STRUCTURE_SETTED, ApplicationProxyResponseCommand );
-			registerCommand( APPLICATION_PAGES_GETTED, ApplicationProxyResponseCommand );			
+			registerCommand( APPLICATION_PAGES_GETTED, ApplicationProxyResponseCommand );		
+			registerCommand( APPLICATION_PAGE_GETTED, ApplicationProxyResponseCommand );	
 			registerCommand( APPLICATION_PAGE_CREATED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_PAGE_DELETED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_SERVER_ACTIONS_LIST_GETTED, ApplicationProxyResponseCommand );

@@ -1,6 +1,7 @@
 package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
+	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
 	
 	import net.vdombox.ide.common.vo.ApplicationEventsVO;
@@ -20,6 +21,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
+	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -43,6 +45,8 @@ package net.vdombox.ide.core.model
 		public static var instances : Object = {};
 
 		private static const CREATE_LIBRARY : String = "createLibrary";
+		
+		private static const GET_PAGE : String = "getPage";
 
 		private static const GET_EVENTS : String = "getEvents";
 		private static const SET_EVENTS : String = "setEvents";
@@ -168,9 +172,15 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function getPageAt( pageID : String ) : PageVO
+		public function getPageAt( pageID : String ) : AsyncToken
 		{
-			return null;
+			var token : AsyncToken;
+			token = soap.get_one_object( applicationVO.id, pageID );
+			
+			token.recipientName = proxyName;
+			token.requestFunctionName = GET_PAGE;
+			
+			return token;
 		}
 
 		public function getPageProxy( pageVO : PageVO ) : PageProxy
@@ -338,6 +348,8 @@ package net.vdombox.ide.core.model
 		private function addHandlers() : void
 		{
 			soap.get_top_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			
+			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 
 			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.delete_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
@@ -364,6 +376,7 @@ package net.vdombox.ide.core.model
 			soap.set_events_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 
 			soap.remote_method_call.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.remote_method_call.addEventListener(  FaultEvent.FAULT, soap_faultHandler, false, 0, true );
 
 		}
 
@@ -650,6 +663,12 @@ package net.vdombox.ide.core.model
 			soap.set_events_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 
 			soap.remote_method_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.remote_method_call.removeEventListener(  FaultEvent.FAULT, soap_faultHandler);
+		}
+		
+		private function soap_faultHandler( event : FaultEvent ) : void
+		{
+			var tt : int = 6;
 		}
 
 		private function soap_resultHandler( event : SOAPEvent ) : void
@@ -672,6 +691,8 @@ package net.vdombox.ide.core.model
 
 			var libraryVO : LibraryVO;
 			var libraryXML : XML;
+			
+			var typeVO : TypeVO;
 
 			switch ( operationName )
 			{
@@ -749,6 +770,29 @@ package net.vdombox.ide.core.model
 					sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_LIST_GETTED,
 						{ applicationVO: applicationVO, serverActionsXML: result } );
 
+					break;
+				}
+					
+				case "get_one_object":
+				{
+					if ( token.requestFunctionName == GET_PAGE )
+					{
+						var objectXML : XML = result.Objects.Object[ 0 ];
+						
+						typeVO = typesProxy.getType( objectXML.@Type );
+						
+						pageVO = new PageVO( applicationVO, typeVO );
+						pageVO.setID( objectXML.@ID );
+						
+						pageVO.setXMLDescription( objectXML );
+						
+						var notification : ProxyNotification;
+						notification = new ProxyNotification( ApplicationFacade.APPLICATION_PAGE_GETTED, pageVO );
+						notification.token = token;
+						
+						facade.notifyObservers( notification );
+					}
+					
 					break;
 				}
 
@@ -851,7 +895,7 @@ package net.vdombox.ide.core.model
 					if ( !pageID || !typeID )
 						return;
 
-					var typeVO : TypeVO = typesProxy.getType( typeID );
+					typeVO = typesProxy.getType( typeID );
 
 					pageVO = new PageVO( applicationVO, typeVO );
 					pageVO.setID( pageID );
