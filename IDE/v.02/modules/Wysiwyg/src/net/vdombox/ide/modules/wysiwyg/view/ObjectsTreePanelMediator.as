@@ -68,10 +68,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var requestQue : Object;
 
 		private var sessionProxy : SessionProxy;
+
+		private function get renderProxy() : RenderProxy
+		{
+			return  facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+		}
 		
 		private var visibleRendererProxy : VisibleRendererProxy;
 
 		private var tempFlag : Boolean = true;
+		
+		private var sourceID : String;
+		private var containerID : String;
 
 		/**
 		 * 
@@ -296,6 +304,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.addEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true, 0, true );
+			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.COPY, copyItemRendererHandler, true, 0, true );
+			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.PASTE, pasteItemRendererHandler, true, 0, true );
 			
 		}
 		
@@ -309,7 +319,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				Alert.noLabel = "Cancel";
 				Alert.yesLabel = "Delete";
-				var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 				
 				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + "?",AlertButton.OK_No, objectsTreePanel.parentApplication, closeHandler);
 			}
@@ -421,6 +430,29 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.removeEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true );
+			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.COPY, copyItemRendererHandler, true );
+			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.PASTE, pasteItemRendererHandler, true );
+		}
+		
+		private function copyItemRendererHandler( event : ObjectsTreePanelEvent ) : void
+		{
+			sourceID = event.objectID;
+		}
+		
+		private function pasteItemRendererHandler( event : ObjectsTreePanelEvent ) : void
+		{
+			containerID = event.objectID;
+			
+			if ( !sourceID || !containerID )
+				return;
+			
+			if ( containerID == event.pageID )
+				sendNotification( ApplicationFacade.COPY_REQUEST, { pageVO : _pages[containerID], sourceID : sourceID } );
+			else
+			{
+				var rendererBase : RendererBase =  renderProxy.getRendererByID( containerID );
+				sendNotification( ApplicationFacade.COPY_REQUEST, {  objectVO : rendererBase.vdomObjectVO, sourceID : sourceID } );
+			}
 		}
 
 		private function selectCurrentPage( needGetPageStructure : Boolean = true ) : void

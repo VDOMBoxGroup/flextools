@@ -103,6 +103,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			interests.push( ApplicationFacade.SET_OBJECT_NAME );
 			
+			interests.push( ApplicationFacade.COPY_REQUEST );
+			
+			
 			
 
 			return interests;
@@ -433,6 +436,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
+					break;
+				}
+					
+				case ApplicationFacade.COPY_REQUEST :
+				{
+					if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.COPY, body );
+					else if ( body.hasOwnProperty( "objectVO" ) )	
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.COPY, body );
+					
+					if ( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
 					break;
 				}
 					

@@ -209,6 +209,8 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const LINE_LIST_GETTED : String = "lineListGetted";
 		
 		
+// Copy
+		public static const COPY_REQUEST : String = "copy";
 		
 		
 

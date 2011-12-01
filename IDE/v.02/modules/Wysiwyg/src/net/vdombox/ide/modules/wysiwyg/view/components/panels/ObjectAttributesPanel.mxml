@@ -27,6 +27,9 @@
 			private var attributes : ArrayCollection;
 			private var codeInterfaceRE : RegExp = /^(\w*)\((.*)\)/;
 			
+			private var verticalScrollPosition : Number = 0;
+			private var NeedSetVerticalScrollPosition : Boolean = false;
+			
 			
 			public function get attributesVO() : VdomObjectAttributesVO
 			{
@@ -35,6 +38,11 @@
 
 			public function set attributesVO( value : VdomObjectAttributesVO ) : void
 			{
+				if ( _attributesVO && value && _attributesVO.vdomObjectVO.id == value.vdomObjectVO.id )
+					verticalScrollPosition = attributesList.scroller.verticalScrollBar.viewport.verticalScrollPosition;
+				else
+					verticalScrollPosition = 0;
+				
 				_attributesVO = value;
 
 				if ( !value )
@@ -84,7 +92,9 @@
 				}
 				
 //				// TODO: need used "attributesList.dataProvider = attributesArray"
+				NeedSetVerticalScrollPosition = true;
 				attributesList.dataProvider = new ArrayCollection( attributesArray );
+				
 			}
 
 			private function getAttributeDesctriptionVOByName( name : String ) : AttributeDescriptionVO
@@ -114,20 +124,31 @@
 				attributesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 			}
 			
+			protected function attributesList_updateCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				if ( NeedSetVerticalScrollPosition )
+				{
+					attributesList.scroller.verticalScrollBar.viewport.verticalScrollPosition = verticalScrollPosition;
+					NeedSetVerticalScrollPosition = false;
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<s:Label id="typeNameLabel" y="-18" left="9" right="1" fontSize="8"
 			 color="#FFFFFF" paddingLeft="3" paddingTop="3" textAlign="left"
 			 verticalAlign="bottom"/>
-	<s:Rect height="100%" width="100%">
+	
+	<s:Rect width="100%" height="100%">
 		<s:fill>
-			<s:SolidColor color="#3A3A3A"/>
+			<s:BitmapFill source = "@Embed('icons/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
 
 	<s:HGroup height="100%" width="100%" gap="0">
-		<s:List id="attributesList" height="100%" width="100%"  borderVisible="false"
+		<s:List id="attributesList" height="100%" width="100%"  borderVisible="false" updateComplete="attributesList_updateCompleteHandler(event)"
 				change="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED ))"
 				useVirtualLayout="false" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase"
 				contentBackgroundAlpha="0" creationComplete="attributesList_creationCompleteHandler(event)">

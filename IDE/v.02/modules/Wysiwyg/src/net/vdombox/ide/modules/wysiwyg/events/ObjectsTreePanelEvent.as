@@ -19,6 +19,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var OPEN : String        = "otpe_open";
 		
 		public static var DELETE : String        = "otpe_delete";
+		public static var COPY : String        = "otpe_copy";
+		public static var PASTE : String        = "otpe_paste";
 
 		public function ObjectsTreePanelEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, pageID : String = null,
 											   objectID : String = null )

@@ -61,7 +61,7 @@
 							clipAndEnableScrolling="true"
 							text="{hostComponent.attributeValue}"
 							height="100%" width="100%"
-							minHeight="0"
+							paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5"
 							backgroundColor="#FFFFFF" bottom="65" fontFamily="Courier New" fontSize="12" left="5" right="5" top="5" 
 							focusIn="hostComponent.focus = true"/>
 	</s:Scroller>
