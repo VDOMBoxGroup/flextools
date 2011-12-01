@@ -7,6 +7,7 @@ package ExtendedAPI.com.containers
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.errors.MemoryError;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
@@ -652,7 +653,7 @@ package ExtendedAPI.com.containers
 	        // to create it every time.
 	        if(!menu) {
 	        	//menu = new Menu();
-	        	menu = new ScrollableArrowMenu();
+	        	menu = new Menu();
 	        	menu.setStyle("textAlign", "left");
 	        	
 	        	// If we wanted to change the scroll policy for the scrolling menu we
@@ -660,7 +661,7 @@ package ExtendedAPI.com.containers
 	        	// verticalScrollPolicy to OFF will remove the side scrollbars and leave
 	        	// just the arrow buttons on top and bottom.
 	        	menu.verticalScrollPolicy = ScrollPolicy.AUTO;
-	        	(menu as ScrollableArrowMenu).arrowScrollPolicy = ScrollPolicy.AUTO;
+	        	//(menu as MemoryError).arrowScrollPolicy = ScrollPolicy.AUTO;
 	        	
 	        	menu.addEventListener(MenuEvent.ITEM_CLICK, changeTabs);
 	        }
