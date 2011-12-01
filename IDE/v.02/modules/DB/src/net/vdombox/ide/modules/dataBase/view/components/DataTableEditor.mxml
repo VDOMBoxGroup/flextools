@@ -492,7 +492,7 @@
 					{
 						if ( StringUtil.trim( event.currentTarget.itemEditorInstance.text ) == '' ) 
 						{
-							if ( dataGridColumnsProps[ event.columnIndex ][ 'notnull' ].toLowerCase() == 'true' )
+							if ( dataGridColumnsProps[ event.columnIndex ][ 'notnull' ] == 'true' )
 								event.currentTarget.itemEditorInstance.text = 'REQUIRED';
 							else
 								event.currentTarget.itemEditorInstance.text = '';

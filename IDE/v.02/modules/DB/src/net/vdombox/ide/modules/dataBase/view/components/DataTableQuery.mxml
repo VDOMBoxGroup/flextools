@@ -5,6 +5,11 @@
 		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
 		 width="400" height="300">
 	
+	<s:states>
+		<s:State name="all"/>
+		<s:State name="short"/>
+	</s:states>
+	
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -16,6 +21,8 @@
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.TextInputItemRenderers;
 			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;
+			
+			import spark.events.TextOperationEvent;
 			
 			private var _objectVO : PageVO;
 			
@@ -144,7 +151,7 @@
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
 				queue.removeEventListener( QueueEvent.UNKNOWN_ERROR, queueERRORHandler );
-				errorWriter.text = "Success";
+				errorWriter.text = "No error";
 			}
 			
 			private function queueERRORHandler( event : QueueEvent ) : void 
@@ -156,6 +163,25 @@
 				dataGridProvider = null;
 			}
 			
+			protected function query_changeHandler(event:TextOperationEvent):void
+			{
+				// TODO Auto-generated method stub
+				if ( query.scroller.viewport.contentHeight < 61 )
+					query.height = 63;
+				else if ( query.scroller.viewport.contentHeight > 250 )
+					query.height = 252;
+				else
+					query.height = query.scroller.viewport.contentHeight + 2;
+			}
+			
+			protected function image1_clickHandler(event:MouseEvent):void
+			{
+				if ( currentState == "all" )
+					currentState = "short";
+				else
+					currentState = "all";
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -163,26 +189,38 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:VGroup width="100%" height="100%">
+	<s:VGroup width="100%" height="100%" paddingLeft="5" paddingRight="5">
 		
-		<s:Group width="100%" height="100">
+		<s:Group id="queryGroup" width="100%">
 			
-			<s:VGroup width="100%" height="100%" gap="3" paddingBottom="4" horizontalAlign="right">
+			<s:VGroup width="100%" height="100%">
 				
-				<s:TextArea id="query" width="100%" height="100%" />
+				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
+					<s:Label text="SQL string" includeIn="all"/>
+					<mx:Spacer width="100%"/>
+					<mx:Image source.all="@Embed('assets/arr_1.png')" source.short="@Embed('assets/arr_2.png')" click="image1_clickHandler(event)"/>
+					<mx:Spacer width="8"/>
+				</s:HGroup>		
 				
-				<s:HGroup width="100%" height="20" horizontalAlign="right" verticalAlign="middle" paddingRight="10">
+				<s:VGroup width="100%" height="{query.height + 65}" gap="3" paddingBottom="4" horizontalAlign="left" 
+						 paddingTop="3" includeIn="all">
 					
+					<s:TextArea id="query" width="100%" height="63" change="query_changeHandler(event)"/>
 					<s:Button id="sendQuery" label="send query" click="sendQuery_clickHandler(event)"/>
 					
-				</s:HGroup>
-				
-				
-				<s:TextInput id="errorWriter" width="100%" editable="false" />
+					<mx:Spacer height="2" />
+					<s:Label text="Error message from database engine" />
+					<s:TextInput id="errorWriter" width="100%" editable="false" />
+					
+				</s:VGroup>
 				
 			</s:VGroup>
-			
+
 		</s:Group>
+		
+		<mx:Spacer height="7" includeIn="all"/>
+		
+		<s:Label text="Data returned:" />
 		
 		<mx:DataGrid id="dataTable" dataProvider="{dataGridProvider}"
 					 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"

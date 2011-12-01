@@ -125,7 +125,7 @@
 								primary={newStructureVO.primary.toString()}
 								autoincrement={newStructureVO.aincrement.toString()}
 								unique={newStructureVO.unique.toString()}
-								default={""}
+								default={newStructureVO.defvalue}
 							/>
 						</tableStructure>;
 					
@@ -134,7 +134,8 @@
 					if ( oldStructureVO )
 					{
 						if ( newStructureVO.name != oldStructureVO.name || newStructureVO.type != oldStructureVO.type || newStructureVO.primary != oldStructureVO.primary || 
-							newStructureVO.aincrement != oldStructureVO.aincrement || newStructureVO.notnull != oldStructureVO.notnull || newStructureVO.unique != oldStructureVO.unique )
+							newStructureVO.aincrement != oldStructureVO.aincrement || newStructureVO.notnull != oldStructureVO.notnull || newStructureVO.unique != oldStructureVO.unique ||
+							newStructureVO.defvalue != oldStructureVO.defvalue )
 						{
 							queue.addRequest( UIDUtil.createUID(), "update_column", requestXML.toXMLString(), null, null) ;
 						}
@@ -279,13 +280,15 @@
 					</mx:itemRenderer>
 				</mx:DataGridColumn>
 				
-				<mx:DataGridColumn dataField="notnull" headerText="notnull" editable="false">
+				<mx:DataGridColumn dataField="notnull" headerText="Notnull" editable="false">
 					<mx:itemRenderer>
 						<fx:Component>
 							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.notnull}" change="{data.notnull = selectedCheck}"/>
 						</fx:Component>
 					</mx:itemRenderer>
 				</mx:DataGridColumn>
+				
+				<mx:DataGridColumn dataField="defvalue" headerText="Default"/>
 				
 			</mx:columns>
 		</mx:DataGrid>

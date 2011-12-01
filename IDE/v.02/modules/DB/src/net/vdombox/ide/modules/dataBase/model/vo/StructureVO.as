@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.dataBase.model.vo
 		public var aincrement : Boolean;
 		public var notnull : Boolean;
 		public var unique : Boolean;
+		public var defvalue : String;
 		
 		
 		
@@ -25,6 +26,7 @@ package net.vdombox.ide.modules.dataBase.model.vo
 				aincrement = source.@autoincrement.toString() == "true" ? true : false;
 				notnull = source.@notnull.toString() == "true" ? true : false;
 				unique = source.@unique.toString() == "true" ? true : false;
+				defvalue = source.@default.toString();
 			}
 			else
 			{
@@ -35,6 +37,7 @@ package net.vdombox.ide.modules.dataBase.model.vo
 				aincrement = false;
 				notnull = false;
 				unique = false;
+				defvalue = "";
 			}
 		}
 		
@@ -49,6 +52,7 @@ package net.vdombox.ide.modules.dataBase.model.vo
 			structureVO.aincrement = aincrement;
 			structureVO.notnull = notnull;
 			structureVO.unique = unique;
+			structureVO.defvalue = defvalue;
 			
 			return structureVO;
 		}
