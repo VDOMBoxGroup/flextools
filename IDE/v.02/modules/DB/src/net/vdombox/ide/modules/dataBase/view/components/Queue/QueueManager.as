@@ -164,7 +164,7 @@ package net.vdombox.ide.modules.dataBase.view.components.Queue
 			}
 			catch (err:Error) {	return;	}
 			
-			if (xmlResult.name().toString() == "Result") {
+			if ( xmlResult.hasOwnProperty("name") && xmlResult.name().toString() == "Result") {
 				
 				try {
 					this.dispatchEvent(new QueueEvent(QueueEvent.SOAP_EXCEPTION, xmlResult.Error, currentRequestInQueue));

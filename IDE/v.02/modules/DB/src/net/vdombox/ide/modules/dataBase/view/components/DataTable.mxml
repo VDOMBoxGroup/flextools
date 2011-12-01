@@ -71,6 +71,11 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor color="#EFEFEF"/>
+		</s:fill>
+	</s:Rect>
 	
 	<s:VGroup paddingTop="5" width="100%" height="100%" gap="0">
 		<s:HGroup width="100%" height="20" horizontalAlign="right" paddingRight="15" includeIn="tableEditor,tableStructure">

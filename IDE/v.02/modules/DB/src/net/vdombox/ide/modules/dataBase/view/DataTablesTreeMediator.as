@@ -105,6 +105,12 @@ package net.vdombox.ide.modules.dataBase.view
 					
 					selectCurrentPage();
 					
+					if ( dataTablesTree.selectedObjectID )
+						sendNotification( ApplicationFacade.GET_TABLE, { pageVO: _dataBases[ dataTablesTree.selectedPageID ], objectID: dataTablesTree.selectedObjectID } );
+					else if ( dataTablesTree.selectedPageID )
+						sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : sessionProxy.selectedApplication, pageID : dataTablesTree.selectedPageID } );
+					
+					
 					break;
 				}
 					
@@ -241,6 +247,10 @@ package net.vdombox.ide.modules.dataBase.view
 			{
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_DATA_BASE_REQUEST, _dataBases[ newBaseID ] );
 				sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, _dataBases[ newBaseID ] );
+				if ( newTableID )
+					sendNotification( ApplicationFacade.GET_TABLE, { pageVO: _dataBases[ newBaseID ], objectID: newTableID } );
+				else
+					sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : sessionProxy.selectedApplication, pageID : newBaseID } );
 			}
 				
 			else if ( !newTableID )
