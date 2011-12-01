@@ -230,7 +230,7 @@
 				 dataProvider="{ _dataBases }" labelField="@name" contentBackgroundAlpha="0"
 				 itemRenderer="net.vdombox.components.ObjectsTreePanelItemRenderer"/>
 		
-		<s:HGroup width="100%" height="20" verticalAlign="middle" horizontalAlign="center">
+		<s:HGroup width="100%" height="20" verticalAlign="middle" horizontalAlign="center" includeInLayout="false">
 			
 			<s:Button id="addBase" label="Add Base" />
 			

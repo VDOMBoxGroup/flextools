@@ -166,6 +166,7 @@
 			protected function query_changeHandler(event:TextOperationEvent):void
 			{
 				// TODO Auto-generated method stub
+				errorWriter.text = "";
 				if ( query.scroller.viewport.contentHeight < 61 )
 					query.height = 63;
 				else if ( query.scroller.viewport.contentHeight > 250 )

@@ -243,12 +243,12 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	<s:VGroup width="100%" height="100%" gap="0">
-		<mx:DataGrid id="dataTable" width="100%" height="100%" dataProvider="{columnsProvider}"
+		<mx:DataGrid id="dataTable" width="100%" height="100%" dataProvider="{columnsProvider}" draggableColumns="false"
 					 sortableColumns="false" editable="true" change="dataTable_changeHandler(event)">
 			<mx:columns>
 				<mx:DataGridColumn dataField="name" headerText="Name"/>
 				
-				<mx:DataGridColumn dataField="type" headerText="Type" editable="false">
+				<mx:DataGridColumn dataField="type" headerText="Type" editable="false" width="120">
 					<mx:itemRenderer>
 						<fx:Component>
 							<ItemRenderers:DropDownItemRenderers selectedType="{data.type}" change="{data.type = selectedType}" width="100%"/>
@@ -256,7 +256,7 @@
 					</mx:itemRenderer>
 				</mx:DataGridColumn>
 				
-				<mx:DataGridColumn dataField="primary" headerText="Primary key" editable="false">
+				<mx:DataGridColumn dataField="primary" headerText="Primary key" editable="false" width="80">
 					<mx:itemRenderer>
 						<fx:Component>
 							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.primary}" change="{data.primary = selectedCheck}"/>
@@ -264,7 +264,7 @@
 					</mx:itemRenderer>
 				</mx:DataGridColumn>
 				
-				<mx:DataGridColumn dataField="aincrement" headerText="Auto increment" editable="false">
+				<mx:DataGridColumn dataField="aincrement" headerText="Auto increment" editable="false" width="80">
 					<mx:itemRenderer>
 						<fx:Component>
 							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.aincrement}" change="{data.aincrement = selectedCheck}"/>
@@ -272,7 +272,7 @@
 					</mx:itemRenderer>
 				</mx:DataGridColumn>
 				
-				<mx:DataGridColumn dataField="unique" headerText="Unique" editable="false">
+				<mx:DataGridColumn dataField="unique" headerText="Unique" editable="false" width="80">
 					<mx:itemRenderer>
 						<fx:Component>
 							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.unique}" change="{data.unique = selectedCheck}"/>
@@ -280,7 +280,7 @@
 					</mx:itemRenderer>
 				</mx:DataGridColumn>
 				
-				<mx:DataGridColumn dataField="notnull" headerText="Notnull" editable="false">
+				<mx:DataGridColumn dataField="notnull" headerText="Notnull" editable="false" width="80">
 					<mx:itemRenderer>
 						<fx:Component>
 							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.notnull}" change="{data.notnull = selectedCheck}"/>
