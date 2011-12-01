@@ -292,6 +292,7 @@ package net.vdombox.ide.core
 		public static const APPLICATION_PAGE_DELETED : String = "applicationPageDeleted";
 		
 		public static const APPLICATION_REMOTE_CALL_GETTED : String = "applicationRemoteCallGetted";
+		public static const APPLICATION_REMOTE_CALL_ERROR_GETTED : String = "applicationRemoteCallErrorGetted";
 		
 		public static const APPLICATION_SERVER_ACTIONS_LIST_GETTED : String = "applicationServerActionsGetted";
 		
@@ -478,6 +479,7 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_EVENTS_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_EVENTS_SETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_REMOTE_CALL_GETTED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_REMOTE_CALL_ERROR_GETTED, ApplicationProxyResponseCommand );
 
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
 			

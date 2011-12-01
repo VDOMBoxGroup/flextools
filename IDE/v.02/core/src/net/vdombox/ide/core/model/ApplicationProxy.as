@@ -3,6 +3,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
+	import mx.rpc.soap.SOAPFault;
 	
 	import net.vdombox.ide.common.vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
@@ -668,7 +669,25 @@ package net.vdombox.ide.core.model
 		
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{
-			var tt : int = 6;
+			var operation : Operation = event.target as Operation;
+			
+			if ( !operation )
+				return;
+			
+			var operationName : String = operation.name;
+			
+			var fault : SOAPFault = event.fault as SOAPFault;
+			
+			switch ( operationName )
+			{
+				case "remote_method_call":
+				{
+					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_ERROR_GETTED, { applicationVO: applicationVO, error: fault.detail } );
+	
+					break;
+				}
+			}
+			
 		}
 
 		private function soap_resultHandler( event : SOAPEvent ) : void

@@ -134,6 +134,13 @@ package net.vdombox.ide.core.controller.responses
 					
 					break;
 				}
+					
+				case ApplicationFacade.APPLICATION_REMOTE_CALL_ERROR_GETTED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.REMOTE_CALL, body );
+					
+					break;
+				}
 				
 			}
 
