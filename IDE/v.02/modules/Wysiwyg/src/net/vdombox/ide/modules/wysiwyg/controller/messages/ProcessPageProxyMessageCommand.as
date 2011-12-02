@@ -75,6 +75,13 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 
 					break;
 				}
+					
+				case PPMPageTargetNames.COPY:
+				{
+					sendNotification( ApplicationFacade.GET_WYSIWYG, body );
+					
+					break;
+				}
 
 				case PPMPageTargetNames.XML_PRESENTATION:
 				{

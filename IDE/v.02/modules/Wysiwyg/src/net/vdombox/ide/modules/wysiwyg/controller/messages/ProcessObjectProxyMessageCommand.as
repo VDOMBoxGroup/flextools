@@ -134,6 +134,13 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					}
 					break;
 				}
+					
+				case PPMObjectTargetNames.COPY:
+				{
+					sendNotification( ApplicationFacade.GET_WYSIWYG, body );
+					
+					break;
+				}
 			}
 		}
 	}
