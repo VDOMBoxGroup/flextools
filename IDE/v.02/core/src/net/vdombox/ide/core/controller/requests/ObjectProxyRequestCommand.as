@@ -117,6 +117,13 @@ package net.vdombox.ide.core.controller.requests
 
 					break;
 				}
+					
+				case PPMObjectTargetNames.COPY:
+				{
+					objectProxy.createCopy( body.sourceID as String );
+					
+					break;
+				}
 			}
 		}
 	}

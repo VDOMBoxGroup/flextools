@@ -120,6 +120,13 @@ package net.vdombox.ide.core.controller.responses
 					
 					break;
 				}
+					
+				case ApplicationFacade.OBJECT_COPY_CREATED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.COPY, body );
+					
+					break;
+				}
 			}
 			
 			if ( message )

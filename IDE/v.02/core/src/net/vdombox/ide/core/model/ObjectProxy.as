@@ -113,6 +113,16 @@ package net.vdombox.ide.core.model
 
 			return token;
 		}
+		
+		public function createCopy( sourceID : String ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.copy_object(objectVO.pageVO.applicationVO.id, sourceID, objectVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
 
 		public function getWYSIWYG() : AsyncToken
 		{
@@ -298,6 +308,9 @@ package net.vdombox.ide.core.model
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
+			soap.copy_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.copy_object.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 			
 		}
 
@@ -324,6 +337,9 @@ package net.vdombox.ide.core.model
 			
 			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.copy_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.copy_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
 			
 		}
@@ -430,6 +446,12 @@ package net.vdombox.ide.core.model
 			var serverActionsXMLList : XMLList ;
 			var serverActionVO : ServerActionVO;
 			var serverActionXML : XML;
+			
+			if ( result.hasOwnProperty( "Error" ) )
+			{
+				trace("EERRREEOOOORRRR " + result.toXMLString());
+				return;
+			}
 
 
 			switch ( operationName )
@@ -613,7 +635,13 @@ package net.vdombox.ide.core.model
 					break;
 				}
 					
+				case "copy_object":
+				{
+					notification = new ProxyNotification( ApplicationFacade.OBJECT_COPY_CREATED, objectVO );
+					notification.token = token;
 					
+					break;
+				}
 			}
 
 			if ( notification )
@@ -643,6 +671,13 @@ package net.vdombox.ide.core.model
 					
 					break;
 				}	
+					
+				case "copy_object":
+				{
+					var it : int = 9;
+					
+					break;
+				}
 			}
 			
 			if ( notification )

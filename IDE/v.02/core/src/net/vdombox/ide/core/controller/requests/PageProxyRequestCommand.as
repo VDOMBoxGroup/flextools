@@ -146,6 +146,13 @@ package net.vdombox.ide.core.controller.requests
 					
 					break;
 				}
+					
+				case PPMPageTargetNames.COPY:
+				{
+					pageProxy.createCopy( body.sourceID as String );
+					
+					break;
+				}
 			}
 		}
 	}

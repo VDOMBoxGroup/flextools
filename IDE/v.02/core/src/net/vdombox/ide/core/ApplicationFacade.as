@@ -345,6 +345,8 @@ package net.vdombox.ide.core
 		public static const PAGE_NAME_SETTED : String = "pageNameSetted";
 		public static const CREATE_FIRST_PAGE : String = "createFirstPage";
 		
+		public static const PAGE_COPY_CREATED  : String = "pageCopyCreated";
+		
 //		object
 		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
 		public static const OBJECT_ATTRIBUTES_SETTED : String = "objectAttributesSetted";
@@ -372,6 +374,10 @@ package net.vdombox.ide.core
 		public static const OPEN_APPLICATION_PROPERTY_VIEW  : String = "openApplicationPropertyView";
 		public static const OPEN_APPLICATIONS_VIEW  : String = "openApplicationsView";
 //		public static const OPEN_APPLICATION_IN_CHANGE_VIEW  : String = "openApplicationInChangeView";
+		
+		public static const OBJECT_COPY_CREATED  : String = "objectCopyCreated";
+		
+		
 
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";
@@ -507,6 +513,7 @@ package net.vdombox.ide.core
 			registerCommand( PAGE_WYSIWYG_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_XML_PRESENTATION_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_XML_PRESENTATION_SETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_COPY_CREATED, PageProxyResponseCommand );
 
 			registerCommand( OBJECT_PROXY_REQUEST, ObjectProxyRequestCommand );
 			registerCommand( OBJECT_ATTRIBUTES_GETTED, ObjectProxyResponseCommand );
@@ -523,6 +530,7 @@ package net.vdombox.ide.core
 			registerCommand( OBJECT_WYSIWYG_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_XML_PRESENTATION_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_XML_PRESENTATION_SETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_COPY_CREATED, ObjectProxyResponseCommand );
 
 			registerCommand( RESOURCES_PROXY_REQUEST,	ResourcesProxyRequestCommand );
 			registerCommand( RESOURCES_GETTED,		 	ResourcesProxyResponseCommand );

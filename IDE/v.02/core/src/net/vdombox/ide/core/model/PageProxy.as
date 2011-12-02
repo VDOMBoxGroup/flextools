@@ -152,6 +152,16 @@ package net.vdombox.ide.core.model
 
 			return token;
 		}
+		
+		public function createCopy( sourceID : String ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.copy_object(pageVO.applicationVO.id, sourceID, pageVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
 
 		public function getServerActionsList() : AsyncToken
 		{
@@ -384,6 +394,10 @@ package net.vdombox.ide.core.model
 			
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.copy_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.copy_object.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 		}
 
 		private function removeHandlers() : void
@@ -415,6 +429,9 @@ package net.vdombox.ide.core.model
 			
 			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.copy_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.copy_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
 			
 		}
@@ -537,7 +554,7 @@ package net.vdombox.ide.core.model
 			
 			if ( result.hasOwnProperty( "Error" ) )
 			{
-				trace(result.toXMLString());
+				trace("EERRREEOOOORRRR " + result.toXMLString());
 				return;
 			}
 
@@ -783,6 +800,16 @@ package net.vdombox.ide.core.model
 
 					break;
 				}
+					
+				case "copy_object":
+				{
+					notification = new ProxyNotification( ApplicationFacade.PAGE_COPY_CREATED, pageVO );
+					notification.token = token;
+					
+					break;
+				}
+					
+					
 			}
 
 			if ( notification )
@@ -825,6 +852,13 @@ package net.vdombox.ide.core.model
 					pageVO.name = detailXML.Name;
 					notification = new ProxyNotification( ApplicationFacade.PAGE_NAME_SETTED, pageVO );
 					notification.token = token;
+					break;
+				}
+					
+				case "copy_object":
+				{
+					var it : int = 9;
+					
 					break;
 				}
 
