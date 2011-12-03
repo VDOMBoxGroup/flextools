@@ -7,19 +7,27 @@
 	<mx:Script>
 		<![CDATA[
 			import PowerPack.com.gen.parse.CodeParser;
-			import mx.core.UIComponent;
+			import PowerPack.com.graph.GraphCanvas;
 			import PowerPack.com.managers.LanguageManager;
-			import mx.events.ListEventReason;
-			import mx.collections.SortField;
-			import mx.collections.Sort;
+			import PowerPack.com.panel.Graphs;
+			
 			import mx.collections.ArrayCollection;
-			import mx.events.ListEvent;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			import mx.controls.listClasses.IListItemRenderer;
+			import mx.core.UIComponent;
 			import mx.events.CollectionEvent;
 			import mx.events.CollectionEventKind;
+			import mx.events.ListEvent;
+			import mx.events.ListEventReason;
 			
 			[Bindable]
 			public var graphs:ArrayCollection = new ArrayCollection();
-
+			
+			private var _newGraphName : String = "";
+			
+			private static const ERROR_TYPE_UNIQUE_NAME : int = 1;
+			private static const ERROR_TYPE_VALID_NAME	: int = 0;
 			//--------------------------------------------------------------------------
 			//
 			//  Class methods
@@ -30,88 +38,107 @@
 			{				
 				graphs.addEventListener(CollectionEvent.COLLECTION_CHANGE, onGraphsChange);	
 			}
-
-            private function BeginningEdit(event:ListEvent):void 
-            {
-            	//
-            	
-            	return;
-            }
-                        
+			
+			public function get newGraphName () : String
+			{
+				return _newGraphName;
+			}
+			
+			public function get listItemEditorInstance () : GraphThumb
+			{
+				return lstGraphs.itemEditorInstance as GraphThumb;
+			}
+			
+			public function get editedItemRenderer () : IListItemRenderer
+			{
+				return lstGraphs.editedItemRenderer;
+			}
+			
+			public function set uniqueGraphName (unique : Boolean) : void
+			{
+				if (!unique)
+				{
+					applyErrorItemRendererName(ERROR_TYPE_UNIQUE_NAME);
+					return;
+				}
+				
+				editedItemRenderer.data.name = _newGraphName;
+				
+				destroyListItemEditor();
+				
+				lstGraphs.dataProvider.notifyItemUpdate(editedItemRenderer);
+				
+				var evnt : GraphsAccordionEvent = new GraphsAccordionEvent( GraphsAccordionEvent.GRAPH_VALUE_EDITING_COMPLETE);
+				lstGraphs.dispatchEvent(evnt);
+			}
+			            
             private function beginEdit(event:ListEvent):void 
             { 
+				lstGraphs = event.target as List;
+				
             	event.preventDefault();
-            	
-            	var list:List = List(event.target);
-            	
-            	list.createItemEditor(event.columnIndex, event.rowIndex); 
-            	list.editedItemRenderer.visible = false;
 				
-            	var editInst:GraphThumb = GraphThumb(list.itemEditorInstance);
-            	
-				editInst.editable = true;
+				if (editedItemRenderer)
+					editedItemRenderer.visible = false;
 				
-				editInst.data = list.selectedItem;
-				editInst.txtThumb.setFocus();
-				editInst.txtThumb.setSelection(0, editInst.txtThumb.text.length);
+				createListItemEditor(event.columnIndex, event.rowIndex);
            	}
             
-            private function endEdit(event:ListEvent):void 
+			private function endEdit(event:ListEvent):void 
             {    
                 event.preventDefault();	
-                
-            	var list:List = List(event.target);
-            	var editInst:GraphThumb = GraphThumb(list.itemEditorInstance);                
 				
-				editInst.txtThumb.errorString = null;
-                var newData:String = editInst.txtThumb.text;
+				listItemEditorInstance.txtThumb.errorString = null;
+                
+				_newGraphName = listItemEditorInstance.txtThumb.text;
                 
                 if (event.reason == ListEventReason.CANCELLED)
                 {
                     // Do not update item.
 	                // Close the cell editor.
-	                list.editedItemRenderer.visible = true;
-	                list.destroyItemEditor();
-	                list.editable = false; 
+					destroyListItemEditor();
                 	return;
                 }
             	
             	// Disable copying data back to the control.
-                if(CodeParser.ParseSubgraphNode(newData).error)
+                if(CodeParser.ParseSubgraphNode(_newGraphName).error)
                 {	      
-                	editInst.txtThumb.errorString = LanguageManager.sentences['msg_enter_valid_graph_name'];
-                	editInst.txtThumb.setFocus();
-                	event.stopImmediatePropagation();
-            	}            	
-            	else
-				{				
-	                // Get new label from editor.
-	                list.editedItemRenderer.data.name =
-						newData;
-
-	            	list.editedItemRenderer.visible = true;
-
-	                // Close the cell editor.
-	                list.destroyItemEditor();
-
-	                // Notify the list control to update its display.
-	        		list.dataProvider.notifyItemUpdate(list.editedItemRenderer);
-	        		
-	        		var evnt:ListEvent = new ListEvent(
-	        			"editingComplete",
-	        			event.bubbles, 
-	        			event.cancelable, 
-	        			event.columnIndex,
-	        			event.rowIndex, 
-	        			null,
-	        			event.itemRenderer);
-	        		
-		   			list.editable = false;
-		   			
-	        		list.dispatchEvent(evnt);
-	   			}
+					event.stopImmediatePropagation();
+					
+					applyErrorItemRendererName();
+					
+					return;
+            	}          
+				
+				var evnt : GraphsAccordionEvent = new GraphsAccordionEvent( GraphsAccordionEvent.GRAPH_VALUE_CHECKED);
+				lstGraphs.dispatchEvent(evnt);
             }
 
+			private function createListItemEditor(columnIndex:int, rowIndex:int):void
+			{
+				lstGraphs.createItemEditor(columnIndex, rowIndex); 
+				
+				listItemEditorInstance.editable = true;
+				
+				listItemEditorInstance.data = lstGraphs.selectedItem;
+				
+				listItemEditorInstance.txtThumb.setFocus();
+				listItemEditorInstance.txtThumb.setSelection(0, listItemEditorInstance.txtThumb.text.length);
+			}
+			
+			private function destroyListItemEditor():void
+			{
+				lstGraphs.visible = true;
+				lstGraphs.destroyItemEditor();
+				lstGraphs.editable = false;
+			}
+			
+			private function applyErrorItemRendererName(errorType : Number = ERROR_TYPE_VALID_NAME):void
+			{
+				listItemEditorInstance.txtThumb.errorString = (errorType == ERROR_TYPE_VALID_NAME) ? LanguageManager.sentences['msg_enter_valid_graph_name'] : LanguageManager.sentences['msg_enter_unique_graph_name'];
+				listItemEditorInstance.txtThumb.setFocus();
+			}
+			
 			//--------------------------------------------------------------------------
 		    //
 		    //  Event handlers
@@ -146,7 +173,6 @@
 		itemRenderer="PowerPack.com.panel.graphsClasses.GraphThumb"
 		itemEditor="PowerPack.com.panel.graphsClasses.GraphThumb"
 		editorDataField="returnText"
-		itemEditBeginning="BeginningEdit(event);"
 		itemEditBegin="beginEdit(event);"
 		itemEditEnd="endEdit(event);"></mx:List>
 
