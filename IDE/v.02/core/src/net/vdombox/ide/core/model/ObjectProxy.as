@@ -117,7 +117,7 @@ package net.vdombox.ide.core.model
 		public function createCopy( sourceID : String ) : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.copy_object(objectVO.pageVO.applicationVO.id, sourceID, objectVO.id );
+			token = soap.copy_object(objectVO.pageVO.applicationVO.id, objectVO.id, sourceID );
 			
 			token.recipientName = proxyName;
 			
