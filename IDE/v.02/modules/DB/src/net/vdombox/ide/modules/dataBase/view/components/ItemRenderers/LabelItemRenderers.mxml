@@ -1,70 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:MXAdvancedDataGridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-						  xmlns:s="library://ns.adobe.com/flex/spark" 
-						  xmlns:mx="library://ns.adobe.com/flex/mx" 
-						  focusEnabled="true" doubleClick="lblData_doubleClickHandler(event)">
-
+								  xmlns:s="library://ns.adobe.com/flex/spark" 
+								  xmlns:mx="library://ns.adobe.com/flex/mx" 
+								  focusEnabled="true">
 	
 	<fx:Script>
 		<![CDATA[
-			import flashx.textLayout.container.TextContainerManager;
-			
 			import mx.controls.dataGridClasses.DataGridListData;
-			import mx.events.DataGridEvent;
 			
 			import net.vdombox.ide.modules.dataBase.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.modules.dataBase.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.utils.WindowManager;
 			
-			import spark.components.RichEditableText;
-			import spark.components.TextArea;
 			import spark.events.TextOperationEvent;
 			
 			override public function set data( value : Object ) : void
 			{
 				if ( !value )
 					return;
-				
+					
 				super.data = value;
-
+					
 				textArea.text = value[DataGridListData(listData).dataField];
 			}
-			
-			
+				
+				
 			protected function lblData_doubleClickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
+					// TODO Auto-generated method stub
 				event.stopImmediatePropagation();
 				var stringAttributeEditWindow : StringAttributeEditWindow = new StringAttributeEditWindow();
 				stringAttributeEditWindow.value = textArea.text;
+				stringAttributeEditWindow.editable = false;
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.APPLY, applyHandler );
-				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.CANCEL, cancelHandler );
-				
+					
 				WindowManager.getInstance().addWindow(stringAttributeEditWindow, this, true);
-				
+					
 				function applyHandler( event : StringAttributeEditWindowEvent ) : void
 				{
 					textArea.text = event.value;
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
-					data[DataGridListData(listData).dataField] = textArea.text;
 				}
+			}
 				
-				function cancelHandler( event : StringAttributeEditWindowEvent ) : void
-				{
-					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
-				}
-			}
-			
-			protected function lblData_changeHandler(event:TextOperationEvent):void
-			{
-				// TODO Auto-generated method stub
-				data[DataGridListData(listData).dataField] = textArea.text;
-			}
-			
 		]]>
 	</fx:Script>
 	
 	<s:TextInput id="textArea" top="0" left="0" right="0" bottom="0" text="{listData.label}" doubleClick="lblData_doubleClickHandler(event)"
-				 contentBackgroundAlpha="0" borderVisible="false" maxHeight="18"  change="lblData_changeHandler(event)" paddingTop="4"
+				 contentBackgroundAlpha="0" borderVisible="false" maxHeight="18" paddingTop="4" editable="false"
 				 focusIn="{textArea.setStyle( 'contentBackgroundAlpha', '1' ) }" focusOut="{textArea.setStyle( 'contentBackgroundAlpha', '0' ) }"/>
 </s:MXAdvancedDataGridItemRenderer>

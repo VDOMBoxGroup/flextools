@@ -107,8 +107,6 @@
 			
 			private function applyBtnClickHandler() : void 
 			{
-				var tt : int = 0;
-				
 				var newStructureVO : StructureVO;
 				var oldStructureVO : StructureVO;
 				var requestXML : XML;

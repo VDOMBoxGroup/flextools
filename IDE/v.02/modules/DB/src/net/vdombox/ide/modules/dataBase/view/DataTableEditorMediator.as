@@ -81,7 +81,10 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.COMMIT_DATA_STRUCTURE:
 				{
 					if ( dataTableEditor.editorID == body as String )
+					{
+						dataTableEditor.dataGridColumns = null;
 						dataTableEditor.updateTable();
+					}
 					
 					break;
 				}

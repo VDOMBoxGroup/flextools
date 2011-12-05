@@ -19,6 +19,7 @@
 			import net.vdombox.ide.common.vo.PageVO;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
+			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.LabelItemRenderers;
 			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.TextInputItemRenderers;
 			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;
 			
@@ -114,7 +115,7 @@
 					dataGridColumnsProps.push( columnProps );
 					_header.dataField = xmlHeader.@name;
 					_header.sortable = true;
-					_header.itemRenderer = new ClassFactory( TextInputItemRenderers );
+					_header.itemRenderer = new ClassFactory( LabelItemRenderers );
 					
 					dataGridColumns.push( _header );
 					
@@ -199,7 +200,7 @@
 				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
 					<s:Label text="SQL string" includeIn="all"/>
 					<mx:Spacer width="100%"/>
-					<mx:Image source.all="@Embed('assets/arr_1.png')" source.short="@Embed('assets/arr_2.png')" click="image1_clickHandler(event)"/>
+					<mx:Image source.all="@Embed('assets/arr_2.png')" source.short="@Embed('assets/arr_1.png')" click="image1_clickHandler(event)"/>
 					<mx:Spacer width="8"/>
 				</s:HGroup>		
 				
@@ -223,9 +224,9 @@
 		
 		<s:Label text="Data returned:" />
 		
-		<mx:DataGrid id="dataTable" dataProvider="{dataGridProvider}"
+		<mx:AdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}"
 					 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
-					 editable="false" sortableColumns="false" />
+					 editable="false" sortableColumns="true" />
 		
 		
 		
