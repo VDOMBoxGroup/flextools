@@ -1,0 +1,49 @@
+<language label="russian" id="RU">
+	
+	<sentense id="" label="yes">Да</sentense>
+	<sentense id="" label="no">Нет</sentense>
+	<sentense id="" label="ok">ОК</sentense>
+	<sentense id="" label="cancel">Отмена</sentense>
+	<sentense id="" label="none">ничего</sentense>
+	
+	<sentense id="" label="english">Английский</sentense>
+	<sentense id="" label="russian">Русский</sentense>
+	<sentense id="" label="arrow_select_trans">Выбор перехода</sentense>
+	<sentense id="" label="console_title">Консоль</sentense>
+	
+	<sentense id="" label="menu_file">_Файл</sentense>
+	
+    <mainmenu>
+        <menuitem label="Файл">
+            <menuitem label="New" id="new"/>
+            <menuitem label="Open File..." id="open_file"/>
+            <menuitem type="separator"/>
+            <menuitem label="Save" id="save"/>
+            <menuitem label="Save As..." id="save_as"/> 
+            <menuitem type="separator"/>
+            <menuitem label="Exit" id="exit"/>                                                
+        </menuitem>
+        <menuitem label="Settings" id="settings">
+            <menuitem label="Language">        
+            	<menuitem label="English" id="language" data="english.xml"/>
+            	<menuitem label="Russian" id="language" data="russian.xml"/>
+	        </menuitem>        
+        </menuitem>        
+        <menuitem label="Help" data="help">
+        </menuitem>
+    </mainmenu>
+    
+    <filebrowse>
+    	<open>
+    		<title label="Open1 File"/>
+    		<btnopen label="Open"/>
+    		<btncancel label="Cancel"/>    		
+    	</open>
+    	<save>
+    		<title label="Save File"/>
+    		<btnsave label="Save"/>
+    		<btncancel label="Cancel"/>    		
+    	</save>
+    </filebrowse>
+
+</language>

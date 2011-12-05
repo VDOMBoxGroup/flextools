@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication 
 	title="{LanguageManager.sentences.app_title}{ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).file ? ' - '+ContextManager.templates.getItemAt(0).file.nativePath : ''} - {ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).name ? ContextManager.templates.getItemAt(0).name : LanguageManager.sentences.noname}{ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).modified ? '*' : ''}"
-	titleIcon="@Embed(source='/assets/icons/icon_16.png')"
+	titleIcon="@Embed(source='assets/icons/icon_16.png')"
 	layout="absolute" 
 	statusBarFactory="PowerPack.customize.core.windowClasses.SuperStatusBar"
 	preinitialize="preinit()"
@@ -14,7 +14,7 @@
 	xmlns:ui="ExtendedAPI.com.ui.*" 
 	xmlns:panel="PowerPack.com.panel.*" xmlns:customize="PowerPack.customize.*">
     
-    <mx:Style source="style/builder.css"/>
+    <mx:Style source="assets/style/builder.css"/>
     <mx:Move duration="100" id="DockerMove"/>
 	<mx:Fade duration="100" id="DockerFade"/>
 	
@@ -76,27 +76,42 @@
     	
 	<mx:Script>
 		<![CDATA[
-			import PowerPack.com.gen.structs.NodeStruct;
-			import PowerPack.com.gen.parse.parseClasses.CodeFragment;
-			import ExtendedAPI.com.ui.SuperNativeMenuItem;
-			import mx.managers.LayoutManager;
-			import mx.core.UIComponent;
-			import flash.system.fscommand;
-			import PowerPack.customize.Resources;
-			import PowerPack.com.managers.CashManager;
-			import ExtendedAPI.com.containers.SuperWindow;
-			import mx.core.Window;
 			import ExtendedAPI.com.containers.SuperAlert;
-			import mx.collections.XMLListCollection;
-			import mx.controls.Tree;
-			import PowerPack.com.dialog.ImportFromTpl;
+			import ExtendedAPI.com.containers.SuperWindow;
 			import ExtendedAPI.com.controls.SuperDataGrid;
 			import ExtendedAPI.com.controls.tabBarClasses.SuperTab;
 			import ExtendedAPI.com.ui.SuperFlexNativeMenu;
 			import ExtendedAPI.com.ui.SuperNativeMenu;
+			import ExtendedAPI.com.ui.SuperNativeMenuItem;
 			import ExtendedAPI.com.utils.FileUtils;
 			import ExtendedAPI.com.utils.Utils;
 			
+			import PowerPack.com.*;
+			import PowerPack.com.dialog.EditCaption;
+			import PowerPack.com.dialog.Import;
+			import PowerPack.com.dialog.ImportFromTpl;
+			import PowerPack.com.dialog.ModalDialog;
+			import PowerPack.com.dialog.TemplateKey;
+			import PowerPack.com.dialog.TemplateProperties;
+			import PowerPack.com.dialog.ValidateDialog;
+			import PowerPack.com.gen.*;
+			import PowerPack.com.gen.parse.CodeParser;
+			import PowerPack.com.gen.parse.parseClasses.CodeFragment;
+			import PowerPack.com.gen.structs.NodeStruct;
+			import PowerPack.com.graph.Connector;
+			import PowerPack.com.graph.GraphCanvas;
+			import PowerPack.com.graph.Node;
+			import PowerPack.com.graph.NodeCategory;
+			import PowerPack.com.managers.CashManager;
+			import PowerPack.com.managers.ContextManager;
+			import PowerPack.com.managers.LanguageManager;
+			import PowerPack.com.managers.ProgressManager;
+			import PowerPack.com.menu.MenuGeneral;
+			import PowerPack.com.panel.Console;
+			import PowerPack.com.panel.graphsClasses.AccordionChild;
+			import PowerPack.customize.Resources;
+			
+			import flash.system.fscommand;
 			import flash.utils.describeType;
 			import flash.utils.setTimeout;
 			
@@ -105,39 +120,24 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayCollection;
 			import mx.collections.HierarchicalData;
+			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
 			import mx.controls.FlexNativeMenu;
 			import mx.controls.ProgressBarMode;
+			import mx.controls.Tree;
 			import mx.core.Application;
 			import mx.core.Singleton;
+			import mx.core.UIComponent;
+			import mx.core.Window;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.events.FlexNativeMenuEvent;
 			import mx.events.ListEvent;
 			import mx.events.MenuEvent;
 			import mx.managers.CursorManager;
+			import mx.managers.LayoutManager;
 			import mx.managers.PopUpManager;
 			import mx.utils.StringUtil;
-			
-			import PowerPack.com.*;
-			import PowerPack.com.dialog.EditCaption;
-			import PowerPack.com.dialog.Import;
-			import PowerPack.com.dialog.ModalDialog;
-			import PowerPack.com.dialog.TemplateKey;
-			import PowerPack.com.dialog.TemplateProperties;
-			import PowerPack.com.dialog.ValidateDialog;
-			import PowerPack.com.gen.*;
-			import PowerPack.com.gen.parse.CodeParser;
-			import PowerPack.com.graph.Connector;
-			import PowerPack.com.graph.GraphCanvas;
-			import PowerPack.com.graph.Node;
-			import PowerPack.com.graph.NodeCategory;
-			import PowerPack.com.managers.ContextManager;
-			import PowerPack.com.managers.LanguageManager;
-			import PowerPack.com.managers.ProgressManager;
-			import PowerPack.com.menu.MenuGeneral;
-			import PowerPack.com.panel.Console;
-			import PowerPack.com.panel.graphsClasses.AccordionChild;
 			
 			//--------------------------------------------------------------------------
 			//
@@ -215,7 +215,7 @@
 	            MenuGeneral.updateLastFilesMenu();
 	            
 				// Load language file
-				file = File.applicationDirectory.resolvePath("lang").resolvePath(ContextManager.instance.lang.file);
+				file = File.applicationDirectory.resolvePath(MenuGeneral.LANG_FOLDER).resolvePath(ContextManager.instance.lang.file);
 	            if(file && file.exists)
 	            {
 					fileStream = new FileStream();
@@ -705,7 +705,7 @@
 				}				    				
 				else if(menuItem.groupName == "language")
 				{				
-					file = File.applicationDirectory.resolvePath("lang").resolvePath(menuItem.data.toString());	
+					file = File.applicationDirectory.resolvePath(MenuGeneral.LANG_FOLDER).resolvePath(menuItem.data.toString());	
 					fileStream.addEventListener(Event.COMPLETE, completeLangHandler);
 					fileStream.openAsync(file, FileMode.READ);
 				}

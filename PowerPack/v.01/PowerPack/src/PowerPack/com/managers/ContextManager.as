@@ -103,55 +103,55 @@ public class ContextManager extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------	
 			
-	[Embed(source="/assets/icons/icon_16.png")]
+	[Embed(source="assets/icons/icon_16.png")]
 	[Bindable]
  	public static var iconClass:Class;
 
-	[Embed(source="/assets/icons/info_16.png")]
+	[Embed(source="assets/icons/info_16.png")]
 	[Bindable]
  	public static var infoClass:Class;
 
-	[Embed(source="/assets/icons/warning_16.png")]
+	[Embed(source="assets/icons/warning_16.png")]
 	[Bindable]
  	public static var warnClass:Class;
 
-	[Embed(source="/assets/icons/error_16.png")]
+	[Embed(source="assets/icons/error_16.png")]
 	[Bindable]
  	public static var errClass:Class;
 
-	[Embed(source="/assets/icons/expand_16.png")]
+	[Embed(source="assets/icons/expand_16.png")]
 	[Bindable]
  	public static var expandClass:Class;
 
-	[Embed(source="/assets/icons/helptip_16.png")]
+	[Embed(source="assets/icons/helptip_16.png")]
 	[Bindable]
  	public static var helpTipClass:Class;
 
-	[Embed(source="/assets/icons/add_16.png")]
+	[Embed(source="assets/icons/add_16.png")]
 	[Bindable]
  	public static var addClass:Class;
 
-	[Embed(source="/assets/icons/copy_16.png")]
+	[Embed(source="assets/icons/copy_16.png")]
 	[Bindable]
  	public static var copyClass:Class;
 
-	[Embed(source="/assets/icons/edit_16.png")]
+	[Embed(source="assets/icons/edit_16.png")]
 	[Bindable]
  	public static var editClass:Class;
 
-	[Embed(source="/assets/icons/delete_16.png")]
+	[Embed(source="assets/icons/delete_16.png")]
 	[Bindable]
  	public static var deleteClass:Class;
 
-	[Embed(source="/assets/icons/help_16.png")]
+	[Embed(source="assets/icons/help_16.png")]
 	[Bindable]
  	public static var helpClass:Class;
  	
-	[Embed(source="/assets/icons/expand_16.png")]
+	[Embed(source="assets/icons/bug_16.png")]
 	[Bindable]
  	public static var problemsClass:Class;
 
-	[Embed(source="/assets/icons/variable_16.png")]
+	[Embed(source="assets/icons/variable_16.png")]
 	[Bindable]
  	public static var variablesClass:Class;
 

@@ -153,7 +153,7 @@
         ]]>
     </mx:Script>
     
-	<mx:Image id="imgThumb" scaleContent="true" autoLoad="true" source="@Embed('../../../../../resources/tree.png')" width="24" height="24"/>
+	<mx:Image id="imgThumb" scaleContent="true" autoLoad="true" source="@Embed('assets/images/Tree.png')" width="24" height="24"/>
 	
 	<mx:TextInput id="txtThumb"
 		styleName="inputTextStyleName" textAlign="center" visible="false" includeInLayout="false"

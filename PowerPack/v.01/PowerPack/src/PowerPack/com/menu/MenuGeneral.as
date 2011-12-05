@@ -20,7 +20,7 @@ import mx.events.FlexNativeMenuEvent;
 
 public class MenuGeneral extends EventDispatcher
 {	
-	public static const LANG_FOLDER:String = "lang";
+	public static const LANG_FOLDER:String = "assets/lang";
 	public static const STATE_NO:String = "noTemplate";
 	public static const STATE_NEW:String = "newTemplate";
 	public static const STATE_MOD:String = "modifiedTemplate";

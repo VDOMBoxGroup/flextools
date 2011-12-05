@@ -13,7 +13,7 @@
 	applicationComplete="show()"
 	updateComplete="complete()">
 	
-	<mx:Style source="style/generator.css"/>
+	<mx:Style source="assets/style/generator.css"/>
 	
 	<mx:Fade alphaFrom="0.0" alphaTo="1.0" duration="300" id="canvasShow"/>
 	<mx:Fade alphaFrom="1.0" alphaTo="0.0" duration="300" id="canvasHide"/>
@@ -45,41 +45,47 @@
     	
 	<mx:Script>
 		<![CDATA[
-			import PowerPack.com.Template;
-			import mx.core.Application;
-			import flash.utils.getTimer;
 			import ExtendedAPI.com.containers.SuperAlert;
-			import PowerPack.com.managers.ConnectionManager;
-			import generated.webservices.Install_applicationResultEvent;
-			import vdom.connection.protect.MD5;
-			import vdom.connection.protect.Code;
-			import generated.webservices.Close_sessionResultEvent;
-			import generated.webservices.List_applicationsResultEvent;
-			import mx.rpc.events.FaultEvent;
-			import generated.webservices.Open_sessionResultEvent;
-			import PowerPack.com.utils.CryptUtils;
-			import generated.webservices.Vdom;
-			import PowerPack.com.BasicError;
-			import GraphicAPI.imageProcessing.Filters;
+			import ExtendedAPI.com.utils.FileUtils;
+			
 			import GraphicAPI.GraphicUtils;
-			import mx.utils.GraphicsUtil;
-			import mx.graphics.codec.PNGEncoder;
-			import PowerPack.com.menu.MenuGeneral;
+			import GraphicAPI.imageProcessing.Filters;
+			
+			import PowerPack.com.BasicError;
+			import PowerPack.com.Template;
 			import PowerPack.com.dialog.GenConnection;
 			import PowerPack.com.dialog.GenProperties;
-			import mx.events.EffectEvent;
-			import mx.events.IndexChangedEvent;
-			import PowerPack.com.gen.TemplateStruct;
 			import PowerPack.com.dialog.ModalDialog;
 			import PowerPack.com.dialog.TemplateKey;
-			import PowerPack.com.managers.ProgressManager;
-			import ExtendedAPI.com.utils.FileUtils;
-			import mx.utils.StringUtil;
-			import mx.controls.Alert;
-			import mx.events.CloseEvent;
+			import PowerPack.com.gen.TemplateStruct;
+			import PowerPack.com.managers.ConnectionManager;
 			import PowerPack.com.managers.ContextManager;
-			import PowerPack.com.managers.LanguageManager;			
+			import PowerPack.com.managers.LanguageManager;
+			import PowerPack.com.managers.ProgressManager;
+			import PowerPack.com.menu.MenuGeneral;
+			import PowerPack.com.utils.CryptUtils;
+			
+			import flash.utils.getTimer;
+			
+			import generated.webservices.Close_sessionResultEvent;
+			import generated.webservices.Install_applicationResultEvent;
+			import generated.webservices.List_applicationsResultEvent;
+			import generated.webservices.Open_sessionResultEvent;
+			import generated.webservices.Vdom;
+			
+			import mx.controls.Alert;
 			import mx.controls.ProgressBarMode;
+			import mx.core.Application;
+			import mx.events.CloseEvent;
+			import mx.events.EffectEvent;
+			import mx.events.IndexChangedEvent;
+			import mx.graphics.codec.PNGEncoder;
+			import mx.rpc.events.FaultEvent;
+			import mx.utils.GraphicsUtil;
+			import mx.utils.StringUtil;
+			
+			import vdom.connection.protect.Code;
+			import vdom.connection.protect.MD5;
 			
        			
 			private var vsLastChanged:DisplayObject;
@@ -155,7 +161,7 @@
 //	            MenuGeneral.updateLastFilesMenu();
 	            
 				// Load language file
-				file = File.applicationDirectory.resolvePath("lang/"+ContextManager.instance.lang.file);
+				file = File.applicationDirectory.resolvePath(MenuGeneral.LANG_FOLDER+ContextManager.instance.lang.file);
 	            if(file && file.exists)
 	            {
 					fileStream = new FileStream();									
@@ -315,7 +321,7 @@
 				
 				if(event.item.@tag == "language")
 				{				
-					file = File.applicationDirectory.resolvePath("lang/"+event.item.@data);	
+					file = File.applicationDirectory.resolvePath(MenuGeneral.LANG_FOLDER+event.item.@data);	
 					fileStream.addEventListener(Event.COMPLETE, onLanguageLoad);
 					fileStream.openAsync(file, FileMode.READ);
 				}
@@ -1100,34 +1106,34 @@
 							change="vsChange(event)">
 							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
 								showEffect="canvasShow" hideEffect="canvasHide">
-								<mx:Image source="@Embed(source='../resources/Question-on.png')" scaleContent="false"/>
-								<mx:Image source="@Embed(source='../resources/Install-off.png')"/>
-								<mx:Image source="@Embed(source='../resources/File-off.png')"/>
-								<mx:Image source="@Embed(source='../resources/web-site-off.png')"/>
+								<mx:Image source="@Embed(source='assets/images/Question-on.png')" scaleContent="false"/>
+								<mx:Image source="@Embed(source='assets/images/Install-off.png')"/>
+								<mx:Image source="@Embed(source='assets/images/File-off.png')"/>
+								<mx:Image source="@Embed(source='assets/images/web-site-off.png')"/>
 							</mx:HBox>
 
 							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
 								showEffect="canvasShow" hideEffect="canvasHide">
-								<mx:Image source="@Embed(source='../resources/Question-off.png')" scaleContent="false"/>
-								<mx:Image source="@Embed(source='../resources/Install-on.png')"/>
-								<mx:Image source="@Embed(source='../resources/File-off.png')"/>
-								<mx:Image source="@Embed(source='../resources/web-site-off.png')"/>
+								<mx:Image source="@Embed(source='assets/images/Question-off.png')" scaleContent="false"/>
+								<mx:Image source="@Embed(source='assets/images/Install-on.png')"/>
+								<mx:Image source="@Embed(source='assets/images/File-off.png')"/>
+								<mx:Image source="@Embed(source='assets/images/web-site-off.png')"/>
 							</mx:HBox>
 
 							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
 								showEffect="canvasShow" hideEffect="canvasHide">
-								<mx:Image source="@Embed(source='../resources/Question-off.png')" scaleContent="false"/>
-								<mx:Image source="@Embed(source='../resources/Install-off.png')"/>
-								<mx:Image source="@Embed(source='../resources/File-on.png')"/>
-								<mx:Image source="@Embed(source='../resources/web-site-off.png')"/>
+								<mx:Image source="@Embed(source='assets/images/Question-off.png')" scaleContent="false"/>
+								<mx:Image source="@Embed(source='assets/images/Install-off.png')"/>
+								<mx:Image source="@Embed(source='assets/images/file-on.png')"/>
+								<mx:Image source="@Embed(source='assets/images/web-site-off.png')"/>
 							</mx:HBox>
 
 							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
 								showEffect="canvasShow" hideEffect="canvasHide">
-								<mx:Image source="@Embed(source='../resources/Question-off.png')" scaleContent="false"/>
-								<mx:Image source="@Embed(source='../resources/Install-off.png')"/>
-								<mx:Image source="@Embed(source='../resources/File-off.png')"/>
-								<mx:Image source="@Embed(source='../resources/web-site-on.png')"/>
+								<mx:Image source="@Embed(source='assets/images/Question-off.png')" scaleContent="false"/>
+								<mx:Image source="@Embed(source='assets/images/Install-off.png')"/>
+								<mx:Image source="@Embed(source='assets/images/File-off.png')"/>
+								<mx:Image source="@Embed(source='assets/images/Web-site-on.png')"/>
 							</mx:HBox>
 						</mx:ViewStack>
 						<mx:Spacer width="100%" height="10"/>
@@ -1167,7 +1173,7 @@
 				</mx:ViewStack>
 				
 				<mx:HBox width="100%" horizontalAlign="right" verticalAlign="bottom" paddingBottom="10" paddingRight="10">
-					<mx:Image source="@Embed(source='../resources/txt_logo.png')"/>
+					<mx:Image source="@Embed(source='assets/images/txt_logo.png')"/>
 				</mx:HBox>
 			</mx:VBox>
 		</mx:HBox>

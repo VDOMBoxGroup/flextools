@@ -1,0 +1,177 @@
+/* Global style declaration */
+
+@font-face {
+    src: url("assets/fonts/Square721ExBT.ttf");
+    fontFamily: Square721ExBT;
+}
+
+global
+{
+	/*backgroundAlpha: 1.0; /* this runs the opacity of nearly every square piece of the components */
+	/*backgroundSize: "auto";*/
+	
+	titleBarButtonBgColor: #494848;
+	
+	/*fillAlphas: 0.3, 0.3, 0.85, 0.75; /* last pair are for OVER state */
+	/*fillColors: #AE4731, #BFD5E8, #E42226, #A8D0E2;*/
+	
+	/*highlightAlphas: 0.08, 0.14; /* use this to control the 'light' cast on the components */
+
+	/* themeColor	*/
+	themeColor: #68332F;	
+	/*rollOverColor: #D3BABA;*/
+	/*selectionColor: #D3989C;*/
+	
+	fontFamily: "Tahoma", "Helvetica", "_sans";
+	fontSize: 11;
+}
+
+/*
+//------------------------------
+//  WindowedApplication
+//------------------------------
+*/
+
+TitleBar
+{
+	titleBarButtonBgColors: #707173, #ffffff;
+}
+
+WindowedApplication
+{
+	headerHeight: 30;
+
+	cornerRadius: 10;
+	 
+	titleTextStyleName:  "titleTextStyle";
+	titleBarColors: #ffeae6, #000000, #666666;
+	titleBarButtonPadding: 2;
+	titleBarBackgroundSkin:  ClassReference("PowerPack.customize.skins.GeneratorApplicationTitleBarBackgroundSkin");
+
+	borderColor: #707173;
+	borderThickness: 2;
+	backgroundGradientColors: #C1C1C0, #ffffff; 
+
+	buttonPadding: 2;
+	buttonAlignment: "auto";
+}
+
+GenModalDialog
+{
+	borderColor: #707173;
+	titleTextStyleName:  "titleTextStyle";
+	titleBarColors: #ffeae6, #000000, #666666;
+	titleBarButtonPadding: 2;
+	buttonPadding: 2;
+	headerHeight: 30;
+	buttonAlignment: "auto";
+	verticalGap: 0;
+	horizontalGap: 0;	
+	backgroundColor: #e1e1e0;
+
+	titleBarBackgroundSkin:  ClassReference("PowerPack.customize.skins.GeneratorApplicationTitleBarBackgroundSkin");
+}
+
+Label 
+{
+	color: #000000;
+    fontSize: 11;	
+}	
+
+MenuBar
+{
+	backgroundColor: #707173;
+	color: #ffffff;
+	fillColors: #707173, #707173;
+	fillAlphas: 1.0, 1.0;	
+	
+	fontSize: 11;
+	borderColor: #707173;
+}
+
+Menu
+{
+	color: #000000;
+}
+
+ProgressBar
+{
+	trackColors: #ffffff, #ffffff;
+	trackHeight: 12;
+	barColor: #E42327;
+	barSkin: ClassReference("PowerPack.customize.skins.GeneratorProgressBarSkin");
+}
+
+Button 
+{
+}
+
+GridItem
+{
+	horizontalGap: 1;
+}
+
+.titleTextStyle 
+{ 
+    fontFamily: Square721ExBT, "Arial", "Helvetica", "_sans";
+	fontSize: 14;
+    fontWeight: bold;
+    color: #d9dadb;
+    textIndent: 15;
+}
+
+.edtTextStyle 
+{ 
+    fontFamily: "Arial", "Helvetica", "_sans";
+	fontSize: 14;
+    fontWeight: bold;
+    
+    color: #000000;
+    borderStyle: solid;
+    borderColor: #5A5859;
+    borderThickness: 2;
+}
+
+.infoTextStyle 
+{ 
+    fontFamily: "Arial", "Helvetica", "_sans";
+	fontSize: 14;
+}
+        
+.dlgHeader
+{
+	paddingLeft: 20;
+	paddingRight: 10;
+	paddingTop: 10;
+	paddingBottom : 5;
+		
+	backgroundColor: #f1f1f0;
+}
+
+.dlgContent
+{
+	verticalGap: 5;
+	paddingLeft: 20;
+	paddingRight: 10;
+	paddingTop: 10;
+	paddingBottom : 5;
+}
+
+.dlgFooter
+{
+	horizontalAlign: right;
+	verticalAlign: bottom;
+}
+
+.headerLabel
+{
+	fontFamily: "Arial", "Helvetica", "_sans";
+    fontSize: 16;
+    fontWeight: bold;
+    textIndent: 0;
+	color: #16414A;	
+}
+
+
+
+
