@@ -6,7 +6,6 @@
 					  width="100%"
 					  minWidth="225"
 					  contentBackgroundAlpha="0" 
-					  creationComplete="creationCompleteHandler(event)"
 					  contextMenu="mxtreeitemrenderer1_contextMenuHandler(event)" xmlns:view="net.vdombox.view.*">
 
 	<s:states>
@@ -55,6 +54,12 @@
 
 				dataChanged = true
 				_data = value as XML;
+				
+				if ( _data )
+				{
+					_contextMenu.removeAllItems();
+					createContextMenu();
+				}
 			}
 			
 			
@@ -126,6 +131,24 @@
 				if ( !_resourceVO ||( _resourceVO && _resourceVO.id != _resourceID ) )
 					dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCE_REQUEST));
 			}
+			
+			private function createContextMenu() : void
+			{
+				var copyItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_copy' ));
+				copyItem.addEventListener( Event.SELECT, copyContextMenuHandler, false, 0, true );
+				_contextMenu.addItem( copyItem );
+				
+				var pasteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_paste' ));
+				pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
+				_contextMenu.addItem( pasteItem );
+				
+				if ( _data.name().localName != "page" )
+				{
+					var deleteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_delete' ));
+					deleteItem.addEventListener( Event.SELECT, deleteContextMenuHandler, false, 0, true );
+					_contextMenu.addItem( deleteItem );
+				}
+			}
 
 			private function dataLoaded( object : Object = null ) : void
 			{
@@ -173,25 +196,8 @@
 					_data.@visible = _eyeOpened
 			}
 			
-			protected function creationCompleteHandler(event:FlexEvent):void
-			{
-				// TODO Auto-generated method stub
-				var deleteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_delete' ));
-				deleteItem.addEventListener( Event.SELECT, deleteContextMenuHandler, false, 0, true );
-				_contextMenu.addItem( deleteItem );
-				
-				var copyItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_copy' ));
-				copyItem.addEventListener( Event.SELECT, copyContextMenuHandler, false, 0, true );
-				_contextMenu.addItem( copyItem );
-				
-				var pasteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_paste' ));
-				pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
-				_contextMenu.addItem( pasteItem );
-			}
-			
 			protected function mxtreeitemrenderer1_contextMenuHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
 				_contextMenu.display( this.stage, event.stageX, event.stageY );
 			}
 			

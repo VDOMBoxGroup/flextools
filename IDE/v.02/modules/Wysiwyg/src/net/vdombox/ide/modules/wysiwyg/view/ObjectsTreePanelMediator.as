@@ -425,7 +425,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function removeHandlers() : void
 		{
-//			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler );
+			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.OPEN, openHandler );
 			objectsTreePanel.removeEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true );
