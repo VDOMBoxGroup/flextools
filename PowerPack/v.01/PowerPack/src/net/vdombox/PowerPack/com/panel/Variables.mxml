@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:controls="ExtendedAPI.com.controls.*" 
+	paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5"
+	width="100%" height="100%"
+	label="{LanguageManager.sentences.variables_title}"
+	icon="{ContextManager.variablesClass}">
+	
+	<mx:Script>
+		<![CDATA[
+			import net.vdombox.PowerPack.com.managers.ContextManager;
+			import net.vdombox.PowerPack.com.managers.LanguageManager;
+			
+			static private var defaultCaptions:Object = {
+				variables_title:"Variables",
+				name: "Name",
+				value: "Value"
+			}			
+			
+			static private var _classConstructed:Boolean = classConstruct(); 
+			
+			static private function classConstruct():Boolean
+			{
+				LanguageManager.setSentences(defaultCaptions);
+				return true
+			}			
+		]]>
+	</mx:Script>
+	
+	<controls:SuperDataGrid id="grid" designViewDataType="tree" 
+		width="100%" height="100%"
+		defaultLeafIcon="{null}"
+		folderOpenIcon="{null}"
+		folderClosedIcon="{null}">
+	  	<controls:columns>
+        	<mx:AdvancedDataGridColumn
+        		headerText="{LanguageManager.sentences.name}" 
+        		dataField="Name"
+        		dataTipField="Name" 
+        		showDataTips="true"/>
+         	<mx:AdvancedDataGridColumn 
+        		headerText="{LanguageManager.sentences.value}" 
+         		dataField="Value"
+         		dataTipField="Value" 
+         		showDataTips="true"/>
+      	</controls:columns>
+	</controls:SuperDataGrid>
+	
+	<mx:TextInput id="txt" width="100%" text="{grid.selectedItem.Value}"/>	
+	
+	<mx:ControlBar visible="false" includeInLayout="false"></mx:ControlBar>
+	
+</mx:VBox>

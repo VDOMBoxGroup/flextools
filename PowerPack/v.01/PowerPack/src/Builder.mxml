@@ -3,16 +3,16 @@
 	title="{LanguageManager.sentences.app_title}{ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).file ? ' - '+ContextManager.templates.getItemAt(0).file.nativePath : ''} - {ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).name ? ContextManager.templates.getItemAt(0).name : LanguageManager.sentences.noname}{ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).modified ? '*' : ''}"
 	titleIcon="@Embed(source='assets/icons/icon_16.png')"
 	layout="absolute" 
-	statusBarFactory="PowerPack.customize.core.windowClasses.SuperStatusBar"
+	statusBarFactory="net.vdombox.PowerPack.customize.core.windowClasses.SuperStatusBar"
 	preinitialize="preinit()"
 	initialize="init()" 
 	applicationComplete="show()" 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:ns4="PowerPack.com.graph.*" 
+	xmlns:graph="net.vdombox.PowerPack.com.graph.*" 
 	xmlns:extended="ExtendedAPI.com.containers.*"
 	xmlns:controls="ExtendedAPI.com.controls.*" 
 	xmlns:ui="ExtendedAPI.com.ui.*" 
-	xmlns:panel="PowerPack.com.panel.*" xmlns:customize="PowerPack.customize.*">
+	xmlns:panel="net.vdombox.PowerPack.com.panel.*" xmlns:customize="net.vdombox.PowerPack.customize.*">
     
     <mx:Style source="assets/style/builder.css"/>
     <mx:Move duration="100" id="DockerMove"/>
@@ -86,30 +86,30 @@
 			import ExtendedAPI.com.utils.FileUtils;
 			import ExtendedAPI.com.utils.Utils;
 			
-			import PowerPack.com.*;
-			import PowerPack.com.dialog.EditCaption;
-			import PowerPack.com.dialog.Import;
-			import PowerPack.com.dialog.ImportFromTpl;
-			import PowerPack.com.dialog.ModalDialog;
-			import PowerPack.com.dialog.TemplateKey;
-			import PowerPack.com.dialog.TemplateProperties;
-			import PowerPack.com.dialog.ValidateDialog;
-			import PowerPack.com.gen.*;
-			import PowerPack.com.gen.parse.CodeParser;
-			import PowerPack.com.gen.parse.parseClasses.CodeFragment;
-			import PowerPack.com.gen.structs.NodeStruct;
-			import PowerPack.com.graph.Connector;
-			import PowerPack.com.graph.GraphCanvas;
-			import PowerPack.com.graph.Node;
-			import PowerPack.com.graph.NodeCategory;
-			import PowerPack.com.managers.CashManager;
-			import PowerPack.com.managers.ContextManager;
-			import PowerPack.com.managers.LanguageManager;
-			import PowerPack.com.managers.ProgressManager;
-			import PowerPack.com.menu.MenuGeneral;
-			import PowerPack.com.panel.Console;
-			import PowerPack.com.panel.graphsClasses.AccordionChild;
-			import PowerPack.customize.Resources;
+			import net.vdombox.PowerPack.com.*;
+			import net.vdombox.PowerPack.com.dialog.EditCaption;
+			import net.vdombox.PowerPack.com.dialog.Import;
+			import net.vdombox.PowerPack.com.dialog.ImportFromTpl;
+			import net.vdombox.PowerPack.com.dialog.ModalDialog;
+			import net.vdombox.PowerPack.com.dialog.TemplateKey;
+			import net.vdombox.PowerPack.com.dialog.TemplateProperties;
+			import net.vdombox.PowerPack.com.dialog.ValidateDialog;
+			import net.vdombox.PowerPack.com.gen.*;
+			import net.vdombox.PowerPack.com.gen.parse.CodeParser;
+			import net.vdombox.PowerPack.com.gen.parse.parseClasses.CodeFragment;
+			import net.vdombox.PowerPack.com.gen.structs.NodeStruct;
+			import net.vdombox.PowerPack.com.graph.Connector;
+			import net.vdombox.PowerPack.com.graph.GraphCanvas;
+			import net.vdombox.PowerPack.com.graph.Node;
+			import net.vdombox.PowerPack.com.graph.NodeCategory;
+			import net.vdombox.PowerPack.com.managers.CashManager;
+			import net.vdombox.PowerPack.com.managers.ContextManager;
+			import net.vdombox.PowerPack.com.managers.LanguageManager;
+			import net.vdombox.PowerPack.com.managers.ProgressManager;
+			import net.vdombox.PowerPack.com.menu.MenuGeneral;
+			import net.vdombox.PowerPack.com.panel.Console;
+			import net.vdombox.PowerPack.com.panel.graphsClasses.AccordionChild;
+			import net.vdombox.PowerPack.customize.Resources;
 			
 			import flash.system.fscommand;
 			import flash.utils.describeType;

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="ExtendedAPI.com.controls.*"
+	creationComplete="onShow()">
+
+	<mx:Script>
+		<![CDATA[
+			import net.vdombox.PowerPack.com.managers.ContextManager;
+			import mx.events.ItemClickEvent;
+			import net.vdombox.PowerPack.com.managers.LanguageManager;
+			
+			static private var defaultCaptions:Object = {
+				import_from: "Import from",
+				import_from_file: "file",
+				import_from_server: "server",
+				default_port: "Default port",
+				save_password: "Save password"			
+			}		
+
+			static private var _classConstructed:Boolean = classConstruct(); 
+			
+			static private function classConstruct():Boolean
+			{
+				LanguageManager.setSentences(defaultCaptions);
+				return true
+			}			
+			private function onShow():void
+			{
+				radFile.setFocus();
+			}
+						
+			private function handleImport():void 
+			{
+            	if(importType.selectedValue == "File")
+            	{
+            		fileBrowse.enabled = true;
+            		gridServer.enabled = false;
+            	} 
+            	else if(importType.selectedValue == "Server") 
+            	{
+            		fileBrowse.enabled = false;
+            		gridServer.enabled = true;
+                } 
+            }
+            
+		]]>
+	</mx:Script>
+
+	<mx:Grid width="100%">
+		<mx:GridRow>
+			<mx:GridItem colSpan="2">
+				<controls:HDivider label="{LanguageManager.sentences.import_from}:"/>
+				<mx:RadioButtonGroup id="importType" change="handleImport();" itemClick="handleImport();"/>
+			</mx:GridItem>
+		</mx:GridRow>
+				
+		<mx:GridRow visible="true" includeInLayout="true">
+			<mx:GridItem>
+				<mx:RadioButton groupName="importType" id="radFile" selected="false" value="File"
+			        label="{LanguageManager.sentences.import_from_file}:"/>    			        
+			</mx:GridItem>
+			<mx:GridItem>
+				<controls:FileBrowseBox id="fileBrowse" width="300" mode="open" enabled="false"
+						browseLabel="{LanguageManager.sentences.browse}..." 
+						browseTitle="{LanguageManager.sentences.open_file}..."
+						filterAll="{LanguageManager.sentences.all}">
+				</controls:FileBrowseBox>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem colSpan="2">
+				<mx:Spacer/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem colSpan="2">
+				<mx:RadioButton groupName="importType" id="radServer" value="Server" selected="true"
+			        label="{LanguageManager.sentences.import_from_server}:"/>
+			</mx:GridItem>
+		</mx:GridRow>
+
+	</mx:Grid>	
+	
+	<mx:Grid width="100%" id="gridServer" enabled="true" disabledOverlayAlpha="0.0">
+		
+		<!-- CONNECTION -->
+		
+		<mx:GridRow>
+			<mx:GridItem colSpan="2">
+				<controls:HDivider label="{LanguageManager.sentences.connection}:" 
+					enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+				
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:Label text="{LanguageManager.sentences.host}:"
+					enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:TextInput width="200" id="txtHost" 
+					text="{ContextManager.instance.host}" 
+					enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+
+		<mx:GridRow>
+			<mx:GridItem colSpan="2">
+				<mx:RadioButtonGroup id="portGroup"/>
+				<mx:RadioButton groupName="portGroup" id="radDefPort" 
+					selected="{ContextManager.instance.use_def_port}" 
+					value="DefPort"					
+					enabled="{gridServer.enabled}"
+			        label="{LanguageManager.sentences.default_port}"/>    			        
+			</mx:GridItem>
+		</mx:GridRow>
+
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:RadioButton groupName="portGroup" id="radPort" 
+					selected="{!ContextManager.instance.use_def_port}" 
+					value="Port" 
+					enabled="{gridServer.enabled}"
+			        label="{LanguageManager.sentences.port}:"/>    			        
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:TextInput width="50" id="txtPort" 
+					text="{ContextManager.instance.port}" 
+					enabled="{radPort.selected &amp;&amp; gridServer.enabled}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<!-- AUTHENTICATION -->
+
+		<mx:GridRow>
+			<mx:GridItem colSpan="2">
+				<controls:HDivider label="{LanguageManager.sentences.authentication}:" 
+					enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:Label text="{LanguageManager.sentences.login}:"
+					enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:TextInput width="200" id="txtLogin" 
+					text="{ContextManager.instance.login}" 
+					enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+		</mx:GridRow>		
+
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:Label text="{LanguageManager.sentences.password}:"
+					enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:TextInput width="200" id="txtPass"  
+					text="{ContextManager.instance.pass}"					
+					enabled="{gridServer.enabled}" 
+					displayAsPassword="true"/>
+			</mx:GridItem>
+		</mx:GridRow>		
+
+		<mx:GridRow>
+			<mx:GridItem/>
+			<mx:GridItem>
+				<mx:CheckBox id="chkSavePass" 
+					label="{LanguageManager.sentences.save_password}"
+					selected="{ContextManager.instance.save_pass}" 
+					enabled="{gridServer.enabled}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+
+	</mx:Grid>
+				
+</mx:VBox>

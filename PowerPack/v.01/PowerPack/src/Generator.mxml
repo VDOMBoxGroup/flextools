@@ -2,13 +2,13 @@
 <mx:WindowedApplication 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:ExtendedAPI="ExtendedAPI.com.controls.*"
-	xmlns:resources="PowerPack.customize.*"
+	xmlns:customize="net.vdombox.PowerPack.customize.*"
 	width="770" height="450" verticalAlign="middle" horizontalAlign="center" layout="absolute"	 
 	showStatusBar="false" showGripper="false"
 	title="{LanguageManager.sentences.app_title}"
 	titleIcon="@Embed(source='assets/icons/icon_16.png')" 
-	titleBarFactory="PowerPack.customize.core.windowClasses.GeneratorTitleBar"
-	statusBarFactory="PowerPack.customize.core.windowClasses.SuperStatusBar"	
+	titleBarFactory="net.vdombox.PowerPack.customize.core.windowClasses.GeneratorTitleBar"
+	statusBarFactory="net.vdombox.PowerPack.customize.core.windowClasses.SuperStatusBar"	
 	initialize="init()" 
 	applicationComplete="show()"
 	updateComplete="complete()">
@@ -23,7 +23,7 @@
     	<mx:Fade alphaFrom="0" alphaTo="1" duration="400"/>
   	</mx:Parallel>	
 
-	<resources:GeneratorResources id="resources"/>
+	<customize:GeneratorResources id="resources"/>
 	
     <mx:XML format="e4x" id="fileMenuData">
         <root> 
@@ -51,19 +51,19 @@
 			import GraphicAPI.GraphicUtils;
 			import GraphicAPI.imageProcessing.Filters;
 			
-			import PowerPack.com.BasicError;
-			import PowerPack.com.Template;
-			import PowerPack.com.dialog.GenConnection;
-			import PowerPack.com.dialog.GenProperties;
-			import PowerPack.com.dialog.ModalDialog;
-			import PowerPack.com.dialog.TemplateKey;
-			import PowerPack.com.gen.TemplateStruct;
-			import PowerPack.com.managers.ConnectionManager;
-			import PowerPack.com.managers.ContextManager;
-			import PowerPack.com.managers.LanguageManager;
-			import PowerPack.com.managers.ProgressManager;
-			import PowerPack.com.menu.MenuGeneral;
-			import PowerPack.com.utils.CryptUtils;
+			import net.vdombox.PowerPack.com.BasicError;
+			import net.vdombox.PowerPack.com.Template;
+			import net.vdombox.PowerPack.com.dialog.GenConnection;
+			import net.vdombox.PowerPack.com.dialog.GenProperties;
+			import net.vdombox.PowerPack.com.dialog.ModalDialog;
+			import net.vdombox.PowerPack.com.dialog.TemplateKey;
+			import net.vdombox.PowerPack.com.gen.TemplateStruct;
+			import net.vdombox.PowerPack.com.managers.ConnectionManager;
+			import net.vdombox.PowerPack.com.managers.ContextManager;
+			import net.vdombox.PowerPack.com.managers.LanguageManager;
+			import net.vdombox.PowerPack.com.managers.ProgressManager;
+			import net.vdombox.PowerPack.com.menu.MenuGeneral;
+			import net.vdombox.PowerPack.com.utils.CryptUtils;
 			
 			import flash.utils.getTimer;
 			

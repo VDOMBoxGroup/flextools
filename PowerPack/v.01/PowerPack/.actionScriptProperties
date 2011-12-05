@@ -17,9 +17,7 @@
       <airExcludes/>
     </application>
   </applications>
-  <modules>
-    <module application="src/Generator.mxml" destPath="PowerPack/customize/GeneratorResources.swf" optimize="true" sourcePath="src/PowerPack/customize/GeneratorResources.mxml"/>
-  </modules>
+  <modules/>
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
