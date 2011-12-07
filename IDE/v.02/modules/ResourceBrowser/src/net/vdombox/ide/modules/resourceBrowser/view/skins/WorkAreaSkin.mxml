@@ -49,6 +49,10 @@
 								   label="{ resourceManager.getString( 'ResourceBrowser_General', 'work_area_delete_resource' ) }"/>
 
 		<mx:Spacer width="100%"/>
+		
+		<components:WorkAreaButton id="getResourceButton"
+								   height="20" label="{ resourceManager.getString( 'ResourceBrowser_General', 'work_area_get_resource' ) }"
+								   highlighted="{ hostComponent.isAddResourcesShowed }"/>
 
 		<components:WorkAreaButton id="showInfoButton"
 								   height="20" icon="@Embed('assets/expand.png')" label="{ hostComponent.isInfoShowed ? resourceManager.getString( 'ResourceBrowser_General', 'work_area_hide_info' ) : resourceManager.getString( 'ResourceBrowser_General', 'work_area_show_info' ) }"/>

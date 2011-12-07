@@ -7,8 +7,11 @@
 
 	<fx:Script>
 		<![CDATA[
+			import flash.filesystem.File;
+			
+			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
-
+			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.resourceBrowser.events.WorkAreaEvent;
 
@@ -20,6 +23,9 @@
 
 			[SkinPart( required="true" )]
 			public var showAddResourcesButton : WorkAreaButton;
+			
+			[SkinPart( required="true" )]
+			public var getResourceButton : WorkAreaButton;
 
 			[Bindable]
 			public var isInfoShowed : Boolean = true;
@@ -47,6 +53,9 @@
 
 				if ( instance === deleteButton )
 					deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );
+				
+				if ( instance === getResourceButton )
+					getResourceButton.addEventListener( MouseEvent.CLICK, getResourceButton_clickHandler, false, 0, true );
 			}
 
 			private function showInfoButton_clickHandler( event : MouseEvent ) : void
@@ -62,6 +71,29 @@
 			private function deleteButton_clickHandler( event : MouseEvent ) : void
 			{
 				dispatchEvent( new WorkAreaEvent( WorkAreaEvent.DELETE_RESOURCE ) );
+			}
+			
+			private function getResourceButton_clickHandler( event : MouseEvent ) : void
+			{
+				if ( previewArea.resourceVO && !previewArea.resourceVO.data )
+				{
+					BindingUtils.bindSetter( dataChanged, previewArea.resourceVO, "data", true, true );
+					dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.LOAD_RESOURCE ) );
+				}
+				else
+					saveResource( previewArea.resourceVO );
+			}
+			
+			private function dataChanged( value : Object ) : void
+			{
+				if ( previewArea.resourceVO.data )
+					saveResource( previewArea.resourceVO );
+			}
+			
+			private function saveResource ( value : ResourceVO ) : void
+			{
+				var fileUpload : FileReference = new FileReference();
+				fileUpload.save( value.data, value.name );
 			}
 		]]>
 	</fx:Script>

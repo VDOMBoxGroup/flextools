@@ -63,6 +63,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
 			interests.push( ApplicationFacade.UPLOAD_RESOURCE );
 			interests.push( ApplicationFacade.DELETE_RESOURCE );
+			interests.push( ApplicationFacade.GET_ICON );
 
 			return interests;
 		}
@@ -222,6 +223,15 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break;
+				}
+					
+				case ApplicationFacade.GET_ICON:
+				{
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.ICON, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break;
 				}
 			}

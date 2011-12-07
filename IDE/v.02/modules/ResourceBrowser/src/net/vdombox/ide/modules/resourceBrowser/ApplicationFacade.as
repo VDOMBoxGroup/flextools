@@ -113,6 +113,10 @@ package net.vdombox.ide.modules.resourceBrowser
 		public static const DELETE_RESOURCE_REQUEST : String = "deleteResourceRequest";
 		public static const DELETE_RESOURCE : String = "deleteResource";
 		public static const RESOURCE_DELETED : String = "resourceDeleted";
+		
+		//		icon
+		public static const GET_ICON	: String = "getIcon";
+		public static const ICON_GETTED : String = "iconGetted";
 
 //		other
 		public static const DELIMITER : String = "/";

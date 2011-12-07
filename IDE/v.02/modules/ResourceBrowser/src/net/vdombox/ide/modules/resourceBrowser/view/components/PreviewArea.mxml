@@ -7,8 +7,9 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
-
+			
 			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.resourceBrowser.events.WorkAreaEvent;
 
 			private var _resourceVO : ResourceVO;
 
@@ -38,6 +39,16 @@
 					else
 						preview.source = _resourceVO.data;
 				}
+				else
+				{
+					if ( !_resourceVO.icon )
+					{
+						dataWatcher = BindingUtils.bindSetter( dataChanged, _resourceVO, "icon", true, true );
+						dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.GET_ICON ) );
+					}
+					else
+						preview.source = _resourceVO.icon;
+				}
 
 			}
 
@@ -48,8 +59,8 @@
 
 			private function dataChanged( value : Object ) : void
 			{
-				if ( _resourceVO.data )
-					preview.source = _resourceVO.data;
+				if ( value )
+					preview.source = value;
 			}
 
 			protected function preview_completeHandler( event : Event ) : void
