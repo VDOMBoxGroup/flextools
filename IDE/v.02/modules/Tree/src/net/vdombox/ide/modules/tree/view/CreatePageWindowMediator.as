@@ -10,6 +10,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.events.ItemRendererEvent;
 	import net.vdombox.ide.modules.tree.events.WindowEvent;
 	import net.vdombox.ide.modules.tree.view.components.CreatePageWindow;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -70,8 +71,8 @@ package net.vdombox.ide.modules.tree.view
 			
 			createPageWindow.addEventListener( ItemRendererEvent.CREATED, pagesItemRenderer_createdHandler, true, 0, true );
 			
-			createPageWindow.addEventListener( WindowEvent.PERFORM_APPLY, performApplyHandler, false, 0, true );
-			createPageWindow.addEventListener( WindowEvent.PERFORM_CANCEL, performCancelHandler, false, 0, true );
+			createPageWindow.addEventListener( WindowEvent.PERFORM_APPLY, performApplyHandler, true, 0, true );
+			createPageWindow.addEventListener( WindowEvent.PERFORM_CANCEL, performCancelHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -80,8 +81,8 @@ package net.vdombox.ide.modules.tree.view
 			
 			createPageWindow.removeEventListener( ItemRendererEvent.CREATED, pagesItemRenderer_createdHandler, true );
 			
-			createPageWindow.removeEventListener( WindowEvent.PERFORM_APPLY, performApplyHandler );
-			createPageWindow.removeEventListener( WindowEvent.PERFORM_CANCEL, performCancelHandler );
+			createPageWindow.removeEventListener( WindowEvent.PERFORM_APPLY, performApplyHandler, true );
+			createPageWindow.removeEventListener( WindowEvent.PERFORM_CANCEL, performCancelHandler, true );
 			
 		}
 
@@ -94,7 +95,9 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var selectedPageType : TypeVO = createPageWindow.selectedPageType;
 			
-			sendNotification( ApplicationFacade.CLOSE_WINDOW, createPageWindow );
+			WindowManager.getInstance().removeWindow( createPageWindow );
+			
+			//sendNotification( ApplicationFacade.CLOSE_WINDOW, createPageWindow );
 			
 			addTitle (selectedPageType);
 			
@@ -117,7 +120,9 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function performCancelHandler ( event : WindowEvent ) : void
 		{
-			sendNotification( ApplicationFacade.CLOSE_WINDOW, createPageWindow );
+			//sendNotification( ApplicationFacade.CLOSE_WINDOW, createPageWindow );
+			
+			WindowManager.getInstance().removeWindow( createPageWindow );
 			
 			facade.removeMediator( NAME );
 		}

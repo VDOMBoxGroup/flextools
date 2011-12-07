@@ -228,6 +228,10 @@
 					y = 0;
 				else
 					y = newY;
+				
+			/*	treeElementVO.left = x;
+				treeElementVO.top = y;*/
+
 			}
 
 			private function stage_mouseMoveHandlerExt( event : MouseEvent ) : void
