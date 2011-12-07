@@ -41,7 +41,7 @@
 
 	<s:Group height="100%" width="228">
 		<mx:VDividedBox height="100%" width="228"
-						dividerSkin="net.vdombox.ide.modules.wysiwyg.view.components.main.DividerSkin">
+						dividerSkin="net.vdombox.view.skins.DividerSkin">
 			
 			<panels:ObjectAttributesPanel id="objectAttributesPanel"
 										  width="100%" height="60%"

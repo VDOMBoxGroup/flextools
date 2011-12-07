@@ -122,6 +122,7 @@
 			protected function attributesList_creationCompleteHandler(event:FlexEvent):void
 			{
 				attributesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
+				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 			}
 			
 			protected function attributesList_updateCompleteHandler(event:FlexEvent):void
@@ -132,6 +133,11 @@
 					attributesList.scroller.verticalScrollBar.viewport.verticalScrollPosition = verticalScrollPosition;
 					NeedSetVerticalScrollPosition = false;
 				}
+			}
+			
+			private function mouseWheelHandler( event : MouseEvent ) : void
+			{
+				event.delta = event.delta > 0 ? 1 : -1;
 			}
 			
 		]]>

@@ -119,7 +119,7 @@
 					 verticalAlign="middle" horizontalAlign="center">
 				
 				<mx:Image id="typeIcon"
-						  height="49" source="{ _resourceVO.data }" width="49"
+						  source="{ _resourceVO.data }"
 						  horizontalCenter="0"
 						  smoothBitmapContent="true"/>
 				
