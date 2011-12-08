@@ -2,9 +2,9 @@ package net.vdombox.powerpack.gen.parse
 {
 import src.net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
-import GraphicAPI.drawing.BrushPatternStyle;
-import GraphicAPI.drawing.PStroke;
-import GraphicAPI.drawing.StrokePatternStyle;
+import src.net.vdombox.powerpack.lib.graphicapi.drawing.BrushPatternStyle;
+import src.net.vdombox.powerpack.lib.graphicapi.drawing.PStroke;
+import src.net.vdombox.powerpack.lib.graphicapi.drawing.StrokePatternStyle;
 
 import net.vdombox.powerpack.gen.errorClasses.RunTimeError;
 import net.vdombox.powerpack.gen.parse.listClasses.ElmType;

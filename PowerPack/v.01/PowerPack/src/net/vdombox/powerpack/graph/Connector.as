@@ -6,8 +6,8 @@ import src.net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import src.net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 import src.net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
-import GeomLib.GeomUtils;
-import GeomLib._2D.LineSegment;
+import src.net.vdombox.powerpack.lib.geomlib.GeomUtils;
+import src.net.vdombox.powerpack.lib.geomlib._2D.LineSegment;
 
 import net.vdombox.powerpack.managers.ContextManager;
 import net.vdombox.powerpack.managers.LanguageManager;

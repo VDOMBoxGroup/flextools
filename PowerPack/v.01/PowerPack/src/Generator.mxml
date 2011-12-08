@@ -48,8 +48,8 @@
 		import src.net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 		import src.net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
-		import GraphicAPI.GraphicUtils;
-		import GraphicAPI.imageProcessing.Filters;
+		import src.net.vdombox.powerpack.lib.graphicapi.GraphicUtils;
+		import src.net.vdombox.powerpack.lib.graphicapi.imageProcessing.Filters;
 
 		import net.vdombox.powerpack.BasicError;
 		import net.vdombox.powerpack.Template;

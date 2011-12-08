@@ -1,6 +1,6 @@
 // ActionScript file
-import GraphicAPI.drawing.Draw;
-import GraphicAPI.drawing.PStroke;
+import src.net.vdombox.powerpack.lib.graphicapi.drawing.Draw;
+import src.net.vdombox.powerpack.lib.graphicapi.drawing.PStroke;
 
 import net.vdombox.powerpack.gen.parse.ListParser;
 
