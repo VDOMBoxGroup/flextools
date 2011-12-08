@@ -1,6 +1,6 @@
 // ActionScript file
+
 import net.vdombox.PowerPack.com.gen.parse.ListParser;
-import net.vdombox.PowerPack.com.gen.parse.Parser;
 
 public function length(list:String):int
 {
@@ -14,7 +14,7 @@ public function getValue(position:Object, list:String):Object
 	return elmValue;
 }
 
-public function getType(position:Object, list:String):int
+public function getType( position : Object, list : String ): int
 {
 	var type:int = ListParser.getType(list, position);
 	return type;

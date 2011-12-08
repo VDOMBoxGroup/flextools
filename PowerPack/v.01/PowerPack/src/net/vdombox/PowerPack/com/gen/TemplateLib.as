@@ -25,6 +25,8 @@ public dynamic class TemplateLib
 	include "include/ListManipulationFunctions.as";
 	include "include/GraphicFunctions.as";
 	include "include/ImageProcessingFunctions.as";
+	include "include/ApplicationFunctions.as";
+
 		
 	public var tplStruct:TemplateStruct;
 	
