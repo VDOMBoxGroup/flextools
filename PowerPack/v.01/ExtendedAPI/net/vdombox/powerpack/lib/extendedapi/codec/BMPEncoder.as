@@ -1,4 +1,4 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.codec
+package net.vdombox.powerpack.lib.extendedapi.codec
 {
 	import flash.display.BitmapData;
 	import flash.geom.Matrix;

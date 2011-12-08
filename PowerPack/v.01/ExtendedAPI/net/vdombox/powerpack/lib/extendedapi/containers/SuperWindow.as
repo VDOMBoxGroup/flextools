@@ -1,4 +1,4 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.containers
+package net.vdombox.powerpack.lib.extendedapi.containers
 {
 import flash.desktop.NativeApplication;
 import flash.desktop.NotificationType;

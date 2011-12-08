@@ -1,4 +1,4 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.events
+package net.vdombox.powerpack.lib.extendedapi.events
 {
 	import flash.events.Event;
 

@@ -1,4 +1,4 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.ui
+package net.vdombox.powerpack.lib.extendedapi.ui
 {
 import flash.display.NativeMenu;
 import flash.display.NativeMenuItem;

@@ -1,9 +1,9 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.containers
+package net.vdombox.powerpack.lib.extendedapi.containers
 {
-	import net.vdombox.powerpack.lib.ExtendedAPI.controls.SuperTabBar;
-	import net.vdombox.powerpack.lib.ExtendedAPI.controls.tabBarClasses.SuperTab;
-	import net.vdombox.powerpack.lib.ExtendedAPI.events.SuperTabEvent;
-	import net.vdombox.powerpack.lib.ExtendedAPI.events.TabReorderEvent;
+	import net.vdombox.powerpack.lib.extendedapi.controls.SuperTabBar;
+	import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
+	import net.vdombox.powerpack.lib.extendedapi.events.SuperTabEvent;
+	import net.vdombox.powerpack.lib.extendedapi.events.TabReorderEvent;
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -40,9 +40,9 @@ package net.vdombox.powerpack.lib.ExtendedAPI.containers
 	 * Fired when the close button of a tab is clicked. To stop the default action, which will remove the 
 	 * child from the collection of children, call event.preventDefault() in your listener.
 	 */
-	[Event(name="tabClose", type="net.vdombox.powerpack.lib.ExtendedAPI.events.SuperTabEvent")]
+	[Event(name="tabClose", type="net.vdombox.powerpack.lib.extendedapi.events.SuperTabEvent")]
 	
-	[Event(name="tabsReordered", type="net.vdombox.powerpack.lib.ExtendedAPI.events.TabReorderEvent")]
+	[Event(name="tabsReordered", type="net.vdombox.powerpack.lib.extendedapi.events.TabReorderEvent")]
 
 	/**
 	 *  Name of CSS style declaration that specifies style for the Button that appears

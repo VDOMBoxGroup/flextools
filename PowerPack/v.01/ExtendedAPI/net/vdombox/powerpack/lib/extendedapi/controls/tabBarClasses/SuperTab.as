@@ -1,7 +1,7 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.controls.tabBarClasses
+package net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses
 {
 	
-	import net.vdombox.powerpack.lib.ExtendedAPI.events.SuperTabEvent;
+	import net.vdombox.powerpack.lib.extendedapi.events.SuperTabEvent;
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -23,7 +23,7 @@ package net.vdombox.powerpack.lib.ExtendedAPI.controls.tabBarClasses
 	 * Fired when the the label of this tab is updated by the user double clicking and editing the 
 	 * tab label. Only possible if dougbleClickToEdit is true.
 	 */
-	[Event(name="tabUpdated", type="net.vdombox.powerpack.lib.ExtendedAPI.events.SuperTabEvent")]
+	[Event(name="tabUpdated", type="net.vdombox.powerpack.lib.extendedapi.events.SuperTabEvent")]
 	
 	/**
 	 *  Name of CSS style declaration that specifies the style to use for the 

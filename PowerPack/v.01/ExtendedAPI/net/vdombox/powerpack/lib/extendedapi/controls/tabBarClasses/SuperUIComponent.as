@@ -1,4 +1,4 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.controls.tabBarClasses
+package net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses
 {
 	import mx.core.UIComponent;
 

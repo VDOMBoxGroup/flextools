@@ -1,4 +1,4 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.containers.utilityClasses
+package net.vdombox.powerpack.lib.extendedapi.containers.utilityClasses
 {
 
 import mx.containers.BoxDirection;

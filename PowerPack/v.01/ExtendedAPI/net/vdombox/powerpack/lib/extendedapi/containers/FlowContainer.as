@@ -1,6 +1,6 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.containers
+package net.vdombox.powerpack.lib.extendedapi.containers
 {
-import net.vdombox.powerpack.lib.ExtendedAPI.containers.utilityClasses.AdobeFlowLayout;
+import net.vdombox.powerpack.lib.extendedapi.containers.utilityClasses.AdobeFlowLayout;
 
 import mx.core.Container;
 import mx.core.mx_internal;

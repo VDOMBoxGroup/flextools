@@ -24,7 +24,7 @@
 			import mx.events.ChildExistenceChangedEvent;
 			import mx.events.FlexEvent;
 			import mx.core.UIComponent;
-			import net.vdombox.powerpack.lib.ExtendedAPI.utils.FileUtils;
+			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 			import mx.utils.StringUtil;
 			
 			public static const MODE_OPEN:String = "open";

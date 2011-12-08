@@ -1,4 +1,4 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.utils
+package net.vdombox.powerpack.lib.extendedapi.utils
 {
 import flash.display.DisplayObject;
 import flash.net.registerClassAlias;

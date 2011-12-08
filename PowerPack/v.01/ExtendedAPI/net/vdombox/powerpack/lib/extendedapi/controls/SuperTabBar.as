@@ -1,11 +1,11 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.controls 
+package net.vdombox.powerpack.lib.extendedapi.controls 
 {
-	import net.vdombox.powerpack.lib.ExtendedAPI.containers.SuperTabNavigator;
-	import net.vdombox.powerpack.lib.ExtendedAPI.controls.tabBarClasses.SuperTab;
-	import net.vdombox.powerpack.lib.ExtendedAPI.controls.tabBarClasses.SuperUIComponent;
-	import net.vdombox.powerpack.lib.ExtendedAPI.events.SuperTabEvent;
-	import net.vdombox.powerpack.lib.ExtendedAPI.events.TabReorderEvent;
-	import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
+	import net.vdombox.powerpack.lib.extendedapi.containers.SuperTabNavigator;
+	import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
+	import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperUIComponent;
+	import net.vdombox.powerpack.lib.extendedapi.events.SuperTabEvent;
+	import net.vdombox.powerpack.lib.extendedapi.events.TabReorderEvent;
+	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -39,19 +39,19 @@ package net.vdombox.powerpack.lib.ExtendedAPI.controls
 	 * Fired when a tab is dropped onto this SuperTabBar, which re-orders the tabs and updates the
 	 * list of tabs.
 	 */
-	[Event(name="tabsReordered", type="net.vdombox.powerpack.lib.ExtendedAPI.events.TabReorderEvent")]
+	[Event(name="tabsReordered", type="net.vdombox.powerpack.lib.extendedapi.events.TabReorderEvent")]
 	
 	/**
 	 * Fired when the close button of a tab is clicked. To stop the default action, which will remove the 
 	 * child from the collection of children, call event.preventDefault() in your listener.
 	 */
-	[Event(name="tabClose", type="net.vdombox.powerpack.lib.ExtendedAPI.events.SuperTabEvent")]
+	[Event(name="tabClose", type="net.vdombox.powerpack.lib.extendedapi.events.SuperTabEvent")]
 	
 	/**
 	 * Fired when the the label or icon of a child is updated and the tab gets updated to reflect
 	 * the new icon or label. SuperTabNavigator listens for this to refresh the PopUpMenuButton data provider.
 	 */
-	[Event(name="tabUpdated", type="net.vdombox.powerpack.lib.ExtendedAPI.events.SuperTabEvent")]
+	[Event(name="tabUpdated", type="net.vdombox.powerpack.lib.extendedapi.events.SuperTabEvent")]
 	
 	
 	[IconFile("SuperTabBar.png")]

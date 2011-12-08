@@ -1,7 +1,7 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.containers
+package net.vdombox.powerpack.lib.extendedapi.containers
 {
 
-import net.vdombox.powerpack.lib.ExtendedAPI.containers.utilityClasses.FlowLayout;
+import net.vdombox.powerpack.lib.extendedapi.containers.utilityClasses.FlowLayout;
 
 import mx.containers.Box;
 import mx.containers.BoxDirection;

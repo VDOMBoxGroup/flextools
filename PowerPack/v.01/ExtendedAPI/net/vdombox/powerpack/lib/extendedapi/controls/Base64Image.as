@@ -1,4 +1,4 @@
-package net.vdombox.powerpack.lib.ExtendedAPI.controls
+package net.vdombox.powerpack.lib.extendedapi.controls
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
