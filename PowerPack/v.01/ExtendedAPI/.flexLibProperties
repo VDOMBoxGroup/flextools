@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties includeAllClasses="false" useMultiPlatformConfig="false" version="1">
   <includeClasses>
-    <classEntry path="GeomLib.GeomUtils"/>
-    <classEntry path="GeomLib._2D.Circle"/>
-    <classEntry path="GeomLib._2D.Ellipse"/>
-    <classEntry path="GeomLib._2D.I2DObject"/>
-    <classEntry path="GeomLib._2D.LineSegment"/>
-    <classEntry path="GeomLib._2D.Polygon"/>
-    <classEntry path="GeomLib._3D.Point3D"/>
-    <classEntry path="GraphicAPI.GraphicUtils"/>
-    <classEntry path="GraphicAPI.drawing.BrushPatternStyle"/>
-    <classEntry path="GraphicAPI.drawing.Draw"/>
-    <classEntry path="GraphicAPI.drawing.DrawContext"/>
-    <classEntry path="GraphicAPI.drawing.GraphicsContext"/>
-    <classEntry path="GraphicAPI.drawing.PStroke"/>
-    <classEntry path="GraphicAPI.drawing.StrokePatternStyle"/>
-    <classEntry path="GraphicAPI.gapi_internal"/>
-    <classEntry path="GraphicAPI.imageProcessing.Adjustment"/>
-    <classEntry path="GraphicAPI.imageProcessing.Filters"/>
-    <classEntry path="GraphicAPI.imageProcessing.Transform"/>
     <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.codec.BMPEncoder"/>
     <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.ButtonScrollingCanvas"/>
     <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.DockableToolBar"/>
@@ -49,16 +31,27 @@
     <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.utils.GeomUtils"/>
     <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils"/>
     <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.utils.Utils"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.graphicapi.GraphicUtils"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.graphicapi.drawing.BrushPatternStyle"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.graphicapi.drawing.Draw"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.graphicapi.drawing.DrawContext"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.graphicapi.drawing.GraphicsContext"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.graphicapi.drawing.PStroke"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.graphicapi.drawing.StrokePatternStyle"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.graphicapi.gapi_internal"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.graphicapi.imageProcessing.Adjustment"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.graphicapi.imageProcessing.Filters"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.graphicapi.imageProcessing.Transform"/>
   </includeClasses>
   <includeResources>
-    <resourceEntry destPath="GeomLib/ASDoc.bat" sourcePath="GeomLib/ASDoc.bat"/>
-    <resourceEntry destPath="GraphicAPI/ASDoc.bat" sourcePath="GraphicAPI/ASDoc.bat"/>
     <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/assets/assets.fla" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/assets/assets.fla"/>
     <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/assets/assets.swf" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/assets/assets.swf"/>
     <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/assets/dragStripIcon.png" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/assets/dragStripIcon.png"/>
     <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/containers/ButtonScrollingCanvas.png" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/containers/ButtonScrollingCanvas.png"/>
     <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/containers/SuperTabNavigator.png" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/containers/SuperTabNavigator.png"/>
     <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/controls/SuperTabBar.png" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/controls/SuperTabBar.png"/>
+    <resourceEntry destPath="src/net/vdombox/powerpack/lib/geomlib/ASDoc.bat" sourcePath="src/net/vdombox/powerpack/lib/geomlib/ASDoc.bat"/>
+    <resourceEntry destPath="src/net/vdombox/powerpack/lib/graphicapi/ASDoc.bat" sourcePath="src/net/vdombox/powerpack/lib/graphicapi/ASDoc.bat"/>
   </includeResources>
   <namespaceManifests/>
 </flexLibProperties>
