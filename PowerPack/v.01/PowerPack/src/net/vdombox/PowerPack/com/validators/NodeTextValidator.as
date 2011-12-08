@@ -1,14 +1,14 @@
-package net.vdombox.PowerPack.com.validators
+package net.vdombox.powerpack.com.validators
 {
 	import ExtendedAPI.com.utils.Utils;
 	
-	import net.vdombox.PowerPack.com.BasicError;
-	import net.vdombox.PowerPack.com.gen.parse.CodeParser;
-	import net.vdombox.PowerPack.com.gen.parse.parseClasses.CodeFragment;
-	import net.vdombox.PowerPack.com.gen.parse.parseClasses.ParsedBlock;
-	import net.vdombox.PowerPack.com.graph.Node;
-	import net.vdombox.PowerPack.com.graph.NodeCategory;
-	import net.vdombox.PowerPack.com.managers.LanguageManager;
+	import net.vdombox.powerpack.com.BasicError;
+	import net.vdombox.powerpack.com.gen.parse.CodeParser;
+	import net.vdombox.powerpack.com.gen.parse.parseClasses.CodeFragment;
+	import net.vdombox.powerpack.com.gen.parse.parseClasses.ParsedBlock;
+	import net.vdombox.powerpack.com.graph.Node;
+	import net.vdombox.powerpack.com.graph.NodeCategory;
+	import net.vdombox.powerpack.com.managers.LanguageManager;
 	
 	import mx.validators.ValidationResult;
 	import mx.validators.Validator;

@@ -1,98 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModalDialog 
-	xmlns="net.vdombox.PowerPack.com.dialog.*" 
+	xmlns="net.vdombox.powerpack.com.dialog.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="322" height="248"
 	title="{LanguageManager.sentences.validate}" 
-	xmlns:control="net.vdombox.PowerPack.com.control.*">
+	xmlns:control="net.vdombox.powerpack.com.control.*">
 	
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			
-			private static var _dialog:ValidateDialog;
-			
-			static public function show(closeHandler:Function = null):ValidateDialog
-			{
-				if(!_dialog || _dialog.closed) 
-				{
-					_dialog = new ValidateDialog();	
-					_dialog.open();
-					_dialog.show(OK | CANCEL, closeHandler, null, OK);			
-									
-					var defaultCaptions:Object = {
-						validate: "Validate",
-						validate_options: "Validate options",
-						validate_clean: "Clean",
-						validate_set_init_graph: "Set initial graphs",
-						validate_set_init_states: "Set initial states",
-						validate_set_uids: "Set UIDs",
-						validate_set_attrs: "Set attributes",
-						validate_set_unames: "Set unique names",
-						hlp_validate_clean: "Clean...",
-						hlp_validate_set_init_graph: "Set initial graphs...",
-						hlp_validate_set_init_states: "Set initial states...",
-						hlp_validate_set_uids: "Set UIDs...",
-						hlp_validate_set_attrs: "Set attributes...",
-						hlp_validate_set_unames: "Set unique names..."
-					};
-					
-					LanguageManager.setSentences(defaultCaptions);		
-				}				
-				else 
-				{
-					_dialog.activate();
-				}	
-				
-				return _dialog;
-			}		
-			
-			private function checkItem(event:Event):void
-			{
-				var count:int = 0;
-				var arr:Array = [chkClean, chkInitGr, chkInitNode, chkID, chkAttr];
-				 
-				for each (var chk:CheckBox in arr)
-				{
-					if(chk.selected)
-						count++;
-				}
-				
-				if(count==0)
-					chkNone.selected = true;
-				else if(count==arr.length)
-					chkAll.selected = true;
-				else {
-					chkNone.selected = false;
-					chkAll.selected = false;					
-				}
-			}
-			
-			private function checkAll(event:Event):void
-			{
-				var arr:Array = [chkClean, chkInitGr, chkInitNode, chkID, chkAttr];
-				
-				if(chkAll.selected) 
-				{
-					for each (var chk:CheckBox in arr)
-						chk.selected = true;
-					
-					chkNone.selected = false;
-				}
-			}			
+		import net.vdombox.powerpack.com.managers.LanguageManager;
 
-			private function checkNone(event:Event):void
-			{
-				var arr:Array = [chkClean, chkInitGr, chkInitNode, chkID, chkAttr];
-				 
-				if(chkNone.selected)
-				{ 
-					for each (var chk:CheckBox in arr)
-						chk.selected = false;
-					
-					chkAll.selected = false;
-				}
-			}	
+		private static var _dialog : ValidateDialog;
+
+		static public function show( closeHandler : Function = null ) : ValidateDialog {
+			if ( !_dialog || _dialog.closed ) {
+				_dialog = new ValidateDialog();
+				_dialog.open();
+				_dialog.show( OK | CANCEL, closeHandler, null, OK );
+
+				var defaultCaptions : Object = {
+					validate: "Validate",
+					validate_options: "Validate options",
+					validate_clean: "Clean",
+					validate_set_init_graph: "Set initial graphs",
+					validate_set_init_states: "Set initial states",
+					validate_set_uids: "Set UIDs",
+					validate_set_attrs: "Set attributes",
+					validate_set_unames: "Set unique names",
+					hlp_validate_clean: "Clean...",
+					hlp_validate_set_init_graph: "Set initial graphs...",
+					hlp_validate_set_init_states: "Set initial states...",
+					hlp_validate_set_uids: "Set UIDs...",
+					hlp_validate_set_attrs: "Set attributes...",
+					hlp_validate_set_unames: "Set unique names..."
+				};
+
+				LanguageManager.setSentences( defaultCaptions );
+			}
+			else {
+				_dialog.activate();
+			}
+
+			return _dialog;
+		}
+
+		private function checkItem( event : Event ) : void {
+			var count : int = 0;
+			var arr : Array = [chkClean, chkInitGr, chkInitNode, chkID, chkAttr];
+
+			for each ( var chk : CheckBox in arr ) {
+				if ( chk.selected )
+					count++;
+			}
+
+			if ( count == 0 )
+				chkNone.selected = true;
+			else if ( count == arr.length )
+				chkAll.selected = true;
+			else {
+				chkNone.selected = false;
+				chkAll.selected = false;
+			}
+		}
+
+		private function checkAll( event : Event ) : void {
+			var arr : Array = [chkClean, chkInitGr, chkInitNode, chkID, chkAttr];
+
+			if ( chkAll.selected ) {
+				for each ( var chk : CheckBox in arr )
+					chk.selected = true;
+
+				chkNone.selected = false;
+			}
+		}
+
+		private function checkNone( event : Event ) : void {
+			var arr : Array = [chkClean, chkInitGr, chkInitNode, chkID, chkAttr];
+
+			if ( chkNone.selected ) {
+				for each ( var chk : CheckBox in arr )
+					chk.selected = false;
+
+				chkAll.selected = false;
+			}
+		}
 		]]>
 	</mx:Script>
 

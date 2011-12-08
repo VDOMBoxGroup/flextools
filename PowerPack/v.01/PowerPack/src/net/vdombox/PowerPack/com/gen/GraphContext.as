@@ -1,6 +1,6 @@
-package net.vdombox.PowerPack.com.gen
+package net.vdombox.powerpack.com.gen
 {
-	import net.vdombox.PowerPack.com.gen.structs.*;
+	import net.vdombox.powerpack.com.gen.structs.*;
 	
 	public class GraphContext
 	{

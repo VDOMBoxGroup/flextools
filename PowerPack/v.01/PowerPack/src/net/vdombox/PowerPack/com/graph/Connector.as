@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.graph
+package net.vdombox.powerpack.com.graph
 {
 import ExtendedAPI.com.containers.SuperAlert;
 import ExtendedAPI.com.ui.SuperNativeMenu;
@@ -9,8 +9,8 @@ import ExtendedAPI.com.utils.Utils;
 import GeomLib.GeomUtils;
 import GeomLib._2D.LineSegment;
 
-import net.vdombox.PowerPack.com.managers.ContextManager;
-import net.vdombox.PowerPack.com.managers.LanguageManager;
+import net.vdombox.powerpack.com.managers.ContextManager;
+import net.vdombox.powerpack.com.managers.LanguageManager;
 
 import flash.display.CapsStyle;
 import flash.display.JointStyle;

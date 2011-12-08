@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModalDialog 
-	xmlns="net.vdombox.PowerPack.com.dialog.*" 
+	xmlns="net.vdombox.powerpack.com.dialog.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="500" height="360"
 	title="{LanguageManager.sentences.lbl_import}" 
@@ -9,140 +9,133 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.PowerPack.com.Template;
-			import ExtendedAPI.com.containers.SuperAlert;
-			import mx.collections.SortField;
-			import mx.collections.Sort;
-			import ExtendedAPI.com.utils.FileUtils;
-			import net.vdombox.PowerPack.com.graph.GraphCanvas;
-			import mx.collections.XMLListCollection;
-			import mx.controls.Alert;
-			import net.vdombox.PowerPack.com.managers.ProgressManager;
-			import mx.events.CloseEvent;
-			import mx.utils.StringUtil;
-			import net.vdombox.PowerPack.com.managers.ContextManager;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			
-			private static var _dialog:ImportFromTpl;
-			
-			static public function show(closeHandler:Function = null):ImportFromTpl
-			{
-				if(!_dialog || _dialog.closed) 
-				{
-					_dialog = new ImportFromTpl();	
-					_dialog.open();
-					_dialog.show(OK | CANCEL, closeHandler, null, OK);		
-					
-					var defaultCaptions:Object = {
-						lbl_import: "Import",
-						import_from_template: "Import from template",
-						template_path: "Template path"
-					};
-					
-					LanguageManager.setSentences(defaultCaptions);	
-				}				
-				else 
-				{
-					_dialog.activate();
-				}
-				
-				return _dialog;
-			}
-			
-			public var template:Template;
+		import net.vdombox.powerpack.com.Template;
 
-			private function onShow(event:Event):void
-			{
-				tplBrowse.txtInput.setFocus();		
-				tplBrowse.filterArray = [Template.tplFilter, Template.allFilter];
-			}
-			
-			///////////////////////////////////////////////////////
-			
-			private function onSelectTemplate():void
-			{
-				/*
-				if(!FileUtils.isValidPath(tplBrowse.text))
-				{
-   					SuperAlert.show(
-						LanguageManager.sentences['msg_file_not_exists'], 
-						LanguageManager.sentences['warning'], 
-						4, this.nativeWindow);
-					return;
-				}
-				*/
-				
-				tplTree.dataProvider = [];
+		import ExtendedAPI.com.containers.SuperAlert;
 
-				template = new Template();
-				template.file = new File(tplBrowse.text);
-				template.addEventListener(Event.COMPLETE, completeTemplateHandler);
-				template.open();
-            }
-            
-	        private function completeTemplateHandler(event:Event):void
-	        {
-				if(template.isEncoded)
-				{
-					TemplateKey.show(onKeyDialogClose);
+		import mx.collections.SortField;
+		import mx.collections.Sort;
+
+		import ExtendedAPI.com.utils.FileUtils;
+
+		import net.vdombox.powerpack.com.graph.GraphCanvas;
+
+		import mx.collections.XMLListCollection;
+		import mx.controls.Alert;
+
+		import net.vdombox.powerpack.com.managers.ProgressManager;
+
+		import mx.events.CloseEvent;
+		import mx.utils.StringUtil;
+
+		import net.vdombox.powerpack.com.managers.ContextManager;
+		import net.vdombox.powerpack.com.managers.LanguageManager;
+
+		private static var _dialog : ImportFromTpl;
+
+		static public function show( closeHandler : Function = null ) : ImportFromTpl {
+			if ( !_dialog || _dialog.closed ) {
+				_dialog = new ImportFromTpl();
+				_dialog.open();
+				_dialog.show( OK | CANCEL, closeHandler, null, OK );
+
+				var defaultCaptions : Object = {
+					lbl_import: "Import",
+					import_from_template: "Import from template",
+					template_path: "Template path"
+				};
+
+				LanguageManager.setSentences( defaultCaptions );
+			}
+			else {
+				_dialog.activate();
+			}
+
+			return _dialog;
+		}
+
+		public var template : Template;
+
+		private function onShow( event : Event ) : void {
+			tplBrowse.txtInput.setFocus();
+			tplBrowse.filterArray = [Template.tplFilter, Template.allFilter];
+		}
+
+		///////////////////////////////////////////////////////
+
+		private function onSelectTemplate() : void {
+			/*
+			 if(!FileUtils.isValidPath(tplBrowse.text))
+			 {
+			 SuperAlert.show(
+			 LanguageManager.sentences['msg_file_not_exists'],
+			 LanguageManager.sentences['warning'],
+			 4, this.nativeWindow);
+			 return;
+			 }
+			 */
+
+			tplTree.dataProvider = [];
+
+			template = new Template();
+			template.file = new File( tplBrowse.text );
+			template.addEventListener( Event.COMPLETE, completeTemplateHandler );
+			template.open();
+		}
+
+		private function completeTemplateHandler( event : Event ) : void {
+			if ( template.isEncoded ) {
+				TemplateKey.show( onKeyDialogClose );
+			}
+			else if ( template.xmlStructure ) {
+				populateList();
+			}
+		}
+
+		private function onKeyDialogClose( event : CloseEvent ) : void {
+			if ( event.detail == ModalDialog.OK ) {
+				if ( event.target.txtKey.text ) {
+					template.key = event.target.txtKey.text;
+
+					template.processOpened();
+
+					if ( template.xmlStructure ) {
+						populateList();
+						return;
+					}
 				}
-				else if(template.xmlStructure)
-				{
-        			populateList();	
+				template = null;
+				SuperAlert.show( "Invalid secret key." );
+			}
+		}
+
+		private function populateList() : void {
+			var xmlList : XMLList = template.xmlStructure..graph;
+			var treeXML : XML = <tree/>;
+
+			for each ( var item : XML in xmlList ) {
+				if ( treeXML.node.(hasOwnProperty( '@label' ) && @label == item.@category).length() == 0 ) {
+					var nodeCat : XML = <node/>;
+					nodeCat.@label = item.@category;
+					nodeCat.@isBranch = 'true';
+					treeXML.appendChild( nodeCat );
 				}
-	        }    
-       
-            private function onKeyDialogClose(event:CloseEvent):void
-            {            	
-            	if(event.detail == ModalDialog.OK)
-            	{
-            		if(event.target.txtKey.text)
-            		{
-            			template.key = event.target.txtKey.text;
-            			
-            			template.processOpened();
-            			
-            			if(template.xmlStructure)
-            			{
-            				populateList();	
-							return;        					
-            			}
-            		}
-					template = null;
-            		SuperAlert.show("Invalid secret key.");
-            	}         	
-            }
-            
-            private function populateList():void
-            {            	
-            	var xmlList:XMLList = template.xmlStructure..graph;
-            	var treeXML:XML = <tree/>;
-            	
-            	for each (var item:XML in xmlList) { 				   
- 					if(treeXML.node.(hasOwnProperty('@label') && @label == item.@category).length()==0)
- 					{
- 						var nodeCat:XML = <node/>;
- 						nodeCat.@label = item.@category;
- 						nodeCat.@isBranch = 'true';
- 						treeXML.appendChild(nodeCat);
- 					}
- 					
- 					var node:XML = <node/>;
- 					node.@label = item.@name;
- 					node.@category = item.@category;
- 					treeXML.node.(hasOwnProperty('@label') && @label == item.@category)[0].appendChild(node);
-				}
-				
-            	var tree:XMLListCollection = new XMLListCollection(treeXML.elements('*'));
-				var sort:Sort = new Sort();
-				sort.fields = [new SortField("label",true)];
-				tree.sort = sort;
-				tree.refresh();
-				
-            	tplTree.labelField = '@label';
-            	tplTree.dataProvider = tree;
-            }
-               			
+
+				var node : XML = <node/>;
+				node.@label = item.@name;
+				node.@category = item.@category;
+				treeXML.node.(hasOwnProperty( '@label' ) && @label == item.@category)[0].appendChild(node);
+			}
+
+			var tree : XMLListCollection = new XMLListCollection( treeXML.elements( '*' ) );
+			var sort : Sort = new Sort();
+			sort.fields = [new SortField( "label", true )];
+			tree.sort = sort;
+			tree.refresh();
+
+			tplTree.labelField = '@label';
+			tplTree.dataProvider = tree;
+		}
 		]]>
 	</mx:Script>
 	<mx:VBox styleName="dlgHeader" width="100%">

@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.utils
+package net.vdombox.powerpack.com.utils
 {
 import com.hurlant.crypto.Crypto;
 import com.hurlant.crypto.hash.IHash;

@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.customize.core.windowClasses
+package net.vdombox.powerpack.customize.core.windowClasses
 {
 	import flash.events.Event;
 	

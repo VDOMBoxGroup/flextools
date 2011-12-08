@@ -1,8 +1,8 @@
-package net.vdombox.PowerPack.com.panel.graphsClasses
+package net.vdombox.powerpack.com.panel.graphsClasses
 {
 	import flash.events.Event;
 	
-	import net.vdombox.PowerPack.com.graph.GraphCanvas;
+	import net.vdombox.powerpack.com.graph.GraphCanvas;
 	
 	public class GraphsAccordionEvent extends Event
 	{

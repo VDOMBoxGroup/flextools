@@ -4,25 +4,25 @@
 
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.PowerPack.com.managers.ContextManager;
-			import mx.events.ItemClickEvent;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			
-			static private var defaultCaptions:Object = {	
-				importation_complete: "Importation complete"
-			}			
-			
-			static private var _classConstructed:Boolean = classConstruct(); 
-			
-			static private function classConstruct():Boolean
-			{
-				LanguageManager.setSentences(defaultCaptions);
-				return true;
-			}
-			private function onShow():void
-			{								
-			}				
-            
+		import net.vdombox.powerpack.com.managers.ContextManager;
+
+		import mx.events.ItemClickEvent;
+
+		import net.vdombox.powerpack.com.managers.LanguageManager;
+
+		static private var defaultCaptions : Object = {
+			importation_complete: "Importation complete"
+		}
+
+		static private var _classConstructed : Boolean = classConstruct();
+
+		static private function classConstruct() : Boolean {
+			LanguageManager.setSentences( defaultCaptions );
+			return true;
+		}
+
+		private function onShow() : void {
+		}
 		]]>
 	</mx:Script>
 

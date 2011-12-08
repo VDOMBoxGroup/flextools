@@ -1,8 +1,8 @@
-package net.vdombox.PowerPack.com.gen.structs
+package net.vdombox.powerpack.com.gen.structs
 {
-	import net.vdombox.PowerPack.com.gen.parse.parseClasses.ParsedBlock;
-	import net.vdombox.PowerPack.com.graph.NodeCategory;
-	import net.vdombox.PowerPack.com.graph.NodeType;
+	import net.vdombox.powerpack.com.gen.parse.parseClasses.ParsedBlock;
+	import net.vdombox.powerpack.com.graph.NodeCategory;
+	import net.vdombox.powerpack.com.graph.NodeType;
 		
 	public dynamic class NodeStruct
 	{
@@ -16,10 +16,10 @@ package net.vdombox.PowerPack.com.gen.structs
 		public var passCount:int = 0;
 		public var graph:GraphStruct;
 		
-		[ArrayElementType("net.vdombox.PowerPack.com.gen.structs.ArrowStruct")]
+		[ArrayElementType("net.vdombox.powerpack.com.gen.structs.ArrowStruct")]
 		public var outArrows:Array = [];
 		
-		[ArrayElementType("net.vdombox.PowerPack.com.gen.structs.ArrowStruct")]
+		[ArrayElementType("net.vdombox.powerpack.com.gen.structs.ArrowStruct")]
 		public var inArrows:Array = [];
 		
     	public function NodeStruct(	_id:String = null,

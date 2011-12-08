@@ -1,9 +1,9 @@
-package net.vdombox.PowerPack.com.managers
+package net.vdombox.powerpack.com.managers
 {
 import ExtendedAPI.com.utils.Utils;
 
-import net.vdombox.PowerPack.com.gen.TemplateStruct;
-import net.vdombox.PowerPack.com.utils.CryptUtils;
+import net.vdombox.powerpack.com.gen.TemplateStruct;
+import net.vdombox.powerpack.com.utils.CryptUtils;
 
 import flash.events.EventDispatcher;
 import flash.filesystem.File;
@@ -90,7 +90,7 @@ public class ContextManager extends EventDispatcher
 	    settingStorage = dataStorage.resolvePath(_appContext[_context]['settingsFolder']);
     
 	    try {
-	    	lastDir = File.documentsDirectory.resolvePath("PowerPack");
+	    	lastDir = File.documentsDirectory.resolvePath("powerpack");
 	    }
 	    catch(e:Error) {
 	    	lastDir = File.desktopDirectory;

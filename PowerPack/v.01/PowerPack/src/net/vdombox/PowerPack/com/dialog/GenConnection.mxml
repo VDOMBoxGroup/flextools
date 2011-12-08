@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GenModalDialog 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns="net.vdombox.PowerPack.com.dialog.*" 
-	xmlns:control="net.vdombox.PowerPack.com.control.*"
+	xmlns="net.vdombox.powerpack.com.dialog.*"
+	xmlns:control="net.vdombox.powerpack.com.control.*"
 	xmlns:controls="ExtendedAPI.com.controls.*" 
 	title="{LanguageManager.sentences.connection}"
 	width="450" height="300"
@@ -10,56 +10,50 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mx.events.FlexEvent;
-			import mx.events.CloseEvent;
-			import mx.utils.StringUtil;
-			import net.vdombox.PowerPack.com.managers.ContextManager;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			
-			private static var _dialog:GenConnection;
-			
-			static public function show(closeHandler:Function = null):GenConnection
-			{
-				if(!_dialog || _dialog.closed) 
-				{
-					_dialog = new GenConnection();	
-					_dialog.open();
-					_dialog.addEventListener(CloseEvent.CLOSE, _dialog.onClose);
-					_dialog.show(OK | CANCEL, closeHandler, null, OK);					
-					
-					var defaultCaptions:Object = {
-						hlp_host: "Host...",
-						hlp_port: "Port...",
-						hlp_login: "Login...",
-						hlp_password: "Password..."
-					};
-					
-					LanguageManager.setSentences(defaultCaptions);								
-				}				
-				else 
-				{
-					_dialog.activate();
-				}	
-				
-				return _dialog;
+		import mx.events.FlexEvent;
+		import mx.events.CloseEvent;
+		import mx.utils.StringUtil;
+
+		import net.vdombox.powerpack.com.managers.ContextManager;
+		import net.vdombox.powerpack.com.managers.LanguageManager;
+
+		private static var _dialog : GenConnection;
+
+		static public function show( closeHandler : Function = null ) : GenConnection {
+			if ( !_dialog || _dialog.closed ) {
+				_dialog = new GenConnection();
+				_dialog.open();
+				_dialog.addEventListener( CloseEvent.CLOSE, _dialog.onClose );
+				_dialog.show( OK | CANCEL, closeHandler, null, OK );
+
+				var defaultCaptions : Object = {
+					hlp_host: "Host...",
+					hlp_port: "Port...",
+					hlp_login: "Login...",
+					hlp_password: "Password..."
+				};
+
+				LanguageManager.setSentences( defaultCaptions );
 			}
-			
-			private function onClose(event:Event):void
-			{
-				if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
-            	{
-            		ContextManager.instance.host = StringUtil.trim(txtHost.text);
-            		ContextManager.instance.port = StringUtil.trim(txtPort.text)
-            		ContextManager.instance.login = StringUtil.trim(txtLogin.text);
-            		ContextManager.instance.pass = StringUtil.trim(txtPass.text)
-            	}
+			else {
+				_dialog.activate();
 			}
-			
-			private function onShow():void
-			{
-				txtHost.setFocus();
+
+			return _dialog;
+		}
+
+		private function onClose( event : Event ) : void {
+			if ( event is CloseEvent && CloseEvent( event ).detail == ModalDialog.OK ) {
+				ContextManager.instance.host = StringUtil.trim( txtHost.text );
+				ContextManager.instance.port = StringUtil.trim( txtPort.text )
+				ContextManager.instance.login = StringUtil.trim( txtLogin.text );
+				ContextManager.instance.pass = StringUtil.trim( txtPass.text )
 			}
-				
+		}
+
+		private function onShow() : void {
+			txtHost.setFocus();
+		}
 		]]>
 	</mx:Script>
 

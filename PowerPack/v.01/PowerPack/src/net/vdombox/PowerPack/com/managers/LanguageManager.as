@@ -1,8 +1,8 @@
-package net.vdombox.PowerPack.com.managers
+package net.vdombox.powerpack.com.managers
 {
 import ExtendedAPI.com.utils.Utils;
 
-import net.vdombox.PowerPack.com.dialog.ModalDialog;
+import net.vdombox.powerpack.com.dialog.ModalDialog;
 
 import flash.events.EventDispatcher;
 import flash.utils.Dictionary;

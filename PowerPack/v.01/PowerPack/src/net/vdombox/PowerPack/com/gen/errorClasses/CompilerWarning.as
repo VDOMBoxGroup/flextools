@@ -1,6 +1,6 @@
-package net.vdombox.PowerPack.com.gen.errorClasses
+package net.vdombox.powerpack.com.gen.errorClasses
 {
-	import net.vdombox.PowerPack.com.BasicError;
+	import net.vdombox.powerpack.com.BasicError;
 	
 	public class CompilerWarning extends BasicError
 	{

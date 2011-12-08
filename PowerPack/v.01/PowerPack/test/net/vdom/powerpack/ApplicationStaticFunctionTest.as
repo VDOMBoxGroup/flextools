@@ -8,7 +8,7 @@ package net.vdom.powerpack {
 
 	import flexunit.framework.TestCase;
 
-	import net.vdombox.PowerPack.com.gen.TemplateLib;
+	import net.vdombox.powerpack.com.gen.TemplateLib;
 
 	public class ApplicationStaticFunctionTest  extends TestCase {
 

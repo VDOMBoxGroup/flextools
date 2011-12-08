@@ -4,44 +4,41 @@
 
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.PowerPack.com.managers.ContextManager;
-			import mx.events.ItemClickEvent;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			
-			static private var defaultCaptions:Object = {
-				import_from: "Import from",
-				import_from_file: "file",
-				import_from_server: "server",
-				default_port: "Default port",
-				save_password: "Save password"			
-			}		
+		import net.vdombox.powerpack.com.managers.ContextManager;
 
-			static private var _classConstructed:Boolean = classConstruct(); 
-			
-			static private function classConstruct():Boolean
-			{
-				LanguageManager.setSentences(defaultCaptions);
-				return true
-			}			
-			private function onShow():void
-			{
-				radFile.setFocus();
+		import mx.events.ItemClickEvent;
+
+		import net.vdombox.powerpack.com.managers.LanguageManager;
+
+		static private var defaultCaptions : Object = {
+			import_from: "Import from",
+			import_from_file: "file",
+			import_from_server: "server",
+			default_port: "Default port",
+			save_password: "Save password"
+		}
+
+		static private var _classConstructed : Boolean = classConstruct();
+
+		static private function classConstruct() : Boolean {
+			LanguageManager.setSentences( defaultCaptions );
+			return true
+		}
+
+		private function onShow() : void {
+			radFile.setFocus();
+		}
+
+		private function handleImport() : void {
+			if ( importType.selectedValue == "File" ) {
+				fileBrowse.enabled = true;
+				gridServer.enabled = false;
 			}
-						
-			private function handleImport():void 
-			{
-            	if(importType.selectedValue == "File")
-            	{
-            		fileBrowse.enabled = true;
-            		gridServer.enabled = false;
-            	} 
-            	else if(importType.selectedValue == "Server") 
-            	{
-            		fileBrowse.enabled = false;
-            		gridServer.enabled = true;
-                } 
-            }
-            
+			else if ( importType.selectedValue == "Server" ) {
+				fileBrowse.enabled = false;
+				gridServer.enabled = true;
+			}
+		}
 		]]>
 	</mx:Script>
 

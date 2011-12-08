@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.gen
+package net.vdombox.powerpack.com.gen
 {
 	public class TemplateValidateOptions
 	{

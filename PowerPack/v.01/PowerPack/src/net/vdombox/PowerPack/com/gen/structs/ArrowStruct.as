@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.gen.structs
+package net.vdombox.powerpack.com.gen.structs
 {
 	public class ArrowStruct
 	{

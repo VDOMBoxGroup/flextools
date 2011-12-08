@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.gen.parse
+package net.vdombox.powerpack.com.gen.parse
 {
 import ExtendedAPI.com.utils.Utils;
 
@@ -6,11 +6,11 @@ import GraphicAPI.drawing.BrushPatternStyle;
 import GraphicAPI.drawing.PStroke;
 import GraphicAPI.drawing.StrokePatternStyle;
 
-import net.vdombox.PowerPack.com.gen.errorClasses.RunTimeError;
-import net.vdombox.PowerPack.com.gen.parse.listClasses.ElmType;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.CodeFragment;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.LexemStruct;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.ParsedBlock;
+import net.vdombox.powerpack.com.gen.errorClasses.RunTimeError;
+import net.vdombox.powerpack.com.gen.parse.listClasses.ElmType;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.CodeFragment;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.LexemStruct;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.ParsedBlock;
 
 import flash.display.GradientType;
 import flash.display.SpreadMethod;

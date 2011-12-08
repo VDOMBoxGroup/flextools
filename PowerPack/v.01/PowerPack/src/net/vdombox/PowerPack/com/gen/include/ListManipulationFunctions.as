@@ -1,6 +1,6 @@
 // ActionScript file
 
-import net.vdombox.PowerPack.com.gen.parse.ListParser;
+import net.vdombox.powerpack.com.gen.parse.ListParser;
 
 public function length(list:String):int
 {

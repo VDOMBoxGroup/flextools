@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.graph
+package net.vdombox.powerpack.com.graph
 {	
 import ExtendedAPI.com.containers.SuperAlert;
 import ExtendedAPI.com.controls.SuperTextArea;
@@ -7,12 +7,12 @@ import ExtendedAPI.com.ui.SuperNativeMenuItem;
 import ExtendedAPI.com.utils.ObjectUtils;
 import ExtendedAPI.com.utils.Utils;
 
-import net.vdombox.PowerPack.com.Template;
-import net.vdombox.PowerPack.com.managers.CashManager;
-import net.vdombox.PowerPack.com.managers.ContextManager;
-import net.vdombox.PowerPack.com.managers.LanguageManager;
-import net.vdombox.PowerPack.com.utils.GeneralUtils;
-import net.vdombox.PowerPack.com.validators.NodeTextValidator;
+import net.vdombox.powerpack.com.Template;
+import net.vdombox.powerpack.com.managers.CashManager;
+import net.vdombox.powerpack.com.managers.ContextManager;
+import net.vdombox.powerpack.com.managers.LanguageManager;
+import net.vdombox.powerpack.com.utils.GeneralUtils;
+import net.vdombox.powerpack.com.validators.NodeTextValidator;
 
 import flash.display.DisplayObject;
 import flash.display.GradientType;
@@ -307,10 +307,10 @@ public class Node extends Canvas
      */
     private var regY:Number;  
     
-    [ArrayElementType("net.vdombox.PowerPack.com.graph.Connector")]
+    [ArrayElementType("net.vdombox.powerpack.com.graph.Connector")]
     public var inArrows:ArrayCollection = new ArrayCollection();
     
-    [ArrayElementType("net.vdombox.PowerPack.com.graph.Connector")]
+    [ArrayElementType("net.vdombox.powerpack.com.graph.Connector")]
     public var outArrows:ArrayCollection = new ArrayCollection();
     
     [Bindable]

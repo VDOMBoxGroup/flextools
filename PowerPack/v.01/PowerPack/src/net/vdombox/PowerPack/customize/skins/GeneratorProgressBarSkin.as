@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.customize.skins
+package net.vdombox.powerpack.customize.skins
 {
 
 import mx.skins.Border;

@@ -4,8 +4,8 @@ import ExtendedAPI.com.utils.GeomUtils;
 
 import GraphicAPI.GraphicUtils;
 
-import net.vdombox.PowerPack.com.BasicError;
-import net.vdombox.PowerPack.com.gen.parse.ListParser;
+import net.vdombox.powerpack.com.BasicError;
+import net.vdombox.powerpack.com.gen.parse.ListParser;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;

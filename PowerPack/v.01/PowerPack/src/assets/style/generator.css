@@ -46,7 +46,7 @@ WindowedApplication
 	titleTextStyleName:  "titleTextStyle";
 	titleBarColors: #ffeae6, #000000, #666666;
 	titleBarButtonPadding: 2;
-	titleBarBackgroundSkin:  ClassReference("net.vdombox.PowerPack.customize.skins.GeneratorApplicationTitleBarBackgroundSkin");
+	titleBarBackgroundSkin:  ClassReference("net.vdombox.powerpack.customize.skins.GeneratorApplicationTitleBarBackgroundSkin");
 
 	borderColor: #707173;
 	borderThickness: 2;
@@ -69,7 +69,7 @@ GenModalDialog
 	horizontalGap: 0;	
 	backgroundColor: #e1e1e0;
 
-	titleBarBackgroundSkin:  ClassReference("net.vdombox.PowerPack.customize.skins.GeneratorApplicationTitleBarBackgroundSkin");
+	titleBarBackgroundSkin:  ClassReference("net.vdombox.powerpack.customize.skins.GeneratorApplicationTitleBarBackgroundSkin");
 }
 
 Label 
@@ -99,7 +99,7 @@ ProgressBar
 	trackColors: #ffffff, #ffffff;
 	trackHeight: 12;
 	barColor: #E42327;
-	barSkin: ClassReference("net.vdombox.PowerPack.customize.skins.GeneratorProgressBarSkin");
+	barSkin: ClassReference("net.vdombox.powerpack.customize.skins.GeneratorProgressBarSkin");
 }
 
 Button 

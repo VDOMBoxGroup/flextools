@@ -2,7 +2,7 @@
 <mx:Box xmlns:mx="http://www.adobe.com/2006/mxml">
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.PowerPack.com.managers.ContextManager;
+		import net.vdombox.powerpack.com.managers.ContextManager;
 		]]>
 	</mx:Script>
 	

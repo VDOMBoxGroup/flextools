@@ -1,7 +1,7 @@
-package net.vdombox.PowerPack.com.gen
+package net.vdombox.powerpack.com.gen
 {
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.ParsedBlock;
-import net.vdombox.PowerPack.com.gen.structs.NodeStruct;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.ParsedBlock;
+import net.vdombox.powerpack.com.gen.structs.NodeStruct;
 
 public class NodeContext
 {

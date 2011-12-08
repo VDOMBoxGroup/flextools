@@ -2,7 +2,7 @@
 import GraphicAPI.drawing.Draw;
 import GraphicAPI.drawing.PStroke;
 
-import net.vdombox.PowerPack.com.gen.parse.ListParser;
+import net.vdombox.powerpack.com.gen.parse.ListParser;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;

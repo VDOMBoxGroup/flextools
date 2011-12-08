@@ -1,17 +1,17 @@
-package net.vdombox.PowerPack.com.gen
+package net.vdombox.powerpack.com.gen
 {
 import ExtendedAPI.com.utils.Utils;
 
-import net.vdombox.PowerPack.com.gen.errorClasses.RunTimeError;
-import net.vdombox.PowerPack.com.gen.errorClasses.ValidationError;
-import net.vdombox.PowerPack.com.gen.errorClasses.ValidationWarning;
-import net.vdombox.PowerPack.com.gen.parse.CodeParser;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.CodeFragment;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.ParsedBlock;
-import net.vdombox.PowerPack.com.gen.structs.*;
-import net.vdombox.PowerPack.com.graph.NodeCategory;
-import net.vdombox.PowerPack.com.graph.NodeType;
-import net.vdombox.PowerPack.com.managers.CashManager;
+import net.vdombox.powerpack.com.gen.errorClasses.RunTimeError;
+import net.vdombox.powerpack.com.gen.errorClasses.ValidationError;
+import net.vdombox.powerpack.com.gen.errorClasses.ValidationWarning;
+import net.vdombox.powerpack.com.gen.parse.CodeParser;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.CodeFragment;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.ParsedBlock;
+import net.vdombox.powerpack.com.gen.structs.*;
+import net.vdombox.powerpack.com.graph.NodeCategory;
+import net.vdombox.powerpack.com.graph.NodeType;
+import net.vdombox.powerpack.com.managers.CashManager;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -33,11 +33,11 @@ public class TemplateStruct extends EventDispatcher
 	private var ID:String;
 	public var error:Error;
 	
-	[ArrayElementType("net.vdombox.PowerPack.com.gen.structs.GraphStruct")]
+	[ArrayElementType("net.vdombox.powerpack.com.gen.structs.GraphStruct")]
 	public var graphs:Array = [];
-	[ArrayElementType("net.vdombox.PowerPack.com.gen.structs.NodeStruct")]
+	[ArrayElementType("net.vdombox.powerpack.com.gen.structs.NodeStruct")]
 	public var nodes:Array = [];
-	[ArrayElementType("net.vdombox.PowerPack.com.gen.structs.ArrowStruct")]
+	[ArrayElementType("net.vdombox.powerpack.com.gen.structs.ArrowStruct")]
 	public var arrows:Array = [];
 	
 	public var initGraph:GraphStruct;
@@ -46,7 +46,7 @@ public class TemplateStruct extends EventDispatcher
 	
 	public var isRunning:Boolean;
 
-	[ArrayElementType("net.vdombox.PowerPack.com.gen.GraphContext")]
+	[ArrayElementType("net.vdombox.powerpack.com.gen.GraphContext")]
 	public var contextStack:Array = [];
 
 	public var nodeStack:Array = [];

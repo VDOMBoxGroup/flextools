@@ -1,9 +1,9 @@
-package net.vdombox.PowerPack.com.gen
+package net.vdombox.powerpack.com.gen
 {
 import ExtendedAPI.com.graphics.codec.BMPEncoder;
 import ExtendedAPI.com.utils.FileToBase64;
 
-import net.vdombox.PowerPack.com.panel.Question;
+import net.vdombox.powerpack.com.panel.Question;
 
 import flash.display.Bitmap;
 import flash.events.Event;
@@ -17,7 +17,7 @@ import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
 import mx.utils.Base64Encoder;
 import mx.utils.StringUtil;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.CodeFragment;	
+import net.vdombox.powerpack.com.gen.parse.parseClasses.CodeFragment;
 
 public dynamic class TemplateLib
 {

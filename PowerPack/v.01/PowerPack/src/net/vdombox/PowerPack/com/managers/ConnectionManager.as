@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.managers
+package net.vdombox.powerpack.com.managers
 {
 import ExtendedAPI.com.containers.SuperAlert;
 

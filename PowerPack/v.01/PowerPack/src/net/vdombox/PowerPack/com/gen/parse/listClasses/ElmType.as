@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.gen.parse.listClasses
+package net.vdombox.powerpack.com.gen.parse.listClasses
 {
 public final class ElmType
 {

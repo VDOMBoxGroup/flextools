@@ -4,26 +4,26 @@
 
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.PowerPack.com.managers.ContextManager;
-			import mx.events.ItemClickEvent;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			
-			static private var defaultCaptions:Object = {	
-				select_app_for_import: "Select application for import"
-			}			
-			
-			static private var _classConstructed:Boolean = classConstruct(); 
-			
-			static private function classConstruct():Boolean
-			{
-				LanguageManager.setSentences(defaultCaptions);
-				return true
-			}	
+		import net.vdombox.powerpack.com.managers.ContextManager;
 
-			private function onShow():void
-			{
-				lstApps.setFocus();
-			}            
+		import mx.events.ItemClickEvent;
+
+		import net.vdombox.powerpack.com.managers.LanguageManager;
+
+		static private var defaultCaptions : Object = {
+			select_app_for_import: "Select application for import"
+		}
+
+		static private var _classConstructed : Boolean = classConstruct();
+
+		static private function classConstruct() : Boolean {
+			LanguageManager.setSentences( defaultCaptions );
+			return true
+		}
+
+		private function onShow() : void {
+			lstApps.setFocus();
+		}
 		]]>
 	</mx:Script>
 

@@ -4,15 +4,15 @@ import ExtendedAPI.com.graphics.codec.BMPEncoder;
 import ExtendedAPI.com.utils.FileToBase64;
 import ExtendedAPI.com.utils.Utils;
 
-import net.vdombox.PowerPack.com.BasicError;
-import net.vdombox.PowerPack.com.dialog.Import;
-import net.vdombox.PowerPack.com.dialog.soap.Login;
-import net.vdombox.PowerPack.com.gen.errorClasses.RunTimeError;
-import net.vdombox.PowerPack.com.gen.parse.ListParser;
-import net.vdombox.PowerPack.com.gen.structs.GraphStruct;
-import net.vdombox.PowerPack.com.gen.structs.NodeStruct;
-import net.vdombox.PowerPack.com.managers.LanguageManager;
-import net.vdombox.PowerPack.com.panel.Question;
+import net.vdombox.powerpack.com.BasicError;
+import net.vdombox.powerpack.com.dialog.Import;
+import net.vdombox.powerpack.com.dialog.soap.Login;
+import net.vdombox.powerpack.com.gen.errorClasses.RunTimeError;
+import net.vdombox.powerpack.com.gen.parse.ListParser;
+import net.vdombox.powerpack.com.gen.structs.GraphStruct;
+import net.vdombox.powerpack.com.gen.structs.NodeStruct;
+import net.vdombox.powerpack.com.managers.LanguageManager;
+import net.vdombox.powerpack.com.panel.Question;
 
 import connection.SOAP;
 import connection.SOAPBaseLevel;

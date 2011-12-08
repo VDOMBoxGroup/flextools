@@ -1,14 +1,14 @@
-package net.vdombox.PowerPack.com
+package net.vdombox.powerpack.com
 {
 import ExtendedAPI.com.containers.SuperAlert;
 import ExtendedAPI.com.utils.FileToBase64;
 import ExtendedAPI.com.utils.Utils;
 
-import net.vdombox.PowerPack.com.managers.CashManager;
-import net.vdombox.PowerPack.com.managers.ContextManager;
-import net.vdombox.PowerPack.com.managers.LanguageManager;
-import net.vdombox.PowerPack.com.managers.ProgressManager;
-import net.vdombox.PowerPack.com.utils.CryptUtils;
+import net.vdombox.powerpack.com.managers.CashManager;
+import net.vdombox.powerpack.com.managers.ContextManager;
+import net.vdombox.powerpack.com.managers.LanguageManager;
+import net.vdombox.powerpack.com.managers.ProgressManager;
+import net.vdombox.powerpack.com.utils.CryptUtils;
 
 import flash.events.ErrorEvent;
 import flash.events.Event;

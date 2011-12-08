@@ -1,6 +1,6 @@
-package net.vdombox.PowerPack.com.gen.parse.parseClasses
+package net.vdombox.powerpack.com.gen.parse.parseClasses
 {
-import net.vdombox.PowerPack.com.BasicError;
+import net.vdombox.powerpack.com.BasicError;
 
 public class ParsedBlock
 {

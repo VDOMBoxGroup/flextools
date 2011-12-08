@@ -2,13 +2,13 @@
 <mx:WindowedApplication 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:ExtendedAPI="ExtendedAPI.com.controls.*"
-	xmlns:customize="net.vdombox.PowerPack.customize.*"
+	xmlns:customize="net.vdombox.powerpack.customize.*"
 	width="770" height="450" verticalAlign="middle" horizontalAlign="center" layout="absolute"	 
 	showStatusBar="false" showGripper="false"
 	title="{LanguageManager.sentences.app_title}"
 	titleIcon="@Embed(source='assets/icons/icon_16.png')" 
-	titleBarFactory="net.vdombox.PowerPack.customize.core.windowClasses.GeneratorTitleBar"
-	statusBarFactory="net.vdombox.PowerPack.customize.core.windowClasses.SuperStatusBar"	
+	titleBarFactory="net.vdombox.powerpack.customize.core.windowClasses.GeneratorTitleBar"
+	statusBarFactory="net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar"
 	initialize="init()" 
 	applicationComplete="show()"
 	updateComplete="complete()">
@@ -45,892 +45,826 @@
     	
 	<mx:Script>
 		<![CDATA[
-			import ExtendedAPI.com.containers.SuperAlert;
-			import ExtendedAPI.com.utils.FileUtils;
-			
-			import GraphicAPI.GraphicUtils;
-			import GraphicAPI.imageProcessing.Filters;
-			
-			import net.vdombox.PowerPack.com.BasicError;
-			import net.vdombox.PowerPack.com.Template;
-			import net.vdombox.PowerPack.com.dialog.GenConnection;
-			import net.vdombox.PowerPack.com.dialog.GenProperties;
-			import net.vdombox.PowerPack.com.dialog.ModalDialog;
-			import net.vdombox.PowerPack.com.dialog.TemplateKey;
-			import net.vdombox.PowerPack.com.gen.TemplateStruct;
-			import net.vdombox.PowerPack.com.managers.ConnectionManager;
-			import net.vdombox.PowerPack.com.managers.ContextManager;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			import net.vdombox.PowerPack.com.managers.ProgressManager;
-			import net.vdombox.PowerPack.com.menu.MenuGeneral;
-			import net.vdombox.PowerPack.com.utils.CryptUtils;
-			
-			import flash.utils.getTimer;
-			
-			import generated.webservices.Close_sessionResultEvent;
-			import generated.webservices.Install_applicationResultEvent;
-			import generated.webservices.List_applicationsResultEvent;
-			import generated.webservices.Open_sessionResultEvent;
-			import generated.webservices.Vdom;
-			
-			import mx.controls.Alert;
-			import mx.controls.ProgressBarMode;
-			import mx.core.Application;
-			import mx.events.CloseEvent;
-			import mx.events.EffectEvent;
-			import mx.events.IndexChangedEvent;
-			import mx.graphics.codec.PNGEncoder;
-			import mx.rpc.events.FaultEvent;
-			import mx.utils.GraphicsUtil;
-			import mx.utils.StringUtil;
-			
-			import vdom.connection.protect.Code;
-			import vdom.connection.protect.MD5;
-			
-       			
-			private var vsLastChanged:DisplayObject;
-			private var appGenerated:Boolean;
-			private var appInstalled:Boolean;
-			private var timer:Number;
-			
-			private function init():void 
-			{
-				var defaultCaptions:Object = {
+		import ExtendedAPI.com.containers.SuperAlert;
+		import ExtendedAPI.com.utils.FileUtils;
 
-					app_title:"Power Pack Player",
-					msg_input_template_key: "Please, input valid template key",	
-					msg_exit_app:"Are you sure want to exit?",
-					msg_tpl_proceed_with_errs: "Error(s) exist in template\nProceed with launch?",
-					msg_gen_welcome: "Lorem ipsum dolor sit amet",
-					msg_gen_finish: "Lorem ipsum dolor sit amet",
-					
-					msg_save_appxml_to_server: "Save application xml to server.",
-					msg_connecting_fault: "A fault occured contacting the server. Fault message is:",
-					msg_try_to_reconnect: "Try to reconnect.",
-					msg_save_appxml_to_file: "Save application xml to file.",
-					msg_saving_appxml_fault: "A fault occured saving application xml. Fault message is:",
-					msg_proceed_interrupt_app_installing: "Are you sure want to interrupt process?",
-					msg_creation_app_interrupted: "Application creation process has been interrupted by user.",
-					
-					prgrs_gen_tpl: "Generating application xml. Progress %3%%",
-					prgrs_save_to_server_tpl: "Saving to server. Progress %3%%",
-					prgrs_save_to_file_tpl: "Saving to file. Progress %3%%",
-					prgrs_launch_app: "Launching %3%%",
-					
-					errs_in_tpl: "Errors in template",
-					menu_run_template:"_Run",
-					gen_result: "Result",
-					virtual_host_name: "Virtual host name",
-					save_to_server: "Save to server",
-					save_to_file: "Save to file"
-				};
-				
-				LanguageManager.setSentences(defaultCaptions);				
-				
-				if(File.applicationDirectory.resolvePath('style/generator.swf').exists)
-					StyleManager.loadStyleDeclarations("style/generator.swf");			
+		import GraphicAPI.GraphicUtils;
+		import GraphicAPI.imageProcessing.Filters;
+
+		import net.vdombox.powerpack.com.BasicError;
+		import net.vdombox.powerpack.com.Template;
+		import net.vdombox.powerpack.com.dialog.GenConnection;
+		import net.vdombox.powerpack.com.dialog.GenProperties;
+		import net.vdombox.powerpack.com.dialog.ModalDialog;
+		import net.vdombox.powerpack.com.dialog.TemplateKey;
+		import net.vdombox.powerpack.com.gen.TemplateStruct;
+		import net.vdombox.powerpack.com.managers.ConnectionManager;
+		import net.vdombox.powerpack.com.managers.ContextManager;
+		import net.vdombox.powerpack.com.managers.LanguageManager;
+		import net.vdombox.powerpack.com.managers.ProgressManager;
+		import net.vdombox.powerpack.com.menu.MenuGeneral;
+		import net.vdombox.powerpack.com.utils.CryptUtils;
+
+		import flash.utils.getTimer;
+
+		import generated.webservices.Close_sessionResultEvent;
+		import generated.webservices.Install_applicationResultEvent;
+		import generated.webservices.List_applicationsResultEvent;
+		import generated.webservices.Open_sessionResultEvent;
+		import generated.webservices.Vdom;
+
+		import mx.controls.Alert;
+		import mx.controls.ProgressBarMode;
+		import mx.core.Application;
+		import mx.events.CloseEvent;
+		import mx.events.EffectEvent;
+		import mx.events.IndexChangedEvent;
+		import mx.graphics.codec.PNGEncoder;
+		import mx.rpc.events.FaultEvent;
+		import mx.utils.GraphicsUtil;
+		import mx.utils.StringUtil;
+
+		import vdom.connection.protect.Code;
+		import vdom.connection.protect.MD5;
+
+		private var vsLastChanged : DisplayObject;
+		private var appGenerated : Boolean;
+		private var appInstalled : Boolean;
+		private var timer : Number;
+
+		private function init() : void {
+			var defaultCaptions : Object = {
+
+				app_title:"Power Pack Player",
+				msg_input_template_key: "Please, input valid template key",
+				msg_exit_app:"Are you sure want to exit?",
+				msg_tpl_proceed_with_errs: "Error(s) exist in template\nProceed with launch?",
+				msg_gen_welcome: "Lorem ipsum dolor sit amet",
+				msg_gen_finish: "Lorem ipsum dolor sit amet",
+
+				msg_save_appxml_to_server: "Save application xml to server.",
+				msg_connecting_fault: "A fault occured contacting the server. Fault message is:",
+				msg_try_to_reconnect: "Try to reconnect.",
+				msg_save_appxml_to_file: "Save application xml to file.",
+				msg_saving_appxml_fault: "A fault occured saving application xml. Fault message is:",
+				msg_proceed_interrupt_app_installing: "Are you sure want to interrupt process?",
+				msg_creation_app_interrupted: "Application creation process has been interrupted by user.",
+
+				prgrs_gen_tpl: "Generating application xml. Progress %3%%",
+				prgrs_save_to_server_tpl: "Saving to server. Progress %3%%",
+				prgrs_save_to_file_tpl: "Saving to file. Progress %3%%",
+				prgrs_launch_app: "Launching %3%%",
+
+				errs_in_tpl: "Errors in template",
+				menu_run_template:"_Run",
+				gen_result: "Result",
+				virtual_host_name: "Virtual host name",
+				save_to_server: "Save to server",
+				save_to_file: "Save to file"
+			};
+
+			LanguageManager.setSentences( defaultCaptions );
+
+			if ( File.applicationDirectory.resolvePath( 'style/generator.swf' ).exists )
+				StyleManager.loadStyleDeclarations( "style/generator.swf" );
+		}
+
+		private function show() : void {
+			addEventListener( Event.CLOSING, closingApplicationHandler );
+
+			function closingApplicationHandler( event : Event ) : void {
+				event.preventDefault();
+				exitApplication();
 			}
-			
-			private function show():void
-			{
-				addEventListener(Event.CLOSING, closingApplicationHandler);
-	       		
-	       		function closingApplicationHandler(event:Event):void 
-				{
-	       			event.preventDefault();
-	       			exitApplication();	   
-	       		}
-	       		
-	       		mnMain.enabled = true;
-	       					
-				var file:File;
-				var fileStream:FileStream;
-				
-        	    for each ( file in [ContextManager.instance.dataStorage, ContextManager.instance.settingStorage] )
-        	    {
-        	    	if(!file.exists) file.createDirectory();
-        	    }
-        	    
-				// Load application settings
-	            ContextManager.loadSettings();
-	            
-	            // Fill language menu
+
+			mnMain.enabled = true;
+
+			var file : File;
+			var fileStream : FileStream;
+
+			for each ( file in [ContextManager.instance.dataStorage, ContextManager.instance.settingStorage] ) {
+				if ( !file.exists ) file.createDirectory();
+			}
+
+			// Load application settings
+			ContextManager.loadSettings();
+
+			// Fill language menu
 //	            MenuGeneral.updateLangMenu();
-	            
-	            // fill last files menu
+
+			// fill last files menu
 //	            MenuGeneral.updateLastFilesMenu();
-	            
-				// Load language file
-				file = File.applicationDirectory.resolvePath(MenuGeneral.LANG_FOLDER+ContextManager.instance.lang.file);
-	            if(file && file.exists)
-	            {
-					fileStream = new FileStream();									
-					fileStream.addEventListener(Event.COMPLETE, onLanguageLoad);
-					fileStream.openAsync(file, FileMode.READ);
-	            }
-	            
-	  		}
-	  		
-	  		private function complete():void
-	  		{
-				/*var pngEncoder:PNGEncoder = new PNGEncoder();
-				var data:ByteArray = pngEncoder.encode(Filters.reflection(GraphicUtils.objToBitmapData(this)));
-				
-   				var file:File = new File();
-				var fileStream:FileStream = new FileStream();
 
-   				/*file.url = FileUtils.pathToUrl('c:/out.png'); 					
-				fileStream.open(file, FileMode.WRITE);
-				fileStream.writeBytes(data);
-				fileStream.close();*/	            
+			// Load language file
+			file = File.applicationDirectory.resolvePath( MenuGeneral.LANG_FOLDER + ContextManager.instance.lang.file );
+			if ( file && file.exists ) {
+				fileStream = new FileStream();
+				fileStream.addEventListener( Event.COMPLETE, onLanguageLoad );
+				fileStream.openAsync( file, FileMode.READ );
 			}
 
-	       	private function exitApplication(event:Event=null):void
-	       	{
-       			SuperAlert.show(
-       				LanguageManager.sentences['msg_exit_app'],
-       				LanguageManager.sentences['confirmation'], 
-       				Alert.YES|Alert.NO, null, alertExitHandler, null, Alert.NO);
+		}
 
-			    function alertExitHandler(event:CloseEvent):void {
-		        	if(event.detail==Alert.YES) {   
-						ContextManager.saveSettings();
-		       			exit();
-		   	     	}
+		private function complete() : void {
+			/*var pngEncoder:PNGEncoder = new PNGEncoder();
+			 var data:ByteArray = pngEncoder.encode(Filters.reflection(GraphicUtils.objToBitmapData(this)));
+
+			 var file:File = new File();
+			 var fileStream:FileStream = new FileStream();
+
+			 /*file.url = FileUtils.pathToUrl('c:/out.png');
+			 fileStream.open(file, FileMode.WRITE);
+			 fileStream.writeBytes(data);
+			 fileStream.close();*/
+		}
+
+		private function exitApplication( event : Event = null ) : void {
+			SuperAlert.show(
+					LanguageManager.sentences['msg_exit_app'],
+					LanguageManager.sentences['confirmation'],
+					Alert.YES | Alert.NO, null, alertExitHandler, null, Alert.NO );
+
+			function alertExitHandler( event : CloseEvent ) : void {
+				if ( event.detail == Alert.YES ) {
+					ContextManager.saveSettings();
+					exit();
 				}
-	       	}
-			
-			private function labelFunction(item:Object):String
-			{
-				var _item:XML = XML(item);				
-				return _item.@label.toString().replace("_", "");
 			}
-						
-			//--------------------------------------------------------------------------
-		    //
-		    //  Event handlers
-		    //
-		    //--------------------------------------------------------------------------
-		    
-	        private function onLanguageLoad(event:Event):void
-	        {
-        		var fileStream:FileStream = event.target as FileStream;
-        		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
-				fileStream.close();
-        		
-				LanguageManager.languageXML = xml;
-				
-				ContextManager.instance.lang.label = LanguageManager.languageXML.@label.toLowerCase();
-				ContextManager.instance.lang.file = LanguageManager.languageXML.@data;
-	        }		
-	            
-	        private function onTemplateLoad(event:Event):void
-	        {
-        		var fileStream:FileStream = event.target as FileStream;
-        		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
-				fileStream.close();
-				
-				var template:Template = new Template(xml);
-				
-        		if(ContextManager.templates.length==0)
-	    			ContextManager.templates.addItemAt(template, 0);
-    			else
-    				ContextManager.templates[0] = template;
+		}
 
-   				if(ContextManager.templates[0].picture) {
-					tplPic.visible = false;
-   					tplPic.source = ContextManager.templates[0].picture;
-					tplPic.visible = true;
-   				}
+		private function labelFunction( item : Object ) : String {
+			var _item : XML = XML( item );
+			return _item.@label.toString().replace( "_", "" );
+		}
 
-				if(template.isEncoded)
-				{
-					processStep(cKeyRequest);
+		//--------------------------------------------------------------------------
+		//
+		//  Event handlers
+		//
+		//--------------------------------------------------------------------------
+
+		private function onLanguageLoad( event : Event ) : void {
+			var fileStream : FileStream = event.target as FileStream;
+			var xml : XML = XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
+			fileStream.close();
+
+			LanguageManager.languageXML = xml;
+
+			ContextManager.instance.lang.label = LanguageManager.languageXML.@label.toLowerCase();
+			ContextManager.instance.lang.file = LanguageManager.languageXML.@data;
+		}
+
+		private function onTemplateLoad( event : Event ) : void {
+			var fileStream : FileStream = event.target as FileStream;
+			var xml : XML = XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
+			fileStream.close();
+
+			var template : Template = new Template( xml );
+
+			if ( ContextManager.templates.length == 0 )
+				ContextManager.templates.addItemAt( template, 0 );
+			else
+				ContextManager.templates[0] = template;
+
+			if ( ContextManager.templates[0].picture ) {
+				tplPic.visible = false;
+				tplPic.source = ContextManager.templates[0].picture;
+				tplPic.visible = true;
+			}
+
+			if ( template.isEncoded ) {
+				processStep( cKeyRequest );
+			}
+			else {
+				openTemplate();
+			}
+		}
+
+		private function onKeyAccept( event : Event ) : void {
+			openTemplate( txtKey.text );
+		}
+
+		private function openTemplate( key : String = null ) : void {
+			var tpl : Template = ContextManager.templates[0];
+
+			if ( tpl.isEncoded )
+				tpl.key = key;
+
+			//tpl.decode();
+
+			if ( !tpl.xmlStructure ) {
+				SuperAlert.show( LanguageManager.sentences['msg_cannot_open_tpl'] );
+				closeTemplateFile();
+			}
+			else {
+				if ( fileMenuData..menuitem.(hasOwnProperty( '@id' ) && @id == "run_template")[0] )
+					fileMenuData..menuitem.(hasOwnProperty( '@id' ) && @id == "run_template")[0].@enabled = 'true';
+				processStep( cGeneral );
+
+			}
+		}
+
+		// Event handler for the MenuBar control's itemClick event.
+		private function onMenuClick( event : Object ) : void {
+			var file : File = ContextManager.instance.lastDir;
+			var fileStream : FileStream = new FileStream();
+			var tmplFilter : FileFilter = new FileFilter(
+					StringUtil.substitute( "{0} ({1})", LanguageManager.sentences['template'], "*.xml" ),
+					"*.xml" );
+			var filter : FileFilter = new FileFilter(
+					StringUtil.substitute( "{0} ({1})", LanguageManager.sentences['all'], "*.*" ),
+					"*.*" );
+
+			if ( event.item.@id == "open_file" ) {
+				openTemplateFile( null, onOpenBrowseSelect, [tmplFilter, filter] );
+			}
+			else if ( event.item.@id == "run_template" ) {
+				processStep( 1 );
+			}
+			else if ( event.item.@tag == "lastfiles" ) {
+				file.url = FileUtils.pathToUrl( event.item.@data );
+				openTemplateFile( file, onTemplateLoad );
+			}
+			else if ( event.item.@id == "exit" ) {
+				exitApplication();
+			}
+			else if ( event.item.@id == "connection" ) {
+				GenConnection.show();
+			}
+			else if ( event.item.@id == "properties" ) {
+				GenProperties.show();
+			}
+
+			if ( event.item.@tag == "language" ) {
+				file = File.applicationDirectory.resolvePath( MenuGeneral.LANG_FOLDER + event.item.@data );
+				fileStream.addEventListener( Event.COMPLETE, onLanguageLoad );
+				fileStream.openAsync( file, FileMode.READ );
+			}
+		}
+
+		private function vsChange( event : IndexChangedEvent ) : void {
+			var child : DisplayObject;
+
+			if ( !vsLastChanged || vsLastChanged == event.target ) {
+				if ( event.target == vsProcess ) {
+					child = vsProcess.getChildAt( event.newIndex );
 				}
+				else if ( event.target == vsImages )
+					child = vsImages.getChildAt( event.newIndex );
+
+				if ( child )
+					child.addEventListener( EffectEvent.EFFECT_END, onEffectEnd );
+
+				vsLastChanged = null;
+			}
+		}
+
+		private function onEffectEnd( event : Event ) : void {
+			event.target.removeEventListener( EffectEvent.EFFECT_END, onEffectEnd );
+
+			switch ( vsProcess.selectedChild ) {
+				case cProcess:
+					switch ( vsImages.selectedIndex ) {
+						case 0:
+							mnMain.enabled = false;
+							runingTemplate();
+							break;
+						case 1:
+							mnMain.enabled = false;
+							saveToServer();
+							break;
+						case 2:
+							mnMain.enabled = false;
+							saveToFile();
+							break;
+						case 3:
+							mnMain.enabled = false;
+							launchApp();
+							break;
+					}
+					break;
+
+				case cFileRequest:
+					fileBrowse.text = ContextManager.instance.file.nativePath;
+					break;
+
+				case cComplete:
+					txtResultBuf.text = '';
+					//txtResultBuf.text = ContextManager.templateStruct.buffer;
+					txtResultBuf.text = (timer / 1000).toString();
+					txtResultBuf.verticalScrollPosition = 0;
+					break;
+			}
+		}
+
+		private function processStep( step : * ) : void {
+			switch ( typeof step ) {
+				case 'number':
+					switch ( step ) {
+						case 1:
+							vsProcess.selectedChild = cProcess;
+							vsLastChanged = vsImages.selectedIndex == 0 ? vsProcess : vsImages;
+							vsImages.selectedIndex = 0;
+							progressBar.mode = ProgressBarMode.MANUAL;
+							progressBar.setProgress( 0, 100 );
+							LanguageManager.bindSentence( 'prgrs_gen_tpl', progressBar );
+							break;
+						case 2:
+							vsProcess.selectedChild = cProcess;
+							vsLastChanged = vsImages.selectedIndex == 1 ? vsProcess : vsImages;
+							vsImages.selectedIndex = 1;
+							progressBar.mode = ProgressBarMode.MANUAL;
+							progressBar.setProgress( 0, 100 );
+							LanguageManager.bindSentence( 'prgrs_save_to_server_tpl', progressBar );
+							break
+						case 3:
+							vsProcess.selectedChild = cProcess;
+							vsLastChanged = vsImages.selectedIndex == 2 ? vsProcess : vsImages;
+							vsImages.selectedIndex = 2;
+							progressBar.mode = ProgressBarMode.MANUAL;
+							progressBar.setProgress( 0, 100 );
+							LanguageManager.bindSentence( 'prgrs_save_to_file_tpl', progressBar );
+							break;
+						case 4:
+							vsProcess.selectedChild = cProcess;
+							vsLastChanged = vsImages.selectedIndex == 3 ? vsProcess : vsImages;
+							vsImages.selectedIndex = 3;
+							vsLastChanged = vsImages;
+							progressBar.mode = ProgressBarMode.MANUAL;
+							progressBar.setProgress( 0, 100 );
+							LanguageManager.bindSentence( 'prgrs_launch_app', progressBar );
+							break;
+					}
+					break;
+				default:
+					switch ( step ) {
+						case cWelcome:
+							vsProcess.selectedChild = cWelcome;
+							mnMain.enabled = true;
+							break;
+						case cKeyRequest:
+							vsProcess.selectedChild = cKeyRequest;
+							mnMain.enabled = true;
+							break;
+						case cGeneral:
+							vsProcess.selectedChild = cGeneral;
+							mnMain.enabled = true;
+							break;
+						case cServerRequest:
+							vsProcess.selectedChild = cServerRequest;
+							break;
+						case cFileRequest:
+							vsProcess.selectedChild = cFileRequest;
+							break;
+						case cProcess:
+							vsProcess.selectedChild = cProcess;
+							break;
+						case cInterrupt:
+							vsProcess.selectedChild = cInterrupt;
+							mnMain.enabled = true;
+							break;
+						case cComplete:
+							vsProcess.selectedChild = cComplete;
+							mnMain.enabled = true;
+							break;
+						case cFinal:
+							vsProcess.selectedChild = cFinal;
+							mnMain.enabled = true;
+							break;
+					}
+					break;
+			}
+		}
+
+		////////////////////////////////////////////////////////////
+
+		private function clearTemplateDebug() : void {
+			var tpl : TemplateStruct = ContextManager.templateStruct;
+
+			if ( tpl ) {
+				tpl.removeEventListener( "stepComplete", stepCompleteHandler );
+				tpl.removeEventListener( "generationComplete", generationComplete );
+				tpl.removeEventListener( "error", debugErrorHandler );
+				ContextManager.templateStruct = null;
+			}
+		}
+
+		private function runingTemplate() : void {
+			try {
+				mnMain.enabled = false;
+				appGenerated = false;
+
+				var tpl : Template;
+
+				tpl = ContextManager.templates.getItemAt( 0 ) as Template;
+
+				ContextManager.templateStruct = new TemplateStruct( tpl.xmlStructure, tpl.fullID );
+
+				var validateArr : Array = ContextManager.templateStruct.validate().array;
+
+				if ( validateArr && validateArr.filter( isError ).length > 0 )
+					alertProceedRun();
 				else
-				{
-        			openTemplate();				
-				}
-	        }	        
-            
-            private function onKeyAccept(event:Event):void
-            {            	
-            	openTemplate(txtKey.text);        	
-            }
-            
-            private function openTemplate(key:String=null):void
-            {
-    			var tpl:Template = ContextManager.templates[0];
-    			
-    			if(tpl.isEncoded)
-    				tpl.key = key;    			
-    				
-    			//tpl.decode();
-    			
-    			if(!tpl.xmlStructure)
-    			{
-    				SuperAlert.show(LanguageManager.sentences['msg_cannot_open_tpl']);
-					closeTemplateFile();    				
-       			}
-       			else
-       			{
-       				if(fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "run_template")[0])
-       					fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "run_template")[0].@enabled = 'true';
-       				processStep(cGeneral);
-       				
-       			}
-            } 
-            
-			// Event handler for the MenuBar control's itemClick event.
-            private function onMenuClick(event:Object):void  
-            {
-            	var file:File = ContextManager.instance.lastDir;
-				var fileStream:FileStream = new FileStream();
-            	var tmplFilter:FileFilter = new FileFilter(
-            		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['template'], "*.xml"), 
-            		"*.xml");
-            	var filter:FileFilter = new FileFilter(
-            		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['all'], "*.*"), 
-            		"*.*");
+					runTemplate();
 
-                if(event.item.@id == "open_file")
-                {		
-                	openTemplateFile(null, onOpenBrowseSelect, [tmplFilter, filter]);
-                }
-                else if(event.item.@id == "run_template")
-                {		
-                	processStep(1);
-                }
-				else if(event.item.@tag == "lastfiles")
-				{
-	            	file.url = FileUtils.pathToUrl(event.item.@data);
-                	openTemplateFile(file, onTemplateLoad);
-				}     
-				else if(event.item.@id == "exit")
-				{
-					exitApplication();
-				}     
-				else if(event.item.@id == "connection")
-				{
-					GenConnection.show();
-				}     
-				else if(event.item.@id == "properties")
-				{
-					GenProperties.show();
-				}     
-				
-				if(event.item.@tag == "language")
-				{				
-					file = File.applicationDirectory.resolvePath(MenuGeneral.LANG_FOLDER+event.item.@data);	
-					fileStream.addEventListener(Event.COMPLETE, onLanguageLoad);
-					fileStream.openAsync(file, FileMode.READ);
-				}
-            }		    			
-            
-            private function vsChange(event:IndexChangedEvent):void
-            {            	
-            	var child:DisplayObject;
-            	
-            	if(!vsLastChanged || vsLastChanged==event.target)
-            	{
-	            	if(event.target==vsProcess) {
-	            		child = vsProcess.getChildAt(event.newIndex);
-	            	}
-	            	else if(event.target==vsImages)
-	            		child = vsImages.getChildAt(event.newIndex);
-	            	
-	            	if(child)            	
-	            		child.addEventListener(EffectEvent.EFFECT_END, onEffectEnd);
-	            	
-	            	vsLastChanged=null;
-	            }
-            }
-            
-            private function onEffectEnd(event:Event):void
-            {
-            	event.target.removeEventListener(EffectEvent.EFFECT_END, onEffectEnd);
-            	
-            	switch(vsProcess.selectedChild)
-            	{
-            		case cProcess:
-            			switch(vsImages.selectedIndex)
-            			{
-            				case 0:
-            					mnMain.enabled = false;
-            					runingTemplate();
-            					break;
-            				case 1:
-            					mnMain.enabled = false;
-            					saveToServer();
-            					break;
-            				case 2:
-            					mnMain.enabled = false;
-            					saveToFile();
-            					break;
-            				case 3:
-            					mnMain.enabled = false;
-            					launchApp();
-            					break;
-            			}
-            			break;	
-
-            		case cFileRequest:
-            			fileBrowse.text = ContextManager.instance.file.nativePath;
-            			break;
-            			
-            		case cComplete:
-            			txtResultBuf.text = '';
-            			//txtResultBuf.text = ContextManager.templateStruct.buffer;
-            			txtResultBuf.text = (timer/1000).toString();
-            			txtResultBuf.verticalScrollPosition = 0;
-            			break;
-            	}            	            	      	
-            }
-            
-            private function processStep(step:*):void
-            {
-            	switch(typeof step)
-            	{
-            		case 'number':
-            			switch(step)
-            			{
-	            			case 1:
-				           		vsProcess.selectedChild = cProcess;
-				           		vsLastChanged = vsImages.selectedIndex == 0 ? vsProcess : vsImages;
-				           		vsImages.selectedIndex = 0;
-								progressBar.mode = ProgressBarMode.MANUAL;
-								progressBar.setProgress(0, 100);
-								LanguageManager.bindSentence('prgrs_gen_tpl', progressBar);
-		            			break;
-		            		case 2:          
-				           		vsProcess.selectedChild = cProcess;
-								vsLastChanged = vsImages.selectedIndex == 1 ? vsProcess : vsImages;				           		
-				           		vsImages.selectedIndex = 1;
-				           		progressBar.mode = ProgressBarMode.MANUAL;
-								progressBar.setProgress(0, 100);
-								LanguageManager.bindSentence('prgrs_save_to_server_tpl', progressBar);
-		            			break
-		            		case 3:
-				           		vsProcess.selectedChild = cProcess;
-				           		vsLastChanged = vsImages.selectedIndex == 2 ? vsProcess : vsImages;
-				           		vsImages.selectedIndex = 2;
-				           		progressBar.mode = ProgressBarMode.MANUAL;
-								progressBar.setProgress(0, 100);
-								LanguageManager.bindSentence('prgrs_save_to_file_tpl', progressBar);
-		            			break;
-		            		case 4:
-				           		vsProcess.selectedChild = cProcess;
-				           		vsLastChanged = vsImages.selectedIndex == 3 ? vsProcess : vsImages;
-				           		vsImages.selectedIndex = 3;
-				           		vsLastChanged = vsImages;
-				           		progressBar.mode = ProgressBarMode.MANUAL;
-								progressBar.setProgress(0, 100);
-								LanguageManager.bindSentence('prgrs_launch_app', progressBar);
-		            			break;
-	            		}
-	            		break;
-	            	default:
-            			switch(step)
-            			{	            			
-	            			case cWelcome:
-	            				vsProcess.selectedChild = cWelcome;
-	            				mnMain.enabled = true;
-	            				break;
-	            			case cKeyRequest:
-	            				vsProcess.selectedChild = cKeyRequest;
-	            				mnMain.enabled = true;
-	            				break;
-	            			case cGeneral:
-	            				vsProcess.selectedChild = cGeneral;
-	            				mnMain.enabled = true;
-	            				break;
-	            			case cServerRequest:
-	            				vsProcess.selectedChild = cServerRequest;
-	            				break;	            				
-	            			case cFileRequest:
-	            				vsProcess.selectedChild = cFileRequest;
-	            				break;	            				
-	            			case cProcess:
-	            				vsProcess.selectedChild = cProcess;
-	            				break;
-	            			case cInterrupt:
-	            				vsProcess.selectedChild = cInterrupt;
-	            				mnMain.enabled = true;
-	            				break;
-	            			case cComplete:
-	            				vsProcess.selectedChild = cComplete;
-	            				mnMain.enabled = true;
-	            				break;
-	            			case cFinal:
-	            				vsProcess.selectedChild = cFinal;
-	            				mnMain.enabled = true;
-	            				break;
-	            		}
-	            		break;
-            	}
-            }
-            
-            ////////////////////////////////////////////////////////////
-            
-            private function clearTemplateDebug():void
-            {
-            	var tpl:TemplateStruct = ContextManager.templateStruct;
-            	
-            	if(tpl)
-            	{
-					tpl.removeEventListener("stepComplete", stepCompleteHandler);
-					tpl.removeEventListener("generationComplete", generationComplete);					
-					tpl.removeEventListener("error", debugErrorHandler);
-					ContextManager.templateStruct = null;
-            	}
-            }
-            
-            private function runingTemplate():void
-            {
-        		try
-				{
-					mnMain.enabled = false;
-					appGenerated = false;
-					
-	        		var tpl:Template;
-    	
-    	    		tpl = ContextManager.templates.getItemAt(0) as Template;
-		
-					ContextManager.templateStruct = new TemplateStruct(tpl.xmlStructure, tpl.fullID);
-					
-					var validateArr:Array = ContextManager.templateStruct.validate().array;
-					
-					if(validateArr && validateArr.filter(isError).length>0)
-						alertProceedRun();
-					else
-						runTemplate();
-						
-					function isError(element:*, index:int, arr:Array):Boolean 
-					{
-            			return (element.error.severity == BasicError.FATAL);
-        			}						
-				}
-				catch(e:Error)
-				{
-					SuperAlert.show(e.message, LanguageManager.sentences['warning']);
-					clearTemplateDebug();
-					processStep(cGeneral);
-				}
-            }
-            		
-			public function alertProceedRun():void
-			{			
-	     		SuperAlert.show(
-	     			LanguageManager.sentences['msg_tpl_proceed_with_errs'], 
-	     			LanguageManager.sentences['errs_in_tpl'], 
-	     			Alert.YES|Alert.NO, null, alertProceedRunHandler, null, Alert.NO);			     	
-
-				function alertProceedRunHandler(event:CloseEvent):void {
-		        	if(event.detail==Alert.YES) {    
-		        		runTemplate();
-		   	     	}
-		   	     	else {
-						clearTemplateDebug();
-						processStep(cGeneral);
-			    	}
+				function isError( element : *, index : int, arr : Array ) : Boolean {
+					return (element.error.severity == BasicError.FATAL);
 				}
 			}
-			
-            private function runTemplate():void
-            {
-            	var tpl:TemplateStruct = ContextManager.templateStruct;
-        		try
-        		{
-					progressBar.mode = ProgressBarMode.MANUAL;
-        			progressBar.maximum = tpl.nodes.length + 1;            
-								
-					//tpl.isDebug = true;
-					//tpl.isStepDebug = true;
-												        			
-					tpl.addEventListener("error", debugErrorHandler);
-					tpl.addEventListener("stepComplete", stepCompleteHandler);
-					tpl.addEventListener("generationComplete", generationComplete);
-					
-					timer = getTimer();
-										
-					tpl.generate();
+			catch( e : Error ) {
+				SuperAlert.show( e.message, LanguageManager.sentences['warning'] );
+				clearTemplateDebug();
+				processStep( cGeneral );
+			}
+		}
+
+		public function alertProceedRun() : void {
+			SuperAlert.show(
+					LanguageManager.sentences['msg_tpl_proceed_with_errs'],
+					LanguageManager.sentences['errs_in_tpl'],
+					Alert.YES | Alert.NO, null, alertProceedRunHandler, null, Alert.NO );
+
+			function alertProceedRunHandler( event : CloseEvent ) : void {
+				if ( event.detail == Alert.YES ) {
+					runTemplate();
 				}
-				catch(e:Error) 
-				{
-					Alert.show(e.message, LanguageManager.sentences['warning']);
-					clearTemplateDebug();
-					processStep(cGeneral);
-				}            	
-            }
-            
-           	private function debugErrorHandler(event:Event):void {           		
-           		var error:* = event.target.error;     
-           		SuperAlert.show(error.message, LanguageManager.sentences['error']);
-           		clearTemplateDebug();		
-           		processStep(cGeneral);
-           	}            						            
-
-            private function stepCompleteHandler(event:Event):void 
-			{
-            	if((progressBar.value+1) < (progressBar.maximum/2+1))
-            		progressBar.setProgress(progressBar.value+1, progressBar.maximum);
-				
-				//ContextManager.templateStruct.generate(true);	            		
-            }	           	
-           	
-           	private function generationComplete(event:Event):void 
-			{
-           		timer = getTimer() - timer;
-           		
-           		appGenerated = true;
-				ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-				ContextManager.templateStruct.removeEventListener("generationComplete", generationComplete);					
-				ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);	           		
-
-				if(ContextManager.templateStruct.buffer) {
-					infoServerRequest.text = LanguageManager.sentences['msg_save_appxml_to_server'];
-					processStep(cServerRequest);
-    			}
-    			else {
-    				processStep(cComplete);
-    			}        							           		
-           	}
-           	
-           	////////////////////////////////////////////////////////////////////////////////////
-           	
-           	private function saveToServer():void
-           	{
-           		if(chkSaveToServer.selected) {           		
-           			connect();
-           		}
 				else {
+					clearTemplateDebug();
+					processStep( cGeneral );
+				}
+			}
+		}
+
+		private function runTemplate() : void {
+			var tpl : TemplateStruct = ContextManager.templateStruct;
+			try {
+				progressBar.mode = ProgressBarMode.MANUAL;
+				progressBar.maximum = tpl.nodes.length + 1;
+
+				//tpl.isDebug = true;
+				//tpl.isStepDebug = true;
+
+				tpl.addEventListener( "error", debugErrorHandler );
+				tpl.addEventListener( "stepComplete", stepCompleteHandler );
+				tpl.addEventListener( "generationComplete", generationComplete );
+
+				timer = getTimer();
+
+				tpl.generate();
+			}
+			catch( e : Error ) {
+				Alert.show( e.message, LanguageManager.sentences['warning'] );
+				clearTemplateDebug();
+				processStep( cGeneral );
+			}
+		}
+
+		private function debugErrorHandler( event : Event ) : void {
+			var error : * = event.target.error;
+			SuperAlert.show( error.message, LanguageManager.sentences['error'] );
+			clearTemplateDebug();
+			processStep( cGeneral );
+		}
+
+		private function stepCompleteHandler( event : Event ) : void {
+			if ( (progressBar.value + 1) < (progressBar.maximum / 2 + 1) )
+				progressBar.setProgress( progressBar.value + 1, progressBar.maximum );
+
+			//ContextManager.templateStruct.generate(true);
+		}
+
+		private function generationComplete( event : Event ) : void {
+			timer = getTimer() - timer;
+
+			appGenerated = true;
+			ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
+			ContextManager.templateStruct.removeEventListener( "generationComplete", generationComplete );
+			ContextManager.templateStruct.removeEventListener( "error", debugErrorHandler );
+
+			if ( ContextManager.templateStruct.buffer ) {
+				infoServerRequest.text = LanguageManager.sentences['msg_save_appxml_to_server'];
+				processStep( cServerRequest );
+			}
+			else {
+				processStep( cComplete );
+			}
+		}
+
+		////////////////////////////////////////////////////////////////////////////////////
+
+		private function saveToServer() : void {
+			if ( chkSaveToServer.selected ) {
+				connect();
+			}
+			else {
+				infoFileRequest.text = LanguageManager.sentences['msg_save_appxml_to_file'];
+				processStep( cFileRequest );
+			}
+		}
+
+		private function connect() : void {
+			appInstalled = false;
+			progressBar.setProgress( progressBar.maximum / 5, progressBar.maximum );
+
+			ConnectionManager.instance.vdom = new Vdom( null, txtHost.text + ":" + txtPort.text + '/SOAP' );
+			var ws : Vdom = ConnectionManager.instance.vdom;
+			ws.addVdomFaultEventListener( faultHandler );
+
+			function faultHandler( event : FaultEvent ) : void {
+				infoServerRequest.text = LanguageManager.sentences['msg_connecting_fault'] + '\n' +
+												 event.fault.faultString + '\n' +
+												 LanguageManager.sentences['msg_try_to_reconnect'];
+				processStep( cServerRequest );
+			}
+
+			login();
+		}
+
+		private function login() : void {
+			progressBar.setProgress( progressBar.maximum / 3, progressBar.maximum );
+
+			var ws : Vdom = ConnectionManager.instance.vdom;
+			var login : String = txtLogin.text;
+			//var pwd_md5:String = CryptUtils.hex(CryptUtils.MD5(txtPass.text));
+			var pwd_md5 : String = MD5.encrypt( txtPass.text );
+
+			ws.addopen_sessionEventListener( loginHandler );
+			ws.open_session( login, pwd_md5 );
+
+			function loginHandler( event : Open_sessionResultEvent ) : void {
+				var resultXML : XML = new XML( <Result /> );
+				resultXML.appendChild( XMLList( event.result ) );
+
+				if ( resultXML.Error.toString() ) {
+					infoServerRequest.text = resultXML.Error;
+					processStep( cServerRequest );
+				}
+				else {
+					// run session protector
+					var code : Code = Code.getInstance();
+					code.init( resultXML.Session.HashString );
+					code.inputSKey( resultXML.Session.SessionKey );
+					code.sessionId = resultXML.Session.SessionId;
+
+					getAppList()
+				}
+			}
+		}
+
+		private function getAppList() : void {
+			progressBar.setProgress( progressBar.maximum / 2, progressBar.maximum );
+
+			var ws : Vdom = ConnectionManager.instance.vdom;
+			var code : Code = Code.getInstance();
+			var sid : String = code.sessionId;
+			var skey : String = code.skey();
+
+			ws.addlist_applicationsEventListener( getAppListHandler );
+			ws.list_applications( sid, skey );
+
+			function getAppListHandler( event : List_applicationsResultEvent ) : void {
+				var resultXML : XML = new XML( <Result /> );
+				resultXML.appendChild( XMLList( event.result ) );
+
+				if ( resultXML.Error.toString() ) {
+					infoServerRequest.text = resultXML.Error;
+					logout();
+					processStep( cServerRequest );
+				}
+				else {
+					trace( resultXML );
+					installApp();
+				}
+			}
+		}
+
+		private function installApp() : void {
+			progressBar.setProgress( progressBar.maximum / 1.5, progressBar.maximum );
+
+			var ws : Vdom = ConnectionManager.instance.vdom;
+			var code : Code = Code.getInstance();
+			var sid : String = code.sessionId;
+			var skey : String = code.skey();
+
+			var appxml : String = ContextManager.templateStruct.buffer;
+
+			/*appxml =
+			 <Application>
+			 <Information>
+			 <ID>58963343-afe9-4320-a6d5-fd2880aadf33</ID>
+			 <Name>test</Name>
+			 <Description/>
+			 </Information>
+
+			 <Objects/>
+
+			 <Structure>
+			 </Structure>
+
+			 <E2vdom>
+			 <Events/>
+			 <Actions/>
+			 </E2vdom>
+
+			 <Resources>
+			 </Resources>
+
+			 <Databases/>
+			 </Application>;*/
+
+			ws.addinstall_applicationEventListener( installAppHandler );
+			ws.install_application( sid, skey, txtVHName.text, appxml );
+
+			function installAppHandler( event : Install_applicationResultEvent ) : void {
+				var resultXML : XML = new XML( <Result /> );
+				resultXML.appendChild( XMLList( event.result ) );
+
+				if ( resultXML.Error.toString() ) {
+					infoServerRequest.text = resultXML.Error;
+					logout();
+					processStep( cServerRequest );
+				}
+				else {
+					progressBar.setProgress( progressBar.maximum, progressBar.maximum );
+					appInstalled = true;
+					logout();
 					infoFileRequest.text = LanguageManager.sentences['msg_save_appxml_to_file'];
-					processStep(cFileRequest);
-				}				
-           	}
-			
-			private function connect():void
-			{
-				appInstalled = false;
-				progressBar.setProgress(progressBar.maximum/5, progressBar.maximum);
-				
-				ConnectionManager.instance.vdom = new Vdom(null, txtHost.text + ":" + txtPort.text + '/SOAP');
-				var ws:Vdom = ConnectionManager.instance.vdom;
-             	ws.addVdomFaultEventListener(faultHandler);
-             	
-				function faultHandler(event:FaultEvent):void {
-					infoServerRequest.text = LanguageManager.sentences['msg_connecting_fault'] + '\n' + 
-						event.fault.faultString + '\n' +
-						LanguageManager.sentences['msg_try_to_reconnect'];
-					processStep(cServerRequest);
-				}
-			    
-			    login();
-			}
-			
-			private function login():void
-			{	
-				progressBar.setProgress(progressBar.maximum/3, progressBar.maximum);
-				
-				var ws:Vdom = ConnectionManager.instance.vdom;
-             	var login:String = txtLogin.text;
-				//var pwd_md5:String = CryptUtils.hex(CryptUtils.MD5(txtPass.text));   
-				var pwd_md5:String = MD5.encrypt(txtPass.text);
-				
-				ws.addopen_sessionEventListener(loginHandler);
-				ws.open_session(login, pwd_md5);
-
-				function loginHandler(event:Open_sessionResultEvent):void {
-					var resultXML:XML = new XML(<Result />);
-					resultXML.appendChild(XMLList(event.result));
-					
-					if(resultXML.Error.toString()) {
-						infoServerRequest.text = resultXML.Error;
-						processStep(cServerRequest);
-					} 
-					else {					
-						// run session protector
-						var code:Code = Code.getInstance();
-						code.init(resultXML.Session.HashString);
-						code.inputSKey(resultXML.Session.SessionKey);
-						code.sessionId = resultXML.Session.SessionId;
-						
-						getAppList()
-					}
-				}
-			}	
-			
-			private function getAppList():void
-			{
-				progressBar.setProgress(progressBar.maximum/2, progressBar.maximum);
-				
-				var ws:Vdom = ConnectionManager.instance.vdom;
-				var code:Code = Code.getInstance();
-				var sid:String = code.sessionId; 
-				var skey:String = code.skey(); 
-				
-				ws.addlist_applicationsEventListener(getAppListHandler);
-				ws.list_applications(sid, skey);
-				
-				function getAppListHandler(event:List_applicationsResultEvent):void
-				{
-					var resultXML:XML = new XML(<Result />);
-					resultXML.appendChild(XMLList(event.result));
-					
-					if(resultXML.Error.toString()) {
-						infoServerRequest.text = resultXML.Error;
-						logout();
-						processStep(cServerRequest);						
-					} 
-					else {	
-						trace(resultXML);
-						installApp();		
-					}
+					processStep( cFileRequest );
 				}
 			}
-			
-			private function installApp():void
-			{
-				progressBar.setProgress(progressBar.maximum/1.5, progressBar.maximum);
-				
-				var ws:Vdom = ConnectionManager.instance.vdom;
-				var code:Code = Code.getInstance();
-				var sid:String = code.sessionId; 
-				var skey:String = code.skey(); 
-				
-				var appxml:String = ContextManager.templateStruct.buffer;
-				
-				
-/*appxml =  
-<Application>
-    <Information>
-      <ID>58963343-afe9-4320-a6d5-fd2880aadf33</ID>      
-      <Name>test</Name>
-      <Description/>
-    </Information>
-    
-    <Objects/>
-    
-    <Structure>
-    </Structure>
-    
-    <E2vdom>
-      <Events/>
-      <Actions/>
-    </E2vdom>
-    
-    <Resources>
-    </Resources>
-    
-    <Databases/>
-  </Application>;*/
-				
-    
-				ws.addinstall_applicationEventListener(installAppHandler);				
-				ws.install_application(sid, skey, txtVHName.text, appxml);
-				
-				function installAppHandler(event:Install_applicationResultEvent):void
-				{
-					var resultXML:XML = new XML(<Result />);
-					resultXML.appendChild(XMLList(event.result));
-					
-					if(resultXML.Error.toString()) {
-						infoServerRequest.text = resultXML.Error;
-						logout();
-						processStep(cServerRequest);						
-					} 
-					else {	
-						progressBar.setProgress(progressBar.maximum, progressBar.maximum);
-						appInstalled = true;
-						logout();	
-						infoFileRequest.text = LanguageManager.sentences['msg_save_appxml_to_file'];					
-						processStep(cFileRequest);
-					}
+		}
+
+		private function logout() : void {
+			var ws : Vdom = ConnectionManager.instance.vdom;
+			var code : Code = Code.getInstance();
+			var sid : String = code.sessionId;
+
+			ws.addclose_sessionEventListener( logoutHandler );
+			ws.close_session( sid );
+
+			function logoutHandler( event : Close_sessionResultEvent ) : void {
+				var resultXML : XML = new XML( <Result /> );
+				resultXML.appendChild( XMLList( event.result ) );
+
+				if ( resultXML.Error.toString() ) {
+					trace( resultXML );
 				}
 			}
+		}
 
-			private function logout():void
-			{	
-             	var ws:Vdom = ConnectionManager.instance.vdom;
-				var code:Code = Code.getInstance();
-				var sid:String = code.sessionId; 
-				
-				ws.addclose_sessionEventListener(logoutHandler);
-				ws.close_session(sid);
-				
-				function logoutHandler(event:Close_sessionResultEvent):void {
-					var resultXML:XML = new XML(<Result />);
-					resultXML.appendChild(XMLList(event.result));
-					
-					if(resultXML.Error.toString()) {
-						trace(resultXML);
-					} 
-				}			           	
-			}						
+		/////////////////////////////////////////////////////////////////////////////////////
 
-           	/////////////////////////////////////////////////////////////////////////////////////
-           	
-           	private function saveToFile():void
-           	{
-           		if(chkSaveToFile.selected)            		
-           			savingToFile();
-				else if(appInstalled)
-					processStep(4);
-				else				
-					processStep(cComplete);
-           	}        		
+		private function saveToFile() : void {
+			if ( chkSaveToFile.selected )
+				savingToFile();
+			else if ( appInstalled )
+				processStep( 4 );
+			else
+				processStep( cComplete );
+		}
 
-           	private function savingToFile():void
-           	{
-           		var file:File = new File();
-           		file.url = FileUtils.pathToUrl(fileBrowse.text);
-       			var stream:FileStream = new FileStream();        	
-    			
-        		stream.addEventListener(OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress);        		
-        		stream.addEventListener(IOErrorEvent.IO_ERROR, onFileStreamError);
-        		stream.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onFileStreamError);
-        		stream.addEventListener(Event.CLOSE, onFileStreamClose);
-    			
-    			try {
-    				stream.openAsync(file, FileMode.WRITE);
-    				stream.writeUTFBytes(ContextManager.templateStruct.buffer);
-    				stream.close();
-    			} catch (e:Error) {
-    				closeStream(stream);
-	    			infoFileRequest.text = LanguageManager.sentences.msg_saving_appxml_fault + '\n' + 
-						LanguageManager.sentences.msg_cannot_save_file;
-					processStep(cFileRequest);     				
-    			}
-    			
-	    		function onFileStreamProgress(event:Event):void {
-	    			var stream:FileStream = event.target as FileStream;
-	    			var total:Number = OutputProgressEvent(event).bytesTotal;
-	    			var pending:Number = OutputProgressEvent(event).bytesPending;
-					progressBar.setProgress(total+(total-pending), total*2+1);      
-					progressBar.validateNow();	
-	    		}
-	    		        		
-	    		function onFileStreamError(event:ErrorEvent):void {
-	    			var stream:FileStream = event.target as FileStream;
-	    			closeStream(stream);
-	    			infoFileRequest.text = LanguageManager.sentences.msg_saving_appxml_fault + '\n' + event.text;
-					processStep(cFileRequest);   
-	    		}
-	        	
-	        	function closeStream(stream:FileStream):void {
-		    		stream.removeEventListener(OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress);
-	        		stream.removeEventListener(IOErrorEvent.IO_ERROR, onFileStreamError);
-	        		stream.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onFileStreamError);
-		    		stream.removeEventListener(Event.CLOSE, onFileStreamClose);
-					stream.close();           		
-	    		}				        		
-	    		    			
-				function onFileStreamClose(event:Event):void {
-	    			var stream:FileStream = event.target as FileStream;
-	    			closeStream(stream);    			
-	    			
-	           		if(appInstalled)
-						processStep(4);
-					else
-						processStep(cComplete);
-	    		}
-           	}           	        
-    		 
-    		//////////////////////////////////////////////////////////////////////////
-    		           
-    		private function launchApp():void
-    		{
-    			var url:String = txtVHName.text;
-    			url = /^http:\/\/.*/i.test(url) ? url : 'http://' + url;
-            	var request:URLRequest = new URLRequest(url);
-            	//var variables:URLVariables = new URLVariables();
-            	//variables.exampleSessionId = new Date().getTime();
-            	//variables.exampleUserLabel = "guest";
-            	//request.data = variables;
-            	navigateToURL(request);
-            
-            	progressBar.setProgress(progressBar.maximum, progressBar.maximum);
-            	
-    			processStep(cComplete);
-    		}
-    		
-			///////////////////////////////////////////////////////////////////////
-			
-            private function onOpenBrowseSelect(event:Event):void
-            {
-               	openTemplateFile(event.target as File, onTemplateLoad);
-            }
-                       	            
-            private function openTemplateFile(file:File, handler:Function, fileFilters:Array=null):*
-            {
-            	var _file:File = file;
-            	var stream:FileStream = new FileStream();
-            	
-            	if(!_file)
-            	{
-            		_file = new File();
-					_file.addEventListener(Event.SELECT, handler);
-					_file.browseForOpen(LanguageManager.sentences['open_file'], fileFilters);
-            		return _file;
-            	}
-            	else
-            	{
-            		if(_file.isDirectory)
-            			return null;
-            			
-	            	if(!_file.exists) {
-	            		SuperAlert.show(
-	            			LanguageManager.sentences['msg_file_not_exists'], 
-	            			LanguageManager.sentences['error']);
-	            		return null; 
-	            	}
+		private function savingToFile() : void {
+			var file : File = new File();
+			file.url = FileUtils.pathToUrl( fileBrowse.text );
+			var stream : FileStream = new FileStream();
 
-					ProgressManager.source = stream;
-					ProgressManager.start();
-				
-					stream.addEventListener(Event.COMPLETE, handler);
-    				stream.openAsync(_file, FileMode.READ);
+			stream.addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress );
+			stream.addEventListener( IOErrorEvent.IO_ERROR, onFileStreamError );
+			stream.addEventListener( SecurityErrorEvent.SECURITY_ERROR, onFileStreamError );
+			stream.addEventListener( Event.CLOSE, onFileStreamClose );
 
-            		ContextManager.updateLastFiles(_file);            	
-            		MenuGeneral.updateLastFilesMenu();            		            			
-            	}
-            	
-            	return stream;
-            }
-            
-            private function closeTemplateFile():void
-            {
-            	clearTemplateDebug();
-            	
-				ContextManager.instance.lastFile = false;
-				if(ContextManager.templates.length>0)
-           			ContextManager.templates.removeItemAt(0);
-           		if(fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "run_template")[0])
-    				fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "run_template")[0].@enabled = 'false';
-    			processStep(cWelcome);
-            }
+			try {
+				stream.openAsync( file, FileMode.WRITE );
+				stream.writeUTFBytes( ContextManager.templateStruct.buffer );
+				stream.close();
+			} catch ( e : Error ) {
+				closeStream( stream );
+				infoFileRequest.text = LanguageManager.sentences.msg_saving_appxml_fault + '\n' +
+											   LanguageManager.sentences.msg_cannot_save_file;
+				processStep( cFileRequest );
+			}
 
-			public function alertInterrupt():void
-			{
-				if(!appGenerated && ContextManager.templateStruct)
-					ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-				
-	     		SuperAlert.show(
-	     			LanguageManager.sentences['msg_proceed_interrupt_app_installing'], 
-	     			LanguageManager.sentences['question'], 
-	     			Alert.YES|Alert.NO, null, alertProceedInterruptHandler, null, Alert.NO);			     	
+			function onFileStreamProgress( event : Event ) : void {
+				var stream : FileStream = event.target as FileStream;
+				var total : Number = OutputProgressEvent( event ).bytesTotal;
+				var pending : Number = OutputProgressEvent( event ).bytesPending;
+				progressBar.setProgress( total + (total - pending), total * 2 + 1 );
+				progressBar.validateNow();
+			}
 
-				function alertProceedInterruptHandler(event:CloseEvent):void {
-		        	if(event.detail==Alert.YES) {    
-		        		processStep(cInterrupt);
-		   	     	}
-		   	     	else if(!appGenerated && ContextManager.templateStruct) {
-						ContextManager.templateStruct.addEventListener("stepComplete", stepCompleteHandler);
-						ContextManager.templateStruct.generate(true);
-			    	}
+			function onFileStreamError( event : ErrorEvent ) : void {
+				var stream : FileStream = event.target as FileStream;
+				closeStream( stream );
+				infoFileRequest.text = LanguageManager.sentences.msg_saving_appxml_fault + '\n' + event.text;
+				processStep( cFileRequest );
+			}
+
+			function closeStream( stream : FileStream ) : void {
+				stream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress );
+				stream.removeEventListener( IOErrorEvent.IO_ERROR, onFileStreamError );
+				stream.removeEventListener( SecurityErrorEvent.SECURITY_ERROR, onFileStreamError );
+				stream.removeEventListener( Event.CLOSE, onFileStreamClose );
+				stream.close();
+			}
+
+			function onFileStreamClose( event : Event ) : void {
+				var stream : FileStream = event.target as FileStream;
+				closeStream( stream );
+
+				if ( appInstalled )
+					processStep( 4 );
+				else
+					processStep( cComplete );
+			}
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+
+		private function launchApp() : void {
+			var url : String = txtVHName.text;
+			url = /^http:\/\/.*/i.test( url ) ? url : 'http://' + url;
+			var request : URLRequest = new URLRequest( url );
+			//var variables:URLVariables = new URLVariables();
+			//variables.exampleSessionId = new Date().getTime();
+			//variables.exampleUserLabel = "guest";
+			//request.data = variables;
+			navigateToURL( request );
+
+			progressBar.setProgress( progressBar.maximum, progressBar.maximum );
+
+			processStep( cComplete );
+		}
+
+		///////////////////////////////////////////////////////////////////////
+
+		private function onOpenBrowseSelect( event : Event ) : void {
+			openTemplateFile( event.target as File, onTemplateLoad );
+		}
+
+		private function openTemplateFile( file : File, handler : Function, fileFilters : Array = null ) : * {
+			var _file : File = file;
+			var stream : FileStream = new FileStream();
+
+			if ( !_file ) {
+				_file = new File();
+				_file.addEventListener( Event.SELECT, handler );
+				_file.browseForOpen( LanguageManager.sentences['open_file'], fileFilters );
+				return _file;
+			}
+			else {
+				if ( _file.isDirectory )
+					return null;
+
+				if ( !_file.exists ) {
+					SuperAlert.show(
+							LanguageManager.sentences['msg_file_not_exists'],
+							LanguageManager.sentences['error'] );
+					return null;
+				}
+
+				ProgressManager.source = stream;
+				ProgressManager.start();
+
+				stream.addEventListener( Event.COMPLETE, handler );
+				stream.openAsync( _file, FileMode.READ );
+
+				ContextManager.updateLastFiles( _file );
+				MenuGeneral.updateLastFilesMenu();
+			}
+
+			return stream;
+		}
+
+		private function closeTemplateFile() : void {
+			clearTemplateDebug();
+
+			ContextManager.instance.lastFile = false;
+			if ( ContextManager.templates.length > 0 )
+				ContextManager.templates.removeItemAt( 0 );
+			if ( fileMenuData..menuitem.(hasOwnProperty( '@id' ) && @id == "run_template")[0] )
+				fileMenuData..menuitem.(hasOwnProperty( '@id' ) && @id == "run_template")[0].@enabled = 'false';
+			processStep( cWelcome );
+		}
+
+		public function alertInterrupt() : void {
+			if ( !appGenerated && ContextManager.templateStruct )
+				ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
+
+			SuperAlert.show(
+					LanguageManager.sentences['msg_proceed_interrupt_app_installing'],
+					LanguageManager.sentences['question'],
+					Alert.YES | Alert.NO, null, alertProceedInterruptHandler, null, Alert.NO );
+
+			function alertProceedInterruptHandler( event : CloseEvent ) : void {
+				if ( event.detail == Alert.YES ) {
+					processStep( cInterrupt );
+				}
+				else if ( !appGenerated && ContextManager.templateStruct ) {
+					ContextManager.templateStruct.addEventListener( "stepComplete", stepCompleteHandler );
+					ContextManager.templateStruct.generate( true );
 				}
 			}
-            				       				
+		}
 		]]>
 	</mx:Script>
 	

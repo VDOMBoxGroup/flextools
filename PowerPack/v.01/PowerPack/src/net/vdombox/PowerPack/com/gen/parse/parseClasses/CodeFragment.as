@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.gen.parse.parseClasses
+package net.vdombox.powerpack.com.gen.parse.parseClasses
 {
 import mx.utils.UIDUtil;
 	

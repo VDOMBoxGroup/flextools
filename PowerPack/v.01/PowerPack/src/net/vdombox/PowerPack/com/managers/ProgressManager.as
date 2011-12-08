@@ -1,10 +1,10 @@
-package net.vdombox.PowerPack.com.managers
+package net.vdombox.powerpack.com.managers
 {
 import ExtendedAPI.com.containers.SuperWindow;
 import ExtendedAPI.com.controls.HDivider;
 
-import net.vdombox.PowerPack.com.menu.MenuGeneral;
-import net.vdombox.PowerPack.customize.core.windowClasses.SuperStatusBar;
+import net.vdombox.powerpack.com.menu.MenuGeneral;
+import net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar;
 
 import flash.desktop.NativeApplication;
 import flash.display.DisplayObject;

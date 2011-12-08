@@ -11,19 +11,18 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			
-			static private var defaultCaptions:Object = {
-				output_title:"Output"
-			}
-			
-			static private var _classConstructed:Boolean = classConstruct(); 
-			
-			static private function classConstruct():Boolean
-			{
-				LanguageManager.setSentences(defaultCaptions);
-				return true
-			}			
+		import net.vdombox.powerpack.com.managers.LanguageManager;
+
+		static private var defaultCaptions : Object = {
+			output_title:"Output"
+		}
+
+		static private var _classConstructed : Boolean = classConstruct();
+
+		static private function classConstruct() : Boolean {
+			LanguageManager.setSentences( defaultCaptions );
+			return true
+		}
 		]]>
 	</mx:Script>
 	

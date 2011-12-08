@@ -1,8 +1,8 @@
-package net.vdombox.PowerPack.com.managers
+package net.vdombox.powerpack.com.managers
 {
 import ExtendedAPI.com.utils.ObjectUtils;
 
-import net.vdombox.PowerPack.com.graph.NodeEvent;
+import net.vdombox.powerpack.com.graph.NodeEvent;
 
 import flash.display.DisplayObject;
 import flash.events.Event;

@@ -1,12 +1,12 @@
-package net.vdombox.PowerPack.com.gen.parse
+package net.vdombox.powerpack.com.gen.parse
 {
 import ExtendedAPI.com.utils.Utils;
 
-import net.vdombox.PowerPack.com.gen.*;
-import net.vdombox.PowerPack.com.gen.errorClasses.ValidationError;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.CodeFragment;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.LexemStruct;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.ParsedBlock;
+import net.vdombox.powerpack.com.gen.*;
+import net.vdombox.powerpack.com.gen.errorClasses.ValidationError;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.CodeFragment;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.LexemStruct;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.ParsedBlock;
 
 public class CodeParser
 {		

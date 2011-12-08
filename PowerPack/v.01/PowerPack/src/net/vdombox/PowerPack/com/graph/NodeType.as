@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.graph
+package net.vdombox.powerpack.com.graph
 {
 	public final class NodeType
 	{

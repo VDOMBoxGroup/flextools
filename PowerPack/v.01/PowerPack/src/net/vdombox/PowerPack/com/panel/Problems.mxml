@@ -13,75 +13,71 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.PowerPack.com.managers.ContextManager;
-			import net.vdombox.PowerPack.com.BasicError;
-			import mx.utils.StringUtil;
-			import mx.collections.HierarchicalData;
-			import mx.binding.utils.BindingUtils;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			
-			static private var defaultCaptions:Object = {
-				problems_title: "Problems",
-				description: "Description",
-				problems_overall: "{0} errors, {1} warnings",
-				problems_errors: "Errors ({0} item(s))",
-				problems_warnings: "Warnings ({0} item(s))"
-			}			
-			
-			static private var _classConstructed:Boolean = classConstruct(); 
-			
-			static private function classConstruct():Boolean
-			{
-				LanguageManager.setSentences(defaultCaptions);
-				return true
+		import net.vdombox.powerpack.com.managers.ContextManager;
+		import net.vdombox.powerpack.com.BasicError;
+
+		import mx.utils.StringUtil;
+		import mx.collections.HierarchicalData;
+		import mx.binding.utils.BindingUtils;
+
+		import net.vdombox.powerpack.com.managers.LanguageManager;
+
+		static private var defaultCaptions : Object = {
+			problems_title: "Problems",
+			description: "Description",
+			problems_overall: "{0} errors, {1} warnings",
+			problems_errors: "Errors ({0} item(s))",
+			problems_warnings: "Warnings ({0} item(s))"
+		}
+
+		static private var _classConstructed : Boolean = classConstruct();
+
+		static private function classConstruct() : Boolean {
+			LanguageManager.setSentences( defaultCaptions );
+			return true
+		}
+
+		private function init() : void {
+			BindingUtils.bindSetter( populateProblems, this, "array" );
+		}
+
+		private function populateProblems( array : Array ) : void {
+			grid.dataProvider = null;
+			description = StringUtil.substitute( LanguageManager.sentences['problems_overall'], 0, 0 );
+
+			if ( array && array.length > 0 ) {
+				var errors : Array = [];
+				var warnings : Array = [];
+
+				for each( var item : Object in array ) {
+					if ( item.error.severity == BasicError.FATAL )
+						errors.push( { Description: item.error.message, data:item, icon:ContextManager.errClass } );
+					else
+						warnings.push( { Description: item.error.message, data:item,  icon:ContextManager.warnClass } );
+				}
+
+				description = StringUtil.substitute( LanguageManager.sentences['problems_overall'],
+						errors.length, warnings.length );
+
+				var problems : Array = [];
+
+				if ( errors.length > 0 )
+					problems.push( {	Description:	 StringUtil.substitute( LanguageManager.sentences['problems_errors'],
+									errors.length ),
+								children:errors } );
+
+				if ( warnings.length > 0 )
+					problems.push( {	Description:	StringUtil.substitute( LanguageManager.sentences['problems_warnings'],
+									warnings.length ),
+								children:warnings } );
+
+				grid.dataProvider = new HierarchicalData( problems );
 			}
-			
-			private function init():void
-			{
-				BindingUtils.bindSetter(populateProblems, this, "array");	
-			}				
-			
-			private function populateProblems(array:Array):void
-			{
-				grid.dataProvider = null;
-				description = StringUtil.substitute(LanguageManager.sentences['problems_overall'], 0, 0);						
-				
-				if(array && array.length>0)
-				{
-					var errors:Array = []; 
-					var warnings:Array = [];
-					
-					for each(var item:Object in array) {
-						if(item.error.severity==BasicError.FATAL)
-							errors.push({ Description: item.error.message, data:item, icon:ContextManager.errClass });
-						else
-							warnings.push({ Description: item.error.message, data:item,  icon:ContextManager.warnClass });
-					}
-					
-					description = StringUtil.substitute(LanguageManager.sentences['problems_overall'], 
-						errors.length, warnings.length);
-																		
-					var problems:Array = [];
-					
-					if(errors.length>0) 
-						problems.push({	Description: 	StringUtil.substitute(LanguageManager.sentences['problems_errors'],
-														errors.length), 
-										children:errors });
-										
-					if(warnings.length>0) 
-						problems.push({	Description:	StringUtil.substitute(LanguageManager.sentences['problems_warnings'],
-														warnings.length),	
-										children:warnings });
-					
-					grid.dataProvider = new HierarchicalData(problems);
-				}				
-			}
-			
-			private function onDoubleClick(event:MouseEvent):void
-			{
-				//
-			}
-						
+		}
+
+		private function onDoubleClick( event : MouseEvent ) : void {
+			//
+		}
 		]]>
 	</mx:Script>
 

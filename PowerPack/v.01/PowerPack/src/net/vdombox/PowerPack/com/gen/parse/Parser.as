@@ -1,13 +1,13 @@
-package net.vdombox.PowerPack.com.gen.parse
+package net.vdombox.powerpack.com.gen.parse
 {
 import ExtendedAPI.com.utils.Utils;
 
-import net.vdombox.PowerPack.com.gen.TemplateStruct;
-import net.vdombox.PowerPack.com.gen.errorClasses.CompilerError;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.CodeFragment;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.LexemStruct;
-import net.vdombox.PowerPack.com.gen.parse.parseClasses.ParsedBlock;
-import net.vdombox.PowerPack.com.managers.LanguageManager;
+import net.vdombox.powerpack.com.gen.TemplateStruct;
+import net.vdombox.powerpack.com.gen.errorClasses.CompilerError;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.CodeFragment;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.LexemStruct;
+import net.vdombox.powerpack.com.gen.parse.parseClasses.ParsedBlock;
+import net.vdombox.powerpack.com.managers.LanguageManager;
 
 import flash.utils.describeType;
 

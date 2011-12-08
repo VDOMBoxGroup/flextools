@@ -1,6 +1,6 @@
-package net.vdombox.PowerPack.com
+package net.vdombox.powerpack.com
 {
-	import net.vdombox.PowerPack.com.managers.LanguageManager;
+	import net.vdombox.powerpack.com.managers.LanguageManager;
 	
 	import mx.utils.StringUtil;
 	

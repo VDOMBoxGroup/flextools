@@ -9,47 +9,44 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.PowerPack.com.dialog.ToolWindow;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			
-			static private var defaultCaptions:Object = {
-				console_title:"Console"
-			}
-			
-			static private var _classConstructed:Boolean = classConstruct(); 
-			
-			static private function classConstruct():Boolean
-			{
-				LanguageManager.setSentences(defaultCaptions);
-				return true
-			}
-			
-			public static var isShown:Boolean;
-			private static var _console:Console;
-			
-			private var _window:ToolWindow;
-			
-			static public function show(text:String, desc:String=""):void
-			{
-				if(!_console || _console._window.closed)
-					_console = new Console();				
+		import net.vdombox.powerpack.com.dialog.ToolWindow;
+		import net.vdombox.powerpack.com.managers.LanguageManager;
 
-				if(!_console._window || _console._window.closed) {
-					_console._window = new ToolWindow();
-					LanguageManager.bindSentence('console_title', _console._window, 'title');
-					_console._window.addChild(_console);
-					_console._window.open();
-				}
-				else {
-					_console._window.activate();
-				}			
-				
-				isShown = true;
-				
-				_console.text = text;
-				_console.description = desc;
+		static private var defaultCaptions : Object = {
+			console_title:"Console"
+		}
+
+		static private var _classConstructed : Boolean = classConstruct();
+
+		static private function classConstruct() : Boolean {
+			LanguageManager.setSentences( defaultCaptions );
+			return true
+		}
+
+		public static var isShown : Boolean;
+		private static var _console : Console;
+
+		private var _window : ToolWindow;
+
+		static public function show( text : String, desc : String = "" ) : void {
+			if ( !_console || _console._window.closed )
+				_console = new Console();
+
+			if ( !_console._window || _console._window.closed ) {
+				_console._window = new ToolWindow();
+				LanguageManager.bindSentence( 'console_title', _console._window, 'title' );
+				_console._window.addChild( _console );
+				_console._window.open();
 			}
-			
+			else {
+				_console._window.activate();
+			}
+
+			isShown = true;
+
+			_console.text = text;
+			_console.description = desc;
+		}
 		]]>
 	</mx:Script>
 

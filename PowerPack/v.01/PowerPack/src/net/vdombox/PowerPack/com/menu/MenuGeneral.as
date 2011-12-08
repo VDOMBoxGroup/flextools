@@ -1,10 +1,10 @@
-package net.vdombox.PowerPack.com.menu
+package net.vdombox.powerpack.com.menu
 {
 import ExtendedAPI.com.ui.SuperNativeMenu;
 import ExtendedAPI.com.ui.SuperNativeMenuItem;
 
-import net.vdombox.PowerPack.com.managers.ContextManager;
-import net.vdombox.PowerPack.com.managers.LanguageManager;
+import net.vdombox.powerpack.com.managers.ContextManager;
+import net.vdombox.powerpack.com.managers.LanguageManager;
 
 import flash.display.NativeMenu;
 import flash.display.NativeMenuItem;

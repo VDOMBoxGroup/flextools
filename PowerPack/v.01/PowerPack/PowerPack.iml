@@ -69,7 +69,7 @@
         <option name="USE_CUSTOM_CONFIG_FILE_FOR_TESTS" value="false" />
         <option name="CUSTOM_CONFIG_FILE_FOR_TESTS" value="" />
         <option name="APPLICATION_ENTRY_POINT" value="" />
-        <option name="MAIN_CLASS" value="net.vdombox.PowerPack.customize.GeneratorResources" />
+        <option name="MAIN_CLASS" value="net.vdombox.powerpack.customize.GeneratorResources" />
         <option name="OUTPUT_FILE_NAME" value="GeneratorResources.swf" />
         <option name="USE_FACET_COMPILE_OUTPUT_PATH" value="true" />
         <option name="FACET_COMPILE_OUTPUT_PATH" value="$MODULE_DIR$/bin-debug/net/vdombox/PowerPack/customize" />

@@ -1,13 +1,13 @@
-package net.vdombox.PowerPack.com.importation
+package net.vdombox.powerpack.com.importation
 {
 	import ExtendedAPI.com.utils.Utils;
 	
-	import net.vdombox.PowerPack.com.Template;
-	import net.vdombox.PowerPack.com.graph.GraphCanvas;
-	import net.vdombox.PowerPack.com.graph.Node;
-	import net.vdombox.PowerPack.com.graph.NodeCategory;
-	import net.vdombox.PowerPack.com.graph.NodeType;
-	import net.vdombox.PowerPack.com.managers.CashManager;
+	import net.vdombox.powerpack.com.Template;
+	import net.vdombox.powerpack.com.graph.GraphCanvas;
+	import net.vdombox.powerpack.com.graph.Node;
+	import net.vdombox.powerpack.com.graph.NodeCategory;
+	import net.vdombox.powerpack.com.graph.NodeType;
+	import net.vdombox.powerpack.com.managers.CashManager;
 	
 	import flash.events.EventDispatcher;
 	

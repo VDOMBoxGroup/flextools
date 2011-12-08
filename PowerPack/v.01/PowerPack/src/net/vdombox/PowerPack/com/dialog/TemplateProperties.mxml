@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModalDialog 
-	xmlns="net.vdombox.PowerPack.com.dialog.*" 
+	xmlns="net.vdombox.powerpack.com.dialog.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="500" height="460"
 	title="{LanguageManager.sentences.properties}" 
@@ -9,105 +9,96 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.PowerPack.com.Template;
-			import mx.events.CloseEvent;
-			import mx.utils.StringUtil;
-			import net.vdombox.PowerPack.com.managers.ContextManager;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			
-			private static var _dialog:TemplateProperties;
-			
-			static public function show(closeHandler:Function = null):TemplateProperties
-			{
-				if(!_dialog || _dialog.closed) 
-				{
-					_dialog = new TemplateProperties();	
-					_dialog.open();
-					_dialog.show(OK | CANCEL, closeHandler, null, OK);
-					
-					var defaultCaptions:Object = {
-						template_properties: "Template properties",
-						template_name: "Template name",
-						template_description: "Description",
-						template_picture: "Template picture",
-						template_remove_pic: "Remove picture",
-						template_key: "Template key"
-					};
-					
-					LanguageManager.setSentences(defaultCaptions);
-				}				
-				else 
-				{
-					_dialog.activate();
-				}
-				
-				return _dialog;
+		import net.vdombox.powerpack.com.Template;
+
+		import mx.events.CloseEvent;
+		import mx.utils.StringUtil;
+
+		import net.vdombox.powerpack.com.managers.ContextManager;
+		import net.vdombox.powerpack.com.managers.LanguageManager;
+
+		private static var _dialog : TemplateProperties;
+
+		static public function show( closeHandler : Function = null ) : TemplateProperties {
+			if ( !_dialog || _dialog.closed ) {
+				_dialog = new TemplateProperties();
+				_dialog.open();
+				_dialog.show( OK | CANCEL, closeHandler, null, OK );
+
+				var defaultCaptions : Object = {
+					template_properties: "Template properties",
+					template_name: "Template name",
+					template_description: "Description",
+					template_picture: "Template picture",
+					template_remove_pic: "Remove picture",
+					template_key: "Template key"
+				};
+
+				LanguageManager.setSentences( defaultCaptions );
 			}
-			
-			private function onShow(event:Event):void
-			{            	
-            	var tpl:Template = ContextManager.templates.getItemAt(0) as Template; 
-				
-				if(tpl.b64picture || tpl.picture)
-				{
-					gridRemovePic.visible = true;
-					gridRemovePic.includeInLayout = true;
-				}
-				else
-				{
-					gridRemovePic.visible = false;
-					gridRemovePic.includeInLayout = false;
-				}				
-            		
-        		txtName.text = tpl.name;
-				txtDesc.text = tpl.description;
-				if(tpl.picture)
-					picBrowse.text = tpl.picture.nativePath;
-				txtKey.text = tpl.key;
-				
-				if(tpl.picture)
-				{
-					tplImg.source = tpl.picture.nativePath; 
-
-					b64Img.visible = false; 
-					b64Img.includeInLayout = false; 
-
-					tplImg.visible = true; 
-					tplImg.includeInLayout = true; 
-				} 
-				else if(tpl.b64picture)
-				{
-					b64Img.source = tpl.b64picture;
-
-					tplImg.visible = false; 
-					tplImg.includeInLayout = false; 
-
-					b64Img.visible = true; 
-					b64Img.includeInLayout = true; 
-				}
-				else
-				{
-					b64Img.visible = tplImg.visible = false; 
-					b64Img.includeInLayout = tplImg.includeInLayout = false; 
-				}
-
-				txtName.setFocus();			
+			else {
+				_dialog.activate();
 			}
-			
-			private function removePicture():void
-			{
-				var tpl:Template = ContextManager.templates.getItemAt(0) as Template;
-				
+
+			return _dialog;
+		}
+
+		private function onShow( event : Event ) : void {
+			var tpl : Template = ContextManager.templates.getItemAt( 0 ) as Template;
+
+			if ( tpl.b64picture || tpl.picture ) {
+				gridRemovePic.visible = true;
+				gridRemovePic.includeInLayout = true;
+			}
+			else {
 				gridRemovePic.visible = false;
 				gridRemovePic.includeInLayout = false;
-					
-				picBrowse.txtInput.text = '';
-				picBrowse.text = '';
-				tpl.picture = null;
-				
-				delete tpl.xml.picture;
 			}
-				
+
+			txtName.text = tpl.name;
+			txtDesc.text = tpl.description;
+			if ( tpl.picture )
+				picBrowse.text = tpl.picture.nativePath;
+			txtKey.text = tpl.key;
+
+			if ( tpl.picture ) {
+				tplImg.source = tpl.picture.nativePath;
+
+				b64Img.visible = false;
+				b64Img.includeInLayout = false;
+
+				tplImg.visible = true;
+				tplImg.includeInLayout = true;
+			}
+			else if ( tpl.b64picture ) {
+				b64Img.source = tpl.b64picture;
+
+				tplImg.visible = false;
+				tplImg.includeInLayout = false;
+
+				b64Img.visible = true;
+				b64Img.includeInLayout = true;
+			}
+			else {
+				b64Img.visible = tplImg.visible = false;
+				b64Img.includeInLayout = tplImg.includeInLayout = false;
+			}
+
+			txtName.setFocus();
+		}
+
+		private function removePicture() : void {
+			var tpl : Template = ContextManager.templates.getItemAt( 0 ) as Template;
+
+			gridRemovePic.visible = false;
+			gridRemovePic.includeInLayout = false;
+
+			picBrowse.txtInput.text = '';
+			picBrowse.text = '';
+			tpl.picture = null;
+
+			delete tpl.xml.picture;
+		}
 		]]>
 	</mx:Script>
 	<mx:VBox styleName="dlgHeader" width="100%">

@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.gen.structs
+package net.vdombox.powerpack.com.gen.structs
 {
 	public class GraphStruct
 	{
@@ -10,10 +10,10 @@ package net.vdombox.PowerPack.com.gen.structs
 		public var initNode:NodeStruct;
 		public var passCount:int = 0;
 		
-		[ArrayElementType("net.vdombox.PowerPack.com.gen.structs.NodeStruct")]
+		[ArrayElementType("net.vdombox.powerpack.com.gen.structs.NodeStruct")]
 		public var nodes:Array = [];
 		
-		[ArrayElementType("net.vdombox.PowerPack.com.gen.structs.ArrowStruct")]
+		[ArrayElementType("net.vdombox.powerpack.com.gen.structs.ArrowStruct")]
 		public var arrows:Array = [];
 		
     	public function GraphStruct(	_id:String = null,

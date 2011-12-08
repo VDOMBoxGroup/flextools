@@ -1,46 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ModalDialog xmlns="net.vdombox.PowerPack.com.dialog.*" xmlns:mx="http://www.adobe.com/2006/mxml" 
+<ModalDialog xmlns="net.vdombox.powerpack.com.dialog.*" xmlns:mx="http://www.adobe.com/2006/mxml"
 	width="320" height="160"
 	title="{LanguageManager.sentences.template_key}"
 	creationComplete="onShow()">
 	
 	<mx:Script>
 		<![CDATA[
-			import mx.utils.StringUtil;
-			import net.vdombox.PowerPack.com.managers.ContextManager;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			
-			private static var _dialog:TemplateKey;
-			
-			static public function show(closeHandler:Function = null):TemplateKey
-			{
-				if(!_dialog || _dialog.closed) 
-				{
-					_dialog = new TemplateKey();	
-					_dialog.open();
-					_dialog.show(OK | CANCEL, closeHandler, null, OK);		
-												
-					var defaultCaptions:Object = {
-						template_key: "Template key",
-						input_template_key: "Input template key",				
-						msg_input_template_key: "Input valid template key"					
-					};
-					
-					LanguageManager.setSentences(defaultCaptions);		
-				}				
-				else 
-				{
-					_dialog.activate();
-				}	
-				
-				return _dialog;
+		import mx.utils.StringUtil;
+
+		import net.vdombox.powerpack.com.managers.ContextManager;
+		import net.vdombox.powerpack.com.managers.LanguageManager;
+
+		private static var _dialog : TemplateKey;
+
+		static public function show( closeHandler : Function = null ) : TemplateKey {
+			if ( !_dialog || _dialog.closed ) {
+				_dialog = new TemplateKey();
+				_dialog.open();
+				_dialog.show( OK | CANCEL, closeHandler, null, OK );
+
+				var defaultCaptions : Object = {
+					template_key: "Template key",
+					input_template_key: "Input template key",
+					msg_input_template_key: "Input valid template key"
+				};
+
+				LanguageManager.setSentences( defaultCaptions );
 			}
-			
-			private function onShow():void
-			{
-				txtKey.setFocus();
-			}			
-				
+			else {
+				_dialog.activate();
+			}
+
+			return _dialog;
+		}
+
+		private function onShow() : void {
+			txtKey.setFocus();
+		}
 		]]>
 	</mx:Script>
 	

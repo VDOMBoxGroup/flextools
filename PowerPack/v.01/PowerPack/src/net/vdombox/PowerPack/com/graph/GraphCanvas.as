@@ -1,4 +1,4 @@
-package net.vdombox.PowerPack.com.graph
+package net.vdombox.powerpack.com.graph
 {
 import ExtendedAPI.com.containers.SuperAlert;
 import ExtendedAPI.com.ui.SuperNativeMenu;
@@ -6,12 +6,12 @@ import ExtendedAPI.com.ui.SuperNativeMenuItem;
 import ExtendedAPI.com.utils.ObjectUtils;
 import ExtendedAPI.com.utils.Utils;
 
-import net.vdombox.PowerPack.com.Template;
-import net.vdombox.PowerPack.com.managers.CashManager;
-import net.vdombox.PowerPack.com.managers.ContextManager;
-import net.vdombox.PowerPack.com.managers.LanguageManager;
-import net.vdombox.PowerPack.com.managers.ProgressManager;
-import net.vdombox.PowerPack.com.managers.SelectionManager;
+import net.vdombox.powerpack.com.Template;
+import net.vdombox.powerpack.com.managers.CashManager;
+import net.vdombox.powerpack.com.managers.ContextManager;
+import net.vdombox.powerpack.com.managers.LanguageManager;
+import net.vdombox.powerpack.com.managers.ProgressManager;
+import net.vdombox.powerpack.com.managers.SelectionManager;
 
 import flash.desktop.Clipboard;
 import flash.desktop.ClipboardFormats;
