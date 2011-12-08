@@ -19,46 +19,46 @@
     <classEntry path="GraphicAPI.imageProcessing.Adjustment"/>
     <classEntry path="GraphicAPI.imageProcessing.Filters"/>
     <classEntry path="GraphicAPI.imageProcessing.Transform"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.codec.BMPEncoder"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.containers.ButtonScrollingCanvas"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.containers.DockableToolBar"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.containers.Docker"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.containers.FlowBox"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.containers.FlowContainer"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.containers.PopUpToolBar"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.containers.SuperTabNavigator"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.containers.utilityClasses.AdobeFlowLayout"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.containers.utilityClasses.FlowLayout"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.controls.Base64Image"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.controls.FileBrowseBox"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.controls.HDivider"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.controls.SuperTabBar"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.controls.SuperTextArea"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperUIComponent"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.events.SuperTabEvent"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.events.TabReorderEvent"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.ui.SuperFlexNativeMenu"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.utils.FileUtils"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.utils.GeomUtils"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils"/>
-    <classEntry path="net.vdombox.powerpack.lib.extendedapi.utils.Utils"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.codec.BMPEncoder"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.ButtonScrollingCanvas"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.DockableToolBar"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.Docker"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.FlowBox"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.FlowContainer"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.PopUpToolBar"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.SuperTabNavigator"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.utilityClasses.AdobeFlowLayout"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.containers.utilityClasses.FlowLayout"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.controls.Base64Image"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.controls.FileBrowseBox"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.controls.HDivider"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.controls.SuperTabBar"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.controls.SuperTextArea"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperUIComponent"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.events.SuperTabEvent"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.events.TabReorderEvent"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.ui.SuperFlexNativeMenu"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.utils.FileUtils"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.utils.GeomUtils"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils"/>
+    <classEntry path="src.net.vdombox.powerpack.lib.extendedapi.utils.Utils"/>
   </includeClasses>
   <includeResources>
     <resourceEntry destPath="GeomLib/ASDoc.bat" sourcePath="GeomLib/ASDoc.bat"/>
     <resourceEntry destPath="GraphicAPI/ASDoc.bat" sourcePath="GraphicAPI/ASDoc.bat"/>
-    <resourceEntry destPath="net/vdombox/powerpack/lib/extendedapi/assets/assets.fla" sourcePath="net/vdombox/powerpack/lib/extendedapi/assets/assets.fla"/>
-    <resourceEntry destPath="net/vdombox/powerpack/lib/extendedapi/assets/assets.swf" sourcePath="net/vdombox/powerpack/lib/extendedapi/assets/assets.swf"/>
-    <resourceEntry destPath="net/vdombox/powerpack/lib/extendedapi/assets/dragStripIcon.png" sourcePath="net/vdombox/powerpack/lib/extendedapi/assets/dragStripIcon.png"/>
-    <resourceEntry destPath="net/vdombox/powerpack/lib/extendedapi/containers/ButtonScrollingCanvas.png" sourcePath="net/vdombox/powerpack/lib/extendedapi/containers/ButtonScrollingCanvas.png"/>
-    <resourceEntry destPath="net/vdombox/powerpack/lib/extendedapi/containers/SuperTabNavigator.png" sourcePath="net/vdombox/powerpack/lib/extendedapi/containers/SuperTabNavigator.png"/>
-    <resourceEntry destPath="net/vdombox/powerpack/lib/extendedapi/controls/SuperTabBar.png" sourcePath="net/vdombox/powerpack/lib/extendedapi/controls/SuperTabBar.png"/>
+    <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/assets/assets.fla" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/assets/assets.fla"/>
+    <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/assets/assets.swf" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/assets/assets.swf"/>
+    <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/assets/dragStripIcon.png" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/assets/dragStripIcon.png"/>
+    <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/containers/ButtonScrollingCanvas.png" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/containers/ButtonScrollingCanvas.png"/>
+    <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/containers/SuperTabNavigator.png" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/containers/SuperTabNavigator.png"/>
+    <resourceEntry destPath="src/net/vdombox/powerpack/lib/extendedapi/controls/SuperTabBar.png" sourcePath="src/net/vdombox/powerpack/lib/extendedapi/controls/SuperTabBar.png"/>
   </includeResources>
   <namespaceManifests/>
 </flexLibProperties>
