@@ -60,9 +60,7 @@ package net.vdombox.ide.core.view
 		
 		override public function onRegister() : void
 		{
-			
-			initialize();
-			
+			initialize();	
 		}
 		
 		override public function onRemove() : void

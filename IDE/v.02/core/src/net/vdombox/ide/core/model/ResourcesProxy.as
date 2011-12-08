@@ -120,10 +120,6 @@ package net.vdombox.ide.core.model
 		 */
 		public function loadResource( resourceVO : ResourceVO ) : void
 		{
-			if ( resourceVO.type && !resourceVO.mastHasPreview )
-			{
-				return;
-			}
 
 			var resource : ByteArray = cacheManager.getCachedFileById( resourceVO.id );
 
