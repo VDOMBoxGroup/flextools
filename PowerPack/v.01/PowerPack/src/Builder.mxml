@@ -9,10 +9,10 @@
 	applicationComplete="show()" 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:graph="net.vdombox.powerpack.graph.*"
-	xmlns:ui="src.net.vdombox.powerpack.lib.extendedapi.ui.*" 
+	xmlns:ui="net.vdombox.powerpack.lib.extendedapi.ui.*" 
 	xmlns:panel="net.vdombox.powerpack.panel.*" 
 	xmlns:customize="net.vdombox.powerpack.customize.*" 
-	xmlns:containers="src.net.vdombox.powerpack.lib.extendedapi.containers.*">
+	xmlns:containers="net.vdombox.powerpack.lib.extendedapi.containers.*">
     
     <mx:Style source="assets/style/builder.css"/>
     <mx:Move duration="100" id="DockerMove"/>
@@ -76,15 +76,15 @@
     	
 	<mx:Script>
 		<![CDATA[
-		import src.net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
-		import src.net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
-		import src.net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
-		import src.net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
-		import src.net.vdombox.powerpack.lib.extendedapi.ui.SuperFlexNativeMenu;
-		import src.net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
-		import src.net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
-		import src.net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
-		import src.net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+		import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
+		import net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
+		import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
+		import net.vdombox.powerpack.lib.extendedapi.ui.SuperFlexNativeMenu;
+		import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
+		import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
+		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+		import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 		import flash.system.fscommand;
 		import flash.utils.describeType;

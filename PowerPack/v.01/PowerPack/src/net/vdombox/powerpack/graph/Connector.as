@@ -1,13 +1,13 @@
 package net.vdombox.powerpack.graph
 {
-import src.net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
-import src.net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
-import src.net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
-import src.net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
-import src.net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
+import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
+import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
-import src.net.vdombox.powerpack.lib.geomlib.GeomUtils;
-import src.net.vdombox.powerpack.lib.geomlib._2D.LineSegment;
+import net.vdombox.powerpack.lib.geomlib.GeomUtils;
+import net.vdombox.powerpack.lib.geomlib._2D.LineSegment;
 
 import net.vdombox.powerpack.managers.ContextManager;
 import net.vdombox.powerpack.managers.LanguageManager;
@@ -834,7 +834,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		if(!arr || arr.length==0)
 			return visibleRect;
 		
-		var lineVisibleRect:Rectangle = src.net.vdombox.powerpack.lib.extendedapi.utils.GeomUtils.getObjectsRect(arr);
+		var lineVisibleRect:Rectangle = net.vdombox.powerpack.lib.extendedapi.utils.GeomUtils.getObjectsRect(arr);
 		
 		return lineVisibleRect;
 	}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SuperWindow xmlns="src.net.vdombox.powerpack.lib.extendedapi.containers.*" 
+<SuperWindow xmlns="net.vdombox.powerpack.lib.extendedapi.containers.*" 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="400" height="300" visible="true"
 	titleIcon="@Embed(source='/assets/icons/icon_16.png')"

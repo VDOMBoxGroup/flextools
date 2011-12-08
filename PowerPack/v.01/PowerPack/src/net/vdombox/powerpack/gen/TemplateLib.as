@@ -1,7 +1,7 @@
 package net.vdombox.powerpack.gen
 {
-import src.net.vdombox.powerpack.lib.extendedapi.codec.BMPEncoder;
-import src.net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
+import net.vdombox.powerpack.lib.extendedapi.codec.BMPEncoder;
+import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 
 import net.vdombox.powerpack.panel.Question;
 

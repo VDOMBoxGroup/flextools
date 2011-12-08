@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns="net.vdombox.powerpack.dialog.*"
 	xmlns:control="net.vdombox.powerpack.control.*"
-	xmlns:controls="src.net.vdombox.powerpack.lib.extendedapi.controls.*" 
+	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
 	title="{LanguageManager.sentences.properties}"
 	width="450" height="240" 
 	creationComplete="onShow()">
@@ -12,7 +12,7 @@
 		<![CDATA[
 		import mx.events.CloseEvent;
 
-		import src.net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
 		import mx.utils.StringUtil;
 

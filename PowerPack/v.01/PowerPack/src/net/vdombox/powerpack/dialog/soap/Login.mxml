@@ -3,7 +3,7 @@
 	<mx:Canvas 
 		xmlns:mx="http://www.adobe.com/2006/mxml" 
 		width="404" height="218" 
-		xmlns:controls="src.net.vdombox.powerpack.lib.extendedapi.controls.*">
+		xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*">
 	
 	
 

@@ -5,18 +5,18 @@
 	width="500" height="360"
 	title="{LanguageManager.sentences.lbl_import}" 
 	creationComplete="onShow(event)" 
-	xmlns:controls="src.net.vdombox.powerpack.lib.extendedapi.controls.*">
+	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*">
 	
 	<mx:Script>
 		<![CDATA[
 		import net.vdombox.powerpack.Template;
 
-		import src.net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 
 		import mx.collections.SortField;
 		import mx.collections.Sort;
 
-		import src.net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
 		import net.vdombox.powerpack.graph.GraphCanvas;
 

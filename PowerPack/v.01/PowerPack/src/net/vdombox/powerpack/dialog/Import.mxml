@@ -2,7 +2,7 @@
 <ModalDialog 
 	xmlns="net.vdombox.powerpack.dialog.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns:controls="src.net.vdombox.powerpack.lib.extendedapi.controls.*" 
+	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
 	xmlns:importClasses="net.vdombox.powerpack.dialog.importClasses.*"
 	width="450" height="460"
 	title="{LanguageManager.sentences.lbl_import}" 
@@ -14,11 +14,11 @@
 		<![CDATA[
 		import net.vdombox.powerpack.Template;
 
-		import src.net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 
 		import net.vdombox.powerpack.importation.ImportApp;
 
-		import src.net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
 		import generated.webservices.Get_all_typesResultEvent;
 

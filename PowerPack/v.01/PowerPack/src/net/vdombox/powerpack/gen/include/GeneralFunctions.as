@@ -1,8 +1,8 @@
 // ActionScript file
 // General functions set
-import src.net.vdombox.powerpack.lib.extendedapi.codec.BMPEncoder;
-import src.net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
-import src.net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import net.vdombox.powerpack.lib.extendedapi.codec.BMPEncoder;
+import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 import net.vdombox.powerpack.BasicError;
 import net.vdombox.powerpack.dialog.Import;

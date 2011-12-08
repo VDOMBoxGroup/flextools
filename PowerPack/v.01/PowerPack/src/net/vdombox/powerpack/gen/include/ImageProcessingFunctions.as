@@ -1,8 +1,8 @@
 // ActionScript file
-import src.net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
-import src.net.vdombox.powerpack.lib.extendedapi.utils.GeomUtils;
+import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+import net.vdombox.powerpack.lib.extendedapi.utils.GeomUtils;
 
-import src.net.vdombox.powerpack.lib.graphicapi.GraphicUtils;
+import net.vdombox.powerpack.lib.graphicapi.GraphicUtils;
 
 import net.vdombox.powerpack.BasicError;
 import net.vdombox.powerpack.gen.parse.ListParser;

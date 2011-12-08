@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns="net.vdombox.powerpack.dialog.*"
 	xmlns:control="net.vdombox.powerpack.control.*"
-	xmlns:controls="src.net.vdombox.powerpack.lib.extendedapi.controls.*" 
+	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
 	title="{LanguageManager.sentences.connection}"
 	width="450" height="300"
 	creationComplete="onShow()">

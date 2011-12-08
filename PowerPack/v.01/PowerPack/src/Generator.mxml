@@ -11,7 +11,7 @@
 	initialize="init()" 
 	applicationComplete="show()"
 	updateComplete="complete()" 
-	xmlns:controls="src.net.vdombox.powerpack.lib.extendedapi.controls.*">
+	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*">
 	
 	<mx:Style source="assets/style/generator.css"/>
 	
@@ -45,11 +45,11 @@
     	
 	<mx:Script>
 		<![CDATA[
-		import src.net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
-		import src.net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
-		import src.net.vdombox.powerpack.lib.graphicapi.GraphicUtils;
-		import src.net.vdombox.powerpack.lib.graphicapi.imageProcessing.Filters;
+		import net.vdombox.powerpack.lib.graphicapi.GraphicUtils;
+		import net.vdombox.powerpack.lib.graphicapi.imageProcessing.Filters;
 
 		import net.vdombox.powerpack.BasicError;
 		import net.vdombox.powerpack.Template;

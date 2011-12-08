@@ -1,6 +1,6 @@
 package net.vdombox.powerpack.gen
 {
-import src.net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 import net.vdombox.powerpack.gen.errorClasses.RunTimeError;
 import net.vdombox.powerpack.gen.errorClasses.ValidationError;

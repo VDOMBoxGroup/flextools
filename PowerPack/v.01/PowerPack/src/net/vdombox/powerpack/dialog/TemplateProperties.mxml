@@ -5,7 +5,7 @@
 	width="500" height="460"
 	title="{LanguageManager.sentences.properties}" 
 	creationComplete="onShow(event)" 
-	xmlns:controls="src.net.vdombox.powerpack.lib.extendedapi.controls.*">
+	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*">
 	
 	<mx:Script>
 		<![CDATA[
