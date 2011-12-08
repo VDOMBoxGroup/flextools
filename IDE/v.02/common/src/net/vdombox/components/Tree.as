@@ -85,8 +85,8 @@ public class Tree extends List
 		else
 		{
 			setStyle("indentation", 17);
-			setStyle("disclosureOpenIcon", disclosureOpenIcon);
-			setStyle("disclosureClosedIcon", disclosureClosedIcon);
+			/*setStyle("disclosureOpenIcon", disclosureOpenIcon);
+			setStyle("disclosureClosedIcon", disclosureClosedIcon);*/
 			setStyle("folderOpenIcon", folderOpenIcon);
 			setStyle("folderClosedIcon", folderClosedIcon);
 			setStyle("defaultLeafIcon", defaultLeafIcon);
@@ -101,11 +101,11 @@ public class Tree extends List
 	//
 	//--------------------------------------------------------------------------
 	
-	[Embed("assets/disclosureOpenIcon.png")]
+	/*[Embed("assets/disclosureOpenIcon.png")]
 	private var disclosureOpenIcon:Class;
 	
 	[Embed("assets/disclosureClosedIcon.png")]
-	private var disclosureClosedIcon:Class;
+	private var disclosureClosedIcon:Class;*/
 	
 	[Embed("assets/folderOpenIcon.png")]
 	private var folderOpenIcon:Class;

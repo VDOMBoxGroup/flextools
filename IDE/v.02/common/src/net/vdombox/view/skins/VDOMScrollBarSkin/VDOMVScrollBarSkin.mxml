@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
-    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" minWidth="7" minHeight="35" height="100%"
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" minWidth="10" minHeight="35" height="100%"
     alpha.disabled="0.5" alpha.inactive="0.5" >
 
     <fx:Metadata>
@@ -13,7 +13,16 @@
     </fx:Metadata> 
     
     <fx:Script fb:purpose="styling">
-        /* Define the skin elements that should not be colorized. 
+        
+		import mx.events.FlexEvent;
+			
+		protected function track_creationCompleteHandler(event:FlexEvent):void
+		{
+			// TODO Auto-generated method stub
+			track.skin.alpha = 0.5;
+		}
+			
+		/* Define the skin elements that should not be colorized. 
            For scroll bar, the skin itself is colorized but the individual parts are not. */
         static private const exclusions:Array = ["track", "thumb"];
 
@@ -41,7 +50,8 @@
  
     <s:Button id="track" top="0" bottom="0" height="100%"
               focusEnabled="false" 
-              skinClass="net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarTrackSkin" />
+              skinClass="net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarTrackSkin" 
+			  creationComplete="track_creationCompleteHandler(event)"/>
     
 
     <s:Button id="thumb" 

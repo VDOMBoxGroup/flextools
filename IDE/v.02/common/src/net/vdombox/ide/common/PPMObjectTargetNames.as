@@ -10,5 +10,6 @@ package net.vdombox.ide.common
 		public static const WYSIWYG : String = "WYSIWYG";
 		public static const XML_PRESENTATION : String = "XMLPresentation";
 		public static const NAME : String = "name";
+		public static const COPY : String = "copy";
 	}
 }

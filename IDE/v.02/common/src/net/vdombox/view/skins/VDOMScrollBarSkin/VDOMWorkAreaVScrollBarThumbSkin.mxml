@@ -52,17 +52,17 @@
 
     <!-- background -->
 	<s:VGroup height="100%" gap="0" verticalAlign="middle" alpha.over="1" alpha.down="1" alpha.up="0.5" alpha="0.5" >
-		<s:Rect left="0" top="1" right="0" minWidth="10" minHeight="9" maxHeight="9">
+		<s:Rect left="0" top="1" right="0" minWidth="12" minHeight="8" maxHeight="8">
 			<s:fill>
 				<s:BitmapFill source = "@Embed('net/vdombox/icons/vertical-scroll-top.png')" smooth="true"/>
 			</s:fill>
 		</s:Rect>
-		<s:Rect minWidth="10" height="100%">
+		<s:Rect minWidth="12" height="100%">
 			<s:fill>
 				<s:BitmapFill source = "@Embed('net/vdombox/icons/vertical-scroll-center.png')" smooth="true"/>
 			</s:fill>
 		</s:Rect>
-		<s:Rect left="0" right="0" bottom="2" minWidth="10" minHeight="9" maxHeight="9">
+		<s:Rect left="0" right="0" bottom="2" minWidth="12" minHeight="8" maxHeight="8">
 			<s:fill>
 				<s:BitmapFill source = "@Embed('net/vdombox/icons/vertical-scroll-bottom.png')" smooth="true"/>
 			</s:fill>

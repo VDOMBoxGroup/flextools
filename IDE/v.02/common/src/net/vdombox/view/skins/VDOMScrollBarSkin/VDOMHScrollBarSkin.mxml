@@ -24,7 +24,7 @@ HScrollBarThumbSkin and HScrollBarTrackSkin classes, respectively.
       @productversion Flex 4
 -->
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
-    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" minWidth="35" minHeight="7" width="100%"
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" minWidth="35" minHeight="10" width="100%"
     alpha.disabled="0.5" alpha.inactive="0.5">
 
     <fx:Metadata>
@@ -37,7 +37,15 @@ HScrollBarThumbSkin and HScrollBarTrackSkin classes, respectively.
     </fx:Metadata> 
     
     <fx:Script fb:purpose="styling">
-        /* Define the skin elements that should not be colorized. 
+        
+		import mx.events.FlexEvent;
+			
+		protected function track_creationCompleteHandler(event:FlexEvent):void
+		{
+			// TODO Auto-generated method stub
+			track.skin.alpha = 0.5;
+		}
+		/* Define the skin elements that should not be colorized. 
            For scroll bar, the skin itself is colorized but the individual parts are not. */
         static private const exclusions:Array = ["track", "thumb" ];
 
@@ -64,7 +72,8 @@ HScrollBarThumbSkin and HScrollBarTrackSkin classes, respectively.
 
     <s:Button id="track" left="0" right="0" width="100%" 
               focusEnabled="false"
-              skinClass="net.vdombox.view.skins.VDOMScrollBarSkin.VDOMHScrollBarTrackSkin" />
+              skinClass="net.vdombox.view.skins.VDOMScrollBarSkin.VDOMHScrollBarTrackSkin" 
+			  creationComplete="track_creationCompleteHandler(event)"/>
 
     <s:Button id="thumb" 
               focusEnabled="false" visible.inactive="false"
