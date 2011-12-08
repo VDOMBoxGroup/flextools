@@ -4,8 +4,7 @@
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 minWidth="200" creationComplete="sparkskin1_creationCompleteHandler(event)" 
-			 xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:view="net.vdombox.view.*"
-			 mouseOver="{ imageDelete.alpha = 1 }" mouseOut="{ imageDelete.alpha = .5 }">
+			 xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:view="net.vdombox.view.*">
 
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.events.view.components.ActionElement")]
@@ -198,7 +197,7 @@
 					<s:HGroup id="imageGroup" height="100%" horizontalAlign="right" verticalAlign="middle" paddingRight="5">
 							
 						<mx1:Image id="imageDelete" source="@Embed('assets/delete.png')"
-									   alpha=".5"
+									   alpha=".5"  mouseOver="{ imageDelete.alpha = 1 }" mouseOut="{ imageDelete.alpha = .5 }"
 									   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )" />
 							
 					</s:HGroup>
