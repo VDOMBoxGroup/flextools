@@ -1,6 +1,6 @@
 package net.vdombox.powerpack.managers
 {
-import ExtendedAPI.com.utils.Utils;
+import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
 
 import flash.display.BitmapData;
 import flash.display.DisplayObject;

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="ExtendedAPI.com.controls.*"
-	creationComplete="onShow()">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:controls="net.vdombox.powerpack.lib.ExtendedAPI.controls.*"
+	creationComplete="onShow()" 
+	xmlns:controls1="net.vdombox.powerpack.lib.ExtendedAPI.controls.*">
 
 	<mx:Script>
 		<![CDATA[
@@ -45,7 +47,7 @@
 	<mx:Grid width="100%">
 		<mx:GridRow>
 			<mx:GridItem colSpan="2">
-				<controls:HDivider label="{LanguageManager.sentences.import_from}:"/>
+				<controls1:HDivider label="{LanguageManager.sentences.import_from}:"/>
 				<mx:RadioButtonGroup id="importType" change="handleImport();" itemClick="handleImport();"/>
 			</mx:GridItem>
 		</mx:GridRow>
@@ -56,11 +58,11 @@
 			        label="{LanguageManager.sentences.import_from_file}:"/>    			        
 			</mx:GridItem>
 			<mx:GridItem>
-				<controls:FileBrowseBox id="fileBrowse" width="300" mode="open" enabled="false"
+				<controls1:FileBrowseBox id="fileBrowse" width="300" mode="open" enabled="false"
 						browseLabel="{LanguageManager.sentences.browse}..." 
 						browseTitle="{LanguageManager.sentences.open_file}..."
 						filterAll="{LanguageManager.sentences.all}">
-				</controls:FileBrowseBox>
+				</controls1:FileBrowseBox>
 			</mx:GridItem>
 		</mx:GridRow>
 		
@@ -85,7 +87,7 @@
 		
 		<mx:GridRow>
 			<mx:GridItem colSpan="2">
-				<controls:HDivider label="{LanguageManager.sentences.connection}:" 
+				<controls1:HDivider label="{LanguageManager.sentences.connection}:" 
 					enabled="{gridServer.enabled}"/>
 			</mx:GridItem>
 		</mx:GridRow>
@@ -132,7 +134,7 @@
 
 		<mx:GridRow>
 			<mx:GridItem colSpan="2">
-				<controls:HDivider label="{LanguageManager.sentences.authentication}:" 
+				<controls1:HDivider label="{LanguageManager.sentences.authentication}:" 
 					enabled="{gridServer.enabled}"/>
 			</mx:GridItem>
 		</mx:GridRow>

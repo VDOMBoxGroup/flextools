@@ -1,6 +1,6 @@
 package net.vdombox.powerpack.importation
 {
-	import ExtendedAPI.com.utils.Utils;
+	import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
 	
 	import net.vdombox.powerpack.Template;
 	import net.vdombox.powerpack.graph.GraphCanvas;

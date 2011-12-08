@@ -1,6 +1,6 @@
 package net.vdombox.powerpack.gen.parse
 {
-import ExtendedAPI.com.utils.Utils;
+import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
 
 import GraphicAPI.drawing.BrushPatternStyle;
 import GraphicAPI.drawing.PStroke;

@@ -12,7 +12,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-		import ExtendedAPI.com.containers.SuperAlert;
+		import net.vdombox.powerpack.lib.ExtendedAPI.containers.SuperAlert;
 
 		import mx.binding.utils.BindingUtils;
 		import mx.containers.Accordion;

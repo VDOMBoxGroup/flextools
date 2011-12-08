@@ -1,6 +1,6 @@
 package net.vdombox.powerpack.validators
 {
-	import ExtendedAPI.com.utils.Utils;
+	import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
 	
 	import net.vdombox.powerpack.BasicError;
 	import net.vdombox.powerpack.gen.parse.CodeParser;

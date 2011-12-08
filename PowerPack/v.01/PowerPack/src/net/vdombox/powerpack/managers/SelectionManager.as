@@ -1,6 +1,6 @@
 package net.vdombox.powerpack.managers
 {
-import ExtendedAPI.com.utils.ObjectUtils;
+import net.vdombox.powerpack.lib.ExtendedAPI.utils.ObjectUtils;
 
 import net.vdombox.powerpack.graph.NodeEvent;
 

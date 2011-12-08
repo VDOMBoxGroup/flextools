@@ -1,6 +1,6 @@
 package net.vdombox.powerpack.managers
 {
-import ExtendedAPI.com.containers.SuperAlert;
+import net.vdombox.powerpack.lib.ExtendedAPI.containers.SuperAlert;
 
 import flash.events.EventDispatcher;
 import flash.events.TimerEvent;

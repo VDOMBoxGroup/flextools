@@ -1,6 +1,6 @@
 package net.vdombox.powerpack.managers
 {
-import ExtendedAPI.com.utils.Utils;
+import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
 
 import net.vdombox.powerpack.dialog.ModalDialog;
 

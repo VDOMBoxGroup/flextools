@@ -9,10 +9,10 @@
 	applicationComplete="show()" 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:graph="net.vdombox.powerpack.graph.*"
-	xmlns:extended="ExtendedAPI.com.containers.*"
-	xmlns:controls="ExtendedAPI.com.controls.*" 
-	xmlns:ui="ExtendedAPI.com.ui.*" 
-	xmlns:panel="net.vdombox.powerpack.panel.*" xmlns:customize="net.vdombox.powerpack.customize.*">
+	xmlns:extended="ExtendedAPI.containers.*"
+	xmlns:controls="ExtendedAPI.controls.*" 
+	xmlns:ui="ExtendedAPI.ui.*" 
+	xmlns:panel="net.vdombox.powerpack.panel.*" xmlns:customize="net.vdombox.powerpack.customize.*" xmlns:containers="net.vdombox.powerpack.lib.ExtendedAPI.containers.*" xmlns:ui1="net.vdombox.powerpack.lib.ExtendedAPI.ui.*">
     
     <mx:Style source="assets/style/builder.css"/>
     <mx:Move duration="100" id="DockerMove"/>
@@ -21,7 +21,7 @@
 	<customize:GeneratorResources id="resources"/>
     
     <mx:menu>
-    	<ui:SuperFlexNativeMenu id="flexNativeMenu" 
+    	<ui1:SuperFlexNativeMenu id="flexNativeMenu" 
     		dataProvider="{fileMenuData}" 
         	labelField="@label" 
         	keyEquivalentField="@keyEquivalent"
@@ -76,15 +76,15 @@
     	
 	<mx:Script>
 		<![CDATA[
-		import ExtendedAPI.com.containers.SuperAlert;
-		import ExtendedAPI.com.containers.SuperWindow;
-		import ExtendedAPI.com.controls.SuperDataGrid;
-		import ExtendedAPI.com.controls.tabBarClasses.SuperTab;
-		import ExtendedAPI.com.ui.SuperFlexNativeMenu;
-		import ExtendedAPI.com.ui.SuperNativeMenu;
-		import ExtendedAPI.com.ui.SuperNativeMenuItem;
-		import ExtendedAPI.com.utils.FileUtils;
-		import ExtendedAPI.com.utils.Utils;
+		import net.vdombox.powerpack.lib.ExtendedAPI.containers.SuperAlert;
+		import net.vdombox.powerpack.lib.ExtendedAPI.containers.SuperWindow;
+		import net.vdombox.powerpack.lib.ExtendedAPI.controls.SuperDataGrid;
+		import net.vdombox.powerpack.lib.ExtendedAPI.controls.tabBarClasses.SuperTab;
+		import net.vdombox.powerpack.lib.ExtendedAPI.ui.SuperFlexNativeMenu;
+		import net.vdombox.powerpack.lib.ExtendedAPI.ui.SuperNativeMenu;
+		import net.vdombox.powerpack.lib.ExtendedAPI.ui.SuperNativeMenuItem;
+		import net.vdombox.powerpack.lib.ExtendedAPI.utils.FileUtils;
+		import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
 
 		import flash.system.fscommand;
 		import flash.utils.describeType;
@@ -1104,7 +1104,7 @@
     	itemClick="menuHandler(event);">    	
     </mx:MenuBar-->
 	
-	<extended:Docker>
+	<containers:Docker>
 
 	<mx:VBox width="100%" height="100%" id="workStage" visible="true" includeInLayout="true">
     
@@ -1126,17 +1126,17 @@
 						
 						<mx:ViewStack id="viewstack" width="100%" height="100%" borderStyle="solid"/>						
 						
-						<extended:SuperTabNavigator creationPolicy="all" height="100%" dragEnabled="true" dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
+						<containers:SuperTabNavigator creationPolicy="all" height="100%" dragEnabled="true" dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
 						
 							<panel:Variables id="pnl_variables"  minWidth="150"/>
 							
-						</extended:SuperTabNavigator>
+						</containers:SuperTabNavigator>
 						
 					</mx:HDividedBox>
 					
 					<mx:HDividedBox width="100%">
 						
-						<extended:SuperTabNavigator creationPolicy="all" width="100%" height="100%" dragEnabled="true" dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
+						<containers:SuperTabNavigator creationPolicy="all" width="100%" height="100%" dragEnabled="true" dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
 							
 							<panel:Problems id="pnl_problems"/>
 							
@@ -1144,13 +1144,13 @@
 							
 							<panel:Output id="pnl_output"/>
 							
-						</extended:SuperTabNavigator>
+						</containers:SuperTabNavigator>
 
-						<extended:SuperTabNavigator creationPolicy="all" width="100%" height="100%" dragEnabled="true" dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
+						<containers:SuperTabNavigator creationPolicy="all" width="100%" height="100%" dragEnabled="true" dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
 							
 							<panel:NodeValue id="pnl_node_value"/>
 							
-						</extended:SuperTabNavigator>
+						</containers:SuperTabNavigator>
 						
 					</mx:HDividedBox>
 					
@@ -1161,7 +1161,7 @@
 
 	</mx:VBox>
 
-	</extended:Docker>
+	</containers:Docker>
 	</mx:VBox>
 
 </mx:WindowedApplication>

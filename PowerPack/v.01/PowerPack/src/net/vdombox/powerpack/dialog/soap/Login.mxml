@@ -3,7 +3,7 @@
 	<mx:Canvas 
 		xmlns:mx="http://www.adobe.com/2006/mxml" 
 		width="404" height="218" 
-		xmlns:controls="ExtendedAPI.com.controls.*"
+		xmlns:controls="net.vdombox.powerpack.lib.ExtendedAPI.controls.*" xmlns:controls1="net.vdombox.powerpack.lib.ExtendedAPI.controls.*"
 	>
 	
 	
@@ -68,7 +68,7 @@
 		
 		<mx:GridRow>
 			<mx:GridItem colSpan="2">
-				<controls:HDivider label="{LanguageManager.sentences.connection}:" 
+				<controls1:HDivider label="{LanguageManager.sentences.connection}:" 
 								   enabled="{gridServer.enabled}"/>
 			</mx:GridItem>
 		</mx:GridRow>
@@ -87,7 +87,7 @@
 		
 		<mx:GridRow>
 			<mx:GridItem colSpan="2">
-				<controls:HDivider label="{LanguageManager.sentences.authentication}:" 
+				<controls1:HDivider label="{LanguageManager.sentences.authentication}:" 
 								   enabled="{gridServer.enabled}"/>
 			</mx:GridItem>
 		</mx:GridRow>
