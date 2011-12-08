@@ -1,8 +1,8 @@
 package net.vdombox.powerpack
 {
-import net.vdombox.powerpack.lib.ExtendedAPI.containers.SuperAlert;
-import net.vdombox.powerpack.lib.ExtendedAPI.utils.FileToBase64;
-import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
+import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 import net.vdombox.powerpack.managers.CashManager;
 import net.vdombox.powerpack.managers.ContextManager;

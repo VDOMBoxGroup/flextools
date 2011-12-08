@@ -1,10 +1,10 @@
 package net.vdombox.powerpack.graph
 {
-import net.vdombox.powerpack.lib.ExtendedAPI.containers.SuperAlert;
-import net.vdombox.powerpack.lib.ExtendedAPI.ui.SuperNativeMenu;
-import net.vdombox.powerpack.lib.ExtendedAPI.ui.SuperNativeMenuItem;
-import net.vdombox.powerpack.lib.ExtendedAPI.utils.ObjectUtils;
-import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
+import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
+import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
+import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 import net.vdombox.powerpack.Template;
 import net.vdombox.powerpack.managers.CashManager;

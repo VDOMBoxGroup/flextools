@@ -37,9 +37,9 @@
 
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.lib.ExtendedAPI.containers.SuperAlert;
-		import net.vdombox.powerpack.lib.ExtendedAPI.utils.ObjectUtils;
-		import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
+		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+		import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
+		import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 		import mx.binding.utils.*;
 		import mx.collections.ArrayCollection;

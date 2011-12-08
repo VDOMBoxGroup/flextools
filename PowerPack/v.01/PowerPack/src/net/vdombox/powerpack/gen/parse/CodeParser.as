@@ -1,6 +1,6 @@
 package net.vdombox.powerpack.gen.parse
 {
-import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 import net.vdombox.powerpack.gen.*;
 import net.vdombox.powerpack.gen.errorClasses.ValidationError;

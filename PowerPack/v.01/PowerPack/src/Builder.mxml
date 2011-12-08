@@ -9,10 +9,10 @@
 	applicationComplete="show()" 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:graph="net.vdombox.powerpack.graph.*"
-	xmlns:extended="ExtendedAPI.containers.*"
-	xmlns:controls="ExtendedAPI.controls.*" 
-	xmlns:ui="ExtendedAPI.ui.*" 
-	xmlns:panel="net.vdombox.powerpack.panel.*" xmlns:customize="net.vdombox.powerpack.customize.*" xmlns:containers="net.vdombox.powerpack.lib.ExtendedAPI.containers.*" xmlns:ui1="net.vdombox.powerpack.lib.ExtendedAPI.ui.*">
+	xmlns:extended="extendedapi.containers.*"
+	xmlns:controls="extendedapi.controls.*" 
+	xmlns:ui="extendedapi.ui.*" 
+	xmlns:panel="net.vdombox.powerpack.panel.*" xmlns:customize="net.vdombox.powerpack.customize.*" xmlns:containers="net.vdombox.powerpack.lib.extendedapi.containers.*" xmlns:ui1="net.vdombox.powerpack.lib.extendedapi.ui.*">
     
     <mx:Style source="assets/style/builder.css"/>
     <mx:Move duration="100" id="DockerMove"/>
@@ -76,15 +76,15 @@
     	
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.lib.ExtendedAPI.containers.SuperAlert;
-		import net.vdombox.powerpack.lib.ExtendedAPI.containers.SuperWindow;
-		import net.vdombox.powerpack.lib.ExtendedAPI.controls.SuperDataGrid;
-		import net.vdombox.powerpack.lib.ExtendedAPI.controls.tabBarClasses.SuperTab;
-		import net.vdombox.powerpack.lib.ExtendedAPI.ui.SuperFlexNativeMenu;
-		import net.vdombox.powerpack.lib.ExtendedAPI.ui.SuperNativeMenu;
-		import net.vdombox.powerpack.lib.ExtendedAPI.ui.SuperNativeMenuItem;
-		import net.vdombox.powerpack.lib.ExtendedAPI.utils.FileUtils;
-		import net.vdombox.powerpack.lib.ExtendedAPI.utils.Utils;
+		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+		import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
+		import net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
+		import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
+		import net.vdombox.powerpack.lib.extendedapi.ui.SuperFlexNativeMenu;
+		import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
+		import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
+		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+		import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 		import flash.system.fscommand;
 		import flash.utils.describeType;

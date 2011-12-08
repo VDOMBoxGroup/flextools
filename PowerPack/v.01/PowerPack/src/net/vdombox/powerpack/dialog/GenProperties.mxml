@@ -3,17 +3,17 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns="net.vdombox.powerpack.dialog.*"
 	xmlns:control="net.vdombox.powerpack.control.*"
-	xmlns:controls="net.vdombox.powerpack.lib.ExtendedAPI.controls.*" 
+	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
 	title="{LanguageManager.sentences.properties}"
 	width="450" height="240" 
 	creationComplete="onShow()" 
-	xmlns:controls1="net.vdombox.powerpack.lib.ExtendedAPI.controls.*">
+	xmlns:controls1="net.vdombox.powerpack.lib.extendedapi.controls.*">
 	
 	<mx:Script>
 		<![CDATA[
 		import mx.events.CloseEvent;
 
-		import net.vdombox.powerpack.lib.ExtendedAPI.utils.FileUtils;
+		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
 		import mx.utils.StringUtil;
 

@@ -1,7 +1,7 @@
 package net.vdombox.powerpack.managers
 {
-import net.vdombox.powerpack.lib.ExtendedAPI.containers.SuperWindow;
-import net.vdombox.powerpack.lib.ExtendedAPI.controls.HDivider;
+import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
+import net.vdombox.powerpack.lib.extendedapi.controls.HDivider;
 
 import net.vdombox.powerpack.menu.MenuGeneral;
 import net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar;

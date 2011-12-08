@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns:controls="net.vdombox.powerpack.lib.ExtendedAPI.controls.*" 
+	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
 	width="100%" height="100%"
 	verticalGap="0" 
 	label="{LanguageManager.sentences.output_title}" 
-	xmlns:controls1="net.vdombox.powerpack.lib.ExtendedAPI.controls.*">
+	xmlns:controls1="net.vdombox.powerpack.lib.extendedapi.controls.*">
 	
 	<mx:String id="text"/>
 	<mx:String id="description"/>	
