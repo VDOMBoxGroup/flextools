@@ -86,31 +86,6 @@
 			import ExtendedAPI.com.utils.FileUtils;
 			import ExtendedAPI.com.utils.Utils;
 			
-			import net.vdombox.PowerPack.com.*;
-			import net.vdombox.PowerPack.com.dialog.EditCaption;
-			import net.vdombox.PowerPack.com.dialog.Import;
-			import net.vdombox.PowerPack.com.dialog.ImportFromTpl;
-			import net.vdombox.PowerPack.com.dialog.ModalDialog;
-			import net.vdombox.PowerPack.com.dialog.TemplateKey;
-			import net.vdombox.PowerPack.com.dialog.TemplateProperties;
-			import net.vdombox.PowerPack.com.dialog.ValidateDialog;
-			import net.vdombox.PowerPack.com.gen.*;
-			import net.vdombox.PowerPack.com.gen.parse.CodeParser;
-			import net.vdombox.PowerPack.com.gen.parse.parseClasses.CodeFragment;
-			import net.vdombox.PowerPack.com.gen.structs.NodeStruct;
-			import net.vdombox.PowerPack.com.graph.Connector;
-			import net.vdombox.PowerPack.com.graph.GraphCanvas;
-			import net.vdombox.PowerPack.com.graph.Node;
-			import net.vdombox.PowerPack.com.graph.NodeCategory;
-			import net.vdombox.PowerPack.com.managers.CashManager;
-			import net.vdombox.PowerPack.com.managers.ContextManager;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			import net.vdombox.PowerPack.com.managers.ProgressManager;
-			import net.vdombox.PowerPack.com.menu.MenuGeneral;
-			import net.vdombox.PowerPack.com.panel.Console;
-			import net.vdombox.PowerPack.com.panel.graphsClasses.AccordionChild;
-			import net.vdombox.PowerPack.customize.Resources;
-			
 			import flash.system.fscommand;
 			import flash.utils.describeType;
 			import flash.utils.setTimeout;
@@ -138,6 +113,31 @@
 			import mx.managers.LayoutManager;
 			import mx.managers.PopUpManager;
 			import mx.utils.StringUtil;
+			
+			import net.vdombox.PowerPack.com.*;
+			import net.vdombox.PowerPack.com.dialog.EditCaption;
+			import net.vdombox.PowerPack.com.dialog.Import;
+			import net.vdombox.PowerPack.com.dialog.ImportFromTpl;
+			import net.vdombox.PowerPack.com.dialog.ModalDialog;
+			import net.vdombox.PowerPack.com.dialog.TemplateKey;
+			import net.vdombox.PowerPack.com.dialog.TemplateProperties;
+			import net.vdombox.PowerPack.com.dialog.ValidateDialog;
+			import net.vdombox.PowerPack.com.gen.*;
+			import net.vdombox.PowerPack.com.gen.parse.CodeParser;
+			import net.vdombox.PowerPack.com.gen.parse.parseClasses.CodeFragment;
+			import net.vdombox.PowerPack.com.gen.structs.NodeStruct;
+			import net.vdombox.PowerPack.com.graph.Connector;
+			import net.vdombox.PowerPack.com.graph.GraphCanvas;
+			import net.vdombox.PowerPack.com.graph.Node;
+			import net.vdombox.PowerPack.com.graph.NodeCategory;
+			import net.vdombox.PowerPack.com.managers.CashManager;
+			import net.vdombox.PowerPack.com.managers.ContextManager;
+			import net.vdombox.PowerPack.com.managers.LanguageManager;
+			import net.vdombox.PowerPack.com.managers.ProgressManager;
+			import net.vdombox.PowerPack.com.menu.MenuGeneral;
+			import net.vdombox.PowerPack.com.panel.Console;
+			import net.vdombox.PowerPack.com.panel.graphsClasses.AccordionChild;
+			import net.vdombox.PowerPack.customize.Resources;
 			
 			//--------------------------------------------------------------------------
 			//
@@ -548,7 +548,7 @@
 	                	break;
 	                	
                 	case "new_category":
-	                	EditCaption.show("New category", onCatDialogClose);
+	                	EditCaption.show("New category", onCategoryDialogClose, onCategoryDialogCheckLabel);
 	                	break;
 	                	
 					case "import_from_app":
@@ -1021,19 +1021,37 @@
 		    private function templateSaveHandler(event:Event):void 
 		    {
 		    	var tpl:Template = event.target as Template;		    	
-		    	tpl.removeEventListener(Event.COMPLETE, templateSaveHandler); 
+		    	tpl.removeEventListener(Event.COMPLETE, templateSaveHandler);
+				
 		    	processSavedTpl();
 		    } 
 			    	            
-            private function onCatDialogClose(event:CloseEvent):void
+            private function onCategoryDialogClose(event:CloseEvent):void
             {            	
             	if(event.detail == ModalDialog.OK)
             	{
-            		if(event.target.txtCaption.text)
-            			pnl_graphs.createCategoryTab(event.target.txtCaption.text);
+					var categoryLabel : String = event.target.txtCaption.text;
+					
+            		if(categoryLabel)
+            			pnl_graphs.createCategoryTab(categoryLabel);
             	}
             }
             
+			private function onCategoryDialogCheckLabel(categoryLabel : String):void
+			{
+				if (pnl_graphs.checkCategoryLabelUnique(categoryLabel))
+				{
+					pnl_graphs.createCategoryTab(categoryLabel);
+					
+					EditCaption.closeDialog();
+					
+					return;
+				}
+				
+				EditCaption.showCategoryLabelError();
+					
+			}
+			
             private function onImportFromTplClose(event:Event):void
             {            	
             	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)

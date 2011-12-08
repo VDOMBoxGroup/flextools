@@ -41,16 +41,6 @@
 			import ExtendedAPI.com.utils.ObjectUtils;
 			import ExtendedAPI.com.utils.Utils;
 			
-			import net.vdombox.PowerPack.com.graph.GraphCanvas;
-			import net.vdombox.PowerPack.com.graph.GraphCanvasEvent;
-			import net.vdombox.PowerPack.com.graph.Node;
-			import net.vdombox.PowerPack.com.managers.ContextManager;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			import net.vdombox.PowerPack.com.managers.ProgressManager;
-			import net.vdombox.PowerPack.com.panel.graphsClasses.AccordionChild;
-			import net.vdombox.PowerPack.com.panel.graphsClasses.AccordionHeader;
-			import net.vdombox.PowerPack.com.panel.graphsClasses.GraphsAccordionEvent;
-			
 			import mx.binding.utils.*;
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
@@ -69,6 +59,16 @@
 			import mx.utils.ArrayUtil;
 			import mx.utils.NameUtil;
 			import mx.utils.ObjectProxy;
+			
+			import net.vdombox.PowerPack.com.graph.GraphCanvas;
+			import net.vdombox.PowerPack.com.graph.GraphCanvasEvent;
+			import net.vdombox.PowerPack.com.graph.Node;
+			import net.vdombox.PowerPack.com.managers.ContextManager;
+			import net.vdombox.PowerPack.com.managers.LanguageManager;
+			import net.vdombox.PowerPack.com.managers.ProgressManager;
+			import net.vdombox.PowerPack.com.panel.graphsClasses.AccordionChild;
+			import net.vdombox.PowerPack.com.panel.graphsClasses.AccordionHeader;
+			import net.vdombox.PowerPack.com.panel.graphsClasses.GraphsAccordionEvent;
 
 
 			static private var defaultCaptions:Object = {
@@ -178,17 +178,35 @@
 				graphAccordionChild.lstGraphs.addEventListener(ListEvent.CHANGE, changeLstGraphsHandler);
 				graphAccordionChild.lstGraphs.addEventListener(MouseEvent.DOUBLE_CLICK, btnRenameClickHandler);
 				
-				graphAccordionChild.lstGraphs.addEventListener(GraphsAccordionEvent.GRAPH_VALUE_CHECKED, onLstGraphsValueChecked);
+				graphAccordionChild.lstGraphs.addEventListener(GraphsAccordionEvent.GRAPH_VALUE_ENTERED, onLstGraphsValueChecked);
 				graphAccordionChild.lstGraphs.addEventListener(GraphsAccordionEvent.GRAPH_VALUE_EDITING_COMPLETE, onLstGraphsEditingComplete);
 				
 				graphAccordionChild.addEventListener(GraphsAccordionEvent.GRAPH_VALUE_EDITING_COMPLETE, onLstGraphsEditingComplete);
 				
 				graphAccordionChild.addEventListener(GraphsAccordionEvent.TAB_CLOSING, closingEditLstGraphsHandler);	
-				graphAccordionChild.addEventListener(GraphsAccordionEvent.CAPTION_CHANGED, captionChangedHandler);	
+				
+				graphAccordionChild.addEventListener(GraphsAccordionEvent.CAPTION_VALUE_ENTERED, captionValueEnteredHandler);
+				graphAccordionChild.addEventListener(GraphsAccordionEvent.CAPTION_CHANGED, captionChangedHandler);
 				
 				dispatchEvent(new Event(TPL_CHANGED));
 				
 				return graphAccordionChild;
+			}
+			
+			public function checkCategoryLabelUnique(categoryLabel : String, targetCategoryName : String = "") : Boolean
+			{
+				for each (var tab:AccordionChild in graphsAccordion.getChildren())
+				{
+					if (tab.name == targetCategoryName)
+						continue;
+					
+					if(tab.label == categoryLabel)
+					{
+						return false;
+					}
+				}
+				
+				return true;
 			}
 			
 			public function addGraph(graph:GraphCanvas, processAfterAdding:Boolean=true):void
@@ -602,11 +620,28 @@
 				dispatchEvent(new Event(TPL_CHANGED));
 			}
 					
+			private function captionValueEnteredHandler(event:GraphsAccordionEvent):void
+			{
+				if (!event.accordHeader)
+				{
+					throw Error ("Accordion header is undefined");
+					return;
+				}
+				
+				var accordChild : AccordionChild = event.target as AccordionChild;	
+				var categoryLabel : String = event.accordHeader.txtInput.text;
+				
+				event.accordHeader.uniqueCategoryName = checkCategoryLabelUnique(categoryLabel, accordChild.name);
+			}
+			
 			private function captionChangedHandler(event:Event):void
 			{
+				var categoryLabel : String = event.target.label;
+				var categoryName : String = event.target.name;
+				
 				for each(var graph:GraphCanvas in AccordionChild(event.target).graphs)
 				{
-					graph.category = event.target.label;
+					graph.category = categoryLabel;
 				}
 				
 				dispatchEvent(new Event(TPL_CHANGED));

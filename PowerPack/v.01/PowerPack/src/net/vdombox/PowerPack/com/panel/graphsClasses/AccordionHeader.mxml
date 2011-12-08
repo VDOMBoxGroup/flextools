@@ -8,16 +8,11 @@
 	doubleClickEnabled="true" 
 	mouseChildren="true"
 	dragEnter="dragEnterHandler(event);"
-	dragDrop="dragDropHandler(event);"
-	creationComplete="show();">
+	dragDrop="dragDropHandler(event);">
 	
 	<mx:Script>
 		<![CDATA[
 			import ExtendedAPI.com.containers.SuperAlert;
-			
-			import net.vdombox.PowerPack.com.graph.GraphCanvas;
-			import net.vdombox.PowerPack.com.managers.LanguageManager;
-			import net.vdombox.PowerPack.com.panel.Graphs;
 			
 			import mx.binding.utils.BindingUtils;
 			import mx.containers.Accordion;
@@ -33,41 +28,25 @@
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.DragManager;
+			import mx.managers.FocusManager;
 			import mx.managers.PopUpManager;
 			import mx.utils.ArrayUtil;
 			
-		    //--------------------------------------------------------------------------
-		    //
-		    //  Class variables and constants
-		    //
-		    //--------------------------------------------------------------------------
-    		
+			import net.vdombox.PowerPack.com.graph.GraphCanvas;
+			import net.vdombox.PowerPack.com.managers.LanguageManager;
+			import net.vdombox.PowerPack.com.panel.Graphs;
 			
-			//----------------------------------
-		    //  labelTextField
-		    //----------------------------------
-		
-			/**
+		    /**
 		     *  A reference to the UITextField that displays the status bar's text.
 		     */
-		    private var labelTextField:IUITextField;
+		    private var labelTextField	: IUITextField;
 		    
-		    public var txtInput:TextInput;	
+		    public var txtInput			: TextInput;	
 		    
-		    private var _isEditing:Boolean;		
-    
-		    //--------------------------------------------------------------------------
-			//
-			//  Properties
-			//
-			//--------------------------------------------------------------------------
-		
-		    //----------------------------------
-		    //  label
-		    //----------------------------------
-    			
+		    private var _isEditing		: Boolean;
+						
 			[Bindable]
-			private var _label:String;
+			private var _label			: String;
 			
 			override public function set label(value:String):void 
 			{
@@ -84,13 +63,7 @@
 						txtInput.text = _label;
 				}
 			}
-	
-			//--------------------------------------------------------------------------
-			//
-			//  Overridden methods
-			//
-			//--------------------------------------------------------------------------	
-			    
+	    
 			override protected function createChildren():void
 			{
        			super.createChildren();
@@ -104,14 +77,15 @@
 			        labelTextField.doubleClickEnabled = true;
 			        labelTextField.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
 			        
-			        boxHeader.addChildAt(DisplayObject(labelTextField), 0);
+			        boxHeader.addChildAt(labelTextFieldAsDisplayObj, 0);					
 		    	}
 		    	if(!txtInput)
 		    	{
 		    		txtInput = new TextInput();
 		    		txtInput.text = _label;
 		    		txtInput.styleName = getStyle("inputTextStyleName");
-		    		txtInput.addEventListener(FocusEvent.FOCUS_OUT, endEdit);
+		    		
+					txtInput.addEventListener(FocusEvent.FOCUS_OUT, endEdit);
 		    		txtInput.addEventListener(FlexEvent.ENTER, endEdit);
 		    		txtInput.addEventListener(KeyboardEvent.KEY_DOWN, endEdit);
 		    		txtInput.addEventListener(FocusEvent.FOCUS_IN, onFocus);
@@ -137,36 +111,24 @@
 		    /**
 		     *  @private
 		     */
-			override protected function updateDisplayList(unscaledWidth:Number,
-														  unscaledHeight:Number):void
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 			{
 				super.updateDisplayList(unscaledWidth, unscaledHeight);
 				
 				boxHeader.setActualSize(unscaledWidth, unscaledHeight);
 				
-				var boxEdges:EdgeMetrics = boxHeader.viewMetricsAndPadding;
+				var boxEdges : EdgeMetrics = boxHeader.viewMetricsAndPadding;
 				cbarHeader.move(boxHeader.width - boxEdges.left - boxEdges.right - cbarHeader.getExplicitOrMeasuredWidth(), cbarHeader.y);
 								
-				if(labelTextField.parent) {
+				if (boxHeader.contains(labelTextFieldAsDisplayObj)) {
 					lblFieldResize();
 				}
 				
-				if(txtInput.parent) {
+				if (txtInput && boxHeader.contains(txtInput)) {
 					edtFieldResize();				
 				}
 			}
 	
-			//--------------------------------------------------------------------------
-			//
-			//  Class methods
-			//
-			//--------------------------------------------------------------------------
-			
-			private function show():void
-			{
-				//
-			}
-			
 			public function beginEdit():void
 			{
 				if(_isEditing)
@@ -174,14 +136,25 @@
 				
 				_isEditing = true;
 				
-				if(labelTextField.parent)
-					boxHeader.removeChild(DisplayObject(labelTextField));
-
-				boxHeader.addChildAt(txtInput, 0);
+				showTextInput();
+				
 				edtFieldResize();
-				txtInput.setFocus();				
+				
+				txtInput.setFocus();
+				
+				deactivateErrorString();
 
 				invalidateDisplayList();
+			}
+			
+			private function activateErrorString():void
+			{
+				txtInput.errorString = LanguageManager.sentences['msg_enter_unique_category_label'];
+			}
+			
+			private function deactivateErrorString():void
+			{
+				txtInput.errorString = null;
 			}
 			
 			public function endEdit(event:Event):void
@@ -189,52 +162,120 @@
 				if(!_isEditing)
 					return;
 				
+				deactivateErrorString();
+				
 				var bCommit:Boolean = true;
 				var bEndEdit:Boolean = true;
 				
 				if(event is KeyboardEvent)
 				{
-				    if(KeyboardEvent(event).charCode == 27) // escape
+				    if(KeyboardEvent(event).keyCode == Keyboard.ESCAPE)
 				    {
-		    			bCommit = false;
-						bEndEdit = true;
+		    			revertChanges();
 		    		}
-				    else if(KeyboardEvent(event).charCode == 13) // enter
+				    else if(KeyboardEvent(event).keyCode == Keyboard.ENTER)
 				    {
-		    			bCommit = true;
-						bEndEdit = true;
+						commitChanges();
 				    }
-					else
-						bEndEdit = false;
+					return;	
 		  		}
 				
-				if(bEndEdit)
-				{		   
-					_isEditing = false;
-					
-					var accordChild:AccordionChild = data as AccordionChild;
-					 	
-					if(bCommit) {
-						label = txtInput.text;
-						accordChild.label = txtInput.text;
-					}
-					else {
-						txtInput.text = _label;
-					}
-					
-					if(txtInput.parent)
-						boxHeader.removeChild(txtInput);
-					
-					boxHeader.addChildAt(DisplayObject(labelTextField), 0);
-					lblFieldResize();
-					
-					invalidateDisplayList();
-					
-					if(bCommit)
-						accordChild.dispatchEvent(new GraphsAccordionEvent(GraphsAccordionEvent.CAPTION_CHANGED));
-				}
+				if (event is FocusEvent && event.type == FocusEvent.FOCUS_OUT)
+					revertChanges();
+				
 			}
-							   
+			
+			private function commitChanges():void
+			{
+				var evt : GraphsAccordionEvent = new GraphsAccordionEvent(GraphsAccordionEvent.CAPTION_VALUE_ENTERED);
+				evt.accordHeader = this;
+				
+				accordChild.dispatchEvent(evt);
+			}
+			
+			private function revertChanges():void
+			{
+				_isEditing = false;
+				
+				txtInput.text = _label;
+				
+				applyCorrectHeaderlabel();
+			}
+				
+			public function set uniqueCategoryName (unique : Boolean) : void 
+			{
+				if (!unique)
+				{
+					applyErrorHeaderLabel();
+					return;
+				}
+				
+				_isEditing = false;
+				
+				label = txtInput.text;
+				accordChild.label = txtInput.text;
+				
+				applyCorrectHeaderlabel();
+				
+				var evt : GraphsAccordionEvent = new GraphsAccordionEvent(GraphsAccordionEvent.CAPTION_CHANGED); 
+				accordChild.dispatchEvent(evt);
+			}
+			
+			private function applyCorrectHeaderlabel () : void
+			{
+				showTextLabel();
+				
+				lblFieldResize();
+				
+				invalidateDisplayList();
+			}
+			
+			private function showTextInput() : void
+			{
+				if (boxHeader.contains(labelTextFieldAsDisplayObj))
+					boxHeader.removeChild(labelTextFieldAsDisplayObj);
+				
+				if (!boxHeader.contains(txtInput))
+					boxHeader.addChildAt(txtInput, 0);
+			}
+			
+			private function showTextLabel() : void
+			{
+				if (boxHeader.contains(txtInput))
+				{
+					stage.focus = null;
+					boxHeader.removeChild(txtInput);
+				}
+				
+				if (!boxHeader.contains(labelTextFieldAsDisplayObj))
+					boxHeader.addChildAt(labelTextFieldAsDisplayObj, 0);
+			}
+			
+			public function get labelTextFieldAsDisplayObj() : DisplayObject
+			{
+				return labelTextField as DisplayObject;
+			}
+			
+			private function applyErrorHeaderLabel () : void
+			{
+				txtInput.setFocus();
+				
+				activateErrorString();
+				
+				invalidateDisplayList();
+			}
+			
+			public function get accordChild () : AccordionChild
+			{
+				return data as AccordionChild;
+			}
+			
+			
+			private function removeTextField():void
+			{
+				
+			}
+			
    			private function getTxtFieldWidth():int
    			{
    				var boxEdges:EdgeMetrics = boxHeader.viewMetricsAndPadding; 
@@ -263,12 +304,6 @@
    				txtInput.width = edtWidth;
    			}   			
 			
-			//--------------------------------------------------------------------------
-		    //
-		    //  Event handlers
-		    //
-		    //--------------------------------------------------------------------------
-			
 			private function doubleClickHandler(event:Event):void
 			{
 				beginEdit();
@@ -279,8 +314,6 @@
 		     */
 		    private function closeTabHandler(event:Event):void
 		    {
-	        	var accordChild:AccordionChild = data as AccordionChild;
-		        	
 		    	event.stopPropagation();
 		    	
 		        var e : Event = new GraphsAccordionEvent(GraphsAccordionEvent.TAB_CLOSING, null, true, true);
@@ -337,7 +370,8 @@
 	
 	<mx:Canvas id="boxHeader">
 
-		<mx:ControlBar id="cbarHeader" horizontalAlign="right" paddingTop="2" paddingBottom="2" paddingRight="2" paddingLeft="2">
+		<mx:ControlBar id="cbarHeader" horizontalAlign="right" paddingBottom="2" paddingLeft="2"
+					   paddingRight="2" paddingTop="2">
 		
 			<flexlib:CanvasButton 
 				paddingTop="0"
@@ -346,9 +380,9 @@
 				paddingRight="0"
 				cornerRadius="2"
 				click="closeTabHandler(event);">
-				<mx:Label text="x"/>
+				<mx:Label id="label_x" text="x"/>
 			</flexlib:CanvasButton>
-		
+				
 		</mx:ControlBar>
 		
 	</mx:Canvas>

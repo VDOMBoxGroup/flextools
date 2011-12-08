@@ -62,14 +62,7 @@
 					return;
 				}
 				
-				editedItemRenderer.data.name = _newGraphName;
-				
-				destroyListItemEditor();
-				
-				lstGraphs.dataProvider.notifyItemUpdate(editedItemRenderer);
-				
-				var evnt : GraphsAccordionEvent = new GraphsAccordionEvent( GraphsAccordionEvent.GRAPH_VALUE_EDITING_COMPLETE);
-				lstGraphs.dispatchEvent(evnt);
+				applyCorrectItemRendererName();
 			}
 			            
             private function beginEdit(event:ListEvent):void 
@@ -110,7 +103,7 @@
 					return;
             	}          
 				
-				var evnt : GraphsAccordionEvent = new GraphsAccordionEvent( GraphsAccordionEvent.GRAPH_VALUE_CHECKED);
+				var evnt : GraphsAccordionEvent = new GraphsAccordionEvent( GraphsAccordionEvent.GRAPH_VALUE_ENTERED);
 				lstGraphs.dispatchEvent(evnt);
             }
 
@@ -137,6 +130,18 @@
 			{
 				listItemEditorInstance.txtThumb.errorString = (errorType == ERROR_TYPE_VALID_NAME) ? LanguageManager.sentences['msg_enter_valid_graph_name'] : LanguageManager.sentences['msg_enter_unique_graph_name'];
 				listItemEditorInstance.txtThumb.setFocus();
+			}
+			
+			private function applyCorrectItemRendererName():void
+			{
+				editedItemRenderer.data.name = _newGraphName;
+				
+				destroyListItemEditor();
+				
+				lstGraphs.dataProvider.notifyItemUpdate(editedItemRenderer);
+				
+				var evnt : GraphsAccordionEvent = new GraphsAccordionEvent( GraphsAccordionEvent.GRAPH_VALUE_EDITING_COMPLETE);
+				lstGraphs.dispatchEvent(evnt);
 			}
 			
 			//--------------------------------------------------------------------------

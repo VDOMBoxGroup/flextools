@@ -1,12 +1,12 @@
 package net.vdombox.PowerPack.com.panel.graphsClasses
 {
-	import net.vdombox.PowerPack.com.graph.GraphCanvas;
-	
 	import flash.events.Event;
+	
+	import net.vdombox.PowerPack.com.graph.GraphCanvas;
 	
 	public class GraphsAccordionEvent extends Event
 	{
-		public static const GRAPH_VALUE_CHECKED				: String = 'graphValueChecked';
+		public static const GRAPH_VALUE_ENTERED				: String = 'graphValueEntered';
 		public static const GRAPH_VALUE_EDITING_COMPLETE	: String = 'graphValueEditingComplete';
 		
 		public static const SELECTED_GRAPH_CHANGED			: String = 'selectedGraphChanged';
@@ -16,9 +16,12 @@ package net.vdombox.PowerPack.com.panel.graphsClasses
 		
 		public static const TAB_CLOSING					: String = 'tabClosing';
 		public static const TAB_CLOSE					: String = 'tabClose';
+		
+		public static const CAPTION_VALUE_ENTERED		: String = 'captionValueEntered';
 		public static const CAPTION_CHANGED				: String = 'captionChanged';
 		
 		public var graph : GraphCanvas;
+		public var accordHeader : AccordionHeader;
 		
 		public function GraphsAccordionEvent(type:String, aGraph:GraphCanvas=null, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
