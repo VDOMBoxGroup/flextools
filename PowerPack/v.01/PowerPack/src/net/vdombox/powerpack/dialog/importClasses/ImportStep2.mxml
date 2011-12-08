@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="ExtendedAPI.com.controls.*"
+	creationComplete="onShow()">
+
+	<mx:Script>
+		<![CDATA[
+		import net.vdombox.powerpack.managers.ContextManager;
+
+		import mx.events.ItemClickEvent;
+
+		import net.vdombox.powerpack.managers.LanguageManager;
+
+		static private var defaultCaptions : Object = {
+			select_app_for_import: "Select application for import"
+		}
+
+		static private var _classConstructed : Boolean = classConstruct();
+
+		static private function classConstruct() : Boolean {
+			LanguageManager.setSentences( defaultCaptions );
+			return true
+		}
+
+		private function onShow() : void {
+			lstApps.setFocus();
+		}
+		]]>
+	</mx:Script>
+
+	<mx:Grid width="100%" height="100%">
+		<mx:GridRow width="100%">
+			<mx:GridItem width="100%">
+				<mx:Label text="{LanguageManager.sentences.select_app_for_import}:"/>
+			</mx:GridItem>
+		</mx:GridRow>
+				
+		<mx:GridRow width="100%" height="100%">
+			<mx:GridItem width="100%" height="100%">
+				<mx:List id="lstApps" width="100%" height="100%"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+	</mx:Grid>
+				
+</mx:VBox>

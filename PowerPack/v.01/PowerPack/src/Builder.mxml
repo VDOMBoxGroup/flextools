@@ -8,11 +8,11 @@
 	initialize="init()" 
 	applicationComplete="show()" 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:graph="net.vdombox.powerpack.com.graph.*"
+	xmlns:graph="net.vdombox.powerpack.graph.*"
 	xmlns:extended="ExtendedAPI.com.containers.*"
 	xmlns:controls="ExtendedAPI.com.controls.*" 
 	xmlns:ui="ExtendedAPI.com.ui.*" 
-	xmlns:panel="net.vdombox.powerpack.com.panel.*" xmlns:customize="net.vdombox.powerpack.customize.*">
+	xmlns:panel="net.vdombox.powerpack.panel.*" xmlns:customize="net.vdombox.powerpack.customize.*">
     
     <mx:Style source="assets/style/builder.css"/>
     <mx:Move duration="100" id="DockerMove"/>
@@ -114,29 +114,29 @@
 		import mx.managers.PopUpManager;
 		import mx.utils.StringUtil;
 
-		import net.vdombox.powerpack.com.*;
-		import net.vdombox.powerpack.com.dialog.EditCaption;
-		import net.vdombox.powerpack.com.dialog.Import;
-		import net.vdombox.powerpack.com.dialog.ImportFromTpl;
-		import net.vdombox.powerpack.com.dialog.ModalDialog;
-		import net.vdombox.powerpack.com.dialog.TemplateKey;
-		import net.vdombox.powerpack.com.dialog.TemplateProperties;
-		import net.vdombox.powerpack.com.dialog.ValidateDialog;
-		import net.vdombox.powerpack.com.gen.*;
-		import net.vdombox.powerpack.com.gen.parse.CodeParser;
-		import net.vdombox.powerpack.com.gen.parse.parseClasses.CodeFragment;
-		import net.vdombox.powerpack.com.gen.structs.NodeStruct;
-		import net.vdombox.powerpack.com.graph.Connector;
-		import net.vdombox.powerpack.com.graph.GraphCanvas;
-		import net.vdombox.powerpack.com.graph.Node;
-		import net.vdombox.powerpack.com.graph.NodeCategory;
-		import net.vdombox.powerpack.com.managers.CashManager;
-		import net.vdombox.powerpack.com.managers.ContextManager;
-		import net.vdombox.powerpack.com.managers.LanguageManager;
-		import net.vdombox.powerpack.com.managers.ProgressManager;
-		import net.vdombox.powerpack.com.menu.MenuGeneral;
-		import net.vdombox.powerpack.com.panel.Console;
-		import net.vdombox.powerpack.com.panel.graphsClasses.AccordionChild;
+		import net.vdombox.powerpack.*;
+		import net.vdombox.powerpack.dialog.EditCaption;
+		import net.vdombox.powerpack.dialog.Import;
+		import net.vdombox.powerpack.dialog.ImportFromTpl;
+		import net.vdombox.powerpack.dialog.ModalDialog;
+		import net.vdombox.powerpack.dialog.TemplateKey;
+		import net.vdombox.powerpack.dialog.TemplateProperties;
+		import net.vdombox.powerpack.dialog.ValidateDialog;
+		import net.vdombox.powerpack.gen.*;
+		import net.vdombox.powerpack.gen.parse.CodeParser;
+		import net.vdombox.powerpack.gen.parse.parseClasses.CodeFragment;
+		import net.vdombox.powerpack.gen.structs.NodeStruct;
+		import net.vdombox.powerpack.graph.Connector;
+		import net.vdombox.powerpack.graph.GraphCanvas;
+		import net.vdombox.powerpack.graph.Node;
+		import net.vdombox.powerpack.graph.NodeCategory;
+		import net.vdombox.powerpack.managers.CashManager;
+		import net.vdombox.powerpack.managers.ContextManager;
+		import net.vdombox.powerpack.managers.LanguageManager;
+		import net.vdombox.powerpack.managers.ProgressManager;
+		import net.vdombox.powerpack.menu.MenuGeneral;
+		import net.vdombox.powerpack.panel.Console;
+		import net.vdombox.powerpack.panel.graphsClasses.AccordionChild;
 		import net.vdombox.powerpack.customize.Resources;
 
 		//--------------------------------------------------------------------------

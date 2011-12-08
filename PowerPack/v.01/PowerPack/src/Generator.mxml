@@ -51,19 +51,19 @@
 		import GraphicAPI.GraphicUtils;
 		import GraphicAPI.imageProcessing.Filters;
 
-		import net.vdombox.powerpack.com.BasicError;
-		import net.vdombox.powerpack.com.Template;
-		import net.vdombox.powerpack.com.dialog.GenConnection;
-		import net.vdombox.powerpack.com.dialog.GenProperties;
-		import net.vdombox.powerpack.com.dialog.ModalDialog;
-		import net.vdombox.powerpack.com.dialog.TemplateKey;
-		import net.vdombox.powerpack.com.gen.TemplateStruct;
-		import net.vdombox.powerpack.com.managers.ConnectionManager;
-		import net.vdombox.powerpack.com.managers.ContextManager;
-		import net.vdombox.powerpack.com.managers.LanguageManager;
-		import net.vdombox.powerpack.com.managers.ProgressManager;
-		import net.vdombox.powerpack.com.menu.MenuGeneral;
-		import net.vdombox.powerpack.com.utils.CryptUtils;
+		import net.vdombox.powerpack.BasicError;
+		import net.vdombox.powerpack.Template;
+		import net.vdombox.powerpack.dialog.GenConnection;
+		import net.vdombox.powerpack.dialog.GenProperties;
+		import net.vdombox.powerpack.dialog.ModalDialog;
+		import net.vdombox.powerpack.dialog.TemplateKey;
+		import net.vdombox.powerpack.gen.TemplateStruct;
+		import net.vdombox.powerpack.managers.ConnectionManager;
+		import net.vdombox.powerpack.managers.ContextManager;
+		import net.vdombox.powerpack.managers.LanguageManager;
+		import net.vdombox.powerpack.managers.ProgressManager;
+		import net.vdombox.powerpack.menu.MenuGeneral;
+		import net.vdombox.powerpack.utils.CryptUtils;
 
 		import flash.utils.getTimer;
 
