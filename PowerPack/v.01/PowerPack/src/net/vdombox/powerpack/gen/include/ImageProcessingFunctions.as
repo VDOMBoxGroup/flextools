@@ -1,6 +1,6 @@
 // ActionScript file
-import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
-import net.vdombox.powerpack.lib.extendedapi.utils.GeomUtils;
+import src.net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+import src.net.vdombox.powerpack.lib.extendedapi.utils.GeomUtils;
 
 import GraphicAPI.GraphicUtils;
 

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
+	xmlns:controls="src.net.vdombox.powerpack.lib.extendedapi.controls.*" 
 	paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5"
 	width="100%" height="100%"
 	label="{LanguageManager.sentences.variables_title}"
-	icon="{ContextManager.variablesClass}" 
-	xmlns:controls1="net.vdombox.powerpack.lib.extendedapi.controls.*">
+	icon="{ContextManager.variablesClass}">
 	
 	<mx:Script>
 		<![CDATA[
@@ -28,7 +27,7 @@
 		]]>
 	</mx:Script>
 	
-	<controls1:SuperDataGrid id="grid" designViewDataType="tree" 
+	<controls:SuperDataGrid id="grid" designViewDataType="tree" 
 		width="100%" height="100%"
 		defaultLeafIcon="{null}"
 		folderOpenIcon="{null}"
@@ -45,7 +44,7 @@
          		dataTipField="Value" 
          		showDataTips="true"/>
       	</controls:columns>
-	</controls1:SuperDataGrid>
+	</controls:SuperDataGrid>
 	
 	<mx:TextInput id="txt" width="100%" text="{grid.selectedItem.Value}"/>	
 	

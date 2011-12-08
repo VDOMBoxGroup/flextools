@@ -1,7 +1,7 @@
 package net.vdombox.powerpack.menu
 {
-import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
-import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
+import src.net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
+import src.net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 
 import net.vdombox.powerpack.managers.ContextManager;
 import net.vdombox.powerpack.managers.LanguageManager;

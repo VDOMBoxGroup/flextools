@@ -5,19 +5,18 @@
 	width="500" height="360"
 	title="{LanguageManager.sentences.lbl_import}" 
 	creationComplete="onShow(event)" 
-	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
-	xmlns:controls1="net.vdombox.powerpack.lib.extendedapi.controls.*">
+	xmlns:controls="src.net.vdombox.powerpack.lib.extendedapi.controls.*">
 	
 	<mx:Script>
 		<![CDATA[
 		import net.vdombox.powerpack.Template;
 
-		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+		import src.net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 
 		import mx.collections.SortField;
 		import mx.collections.Sort;
 
-		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+		import src.net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
 		import net.vdombox.powerpack.graph.GraphCanvas;
 
@@ -152,7 +151,7 @@
 				<mx:GridItem width="100%">
 					<mx:HBox width="100%">
 						<mx:Label text="{LanguageManager.sentences.template_path}:"/>
-						<controls1:FileBrowseBox id="tplBrowse" width="100%" mode="open" 
+						<controls:FileBrowseBox id="tplBrowse" width="100%" mode="open" 
 							browseLabel="{LanguageManager.sentences.browse}..." 
 							browseTitle="{LanguageManager.sentences.open_file}..."
 							filterAll="{LanguageManager.sentences.all}" 

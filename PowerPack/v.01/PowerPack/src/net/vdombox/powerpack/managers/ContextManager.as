@@ -1,6 +1,6 @@
 package net.vdombox.powerpack.managers
 {
-import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import src.net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 import net.vdombox.powerpack.gen.TemplateStruct;
 import net.vdombox.powerpack.utils.CryptUtils;

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<containers:SuperWindow xmlns="net.vdombox.powerpack.lib.extendedapi.containers.*" 
+<SuperWindow xmlns="src.net.vdombox.powerpack.lib.extendedapi.containers.*" 
 	xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300"
 	title="Tool window"
 	startPosition="centerParent" 
 	systemChrome="standard"
 	alwaysInFront="false"
 	parentWindow="{Application.application.nativeWindow}"
-	type="utility" xmlns:containers="net.vdombox.powerpack.lib.extendedapi.containers.*"> 
+	type="utility"> 
 	
 	<mx:Script>
 		<![CDATA[
@@ -14,4 +14,4 @@
 		]]>
 	</mx:Script>
 	
-</containers:SuperWindow>
+</SuperWindow>
