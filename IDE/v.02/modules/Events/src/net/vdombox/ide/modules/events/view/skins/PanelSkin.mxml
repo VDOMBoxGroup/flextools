@@ -96,12 +96,9 @@
 		<!-- top group mask -->
 
 		<s:Group id="topGroupMask"
-				 bottom="1" left="1" right="1" top="1">
+				 bottom="0" left="0" right="0" top="0">
 
-			<s:Rect bottom="0" left="0" right="0" top="0"
-					bottomLeftRadiusX.withControls="{cornerRadius}"
-					bottomRightRadiusX.withControls="{cornerRadius}" topLeftRadiusX="{cornerRadius}"
-					topRightRadiusX="{cornerRadius}">
+			<s:Rect bottom="0" left="0" right="0" top="0">
 
 				<s:fill>
 
@@ -112,7 +109,7 @@
 		<!-- bottom group mask -->
 
 		<s:Group id="bottomGroupMask"
-				 bottom="1" left="1" right="1" top="1"
+				 bottom="0" left="0" right="0" top="0"
 				 includeIn="normalWithControlBar, disabledWithControlBar">
 
 			<s:Rect bottom="0" left="0" right="0" top="0"
@@ -129,10 +126,7 @@
 		<!-- layer 1: border -->
 
 		<s:Rect id="border"
-				bottom="0" left="0" right="0" top="0"
-				bottomLeftRadiusX.withControls="{cornerRadius}"
-				bottomRightRadiusX.withControls="{cornerRadius}" topLeftRadiusX="{cornerRadius}"
-				topRightRadiusX="{cornerRadius}">
+				bottom="0" left="0" right="0" top="0">
 
 			<s:stroke>
 
@@ -144,10 +138,7 @@
 		<!--- Defines the appearance of the PanelSkin class's background. -->
 
 		<s:Rect id="background"
-				bottom="1" left="1" right="1" top="1"
-				bottomLeftRadiusX.withControls="{cornerRadius}"
-				bottomRightRadiusX.withControls="{cornerRadius}" topLeftRadiusX="{cornerRadius}"
-				topRightRadiusX="{cornerRadius}">
+				bottom="0" left="0" right="0" top="0">
 
 			<s:fill>
 				<!-- Defines the  PanelSkin class's background fill. The default color is 0xFFFFFF. -->
@@ -160,7 +151,7 @@
 		<!--- contains the vertical stack of titlebar content and controlbar -->
 
 		<s:Group id="contents"
-				 bottom="1" left="1" right="1" top="1">
+				 bottom="0" left="0" right="0" top="0">
 
 			<s:layout>
 
@@ -170,45 +161,38 @@
 
 			<s:Group id="topGroup"
 					 mask="{topGroupMask}">
+				
 				<!-- layer 0: title bar fill -->
-
+				
+				
 				<s:Rect id="tbFill"
-						bottom="1" left="0" right="0" top="0">
-
+						bottom="0" left="0" right="0" top="0">
 					<s:fill>
-
 						<s:LinearGradient rotation="90">
-
-							<s:GradientEntry color="0x46494E" />
-
-							<s:GradientEntry color="0x000000" />
+							<s:GradientEntry color="#B70000"/>
+							<s:GradientEntry color="#A00000"/>
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
-				<!-- layer 1: title bar highlight -->
-				<!--<s:Rect id="tbHilite" left="0" right="0" top="0" bottom="0">
-					 <s:stroke>
-					 <s:LinearGradientStroke rotation="90" weight="1">
-					 <s:GradientEntry color="0xEAEAEA" />
-					 <s:GradientEntry color="0xD9D9D9" />
-					 </s:LinearGradientStroke>
-					 </s:stroke>
-					 </s:Rect>-->
-				<!-- layer 2: title bar divider -->
-				<!--<s:Rect id="tbDiv" left="0" right="0" height="1" bottom="0">
-					 <s:fill>
-					 <s:SolidColor color="0xC0C0C0" />
-					 </s:fill>
-					 </s:Rect>-->
-				<!-- layer 3: text -->
-				<!--- Defines the appearance of the PanelSkin class's title bar. -->
-
+				
 				<s:Label id="titleDisplay"
-						 minHeight="23"
-						 bottom="0" color="white" left="3" right="3" textAlign="center"
-						 top="1" verticalAlign="middle"
-						 maxDisplayedLines="1">
+						 top="7" color="white" left="3" right="3" paddingLeft="10"
+						 textAlign="left" verticalAlign="middle" paddingBottom="6"
+						 maxDisplayedLines="1" fontSize="15" fontWeight="bold">
 				</s:Label>
+				
+				<s:Line top="0" width="100%">
+					<s:stroke>
+						<s:SolidColorStroke color="#FFFFFF" alpha="0.2" weight="1"/>
+					</s:stroke>
+				</s:Line>
+				
+				<s:Line bottom="0" width="100%">
+					<s:stroke>
+						<s:SolidColorStroke color="#000000" alpha="0.2" weight="1"/>
+					</s:stroke>
+				</s:Line>
+				
 			</s:Group>
 			<!--
 				 Note: setting the minimum size to 0 here so that changes to the host component's

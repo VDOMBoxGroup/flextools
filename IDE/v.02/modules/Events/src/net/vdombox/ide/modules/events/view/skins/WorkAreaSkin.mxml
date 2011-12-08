@@ -108,8 +108,7 @@
 			 bottom="0" left="0" right="0" top="22">
 		<s:Rect height="100%" width="100%">
 			<s:fill>
-				<s:SolidColor color="black"
-							  alpha="0.0"/>
+				<s:BitmapFill source = "@Embed('assets/bg_for_ide_bright.png')" smooth="true" fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
 

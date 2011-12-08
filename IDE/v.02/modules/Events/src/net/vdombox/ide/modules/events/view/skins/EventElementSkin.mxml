@@ -4,7 +4,8 @@
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 minWidth="200"
-			 creationComplete="sparkskin1_creationCompleteHandler(event)" xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:view="net.vdombox.view.*">
+			 creationComplete="sparkskin1_creationCompleteHandler(event)" xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:view="net.vdombox.view.*"
+			 mouseOver="{ imageArraw.alpha = 1; imageDelete.alpha = 1 }" mouseOut="{ imageArraw.alpha = .5; imageDelete.alpha = .5 }">
 
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.events.view.components.EventElement")]
@@ -15,7 +16,7 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.FlexEvent;
-
+			
 			import net.vdombox.ide.common.vo.EventVO;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 
@@ -56,6 +57,8 @@
 			protected function sparkskin1_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				BindingUtils.bindProperty( this, "data", hostComponent, "data", true );
+				doubleClickEnabled = true;
+				addEventListener( MouseEvent.DOUBLE_CLICK, hideButton_clickHandler, true, 0, true );
 			}
 
 			override protected function commitProperties() : void
@@ -102,6 +105,7 @@
 				else
 					titleLabel.text = headerGroup.toolTip = hostComponent.data.objectName + ":" + hostComponent.data.name;
 			}
+			
 		]]>
 	</fx:Script>
 
@@ -129,7 +133,7 @@
 			 bottom="0" left="0" right="0" top="0">
 
 		<s:Rect bottom="0" left="0" right="0" top="0"
-				radiusX="10" radiusY="10">
+				radiusX="6" radiusY="6">
 
 			<s:fill>
 
@@ -154,64 +158,75 @@
 				  gap="1">
 
 			<s:Group id="headerGroup"
-					 height="25" width="100%">
+					 height="28" width="100%">
 
 				<s:Rect bottom="0" left="0" right="0" top="0">
-
 					<s:fill>
-
 						<s:LinearGradient rotation="90">
-
-							<s:GradientEntry color="0x598E00"/>
-
-							<s:GradientEntry color="0x314D00"/>
+							<s:GradientEntry color="0x86C617"/>
+							<s:GradientEntry color="0x478003"/>
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
+						
+				<s:Label id="titleLabel" width="100%"
+							text="{ hostComponent.title }"
+							color="#FFFFFF" textAlign="center"
+							verticalCenter="0" maxDisplayedLines="1" />	
 
-				<s:Label id="titleLabel"
-						 text="{ hostComponent.title }"
-						 color="#FFFFFF" left="5" right="5" textAlign="center"
-						 verticalCenter="0"
-						 maxDisplayedLines="1"/>
-				
+				<s:Group top="0" bottom="0" right="0" width="45">
+						
+					<s:Rect bottom="0" left="0" right="0" top="0">
+						<s:fill>
+							<s:LinearGradient rotation="90">
+								<s:GradientEntry color="0x86C617"/>
+								<s:GradientEntry color="0x478003"/>
+							</s:LinearGradient>
+						</s:fill>
+					</s:Rect>
+						
+					<s:HGroup id="imageGroup" height="100%" horizontalAlign="right" verticalAlign="middle" paddingRight="5">
+							
+						<mx1:Image id="imageArraw" source="@Embed('assets/arrow.png')" 
+								   alpha=".5"
+								   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.CREATE_LINKAGE ) )" />
+							
+						<mx1:Image id="imageDelete" source="@Embed('assets/delete.png')" 
+								   alpha=".5"
+								   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )" />
+							
+					</s:HGroup>
+						
+				</s:Group>
+		
 			</s:Group>
 
 			<s:Group id="contentGroup"
 					 width="100%"
 					 itemCreationPolicy="immediate" includeIn="full"/>
 
-			<s:Group width="100%">
+			<s:Group width="100%" height="16" includeIn="full">
 
 				<s:Rect bottom="0" left="0" right="0" top="0">
-
 					<s:fill>
-
-						<s:SolidColor color="0x518000"/>
+						
+						<s:LinearGradient rotation="90">
+							
+							<s:GradientEntry color="0x86C617"/>
+							
+							<s:GradientEntry color="0x478003"/>
+						</s:LinearGradient>
+						
 					</s:fill>
+					
 				</s:Rect>
-
-				<s:HGroup height="17" width="100%"
-						  gap="1">
-
-					<components:ElementButton id="hideButton"
-											  height="17" icon.full="@Embed('assets/hide.png')" icon.short="@Embed('assets/show.png')"
-											  label.full="{ resourceManager.getString( 'Events_General', 'event_element_hide' ) }"
-											  label.short="{ resourceManager.getString( 'Events_General', 'event_element_show' ) }"
-											  minWidth="10" width="100%"
-											  cornerRadius="0" skinClass="net.vdombox.ide.modules.events.view.skins.ElementButtonSkin"
-											  click="hideButton_clickHandler( event )"/>
-
-					<components:ElementButton height="17" icon="@Embed('assets/arrow.png')" label="{ resourceManager.getString( 'Events_General', 'event_element_create_linkage' ) }" minWidth="10"
-											  width="100%"
-											  cornerRadius="0" skinClass="net.vdombox.ide.modules.events.view.skins.ElementButtonSkin"
-											  click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.CREATE_LINKAGE ) )"/>
-
-					<components:ElementButton height="17" icon="@Embed('assets/delete.png')" label="{ resourceManager.getString( 'Events_General', 'event_element_delete' ) }" minWidth="10"
-											  width="100%"
-											  cornerRadius="0" skinClass="net.vdombox.ide.modules.events.view.skins.ElementButtonSkin"
-											  click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )"/>
+				
+				<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+					
+					<mx1:Image source="@Embed('assets/arr_2.png')" click="hideButton_clickHandler(event)" />
+					
 				</s:HGroup>
+
 			</s:Group>
 		</s:VGroup>
 	</s:Group>

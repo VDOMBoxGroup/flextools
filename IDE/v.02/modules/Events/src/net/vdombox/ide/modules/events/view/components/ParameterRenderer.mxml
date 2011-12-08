@@ -30,7 +30,7 @@
 
 	<s:HGroup verticalAlign="middle" verticalCenter="0" paddingLeft="4" paddingRight="4" gap="9">
 
-		<mx:Image source="{ icon }" width="16" height="16"/>
+		<mx:Image source="{ icon }" width="16" height="16" alpha="0.3"/>
 
 		<s:TextInput text="{ title }" width="100%" editable="false" contentBackgroundAlpha="0" borderVisible="false" />
 	</s:HGroup>

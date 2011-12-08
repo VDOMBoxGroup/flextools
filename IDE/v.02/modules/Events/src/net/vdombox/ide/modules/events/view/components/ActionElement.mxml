@@ -27,9 +27,6 @@
 
 			[SkinPart( required="true" )]
 			public var headerGroup : Group;
-
-			[SkinPart( required="true" )]
-			public var hideButton : ElementButton;
 		
 			public override function get uniqueName() : String
 			{
@@ -76,8 +73,6 @@
 
 				if ( instance == headerGroup )
 					headerGroup.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
-				else if ( instance == hideButton )
-					hideButton.addEventListener( MouseEvent.CLICK, hideButton_clickHandler, false, 0, true );
 			}
 
 			override protected function partRemoved( partName : String, instance : Object ) : void
@@ -86,16 +81,6 @@
 
 				if ( instance == headerGroup )
 					headerGroup.removeEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler );
-				else if ( instance == hideButton )
-					hideButton.removeEventListener( MouseEvent.CLICK, hideButton_clickHandler );
-			}
-		
-			private function hideButton_clickHandler( event : MouseEvent ) : void
-			{
-				if ( !data )
-					return;
-
-				data.state = skin.currentState == "normal" || skin.currentState == "disabled" ;
 			}
 			
 		]]>

@@ -1,6 +1,5 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
-			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 creationComplete="creationCompleteHandler()">
+			 xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -29,21 +28,13 @@
 				super.updateDisplayList( unscaledWidth, unscaledHeight );
 			}
 
-			protected function creationCompleteHandler() : void
+			/*protected function creationCompleteHandler() : void
 			{
 				titleBar.dataProvider =
 					new ArrayList( [ resourceManager.getString( "Events_General", "events_panel_events_title" ),
 									resourceManager.getString( "Events_General", "events_panel_actions_title" ) ] );
 				titleBar.selectedIndex = 0;
-			}
-
-			protected function titleBar_clickHandler( event : MouseEvent ) : void
-			{
-				if ( currentState == "events" )
-					currentState = "actions";
-				else
-					currentState = "events";
-			}
+			}*/
 			
 			protected function eventsList_creationCompleteHandler(event:FlexEvent):void
 			{
@@ -59,13 +50,6 @@
 			
 		]]>
 	</fx:Script>
-
-	<s:states>
-
-		<s:State name="events"/>
-
-		<s:State name="actions"/>
-	</s:states>
 	
 	<s:Rect width="100%" height="100%">
 		<s:fill>
@@ -80,27 +64,89 @@
 							 blurY="20" brRadius="5" distance="11" tlRadius="5"
 							 trRadius="5"/>
 
-	<s:VGroup bottom="0" left="0" right="0" top="0"
-			  gap="0">
+	<mx:VDividedBox bottom="0" left="0" right="0" top="0"
+					dividerSkin="net.vdombox.view.skins.DividerSkin">
 
-		<s:ButtonBar id="titleBar"
+		<!--<s:ButtonBar id="titleBar"
 					 height="20" labelField="title"
 					 skinClass="net.vdombox.ide.modules.events.view.skins.EventsBarSkin"
-					 click="titleBar_clickHandler(event)"/>
+					 click="titleBar_clickHandler(event)"/> -->
+	<s:VGroup width="100%" height="100%" gap="0">
+		<s:Group width="100%" height="28">
 
-		<s:Group height="100%" width="100%">
-
-			<s:List id="eventsList"
+			<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:fill>
+					<s:LinearGradient rotation="90">
+						<s:GradientEntry color="#63A108"/>
+						<s:GradientEntry color="#498006"/>
+					</s:LinearGradient>
+				</s:fill>
+			</s:Rect>
+				
+			<s:Label text="{ resourceManager.getString( 'Events_General', 'events_panel_events_title' ) } "
+					 height="100%" color="white" left="3" right="3" paddingLeft="10"
+					 textAlign="left" verticalAlign="middle"
+					 maxDisplayedLines="1" fontSize="15" fontWeight="bold">
+			</s:Label>
+				
+			<s:Line top="0" width="100%">
+				<s:stroke>
+					<s:SolidColorStroke color="#FFFFFF" alpha="0.2" weight="1"/>
+				</s:stroke>
+			</s:Line>
+				
+			<s:Line bottom="0" width="100%">
+				<s:stroke>
+					<s:SolidColorStroke color="#000000" alpha="0.2" weight="1"/>
+				</s:stroke>
+			</s:Line>
+				
+		</s:Group>
+			
+		<s:List id="eventsList"
 					height="100%" labelField="name" width="100%" contentBackgroundAlpha="0"
-					dragEnabled="true" includeIn="events" itemCreationPolicy="immediate" itemRenderer="net.vdombox.ide.modules.events.view.components.EventItemRenderer"
+					dragEnabled="true" itemRenderer="net.vdombox.ide.modules.events.view.components.EventItemRenderer"
 					creationComplete="eventsList_creationCompleteHandler(event)"/>
-
-			<s:List id="actionsList"
-					height="100%" labelField="name" width="100%" contentBackgroundAlpha="0"
-					dragEnabled="true" includeIn="actions" itemCreationPolicy="immediate" itemRenderer="net.vdombox.ide.modules.events.view.components.ActionItemRenderer"
-					creationComplete="actionsList_creationCompleteHandler(event)"/>
+	</s:VGroup>
+		
+	<s:VGroup width="100%" height="100%" gap="0">
+		<s:Group width="100%" height="28">
+				
+			<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:fill>
+					<s:LinearGradient rotation="90">
+						<s:GradientEntry color="#851DE1"/>
+						<s:GradientEntry color="#6215D6"/>
+					</s:LinearGradient>
+				</s:fill>
+			</s:Rect>
+				
+			<s:Label text="{ resourceManager.getString( 'Events_General', 'events_panel_actions_title' ) } "
+					 height="100%" color="white" left="3" right="3" paddingLeft="10"
+					 textAlign="left" verticalAlign="middle"
+					 maxDisplayedLines="1" fontSize="15" fontWeight="bold">
+			</s:Label>
+				
+			<s:Line top="0" width="100%">
+				<s:stroke>
+					<s:SolidColorStroke color="#FFFFFF" alpha="0.2" weight="1"/>
+				</s:stroke>
+			</s:Line>
+				
+			<s:Line bottom="0" width="100%">
+				<s:stroke>
+					<s:SolidColorStroke color="#000000" alpha="0.2" weight="1"/>
+				</s:stroke>
+			</s:Line>
+			
 		</s:Group>
 
-		
+		<s:List id="actionsList"
+						height="100%" labelField="name" width="100%" contentBackgroundAlpha="0"
+						dragEnabled="true" itemRenderer="net.vdombox.ide.modules.events.view.components.ActionItemRenderer"
+						creationComplete="actionsList_creationCompleteHandler(event)"/>
 	</s:VGroup>
+
+		
+	</mx:VDividedBox>
 </s:SparkSkin>

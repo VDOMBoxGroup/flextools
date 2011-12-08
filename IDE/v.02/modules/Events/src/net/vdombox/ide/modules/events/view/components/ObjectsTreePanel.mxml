@@ -11,6 +11,21 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.treeClasses.TreeItemRenderer;
+			import mx.events.FlexEvent;
+			
+			[Embed(source="assets/disclosureClosedIcon.png")]
+			public var plus:Class;
+			
+			[Embed(source="assets/disclosureOpenIcon.png")]
+			public var minus:Class;
+			
+			protected function objectsTree_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				objectsTree.setStyle("disclosureOpenIcon", minus);
+				objectsTree.setStyle("disclosureClosedIcon", plus);
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -24,5 +39,6 @@
 	<mx:Tree id="objectsTree" maxHorizontalScrollPosition="140" horizontalScrollPolicy="auto"
 			 itemRenderer="net.vdombox.components.ObjectsTreePanelItemRenderer"
 			 height="100%"
-			 width="100%" contentBackgroundAlpha="0"/>
+			 width="100%" contentBackgroundAlpha="0"
+			 creationComplete="objectsTree_creationCompleteHandler(event)"/>
 </s:Panel>
