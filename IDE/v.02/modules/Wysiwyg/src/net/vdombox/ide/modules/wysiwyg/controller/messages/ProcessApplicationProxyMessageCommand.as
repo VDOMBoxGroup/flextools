@@ -20,6 +20,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 			var operation : String = message.operation;
 
 			var applicationVO : ApplicationVO;
+			
+			
 
 			if ( body is ApplicationVO )
 				applicationVO = body as ApplicationVO;

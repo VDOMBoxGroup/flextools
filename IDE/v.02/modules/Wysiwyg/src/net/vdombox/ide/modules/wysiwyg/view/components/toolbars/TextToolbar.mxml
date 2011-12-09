@@ -439,10 +439,41 @@
 			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
 			{
 				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO(_item.vdomObjectVO);
-				var attributeVO : AttributeVO = new AttributeVO( "value" );
+				var attributesVO : Array = [];
 				
+				var attributeVO : AttributeVO = new AttributeVO( "value" );
 				attributeVO.value = attributesObject[ "value" ].value;
-				vdomObjectAttributesVO.attributes = [attributeVO];
+				attributesVO.push( attributeVO );
+				
+				attributeVO = new AttributeVO( "fontweight" );
+				attributeVO.value = attributesObject[ "fontweight" ].value;
+				attributesVO.push( attributeVO );
+				
+				attributeVO = new AttributeVO( "fontstyle" );
+				attributeVO.value = attributesObject[ "fontstyle" ].value;
+				attributesVO.push( attributeVO );
+				
+				attributeVO = new AttributeVO( "textdecoration" );
+				attributeVO.value = attributesObject[ "textdecoration" ].value;
+				attributesVO.push( attributeVO );
+				
+				attributeVO = new AttributeVO( "align" );
+				attributeVO.value = attributesObject[ "align" ].value;
+				attributesVO.push( attributeVO );
+				
+				attributeVO = new AttributeVO( "fontfamily" );
+				attributeVO.value = attributesObject[ "fontfamily" ].value;
+				attributesVO.push( attributeVO );
+				
+				attributeVO = new AttributeVO( "fontsize" );
+				attributeVO.value = attributesObject[ "fontsize" ].value;
+				attributesVO.push( attributeVO );
+				
+				attributeVO = new AttributeVO( "color" );
+				attributeVO.value = attributesObject[ "color" ].value;
+				attributesVO.push( attributeVO );
+				
+				vdomObjectAttributesVO.attributes = attributesVO;
 				
 				return vdomObjectAttributesVO;
 			}

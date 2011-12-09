@@ -212,6 +212,10 @@ package net.vdombox.ide.modules.wysiwyg
 // Copy
 		public static const COPY_REQUEST : String = "copy";
 		
+// Error
+		public static const ERROR_GETTED : String = "errorGetted";
+		
+		
 		
 
 		public static function getInstance( key : String ) : ApplicationFacade
