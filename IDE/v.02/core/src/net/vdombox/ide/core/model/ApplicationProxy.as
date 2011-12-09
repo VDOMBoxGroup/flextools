@@ -346,41 +346,6 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		private function addHandlers() : void
-		{
-			soap.get_top_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-			
-			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-			soap.delete_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-
-			soap.get_application_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-			soap.set_application_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-
-			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-
-			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-			soap.set_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-
-			soap.set_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-			soap.remove_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-
-			soap.get_libraries.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-
-//			soap.get_child_objects_tree.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-
-//			soap.get_application_events.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-//			soap.set_application_events.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-
-			soap.get_events_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-			soap.set_events_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-
-			soap.remote_method_call.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-			soap.remote_method_call.addEventListener(  FaultEvent.FAULT, soap_faultHandler, false, 0, true );
-
-		}
-
 		private function createPagesList( pages : XML ) : void
 		{
 			var pageVO : PageVO;
@@ -634,37 +599,92 @@ package net.vdombox.ide.core.model
 
 			return structure;
 		}
-
+		
+		private function addHandlers() : void
+		{
+			soap.get_top_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.get_top_objects.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
+			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_one_object.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
+			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.create_object.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			soap.delete_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.delete_object.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
+			soap.get_application_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.get_application_structure.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			soap.set_application_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.set_application_structure.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
+			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.set_application_info.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
+			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.get_server_actions.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			soap.set_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.set_server_actions.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
+			soap.set_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.set_library.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			soap.remove_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.remove_library.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
+			soap.get_libraries.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.get_libraries.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
+			soap.get_events_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.get_events_structure.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			soap.set_events_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.set_events_structure.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
+			soap.remote_method_call.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.remote_method_call.addEventListener(  FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
+		}
+		
 		private function removeHandlers() : void
 		{
 			soap.get_top_objects.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
+			soap.get_top_objects.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.get_one_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_one_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.create_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.delete_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
+			soap.delete_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 			soap.get_application_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_application_structure.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.set_application_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
+			soap.set_application_structure.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 			soap.set_application_info.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
+			soap.set_application_info.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.set_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
+			soap.set_server_actions.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 			soap.set_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_library.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.remove_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
+			soap.remove_library.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 			soap.get_libraries.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-//			soap.get_child_objects_tree.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-//			soap.get_application_events.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-//			soap.set_application_events.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
+			soap.get_libraries.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 			soap.get_events_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_events_structure.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.set_events_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
+			soap.set_events_structure.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 			soap.remote_method_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.remote_method_call.removeEventListener(  FaultEvent.FAULT, soap_faultHandler);
+			soap.remote_method_call.removeEventListener(  FaultEvent.FAULT, soap_faultHandler );
 		}
 		
 		private function soap_faultHandler( event : FaultEvent ) : void
@@ -684,9 +704,10 @@ package net.vdombox.ide.core.model
 				{
 					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_ERROR_GETTED, { applicationVO: applicationVO, error: fault.detail } );
 	
-					break;
+					return;
 				}
 			}
+			sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
 			
 		}
 
@@ -702,6 +723,12 @@ package net.vdombox.ide.core.model
 
 			if ( !operation || !result )
 				return;
+			
+			if ( result.hasOwnProperty( "Error" ) )
+			{
+				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
+				return;
+			}
 
 			var operationName : String = operation.name;
 
@@ -712,6 +739,8 @@ package net.vdombox.ide.core.model
 			var libraryXML : XML;
 			
 			var typeVO : TypeVO;
+			
+			
 
 			switch ( operationName )
 			{

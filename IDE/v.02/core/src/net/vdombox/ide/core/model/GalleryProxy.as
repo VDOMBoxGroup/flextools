@@ -20,11 +20,12 @@ package net.vdombox.ide.core.model
 	import flash.filesystem.FileStream;
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
-
+	
 	import mx.graphics.codec.PNGEncoder;
-
+	
+	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.vo.GalleryItemVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -55,14 +56,6 @@ package net.vdombox.ide.core.model
 
 		private var loader : Loader;
 
-		
-
-		
-
-		
-
-		
-
 		private function fileStream_completeHandler( event : Event ) : void
 		{
 			var byteArray : ByteArray = new ByteArray();
@@ -79,6 +72,7 @@ package net.vdombox.ide.core.model
 		private function fileStream_ioErrorHandler( event : IOErrorEvent ) : void
 		{
 			var d : * = "";
+			sendNotification( ApplicationFacade.WRITE_ERROR, event.text );
 		}
 
 		private function init() : void

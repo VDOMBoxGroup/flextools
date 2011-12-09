@@ -19,15 +19,20 @@ package net.vdombox.ide.core.view.components
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
+	import mx.events.CloseEvent;
+	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
+	import net.vdombox.view.Alert;
+	import net.vdombox.view.AlertButton;
 	
 	import spark.components.Group;
 	import spark.components.Label;
 	import spark.components.TextInput;
 	import spark.components.Window;
+
 //	import spark.components.windowClasses.TitleBar;
 	/**
 	 *
@@ -140,10 +145,6 @@ package net.vdombox.ide.core.view.components
 			
 			iconApplication.source = Bitmap( event.target.content );
 		}
-		
-		private function closeEvent( event : Event ) : void
-		{
-			NativeApplication.nativeApplication.exit();
-		}
+
 	}
 }

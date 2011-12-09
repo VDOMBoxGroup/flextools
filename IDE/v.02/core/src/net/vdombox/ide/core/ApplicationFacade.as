@@ -1,5 +1,6 @@
 package net.vdombox.ide.core
 {
+	import net.vdombox.ide.core.controller.AlertSystemCommand;
 	import net.vdombox.ide.core.controller.ChangeLocaleCommand;
 	import net.vdombox.ide.core.controller.CheckIndexPageCommand;
 	import net.vdombox.ide.core.controller.CheckSelectedPageCommand;
@@ -392,6 +393,10 @@ package net.vdombox.ide.core
 		public static const CLOSE_APPLICATION_MANAGER : String = "closeApplicationManager";
 		public static const GET_APPLICATIONS_LIST : String = "getApplicationList";
 		
+//		errors
+		
+		public static const WRITE_ERROR : String = "writeError";
+		
 		
 
 		public static function getInstance( key : String ) : ApplicationFacade
@@ -581,6 +586,7 @@ package net.vdombox.ide.core
 			registerCommand( CLOSE_APPLICATION_MANAGER, CloseApplicationManagerCommand );
 			
 			registerCommand( CHECK_UPDATE, CheckUpdateCommand );
+			registerCommand( WRITE_ERROR, AlertSystemCommand );
 		}
 	}
 }

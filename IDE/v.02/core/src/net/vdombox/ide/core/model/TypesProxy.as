@@ -1,5 +1,7 @@
 package net.vdombox.ide.core.model
 {
+	import mx.rpc.events.FaultEvent;
+	
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
@@ -134,11 +136,13 @@ package net.vdombox.ide.core.model
 		private function addHandlers() : void
 		{
 			soap.get_all_types.addEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
+			soap.get_all_types.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function removeHandlers() : void
 		{
 			soap.get_all_types.removeEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
+			soap.get_all_types.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function soap_connectedHandler( event : SOAPEvent ) : void
@@ -175,6 +179,11 @@ package net.vdombox.ide.core.model
 				_topLevelTypes = topLevelTypes;
 
 			sendNotification( ApplicationFacade.TYPES_LOADED, types );
+		}
+		
+		private function soap_faultHandler( event : FaultEvent ) : void
+		{	
+			sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
 		}
 	}
 }

@@ -10,6 +10,7 @@ package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
+	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.Screen;
 	import flash.display.Stage;
@@ -17,17 +18,21 @@ package net.vdombox.ide.core.view
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.net.SharedObject;
+	
 	import flashx.textLayout.elements.BreakElement;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.core.mx_internal;
 	import mx.events.AIREvent;
+	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	import mx.managers.SystemManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
+	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -43,10 +48,14 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
 	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
+	import net.vdombox.view.Alert;
+	import net.vdombox.view.AlertButton;
+	
 	import org.osmf.utils.Version;
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
@@ -148,6 +157,12 @@ package net.vdombox.ide.core.view
 					break;
 				}
 			}
+			
+			function alertResultHandler( event : CloseEvent ) : void
+			{
+				
+			}
+			
 		}
 
 		override public function listNotificationInterests() : Array
@@ -159,7 +174,8 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
 			interests.push( ApplicationFacade.OPEN_MAIN_WINDOW );
-
+			interests.push( ApplicationFacade.WRITE_ERROR );
+			
 			return interests;
 		}
 

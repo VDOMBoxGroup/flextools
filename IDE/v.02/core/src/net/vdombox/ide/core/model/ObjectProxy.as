@@ -286,22 +286,35 @@ package net.vdombox.ide.core.model
 		private function addHandlers() : void
 		{
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_one_object.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
 			soap.get_server_actions_list.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions_list.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.set_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_actions.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.get_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_action.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.set_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_action.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.create_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.create_server_action.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.delete_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.delete_server_action.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.rename_server_action.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.rename_server_action.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
 			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.create_object.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.set_attributes.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.set_attributes.addEventListener( FaultEvent.FAULT, soap_faultHandler  );
+			soap.set_attributes.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.get_child_objects_tree.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_child_objects_tree.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.render_wysiwyg.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.render_wysiwyg.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.get_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_object_script_presentation.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.submit_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.submit_object_script_presentation.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
 			soap.set_name.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_name.addEventListener( FaultEvent.FAULT, soap_faultHandler );
@@ -318,21 +331,35 @@ package net.vdombox.ide.core.model
 		private function removeHandlers() : void
 		{
 			soap.get_one_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_one_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
 			soap.get_server_actions_list.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions_list.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			soap.set_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_actions.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.get_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_action.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.set_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_action.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.create_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.create_server_action.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.delete_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.delete_server_action.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.rename_server_action.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.rename_server_action.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
 			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.create_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.set_attributes.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.get_child_objects_tree.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_child_objects_tree.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.render_wysiwyg.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.render_wysiwyg.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.get_object_script_presentation.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_object_script_presentation.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.submit_object_script_presentation.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.submit_object_script_presentation.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
 			soap.set_name.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_name.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
@@ -342,7 +369,6 @@ package net.vdombox.ide.core.model
 			
 			soap.copy_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.copy_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
-			
 			
 		}
 
@@ -451,7 +477,7 @@ package net.vdombox.ide.core.model
 			
 			if ( result.hasOwnProperty( "Error" ) )
 			{
-				trace("EERRREEOOOORRRR " + result.toXMLString());
+				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
 				return;
 			}
 
@@ -658,9 +684,13 @@ package net.vdombox.ide.core.model
 			if ( !operation || !fault )
 				return;
 			
+			sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
+			
 			var operationName : String = operation.name;
 			var notification : ProxyNotification;
 			var token : AsyncToken = event.token;
+			
+			
 			
 			switch ( operationName )
 			{
@@ -673,13 +703,6 @@ package net.vdombox.ide.core.model
 					
 					break;
 				}	
-					
-				case "copy_object":
-				{
-					var it : int = 9;
-					
-					break;
-				}
 			}
 			
 			if ( notification )
