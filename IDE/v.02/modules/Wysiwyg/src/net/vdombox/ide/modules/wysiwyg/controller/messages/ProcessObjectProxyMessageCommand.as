@@ -45,7 +45,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					if ( operation == PPMOperationNames.CREATE )
 					{
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.newObjectVO );
-						sendNotification( ApplicationFacade.GET_WYSIWYG, sessionProxy.selectedPage );
+						sendNotification( ApplicationFacade.GET_WYSIWYG, body.objectVO );
 						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
 						sendNotification( ApplicationFacade.SET_SELECTED_OBJECT,  body.newObjectVO );
 					}

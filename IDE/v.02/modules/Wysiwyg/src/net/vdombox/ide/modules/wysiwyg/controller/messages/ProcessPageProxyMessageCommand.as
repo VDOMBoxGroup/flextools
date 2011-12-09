@@ -3,12 +3,14 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxyMessage;
+	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -52,7 +54,16 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					else if ( operation == PPMOperationNames.DELETE )
 					{
 						sendNotification( ApplicationFacade.OBJECT_DELETED, body.objectVO );
-						sendNotification( ApplicationFacade.GET_WYSIWYG, pageVO );
+						if ( body.objectVO.parentID )
+						{
+							var rendererBase : RendererBase = renderProxy.getRendererByID( body.objectVO.parentID );
+							var objectVO : ObjectVO = rendererBase.renderVO.vdomObjectVO as ObjectVO;
+							sendNotification( ApplicationFacade.GET_WYSIWYG, objectVO );
+						}
+						else
+						{
+							sendNotification( ApplicationFacade.GET_WYSIWYG, pageVO );
+						}
 						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, pageVO );
 						sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, pageVO );
 
