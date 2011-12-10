@@ -12,7 +12,8 @@
 	xmlns:ui="net.vdombox.powerpack.lib.extendedapi.ui.*" 
 	xmlns:panel="net.vdombox.powerpack.panel.*" 
 	xmlns:customize="net.vdombox.powerpack.customize.*" 
-	xmlns:containers="net.vdombox.powerpack.lib.extendedapi.containers.*">
+	xmlns:containers="net.vdombox.powerpack.lib.extendedapi.containers.*"
+	closing="closingApplicationHandler(event)">
     
     <mx:Style source="assets/style/builder.css"/>
     <mx:Move duration="100" id="DockerMove"/>
@@ -181,17 +182,18 @@
 			MenuGeneral.menu = flexNativeMenu;
 		}
 
-		private function show() : void {
-			addEventListener( Event.CLOSING, closingApplicationHandler );
+		private function show() : void 
+		{
 			pnl_problems.grid.addEventListener( MouseEvent.DOUBLE_CLICK, problemsDoubleClickHandler );
 
-			var file : File;
-			var fileStream : FileStream;
+			var langFile	: File;
+			var langFolder	: File;
+			var fileStream	: FileStream;
 
-			for each ( file in [ContextManager.instance.dataStorage,
-				ContextManager.instance.settingStorage] ) {
-				if ( !file.exists )
-					file.createDirectory();
+			for each ( langFile in [ContextManager.instance.dataStorage, ContextManager.instance.settingStorage] ) 
+			{
+				if ( !langFile.exists )
+					langFile.createDirectory();
 			}
 
 			Application.application.setStyle( "modalTransparencyBlur", 0 );
@@ -210,30 +212,52 @@
 			MenuGeneral.updateLastFilesMenu();
 
 			// Load language file
-			file = File.applicationDirectory.resolvePath( MenuGeneral.LANG_FOLDER ).resolvePath( ContextManager.instance.lang.file );
-			if ( file && file.exists ) {
+			langFolder = File.applicationDirectory.resolvePath( MenuGeneral.LANG_FOLDER );
+			langFile = langFolder.resolvePath( ContextManager.instance.lang.file );
+			
+			if ( langFile && langFile.exists ) {
 				fileStream = new FileStream();
 
 				fileStream.addEventListener( Event.COMPLETE, completeLangHandler );
-				fileStream.openAsync( file, FileMode.READ );
+				fileStream.openAsync( langFile, FileMode.READ );
 			}
 
-			// Load template
-			if ( ContextManager.instance.lastFile && ContextManager.instance.files[0] ) {
-				var tpl : Template = new Template();
-				tpl.file = ContextManager.instance.files[0];
-				tpl.addEventListener( Event.COMPLETE, completeTemplateHandler );
-
-				tpl.open();
-			}
-
-			function closingApplicationHandler( event : Event ) : void {
-				event.preventDefault();
-				exitApplication();
+			openTemplate();
+		}
+			
+		private function openTemplate() : void
+		{
+			if ( lastTemplateSaved ) 
+			{
+				openLastTemplate();
+			} 
+			else
+			{
+				newTpl();
 			}
 
 		}
+			
+		private function get lastTemplateSaved() : Boolean
+		{
+			return ContextManager.instance.lastFile && ContextManager.instance.files[0];
+		}
+			
+		private function openLastTemplate():void
+		{
+			var tpl : Template = new Template();
+			
+			tpl.file = ContextManager.instance.files[0];
+			tpl.addEventListener( Event.COMPLETE, completeTemplateHandler );
+			
+			tpl.open();
+		}
 
+		private function closingApplicationHandler( event : Event ) : void {
+			event.preventDefault();
+			exitApplication();
+		}
+			
 		public function exitApplication( event : Event = null ) : void {
 			if ( ContextManager.templates.length > 0 && currentTemplate.modified ) 
 			{
@@ -339,7 +363,8 @@
 			}
 		}
 
-		public function processOpenedTpl() : void {
+		public function processOpenedTpl() : void 
+		{
 			workStage.visible = true;
 			workStage.includeInLayout = true;
 			workStage.validateNow();
@@ -373,8 +398,11 @@
 			workStage.visible = true;
 			workStage.includeInLayout = true;
 
-			pnl_graphs.templateXML = currentTemplate.xmlStructure;
-			currentTemplate.modified = true;
+			if (currentTemplate)
+			{
+				pnl_graphs.templateXML = currentTemplate.xmlStructure;
+				currentTemplate.modified = true;
+			}
 
 			ContextManager.instance.lastFile = false;
 
@@ -400,7 +428,8 @@
 			ContextManager.instance.lang.file = LanguageManager.languageXML.@data;
 		}
 
-		private function completeTemplateHandler( event : Event ) : void {
+		private function completeTemplateHandler( event : Event ) : void 
+		{
 			var template : Template = event.target as Template;
 
 			template.removeEventListener( Event.COMPLETE, completeTemplateHandler );
@@ -494,6 +523,7 @@
 					break;
 
 				case "save":
+					trace ("+++ templ count: " + ContextManager.templates.length);
 					if ( ContextManager.templates.length > 0 ) 
 					{
 						currentTemplate.addEventListener( Event.COMPLETE, templateSaveHandler );
