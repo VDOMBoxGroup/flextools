@@ -136,6 +136,8 @@
 			destroyListItemEditor();
 
 			lstGraphs.dataProvider.notifyItemUpdate( editedItemRenderer );
+			
+			onGraphsChange(null);
 
 			var evnt : GraphsAccordionEvent = new GraphsAccordionEvent( GraphsAccordionEvent.GRAPH_VALUE_EDITING_COMPLETE );
 			lstGraphs.dispatchEvent( evnt );
