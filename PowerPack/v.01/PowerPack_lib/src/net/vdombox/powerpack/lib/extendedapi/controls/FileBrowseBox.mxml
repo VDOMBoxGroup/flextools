@@ -32,7 +32,7 @@
 			public static const MODE_DIR:String = "dir";
 			public static const MODE_MULTI:String = "multi";
 			
-			public static var memPath:String = File.documentsDirectory.nativePath;
+			public static var memPath:String = ""; //File.documentsDirectory.nativePath;
 
 			public var files:Array = [];
 			public var filterArray:Array = [];
@@ -135,7 +135,7 @@
             {
             	var file:File = event.target as File;
            		
-           		memPath = file.nativePath;
+           		//memPath = file.nativePath;
 				txtInput.text = file.nativePath;
 				
 				files = [];
@@ -151,8 +151,8 @@
             	
             	if(files && files.length)
             	{
-	           		memPath = File(files[0]).parent.nativePath;
-					txtInput.text = memPath;
+	           		//memPath = File(files[0]).parent.nativePath;
+					txtInput.text = File(files[0]).parent.nativePath;
 	
 					txtInput.dispatchEvent(new Event(Event.CHANGE));
             	}

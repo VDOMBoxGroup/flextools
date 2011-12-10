@@ -1,9 +1,18 @@
 package net.vdombox.powerpack.lib.extendedapi.utils
 {
+	import flash.filesystem.File;
+	
 	import mx.utils.StringUtil;
 	
 	public class FileUtils
 	{
+		public static const FILE_FORMAT_JPG		: String = "jpg";
+		public static const FILE_FORMAT_JPEG	: String = "jpeg";
+		public static const FILE_FORMAT_BMP		: String = "bmp";
+		public static const FILE_FORMAT_PNG		: String = "png";
+		public static const FILE_FORMAT_GIF		: String = "gif";
+		public static const FILE_FORMAT_SVG		: String = "svg";
+		
 		/*
 		* 	isRootFolder
 		* 	@param	folderPath path to a  folder to check
@@ -146,5 +155,40 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			
 			return null;
 		}
+		
+		public static function correctImageFile (file : File) : Boolean
+		{
+			return file && file.exists && isImageFileFormat(file);
+		}
+		
+		public static function isImageFileFormat (file : File) : Boolean
+		{
+			if (!file)
+				return false;
+			
+			if (file.isDirectory || file.isPackage || file.isSymbolicLink)
+				return false;
+			
+			var fileExtension	: String = file.extension;
+			
+			switch ( fileExtension.toLowerCase() )
+			{
+				case FILE_FORMAT_BMP:
+				case FILE_FORMAT_PNG:
+				case FILE_FORMAT_GIF:
+				case FILE_FORMAT_SVG:
+				case FILE_FORMAT_JPG:
+				case FILE_FORMAT_JPEG:
+					return true;
+					
+				default:
+					return false;
+			}
+			
+			
+			return false;
+		}
+		
+		
 	}
 }
