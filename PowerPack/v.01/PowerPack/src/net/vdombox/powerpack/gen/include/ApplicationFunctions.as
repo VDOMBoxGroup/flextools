@@ -52,7 +52,7 @@ public function setApplicationValue( applicationXML : XML, queryStr : String, va
 	return applicationXML;
 }
 
-public function loadApplication(  applicationID : String  ) : void
+public function loadApplication(  applicationID : String  ) : Function
 {
 	var soapApplicationLevel : SOAPApplicationLevel = new SOAPApplicationLevel();
 

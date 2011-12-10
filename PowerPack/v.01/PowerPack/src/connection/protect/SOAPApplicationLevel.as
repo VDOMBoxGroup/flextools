@@ -67,7 +67,7 @@ public class SOAPApplicationLevel extends EventDispatcher
 	public function soapError( event : FaultEvent ) : void
 	{
 		var fault : Fault = event.fault;
-		var faultMessage : String = "faultstring" in event.fault ? fault["faultstring"] : fault["faultStrin"]
+		var faultMessage : String = ("faultstring" in event.fault) ? fault["faultstring"] : fault["faultStrin"] as String;
 
 		_errorResult = "['error' '" + faultMessage + "']";
 
