@@ -1,40 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" layout="absolute" 
-	horizontalAlign="center"
-	showCloseButton="false"
-	creationComplete="show();"
-	defaultButton="{btnOk}">
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" layout="absolute"
+				horizontalAlign="center"
+				showCloseButton="false"
+				creationComplete="show();"
+				defaultButton="{btnOk}">
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.managers.LanguageManager;
-
-		import mx.messaging.channels.StreamingAMFChannel;
-		import mx.events.FlexEvent;
 		import mx.containers.HBox;
-		import mx.controls.TextInput;
-		import mx.core.UIComponent;
-		import mx.controls.Alert;
-		import mx.utils.StringUtil;
 		import mx.containers.VBox;
 		import mx.controls.RadioButton;
-		import mx.controls.RadioButtonGroup;
 		import mx.controls.TextArea;
-		import mx.managers.PopUpManager;
-		import mx.events.CloseEvent;
+		import mx.controls.TextInput;
 		import mx.core.Application;
+		import mx.events.CloseEvent;
+		import mx.managers.PopUpManager;
+		import mx.utils.StringUtil;
+
+		import net.vdombox.powerpack.managers.LanguageManager;
 
 		public static const QM_QUESTION : int = 1;
 		public static const QM_CHOICE : int = 2;
 		public static const QM_BROWSE : int = 3;
 
 		static private var defaultCaptions : Object = {
-			question: "Question",
-			answer: "Answer"
+			question : "Question",
+			answer : "Answer"
 		}
 
 		static private var _classConstructed : Boolean = classConstruct();
 
-		static private function classConstruct() : Boolean {
+		static private function classConstruct() : Boolean
+		{
 			LanguageManager.setSentences( defaultCaptions );
 			return true
 		}
@@ -54,7 +50,8 @@
 
 		private var dSize : Boolean = false;
 
-		private function show() : void {
+		private function show() : void
+		{
 			btnOk.addEventListener( MouseEvent.CLICK, clickHandler );
 			addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler );
 			btnOk.setFocus();
@@ -72,7 +69,8 @@
 			invalidateDisplayList();
 		}
 
-		public static function show( question : String = "", title : String = "", mode : int = QM_QUESTION, answers : Array = null, filter : String = null, parent : Sprite = null, closeHandler : Function = null ) : Question {
+		public static function show( question : String = "", title : String = "", mode : int = QM_QUESTION, answers : Array = null, filter : String = null, parent : Sprite = null, closeHandler : Function = null ) : Question
+		{
 
 			if ( !parent )
 				parent = Sprite( Application.application );
@@ -93,11 +91,14 @@
 			return dialog;
 		}
 
-		override protected function createChildren() : void {
+		override protected function createChildren() : void
+		{
 			super.createChildren();
 
-			if ( cnvsAnswer.numChildren == 0 ) {
-				if ( mode == QM_QUESTION ) {
+			if ( cnvsAnswer.numChildren == 0 )
+			{
+				if ( mode == QM_QUESTION )
+				{
 					txtAnswer = new TextArea();
 					txtAnswer.percentWidth = 100;
 					txtAnswer.percentHeight = 100;
@@ -107,13 +108,15 @@
 
 					btnOk.enabled = false;
 				}
-				else if ( mode == QM_CHOICE ) {
+				else if ( mode == QM_CHOICE )
+				{
 					var vBox : VBox = new VBox();
 					vBox.percentWidth = 100;
 					vBox.percentHeight = 100;
 					cnvsAnswer.addChild( vBox );
 
-					for ( var i : int = 0; i < arrAnswers.length; i++ ) {
+					for ( var i : int = 0; i < arrAnswers.length; i++ )
+					{
 						var radBtn : RadioButton = new RadioButton();
 						radBtn.groupName = "radioGroup";
 
@@ -124,7 +127,8 @@
 							radBtn.selected = true;
 					}
 				}
-				else if ( mode == QM_BROWSE ) {
+				else if ( mode == QM_BROWSE )
+				{
 					var hBox : HBox = new HBox();
 					hBox.percentWidth = 100;
 					hBox.percentHeight = 100;
@@ -147,18 +151,21 @@
 			}
 		}
 
-		override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void {
+		override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
+		{
 			super.updateDisplayList( unscaledWidth, unscaledHeight );
 
 			var dHeight : int = cnvsAnswer.maxVerticalScrollPosition;
 			var dWidth : int = cnvsAnswer.maxHorizontalScrollPosition;
 
-			if ( !dSize && (dWidth || dHeight) ) {
+			if ( !dSize && (dWidth || dHeight) )
+			{
 				dSize = true;
 
 				var container : DisplayObjectContainer = cnvsAnswer.parent;
 
-				while ( container != this ) {
+				while ( container != this )
+				{
 					container = container.parent;
 					if ( dWidth )
 						container.width += dWidth;
@@ -171,21 +178,25 @@
 			}
 		}
 
-		private function closeDialog() : void {
-			if ( txtAnswer || txtInput ) {
+		private function closeDialog() : void
+		{
+			if ( txtAnswer || txtInput )
+			{
 				var txtObj : Object = txtAnswer ? txtAnswer : txtInput;
 				strAnswer = txtObj.text;
 
 				strAnswer = StringUtil.trim( strAnswer );
 
-				if ( strAnswer.length == 0 ) {
+				if ( strAnswer.length == 0 )
+				{
 					txtObj.setFocus();
 					txtObj.setSelection( 0, txtObj.length );
 					strAnswer = null;
 					return;
 				}
 			}
-			else if ( radioGroup.numRadioButtons > 0 ) {
+			else if ( radioGroup.numRadioButtons > 0 )
+			{
 				if ( !radioGroup.selectedValue )
 					return;
 				strAnswer = radioGroup.selectedValue.toString();
@@ -194,7 +205,8 @@
 			dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
 		}
 
-		private function onClosing( event : Event ) : void {
+		private function onClosing( event : Event ) : void
+		{
 			removeEventListener( CloseEvent.CLOSE, onClosing );
 
 			event.preventDefault();
@@ -203,37 +215,46 @@
 
 			removeDialog();
 
-			if ( fCloseHandler != null ) {
+			if ( fCloseHandler != null )
+			{
 				addEventListener( CloseEvent.CLOSE, fCloseHandler );
 				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
 			}
 		}
 
-		private function removeDialog() : void {
+		private function removeDialog() : void
+		{
 			visible = false;
-			mx.managers.PopUpManager.removePopUp( this );
+			PopUpManager.removePopUp( this );
 		}
 
-		private function onTxtAreaKeyDown( event : KeyboardEvent ) : void {
-			if ( event.keyCode == Keyboard.ENTER ) {
+		private function onTxtAreaKeyDown( event : KeyboardEvent ) : void
+		{
+			if ( event.keyCode == Keyboard.ENTER )
+			{
 				//	event.stopPropagation();
 			}
 		}
 
-		private function onTextInput( event : TextEvent ) : void {
+		private function onTextInput( event : TextEvent ) : void
+		{
 			btnOk.enabled = event.target.text || event.text ? true : false;
 		}
 
-		override protected function keyDownHandler( event : KeyboardEvent ) : void {
-			if ( event.keyCode == Keyboard.ENTER ) {
+		override protected function keyDownHandler( event : KeyboardEvent ) : void
+		{
+			if ( event.keyCode == Keyboard.ENTER )
+			{
 				//closeDialog();
 			}
-			else if ( event.keyCode == Keyboard.ESCAPE ) {
+			else if ( event.keyCode == Keyboard.ESCAPE )
+			{
 				//dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 			}
 		}
 
-		private function browseClickHandler( event : MouseEvent ) : void {
+		private function browseClickHandler( event : MouseEvent ) : void
+		{
 			var filter : FileFilter = new FileFilter(
 					StringUtil.substitute( LanguageManager.sentences.file + " ({0})", strFilter ? strFilter : '*.*' ),
 					strFilter ? strFilter : '*.*' );
@@ -248,35 +269,37 @@
 			file.addEventListener( Event.SELECT, fileSelectHandler );
 		}
 
-		private function fileSelectHandler( event : Event ) : void {
+		private function fileSelectHandler( event : Event ) : void
+		{
 			txtInput.text = event.target.nativePath;
 		}
 
-		private function clickHandler( event : MouseEvent ) : void {
+		private function clickHandler( event : MouseEvent ) : void
+		{
 			closeDialog();
 		}
 		]]>
 	</mx:Script>
-	
+
 	<mx:VBox height="100%" width="100%" horizontalAlign="center">
 		<mx:Canvas width="100%" height="100%" label="{LanguageManager.sentences.question}">
 			<mx:HBox verticalAlign="top" left="10" top="10" bottom="10" right="10">
-				<mx:Image source="@Embed('/assets/images/Question.png')"/>
-				<mx:Text width="100%" height="100%" id="txtQuestion"/>
+				<mx:Image source="@Embed('/assets/images/Question.png')" />
+				<mx:Text width="100%" height="100%" id="txtQuestion" />
 			</mx:HBox>
 		</mx:Canvas>
-		<mx:HRule width="95%"/>
+		<mx:HRule width="95%" />
 		<mx:Canvas width="100%" height="100%" label="{LanguageManager.sentences.answer}">
 			<mx:HBox left="10" right="10" top="10" bottom="10">
-				<mx:Image source="@Embed('/assets/images/User.png')" autoLoad="true"/>
+				<mx:Image source="@Embed('/assets/images/User.png')" autoLoad="true" />
 				<mx:Canvas width="100%" height="100%" id="cnvsAnswer">
-					<mx:RadioButtonGroup id="radioGroup"/>
+					<mx:RadioButtonGroup id="radioGroup" />
 				</mx:Canvas>
 				<mx:Canvas height="100%">
-					<mx:Button label="Ok" bottom="0" id="btnOk" width="100%"/>
+					<mx:Button label="Ok" bottom="0" id="btnOk" width="100%" />
 				</mx:Canvas>
 			</mx:HBox>
 		</mx:Canvas>
 	</mx:VBox>
-	
+
 </mx:TitleWindow>

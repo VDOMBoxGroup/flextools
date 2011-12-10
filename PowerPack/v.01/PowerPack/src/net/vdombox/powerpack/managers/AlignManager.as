@@ -1,7 +1,7 @@
 package net.vdombox.powerpack.managers
 {
-	import flash.events.EventDispatcher;
-	
+
+import flash.events.EventDispatcher;
 
 public class AlignManager extends EventDispatcher
 {
@@ -10,22 +10,21 @@ public class AlignManager extends EventDispatcher
 	//  Class variables and constants
 	//
 	//--------------------------------------------------------------------------
-		
-	
+
 	//--------------------------------------------------------------------------
 	//
 	//  Constructor
 	//
 	//--------------------------------------------------------------------------
-	
+
 	/**
 	 *	Constructor
-	 */ 
+	 */
 	public function AlignManager()
 	{
 		super();
 	}
-	
+
 	//--------------------------------------------------------------------------
 	//
 	//  Destructor
@@ -35,10 +34,10 @@ public class AlignManager extends EventDispatcher
 	/**
 	 *	Destructor
 	 */
-	 public function dispose():void
-	 {
-	 }
-	  
+	public function dispose() : void
+	{
+	}
+
 	//--------------------------------------------------------------------------
 	//
 	//  Variables
@@ -50,16 +49,12 @@ public class AlignManager extends EventDispatcher
 	//  Class methods
 	//
 	//--------------------------------------------------------------------------
-	
-	
-    
+
 	//--------------------------------------------------------------------------
-    //
-    //  Event handlers
-    //
-    //--------------------------------------------------------------------------
-   	
-  
-   	
+	//
+	//  Event handlers
+	//
+	//--------------------------------------------------------------------------
+
 }
 }

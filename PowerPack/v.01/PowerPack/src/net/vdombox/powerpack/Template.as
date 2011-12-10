@@ -1,5 +1,6 @@
 package net.vdombox.powerpack
 {
+
 import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -26,99 +27,99 @@ import net.vdombox.powerpack.managers.ProgressManager;
 import net.vdombox.powerpack.utils.CryptUtils;
 
 /**
- * 
+ *
  *	<template ID=''>
- * 		<name/>
- * 		<description/>
- * 		<picture/>
- * 		<encoded> or <structure>
- * 			<graph name='' initial='' category=''>
- * 				<states>
- * 					<state name='' type='' category='' enabled='' breakpoint='' x='' y=''>
- * 						<text/>
- * 					</state>
- * 					...
- * 				</states>
- * 				
- * 				<transitions>
- * 					<transition name='' highlighted='' enabled='' source='' destination=''>
- * 						<label/>
- * 					</transition>
- * 					...
- * 				</transitions>
- * 			</graph>
- * 			...
+ *		 <name/>
+ *		 <description/>
+ *		 <picture/>
+ *		 <encoded> or <structure>
+ *			 <graph name='' initial='' category=''>
+ *				 <states>
+ *					 <state name='' type='' category='' enabled='' breakpoint='' x='' y=''>
+ *						 <text/>
+ *					 </state>
+ *					 ...
+ *				 </states>
+ *
+ *				 <transitions>
+ *					 <transition name='' highlighted='' enabled='' source='' destination=''>
+ *						 <label/>
+ *					 </transition>
+ *					 ...
+ *				 </transitions>
+ *			 </graph>
+ *			 ...
  *			<categories>
  *				<category name=''/>
  *				...
  *			</categories>
- * 				
+ *
  *			<resources>
  *				<resource category='' ID='' type='' name=''/>
  *				...
  *			</resources>
- * 		</encoded> or </structure>
- * 	</template>
- * 
- */ 
- 
+ *		 </encoded> or </structure>
+ *	 </template>
+ *
+ */
+
 public class Template extends EventDispatcher
 {
-	public static const TYPE_APPLICATION:String = "application";
-	public static const TYPE_MODULE:String = "module";
-	
-	public static const TPL_EXTENSION:String = 'xml';
-			
-	public static var tplFilter:FileFilter = new FileFilter(
-		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['template'], "*."+TPL_EXTENSION), 
-		"*."+TPL_EXTENSION);
-	
-	public static var allFilter:FileFilter = new FileFilter(
-		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['all'], "*.*"), 
-		"*.*");	
+	public static const TYPE_APPLICATION : String = "application";
+	public static const TYPE_MODULE : String = "module";
 
-	public static var defaultCaptions:Object = {
+	public static const TPL_EXTENSION : String = 'xml';
+
+	public static var tplFilter : FileFilter = new FileFilter(
+			StringUtil.substitute( "{0} ({1})", LanguageManager.sentences['template'], "*." + TPL_EXTENSION ),
+			"*." + TPL_EXTENSION );
+
+	public static var allFilter : FileFilter = new FileFilter(
+			StringUtil.substitute( "{0} ({1})", LanguageManager.sentences['all'], "*.*" ),
+			"*.*" );
+
+	public static var defaultCaptions : Object = {
 	};
-	
-    private static var _classConstructed:Boolean = classConstruct();
-    
-    public static function get classConstructed():Boolean
-    {
-    	return _classConstructed;
-    }
-        
-    // Define a static method.
-    private static function classConstruct():Boolean
-    {
-        LanguageManager.setSentences(defaultCaptions);
-        
-        return true;
-    } 
-    
+
+	private static var _classConstructed : Boolean = classConstruct();
+
+	public static function get classConstructed() : Boolean
+	{
+		return _classConstructed;
+	}
+
+	// Define a static method.
+	private static function classConstruct() : Boolean
+	{
+		LanguageManager.setSentences( defaultCaptions );
+
+		return true;
+	}
+
 	//--------------------------------------------------------------------------
 	//
 	//  Constructor
 	//
 	//--------------------------------------------------------------------------
-	
+
 	/**
 	 *	Constructor
-	 */ 
-	public function Template(xml:XML=null)
+	 */
+	public function Template( xml : XML = null )
 	{
-		_xml = new XML(<template/>);
+		_xml = new XML( <template/> );
 		_xml.@ID = UIDUtil.createUID();
 
-		if(xml && isValidTpl(xml))
+		if ( xml && isValidTpl( xml ) )
 		{
 			_xml = xml;
-			if(!Utils.getStringOrDefault(_xml.@ID, ''))
+			if ( !Utils.getStringOrDefault( _xml.@ID, '' ) )
 				_xml.@ID = UIDUtil.createUID();
-			
+
 			processOpened();
 			return;
 		}
-		else if(!xml)
+		else if ( !xml )
 		{
 			modified = true;
 			_completelyOpened = true;
@@ -130,596 +131,596 @@ public class Template extends EventDispatcher
 	//  Destructor
 	//
 	//--------------------------------------------------------------------------
-	
+
 	/**
 	 *	Destructor
-	 */		 
-	 public function dispose():void
-	 {
-	 	_xmlStructure = null;
-	 	_pictureFile = null;
-	 	file = null;
-	 	_xml = null;
-	 }  
-	 
-    //--------------------------------------------------------------------------
-    //
-    //  Variables
-    //
-    //--------------------------------------------------------------------------  
-	
+	 */
+	public function dispose() : void
+	{
+		_xmlStructure = null;
+		_pictureFile = null;
+		file = null;
+		_xml = null;
+	}
+
+	//--------------------------------------------------------------------------
+	//
+	//  Variables
+	//
+	//--------------------------------------------------------------------------
+
 	[Bindable]
-	public var key:String;
-	
+	public var key : String;
+
 	/**
-	 * 
-	 * template file (XML) 
+	 *
+	 * template file (XML)
 	 */
 	[Bindable]
 	public var file : File;
-	
-	private var _completelyOpened:Boolean;
-	
-    //--------------------------------------------------------------------------
+
+	private var _completelyOpened : Boolean;
+
+	//--------------------------------------------------------------------------
 	//
 	//  Properties
 	//
 	//--------------------------------------------------------------------------
-    
 
-    //----------------------------------
-    //  modified
-    //----------------------------------
+	//----------------------------------
+	//  modified
+	//----------------------------------
 
-	private var _modified:Boolean;
-	
-	public function set modified(value:Boolean):void
+	private var _modified : Boolean;
+
+	public function set modified( value : Boolean ) : void
 	{
-		if (_modified != value)
+		if ( _modified != value )
 		{
 			_modified = value;
-			
-			var mainIndex:XML = CashManager.getMainIndex();	
-			
-			CashManager.updateMainIndexEntry(mainIndex, fullID, 'saved', _modified?'false':'true');
-			CashManager.setMainIndex(mainIndex);
+
+			var mainIndex : XML = CashManager.getMainIndex();
+
+			CashManager.updateMainIndexEntry( mainIndex, fullID, 'saved', _modified ? 'false' : 'true' );
+			CashManager.setMainIndex( mainIndex );
 		}
 	}
-	
+
 	[Bindable]
-	public function get modified():Boolean
+	public function get modified() : Boolean
 	{
 		return _modified;
 	}
 
+	//----------------------------------
+	//  xml
+	//----------------------------------
 
-    //----------------------------------
-    //  xml
-    //----------------------------------
-    
-	private var _xml:XML;
-			
-	public function get xml():XML
+	private var _xml : XML;
+
+	public function get xml() : XML
 	{
 		return _xml;
 	}
 
-    //----------------------------------
-    //  xmlStructure
-    //----------------------------------
+	//----------------------------------
+	//  xmlStructure
+	//----------------------------------
 
-	private var _xmlStructure:XML;
-	
-	public function set xmlStructure(value:XML):void
+	private var _xmlStructure : XML;
+
+	public function set xmlStructure( value : XML ) : void
 	{
-		if(_xmlStructure!=value)
+		if ( _xmlStructure != value )
 		{
 			modified = true;
-			_xmlStructure = value;		
+			_xmlStructure = value;
 		}
 	}
-	
+
 	[Bindable]
-	public function get xmlStructure():XML
+	public function get xmlStructure() : XML
 	{
 		return _xmlStructure;
-	}		
+	}
 
-    //----------------------------------
-    //  name
-    //----------------------------------
+	//----------------------------------
+	//  name
+	//----------------------------------
 
-	public function set name(value:String):void
+	public function set name( value : String ) : void
 	{
-		if(_xml.name != value)
+		if ( _xml.name != value )
 		{
 			modified = true;
 			_xml.name = value;
-		}	
-	}
-	
-	[Bindable]
-	public function get name():String
-	{
-		return Utils.getStringOrDefault(_xml.name, '');	
-	}		
-
-    //----------------------------------
-    //  description
-    //----------------------------------
-
-	public function set description(value:String):void
-	{
-		if(_xml.description != value)
-		{
-			modified = true;
-			_xml.description = value;	
 		}
 	}
-	
-	[Bindable]
-	public function get description():String
-	{
-		return Utils.getStringOrDefault(_xml.description, '');	
-	}		
-	
-    //----------------------------------
-    //  ID
-    //----------------------------------
 
-	public function set ID(value:String):void
+	[Bindable]
+	public function get name() : String
 	{
-		if(_xml.@ID != value)
+		return Utils.getStringOrDefault( _xml.name, '' );
+	}
+
+	//----------------------------------
+	//  description
+	//----------------------------------
+
+	public function set description( value : String ) : void
+	{
+		if ( _xml.description != value )
+		{
+			modified = true;
+			_xml.description = value;
+		}
+	}
+
+	[Bindable]
+	public function get description() : String
+	{
+		return Utils.getStringOrDefault( _xml.description, '' );
+	}
+
+	//----------------------------------
+	//  ID
+	//----------------------------------
+
+	public function set ID( value : String ) : void
+	{
+		if ( _xml.@ID != value )
 		{
 			modified = true;
 			_xml.@ID = value;
-		}	
+		}
 	}
-	
+
 	[Bindable]
-	public function get ID():String
+	public function get ID() : String
 	{
-		if(!_xml.hasOwnProperty('@ID'))
+		if ( !_xml.hasOwnProperty( '@ID' ) )
 			_xml.@ID = UIDUtil.createUID();
 
-		return _xml.@ID;	
+		return _xml.@ID;
 	}
-	
-    //----------------------------------
-    //  fullID
-    //----------------------------------
-    
-	private var _fullID:String;
-	
-	public function get fullID():String
+
+	//----------------------------------
+	//  fullID
+	//----------------------------------
+
+	private var _fullID : String;
+
+	public function get fullID() : String
 	{
-		if(!_fullID)
+		if ( !_fullID )
 		{
 			_fullID = ID;
-			
-			if(file && file.exists)
+
+			if ( file && file.exists )
 				_fullID += '_' + file.creationDate.getTime() + '_' + file.modificationDate.getTime() + '_' + file.size;
 		}
 
-		return _fullID;	
-	}		
+		return _fullID;
+	}
 
-    //----------------------------------
-    //  picture
-    //----------------------------------
-	
+	//----------------------------------
+	//  picture
+	//----------------------------------
+
 	private var _pictureFile : File;
-	
-	public function set pictureFile(value:File):void
+
+	public function set pictureFile( value : File ) : void
 	{
-		if (!value || !_pictureFile || _pictureFile.nativePath != value.nativePath)
+		if ( !value || !_pictureFile || _pictureFile.nativePath != value.nativePath )
 		{
 			modified = true;
-			_pictureFile = value;		
+			_pictureFile = value;
 		}
 	}
-	
+
 	[Bindable]
-	public function get pictureFile():File
+	public function get pictureFile() : File
 	{
 		return _pictureFile;
-	}	
-					
-    //----------------------------------
-    //  b64picture
-    //----------------------------------
+	}
 
-	public function set b64picture(value:String):void
+	//----------------------------------
+	//  b64picture
+	//----------------------------------
+
+	public function set b64picture( value : String ) : void
 	{
-		if(_xml.picture != value)
+		if ( _xml.picture != value )
 		{
-			modified = true;								
-			_xml.picture = value;	
+			modified = true;
+			_xml.picture = value;
 		}
 	}
-	
-	[Bindable]
-	public function get b64picture():String
-	{
-		return Utils.getStringOrDefault(_xml.picture[0], '');	
-	}		
-	
-    //----------------------------------
-    //  isEncoded
-    //----------------------------------
 
-	public function get isEncoded():Boolean
+	[Bindable]
+	public function get b64picture() : String
 	{
-		return _xml.hasOwnProperty('encoded');	
-	}		
+		return Utils.getStringOrDefault( _xml.picture[0], '' );
+	}
+
+	//----------------------------------
+	//  isEncoded
+	//----------------------------------
+
+	public function get isEncoded() : Boolean
+	{
+		return _xml.hasOwnProperty( 'encoded' );
+	}
 
 	//--------------------------------------------------------------------------
 	//
 	//  Class methods
 	//
 	//--------------------------------------------------------------------------
-	
-	private function isValidTpl(xmlData:XML):Boolean
+
+	private function isValidTpl( xmlData : XML ) : Boolean
 	{
-		if(xmlData.name() != 'template')
+		if ( xmlData.name() != 'template' )
 			return false;
-			
-		if(!xmlData.hasOwnProperty('encoded') && !xmlData.hasOwnProperty('structure'))
+
+		if ( !xmlData.hasOwnProperty( 'encoded' ) && !xmlData.hasOwnProperty( 'structure' ) )
 			return false;
-	
+
 		return true;
 	}
-	
-	public function save():void
+
+	public function save() : void
 	{
-		if(!_completelyOpened)
+		if ( !_completelyOpened )
 			return;
-		
-		if(!file)
+
+		if ( !file )
 		{
 			browseForSave();
 			return;
-		}		
+		}
 
 		try
 		{
-			ProgressManager.start(null, false);
-			
-	      	// update tpl UID
-	   		_xml.@ID = UIDUtil.createUID();	   		
+			ProgressManager.start( null, false );
+
+			// update tpl UID
+			_xml.@ID = UIDUtil.createUID();
 
 			// cash template structure
 			cashStructure();
-				
+
 			/// get resources from cash 
-	   		fillFromCash();
-	   		
-	   		// set (+encrypt) structure and resources data
-	   		encode();
-	   		
-		   	var stream:FileStream = new FileStream();
-			
+			fillFromCash();
+
+			// set (+encrypt) structure and resources data
+			encode();
+
+			var stream : FileStream = new FileStream();
+
 			ProgressManager.source = stream;
 			ProgressManager.start();
-			
-			stream.addEventListener(Event.COMPLETE, saveHandler);
-			stream.addEventListener(OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler);
-			stream.addEventListener(IOErrorEvent.IO_ERROR, saveErrorHandler);
-			stream.openAsync(file, FileMode.WRITE);				
-			
-			stream.writeUTFBytes(_xml.toXMLString());
+
+			stream.addEventListener( Event.COMPLETE, saveHandler );
+			stream.addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler );
+			stream.addEventListener( IOErrorEvent.IO_ERROR, saveErrorHandler );
+			stream.openAsync( file, FileMode.WRITE );
+
+			stream.writeUTFBytes( _xml.toXMLString() );
 		}
-		catch(e:Error)
+		catch ( e : Error )
 		{
 			stream.close();
 
-    		ProgressManager.complete();
-	
-			var errEvent:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, false, true, 
-				e.message);
-			 
-			dispatchEvent(errEvent);	
-			
-			if(!errEvent.isDefaultPrevented())
+			ProgressManager.complete();
+
+			var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true,
+					e.message );
+
+			dispatchEvent( errEvent );
+
+			if ( !errEvent.isDefaultPrevented() )
 			{
-				SuperAlert.show( 
-					e.message,
-					LanguageManager.sentences['error']);    		
-			}			
+				SuperAlert.show(
+						e.message,
+						LanguageManager.sentences['error'] );
+			}
 		}
 	}
-	
-	public function open():void
+
+	public function open() : void
 	{
 		// check for not saved tpl
-		
-		if(!file)
+
+		if ( !file )
 		{
 			browseForOpen();
 			return;
 		}
-		
-		if(!file.exists)
+
+		if ( !file.exists )
 		{
-			var errEvent:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, false, true, 
-				LanguageManager.sentences['msg_file_not_exists']);
-			 
-			dispatchEvent(errEvent);
-			
-			if(!errEvent.isDefaultPrevented())
+			var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true,
+					LanguageManager.sentences['msg_file_not_exists'] );
+
+			dispatchEvent( errEvent );
+
+			if ( !errEvent.isDefaultPrevented() )
 			{
-				SuperAlert.show( 
-					errEvent.text,
-					LanguageManager.sentences['error']);    		
+				SuperAlert.show(
+						errEvent.text,
+						LanguageManager.sentences['error'] );
 			}
 			return;
 		}
-		
-	   	var stream:FileStream = new FileStream();
-		
+
+		var stream : FileStream = new FileStream();
+
 		ProgressManager.source = stream;
 		ProgressManager.start();
-		
-		stream.addEventListener(Event.COMPLETE, openHandler);
-		stream.addEventListener(IOErrorEvent.IO_ERROR, openErrorHandler);
-		stream.openAsync(file, FileMode.READ);
+
+		stream.addEventListener( Event.COMPLETE, openHandler );
+		stream.addEventListener( IOErrorEvent.IO_ERROR, openErrorHandler );
+		stream.openAsync( file, FileMode.READ );
 	}
 
-	public function browseForSave():void
+	public function browseForSave() : void
 	{
-        var folder:File = ContextManager.instance.lastDir;
-						
-		folder.addEventListener(Event.SELECT, saveBrowseHandler);
-		folder.browseForSave(LanguageManager.sentences['save_file']);
-		
-		function saveBrowseHandler(event:Event):void {
-			var f:File = event.target as File;
-			f.removeEventListener(Event.SELECT, saveBrowseHandler);
-			
-			if(f.isDirectory || f.isPackage || f.isSymbolicLink)
-            	return;
-           	
-           	if(!f.extension || f.extension.toLowerCase() != TPL_EXTENSION)            	
-            	f = f.parent.resolvePath(f.name+'.'+TPL_EXTENSION);
- 
-            file = f;
-            
-         	var evnt:Event = new Event('saving', false, true);
-         	dispatchEvent(evnt);
-         	
-         	if(!evnt.isDefaultPrevented())         	
-         		save();   
+		var folder : File = ContextManager.instance.lastDir;
+
+		folder.addEventListener( Event.SELECT, saveBrowseHandler );
+		folder.browseForSave( LanguageManager.sentences['save_file'] );
+
+		function saveBrowseHandler( event : Event ) : void
+		{
+			var f : File = event.target as File;
+			f.removeEventListener( Event.SELECT, saveBrowseHandler );
+
+			if ( f.isDirectory || f.isPackage || f.isSymbolicLink )
+				return;
+
+			if ( !f.extension || f.extension.toLowerCase() != TPL_EXTENSION )
+				f = f.parent.resolvePath( f.name + '.' + TPL_EXTENSION );
+
+			file = f;
+
+			var evnt : Event = new Event( 'saving', false, true );
+			dispatchEvent( evnt );
+
+			if ( !evnt.isDefaultPrevented() )
+				save();
 		}
 	}
-	
-	public function browseForOpen():void
+
+	public function browseForOpen() : void
 	{
-        var folder:File = ContextManager.instance.lastDir;
-						
-		folder.addEventListener(Event.SELECT, openBrowseHandler);
-		folder.browseForOpen(LanguageManager.sentences['open_file'], [tplFilter, allFilter])
-		
-		function openBrowseHandler(event:Event):void {
-			var f:File = event.target as File;
-			f.removeEventListener(Event.SELECT, openBrowseHandler);
-			
-			if(f.isDirectory || f.isPackage || f.isSymbolicLink)
-            	return;
-            
-            file = f;
-         	
-         	var evnt:Event = new Event('opening', false, true);
-         	dispatchEvent(evnt);
-         	
-         	if(!evnt.isDefaultPrevented())
-         		open();   
+		var folder : File = ContextManager.instance.lastDir;
+
+		folder.addEventListener( Event.SELECT, openBrowseHandler );
+		folder.browseForOpen( LanguageManager.sentences['open_file'], [tplFilter, allFilter] )
+
+		function openBrowseHandler( event : Event ) : void
+		{
+			var f : File = event.target as File;
+			f.removeEventListener( Event.SELECT, openBrowseHandler );
+
+			if ( f.isDirectory || f.isPackage || f.isSymbolicLink )
+				return;
+
+			file = f;
+
+			var evnt : Event = new Event( 'opening', false, true );
+			dispatchEvent( evnt );
+
+			if ( !evnt.isDefaultPrevented() )
+				open();
 		}
-	}	
-	
-	public function processOpened():void
+	}
+
+	public function processOpened() : void
 	{
-		if(!_xml.hasOwnProperty('encoded') && !_xml.hasOwnProperty('structure'))
+		if ( !_xml.hasOwnProperty( 'encoded' ) && !_xml.hasOwnProperty( 'structure' ) )
 			return;
-		
+
 		decode();
-			
-		if(_xmlStructure)
+
+		if ( _xmlStructure )
 			cash();
-		
-		if(!isEncoded)
+
+		if ( !isEncoded )
 			_completelyOpened = true;
 	}
-	
-	private function encode():void
+
+	private function encode() : void
 	{
 		delete _xml.encoded;
 		delete _xml.structure;
-		
-		var structData:XML = _xmlStructure ? _xmlStructure : new XML(<structure/>);
-		
-		if(key)
+
+		var structData : XML = _xmlStructure ? _xmlStructure : new XML( <structure/> );
+
+		if ( key )
 		{
-			var bytes:ByteArray = CryptUtils.encrypt(structData.toXMLString(), key);
-			
-			var encoder:Base64Encoder = new Base64Encoder();
-		    encoder.encodeBytes(bytes);
-		    _xml.encoded = encoder.flush();
+			var bytes : ByteArray = CryptUtils.encrypt( structData.toXMLString(), key );
+
+			var encoder : Base64Encoder = new Base64Encoder();
+			encoder.encodeBytes( bytes );
+			_xml.encoded = encoder.flush();
 		}
 		else
 			_xml.structure = structData;
 	}
-	
-	private function decode():void
+
+	private function decode() : void
 	{
 		_xmlStructure = null;
-		
-		if(isEncoded && _xml.hasOwnProperty('structure'))
+
+		if ( isEncoded && _xml.hasOwnProperty( 'structure' ) )
 			delete _xml.structure;
-		
-		if(isEncoded && key)
-		{			
-			try 
-			{	
-				var strEncoded:String = XML(_xml.encoded[0]).toString(); 
-		 		var strDecoded:String;
-		 	
-				var decoder:Base64Decoder = new Base64Decoder();
-			    decoder.decode(strEncoded);				
-				var bytes:ByteArray = decoder.flush();	
-			
-				bytes = CryptUtils.decrypt(bytes, key);	
+
+		if ( isEncoded && key )
+		{
+			try
+			{
+				var strEncoded : String = XML( _xml.encoded[0] ).toString();
+				var strDecoded : String;
+
+				var decoder : Base64Decoder = new Base64Decoder();
+				decoder.decode( strEncoded );
+				var bytes : ByteArray = decoder.flush();
+
+				bytes = CryptUtils.decrypt( bytes, key );
 				bytes.position = 0;
-				strDecoded = bytes.readUTFBytes(bytes.length);
-			 	_xmlStructure = XML(strDecoded);
-			 	
-				if(_xmlStructure)
+				strDecoded = bytes.readUTFBytes( bytes.length );
+				_xmlStructure = XML( strDecoded );
+
+				if ( _xmlStructure )
 				{
-			 		if(_xmlStructure.name().localName=='structure')
-			 			delete _xml.encoded;
-			 		else
-			 			_xmlStructure = null;
-			 	}
-			} 
-			catch(e:*) 
+					if ( _xmlStructure.name().localName == 'structure' )
+						delete _xml.encoded;
+					else
+						_xmlStructure = null;
+				}
+			}
+			catch ( e : * )
 			{
 				_xmlStructure = null;
-			}				
-		}	
-		else if(_xml.hasOwnProperty('structure'))
+			}
+		}
+		else if ( _xml.hasOwnProperty( 'structure' ) )
 		{
 			_xmlStructure = _xml.structure[0];
 			delete _xml.structure;
 		}
 	}
-	
-	private function setPictureFromFile():Boolean
+
+	private function setPictureFromFile() : Boolean
 	{
-		if(!pictureFile || !pictureFile.exists)
+		if ( !pictureFile || !pictureFile.exists )
 		{
 			return false;
 		}
-		
-		var fileToBase64:FileToBase64 = new FileToBase64(pictureFile.nativePath);
-		fileToBase64.convert();						
+
+		var fileToBase64 : FileToBase64 = new FileToBase64( pictureFile.nativePath );
+		fileToBase64.convert();
 		b64picture = fileToBase64.data.toString();
-		
+
 		_xml.picture[0].@type = file.extension;
 		_xml.picture[0].@name = file.name;
-		
+
 		//picture = null;
-		
+
 		return true;
 	}
-	
+
 	private function getPictureFromCash() : void
 	{
-		var picObj:Object = CashManager.getObject(fullID, 'logo');
-		if(picObj)
+		var picObj : Object = CashManager.getObject( fullID, 'logo' );
+		if ( picObj )
 		{
-			var picData:ByteArray = ByteArray(picObj.data);
-			
-			_xml.picture = picData.readUTFBytes(picData.bytesAvailable);
-			_xml.picture.@name = XML(picObj.entry).@name;       		
-			_xml.picture.@type = XML(picObj.entry).@type;
+			var picData : ByteArray = ByteArray( picObj.data );
+
+			_xml.picture = picData.readUTFBytes( picData.bytesAvailable );
+			_xml.picture.@name = XML( picObj.entry ).@name;
+			_xml.picture.@type = XML( picObj.entry ).@type;
 		}
 	}
-	
-	private function cash():Boolean
+
+	private function cash() : Boolean
 	{
-		if(_xmlStructure==null)
+		if ( _xmlStructure == null )
 			return false;
-		
+
 		// cash all resources
-		for each (var res:XML in _xmlStructure.resources.resource)
+		for each ( var res : XML in _xmlStructure.resources.resource )
 		{
-			CashManager.setStringObject(fullID, 
-				XML(
-					"<resource " + 
-					"category='" +	Utils.getStringOrDefault(res.@category, "") + "' " + 
-					"ID='" +		Utils.getStringOrDefault(res.@ID, "") + "' " + 
-					"name='" +		Utils.getStringOrDefault(res.@name, "") + "' " + 
-					"type='" +		Utils.getStringOrDefault(res.@type, "") + "' />"), 
-				res);
-		} 
-		
+			CashManager.setStringObject( fullID,
+					XML(
+							"<resource " +
+									"category='" + Utils.getStringOrDefault( res.@category, "" ) + "' " +
+									"ID='" + Utils.getStringOrDefault( res.@ID, "" ) + "' " +
+									"name='" + Utils.getStringOrDefault( res.@name, "" ) + "' " +
+									"type='" + Utils.getStringOrDefault( res.@type, "" ) + "' />" ),
+					res );
+		}
+
 		delete _xmlStructure.resources;
-		
+
 		// cash tpl picture
-		if(b64picture)
+		if ( b64picture )
 		{
-			var picXML:XML = _xml.picture[0];
-			CashManager.setStringObject(fullID, 
-				XML(
-					"<resource " + 
-					"category='logo' " + 
-					"ID='logo' " + 
-					"name='" +		Utils.getStringOrDefault(picXML.@name, "") + "' " + 
-					"type='" +		Utils.getStringOrDefault(picXML.@type, "") + "' />"), 
-				b64picture);
-				
+			var picXML : XML = _xml.picture[0];
+			CashManager.setStringObject( fullID,
+					XML(
+							"<resource " +
+									"category='logo' " +
+									"ID='logo' " +
+									"name='" + Utils.getStringOrDefault( picXML.@name, "" ) + "' " +
+									"type='" + Utils.getStringOrDefault( picXML.@type, "" ) + "' />" ),
+					b64picture );
+
 			delete _xml.picture;
 		}
 
 		cashStructure();
-			
+
 		return true;
 	}
-	
-	private function cashStructure():void
-	{
-		CashManager.setStringObject(fullID, 
-			XML(
-				"<resource " + 
-				"category='template' " + 
-				"ID='template' " + 
-				"name='" + name + "' " + 
-				"type='" + TYPE_APPLICATION + "' />"), 
-			_xml.toXMLString());
 
-		CashManager.setStringObject(fullID, 
-			XML(
-				"<resource " + 
-				"category='template' " + 
-				"ID='structure' " + 
-				"name='" + name + "' " + 
-				"type='" + TYPE_APPLICATION + "' />"), 
-			_xmlStructure.toXMLString());		
+	private function cashStructure() : void
+	{
+		CashManager.setStringObject( fullID,
+				XML(
+						"<resource " +
+								"category='template' " +
+								"ID='template' " +
+								"name='" + name + "' " +
+								"type='" + TYPE_APPLICATION + "' />" ),
+				_xml.toXMLString() );
+
+		CashManager.setStringObject( fullID,
+				XML(
+						"<resource " +
+								"category='template' " +
+								"ID='structure' " +
+								"name='" + name + "' " +
+								"type='" + TYPE_APPLICATION + "' />" ),
+				_xmlStructure.toXMLString() );
 	}
 
-	private function fillFromCash():void
+	private function fillFromCash() : void
 	{
 		// get tpl picture
-   		delete _xml.picture;
+		delete _xml.picture;
 
-      	if(pictureFile)
-      		setPictureFromFile();
-      	else
-      		//getPictureFromCash();
-		
+		if ( pictureFile )
+			setPictureFromFile();
+		else
+		//getPictureFromCash();
+
 		// get resources		
-		delete _xmlStructure.resources;
+			delete _xmlStructure.resources;
 
-		var index:XML = CashManager.getIndex(fullID);
-		if(index)
+		var index : XML = CashManager.getIndex( fullID );
+		if ( index )
 		{
-			var resources:XMLList = index.resource.(hasOwnProperty('@category') && 
-						(@category=='image' || @category=='database'));
-		
-			_xmlStructure.appendChild(<resources/>);
+			var resources : XMLList = index.resource.(hasOwnProperty( '@category' ) &&
+					(@category == 'image' || @category == 'database'));
 
-			for each (var res:XML in resources)
+			_xmlStructure.appendChild( <resources/> );
+
+			for each ( var res : XML in resources )
 			{
-				var resObj:Object = CashManager.getObject(fullID, res.@ID);
-				var resData:ByteArray = ByteArray(resObj.data);
-				var content:String = resData.readUTFBytes(resData.bytesAvailable);
-				
-				var resXML:XML = XML('<resource><![CDATA['+content+']]></resource>');
+				var resObj : Object = CashManager.getObject( fullID, res.@ID );
+				var resData : ByteArray = ByteArray( resObj.data );
+				var content : String = resData.readUTFBytes( resData.bytesAvailable );
+
+				var resXML : XML = XML( '<resource><![CDATA[' + content + ']]></resource>' );
 				resXML.@category = resObj.entry.@category;
 				resXML.@ID = resObj.entry.@ID;
 				resXML.@type = resObj.entry.@type;
 				resXML.@name = resObj.entry.@name;
-				
-				_xmlStructure.resources.appendChild(resXML);
+
+				_xmlStructure.resources.appendChild( resXML );
 			}
 		}
 	}
@@ -729,154 +730,154 @@ public class Template extends EventDispatcher
 	//  Event handlers
 	//
 	//--------------------------------------------------------------------------
-	
-	private function outputProgressHandler(event:OutputProgressEvent):void
+
+	private function outputProgressHandler( event : OutputProgressEvent ) : void
 	{
-		var stream:FileStream = event.target as FileStream;
-		if(event.bytesPending==0)	
-			stream.dispatchEvent(new Event(Event.COMPLETE)); 
+		var stream : FileStream = event.target as FileStream;
+		if ( event.bytesPending == 0 )
+			stream.dispatchEvent( new Event( Event.COMPLETE ) );
 	}
-	
-	private function saveHandler(event:Event):void 
-	{
-		var stream:FileStream = event.target as FileStream;
-		
-		stream.removeEventListener(OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler);
-		stream.removeEventListener(Event.COMPLETE, saveHandler);
-		stream.removeEventListener(IOErrorEvent.IO_ERROR, saveErrorHandler);
-				
-    	try 
-    	{
-    		stream.close();
-    		
-    		ProgressManager.start(ProgressManager.DIALOG_MODE, false);
-			
-			_xml = XML(CashManager.getStringObject(fullID, 'template'));
-			
-	      	// update tpl UID
-	   		var oldID:String = fullID;
-	   		_fullID = null;
-	   		CashManager.updateID(oldID, fullID);			
-			
-			ProgressManager.complete();
-			
-			modified = false;
 
-			dispatchEvent( new Event(Event.COMPLETE) );
-    	}
-    	catch(e:Error)
-    	{
-    		ProgressManager.complete();
-	
-			var errEvent:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, false, true, 
-				LanguageManager.sentences['msg_not_valid_tpl_file']);
-			 
-			dispatchEvent(errEvent);
-			
-			if(!errEvent.isDefaultPrevented())
-			{
-				SuperAlert.show( 
-					LanguageManager.sentences['msg_not_valid_tpl_file'],
-					LanguageManager.sentences['error']);    		
-			}
-    	}			
-	}	
-	
-	private function openHandler(event:Event):void 
+	private function saveHandler( event : Event ) : void
 	{
-		var stream:FileStream = event.target as FileStream;
-		stream.removeEventListener(Event.COMPLETE, openHandler);
-		stream.removeEventListener(IOErrorEvent.IO_ERROR, openErrorHandler);
-		    	
-    	try 
-    	{
-    		ProgressManager.start(ProgressManager.DIALOG_MODE, false);
-    		 
-    		var strData:String = stream.readUTFBytes(stream.bytesAvailable);
-    		stream.close();
-    		
-    		var xmlData:XML = XML(strData);
-    		
-    		if(!isValidTpl(xmlData))
-    			throw new Error(LanguageManager.sentences['msg_not_valid_tpl_file']);
-			
-			_xml = xmlData;
-			
-			_completelyOpened = false;
-			
-			_fullID = null;
-			
-			processOpened();
-			
-			ProgressManager.complete();
+		var stream : FileStream = event.target as FileStream;
 
-			modified = false;
-			
-			dispatchEvent( new Event(Event.COMPLETE) );
-    	}
-    	catch(e:Error)
-    	{
+		stream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler );
+		stream.removeEventListener( Event.COMPLETE, saveHandler );
+		stream.removeEventListener( IOErrorEvent.IO_ERROR, saveErrorHandler );
+
+		try
+		{
 			stream.close();
 
-    		ProgressManager.complete();
-	
-			var errEvent:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, false, true, 
-				LanguageManager.sentences['msg_not_valid_tpl_file']);
-			 
-			dispatchEvent(errEvent);	
-			
-			if(!errEvent.isDefaultPrevented())
+			ProgressManager.start( ProgressManager.DIALOG_MODE, false );
+
+			_xml = XML( CashManager.getStringObject( fullID, 'template' ) );
+
+			// update tpl UID
+			var oldID : String = fullID;
+			_fullID = null;
+			CashManager.updateID( oldID, fullID );
+
+			ProgressManager.complete();
+
+			modified = false;
+
+			dispatchEvent( new Event( Event.COMPLETE ) );
+		}
+		catch ( e : Error )
+		{
+			ProgressManager.complete();
+
+			var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true,
+					LanguageManager.sentences['msg_not_valid_tpl_file'] );
+
+			dispatchEvent( errEvent );
+
+			if ( !errEvent.isDefaultPrevented() )
 			{
-				SuperAlert.show( 
-					LanguageManager.sentences['msg_not_valid_tpl_file'],
-					LanguageManager.sentences['error']);    		
+				SuperAlert.show(
+						LanguageManager.sentences['msg_not_valid_tpl_file'],
+						LanguageManager.sentences['error'] );
 			}
-    	}			
+		}
 	}
-	
-	private function saveErrorHandler(event:IOErrorEvent):void
+
+	private function openHandler( event : Event ) : void
+	{
+		var stream : FileStream = event.target as FileStream;
+		stream.removeEventListener( Event.COMPLETE, openHandler );
+		stream.removeEventListener( IOErrorEvent.IO_ERROR, openErrorHandler );
+
+		try
+		{
+			ProgressManager.start( ProgressManager.DIALOG_MODE, false );
+
+			var strData : String = stream.readUTFBytes( stream.bytesAvailable );
+			stream.close();
+
+			var xmlData : XML = XML( strData );
+
+			if ( !isValidTpl( xmlData ) )
+				throw new Error( LanguageManager.sentences['msg_not_valid_tpl_file'] );
+
+			_xml = xmlData;
+
+			_completelyOpened = false;
+
+			_fullID = null;
+
+			processOpened();
+
+			ProgressManager.complete();
+
+			modified = false;
+
+			dispatchEvent( new Event( Event.COMPLETE ) );
+		}
+		catch ( e : Error )
+		{
+			stream.close();
+
+			ProgressManager.complete();
+
+			var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true,
+					LanguageManager.sentences['msg_not_valid_tpl_file'] );
+
+			dispatchEvent( errEvent );
+
+			if ( !errEvent.isDefaultPrevented() )
+			{
+				SuperAlert.show(
+						LanguageManager.sentences['msg_not_valid_tpl_file'],
+						LanguageManager.sentences['error'] );
+			}
+		}
+	}
+
+	private function saveErrorHandler( event : IOErrorEvent ) : void
 	{
 		ProgressManager.complete();
 
-		var stream:FileStream = event.target as FileStream;
-		stream.removeEventListener(OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler);
-		stream.removeEventListener(Event.COMPLETE, saveHandler);
-		stream.removeEventListener(IOErrorEvent.IO_ERROR, saveErrorHandler);
+		var stream : FileStream = event.target as FileStream;
+		stream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler );
+		stream.removeEventListener( Event.COMPLETE, saveHandler );
+		stream.removeEventListener( IOErrorEvent.IO_ERROR, saveErrorHandler );
 		file.cancel();
 		stream.close();
 
-		var errEvent:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, false, true, event.text);
-		 
-		dispatchEvent(errEvent);
-		
-		if(!errEvent.isDefaultPrevented())
+		var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true, event.text );
+
+		dispatchEvent( errEvent );
+
+		if ( !errEvent.isDefaultPrevented() )
 		{
-			SuperAlert.show( 
-				errEvent.text,
-				LanguageManager.sentences['error']);
-		}	
+			SuperAlert.show(
+					errEvent.text,
+					LanguageManager.sentences['error'] );
+		}
 	}
-		
-	private function openErrorHandler(event:IOErrorEvent):void
+
+	private function openErrorHandler( event : IOErrorEvent ) : void
 	{
 		ProgressManager.complete();
 
-		var stream:FileStream = event.target as FileStream;
-		stream.removeEventListener(Event.COMPLETE, openHandler);
-		stream.removeEventListener(IOErrorEvent.IO_ERROR, openErrorHandler);		
+		var stream : FileStream = event.target as FileStream;
+		stream.removeEventListener( Event.COMPLETE, openHandler );
+		stream.removeEventListener( IOErrorEvent.IO_ERROR, openErrorHandler );
 		file.cancel();
 		stream.close();
 
-		var errEvent:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, false, true, event.text);
-		 
-		dispatchEvent(errEvent);
-		
-		if(!errEvent.isDefaultPrevented())
+		var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true, event.text );
+
+		dispatchEvent( errEvent );
+
+		if ( !errEvent.isDefaultPrevented() )
 		{
-			SuperAlert.show( 
-				errEvent.text,
-				LanguageManager.sentences['error']);
-		}	
+			SuperAlert.show(
+					errEvent.text,
+					LanguageManager.sentences['error'] );
+		}
 	}
 
 }

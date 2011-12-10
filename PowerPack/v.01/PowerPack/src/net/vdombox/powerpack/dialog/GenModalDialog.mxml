@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ModalDialog 
-	xmlns="net.vdombox.powerpack.dialog.*"
-	xmlns:mx="http://www.adobe.com/2006/mxml"		
-	showStatusBar="false"
-	showGripper="false"
-	systemChrome="none"
-	transparent="true">		
+<ModalDialog
+		xmlns="net.vdombox.powerpack.dialog.*"
+		xmlns:mx="http://www.adobe.com/2006/mxml"
+		showStatusBar="false"
+		showGripper="false"
+		systemChrome="none"
+		transparent="true">
 	<mx:Script>
 		<![CDATA[
 		import net.vdombox.powerpack.customize.core.windowClasses.GeneratorTitleBar;
@@ -36,14 +36,16 @@
 		 *  public properties named <code>titleIcon</code>
 		 *  and <code>title</code>.</p>
 		 */
-		override public function get titleBarFactory() : IFactory {
+		override public function get titleBarFactory() : IFactory
+		{
 			return _titleBarFactory;
 		}
 
 		/**
 		 *  @private
 		 */
-		override public function set titleBarFactory( value : IFactory ) : void {
+		override public function set titleBarFactory( value : IFactory ) : void
+		{
 			_titleBarFactory = value;
 			titleBarFactoryChanged = true;
 
@@ -53,6 +55,6 @@
 		}
 		]]>		
 	</mx:Script>
-	
-	
+
+
 </ModalDialog>

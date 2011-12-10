@@ -1,5 +1,6 @@
 package net.vdombox.powerpack.managers
 {
+
 import flash.events.EventDispatcher;
 
 public class LogManager extends EventDispatcher
@@ -7,28 +8,28 @@ public class LogManager extends EventDispatcher
 	/**
 	 *  @private
 	 */
-	private static var _instance:LogManager;
+	private static var _instance : LogManager;
 
 	/**
 	 *  @private
 	 */
-	public static function getInstance():LogManager
+	public static function getInstance() : LogManager
 	{
-		if (!_instance)
+		if ( !_instance )
 		{
 			_instance = new LogManager();
 		}
 
 		return _instance;
 	}
-	
+
 	/**
 	 *  @private
 	 */
-	public static function get instance():LogManager
+	public static function get instance() : LogManager
 	{
 		return getInstance();
-	}	
+	}
 
 	//--------------------------------------------------------------------------
 	//
@@ -43,10 +44,10 @@ public class LogManager extends EventDispatcher
 	{
 		super();
 
-		if (_instance)
-			throw new Error("Instance already exists.");
+		if ( _instance )
+			throw new Error( "Instance already exists." );
 	}
-	
+
 	//--------------------------------------------------------------------------
 	//
 	//  Variables
@@ -59,29 +60,29 @@ public class LogManager extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------			
 
-    //----------------------------------
+	//----------------------------------
 	//  languageXML
-    //----------------------------------	
+	//----------------------------------
 
 	[Bindable]
-	public var _languageXML:XML;
-    
-    public static function get languageXML():XML
-    {
-    	return instance._languageXML;
-    }	
-    
-    public static function set languageXML(value:XML):void
-    {
-    	instance._languageXML = value;
-    }	
-	
+	public var _languageXML : XML;
+
+	public static function get languageXML() : XML
+	{
+		return instance._languageXML;
+	}
+
+	public static function set languageXML( value : XML ) : void
+	{
+		instance._languageXML = value;
+	}
+
 	//--------------------------------------------------------------------------
 	//
 	//  Methods
 	//
 	//--------------------------------------------------------------------------
-	
+
 	//--------------------------------------------------------------------------
 	//
 	//  Event handlers

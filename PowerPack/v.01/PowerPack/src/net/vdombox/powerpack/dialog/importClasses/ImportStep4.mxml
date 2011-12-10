@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
-	creationComplete="onShow()">
+		 creationComplete="onShow()">
 
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.managers.ContextManager;
-
-		import mx.events.ItemClickEvent;
-
 		import net.vdombox.powerpack.managers.LanguageManager;
 
 		static private var defaultCaptions : Object = {
-			importation_complete: "Importation complete"
+			importation_complete : "Importation complete"
 		}
 
 		static private var _classConstructed : Boolean = classConstruct();
 
-		static private function classConstruct() : Boolean {
+		static private function classConstruct() : Boolean
+		{
 			LanguageManager.setSentences( defaultCaptions );
 			return true;
 		}
 
-		private function onShow() : void {
+		private function onShow() : void
+		{
 		}
 		]]>
 	</mx:Script>
@@ -29,10 +27,10 @@
 	<mx:Grid width="100%">
 		<mx:GridRow>
 			<mx:GridItem colSpan="2">
-				<mx:Label text="{LanguageManager.sentences.importation_complete}"/>
+				<mx:Label text="{LanguageManager.sentences.importation_complete}" />
 			</mx:GridItem>
 		</mx:GridRow>
-	</mx:Grid>	
-	
-			
+	</mx:Grid>
+
+
 </mx:VBox>

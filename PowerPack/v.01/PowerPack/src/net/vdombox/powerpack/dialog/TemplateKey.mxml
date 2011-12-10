@@ -1,69 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModalDialog xmlns="net.vdombox.powerpack.dialog.*" xmlns:mx="http://www.adobe.com/2006/mxml"
-	width="320" height="160"
-	title="{LanguageManager.sentences.template_key}"
-	creationComplete="onShow()">
-	
+			 width="320" height="160"
+			 title="{LanguageManager.sentences.template_key}"
+			 creationComplete="onShow()">
+
 	<mx:Script>
 		<![CDATA[
-		import mx.utils.StringUtil;
-
-		import net.vdombox.powerpack.managers.ContextManager;
 		import net.vdombox.powerpack.managers.LanguageManager;
 
 		private static var _dialog : TemplateKey;
 
-		static public function show( closeHandler : Function = null ) : TemplateKey {
-			if ( !_dialog || _dialog.closed ) {
+		static public function show( closeHandler : Function = null ) : TemplateKey
+		{
+			if ( !_dialog || _dialog.closed )
+			{
 				_dialog = new TemplateKey();
 				_dialog.open();
 				_dialog.show( OK | CANCEL, closeHandler, null, OK );
 
 				var defaultCaptions : Object = {
-					template_key: "Template key",
-					input_template_key: "Input template key",
-					msg_input_template_key: "Input valid template key"
+					template_key : "Template key",
+					input_template_key : "Input template key",
+					msg_input_template_key : "Input valid template key"
 				};
 
 				LanguageManager.setSentences( defaultCaptions );
 			}
-			else {
+			else
+			{
 				_dialog.activate();
 			}
 
 			return _dialog;
 		}
 
-		private function onShow() : void {
+		private function onShow() : void
+		{
 			txtKey.setFocus();
 		}
 		]]>
 	</mx:Script>
-	
+
 	<mx:VBox styleName="dlgHeader" width="100%">
-		<mx:Label text="{LanguageManager.sentences.input_template_key}" styleName="headerLabel"/>
+		<mx:Label text="{LanguageManager.sentences.input_template_key}" styleName="headerLabel" />
 	</mx:VBox>
-	
-	<mx:HRule width="100%"/>
-		
+
+	<mx:HRule width="100%" />
+
 	<mx:VBox styleName="dlgContent" width="100%" height="100%">
 		<mx:Grid width="100%" height="100%">
 			<mx:GridRow width="100%" height="100%">
 				<mx:GridItem width="100%" height="100%">
-					<mx:Label text="{LanguageManager.sentences.msg_input_template_key}:"/>
+					<mx:Label text="{LanguageManager.sentences.msg_input_template_key}:" />
 				</mx:GridItem>
 			</mx:GridRow>
 			<mx:GridRow width="100%" height="100%">
 				<mx:GridItem width="100%" height="100%" horizontalAlign="center">
-					<mx:TextInput id="txtKey" width="90%"/>
+					<mx:TextInput id="txtKey" width="90%" />
 				</mx:GridItem>
 			</mx:GridRow>
 		</mx:Grid>
-	</mx:VBox>	
+	</mx:VBox>
 
-	<mx:HRule width="100%"/>
-	
+	<mx:HRule width="100%" />
+
 	<mx:ControlBar styleName="dlgFooter" width="100%">
 	</mx:ControlBar>
-	
+
 </ModalDialog>

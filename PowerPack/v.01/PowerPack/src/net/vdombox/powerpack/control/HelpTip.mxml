@@ -5,22 +5,22 @@
 		import net.vdombox.powerpack.managers.ContextManager;
 		]]>
 	</mx:Script>
-	
-	<mx:Number id="alpha">0.6</mx:Number>
-	
-	<mx:Parallel id="FadeInEffect">
-		<mx:Fade duration="100" alphaFrom="{alpha}" alphaTo="1.0"/>
-	</mx:Parallel>
-	 
-	<mx:Parallel id="FadeOutEffect">
-		<mx:Fade duration="400" alphaFrom="1.0" alphaTo="{alpha}"/>
-  	</mx:Parallel>	
 
-	<mx:Image		
-		source="{ContextManager.helpTipClass}"
-		rollOverEffect="FadeInEffect"
-		rollOutEffect="FadeOutEffect"
-		alpha="{alpha}">
+	<mx:Number id="alpha">0.6</mx:Number>
+
+	<mx:Parallel id="FadeInEffect">
+		<mx:Fade duration="100" alphaFrom="{alpha}" alphaTo="1.0" />
+	</mx:Parallel>
+
+	<mx:Parallel id="FadeOutEffect">
+		<mx:Fade duration="400" alphaFrom="1.0" alphaTo="{alpha}" />
+	</mx:Parallel>
+
+	<mx:Image
+			source="{ContextManager.helpTipClass}"
+			rollOverEffect="FadeInEffect"
+			rollOutEffect="FadeOutEffect"
+			alpha="{alpha}">
 	</mx:Image>
-	
+
 </mx:Box>

@@ -1,61 +1,62 @@
 package net.vdombox.powerpack.managers
 {
+
 import flash.events.EventDispatcher;
 
 public class CustomTipManager extends EventDispatcher
 {
 
-    //--------------------------------------------------------------------------
-    //
-    //  Class variables
-    //
-    //--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+	//
+	//  Class variables
+	//
+	//--------------------------------------------------------------------------
 
-    /**
-     *  @private
-     */
-    private static var instance:CustomTipManager;
+	/**
+	 *  @private
+	 */
+	private static var instance : CustomTipManager;
 
-    //--------------------------------------------------------------------------
-    //
-    //  Class methods
-    //
-    //--------------------------------------------------------------------------
-    
-    /**
-     *  @private
-     */
-    public static function getInstance():CustomTipManager
-    {
-        if (!instance)
-            instance = new CustomTipManager();
+	//--------------------------------------------------------------------------
+	//
+	//  Class methods
+	//
+	//--------------------------------------------------------------------------
 
-        return instance;
-    }
+	/**
+	 *  @private
+	 */
+	public static function getInstance() : CustomTipManager
+	{
+		if ( !instance )
+			instance = new CustomTipManager();
 
-    //--------------------------------------------------------------------------
-    //
-    //  Constructor
-    //
-    //--------------------------------------------------------------------------
+		return instance;
+	}
 
-    /**
-     *  @private
-     */
+	//--------------------------------------------------------------------------
+	//
+	//  Constructor
+	//
+	//--------------------------------------------------------------------------
+
+	/**
+	 *  @private
+	 */
 	public function CustomTipManager()
 	{
 		super();
-		
-		if (instance)
-            throw new Error("Instance already exists.");
+
+		if ( instance )
+			throw new Error( "Instance already exists." );
 
 		this.systemManager = SystemManagerGlobals.topLevelSystemManagers[0] as ISystemManager;
 		sandboxRoot = this.systemManager.getSandboxRoot();
-		sandboxRoot.addEventListener(InterManagerRequest.TOOLTIP_MANAGER_REQUEST, marshalToolTipManagerHandler, false, 0, true);
-		var me:InterManagerRequest = new InterManagerRequest(InterManagerRequest.TOOLTIP_MANAGER_REQUEST);
+		sandboxRoot.addEventListener( InterManagerRequest.TOOLTIP_MANAGER_REQUEST, marshalToolTipManagerHandler, false, 0, true );
+		var me : InterManagerRequest = new InterManagerRequest( InterManagerRequest.TOOLTIP_MANAGER_REQUEST );
 		me.name = "update";
 		// trace("--->update request for ToolTipManagerImpl", systemManager);
-		sandboxRoot.dispatchEvent(me);
+		sandboxRoot.dispatchEvent( me );
 		// trace("<---update request for ToolTipManagerImpl", systemManager);
 
 	}

@@ -1,4 +1,3 @@
-import connection.SOAPBaseLevel;
 import connection.protect.SOAPApplicationLevel;
 
 import memorphic.xpath.XPathQuery;
@@ -19,7 +18,7 @@ public function getApplicationValue( applicationXML : XML, queryStr : String ) :
 
 	queryStr = queryStr ? queryStr : "/";
 	myQuery = new XPathQuery( queryStr );
-	result  = myQuery.exec( applicationXML );
+	result = myQuery.exec( applicationXML );
 
 	return result.toString();
 }
@@ -52,7 +51,7 @@ public function setApplicationValue( applicationXML : XML, queryStr : String, va
 	return applicationXML;
 }
 
-public function loadApplication(  applicationID : String  ) : Function
+public function loadApplication( applicationID : String ) : Function
 {
 	var soapApplicationLevel : SOAPApplicationLevel = new SOAPApplicationLevel();
 
@@ -62,15 +61,24 @@ public function loadApplication(  applicationID : String  ) : Function
 
 	function rusulGettedHandler( event : Event ) : void
 	{
-		soapApplicationLevel.removeEventListener( SOAPApplicationLevel.RESULT_GETTED, rusulGettedHandler);
+		soapApplicationLevel.removeEventListener( SOAPApplicationLevel.RESULT_GETTED, rusulGettedHandler );
 		soapApplicationLevel.removeEventListener( SOAPApplicationLevel.ERROR, rusulGettedHandler );
 
-		if   (event.type == SOAPApplicationLevel.RESULT_GETTED)
+		if ( event.type == SOAPApplicationLevel.RESULT_GETTED )
+		{
 			setReturnValue( soapApplicationLevel.result );
+
+		}
 		else
+		{
 			setReturnValue( soapApplicationLevel.errorResult );
+
+		}
+
 	}
 
 	return rusulGettedHandler;
 }
+
+
 

@@ -1,65 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ModalDialog 
-	xmlns="net.vdombox.powerpack.dialog.*"
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="500" height="460"
-	title="{LanguageManager.sentences.properties}" 
-	creationComplete="onShow(event)" 
-	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*">
-	
+<ModalDialog
+		xmlns="net.vdombox.powerpack.dialog.*"
+		xmlns:mx="http://www.adobe.com/2006/mxml"
+		width="500" height="460"
+		title="{LanguageManager.sentences.properties}"
+		creationComplete="onShow(event)"
+		xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*">
+
 	<mx:Script>
 		<![CDATA[
-			import mx.events.CloseEvent;
-			import mx.events.FlexEvent;
-			import mx.utils.StringUtil;
-			
-			import net.vdombox.powerpack.Template;
-			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
-			import net.vdombox.powerpack.managers.ContextManager;
-			import net.vdombox.powerpack.managers.LanguageManager;
+		import mx.utils.StringUtil;
+
+		import net.vdombox.powerpack.Template;
+		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+		import net.vdombox.powerpack.managers.ContextManager;
+		import net.vdombox.powerpack.managers.LanguageManager;
 
 		private static var _dialog : TemplateProperties;
 
-		static public function show( closeHandler : Function = null ) : TemplateProperties 
+		static public function show( closeHandler : Function = null ) : TemplateProperties
 		{
-			
-			if ( !_dialog || _dialog.closed ) {
+
+			if ( !_dialog || _dialog.closed )
+			{
 				_dialog = new TemplateProperties();
 				_dialog.open();
 				_dialog.show( OK | CANCEL, closeHandler, null, OK );
 
 				var defaultCaptions : Object = {
-					template_properties: "Template properties",
-					template_name: "Template name",
-					template_description: "Description",
-					template_picture: "Template picture",
-					template_remove_pic: "Remove picture",
-					template_key: "Template key"
+					template_properties : "Template properties",
+					template_name : "Template name",
+					template_description : "Description",
+					template_picture : "Template picture",
+					template_remove_pic : "Remove picture",
+					template_key : "Template key"
 				};
 
 				LanguageManager.setSentences( defaultCaptions );
 			}
-			else {
+			else
+			{
 				_dialog.activate();
 			}
 
 			return _dialog;
 		}
-			
-		protected override function removeDialog( buttonPressed : String ) : void 
+
+		protected override function removeDialog( buttonPressed : String ) : void
 		{
-			switch ( buttonPressed ) {
-				
+			switch ( buttonPressed )
+			{
+
 				case BUTTON_NAME_OK:
 				{
-					if (picBrowse.text && !_dialog.isCorrectImageFile)
+					if ( picBrowse.text && !_dialog.isCorrectImageFile )
 						showTemplatePictureError();
 					else
 					{
 						_dialog.closeDetail = ModalDialog.OK;
 						_dialog.close();
 					}
-					
+
 					break;
 				}
 				case BUTTON_NAME_CANCEL:
@@ -76,163 +77,168 @@
 				}
 			}
 		}
-			
-		public function get isCorrectImageFile () : Boolean
+
+		public function get isCorrectImageFile() : Boolean
 		{
-			try {
+			try
+			{
 				var templatePictureFile : File = new File( StringUtil.trim( picBrowse.text ) );
-			} catch (e:Error)
+			}
+			catch ( e : Error )
 			{
 				return false;
 			}
-			
-			return FileUtils.correctImageFile(templatePictureFile);
+
+			return FileUtils.correctImageFile( templatePictureFile );
 		}
-			
-		public function showTemplatePictureError() : void 
+
+		public function showTemplatePictureError() : void
 		{
 			picBrowse.txtInput.setFocus();
 			picBrowse.txtInput.errorString = LanguageManager.sentences['msg_enter_correct_image_file'];
 		}
-			
-		private function onShow( event : Event ) : void 
+
+		private function onShow( event : Event ) : void
 		{
-			if (!currentTemplate)
+			if ( !currentTemplate )
 				return;
-			
+
 			txtName.text = currentTemplate.name;
 			txtDesc.text = currentTemplate.description;
 			txtKey.text = currentTemplate.key;
 
-			if ( currentTemplate.pictureFile ) 
+			if ( currentTemplate.pictureFile )
 			{
 				picBrowse.text = currentTemplate.pictureFile.nativePath;
-				showPicture(currentTemplate.pictureFile.nativePath);
+				showPicture( currentTemplate.pictureFile.nativePath );
 			}
-			else if ( currentTemplate.b64picture ) 
+			else if ( currentTemplate.b64picture )
 			{
-				showBase64Picture(currentTemplate.b64picture);
+				showBase64Picture( currentTemplate.b64picture );
 			}
-			else 
+			else
 			{
 				hideGridRemovePic();
 			}
-			
+
 			txtName.setFocus();
-			
+
 			addHandlers();
 		}
-			
-		private function addHandlers():void
+
+		private function addHandlers() : void
 		{
-			picBrowse.txtInput.addEventListener(Event.CHANGE, onImageFilePathChange);
+			picBrowse.txtInput.addEventListener( Event.CHANGE, onImageFilePathChange );
 		}
-			
+
 		public function get currentTemplate() : Template
 		{
-			if (!ContextManager.templates || ContextManager.templates.length == 0)
+			if ( !ContextManager.templates || ContextManager.templates.length == 0 )
 				return null;
-			
-			return ContextManager.templates.getItemAt( 0 ) as Template; 
+
+			return ContextManager.templates.getItemAt( 0 ) as Template;
 		}
-			
+
 		public function get templatePicturePath() : String
 		{
-			return StringUtil.trim(picBrowse.text);
+			return StringUtil.trim( picBrowse.text );
 		}
-			
+
 		public function get templateName() : String
 		{
 			return txtName.text;
 		}
-			
+
 		public function get templateDescription() : String
 		{
 			return txtDesc.text;
 		}
-			
+
 		public function get templateKey() : String
 		{
 			return StringUtil.trim( txtKey.text );
 		}
 
-		private function removePicture() : void 
+		private function removePicture() : void
 		{
 			hideGridRemovePic();
 
 			picBrowse.txtInput.text = '';
 			picBrowse.text = '';
 		}
-			
-		private function onImageFilePathChange(evt:Event):void
+
+		private function onImageFilePathChange( evt : Event ) : void
 		{
 			picBrowse.txtInput.errorString = null;
-			
-			try {
-				 if (isCorrectImageFile)
-				 {
-					showPicture(templatePicturePath);
-				 } else
-				 {
-					hideGridRemovePic(); 
-				 }
-	
-			 } catch (e:Error)
-			 {
-				 hideGridRemovePic();
-			 }
+
+			try
+			{
+				if ( isCorrectImageFile )
+				{
+					showPicture( templatePicturePath );
+				}
+				else
+				{
+					hideGridRemovePic();
+				}
+
+			}
+			catch ( e : Error )
+			{
+				hideGridRemovePic();
+			}
 		}
-			
-		private function hidePicture():void
+
+		private function hidePicture() : void
 		{
 			tplImg.source = null;
-			
+
 			tplImg.visible = false;
 			tplImg.includeInLayout = false;
 		}
-			
-		private function hideBase64Picture():void
+
+		private function hideBase64Picture() : void
 		{
 			b64Img.source = null;
-			
+
 			b64Img.visible = false;
 			b64Img.includeInLayout = false;
 		}
-			
-		private function hideGridRemovePic():void
+
+		private function hideGridRemovePic() : void
 		{
 			hidePicture();
 			hideBase64Picture();
-			
+
 			gridRemovePic.visible = false;
 			gridRemovePic.includeInLayout = false;
 		}
-	
-		private function showPicture(imageSource : Object):void
+
+		private function showPicture( imageSource : Object ) : void
 		{
 			hideBase64Picture();
-			
+
 			tplImg.source = imageSource;
-			
+
 			tplImg.visible = true;
 			tplImg.includeInLayout = true;
-			
+
 			showGridRemovePic();
 		}
-		
-		private function showBase64Picture(imageSource : Object):void
+
+		private function showBase64Picture( imageSource : Object ) : void
 		{
 			hidePicture();
-			
+
 			b64Img.source = imageSource;
-			
+
 			b64Img.visible = true;
 			b64Img.includeInLayout = true;
-			
+
 			showGridRemovePic();
 		}
-		
-		private function showGridRemovePic():void
+
+		private function showGridRemovePic() : void
 		{
 			gridRemovePic.visible = true;
 			gridRemovePic.includeInLayout = true;
@@ -240,88 +246,88 @@
 		]]>
 	</mx:Script>
 	<mx:VBox styleName="dlgHeader" width="100%">
-		<mx:Label text="{LanguageManager.sentences.template_properties}" styleName="headerLabel"/>
+		<mx:Label text="{LanguageManager.sentences.template_properties}" styleName="headerLabel" />
 	</mx:VBox>
-	
-	<mx:HRule width="100%"/>
-		
+
+	<mx:HRule width="100%" />
+
 	<mx:VBox styleName="dlgContent" height="100%">
 		<mx:Grid>
-		
+
 			<mx:GridRow width="100%" height="100%">
 				<mx:GridItem width="100%" height="100%">
-					<mx:Label text="{LanguageManager.sentences.template_name}:"/>
+					<mx:Label text="{LanguageManager.sentences.template_name}:" />
 				</mx:GridItem>
 				<mx:GridItem width="100%" height="100%">
-					<mx:TextInput width="300" id="txtName"/>
+					<mx:TextInput width="300" id="txtName" />
 				</mx:GridItem>
 			</mx:GridRow>
-			
+
 			<mx:GridRow width="100%" height="100%">
 				<mx:GridItem width="100%" height="100%">
-					<mx:Label text="{LanguageManager.sentences.template_description}:"/>					
+					<mx:Label text="{LanguageManager.sentences.template_description}:" />
 				</mx:GridItem>
 				<mx:GridItem width="100%" height="100%">
-					<mx:TextArea width="300" height="90" id="txtDesc"/>
+					<mx:TextArea width="300" height="90" id="txtDesc" />
 				</mx:GridItem>
 			</mx:GridRow>
-			
+
 			<mx:GridRow width="100%" height="100%">
 				<mx:GridItem width="100%" height="100%" colSpan="2">
-					<controls:HDivider label="{LanguageManager.sentences.template_picture}"/>
+					<controls:HDivider label="{LanguageManager.sentences.template_picture}" />
 				</mx:GridItem>
 			</mx:GridRow>
-			
+
 			<mx:GridRow width="100%" height="100%">
 				<mx:GridItem width="100%" height="100%">
-					<mx:Label text="{LanguageManager.sentences.template_picture}:"/>
+					<mx:Label text="{LanguageManager.sentences.template_picture}:" />
 				</mx:GridItem>
 				<mx:GridItem width="100%" height="100%">
-					<controls:FileBrowseBox id="picBrowse" width="300" mode="open" 
-						browseLabel="{LanguageManager.sentences.browse}..." 
-						browseTitle="{LanguageManager.sentences.open_file}..."
-						filterAll="{LanguageManager.sentences.all}"
-						text=""/>
+					<controls:FileBrowseBox id="picBrowse" width="300" mode="open"
+											browseLabel="{LanguageManager.sentences.browse}..."
+											browseTitle="{LanguageManager.sentences.open_file}..."
+											filterAll="{LanguageManager.sentences.all}"
+											text="" />
 				</mx:GridItem>
 			</mx:GridRow>
-			
+
 			<mx:GridRow width="100%" height="100%" id="gridRemovePic">
 				<mx:GridItem width="100%" height="100%">
 					<!--mx:Label text="{LanguageManager.sentences.template_remove_pic}:"/-->
 				</mx:GridItem>
-				<mx:GridItem width="100%" height="100%">					
+				<mx:GridItem width="100%" height="100%">
 					<mx:Image id="tplImg"
-							  width="100" height="100" 
+							  width="100" height="100"
 							  scaleContent="true" autoLoad="true" />
 					<controls:Base64Image id="b64Img"
-										  width="100" height="100" 
+										  width="100" height="100"
 										  scaleContent="true" autoLoad="true" />
-					<mx:Button id="btnRemovePic" label="{LanguageManager.sentences.remove}" 
-						click="removePicture()"/>
+					<mx:Button id="btnRemovePic" label="{LanguageManager.sentences.remove}"
+							   click="removePicture()" />
 				</mx:GridItem>
 			</mx:GridRow>
-			
+
 			<mx:GridRow width="100%" height="100%">
 				<mx:GridItem width="100%" height="100%" colSpan="2">
-					<mx:HRule width="100%"/>
+					<mx:HRule width="100%" />
 				</mx:GridItem>
 			</mx:GridRow>
-									
+
 			<mx:GridRow width="100%" height="100%">
 				<mx:GridItem width="100%" height="100%">
-					<mx:Label text="{LanguageManager.sentences.template_key}:"/>
+					<mx:Label text="{LanguageManager.sentences.template_key}:" />
 				</mx:GridItem>
 				<mx:GridItem width="100%" height="100%">
-					<mx:TextInput id="txtKey" width="300"/>
+					<mx:TextInput id="txtKey" width="300" />
 				</mx:GridItem>
 			</mx:GridRow>
-			
+
 		</mx:Grid>
 	</mx:VBox>
 
-	<mx:HRule width="100%"/>
-	
+	<mx:HRule width="100%" />
+
 	<mx:ControlBar width="100%" styleName="dlgFooter">
 	</mx:ControlBar>
-	
+
 </ModalDialog>

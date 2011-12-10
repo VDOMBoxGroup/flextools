@@ -1,51 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ModalDialog 
-	xmlns="net.vdombox.powerpack.dialog.*"
-	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
-	xmlns:importClasses="net.vdombox.powerpack.dialog.importClasses.*"
-	width="450" height="460"
-	title="{LanguageManager.sentences.lbl_import}" 
-	close="ConnectionManager.instance.window = null"
-	>
+<ModalDialog
+		xmlns="net.vdombox.powerpack.dialog.*"
+		xmlns:mx="http://www.adobe.com/2006/mxml"
+		xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
+		xmlns:importClasses="net.vdombox.powerpack.dialog.importClasses.*"
+		width="450" height="460"
+		title="{LanguageManager.sentences.lbl_import}"
+		close="ConnectionManager.instance.window = null"
+		>
 
-	
+
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.Template;
-
-		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
-
-		import net.vdombox.powerpack.importation.ImportApp;
-
-		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
-
-		import generated.webservices.Get_all_typesResultEvent;
-
-		import net.vdombox.powerpack.managers.ProgressManager;
-		import net.vdombox.powerpack.managers.ConnectionManager;
-
 		import generated.webservices.Export_applicationResultEvent;
-
-		import vdom.connection.protect.MD5;
-
+		import generated.webservices.Get_all_typesResultEvent;
 		import generated.webservices.List_applicationsResultEvent;
-		import generated.webservices.Close_sessionResultEvent;
-		import generated.webservices.Open_sessionResultEvent;
-		import generated.webservices.Vdom;
 
-		import vdom.connection.protect.Code;
-
-		import mx.rpc.events.ResultEvent;
 		import mx.controls.Alert;
-		import mx.rpc.soap.WebService;
-		import mx.rpc.events.FaultEvent;
-		import mx.rpc.soap.LoadEvent;
-		import mx.events.ItemClickEvent;
 		import mx.utils.StringUtil;
 
+		import net.vdombox.powerpack.Template;
+		import net.vdombox.powerpack.importation.ImportApp;
+		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+		import net.vdombox.powerpack.managers.ConnectionManager;
 		import net.vdombox.powerpack.managers.ContextManager;
 		import net.vdombox.powerpack.managers.LanguageManager;
+		import net.vdombox.powerpack.managers.ProgressManager;
 
 		private static var _dialog : Import;
 		private var appsXML : XMLList;
@@ -54,8 +35,10 @@
 		public var graphs : Array = [];
 		public var template : Template;
 
-		static public function show( closeHandler : Function = null ) : Import {
-			if ( !_dialog || _dialog.closed ) {
+		static public function show( closeHandler : Function = null ) : Import
+		{
+			if ( !_dialog || _dialog.closed )
+			{
 				_dialog = new Import();
 				_dialog.open();
 				_dialog.show( CANCEL | OK, closeHandler, null, CANCEL );
@@ -65,13 +48,14 @@
 				ConnectionManager.instance.window = _dialog;
 
 				var defaultCaptions : Object = {
-					lbl_import: "Import",
-					import_template: "Import template"
+					lbl_import : "Import",
+					import_template : "Import template"
 				};
 
 				LanguageManager.setSentences( defaultCaptions );
 			}
-			else {
+			else
+			{
 				_dialog.activate();
 			}
 
@@ -79,8 +63,10 @@
 		}
 
 		//////////////////////////////////////////////////////////////////!!!
-		static public function conshow( closeHandler : Function = null ) : Import {
-			if ( !_dialog || _dialog.closed ) {
+		static public function conshow( closeHandler : Function = null ) : Import
+		{
+			if ( !_dialog || _dialog.closed )
+			{
 				_dialog = new Import();
 				_dialog.open();
 				_dialog.show( CANCEL | OK, closeHandler, null, CANCEL );
@@ -90,28 +76,34 @@
 				ConnectionManager.instance.window = _dialog;
 
 				var CaptionsVImport : Object = {
-					lbl_import: "Connect",
-					import_template: "Connect:"
+					lbl_import : "Connect",
+					import_template : "Connect:"
 				};
 
 				LanguageManager.setSentences( CaptionsVImport );
 			}
-			else {
+			else
+			{
 				_dialog.activate();
 			}
 
 			return _dialog;
 		}
 
-		private function onShow() : void {
+		private function onShow() : void
+		{
 
 		}
 
-		private function nextHandler( event : Event ) : void {
-			if ( vsStep.numChildren - 1 > vsStep.selectedIndex ) {
-				switch ( vsStep.selectedChild ) {
+		private function nextHandler( event : Event ) : void
+		{
+			if ( vsStep.numChildren - 1 > vsStep.selectedIndex )
+			{
+				switch ( vsStep.selectedChild )
+				{
 					case step1:
-						if ( step1.radServer.selected ) {
+						if ( step1.radServer.selected )
+						{
 							ProgressManager.start( ProgressManager.WINDOW_MODE, false );
 
 							if ( step1.txtHost.text.indexOf( 'http://' ) == -1 )
@@ -129,9 +121,11 @@
 
 							ConnectionManager.exec( 'list_applications', getAppListHandler );
 						}
-						else if ( step1.radFile.selected && FileUtils.isValidPath( step1.fileBrowse.text ) ) {
+						else if ( step1.radFile.selected && FileUtils.isValidPath( step1.fileBrowse.text ) )
+						{
 							var file : File = new File( step1.fileBrowse.text );
-							if ( file && file.exists ) {
+							if ( file && file.exists )
+							{
 								var fileStream : FileStream = new FileStream();
 
 								ProgressManager.source = fileStream;
@@ -144,7 +138,8 @@
 						break;
 
 					case step2:
-						if ( step2.lstApps.selectedItem ) {
+						if ( step2.lstApps.selectedItem )
+						{
 							ProgressManager.start( ProgressManager.WINDOW_MODE, false );
 							var appID : String = XML( step2.lstApps.selectedItem ).@ID;
 							ConnectionManager.exec( 'export_application', importAppHandler, appID );
@@ -188,21 +183,25 @@
 			}
 		}
 
-		private function backHandler( event : Event ) : void {
+		private function backHandler( event : Event ) : void
+		{
 			if ( vsStep.selectedIndex == 2 && step1.radFile.selected )
 				vsStep.selectedIndex -= 2;
 			else if ( vsStep.selectedIndex > 0 )
 				vsStep.selectedIndex--;
 		}
 
-		private function getAllTypesHandler( event : Get_all_typesResultEvent ) : void {
+		private function getAllTypesHandler( event : Get_all_typesResultEvent ) : void
+		{
 			var resultXML : XML = new XML( <Result/> );
 			resultXML.appendChild( XMLList( event.result ) );
 
-			if ( resultXML.Error.toString() == 'Error' ) {
+			if ( resultXML.Error.toString() == 'Error' )
+			{
 				SuperAlert.show( resultXML.Error );
 			}
-			else {
+			else
+			{
 				typesXML = resultXML.Types[0];
 				ConnectionManager.logout();
 				vsStep.selectedIndex = 2;
@@ -210,7 +209,8 @@
 			}
 		}
 
-		private function onAppFileLoad( event : Event ) : void {
+		private function onAppFileLoad( event : Event ) : void
+		{
 			var fileStream : FileStream = event.target as FileStream;
 			var xml : XML = XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
 			fileStream.close();
@@ -224,14 +224,17 @@
 			ConnectionManager.exec( 'get_all_types', getAllTypesHandler );
 		}
 
-		private function getAppListHandler( event : List_applicationsResultEvent ) : void {
+		private function getAppListHandler( event : List_applicationsResultEvent ) : void
+		{
 			var resultXML : XML = new XML( <Result /> );
 			resultXML.appendChild( XMLList( event.result ) );
 
-			if ( resultXML.Error.toString() == 'Error' ) {
+			if ( resultXML.Error.toString() == 'Error' )
+			{
 				SuperAlert.show( resultXML.Error );
 			}
-			else {
+			else
+			{
 				//trace(resultXML);
 				appsXML = resultXML..Application;
 
@@ -240,12 +243,14 @@
 			}
 		}
 
-		private function onStep2Show() : void {
+		private function onStep2Show() : void
+		{
 			step2.lstApps.dataProvider = appsXML;
 			step2.lstApps.labelFunction = labelFunction;
 			step2.lstApps.iconFunction = iconFunction;
 
-			function labelFunction( item : Object ) : String {
+			function labelFunction( item : Object ) : String
+			{
 				var _item : XML = XML( item );
 				var label : String = String( _item.Information.Name[0] );
 				label = StringUtil.trim( label ) ? label : LanguageManager.sentences['noname'];
@@ -253,31 +258,37 @@
 				return label + " (" + _item.@ID + ")";
 			}
 
-			function iconFunction( item : Object ) : Class {
+			function iconFunction( item : Object ) : Class
+			{
 				var _item : XML = XML( item );
 				return ContextManager.iconClass;
 			}
 		}
 
-		private function onStep3Show() : void {
+		private function onStep3Show() : void
+		{
 			step3.txtName.text = appXML.Information.Name[0];
 		}
 
-		private function onStep4Show() : void {
+		private function onStep4Show() : void
+		{
 			btnBack.enabled = false;
 			Button( ctrlBar.getChildByName( "CANCEL" ) ).enabled = true;
 			Button( ctrlBar.getChildByName( "OK" ) ).enabled = true;
 			defaultButton = Button( ctrlBar.getChildByName( "OK" ) );
 		}
 
-		private function importAppHandler( event : Export_applicationResultEvent ) : void {
+		private function importAppHandler( event : Export_applicationResultEvent ) : void
+		{
 			var resultXML : XML = new XML( <Result /> );
 			resultXML.appendChild( XMLList( event.result ) );
 
-			if ( resultXML.Error.toString() == 'Error' ) {
+			if ( resultXML.Error.toString() == 'Error' )
+			{
 				SuperAlert.show( resultXML.Error );
 			}
-			else {
+			else
+			{
 				appXML = resultXML.Application[0];
 
 				/*
@@ -293,36 +304,38 @@
 			}
 		}
 
-		private function onVSChange() : void {
+		private function onVSChange() : void
+		{
 			btnBack.enabled = vsStep.selectedIndex == 0 ? false : true;
 			btnNext.enabled = vsStep.selectedIndex == vsStep.numChildren - 1 ? false : true;
 		}
 		]]>
 	</mx:Script>
-	
+
 	<mx:VBox styleName="dlgHeader" width="100%">
-		<mx:Label text="{LanguageManager.sentences.import_template}" styleName="headerLabel"/>
+		<mx:Label text="{LanguageManager.sentences.import_template}" styleName="headerLabel" />
 	</mx:VBox>
-	
-	<mx:HRule width="100%"/>
-	
+
+	<mx:HRule width="100%" />
+
 	<mx:ViewStack width="100%" height="100%" selectedIndex="0" id="vsStep" change="onVSChange()">
 
-		<importClasses:ImportStep1 styleName="dlgContent" width="100%" height="100%" id="step1"/>
-		
-		<importClasses:ImportStep2 styleName="dlgContent" width="100%" height="100%" id="step2" show="onStep2Show()"/>
-		
-		<importClasses:ImportStep3 styleName="dlgContent" width="100%" height="100%" id="step3" show="onStep3Show()"/>
-		
-		<importClasses:ImportStep4 styleName="dlgContent" width="100%" height="100%" id="step4" show="onStep4Show()"/>
-		
+		<importClasses:ImportStep1 styleName="dlgContent" width="100%" height="100%" id="step1" />
+
+		<importClasses:ImportStep2 styleName="dlgContent" width="100%" height="100%" id="step2" show="onStep2Show()" />
+
+		<importClasses:ImportStep3 styleName="dlgContent" width="100%" height="100%" id="step3" show="onStep3Show()" />
+
+		<importClasses:ImportStep4 styleName="dlgContent" width="100%" height="100%" id="step4" show="onStep4Show()" />
+
 	</mx:ViewStack>
 
-	<mx:HRule width="100%"/>
-	
+	<mx:HRule width="100%" />
+
 	<mx:ControlBar width="100%" styleName="dlgFooter" id="ctrlBar">
-		<mx:Button id="btnBack" label="&lt; {LanguageManager.sentences.back}" click="backHandler(event)" enabled="false"/>
-		<mx:Button id="btnNext" label="{LanguageManager.sentences.next} &gt;" click="nextHandler(event)"/>
+		<mx:Button id="btnBack" label="&lt; {LanguageManager.sentences.back}" click="backHandler(event)"
+				   enabled="false" />
+		<mx:Button id="btnNext" label="{LanguageManager.sentences.next} &gt;" click="nextHandler(event)" />
 	</mx:ControlBar>
-	
+
 </ModalDialog>

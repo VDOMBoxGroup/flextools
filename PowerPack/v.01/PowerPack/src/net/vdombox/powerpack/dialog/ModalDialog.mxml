@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SuperWindow xmlns="net.vdombox.powerpack.lib.extendedapi.containers.*" 
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="400" height="300" visible="true"
-	titleIcon="@Embed(source='/assets/icons/icon_16.png')"
-	startPosition="centerParent" 
-	alwaysInFront="false"
-	modal="true"
-	parentWindow="{NativeApplication.nativeApplication.activeWindow}"
-	showStatusBar="false"
-	minimizable="false"
-	resizable="false">
-	 
+<SuperWindow xmlns="net.vdombox.powerpack.lib.extendedapi.containers.*"
+			 xmlns:mx="http://www.adobe.com/2006/mxml"
+			 width="400" height="300" visible="true"
+			 titleIcon="@Embed(source='/assets/icons/icon_16.png')"
+			 startPosition="centerParent"
+			 alwaysInFront="false"
+			 modal="true"
+			 parentWindow="{NativeApplication.nativeApplication.activeWindow}"
+			 showStatusBar="false"
+			 minimizable="false"
+			 resizable="false">
+
 	<mx:Script>
 		<![CDATA[
 		import mx.containers.ControlBar;
 		import mx.controls.Button;
-		import mx.core.Application;
 		import mx.core.Container;
 		import mx.events.CloseEvent;
-		
-		import net.vdombox.powerpack.managers.LanguageManager;
 
 		public static const YES : uint = 0x0001;
 		public static const NO : uint = 0x0002;
@@ -39,13 +36,15 @@
 		private var closeEvent : CloseEvent = new CloseEvent( CloseEvent.CLOSE );
 		private var _closeHandler : Function;
 
-		public function show( flags : uint = 0x4 /* Alert.OK */, closeHandler : Function = null, iconClass : Class = null, defaultButtonFlag : uint = 0x4 /* Alert.OK */ ) : void {
+		public function show( flags : uint = 0x4 /* Alert.OK */, closeHandler : Function = null, iconClass : Class = null, defaultButtonFlag : uint = 0x4 /* Alert.OK */ ) : void
+		{
 
 			buttonFlags = flags;
 
 			var btnContainer : Object;
 
-			for ( var i : int = numChildren - 1; i >= 0; i-- ) {
+			for ( var i : int = numChildren - 1; i >= 0; i-- )
+			{
 				if ( getChildAt( i ) is ControlBar )
 					btnContainer = getChildAt( i );
 			}
@@ -55,7 +54,8 @@
 
 			var button : Button;
 
-			if ( buttonFlags & OK ) {
+			if ( buttonFlags & OK )
+			{
 				button = createButton( okLabel, BUTTON_NAME_OK, btnContainer as Container );
 
 				button.visible = true;
@@ -65,7 +65,8 @@
 					defaultButton = button;
 			}
 
-			if ( buttonFlags & YES ) {
+			if ( buttonFlags & YES )
+			{
 				button = createButton( yesLabel, BUTTON_NAME_YES, btnContainer as Container );
 
 				button.visible = true;
@@ -75,7 +76,8 @@
 					defaultButton = button;
 			}
 
-			if ( buttonFlags & NO ) {
+			if ( buttonFlags & NO )
+			{
 				button = createButton( noLabel, BUTTON_NAME_NO, btnContainer as Container );
 
 				button.visible = true;
@@ -85,7 +87,8 @@
 					defaultButton = button;
 			}
 
-			if ( buttonFlags & CANCEL ) {
+			if ( buttonFlags & CANCEL )
+			{
 				button = createButton( cancelLabel, BUTTON_NAME_CANCEL, btnContainer as Container );
 
 				button.visible = true;
@@ -108,7 +111,7 @@
 
 		private var buttonFlags : uint;
 
-		private function createButton( label : String, name : String, bar : Container ) : Button 
+		private function createButton( label : String, name : String, bar : Container ) : Button
 		{
 			var button : Button = new Button();
 			button.label = label;
@@ -122,9 +125,9 @@
 			return button;
 		}
 
-		override protected function keyDownHandler( event : KeyboardEvent ) : void 
+		override protected function keyDownHandler( event : KeyboardEvent ) : void
 		{
-			if ( event.keyCode == Keyboard.ESCAPE ) 
+			if ( event.keyCode == Keyboard.ESCAPE )
 			{
 				if ( (buttonFlags & CANCEL) || !(buttonFlags & NO) )
 					removeDialog( BUTTON_NAME_CANCEL );
@@ -133,16 +136,17 @@
 			}
 		}
 
-		private function onDialogBtnClick( event : MouseEvent ) : void 
+		private function onDialogBtnClick( event : MouseEvent ) : void
 		{
 			var name : String = Button( event.currentTarget ).name;
 
 			removeDialog( name );
 		}
 
-		protected function removeDialog( buttonPressed : String ) : void 
+		protected function removeDialog( buttonPressed : String ) : void
 		{
-			switch ( buttonPressed ) {
+			switch ( buttonPressed )
+			{
 				case BUTTON_NAME_YES:
 				{
 					closeDetail = YES;
@@ -172,13 +176,14 @@
 
 			close();
 		}
-			
-		public function set closeDetail (detail : int) : void
+
+		public function set closeDetail( detail : int ) : void
 		{
 			closeEvent.detail = detail;
 		}
 
-		private function onClose( event : Event ) : void {
+		private function onClose( event : Event ) : void
+		{
 			event.stopImmediatePropagation();
 
 			removeEventListener( Event.CLOSE, onClose );
@@ -190,5 +195,5 @@
 		}
 		]]>
 	</mx:Script>
-		
+
 </SuperWindow>

@@ -1,7 +1,7 @@
 package net.vdombox.powerpack.managers
 {
+
 import flash.events.EventDispatcher;
-import flash.events.IEventDispatcher;
 
 public class ToolWindowManager extends EventDispatcher
 {
@@ -10,11 +10,11 @@ public class ToolWindowManager extends EventDispatcher
 	//  Class variables
 	//
 	//--------------------------------------------------------------------------
-		
+
 	/**
 	 *  @private
 	 */
-	private static var _instance:ToolWindowManager;
+	private static var _instance : ToolWindowManager;
 
 	//--------------------------------------------------------------------------
 	//
@@ -25,23 +25,23 @@ public class ToolWindowManager extends EventDispatcher
 	/**
 	 *  @private
 	 */
-	public static function getInstance():ToolWindowManager
+	public static function getInstance() : ToolWindowManager
 	{
-		if (!_instance)
+		if ( !_instance )
 		{
 			_instance = new ToolWindowManager();
 		}
 
 		return _instance;
 	}
-	
+
 	/**
 	 *  @private
 	 */
-	public static function get instance():ToolWindowManager
+	public static function get instance() : ToolWindowManager
 	{
 		return getInstance();
-	}	
+	}
 
 	//--------------------------------------------------------------------------
 	//
@@ -56,9 +56,9 @@ public class ToolWindowManager extends EventDispatcher
 	{
 		super();
 
-		if (_instance)
-			throw new Error("Instance already exists.");
-				
+		if ( _instance )
+			throw new Error( "Instance already exists." );
+
 	}
 
 	//--------------------------------------------------------------------------
@@ -66,8 +66,6 @@ public class ToolWindowManager extends EventDispatcher
 	//  Variables
 	//
 	//--------------------------------------------------------------------------			
-
-
 
 }
 }
