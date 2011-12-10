@@ -132,7 +132,8 @@ public class LanguageManager extends EventDispatcher
 				msg_enter_valid_graph_name: "Enter a valid graph name.",
 				msg_enter_unique_graph_name: "Enter unique graph name.",
 				msg_enter_unique_category_label: "Enter unique category label.",
-				msg_cannot_remove_nonempty_cat: "You cannot remove non empty category."
+				msg_cannot_remove_nonempty_cat: "You cannot remove non empty category.",
+				msg_enter_correct_image_file: "Enter correct image file."
 			};
 			
 			LanguageManager.setSentences(defaultCaptions);

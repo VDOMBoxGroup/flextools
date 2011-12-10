@@ -1,10 +1,5 @@
 package net.vdombox.powerpack.managers
 {
-import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-
-import net.vdombox.powerpack.gen.TemplateStruct;
-import net.vdombox.powerpack.utils.CryptUtils;
-
 import flash.events.EventDispatcher;
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
@@ -15,6 +10,11 @@ import mx.collections.ArrayCollection;
 import mx.core.Application;
 import mx.utils.Base64Decoder;
 import mx.utils.Base64Encoder;
+
+import net.vdombox.powerpack.Template;
+import net.vdombox.powerpack.gen.TemplateStruct;
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import net.vdombox.powerpack.utils.CryptUtils;
 
 public class ContextManager extends EventDispatcher
 {

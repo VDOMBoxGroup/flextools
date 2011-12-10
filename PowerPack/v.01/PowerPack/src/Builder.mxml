@@ -76,22 +76,12 @@
     	
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
-		import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
-		import net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
-		import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
-		import net.vdombox.powerpack.lib.extendedapi.ui.SuperFlexNativeMenu;
-		import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
-		import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
-		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
-		import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-
 		import flash.system.fscommand;
 		import flash.utils.describeType;
 		import flash.utils.setTimeout;
-
+		
 		import flexlib.controls.Highlighter;
-
+		
 		import mx.binding.utils.BindingUtils;
 		import mx.collections.ArrayCollection;
 		import mx.collections.HierarchicalData;
@@ -113,8 +103,9 @@
 		import mx.managers.LayoutManager;
 		import mx.managers.PopUpManager;
 		import mx.utils.StringUtil;
-
+		
 		import net.vdombox.powerpack.*;
+		import net.vdombox.powerpack.customize.Resources;
 		import net.vdombox.powerpack.dialog.EditCaption;
 		import net.vdombox.powerpack.dialog.Import;
 		import net.vdombox.powerpack.dialog.ImportFromTpl;
@@ -130,6 +121,15 @@
 		import net.vdombox.powerpack.graph.GraphCanvas;
 		import net.vdombox.powerpack.graph.Node;
 		import net.vdombox.powerpack.graph.NodeCategory;
+		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+		import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
+		import net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
+		import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
+		import net.vdombox.powerpack.lib.extendedapi.ui.SuperFlexNativeMenu;
+		import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
+		import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
+		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+		import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 		import net.vdombox.powerpack.managers.CashManager;
 		import net.vdombox.powerpack.managers.ContextManager;
 		import net.vdombox.powerpack.managers.LanguageManager;
@@ -137,7 +137,6 @@
 		import net.vdombox.powerpack.menu.MenuGeneral;
 		import net.vdombox.powerpack.panel.Console;
 		import net.vdombox.powerpack.panel.graphsClasses.AccordionChild;
-		import net.vdombox.powerpack.customize.Resources;
 
 		//--------------------------------------------------------------------------
 		//
@@ -233,22 +232,23 @@
 				exitApplication();
 			}
 
-			//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));
-			//trace(describeType(TemplateStruct.lib));
 		}
 
 		public function exitApplication( event : Event = null ) : void {
-			if ( ContextManager.templates.length > 0 && ContextManager.templates[0].modified ) {
+			if ( ContextManager.templates.length > 0 && currentTemplate.modified ) 
+			{
 				SuperAlert.show(
 						"Do you want to save file before exit?",
 						LanguageManager.sentences['confirmation'],
 						Alert.YES | Alert.NO | Alert.CANCEL, this.nativeWindow, alertSaveBeforeExitHandler, null, Alert.YES );
 			}
 			else {
-				SuperAlert.show(
+				/*SuperAlert.show(
 						"Are you sure want to exit?",
 						LanguageManager.sentences['confirmation'],
-						Alert.YES | Alert.NO, this.nativeWindow, alertExitHandler, null, Alert.NO );
+						Alert.YES | Alert.NO, this.nativeWindow, alertExitHandler, null, Alert.NO );*/
+				ContextManager.saveSettings();
+				exit();
 			}
 
 			function alertExitHandler( event : CloseEvent ) : void {
@@ -260,10 +260,9 @@
 
 			function alertSaveBeforeExitHandler( event : CloseEvent ) : void {
 				if ( event.detail == Alert.YES ) {
-					var tpl : Template = ContextManager.templates[0];
-					tpl.addEventListener( Event.COMPLETE, templateSaveAndExitHandler );
-					tpl.xmlStructure = pnl_graphs.toXML();
-					tpl.save();
+					currentTemplate.addEventListener( Event.COMPLETE, templateSaveAndExitHandler );
+					currentTemplate.xmlStructure = pnl_graphs.toXML();
+					currentTemplate.save();
 				}
 				else if ( event.detail == Alert.NO ) {
 					ContextManager.saveSettings();
@@ -281,18 +280,18 @@
 			}
 		}
 
-		public function closeTpl( askForSave : Boolean = true, action : Function = null, args : Array = null ) : void {
-			if ( ContextManager.templates.length > 0 ) {
-				var tpl : Template = ContextManager.templates[0];
-
-				if ( (tpl.modified || !tpl.file) && askForSave ) {
+		public function closeTpl( askForSave : Boolean = true, action : Function = null, args : Array = null ) : void 
+		{
+			if ( ContextManager.templates.length > 0 ) 
+			{
+				if ( (currentTemplate.modified || !currentTemplate.file) && askForSave ) {
 					alertSaveAndCloseTemplate( action, args );
 					return;
 				}
 
+				currentTemplate.dispose();
+				
 				ContextManager.templates.removeItemAt( 0 );
-				tpl.dispose();
-				tpl = null;
 			}
 
 			ContextManager.instance.lastFile = false;
@@ -308,28 +307,34 @@
 				action.apply( this, args );
 		}
 
-		public function alertSaveAndCloseTemplate( action : Function = null, args : Array = null ) : void {
+		public function alertSaveAndCloseTemplate( action : Function = null, args : Array = null ) : void 
+		{
 			SuperAlert.show(
 					"Do you want to save template?",
 					LanguageManager.sentences['confirmation'],
 					Alert.YES | Alert.NO | Alert.CANCEL, this.nativeWindow, alertSaveAndCloseHandler, null, Alert.YES );
 
-			function alertSaveAndCloseHandler( event : CloseEvent ) : void {
-				if ( event.detail == Alert.YES ) {
-					var tpl : Template = ContextManager.templates[0];
-					tpl.addEventListener( Event.COMPLETE, templateSaveAndCloseHandler );
-					tpl.xmlStructure = pnl_graphs.toXML();
-					tpl.save();
+			function alertSaveAndCloseHandler( event : CloseEvent ) : void 
+			{
+				if ( event.detail == Alert.YES ) 
+				{
+					currentTemplate.addEventListener( Event.COMPLETE, templateSaveAndCloseHandler );
+					currentTemplate.xmlStructure = pnl_graphs.toXML();
+					currentTemplate.save();
 				}
-				else if ( event.detail == Alert.NO ) {
+				else if ( event.detail == Alert.NO ) 
+				{
 					closeTpl( false, action, args );
 				}
 			}
 
-			function templateSaveAndCloseHandler( event : Event ) : void {
+			function templateSaveAndCloseHandler( event : Event ) : void 
+			{
 				var tpl : Template = event.target as Template;
 				tpl.removeEventListener( Event.COMPLETE, templateSaveAndCloseHandler );
+			
 				processSavedTpl();
+				
 				closeTpl( false, action, args );
 			}
 		}
@@ -339,38 +344,37 @@
 			workStage.includeInLayout = true;
 			workStage.validateNow();
 
-			var tpl : Template = Template( ContextManager.templates[0] );
-			pnl_graphs.templateXML = tpl.xmlStructure;
-			tpl.modified = false;
+			pnl_graphs.templateXML = currentTemplate.xmlStructure;
+			currentTemplate.modified = false;
 
 			ContextManager.instance.lastFile = true;
-			ContextManager.updateLastFiles( tpl.file );
+			ContextManager.updateLastFiles( currentTemplate.file );
 
 			MenuGeneral.updateLastFilesMenu();
 			MenuGeneral.openedTemplate();
 		}
 
-		public function processSavedTpl() : void {
+		public function processSavedTpl() : void 
+		{
 			workStage.visible = true;
 			workStage.includeInLayout = true;
 
-			var tpl : Template = Template( ContextManager.templates[0] );
-			tpl.modified = false;
+			currentTemplate.modified = false;
 
 			ContextManager.instance.lastFile = true;
-			ContextManager.updateLastFiles( tpl.file );
+			ContextManager.updateLastFiles( currentTemplate.file );
 
 			MenuGeneral.updateLastFilesMenu();
 			MenuGeneral.openedTemplate();
 		}
 
-		public function processNewTpl() : void {
+		public function processNewTpl() : void 
+		{
 			workStage.visible = true;
 			workStage.includeInLayout = true;
 
-			var tpl : Template = Template( ContextManager.templates[0] );
-			pnl_graphs.templateXML = tpl.xmlStructure;
-			tpl.modified = true;
+			pnl_graphs.templateXML = currentTemplate.xmlStructure;
+			currentTemplate.modified = true;
 
 			ContextManager.instance.lastFile = false;
 
@@ -413,20 +417,22 @@
 			}
 		}
 
-		private function onKeyDialogClose( event : CloseEvent ) : void {
-			if ( event.detail == ModalDialog.OK ) {
-				if ( event.target.txtKey.text ) {
-					var tpl : Template = ContextManager.templates[0];
-
-					tpl.key = event.target.txtKey.text;
+		private function onKeyDialogClose( event : CloseEvent ) : void 
+		{
+			if ( event.detail == ModalDialog.OK ) 
+			{
+				if ( event.target.txtKey.text ) 
+				{
+					currentTemplate.key = event.target.txtKey.text;
 
 					ProgressManager.start( ProgressManager.DIALOG_MODE, false );
 
-					tpl.processOpened();
+					currentTemplate.processOpened();
 
 					ProgressManager.complete();
 
-					if ( !tpl.isEncoded ) {
+					if ( !currentTemplate.isEncoded ) 
+					{
 						processOpenedTpl();
 						return;
 					}
@@ -438,18 +444,19 @@
 			closeTpl( false );
 		}
 
-		public function templateChanged() : void {
-			if ( ContextManager.templates.length > 0 ) {
-				var tpl : Template = ContextManager.templates[0];
-
+		public function templateChanged() : void 
+		{
+			if ( ContextManager.templates.length > 0 ) 
+			{
 				if ( MenuGeneral.state != MenuGeneral.STATE_MOD ) {
-					tpl.modified = true;
+					currentTemplate.modified = true;
 					MenuGeneral.modifiedTemplate();
 				}
 			}
 		}
 
-		public function newTpl() : void {
+		public function newTpl() : void 
+		{
 			var template : Template = new Template();
 
 			ContextManager.templates.addItemAt( template, 0 );
@@ -457,11 +464,14 @@
 			processNewTpl();
 		}
 
-		public function openTpl( file : File = null ) : void {
+		public function openTpl( file : File = null ) : void 
+		{
 			var tpl : Template = new Template();
 			tpl.addEventListener( Event.COMPLETE, completeTemplateHandler );
+			
 			if ( file )
 				tpl.file = file;
+			
 			tpl.open();
 		}
 
@@ -484,20 +494,20 @@
 					break;
 
 				case "save":
-					if ( ContextManager.templates.length > 0 ) {
-						tpl = ContextManager.templates[0];
-						tpl.addEventListener( Event.COMPLETE, templateSaveHandler );
-						tpl.xmlStructure = pnl_graphs.toXML();
-						tpl.save();
+					if ( ContextManager.templates.length > 0 ) 
+					{
+						currentTemplate.addEventListener( Event.COMPLETE, templateSaveHandler );
+						currentTemplate.xmlStructure = pnl_graphs.toXML();
+						currentTemplate.save();
 					}
 					break;
 
 				case "save_as":
-					if ( ContextManager.templates.length > 0 ) {
-						tpl = ContextManager.templates[0];
-						tpl.addEventListener( Event.COMPLETE, templateSaveHandler );
-						tpl.xmlStructure = pnl_graphs.toXML();
-						tpl.browseForSave();
+					if ( ContextManager.templates.length > 0 ) 
+					{
+						currentTemplate.addEventListener( Event.COMPLETE, templateSaveHandler );
+						currentTemplate.xmlStructure = pnl_graphs.toXML();
+						currentTemplate.browseForSave();
 					}
 					break;
 
@@ -522,7 +532,7 @@
 					break;
 
 				case "properties":
-					TemplateProperties.show( onTemplatePropertiesClose );
+					TemplateProperties.show( onTemplatePropertiesClose);
 					break;
 
 				case "validate":
@@ -663,32 +673,50 @@
 			}
 
 		}
+		
+		public function get currentTemplate() : Template
+		{
+			if (!ContextManager.templates || ContextManager.templates.length == 0)
+				return null;
+			
+			return ContextManager.templates.getItemAt( 0 ) as Template;
+		}
 
-		private function onTemplatePropertiesClose( event : CloseEvent ) : void {
+			
+		private function onTemplatePropertiesClose( event : CloseEvent ) : void 
+		{
+			if (!currentTemplate)
+				return;
+			
 			if ( event.detail == ModalDialog.OK ) {
-				var tpl : Template = ContextManager.templates[0];
+				
 				var propDlg : TemplateProperties = event.target as TemplateProperties;
-
-				tpl.name = propDlg.txtName.text;
-				tpl.description = propDlg.txtDesc.text;
-				try {
-					tpl.picture = new File( StringUtil.trim( propDlg.picBrowse.text ) );
+				
+				currentTemplate.name = propDlg.templateName;
+				currentTemplate.description = propDlg.templateDescription;
+				
+				if (!propDlg.templatePicturePath)
+					currentTemplate.pictureFile = null;
+				else
+				{
+					var templatePictureFile : File = new File( propDlg.templatePicturePath );
+					
+					currentTemplate.pictureFile = FileUtils.correctImageFile(templatePictureFile) ? templatePictureFile : null;
 				}
-				catch ( e : * ) {
-					trace( 'Wrong pic path' );
-				}
-				tpl.key = StringUtil.trim( propDlg.txtKey.text );
+				
+				currentTemplate.key = propDlg.templateKey;
 
 				templateChanged();
 			}
+			
 		}
 
-		private function onValidate( event : CloseEvent ) : void {
-			if ( event.detail == ModalDialog.OK ) {
-				var dialog : ValidateDialog = event.target as ValidateDialog;
-				var tpl : Template = ContextManager.templates[0];
-
-				var flags : uint = 0;
+		private function onValidate( event : CloseEvent ) : void 
+		{
+			if ( event.detail == ModalDialog.OK ) 
+			{
+				var dialog	: ValidateDialog = event.target as ValidateDialog;
+				var flags	: uint = 0;
 
 				if ( dialog ) {
 					if ( dialog.chkClean )	 flags |= TemplateValidateOptions.CLEAN;
@@ -699,7 +727,8 @@
 					if ( dialog.chkNames )	 flags |= TemplateValidateOptions.SET_UNIQ_NAMES;
 				}
 
-				ContextManager.templateStruct = new TemplateStruct( tpl.xmlStructure, tpl.fullID );
+				ContextManager.templateStruct = new TemplateStruct( currentTemplate.xmlStructure, currentTemplate.fullID );
+				
 				var validateArr : Array = ContextManager.templateStruct.validate( flags ).array;
 
 				pnl_problems.array = validateArr;
@@ -945,36 +974,30 @@
 			}
 		}
 
-		private function templateSaveHandler( event : Event ) : void {
+		private function templateSaveHandler( event : Event ) : void 
+		{
 			var tpl : Template = event.target as Template;
 			tpl.removeEventListener( Event.COMPLETE, templateSaveHandler );
 
 			processSavedTpl();
 		}
 
-		private function onCategoryDialogClose( event : CloseEvent ) : void {
+		private function onCategoryDialogClose( event : CloseEvent ) : void 
+		{
 			if ( event.detail == ModalDialog.OK ) {
 				var categoryLabel : String = event.target.txtCaption.text;
 
-				if ( categoryLabel )
-					pnl_graphs.createCategoryTab( categoryLabel );
-			}
-		}
-
-		private function onCategoryDialogCheckLabel( categoryLabel : String ) : void {
-			if ( pnl_graphs.checkCategoryLabelUnique( categoryLabel ) ) {
 				pnl_graphs.createCategoryTab( categoryLabel );
-
-				EditCaption.closeDialog();
-
-				return;
 			}
-
-			EditCaption.showCategoryLabelError();
-
 		}
 
-		private function onImportFromTplClose( event : Event ) : void {
+		private function onCategoryDialogCheckLabel( categoryLabel : String ) : void 
+		{
+			EditCaption.correctCategory = pnl_graphs.checkCategoryLabelUnique( categoryLabel );
+		}
+
+		private function onImportFromTplClose( event : Event ) : void 
+		{
 			if ( event is CloseEvent && CloseEvent( event ).detail == ModalDialog.OK ) {
 				var tree : Tree = event.target.tplTree;
 				var tpl : Template = event.target.template;
@@ -1022,7 +1045,8 @@
 			ProgressManager.complete();
 		}
 
-		private function onImportClose( event : CloseEvent ) : void {
+		private function onImportClose( event : CloseEvent ) : void 
+		{
 			if ( event.detail == ModalDialog.OK ) {
 				var graphs : Array = event.target.graphs;
 

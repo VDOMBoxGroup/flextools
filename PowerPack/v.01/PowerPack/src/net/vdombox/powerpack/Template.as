@@ -1,15 +1,5 @@
 package net.vdombox.powerpack
 {
-import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
-import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
-import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-
-import net.vdombox.powerpack.managers.CashManager;
-import net.vdombox.powerpack.managers.ContextManager;
-import net.vdombox.powerpack.managers.LanguageManager;
-import net.vdombox.powerpack.managers.ProgressManager;
-import net.vdombox.powerpack.utils.CryptUtils;
-
 import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -25,6 +15,15 @@ import mx.utils.Base64Decoder;
 import mx.utils.Base64Encoder;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
+
+import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import net.vdombox.powerpack.managers.CashManager;
+import net.vdombox.powerpack.managers.ContextManager;
+import net.vdombox.powerpack.managers.LanguageManager;
+import net.vdombox.powerpack.managers.ProgressManager;
+import net.vdombox.powerpack.utils.CryptUtils;
 
 /**
  * 
@@ -138,7 +137,7 @@ public class Template extends EventDispatcher
 	 public function dispose():void
 	 {
 	 	_xmlStructure = null;
-	 	_picture = null;
+	 	_pictureFile = null;
 	 	file = null;
 	 	_xml = null;
 	 }  
@@ -152,8 +151,12 @@ public class Template extends EventDispatcher
 	[Bindable]
 	public var key:String;
 	
+	/**
+	 * 
+	 * template file (XML) 
+	 */
 	[Bindable]
-	public var file:File;
+	public var file : File;
 	
 	private var _completelyOpened:Boolean;
 	
@@ -170,18 +173,20 @@ public class Template extends EventDispatcher
 
 	private var _modified:Boolean;
 	
-	[Bindable]
 	public function set modified(value:Boolean):void
 	{
-		if(_modified!=value)
+		if (_modified != value)
 		{
 			_modified = value;
 			
 			var mainIndex:XML = CashManager.getMainIndex();	
+			
 			CashManager.updateMainIndexEntry(mainIndex, fullID, 'saved', _modified?'false':'true');
 			CashManager.setMainIndex(mainIndex);
 		}
 	}
+	
+	[Bindable]
 	public function get modified():Boolean
 	{
 		return _modified;
@@ -205,7 +210,6 @@ public class Template extends EventDispatcher
 
 	private var _xmlStructure:XML;
 	
-	[Bindable]
 	public function set xmlStructure(value:XML):void
 	{
 		if(_xmlStructure!=value)
@@ -214,6 +218,8 @@ public class Template extends EventDispatcher
 			_xmlStructure = value;		
 		}
 	}
+	
+	[Bindable]
 	public function get xmlStructure():XML
 	{
 		return _xmlStructure;
@@ -223,7 +229,6 @@ public class Template extends EventDispatcher
     //  name
     //----------------------------------
 
-	[Bindable]
 	public function set name(value:String):void
 	{
 		if(_xml.name != value)
@@ -231,7 +236,9 @@ public class Template extends EventDispatcher
 			modified = true;
 			_xml.name = value;
 		}	
-	}		
+	}
+	
+	[Bindable]
 	public function get name():String
 	{
 		return Utils.getStringOrDefault(_xml.name, '');	
@@ -241,7 +248,6 @@ public class Template extends EventDispatcher
     //  description
     //----------------------------------
 
-	[Bindable]
 	public function set description(value:String):void
 	{
 		if(_xml.description != value)
@@ -249,7 +255,9 @@ public class Template extends EventDispatcher
 			modified = true;
 			_xml.description = value;	
 		}
-	}		
+	}
+	
+	[Bindable]
 	public function get description():String
 	{
 		return Utils.getStringOrDefault(_xml.description, '');	
@@ -259,7 +267,6 @@ public class Template extends EventDispatcher
     //  ID
     //----------------------------------
 
-	[Bindable]
 	public function set ID(value:String):void
 	{
 		if(_xml.@ID != value)
@@ -267,7 +274,9 @@ public class Template extends EventDispatcher
 			modified = true;
 			_xml.@ID = value;
 		}	
-	}		
+	}
+	
+	[Bindable]
 	public function get ID():String
 	{
 		if(!_xml.hasOwnProperty('@ID'))
@@ -299,27 +308,27 @@ public class Template extends EventDispatcher
     //  picture
     //----------------------------------
 	
-	private var _picture:File;
-			
-	[Bindable]
-	public function set picture(value:File):void
+	private var _pictureFile : File;
+	
+	public function set pictureFile(value:File):void
 	{
-		if(!value || !_picture || _picture.nativePath!=value.nativePath)
+		if (!value || !_pictureFile || _pictureFile.nativePath != value.nativePath)
 		{
 			modified = true;
-			_picture = value;		
+			_pictureFile = value;		
 		}
 	}
-	public function get picture():File
+	
+	[Bindable]
+	public function get pictureFile():File
 	{
-		return _picture;
+		return _pictureFile;
 	}	
 					
     //----------------------------------
     //  b64picture
     //----------------------------------
 
-	[Bindable]
 	public function set b64picture(value:String):void
 	{
 		if(_xml.picture != value)
@@ -327,7 +336,9 @@ public class Template extends EventDispatcher
 			modified = true;								
 			_xml.picture = value;	
 		}
-	}	
+	}
+	
+	[Bindable]
 	public function get b64picture():String
 	{
 		return Utils.getStringOrDefault(_xml.picture[0], '');	
@@ -583,21 +594,34 @@ public class Template extends EventDispatcher
 	
 	private function setPictureFromFile():Boolean
 	{
-		if(!picture || !picture.exists)
+		if(!pictureFile || !pictureFile.exists)
 		{
 			return false;
 		}
 		
-		var fileToBase64:FileToBase64 = new FileToBase64(picture.nativePath);
+		var fileToBase64:FileToBase64 = new FileToBase64(pictureFile.nativePath);
 		fileToBase64.convert();						
 		b64picture = fileToBase64.data.toString();
 		
 		_xml.picture[0].@type = file.extension;
 		_xml.picture[0].@name = file.name;
 		
-		picture = null;
+		//picture = null;
 		
 		return true;
+	}
+	
+	private function getPictureFromCash() : void
+	{
+		var picObj:Object = CashManager.getObject(fullID, 'logo');
+		if(picObj)
+		{
+			var picData:ByteArray = ByteArray(picObj.data);
+			
+			_xml.picture = picData.readUTFBytes(picData.bytesAvailable);
+			_xml.picture.@name = XML(picObj.entry).@name;       		
+			_xml.picture.@type = XML(picObj.entry).@type;
+		}
 	}
 	
 	private function cash():Boolean
@@ -667,21 +691,10 @@ public class Template extends EventDispatcher
 		// get tpl picture
    		delete _xml.picture;
 
-      	if(picture)
+      	if(pictureFile)
       		setPictureFromFile();
       	else
-      	{
-      		
-      		var picObj:Object = CashManager.getObject(fullID, 'logo');
-      		if(picObj)
-      		{
-      			var picData:ByteArray = ByteArray(picObj.data);
-      		
-      			_xml.picture = picData.readUTFBytes(picData.bytesAvailable);
-      			_xml.picture.@name = XML(picObj.entry).@name;       		
-      			_xml.picture.@type = XML(picObj.entry).@type;
-      		}
-      	}
+      		//getPictureFromCash();
 		
 		// get resources		
 		delete _xmlStructure.resources;

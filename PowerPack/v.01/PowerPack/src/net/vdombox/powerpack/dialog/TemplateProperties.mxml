@@ -9,17 +9,20 @@
 	
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.Template;
-
-		import mx.events.CloseEvent;
-		import mx.utils.StringUtil;
-
-		import net.vdombox.powerpack.managers.ContextManager;
-		import net.vdombox.powerpack.managers.LanguageManager;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.utils.StringUtil;
+			
+			import net.vdombox.powerpack.Template;
+			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+			import net.vdombox.powerpack.managers.ContextManager;
+			import net.vdombox.powerpack.managers.LanguageManager;
 
 		private static var _dialog : TemplateProperties;
 
-		static public function show( closeHandler : Function = null ) : TemplateProperties {
+		static public function show( closeHandler : Function = null ) : TemplateProperties 
+		{
+			
 			if ( !_dialog || _dialog.closed ) {
 				_dialog = new TemplateProperties();
 				_dialog.open();
@@ -42,62 +45,197 @@
 
 			return _dialog;
 		}
-
-		private function onShow( event : Event ) : void {
-			var tpl : Template = ContextManager.templates.getItemAt( 0 ) as Template;
-
-			if ( tpl.b64picture || tpl.picture ) {
-				gridRemovePic.visible = true;
-				gridRemovePic.includeInLayout = true;
+			
+		protected override function removeDialog( buttonPressed : String ) : void 
+		{
+			switch ( buttonPressed ) {
+				
+				case BUTTON_NAME_OK:
+				{
+					if (picBrowse.text && !_dialog.isCorrectImageFile)
+						showTemplatePictureError();
+					else
+					{
+						_dialog.closeDetail = ModalDialog.OK;
+						_dialog.close();
+					}
+					
+					break;
+				}
+				case BUTTON_NAME_CANCEL:
+				{
+					_dialog.closeDetail = ModalDialog.CANCEL;
+					_dialog.close();
+					break;
+				}
+				default:
+				{
+					_dialog.closeDetail = ModalDialog.CANCEL;
+					_dialog.close();
+					break;
+				}
 			}
-			else {
-				gridRemovePic.visible = false;
-				gridRemovePic.includeInLayout = false;
+		}
+			
+		public function get isCorrectImageFile () : Boolean
+		{
+			try {
+				var templatePictureFile : File = new File( StringUtil.trim( picBrowse.text ) );
+			} catch (e:Error)
+			{
+				return false;
 			}
+			
+			return FileUtils.correctImageFile(templatePictureFile);
+		}
+			
+		public function showTemplatePictureError() : void 
+		{
+			picBrowse.txtInput.setFocus();
+			picBrowse.txtInput.errorString = LanguageManager.sentences['msg_enter_correct_image_file'];
+		}
+			
+		private function onShow( event : Event ) : void 
+		{
+			if (!currentTemplate)
+				return;
+			
+			txtName.text = currentTemplate.name;
+			txtDesc.text = currentTemplate.description;
+			txtKey.text = currentTemplate.key;
 
-			txtName.text = tpl.name;
-			txtDesc.text = tpl.description;
-			if ( tpl.picture )
-				picBrowse.text = tpl.picture.nativePath;
-			txtKey.text = tpl.key;
-
-			if ( tpl.picture ) {
-				tplImg.source = tpl.picture.nativePath;
-
-				b64Img.visible = false;
-				b64Img.includeInLayout = false;
-
-				tplImg.visible = true;
-				tplImg.includeInLayout = true;
+			if ( currentTemplate.pictureFile ) 
+			{
+				picBrowse.text = currentTemplate.pictureFile.nativePath;
+				showPicture(currentTemplate.pictureFile.nativePath);
 			}
-			else if ( tpl.b64picture ) {
-				b64Img.source = tpl.b64picture;
-
-				tplImg.visible = false;
-				tplImg.includeInLayout = false;
-
-				b64Img.visible = true;
-				b64Img.includeInLayout = true;
+			else if ( currentTemplate.b64picture ) 
+			{
+				showBase64Picture(currentTemplate.b64picture);
 			}
-			else {
-				b64Img.visible = tplImg.visible = false;
-				b64Img.includeInLayout = tplImg.includeInLayout = false;
+			else 
+			{
+				hideGridRemovePic();
 			}
-
+			
 			txtName.setFocus();
+			
+			addHandlers();
+		}
+			
+		private function addHandlers():void
+		{
+			picBrowse.txtInput.addEventListener(Event.CHANGE, onImageFilePathChange);
+		}
+			
+		public function get currentTemplate() : Template
+		{
+			if (!ContextManager.templates || ContextManager.templates.length == 0)
+				return null;
+			
+			return ContextManager.templates.getItemAt( 0 ) as Template; 
+		}
+			
+		public function get templatePicturePath() : String
+		{
+			return StringUtil.trim(picBrowse.text);
+		}
+			
+		public function get templateName() : String
+		{
+			return txtName.text;
+		}
+			
+		public function get templateDescription() : String
+		{
+			return txtDesc.text;
+		}
+			
+		public function get templateKey() : String
+		{
+			return StringUtil.trim( txtKey.text );
 		}
 
-		private function removePicture() : void {
-			var tpl : Template = ContextManager.templates.getItemAt( 0 ) as Template;
-
-			gridRemovePic.visible = false;
-			gridRemovePic.includeInLayout = false;
+		private function removePicture() : void 
+		{
+			hideGridRemovePic();
 
 			picBrowse.txtInput.text = '';
 			picBrowse.text = '';
-			tpl.picture = null;
-
-			delete tpl.xml.picture;
+		}
+			
+		private function onImageFilePathChange(evt:Event):void
+		{
+			picBrowse.txtInput.errorString = null;
+			
+			try {
+				 if (isCorrectImageFile)
+				 {
+					showPicture(templatePicturePath);
+				 } else
+				 {
+					hideGridRemovePic(); 
+				 }
+	
+			 } catch (e:Error)
+			 {
+				 hideGridRemovePic();
+			 }
+		}
+			
+		private function hidePicture():void
+		{
+			tplImg.source = null;
+			
+			tplImg.visible = false;
+			tplImg.includeInLayout = false;
+		}
+			
+		private function hideBase64Picture():void
+		{
+			b64Img.source = null;
+			
+			b64Img.visible = false;
+			b64Img.includeInLayout = false;
+		}
+			
+		private function hideGridRemovePic():void
+		{
+			hidePicture();
+			hideBase64Picture();
+			
+			gridRemovePic.visible = false;
+			gridRemovePic.includeInLayout = false;
+		}
+	
+		private function showPicture(imageSource : Object):void
+		{
+			hideBase64Picture();
+			
+			tplImg.source = imageSource;
+			
+			tplImg.visible = true;
+			tplImg.includeInLayout = true;
+			
+			showGridRemovePic();
+		}
+		
+		private function showBase64Picture(imageSource : Object):void
+		{
+			hidePicture();
+			
+			b64Img.source = imageSource;
+			
+			b64Img.visible = true;
+			b64Img.includeInLayout = true;
+			
+			showGridRemovePic();
+		}
+		
+		private function showGridRemovePic():void
+		{
+			gridRemovePic.visible = true;
+			gridRemovePic.includeInLayout = true;
 		}
 		]]>
 	</mx:Script>
@@ -152,8 +290,12 @@
 					<!--mx:Label text="{LanguageManager.sentences.template_remove_pic}:"/-->
 				</mx:GridItem>
 				<mx:GridItem width="100%" height="100%">					
-					<mx:Image width="100" height="100" scaleContent="true" autoLoad="true" id="tplImg"/>
-					<controls:Base64Image width="100" height="100" scaleContent="true" autoLoad="true" id="b64Img"/>
+					<mx:Image id="tplImg"
+							  width="100" height="100" 
+							  scaleContent="true" autoLoad="true" />
+					<controls:Base64Image id="b64Img"
+										  width="100" height="100" 
+										  scaleContent="true" autoLoad="true" />
 					<mx:Button id="btnRemovePic" label="{LanguageManager.sentences.remove}" 
 						click="removePicture()"/>
 				</mx:GridItem>

@@ -18,7 +18,7 @@
 		import mx.core.Application;
 		import mx.core.Container;
 		import mx.events.CloseEvent;
-
+		
 		import net.vdombox.powerpack.managers.LanguageManager;
 
 		public static const YES : uint = 0x0001;
@@ -108,7 +108,8 @@
 
 		private var buttonFlags : uint;
 
-		private function createButton( label : String, name : String, bar : Container ) : Button {
+		private function createButton( label : String, name : String, bar : Container ) : Button 
+		{
 			var button : Button = new Button();
 			button.label = label;
 			button.visible = false;
@@ -121,8 +122,10 @@
 			return button;
 		}
 
-		override protected function keyDownHandler( event : KeyboardEvent ) : void {
-			if ( event.keyCode == Keyboard.ESCAPE ) {
+		override protected function keyDownHandler( event : KeyboardEvent ) : void 
+		{
+			if ( event.keyCode == Keyboard.ESCAPE ) 
+			{
 				if ( (buttonFlags & CANCEL) || !(buttonFlags & NO) )
 					removeDialog( BUTTON_NAME_CANCEL );
 				else if ( buttonFlags & NO )
@@ -130,43 +133,49 @@
 			}
 		}
 
-		private function onDialogBtnClick( event : MouseEvent ) : void {
+		private function onDialogBtnClick( event : MouseEvent ) : void 
+		{
 			var name : String = Button( event.currentTarget ).name;
 
 			removeDialog( name );
 		}
 
-		protected function removeDialog( buttonPressed : String ) : void {
+		protected function removeDialog( buttonPressed : String ) : void 
+		{
 			switch ( buttonPressed ) {
 				case BUTTON_NAME_YES:
 				{
-					closeEvent.detail = YES;
+					closeDetail = YES;
 					break;
 				}
 				case BUTTON_NAME_NO:
 				{
-					closeEvent.detail = NO;
+					closeDetail = NO;
 					break;
 				}
 				case BUTTON_NAME_OK:
 				{
-					closeEvent.detail = OK;
+					closeDetail = OK;
 					break;
 				}
 				case BUTTON_NAME_CANCEL:
 				{
-					closeEvent.detail = CANCEL;
+					closeDetail = CANCEL;
 					break;
 				}
-
 				default:
 				{
-					closeEvent.detail = 0;
+					closeDetail = 0;
 					break;
 				}
 			}
 
 			close();
+		}
+			
+		public function set closeDetail (detail : int) : void
+		{
+			closeEvent.detail = detail;
 		}
 
 		private function onClose( event : Event ) : void {

@@ -185,6 +185,9 @@
 		}
 
 		public function checkCategoryLabelUnique( categoryLabel : String, targetCategoryName : String = "" ) : Boolean {
+			if (!categoryLabel)
+				return false;
+			
 			for each ( var tab : AccordionChild in graphsAccordion.getChildren() ) {
 				if ( tab.name == targetCategoryName )
 					continue;

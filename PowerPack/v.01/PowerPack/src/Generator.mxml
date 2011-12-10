@@ -179,7 +179,7 @@
 		}
 
 		private function exitApplication( event : Event = null ) : void {
-			SuperAlert.show(
+			/*SuperAlert.show(
 					LanguageManager.sentences['msg_exit_app'],
 					LanguageManager.sentences['confirmation'],
 					Alert.YES | Alert.NO, null, alertExitHandler, null, Alert.NO );
@@ -189,7 +189,9 @@
 					ContextManager.saveSettings();
 					exit();
 				}
-			}
+			}*/
+			ContextManager.saveSettings();
+			exit();
 		}
 
 		private function labelFunction( item : Object ) : String {
@@ -214,9 +216,11 @@
 			ContextManager.instance.lang.file = LanguageManager.languageXML.@data;
 		}
 
-		private function onTemplateLoad( event : Event ) : void {
+		private function onTemplateLoad( event : Event ) : void 
+		{
 			var fileStream : FileStream = event.target as FileStream;
 			var xml : XML = XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
+		
 			fileStream.close();
 
 			var template : Template = new Template( xml );
