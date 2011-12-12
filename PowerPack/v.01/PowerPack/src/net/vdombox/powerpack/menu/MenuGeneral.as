@@ -271,6 +271,9 @@ public class MenuGeneral extends EventDispatcher
 	{
 		if ( ContextManager.instance.files && ContextManager.instance.files.length > 0 )
 		{
+			if (!MenuGeneral.menu)
+				return;
+			
 			var fileItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "file" );
 			var exitItem : NativeMenuItem = fileItem.submenu.getItemByName( "exit" );
 

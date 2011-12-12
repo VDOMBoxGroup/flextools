@@ -112,7 +112,7 @@ public class Template extends EventDispatcher
 
 		if ( xml && isValidTpl( xml ) )
 		{
-			_xml = xml;
+			_xml = xml.copy();
 			if ( !Utils.getStringOrDefault( _xml.@ID, '' ) )
 				_xml.@ID = UIDUtil.createUID();
 
@@ -330,7 +330,7 @@ public class Template extends EventDispatcher
 
 	public function set b64picture( value : String ) : void
 	{
-		if ( _xml.picture != value )
+		if ( _xml.picture[0] != value )
 		{
 			modified = true;
 			_xml.picture = value;
@@ -342,7 +342,7 @@ public class Template extends EventDispatcher
 	{
 		return Utils.getStringOrDefault( _xml.picture[0], '' );
 	}
-
+	
 	//----------------------------------
 	//  isEncoded
 	//----------------------------------
@@ -550,7 +550,7 @@ public class Template extends EventDispatcher
 			_xml.structure = structData;
 	}
 
-	private function decode() : void
+	public function decode() : void
 	{
 		_xmlStructure = null;
 
@@ -607,7 +607,7 @@ public class Template extends EventDispatcher
 		_xml.picture[0].@type = file.extension;
 		_xml.picture[0].@name = file.name;
 
-		//picture = null;
+		//pictureFile = null;
 
 		return true;
 	}
@@ -694,11 +694,11 @@ public class Template extends EventDispatcher
 
 		if ( pictureFile )
 			setPictureFromFile();
-		else
+		//else
 		//getPictureFromCash();
 
 		// get resources		
-			delete _xmlStructure.resources;
+		delete _xmlStructure.resources;
 
 		var index : XML = CashManager.getIndex( fullID );
 		if ( index )

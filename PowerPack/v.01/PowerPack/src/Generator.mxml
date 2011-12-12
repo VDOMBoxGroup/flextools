@@ -45,35 +45,36 @@
 
 	<mx:Script>
 		<![CDATA[
-		import generated.webservices.Close_sessionResultEvent;
-		import generated.webservices.Install_applicationResultEvent;
-		import generated.webservices.List_applicationsResultEvent;
-		import generated.webservices.Open_sessionResultEvent;
-		import generated.webservices.Vdom;
-
-		import mx.controls.Alert;
-		import mx.controls.ProgressBarMode;
-		import mx.events.CloseEvent;
-		import mx.events.EffectEvent;
-		import mx.events.IndexChangedEvent;
-		import mx.rpc.events.FaultEvent;
-		import mx.utils.StringUtil;
-
-		import net.vdombox.powerpack.BasicError;
-		import net.vdombox.powerpack.Template;
-		import net.vdombox.powerpack.dialog.GenConnection;
-		import net.vdombox.powerpack.dialog.GenProperties;
-		import net.vdombox.powerpack.gen.TemplateStruct;
-		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
-		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
-		import net.vdombox.powerpack.managers.ConnectionManager;
-		import net.vdombox.powerpack.managers.ContextManager;
-		import net.vdombox.powerpack.managers.LanguageManager;
-		import net.vdombox.powerpack.managers.ProgressManager;
-		import net.vdombox.powerpack.menu.MenuGeneral;
-
-		import vdom.connection.protect.Code;
-		import vdom.connection.protect.MD5;
+			import generated.webservices.Close_sessionResultEvent;
+			import generated.webservices.Install_applicationResultEvent;
+			import generated.webservices.List_applicationsResultEvent;
+			import generated.webservices.Open_sessionResultEvent;
+			import generated.webservices.Vdom;
+			
+			import mx.controls.Alert;
+			import mx.controls.ProgressBarMode;
+			import mx.events.CloseEvent;
+			import mx.events.EffectEvent;
+			import mx.events.IndexChangedEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.utils.StringUtil;
+			
+			import net.vdombox.powerpack.BasicError;
+			import net.vdombox.powerpack.Template;
+			import net.vdombox.powerpack.dialog.GenConnection;
+			import net.vdombox.powerpack.dialog.GenProperties;
+			import net.vdombox.powerpack.gen.TemplateStruct;
+			import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+			import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+			import net.vdombox.powerpack.managers.ConnectionManager;
+			import net.vdombox.powerpack.managers.ContextManager;
+			import net.vdombox.powerpack.managers.LanguageManager;
+			import net.vdombox.powerpack.managers.ProgressManager;
+			import net.vdombox.powerpack.menu.MenuGeneral;
+			
+			import vdom.connection.protect.Code;
+			import vdom.connection.protect.MD5;
 
 		private var vsLastChanged : DisplayObject;
 		private var appGenerated : Boolean;
@@ -227,10 +228,10 @@
 			else
 				ContextManager.templates[0] = template;
 
-			if ( ContextManager.templates[0].picture )
+			if ( getLogo())
 			{
 				tplPic.visible = false;
-				tplPic.source = ContextManager.templates[0].picture;
+				tplPic.source = getLogo();
 				tplPic.visible = true;
 			}
 
@@ -241,6 +242,17 @@
 			else
 			{
 				openTemplate();
+			}
+			
+			function getLogo() : *
+			{
+				if (template.b64picture)
+					return template.b64picture;
+				
+				if (xml.picture[0])
+					return Utils.getStringOrDefault( xml.picture[0], '' );
+				
+				return null;
 			}
 		}
 
@@ -254,9 +266,10 @@
 			var tpl : Template = ContextManager.templates[0];
 
 			if ( tpl.isEncoded )
+			{
 				tpl.key = key;
-
-			//tpl.decode();
+				tpl.decode();
+			}
 
 			if ( !tpl.xmlStructure )
 			{
