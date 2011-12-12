@@ -246,13 +246,7 @@
 			
 			function getLogo() : *
 			{
-				if (template.b64picture)
-					return template.b64picture;
-				
-				if (xml.picture[0])
-					return Utils.getStringOrDefault( xml.picture[0], '' );
-				
-				return null;
+				return xml.picture[0] && Utils.getStringOrDefault( xml.picture[0], '' ) || null;
 			}
 		}
 
