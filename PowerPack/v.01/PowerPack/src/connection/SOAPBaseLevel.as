@@ -77,14 +77,14 @@ public class SOAPBaseLevel extends EventDispatcher
 			case 'install_application':
 				installApplication( args );
 				break;
-//
-//			case 'set_application_events':
-//				setApplicationEvents( args );
-//				break;
-//
-//			case 'set_application_events':
-//				setApplicationEvents( args );
-//				break;
+
+			case 'update_application':
+				updateApplication( args );
+				break;
+
+			case 'get_application_info':
+				getApplicationInfo( args );
+				break;
 
 		}
 	}
@@ -408,7 +408,6 @@ public class SOAPBaseLevel extends EventDispatcher
 
 			if ( event.type == ResultEvent.RESULT )
 			{
-				var res : String;
 				var result : XMLList = new XMLList( event.result );
 
 				_result = result[0];
@@ -422,15 +421,12 @@ public class SOAPBaseLevel extends EventDispatcher
 	private function installApplication( params : Array ) : void
 	{
 		/*
-		 appid - идентификатор приложения
-		 objid - идентификатор объекта
+		 vhname - виртуальное имя хоста
+		 appxml - xml приложения
 		 */
-
 
 		var vhname  : String = params[0];
 		var appxml  : String = params[1];
-
-
 		var soap : SOAP = SOAP.getInstance();
 
 		soap.install_application.addEventListener( ResultEvent.RESULT, resultHandler );
@@ -444,7 +440,6 @@ public class SOAPBaseLevel extends EventDispatcher
 
 			if ( event.type == ResultEvent.RESULT )
 			{
-				var res : String;
 				var result : XMLList = new XMLList( event.result );
 
 				_result = result[0];
@@ -486,5 +481,66 @@ public class SOAPBaseLevel extends EventDispatcher
 			}
 		}
 	}
+
+	private function updateApplication( params : Array ) : void
+	{
+		/*
+		 vhname - виртуальное имя хоста
+		 appxml - xml приложения
+		 */
+
+		var appxml  : String = params[0];
+		var soap : SOAP = SOAP.getInstance();
+
+		soap.update_application.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.update_application.addEventListener( FaultEvent.FAULT, soapError );
+		soap.update_application( appxml  );
+
+		function resultHandler( event : * ) : void
+		{
+			soap.update_application.removeEventListener( SOAPEvent.RESULT, resultHandler );
+			soap.update_application.removeEventListener( FaultEvent.FAULT, soapError );
+
+			if ( event.type == ResultEvent.RESULT )
+			{
+				var result : XMLList = new XMLList( event.result );
+
+				_result = result[0];
+
+				dispatchEvent( new Event( RESULT_GETTED ) );
+			}
+		}
+	}
+
+	private function getApplicationInfo( params : Array ) : void
+	{
+		/*
+		 vhname - виртуальное имя хоста
+		 appxml - xml приложения
+		 */
+
+		var appxml  : String = params[0];
+		var soap : SOAP = SOAP.getInstance();
+
+		soap.get_application_info.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.get_application_info.addEventListener( FaultEvent.FAULT, soapError );
+		soap.get_application_info( appxml  );
+
+		function resultHandler( event : * ) : void
+		{
+			soap.get_application_info.removeEventListener( SOAPEvent.RESULT, resultHandler );
+			soap.get_application_info.removeEventListener( FaultEvent.FAULT, soapError );
+
+			if ( event.type == ResultEvent.RESULT )
+			{
+				var result : XMLList = new XMLList( event.result );
+
+				_result = result[0];
+
+				dispatchEvent( new Event( RESULT_GETTED ) );
+			}
+		}
+	}
+
 }
 }
