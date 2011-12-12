@@ -34,6 +34,34 @@
 			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 			{
 				super.updateDisplayList( unscaledWidth, unscaledHeight );
+				
+				if ( parametersContainer && isNeedUpdateParameters )
+				{
+					parametersContainer.removeAllElements();
+				
+					if ( data.parameters.length == 0 )
+						return;
+				
+					var parameter : EventParameterVO;
+					var parameterRenderer : ParameterRenderer;
+					var parameterRendererFactory : ClassFactory = new ClassFactory( ParameterRenderer );
+				
+					parameterRendererFactory.properties = { percentWidth: 100 };
+				
+					for each ( parameter in data.parameters )
+					{
+						parameterRenderer = parameterRendererFactory.newInstance();
+					
+						parameterRenderer.title = parameter.name;
+					
+						parametersContainer.addElement( parameterRenderer );
+					}
+				}
+				
+				/*if( objectNameGroup )
+				{
+					objectNameGroup.visible = data is ClientActionVO;
+				}*/
 			}
 
 			override protected function partAdded( partName : String, instance : Object ) : void
