@@ -10,7 +10,7 @@ import mx.rpc.events.ResultEvent;
 
 public class SOAPBaseLevel extends EventDispatcher
 {
-	public static var RESULT_GETTED : String = "rusulGetted";
+	public static var RESULT_GETED : String = "resultGeted";
 	private var _result : * = "";
 
 	public function SOAPBaseLevel( target : IEventDispatcher = null )
@@ -35,12 +35,12 @@ public class SOAPBaseLevel extends EventDispatcher
 		else
 			_result = "['error' '" + event.fault.faultString + "']";
 
-		dispatchEvent( new Event( RESULT_GETTED ) );
+		dispatchEvent( new Event( RESULT_GETED ) );
 	}
 
-	public function execute( funct : String, args : Array ) : void
+	public function execute( functionName : String, args : Array ) : void
 	{
-		switch ( funct )
+		switch ( functionName )
 		{
 			case 'login':
 				soapLogin( args );
@@ -84,6 +84,10 @@ public class SOAPBaseLevel extends EventDispatcher
 
 			case 'get_application_info':
 				getApplicationInfo( args );
+				break;
+
+			case 'set_application_events':
+				setApplicationEvents( args );
 				break;
 
 		}
@@ -143,7 +147,7 @@ public class SOAPBaseLevel extends EventDispatcher
 				var resultXML : XML = result[0];
 				_result = "['result' '" + resultXML.children() + "']";
 
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
@@ -182,7 +186,7 @@ public class SOAPBaseLevel extends EventDispatcher
 				res = res.replace( regExp, " " );
 				_result = "['result' '" + res + "']";
 
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
@@ -224,7 +228,7 @@ public class SOAPBaseLevel extends EventDispatcher
 				var resultXML : XML = result[0];
 				_result = "['result' '" + resultXML.children() + "']";
 
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
@@ -263,7 +267,7 @@ public class SOAPBaseLevel extends EventDispatcher
 				res = res.replace( regExp, " " );
 				_result = "['result' '" + res + "']";
 
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
@@ -305,7 +309,7 @@ public class SOAPBaseLevel extends EventDispatcher
 			{
 				_result = "['result' '" + event.result + "']";
 
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
@@ -341,7 +345,7 @@ public class SOAPBaseLevel extends EventDispatcher
 				var resultXML : XML = result[0];
 				_result = "['result' '" + resultXML.children() + "']";
 
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
@@ -381,10 +385,11 @@ public class SOAPBaseLevel extends EventDispatcher
 				res = res.replace( regExp, " " );
 				_result = "['result' '" + res + "']";
 
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
+
 //	export_application       //
 	private function exportApplication( params : Array ) : void
 	{
@@ -412,7 +417,7 @@ public class SOAPBaseLevel extends EventDispatcher
 
 				_result = result[0];
 
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
@@ -425,13 +430,13 @@ public class SOAPBaseLevel extends EventDispatcher
 		 appxml - xml приложения
 		 */
 
-		var vhname  : String = params[0];
-		var appxml  : String = params[1];
+		var vhname : String = params[0];
+		var appxml : String = params[1];
 		var soap : SOAP = SOAP.getInstance();
 
 		soap.install_application.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.install_application.addEventListener( FaultEvent.FAULT, soapError );
-		soap.install_application( vhname, appxml  );
+		soap.install_application( vhname, appxml );
 
 		function resultHandler( event : * ) : void
 		{
@@ -444,10 +449,11 @@ public class SOAPBaseLevel extends EventDispatcher
 
 				_result = result[0];
 
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
+
 	// login //
 
 	public function soapLogin( params : Array ) : void
@@ -477,7 +483,7 @@ public class SOAPBaseLevel extends EventDispatcher
 			if ( event.type == SOAPEvent.LOGIN_OK )
 			{
 				_result = "['result' 'ok']";
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
@@ -489,12 +495,12 @@ public class SOAPBaseLevel extends EventDispatcher
 		 appxml - xml приложения
 		 */
 
-		var appxml  : String = params[0];
+		var appxml : String = params[0];
 		var soap : SOAP = SOAP.getInstance();
 
 		soap.update_application.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.update_application.addEventListener( FaultEvent.FAULT, soapError );
-		soap.update_application( appxml  );
+		soap.update_application( appxml );
 
 		function resultHandler( event : * ) : void
 		{
@@ -507,7 +513,7 @@ public class SOAPBaseLevel extends EventDispatcher
 
 				_result = result[0];
 
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
@@ -516,15 +522,15 @@ public class SOAPBaseLevel extends EventDispatcher
 	{
 		/*
 		 vhname - виртуальное имя хоста
-		 appxml - xml приложения
+		 applicationXML - xml приложения
 		 */
 
-		var appxml  : String = params[0];
+		var applicationXML : String = params[0];
 		var soap : SOAP = SOAP.getInstance();
 
 		soap.get_application_info.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.get_application_info.addEventListener( FaultEvent.FAULT, soapError );
-		soap.get_application_info( appxml  );
+		soap.get_application_info( applicationXML );
 
 		function resultHandler( event : * ) : void
 		{
@@ -537,7 +543,7 @@ public class SOAPBaseLevel extends EventDispatcher
 
 				_result = result[0];
 
-				dispatchEvent( new Event( RESULT_GETTED ) );
+				dispatchEvent( new Event( RESULT_GETED ) );
 			}
 		}
 	}
