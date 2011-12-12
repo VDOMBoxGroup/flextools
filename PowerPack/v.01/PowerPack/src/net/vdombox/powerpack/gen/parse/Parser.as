@@ -45,7 +45,9 @@ public class Parser
 		"imageToBase64" : { pattern : /^\[n[v][vscVSA]\]$/, argNum : 2 },
 
 		"alert" : { pattern : /^\[n[vscVSA]*\]$/, argNum : 1 },
-		"soapBase" : { pattern : /^\[n[vscVSA][nsc]*\]$/, argNum : -1 },
+		"soapBase" : { pattern : /^\[n[vscVSA][vscVSA]*\]$/, argNum : -1 },
+		"XML" : { pattern : /^\[n\]$/, argNum : 0 },
+		"getApplicationValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
 
 		//*********************
 		// List manipulation
@@ -266,7 +268,7 @@ public class Parser
 
 						do {
 							i++;
-						} while ( sourceText.charAt( i ) == ';' || sourceText.charAt( i ).search( /\s/ ) >= 0 )
+						} while ( sourceText.charAt( i ) == ';' || sourceText.charAt( i ).search( /\s/ ) >= 0 );
 						i--;
 
 						if ( braceStack.length > 0 )

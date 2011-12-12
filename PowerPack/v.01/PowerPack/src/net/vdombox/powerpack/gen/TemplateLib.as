@@ -19,6 +19,9 @@ public dynamic class TemplateLib extends EventDispatcher
 
 	private function setReturnValue( value : * ) : void
 	{
+		trace("setReturnValue");
+		dispatchEvent( new TemplateLibEvent( TemplateLibEvent.RESULT_GETTED, value ) )
+
 		var lastFrag : CodeFragment = tplStruct.curNodeContext.block.lastExecutedFragment;
 
 		lastFrag.retValue = value;
@@ -26,7 +29,7 @@ public dynamic class TemplateLib extends EventDispatcher
 
 		tplStruct.generate();
 
-		dispatchEvent( new TemplateLibEvent( TemplateLibEvent.RESULT_GETTED, value ) )
+
 
 	}
 

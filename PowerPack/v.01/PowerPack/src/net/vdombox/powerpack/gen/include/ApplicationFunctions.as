@@ -8,17 +8,24 @@ import memorphic.xpath.XPathQuery;
  * Date: 08.12.11
  * Time: 11:33
  */
-public function getApplicationValue( applicationXML : XML, queryStr : String ) : String
+public function getApplicationValue( applicationXML : String, queryStr : String ) : String
 {
-	if ( !applicationXML )
+	var xml : XML;
+	try
+	{
+		xml = new XML(applicationXML);
+	}
+	catch ( error : Error )
+	{
 		return "";
+	}
 
 	var myQuery : XPathQuery;
 	var result : XMLList;
 
 	queryStr = queryStr ? queryStr : "/";
 	myQuery = new XPathQuery( queryStr );
-	result = myQuery.exec( applicationXML );
+	result = myQuery.exec( xml );
 
 	return result.toString();
 }

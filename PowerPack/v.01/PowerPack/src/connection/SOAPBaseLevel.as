@@ -11,7 +11,7 @@ import mx.rpc.events.ResultEvent;
 public class SOAPBaseLevel extends EventDispatcher
 {
 	public static var RESULT_GETTED : String = "rusulGetted";
-	private var _result : String = "";
+	private var _result : * = "";
 
 	public function SOAPBaseLevel( target : IEventDispatcher = null )
 	{
@@ -70,9 +70,22 @@ public class SOAPBaseLevel extends EventDispatcher
 				getApplicationEvents( args );
 				break;
 
-			case 'set_application_events':
-				setApplicationEvents( args );
+			case 'export_application':
+				exportApplication( args );
 				break;
+
+			case 'install_application':
+				installApplication( args );
+				break;
+//
+//			case 'set_application_events':
+//				setApplicationEvents( args );
+//				break;
+//
+//			case 'set_application_events':
+//				setApplicationEvents( args );
+//				break;
+
 		}
 	}
 
@@ -372,7 +385,74 @@ public class SOAPBaseLevel extends EventDispatcher
 			}
 		}
 	}
+//	export_application       //
+	private function exportApplication( params : Array ) : void
+	{
+		/*
+		 appid - идентификатор приложения
+		 objid - идентификатор объекта
+		 */
 
+		var appId : String = params[0];
+
+		var soap : SOAP = SOAP.getInstance();
+
+		soap.export_application.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.export_application.addEventListener( FaultEvent.FAULT, soapError );
+		soap.export_application( appId );
+
+		function resultHandler( event : * ) : void
+		{
+			soap.export_application.removeEventListener( SOAPEvent.RESULT, resultHandler );
+			soap.export_application.removeEventListener( FaultEvent.FAULT, soapError );
+
+			if ( event.type == ResultEvent.RESULT )
+			{
+				var res : String;
+				var result : XMLList = new XMLList( event.result );
+
+				_result = result[0];
+
+				dispatchEvent( new Event( RESULT_GETTED ) );
+			}
+		}
+	}
+
+//	installApplication
+	private function installApplication( params : Array ) : void
+	{
+		/*
+		 appid - идентификатор приложения
+		 objid - идентификатор объекта
+		 */
+
+
+		var vhname  : String = params[0];
+		var appxml  : String = params[1];
+
+
+		var soap : SOAP = SOAP.getInstance();
+
+		soap.install_application.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.install_application.addEventListener( FaultEvent.FAULT, soapError );
+		soap.install_application( vhname, appxml  );
+
+		function resultHandler( event : * ) : void
+		{
+			soap.install_application.removeEventListener( SOAPEvent.RESULT, resultHandler );
+			soap.install_application.removeEventListener( FaultEvent.FAULT, soapError );
+
+			if ( event.type == ResultEvent.RESULT )
+			{
+				var res : String;
+				var result : XMLList = new XMLList( event.result );
+
+				_result = result[0];
+
+				dispatchEvent( new Event( RESULT_GETTED ) );
+			}
+		}
+	}
 	// login //
 
 	public function soapLogin( params : Array ) : void

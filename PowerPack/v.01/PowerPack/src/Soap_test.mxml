@@ -9,34 +9,15 @@
 		import mx.rpc.events.FaultEvent;
 		import mx.rpc.events.ResultEvent;
 
+		import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
+
 		import net.vdombox.powerpack.gen.TemplateLib;
 
 		private var soap : SOAP = SOAP.getInstance();
 
-		public function init() : void
+		protected function init( ) : void
 		{
-			var templateLib : TemplateLib = new TemplateLib();
-			var applicationXML : XML = <application>
-				<a/>
-				<a/>
-			</application>;
-
-			var queryStr : String = '/application/a';
-
-			var control : XML = <application>
-				<a>
-					<b>alex</b>
-				</a>
-			</application>;
-
-			var value : String = <b>alex</b>.toXMLString();
-
-			templateLib.setApplicationValue( applicationXML, queryStr, value );
-		}
-
-		protected function windowedapplication1_creationCompleteHandler( event : FlexEvent ) : void
-		{
-			var hostname : String = '192.168.0.41'
+			var hostname : String = '192.168.0.58'
 			var wsdl : String = "http://" + hostname + "/vdom.wsdl";
 			soap.addEventListener( "loadWsdlComplete", soap_initCompleteHandler );
 			soap.init( wsdl );
@@ -56,8 +37,22 @@
 		private function soap_loginOKHandler( event : SOAPEvent ) : void
 		{
 			trace( "OK" );
-			GetObjectScriptPresentation();
+			loadApplicationTest();
 			//soap
+		}
+
+		private function loadApplicationTest(  ) : void
+		{
+			var templateLib : TemplateLib = new TemplateLib();
+
+			templateLib.addEventListener(TemplateLibEvent.RESULT_GETTED,resultGettedHandler )   ;
+			templateLib.loadApplication("a785b129-72b7-4336-9965-29b02cd58009");
+
+			function resultGettedHandler( event : TemplateLibEvent ) : void
+			{
+
+
+			}
 		}
 
 		private function soap_loginErrorHandler( event : SOAPEvent ) : void
