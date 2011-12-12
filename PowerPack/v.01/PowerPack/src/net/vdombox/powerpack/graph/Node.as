@@ -1596,7 +1596,10 @@ public class Node extends Canvas implements IFocusManagerComponent
 				break;
 
 			case "jump":
-				dispatchEvent( new Event( "jumpToGraph" ) );
+				var jumpEvent : GraphCanvasEvent = new GraphCanvasEvent(GraphCanvasEvent.JUMP_TO_GRAPH);
+				jumpEvent.graphToJumpName = text;
+				
+				parent.dispatchEvent( jumpEvent );
 				break;
 
 			case "delete":
@@ -1823,7 +1826,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 				event.preventDefault();
 				event.stopPropagation();
 				if ( parent )
-					parent.dispatchEvent( new Event( "selectAll" ) )
+					parent.dispatchEvent( new GraphCanvasEvent(GraphCanvasEvent.SELECT_ALL) )
 			}
 		}
 	}

@@ -75,6 +75,8 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		graph_alert_delete_text : "Are you sure want to delete seleted states?"
 	};
 
+	private static const CLIPBOARD_GRAPH_FORMAT : String = "GRAPH_FORMAT"; 
+	
 	// Define a static variable.
 	private static var _classConstructed : Boolean = classConstruct();
 
@@ -133,7 +135,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 		addEventListener( "cut", onCut );
 		addEventListener( "copy", onCopy );
-		addEventListener( "selectAll", onSelectAll );
+		addEventListener( GraphCanvasEvent.SELECT_ALL, onSelectAll );
 		addEventListener( ChildExistenceChangedEvent.CHILD_ADD, childAddHandler );
 		addEventListener( ChildExistenceChangedEvent.CHILD_REMOVE, childRemoveHandler );
 		addEventListener( MouseEvent.CONTEXT_MENU, contextMenuDisplayingHandler );
@@ -172,7 +174,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		removeEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 		removeEventListener( "cut", onCut );
 		removeEventListener( "copy", onCopy );
-		removeEventListener( "selectAll", onSelectAll );
+		removeEventListener( GraphCanvasEvent.SELECT_ALL, onSelectAll );
 		removeEventListener( ChildExistenceChangedEvent.CHILD_ADD, childAddHandler );
 		removeEventListener( ChildExistenceChangedEvent.CHILD_REMOVE, childRemoveHandler );
 		removeEventListener( MouseEvent.CONTEXT_MENU, contextMenuDisplayingHandler );
@@ -658,17 +660,17 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 			}
 
 			Clipboard.generalClipboard.clear();
-			Clipboard.generalClipboard.setData( "GRAPH_FORMAT", dataXML );
+			Clipboard.generalClipboard.setData( CLIPBOARD_GRAPH_FORMAT, dataXML );
 		}
 	}
 
 	public function doPaste() : void
 	{
-		if ( Clipboard.generalClipboard.hasFormat( "GRAPH_FORMAT" ) )
+		if ( Clipboard.generalClipboard.hasFormat( CLIPBOARD_GRAPH_FORMAT ) )
 		{
 			selectionManager.deselectAll();
 
-			var dataXML : XML = XML( Clipboard.generalClipboard.getData( "GRAPH_FORMAT" ) );
+			var dataXML : XML = XML( Clipboard.generalClipboard.getData( CLIPBOARD_GRAPH_FORMAT ) );
 			var namesMap : Object = new Object();
 
 			for each( var xmlNode : XML in dataXML.state )
@@ -826,7 +828,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 			contextMenu.getItemByName( "copy" ).enabled = false;
 		}
 
-		if ( Clipboard.generalClipboard.hasFormat( "GRAPH_FORMAT" ) ||
+		if ( Clipboard.generalClipboard.hasFormat( CLIPBOARD_GRAPH_FORMAT ) ||
 				Clipboard.generalClipboard.hasFormat( ClipboardFormats.TEXT_FORMAT ) ||
 				Clipboard.generalClipboard.hasFormat( ClipboardFormats.BITMAP_FORMAT ) ||
 				Clipboard.generalClipboard.hasFormat( ClipboardFormats.FILE_LIST_FORMAT ) )

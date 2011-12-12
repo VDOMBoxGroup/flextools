@@ -516,7 +516,6 @@
 					break;
 
 				case "save":
-					trace( "+++ templ count: " + ContextManager.templates.length );
 					if ( ContextManager.templates.length > 0 )
 					{
 						currentTemplate.addEventListener( Event.COMPLETE, templateSaveHandler );
