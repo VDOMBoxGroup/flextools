@@ -57,7 +57,6 @@
 			{
 				BindingUtils.bindProperty( this, "data", hostComponent, "data", true );
 				doubleClickEnabled = true;
-				addEventListener( MouseEvent.DOUBLE_CLICK, hideButton_clickHandler, true, 0, true );
 			}
 
 			override protected function commitProperties() : void
@@ -156,7 +155,7 @@
 		<s:VGroup left="0" right="0"
 				  gap="1">
 
-			<s:Group id="headerGroup"
+			<s:Group id="headerGroup" doubleClick="hideButton_clickHandler(event)"
 					 height="28" width="100%">
 
 				<s:Rect bottom="0" left="0" right="0" top="0">

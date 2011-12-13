@@ -6,7 +6,12 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.core.UIComponent;
+			
+			import net.vdombox.components.StringAttributeEditWindow;
+			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.common.vo.ActionParameterVO;
+			import net.vdombox.utils.WindowManager;
 
 			[Bindable]
 			private var _data : ActionParameterVO;
@@ -20,6 +25,29 @@
 			{
 				_data = value
 			}
+			
+			protected function textinput1_doubleClickHandler(event:MouseEvent):void
+			{
+				event.stopImmediatePropagation();
+				var stringAttributeEditWindow : StringAttributeEditWindow = new StringAttributeEditWindow();
+				stringAttributeEditWindow.value = actionText.text;
+				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.APPLY, applyHandler );
+				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.CANCEL, cancelHandler );
+				
+				WindowManager.getInstance().addWindow(stringAttributeEditWindow, parentApplication as UIComponent, true);
+				
+				function applyHandler( event : StringAttributeEditWindowEvent ) : void
+				{
+					actionText.text = event.value;
+					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
+				}
+				
+				function cancelHandler( event : StringAttributeEditWindowEvent ) : void
+				{
+					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
+				}
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -45,8 +73,8 @@
 		<mx:Spacer width="9"/>
 		<s:Label text="{ _data.name }"/>
 		<mx:Spacer width="4"/>
-		<s:TextInput minWidth="0" text="@{ _data.value }" width="100%"
-					 focusAlpha="0"/>
+		<s:TextInput id="actionText" minWidth="0" text="@{ _data.value }" width="100%"
+					 focusAlpha="0" doubleClick="textinput1_doubleClickHandler(event)"/>
 	</s:HGroup>
 
 	<s:Line xFrom="24" xTo="24" yFrom="0" yTo="20">
