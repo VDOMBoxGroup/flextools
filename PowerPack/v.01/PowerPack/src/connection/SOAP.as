@@ -55,7 +55,7 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 
 	public function login( login : String, password : String ) : *
 	{
-		var password : String = MD5Utils.encrypt( password );
+		password = MD5Utils.encrypt( password );
 
 		ws.open_session.addEventListener( ResultEvent.RESULT, loginCompleteHandler );
 		ws.open_session.addEventListener( FaultEvent.FAULT, loginErrorHandler );
@@ -97,7 +97,6 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 	private function escapeXML( value : Object ) : String
 	{
 		var str : String = value.toString();
-		//str = str.replace(/&/g, "&amp;").replace(/</g, "&lt;"); // TODO very dirty hack. wrong escaping special xml symbols
 		return str;
 	}
 
