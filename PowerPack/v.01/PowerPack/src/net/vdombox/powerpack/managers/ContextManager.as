@@ -269,6 +269,9 @@ public class ContextManager extends EventDispatcher
 
 	public static function updateLastFiles( file : File ) : void
 	{
+		if (!file)
+			return;
+		
 		ContextManager.instance.lastFile = true;
 		ContextManager.instance.lastDir = file.parent;
 
