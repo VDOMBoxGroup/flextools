@@ -8,8 +8,8 @@
 		<![CDATA[
 			import mx.controls.dataGridClasses.DataGridListData;
 			
-			import net.vdombox.ide.modules.dataBase.events.StringAttributeEditWindowEvent;
-			import net.vdombox.ide.modules.dataBase.view.components.windows.StringAttributeEditWindow;
+			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
+			import net.vdombox.components.StringAttributeEditWindow;
 			import net.vdombox.utils.WindowManager;
 			
 			import spark.events.TextOperationEvent;

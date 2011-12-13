@@ -177,6 +177,9 @@
 			private function removeSelectedColRequest( event : CloseEvent ) : void 
 			{
 				/* Applying changes */
+				if ( event.detail == Alert.NO )
+					return;
+				
 				queue.addRequest( UIDUtil.createUID(), "delete_column", "<delete><column id='" + selectedItem.id + "' /></delete>", removeSelectedColOkHandler, null) ;
 				var newColsProvider:Array = [];
 				for each ( var item:Object in columnsProvider ) 
