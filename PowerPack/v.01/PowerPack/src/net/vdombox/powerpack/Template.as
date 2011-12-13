@@ -65,6 +65,12 @@ import net.vdombox.powerpack.utils.CryptUtils;
 
 public class Template extends EventDispatcher
 {
+	private static const BROWSE_TYPE_OPEN : String = "browseForOpen";
+	private static const BROWSE_TYPE_SAVE : String = "browseForSave";
+	private static const BROWSE_TYPE_NONE : String = "browseNone";
+	
+	private var browseType : String = BROWSE_TYPE_NONE;
+	
 	public static const TYPE_APPLICATION : String = "application";
 	public static const TYPE_MODULE : String = "module";
 
@@ -82,7 +88,10 @@ public class Template extends EventDispatcher
 	};
 
 	private static var _classConstructed : Boolean = classConstruct();
+	
+	private var fileStream : FileStream = new FileStream();
 
+	
 	public static function get classConstructed() : Boolean
 	{
 		return _classConstructed;
@@ -382,7 +391,7 @@ public class Template extends EventDispatcher
 
 		try
 		{
-			ProgressManager.start( null, false );
+			//ProgressManager.start( null, false );
 
 			// update tpl UID
 			_xml.@ID = UIDUtil.createUID();
@@ -396,42 +405,33 @@ public class Template extends EventDispatcher
 			// set (+encrypt) structure and resources data
 			encode();
 
-			var stream : FileStream = new FileStream();
-
-			ProgressManager.source = stream;
+			ProgressManager.source = fileStream;
 			ProgressManager.start();
 
-			stream.addEventListener( Event.COMPLETE, saveHandler );
-			stream.addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler );
-			stream.addEventListener( IOErrorEvent.IO_ERROR, saveErrorHandler );
-			stream.openAsync( file, FileMode.WRITE );
-
-			stream.writeUTFBytes( _xml.toXMLString() );
+			fileStream.addEventListener( Event.COMPLETE, saveHandler );
+			fileStream.addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+			fileStream.addEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+			
+			fileStream.openAsync( file, FileMode.WRITE );
+			fileStream.writeUTFBytes( _xml.toXMLString() );
 		}
 		catch ( e : Error )
 		{
-			stream.close();
-
+			fileStream.removeEventListener( Event.COMPLETE, saveHandler );
+			fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+			fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+			
+			file.cancel();
+			fileStream.close();
+			
 			ProgressManager.complete();
-
-			var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true,
-					e.message );
-
-			dispatchEvent( errEvent );
-
-			if ( !errEvent.isDefaultPrevented() )
-			{
-				SuperAlert.show(
-						e.message,
-						LanguageManager.sentences['error'] );
-			}
+			
+			showError(e.message);
 		}
 	}
 
 	public function open() : void
 	{
-		// check for not saved tpl
-
 		if ( !file )
 		{
 			browseForOpen();
@@ -440,83 +440,39 @@ public class Template extends EventDispatcher
 
 		if ( !file.exists )
 		{
-			var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true,
-					LanguageManager.sentences['msg_file_not_exists'] );
-
-			dispatchEvent( errEvent );
-
-			if ( !errEvent.isDefaultPrevented() )
-			{
-				SuperAlert.show(
-						errEvent.text,
-						LanguageManager.sentences['error'] );
-			}
+			showError(LanguageManager.sentences['msg_file_not_exists']);
 			return;
 		}
-
-		var stream : FileStream = new FileStream();
-
-		ProgressManager.source = stream;
+		
+		ProgressManager.source = fileStream;
 		ProgressManager.start();
 
-		stream.addEventListener( Event.COMPLETE, openHandler );
-		stream.addEventListener( IOErrorEvent.IO_ERROR, openErrorHandler );
-		stream.openAsync( file, FileMode.READ );
+		fileStream.addEventListener( Event.COMPLETE, openHandler );
+		fileStream.addEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+		
+		fileStream.openAsync( file, FileMode.READ );
 	}
 
 	public function browseForSave() : void
 	{
 		var folder : File = ContextManager.instance.lastDir;
 
-		folder.addEventListener( Event.SELECT, saveBrowseHandler );
+		folder.addEventListener( Event.SELECT, fileBrowseHandler );
+		
+		browseType = BROWSE_TYPE_SAVE;
 		folder.browseForSave( LanguageManager.sentences['save_file'] );
-
-		function saveBrowseHandler( event : Event ) : void
-		{
-			var f : File = event.target as File;
-			f.removeEventListener( Event.SELECT, saveBrowseHandler );
-
-			if ( f.isDirectory || f.isPackage || f.isSymbolicLink )
-				return;
-
-			if ( !f.extension || f.extension.toLowerCase() != TPL_EXTENSION )
-				f = f.parent.resolvePath( f.name + '.' + TPL_EXTENSION );
-
-			file = f;
-
-			var evnt : Event = new Event( 'saving', false, true );
-			dispatchEvent( evnt );
-
-			if ( !evnt.isDefaultPrevented() )
-				save();
-		}
 	}
 
 	public function browseForOpen() : void
 	{
 		var folder : File = ContextManager.instance.lastDir;
 
-		folder.addEventListener( Event.SELECT, openBrowseHandler );
+		folder.addEventListener( Event.SELECT, fileBrowseHandler );
+		
+		browseType = BROWSE_TYPE_OPEN;
 		folder.browseForOpen( LanguageManager.sentences['open_file'], [tplFilter, allFilter] )
-
-		function openBrowseHandler( event : Event ) : void
-		{
-			var f : File = event.target as File;
-			f.removeEventListener( Event.SELECT, openBrowseHandler );
-
-			if ( f.isDirectory || f.isPackage || f.isSymbolicLink )
-				return;
-
-			file = f;
-
-			var evnt : Event = new Event( 'opening', false, true );
-			dispatchEvent( evnt );
-
-			if ( !evnt.isDefaultPrevented() )
-				open();
-		}
 	}
-
+	
 	public function processOpened() : void
 	{
 		if ( !_xml.hasOwnProperty( 'encoded' ) && !_xml.hasOwnProperty( 'structure' ) )
@@ -543,7 +499,9 @@ public class Template extends EventDispatcher
 			var bytes : ByteArray = CryptUtils.encrypt( structData.toXMLString(), key );
 
 			var encoder : Base64Encoder = new Base64Encoder();
+			
 			encoder.encodeBytes( bytes );
+			
 			_xml.encoded = encoder.flush();
 		}
 		else
@@ -566,11 +524,14 @@ public class Template extends EventDispatcher
 
 				var decoder : Base64Decoder = new Base64Decoder();
 				decoder.decode( strEncoded );
+				
 				var bytes : ByteArray = decoder.flush();
 
 				bytes = CryptUtils.decrypt( bytes, key );
 				bytes.position = 0;
+				
 				strDecoded = bytes.readUTFBytes( bytes.length );
+				
 				_xmlStructure = XML( strDecoded );
 
 				if ( _xmlStructure )
@@ -606,8 +567,6 @@ public class Template extends EventDispatcher
 
 		_xml.picture[0].@type = file.extension;
 		_xml.picture[0].@name = file.name;
-
-		//pictureFile = null;
 
 		return true;
 	}
@@ -694,8 +653,8 @@ public class Template extends EventDispatcher
 
 		if ( pictureFile )
 			setPictureFromFile();
-		//else
-		//getPictureFromCash();
+		/*else
+			getPictureFromCash();*/
 
 		// get resources		
 		delete _xmlStructure.resources;
@@ -731,24 +690,76 @@ public class Template extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------
 
-	private function outputProgressHandler( event : OutputProgressEvent ) : void
+	private function fileBrowseHandler (event : Event) : void
 	{
-		var stream : FileStream = event.target as FileStream;
+		var f : File = event.target as File;
+		
+		f.removeEventListener( Event.SELECT, fileBrowseHandler );
+		
+		if ( f.isDirectory || f.isPackage || f.isSymbolicLink )
+		{
+			browseType = BROWSE_TYPE_NONE;
+			return;
+		}
+		
+		switch (browseType)
+		{
+			case BROWSE_TYPE_OPEN:
+			{
+				browseType = BROWSE_TYPE_NONE;
+				
+				file = f;
+				
+				open();
+				
+				/*var evnt : Event = new Event( 'opening', false, true );
+				dispatchEvent( evnt );
+				
+				if ( !evnt.isDefaultPrevented() )
+					open();*/
+				break;
+			}
+			case BROWSE_TYPE_SAVE:
+			{
+				browseType = BROWSE_TYPE_NONE;
+				
+				if ( !f.extension || f.extension.toLowerCase() != TPL_EXTENSION )
+					f = f.parent.resolvePath( f.name + '.' + TPL_EXTENSION );
+				
+				file = f;
+				
+				save();
+				
+				/*var evnt : Event = new Event( 'saving', false, true );
+				dispatchEvent( evnt );
+				
+				if ( !evnt.isDefaultPrevented() )
+					save();*/
+				break;
+			}
+			default:
+			{
+				browseType = BROWSE_TYPE_NONE;
+				break;
+			}
+		}
+	}
+	
+	private function fileStreamOutputProgressHandler( event : OutputProgressEvent ) : void
+	{
 		if ( event.bytesPending == 0 )
-			stream.dispatchEvent( new Event( Event.COMPLETE ) );
+			fileStream.dispatchEvent( new Event( Event.COMPLETE ) );
 	}
 
 	private function saveHandler( event : Event ) : void
 	{
-		var stream : FileStream = event.target as FileStream;
-
-		stream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler );
-		stream.removeEventListener( Event.COMPLETE, saveHandler );
-		stream.removeEventListener( IOErrorEvent.IO_ERROR, saveErrorHandler );
+		fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+		fileStream.removeEventListener( Event.COMPLETE, saveHandler );
+		fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
 
 		try
 		{
-			stream.close();
+			fileStream.close();
 
 			ProgressManager.start( ProgressManager.DIALOG_MODE, false );
 
@@ -769,32 +780,21 @@ public class Template extends EventDispatcher
 		{
 			ProgressManager.complete();
 
-			var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true,
-					LanguageManager.sentences['msg_not_valid_tpl_file'] );
-
-			dispatchEvent( errEvent );
-
-			if ( !errEvent.isDefaultPrevented() )
-			{
-				SuperAlert.show(
-						LanguageManager.sentences['msg_not_valid_tpl_file'],
-						LanguageManager.sentences['error'] );
-			}
+			showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
 		}
 	}
 
 	private function openHandler( event : Event ) : void
 	{
-		var stream : FileStream = event.target as FileStream;
-		stream.removeEventListener( Event.COMPLETE, openHandler );
-		stream.removeEventListener( IOErrorEvent.IO_ERROR, openErrorHandler );
+		fileStream.removeEventListener( Event.COMPLETE, openHandler );
+		fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
 
 		try
 		{
 			ProgressManager.start( ProgressManager.DIALOG_MODE, false );
 
-			var strData : String = stream.readUTFBytes( stream.bytesAvailable );
-			stream.close();
+			var strData : String = fileStream.readUTFBytes( fileStream.bytesAvailable );
+			fileStream.close();
 
 			var xmlData : XML = XML( strData );
 
@@ -817,68 +817,38 @@ public class Template extends EventDispatcher
 		}
 		catch ( e : Error )
 		{
-			stream.close();
+			fileStream.close();
 
 			ProgressManager.complete();
 
-			var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true,
-					LanguageManager.sentences['msg_not_valid_tpl_file'] );
-
-			dispatchEvent( errEvent );
-
-			if ( !errEvent.isDefaultPrevented() )
-			{
-				SuperAlert.show(
-						LanguageManager.sentences['msg_not_valid_tpl_file'],
-						LanguageManager.sentences['error'] );
-			}
+			showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
 		}
 	}
 
-	private function saveErrorHandler( event : IOErrorEvent ) : void
+	private function fileStreamIOErrorHandler( event : IOErrorEvent ) : void
 	{
+		browseType = BROWSE_TYPE_NONE;
+		
+		fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+		
+		fileStream.removeEventListener( Event.COMPLETE, saveHandler );
+		fileStream.removeEventListener( Event.COMPLETE, openHandler );
+		
+		fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+		
+		file.cancel();
+		fileStream.close();
+		
 		ProgressManager.complete();
 
-		var stream : FileStream = event.target as FileStream;
-		stream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler );
-		stream.removeEventListener( Event.COMPLETE, saveHandler );
-		stream.removeEventListener( IOErrorEvent.IO_ERROR, saveErrorHandler );
-		file.cancel();
-		stream.close();
-
-		var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true, event.text );
-
-		dispatchEvent( errEvent );
-
-		if ( !errEvent.isDefaultPrevented() )
-		{
-			SuperAlert.show(
-					errEvent.text,
-					LanguageManager.sentences['error'] );
-		}
+		showError(event.text);
 	}
-
-	private function openErrorHandler( event : IOErrorEvent ) : void
+	
+	private function showError(errorText : String) : void
 	{
-		ProgressManager.complete();
-
-		var stream : FileStream = event.target as FileStream;
-		stream.removeEventListener( Event.COMPLETE, openHandler );
-		stream.removeEventListener( IOErrorEvent.IO_ERROR, openErrorHandler );
-		file.cancel();
-		stream.close();
-
-		var errEvent : ErrorEvent = new ErrorEvent( ErrorEvent.ERROR, false, true, event.text );
-
-		dispatchEvent( errEvent );
-
-		if ( !errEvent.isDefaultPrevented() )
-		{
-			SuperAlert.show(
-					errEvent.text,
-					LanguageManager.sentences['error'] );
-		}
+		SuperAlert.show( errorText,  LanguageManager.sentences['error']);
 	}
+	
 
 }
 }
