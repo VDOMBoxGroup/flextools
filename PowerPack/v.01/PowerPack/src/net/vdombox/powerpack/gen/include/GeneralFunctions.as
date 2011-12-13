@@ -85,33 +85,71 @@ private function enterSubgraph( subgraph : GraphStruct, prefix : String, params 
 
 private function __question( handler : Function, question : String, params : Array = null ) : Function
 {
-	var array : Array = [];
-	var mode : int;
-	var filter : String;
+	var answersArray		: Array = [];
+	var questionMode		: int;
+	var questionFileFilter	: String;
 
 	if ( !params ) params = [];
 
-	if ( params.length == 0 )
+	questionMode = getQuestionMode(params);
+	
+	if (questionMode == Question.QM_BROWSE)
 	{
-		mode = Question.QM_QUESTION
+		if ( params.length >= 1 )
+		{
+			questionFileFilter = getFileMask( params[0].toString() );
+		}
 	}
-	else if ( params[0].toString() == "#" )
+	
+	if (questionMode == Question.QM_CHOICE)
 	{
-		mode = Question.QM_BROWSE;
-
-		if ( params.length > 1 )
-			filter = params[1].toString();
-	}
-	else
-	{
-		mode = Question.QM_CHOICE;
-
 		for ( var i : int = 0; i < params.length; i++ )
-			array.push( params[i].toString() );
+			answersArray.push( params[i].toString() );
 	}
-
-	Question.show( question, "", mode, array, filter, null, handler );
+	
+	Question.show( question, "", questionMode, answersArray, questionFileFilter, null, handler );
+	
 	return handler;
+}
+
+private function getQuestionMode (params : Array) : int
+{
+	if (!params || params.length == 0)
+		return Question.QM_QUESTION;
+	
+	if ( params.length == 1 && params[0].toString() == "*")
+		return Question.QM_QUESTION;
+	
+	if ( params.length == 1 && isFileMaskParam(params[0].toString()) )
+		return Question.QM_BROWSE;
+	
+	if (params.length > 1)
+		return Question.QM_CHOICE;
+	
+	return Question.QM_QUESTION;
+}
+
+private var regExpFileMask : RegExp = /#\((\*.([\w]+|\*)(;(\*.([\w]+|\*))+)*)*\)/g;
+
+private function isFileMaskParam(param : String) : Boolean
+{
+	var arrMatch : Array = param.match(regExpFileMask);
+	
+	if (!arrMatch || arrMatch.length != 1)
+		return false;
+	
+	return true;
+}
+private function getFileMask(param : String) : String
+{
+	if (!isFileMaskParam(param))
+		return null;
+	
+	var arrMatch : Array = param.match(regExpFileMask);
+	
+	var maskGroup : String = String(arrMatch[0]).substring(2, String(arrMatch[0]).length-1);
+
+	return maskGroup;
 }
 
 public function question( question : String, ...args ) : Function
