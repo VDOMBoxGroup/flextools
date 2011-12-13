@@ -354,12 +354,12 @@ public function soapBase( funct : String, ...args ) : Function
 {
 	var soapBaseLevel : SOAPBaseLevel = new SOAPBaseLevel();
 
-	soapBaseLevel.addEventListener( SOAPBaseLevel.RESULT_GETED, rusulGettedHandler, false, 0, true );
+	soapBaseLevel.addEventListener( SOAPBaseLevel.RESULT_RECEIVED, rusulGettedHandler, false, 0, true );
 	soapBaseLevel.execute( funct, args );
 
 	function rusulGettedHandler( event : Event ) : void
 	{
-		soapBaseLevel.removeEventListener( SOAPBaseLevel.RESULT_GETED, rusulGettedHandler );
+		soapBaseLevel.removeEventListener( SOAPBaseLevel.RESULT_RECEIVED, rusulGettedHandler );
 		setReturnValue( soapBaseLevel.result );
 	}
 
