@@ -129,7 +129,7 @@ private function getQuestionMode (params : Array) : int
 	return Question.QM_QUESTION;
 }
 
-private var regExpFileMask : RegExp = /#\((\*.([\w]+|\*)(;(\*.([\w]+|\*))+)*)*\)/g;
+private var regExpFileMask : RegExp = /#\((\*.([\w]+|\*)(;[ ]*(\*.([\w]+|\*))+)*)*\)/g;
 
 private function isFileMaskParam(param : String) : Boolean
 {
