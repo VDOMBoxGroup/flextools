@@ -21,10 +21,10 @@
     <filename>Power Pack Builder</filename>
 
     <!-- The name that is displayed in the AIR application installer. Optional. -->
-    <name>Power Pack Builder 1.1.00 (7430)</name>
+    <name>Power Pack Builder 1.1.10 (7521)</name>
 
     <!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-    <version>1.1.00</version>
+    <version>1.1.10.7521</version>
 
     <!-- Description, displayed in the AIR application installer. Optional. -->
     <!-- <description></description> -->

@@ -45,7 +45,7 @@ public class Parser
 		"imageToBase64" : { pattern : /^\[n[v][vscVSA]\]$/, argNum : 2 },
 
 		"alert" : { pattern : /^\[n[vscVSA]*\]$/, argNum : 1 },
-		"soapBase" : { pattern : /^\[n[vscVSA][vscVSA]*\]$/, argNum : -1 },
+		"wholeMethod" : { pattern : /^\[n[vscVSA][vscVSA]*\]$/, argNum : -1 },
 		"XML" : { pattern : /^\[n\]$/, argNum : 0 },
 		"getApplicationValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
 

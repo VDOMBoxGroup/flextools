@@ -35,8 +35,10 @@ public class TemplateStruct extends EventDispatcher
 
 	[ArrayElementType("net.vdombox.powerpack.gen.structs.GraphStruct")]
 	public var graphs : Array = [];
+
 	[ArrayElementType("net.vdombox.powerpack.gen.structs.NodeStruct")]
 	public var nodes : Array = [];
+
 	[ArrayElementType("net.vdombox.powerpack.gen.structs.ArrowStruct")]
 	public var arrows : Array = [];
 

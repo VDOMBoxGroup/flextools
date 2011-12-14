@@ -388,7 +388,7 @@ public function alert( strr : String ) : void
 	Alert.show( strr );
 }
 
-public function soapBase( funct : String, ...args ) : Function
+public function wholeMethod( funct : String, ...args ) : Function
 {
 	var soapBaseLevel : SOAPBaseLevel = new SOAPBaseLevel();
 

@@ -31,7 +31,6 @@ public class SOAPBaseLevel extends EventDispatcher
 
 	private function resultHandler( event : * ) : void
 	{
-		trace("resultHandler")    ;
 		deleteListeners( event.target);
 
 		var result : XMLList = new XMLList( event.result );
@@ -50,7 +49,6 @@ public class SOAPBaseLevel extends EventDispatcher
 
 	public function soapError( event : FaultEvent ) : void
 	{
-		trace("soapError");
 
 		deleteListeners( event.target);
 
@@ -227,25 +225,12 @@ public class SOAPBaseLevel extends EventDispatcher
 
 
 
-		trace("exportApplication0")
-		soap.export_application.addEventListener( ResultEvent.RESULT, resultHandler2 );
-		trace("exportApplication1")
+		soap.export_application.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.export_application.addEventListener( FaultEvent.FAULT, soapError );
-		trace("exportApplication2")
 
 		soap.export_application( appId );
 
-		 function resultHandler2( event : * ) : void
-		{
-			trace("resultHandler2")    ;
-			deleteListeners( event.target);
 
-			var result : XMLList = new XMLList( event.result );
-
-			_result = result[0];
-
-			dispatchEvent( new Event( RESULT_RECEIVED ) );
-		}
 	}
 
 //	installApplication
