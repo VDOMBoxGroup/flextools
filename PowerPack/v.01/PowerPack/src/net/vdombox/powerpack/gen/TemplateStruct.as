@@ -21,6 +21,7 @@ import net.vdombox.powerpack.graph.NodeCategory;
 import net.vdombox.powerpack.graph.NodeType;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.managers.CashManager;
+import net.vdombox.powerpack.menu.MenuGeneral;
 
 import r1.deval.D;
 
@@ -662,6 +663,8 @@ public class TemplateStruct extends EventDispatcher
 					{
 						if ( !curNodeContext.block.executed )
 						{
+							// TODO : block run menu
+							MenuGeneral.updateMenuState(MenuGeneral.MENU_RUN, false);
 							step = 'processExecResult';
 
 							CodeParser.executeBlock(
@@ -707,6 +710,9 @@ public class TemplateStruct extends EventDispatcher
 							step = 'executeCode';
 							continue;
 						}
+						
+						//TODO : unblock
+						MenuGeneral.updateMenuState(MenuGeneral.MENU_RUN, true);
 					}
 
 				case 'getNextNode': // transition to next node

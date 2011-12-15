@@ -20,12 +20,16 @@ import net.vdombox.powerpack.managers.LanguageManager;
 
 public class MenuGeneral extends EventDispatcher
 {
-	public static const LANG_FOLDER : String = "assets/lang";
-	public static const STATE_NO : String = "noTemplate";
-	public static const STATE_NEW : String = "newTemplate";
-	public static const STATE_MOD : String = "modifiedTemplate";
-	public static const STATE_OPEN : String = "openedTemplate";
+	public static const LANG_FOLDER	: String = "assets/lang";
+	public static const STATE_NO	: String = "noTemplate";
+	public static const STATE_NEW	: String = "newTemplate";
+	public static const STATE_MOD	: String = "modifiedTemplate";
+	public static const STATE_OPEN	: String = "openedTemplate";
 
+	public static const MENU_FILE		: String = "file";
+	public static const MENU_RUN		: String = "run";
+	public static const MENU_TEMPLATE	: String = "template";
+	
 	public static var state : String;
 	public static var menu : FlexNativeMenu;
 	private static var memMenu : Dictionary;
@@ -73,27 +77,13 @@ public class MenuGeneral extends EventDispatcher
 		state = STATE_NO;
 
 		// process file menu
-		var fileMenu : NativeMenu = MenuGeneral.menu.nativeMenu.getItemByName( "file" ).submenu;
-		fileMenu.getItemByName( "new_category" ).enabled = false;
-		fileMenu.getItemByName( "close" ).enabled = false;
-		fileMenu.getItemByName( "save" ).enabled = false;
-		fileMenu.getItemByName( "save_as" ).enabled = false;
-
+		updateFileSubMenuState(false);
+		
 		// process template menu
-		var tplItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "template" );
-		tplItem.enabled = false;
-		for each ( var item : NativeMenuItem in tplItem.submenu.items )
-		{
-			item.enabled = false;
-		}
-
+		updateMenuState(MENU_TEMPLATE, false);
+		
 		// process run menu
-		var runItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "run" );
-		runItem.enabled = false;
-		for each ( item in runItem.submenu.items )
-		{
-			item.enabled = false;
-		}
+		updateMenuState(MENU_RUN, false);
 	}
 
 	public static function newTemplate() : void
@@ -101,63 +91,27 @@ public class MenuGeneral extends EventDispatcher
 		state = STATE_NEW;
 
 		// process file menu
-		var fileMenu : NativeMenu = MenuGeneral.menu.nativeMenu.getItemByName( "file" ).submenu;
-		fileMenu.getItemByName( "new_category" ).enabled = true;
-		fileMenu.getItemByName( "close" ).enabled = true;
-		fileMenu.getItemByName( "save" ).enabled = true;
-		fileMenu.getItemByName( "save_as" ).enabled = true;
-
+		updateFileSubMenuState(true);
+		
 		// process template menu
-		var tplItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "template" );
-		tplItem.enabled = true;
-		for each ( var item : NativeMenuItem in tplItem.submenu.items )
-		{
-			item.enabled = true;
-		}
-
+		updateMenuState(MENU_TEMPLATE, true);
+		
 		// process run menu
-		var runItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "run" );
-		runItem.enabled = true;
-		for each ( item in runItem.submenu.items )
-		{
-			item.enabled = true;
-		}
-
-		runItem.submenu.getItemByName( "run" ).enabled = true;
-		runItem.submenu.getItemByName( "debug" ).enabled = true;
-		runItem.submenu.getItemByName( "step_by_step" ).enabled = true;
+		enableDebugStartMenu();
 	}
-
+	
 	public static function modifiedTemplate() : void
 	{
 		state = STATE_MOD;
 
 		// process file menu
-		var fileMenu : NativeMenu = MenuGeneral.menu.nativeMenu.getItemByName( "file" ).submenu;
-		fileMenu.getItemByName( "new_category" ).enabled = true;
-		fileMenu.getItemByName( "close" ).enabled = true;
-		fileMenu.getItemByName( "save" ).enabled = true;
-		fileMenu.getItemByName( "save_as" ).enabled = true;
-
+		updateFileSubMenuState(true);
+		
 		// process template menu
-		var tplItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "template" );
-		tplItem.enabled = true;
-		for each ( var item : NativeMenuItem in tplItem.submenu.items )
-		{
-			item.enabled = true;
-		}
-
+		updateMenuState(MENU_TEMPLATE, true);
+		
 		// process run menu
-		var runItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "run" );
-		runItem.enabled = true;
-		for each ( item in runItem.submenu.items )
-		{
-			item.enabled = false;
-		}
-
-		runItem.submenu.getItemByName( "run" ).enabled = true;
-		runItem.submenu.getItemByName( "debug" ).enabled = true;
-		runItem.submenu.getItemByName( "step_by_step" ).enabled = true;
+		enableDebugStartMenu();
 	}
 
 	public static function openedTemplate() : void
@@ -165,31 +119,13 @@ public class MenuGeneral extends EventDispatcher
 		state = STATE_OPEN;
 
 		// process file menu
-		var fileMenu : NativeMenu = MenuGeneral.menu.nativeMenu.getItemByName( "file" ).submenu;
-		fileMenu.getItemByName( "new_category" ).enabled = true;
-		fileMenu.getItemByName( "close" ).enabled = true;
-		fileMenu.getItemByName( "save" ).enabled = false;
-		fileMenu.getItemByName( "save_as" ).enabled = true;
-
+		updateFileSubMenuState(true, false);
+		
 		// process template menu
-		var tplItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "template" );
-		tplItem.enabled = true;
-		for each ( var item : NativeMenuItem in tplItem.submenu.items )
-		{
-			item.enabled = true;
-		}
+		updateMenuState(MENU_TEMPLATE, true);
 
 		// process run menu
-		var runItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "run" );
-		runItem.enabled = true;
-		for each ( item in runItem.submenu.items )
-		{
-			item.enabled = false;
-		}
-
-		runItem.submenu.getItemByName( "run" ).enabled = true;
-		runItem.submenu.getItemByName( "debug" ).enabled = true;
-		runItem.submenu.getItemByName( "step_by_step" ).enabled = true;
+		enableDebugStartMenu();
 	}
 
 	public static function updateLangMenu() : void
@@ -328,6 +264,43 @@ public class MenuGeneral extends EventDispatcher
 			fileItem.submenu.addItemAt( item, exitItem.menu.getItemIndex( exitItem ) );
 		}
 	}
-
+	
+	public static function updateMenuState (menuType : String, enabled : Boolean) : void 
+	{
+		var menuItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( menuType );
+		menuItem.enabled = enabled;
+		
+		for each ( var subItem : NativeMenuItem in menuItem.submenu.items )
+		{
+			subItem.enabled = enabled;
+		}
+	}
+	
+	private static function enableDebugStartMenu () : void 
+	{
+		var runItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "run" );
+		runItem.enabled = true;
+		
+		for each ( var item : NativeMenuItem in runItem.submenu.items )
+		{
+			item.enabled = false;
+		}
+		
+		runItem.submenu.getItemByName( "run" ).enabled = true;
+		runItem.submenu.getItemByName( "debug" ).enabled = true;
+		runItem.submenu.getItemByName( "step_by_step" ).enabled = true;
+	}
+	
+	public static function updateFileSubMenuState (enabled : Boolean, tplFileModified : Boolean = true) : void 
+	{
+		var fileMenu : NativeMenu = MenuGeneral.menu.nativeMenu.getItemByName( "file" ).submenu;
+		
+		fileMenu.getItemByName( "new_category" ).enabled = enabled;
+		fileMenu.getItemByName( "close" ).enabled = enabled;
+		fileMenu.getItemByName( "save_as" ).enabled = enabled;
+		
+		fileMenu.getItemByName( "save" ).enabled = enabled ? tplFileModified : enabled;
+	}
+	
 }
 }
