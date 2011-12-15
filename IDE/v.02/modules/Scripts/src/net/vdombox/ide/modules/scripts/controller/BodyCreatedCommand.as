@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.scripts.controller
 	import net.vdombox.ide.modules.scripts.view.LibrariesPanelMediator;
 	import net.vdombox.ide.modules.scripts.view.ScriptEditorMediator;
 	import net.vdombox.ide.modules.scripts.view.ServerScriptsPanelMediator;
+	import net.vdombox.ide.modules.scripts.view.WorkAreaMediator;
 	import net.vdombox.ide.modules.scripts.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -17,7 +18,9 @@ package net.vdombox.ide.modules.scripts.controller
 		{
 			var body : Body = notification.getBody() as Body;
 
-			facade.registerMediator( new ScriptEditorMediator( body.sriptEditor ) );
+			//facade.registerMediator( new ScriptEditorMediator( body.sriptEditor ) );
+			
+			facade.registerMediator( new WorkAreaMediator( body.workArea ) );
 			
 			facade.registerMediator( new GlobalScriptsPanelMediator( body.globalScriptsPanel ) );
 			facade.registerMediator( new ContainersPanelMediator( body.containersPanel ) );

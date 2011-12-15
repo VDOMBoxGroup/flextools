@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 xmlns:s="library://ns.adobe.com/flex/spark">
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 removedFromStage="panel1_removedFromStageHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
@@ -11,6 +12,7 @@
 			
 			import net.vdombox.ide.common.vo.LibraryVO;
 			import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
+			import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
 			
 			import spark.events.IndexChangeEvent;
 
@@ -89,7 +91,7 @@
 					dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.SELECTED_LIBRARY_CHANGED ) )					
 			}
 
-			protected function librariesList_changeHandler() : void
+			protected function librariesList_changeHandler( event : ListItemRendererEvent ) : void
 			{
 				dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.SELECTED_LIBRARY_CHANGED ) );
 			}
@@ -97,6 +99,7 @@
 			protected function librariesList_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				BindingUtils.bindSetter( indexChanged, librariesList, "selectedIndex", true );
+				librariesList.addEventListener( ListItemRendererEvent.DOUBLE_CLICK,librariesList_changeHandler, true );
 			}
 
 			private function indexChanged( value : int ) : void
@@ -106,12 +109,20 @@
 				else if ( !deleteButton.enabled && value != -1 )
 					deleteButton.enabled = true;
 			}
+			
+			protected function panel1_removedFromStageHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				librariesList.removeEventListener( ListItemRendererEvent.DOUBLE_CLICK,librariesList_changeHandler, true );
+			}
+			
 		]]>
 	</fx:Script>
 
 	<s:List id="librariesList"
 			dataProvider="{ _libraries }" height="100%" labelField="name" width="100%"
-			change="librariesList_changeHandler()" creationComplete="librariesList_creationCompleteHandler(event)"/>
+			itemRenderer="net.vdombox.ide.modules.scripts.view.components.ListItemRenderer"
+			creationComplete="librariesList_creationCompleteHandler(event)"/>
 
 	<s:controlBarContent>
 

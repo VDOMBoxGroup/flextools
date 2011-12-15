@@ -11,6 +11,7 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.vo.ServerActionVO;
+			import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
 			import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
 			
 			import spark.events.IndexChangeEvent;
@@ -74,7 +75,7 @@
 					if( newSelectedIndex != -1 )
 						actionList.validateNow();
 					
-					actionList.selectedIndex = newSelectedIndex;
+					actionList.selectedIndex = -1;
 				}
 				else
 				{
@@ -88,10 +89,10 @@
 				}
 
 //				if( isSelectedItemChanged )
-					dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) );
+					//dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) );
 			}
 
-			protected function actionList_changeHandler() : void
+			protected function actionList_changeHandler( event : ListItemRendererEvent ) : void
 			{
 				dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) )
 			}
@@ -99,6 +100,7 @@
 			protected function creationCompleteHandler() : void
 			{
 				BindingUtils.bindSetter( indexChanged, actionList, "selectedIndex", true );
+				actionList.addEventListener( ListItemRendererEvent.DOUBLE_CLICK, actionList_changeHandler, true, 0, true );
 			}
 
 			protected function deleteButton_clickHandler() : void
@@ -113,12 +115,14 @@
 				else if ( !deleteButton.enabled && value != -1 )
 					deleteButton.enabled = true;
 			}
+			
 		]]>
 	</fx:Script>
 
 	<s:List id="actionList"
 			dataProvider="{ _scripts }" height="100%" labelField="name" width="100%"
-			change="actionList_changeHandler()"/>
+			itemRenderer="net.vdombox.ide.modules.scripts.view.components.ListItemRenderer"
+			doubleClickEnabled="true"/>
 
 	<s:controlBarContent>
 

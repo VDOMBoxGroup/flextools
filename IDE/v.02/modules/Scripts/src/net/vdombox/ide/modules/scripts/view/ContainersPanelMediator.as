@@ -111,11 +111,21 @@ package net.vdombox.ide.modules.scripts.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
+					selectCurrentPage();
+					
+					break;
 				}
 
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
-					commitProperties();
+					if ( sessionProxy.selectedObject )
+						containersPanel.selectedObjectID = sessionProxy.selectedObject.id;
+					else if ( sessionProxy.selectedPage )
+						containersPanel.selectedPageID = sessionProxy.selectedPage.id;
+					else
+						containersPanel.selectedPageID = "";
+					
+					break;
 
 					break;
 				}
@@ -126,7 +136,7 @@ package net.vdombox.ide.modules.scripts.view
 
 					showPages( pages );
 					
-					commitProperties();
+					selectCurrentPage();
 					
 					break;
 				}
@@ -170,6 +180,25 @@ package net.vdombox.ide.modules.scripts.view
 			}
 		}
 		
+		private function selectCurrentPage( needGetPageStructure : Boolean = true ) : void
+		{
+			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+			if ( !sessionProxy.selectedPage )
+				return;
+			
+			if ( sessionProxy.selectedObject )
+				containersPanel.selectedPageID = sessionProxy.selectedObject.id;
+			else
+				containersPanel.selectedPageID = sessionProxy.selectedPage.id;
+			
+			if ( !needGetPageStructure )
+				return;
+			
+			sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: sessionProxy.selectedPage } );
+			//sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, sessionProxy.selectedPage );
+		}
+		
 		private function showPages( pages : Array ) : void
 		{
 			var pagesXMLList : XMLList = new XMLList();
@@ -197,45 +226,6 @@ package net.vdombox.ide.modules.scripts.view
 			containersPanel.removeEventListener( ContainersPanelEvent.CONTAINER_CHANGED, containerChangedHandler );
 		}
 
-		private function commitProperties() : void
-		{
-
-			if ( ( sessionProxy.selectedPage && !currentPageVO ) ||
-				( sessionProxy.selectedPage && currentPageVO && sessionProxy.selectedPage.id != currentPageVO.id ) )
-			{
-				currentPageVO = sessionProxy.selectedPage;
-				currentObjectVO = null;
-				
-				sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: currentPageVO } );
-				
-				return;
-			}
-			else if( !sessionProxy.selectedPage )
-			{
-				if ( currentPageVO )
-					currentPageVO = null;
-
-				currentObjectVO = null;
-				containersPanel.structure = null;
-				
-				return;
-			}
-			
-			if( ( sessionProxy.selectedObject && !currentObjectVO ) ||
-				( sessionProxy.selectedObject && currentObjectVO && sessionProxy.selectedObject.id != currentObjectVO.id ) )
-			{
-				currentObjectVO = sessionProxy.selectedObject;
-				containersPanel.selectedObjectID = currentObjectVO.id;
-			}
-			else if( !sessionProxy.selectedObject )
-			{
-				if( currentObjectVO )
-					currentObjectVO = null;
-				
-				containersPanel.selectedObjectID = "";
-			}
-		}
-
 		private function clearData() : void
 		{
 			currentPageVO = null;
@@ -260,25 +250,38 @@ package net.vdombox.ide.modules.scripts.view
 
 			return result;
 		}
+		
+		public function get currentObjectID() : String
+		{
+			return sessionProxy.selectedObject ? sessionProxy.selectedObject.id : null;
+		}
+		
+		public function get currentPageID() : String
+		{
+			return sessionProxy.selectedPage ? sessionProxy.selectedPage.id : null;
+		}
 
 		private function containerChangedHandler( event : ContainersPanelEvent ) : void
 		{
-			var selectedItem : XML = containersPanel.selectedItem;
-			var selectedItemID : String = selectedItem.@id;
+			var newPage : XML = containersPanel.selectedPage;
+			var newObject : XML = containersPanel.selectedObject;
 			var selectedObject : ObjectVO;
 			
 			var typeVO : TypeVO;
 
-			if( !selectedItem )
+			if( !newPage )
 				return;
 			
-			 typeVO = getTypeByID( selectedItem.@typeID )
+			if ( newObject )
+				typeVO = getTypeByID( newObject.@typeID )
+			else
+				typeVO = getTypeByID( newPage.@typeID )
 				 
 			 var pageVO : PageVO = null;
-			 if ( _pages.hasOwnProperty( selectedItemID ) )
-				 pageVO = _pages[selectedItemID];;
+			 if ( _pages.hasOwnProperty( newPage.@id ) )
+				 pageVO = _pages[newPage.@id];;
 			 
-			 if( pageVO )
+			 /*if( pageVO )
 				 sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
 			 else
 			 {
@@ -289,7 +292,42 @@ package net.vdombox.ide.modules.scripts.view
 				}
 
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
+			 }*/
+			 
+			 
+			 if ( newObject && newObject.@id != currentObjectID )
+			 {
+				 /*if ( !requestQue )
+					 requestQue = {};
+				 
+				 if ( !requestQue.hasOwnProperty( newTableID ) )
+					 requestQue[ newTableID ] = { open: false, change: true };
+				 else
+					 requestQue[ newTableID ][ "change" ] = true;*/
+				 
+				 if ( newObject.name() == "object" )
+				 {
+					 selectedObject = new ObjectVO( sessionProxy.selectedPage, typeVO );
+					 selectedObject.setID( newObject.@id );
+					 sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
+				 }
 			 }
+			 else if ( newPage.@id != currentPageID )
+			 {
+				 sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
+				 if ( newObject && newObject.name() == "object" )
+				 {
+					 selectedObject = new ObjectVO( sessionProxy.selectedPage, typeVO );
+					 selectedObject.setID( newObject.@id );
+					 sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
+				 }
+				
+			 }
+			 else if ( !newObject )
+			 {
+				 sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
+			 }
+			
 		}
 	}
 }

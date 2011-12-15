@@ -15,18 +15,29 @@ package net.vdombox.ide.modules.scripts.controller
 			
 			var selectedPageVO : PageVO = notification.getBody() as PageVO;
 			
-			if( sessionProxy.selectedPage == selectedPageVO )
+			/*if( sessionProxy.selectedPage.id == selectedPageVO.id )
 			{
 				if( sessionProxy.selectedObject )
 					sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, null );
 				
 				return;
-			}
+			}*/
 			
-			if( sessionProxy.selectedPage && selectedPageVO && sessionProxy.selectedPage.id == selectedPageVO.id )
-				return;
+			/*if( sessionProxy.selectedPage && selectedPageVO && sessionProxy.selectedPage.id == selectedPageVO.id )
+				return;*/
 			
-			sendNotification( ApplicationFacade.SET_SELECTED_PAGE, selectedPageVO );
+			//sendNotification( ApplicationFacade.SET_SELECTED_PAGE, selectedPageVO );
+			
+			
+			
+			var oldPageID : String = sessionProxy.selectedPage ? sessionProxy.selectedPage.id : "";
+			var newPageID : String = selectedPageVO ? selectedPageVO.id : "";
+			
+			if( sessionProxy.selectedObject )
+				sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, null );
+			
+			if( oldPageID != newPageID )
+				sendNotification( ApplicationFacade.SET_SELECTED_PAGE, selectedPageVO );
 		}
 	}
 }

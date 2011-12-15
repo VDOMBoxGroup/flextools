@@ -3,18 +3,23 @@
 		 xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 height="100%" width="100%" xmlns:editors="net.vdombox.editors.*"
-		 xmlns:components1="net.vdombox.components.*">
+		 height="300" width="400" xmlns:editors="net.vdombox.editors.*"
+		 xmlns:components1="net.vdombox.components.*"
+		 removedFromStage="navigatorcontent1_removedFromStageHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.editors.ScriptAreaComponent;
+			import net.vdombox.ide.common.events.EditorEvent;
+			import net.vdombox.ide.common.vo.ServerActionVO;
 			import net.vdombox.ide.modules.scripts.events.EditAreaEvent;
 			import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 			
 			private var _script : String;
+			private var _objectVO : Object;
+			private var _actionVO : Object;
 
 			private var _syntax : String = "vscript";
 
@@ -28,6 +33,43 @@
 				pythonScriptEditor.scriptAreaComponent.text = value;
 				pythonScriptEditor.dispatchEvent( new Event ( Event.CHANGE ) );
 			}
+			
+			public function get editorID() : String
+			{
+				if ( actionVO )
+				{
+					if ( actionVO is ServerActionVO )
+					{
+						return  actionVO.id;
+					}
+					else
+					{
+						return actionVO.name;
+					}
+				}
+				else
+					return "";
+			}
+			
+			public function get objectVO() : Object
+			{
+				return _objectVO ? _objectVO : null;
+			}
+			
+			public function set objectVO( value : Object ) : void
+			{
+				_objectVO = value;
+			}
+			
+			public function get actionVO() : Object
+			{
+				return _actionVO ? _actionVO : null;
+			}
+			
+			public function set actionVO( value : Object ) : void
+			{
+				_actionVO = value;
+			}
 
 			/*public function set syntax( value : String ) : void
 			{
@@ -38,6 +80,12 @@
 			{
 				dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SAVE ) );
 			}
+			
+			protected function navigatorcontent1_removedFromStageHandler(event:Event):void
+			{
+				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
+			}
+			
 		]]>
 	</fx:Script>
 	<s:VGroup width="100%" height="100%" gap="0">

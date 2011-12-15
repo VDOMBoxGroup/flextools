@@ -25,30 +25,32 @@ package net.vdombox.ide.modules.scripts.view
 
 		public function ScriptEditorMediator( viewComponent : Object )
 		{
-			super( NAME, viewComponent );
-			scriptEditor.addEventListener( FlexEvent.SHOW, showHandler );
+			var instanceName : String = NAME + viewComponent.editorID;
+			super( instanceName, viewComponent );
+			//scriptEditor.addEventListener( FlexEvent.SHOW, showHandler );
 			compliteSourceCode();
 		}
 
 		private var sessionProxy : SessionProxy;
-
-		private var isActive : Boolean;
 		
 		private var serverActionVO : ServerActionVO;
 		private var libraryVO : LibraryVO;
 		private var globalActionVO : GlobalActionVO;
 
-		private var currentVO : Object;
+		
 		
 		public function get scriptEditor() : ScriptEditor
 		{
 			return viewComponent as ScriptEditor;
 		}
+		
+		private function get currentVO() : Object
+		{
+			return scriptEditor.actionVO;
+		}
 
 		override public function onRegister() : void
 		{
-			scriptEditor.enabled = false;
-			isActive = false;
 
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
@@ -57,125 +59,9 @@ package net.vdombox.ide.modules.scripts.view
 
 		override public function onRemove() : void
 		{
-			scriptEditor.enabled = false;
 			removeHandlers();
 
 			clearData();
-		}
-
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
-
-			interests.push( ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_LIBRARY_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_GLOBAL_ACTION_CHANGED );
-
-			return interests;
-		}
-
-		override public function handleNotification( notification : INotification ) : void
-		{
-			var name : String = notification.getName();
-			var body : Object = notification.getBody();
-			//var pythonScriptEditor: PythonScriptEditor = scriptEditor.pythonScriptEditor;
-
-			if ( !isActive && name != ApplicationFacade.BODY_START )
-				return;
-
-			switch ( name )
-			{
-				case ApplicationFacade.BODY_START:
-				{
-					if ( sessionProxy.selectedApplication )
-					{
-						isActive = true;
-
-						if( sessionProxy.selectedApplication )
-							//scriptEditor.syntax = sessionProxy.selectedApplication.scriptingLanguage;
-						
-						break;
-					}
-				}
-
-				case ApplicationFacade.BODY_STOP:
-				{
-					isActive = false;
-
-					clearData();
-
-					break;
-				}
-
-				case ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED:
-				{
-					serverActionVO = body as ServerActionVO;
-
-					if ( serverActionVO )
-					{
-						scriptEditor.enabled = true;
-						scriptEditor.script = serverActionVO.script;
-						//pythonScriptEditor.loadSource( serverActionVO.script, "zzz" );
-						currentVO = serverActionVO;
-					}
-					else
-					{
-						scriptEditor.enabled = false;
-						scriptEditor.script = "";
-						//pythonScriptEditor.loadSource( "", "zzz" );
-						currentVO = null;
-					}
-
-					break;
-				}
-
-				case ApplicationFacade.SELECTED_LIBRARY_CHANGED:
-				{
-					libraryVO = body as LibraryVO
-
-					if ( libraryVO )
-					{
-						scriptEditor.enabled = true;
-						scriptEditor.script = libraryVO.script;
-						//pythonScriptEditor.loadSource( libraryVO.script, "zzz" );
-						currentVO = libraryVO;
-					}
-					else
-					{
-						scriptEditor.enabled = false;
-						scriptEditor.script = "";
-						//pythonScriptEditor.loadSource( "", "zzz" );
-						currentVO = null;
-					}
-
-					break;
-				}
-					
-				case ApplicationFacade.SELECTED_GLOBAL_ACTION_CHANGED:
-				{
-					globalActionVO = body as GlobalActionVO;
-					
-					if ( globalActionVO )
-					{
-						scriptEditor.enabled = true;
-						scriptEditor.script = globalActionVO.script;
-						//pythonScriptEditor.loadSource( globalActionVO.script, "zzz" );
-						currentVO = globalActionVO;
-					}
-					else
-					{
-						scriptEditor.enabled = false;
-						scriptEditor.script = "";
-						//pythonScriptEditor.loadSource( "", "zzz" );
-						currentVO = null;
-					}
-					
-					break;
-				}
-			}
 		}
 
 		private function addHandlers() : void
@@ -213,7 +99,7 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			serverActionVO = null;
 			libraryVO = null;
-			currentVO = null;
+			globalActionVO = null;
 		}
 		
 		private function scriptEditor_saveHandler( event : ScriptEditorEvent ) : void
