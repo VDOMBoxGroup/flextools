@@ -106,6 +106,7 @@ package net.vdombox.ide.modules.scripts.view
 				{
 					
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					trace( "page" )
 					
 					break;
 				}
@@ -122,6 +123,7 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					trace( "object" );
 
 					break;
 				}

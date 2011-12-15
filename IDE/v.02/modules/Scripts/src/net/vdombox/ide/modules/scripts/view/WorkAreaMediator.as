@@ -135,8 +135,10 @@ package net.vdombox.ide.modules.scripts.view
 						editor = workArea.openEditor( sessionProxy.selectedObject, objectVO ) as ScriptEditor;
 					else
 						editor = workArea.openEditor( sessionProxy.selectedPage, objectVO ) as ScriptEditor;
+					
 					if ( facade.retrieveMediator( ScriptEditorMediator.NAME + editor.editorID ) != null )
 						facade.removeMediator( ScriptEditorMediator.NAME + editor.editorID  );
+					
 					facade.registerMediator( new ScriptEditorMediator( editor ) );
 					editor.enabled = true;
 					editor.script = objectVO.script;
@@ -153,14 +155,12 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			workArea.addEventListener( EditorEvent.REMOVED, editor_removedHandler, true, 0, true );
 			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
-			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
 		}
 		
 		private function removeHandlers() : void
 		{
 			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
 			workArea.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
-			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
 		}
 		
 		private function editor_removedHandler( event : EditorEvent ) : void
@@ -172,23 +172,6 @@ package net.vdombox.ide.modules.scripts.view
 				workArea.closeEditor( editor.actionVO );
 			}
 		}
-		
-		private function changeHandler( event : WorkAreaEvent ) : void
-		{
-			var selectedEditor : ScriptEditor = workArea.selectedEditor;
-			
-			if ( selectedEditor && selectedEditor is ScriptEditor )
-			{
-				if ( selectedEditor.objectVO && selectedEditor.objectVO is PageVO &&  selectedEditor.objectVO.id != sessionProxy.selectedPage.id )
-					sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, selectedEditor.objectVO );
-				else if ( !sessionProxy.selectedObject || selectedEditor.objectVO && selectedEditor.objectVO is ObjectVO && selectedEditor.objectVO.id != sessionProxy.selectedObject.id )
-				{
-					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.objectVO );
-					/*if ( selectedEditor.objectVO.pageVO.id != sessionProxy.selectedPage.id )
-						sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, sessionProxy. );*/
-				}
-			}
-		}	
 		
 		private function removedFromStageHandler( event : Event ) : void
 		{

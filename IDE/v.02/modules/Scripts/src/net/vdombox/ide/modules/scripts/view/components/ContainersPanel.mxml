@@ -21,8 +21,6 @@
 			
 			[Embed(source="icons/disclosureOpenIcon.png")]
 			public var minus:Class;
-			
-			private var lastHighlightedItem : XML;
 
 			public function get selectedObject() : XML
 			{
@@ -137,6 +135,34 @@
 					invalidateProperties();
 				}
 			}
+			
+			override public function  validateProperties():void
+			{
+				super.validateProperties();
+				
+				if ( _needUpdateProperties )
+				{
+					_needUpdateProperties 		= false;
+					
+					openTree( elementForSelection );
+					
+					containersTree.selectedItem = elementForSelection;
+					
+					invalidateDisplayList();
+				}
+				
+			}
+			
+			private function openTree( item : Object ) : void
+			{
+				var parentItem : Object = XML( item ).parent();
+				
+				if ( parentItem )
+				{
+					openTree( parentItem );
+					containersTree.expandItem( parentItem, true, false );
+				}
+			}
 
 			public function get selectedItem() : XML
 			{
@@ -163,52 +189,12 @@
 			{
 				// TODO Auto-generated method stub
 				containersTree.addEventListener( ListEvent.CHANGE, objectsTree_changeHandler, false, 0, true );
-				
-				containersTree.addEventListener( ListEvent.ITEM_ROLL_OVER, objectsTree_highlightChangeHandler, false, 0, true );
-				containersTree.addEventListener( ListEvent.ITEM_ROLL_OUT, objectsTree_highlightChangeHandler, false, 0, true );
-			}
-			
-			private function objectsTree_highlightChangeHandler( event : ListEvent ) : void
-			{
-				if ( event.type == ListEvent.ITEM_ROLL_OVER )
-					lastHighlightedItem = event.itemRenderer.data as XML;
-				else
-					lastHighlightedItem = null;
 			}
 			
 			private function objectsTree_changeHandler( event : ListEvent ) : void
 			{
 				dispatchEvent( new ContainersPanelEvent( ContainersPanelEvent.CONTAINER_CHANGED ) );
-			}
-
-			private var _needValideteDisplayList : Boolean = false;
-			override public function  validateProperties():void
-			{
-				super.validateProperties();
-				
-				if ( _needUpdateProperties )
-				{
-					_needUpdateProperties 		= false;
-					_needValideteDisplayList 	= true;
-					
-					openTree( elementForSelection );
-					
-					containersTree.selectedItem = elementForSelection;
-					
-					invalidateDisplayList();
-				}
-				
-			}
-			
-			private function openTree( item : Object ) : void
-			{
-				var parentItem : Object = XML( item ).parent();
-				
-				if ( parentItem )
-				{
-					openTree( parentItem );
-					containersTree.expandItem( parentItem, true, false );
-				}
+				trace( "change" );
 			}
 			
 			
@@ -223,7 +209,7 @@
 	</s:Rect>
 
 	<mx:Tree id="containersTree"
-			 dataProvider="{ _structure }" height="100%" labelField="@name"
+			 dataProvider="{ _structure }" height="100%" labelField="@name" showRoot="true"
 			 itemRenderer="net.vdombox.components.ObjectsTreePanelItemRenderer"
 			 contentBackgroundAlpha="0" width="100%"
 			 maxHorizontalScrollPosition="140"

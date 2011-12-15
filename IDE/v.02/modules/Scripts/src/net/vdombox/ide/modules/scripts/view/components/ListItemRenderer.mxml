@@ -2,7 +2,7 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				autoDrawBackground="true"
+				autoDrawBackground="true" minHeight="22" width="100%"
 				doubleClickEnabled="true" doubleClick="itemrenderer1_doubleClickHandler(event)" >
 	
 	<fx:Script>
@@ -13,10 +13,39 @@
 				// TODO Auto-generated method stub
 				dispatchEvent( new ListItemRendererEvent ( ListItemRendererEvent.DOUBLE_CLICK ) );
 			}
+			
+			override public function set selected( value : Boolean ) : void
+			{ 
+				super.selected = value;
+				
+				currentState = value ? "selected" : "normal"
+			}
 		]]>
 	</fx:Script>
 	
+	<s:states>
+		<s:State name="normal" /> 
+		<s:State name="selected" />
+	</s:states>
 	
-	<s:Label text="{data.name}"/>
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor color.normal="#3A3A3A" color.selected="#0000FF" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:Label text="{data.name}" color="#FFFFFF" height="100%" verticalAlign="middle" paddingLeft="10"/>
+	
+	<s:Line top="0" left="0" width="100%">
+		<s:stroke>
+			<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1" />
+		</s:stroke>
+	</s:Line>
+	
+	<s:Line bottom="0" left="0" width="100%">
+		<s:stroke>
+			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1" />
+		</s:stroke>
+	</s:Line>
 	
 </s:ItemRenderer>

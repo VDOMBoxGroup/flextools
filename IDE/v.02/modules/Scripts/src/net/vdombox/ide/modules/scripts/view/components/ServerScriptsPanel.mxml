@@ -118,9 +118,16 @@
 			
 		]]>
 	</fx:Script>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:BitmapFill source = "@Embed('icons/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+		</s:fill>
+	</s:Rect>
 
 	<s:List id="actionList"
 			dataProvider="{ _scripts }" height="100%" labelField="name" width="100%"
+			contentBackgroundAlpha="0" borderVisible="false"
 			itemRenderer="net.vdombox.ide.modules.scripts.view.components.ListItemRenderer"
 			doubleClickEnabled="true"/>
 

@@ -64,9 +64,8 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.TYPES_GETTED );
 			interests.push( ApplicationFacade.STRUCTURE_GETTED );
-
+			
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 			
 			interests.push( ApplicationFacade.PAGES_GETTED );
 
@@ -106,27 +105,6 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.TYPES_GETTED:
 				{
 					types = body as Array;
-					break;
-				}
-
-				case ApplicationFacade.SELECTED_PAGE_CHANGED:
-				{
-					selectCurrentPage();
-					
-					break;
-				}
-
-				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
-				{
-					if ( sessionProxy.selectedObject )
-						containersPanel.selectedObjectID = sessionProxy.selectedObject.id;
-					else if ( sessionProxy.selectedPage )
-						containersPanel.selectedPageID = sessionProxy.selectedPage.id;
-					else
-						containersPanel.selectedPageID = "";
-					
-					break;
-
 					break;
 				}
 					
@@ -177,6 +155,14 @@ package net.vdombox.ide.modules.scripts.view
 					}
 					break;
 				}
+					
+				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				{
+					sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: sessionProxy.selectedPage } );
+					
+					break;
+				}
+					
 			}
 		}
 		
@@ -196,7 +182,6 @@ package net.vdombox.ide.modules.scripts.view
 				return;
 			
 			sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: sessionProxy.selectedPage } );
-			//sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, sessionProxy.selectedPage );
 		}
 		
 		private function showPages( pages : Array ) : void
@@ -281,36 +266,13 @@ package net.vdombox.ide.modules.scripts.view
 			 if ( _pages.hasOwnProperty( newPage.@id ) )
 				 pageVO = _pages[newPage.@id];;
 			 
-			 /*if( pageVO )
-				 sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
-			 else
+			 
+			 
+			 if ( newObject && newObject.@id != currentObjectID &&  newObject.name() == "object" )
 			 {
-				if ( selectedItem.name() == "object" )
-				{
-					selectedObject = new ObjectVO( sessionProxy.selectedPage, typeVO );
-					selectedObject.setID( selectedItem.@id );
-				}
-
+				selectedObject = new ObjectVO( sessionProxy.selectedPage, typeVO );
+				selectedObject.setID( newObject.@id );
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
-			 }*/
-			 
-			 
-			 if ( newObject && newObject.@id != currentObjectID )
-			 {
-				 /*if ( !requestQue )
-					 requestQue = {};
-				 
-				 if ( !requestQue.hasOwnProperty( newTableID ) )
-					 requestQue[ newTableID ] = { open: false, change: true };
-				 else
-					 requestQue[ newTableID ][ "change" ] = true;*/
-				 
-				 if ( newObject.name() == "object" )
-				 {
-					 selectedObject = new ObjectVO( sessionProxy.selectedPage, typeVO );
-					 selectedObject.setID( newObject.@id );
-					 sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
-				 }
 			 }
 			 else if ( newPage.@id != currentPageID )
 			 {
