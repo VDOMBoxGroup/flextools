@@ -51,13 +51,13 @@
 			{
 				ContextManager.instance.saveToServer = chkServer.selected;
 				ContextManager.instance.saveToFile = chkFile.selected;
-				ContextManager.instance.file.url = FileUtils.pathToUrl( fileBrowse.text );
+				ContextManager.instance.file.url = FileUtils.pathToUrl( fileBrowse.path );
 			}
 		}
 
 		private function onShow() : void
 		{
-			fileBrowse.text = ContextManager.instance.file.nativePath;
+			fileBrowse.path = ContextManager.instance.file.nativePath;
 			chkServer.setFocus();
 		}
 		]]>

@@ -342,7 +342,10 @@ public class Template extends EventDispatcher
 		if ( _xml.picture[0] != value )
 		{
 			modified = true;
-			_xml.picture = value;
+			if (value)
+				_xml.picture = value;
+			else
+				delete _xml.picture; 
 		}
 	}
 
@@ -565,8 +568,8 @@ public class Template extends EventDispatcher
 		fileToBase64.convert();
 		b64picture = fileToBase64.data.toString();
 
-		_xml.picture[0].@type = file.extension;
-		_xml.picture[0].@name = file.name;
+		_xml.picture[0].@type = pictureFile.extension;
+		_xml.picture[0].@name = pictureFile.name;
 
 		return true;
 	}
@@ -617,7 +620,7 @@ public class Template extends EventDispatcher
 									"type='" + Utils.getStringOrDefault( picXML.@type, "" ) + "' />" ),
 					b64picture );
 
-			delete _xml.picture;
+			//delete _xml.picture;
 		}
 
 		cashStructure();
@@ -649,13 +652,16 @@ public class Template extends EventDispatcher
 	private function fillFromCash() : void
 	{
 		// get tpl picture
-		delete _xml.picture;
-
 		if ( pictureFile )
+		{
+			delete _xml.picture;
 			setPictureFromFile();
-		/*else
-			getPictureFromCash();*/
-
+		}
+		
+		if (!b64picture)
+			delete _xml.picture;
+		
+		
 		// get resources		
 		delete _xmlStructure.resources;
 

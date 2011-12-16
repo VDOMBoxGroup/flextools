@@ -121,9 +121,9 @@
 
 							ConnectionManager.exec( 'list_applications', getAppListHandler );
 						}
-						else if ( step1.radFile.selected && FileUtils.isValidPath( step1.fileBrowse.text ) )
+						else if ( step1.radFile.selected && FileUtils.isValidPath( step1.fileBrowse.path ) )
 						{
-							var file : File = new File( step1.fileBrowse.text );
+							var file : File = new File( step1.fileBrowse.path );
 							if ( file && file.exists )
 							{
 								var fileStream : FileStream = new FileStream();

@@ -55,6 +55,7 @@
 			import mx.controls.ProgressBarMode;
 			import mx.events.CloseEvent;
 			import mx.events.EffectEvent;
+			import mx.events.FlexEvent;
 			import mx.events.IndexChangedEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.utils.StringUtil;
@@ -156,7 +157,7 @@
 				fileStream.addEventListener( Event.COMPLETE, onLanguageLoad );
 				fileStream.openAsync( file, FileMode.READ );
 			}
-
+			
 		}
 
 		private function complete() : void
@@ -228,13 +229,8 @@
 			else
 				ContextManager.templates[0] = template;
 
-			if ( getLogo())
-			{
-				tplPic.visible = false;
-				tplPic.source = getLogo();
-				tplPic.visible = true;
-			}
-
+			showTemplateLogo(getLogo());
+			
 			if ( template.isEncoded )
 			{
 				processStep( cKeyRequest );
@@ -246,10 +242,42 @@
 			
 			function getLogo() : *
 			{
-				return xml.picture[0] && Utils.getStringOrDefault( xml.picture[0], '' ) || null;
+				return xml.picture[0] && Utils.getStringOrDefault( xml.picture[0], '' ) || resources.strLogo;
 			}
 		}
 
+		private function showTemplateLogo(sourceLogo : String):void
+		{
+			if (tplPic.visible && tplPic.value == sourceLogo)
+				return;
+			
+			tplPic.visible = false;
+			
+			tplPic.addEventListener("sourceChanged", onLogoScaleContentChanged);
+			
+			tplPic.width = 220;
+			tplPic.percentHeight = 100;
+			
+			tplPic.value = sourceLogo;
+			tplPic.visible = true;
+		}
+			
+		private function onLogoScaleContentChanged(evt:Event):void
+		{
+			if (tplPic.source && tplPic.source is Bitmap)
+			{
+				tplPic.removeEventListener("sourceChanged", onLogoScaleContentChanged);
+				
+				var sourceBitmapData : BitmapData = tplPic.source.bitmapData; 
+				
+				if (sourceBitmapData.width < tplPic.width && sourceBitmapData.height < tplPic.height)
+				{
+					tplPic.width = sourceBitmapData.width;
+					tplPic.height = sourceBitmapData.height;
+				}
+			}
+		}
+			
 		private function onKeyAccept( event : Event ) : void
 		{
 			openTemplate( txtKey.text );
@@ -374,7 +402,7 @@
 					break;
 
 				case cFileRequest:
-					fileBrowse.text = ContextManager.instance.file.nativePath;
+					fileBrowse.path = ContextManager.instance.file.nativePath;
 					break;
 
 				case cComplete:
@@ -798,7 +826,7 @@
 		private function savingToFile() : void
 		{
 			var file : File = new File();
-			file.url = FileUtils.pathToUrl( fileBrowse.text );
+			file.url = FileUtils.pathToUrl( fileBrowse.path );
 			var stream : FileStream = new FileStream();
 
 			stream.addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress );
@@ -956,6 +984,19 @@
 				}
 			}
 		}
+			
+			protected function tplPic_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				trace ("pic creation compl");
+			}
+			
+			protected function tplPic_showHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				trace ("pic show");
+			}
+			
 		]]>
 	</mx:Script>
 
@@ -967,8 +1008,12 @@
 
 		<mx:HBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="left"
 				 paddingTop="10" paddingRight="10" paddingLeft="10" paddingBottom="10">
-			<controls:Base64Image id="tplPic" source="{resources.strLogo}" horizontalAlign="right" width="220"
-								  showEffect="{picShow}" height="100%" verticalAlign="top" />
+			<controls:Base64Image id="tplPic" 
+								  width="220" height="100%"
+								  value="{resources.strLogo}"  
+								  showEffect="{picShow}"
+								  scaleContent="true" maintainAspectRatio="true"
+								  verticalAlign="top" horizontalAlign="right"/>
 			<mx:VBox height="100%" width="100%" horizontalAlign="right">
 
 				<mx:ViewStack id="vsProcess" width="100%" height="100%" creationPolicy="all" change="vsChange(event)">

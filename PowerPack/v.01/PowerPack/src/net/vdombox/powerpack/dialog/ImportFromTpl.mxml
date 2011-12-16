@@ -48,7 +48,7 @@
 
 		private function onShow( event : Event ) : void
 		{
-			tplBrowse.txtInput.setFocus();
+			tplBrowse.txtPathInput.setFocus();
 			tplBrowse.filterArray = [Template.tplFilter, Template.allFilter];
 		}
 
@@ -70,7 +70,7 @@
 			tplTree.dataProvider = [];
 
 			template = new Template();
-			template.file = new File( tplBrowse.text );
+			template.file = new File( tplBrowse.path );
 			template.addEventListener( Event.COMPLETE, completeTemplateHandler );
 			template.open();
 		}

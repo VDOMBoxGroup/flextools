@@ -2,22 +2,27 @@
 <ModalDialog
 		xmlns="net.vdombox.powerpack.dialog.*"
 		xmlns:mx="http://www.adobe.com/2006/mxml"
-		width="500" height="460"
+		width="500" height="425"
 		title="{LanguageManager.sentences.properties}"
 		creationComplete="onShow(event)"
-		xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*">
+		xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
+		xmlns:customize="net.vdombox.powerpack.customize.*"
+		resizable="false">
 
+	<customize:TemplateDefaultLogo id="defaultLogo" />
+	
 	<mx:Script>
 		<![CDATA[
-		import mx.utils.StringUtil;
+			import mx.events.FlexEvent;
+			import mx.utils.StringUtil;
+			
+			import net.vdombox.powerpack.Template;
+			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+			import net.vdombox.powerpack.managers.ContextManager;
+			import net.vdombox.powerpack.managers.LanguageManager;
 
-		import net.vdombox.powerpack.Template;
-		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
-		import net.vdombox.powerpack.managers.ContextManager;
-		import net.vdombox.powerpack.managers.LanguageManager;
-
-		private static var _dialog : TemplateProperties;
-
+		private static var _dialog	: TemplateProperties;
+		
 		static public function show( closeHandler : Function = null ) : TemplateProperties
 		{
 
@@ -32,8 +37,10 @@
 					template_name : "Template name",
 					template_description : "Description",
 					template_picture : "Template picture",
+					template_use_picture : "Use picture",
 					template_remove_pic : "Remove picture",
-					template_key : "Template key"
+					template_key : "Template key",
+					template_images : "Images"
 				};
 
 				LanguageManager.setSentences( defaultCaptions );
@@ -53,8 +60,8 @@
 
 				case BUTTON_NAME_OK:
 				{
-					if ( picBrowse.text && !_dialog.isCorrectImageFile )
-						showTemplatePictureError();
+					if ( _dialog.templatePicturePath && !_dialog.isCorrectImageFile )
+					{}
 					else
 					{
 						_dialog.closeDetail = ModalDialog.OK;
@@ -82,7 +89,7 @@
 		{
 			try
 			{
-				var templatePictureFile : File = new File( StringUtil.trim( picBrowse.text ) );
+				var templatePictureFile : File = new File( StringUtil.trim( templatePicturePath ) );
 			}
 			catch ( e : Error )
 			{
@@ -90,12 +97,6 @@
 			}
 
 			return FileUtils.correctImageFile( templatePictureFile );
-		}
-
-		public function showTemplatePictureError() : void
-		{
-			picBrowse.txtInput.setFocus();
-			picBrowse.txtInput.errorString = LanguageManager.sentences['msg_enter_correct_image_file'];
 		}
 
 		private function onShow( event : Event ) : void
@@ -107,28 +108,10 @@
 			txtDesc.text = currentTemplate.description;
 			txtKey.text = currentTemplate.key;
 
-			if ( currentTemplate.pictureFile )
-			{
-				picBrowse.text = currentTemplate.pictureFile.nativePath;
-				showPicture( currentTemplate.pictureFile.nativePath );
-			}
-			else if ( currentTemplate.b64picture )
-			{
-				showBase64Picture( currentTemplate.b64picture );
-			}
-			else
-			{
-				hideGridRemovePic();
-			}
-
+			usePictureCheckBox.selected = currentTemplate.pictureFile || currentTemplate.b64picture;
+			onUsePictureSelectionChanged(null);
+			
 			txtName.setFocus();
-
-			addHandlers();
-		}
-
-		private function addHandlers() : void
-		{
-			picBrowse.txtInput.addEventListener( Event.CHANGE, onImageFilePathChange );
 		}
 
 		public function get currentTemplate() : Template
@@ -141,7 +124,28 @@
 
 		public function get templatePicturePath() : String
 		{
-			return StringUtil.trim( picBrowse.text );
+			if (!tplImg || !tplImg.source)
+				return null;
+			
+			return StringUtil.trim( tplImg.source.toString() );
+		}
+		
+		public function set templatePicturePath(picFilePath : String) : void
+		{
+			tplImg.source = picFilePath;
+		}
+			
+		public function get templateB64Picture() : String
+		{
+			if (!b64Img || !b64Img.value)
+				return null;
+			
+			return b64Img.value;
+		}
+		
+		public function set templateB64Picture(base64Pic : String) : void
+		{
+			b64Img.value = base64Pic;
 		}
 
 		public function get templateName() : String
@@ -159,90 +163,200 @@
 			return StringUtil.trim( txtKey.text );
 		}
 
-		private function removePicture() : void
-		{
-			hideGridRemovePic();
-
-			picBrowse.txtInput.text = '';
-			picBrowse.text = '';
-		}
-
 		private function onImageFilePathChange( evt : Event ) : void
 		{
-			picBrowse.txtInput.errorString = null;
-
 			try
 			{
 				if ( isCorrectImageFile )
 				{
-					showPicture( templatePicturePath );
+					showPictureFromFile( templatePicturePath );
 				}
 				else
 				{
-					hideGridRemovePic();
+					hidePictureFromFile();
 				}
 
 			}
 			catch ( e : Error )
 			{
-				hideGridRemovePic();
+				hidePictureFromFile();
 			}
 		}
 
-		private function hidePicture() : void
+		protected function onPicBrowseClick(event:MouseEvent):void
 		{
-			tplImg.source = null;
-
+			var file : File = currentPictureFile;
+			
+			file.addEventListener(Event.SELECT, onPicFileSelect);
+			
+			var fileFilter : FileFilter = new FileFilter(LanguageManager.sentences.template_images, FileUtils.getImagesFileExtension());
+			
+			file.browseForOpen(LanguageManager.sentences.select_file, [fileFilter]);
+		}
+			
+		private function get currentPictureFile() : File
+		{
+			var file : File;
+			
+			if (templatePicturePath)
+			{
+				try 
+				{
+					file = new File(templatePicturePath);
+					
+					if (!file.exists)
+						file = null;
+				} 
+				catch (e:*) {
+					file = null;
+				}
+			}
+			
+			if (!file)
+				file = new File (File.documentsDirectory.nativePath);
+			
+			return file;
+		}
+			
+		private function onPicFileSelect(evt:Event):void
+		{
+			var file:File = evt.target as File;
+			
+			file.removeEventListener(Event.SELECT, onPicFileSelect); 
+			
+			showPictureFromFile(file.nativePath);
+		}
+			
+		protected function onUsePictureSelectionChanged(event:Event):void
+		{
+			useTemplatePicture = usePictureCheckBox.selected;
+		}
+			
+		private function set useTemplatePicture (usePicture : Boolean) : void
+		{
+			if (usePicture)
+			{
+				showTemplatePicture();
+			}
+			else
+			{
+				hideTemplatePicture();
+			}
+		}
+			
+		private function showTemplatePicture():void
+		{
+			pictureGridRow.visible = true;
+			pictureGridRow.includeInLayout = true;
+			
+			if ( currentTemplate.pictureFile )
+			{
+				showPictureFromFile(currentTemplate.pictureFile.nativePath);
+			}
+			else if ( currentTemplate.b64picture )
+			{
+				showBase64Picture( currentTemplate.b64picture );
+			}
+			else
+			{
+				showDefaultPicture();
+			}
+		}
+			
+		private function hideTemplatePicture():void
+		{
+			hidePictureFromFile();
+			hideBase64Picture();
+			
+			pictureGridRow.visible = false;
+			pictureGridRow.includeInLayout = false;
+		}
+			
+		private function showPictureFromFile( imageSourcePath : String ) : void
+		{
+			hideBase64Picture();
+			
+			tplImg.addEventListener(Event.COMPLETE, onImageContentLoaded);
+			
+			tplImg.width = 98;
+			tplImg.height = 98;
+			
+			templatePicturePath = imageSourcePath;
+			
+			tplImg.visible = true;
+			tplImg.includeInLayout = true;
+		}
+		
+		private function onImageContentLoaded(evt:Event):void
+		{
+			if (tplImg.content && tplImg.content is Bitmap)
+			{
+				tplImg.removeEventListener(Event.COMPLETE, onImageContentLoaded);
+				
+				var sourceBitmapData : BitmapData = Bitmap(tplImg.content).bitmapData; 
+				
+				if (sourceBitmapData.width < tplImg.width && sourceBitmapData.height < tplImg.height)
+				{
+					tplImg.width = sourceBitmapData.width;
+					tplImg.height = sourceBitmapData.height;
+				}
+			}
+			
+		}
+	
+		private function hidePictureFromFile() : void
+		{
+			templatePicturePath = "";
+			
 			tplImg.visible = false;
 			tplImg.includeInLayout = false;
 		}
 
+		private function showBase64Picture( imageSource : String ) : void
+		{
+			hidePictureFromFile();
+			
+			b64Img.width = 98;
+			b64Img.height = 98;
+			
+			templateB64Picture = imageSource;
+			
+			b64Img.addEventListener("sourceChanged", onBase64ImageScaleContentChanged);
+			
+			b64Img.visible = true;
+			b64Img.includeInLayout = true;
+		}
+			
+		private function onBase64ImageScaleContentChanged(evt:Event):void
+		{
+			if (b64Img.source && b64Img.source is Bitmap)
+			{
+				b64Img.removeEventListener("sourceChanged", onBase64ImageScaleContentChanged);
+				
+				var sourceBitmapData : BitmapData = b64Img.source.bitmapData; 
+				
+				if (sourceBitmapData.width < b64Img.width && sourceBitmapData.height < b64Img.height)
+				{
+					b64Img.width = sourceBitmapData.width;
+					b64Img.height = sourceBitmapData.height;
+				}
+			}
+				
+		}
+				
 		private function hideBase64Picture() : void
 		{
-			b64Img.source = null;
-
+			templateB64Picture = "";
+			
 			b64Img.visible = false;
 			b64Img.includeInLayout = false;
 		}
-
-		private function hideGridRemovePic() : void
+		
+		private function showDefaultPicture() : void
 		{
-			hidePicture();
-			hideBase64Picture();
-
-			gridRemovePic.visible = false;
-			gridRemovePic.includeInLayout = false;
+			showBase64Picture(defaultLogo.strLogo);
 		}
-
-		private function showPicture( imageSource : Object ) : void
-		{
-			hideBase64Picture();
-
-			tplImg.source = imageSource;
-
-			tplImg.visible = true;
-			tplImg.includeInLayout = true;
-
-			showGridRemovePic();
-		}
-
-		private function showBase64Picture( imageSource : Object ) : void
-		{
-			hidePicture();
-
-			b64Img.source = imageSource;
-
-			b64Img.visible = true;
-			b64Img.includeInLayout = true;
-
-			showGridRemovePic();
-		}
-
-		private function showGridRemovePic() : void
-		{
-			gridRemovePic.visible = true;
-			gridRemovePic.includeInLayout = true;
-		}
+			
 		]]>
 	</mx:Script>
 	<mx:VBox styleName="dlgHeader" width="100%">
@@ -251,11 +365,14 @@
 
 	<mx:HRule width="100%" />
 
-	<mx:VBox styleName="dlgContent" height="100%">
+	<mx:VBox styleName="dlgContent" 
+			 height="335" width="100%"
+			 horizontalAlign="left">
+		
 		<mx:Grid>
 
-			<mx:GridRow width="100%" height="100%">
-				<mx:GridItem width="100%" height="100%">
+			<mx:GridRow width="100%" height="22">
+				<mx:GridItem width="100" height="100%">
 					<mx:Label text="{LanguageManager.sentences.template_name}:" />
 				</mx:GridItem>
 				<mx:GridItem width="100%" height="100%">
@@ -263,8 +380,8 @@
 				</mx:GridItem>
 			</mx:GridRow>
 
-			<mx:GridRow width="100%" height="100%">
-				<mx:GridItem width="100%" height="100%">
+			<mx:GridRow width="100%" height="90">
+				<mx:GridItem width="100" height="100%">
 					<mx:Label text="{LanguageManager.sentences.template_description}:" />
 				</mx:GridItem>
 				<mx:GridItem width="100%" height="100%">
@@ -272,62 +389,69 @@
 				</mx:GridItem>
 			</mx:GridRow>
 
-			<mx:GridRow width="100%" height="100%">
-				<mx:GridItem width="100%" height="100%" colSpan="2">
-					<controls:HDivider label="{LanguageManager.sentences.template_picture}" />
-				</mx:GridItem>
-			</mx:GridRow>
-
-			<mx:GridRow width="100%" height="100%">
-				<mx:GridItem width="100%" height="100%">
-					<mx:Label text="{LanguageManager.sentences.template_picture}:" />
-				</mx:GridItem>
-				<mx:GridItem width="100%" height="100%">
-					<controls:FileBrowseBox id="picBrowse" width="300" mode="open"
-											browseLabel="{LanguageManager.sentences.browse}..."
-											browseTitle="{LanguageManager.sentences.open_file}..."
-											filterAll="{LanguageManager.sentences.all}"
-											text="" />
-				</mx:GridItem>
-			</mx:GridRow>
-
-			<mx:GridRow width="100%" height="100%" id="gridRemovePic">
-				<mx:GridItem width="100%" height="100%">
-					<!--mx:Label text="{LanguageManager.sentences.template_remove_pic}:"/-->
-				</mx:GridItem>
-				<mx:GridItem width="100%" height="100%">
-					<mx:Image id="tplImg"
-							  width="100" height="100"
-							  scaleContent="true" autoLoad="true" />
-					<controls:Base64Image id="b64Img"
-										  width="100" height="100"
-										  scaleContent="true" autoLoad="true" />
-					<mx:Button id="btnRemovePic" label="{LanguageManager.sentences.remove}"
-							   click="removePicture()" />
-				</mx:GridItem>
-			</mx:GridRow>
-
-			<mx:GridRow width="100%" height="100%">
+			<mx:GridRow width="100%" height="10">
 				<mx:GridItem width="100%" height="100%" colSpan="2">
 					<mx:HRule width="100%" />
 				</mx:GridItem>
 			</mx:GridRow>
-
-			<mx:GridRow width="100%" height="100%">
-				<mx:GridItem width="100%" height="100%">
+			
+			<mx:GridRow width="100%" height="22">
+				<mx:GridItem width="100" height="100%">
 					<mx:Label text="{LanguageManager.sentences.template_key}:" />
 				</mx:GridItem>
 				<mx:GridItem width="100%" height="100%">
 					<mx:TextInput id="txtKey" width="300" />
 				</mx:GridItem>
 			</mx:GridRow>
+			
+			<mx:GridRow width="100%" height="15">
+				<mx:GridItem width="100%" height="100%" colSpan="2">
+					<controls:HDivider label="{LanguageManager.sentences.template_picture}" />
+				</mx:GridItem>
+			</mx:GridRow>
+
+			<mx:GridRow width="100%" height="22">
+				<mx:GridItem width="100%" height="100%">
+					<mx:CheckBox id="usePictureCheckBox" 
+								 label="{LanguageManager.sentences.template_use_picture}"
+								 change="onUsePictureSelectionChanged(event)"
+								 selected="true"/>
+				</mx:GridItem>
+			</mx:GridRow>
+
+			<mx:GridRow id="pictureGridRow" 
+						width="100%" height="100" 
+						verticalAlign="middle">
+				<mx:GridItem id="pictureGridColumn" 
+							 width="100" height="100"
+							 verticalAlign="middle" horizontalAlign="center">
+					<mx:Image id="tplImg"
+							  width="100%" height="100%"
+							  scaleContent="true" maintainAspectRatio="true"
+							  autoLoad="true"
+							  verticalAlign="middle" horizontalAlign="center"/>
+					
+					<controls:Base64Image id="b64Img"
+										  width="100%" height="100%"
+										  scaleContent="true" maintainAspectRatio="true"
+										  autoLoad="true"
+										  verticalAlign="middle" horizontalAlign="center"/>
+				</mx:GridItem>
+				
+				<mx:GridItem width="100%" height="100" verticalAlign="middle">
+					<mx:Button id="btnBrowsePic"
+							   label="{LanguageManager.sentences.browse}..."		
+							   click="onPicBrowseClick(event)"/>
+					
+				</mx:GridItem>
+			</mx:GridRow>
 
 		</mx:Grid>
 	</mx:VBox>
 
-	<mx:HRule width="100%" />
+	<mx:HRule width="500" />
 
-	<mx:ControlBar width="100%" styleName="dlgFooter">
+	<mx:ControlBar width="500" styleName="dlgFooter">
 	</mx:ControlBar>
 
 </ModalDialog>

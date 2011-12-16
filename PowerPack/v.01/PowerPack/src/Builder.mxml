@@ -724,13 +724,19 @@
 				currentTemplate.name = propDlg.templateName;
 				currentTemplate.description = propDlg.templateDescription;
 
-				if ( !propDlg.templatePicturePath )
-					currentTemplate.pictureFile = null;
-				else
+				if (propDlg.templatePicturePath)
 				{
 					var templatePictureFile : File = new File( propDlg.templatePicturePath );
 
 					currentTemplate.pictureFile = FileUtils.correctImageFile( templatePictureFile ) ? templatePictureFile : null;
+				} 
+				else if (propDlg.templateB64Picture)
+				{
+					currentTemplate.b64picture = propDlg.templateB64Picture; 
+				} else
+				{
+					currentTemplate.pictureFile = null;
+					currentTemplate.b64picture = null;
 				}
 
 				currentTemplate.key = propDlg.templateKey;
