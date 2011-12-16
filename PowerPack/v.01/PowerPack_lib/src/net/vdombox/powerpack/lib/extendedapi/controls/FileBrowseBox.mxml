@@ -11,7 +11,7 @@
 	<mx:String id="browseLabel">Browse...</mx:String>
 	<mx:String id="filterAll">All</mx:String>
 	<mx:String id="mode">{MODE_OPEN}</mx:String>
-	<mx:String id="text"></mx:String>
+	<!--<mx:String id="text"></mx:String>-->
  	
  	<mx:Metadata>
         [Event(name="change", type="flash.events.Event")] 
@@ -21,22 +21,40 @@
 
 	<mx:Script>
 		<![CDATA[
+			import flash.filesystem.File;
+			
+			import mx.core.UIComponent;
 			import mx.events.ChildExistenceChangedEvent;
 			import mx.events.FlexEvent;
-			import mx.core.UIComponent;
-			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 			import mx.utils.StringUtil;
 			
-			public static const MODE_OPEN:String = "open";
-			public static const MODE_SAVE:String = "save";
-			public static const MODE_DIR:String = "dir";
-			public static const MODE_MULTI:String = "multi";
+			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+			
+			public static const PATH_CHANGED	: String = "pathChanged";
+			
+			public static const MODE_OPEN	: String = "open";
+			public static const MODE_SAVE	: String = "save";
+			public static const MODE_DIR	: String = "dir";
+			public static const MODE_MULTI	: String = "multi";
 			
 			public static var memPath:String = ""; //File.documentsDirectory.nativePath;
 
 			public var files:Array = [];
 			public var filterArray:Array = [];
-
+			
+			public function get path () : String
+			{
+				return txtPathInput.text;
+			}
+			
+			public function set path (filePath : String):void
+			{
+				if (txtPathInput)
+				{
+					txtPathInput.text = filePath;
+					txtPathInput.toolTip = filePath;
+				}
+			}
 		    //----------------------------------
 		    //  enabled
 		    //----------------------------------
@@ -64,7 +82,7 @@
 			
 			private function onPreinitialize(event:Event):void
 			{
-				text = memPath;
+				path = memPath;
 			}
 			
 			private function onChildAdd(event:ChildExistenceChangedEvent):void
@@ -74,7 +92,6 @@
 			
 			private function onInputTextChange(event:Event):void
 			{
-				text = txtInput.text; 
 				dispatchEvent(new Event(Event.CHANGE));
 			}
 			
@@ -82,26 +99,26 @@
 			{			
             	var file:File;
             	
-            	if(text)
+            	if (path)
             	{
             		try {
-            			file = new File(text);
+            			file = new File(path);
 	    
-	            		if(!file.exists)
+	            		if (!file.exists)
     	        			file = null;
-            		} catch(e:*) {
+            		} catch (e:*) {
             			file = null;
             		}
             	}
             	
-            	if(!file)
+            	if (!file)
             		file = new File(File.documentsDirectory.nativePath);
             	
-            	var filter:FileFilter = new FileFilter(
+            	var filter : FileFilter = new FileFilter(
             		StringUtil.substitute("{0} ({1})", filterAll, "*.*"), 
             		"*.*");
             		
-            	var filters:Array = filterArray.length>0 ? filterArray : [filter];
+            	var filters : Array = filterArray.length > 0 ? filterArray : [filter];
             		            	
 				file.addEventListener(Event.SELECT, onSelect);
 				file.addEventListener(FileListEvent.SELECT_MULTIPLE, onMultiSelect);
@@ -136,12 +153,13 @@
             	var file:File = event.target as File;
            		
            		//memPath = file.nativePath;
-				txtInput.text = file.nativePath;
+				path = file.nativePath;
 				
 				files = [];
 				files.push(file);
 				
-				txtInput.dispatchEvent(new Event(Event.CHANGE));
+				dispatchEvent(new Event(PATH_CHANGED));
+				
 				dispatchEvent(new Event(Event.SELECT));
             }
 
@@ -152,21 +170,24 @@
             	if(files && files.length)
             	{
 	           		//memPath = File(files[0]).parent.nativePath;
-					txtInput.text = File(files[0]).parent.nativePath;
+					path = File(files[0]).parent.nativePath;
 	
-					txtInput.dispatchEvent(new Event(Event.CHANGE));
+					dispatchEvent(new Event(PATH_CHANGED));
+					
             	}
             	
             	dispatchEvent(new FileListEvent(FileListEvent.SELECT_MULTIPLE));
-            }					
+
+            }	
             
 		]]>
 	</mx:Script>
 	
-	<mx:TextInput id="txtInput"
-		width="100%"   
-		text="{text}" 
-		change="onInputTextChange(event)"/>
+	<mx:TextInput id="txtPathInput"
+		text="" 
+		change="onInputTextChange(event)"
+		visible="true"
+		width="100%"/>
 		
 	<mx:Button id="btnBrowse"
 		label="{browseLabel}"		

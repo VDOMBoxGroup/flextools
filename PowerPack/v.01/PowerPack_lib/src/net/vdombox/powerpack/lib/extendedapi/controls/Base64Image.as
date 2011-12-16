@@ -37,14 +37,14 @@ package net.vdombox.powerpack.lib.extendedapi.controls
 		 * Attempt to auto detect if we're receiving a base64 encoded string
 		 * or a traditional value for the image source
 		 */
-		override public function set source( value:Object ) :void
+		override public function set source( sourceValue:Object ) :void
 		{
 			var decoder:Base64Decoder = new Base64Decoder();
 			var byteArray:ByteArray;
 
 			try
 			{
-				decoder.decode( value as String );
+				decoder.decode( sourceValue as String );
 				byteArray = decoder.flush();
 				
 				super.source = byteArray;
@@ -55,7 +55,7 @@ package net.vdombox.powerpack.lib.extendedapi.controls
 			}
 			catch (error:Error)
 			{
-				super.source = value
+				super.source = sourceValue;
 			}
 		}
 

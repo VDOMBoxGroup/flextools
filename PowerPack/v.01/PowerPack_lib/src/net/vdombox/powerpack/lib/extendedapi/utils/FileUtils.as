@@ -189,6 +189,19 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			return false;
 		}
 		
+		public static function getImagesFileExtension () : String
+		{
+			var strExtension : String = "";
+			
+			strExtension += "*." + FILE_FORMAT_BMP + ";";
+			strExtension += "*." + FILE_FORMAT_PNG + ";";
+			strExtension += "*." + FILE_FORMAT_GIF + ";";
+			strExtension += "*." + FILE_FORMAT_SVG + ";";
+			strExtension += "*." + FILE_FORMAT_JPG + ";";
+			strExtension += "*." + FILE_FORMAT_JPEG;
+		
+			return strExtension;
+		}
 		
 	}
 }
