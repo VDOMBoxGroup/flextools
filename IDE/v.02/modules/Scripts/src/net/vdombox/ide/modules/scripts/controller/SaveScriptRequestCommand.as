@@ -23,49 +23,37 @@ package net.vdombox.ide.modules.scripts.controller
 			var selectedApplicationVO : ApplicationVO = sessionProxy.selectedApplication;
 
 			var body : Object = notification.getBody();
+			
+			var actionVO : Object = body.currentVO;
+			var scriptName : String = actionVO.name;
 
-			var scriptName : String = body.name;
-			var script : String = body.script;
-
-			if ( !selectedApplicationVO || !scriptName || !script )
+			if ( !selectedApplicationVO || !scriptName )
 				return;
 
-			if ( body is ServerActionVO )
+			if ( actionVO is ServerActionVO )
 			{
-				//TODO: сделать более полную обработку исключения...
-				if ( !facade.hasMediator( ServerScriptsPanelMediator.NAME ) )
-					return;
 
-				var serverScriptsPanelMediator : ServerScriptsPanelMediator = facade.retrieveMediator( ServerScriptsPanelMediator.NAME ) as
-					ServerScriptsPanelMediator;
-
-				var serverActions : Array = serverScriptsPanelMediator.serverScripts;
-
-				//TODO: сделать более полную обработку исключения...
-				if ( !serverActions )
-					return;
-
-				if ( sessionProxy.selectedObject )
+				if ( body.hasOwnProperty( "objectVO" ) )
 				{
-					sendNotification( ApplicationFacade.SET_SERVER_ACTIONS,
-						{ objectVO: sessionProxy.selectedObject, serverActions: serverActions } );
+					sendNotification( ApplicationFacade.SET_SERVER_ACTION,
+						{ objectVO: body.objectVO, serverActionVO: actionVO } );
 				}
 
-				else if ( sessionProxy.selectedPage )
+				else if ( body.hasOwnProperty( "pageVO" )  )
 				{
-					sendNotification( ApplicationFacade.SET_SERVER_ACTIONS,
-						{ pageVO: sessionProxy.selectedPage, serverActions: serverActions } );
+					sendNotification( ApplicationFacade.SET_SERVER_ACTION,
+						{ pageVO: body.pageVO, serverActionVO: actionVO } );
 				}
 
 			}
-			else if ( body is GlobalActionVO )
+			else if ( actionVO is GlobalActionVO )
 			{
-				sendNotification( ApplicationFacade.SAVE_GLOBAL_ACTION, { applicationVO: selectedApplicationVO, globalActionVO : body as GlobalActionVO } );
+				sendNotification( ApplicationFacade.SAVE_GLOBAL_ACTION, { applicationVO: selectedApplicationVO, globalActionVO : actionVO as GlobalActionVO } );
 			}
 			
-			else if ( body is LibraryVO )
+			else if ( actionVO is LibraryVO )
 			{
-				sendNotification( ApplicationFacade.SAVE_LIBRARY, { applicationVO: selectedApplicationVO, libraryVO : body as LibraryVO } );
+				sendNotification( ApplicationFacade.SAVE_LIBRARY, { applicationVO: selectedApplicationVO, libraryVO : actionVO as LibraryVO } );
 			}
 			
 		}

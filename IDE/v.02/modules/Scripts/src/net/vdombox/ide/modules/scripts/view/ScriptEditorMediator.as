@@ -9,6 +9,8 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.GlobalActionVO;
 	import net.vdombox.ide.common.vo.LibraryVO;
+	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
@@ -107,7 +109,10 @@ package net.vdombox.ide.modules.scripts.view
 			if( currentVO is ServerActionVO || currentVO is LibraryVO || currentVO is GlobalActionVO )
 				currentVO.script = scriptEditor.script;
 			
-			sendNotification( ApplicationFacade.SAVE_SCRIPT_REQUEST, currentVO );
+			if ( scriptEditor.objectVO is PageVO )
+				sendNotification( ApplicationFacade.SAVE_SCRIPT_REQUEST, { pageVO : scriptEditor.objectVO, currentVO :  currentVO } );
+			else if ( scriptEditor.objectVO is ObjectVO )
+				sendNotification( ApplicationFacade.SAVE_SCRIPT_REQUEST, { objectVO : scriptEditor.objectVO, currentVO :  currentVO } );
 		}
 	}
 }

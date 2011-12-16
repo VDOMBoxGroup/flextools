@@ -120,6 +120,8 @@ package net.vdombox.ide.modules.scripts
 		public static const SET_SERVER_ACTIONS : String = "setServerActions";
 		public static const SERVER_ACTIONS_SETTED : String = "serverActionsSetted";
 		
+		public static const SET_SERVER_ACTION : String = "setServerAction";
+		
 		public static const GET_LIBRARIES : String = "getLibraries";
 		public static const LIBRARIES_GETTED : String = "librariesGetted";
 		

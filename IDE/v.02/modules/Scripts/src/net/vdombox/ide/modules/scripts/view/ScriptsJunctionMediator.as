@@ -73,6 +73,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
 			interests.push( ApplicationFacade.SET_SERVER_ACTIONS );
 			
+			interests.push( ApplicationFacade.SET_SERVER_ACTION );
+			
 			interests.push( ApplicationFacade.GET_LIBRARIES );
 
 			interests.push( ApplicationFacade.CREATE_LIBRARY );
@@ -306,6 +308,19 @@ package net.vdombox.ide.modules.scripts.view
 					if( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break
+				}
+					
+				case ApplicationFacade.SET_SERVER_ACTION:
+				{
+					if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTION, body );
+					else if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTION, body );
+					
+					if( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break
 				}
 
