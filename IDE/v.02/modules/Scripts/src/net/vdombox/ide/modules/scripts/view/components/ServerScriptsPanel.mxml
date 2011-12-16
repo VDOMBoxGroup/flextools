@@ -91,6 +91,11 @@
 //				if( isSelectedItemChanged )
 					//dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) );
 			}
+			
+			public function set titleAndName( value : String ) : void
+			{
+				title = resourceManager.getString( 'Scripts_General', 'server_scripts_panel_title' ) + " " + value;
+			}
 
 			protected function actionList_changeHandler( event : ListItemRendererEvent ) : void
 			{

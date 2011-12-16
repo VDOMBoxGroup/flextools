@@ -194,7 +194,6 @@
 			private function objectsTree_changeHandler( event : ListEvent ) : void
 			{
 				dispatchEvent( new ContainersPanelEvent( ContainersPanelEvent.CONTAINER_CHANGED ) );
-				trace( "change" );
 			}
 			
 			

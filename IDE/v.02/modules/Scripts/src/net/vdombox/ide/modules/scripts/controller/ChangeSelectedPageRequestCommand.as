@@ -28,13 +28,19 @@ package net.vdombox.ide.modules.scripts.controller
 			
 			//sendNotification( ApplicationFacade.SET_SELECTED_PAGE, selectedPageVO );
 			
-			
+			if( sessionProxy.selectedPage.id == selectedPageVO.id )
+			{
+				if( sessionProxy.selectedObject )
+					sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, null );
+				
+				return;
+			}
 			
 			var oldPageID : String = sessionProxy.selectedPage ? sessionProxy.selectedPage.id : "";
 			var newPageID : String = selectedPageVO ? selectedPageVO.id : "";
 			
-			if( sessionProxy.selectedObject )
-				sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, null );
+			/*if( sessionProxy.selectedObject )
+				sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, null );*/
 			
 			if( oldPageID != newPageID )
 				sendNotification( ApplicationFacade.SET_SELECTED_PAGE, selectedPageVO );

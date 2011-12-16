@@ -39,7 +39,7 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					
 				case PPMApplicationTargetNames.SERVER_ACTIONS:
 				{
-					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body.serverActions );
+					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
 					
 					break;
 				}

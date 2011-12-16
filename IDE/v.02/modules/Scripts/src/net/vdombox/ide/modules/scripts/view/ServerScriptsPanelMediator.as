@@ -1,11 +1,13 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import mx.resources.ResourceManager;
+	
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.ServerScriptsPanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -106,7 +108,7 @@ package net.vdombox.ide.modules.scripts.view
 				{
 					
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
-					trace( "page" )
+					trace( "page - " + sessionProxy.selectedPage.name )
 					
 					break;
 				}
@@ -123,19 +125,26 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
-					trace( "object" );
 
 					break;
 				}
 
 				case ApplicationFacade.SERVER_ACTIONS_GETTED:
 				{
-					serverScriptsPanel.scripts = body as Array;
+					serverScriptsPanel.scripts = body.serverActions as Array;
+					/*if ( body.hasOwnProperty( "pageVO" ) )
+						serverScriptsPanel.titleAndName = body.pageVO.name;
+					else if ( body.hasOwnProperty( "objectVO" ) )
+					serverScriptsPanel.titleAndName = body.objectVO.name;
+					else if ( body.hasOwnProperty( "applicationVO" ) )
+					serverScriptsPanel.titleAndName = body.applicationVO.name;*/
+					
+						
 				}
 					
 				case ApplicationFacade.SERVER_ACTIONS_SETTED:
 				{
-					serverScriptsPanel.scripts = body as Array;
+					serverScriptsPanel.scripts = body.serverActions as Array;
 					
 					break;
 				}

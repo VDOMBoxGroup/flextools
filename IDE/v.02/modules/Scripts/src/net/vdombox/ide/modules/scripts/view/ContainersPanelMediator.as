@@ -250,6 +250,11 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var newPage : XML = containersPanel.selectedPage;
 			var newObject : XML = containersPanel.selectedObject;
+			
+			trace("Page : " + newPage.@name);
+			if ( newObject )
+				trace("Object : " + newObject.@name);
+			
 			var selectedObject : ObjectVO;
 			
 			var typeVO : TypeVO;

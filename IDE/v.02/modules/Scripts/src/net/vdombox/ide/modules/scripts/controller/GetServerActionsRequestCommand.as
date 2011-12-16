@@ -24,6 +24,7 @@ package net.vdombox.ide.modules.scripts.controller
 				return;
 			
 			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS, currentContainer );
+			trace("send ( " + currentContainer.name );
 		}
 	}
 }

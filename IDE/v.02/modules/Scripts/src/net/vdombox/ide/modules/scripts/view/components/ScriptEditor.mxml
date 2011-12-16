@@ -5,7 +5,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 height="300" width="400" xmlns:editors="net.vdombox.editors.*"
 		 xmlns:components1="net.vdombox.components.*"
-		 removedFromStage="navigatorcontent1_removedFromStageHandler(event)">
+		 removedFromStage="navigatorcontent1_removedFromStageHandler(event)" xmlns:components2="net.vdombox.ide.common.components.*">
 
 	<fx:Script>
 		<![CDATA[
@@ -79,6 +79,8 @@
 			private function scriptEditor_saveHandler( event : MouseEvent ) : void
 			{
 				dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SAVE ) );
+				currentState = "disabled";
+				
 			}
 			
 			protected function navigatorcontent1_removedFromStageHandler(event:Event):void
@@ -86,16 +88,76 @@
 				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
 			}
 			
+			private function setStateInUnsave( event : Event ) : void
+			{
+				currentState = "unsaved";
+			}
+			
+			protected function pythonScriptEditor_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				addEventListener(Event.CHANGE, setStateInUnsave, true );
+			}
+			
 		]]>
 	</fx:Script>
-	<s:VGroup width="100%" height="100%" gap="0">
-		<editors:PythonScriptEditor id="pythonScriptEditor"
-									height="100%" width="100%"  scriptAreaComponent="{new ScriptAreaComponent()}"/>
+	
+	<s:states>
 		
-		<s:HGroup width="100%" height="40" horizontalAlign="right" 
-				  paddingTop="5" paddingBottom="5" paddingRight="10">
-			<components1:VDOMButton id="save" label="Save" click="scriptEditor_saveHandler( event )"/>
-		</s:HGroup>
+		<s:State name="normal"/>
+		<s:State name="unsaved"/>
+		<s:State name="disabled"/>
+	</s:states>
+	
+	<s:Rect left="0" width="40" height="100%">
+		<s:fill>
+			<s:SolidColor color="#A0A1A1"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Rect left="40" width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor color="#FFFFFF"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:VGroup width="100%" height="100%" gap="0">
+		<s:Group width="100%" height="24">
+			<s:Rect width="100%" height="100%">
+				<s:fill>
+					<s:LinearGradient rotation="90">
+						<s:GradientEntry color="#FFFFFF" />
+						<s:GradientEntry color="#F6F8F8" />
+					</s:LinearGradient>
+				</s:fill>
+			</s:Rect>
+			
+			<s:HGroup width="100%" height="100%" horizontalAlign="left" 
+					  paddingLeft="10" paddingTop="2" paddingBottom="2">
+				
+				<components2:WorkAreaButton id="saveButton"
+										   enabled.unsaved="true" enabled="false" height="20" icon="@Embed('icons/save.png')"
+										   label="Save" click="scriptEditor_saveHandler( event )"
+										   highlighted="false" highlighted.unsaved="true"/>
+				
+			</s:HGroup>
+			
+			<s:Line top="0" width="100%">
+				<s:stroke>
+					<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1"/>
+				</s:stroke>
+			</s:Line>
+			
+			<s:Line bottom="0" width="100%">
+				<s:stroke>
+					<s:SolidColorStroke color="#000000" alpha="0.5" weight="1"/>
+				</s:stroke>
+			</s:Line>
+			
+		</s:Group>
+		
+		<editors:PythonScriptEditor id="pythonScriptEditor" creationComplete="pythonScriptEditor_creationCompleteHandler(event)"
+									height="100%" width="100%"  scriptAreaComponent="{new ScriptAreaComponent()}"/>
 	</s:VGroup>
 
 	
