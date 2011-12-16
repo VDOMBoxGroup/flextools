@@ -7,7 +7,7 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			private var dataChanged : Boolean = false;
+			//private var dataChanged : Boolean = false;
 			
 			private var _data : XML;
 			
@@ -15,7 +15,7 @@
 			{
 				super.data = value;
 				
-				dataChanged = true;
+				//dataChanged = true;
 				
 				_data = value as XML;
 			}
@@ -25,7 +25,7 @@
 				return _data.@id;
 			}
 			
-			override public function validateProperties() : void
+			/*override public function validateProperties() : void
 			{
 				super.validateProperties();
 				
@@ -36,7 +36,7 @@
 				
 				if ( !_data )
 					return;
-			}
+			}*/
 			
 		]]>
 	</fx:Script>

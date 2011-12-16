@@ -157,14 +157,10 @@ package net.vdombox.ide.common.vo
 
 			testValue = propertiesXML.@Top[ 0 ];
 			
-			trace( "vvod" + testValue );
-			
 			if ( testValue !== null )
 				top = int( testValue );
 
 			testValue = propertiesXML.@Left[ 0 ];
-			
-			trace( testValue );
 			
 			if ( testValue !== null )
 				left = int( testValue );
