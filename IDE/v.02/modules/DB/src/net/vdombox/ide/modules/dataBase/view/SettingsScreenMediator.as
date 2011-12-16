@@ -32,6 +32,7 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
+			// FIXME: что то здесь не так, NAME константа, SETTINGS_GETTED - константа.  
 			interests.push( NAME + "/" + ApplicationFacade.SETTINGS_GETTED );
 			interests.push( ApplicationFacade.SETTINGS_CHANGED );
 			

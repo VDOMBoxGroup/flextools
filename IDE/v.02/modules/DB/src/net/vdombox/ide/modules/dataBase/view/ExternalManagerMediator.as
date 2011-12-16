@@ -57,6 +57,8 @@ package net.vdombox.ide.modules.dataBase.view
 				{
 					var event : ExternalManagerEvent = new ExternalManagerEvent( ExternalManagerEvent.CALL_COMPLETE );
 					event.result = body;
+					
+					// FIXME: медиатор может посылать оповещения но не Евенты.
 					dispatchEvent( event );
 					
 					break;
@@ -64,6 +66,7 @@ package net.vdombox.ide.modules.dataBase.view
 			}
 		}
 
+		// FIXME: зачем возвращать Стринг если всегда возвращается Нулл?
 		public function remoteMethodCall( functionName : String, value : String ) : String
 		{
 			var objectID : String = sessionProxy.selectedTable ? sessionProxy.selectedTable.id : sessionProxy.selectedBase.id;
@@ -73,27 +76,32 @@ package net.vdombox.ide.modules.dataBase.view
 			return null;
 		}
 
+		// FIXME: неправильное поведение медиатора, ведет себя как Визуальный Обьект
 		public function addEventListener( type : String, listener : Function, useCapture : Boolean = false, priority : int = 0,
 										  useWeakReference : Boolean = false ) : void
 		{
 			dispatcher.addEventListener( type, listener, useCapture, priority, useWeakReference );
 		}
 
+		// FIXME: неправильное поведение медиатора, ведет себя как Визуальный Обьект
 		public function removeEventListener( type : String, listener : Function, useCapture : Boolean = false ) : void
 		{
 			dispatcher.removeEventListener( type, listener, useCapture );
 		}
 
+		// FIXME: неправильное поведение медиатора, ведет себя как Визуальный Обьект
 		public function dispatchEvent( event : Event ) : Boolean
 		{
 			return dispatcher.dispatchEvent( event );
 		}
 
+		// FIXME: неправильное поведение медиатора, ведет себя как Визуальный Обьект
 		public function hasEventListener( type : String ) : Boolean
 		{
 			return dispatcher.hasEventListener( type );
 		}
-
+		
+		// FIXME: неправильное поведение медиатора, ведет себя как Визуальный Обьект
 		public function willTrigger( type : String ) : Boolean
 		{
 			return dispatcher.willTrigger( type );

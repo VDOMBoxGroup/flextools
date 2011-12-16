@@ -178,10 +178,11 @@
 			
 			protected function image1_clickHandler(event:MouseEvent):void
 			{
-				if ( currentState == "all" )
-					currentState = "short";
-				else
-					currentState = "all";
+				currentState = currentState == "all" ? "short" : "all";
+//				if ( currentState == "all" )
+//					currentState = "short";
+//				else
+//					currentState = "all";
 			}
 			
 		]]>

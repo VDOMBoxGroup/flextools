@@ -37,6 +37,8 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			dispatcher = new EventDispatcher();
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+			// FIXME: грубый хак. убрать.
 			dataTableStructure.externalManager = this as IExternalManager;
 			dataTableStructure.addEventListener( DataTablesEvents.UPDATE_STRUCTURE,  sendCommit );
 		}
@@ -50,6 +52,7 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			sessionProxy = null;
 			dispatcher = null;
+			
 			dataTableStructure.removeEventListener( DataTablesEvents.UPDATE_STRUCTURE,  sendCommit );
 		}
 		
@@ -80,6 +83,8 @@ package net.vdombox.ide.modules.dataBase.view
 			}
 		}
 		
+		
+		// FIXME: нада ничего не возвращать.
 		public function remoteMethodCall( functionName : String, value : String ) : String
 		{
 			var objectID : String = sessionProxy.selectedTable ? sessionProxy.selectedTable.id : sessionProxy.selectedBase.id;
@@ -90,27 +95,32 @@ package net.vdombox.ide.modules.dataBase.view
 			return null;
 		}
 		
+		// FIXME: неправильное поведение медиатора, ведет себя как EventDispatcher
 		public function addEventListener( type : String, listener : Function, useCapture : Boolean = false, priority : int = 0,
 										  useWeakReference : Boolean = false ) : void
 		{
 			dispatcher.addEventListener( type, listener, useCapture, priority, useWeakReference );
 		}
 		
+		// FIXME: неправильное поведение медиатора, ведет себя как EventDispatcher
 		public function removeEventListener( type : String, listener : Function, useCapture : Boolean = false ) : void
 		{
 			dispatcher.removeEventListener( type, listener, useCapture );
 		}
 		
+		// FIXME: неправильное поведение медиатора, ведет себя как EventDispatcher
 		public function dispatchEvent( event : Event ) : Boolean
 		{
 			return dispatcher.dispatchEvent( event );
 		}
 		
+		// FIXME: неправильное поведение медиатора, ведет себя как EventDispatcher
 		public function hasEventListener( type : String ) : Boolean
 		{
 			return dispatcher.hasEventListener( type );
 		}
 		
+		// FIXME: неправильное поведение медиатора, ведет себя как EventDispatcher
 		public function willTrigger( type : String ) : Boolean
 		{
 			return dispatcher.willTrigger( type );

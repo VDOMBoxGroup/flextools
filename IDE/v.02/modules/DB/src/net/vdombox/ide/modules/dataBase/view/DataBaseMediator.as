@@ -25,6 +25,7 @@ package net.vdombox.ide.modules.dataBase.view
 			
 		}
 
+		// FIXME: чето я запутался, зачем DataBase нужен resourceBrowser?
 		public function get resourceBrowser() : DataBase
 		{
 			return viewComponent as DataBase;

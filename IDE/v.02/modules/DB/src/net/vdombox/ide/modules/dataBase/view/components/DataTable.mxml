@@ -21,6 +21,7 @@
 			import net.vdombox.ide.modules.dataBase.events.EditorEvent;
 			
 			[Bindable]
+			// FIXME: not Object mas by IVDOMObjectVO.
 			private var _objectVO : Object;
 			
 			public function get editorID() : String

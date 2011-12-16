@@ -15,6 +15,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
+	// FIXME: неправильное поведение медиатора, ведет себя как IEventDispatcher !
 	public class DataTableQueryMediator extends Mediator implements IMediator, IExternalManager, IEventDispatcher
 	{
 		public static const NAME : String = "DataTableQueryMediator";

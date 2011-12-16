@@ -253,6 +253,7 @@
 
 			}
 			
+			// FIXME: Большая запутанная функция.
 			private function buildPagesTickets() : void 
 			{
 				/* (Re)Build pages tickets */
