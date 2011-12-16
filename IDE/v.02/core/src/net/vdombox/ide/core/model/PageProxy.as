@@ -672,7 +672,7 @@ package net.vdombox.ide.core.model
 						serverActions.push( serverActionVO );
 					}
 					
-					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTIONS_GETTED, { objectVO: objectVO, serverActions: serverActions } );
+					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTIONS_GETTED, { pageVO: pageVO, serverActions: serverActions } );
 					
 					break;
 				}

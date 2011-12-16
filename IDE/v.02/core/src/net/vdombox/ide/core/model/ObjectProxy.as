@@ -611,7 +611,10 @@ package net.vdombox.ide.core.model
 
 				case "render_wysiwyg":
 				{
-					var wysiwyg : XML = result.Result.container[ 0 ];
+					var wysiwyg : XML = result.Result.children()[0];
+					
+					/*if ( !wysiwyg )
+						wysiwyg = result.Result.table[ 0 ];*/
 
 					var tempList : XMLList = result.Result.descendants( "*" );
 					var tempElement : XML;

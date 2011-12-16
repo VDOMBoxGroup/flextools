@@ -422,7 +422,7 @@ package net.vdombox.ide.core.model
 			
 			if ( result.hasOwnProperty( "Error" ) )
 			{
-				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
+				//sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
 				return;
 			}
 
@@ -536,7 +536,7 @@ package net.vdombox.ide.core.model
 			}
 
 			sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxy | soap_faultHandler | " + event.currentTarget.name );
-			sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
+			//sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
 		}
 
 		private function resourceForIcon( resourceId : String ) : Boolean
