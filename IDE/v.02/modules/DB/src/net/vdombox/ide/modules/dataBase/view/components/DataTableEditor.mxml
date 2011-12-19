@@ -19,8 +19,8 @@
 			import mx.utils.StringUtil;
 			import mx.utils.UIDUtil;
 			
+			import net.vdombox.ide.common.events.EditorEvent;
 			import net.vdombox.ide.common.vo.ObjectVO;
-			import net.vdombox.ide.modules.dataBase.events.EditorEvent;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.TextInputItemRenderers;
@@ -45,7 +45,7 @@
 			private var dataGridProvider:ArrayCollection = new ArrayCollection();
 			private var dataGridProviderOld:Dictionary = new Dictionary( true );
 			
-			private var AMOUNT:int = 10000;
+			private var AMOUNT:int = 500;
 			
 			[Bindable]
 			private var totalRecords:int = 0;
@@ -574,11 +574,24 @@
 				getPageRequest();
 			}
 			
-			
-			protected function dataTable_itemEditEndHandler(event:AdvancedDataGridEvent):void
+			protected function button1_clickHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
-				var tt : int = 0;
+				try 
+				{
+					AMOUNT = int(amount.text);
+				}
+				catch (err:Error) 
+				{
+					AMOUNT = 500;
+				}
+				
+				AMOUNT = AMOUNT > 2000 ? 2000 : AMOUNT;
+				AMOUNT = AMOUNT <= 0 ? 500 : AMOUNT;
+				
+				pages = [];
+				currentPage = 0;
+				getPageRequest();
 			}
 			
 		]]>
@@ -588,36 +601,41 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	<s:VGroup width="100%" height="100%">
-			<mx:AdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}" itemEditEnd="dataTable_itemEditEndHandler(event)"
+			<mx:AdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}"
 						 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"				 
 						 draggableColumns="true" sortableColumns="true" />
-		<s:Group width="100%" height="50">
-			<s:Rect width="100%" height="100%">
+		<s:Group width="100%">
+			<s:Rect width="100%" height="70">
 				<s:fill>
 					<s:SolidColor color="#F0F0F0"/>
 				</s:fill>
 			</s:Rect>
 			
-			<s:HGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="left" paddingLeft="10">
+			<s:VGroup width="100%" height="70">
 				
-				<s:Button id="addRow" height="20" label="add row" click="addRow_clickHandler(event)"/>
-				
-				<s:Button id="deleteRow" height="20" label="delete row" click="deleteRow_clickHandler(event)"/>
-				
-				<s:Button id="commit" height="20" label="commit" click="commit_clickHandler(event)"/>
-				
-				<s:Button id="discard" height="20"  label="discard" click="discard_clickHandler(event)"/>
-				
-				<mx:HBox width="100%" height="20" horizontalAlign="left" verticalAlign="middle" horizontalGap="0" paddingRight="0" paddingLeft="0" visible="false">
-					<mx:Label text="Pages:" />
+				<s:HGroup width="100%" height="20" horizontalAlign="left" verticalAlign="middle" gap="0" paddingRight="0" paddingLeft="0">
+					<s:Label text="Pages:" />
 					<mx:HBox id="pagesArea" width="100%" height="20" verticalAlign="middle" horizontalGap="0"
 							 disabledOverlayAlpha="0.1" />
-					<mx:Label text="Records per page:" fontSize="9" />
-					<mx:TextInput id="amount" borderColor="#999999" borderStyle="solid" height="20" fontSize="9" width="45" />
-					<mx:Button height="20" label="apply" cornerRadius="0" click="{amountApplyBtnClickHandler();}"/>
-				</mx:HBox>
+					<s:Label text="Records per page:" fontSize="9" />
+					<s:TextInput id="amount" borderColor="#999999" fontWeight="bold" height="20" fontSize="9" width="45" />
+					<s:Button height="20" label="apply" cornerRadius="0" click="button1_clickHandler(event)"/>
+				</s:HGroup>
 				
-			</s:HGroup>
+				<s:HGroup width="100%" height="50" verticalAlign="top" horizontalAlign="left" paddingLeft="10" paddingTop="5">
+					
+					<s:Button id="addRow" height="20" label="add row" click="addRow_clickHandler(event)"/>
+					
+					<s:Button id="deleteRow" height="20" label="delete row" click="deleteRow_clickHandler(event)"/>
+					
+					<s:Button id="commit" height="20" label="commit" click="commit_clickHandler(event)"/>
+					
+					<s:Button id="discard" height="20"  label="discard" click="discard_clickHandler(event)"/>
+					
+				</s:HGroup>
+			</s:VGroup>
+			
+			
 		</s:Group>
 			
 	</s:VGroup>

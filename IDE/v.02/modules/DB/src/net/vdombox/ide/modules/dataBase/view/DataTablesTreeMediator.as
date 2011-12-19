@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import flash.events.MouseEvent;
 	
 	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
@@ -65,6 +66,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.BODY_START );
+			interests.push( ApplicationFacade.BODY_STOP );
 			interests.push( ApplicationFacade.DATA_BASES_GETTED );
 			interests.push( ApplicationFacade.DATA_BASE_TABLES_GETTED );
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
@@ -99,14 +101,36 @@ package net.vdombox.ide.modules.dataBase.view
 					}
 				}
 					
+				case ApplicationFacade.BODY_STOP:
+				{
+					
+					isActive = false;
+					dataTablesTree.dataBases = null;
+						
+					break;
+				
+				}
+					
 				case ApplicationFacade.DATA_BASES_GETTED:
 				{
 					showPages( notification.getBody() as Array );
 					
-					selectCurrentPage();
+					sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, sessionProxy.selectedBase );
 					
-					if ( dataTablesTree.selectedObjectID )
-						sendNotification( ApplicationFacade.GET_TABLE, { pageVO: _dataBases[ dataTablesTree.selectedPageID ], objectID: dataTablesTree.selectedObjectID } );
+					if ( !sessionProxy.selectedBase || !_dataBases.hasOwnProperty( sessionProxy.selectedBase.id ) )
+					{
+						for each ( var pageVO : PageVO in _dataBases )
+						{
+							sendNotification( ApplicationFacade.CHANGE_SELECTED_DATA_BASE_REQUEST, pageVO );
+							sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : sessionProxy.selectedApplication, pageID : pageVO.id } );
+							sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, pageVO );
+							break;
+						}
+						return;
+					}
+					
+					if ( sessionProxy.selectedTable )
+						sendNotification( ApplicationFacade.GET_TABLE, { pageVO: _dataBases[ sessionProxy.selectedBase.id ], objectID: sessionProxy.selectedTable.id } );
 					else if ( dataTablesTree.selectedPageID )
 						sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : sessionProxy.selectedApplication, pageID : dataTablesTree.selectedPageID } );
 					
@@ -237,6 +261,7 @@ package net.vdombox.ide.modules.dataBase.view
 				else
 					requestQue[ newTableID ][ "change" ] = true;
 				
+				
 				sendNotification( ApplicationFacade.GET_TABLE, { pageVO: _dataBases[ newBaseID ], objectID: newTableID } );
 			}
 			else if ( newBaseID != currentBaseID )
@@ -249,10 +274,8 @@ package net.vdombox.ide.modules.dataBase.view
 				else
 					sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : sessionProxy.selectedApplication, pageID : newBaseID } );
 			}
-				
 			else if ( !newTableID )
 			{
-				
 				sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : sessionProxy.selectedApplication, pageID : newBaseID } );
 			}
 		}

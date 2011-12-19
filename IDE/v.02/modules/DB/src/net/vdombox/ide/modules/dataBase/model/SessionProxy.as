@@ -74,6 +74,7 @@ package net.vdombox.ide.modules.dataBase.model
 				return;
 
 			data[ SELECTED_PAGE ] = value;
+			data[ SELECTED_OBJECT ] = null;
 			isSelectedPageChanged = true;
 
 			sendNotifications();

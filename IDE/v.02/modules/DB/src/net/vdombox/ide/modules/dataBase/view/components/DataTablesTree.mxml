@@ -29,6 +29,9 @@
 			{
 				var selectedItem : XML = tablesTree.selectedItem as XML;
 				
+				if ( !selectedItem )
+					selectedItem = elementForSelection;
+				
 				var itemID : String;
 				
 				if ( selectedItem && selectedItem.name() == "object" )
@@ -172,7 +175,10 @@
 					_needUpdateProperties 		= false;
 					_needValideteDisplayList 	= true;
 					
-					openTree( elementForSelection );
+					if ( elementForSelection.name() == "page" )
+						tablesTree.expandItem( elementForSelection, true, false );
+					else
+						openTree( elementForSelection );
 					
 					tablesTree.selectedItem = elementForSelection;
 					
