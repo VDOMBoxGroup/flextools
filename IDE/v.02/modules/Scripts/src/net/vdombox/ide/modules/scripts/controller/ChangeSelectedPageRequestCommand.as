@@ -12,21 +12,7 @@ package net.vdombox.ide.modules.scripts.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			
 			var selectedPageVO : PageVO = notification.getBody() as PageVO;
-			
-			/*if( sessionProxy.selectedPage.id == selectedPageVO.id )
-			{
-				if( sessionProxy.selectedObject )
-					sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, null );
-				
-				return;
-			}*/
-			
-			/*if( sessionProxy.selectedPage && selectedPageVO && sessionProxy.selectedPage.id == selectedPageVO.id )
-				return;*/
-			
-			//sendNotification( ApplicationFacade.SET_SELECTED_PAGE, selectedPageVO );
 			
 			if( sessionProxy.selectedPage.id == selectedPageVO.id )
 			{
@@ -38,9 +24,6 @@ package net.vdombox.ide.modules.scripts.controller
 			
 			var oldPageID : String = sessionProxy.selectedPage ? sessionProxy.selectedPage.id : "";
 			var newPageID : String = selectedPageVO ? selectedPageVO.id : "";
-			
-			/*if( sessionProxy.selectedObject )
-				sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, null );*/
 			
 			if( oldPageID != newPageID )
 				sendNotification( ApplicationFacade.SET_SELECTED_PAGE, selectedPageVO );

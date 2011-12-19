@@ -116,6 +116,11 @@ package net.vdombox.ide.modules.scripts.view
 					
 					selectCurrentPage();
 					
+					/*if ( containersPanel.selectedObjectID )
+						sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: sessionProxy.selectedPage } );
+					else if ( containersPanel.selectedPageID )
+						sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : sessionProxy.selectedApplication, pageID : dataTablesTree.selectedPageID } );
+					*/
 					break;
 				}
 
@@ -151,7 +156,7 @@ package net.vdombox.ide.modules.scripts.view
 						var pageXML : XML = containersPanel.structure.( @id == structure.@id )[ 0 ];
 						pageXML.setChildren( new XMLList() ); //TODO: strange construction
 						pageXML.appendChild( structure.* );
-						//containersPanel.validateNow();
+						selectCurrentPage( false );
 					}
 					break;
 				}

@@ -12,20 +12,11 @@ package net.vdombox.ide.modules.scripts.controller
 	{
 		override public function execute(notification:INotification) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			
 			var selectedObjectVO : ObjectVO = notification.getBody() as ObjectVO;
 			
+			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			var selectedObject : ObjectVO = sessionProxy.selectedObject;
 			var selectedPage : PageVO = sessionProxy.selectedPage;
-			
-			/*if( sessionProxy.selectedObject && selectedObjectVO && sessionProxy.selectedObject.id == selectedObjectVO.id )
-				return;
-			
-			if( sessionProxy.selectedObject && selectedObjectVO && sessionProxy.selectedPage.id == selectedObjectVO.id )
-				return;
-			
-			sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, selectedObjectVO );*/
 
 			if ( selectedObject != selectedObjectVO ||
 				( selectedObject && selectedObjectVO && selectedObject.id != selectedObjectVO.id ) )

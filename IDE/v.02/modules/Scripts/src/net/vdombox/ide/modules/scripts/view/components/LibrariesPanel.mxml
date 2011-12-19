@@ -129,7 +129,8 @@
 			dataProvider="{ _libraries }" height="100%" labelField="name" width="100%"
 			itemRenderer="net.vdombox.ide.modules.scripts.view.components.ListItemRenderer"
 			contentBackgroundAlpha="0" borderVisible="false"
-			creationComplete="librariesList_creationCompleteHandler(event)"/>
+			creationComplete="librariesList_creationCompleteHandler(event)"
+			doubleClickEnabled="true"/>
 
 	<s:controlBarContent>
 
