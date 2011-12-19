@@ -35,6 +35,8 @@ package net.vdombox.ide.modules.events.view
 		private var isActive : Boolean;
 		private var sessionProxy : SessionProxy;
 		private var visibleElementProxy : VisibleElementProxy;
+		private var treePanelCreateCompleted : Boolean = false;
+		private var sendChildrenQuery : Boolean = false;
 
 		public function get workArea() : WorkArea
 		{
@@ -69,7 +71,8 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 			
 			interests.push( ApplicationFacade.CHILDREN_ELEMENTS_GETTED );
-
+			interests.push( ApplicationFacade.STRUCTURE_GETTED );
+			
 			return interests;
 		}
 
@@ -139,6 +142,20 @@ package net.vdombox.ide.modules.events.view
 				{
 					setVisibleElementsForContainer( body as XML );
 					break;
+				}
+					
+				case ApplicationFacade.STRUCTURE_GETTED:
+				{
+					if ( !treePanelCreateCompleted )
+					{
+						treePanelCreateCompleted = true;
+						if ( sendChildrenQuery )
+						{
+							sendChildrenQuery = false;
+							sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
+						}
+							
+					}
 				}
 			}
 		}
@@ -269,13 +286,6 @@ package net.vdombox.ide.modules.events.view
 			var leng : Number = workArea.contentGroup.numElements;
 			var element : BaseElement;
 			
-			var newTarget : Object = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;
-			var objectID : String;
-			if ( newTarget is PageVO )
-				objectID = newTarget.id;
-			else if ( newTarget is BaseElement )
-				objectID = newTarget.objectID;
-			
 			for ( var i : int = 0; i < leng; i++ )
 			{
 				element = workArea.contentGroup.getElementAt( i ) as BaseElement;
@@ -314,7 +324,12 @@ package net.vdombox.ide.modules.events.view
 			if ( workArea.showElementsView == "Full View" )
 				setVisibleElementsForAllObjects();
 			else if ( workArea.showElementsView == "Active + Embedded" )
-				sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
+			{
+				if ( treePanelCreateCompleted )
+					sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
+				else
+					sendChildrenQuery = true;
+			}
 			else if ( workArea.showElementsView == "Active" )
 				setVisibleElementsForCurrentObject();
 		}

@@ -39,6 +39,21 @@
 				objectsTree.setStyle("disclosureClosedIcon", plus);
 			}
 			
+			public function get selectedObject() : XML
+			{
+				var selectedItem : XML = objectsTree.selectedItem as XML;
+				
+				if ( !selectedItem && elementForSelection )
+					selectedItem = elementForSelection;
+				var item : XML;
+				
+				if ( selectedItem && selectedItem.name() == "object" )
+					item = selectedItem;
+				
+				return item;
+				
+			}
+			
 			public function set selectedObjectID( value : String ) : void
 			{
 				var currentID : String;

@@ -87,7 +87,7 @@ package net.vdombox.ide.modules.events.view.components
 		public function set showElementsView( value : String ) : void
 		{
 			_showElementsView.selectedItem = value;
-			if ( _showElementsView.selectedIndex < 0 )
+			if ( value != "Active" && value != "Active + Embedded" )
 				_showElementsView.selectedItem = "Full View";
 		}
 			

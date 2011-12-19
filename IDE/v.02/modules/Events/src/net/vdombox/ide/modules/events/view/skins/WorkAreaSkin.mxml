@@ -32,9 +32,9 @@
 			{
 				// TODO Auto-generated method stub
 				var sourceDropDownList : ArrayCollection = new ArrayCollection();
-				sourceDropDownList.addItem( "Full View" );
-				sourceDropDownList.addItem( "Active + Embedded" );
-				sourceDropDownList.addItem( "Active" );
+				sourceDropDownList.addItem( 'Full View' );
+				sourceDropDownList.addItem( 'Active + Embedded' );
+				sourceDropDownList.addItem( 'Active' );
 				_showElementsView.dataProvider = sourceDropDownList;
 			}
 			

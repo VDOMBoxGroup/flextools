@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.events.view
 {
 	import flash.events.MouseEvent;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.controls.Tree;
 	import mx.events.ListEvent;
 	
@@ -42,6 +43,8 @@ package net.vdombox.ide.modules.events.view
 		private var currentPageXML : XML;
 		
 		private var visibleElementProxy : VisibleElementProxy;
+		
+		private var treePanelCreateCompleted : Boolean = false;
 
 		public function get objectsTreePanel() : ObjectsTreePanel
 		{
@@ -143,6 +146,13 @@ package net.vdombox.ide.modules.events.view
 					//objectsTree.validateNow();
 					selectCurrentPage( false );
 					
+					if ( !treePanelCreateCompleted )
+					{
+						treePanelCreateCompleted = true;
+						sendNotification( ApplicationFacade.STRUCTURE_GETTED );
+					}
+					
+					
 					break;
 				}
 
@@ -156,7 +166,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.GET_CHILDREN_ELEMENTS:
 				{
-					sendNotification( ApplicationFacade.CHILDREN_ELEMENTS_GETTED, objectsTree.selectedItem );
+					sendNotification( ApplicationFacade.CHILDREN_ELEMENTS_GETTED, objectsTreePanel.selectedObject );
 					
 					break;
 				}

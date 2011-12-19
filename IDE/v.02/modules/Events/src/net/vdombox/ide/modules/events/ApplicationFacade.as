@@ -135,6 +135,8 @@ package net.vdombox.ide.modules.events
 		public static const GET_CHILDREN_ELEMENTS 	: String = "getChildrenElements";
 		public static const CHILDREN_ELEMENTS_GETTED 	: String = "childrenElementsGetted";
 		
+		public static const STRUCTURE_GETTED 	: String = "structureGetted";
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )
