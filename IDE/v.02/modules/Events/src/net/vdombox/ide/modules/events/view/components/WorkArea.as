@@ -31,6 +31,7 @@ package net.vdombox.ide.modules.events.view.components
 	import spark.components.Label;
 	import spark.components.List;
 	import spark.components.SkinnableContainer;
+	import spark.components.TextInput;
 	import spark.skins.spark.PanelSkin;
 
 	public class WorkArea extends SkinnableContainer
@@ -65,6 +66,9 @@ package net.vdombox.ide.modules.events.view.components
 		
 		[SkinPart]
 		public var _showElementsView : DropDownList;
+		
+		[SkinPart]
+		public var pageName : TextInput;
 		
 		private var applicationEventsVO : ApplicationEventsVO;
 

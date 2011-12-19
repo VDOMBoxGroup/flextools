@@ -94,7 +94,14 @@
 		<components:WorkAreaButton id="undoButton"
 								   enabled="false" enabled.unsaved="true" height="20" icon="@Embed('assets/undo.png')"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_undo' ) }"/>
-		<mx1:Spacer width="100%" />
+		
+		<s:HGroup width="100%" horizontalAlign="center" gap="3" paddingLeft="10" paddingRight="10">
+			
+			<s:Label text="Page: " width="100%" textAlign="right" height="100%" verticalAlign="middle" color="#6215D6"/>
+			
+			<s:TextInput id="pageName" editable="false" selectable="false" contentBackgroundAlpha="0" borderVisible="false"  width="100%" color="#6215D6"/>
+			
+		</s:HGroup>
 		
 		<s:Label text="{ resourceManager.getString( 'Events_General', 'work_area_show_current' ) }" />
 		

@@ -140,7 +140,8 @@ package net.vdombox.ide.modules.events.view
 					currentPageXML.setChildren( new XMLList() );
 					currentPageXML.appendChild( pageXMLTree.* );
 
-					objectsTree.validateNow();
+					//objectsTree.validateNow();
+					selectCurrentPage( false );
 					
 					break;
 				}
@@ -165,7 +166,7 @@ package net.vdombox.ide.modules.events.view
 
 		private function clearData() : void
 		{
-			objectsTree.dataProvider = null;
+			objectsTreePanel.structure = null;
 			pagesXMLList = null;
 			_pages = null;
 		}
@@ -193,29 +194,27 @@ package net.vdombox.ide.modules.events.view
 					<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}/>
 			}
 
-			objectsTree.dataProvider = pagesXMLList;
+			objectsTreePanel.structure = pagesXMLList;
 
 			selectCurrentPage();
 		}
 		
-		private function selectCurrentPage( ) : void
+		private function selectCurrentPage(  needGetPageStructure : Boolean = true  ) : void
 		{
 			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			if( sessionProxy.selectedPage )
 			{
+				if ( sessionProxy.selectedObject )
+					objectsTreePanel.selectedPageID = sessionProxy.selectedObject.id;
+				else
+					objectsTreePanel.selectedPageID = sessionProxy.selectedPage.id;
 				
-				var pageVO : PageVO = sessionProxy.selectedPage;
+				if ( !needGetPageStructure )
+					return;
 				
-				sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, pageVO);
-				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, pageVO );
-				
-				
-				// XXX: doun on quck switch
-				objectsTree.selectedItem = getPageXML(pageVO.id);
-				objectsTree.validateNow();
-				objectsTree.scrollToIndex(objectsTree.selectedIndex);
-				
+				sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, sessionProxy.selectedPage);
+				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
 				
 			}
 			else

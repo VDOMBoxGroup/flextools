@@ -62,8 +62,6 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
-
 			interests.push( ApplicationFacade.APPLICATION_EVENTS_GETTED );
 			interests.push( ApplicationFacade.APPLICATION_EVENTS_SETTED );
 			
@@ -108,6 +106,7 @@ package net.vdombox.ide.modules.events.view
 					if ( sessionProxy.selectedApplication && sessionProxy.selectedPage )
 					{
 						workArea.dataProvider = null;
+						workArea.pageName.text = body.name;
 						sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
 										  { applicationVO: sessionProxy.selectedApplication, pageVO: sessionProxy.selectedPage } );
 					}
@@ -129,13 +128,6 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.SELECTED_PAGE_CHANGED:
-				{
-					setVisibleElementsForAllObjects();
-					setElementsCurrentVisibleState();
-					break;
-				}
-					
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
 					setVisibleElementsForAllObjects();
@@ -153,6 +145,9 @@ package net.vdombox.ide.modules.events.view
 		
 		private function setVisibleElementsForContainer( item : XML ) : void
 		{
+			if ( !item )
+				return;
+			
 			setVisibleElementsForAllObjects();
 			var leng : Number = workArea.contentGroup.numElements;
 			var element : BaseElement;
