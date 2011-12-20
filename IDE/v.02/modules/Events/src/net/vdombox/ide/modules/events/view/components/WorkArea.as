@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.events.view.components
 	import mx.utils.NameUtil;
 	import mx.utils.ObjectUtil;
 	
+	import net.vdombox.components.VDOMScroller;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.vo.ClientActionVO;
@@ -69,6 +70,10 @@ package net.vdombox.ide.modules.events.view.components
 		
 		[SkinPart]
 		public var pageName : TextInput;
+		
+		[SkinPart]
+		public var scroller : VDOMScroller;
+		
 		
 		private var applicationEventsVO : ApplicationEventsVO;
 
@@ -481,7 +486,7 @@ package net.vdombox.ide.modules.events.view.components
 			var dragSource : DragSource = event.dragSource;
 			var newElementVO : Object = dragSource.dataForFormat( "elementVO" );
 
-			var coordinates : Point = new Point( event.localX, event.localY );
+			var coordinates : Point = new Point( event.localX + scroller.viewport.horizontalScrollPosition , event.localY + scroller.viewport.verticalScrollPosition );
 
 			if ( newElementVO is EventVO )
 				createEvent( newElementVO as EventVO, coordinates );
