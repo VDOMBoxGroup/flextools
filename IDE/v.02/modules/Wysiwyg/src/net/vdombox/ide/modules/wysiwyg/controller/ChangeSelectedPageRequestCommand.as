@@ -17,6 +17,13 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var oldPageID : String = sessionProxy.selectedPage ? sessionProxy.selectedPage.id : "";
 			var newPageID : String = pageVO ? pageVO.id : "";
 			
+			if( sessionProxy.selectedPage && pageVO && sessionProxy.selectedPage.id == pageVO.id )
+			{
+				if( sessionProxy.selectedObject )
+					sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, null );
+				
+				return;
+			}
 			
 			if( oldPageID != newPageID )
 				sendNotification( ApplicationFacade.SET_SELECTED_PAGE, pageVO );
