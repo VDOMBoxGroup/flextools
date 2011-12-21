@@ -732,8 +732,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( contetntPart.@editable[0] && contetntPart.@editable )
 			{
-				richText = new RichEditableText();
-				_editableComponent = richText;
+				if ( !_editableComponent )
+				{
+					richText = new RichEditableText();
+					_editableComponent = richText;
+				}
+				else
+					richText = _editableComponent as UIComponent;
 			}
 			else
 			{
@@ -741,8 +746,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				richText.maxHeight = 22;
 			}
 			
-			
-
 			richText.x = contetntPart.@left;
 			richText.y = contetntPart.@top;
 			
@@ -756,8 +759,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			richText[ "text" ] = contetntPart[ 0 ];
 
 			applyStyles( richText, contetntPart );
-
+			
 			parentContainer.addElement( richText );
+		}
+		
+		private function mouseDownClick( event : MouseEvent ) : void
+		{
+			event.stopImmediatePropagation();
 		}
 		
 		private function caseTable( contetnt : XML, parentContainer : Group ) : void
@@ -1354,20 +1362,23 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
-			setFocus();
-			
-			var isScroller : Boolean = isScroller( event.target as DisplayObjectContainer ); 
-			
-			if ( movable && !isScroller )
+			if ( !( editableComponent && editableComponent is RichEditableText && !( event.target is Group ) ) )
 			{
-				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
-				stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
+				setFocus();
+			
+				var isScroller : Boolean = isScroller( event.target as DisplayObjectContainer ); 
+			
+				if ( movable && !isScroller )
+				{
+					stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
+					stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
 
-				mDeltaX = mouseX;
-				mDeltaY = mouseY;
+					mDeltaX = mouseX;
+					mDeltaY = mouseY;
 
-				beforeX = x;
-				beforeY = y;
+					beforeX = x;
+					beforeY = y;
+				}
 			}
 			
 			event.stopImmediatePropagation();

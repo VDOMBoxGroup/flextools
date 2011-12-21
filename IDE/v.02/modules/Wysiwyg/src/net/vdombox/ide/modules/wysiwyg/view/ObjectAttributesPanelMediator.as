@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
@@ -18,7 +19,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
+	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectAttributesPanel;
@@ -31,6 +34,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.components.RichEditableText;
 
 	public class ObjectAttributesPanelMediator extends Mediator implements IMediator
 	{
@@ -42,6 +47,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		private var sessionProxy : SessionProxy;
+		
+		private var renderProxy : RenderProxy;
 
 		private var isActive : Boolean;
 
@@ -53,6 +60,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+			renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 
 			isActive = false;
 
@@ -219,6 +228,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			//objectAttributesPanel.attributesVO;
 			var attributeRander : AttributeBase = event.target as AttributeBase;
+			if ( sessionProxy.selectedObject )
+			{
+				var renderBase : RendererBase = renderProxy.getRendererByVO( sessionProxy.selectedObject );
+				if ( renderBase && renderBase.editableComponent && renderBase.editableComponent is RichEditableText )
+				{
+					var attributeVO : AttributeVO;
+					for each ( attributeVO in objectAttributesPanel.attributesVO.attributes )
+					{
+						if ( attributeVO.name == "value" )
+						{
+							attributeVO.value = renderBase.editableComponent.text;
+							break;
+						}
+					}
+				}
+			}
 			if ( attributeRander.objectVO )
 				sendNotification( ApplicationFacade.SET_OBJECT_NAME, attributeRander.objectVO );
 			else

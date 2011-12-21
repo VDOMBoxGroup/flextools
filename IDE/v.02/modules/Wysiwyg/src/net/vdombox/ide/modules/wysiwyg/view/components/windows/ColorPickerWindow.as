@@ -591,8 +591,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		{
 			_color = c;
 
-			if ( m_parent != null )
-				m_parent.dispatchEvent( new ColorPickerEvent( "change", _color, hexrgb.text ) );
+			/*if ( m_parent != null )
+				m_parent.dispatchEvent( new ColorPickerEvent( "change", _color, hexrgb.text ) );*/
 		}
 
 		private function get color() : uint
@@ -803,8 +803,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			{
 				_color = old_color;
 
-				if ( m_parent != null )
-					m_parent.dispatchEvent( new ColorPickerEvent( "change", _color, hexrgb.text ) );
+				/*if ( m_parent != null )
+					m_parent.dispatchEvent( new ColorPickerEvent( "change", _color, hexrgb.text ) );*/
 			}
 
 			if ( m_parent != null )

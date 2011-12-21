@@ -80,8 +80,11 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			{
 				for each( renderer in renderers )
 				{
-					renderer.lock( true );
-					needForUpdateObject[ renderer ] = true;
+					if ( renderer )
+					{
+						renderer.lock( true );
+						needForUpdateObject[ renderer ] = true;
+					}
 				}
 			}
 

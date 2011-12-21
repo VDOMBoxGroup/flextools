@@ -3,13 +3,13 @@
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:mx="library://ns.adobe.com/flex/halo" >
 	
-	<s:transitions>
+	<!--<s:transitions>
 		<s:Transition autoReverse="true">
 			<s:Animate target="{strokeLine}">
 				<s:SimpleMotionPath property="alpha"/>                
 			</s:Animate>
 		</s:Transition>
-	</s:transitions>
+	</s:transitions>-->
 	
 	<s:states>
 		<s:State name="normal" />

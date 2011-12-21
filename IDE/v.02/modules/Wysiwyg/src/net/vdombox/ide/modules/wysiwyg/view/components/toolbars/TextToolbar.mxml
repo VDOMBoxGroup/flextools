@@ -27,12 +27,12 @@
 			
 			import spark.components.RichEditableText;
 
-			private var fonts : ArrayCollection = new ArrayCollection( [ { label: "Andale Mono", data: "andale mono" },
+			private var fonts : ArrayCollection = new ArrayCollection( [ { label: "Andale Mono", data: "andale" },
 				{ label: "Arial", data: "arial" },
-				{ label: "Arial Black", data: "arial black" },
-				{ label: "Book Antiqua", data: "book antiqua" },
-				{ label: "Comic Sans MS", data: "comic sans ms" },
-				{ label: "Courier New", data: "courier new" },
+				{ label: "Arial Black", data: "arial" },
+				{ label: "Book Antiqua", data: "book" },
+				{ label: "Comic Sans MS", data: "comic" },
+				{ label: "Courier New", data: "courier" },
 				{ label: "Georgia", data: "georgia" },
 				{ label: "Helvetica", data: "helvetica" },
 				{ label: "Impact", data: "impact" },
@@ -40,7 +40,7 @@
 				{ label: "Tahoma", data: "tahoma" },
 				{ label: "Terminal", data: "terminal" },
 				{ label: "Times New Roman",
-					data: "times new roman" },
+					data: "times" },
 				{ label: "Times", data: "times" },
 				{ label: "Verdana", data: "verdana" },
 				{ label: "Webdings", data: "webdings" },
@@ -54,13 +54,19 @@
 				{ label: "24 px", data: "24" },
 				{ label: "36 px", data: "36" }, ] );
 
-			private var elementForEditing : Object;
 
 			private var attributesObject : Object;
 
 			private var _item : IRenderer;
 
 			private var isInited : Boolean;
+			
+			private var attributeName : String;
+
+			public function get elementForEditing():Object
+			{
+				return item.editableComponent;
+			}
 
 			public function get attributes() : Array
 			{
@@ -85,8 +91,6 @@
 
 			private function onKeyDown(evt:KeyboardEvent):void
 			{
-				trace ("[TextToolbar] onKeyDown");
-				
 				switch (evt.keyCode)
 				{
 					case Keyboard.DELETE :
@@ -95,11 +99,18 @@
 				}
 			}
 			
+			private function onFocusOut( event : FocusEvent ) : void
+			{
+				attributeName = "value";
+				
+				dispatchEvent( new Event( Event.CHANGE ) );
+				
+				dispatchEvent( event );
+			}
+			
 			public function init( item : IRenderer ) : void
 			{
 				_item = item;
-
-				elementForEditing = item.editableComponent;
 					
 				elementForEditing.setStyle( "paddingTop", 5 );
 				elementForEditing.setStyle( "paddingBottom", 5 );
@@ -120,10 +131,14 @@
 				if (elementForEditing is RichEditableText)
 				{
 					RichEditableText(elementForEditing).addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown, true);
+					//RichEditableText(item.editableComponent).addEventListener(FocusEvent.FOCUS_OUT, onFocusOut );
 				}
 
 				RichEditableText( elementForEditing ).setFocus();
 				focusManager.setFocus( elementForEditing as IFocusManagerComponent );
+				
+				visible = false;
+				includeInLayout = false;
 
 				isInited = true;
 				enabled = true;
@@ -150,6 +165,8 @@
 				enabled = false;
 				isInited = false;
 				attributesObject[ "value" ].value = elementForEditing.text;
+				
+				attributeName = "value";
 				
 				dispatchEvent( new Event( Event.CHANGE ) );
 
@@ -324,6 +341,10 @@
 					attributesObject[ "fontweight" ].value = "bold";
 
 				elementForEditing.setStyle( "fontWeight", attributesObject[ "fontweight" ].value );
+				
+				attributeName = "fontweight";
+				
+				dispatchEvent( new Event( Event.CHANGE ) );
 			}
 
 			private function changeStyle() : void
@@ -337,6 +358,10 @@
 					attributesObject[ "fontstyle" ].value = "italic";
 
 				elementForEditing.setStyle( "fontStyle", attributesObject[ "fontstyle" ].value );
+				
+				attributeName = "fontstyle";
+				
+				dispatchEvent( new Event( Event.CHANGE ) );
 			}
 
 			private function changeDecoration() : void
@@ -350,6 +375,10 @@
 					attributesObject[ "textdecoration" ].value = "underline";
 
 				elementForEditing.setStyle( "textDecoration", attributesObject[ "textdecoration" ].value );
+				
+				attributeName = "textdecoration";
+				
+				dispatchEvent( new Event( Event.CHANGE ) );
 			}
 
 			private function changeAlign( value : String ) : void
@@ -392,6 +421,10 @@
 				}
 
 				elementForEditing.setStyle( "textAlign", attributesObject[ "align" ].value );
+				
+				attributeName = "align";
+				
+				dispatchEvent( new Event( Event.CHANGE ) );
 			}
 
 			private function colorTextChanged( event : ColorPickerEvent ) : void
@@ -410,6 +443,10 @@
 				attributesObject[ "color" ].value = hexValue;
 
 				elementForEditing.setStyle( "color", event.color );
+				
+				attributeName = "color";
+				
+				dispatchEvent( new Event( Event.CHANGE ) );
 			}
 
 			private function changeFamily( value : Object ) : void
@@ -421,6 +458,10 @@
 				{
 					attributesObject[ "fontfamily" ].value = value.data;
 					elementForEditing.setStyle( "fontFamily", value.data );
+					
+					attributeName = "fontfamily";
+					
+					dispatchEvent( new Event( Event.CHANGE ) );
 				}
 			}
 
@@ -433,6 +474,10 @@
 				{
 					attributesObject[ "fontsize" ].value = value.data;
 					elementForEditing.setStyle( "fontSize", value.data );
+					
+					attributeName = "fontsize";
+					
+					dispatchEvent( new Event( Event.CHANGE ) );
 				}
 			}
 			
@@ -441,37 +486,25 @@
 				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO(_item.vdomObjectVO);
 				var attributesVO : Array = [];
 				
-				var attributeVO : AttributeVO = new AttributeVO( "value" );
-				attributeVO.value = attributesObject[ "value" ].value;
-				attributesVO.push( attributeVO );
-				
-				attributeVO = new AttributeVO( "fontweight" );
-				attributeVO.value = attributesObject[ "fontweight" ].value;
-				attributesVO.push( attributeVO );
-				
-				attributeVO = new AttributeVO( "fontstyle" );
-				attributeVO.value = attributesObject[ "fontstyle" ].value;
-				attributesVO.push( attributeVO );
-				
-				attributeVO = new AttributeVO( "textdecoration" );
-				attributeVO.value = attributesObject[ "textdecoration" ].value;
-				attributesVO.push( attributeVO );
-				
-				attributeVO = new AttributeVO( "align" );
-				attributeVO.value = attributesObject[ "align" ].value;
-				attributesVO.push( attributeVO );
-				
-				attributeVO = new AttributeVO( "fontfamily" );
-				attributeVO.value = attributesObject[ "fontfamily" ].value;
-				attributesVO.push( attributeVO );
-				
-				attributeVO = new AttributeVO( "fontsize" );
-				attributeVO.value = attributesObject[ "fontsize" ].value;
-				attributesVO.push( attributeVO );
-				
-				attributeVO = new AttributeVO( "color" );
-				attributeVO.value = attributesObject[ "color" ].value;
-				attributesVO.push( attributeVO );
+				var attributeVO : AttributeVO;
+				if ( attributeName == "value" )
+				{
+					attributeVO = new AttributeVO( attributeName );
+					attributesObject[ attributeName ].value = elementForEditing.text;
+					attributeVO.value = attributesObject[ attributeName ].value;
+					attributesVO.push( attributeVO );
+				}
+				else
+				{
+					attributeVO = new AttributeVO( attributeName );
+					attributeVO.value = attributesObject[ attributeName ].value;
+					attributesVO.push( attributeVO );
+					
+					attributeVO = new AttributeVO( "value" );
+					attributesObject[ "value" ].value = elementForEditing.text;
+					attributeVO.value = attributesObject[ "value" ].value;
+					attributesVO.push( attributeVO );
+				}
 				
 				vdomObjectAttributesVO.attributes = attributesVO;
 				
