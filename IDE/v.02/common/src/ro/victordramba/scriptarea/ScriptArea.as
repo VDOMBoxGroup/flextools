@@ -255,7 +255,7 @@ package ro.victordramba.scriptarea
 				cursor.visible = _caret <= lastPos && _caret >= firstPos;
 				_caret = endIndex;
 				cursor.pauseBlink();
-				cursor.setX( p1.x + tf.x );
+				cursor.x = p1.x + tf.x;
 				cursor.y = p1.y + tf.y;
 				checkScrollToCursor();
 			}
@@ -266,7 +266,7 @@ package ro.victordramba.scriptarea
 			cursor.visible = _caret <= lastPos && _caret >= firstPos;
 			cursor.pauseBlink();
 			var p : Point = getPointForIndex( _caret );
-			cursor.setX( p.x + tf.x );
+			cursor.x = p.x + tf.x;
 			cursor.y = p.y + tf.y;
 		}
 
@@ -497,12 +497,28 @@ package ro.victordramba.scriptarea
 				updateCaret();
 			}
 			
-			var newX : Number = width - tf.width;
-
-			if ( tf.x < newX )
+			//var newX : Number = tf.width - width;
+			var newX : Number = cursor.x - tf.x - width + 48;
+			
+			if ( tf.x < newX && cursor.x > width - 48 )
 			{
-				tf.x = newX;
-				selectionShape.x = newX;
+				if ( newX < 0 )
+					newX = 0;
+				tf.x = -newX;
+				selectionShape.x = -newX;
+			} 
+			else if ( cursor.x < 0 )
+			{
+				if ( cursor.x < tf.x )
+				{
+					tf.x = 0;
+					selectionShape.x -= 0;
+				}
+				else
+				{
+					tf.x -= cursor.x;
+					selectionShape.x -= cursor.x;
+				}
 			}
 
 			if ( _scrollV > _maxScrollV )

@@ -24,8 +24,8 @@
 				vsb.maximum = scriptAreaComponent.maxScrollV;
 				vsb.value = scriptAreaComponent.scrollV;
 
-				hsb.maximum = scriptAreaComponent.maxScrollH / 8;
-				hsb.value = scriptAreaComponent.scrollH / 8;
+				hsb.maximum = scriptAreaComponent.maxScrollH / 8.0;
+				hsb.value = scriptAreaComponent.scrollH / 8.0;
 			}
 
 			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
@@ -46,6 +46,7 @@
 				{
 					scriptAreaComponent.addEventListener( Event.SCROLL, scriptAreaComponent_scrollHandler, false, 0, true );
 					scriptAreaComponent.addEventListener( Event.CHANGE, scriptAreaComponent_changeHandler, false, 0, true );
+					scriptAreaComponent.addEventListener( KeyboardEvent.KEY_DOWN, scriptAreaComponent_keyDownHandler, false, 0, true );
 				}
 
 				if ( hsb )
@@ -61,6 +62,7 @@
 			{
 				removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 				removeEventListener( Event.RESIZE, resizeHandler );
+				removeEventListener( Event.CHANGE, resizeHandler );
 				removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 
 				if ( scriptAreaComponent )
@@ -93,6 +95,11 @@
 			{
 				updateScrollBar();
 			}
+			
+			private function scriptAreaComponent_keyDownHandler( event : KeyboardEvent ) : void
+			{
+				updateScrollBar();
+			}
 
 			private function hsb_changeHandler( event : Event ) : void
 			{
@@ -113,7 +120,7 @@
 
 
 	<editors:ScriptAreaComponent id="scriptAreaComponent"
-								 bottom="15" left="0" right="15" top="0"/>
+								 bottom="{ hsb.height }" left="0" right="{ vsb.width }" top="0"/>
 
 	<s:HScrollBar id="hsb"
 				  minimum="0"

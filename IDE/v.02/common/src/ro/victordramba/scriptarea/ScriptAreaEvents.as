@@ -204,9 +204,7 @@ package ro.victordramba.scriptarea
 		{
 			
 			var c : String = String.fromCharCode( e.charCode );
-			trace(c);
 			var k : int = e.keyCode;
-			trace(k);
 			var i : int;
 			if (e.ctrlKey &&  (k == Keyboard.INSERT  || c ==  'c' || c == 'C' ))
 			{
@@ -497,6 +495,7 @@ package ro.victordramba.scriptarea
 				_setSelection( _caret, _caret );
 			
 			updateCaret();
+			updateSize();
 			
 			//save last column
 			if ( k != Keyboard.UP && k != Keyboard.DOWN && k != Keyboard.TAB )

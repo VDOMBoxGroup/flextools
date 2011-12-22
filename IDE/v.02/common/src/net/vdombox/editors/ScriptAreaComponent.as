@@ -19,6 +19,8 @@ package net.vdombox.editors
 			super();
 
 			area = new ScriptAreaEvents();
+			
+			area.width = width;
 
 			addChild( area );
 
