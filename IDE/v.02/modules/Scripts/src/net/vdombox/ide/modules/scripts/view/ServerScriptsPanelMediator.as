@@ -70,9 +70,13 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.SERVER_ACTIONS_GETTED );
 			interests.push( ApplicationFacade.SERVER_ACTIONS_SETTED );
+			
+			interests.push( ApplicationFacade.OPEN_ONLOAD_SCRIPT );
 
 			return interests;
 		}
+		
+		private var onloadScriptOpening : String = "";
 
 		override public function handleNotification( notification : INotification ) : void
 		{
@@ -132,13 +136,11 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.SERVER_ACTIONS_GETTED:
 				{
 					serverScriptsPanel.scripts = body.serverActions as Array;
-					/*if ( body.hasOwnProperty( "pageVO" ) )
-						serverScriptsPanel.titleAndName = body.pageVO.name;
-					else if ( body.hasOwnProperty( "objectVO" ) )
-					serverScriptsPanel.titleAndName = body.objectVO.name;
-					else if ( body.hasOwnProperty( "applicationVO" ) )
-					serverScriptsPanel.titleAndName = body.applicationVO.name;*/
-					
+					if ( onloadScriptOpening != "" )
+					{
+						onloadScriptOpen( onloadScriptOpening );
+						onloadScriptOpening = "";
+					}
 						
 				}
 					
@@ -156,9 +158,16 @@ package net.vdombox.ide.modules.scripts.view
 
 					break;
 				}
+					
+				case ApplicationFacade.OPEN_ONLOAD_SCRIPT:
+				{
+					onloadScriptOpen( body as String );
+					
+					break;
+				}
 			}
 		}
-
+		
 		private function addHandlers() : void
 		{
 			serverScriptsPanel.addEventListener( ServerScriptsPanelEvent.CREATE_ACTION, createActionHandler,
@@ -220,6 +229,28 @@ package net.vdombox.ide.modules.scripts.view
 				sendNotification( ApplicationFacade.SET_SERVER_ACTIONS, { pageVO: sessionProxy.selectedPage, serverActions: serverActions } );
 			}
 		}
+		
+		private function onloadScriptOpen( containerID : String ) : void
+		{
+			var serverActionVO : ServerActionVO;
+			for each ( serverActionVO in serverScriptsPanel.scripts )
+			{
+				if ( serverActionVO.name == "onload" )
+				{
+					if ( serverActionVO.containerID == containerID )
+					{
+						onloadScriptOpening = "";
+						sendNotification( ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED, serverActionVO );
+					}
+					else
+					{
+						onloadScriptOpening = containerID;
+					}
+					break;
+				}
+			}
+		}
+
 
 		private function selectedServerActionChangedHandler( event : ServerScriptsPanelEvent ) : void
 		{

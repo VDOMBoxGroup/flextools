@@ -86,6 +86,8 @@
 			protected function navigatorcontent1_removedFromStageHandler(event:Event):void
 			{
 				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
+				removeEventListener(Event.CHANGE, setStateInUnsave, true );
+				pythonScriptEditor.removeEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true );
 			}
 			
 			private function setStateInUnsave( event : Event ) : void
@@ -93,10 +95,20 @@
 				currentState = "unsaved";
 			}
 			
+			private function onCtrlSDown( e : KeyboardEvent ) : void
+			{
+				if ( e.ctrlKey && e.keyCode == Keyboard.S )
+				{
+					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SAVE ) );
+					currentState = "disabled";
+				}
+			}
+			
 			protected function pythonScriptEditor_creationCompleteHandler(event:FlexEvent):void
 			{
 				// TODO Auto-generated method stub
-				addEventListener(Event.CHANGE, setStateInUnsave, true );
+				addEventListener(Event.CHANGE, setStateInUnsave, true, 0, true );
+				pythonScriptEditor.addEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true, 0, true );
 			}
 			
 		]]>

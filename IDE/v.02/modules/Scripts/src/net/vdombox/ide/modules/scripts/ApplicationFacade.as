@@ -154,6 +154,8 @@ package net.vdombox.ide.modules.scripts
 		public static const OPEN_WINDOW : String = "openWidow";
 		public static const CLOSE_WINDOW : String = "closeWidow";
 		
+		public static const OPEN_ONLOAD_SCRIPT : String = "openOnloadScript";
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )

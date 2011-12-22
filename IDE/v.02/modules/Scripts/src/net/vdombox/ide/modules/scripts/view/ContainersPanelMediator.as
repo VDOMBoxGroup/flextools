@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import net.vdombox.components.ObjectsTreePanelItemRenderer;
+	import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
@@ -209,11 +211,13 @@ package net.vdombox.ide.modules.scripts.view
 		private function addHandlers() : void
 		{
 			containersPanel.addEventListener( ContainersPanelEvent.CONTAINER_CHANGED, containerChangedHandler, false, 0, true );
+			containersPanel.addEventListener( ObjectsTreePanelEvent.DOUBLE_CLICK, openOnloadScript, true, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			containersPanel.removeEventListener( ContainersPanelEvent.CONTAINER_CHANGED, containerChangedHandler );
+			containersPanel.removeEventListener( ObjectsTreePanelEvent.DOUBLE_CLICK, openOnloadScript, true );
 		}
 
 		private function clearData() : void
@@ -300,6 +304,15 @@ package net.vdombox.ide.modules.scripts.view
 				 sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
 			 }
 			
+		}
+		
+		private function openOnloadScript( event : ObjectsTreePanelEvent ) : void
+		{
+			var treeItemRenderer : ObjectsTreePanelItemRenderer = event.target as ObjectsTreePanelItemRenderer;
+			if ( treeItemRenderer )
+			{
+				sendNotification( ApplicationFacade.OPEN_ONLOAD_SCRIPT, treeItemRenderer.objectID );
+			}
 		}
 	}
 }

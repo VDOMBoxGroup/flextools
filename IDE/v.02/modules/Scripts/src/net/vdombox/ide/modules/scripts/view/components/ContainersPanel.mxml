@@ -2,7 +2,8 @@
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 creationComplete="panel1_creationCompleteHandler(event)">
+		 creationComplete="panel1_creationCompleteHandler(event)"
+		 removedFromStage="panel1_removedFromStageHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
@@ -11,6 +12,7 @@
 			import mx.events.ListEvent;
 			import mx.managers.DragManager;
 			
+			import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 			import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
 
 			[Bindable]
@@ -219,7 +221,10 @@
 				dispatchEvent( new ContainersPanelEvent( ContainersPanelEvent.CONTAINER_CHANGED ) );
 			}
 			
-			
+			protected function panel1_removedFromStageHandler(event:Event):void
+			{
+				containersTree.removeEventListener( ListEvent.CHANGE, objectsTree_changeHandler );
+			}
 			
 		]]>
 	</fx:Script>

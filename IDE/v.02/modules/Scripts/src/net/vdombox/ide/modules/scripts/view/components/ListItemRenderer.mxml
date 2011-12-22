@@ -7,7 +7,22 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.vo.ServerActionVO;
 			import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
+			
+			override public function set data( value : Object ) : void
+			{
+				super.data = value;
+				
+				if ( value && value is ServerActionVO )
+				{
+					if ( value.script == "" )
+						itemName.setStyle( "color", 0x00FF00 );
+					else
+						itemName.setStyle( "color", 0xFFFFFF  );
+				}
+			}
+			
 			protected function itemrenderer1_doubleClickHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
@@ -34,7 +49,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:Label text="{data.name}" color="#FFFFFF" height="100%" verticalAlign="middle" paddingLeft="10"/>
+	<s:Label id="itemName" text="{data.name}" color="#FFFFFF" height="100%" verticalAlign="middle" paddingLeft="10"/>
 	
 	<s:Line top="0" left="0" width="100%">
 		<s:stroke>
