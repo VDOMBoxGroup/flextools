@@ -6,6 +6,9 @@ package net.vdombox.ide.modules.dataBase.events
 	{
 		public static var CHANGE : String = "change";
 		public static var UPDATE_STRUCTURE : String = "updateSrtucture";
+		public static var SELECT_CONTEXT_ITEM_NEW : String = "selectContextItemNew";
+		
+		public var content : Object;
 		
 		public function DataTablesEvents( type : String, bubbles : Boolean = false,
 										  cancelable : Boolean = false )

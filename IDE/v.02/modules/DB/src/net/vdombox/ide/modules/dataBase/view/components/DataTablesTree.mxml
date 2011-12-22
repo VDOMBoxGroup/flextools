@@ -5,9 +5,11 @@
 		 creationComplete="creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import mx.core.INavigatorContent;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
 			
+			import net.vdombox.ide.common.vo.TypeVO;
 			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 			
 			[Bindable]
@@ -217,6 +219,45 @@
 					openTree( parentItem );
 					tablesTree.expandItem( parentItem, true, false );
 				}
+			}
+			
+			public function setNewContextSubMenu( items : Array ) : void
+			{
+				var item : TypeVO;
+				
+				var newItem : ContextMenuItem = new ContextMenuItem("New");
+				
+				var newMenu : NativeMenu = new NativeMenu();
+				
+				for each ( item in items )
+				{
+					if ( item.category == "Database" )
+					{
+						var newSubItem : ContextMenuItem = new ContextMenuItem( item.displayName );
+						newSubItem.data = item;
+						
+						if ( item.container != 3 )
+						{
+							newSubItem.addEventListener( Event.SELECT, newSubItemSelectHandler, false, 0, true );
+							newMenu.addItem( newSubItem );
+						}
+						else
+						{
+							newMenu.addItemAt( newSubItem, 0 );
+						}
+					}
+				}
+				newItem.submenu = newMenu;
+				
+				contextMenu.addItem( newItem );
+			}
+			
+			private function newSubItemSelectHandler( event : Event ) : void
+			{
+				var newEvent : DataTablesEvents = new DataTablesEvents( DataTablesEvents.SELECT_CONTEXT_ITEM_NEW );
+				newEvent.content = event.target.data;
+				dispatchEvent( newEvent );
+				
 			}
 			
 		]]>

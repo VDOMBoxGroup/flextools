@@ -2,14 +2,21 @@ package net.vdombox.ide.modules.dataBase.view
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.ui.ContextMenu;
+	
+	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.modules.dataBase.events.CreateNewObjectEvent;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
+	import net.vdombox.ide.modules.dataBase.model.TypesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTablesTree;
+	import net.vdombox.ide.modules.dataBase.view.components.windows.CreateNewObjectWindow;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -21,6 +28,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private var isActive : Boolean;
 		private var sessionProxy : SessionProxy;
+		private var typesProxy : TypesProxy;
 		
 		private var _dataBases : Object;
 		private var requestQue : Object;
@@ -50,6 +58,7 @@ package net.vdombox.ide.modules.dataBase.view
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 			isActive = false;
 			addHandlers();
 		}
@@ -96,6 +105,9 @@ package net.vdombox.ide.modules.dataBase.view
 					{
 						isActive = true;
 						sendNotification( ApplicationFacade.GET_DATA_BASES, sessionProxy.selectedApplication );
+						
+						/*dataTablesTree.contextMenu = new ContextMenu();
+						dataTablesTree.setNewContextSubMenu( typesProxy.types );*/
 						
 						break;
 					}
@@ -227,7 +239,35 @@ package net.vdombox.ide.modules.dataBase.view
 		private function addHandlers() : void
 		{
 			dataTablesTree.addEventListener( DataTablesEvents.CHANGE, changeHandler, false, 0, true );
+			dataTablesTree.addEventListener( DataTablesEvents.SELECT_CONTEXT_ITEM_NEW, createNewPageOrObject, false, 0, true );
 			dataTablesTree.addBase.addEventListener( MouseEvent.CLICK, addNewBase, false, 0, true );
+		}
+		
+		private function createNewPageOrObject( event : DataTablesEvents ) : void
+		{
+			if ( event.content is TypeVO )
+			{
+				var typeVO : TypeVO = event.content as TypeVO;
+				
+				var createNewObjectWindow : CreateNewObjectWindow = new CreateNewObjectWindow();
+				
+				for each ( var dataBase : Object in _dataBases )
+				{
+					createNewObjectWindow.dataBases.addItem( dataBase );
+				}
+				
+				createNewObjectWindow.title = "New " + typeVO.displayName;
+				
+				createNewObjectWindow.addEventListener( CreateNewObjectEvent.APPLY, applyHandler );
+				
+				WindowManager.getInstance().addWindow(createNewObjectWindow, event.target as UIComponent, true);
+				
+				function applyHandler( event : CreateNewObjectEvent ) : void
+				{
+					WindowManager.getInstance().removeWindow( createNewObjectWindow );
+					
+				}
+			}
 		}
 		
 		private function addNewBase( event : MouseEvent ) : void
