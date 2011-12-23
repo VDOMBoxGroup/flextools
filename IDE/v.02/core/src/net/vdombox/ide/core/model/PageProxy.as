@@ -846,9 +846,14 @@ package net.vdombox.ide.core.model
 
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{
+			var token : AsyncToken = event.token;
+			
+			if ( !token.hasOwnProperty( "recipientName" ) || token.recipientName != proxyName )
+				return;
+			
 			var operation : Operation = event.target as Operation;
 
-			if ( !operation )
+			if ( !operation   )
 				return;
 			
 
@@ -856,7 +861,6 @@ package net.vdombox.ide.core.model
 			var errorVO : ErrorVO;
 			
 			var notification : ProxyNotification;
-			var token : AsyncToken = event.token;
 			var fault : SOAPFault = event.fault as SOAPFault;
 			
 			var faultString : String = event.fault.faultString;
