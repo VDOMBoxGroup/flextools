@@ -142,7 +142,12 @@ package net.vdombox.ide.modules.dataBase
 		public static const GET_TYPES : String = "getTypes";
 		public static const TYPES_CHANGED : String = "typesChanged";
 		
-
+		public static const CREATE_OBJECT : String = "createObject";
+		public static const OBJECT_CREATED : String = "objectCreated";
+		
+		public static const SET_OBJECT_NAME : String = "setObjectName";
+		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
+		public static const PAGE_NAME_SETTED : String = "pageNameSetted";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

@@ -5,6 +5,7 @@
 		 creationComplete="creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
 			import mx.core.INavigatorContent;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
@@ -221,6 +222,14 @@
 				}
 			}
 			
+			public function createContextMenu() : void
+			{
+				if ( !contextMenu )
+					contextMenu = new ContextMenu();
+				else
+					contextMenu.removeAllItems();
+			}
+			
 			public function setNewContextSubMenu( items : Array ) : void
 			{
 				var item : TypeVO;
@@ -231,21 +240,15 @@
 				
 				for each ( item in items )
 				{
-					if ( item.category == "Database" )
-					{
-						var newSubItem : ContextMenuItem = new ContextMenuItem( item.displayName );
-						newSubItem.data = item;
+					var newSubItem : ContextMenuItem = new ContextMenuItem( item.displayName );
+					newSubItem.data = item;
+					
+					newSubItem.addEventListener( Event.SELECT, newSubItemSelectHandler, false, 0, true );
 						
-						if ( item.container != 3 )
-						{
-							newSubItem.addEventListener( Event.SELECT, newSubItemSelectHandler, false, 0, true );
-							newMenu.addItem( newSubItem );
-						}
-						else
-						{
-							newMenu.addItemAt( newSubItem, 0 );
-						}
-					}
+					if ( item.container != 3 )
+						newMenu.addItem( newSubItem );
+					else
+						newMenu.addItemAt( newSubItem, 0 );
 				}
 				newItem.submenu = newMenu;
 				
@@ -277,10 +280,10 @@
 				 dataProvider="{ _dataBases }" labelField="@name" contentBackgroundAlpha="0"
 				 itemRenderer="net.vdombox.components.ObjectsTreePanelItemRenderer"/>
 		
-		<s:HGroup width="100%" height="20" verticalAlign="middle" horizontalAlign="center" includeInLayout="false">
+		<s:HGroup width="100%" height="20" verticalAlign="middle" horizontalAlign="center" visible="false" includeInLayout="false">
 			
-			<s:Button id="addBase" label="Add Base" />
-			
+				<s:Button id="addBase" label="Add New" />
+	
 		</s:HGroup>
 	</s:VGroup>
 	

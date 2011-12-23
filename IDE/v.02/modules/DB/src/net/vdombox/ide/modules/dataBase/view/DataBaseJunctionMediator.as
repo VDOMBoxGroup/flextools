@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
+	import net.vdombox.ide.common.PPMObjectTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
@@ -19,6 +20,8 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
+	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.model.vo.SettingsVO;
@@ -74,6 +77,10 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			interests.push( ApplicationFacade.GET_TYPES );
 			interests.push( ApplicationFacade.GET_PAGE );
+			
+			interests.push( ApplicationFacade.CREATE_OBJECT );
+			
+			interests.push( ApplicationFacade.SET_OBJECT_NAME );
 			
 			return interests;
 		}
@@ -267,6 +274,29 @@ package net.vdombox.ide.modules.dataBase.view
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.CREATE_OBJECT:
+				{
+					if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.OBJECT, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SET_OBJECT_NAME:
+				{
+					if ( body is PageVO )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.NAME, body );
+					else if ( body is ObjectVO )
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.NAME, body );
+					
+					if ( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
 				}

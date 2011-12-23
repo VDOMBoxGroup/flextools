@@ -30,8 +30,7 @@ package net.vdombox.ide.modules.dataBase.model
 		
 		public function set types( types : Array ) : void
 		{
-			if ( !_types )
-				_types = [];
+			_types = [];
 			
 			var typeVO : TypeVO;
 			for each ( typeVO in types )

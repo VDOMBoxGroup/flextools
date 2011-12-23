@@ -22,19 +22,39 @@ package net.vdombox.ide.modules.dataBase.view.components.windows
 		[SkinPart( required="true" )]
 		public var baseName : DropDownList;
 		
+		[Bindable]
+		public var typeVO : TypeVO;
+		
+		[Bindable]
+		public var types : ArrayCollection;
+		
 		public function CreateNewObjectWindow()
 		{
 			super();
 			
-			width = 400;
+			width = 500;
 			height = 300;
 			
-			minWidth = 400;
+			minWidth = 500;
 			minHeight = 300;
 			
 			dataBases = new ArrayCollection();
 			
 			this.setFocus();
+		}
+		
+		public function setTypes( _types : Array ) : void
+		{
+			types = new ArrayCollection();
+			
+			var _typeVO : TypeVO;
+			for each ( _typeVO in _types )
+			{
+				if ( _typeVO.container == 3 )
+					types.addItemAt( _typeVO, 0 );
+				else
+					types.addItem( _typeVO );
+			}
 		}
 		
 		[Bindable]
@@ -58,7 +78,10 @@ package net.vdombox.ide.modules.dataBase.view.components.windows
 		
 		public function ok_close_window(event: KeyboardEvent = null ) : void
 		{
-			dispatchEvent( new CreateNewObjectEvent( CreateNewObjectEvent.APPLY, baseName.selectedItem, objectName.text ) );
+			if ( typeVO.container != 3 )
+				dispatchEvent( new CreateNewObjectEvent( CreateNewObjectEvent.APPLY, baseName.selectedItem, objectName.text ) );
+			else
+				dispatchEvent( new CreateNewObjectEvent( CreateNewObjectEvent.APPLY, null, objectName.text ) );
 		}
 		
 		public function no_close_window(event: KeyboardEvent = null ) : void

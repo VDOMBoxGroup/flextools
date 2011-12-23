@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
@@ -34,6 +35,8 @@ package net.vdombox.ide.modules.dataBase.view
 		private var requestQue : Object;
 		
 		private var typeVO : TypeVO;
+		
+		private var componentName : String;
 		
 		public function DataTablesTreeMediator( viewComponent : Object = null )
 		{
@@ -65,6 +68,9 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		override public function onRemove() : void
 		{
+			dataTablesTree.removeEventListener( DataTablesEvents.CHANGE, changeHandler );
+			dataTablesTree.removeEventListener( DataTablesEvents.SELECT_CONTEXT_ITEM_NEW, createNewPageOrObject );
+			
 			sessionProxy = null;
 			
 			isActive = false;
@@ -83,6 +89,9 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 			interests.push( ApplicationFacade.TOP_LEVEL_TYPES_GETTED );
 			interests.push( ApplicationFacade.PAGE_CREATED );
+			interests.push( ApplicationFacade.OBJECT_CREATED );
+			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
+			interests.push( ApplicationFacade.PAGE_NAME_SETTED );
 			
 			return interests;
 		}
@@ -106,7 +115,7 @@ package net.vdombox.ide.modules.dataBase.view
 						isActive = true;
 						sendNotification( ApplicationFacade.GET_DATA_BASES, sessionProxy.selectedApplication );
 						
-						/*dataTablesTree.contextMenu = new ContextMenu();
+						/*dataTablesTree.createContextMenu();
 						dataTablesTree.setNewContextSubMenu( typesProxy.types );*/
 						
 						break;
@@ -223,16 +232,60 @@ package net.vdombox.ide.modules.dataBase.view
 							{ applicationVO: sessionProxy.selectedApplication, typeVO: typeVO } );				
 					}		
 						
-					
 					break;
 				}
 					
 				case ApplicationFacade.PAGE_CREATED:
 				{
-					sendNotification( ApplicationFacade.GET_DATA_BASES, sessionProxy.selectedApplication );
+					if ( componentName == "" )
+					{
+						sendNotification( ApplicationFacade.GET_DATA_BASES, sessionProxy.selectedApplication );
+					}
+					else
+					{
+						var _pageVO : PageVO = body.pageVO;
+					
+						if ( !_pageVO )
+							return;
+					
+						_pageVO.name = componentName;
+						
+						sendNotification( ApplicationFacade.SET_OBJECT_NAME, _pageVO );
+					}
 					
 					break;
 				}	
+					
+				case ApplicationFacade.OBJECT_CREATED:
+				{
+					if ( componentName == "" )
+					{
+						sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
+						sendNotification( ApplicationFacade.GET_TABLE, { pageVO: body.pageVO, objectID: body.id } );
+					}
+					else
+					{
+						body.name = componentName;
+					
+						sendNotification( ApplicationFacade.SET_OBJECT_NAME, body );
+					}
+					break;
+				}	
+					
+				case ApplicationFacade.OBJECT_NAME_SETTED:
+				{
+					sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
+					sendNotification( ApplicationFacade.GET_TABLE, { pageVO: body.pageVO, objectID: body.id } );
+					
+					break;
+				}	
+					
+				case ApplicationFacade.PAGE_NAME_SETTED:
+				{
+					sendNotification( ApplicationFacade.GET_DATA_BASES, sessionProxy.selectedApplication );
+					
+					break;
+				}
 			}
 		}
 		
@@ -240,48 +293,63 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			dataTablesTree.addEventListener( DataTablesEvents.CHANGE, changeHandler, false, 0, true );
 			dataTablesTree.addEventListener( DataTablesEvents.SELECT_CONTEXT_ITEM_NEW, createNewPageOrObject, false, 0, true );
-			dataTablesTree.addBase.addEventListener( MouseEvent.CLICK, addNewBase, false, 0, true );
 		}
 		
 		private function createNewPageOrObject( event : DataTablesEvents ) : void
 		{
 			if ( event.content is TypeVO )
 			{
-				var typeVO : TypeVO = event.content as TypeVO;
+				var _typeVO : TypeVO = event.content as TypeVO;
 				
 				var createNewObjectWindow : CreateNewObjectWindow = new CreateNewObjectWindow();
 				
-				for each ( var dataBase : Object in _dataBases )
-				{
-					createNewObjectWindow.dataBases.addItem( dataBase );
-				}
-				
-				createNewObjectWindow.title = "New " + typeVO.displayName;
+				createNewObjectWindow.title = "New " + _typeVO.displayName;
+				createNewObjectWindow.typeVO = typeVO;
+				createNewObjectWindow.setTypes( typesProxy.types );
 				
 				createNewObjectWindow.addEventListener( CreateNewObjectEvent.APPLY, applyHandler );
+				
+				if ( _typeVO.container != 3 )
+				{
+					for each ( var dataBase : Object in _dataBases )
+					{
+						createNewObjectWindow.dataBases.addItem( dataBase );
+					}
+				}
 				
 				WindowManager.getInstance().addWindow(createNewObjectWindow, event.target as UIComponent, true);
 				
 				function applyHandler( event : CreateNewObjectEvent ) : void
 				{
+					componentName = event.name;
+					
+					if ( _typeVO.container == 3 )
+					{
+						if ( !typeVO )
+							sendNotification( ApplicationFacade.GET_TOP_LEVEL_TYPES );
+						else if ( sessionProxy.selectedApplication )
+						{
+							sendNotification( ApplicationFacade.CREATE_PAGE,
+								{ applicationVO: sessionProxy.selectedApplication, typeVO: typeVO } );				
+						}
+					}
+					else
+					{
+						var attributes : Array = [];
+						
+						if ( !event.base || !_typeVO )
+							return;
+						
+						attributes.push( new AttributeVO( "left", "0" ) );
+						attributes.push( new AttributeVO( "top", "0" ) );
+						
+						sendNotification( ApplicationFacade.CREATE_OBJECT, { pageVO: event.base, attributes: attributes, typeVO: _typeVO } );
+					}
 					WindowManager.getInstance().removeWindow( createNewObjectWindow );
 					
 				}
 			}
 		}
-		
-		private function addNewBase( event : MouseEvent ) : void
-		{
-			if ( !typeVO )
-				sendNotification( ApplicationFacade.GET_TOP_LEVEL_TYPES );
-			else if ( sessionProxy.selectedApplication )
-			{
-				sendNotification( ApplicationFacade.CREATE_PAGE,
-					{ applicationVO: sessionProxy.selectedApplication, typeVO: typeVO } );				
-			}
-		}
-		
-		
 		
 		private function changeHandler( event : DataTablesEvents ) : void
 		{

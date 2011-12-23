@@ -1,6 +1,9 @@
 package net.vdombox.ide.modules.dataBase.controller.messages
 {
+	import net.vdombox.ide.common.PPMObjectTargetNames;
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxyMessage;
+	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -16,15 +19,17 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 			var target : String = message.target;
 			var operation : String = message.operation;
 
-//			switch ( target )
-//			{
-//				case PPMObjectTargetNames.:
-//				{
-//					if ( operation == PPMOperationNames.READ )
-//						
-//					break;
-//				}
-//			}
+			switch ( target )
+			{
+				case PPMObjectTargetNames.NAME:
+				{
+					if ( operation == PPMOperationNames.UPDATE )
+					{
+						sendNotification( ApplicationFacade.OBJECT_NAME_SETTED, body );
+					}
+					break;
+				}
+			}
 		}
 	}
 }

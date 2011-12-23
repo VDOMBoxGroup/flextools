@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:mx="library://ns.adobe.com/flex/mx">
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		creationComplete="sparkskin1_creationCompleteHandler(event)">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.dataBase.view.components.windows.CreateNewObjectWindow")]
@@ -10,6 +11,10 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.common.vo.TypeVO;
+			
+			import spark.events.IndexChangeEvent;
+			
 			protected function baseName_creationCompleteHandler(event:FlexEvent):void
 			{
 				// TODO Auto-generated method stub
@@ -17,52 +22,82 @@
 					baseName.selectedIndex = 0;
 			}
 			
+			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				types.selectedItem = hostComponent.typeVO;
+			}
+			
+			protected function types_changeHandler(event:IndexChangeEvent):void
+			{
+				hostComponent.typeVO = types.selectedItem;
+				if ( hostComponent.typeVO.container == 3 )
+					chooseBaseGroup.visible = false;
+				else
+					chooseBaseGroup.visible = true;
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<!-- states -->
 	<s:states>
+		<s:State name="newObject" />
+		<s:State name="newBase" />
 		<s:State name="disabledAndInactive" />
 		<s:State name="normalAndInactive" />
 		<s:State name="disabled" />
 		<s:State name="normal" />
 	</s:states>
 	
-	<s:VGroup width="100%" height="100%" paddingTop="10" paddingLeft="10" paddingRight="10">
+	<s:HGroup width="100%" height="100%">
+		<s:VGroup width="150" height="100%">
+			
+			<s:List id="types" width="100%" height="100%" 
+					dataProvider="{hostComponent.types}" labelField="displayName"
+					change="types_changeHandler(event)"/>
+			
+		</s:VGroup>
 		
+		<s:VGroup width="100%" height="100%" paddingTop="10" paddingLeft="10" paddingRight="10">
+			
+			
+			<s:HGroup width="100%" height="20" verticalAlign="middle">
+				
+				<s:Label text="{ resourceManager.getString( 'DataBase_General', 'create_new_object_window_Name' ) }" />
+				
+				<mx:Spacer width="100%" />
+				
+				<s:TextInput id="objectName" width="300"/>
+				
+			</s:HGroup>
+			
+			<mx:Spacer height="5" />
+			
+			<s:HGroup id="chooseBaseGroup" width="100%" height="20" verticalAlign="middle" >
+				
+				<s:Label text="{ resourceManager.getString( 'DataBase_General', 'create_new_object_window_Base' ) }" />
+				
+				<mx:Spacer width="100%" />
+				
+				<s:DropDownList id="baseName" width="300"
+								dataProvider="{hostComponent.dataBases}" skinClass="spark.skins.spark.DropDownListSkin"
+								labelField="name" creationComplete="baseName_creationCompleteHandler(event)" />
+				
+			</s:HGroup>
+			
+			<s:HGroup width="100%" height="20" verticalAlign="middle" horizontalAlign="right">
+				
+				<s:Button id="ok" label="{ resourceManager.getString( 'DataBase_General', 'create_new_object_window_OK' ) }" click="{hostComponent.ok_close_window()}"/>
+				
+				<s:Button id="cancel" label="{ resourceManager.getString( 'DataBase_General', 'create_new_object_window_Cancel' ) }" click="{hostComponent.no_close_window()}"/>
+				
+			</s:HGroup>
+			
+		</s:VGroup>
+		
+	</s:HGroup>
 	
-		<s:HGroup width="100%" height="20" verticalAlign="middle">
-			
-			<s:Label text="{ resourceManager.getString( 'DataBase_General', 'create_new_object_window_Name' ) }" />
-			
-			<mx:Spacer width="100%" />
-			
-			<s:TextInput id="objectName" width="300"/>
-			
-		</s:HGroup>
-		
-		<mx:Spacer height="5" />
-		
-		<s:HGroup width="100%" height="20" verticalAlign="middle">
-			
-			<s:Label text="{ resourceManager.getString( 'DataBase_General', 'create_new_object_window_Base' ) }" />
-			
-			<mx:Spacer width="100%" />
-			
-			<s:DropDownList id="baseName" width="300"
-							dataProvider="{hostComponent.dataBases}" skinClass="spark.skins.spark.DropDownListSkin"
-							labelField="name" creationComplete="baseName_creationCompleteHandler(event)" />
-			
-		</s:HGroup>
-		
-		<s:HGroup width="100%" height="20" verticalAlign="middle" horizontalAlign="right">
-			
-			<s:Button id="ok" label="{ resourceManager.getString( 'DataBase_General', 'create_new_object_window_OK' ) }" click="{hostComponent.ok_close_window()}"/>
-			
-			<s:Button id="cancel" label="{ resourceManager.getString( 'DataBase_General', 'create_new_object_window_Cancel' ) }" click="{hostComponent.no_close_window()}"/>
-			
-		</s:HGroup>
-		
-	</s:VGroup>
+	
 	
 </s:SparkSkin>
