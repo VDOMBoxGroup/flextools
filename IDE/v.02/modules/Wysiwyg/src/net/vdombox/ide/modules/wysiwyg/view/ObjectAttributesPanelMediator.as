@@ -231,7 +231,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( sessionProxy.selectedObject )
 			{
 				var renderBase : RendererBase = renderProxy.getRendererByVO( sessionProxy.selectedObject );
-				if ( renderBase && renderBase.editableComponent && renderBase.editableComponent is RichEditableText )
+				if ( renderBase && renderBase.editableComponent && renderBase.editableComponent is RichEditableText && renderBase.typeVO.name == "text" )
 				{
 					var attributeVO : AttributeVO;
 					for each ( attributeVO in objectAttributesPanel.attributesVO.attributes )

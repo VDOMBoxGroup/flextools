@@ -154,7 +154,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 
 		public function copyResourceID() : void
 		{
-			Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, resourceId.text);
+			Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, resourceId.text);0
 		}
 
 	}

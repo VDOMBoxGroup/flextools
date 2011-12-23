@@ -224,6 +224,18 @@
 			{
 				var copyEvent : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.COPY );
 				copyEvent.objectID = _data.@id;
+				var xmlListCollection : XMLListCollection = (owner as Tree).dataProvider as XMLListCollection;
+				var xml : XML;
+				for each ( xml in xmlListCollection )
+				{
+					var xmlList : XMLList = xml..object;
+					var xml2 : XML;
+					for each ( xml2 in xmlList )
+					{
+						if ( xml2.@id == _data.@id )
+							copyEvent.pageID = xml.@id;
+					}
+				}
 				dispatchEvent( copyEvent );
 			}
 			

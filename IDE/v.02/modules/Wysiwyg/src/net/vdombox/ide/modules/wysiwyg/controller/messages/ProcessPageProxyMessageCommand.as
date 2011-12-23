@@ -152,6 +152,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					if ( operation == PPMOperationNames.UPDATE )
 					{
 						sendNotification( ApplicationFacade.PAGE_NAME_SETTED, body );
+						sendNotification( ApplicationFacade.GET_WYSIWYG, body );
 					}
 					break;
 				}

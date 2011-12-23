@@ -8,6 +8,8 @@
 
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.desktop.Clipboard;
+	import flash.desktop.ClipboardFormats;
 	import flash.events.Event;
 	
 	import mx.controls.Tree;
@@ -19,6 +21,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
@@ -436,12 +439,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function copyItemRendererHandler( event : ObjectsTreePanelEvent ) : void
 		{
-			sourceID = event.objectID;
+			sourceID = sessionProxy.selectedApplication.id + " " + event.objectID + " ";
+			
+			if ( event.pageID == event.objectID )
+				sourceID += "0";
+			else
+				sourceID += "1";
+			
+			
+			Clipboard.generalClipboard.setData( ClipboardFormats.TEXT_FORMAT, sourceID );
 		}
 		
 		private function pasteItemRendererHandler( event : ObjectsTreePanelEvent ) : void
 		{
 			containerID = event.objectID;
+			
+			sourceID = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
 			
 			if ( !sourceID || !containerID )
 				return;
@@ -494,7 +507,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			for each( objectXML in xmlList)
 			{
 				typeID = objectXML.@typeID;
-				objectXML.@iconID = typeProxy.getTypeVObyID( typeID ).structureIconID;
+				var rr : TypeVO = typeProxy.getTypeVObyID( typeID )
+				objectXML.@iconID = rr.structureIconID;
 				objectXML.@visible = visibleRendererProxy.getVisible(  String(objectXML.@id) );
 //				trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
 			}

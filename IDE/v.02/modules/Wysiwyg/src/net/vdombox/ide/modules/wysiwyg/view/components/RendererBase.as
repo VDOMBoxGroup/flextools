@@ -732,7 +732,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( contetntPart.@editable[0] && contetntPart.@editable )
 			{
-				if ( !_editableComponent )
+				if ( !_editableComponent || !(_editableComponent is RichEditableText) )
 				{
 					richText = new RichEditableText();
 					_editableComponent = richText;
