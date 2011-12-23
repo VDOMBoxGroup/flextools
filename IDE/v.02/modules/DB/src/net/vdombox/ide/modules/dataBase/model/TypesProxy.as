@@ -35,8 +35,24 @@ package net.vdombox.ide.modules.dataBase.model
 			var typeVO : TypeVO;
 			for each ( typeVO in types )
 			{
-				if ( typeVO.category == "Database" )
+				if ( typeVO.id == "753ea72c-475d-4a29-96be-71c522ca2097" )
+				{
 					_types.push( typeVO );
+				}
+				else
+				{
+					var containers : Array = typeVO.containers.split( "," );
+				
+					var containerName : String;
+					for each ( containerName in containers )
+					{
+						if ( containerName == "dbschema" )
+						{
+							_types.push( typeVO );
+							break;
+						}
+					}
+				}
 			}
 			
 			TypeDB.removeDB( "vdom" );

@@ -25,36 +25,19 @@ package net.vdombox.ide.modules.dataBase.view.components.windows
 		[Bindable]
 		public var typeVO : TypeVO;
 		
-		[Bindable]
-		public var types : ArrayCollection;
-		
 		public function CreateNewObjectWindow()
 		{
 			super();
 			
-			width = 500;
-			height = 300;
+			width = 400;
+			height = 110;
 			
-			minWidth = 500;
-			minHeight = 300;
+			minWidth = 400;
+			minHeight = 110;
 			
 			dataBases = new ArrayCollection();
 			
 			this.setFocus();
-		}
-		
-		public function setTypes( _types : Array ) : void
-		{
-			types = new ArrayCollection();
-			
-			var _typeVO : TypeVO;
-			for each ( _typeVO in _types )
-			{
-				if ( _typeVO.container == 3 )
-					types.addItemAt( _typeVO, 0 );
-				else
-					types.addItem( _typeVO );
-			}
 		}
 		
 		[Bindable]

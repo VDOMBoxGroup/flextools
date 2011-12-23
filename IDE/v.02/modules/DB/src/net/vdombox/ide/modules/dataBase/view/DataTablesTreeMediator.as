@@ -115,8 +115,8 @@ package net.vdombox.ide.modules.dataBase.view
 						isActive = true;
 						sendNotification( ApplicationFacade.GET_DATA_BASES, sessionProxy.selectedApplication );
 						
-						/*dataTablesTree.createContextMenu();
-						dataTablesTree.setNewContextSubMenu( typesProxy.types );*/
+						dataTablesTree.createContextMenu();
+						dataTablesTree.setNewContextSubMenu( typesProxy.types );
 						
 						break;
 					}
@@ -304,10 +304,10 @@ package net.vdombox.ide.modules.dataBase.view
 				var createNewObjectWindow : CreateNewObjectWindow = new CreateNewObjectWindow();
 				
 				createNewObjectWindow.title = "New " + _typeVO.displayName;
-				createNewObjectWindow.typeVO = typeVO;
-				createNewObjectWindow.setTypes( typesProxy.types );
+				createNewObjectWindow.typeVO = _typeVO;
 				
 				createNewObjectWindow.addEventListener( CreateNewObjectEvent.APPLY, applyHandler );
+				createNewObjectWindow.addEventListener( CreateNewObjectEvent.CANCEL, cancelHandler );
 				
 				if ( _typeVO.container != 3 )
 				{
@@ -347,6 +347,11 @@ package net.vdombox.ide.modules.dataBase.view
 					}
 					WindowManager.getInstance().removeWindow( createNewObjectWindow );
 					
+				}
+				
+				function cancelHandler( event : CreateNewObjectEvent ) : void
+				{
+					WindowManager.getInstance().removeWindow( createNewObjectWindow );
 				}
 			}
 		}
