@@ -441,7 +441,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sourceID = sessionProxy.selectedApplication.id + " " + event.objectID + " ";
 			
-			if ( event.pageID == event.objectID )
+			if ( !event.pageID )
 				sourceID += "0";
 			else
 				sourceID += "1";
