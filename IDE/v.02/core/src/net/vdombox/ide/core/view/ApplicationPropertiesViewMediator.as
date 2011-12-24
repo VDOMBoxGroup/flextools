@@ -225,7 +225,7 @@ package net.vdombox.ide.core.view
 
 		private function canselView() : void
 		{
-			if ( serverProxy.applications.length > 0 )
+			if ( serverProxy.applications && serverProxy.applications.length > 0 )
 				sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
 			else
 				NativeApplication.nativeApplication.exit();

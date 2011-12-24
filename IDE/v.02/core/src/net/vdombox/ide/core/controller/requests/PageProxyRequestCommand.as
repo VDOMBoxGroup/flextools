@@ -28,6 +28,9 @@ package net.vdombox.ide.core.controller.requests
 			var target : String = message.target;
 			var operation : String = message.operation;
 
+			if ( !body )
+				return;
+			
 			var pageVO : PageVO;
 
 			if ( body is PageVO )

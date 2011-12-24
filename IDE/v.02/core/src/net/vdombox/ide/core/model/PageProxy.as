@@ -61,6 +61,8 @@ package net.vdombox.ide.core.model
 		private var typesProxy : TypesProxy;
 
 		private var _objects : Array;
+		
+		public static var errorWritten : Boolean;
 
 		public function get pageVO() : PageVO
 		{
@@ -75,6 +77,8 @@ package net.vdombox.ide.core.model
 		override public function onRegister() : void
 		{
 			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
+			
+			errorWritten = false;
 
 			addHandlers();
 		}
@@ -90,6 +94,8 @@ package net.vdombox.ide.core.model
 
 		public function getStructure() : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			token = soap.get_child_objects_tree( pageVO.applicationVO.id, pageVO.id );
@@ -101,6 +107,8 @@ package net.vdombox.ide.core.model
 
 		public function getAttributes() : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			token = soap.get_one_object( pageVO.applicationVO.id, pageVO.id );
@@ -118,6 +126,8 @@ package net.vdombox.ide.core.model
 		 */		
 		public function setAttributes( vdomObjectAttributesVO : VdomObjectAttributesVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			var attributes : Array = vdomObjectAttributesVO.getChangedAttributes();
@@ -144,6 +154,8 @@ package net.vdombox.ide.core.model
 
 		public function getObjects() : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.get_child_objects( pageVO.applicationVO.id, pageVO.id );
 
@@ -155,8 +167,30 @@ package net.vdombox.ide.core.model
 		
 		public function createCopy( sourceID : String ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
-			token = soap.copy_object(pageVO.applicationVO.id, pageVO.id, sourceID );
+			
+			var sourceInfo : Array = sourceID.split( " " );
+			
+			var sourceAppId : String = sourceInfo[0] as String;
+			var sourceObjId : String = sourceInfo[1] as String;
+			var sourceObjType : String = sourceInfo[2] as String;
+			
+			if ( pageVO.applicationVO.id == sourceAppId )
+			{
+				if ( sourceObjType == "0" )
+					token = soap.copy_object(pageVO.applicationVO.id, null, sourceObjId, null );
+				else
+					token = soap.copy_object(pageVO.applicationVO.id, pageVO.id, sourceObjId, null );
+			}
+			else
+			{
+				if ( sourceObjType == "0" )
+					token = soap.copy_object(pageVO.applicationVO.id, null, sourceObjId, sourceAppId );
+				else
+					token = soap.copy_object(pageVO.applicationVO.id, pageVO.id, sourceObjId, sourceAppId );
+			}
 			
 			token.recipientName = proxyName;
 			
@@ -165,6 +199,8 @@ package net.vdombox.ide.core.model
 
 		public function getServerActionsList() : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.get_server_actions_list( pageVO.applicationVO.id, pageVO.id );
 
@@ -175,6 +211,8 @@ package net.vdombox.ide.core.model
 		
 		public function getServerActions() : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.get_server_actions( pageVO.applicationVO.id, pageVO.id );
 			
@@ -186,6 +224,8 @@ package net.vdombox.ide.core.model
 
 		public function getServerAction( serverActionVO : ServerActionVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.get_server_action( pageVO.applicationVO.id, pageVO.id, serverActionVO.id );
 			
@@ -196,6 +236,8 @@ package net.vdombox.ide.core.model
 		
 		public function setServerAction( serverActionVO : ServerActionVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.set_server_action( pageVO.applicationVO.id, pageVO.id, serverActionVO.id, serverActionVO.script );
 			
@@ -206,6 +248,8 @@ package net.vdombox.ide.core.model
 		
 		public function createServerAction( serverActionVO : ServerActionVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.create_server_action( pageVO.applicationVO.id, pageVO.id, serverActionVO.name, serverActionVO.script );
 			
@@ -216,6 +260,8 @@ package net.vdombox.ide.core.model
 		
 		public function renameServerAction( serverActionVO : ServerActionVO, newName : String ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.rename_server_action( pageVO.applicationVO.id, pageVO.id, serverActionVO.id, newName );
 			
@@ -226,6 +272,8 @@ package net.vdombox.ide.core.model
 		
 		public function deleteServerAction( serverActionVO : ServerActionVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.delete_server_action( pageVO.applicationVO.id, pageVO.id, serverActionVO.id );
 			
@@ -236,6 +284,8 @@ package net.vdombox.ide.core.model
 		
 		public function setServerActions( serverActions : Array ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			var language : String = "vscript";
@@ -266,6 +316,8 @@ package net.vdombox.ide.core.model
 
 		public function getWYSIWYG() : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.get_child_objects_tree( pageVO.applicationVO.id, pageVO.id );
 
@@ -277,6 +329,8 @@ package net.vdombox.ide.core.model
 
 		public function getXMLPresentation() : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.get_object_script_presentation( pageVO.applicationVO.id, pageVO.id );
 
@@ -287,6 +341,8 @@ package net.vdombox.ide.core.model
 
 		public function setXMLPresentation( value : VdomObjectXMLPresentationVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.submit_object_script_presentation( pageVO.applicationVO.id, pageVO.id, value.xmlPresentation );
 
@@ -297,6 +353,8 @@ package net.vdombox.ide.core.model
 
 		public function createObject( typeVO : TypeVO, attributes : Array ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			var attributesXML : XML;
@@ -324,6 +382,8 @@ package net.vdombox.ide.core.model
 
 		public function deleteObject( objectVO : ObjectVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			token = soap.delete_object( pageVO.applicationVO.id, objectVO.id );
@@ -340,6 +400,8 @@ package net.vdombox.ide.core.model
 
 		public function getObjectAt( objectID : String ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.get_one_object( pageVO.applicationVO.id, objectID );
 
@@ -545,6 +607,8 @@ package net.vdombox.ide.core.model
 		
 		public function setName(  ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.set_name( pageVO.applicationVO.id, pageVO.id, pageVO.name );
 			
@@ -580,8 +644,9 @@ package net.vdombox.ide.core.model
 			var serverActionVO : ServerActionVO;
 			var serverActionXML : XML;
 			
-			if ( result.hasOwnProperty( "Error" ) )
+			if ( result.hasOwnProperty( "Error" ) && !errorWritten)
 			{
+				errorWritten = true;
 				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
 				return;
 			}
@@ -892,7 +957,13 @@ package net.vdombox.ide.core.model
 				}
 
 			}
-			sendNotification( ApplicationFacade.WRITE_ERROR, faultString );
+			
+			if ( !errorWritten )
+			{
+				errorWritten = true;
+				sendNotification( ApplicationFacade.WRITE_ERROR, faultString );
+			}
+			
 			if ( notification )
 				facade.notifyObservers( notification );
 		}

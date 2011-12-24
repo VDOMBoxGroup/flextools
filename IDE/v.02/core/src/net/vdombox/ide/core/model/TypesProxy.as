@@ -38,8 +38,12 @@ package net.vdombox.ide.core.model
 
 		private var isSOAPConnected : Boolean;
 		
+		public static var errorWritten : Boolean;
+		
 		override public function onRegister() : void
 		{
+			errorWritten = false;
+			
 			if ( soap.ready )
 			{
 				isSOAPConnected = true;
@@ -183,7 +187,12 @@ package net.vdombox.ide.core.model
 		
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{	
-			sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
+			if ( !errorWritten )
+			{
+				errorWritten = true;
+				sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
+			}
+			
 		}
 	}
 }

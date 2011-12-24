@@ -174,7 +174,6 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
 			interests.push( ApplicationFacade.OPEN_MAIN_WINDOW );
-			interests.push( ApplicationFacade.WRITE_ERROR );
 			
 			return interests;
 		}

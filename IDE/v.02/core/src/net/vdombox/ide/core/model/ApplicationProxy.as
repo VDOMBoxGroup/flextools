@@ -69,6 +69,8 @@ package net.vdombox.ide.core.model
 		private var soap : SOAP = SOAP.getInstance();
 
 		private var typesProxy : TypesProxy;
+		
+		public static var errorWritten : Boolean;
 
 		public function get applicationVO() : ApplicationVO
 		{
@@ -77,6 +79,8 @@ package net.vdombox.ide.core.model
 
 		public function changeApplicationInformation( applicationInformationVO : ApplicationInformationVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var applicationInformationXML : XML = applicationInformationVO.toXML();
 			var token : AsyncToken;
 
@@ -89,6 +93,8 @@ package net.vdombox.ide.core.model
 
 		public function createLibrary( libraryVO : LibraryVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.set_library( applicationVO.id, libraryVO.name, libraryVO.script );
 
@@ -100,6 +106,8 @@ package net.vdombox.ide.core.model
 
 		public function createPage( typeVO : TypeVO, name : String = "", pageAttributesVO : VdomObjectAttributesVO = null ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			var attributesXML : XML
@@ -126,6 +134,8 @@ package net.vdombox.ide.core.model
 
 		public function deleteLibrary( libraryVO : LibraryVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.remove_library( applicationVO.id, libraryVO.name );
 
@@ -136,6 +146,8 @@ package net.vdombox.ide.core.model
 
 		public function deletePage( pageVO : PageVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			token = soap.delete_object( applicationVO.id, pageVO.id );
@@ -151,6 +163,8 @@ package net.vdombox.ide.core.model
 
 		public function getEvents( pageVO : PageVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 //			token = soap.get_child_objects_tree( applicationVO.id, pageVO.id );
 
@@ -165,6 +179,8 @@ package net.vdombox.ide.core.model
 
 		public function getLibraries() : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.get_libraries( applicationVO.id );
 
@@ -175,6 +191,8 @@ package net.vdombox.ide.core.model
 
 		public function getPageAt( pageID : String ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.get_one_object( applicationVO.id, pageID );
 			
@@ -204,6 +222,8 @@ package net.vdombox.ide.core.model
 
 		public function getPages() : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			token = soap.get_top_objects( applicationVO.id );
@@ -214,6 +234,8 @@ package net.vdombox.ide.core.model
 
 		public function getServerActions( typeAction : String ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.get_server_actions( applicationVO.id, typeAction );
 
@@ -224,6 +246,8 @@ package net.vdombox.ide.core.model
 
 		public function getStructure() : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			token = soap.get_application_structure( applicationVO.id );
@@ -242,6 +266,8 @@ package net.vdombox.ide.core.model
 		{
 			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 
+			errorWritten = false;
+			
 			addHandlers();
 		}
 
@@ -256,6 +282,8 @@ package net.vdombox.ide.core.model
 
 		public function remoteCall( objectID : String, functionName : String, value : String ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			token = soap.remote_method_call( applicationVO.id, objectID, functionName, value, "" );
@@ -268,6 +296,8 @@ package net.vdombox.ide.core.model
 		//click save button
 		public function setEvents( applicationEventsVO : ApplicationEventsVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 //			var serverActionsXML : XML = applicationEventsVO.getServerActionsXML();
@@ -304,6 +334,8 @@ package net.vdombox.ide.core.model
 
 		public function setStructure( strucrure : Array ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 
 			var structureXML : XML =
@@ -325,6 +357,8 @@ package net.vdombox.ide.core.model
 
 		public function updateLibrary( libraryVO : LibraryVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			token = soap.set_library( applicationVO.id, libraryVO.name, libraryVO.script );
 
@@ -336,6 +370,8 @@ package net.vdombox.ide.core.model
 		
 		public function updateGlobal( globalActionVO : GlobalActionVO ) : AsyncToken
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken;
 			//token = soap.set_library( applicationVO.id, globalActionVO.name, globalActionVO.script );
 			token = soap.set_server_action( applicationVO.id, globalActionVO.scriptsGroupName, globalActionVO.name, globalActionVO.script );
@@ -713,7 +749,12 @@ package net.vdombox.ide.core.model
 					return;
 				}
 			}
-			sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
+			
+			if ( !errorWritten )
+			{
+				errorWritten = true;
+				sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
+			}
 			
 		}
 
@@ -730,8 +771,9 @@ package net.vdombox.ide.core.model
 			if ( !operation || !result )
 				return;
 			
-			if ( result.hasOwnProperty( "Error" ) )
+			if ( result.hasOwnProperty( "Error" ) && !errorWritten )
 			{
+				errorWritten = true;
 				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
 				return;
 			}

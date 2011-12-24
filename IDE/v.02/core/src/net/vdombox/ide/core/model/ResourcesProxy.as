@@ -65,6 +65,8 @@ package net.vdombox.ide.core.model
 
 		override public function onRegister() : void
 		{
+			errorWritten = false;
+			
 			if ( soap.ready )
 				addHandlers();
 			else
@@ -85,6 +87,8 @@ package net.vdombox.ide.core.model
 		private var cacheManager : CacheManager = CacheManager.getInstance();
 
 		private var loadQue : Array;
+		
+		public static var errorWritten : Boolean;
 
 //		private var loadableTypesIcons : ArrayCollection = new ArrayCollection();
 
@@ -95,6 +99,8 @@ package net.vdombox.ide.core.model
 		 */
 		public function deleteResource( applicationVO : ApplicationVO, resourceVO : ResourceVO ) : void
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken = soap.delete_resource( applicationVO.id, resourceVO.id );
 
 			token.recipientName = proxyName;
@@ -107,6 +113,8 @@ package net.vdombox.ide.core.model
 		 */
 		public function getListResources( applicationVO : ApplicationVO ) : void
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken = soap.list_resources( applicationVO.id );
 
 			token.recipientName = proxyName;
@@ -150,6 +158,8 @@ package net.vdombox.ide.core.model
 
 		private function getResourceFromServer( resourceVO : ResourceVO ) : void
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
 
 			token.recipientName = proxyName;
@@ -211,6 +221,8 @@ package net.vdombox.ide.core.model
 		 */
 		public function modifyResource( applicationVO : ApplicationVO, resourceVO : ResourceVO, attributeName : String, operation : String, attributes : XML ) : void
 		{
+			errorWritten = false;
+			
 			var token : AsyncToken = soap.modify_resource( applicationVO.id, resourceVO.ownerID, resourceVO.id, attributeName, operation, attributes );
 
 			token.recipientName = proxyName;
@@ -397,6 +409,8 @@ package net.vdombox.ide.core.model
 			base64Data.encodeBytes( data );
 
 			resourceVO.setStatus( ResourceVO.UPLOAD_PROGRESS );
+			
+			errorWritten = false;
 
 			var token : AsyncToken = soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString() );
 
