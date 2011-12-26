@@ -33,9 +33,6 @@ package net.vdombox.ide.core.view.components
 			this.setStyle( "skinClass", AlertWindowSkin );
 		}
 		
-		public function ok_close_handler( event : MouseEvent ) : void
-		{
-			dispatchEvent( new AlertWindowEvent ( AlertWindowEvent.OK ) );
-		}
+		
 	}
 }

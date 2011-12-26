@@ -20,37 +20,15 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			ApplicationProxy.errorWritten = true;
-			PageProxy.errorWritten = true;
-			ObjectProxy.errorWritten = true;
-			GalleryProxy.errorWritten = true;
-			ResourcesProxy.errorWritten = true;
-			TypesProxy.errorWritten = true;
-			
-			
 			var body : Object = notification.getBody();
-			
 			var label : String = body as String;
-			
+
 			var alertWindow : AlertWindow = new AlertWindow();
-			alertWindow.addEventListener( AlertWindowEvent.OK, okHandler );
-			
-			switch ( notification.getName() )
-			{
-				case ApplicationFacade.WRITE_ERROR:
-				{
-					alertWindow.content = label;
-					alertWindow.title = "Error!";
-					WindowManager.getInstance().addWindow(alertWindow, null, true);
-					break;
-				}
-			}
-			
-			
-			function okHandler( event : AlertWindowEvent ) : void
-			{
-				WindowManager.getInstance().removeWindow( alertWindow );
-			}
+
+			alertWindow.content = label;
+			alertWindow.title = "Error!";
+
+			WindowManager.getInstance().addWindow(alertWindow, null, true);
 		}
 	}
 }

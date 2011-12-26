@@ -82,7 +82,7 @@ package net.vdombox.ide.core.view
 
 //		private var newIconResourceVO : ResourceVO;
 
-
+/* sdfsdfsdfs */
 		public function get applicationPropertiesView() : ApplicationPropertiesView
 		{
 			return viewComponent as ApplicationPropertiesView;

@@ -59,7 +59,7 @@
 				
 			<s:HGroup width="100%" height="100%" horizontalAlign="right" verticalAlign="middle" paddingRight="10">
 				
-				<components:VDOMButton label="Close" click="{hostComponent.ok_close_handler(event)}"/>
+				<components:VDOMButton label="Close" click="{hostComponent.close()}"/>
 				
 			</s:HGroup>
 				

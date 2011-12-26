@@ -49,7 +49,7 @@ package net.vdombox.ide.core.model
 
 		private var fileStream : FileStream;
 		
-		public static var errorWritten : Boolean;
+	
 
 		public function get items() : Array
 		{
@@ -73,17 +73,11 @@ package net.vdombox.ide.core.model
 
 		private function fileStream_ioErrorHandler( event : IOErrorEvent ) : void
 		{
-			var d : * = "";
-			if ( !errorWritten )
-			{
-				errorWritten = true;
 				sendNotification( ApplicationFacade.WRITE_ERROR, event.text );
-			}
 		}
 
 		private function init() : void
 		{
-			errorWritten = false;
 			
 			var f : File = File.applicationDirectory;
 
