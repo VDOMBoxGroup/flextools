@@ -6,6 +6,8 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -38,10 +40,16 @@ package net.vdombox.ide.modules.dataBase.view
 			addHandlers();
 			
 		}
+		
+		private function sendCommit( event : DataTablesEvents ) : void
+		{
+			sendNotification( ApplicationFacade.COMMIT_DATA_STRUCTURE, dataTable.editorID );
+		}
 
 		private function addHandlers() : void
 		{
 			dataTable.DataStructure.addEventListener( FlexEvent.SHOW,  registerDataStructureMediator );
+			dataTable.addEventListener( DataTablesEvents.UPDATE_STRUCTURE,  sendCommit );
 		}
 		
 		override public function onRemove() : void
@@ -49,6 +57,8 @@ package net.vdombox.ide.modules.dataBase.view
 			facade.removeMediator( DataTableEditorMediator.NAME + dataTable.editorID );
 			facade.removeMediator( DataTableStructureMediator.NAME + dataTable.editorID );
 			facade.removeMediator( DataTableQueryMediator.NAME + dataTable.editorID );
+			
+			dataTable.removeEventListener( DataTablesEvents.UPDATE_STRUCTURE,  sendCommit );
 		}
 		
 		private function registerDataStructureMediator( event : FlexEvent ) : void

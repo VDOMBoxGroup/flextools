@@ -91,7 +91,7 @@
 				
 				dataTable.dataProvider = columnsProvider;
 				
-				dispatchEvent( new DataTablesEvents ( DataTablesEvents.UPDATE_STRUCTURE ) );
+				
 			}
 			
 			private function findRecordInOldDataProvider( structureID : String ) : StructureVO

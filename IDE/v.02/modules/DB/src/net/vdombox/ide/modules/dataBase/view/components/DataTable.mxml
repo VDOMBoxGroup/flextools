@@ -57,12 +57,13 @@
 			
 			protected function data_clickHandler(event:MouseEvent):void
 			{
-				currentState = "tableEditor"
+				currentState = "tableEditor";
+				dispatchEvent( new DataTablesEvents ( DataTablesEvents.UPDATE_STRUCTURE ) );
 			}
 			
 			protected function structure_clickHandler(event:MouseEvent):void
 			{
-				currentState = "tableStructure"
+				currentState = "tableStructure";
 			}
 			
 			

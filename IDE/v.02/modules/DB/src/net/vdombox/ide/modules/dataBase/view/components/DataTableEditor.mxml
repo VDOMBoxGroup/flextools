@@ -105,6 +105,7 @@
 				
 				queue.reset();
 				//queue.addRequest( UIDUtil.createUID(), "get_structure", "", structureResponseHandler, null) ;
+				queue.addRequest( UIDUtil.createUID(), 'get_structure', '', structureResponseHandler, null);
 				queue.addRequest( UIDUtil.createUID(), "get_count", "", countResponseHandler, null );
 				
 				/* Request first page */
@@ -151,16 +152,27 @@
 			{
 				try 
 				{
-				/*	queryResult = new XML( message );
-					tableStructureXML = new XML( queryResult.Result.tablestructure );
+					queryResult = new XML( message );
+					tableStructureXML = new XML( queryResult.Result.tablestructure.table.header );
 					
-					setTableHeaders();*/
+					setTableHeaders();
 				}
 				catch (err:Error) 
 				{
 					/* error04 */
 					showMessage( "External Manager error (04): Can not convert result into XML or result error!" );
 					queryResult = new XML();
+				}
+			}
+			
+			
+			private function fieldSortNumber(field : String):Function
+			{
+				return function sortNumber(obj1:Object, obj2:Object):int
+				{
+					var num:Number = ((Number)(obj1[field]) - (Number)(obj2[field]));
+					return (num > 0) ? 1 : ((num < 0) ? -1 : 0);
+
 				}
 			}
 			
@@ -177,6 +189,9 @@
 						_header.itemRenderer = new ClassFactory( TextInputItemRenderers );
 						dataGridColumnsProps.push( columnProps );
 						_header.dataField = xmlHeader.@name;
+						
+						if ( xmlHeader.@type == "INTEGER" )
+							_header.sortCompareFunction = fieldSortNumber( xmlHeader.@name );
 				
 						dataGridColumns.push( _header );
 					
@@ -205,9 +220,9 @@
 				try 
 				{
 					queryResult = new XML( message );
-					tableStructureXML = new XML( queryResult.Result.queryresult.table.header );
+					/*tableStructureXML = new XML( queryResult.Result.queryresult.table.header );
 					
-					setTableHeaders();
+					setTableHeaders();*/
 					pages[currentPage] = new XML(queryResult.Result.queryresult.table.data );
 					
 					showPageData();
@@ -494,6 +509,7 @@
 				
 				/* ReRequest rows count */
 				queue.reset();
+				queue.addRequest( UIDUtil.createUID(), 'get_structure', '', structureResponseHandler, null);
 				queue.addRequest( UIDUtil.createUID(), 'get_count', '', countResponseHandler, null );
 				
 				/* ReRequest page */
