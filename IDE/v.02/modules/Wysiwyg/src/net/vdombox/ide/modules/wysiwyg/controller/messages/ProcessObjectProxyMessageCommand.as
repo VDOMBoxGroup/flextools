@@ -139,6 +139,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMObjectTargetNames.COPY:
 				{
 					sendNotification( ApplicationFacade.GET_WYSIWYG, body );
+					sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, body.pageVO );
 					
 					break;
 				}

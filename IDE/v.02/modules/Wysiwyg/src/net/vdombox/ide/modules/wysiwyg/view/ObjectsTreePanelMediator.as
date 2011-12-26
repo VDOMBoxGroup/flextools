@@ -437,14 +437,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.PASTE, pasteItemRendererHandler, true );
 		}
 		
+		private var copyPage : Boolean = false;
+		
 		private function copyItemRendererHandler( event : ObjectsTreePanelEvent ) : void
 		{
-			sourceID = sessionProxy.selectedApplication.id + " " + event.objectID + " ";
+			sourceID = sessionProxy.selectedApplication.id + " " + event.objectID;
 			
 			if ( !event.pageID )
-				sourceID += "0";
+				copyPage = true;
 			else
-				sourceID += "1";
+				copyPage = false;
 			
 			
 			Clipboard.generalClipboard.setData( ClipboardFormats.TEXT_FORMAT, sourceID );
@@ -459,7 +461,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( !sourceID || !containerID )
 				return;
 			
-			if ( containerID == event.pageID )
+			if ( copyPage )
+				sendNotification( ApplicationFacade.COPY_REQUEST, { applicationVO : sessionProxy.selectedApplication, sourceID : sourceID } );
+			else if ( containerID == event.pageID )
 				sendNotification( ApplicationFacade.COPY_REQUEST, { pageVO : _pages[containerID], sourceID : sourceID } );
 			else
 			{

@@ -40,6 +40,13 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					break;
 				}
 					
+				case PPMApplicationTargetNames.COPY:
+				{
+					sendNotification( ApplicationFacade.GET_PAGES, body );
+					
+					break;
+				}
+					
 				case PPMApplicationTargetNames.REMOTE_CALL:
 				{
 					if ( operation == PPMOperationNames.READ )

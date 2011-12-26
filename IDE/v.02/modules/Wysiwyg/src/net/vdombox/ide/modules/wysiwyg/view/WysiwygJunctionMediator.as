@@ -445,7 +445,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.COPY, body );
 					else if ( body.hasOwnProperty( "objectVO" ) )	
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.COPY, body );
-					
+					else
+						message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.COPY, body );
 					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
 					break;
