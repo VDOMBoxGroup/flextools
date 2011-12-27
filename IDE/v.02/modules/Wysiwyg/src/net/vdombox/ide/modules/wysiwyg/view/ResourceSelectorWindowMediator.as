@@ -302,7 +302,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				if ( !resVO )
 					continue;
 
-				if ( resVO.name.toLowerCase().indexOf( nameFilter ) >= 0 )
+				if ( resVO.name.toLowerCase().indexOf( nameFilter ) >= 0 || resVO.type.toLowerCase().indexOf( nameFilter ) >= 0)
 				{
 					resourceSelectorWindow.filteredResources++;
 					newResourcesList.addItem( resVO );

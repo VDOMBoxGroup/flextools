@@ -22,6 +22,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
+			if ( !sessionProxy.selectedApplication )
+				return;
+			
 			resourceVO = new ResourceVO( sessionProxy.selectedApplication.id );
 			
 			body   = notification.getBody();
