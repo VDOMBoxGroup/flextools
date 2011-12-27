@@ -8,6 +8,8 @@ package net.vdombox.powerpack.sdkcompiler
 	import flash.events.NativeProcessExitEvent;
 	import flash.events.ProgressEvent;
 	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
 	import flash.system.Capabilities;
 	
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
@@ -65,9 +67,7 @@ package net.vdombox.powerpack.sdkcompiler
 			paramsChecker.removeEventListener(SDKCompilerParamsChecker.PARAMS_OK, onParamsOK);
 			paramsChecker.removeEventListener(SDKCompilerParamsChecker.PARAMS_ERROR, onParamsError);
 			
-			initProcess();
-			
-			buildSwf();
+			generateBuildingBatFiles();
 		}
 		
 		private function onParamsError(evt:Event):void
@@ -76,6 +76,108 @@ package net.vdombox.powerpack.sdkcompiler
 			paramsChecker.removeEventListener(SDKCompilerParamsChecker.PARAMS_ERROR, onParamsError);
 			
 			sendEvent(SDKCompilerEvent.SDK_COMPILER_ERROR, "Incorrect params");
+		}
+		
+		private function generateBuildingBatFiles () : void
+		{
+			var batFileType : String;
+			var batFileGenerated : Boolean;
+			
+			batFileType = "swf";
+			
+			batFileGenerated = generateBuildingBatFile();
+			
+			if (batFileGenerated)
+			{
+				batFileType = "package";
+				
+				batFileGenerated = generateBuildingBatFile();
+				
+				if (batFileGenerated)
+					onBatFilesGenerated();
+			}
+			
+			function generateBuildingBatFile () : Boolean
+			{
+				var batFilePath : String = batFileType == "swf" ? swfBatFilePath : packageBatFilePath;
+				var batFileContent : String = batFileType == "swf" ? swfBatFileContent : packageBatFileContent;
+				
+				var fileStream : FileStream = new FileStream();
+				var swfBatFile : File = new File(batFilePath);
+				
+				try
+				{
+					fileStream.openAsync(swfBatFile, FileMode.WRITE);
+					fileStream.writeUTFBytes(batFileContent);
+					fileStream.close();
+				}
+				catch (e:Error)
+				{
+					sendEvent(SDKCompilerEvent.SDK_COMPILER_ERROR, "Error when creating bat file");
+					return false;
+				}
+				
+				return true;
+			}
+		}
+		
+		private function get swfBatFilePath () : String
+		{
+			var batFilePath : String = File.applicationStorageDirectory.nativePath + "/generatePlayerSwf.bat";
+			
+			return batFilePath;
+		}
+		
+		private function get swfBatFileContent() : String
+		{
+			var content : String = "";
+			
+			content += FileUtils.convertPathForCMD(sdk3_6Path + '/bin/amxmlc.bat') + ' ';
+			content += '-output=' + FileUtils.convertPathForCMD(outputSwfPath) + ' ';
+			content += '-library-path+='
+			content += FileUtils.convertPathForCMD(powerPackProjectPath + '/libs') + ',';
+			content += FileUtils.convertPathForCMD(powerPackLibProjectPath + '/bin/PowerPack_lib.swc') + ',';
+			content += FileUtils.convertPathForCMD(sdk4_1Path + '/frameworks/libs/air/airglobal.swc');
+			content += ' -- ';
+			content += FileUtils.convertPathForCMD(powerPackProjectPath + '/src/Generator.mxml');
+			
+			return content;
+		}
+		
+		private function get packageBatFilePath () : String
+		{
+			var batFilePath : String = File.applicationStorageDirectory.nativePath + "/generatePlayerPackage.bat";
+			
+			return batFilePath;
+		}
+		
+		private function get packageBatFileContent() : String
+		{
+			var content : String = "";
+			
+			content += FileUtils.convertPathForCMD(sdk4_1Path + "/bin/adt.bat") + " ";
+			content += "-package -storetype pkcs12 -keystore ";
+			content += FileUtils.convertPathForCMD(sertificatePath) + " ";
+			content += "-storepass q -target native -storetype pkcs12 -keystore ";
+			content += FileUtils.convertPathForCMD(sertificatePath) + " ";
+			content += "-storepass q ";
+			content += FileUtils.convertPathForCMD(outputPackagePath) + " ";
+			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/bin-debug/Generator-app.xml") + " ";
+			content += "-C ";
+			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/bin-debug") + " ";
+			content += "Generator.swf ";
+			content += "-C ";
+			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/bin-debug") + " ";
+			content += "assets";
+			
+			return content;
+		}
+		
+		private function onBatFilesGenerated():void
+		{
+			initProcess();
+			
+			buildSwf();
 		}
 		
 		private function initProcess():void
@@ -166,74 +268,36 @@ package net.vdombox.powerpack.sdkcompiler
 				case FileUtils.OS_WINDOWS:
 				default:
 				{
-					//outputPath = File.applicationStorageDirectory.nativePath + '/appInstaller.exe'
-					outputPath = "C:/temp" + '/appInstaller.exe'
+					outputPath = File.applicationStorageDirectory.nativePath + '/appInstaller.exe'
 					break;
 				}
 			}
 			
 			return outputPath;
 		}
-
+		
 		private function get compilerArguments() : Vector.<String>
 		{
 			var argVector : Vector.<String>               = new Vector.<String>();
-			var arguments : String;
-			
+			var batFilePath : String;
 			switch(compilerType)
 			{
 				case COMPILER_TYPE_SWF:
 				{
-					arguments = "";
-					//arguments += "/c ";
-					argVector.push("/c")
-					//arguments += '"c:/temp/3 .6.0/bin/amxmlc.bat" '; //sdk3_6Path + "/bin/amxmlc.bat"+" ";
-					argVector.push('"c:/temp/3 .6.0/bin/amxmlc.bat"')
-					//arguments += "-output=" + outputSwfPath + " ";
-					argVector.push("-output=" + outputSwfPath);
-//					arguments += "-library-path+="
-//					arguments += powerPackProjectPath + "/libs" + ",";
-//					arguments += powerPackLibProjectPath + "/bin/PowerPack_lib.swc" + ",";
-//					arguments += sdk4_1Path + "/frameworks/libs/air/airglobal.swc";
-					argVector.push("-library-path+="+powerPackProjectPath + "/libs");
-					argVector.push("-library-path+="+powerPackLibProjectPath + "/bin/PowerPack_lib.swc");
-					argVector.push("-library-path+="+sdk4_1Path + "/frameworks/libs/air/airglobal.swc");
-					//arguments += " -- ";
-					//arguments += powerPackProjectPath + "/src/Generator.mxml";
-					argVector.push("-- "+powerPackProjectPath + "/src/Generator.mxml");
+					batFilePath = FileUtils.convertPathForCMD(swfBatFilePath, true);
 					
 					break;
 				}
 				case COMPILER_TYPE_PACKAGE:
 				{
-					arguments = "";
-					arguments += "/c ";
-					arguments += sdk4_1Path + "/bin/adt.bat ";
-					arguments += "-package -storetype pkcs12 -keystore ";
-					arguments += sertificatePath + " ";
-					arguments += "-storepass q -target native -storetype pkcs12 -keystore ";
-					arguments += sertificatePath + " ";
-					arguments += "-storepass q ";
-					arguments += outputPackagePath + " ";
-					arguments += powerPackProjectPath + "/bin-debug/Generator-app.xml" + " ";
-					arguments += "-C ";
-					arguments += powerPackProjectPath + "/bin-debug" + " ";
-					arguments += "Generator.swf ";
-					arguments += "-C ";
-					arguments += powerPackProjectPath + "/bin-debug" + " ";
-					arguments += "assets";
+					batFilePath = FileUtils.convertPathForCMD(packageBatFilePath, true);
 					
 					break;
 				}	
-				default:
-				{
-					arguments = "";
-					break;
-				}
 			}
 			
-			if (arguments)
-				argVector.push(arguments);
+			argVector.push("/c");
+			argVector.push(batFilePath);
 				
 			return argVector;
 		}

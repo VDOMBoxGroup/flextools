@@ -831,10 +831,17 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR))
 			sdkCompiler.addEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR, sdkCompilerEventHandler);
 			
-		sdkCompiler.build("D:/upload/3.6.0/flex-sdk-description.xml", "D:/upload/4.1.0/flex-sdk-description.xml", 
+		ProgressManager.start( ProgressManager.WINDOW_MODE, false );
+		
+		sdkCompiler.build("C:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/3.6.0/flex-sdk-description.xml", 
+							"C:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.1.0/flex-sdk-description.xml", 
 							"D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack", 
 							"D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack_lib");
-		function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void{
+		
+		function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void
+		{
+			ProgressManager.complete();
+			
 			if (evt.message)
 			{
 				SuperAlert.show(evt.message);
