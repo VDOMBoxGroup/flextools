@@ -141,6 +141,13 @@ package net.vdombox.ide.core.controller.responses
 					
 					break;
 				}
+					
+				case ApplicationFacade.APPLICATION_COPY_CREATED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.COPY, body );
+					
+					break;
+				}
 				
 			}
 

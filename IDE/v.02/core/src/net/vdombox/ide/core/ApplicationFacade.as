@@ -312,6 +312,8 @@ package net.vdombox.ide.core
 		
 		public static const EDIT_APPLICATION_INFORMATION : String = "editApplicationInformation";
 		
+		public static const APPLICATION_COPY_CREATED  : String = "applicationCopyCreated";
+		
 //		page		
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
 		
@@ -491,6 +493,7 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_EVENTS_SETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_REMOTE_CALL_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_REMOTE_CALL_ERROR_GETTED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_COPY_CREATED, ApplicationProxyResponseCommand );
 
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
 			

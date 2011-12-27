@@ -158,6 +158,17 @@ package net.vdombox.ide.core.model
 			var token : AsyncToken;
 			token = soap.copy_object(pageVO.applicationVO.id, pageVO.id, sourceID );
 			
+			var sourceInfo : Array = sourceID.split( " " );
+			
+			var sourceAppId : String = sourceInfo[0] as String;
+			var sourceObjId : String = sourceInfo[1] as String;
+			
+			if ( pageVO.applicationVO.id == sourceAppId )
+					token = soap.copy_object(pageVO.applicationVO.id, pageVO.id, sourceObjId, null );
+			else
+					token = soap.copy_object(sourceAppId, pageVO.id, sourceObjId, pageVO.applicationVO.id );
+			
+
 			token.recipientName = proxyName;
 			
 			return token;

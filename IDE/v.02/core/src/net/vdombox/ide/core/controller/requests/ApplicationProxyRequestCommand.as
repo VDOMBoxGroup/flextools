@@ -163,6 +163,13 @@ package net.vdombox.ide.core.controller.requests
 					break;
 				}
 					
+				case PPMApplicationTargetNames.COPY:
+				{
+					applicationProxy.createCopy( body.sourceID as String );
+					
+					break;
+				}
+					
 				
 			}
 		}
