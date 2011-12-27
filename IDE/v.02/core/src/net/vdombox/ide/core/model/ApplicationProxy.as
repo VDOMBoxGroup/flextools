@@ -334,6 +334,26 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 		
+		public function createCopy( sourceID : String ) : AsyncToken
+		{
+			
+			var token : AsyncToken;
+			
+			var sourceInfo : Array = sourceID.split( " " );
+			
+			var sourceAppId : String = sourceInfo[0] as String;
+			var sourceObjId : String = sourceInfo[1] as String;
+			
+			if ( applicationVO.id == sourceAppId )
+					token = soap.copy_object(applicationVO.id, null, sourceObjId, null );
+			else
+					token = soap.copy_object(sourceAppId, null, sourceObjId, applicationVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
 		public function updateGlobal( globalActionVO : GlobalActionVO ) : AsyncToken
 		{
 			var token : AsyncToken;
@@ -642,6 +662,9 @@ package net.vdombox.ide.core.model
 			soap.remote_method_call.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.remote_method_call.addEventListener(  FaultEvent.FAULT, soap_faultHandler, false, 0, true );
 			
+			soap.copy_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true  );
+			soap.copy_object.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true  );
+			
 		}
 		
 		private function removeHandlers() : void
@@ -685,6 +708,9 @@ package net.vdombox.ide.core.model
 			
 			soap.remote_method_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.remote_method_call.removeEventListener(  FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.copy_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.copy_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 		
 		private function soap_faultHandler( event : FaultEvent ) : void
@@ -1008,6 +1034,16 @@ package net.vdombox.ide.core.model
 				case "set_events_structure":
 				{
 					sendNotification( ApplicationFacade.APPLICATION_EVENTS_SETTED, { applicationVO: applicationVO } )
+					
+					break;
+				}
+					
+				case "copy_object":
+				{
+					notification = new ProxyNotification( ApplicationFacade.APPLICATION_COPY_CREATED, applicationVO );
+					notification.token = token;
+					
+					facade.notifyObservers( notification );
 					
 					break;
 				}
