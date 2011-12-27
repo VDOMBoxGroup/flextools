@@ -1,18 +1,23 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
+	import flash.events.Event;
+	
 	import mx.collections.ArrayList;
-
+	import mx.events.FlexEvent;
+	import mx.resources.ResourceManager;
+	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.events.ResourcesListItemRendererEvent;
 	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.ResourcesList;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.ResourcesListItemRenderer;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
+	import spark.components.List;
 	import spark.events.IndexChangeEvent;
 
 	public class ResourcesListMediator extends Mediator implements IMediator
@@ -28,10 +33,17 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			return viewComponent as ResourcesList;
 		}
-
+		
+		public function get resourcesProvider() : List
+		{
+			return resourcesList.resources as List;
+		}
+		
 		private var sessionProxy : SessionProxy;
 
 		private var isActive : Boolean;
+		
+		private var allResources : ArrayList;
 
 		override public function onRegister() : void
 		{
@@ -99,9 +111,9 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case ApplicationFacade.RESOURCES_GETTED:
 				{
-					var resources : Array = body as Array;
+					allResources = new ArrayList( body as Array );
 
-					resourcesList.dataProvider = new ArrayList( resources );
+					resourcesProvider.dataProvider = allResources;
 
 					break;
 				}
@@ -109,11 +121,15 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case ApplicationFacade.RESOURCE_UPLOADED:
 				{
 					resourceVO = body as ResourceVO;
-					resourcesArrayList = resourcesList.dataProvider as ArrayList;
+					//resourcesArrayList = resourcesProvider.dataProvider as ArrayList;
 
-					if ( resourceVO && resourcesArrayList )
-						resourcesArrayList.addItem( resourceVO );
+					if ( resourceVO && allResources )
+						allResources.addItem( resourceVO );
 
+					resourcesProvider.dataProvider = allResources;
+					
+					findResource( resourcesList.nameFilter.text.toLowerCase() );
+					
 					break;
 				}
 
@@ -124,16 +140,21 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 					if ( resourceVO )
 					{
-						resourcesArrayList = resourcesList.dataProvider as ArrayList;
+						//resourcesArrayList = resourcesProvider.dataProvider as ArrayList;
 
-						for each ( currentReourceVO in resourcesArrayList.source )
+						for each ( currentReourceVO in allResources.source )
 						{
 							if ( currentReourceVO.id == resourceVO.id )
 							{
-								resourcesArrayList.removeItem( currentReourceVO );
+								//resourcesArrayList.removeItem( currentReourceVO );
+								allResources.removeItem( currentReourceVO );
 								break;
 							}
 						}
+						
+						resourcesProvider.dataProvider = allResources;
+						
+						findResource( resourcesList.nameFilter.text.toLowerCase() );
 					}
 
 					break;
@@ -143,24 +164,63 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 		private function addHandlers() : void
 		{
-			resourcesList.addEventListener( ResourcesListItemRendererEvent.CREATED, itemRenderer_createdHandler, true, 0, true );
-			resourcesList.addEventListener( IndexChangeEvent.CHANGE, changeHandler, false, 0, true );
+			resourcesList.resources.addEventListener( ResourcesListItemRendererEvent.CREATED, itemRenderer_createdHandler, true, 0, true );
+			resourcesList.resources.addEventListener( IndexChangeEvent.CHANGE, changeHandler, false, 0, true );
+			resourcesList.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
+			resourcesList.resources.addEventListener( FlexEvent.DATA_CHANGE, sendLoadIcon, true );
 		}
 
 		private function removeHandlers() : void
 		{
-			resourcesList.removeEventListener( ResourcesListItemRendererEvent.CREATED, itemRenderer_createdHandler, true );
-			resourcesList.removeEventListener( IndexChangeEvent.CHANGE, changeHandler );
+			resourcesList.resources.removeEventListener( ResourcesListItemRendererEvent.CREATED, itemRenderer_createdHandler, true );
+			resourcesList.resources.removeEventListener( IndexChangeEvent.CHANGE, changeHandler );
+			resourcesList.nameFilter.removeEventListener( Event.CHANGE, applyNameFilter );
+			resourcesList.resources.removeEventListener( FlexEvent.DATA_CHANGE, sendLoadIcon, true );
+		}
+		
+		private function applyNameFilter( event : Event ) : void
+		{
+			findResource( resourcesList.nameFilter.text.toLowerCase() );
+		}
+		
+		private function sendLoadIcon( event : FlexEvent ) : void
+		{
+			var itemRenderer : ResourcesListItemRenderer = event.target as ResourcesListItemRenderer;
+			
+			if ( itemRenderer.data )
+				sendNotification( ApplicationFacade.GET_ICON, itemRenderer.data );
+		}
+		
+		private function findResource( nameFilter : String ) : void
+		{
+			if ( nameFilter == ResourceManager.getInstance().getString( 'ResourceBrowser_General', 'list_filter' ).toLowerCase() )
+				return;
+			
+			var newResourcesList : ArrayList = new ArrayList();
+			var resVO : ResourceVO;
+			
+			for each ( resVO in allResources.source )
+			{
+				if ( !resVO )
+					continue;
+				
+				if ( resVO.name.toLowerCase().indexOf( nameFilter ) >= 0 || resVO.type.toLowerCase().indexOf( nameFilter ) >= 0)
+				{
+					newResourcesList.addItem( resVO );
+				}
+			}
+			
+			resourcesProvider.dataProvider = newResourcesList;
 		}
 
 		private function clearData() : void
 		{
-			resourcesList.dataProvider = null;
+			resourcesProvider.dataProvider = null;
 		}
 
 		private function changeHandler( event : IndexChangeEvent ) : void
 		{
-			var selectedResourceVO : ResourceVO = resourcesList.selectedItem as ResourceVO;
+			var selectedResourceVO : ResourceVO = resourcesProvider.selectedItem as ResourceVO;
 
 			sendNotification( ApplicationFacade.CHANGE_SELECTED_RESOURCE_REQUEST, selectedResourceVO );
 		}

@@ -10,9 +10,11 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.FlexEvent;
-
+			import mx.utils.ObjectUtil;
+			
+			import net.vdombox.ide.common.events.WorkAreaEvent;
 			import net.vdombox.ide.common.vo.ResourceVO;
-
+			
 			import spark.filters.DropShadowFilter;
 
 			[Embed( source="assets/rect.png",
@@ -21,31 +23,44 @@
 			[Bindable]
 			public var thumb : Class;
 
-			private var _data : ResourceVO;
+			private var resourceVO : ResourceVO;
 
 			private var imageDataWatcher : ChangeWatcher;
 
 			[Bindable]
 			public function get data() : ResourceVO
 			{
-				return _data;
+				return resourceVO;
 			}
 
 			public function set data( value : ResourceVO ) : void
 			{
-				_data = value;
-
-				if ( _data && ( data.type == "jpg" || data.type == "jpeg" || data.type == "png" || data.type == "gif" ) )
+				resourceVO = value;
+				
+				if ( resourceVO.icon )
+					image.source = resourceVO.icon;
+				else
+					BindingUtils.bindSetter( dataChanged, resourceVO, "icon", true, true );
+//					imageDataWatcher = BindingUtils.bindProperty( image, "source", _data, "icon", true, true );
+				
+				/*if ( _data && ( data.type == "jpg" || data.type == "jpeg" || data.type == "png" || data.type == "gif" ) )
 				{
 					currentState = "image";
-					imageDataWatcher = BindingUtils.bindProperty( image, "source", _data, "data", true, true );
+					imageDataWatcher = BindingUtils.bindProperty( image, "source", _data, "icon", true, true );
+					
 				}
 				else
 				{
 					currentState = "nopreview";
 					imageDataWatcher.unwatch();
 					image.source = null;
-				}
+				}*/
+				
+				invalidateDisplayList();
+			}
+			private function dataChanged( value : Object ):void
+			{
+				image.source = ObjectUtil.copy(value);
 			}
 		]]>
 	</fx:Script>
