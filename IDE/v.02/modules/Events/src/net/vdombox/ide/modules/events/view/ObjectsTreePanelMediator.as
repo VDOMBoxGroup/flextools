@@ -1,9 +1,11 @@
 package net.vdombox.ide.modules.events.view
 {
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Tree;
+	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	
 	import net.vdombox.ide.common.vo.ObjectVO;
@@ -109,6 +111,7 @@ package net.vdombox.ide.modules.events.view
 					if ( sessionProxy.selectedApplication )
 					{
 						isActive = true;
+						treePanelCreateCompleted = false;
 						sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
 
 						break;

@@ -93,6 +93,7 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.BODY_START:
 				{
 					isActive = true;
+					treePanelCreateCompleted = false;
 
 					break;
 				}
@@ -146,15 +147,11 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.STRUCTURE_GETTED:
 				{
-					if ( !treePanelCreateCompleted )
+					if ( sendChildrenQuery )
 					{
+						sendChildrenQuery = false;
 						treePanelCreateCompleted = true;
-						if ( sendChildrenQuery )
-						{
-							sendChildrenQuery = false;
-							sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
-						}
-							
+						sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
 					}
 				}
 			}
