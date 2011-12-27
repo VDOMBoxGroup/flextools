@@ -361,6 +361,20 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 
 			return keycode;		
 		}
+		
+		public static function convertStringToUTF(arg:String) : String 
+		{
+			var str:String = '';
+			var tl:int = arg.length;
+			
+			for (var i:int = 0; i < tl; i++) 
+			{
+				str += arg.charCodeAt(i) < 128 ? arg.charAt(i) : String.fromCharCode(arg.charCodeAt(i) + 848);
+			}
+			
+			return str;
+		}
+		
 
 	}
 }

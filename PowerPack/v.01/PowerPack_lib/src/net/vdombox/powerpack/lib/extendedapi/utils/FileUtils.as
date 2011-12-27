@@ -1,6 +1,7 @@
 package net.vdombox.powerpack.lib.extendedapi.utils
 {
 	import flash.filesystem.File;
+	import flash.system.Capabilities;
 	
 	import mx.utils.StringUtil;
 	
@@ -12,6 +13,11 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 		public static const FILE_FORMAT_PNG		: String = "png";
 		public static const FILE_FORMAT_GIF		: String = "gif";
 		public static const FILE_FORMAT_SVG		: String = "svg";
+		
+		public static const OS_LINUX	: String = "LIN";
+		public static const OS_WINDOWS	: String = "WIN";
+		public static const OS_MAC		: String = "MAC";
+		
 		
 		/*
 		* 	isRootFolder
@@ -201,6 +207,55 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			strExtension += "*." + FILE_FORMAT_JPEG;
 		
 			return strExtension;
+		}
+		
+		public static function get cmdFile() : File
+		{
+			var os : String = Capabilities.os.substr(0, 3).toUpperCase();
+			
+			switch (os) 
+			{
+				case OS_WINDOWS :
+				{
+					return windowsCmdFile;
+					
+					break;
+				}
+				case OS_LINUX:
+				{
+					//Linux OS
+					break;
+				}
+				case OS_MAC:
+				{
+					//Mac OS
+					break;
+				}
+			}
+			
+			return null;
+		}
+		
+		private static function get windowsCmdFile() : File
+		{
+			var rootDirs:Array = File.getRootDirectories();
+			var consoleExecutable : File;
+			
+			for (var i:int = 0; i < rootDirs.length; ++i) 
+			{
+				consoleExecutable = rootDirs[i] as File;
+				consoleExecutable  = consoleExecutable.resolvePath("Windows");
+				
+				if (consoleExecutable.exists == true) 
+				{
+					consoleExecutable = consoleExecutable.resolvePath("System32");
+					consoleExecutable = consoleExecutable.resolvePath("cmd.exe");
+					
+					return consoleExecutable;                                    
+				}                   
+			}
+			
+			return null;
 		}
 		
 	}
