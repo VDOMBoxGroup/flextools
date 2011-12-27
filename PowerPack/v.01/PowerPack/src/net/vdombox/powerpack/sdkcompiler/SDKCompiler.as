@@ -35,7 +35,7 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 		}
 		
-		public function build(_sdk3_6DescriptionXMLPath : String, 
+		public function build(sdk3_6DescriptionXMLPath : String, 
 							  _sdk4_1DescriptionXMLPath : String, 
 							  _powerPackProjectPath : String,
 							  _powerPackLibProjectPath : String) : void
@@ -48,7 +48,7 @@ package net.vdombox.powerpack.sdkcompiler
 				return;
 			}
 			
-			sdk3_6DescriptionXMLPath = _sdk3_6DescriptionXMLPath;
+			this.sdk3_6DescriptionXMLPath = sdk3_6DescriptionXMLPath;
 			sdk4_1DescriptionXMLPath = _sdk4_1DescriptionXMLPath;
 			powerPackProjectPath = _powerPackProjectPath;
 			powerPackLibProjectPath = _powerPackLibProjectPath;
@@ -106,7 +106,7 @@ package net.vdombox.powerpack.sdkcompiler
 			if (!FileUtils.cmdFile || !FileUtils.cmdFile.exists)
 			{
 				throw Error("Can't find cmd file");
-				return;
+				return null;
 			}
 			
 			startupInfo.arguments	= compilerArguments;
@@ -185,39 +185,42 @@ package net.vdombox.powerpack.sdkcompiler
 				case COMPILER_TYPE_SWF:
 				{
 					arguments = "";
-					arguments += "/c ";
-					arguments += sdk3_6Path + "/bin/amxmlc.bat"+" "; // D:/upload/3.6.0/bin/amxmlc.bat
-					arguments += "-output=" + outputSwfPath + " "; //C:/temp/playerApp.swf
-
-//					 -library-path+=D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack/libs,
-//									D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack_lib/bin/PowerPack_lib.swc,
-//									D:/upload/4.1.0/frameworks/libs/air/airglobal.swc : 
-					arguments += "-library-path+="
-					arguments += powerPackProjectPath + "/libs" + ",";
-					arguments += powerPackLibProjectPath + "/bin/PowerPack_lib.swc" + ",";
-					arguments += sdk4_1Path + "/frameworks/libs/air/airglobal.swc";
-					arguments += " -- ";
-					arguments += powerPackProjectPath + "/src/Generator.mxml"; // D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack/src/Generator.mxml
-						
+					//arguments += "/c ";
+					argVector.push("/c")
+					//arguments += '"c:/temp/3 .6.0/bin/amxmlc.bat" '; //sdk3_6Path + "/bin/amxmlc.bat"+" ";
+					argVector.push('"c:/temp/3 .6.0/bin/amxmlc.bat"')
+					//arguments += "-output=" + outputSwfPath + " ";
+					argVector.push("-output=" + outputSwfPath);
+//					arguments += "-library-path+="
+//					arguments += powerPackProjectPath + "/libs" + ",";
+//					arguments += powerPackLibProjectPath + "/bin/PowerPack_lib.swc" + ",";
+//					arguments += sdk4_1Path + "/frameworks/libs/air/airglobal.swc";
+					argVector.push("-library-path+="+powerPackProjectPath + "/libs");
+					argVector.push("-library-path+="+powerPackLibProjectPath + "/bin/PowerPack_lib.swc");
+					argVector.push("-library-path+="+sdk4_1Path + "/frameworks/libs/air/airglobal.swc");
+					//arguments += " -- ";
+					//arguments += powerPackProjectPath + "/src/Generator.mxml";
+					argVector.push("-- "+powerPackProjectPath + "/src/Generator.mxml");
+					
 					break;
 				}
 				case COMPILER_TYPE_PACKAGE:
 				{
 					arguments = "";
 					arguments += "/c ";
-					arguments += sdk4_1Path + "/bin/adt.bat "; //"D:/upload/4.1.0/bin/adt.bat"
+					arguments += sdk4_1Path + "/bin/adt.bat ";
 					arguments += "-package -storetype pkcs12 -keystore ";
-					arguments += sertificatePath + " "; //"D:/workspaces/workspaceMiniBuilder/innerProject/sert.p12"
+					arguments += sertificatePath + " ";
 					arguments += "-storepass q -target native -storetype pkcs12 -keystore ";
-					arguments += sertificatePath + " "; //"D:/workspaces/workspaceMiniBuilder/innerProject/sert.p12"
+					arguments += sertificatePath + " ";
 					arguments += "-storepass q ";
-					arguments += outputPackagePath + " "; // "c:/temp/myPlayerApp.exe"
-					arguments += powerPackProjectPath + "/bin-debug/Generator-app.xml" + " "; //"D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack/bin-debug/Generator-app.xml"
+					arguments += outputPackagePath + " ";
+					arguments += powerPackProjectPath + "/bin-debug/Generator-app.xml" + " ";
 					arguments += "-C ";
-					arguments += powerPackProjectPath + "/bin-debug" + " "; //"D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack/bin-debug"
+					arguments += powerPackProjectPath + "/bin-debug" + " ";
 					arguments += "Generator.swf ";
 					arguments += "-C ";
-					arguments += powerPackProjectPath + "/bin-debug" + " "; //"D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack/bin-debug"
+					arguments += powerPackProjectPath + "/bin-debug" + " ";
 					arguments += "assets";
 					
 					break;
