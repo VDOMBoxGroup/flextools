@@ -156,7 +156,7 @@ package net.vdombox.ide.core.model
 		public function createCopy( sourceID : String ) : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.copy_object(pageVO.applicationVO.id, pageVO.id, sourceID );
+			//token = soap.copy_object(pageVO.applicationVO.id, pageVO.id, sourceID );
 			
 			var sourceInfo : Array = sourceID.split( " " );
 			
