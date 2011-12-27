@@ -258,5 +258,33 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			return null;
 		}
 		
+		public static function convertPathForCMD(path : String, useQoutesBetweenSlashes:Boolean = false) : String
+		{
+			var delim : String = "/";
+			var regExpDoubleBackSlashes : RegExp = /\\\\/g;
+			var regExpDoubleSlashes : RegExp = /\\/g;
+			
+			path = path.replace(regExpDoubleBackSlashes, delim);
+			path = path.replace(regExpDoubleSlashes, delim);
+			
+			if (!useQoutesBetweenSlashes && path.indexOf(" ") >= 0)
+			{
+				return "\"" + path + "\""; 
+			}
+			
+			var pathParts : Array = path.split(delim);
+			
+			if (!pathParts || pathParts.length == 0)
+				return path;
+			
+			for (var i:int; i<pathParts.length; i++)
+			{
+				if (pathParts[i].indexOf(" ") >= 0)
+					pathParts[i] = "\"" + pathParts[i] + "\"";
+			}
+			
+			return pathParts.join(delim);
+		}
+		
 	}
 }
