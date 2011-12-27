@@ -42,6 +42,8 @@ import net.vdombox.powerpack.managers.ContextManager;
 import net.vdombox.powerpack.managers.LanguageManager;
 import net.vdombox.powerpack.managers.ProgressManager;
 import net.vdombox.powerpack.managers.SelectionManager;
+import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
+import net.vdombox.powerpack.sdkcompiler.SDKCompilerEvent;
 
 public class GraphCanvas extends Canvas implements IFocusManagerComponent
 {
@@ -807,9 +809,40 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 				event.stopPropagation();
 				doPaste();
 			}
+			
+			// TEMP FOR TESTING ...
+			else if ( event.keyCode == Keyboard.K )
+			{
+				event.stopPropagation();
+				compilePlayer();
+			}
+			// ... TEMP FOR TESTING
 		}
 	}
-
+	
+	// TEMP FOR TESTING ...
+	private function compilePlayer():void
+	{
+		var sdkCompiler : SDKCompiler = new SDKCompiler();
+		
+		if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE))
+			sdkCompiler.addEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE, sdkCompilerEventHandler); 
+		
+		if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR))
+			sdkCompiler.addEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR, sdkCompilerEventHandler);
+			
+		sdkCompiler.build("D:/upload/3.6.0/flex-sdk-description.xml", "D:/upload/4.1.0/flex-sdk-description.xml", 
+							"D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack", 
+							"D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack_lib");
+		function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void{
+			if (evt.message)
+			{
+				SuperAlert.show(evt.message);
+			}
+		}
+	}
+	// ... TEMP FOR TESTING
+	
 	private function contextMenuDisplayingHandler( event : Event ) : void
 	{
 		for each ( var item : NativeMenuItem in contextMenu.items )
