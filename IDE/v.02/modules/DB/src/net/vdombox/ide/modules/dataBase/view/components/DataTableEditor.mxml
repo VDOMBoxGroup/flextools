@@ -190,7 +190,7 @@
 						dataGridColumnsProps.push( columnProps );
 						_header.dataField = xmlHeader.@name;
 						
-						if ( xmlHeader.@type == "INTEGER" )
+						if ( xmlHeader.@type == "INTEGER" || xmlHeader.@type == "REAL" )
 							_header.sortCompareFunction = fieldSortNumber( xmlHeader.@name );
 				
 						dataGridColumns.push( _header );
