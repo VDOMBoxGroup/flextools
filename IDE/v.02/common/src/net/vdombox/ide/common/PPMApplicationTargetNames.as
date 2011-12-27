@@ -70,5 +70,9 @@ package net.vdombox.ide.common
 		public static const REMOTE_CALL : String = "remoteCall";
 		
 		public static const ERROR : String = "error";
+		
+		public static const COPY : String = "copy";
+		
+	
 	}
 }
