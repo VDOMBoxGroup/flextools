@@ -31,6 +31,8 @@ package net.vdombox.ide.modules.resourceBrowser.controller.messages
 						sendNotification( ApplicationFacade.RESOURCE_UPLOADED, body );
 					else if ( operation == PPMOperationNames.DELETE )
 						sendNotification( ApplicationFacade.RESOURCE_DELETED, body );
+					else if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.RESOURCE_LOADED, body );
 					
 					break;
 				}

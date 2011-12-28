@@ -53,6 +53,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( ApplicationFacade.BODY_STOP );
 
 			interests.push( ApplicationFacade.SELECTED_RESOURCE_CHANGED );
+			
+			interests.push( ApplicationFacade.RESOURCE_LOADED );
 
 			return interests;
 		}
@@ -92,6 +94,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 					break;
 				}
+					
+				case ApplicationFacade.RESOURCE_LOADED:
+				{
+					workArea.resourceVO = body as ResourceVO;
+					
+					break;
+				}
 			}
 		}
 
@@ -118,7 +127,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 		private function deleteResourceHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.DELETE_RESOURCE_REQUEST );
+			//sendNotification( ApplicationFacade.DELETE_RESOURCE_REQUEST );
+			sendNotification( ApplicationFacade.DELETE_RESOURCE, { applicationVO: sessionProxy.selectedApplication, resourceVO: workArea.resourceVO } );
 		}
 		
 		private function loadResourceHandler( event : WorkAreaEvent ) : void

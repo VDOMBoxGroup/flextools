@@ -222,15 +222,18 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var selectedResourceVO : ResourceVO = resourcesProvider.selectedItem as ResourceVO;
 
-			sendNotification( ApplicationFacade.CHANGE_SELECTED_RESOURCE_REQUEST, selectedResourceVO );
+			if ( selectedResourceVO ) 
+				sendNotification( ApplicationFacade.LOAD_RESOURCE, selectedResourceVO );
+			//sendNotification( ApplicationFacade.CHANGE_SELECTED_RESOURCE_REQUEST, selectedResourceVO );
+			
 		}
 
 		private function itemRenderer_createdHandler( event : ResourcesListItemRendererEvent ) : void
 		{
 			var itemRenderer : ResourcesListItemRenderer = event.target as ResourcesListItemRenderer;
 
-			if ( itemRenderer && itemRenderer.data && itemRenderer.data is ResourceVO )
-				sendNotification( ApplicationFacade.LOAD_RESOURCE, itemRenderer.data );
+			/*if ( itemRenderer && itemRenderer.data && itemRenderer.data is ResourceVO )
+				sendNotification( ApplicationFacade.LOAD_RESOURCE, itemRenderer.data );*/
 		}
 	}
 }

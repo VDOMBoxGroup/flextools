@@ -34,9 +34,18 @@
 
 			[Bindable]
 			public var isAddResourcesShowed : Boolean = false;
+			
+			private var _resourceVO : ResourceVO;
+
+			public function get resourceVO():ResourceVO
+			{
+				return _resourceVO;
+			}
 
 			public function set resourceVO( value : ResourceVO ) : void
 			{
+				_resourceVO = value;
+				
 				if ( value )
 					deleteButton.enabled = true;
 				else
