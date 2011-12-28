@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" verticalAlign="middle">
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.dataBase.interfaces.ISearchable;
+			
+			[Bindable]
+			public var target:ISearchable;
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Label text="Search:"/>
+	<s:TextInput id="searchInput" 
+				  change="{target.find(searchInput.text)}"
+				  contentBackgroundColor="{!target.searchString || target.found ? 0xffffff:0xff0000}"
+				  enter="{target.findNext()}"
+				  toolTip="Live search"/>
+	<s:Button id="previousButton" label="&lt;" click="{target.findPrevious()}" toolTip="Previous" />
+	<s:Button id="nextButton" label="&gt;" click="{target.findNext()}" toolTip="Next" />
+</s:HGroup>
