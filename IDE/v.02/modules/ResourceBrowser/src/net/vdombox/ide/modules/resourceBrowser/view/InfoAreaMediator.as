@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.InfoArea;
@@ -50,6 +51,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( ApplicationFacade.BODY_STOP );
 
 			interests.push( ApplicationFacade.SELECTED_RESOURCE_CHANGED );
+			
+			interests.push( ApplicationFacade.RESOURCE_LOADED );
 
 			return interests;
 		}
@@ -87,6 +90,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				{
 					infoArea.resourceVO = sessionProxy.selectedResource;
 
+					break;
+				}
+					
+				case ApplicationFacade.RESOURCE_LOADED:
+				{
+					infoArea.resourceVO = body as ResourceVO;
+					
 					break;
 				}
 			}

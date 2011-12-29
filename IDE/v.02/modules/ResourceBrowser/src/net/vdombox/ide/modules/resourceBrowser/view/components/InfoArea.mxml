@@ -117,13 +117,13 @@
 		<mx:Spacer width="100%"/>
 
 		<s:VGroup gap="0">
-			<s:Label height="20" text="Name: " width="100%"
+			<s:Label height="20" text="{ resourceManager.getString( 'ResourceBrowser_General', 'info_area_name' ) }" width="100%"
 					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
-			<s:Label height="20" text="Type: " width="100%"
+			<s:Label height="20" text="{ resourceManager.getString( 'ResourceBrowser_General', 'info_area_type' ) }" width="100%"
 					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
 			<s:Label height="20" text="ID: " width="100%"
 					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
-			<s:Label height="20" text="Size: " width="100%"
+			<s:Label height="20" text="{ resourceManager.getString( 'ResourceBrowser_General', 'info_area_size' ) }" width="100%"
 					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
 		</s:VGroup>
 
