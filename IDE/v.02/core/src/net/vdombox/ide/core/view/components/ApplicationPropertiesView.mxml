@@ -16,11 +16,6 @@
 				return resourceManager.getString( 'Core_General', word );
 			}
 			
-			protected function selectIcon_creationCompleteHandler(event:FlexEvent):void
-			{
-				selectIcon.width = selectIcon.text.length * 6;
-			}
-			
 		]]>
 	</fx:Script>
 	
@@ -65,10 +60,10 @@
 	<s:VGroup width="35%" height="100%" gap="2" 
 			  paddingTop="10" paddingLeft="20" >
 		
-			<components1:ApplicationsIconView id="iconChooser"  />
+		<components1:ApplicationsIconView id="iconChooser"  />
 		
-			<s:Label id="selectIcon" buttonMode="true" text="{getLocalesWord( 'iconchooser_select_icon' ) }" creationComplete="selectIcon_creationCompleteHandler(event)"
-				 fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF"  />
+		<s:Label id="selectIcon" buttonMode="true" text="{getLocalesWord( 'iconchooser_select_icon' ) }"
+				 fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF" />
 		
 		<mx:Spacer height="100%" />
 		
