@@ -199,7 +199,7 @@
 			<s:VGroup width="100%" height="100%">
 				
 				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
-					<s:Label text="SQL string" includeIn="all"/>
+					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_query_sql_string' ) }" includeIn="all"/>
 					<mx:Spacer width="100%"/>
 					<mx:Image source.all="@Embed('assets/arr_2.png')" source.short="@Embed('assets/arr_1.png')" click="image1_clickHandler(event)"/>
 					<mx:Spacer width="8"/>
@@ -209,10 +209,10 @@
 						 paddingTop="3" includeIn="all">
 					
 					<s:TextArea id="query" width="100%" height="63" change="query_changeHandler(event)"/>
-					<s:Button id="sendQuery" label="send query" click="sendQuery_clickHandler(event)"/>
+					<s:Button id="sendQuery" label="{ resourceManager.getString( 'DataBase_General', 'data_table_query_send_query' ) }" click="sendQuery_clickHandler(event)"/>
 					
 					<mx:Spacer height="2" />
-					<s:Label text="Error message from database engine" />
+					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_query_error' ) }" />
 					<s:TextInput id="errorWriter" width="100%" editable="false" />
 					
 				</s:VGroup>
@@ -223,7 +223,7 @@
 		
 		<mx:Spacer height="7" includeIn="all"/>
 		
-		<s:Label text="Data returned:" />
+		<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_query_data_returned' ) }" />
 		
 		<mx:AdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}"
 					 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"

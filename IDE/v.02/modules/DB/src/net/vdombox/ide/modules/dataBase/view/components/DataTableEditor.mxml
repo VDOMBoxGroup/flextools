@@ -633,23 +633,23 @@
 				<components1:SearchBox target="{dataTable}" height="22"/>
 				
 				<s:HGroup width="100%" height="20" horizontalAlign="left" verticalAlign="middle" gap="0" paddingRight="0" paddingLeft="0">
-					<s:Label text="Pages:" />
+					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_pages' ) }" />
 					<mx:HBox id="pagesArea" width="100%" height="20" verticalAlign="middle" horizontalGap="0"
 							 disabledOverlayAlpha="0.1" />
-					<s:Label text="Records per page:" fontSize="9" />
+					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_records' ) }" fontSize="9" />
 					<s:TextInput id="amount" borderColor="#999999" fontWeight="bold" height="20" fontSize="9" width="45" />
-					<s:Button height="20" label="apply" cornerRadius="0" click="button1_clickHandler(event)"/>
+					<s:Button height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_apply' ) }" cornerRadius="0" click="button1_clickHandler(event)"/>
 				</s:HGroup>
 				
 				<s:HGroup width="100%" height="50" verticalAlign="top" horizontalAlign="left" paddingLeft="10" paddingTop="5">
 					
-					<s:Button id="addRow" height="20" label="add row" click="addRow_clickHandler(event)"/>
+					<s:Button id="addRow" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_add_row' ) }" click="addRow_clickHandler(event)"/>
 					
-					<s:Button id="deleteRow" height="20" label="delete row" click="deleteRow_clickHandler(event)"/>
+					<s:Button id="deleteRow" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_delete_row' ) }" click="deleteRow_clickHandler(event)"/>
 					
-					<s:Button id="commit" height="20" label="commit" click="commit_clickHandler(event)"/>
+					<s:Button id="commit" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_commit' ) }" click="commit_clickHandler(event)"/>
 					
-					<s:Button id="discard" height="20"  label="discard" click="discard_clickHandler(event)"/>
+					<s:Button id="discard" height="20"  label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_discard' ) }" click="discard_clickHandler(event)"/>
 					
 				</s:HGroup>
 			</s:VGroup>

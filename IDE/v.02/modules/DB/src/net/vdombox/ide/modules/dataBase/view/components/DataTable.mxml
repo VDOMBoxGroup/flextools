@@ -82,9 +82,9 @@
 	<s:VGroup paddingTop="5" width="100%" height="100%" gap="5">
 		<s:HGroup width="100%" height="20" verticalAlign="middle" horizontalAlign="right" paddingRight="15" includeIn="tableEditor,tableStructure">
 			
-			<s:Button id="data" label="Data" click="data_clickHandler(event)" />
+			<s:Button id="data" label="{ resourceManager.getString( 'DataBase_General', 'data_table_data' ) }" click="data_clickHandler(event)" />
 			
-			<s:Button id="structure" label="Structure" click="structure_clickHandler(event)"/>
+			<s:Button id="structure" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure' ) }" click="structure_clickHandler(event)"/>
 			
 		</s:HGroup>
 		

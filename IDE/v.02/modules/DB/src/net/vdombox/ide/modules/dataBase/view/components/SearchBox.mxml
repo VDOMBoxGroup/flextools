@@ -15,7 +15,7 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:Label text="Search:"/>
+	<s:Label text="{ resourceManager.getString( 'DataBase_General', 'search_box_search' ) }"/>
 	<s:TextInput id="searchInput" 
 				  change="{target.find(searchInput.text)}"
 				  contentBackgroundColor="{!target.searchString || target.found ? 0xffffff:0xff0000}"
