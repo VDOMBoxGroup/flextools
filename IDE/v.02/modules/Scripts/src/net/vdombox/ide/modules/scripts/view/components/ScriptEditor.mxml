@@ -149,7 +149,7 @@
 				
 				<components2:WorkAreaButton id="saveButton"
 										   enabled.unsaved="true" enabled="false" height="20" icon="@Embed('icons/save.png')"
-										   label="Save" click="scriptEditor_saveHandler( event )"
+										   label="{ resourceManager.getString( 'Scripts_General', 'save' ) }" click="scriptEditor_saveHandler( event )"
 										   highlighted="false" highlighted.unsaved="true"/>
 				
 			</s:HGroup>
