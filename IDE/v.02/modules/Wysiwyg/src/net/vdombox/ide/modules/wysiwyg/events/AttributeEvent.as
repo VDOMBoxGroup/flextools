@@ -9,6 +9,9 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var EDIT_MULTILINE	: String = "editMultiline";
 		public static var SELECT_RESOURCE 	: String = "selectResource";
 		public static var OPEN_EXTERNAL		: String = "openExternal";
+		public static var ERROR		: String = "errorAttribute2";
+		
+		public var value : String;
 		
 		public function AttributeEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

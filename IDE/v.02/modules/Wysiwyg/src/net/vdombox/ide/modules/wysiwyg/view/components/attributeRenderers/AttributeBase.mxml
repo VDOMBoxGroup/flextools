@@ -18,16 +18,19 @@
 			import mx.core.UIComponent;
 			import mx.skins.halo.ComboBoxArrowSkin;
 			import mx.skins.spark.ComboBoxSkin;
-
+			
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.common.vo.ObjectListVO;
 			import net.vdombox.ide.common.vo.PageVO;
+			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
 			import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
-
+			import net.vdombox.view.Alert;
+			import net.vdombox.view.AlertButton;
+			
 			import spark.components.TextInput;
 
 			[Bindable]
@@ -68,6 +71,8 @@
 				if ( !value )
 					return;
 
+				addEventListener(AttributeEvent.ERROR, errorHandler2, true, 0, true );
+				
 				if ( value.hasOwnProperty( "objectVO") )
 				{
 					_objectVO = value.objectVO;
@@ -181,7 +186,7 @@
 				valueField.height = 21;
 				secondElement = valueField as UIComponent;
 
-				valueField.addEventListener(Event.CHANGE, changeHandler);
+				valueField.addEventListener(Event.CHANGE, changeHandler, false, 0 , true );
 			}
 
 			private function newColorPicker() : void
@@ -192,7 +197,7 @@
 				valueField.height = 21;
 				secondElement = valueField as UIComponent;
 
-				valueField.addEventListener(Event.CHANGE, changeHandler);
+				valueField.addEventListener(Event.CHANGE, changeHandler, false, 0 , true );
 			}
 
 			private function newDropdown() : void
@@ -205,7 +210,7 @@
 
 				valueField.init(codeInterface[ "value" ], _attributeVO.value);
 
-				valueField.addEventListener(Event.CHANGE, changeHandler);
+				valueField.addEventListener(Event.CHANGE, changeHandler, false, 0 , true );
 			}
 
 			private function newExternalEdition() : void //
@@ -217,7 +222,7 @@
 				valueField.height = 21;
 				secondElement = valueField as UIComponent;
 
-				valueField.addEventListener(Event.CHANGE, changeHandler);
+				valueField.addEventListener(Event.CHANGE, changeHandler, false, 0 , true );
 
 				var resourceID : String = codeInterface[ "value" ];
 				resourceID = resourceID.substr( resourceID.indexOf( "," ) + 1 );
@@ -233,7 +238,7 @@
 				valueField.height = 21;
 				secondElement = valueField as UIComponent;
 
-				valueField.addEventListener(Event.CHANGE, changeHandler);
+				valueField.addEventListener(Event.CHANGE, changeHandler, false, 0 , true );
 			}
 
 			private function newNumber() : void
@@ -273,7 +278,7 @@
 				valueField.init( value.objectsList, _attributeVO.value);
 
 
-				valueField.addEventListener(Event.CHANGE, changeHandler);
+				valueField.addEventListener(Event.CHANGE, changeHandler, false, 0 , true );
 			}
 
 			private function newPageLink( value : Object ) : void
@@ -287,7 +292,7 @@
 
 				valueField.init(value.pageLinks, _attributeVO.value);
 
-				valueField.addEventListener(Event.CHANGE, changeHandler);
+				valueField.addEventListener(Event.CHANGE, changeHandler, false, 0 , true );
 			}
 
 			private function newTextField() : void
@@ -302,7 +307,7 @@
 				//				valueField.text = _attributeVO.value;
 
 
-				valueField.addEventListener(Event.CHANGE, changeHandler);
+				valueField.addEventListener(Event.CHANGE, changeHandler, false, 0 , true );
 			}
 
 			private function changeHandler(event : Event) : void
@@ -313,6 +318,12 @@
 					_attributeVO.value = valueField.value;
 				
 				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ) );
+			}
+			
+			private function errorHandler2(event : AttributeEvent) : void
+			{
+				var errorString : String = event.value + "  " + rtextLabel.text;
+				Alert.Show( errorString, AlertButton.OK, this.parentApplication );
 			}
 
 			protected function getColorByGroup( groupNumber : uint ) : uint

@@ -9,6 +9,7 @@
 			import mx.collections.SortField;
 			
 			import net.vdombox.ide.common.vo.ObjectListVO;
+			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 			
 			import spark.events.IndexChangeEvent;
@@ -26,7 +27,7 @@
 				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
 				
 				var listValues : Array = [];
-				var selectedItem : Object = {};
+				var selectedItem : Object;
 				
 				var listItem : Object = { label: "", data: "" };
 				//comboBoxData.addItem( listItem );
@@ -47,8 +48,18 @@
 				
 				
 				valueField.dataProvider = comboBoxData;
-				valueField.selectedItem = selectedItem;
-				_value = selectedItem.data;
+				
+				if ( selectedItem )
+				{
+					valueField.selectedItem = selectedItem;
+					_value = selectedItem.data;
+				}
+				else
+				{
+					var errorEvent : AttributeEvent = new AttributeEvent( AttributeEvent.ERROR );
+					errorEvent.value = resourceManager.getString( 'Wysiwyg_General', 'attribut_error_in_attribute');
+					dispatchEvent( errorEvent );
+				}
 			}
 			
 			private function changeHandler() : void

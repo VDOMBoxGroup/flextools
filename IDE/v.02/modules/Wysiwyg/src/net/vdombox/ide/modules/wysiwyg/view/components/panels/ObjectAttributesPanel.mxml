@@ -10,8 +10,6 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
-			import mx.collections.Sort;
-			import mx.collections.SortField;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
@@ -68,7 +66,7 @@
 					pageLinks: 				null } );
 				
 				attributesArray.push( { group: 0, 
-					name: 					"name", 
+					name: 					resourceManager.getString( 'Wysiwyg_General', 'attribut_name'), 
 					objectVO: 			_attributesVO.vdomObjectVO,
 					attributeDescriptionVO: null, 
 					objectsList:	 		null,
