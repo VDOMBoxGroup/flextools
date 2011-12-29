@@ -97,7 +97,7 @@
 		
 		<s:HGroup width="100%" horizontalAlign="center" gap="3" paddingLeft="10" paddingRight="10">
 			
-			<s:Label text="Page: " width="100%" textAlign="right" height="100%" verticalAlign="middle" color="#6215D6"/>
+			<s:Label text="{ resourceManager.getString( 'Events_General', 'work_area_page' ) }" width="100%" textAlign="right" height="100%" verticalAlign="middle" color="#6215D6"/>
 			
 			<s:TextInput id="pageName" editable="false" selectable="false" contentBackgroundAlpha="0" borderVisible="false"  width="100%" color="#6215D6"/>
 			
