@@ -2,6 +2,7 @@
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 addedToStage="panel1_addedToStageHandler(event)"
 		 creationComplete="panel1_creationCompleteHandler(event)"
 		 removedFromStage="panel1_removedFromStageHandler(event)">
 
@@ -210,12 +211,6 @@
 				containersTree.setStyle("disclosureClosedIcon", plus);
 			}
 			
-			protected function panel1_creationCompleteHandler(event:FlexEvent):void
-			{
-				// TODO Auto-generated method stub
-				containersTree.addEventListener( ListEvent.CHANGE, objectsTree_changeHandler, false, 0, true );
-			}
-			
 			private function objectsTree_changeHandler( event : ListEvent ) : void
 			{
 				dispatchEvent( new ContainersPanelEvent( ContainersPanelEvent.CONTAINER_CHANGED ) );
@@ -224,6 +219,19 @@
 			protected function panel1_removedFromStageHandler(event:Event):void
 			{
 				containersTree.removeEventListener( ListEvent.CHANGE, objectsTree_changeHandler );
+			}
+			
+			protected function panel1_addedToStageHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				if ( containersTree )
+					containersTree.addEventListener( ListEvent.CHANGE, objectsTree_changeHandler, false );
+			}
+			
+			protected function panel1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				containersTree.addEventListener( ListEvent.CHANGE, objectsTree_changeHandler, false );
 			}
 			
 		]]>
