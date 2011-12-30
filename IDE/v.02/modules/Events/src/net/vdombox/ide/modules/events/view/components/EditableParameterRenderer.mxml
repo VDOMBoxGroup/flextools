@@ -50,6 +50,12 @@
 				}
 			}
 			
+			protected function actionText_focusOutHandler(event:FocusEvent):void
+			{
+				// TODO Auto-generated method stub
+				var tt : int = 9;
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -76,7 +82,7 @@
 		<s:Label text="{ _data.name }"/>
 		<mx:Spacer width="4"/>
 		<s:TextInput id="actionText" minWidth="0" text="@{ _data.value }" width="100%"
-					 focusAlpha="0" doubleClick="textinput1_doubleClickHandler(event)" />
+					 focusAlpha="0" doubleClick="textinput1_doubleClickHandler(event)" focusOut="actionText_focusOutHandler(event)"/>
 	</s:HGroup>
 
 	<s:Line xFrom="24" xTo="24" yFrom="0" yTo="20">

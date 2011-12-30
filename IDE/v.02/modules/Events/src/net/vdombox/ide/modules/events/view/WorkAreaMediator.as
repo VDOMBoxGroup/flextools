@@ -94,7 +94,6 @@ package net.vdombox.ide.modules.events.view
 				{
 					isActive = true;
 					treePanelCreateCompleted = false;
-
 					break;
 				}
 
@@ -147,10 +146,10 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.STRUCTURE_GETTED:
 				{
+					treePanelCreateCompleted = true;
 					if ( sendChildrenQuery )
 					{
 						sendChildrenQuery = false;
-						treePanelCreateCompleted = true;
 						sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
 					}
 				}
