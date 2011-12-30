@@ -322,7 +322,9 @@
 			
 			private function errorHandler2(event : AttributeEvent) : void
 			{
-				var errorString : String = event.value + "  " + rtextLabel.text;
+				var errorString : String = event.value + "  ";
+				if ( data && data.hasOwnProperty( "attributeDescriptionVO" ) && data.attributeDescriptionVO )
+					errorString += data.attributeDescriptionVO.displayName;
 				Alert.Show( errorString, AlertButton.OK, this.parentApplication );
 			}
 
