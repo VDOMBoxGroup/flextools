@@ -154,7 +154,7 @@ GridItem
 .headerLabel
 {
     fontFamily : "Arial", "Helvetica", "_sans";
-    fontSize   : 16;
+    fontSize   : 48;
     fontWeight : bold;
     textIndent : 0;
     color      : #16414A;

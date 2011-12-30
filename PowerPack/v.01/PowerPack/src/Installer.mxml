@@ -1003,20 +1003,20 @@
 					showRoot="false"
 					itemClick="onMenuClick(event);"></mx:MenuBar-->
 		
-		<mx:HBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="left"
-				 paddingTop="40" paddingRight="10" paddingLeft="40" paddingBottom="10">
-			<controls:Base64Image id="tplPic" 
+		<mx:HBox width="100%" height="100%" verticalAlign="top" horizontalAlign="left"
+				 paddingTop="26" paddingRight="10" paddingLeft="40" paddingBottom="10" verticalGap="0">
+			<controls:Base64Image id="tplPic"  x="14"
 								  width="220" height="100%"
 								  value="{resources.strLogo}"  
 								  showEffect="{picShow}"
 								  scaleContent="true" maintainAspectRatio="true"
 								  verticalAlign="top" horizontalAlign="right"/>
-			<mx:VBox height="100%" width="100%" horizontalAlign="right">
+			<mx:VBox height="100%" width="100%" horizontalAlign="right" >
 				
-				<mx:ViewStack id="vsProcess" width="100%" height="100%" creationPolicy="all" change="vsChange(event)">
+				<mx:ViewStack id="vsProcess" width="100%" height="100%" creationPolicy="all" change="vsChange(event)" paddingTop="0">
 					
 					<mx:VBox id="cWelcome" height="100%" width="100%"
-							 verticalAlign="middle" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:Text width="90%" styleName="infoTextStyle"
 								 text="{LanguageManager.sentences.msg_gen_welcome}">
@@ -1024,13 +1024,15 @@
 					</mx:VBox>
 					
 					<mx:VBox id="cKeyRequest" height="100%" width="100%"
-							 verticalAlign="middle" horizontalAlign="center"
-							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
+							 verticalAlign="top" horizontalAlign="center"
+							 showEffect="{canvasShow}" hideEffect="{canvasHide}" verticalGap="0">
+			
 						<mx:Label width="90%" 
 									  text="{'1 '+ContextManager.templates.getItemAt(0).name}"
 									  styleName="headerLabel"/>
-						<mx:TextArea editable="false" width="90%" height="150"
-									 text="{ContextManager.templates.getItemAt(0).description}" />
+						<mx:Label  width="90%" height="150"
+									 text="{ContextManager.templates.getItemAt(0).description}" 
+									 styleName="infoTextStyle"/>
 						<mx:Label text="{LanguageManager.sentences.msg_input_template_key}:" />
 						<mx:TextInput width="90%" id="txtKey" styleName="edtTextStyle" />
 						
@@ -1043,13 +1045,14 @@
 					</mx:VBox>
 					
 					<mx:VBox id="cGeneral" height="100%" width="100%"
-							 verticalAlign="middle" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:Label width="90%" 
 									  text="{'2 '+ContextManager.templates.getItemAt(0).name}"
 									  styleName="headerLabel" />
-						<mx:Label  width="90%" height="150"
-									 text="{ContextManager.templates.getItemAt(0).description}" />
+						<mx:Label  width="90%" height="150" 
+									 text="{ContextManager.templates.getItemAt(0).description}"
+									 styleName="infoTextStyle"/>
 						
 						<mx:ControlBar width="90%" horizontalAlign="right">
 							<mx:Button label="{LanguageManager.sentences.cancel}"
@@ -1060,7 +1063,7 @@
 					</mx:VBox>
 					
 					<mx:VBox id="cServerRequest" height="100%" width="100%"
-							 verticalAlign="middle" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						
 						<mx:Text width="90%" id="infoServerRequest" styleName="infoTextStyle" />
@@ -1129,7 +1132,7 @@
 					</mx:VBox>
 					
 					<mx:VBox id="cFileRequest" height="100%" width="100%"
-							 verticalAlign="middle" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						
 						<mx:Text width="90%" id="infoFileRequest" styleName="infoTextStyle" />
@@ -1151,7 +1154,7 @@
 					</mx:VBox>
 					
 					<mx:VBox id="cInterrupt" height="100%" width="100%"
-							 verticalAlign="middle" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:Text width="90%" styleName="infoTextStyle"
 								 text="{LanguageManager.sentences.msg_creation_app_interrupted}" />
@@ -1162,50 +1165,53 @@
 					</mx:VBox>
 					
 					<mx:VBox id="cProcess" height="100%" width="100%"
-							 verticalAlign="middle" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:Label width="90%" 
 									  text="{'3 '+ContextManager.templates.getItemAt(0).name}"
 									  styleName="headerLabel"/>
 						
-						<mx:Spacer width="100%" height="30" />
+						
 						
 						<mx:ViewStack id="vsImages" width="100%" height="100%"
 									  change="vsChange(event)">
 							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
 									 showEffect="canvasShow" hideEffect="canvasHide">
-								<mx:Image source="@Embed(source='assets/images/Question-on.png')"
-										  scaleContent="false" />
-								<mx:Image source="@Embed(source='assets/images/Install-off.png')" />
-								<mx:Image source="@Embed(source='assets/images/File-off.png')" />
-								<mx:Image source="@Embed(source='assets/images/web-site-off.png')" />
+								<mx:Image smoothBitmapContent="true" source="@Embed(source='assets/images/Question-on.png')"
+										    width="100" height="100" />
+								<mx:Image source="@Embed(source='assets/images/Install-off.png')" width="100" height="100"
+										  smoothBitmapContent="true"/>
+								<mx:Image source="@Embed(source='assets/images/File-off.png')" width="100" height="100"
+										  smoothBitmapContent="true"/>
+								<mx:Image source="@Embed(source='assets/images/web-site-off.png')" width="100" height="100" 
+										  smoothBitmapContent="true"/>
 							</mx:HBox>
 							
 							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
 									 showEffect="canvasShow" hideEffect="canvasHide">
 								<mx:Image source="@Embed(source='assets/images/Question-off.png')"
-										  scaleContent="false" />
-								<mx:Image source="@Embed(source='assets/images/Install-on.png')" />
-								<mx:Image source="@Embed(source='assets/images/File-off.png')" />
-								<mx:Image source="@Embed(source='assets/images/web-site-off.png')" />
+										  width="100" height="100"/>
+								<mx:Image source="@Embed(source='assets/images/Install-on.png')" width="100" height="100"/>
+								<mx:Image source="@Embed(source='assets/images/File-off.png')" width="100" height="100" />
+								<mx:Image source="@Embed(source='assets/images/web-site-off.png')" width="100" height="100"/>
 							</mx:HBox>
 							
 							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
 									 showEffect="canvasShow" hideEffect="canvasHide">
 								<mx:Image source="@Embed(source='assets/images/Question-off.png')"
-										  scaleContent="false" />
-								<mx:Image source="@Embed(source='assets/images/Install-off.png')" />
-								<mx:Image source="@Embed(source='assets/images/file-on.png')" />
-								<mx:Image source="@Embed(source='assets/images/web-site-off.png')" />
+										  width="100" height="100"/>
+								<mx:Image source="@Embed(source='assets/images/Install-off.png')" width="100" height="100" />
+								<mx:Image source="@Embed(source='assets/images/file-on.png')" width="100" height="100"/>
+								<mx:Image source="@Embed(source='assets/images/web-site-off.png')" width="100" height="100" />
 							</mx:HBox>
 							
 							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
 									 showEffect="canvasShow" hideEffect="canvasHide">
 								<mx:Image source="@Embed(source='assets/images/Question-off.png')"
-										  scaleContent="false" />
-								<mx:Image source="@Embed(source='assets/images/Install-off.png')" />
-								<mx:Image source="@Embed(source='assets/images/File-off.png')" />
-								<mx:Image source="@Embed(source='assets/images/Web-site-on.png')" />
+										  width="100" height="100" />
+								<mx:Image source="@Embed(source='assets/images/Install-off.png')"  width="100" height="100"/>
+								<mx:Image source="@Embed(source='assets/images/File-off.png')" width="100" height="100" />
+								<mx:Image source="@Embed(source='assets/images/Web-site-on.png')"  width="100" height="100"/>
 							</mx:HBox>
 						</mx:ViewStack>
 						<mx:Spacer width="100%" height="10" />
@@ -1218,7 +1224,7 @@
 					</mx:VBox>
 					
 					<mx:VBox id="cComplete" height="100%" width="100%"
-							 verticalAlign="middle" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:Label text="{LanguageManager.sentences.gen_result}:" />
 						<mx:TextArea id="txtResultBuf" editable="false" width="90%" height="250"
@@ -1230,7 +1236,7 @@
 					</mx:VBox>
 					
 					<mx:VBox id="cFinal" height="100%" width="100%"
-							 verticalAlign="middle" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:Text styleName="infoTextStyle"
 								 text="{LanguageManager.sentences.msg_gen_finish}">
