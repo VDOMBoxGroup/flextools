@@ -61,6 +61,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE );
+			interests.push( ApplicationFacade.COMMIT_STRUCTURE );
 			
 			return interests;
 		}
@@ -77,6 +78,16 @@ package net.vdombox.ide.modules.dataBase.view
 					var event : ExternalManagerEvent = new ExternalManagerEvent( ExternalManagerEvent.CALL_COMPLETE );
 					event.result = body;
 					dispatchEvent( event );
+					
+					break;
+				}
+					
+				case ApplicationFacade.COMMIT_STRUCTURE:
+				{
+					if ( dataTableStructure.editorID == body as String )
+					{
+						dataTableStructure.updateTable();
+					}
 					
 					break;
 				}

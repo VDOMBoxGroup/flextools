@@ -131,6 +131,7 @@ package net.vdombox.ide.modules.dataBase
 		public static const REMOTE_CALL_RESPONSE_ERROR : String = "removeCallResponseError";
 		
 		public static const COMMIT_DATA_STRUCTURE : String = "commitDataStructure";
+		public static const COMMIT_STRUCTURE : String = "commitStructure";
 		
 		
 // add Bases and Tables

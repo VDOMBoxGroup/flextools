@@ -146,11 +146,22 @@
 				
 				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
 				queue.execute();
+				
+				deleteCol.enabled = true;
+				commitLabel.text = "";
 			}
 			
 			private function queueCommitCompleteHandler( event : QueueEvent ) : void 
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
+				updateTable();
+			}
+			
+			public function updateTable() : void
+			{
+				deleteCol.enabled = true;
+				commitLabel.text = "";
+				
 				queue.reset();
 				queue.addRequest(UIDUtil.createUID(), 'get_structure', '', getTableStructureHandler, null);
 				
@@ -163,6 +174,7 @@
 				
 				dataTable.dataProvider = columnsProvider;
 				dataTable.selectedIndex = columnsProvider.length - 1;
+				selectedItem = columnsProvider[ columnsProvider.length - 1 ];
 			}
 			
 			private function removeBtnHandler() : void 
@@ -179,6 +191,9 @@
 				/* Applying changes */
 				if ( event.detail == Alert.NO )
 					return;
+				
+				deleteCol.enabled = false;
+				commitLabel.text = "Need push commit for enable button delete";
 				
 				queue.addRequest( UIDUtil.createUID(), "delete_column", "<delete><column id='" + selectedItem.id + "' /></delete>", removeSelectedColOkHandler, null) ;
 				
@@ -308,9 +323,11 @@
 			
 				<s:Button id="addNew" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_add' ) }" click="addBtnHandler()" />
 			
-				<s:Button id="delete" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_delete' ) }" click="removeBtnHandler()" />
+				<s:Button id="deleteCol" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_delete' ) }" click="removeBtnHandler()" />
 				
 				<s:Button id="discard" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_discard' ) }" click="discardChanges()" />
+				
+				<s:Label id="commitLabel" color="#FF0000" />
 			</s:HGroup>
 		</s:Group>
 	</s:VGroup>

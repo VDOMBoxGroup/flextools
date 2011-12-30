@@ -532,13 +532,14 @@
 			}
 			
 			protected function deleteRow_clickHandler( event : MouseEvent ) : void
-			{
-				var selectedRowIndex:int = 0;
+			{				
+				var selectedRowsArray : Array;
 				
 				try 
 				{
-					selectedRowIndex = dataTable.selectedIndex;
-					if ( selectedRowIndex == -1 )
+					selectedRowsArray = dataTable.selectedItems;
+					
+					if ( !selectedRowsArray || selectedRowsArray.length == 0 )
 						return;
 				}
 				catch ( err : Error ) 
@@ -546,21 +547,19 @@
 					return; 
 				}
 				
-				if ( dataGridProvider[ selectedRowIndex ][ 'fnew' ] ) 
+				for each ( var row : Object in selectedRowsArray )
 				{
-					queue.removeRequest(dataGridProvider[selectedRowIndex]['GUID']);
-				} 
-				else 
-				{
-					var requestXMLParam:XML = new XML( <data><row id={dataGridProvider[selectedRowIndex]['id']} /></data> );
+				
+					var requestXMLParam:XML = new XML( <data><row id={row['id']} /></data> );
 					
 					queue.addRequest(
-						dataGridProvider[selectedRowIndex]['GUID'].toString(),
+						row['GUID'].toString(),
 						'delete_row',
 						requestXMLParam.toXMLString() );
-				}
 				
-				dataGridProvider.removeItemAt( selectedRowIndex );
+					dataGridProvider.removeItemAt( dataGridProvider.getItemIndex( row ) );
+				
+				}
 				
 				updateQueueLength();
 			}
@@ -620,7 +619,8 @@
 	<s:VGroup width="100%" height="100%">
 			<components1:VDOMAdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}"
 						 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"				 
-						 draggableColumns="true" sortableColumns="true" doubleClickEnabled="true"/>
+						 draggableColumns="true" sortableColumns="true" doubleClickEnabled="true"
+						 allowMultipleSelection="true"/>
 		<s:Group width="100%">
 			<s:Rect width="100%" height="70">
 				<s:fill>

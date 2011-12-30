@@ -41,15 +41,21 @@ package net.vdombox.ide.modules.dataBase.view
 			
 		}
 		
-		private function sendCommit( event : DataTablesEvents ) : void
+		private function sendCommitEditor( event : DataTablesEvents ) : void
 		{
 			sendNotification( ApplicationFacade.COMMIT_DATA_STRUCTURE, dataTable.editorID );
+		}
+		
+		private function sendCommitSttructure( event : DataTablesEvents ) : void
+		{
+			sendNotification( ApplicationFacade.COMMIT_STRUCTURE, dataTable.editorID );
 		}
 
 		private function addHandlers() : void
 		{
 			dataTable.DataStructure.addEventListener( FlexEvent.SHOW,  registerDataStructureMediator );
-			dataTable.addEventListener( DataTablesEvents.UPDATE_STRUCTURE,  sendCommit );
+			dataTable.addEventListener( DataTablesEvents.UPDATE_DATA,  sendCommitEditor );
+			dataTable.addEventListener( DataTablesEvents.UPDATE_STRUCTURE,  sendCommitSttructure );
 		}
 		
 		override public function onRemove() : void
@@ -58,7 +64,8 @@ package net.vdombox.ide.modules.dataBase.view
 			facade.removeMediator( DataTableStructureMediator.NAME + dataTable.editorID );
 			facade.removeMediator( DataTableQueryMediator.NAME + dataTable.editorID );
 			
-			dataTable.removeEventListener( DataTablesEvents.UPDATE_STRUCTURE,  sendCommit );
+			dataTable.removeEventListener( DataTablesEvents.UPDATE_DATA,  sendCommitEditor );
+			dataTable.removeEventListener( DataTablesEvents.UPDATE_STRUCTURE,  sendCommitEditor );
 		}
 		
 		private function registerDataStructureMediator( event : FlexEvent ) : void
