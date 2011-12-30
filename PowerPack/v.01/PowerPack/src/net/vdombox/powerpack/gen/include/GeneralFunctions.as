@@ -5,6 +5,7 @@ import connection.SOAPBaseLevel;
 
 import flash.display.Bitmap;
 import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
@@ -18,6 +19,7 @@ import mx.utils.Base64Encoder;
 import mx.utils.UIDUtil;
 
 import net.vdombox.powerpack.BasicError;
+import net.vdombox.powerpack.gen.GraphContext;
 import net.vdombox.powerpack.gen.errorClasses.RunTimeError;
 import net.vdombox.powerpack.gen.structs.GraphStruct;
 import net.vdombox.powerpack.gen.structs.NodeStruct;
@@ -267,41 +269,62 @@ public function writeTo( filePath : String ) : void
 
 public function writeVarTo( filePath : String, value : Object ) : void
 {
-	if ( value && filePath )
-	{
-		var file : File = new File( filePath );
-		var data : ByteArray = new ByteArray();
+	// TODO: return operation result  ['error' 'description'] ['ok']
+	if ( !(value && filePath) )
+		return;
+	
+	var file : File = new File( filePath );
 
-		if ( value is Bitmap )
+	if(file.isDirectory || file.isPackage ||file.isSymbolicLink)
+		return;
+
+	var data : ByteArray = objectToByteArray(value, file.extension);
+
+	var fileStream : FileStream = new FileStream();
+
+	fileStream.open( file, FileMode.WRITE );
+	fileStream.writeBytes( data );
+	fileStream.close();
+
+}
+private function objectToByteArray( value : Object, extension : String  ) : ByteArray
+{
+	var data : ByteArray = new ByteArray();
+
+	if ( value is Bitmap )
+	{
+		var bitmap : Bitmap =  value as    Bitmap;
+
+		switch (extension.toLowerCase() )
 		{
-			if ( file.extension.toLowerCase() == "png" )
+			case "png":
 			{
 				var pngEncoder : PNGEncoder = new PNGEncoder();
-				data = pngEncoder.encode( (value as Bitmap).bitmapData );
+				data = pngEncoder.encode( bitmap.bitmapData );
+
+				break;
 			}
-			else if ( file.extension.toLowerCase() == "jpg" ||
-					file.extension.toLowerCase() == "jpeg" )
+			case "jpg":
+			case "jpeg":
 			{
 				var jpgEncoder : JPEGEncoder = new JPEGEncoder( 80 );
-				data = jpgEncoder.encode( (value as Bitmap).bitmapData );
+				data = jpgEncoder.encode( bitmap.bitmapData );
+
+				break;
 			}
-			else
+			default :
 			{
-				data = BMPEncoder.encode( (value as Bitmap).bitmapData );
+				data = BMPEncoder.encode( bitmap.bitmapData );
 			}
-		}
-		else
-			data.writeUTFBytes( value.toString() );
-
-		if ( !file.isDirectory && !file.isPackage && !file.isSymbolicLink )
-		{
-			var fileStream : FileStream = new FileStream();
-
-			fileStream.open( file, FileMode.WRITE );
-			fileStream.writeBytes( data );
-			fileStream.close();
 		}
 	}
+	else
+	{
+		data.writeUTFBytes( value.toString() );
+	}
+
+	return data;
+
 }
 
 public function loadDataFrom( filePath : String ) : Function

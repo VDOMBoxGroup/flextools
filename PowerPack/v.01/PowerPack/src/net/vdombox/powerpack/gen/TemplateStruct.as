@@ -664,7 +664,7 @@ public class TemplateStruct extends EventDispatcher
 						if ( !curNodeContext.block.executed )
 						{
 							// TODO : block run menu
-							MenuGeneral.updateMenuState(MenuGeneral.MENU_RUN, false);
+//							MenuGeneral.updateMenuState(MenuGeneral.MENU_RUN, false);
 							step = 'processExecResult';
 
 							CodeParser.executeBlock(

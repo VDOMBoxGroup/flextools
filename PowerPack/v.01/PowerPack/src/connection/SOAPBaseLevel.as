@@ -8,6 +8,8 @@ import flash.events.IEventDispatcher;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
+import net.vdombox.powerpack.gen.parse.ListParser;
+
 public class SOAPBaseLevel extends EventDispatcher
 {
 	public static var RESULT_RECEIVED  : String = "resultReceived";
@@ -49,13 +51,14 @@ public class SOAPBaseLevel extends EventDispatcher
 
 	public function soapError( event : FaultEvent ) : void
 	{
+		trace("soapError")
 
 		deleteListeners( event.target);
 
 		if ( "faultstring" in event.fault )
-			_result = "['error' '" + event.fault["faultstring"] + "']";
+			_result = "['Error' '" + event.fault["faultstring"] + "']";
 		else
-			_result = "['error' '" + event.fault.faultString + "']";
+			_result = "['Error' '" + event.fault.faultString + "']";
 
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
 	}
@@ -114,6 +117,10 @@ public class SOAPBaseLevel extends EventDispatcher
 
 			case 'close_session':
 				closeSession( );
+				break;
+
+			case 'check_application_exists':
+				checkApplicationExists( args );
 				break;
 
 		}
@@ -220,7 +227,7 @@ public class SOAPBaseLevel extends EventDispatcher
 //	export_application       //
 	private function exportApplication( params : Array ) : void
 	{
-		trace("exportApplication")
+		trace( "exportApplication" );
 		var appId : String = params[0];
 
 
@@ -254,13 +261,14 @@ public class SOAPBaseLevel extends EventDispatcher
 		var login : String = params[1];
 		var pass : String = params[2];
 		var wsdl : String = "http://" + server + "/vdom.wsdl";
-
+trace(wsdl)
 		soap.addEventListener( "loadWsdlComplete", soap_initCompleteHandler );
 		soap.addEventListener( FaultEvent.FAULT, soapError );
 		soap.init( wsdl );
 
 		function soap_initCompleteHandler( event : Event ) : void
 		{
+			trace("soap_initCompleteHandler"); 
 			soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
 
 			soap.login( login, pass );
@@ -268,11 +276,18 @@ public class SOAPBaseLevel extends EventDispatcher
 
 		function soap_loginOKHandler( event : SOAPEvent ) : void
 		{
+			trace("soap_loginOKHandler"); 
 			soap.removeEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
 
-			var result : XMLList = new XMLList( event.result );
 
-			_result = result[0];
+			var result : XML =  event.result as XML;
+            trace(result)
+
+//            [Success 195.167.233.27 root 1.2.7817]
+             var resultArray : Array = ["Success", result.Hostname, result.Username, result.ServerVersion]
+
+            _result = ListParser.array2List(resultArray);
+            trace(_result)
 
 			dispatchEvent( new Event( RESULT_RECEIVED ) );
 		}
@@ -305,6 +320,16 @@ public class SOAPBaseLevel extends EventDispatcher
 		_result = "Ok";
 
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
+	}
+
+	private function checkApplicationExists( params : Array ) : void
+	{
+		var applicationID : String = params[0];
+
+		soap.check_application_exists.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.check_application_exists.addEventListener( FaultEvent.FAULT, soapError );
+
+		soap.check_application_exists(  applicationID );
 	}
 }
 }

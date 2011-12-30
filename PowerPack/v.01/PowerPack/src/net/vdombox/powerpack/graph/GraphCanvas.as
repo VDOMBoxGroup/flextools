@@ -833,10 +833,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 			
 		ProgressManager.start( ProgressManager.WINDOW_MODE, false );
 		
-		sdkCompiler.build("C:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/3.6.0/flex-sdk-description.xml", 
-							"C:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.1.0/flex-sdk-description.xml", 
-							"D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack", 
-							"D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack_lib");
+		sdkCompiler.build("C:/Program Files (x86)/Adobe/Adobe Flash Builder 4.5/sdks/3.6.0/flex-sdk-description.xml", 
+							"C:/Program Files (x86)/Adobe/Adobe Flash Builder 4.5/sdks/4.1.0/flex-sdk-description.xml", 
+							"D:/FlexProjects/PowerPack/PowerPack", 
+							"D:/FlexProjects/PowerPack/PowerPack_lib");
 		
 		function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void
 		{

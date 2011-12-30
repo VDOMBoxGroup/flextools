@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application xmlns="http://ns.adobe.com/air/application/2.0">
+<application xmlns="http://ns.adobe.com/air/application/1.5.3">
 
     <!-- Adobe AIR Application Descriptor File Template.
 
@@ -15,18 +15,18 @@
 -->
 
     <!-- The application identifier string, unique to this application. Required. -->
-    <id>net.vdom.powerpack.builder</id>
+    <id>net.vdom.powerpack.Installer</id>
 
     <!-- Used as the filename for the application. Required. -->
-    <filename>Power Pack Builder</filename>
+    <filename>Power Pack Installer</filename>
 
     <!-- The name that is displayed in the AIR application installer. Optional. -->
-    <name>Power Pack Builder 1.1.11 (7521)</name>
+    <name>Power Pack Installer 1.1.11 (7554)</name>
 
-	<supportedProfiles>extendedDesktop desktop</supportedProfiles>
+	<!--  supportedProfiles>extendedDesktop desktop</supportedProfiles-->
 	
     <!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-    <version>1.1.10.7521</version>
+    <version>1.1.11.7554</version>
 
     <!-- Description, displayed in the AIR application installer. Optional. -->
     <!-- <description></description> -->
@@ -38,16 +38,16 @@
     <initialWindow>
         <!-- The main SWF or HTML file of the application. Required. -->
         <!-- Note: In Flex Builder, the SWF reference is set automatically. -->
-        <content>Builder.swf</content>
+        <content>Installer.swf</content>
 
         <!-- The title of the main window. Optional. -->
         <!-- <title></title> -->
 
         <!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
-        <systemChrome>standard</systemChrome>
+        <systemChrome>none</systemChrome>
 
         <!-- Whether the window is transparent. Only applicable when systemChrome is false. Optional. Default false. -->
-        <transparent>false</transparent>
+        <transparent>true</transparent>
 
         <!-- Whether the window is initially visible. Optional. Default false. -->
         <!-- <visible></visible> -->
@@ -56,10 +56,10 @@
         <!-- <minimizable></minimizable> -->
 
         <!-- Whether the user can maximize the window. Optional. Default true. -->
-        <!-- <maximizable></maximizable> -->
+        <maximizable>false</maximizable>
 
         <!-- Whether the user can resize the window. Optional. Default true. -->
-        <!-- <resizable></resizable> -->
+        <resizable>false</resizable>
 
         <!-- The window's initial width. Optional. -->
         <!-- <width></width> -->
@@ -81,7 +81,7 @@
     </initialWindow>
 
     <!-- The subpath of the standard default installation location to use. Optional. -->
-    <installFolder>VDOM</installFolder>
+    <!-- <installFolder>VDOM</installFolder> -->
 
     <!-- The subpath of the Windows Start/Programs menu to use. Optional. -->
     <programMenuFolder>VDOM/Power Pack</programMenuFolder>

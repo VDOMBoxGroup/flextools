@@ -14,7 +14,7 @@
 	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
 	creationComplete="windowedapplication1_creationCompleteHandler(event)">
 	
-	<mx:Style source="assets/style/generator.css" />
+	<mx:Style source="assets/style/installer.css" />
 	
 	<mx:Fade alphaFrom="0.0" alphaTo="1.0" duration="300" id="canvasShow" />
 	<mx:Fade alphaFrom="1.0" alphaTo="0.0" duration="300" id="canvasHide" />
@@ -87,7 +87,7 @@
 			{
 				var defaultCaptions : Object = {
 					
-					app_title : "Power Pack Player",
+					app_title : "Power Pack Installer",
 					msg_input_template_key : "Please, input valid template key",
 					msg_exit_app : "Are you sure want to exit?",
 					msg_tpl_proceed_with_errs : "Error(s) exist in template\nProceed with launch?",
@@ -131,7 +131,7 @@
 					exitApplication();
 				}
 				
-				mnMain.enabled = true;
+//				mnMain.enabled = true;
 				
 				var file : File;
 				var fileStream : FileStream;
@@ -384,19 +384,15 @@
 						switch ( vsImages.selectedIndex )
 						{
 							case 0:
-								mnMain.enabled = false;
 								runingTemplate();
 								break;
 							case 1:
-								mnMain.enabled = false;
 								saveToServer();
 								break;
 							case 2:
-								mnMain.enabled = false;
 								saveToFile();
 								break;
 							case 3:
-								mnMain.enabled = false;
 								launchApp();
 								break;
 						}
@@ -462,15 +458,12 @@
 						{
 							case cWelcome:
 								vsProcess.selectedChild = cWelcome;
-								mnMain.enabled = true;
 								break;
 							case cKeyRequest:
 								vsProcess.selectedChild = cKeyRequest;
-								mnMain.enabled = true;
 								break;
 							case cGeneral:
 								vsProcess.selectedChild = cGeneral;
-								mnMain.enabled = true;
 								break;
 							case cServerRequest:
 								vsProcess.selectedChild = cServerRequest;
@@ -483,15 +476,12 @@
 								break;
 							case cInterrupt:
 								vsProcess.selectedChild = cInterrupt;
-								mnMain.enabled = true;
 								break;
 							case cComplete:
 								vsProcess.selectedChild = cComplete;
-								mnMain.enabled = true;
 								break;
 							case cFinal:
 								vsProcess.selectedChild = cFinal;
-								mnMain.enabled = true;
 								break;
 						}
 						break;
@@ -517,7 +507,7 @@
 			{
 				try
 				{
-					mnMain.enabled = false;
+//					mnMain.enabled = false;
 					appGenerated = false;
 					
 					var tpl : Template;
@@ -622,7 +612,7 @@
 				if ( ContextManager.templateStruct.buffer )
 				{
 					infoServerRequest.text = LanguageManager.sentences['msg_save_appxml_to_server'];
-					processStep( cServerRequest );
+					processStep( cFinal );
 				}
 				else
 				{
@@ -1001,7 +991,7 @@
 			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
 				// TODO Auto-generated method stub
-				
+				openTemplateFile(null,onTemplateLoad);
 			}
 			
 		]]>
@@ -1009,12 +999,12 @@
 	
 	<mx:VBox height="100%" width="100%">
 		
-		<mx:MenuBar id="mnMain" width="100%" dataProvider="{fileMenuData.menuitem}" labelFunction="labelFunction"
+		<!--mx:MenuBar id="mnMain" width="100%" dataProvider="{fileMenuData.menuitem}" labelFunction="labelFunction"
 					showRoot="false"
-					itemClick="onMenuClick(event);"></mx:MenuBar>
+					itemClick="onMenuClick(event);"></mx:MenuBar-->
 		
 		<mx:HBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="left"
-				 paddingTop="10" paddingRight="10" paddingLeft="10" paddingBottom="10">
+				 paddingTop="40" paddingRight="10" paddingLeft="40" paddingBottom="10">
 			<controls:Base64Image id="tplPic" 
 								  width="220" height="100%"
 								  value="{resources.strLogo}"  
@@ -1036,9 +1026,9 @@
 					<mx:VBox id="cKeyRequest" height="100%" width="100%"
 							 verticalAlign="middle" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
-						<mx:TextInput width="90%" editable="false"
-									  text="{ContextManager.templates.getItemAt(0).name}"
-									  styleName="edtTextStyle" />
+						<mx:Label width="90%" 
+									  text="{'1 '+ContextManager.templates.getItemAt(0).name}"
+									  styleName="headerLabel"/>
 						<mx:TextArea editable="false" width="90%" height="150"
 									 text="{ContextManager.templates.getItemAt(0).description}" />
 						<mx:Label text="{LanguageManager.sentences.msg_input_template_key}:" />
@@ -1055,10 +1045,10 @@
 					<mx:VBox id="cGeneral" height="100%" width="100%"
 							 verticalAlign="middle" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
-						<mx:TextInput width="90%" editable="false"
-									  text="{ContextManager.templates.getItemAt(0).name}"
-									  styleName="edtTextStyle" />
-						<mx:TextArea editable="false" width="90%" height="150"
+						<mx:Label width="90%" 
+									  text="{'2 '+ContextManager.templates.getItemAt(0).name}"
+									  styleName="headerLabel" />
+						<mx:Label  width="90%" height="150"
 									 text="{ContextManager.templates.getItemAt(0).description}" />
 						
 						<mx:ControlBar width="90%" horizontalAlign="right">
@@ -1174,9 +1164,9 @@
 					<mx:VBox id="cProcess" height="100%" width="100%"
 							 verticalAlign="middle" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
-						<mx:TextInput width="90%" editable="false"
-									  text="{ContextManager.templates.getItemAt(0).name}"
-									  styleName="edtTextStyle" />
+						<mx:Label width="90%" 
+									  text="{'3 '+ContextManager.templates.getItemAt(0).name}"
+									  styleName="headerLabel"/>
 						
 						<mx:Spacer width="100%" height="30" />
 						

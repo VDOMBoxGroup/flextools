@@ -49,6 +49,10 @@ public class Parser
 		"XML" : { pattern : /^\[n\]$/, argNum : 0 },
 		"getApplicationValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
 
+        "setXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]*\]$/, argNum : 3 },
+		"getXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
+
+
 		//*********************
 		// List manipulation
 		//*********************

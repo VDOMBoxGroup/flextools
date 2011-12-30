@@ -6,11 +6,13 @@
       <libraryPathEntry kind="4" path=""/>
       <libraryPathEntry kind="1" linkType="1" path="libs"/>
       <libraryPathEntry kind="3" linkType="1" path="/PowerPack_lib/bin/PowerPack_lib.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="2" path="C:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.1.0/frameworks/libs/air/airglobal.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
   <applications>
+    <application path="Installer.mxml">
+      <airExcludes/>
+    </application>
     <application path="Builder.mxml">
       <airExcludes/>
     </application>
@@ -23,7 +25,7 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="default">
-      <airSettings airCertificatePath="D:/workspaces/workspacePowerPack/PowerPack/v.01/PowerPack/src/assets/sert.p12" airTimestamp="true" version="1">
+      <airSettings airCertificatePath="D:/FlexProjects/PowerPack/PowerPack/src/assets/sert.p12" airTimestamp="true" version="1">
         <airExcludes/>
       </airSettings>
       <actionScriptSettings version="1"/>

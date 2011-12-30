@@ -31,8 +31,18 @@ public class MenuGeneral extends EventDispatcher
 	public static const MENU_TEMPLATE	: String = "template";
 	
 	public static var state : String;
-	public static var menu : FlexNativeMenu;
+	private static var _menu : FlexNativeMenu;
 	private static var memMenu : Dictionary;
+
+	public static function get menu():FlexNativeMenu
+	{
+		return _menu;
+	}
+
+	public static function set menu(value:FlexNativeMenu):void
+	{
+		_menu = value;
+	}
 
 	public static function bindItems() : void
 	{
@@ -267,6 +277,10 @@ public class MenuGeneral extends EventDispatcher
 	
 	public static function updateMenuState (menuType : String, enabled : Boolean) : void 
 	{
+		return;
+//		if ( !MenuGeneral.menu)
+//			return;
+		
 		var menuItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( menuType );
 		menuItem.enabled = enabled;
 		
