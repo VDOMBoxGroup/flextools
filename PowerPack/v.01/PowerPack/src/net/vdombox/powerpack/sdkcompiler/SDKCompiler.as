@@ -139,7 +139,7 @@ package net.vdombox.powerpack.sdkcompiler
 			content += FileUtils.convertPathForCMD(powerPackLibProjectPath + '/bin/PowerPack_lib.swc') + ',';
 			content += FileUtils.convertPathForCMD(sdk4_1Path + '/frameworks/libs/air/airglobal.swc');
 			content += ' -- ';
-			content += FileUtils.convertPathForCMD(powerPackProjectPath + '/src/Generator.mxml');
+			content += FileUtils.convertPathForCMD(powerPackProjectPath + '/src/Installer.mxml');
 			
 			return content;
 		}
@@ -162,10 +162,10 @@ package net.vdombox.powerpack.sdkcompiler
 			content += FileUtils.convertPathForCMD(sertificatePath) + " ";
 			content += "-storepass q ";
 			content += FileUtils.convertPathForCMD(outputPackagePath) + " ";
-			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/bin-debug/Generator-app.xml") + " ";
+			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/bin-debug/Installer-app.xml") + " ";
 			content += "-C ";
 			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/bin-debug") + " ";
-			content += "Generator.swf ";
+			content += "Installer.swf ";
 			content += "-C ";
 			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/bin-debug") + " ";
 			content += "assets";
@@ -244,7 +244,7 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		private function get outputSwfPath () : String
 		{
-			return powerPackProjectPath + "/bin-debug/Generator.swf";
+			return powerPackProjectPath + "/bin-debug/Installer.swf";
 		}
 		
 		public function get outputPackagePath () : String
