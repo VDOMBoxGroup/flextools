@@ -257,6 +257,8 @@ public class SOAPBaseLevel extends EventDispatcher
 
 	public function soapLogin( params : Array ) : void
 	{
+		
+		
 		var server : String = params[0];
 		var login : String = params[1];
 		var pass : String = params[2];
@@ -268,9 +270,12 @@ trace(wsdl)
 
 		function soap_initCompleteHandler( event : Event ) : void
 		{
+			soap.removeEventListener( "loadWsdlComplete", soap_initCompleteHandler );
 			trace("soap_initCompleteHandler"); 
 			soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
-
+			
+			
+//			soap.close_session(); 
             trace(login+" : "+ pass)
 			soap.login( login, pass );
 		}
