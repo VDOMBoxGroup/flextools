@@ -271,6 +271,7 @@ trace(wsdl)
 			trace("soap_initCompleteHandler"); 
 			soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
 
+            trace(login+" : "+ pass)
 			soap.login( login, pass );
 		}
 

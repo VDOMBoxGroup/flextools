@@ -408,7 +408,7 @@ public function random( value : int ) : String
 
 public function alert( strr : String ) : void
 {
-	Alert.show( strr );
+	//Alert.show( strr );
 }
 
 public function wholeMethod( funct : String, ...args ) : Function

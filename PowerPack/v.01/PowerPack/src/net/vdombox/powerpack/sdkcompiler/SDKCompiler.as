@@ -268,7 +268,9 @@ package net.vdombox.powerpack.sdkcompiler
 				case FileUtils.OS_WINDOWS:
 				default:
 				{
-					outputPath = File.applicationStorageDirectory.nativePath + '/appInstaller.exe'
+//					outputPath = File.applicationStorageDirectory.nativePath + '/appInstaller.exe'
+					outputPath = "c:/temp/appInstaller.exe"					
+					
 					break;
 				}
 			}
@@ -338,7 +340,7 @@ package net.vdombox.powerpack.sdkcompiler
 					return;
 				}
 				
-				var exitMessage : String = evt.exitCode == 0 ? "Building process was completed without errors." : "Building process completed with errors.";
+				var exitMessage : String = evt.exitCode == 0 ? "Building process was completed Ok." : "Building process completed with errors.";
 				sendEvent(SDKCompilerEvent.SDK_COMPILER_COMPETE, exitMessage);
 				
 				removeProcessListeners();

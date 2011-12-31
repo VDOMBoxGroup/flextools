@@ -53,6 +53,7 @@
 			<menuitem label="Template" id="template">
 				<!--menuitem label="Validate" id="validate"/-->
 				<menuitem label="Properties" id="properties" />
+				<menuitem label="Build AIR " id="air_builder" />
 			</menuitem>
 
 			<menuitem label="Run" id="run">
@@ -69,6 +70,7 @@
 
 			<menuitem label="Settings" id="settings">
 				<menuitem label="Language" id="language" enabled="false" />
+				
 			</menuitem>
 
 			<menuitem label="Help" id="help" enabled="false" />
@@ -77,41 +79,42 @@
 
 	<mx:Script>
 		<![CDATA[
-		import mx.collections.HierarchicalData;
-		import mx.collections.XMLListCollection;
-		import mx.controls.Alert;
-		import mx.controls.Tree;
-		import mx.core.Application;
-		import mx.events.CloseEvent;
-		import mx.events.FlexNativeMenuEvent;
-		import mx.utils.StringUtil;
-
-		import net.vdombox.powerpack.*;
-		import net.vdombox.powerpack.dialog.EditCaption;
-		import net.vdombox.powerpack.dialog.Import;
-		import net.vdombox.powerpack.dialog.ImportFromTpl;
-		import net.vdombox.powerpack.dialog.ModalDialog;
-		import net.vdombox.powerpack.dialog.TemplateKey;
-		import net.vdombox.powerpack.dialog.TemplateProperties;
-		import net.vdombox.powerpack.dialog.ValidateDialog;
-		import net.vdombox.powerpack.gen.*;
-		import net.vdombox.powerpack.gen.parse.parseClasses.CodeFragment;
-		import net.vdombox.powerpack.gen.structs.NodeStruct;
-		import net.vdombox.powerpack.graph.Connector;
-		import net.vdombox.powerpack.graph.GraphCanvas;
-		import net.vdombox.powerpack.graph.Node;
-		import net.vdombox.powerpack.graph.NodeCategory;
-		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
-		import net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
-		import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
-		import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
-		import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
-		import net.vdombox.powerpack.managers.CashManager;
-		import net.vdombox.powerpack.managers.ContextManager;
-		import net.vdombox.powerpack.managers.LanguageManager;
-		import net.vdombox.powerpack.managers.ProgressManager;
-		import net.vdombox.powerpack.menu.MenuGeneral;
-		import net.vdombox.powerpack.panel.Console;
+			import mx.collections.HierarchicalData;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.controls.Tree;
+			import mx.core.Application;
+			import mx.events.CloseEvent;
+			import mx.events.FlexNativeMenuEvent;
+			import mx.utils.StringUtil;
+			
+			import net.vdombox.powerpack.*;
+			import net.vdombox.powerpack.dialog.AirBuildProperties;
+			import net.vdombox.powerpack.dialog.EditCaption;
+			import net.vdombox.powerpack.dialog.Import;
+			import net.vdombox.powerpack.dialog.ImportFromTpl;
+			import net.vdombox.powerpack.dialog.ModalDialog;
+			import net.vdombox.powerpack.dialog.TemplateKey;
+			import net.vdombox.powerpack.dialog.TemplateProperties;
+			import net.vdombox.powerpack.dialog.ValidateDialog;
+			import net.vdombox.powerpack.gen.*;
+			import net.vdombox.powerpack.gen.parse.parseClasses.CodeFragment;
+			import net.vdombox.powerpack.gen.structs.NodeStruct;
+			import net.vdombox.powerpack.graph.Connector;
+			import net.vdombox.powerpack.graph.GraphCanvas;
+			import net.vdombox.powerpack.graph.Node;
+			import net.vdombox.powerpack.graph.NodeCategory;
+			import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+			import net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
+			import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
+			import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
+			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+			import net.vdombox.powerpack.managers.CashManager;
+			import net.vdombox.powerpack.managers.ContextManager;
+			import net.vdombox.powerpack.managers.LanguageManager;
+			import net.vdombox.powerpack.managers.ProgressManager;
+			import net.vdombox.powerpack.menu.MenuGeneral;
+			import net.vdombox.powerpack.panel.Console;
 
 		//--------------------------------------------------------------------------
 		//
@@ -555,6 +558,10 @@
 
 				case "properties":
 					TemplateProperties.show( onTemplatePropertiesClose );
+					break;
+				
+				case "air_builder":
+					AirBuildProperties.show( );
 					break;
 
 				case "validate":

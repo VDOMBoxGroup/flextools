@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModalDialog
+	xmlns="net.vdombox.powerpack.dialog.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="500" height="425"
+	title="AIR"
+	creationComplete="onShow()"
+	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
+	xmlns:customize="net.vdombox.powerpack.customize.*"
+	resizable="false">
+	
+	<customize:TemplateDefaultLogo id="defaultLogo" />
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.utils.StringUtil;
+			
+			import net.vdombox.powerpack.Template;
+			import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+			import net.vdombox.powerpack.managers.ContextManager;
+			import net.vdombox.powerpack.managers.LanguageManager;
+			import net.vdombox.powerpack.managers.ProgressManager;
+			import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
+			import net.vdombox.powerpack.sdkcompiler.SDKCompilerEvent;
+			
+			private static var _dialog	: AirBuildProperties;
+			
+			private var shObject : SharedObject = SharedObject.getLocal( "air_properties" );
+			private  function onShow():void
+			{
+				trace("INIT");
+				
+				
+				
+				if(shObject.data.hasOwnProperty("sdk_3_6")) 
+					sdk_3.text = shObject.data["sdk_3_6"] ;
+						
+				if(shObject.data.hasOwnProperty("sdk_4_5")) 
+					sdk_4.text = shObject.data["sdk_4_5"] ;
+						
+				if(shObject.data.hasOwnProperty("powerPackPath")) 
+					powerPackPath.text = shObject.data["powerPackPath"]; 
+						
+				if(shObject.data.hasOwnProperty("powerPackLibPath")) 
+					powerPackLibPath.text = shObject.data["powerPackLibPath"]; 
+			}
+			
+			static public function show( closeHandler : Function = null ) : AirBuildProperties
+			{
+				
+				
+				if ( !_dialog || _dialog.closed )
+				{
+					_dialog = new AirBuildProperties();
+					_dialog.open();
+					_dialog.show( OK | CANCEL, closeHandler, null, OK );
+				}
+				else
+				{
+					_dialog.activate();
+				}
+				
+				return _dialog;
+			}
+			
+			protected override function removeDialog( buttonPressed : String ) : void
+			{
+				switch ( buttonPressed )
+				{
+					
+					case BUTTON_NAME_OK:
+					{
+							_dialog.closeDetail = ModalDialog.OK;
+							_dialog.close();
+							
+							shObject.data["sdk_3_6"] = sdk_3.text ;
+							shObject.data["sdk_4_5"] = sdk_4.text ;
+							
+							shObject.data["powerPackPath"] = powerPackPath.text ;
+							shObject.data["powerPackLibPath"] = powerPackLibPath.text ;
+							
+							
+							shObject.flush();
+						
+						break;
+					}
+					case BUTTON_NAME_CANCEL:
+					{
+						_dialog.closeDetail = ModalDialog.CANCEL;
+						_dialog.close();
+						break;
+					}
+					default:
+					{
+						_dialog.closeDetail = ModalDialog.CANCEL;
+						_dialog.close();
+						break;
+					}
+				}
+			}
+			
+			
+			
+			
+			private function compilePlayer():void
+			{
+				var sdkCompiler : SDKCompiler = new SDKCompiler();
+				
+				if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE))
+					sdkCompiler.addEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE, sdkCompilerEventHandler); 
+				
+				if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR))
+					sdkCompiler.addEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR, sdkCompilerEventHandler);
+				
+				ProgressManager.start( ProgressManager.WINDOW_MODE, false );
+				
+				sdkCompiler.build(sdk_3.text, 
+					sdk_4.text, 
+					powerPackPath.text, 
+					powerPackLibPath.text);
+				
+				function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void
+				{
+					ProgressManager.complete();
+					
+					if (evt.message)
+					{
+						SuperAlert.show(evt.message);
+					}
+				}
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:VBox styleName="dlgHeader" width="100%">
+		<mx:Label text="AIR" styleName="headerLabel" />
+	
+	<mx:Label text="SDK 3.6"/>
+	<mx:TextInput id="sdk_3" 
+				  width="100%"
+				  toolTip="C:/Program Files (x86)/Adobe/Adobe Flash Builder 4.5/sdks/3.6.0/flex-sdk-description.xml"/>
+	
+	<mx:Label text="SDK 4.1"/>
+	<mx:TextInput id="sdk_4" 
+					  width="100%"
+					  toolTip="C:/Program Files (x86)/Adobe/Adobe Flash Builder 4.5/sdks/4.5.0/flex-sdk-description.xml"/>
+			
+	<mx:Label text="Power Pack Project Path"/>
+	<mx:TextInput  id="powerPackPath"  
+				   width="100%"
+				   toolTip="D:/FlexProjects/PowerPack/PowerPack"/>
+		
+	<mx:Label text="Power Pack Libs Project Path"/>
+	<mx:TextInput id="powerPackLibPath" 
+				  width="100%"
+				  toolTip="D:/FlexProjects/PowerPack/PowerPack_libl" />
+	</mx:VBox>
+	
+	<mx:Button label="Build" click="compilePlayer()" />
+	
+	
+	
+	
+	<mx:ControlBar width="500" styleName="dlgFooter"/>
+	
+	
+</ModalDialog>

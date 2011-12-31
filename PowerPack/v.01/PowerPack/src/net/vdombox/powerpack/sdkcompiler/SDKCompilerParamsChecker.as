@@ -30,7 +30,7 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 		}
 		
-		
+		// TODO: need add posible check by 1 param 
 		public function checkParams(_sdk3_6DescriptionXMLPath : String, 
 									_sdk4_1DescriptionXMLPath : String, 
 									_powerPackProjectPath : String,
@@ -53,12 +53,13 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		private function onParamsCheckError():void
 		{
+			// TODO: need error details
 			dispatchEvent(new Event(PARAMS_ERROR));
 		}
 		
 		private function checkSDKPath(descriptionXMLPath : String) : void
 		{
-			var descriptionFile : File = new File(descriptionXMLPath);
+			var descriptionFile : File = new File().resolvePath(descriptionXMLPath);
 			var sdkDescriptionXML : XML;
 			
 			if (!descriptionFile || !descriptionFile.exists)
@@ -67,7 +68,7 @@ package net.vdombox.powerpack.sdkcompiler
 				return;
 			}
 			
-			
+			// TODO: other way to open file 
 			fileStream.addEventListener(Event.COMPLETE, onDescriptionXMLOpenComplete);
 			fileStream.addEventListener(IOErrorEvent.IO_ERROR, onDescriptionXMLOpenError);
 			fileStream.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onDescriptionXMLOpenError);
@@ -116,18 +117,22 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		private function onSDKChecked():void
 		{
+			
 			if (currentSdkVersion == SDK_3_6)
 			{
 				currentSdkVersion = SDK_4_1;
 				checkSDKPath(sdk4_1DescriptionXMLPath);
 			}
 			else
+			{
 				checkPowerPackPath();
+			}
 
 		}
 		
 		private function isCorrectSDK(sdkDescriptionXML : XML) : Boolean
 		{
+			return true;
 			var sdkVersion : String = XMLList(sdkDescriptionXML.version).toString(); 
 			
 			return sdkVersion == currentSdkVersion;
@@ -147,8 +152,8 @@ package net.vdombox.powerpack.sdkcompiler
 			var powerPackAssetsFolder : File = new File(powerPackProjectPath + "/src/assets");
 			var powerPackLibsFolder : File = new File(powerPackProjectPath + "/libs");
 			var powerPackBinFolder : File = new File(powerPackProjectPath + "/bin-debug");
-			var powerPackGeneratorFile : File = new File(powerPackProjectPath + "/src/Generator.mxml");
-			var powerPackDescriptionXmlFile : File = new File(powerPackProjectPath + "/bin-debug/Generator-app.xml");
+			var powerPackGeneratorFile : File = new File(powerPackProjectPath + "/src/Installer.mxml");
+			var powerPackDescriptionXmlFile : File = new File(powerPackProjectPath + "/bin-debug/Installer-app.xml");
 			
 			return powerPackProjectFolder.exists && 
 				powerPackAssetsFolder.exists && 
