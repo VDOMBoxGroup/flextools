@@ -19,28 +19,16 @@ package net.vdombox.powerpack.sdkcompiler
 	{
 		private var process : NativeProcess;
 
+		private var outputInstallerFolderPath : String;
+		private var outputInstallerFileName : String;
+		
 		private var paramsChecker	: SDKCompilerParamsChecker = new SDKCompilerParamsChecker();;
-		
-		private var powerPackProjectPath	: String;
-		private var powerPackLibProjectPath	: String;
-		
-		private var sdk3_6DescriptionXMLPath	: String;
-		private var sdk4_1DescriptionXMLPath	: String;
-		
-		private static const COMPILER_TYPE_SWF		: String = "swfCompiler";
-		private static const COMPILER_TYPE_PACKAGE	: String = "packageCompiler";
-		
-		private var compilerType : String;
-		
 		
 		public function SDKCompiler()
 		{
 		}
 		
-		public function build(sdk3_6DescriptionXMLPath : String, 
-							  _sdk4_1DescriptionXMLPath : String, 
-							  _powerPackProjectPath : String,
-							  _powerPackLibProjectPath : String) : void
+		public function buildInstallerPackage(outputFolderPath : String, outputFileName : String) : void
 		{
 			var processEvent : SDKCompilerEvent;
 			
@@ -50,16 +38,13 @@ package net.vdombox.powerpack.sdkcompiler
 				return;
 			}
 			
-			this.sdk3_6DescriptionXMLPath = sdk3_6DescriptionXMLPath;
-			sdk4_1DescriptionXMLPath = _sdk4_1DescriptionXMLPath;
-			powerPackProjectPath = _powerPackProjectPath;
-			powerPackLibProjectPath = _powerPackLibProjectPath;
+			outputInstallerFolderPath = outputFolderPath;
+			outputInstallerFileName = outputFileName;
 			
 			paramsChecker.addEventListener(SDKCompilerParamsChecker.PARAMS_OK, onParamsOK);
 			paramsChecker.addEventListener(SDKCompilerParamsChecker.PARAMS_ERROR, onParamsError);
 			
-			paramsChecker.checkParams(sdk3_6DescriptionXMLPath, sdk4_1DescriptionXMLPath, powerPackProjectPath, powerPackLibProjectPath);
-			
+			paramsChecker.checkParams(sdk4_1Path, powerPackProjectPath);
 		}
 		
 		private function onParamsOK(evt:Event):void
@@ -80,34 +65,24 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		private function generateBuildingBatFiles () : void
 		{
-			var batFileType : String;
 			var batFileGenerated : Boolean;
-			
-			batFileType = "swf";
 			
 			batFileGenerated = generateBuildingBatFile();
 			
 			if (batFileGenerated)
-			{
-				batFileType = "package";
-				
-				batFileGenerated = generateBuildingBatFile();
-				
-				if (batFileGenerated)
-					onBatFilesGenerated();
-			}
+				onBatFilesGenerated();
 			
 			function generateBuildingBatFile () : Boolean
 			{
-				var batFilePath : String = batFileType == "swf" ? swfBatFilePath : packageBatFilePath;
-				var batFileContent : String = batFileType == "swf" ? swfBatFileContent : packageBatFileContent;
+				var batFilePath : String = packageBatFilePath;
+				var batFileContent : String = packageBatFileContent;
 				
 				var fileStream : FileStream = new FileStream();
-				var swfBatFile : File = new File(batFilePath);
+				var batFile : File = new File(batFilePath);
 				
 				try
 				{
-					fileStream.openAsync(swfBatFile, FileMode.WRITE);
+					fileStream.openAsync(batFile, FileMode.WRITE);
 					fileStream.writeUTFBytes(batFileContent);
 					fileStream.close();
 				}
@@ -119,29 +94,6 @@ package net.vdombox.powerpack.sdkcompiler
 				
 				return true;
 			}
-		}
-		
-		private function get swfBatFilePath () : String
-		{
-			var batFilePath : String = File.applicationStorageDirectory.nativePath + "/generatePlayerSwf.bat";
-			
-			return batFilePath;
-		}
-		
-		private function get swfBatFileContent() : String
-		{
-			var content : String = "";
-			
-			content += FileUtils.convertPathForCMD(sdk3_6Path + '/bin/amxmlc.bat') + ' ';
-			content += '-output=' + FileUtils.convertPathForCMD(outputSwfPath) + ' ';
-			content += '-library-path+='
-			content += FileUtils.convertPathForCMD(powerPackProjectPath + '/libs') + ',';
-			content += FileUtils.convertPathForCMD(powerPackLibProjectPath + '/bin/PowerPack_lib.swc') + ',';
-			content += FileUtils.convertPathForCMD(sdk4_1Path + '/frameworks/libs/air/airglobal.swc');
-			content += ' -- ';
-			content += FileUtils.convertPathForCMD(powerPackProjectPath + '/src/Installer.mxml');
-			
-			return content;
 		}
 		
 		private function get packageBatFilePath () : String
@@ -162,12 +114,12 @@ package net.vdombox.powerpack.sdkcompiler
 			content += FileUtils.convertPathForCMD(sertificatePath) + " ";
 			content += "-storepass q ";
 			content += FileUtils.convertPathForCMD(outputPackagePath) + " ";
-			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/bin-debug/Installer-app.xml") + " ";
+			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/Installer-app.xml") + " ";
 			content += "-C ";
-			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/bin-debug") + " ";
+			content += FileUtils.convertPathForCMD(powerPackProjectPath) + " ";
 			content += "Installer.swf ";
 			content += "-C ";
-			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/bin-debug") + " ";
+			content += FileUtils.convertPathForCMD(powerPackProjectPath) + " ";
 			content += "assets";
 			
 			return content;
@@ -177,7 +129,7 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 			initProcess();
 			
-			buildSwf();
+			buildPackage();
 		}
 		
 		private function initProcess():void
@@ -187,17 +139,8 @@ package net.vdombox.powerpack.sdkcompiler
 			addProcessListeners();
 		}
 		
-		private function buildSwf() : void
-		{
-			compilerType = COMPILER_TYPE_SWF;
-			
-			process.start(processStartupInfo);
-		}
-		
 		private function buildPackage() : void
 		{
-			compilerType = COMPILER_TYPE_PACKAGE;
-			
 			process.start(processStartupInfo);
 		}
 		
@@ -217,86 +160,57 @@ package net.vdombox.powerpack.sdkcompiler
 			return startupInfo;
 		}
 		
-		private function get sdk3_6Path () : String
+		private function get powerPackProjectPath () : String
 		{
-			var sdkFolder : File = new File(sdk3_6DescriptionXMLPath).parent;
-			
-			if (!sdkFolder || !sdkFolder.exists)
-				return null;
-			
-			return sdkFolder.nativePath;
+			return File.applicationDirectory.nativePath;
 		}
 		
 		private function get sdk4_1Path () : String
 		{
-			var sdkFolder : File = new File(sdk4_1DescriptionXMLPath).parent;
-			
-			if (!sdkFolder || !sdkFolder.exists)
-				return null;
-			
-			return sdkFolder.nativePath;
+			return powerPackProjectPath + "/sdks/4.1.0";
 		}
 		
 		private function get sertificatePath () : String
 		{
-			return powerPackProjectPath + "/src/assets/sert.p12";
-		}
-		
-		private function get outputSwfPath () : String
-		{
-			return powerPackProjectPath + "/bin-debug/Installer.swf";
+			return powerPackProjectPath + "/assets/sert.p12";
 		}
 		
 		public function get outputPackagePath () : String
 		{
-			var outputPath : String;
-			
+			var outputExtension	: String;
 			var os : String = Capabilities.os.substr(0, 3).toUpperCase();
 			
 			switch(os)
 			{
 				case FileUtils.OS_MAC:
 				{
-					outputPath = File.applicationStorageDirectory.nativePath + '/appInstaller.dmg'
+					outputExtension = ".dmg";
 					break;
 				}
 				case FileUtils.OS_LINUX:
 				{
-					outputPath = File.applicationStorageDirectory.nativePath + '/appInstaller.deb'
+					outputExtension = ".deb";
 					break;
 				}
 				case FileUtils.OS_WINDOWS:
 				default:
 				{
-//					outputPath = File.applicationStorageDirectory.nativePath + '/appInstaller.exe'
-					outputPath = "c:/temp/appInstaller.exe"					
+					outputExtension = ".exe";
 					
 					break;
 				}
 			}
+			
+			var outputPath : String = outputInstallerFolderPath + "/" + outputInstallerFileName + outputExtension; 
 			
 			return outputPath;
 		}
 		
 		private function get compilerArguments() : Vector.<String>
 		{
-			var argVector : Vector.<String>               = new Vector.<String>();
-			var batFilePath : String;
-			switch(compilerType)
-			{
-				case COMPILER_TYPE_SWF:
-				{
-					batFilePath = FileUtils.convertPathForCMD(swfBatFilePath, true);
-					
-					break;
-				}
-				case COMPILER_TYPE_PACKAGE:
-				{
-					batFilePath = FileUtils.convertPathForCMD(packageBatFilePath, true);
-					
-					break;
-				}	
-			}
+			var argVector : Vector.<String>		= new Vector.<String>();
+			
+			var batFilePath : String			= FileUtils.convertPathForCMD(packageBatFilePath, true);
 			
 			argVector.push("/c");
 			argVector.push(batFilePath);
@@ -334,12 +248,6 @@ package net.vdombox.powerpack.sdkcompiler
 			trace ("[SDKCompiler] onProcessExitEvent");
 			if (evt.type == NativeProcessExitEvent.EXIT)
 			{
-				if (compilerType == COMPILER_TYPE_SWF)
-				{
-					buildPackage();
-					return;
-				}
-				
 				var exitMessage : String = evt.exitCode == 0 ? "Building process was completed Ok." : "Building process completed with errors.";
 				sendEvent(SDKCompilerEvent.SDK_COMPILER_COMPETE, exitMessage);
 				

@@ -13,16 +13,9 @@ package net.vdombox.powerpack.sdkcompiler
 		public static const PARAMS_OK		: String = "paramsOK";
 		public static const PARAMS_ERROR	: String = "paramsError";
 		
-		private static const SDK_3_6	: String = "3.6.0";
-		private static const SDK_4_1	: String = "4.1.0";
-		
-		private var currentSdkVersion	: String;
-		
 		private var powerPackProjectPath	: String;
-		private var powerPackLibProjectPath	: String;
 		
-		private var sdk3_6DescriptionXMLPath	: String;
-		private var sdk4_1DescriptionXMLPath	: String;
+		private static const SDK_4_1_VERSION	: String = "4.1.0";
 		
 		private var fileStream : FileStream = new FileStream();
 		
@@ -31,19 +24,13 @@ package net.vdombox.powerpack.sdkcompiler
 		}
 		
 		// TODO: need add posible check by 1 param 
-		public function checkParams(_sdk3_6DescriptionXMLPath : String, 
-									_sdk4_1DescriptionXMLPath : String, 
-									_powerPackProjectPath : String,
-									_powerPackLibProjectPath : String) : void
+		public function checkParams(_sdk4_1Path : String, 
+									_powerPackProjectPath : String) : void
 		{
 			
-			sdk3_6DescriptionXMLPath = _sdk3_6DescriptionXMLPath;
-			sdk4_1DescriptionXMLPath = _sdk4_1DescriptionXMLPath;
 			powerPackProjectPath = _powerPackProjectPath;
-			powerPackLibProjectPath = _powerPackLibProjectPath;
 			
-			currentSdkVersion = SDK_3_6;
-			checkSDKPath(sdk3_6DescriptionXMLPath);
+			checkSDKPath(_sdk4_1Path + "/flex-sdk-description.xml");
 		}
 		
 		private function onParamsCheckOK():void
@@ -68,66 +55,30 @@ package net.vdombox.powerpack.sdkcompiler
 				return;
 			}
 			
-			// TODO: other way to open file 
-			fileStream.addEventListener(Event.COMPLETE, onDescriptionXMLOpenComplete);
-			fileStream.addEventListener(IOErrorEvent.IO_ERROR, onDescriptionXMLOpenError);
-			fileStream.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onDescriptionXMLOpenError);
-			
-			fileStream.openAsync(descriptionFile, FileMode.READ);
-			
-			function onDescriptionXMLOpenComplete (event : Event) : void
+			try 
 			{
-				fileStream.removeEventListener(Event.COMPLETE, onDescriptionXMLOpenComplete);
-				fileStream.removeEventListener(IOErrorEvent.IO_ERROR, onDescriptionXMLOpenError);
-				fileStream.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onDescriptionXMLOpenError);
+				fileStream.open(descriptionFile, FileMode.READ);
 				
-				try 
-				{
-					sdkDescriptionXML = XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
-					
-					fileStream.close();
-				} 
-				catch (e:Error)
-				{
-					fileStream.close();
-					
-					onParamsCheckError();
-					return;
-				}
+				sdkDescriptionXML = XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
 				
-				if (!isCorrectSDK(sdkDescriptionXML))
-				{
-					onParamsCheckError();
-					return;
-				}
-				
-				onSDKChecked();
-			}
-			
-			function onDescriptionXMLOpenError (event : Event) : void
+				fileStream.close();
+			} 
+			catch (e:Error)
 			{
-				fileStream.removeEventListener(Event.COMPLETE, onDescriptionXMLOpenComplete);
-				fileStream.removeEventListener(IOErrorEvent.IO_ERROR, onDescriptionXMLOpenError);
-				fileStream.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onDescriptionXMLOpenError);
+				fileStream.close();
 				
 				onParamsCheckError();
+				return;
 			}
+			
+			onSDKChecked();
 				
 		}
 		
 		private function onSDKChecked():void
-		{
-			
-			if (currentSdkVersion == SDK_3_6)
-			{
-				currentSdkVersion = SDK_4_1;
-				checkSDKPath(sdk4_1DescriptionXMLPath);
-			}
-			else
-			{
-				checkPowerPackPath();
-			}
-
+		{		
+			checkPowerPackPath();
+			//onParamsCheckOK();
 		}
 		
 		private function isCorrectSDK(sdkDescriptionXML : XML) : Boolean
@@ -135,12 +86,12 @@ package net.vdombox.powerpack.sdkcompiler
 			return true;
 			var sdkVersion : String = XMLList(sdkDescriptionXML.version).toString(); 
 			
-			return sdkVersion == currentSdkVersion;
+			return sdkVersion == SDK_4_1_VERSION;
 		}
 		
 		private function checkPowerPackPath() : void
 		{
-			if (correctPowerPackProjectPath && correctPowerPackLibProjectPath)
+			if (correctPowerPackProjectPath)
 				onParamsCheckOK();
 			else
 				onParamsCheckError();
@@ -149,28 +100,16 @@ package net.vdombox.powerpack.sdkcompiler
 		private function get correctPowerPackProjectPath () : Boolean
 		{
 			var powerPackProjectFolder : File = new File(powerPackProjectPath);
-			var powerPackAssetsFolder : File = new File(powerPackProjectPath + "/src/assets");
-			var powerPackLibsFolder : File = new File(powerPackProjectPath + "/libs");
-			var powerPackBinFolder : File = new File(powerPackProjectPath + "/bin-debug");
-			var powerPackGeneratorFile : File = new File(powerPackProjectPath + "/src/Installer.mxml");
-			var powerPackDescriptionXmlFile : File = new File(powerPackProjectPath + "/bin-debug/Installer-app.xml");
+			var powerPackAssetsFolder : File = new File(powerPackProjectPath + "/assets");
+			var powerPackInstallerSwfFile : File = new File(powerPackProjectPath + "/Installer.swf");
+			var powerPackDescriptionXmlFile : File = new File(powerPackProjectPath + "/Installer-app.xml");
 			
 			return powerPackProjectFolder.exists && 
 				powerPackAssetsFolder.exists && 
-				powerPackLibsFolder.exists && 
-				powerPackBinFolder.exists &&
-				powerPackGeneratorFile.exists &&
+				powerPackInstallerSwfFile.exists &&
 				powerPackDescriptionXmlFile.exists;
 			
 			
-		}
-		
-		private function get correctPowerPackLibProjectPath () : Boolean
-		{
-			var powerPackLibProjectFolder : File = new File(powerPackLibProjectPath);
-			var powerPackLibSwcFile : File = new File(powerPackLibProjectPath + "/bin/PowerPack_lib.swc");
-			
-			return powerPackLibProjectFolder.exists && powerPackLibSwcFile.exists;
 		}
 		
 	}

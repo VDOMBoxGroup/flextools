@@ -810,45 +810,8 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 				doPaste();
 			}
 			
-			// TEMP FOR TESTING ...
-			else if ( event.keyCode == Keyboard.K )
-			{
-				event.stopPropagation();
-				compilePlayer();
-			}
-			// ... TEMP FOR TESTING
 		}
 	}
-	
-	// TEMP FOR TESTING ...
-	private function compilePlayer():void
-	{
-		var sdkCompiler : SDKCompiler = new SDKCompiler();
-		
-		if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE))
-			sdkCompiler.addEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE, sdkCompilerEventHandler); 
-		
-		if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR))
-			sdkCompiler.addEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR, sdkCompilerEventHandler);
-			
-		ProgressManager.start( ProgressManager.WINDOW_MODE, false );
-		
-		sdkCompiler.build("C:/Program Files (x86)/Adobe/Adobe Flash Builder 4.5/sdks/3.6.0/flex-sdk-description.xml", 
-							"C:/Program Files (x86)/Adobe/Adobe Flash Builder 4.5/sdks/4.1.0/flex-sdk-description.xml", 
-							"D:/FlexProjects/PowerPack/PowerPack", 
-							"D:/FlexProjects/PowerPack/PowerPack_lib");
-		
-		function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void
-		{
-			ProgressManager.complete();
-			
-			if (evt.message)
-			{
-				SuperAlert.show(evt.message);
-			}
-		}
-	}
-	// ... TEMP FOR TESTING
 	
 	private function contextMenuDisplayingHandler( event : Event ) : void
 	{

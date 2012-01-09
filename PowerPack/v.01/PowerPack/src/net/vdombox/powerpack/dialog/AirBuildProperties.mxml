@@ -2,7 +2,7 @@
 <ModalDialog
 	xmlns="net.vdombox.powerpack.dialog.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	width="500" height="425"
+	width="500" height="300"
 	title="AIR"
 	creationComplete="onShow()"
 	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
@@ -30,21 +30,19 @@
 			private var shObject : SharedObject = SharedObject.getLocal( "air_properties" );
 			private  function onShow():void
 			{
-				trace("INIT");
+				installerFolder.text = outputFolderRemembered ? shObject.data["outputInstallerFolder"] : File.documentsDirectory.nativePath;
 				
-				
-				
-				if(shObject.data.hasOwnProperty("sdk_3_6")) 
-					sdk_3.text = shObject.data["sdk_3_6"] ;
-						
-				if(shObject.data.hasOwnProperty("sdk_4_5")) 
-					sdk_4.text = shObject.data["sdk_4_5"] ;
-						
-				if(shObject.data.hasOwnProperty("powerPackPath")) 
-					powerPackPath.text = shObject.data["powerPackPath"]; 
-						
-				if(shObject.data.hasOwnProperty("powerPackLibPath")) 
-					powerPackLibPath.text = shObject.data["powerPackLibPath"]; 
+				installerFileName.text = outputFileNameRemembered ? shObject.data["outputInstallerFileName"] : "appInstaller";
+			}
+			
+			private function get outputFolderRemembered () : Boolean
+			{
+				return shObject.data.hasOwnProperty("outputInstallerFolder") && shObject.data["outputInstallerFolder"];
+			}
+			
+			private function get outputFileNameRemembered () : Boolean
+			{
+				return shObject.data.hasOwnProperty("outputInstallerFileName") && shObject.data["outputInstallerFileName"];
 			}
 			
 			static public function show( closeHandler : Function = null ) : AirBuildProperties
@@ -75,12 +73,8 @@
 							_dialog.closeDetail = ModalDialog.OK;
 							_dialog.close();
 							
-							shObject.data["sdk_3_6"] = sdk_3.text ;
-							shObject.data["sdk_4_5"] = sdk_4.text ;
-							
-							shObject.data["powerPackPath"] = powerPackPath.text ;
-							shObject.data["powerPackLibPath"] = powerPackLibPath.text ;
-							
+							shObject.data["outputInstallerFolder"] = installerFolder.text;
+							shObject.data["outputInstallerFileName"] = installerFileName.text;
 							
 							shObject.flush();
 						
@@ -101,9 +95,6 @@
 				}
 			}
 			
-			
-			
-			
 			private function compilePlayer():void
 			{
 				var sdkCompiler : SDKCompiler = new SDKCompiler();
@@ -116,13 +107,13 @@
 				
 				ProgressManager.start( ProgressManager.WINDOW_MODE, false );
 				
-				sdkCompiler.build(sdk_3.text, 
-					sdk_4.text, 
-					powerPackPath.text, 
-					powerPackLibPath.text);
+				sdkCompiler.buildInstallerPackage(StringUtil.trim(installerFolder.text), StringUtil.trim(installerFileName.text));
 				
 				function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void
 				{
+					sdkCompiler.removeEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE, sdkCompilerEventHandler);
+					sdkCompiler.removeEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR, sdkCompilerEventHandler);
+					
 					ProgressManager.complete();
 					
 					if (evt.message)
@@ -132,38 +123,46 @@
 				}
 			}
 			
+			protected function btnOutputFolderClickHandler(event:MouseEvent):void
+			{
+				var file : File = new File(StringUtil.trim(installerFolder.text));
+				
+				file.addEventListener(Event.SELECT, folderSelectHandler);
+				
+				file.browseForDirectory("Select output folder");
+				
+				
+				function folderSelectHandler (evt:Event) : void
+				{
+					file.removeEventListener(Event.SELECT, folderSelectHandler);
+					
+					installerFolder.text = file.nativePath; 
+				}
+			}
+			
 		]]>
 	</mx:Script>
-	<mx:VBox styleName="dlgHeader" width="100%">
+	
+	<!--> TODO: VBox not in use ... </-->
+	<mx:VBox verticalGap="10"
+			 paddingLeft="20" paddingRight="20" paddingTop="20" paddingBottom="20">
 		<mx:Label text="AIR" styleName="headerLabel" />
-	
-	<mx:Label text="SDK 3.6"/>
-	<mx:TextInput id="sdk_3" 
-				  width="100%"
-				  toolTip="C:/Program Files (x86)/Adobe/Adobe Flash Builder 4.5/sdks/3.6.0/flex-sdk-description.xml"/>
-	
-	<mx:Label text="SDK 4.1"/>
-	<mx:TextInput id="sdk_4" 
-					  width="100%"
-					  toolTip="C:/Program Files (x86)/Adobe/Adobe Flash Builder 4.5/sdks/4.5.0/flex-sdk-description.xml"/>
-			
-	<mx:Label text="Power Pack Project Path"/>
-	<mx:TextInput  id="powerPackPath"  
-				   width="100%"
-				   toolTip="D:/FlexProjects/PowerPack/PowerPack"/>
+			 
+		<mx:HBox width="400" horizontalGap="3">
+			<mx:Label text="Output installer folder: " width="160"/>
+			<mx:TextInput id="installerFolder" width="100%" editable="false" toolTip="{installerFolder.text}"/>
+			<mx:Button label="Browse" click="btnOutputFolderClickHandler(event)"/>
+		</mx:HBox>
 		
-	<mx:Label text="Power Pack Libs Project Path"/>
-	<mx:TextInput id="powerPackLibPath" 
-				  width="100%"
-				  toolTip="D:/FlexProjects/PowerPack/PowerPack_libl" />
+		<mx:HBox width="400" horizontalGap="3">
+			<mx:Label text="Output installer file name: " width="160"/>
+			<mx:TextInput id="installerFileName" width="100%" restrict="a-zA-z0-9 \-_.()" toolTip="{installerFileName.text}"/>
+		</mx:HBox>
+			 
+		<mx:Button label="Build" click="compilePlayer()" />
 	</mx:VBox>
 	
-	<mx:Button label="Build" click="compilePlayer()" />
-	
-	
-	
-	
-	<mx:ControlBar width="500" styleName="dlgFooter"/>
+	<mx:ControlBar width="100%" height="100%" styleName="dlgFooter"/>
 	
 	
 </ModalDialog>
