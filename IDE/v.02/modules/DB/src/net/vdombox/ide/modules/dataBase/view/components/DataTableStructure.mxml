@@ -180,7 +180,7 @@
 			private function removeBtnHandler() : void 
 			{
 				
-				if (selectedItem.name == "id")
+				if ( selectedItem.name == "id" )
 					return;
 				
 				Alert.Show( resourceManager.getString( 'DataBase_General', 'data_table_structure_delete_dialog' ), AlertButton.OK_No, this, removeSelectedColRequest );
@@ -192,16 +192,19 @@
 				if ( event.detail == Alert.NO )
 					return;
 				
-				deleteCol.enabled = false;
-				commitLabel.text = "Need push commit for enable button delete";
-				
-				queue.addRequest( UIDUtil.createUID(), "delete_column", "<delete><column id='" + selectedItem.id + "' /></delete>", removeSelectedColOkHandler, null) ;
+				var oldStructureVO : StructureVO = findRecordInOldDataProvider( selectedItem.id );
+				if ( oldStructureVO )
+				{
+					queue.addRequest( UIDUtil.createUID(), "delete_column", "<delete><column id='" + selectedItem.id + "' /></delete>", removeSelectedColOkHandler, null );
+					deleteCol.enabled = false;
+					commitLabel.text = "Need push commit for enable button delete";
+				}
 				
 				var newColsProvider:Array = [];
 				for each ( var item:Object in columnsProvider ) 
 				{
 					if ( item != selectedItem ) 
-						newColsProvider.push(item);
+						newColsProvider.push( item );
 				}
 				columnsProvider = newColsProvider;
 				
@@ -218,7 +221,7 @@
 				for each ( var item:Object in columnsProvider ) 
 				{
 					if ( item != selectedItem ) 
-						newColsProvider.push(item);
+						newColsProvider.push( item );
 				}
 				columnsProvider = newColsProvider;
 				
