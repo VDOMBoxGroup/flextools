@@ -204,7 +204,6 @@ package net.vdombox.ide.modules.events.view
 			workArea.addEventListener( WorkAreaEvent.UNDO, undoHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged, true, 0, true );
 			NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_DOWN, shiftClickHandler );
-			NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_UP, shiftOffHandler );
 		}
 
 		private function removeHandlers() : void
@@ -213,8 +212,7 @@ package net.vdombox.ide.modules.events.view
 			workArea.removeEventListener( WorkAreaEvent.SAVE, saveHandler );
 			workArea.removeEventListener( WorkAreaEvent.UNDO, undoHandler );
 			workArea.removeEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged );
-			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, shiftClickHandler );	
-			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_UP, shiftOffHandler );
+			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, shiftClickHandler );
 		}
 		
 		private function set showElementsView ( value : String ) : void
@@ -249,11 +247,6 @@ package net.vdombox.ide.modules.events.view
 				showElementsView = "Active";
 				setVisibleElementsForCurrentObject();
 			}
-		}
-		
-		private function shiftOffHandler( event : KeyboardEvent ) : void
-		{
-			setElementsCurrentVisibleState();
 		}
 		
 		private function setVisibleElementsForCurrentObject() : void
