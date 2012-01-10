@@ -1,11 +1,12 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import flash.utils.Dictionary;
-
+	
 	import mx.core.UIComponent;
-
+	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
+	import net.vdombox.ide.common.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
@@ -19,7 +20,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.model.vo.SettingsVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -64,6 +65,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( ApplicationFacade.UPLOAD_RESOURCE );
 			interests.push( ApplicationFacade.DELETE_RESOURCE );
 			interests.push( ApplicationFacade.GET_ICON );
+			
+			interests.push( ApplicationFacade.WRITE_ERROR );
 
 			return interests;
 		}
@@ -229,6 +232,15 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case ApplicationFacade.GET_ICON:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.ICON, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.WRITE_ERROR:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.ERROR, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

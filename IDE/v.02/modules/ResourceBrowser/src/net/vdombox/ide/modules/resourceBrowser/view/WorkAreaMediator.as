@@ -109,6 +109,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			workArea.addEventListener( WorkAreaEvent.DELETE_RESOURCE, deleteResourceHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.LOAD_RESOURCE, loadResourceHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.GET_ICON, getIconHandler, true, 0, true );
+			workArea.addEventListener( WorkAreaEvent.ERROR, errorHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -116,6 +117,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			workArea.removeEventListener( WorkAreaEvent.DELETE_RESOURCE, deleteResourceHandler );
 			workArea.removeEventListener( WorkAreaEvent.LOAD_RESOURCE, loadResourceHandler );
 			workArea.removeEventListener( WorkAreaEvent.GET_ICON, getIconHandler, true );
+			workArea.removeEventListener( WorkAreaEvent.ERROR, errorHandler);
 		}
 
 		private function clearData() : void
@@ -139,6 +141,11 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		private function getIconHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( ApplicationFacade.GET_ICON, workArea.previewArea.resourceVO );
+		}
+		
+		private function errorHandler( event : WorkAreaEvent ) : void
+		{
+			sendNotification( ApplicationFacade.WRITE_ERROR, { applicationVO: sessionProxy.selectedApplication, content: event.content } );
 		}
 
 	}

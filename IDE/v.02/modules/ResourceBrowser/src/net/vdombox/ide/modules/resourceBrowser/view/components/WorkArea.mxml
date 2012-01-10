@@ -88,8 +88,9 @@
 			{
 				if ( !previewArea.resourceVO )
 				{
-					Alert.yesLabel = "OK";
-					Alert.Show( "Not select resource!", AlertButton.OK, this );
+					var errorEvent : WorkAreaEvent = new WorkAreaEvent( WorkAreaEvent.ERROR );
+					errorEvent.content = "Not select resource!";
+					dispatchEvent( errorEvent );
 					return;
 				}
 					

@@ -124,6 +124,8 @@ package net.vdombox.ide.modules.resourceBrowser
 		public static const BODY_CREATED : String = "bodyCreated";
 		public static const BODY_START : String = "bodyStart";
 		public static const BODY_STOP : String = "bodyStop";
+		
+		public static const WRITE_ERROR : String = "writeError";
 
 
 		public static function getInstance( key : String ) : ApplicationFacade
