@@ -122,6 +122,10 @@ public class SOAPBaseLevel extends EventDispatcher
 			case 'check_application_exists':
 				checkApplicationExists( args );
 				break;
+			
+			case 'remote_call':
+				remoteCall( args );
+				break;
 
 		}
 	}
@@ -336,6 +340,17 @@ trace(wsdl)
 		soap.check_application_exists.addEventListener( FaultEvent.FAULT, soapError );
 
 		soap.check_application_exists(  applicationID );
+	}
+	
+	
+	private function remoteCall( params : Array ) : void
+	{
+		var applicationID : String = params[0];
+		
+		soap.remote_call.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.remote_call.addEventListener( FaultEvent.FAULT, soapError );
+		
+		soap.remote_call(  params );
 	}
 }
 }

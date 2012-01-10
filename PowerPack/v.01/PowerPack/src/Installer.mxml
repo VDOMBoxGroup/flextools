@@ -132,7 +132,6 @@
 					exitApplication();
 				}
 				
-//				mnMain.enabled = true;
 				
 				var file : File;
 				var fileStream : FileStream;
@@ -145,11 +144,6 @@
 				// Load application settings
 				ContextManager.loadSettings();
 				
-				// Fill language menu
-				//	            MenuGeneral.updateLangMenu();
-				
-				// fill last files menu
-				//	            MenuGeneral.updateLastFilesMenu();
 				
 				// Load language file
 				file = File.applicationDirectory.resolvePath( MenuGeneral.LANG_FOLDER + ContextManager.instance.lang.file );
@@ -164,31 +158,12 @@
 			
 			private function complete() : void
 			{
-				/*var pngEncoder:PNGEncoder = new PNGEncoder();
-				var data:ByteArray = pngEncoder.encode(Filters.reflection(GraphicUtils.objToBitmapData(this)));
 				
-				var file:File = new File();
-				var fileStream:FileStream = new FileStream();
-				
-				/*file.url = FileUtils.pathToUrl('c:/out.png');
-				fileStream.open(file, FileMode.WRITE);
-				fileStream.writeBytes(data);
-				fileStream.close();*/
 			}
 			
 			private function exitApplication( event : Event = null ) : void
 			{
-				/*SuperAlert.show(
-				LanguageManager.sentences['msg_exit_app'],
-				LanguageManager.sentences['confirmation'],
-				Alert.YES | Alert.NO, null, alertExitHandler, null, Alert.NO );
-				
-				function alertExitHandler( event : CloseEvent ) : void {
-				if ( event.detail == Alert.YES ) {
-				ContextManager.saveSettings();
-				exit();
-				}
-				}*/
+			
 				ContextManager.saveSettings();
 				exit();
 			}
@@ -585,20 +560,12 @@
 				processStep( cGeneral );
 			}
 			
-//			private function stepCompleteHandler( event : Event ) : void
-//			{
-//				if ( (progressBar.value + 1) < (progressBar.maximum / 2 + 1) )
-//					progressBar.setProgress( progressBar.value + 1, progressBar.maximum );
-//				
-//				//ContextManager.templateStruct.generate(true);
-//			}
 			
 			private function generationComplete( event : Event ) : void
 			{
 				timer = getTimer() - timer;
 				
 				appGenerated = true;
-//				ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
 				ContextManager.templateStruct.removeEventListener( "generationComplete", generationComplete );
 				ContextManager.templateStruct.removeEventListener( "error", debugErrorHandler );
 				
@@ -612,26 +579,6 @@
 				}
 			}
 			
-			////////////////////////////////////////////////////////////////////////////////////
-			
-		
-			
-			
-			
-			
-		
-			
-			
-			
-			/////////////////////////////////////////////////////////////////////////////////////
-			
-			
-			
-			
-			//////////////////////////////////////////////////////////////////////////
-			
-		
-			///////////////////////////////////////////////////////////////////////
 			
 			private function onOpenBrowseSelect( event : Event ) : void
 			{
@@ -685,7 +632,7 @@
 					ContextManager.templates.removeItemAt( 0 );
 				if ( fileMenuData..menuitem.(hasOwnProperty( '@id' ) && @id == "run_template")[0] )
 					fileMenuData..menuitem.(hasOwnProperty( '@id' ) && @id == "run_template")[0].@enabled = 'false';
-				processStep( cWelcome );
+				processStep( cInterrupt ) ;
 			}
 			
 			public function alertInterrupt() : void
@@ -784,7 +731,7 @@
 							 verticalAlign="top" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:Label width="90%" 
-									  text="{'2 '+ContextManager.templates.getItemAt(0).name}"
+									  text="{ContextManager.templates.getItemAt(0).name}"
 									  styleName="headerLabel" />
 						<mx:Label  width="90%" height="150" 
 									 text="{ContextManager.templates.getItemAt(0).description}"
@@ -816,8 +763,6 @@
 						<mx:Label width="90%" 
 									  text="{ContextManager.templates.getItemAt(0).name}"
 									  styleName="headerLabel"/>
-						
-						
 						
 						<mx:ViewStack id="vsImages" width="100%" height="100%"
 									  change="vsChange(event)">
@@ -861,13 +806,15 @@
 							</mx:HBox>
 						</mx:ViewStack>
 						<mx:Spacer width="100%" height="10" />
-						<mx:ProgressBar width="90%" minimum="0" maximum="100" id="progressBar" mode="manual" />
+						<mx:HBox width="100%" >
 						
-						
-						<mx:ControlBar width="90%" horizontalAlign="right">
+							<mx:ProgressBar width="90%" minimum="0" maximum="100" id="progressBar" mode="manual" />
+							
 							<mx:Button id="btnCancel" label="{LanguageManager.sentences.cancel}"
 									   click="alertInterrupt()" />
-						</mx:ControlBar>
+						</mx:HBox>
+						
+						
 					</mx:VBox>
 					
 					<mx:VBox id="cComplete" height="100%" width="100%"
