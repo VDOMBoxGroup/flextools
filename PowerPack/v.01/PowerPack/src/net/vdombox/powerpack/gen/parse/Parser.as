@@ -31,6 +31,7 @@ public class Parser
 		'sub' : { pattern : /^\[nn[nobvscifVNSA]*\]$/, argNum : -1 },
 		'subPrefix' : { pattern : /^\[nnn[nobvscifVNSA]*\]$/, argNum : -2 },
 		'question' : { pattern : /^\[n[vscVSA][nvscVSA]*\]$/, argNum : -1 },
+		
 		'qSwitch' : { pattern : /^\[n[vscVSA][nsc]*\]$/, argNum : -2, trans : [] },
 		"_switch" : { pattern : /^\[n[nvscVSA][nsc]*\]$/, argNum : -2, trans : [] },
 		'convert' : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2 },
@@ -51,6 +52,9 @@ public class Parser
 
         "setXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]*\]$/, argNum : 3 },
 		"getXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
+		
+		"progress" : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2 },
+		
 
 
 		//*********************
@@ -954,7 +958,7 @@ public class Parser
 				_contexts[1] = contexts[1];
 		}
 
-		D.eval( _prog, _contexts[0], _contexts[_contexts.length - 1] );
+		D.eval( _prog,_contexts[0], _contexts[_contexts.length - 1] );
 
 		ret = _contexts[0][_res];
 		delete _contexts[0][_res];

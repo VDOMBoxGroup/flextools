@@ -19,6 +19,7 @@ import mx.utils.Base64Encoder;
 import mx.utils.UIDUtil;
 
 import net.vdombox.powerpack.BasicError;
+import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
 import net.vdombox.powerpack.gen.GraphContext;
 import net.vdombox.powerpack.gen.errorClasses.RunTimeError;
 import net.vdombox.powerpack.gen.structs.GraphStruct;
@@ -156,12 +157,19 @@ private function getFileMask(param : String) : String
 
 public function question( question : String, ...args ) : Function
 {
+	
 	return __question( questionCloseHandler, question, args );
 
 	function questionCloseHandler( event : Event ) : void
 	{
 		setReturnValue( event.target.strAnswer );
 	}
+}
+
+public function progress( value : Number, description : String ) : void
+{
+	dispatchEvent( new TemplateLibEvent( TemplateLibEvent.SET_PROGRESS, 
+										{value : value, description : description} ) );
 }
 
 public function qSwitch( question : String, ...args ) : Function
@@ -408,7 +416,7 @@ public function random( value : int ) : String
 
 public function alert( strr : String ) : void
 {
-	//Alert.show( strr );
+	
 }
 
 public function wholeMethod( funct : String, ...args ) : Function
@@ -426,3 +434,5 @@ public function wholeMethod( funct : String, ...args ) : Function
 
 	return rusulGettedHandler;
 }
+
+

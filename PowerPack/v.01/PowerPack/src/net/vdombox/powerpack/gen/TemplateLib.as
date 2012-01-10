@@ -19,6 +19,7 @@ public dynamic class TemplateLib extends EventDispatcher
 
 	public var tplStruct : TemplateStruct;
 
+	
 	private function setReturnValue( value : * ) : void
 	{
 
@@ -30,9 +31,6 @@ public dynamic class TemplateLib extends EventDispatcher
 		tplStruct.context[lastFrag.retVarName] = value;
 
 		tplStruct.generate();
-
-
-
 	}
 
 	private function setTransition( value : String ) : void
@@ -45,6 +43,12 @@ public dynamic class TemplateLib extends EventDispatcher
 	{
 		return [tplStruct.context, tplStruct.curGraphContext.context];
 	}
-
+	
+	override public function dispatchEvent(event:Event):Boolean
+	{
+		return super.dispatchEvent(event);
+	}
+	
+	
 }
 }

@@ -279,7 +279,7 @@ trace(wsdl)
             trace(login+" : "+ pass)
 			soap.login( login, pass );
 		}
-
+                                              
 		function soap_loginOKHandler( event : SOAPEvent ) : void
 		{
 			trace("soap_loginOKHandler"); 

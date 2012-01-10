@@ -10,6 +10,7 @@ import flash.utils.ByteArray;
 
 import mx.utils.UIDUtil;
 
+import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
 import net.vdombox.powerpack.gen.errorClasses.RunTimeError;
 import net.vdombox.powerpack.gen.errorClasses.ValidationError;
 import net.vdombox.powerpack.gen.errorClasses.ValidationWarning;
@@ -482,6 +483,7 @@ public class TemplateStruct extends EventDispatcher
 
 	public function init() : void
 	{
+		trace("[TemplateLib] init()");
 		clear();
 
 		var graphContext : GraphContext;
@@ -497,6 +499,13 @@ public class TemplateStruct extends EventDispatcher
 
 		lib.tplStruct = this;
 		context[CNTXT_INSTANCE] = lib;
+		
+		lib.addEventListener( TemplateLibEvent.SET_PROGRESS, setProgerssHendler);
+		
+		function setProgerssHendler( event : TemplateLibEvent ):void
+		{
+			dispatchEvent( event );
+		}
 	}
 
 	public function clear() : void

@@ -65,6 +65,7 @@
 			import net.vdombox.powerpack.Template;
 			import net.vdombox.powerpack.dialog.GenConnection;
 			import net.vdombox.powerpack.dialog.GenProperties;
+			import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
 			import net.vdombox.powerpack.gen.TemplateStruct;
 			import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
@@ -92,7 +93,7 @@
 					msg_exit_app : "Are you sure want to exit?",
 					msg_tpl_proceed_with_errs : "Error(s) exist in template\nProceed with launch?",
 					msg_gen_welcome : "Lorem ipsum dolor sit amet",
-					msg_gen_finish : "Lorem ipsum dolor sit amet",
+					msg_gen_finish : "Installation is complete",
 					
 					msg_save_appxml_to_server : "Save application xml to server.",
 					msg_connecting_fault : "A fault occured contacting the server. Fault message is:",
@@ -386,21 +387,10 @@
 							case 0:
 								runingTemplate();
 								break;
-							case 1:
-								saveToServer();
-								break;
-							case 2:
-								saveToFile();
-								break;
-							case 3:
-								launchApp();
-								break;
+						
 						}
 						break;
 					
-					case cFileRequest:
-						fileBrowse.path = ContextManager.instance.file.nativePath;
-						break;
 					
 					case cComplete:
 						txtResultBuf.text = '';
@@ -422,25 +412,25 @@
 								vsProcess.selectedChild = cProcess;
 								vsLastChanged = vsImages.selectedIndex == 0 ? vsProcess : vsImages;
 								vsImages.selectedIndex = 0;
-								progressBar.mode = ProgressBarMode.MANUAL;
-								progressBar.setProgress( 0, 100 );
-								LanguageManager.bindSentence( 'prgrs_gen_tpl', progressBar );
+//								progressBar.mode = ProgressBarMode.MANUAL;
+//								progressBar.setProgress( 0, 100 );
+//								LanguageManager.bindSentence( 'prgrs_gen_tpl', progressBar );
 								break;
 							case 2:
 								vsProcess.selectedChild = cProcess;
 								vsLastChanged = vsImages.selectedIndex == 1 ? vsProcess : vsImages;
 								vsImages.selectedIndex = 1;
-								progressBar.mode = ProgressBarMode.MANUAL;
-								progressBar.setProgress( 0, 100 );
-								LanguageManager.bindSentence( 'prgrs_save_to_server_tpl', progressBar );
+//								progressBar.mode = ProgressBarMode.MANUAL;
+//								progressBar.setProgress( 0, 100 );
+//								LanguageManager.bindSentence( 'prgrs_save_to_server_tpl', progressBar );
 								break
 							case 3:
 								vsProcess.selectedChild = cProcess;
 								vsLastChanged = vsImages.selectedIndex == 2 ? vsProcess : vsImages;
 								vsImages.selectedIndex = 2;
-								progressBar.mode = ProgressBarMode.MANUAL;
-								progressBar.setProgress( 0, 100 );
-								LanguageManager.bindSentence( 'prgrs_save_to_file_tpl', progressBar );
+//								progressBar.mode = ProgressBarMode.MANUAL;
+//								progressBar.setProgress( 0, 100 );
+//								LanguageManager.bindSentence( 'prgrs_save_to_file_tpl', progressBar );
 								break;
 							case 4:
 								vsProcess.selectedChild = cProcess;
@@ -448,8 +438,8 @@
 								vsImages.selectedIndex = 3;
 								vsLastChanged = vsImages;
 								progressBar.mode = ProgressBarMode.MANUAL;
-								progressBar.setProgress( 0, 100 );
-								LanguageManager.bindSentence( 'prgrs_launch_app', progressBar );
+//								progressBar.setProgress( 0, 100 );
+//								LanguageManager.bindSentence( 'prgrs_launch_app', progressBar );
 								break;
 						}
 						break;
@@ -465,12 +455,7 @@
 							case cGeneral:
 								vsProcess.selectedChild = cGeneral;
 								break;
-							case cServerRequest:
-								vsProcess.selectedChild = cServerRequest;
-								break;
-							case cFileRequest:
-								vsProcess.selectedChild = cFileRequest;
-								break;
+							
 							case cProcess:
 								vsProcess.selectedChild = cProcess;
 								break;
@@ -496,7 +481,7 @@
 				
 				if ( tpl )
 				{
-					tpl.removeEventListener( "stepComplete", stepCompleteHandler );
+//					tpl.removeEventListener( "stepComplete", stepCompleteHandler );
 					tpl.removeEventListener( "generationComplete", generationComplete );
 					tpl.removeEventListener( "error", debugErrorHandler );
 					ContextManager.templateStruct = null;
@@ -559,22 +544,24 @@
 			
 			private function runTemplate() : void
 			{
-				var tpl : TemplateStruct = ContextManager.templateStruct;
+				var templateStructure : TemplateStruct = ContextManager.templateStruct;
 				try
 				{
-					progressBar.mode = ProgressBarMode.MANUAL;
-					progressBar.maximum = tpl.nodes.length + 1;
+//					progressBar.mode = ProgressBarMode.MANUAL;
+//					progressBar.maximum = templateStructure.nodes.length + 1;
 					
 					//tpl.isDebug = true;
 					//tpl.isStepDebug = true;
 					
-					tpl.addEventListener( "error", debugErrorHandler );
-					tpl.addEventListener( "stepComplete", stepCompleteHandler );
-					tpl.addEventListener( "generationComplete", generationComplete );
+					templateStructure.addEventListener( "error", debugErrorHandler, false, 0, true);
+//					templateStructure.addEventListener( "stepComplete", stepCompleteHandler, false, 0, true );
+					templateStructure.addEventListener( "generationComplete", generationComplete );
+					templateStructure.addEventListener( TemplateLibEvent.SET_PROGRESS, setProgressHandler, false, 0, true );
+					
 					
 					timer = getTimer();
 					
-					tpl.generate();
+					templateStructure.generate();
 				}
 				catch ( e : Error )
 				{
@@ -582,6 +569,12 @@
 					clearTemplateDebug();
 					processStep( cGeneral );
 				}
+			}
+			
+			private function setProgressHandler( event : TemplateLibEvent) : void
+			{
+				progressBar.setProgress( event.result.value , 100 );
+				progressBar.label =  event.result["description"] as String;
 			}
 			
 			private function debugErrorHandler( event : Event ) : void
@@ -592,26 +585,25 @@
 				processStep( cGeneral );
 			}
 			
-			private function stepCompleteHandler( event : Event ) : void
-			{
-				if ( (progressBar.value + 1) < (progressBar.maximum / 2 + 1) )
-					progressBar.setProgress( progressBar.value + 1, progressBar.maximum );
-				
-				//ContextManager.templateStruct.generate(true);
-			}
+//			private function stepCompleteHandler( event : Event ) : void
+//			{
+//				if ( (progressBar.value + 1) < (progressBar.maximum / 2 + 1) )
+//					progressBar.setProgress( progressBar.value + 1, progressBar.maximum );
+//				
+//				//ContextManager.templateStruct.generate(true);
+//			}
 			
 			private function generationComplete( event : Event ) : void
 			{
 				timer = getTimer() - timer;
 				
 				appGenerated = true;
-				ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
+//				ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
 				ContextManager.templateStruct.removeEventListener( "generationComplete", generationComplete );
 				ContextManager.templateStruct.removeEventListener( "error", debugErrorHandler );
 				
 				if ( ContextManager.templateStruct.buffer )
 				{
-					infoServerRequest.text = LanguageManager.sentences['msg_save_appxml_to_server'];
 					processStep( cFinal );
 				}
 				else
@@ -622,279 +614,23 @@
 			
 			////////////////////////////////////////////////////////////////////////////////////
 			
-			private function saveToServer() : void
-			{
-				if ( chkSaveToServer.selected )
-				{
-					connect();
-				}
-				else
-				{
-					infoFileRequest.text = LanguageManager.sentences['msg_save_appxml_to_file'];
-					processStep( cFileRequest );
-				}
-			}
+		
 			
-			private function connect() : void
-			{
-				appInstalled = false;
-				progressBar.setProgress( progressBar.maximum / 5, progressBar.maximum );
-				
-				ConnectionManager.instance.vdom = new Vdom( null, txtHost.text + ":" + txtPort.text + '/SOAP' );
-				var ws : Vdom = ConnectionManager.instance.vdom;
-				ws.addVdomFaultEventListener( faultHandler );
-				
-				function faultHandler( event : FaultEvent ) : void
-				{
-					infoServerRequest.text = LanguageManager.sentences['msg_connecting_fault'] + '\n' +
-						event.fault.faultString + '\n' +
-						LanguageManager.sentences['msg_try_to_reconnect'];
-					processStep( cServerRequest );
-				}
-				
-				login();
-			}
 			
-			private function login() : void
-			{
-				progressBar.setProgress( progressBar.maximum / 3, progressBar.maximum );
-				
-				var ws : Vdom = ConnectionManager.instance.vdom;
-				var login : String = txtLogin.text;
-				//var pwd_md5:String = CryptUtils.hex(CryptUtils.MD5(txtPass.text));
-				var pwd_md5 : String = MD5.encrypt( txtPass.text );
-				
-				ws.addopen_sessionEventListener( loginHandler );
-				ws.open_session( login, pwd_md5 );
-				
-				function loginHandler( event : Open_sessionResultEvent ) : void
-				{
-					var resultXML : XML = new XML( <Result /> );
-					resultXML.appendChild( XMLList( event.result ) );
-					
-					if ( resultXML.Error.toString() )
-					{
-						infoServerRequest.text = resultXML.Error;
-						processStep( cServerRequest );
-					}
-					else
-					{
-						// run session protector
-						var code : Code = Code.getInstance();
-						code.init( resultXML.Session.HashString );
-						code.inputSKey( resultXML.Session.SessionKey );
-						code.sessionId = resultXML.Session.SessionId;
-						
-						getAppList()
-					}
-				}
-			}
 			
-			private function getAppList() : void
-			{
-				progressBar.setProgress( progressBar.maximum / 2, progressBar.maximum );
-				
-				var ws : Vdom = ConnectionManager.instance.vdom;
-				var code : Code = Code.getInstance();
-				var sid : String = code.sessionId;
-				var skey : String = code.skey();
-				
-				ws.addlist_applicationsEventListener( getAppListHandler );
-				ws.list_applications( sid, skey );
-				
-				function getAppListHandler( event : List_applicationsResultEvent ) : void
-				{
-					var resultXML : XML = new XML( <Result /> );
-					resultXML.appendChild( XMLList( event.result ) );
-					
-					if ( resultXML.Error.toString() )
-					{
-						infoServerRequest.text = resultXML.Error;
-						logout();
-						processStep( cServerRequest );
-					}
-					else
-					{
-						trace( resultXML );
-						installApp();
-					}
-				}
-			}
 			
-			private function installApp() : void
-			{
-				progressBar.setProgress( progressBar.maximum / 1.5, progressBar.maximum );
-				
-				var ws : Vdom = ConnectionManager.instance.vdom;
-				var code : Code = Code.getInstance();
-				var sid : String = code.sessionId;
-				var skey : String = code.skey();
-				
-				var appxml : String = ContextManager.templateStruct.buffer;
-				
-				/*appxml =
-				<Application>
-				<Information>
-				<ID>58963343-afe9-4320-a6d5-fd2880aadf33</ID>
-				<Name>test</Name>
-				<Description/>
-				</Information>
-				
-				<Objects/>
-				
-				<Structure>
-				</Structure>
-				
-				<E2vdom>
-				<Events/>
-				<Actions/>
-				</E2vdom>
-				
-				<Resources>
-				</Resources>
-				
-				<Databases/>
-				</Application>;*/
-				
-				ws.addinstall_applicationEventListener( installAppHandler );
-				ws.install_application( sid, skey, txtVHName.text, appxml );
-				
-				function installAppHandler( event : Install_applicationResultEvent ) : void
-				{
-					var resultXML : XML = new XML( <Result /> );
-					resultXML.appendChild( XMLList( event.result ) );
-					
-					if ( resultXML.Error.toString() )
-					{
-						infoServerRequest.text = resultXML.Error;
-						logout();
-						processStep( cServerRequest );
-					}
-					else
-					{
-						progressBar.setProgress( progressBar.maximum, progressBar.maximum );
-						appInstalled = true;
-						logout();
-						infoFileRequest.text = LanguageManager.sentences['msg_save_appxml_to_file'];
-						processStep( cFileRequest );
-					}
-				}
-			}
+		
 			
-			private function logout() : void
-			{
-				var ws : Vdom = ConnectionManager.instance.vdom;
-				var code : Code = Code.getInstance();
-				var sid : String = code.sessionId;
-				
-				ws.addclose_sessionEventListener( logoutHandler );
-				ws.close_session( sid );
-				
-				function logoutHandler( event : Close_sessionResultEvent ) : void
-				{
-					var resultXML : XML = new XML( <Result /> );
-					resultXML.appendChild( XMLList( event.result ) );
-					
-					if ( resultXML.Error.toString() )
-					{
-						trace( resultXML );
-					}
-				}
-			}
+			
 			
 			/////////////////////////////////////////////////////////////////////////////////////
 			
-			private function saveToFile() : void
-			{
-				if ( chkSaveToFile.selected )
-					savingToFile();
-				else if ( appInstalled )
-					processStep( 4 );
-				else
-					processStep( cComplete );
-			}
 			
-			private function savingToFile() : void
-			{
-				var file : File = new File();
-				file.url = FileUtils.pathToUrl( fileBrowse.path );
-				var stream : FileStream = new FileStream();
-				
-				stream.addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress );
-				stream.addEventListener( IOErrorEvent.IO_ERROR, onFileStreamError );
-				stream.addEventListener( SecurityErrorEvent.SECURITY_ERROR, onFileStreamError );
-				stream.addEventListener( Event.CLOSE, onFileStreamClose );
-				
-				try
-				{
-					stream.openAsync( file, FileMode.WRITE );
-					stream.writeUTFBytes( ContextManager.templateStruct.buffer );
-					stream.close();
-				}
-				catch ( e : Error )
-				{
-					closeStream( stream );
-					infoFileRequest.text = LanguageManager.sentences.msg_saving_appxml_fault + '\n' +
-						LanguageManager.sentences.msg_cannot_save_file;
-					processStep( cFileRequest );
-				}
-				
-				function onFileStreamProgress( event : Event ) : void
-				{
-					var stream : FileStream = event.target as FileStream;
-					var total : Number = OutputProgressEvent( event ).bytesTotal;
-					var pending : Number = OutputProgressEvent( event ).bytesPending;
-					progressBar.setProgress( total + (total - pending), total * 2 + 1 );
-					progressBar.validateNow();
-				}
-				
-				function onFileStreamError( event : ErrorEvent ) : void
-				{
-					var stream : FileStream = event.target as FileStream;
-					closeStream( stream );
-					infoFileRequest.text = LanguageManager.sentences.msg_saving_appxml_fault + '\n' + event.text;
-					processStep( cFileRequest );
-				}
-				
-				function closeStream( stream : FileStream ) : void
-				{
-					stream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress );
-					stream.removeEventListener( IOErrorEvent.IO_ERROR, onFileStreamError );
-					stream.removeEventListener( SecurityErrorEvent.SECURITY_ERROR, onFileStreamError );
-					stream.removeEventListener( Event.CLOSE, onFileStreamClose );
-					stream.close();
-				}
-				
-				function onFileStreamClose( event : Event ) : void
-				{
-					var stream : FileStream = event.target as FileStream;
-					closeStream( stream );
-					
-					if ( appInstalled )
-						processStep( 4 );
-					else
-						processStep( cComplete );
-				}
-			}
+			
 			
 			//////////////////////////////////////////////////////////////////////////
 			
-			private function launchApp() : void
-			{
-				var url : String = txtVHName.text;
-				url = /^http:\/\/.*/i.test( url ) ? url : 'http://' + url;
-				var request : URLRequest = new URLRequest( url );
-				//var variables:URLVariables = new URLVariables();
-				//variables.exampleSessionId = new Date().getTime();
-				//variables.exampleUserLabel = "guest";
-				//request.data = variables;
-				navigateToURL( request );
-				
-				progressBar.setProgress( progressBar.maximum, progressBar.maximum );
-				
-				processStep( cComplete );
-			}
-			
+		
 			///////////////////////////////////////////////////////////////////////
 			
 			private function onOpenBrowseSelect( event : Event ) : void
@@ -954,8 +690,8 @@
 			
 			public function alertInterrupt() : void
 			{
-				if ( !appGenerated && ContextManager.templateStruct )
-					ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
+//				if ( !appGenerated && ContextManager.templateStruct )
+//					ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
 				
 				SuperAlert.show(
 					LanguageManager.sentences['msg_proceed_interrupt_app_installing'],
@@ -970,7 +706,7 @@
 					}
 					else if ( !appGenerated && ContextManager.templateStruct )
 					{
-						ContextManager.templateStruct.addEventListener( "stepComplete", stepCompleteHandler );
+//						ContextManager.templateStruct.addEventListener( "stepComplete", stepCompleteHandler );
 						ContextManager.templateStruct.generate( true );
 					}
 				}
@@ -1028,7 +764,7 @@
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}" verticalGap="0">
 			
 						<mx:Label width="90%" 
-									  text="{'1 '+ContextManager.templates.getItemAt(0).name}"
+									  text="{ContextManager.templates.getItemAt(0).name}"
 									  styleName="headerLabel"/>
 						<mx:Label  width="90%" height="150"
 									 text="{ContextManager.templates.getItemAt(0).description}" 
@@ -1062,96 +798,6 @@
 						</mx:ControlBar>
 					</mx:VBox>
 					
-					<mx:VBox id="cServerRequest" height="100%" width="100%"
-							 verticalAlign="top" horizontalAlign="center"
-							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
-						
-						<mx:Text width="90%" id="infoServerRequest" styleName="infoTextStyle" />
-						
-						<mx:CheckBox id="chkSaveToServer" selected="{ContextManager.instance.saveToServer}"
-									 label="{LanguageManager.sentences.save_to_server}" />
-						
-						<mx:Grid>
-							<mx:GridRow>
-								<mx:GridItem>
-									<mx:Label text="{LanguageManager.sentences.virtual_host_name}:" />
-								</mx:GridItem>
-								<mx:GridItem>
-									<mx:TextInput id="txtVHName" width="250"
-												  text="www.example.com" />
-								</mx:GridItem>
-							</mx:GridRow>
-							
-							<mx:GridRow>
-								<mx:GridItem>
-									<mx:Label text="{LanguageManager.sentences.host}:" />
-								</mx:GridItem>
-								<mx:GridItem>
-									<mx:TextInput id="txtHost" width="250"
-												  text="{ContextManager.instance.host}" />
-								</mx:GridItem>
-							</mx:GridRow>
-							
-							<mx:GridRow>
-								<mx:GridItem>
-									<mx:Label text="{LanguageManager.sentences.port}:" />
-								</mx:GridItem>
-								<mx:GridItem>
-									<mx:TextInput id="txtPort" width="50"
-												  text="{ContextManager.instance.port}" />
-								</mx:GridItem>
-							</mx:GridRow>
-							
-							<mx:GridRow>
-								<mx:GridItem>
-									<mx:Label text="{LanguageManager.sentences.login}:" />
-								</mx:GridItem>
-								<mx:GridItem>
-									<mx:TextInput id="txtLogin" width="250"
-												  text="{ContextManager.instance.login}" />
-								</mx:GridItem>
-							</mx:GridRow>
-							
-							<mx:GridRow>
-								<mx:GridItem>
-									<mx:Label text="{LanguageManager.sentences.password}:" />
-								</mx:GridItem>
-								<mx:GridItem>
-									<mx:TextInput id="txtPass" width="250" displayAsPassword="true"
-												  text="{ContextManager.instance.pass}" />
-								</mx:GridItem>
-							</mx:GridRow>
-						</mx:Grid>
-						
-						<mx:ControlBar width="90%" horizontalAlign="right">
-							<mx:Button label="{LanguageManager.sentences.cancel}"
-									   click="alertInterrupt()" />
-							<mx:Button label="{LanguageManager.sentences.next}"
-									   click="processStep(2)" />
-						</mx:ControlBar>
-					</mx:VBox>
-					
-					<mx:VBox id="cFileRequest" height="100%" width="100%"
-							 verticalAlign="top" horizontalAlign="center"
-							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
-						
-						<mx:Text width="90%" id="infoFileRequest" styleName="infoTextStyle" />
-						
-						<mx:CheckBox id="chkSaveToFile" selected="{ContextManager.instance.saveToFile}"
-									 label="{LanguageManager.sentences.save_to_file}" />
-						
-						<controls:FileBrowseBox id="fileBrowse" width="90%" mode="save"
-												browseLabel="{LanguageManager.sentences.browse}..."
-												browseTitle="{LanguageManager.sentences.open_file}..."
-												filterAll="{LanguageManager.sentences.all}" />
-						
-						<mx:ControlBar width="90%" horizontalAlign="right">
-							<mx:Button label="{LanguageManager.sentences.cancel}"
-									   click="alertInterrupt()" />
-							<mx:Button label="{LanguageManager.sentences.next}"
-									   click="processStep(3)" />
-						</mx:ControlBar>
-					</mx:VBox>
 					
 					<mx:VBox id="cInterrupt" height="100%" width="100%"
 							 verticalAlign="top" horizontalAlign="center"
@@ -1168,7 +814,7 @@
 							 verticalAlign="top" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:Label width="90%" 
-									  text="{'3 '+ContextManager.templates.getItemAt(0).name}"
+									  text="{ContextManager.templates.getItemAt(0).name}"
 									  styleName="headerLabel"/>
 						
 						
@@ -1215,7 +861,8 @@
 							</mx:HBox>
 						</mx:ViewStack>
 						<mx:Spacer width="100%" height="10" />
-						<mx:ProgressBar width="90%" minimum="0" maximum="100" id="progressBar" />
+						<mx:ProgressBar width="90%" minimum="0" maximum="100" id="progressBar" mode="manual" />
+						
 						
 						<mx:ControlBar width="90%" horizontalAlign="right">
 							<mx:Button id="btnCancel" label="{LanguageManager.sentences.cancel}"
@@ -1238,9 +885,14 @@
 					<mx:VBox id="cFinal" height="100%" width="100%"
 							 verticalAlign="top" horizontalAlign="center"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
-						<mx:Text styleName="infoTextStyle"
+						<mx:Label width="90%" 
+								  text="{ContextManager.templates.getItemAt(0).name}"
+								  styleName="headerLabel"/>
+						
+						<mx:Text styleName="infoTextStyle" width="90%"
 								 text="{LanguageManager.sentences.msg_gen_finish}">
 						</mx:Text>
+						<mx:Spacer height="100%" />
 						<mx:ControlBar width="90%" horizontalAlign="right">
 							<mx:Button id="btnExit"
 									   label="{LanguageManager.sentences.exit}"
