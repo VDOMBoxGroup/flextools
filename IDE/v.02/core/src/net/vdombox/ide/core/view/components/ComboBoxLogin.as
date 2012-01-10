@@ -27,7 +27,7 @@ package net.vdombox.ide.core.view.components
 		
 		public function set editable( value : Boolean ) : void
 		{
-			_editable = value;
+			_editable = value; 
 		}
 		
 		public function set selecteble( value : Boolean ) : void
