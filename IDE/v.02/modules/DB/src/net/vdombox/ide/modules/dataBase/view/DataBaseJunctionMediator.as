@@ -82,6 +82,8 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			interests.push( ApplicationFacade.SET_OBJECT_NAME );
 			
+			interests.push( ApplicationFacade.LOAD_RESOURCE );
+			
 			return interests;
 		}
 
@@ -297,6 +299,15 @@ package net.vdombox.ide.modules.dataBase.view
 					
 					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.LOAD_RESOURCE:
+				{
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
 				}

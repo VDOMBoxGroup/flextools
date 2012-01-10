@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.dataBase
 	import net.vdombox.ide.modules.dataBase.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.dataBase.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.dataBase.controller.DeleteResourceRequestCommand;
+	import net.vdombox.ide.modules.dataBase.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.dataBase.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.dataBase.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.dataBase.controller.SaveSettingsToProxy;
@@ -149,6 +150,10 @@ package net.vdombox.ide.modules.dataBase
 		public static const SET_OBJECT_NAME : String = "setObjectName";
 		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
 		public static const PAGE_NAME_SETTED : String = "pageNameSetted";
+		
+// Resources
+		public static const GET_RESOURCE_REQUEST 	: String = "getResourceRequest";
+		public static const LOAD_RESOURCE 	: String = "loadResource";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -196,6 +201,7 @@ package net.vdombox.ide.modules.dataBase
 
 			registerCommand( TEAR_DOWN, TearDownCommand );
 			registerCommand( CHANGE_SELECTED_DATA_BASE_REQUEST, ChangeSelectedDataBaseRequestCommand );
+			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 			
 		}
 	}

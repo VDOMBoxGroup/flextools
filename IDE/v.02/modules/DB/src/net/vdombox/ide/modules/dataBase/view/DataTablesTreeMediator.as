@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -70,6 +71,7 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			dataTablesTree.removeEventListener( DataTablesEvents.CHANGE, changeHandler );
 			dataTablesTree.removeEventListener( DataTablesEvents.SELECT_CONTEXT_ITEM_NEW, createNewPageOrObject );
+			dataTablesTree.removeEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler ); 
 			
 			sessionProxy = null;
 			
@@ -166,8 +168,15 @@ package net.vdombox.ide.modules.dataBase.view
 					
 					var pageXMLTree : XML = notification.getBody() as XML;
 					
-					if ( !pageXMLTree )
+					if ( pageXMLTree )
+					{
+						if ( pageXMLTree.@typeID == "753ea72c-475d-4a29-96be-71c522ca2097" )
+							setVisibleForElements( pageXMLTree );
+					}
+					else
+					{
 						pageXMLTree = new XML();
+					}
 					
 					pageXML = dataTablesTree.dataBases.( @id == pageXMLTree.@id )[ 0 ];
 					
@@ -289,10 +298,26 @@ package net.vdombox.ide.modules.dataBase.view
 			}
 		}
 		
+		private function setVisibleForElements( pageXML : XML) : void
+		{
+			var xmlList : XMLList = pageXML..object;
+			var objectXML : XML;
+			var typeID : String;
+			var typeProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy ;
+			
+			for each( objectXML in xmlList)
+			{
+				typeID = objectXML.@typeID;
+				var rr : TypeVO = typeProxy.getTypeVObyID( typeID )
+				objectXML.@iconID = rr.structureIconID;
+			}
+		}
+		
 		private function addHandlers() : void
 		{
 			dataTablesTree.addEventListener( DataTablesEvents.CHANGE, changeHandler, false, 0, true );
 			dataTablesTree.addEventListener( DataTablesEvents.SELECT_CONTEXT_ITEM_NEW, createNewPageOrObject, false, 0, true );
+			dataTablesTree.addEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true ); 
 		}
 		
 		private function createNewPageOrObject( event : DataTablesEvents ) : void
@@ -426,6 +451,11 @@ package net.vdombox.ide.modules.dataBase.view
 				return;
 			
 			sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, sessionProxy.selectedBase );
+		}
+		
+		private function getResourceRequestHandler( event : ResourceVOEvent ) : void
+		{
+			sendNotification( ApplicationFacade.GET_RESOURCE_REQUEST, event.target );
 		}
 	}
 }
