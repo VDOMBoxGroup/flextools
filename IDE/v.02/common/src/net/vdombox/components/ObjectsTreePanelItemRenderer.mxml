@@ -6,13 +6,20 @@
 					  doubleClickEnabled="true" doubleClick="mxtreeitemrenderer1_doubleClickHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
+			import net.vdombox.ide.common.events.ResourceVOEvent;
+			import net.vdombox.ide.common.vo.ResourceVO;
 			
 			//private var dataChanged : Boolean = false;
 			
 			private var _data : XML;
+			
+			private var _resourceVO : ResourceVO;
+			
+			private var loader : Loader;
 			
 			override public function set data( value : Object ) : void
 			{
@@ -28,18 +35,72 @@
 				return _data.@id;
 			}
 			
-			/*override public function validateProperties() : void
+			public function set resourceVO(value:ResourceVO) : void
+			{
+				_resourceVO = value;
+				
+				if ( !value.data )
+				{
+					BindingUtils.bindSetter( dataLoaded, value, "data", false, true );
+					return;
+				}
+				
+				dataLoaded();
+			}
+			
+			public function get resourceID() : String
+			{
+				if ( _data )
+					return _data.@iconID;
+				else
+					return "";
+			}
+			
+			private function dataLoaded( object : Object = null ) : void
+			{
+				loader = new Loader();
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
+				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+				
+				try
+				{
+					loader.loadBytes( _resourceVO.data );
+					
+				}
+				catch ( error : Error )
+				{
+					// FIXME Сделать обработку исключения если не грузится изображение
+				}
+			}
+			
+			private function onBytesLoaded( event : Event ) : void
+			{
+				loader = null;
+				
+				if ( event.type == IOErrorEvent.IO_ERROR )
+					return;
+				
+				componentIcon.source = Bitmap( event.target.content )
+			}
+			
+			override public function validateProperties() : void
 			{
 				super.validateProperties();
 				
-				if ( !dataChanged )
+				/*if ( !dataChanged )
 					return;
 				
-				dataChanged = false;
+				dataChanged = false;*/
+				
+				//				componentIcon.source = null;
 				
 				if ( !_data )
-					return;
-			}*/
+					return
+				
+				
+				if ( !_resourceVO ||( _resourceVO && _resourceVO.id != _data.@iconID ) )
+					dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCE_REQUEST));
+			}
 			
 			protected function mxtreeitemrenderer1_doubleClickHandler(event:MouseEvent):void
 			{
@@ -83,7 +144,7 @@
 				<s:BitmapImage source="{treeListData.disclosureIcon}" visible="{treeListData.hasChildren}" />
 			</s:Group>
 			
-			<s:BitmapImage source="{treeListData.icon}" />
+			<s:BitmapImage id="componentIcon" />
 			
 			<s:TextInput id="labelField"
 						 color="#FFFFFF"
