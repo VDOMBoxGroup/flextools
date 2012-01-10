@@ -8,8 +8,11 @@ package net.vdombox.ide.modules.events.view
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	
+	import net.vdombox.ide.common.events.ResourceVOEvent;
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
@@ -138,8 +141,15 @@ package net.vdombox.ide.modules.events.view
 				{
 					var pageXMLTree : XML = notification.getBody() as XML;
 					
-					if ( !pageXMLTree )
+					if ( pageXMLTree )
+					{
+						setVisibleForElements( pageXMLTree );
+						
+					}
+					else
+					{
 						pageXMLTree = new XML();
+					}
 
 					// XXX: doun on quck switch (pagesXMLList == null)
 					currentPageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
@@ -176,6 +186,21 @@ package net.vdombox.ide.modules.events.view
 			}
 		}
 		
+		private function setVisibleForElements( pageXML : XML) : void
+		{
+			var xmlList : XMLList = pageXML..object;
+			var objectXML : XML;
+			var typeID : String;
+			var typeProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy ;
+			
+			for each( objectXML in xmlList)
+			{
+				typeID = objectXML.@typeID;
+				var rr : TypeVO = typeProxy.getTypeVObyID( typeID )
+				objectXML.@iconID = rr.structureIconID;
+				//				trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
+			}
+		}
 
 		private function clearData() : void
 		{
@@ -187,11 +212,13 @@ package net.vdombox.ide.modules.events.view
 		private function addHandlers() : void
 		{
 			objectsTree.addEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler, false, 0, true );
+			objectsTreePanel.addEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 		}
 
 		private function removeHandlers() : void
 		{
 			objectsTree.removeEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler );
+			objectsTreePanel.removeEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 		}
 		
 
@@ -204,7 +231,7 @@ package net.vdombox.ide.modules.events.view
 			{
 				_pages[ pages[ i ].id ] = pages[ i ];
 				pagesXMLList +=
-					<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}/>
+					<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id} iconID={pages[ i ].typeVO.structureIconID}/>
 			}
 
 			objectsTreePanel.structure = pagesXMLList;
@@ -280,6 +307,11 @@ package net.vdombox.ide.modules.events.view
 				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ pageID ], objectID: id } );
 			}
 			
+		}
+		
+		private function getResourceRequestHandler( event : ResourceVOEvent ) : void
+		{
+			sendNotification( ApplicationFacade.GET_RESOURCE_REQUEST, event.target );
 		}
 	}
 }

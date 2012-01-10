@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.events
 	import net.vdombox.ide.modules.events.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.events.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.events.controller.CreateToolsetCommand;
+	import net.vdombox.ide.modules.events.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.events.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.events.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.events.controller.SaveSettingsToProxy;
@@ -18,9 +19,11 @@ package net.vdombox.ide.modules.events
 	import net.vdombox.ide.modules.events.controller.messages.ProcessPageProxyMessageCommand;
 	import net.vdombox.ide.modules.events.controller.messages.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.events.controller.messages.ProcessStatesProxyMessageCommand;
+	import net.vdombox.ide.modules.events.controller.messages.ProcessTypesProxyMessageCommand;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
+
 	/**
 	 * 
 	 * @author adelfos
@@ -112,6 +115,10 @@ package net.vdombox.ide.modules.events
 
 		public static const GET_OBJECTS 	: String = "getObjects";
 		public static const OBJECTS_GETTED 	: String = "objectsGetted";
+		
+//		Resource
+		public static const GET_RESOURCE_REQUEST 	: String = "getResourceRequest";
+		public static const LOAD_RESOURCE 	: String = "loadResource";
 
 //		other
 		public static const DELIMITER	 : String = "/";
@@ -174,6 +181,7 @@ package net.vdombox.ide.modules.events
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
+			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 
@@ -181,6 +189,8 @@ package net.vdombox.ide.modules.events
 			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 
 			registerCommand( TEAR_DOWN, TearDownCommand );
+			
+			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 		}
 	}
 }

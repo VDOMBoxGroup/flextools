@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.events.controller
 {
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.model.SettingsProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
@@ -14,6 +15,7 @@ package net.vdombox.ide.modules.events.controller
 			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new SessionProxy() );
 			facade.registerProxy( new VisibleElementProxy() );
+			facade.registerProxy( new TypesProxy() );
 		}
 	}
 }

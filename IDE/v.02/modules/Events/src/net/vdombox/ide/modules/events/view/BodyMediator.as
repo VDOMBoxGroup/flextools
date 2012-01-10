@@ -1,10 +1,11 @@
 package net.vdombox.ide.modules.events.view
 {
 	import mx.events.FlexEvent;
-
+	
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.view.components.Body;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -58,6 +59,7 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.PIPES_READY:
 				{
 					sendNotification( ApplicationFacade.GET_ALL_STATES );
+					sendNotification( TypesProxy.GET_TYPES );
 
 					break;
 				}
