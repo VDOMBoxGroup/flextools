@@ -421,9 +421,6 @@
 					default:
 						switch ( step )
 						{
-							case cWelcome:
-								vsProcess.selectedChild = cWelcome;
-								break;
 							case cKeyRequest:
 								vsProcess.selectedChild = cKeyRequest;
 								break;
@@ -698,13 +695,6 @@
 				
 				<mx:ViewStack id="vsProcess" width="100%" height="100%" creationPolicy="all" change="vsChange(event)" paddingTop="0">
 					
-					<mx:VBox id="cWelcome" height="100%" width="100%"
-							 verticalAlign="top" horizontalAlign="center"
-							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
-						<mx:Text width="90%" styleName="infoTextStyle"
-								 text="{LanguageManager.sentences.msg_gen_welcome}">
-						</mx:Text>
-					</mx:VBox>
 					
 					<mx:VBox id="cKeyRequest" height="100%" width="100%"
 							 verticalAlign="top" horizontalAlign="center"
