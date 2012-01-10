@@ -9,8 +9,11 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.events.FlexEvent;
+	
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.view.components.main.Body;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -59,7 +62,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.PIPES_READY:
 				{
 					sendNotification( ApplicationFacade.GET_ALL_STATES );
-					sendNotification( ApplicationFacade.GET_TYPES );
+					sendNotification( TypesProxy.GET_TYPES );
 
 					break;
 				}
@@ -73,7 +76,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.TYPES_CHANGED:
+				case TypesProxy.TYPES_CHANGED:
 				{
 					isTypesChanged = true;
 
@@ -101,7 +104,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.ALL_STATES_GETTED );
-			interests.push( ApplicationFacade.TYPES_CHANGED );
+			interests.push( TypesProxy.TYPES_CHANGED );
 
 			interests.push( ApplicationFacade.PIPES_READY );
 			interests.push( ApplicationFacade.MODULE_DESELECTED );

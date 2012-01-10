@@ -71,7 +71,7 @@
 				if ( !value )
 					return;
 
-				addEventListener(AttributeEvent.ERROR, errorHandler2, true, 0, true );
+				addEventListener(AttributeEvent.ERROR1, errorHandler2, true, 0, true );
 				
 				if ( value.hasOwnProperty( "objectVO") )
 				{
@@ -325,7 +325,12 @@
 				var errorString : String = event.value + "  ";
 				if ( data && data.hasOwnProperty( "attributeDescriptionVO" ) && data.attributeDescriptionVO )
 					errorString += data.attributeDescriptionVO.displayName;
-				Alert.Show( errorString, AlertButton.OK, this.parentApplication );
+				
+				var errorEvent : AttributeEvent = new AttributeEvent( AttributeEvent.ERROR2 );
+				
+				errorEvent.value = errorString;
+				
+				dispatchEvent( errorEvent );
 			}
 
 			protected function getColorByGroup( groupNumber : uint ) : uint

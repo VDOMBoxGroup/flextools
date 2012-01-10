@@ -91,8 +91,8 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const PROCESS_OBJECT_PROXY_MESSAGE : String = "processObjectProxyMessage";
 
 //		types
-		public static const GET_TYPES : String = "getTypes";
-		public static const TYPES_CHANGED : String = "typesChanged";
+		/*public static const GET_TYPES : String = "getTypes";
+		public static const TYPES_CHANGED : String = "typesChanged";*/
 
 //		resources
 		public static const GET_RESOURCES : String = "getResources";
@@ -214,6 +214,8 @@ package net.vdombox.ide.modules.wysiwyg
 		
 // Error
 		public static const ERROR_GETTED : String = "errorGetted";
+		
+		public static const WRITE_ERROR : String = "writeError";
 		
 		
 		

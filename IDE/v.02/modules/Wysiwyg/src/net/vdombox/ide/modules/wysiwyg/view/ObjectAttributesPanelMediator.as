@@ -207,6 +207,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectAttributesPanel.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true, 0, true );
 			objectAttributesPanel.addEventListener( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE, getResourcesAndPagesHandler, true, 0, true );
 			objectAttributesPanel.addEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true, 0, true );
+			objectAttributesPanel.addEventListener( AttributeEvent.ERROR2, errorHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -217,6 +218,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectAttributesPanel.removeEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true );
 			objectAttributesPanel.removeEventListener( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE, getResourcesAndPagesHandler, true );
 			objectAttributesPanel.removeEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true );
+			objectAttributesPanel.removeEventListener( AttributeEvent.ERROR2, errorHandler, true );
 		}
 
 		private function clearData() : void
@@ -252,7 +254,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function deleteRequestHandler( event : ObjectAttributesPanelEvent ) : void
 		{
-			trace ("[ObjAttributesPanelMediator] deleteRequestHandler");
 			var componentName : String = sessionProxy.selectedObject.typeVO.displayName;
 			
 			Alert.noLabel = "Cancel";
@@ -288,6 +289,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function openExternalHandler( event : AttributeEvent ) : void
 		{
 			sendNotification( ApplicationFacade.OPEN_EXTERNAL_EDITOR_REQUEST, event.target );
+		}
+		
+		private function errorHandler( event : AttributeEvent ) : void
+		{
+			sendNotification( ApplicationFacade.WRITE_ERROR, { applicationVO: sessionProxy.selectedApplication, content: event.value } );
 		}
 
 		private function selectResourceHandler( event : AttributeEvent ) : void

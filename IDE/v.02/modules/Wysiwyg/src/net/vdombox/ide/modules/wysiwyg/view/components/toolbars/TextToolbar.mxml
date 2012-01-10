@@ -110,6 +110,8 @@
 			
 			public function init( item : IRenderer ) : void
 			{
+				try
+				{
 				_item = item;
 					
 				elementForEditing.setStyle( "paddingTop", 5 );
@@ -125,6 +127,7 @@
 				applyDefaultStates();
 
 
+				
 				elementForEditing.editable = true;
 				elementForEditing.selectable = true;
 
@@ -149,6 +152,11 @@
 				}
 				catch ( error : Error )
 				{
+				}
+				}
+				catch ( error : Error )
+				{
+					var t : int = 9;
 				}
 			}
 

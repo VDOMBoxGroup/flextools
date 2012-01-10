@@ -95,8 +95,6 @@
 						
 					case TypeInterface.TEXT_EDITOR:
 					{
-						if ( _selectedRenderer.editableComponent is SVGNode )
-								return;
 						var textToolbar : TextToolbar = new TextToolbar();
 						
 						textToolbar.addEventListener(Event.CHANGE, toolbarChageHandle);

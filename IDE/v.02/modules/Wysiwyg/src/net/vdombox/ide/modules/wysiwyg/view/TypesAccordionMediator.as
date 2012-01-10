@@ -6,11 +6,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.containers.Accordion;
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.TypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypesCategory;
 	

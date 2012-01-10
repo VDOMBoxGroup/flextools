@@ -56,10 +56,11 @@
 				}
 				else
 				{
-					var errorEvent : AttributeEvent = new AttributeEvent( AttributeEvent.ERROR );
+					var errorEvent : AttributeEvent = new AttributeEvent( AttributeEvent.ERROR1 );
 					errorEvent.value = resourceManager.getString( 'Wysiwyg_General', 'attribut_error_in_attribute');
 					dispatchEvent( errorEvent );
 				}
+				
 			}
 			
 			private function changeHandler() : void

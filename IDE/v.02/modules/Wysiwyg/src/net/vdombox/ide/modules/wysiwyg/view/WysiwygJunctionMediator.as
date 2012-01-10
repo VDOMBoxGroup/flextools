@@ -20,6 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
@@ -69,7 +70,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
 			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
 
-			interests.push( ApplicationFacade.GET_TYPES );
+			interests.push( TypesProxy.GET_TYPES );
 
 			interests.push( ApplicationFacade.GET_RESOURCES );
 			interests.push( ApplicationFacade.SET_RESOURCE );
@@ -105,7 +106,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			interests.push( ApplicationFacade.COPY_REQUEST );
 			
-			
+			interests.push( ApplicationFacade.WRITE_ERROR );
 			
 
 			return interests;
@@ -209,7 +210,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.GET_TYPES:
+				case TypesProxy.GET_TYPES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
 
@@ -459,6 +460,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					break;
 				}
+					
+				case ApplicationFacade.WRITE_ERROR :
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.ERROR, body );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
 				case SessionProxy.GET_SELECTED_PAGE :
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_PAGE, body );

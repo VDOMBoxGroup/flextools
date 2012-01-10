@@ -39,9 +39,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			}
 			
 			return;
-			
-			
-			
 		}
 	}
 }

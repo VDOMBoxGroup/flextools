@@ -3,13 +3,14 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.ProxyMessage;
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.TypesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
+
 	/**
 	 * This command gives to <b>TypesProxy</b> geted  <b>TypesVO</b><br />
 	 *  <ul><br />

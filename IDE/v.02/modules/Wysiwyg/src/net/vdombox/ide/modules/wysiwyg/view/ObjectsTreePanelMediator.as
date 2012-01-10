@@ -18,6 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.ListEvent;
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -27,7 +28,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.TypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.VisibleRendererProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;

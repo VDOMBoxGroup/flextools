@@ -16,6 +16,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import mx.core.IUIComponent;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
