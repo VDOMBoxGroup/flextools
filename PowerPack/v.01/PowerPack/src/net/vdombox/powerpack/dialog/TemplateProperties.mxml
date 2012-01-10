@@ -2,7 +2,7 @@
 <ModalDialog
 		xmlns="net.vdombox.powerpack.dialog.*"
 		xmlns:mx="http://www.adobe.com/2006/mxml"
-		width="500" height="425"
+		width="500" height="455"
 		title="{LanguageManager.sentences.properties}"
 		creationComplete="onShow(event)"
 		xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
@@ -35,6 +35,8 @@
 				var defaultCaptions : Object = {
 					template_properties : "Template properties",
 					template_name : "Template name",
+					template_id : "Application ID",
+					template_ID_tooltip : "The application identifier string, unique to this application. Required.",
 					template_description : "Description",
 					template_picture : "Template picture",
 					template_use_picture : "Use picture",
@@ -105,6 +107,7 @@
 				return;
 
 			txtName.text = currentTemplate.name;
+			txtInstallerId.text = currentTemplate.installerId;
 			txtDesc.text = currentTemplate.description;
 			txtKey.text = currentTemplate.key;
 
@@ -151,6 +154,11 @@
 		public function get templateName() : String
 		{
 			return txtName.text;
+		}
+			
+		public function get templateInstallerId() : String
+		{
+			return txtInstallerId.text;
 		}
 
 		public function get templateDescription() : String
@@ -366,7 +374,7 @@
 	<mx:HRule width="100%" />
 
 	<mx:VBox styleName="dlgContent" 
-			 height="335" width="100%"
+			 height="362" width="100%"
 			 horizontalAlign="left">
 		
 		<mx:Grid>
@@ -377,6 +385,17 @@
 				</mx:GridItem>
 				<mx:GridItem width="100%" height="100%">
 					<mx:TextInput width="300" id="txtName" />
+				</mx:GridItem>
+			</mx:GridRow>
+			
+			<mx:GridRow width="100%" height="22">
+				<mx:GridItem width="100" height="100%">
+					<mx:Label text="{LanguageManager.sentences.template_id}:" />
+				</mx:GridItem>
+				<mx:GridItem width="100%" height="100%">
+					<mx:TextInput width="300" id="txtInstallerId" 
+								  toolTip="{LanguageManager.sentences.template_ID_tooltip}"
+								  restrict="a-zA-Z0-9\-_()."/>
 				</mx:GridItem>
 			</mx:GridRow>
 

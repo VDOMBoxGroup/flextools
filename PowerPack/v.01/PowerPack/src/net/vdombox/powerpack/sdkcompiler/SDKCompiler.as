@@ -114,7 +114,7 @@ package net.vdombox.powerpack.sdkcompiler
 			content += FileUtils.convertPathForCMD(sertificatePath) + " ";
 			content += "-storepass q ";
 			content += FileUtils.convertPathForCMD(outputPackagePath) + " ";
-			content += FileUtils.convertPathForCMD(powerPackProjectPath + "/Installer-app.xml") + " ";
+			content += FileUtils.convertPathForCMD(powerPackProjectStoragePath + "/Installer-app.xml") + " ";
 			content += "-C ";
 			content += FileUtils.convertPathForCMD(powerPackProjectPath) + " ";
 			content += "Installer.swf ";

@@ -29,6 +29,26 @@
 			
 			public var templateStructure : XML;
 			
+			private var installerTplXml : XML = 
+				 <application xmlns="http://ns.adobe.com/air/application/2.0">
+				  <version>1.1.12.7588</version> 
+				 <initialWindow>
+				  <content>Installer.swf</content> 
+				  <systemChrome>none</systemChrome> 
+				  <transparent>true</transparent> 
+				  <maximizable>false</maximizable> 
+				  <resizable>false</resizable> 
+				  </initialWindow>
+				  <installFolder>VDOM</installFolder> 
+				  <programMenuFolder>VDOM</programMenuFolder> 
+				 <icon>
+				  <image16x16>assets/icons/Installer16.png</image16x16> 
+				  <image32x32>assets/icons/Installer32.png</image32x32> 
+				  <image48x48>assets/icons/Installer48.png</image48x48> 
+				  <image128x128>assets/icons/Installer128.png</image128x128> 
+				  </icon>
+				  </application>;
+			
 			private var shObject : SharedObject = SharedObject.getLocal( "air_properties" );
 			private  function onShow():void
 			{
@@ -167,6 +187,14 @@
 			
 			private function compilePlayer():void
 			{
+				var installerAppXmlPrepeared : Boolean = prepareInstallerXml();
+				
+				if (!installerAppXmlPrepeared)
+				{
+					SuperAlert.show("Can't prepare installer properties xml", "Error");
+					return;
+				}
+				
 				var sdkCompiler : SDKCompiler = new SDKCompiler();
 				
 				if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE))
@@ -193,6 +221,39 @@
 						SuperAlert.show(evt.message);
 					}
 				}
+			}
+			
+			private function prepareInstallerXml() : Boolean
+			{
+				var fileStream : FileStream = new FileStream();
+				
+				var targetXmlFile : File = File.applicationStorageDirectory.resolvePath("Installer-app.xml");
+				
+				var installerXML : XML;
+				var targetXmlSource : String;
+				
+				try 
+				{
+					installerXML = installerTplXml;
+					
+					installerXML.id = "net.vdom." + currentTemplate.installerId;
+					installerXML.name = currentTemplate.name;
+					installerXML.filename = currentTemplate.name;
+					
+					installerXML.normalize();
+					
+					fileStream.open(targetXmlFile, FileMode.WRITE);
+					fileStream.writeUTFBytes( '<?xml version="1.0" encoding="UTF-8"?>' + "\n" + installerXML.toXMLString() );
+					fileStream.close();
+				} 
+				catch (e:Error)
+				{
+					fileStream.close();
+					
+					return false;
+				}
+				
+				return true;
 			}
 			
 			protected function btnBuildClickHandler(event:MouseEvent):void

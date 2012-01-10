@@ -734,6 +734,7 @@
 				var propDlg : TemplateProperties = event.target as TemplateProperties;
 
 				currentTemplate.name = propDlg.templateName;
+				currentTemplate.installerId = propDlg.templateInstallerId;
 				currentTemplate.description = propDlg.templateDescription;
 
 				if (propDlg.templatePicturePath)

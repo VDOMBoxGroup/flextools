@@ -237,8 +237,32 @@ public class Template extends EventDispatcher
 	//  name
 	//----------------------------------
 
+	private static const DEFAULT_NAME			: String = 'installer';
+	private static const DEFAULT_INSTALLER_ID	: String = 'installer';
+	
+	public function set installerId( value : String ) : void
+	{
+		if (!value)
+			value = DEFAULT_INSTALLER_ID;
+		
+		if ( _xml.id != value )
+		{
+			modified = true;
+			_xml.id = value;
+		}
+	}
+	
+	[Bindable]
+	public function get installerId() : String
+	{
+		return Utils.getStringOrDefault( _xml.id, DEFAULT_INSTALLER_ID );
+	}
+	
 	public function set name( value : String ) : void
 	{
+		if (!value)
+			value = DEFAULT_NAME;
+		
 		if ( _xml.name != value )
 		{
 			modified = true;
@@ -249,7 +273,7 @@ public class Template extends EventDispatcher
 	[Bindable]
 	public function get name() : String
 	{
-		return Utils.getStringOrDefault( _xml.name, '' );
+		return Utils.getStringOrDefault( _xml.name, DEFAULT_NAME );
 	}
 
 	//----------------------------------
