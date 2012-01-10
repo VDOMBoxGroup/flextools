@@ -66,7 +66,17 @@
 				queue.reset();
 				
 				queue.addRequest(UIDUtil.createUID(), 'get_structure', '', getTableStructureHandler, null);
+				
+				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueOKHandler );
 				queue.execute();
+				
+				currentState = "Progress";
+			}
+			
+			private function queueOKHandler( message : String ) : void 
+			{
+				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOKHandler );
+				currentState = "Result";
 			}
 			
 			private function getTableStructureHandler( event : * ) : void 
@@ -90,8 +100,6 @@
 				}
 				
 				dataTable.dataProvider = columnsProvider;
-				
-				
 			}
 			
 			private function findRecordInOldDataProvider( structureID : String ) : StructureVO
@@ -147,6 +155,8 @@
 				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
 				queue.execute();
 				
+				currentState = "Progress";
+				
 				deleteCol.enabled = true;
 				commitLabel.text = "";
 			}
@@ -163,9 +173,13 @@
 				commitLabel.text = "";
 				
 				queue.reset();
+				
 				queue.addRequest(UIDUtil.createUID(), 'get_structure', '', getTableStructureHandler, null);
+				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueOKHandler );
 				
 				queue.execute();
+				
+				currentState = "Progress";
 			}
 			
 			private function addBtnHandler() : void 
@@ -262,56 +276,70 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="Progress"/>
+		<s:State name="Result"/>
+	</s:states>
+	
 	<s:VGroup width="100%" height="100%" gap="0">
-		<mx:DataGrid id="dataTable" width="100%" height="100%" dataProvider="{columnsProvider}" draggableColumns="false"
-					 sortableColumns="false" editable="true" change="dataTable_changeHandler(event)">
-			<mx:columns>
-				<mx:DataGridColumn dataField="name" headerText="Name"/>
+		
+		<s:Group width="100%" height="100%">
+		
+			<mx:DataGrid id="dataTable" width="100%" height="100%" dataProvider="{columnsProvider}" draggableColumns="false"
+					 	sortableColumns="false" editable="true" change="dataTable_changeHandler(event)"
+						alpha.Result="1" alpha.Progress="0.4">
+				<mx:columns>
+					<mx:DataGridColumn dataField="name" headerText="Name"/>
 				
-				<mx:DataGridColumn dataField="type" headerText="Type" editable="false" width="120">
-					<mx:itemRenderer>
-						<fx:Component>
-							<ItemRenderers:DropDownItemRenderers selectedType="{data.type}" change="{data.type = selectedType}" width="100%"/>
-						</fx:Component>
-					</mx:itemRenderer>
-				</mx:DataGridColumn>
+					<mx:DataGridColumn dataField="type" headerText="Type" editable="false" width="120">
+						<mx:itemRenderer>
+							<fx:Component>
+								<ItemRenderers:DropDownItemRenderers selectedType="{data.type}" change="{data.type = selectedType}" width="100%"/>
+							</fx:Component>
+						</mx:itemRenderer>
+					</mx:DataGridColumn>
 				
-				<mx:DataGridColumn dataField="primary" headerText="Primary key" editable="false" width="80">
-					<mx:itemRenderer>
-						<fx:Component>
-							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.primary}" change="{data.primary = selectedCheck}"/>
-						</fx:Component>
-					</mx:itemRenderer>
-				</mx:DataGridColumn>
+					<mx:DataGridColumn dataField="primary" headerText="Primary key" editable="false" width="80">
+						<mx:itemRenderer>
+							<fx:Component>
+								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.primary}" change="{data.primary = selectedCheck}"/>
+							</fx:Component>
+						</mx:itemRenderer>
+					</mx:DataGridColumn>
 				
-				<mx:DataGridColumn dataField="aincrement" headerText="Auto increment" editable="false" width="80">
-					<mx:itemRenderer>
-						<fx:Component>
-							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.aincrement}" change="{data.aincrement = selectedCheck}"/>
-						</fx:Component>
-					</mx:itemRenderer>
-				</mx:DataGridColumn>
+					<mx:DataGridColumn dataField="aincrement" headerText="Auto increment" editable="false" width="80">
+						<mx:itemRenderer>
+							<fx:Component>
+								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.aincrement}" change="{data.aincrement = selectedCheck}"/>
+							</fx:Component>
+						</mx:itemRenderer>
+					</mx:DataGridColumn>
 				
-				<mx:DataGridColumn dataField="unique" headerText="Unique" editable="false" width="80">
-					<mx:itemRenderer>
-						<fx:Component>
-							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.unique}" change="{data.unique = selectedCheck}"/>
-						</fx:Component>
-					</mx:itemRenderer>
-				</mx:DataGridColumn>
+					<mx:DataGridColumn dataField="unique" headerText="Unique" editable="false" width="80">
+						<mx:itemRenderer>
+							<fx:Component>
+								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.unique}" change="{data.unique = selectedCheck}"/>
+							</fx:Component>
+						</mx:itemRenderer>
+					</mx:DataGridColumn>
 				
-				<mx:DataGridColumn dataField="notnull" headerText="Notnull" editable="false" width="80">
-					<mx:itemRenderer>
-						<fx:Component>
-							<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.notnull}" change="{data.notnull = selectedCheck}"/>
-						</fx:Component>
-					</mx:itemRenderer>
-				</mx:DataGridColumn>
+					<mx:DataGridColumn dataField="notnull" headerText="Notnull" editable="false" width="80">
+						<mx:itemRenderer>
+							<fx:Component>
+								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.notnull}" change="{data.notnull = selectedCheck}"/>
+							</fx:Component>
+						</mx:itemRenderer>
+					</mx:DataGridColumn>
 				
-				<mx:DataGridColumn dataField="defvalue" headerText="Default"/>
+					<mx:DataGridColumn dataField="defvalue" headerText="Default"/>
 				
-			</mx:columns>
-		</mx:DataGrid>
+				</mx:columns>
+			</mx:DataGrid>
+			
+			<mx:Image source="@Embed('assets/spinner.swf')" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center"  includeIn="Progress" scaleContent="false" maintainAspectRatio="true"/>
+				
+		</s:Group>
 		
 		<s:Group width="100%" height="50">
 			<s:Rect width="100%" height="100%">

@@ -122,12 +122,14 @@
 				updateQueueLength();
 				
 				queue.execute();
+				
+				currentState = "Progress";
 			}
 			
 			private function queueOnLoadCompleteHandler( message : String ) : void 
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
-				//__alertArea.selectedChild = __normal;
+				currentState = "Result";
 				updateQueueLength();
 			}
 			
@@ -389,11 +391,14 @@
 				
 				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, getPageQueueCompleteHandler );
 				queue.execute();
+				currentState = "Progress";
 			}
 			
 			private function getPageQueueCompleteHandler( event : QueueEvent ) : void 
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, getPageQueueCompleteHandler );
+				currentState = "Result";
+				
 				updateQueueLength();
 			}
 			
@@ -492,15 +497,21 @@
 					}
 				}
 				
-				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
-				queue.execute();
+				if ( queue.length > 0 )
+				{
+					queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
+					queue.execute();
 				
-				updateQueueLength();
+					currentState = "Progress";
+				
+					updateQueueLength();
+				}
 			}
 			
 			private function queueCommitCompleteHandler( event : QueueEvent ) : void 
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
+				
 				updateTable();
 			}
 			
@@ -522,7 +533,15 @@
 				
 				verticalScrollPositionStore = dataTable.verticalScrollPosition;
 				
+				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, updateTableCompleteHandler );
 				queue.execute();
+				currentState = "Progress";
+			}
+			
+			private function updateTableCompleteHandler( event : QueueEvent ) : void 
+			{
+				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, updateTableCompleteHandler );
+				currentState = "Result";
 			}
 			
 			private function refreshDataGrid( message : String ) : void 
@@ -616,12 +635,25 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="Progress"/>
+		<s:State name="Result"/>
+	</s:states>
+	
 	<s:VGroup width="100%" height="100%">
+		
+		<s:Group width="100%" height="100%" >
+			
 			<components1:VDOMAdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}"
-						 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"				 
-						 draggableColumns="true" sortableColumns="true" doubleClickEnabled="true"
-						 allowMultipleSelection="true"/>
-		<s:Group width="100%">
+											  width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"				 
+											  draggableColumns="true" sortableColumns="true" doubleClickEnabled="true"
+											  allowMultipleSelection="true" alpha.Result="1" alpha.Progress="0.4"/>
+			
+			<mx:Image source="@Embed('assets/spinner.swf')" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center"  includeIn="Progress" scaleContent="false" maintainAspectRatio="true"/>
+			
+		</s:Group>
+				<s:Group width="100%">
 			<s:Rect width="100%" height="70">
 				<s:fill>
 					<s:SolidColor color="#F0F0F0"/>

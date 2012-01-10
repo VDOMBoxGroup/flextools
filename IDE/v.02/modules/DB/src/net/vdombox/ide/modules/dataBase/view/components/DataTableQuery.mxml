@@ -83,6 +83,9 @@
 				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
 				queue.addEventListener( QueueEvent.UNKNOWN_ERROR, queueERRORHandler );
 				queue.execute();
+				
+				dataTable.alpha = 0.4;
+				imageProgress.visible = true;
 			}
 			
 			private function writeQueryResultOnDataGrid( message : String ) : void 
@@ -153,6 +156,9 @@
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
 				queue.removeEventListener( QueueEvent.UNKNOWN_ERROR, queueERRORHandler );
 				errorWriter.text = "No error";
+				
+				dataTable.alpha = 1;
+				imageProgress.visible = false;
 			}
 			
 			private function queueERRORHandler( event : QueueEvent ) : void 
@@ -162,6 +168,9 @@
 				errorWriter.text = event.message;	
 				queue.reset();
 				dataGridProvider = null;
+				
+				dataTable.alpha = 1;
+				imageProgress.visible = false;;
 			}
 			
 			protected function query_changeHandler(event:TextOperationEvent):void
@@ -179,10 +188,6 @@
 			protected function image1_clickHandler(event:MouseEvent):void
 			{
 				currentState = currentState == "all" ? "short" : "all";
-//				if ( currentState == "all" )
-//					currentState = "short";
-//				else
-//					currentState = "all";
 			}
 			
 		]]>
@@ -191,6 +196,7 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
+
 	
 	<s:VGroup width="100%" height="100%" paddingLeft="5" paddingRight="5">
 		
@@ -225,9 +231,17 @@
 		
 		<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_query_data_returned' ) }" />
 		
-		<mx:AdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}"
-					 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
-					 editable="false" sortableColumns="true" />
+		<s:Group width="100%" height="100%">
+			
+			<mx:AdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}"
+								 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
+								 editable="false" sortableColumns="true"/>
+			
+			<mx:Image id="imageProgress" source="@Embed('assets/spinner.swf')" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center"  visible="false" scaleContent="false" maintainAspectRatio="true"/>
+			
+		</s:Group>
+		
+		
 		
 		
 		
