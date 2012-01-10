@@ -320,6 +320,21 @@
 			if ( action != null )
 				action.apply( this, args );
 		}
+			
+		public function saveTpl( browseForSave : Boolean = false ) : void
+		{
+			if ( ContextManager.templates.length > 0 )
+			{
+				currentTemplate.addEventListener( Event.COMPLETE, templateSaveHandler );
+				currentTemplate.xmlStructure = pnl_graphs.toXML();
+				
+				if (browseForSave)
+					currentTemplate.browseForSave();
+				else
+					currentTemplate.save();
+			}
+			
+		}
 
 		public function alertSaveAndCloseTemplate( action : Function = null, args : Array = null ) : void
 		{
@@ -519,21 +534,11 @@
 					break;
 
 				case "save":
-					if ( ContextManager.templates.length > 0 )
-					{
-						currentTemplate.addEventListener( Event.COMPLETE, templateSaveHandler );
-						currentTemplate.xmlStructure = pnl_graphs.toXML();
-						currentTemplate.save();
-					}
+					saveTpl();
 					break;
 
 				case "save_as":
-					if ( ContextManager.templates.length > 0 )
-					{
-						currentTemplate.addEventListener( Event.COMPLETE, templateSaveHandler );
-						currentTemplate.xmlStructure = pnl_graphs.toXML();
-						currentTemplate.browseForSave();
-					}
+					saveTpl(true);
 					break;
 
 				case "close":
@@ -561,7 +566,7 @@
 					break;
 				
 				case "air_builder":
-					AirBuildProperties.show( );
+					AirBuildProperties.show(pnl_graphs.toXML());
 					break;
 
 				case "validate":

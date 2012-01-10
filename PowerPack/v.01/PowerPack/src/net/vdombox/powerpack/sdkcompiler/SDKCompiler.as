@@ -120,7 +120,10 @@ package net.vdombox.powerpack.sdkcompiler
 			content += "Installer.swf ";
 			content += "-C ";
 			content += FileUtils.convertPathForCMD(powerPackProjectPath) + " ";
-			content += "assets";
+			content += "assets" + " ";
+			content += "-C ";
+			content += FileUtils.convertPathForCMD(powerPackProjectStoragePath) + " ";
+			content += "assets/template.xml";
 			
 			return content;
 		}
@@ -163,6 +166,11 @@ package net.vdombox.powerpack.sdkcompiler
 		private function get powerPackProjectPath () : String
 		{
 			return File.applicationDirectory.nativePath;
+		}
+		
+		private function get powerPackProjectStoragePath () : String
+		{
+			return File.applicationStorageDirectory.nativePath;
 		}
 		
 		private function get sdk4_1Path () : String

@@ -81,10 +81,10 @@
     </initialWindow>
 
     <!-- The subpath of the standard default installation location to use. Optional. -->
-    <!-- <installFolder>VDOM</installFolder> -->
+    <installFolder>VDOM</installFolder>
 
     <!-- The subpath of the Windows Start/Programs menu to use. Optional. -->
-    <programMenuFolder>VDOM/Power Pack</programMenuFolder>
+    <programMenuFolder>VDOM</programMenuFolder>
 
     <!-- The icon the system uses for the application. For at least one resolution,
              specify the path to a PNG file included in the AIR package. Optional. -->

@@ -27,6 +27,8 @@
 			
 			private static var _dialog	: AirBuildProperties;
 			
+			public var templateStructure : XML;
+			
 			private var shObject : SharedObject = SharedObject.getLocal( "air_properties" );
 			private  function onShow():void
 			{
@@ -45,13 +47,16 @@
 				return shObject.data.hasOwnProperty("outputInstallerFileName") && shObject.data["outputInstallerFileName"];
 			}
 			
-			static public function show( closeHandler : Function = null ) : AirBuildProperties
+			static public function show( templateXmlStructure : XML, closeHandler : Function = null ) : AirBuildProperties
 			{
 				
 				
 				if ( !_dialog || _dialog.closed )
 				{
 					_dialog = new AirBuildProperties();
+					
+					_dialog.templateStructure = templateXmlStructure;
+					
 					_dialog.open();
 					_dialog.show( OK | CANCEL, closeHandler, null, OK );
 				}
@@ -95,6 +100,71 @@
 				}
 			}
 			
+			protected function btnOutputFolderClickHandler(event:MouseEvent):void
+			{
+				var file : File = new File(StringUtil.trim(installerFolder.text));
+				
+				file.addEventListener(Event.SELECT, folderSelectHandler);
+				
+				file.browseForDirectory("Select output folder");
+				
+				
+				function folderSelectHandler (evt:Event) : void
+				{
+					file.removeEventListener(Event.SELECT, folderSelectHandler);
+					
+					installerFolder.text = file.nativePath; 
+				}
+			}
+			
+			public function get currentTemplate() : Template
+			{
+				if ( !ContextManager.templates || ContextManager.templates.length == 0 )
+					return null;
+				
+				return ContextManager.templates.getItemAt( 0 ) as Template;
+			}
+			
+			private function saveTemplate () : void
+			{ 
+				if (!currentTemplate)
+				{
+					SuperAlert.show("No opened template", "Error");
+					return;
+				}
+				
+				currentTemplate.addEventListener( Event.COMPLETE, templateSaveCompleteHandler );
+				currentTemplate.addEventListener( ErrorEvent.ERROR, templateSaveErrorHandler );
+				
+				currentTemplate.xmlStructure = templateStructure;
+				currentTemplate.save();
+				
+				function templateSaveCompleteHandler(evt:Event) : void
+				{
+					currentTemplate.removeEventListener( Event.COMPLETE, templateSaveCompleteHandler );
+					
+					try
+					{
+						var tplTargetFile : File = File.applicationStorageDirectory.resolvePath("assets/template.xml");
+						currentTemplate.file.copyTo(tplTargetFile, true);
+					}
+					catch (e:Error)
+					{
+						SuperAlert.show("Can't save template", "Error");
+						return;
+					}
+					
+					compilePlayer();
+				}
+				
+				function templateSaveErrorHandler(evt:Event) : void
+				{
+					currentTemplate.removeEventListener( ErrorEvent.ERROR, templateSaveErrorHandler );
+					
+					SuperAlert.show("Can't save template", "Error");
+				}
+			}
+			
 			private function compilePlayer():void
 			{
 				var sdkCompiler : SDKCompiler = new SDKCompiler();
@@ -105,7 +175,9 @@
 				if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR))
 					sdkCompiler.addEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR, sdkCompilerEventHandler);
 				
-				ProgressManager.start( ProgressManager.WINDOW_MODE, false );
+				ProgressManager.complete();
+				ProgressManager.source = null;
+				ProgressManager.start( ProgressManager.DIALOG_MODE, false );
 				
 				sdkCompiler.buildInstallerPackage(StringUtil.trim(installerFolder.text), StringUtil.trim(installerFileName.text));
 				
@@ -123,21 +195,9 @@
 				}
 			}
 			
-			protected function btnOutputFolderClickHandler(event:MouseEvent):void
+			protected function btnBuildClickHandler(event:MouseEvent):void
 			{
-				var file : File = new File(StringUtil.trim(installerFolder.text));
-				
-				file.addEventListener(Event.SELECT, folderSelectHandler);
-				
-				file.browseForDirectory("Select output folder");
-				
-				
-				function folderSelectHandler (evt:Event) : void
-				{
-					file.removeEventListener(Event.SELECT, folderSelectHandler);
-					
-					installerFolder.text = file.nativePath; 
-				}
+				saveTemplate();
 			}
 			
 		]]>
@@ -159,7 +219,7 @@
 			<mx:TextInput id="installerFileName" width="100%" restrict="a-zA-z0-9 \-_.()" toolTip="{installerFileName.text}"/>
 		</mx:HBox>
 			 
-		<mx:Button label="Build" click="compilePlayer()" />
+		<mx:Button label="Build" click="btnBuildClickHandler(event)" />
 	</mx:VBox>
 	
 	<mx:ControlBar width="100%" height="100%" styleName="dlgFooter"/>
