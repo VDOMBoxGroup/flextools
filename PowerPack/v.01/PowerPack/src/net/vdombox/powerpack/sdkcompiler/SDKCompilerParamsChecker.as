@@ -102,12 +102,10 @@ package net.vdombox.powerpack.sdkcompiler
 			var powerPackProjectFolder : File = new File(powerPackProjectPath);
 			var powerPackAssetsFolder : File = new File(powerPackProjectPath + "/assets");
 			var powerPackInstallerSwfFile : File = new File(powerPackProjectPath + "/Installer.swf");
-			var powerPackDescriptionXmlFile : File = new File(powerPackProjectPath + "/Installer-app.xml");
 			
 			return powerPackProjectFolder.exists && 
 				powerPackAssetsFolder.exists && 
-				powerPackInstallerSwfFile.exists &&
-				powerPackDescriptionXmlFile.exists;
+				powerPackInstallerSwfFile.exists;
 			
 			
 		}
