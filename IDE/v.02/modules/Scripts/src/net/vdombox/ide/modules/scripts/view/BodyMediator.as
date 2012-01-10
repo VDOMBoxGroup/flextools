@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.view.components.Body;
 	
@@ -58,6 +59,7 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.PIPES_READY:
 				{
 					sendNotification( ApplicationFacade.GET_ALL_STATES );
+					sendNotification( TypesProxy.GET_TYPES );
 					
 					break;
 				}

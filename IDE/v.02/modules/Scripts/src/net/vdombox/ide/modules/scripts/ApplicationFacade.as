@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.scripts.controller.DeleteLibraryRequestCommand;
+	import net.vdombox.ide.modules.scripts.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.GetServerActionsRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.OpenCreateActionWindowCommand;
 	import net.vdombox.ide.modules.scripts.controller.SaveScriptRequestCommand;
@@ -156,6 +157,10 @@ package net.vdombox.ide.modules.scripts
 		
 		public static const OPEN_ONLOAD_SCRIPT : String = "openOnloadScript";
 		
+		//		Resource
+		public static const GET_RESOURCE_REQUEST 	: String = "getResourceRequest";
+		public static const LOAD_RESOURCE 	: String = "loadResource";
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )
@@ -209,6 +214,8 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
+			
+			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 		}
 	}
 }

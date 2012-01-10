@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
+	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
@@ -17,6 +18,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -85,6 +87,9 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.DELETE_LIBRARY );
 			
 			interests.push( ApplicationFacade.BODY_STOP );
+			
+			interests.push( ApplicationFacade.LOAD_RESOURCE );
+			interests.push( TypesProxy.GET_TYPES );
 			 
 
 			return interests;
@@ -360,6 +365,24 @@ package net.vdombox.ide.modules.scripts.view
 				{
 					junction.sendMessage( PipeNames.STDCORE,
 						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+					
+					break;
+				}
+					
+				case ApplicationFacade.LOAD_RESOURCE:
+				{
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case TypesProxy.GET_TYPES:
+				{
+					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
 				}

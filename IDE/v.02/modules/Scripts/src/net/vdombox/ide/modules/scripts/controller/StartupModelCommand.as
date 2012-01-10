@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.scripts.controller
 {
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	import net.vdombox.ide.modules.scripts.model.SettingsProxy;
 	
@@ -12,6 +13,7 @@ package net.vdombox.ide.modules.scripts.controller
 		{
 			facade.registerProxy( new SessionProxy() );
 			facade.registerProxy( new SettingsProxy() );
+			facade.registerProxy( new TypesProxy() );
 		}
 	}
 }

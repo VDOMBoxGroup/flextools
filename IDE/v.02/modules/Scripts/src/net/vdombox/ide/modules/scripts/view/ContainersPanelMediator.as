@@ -2,6 +2,8 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import net.vdombox.components.ObjectsTreePanelItemRenderer;
 	import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
+	import net.vdombox.ide.common.events.ResourceVOEvent;
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
@@ -153,7 +155,7 @@ package net.vdombox.ide.modules.scripts.view
 						}
 						
 						//containersPanel.structure = structure;
-						
+						setVisibleForElements( structure );
 						
 						var pageXML : XML = containersPanel.structure.( @id == structure.@id )[ 0 ];
 						pageXML.setChildren( new XMLList() ); //TODO: strange construction
@@ -169,7 +171,22 @@ package net.vdombox.ide.modules.scripts.view
 					
 					break;
 				}
-					
+			}
+		}
+		
+		private function setVisibleForElements( pageXML : XML) : void
+		{
+			var xmlList : XMLList = pageXML..object;
+			var objectXML : XML;
+			var typeID : String;
+			var typeProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy ;
+			
+			for each( objectXML in xmlList)
+			{
+				typeID = objectXML.@typeID;
+				var rr : TypeVO = typeProxy.getTypeVObyID( typeID )
+				objectXML.@iconID = rr.structureIconID;
+				//				trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
 			}
 		}
 		
@@ -200,7 +217,7 @@ package net.vdombox.ide.modules.scripts.view
 			{
 				_pages[ pages[ i ].id ] = pages[ i ];
 				
-				pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} />;
+				pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} iconID={pages[ i ].typeVO.structureIconID} />;
 				
 			}
 			
@@ -212,12 +229,14 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			containersPanel.addEventListener( ContainersPanelEvent.CONTAINER_CHANGED, containerChangedHandler, false, 0, true );
 			containersPanel.addEventListener( ObjectsTreePanelEvent.DOUBLE_CLICK, openOnloadScript, true, 0, true );
+			containersPanel.addEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 		}
 
 		private function removeHandlers() : void
 		{
 			containersPanel.removeEventListener( ContainersPanelEvent.CONTAINER_CHANGED, containerChangedHandler );
 			containersPanel.removeEventListener( ObjectsTreePanelEvent.DOUBLE_CLICK, openOnloadScript, true );
+			containersPanel.removeEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 		}
 
 		private function clearData() : void
@@ -313,6 +332,11 @@ package net.vdombox.ide.modules.scripts.view
 			{
 				sendNotification( ApplicationFacade.OPEN_ONLOAD_SCRIPT, treeItemRenderer.objectID );
 			}
+		}
+		
+		private function getResourceRequestHandler( event : ResourceVOEvent ) : void
+		{
+			sendNotification( ApplicationFacade.GET_RESOURCE_REQUEST, event.target );
 		}
 	}
 }
