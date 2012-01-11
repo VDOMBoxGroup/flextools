@@ -268,18 +268,18 @@
 				{
 					tpl.key = key;
 					tpl.decode();
+					
 				}
 				
-				if ( !tpl.xmlStructure )
-				{
-					SuperAlert.show( LanguageManager.sentences['msg_cannot_open_tpl'] );
-					closeTemplateFile();
-				}
-				else
+				if ( tpl.xmlStructure )
 				{
 					if ( fileMenuData..menuitem.(hasOwnProperty( '@id' ) && @id == "run_template")[0] )
 						fileMenuData..menuitem.(hasOwnProperty( '@id' ) && @id == "run_template")[0].@enabled = 'true';
 					processStep( cGeneral );
+				}
+				else
+				{
+					SuperAlert.show( LanguageManager.sentences['msg_cannot_open_tpl'] );
 					
 				}
 			}
@@ -296,6 +296,7 @@
 					StringUtil.substitute( "{0} ({1})", LanguageManager.sentences['all'], "*.*" ),
 					"*.*" );
 				
+				//todo: overite by "case" 
 				if ( event.item.@id == "open_file" )
 				{
 					openTemplateFile( null, onOpenBrowseSelect, [tmplFilter, filter] );
@@ -431,9 +432,7 @@
 							case cProcess:
 								vsProcess.selectedChild = cProcess;
 								break;
-							case cInterrupt:
-								vsProcess.selectedChild = cInterrupt;
-								break;
+							
 							case cComplete:
 								vsProcess.selectedChild = cComplete;
 								break;
@@ -629,7 +628,7 @@
 					ContextManager.templates.removeItemAt( 0 );
 				if ( fileMenuData..menuitem.(hasOwnProperty( '@id' ) && @id == "run_template")[0] )
 					fileMenuData..menuitem.(hasOwnProperty( '@id' ) && @id == "run_template")[0].@enabled = 'false';
-				processStep( cInterrupt ) ;
+				processStep( cGeneral ) ;
 			}
 			
 			public function alertInterrupt() : void
@@ -646,7 +645,7 @@
 				{
 					if ( event.detail == Alert.YES )
 					{
-						processStep( cInterrupt );
+						processStep( cGeneral );
 					}
 					else if ( !appGenerated && ContextManager.templateStruct )
 					{
@@ -710,8 +709,7 @@
 						<mx:TextInput width="90%" id="txtKey" styleName="edtTextStyle" />
 						
 						<mx:ControlBar width="90%" horizontalAlign="right">
-							<mx:Button label="{LanguageManager.sentences.cancel}"
-									   click="closeTemplateFile()" />
+							
 							<mx:Button id="btnAcceptKey" label="{LanguageManager.sentences.accept}"
 									   click="onKeyAccept(event)" />
 						</mx:ControlBar>
@@ -728,24 +726,14 @@
 									 styleName="infoTextStyle"/>
 						
 						<mx:ControlBar width="90%" horizontalAlign="right">
-							<mx:Button label="{LanguageManager.sentences.cancel}"
-									   click="closeTemplateFile()" />
+							
 							<mx:Button id="btnRun" label="{LanguageManager.sentences.run}"
 									   click="processStep(1)" />
 						</mx:ControlBar>
 					</mx:VBox>
 					
 					
-					<mx:VBox id="cInterrupt" height="100%" width="100%"
-							 verticalAlign="top" horizontalAlign="center"
-							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
-						<mx:Text width="90%" styleName="infoTextStyle"
-								 text="{LanguageManager.sentences.msg_creation_app_interrupted}" />
-						<mx:ControlBar width="90%" horizontalAlign="right">
-							<mx:Button label="{LanguageManager.sentences.next}"
-									   click="closeTemplateFile()" />
-						</mx:ControlBar>
-					</mx:VBox>
+					
 					
 					<mx:VBox id="cProcess" height="100%" width="100%"
 							 verticalAlign="top" horizontalAlign="center"
