@@ -165,7 +165,11 @@
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
 				queue.removeEventListener( QueueEvent.UNKNOWN_ERROR, queueERRORHandler );
-				errorWriter.text = event.message;	
+				
+				if ( event.message == "execute_query_xml" )
+					errorWriter.text = "This server does not support this feature!!!";
+				else
+					errorWriter.text = event.message;	
 				queue.reset();
 				dataGridProvider = null;
 				

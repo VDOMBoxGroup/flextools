@@ -228,7 +228,12 @@ package net.vdombox.ide.modules.dataBase.view
 					
 				case ApplicationFacade.REMOTE_CALL_REQUEST:
 				{
-					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.REMOTE_CALL, body );
+					if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.REMOTE_CALL, body );
+					else if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.REMOTE_CALL, body );
+					else if ( body.hasOwnProperty( "applicationVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.REMOTE_CALL, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

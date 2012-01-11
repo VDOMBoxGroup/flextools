@@ -322,9 +322,14 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function createNewPageOrObject( event : DataTablesEvents ) : void
 		{
-			if ( event.content is TypeVO )
+			createNew( event.content );
+		}
+		
+		private function createNew( object : Object ) : void
+		{
+			if ( object is TypeVO )
 			{
-				var _typeVO : TypeVO = event.content as TypeVO;
+				var _typeVO : TypeVO = object as TypeVO;
 				
 				var createNewObjectWindow : CreateNewObjectWindow = new CreateNewObjectWindow();
 				
@@ -342,7 +347,7 @@ package net.vdombox.ide.modules.dataBase.view
 					}
 				}
 				
-				WindowManager.getInstance().addWindow(createNewObjectWindow, event.target as UIComponent, true);
+				WindowManager.getInstance().addWindow(createNewObjectWindow, dataTablesTree as UIComponent, true);
 				
 				function applyHandler( event : CreateNewObjectEvent ) : void
 				{

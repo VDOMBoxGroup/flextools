@@ -43,6 +43,19 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 					break;
 				}
 					
+				case PPMPageTargetNames.REMOTE_CALL:
+				{
+					if ( operation == PPMOperationNames.READ )
+					{
+						if ( body.hasOwnProperty("result") )
+							sendNotification( ApplicationFacade.REMOTE_CALL_RESPONSE, body.result );
+						else
+							sendNotification( ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR, body.error );
+					}
+					
+					break;
+				}
+					
 				case PPMPageTargetNames.NAME:
 				{
 					if ( operation == PPMOperationNames.UPDATE )

@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import net.vdombox.ide.common.events.ExternalManagerEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
+	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
@@ -96,11 +97,10 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		public function remoteMethodCall( functionName : String, value : String ) : String
 		{
-			var objectID : String = sessionProxy.selectedTable ? sessionProxy.selectedTable.id : sessionProxy.selectedBase.id;
+			var objectVO : ObjectVO = sessionProxy.selectedTable;
 			
-			
-			sendNotification( ApplicationFacade.REMOTE_CALL_REQUEST,
-				{ applicationVO: sessionProxy.selectedApplication, objectID: objectID, functionName: functionName, value: value } );
+			if ( objectVO )
+				sendNotification( ApplicationFacade.REMOTE_CALL_REQUEST, { objectVO: objectVO, functionName: functionName, value: value } );
 			return null;
 		}
 		
