@@ -13,6 +13,7 @@ package net.vdombox.ide.common
 		public static const XML_PRESENTATION : String = "XMLPresentation";
 		public static const NAME : String = "name";
 		public static const COPY : String = "copy";
+		public static const REMOTE_CALL : String = "remoteCall";
 		
 	}
 }
