@@ -142,6 +142,20 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				}
 					
+				case ApplicationFacade.PAGE_REMOTE_CALL_GETTED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.REMOTE_CALL, body );
+					
+					break;
+				}
+					
+				case ApplicationFacade.PAGE_REMOTE_CALL_ERROR_GETTED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.REMOTE_CALL, body );
+					
+					break;
+				}
+					
 				case ApplicationFacade.PAGE_XML_PRESENTATION_SETTED:
 				{
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.XML_PRESENTATION, body );

@@ -109,6 +109,14 @@ package net.vdombox.ide.core.controller.requests
 
 					break;
 				}
+					
+				case PPMObjectTargetNames.REMOTE_CALL:
+				{
+					if ( operation == PPMOperationNames.READ )
+						objectProxy.remoteCall( body.functionName, body.value );
+					
+					break;
+				}
 
 				case PPMObjectTargetNames.NAME:
 				{

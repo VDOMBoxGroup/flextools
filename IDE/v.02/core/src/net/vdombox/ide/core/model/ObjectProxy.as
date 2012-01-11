@@ -73,6 +73,17 @@ package net.vdombox.ide.core.model
 			delete instances[ proxyName ];
 		}
 		
+		public function remoteCall( functionName : String, value : String ) : AsyncToken
+		{
+			var token : AsyncToken;
+			
+			token = soap.remote_method_call( objectVO.pageVO.applicationVO.id, objectVO.id, functionName, value, "" );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
 		public function getAttributes() : AsyncToken
 		{
 			var token : AsyncToken;
@@ -336,6 +347,9 @@ package net.vdombox.ide.core.model
 			soap.copy_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.copy_object.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
+			soap.remote_method_call.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.remote_method_call.addEventListener(  FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
 			
 		}
 		
@@ -380,6 +394,9 @@ package net.vdombox.ide.core.model
 			
 			soap.copy_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.copy_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.remote_method_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.remote_method_call.removeEventListener(  FaultEvent.FAULT, soap_faultHandler );
 			
 		}
 		
@@ -684,6 +701,13 @@ package net.vdombox.ide.core.model
 					
 					break;
 				}
+					
+				case "remote_method_call":
+				{
+					sendNotification( ApplicationFacade.OBJECT_REMOTE_CALL_GETTED, { objectVO: objectVO, result: result } );
+					
+					break;
+				}
 			}
 			
 			if ( notification )
@@ -718,7 +742,14 @@ package net.vdombox.ide.core.model
 					notification.token = token;
 					
 					break;
-				}	
+				}
+					
+				case "remote_method_call":
+				{
+					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_ERROR_GETTED, { objectVO: objectVO, error: fault.detail } );
+					
+					return;
+				}
 			}
 			
 			if ( notification )

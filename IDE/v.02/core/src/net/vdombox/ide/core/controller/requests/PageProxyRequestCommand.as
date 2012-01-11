@@ -140,6 +140,14 @@ package net.vdombox.ide.core.controller.requests
 					break;
 				}
 					
+				case PPMPageTargetNames.REMOTE_CALL:
+				{
+					if ( operation == PPMOperationNames.READ )
+						pageProxy.remoteCall( body.functionName, body.value );
+					
+					break;
+				}
+					
 				case PPMPageTargetNames.XML_PRESENTATION:
 				{
 					if( operation == PPMOperationNames.READ )

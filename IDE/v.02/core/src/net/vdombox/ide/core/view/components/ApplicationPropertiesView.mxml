@@ -38,6 +38,18 @@
 		<s:TextArea id="txtapplicationDescription" 
 					height="100%" width="100%" color="#FFFFFF"/>
 		
+		<!--<mx:Spacer height="10" />
+		
+		<s:HGroup width="100%" verticalAlign="middle">
+			
+			<s:Label id="lblapplicationVersion" color="#FFFFFF"
+					 text="{getLocalesWord( 'create_edit_application_version' )}"/>
+			<s:TextInput id="txtapplicationVersion" 
+						 width="100%" color="#FFFFFF"/> 
+			
+		</s:HGroup>-->
+		
+		
 		<mx:Spacer height="15" />
 		
 		<s:Label buttonMode="true" text="{getLocalesWord('create_edit_application_script_language')}"

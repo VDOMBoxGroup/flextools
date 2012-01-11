@@ -88,6 +88,17 @@ package net.vdombox.ide.core.model
 			delete instances[ proxyName ];
 		}
 
+		public function remoteCall( functionName : String, value : String ) : AsyncToken
+		{
+			var token : AsyncToken;
+			
+			token = soap.remote_method_call( pageVO.applicationVO.id, pageVO.id, functionName, value, "" );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
 		public function getStructure() : AsyncToken
 		{
 			var token : AsyncToken;
@@ -422,6 +433,9 @@ package net.vdombox.ide.core.model
 			soap.copy_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.copy_object.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
+			soap.remote_method_call.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.remote_method_call.addEventListener(  FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
 		}
 
 		private function removeHandlers() : void
@@ -472,7 +486,8 @@ package net.vdombox.ide.core.model
 			soap.copy_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.copy_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
-			
+			soap.remote_method_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.remote_method_call.removeEventListener(  FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function createObjectsList( objects : XML ) : void
@@ -848,6 +863,13 @@ package net.vdombox.ide.core.model
 					break;
 				}
 					
+				case "remote_method_call":
+				{
+					sendNotification( ApplicationFacade.PAGE_REMOTE_CALL_GETTED, { pageVO: pageVO, result: result } );
+					
+					break;
+				}
+					
 					
 			}
 
@@ -888,6 +910,13 @@ package net.vdombox.ide.core.model
 					sendNotification( ApplicationFacade.SERVER_ERROR, errorVO );
 
 					break;
+				}
+					
+				case "remote_method_call":
+				{
+					sendNotification( ApplicationFacade.PAGE_REMOTE_CALL_ERROR_GETTED, { pageVO: pageVO, error: fault.detail } );
+					
+					return;
 				}
 					
 				case "set_name":

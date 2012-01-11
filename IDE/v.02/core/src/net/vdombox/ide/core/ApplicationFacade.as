@@ -350,6 +350,9 @@ package net.vdombox.ide.core
 		
 		public static const PAGE_COPY_CREATED  : String = "pageCopyCreated";
 		
+		public static const PAGE_REMOTE_CALL_GETTED : String = "pageRemoteCallGetted";
+		public static const PAGE_REMOTE_CALL_ERROR_GETTED : String = "pageRemoteCallErrorGetted";
+		
 //		object
 		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
 		public static const OBJECT_ATTRIBUTES_SETTED : String = "objectAttributesSetted";
@@ -379,6 +382,9 @@ package net.vdombox.ide.core
 //		public static const OPEN_APPLICATION_IN_CHANGE_VIEW  : String = "openApplicationInChangeView";
 		
 		public static const OBJECT_COPY_CREATED  : String = "objectCopyCreated";
+		public static const OBJECT_REMOTE_CALL_GETTED : String = "objectRemoteCallGetted";
+		public static const OBJECT_REMOTE_CALL_ERROR_GETTED : String = "objectRemoteCallErrorGetted";
+		
 		
 		
 
@@ -521,6 +527,8 @@ package net.vdombox.ide.core
 			registerCommand( PAGE_WYSIWYG_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_XML_PRESENTATION_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_XML_PRESENTATION_SETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_REMOTE_CALL_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_REMOTE_CALL_ERROR_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_COPY_CREATED, PageProxyResponseCommand );
 
 			registerCommand( OBJECT_PROXY_REQUEST, ObjectProxyRequestCommand );
@@ -538,7 +546,10 @@ package net.vdombox.ide.core
 			registerCommand( OBJECT_WYSIWYG_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_XML_PRESENTATION_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_XML_PRESENTATION_SETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_REMOTE_CALL_GETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_REMOTE_CALL_ERROR_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_COPY_CREATED, ObjectProxyResponseCommand );
+			
 
 			registerCommand( RESOURCES_PROXY_REQUEST,	ResourcesProxyRequestCommand );
 			registerCommand( RESOURCES_GETTED,		 	ResourcesProxyResponseCommand );
