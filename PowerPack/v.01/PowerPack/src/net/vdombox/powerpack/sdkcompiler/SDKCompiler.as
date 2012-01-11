@@ -21,6 +21,7 @@ package net.vdombox.powerpack.sdkcompiler
 
 		private var outputInstallerFolderPath : String;
 		private var outputInstallerFileName : String;
+		private var includeApplication : Boolean;
 		
 		private var paramsChecker	: SDKCompilerParamsChecker = new SDKCompilerParamsChecker();;
 		
@@ -28,7 +29,7 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 		}
 		
-		public function buildInstallerPackage(outputFolderPath : String, outputFileName : String) : void
+		public function buildInstallerPackage(outputFolderPath : String, outputFileName : String, includeApp : Boolean) : void
 		{
 			var processEvent : SDKCompilerEvent;
 			
@@ -40,6 +41,7 @@ package net.vdombox.powerpack.sdkcompiler
 			
 			outputInstallerFolderPath = outputFolderPath;
 			outputInstallerFileName = outputFileName;
+			includeApplication = includeApp;
 			
 			paramsChecker.addEventListener(SDKCompilerParamsChecker.PARAMS_OK, onParamsOK);
 			paramsChecker.addEventListener(SDKCompilerParamsChecker.PARAMS_ERROR, onParamsError);
@@ -123,7 +125,15 @@ package net.vdombox.powerpack.sdkcompiler
 			content += "assets" + " ";
 			content += "-C ";
 			content += FileUtils.convertPathForCMD(powerPackProjectStoragePath) + " ";
-			content += "assets/template.xml";
+			content += "assets/template.xml"
+			
+			if (includeApplication)
+			{
+				content += " ";
+				content += "-C ";
+				content += FileUtils.convertPathForCMD(powerPackProjectStoragePath) + " ";
+				content += "app.xml";
+			}
 			
 			return content;
 		}
