@@ -90,9 +90,9 @@ Label
 
 ProgressBar
 {
-    trackColors : #aaaaaa, #aaaaaa;
+    trackColors : #353535, #353535;
     trackHeight : 12;
-    barColor    : #333333;
+    barColor    : #4f92c4;
     barSkin     : ClassReference("net.vdombox.powerpack.customize.skins.GeneratorProgressBarSkin");
 	color		: #ffffff;
 }

@@ -3,7 +3,10 @@
 
 import connection.SOAPBaseLevel;
 
+import flash.desktop.NativeApplication;
 import flash.display.Bitmap;
+import flash.display.DisplayObject;
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.filesystem.File;
@@ -13,8 +16,11 @@ import flash.utils.ByteArray;
 
 import mx.controls.Alert;
 import mx.core.Application;
+import mx.core.WindowedApplication;
 import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
+import mx.managers.PopUpManager;
+import mx.managers.SystemManager;
 import mx.utils.Base64Encoder;
 import mx.utils.UIDUtil;
 
@@ -25,10 +31,12 @@ import net.vdombox.powerpack.gen.errorClasses.RunTimeError;
 import net.vdombox.powerpack.gen.structs.GraphStruct;
 import net.vdombox.powerpack.gen.structs.NodeStruct;
 import net.vdombox.powerpack.lib.extendedapi.codec.BMPEncoder;
+import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
 import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.managers.LanguageManager;
 import net.vdombox.powerpack.panel.Question;
+import net.vdombox.powerpack.panel.QuestionPopup;
 
 public function sub( graph : String, ...args ) : *
 {
@@ -110,7 +118,14 @@ private function __question( handler : Function, question : String, params : Arr
 			answersArray.push( params[i].toString() );
 	}
 	
-	Question.show( question, "", questionMode, answersArray, questionFileFilter, null, handler );
+	//Question.show( question, "", questionMode, answersArray, questionFileFilter, null, handler );
+	var questionPopup	: QuestionPopup = new QuestionPopup();
+	var popupParent		: Sprite = Sprite(Application.application);
+	
+	questionPopup.setShowProperties(questionMode);
+	
+	PopUpManager.addPopUp(questionPopup, popupParent, true);
+	PopUpManager.centerPopUp(questionPopup);
 	
 	return handler;
 }
