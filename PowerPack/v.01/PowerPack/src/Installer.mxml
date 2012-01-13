@@ -697,9 +697,16 @@
 		
 		<mx:Spacer width="100%"/>
 		
-		<mx:Button skin="{MinimizeButtonSkin}" click="{nativeWindow.minimize()}"/>
-		<mx:Button skin="{MaximizeButtonSkin}" click="{if (nativeWindow.maximizable) nativeWindow.maximize()}" alpha="{nativeWindow.maximizable ? 1 : 0.5}"/>
-		<mx:Button skin="{CloseButtonSkin}" click="{nativeWindow.close()}"/>
+		<mx:Button skin="{MinimizeButtonSkin}" 
+				   click="{nativeWindow.minimize()}" 
+				   focusEnabled="false"/>
+		<mx:Button skin="{MaximizeButtonSkin}" 
+				   click="{if (nativeWindow.maximizable) nativeWindow.maximize()}" 
+				   alpha="{nativeWindow.maximizable ? 1 : 0.5}"
+				   focusEnabled="false"/>
+		<mx:Button skin="{CloseButtonSkin}" 
+				   click="{nativeWindow.close()}"
+				   focusEnabled="false"/>
 		
 		<mx:Spacer width="10"/>
 	</mx:HBox>
@@ -736,7 +743,7 @@
 						<mx:TextArea width="450" height="100"
 									 text="{ContextManager.templates.getItemAt(0).description}" 
 									 styleName="infoTextStyle"
-									 editable="false" selectable="false"
+									 editable="false" selectable="false" focusEnabled="false"
 									 backgroundAlpha="0" borderStyle="none"/>
 						
 						<mx:Spacer height="5"/>
@@ -762,7 +769,7 @@
 						<mx:TextArea width="450" height="150"
 									 text="{ContextManager.templates.getItemAt(0).description}" 
 									 styleName="infoTextStyle"
-									 editable="false" selectable="false"
+									 editable="false" selectable="false" focusEnabled="false"
 									 backgroundAlpha="0" borderStyle="none"/>
 						
 						<mx:ControlBar width="90%" horizontalAlign="right">

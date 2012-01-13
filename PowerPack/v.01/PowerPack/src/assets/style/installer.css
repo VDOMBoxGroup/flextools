@@ -19,7 +19,7 @@ global
     /*highlightAlphas: 0.08, 0.14; /* use this to control the 'light' cast on the components */
 
     /* themeColor	*/
-    themeColor            : #888888;
+    themeColor            : #2ba6e5;
     /*rollOverColor: #D3BABA;*/
     /*selectionColor: #D3989C;*/
 
@@ -104,7 +104,8 @@ PowerPackInstallerButton
 	fontSize		: 16;
 	fontFamily		: Arial;
 	skin			: ClassReference("net.vdombox.powerpack.customize.skins.GradientButtonSkin");
-	buttonBgColors	: #f1f1f1, #b4b4b4; 
+	buttonBgColors	: #f1f1f1, #b4b4b4;
+	cornerRadius	: 13;
 }
 
 GridItem

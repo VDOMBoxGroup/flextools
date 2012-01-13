@@ -24,6 +24,9 @@ package net.vdombox.powerpack.customize.skins
 		{
 			graphics.clear();
 			
+			var rectEllipsWidth : Number = unscaledWidth-55;
+			var rectEllipsHeight : Number = unscaledHeight;
+			
 			var bgColors : Array = getStyle( "buttonBgColors" );
 			
 			var matr:Matrix = new Matrix();
@@ -36,9 +39,19 @@ package net.vdombox.powerpack.customize.skins
 			
 			graphics.drawRoundRect(0, 0, 
 									unscaledWidth, unscaledHeight,
-									unscaledWidth-55,unscaledHeight);
+									rectEllipsWidth, rectEllipsHeight);
 			graphics.endFill();
-			
+
+			if (name == "overSkin" || name == "downSkin")
+			{
+				graphics.beginFill(0x000000, 0.2)
+				
+				graphics.drawRoundRect(0, 0, 
+										unscaledWidth, unscaledHeight,
+										rectEllipsWidth, rectEllipsHeight);
+				graphics.endFill();
+			}
+
 			super.updateDisplayList(unscaledWidth,unscaledHeight);
 		}
 		

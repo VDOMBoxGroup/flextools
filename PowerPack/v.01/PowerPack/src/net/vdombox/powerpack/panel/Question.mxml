@@ -276,7 +276,8 @@
 		]]>
 	</mx:Script>
 
-	<mx:VBox height="100%" width="100%" horizontalAlign="center">
+	<mx:VBox height="100%" width="100%" 
+			 horizontalAlign="center">
 		<mx:Canvas width="100%" height="100%" label="{LanguageManager.sentences.question}">
 			<mx:HBox verticalAlign="top" left="10" top="10" bottom="10" right="10">
 				<mx:Image source="@Embed('/assets/images/Question.png')" />
