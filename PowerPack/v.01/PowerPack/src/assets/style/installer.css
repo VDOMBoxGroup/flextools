@@ -2,8 +2,8 @@
 
 @font-face
 {
-    src        : url("assets/fonts/Square721ExBT.ttf");
-    fontFamily : Square721ExBT;
+    src        : url("assets/fonts/arial.ttf");
+    fontFamily : Arial;
 }
 
 global
@@ -19,12 +19,12 @@ global
     /*highlightAlphas: 0.08, 0.14; /* use this to control the 'light' cast on the components */
 
     /* themeColor	*/
-    themeColor            : #68332F;
+    themeColor            : #888888;
     /*rollOverColor: #D3BABA;*/
     /*selectionColor: #D3989C;*/
 
-    fontFamily            : "Tahoma", "Helvetica", "_sans";
-    fontSize              : 11;
+    fontFamily            : Arial;
+    fontSize              : 10;
 }
 
 /*
@@ -35,26 +35,32 @@ global
 
 TitleBar
 {
-    titleBarButtonBgColors : #707173, #ffffff;
+    /*titleBarButtonBgColors : #707173, #ffffff;*/
+	backgroundAlpha : 0;
 }
 
 WindowedApplication
 {
     headerHeight             : 30;
-
-    cornerRadius             : 10;
-
+	
+    cornerRadius             : 9;
+	
     titleTextStyleName       : "titleTextStyle";
-    titleBarColors           : #ffeae6, #000000, #666666;
-    titleBarButtonPadding    : 2;
+    
+	titleBarColors           : #ffeae6, #000000, #666666;
+
+	titleBarButtonPadding    : 8;
     titleBarBackgroundSkin   : ClassReference("net.vdombox.powerpack.customize.skins.GeneratorApplicationTitleBarBackgroundSkin");
-
-    borderColor              : #707173;
-    borderThickness          : 2;
-    backgroundGradientColors : #C1C1C0, #ffffff;
-
+	
+    borderColor              : #424242;
+    borderThickness          : 8;
+    
     buttonPadding            : 2;
     buttonAlignment          : "auto";
+	
+	minimizeButtonSkin		 : ClassReference("net.vdombox.powerpack.customize.skins.MinimizeButtonSkin");
+	maximizeButtonSkin		 : ClassReference("net.vdombox.powerpack.customize.skins.MaximizeButtonSkin");
+	closeButtonSkin			 : ClassReference("net.vdombox.powerpack.customize.skins.CloseButtonSkin");
 }
 
 GenModalDialog
@@ -75,8 +81,8 @@ GenModalDialog
 
 Label
 {
-    color    : #000000;
-    fontSize : 11;
+    color    : #ffffff;
+    fontSize : 12;
 }
 
 
@@ -84,14 +90,21 @@ Label
 
 ProgressBar
 {
-    trackColors : #ffffff, #ffffff;
+    trackColors : #aaaaaa, #aaaaaa;
     trackHeight : 12;
-    barColor    : #E42327;
+    barColor    : #333333;
     barSkin     : ClassReference("net.vdombox.powerpack.customize.skins.GeneratorProgressBarSkin");
+	color		: #ffffff;
 }
 
-Button
+
+PowerPackInstallerButton
 {
+	color			: #000000;
+	fontSize		: 16;
+	fontFamily		: Arial;
+	skin			: ClassReference("net.vdombox.powerpack.customize.skins.GradientButtonSkin");
+	buttonBgColors	: #f1f1f1, #b4b4b4; 
 }
 
 GridItem
@@ -101,7 +114,7 @@ GridItem
 
 .titleTextStyle
 {
-    fontFamily : Square721ExBT, "Arial", "Helvetica", "_sans";
+    fontFamily : Arial;
     fontSize   : 14;
     fontWeight : bold;
     color      : #d9dadb;
@@ -110,11 +123,11 @@ GridItem
 
 .edtTextStyle
 {
-    fontFamily      : "Arial", "Helvetica", "_sans";
+    fontFamily      : Arial;
     fontSize        : 14;
     fontWeight      : bold;
 
-    color           : #000000;
+    color           : #666666;
     borderStyle     : solid;
     borderColor     : #5A5859;
     borderThickness : 2;
@@ -122,8 +135,9 @@ GridItem
 
 .infoTextStyle
 {
-    fontFamily : "Arial", "Helvetica", "_sans";
+    fontFamily : Arial;
     fontSize   : 14;
+	color	   : #ffffff;
 }
 
 .dlgHeader
@@ -153,11 +167,11 @@ GridItem
 
 .headerLabel
 {
-    fontFamily : "Arial", "Helvetica", "_sans";
-    fontSize   : 48;
-    fontWeight : bold;
+    fontFamily : "Arial";
+    fontSize   : 46;
+    fontWeight : normal;
     textIndent : 0;
-    color      : #16414A;
+    color      : #ffffff;
 }
 
 

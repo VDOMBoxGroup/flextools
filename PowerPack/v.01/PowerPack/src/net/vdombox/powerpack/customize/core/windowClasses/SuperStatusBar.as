@@ -228,7 +228,7 @@ public class SuperStatusBar extends UIComponent
 	override public function styleChanged( styleProp : String ) : void
 	{
 		super.styleChanged( styleProp );
-
+		
 		invalidateDisplayList();
 
 		var allStyles : Boolean = !styleProp || styleProp == "styleName";

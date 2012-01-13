@@ -4,6 +4,7 @@ package net.vdombox.powerpack.customize.skins
 import mx.core.IWindow;
 import mx.core.UIComponent;
 import mx.skins.ProgrammaticSkin;
+import mx.states.SetStyle;
 import mx.styles.StyleManager;
 
 /**
@@ -37,8 +38,8 @@ public class GeneratorApplicationTitleBarBackgroundSkin extends ProgrammaticSkin
 	override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 	{
 		super.updateDisplayList( unscaledWidth, unscaledHeight );
-
-		var cornerRadius : Number = getStyle( "cornerRadius" );
+		
+		/*var cornerRadius : Number = getStyle( "cornerRadius" );
 		var titleBarColors : Array = getStyle( "titleBarColors" );
 		var borderThickness : Number = UIComponent( parent.parent ).getStyle( "borderThickness" );
 		var isActiveWindow : Boolean = IWindow( parent.parent ).nativeWindow.active;
@@ -59,7 +60,8 @@ public class GeneratorApplicationTitleBarBackgroundSkin extends ProgrammaticSkin
 					tr : cornerRadius / 1.2, bl : 0, br : 0},
 				titleBarColors[0], [0.4],
 				verticalGradientMatrix( 0, 0, unscaledWidth, unscaledHeight / 2 ) );
-
+		
+*/
 	}
 }
 

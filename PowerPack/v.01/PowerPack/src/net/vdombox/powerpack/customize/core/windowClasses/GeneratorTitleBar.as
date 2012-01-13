@@ -7,6 +7,8 @@ import mx.core.UIComponent;
 import mx.core.mx_internal;
 import mx.core.windowClasses.TitleBar;
 
+import net.vdombox.powerpack.customize.skins.MinimizeButtonSkin;
+
 use namespace mx_internal;
 
 public class GeneratorTitleBar extends TitleBar
@@ -35,28 +37,28 @@ public class GeneratorTitleBar extends TitleBar
 
 		minimizeButton.setActualSize( minimizeButton.measuredWidth,
 				minimizeButton.measuredHeight );
+		
 		maximizeButton.setActualSize( maximizeButton.measuredWidth,
 				maximizeButton.measuredHeight );
+		
 		closeButton.setActualSize( closeButton.measuredWidth,
 				closeButton.measuredHeight );
-
+		
 		if ( align == "right" )
 		{
-			minimizeButton.move(
-					unscaledWidth - (minimizeButton.measuredWidth +
-							maximizeButton.measuredWidth + closeButton.measuredWidth +
-							(2 * pad)) - cornerOffset - edgePad,
-					edgePad );
-
-			maximizeButton.move(
-					unscaledWidth - (maximizeButton.measuredWidth +
-							closeButton.measuredWidth + pad) - cornerOffset - edgePad,
-					edgePad );
-
 			closeButton.move(
-					unscaledWidth - closeButton.measuredWidth -
-							cornerOffset - edgePad,
+				unscaledWidth - closeButton.measuredWidth -
+				3*cornerOffset - edgePad,
+				edgePad );
+			
+			maximizeButton.move(
+					closeButton.x - 10 - edgePad,
 					edgePad );
+
+			minimizeButton.move(
+				maximizeButton.x - 10 - edgePad,
+				edgePad );
+
 		}
 		else
 		{
@@ -93,8 +95,6 @@ public class GeneratorTitleBar extends TitleBar
 
 	override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 	{
-		super.updateDisplayList( unscaledWidth, unscaledHeight );
-
 		var cornerRadius1 : Number = getStyle( "cornerRadius" ) / 1.7;
 		var cornerRadius2 : Number = getStyle( "cornerRadius" ) / 2;
 
@@ -131,7 +131,9 @@ public class GeneratorTitleBar extends TitleBar
 						titleBarButtonBgColors[1], [0.6],
 						verticalGradientMatrix( 0, 0, unscaledWidth, unscaledHeight ) );
 		}
+		
+		super.updateDisplayList( unscaledWidth, unscaledHeight );
 	}
-
+	
 }
 }

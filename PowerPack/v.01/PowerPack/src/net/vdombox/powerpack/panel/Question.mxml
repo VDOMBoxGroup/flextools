@@ -63,7 +63,7 @@
 			if ( mode == QM_QUESTION )
 				answerTextInput.setFocus();
 			else if ( mode == QM_BROWSE )
-				btnOk
+				btnOk;
 
 			addEventListener( CloseEvent.CLOSE, onClosing );
 

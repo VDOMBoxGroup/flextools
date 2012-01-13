@@ -2,7 +2,7 @@
 <mx:WindowedApplication
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:customize="net.vdombox.powerpack.customize.*"
-	width="770" height="450" verticalAlign="middle" horizontalAlign="center" layout="absolute"
+	width="750" height="400" verticalAlign="middle" horizontalAlign="center" layout="absolute"
 	showStatusBar="false" showGripper="false"
 	title="{LanguageManager.sentences.app_title}"
 	titleIcon="@Embed(source='assets/icons/icon_16.png')"
@@ -12,7 +12,10 @@
 	applicationComplete="show()"
 	updateComplete="complete()"
 	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
-	creationComplete="windowedapplication1_creationCompleteHandler(event)">
+	creationComplete="windowedapplication1_creationCompleteHandler(event)"
+	backgroundImage="assets/images/texture_ide_sidebar.png" xmlns:control="net.vdombox.powerpack.control.*"
+	showTitleBar="false"
+	mouseDown="window_mouseDownHandler(event)">
 	
 	<mx:Style source="assets/style/installer.css" />
 	
@@ -54,6 +57,7 @@
 			
 			import mx.controls.Alert;
 			import mx.controls.ProgressBarMode;
+			import mx.core.FlexLoader;
 			import mx.events.CloseEvent;
 			import mx.events.EffectEvent;
 			import mx.events.FlexEvent;
@@ -63,6 +67,10 @@
 			
 			import net.vdombox.powerpack.BasicError;
 			import net.vdombox.powerpack.Template;
+			import net.vdombox.powerpack.customize.skins.CloseButtonSkin;
+			import net.vdombox.powerpack.customize.skins.GradientButtonSkin;
+			import net.vdombox.powerpack.customize.skins.MaximizeButtonSkin;
+			import net.vdombox.powerpack.customize.skins.MinimizeButtonSkin;
 			import net.vdombox.powerpack.dialog.GenConnection;
 			import net.vdombox.powerpack.dialog.GenProperties;
 			import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
@@ -120,6 +128,7 @@
 				
 				if ( File.applicationDirectory.resolvePath( 'style/generator.swf' ).exists )
 					StyleManager.loadStyleDeclarations( "style/generator.swf" );
+
 			}
 			
 			private function show() : void
@@ -158,7 +167,6 @@
 			
 			private function complete() : void
 			{
-				
 			}
 			
 			private function exitApplication( event : Event = null ) : void
@@ -663,19 +671,39 @@
 			
 			protected function tplPic_showHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
 				trace ("pic show");
 			}
 			
 			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
 				openTemplateFile(null,onTemplateLoad);
+			}
+			
+			protected function window_mouseDownHandler(event:MouseEvent):void
+			{
+				if (event.target is FlexLoader)
+				{
+					event.stopImmediatePropagation();
+					nativeWindow.startMove();
+				}
 			}
 			
 		]]>
 	</mx:Script>
-	
+
+	<mx:HBox height="10" width="100%"
+			 verticalAlign="bottom" horizontalAlign="right"
+			 horizontalGap="20">
+		
+		<mx:Spacer width="100%"/>
+		
+		<mx:Button skin="{MinimizeButtonSkin}" click="{nativeWindow.minimize()}"/>
+		<mx:Button skin="{MaximizeButtonSkin}" click="{if (nativeWindow.maximizable) nativeWindow.maximize()}" alpha="{nativeWindow.maximizable ? 1 : 0.5}"/>
+		<mx:Button skin="{CloseButtonSkin}" click="{nativeWindow.close()}"/>
+		
+		<mx:Spacer width="10"/>
+	</mx:HBox>
+		
 	<mx:VBox height="100%" width="100%">
 		
 		<!--mx:MenuBar id="mnMain" width="100%" dataProvider="{fileMenuData.menuitem}" labelFunction="labelFunction"
@@ -696,39 +724,52 @@
 					
 					
 					<mx:VBox id="cKeyRequest" height="100%" width="100%"
-							 verticalAlign="top" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="left"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}" verticalGap="0">
 			
 						<mx:Label width="90%" 
 									  text="{ContextManager.templates.getItemAt(0).name}"
 									  styleName="headerLabel"/>
-						<mx:Label  width="90%" height="150"
+						<!--<mx:Label  width="90%" height="100%"
 									 text="{ContextManager.templates.getItemAt(0).description}" 
-									 styleName="infoTextStyle"/>
+									 styleName="infoTextStyle"/>-->
+						<mx:TextArea width="450" height="100"
+									 text="{ContextManager.templates.getItemAt(0).description}" 
+									 styleName="infoTextStyle"
+									 editable="false" selectable="false"
+									 backgroundAlpha="0" borderStyle="none"/>
+						
+						<mx:Spacer height="5"/>
 						<mx:Label text="{LanguageManager.sentences.msg_input_template_key}:" />
 						<mx:TextInput width="90%" id="txtKey" styleName="edtTextStyle" />
 						
 						<mx:ControlBar width="90%" horizontalAlign="right">
 							
-							<mx:Button id="btnAcceptKey" label="{LanguageManager.sentences.accept}"
-									   click="onKeyAccept(event)" />
+							<control:PowerPackInstallerButton id="btnAcceptKey" label="{LanguageManager.sentences.accept}"
+									   click="onKeyAccept(event)"/>
 						</mx:ControlBar>
 					</mx:VBox>
 					
 					<mx:VBox id="cGeneral" height="100%" width="100%"
-							 verticalAlign="top" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="left"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:Label width="90%" 
 									  text="{ContextManager.templates.getItemAt(0).name}"
 									  styleName="headerLabel" />
-						<mx:Label  width="90%" height="150" 
+						<!--<mx:Label  width="450" height="100%" 
 									 text="{ContextManager.templates.getItemAt(0).description}"
-									 styleName="infoTextStyle"/>
+									 styleName="infoTextStyle"/>-->
+						<mx:TextArea width="450" height="150"
+									 text="{ContextManager.templates.getItemAt(0).description}" 
+									 styleName="infoTextStyle"
+									 editable="false" selectable="false"
+									 backgroundAlpha="0" borderStyle="none"/>
 						
 						<mx:ControlBar width="90%" horizontalAlign="right">
 							
-							<mx:Button id="btnRun" label="{LanguageManager.sentences.run}"
-									   click="processStep(1)" />
+							<control:PowerPackInstallerButton id="btnRun" 
+															  label="{LanguageManager.sentences.run}"
+									   						  click="processStep(1)"/>
 						</mx:ControlBar>
 					</mx:VBox>
 					
@@ -788,7 +829,7 @@
 						
 							<mx:ProgressBar width="90%" minimum="0" maximum="100" id="progressBar" mode="manual" />
 							
-							<mx:Button id="btnCancel" label="{LanguageManager.sentences.cancel}"
+							<control:PowerPackInstallerButton id="btnCancel" label="{LanguageManager.sentences.cancel}"
 									   click="alertInterrupt()" />
 						</mx:HBox>
 						
@@ -796,19 +837,19 @@
 					</mx:VBox>
 					
 					<mx:VBox id="cComplete" height="100%" width="100%"
-							 verticalAlign="top" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="left"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:Label text="{LanguageManager.sentences.gen_result}:" />
 						<mx:TextArea id="txtResultBuf" editable="false" width="90%" height="250"
 									 text="" />
 						<mx:ControlBar width="90%" horizontalAlign="right">
-							<mx:Button id="btnNext" label="{LanguageManager.sentences.next}"
+							<control:PowerPackInstallerButton id="btnNext" label="{LanguageManager.sentences.next}"
 									   click="processStep(cFinal)" />
 						</mx:ControlBar>
 					</mx:VBox>
 					
 					<mx:VBox id="cFinal" height="100%" width="100%"
-							 verticalAlign="top" horizontalAlign="center"
+							 verticalAlign="top" horizontalAlign="left"
 							 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:Label width="90%" 
 								  text="{ContextManager.templates.getItemAt(0).name}"
@@ -819,7 +860,7 @@
 						</mx:Text>
 						<mx:Spacer height="100%" />
 						<mx:ControlBar width="90%" horizontalAlign="right">
-							<mx:Button id="btnExit"
+							<control:PowerPackInstallerButton id="btnExit"
 									   label="{LanguageManager.sentences.exit}"
 									   click="exitApplication();" />
 						</mx:ControlBar>
@@ -827,12 +868,27 @@
 					
 				</mx:ViewStack>
 				
-				<mx:HBox width="100%" horizontalAlign="right" verticalAlign="bottom" paddingBottom="10"
-						 paddingRight="10">
-					<mx:Image source="@Embed(source='assets/images/txt_logo.png')" />
-				</mx:HBox>
 			</mx:VBox>
+		</mx:HBox>
+		
+		<mx:HBox id="bottomPanel" bottom="0" 
+				 width="100%" height="40" 
+				 backgroundColor="#464646" 
+				 verticalAlign="middle">
+			
+			<mx:Spacer width="5"/>
+			<mx:Image source="@Embed(source='assets/images/powerpack_sign.png')" 
+					  smoothBitmapContent="true"
+					  verticalAlign="middle"/>
+			
+			<mx:Spacer width="100%"/>
+			<mx:Image source="@Embed(source='assets/images/txt_logo.png')" 
+					  width="160" height="20" 
+					  smoothBitmapContent="true"
+					  verticalAlign="middle"/>
+			<mx:Spacer width="5"/>
 		</mx:HBox>
 	</mx:VBox>
 	
+		
 </mx:WindowedApplication>
