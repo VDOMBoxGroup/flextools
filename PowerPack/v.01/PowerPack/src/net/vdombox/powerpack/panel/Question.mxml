@@ -22,6 +22,7 @@
 		public static const QM_QUESTION : int = 1;
 		public static const QM_CHOICE : int = 2;
 		public static const QM_BROWSE : int = 3;
+        public static const QM_INFORMATION : int = 4;
 
 		static private var defaultCaptions : Object = {
 			question : "Question",

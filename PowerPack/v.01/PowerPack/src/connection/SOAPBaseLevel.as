@@ -14,7 +14,13 @@ public class SOAPBaseLevel extends EventDispatcher
 {
 	public static var RESULT_RECEIVED  : String = "resultReceived";
 
+    public static var SUCCESS  : String = "Success";
+
+    public static var ERROR  : String = "Error";
+
 	private var _result : Object;
+
+    private var _resultType : String = ERROR;
 
 	private var soap : SOAP;
 
@@ -31,6 +37,13 @@ public class SOAPBaseLevel extends EventDispatcher
 		return _result;
 	}
 
+    public function get resultType() : String
+    {
+//        if (!_resultType)
+
+        return _resultType;
+    }
+
 	private function resultHandler( event : * ) : void
 	{
 		deleteListeners( event.target);
@@ -38,6 +51,8 @@ public class SOAPBaseLevel extends EventDispatcher
 		var result : XMLList = new XMLList( event.result );
 
 		_result = result[0];
+
+        _resultType = SUCCESS;
 
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
 	}
@@ -51,14 +66,14 @@ public class SOAPBaseLevel extends EventDispatcher
 
 	public function soapError( event : FaultEvent ) : void
 	{
-		trace("soapError")
-
 		deleteListeners( event.target);
 
 		if ( "faultstring" in event.fault )
 			_result = "['Error' '" + event.fault["faultstring"] + "']";
 		else
 			_result = "['Error' '" + event.fault.faultString + "']";
+
+        _resultType = ERROR;
 
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
 	}
@@ -297,10 +312,12 @@ trace(wsdl)
              var resultArray : Array = ["Success", result.Hostname, result.Username, result.ServerVersion]
 
             _result = ListParser.array2List(resultArray);
-            trace(_result)
+
+            _resultType = SUCCESS;
 
 			dispatchEvent( new Event( RESULT_RECEIVED ) );
 		}
+
 	}
 
 
@@ -327,7 +344,9 @@ trace(wsdl)
 	public function closeSession() : void
 	{
 		soap.close_session();
-		_result = "Ok";
+
+        _result = "Ok";
+        _resultType = SUCCESS;
 
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
 	}

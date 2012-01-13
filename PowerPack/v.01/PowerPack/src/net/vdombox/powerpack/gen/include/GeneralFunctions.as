@@ -128,7 +128,8 @@ private function getQuestionMode (params : Array) : int
 	
 	if (params.length > 1)
 		return Question.QM_CHOICE;
-	
+
+//    return Question.QM_INFORMATION;
 	return Question.QM_QUESTION;
 }
 
@@ -429,7 +430,11 @@ public function wholeMethod( funct : String, ...args ) : Function
 	function rusulGettedHandler( event : Event ) : void
 	{
 		soapBaseLevel.removeEventListener( SOAPBaseLevel.RESULT_RECEIVED, rusulGettedHandler );
+
+        setTransition( soapBaseLevel.resultType );
 		setReturnValue( soapBaseLevel.result );
+
+        soapBaseLevel = null;
 	}
 
 	return rusulGettedHandler;
