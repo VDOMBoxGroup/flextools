@@ -13,11 +13,14 @@
 	updateComplete="complete()"
 	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
 	creationComplete="windowedapplication1_creationCompleteHandler(event)"
-	backgroundImage="assets/images/texture_ide_sidebar.png" xmlns:control="net.vdombox.powerpack.control.*"
+	backgroundImage="assets/images/texture_ide_sidebar.png"
+	
+	xmlns:control="net.vdombox.powerpack.control.*"
 	showTitleBar="false"
 	mouseDown="window_mouseDownHandler(event)">
 	
 	<mx:Style source="assets/style/installer.css" />
+	
 	
 	<mx:Fade alphaFrom="0.0" alphaTo="1.0" duration="300" id="canvasShow" />
 	<mx:Fade alphaFrom="1.0" alphaTo="0.0" duration="300" id="canvasHide" />
@@ -287,7 +290,7 @@
 				}
 				else
 				{
-					SuperAlert.show( LanguageManager.sentences['msg_cannot_open_tpl'] );
+					SuperAlert.show( LanguageManager.sentences['msg_cannot_open_tpl'] ,"", 4, nativeWindow);
 					
 				}
 			}
@@ -790,55 +793,39 @@
 									  text="{ContextManager.templates.getItemAt(0).name}"
 									  styleName="headerLabel"/>
 						
-						<mx:ViewStack id="vsImages" width="100%" height="100%"
+						<mx:ViewStack id="vsImages" 
 									  change="vsChange(event)">
 							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
 									 showEffect="canvasShow" hideEffect="canvasHide">
-								<mx:Image smoothBitmapContent="true" source="@Embed(source='assets/images/Question-on.png')"
-										    width="100" height="100" />
-								<mx:Image source="@Embed(source='assets/images/Install-off.png')" width="100" height="100"
-										  smoothBitmapContent="true"/>
-								<mx:Image source="@Embed(source='assets/images/File-off.png')" width="100" height="100"
-										  smoothBitmapContent="true"/>
-								<mx:Image source="@Embed(source='assets/images/web-site-off.png')" width="100" height="100" 
-										  smoothBitmapContent="true"/>
+								
 							</mx:HBox>
 							
 							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
 									 showEffect="canvasShow" hideEffect="canvasHide">
-								<mx:Image source="@Embed(source='assets/images/Question-off.png')"
-										  width="100" height="100"/>
-								<mx:Image source="@Embed(source='assets/images/Install-on.png')" width="100" height="100"/>
-								<mx:Image source="@Embed(source='assets/images/File-off.png')" width="100" height="100" />
-								<mx:Image source="@Embed(source='assets/images/web-site-off.png')" width="100" height="100"/>
+								
 							</mx:HBox>
+							
+							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0">
+							
+							</mx:HBox>
+							
 							
 							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
 									 showEffect="canvasShow" hideEffect="canvasHide">
-								<mx:Image source="@Embed(source='assets/images/Question-off.png')"
-										  width="100" height="100"/>
-								<mx:Image source="@Embed(source='assets/images/Install-off.png')" width="100" height="100" />
-								<mx:Image source="@Embed(source='assets/images/file-on.png')" width="100" height="100"/>
-								<mx:Image source="@Embed(source='assets/images/web-site-off.png')" width="100" height="100" />
-							</mx:HBox>
-							
-							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
-									 showEffect="canvasShow" hideEffect="canvasHide">
-								<mx:Image source="@Embed(source='assets/images/Question-off.png')"
-										  width="100" height="100" />
-								<mx:Image source="@Embed(source='assets/images/Install-off.png')"  width="100" height="100"/>
-								<mx:Image source="@Embed(source='assets/images/File-off.png')" width="100" height="100" />
-								<mx:Image source="@Embed(source='assets/images/Web-site-on.png')"  width="100" height="100"/>
+								
 							</mx:HBox>
 						</mx:ViewStack>
-						<mx:Spacer width="100%" height="10" />
-						<mx:HBox width="100%" >
+						<mx:Spacer width="100%" height="100%" />
 						
-							<mx:ProgressBar width="90%" minimum="0" maximum="100" id="progressBar" mode="manual" />
+						
+						<mx:ProgressBar width="90%" minimum="0" maximum="100" id="progressBar" mode="manual" />
+							
+						<mx:ControlBar horizontalAlign="right" width="90%">
 							
 							<control:PowerPackInstallerButton id="btnCancel" label="{LanguageManager.sentences.cancel}"
 									   click="alertInterrupt()" />
-						</mx:HBox>
+						</mx:ControlBar>
+					
 						
 						
 					</mx:VBox>
