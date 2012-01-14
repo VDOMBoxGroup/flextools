@@ -18,8 +18,9 @@ global
 
     /*highlightAlphas: 0.08, 0.14; /* use this to control the 'light' cast on the components */
 
-    /* themeColor	*/
     themeColor            : #2ba6e5;
+	
+	focusThickness		  : 2.5;
     /*rollOverColor: #D3BABA;*/
     /*selectionColor: #D3989C;*/
 
@@ -43,6 +44,26 @@ RadioButton
 {
 	fontFamily	: Arial;
 	fontSize	: 13;
+	
+	fillColor: #ffffff;
+	fillAlpha:  1;
+	
+	icon : ClassReference(null);
+	skin : ClassReference("net.vdombox.powerpack.customize.skins.RadioBtnSkin");
+	 
+	borderColor: #747474;
+	borderThickness: 2.5;
+	borderStyle : none;
+	
+	color: #ffffff;
+	disabledColor:  #ffffff;
+	textRollOverColor: #ffffff;
+	textSelectedColor: #ffffff;
+	
+	paddingLeft : 20;
+	iconRadius : 10;
+	
+	focusAlpha : 0;
 }
 
 WindowedApplication

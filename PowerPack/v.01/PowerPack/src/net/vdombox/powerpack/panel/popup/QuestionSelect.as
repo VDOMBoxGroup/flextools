@@ -37,8 +37,7 @@ package net.vdombox.powerpack.panel.popup
 			{
 				var radBtn : RadioButton = new RadioButton();
 				radBtn.group = radioBtnGroup;
-				radBtn.setStyle("color", 0xff0000);
-				
+					
 				radBtn.value = radBtn.label = possibleAnswers[i];
 				vBox.addChild( radBtn );
 				
