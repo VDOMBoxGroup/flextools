@@ -44,7 +44,7 @@ package net.vdombox.powerpack.customize.skins
 
 			if (name == "overSkin" || name == "downSkin")
 			{
-				graphics.beginFill(0x000000, 0.2)
+				graphics.beginFill(0x000000, 0.15)
 				
 				graphics.drawRoundRect(0, 0, 
 										unscaledWidth, unscaledHeight,

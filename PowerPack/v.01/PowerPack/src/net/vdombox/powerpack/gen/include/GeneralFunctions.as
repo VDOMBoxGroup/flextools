@@ -16,6 +16,7 @@ import flash.utils.ByteArray;
 
 import mx.controls.Alert;
 import mx.core.Application;
+import mx.core.IFlexDisplayObject;
 import mx.core.WindowedApplication;
 import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
@@ -35,8 +36,13 @@ import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
 import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.managers.LanguageManager;
-import net.vdombox.powerpack.panel.Question;
-import net.vdombox.powerpack.panel.QuestionPopup;
+import net.vdombox.powerpack.panel.popup.PopupBox;
+import net.vdombox.powerpack.panel.popup.Question;
+import net.vdombox.powerpack.panel.popup.QuestionBasePopup;
+import net.vdombox.powerpack.panel.popup.QuestionInput;
+import net.vdombox.powerpack.panel.popup.QuestionInput;
+import net.vdombox.powerpack.panel.popup.QuestionPopup;
+import net.vdombox.powerpack.panel.popup.QuestionSelect;
 
 public function sub( graph : String, ...args ) : *
 {
@@ -99,6 +105,15 @@ private function __question( handler : Function, question : String, params : Arr
 	var answersArray		: Array = [];
 	var questionMode		: int;
 	var questionFileFilter	: String;
+	
+	var questionPopup	: QuestionBasePopup;
+	
+	/*var questionPopup	: QuestionBasePopup = new QuestionBasePopup();
+	
+	var popupParent		: Sprite = Sprite(Application.application);
+	
+	PopUpManager.addPopUp(questionPopup, popupParent, true);
+	PopUpManager.centerPopUp(questionPopup);*/
 
 	if ( !params ) params = [];
 
@@ -109,6 +124,11 @@ private function __question( handler : Function, question : String, params : Arr
 		if ( params.length >= 1 )
 		{
 			questionFileFilter = getFileMask( params[0].toString() );
+			
+			questionPopup = new net.vdombox.powerpack.panel.popup.QuestionInput();
+			showQuestionPopup();
+			
+			return handler;
 		}
 	}
 	
@@ -116,16 +136,29 @@ private function __question( handler : Function, question : String, params : Arr
 	{
 		for ( var i : int = 0; i < params.length; i++ )
 			answersArray.push( params[i].toString() );
+	
+		questionPopup = new QuestionSelect();
+		(questionPopup as QuestionSelect).possibleAnswers = answersArray;
+		
+		showQuestionPopup();
+		
+		return handler;
 	}
 	
+	questionPopup = new QuestionInput();
+	showQuestionPopup();
+	
 	//Question.show( question, "", questionMode, answersArray, questionFileFilter, null, handler );
-	var questionPopup	: QuestionPopup = new QuestionPopup();
-	var popupParent		: Sprite = Sprite(Application.application);
 	
-	questionPopup.setShowProperties(questionMode);
-	
-	PopUpManager.addPopUp(questionPopup, popupParent, true);
-	PopUpManager.centerPopUp(questionPopup);
+	function showQuestionPopup() : void
+	{
+		var popupParent		: Sprite = Sprite(Application.application);
+		
+		questionPopup.setDefaultProperties(question, handler);
+		
+		PopUpManager.addPopUp(questionPopup, popupParent, true);
+		PopUpManager.centerPopUp(questionPopup);
+	}
 	
 	return handler;
 }
@@ -192,7 +225,7 @@ public function qSwitch( question : String, ...args ) : Function
 {
 	return __question( questionCloseHandler, question, args );
 
-	function questionCloseHandler( event : Event ) : void
+	function questionCloseHandler( event : Event) : void
 	{
 		var retVal : String = LanguageManager.sentences['other'] + '...';
 

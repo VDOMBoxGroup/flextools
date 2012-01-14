@@ -39,6 +39,12 @@ TitleBar
 	backgroundAlpha : 0;
 }
 
+RadioButton
+{
+	fontFamily	: Arial;
+	fontSize	: 13;
+}
+
 WindowedApplication
 {
     headerHeight             : 30;
