@@ -12,12 +12,12 @@
 														  unscaledHeight:Number):void
 			{
 				var borderWidth : Number = getStyle("borderThickness");
-				var bgWidth : Number = unscaledWidth - 2*borderWidth + 1;
-				var bgHeight : Number = unscaledHeight - 2*borderWidth + 1;
+				var bgWidth : Number = width- 2*borderWidth + 1;
+				var bgHeight : Number = height - (2*borderWidth + 1);
 				
 				var matr:Matrix = new Matrix();
 				matr.createGradientBox(bgWidth, bgHeight, 1.57, 0, 0);
-				
+				graphics.clear();
 				graphics.beginGradientFill(GradientType.LINEAR, 
 					[0x333333, 0x242424], 
 					[1, 1], [0x44, 0xff], 
