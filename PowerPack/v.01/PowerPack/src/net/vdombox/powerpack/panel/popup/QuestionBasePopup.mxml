@@ -2,7 +2,7 @@
 <popup:PopupBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 				xmlns:popup="net.vdombox.powerpack.panel.popup.*" 
 				xmlns:control="net.vdombox.powerpack.control.*"
-				creationComplete="completeHandler(event)">
+				creationComplete="completeHandler(event)" >
 	<mx:Script>
 		<![CDATA[
 			import mx.containers.Canvas;
@@ -63,7 +63,7 @@
 			<mx:HBox width="100%"
 					 horizontalGap="10" id="topH">
 				<mx:Image source="@Embed('/assets/images/question.png')" autoLoad="true" id="qImg"/>
-				<mx:Text width="100%" 
+				<mx:Text width="100%" maxHeight="200"
 						 paddingTop="5" paddingBottom="5"
 						 styleName="infoTextStyle"
 						 text="{question}"
@@ -73,20 +73,20 @@
 		</mx:Canvas>
 		
 		<popup:PopupBottomPart width="100%" id="bottomPart">
-			<mx:VBox top="10" bottom="12" left="15" right="18" verticalGap="12" id="t1">
+			<mx:VBox  verticalGap="12" id="t1" width="100%">
 				<mx:HBox width="100%" height="100%" id="t2">
  					<mx:Image source="@Embed('/assets/images/user.png')" autoLoad="true" id="t3"/>
-					<mx:Canvas width="100%"  id="answerCanvas">
-					</mx:Canvas>
+					<mx:Canvas width="100%"  id="answerCanvas"  maxHeight="240" />
+					
 				</mx:HBox>
-				<mx:Canvas width="100%">
-					<control:PowerPackInstallerButton label="Ok" id="btnOk" 
-							   							bottom="0" right="0"
-														click="btnOkClickHandler(event)"/>
-				</mx:Canvas>
+				
 			</mx:VBox>
 		</popup:PopupBottomPart>
-				
+		<mx:Canvas width="100%">
+			<control:PowerPackInstallerButton label="Ok" id="btnOk" 
+											  
+											  click="btnOkClickHandler(event)"/>
+		</mx:Canvas>
 	</mx:VBox>
 	
 </popup:PopupBox>

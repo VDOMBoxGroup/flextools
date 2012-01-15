@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
 		   borderColor="0x424242" borderThickness="8" borderStyle="solid" 
-		   cornerRadius="8">
+		   cornerRadius="8" creationComplete="canvas1_creationCompleteHandler(event)">
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Image;
 			import mx.events.FlexEvent;
 			import mx.graphics.BitmapFill;
 			
+			
+			
 			override protected function updateDisplayList(unscaledWidth:Number,
 														  unscaledHeight:Number):void
 			{
 				var borderWidth : Number = getStyle("borderThickness");
 				var bgWidth : Number = width- 2*borderWidth + 1;
-				var bgHeight : Number = height - (2*borderWidth + 1);
+				var bgHeight : Number = height - 2*borderWidth + 1;
 				
 				var matr:Matrix = new Matrix();
 				matr.createGradientBox(bgWidth, bgHeight, 1.57, 0, 0);
@@ -30,6 +32,12 @@
 			}
 			
 		
+			protected function canvas1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
 		]]>
 	</mx:Script>
 	

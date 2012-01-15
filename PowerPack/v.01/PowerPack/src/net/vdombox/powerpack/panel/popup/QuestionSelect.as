@@ -29,8 +29,9 @@ package net.vdombox.powerpack.panel.popup
 			radioBtnGroup = new RadioButtonGroup();
 			
 			 vBox= new VBox();
-			//vBox.percentWidth = 100;
-			//vBox.percentHeight = 100;
+			
+			 vBox.maxHeight = 200;
+			 vBox.percentWidth = 100;
 			
 			
 			for ( var i : int = 0; i < possibleAnswers.length; i++ )
