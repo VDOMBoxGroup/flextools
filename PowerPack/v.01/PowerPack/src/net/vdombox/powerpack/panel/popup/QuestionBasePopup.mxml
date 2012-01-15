@@ -54,75 +54,6 @@
 				PopUpManager.centerPopUp(this);
 			}
 			
-			override protected function childrenCreated():void
-			{
-				super.childrenCreated();
-			}
-			
-			override protected function measure():void
-			{
-				super.measure();
-				
-//				topPart.height = topH.height = Math.max(qText.height, qImg.height);
-					
-//				mainBox.height = bottomPart.height + topPart.height + 16//mainBox.getStyle("verticalGap");
-			}
-			
-			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
-			{
-				trace ("qImage height: " + qText.height);
-				trace ("top h = " + topPart.height);
-				trace ("bottom h = " + bottomPart.height);
-				
-				trace ("answerCanvas h = " + answerCanvas.height);
-				trace ("t1 h = " + t1.height);
-				trace ("t2 h = " + t2.height);
-				trace ("t3 h = " + t3.height);
-				trace ("--------");
-				
-				super.updateDisplayList( unscaledWidth, unscaledHeight );
-				
-				
-				
-				//mainBox.height = bottomPart.height + topPart.height;;
-				
-				return;
-				
-				var dHeight : int = answerCanvas.maxVerticalScrollPosition;
-				
-				if ( !dSize && (dHeight) )
-				{
-					dSize = true;
-					
-					var container : DisplayObjectContainer = answerCanvas.parent;
-					container.height += dHeight;
-					while ( container != this)
-					{
-						container = container.parent;
-						
-						if ( dHeight )
-							container.height += dHeight;
-					}
-					
-					mainBox.height = bottomPart.y + bottomPart.height;
-					mainBox.invalidateDisplayList();
-					
-					height = mainBox.height + 16;
-					
-					trace (" bottomPart height: " + bottomPart.y);
-					trace (" bottomPart y: " + bottomPart.height);
-					trace (" window height: " + height);
-					trace ("------");
-					
-					super.updateDisplayList( unscaledWidth, unscaledHeight );
-					
-					//invalidateDisplayList();
-					
-					if (dHeight )
-						callLater( PopUpManager.centerPopUp, [this] );
-				}
-			}
-			
 		]]>
 	</mx:Script>
 	
@@ -132,7 +63,7 @@
 			<mx:HBox width="100%"
 					 horizontalGap="10" id="topH">
 				<mx:Image source="@Embed('/assets/images/question.png')" autoLoad="true" id="qImg"/>
-				<mx:Text width="100%" height="100%"
+				<mx:Text width="100%" 
 						 paddingTop="5" paddingBottom="5"
 						 styleName="infoTextStyle"
 						 text="{question}"
@@ -145,7 +76,7 @@
 			<mx:VBox top="10" bottom="12" left="15" right="18" verticalGap="12" id="t1">
 				<mx:HBox width="100%" height="100%" id="t2">
  					<mx:Image source="@Embed('/assets/images/user.png')" autoLoad="true" id="t3"/>
-					<mx:Canvas width="100%" height="100%" id="answerCanvas">
+					<mx:Canvas width="100%"  id="answerCanvas">
 					</mx:Canvas>
 				</mx:HBox>
 				<mx:Canvas width="100%">
