@@ -51,6 +51,7 @@
 			{
 				width = 400;
 				//height = 300;
+				PopUpManager.centerPopUp(this);
 			}
 			
 			override protected function childrenCreated():void
@@ -62,9 +63,9 @@
 			{
 				super.measure();
 				
-				topPart.height = topH.height = Math.max(qText.height, qImg.height);
+//				topPart.height = topH.height = Math.max(qText.height, qImg.height);
 					
-				mainBox.height = bottomPart.height + topPart.height + 16//mainBox.getStyle("verticalGap");
+//				mainBox.height = bottomPart.height + topPart.height + 16//mainBox.getStyle("verticalGap");
 			}
 			
 			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
@@ -81,7 +82,7 @@
 				
 				super.updateDisplayList( unscaledWidth, unscaledHeight );
 				
-				PopUpManager.centerPopUp(this);
+				
 				
 				//mainBox.height = bottomPart.height + topPart.height;;
 				
