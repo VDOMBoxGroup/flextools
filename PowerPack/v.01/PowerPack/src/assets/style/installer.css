@@ -131,14 +131,29 @@ ProgressBar
 }
 
 
-PowerPackInstallerButton
+RoundButton
 {
 	color			: #000000;
 	fontSize		: 16;
 	fontFamily		: Arial;
-	skin			: ClassReference("net.vdombox.powerpack.customize.skins.GradientButtonSkin");
-	buttonBgColors	: #f1f1f1, #b4b4b4;
+	
+	fillColors 		: #f1f1f1, #b4b4b4, #c2c2c2, #c2c2c2;
+	fillAlphas		: 1,1,1,1;
+	
 	cornerRadius	: 13;
+}
+
+BrowseButton
+{
+	color			: #000000;
+	fontSize		: 16;
+	fontFamily		: Arial;
+	
+	fillColors 		: #f1f1f1, #b4b4b4, #c2c2c2, #c2c2c2;
+	fillAlphas		: 1,1,1,1;
+	
+	cornerRadius	: 6;
+
 }
 
 GridItem
@@ -168,12 +183,34 @@ GridItem
 	cornerRadius 	: 10;
 }
 
+.browseFileTextStyle
+{
+	fontFamily      : Arial;
+	fontSize        : 13;
+	
+	color           : #666666;
+	borderStyle     : solid;
+	borderColor     : #cccccc;
+	borderThickness : 2;
+	cornerRadius 	: 6;
+}
+
 .infoTextStyle
 {
     fontFamily : Arial;
     fontSize   : 14;
 	color	   : #ffffff;
 	
+}
+
+.browseBtnStyle
+{
+	paddingLeft	: 2;
+	paddingRight : 2;
+	paddingTop : 0;
+	paddingBottom : 0;
+	backgroundColor: red;
+	backgroundGradientColors : #cccccc, #ffffff;
 }
 
 .dlgHeader

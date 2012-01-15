@@ -706,7 +706,7 @@
 							  keyDown="txtKey_keyDownHandler(event)"/>
 				
 				
-				<control:PowerPackInstallerButton id="btnAcceptKey" 
+				<control:RoundButton id="btnAcceptKey" 
 												  y="162" x="303" label="{LanguageManager.sentences.accept}"
 							   click="onKeyAccept(event)"/>
 				
@@ -725,7 +725,7 @@
 					
 					backgroundAlpha="0" borderStyle="none" />
 				
-				<control:PowerPackInstallerButton id="btnRun" 
+				<control:RoundButton id="btnRun" 
 												  y="162" x="303" 
 												  label="{LanguageManager.sentences.run}"
 												  click="runingTemplate();"
@@ -743,7 +743,7 @@
 								mode="manual"
 								styleName="infoTextStyle"/>
 					
-					<control:PowerPackInstallerButton id="btnCancel"
+					<control:RoundButton id="btnCancel"
 														y="162" x="303" 
 													 label="{LanguageManager.sentences.cancel}"
 												   	click="alertInterrupt()" />
@@ -758,7 +758,7 @@
 				<mx:Text styleName="infoTextStyle" 
 						 text="{LanguageManager.sentences.msg_gen_finish}"/>
 				
-				<control:PowerPackInstallerButton id="btnExit"
+				<control:RoundButton id="btnExit"
 												  y="162" x="303" 				  
 							   label="{LanguageManager.sentences.exit}"
 							   click="exitApplication();" />

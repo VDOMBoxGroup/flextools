@@ -39,7 +39,7 @@ import net.vdombox.powerpack.managers.LanguageManager;
 import net.vdombox.powerpack.panel.popup.PopupBox;
 import net.vdombox.powerpack.panel.popup.Question;
 import net.vdombox.powerpack.panel.popup.QuestionBasePopup;
-import net.vdombox.powerpack.panel.popup.QuestionInput;
+import net.vdombox.powerpack.panel.popup.QuestionBrowse;
 import net.vdombox.powerpack.panel.popup.QuestionInput;
 import net.vdombox.powerpack.panel.popup.QuestionPopup;
 import net.vdombox.powerpack.panel.popup.QuestionSelect;
@@ -125,7 +125,8 @@ private function __question( handler : Function, question : String, params : Arr
 		{
 			questionFileFilter = getFileMask( params[0].toString() );
 			
-			questionPopup = new net.vdombox.powerpack.panel.popup.QuestionInput();
+			questionPopup = new QuestionBrowse();
+			(questionPopup as QuestionBrowse).browseFilter = questionFileFilter;
 			showQuestionPopup();
 			
 			return handler;

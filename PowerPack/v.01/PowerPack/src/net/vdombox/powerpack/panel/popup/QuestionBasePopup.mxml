@@ -12,7 +12,7 @@
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
-			import net.vdombox.powerpack.control.PowerPackInstallerButton;
+			import net.vdombox.powerpack.control.BrowseButton;
 			
 			[Bindable]
 			private var question : String = "";
@@ -79,14 +79,14 @@
 					<mx:Canvas width="100%"  id="answerCanvas"  maxHeight="240" />
 					
 				</mx:HBox>
-				
+				<mx:Canvas width="100%">
+					<control:RoundButton label="Ok" id="btnOk" 
+							   							bottom="0" right="0"
+														click="btnOkClickHandler(event)"/>
+				</mx:Canvas>
 			</mx:VBox>
 		</popup:PopupBottomPart>
-		<mx:Canvas width="100%">
-			<control:PowerPackInstallerButton label="Ok" id="btnOk" 
-											  
-											  click="btnOkClickHandler(event)"/>
-		</mx:Canvas>
+		
 	</mx:VBox>
 	
 </popup:PopupBox>

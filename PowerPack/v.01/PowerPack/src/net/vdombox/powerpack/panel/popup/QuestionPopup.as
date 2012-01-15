@@ -13,7 +13,7 @@ package net.vdombox.powerpack.panel.popup
 	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.powerpack.control.PowerPackInstallerButton;
+	import net.vdombox.powerpack.control.RoundButton;
 
 	public class QuestionPopup extends PopupBox
 	{
@@ -22,7 +22,7 @@ package net.vdombox.powerpack.panel.popup
 		
 		private var fCloseHandler : Function;
 		
-		public var btnOk			: PowerPackInstallerButton;
+		public var btnOk			: RoundButton;
 		public var answerCanvas	: Canvas;
 		
 		[Embed(source='assets/images/question.png')]
@@ -115,7 +115,7 @@ package net.vdombox.powerpack.panel.popup
 			var canvas : Canvas = new Canvas();
 			canvas.percentWidth = 100;
 			
-			btnOk = new PowerPackInstallerButton();
+			btnOk = new BrowseButton();
 			btnOk.label = "OK";
 			btnOk.setStyle("bottom", 0);
 			btnOk.setStyle("right", 0);

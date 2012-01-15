@@ -11,6 +11,7 @@ package net.vdombox.powerpack.customize.skins
 	import mx.graphics.GradientEntry;
 	import mx.graphics.LinearGradient;
 	import mx.skins.ProgrammaticSkin;
+	import mx.states.SetStyle;
 	
 	public class GradientButtonSkin extends ProgrammaticSkin
 	{
@@ -23,8 +24,9 @@ package net.vdombox.powerpack.customize.skins
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void 
 		{
 			graphics.clear();
-			
-			var rectEllipsWidth : Number = unscaledWidth-55;
+			/*var cornerRadius : Number = getStyle( "cornerRadius" );
+			var ellipsWidthDist : Number = cornerRadius == 13 ? 55 : 80;
+			var rectEllipsWidth : Number = unscaledWidth-ellipsWidthDist;
 			var rectEllipsHeight : Number = unscaledHeight;
 			
 			var bgColors : Array = getStyle( "buttonBgColors" );
@@ -52,7 +54,7 @@ package net.vdombox.powerpack.customize.skins
 				graphics.endFill();
 			}
 
-			super.updateDisplayList(unscaledWidth,unscaledHeight);
+			super.updateDisplayList(unscaledWidth,unscaledHeight);*/
 		}
 		
 	}

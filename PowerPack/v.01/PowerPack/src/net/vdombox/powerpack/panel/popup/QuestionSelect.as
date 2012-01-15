@@ -11,6 +11,7 @@ package net.vdombox.powerpack.panel.popup
 		public var possibleAnswers : Array;
 		
 		private var vBox : VBox;
+		
 		public function QuestionSelect()
 		{
 			super();

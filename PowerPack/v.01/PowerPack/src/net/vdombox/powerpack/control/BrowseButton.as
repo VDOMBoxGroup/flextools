@@ -6,9 +6,9 @@ package net.vdombox.powerpack.control
 	import net.vdombox.powerpack.customize.skins.GradientButtonSkin;
 	import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 	
-	public class PowerPackInstallerButton extends Button
+	public class BrowseButton extends Button
 	{
-		public function PowerPackInstallerButton()
+		public function BrowseButton()
 		{
 			super();
 		}
