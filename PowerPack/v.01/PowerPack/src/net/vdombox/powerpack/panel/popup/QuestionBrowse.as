@@ -33,7 +33,7 @@ package net.vdombox.powerpack.panel.popup
 		{
 			super.createChildren();
 			
-			var btnBrowse : BrowseButton = createButton()
+			createButton();
 			createTextInput();
 			
 			answerCanvas.addChild( btnBrowse );
@@ -43,14 +43,12 @@ package net.vdombox.powerpack.panel.popup
 			btnOk.enabled = false;
 		}
 		
-		private function createButton():BrowseButton
+		private function createButton():void
 		{
-			var btnBrowse : BrowseButton = new BrowseButton();
+			 btnBrowse  = new BrowseButton();
 			btnBrowse.styleName = "browseBtnStyle";
 			btnBrowse.label = LanguageManager.sentences.browse + "...";
 			btnBrowse.addEventListener( MouseEvent.CLICK, browseClickHandler );
-			
-			return btnBrowse;	
 		}
 		
 		private function  createTextInput():void
