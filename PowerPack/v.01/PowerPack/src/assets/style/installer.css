@@ -134,23 +134,27 @@ ProgressBar
 RoundButton
 {
 	color			: #000000;
-	fontSize		: 16;
+	fontSize		: 15;
 	fontFamily		: Arial;
 	
 	fillColors 		: #f1f1f1, #b4b4b4, #c2c2c2, #c2c2c2;
 	fillAlphas		: 1,1,1,1;
+		
+	skin			: ClassReference("net.vdombox.powerpack.customize.skins.RoundButtonSkin");
 	
-	cornerRadius	: 13;
+	cornerRadius	: 15;
 }
 
 BrowseButton
 {
 	color			: #000000;
-	fontSize		: 16;
+	fontSize		: 15;
 	fontFamily		: Arial;
 	
 	fillColors 		: #f1f1f1, #b4b4b4, #c2c2c2, #c2c2c2;
 	fillAlphas		: 1,1,1,1;
+	
+	skin			: ClassReference("net.vdombox.powerpack.customize.skins.BrowseBtnSkin");
 	
 	cornerRadius	: 6;
 
