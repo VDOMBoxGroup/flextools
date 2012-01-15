@@ -9,7 +9,7 @@ package net.vdombox.powerpack.panel.popup
 	import mx.controls.TextArea;
 	import mx.events.FlexEvent;
 
-	public class QuestionInput extends QuestionBasePopup
+	public class QuestionInput extends Question
 	{
 		private var answerTextInput : TextArea;
 		

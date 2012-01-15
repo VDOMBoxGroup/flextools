@@ -16,7 +16,7 @@ package net.vdombox.powerpack.panel.popup
 	import net.vdombox.powerpack.control.BrowseButton;
 	import net.vdombox.powerpack.managers.LanguageManager;
 
-	public class QuestionBrowse extends QuestionBasePopup
+	public class QuestionBrowse extends Question
 	{
 		private var filePathTextInput	: TextInput;
 		private var btnBrowse : BrowseButton;
@@ -39,6 +39,8 @@ package net.vdombox.powerpack.panel.popup
 			answerCanvas.addChild( btnBrowse );
 			
 			answerCanvas.addChildAt(filePathTextInput, 0);
+			
+			btnOk.enabled = false;
 		}
 		
 		private function createButton():BrowseButton
@@ -82,6 +84,8 @@ package net.vdombox.powerpack.panel.popup
 		{
 			filePathTextInput.text = event.target.nativePath;
 			filePathTextInput.toolTip = event.target.nativePath;
+			
+			btnOk.enabled = filePathTextInput.text ? true : false;
 		}
 		
 		override protected function closeDialog() : void

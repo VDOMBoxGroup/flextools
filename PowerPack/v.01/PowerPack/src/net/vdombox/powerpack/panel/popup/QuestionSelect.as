@@ -5,7 +5,7 @@ package net.vdombox.powerpack.panel.popup
 	import mx.controls.RadioButtonGroup;
 	import mx.events.FlexEvent;
 
-	public class QuestionSelect extends QuestionBasePopup
+	public class QuestionSelect extends Question
 	{
 		private var radioBtnGroup : RadioButtonGroup;
 		public var possibleAnswers : Array;

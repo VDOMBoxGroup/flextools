@@ -38,10 +38,8 @@ import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.managers.LanguageManager;
 import net.vdombox.powerpack.panel.popup.PopupBox;
 import net.vdombox.powerpack.panel.popup.Question;
-import net.vdombox.powerpack.panel.popup.QuestionBasePopup;
 import net.vdombox.powerpack.panel.popup.QuestionBrowse;
 import net.vdombox.powerpack.panel.popup.QuestionInput;
-import net.vdombox.powerpack.panel.popup.QuestionPopup;
 import net.vdombox.powerpack.panel.popup.QuestionSelect;
 
 public function sub( graph : String, ...args ) : *
@@ -106,50 +104,49 @@ private function __question( handler : Function, question : String, params : Arr
 	var questionMode		: int;
 	var questionFileFilter	: String;
 	
-	var questionPopup	: QuestionBasePopup;
+	var questionPopup	: Question;
 	
-	/*var questionPopup	: QuestionBasePopup = new QuestionBasePopup();
-	
-	var popupParent		: Sprite = Sprite(Application.application);
-	
-	PopUpManager.addPopUp(questionPopup, popupParent, true);
-	PopUpManager.centerPopUp(questionPopup);*/
-
 	if ( !params ) params = [];
 
 	questionMode = getQuestionMode(params);
 	
-	if (questionMode == Question.QM_BROWSE)
+	switch(questionMode)
 	{
-		if ( params.length >= 1 )
+		case Question.QT_BROWSE:
 		{
-			questionFileFilter = getFileMask( params[0].toString() );
+			if ( params.length >= 1 )
+			{
+				questionFileFilter = getFileMask( params[0].toString() );
+				
+				questionPopup = new QuestionBrowse();
+				(questionPopup as QuestionBrowse).browseFilter = questionFileFilter;
+				showQuestionPopup();
+				
+				return handler;
+			}
+			break;
+		}
+		case Question.QT_SELECT:
+		{
+			for ( var i : int = 0; i < params.length; i++ )
+				answersArray.push( params[i].toString() );
 			
-			questionPopup = new QuestionBrowse();
-			(questionPopup as QuestionBrowse).browseFilter = questionFileFilter;
+			questionPopup = new QuestionSelect();
+			(questionPopup as QuestionSelect).possibleAnswers = answersArray;
+			
 			showQuestionPopup();
 			
-			return handler;
+			break;
+		}
+		case Question.QT_INPUT:
+		default:
+		{
+			questionPopup = new QuestionInput();
+			showQuestionPopup();
+			
+			break;
 		}
 	}
-	
-	if (questionMode == Question.QM_CHOICE)
-	{
-		for ( var i : int = 0; i < params.length; i++ )
-			answersArray.push( params[i].toString() );
-	
-		questionPopup = new QuestionSelect();
-		(questionPopup as QuestionSelect).possibleAnswers = answersArray;
-		
-		showQuestionPopup();
-		
-		return handler;
-	}
-	
-	questionPopup = new QuestionInput();
-	showQuestionPopup();
-	
-	//Question.show( question, "", questionMode, answersArray, questionFileFilter, null, handler );
 	
 	function showQuestionPopup() : void
 	{
@@ -167,19 +164,19 @@ private function __question( handler : Function, question : String, params : Arr
 private function getQuestionMode (params : Array) : int
 {
 	if (!params || params.length == 0)
-		return Question.QM_QUESTION;
+		return Question.QT_INPUT;
 	
 	if ( params.length == 1 && params[0].toString() == "*")
-		return Question.QM_QUESTION;
+		return Question.QT_INPUT;
 	
 	if ( params.length == 1 && isFileMaskParam(params[0].toString()) )
-		return Question.QM_BROWSE;
+		return Question.QT_BROWSE;
 	
 	if (params.length > 1)
-		return Question.QM_CHOICE;
+		return Question.QT_SELECT;
 
 //    return Question.QM_INFORMATION;
-	return Question.QM_QUESTION;
+	return Question.QT_INPUT;
 }
 
 private var regExpFileMask : RegExp = /#\((\*.([\w]+|\*)(;[ ]*(\*.([\w]+|\*))+)*)*\)/g;
