@@ -5,7 +5,7 @@
 			import mx.core.mx_internal;
 			import mx.events.FlexEvent;
 			
-			[Embed(source='assets/images/texture_ide_sidebar.png')]
+			[Embed(source='/assets/images/texture_ide_sidebar.png')]
 			private var backgroundImageClass :Class;
 			private var backgroundImage :Bitmap;
 			private var backgroundBitmapData :BitmapData;

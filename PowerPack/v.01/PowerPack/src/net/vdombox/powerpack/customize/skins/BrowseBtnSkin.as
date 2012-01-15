@@ -7,10 +7,10 @@ package net.vdombox.powerpack.customize.skins
 	
 	public class BrowseBtnSkin extends ProgrammaticSkin
 	{
-		[Embed(source='assets/icons/BrowseBtnIcon.png')]
+		[Embed(source='/assets/icons/BrowseBtnIcon.png')]
 		private var backgroundImageClass :Class;
 		
-		[Embed(source='assets/icons/BrowseBtnIconOver.png')]
+		[Embed(source='/assets/icons/BrowseBtnIconOver.png')]
 		private var backgroundImageOverClass :Class;
 		
 		private var backgroundImage :Bitmap;

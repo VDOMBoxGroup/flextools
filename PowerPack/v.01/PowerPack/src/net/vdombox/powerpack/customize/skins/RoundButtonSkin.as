@@ -18,10 +18,10 @@ package net.vdombox.powerpack.customize.skins
 	public class RoundButtonSkin extends ProgrammaticSkin
 	{
 		
-		[Embed(source='assets/icons/RoundBtnIcon.png')]
+		[Embed(source='/assets/icons/RoundBtnIcon.png')]
 		private var backgroundImageClass :Class;
 		
-		[Embed(source='assets/icons/RoundBtnIconOver.png')]
+		[Embed(source='/assets/icons/RoundBtnIconOver.png')]
 		private var backgroundImageOverClass :Class;
 		
 		private var backgroundImage :Bitmap;

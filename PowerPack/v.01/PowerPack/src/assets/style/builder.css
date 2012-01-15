@@ -5,6 +5,67 @@ Please remember to add the following effects to the main application.
 	<mx:Fade duration="100" id="DockerFade"/>
 */
 
+@font-face
+{
+	src        : url("assets/fonts/arial.ttf");
+	fontFamily : Arial;
+}
+
+global
+{
+	/*backgroundAlpha: 1.0; /* this runs the opacity of nearly every square piece of the components */
+	/*backgroundSize: "auto";*/
+	
+	titleBarButtonBgColor : #494848;
+	
+	/*fillAlphas: 0.3, 0.3, 0.85, 0.75; /* last pair are for OVER state */
+	/*fillColors: #AE4731, #BFD5E8, #E42226, #A8D0E2;*/
+	
+	/*highlightAlphas: 0.08, 0.14; /* use this to control the 'light' cast on the components */
+	
+	themeColor            : #2ba6e5;
+	
+	focusThickness		  : 2.5;
+	/*rollOverColor: #D3BABA;*/
+	/*selectionColor: #D3989C;*/
+	
+	fontFamily            : Arial;
+	fontSize              : 10;
+}
+
+TitleBar
+{
+	/*titleBarButtonBgColors : #707173, #ffffff;*/
+	backgroundAlpha : 0;
+}
+
+RadioButton
+{
+	fontFamily	: Arial;
+	fontSize	: 13;
+	
+	fillColor: #ffffff;
+	fillAlpha:  1;
+	
+	icon : ClassReference(null);
+	skin : ClassReference("net.vdombox.powerpack.customize.skins.RadioBtnSkin");
+	
+	borderColor: #747474;
+	borderThickness: 2.5;
+	borderStyle : none;
+	
+	color: #ffffff;
+	disabledColor:  #ffffff;
+	textRollOverColor: #ffffff;
+	textSelectedColor: #ffffff;
+	
+	paddingLeft : 20;
+	iconRadius : 10;
+	
+	focusAlpha : 0;
+}
+
+
 WindowedApplication
 {
     fontFamily : "Tahoma", "Helvetica", "_sans";
@@ -70,6 +131,71 @@ GridItem
     color      : #16414A;
 }
 
+RoundButton
+{
+	color			: #000000;
+	fontSize		: 15;
+	fontFamily		: Arial;
+	
+	fillColors 		: #f1f1f1, #b4b4b4, #c2c2c2, #c2c2c2;
+	fillAlphas		: 1,1,1,1;
+	
+	skin			: ClassReference("net.vdombox.powerpack.customize.skins.RoundButtonSkin");
+	
+	cornerRadius	: 15;
+}
+
+BrowseButton
+{
+	color			: #000000;
+	fontSize		: 15;
+	fontFamily		: Arial;
+	
+	fillColors 		: #f1f1f1, #b4b4b4, #c2c2c2, #c2c2c2;
+	fillAlphas		: 1,1,1,1;
+	
+	skin			: ClassReference("net.vdombox.powerpack.customize.skins.BrowseBtnSkin");
+	
+	cornerRadius	: 6;
+	
+}
+
+.keyEdtTextStyle
+{
+	fontFamily      : Arial;
+	fontSize        : 14;
+	fontWeight      : bold;
+	
+	color           : #666666;
+	borderStyle     : solid;
+	borderColor     : #5A5859;
+	borderThickness : 2;
+	cornerRadius 	: 10;
+}
+
+.browseFileTextStyle
+{
+	fontFamily      : Arial;
+	fontSize        : 13;
+	
+	color           : #666666;
+	borderStyle     : solid;
+	borderColor     : #cccccc;
+	borderThickness : 2;
+	cornerRadius 	: 6;
+	paddingLeft		: 8;
+	focusRoundedCorners: tr tb;
+}
+
+.titleTextStyle
+{
+	fontFamily : Arial;
+	fontSize   : 14;
+	fontWeight : bold;
+	color      : #d9dadb;
+	textIndent : 15;
+}
+
 PopUpToolBar
 {
     /*removedEffect: "DockerFade";
@@ -93,6 +219,24 @@ PopUpToolBar
         paddingRight: 0;
         paddingTop: 0;
         headerHeight: 20;*/
+}
+
+.infoTextStyle
+{
+	fontFamily : Arial;
+	fontSize   : 14;
+	color	   : #ffffff;
+	
+}
+
+.browseBtnStyle
+{
+	paddingLeft	: 2;
+	paddingRight : 2;
+	paddingTop : 0;
+	paddingBottom : 0;
+	backgroundColor: red;
+	backgroundGradientColors : #cccccc, #ffffff;
 }
 
 .dlgHeader
