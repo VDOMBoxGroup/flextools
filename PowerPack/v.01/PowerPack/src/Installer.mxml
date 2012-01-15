@@ -382,7 +382,6 @@
 					case cGeneral:
 						vsProcess.selectedChild = cGeneral;
 						btnRun.setFocus();
-						
 						break;
 					
 					case cProcess:
@@ -672,32 +671,26 @@
 	<mx:VBox x="300" y="33" >
 		
 	
-	<mx:Label maxWidth="450"
+	<mx:Label 
 		width="100%"
 		text="{ContextManager.templates.getItemAt(0).name}"
 		styleName="headerLabel"/>
 	
-			
-				
 		<mx:ViewStack id="vsProcess"
 					  width="100%" height="100%" 
 					  creationPolicy="all" change="vsChange(event)" paddingTop="0">
-			
 			
 			<mx:Canvas id="cKeyRequest"
 					width="100%" 
 					 showEffect="{canvasShow}" hideEffect="{canvasHide}" >
 	
-				
-				
 				<mx:TextArea 
-							 maxWidth="380"
+					width="100%"  height="70"
 							 text="{ContextManager.templates.getItemAt(0).description}" 
 							 styleName="infoTextStyle"
 							 editable="false" selectable="false" focusEnabled="false" 
 							
 							 backgroundAlpha="0" borderStyle="none" />
-				
 				
 				<mx:Label y="70"
 						  text="{LanguageManager.sentences.msg_input_template_key}:" />
@@ -705,11 +698,9 @@
 							  paddingTop="10"  textIndent="10" creationComplete="{txtKey.setFocus()}"
 							  keyDown="txtKey_keyDownHandler(event)"/>
 				
-				
 				<control:RoundButton id="btnAcceptKey" 
 												  y="162" x="303" label="{LanguageManager.sentences.accept}"
 							   click="onKeyAccept(event)"/>
-				
 			</mx:Canvas>
 			<mx:Canvas id="cGeneral"
 					   width="100%" 
@@ -718,7 +709,7 @@
 				
 				
 				<mx:TextArea 
-					maxWidth="380"
+					width="100%"  height="150"
 					text="{ContextManager.templates.getItemAt(0).description}" 
 					styleName="infoTextStyle"
 					editable="false" selectable="false" focusEnabled="false" 
@@ -749,13 +740,12 @@
 												   	click="alertInterrupt()" />
 			</mx:Canvas>
 			
-			
-			
 			<mx:Canvas id="cFinal" height="100%" width="100%"
 					 showEffect="{canvasShow}" hideEffect="{canvasHide}">
 			
 				
 				<mx:Text styleName="infoTextStyle" 
+						 width="100%"  height="70"
 						 text="{LanguageManager.sentences.msg_gen_finish}"/>
 				
 				<control:RoundButton id="btnExit"
