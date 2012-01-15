@@ -30,7 +30,7 @@ package net.vdombox.powerpack.panel.popup
 			radioBtnGroup = new RadioButtonGroup();
 			
 			 vBox= new VBox();
-			
+			 vBox.setStyle( "paddingLeft", 10  );
 			 vBox.maxHeight = 200;
 			 vBox.percentWidth = 100;
 			

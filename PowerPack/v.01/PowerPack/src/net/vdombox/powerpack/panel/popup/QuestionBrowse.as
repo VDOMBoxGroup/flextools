@@ -19,6 +19,7 @@ package net.vdombox.powerpack.panel.popup
 	public class QuestionBrowse extends QuestionBasePopup
 	{
 		private var filePathTextInput	: TextInput;
+		private var btnBrowse : BrowseButton;
 		
 		public var browseFilter : String;
 		
@@ -32,27 +33,33 @@ package net.vdombox.powerpack.panel.popup
 		{
 			super.createChildren();
 			
-			var hBox : HBox = new HBox();
-			hBox.percentWidth = 100;
-			hBox.percentHeight = 100;
-			hBox.setStyle('horizontalGap', -8);
-			answerCanvas.addChild( hBox );
+			var btnBrowse : BrowseButton = createButton()
+			createTextInput();
 			
-			var btnBrowse : Button = new BrowseButton();
+			answerCanvas.addChild( btnBrowse );
+			
+			answerCanvas.addChildAt(filePathTextInput, 0);
+		}
+		
+		private function createButton():BrowseButton
+		{
+			var btnBrowse : BrowseButton = new BrowseButton();
 			btnBrowse.styleName = "browseBtnStyle";
 			btnBrowse.label = LanguageManager.sentences.browse + "...";
 			btnBrowse.addEventListener( MouseEvent.CLICK, browseClickHandler );
-			hBox.addChild( btnBrowse );
 			
+			return btnBrowse;	
+		}
+		
+		private function  createTextInput():void
+		{
 			filePathTextInput = new TextInput();
 			filePathTextInput.setStyle( 'styleName', "browseFileTextStyle" );
-			filePathTextInput.setStyle('paddingLeft', '8');
+			filePathTextInput.x = 60;
 			filePathTextInput.text = "";
 			filePathTextInput.enabled = false;
 			filePathTextInput.editable = false;
 			filePathTextInput.percentWidth = 100;
-			
-			hBox.addChild(filePathTextInput);
 		}
 		
 		private function browseClickHandler( event : MouseEvent ) : void

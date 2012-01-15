@@ -197,6 +197,8 @@ GridItem
 	borderColor     : #cccccc;
 	borderThickness : 2;
 	cornerRadius 	: 6;
+	paddingLeft		: 8;
+	focusRoundedCorners: tr tb;
 }
 
 .infoTextStyle
