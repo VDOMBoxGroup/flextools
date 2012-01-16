@@ -14,8 +14,6 @@ package net.vdombox.ide.modules.scripts.controller.messages
 	{
 		override public function execute( notification : INotification ) : void
 		{
-//			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 			var typesProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 
