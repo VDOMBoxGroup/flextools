@@ -2,24 +2,18 @@
 <mx:WindowedApplication
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:customize="net.vdombox.powerpack.customize.*"
-	width="760" height="410" verticalAlign="middle" horizontalAlign="center" layout="absolute"
-	showStatusBar="false" showGripper="false" showTitleBar="false"
-	
-	
-
-	initialize="init()"
+	width="739" height="388" verticalAlign="middle" horizontalAlign="center" layout="absolute"
+	showStatusBar="false" showGripper="false" showTitleBar="false"	initialize="init()"
 	applicationComplete="show()"
 	updateComplete="complete()"
 	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
-	creationComplete="windowedapplication1_creationCompleteHandler(event)"
-
-	
-	horizontalScrollPolicy="off"
+	creationComplete="windowedapplication1_creationCompleteHandler(event)"	horizontalScrollPolicy="off"
 	verticalScrollPolicy="off"
 	xmlns:control="net.vdombox.powerpack.control.*"
-	mouseDown="window_mouseDownHandler(event)">
+	mouseDown="window_mouseDownHandler(event)"
+	styleName="installerWindowStyle">
 	
-	<mx:Style source="assets/style/installer.css" />
+	<mx:Style source="assets/style/style.css" />
 	
 	
 	<mx:Fade alphaFrom="0.0" alphaTo="1.0" duration="300" id="canvasShow" />
@@ -638,7 +632,7 @@
 			
 		]]>
 	</mx:Script>
-	<mx:Image source="assets/images/Background.png" width="760" height="410"/>
+	<mx:Image source="assets/images/Background.png"/>
 	
 	<mx:HBox  right="14" y="17" 
 			  height="10" width="100%"
@@ -668,13 +662,14 @@
 						  scaleContent="true" maintainAspectRatio="true"
 						  verticalAlign="top" horizontalAlign="right"/>
 	
-	<mx:VBox x="300" y="33" >
+	<mx:VBox x="250" y="40" width="470">
 		
 	
 	<mx:Label 
-		width="100%"
+		width="470"
 		text="{ContextManager.templates.getItemAt(0).name}"
-		styleName="headerLabel"/>
+		styleName="installerHeaderLabel"
+		/>
 	
 		<mx:ViewStack id="vsProcess"
 					  width="100%" height="100%" 

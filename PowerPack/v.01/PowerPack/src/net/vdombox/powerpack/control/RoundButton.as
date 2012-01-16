@@ -15,8 +15,8 @@ package net.vdombox.powerpack.control
 		
 		override protected function commitProperties():void
 		{
-			width = 74;
-			height = 29;
+			width = 80;
+			height = 30;
 		}
 	}
 }

@@ -66,10 +66,37 @@ RadioButton
 }
 
 
-WindowedApplication
+.builderWindowStyle
 {
     fontFamily : "Tahoma", "Helvetica", "_sans";
     fontSize   : 11;
+}
+
+.installerWindowStyle
+{
+	headerHeight             : 30;
+	
+	
+	
+	titleTextStyleName       : "titleTextStyle";
+	
+	titleBarColors           : #ffeae6, #000000, #666666;
+	
+	titleBarButtonPadding    : 8;
+	titleBarBackgroundSkin   : ClassReference("net.vdombox.powerpack.customize.skins.GeneratorApplicationTitleBarBackgroundSkin");
+	
+	borderColor              : #424242;
+	borderThickness          : 0;
+	borderAlpha              : 0.0;				
+	
+	buttonPadding            : 2;
+	buttonAlignment          : "auto";
+	
+	backgroundAlpha			 :"0.0";
+	
+	minimizeButtonSkin		 : ClassReference("net.vdombox.powerpack.customize.skins.MinimizeButtonSkin");
+	maximizeButtonSkin		 : ClassReference("net.vdombox.powerpack.customize.skins.MaximizeButtonSkin");
+	closeButtonSkin			 : ClassReference("net.vdombox.powerpack.customize.skins.CloseButtonSkin");
 }
 
 Window
@@ -131,14 +158,36 @@ GridItem
     color      : #16414A;
 }
 
+.installerHeaderLabel
+{
+	fontFamily : "Arial";
+	fontSize   : 46;
+	fontWeight : normal;
+	textIndent : 0;
+	color      : #ffffff;
+	letterSpacing : -2;
+}
+
+ProgressBar
+{
+	trackColors : #353535, #353535;
+	trackHeight : 12;
+	barColor    : #0c5d9b;
+	borderColor : #787878;
+	borderSkin  :  ClassReference("net.vdombox.powerpack.customize.skins.GeneratorProgressBarSkin");
+	/* barSkin     : ClassReference("net.vdombox.powerpack.customize.skins.GeneratorProgressBarSkin");*/
+	color		: #ffffff;
+	
+}
+
+
 RoundButton
 {
 	color			: #000000;
 	fontSize		: 15;
 	fontFamily		: Arial;
 	
-	fillColors 		: #f1f1f1, #b4b4b4, #c2c2c2, #c2c2c2;
-	fillAlphas		: 1,1,1,1;
+	fillColors 		: #ffffff, #c2c2c2;
 	
 	skin			: ClassReference("net.vdombox.powerpack.customize.skins.RoundButtonSkin");
 	
@@ -151,10 +200,10 @@ BrowseButton
 	fontSize		: 15;
 	fontFamily		: Arial;
 	
-	fillColors 		: #f1f1f1, #b4b4b4, #c2c2c2, #c2c2c2;
-	fillAlphas		: 1,1,1,1;
+	fillColors 		: #ffffff, #c2c2c2;
+	borderColors	: #e5e5e5, #a8a8a8;
 	
-	skin			: ClassReference("net.vdombox.powerpack.customize.skins.BrowseBtnSkin");
+	skin			: ClassReference("net.vdombox.powerpack.customize.skins.BrowseButtonSkin");
 	
 	cornerRadius	: 6;
 	
@@ -167,10 +216,16 @@ BrowseButton
 	fontWeight      : bold;
 	
 	color           : #666666;
+	
 	borderStyle     : solid;
 	borderColor     : #5A5859;
 	borderThickness : 2;
+	
 	cornerRadius 	: 10;
+	
+	backgroundGradientColors	: #e0e0e0, #ffffff;
+	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.KeyTextBackgroundSkin");
+	paddingLeft	: 20;
 }
 
 .browseFileTextStyle
@@ -178,13 +233,21 @@ BrowseButton
 	fontFamily      : Arial;
 	fontSize        : 13;
 	
-	color           : #666666;
+	color           : #848484;
+	
 	borderStyle     : solid;
 	borderColor     : #cccccc;
-	borderThickness : 2;
+	borderThickness : 1;
+	
 	cornerRadius 	: 6;
-	paddingLeft		: 8;
+	
+	paddingLeft		: 20;
+	paddingTop		: 3;
+	
 	focusRoundedCorners: tr tb;
+	
+	backgroundGradientColors	: #e0e0e0, #ffffff;
+	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.BrowseAnswerTextBackgroundSkin");
 }
 
 .titleTextStyle
@@ -195,6 +258,17 @@ BrowseButton
 	color      : #d9dadb;
 	textIndent : 15;
 }
+
+.answerInputTextStyle
+{
+	cornerRadius				: 7;
+	fontSize					: 14;
+	backgroundGradientColors	: #e0e0e0, #ffffff;
+	borderThickness				: 1.5;
+	borderColor					: #414141;
+	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.InputAnswerTextBackgroundSkin");
+}
+
 
 PopUpToolBar
 {

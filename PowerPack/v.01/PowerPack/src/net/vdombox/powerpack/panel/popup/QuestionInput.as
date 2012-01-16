@@ -8,6 +8,8 @@ package net.vdombox.powerpack.panel.popup
 	import mx.containers.HBox;
 	import mx.controls.TextArea;
 	import mx.events.FlexEvent;
+	
+	import net.vdombox.powerpack.customize.skins.InputAnswerTextBackgroundSkin;
 
 	public class QuestionInput extends Question
 	{
@@ -24,11 +26,10 @@ package net.vdombox.powerpack.panel.popup
 			
 			answerTextInput = new TextArea();
 			answerTextInput.percentWidth = 100;
-			//answerTextInput.percentHeight = 100;
+			answerTextInput.styleName = "answerInputTextStyle";
+			
 			answerTextInput.setStyle("top", 10);
 			answerTextInput.setStyle("bottom", 0);
-			answerTextInput.setStyle("cornerRadius", 7);
-			answerTextInput.setStyle("fontSize", 14);
 			
 			answerCanvas.addChild( answerTextInput );
 			

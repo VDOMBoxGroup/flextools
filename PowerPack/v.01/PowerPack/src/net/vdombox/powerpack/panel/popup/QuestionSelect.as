@@ -58,20 +58,6 @@ package net.vdombox.powerpack.panel.popup
 			answerCanvas.height = vBox.height;
 		}
 		
-		override protected function childrenCreated():void
-		{
-						super.childrenCreated();
-		}
-		
-		override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
-		{
-			trace ("ANS H : " + answerCanvas.height);
-			
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			
-			
-		}
-		
 		override protected function closeDialog() : void
 		{
 			if ( radioBtnGroup.numRadioButtons > 0 )

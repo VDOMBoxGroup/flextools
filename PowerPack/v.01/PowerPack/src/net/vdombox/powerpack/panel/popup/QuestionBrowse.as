@@ -56,6 +56,8 @@ package net.vdombox.powerpack.panel.popup
 			filePathTextInput = new TextInput();
 			filePathTextInput.setStyle( 'styleName', "browseFileTextStyle" );
 			filePathTextInput.x = 60;
+			filePathTextInput.height = 25;
+			
 			filePathTextInput.text = "";
 			filePathTextInput.enabled = false;
 			filePathTextInput.editable = false;

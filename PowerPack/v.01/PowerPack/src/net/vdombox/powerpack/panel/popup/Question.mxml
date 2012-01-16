@@ -77,7 +77,7 @@
 					 paddingLeft="23" paddingTop="12" paddingRight="23" paddingBottom="12"
 					 horizontalGap="10" id="topH">
 				<mx:Image source="@Embed('/assets/images/question.png')" autoLoad="true" id="qImg"/>
-				<mx:Text width="100%" maxHeight="200"
+				<mx:Text width="100%" maxHeight="188"
 						 paddingTop="5" paddingBottom="5"
 						 styleName="infoTextStyle"
 						 text="{question}"
@@ -91,7 +91,7 @@
 					  paddingLeft="23" paddingTop="12" paddingRight="23" paddingBottom="12">
 				<mx:HBox width="100%" height="100%" id="t2">
  					<mx:Image source="@Embed('/assets/images/user.png')" autoLoad="true" id="t3"/>
-					<mx:Canvas width="100%"  id="answerCanvas"  maxHeight="240" />
+					<mx:Canvas width="100%"  id="answerCanvas"  maxHeight="200" />
 					
 				</mx:HBox>
 				<mx:Canvas width="100%">

@@ -120,9 +120,7 @@ private function __question( handler : Function, question : String, params : Arr
 				
 				questionPopup = new QuestionBrowse();
 				(questionPopup as QuestionBrowse).browseFilter = questionFileFilter;
-				showQuestionPopup();
 				
-				return handler;
 			}
 			break;
 		}
@@ -134,19 +132,18 @@ private function __question( handler : Function, question : String, params : Arr
 			questionPopup = new QuestionSelect();
 			(questionPopup as QuestionSelect).possibleAnswers = answersArray;
 			
-			showQuestionPopup();
-			
 			break;
 		}
 		case Question.QT_INPUT:
 		default:
 		{
 			questionPopup = new QuestionInput();
-			showQuestionPopup();
 			
 			break;
 		}
 	}
+	
+	showQuestionPopup();
 	
 	function showQuestionPopup() : void
 	{
@@ -155,6 +152,7 @@ private function __question( handler : Function, question : String, params : Arr
 		questionPopup.setDefaultProperties(question, handler);
 		
 		PopUpManager.addPopUp(questionPopup, popupParent, true);
+		
 		PopUpManager.centerPopUp(questionPopup);
 	}
 	

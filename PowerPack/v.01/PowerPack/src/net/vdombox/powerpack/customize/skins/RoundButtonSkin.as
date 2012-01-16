@@ -17,17 +17,6 @@ package net.vdombox.powerpack.customize.skins
 	
 	public class RoundButtonSkin extends ProgrammaticSkin
 	{
-		
-		[Embed(source='/assets/icons/RoundBtnIcon.png')]
-		private var backgroundImageClass :Class;
-		
-		[Embed(source='/assets/icons/RoundBtnIconOver.png')]
-		private var backgroundImageOverClass :Class;
-		
-		private var backgroundImage :Bitmap;
-		private var backgroundBitmapData :BitmapData;
-		
-		
 		public function RoundButtonSkin()
 		{
 			super();
@@ -36,21 +25,22 @@ package net.vdombox.powerpack.customize.skins
 		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void 
 		{
-			graphics.clear();
-			
-			var imageWidth:Number = 74;
-			var imageX : Number = (unscaledWidth-74)/2;
-			
-			backgroundImage = (name == "downSkin" || name == "overSkin") ? new backgroundImageOverClass() : new backgroundImageClass();
-			backgroundBitmapData = new BitmapData( imageWidth, backgroundImage.height, true, 0x000000);
-			backgroundBitmapData.draw( backgroundImage );
-			
-			graphics.clear();
-			graphics.beginBitmapFill(backgroundBitmapData, null, false, true); 
-			graphics.drawRect(imageX, 0, imageWidth, unscaledHeight);
-			graphics.endFill();
-			
 			super.updateDisplayList(unscaledWidth,unscaledHeight);
+			
+			var cornerRadius : Number = getStyle("cornerRadius");
+			var fillColors : Array = getStyle("fillColors");
+			
+			graphics.clear();
+			
+			drawRoundRect(0, 0, unscaledWidth, unscaledHeight, cornerRadius, fillColors, 1, 
+						verticalGradientMatrix(0, 0, unscaledWidth, unscaledHeight));
+			
+			
+			if (name == "downSkin" || name == "overSkin")
+			{
+				drawRoundRect(0, 0, unscaledWidth, unscaledHeight, cornerRadius, 0x000000, 0.1);
+			}
+			
 		}
 		
 	}

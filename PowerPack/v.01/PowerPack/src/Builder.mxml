@@ -13,9 +13,11 @@
 		xmlns:panel="net.vdombox.powerpack.panel.*"
 		xmlns:customize="net.vdombox.powerpack.customize.*"
 		xmlns:containers="net.vdombox.powerpack.lib.extendedapi.containers.*"
-		closing="closingApplicationHandler(event)">
+		closing="closingApplicationHandler(event)"
+		styleName="builderWindowStyle">
 
-	<mx:Style source="assets/style/builder.css" />
+	<mx:Style source="assets/style/style.css" />
+	
 	<mx:Move duration="100" id="DockerMove" />
 	<mx:Fade duration="100" id="DockerFade" />
 
