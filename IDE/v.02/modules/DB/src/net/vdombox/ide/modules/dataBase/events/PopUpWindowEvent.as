@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.dataBase.events
 	
 	import net.vdombox.ide.common.vo.PageVO;
 
-	public class CreateNewObjectEvent extends Event
+	public class PopUpWindowEvent extends Event
 	{
 		public var base : PageVO;
 		public var name : String;
@@ -13,7 +13,7 @@ package net.vdombox.ide.modules.dataBase.events
 		public static var CANCEL : String = "cancelw";
 		
 		
-		public function CreateNewObjectEvent(type : String, _base : PageVO = null, _name : String = "" )
+		public function PopUpWindowEvent(type : String, _base : PageVO = null, _name : String = "" )
 		{
 			base = _base;
 			name = _name;
@@ -22,7 +22,7 @@ package net.vdombox.ide.modules.dataBase.events
 		
 		override public function clone() : Event
 		{
-			return new CreateNewObjectEvent( type, base, name );
+			return new PopUpWindowEvent( type, base, name );
 		}
 	}
 }

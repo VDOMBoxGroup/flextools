@@ -12,7 +12,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
-	import net.vdombox.ide.modules.dataBase.events.CreateNewObjectEvent;
+	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
 	import net.vdombox.ide.modules.dataBase.model.TypesProxy;
@@ -246,7 +246,7 @@ package net.vdombox.ide.modules.dataBase.view
 					
 				case ApplicationFacade.PAGE_CREATED:
 				{
-					if ( componentName == "" )
+					if ( componentName == "" || !componentName )
 					{
 						sendNotification( ApplicationFacade.GET_DATA_BASES, sessionProxy.selectedApplication );
 					}
@@ -267,10 +267,11 @@ package net.vdombox.ide.modules.dataBase.view
 					
 				case ApplicationFacade.OBJECT_CREATED:
 				{
-					if ( componentName == "" )
+					if ( componentName == "" || !componentName )
 					{
 						sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
-						sendNotification( ApplicationFacade.GET_TABLE, { pageVO: body.pageVO, objectID: body.id } );
+						sendNotification( ApplicationFacade.TABLE_CREATED, { pageVO : body.pageVO } );
+						//sendNotification( ApplicationFacade.GET_TABLE, { pageVO: body.pageVO, objectID: body.id } );
 					}
 					else
 					{
@@ -284,7 +285,8 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.OBJECT_NAME_SETTED:
 				{
 					sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
-					sendNotification( ApplicationFacade.GET_TABLE, { pageVO: body.pageVO, objectID: body.id } );
+					sendNotification( ApplicationFacade.TABLE_CREATED, { pageVO : body.pageVO } );
+					//sendNotification( ApplicationFacade.GET_TABLE, { pageVO: body.pageVO, objectID: body.id } );
 					
 					break;
 				}	
@@ -336,8 +338,8 @@ package net.vdombox.ide.modules.dataBase.view
 				createNewObjectWindow.title = "New " + _typeVO.displayName;
 				createNewObjectWindow.typeVO = _typeVO;
 				
-				createNewObjectWindow.addEventListener( CreateNewObjectEvent.APPLY, applyHandler );
-				createNewObjectWindow.addEventListener( CreateNewObjectEvent.CANCEL, cancelHandler );
+				createNewObjectWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
+				createNewObjectWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 				
 				if ( _typeVO.container != 3 )
 				{
@@ -349,7 +351,7 @@ package net.vdombox.ide.modules.dataBase.view
 				
 				WindowManager.getInstance().addWindow(createNewObjectWindow, dataTablesTree as UIComponent, true);
 				
-				function applyHandler( event : CreateNewObjectEvent ) : void
+				function applyHandler( event : PopUpWindowEvent ) : void
 				{
 					componentName = event.name;
 					
@@ -379,7 +381,7 @@ package net.vdombox.ide.modules.dataBase.view
 					
 				}
 				
-				function cancelHandler( event : CreateNewObjectEvent ) : void
+				function cancelHandler( event : PopUpWindowEvent ) : void
 				{
 					WindowManager.getInstance().removeWindow( createNewObjectWindow );
 				}

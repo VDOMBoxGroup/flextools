@@ -13,6 +13,12 @@
 			import net.vdombox.ide.common.vo.TypeVO;
 			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 			
+			[Embed(source="assets/disclosureClosedIcon.png")]
+			public var plus:Class;
+			
+			[Embed(source="assets/disclosureOpenIcon.png")]
+			public var minus:Class;
+			
 			[Bindable]
 			private var _dataBases : XMLList;
 			
@@ -156,6 +162,9 @@
 					
 				tablesTree.addEventListener( ListEvent.ITEM_ROLL_OVER, objectsTree_highlightChangeHandler, false, 0, true );
 				tablesTree.addEventListener( ListEvent.ITEM_ROLL_OUT, objectsTree_highlightChangeHandler, false, 0, true );
+				
+				tablesTree.setStyle("disclosureOpenIcon", minus);
+				tablesTree.setStyle("disclosureClosedIcon", plus);
 					
 			}
 			
@@ -278,16 +287,6 @@
 				dispatchEvent( newEvent );
 			}
 			
-			protected function addBase_clickHandler(event:MouseEvent):void
-			{
-				genericNewPageOrObject( typeBase );
-			}
-			
-			protected function addTable_clickHandler(event:MouseEvent):void
-			{
-				genericNewPageOrObject( typeTable );
-			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -304,14 +303,6 @@
 		<mx:Tree id="tablesTree" width="100%" height="100%" doubleClickEnabled="true"
 				 dataProvider="{ _dataBases }" labelField="@name" contentBackgroundAlpha="0"
 				 itemRenderer="net.vdombox.components.ObjectsTreePanelItemRenderer"/>
-		
-		<s:HGroup width="100%" paddingTop="5" paddingBottom="5" verticalAlign="middle" horizontalAlign="center" gap="15">
-			
-				<s:Button id="addBase" label="Add Base" click="addBase_clickHandler(event)"/>
-			
-				<s:Button id="addTable" label="Add Table" click="addTable_clickHandler(event)" />
-	
-		</s:HGroup>
 	</s:VGroup>
 	
 	

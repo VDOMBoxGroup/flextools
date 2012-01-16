@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.dataBase.view.components.windows
 	import mx.collections.ArrayCollection;
 	
 	import net.vdombox.ide.common.vo.TypeVO;
-	import net.vdombox.ide.modules.dataBase.events.CreateNewObjectEvent;
+	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
 	import net.vdombox.ide.modules.dataBase.view.skins.CreateNewObjectWindowSkin;
 	
 	import spark.components.DropDownList;
@@ -62,14 +62,14 @@ package net.vdombox.ide.modules.dataBase.view.components.windows
 		public function ok_close_window(event: KeyboardEvent = null ) : void
 		{
 			if ( typeVO.container != 3 )
-				dispatchEvent( new CreateNewObjectEvent( CreateNewObjectEvent.APPLY, baseName.selectedItem, objectName.text ) );
+				dispatchEvent( new PopUpWindowEvent( PopUpWindowEvent.APPLY, baseName.selectedItem, objectName.text ) );
 			else
-				dispatchEvent( new CreateNewObjectEvent( CreateNewObjectEvent.APPLY, null, objectName.text ) );
+				dispatchEvent( new PopUpWindowEvent( PopUpWindowEvent.APPLY, null, objectName.text ) );
 		}
 		
 		public function no_close_window(event: KeyboardEvent = null ) : void
 		{
-			dispatchEvent( new CreateNewObjectEvent( CreateNewObjectEvent.CANCEL ) );
+			dispatchEvent( new PopUpWindowEvent( PopUpWindowEvent.CANCEL ) );
 			
 		}
 	}

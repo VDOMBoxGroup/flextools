@@ -23,6 +23,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.model.vo.SettingsVO;
 	
@@ -72,6 +73,8 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
 			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
 			
+			interests.push( ApplicationFacade.GET_OBJECTS );
+			
 			interests.push( ApplicationFacade.GET_TOP_LEVEL_TYPES );
 			interests.push( ApplicationFacade.CREATE_PAGE );
 			
@@ -83,6 +86,11 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.SET_OBJECT_NAME );
 			
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
+			
+			interests.push( ApplicationFacade.GET_OBJECT_ATTRIBUTES );
+			interests.push( ApplicationFacade.UPDATE_ATTRIBUTES );
+			
+			interests.push( ApplicationFacade.DELETE_OBJECT );
 			
 			return interests;
 		}
@@ -226,6 +234,15 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
+				case ApplicationFacade.GET_OBJECTS:
+				{
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECTS, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
 				case ApplicationFacade.REMOTE_CALL_REQUEST:
 				{
 					if ( body.hasOwnProperty( "objectVO" ) )
@@ -311,6 +328,37 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.LOAD_RESOURCE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_OBJECT_ATTRIBUTES:
+				{
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.ATTRIBUTES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.UPDATE_ATTRIBUTES:
+				{
+					if ( VdomObjectAttributesVO( body ).vdomObjectVO is PageVO )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
+					else if ( VdomObjectAttributesVO( body ).vdomObjectVO is ObjectVO )
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.ATTRIBUTES, body );
+					
+					if ( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.DELETE_OBJECT:
+				{
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.DELETE, PPMPageTargetNames.OBJECT, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

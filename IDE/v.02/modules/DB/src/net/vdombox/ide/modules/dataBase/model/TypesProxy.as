@@ -20,6 +20,8 @@ package net.vdombox.ide.modules.dataBase.model
 		
 		private var _types : Array;
 		
+		public var tableType : TypeVO;
+		
 		public function get types() : Array
 		{
 			if( !_types )
@@ -49,6 +51,11 @@ package net.vdombox.ide.modules.dataBase.model
 						if ( containerName == "dbschema" )
 						{
 							_types.push( typeVO );
+							
+							if ( typeVO.name == "dbtable" )
+							{
+								tableType = typeVO;
+							}
 							break;
 						}
 					}

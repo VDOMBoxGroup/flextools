@@ -32,6 +32,20 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 					{
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
 					}
+					else if ( operation == PPMOperationNames.DELETE )
+					{
+						sendNotification( ApplicationFacade.GET_OBJECTS, body.pageVO );
+						sendNotification( ApplicationFacade.OBJECT_DELETED, body.objectVO );
+						sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
+					}
+					break;
+				}
+					
+				case PPMPageTargetNames.OBJECTS:
+				{
+					if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.OBJECTS_GETTED, body );
+
 					break;
 				}
 				

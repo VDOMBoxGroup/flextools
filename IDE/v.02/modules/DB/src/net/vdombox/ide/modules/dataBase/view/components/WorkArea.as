@@ -5,12 +5,13 @@ package net.vdombox.ide.modules.dataBase.view.components
 	
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColor;
+	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.components.tabNavigatorClasses.TabNavigator;
+	import net.vdombox.ide.common.events.WorkAreaEvent;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
 	
 	import spark.primitives.Rect;
@@ -34,6 +35,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 			editor.objectVO = objectVO;
 			
 			var tab : Tab = new Tab();
+			tab.id = objectVO.id;
 			tab.label = objectVO.name;
 			
 			addTab( tab );
@@ -63,6 +65,21 @@ package net.vdombox.ide.modules.dataBase.view.components
 			return result;
 		}
 		
+		public function closeTab( objectVO : Object ) : IEditor
+		{
+			var result : IEditor;
+			var tab : Tab;
+			
+			result = getEditorByVO( objectVO );
+			
+			if ( result )
+			{
+				removeTab( _editors[ result ] );
+			}
+			
+			return result;
+		}
+		
 		public function closeAllEditors() : void
 		{
 			//			затычка нада разобраться в чем дело
@@ -70,6 +87,8 @@ package net.vdombox.ide.modules.dataBase.view.components
 				return 
 			
 			var tab : Tab;
+			
+			_editors = null;
 			while ( tabBar.dataProvider.length  > 0 ) 
 			{
 				tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;

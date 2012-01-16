@@ -70,6 +70,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function resourceButton_click( event : MouseEvent ) : void
 		{
+			toolset.toolsetButton.selected = true;
 			sendNotification( ApplicationFacade.SELECT_MODULE );
 		}
 	}

@@ -114,6 +114,9 @@ package net.vdombox.ide.modules.dataBase
 		public static const GET_TABLE : String = "getTable";
 		public static const TABLE_GETTED : String = "tableGetted";
 		
+		public static const GET_OBJECTS : String = "getObjects";
+		public static const OBJECTS_GETTED : String = "objectsGetted";
+		
 
 		
 		
@@ -123,6 +126,8 @@ package net.vdombox.ide.modules.dataBase
 		public static const BODY_CREATED : String = "bodyCreated";
 		public static const BODY_START : String = "bodyStart";
 		public static const BODY_STOP : String = "bodyStop";
+		
+		public static const TABLE_CREATED : String = "tableCreated";
 		
 		
 //		removecall
@@ -151,9 +156,18 @@ package net.vdombox.ide.modules.dataBase
 		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
 		public static const PAGE_NAME_SETTED : String = "pageNameSetted";
 		
+		public static const DELETE_OBJECT : String = "deleteObject";
+		public static const OBJECT_DELETED : String = "objectDeleted";
+		
 // Resources
 		public static const GET_RESOURCE_REQUEST 	: String = "getResourceRequest";
 		public static const LOAD_RESOURCE 	: String = "loadResource";
+		
+// Attributes
+		public static const GET_OBJECT_ATTRIBUTES 	: String = "getObjectAttributes";
+		public static const OBJECT_ATTRIBUTES_GETTED 	: String = "objectAttributesGetted";
+		public static const UPDATE_ATTRIBUTES 	: String = "updateAttributes";
+		
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

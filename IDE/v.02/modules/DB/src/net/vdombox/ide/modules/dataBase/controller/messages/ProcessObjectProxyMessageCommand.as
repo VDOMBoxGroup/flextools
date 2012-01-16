@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 	import net.vdombox.ide.common.PPMObjectTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxyMessage;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -30,6 +31,16 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 						else
 							sendNotification( ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR, body.error );
 					}
+					
+					break;
+				}
+					
+				case PPMObjectTargetNames.ATTRIBUTES:
+				{
+					var vdomObjectAttributesVO : VdomObjectAttributesVO = body.vdomObjectAttributesVO as VdomObjectAttributesVO;
+					
+					sendNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED, body );
+					
 					
 					break;
 				}

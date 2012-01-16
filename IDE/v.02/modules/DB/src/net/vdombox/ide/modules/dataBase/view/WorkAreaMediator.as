@@ -54,6 +54,8 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.TABLE_GETTED);
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED);
 			
+			interests.push( ApplicationFacade.OBJECT_DELETED);
+			
 			return interests;
 		}
 		
@@ -129,6 +131,18 @@ package net.vdombox.ide.modules.dataBase.view
 					break
 				}
 					
+				case ApplicationFacade.OBJECT_DELETED:
+				{
+					
+					if ( workArea.getEditorByVO( body) )
+					{
+						facade.removeMediator( DataTableMediator.NAME + body.id  );
+						workArea.closeTab( body );
+					}
+					
+					break
+				}
+					
 			}
 		}
 		
@@ -167,7 +181,7 @@ package net.vdombox.ide.modules.dataBase.view
 		private function editor_removedHandler( event : EditorEvent ) : void
 		{
 			var editor : IEditor = event.target as IEditor;
-			if ( editor is DataTable )
+			if ( editor is DataTable && workArea.getEditorByVO( editor.objectVO) )
 			{
 				facade.removeMediator( DataTableMediator.NAME + editor.editorID  );
 				workArea.closeEditor( editor.objectVO );
