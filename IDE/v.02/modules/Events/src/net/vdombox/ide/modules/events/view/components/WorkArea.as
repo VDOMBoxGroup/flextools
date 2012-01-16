@@ -45,8 +45,9 @@ package net.vdombox.ide.modules.events.view.components
 
 			addEventListener( ElementEvent.CREATE_LINKAGE, element_createLinkageHandler, true, 0, true );
 			addEventListener( ElementEvent.DELETE, element_deleteHandler, true, 0, true );
-			addEventListener( ElementEvent.MOVED, element_movedHandler, true, 0, true );
-			addEventListener( ElementEvent.STATE_CHANGED, element_stateChangedHandler, true, 0, true );
+			addEventListener( ElementEvent.MOVED, unsaveStateHandler, true, 0, true );
+			addEventListener( ElementEvent.STATE_CHANGED, unsaveStateHandler, true, 0, true );
+			addEventListener( ElementEvent.PARAMETER_EDIT, unsaveStateHandler, true, 0, true );
 			addEventListener( ElementEvent.DELETE_LINKAGE, linkage_deleteLinkageHandler, true, 0, true );
 		}
 
@@ -693,13 +694,8 @@ package net.vdombox.ide.modules.events.view.components
 				}
 			}
 		}
-
-		private function element_movedHandler( event : ElementEvent ) : void
-		{
-			skin.currentState = "unsaved";
-		}
-
-		private function element_stateChangedHandler( event : ElementEvent ) : void
+		
+		private function unsaveStateHandler( event : ElementEvent ) : void
 		{
 			skin.currentState = "unsaved";
 		}

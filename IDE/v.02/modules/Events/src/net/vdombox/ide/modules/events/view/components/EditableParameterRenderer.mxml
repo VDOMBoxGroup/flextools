@@ -11,6 +11,7 @@
 			import net.vdombox.components.StringAttributeEditWindow;
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.common.vo.ActionParameterVO;
+			import net.vdombox.ide.modules.events.events.ElementEvent;
 			import net.vdombox.utils.WindowManager;
 			
 			import spark.events.TextOperationEvent;
@@ -42,6 +43,7 @@
 				{
 					actionText.text = event.value;
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
+					dispatchEvent( new ElementEvent ( ElementEvent.PARAMETER_EDIT ) );
 				}
 				
 				function cancelHandler( event : StringAttributeEditWindowEvent ) : void
@@ -49,11 +51,12 @@
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
 				}
 			}
+
 			
-			protected function actionText_focusOutHandler(event:FocusEvent):void
+			protected function actionText_changeHandler(event:TextOperationEvent):void
 			{
 				// TODO Auto-generated method stub
-				var tt : int = 9;
+				dispatchEvent( new ElementEvent ( ElementEvent.PARAMETER_EDIT ) );
 			}
 			
 		]]>
@@ -82,7 +85,7 @@
 		<s:Label text="{ _data.name }"/>
 		<mx:Spacer width="4"/>
 		<s:TextInput id="actionText" minWidth="0" text="@{ _data.value }" width="100%"
-					 focusAlpha="0" doubleClick="textinput1_doubleClickHandler(event)" focusOut="actionText_focusOutHandler(event)"/>
+					 focusAlpha="0" doubleClick="textinput1_doubleClickHandler(event)" change="actionText_changeHandler(event)"/>
 	</s:HGroup>
 
 	<s:Line xFrom="24" xTo="24" yFrom="0" yTo="20">
