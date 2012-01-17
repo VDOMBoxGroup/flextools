@@ -18,6 +18,7 @@ import mx.controls.Alert;
 import mx.core.Application;
 import mx.core.IFlexDisplayObject;
 import mx.core.WindowedApplication;
+import mx.events.CloseEvent;
 import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
 import mx.managers.PopUpManager;
@@ -40,6 +41,7 @@ import net.vdombox.powerpack.panel.popup.PopupBox;
 import net.vdombox.powerpack.panel.popup.Question;
 import net.vdombox.powerpack.panel.popup.QuestionBrowse;
 import net.vdombox.powerpack.panel.popup.QuestionInput;
+import net.vdombox.powerpack.panel.popup.QuestionMultiType;
 import net.vdombox.powerpack.panel.popup.QuestionSelect;
 
 public function sub( graph : String, ...args ) : *
@@ -488,13 +490,20 @@ public function wholeMethod( funct : String, ...args ) : Function
 
 public function dialog( question : String, ...args ) : Function
 {
+//	QuestionMultiType 
+	var popupParent		: Sprite = Sprite(Application.application);
+	var questionPopup : QuestionMultiType = new QuestionMultiType( question, args );
 	
-	return __question( questionCloseHandler, question, args );
+	questionPopup.addEventListener( CloseEvent.CLOSE, dialogCloseHandler); 
+	PopUpManager.addPopUp(questionPopup, popupParent, true);
 	
-	function questionCloseHandler( event : Event ) : void
+	
+	function dialogCloseHandler( event : Event ) : void
 	{
 		setReturnValue( event.target.strAnswer );
 	}
+	
+	return dialogCloseHandler;
 }
 
 

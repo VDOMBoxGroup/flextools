@@ -32,6 +32,8 @@ public class Parser
 		'subPrefix' : { pattern : /^\[nnn[nobvscifVNSA]*\]$/, argNum : -2 },
 		'question' : { pattern : /^\[n[vscVSA][nvscVSA]*\]$/, argNum : -1 },
 		
+		
+		
 		'qSwitch' : { pattern : /^\[n[vscVSA][nsc]*\]$/, argNum : -2, trans : [] },
 		"_switch" : { pattern : /^\[n[nvscVSA][nsc]*\]$/, argNum : -2, trans : [] },
 		'convert' : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2 },
@@ -52,6 +54,8 @@ public class Parser
 
         "setXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]*\]$/, argNum : 3 },
 		"getXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
+		
+		'dialog' : { pattern : /^\[n[vscVSA][nvscVSA]*\]$/, argNum : -1 },
 		
 		"progress" : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2 },
 		

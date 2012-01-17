@@ -46,9 +46,10 @@
 				if ( fCloseHandler != null )
 				{
 					addEventListener( CloseEvent.CLOSE, fCloseHandler );
-					dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+					
 				}
 				
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
 				PopUpManager.removePopUp(this);
 			}
 			

@@ -134,19 +134,19 @@ public class ListParser
 			var curElm : Object = arr[i];
 
 			if ( curElm is Array )
-			{
 				listStr += array2List( curElm as Array );
-			}
+
 			else if ( curElm is CodeFragment )
-			{
 				listStr += CodeFragment( curElm ).origValue;
-			}
+			
 			else if ( curElm.hasOwnProperty( 'type' ) && curElm.hasOwnProperty( 'value' ) )
-			{
 				listStr += curElm.value;
-			}
-			else
+
+			else if ( typeof curElm == "number")
 				listStr += curElm.toString();
+			
+			else
+				listStr += '"' + curElm.toString() + '"';
 
 			listStr += ' ';
 		}

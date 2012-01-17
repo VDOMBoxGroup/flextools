@@ -34,6 +34,8 @@ package net.vdombox.powerpack.panel.popup
 			 vBox.setStyle( "paddingLeft", 10  );
 			 vBox.maxHeight = 200;
 			 vBox.percentWidth = 100;
+			 answerCanvas.addChild( vBox );
+			 
 			
 			 var radBtn : RadioButton;
 			 
@@ -50,9 +52,6 @@ package net.vdombox.powerpack.panel.popup
 			// select first radioButton
 			radBtn = vBox.getChildAt(0) as RadioButton;
 			radBtn.selected = true;
-				
-			answerCanvas.addChild( vBox );
-			
 		}
 		
 		override protected function measure():void
