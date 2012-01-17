@@ -1,6 +1,7 @@
 package net.vdombox.powerpack.customize.skins
 {
 	import flash.display.GradientType;
+	import flash.filters.DropShadowFilter;
 	
 	import mx.skins.ProgrammaticSkin;
 	
@@ -14,6 +15,9 @@ package net.vdombox.powerpack.customize.skins
 		override protected function updateDisplayList( w : Number, h : Number ) : void
 		{
 			super.updateDisplayList( w, h );
+			
+			var paddingLeft : Number = getStyle("paddingLeft");
+			var paddingTop : Number = getStyle("paddingTop");
 			
 			var cornerRadius : Number = getStyle("cornerRadius");
 			var gradientColors : Array = getStyle("backgroundGradientColors");
@@ -32,6 +36,9 @@ package net.vdombox.powerpack.customize.skins
 			
 			drawRoundRect(topRectX, topRectY, topRectW, topRectH, cornerRadius, gradientColors, 1, 
 				verticalGradientMatrix( topRectX, topRectY, topRectW, topRectH ));
+			
+			var shadowDist : Number = Math.max(paddingLeft, paddingTop);
+			filters = [new DropShadowFilter(shadowDist, 45, 0x000000, 0.2,4,4,1,1,true)];
 			
 		}
 		
