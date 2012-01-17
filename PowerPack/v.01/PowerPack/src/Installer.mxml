@@ -67,9 +67,9 @@
 			import net.vdombox.powerpack.BasicError;
 			import net.vdombox.powerpack.Template;
 			import net.vdombox.powerpack.customize.skins.CloseButtonSkin;
-			import net.vdombox.powerpack.customize.skins.RoundButtonSkin;
 			import net.vdombox.powerpack.customize.skins.MaximizeButtonSkin;
 			import net.vdombox.powerpack.customize.skins.MinimizeButtonSkin;
+			import net.vdombox.powerpack.customize.skins.RoundButtonSkin;
 			import net.vdombox.powerpack.dialog.GenConnection;
 			import net.vdombox.powerpack.dialog.GenProperties;
 			import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
@@ -714,8 +714,7 @@
 				<control:RoundButton id="btnRun" 
 												  y="162" x="303" 
 												  label="{LanguageManager.sentences.run}"
-												  click="runingTemplate();"
-												 />
+												  click="runingTemplate();"/>
 				
 			</mx:Canvas>
 			
@@ -732,7 +731,7 @@
 					<control:RoundButton id="btnCancel"
 														y="162" x="303" 
 													 label="{LanguageManager.sentences.cancel}"
-												   	click="alertInterrupt()" />
+												   	click="alertInterrupt()"/>
 			</mx:Canvas>
 			
 			<mx:Canvas id="cFinal" height="100%" width="100%"

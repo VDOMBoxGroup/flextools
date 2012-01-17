@@ -17,6 +17,8 @@ package net.vdombox.powerpack.control
 		{
 			width = 80;
 			height = 30;
+			
+			super.commitProperties();
 		}
 	}
 }

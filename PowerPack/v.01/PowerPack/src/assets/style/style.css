@@ -180,23 +180,28 @@ ProgressBar
 	
 }
 
-
 RoundButton
 {
 	color			: #000000;
+	disabledColor	: #888888;
+	
 	fontSize		: 15;
 	fontFamily		: Arial;
 	
 	fillColors 		: #ffffff, #c2c2c2;
+	fillColorDisabled	: #c1c1c1;
+	disabledfillColorBevelFilter	: #dadada;
 	
 	skin			: ClassReference("net.vdombox.powerpack.customize.skins.RoundButtonSkin");
 	
 	cornerRadius	: 15;
 }
 
+
 BrowseButton
 {
 	color			: #000000;
+	
 	fontSize		: 15;
 	fontFamily		: Arial;
 	
