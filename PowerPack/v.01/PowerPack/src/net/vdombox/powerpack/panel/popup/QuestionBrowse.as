@@ -24,10 +24,14 @@ package net.vdombox.powerpack.panel.popup
 		public var browseFilter : String;
 		
 		
-		public function QuestionBrowse()
+		public function QuestionBrowse( value : Object = null)
 		{
 			super();
+			
+			browseFilter = value as String;
 		}
+		
+		
 		
 		override protected function createChildren () : void
 		{

@@ -12,9 +12,10 @@ package net.vdombox.powerpack.panel.popup
 		
 		private var vBox : VBox;
 		
-		public function QuestionSelect()
+		public function QuestionSelect( value :  Array = null )
 		{
 			super();
+			possibleAnswers = value;
 		}
 		
 		override protected function createChildren () : void
@@ -34,19 +35,22 @@ package net.vdombox.powerpack.panel.popup
 			 vBox.maxHeight = 200;
 			 vBox.percentWidth = 100;
 			
-			
-			for ( var i : int = 0; i < possibleAnswers.length; i++ )
+			 var radBtn : RadioButton;
+			 
+			 for each (var value:String in possibleAnswers) 
 			{
-				var radBtn : RadioButton = new RadioButton();
+				radBtn  = new RadioButton();
+				radBtn.value = value;
+				radBtn.label = value;
 				radBtn.group = radioBtnGroup;
-					
-				radBtn.value = radBtn.label = possibleAnswers[i];
-				vBox.addChild( radBtn );
 				
-				if ( i == 0 )
-					radBtn.selected = true;
+				vBox.addChild( radBtn );
 			}
 			
+			// select first radioButton
+			radBtn = vBox.getChildAt(0) as RadioButton;
+			radBtn.selected = true;
+				
 			answerCanvas.addChild( vBox );
 			
 		}

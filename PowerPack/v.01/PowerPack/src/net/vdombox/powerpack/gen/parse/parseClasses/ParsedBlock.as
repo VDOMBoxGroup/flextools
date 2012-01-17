@@ -5,7 +5,7 @@ import net.vdombox.powerpack.BasicError;
 
 public class ParsedBlock
 {
-	public var lastExecutedFragment : CodeFragment;
+	private var _lastExecutedFragment : CodeFragment;
 
 	public var type : String; // TEXT|CODE
 	public var lexems : Array = []; // lexems array
@@ -29,6 +29,23 @@ public class ParsedBlock
 	//  varPrefix
 	//----------------------------------
 	private var _varPrefix : String = ''; // variable name prefix
+
+	public function get lastExecutedFragment():CodeFragment
+	{
+		return _lastExecutedFragment;
+	}
+
+	public function set lastExecutedFragment(value:CodeFragment):void
+	{
+		if (value)
+			trace("value: "+value.evalValue);
+		else
+			trace("null")
+			
+		_lastExecutedFragment = value;
+		
+	}
+
 	public function get varPrefix() : String
 	{
 		return _varPrefix;

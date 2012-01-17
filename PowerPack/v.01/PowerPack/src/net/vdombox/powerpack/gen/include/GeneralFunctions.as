@@ -104,12 +104,14 @@ private function __question( handler : Function, question : String, params : Arr
 	var questionMode		: int;
 	var questionFileFilter	: String;
 	
+	// TODO: used Interface
 	var questionPopup	: Question;
 	
 	if ( !params ) params = [];
 
 	questionMode = getQuestionMode(params);
 	
+	// TODO: create "fabrika"
 	switch(questionMode)
 	{
 		case Question.QT_BROWSE:
@@ -118,8 +120,8 @@ private function __question( handler : Function, question : String, params : Arr
 			{
 				questionFileFilter = getFileMask( params[0].toString() );
 				
-				questionPopup = new QuestionBrowse();
-				(questionPopup as QuestionBrowse).browseFilter = questionFileFilter;
+				questionPopup = new QuestionBrowse( questionFileFilter );
+//				(questionPopup as QuestionBrowse).browseFilter = questionFileFilter;
 				
 			}
 			break;
@@ -129,8 +131,8 @@ private function __question( handler : Function, question : String, params : Arr
 			for ( var i : int = 0; i < params.length; i++ )
 				answersArray.push( params[i].toString() );
 			
-			questionPopup = new QuestionSelect();
-			(questionPopup as QuestionSelect).possibleAnswers = answersArray;
+			questionPopup = new QuestionSelect(answersArray);
+//			(questionPopup as QuestionSelect).possibleAnswers = answersArray;
 			
 			break;
 		}
@@ -482,6 +484,17 @@ public function wholeMethod( funct : String, ...args ) : Function
 	}
 
 	return rusulGettedHandler;
+}
+
+public function dialog( question : String, ...args ) : Function
+{
+	
+	return __question( questionCloseHandler, question, args );
+	
+	function questionCloseHandler( event : Event ) : void
+	{
+		setReturnValue( event.target.strAnswer );
+	}
 }
 
 

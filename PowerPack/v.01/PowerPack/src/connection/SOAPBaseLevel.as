@@ -362,14 +362,14 @@ trace(wsdl)
 	}
 	
 	
-	private function remoteCall( params : Array ) : void
+	private function remoteCall(params  : Array ) : void
 	{
 		var applicationID : String = params[0];
 		
 		soap.remote_call.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.remote_call.addEventListener( FaultEvent.FAULT, soapError );
 		
-		soap.remote_call(  params );
+		soap.remote_call(   params[0], params[1], params[2], params[3],  params[4]  );
 	}
 }
 }
