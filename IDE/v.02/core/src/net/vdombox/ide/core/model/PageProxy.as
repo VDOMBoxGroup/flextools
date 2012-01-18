@@ -507,11 +507,16 @@ package net.vdombox.ide.core.model
 					continue;
 
 				var typeVO : TypeVO = typesProxy.getType( typeID );
-
+				
 				var objectVO : ObjectVO = new ObjectVO( pageVO, typeVO );
+				
 				objectVO.setID( objectID );
-
+				
 				objectVO.setXMLDescription( object );
+
+				var objectProxy : ObjectProxy = getObjectProxy( objectVO );;
+				
+				objectVO = objectProxy.objectVO;
 
 				_objects.push( objectVO );
 			}
@@ -650,7 +655,7 @@ package net.vdombox.ide.core.model
 				case "get_child_objects":
 				{
 					createObjectsList( result.Objects[ 0 ] );
-					notification = new ProxyNotification( ApplicationFacade.PAGE_OBJECTS_GETTED, _objects );
+					notification = new ProxyNotification( ApplicationFacade.PAGE_OBJECTS_GETTED, { pageVO : pageVO, objects : _objects } );
 					notification.token = token;
 
 					break;

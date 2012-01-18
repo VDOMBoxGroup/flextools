@@ -38,7 +38,7 @@
 		<s:TextArea id="txtapplicationDescription" 
 					height="100%" width="100%" color="#FFFFFF"/>
 		
-		<!--<mx:Spacer height="10" />
+		<mx:Spacer height="10" />
 		
 		<s:HGroup width="100%" verticalAlign="middle">
 			
@@ -47,7 +47,7 @@
 			<s:TextInput id="txtapplicationVersion" 
 						 width="100%" color="#FFFFFF"/> 
 			
-		</s:HGroup>-->
+		</s:HGroup>
 		
 		
 		<mx:Spacer height="15" />

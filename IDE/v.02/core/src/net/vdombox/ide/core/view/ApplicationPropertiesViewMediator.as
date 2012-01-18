@@ -244,6 +244,7 @@ package net.vdombox.ide.core.view
 		{
 			applicationPropertiesView.txtapplicationName.text = applicationVO ? applicationVO.name : "";
 			applicationPropertiesView.txtapplicationDescription.text = applicationVO ? applicationVO.description : "";
+			applicationPropertiesView.txtapplicationVersion.text = applicationVO ? applicationVO.version : "";
 
 			if ( applicationVO && applicationVO.scriptingLanguage == "python" )
 				applicationPropertiesView.python.selected = true;
@@ -364,6 +365,7 @@ package net.vdombox.ide.core.view
 
 			appInfVO.name = applicationPropertiesView.txtapplicationName.text;
 			appInfVO.description = applicationPropertiesView.txtapplicationDescription.text;
+			appInfVO.version = applicationPropertiesView.txtapplicationVersion.text;
 			appInfVO.scriptingLanguage = applicationPropertiesView.languageRBGroup.selectedValue.toString();
 
 			return appInfVO;

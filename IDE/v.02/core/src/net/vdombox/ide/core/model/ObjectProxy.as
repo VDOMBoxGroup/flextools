@@ -47,6 +47,8 @@ package net.vdombox.ide.core.model
 			super( NAME + "/" + objectVO.pageVO.applicationVO.id + "/" + objectVO.pageVO.id + "/" + objectVO.id, objectVO );
 			
 			instances[ this.proxyName ] = "";
+			
+			trace( "proxy - " + proxyName );
 		}
 		
 		private var soap : SOAP = SOAP.getInstance();
@@ -506,6 +508,8 @@ package net.vdombox.ide.core.model
 			if ( result.hasOwnProperty( "Error" ) )
 			{
 				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
+				if ( operationName == "remote_method_call" )
+					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_ERROR_GETTED, { objectVO: objectVO, error: "" } );
 				return;
 			}
 			
