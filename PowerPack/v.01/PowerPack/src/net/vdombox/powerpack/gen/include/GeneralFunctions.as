@@ -397,7 +397,17 @@ public function loadDataFrom( filePath : String ) : Function
 
 		if ( !file.exists )
 		{
-			throw new BasicError( "File does not exist" );
+			if( file.extension.toLowerCase() == "xml" )
+			{
+				file  =  File.applicationDirectory.resolvePath( file.name);
+				
+				if ( !file.exists ) 
+					throw new BasicError( "File does not exist" );
+					
+			}else
+			{
+				throw new BasicError( "File does not exist" );
+			}
 		}
 
 		var fileStream : FileStream = new FileStream();
