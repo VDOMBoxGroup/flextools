@@ -12,6 +12,8 @@ package net.vdombox.powerpack.sdkcompiler
 	import flash.filesystem.FileStream;
 	import flash.system.Capabilities;
 	
+	import mx.utils.StringUtil;
+	
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
@@ -21,7 +23,7 @@ package net.vdombox.powerpack.sdkcompiler
 
 		private var outputInstallerFolderPath : String;
 		private var outputInstallerFileName : String;
-		private var includeApplication : Boolean;
+		private var installerApp : VDOMApplication;
 		
 		private var paramsChecker	: SDKCompilerParamsChecker = new SDKCompilerParamsChecker();;
 		
@@ -29,7 +31,7 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 		}
 		
-		public function buildInstallerPackage(outputFolderPath : String, outputFileName : String, includeApp : Boolean) : void
+		public function buildInstallerPackage(outputFolderPath : String, outputFileName : String, app : VDOMApplication) : void
 		{
 			var processEvent : SDKCompilerEvent;
 			
@@ -41,7 +43,7 @@ package net.vdombox.powerpack.sdkcompiler
 			
 			outputInstallerFolderPath = outputFolderPath;
 			outputInstallerFileName = outputFileName;
-			includeApplication = includeApp;
+			installerApp = app;
 			
 			paramsChecker.addEventListener(SDKCompilerParamsChecker.PARAMS_OK, onParamsOK);
 			paramsChecker.addEventListener(SDKCompilerParamsChecker.PARAMS_ERROR, onParamsError);
@@ -127,12 +129,12 @@ package net.vdombox.powerpack.sdkcompiler
 			content += FileUtils.convertPathForCMD(powerPackProjectStoragePath) + " ";
 			content += "assets/template.xml"
 			
-			if (includeApplication)
+			if (installerApp.stored && installerApp.fileName)
 			{
 				content += " ";
 				content += "-C ";
 				content += FileUtils.convertPathForCMD(powerPackProjectStoragePath) + " ";
-				content += "app.xml";
+				content += installerApp.fileName; //"app.xml";
 			}
 			
 			return content;

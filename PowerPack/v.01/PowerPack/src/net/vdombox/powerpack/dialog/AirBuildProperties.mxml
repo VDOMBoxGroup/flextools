@@ -24,6 +24,7 @@
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompilerEvent;
+			import net.vdombox.powerpack.sdkcompiler.VDOMApplication;
 			
 			private static var _dialog	: AirBuildProperties;
 			
@@ -49,48 +50,29 @@
 				  </icon>
 				  </application>;
 			
-			private static const DEFAULT_OUTPUT_FOLDER		: String = File.documentsDirectory.nativePath;
-			private static const DEFAULT_OUTPUT_FILE_NAME	: String = "appInstaller";
-			private static const DEFAULT_APP_PATH			: String = "";
 			
-			private var shObject : SharedObject = SharedObject.getLocal( "air_properties" );
 			private  function onShow():void
 			{
-				installerFolder.text = sharedOutputFolder || DEFAULT_OUTPUT_FOLDER;
+				installerFolder.text = currentTemplate ? currentTemplate.installerFolderPath : Template.DEFAULT_OUTPUT_FOLDER;
 				
-				installerFileName.text = sharedOutputFileName || DEFAULT_OUTPUT_FILE_NAME;
+				installerFileName.text = currentTemplate ? currentTemplate.installerFileName : Template.DEFAULT_OUTPUT_FILE_NAME;
 				
-				installerApplication.text = sharedApp || DEFAULT_APP_PATH;
-			}
-			
-			private function get sharedOutputFolder () : String
-			{
-				return shObject.data.hasOwnProperty("outputInstallerFolder") ? shObject.data["outputInstallerFolder"] : "";
-			}
-			
-			private function get sharedOutputFileName () : String
-			{
-				return shObject.data.hasOwnProperty("outputInstallerFileName") ? shObject.data["outputInstallerFileName"] : "";
-			}
-			
-			private function get sharedApp () : String
-			{
-				return shObject.data.hasOwnProperty("installerApplication") ? shObject.data["installerApplication"] : "";
+				installerApplication.text = currentTemplate ? currentTemplate.installerAppPath : Template.DEFAULT_APP_PATH;
 			}
 			
 			private function get outputFolderPath () : String
 			{
-				return StringUtil.trim(installerFolder.text) || DEFAULT_OUTPUT_FOLDER;
+				return StringUtil.trim(installerFolder.text);
 			}
 			
 			private function get outputFileName () : String
 			{
-				return StringUtil.trim(installerFileName.text) || DEFAULT_OUTPUT_FILE_NAME;
+				return StringUtil.trim(installerFileName.text);
 			}
 			
 			private function get appPath () : String
 			{
-				return StringUtil.trim(installerApplication.text) || DEFAULT_APP_PATH;
+				return StringUtil.trim(installerApplication.text);
 			}
 			
 			static public function show( templateXmlStructure : XML, closeHandler : Function = null ) : AirBuildProperties
@@ -124,12 +106,9 @@
 							_dialog.closeDetail = ModalDialog.OK;
 							_dialog.close();
 							
-							shObject.data["outputInstallerFolder"] = outputFolderPath;
-							shObject.data["outputInstallerFileName"] = outputFileName;
-							shObject.data["installerApplication"] = appPath;
+							if (currentTemplate)
+								setTemplateBuildProperties();
 							
-							shObject.flush();
-						
 						break;
 					}
 					case BUTTON_NAME_CANCEL:
@@ -196,7 +175,7 @@
 					if (isSselectedAppCorrect())
 						installerApplication.text = file.nativePath;
 					else
-						installerApplication.text = DEFAULT_APP_PATH;
+						installerApplication.text = currentTemplate ? currentTemplate.installerAppPath : Template.DEFAULT_APP_PATH;
 				}
 				
 				function isSselectedAppCorrect() : Boolean
@@ -234,6 +213,18 @@
 				return ContextManager.templates.getItemAt( 0 ) as Template;
 			}
 			
+			private function setTemplateBuildProperties () : void
+			{
+				if (!currentTemplate)
+					return;
+				
+				currentTemplate.xmlStructure = templateStructure;
+				
+				currentTemplate.installerAppPath = appPath;
+				currentTemplate.installerFolderPath = outputFolderPath;
+				currentTemplate.installerFileName = outputFileName;
+			}
+			
 			private function saveTemplate () : void
 			{ 
 				if (!currentTemplate)
@@ -245,7 +236,8 @@
 				currentTemplate.addEventListener( Event.COMPLETE, templateSaveCompleteHandler );
 				currentTemplate.addEventListener( ErrorEvent.ERROR, templateSaveErrorHandler );
 				
-				currentTemplate.xmlStructure = templateStructure;
+				setTemplateBuildProperties();
+				
 				currentTemplate.save();
 				
 				function templateSaveCompleteHandler(evt:Event) : void
@@ -277,7 +269,10 @@
 			private function compilePlayer():void
 			{
 				var installerPropertiesXmlPrepeared : Boolean = prepareInstallerPropertiesXml();
-				var installerAppPrepeared : Boolean = prepareInstallerApp();
+				
+				var app : VDOMApplication = new VDOMApplication();
+				app.stored = prepareInstallerApp();
+				app.fileName = FileUtils.getFileName(appPath);
 				
 				if (!installerPropertiesXmlPrepeared)
 				{
@@ -297,7 +292,7 @@
 				ProgressManager.source = null;
 				ProgressManager.start( ProgressManager.DIALOG_MODE, false );
 				
-				sdkCompiler.buildInstallerPackage (outputFolderPath, outputFileName, installerAppPrepeared);
+				sdkCompiler.buildInstallerPackage (outputFolderPath, outputFileName, app);
 				
 				function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void
 				{
@@ -325,7 +320,7 @@
 					if (!sourceAppFile || !sourceAppFile.exists)
 						return false;
 					
-					var targetAppFile : File = File.applicationStorageDirectory.resolvePath("app.xml");
+					var targetAppFile : File = File.applicationStorageDirectory.resolvePath(FileUtils.getFileName(appPath));
 					
 					sourceAppFile.copyTo(targetAppFile, true);
 				}

@@ -237,8 +237,12 @@ public class Template extends EventDispatcher
 	//  name
 	//----------------------------------
 
-	private static const DEFAULT_NAME			: String = 'installer';
-	private static const DEFAULT_INSTALLER_ID	: String = 'installer';
+	public static const DEFAULT_NAME			: String = 'installer';
+	public static const DEFAULT_INSTALLER_ID	: String = 'installer';
+	public static const DEFAULT_OUTPUT_FOLDER		: String = File.documentsDirectory.nativePath;
+	public static const DEFAULT_OUTPUT_FILE_NAME	: String = "appInstaller";
+	public static const DEFAULT_APP_PATH			: String = "";
+	
 	
 	public function set installerId( value : String ) : void
 	{
@@ -258,6 +262,60 @@ public class Template extends EventDispatcher
 		return Utils.getStringOrDefault( _xml.id, DEFAULT_INSTALLER_ID );
 	}
 	
+	public function set installerAppPath( value : String ) : void
+	{
+		if (!value)
+			value = DEFAULT_APP_PATH;
+		
+		if ( _xml.appPath != value )
+		{
+			modified = true;
+			_xml.appPath = value;
+		}
+	}
+	
+	[Bindable]
+	public function get installerAppPath() : String
+	{
+		return Utils.getStringOrDefault( _xml.appPath, DEFAULT_APP_PATH );
+	}
+	
+	public function set installerFolderPath( value : String ) : void
+	{
+		if (!value)
+			value = DEFAULT_OUTPUT_FOLDER;
+		
+		if ( _xml.outputFolder != value )
+		{
+			modified = true;
+			_xml.outputFolder = value;
+		}
+	}
+	
+	[Bindable]
+	public function get installerFolderPath() : String
+	{
+		return Utils.getStringOrDefault( _xml.outputFolder, DEFAULT_OUTPUT_FOLDER );
+	}
+	
+	public function set installerFileName( value : String ) : void
+	{
+		if (!value)
+			value = DEFAULT_OUTPUT_FILE_NAME;
+		
+		if ( _xml.outputFileName != value )
+		{
+			modified = true;
+			_xml.outputFileName = value;
+		}
+	}
+	
+	[Bindable]
+	public function get installerFileName() : String
+	{
+		return Utils.getStringOrDefault( _xml.outputFileName, DEFAULT_OUTPUT_FILE_NAME );
+	}
+
 	public function set name( value : String ) : void
 	{
 		if (!value)
