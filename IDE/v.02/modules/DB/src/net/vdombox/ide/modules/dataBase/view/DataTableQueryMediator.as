@@ -69,12 +69,15 @@ package net.vdombox.ide.modules.dataBase.view
 			var body : Object = notification.getBody();
 			var event : ExternalManagerEvent;
 			
+			if ( body.objectVO.id != dataTableQuery.editorID)
+				return;
+			
 			switch ( name )
 			{
 				case ApplicationFacade.REMOTE_CALL_RESPONSE:
 				{
 					event = new ExternalManagerEvent( ExternalManagerEvent.CALL_COMPLETE );
-					event.result = body;
+					event.result = body.result;
 					dispatchEvent( event );
 					
 					break;
@@ -83,7 +86,7 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR:
 				{
 					event = new ExternalManagerEvent( ExternalManagerEvent.CALL_ERROR );
-					event.result = body;
+					event.result = body.error;
 					dispatchEvent( event );
 					
 					break;

@@ -56,12 +56,12 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function sendCommitEditor( event : DataTablesEvents ) : void
 		{
-			sendNotification( ApplicationFacade.COMMIT_DATA_STRUCTURE, dataTable.editorID );
+			sendNotification( ApplicationFacade.COMMIT_DATA_STRUCTURE, { objectVO : dataTable.objectVO, objectID: dataTable.editorID } );
 		}
 		
 		private function sendCommitSttructure( event : DataTablesEvents ) : void
 		{
-			sendNotification( ApplicationFacade.COMMIT_STRUCTURE, dataTable.editorID );
+			sendNotification( ApplicationFacade.COMMIT_STRUCTURE, { objectVO : dataTable.objectVO, objectID: dataTable.editorID } );
 		}
 
 		private function addHandlers() : void

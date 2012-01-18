@@ -140,7 +140,7 @@ package net.vdombox.ide.modules.dataBase.view
 					
 					sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, sessionProxy.selectedBase );
 					
-					if ( !sessionProxy.selectedBase || !_dataBases.hasOwnProperty( sessionProxy.selectedBase.id ) )
+					if ( sessionProxy.selectedBase && !sessionProxy.selectedTable )
 					{
 						for each ( var pageVO : PageVO in _dataBases )
 						{

@@ -51,7 +51,7 @@
 			
 			protected function sparkskin1_doubleClickHandler(event:MouseEvent):void
 			{
-				if ( event.target is RichEditableText )
+				if ( event.target is Label )
 					return;
 				
 				hostComponent.sendGoToTable();
@@ -76,9 +76,11 @@
 	</s:Rect>
 	
 	<s:VGroup width="100%" height="100%" paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
-		<s:TextInput id="nameTable" text="{ hostComponent.objectVO.name }" textAlign="center" verticalCenter="0" left="5" right="5" width="100%"
-					 editable="false" contentBackgroundAlpha="0" borderVisible="false" selectable="false" 
+		<s:Label id="nameTable" text="{ hostComponent.objectVO.name }" textAlign="center" verticalCenter="0" left="5" right="5" width="100%"
+					 maxDisplayedLines="1"
 					 doubleClick="textinput1_doubleClickHandler(event)" doubleClickEnabled="true"/>
+		
+		<s:VGroup id="attributes" width="100%" height="100%" gap="1"/>
 	</s:VGroup>
 	
 	<mx:Image id="angle" bottom="0" right="0" width="8" height="8"

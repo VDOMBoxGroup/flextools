@@ -62,9 +62,9 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 					if ( operation == PPMOperationNames.READ )
 					{
 						if ( body.hasOwnProperty("result") )
-							sendNotification( ApplicationFacade.REMOTE_CALL_RESPONSE, body.result );
+							sendNotification( ApplicationFacade.REMOTE_CALL_RESPONSE, body );
 						else
-							sendNotification( ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR, body.error );
+							sendNotification( ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR, body );
 					}
 					
 					break;

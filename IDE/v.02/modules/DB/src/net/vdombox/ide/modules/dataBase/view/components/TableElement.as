@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
+	import mx.collections.ArrayList;
 	import mx.events.CloseEvent;
 	
 	import net.vdombox.ide.common.vo.AttributeVO;
@@ -18,7 +19,9 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import net.vdombox.view.Alert;
 	import net.vdombox.view.AlertButton;
 	
+	import spark.components.Label;
 	import spark.components.SkinnableContainer;
+	import spark.components.VGroup;
 
 	public class TableElement extends SkinnableContainer
 	{
@@ -29,6 +32,9 @@ package net.vdombox.ide.modules.dataBase.view.components
 		
 		private var mouseOffcetX : int;
 		private var mouseOffcetY : int;
+		
+		[SkinPart( required="true" )]
+		public var attributes : VGroup;
 		
 		public function TableElement( object : ObjectVO )
 		{
@@ -181,6 +187,9 @@ package net.vdombox.ide.modules.dataBase.view.components
 		
 		protected function stage_mouseUpHandler( event : MouseEvent ) : void
 		{
+			if ( !stage )
+				return;
+			
 			stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
 			stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 			
@@ -246,6 +255,21 @@ package net.vdombox.ide.modules.dataBase.view.components
 		public function sendGoToTable() : void
 		{
 			dispatchEvent( new TableElementEvent ( TableElementEvent.GO_TO_TABLE ) );
+		}
+		
+		public function setTableHeaders( tableStructureXML : XML ):void 
+		{
+			attributes.removeAllElements();
+			for each (var xmlHeader:XML in tableStructureXML.column) 
+			{
+				var labelAttribute : ColumnElement = new ColumnElement();
+				labelAttribute.columnXML = xmlHeader;
+				attributes.addElement( labelAttribute );
+					
+			}
+
+			
+			
 		}
 		
 	}

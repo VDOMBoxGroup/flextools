@@ -61,6 +61,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE );
+			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR );
 			interests.push( ApplicationFacade.COMMIT_DATA_STRUCTURE );
 			
 			return interests;
@@ -71,24 +72,31 @@ package net.vdombox.ide.modules.dataBase.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 			
+			if ( body.objectVO.id != dataTableEditor.editorID)
+				return;
+			
 			switch ( name )
 			{
 				case ApplicationFacade.REMOTE_CALL_RESPONSE:
 				{
 					var event : ExternalManagerEvent = new ExternalManagerEvent( ExternalManagerEvent.CALL_COMPLETE );
-					event.result = body;
+					event.result = body.result;
 					dispatchEvent( event );
 					
 					break;
 				}
 					
+				case ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR:
+				{
+					dataTableEditor.currentState = "Result";
+					
+					break;
+				}	
+					
 				case ApplicationFacade.COMMIT_DATA_STRUCTURE:
 				{
-					if ( dataTableEditor.editorID == body as String )
-					{
-						dataTableEditor.dataGridColumns = null;
-						dataTableEditor.updateTable();
-					}
+					dataTableEditor.dataGridColumns = null;
+					dataTableEditor.updateTable();
 					
 					break;
 				}

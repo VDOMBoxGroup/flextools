@@ -629,6 +629,11 @@
 				getPageRequest();
 			}
 			
+			protected function dataTable_doubleClickHandler(event:MouseEvent):void
+			{
+				addRowBtnClickHandler();
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -648,7 +653,8 @@
 			<components1:VDOMAdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}"
 											  width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"				 
 											  draggableColumns="true" sortableColumns="true" doubleClickEnabled="true"
-											  allowMultipleSelection="true" alpha.Result="1" alpha.Progress="0.4"/>
+											  allowMultipleSelection="true" alpha.Result="1" alpha.Progress="0.4"
+											  doubleClick="dataTable_doubleClickHandler(event)"/>
 			
 			<mx:Image source="@Embed('assets/spinner.swf')" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center"  includeIn="Progress" scaleContent="false" maintainAspectRatio="true"/>
 			

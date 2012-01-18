@@ -31,6 +31,7 @@ package net.vdombox.ide.modules.dataBase.view
 			addHandlers();
 			
 			sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, tableElement.objectVO);
+			sendNotification( ApplicationFacade.REMOTE_CALL_REQUEST, { objectVO: tableElement.objectVO, functionName: "get_structure", value: "" } );
 		}
 		
 		override public function onRemove() : void
@@ -44,6 +45,7 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			interests.push( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED );
 			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
+			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE );
 			
 			return interests;
 		}
@@ -67,6 +69,24 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.OBJECT_ATTRIBUTES_GETTED:
 				{
 					tableElement.attributesVO = body.vdomObjectAttributesVO as VdomObjectAttributesVO;
+					break;
+				}
+					
+				case ApplicationFacade.REMOTE_CALL_RESPONSE:
+				{
+					try 
+					{
+						var queryResult : XML = new XML( body.result );
+						var tableStructureXML : XML = new XML( queryResult.Result.tablestructure.table.header );
+						
+						tableElement.setTableHeaders( tableStructureXML );
+					}
+					catch (err:Error) 
+					{
+						
+					}
+					
+					break;
 				}
 					
 				case ApplicationFacade.OBJECT_NAME_SETTED:

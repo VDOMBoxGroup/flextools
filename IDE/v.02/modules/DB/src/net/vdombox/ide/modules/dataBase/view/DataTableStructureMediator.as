@@ -46,7 +46,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function sendCommit( event : DataTablesEvents ) : void
 		{
-			sendNotification( ApplicationFacade.COMMIT_DATA_STRUCTURE, dataTableStructure.editorID );
+			sendNotification( ApplicationFacade.COMMIT_DATA_STRUCTURE, { objectVO :dataTableStructure.objectVO, objectID: dataTableStructure.editorID  });
 		}
 		
 		override public function onRemove() : void
@@ -62,6 +62,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE );
+			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR );
 			interests.push( ApplicationFacade.COMMIT_STRUCTURE );
 			
 			return interests;
@@ -72,23 +73,31 @@ package net.vdombox.ide.modules.dataBase.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 			
+			if ( body.objectVO.id != dataTableStructure.editorID)
+				return;
+			
 			switch ( name )
 			{
 				case ApplicationFacade.REMOTE_CALL_RESPONSE:
 				{
 					var event : ExternalManagerEvent = new ExternalManagerEvent( ExternalManagerEvent.CALL_COMPLETE );
-					event.result = body;
+					event.result = body.result;
 					dispatchEvent( event );
+					
+					break;
+				}
+					
+				case ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR:
+				{
+					dataTableStructure.currentState = "Result";
+					dataTableStructure.updateTable();
 					
 					break;
 				}
 					
 				case ApplicationFacade.COMMIT_STRUCTURE:
 				{
-					if ( dataTableStructure.editorID == body as String )
-					{
-						dataTableStructure.updateTable();
-					}
+					dataTableStructure.updateTable();
 					
 					break;
 				}
