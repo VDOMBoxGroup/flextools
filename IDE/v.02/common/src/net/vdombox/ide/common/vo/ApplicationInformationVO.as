@@ -18,6 +18,8 @@ package net.vdombox.ide.common.vo
 		public var scriptingLanguage : String
 
 		public var active : String = "1"
+			
+		public var version : String;
 
 
 		public function toXML() : XML
@@ -38,6 +40,9 @@ package net.vdombox.ide.common.vo
 
 			if ( scriptingLanguage !== null )
 				info.appendChild( <ScriptingLanguage>{scriptingLanguage}</ScriptingLanguage> );
+			
+			if ( version !== null && version !== "")
+				info.appendChild( <Version>{version}</Version> );
 
 			info.appendChild( <Active>{active}</Active> );
 

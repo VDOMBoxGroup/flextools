@@ -42,6 +42,7 @@ package net.vdombox.ide.common.vo
 		private var _numberOfPages 		: int
 		private var _scriptingLanguage	: String
 		private var _serverVersion 		: String
+		private var _version 			: String
 
 		public function get active():String
 		{
@@ -103,6 +104,11 @@ package net.vdombox.ide.common.vo
 			return _serverVersion;
 		}
 		
+		public function get version() : String
+		{
+			return _version;
+		}
+		
 		public function setInformation( information : XML ) : void
 		{
 			_name				= information.Name[ 0 ];
@@ -114,6 +120,7 @@ package net.vdombox.ide.common.vo
 			_numberOfObjects 	= information.Numberofobjects[ 0 ];
 			_scriptingLanguage	= information.ScriptingLanguage[ 0 ];
 			_active				= information.Active[ 0 ];
+			_version			= information.Version[ 0 ];
 		}
 	}
 }
