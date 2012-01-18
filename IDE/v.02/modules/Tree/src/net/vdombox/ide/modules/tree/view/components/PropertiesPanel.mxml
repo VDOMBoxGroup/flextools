@@ -23,6 +23,9 @@
 
 			[Bindable]
 			private var _nameAttribute : String = "";
+			
+			[Bindable]
+			private var _typeAttribute : String = "";
 
 			[Bindable]
 			private var descriptionAttributeVO : AttributeVO;
@@ -41,8 +44,13 @@
 				if (_treeElementVO)
 				{
 					_nameAttribute = _treeElementVO.pageVO.name;
-				} else 
+					_typeAttribute = _treeElementVO.pageVO.typeVO.displayName;
+				} 
+				else 
+				{
 					_nameAttribute = "";
+					_typeAttribute = "";
+				}
 			}
 			
 			public function set nameAttribute(name:String):void
@@ -237,7 +245,7 @@
 
 			<components:SmoothImage height="18" width="18"/>
 
-			<s:Label id="typeNameLabel"/>
+			<s:Label id="typeNameLabel" text="{_typeAttribute}"/>
 
 		</s:HGroup>
 
