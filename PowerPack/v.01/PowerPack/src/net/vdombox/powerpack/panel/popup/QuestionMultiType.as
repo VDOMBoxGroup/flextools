@@ -16,6 +16,8 @@ package net.vdombox.powerpack.panel.popup
 			super();
 			
 			_dataProvaider = data;
+			
+			setDefaultProperties( title );
 		}
 	
 		public function set dataProvaider(value:Array):void
@@ -40,18 +42,18 @@ package net.vdombox.powerpack.panel.popup
 		answerCanvas.addChild( vBox );
 		
 		
-		var valueArray  : Array;
+		var answer : Answer
 		for each (var value : String in _dataProvaider) 
 		{
-			trace(value);
-			valueArray = ListParser.list2Array( value );
+			
 		
 			// Simple factory			
-//			var answ : IAnswer = AnsverCreator.create(valueArray)
-//			vBox.addChild(answ);
+//			answer  = AnsverCreator.create(valueArray)
+			
+			vBox.addChild( AnsverCreator.create( value ));
 			
 			// test
-			vBox.addChild( new Button());
+//			vBox.addChild( new Button());
 		}
 	}
 	

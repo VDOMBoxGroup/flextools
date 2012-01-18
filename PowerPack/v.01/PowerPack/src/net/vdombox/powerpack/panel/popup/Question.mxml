@@ -28,7 +28,7 @@
 			
 			private var fCloseHandler : Function;
 			
-			public function setDefaultProperties(question : String, closeHandler : Function):void
+			public function setDefaultProperties(question : String, closeHandler : Function = null):void
 			{
 				this.question = question;
 				fCloseHandler = closeHandler;
