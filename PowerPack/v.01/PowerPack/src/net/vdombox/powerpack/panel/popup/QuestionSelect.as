@@ -51,7 +51,9 @@ package net.vdombox.powerpack.panel.popup
 			
 			// select first radioButton
 			radBtn = vBox.getChildAt(0) as RadioButton;
-			radBtn.selected = true;
+			
+			if(radBtn)
+				radBtn.selected = true;
 		}
 		
 		override protected function measure():void

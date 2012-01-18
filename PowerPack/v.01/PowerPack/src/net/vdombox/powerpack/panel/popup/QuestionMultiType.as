@@ -47,7 +47,8 @@ package net.vdombox.powerpack.panel.popup
 			valueArray = ListParser.list2Array( value );
 		
 			// Simple factory			
-//			vBox.addChild( Ansver.create(valueArray));
+//			var answ : IAnswer = AnsverCreator.create(valueArray)
+//			vBox.addChild(answ);
 			
 			// test
 			vBox.addChild( new Button());
@@ -59,6 +60,7 @@ package net.vdombox.powerpack.panel.popup
 		var aas: String = '[1, 12, "Hi, agai\'n", [0, "By sdf"]]'
 		var debugResult : Array = [1, 12, "Hi, agai'n", [0, "By sdf"]];
 		strAnswer = ListParser.array2List(  ListParser.list2Array(ListParser.array2List(debugResult)) );
+		
 		super.closeDialog();
 	}
 }
