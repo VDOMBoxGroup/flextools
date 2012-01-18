@@ -45,23 +45,22 @@ package net.vdombox.powerpack.panel.popup
 		var answer : Answer
 		for each (var value : String in _dataProvaider) 
 		{
+			answer = AnsverCreator.create( value );
+			vBox.addChild( answer );
 			
-		
-			// Simple factory			
-//			answer  = AnsverCreator.create(valueArray)
-			
-			vBox.addChild( AnsverCreator.create( value ));
-			
-			// test
-//			vBox.addChild( new Button());
 		}
 	}
 	
 	override protected function closeDialog() : void
 	{
-		var aas: String = '[1, 12, "Hi, agai\'n", [0, "By sdf"]]'
-		var debugResult : Array = [1, 12, "Hi, agai'n", [0, "By sdf"]];
-		strAnswer = ListParser.array2List(  ListParser.list2Array(ListParser.array2List(debugResult)) );
+		var resultArray : Array = [];
+		
+		for each(var answer : Answer in vBox.getChildren())
+		{
+			resultArray.push( answer.value);
+		}
+		
+		strAnswer = ListParser.array2List( resultArray );
 		
 		super.closeDialog();
 	}

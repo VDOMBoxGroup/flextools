@@ -24,8 +24,6 @@ package net.vdombox.powerpack.panel.popup
 		{
 			super.createChildren();
 			
-			trace("createChildren()");
-			
 			craeteLabel();
 			createTextInput();
 			
@@ -62,6 +60,11 @@ package net.vdombox.powerpack.panel.popup
 //			textInput.setStyle("top", 10);
 //			textInput.setStyle("bottom", 0);
 			
+		}
+		
+		override public function get value () : String
+		{
+			return textInput.text;
 		}
 	}
 }

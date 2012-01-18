@@ -142,7 +142,7 @@ public class ListParser
 			else if ( curElm.hasOwnProperty( 'type' ) && curElm.hasOwnProperty( 'value' ) )
 				listStr += curElm.value;
 
-			else if ( typeof curElm == "number")
+			else if (  Number(curElm) || Number(curElm) == 0  )
 				listStr += curElm.toString();
 			
 			else

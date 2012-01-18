@@ -85,5 +85,7 @@ package net.vdombox.powerpack.panel.popup
 			
 			return value;
 		}
+		
+		
 	}
 }
