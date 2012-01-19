@@ -17,11 +17,11 @@
 			import mx.utils.StringUtil;
 			
 			import net.vdombox.powerpack.Template;
-			import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 			import net.vdombox.powerpack.managers.ContextManager;
 			import net.vdombox.powerpack.managers.LanguageManager;
 			import net.vdombox.powerpack.managers.ProgressManager;
+			import net.vdombox.powerpack.panel.popup.AlertPopup;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompilerEvent;
 			import net.vdombox.powerpack.sdkcompiler.VDOMApplication;
@@ -204,7 +204,7 @@
 			{ 
 				if (!currentTemplate)
 				{
-					SuperAlert.show("No opened template", "Error");
+					AlertPopup.show("No opened template", "Error");
 					return;
 				}
 				
@@ -226,7 +226,7 @@
 					}
 					catch (e:Error)
 					{
-						SuperAlert.show("Can't save template", "Error");
+						AlertPopup.show("Can't save template", "Error");
 						return;
 					}
 					
@@ -237,7 +237,7 @@
 				{
 					currentTemplate.removeEventListener( ErrorEvent.ERROR, templateSaveErrorHandler );
 					
-					SuperAlert.show("Can't save template", "Error");
+					AlertPopup.show("Can't save template", "Error");
 				}
 			}
 			
@@ -251,7 +251,7 @@
 				
 				if (!installerPropertiesXmlPrepeared)
 				{
-					SuperAlert.show("Can't prepare installer properties xml", "Error");
+					AlertPopup.show("Can't prepare installer properties xml", "Error");
 					return;
 				}
 				
@@ -278,7 +278,7 @@
 					
 					if (evt.message)
 					{
-						SuperAlert.show(evt.message);
+						AlertPopup.show(evt.message);
 					}
 				}
 			}

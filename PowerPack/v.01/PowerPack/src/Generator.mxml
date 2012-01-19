@@ -65,7 +65,6 @@
 			import net.vdombox.powerpack.dialog.GenConnection;
 			import net.vdombox.powerpack.dialog.GenProperties;
 			import net.vdombox.powerpack.gen.TemplateStruct;
-			import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 			import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 			import net.vdombox.powerpack.managers.ConnectionManager;
@@ -73,6 +72,7 @@
 			import net.vdombox.powerpack.managers.LanguageManager;
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.menu.MenuGeneral;
+			import net.vdombox.powerpack.panel.popup.AlertPopup;
 			
 			import vdom.connection.protect.Code;
 			import vdom.connection.protect.MD5;
@@ -176,17 +176,6 @@
 
 		private function exitApplication( event : Event = null ) : void
 		{
-			/*SuperAlert.show(
-			 LanguageManager.sentences['msg_exit_app'],
-			 LanguageManager.sentences['confirmation'],
-			 Alert.YES | Alert.NO, null, alertExitHandler, null, Alert.NO );
-
-			 function alertExitHandler( event : CloseEvent ) : void {
-			 if ( event.detail == Alert.YES ) {
-			 ContextManager.saveSettings();
-			 exit();
-			 }
-			 }*/
 			ContextManager.saveSettings();
 			exit();
 		}
@@ -295,7 +284,7 @@
 
 			if ( !tpl.xmlStructure )
 			{
-				SuperAlert.show( LanguageManager.sentences['msg_cannot_open_tpl'] );
+				AlertPopup.show( LanguageManager.sentences['msg_cannot_open_tpl'] );
 				closeTemplateFile();
 			}
 			else
@@ -539,7 +528,7 @@
 			}
 			catch ( e : Error )
 			{
-				SuperAlert.show( e.message, LanguageManager.sentences['warning'] );
+				AlertPopup.show( e.message, LanguageManager.sentences['warning'] );
 				clearTemplateDebug();
 				processStep( cGeneral );
 			}
@@ -547,7 +536,7 @@
 
 		public function alertProceedRun() : void
 		{
-			SuperAlert.show(
+			AlertPopup.show(
 					LanguageManager.sentences['msg_tpl_proceed_with_errs'],
 					LanguageManager.sentences['errs_in_tpl'],
 					Alert.YES | Alert.NO, null, alertProceedRunHandler, null, Alert.NO );
@@ -596,7 +585,7 @@
 		private function debugErrorHandler( event : Event ) : void
 		{
 			var error : * = event.target.error;
-			SuperAlert.show( error.message, LanguageManager.sentences['error'] );
+			AlertPopup.show( error.message, LanguageManager.sentences['error'] );
 			clearTemplateDebug();
 			processStep( cGeneral );
 		}
@@ -930,7 +919,7 @@
 
 				if ( !_file.exists )
 				{
-					SuperAlert.show(
+					AlertPopup.show(
 							LanguageManager.sentences['msg_file_not_exists'],
 							LanguageManager.sentences['error'] );
 					return null;
@@ -966,7 +955,7 @@
 			if ( !appGenerated && ContextManager.templateStruct )
 				ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
 
-			SuperAlert.show(
+			AlertPopup.show(
 					LanguageManager.sentences['msg_proceed_interrupt_app_installing'],
 					LanguageManager.sentences['question'],
 					Alert.YES | Alert.NO, null, alertProceedInterruptHandler, null, Alert.NO );

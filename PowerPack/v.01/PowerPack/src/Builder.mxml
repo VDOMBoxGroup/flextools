@@ -650,7 +650,6 @@
 					if ( !ContextManager.templateStruct )
 						return;
 
-					//try {
 					switch ( menuItem.name )
 					{
 						case 'resume':
@@ -685,18 +684,7 @@
 							switchDebug( false );
 							break;
 					}
-					/*} catch(e:Error) {
-					 ProgressManager.complete();
-
-					 ContextManager.templateStruct.removeEventListener("generationComplete", generationComplete);
-					 ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-					 ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);
-
-					 ContextManager.templateStruct = null;
-					 switchDebug(false);
-					 SuperAlert.show(e.message, "Warning!");
-					 }*/
-
+					
 					break;
 			}
 

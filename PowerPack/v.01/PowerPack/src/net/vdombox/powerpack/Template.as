@@ -17,13 +17,13 @@ import mx.utils.Base64Encoder;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
-import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.managers.CashManager;
 import net.vdombox.powerpack.managers.ContextManager;
 import net.vdombox.powerpack.managers.LanguageManager;
 import net.vdombox.powerpack.managers.ProgressManager;
+import net.vdombox.powerpack.panel.popup.AlertPopup;
 import net.vdombox.powerpack.utils.CryptUtils;
 
 /**
@@ -934,7 +934,7 @@ public class Template extends EventDispatcher
 	
 	private function showError(errorText : String) : void
 	{
-		SuperAlert.show( errorText,  LanguageManager.sentences['error']);
+		AlertPopup.show( errorText,  LanguageManager.sentences['error']);
 	}
 	
 

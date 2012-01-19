@@ -32,7 +32,6 @@ import mx.utils.NameUtil;
 import mx.utils.UIDUtil;
 
 import net.vdombox.powerpack.Template;
-import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
@@ -42,6 +41,7 @@ import net.vdombox.powerpack.managers.ContextManager;
 import net.vdombox.powerpack.managers.LanguageManager;
 import net.vdombox.powerpack.managers.ProgressManager;
 import net.vdombox.powerpack.managers.SelectionManager;
+import net.vdombox.powerpack.panel.popup.AlertPopup;
 import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
 import net.vdombox.powerpack.sdkcompiler.SDKCompilerEvent;
 
@@ -365,10 +365,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	{
 		if ( parent )
 		{
-			SuperAlert.show(
-					LanguageManager.sentences['graph_alert_clear_text'],
-					LanguageManager.sentences['graph_alert_clear_title'],
-					Alert.YES | Alert.NO, null, alertRemoveHandler, null, Alert.YES );
+			AlertPopup.show(
+						LanguageManager.sentences['graph_alert_clear_text'],
+						LanguageManager.sentences['graph_alert_clear_title'],
+						Alert.YES | Alert.NO, null, alertRemoveHandler, null, Alert.YES );
 		}
 	}
 
@@ -376,7 +376,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	{
 		if ( parent )
 		{
-			SuperAlert.show(
+			AlertPopup.show(
 					LanguageManager.sentences['graph_alert_delete_text'],
 					LanguageManager.sentences['graph_alert_delete_title'],
 					Alert.YES | Alert.NO, null, alertDeleteHandler, null, Alert.YES );

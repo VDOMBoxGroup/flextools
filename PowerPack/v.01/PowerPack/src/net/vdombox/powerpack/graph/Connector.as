@@ -31,7 +31,6 @@ import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
 import mx.utils.ArrayUtil;
 
-import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
@@ -40,6 +39,7 @@ import net.vdombox.powerpack.lib.geomlib.GeomUtils;
 import net.vdombox.powerpack.lib.geomlib._2D.LineSegment;
 import net.vdombox.powerpack.managers.ContextManager;
 import net.vdombox.powerpack.managers.LanguageManager;
+import net.vdombox.powerpack.panel.popup.AlertPopup;
 
 //--------------------------------------
 //  Events
@@ -819,7 +819,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		if ( parent )
 		{
 			if ( deleteConfirmation )
-				SuperAlert.show(
+				AlertPopup.show(
 						LanguageManager.sentences['connector_alert_delete_text'],
 						LanguageManager.sentences['connector_alert_delete_title'],
 						Alert.YES | Alert.NO, null, alertRemoveHandler, null, Alert.YES );

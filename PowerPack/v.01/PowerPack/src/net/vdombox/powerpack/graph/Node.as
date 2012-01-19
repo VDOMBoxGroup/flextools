@@ -49,7 +49,6 @@ import mx.styles.StyleManager;
 import mx.utils.NameUtil;
 
 import net.vdombox.powerpack.Template;
-import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 import net.vdombox.powerpack.lib.extendedapi.controls.SuperTextArea;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
@@ -58,6 +57,7 @@ import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.managers.CashManager;
 import net.vdombox.powerpack.managers.ContextManager;
 import net.vdombox.powerpack.managers.LanguageManager;
+import net.vdombox.powerpack.panel.popup.AlertPopup;
 import net.vdombox.powerpack.utils.GeneralUtils;
 import net.vdombox.powerpack.validators.NodeTextValidator;
 
@@ -1158,10 +1158,10 @@ public class Node extends Canvas implements IFocusManagerComponent
 		if ( parent )
 		{
 			if ( deleteConfirmation )
-				SuperAlert.show(
-						LanguageManager.sentences['node_alert_delete_text'],
-						LanguageManager.sentences['node_alert_delete_title'],
-						Alert.YES | Alert.NO, null, alertRemoveHandler, null, Alert.YES );
+				AlertPopup.show(
+							LanguageManager.sentences['node_alert_delete_text'],
+							LanguageManager.sentences['node_alert_delete_title'],
+							Alert.YES | Alert.NO, null, alertRemoveHandler, null, Alert.YES );
 			else
 				dispose();
 		}

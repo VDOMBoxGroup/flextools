@@ -9,14 +9,14 @@
 
 	<mx:Script>
 		<![CDATA[
-		import mx.collections.Sort;
-		import mx.collections.SortField;
-		import mx.collections.XMLListCollection;
-		import mx.events.CloseEvent;
-
-		import net.vdombox.powerpack.Template;
-		import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
-		import net.vdombox.powerpack.managers.LanguageManager;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			import mx.collections.XMLListCollection;
+			import mx.events.CloseEvent;
+			
+			import net.vdombox.powerpack.Template;
+			import net.vdombox.powerpack.managers.LanguageManager;
+			import net.vdombox.powerpack.panel.popup.AlertPopup;
 
 		private static var _dialog : ImportFromTpl;
 
@@ -56,17 +56,6 @@
 
 		private function onSelectTemplate() : void
 		{
-			/*
-			 if(!FileUtils.isValidPath(tplBrowse.text))
-			 {
-			 SuperAlert.show(
-			 LanguageManager.sentences['msg_file_not_exists'],
-			 LanguageManager.sentences['warning'],
-			 4, this.nativeWindow);
-			 return;
-			 }
-			 */
-
 			tplTree.dataProvider = [];
 
 			template = new Template();
@@ -104,7 +93,7 @@
 					}
 				}
 				template = null;
-				SuperAlert.show( "Invalid secret key." );
+				AlertPopup.show( "Invalid secret key." );
 			}
 		}
 

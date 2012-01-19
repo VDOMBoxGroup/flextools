@@ -61,13 +61,13 @@
 			import net.vdombox.powerpack.graph.GraphCanvas;
 			import net.vdombox.powerpack.graph.GraphCanvasEvent;
 			import net.vdombox.powerpack.graph.Node;
-			import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 			import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 			import net.vdombox.powerpack.managers.ContextManager;
 			import net.vdombox.powerpack.managers.LanguageManager;
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.panel.graphsClasses.AccordionChild;
 			import net.vdombox.powerpack.panel.graphsClasses.GraphsAccordionEvent;
+			import net.vdombox.powerpack.panel.popup.AlertPopup;
 
 		static private var defaultCaptions : Object = {
 			none : "none",
@@ -496,7 +496,7 @@
 			var graph : GraphCanvas = getGraphByName( name );
 			if ( !graph )
 			{
-				SuperAlert.show( LanguageManager.sentences['msg_no_graph_by_name'], LanguageManager.sentences['error'] ); 
+				AlertPopup.show( LanguageManager.sentences['msg_no_graph_by_name'], LanguageManager.sentences['error'] ); 
 				return null;
 			}
 
@@ -585,7 +585,7 @@
 			if ( accordChild.graphs && accordChild.graphs.length > 0 ||
 						 tabMap[accordChild] && ObjectUtils.dictLength( tabMap[accordChild] ) > 0 )
 			{
-				SuperAlert.show( LanguageManager.sentences['msg_cannot_remove_nonempty_cat'] );
+				AlertPopup.show( LanguageManager.sentences['msg_cannot_remove_nonempty_cat'] );
 				event.preventDefault();
 			}
 		}

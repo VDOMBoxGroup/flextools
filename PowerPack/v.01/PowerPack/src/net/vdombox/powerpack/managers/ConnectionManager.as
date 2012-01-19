@@ -12,7 +12,7 @@ import generated.webservices.Vdom;
 import mx.core.Window;
 import mx.rpc.events.FaultEvent;
 
-import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
+import net.vdombox.powerpack.panel.popup.AlertPopup;
 
 import vdom.connection.protect.Code;
 import vdom.connection.protect.MD5;
@@ -238,7 +238,7 @@ public class ConnectionManager extends EventDispatcher
 
 			loggedIn = false;
 
-			SuperAlert.show( resultXML.Error,
+			AlertPopup.show( resultXML.Error,
 					LanguageManager.sentences["fault"],
 					4 )
 		}
@@ -279,12 +279,12 @@ public class ConnectionManager extends EventDispatcher
 		loggedIn = false;
 		timer.stop();
 
-		SuperAlert.show( "A fault occured contacting the server. Fault message is: " + event.fault.faultString +
-				"\n" + event.fault.faultDetail +
-				"\n" + event.fault.rootCause +
-				"\n" + event.headers,
-				LanguageManager.sentences["fault"],
-				4 );
+		AlertPopup.show( "A fault occured contacting the server. Fault message is: " + event.fault.faultString +
+					"\n" + event.fault.faultDetail +
+					"\n" + event.fault.rootCause +
+					"\n" + event.headers,
+					LanguageManager.sentences["fault"],
+					4 );
 
 		ProgressManager.complete();
 	}

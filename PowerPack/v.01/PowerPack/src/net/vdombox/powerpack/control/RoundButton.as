@@ -4,7 +4,6 @@ package net.vdombox.powerpack.control
 	import mx.controls.Button;
 	
 	import net.vdombox.powerpack.customize.skins.RoundButtonSkin;
-	import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 	
 	public class RoundButton extends Button
 	{
