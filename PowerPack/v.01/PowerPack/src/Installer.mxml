@@ -660,14 +660,13 @@
 						  scaleContent="true" maintainAspectRatio="true"
 						  verticalAlign="top" horizontalAlign="right"/>
 	
-	<mx:VBox x="250" y="40" width="470">
+	<mx:VBox x="250" y="40" width="460">
 		
 	
-	<mx:Label 
-		width="470"
-		text="{ContextManager.templates.getItemAt(0).name}"
-		styleName="installerHeaderLabel"
-		/>
+		<mx:Label 
+			width="100%"
+			text="{ContextManager.templates.getItemAt(0).name}"
+			styleName="installerHeaderLabel"/>
 	
 		<mx:ViewStack id="vsProcess"
 					  width="100%" height="100%" 
@@ -688,14 +687,18 @@
 				<mx:Label y="70"
 						  styleName="infoTextStyle"
 						  text="{LanguageManager.sentences.msg_input_template_key}:" />
-				<mx:TextInput y="95" width="385" height="40" id="txtKey"  styleName="keyEdtTextStyle" 
+				<mx:TextInput y="95" width="100%" height="40" id="txtKey"  styleName="keyEdtTextStyle" 
 							  paddingTop="10"  textIndent="10" creationComplete="{txtKey.setFocus()}"
 							  keyDown="txtKey_keyDownHandler(event)"/>
 				
-				<control:RoundButton id="btnAcceptKey" 
-												  y="162" x="303" label="{LanguageManager.sentences.accept}"
-							   click="onKeyAccept(event)"/>
+				<mx:HBox y="162" width="100%"
+						 horizontalAlign="right" verticalAlign="middle">
+					<control:RoundButton id="btnAcceptKey" 
+								label="{LanguageManager.sentences.accept}"
+								click="onKeyAccept(event)"/>
+					</mx:HBox>
 			</mx:Canvas>
+			
 			<mx:Canvas id="cGeneral"
 					   width="100%" 
 					   showEffect="{canvasShow}" hideEffect="{canvasHide}" >
@@ -710,10 +713,12 @@
 					
 					backgroundAlpha="0" borderStyle="none" />
 				
-				<control:RoundButton id="btnRun" 
-												  y="162" x="303" 
+				<mx:HBox y="162" width="100%"
+						 horizontalAlign="right" verticalAlign="middle">
+					<control:RoundButton id="btnRun" 
 												  label="{LanguageManager.sentences.run}"
 												  click="runingTemplate();"/>
+					</mx:HBox>
 			</mx:Canvas>
 			
 			<mx:Canvas id="cProcess" 
@@ -721,15 +726,18 @@
 					 	showEffect="{canvasShow}" hideEffect="{canvasHide}">
 
 				<mx:ProgressBar id="progressBar" 
-								y="110" width="385" 
+								y="110" width="100%" 
 								minimum="0" maximum="100" 
 								mode="manual"
 								styleName="infoTextStyle"/>
 					
+				<mx:HBox y="162" width="100%"
+						 horizontalAlign="right" verticalAlign="middle">
 					<control:RoundButton id="btnCancel"
-														y="162" x="303" 
 													 label="{LanguageManager.sentences.cancel}"
 												   	click="alertInterrupt()"/>
+				</mx:HBox>
+				
 			</mx:Canvas>
 			
 			<mx:Canvas id="cFinal" height="100%" width="100%"
@@ -740,10 +748,14 @@
 						 width="100%"  height="70"
 						 text="{LanguageManager.sentences.msg_gen_finish}"/>
 				
-				<control:RoundButton id="btnExit"
-												  y="162" x="303" 				  
-							   label="{LanguageManager.sentences.exit}"
-							   click="exitApplication();" />
+				<mx:HBox y="162" width="100%"
+						 horizontalAlign="right" verticalAlign="middle">
+					<control:RoundButton id="btnExit"
+										  height="100%"				  
+										 label="{LanguageManager.sentences.exit}"
+										 click="exitApplication();" />
+				</mx:HBox>
+				
 			</mx:Canvas>
 			
 		</mx:ViewStack>
