@@ -31,7 +31,11 @@ package net.vdombox.ide.modules.dataBase.view
 			addHandlers();
 			
 			sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, tableElement.objectVO);
-			sendNotification( ApplicationFacade.REMOTE_CALL_REQUEST, { objectVO: tableElement.objectVO, functionName: "get_structure", value: "" } );
+			var structureMediator : DataTableStructureMediator = facade.retrieveMediator( DataTableStructureMediator.NAME + tableElement.objectID ) as DataTableStructureMediator;
+			if ( !structureMediator )
+				sendNotification( ApplicationFacade.REMOTE_CALL_REQUEST, { objectVO: tableElement.objectVO, functionName: "get_structure", value: "" } );
+			else
+				sendNotification( ApplicationFacade.GET_TABLE_STRUCTURE, { objectVO: tableElement.objectVO } );
 		}
 		
 		override public function onRemove() : void
@@ -46,6 +50,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED );
 			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
 			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE );
+			interests.push( ApplicationFacade.TABLE_STRUCTURE_GETTED );
 			
 			return interests;
 		}
@@ -92,6 +97,13 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.OBJECT_NAME_SETTED:
 				{
 					tableElement.objectVO = objectVO;
+					
+					break;
+				}	
+					
+				case ApplicationFacade.TABLE_STRUCTURE_GETTED:
+				{
+					tableElement.setTableHeaders( new XML( body.result.table.header ) );
 					
 					break;
 				}	

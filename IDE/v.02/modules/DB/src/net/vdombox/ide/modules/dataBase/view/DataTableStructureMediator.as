@@ -64,6 +64,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE );
 			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR );
 			interests.push( ApplicationFacade.COMMIT_STRUCTURE );
+			interests.push( ApplicationFacade.GET_TABLE_STRUCTURE );
 			
 			return interests;
 		}
@@ -98,6 +99,13 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.COMMIT_STRUCTURE:
 				{
 					dataTableStructure.updateTable();
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_TABLE_STRUCTURE:
+				{
+					sendNotification( ApplicationFacade.TABLE_STRUCTURE_GETTED, { objectVO: dataTableStructure.objectVO, result : dataTableStructure.tableStructure } );
 					
 					break;
 				}

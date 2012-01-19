@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.dataBase.view.components.windows
 {
 	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
 	
 	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
 	import net.vdombox.ide.modules.dataBase.view.skins.RenameTableWindowSkin;
@@ -28,6 +29,8 @@ package net.vdombox.ide.modules.dataBase.view.components.windows
 			_nameTable = __nameTable;
 			title = resourceManager.getString( "DataBase_General", "renaem_table_window_title" );
 			
+			addEventListener( KeyboardEvent.KEY_DOWN, keyDownEnterEscHandler, true, 0 , true );
+			
 			this.setFocus();
 		}
 		
@@ -46,6 +49,14 @@ package net.vdombox.ide.modules.dataBase.view.components.windows
 		{
 			super.stylesInitialized();
 			this.setStyle( "skinClass", RenameTableWindowSkin );
+		}
+		
+		private function keyDownEnterEscHandler( event : KeyboardEvent ) : void
+		{
+			if ( event.keyCode == Keyboard.ENTER )
+				ok_close_window();
+			else if ( event.keyCode == Keyboard.ESCAPE )
+				no_close_window();
 		}
 		
 		public function ok_close_window(event: KeyboardEvent = null ) : void

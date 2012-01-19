@@ -22,7 +22,7 @@
 			
 			private var manager : *;
 			private var queue : QueueManager;
-			private var tableStructure:XML;			/* XML got by vdom IDE (of existing table) */
+			private var _tableStructure:XML;			/* XML got by vdom IDE (of existing table) */
 			private var tableID:String;
 			private var tableName:String;
 			
@@ -32,6 +32,11 @@
 			
 			private var selectedItem : StructureVO;
 			
+			public function get tableStructure():XML
+			{
+				return _tableStructure;
+			}
+
 			public function get editorID() : String
 			{
 				return _objectVO ? _objectVO.id : "";
@@ -82,7 +87,7 @@
 			private function getTableStructureHandler( event : * ) : void 
 			{
 				var queryResult : XML = new XML( event.Result );
-				tableStructure = new XML( queryResult.tablestructure );		
+				_tableStructure = new XML( queryResult.tablestructure );		
 				
 				columnsProvider = []; /* Array of Object */
 				tableID = tableStructure.table.@id;

@@ -4,7 +4,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		creationComplete="sparkskin1_creationCompleteHandler(event)"
 		removedFromStage="sparkskin1_removedFromStageHandler(event)"
-		doubleClick="sparkskin1_doubleClickHandler(event)" doubleClickEnabled="true">
+		doubleClick="sparkskin1_doubleClickHandler(event)" doubleClickEnabled="true" xmlns:components="net.vdombox.components.*">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.dataBase.view.components.TableElement")]
@@ -16,6 +16,7 @@
 			
 			import net.vdombox.ide.modules.dataBase.events.TableElementEvent;
 			
+			import spark.components.Button;
 			import spark.components.RichEditableText;
 			
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
@@ -30,6 +31,9 @@
 				if ( event.target is Image )
 					return;
 					
+				if ( event.target is Button )
+					return;
+				
 				hostComponent.mouseDownHandler();
 			}
 			
@@ -80,7 +84,12 @@
 					 maxDisplayedLines="1"
 					 doubleClick="textinput1_doubleClickHandler(event)" doubleClickEnabled="true"/>
 		
-		<s:VGroup id="attributes" width="100%" height="100%" gap="1"/>
+		<components:VDOMScroller width="100%" height="100%">
+			
+			<s:VGroup id="attributes" width="100%" height="100%" gap="1"/>
+			
+		</components:VDOMScroller>
+		
 	</s:VGroup>
 	
 	<mx:Image id="angle" bottom="0" right="0" width="8" height="8"

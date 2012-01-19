@@ -139,6 +139,9 @@ package net.vdombox.ide.modules.dataBase
 		public static const COMMIT_DATA_STRUCTURE : String = "commitDataStructure";
 		public static const COMMIT_STRUCTURE : String = "commitStructure";
 		
+		public static const GET_TABLE_STRUCTURE : String = "getTableStructure";
+		public static const TABLE_STRUCTURE_GETTED : String = "tableStructureGetted";
+		
 		
 // add Bases and Tables
 		public static const GET_TOP_LEVEL_TYPES : String = "getTopLevelTypes";
