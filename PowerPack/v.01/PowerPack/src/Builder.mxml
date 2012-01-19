@@ -117,6 +117,7 @@
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.menu.MenuGeneral;
 			import net.vdombox.powerpack.panel.Console;
+			import net.vdombox.powerpack.panel.popup.AlertPopup;
 
 		//--------------------------------------------------------------------------
 		//
@@ -245,17 +246,14 @@
 		{
 			if ( ContextManager.templates.length > 0 && currentTemplate.modified )
 			{
-				SuperAlert.show(
-						"Do you want to save file before exit?",
-						LanguageManager.sentences['confirmation'],
-						Alert.YES | Alert.NO | Alert.CANCEL, this.nativeWindow, alertSaveBeforeExitHandler, null, Alert.YES );
+				AlertPopup.show("Do you want to save file before exit? dfsgdfg fgfgfg fgfgf gfgfgf gfgfg fgfgf fggf gfgf", 
+					LanguageManager.sentences['confirmation'], 
+					AlertPopup.YES | AlertPopup.NO | AlertPopup.CANCEL, 
+					Sprite(Application.application), 
+					alertSaveBeforeExitHandler, AlertPopup.NO);
 			}
 			else
 			{
-				/*SuperAlert.show(
-				 "Are you sure want to exit?",
-				 LanguageManager.sentences['confirmation'],
-				 Alert.YES | Alert.NO, this.nativeWindow, alertExitHandler, null, Alert.NO );*/
 				ContextManager.saveSettings();
 				exit();
 			}

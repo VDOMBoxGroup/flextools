@@ -37,7 +37,7 @@ package net.vdombox.powerpack.customize.skins
 			
 			graphics.clear();
 			
-			if (RoundButton(parent).enabled)
+			if (parent && parent is RoundButton && RoundButton(parent).enabled)
 			{
 				drawRoundRect(0, 0, unscaledWidth, unscaledHeight, cornerRadius, fillColors, 1, 
 							verticalGradientMatrix(0, 0, unscaledWidth, unscaledHeight));

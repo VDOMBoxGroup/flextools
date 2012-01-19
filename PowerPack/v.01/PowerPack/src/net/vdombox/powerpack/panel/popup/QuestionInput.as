@@ -28,7 +28,7 @@ package net.vdombox.powerpack.panel.popup
 			answerTextInput.percentWidth = 100;
 			answerTextInput.styleName = "answerInputTextStyle";
 			
-			answerTextInput.setStyle("top", 10);
+			//answerTextInput.setStyle("top", 10);
 			answerTextInput.setStyle("bottom", 0);
 			
 			answerCanvas.addChild( answerTextInput );

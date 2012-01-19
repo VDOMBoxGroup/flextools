@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+				xmlns:popup="net.vdombox.powerpack.panel.popup.*" 
+				xmlns:control="net.vdombox.powerpack.control.*">
+	<mx:Script>
+		<![CDATA[
+			import mx.containers.Canvas;
+			import mx.controls.Alert;
+			import mx.controls.Image;
+			import mx.controls.Text;
+			import mx.core.Application;
+			import mx.core.Container;
+			import mx.core.ContainerGlobals;
+			import mx.core.IFlexDisplayObject;
+			import mx.core.UIComponentGlobals;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.events.FocusRequestDirection;
+			import mx.managers.FocusManager;
+			import mx.managers.IFocusManagerContainer;
+			import mx.managers.ISystemManager;
+			import mx.managers.PopUpManager;
+			import mx.managers.SystemManager;
+			
+			import net.vdombox.powerpack.control.BrowseButton;
+			import net.vdombox.powerpack.control.RoundButton;
+			import net.vdombox.powerpack.customize.skins.PopupBackgroundSkin;
+			
+			public static var yesLabel : String = "Yes";
+			public static var noLabel : String = "No";
+			public static var okLabel : String = "OK";
+			public static var cancelLabel : String = "Cancel";
+			
+			public static const BUTTON_NAME_YES : String = "YES";
+			public static const BUTTON_NAME_NO : String = "NO";
+			public static const BUTTON_NAME_OK : String = "OK";
+			public static const BUTTON_NAME_CANCEL : String = "CANCEL";
+
+			public static const YES:uint = 0x0001;
+			public static const NO:uint = 0x0002;
+			public static const OK:uint = 0x0004;
+			public static const CANCEL:uint= 0x0008;
+			public static const NONMODAL:uint = 0x8000;
+			
+			private var buttons : Array = [];
+			
+			private var buttonFlags:uint = OK;
+			public var defaultButtonFlag:uint = OK;
+			
+			[Bindable]
+			public var title : String = "";
+			
+			[Bindable]
+			public var message : String = "";
+			
+			private static var alert	: AlertPopup;
+			
+			
+			public static function show(text:String = "", title:String = "",
+										flags:uint = 0x4 /* OK */, 
+										parent:Sprite = null, 
+										closeHandler:Function = null, 
+										defaultButtonFlag:uint = 0x4 /* OK */):AlertPopup
+			{
+				var modal:Boolean = true;
+				
+				if (!parent)
+				{
+					parent = Sprite(Application.application);
+				}
+				
+				if ( !alert )
+					alert = new AlertPopup();
+				else
+					return alert;
+				
+				if (flags & AlertPopup.OK||
+					flags & AlertPopup.CANCEL ||
+					flags & AlertPopup.YES ||
+					flags & AlertPopup.NO)
+				{
+					alert.buttonFlags = flags;
+				}
+				
+				if (defaultButtonFlag == AlertPopup.OK ||
+					defaultButtonFlag == AlertPopup.CANCEL ||
+					defaultButtonFlag == AlertPopup.YES ||
+					defaultButtonFlag == AlertPopup.NO)
+				{
+					defaultButtonFlag = defaultButtonFlag;
+				}
+				
+				alert.message = text;
+				alert.title = title;
+				
+				if (closeHandler != null)
+					alert.addEventListener(CloseEvent.CLOSE, closeHandler);
+				
+				PopUpManager.addPopUp(alert, parent, modal);
+				
+				alert.setActualSize(alert.getExplicitOrMeasuredWidth(),
+									alert.getExplicitOrMeasuredHeight());
+				alert.addEventListener(FlexEvent.CREATION_COMPLETE, static_creationCompleteHandler);
+				
+				return alert;
+			}
+			
+			private static function static_creationCompleteHandler(event:FlexEvent):void
+			{
+				if (event.target is IFlexDisplayObject && event.eventPhase == EventPhase.AT_TARGET)
+				{
+					event.target.removeEventListener(FlexEvent.CREATION_COMPLETE, static_creationCompleteHandler);
+					PopUpManager.centerPopUp(IFlexDisplayObject(event.target));
+				}
+			}
+			
+			override protected function createChildren():void
+			{
+				super.createChildren();
+				
+				var label:String;
+				var button:RoundButton;
+
+				// Create the icon object, if any.
+				if (buttonFlags & OK)
+				{
+					label = okLabel;
+					button = createButton(label, BUTTON_NAME_OK);
+					if (defaultButtonFlag == OK)
+						defaultButton = button;
+				}
+				
+				if (buttonFlags & YES)
+				{
+					label = yesLabel;
+					button = createButton(label, BUTTON_NAME_YES);
+					if (defaultButtonFlag == YES)
+						defaultButton = button;
+				}
+				
+				if (buttonFlags & NO)
+				{
+					label = noLabel;
+					button = createButton(label, "NO");
+					if (defaultButtonFlag == NO)
+						defaultButton = button;
+				}
+				
+				if (buttonFlags & CANCEL)
+				{
+					label = cancelLabel;
+					button = createButton(label, "CANCEL");
+					if (defaultButtonFlag == CANCEL)
+						defaultButton = button;
+				}
+				
+				if (!defaultButton && buttons.length)
+					defaultButton = buttons[0];
+				
+				// Set the default button to have focus.
+				if (defaultButton)
+				{
+					RoundButton(defaultButton).setFocus();
+				}
+			}
+			
+			private function createButton(label:String, name:String) : RoundButton
+			{
+				var button : RoundButton = new RoundButton();
+				
+				button.label = label;
+				
+				button.name = name;
+				
+				button.addEventListener(MouseEvent.CLICK, clickHandler);
+				button.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+				
+				btnsBar.addChild(button);
+				
+				buttons.push(button);
+				
+				return button;
+			}
+			
+			override protected function keyDownHandler(event:KeyboardEvent):void
+			{
+				if (event.keyCode == Keyboard.ESCAPE)
+				{
+					if ((buttonFlags & CANCEL) || !(buttonFlags & NO))
+						removeAlert(BUTTON_NAME_CANCEL);
+					else if (buttonFlags & NO)
+						removeAlert(BUTTON_NAME_NO);
+				}
+				
+			}
+			
+			private function clickHandler(event:MouseEvent):void
+			{
+				var name:String = RoundButton(event.currentTarget).name;
+				removeAlert(name);
+			}
+			
+			private function removeAlert(buttonPressed:String):void
+			{
+				visible = false;
+				
+				var closeEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
+				if (buttonPressed == BUTTON_NAME_YES)
+					closeEvent.detail = YES;
+				else if (buttonPressed == BUTTON_NAME_NO)
+					closeEvent.detail = NO;
+				else if (buttonPressed == BUTTON_NAME_OK)
+					closeEvent.detail = OK;
+				else if (buttonPressed == BUTTON_NAME_CANCEL)
+					closeEvent.detail = CANCEL;
+				
+				dispatchEvent(closeEvent);
+				
+				PopUpManager.removePopUp(alert);
+				alert = null;
+				
+			}
+			
+			private function get borderthickness () : Number
+			{
+				return getStyle("borderThickness");
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox maxWidth="600" maxHeight="600" id="mainBox"
+			 verticalGap="10" 
+			 paddingTop="{borderthickness}" paddingLeft="{borderthickness}" 
+			 paddingRight="{borderthickness}" paddingBottom="{borderthickness}">
+		
+		<mx:VBox width="100%"  id="msgBox"
+				 paddingTop="10" paddingLeft="15" paddingRight="15"
+				 verticalGap="10">
+			<mx:Text width="100%"
+					 text="{title}"
+					 textAlign="left"
+					 selectable="false"
+					 styleName="alertTitle"/>
+			
+			<mx:TextArea width="100%"
+					 	text="{message}"
+					 	textAlign="center"
+					 	selectable="false" focusEnabled="false"
+					 	styleName="alertMessage"
+						backgroundAlpha="0" borderStyle="none"/>
+
+		</mx:VBox>
+		
+		<popup:PopupBottomPart id="bottomPart" height="60" width="100%">
+			<mx:HBox horizontalGap="8" verticalAlign="middle" horizontalAlign="center"
+					 paddingLeft="10" paddingRight="10"
+					 width="100%" height="100%"
+					 id="btnsBar">
+				
+			</mx:HBox>
+		</popup:PopupBottomPart>
+	</mx:VBox>
+	
+</mx:Canvas>

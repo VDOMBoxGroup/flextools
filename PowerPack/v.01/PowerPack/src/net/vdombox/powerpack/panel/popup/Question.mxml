@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<popup:PopupBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
 				xmlns:popup="net.vdombox.powerpack.panel.popup.*" 
 				xmlns:control="net.vdombox.powerpack.control.*"
 				creationComplete="completeHandler(event)" 
@@ -14,6 +14,7 @@
 			import mx.managers.PopUpManager;
 			
 			import net.vdombox.powerpack.control.BrowseButton;
+			import net.vdombox.powerpack.customize.skins.PopupBackgroundSkin;
 			
 			public static const QT_INPUT	: int = 0;
 			public static const QT_SELECT	: int = 1;
@@ -68,10 +69,17 @@
 				}
 			}
 			
+			private function get borderThickness () : Number
+			{
+				return getStyle("borderThickness");
+			}
+			
 		]]>
 	</mx:Script>
 	
-	<mx:VBox width="100%" id="mainBox">
+	<mx:VBox width="100%" id="mainBox" 
+			 left="{borderThickness}" right="{borderThickness}" 
+			 top="{borderThickness}" bottom="{borderThickness}">
 		
 		<mx:Canvas width="100%" id="topPart">
 			<mx:HBox width="100%"
@@ -105,4 +113,4 @@
 		
 	</mx:VBox>
 	
-</popup:PopupBox>
+</mx:Canvas>

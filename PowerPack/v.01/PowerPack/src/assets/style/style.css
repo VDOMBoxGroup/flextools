@@ -249,6 +249,7 @@ BrowseButton
 	paddingLeft		: 20;
 	paddingTop		: 3;
 	
+	top : 4;
 	focusRoundedCorners: tr tb;
 	
 	backgroundGradientColors	: #e0e0e0, #ffffff;
@@ -318,6 +319,9 @@ PopUpToolBar
 	paddingRight : 2;
 	paddingTop : 0;
 	paddingBottom : 0;
+	
+	top : 4;
+	
 	backgroundColor: red;
 	backgroundGradientColors : #cccccc, #ffffff;
 }
@@ -354,4 +358,59 @@ PopUpToolBar
 
     horizontalAlign : right;
     verticalAlign   : bottom;
+}
+
+Question
+{
+	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.PopupBackgroundSkin");
+	
+	borderColor : #424242;
+	borderThickness :8;
+	
+	cornerRadius : 8;
+	
+	backgroundGradientColors : #333333, #242424;
+}
+
+PopupBottomPart
+{
+	borderThickness :8;
+	cornerRadius : 8;
+}
+
+AlertPopup
+{
+	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.PopupBackgroundSkin");
+	
+	backgroundGradientColors : #333333, #242424;
+	
+	borderColor : #424242;
+	borderThickness :8;
+	
+	cornerRadius : 8;
+}
+
+.alertTitle 
+{
+	fontSize: 14;
+	fontWeight:bold;
+	
+	color: #fffafc;
+	textRollOverColor : #fffafc;
+	textSelectedColor : #fffafc;
+	disabledColor : #fffafc;
+}
+
+.alertMessage 
+{
+	fontSize: 14;
+	fontWeight: normal;
+	
+	color: #fffafc;
+	textRollOverColor : #fffafc;
+	textSelectedColor : #fffafc;
+	disabledColor : #fffafc;
+	
+	borderColor : red;
+	borderAlpha : 1;
 }

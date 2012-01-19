@@ -17,9 +17,13 @@
 				backgroundBitmapData = new BitmapData( backgroundImage.width, backgroundImage.height, false, 0x000000);
 				backgroundBitmapData.draw( backgroundImage );
 				
+				var cornerRadius : Number = getStyle("cornerRadius");
+				
 				graphics.clear();
-				graphics.beginBitmapFill(backgroundBitmapData, null, true, true); 
-				graphics.drawRect(0, 0, unscaledWidth, unscaledHeight);
+				
+				graphics.beginBitmapFill(backgroundBitmapData, null, true, true);
+				//graphics.drawRect(0, 0, unscaledWidth, unscaledHeight);
+				drawRoundRect(0, 0, unscaledWidth, unscaledHeight, {tl:0, tr:0, bl:cornerRadius, br:cornerRadius});
 				graphics.endFill();
 				
 				var barHeight : Number = 10;
