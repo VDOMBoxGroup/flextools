@@ -244,7 +244,7 @@
 		{
 			if ( ContextManager.templates.length > 0 && currentTemplate.modified )
 			{
-				AlertPopup.show("Do you want to save file before exit? dfsgdfg fgfgfg fgfgf gfgfgf gfgfg fgfgf fggf gfgf", 
+				AlertPopup.show("Do you want to save file before exit?", 
 					LanguageManager.sentences['confirmation'], 
 					AlertPopup.YES | AlertPopup.NO | AlertPopup.CANCEL, 
 					Sprite(Application.application), 

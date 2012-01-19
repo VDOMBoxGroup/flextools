@@ -353,7 +353,11 @@
 			
 			private function validateAppPath():void
 			{
-				build.enabled = selectedApplicationPathCorrect();
+				var validPath : Boolean = selectedApplicationPathCorrect();
+				
+				build.enabled = validPath;
+				
+				installerApplication.errorString = validPath ? null : "Error";
 			}
 			
 			private function selectedApplicationPathCorrect():Boolean
