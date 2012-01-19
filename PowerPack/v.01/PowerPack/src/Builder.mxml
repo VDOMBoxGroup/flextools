@@ -83,7 +83,6 @@
 		<![CDATA[
 			import mx.collections.HierarchicalData;
 			import mx.collections.XMLListCollection;
-			import mx.controls.Alert;
 			import mx.controls.Tree;
 			import mx.core.Application;
 			import mx.events.CloseEvent;
@@ -106,7 +105,6 @@
 			import net.vdombox.powerpack.graph.GraphCanvas;
 			import net.vdombox.powerpack.graph.Node;
 			import net.vdombox.powerpack.graph.NodeCategory;
-			import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 			import net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
 			import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
 			import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
@@ -250,7 +248,7 @@
 					LanguageManager.sentences['confirmation'], 
 					AlertPopup.YES | AlertPopup.NO | AlertPopup.CANCEL, 
 					Sprite(Application.application), 
-					alertSaveBeforeExitHandler, AlertPopup.NO);
+					alertSaveBeforeExitHandler, null, AlertPopup.NO);
 			}
 			else
 			{
@@ -260,7 +258,7 @@
 
 			function alertExitHandler( event : CloseEvent ) : void
 			{
-				if ( event.detail == Alert.YES )
+				if ( event.detail == AlertPopup.YES )
 				{
 					ContextManager.saveSettings();
 					exit();
@@ -269,13 +267,13 @@
 
 			function alertSaveBeforeExitHandler( event : CloseEvent ) : void
 			{
-				if ( event.detail == Alert.YES )
+				if ( event.detail == AlertPopup.YES )
 				{
 					currentTemplate.addEventListener( Event.COMPLETE, templateSaveAndExitHandler );
 					currentTemplate.xmlStructure = pnl_graphs.toXML();
 					currentTemplate.save();
 				}
-				else if ( event.detail == Alert.NO )
+				else if ( event.detail == AlertPopup.NO )
 				{
 					ContextManager.saveSettings();
 					exit();
@@ -338,20 +336,20 @@
 
 		public function alertSaveAndCloseTemplate( action : Function = null, args : Array = null ) : void
 		{
-			SuperAlert.show(
+			AlertPopup.show(
 					"Do you want to save template?",
 					LanguageManager.sentences['confirmation'],
-					Alert.YES | Alert.NO | Alert.CANCEL, this.nativeWindow, alertSaveAndCloseHandler, null, Alert.YES );
+					AlertPopup.YES | AlertPopup.NO | AlertPopup.CANCEL, this.nativeWindow as Sprite, alertSaveAndCloseHandler, null, AlertPopup.YES );
 
 			function alertSaveAndCloseHandler( event : CloseEvent ) : void
 			{
-				if ( event.detail == Alert.YES )
+				if ( event.detail == AlertPopup.YES )
 				{
 					currentTemplate.addEventListener( Event.COMPLETE, templateSaveAndCloseHandler );
 					currentTemplate.xmlStructure = pnl_graphs.toXML();
 					currentTemplate.save();
 				}
-				else if ( event.detail == Alert.NO )
+				else if ( event.detail == AlertPopup.NO )
 				{
 					closeTpl( false, action, args );
 				}
@@ -475,7 +473,7 @@
 					}
 				}
 
-				SuperAlert.show( "Invalid secret key." );
+				AlertPopup.show( "Invalid secret key." );
 			}
 
 			closeTpl( false );
@@ -786,12 +784,13 @@
 
 		public function alertProceedRun() : void
 		{
-			SuperAlert.show( "Error(s) exist in template\nProceed with launch?", "Errors in template", Alert.YES | Alert.NO, null, alertProceedRunHandler, null, Alert.NO );
+//			AlertPopup.show( "Error(s) exist in template\nProceed with launch?", "Errors in template", AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
+			AlertPopup.show( "Error(s) exist in template\nProceed with launch?", "Errors in template", AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
 		}
 
 		private function alertProceedRunHandler( event : CloseEvent ) : void
 		{
-			if ( event.detail == Alert.YES )
+			if ( event.detail == AlertPopup.YES )
 			{
 				//try
 				{
@@ -804,21 +803,6 @@
 					ContextManager.templateStruct.addEventListener( "error", debugErrorHandler );
 					ContextManager.templateStruct.generate();
 				}
-				/*
-				 catch(e:Error)
-				 {
-				 ProgressManager.complete();
-
-				 switchDebug(false);
-
-				 ContextManager.templateStruct.removeEventListener("generationComplete", generationComplete);
-				 ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-				 ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);
-
-				 ContextManager.templateStruct = null;
-				 SuperAlert.show(e.message, "Warning!");
-				 }
-				 */
 			}
 			else
 				ContextManager.templateStruct = null;
@@ -1189,7 +1173,7 @@
 			ProgressManager.complete();
 
 			showDebugDetails();
-			SuperAlert.show( error.message, "Error!", 4, null, onErrAlertClose );
+			AlertPopup.show( error.message, "Error!", 4, null, onErrAlertClose );
 		}
 
 		private function onErrAlertClose( event : Event ) : void

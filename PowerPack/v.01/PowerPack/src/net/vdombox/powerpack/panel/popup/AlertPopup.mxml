@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
 				xmlns:popup="net.vdombox.powerpack.panel.popup.*" 
-				xmlns:control="net.vdombox.powerpack.control.*">
+				xmlns:control="net.vdombox.powerpack.control.*" >
 	<mx:Script>
 		<![CDATA[
 			import mx.containers.Canvas;
@@ -59,7 +59,8 @@
 			public static function show(text:String = "", title:String = "",
 										flags:uint = 0x4 /* OK */, 
 										parent:Sprite = null, 
-										closeHandler:Function = null, 
+										closeHandler:Function = null,
+										iconClass:Class = null, 
 										defaultButtonFlag:uint = 0x4 /* OK */):AlertPopup
 			{
 				var modal:Boolean = true;
@@ -229,7 +230,7 @@
 		]]>
 	</mx:Script>
 	
-	<mx:VBox maxWidth="600" maxHeight="600" id="mainBox"
+	<mx:VBox maxWidth="600" maxHeight="600" id="mainBox" minWidth="200"
 			 verticalGap="10" 
 			 paddingTop="{borderthickness}" paddingLeft="{borderthickness}" 
 			 paddingRight="{borderthickness}" paddingBottom="{borderthickness}">
@@ -243,12 +244,12 @@
 					 selectable="false"
 					 styleName="alertTitle"/>
 			
-			<mx:TextArea width="100%"
+			<mx:Text width="100%"
 					 	text="{message}"
 					 	textAlign="center"
 					 	selectable="false" focusEnabled="false"
 					 	styleName="alertMessage"
-						backgroundAlpha="0" borderStyle="none"/>
+						/>
 
 		</mx:VBox>
 		

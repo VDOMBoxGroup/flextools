@@ -58,6 +58,8 @@
 				installerFileName.text = currentTemplate ? currentTemplate.installerFileName : Template.DEFAULT_OUTPUT_FILE_NAME;
 				
 				installerApplication.text = currentTemplate ? currentTemplate.installerAppPath : Template.DEFAULT_APP_PATH;
+				
+				validateAppPath();
 			}
 			
 			private function get outputFolderPath () : String
@@ -172,37 +174,10 @@
 				{
 					file.removeEventListener(Event.SELECT, appSelectHandler);
 					
-					if (isSselectedAppCorrect())
-						installerApplication.text = file.nativePath;
-					else
-						installerApplication.text = currentTemplate ? currentTemplate.installerAppPath : Template.DEFAULT_APP_PATH;
-				}
-				
-				function isSselectedAppCorrect() : Boolean
-				{
-					var fileStream : FileStream = new FileStream();
-					var appXml : XML;
+					installerApplication.text = file.nativePath;
 					
-					try 
-					{
-						fileStream.open(file, FileMode.READ);
-						appXml = new XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
-						fileStream.close();
-						
-						var appId : String = appXml.Information.ID[0];
-						
-						if (!appId)
-							return false;
-					}
-					catch (e:Error)
-					{
-						fileStream.close();
-						return false;
-					}
-					
-					return true;
+					validateAppPath();
 				}
-				
 			}
 			
 			public function get currentTemplate() : Template
@@ -371,6 +346,74 @@
 				saveTemplate();
 			}
 			
+			protected function installerApplication_changeHandler(event:Event):void
+			{
+				validateAppPath();
+			}
+			
+			private function validateAppPath():void
+			{
+				build.enabled = selectedApplicationPathCorrect();
+			}
+			
+			private function selectedApplicationPathCorrect():Boolean
+			{
+				if ( appPath == "")
+					return true;
+				
+				try
+				{
+					var file : File = new File( appPath);
+				}
+				catch (e:Error)
+				{
+					return false;
+				}
+				
+				return selectedApplicationExist(file) && selectedApplicationValid(file);
+			}
+			
+			private function selectedApplicationExist( file : File):Boolean
+			{
+				if (appPath == "")
+					return true;
+				
+				if ( !file.exists )
+					return false;
+				
+				if( file.isDirectory)
+					return false;
+				
+				if( file.extension.toLowerCase() != "xml")
+					return false;
+				
+				return true;		
+			}
+			
+			private function selectedApplicationValid(file : File):Boolean
+			{
+				var fileStream : FileStream = new FileStream();
+				var appXml : XML;
+				
+				try 
+				{
+					fileStream.open(file, FileMode.READ);
+					appXml = new XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
+					fileStream.close();
+					
+					var appId : String = appXml.Information.ID[0];
+					
+					if (!appId)
+						return false;
+				}
+				catch (e:Error)
+				{
+					fileStream.close();
+					return false;
+				}
+				
+				return true;	
+			}
 		]]>
 	</mx:Script>
 	
@@ -397,11 +440,11 @@
 		
 		<mx:HBox width="450" horizontalGap="3">
 			<mx:Label text="Application: " width="110"/>
-			<mx:TextInput id="installerApplication" width="100%" editable="true" toolTip="{installerApplication.text}"/>
+			<mx:TextInput id="installerApplication" width="100%" editable="true" toolTip="{installerApplication.text}" change="installerApplication_changeHandler(event)"/>
 			<mx:Button label="Browse" click="btnBrowseApplicationClickHandler(event)" width="70"/>
 		</mx:HBox>
 			 
-		<mx:Button label="Build" click="btnBuildClickHandler(event)" />
+		<mx:Button id="build" label="Build" click="btnBuildClickHandler(event)" />
 	</mx:VBox>
 	
 	<mx:ControlBar width="100%" height="100%" styleName="dlgFooter"/>

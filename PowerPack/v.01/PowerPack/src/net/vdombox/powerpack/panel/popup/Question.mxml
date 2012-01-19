@@ -83,7 +83,7 @@
 		
 		<mx:Canvas width="100%" id="topPart">
 			<mx:HBox width="100%"
-					 paddingLeft="16" paddingTop="16" paddingRight="16" paddingBottom="16"
+					 paddingLeft="16" paddingTop="16" paddingRight="16" 
 					 horizontalGap="10" id="topH">
 				<mx:Image source="@Embed('/assets/images/question.png')" autoLoad="true" id="qImg"/>
 				<mx:Text width="100%" maxHeight="188"

@@ -53,7 +53,6 @@
 			import generated.webservices.Open_sessionResultEvent;
 			import generated.webservices.Vdom;
 			
-			import mx.controls.Alert;
 			import mx.controls.ProgressBarMode;
 			import mx.core.Application;
 			import mx.core.FlexLoader;
@@ -74,7 +73,6 @@
 			import net.vdombox.powerpack.dialog.GenProperties;
 			import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
 			import net.vdombox.powerpack.gen.TemplateStruct;
-			import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 			import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 			import net.vdombox.powerpack.managers.ConnectionManager;
@@ -82,6 +80,7 @@
 			import net.vdombox.powerpack.managers.LanguageManager;
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.menu.MenuGeneral;
+			import net.vdombox.powerpack.panel.popup.AlertPopup;
 			
 			import vdom.connection.protect.Code;
 			import vdom.connection.protect.MD5;
@@ -196,7 +195,6 @@
 				fileStream.close();
 				
 				LanguageManager.languageXML = xml;
-				SuperAlert
 				ContextManager.instance.lang.label = LanguageManager.languageXML.@label.toLowerCase();
 				ContextManager.instance.lang.file = LanguageManager.languageXML.@data;
 			}
@@ -241,7 +239,7 @@
 				
 				tplPic.addEventListener("sourceChanged", onLogoScaleContentChanged);
 				
-				tplPic.width = 220;
+				
 				tplPic.percentHeight = 100;
 				
 				tplPic.value = sourceLogo;
@@ -288,7 +286,7 @@
 				}
 				else
 				{
-					SuperAlert.show( LanguageManager.sentences['msg_cannot_open_tpl'] ,"", 4, nativeWindow);
+					AlertPopup.show( LanguageManager.sentences['msg_cannot_open_tpl'] ,"", 4, nativeWindow as Sprite);
 					
 				}
 			}
@@ -431,7 +429,7 @@
 				}
 				catch ( e : Error )
 				{
-					SuperAlert.show( e.message, LanguageManager.sentences['warning'] );
+					AlertPopup.show( e.message, LanguageManager.sentences['warning'] );
 					clearTemplateDebug();
 					processStep( cGeneral );
 				}
@@ -439,14 +437,14 @@
 			
 			public function alertProceedRun() : void
 			{
-				SuperAlert.show(
+				AlertPopup.show(
 					LanguageManager.sentences['msg_tpl_proceed_with_errs'],
 					LanguageManager.sentences['errs_in_tpl'],
-					Alert.YES | Alert.NO, null, alertProceedRunHandler, null, Alert.NO );
+					AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
 				
 				function alertProceedRunHandler( event : CloseEvent ) : void
 				{
-					if ( event.detail == Alert.YES )
+					if ( event.detail == AlertPopup.YES )
 					{
 						runTemplate();
 					}
@@ -475,7 +473,7 @@
 				}
 				catch ( e : Error )
 				{
-					Alert.show( e.message, LanguageManager.sentences['warning'] );
+					AlertPopup.show( e.message, LanguageManager.sentences['warning'] );
 					clearTemplateDebug();
 					processStep( cGeneral );
 				}
@@ -490,7 +488,7 @@
 			private function debugErrorHandler( event : Event ) : void
 			{
 				var error : * = event.target.error;
-				SuperAlert.show( error.message, LanguageManager.sentences['error'] );
+				AlertPopup.show( error.message, LanguageManager.sentences['error'] );
 				clearTemplateDebug();
 				processStep( cGeneral );
 			}
@@ -532,7 +530,7 @@
 					
 					if ( !_file.exists )
 					{
-						SuperAlert.show(
+						AlertPopup.show(
 							LanguageManager.sentences['msg_file_not_exists'],
 							LanguageManager.sentences['error'] );
 						return null;
@@ -568,14 +566,14 @@
 //				if ( !appGenerated && ContextManager.templateStruct )
 //					ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
 				
-				SuperAlert.show(
+				AlertPopup.show(
 					LanguageManager.sentences['msg_proceed_interrupt_app_installing'],
 					LanguageManager.sentences['question'],
-					Alert.YES | Alert.NO, null, alertProceedInterruptHandler, null, Alert.NO );
+					AlertPopup.YES | AlertPopup.NO, null, alertProceedInterruptHandler, null, AlertPopup.NO );
 				
 				function alertProceedInterruptHandler( event : CloseEvent ) : void
 				{
-					if ( event.detail == Alert.YES )
+					if ( event.detail == AlertPopup.YES )
 					{
 						processStep( cGeneral );
 					}
@@ -655,8 +653,8 @@
 		<mx:Spacer width="10"/>
 	</mx:HBox>
 
-	<controls:Base64Image id="tplPic"  x="42" y="45"
-						  width="220" height="100%"
+	<controls:Base64Image id="tplPic"  x="42" y="50"
+						  width="200" height="100%"
 						
 						  showEffect="{picShow}"
 						  scaleContent="true" maintainAspectRatio="true"
@@ -679,15 +677,16 @@
 					width="100%" 
 					 showEffect="{canvasShow}" hideEffect="{canvasHide}" >
 	
-				<mx:TextArea 
+				<!--mx:TextArea 
 					width="100%"  height="70"
 							 text="{ContextManager.templates.getItemAt(0).description}" 
 							 styleName="infoTextStyle"
 							 editable="false" selectable="false" focusEnabled="false" 
 							
-							 backgroundAlpha="0" borderStyle="none" />
+							 backgroundAlpha="0" borderStyle="none" /-->
 				
 				<mx:Label y="70"
+						  styleName="infoTextStyle"
 						  text="{LanguageManager.sentences.msg_input_template_key}:" />
 				<mx:TextInput y="95" width="385" height="40" id="txtKey"  styleName="keyEdtTextStyle" 
 							  paddingTop="10"  textIndent="10" creationComplete="{txtKey.setFocus()}"
@@ -715,7 +714,6 @@
 												  y="162" x="303" 
 												  label="{LanguageManager.sentences.run}"
 												  click="runingTemplate();"/>
-				
 			</mx:Canvas>
 			
 			<mx:Canvas id="cProcess" 
