@@ -14,7 +14,6 @@ package net.vdombox.ide.modules.wysiwyg.model
 		
 		public function VisibleRendererProxy()
 		{
-			
 			super( NAME, {} );
 		}
 		

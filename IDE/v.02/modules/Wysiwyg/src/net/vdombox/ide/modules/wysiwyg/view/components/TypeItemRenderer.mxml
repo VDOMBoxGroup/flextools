@@ -12,11 +12,13 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.core.DragSource;
-
+			import mx.events.FlexEvent;
+			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.common.vo.TypeVO;
+			import net.vdombox.ide.modules.wysiwyg.events.TypeItemRendererEvent;
 			import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
-
+			
 			import spark.filters.GlowFilter;
 
 
@@ -40,6 +42,9 @@
 
 			override public function set data( value : Object ) : void
 			{
+				if ( !value )
+					return;
+				
 				if ( value == _typeVO )
 				{
 					invalidateDisplayList();
@@ -52,6 +57,24 @@
 				typeName = value ?  value.displayName : ""
 
 				super.data = value;
+				
+				if ( !contextMenu )
+					contextMenu = new ContextMenu();
+				
+				contextMenu.removeAllItems();
+				
+				if ( _typeVO.includedInUserCategory )
+				{
+					var delItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_del_in_user" ));
+					delItem.addEventListener( Event.SELECT, delContextMenuHandler, false, 0, true );
+					contextMenu.addItem( delItem );
+				}
+				else
+				{
+					var addItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_add_in_user" ));
+					addItem.addEventListener( Event.SELECT, addContextMenuHandler, false, 0, true );
+					contextMenu.addItem( addItem );
+				}
 			}
 
 			override public function set selected( value : Boolean ) : void
@@ -97,6 +120,17 @@
 				removeEventListener( MouseEvent.MOUSE_MOVE, dragIt );
 				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 			}
+			
+			private function addContextMenuHandler ( event : Event ) : void
+			{
+				dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.ADD_IN_USER_CATIGORY ) );
+			}
+			
+			private function delContextMenuHandler ( event : Event ) : void
+			{
+				dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.DELET_IN_USER_CATIGORY ) );
+			}
+			
 		]]>
 	</fx:Script>
 

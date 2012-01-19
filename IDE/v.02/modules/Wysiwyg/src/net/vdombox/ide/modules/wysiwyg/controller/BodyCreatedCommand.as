@@ -18,7 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			facade.registerMediator( new HelpPanelMediator( body.helpPanel ) );
 			
-			facade.registerMediator( new TypesAccordionMediator( body.typesAccordion ) );
+			facade.registerMediator( new TypesAccordionMediator( body.toolbox ) );
 			facade.registerMediator( new ObjectsTreePanelMediator( body.objectsTreePanel ) );
 			facade.registerMediator( new ObjectAttributesPanelMediator( body.objectAttributesPanel ) );
 			facade.registerMediator( new WorkAreaMediator( body.workArea ) );

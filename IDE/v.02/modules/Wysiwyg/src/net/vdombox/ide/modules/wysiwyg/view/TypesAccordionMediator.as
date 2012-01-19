@@ -10,9 +10,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.TypeItemRendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.UserTypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypesCategory;
+	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ToolBoxPanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -35,14 +38,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private var sessionProxy : SessionProxy;
 		private var typesProxy : TypesProxy;
-		
-		private var categories : Array = [];
+		private var userTypesProxy : UserTypesProxy;
 
 		private var isActive : Boolean;
 		
+		public function get toolboxPanel() : ToolBoxPanel
+		{
+			return viewComponent as ToolBoxPanel;
+		}
+		
 		public function get typesAccordion() : Accordion
 		{
-			return viewComponent as Accordion;
+			return toolboxPanel.typesAccordion;
 		}
 
 		override public function onRegister() : void
@@ -51,6 +58,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
+			userTypesProxy = facade.retrieveProxy( UserTypesProxy.NAME) as UserTypesProxy;
 			
 			addHandlers();
 		}
@@ -59,7 +67,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			removeHandlers();
 			
-			clearData();
+			toolboxPanel.clearData();
 		}
 
 		override public function listNotificationInterests() : Array
@@ -88,7 +96,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					{
 						isActive = true;
 						
-						showTypes();
+						toolboxPanel.userTypes = userTypesProxy.getTypes();
+						toolboxPanel.types = typesProxy.types;
 						
 						break;
 					}
@@ -98,7 +107,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					isActive = false;
 					
-					clearData();
+					toolboxPanel.clearData();
 					
 					break;
 				}
@@ -108,73 +117,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function addHandlers() : void
 		{
 			
-			typesAccordion.addEventListener( FlexEvent.DATA_CHANGE, typeRendererCreatedHandler, true, 0, false );
-//			typesAccordion.addEventListener( "TypeRendererCreated", typeRendererCreatedHandler, true, 0, false );
+			typesAccordion.addEventListener( FlexEvent.DATA_CHANGE, typeRendererCreatedHandler, true );
+			typesAccordion.addEventListener( TypeItemRendererEvent.ADD_IN_USER_CATIGORY, addInUserCategory, true );
+			typesAccordion.addEventListener( TypeItemRendererEvent.DELET_IN_USER_CATIGORY, delFromUserCategory, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			typesAccordion.removeEventListener( FlexEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
-//			typesAccordion.removeEventListener( "TypeRendererCreated", typeRendererCreatedHandler, true );
-		}
-
-		private function clearData() : void
-		{
-			typesAccordion.removeAllChildren();
-			categories = [];
-		}
-		
-		private function showTypes() : void
-		{
-			var types : Array = typesProxy.types;
-			
-			var type : TypeVO;
-			var category : TypesCategory;
-			
-			var label : Label;
-			
-			for ( var i : int = 0; i < types.length; i++ )
-			{
-				type = types[ i ] as TypeVO;
-				
-				category = insertCategory( type.category );
-				
-				category.addType( type );
-			}
-			
-		}
-		
-		private function insertCategory( categoryName : String ) : TypesCategory
-		{
-			var currentCategory : TypesCategory;
-
-			if ( !categories[ categoryName ] )
-			{
-				currentCategory = new TypesCategory();
-
-				categories[ categoryName ] = currentCategory;
-
-				currentCategory.label = categoryName;
-				
-				var childArray : Array = typesAccordion.getChildren();
-				var k:int = 0;
-				
-				for ( ; k < childArray.length;k++ )
-				{
-					if( categoryName < childArray[k].label )
-						break;
-				}
-				if (k >= childArray.length)
-					typesAccordion.addChild(currentCategory);
-				else
-					typesAccordion.addChildAt(currentCategory, k);
-			}
-			else
-			{
-				currentCategory = categories[ categoryName ];
-			}
-
-			return currentCategory;
+			typesAccordion.removeEventListener( TypeItemRendererEvent.ADD_IN_USER_CATIGORY, addInUserCategory, true );
+			typesAccordion.removeEventListener( TypeItemRendererEvent.DELET_IN_USER_CATIGORY, delFromUserCategory, true );
 		}
 
 		private function typeRendererCreatedHandler( event : FlexEvent ) : void
@@ -189,6 +141,28 @@ package net.vdombox.ide.modules.wysiwyg.view
 			typeItemRenderer.resourceVO = resourceVO;
 
 			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+		}
+		
+		private function addInUserCategory( event : TypeItemRendererEvent ) : void
+		{
+			var typeRenderer : TypeItemRenderer = event.target as TypeItemRenderer;
+			if ( !typeRenderer )
+				return;
+			
+			userTypesProxy.addTypeId( typeRenderer.typeVO.id );
+			
+			toolboxPanel.updateUserCategory();
+		}
+		
+		private function delFromUserCategory( event : TypeItemRendererEvent ) : void
+		{
+			var typeRenderer : TypeItemRenderer = event.target as TypeItemRenderer;
+			if ( !typeRenderer )
+				return;
+			
+			userTypesProxy.removeTypeId( typeRenderer.typeVO.id );
+			
+			toolboxPanel.updateUserCategory();
 		}
 	}
 }

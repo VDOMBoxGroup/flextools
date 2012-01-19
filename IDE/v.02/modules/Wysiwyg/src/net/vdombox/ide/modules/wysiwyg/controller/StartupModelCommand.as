@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SettingsApplicationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SettingsProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.UserTypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.VisibleRendererProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -22,6 +23,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new RenderProxy() );
 			facade.registerProxy( new ResourcesProxy() );
+			facade.registerProxy( new UserTypesProxy() );
 		}
 	}
 }
