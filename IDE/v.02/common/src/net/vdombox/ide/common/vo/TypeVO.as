@@ -100,6 +100,8 @@ package net.vdombox.ide.common.vo
 		private var _actions : Array = [];
 
 		private var informationPropertyObject : Object = {};
+		
+		public var includedInUserCategory : Boolean = false;
 
 		public function get information() : TypeInformationVO
 		{

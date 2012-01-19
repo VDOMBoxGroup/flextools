@@ -2,14 +2,50 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/mx"
-		maxWidth="338" xmlns:components="net.vdombox.components.*">
+		maxWidth="338" xmlns:components="net.vdombox.components.*"
+		creationComplete="sparkskin2_creationCompleteHandler(event)"
+		removedFromStage="sparkskin2_removedFromStageHandler(event)">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.view.Alert")]
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
+			import flash.desktop.NativeApplication;
+			
+			import mx.events.FlexEvent;
+			
 			import net.vdombox.view.Alert;
+			
+			protected function sparkskin1_keyDownHandler(event:KeyboardEvent):void
+			{
+				if ( event.keyCode == Keyboard.LEFT || event.keyCode == Keyboard.RIGHT || event.keyCode == Keyboard.TAB )
+				{
+					noButton.select = !noButton.select;
+					yesButton.select = !yesButton.select;
+				}
+				else if ( event.keyCode == Keyboard.ENTER )
+				{
+					if ( noButton.select )
+						hostComponent.btnClickHandler(Alert.NO);
+					else
+						hostComponent.btnClickHandler(Alert.YES);
+				}
+				else if ( event.keyCode == Keyboard.ESCAPE )
+					hostComponent.btnClickHandler(Alert.NO);
+				
+			}
+			
+			protected function sparkskin2_creationCompleteHandler(event:FlexEvent):void
+			{
+				NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_DOWN, sparkskin1_keyDownHandler, true, 0 , true );
+			}
+			
+			protected function sparkskin2_removedFromStageHandler(event:Event):void
+			{
+				NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, sparkskin1_keyDownHandler, true );
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -42,13 +78,13 @@
 					 fontSize="16" color="#FFFFFF" text="{hostComponent.text}"/>
 			
 			<s:HGroup height="29" width="100%" horizontalAlign="center" gap="40">
-				<components:VDOMButton  id="noButton" tabIndex="1"
+				<components:VDOMButton  id="noButton" tabIndex="-1" select="true"
 							label="{hostComponent.getNoLabel()}"
 							visible="{hostComponent.getVisibleNoButton()}" includeInLayout="{hostComponent.getVisibleNoButton()}"
-							click="hostComponent.btnClickHandler(Alert.NO)" keyDown="hostComponent.keyNoPush(event)"/>
-				<components:VDOMButton  id="yesButton" tabIndex="2"
+							click="hostComponent.btnClickHandler(Alert.NO)" keyDown="hostComponent.keyNoPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
+				<components:VDOMButton  id="yesButton" tabIndex="-1"
 							icon="@Embed('net/vdombox/icons/Cancel.png')" label="{hostComponent.getYesLabel()}"
-							click="hostComponent.btnClickHandler(Alert.YES)" keyDown="hostComponent.keyYesPush(event)"/>
+							click="hostComponent.btnClickHandler(Alert.YES)" keyDown="hostComponent.keyYesPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
 			</s:HGroup>
 		</s:VGroup>
 		

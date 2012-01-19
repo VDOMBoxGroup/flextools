@@ -68,7 +68,7 @@
 	
 	<!-- layer 1: shadow -->
 	<!--- @private -->
-	<s:Rect id="shadow" left="-1" right="-1" top="-1" bottom="-1" radiusX="2">
+	<s:Rect id="shadow" visible="{!hostComponent.select}" left="-1" right="-1" top="-1" bottom="-1" radiusX="2">
 		<s:fill>
 			<s:LinearGradient rotation="90">
 				<s:GradientEntry color="0x000000" 
@@ -80,6 +80,12 @@
 								 alpha="0.07"
 								 alpha.down="0.5" />
 			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Rect id="shadow2" visible="{hostComponent.select}" left="-1" right="-1" top="-1" bottom="-1" radiusX="15">
+		<s:fill>
+			<s:SolidColor color="#6398C8"/>
 		</s:fill>
 	</s:Rect>
 	

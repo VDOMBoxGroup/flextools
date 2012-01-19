@@ -1,7 +1,9 @@
 package net.vdombox.components
 {
+	import flash.events.KeyboardEvent;
+	
 	import net.vdombox.view.skins.VDOMButtonSkin;
-
+	
 	import spark.components.Button;
 
 	public class VDOMButton extends Button
@@ -17,6 +19,19 @@ package net.vdombox.components
 		}
 
 		private var _icon : Object;
+		
+		private var _select : Boolean = false;
+
+		[Bindable]
+		public function get select():Boolean
+		{
+			return _select;
+		}
+
+		public function set select(value:Boolean):void
+		{
+			_select = value;
+		}
 
 		override public function stylesInitialized() : void
 		{
