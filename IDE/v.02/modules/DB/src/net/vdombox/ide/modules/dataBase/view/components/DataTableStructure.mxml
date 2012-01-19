@@ -157,13 +157,17 @@
 					}
 				}
 				
-				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
-				queue.execute();
+				if ( queue.length > 0 )
+				{
 				
-				currentState = "Progress";
+					queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
+					queue.execute();
 				
-				deleteCol.enabled = true;
-				commitLabel.text = "";
+					currentState = "Progress";
+				
+					deleteCol.enabled = true;
+					commitLabel.text = "";
+				}
 			}
 			
 			private function queueCommitCompleteHandler( event : QueueEvent ) : void 
@@ -276,6 +280,11 @@
 				queue.execute();
 			}
 			
+			protected function dataTable_doubleClickHandler(event:MouseEvent):void
+			{
+				addBtnHandler();
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -293,7 +302,7 @@
 		
 			<mx:DataGrid id="dataTable" width="100%" height="100%" dataProvider="{columnsProvider}" draggableColumns="false"
 					 	sortableColumns="false" editable="true" change="dataTable_changeHandler(event)"
-						alpha.Result="1" alpha.Progress="0.4">
+						alpha.Result="1" alpha.Progress="0.4" doubleClickEnabled="true" doubleClick="dataTable_doubleClickHandler(event)">
 				<mx:columns>
 					<mx:DataGridColumn dataField="name" headerText="Name"/>
 				

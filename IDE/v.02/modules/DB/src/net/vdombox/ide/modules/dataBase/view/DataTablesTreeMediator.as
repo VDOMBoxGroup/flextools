@@ -152,7 +152,7 @@ package net.vdombox.ide.modules.dataBase.view
 						return;
 					}
 					
-					if ( sessionProxy.selectedTable )
+					if ( sessionProxy.selectedTable && _dataBases[ sessionProxy.selectedBase.id ] )
 						sendNotification( ApplicationFacade.GET_TABLE, { pageVO: _dataBases[ sessionProxy.selectedBase.id ], objectID: sessionProxy.selectedTable.id } );
 					else if ( dataTablesTree.selectedPageID )
 						sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : sessionProxy.selectedApplication, pageID : dataTablesTree.selectedPageID } );
