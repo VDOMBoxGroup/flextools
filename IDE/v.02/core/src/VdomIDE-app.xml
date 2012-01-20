@@ -27,7 +27,7 @@
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
 	
 
-	<version>2.1.62.7648</version>
+	<version>2.1.71.7681</version>
 
 	<!-- versionNumber>2.0.2</versionNumber-->
 
@@ -48,7 +48,7 @@
 		<content>[Это значение будет перезаписано программой Flash Builder в выходном файле app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
-		 <title>Vdom IDE.v.2.1.62.7648</title> 
+		 <title>Vdom IDE.v.2.1.71.7681</title> 
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
 		<!-- <systemChrome></systemChrome> -->
