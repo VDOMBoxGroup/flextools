@@ -5,8 +5,8 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.events.ItemRendererEvent;
-	import net.vdombox.ide.modules.tree.view.components.PageTypeItemRenderer;
+	import net.vdombox.ide.common.events.ItemRendererEvent;
+	import net.vdombox.ide.common.components.PageTypeItemRenderer;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

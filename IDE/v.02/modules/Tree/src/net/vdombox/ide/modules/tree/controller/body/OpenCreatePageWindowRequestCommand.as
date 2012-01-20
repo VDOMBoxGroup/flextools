@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.tree.controller.body
 	
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.view.CreatePageWindowMediator;
-	import net.vdombox.ide.modules.tree.view.components.CreatePageWindow;
+	import net.vdombox.ide.common.components.CreatePageWindow;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

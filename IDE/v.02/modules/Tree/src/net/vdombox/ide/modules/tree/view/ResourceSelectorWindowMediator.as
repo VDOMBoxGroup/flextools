@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.tree.view
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.events.WindowEvent;
+	import net.vdombox.ide.common.events.WindowEvent;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelector;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelectorWindow;

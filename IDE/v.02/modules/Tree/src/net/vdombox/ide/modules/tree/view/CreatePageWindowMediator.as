@@ -7,9 +7,9 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.vo.AttributeDescriptionVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.events.ItemRendererEvent;
-	import net.vdombox.ide.modules.tree.events.WindowEvent;
-	import net.vdombox.ide.modules.tree.view.components.CreatePageWindow;
+	import net.vdombox.ide.common.events.ItemRendererEvent;
+	import net.vdombox.ide.common.events.WindowEvent;
+	import net.vdombox.ide.common.components.CreatePageWindow;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
