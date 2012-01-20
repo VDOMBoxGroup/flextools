@@ -246,7 +246,7 @@
 			{
 				var item : TypeVO;
 				
-				var newItem : ContextMenuItem = new ContextMenuItem("New");
+				var newItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'DataBase_General', "data_table_tree_new_context" ));
 				
 				var newMenu : NativeMenu = new NativeMenu();
 				
