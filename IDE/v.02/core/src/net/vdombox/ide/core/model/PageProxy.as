@@ -171,8 +171,8 @@ package net.vdombox.ide.core.model
 			
 			var sourceInfo : Array = sourceID.split( " " );
 			
-			var sourceAppId : String = sourceInfo[0] as String;
-			var sourceObjId : String = sourceInfo[1] as String;
+			var sourceAppId : String = sourceInfo[1] as String;
+			var sourceObjId : String = sourceInfo[2] as String;
 			
 			if ( pageVO.applicationVO.id == sourceAppId )
 					token = soap.copy_object(pageVO.applicationVO.id, pageVO.id, sourceObjId, null );
