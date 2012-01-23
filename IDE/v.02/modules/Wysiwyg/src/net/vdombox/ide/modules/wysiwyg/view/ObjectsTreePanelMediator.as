@@ -101,6 +101,34 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			return sessionProxy.selectedPage ? sessionProxy.selectedPage.id : null;
 		}
+		
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.BODY_START );
+			interests.push( ApplicationFacade.BODY_STOP );
+			
+			interests.push( ApplicationFacade.PAGES_GETTED );
+			interests.push( ApplicationFacade.PAGE_STRUCTURE_GETTED );
+			
+			interests.push( ApplicationFacade.MODULE_DESELECTED );
+			
+			interests.push( ApplicationFacade.OBJECT_GETTED );
+			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
+			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			
+			interests.push( ApplicationFacade.PAGE_NAME_SETTED );
+			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
+			
+			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
+			
+			interests.push( ApplicationFacade.PAGE_DELETED );
+			interests.push( ApplicationFacade.PAGE_CREATED);
+			
+			return interests;
+		}
+
 
 		override public function handleNotification( notification : INotification ) : void
 		{
@@ -239,34 +267,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}	
 					
+				case ApplicationFacade.PAGE_DELETED:
+				{
+					sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
+						
+					break;
+				}
+					
+				case ApplicationFacade.PAGE_CREATED:
+				{
+					sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
+					
+					break;
+				}
+					
 			}
 		}
-		
-
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
-
-			interests.push( ApplicationFacade.PAGES_GETTED );
-			interests.push( ApplicationFacade.PAGE_STRUCTURE_GETTED );
-
-			interests.push( ApplicationFacade.MODULE_DESELECTED );
-
-			interests.push( ApplicationFacade.OBJECT_GETTED );
-			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
-			
-			interests.push( ApplicationFacade.PAGE_NAME_SETTED );
-			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
-			
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
-
-			return interests;
-		}
-
 		/**
 		 * 
 		 * @return 
@@ -305,6 +321,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler, false, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.OPEN, openHandler, false, 0, true );
 			objectsTreePanel.addEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
+			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CREATE_NEW_CLICK, createNewPage, false, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.COPY, copyItemRendererHandler, true, 0, true );
@@ -318,18 +335,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			var objectID : String = event.objectID;
 			var pageID : String = event.pageID;
-			if ( pageID && objectID )
-			{
-				Alert.noLabel = "Cancel";
-				Alert.yesLabel = "Delete";
+
+			Alert.noLabel = "Cancel";
+			Alert.yesLabel = "Delete";
 				
-				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + "?",AlertButton.OK_No, objectsTreePanel.parentApplication, closeHandler);
-			}
+			Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + "?",AlertButton.OK_No, objectsTreePanel.parentApplication, closeHandler);
 			
 			function closeHandler( event : CloseEvent ) : void
 			{
 				if (event.detail == Alert.YES)
-					sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: renderProxy.getRendererByID( pageID ).renderVO.vdomObjectVO, objectVO: renderProxy.getRendererByID( objectID ).renderVO.vdomObjectVO } );
+				{
+					if ( pageID )
+						sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: renderProxy.getRendererByID( pageID ).renderVO.vdomObjectVO, objectVO: renderProxy.getRendererByID( objectID ).renderVO.vdomObjectVO } );
+					else
+						sendNotification( ApplicationFacade.DELETE_PAGE, { applicationVO: sessionProxy.selectedApplication, pageVO: _pages[objectID] } );
+				}
 			}
 		}
 		
@@ -431,6 +451,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.OPEN, openHandler );
 			objectsTreePanel.removeEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
+			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CREATE_NEW_CLICK, createNewPage );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.COPY, copyItemRendererHandler, true );
@@ -439,7 +460,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function copyItemRendererHandler( event : ObjectsTreePanelEvent ) : void
 		{
-			sourceID = sessionProxy.selectedApplication.id + " " + event.objectID + " ";
+			sourceID = "Vlt+VDOMIDE2+ " + sessionProxy.selectedApplication.id + " " + event.objectID + " ";
 			
 			if ( !event.pageID )
 				sourceID += "1";
@@ -458,9 +479,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			var sourceInfo : Array = sourceID.split( " " );
 			
-			var sourceAppId : String = sourceInfo[0] as String;
-			var sourceObjId : String = sourceInfo[1] as String;
-			var typeObject : String = sourceInfo[2] as String;
+			var sourceAppId : String = sourceInfo[1] as String;
+			var sourceObjId : String = sourceInfo[2] as String;
+			var typeObject : String = sourceInfo[3] as String;
 			
 			if ( !sourceID || !containerID )
 				return;
@@ -474,6 +495,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 				var rendererBase : RendererBase =  renderProxy.getRendererByID( containerID );
 				sendNotification( ApplicationFacade.COPY_REQUEST, {  objectVO : rendererBase.vdomObjectVO, sourceID : sourceID } );
 			}
+		}
+		
+		private function createNewPage( event : ObjectsTreePanelEvent ) : void
+		{
+			sendNotification( ApplicationFacade.OPEN_CREATE_PAGE_WINDOW_REQUEST );
 		}
 
 		private function selectCurrentPage( needGetPageStructure : Boolean = true ) : void

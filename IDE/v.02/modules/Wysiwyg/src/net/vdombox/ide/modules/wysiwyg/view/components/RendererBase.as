@@ -20,10 +20,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.events.IOErrorEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
+	import flash.utils.Timer;
 	
 	import flashx.textLayout.factory.TruncationOptions;
 	
@@ -64,6 +66,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.view.components.controls.ToolbarButton;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
 	
+	import org.osmf.events.TimeEvent;
+	
 	import spark.components.Application;
 	import spark.components.Button;
 	import spark.components.Group;
@@ -101,7 +105,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			ToolTip.maxWidth = 180;
 
 			addHandlers();
+			
+			/*var timer : Timer = new Timer( 1000, 1000 );
+			timer.addEventListener(TimerEvent.TIMER, settimerFun, false, 0 ,true );
+			timer.start();*/
 		}
+		
+		/*private function settimerFun( event : TimerEvent ) : void
+		{
+			trace( name );
+		}*/
 
 		[SkinPart( required = "true" )]
 		/**
@@ -536,7 +549,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		protected function removeHandlers() : void
 		{
 			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-			removeEventListener( Event.REMOVED, removeHandler );
+			removeEventListener( Event.REMOVED_FROM_STAGE, removeHandler );
 
 			removeEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
 			removeEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
@@ -1578,6 +1591,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( event.target == this )
 			{
 				//TODO: check who is lissener
+				trace("Remove From Stage - " + name);
 				dispatchEvent( new RendererEvent( RendererEvent.REMOVED ) );
 				removeHandlers();
 			}

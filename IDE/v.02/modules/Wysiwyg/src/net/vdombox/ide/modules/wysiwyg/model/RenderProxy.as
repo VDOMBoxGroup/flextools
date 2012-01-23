@@ -192,7 +192,10 @@ package net.vdombox.ide.modules.wysiwyg.model
 				var index : int = renderersIndex[ renderVO.vdomObjectVO.id ].indexOf( renderer );
 
 				if ( index != -1 )
+				{
 					renderersIndex[ renderVO.vdomObjectVO.id ].splice( index, 1 );
+					trace("Delete");
+				}
 			}
 
 			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGED, renderer_renderchangedHandler );

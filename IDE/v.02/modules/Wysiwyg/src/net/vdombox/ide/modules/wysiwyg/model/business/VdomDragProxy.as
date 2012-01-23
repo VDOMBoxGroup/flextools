@@ -229,6 +229,8 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			var dragEvent : DragEvent;
 			var dropTarget : DisplayObject;
 			var i : int;
+			
+			trace("Drag");
 
 			lastMouseEvent = event;
 

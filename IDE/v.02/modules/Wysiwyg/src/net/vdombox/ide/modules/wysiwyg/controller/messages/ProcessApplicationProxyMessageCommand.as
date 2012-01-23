@@ -40,6 +40,16 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					break;
 				}
 					
+				case PPMApplicationTargetNames.PAGE:
+				{
+					if ( operation == PPMOperationNames.CREATE )
+						sendNotification( ApplicationFacade.PAGE_CREATED, body );
+					else if ( operation == PPMOperationNames.DELETE )
+						sendNotification( ApplicationFacade.PAGE_DELETED, body );
+					
+					break;
+				}
+					
 				case PPMApplicationTargetNames.COPY:
 				{
 					sendNotification( ApplicationFacade.GET_PAGES, body );

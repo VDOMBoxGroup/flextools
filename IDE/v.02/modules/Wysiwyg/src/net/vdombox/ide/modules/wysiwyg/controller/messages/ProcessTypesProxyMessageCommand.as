@@ -47,6 +47,13 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					
 					break;
 				}
+					
+				case PPMTypesTargetNames.TOP_LEVEL_TYPES:
+				{
+					sendNotification( ApplicationFacade.TOP_LEVEL_TYPES_GETTED, body );
+					
+					break;
+				}
 			}
 		}
 	}

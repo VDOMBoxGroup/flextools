@@ -541,7 +541,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( EditorEvent.RENDERER_TRANSFORMED, rendererTransformedHandler, false, 0, true );
 
 			editor.addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
-			editor.addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0, true );
+			editor.addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0 , true );
 			editor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
 
 			editor.addEventListener( RendererEvent.GET_RESOURCE, renderer_getResourseHandler, true, 0, true );
@@ -686,6 +686,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function removedFromStageHandler( event : Event ) : void
 		{
+			//for each( var render : RenderVO in editor.editorVO.renderVO.children )
+			//editor.editorVO.renderVO.children.splice(); 
 			facade.removeMediator( mediatorName );
 			delete instancesNameList[ mediatorName ];
 		}

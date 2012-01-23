@@ -16,6 +16,9 @@
 
 	<fx:Script>
 		<![CDATA[
+			import flash.desktop.Clipboard;
+			import flash.desktop.ClipboardFormats;
+			
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.XMLListCollection;
 			import mx.controls.Tree;
@@ -56,10 +59,7 @@
 				_data = value as XML;
 				
 				if ( _data )
-				{
-					_contextMenu.removeAllItems();
 					createContextMenu();
-				}
 			}
 			
 			
@@ -134,6 +134,8 @@
 			
 			private function createContextMenu() : void
 			{
+				_contextMenu.removeAllItems();
+				
 				var copyItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_copy' ));
 				copyItem.addEventListener( Event.SELECT, copyContextMenuHandler, false, 0, true );
 				_contextMenu.addItem( copyItem );
@@ -142,12 +144,16 @@
 				pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
 				_contextMenu.addItem( pasteItem );
 				
-				if ( _data.name().localName != "page" )
+				var bufferContent : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
+				
+				if ( bufferContent && ( bufferContent.slice(0, 13) != "Vlt+VDOMIDE2+" || bufferContent.split(' ').length != 4 ) )
 				{
-					var deleteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_delete' ));
-					deleteItem.addEventListener( Event.SELECT, deleteContextMenuHandler, false, 0, true );
-					_contextMenu.addItem( deleteItem );
+					pasteItem.enabled = false;
 				}
+				
+				var deleteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_delete' ));
+				deleteItem.addEventListener( Event.SELECT, deleteContextMenuHandler, false, 0, true );
+				_contextMenu.addItem( deleteItem );
 			}
 
 			private function dataLoaded( object : Object = null ) : void
@@ -198,6 +204,7 @@
 			
 			protected function mxtreeitemrenderer1_contextMenuHandler(event:MouseEvent):void
 			{
+				createContextMenu();
 				_contextMenu.display( this.stage, event.stageX, event.stageY );
 			}
 			

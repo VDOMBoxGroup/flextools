@@ -15,6 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
@@ -43,6 +44,27 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var isActive : Boolean;
 
 		private var sessionProxy : SessionProxy;
+		
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.BODY_START );
+			interests.push( ApplicationFacade.BODY_STOP );
+			
+			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			
+			interests.push( ApplicationFacade.OPEN_PAGE_REQUEST );
+			interests.push( ApplicationFacade.OPEN_OBJECT_REQUEST );
+			
+			interests.push( ApplicationFacade.PAGE_NAME_SETTED);
+			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED);
+			
+			interests.push( ApplicationFacade.PAGE_DELETED);
+			interests.push( ApplicationFacade.PAGE_CREATED);
+			
+			return interests;
+		}
 
 		override public function handleNotification( notification : INotification ) : void
 		{
@@ -124,33 +146,34 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					break;
 				}
+					
 				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
 				{
 					workArea.closeAllEditors();
 					
 					break
 				}
+					
+				case ApplicationFacade.PAGE_DELETED:
+				{
+					workArea.closeEditor( body.pageVO as PageVO );;
+					
+					break
+				}
+					
+				case ApplicationFacade.PAGE_CREATED:
+				{
+					vdomObjectVO = body.pageVO as IVDOMObjectVO;
+					
+					if ( vdomObjectVO )
+						editor = workArea.openEditor( vdomObjectVO );
+					
+					break;
+					
+					break
+				}
 			}
 		}
-
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
-
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
-
-			interests.push( ApplicationFacade.OPEN_PAGE_REQUEST );
-			interests.push( ApplicationFacade.OPEN_OBJECT_REQUEST );
-			
-			interests.push( ApplicationFacade.PAGE_NAME_SETTED);
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED);
-
-			return interests;
-		}
-
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
@@ -187,11 +210,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			workArea.addEventListener( EditorEvent.PREINITIALIZED, editor_preinitializedHandler, true, 0, true );
 			workArea.addEventListener( EditorEvent.REMOVED, editor_removedHandler, true, 0, true );
+			//workArea.addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true );
 		}
 
 		private function addedToStageHandler( event : Event ) : void
 		{
 
+		}
+		
+		private function renderer_removedHandler( event : RendererEvent ) : void
+		{
+			sendNotification( ApplicationFacade.RENDERER_REMOVED, event.target as IRenderer );
 		}
 
 		private function changeHandler( event : WorkAreaEvent ) : void
@@ -236,6 +265,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			workArea.removeEventListener( EditorEvent.PREINITIALIZED, editor_preinitializedHandler, true );
 			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
+			//workArea.removeEventListener( RendererEvent.REMOVED, renderer_removedHandler, true );
 		}
 
 		private function removedFromStageHandler( event : Event ) : void

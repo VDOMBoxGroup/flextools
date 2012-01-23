@@ -38,7 +38,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 		
 		public function removeTypeId( typeId : String ) : void
 		{
-			sharedObject.data[typeId] = "";
+			delete sharedObject.data[typeId];
 		}
 		
 		

@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateLineLinkingCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateObjectRequestCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.CreatePageRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.EditorCreatedCommand;
@@ -17,7 +18,9 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ObjectVisibleCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.OpenCreatePageWindowRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenExternalEditorRequestCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.PageTypeItemRendererCreatedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererClickedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererCreatedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererRemovedCommand;
@@ -133,6 +136,16 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const PAGES_GETTED : String = "pagesGetted";
 		public static const GET_PAGE_SRUCTURE : String = "getPageStructure";
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
+		
+		public static const GET_TOP_LEVEL_TYPES : String = "getTopLevelTypes";
+		public static const TOP_LEVEL_TYPES_GETTED : String = "topLevelTypesGetted";
+		
+		public static const DELETE_PAGE : String = "deletePage";
+		public static const PAGE_DELETED : String = "pageDeleted";
+		
+		public static const CREATE_PAGE_REQUEST : String = "createPageRequest";
+		public static const CREATE_PAGE : String = "createPage";
+		public static const PAGE_CREATED : String = "pageCreated";
 
 //		objects
 		public static const GET_OBJECT : String = "getObject";
@@ -207,6 +220,9 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
 		
 		public static const LINE_LIST_GETTED : String = "lineListGetted";
+		
+		public static const OPEN_CREATE_PAGE_WINDOW_REQUEST : String = "openCreatePageWindowRequest";
+		public static const PAGE_TYPE_ITEM_RENDERER_CREATED : String = "pageTypeItemRendererCreated";
 		
 		
 // Copy
@@ -294,6 +310,11 @@ package net.vdombox.ide.modules.wysiwyg
 			
 			registerCommand( PAGE_STRUCTURE_GETTED, SetToolTipCommand );
 			registerCommand( OBJECT_NAME_SETTED, SetNewNameObjectCommand );
+			
+			registerCommand( OPEN_CREATE_PAGE_WINDOW_REQUEST, OpenCreatePageWindowRequestCommand );
+			registerCommand( PAGE_TYPE_ITEM_RENDERER_CREATED, PageTypeItemRendererCreatedCommand );
+			
+			registerCommand( CREATE_PAGE_REQUEST, CreatePageRequestCommand );
 			
 		}
 	}
