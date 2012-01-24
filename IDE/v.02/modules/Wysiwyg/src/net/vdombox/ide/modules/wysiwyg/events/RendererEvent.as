@@ -31,6 +31,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var CLEAR_RENDERER : String = "clearRenderer";
 		
 		public static var HTML_ADDED	: String = "rendererHTMLAdded";
+		
+		public static var PASTE_SELECTED	: String = "pasteSelected";
 
 		public var object : Object;
 		

@@ -105,13 +105,13 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			if ( component is TransformMarker )
 			{
 				marker = component as TransformMarker;
-				equallyXFlag = marker.equallyWidth( component.measuredWidth );
+				/*equallyXFlag = marker.equallyWidth( component.measuredWidth );
 				if ( equallyXFlag )
-					minEpsX2 = 0;
+					minEpsX2 = 100;
 				
 				equallyYFlag = marker.equallyHeight( component.measuredHeight );
 				if ( equallyYFlag )
-					minEpsY2 = 0;
+					minEpsY2 = 100;*/
 			}
 			
 				
@@ -336,7 +336,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 							lines.push( line );
 							if ( Math.abs( minEpsX) > Math.abs( k ) )
 								minEpsX = -k;
-							if ( Math.abs( minEpsX2) > Math.abs( k ) && k != 0 )
+							if ( Math.abs( minEpsX2) > Math.abs( k ) && k != 0 && line.type == 0 )
 								minEpsX2 = -k;
 							break;
 						}
@@ -449,7 +449,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 							lines.push( line );
 							if ( Math.abs( minEpsY) > Math.abs( k ) )
 								minEpsY = -k;
-							if ( Math.abs( minEpsY2) > Math.abs( k ) && k != 0 )
+							if ( Math.abs( minEpsY2) > Math.abs( k ) && k != 0 && line.type == 0)
 								minEpsY2 = -k;
 							break;
 						}

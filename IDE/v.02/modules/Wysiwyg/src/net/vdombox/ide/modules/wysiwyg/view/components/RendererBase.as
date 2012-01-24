@@ -10,6 +10,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
 	
+	import flash.desktop.Clipboard;
+	import flash.desktop.ClipboardFormats;
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -56,6 +58,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
+	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
@@ -1355,6 +1359,31 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				if ( event.keyCode == Keyboard.DELETE )
 					dispatchEvent( new KeyboardEvent( "deleteObjectOnScreen" ) );
+				else if ( event.ctrlKey )
+				{
+					var sourceID : String;
+					if ( event.keyCode == Keyboard.C )
+					{
+						
+						if ( renderVO && renderVO.vdomObjectVO is ObjectVO )
+						{
+							var obj : ObjectVO = renderVO.vdomObjectVO as ObjectVO;
+							sourceID = "Vlt+VDOMIDE2+ " + obj.pageVO.applicationVO.id  + " " + obj.id + " 0";
+						}
+						else if ( renderVO && renderVO.vdomObjectVO is PageVO )
+						{
+							var pg : PageVO = renderVO.vdomObjectVO as PageVO;
+							sourceID = "Vlt+VDOMIDE2+ " + pg.applicationVO.id  + " " + pg.id + " 1";
+						}
+						
+						Clipboard.generalClipboard.setData( ClipboardFormats.TEXT_FORMAT, sourceID );
+					}
+					else if ( event.keyCode == Keyboard.V )
+					{
+						dispatchEvent( new RendererEvent( RendererEvent.PASTE_SELECTED ) );
+					}
+					
+				}
 				return;
 			}
 

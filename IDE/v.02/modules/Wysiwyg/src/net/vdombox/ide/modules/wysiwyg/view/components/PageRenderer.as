@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.PageRendererSkin;
 	
+	import spark.components.DataGroup;
 	import spark.components.Group;
 
 	public class PageRenderer extends RendererBase

@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.desktop.Clipboard;
+	import flash.desktop.ClipboardFormats;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -328,7 +330,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					element.y -= stepY;
 				}
 				
-				/*var marker : TransformMarker = element as TransformMarker;
+				//var marker : TransformMarker = element as TransformMarker;
 				var rend : RendererBase;
 				var point : Point = new Point( element.x, element.y );
 				if ( marker.renderer.renderVO.parent )
@@ -368,11 +370,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 					}
 					else
 					{
-						var _renderer : RendererBase = marker.renderer as RendererBase;
-						_renderer.x -= stepX;
-						_renderer.y -= stepY;
+						var _renderer2 : RendererBase = marker.renderer as RendererBase;
+						_renderer2.x -= stepX;
+						_renderer2.y -= stepY;
 					}
-				}*/
+				}
 			}
 			else
 			{
@@ -390,8 +392,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 				listStates.push( lineVO.renderTo );
 				if (lineVO.type == 0)
 				{
-					if ( element is TransformMarker && !(element as TransformMarker).equallySize( element.measuredWidth, element.measuredHeight ) && lineVO.eps != 0 )
-						continue;
+					/*if ( element is TransformMarker && !(element as TransformMarker).equallySize( element.measuredWidth, element.measuredHeight ) && lineVO.eps != 0 )
+						continue;*/
 					line = new Line();
 					if ( lineVO.orientationH )
 					{
@@ -411,7 +413,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 				else
 				{
-					if ( element is TransformMarker && !(element as TransformMarker).equallySize( element.measuredWidth, element.measuredHeight ) && lineVO.eps != 0 )
+					if ( element is TransformMarker )
 						continue;
 					if ( !lineVO.orientationH )
 					{
@@ -543,6 +545,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
 			editor.addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0 , true );
 			editor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
+			
+			editor.addEventListener( RendererEvent.PASTE_SELECTED, renderer_pasteHandler, true, 0, true );
 
 			editor.addEventListener( RendererEvent.GET_RESOURCE, renderer_getResourseHandler, true, 0, true );
 
@@ -587,6 +591,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.removeEventListener( RendererEvent.CREATED, renderer_createdHandler, true );
 			editor.removeEventListener( RendererEvent.REMOVED, renderer_removedHandler, true );
 			editor.removeEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true );
+			
+			editor.removeEventListener( RendererEvent.PASTE_SELECTED, renderer_pasteHandler, true );
 
 			editor.removeEventListener( RendererDropEvent.DROP, renderer_dropHandler, true );
 
@@ -740,6 +746,31 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			
 			sendNotification( ApplicationFacade.RENDERER_CLICKED, event.target as IRenderer );
+		}
+		
+		private function renderer_pasteHandler( event : RendererEvent ) : void
+		{
+			var rend : RendererBase = event.target as RendererBase;
+			
+			if ( !rend )
+				return;
+			
+			var sourceID : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
+			var sourceInfo : Array = sourceID.split( " " );
+			if ( sourceInfo.length != 4 || sourceInfo[0] != "Vlt+VDOMIDE2+" )
+				return;
+			
+			var sourceAppId : String = sourceInfo[1] as String;
+			var sourceObjId : String = sourceInfo[2] as String;
+			var typeObject : String = sourceInfo[3] as String;
+			
+			if ( typeObject == "1" )
+				sendNotification( ApplicationFacade.COPY_REQUEST, { applicationVO : sessionProxy.selectedApplication, sourceID : sourceID } );
+			else if ( rend.vdomObjectVO is PageVO )
+				sendNotification( ApplicationFacade.COPY_REQUEST, { pageVO : rend.vdomObjectVO, sourceID : sourceID } );
+			else if ( rend.vdomObjectVO is ObjectVO )
+				sendNotification( ApplicationFacade.COPY_REQUEST, {  objectVO : rend.vdomObjectVO, sourceID : sourceID } );
+			
 		}
 
 		private function renderer_getResourseHandler( event : RendererEvent ) : void
