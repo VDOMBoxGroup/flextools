@@ -1,5 +1,6 @@
 package net.vdombox.powerpack.lib.extendedapi.utils
 {
+	import flash.desktop.NativeApplication;
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -376,5 +377,18 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 		}
 		
 
+		public static function getApplicationVersion() : String
+		{
+			var appXML : XML = NativeApplication.nativeApplication.applicationDescriptor;
+			var ns : Namespace = appXML.namespace();
+			var str:String = ""; 
+			
+			str = appXML.ns::version;
+			if (!str)
+				str = appXML.ns::versionNumber;
+			
+			return str;
+		}
+		
 	}
 }
