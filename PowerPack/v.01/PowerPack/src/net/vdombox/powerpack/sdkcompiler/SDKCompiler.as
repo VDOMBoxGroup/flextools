@@ -25,13 +25,14 @@ package net.vdombox.powerpack.sdkcompiler
 		private var outputInstallerFileName : String;
 		private var installerApp : VDOMApplication;
 		
-		private var paramsChecker	: SDKCompilerParamsChecker = new SDKCompilerParamsChecker();;
+		private var sdk4_1Path : String;
 		
 		public function SDKCompiler()
 		{
 		}
 		
-		public function buildInstallerPackage(outputFolderPath : String, outputFileName : String, app : VDOMApplication) : void
+		public function buildInstallerPackage(outputFolderPath : String, outputFileName : String, 
+											  app : VDOMApplication, sdkPath : String) : void
 		{
 			var processEvent : SDKCompilerEvent;
 			
@@ -44,27 +45,9 @@ package net.vdombox.powerpack.sdkcompiler
 			outputInstallerFolderPath = outputFolderPath;
 			outputInstallerFileName = outputFileName;
 			installerApp = app;
-			
-			paramsChecker.addEventListener(SDKCompilerParamsChecker.PARAMS_OK, onParamsOK);
-			paramsChecker.addEventListener(SDKCompilerParamsChecker.PARAMS_ERROR, onParamsError);
-			
-			paramsChecker.checkParams(sdk4_1Path, powerPackProjectPath);
-		}
-		
-		private function onParamsOK(evt:Event):void
-		{
-			paramsChecker.removeEventListener(SDKCompilerParamsChecker.PARAMS_OK, onParamsOK);
-			paramsChecker.removeEventListener(SDKCompilerParamsChecker.PARAMS_ERROR, onParamsError);
+			sdk4_1Path = sdkPath;
 			
 			generateBuildingBatFiles();
-		}
-		
-		private function onParamsError(evt:Event):void
-		{
-			paramsChecker.removeEventListener(SDKCompilerParamsChecker.PARAMS_OK, onParamsOK);
-			paramsChecker.removeEventListener(SDKCompilerParamsChecker.PARAMS_ERROR, onParamsError);
-			
-			sendEvent(SDKCompilerEvent.SDK_COMPILER_ERROR, "Incorrect params");
 		}
 		
 		private function generateBuildingBatFiles () : void
@@ -183,11 +166,6 @@ package net.vdombox.powerpack.sdkcompiler
 		private function get powerPackProjectStoragePath () : String
 		{
 			return File.applicationStorageDirectory.nativePath;
-		}
-		
-		private function get sdk4_1Path () : String
-		{
-			return powerPackProjectPath + "/sdks/4.1.0";
 		}
 		
 		private function get sertificatePath () : String

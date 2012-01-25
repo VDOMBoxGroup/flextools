@@ -43,7 +43,6 @@ import net.vdombox.powerpack.managers.ProgressManager;
 import net.vdombox.powerpack.managers.SelectionManager;
 import net.vdombox.powerpack.panel.popup.AlertPopup;
 import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
-import net.vdombox.powerpack.sdkcompiler.SDKCompilerEvent;
 
 public class GraphCanvas extends Canvas implements IFocusManagerComponent
 {

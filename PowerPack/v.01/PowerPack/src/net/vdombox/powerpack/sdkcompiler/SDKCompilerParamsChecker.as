@@ -10,11 +10,6 @@ package net.vdombox.powerpack.sdkcompiler
 
 	public class SDKCompilerParamsChecker extends EventDispatcher
 	{
-		public static const PARAMS_OK		: String = "paramsOK";
-		public static const PARAMS_ERROR	: String = "paramsError";
-		
-		private var powerPackProjectPath	: String;
-		
 		private static const SDK_4_1_VERSION	: String = "4.1.0";
 		
 		private var fileStream : FileStream = new FileStream();
@@ -23,41 +18,56 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 		}
 		
-		// TODO: need add posible check by 1 param 
-		public function checkParams(_sdk4_1Path : String, 
-									_powerPackProjectPath : String) : void
+		public function isSDKPathValid(sdkFolderPath : String) : Boolean
 		{
+			if ( !sdkFolderPath)
+				return false;
 			
-			powerPackProjectPath = _powerPackProjectPath;
-			
-			checkSDKPath(_sdk4_1Path + "/flex-sdk-description.xml");
-		}
-		
-		private function onParamsCheckOK():void
-		{
-			dispatchEvent(new Event(PARAMS_OK));
-		}
-		
-		private function onParamsCheckError():void
-		{
-			// TODO: need error details
-			dispatchEvent(new Event(PARAMS_ERROR));
-		}
-		
-		private function checkSDKPath(descriptionXMLPath : String) : void
-		{
-			var descriptionFile : File = new File().resolvePath(descriptionXMLPath);
-			var sdkDescriptionXML : XML;
-			
-			if (!descriptionFile || !descriptionFile.exists)
+			try
 			{
-				onParamsCheckError();
-				return;
+				var sdkFolder : File = new File(sdkFolderPath);
 			}
+			catch (e:Error)
+			{
+				return false;
+			}
+			
+			if (!sdkFolderExists(sdkFolder))
+				return false;
+			
+			var sdkDescriptionFile : File = sdkFolder.resolvePath("flex-sdk-description.xml");
+			
+			return  sdkDescriptionFileExists(sdkDescriptionFile) &&
+					sdkDescriptionFileIsValid(sdkDescriptionFile);
+				
+		}
+		
+		private function sdkFolderExists(sdkFolder : File) : Boolean
+		{
+			return sdkFolder && sdkFolder.exists && sdkFolder.isDirectory;
+		}
+		
+		private function sdkDescriptionFileExists(sdkDescriptionFile : File) : Boolean
+		{
+			if (!sdkDescriptionFile || !sdkDescriptionFile.exists)
+				return false;
+			
+			if( sdkDescriptionFile.isDirectory)
+				return false;
+			
+			if( sdkDescriptionFile.extension.toLowerCase() != "xml")
+				return false;
+			
+			return true;
+		}
+		
+		private function sdkDescriptionFileIsValid(sdkDescriptionFile : File) : Boolean
+		{
+			var sdkDescriptionXML : XML;
 			
 			try 
 			{
-				fileStream.open(descriptionFile, FileMode.READ);
+				fileStream.open(sdkDescriptionFile, FileMode.READ);
 				
 				sdkDescriptionXML = XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
 				
@@ -67,48 +77,79 @@ package net.vdombox.powerpack.sdkcompiler
 			{
 				fileStream.close();
 				
-				onParamsCheckError();
-				return;
+				return false;
 			}
 			
-			onSDKChecked();
-				
+			if (sdkDescriptionXML.name() != "flex-sdk-description")
+				return false;
+			
+			return sdkVersionIsValid(sdkDescriptionXML);
 		}
 		
-		private function onSDKChecked():void
-		{		
-			checkPowerPackPath();
-			//onParamsCheckOK();
-		}
-		
-		private function isCorrectSDK(sdkDescriptionXML : XML) : Boolean
+		private function sdkVersionIsValid(sdkDescriptionXML : XML) : Boolean
 		{
-			return true;
-			var sdkVersion : String = XMLList(sdkDescriptionXML.version).toString(); 
+			var sdkVersion : String = sdkDescriptionXML.version[0]; 
 			
 			return sdkVersion == SDK_4_1_VERSION;
 		}
 		
-		private function checkPowerPackPath() : void
+		public function isAppPathValid(appPath : String) : Boolean
 		{
-			if (correctPowerPackProjectPath)
-				onParamsCheckOK();
-			else
-				onParamsCheckError();
+			if ( appPath == "")
+				return true;
+			
+			try
+			{
+				var file : File = new File(appPath);
+			}
+			catch (e:Error)
+			{
+				return false;
+			}
+			
+			return selectedApplicationExist(file) && selectedApplicationValid(file);
 		}
 		
-		private function get correctPowerPackProjectPath () : Boolean
+		private function selectedApplicationExist( file : File):Boolean
 		{
-			var powerPackProjectFolder : File = new File(powerPackProjectPath);
-			var powerPackAssetsFolder : File = new File(powerPackProjectPath + "/assets");
-			var powerPackInstallerSwfFile : File = new File(powerPackProjectPath + "/Installer.swf");
+			if ( !file || !file.exists )
+				return false;
 			
-			return powerPackProjectFolder.exists && 
-				powerPackAssetsFolder.exists && 
-				powerPackInstallerSwfFile.exists;
+			if( file.isDirectory)
+				return false;
 			
+			if( file.extension.toLowerCase() != "xml")
+				return false;
 			
+			return true;		
 		}
+		
+		private function selectedApplicationValid(file : File):Boolean
+		{
+			var appXml : XML;
+			
+			try 
+			{
+				fileStream.open(file, FileMode.READ);
+				
+				appXml = new XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
+				
+				fileStream.close();
+				
+				var appId : String = appXml.Information.ID[0];
+				
+				if (!appId)
+					return false;
+			}
+			catch (e:Error)
+			{
+				fileStream.close();
+				return false;
+			}
+			
+			return true;	
+		}
+		
 		
 	}
 }

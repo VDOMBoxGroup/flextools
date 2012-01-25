@@ -2,7 +2,7 @@
 <ModalDialog
 	xmlns="net.vdombox.powerpack.dialog.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	width="500" height="300"
+	width="500" height="360"
 	title="Build installer"
 	creationComplete="onShow()"
 	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
@@ -24,7 +24,12 @@
 			import net.vdombox.powerpack.panel.popup.AlertPopup;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompilerEvent;
+			import net.vdombox.powerpack.sdkcompiler.SDKCompilerParamsChecker;
 			import net.vdombox.powerpack.sdkcompiler.VDOMApplication;
+			
+			private var compilerParamsChecker	: SDKCompilerParamsChecker = new SDKCompilerParamsChecker();
+			
+			private var shObject : SharedObject = SharedObject.getLocal( "air_properties" );
 			
 			private static var _dialog	: AirBuildProperties;
 			
@@ -59,7 +64,11 @@
 				
 				installerApplication.text = currentTemplate ? currentTemplate.installerAppPath : Template.DEFAULT_APP_PATH;
 				
+				if(shObject.data.hasOwnProperty("sdk_4_1")) 
+					sdkFolderTextInput.text = shObject.data["sdk_4_1"] ;
+				
 				validateAppPath();
+				validateSDKPath();
 			}
 			
 			private function get outputFolderPath () : String
@@ -75,6 +84,11 @@
 			private function get appPath () : String
 			{
 				return StringUtil.trim(installerApplication.text);
+			}
+			
+			private function get sdkPath () : String
+			{
+				return StringUtil.trim(sdkFolderTextInput.text);
 			}
 			
 			static public function show( templateXmlStructure : XML, closeHandler : Function = null ) : AirBuildProperties
@@ -145,39 +159,81 @@
 				}
 			}
 			
+			private static const FILE_TYPE_XML		: String = "xmlType";
+			private static const FILE_TYPE_FOLDER	: String = "folderType";
+			
 			protected function btnBrowseApplicationClickHandler(event:MouseEvent):void
 			{
-				var fileFilter : FileFilter = new FileFilter("XML", "*.xml");
-				
-				var filePath : String = appPath || null;
+				browseFile(FILE_TYPE_XML);
+			}
+			
+			protected function btnBrowseSDKClickHandler(event:MouseEvent):void
+			{
+				browseFile(FILE_TYPE_FOLDER);
+			}
+			
+			private function browseFile(fileType : String):void
+			{
+				var filePath : String = fileType == FILE_TYPE_XML ? appPath : sdkPath;
+				var file : File;
 				
 				try
 				{
-					var file : File = new File(filePath);
-					
-					file.addEventListener(Event.SELECT, appSelectHandler);
-					
-					file.browseForOpen("Select application", [fileFilter]);
+					file = new File(filePath);
 				}
 				catch (e:Error)
 				{
 					file = new File();
-					
-					if (!file.hasEventListener(Event.SELECT))
-						file.addEventListener(Event.SELECT, appSelectHandler);
-					
-					file.browseForOpen("Select application", [fileFilter]);
-					
 				}
 				
-				function appSelectHandler (evt:Event) : void
+				file.addEventListener(Event.SELECT, fileSelectHandler);
+				file.addEventListener(Event.CANCEL, fileCancelHandler);
+				
+				if (fileType == FILE_TYPE_XML)
 				{
-					file.removeEventListener(Event.SELECT, appSelectHandler);
+					var fileFilter : FileFilter = new FileFilter("XML", "*.xml");
+					file.browseForOpen("Select application", [fileFilter]);
 					
-					installerApplication.text = file.nativePath;
-					
-					validateAppPath();
+				} 
+				else if (fileType == FILE_TYPE_FOLDER)
+				{
+					file.browseForDirectory("Select sdk4.1 directory");
 				}
+				
+				function fileSelectHandler (evt:Event) : void
+				{
+					file.removeEventListener(Event.SELECT, fileSelectHandler);
+					file.removeEventListener(Event.CANCEL, fileCancelHandler);
+					
+					if (fileType == FILE_TYPE_XML)
+					{
+						appFileSelectedHandler(file.nativePath);
+						
+					} else if (fileType == FILE_TYPE_FOLDER)
+					{
+						sdkFolderSelectedHandler(file.nativePath);
+					}
+				}
+				
+				function fileCancelHandler (evt:Event) : void
+				{
+					file.removeEventListener(Event.SELECT, fileSelectHandler);
+					file.removeEventListener(Event.CANCEL, fileCancelHandler);
+				}
+			}
+
+			private function appFileSelectedHandler (filePath : String) : void
+			{
+				installerApplication.text = filePath;
+				
+				validateAppPath();
+			}
+			
+			private function sdkFolderSelectedHandler (filePath : String) : void
+			{
+				sdkFolderTextInput.text = filePath;
+				
+				validateSDKPath();
 			}
 			
 			public function get currentTemplate() : Template
@@ -198,13 +254,15 @@
 				currentTemplate.installerAppPath = appPath;
 				currentTemplate.installerFolderPath = outputFolderPath;
 				currentTemplate.installerFileName = outputFileName;
+				
+				shObject.data["sdk_4_1"] = sdkPath;
 			}
 			
 			private function saveTemplate () : void
 			{ 
 				if (!currentTemplate)
 				{
-					AlertPopup.show("No opened template", "Error");
+					AlertPopup.show("No opened template", "Error", OK, _dialog);
 					return;
 				}
 				
@@ -226,7 +284,7 @@
 					}
 					catch (e:Error)
 					{
-						AlertPopup.show("Can't save template", "Error");
+						AlertPopup.show("Can't save template", "Error", OK, _dialog);
 						return;
 					}
 					
@@ -237,7 +295,7 @@
 				{
 					currentTemplate.removeEventListener( ErrorEvent.ERROR, templateSaveErrorHandler );
 					
-					AlertPopup.show("Can't save template", "Error");
+					AlertPopup.show("Can't save template", "Error", OK, _dialog);
 				}
 			}
 			
@@ -251,7 +309,7 @@
 				
 				if (!installerPropertiesXmlPrepeared)
 				{
-					AlertPopup.show("Can't prepare installer properties xml", "Error");
+					AlertPopup.show("Can't prepare installer properties xml", "Error", OK, _dialog);
 					return;
 				}
 				
@@ -267,7 +325,7 @@
 				ProgressManager.source = null;
 				ProgressManager.start( ProgressManager.DIALOG_MODE, false );
 				
-				sdkCompiler.buildInstallerPackage (outputFolderPath, outputFileName, app);
+				sdkCompiler.buildInstallerPackage (outputFolderPath, outputFileName, app, sdkPath);
 				
 				function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void
 				{
@@ -278,22 +336,19 @@
 					
 					if (evt.message)
 					{
-						AlertPopup.show(evt.message);
+						AlertPopup.show(evt.message,"", OK, _dialog);
 					}
 				}
 			}
 			
 			private function prepareInstallerApp() : Boolean
 			{
-				if (!appPath)
+				if (!appPath || !validAppPath)
 					return false;
 				
 				try
 				{
 					var sourceAppFile : File = new File(appPath);
-					
-					if (!sourceAppFile || !sourceAppFile.exists)
-						return false;
 					
 					var targetAppFile : File = File.applicationStorageDirectory.resolvePath(FileUtils.getFileName(appPath));
 					
@@ -353,71 +408,43 @@
 			
 			private function validateAppPath():void
 			{
-				var validPath : Boolean = selectedApplicationPathCorrect();
+				installerApplication.errorString = validAppPath ? null : "Error";
 				
-				build.enabled = validPath;
-				
-				installerApplication.errorString = validPath ? null : "Error";
+				buildBtn.enabled = validAppPath && validSDKPath;
 			}
 			
-			private function selectedApplicationPathCorrect():Boolean
+			private function get validAppPath () : Boolean
 			{
-				if ( appPath == "")
-					return true;
-				
-				try
-				{
-					var file : File = new File( appPath);
-				}
-				catch (e:Error)
-				{
-					return false;
-				}
-				
-				return selectedApplicationExist(file) && selectedApplicationValid(file);
+				return compilerParamsChecker.isAppPathValid(appPath);
 			}
 			
-			private function selectedApplicationExist( file : File):Boolean
+			protected function sdkFolderTextInput_changeHandler(event:Event):void
 			{
-				if (appPath == "")
-					return true;
-				
-				if ( !file.exists )
-					return false;
-				
-				if( file.isDirectory)
-					return false;
-				
-				if( file.extension.toLowerCase() != "xml")
-					return false;
-				
-				return true;		
+				validateSDKPath();
 			}
 			
-			private function selectedApplicationValid(file : File):Boolean
+			private function validateSDKPath():void
 			{
-				var fileStream : FileStream = new FileStream();
-				var appXml : XML;
+				sdkFolderTextInput.errorString = validSDKPath ? null : "Error";
 				
-				try 
-				{
-					fileStream.open(file, FileMode.READ);
-					appXml = new XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
-					fileStream.close();
-					
-					var appId : String = appXml.Information.ID[0];
-					
-					if (!appId)
-						return false;
-				}
-				catch (e:Error)
-				{
-					fileStream.close();
-					return false;
-				}
-				
-				return true;	
+				buildBtn.enabled = validAppPath && validSDKPath;
 			}
+			
+			private function get validSDKPath () : Boolean
+			{
+				return compilerParamsChecker.isSDKPathValid(sdkPath);
+			}
+			
+			private function get buildAvailable (): Boolean
+			{
+				return validAppPath && validSDKPath;
+			}
+			
+			public function linkHandler(event:TextEvent):void {
+				// Open the link in a new browser window.
+				navigateToURL(new URLRequest(event.text), '_blank')
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -444,11 +471,31 @@
 		
 		<mx:HBox width="450" horizontalGap="3">
 			<mx:Label text="Application: " width="110"/>
-			<mx:TextInput id="installerApplication" width="100%" editable="true" toolTip="{installerApplication.text}" change="installerApplication_changeHandler(event)"/>
+			<mx:TextInput id="installerApplication" width="100%" 
+						  editable="true" 
+						  toolTip="{installerApplication.text}" 
+						  change="installerApplication_changeHandler(event)"/>
 			<mx:Button label="Browse" click="btnBrowseApplicationClickHandler(event)" width="70"/>
 		</mx:HBox>
+		
+		<mx:HBox width="450" horizontalGap="3">
+			<mx:Label text="SDK 4.1.0: " width="110"/>
+			<mx:VBox width="100%" verticalAlign="middle" horizontalAlign="center" verticalGap="0">
+				<mx:TextInput id="sdkFolderTextInput" width="100%" 
+							  editable="true" 
+							  toolTip="{sdkFolderTextInput.text}" 
+							  change="sdkFolderTextInput_changeHandler(event)"/>
+				
+				<mx:Label link="linkHandler(event)" selectable="true" color="0x0000ff">
+					<mx:htmlText>
+						<![CDATA[<a href='http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4/flex_sdk_4.1.0.16076A.zip'>Download Flex SDK</a>]]>
+					</mx:htmlText>
+				</mx:Label>
+			</mx:VBox>
+			<mx:Button label="Browse" click="btnBrowseSDKClickHandler(event)" width="70"/>
+		</mx:HBox>
 			 
-		<mx:Button id="build" label="Build" click="btnBuildClickHandler(event)" />
+		<mx:Button id="buildBtn" label="Build" click="btnBuildClickHandler(event)" />
 	</mx:VBox>
 	
 	<mx:ControlBar width="100%" height="100%" styleName="dlgFooter"/>
