@@ -6,6 +6,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import net.vdombox.powerpack.panel.popup.Answers.AnswerCreator;
+			import net.vdombox.powerpack.panel.popup.Answers.Answer;
 			import mx.containers.Canvas;
 			import mx.controls.HRule;
 			import mx.controls.Image;

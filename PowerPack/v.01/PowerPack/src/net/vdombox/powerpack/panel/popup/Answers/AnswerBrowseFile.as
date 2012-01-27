@@ -1,4 +1,4 @@
-package net.vdombox.powerpack.panel.popup
+package net.vdombox.powerpack.panel.popup.Answers
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;

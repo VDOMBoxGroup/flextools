@@ -1,4 +1,4 @@
-package net.vdombox.powerpack.panel.popup
+package net.vdombox.powerpack.panel.popup.Answers
 {
 	import mx.containers.VBox;
 	import mx.controls.Text;
