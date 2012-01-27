@@ -1,6 +1,9 @@
 package net.vdombox.ide.common.vo
 {
+	import mx.utils.ObjectUtil;
+	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+
 	/**
 	 * The VdomObjectAttributesVO is Visual Object of Object Attributes.
 	 * VdomObjectAttributesVO is contained in VDOM Object. 
@@ -95,6 +98,26 @@ package net.vdombox.ide.common.vo
 			}
 			
 			return result;
+		}
+		
+		public function getUndo() : VdomObjectAttributesVO
+		{
+			var result : Array = [];
+			
+			var attributeVO : AttributeVO;
+			var attributeVONew : AttributeVO;
+			for each ( attributeVO in attributes )
+			{
+				attributeVONew = attributeVO.clone();
+				attributeVONew.value = attributeVONew.defaultValue;
+				
+				result.push( attributeVONew );
+			}
+			
+			var undoAttributesVO : VdomObjectAttributesVO = ObjectUtil.copy( this ) as VdomObjectAttributesVO;
+			undoAttributesVO.attributes = result;
+			
+			return undoAttributesVO;
 		}
 		
 		private function processAttributes( attributesXML : XML ) : void

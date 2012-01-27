@@ -54,6 +54,15 @@ package net.vdombox.ide.common.vo
 			return result;
 		}
 		
+		public function clone() : AttributeVO
+		{
+			var attributeVO : AttributeVO = new AttributeVO( _name, _defaultValue );
+			attributeVO.value = _value;
+			
+			return attributeVO;
+			
+		}
+		
 		
 	}
 }
