@@ -86,6 +86,12 @@ package net.vdombox.ide.modules.events.view
 			
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
 			interests.push( TypesProxy.GET_TYPES );
+			
+			interests.push( ApplicationFacade.OPEN_WINDOW );
+			interests.push( ApplicationFacade.CLOSE_WINDOW );
+			
+			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
+			interests.push( ApplicationFacade.SET_SERVER_ACTIONS );
 
 			return interests;
 		}
@@ -97,6 +103,9 @@ package net.vdombox.ide.modules.events.view
 			var body : Object = notification.getBody();
 
 			var message : IPipeMessage;
+			
+			var placeName : String;
+			var targetName : String;
 
 			switch ( notification.getName() )
 			{
@@ -250,8 +259,6 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.GET_SERVER_ACTIONS_LIST:
 				{
-					var placeName : String;
-					var targetName : String;
 					
 					if ( body is ObjectVO )
 					{
@@ -272,6 +279,7 @@ package net.vdombox.ide.modules.events.view
 					
 					break;
 				}
+					
 				case ApplicationFacade.BODY_STOP :
 				{
 					junction.sendMessage( PipeNames.STDCORE,
@@ -296,6 +304,60 @@ package net.vdombox.ide.modules.events.view
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
+				}
+					
+				case ApplicationFacade.OPEN_WINDOW:
+				{
+					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, body, multitonKey );
+					
+					junction.sendMessage( PipeNames.STDCORE, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.CLOSE_WINDOW:
+				{
+					message = new SimpleMessage( SimpleMessageHeaders.CLOSE_WINDOW, body, multitonKey );
+					
+					junction.sendMessage( PipeNames.STDCORE, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_SERVER_ACTIONS:
+				{
+					
+					if ( body is ObjectVO )
+					{
+						placeName = PPMPlaceNames.OBJECT;
+						targetName = PPMObjectTargetNames.SERVER_ACTIONS;
+					}
+					else if ( body is PageVO )
+					{
+						placeName = PPMPlaceNames.PAGE;
+						targetName = PPMPageTargetNames.SERVER_ACTIONS;
+					}
+					
+					if ( placeName && targetName )
+					{
+						message = new ProxyMessage( placeName, PPMOperationNames.READ, targetName, body );
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					}
+					
+					break;
+				}
+					
+				case ApplicationFacade.SET_SERVER_ACTIONS:
+				{
+					if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTIONS_LIST, body );
+					else if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTIONS_LIST, body );
+					
+					if( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break
 				}
 					
 					

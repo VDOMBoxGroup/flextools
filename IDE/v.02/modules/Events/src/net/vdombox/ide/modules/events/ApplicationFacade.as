@@ -5,9 +5,11 @@ package net.vdombox.ide.modules.events
 	import net.vdombox.ide.modules.events.controller.ChangeSelectedObjectRequestCommand;
 	import net.vdombox.ide.modules.events.controller.ChangeSelectedPageRequestCommand;
 	import net.vdombox.ide.modules.events.controller.CreateBodyCommand;
+	import net.vdombox.ide.modules.events.controller.CreateScriptRequestCommand;
 	import net.vdombox.ide.modules.events.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.events.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.events.controller.GetResourceRequestCommand;
+	import net.vdombox.ide.modules.events.controller.GetServerActionsRequestCommand;
 	import net.vdombox.ide.modules.events.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.events.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.events.controller.SaveSettingsToProxy;
@@ -144,6 +146,25 @@ package net.vdombox.ide.modules.events
 		
 		public static const STRUCTURE_GETTED 	: String = "structureGetted";
 		
+		
+//ServerAction
+		public static const ACTION : String = "action";
+		
+		public static const GET_SERVER_ACTIONS_REQUEST : String = "getServerActionsRequest";
+		public static const GET_SERVER_ACTIONS : String = "getServerActions";
+		public static const SERVER_ACTIONS_GETTED : String = "serverActionsGetted";
+		
+		public static const SET_SERVER_ACTIONS : String = "setServerActions";
+		public static const SERVER_ACTIONS_SETTED : String = "serverActionsSetted";
+		
+		public static const OPEN_WINDOW : String = "openWidow";
+		public static const CLOSE_WINDOW : String = "closeWidow";
+		
+		public static const CREATE_SCRIPT_REQUEST : String = "createScriptRequest";
+		
+		public static const CHECK_SAVE_IN_WORKAREA : String = "checkSaveInWorkArea";
+		public static const SAVE_IN_WORKAREA_CHECKED : String = "saveInWorkAreaChecked";
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )
@@ -191,6 +212,10 @@ package net.vdombox.ide.modules.events
 			registerCommand( TEAR_DOWN, TearDownCommand );
 			
 			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
+			
+			registerCommand( CREATE_SCRIPT_REQUEST, CreateScriptRequestCommand );
+			
+			registerCommand( GET_SERVER_ACTIONS_REQUEST, GetServerActionsRequestCommand );
 		}
 	}
 }

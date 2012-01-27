@@ -7,6 +7,7 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.controls.Image;
 			import mx.core.DragSource;
 			import mx.events.DragEvent;
 			import mx.managers.DragManager;
@@ -18,6 +19,9 @@
 
 			[SkinPart( required="true" )]
 			public var actionsList : List;
+			
+			[SkinPart( required="true" )]
+			public var createServerAction : Image;
 		]]>
 	</fx:Script>
 </s:SkinnableComponent>

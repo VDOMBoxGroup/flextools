@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.events.controller.messages
 {
 	import net.vdombox.ide.common.PPMObjectTargetNames;
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	
@@ -27,6 +28,23 @@ package net.vdombox.ide.modules.events.controller.messages
 					
 					break;
 				}
+					
+				case PPMObjectTargetNames.SERVER_ACTIONS:
+				{
+					if( PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
+					else if( PPMOperationNames.UPDATE )
+						sendNotification( ApplicationFacade.SERVER_ACTIONS_SETTED, body.serverActions );
+					
+					break;
+				}
+					
+				case PPMObjectTargetNames.SERVER_ACTION:
+				{
+					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					
+					break;
+				}	
 			}
 		}
 	}

@@ -18,7 +18,6 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.ObjectsTreePanel;
-	import net.vdombox.ide.modules.events.view.components.ObjectsTreePanelItemRenderer;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -196,8 +195,8 @@ package net.vdombox.ide.modules.events.view
 			for each( objectXML in xmlList)
 			{
 				typeID = objectXML.@typeID;
-				var rr : TypeVO = typeProxy.getTypeVObyID( typeID )
-				objectXML.@iconID = rr.structureIconID;
+				var typeVO : TypeVO = typeProxy.getTypeVObyID( typeID )
+				objectXML.@iconID = typeVO.structureIconID;
 				//				trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
 			}
 		}

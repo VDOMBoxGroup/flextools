@@ -34,6 +34,23 @@ package net.vdombox.ide.modules.events.controller.messages
 					break;
 				}
 					
+				case PPMPageTargetNames.SERVER_ACTIONS:
+				{
+					if( PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
+					else if( PPMOperationNames.UPDATE )
+						sendNotification( ApplicationFacade.SERVER_ACTIONS_SETTED, body.serverActions );
+					
+					break;
+				}
+					
+				case PPMPageTargetNames.SERVER_ACTION:
+				{
+					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					
+					break;
+				}	
+					
 				case PPMPageTargetNames.XML_PRESENTATION:
 				{
 					break;

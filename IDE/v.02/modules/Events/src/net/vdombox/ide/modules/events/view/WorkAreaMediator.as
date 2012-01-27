@@ -73,6 +73,8 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.CHILDREN_ELEMENTS_GETTED );
 			interests.push( ApplicationFacade.STRUCTURE_GETTED );
 			
+			interests.push( ApplicationFacade.CHECK_SAVE_IN_WORKAREA );
+			
 			return interests;
 		}
 
@@ -152,7 +154,20 @@ package net.vdombox.ide.modules.events.view
 						sendChildrenQuery = false;
 						sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
 					}
+					
+					break;
 				}
+					
+				case ApplicationFacade.CHECK_SAVE_IN_WORKAREA:
+				{
+					if ( workArea.skin.currentState == "unsaved" )
+						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, false );
+					else
+						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, true );
+					
+					break;
+				}
+					
 			}
 		}
 		
