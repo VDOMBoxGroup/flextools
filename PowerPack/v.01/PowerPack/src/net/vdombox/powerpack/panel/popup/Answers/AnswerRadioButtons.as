@@ -46,7 +46,12 @@ package net.vdombox.powerpack.panel.popup.Answers
 			
 			var radBtn : RadioButton;
 			
-			for each (var value:String in dataProvider.slice(2)) 
+			var variants : Array = dataProvider.slice(2);
+			
+			if (variants.length == 1)
+				variants = String(variants[0]).split(",");
+			
+			for each (var value:String in variants) 
 			{
 				radBtn  = new RadioButton();
 				radBtn.value = value;
