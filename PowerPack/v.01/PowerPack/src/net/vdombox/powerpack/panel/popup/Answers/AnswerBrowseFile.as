@@ -23,7 +23,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 		private var filePathTextInput	: TextInput;
 		private var btnBrowse			: BrowseButton;
 		
-		public var browseFilter : String = "*.*";
+		private var _browseFilter : String = "*.*";
 		
 		public function AnswerBrowseFile(data:String )
 		{
@@ -31,6 +31,19 @@ package net.vdombox.powerpack.panel.popup.Answers
 		
 			if (dataProvider[2])
 				browseFilter = dataProvider[2];
+		}
+		
+		public function set browseFilter (value : String) : void
+		{
+			_browseFilter = value;
+			
+			if (_browseFilter.indexOf("#(") == 0 &&	_browseFilter.charAt(_browseFilter.length-1) == ")")
+				_browseFilter = _browseFilter.substring(2, _browseFilter.length-1);
+		}
+		
+		public function get browseFilter () : String
+		{
+			return _browseFilter;
 		}
 		
 		override protected function createChildren () : void
