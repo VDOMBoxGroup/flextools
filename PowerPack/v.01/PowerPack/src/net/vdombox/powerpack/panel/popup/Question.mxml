@@ -2,11 +2,12 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
 				xmlns:popup="net.vdombox.powerpack.panel.popup.*" 
 				xmlns:control="net.vdombox.powerpack.control.*"
-				creationComplete="completeHandler(event)" 
-				initialize="popupbox1_initializeHandler(event)">
+				creationComplete="completeHandler(event)">
+	
 	<mx:Script>
 		<![CDATA[
 			import mx.containers.Canvas;
+			import mx.controls.HRule;
 			import mx.controls.Image;
 			import mx.controls.Text;
 			import mx.events.CloseEvent;
@@ -15,24 +16,48 @@
 			
 			import net.vdombox.powerpack.control.BrowseButton;
 			import net.vdombox.powerpack.customize.skins.PopupBackgroundSkin;
-			
-			public static const QT_INPUT	: int = 0;
-			public static const QT_SELECT	: int = 1;
-			public static const QT_BROWSE	: int = 2;
+			import net.vdombox.powerpack.gen.parse.ListParser;
 			
 			[Bindable]
-			private var question : String = "";
+			public var question : String = "";
 			
 			public var strAnswer : String = "";
 			
-			private var dSize : Boolean = false;
+			private var _dataProvider : Array;
 			
-			private var fCloseHandler : Function;
-			
-			public function setDefaultProperties(question : String, closeHandler : Function = null):void
+			public function set dataProvider(value:Array):void
 			{
-				this.question = question;
-				fCloseHandler = closeHandler;
+				_dataProvider = QuestionParamsConvertor.convertToArrayOfLists(value);
+			}
+			
+			override protected function createChildren () : void
+			{
+				super.createChildren();
+				
+				if (!_dataProvider)
+				{
+					throw Error("Possible answers are not declared!");
+					return;
+				}
+				
+				var answer : Answer;
+				for each (var value : String in _dataProvider) 
+				{
+					answer = AnswerCreator.create( value );
+					answerBox.addChild( answer );
+				}
+			}
+						
+			private function get answersList () : String
+			{
+				var resultArray : Array = [];
+				
+				for each(var answer : Answer in answerBox.getChildren())
+				{
+					resultArray.push( answer.value);
+				}
+				
+				return ListParser.array2List( resultArray );
 			}
 			
 			protected function btnOkClickHandler(evt:MouseEvent) : void
@@ -44,29 +69,19 @@
 			
 			protected function closeDialog() : void
 			{
-				if ( fCloseHandler != null )
-				{
-					addEventListener( CloseEvent.CLOSE, fCloseHandler );
-					
-				}
+				var answers : Array =  answerBox.getChildren();
+				
+				strAnswer = answers.length == 1 ? answers[0].value : answersList;
 				
 				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+				
 				PopUpManager.removePopUp(this);
 			}
 			
 			protected function completeHandler(event:FlexEvent):void
 			{
 				width = 400;
-				//height = 300;
 				PopUpManager.centerPopUp(this);
-			}
-			
-			protected function popupbox1_initializeHandler(event:FlexEvent):void
-			{
-				if (className == "Question")
-				{
-					throw new IllegalOperationError("Abstract class did not receive reference to self. MyAbstractType cannot be instantiated directly.");
-				}
 			}
 			
 			private function get borderThickness () : Number
@@ -100,7 +115,7 @@
 					  paddingLeft="16" paddingTop="16" paddingRight="16" paddingBottom="16">
 				<mx:HBox width="100%" height="100%" id="t2">
  					<mx:Image source="@Embed('/assets/images/user.png')" autoLoad="true" id="t3"/>
-					<mx:Canvas width="100%"  id="answerCanvas"  maxHeight="200" />
+					<mx:VBox width="100%"  id="answerBox"  maxHeight="200" verticalGap="20" />
 					
 				</mx:HBox>
 				<mx:Canvas width="100%">

@@ -39,10 +39,6 @@ import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.managers.LanguageManager;
 import net.vdombox.powerpack.panel.popup.PopupBox;
 import net.vdombox.powerpack.panel.popup.Question;
-import net.vdombox.powerpack.panel.popup.QuestionBrowse;
-import net.vdombox.powerpack.panel.popup.QuestionInput;
-import net.vdombox.powerpack.panel.popup.QuestionMultiType;
-import net.vdombox.powerpack.panel.popup.QuestionSelect;
 
 public function sub( graph : String, ...args ) : *
 {
@@ -100,115 +96,25 @@ private function enterSubgraph( subgraph : GraphStruct, prefix : String, params 
 	return new Function;
 }
 
-private function __question( handler : Function, question : String, params : Array = null ) : Function
+private function _dialog( closeHandler : Function, question : String, params : Array = null ) : Function
 {
-	var answersArray		: Array = [];
-	var questionMode		: int;
-	var questionFileFilter	: String;
+	var popupParent		: Sprite = Sprite(Application.application);
+	var questionPopup : Question = new Question();
 	
-	// TODO: used Interface
-	var questionPopup	: Question;
+	questionPopup.question = question;
+	questionPopup.dataProvider = params;
 	
-	if ( !params ) params = [];
-
-	questionMode = getQuestionMode(params);
 	
-	// TODO: create "fabrika"
-	switch(questionMode)
-	{
-		case Question.QT_BROWSE:
-		{
-			if ( params.length >= 1 )
-			{
-				questionFileFilter = getFileMask( params[0].toString() );
-				
-				questionPopup = new QuestionBrowse( questionFileFilter );
-//				(questionPopup as QuestionBrowse).browseFilter = questionFileFilter;
-				
-			}
-			break;
-		}
-		case Question.QT_SELECT:
-		{
-			for ( var i : int = 0; i < params.length; i++ )
-				answersArray.push( params[i].toString() );
-			
-			questionPopup = new QuestionSelect(answersArray);
-//			(questionPopup as QuestionSelect).possibleAnswers = answersArray;
-			
-			break;
-		}
-		case Question.QT_INPUT:
-		default:
-		{
-			questionPopup = new QuestionInput();
-			
-			break;
-		}
-	}
+	questionPopup.addEventListener( CloseEvent.CLOSE, closeHandler); 
+	PopUpManager.addPopUp(questionPopup, popupParent, true);
 	
-	showQuestionPopup();
-	
-	function showQuestionPopup() : void
-	{
-		var popupParent		: Sprite = Sprite(Application.application);
-		
-		questionPopup.setDefaultProperties(question, handler);
-		
-		PopUpManager.addPopUp(questionPopup, popupParent, true);
-		
-		PopUpManager.centerPopUp(questionPopup);
-	}
-	
-	return handler;
-}
-
-private function getQuestionMode (params : Array) : int
-{
-	if (!params || params.length == 0)
-		return Question.QT_INPUT;
-	
-	if ( params.length == 1 && params[0].toString() == "*")
-		return Question.QT_INPUT;
-	
-	if ( params.length == 1 && isFileMaskParam(params[0].toString()) )
-		return Question.QT_BROWSE;
-	
-	if (params.length > 1)
-		return Question.QT_SELECT;
-
-//    return Question.QM_INFORMATION;
-	return Question.QT_INPUT;
-}
-
-private var regExpFileMask : RegExp = /#\((\*.([\w]+|\*)(;[ ]*(\*.([\w]+|\*))+)*)*\)/g;
-
-private function isFileMaskParam(param : String) : Boolean
-{
-	var arrMatch : Array = param.match(regExpFileMask);
-	
-	if (!arrMatch || arrMatch.length != 1)
-		return false;
-	
-	return true;
-}
-private function getFileMask(param : String) : String
-{
-	if (!isFileMaskParam(param))
-		return null;
-	
-	var arrMatch : Array = param.match(regExpFileMask);
-	
-	var maskGroup : String = String(arrMatch[0]).substring(2, String(arrMatch[0]).length-1);
-
-	return maskGroup;
+	return closeHandler;
 }
 
 public function question( question : String, ...args ) : Function
 {
+	return _dialog(questionCloseHandler, question, args);
 	
-	return __question( questionCloseHandler, question, args );
-
 	function questionCloseHandler( event : Event ) : void
 	{
 		setReturnValue( event.target.strAnswer );
@@ -223,7 +129,7 @@ public function progress( value : Number, description : String ) : void
 
 public function qSwitch( question : String, ...args ) : Function
 {
-	return __question( questionCloseHandler, question, args );
+	return _dialog( questionCloseHandler, question, args );
 
 	function questionCloseHandler( event : Event) : void
 	{
@@ -500,20 +406,12 @@ public function wholeMethod( funct : String, ...args ) : Function
 
 public function dialog( question : String, ...args ) : Function
 {
-//	QuestionMultiType 
-	var popupParent		: Sprite = Sprite(Application.application);
-	var questionPopup : QuestionMultiType = new QuestionMultiType( question, args );
-	
-	questionPopup.addEventListener( CloseEvent.CLOSE, dialogCloseHandler); 
-	PopUpManager.addPopUp(questionPopup, popupParent, true);
-	
+	return _dialog(dialogCloseHandler, question, args);
 	
 	function dialogCloseHandler( event : Event ) : void
 	{
 		setReturnValue( event.target.strAnswer );
 	}
-	
-	return dialogCloseHandler;
 }
 
 

@@ -1,72 +1,87 @@
 package net.vdombox.powerpack.panel.popup
 {
 	import mx.containers.VBox;
+	import mx.controls.Text;
 	
 	import net.vdombox.powerpack.gen.parse.ListParser;
+	import net.vdombox.powerpack.gen.parse.parseClasses.LexemStruct;
 	
 	public class Answer extends VBox
 	{
-		private var _dataProvider : String;
-		
-		private var _value : String;
-		
-		private var _dataArray : Array;
+		private var _dataProvider : Array;
+		private var textLabel : Text;
 		
 		public function Answer( data : String)
 		{
 			super();
 			
-			_dataProvider = data;
-			_dataArray = ListParser.list2Array( data);
+			setStyle("verticalGap", 0);
+			
+			dataProvider = ListParser.list2Array( data);
 			
 			validateLabel();
 			
 			percentWidth = 100;
 		}
 
-		public function get dataArray():Array
-		{
-			return _dataArray;
-		}
-
-		public function set dataArray(value:Array):void
-		{
-			_dataArray = value;
-		}
-
-		public function get dataProvider():String
+		public function get dataProvider() : Array
 		{
 			return _dataProvider;
+		}
+		
+		public function set dataProvider(value : Array):void
+		{
+			for (var i:uint=0; i<value.length; i++)
+			{
+				if (value[i] is LexemStruct)
+					value[i] = clearString (LexemStruct(value[i]).value);
+				
+				else if (value[i] is Object && value[i].hasOwnProperty("value"))
+					value[i] = value[i].value;
+			}
+			
+			_dataProvider = value;
 		}
 
 		public function get value():String
 		{
-			return _value;
-		}
-
-		public function set dataProvider(value:String):void
-		{
-			_dataProvider = value;
+			return "";
 		}
 		
-		// TODO: do it on validatPropeties
 		private function validateLabel():void
 		{
-			if ( !dataArray[1] )
+			if ( !dataProvider[1] )
 				return;
 			
-			label = clearString( ListParser.getElm( dataProvider , 2));
+			label = dataProvider[1];
 		}
 		
 		override protected function createChildren () : void
 		{
 			super.createChildren();
 				
-			if ( !_dataProvider )
+			if ( !dataProvider )
 			{
 				throw Error("Possible answers are not declared!");
 				return;
 			}
+			
+			createLabel();
+		}
+		
+		private function createLabel():void
+		{
+			if (label == "")
+				return;
+			
+			textLabel = new Text();
+			textLabel.percentWidth = 100; 
+			
+			textLabel.styleName = "infoTextStyle";
+			textLabel.selectable = false;
+			textLabel.text = label;
+			
+			addChild(textLabel);
 		}
 		
 		public function clearString(value : String ): String
@@ -75,6 +90,7 @@ package net.vdombox.powerpack.panel.popup
 			var length : int = value.length;
 			if (length < 2)
 				return value;
+			
 			var firstChar : String = value.charAt(0);
 			var lastChar : String = value.charAt(length - 1);
 			

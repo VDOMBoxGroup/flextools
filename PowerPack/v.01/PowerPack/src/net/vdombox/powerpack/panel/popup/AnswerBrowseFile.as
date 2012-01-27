@@ -5,33 +5,33 @@ package net.vdombox.powerpack.panel.popup
 	import flash.filesystem.File;
 	import flash.net.FileFilter;
 	
-	import mx.containers.Box;
 	import mx.containers.Canvas;
-	import mx.containers.HBox;
 	import mx.controls.Button;
+	import mx.controls.Text;
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
 	import mx.utils.StringUtil;
 	
 	import net.vdombox.powerpack.control.BrowseButton;
+	import net.vdombox.powerpack.gen.parse.ListParser;
+	import net.vdombox.powerpack.gen.parse.parseClasses.LexemStruct;
 	import net.vdombox.powerpack.managers.LanguageManager;
 
-	public class QuestionBrowse extends Question
+	public class AnswerBrowseFile extends Answer
 	{
+		
 		private var filePathTextInput	: TextInput;
-		private var btnBrowse : BrowseButton;
+		private var btnBrowse			: BrowseButton;
 		
-		public var browseFilter : String;
+		public var browseFilter : String = "*.*";
 		
-		
-		public function QuestionBrowse( value : Object = null)
+		public function AnswerBrowseFile(data:String )
 		{
-			super();
-			
-			browseFilter = value as String;
+			super(data);
+		
+			if (dataProvider[2])
+				browseFilter = dataProvider[2];
 		}
-		
-		
 		
 		override protected function createChildren () : void
 		{
@@ -40,18 +40,24 @@ package net.vdombox.powerpack.panel.popup
 			createButton();
 			createTextInput();
 			
-			answerCanvas.addChild( btnBrowse );
+			var canvas : Canvas = new Canvas();
+			canvas.percentHeight = 100;
+			canvas.percentWidth = 100;
 			
-			answerCanvas.addChildAt(filePathTextInput, 0);
+			canvas.addChild( btnBrowse );
 			
-			btnOk.enabled = false;
+			canvas.addChildAt(filePathTextInput, 0);
+			
+			addChild(canvas);
 		}
 		
 		private function createButton():void
 		{
-			 btnBrowse  = new BrowseButton();
+			btnBrowse  = new BrowseButton();
+			
 			btnBrowse.styleName = "browseBtnStyle";
 			btnBrowse.label = LanguageManager.sentences.browse + "...";
+			
 			btnBrowse.addEventListener( MouseEvent.CLICK, browseClickHandler );
 		}
 		
@@ -88,15 +94,11 @@ package net.vdombox.powerpack.panel.popup
 		{
 			filePathTextInput.text = event.target.nativePath;
 			filePathTextInput.toolTip = event.target.nativePath;
-			
-			btnOk.enabled = filePathTextInput.text ? true : false;
 		}
 		
-		override protected function closeDialog() : void
+		override public function get value () : String
 		{
-			strAnswer = StringUtil.trim( filePathTextInput.text );
-			
-			super.closeDialog();
+			return StringUtil.trim( filePathTextInput.text );
 		}
 	}
 }

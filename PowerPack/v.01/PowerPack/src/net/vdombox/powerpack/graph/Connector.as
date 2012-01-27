@@ -316,7 +316,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 
 	public function get focused() : Boolean
 	{
-		if ( focusManager.getFocus() == this )
+		if ( focusManager && focusManager.getFocus() == this )
 			_focused = true;
 		else
 			_focused = false;

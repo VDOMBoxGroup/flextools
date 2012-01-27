@@ -271,12 +271,13 @@ BrowseButton
 	fontSize					: 14;
 	backgroundGradientColors	: #e0e0e0, #ffffff;
 	
+	leading						: -2;
 	borderThickness				: 1.5;
 	borderColor					: #414141;
 	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.InputAnswerTextBackgroundSkin");
 	
 	paddingLeft	: 7;
-	paddingTop	: 7;
+	paddingTop	: 3;
 }
 
 
