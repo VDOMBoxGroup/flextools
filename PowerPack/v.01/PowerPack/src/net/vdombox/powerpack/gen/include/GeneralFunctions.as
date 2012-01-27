@@ -341,9 +341,17 @@ public function loadDataFrom( filePath : String ) : Function
 		var _stream : FileStream = event.target as FileStream;
 		var _strData : String = _stream.readUTFBytes( _stream.bytesAvailable );
 		_stream.close();
-
+		
 		setTransition( 'true' );
-		setReturnValue( _strData );
+		try{
+			var xml : XML = new XML(_strData);
+			setReturnValue( xml );
+		}
+		catch ( e : * )
+		{
+			setReturnValue( _strData );
+		}
+		
 	}
 }
 

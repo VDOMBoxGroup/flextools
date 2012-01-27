@@ -854,9 +854,10 @@
 
 				// get local vars            	   
 				var subArr : Array = [];
+				var value : Object ;
 				for ( var obj : String in curGraphContext.context )
 				{
-					var value : Object = curGraphContext.context[obj];
+					value   = curGraphContext.context[obj];
 					if ( obj.search( /^__tmp_.*$/ ) < 0 )
 						subArr.push( {	 Name : "$" + obj,
 							Value : value != null ? value.toString() : 'null' } );
@@ -864,12 +865,18 @@
 
 				// get global vars
 				var arr : Array = [];
-				for ( obj in ContextManager.templateStruct.context )
+				var context : Dynamic = ContextManager.templateStruct.context
+				for ( obj in context )
 				{
-					if ( !(ContextManager.templateStruct.context[obj] is TemplateLib) )
+					if ( !(context[obj] is TemplateLib) )
 					{
 						if ( obj.search( /^__tmp_.*$/ ) < 0 )
-							arr.push( { Name : "$" + obj, Value : ContextManager.templateStruct.context[obj] } );
+						{
+							
+							value = (  context[obj] is XML ) ? "[Object XML]" :  context[obj];
+							
+							arr.push( { Name : "$" + obj, Value : value } );
+						}
 					}
 				}
 				arr.push( { Name : "this", Value : curGraphContext.curGraph.name, children : subArr } );

@@ -7,17 +7,17 @@ import memorphic.xpath.XPathQuery;
  */
 
 
-public function getXMLValue( xmlString : String, queryStr : String ) : String
+public function getXMLValue( xml : XML, queryStr : String ) : XMLList
 {
-    var xml : XML = string2xml( xmlString ) ;
+   
 
-    return  getQueryResult(xml, queryStr).toString();
+    return  getQueryResult(xml, queryStr);
 }
 
 
-public function setXMLValue( xmlString : String, path : String, value : Object ) : String
+public function setXMLValue( xml : XML, path : String, value : Object ) : XML
 {
-    var xml : XML = string2xml( xmlString ) ;
+//    var xml : XML = string2xml( xmlString ) ;
     var queryResult : XMLList = getQueryResult(xml, path) ;
 
     for each ( var xmlNode : XML in queryResult )
@@ -28,13 +28,12 @@ public function setXMLValue( xmlString : String, path : String, value : Object )
     // todo: is it necessary?
 //    xml.normalize();
 
-    return xml.toString();
+    return xml;
 }
 
 
-public function addXMLValue( xmlString : String, queryStr : String, value : Object ) : String
+public function addXMLValue( xml : XML, queryStr : String, value : Object ) : XML
 {
-    var xml : XML = string2xml( xmlString ) ;
     var queryResult : XMLList = getQueryResult(xml, queryStr) ;
 
     for each ( var xmlNode : XML in queryResult )
@@ -45,7 +44,7 @@ public function addXMLValue( xmlString : String, queryStr : String, value : Obje
     // todo: is it necessary?
 //    xml.normalize();
 
-    return xml.toString();
+    return xml;
 }
 
 
@@ -56,25 +55,23 @@ private function getQueryResult(xml : XML, path:String):XMLList
     var xPathQuery:XPathQuery =  new XPathQuery( path );
 
     return  xPathQuery.exec( xml );
-
-
 }
 
 
-private function string2xml(value : String ):XML
-{
-    var xml : XML;
-
-    try
-    {
-        xml = new XML(value);
-    }
-    catch ( error : Error )
-    {
-        //TODO: rise Exception
-
-    }
-
-    return xml ||  new XML();
-}
+//private function string2xml(value : String ):XML
+//{
+//    var xml : XML;
+//
+//    try
+//    {
+//        xml = new XML(value);
+//    }
+//    catch ( error : Error )
+//    {
+//        //TODO: rise Exception
+//
+//    }
+//
+//    return xml ||  new XML();
+//}
 
