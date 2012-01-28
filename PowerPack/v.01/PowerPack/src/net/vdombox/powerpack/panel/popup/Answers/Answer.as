@@ -10,14 +10,16 @@ package net.vdombox.powerpack.panel.popup.Answers
 	{
 		private var _dataProvider : Array;
 		private var textLabel : Text;
+		private var dataProvaiderString : String;
 		
-		public function Answer( data : String)
+		public function Answer( data : String )
 		{
 			super();
 			
 			setStyle("verticalGap", 0);
 			
 			dataProvider = ListParser.list2Array( data);
+			this.data =  data;
 			
 			validateLabel();
 			
@@ -33,11 +35,15 @@ package net.vdombox.powerpack.panel.popup.Answers
 		{
 			for (var i:uint=0; i<value.length; i++)
 			{
-				if (value[i] is LexemStruct)
-					value[i] = clearString (LexemStruct(value[i]).value);
+				value[i] =  clearString (ListParser.getElm( value , i+1 ));
+//				if (value[i] is LexemStruct)
+//					value[i] = clearString (LexemStruct(value[i]).value);
+//				else
+//					value[i] =  ListParser.getElm( dataProvider , 3)
+//				var defaulValue : String =  ListParser.getElm( dataProvider , 3);
 				
-				else if (value[i] is Object && value[i].hasOwnProperty("value"))
-					value[i] = value[i].value;
+//				else if (value[i] is Object && value[i].hasOwnProperty("value"))
+//					value[i] = value[i].value;
 			}
 			
 			_dataProvider = value;

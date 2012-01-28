@@ -9,7 +9,6 @@ import memorphic.xpath.XPathQuery;
 
 public function getXMLValue( xml : XML, queryStr : String ) : XMLList
 {
-   
 
     return  getQueryResult(xml, queryStr);
 }
@@ -17,16 +16,12 @@ public function getXMLValue( xml : XML, queryStr : String ) : XMLList
 
 public function setXMLValue( xml : XML, path : String, value : Object ) : XML
 {
-//    var xml : XML = string2xml( xmlString ) ;
     var queryResult : XMLList = getQueryResult(xml, path) ;
 
     for each ( var xmlNode : XML in queryResult )
     {
         xmlNode.setChildren( value) ;
     }
-
-    // todo: is it necessary?
-//    xml.normalize();
 
     return xml;
 }
@@ -41,9 +36,6 @@ public function addXMLValue( xml : XML, queryStr : String, value : Object ) : XM
         xmlNode.appendChild( value);
     }
 
-    // todo: is it necessary?
-//    xml.normalize();
-
     return xml;
 }
 
@@ -56,22 +48,4 @@ private function getQueryResult(xml : XML, path:String):XMLList
 
     return  xPathQuery.exec( xml );
 }
-
-
-//private function string2xml(value : String ):XML
-//{
-//    var xml : XML;
-//
-//    try
-//    {
-//        xml = new XML(value);
-//    }
-//    catch ( error : Error )
-//    {
-//        //TODO: rise Exception
-//
-//    }
-//
-//    return xml ||  new XML();
-//}
 
