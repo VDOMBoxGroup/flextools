@@ -37,7 +37,7 @@
 			
 			private var installerTplXml : XML = 
 				 <application xmlns="http://ns.adobe.com/air/application/2.0">
-				  <version>1.2.2.7698</version> 
+				  <version>1.2.2.7704</version> 
 				 <initialWindow>
 				  <content>Installer.swf</content> 
 				  <systemChrome>none</systemChrome> 
