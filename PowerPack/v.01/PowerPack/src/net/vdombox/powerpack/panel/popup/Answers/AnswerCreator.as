@@ -8,43 +8,51 @@ package net.vdombox.powerpack.panel.popup.Answers
 
 	public class AnswerCreator
 	{
-		public static function create( data : String ) : Answer
+		public static function create( data : String, context : Array) : Answer
 		{
+			Answer.context = context;
+			
+			//var type : String = ListParser.getElmValue( data , 1, context);
 			var type : String = ListParser.getElm( data , 1);
+			
 			var answer : *;
 		
 			switch (type)
 			{	
 				case "'text'":
 				case "\"text\"":
+				case "text":
 				{
 					answer = new AnswerText (data);
 					break;
 				}
 				case "'textArea'":
 				case "\"textArea\"":
+				case "textArea":
 				{
 					answer = new AnswerTextArea (data);
 					break;
 				}
 				case "'radioButtons'":
 				case "\"radioButtons\"":
+				case "radioButtons":
 				{
 					answer = new AnswerRadioButtons (data);
 					break;
 				}
 				case "'browseFile'":
 				case "\"browseFile\"":
+				case "browseFile":
 				{
 					answer = new AnswerBrowseFile (data);
 					break;
 				}
-				case "'comboBox'":
+				case "comboBox":
 				{
 					
 					break;
 				}	
-				case "'checkBox'":
+				case "checkBox":
 				{
 					
 					break;

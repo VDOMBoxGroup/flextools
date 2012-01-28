@@ -27,6 +27,8 @@
 			
 			private var _dataProvider : Array;
 			
+			public var context : Array;
+			
 			public function set dataProvider(value:Array):void
 			{
 				_dataProvider = QuestionParamsConvertor.convertToArrayOfLists(value);
@@ -45,7 +47,7 @@
 				var answer : Answer;
 				for each (var value : String in _dataProvider) 
 				{
-					answer = AnswerCreator.create( value );
+					answer = AnswerCreator.create( value, context );
 					answerBox.addChild( answer );
 				}
 			}

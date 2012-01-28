@@ -98,12 +98,13 @@ private function enterSubgraph( subgraph : GraphStruct, prefix : String, params 
 
 private function _dialog( closeHandler : Function, question : String, params : Array = null ) : Function
 {
+	trace ("cont : " + getContexts());
 	var popupParent		: Sprite = Sprite(Application.application);
 	var questionPopup : Question = new Question();
 	
 	questionPopup.question = question;
+	questionPopup.context = getContexts();
 	questionPopup.dataProvider = params;
-	
 	
 	questionPopup.addEventListener( CloseEvent.CLOSE, closeHandler); 
 	PopUpManager.addPopUp(questionPopup, popupParent, true);

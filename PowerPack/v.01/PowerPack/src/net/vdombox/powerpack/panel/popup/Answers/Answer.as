@@ -12,6 +12,8 @@ package net.vdombox.powerpack.panel.popup.Answers
 		private var textLabel : Text;
 		private var dataProvaiderString : String;
 		
+		public static var context : Array;
+		
 		public function Answer( data : String )
 		{
 			super();
@@ -35,7 +37,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 		{
 			for (var i:uint=0; i<value.length; i++)
 			{
-				value[i] =  clearString (ListParser.getElm( value , i+1 ));
+				value[i] =  ListParser.getElmValue( ListParser.array2List(value), i+1, context);
 //				if (value[i] is LexemStruct)
 //					value[i] = clearString (LexemStruct(value[i]).value);
 //				else
@@ -48,7 +50,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 			
 			_dataProvider = value;
 		}
-
+		
 		public function get value():String
 		{
 			return "";
