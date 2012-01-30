@@ -6,8 +6,6 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.powerpack.panel.popup.Answers.AnswerCreator;
-			import net.vdombox.powerpack.panel.popup.Answers.Answer;
 			import mx.containers.Canvas;
 			import mx.controls.HRule;
 			import mx.controls.Image;
@@ -19,6 +17,8 @@
 			import net.vdombox.powerpack.control.BrowseButton;
 			import net.vdombox.powerpack.customize.skins.PopupBackgroundSkin;
 			import net.vdombox.powerpack.gen.parse.ListParser;
+			import net.vdombox.powerpack.panel.popup.Answers.Answer;
+			import net.vdombox.powerpack.panel.popup.Answers.AnswerCreator;
 			
 			[Bindable]
 			public var question : String = "";
@@ -45,9 +45,11 @@
 				}
 				
 				var answer : Answer;
-				for each (var value : String in _dataProvider) 
+				Answer.context = context;
+				
+				for each (var value : * in _dataProvider) 
 				{
-					answer = AnswerCreator.create( value, context );
+					answer = AnswerCreator.create( value);
 					answerBox.addChild( answer );
 				}
 			}

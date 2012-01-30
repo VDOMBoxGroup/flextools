@@ -38,14 +38,6 @@ package net.vdombox.powerpack.panel.popup.Answers
 			for (var i:uint=0; i<value.length; i++)
 			{
 				value[i] =  ListParser.getElmValue( ListParser.array2List(value), i+1, context);
-//				if (value[i] is LexemStruct)
-//					value[i] = clearString (LexemStruct(value[i]).value);
-//				else
-//					value[i] =  ListParser.getElm( dataProvider , 3)
-//				var defaulValue : String =  ListParser.getElm( dataProvider , 3);
-				
-//				else if (value[i] is Object && value[i].hasOwnProperty("value"))
-//					value[i] = value[i].value;
 			}
 			
 			_dataProvider = value;
@@ -91,25 +83,6 @@ package net.vdombox.powerpack.panel.popup.Answers
 			
 			addChild(textLabel);
 		}
-		
-		public function clearString(value : String ): String
-		{
-			
-			var length : int = value.length;
-			if (length < 2)
-				return value;
-			
-			var firstChar : String = value.charAt(0);
-			var lastChar : String = value.charAt(length - 1);
-			
-			if (( firstChar  == '"' && lastChar  == '"')
-				|| ( firstChar  == "'" && lastChar  == "'"))
-				
-				return value.substr(1, length - 2);
-			
-			return value;
-		}
-		
 		
 	}
 }

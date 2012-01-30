@@ -1,6 +1,7 @@
 package net.vdombox.powerpack.panel.popup
 {
 	import net.vdombox.powerpack.gen.parse.ListParser;
+	import net.vdombox.powerpack.panel.popup.Answers.AnswerCreator;
 
 	public class QuestionParamsConvertor
 	{
@@ -88,12 +89,12 @@ package net.vdombox.powerpack.panel.popup
 			{
 				case QT_INPUT:
 				{
-					listParamsArr.push("textArea"); // ans type
+					listParamsArr.push(AnswerCreator.ANSWER_TYPE_TEXT); // ans type
 					break;
 				}
 				case QT_SELECT:
 				{
-					listParamsArr.push("radioButtons"); // ans type
+					listParamsArr.push(AnswerCreator.ANSWER_TYPE_RADIO_BUTTONS); // ans type
 					listParamsArr.push(""); // ans label
 					
 					if (params.length > 1) // ans variants
@@ -105,7 +106,7 @@ package net.vdombox.powerpack.panel.popup
 				}
 				case QT_BROWSE:
 				{
-					listParamsArr.push("browseFile"); // ans type
+					listParamsArr.push(AnswerCreator.ANSWER_TYPE_BROWSE_FILE); // ans type
 					listParamsArr.push(""); // ans label
 					
 					listParamsArr.push(getFileMask(params[0].toString()));

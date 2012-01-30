@@ -8,51 +8,49 @@ package net.vdombox.powerpack.panel.popup.Answers
 
 	public class AnswerCreator
 	{
-		public static function create( data : String, context : Array) : Answer
+		
+		public static const ANSWER_TYPE_TEXT			: String = "text";
+		public static const ANSWER_TYPE_TEXT_AREA		: String = "textArea";
+		public static const ANSWER_TYPE_RADIO_BUTTONS	: String = "radioButtons";
+		public static const ANSWER_TYPE_BROWSE_FILE		: String = "browseFile";
+		public static const ANSWER_TYPE_COMBO_BOX		: String = "comboBox";
+		public static const ANSWER_TYPE_CHECK_BOX		: String = "checkBox";
+		
+		
+		public static function create( data : *) : Answer
 		{
-			Answer.context = context;
-			
-			//var type : String = ListParser.getElmValue( data , 1, context);
-			var type : String = ListParser.getElm( data , 1);
+			var type : String = ListParser.getElmValue( data , 1, Answer.context).toString();
 			
 			var answer : *;
 		
 			switch (type)
 			{	
-				case "'text'":
-				case "\"text\"":
-				case "text":
+				case ANSWER_TYPE_TEXT :
 				{
 					answer = new AnswerText (data);
 					break;
 				}
-				case "'textArea'":
-				case "\"textArea\"":
-				case "textArea":
+				case ANSWER_TYPE_TEXT_AREA :
 				{
 					answer = new AnswerTextArea (data);
 					break;
 				}
-				case "'radioButtons'":
-				case "\"radioButtons\"":
-				case "radioButtons":
+				case ANSWER_TYPE_RADIO_BUTTONS :
 				{
 					answer = new AnswerRadioButtons (data);
 					break;
 				}
-				case "'browseFile'":
-				case "\"browseFile\"":
-				case "browseFile":
+				case ANSWER_TYPE_BROWSE_FILE :
 				{
 					answer = new AnswerBrowseFile (data);
 					break;
 				}
-				case "comboBox":
+				case ANSWER_TYPE_COMBO_BOX :
 				{
 					
 					break;
 				}	
-				case "checkBox":
+				case ANSWER_TYPE_CHECK_BOX :
 				{
 					
 					break;
