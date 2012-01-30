@@ -12,8 +12,8 @@
 			import mx.controls.dataGridClasses.DataGridListData;
 			import mx.events.DataGridEvent;
 			
-			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.components.StringAttributeEditWindow;
+			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.utils.WindowManager;
 			
 			import spark.components.RichEditableText;
@@ -61,10 +61,16 @@
 				data[DataGridListData(listData).dataField] = textArea.text;
 			}
 			
+			protected function textArea_changingHandler(event:TextOperationEvent):void
+			{
+				var rr : int = 0;
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<s:TextInput id="textArea" top="0" left="0" right="0" bottom="0" text="{listData.label}" doubleClick="lblData_doubleClickHandler(event)"
 				 contentBackgroundAlpha="0" borderVisible="false" maxHeight="18"  change="lblData_changeHandler(event)" paddingTop="4"
+				 changing="textArea_changingHandler(event)"
 				 focusIn="{textArea.setStyle( 'contentBackgroundAlpha', '1' ) }" focusOut="{textArea.setStyle( 'contentBackgroundAlpha', '0' ) }"/>
 </s:MXAdvancedDataGridItemRenderer>

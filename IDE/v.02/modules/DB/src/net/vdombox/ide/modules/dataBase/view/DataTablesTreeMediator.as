@@ -259,6 +259,8 @@ package net.vdombox.ide.modules.dataBase.view
 					
 						_pageVO.name = componentName;
 						
+						componentName = "";
+						
 						sendNotification( ApplicationFacade.SET_OBJECT_NAME, _pageVO );
 					}
 					
@@ -271,11 +273,12 @@ package net.vdombox.ide.modules.dataBase.view
 					{
 						sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
 						sendNotification( ApplicationFacade.TABLE_CREATED, { pageVO : body.pageVO } );
-						//sendNotification( ApplicationFacade.GET_TABLE, { pageVO: body.pageVO, objectID: body.id } );
 					}
 					else
 					{
 						body.name = componentName;
+						
+						componentName = "";
 					
 						sendNotification( ApplicationFacade.SET_OBJECT_NAME, body );
 					}
@@ -286,7 +289,6 @@ package net.vdombox.ide.modules.dataBase.view
 				{
 					sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
 					sendNotification( ApplicationFacade.TABLE_CREATED, { pageVO : body.pageVO } );
-					//sendNotification( ApplicationFacade.GET_TABLE, { pageVO: body.pageVO, objectID: body.id } );
 					
 					break;
 				}	

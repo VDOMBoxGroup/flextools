@@ -2,11 +2,15 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
-		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*">
+		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
+		 xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*"
+		 creationComplete="group1_creationCompleteHandler(event)"
+		 removedFromStage="group1_removedFromStageHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.CloseEvent;
 			import mx.events.DataGridEvent;
+			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
 			import mx.utils.UIDUtil;
 			
@@ -283,6 +287,33 @@
 			protected function dataTable_doubleClickHandler(event:MouseEvent):void
 			{
 				addBtnHandler();
+			}
+			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener( KeyboardEvent.KEY_DOWN, kaysHandler, true, 0 , true );
+				addEventListener( KeyboardEvent.KEY_DOWN, kaysHandler, false, 0 , true );
+			}
+			
+			protected function group1_removedFromStageHandler(event:Event):void
+			{
+				removeEventListener( KeyboardEvent.KEY_DOWN, kaysHandler, true );
+				removeEventListener( KeyboardEvent.KEY_DOWN, kaysHandler );
+			}
+			
+			private function kaysHandler( event : KeyboardEvent ) : void
+			{
+				if ( event.ctrlKey )
+				{
+					if ( event.keyCode == Keyboard.S )
+						applyBtnClickHandler();
+					else if ( event.keyCode == Keyboard.D )
+						removeBtnHandler();
+					else if ( event.keyCode == Keyboard.N )
+						addBtnHandler();
+				}
+				
+				event.stopImmediatePropagation();
 			}
 			
 		]]>
