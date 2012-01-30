@@ -11,14 +11,14 @@ package net.vdombox.powerpack.panel.popup.Answers
 	import net.vdombox.powerpack.gen.parse.ListParser;
 	import net.vdombox.powerpack.gen.parse.parseClasses.LexemStruct;
 
-	public class AnswerRadioButtons extends Answer
+	public class RadioButtonsAnswer extends Answer
 	{
 		
 		private var radioBtnGroup : RadioButtonGroup;
 		private var vBox : VBox;
 		private var textLabel : Text;
 		
-		public function AnswerRadioButtons(data:String )
+		public function RadioButtonsAnswer(data:String )
 		{
 			super(data);
 			

@@ -27,22 +27,22 @@ package net.vdombox.powerpack.panel.popup.Answers
 			{	
 				case ANSWER_TYPE_TEXT :
 				{
-					answer = new AnswerText (data);
+					answer = new TextAnswer (data);
 					break;
 				}
 				case ANSWER_TYPE_TEXT_AREA :
 				{
-					answer = new AnswerTextArea (data);
+					answer = new TextAreaAnswer (data);
 					break;
 				}
 				case ANSWER_TYPE_RADIO_BUTTONS :
 				{
-					answer = new AnswerRadioButtons (data);
+					answer = new RadioButtonsAnswer (data);
 					break;
 				}
 				case ANSWER_TYPE_BROWSE_FILE :
 				{
-					answer = new AnswerBrowseFile (data);
+					answer = new BrowseFileAnswer (data);
 					break;
 				}
 				case ANSWER_TYPE_COMBO_BOX :

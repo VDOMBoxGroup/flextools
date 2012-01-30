@@ -8,13 +8,13 @@ package net.vdombox.powerpack.panel.popup.Answers
 	import net.vdombox.powerpack.gen.parse.ListParser;
 	import net.vdombox.powerpack.gen.parse.parseClasses.LexemStruct;
 
-	public class AnswerText extends Answer
+	public class TextAreaAnswer extends Answer
 	{
 		
-		private var textInput : TextInput;
-		private var text1 : Text;
+		private var textInput : TextArea;
+		private var textLabel : Text;
 		
-		public function AnswerText(data:String )
+		public function TextAreaAnswer(data:String )
 		{
 			super(data);
 			
@@ -24,20 +24,20 @@ package net.vdombox.powerpack.panel.popup.Answers
 		{
 			super.createChildren();
 			
-			createTextInput();
+			createTextArea();
 			
 		}
 		
-		private function createTextInput():void
+		private function createTextArea():void
 		{
-			textInput = new TextInput();
+			textInput = new TextArea();
 			textInput.percentWidth = 100;
-			textInput.height = 27;
 			textInput.styleName = "answerInputTextStyle";
+			textInput.setStyle("bottom", 0);
 			
 			addChild(textInput);
 
-			if ( dataProvider[2])
+			if ( dataProvider[2] )
 			{
 				var defaulValue : String =  dataProvider[2];
 				
@@ -51,5 +51,6 @@ package net.vdombox.powerpack.panel.popup.Answers
 		{
 			return textInput.text;
 		}
+		
 	}
 }

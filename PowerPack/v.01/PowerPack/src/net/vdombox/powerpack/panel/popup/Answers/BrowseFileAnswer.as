@@ -17,7 +17,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 	import net.vdombox.powerpack.gen.parse.parseClasses.LexemStruct;
 	import net.vdombox.powerpack.managers.LanguageManager;
 
-	public class AnswerBrowseFile extends Answer
+	public class BrowseFileAnswer extends Answer
 	{
 		
 		private var filePathTextInput	: TextInput;
@@ -25,7 +25,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 		
 		private var _browseFilter : String = "*.*";
 		
-		public function AnswerBrowseFile(data:String )
+		public function BrowseFileAnswer(data:String )
 		{
 			super(data);
 		
