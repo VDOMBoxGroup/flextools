@@ -69,7 +69,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var body : Object = notification.getBody();
 			var event : ExternalManagerEvent;
 			
-			if ( body.objectVO.id != dataTableQuery.editorID)
+			if ( !body.hasOwnProperty("pageVO") || body.pageVO.id != dataTableQuery.editorID)
 				return;
 			
 			switch ( name )
