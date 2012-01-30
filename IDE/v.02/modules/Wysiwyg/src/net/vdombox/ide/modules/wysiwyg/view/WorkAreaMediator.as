@@ -8,7 +8,10 @@
 
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.desktop.NativeApplication;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
 	
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
@@ -205,6 +208,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			// Alexey Andreev: delete because do not used in outher modules 
 //			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
+			
+			NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
 
 			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
 
@@ -265,12 +270,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			workArea.removeEventListener( EditorEvent.PREINITIALIZED, editor_preinitializedHandler, true );
 			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
+			
+			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true );
 			//workArea.removeEventListener( RendererEvent.REMOVED, renderer_removedHandler, true );
 		}
 
 		private function removedFromStageHandler( event : Event ) : void
 		{
 			clearData();
+		}
+		
+		private function keyDownHandler( event : KeyboardEvent ) : void
+		{
+			if ( event.ctrlKey && event.keyCode == Keyboard.Z )
+				sendNotification( ApplicationFacade.UNDO, sessionProxy.selectedPage );
+			else if ( event.ctrlKey && event.keyCode == Keyboard.Y )
+				sendNotification( ApplicationFacade.REDO, sessionProxy.selectedPage );
 		}
 	}
 }

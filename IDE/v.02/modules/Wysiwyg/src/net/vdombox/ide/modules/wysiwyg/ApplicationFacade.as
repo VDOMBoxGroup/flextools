@@ -228,6 +228,11 @@ package net.vdombox.ide.modules.wysiwyg
 // Copy
 		public static const COPY_REQUEST : String = "copy";
 		
+
+// Undo
+		public static const UNDO : String = "undo";
+		public static const REDO : String = "redo";
+		
 // Error
 		public static const ERROR_GETTED : String = "errorGetted";
 		

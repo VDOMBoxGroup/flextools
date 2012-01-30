@@ -25,6 +25,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.model.MessageProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.SettingsVO;
 	
@@ -45,10 +46,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		private var recipients : Dictionary;
+		
+		private var messageProxy : MessageProxy;
 
 		override public function onRegister() : void
 		{
 			recipients = new Dictionary( true );
+			messageProxy = facade.retrieveProxy( MessageProxy.NAME ) as MessageProxy;
 		}
 
 		override public function listNotificationInterests() : Array
@@ -111,6 +115,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.GET_TOP_LEVEL_TYPES );
 			interests.push( ApplicationFacade.CREATE_PAGE );
 			
+			interests.push( ApplicationFacade.UNDO );
+			interests.push( ApplicationFacade.REDO );
 
 			return interests;
 		}
@@ -386,6 +392,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.DELETE, PPMPageTargetNames.OBJECT, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					messageProxy.removeAll( body.pageVO as PageVO );
 
 					break;
 				}
@@ -419,10 +427,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.UPDATE_ATTRIBUTES:
 				{
-					if ( VdomObjectAttributesVO( body ).vdomObjectVO is PageVO )
+					if ( VdomObjectAttributesVO(body).vdomObjectVO is PageVO )
+					{
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
-					else if ( VdomObjectAttributesVO( body ).vdomObjectVO is ObjectVO )
+						messageProxy.push( body.vdomObjectVO, message as ProxyMessage );				
+					} else if ( VdomObjectAttributesVO(body).vdomObjectVO is ObjectVO )
+					{
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.ATTRIBUTES, body );
+						messageProxy.push( body.vdomObjectVO.pageVO, message as ProxyMessage );
+					}
 
 					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -486,6 +499,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
+					messageProxy.removeAll( body.pageVO as PageVO );
+					
 					break;
 				}
 					
@@ -503,6 +518,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.UNDO:
+				{
+					message = messageProxy.getUndo( body as PageVO );
+					
+					if ( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.REDO:
+				{
+					message = messageProxy.getRedo( body as PageVO );
+					
+					if ( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
 				}

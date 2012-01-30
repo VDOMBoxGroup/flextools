@@ -782,6 +782,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST, { vdomObjectVO: ( event.target as IRenderer ).vdomObjectVO, typeVO: event.typeVO, point: event.point } )
 		}
+		
+		private function getAttributeVO( attributes : Array, attributeName : String, attributeValue : String ) : AttributeVO
+		{
+			var __attributeVO : AttributeVO;
+			
+			for each ( var atr : AttributeVO in attributes )
+			{
+				if ( atr.name == attributeName )
+					__attributeVO = atr;
+			}
+			
+			if ( !__attributeVO )
+			{
+				__attributeVO = new AttributeVO( attributeName );
+			}
+			
+			__attributeVO.value = attributeValue;
+			
+			return __attributeVO;
+		}
 
 		private function rendererTransformedHandler( event : EditorEvent ) : void
 		{
@@ -791,6 +811,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			var attributes : Array = [];
 			var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO( event.renderer.vdomObjectVO );
+			
+			var obj : Object = event.renderer.vdomObjectVO;
+			
+			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+			
+			var renderer : RendererBase = renderProxy.getRendererByID( obj.id );
+			
+			var attributesRender : Array = renderer.renderVO.attributes;
 
 			for ( attributeName in event.attributes )
 			{
@@ -802,15 +830,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 				else if ( attributeName == "y" )
 				{
 					attributeValue = event.attributes[ attributeName ];
-					attributeName = "top"
+					attributeName = "top";
 				}
 				else
 				{
 					attributeValue = event.attributes[ attributeName ];
 				}
 
-				attributeVO = new AttributeVO( attributeName );
-				attributeVO.value = attributeValue;
+				attributeVO = getAttributeVO( attributesRender, attributeName, attributeValue );
 
 				attributes.push( attributeVO );
 			}
