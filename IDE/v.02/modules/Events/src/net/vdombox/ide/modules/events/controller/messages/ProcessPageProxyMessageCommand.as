@@ -47,6 +47,8 @@ package net.vdombox.ide.modules.events.controller.messages
 				case PPMPageTargetNames.SERVER_ACTION:
 				{
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
+						{ applicationVO: sessionProxy.selectedApplication, pageVO: sessionProxy.selectedPage } );
 					
 					break;
 				}	

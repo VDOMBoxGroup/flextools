@@ -133,8 +133,7 @@ package net.vdombox.ide.modules.events.view
 				{
 					scripts = body.serverActions as Array;
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_LIST, currentTarget );
-					sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
-						{ applicationVO: sessionProxy.selectedApplication, pageVO: sessionProxy.selectedPage } );
+					
 					return;
 					
 				}
