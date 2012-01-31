@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox
+<mx:VDividedBox
 		xmlns:mx="http://www.adobe.com/2006/mxml"
 		xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
 		paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5"
@@ -9,8 +9,11 @@
 
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.managers.ContextManager;
-		import net.vdombox.powerpack.managers.LanguageManager;
+			import mx.events.ListEvent;
+			
+			import net.vdombox.powerpack.lib.extendedapi.controls.XMLItemRenderer;
+			import net.vdombox.powerpack.managers.ContextManager;
+			import net.vdombox.powerpack.managers.LanguageManager;
 
 		static private var defaultCaptions : Object = {
 			variables_title : "Variables",
@@ -25,6 +28,19 @@
 			LanguageManager.setSentences( defaultCaptions );
 			return true
 		}
+			
+			protected function grid_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			protected function grid_changeHandler(event:ListEvent):void
+			{
+				// TODO Auto-generated method stub
+				txt.text = event.itemRenderer.data["FullValue"]	
+			}
+			
 		]]>
 	</mx:Script>
 
@@ -32,7 +48,10 @@
 							width="100%" height="100%"
 							defaultLeafIcon="{null}"
 							folderOpenIcon="{null}"
-							folderClosedIcon="{null}">
+							folderClosedIcon="{null}"
+							change="grid_changeHandler(event)"
+							
+							>
 		<controls:columns>
 			<mx:AdvancedDataGridColumn
 					headerText="{LanguageManager.sentences.name}"
@@ -43,12 +62,14 @@
 					headerText="{LanguageManager.sentences.value}"
 					dataField="Value"
 					dataTipField="Value"
-					showDataTips="true" />
+					showDataTips="true" 
+					/>
+			
 		</controls:columns>
 	</controls:SuperDataGrid>
 
-	<mx:TextInput id="txt" width="100%" text="{grid.selectedItem.Value}" />
+	<mx:TextArea id="txt" width="100%"   />
 
 	<mx:ControlBar visible="false" includeInLayout="false"></mx:ControlBar>
 
-</mx:VBox>
+</mx:VDividedBox>

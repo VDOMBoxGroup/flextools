@@ -39,8 +39,6 @@ public class SOAPBaseLevel extends EventDispatcher
 
     public function get resultType() : String
     {
-//        if (!_resultType)
-
         return _resultType;
     }
 
@@ -246,17 +244,12 @@ public class SOAPBaseLevel extends EventDispatcher
 //	export_application       //
 	private function exportApplication( params : Array ) : void
 	{
-		trace( "exportApplication" );
 		var appId : String = params[0];
-
-
 
 		soap.export_application.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.export_application.addEventListener( FaultEvent.FAULT, soapError );
 
 		soap.export_application( appId );
-
-
 	}
 
 //	installApplication
@@ -276,8 +269,6 @@ public class SOAPBaseLevel extends EventDispatcher
 
 	public function soapLogin( params : Array ) : void
 	{
-		
-		
 		var server : String = params[0];
 		var login : String = params[1];
 		var pass : String = params[2];
@@ -290,26 +281,19 @@ trace(wsdl)
 		function soap_initCompleteHandler( event : Event ) : void
 		{
 			soap.removeEventListener( "loadWsdlComplete", soap_initCompleteHandler );
-			trace("soap_initCompleteHandler"); 
 			soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
-			
-			
-//			soap.close_session(); 
-            trace(login+" : "+ pass)
+
 			soap.login( login, pass );
 		}
                                               
 		function soap_loginOKHandler( event : SOAPEvent ) : void
 		{
-			trace("soap_loginOKHandler"); 
 			soap.removeEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
 
 
 			var result : XML =  event.result as XML;
-            trace(result)
 
-//            [Success 195.167.233.27 root 1.2.7817]
-             var resultArray : Array = ["Success", result.Hostname, result.Username, result.ServerVersion]
+			var resultArray : Array = ["Success", result.Hostname, result.Username, result.ServerVersion]
 
             _result = ListParser.array2List(resultArray);
 
@@ -317,7 +301,6 @@ trace(wsdl)
 
 			dispatchEvent( new Event( RESULT_RECEIVED ) );
 		}
-
 	}
 
 
