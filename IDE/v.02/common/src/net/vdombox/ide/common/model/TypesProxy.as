@@ -14,6 +14,8 @@ package net.vdombox.ide.common.model
 		
 		//		types
 		public static const GET_TYPES : String = "getTypes";
+		public static const TYPES_GETTED : String = "typesGetted";
+		
 		public static const TYPES_CHANGED : String = "typesChanged";
 		
 		public static const GET_TYPE : String = "getType";
@@ -32,6 +34,8 @@ package net.vdombox.ide.common.model
 		
 		private var _types : Array;
 		
+		public var tableType : TypeVO;
+		
 		public function get types() : Array
 		{
 			if( !_types )
@@ -43,6 +47,45 @@ package net.vdombox.ide.common.model
 		public function set types( types : Array ) : void
 		{
 			_types = types;
+			
+			TypeDB.removeDB( "vdom" );
+			
+			TypeDB.setDB( "vdom", typeDB );
+			
+			sendNotification( TYPES_CHANGED, _types );
+		}
+		
+		public function set dbtypes( types : Array ) : void
+		{
+			_types = [];
+			
+			var typeVO : TypeVO;
+			for each ( typeVO in types )
+			{
+				if ( typeVO.id == "753ea72c-475d-4a29-96be-71c522ca2097" )
+				{
+					_types.push( typeVO );
+				}
+				else
+				{
+					var containers : Array = typeVO.containers.split( "," );
+					
+					var containerName : String;
+					for each ( containerName in containers )
+					{
+						if ( containerName == "dbschema" )
+						{
+							_types.push( typeVO );
+							
+							if ( typeVO.name == "dbtable" )
+							{
+								tableType = typeVO;
+							}
+							break;
+						}
+					}
+				}
+			}
 			
 			TypeDB.removeDB( "vdom" );
 			
