@@ -54,17 +54,17 @@
 	<s:VGroup height="100%" gap="0" verticalAlign="middle">
 		<s:Rect left="0" top="0" right="0" minWidth="10" minHeight="9" maxHeight="9">
 			<s:fill>
-				<s:BitmapFill source = "@Embed('net/vdombox/icons/mini-vertical-scroll-top.png')" smooth="true"/>
+				<s:BitmapFill source = "@Embed('assets/vdomscrollbar/mini-vertical-scroll-top.png')" smooth="true"/>
 			</s:fill>
 		</s:Rect>
 		<s:Rect left="0" right="0" minWidth="10" height="100%">
 			<s:fill>
-				<s:BitmapFill source = "@Embed('net/vdombox/icons/mini-vertical-scroll-center.png')" smooth="true" fillMode="repeat"/>
+				<s:BitmapFill source = "@Embed('assets/vdomscrollbar/mini-vertical-scroll-center.png')" smooth="true" fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
 		<s:Rect left="0" right="0" bottom="0" minWidth="10" minHeight="9" maxHeight="9">
 			<s:fill>
-				<s:BitmapFill source = "@Embed('net/vdombox/icons/mini-vertical-scroll-bottom.png')" smooth="true"/>
+				<s:BitmapFill source = "@Embed('assets/vdomscrollbar/mini-vertical-scroll-bottom.png')" smooth="true"/>
 			</s:fill>
 		</s:Rect>
 	</s:VGroup>

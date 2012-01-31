@@ -21,7 +21,7 @@ package net.vdombox.ide.common.view.components.windows
 	
 	import spark.components.Label;
 	import spark.components.TitleWindow;
-	import net.vdombox.ide.common.view.AlertButton;
+	import net.vdombox.ide.common.view.components.AlertButton;
 
 	public class Alert extends TitleWindow
 	{

@@ -13,6 +13,9 @@ package net.vdombox.ide.common
 	import org.puremvc.as3.multicore.utilities.pipes.messages.FilterControlMessage;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
+	import net.vdombox.ide.common.model.names.PipeNames;
+	import net.vdombox.ide.common.model.messages.LogFilterMessage;
+	import net.vdombox.ide.common.model.messages.LogMessage;
 	
 	public class LoggingJunctionMediator extends JunctionMediator
 	{

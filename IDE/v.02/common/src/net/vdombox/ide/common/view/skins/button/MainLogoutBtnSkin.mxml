@@ -17,7 +17,7 @@
 		<s:State name="up" />
 	</s:states>
 	
-	<mx:Image source="@Embed(source='net/vdombox/icons/logout_but.png')" />
+	<mx:Image source="@Embed(source='assets/logout_but.png')" />
 	<!-- SkinParts
 	name=labelDisplay, type=spark.components.supportClasses.TextBase, required=false
 	-->

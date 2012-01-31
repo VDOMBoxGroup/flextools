@@ -68,7 +68,7 @@
 	<s:Group left="9" top="9" right="9" bottom="9">
 		<s:Rect width="100%" height="100%">
 			<s:fill>
-				<s:BitmapFill source = "@Embed('net/vdombox/icons/texture_sidebar.png')" smooth="true" fillMode="repeat"/>
+				<s:BitmapFill source = "@Embed('assets/texture_sidebar.png')" smooth="true" fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
 		
@@ -83,7 +83,7 @@
 							visible="{hostComponent.getVisibleNoButton()}" includeInLayout="{hostComponent.getVisibleNoButton()}"
 							click="hostComponent.btnClickHandler(Alert.NO)" keyDown="hostComponent.keyNoPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
 				<components:VDOMButton  id="yesButton" tabIndex="-1"
-							icon="@Embed('net/vdombox/icons/Cancel.png')" label="{hostComponent.getYesLabel()}"
+							icon="@Embed('assets/Cancel.png')" label="{hostComponent.getYesLabel()}"
 							click="hostComponent.btnClickHandler(Alert.YES)" keyDown="hostComponent.keyYesPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
 			</s:HGroup>
 		</s:VGroup>

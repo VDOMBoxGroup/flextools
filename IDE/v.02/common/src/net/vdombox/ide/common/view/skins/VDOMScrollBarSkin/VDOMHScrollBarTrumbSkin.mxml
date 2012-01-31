@@ -34,17 +34,17 @@
 	<s:HGroup width="100%" gap="0" horizontalAlign="center">
 		<s:Rect left="1" minWidth="9" maxWidth="9" minHeight="10">
 			<s:fill>
-				<s:BitmapFill source = "@Embed('net/vdombox/icons/mini-horizontal-scroll-right.png')" smooth="true"/>
+				<s:BitmapFill source = "@Embed('assets/vdomscrollbar/mini-horizontal-scroll-right.png')" smooth="true"/>
 			</s:fill>
 		</s:Rect>
 		<s:Rect width="100%" minHeight="10">
 			<s:fill>
-				<s:BitmapFill source = "@Embed('net/vdombox/icons/mini-horizontal-scroll-center.png')" smooth="true" fillMode="repeat"/>
+				<s:BitmapFill source = "@Embed('assets/vdomscrollbar/mini-horizontal-scroll-center.png')" smooth="true" fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
 		<s:Rect right="2" minWidth="9" maxWidth="9" minHeight="10">
 			<s:fill>
-				<s:BitmapFill source = "@Embed('net/vdombox/icons/mini-horizontal-scroll-left.png')" smooth="true"/>
+				<s:BitmapFill source = "@Embed('assets/vdomscrollbar/mini-horizontal-scroll-left.png')" smooth="true"/>
 			</s:fill>
 		</s:Rect>
 	</s:HGroup>

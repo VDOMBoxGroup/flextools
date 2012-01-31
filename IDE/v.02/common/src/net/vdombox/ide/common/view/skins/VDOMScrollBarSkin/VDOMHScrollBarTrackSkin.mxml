@@ -53,7 +53,7 @@
 	<!-- border/fill -->
 	<s:Rect top="0" bottom="0" left="0" right="0" minWidth="30" minHeight="7">
 		<s:fill>
-			<s:BitmapFill source = "@Embed('net/vdombox/icons/mini-horizontal-bg.png')" smooth="true" fillMode="repeat"/>
+			<s:BitmapFill source = "@Embed('assets/vdomscrollbar/mini-horizontal-bg.png')" smooth="true" fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
 

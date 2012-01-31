@@ -1,6 +1,7 @@
-package net.vdombox.ide.common
+package net.vdombox.ide.common.model.messages
 {
 	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
+	import net.vdombox.ide.common.MessageTypes;
 	
 	public class ErrorProxyMessage extends Message
 	{
