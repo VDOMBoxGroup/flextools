@@ -9,13 +9,13 @@ package net.vdombox.ide.modules.events.view
 	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
 	
-	import net.vdombox.ide.common.components.CreateActionWindow;
-	import net.vdombox.ide.common.vo.ClientActionVO;
-	import net.vdombox.ide.common.vo.EventVO;
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.ServerActionVO;
-	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.common.view.components.windows.CreateActionWindow;
+	import net.vdombox.ide.common.model.vo.ClientActionVO;
+	import net.vdombox.ide.common.model.vo.EventVO;
+	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.ServerActionVO;
+	import net.vdombox.ide.common.model.vo.TypeVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.events.EventsPanelEvent;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
@@ -26,8 +26,8 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.EventItemRenderer;
 	import net.vdombox.ide.modules.events.view.components.EventsPanel;
-	import net.vdombox.view.Alert;
-	import net.vdombox.view.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
+	import net.vdombox.ide.common.view.AlertButton;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

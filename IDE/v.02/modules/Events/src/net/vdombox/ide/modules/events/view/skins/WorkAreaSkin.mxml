@@ -15,8 +15,8 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.modules.events.events.WorkAreaEvent;
-			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
-			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			
 			import spark.events.IndexChangeEvent;
 			

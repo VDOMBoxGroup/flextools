@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.events.model
 {
-	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;

@@ -4,14 +4,14 @@
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				
-				focusEnabled="false" xmlns:view="net.vdombox.view.*">
+				focusEnabled="false" xmlns:view="net.vdombox.ide.common.view.*">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.vo.EventVO;
+			import net.vdombox.ide.common.model.vo.EventVO;
 			
 			[Embed(source='assets/events.png')]
 			public var EventsIcon:Class;

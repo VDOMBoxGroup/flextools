@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.events.controller.messages
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

@@ -2,8 +2,8 @@ package net.vdombox.ide.modules.events.controller
 {
 	import mx.utils.UIDUtil;
 	
-	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.ServerActionVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.ServerActionVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.view.EventsPanelMediator;

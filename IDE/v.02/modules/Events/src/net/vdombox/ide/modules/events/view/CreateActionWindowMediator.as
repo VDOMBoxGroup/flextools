@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.events.view
 {
-	import net.vdombox.ide.common.components.CreateActionWindow;
+	import net.vdombox.ide.common.view.components.windows.CreateActionWindow;
 	import net.vdombox.ide.common.events.CreateActionWindowEvent;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	

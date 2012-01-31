@@ -6,9 +6,9 @@ package net.vdombox.ide.modules.events.view
 	
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.common.vo.ApplicationEventsVO;
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.ApplicationEventsVO;
+	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;

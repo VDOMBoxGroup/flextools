@@ -10,7 +10,7 @@
 			
 			import net.vdombox.components.StringAttributeEditWindow;
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
-			import net.vdombox.ide.common.vo.ActionParameterVO;
+			import net.vdombox.ide.common.model.vo.ActionParameterVO;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 			import net.vdombox.utils.WindowManager;
 			

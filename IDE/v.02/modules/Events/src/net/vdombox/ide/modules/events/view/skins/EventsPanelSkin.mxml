@@ -19,8 +19,8 @@
 			import mx.utils.ObjectProxy;
 			
 			import net.vdombox.ide.modules.events.events.EventsPanelEvent;
-			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
-			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			
 			import spark.skins.spark.DefaultItemRenderer;
 
@@ -71,7 +71,7 @@
 							 trRadius="5"/>
 
 	<mx:VDividedBox bottom="0" left="0" right="0" top="0"
-					dividerSkin="net.vdombox.view.skins.DividerSkin">
+					dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
 
 		<!--<s:ButtonBar id="titleBar"
 					 height="20" labelField="title"

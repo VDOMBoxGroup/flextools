@@ -14,16 +14,16 @@ package net.vdombox.ide.modules.events.view.components
 	
 	import net.vdombox.components.VDOMScroller;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
-	import net.vdombox.ide.common.vo.ApplicationEventsVO;
-	import net.vdombox.ide.common.vo.ClientActionVO;
-	import net.vdombox.ide.common.vo.EventVO;
-	import net.vdombox.ide.common.vo.ServerActionVO;
+	import net.vdombox.ide.common.model.vo.ApplicationEventsVO;
+	import net.vdombox.ide.common.model.vo.ClientActionVO;
+	import net.vdombox.ide.common.model.vo.EventVO;
+	import net.vdombox.ide.common.model.vo.ServerActionVO;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.view.skins.WorkAreaSkin;
-	import net.vdombox.view.Alert;
-	import net.vdombox.view.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
+	import net.vdombox.ide.common.view.AlertButton;
 	
 	import spark.components.Button;
 	import spark.components.CheckBox;
