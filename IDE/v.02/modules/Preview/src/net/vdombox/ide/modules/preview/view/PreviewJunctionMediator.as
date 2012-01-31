@@ -17,9 +17,9 @@ package net.vdombox.ide.modules.preview.view
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
-	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	import net.vdombox.ide.modules.preview.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
