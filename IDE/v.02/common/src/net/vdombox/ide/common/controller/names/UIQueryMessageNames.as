@@ -1,4 +1,4 @@
-package net.vdombox.ide.common.model.names
+package net.vdombox.ide.common.controller.names
 {
 	public class UIQueryMessageNames
 	{

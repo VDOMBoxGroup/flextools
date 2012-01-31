@@ -1,4 +1,4 @@
-package net.vdombox.ide.common.model.messages
+package net.vdombox.ide.common.controller.messages
 {
 	import mx.core.UIComponent;
 	
