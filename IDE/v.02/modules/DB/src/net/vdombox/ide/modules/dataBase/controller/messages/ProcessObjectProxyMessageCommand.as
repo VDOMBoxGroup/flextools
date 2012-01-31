@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 	import net.vdombox.ide.common.PPMObjectTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

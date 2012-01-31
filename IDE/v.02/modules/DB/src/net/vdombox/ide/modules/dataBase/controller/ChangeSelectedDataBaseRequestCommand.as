@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.dataBase.controller
 {
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
 	

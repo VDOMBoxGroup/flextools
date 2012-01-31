@@ -7,10 +7,10 @@ package net.vdombox.ide.modules.dataBase.view
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.events.ResourceVOEvent;
-	import net.vdombox.ide.common.vo.AttributeVO;
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.common.model.vo.AttributeVO;
+	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.TypeVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;

@@ -10,8 +10,8 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.components.tabNavigatorClasses.TabNavigator;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
 	
 	import spark.primitives.Rect;

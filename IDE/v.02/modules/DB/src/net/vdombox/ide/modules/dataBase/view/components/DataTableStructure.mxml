@@ -14,13 +14,13 @@
 			import mx.events.ListEvent;
 			import mx.utils.UIDUtil;
 			
-			import net.vdombox.ide.common.vo.ObjectVO;
+			import net.vdombox.ide.common.model.vo.ObjectVO;
 			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;
-			import net.vdombox.view.Alert;
-			import net.vdombox.view.AlertButton;
+			import net.vdombox.ide.common.view.components.windows.Alert;
+			import net.vdombox.ide.common.view.AlertButton;
 			
 			private var _objectVO : ObjectVO;
 			

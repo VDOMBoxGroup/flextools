@@ -20,10 +20,10 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.ResourceVO;
-	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.model.vo.SettingsVO;
 	

@@ -4,7 +4,7 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
 		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
 		 xmlns:components="net.vdombox.ide.modules.dataBase.view.components.*"
-		 removedFromStage="group1_removedFromStageHandler(event)" xmlns:components1="net.vdombox.ide.common.components.*">
+		 removedFromStage="group1_removedFromStageHandler(event)" xmlns:components1="net.vdombox.ide.common.components.*" xmlns:components2="net.vdombox.ide.common.view.components.*">
 	
 	<s:states>
 		<s:State name="tableEditor"/>
@@ -19,8 +19,8 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.events.EditorEvent;
-			import net.vdombox.ide.common.vo.ObjectVO;
-			import net.vdombox.ide.common.vo.PageVO;
+			import net.vdombox.ide.common.model.vo.ObjectVO;
+			import net.vdombox.ide.common.model.vo.PageVO;
 			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 			
 			[Bindable]
@@ -117,21 +117,21 @@
 	<s:VGroup paddingTop="5" width="100%" height="100%" gap="5">
 		<s:HGroup width="100%" height="20" verticalAlign="middle" horizontalAlign="left" paddingLeft="10" paddingRight="10" >
 			
-			<components1:WorkAreaButton id="data" label="{ resourceManager.getString( 'DataBase_General', 'data_table_data' ) }" height="20" click="data_clickHandler(event)" highlighted="false" highlighted.tableEditor="true" includeIn="tableEditor,tableStructure"/>
+			<components2:WorkAreaButton id="data" label="{ resourceManager.getString( 'DataBase_General', 'data_table_data' ) }" height="20" click="data_clickHandler(event)" highlighted="false" highlighted.tableEditor="true" includeIn="tableEditor,tableStructure"/>
 			
-			<components1:WorkAreaButton id="structure" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure' ) }" height="20" click="structure_clickHandler(event)" highlighted="false" highlighted.tableStructure="true" includeIn="tableEditor,tableStructure"/>
+			<components2:WorkAreaButton id="structure" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure' ) }" height="20" click="structure_clickHandler(event)" highlighted="false" highlighted.tableStructure="true" includeIn="tableEditor,tableStructure"/>
 			
-			<components1:WorkAreaButton id="visual" label="{ resourceManager.getString( 'DataBase_General', 'data_table_visual' ) }" height="20" click="visual_clickHandler(event)" highlighted="false" highlighted.baseVisual="true" includeIn="baseQuery,baseVisual"/>
+			<components2:WorkAreaButton id="visual" label="{ resourceManager.getString( 'DataBase_General', 'data_table_visual' ) }" height="20" click="visual_clickHandler(event)" highlighted="false" highlighted.baseVisual="true" includeIn="baseQuery,baseVisual"/>
 			
-			<components1:WorkAreaButton id="query" label="{ resourceManager.getString( 'DataBase_General', 'data_table_sql_query' ) }" height="20" click="query_clickHandler(event)" highlighted="false" highlighted.baseQuery="true" includeIn="baseQuery,baseVisual"/>
+			<components2:WorkAreaButton id="query" label="{ resourceManager.getString( 'DataBase_General', 'data_table_sql_query' ) }" height="20" click="query_clickHandler(event)" highlighted="false" highlighted.baseQuery="true" includeIn="baseQuery,baseVisual"/>
 			
 			<mx:Spacer width="100%"/>
 			
-			<components1:WorkAreaButton id="newTable" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_table' ) }" icon="@Embed('assets/expand.png')" height="20" click="newTable_clickHandler(event)" includeIn="baseVisual"/>
+			<components2:WorkAreaButton id="newTable" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_table' ) }" icon="@Embed('assets/expand.png')" height="20" click="newTable_clickHandler(event)" includeIn="baseVisual"/>
 			
 			<!--<components1:WorkAreaButton id="newBase" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_base' ) }" height="20" click="newBase_clickHandler(event)" includeIn="baseVisual"/>-->
 			
-			<components1:WorkAreaButton id="goToBase" label="{ resourceManager.getString( 'DataBase_General', 'data_table_go_to_base' ) }" height="20" click="goToBase_clickHandler(event)" includeIn="tableEditor,tableStructure"/>
+			<components2:WorkAreaButton id="goToBase" label="{ resourceManager.getString( 'DataBase_General', 'data_table_go_to_base' ) }" height="20" click="goToBase_clickHandler(event)" includeIn="tableEditor,tableStructure"/>
 			
 		</s:HGroup>
 		

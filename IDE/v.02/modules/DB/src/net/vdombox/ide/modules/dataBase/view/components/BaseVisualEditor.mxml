@@ -6,7 +6,7 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.vo.PageVO;
+			import net.vdombox.ide.common.model.vo.PageVO;
 			
 			private var _objectVO : PageVO;
 			

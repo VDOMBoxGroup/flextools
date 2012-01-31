@@ -11,7 +11,7 @@
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.FlexEvent;
 
-			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.common.model.vo.ResourceVO;
 
 			import spark.filters.DropShadowFilter;
 

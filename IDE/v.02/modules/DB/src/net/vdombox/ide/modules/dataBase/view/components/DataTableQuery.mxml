@@ -16,7 +16,7 @@
 			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
 			import mx.utils.UIDUtil;
 			
-			import net.vdombox.ide.common.vo.PageVO;
+			import net.vdombox.ide.common.model.vo.PageVO;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.LabelItemRenderers;
