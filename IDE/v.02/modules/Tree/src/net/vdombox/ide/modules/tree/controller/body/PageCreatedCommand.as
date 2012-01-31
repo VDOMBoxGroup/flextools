@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.tree.controller.body
 {
 	import flash.utils.getQualifiedClassName;
 	
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;

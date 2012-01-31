@@ -17,12 +17,12 @@
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.common.model.vo.ResourceVO;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
-			import net.vdombox.view.Alert;
-			import net.vdombox.view.AlertButton;
+			import net.vdombox.ide.common.view.components.windows.Alert;
+			import net.vdombox.ide.common.view.AlertButton;
 			
 			import spark.components.Group;
 			import spark.filters.DropShadowFilter;

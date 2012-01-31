@@ -2,11 +2,11 @@ package net.vdombox.ide.modules.tree.view
 {
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.common.vo.ResourceVO;
-	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.common.events.ItemRendererEvent;
-	import net.vdombox.ide.common.components.PageTypeItemRenderer;
+	import net.vdombox.ide.common.view.components.PageTypeItemRenderer;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

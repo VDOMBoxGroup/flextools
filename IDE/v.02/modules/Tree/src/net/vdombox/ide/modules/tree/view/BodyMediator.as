@@ -6,8 +6,8 @@ package net.vdombox.ide.modules.tree.view
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 
-	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;

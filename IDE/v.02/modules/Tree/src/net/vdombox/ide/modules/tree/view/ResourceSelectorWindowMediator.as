@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.tree.view
 	
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.common.events.WindowEvent;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;

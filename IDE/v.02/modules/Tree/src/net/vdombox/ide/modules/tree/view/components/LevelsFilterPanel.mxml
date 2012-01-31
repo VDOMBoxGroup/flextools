@@ -14,7 +14,7 @@
 			import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
-			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			
 			import spark.events.IndexChangeEvent;
 

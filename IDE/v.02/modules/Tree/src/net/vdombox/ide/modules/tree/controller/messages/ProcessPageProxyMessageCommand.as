@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	

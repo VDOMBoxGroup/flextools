@@ -1,11 +1,11 @@
 package net.vdombox.ide.modules.tree.view
 {
-	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.AttributeVO;
-	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.ResourceVO;
-	import net.vdombox.ide.common.vo.TypeVO;
-	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.AttributeVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.TypeVO;
+	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;

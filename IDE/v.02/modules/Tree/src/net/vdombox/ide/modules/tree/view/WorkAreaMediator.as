@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.tree.view
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
 	
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.LinkageEvent;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;

@@ -3,10 +3,10 @@ package net.vdombox.ide.modules.tree.model
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 
-	import net.vdombox.ide.common.vo.LevelObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.ResourceVO;
-	import net.vdombox.ide.common.vo.StructureObjectVO;
+	import net.vdombox.ide.common.model.vo.LevelObjectVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.StructureObjectVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;

@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.model.vo.SettingsVO;

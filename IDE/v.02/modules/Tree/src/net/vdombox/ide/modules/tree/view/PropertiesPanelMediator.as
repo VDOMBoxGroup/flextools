@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.tree.view
 {
-	import net.vdombox.ide.common.vo.ApplicationInformationVO;
-	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model.vo.ApplicationInformationVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.AttributeEvent;
 	import net.vdombox.ide.modules.tree.events.PropertiesPanelEvent;
