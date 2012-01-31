@@ -61,7 +61,7 @@
 			
 			<s:List id="pageTypeList"
 					dataProvider="{ hostComponent._pagesDataProvider}" height="100%" width="100%"
-					itemRenderer="net.vdombox.ide.common.view.components.PageTypeItemRenderer"
+					itemRenderer="net.vdombox.ide.common.view.components.itemrenderers.PageTypeItemRenderer"
 					requireSelection="true" useVirtualLayout="false"
 					creationComplete="pageTypeList_creationCompleteHandler(event)" borderVisible="false"/>
 			
