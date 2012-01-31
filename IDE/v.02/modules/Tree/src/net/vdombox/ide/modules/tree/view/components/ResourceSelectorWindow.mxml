@@ -8,7 +8,7 @@
 		<![CDATA[
 			import mx.collections.ArrayList;
 			
-			import net.vdombox.ide.common.model.vo.ResourceVO;
+			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.common.events.WindowEvent;
 
 			[Bindable]

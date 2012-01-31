@@ -1,29 +1,30 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import flash.utils.Dictionary;
-
+	
 	import mx.core.UIComponent;
-
-	import net.vdombox.ide.common.LogMessage;
-	import net.vdombox.ide.common.LoggingJunctionMediator;
-	import net.vdombox.ide.common.PPMApplicationTargetNames;
-	import net.vdombox.ide.common.PPMOperationNames;
-	import net.vdombox.ide.common.PPMPageTargetNames;
-	import net.vdombox.ide.common.PPMPlaceNames;
-	import net.vdombox.ide.common.PPMResourcesTargetNames;
-	import net.vdombox.ide.common.PPMStatesTargetNames;
-	import net.vdombox.ide.common.PPMTypesTargetNames;
-	import net.vdombox.ide.common.PipeNames;
-	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.SimpleMessage;
+	
 	import net.vdombox.ide.common.SimpleMessageHeaders;
-	import net.vdombox.ide.common.UIQueryMessage;
-	import net.vdombox.ide.common.UIQueryMessageNames;
-	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model.TypesProxy;
+	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.controller.messages.LogMessage;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.messages.SimpleMessage;
+	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
+	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
+	import net.vdombox.ide.common.controller.names.PPMOperationNames;
+	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
+	import net.vdombox.ide.common.controller.names.PPMPlaceNames;
+	import net.vdombox.ide.common.controller.names.PPMResourcesTargetNames;
+	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
+	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
+	import net.vdombox.ide.common.controller.names.PipeNames;
+	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
+	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.model.vo.SettingsVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -78,8 +79,8 @@ package net.vdombox.ide.modules.tree.view
 			
 			interests.push( ApplicationFacade.GET_PAGES );
 
-			interests.push( ApplicationFacade.GET_TYPE );
-			interests.push( ApplicationFacade.GET_TOP_LEVEL_TYPES );
+			interests.push( TypesProxy.GET_TYPE );
+			interests.push( TypesProxy.GET_TOP_LEVEL_TYPES );
 
 			interests.push( ApplicationFacade.GET_RESOURCE );
 
@@ -281,7 +282,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.GET_TYPE:
+				case TypesProxy.GET_TYPE:
 				{
 					var typeRecipientID : String = body.recipientID;
 					var typeID : String = body.typeID;
@@ -303,7 +304,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.GET_TOP_LEVEL_TYPES:
+				case TypesProxy.GET_TOP_LEVEL_TYPES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TOP_LEVEL_TYPES, body );
 
@@ -540,7 +541,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case PPMPlaceNames.TYPES:
 				{
-					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
+					sendNotification( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, message );
 					break;
 				}
 

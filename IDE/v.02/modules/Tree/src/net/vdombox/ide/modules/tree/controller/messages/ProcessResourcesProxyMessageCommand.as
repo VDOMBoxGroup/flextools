@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.tree.controller.messages
 {
-	import net.vdombox.ide.common.PPMOperationNames;
-	import net.vdombox.ide.common.PPMResourcesTargetNames;
-	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.controller.names.PPMOperationNames;
+	import net.vdombox.ide.common.controller.names.PPMResourcesTargetNames;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	

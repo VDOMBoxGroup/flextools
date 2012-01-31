@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.tree
 {
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.Tree;
 	import net.vdombox.ide.modules.tree.controller.BodyStopCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateLinkageCommand;
@@ -92,18 +93,10 @@ package net.vdombox.ide.modules.tree
 
 //		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
-		public static const PROCESS_TYPES_PROXY_MESSAGE : String = "processTypesProxyMessage";
 		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
 		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
-
-//		types
-		public static const GET_TYPE : String = "getType";
-		public static const TYPE_GETTED : String = "typeGetted";
-
-		public static const GET_TOP_LEVEL_TYPES : String = "getTopLevelTypes";
-		public static const TOP_LEVEL_TYPES_GETTED : String = "topLevelTypesGetted";
 
 //		states
 		public static const GET_ALL_STATES : String = "getAllStates";
@@ -254,7 +247,7 @@ package net.vdombox.ide.modules.tree
 			registerCommand( SET_SETTINGS, SetSettingsCommand );
 			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 
-			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
+			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );

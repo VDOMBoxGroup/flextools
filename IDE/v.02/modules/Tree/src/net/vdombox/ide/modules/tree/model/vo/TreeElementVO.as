@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.model.vo
 {
-	import net.vdombox.ide.common.model.vo.PageVO;
-	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 
 	[Bindable]
 	public class TreeElementVO

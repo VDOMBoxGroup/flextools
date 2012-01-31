@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.tree.controller
 {
-	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;

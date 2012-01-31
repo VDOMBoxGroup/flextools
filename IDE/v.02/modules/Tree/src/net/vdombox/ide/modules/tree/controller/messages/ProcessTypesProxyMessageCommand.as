@@ -1,11 +1,12 @@
 package net.vdombox.ide.modules.tree.controller.messages
 {
-	import net.vdombox.ide.common.PPMTypesTargetNames;
-	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.model.vo.TypeVO;
+	import net.vdombox.ide.common.model.TypesProxy;
+	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -38,7 +39,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 
 					for each ( recipientID in typeRecipient )
 					{
-						sendNotification( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + recipientID, typeVO );
+						sendNotification( TypesProxy.TYPE_GETTED + ApplicationFacade.DELIMITER + recipientID, typeVO );
 					}
 
 					delete allTypeRecipients[ typeVO.id ];
@@ -48,7 +49,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 
 				case PPMTypesTargetNames.TOP_LEVEL_TYPES:
 				{
-					sendNotification( ApplicationFacade.TOP_LEVEL_TYPES_GETTED, body );
+					sendNotification( TypesProxy.TOP_LEVEL_TYPES_GETTED, body );
 
 					break;
 				}

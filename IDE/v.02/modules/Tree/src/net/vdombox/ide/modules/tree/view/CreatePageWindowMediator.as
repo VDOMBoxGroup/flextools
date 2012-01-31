@@ -4,12 +4,13 @@ package net.vdombox.ide.modules.tree.view
 	
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.common.model.vo.AttributeDescriptionVO;
-	import net.vdombox.ide.common.model.vo.TypeVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.common.events.ItemRendererEvent;
 	import net.vdombox.ide.common.events.WindowEvent;
+	import net.vdombox.ide.common.model.TypesProxy;
+	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.windows.CreatePageWindow;
+	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -44,7 +45,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.TOP_LEVEL_TYPES_GETTED );
+			interests.push( TypesProxy.TOP_LEVEL_TYPES_GETTED );
 
 			return interests;
 		}
@@ -56,7 +57,7 @@ package net.vdombox.ide.modules.tree.view
 
 			switch ( name )
 			{
-				case ApplicationFacade.TOP_LEVEL_TYPES_GETTED:
+				case TypesProxy.TOP_LEVEL_TYPES_GETTED:
 				{
 					createPageWindow.pagesDataProvider = body as Array;
 					
@@ -88,7 +89,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			sendNotification( ApplicationFacade.GET_TOP_LEVEL_TYPES );
+			sendNotification( TypesProxy.GET_TOP_LEVEL_TYPES );
 		}
 		
 		private function performApplyHandler ( event : WindowEvent ) : void

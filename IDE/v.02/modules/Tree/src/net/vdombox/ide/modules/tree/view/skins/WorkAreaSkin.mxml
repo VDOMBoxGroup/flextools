@@ -3,7 +3,7 @@
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 creationComplete="creationCompleteHandler()" xmlns:components1="net.vdombox.components.*">
+			 creationComplete="creationCompleteHandler()" xmlns:components1="net.vdombox.components.*" xmlns:components2="net.vdombox.ide.common.view.components.*">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -156,7 +156,7 @@
 			</s:fill>
 		</s:Rect>
 
-		<components1:VDOMScroller id="scroller"
+		<components2:VDOMScroller id="scroller"
 					height="100%" width="100%" creationComplete="scroller_creationCompleteHandler(event)">
 			<s:VGroup paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
 				<s:Group>
@@ -164,6 +164,6 @@
 					<s:Group id="contentGroup"/>
 				</s:Group>
 			</s:VGroup>
-		</components1:VDOMScroller>
+		</components2:VDOMScroller>
 	</s:Group>
 </s:SparkSkin>

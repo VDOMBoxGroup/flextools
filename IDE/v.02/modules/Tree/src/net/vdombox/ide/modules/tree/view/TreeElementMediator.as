@@ -1,11 +1,12 @@
 package net.vdombox.ide.modules.tree.view
 {
-	import net.vdombox.ide.common.model.vo.ApplicationVO;
-	import net.vdombox.ide.common.model.vo.AttributeVO;
-	import net.vdombox.ide.common.model.vo.PageVO;
-	import net.vdombox.ide.common.model.vo.ResourceVO;
-	import net.vdombox.ide.common.model.vo.TypeVO;
-	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model.TypesProxy;
+	import net.vdombox.ide.common.model._vo.ApplicationVO;
+	import net.vdombox.ide.common.model._vo.AttributeVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
@@ -60,7 +61,7 @@ package net.vdombox.ide.modules.tree.view
 				sendNotification( ApplicationFacade.LOAD_RESOURCE, treeElementVO.resourceVO );
 			}
 
-			sendNotification( ApplicationFacade.GET_TYPE, { typeID: treeElementVO.pageVO.typeVO.id, recipientID: mediatorName } );
+			sendNotification( TypesProxy.GET_TYPE, { typeID: treeElementVO.pageVO.typeVO.id, recipientID: mediatorName } );
 			sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, { pageVO: treeElementVO.pageVO, recipientID: mediatorName } );
 		}
 
@@ -78,7 +79,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.EXPAND_ALL_TREE_ELEMENTS );
 			interests.push( ApplicationFacade.COLLAPSE_ALL_TREE_ELEMENTS );
 
-			interests.push( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName );
+			interests.push( TypesProxy.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_SETTED );
@@ -98,7 +99,7 @@ package net.vdombox.ide.modules.tree.view
 
 			switch ( name )
 			{
-				case ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName:
+				case TypesProxy.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName:
 				{
 					_typeVO = body as TypeVO;
 

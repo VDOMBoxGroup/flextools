@@ -8,10 +8,10 @@
 
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.common.model.vo.AttributeVO;
-			import net.vdombox.ide.common.model.vo.ObjectVO;
-			import net.vdombox.ide.common.model.vo.PageVO;
-			import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
+			import net.vdombox.ide.common.model._vo.AttributeVO;
+			import net.vdombox.ide.common.model._vo.ObjectVO;
+			import net.vdombox.ide.common.model._vo.PageVO;
+			import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.tree.events.PropertiesPanelEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TextAreaShadowedSkin;

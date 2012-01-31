@@ -7,7 +7,7 @@
 
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.common.model.vo.ResourceVO;
+			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.tree.events.AttributeEvent;
 			import net.vdombox.ide.modules.tree.view.skins.AttributeButtonSkin;
 

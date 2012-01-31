@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
 	import net.vdombox.ide.modules.tree.view.PageTypeItemRendererMediator;
-	import net.vdombox.ide.common.view.components.PageTypeItemRenderer;
+	import net.vdombox.ide.common.view.components.itemrenderers.PageTypeItemRenderer;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
