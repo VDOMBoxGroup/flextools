@@ -4,7 +4,7 @@ package net.vdombox.ide.core.controller.responses
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

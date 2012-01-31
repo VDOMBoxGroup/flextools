@@ -22,11 +22,11 @@ package net.vdombox.ide.core.view.components
 	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
 	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
-	import net.vdombox.view.Alert;
-	import net.vdombox.view.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
+	import net.vdombox.ide.common.view.AlertButton;
 	
 	import spark.components.Group;
 	import spark.components.Label;

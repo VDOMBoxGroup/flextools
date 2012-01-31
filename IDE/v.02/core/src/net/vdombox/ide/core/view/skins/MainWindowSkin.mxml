@@ -13,7 +13,7 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			
-			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.common.model.vo.ResourceVO;
 			import net.vdombox.ide.core.events.MainWindowEvent;
 			static private const exclusions : Array = [ "backgroundRect", "contentGroup", "titleBar",
 														"titleBarBackgroundRect", "statusText", "borderBgFill" ];

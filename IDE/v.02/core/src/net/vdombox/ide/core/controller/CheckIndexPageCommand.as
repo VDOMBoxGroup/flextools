@@ -1,6 +1,6 @@
 package net.vdombox.ide.core.controller
 {
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.StatesProxy;
 	

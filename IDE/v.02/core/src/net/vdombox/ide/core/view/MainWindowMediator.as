@@ -33,9 +33,9 @@ package net.vdombox.ide.core.view
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.common.vo.ApplicationInformationVO;
-	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.ApplicationInformationVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.model.ModulesProxy;
@@ -48,8 +48,8 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
 	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
-	import net.vdombox.view.Alert;
-	import net.vdombox.view.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
+	import net.vdombox.ide.common.view.AlertButton;
 	
 	import org.osmf.utils.Version;
 	import org.puremvc.as3.multicore.interfaces.IMediator;

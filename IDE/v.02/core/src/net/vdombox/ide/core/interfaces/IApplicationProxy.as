@@ -1,7 +1,7 @@
 package net.vdombox.ide.core.interfaces
 {
-	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 

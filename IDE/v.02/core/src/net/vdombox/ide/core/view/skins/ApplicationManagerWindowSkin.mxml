@@ -47,7 +47,7 @@
 	<s:VGroup left="9" top="9" right="9" bottom="9" gap="1">
 
 			<s:TitleBar id="titleBar" width="100%"					
-						skinClass="net.vdombox.view.skins.PopupWindowTitleBarSkin"/>
+						skinClass="net.vdombox.ide.common.view.skins.PopupWindowTitleBarSkin"/>
 
 			<!--s:VGroup right="10" height="100%" verticalAlign="middle" >
 				<s:Button id="closeButton"

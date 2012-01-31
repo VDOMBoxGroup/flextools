@@ -14,7 +14,7 @@ package net.vdombox.ide.core.model.managers
 
 	import mx.graphics.codec.PNGEncoder;
 
-	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
 
 	public class IconManager extends EventDispatcher
 	{

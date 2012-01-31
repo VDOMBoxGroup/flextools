@@ -10,8 +10,8 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.model.TypesProxy;
 	import net.vdombox.ide.core.view.components.AlertWindow;
 	import net.vdombox.utils.WindowManager;
-	import net.vdombox.view.Alert;
-	import net.vdombox.view.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
+	import net.vdombox.ide.common.view.AlertButton;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

@@ -13,7 +13,7 @@ package net.vdombox.ide.core.view
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.view.AlertButton;
+	import net.vdombox.ide.common.view.AlertButton;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

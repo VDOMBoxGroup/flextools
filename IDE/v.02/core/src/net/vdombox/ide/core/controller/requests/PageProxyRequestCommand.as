@@ -3,9 +3,9 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
-	import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model.vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.PageProxy;
 	

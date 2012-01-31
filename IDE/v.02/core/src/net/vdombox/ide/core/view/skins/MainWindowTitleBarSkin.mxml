@@ -127,20 +127,20 @@
 	<s:HGroup right="16" top="12" height="100%" minWidth="40" minHeight="20" gap="10">
 		<!-- minimize button -->
 		<s:Button id="minimizeButton"
-				  bottom="2" skinClass="net.vdombox.view.skins.MainMinimizeBtnSkin" verticalCenter="0"/>
+				  bottom="2" skinClass="net.vdombox.ide.common.view.skins.button.MainMinimizeBtnSkin" verticalCenter="0"/>
 		
 		<!-- close button -->
 		<s:Button id="logoutButton" 
-				  skinClass="net.vdombox.view.skins.MainLogoutBtnSkin" verticalCenter="0"
+				  skinClass="net.vdombox.ide.common.view.skins.button.MainLogoutBtnSkin" verticalCenter="0"
 				  click="dispatchEvent( new MainWindowEvent( MainWindowEvent.LOGOUT ) )"/>	
 		
 		<!-- maximize button -->
 		<s:Button id="maximizeButton"
-				  skinClass="net.vdombox.view.skins.MainMaximizeBtnSkin" skinClass.maximizedGroup="net.vdombox.view.skins.MainRestoreBtnSkin" verticalCenter="0"/>
+				  skinClass="net.vdombox.ide.common.view.skins.button.MainMaximizeBtnSkin" skinClass.maximizedGroup="net.vdombox.ide.common.view.skins.button.MainRestoreBtnSkin" verticalCenter="0"/>
 		
 		<!-- close button -->
 		<s:Button id="closeButton"
-				  skinClass="net.vdombox.view.skins.MainCloseBtnSkin" verticalCenter="0"
+				  skinClass="net.vdombox.ide.common.view.skins.button.MainCloseBtnSkin" verticalCenter="0"
 				  click="closeButton_clickHandler(event)"/>	
 	</s:HGroup>
 	

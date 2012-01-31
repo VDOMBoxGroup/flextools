@@ -13,7 +13,7 @@ package net.vdombox.ide.core.view
 
 	import mx.events.FlexEvent;
 
-	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.ApplicationManagerEvent;
 	import net.vdombox.ide.core.model.GalleryProxy;
