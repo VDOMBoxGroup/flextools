@@ -3,7 +3,7 @@
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*"
-			 creationComplete="creationCompleteHandler()">
+			 creationComplete="creationCompleteHandler()" xmlns:tabnavigator="net.vdombox.ide.common.view.components.tabnavigator.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
@@ -38,7 +38,7 @@
 	</fx:Script>
 	
 	<fx:Metadata>
-		[HostComponent("net.vdombox.components.tabNavigatorClasses.TabNavigator")]
+		[HostComponent("net.vdombox.ide.common.view.components.tabnavigator.TabNavigator")]
 	</fx:Metadata>
 	
 	<s:states>
@@ -59,7 +59,7 @@
 		<s:Group id="contentGroup"/>
 	</s:Scroller>
 
-	<tabNavigatorClasses:TabNavigatorScrollBar id="hsb" 
+	<tabnavigator:TabNavigatorScrollBar id="hsb" 
 											   top="-22"
 											   height="24" width="100%"
 											   pageSize="60" stepSize="2" 

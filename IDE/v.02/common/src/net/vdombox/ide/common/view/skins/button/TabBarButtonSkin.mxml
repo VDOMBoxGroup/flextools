@@ -2,11 +2,11 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 minHeight="24" maxHeight="24" minWidth="125" maxWidth="125"
-			 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*">
+			 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*" xmlns:tabnavigator="net.vdombox.ide.common.view.components.tabnavigator.*">
 
 	<!-- host component -->
 	<fx:Metadata>
-		[HostComponent("net.vdombox.components.tabNavigatorClasses.TabBarButton")]
+		[HostComponent("net.vdombox.ide.common.view.components.tabnavigator.TabBarButton")]
 	</fx:Metadata>
 
 	<fx:Script>
@@ -101,7 +101,7 @@
 			 verticalAlign="middle"
 			 maxDisplayedLines="1"/>
 	
-	<tabNavigatorClasses:TabBarCloseButton id="closeButton"
+	<tabnavigator:TabBarCloseButton id="closeButton"
 										   right="11" top="6"
 										   visible="{hostComponent.canClose}" 
 										   alpha="1" alpha.invisibleStates="0"/>

@@ -1,4 +1,4 @@
-package net.vdombox.components.tabNavigatorClasses
+package net.vdombox.ide.common.view.components.tabnavigator
 {
 	import flash.display.DisplayObject;
 	import flash.events.EventDispatcher;

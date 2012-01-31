@@ -7,7 +7,7 @@
  Copyright (c) 2007-08 Simon Bailey <simon.bailey@puremvc.org>
  Your reuse is governed by the Creative Commons Attribution 3.0 License
  */
-package net.vdombox.ide.common
+package net.vdombox.ide.common.view
 {
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.messages.FilterControlMessage;

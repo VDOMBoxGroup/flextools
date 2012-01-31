@@ -16,9 +16,18 @@ package net.vdombox.ide.common.model
 		public static const GET_TYPES : String = "getTypes";
 		public static const TYPES_CHANGED : String = "typesChanged";
 		
-		public function TypesProxy()
+		public static const GET_TYPE : String = "getType";
+		public static const TYPE_GETTED : String = "typeGetted";
+		
+		//		pipe messages
+		public static const PROCESS_TYPES_PROXY_MESSAGE : String = "processTypesProxyMessage";
+		
+		public static const GET_TOP_LEVEL_TYPES : String = "getTopLevelTypes";
+		public static const TOP_LEVEL_TYPES_GETTED : String = "topLevelTypesGetted";
+		
+		public function TypesProxy( data : Object = null  )
 		{
-			super( NAME );
+			super( NAME, data );
 		}
 		
 		private var _types : Array;

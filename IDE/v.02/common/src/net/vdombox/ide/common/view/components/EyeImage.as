@@ -1,4 +1,4 @@
-package net.vdombox.ide.common.view
+package net.vdombox.ide.common.view.components
 {
 	import mx.controls.Image;
 	
