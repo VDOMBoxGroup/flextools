@@ -18,7 +18,7 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 
-			import net.vdombox.ide.common.model.vo.ResourceVO;
+			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderItemRendererEvent;
 
 			[Embed( source="assets/new_page.png" )]

@@ -8,7 +8,7 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 
-			import net.vdombox.ide.common.model.vo.ResourceVO;
+			import net.vdombox.ide.common.model._vo.ResourceVO;
 
 			private const wordSize : Array = [ "bytes", "KB", "MB", "GB", "TB" ];
 

@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.resourceBrowser.controller.messages
 {
-	import net.vdombox.ide.common.PPMTypesTargetNames;
-	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.model.vo.TypeVO;
+	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

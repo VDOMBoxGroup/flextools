@@ -4,20 +4,20 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	
 	import mx.core.UIComponent;
 	
-	import net.vdombox.ide.common.LogMessage;
-	import net.vdombox.ide.common.LoggingJunctionMediator;
-	import net.vdombox.ide.common.PPMApplicationTargetNames;
-	import net.vdombox.ide.common.PPMOperationNames;
-	import net.vdombox.ide.common.PPMPlaceNames;
-	import net.vdombox.ide.common.PPMResourcesTargetNames;
-	import net.vdombox.ide.common.PPMStatesTargetNames;
-	import net.vdombox.ide.common.PipeNames;
-	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.SimpleMessage;
+	import net.vdombox.ide.common.controller.messages.LogMessage;
+	import net.vdombox.ide.common.view.LoggingJunctionMediator;
+	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
+	import net.vdombox.ide.common.controller.names.PPMOperationNames;
+	import net.vdombox.ide.common.controller.names.PPMPlaceNames;
+	import net.vdombox.ide.common.controller.names.PPMResourcesTargetNames;
+	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
+	import net.vdombox.ide.common.controller.names.PipeNames;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.messages.SimpleMessage;
 	import net.vdombox.ide.common.SimpleMessageHeaders;
-	import net.vdombox.ide.common.UIQueryMessage;
-	import net.vdombox.ide.common.UIQueryMessageNames;
-	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
+	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.model.vo.SettingsVO;
 	
