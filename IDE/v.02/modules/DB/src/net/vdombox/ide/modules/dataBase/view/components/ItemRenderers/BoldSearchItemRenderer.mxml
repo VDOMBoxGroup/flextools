@@ -7,7 +7,7 @@
 		<![CDATA[
 			import mx.controls.dataGridClasses.DataGridListData;
 			
-			import net.vdombox.components.StringAttributeEditWindow;
+			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.modules.dataBase.interfaces.ISearchable;
 			import net.vdombox.utils.WindowManager;

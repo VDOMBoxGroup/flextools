@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.dataBase.controller.messages
 {
-	import net.vdombox.ide.common.PPMOperationNames;
-	import net.vdombox.ide.common.PPMPageTargetNames;
-	import net.vdombox.ide.common.ProxyMessage;
+	import net.vdombox.ide.common.controller.names.PPMOperationNames;
+	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
 	

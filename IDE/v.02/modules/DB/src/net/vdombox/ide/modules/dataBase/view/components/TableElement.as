@@ -8,16 +8,16 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import mx.collections.ArrayList;
 	import mx.events.CloseEvent;
 	
-	import net.vdombox.ide.common.model.vo.AttributeVO;
-	import net.vdombox.ide.common.model.vo.ObjectVO;
-	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model._vo.AttributeVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
 	import net.vdombox.ide.modules.dataBase.events.TableElementEvent;
 	import net.vdombox.ide.modules.dataBase.view.components.windows.RenameTableWindow;
 	import net.vdombox.ide.modules.dataBase.view.skins.TableElementSkin;
 	import net.vdombox.utils.WindowManager;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.AlertButton;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
 	
 	import spark.components.Label;
 	import spark.components.SkinnableContainer;

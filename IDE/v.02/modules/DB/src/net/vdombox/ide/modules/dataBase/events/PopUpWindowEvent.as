@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.dataBase.events
 {
 	import flash.events.Event;
 	
-	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
 
 	public class PopUpWindowEvent extends Event
 	{

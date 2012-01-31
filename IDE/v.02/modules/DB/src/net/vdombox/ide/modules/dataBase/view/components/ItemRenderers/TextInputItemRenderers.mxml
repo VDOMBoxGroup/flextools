@@ -12,7 +12,7 @@
 			import mx.controls.dataGridClasses.DataGridListData;
 			import mx.events.DataGridEvent;
 			
-			import net.vdombox.components.StringAttributeEditWindow;
+			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.utils.WindowManager;
 			

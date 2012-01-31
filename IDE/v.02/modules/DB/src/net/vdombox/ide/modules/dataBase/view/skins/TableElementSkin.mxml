@@ -4,7 +4,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		creationComplete="sparkskin1_creationCompleteHandler(event)"
 		removedFromStage="sparkskin1_removedFromStageHandler(event)"
-		doubleClick="sparkskin1_doubleClickHandler(event)" doubleClickEnabled="true" xmlns:components="net.vdombox.components.*">
+		doubleClick="sparkskin1_doubleClickHandler(event)" doubleClickEnabled="true" xmlns:components="net.vdombox.components.*" xmlns:components1="net.vdombox.ide.common.view.components.*">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.dataBase.view.components.TableElement")]
@@ -84,11 +84,11 @@
 					 maxDisplayedLines="1"
 					 doubleClick="textinput1_doubleClickHandler(event)" doubleClickEnabled="true"/>
 		
-		<components:VDOMScroller width="100%" height="100%">
+		<components1:VDOMScroller width="100%" height="100%">
 			
 			<s:VGroup id="attributes" width="100%" height="100%" gap="1"/>
 			
-		</components:VDOMScroller>
+		</components1:VDOMScroller>
 		
 	</s:VGroup>
 	

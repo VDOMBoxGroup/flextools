@@ -20,7 +20,7 @@
 			import mx.utils.UIDUtil;
 			
 			import net.vdombox.ide.common.events.EditorEvent;
-			import net.vdombox.ide.common.model.vo.ObjectVO;
+			import net.vdombox.ide.common.model._vo.ObjectVO;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.BoldSearchItemRenderer;

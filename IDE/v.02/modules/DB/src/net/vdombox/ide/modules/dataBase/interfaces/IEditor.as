@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.dataBase.interfaces
 {
 	import flash.events.IEventDispatcher;
 	
-	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
 
 	public interface IEditor extends IEventDispatcher
 	{

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" xmlns:components="net.vdombox.components.*">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" xmlns:components="net.vdombox.components.*" xmlns:components1="net.vdombox.ide.common.view.components.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.model.vo.PageVO;
+			import net.vdombox.ide.common.model._vo.PageVO;
 			
 			private var _objectVO : PageVO;
 			
@@ -44,12 +44,12 @@
 			</s:fill>
 		</s:Rect>
 		
-		<components:VDOMScroller id="scroller" height="100%" width="100%">
+		<components1:VDOMScroller id="scroller" height="100%" width="100%">
 			<s:Group>
 				<s:Group id="linkagesLayer"/>
 				<s:Group id="contentGroup"/>
 			</s:Group>
-		</components:VDOMScroller>
+		</components1:VDOMScroller>
 	</s:Group>
 	
 </s:Group>

@@ -7,16 +7,16 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import mx.graphics.SolidColor;
 	import mx.utils.ObjectUtil;
 	
-	import net.vdombox.components.tabNavigatorClasses.Tab;
-	import net.vdombox.components.tabNavigatorClasses.TabNavigator;
+	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
+	import net.vdombox.ide.common.view.components.tabnavigator.TabNavigator;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
-	import net.vdombox.ide.common.model.vo.ObjectVO;
-	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
 	
 	import spark.primitives.Rect;
 
-	public class WorkArea extends net.vdombox.components.tabNavigatorClasses.TabNavigator
+	public class WorkArea extends net.vdombox.ide.common.view.components.tabnavigator.TabNavigator
 	{
 		private var _editors : Dictionary;
 		

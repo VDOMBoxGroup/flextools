@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import net.vdombox.ide.common.events.ExternalManagerEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
-	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
