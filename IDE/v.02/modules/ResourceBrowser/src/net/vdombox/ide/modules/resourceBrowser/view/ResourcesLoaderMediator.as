@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import flash.events.MouseEvent;
 	import flash.filesystem.File;
 	
-	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderEvent;
 	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;

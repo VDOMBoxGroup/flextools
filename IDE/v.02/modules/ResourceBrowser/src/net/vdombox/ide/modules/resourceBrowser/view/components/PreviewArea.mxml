@@ -8,7 +8,7 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			
-			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.common.model.vo.ResourceVO;
 			import net.vdombox.ide.modules.resourceBrowser.events.WorkAreaEvent;
 
 			private var _resourceVO : ResourceVO;

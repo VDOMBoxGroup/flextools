@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.resourceBrowser.controller
 {
-	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

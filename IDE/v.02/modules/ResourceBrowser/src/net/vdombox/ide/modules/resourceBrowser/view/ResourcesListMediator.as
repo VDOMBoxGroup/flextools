@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import mx.events.FlexEvent;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.events.ResourcesListItemRendererEvent;
 	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;

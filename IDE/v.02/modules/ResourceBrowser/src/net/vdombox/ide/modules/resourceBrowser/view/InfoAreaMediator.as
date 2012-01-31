@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
-	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.InfoArea;

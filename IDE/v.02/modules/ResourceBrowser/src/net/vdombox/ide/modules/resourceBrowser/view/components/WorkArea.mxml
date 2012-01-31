@@ -12,10 +12,10 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.common.model.vo.ResourceVO;
 			import net.vdombox.ide.modules.resourceBrowser.events.WorkAreaEvent;
-			import net.vdombox.view.Alert;
-			import net.vdombox.view.AlertButton;
+			import net.vdombox.ide.common.view.components.windows.Alert;
+			import net.vdombox.ide.common.view.AlertButton;
 
 			[SkinPart( required="true" )]
 			public var deleteButton : WorkAreaButton;

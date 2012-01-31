@@ -27,5 +27,5 @@
 	<components:ToolsetButton id="toolsetButton"
 							  height="100%"
 							  label="{ resourceManager.getString( 'ResourceBrowser_General', 'toolset_button_label' ) }"
-							  skinClass="net.vdombox.ide.common.skins.ToolsetButtonSkin" />
+							  skinClass="net.vdombox.ide.common.view.skins.button.ToolsetButtonSkin" />
 </s:Group>

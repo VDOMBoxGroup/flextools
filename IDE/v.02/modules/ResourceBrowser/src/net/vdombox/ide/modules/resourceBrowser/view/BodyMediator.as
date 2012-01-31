@@ -5,8 +5,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.Body;
 	

@@ -13,7 +13,7 @@
 			import mx.utils.ObjectUtil;
 			
 			import net.vdombox.ide.common.events.WorkAreaEvent;
-			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.common.model.vo.ResourceVO;
 			
 			import spark.filters.DropShadowFilter;
 

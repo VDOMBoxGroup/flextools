@@ -10,7 +10,7 @@
 		<![CDATA[
 			import mx.collections.ArrayList;
 			
-			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.common.model.vo.ResourceVO;
 			import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderEvent;
 			import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderItemRendererEvent;
 			import net.vdombox.ide.modules.resourceBrowser.view.skins.ResourceLoaderListSkin;
