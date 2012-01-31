@@ -1,6 +1,6 @@
 package net.vdombox.ide.core.controller
 {
-	import net.vdombox.ide.common.SimpleMessage;
+	import net.vdombox.ide.common.controller.messages.SimpleMessage;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.SettingsStorageProxy;

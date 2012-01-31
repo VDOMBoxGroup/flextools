@@ -18,9 +18,9 @@ package net.vdombox.ide.core.view
 	import mx.events.FlexEvent;
 	import mx.utils.ObjectUtil;
 
-	import net.vdombox.ide.common.model.vo.ApplicationInformationVO;
-	import net.vdombox.ide.common.model.vo.ApplicationVO;
-	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
+	import net.vdombox.ide.common.model._vo.ApplicationVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.ApplicationManagerEvent;
 	import net.vdombox.ide.core.events.IconChooserEvent;

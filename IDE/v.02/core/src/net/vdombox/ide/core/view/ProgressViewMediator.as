@@ -1,11 +1,12 @@
 package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
-
+	
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.TypesProxy;
 	import net.vdombox.ide.core.view.components.ProgressView;
 	import net.vdombox.ide.core.view.components.Task;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -54,8 +55,8 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SERVER_LOGIN_SUCCESSFUL );
 			interests.push( ApplicationFacade.SERVER_LOGIN_ERROR );
 
-			interests.push( ApplicationFacade.TYPES_LOADING );
-			interests.push( ApplicationFacade.TYPES_LOADED );
+			interests.push( TypesProxy.TYPES_LOADING );
+			interests.push( TypesProxy.TYPES_LOADED );
 
 			return interests;
 		}
@@ -151,7 +152,7 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-				case ApplicationFacade.TYPES_LOADING:
+				case TypesProxy.TYPES_LOADING:
 				{
 					task = new Task();
 					task.description = "Types loading...";
@@ -164,7 +165,7 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-				case ApplicationFacade.TYPES_LOADED:
+				case TypesProxy.TYPES_LOADED:
 				{
 					task = tasks[ "types" ];
 					if ( task )

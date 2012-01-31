@@ -57,6 +57,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.responses.PageProxyResponseCommand;
 	import net.vdombox.ide.core.controller.responses.ResourcesProxyResponseCommand;
 	import net.vdombox.ide.core.controller.responses.ServerProxyResponseCommand;
+	import net.vdombox.ide.core.model.TypesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -190,9 +191,6 @@ package net.vdombox.ide.core
 		public static const STATES_PROXY_REQUEST : String = "statesProxyRequest";
 		public static const STATES_PROXY_RESPONSE : String = "statesProxyResponse";
 		
-		public static const TYPES_PROXY_REQUEST : String = "typesProxyRequest";
-		public static const TYPES_PROXY_RESPONSE : String = "typesProxyResponse";
-		
 		public static const APPLICATION_PROXY_REQUEST : String = "applicationProxyRequest";
 		public static const APPLICATION_PROXY_RESPONSE : String = "applicationProxyResponse";
 		
@@ -274,11 +272,6 @@ package net.vdombox.ide.core
 //		icon of resources
 		public static const GET_ICON	: String = "getIcon";		
 		public static const ICON_GETTED : String = "iconGetted";
-		
-//		types
-		public static const TYPES_LOADING : String = "typesLoading";
-		public static const TYPES_LOADED : String = "typesLoaded";
-		public static const GET_TYPES : String = "getTypes";
 		
 //		application
 		public static const APPLICATION_INFORMATION_UPDATED : String = "applicationInfrmationUpdated";
@@ -475,7 +468,7 @@ package net.vdombox.ide.core
 			registerCommand( PROCESS_UIQUERY_MESSAGE, ProcessUIQueryMessageCommand );
 			registerCommand( PROCESS_LOG_MESSAGE, ProcessLogMessage );
 
-			registerCommand( TYPES_PROXY_REQUEST, TypesProxyRequestCommand );
+			registerCommand( TypesProxy.TYPES_PROXY_REQUEST, TypesProxyRequestCommand );
 
 			registerCommand( SERVER_PROXY_REQUEST, ServerProxyRequestCommand );
 			registerCommand( SERVER_APPLICATION_CREATED, ServerProxyResponseCommand );
@@ -590,7 +583,7 @@ package net.vdombox.ide.core
 			
 			registerCommand( CREATE_APPLICATION, CreateApplicationCommand );
 			
-			registerCommand( GET_TYPES, GetTypesCommand );
+			registerCommand( TypesProxy.GET_TYPES, GetTypesCommand );
 			
 //			registerCommand( OPEN_APPLICATION_IN_EDITOR, OpenAppInEditorCommand );
 			

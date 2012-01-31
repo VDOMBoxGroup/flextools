@@ -6,13 +6,13 @@ package net.vdombox.ide.core.model
 	import mx.rpc.soap.Operation;
 	import mx.rpc.soap.SOAPFault;
 	
-	import net.vdombox.ide.common.model.vo.AttributeVO;
-	import net.vdombox.ide.common.model.vo.ObjectVO;
-	import net.vdombox.ide.common.model.vo.PageVO;
-	import net.vdombox.ide.common.model.vo.ServerActionVO;
-	import net.vdombox.ide.common.model.vo.TypeVO;
-	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
-	import net.vdombox.ide.common.model.vo.VdomObjectXMLPresentationVO;
+	import net.vdombox.ide.common.model._vo.AttributeVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;

@@ -25,7 +25,7 @@
 	 </s:Rect>
 	
 	<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
-		<mx:Image width="14" height="11" source="@Embed('icons/arrow.png')"/>
+		<mx:Image width="14" height="11" source="@Embed('assets/arrow.png')"/>
 	</s:HGroup>
 	
 	

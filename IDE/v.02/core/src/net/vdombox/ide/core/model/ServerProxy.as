@@ -9,8 +9,8 @@ package net.vdombox.ide.core.model
 	import mx.rpc.soap.Operation;
 	
 	import net.vdombox.editors.AssistMenu;
-	import net.vdombox.ide.common.model.vo.ApplicationInformationVO;
-	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
+	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.events.SOAPErrorEvent;

@@ -2,7 +2,7 @@ package net.vdombox.ide.core.controller
 {
 	import mx.utils.StringUtil;
 	
-	import net.vdombox.ide.common.LogMessage;
+	import net.vdombox.ide.common.controller.messages.LogMessage;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

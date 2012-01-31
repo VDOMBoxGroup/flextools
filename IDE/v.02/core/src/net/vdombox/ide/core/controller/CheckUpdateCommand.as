@@ -11,7 +11,7 @@ package net.vdombox.ide.core.controller
 	import flash.filesystem.File;
 
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.AlertButton;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
 
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

@@ -26,8 +26,8 @@ package net.vdombox.ide.core.model
 	import mx.utils.Base64Decoder;
 	import mx.utils.Base64Encoder;
 	
-	import net.vdombox.ide.common.model.vo.ApplicationVO;
-	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.ApplicationVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;

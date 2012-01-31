@@ -2,7 +2,8 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.events.FaultEvent;
 	
-	import net.vdombox.ide.common.model.vo.TypeVO;
+	import net.vdombox.ide.common.model.TypesProxy;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
@@ -22,13 +23,20 @@ package net.vdombox.ide.core.model
 	 * 
 	 * @flowerModelElementId _DE2aoEomEeC-JfVEe_-0Aw
 	 */
-	public class TypesProxy extends Proxy implements IProxy
+	public class TypesProxy extends net.vdombox.ide.common.model.TypesProxy
 	{
 		public static const NAME : String = "TypesProxy";
-
+		
+		public static const TYPES_PROXY_REQUEST : String = "typesProxyRequest";
+		public static const TYPES_PROXY_RESPONSE : String = "typesProxyResponse";
+		
+		public static const TYPES_LOADING : String = "typesLoading";
+		public static const TYPES_LOADED : String = "typesLoaded";
+		public static const GET_TYPES : String = "getTypes";
+		
 		public function TypesProxy( data : Object = null )
 		{
-			super( NAME, data );
+			super( data );
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
@@ -65,7 +73,7 @@ package net.vdombox.ide.core.model
 			removeHandlers();
 		}
 
-		public function get types() : Array
+		public override function get types() : Array
 		{
 			return _types ? _types.slice() : null;
 		}
@@ -84,7 +92,7 @@ package net.vdombox.ide.core.model
 		{
 			if( isSOAPConnected )
 			{
-				sendNotification( ApplicationFacade.TYPES_LOADING );
+				sendNotification( TYPES_LOADING );
 				soap.get_all_types();
 			}
 			else
@@ -97,23 +105,6 @@ package net.vdombox.ide.core.model
 		{
 			_types = null;
 			_topLevelTypes = null;
-		}
-		
-		public function getTypeVObyID( typeID : String ) : TypeVO
-		{
-			var result : TypeVO;
-			var typeVO : TypeVO;
-			
-			for each ( typeVO in _types )
-			{
-				if ( typeVO.id == typeID )
-				{
-					result = typeVO;
-					break;
-				}
-			}
-			
-			return result;
 		}
 		
 		public function getType( typeID : String ) : TypeVO
@@ -179,7 +170,7 @@ package net.vdombox.ide.core.model
 			if( topLevelTypes.length > 0 )
 				_topLevelTypes = topLevelTypes;
 
-			sendNotification( ApplicationFacade.TYPES_LOADED, types );
+			sendNotification( TYPES_LOADED, types );
 		}
 		
 		private function soap_faultHandler( event : FaultEvent ) : void

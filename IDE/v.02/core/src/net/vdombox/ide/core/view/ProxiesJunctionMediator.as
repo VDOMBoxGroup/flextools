@@ -1,11 +1,12 @@
 package net.vdombox.ide.core.view
 {
-	import net.vdombox.ide.common.PPMPlaceNames;
-	import net.vdombox.ide.common.PipeNames;
-	import net.vdombox.ide.common.ProxyMessage;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.names.PPMPlaceNames;
+	import net.vdombox.ide.common.controller.names.PipeNames;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.PipesProxy;
+	import net.vdombox.ide.core.model.TypesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -59,7 +60,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.APPLICATION_PROXY_RESPONSE );
 			interests.push( ApplicationFacade.PAGE_PROXY_RESPONSE );
 			interests.push( ApplicationFacade.OBJECT_PROXY_RESPONSE );
-			interests.push( ApplicationFacade.TYPES_PROXY_RESPONSE );
+			interests.push( TypesProxy.TYPES_PROXY_RESPONSE );
 			interests.push( ApplicationFacade.RESOURCES_PROXY_RESPONSE );
 
 			return interests;
@@ -158,7 +159,7 @@ package net.vdombox.ide.core.view
 				{
 				}
 
-				case ApplicationFacade.TYPES_PROXY_RESPONSE:
+				case TypesProxy.TYPES_PROXY_RESPONSE:
 				{
 				}
 
@@ -194,7 +195,7 @@ package net.vdombox.ide.core.view
 
 				case PPMPlaceNames.TYPES:
 				{
-					sendNotification( ApplicationFacade.TYPES_PROXY_REQUEST, ppMessage );
+					sendNotification( TypesProxy.TYPES_PROXY_REQUEST, ppMessage );
 
 					break;
 				}

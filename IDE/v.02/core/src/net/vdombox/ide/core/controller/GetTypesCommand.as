@@ -1,9 +1,9 @@
 package net.vdombox.ide.core.controller
 {
-	import net.vdombox.ide.common.PPMOperationNames;
-	import net.vdombox.ide.common.PPMPlaceNames;
-	import net.vdombox.ide.common.PPMTypesTargetNames;
-	import net.vdombox.ide.common.ProxyMessage;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.names.PPMOperationNames;
+	import net.vdombox.ide.common.controller.names.PPMPlaceNames;
+	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.TypesProxy;
 	
@@ -19,7 +19,7 @@ package net.vdombox.ide.core.controller
 			var message : ProxyMessage =  new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ,
 				PPMTypesTargetNames.TYPES, typesProxy.types );
 			
-			sendNotification( ApplicationFacade.TYPES_PROXY_RESPONSE, message );
+			sendNotification( TypesProxy.TYPES_PROXY_RESPONSE, message );
 			
 		}
 	}

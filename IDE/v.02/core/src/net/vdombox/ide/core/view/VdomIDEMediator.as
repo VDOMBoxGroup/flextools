@@ -4,6 +4,7 @@ package net.vdombox.ide.core.view
 	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.StatesProxy;
+	import net.vdombox.ide.core.model.TypesProxy;
 	import net.vdombox.ide.core.view.components.InitialWindow;
 	import net.vdombox.ide.core.view.components.MainWindow;
 	
@@ -40,7 +41,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.INITIAL_WINDOW_OPENED );
 
 //			interests.push( ApplicationFacade.MAIN_WINDOW_OPENED );
-			interests.push( ApplicationFacade.TYPES_LOADED );
+			interests.push( TypesProxy.TYPES_LOADED );
 			
 			return interests;
 		}
@@ -51,7 +52,7 @@ package net.vdombox.ide.core.view
 
 			switch ( name )
 			{
-				case ApplicationFacade.TYPES_LOADED:
+				case TypesProxy.TYPES_LOADED:
 				{
 //					if (statesProxy.selectedApplication)
 //						sendNotification( ApplicationFacade.OPEN_MAIN_WINDOW );

@@ -1,6 +1,6 @@
 package net.vdombox.ide.core.interfaces
 {	
-	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 

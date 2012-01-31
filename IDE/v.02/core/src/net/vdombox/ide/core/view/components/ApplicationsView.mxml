@@ -6,13 +6,13 @@
 		  height="100%"
 		  paddingBottom="10"
 		  paddingRight="10"
-		  xmlns:components="net.vdombox.components.*">
+		  xmlns:components="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.model.vo.ApplicationVO;
+			import net.vdombox.ide.common.model._vo.ApplicationVO;
 			import net.vdombox.ide.core.events.ApplicationManagerEvent;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			
@@ -82,7 +82,7 @@
 				creationComplete="applicationList_creationCompleteHandler(event)"
 				/>
 
-		<components:VDOMButton id="addApplication" label="{getLocalesWord( 'change_application_add_new_application' )}" />
+		<button:VDOMButton id="addApplication" label="{getLocalesWord( 'change_application_add_new_application' )}" />
 
 	</s:VGroup>
 
@@ -112,10 +112,10 @@
 		<s:HGroup horizontalAlign="right" 
 				  gap="10" 
 				  width="100%">
-			<components:VDOMButton id="changeApplication" 
+			<button:VDOMButton id="changeApplication" 
 								   label="{getLocalesWord('change_application_edit')}" />
 
-			<components:VDOMButton id="setSelectApplication" 
+			<button:VDOMButton id="setSelectApplication" 
 								   label="{getLocalesWord('change_application_open_in_editor' )}" />
 		</s:HGroup>
 

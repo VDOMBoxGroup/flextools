@@ -1,7 +1,7 @@
 package net.vdombox.ide.core.controller
 {
-	import net.vdombox.ide.common.model.vo.ApplicationInformationVO;
-	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
+	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
 	

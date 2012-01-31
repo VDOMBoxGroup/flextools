@@ -7,7 +7,7 @@
 		  skinClass="net.vdombox.ide.core.view.skins.InitialWindowSkin"
 		  minHeight="410" minWidth="580"
 		  mouseDown="window_mouseDownHandler( event )"
-		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true" xmlns:components1="net.vdombox.components.*">
+		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true" xmlns:components1="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 
 	<fx:Script>
 		<![CDATA[
@@ -66,12 +66,12 @@
 		
 	<s:HGroup width="100%" horizontalAlign="right" paddingRight="40" gap="10" bottom="37">
 			
-		<components1:VDOMButton id="exitButton" includeIn="loginView, progressView" 
+		<button:VDOMButton id="exitButton" includeIn="loginView, progressView" 
 				label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }" minWidth="100"
 				click="exitButton_clickHandler(event)"/>
 			
-		<components1:VDOMButton id="submitButton" includeIn="loginView"
-				icon="@Embed('icons/connect.png')"
+		<button:VDOMButton id="submitButton" includeIn="loginView"
+				icon="@Embed('assets/connect.png')"
 				label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
 				click="submitButton_clickHandler(event)" />
 	</s:HGroup>

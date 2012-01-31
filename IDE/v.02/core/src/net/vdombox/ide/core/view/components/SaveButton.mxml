@@ -22,8 +22,8 @@
 	
 	<s:HGroup width="100%" height="100%" gap="2" verticalAlign="middle"
 			  paddingLeft="5" paddingRight="5">
-		<mx:Image source.notsave="@Embed('icons/check_0.png')"
-				  source.save="@Embed('icons/check_1.png')" />
+		<mx:Image source.notsave="@Embed('assets/check_0.png')"
+				  source.save="@Embed('assets/check_1.png')" />
 		
 		<s:Label id="labelDisplay"
 				 textAlign="center" color="#000000"

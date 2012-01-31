@@ -23,7 +23,7 @@
 	
 	<s:Rect left="9" top="9" right="9" bottom="9">
 		<s:fill>
-			<s:BitmapFill source = "@Embed('icons/bg_logo.png')" smooth="true" fillMode="repeat"/>
+			<s:BitmapFill source = "@Embed('assets/bg_logo.png')" smooth="true" fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
 	
