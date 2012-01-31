@@ -7,6 +7,8 @@ package net.vdombox.ide.common.vo
 		{
 			_name = name;
 			_value = _defaultValue = value;
+			if ( name == "left" )
+				var tt : int = 0;
 		}
 		
 		private var _name : String;
@@ -61,6 +63,13 @@ package net.vdombox.ide.common.vo
 			
 			return attributeVO;
 			
+		}
+		
+		public function replaceValue() : void
+		{
+			var strTemp : String = _defaultValue;
+			_defaultValue = _value;
+			_value = strTemp;
 		}
 		
 		

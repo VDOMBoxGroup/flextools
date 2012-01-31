@@ -109,12 +109,12 @@ package net.vdombox.ide.common.vo
 			for each ( attributeVO in attributes )
 			{
 				attributeVONew = attributeVO.clone();
-				attributeVONew.value = attributeVONew.defaultValue;
+				attributeVONew.replaceValue();
 				
 				result.push( attributeVONew );
 			}
 			
-			var undoAttributesVO : VdomObjectAttributesVO = ObjectUtil.copy( this ) as VdomObjectAttributesVO;
+			var undoAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO( _objectVO );
 			undoAttributesVO.attributes = result;
 			
 			return undoAttributesVO;
