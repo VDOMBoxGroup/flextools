@@ -11,7 +11,7 @@
 			
 			import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 			import net.vdombox.ide.common.events.ResourceVOEvent;
-			import net.vdombox.ide.common.model.vo.ResourceVO;
+			import net.vdombox.ide.common.model._vo.ResourceVO;
 			
 			//private var dataChanged : Boolean = false;
 			
