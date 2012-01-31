@@ -19,17 +19,17 @@
 			import mx.skins.halo.ComboBoxArrowSkin;
 			import mx.skins.spark.ComboBoxSkin;
 			
-			import net.vdombox.ide.common.model.vo.AttributeDescriptionVO;
-			import net.vdombox.ide.common.model.vo.AttributeVO;
-			import net.vdombox.ide.common.model.vo.ObjectListVO;
-			import net.vdombox.ide.common.model.vo.PageVO;
+			import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
+			import net.vdombox.ide.common.model._vo.AttributeVO;
+			import net.vdombox.ide.common.model._vo.ObjectListVO;
+			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
 			import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
 			import net.vdombox.ide.common.view.components.windows.Alert;
-			import net.vdombox.ide.common.view.AlertButton;
+			import net.vdombox.ide.common.view.components.button.AlertButton;
 			
 			import spark.components.TextInput;
 

@@ -11,10 +11,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.ide.common.model.vo.AttributeVO;
-	import net.vdombox.ide.common.model.vo.ObjectVO;
-	import net.vdombox.ide.common.model.vo.PageVO;
-	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model._vo.AttributeVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
@@ -29,7 +29,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	import net.vdombox.utils.WindowManager;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.AlertButton;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

@@ -217,10 +217,10 @@
 				}
 			}
 			
-			[Embed(source="icons/disclosureClosedIcon.png")]
+			[Embed(source="assets/disclosureClosedIcon.png")]
 			public var plus:Class;
 			
-			[Embed(source="icons/disclosureOpenIcon.png")]
+			[Embed(source="assets/disclosureOpenIcon.png")]
 			public var minus:Class;
 			
 
@@ -326,7 +326,7 @@
 	
 	<s:Rect width="100%" height="100%">
 		<s:fill>
-			<s:BitmapFill source = "@Embed('icons/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+			<s:BitmapFill source = "@Embed('assets/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
 	

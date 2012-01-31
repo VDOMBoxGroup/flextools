@@ -32,7 +32,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.resources.ResourceManager;
 	import mx.validators.Validator;
 
-	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
@@ -43,7 +43,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.utils.WindowManager;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.AlertButton;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

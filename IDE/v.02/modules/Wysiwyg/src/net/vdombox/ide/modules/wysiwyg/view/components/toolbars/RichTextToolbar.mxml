@@ -21,8 +21,8 @@
 			import mx.managers.PopUpManager;
 			import mx.utils.StringUtil;
 			
-			import net.vdombox.ide.common.model.vo.AttributeVO;
-			import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
+			import net.vdombox.ide.common.model._vo.AttributeVO;
+			import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditor;

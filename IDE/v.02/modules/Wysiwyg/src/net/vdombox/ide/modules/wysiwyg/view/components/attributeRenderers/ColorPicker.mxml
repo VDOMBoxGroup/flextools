@@ -79,6 +79,6 @@
 	</s:Group>
 	
 		
-	<mx:Image source="@Embed('icons/colorpicker.png')" smoothBitmapContent="true"/>
+	<mx:Image source="@Embed('assets/colorpicker.png')" smoothBitmapContent="true"/>
 
 </s:HGroup>

@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
-	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 
 	public class UndoStackItem
 	{

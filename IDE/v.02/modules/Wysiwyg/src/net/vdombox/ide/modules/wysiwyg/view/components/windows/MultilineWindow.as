@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;

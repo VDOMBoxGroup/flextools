@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import net.vdombox.ide.common.view.components.PageTypeItemRenderer;
+	import net.vdombox.ide.common.view.components.itemrenderers.PageTypeItemRenderer;
 	import net.vdombox.ide.common.events.ItemRendererEvent;
-	import net.vdombox.ide.common.model.vo.ResourceVO;
-	import net.vdombox.ide.common.model.vo.TypeVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

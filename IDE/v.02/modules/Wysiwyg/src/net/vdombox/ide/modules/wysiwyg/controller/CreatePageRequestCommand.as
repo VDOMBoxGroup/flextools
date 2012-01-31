@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
-	import net.vdombox.ide.common.model.vo.TypeVO;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	

@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-	import net.vdombox.ide.common.model.vo.ObjectVO;
-	import net.vdombox.ide.common.model.vo.VdomObjectXMLPresentationVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	import net.vdombox.ide.modules.wysiwyg.view.VdomObjectEditorMediator;

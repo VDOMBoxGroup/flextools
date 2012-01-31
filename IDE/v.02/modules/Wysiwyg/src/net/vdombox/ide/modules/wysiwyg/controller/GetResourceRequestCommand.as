@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import com.zavoo.svg.nodes.SVGImageNode;
 	
-	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.ResourcesProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;

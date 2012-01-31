@@ -5,7 +5,7 @@
 
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.common.model.vo.ResourceVO;
+			import net.vdombox.ide.common.model._vo.ResourceVO;
 
 			[Bindable]
 			private var resourceVO : ResourceVO;

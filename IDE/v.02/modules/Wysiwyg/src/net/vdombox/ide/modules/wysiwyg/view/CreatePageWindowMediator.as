@@ -5,8 +5,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.windows.CreatePageWindow;
 	import net.vdombox.ide.common.events.ItemRendererEvent;
 	import net.vdombox.ide.common.events.WindowEvent;
-	import net.vdombox.ide.common.model.vo.AttributeDescriptionVO;
-	import net.vdombox.ide.common.model.vo.TypeVO;
+	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.utils.WindowManager;
 	

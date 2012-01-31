@@ -4,26 +4,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import mx.core.UIComponent;
 	
-	import net.vdombox.ide.common.LogMessage;
-	import net.vdombox.ide.common.LoggingJunctionMediator;
-	import net.vdombox.ide.common.PPMApplicationTargetNames;
-	import net.vdombox.ide.common.PPMObjectTargetNames;
-	import net.vdombox.ide.common.PPMOperationNames;
-	import net.vdombox.ide.common.PPMPageTargetNames;
-	import net.vdombox.ide.common.PPMPlaceNames;
-	import net.vdombox.ide.common.PPMResourcesTargetNames;
-	import net.vdombox.ide.common.PPMStatesTargetNames;
-	import net.vdombox.ide.common.PPMTypesTargetNames;
-	import net.vdombox.ide.common.PipeNames;
-	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.SimpleMessage;
 	import net.vdombox.ide.common.SimpleMessageHeaders;
-	import net.vdombox.ide.common.UIQueryMessage;
-	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.common.model.vo.ObjectVO;
-	import net.vdombox.ide.common.model.vo.PageVO;
-	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.controller.messages.LogMessage;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.messages.SimpleMessage;
+	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
+	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
+	import net.vdombox.ide.common.controller.names.PPMObjectTargetNames;
+	import net.vdombox.ide.common.controller.names.PPMOperationNames;
+	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
+	import net.vdombox.ide.common.controller.names.PPMPlaceNames;
+	import net.vdombox.ide.common.controller.names.PPMResourcesTargetNames;
+	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
+	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
+	import net.vdombox.ide.common.controller.names.PipeNames;
+	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
+	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.MessageProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
@@ -694,7 +694,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case PPMPlaceNames.TYPES:
 				{
-					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
+					sendNotification( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, message );
 
 					break;
 				}

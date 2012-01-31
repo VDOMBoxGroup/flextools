@@ -13,7 +13,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourcePreviewWindowSkin;
 	import net.vdombox.utils.WindowManager;
 	

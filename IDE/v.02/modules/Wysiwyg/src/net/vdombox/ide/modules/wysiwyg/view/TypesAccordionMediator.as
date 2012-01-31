@@ -7,8 +7,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.common.model.vo.ResourceVO;
-	import net.vdombox.ide.common.model.vo.TypeVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.TypeItemRendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;

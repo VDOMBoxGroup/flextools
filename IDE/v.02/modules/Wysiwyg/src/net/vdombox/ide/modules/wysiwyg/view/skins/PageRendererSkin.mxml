@@ -2,12 +2,12 @@
 <s:SparkSkin xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
-			 xmlns:s="library://ns.adobe.com/flex/spark" width="100%" height="100%" xmlns:components1="net.vdombox.components.*">
+			 xmlns:s="library://ns.adobe.com/flex/spark" width="100%" height="100%" xmlns:components1="net.vdombox.components.*" xmlns:components2="net.vdombox.ide.common.view.components.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.components.VDOMScroller;
+			import net.vdombox.ide.common.view.components.VDOMScroller;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
@@ -56,7 +56,7 @@
 		</s:stroke>
 	</s:Rect>
 	
-	<components1:VDOMScroller id="scroller"
+	<components2:VDOMScroller id="scroller"
 				focusEnabled="false"
 				bottom="0" left="0" right="0" top="0"
 				minViewportInset="1" creationComplete="scroller_creationCompleteHandler(event)">
@@ -74,7 +74,7 @@
 			
 			<components:TransformMarker id="transformMarker"/>
 		</s:Group>
-	</components1:VDOMScroller>
+	</components2:VDOMScroller>
 
 	<s:Group id="locker"
 			 bottom="0" left="0" right="0" top="0"

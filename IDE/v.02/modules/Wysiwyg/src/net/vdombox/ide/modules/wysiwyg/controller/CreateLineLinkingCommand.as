@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import mx.core.Container;
 	import mx.core.UIComponent;
 	
-	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.LineVO;

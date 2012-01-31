@@ -11,7 +11,7 @@
 			import mx.core.IVisualElement;
 			
 			import net.vdombox.ide.common.TypeInterface;
-			import net.vdombox.ide.common.model.vo.TypeVO;
+			import net.vdombox.ide.common.model._vo.TypeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar;

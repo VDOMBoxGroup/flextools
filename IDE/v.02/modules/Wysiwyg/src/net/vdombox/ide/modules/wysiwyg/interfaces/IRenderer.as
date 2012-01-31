@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.wysiwyg.interfaces
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-	import net.vdombox.ide.common.model.vo.ResourceVO;
-	import net.vdombox.ide.common.model.vo.TypeVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 
 	public interface IRenderer

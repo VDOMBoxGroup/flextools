@@ -14,8 +14,8 @@
 			import mx.core.DragSource;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.model.vo.ResourceVO;
-			import net.vdombox.ide.common.model.vo.TypeVO;
+			import net.vdombox.ide.common.model._vo.ResourceVO;
+			import net.vdombox.ide.common.model._vo.TypeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.TypeItemRendererEvent;
 			import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 			

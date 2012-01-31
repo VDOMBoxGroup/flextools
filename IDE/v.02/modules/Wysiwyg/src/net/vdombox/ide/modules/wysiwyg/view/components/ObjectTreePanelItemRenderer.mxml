@@ -6,7 +6,7 @@
 					  width="100%"
 					  minWidth="225"
 					  contentBackgroundAlpha="0" 
-					  contextMenu="mxtreeitemrenderer1_contextMenuHandler(event)" xmlns:view="net.vdombox.view.*" xmlns:view1="net.vdombox.ide.common.view.*">
+					  contextMenu="mxtreeitemrenderer1_contextMenuHandler(event)" xmlns:view="net.vdombox.view.*" xmlns:view1="net.vdombox.ide.common.view.*" xmlns:components="net.vdombox.ide.common.view.components.*">
 
 	<s:states>
 		<s:State name="normal" />
@@ -25,7 +25,7 @@
 			import mx.events.FlexEvent;
 			import mx.events.ResourceEvent;
 			
-			import net.vdombox.ide.common.model.vo.ResourceVO;
+			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 			
@@ -331,7 +331,7 @@
 		</s:Rect>
 
 		<s:VGroup width="22" height="100%" verticalAlign="middle" horizontalAlign="center">
-			<view1:EyeImage id="eyes" width="16" height="14" />
+			<components:EyeImage id="eyes" width="16" height="14" />
 		</s:VGroup>
 
 	</s:Group>

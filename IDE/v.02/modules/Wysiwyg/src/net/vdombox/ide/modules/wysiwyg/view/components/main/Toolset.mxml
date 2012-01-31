@@ -12,7 +12,7 @@
 
 	<components:ToolsetButton id="toolsetButton"
 							  height="100%"
-							  icon="@Embed('icons/wysiwyg_icon.png')"
+							  icon="@Embed('assets/wysiwyg_icon.png')"
 							  label="{ resourceManager.getString( 'Wysiwyg_General', 'toolset_button_label' ) }"
 							  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.ToolsetButtonSkin" />
 </s:Group>

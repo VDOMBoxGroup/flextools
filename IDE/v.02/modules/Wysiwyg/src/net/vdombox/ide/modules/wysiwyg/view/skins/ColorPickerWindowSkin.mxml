@@ -4,7 +4,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:colorPicker="net.vdombox.ide.modules.wysiwyg.view.components.colorPicker.*" 
 		xmlns:attributeRenderers="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.*"
-		width="460" height="360" xmlns:components="net.vdombox.components.*">
+		width="460" height="360" xmlns:components="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.windows.ColorPickerWindow")]
@@ -168,7 +168,7 @@
 		<s:Group width="100%" height="100%">
 			<s:Rect width="100%" height="100%">
 				<s:fill>
-					<s:BitmapFill source = "@Embed('icons/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+					<s:BitmapFill source = "@Embed('assets/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
 				</s:fill>
 			</s:Rect>
 		
@@ -203,11 +203,11 @@
 			
 				<mx:Spacer width="100%" />
 			
-				<components:VDOMButton width="48"
-						  icon="@Embed(source='icons/Cancel.png')"
+				<button:VDOMButton width="48"
+						  icon="@Embed(source='assets/Cancel.png')"
 					  	  click="hostComponent.cancel_close_window()" />
 			
-				<components:VDOMButton label="{ resourceManager.getString( 'Wysiwyg_General', 'color_picker_window_use' ) }"
+				<button:VDOMButton label="{ resourceManager.getString( 'Wysiwyg_General', 'color_picker_window_use' ) }"
 					  	  click="hostComponent.ok_close_window()" />
 			</mx:ControlBar>	
 		

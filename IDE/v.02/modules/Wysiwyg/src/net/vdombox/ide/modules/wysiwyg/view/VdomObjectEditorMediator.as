@@ -20,11 +20,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-	import net.vdombox.ide.common.model.vo.AttributeVO;
-	import net.vdombox.ide.common.model.vo.ObjectVO;
-	import net.vdombox.ide.common.model.vo.PageVO;
-	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
-	import net.vdombox.ide.common.model.vo.VdomObjectXMLPresentationVO;
+	import net.vdombox.ide.common.model._vo.AttributeVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
@@ -44,7 +44,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
 	import net.vdombox.ide.modules.wysiwyg.view.components.VdomObjectEditor;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.AlertButton;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

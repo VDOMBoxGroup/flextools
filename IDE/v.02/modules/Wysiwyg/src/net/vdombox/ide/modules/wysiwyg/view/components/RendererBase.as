@@ -57,11 +57,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.managers.ToolTipManager;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-	import net.vdombox.ide.common.model.vo.AttributeVO;
-	import net.vdombox.ide.common.model.vo.ObjectVO;
-	import net.vdombox.ide.common.model.vo.PageVO;
-	import net.vdombox.ide.common.model.vo.ResourceVO;
-	import net.vdombox.ide.common.model.vo.TypeVO;
+	import net.vdombox.ide.common.model._vo.AttributeVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
@@ -135,7 +135,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		 */
 		public var backgroundRect : Rect;
 
-		[Embed( source = "/icons/wysiwyg_icon.png" )]
+		[Embed( source = "assets/wysiwyg_icon.png" )]
 		/**
 		 *
 		 * @default

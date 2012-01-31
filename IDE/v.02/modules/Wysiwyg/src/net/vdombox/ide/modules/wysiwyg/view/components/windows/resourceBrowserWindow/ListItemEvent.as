@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 {
 import flash.events.Event;
 
-import net.vdombox.ide.common.model.vo.ResourceVO;
+import net.vdombox.ide.common.model._vo.ResourceVO;
 
 
 public class ListItemEvent extends Event

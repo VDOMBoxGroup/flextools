@@ -14,7 +14,7 @@ package com.zavoo.svg.nodes
 	import mx.binding.utils.BindingUtils;
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.common.model.vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 
 	public class SVGImageNode extends SVGNode
