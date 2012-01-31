@@ -53,9 +53,9 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.TYPES_LOADED:
 				{
-					if (statesProxy.selectedApplication)
-						sendNotification( ApplicationFacade.OPEN_MAIN_WINDOW );
-					else
+//					if (statesProxy.selectedApplication)
+//						sendNotification( ApplicationFacade.OPEN_MAIN_WINDOW );
+//					else
 						sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER );
 
 					break;

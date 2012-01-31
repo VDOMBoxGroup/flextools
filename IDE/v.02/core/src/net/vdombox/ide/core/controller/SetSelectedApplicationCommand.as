@@ -41,11 +41,11 @@ package net.vdombox.ide.core.controller
 			if ( !settingsVO )
 				return null;
 			
-			/*for each( var applicationVO : ApplicationVO in applications)
+			for each( var applicationVO : ApplicationVO in applications)
 			{
 				if ( applicationVO.id == settingsVO.lastApplicationID )
 					return  applicationVO;
-			}*/
+			}
 			
 			return null;
 		}
