@@ -51,7 +51,7 @@
 			 updateComplete="checkScrollbar()">
 		
 		<s:TabBar id="tabBar"
-				  skinClass="net.vdombox.view.skins.TabBarSkin"
+				  skinClass="net.vdombox.ide.common.view.skins.tabnavigator.TabBarSkin"
 				  requireSelection="true"/>
 	</s:Group>
 
@@ -63,7 +63,7 @@
 											   top="-22"
 											   height="24" width="100%"
 											   pageSize="60" stepSize="2" 
-											   repeatInterval="150" skinClass="net.vdombox.view.skins.TabNavigatorScrollBarSkin"
+											   repeatInterval="150" skinClass="net.vdombox.ide.common.view.skins.tabnavigator.TabNavigatorScrollBarSkin"
 											   visible="false" smoothScrolling="true" viewport="{ tabBarGroup }"/>
 
 </s:SparkSkin>

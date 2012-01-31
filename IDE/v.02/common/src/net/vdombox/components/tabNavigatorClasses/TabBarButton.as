@@ -8,7 +8,7 @@ package net.vdombox.components.tabNavigatorClasses
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	
-	import net.vdombox.view.skins.TabBarButtonSkin;
+	import net.vdombox.ide.common.view.skins.button.TabBarButtonSkin;
 	
 	import spark.components.Button;
 	import spark.components.ButtonBarButton;

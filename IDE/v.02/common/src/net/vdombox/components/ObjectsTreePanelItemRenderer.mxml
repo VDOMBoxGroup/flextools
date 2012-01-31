@@ -2,7 +2,7 @@
 <s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
-					  width="100%" minWidth="225" xmlns:view="net.vdombox.view.*"
+					  width="100%" minWidth="225" xmlns:view="net.vdombox.ide.common.view.*"
 					  doubleClickEnabled="true" doubleClick="mxtreeitemrenderer1_doubleClickHandler(event)">
 	<fx:Script>
 		<![CDATA[
@@ -11,7 +11,7 @@
 			
 			import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 			import net.vdombox.ide.common.events.ResourceVOEvent;
-			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.common.model.vo.ResourceVO;
 			
 			//private var dataChanged : Boolean = false;
 			

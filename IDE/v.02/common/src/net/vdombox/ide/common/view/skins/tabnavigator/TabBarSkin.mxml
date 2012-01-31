@@ -51,7 +51,7 @@
 
 		<s:itemRenderer>
 			<fx:Component>
-				<tabNavigatorClasses:TabBarButton mouseChildren="true" skinClass="net.vdombox.view.skins.TabBarButtonSkin"/>
+				<tabNavigatorClasses:TabBarButton mouseChildren="true" skinClass="net.vdombox.ide.common.view.skins.button.TabBarButtonSkin"/>
 			</fx:Component>
 		</s:itemRenderer>
 

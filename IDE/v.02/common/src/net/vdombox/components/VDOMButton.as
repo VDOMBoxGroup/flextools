@@ -2,7 +2,7 @@ package net.vdombox.components
 {
 	import flash.events.KeyboardEvent;
 	
-	import net.vdombox.view.skins.VDOMButtonSkin;
+	import net.vdombox.ide.common.view.skins.button.VDOMButtonSkin;
 	
 	import spark.components.Button;
 

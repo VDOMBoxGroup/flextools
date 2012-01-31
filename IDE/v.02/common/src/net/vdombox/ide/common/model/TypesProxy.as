@@ -2,8 +2,8 @@ package net.vdombox.ide.common.model
 {
 	import net.vdombox.editors.parsers.vdomxml.Field;
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
-	import net.vdombox.ide.common.vo.AttributeDescriptionVO;
-	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.common.model.vo.AttributeDescriptionVO;
+	import net.vdombox.ide.common.model.vo.TypeVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;

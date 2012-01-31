@@ -1,6 +1,6 @@
 package net.vdombox.components.tabNavigatorClasses
 {
-	import net.vdombox.view.skins.TabBarCloseButtonSkin;
+	import net.vdombox.ide.common.view.skins.button.TabBarCloseButtonSkin;
 	
 	import spark.components.Button;
 	

@@ -1,6 +1,6 @@
-package net.vdombox.ide.common.components
+package net.vdombox.ide.common.view.components
 {
-	import net.vdombox.ide.common.skins.WorkAreaButtonSkin;
+	import net.vdombox.ide.common.view.skins.button.WorkAreaButtonSkin;
 	
 	import spark.components.Button;
 	
@@ -10,7 +10,7 @@ package net.vdombox.ide.common.components
 		{
 			super();
 			
-			setStyle( "skinClass", net.vdombox.ide.common.skins.WorkAreaButtonSkin );
+			setStyle( "skinClass", net.vdombox.ide.common.view.skins.button.WorkAreaButtonSkin );
 		}
 		
 		[Bindable]

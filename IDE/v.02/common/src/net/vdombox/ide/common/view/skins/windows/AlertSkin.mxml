@@ -7,7 +7,7 @@
 		removedFromStage="sparkskin2_removedFromStageHandler(event)">
 	<!-- host component -->
 	<fx:Metadata>
-		[HostComponent("net.vdombox.view.Alert")]
+		[HostComponent("net.vdombox.ide.common.view.components.windows.Alert")]
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
@@ -15,7 +15,7 @@
 			
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.view.Alert;
+			import net.vdombox.ide.common.view.components.windows.Alert;
 			
 			protected function sparkskin1_keyDownHandler(event:KeyboardEvent):void
 			{

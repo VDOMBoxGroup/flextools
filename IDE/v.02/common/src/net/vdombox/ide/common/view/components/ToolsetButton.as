@@ -1,6 +1,6 @@
-package net.vdombox.ide.common.components
+package net.vdombox.ide.common.view.components
 {
-	import net.vdombox.ide.common.skins.ToolsetButtonSkin;
+	import net.vdombox.ide.common.view.skins.button.ToolsetButtonSkin;
 	
 	import spark.components.ToggleButton;
 	
@@ -10,7 +10,7 @@ package net.vdombox.ide.common.components
 		{
 			super();
 			
-			setStyle( "skinClass", net.vdombox.ide.common.skins.ToolsetButtonSkin );
+			setStyle( "skinClass", net.vdombox.ide.common.view.skins.button.ToolsetButtonSkin );
 		}
 		
 		[Bindable]

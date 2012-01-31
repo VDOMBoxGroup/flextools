@@ -5,7 +5,7 @@ package net.vdombox.components
 	
 	import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 	import net.vdombox.utils.WindowManager;
-	import net.vdombox.view.skins.StringAttributeEditWindowSkin;
+	import net.vdombox.ide.common.view.skins.windows.StringAttributeEditWindowSkin;
 	
 	import spark.components.RichEditableText;
 	import spark.components.Window;

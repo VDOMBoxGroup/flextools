@@ -70,7 +70,7 @@
 		<mx1:Spacer  width="100%"/>
 		<!-- close button -->
 		<s:Button id="closeButton" 
-				  skinClass="net.vdombox.view.skins.MainCloseBtnSkin"
+				  skinClass="net.vdombox.ide.common.view.skins.button.MainCloseBtnSkin"
 				  />	
 	</s:HGroup>
 		

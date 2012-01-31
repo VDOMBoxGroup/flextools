@@ -8,7 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.events.ItemRendererEvent;
-			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.common.model.vo.ResourceVO;
 
 			[Bindable]
 			private var _typeResource : ResourceVO;
