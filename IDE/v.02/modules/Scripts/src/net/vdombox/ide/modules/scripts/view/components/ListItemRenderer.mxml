@@ -7,7 +7,7 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.common.model.vo.ServerActionVO;
+			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
 			
 			override public function set data( value : Object ) : void

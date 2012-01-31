@@ -19,10 +19,10 @@
 			[Bindable]
 			private var _structure : XMLList;
 			
-			[Embed(source="icons/disclosureClosedIcon.png")]
+			[Embed(source="assets/disclosureClosedIcon.png")]
 			public var plus:Class;
 			
-			[Embed(source="icons/disclosureOpenIcon.png")]
+			[Embed(source="assets/disclosureOpenIcon.png")]
 			public var minus:Class;
 
 			public function get selectedObject() : XML
@@ -239,13 +239,13 @@
 	
 	<s:Rect width="100%" height="100%">
 		<s:fill>
-			<s:BitmapFill source = "@Embed('icons/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+			<s:BitmapFill source = "@Embed('assets/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
 
 	<mx:Tree id="containersTree"
 			 dataProvider="{ _structure }" height="100%" labelField="@name" showRoot="true"
-			 itemRenderer="net.vdombox.components.ObjectsTreePanelItemRenderer"
+			 itemRenderer="net.vdombox.ide.common.view.components.itemrenderers.ObjectsTreePanelItemRenderer"
 			 contentBackgroundAlpha="0" width="100%"
 			 maxHorizontalScrollPosition="140"
 			 creationComplete="containersTree_creationCompleteHandler(event)"/>

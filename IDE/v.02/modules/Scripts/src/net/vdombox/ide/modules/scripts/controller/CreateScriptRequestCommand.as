@@ -3,9 +3,9 @@ package net.vdombox.ide.modules.scripts.controller
 	import mx.utils.ObjectUtil;
 	import mx.utils.UIDUtil;
 	
-	import net.vdombox.ide.common.model.vo.ApplicationVO;
-	import net.vdombox.ide.common.model.vo.LibraryVO;
-	import net.vdombox.ide.common.model.vo.ServerActionVO;
+	import net.vdombox.ide.common.model._vo.ApplicationVO;
+	import net.vdombox.ide.common.model._vo.LibraryVO;
+	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	import net.vdombox.ide.modules.scripts.view.ServerScriptsPanelMediator;

@@ -5,7 +5,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 height="300" width="400" xmlns:editors="net.vdombox.editors.*"
 		 xmlns:components1="net.vdombox.components.*"
-		 removedFromStage="navigatorcontent1_removedFromStageHandler(event)" xmlns:components2="net.vdombox.ide.common.components.*" xmlns:components3="net.vdombox.ide.common.view.components.*">
+		 removedFromStage="navigatorcontent1_removedFromStageHandler(event)" xmlns:components2="net.vdombox.ide.common.components.*" xmlns:components3="net.vdombox.ide.common.view.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 
 	<fx:Script>
 		<![CDATA[
@@ -13,7 +13,7 @@
 			
 			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.events.EditorEvent;
-			import net.vdombox.ide.common.model.vo.ServerActionVO;
+			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.modules.scripts.events.EditAreaEvent;
 			import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 			
@@ -70,11 +70,6 @@
 			{
 				_actionVO = value;
 			}
-
-			/*public function set syntax( value : String ) : void
-			{
-				pythonScriptEditor.syntax = _syntax;
-			}*/
 			
 			private function scriptEditor_saveHandler( event : MouseEvent ) : void
 			{
@@ -106,7 +101,6 @@
 			
 			protected function pythonScriptEditor_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
 				addEventListener(Event.CHANGE, setStateInUnsave, true, 0, true );
 				pythonScriptEditor.addEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true, 0, true );
 			}
@@ -147,8 +141,8 @@
 			<s:HGroup width="100%" height="100%" horizontalAlign="left" 
 					  paddingLeft="10" paddingTop="2" paddingBottom="2">
 				
-				<components3:WorkAreaButton id="saveButton"
-										   enabled.unsaved="true" enabled="false" height="20" icon="@Embed('icons/save.png')"
+				<button:WorkAreaButton id="saveButton"
+										   enabled.unsaved="true" enabled="false" height="20" icon="@Embed('assets/save.png')"
 										   label="{ resourceManager.getString( 'Scripts_General', 'save' ) }" click="scriptEditor_saveHandler( event )"
 										   highlighted="false" highlighted.unsaved="true"/>
 				

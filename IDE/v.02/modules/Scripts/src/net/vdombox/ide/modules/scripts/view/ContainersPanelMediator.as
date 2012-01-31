@@ -1,12 +1,12 @@
 package net.vdombox.ide.modules.scripts.view
 {
-	import net.vdombox.components.ObjectsTreePanelItemRenderer;
+	import net.vdombox.ide.common.view.components.itemrenderers.ObjectsTreePanelItemRenderer;
 	import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.common.model.vo.ObjectVO;
-	import net.vdombox.ide.common.model.vo.PageVO;
-	import net.vdombox.ide.common.model.vo.TypeVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;

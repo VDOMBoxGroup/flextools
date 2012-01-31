@@ -3,10 +3,10 @@ package net.vdombox.ide.modules.scripts.view.components
 	import flash.events.Event;
 	import flash.utils.Dictionary;
 	
-	import net.vdombox.components.tabNavigatorClasses.Tab;
-	import net.vdombox.components.tabNavigatorClasses.TabNavigator;
+	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
+	import net.vdombox.ide.common.view.components.tabnavigator.TabNavigator;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
-	import net.vdombox.ide.common.model.vo.ServerActionVO;
+	import net.vdombox.ide.common.model._vo.ServerActionVO;
 
 	public class WorkArea extends TabNavigator
 	{

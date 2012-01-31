@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.scripts.controller.messages
 {
-	import net.vdombox.ide.common.PPMOperationNames;
-	import net.vdombox.ide.common.PPMTypesTargetNames;
-	import net.vdombox.ide.common.ProxyMessage;
+	import net.vdombox.ide.common.controller.names.PPMOperationNames;
+	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;
