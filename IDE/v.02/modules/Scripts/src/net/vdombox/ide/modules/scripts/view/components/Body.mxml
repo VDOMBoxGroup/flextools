@@ -19,7 +19,7 @@
 		</s:fill>
 	</s:Rect>
 
-	<mx1:VDividedBox height="100%" width="228" minWidth="200" dividerSkin="net.vdombox.view.skins.DividerSkin">
+	<mx1:VDividedBox height="100%" width="228" minWidth="200" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
 
 		<components:ContainersPanel id="containersPanel"
 									width="100%" height="25%" 

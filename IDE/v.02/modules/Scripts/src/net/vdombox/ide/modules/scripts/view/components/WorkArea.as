@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.scripts.view.components
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.components.tabNavigatorClasses.TabNavigator;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
-	import net.vdombox.ide.common.vo.ServerActionVO;
+	import net.vdombox.ide.common.model.vo.ServerActionVO;
 
 	public class WorkArea extends TabNavigator
 	{

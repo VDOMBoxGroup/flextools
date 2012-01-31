@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.common.vo.ServerActionVO;
+	import net.vdombox.ide.common.model.vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;

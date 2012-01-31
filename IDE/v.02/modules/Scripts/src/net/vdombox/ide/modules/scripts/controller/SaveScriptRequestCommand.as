@@ -3,10 +3,10 @@ package net.vdombox.ide.modules.scripts.controller
 	import mx.utils.ObjectUtil;
 	import mx.utils.UIDUtil;
 	
-	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.GlobalActionVO;
-	import net.vdombox.ide.common.vo.LibraryVO;
-	import net.vdombox.ide.common.vo.ServerActionVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.GlobalActionVO;
+	import net.vdombox.ide.common.model.vo.LibraryVO;
+	import net.vdombox.ide.common.model.vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	import net.vdombox.ide.modules.scripts.view.ServerScriptsPanelMediator;

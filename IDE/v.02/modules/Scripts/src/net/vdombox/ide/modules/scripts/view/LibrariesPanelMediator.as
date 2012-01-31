@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.scripts.view
 {
-	import net.vdombox.ide.common.vo.LibraryVO;
+	import net.vdombox.ide.common.model.vo.LibraryVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;

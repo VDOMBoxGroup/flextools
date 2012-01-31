@@ -6,12 +6,12 @@ package net.vdombox.ide.modules.scripts.view
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.editors.PythonScriptEditor;
-	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.GlobalActionVO;
-	import net.vdombox.ide.common.vo.LibraryVO;
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.ServerActionVO;
+	import net.vdombox.ide.common.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.model.vo.GlobalActionVO;
+	import net.vdombox.ide.common.model.vo.LibraryVO;
+	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;

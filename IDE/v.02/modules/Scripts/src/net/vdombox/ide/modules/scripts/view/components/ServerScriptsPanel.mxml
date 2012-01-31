@@ -10,7 +10,7 @@
 			import mx.collections.ArrayList;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.vo.ServerActionVO;
+			import net.vdombox.ide.common.model.vo.ServerActionVO;
 			import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
 			import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
 			

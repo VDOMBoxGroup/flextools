@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.common.events.CreateActionWindowEvent;
-	import net.vdombox.ide.common.components.CreateActionWindow;
+	import net.vdombox.ide.common.view.components.windows.CreateActionWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;

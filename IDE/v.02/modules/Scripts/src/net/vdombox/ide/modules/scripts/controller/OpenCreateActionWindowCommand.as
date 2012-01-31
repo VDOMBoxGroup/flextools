@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.scripts.controller
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.common.components.CreateActionWindow;
+	import net.vdombox.ide.common.view.components.windows.CreateActionWindow;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.view.CreateActionWindowMediator;
 	

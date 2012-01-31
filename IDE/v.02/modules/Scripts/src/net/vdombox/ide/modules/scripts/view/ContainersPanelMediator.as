@@ -4,9 +4,9 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.TypeVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;
