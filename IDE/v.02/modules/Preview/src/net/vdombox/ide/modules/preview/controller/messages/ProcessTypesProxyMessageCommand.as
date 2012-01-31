@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.preview.controller.messages
 {
-	import net.vdombox.ide.common.PPMTypesTargetNames;
-	import net.vdombox.ide.common.ProxyMessage;
+	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.modules.preview.ApplicationFacade;
 	import net.vdombox.ide.modules.preview.model.SessionProxy;
 	

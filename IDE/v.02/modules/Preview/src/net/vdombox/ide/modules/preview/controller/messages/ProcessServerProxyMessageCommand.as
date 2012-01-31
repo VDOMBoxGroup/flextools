@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.preview.controller.messages
 {
-	import net.vdombox.ide.common.PPMServerTargetNames;
-	import net.vdombox.ide.common.ProxyMessage;
+	import net.vdombox.ide.common.controller.names.PPMServerTargetNames;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
