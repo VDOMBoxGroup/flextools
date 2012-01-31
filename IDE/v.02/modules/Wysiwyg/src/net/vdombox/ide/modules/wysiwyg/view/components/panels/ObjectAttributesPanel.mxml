@@ -12,12 +12,12 @@
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
-			import net.vdombox.ide.common.vo.AttributeVO;
-			import net.vdombox.ide.common.vo.TypeVO;
-			import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+			import net.vdombox.ide.common.model.vo.AttributeDescriptionVO;
+			import net.vdombox.ide.common.model.vo.AttributeVO;
+			import net.vdombox.ide.common.model.vo.TypeVO;
+			import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
-			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 
 			private var _attributesVO : VdomObjectAttributesVO;
 			private var _typeVO : TypeVO;

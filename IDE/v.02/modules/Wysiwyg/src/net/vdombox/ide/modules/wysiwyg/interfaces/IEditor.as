@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.wysiwyg.interfaces
 	import mx.core.IUIComponent;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-	import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
+	import net.vdombox.ide.common.model.vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 
 	public interface IEditor extends IEventDispatcher

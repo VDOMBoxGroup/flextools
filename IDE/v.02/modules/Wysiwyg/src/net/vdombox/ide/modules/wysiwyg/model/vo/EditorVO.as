@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 	import flash.events.EventDispatcher;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-	import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
+	import net.vdombox.ide.common.model.vo.VdomObjectXMLPresentationVO;
 
 	public class EditorVO extends EventDispatcher
 	{

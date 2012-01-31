@@ -6,7 +6,7 @@
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 width="100%" height="100%"
-			 creationComplete="creationCompleteHandler()">
+			 creationComplete="creationCompleteHandler()" xmlns:components1="net.vdombox.ide.common.view.components.*">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -85,7 +85,7 @@
 				  left="1" right="1" top="1">
 			
 			<s:HGroup includeIn="xml, xmlDisabled">
-				<libcomponents:WorkAreaButton id="saveXMLButton"
+				<components1:WorkAreaButton id="saveXMLButton"
 											  height="25" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_save_button_label' ) }"/>
 				
 				<mx:Spacer width="20"/>

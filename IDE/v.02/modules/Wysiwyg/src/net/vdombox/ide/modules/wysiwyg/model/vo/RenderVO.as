@@ -5,9 +5,9 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 	import mx.collections.SortField;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-	import net.vdombox.ide.common.vo.AttributeVO;
-	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.common.model.vo.AttributeVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.TypeVO;
 	
 	[Bindable]
 	public class RenderVO

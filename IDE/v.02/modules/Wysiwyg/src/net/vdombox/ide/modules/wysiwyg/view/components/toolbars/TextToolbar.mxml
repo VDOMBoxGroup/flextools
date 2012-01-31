@@ -21,8 +21,8 @@
 			import mx.managers.IFocusManagerComponent;
 			import mx.utils.StringUtil;
 			
-			import net.vdombox.ide.common.vo.AttributeVO;
-			import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+			import net.vdombox.ide.common.model.vo.AttributeVO;
+			import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			
 			import spark.components.RichEditableText;

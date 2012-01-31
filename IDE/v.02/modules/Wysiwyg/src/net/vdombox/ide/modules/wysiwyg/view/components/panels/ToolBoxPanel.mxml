@@ -7,7 +7,7 @@
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.vo.TypeVO;
+			import net.vdombox.ide.common.model.vo.TypeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.TypesAccordionHeader;
 			import net.vdombox.ide.modules.wysiwyg.view.components.TypesCategory;

@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
-	import net.vdombox.ide.common.components.CreatePageWindow;
+	import net.vdombox.ide.common.view.components.windows.CreatePageWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.CreatePageWindowMediator;
 	import net.vdombox.utils.WindowManager;
 	

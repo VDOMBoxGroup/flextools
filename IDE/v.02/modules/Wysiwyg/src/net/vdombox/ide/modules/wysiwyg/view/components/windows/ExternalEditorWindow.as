@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.interfaces.IExternalManager;
-	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.common.model.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.events.ExternalEditorWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ExternalEditorWindowSkin;
 	

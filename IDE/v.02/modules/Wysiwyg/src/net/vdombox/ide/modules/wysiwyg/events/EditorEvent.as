@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 {
 	import flash.events.Event;
 	
-	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.model.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 
 	public class EditorEvent extends Event

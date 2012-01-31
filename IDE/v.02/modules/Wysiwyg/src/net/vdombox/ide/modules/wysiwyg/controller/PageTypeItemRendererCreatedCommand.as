@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
-	import net.vdombox.ide.common.components.PageTypeItemRenderer;
+	import net.vdombox.ide.common.view.components.PageTypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.PageTypeItemRendererMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

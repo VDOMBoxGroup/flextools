@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import net.vdombox.ide.common.vo.AttributeDescriptionVO;
+	import net.vdombox.ide.common.model.vo.AttributeDescriptionVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.HelpPanel;
-	import net.vdombox.view.Alert;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

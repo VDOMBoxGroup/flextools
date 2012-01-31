@@ -11,7 +11,7 @@
 			
 			import mx.events.ValidationResultEvent;
 			
-			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
+			import net.vdombox.ide.common.model.vo.AttributeDescriptionVO;
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
 			[Bindable]
 			private var _value : String;

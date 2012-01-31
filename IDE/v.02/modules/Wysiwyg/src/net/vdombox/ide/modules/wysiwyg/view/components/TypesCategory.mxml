@@ -14,8 +14,8 @@
 			import mx.collections.SortField;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.vo.TypeVO;
-			import net.vdombox.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
+			import net.vdombox.ide.common.model.vo.TypeVO;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 
 			[Bindable]
 			private var typeData : ArrayCollection;

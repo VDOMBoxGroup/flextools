@@ -16,9 +16,9 @@
 			import mx.events.StateChangeEvent;
 			import mx.utils.DisplayUtil;
 			
-			import net.vdombox.ide.common.components.WorkAreaButton;
+			import net.vdombox.ide.common.view.components.WorkAreaButton;
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-			import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
+			import net.vdombox.ide.common.model.vo.VdomObjectXMLPresentationVO;
 			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;

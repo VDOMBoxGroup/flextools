@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 	import flash.events.Event;
 	import flash.geom.Point;
 
-	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.common.model.vo.TypeVO;
 
 	public class RendererDropEvent extends Event
 	{

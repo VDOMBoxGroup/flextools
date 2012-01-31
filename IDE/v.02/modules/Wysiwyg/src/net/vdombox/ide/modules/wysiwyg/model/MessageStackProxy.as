@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.model
 {
 	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.model.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.UndoStackItem;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
