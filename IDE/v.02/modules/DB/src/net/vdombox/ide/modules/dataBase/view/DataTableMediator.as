@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -11,7 +12,6 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
-	import net.vdombox.ide.modules.dataBase.model.TypesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.BaseVisualEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
 	

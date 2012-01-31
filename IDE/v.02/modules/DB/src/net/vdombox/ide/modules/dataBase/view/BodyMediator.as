@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
@@ -59,7 +60,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.ALL_STATES_GETTED );
-			interests.push( ApplicationFacade.TYPES_CHANGED );
+			interests.push( TypesProxy.TYPES_CHANGED );
 			
 			interests.push( ApplicationFacade.PIPES_READY );
 			interests.push( ApplicationFacade.MODULE_DESELECTED );
@@ -76,7 +77,7 @@ package net.vdombox.ide.modules.dataBase.view
 				case ApplicationFacade.PIPES_READY:
 				{
 					sendNotification( ApplicationFacade.GET_ALL_STATES );
-					sendNotification( ApplicationFacade.GET_TYPES );
+					sendNotification( TypesProxy.GET_TYPES );
 					
 					break;
 				}
@@ -90,7 +91,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.TYPES_CHANGED:
+				case TypesProxy.TYPES_CHANGED:
 				{
 					isTypesChanged = true;
 					

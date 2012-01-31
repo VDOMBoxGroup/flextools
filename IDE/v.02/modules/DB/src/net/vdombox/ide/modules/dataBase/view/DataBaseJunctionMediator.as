@@ -4,8 +4,11 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
-	import net.vdombox.ide.common.view.LoggingJunctionMediator;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.messages.SimpleMessage;
+	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMObjectTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
@@ -15,15 +18,13 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.common.controller.names.PipeNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
-	import net.vdombox.ide.common.controller.messages.SimpleMessage;
-	import net.vdombox.ide.common.SimpleMessageHeaders;
-	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.model.vo.SettingsVO;
 	
@@ -75,10 +76,10 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			interests.push( ApplicationFacade.GET_OBJECTS );
 			
-			interests.push( ApplicationFacade.GET_TOP_LEVEL_TYPES );
+			interests.push( TypesProxy.GET_TOP_LEVEL_TYPES );
 			interests.push( ApplicationFacade.CREATE_PAGE );
 			
-			interests.push( ApplicationFacade.GET_TYPES );
+			interests.push( TypesProxy.GET_TYPES );
 			interests.push( ApplicationFacade.GET_PAGE );
 			
 			interests.push( ApplicationFacade.CREATE_OBJECT );
@@ -275,7 +276,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_TOP_LEVEL_TYPES:
+				case TypesProxy.GET_TOP_LEVEL_TYPES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TOP_LEVEL_TYPES, body );
 					
@@ -293,7 +294,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_TYPES:
+				case TypesProxy.GET_TYPES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
 					
@@ -510,7 +511,7 @@ package net.vdombox.ide.modules.dataBase.view
 
 				case PPMPlaceNames.TYPES:
 				{
-					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
+					sendNotification( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, message );
 					
 					break;
 				}

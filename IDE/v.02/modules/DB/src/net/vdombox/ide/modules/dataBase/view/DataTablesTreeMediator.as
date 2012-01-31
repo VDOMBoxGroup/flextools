@@ -7,15 +7,15 @@ package net.vdombox.ide.modules.dataBase.view
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.events.ResourceVOEvent;
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
-	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
+	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
 	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
-	import net.vdombox.ide.modules.dataBase.model.TypesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTablesTree;
 	import net.vdombox.ide.modules.dataBase.view.components.windows.CreateNewObjectWindow;
 	import net.vdombox.utils.WindowManager;
@@ -89,7 +89,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.TABLE_GETTED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
-			interests.push( ApplicationFacade.TOP_LEVEL_TYPES_GETTED );
+			interests.push( TypesProxy.TOP_LEVEL_TYPES_GETTED );
 			interests.push( ApplicationFacade.PAGE_CREATED );
 			interests.push( ApplicationFacade.OBJECT_CREATED );
 			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
@@ -218,7 +218,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.TOP_LEVEL_TYPES_GETTED:
+				case TypesProxy.TOP_LEVEL_TYPES_GETTED:
 				{
 					var typesVO : Array = body as Array;
 					var itemVO : TypeVO;
@@ -360,7 +360,7 @@ package net.vdombox.ide.modules.dataBase.view
 					if ( _typeVO.container == 3 )
 					{
 						if ( !typeVO )
-							sendNotification( ApplicationFacade.GET_TOP_LEVEL_TYPES );
+							sendNotification( TypesProxy.GET_TOP_LEVEL_TYPES );
 						else if ( sessionProxy.selectedApplication )
 						{
 							sendNotification( ApplicationFacade.CREATE_PAGE,

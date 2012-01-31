@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.dataBase
 {
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.DataBase;
 	import net.vdombox.ide.modules.dataBase.controller.BodyCreatedCommand;
 	import net.vdombox.ide.modules.dataBase.controller.ChangeSelectedDataBaseRequestCommand;
@@ -63,7 +64,6 @@ package net.vdombox.ide.modules.dataBase
 
 		//		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
-		public static const PROCESS_TYPES_PROXY_MESSAGE : String = "processTypesProxyMessage";
 		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
 		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
@@ -144,13 +144,8 @@ package net.vdombox.ide.modules.dataBase
 		
 		
 // add Bases and Tables
-		public static const GET_TOP_LEVEL_TYPES : String = "getTopLevelTypes";
-		public static const TOP_LEVEL_TYPES_GETTED : String = "topLevelTypesGetted";
 		public static const CREATE_PAGE : String = "createPage";
 		public static const PAGE_CREATED : String = "pageCreate";
-		
-		public static const GET_TYPES : String = "getTypes";
-		public static const TYPES_CHANGED : String = "typesChanged";
 		
 		public static const CREATE_OBJECT : String = "createObject";
 		public static const OBJECT_CREATED : String = "objectCreated";
@@ -209,7 +204,7 @@ package net.vdombox.ide.modules.dataBase
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
-			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
+			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 
 			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 			
