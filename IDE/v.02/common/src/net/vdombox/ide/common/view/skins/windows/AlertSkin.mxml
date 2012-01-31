@@ -4,7 +4,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		maxWidth="338" xmlns:components="net.vdombox.components.*"
 		creationComplete="sparkskin2_creationCompleteHandler(event)"
-		removedFromStage="sparkskin2_removedFromStageHandler(event)">
+		removedFromStage="sparkskin2_removedFromStageHandler(event)" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.common.view.components.windows.Alert")]
@@ -78,11 +78,11 @@
 					 fontSize="16" color="#FFFFFF" text="{hostComponent.text}"/>
 			
 			<s:HGroup height="29" width="100%" horizontalAlign="center" gap="40">
-				<components:VDOMButton  id="noButton" tabIndex="-1" select="true"
+				<button:VDOMButton  id="noButton" tabIndex="-1" select="true"
 							label="{hostComponent.getNoLabel()}"
 							visible="{hostComponent.getVisibleNoButton()}" includeInLayout="{hostComponent.getVisibleNoButton()}"
 							click="hostComponent.btnClickHandler(Alert.NO)" keyDown="hostComponent.keyNoPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
-				<components:VDOMButton  id="yesButton" tabIndex="-1"
+				<button:VDOMButton  id="yesButton" tabIndex="-1"
 							icon="@Embed('assets/Cancel.png')" label="{hostComponent.getYesLabel()}"
 							click="hostComponent.btnClickHandler(Alert.YES)" keyDown="hostComponent.keyYesPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
 			</s:HGroup>

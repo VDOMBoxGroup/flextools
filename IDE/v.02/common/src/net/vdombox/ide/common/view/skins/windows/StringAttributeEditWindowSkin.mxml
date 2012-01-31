@@ -4,7 +4,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx">
 	<!-- host component -->
 	<fx:Metadata>
-		[HostComponent("net.vdombox.components.StringAttributeEditWindow")]
+		[HostComponent("net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow")]
 	</fx:Metadata>
 	
 	<!-- states -->

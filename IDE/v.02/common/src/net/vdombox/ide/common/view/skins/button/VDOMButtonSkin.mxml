@@ -7,7 +7,7 @@
 		creationComplete="hostComponent.setIcon()">
 	<!-- host component -->
 	<fx:Metadata>
-		[HostComponent("net.vdombox.components.VDOMButton")]
+		[HostComponent("net.vdombox.ide.common.view.components.button.VDOMButton")]
 	</fx:Metadata>
 	
 	<fx:Script fb:purpose="styling">

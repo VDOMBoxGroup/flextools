@@ -16,12 +16,12 @@ package net.vdombox.ide.common.view.components.windows
 	import mx.managers.ISystemManager;
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.components.VDOMButton;
+	import net.vdombox.ide.common.view.components.button.VDOMButton;
 	import net.vdombox.ide.common.view.skins.windows.AlertSkin;
 	
 	import spark.components.Label;
 	import spark.components.TitleWindow;
-	import net.vdombox.ide.common.view.components.AlertButton;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
 
 	public class Alert extends TitleWindow
 	{

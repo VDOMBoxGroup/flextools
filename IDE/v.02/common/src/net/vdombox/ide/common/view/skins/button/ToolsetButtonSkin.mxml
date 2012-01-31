@@ -29,7 +29,7 @@ in accordance with the terms of the license agreement accompanying it.
 		/** 
 		* @copy spark.skins.spark.ApplicationSkin#hostComponent
 		*/
-		[HostComponent("net.vdombox.ide.common.view.components.ToolsetButton")]
+		[HostComponent("net.vdombox.ide.common.view.components.button.ToolsetButton")]
 		]]>
 	</fx:Metadata>
 	

@@ -1,4 +1,4 @@
-package net.vdombox.ide.common.view.components
+package net.vdombox.ide.common.view.components.button
 {
 	public class AlertButton
 	{

@@ -11,7 +11,7 @@
 		/** 
 		* @copy spark.skins.spark.ApplicationSkin#hostComponent
 		*/
-		[HostComponent("net.vdombox.ide.common.view.components.WorkAreaButton")]
+		[HostComponent("net.vdombox.ide.common.view.components.button.WorkAreaButton")]
 		]]>
 	</fx:Metadata>
 

@@ -1,4 +1,4 @@
-package net.vdombox.components
+package net.vdombox.ide.common.view.components.windows
 {
 	import flash.display.NativeWindowSystemChrome;
 	import flash.events.KeyboardEvent;
