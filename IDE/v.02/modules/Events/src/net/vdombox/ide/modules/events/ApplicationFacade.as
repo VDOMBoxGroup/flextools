@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.events
 {
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.Events;
 	import net.vdombox.ide.modules.events.controller.BodyCreatedCommand;
 	import net.vdombox.ide.modules.events.controller.ChangeSelectedObjectRequestCommand;
@@ -70,7 +71,6 @@ package net.vdombox.ide.modules.events
 
 //		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE 		: String = "processServerProxyMessage";
-		public static const PROCESS_TYPES_PROXY_MESSAGE 		: String = "processTypesProxyMessage";
 		public static const PROCESS_STATES_PROXY_MESSAGE 		: String = "processStatesProxyMessage";
 		public static const PROCESS_RESOURCES_PROXY_MESSAGE 	: String = "processResourcesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE	: String = "processApplicationProxyMessage";
@@ -138,14 +138,10 @@ package net.vdombox.ide.modules.events
 		public static const SET_APPLICATION_EVENTS 		: String = "setApplicationEvents";
 		public static const APPLICATION_EVENTS_SETTED 	: String = "applicationEventsSetted";
 		
-		/*public static const GET_EXISTING_ELEMENTS_IN_WORK_AREA		: String = "getElementsListInWorkArea";
-		public static const EXISTING_ELEMENTS_IN_WORK_AREA_GETTED 	: String = "ElementsListInWorkAreaGetted";*/
-		
 		public static const GET_CHILDREN_ELEMENTS 	: String = "getChildrenElements";
 		public static const CHILDREN_ELEMENTS_GETTED 	: String = "childrenElementsGetted";
 		
 		public static const STRUCTURE_GETTED 	: String = "structureGetted";
-		
 		
 //ServerAction
 		public static const ACTION : String = "action";
@@ -202,7 +198,7 @@ package net.vdombox.ide.modules.events
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
-			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
+			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 
