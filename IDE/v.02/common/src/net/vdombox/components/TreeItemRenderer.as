@@ -2,7 +2,7 @@ package net.vdombox.components
 {
 import flash.events.Event;
 
-import net.vdombox.interfaces.ITreeItemRenderer;
+import net.vdombox.ide.common.interfaces.ITreeItemRenderer;
 
 import spark.components.supportClasses.ItemRenderer;
 

@@ -10,7 +10,7 @@ import mx.core.FlexGlobals;
 import mx.core.IVisualElement;
 import mx.styles.CSSStyleDeclaration;
 
-import net.vdombox.interfaces.ITreeItemRenderer;
+import net.vdombox.ide.common.interfaces.ITreeItemRenderer;
 
 import spark.components.List;
 
