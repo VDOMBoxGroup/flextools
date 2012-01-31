@@ -185,7 +185,7 @@
 	</s:Rect>
 
 	<mx:Tree id="objectsTree" maxHorizontalScrollPosition="140" horizontalScrollPolicy="auto"
-			 dataProvider="{ _structure }" itemRenderer="net.vdombox.components.ObjectsTreePanelItemRenderer"
+			 dataProvider="{ _structure }" itemRenderer="net.vdombox.ide.common.view.components.itemrenderers.ObjectsTreePanelItemRenderer"
 			 height="100%"
 			 width="100%" contentBackgroundAlpha="0"
 			 creationComplete="objectsTree_creationCompleteHandler(event)"/>

@@ -16,7 +16,7 @@
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.model.vo.EventVO;
+			import net.vdombox.ide.common.model._vo.EventVO;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 
 			protected function hideButton_clickHandler( event : MouseEvent ) : void

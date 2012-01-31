@@ -6,9 +6,9 @@ package net.vdombox.ide.modules.events.view.components
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
-	import net.vdombox.ide.common.model.vo.EventVO;
+	import net.vdombox.ide.common.model._vo.EventVO;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
-	import net.vdombox.ide.common.view.EyeImage;
+	import net.vdombox.ide.common.view.components.EyeImage;
 	
 	import spark.components.SkinnableContainer;
 	

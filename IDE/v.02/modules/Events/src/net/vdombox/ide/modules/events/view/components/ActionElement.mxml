@@ -12,14 +12,14 @@
 			import mx.controls.Image;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.model.vo.ActionParameterVO;
-			import net.vdombox.ide.common.model.vo.ClientActionVO;
-			import net.vdombox.ide.common.model.vo.EventParameterVO;
-			import net.vdombox.ide.common.model.vo.EventVO;
-			import net.vdombox.ide.common.model.vo.ServerActionVO;
+			import net.vdombox.ide.common.model._vo.ActionParameterVO;
+			import net.vdombox.ide.common.model._vo.ClientActionVO;
+			import net.vdombox.ide.common.model._vo.EventParameterVO;
+			import net.vdombox.ide.common.model._vo.EventVO;
+			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 			import net.vdombox.ide.modules.events.view.skins.EventElementSkin;
-			import net.vdombox.ide.common.view.EyeImage;
+			import net.vdombox.ide.common.view.components.EyeImage;
 			
 			import spark.components.Group;
 			import spark.components.Label;

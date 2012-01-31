@@ -11,7 +11,7 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			
-			import net.vdombox.ide.common.model.vo.ServerActionVO;
+			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			
 			[Embed(source='assets/action.png')]
 			public var ActionIcon:Class;

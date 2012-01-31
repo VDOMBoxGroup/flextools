@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.events.controller
 {
-	import net.vdombox.ide.common.model.vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	
