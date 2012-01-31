@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.resourceBrowser
 {
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.ResourceBrowser;
 	import net.vdombox.ide.modules.resourceBrowser.controller.BodyCreatedCommand;
 	import net.vdombox.ide.modules.resourceBrowser.controller.ChangeSelectedObjectRequestCommand;
@@ -63,7 +64,6 @@ package net.vdombox.ide.modules.resourceBrowser
 
 		//		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
-		public static const PROCESS_TYPES_PROXY_MESSAGE : String = "processTypesProxyMessage";
 		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
 		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
@@ -166,7 +166,7 @@ package net.vdombox.ide.modules.resourceBrowser
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
-			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
+			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 
 			registerCommand( CHANGE_SELECTED_RESOURCE_REQUEST, ChangeSelectedObjectRequestCommand );
 			registerCommand( DELETE_RESOURCE_REQUEST, DeleteResourceRequestCommand )

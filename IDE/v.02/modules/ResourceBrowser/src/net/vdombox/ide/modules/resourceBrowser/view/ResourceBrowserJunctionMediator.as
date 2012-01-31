@@ -4,20 +4,21 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
-	import net.vdombox.ide.common.view.LoggingJunctionMediator;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.messages.SimpleMessage;
+	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPlaceNames;
 	import net.vdombox.ide.common.controller.names.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
 	import net.vdombox.ide.common.controller.names.PipeNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
-	import net.vdombox.ide.common.controller.messages.SimpleMessage;
-	import net.vdombox.ide.common.SimpleMessageHeaders;
-	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.model.vo.SettingsVO;
 	
@@ -384,7 +385,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case PPMPlaceNames.TYPES:
 				{
-					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
+					sendNotification( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, message );
 					
 					break;
 				}
