@@ -57,7 +57,7 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.OPEN_WINDOW );
 			interests.push( ApplicationFacade.CLOSE_WINDOW );
 
-			interests.push( ApplicationFacade.GET_TYPES );
+			interests.push( TypesProxy.GET_TYPES );
 
 			interests.push( ApplicationFacade.GET_PAGES );
 
@@ -256,7 +256,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case ApplicationFacade.GET_TYPES:
+				case TypesProxy.GET_TYPES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES, body );
 
@@ -463,7 +463,7 @@ package net.vdombox.ide.modules.scripts.view
 
 				case PPMPlaceNames.TYPES:
 				{
-					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
+					sendNotification( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, message );
 
 					break;
 				}

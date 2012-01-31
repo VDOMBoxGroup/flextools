@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.scripts
 {
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.Scripts;
 	import net.vdombox.ide.modules.scripts.controller.BodyCreatedCommand;
 	import net.vdombox.ide.modules.scripts.controller.ChangeSelectedObjectRequestCommand;
@@ -68,7 +69,6 @@ package net.vdombox.ide.modules.scripts
 //		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
 		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
-		public static const PROCESS_TYPES_PROXY_MESSAGE : String = "processTypesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
 		public static const PROCESS_OBJECT_PROXY_MESSAGE : String = "processObjectProxyMessage";
@@ -89,10 +89,6 @@ package net.vdombox.ide.modules.scripts
 		public static const CHANGE_SELECTED_OBJECT_REQUEST : String = "changeSelectedObjectRequest";
 		public static const SET_SELECTED_OBJECT : String = "setSelectedObject";
 		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
-		
-//		types
-		public static const GET_TYPES : String = "getTypes";
-		public static const TYPES_GETTED : String = "typesGetted";
 		
 //		other
 		public static const DELIMITER : String = "/";
@@ -194,7 +190,7 @@ package net.vdombox.ide.modules.scripts
 			
 			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
 			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
-			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
+			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );

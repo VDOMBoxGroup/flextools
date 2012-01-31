@@ -66,7 +66,7 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( ApplicationFacade.TYPES_GETTED );
+			interests.push( TypesProxy.TYPES_GETTED );
 			interests.push( ApplicationFacade.STRUCTURE_GETTED );
 			
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
@@ -91,7 +91,7 @@ package net.vdombox.ide.modules.scripts.view
 					if ( sessionProxy.selectedApplication )
 					{
 						isActive = true;
-						sendNotification( ApplicationFacade.GET_TYPES );
+						sendNotification( TypesProxy.GET_TYPES );
 					}
 
 					break;
@@ -106,7 +106,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case ApplicationFacade.TYPES_GETTED:
+				case TypesProxy.TYPES_GETTED:
 				{
 					types = body as Array;
 					break;
