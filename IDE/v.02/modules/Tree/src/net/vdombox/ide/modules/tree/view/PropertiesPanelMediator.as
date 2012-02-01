@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.AttributeEvent;
 	import net.vdombox.ide.modules.tree.events.PropertiesPanelEvent;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.view.components.PropertiesPanel;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelector;
 	
@@ -24,7 +24,7 @@ package net.vdombox.ide.modules.tree.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var isActive : Boolean;
 
@@ -35,7 +35,7 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			isActive = false;
 
@@ -56,7 +56,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
+			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + mediatorName );
@@ -80,7 +80,7 @@ package net.vdombox.ide.modules.tree.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 						updateAttributes();
@@ -98,7 +98,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case SessionProxy.SELECTED_PAGE_CHANGED:
+				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
 					updateAttributes();
 
@@ -109,13 +109,13 @@ package net.vdombox.ide.modules.tree.view
 				{
 					propertiesPanel.vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
-					if ( sessionProxy.selectedTreeElement && sessionProxy.selectedTreeElement.resourceVO &&
-						sessionProxy.selectedTreeElement.resourceVO.id && !sessionProxy.selectedTreeElement.resourceVO.data )
+					if ( statesProxy.selectedTreeElement && statesProxy.selectedTreeElement.resourceVO &&
+						statesProxy.selectedTreeElement.resourceVO.id && !statesProxy.selectedTreeElement.resourceVO.data )
 					{
-						sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO : sessionProxy.selectedTreeElement.resourceVO } )
+						sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO : statesProxy.selectedTreeElement.resourceVO } )
 					}
 					
-					propertiesPanel.treeElementVO = sessionProxy.selectedTreeElement;
+					propertiesPanel.treeElementVO = statesProxy.selectedTreeElement;
 
 					break;
 				}
@@ -160,8 +160,8 @@ package net.vdombox.ide.modules.tree.view
 			propertiesPanel.treeElementVO = null;
 			propertiesPanel.vdomObjectAttributesVO = null;
 			
-			if ( sessionProxy.selectedPage )
-				sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, { pageVO: sessionProxy.selectedPage, recipientID: mediatorName } );
+			if ( statesProxy.selectedPage )
+				sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, { pageVO: statesProxy.selectedPage, recipientID: mediatorName } );
 		}
 
 		private function addHandlers() : void

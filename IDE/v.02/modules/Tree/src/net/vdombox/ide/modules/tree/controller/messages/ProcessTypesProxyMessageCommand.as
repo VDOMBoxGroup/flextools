@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -14,7 +14,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
@@ -30,7 +30,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 				{
 					var typeVO : TypeVO = body as TypeVO;
 
-					var allTypeRecipients : Object = sessionProxy.getObject( place + ApplicationFacade.DELIMITER + operation +
+					var allTypeRecipients : Object = statesProxy.getObject( place + ApplicationFacade.DELIMITER + operation +
 						ApplicationFacade.DELIMITER + target );
 
 					var typeRecipient : Array = allTypeRecipients[ typeVO.id ];

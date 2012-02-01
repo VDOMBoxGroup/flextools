@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.tree.view
 {
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.MenuPanelEvent;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.tree.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		
 		private var isActive : Boolean;
 		
@@ -32,7 +32,7 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
 			isActive = false;
 			
@@ -72,7 +72,7 @@ package net.vdombox.ide.modules.tree.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 						

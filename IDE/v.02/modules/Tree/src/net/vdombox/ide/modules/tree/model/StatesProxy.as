@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.tree.model
 {
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -11,22 +11,33 @@ package net.vdombox.ide.modules.tree.model
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
-	public class SessionProxy extends net.vdombox.ide.common.model.SessionProxy
+	public class StatesProxy extends net.vdombox.ide.common.model.StatesProxy
 	{
-		public static const NAME : String = "SessionProxy";
+		public static const NAME : String = "StatesProxy";
 
 		public static const SELECTED_APPLICATION : String = "selectedApplication";
 		public static const SELECTED_PAGE : String = "selectedPage";
-		//public static const SELECTED_OBJECT : String = "selectedObject";
 		public static const SELECTED_TREE_ELEMENT : String = "selectedTreeElement";
 		public static const SELECTED_TREE_LEVEL : String = "selectedTreeLevel";
 		
+//pipe
+		public static const PROCESS_STATES_PROXY_MESSAGE 		: String = "processStatesProxyMessage";
 		
+//states
+		public static const GET_ALL_STATES 	  : String = "getAllStates";
+		public static const ALL_STATES_GETTED : String = "allStatesGetted";
+		
+		public static const SET_ALL_STATES 	  : String = "setAllStates";
+		public static const ALL_STATES_SETTED : String = "allStatesSetted";
+		
+//application
 		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
 		
+//page
 		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
 		public static const SET_SELECTED_PAGE 	  : String = "setSelectedPage";
-		
+	
+//object
 		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
 		
 		
@@ -36,14 +47,10 @@ package net.vdombox.ide.modules.tree.model
 		public static const SELECTED_TREE_LEVEL_CHANGE_REQUEST : String = "selectedTreeLevelChangeRequest";
 		public static const SELECTED_TREE_LEVEL_CHANGED : String = "selectedTreeLevelChanged";
 
-		public function SessionProxy()
+		public function StatesProxy()
 		{
 			super();
 		}
-
-		private var isSelectedApplicationChanged : Boolean;
-		private var isSelectedPageChanged : Boolean;
-		private var isSelectedObjectChanged : Boolean;
 
 		override public function onRegister() : void
 		{
@@ -93,7 +100,7 @@ package net.vdombox.ide.modules.tree.model
 			sendNotification( SELECTED_TREE_LEVEL_CHANGED, data[ SELECTED_TREE_LEVEL ] );
 		}
 		
-		private function sendNotifications() : void
+		protected override function sendNotifications() : void
 		{
 			if ( isSelectedApplicationChanged )
 			{

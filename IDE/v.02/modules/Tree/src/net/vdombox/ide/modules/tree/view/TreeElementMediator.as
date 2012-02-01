@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
 	
@@ -26,7 +26,7 @@ package net.vdombox.ide.modules.tree.view
 			super( NAME + ApplicationFacade.DELIMITER + treeElement.treeElementVO.id, treeElement );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var _vdomObjectAttributesVO : VdomObjectAttributesVO;
 
@@ -52,7 +52,7 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			addHandlers();
 
@@ -74,7 +74,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
+			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 
 			interests.push( ApplicationFacade.EXPAND_ALL_TREE_ELEMENTS );
 			interests.push( ApplicationFacade.COLLAPSE_ALL_TREE_ELEMENTS );
@@ -130,9 +130,9 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case SessionProxy.SELECTED_PAGE_CHANGED:
+				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
-					if ( sessionProxy.selectedPage && sessionProxy.selectedPage.id == treeElementVO.pageVO.id )
+					if ( statesProxy.selectedPage && statesProxy.selectedPage.id == treeElementVO.pageVO.id )
 						treeElement.selected = true;
 					else
 						treeElement.selected = false;
@@ -221,9 +221,9 @@ package net.vdombox.ide.modules.tree.view
 
 		private function elementSelectionHandler( event : TreeElementEvent ) : void
 		{
-			if ( treeElementVO && treeElementVO.pageVO && sessionProxy.selectedPage != treeElementVO.pageVO )
+			if ( treeElementVO && treeElementVO.pageVO && statesProxy.selectedPage != treeElementVO.pageVO )
 			{
-				sendNotification( SessionProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );
+				sendNotification( StatesProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );
 			}
 		}
 

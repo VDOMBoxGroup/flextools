@@ -232,7 +232,7 @@ package net.vdombox.ide.modules.tree.model
 		{			
 			if ( treeElementVO && treeElementVO.pageVO )
 			{
-				sendNotification( SessionProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );				
+				sendNotification( StatesProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );				
 			}
 		}
 

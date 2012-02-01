@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.tree.view
 
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
 	import net.vdombox.ide.modules.tree.view.components.LevelsFilterPanel;
 
@@ -21,7 +21,7 @@ package net.vdombox.ide.modules.tree.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var isActive : Boolean;
 
@@ -32,7 +32,7 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			isActive = false;
 
@@ -41,7 +41,7 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRemove() : void
 		{
-			sessionProxy = null;
+			statesProxy = null;
 			
 			removeHandlers();
 
@@ -72,7 +72,7 @@ package net.vdombox.ide.modules.tree.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 						
@@ -95,7 +95,7 @@ package net.vdombox.ide.modules.tree.view
 				{
 					levelsPanel.dataProvider = body as Array;
 
-					sendNotification( SessionProxy.SELECTED_TREE_LEVEL_CHANGE_REQUEST, levelsPanel.currentStructureLevel );
+					sendNotification( StatesProxy.SELECTED_TREE_LEVEL_CHANGE_REQUEST, levelsPanel.currentStructureLevel );
 					
 					break;
 				}
@@ -119,7 +119,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private function changeHandler( event : Event ) : void
 		{
-			sendNotification( SessionProxy.SELECTED_TREE_LEVEL_CHANGE_REQUEST, levelsPanel.currentStructureLevel );
+			sendNotification( StatesProxy.SELECTED_TREE_LEVEL_CHANGE_REQUEST, levelsPanel.currentStructureLevel );
 		}
 	}
 }

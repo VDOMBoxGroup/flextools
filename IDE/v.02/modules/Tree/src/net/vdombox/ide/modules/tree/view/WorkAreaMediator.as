@@ -8,7 +8,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.events.LinkageEvent;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.events.WorkAreaEvent;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
@@ -34,7 +34,7 @@ package net.vdombox.ide.modules.tree.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		private var structureProxy : StructureProxy;
 
 		private var isActive : Boolean;
@@ -46,7 +46,7 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			structureProxy = facade.retrieveProxy( StructureProxy.NAME ) as StructureProxy;
 
 			isActive = false;
@@ -69,8 +69,8 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.BODY_STOP );
 
 			interests.push( ApplicationFacade.PAGE_DELETED );
-			interests.push( SessionProxy.SELECTED_TREE_LEVEL_CHANGED );
-			interests.push( SessionProxy.SELECTED_APPLICATION_CHANGED );
+			interests.push( StatesProxy.SELECTED_TREE_LEVEL_CHANGED );
+			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
 
 			interests.push( ApplicationFacade.TREE_ELEMENTS_CHANGED );
 			interests.push( ApplicationFacade.TREE_ELEMENT_ADD );
@@ -106,11 +106,11 @@ package net.vdombox.ide.modules.tree.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 
-						workArea.selectedTreeLevelVO = sessionProxy.selectedTreeLevel;
+						workArea.selectedTreeLevelVO = statesProxy.selectedTreeLevel;
 
 						if ( structureProxy.treeElements )
 							workArea.treeElements = structureProxy.treeElements;
@@ -118,15 +118,15 @@ package net.vdombox.ide.modules.tree.view
 						if ( structureProxy.linkages )
 							workArea.linkages = structureProxy.linkages;
 
-						if ( sessionProxy.selectedPage )
+						if ( statesProxy.selectedPage )
 						{
-							sessionProxy.selectedTreeElement = structureProxy.getTreeElementByVO(sessionProxy.selectedPage); // VO
-							setSelectTreeElement( sessionProxy.selectedTreeElement );
+							statesProxy.selectedTreeElement = structureProxy.getTreeElementByVO(statesProxy.selectedPage); // VO
+							setSelectTreeElement( statesProxy.selectedTreeElement );
 						}
 						break;
 					}
 				}
-				case SessionProxy.SELECTED_APPLICATION_CHANGED:
+				case StatesProxy.SELECTED_APPLICATION_CHANGED:
 				{
 					clearData();
 					
@@ -148,9 +148,9 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case SessionProxy.SELECTED_TREE_LEVEL_CHANGED:
+				case StatesProxy.SELECTED_TREE_LEVEL_CHANGED:
 				{
-					workArea.selectedTreeLevelVO = sessionProxy.selectedTreeLevel;
+					workArea.selectedTreeLevelVO = statesProxy.selectedTreeLevel;
 					
 					break;
 				}

@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.common.events.WindowEvent;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelector;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelectorWindow;
 	
@@ -26,7 +26,7 @@ package net.vdombox.ide.modules.tree.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var _resourceSelector : ResourceSelector;
 
@@ -43,20 +43,20 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			addHandlers();
 
 			resourceSelectorWindow.value = _resourceSelector.value;
 
-			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
+			sendNotification( ApplicationFacade.GET_RESOURCES, statesProxy.selectedApplication );
 		}
 
 		override public function onRemove() : void
 		{
 			removeHandlers();
 
-			sessionProxy = null;
+			statesProxy = null;
 		}
 
 		override public function listNotificationInterests() : Array

@@ -39,7 +39,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.settings.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.settings.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.tree.controller.settings.SetSettingsCommand;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -94,17 +94,9 @@ package net.vdombox.ide.modules.tree
 
 //		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
-		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
 		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
-
-//		states
-		public static const GET_ALL_STATES : String = "getAllStates";
-		public static const ALL_STATES_GETTED : String = "allStatesGetted";
-		
-		public static const SET_ALL_STATES : String = "setAllStates";
-		public static const ALL_STATES_SETTED : String = "allStatesSetted";
 		
 //		resources
 		public static const GET_RESOURCES : String = "getResources";
@@ -222,7 +214,7 @@ package net.vdombox.ide.modules.tree
 			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
-			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
+			registerCommand( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
 			registerCommand( PROCESS_RESOURCES_PROXY_MESSAGE, ProcessResourcesProxyMessageCommand );
 
 			registerCommand( TREE_ELEMENT_CREATED, TreeElementCreatedCommand );
@@ -250,8 +242,8 @@ package net.vdombox.ide.modules.tree
 			registerCommand( PAGE_CREATED, PageCreatedCommand );
 			registerCommand( PAGE_DELETED, PageDeletedCommand );
 			
-			registerCommand( SessionProxy.SELECTED_TREE_LEVEL_CHANGE_REQUEST, SelectedTreeLevelChangeRequestCommand );
-			registerCommand( SessionProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, SelectedTreeElementChangeRequestCommand );
+			registerCommand( StatesProxy.SELECTED_TREE_LEVEL_CHANGE_REQUEST, SelectedTreeLevelChangeRequestCommand );
+			registerCommand( StatesProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, SelectedTreeElementChangeRequestCommand );
 			
 			registerCommand( OPEN_RESOURCE_SELECTOR_REQUEST, OpenResourceSelectorRequestCommand );
 			

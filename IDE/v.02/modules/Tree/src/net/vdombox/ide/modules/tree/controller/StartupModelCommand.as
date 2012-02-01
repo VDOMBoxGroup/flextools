@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.controller
 {
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.SettingsProxy;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;
 	
@@ -12,7 +12,7 @@ package net.vdombox.ide.modules.tree.controller
 	{
 		override public function execute( note : INotification ) : void
 		{
-			facade.registerProxy( new SessionProxy() );
+			facade.registerProxy( new StatesProxy() );
 			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new StructureProxy() );
 		}

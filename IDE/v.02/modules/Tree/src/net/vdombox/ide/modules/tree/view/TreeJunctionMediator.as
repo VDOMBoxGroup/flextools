@@ -22,7 +22,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -41,16 +41,16 @@ package net.vdombox.ide.modules.tree.view
 			super( NAME, new Junction() );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 		}
 
 		override public function onRemove() : void
 		{
-			sessionProxy = null;
+			statesProxy = null;
 		}
 		
 		override public function listNotificationInterests() : Array
@@ -66,8 +66,8 @@ package net.vdombox.ide.modules.tree.view
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
-			interests.push( ApplicationFacade.GET_ALL_STATES );
-			interests.push( ApplicationFacade.SET_ALL_STATES );
+			interests.push( StatesProxy.GET_ALL_STATES );
+			interests.push( StatesProxy.SET_ALL_STATES );
 
 			interests.push( ApplicationFacade.GET_RESOURCES );
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
@@ -92,7 +92,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.OPEN_WINDOW );
 			interests.push( ApplicationFacade.CLOSE_WINDOW );
 
-			interests.push( SessionProxy.SET_SELECTED_PAGE );
+			interests.push( StatesProxy.SET_SELECTED_PAGE );
 
 			interests.push( ApplicationFacade.CREATE_PAGE );
 			interests.push( ApplicationFacade.DELETE_PAGE );
@@ -191,7 +191,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.GET_ALL_STATES:
+				case StatesProxy.GET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
 					
@@ -200,7 +200,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 					
-				case ApplicationFacade.SET_ALL_STATES:
+				case StatesProxy.SET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
 					
@@ -290,7 +290,7 @@ package net.vdombox.ide.modules.tree.view
 					var typesSessionName : String = PPMPlaceNames.TYPES + ApplicationFacade.DELIMITER + PPMOperationNames.READ +
 						ApplicationFacade.DELIMITER + PPMTypesTargetNames.TYPE;
 
-					var typeRecipients : Object = sessionProxy.getObject( typesSessionName );
+					var typeRecipients : Object = statesProxy.getObject( typesSessionName );
 
 					if ( !typeRecipients.hasOwnProperty( typeID ) )
 						typeRecipients[ typeID ] = [];
@@ -330,7 +330,7 @@ package net.vdombox.ide.modules.tree.view
 					pageAttributesSessionName = PPMPlaceNames.PAGE + ApplicationFacade.DELIMITER + PPMOperationNames.READ +
 						ApplicationFacade.DELIMITER + PPMPageTargetNames.ATTRIBUTES;
 					
-					pageAttributesRecipients = sessionProxy.getObject( pageAttributesSessionName );
+					pageAttributesRecipients = statesProxy.getObject( pageAttributesSessionName );
 
 					if ( !pageAttributesRecipients.hasOwnProperty( pageVO.id ) )
 						pageAttributesRecipients[ pageVO.id ] = [];
@@ -364,7 +364,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case SessionProxy.SET_SELECTED_PAGE:
+				case StatesProxy.SET_SELECTED_PAGE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
 
@@ -553,7 +553,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case PPMPlaceNames.STATES:
 				{
-					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
+					sendNotification( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, message );
 					break;
 				}
 

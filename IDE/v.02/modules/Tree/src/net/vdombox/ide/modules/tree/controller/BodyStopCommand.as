@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.tree.controller
 {
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;
 
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -10,10 +10,10 @@ package net.vdombox.ide.modules.tree.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			var structureProxy : StructureProxy = facade.retrieveProxy( StructureProxy.NAME ) as StructureProxy;
 			
-			sessionProxy.cleanup();
+			statesProxy.cleanup();
 			structureProxy.cleanup();
 		}
 	}

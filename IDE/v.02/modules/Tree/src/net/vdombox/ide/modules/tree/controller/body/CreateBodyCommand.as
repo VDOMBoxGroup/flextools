@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.view.BodyMediator;
 	import net.vdombox.ide.modules.tree.view.TreeMediator;
 	import net.vdombox.ide.modules.tree.view.components.Body;
@@ -17,7 +17,6 @@ package net.vdombox.ide.modules.tree.controller.body
 	{
 		override public function execute( notification : INotification ) : void
 		{
-//			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			var body : Body;
 			var bodyMediator : BodyMediator;
@@ -37,11 +36,6 @@ package net.vdombox.ide.modules.tree.controller.body
 			
 			
 			body.moduleFactory = treeMediator.tree.moduleFactory;
-//			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
-//						
-//			statesObject[ ApplicationFacade.SELECTED_APPLICATION ] = null;
-//			statesObject[ ApplicationFacade.SELECTED_TREE_ELEMENT ] = null;
-//			statesObject[ ApplicationFacade.SELECTED_TREE_LEVEL ] = null;
 			
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
 			facade.sendNotification( ApplicationFacade.MODULE_SELECTED );

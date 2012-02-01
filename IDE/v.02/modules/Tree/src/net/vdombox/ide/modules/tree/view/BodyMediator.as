@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
@@ -34,7 +34,7 @@ package net.vdombox.ide.modules.tree.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var isAllStatesGetted : Boolean;
 		private var isPagesGetted : Boolean;
@@ -54,7 +54,7 @@ package net.vdombox.ide.modules.tree.view
 			isApplicationStructureGetted = false;
 			isBodyStarted = false;
 
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			addHandlers();
 		}
@@ -74,10 +74,10 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.ALL_STATES_GETTED );
+			interests.push( StatesProxy.ALL_STATES_GETTED );
 			interests.push( ApplicationFacade.PAGES_GETTED );
 			interests.push( ApplicationFacade.APPLICATION_STRUCTURE_GETTED );
-			interests.push( SessionProxy.SELECTED_APPLICATION_CHANGED );
+			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
 
 			interests.push( ApplicationFacade.PIPES_READY );
 			interests.push( ApplicationFacade.MODULE_DESELECTED );
@@ -94,19 +94,19 @@ package net.vdombox.ide.modules.tree.view
 			{
 				case ApplicationFacade.PIPES_READY:
 				{
-					sendNotification( ApplicationFacade.GET_ALL_STATES );
+					sendNotification( StatesProxy.GET_ALL_STATES );
 
 					break;
 				}
 				
-				case SessionProxy.SELECTED_APPLICATION_CHANGED:
+				case StatesProxy.SELECTED_APPLICATION_CHANGED:
 				{
 					isAllStatesGetted = true;
 					
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
-						sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
-						sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, sessionProxy.selectedApplication );
+						sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
+						sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, statesProxy.selectedApplication );
 					}
 					
 					checkConditions();
@@ -114,14 +114,14 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 					
-				case ApplicationFacade.ALL_STATES_GETTED:
+				case StatesProxy.ALL_STATES_GETTED:
 				{
 					isAllStatesGetted = true;
 
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
-						sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
-						sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, sessionProxy.selectedApplication );
+						sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
+						sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, statesProxy.selectedApplication );
 					}
 
 					checkConditions();
