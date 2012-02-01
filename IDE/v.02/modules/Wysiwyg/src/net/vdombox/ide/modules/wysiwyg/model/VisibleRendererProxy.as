@@ -2,6 +2,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 {
 	import flash.net.SharedObject;
 	
+	import net.vdombox.ide.common.model.StatesProxy;
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -9,7 +11,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 	{
 		public static const NAME : String = "visibleRendererProxy";
 		
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		private var sharedObjects : Object = {};
 		
 		public function VisibleRendererProxy()
@@ -32,9 +34,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 		{
 			var id : String; 
 			
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
-			id = sessionProxy.selectedApplication.id;
+			id = statesProxy.selectedApplication.id;
 			
 			if (!sharedObjects[ id ])
 				sharedObjects[ id ] =  SharedObject.getLocal( id )

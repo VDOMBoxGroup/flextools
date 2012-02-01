@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
@@ -20,7 +21,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 		private var messageStackProxy : MessageStackProxy;
 		private var message : ProxyMessage;
 		private var renderProxy : RenderProxy;
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		
 		public function MessageProxy()
 		{
@@ -86,9 +87,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 		private function setNeedForUpdate() : void
 		{
 			renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
-			var needForUpdateObject : Object = sessionProxy.needForUpdate;
+			var needForUpdateObject : Object = statesProxy.needForUpdate;
 			
 			var vdomObjectAttributesVO : VdomObjectAttributesVO = message.getBody() as VdomObjectAttributesVO;
 			renderers = renderProxy.getRenderersByVO( vdomObjectAttributesVO.vdomObjectVO );

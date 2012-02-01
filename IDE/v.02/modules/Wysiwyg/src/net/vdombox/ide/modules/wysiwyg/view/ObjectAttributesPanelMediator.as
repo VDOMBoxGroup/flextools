@@ -11,16 +11,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
@@ -28,8 +30,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	import net.vdombox.utils.WindowManager;
-	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -46,7 +46,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		
 		private var renderProxy : RenderProxy;
 
@@ -59,7 +59,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
 			renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 
@@ -82,8 +82,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
+			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED );
 			interests.push( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED );
@@ -111,14 +111,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 
-						if ( sessionProxy.selectedObject )
-							sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, sessionProxy.selectedObject );
-						else if ( sessionProxy.selectedPage )
-							sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, sessionProxy.selectedPage );
+						if ( statesProxy.selectedObject )
+							sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
+						else if ( statesProxy.selectedPage )
+							sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
 
 						break;
 					}
@@ -133,22 +133,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
+				case StatesProxy.SELECTED_OBJECT_CHANGED:
 				{
-					if ( sessionProxy.selectedObject )
-						sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, sessionProxy.selectedObject );
-					else if ( sessionProxy.selectedPage )
-						sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, sessionProxy.selectedPage );
+					if ( statesProxy.selectedObject )
+						sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
+					else if ( statesProxy.selectedPage )
+						sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
 					else
 						clearData();
 
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
-					if ( sessionProxy.selectedPage  )
-						sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, sessionProxy.selectedPage );
+					if ( statesProxy.selectedPage  )
+						sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
 					else
 						clearData();
 
@@ -157,13 +157,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED:
 				{
-					if ( sessionProxy.selectedObject )
+					if ( statesProxy.selectedObject )
 						break;
 					
 					vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
-					if ( sessionProxy.selectedPage && vdomObjectAttributesVO &&
-						sessionProxy.selectedPage.id == vdomObjectAttributesVO.vdomObjectVO.id )
+					if ( statesProxy.selectedPage && vdomObjectAttributesVO &&
+						statesProxy.selectedPage.id == vdomObjectAttributesVO.vdomObjectVO.id )
 					{
 						objectAttributesPanel.attributesVO = body as VdomObjectAttributesVO;
 					}
@@ -175,8 +175,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
-					if ( sessionProxy.selectedObject && vdomObjectAttributesVO &&
-						sessionProxy.selectedObject.id == vdomObjectAttributesVO.vdomObjectVO.id )
+					if ( statesProxy.selectedObject && vdomObjectAttributesVO &&
+						statesProxy.selectedObject.id == vdomObjectAttributesVO.vdomObjectVO.id )
 					{
 						objectAttributesPanel.attributesVO = vdomObjectAttributesVO;
 					}
@@ -230,9 +230,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			//objectAttributesPanel.attributesVO;
 			var attributeRander : AttributeBase = event.target as AttributeBase;
-			if ( sessionProxy.selectedObject )
+			if ( statesProxy.selectedObject )
 			{
-				var renderBase : RendererBase = renderProxy.getRendererByVO( sessionProxy.selectedObject );
+				var renderBase : RendererBase = renderProxy.getRendererByVO( statesProxy.selectedObject );
 				if ( renderBase && renderBase.editableComponent && renderBase.editableComponent is RichEditableText && renderBase.typeVO.name == "text" )
 				{
 					var attributeVO : AttributeVO;
@@ -254,7 +254,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function deleteRequestHandler( event : ObjectAttributesPanelEvent ) : void
 		{
-			var componentName : String = sessionProxy.selectedObject.typeVO.displayName;
+			var componentName : String = statesProxy.selectedObject.typeVO.displayName;
 			
 			Alert.noLabel = "Cancel";
 			Alert.yesLabel = "Delete";
@@ -266,8 +266,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			if (event.detail == Alert.YES)
 			{
-				if ( sessionProxy.selectedPage && sessionProxy.selectedObject )
-					sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: sessionProxy.selectedPage, objectVO: sessionProxy.selectedObject } );
+				if ( statesProxy.selectedPage && statesProxy.selectedObject )
+					sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: statesProxy.selectedPage, objectVO: statesProxy.selectedObject } );
 			}
 		}
 
@@ -293,7 +293,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function errorHandler( event : AttributeEvent ) : void
 		{
-			sendNotification( ApplicationFacade.WRITE_ERROR, { applicationVO: sessionProxy.selectedApplication, content: event.value } );
+			sendNotification( ApplicationFacade.WRITE_ERROR, { applicationVO: statesProxy.selectedApplication, content: event.value } );
 		}
 
 		private function selectResourceHandler( event : AttributeEvent ) : void

@@ -13,16 +13,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
-	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.VdomObjectEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
 	
@@ -46,7 +46,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var isActive : Boolean;
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		
 		override public function listNotificationInterests() : Array
 		{
@@ -55,13 +55,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 			
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 			
 			interests.push( ApplicationFacade.OPEN_PAGE_REQUEST );
 			interests.push( ApplicationFacade.OPEN_OBJECT_REQUEST );
 			
 			interests.push( ApplicationFacade.PAGE_NAME_SETTED);
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED);
+			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED);
 			
 			interests.push( ApplicationFacade.PAGE_DELETED);
 			interests.push( ApplicationFacade.PAGE_CREATED);
@@ -86,12 +86,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( !sessionProxy.selectedApplication )
+					if ( !statesProxy.selectedApplication )
 						break;
 
 					// if was opened before 
-					if ( !workArea.selectedEditor && sessionProxy.selectedPage )
-						editor = workArea.openEditor( sessionProxy.selectedPage );
+					if ( !workArea.selectedEditor && statesProxy.selectedPage )
+						editor = workArea.openEditor( statesProxy.selectedPage );
 					isActive = true;
 
 					break;
@@ -106,7 +106,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
 					vdomObjectVO = body as IVDOMObjectVO;
 					editor = workArea.getEditorByVO( vdomObjectVO );
@@ -150,7 +150,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
+				case StatesProxy.SELECTED_APPLICATION_CHANGED:
 				{
 					workArea.closeAllEditors();
 					
@@ -179,7 +179,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			addHandlers();
 
@@ -237,11 +237,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 				var selectedRenderer : IRenderer = selectedEditor.selectedRenderer;
 
 				if ( selectedRenderer )
-					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.selectedRenderer.vdomObjectVO );
+					sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.selectedRenderer.vdomObjectVO );
 				else
 				{
-					sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, selectedEditor.editorVO.vdomObjectVO );
-					//sendNotification( ApplicationFacade.GET_WYSIWYG, selectedEditor.editorVO.vdomObjectVO );
+					sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, selectedEditor.editorVO.vdomObjectVO );
 				}
 			}
 		}
@@ -283,9 +282,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function keyDownHandler( event : KeyboardEvent ) : void
 		{
 			if ( event.ctrlKey && event.keyCode == Keyboard.Z )
-				sendNotification( ApplicationFacade.UNDO, sessionProxy.selectedPage );
+				sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
 			else if ( event.ctrlKey && event.keyCode == Keyboard.Y )
-				sendNotification( ApplicationFacade.REDO, sessionProxy.selectedPage );
+				sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
 		}
 	}
 }

@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SettingsProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -12,12 +12,12 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			var typesProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 			var settingsProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			
-			sessionProxy.cleanup();
+			statesProxy.cleanup();
 			typesProxy.cleanup();
 			settingsProxy.cleanup();
 			renderProxy.cleanup();

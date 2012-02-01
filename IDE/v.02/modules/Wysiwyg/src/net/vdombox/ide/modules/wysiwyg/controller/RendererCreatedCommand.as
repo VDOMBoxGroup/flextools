@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -21,12 +21,12 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			// on start wysiwyg we need to set transform marker for selected object: 
 			// (we do it in VdomObjectEditorMediator, handler for ApplicationFacade.SELECTED_OBJECT_CHANGED msg )
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var selectedObject : IVDOMObjectVO = sessionProxy.selectedObject as IVDOMObjectVO;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			var selectedObject : IVDOMObjectVO = statesProxy.selectedObject as IVDOMObjectVO;
 			
 			if (selectedObject && renderer && renderer.vdomObjectVO && selectedObject.id == renderer.vdomObjectVO.id)
 			{
-				sendNotification( ApplicationFacade.SELECTED_OBJECT_CHANGED, selectedObject );
+				sendNotification( StatesProxy.SELECTED_OBJECT_CHANGED, selectedObject );
 			}
 		}
 	}

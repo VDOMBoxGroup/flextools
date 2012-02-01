@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -9,7 +10,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -20,11 +20,10 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		
 		override public function execute( notification : INotification ) : void
 		{
-			trace ('--- Wysiwyg: RendererTransformedCommand');
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			
-			var needForUpdateObject : Object = sessionProxy.needForUpdate;
+			var needForUpdateObject : Object = statesProxy.needForUpdate;
 
 			var vdomObjectAttributesVO : VdomObjectAttributesVO = notification.getBody() as VdomObjectAttributesVO;
 						

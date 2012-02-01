@@ -1,16 +1,16 @@
 package net.vdombox.ide.modules.wysiwyg.controller.messages
 {
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMObjectTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -18,8 +18,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var needForUpdateObject : Object = sessionProxy.needForUpdate;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			var needForUpdateObject : Object = statesProxy.needForUpdate;
 
 			var renderProxy : RenderProxy;
 
@@ -46,15 +46,15 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					{
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.newObjectVO );
 						sendNotification( ApplicationFacade.GET_WYSIWYG, body.objectVO );
-						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
-						sendNotification( ApplicationFacade.SET_SELECTED_OBJECT,  body.newObjectVO );
+						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, statesProxy.selectedPage );
+						sendNotification( StatesProxy.SET_SELECTED_OBJECT,  body.newObjectVO );
 					}
 					else if ( operation == PPMOperationNames.DELETE )
 					{
 						sendNotification( ApplicationFacade.OBJECT_DELETED, body.objectVO );
-						sendNotification( ApplicationFacade.GET_WYSIWYG, sessionProxy.selectedPage );
-						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
-						sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, sessionProxy.selectedPage );
+						sendNotification( ApplicationFacade.GET_WYSIWYG, statesProxy.selectedPage );
+						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, statesProxy.selectedPage );
+						sendNotification( StatesProxy.SET_SELECTED_OBJECT, statesProxy.selectedPage );
 					}
 
 					break;

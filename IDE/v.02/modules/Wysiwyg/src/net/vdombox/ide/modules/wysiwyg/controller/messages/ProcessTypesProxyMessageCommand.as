@@ -1,12 +1,11 @@
 package net.vdombox.ide.modules.wysiwyg.controller.messages
 {
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -28,7 +27,6 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	{	
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			var typesProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;

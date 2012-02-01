@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.view.components.panels.HelpPanel;
 	import net.vdombox.ide.common.view.components.windows.Alert;
+	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.view.components.panels.HelpPanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			super( NAME, viewComponent );
 		}
 		
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		
 		private var isActive : Boolean;
 		
@@ -30,7 +30,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
 			isActive = false;
 			
@@ -68,7 +68,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 						

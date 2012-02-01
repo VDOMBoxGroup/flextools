@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -15,9 +15,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		{
 			var objectVO : IVDOMObjectVO = notification.getBody() as IVDOMObjectVO; 
 
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var selectedObject : ObjectVO = sessionProxy.selectedObject;
-			var selectedPage : PageVO = sessionProxy.selectedPage;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			var selectedObject : ObjectVO = statesProxy.selectedObject;
+			var selectedPage : PageVO = statesProxy.selectedPage;
 
 			if ( selectedObject != objectVO ||
 				( selectedObject && objectVO && selectedObject.id != objectVO.id ) )
@@ -29,9 +29,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 					pageVO =  objectVO["pageVO"];
 					
 				if ( (!selectedPage && pageVO ) || ( selectedPage && pageVO && selectedPage.id != pageVO.id ) )
-					sendNotification(ApplicationFacade.SET_SELECTED_PAGE, pageVO);
+					sendNotification(StatesProxy.SET_SELECTED_PAGE, pageVO);
 				
-				sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, objectVO );
+				sendNotification( StatesProxy.SET_SELECTED_OBJECT, objectVO );
 			}
 		}
 	}

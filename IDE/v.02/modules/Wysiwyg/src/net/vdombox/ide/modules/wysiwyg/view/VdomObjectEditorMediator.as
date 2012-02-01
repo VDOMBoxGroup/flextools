@@ -20,11 +20,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
@@ -33,7 +36,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SettingsApplicationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.LineVO;
@@ -43,8 +45,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
 	import net.vdombox.ide.modules.wysiwyg.view.components.VdomObjectEditor;
-	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -73,7 +73,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			instancesNameList[ instanceName ] = true;
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		
 		private var sharedObjectProxy : SettingsApplicationProxy;
 		
@@ -105,7 +105,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
 			sharedObjectProxy = facade.retrieveProxy( SettingsApplicationProxy.NAME ) as SettingsApplicationProxy;
 
@@ -118,7 +118,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			clearData();
 
-			sessionProxy = null;
+			statesProxy = null;
 		}
 
 		override public function listNotificationInterests() : Array
@@ -129,7 +129,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.XML_PRESENTATION_GETTED );
 
-			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
+			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
 
 			interests.push( ApplicationFacade.XML_PRESENTATION_SETTED );
 			
@@ -161,11 +161,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
+				case StatesProxy.SELECTED_OBJECT_CHANGED:
 				{
 					//  set transformMarker to selected page
-					var selectedPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
-					var selectedObject : IVDOMObjectVO = sessionProxy.selectedObject as IVDOMObjectVO;
+					var selectedPage : IVDOMObjectVO = statesProxy.selectedPage as IVDOMObjectVO;
+					var selectedObject : IVDOMObjectVO = statesProxy.selectedObject as IVDOMObjectVO;
 					var selRenderer : RendererBase;
 
 					if ( !selectedPage )
@@ -234,7 +234,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.PAGE_STRUCTURE_GETTED:
 				{
 					var pageXMLTree : XML = notification.getBody() as XML;
-					var selectedPageVO : PageVO = sessionProxy.selectedPage as PageVO;
+					var selectedPageVO : PageVO = statesProxy.selectedPage as PageVO;
 					break;
 				}
 					
@@ -286,7 +286,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function drawLine( body : Object ) : void
 		{
-			var selectedPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
+			var selectedPage : IVDOMObjectVO = statesProxy.selectedPage as IVDOMObjectVO;
 			if ( !selectedPage )
 				return;		
 			
@@ -303,7 +303,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var lineVO : LineVO;
 			var line : Line;
 			
-			var selectPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
+			var selectPage : IVDOMObjectVO = statesProxy.selectedPage as IVDOMObjectVO;
 			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			var pageRender : PageRenderer = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
 			pageRender.linegroup.removeAllElements();
@@ -625,10 +625,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			renderProxy  = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			
-			if ( !sessionProxy.selectedObject )
+			if ( !statesProxy.selectedObject )
 				return;
 			
-			if ( _renderer.renderVO.vdomObjectVO.id != sessionProxy.selectedObject.id )
+			if ( _renderer.renderVO.vdomObjectVO.id != statesProxy.selectedObject.id )
 				return;
 			
 			if ( !visibleOnStage( _renderer ) )
@@ -639,7 +639,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function clearLineGroup ( event : Event = null ) : void
 		{
-			var selectPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
+			var selectPage : IVDOMObjectVO = statesProxy.selectedPage as IVDOMObjectVO;
 			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			
 			var pageRender : PageRenderer = rendProxy.getRendererByVO( selectPage ) as PageRenderer;
@@ -665,9 +665,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function keyDownDeleteHandler(event : KeyboardEvent) : void
 		{
 			//trace ("[VdomObjectEditorMediator] keyDownDeleteHandler: " + event.keyCode + "; PHASE = " + event.eventPhase);
-			if ( sessionProxy.selectedObject != null)
+			if ( statesProxy.selectedObject != null)
 			{
-				var componentName : String = sessionProxy.selectedObject.typeVO.displayName;
+				var componentName : String = statesProxy.selectedObject.typeVO.displayName;
 				
 				Alert.noLabel = "Cancel";
 				Alert.yesLabel = "Delete";
@@ -680,8 +680,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			if (event.detail == Alert.YES)
 			{
-				if ( sessionProxy.selectedPage && sessionProxy.selectedObject )
-					sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: sessionProxy.selectedPage, objectVO: sessionProxy.selectedObject } );
+				if ( statesProxy.selectedPage && statesProxy.selectedObject )
+					sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: statesProxy.selectedPage, objectVO: statesProxy.selectedObject } );
 			}
 		}
 		
@@ -708,8 +708,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 				sendNotification( ApplicationFacade.GET_WYSIWYG, editor.editorVO.vdomObjectVO );
 			else if ( event.type == EditorEvent.XML_EDITOR_OPENED )
 			{
-				var selectedPage : IVDOMObjectVO = sessionProxy.selectedPage as IVDOMObjectVO;
-				var selectedObject : IVDOMObjectVO = sessionProxy.selectedObject as IVDOMObjectVO;
+				var selectedPage : IVDOMObjectVO = statesProxy.selectedPage as IVDOMObjectVO;
+				var selectedObject : IVDOMObjectVO = statesProxy.selectedObject as IVDOMObjectVO;
 				
 				if (selectedObject == null)
 					sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { pageVO: editor.editorVO.vdomObjectVO } );
@@ -765,7 +765,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var typeObject : String = sourceInfo[3] as String;
 			
 			if ( typeObject == "1" )
-				sendNotification( ApplicationFacade.COPY_REQUEST, { applicationVO : sessionProxy.selectedApplication, sourceID : sourceID } );
+				sendNotification( ApplicationFacade.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceID } );
 			else if ( rend.vdomObjectVO is PageVO )
 				sendNotification( ApplicationFacade.COPY_REQUEST, { pageVO : rend.vdomObjectVO, sourceID : sourceID } );
 			else if ( rend.vdomObjectVO is ObjectVO )

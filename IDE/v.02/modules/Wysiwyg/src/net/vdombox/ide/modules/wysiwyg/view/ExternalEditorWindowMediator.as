@@ -5,11 +5,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.interfaces.IExternalManager;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ExternalEditorWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ExternalEditorWindow;
 	
@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			super( NAME, viewComponent );
 		}
 		
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		private var _externalEditor : ExternalEditor;
 		
 		public function set externalEditor( value : ExternalEditor ) : void
@@ -42,15 +42,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
 			addHandlers();
 			
-			var resourceVO : ResourceVO = new ResourceVO( sessionProxy.selectedObject ? sessionProxy.selectedObject.typeVO.id : sessionProxy.selectedPage.typeVO.id );
+			var resourceVO : ResourceVO = new ResourceVO( statesProxy.selectedObject ? statesProxy.selectedObject.typeVO.id : statesProxy.selectedPage.typeVO.id );
 			resourceVO.setID( _externalEditor.resourceID );
 			
-			externalEditorWindow.applicationID = sessionProxy.selectedApplication.id;
-			externalEditorWindow.objectID = sessionProxy.selectedObject ? sessionProxy.selectedObject.id : sessionProxy.selectedPage.id;
+			externalEditorWindow.applicationID = statesProxy.selectedApplication.id;
+			externalEditorWindow.objectID = statesProxy.selectedObject ? statesProxy.selectedObject.id : statesProxy.selectedPage.id;
 			externalEditorWindow.value = _externalEditor.value;
 			externalEditorWindow.externalManager = facade.retrieveMediator( ExternalManagerMediator.NAME ) as IExternalManager;
 			externalEditorWindow.resourceVO = resourceVO;
@@ -61,7 +61,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRemove() : void
 		{
 			removeHandlers();
-			sessionProxy = null;
+			statesProxy = null;
 		}
 		override public function listNotificationInterests() : Array
 		{

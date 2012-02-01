@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg
 {
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.Wysiwyg;
 	import net.vdombox.ide.modules.wysiwyg.controller.BodyCreatedCommand;
@@ -87,15 +88,10 @@ package net.vdombox.ide.modules.wysiwyg
 
 //		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
-		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
 		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
 		public static const PROCESS_OBJECT_PROXY_MESSAGE : String = "processObjectProxyMessage";
-
-//		types
-		/*public static const GET_TYPES : String = "getTypes";
-		public static const TYPES_CHANGED : String = "typesChanged";*/
 
 //		resources
 		public static const GET_RESOURCES : String = "getResources";
@@ -110,26 +106,9 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const RESOURCE_LOADED	: String = "resourceLoaded"; //not used
 		public static const MODIFY_RESOURCE : String = "modifyResource";
 
-		//		icon
+//		icon
 		public static const GET_ICON	: String = "getIcon";
 		public static const ICON_GETTED : String = "iconGetted";
-		
-//		states	
-		public static const GET_ALL_STATES : String = "getAllStates";
-		public static const ALL_STATES_GETTED : String = "allStatesGetted";
-
-		public static const SET_ALL_STATES : String = "setAllStates";
-		public static const ALL_STATES_SETTED : String = "allStatesSetted";
-
-		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
-
-		public static const CHANGE_SELECTED_PAGE_REQUEST : String = "changeSelectedPageRequest";
-		public static const SET_SELECTED_PAGE : String = "setSelectedPage";
-		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
-//
-		public static const CHANGE_SELECTED_OBJECT_REQUEST : String = "changeSelectedObjectRequest";
-		public static const SET_SELECTED_OBJECT : String = "setSelectedObject";
-		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
 
 //		pages
 		public static const GET_PAGES : String = "getPages";
@@ -277,14 +256,14 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 
 			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
-			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
+			registerCommand( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
 			registerCommand( PROCESS_RESOURCES_PROXY_MESSAGE, ProcessResourcesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
 
-			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
-			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
+			registerCommand( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
+			registerCommand( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 
 			registerCommand( OPEN_EXTERNAL_EDITOR_REQUEST, OpenExternalEditorRequestCommand );
 

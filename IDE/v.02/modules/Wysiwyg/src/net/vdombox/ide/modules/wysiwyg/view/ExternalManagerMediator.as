@@ -6,8 +6,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import net.vdombox.ide.common.events.ExternalManagerEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -23,17 +23,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		private var dispatcher : EventDispatcher;
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		override public function onRegister() : void
 		{
 			dispatcher = new EventDispatcher();
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 		}
 
 		override public function onRemove() : void
 		{
-			sessionProxy = null;
+			statesProxy = null;
 			dispatcher = null;
 		}
 
@@ -66,10 +66,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		public function remoteMethodCall( functionName : String, value : String ) : String
 		{
-			var objectID : String = sessionProxy.selectedObject ? sessionProxy.selectedObject.id : sessionProxy.selectedPage.id;
+			var objectID : String = statesProxy.selectedObject ? statesProxy.selectedObject.id : statesProxy.selectedPage.id;
 
 			sendNotification( ApplicationFacade.REMOTE_CALL_REQUEST,
-							  { applicationVO: sessionProxy.selectedApplication, objectID: objectID, functionName: functionName, value: value } );
+							  { applicationVO: statesProxy.selectedApplication, objectID: objectID, functionName: functionName, value: value } );
 			return null;
 		}
 

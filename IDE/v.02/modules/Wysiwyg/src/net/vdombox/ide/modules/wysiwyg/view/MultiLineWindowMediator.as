@@ -13,7 +13,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
@@ -39,8 +38,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy : SessionProxy;
-
 		private var multilineWindow : MultilineWindow;
 
 		override public function onRegister() : void
@@ -57,9 +54,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			multilineWindow.removeEventListener( MultilineWindowEvent.CLOSE, removeYourself, false);
 			multilineWindow.addEventListener( Event.CLOSE, closeHandler, false, 0, true );
 			multilineWindow.removeEventListener(AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false);
-
-//			sessionProxy = null;
-//			multilineWindow = null;
 		}
 
 		private function removeYourself( event : MultilineWindowEvent ) : void
@@ -111,11 +105,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var str2 : String = multilineWindow.textAreaContainer.text;
 
 			multilineWindow.attributeValue = autoPasteCommon(str1, str2);
-//			resourceSelectorWindow.removeEventListener(Event.CHANGE, applyHandler, false);
 
-			//PopUpManager.removePopUp( resourceSelectorWindow );
 			WindowManager.getInstance().removeWindow(resourceSelectorWindow);
-//			facade.removeMediator( resourceSelectorWindowMediator.getMediatorName() );
 		}
 
 		private function autoPasteCommon(str1 : String, str2 : String) : String

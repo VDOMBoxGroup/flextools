@@ -1,15 +1,15 @@
 package net.vdombox.ide.modules.wysiwyg.controller.messages
 {
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -19,8 +19,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var needForUpdateObject : Object = sessionProxy.needForUpdate;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			var needForUpdateObject : Object = statesProxy.needForUpdate;
 
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 
@@ -45,9 +45,9 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					if ( operation == PPMOperationNames.CREATE )
 					{
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
-						sendNotification( ApplicationFacade.GET_WYSIWYG, sessionProxy.selectedPage );
-						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
-						sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, sessionProxy.selectedPage );
+						sendNotification( ApplicationFacade.GET_WYSIWYG, statesProxy.selectedPage );
+						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, statesProxy.selectedPage );
+						sendNotification( StatesProxy.SET_SELECTED_OBJECT, statesProxy.selectedPage );
 					}
 					else if ( operation == PPMOperationNames.READ )
 						sendNotification( ApplicationFacade.OBJECT_GETTED, body.objectVO );
@@ -65,7 +65,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 							sendNotification( ApplicationFacade.GET_WYSIWYG, pageVO );
 						}
 						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, pageVO );
-						sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, pageVO );
+						sendNotification( StatesProxy.SET_SELECTED_OBJECT, pageVO );
 
 					}
 					break;

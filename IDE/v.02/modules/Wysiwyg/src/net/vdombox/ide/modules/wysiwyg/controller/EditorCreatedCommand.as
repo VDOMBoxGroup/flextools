@@ -1,7 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.VdomObjectEditorMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

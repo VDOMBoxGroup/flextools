@@ -5,10 +5,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.SimpleMessageHeaders;
-	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.messages.SimpleMessage;
@@ -23,10 +19,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.common.controller.names.PipeNames;
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
+	import net.vdombox.ide.common.model.StatesProxy;
+	import net.vdombox.ide.common.model.TypesProxy;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.MessageProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -68,11 +68,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
-			interests.push( ApplicationFacade.GET_ALL_STATES );
-			interests.push( ApplicationFacade.SET_ALL_STATES );
+			interests.push( StatesProxy.GET_ALL_STATES );
+			interests.push( StatesProxy.SET_ALL_STATES );
 
-			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
-			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
+			interests.push( StatesProxy.SET_SELECTED_PAGE );
+			interests.push( StatesProxy.SET_SELECTED_OBJECT );
 
 			interests.push( TypesProxy.GET_TYPES );
 
@@ -104,7 +104,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.UPDATE_ATTRIBUTES );
 		
 			interests.push( ApplicationFacade.BODY_STOP );
-			interests.push( SessionProxy.GET_SELECTED_PAGE );
+			interests.push( StatesProxy.GET_SELECTED_PAGE );
 			
 			interests.push( ApplicationFacade.SET_OBJECT_NAME );
 			
@@ -201,7 +201,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.GET_ALL_STATES:
+				case StatesProxy.GET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
 
@@ -210,7 +210,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.SET_ALL_STATES:
+				case StatesProxy.SET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
 
@@ -398,7 +398,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.SET_SELECTED_PAGE:
+				case StatesProxy.SET_SELECTED_PAGE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
 
@@ -407,7 +407,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.SET_SELECTED_OBJECT:
+				case StatesProxy.SET_SELECTED_OBJECT:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
 
@@ -485,7 +485,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case SessionProxy.GET_SELECTED_PAGE :
+				case StatesProxy.GET_SELECTED_PAGE :
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_PAGE, body );
 					
@@ -701,7 +701,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case PPMPlaceNames.STATES:
 				{
-					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
+					sendNotification( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, message );
 
 					break;
 				}

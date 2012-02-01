@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
-
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
@@ -31,20 +31,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.managers.PopUpManagerChildList;
 	import mx.resources.ResourceManager;
 	import mx.validators.Validator;
-
+	
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.SpinnerPopup;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.utils.WindowManager;
-	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -84,7 +84,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var resourceVO : ResourceVO  = new ResourceVO( ResourceVO.RESOURCE_TEMP );
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var showSpinnerOnListCreation : Boolean = true;
 
@@ -161,11 +161,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			trace("Res: onRegister()");
 			
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			addHandlers();
 
-			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
+			sendNotification( ApplicationFacade.GET_RESOURCES, statesProxy.selectedApplication );
 		}
 
 		override public function onRemove() : void
@@ -174,7 +174,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			removeHandlers();
 
-			sessionProxy = null;
+			statesProxy = null;
 
 			allResourcesList = null;
 
@@ -337,7 +337,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( event.detail == Alert.YES )
 			{
 				//delete from server
-				sendNotification( ApplicationFacade.DELETE_RESOURCE, { resourceVO: delResVO, applicationVO: sessionProxy.selectedApplication } );
+				sendNotification( ApplicationFacade.DELETE_RESOURCE, { resourceVO: delResVO, applicationVO: statesProxy.selectedApplication } );
 
 				//delete from view
 				resourceSelectorWindow.deleteResourceID = delResVO.id;
@@ -389,7 +389,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function getResourcesRequestHandler( event : Event ) : void
 		{
-			sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
+			sendNotification( ApplicationFacade.GET_RESOURCES, statesProxy.selectedApplication );
 		}
 
 		private function initTitle() : void
@@ -429,7 +429,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				// compress and encode to base64 in Server
 				openFile.removeEventListener(Event.COMPLETE, fileDownloaded);
 
-				var resourceVO : ResourceVO = new ResourceVO( sessionProxy.selectedApplication.id );
+				var resourceVO : ResourceVO = new ResourceVO( statesProxy.selectedApplication.id );
 				resourceVO.setID( openFile.name ); //?
 				resourceVO.setData( openFile.data);
 				resourceVO.name = openFile.name;

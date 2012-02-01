@@ -1,12 +1,12 @@
 package net.vdombox.ide.modules.wysiwyg.controller.messages
 {
-	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 			
 			var body : Object = message.getBody();
@@ -26,30 +26,30 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 			{
 				case PPMStatesTargetNames.ALL_STATES:
 				{
-					sessionProxy.setStates( body );
+					statesProxy.setStates( body );
 					
-					sendNotification( ApplicationFacade.ALL_STATES_GETTED, body );
+					sendNotification( StatesProxy.ALL_STATES_GETTED, body );
 					
 					break;
 				}
 				
 				case PPMStatesTargetNames.SELECTED_APPLICATION:
 				{
-					sessionProxy.selectedApplication = body as ApplicationVO;
+					statesProxy.selectedApplication = body as ApplicationVO;
 					
 					break;
 				}
 					
 				case PPMStatesTargetNames.SELECTED_PAGE:
 				{
-					sessionProxy.selectedPage = body as PageVO;
+					statesProxy.selectedPage = body as PageVO;
 					
 					break;
 				}
 					
 				case PPMStatesTargetNames.SELECTED_OBJECT:
 				{
-					sessionProxy.selectedObject = body as ObjectVO;
+					statesProxy.selectedObject = body as ObjectVO;
 					
 					break;
 				}

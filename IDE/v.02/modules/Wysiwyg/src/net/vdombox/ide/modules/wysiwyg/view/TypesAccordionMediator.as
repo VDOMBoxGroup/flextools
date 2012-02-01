@@ -6,12 +6,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.containers.Accordion;
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.TypeItemRendererEvent;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.UserTypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypesCategory;
@@ -31,12 +31,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			super( NAME, viewComponent );
 		}
-
-//		private const STANDART_CATEGORIES : Array = [ "usual", "standard", "form", "table", "database", "debug" ];
-
-//		private const USUAL_ELEMENTS : Array = [ "button", "copy", "image", "richtext" ];
 		
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		private var typesProxy : TypesProxy;
 		private var userTypesProxy : UserTypesProxy;
 
@@ -56,7 +52,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			isActive = false;
 			
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 			userTypesProxy = facade.retrieveProxy( UserTypesProxy.NAME) as UserTypesProxy;
 			
@@ -92,7 +88,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 						
