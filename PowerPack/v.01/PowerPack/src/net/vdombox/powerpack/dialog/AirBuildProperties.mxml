@@ -2,7 +2,7 @@
 <ModalDialog
 	xmlns="net.vdombox.powerpack.dialog.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	width="500" height="360"
+	width="500" height="420"
 	title="Build installer"
 	creationComplete="onShow()"
 	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
@@ -325,7 +325,7 @@
 				ProgressManager.source = null;
 				ProgressManager.start( ProgressManager.DIALOG_MODE, false );
 				
-				sdkCompiler.buildInstallerPackage (outputFolderPath, outputFileName, app, sdkPath);
+				sdkCompiler.buildInstallerPackage (outputFolderPath, outputFileName, app, sdkPath, radioBtnGroupBuildType.selectedValue.toString());
 				
 				function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void
 				{
@@ -494,8 +494,30 @@
 			</mx:VBox>
 			<mx:Button label="Browse" click="btnBrowseSDKClickHandler(event)" width="70"/>
 		</mx:HBox>
-			 
-		<mx:Button id="buildBtn" label="Build" click="btnBuildClickHandler(event)" />
+		
+		<mx:VBox verticalGap="10"
+				 top="10" bottom="10" left="10" right="10">
+			
+			<mx:VBox verticalGap="1">
+				<mx:Label text="Export as: "/>
+				<mx:RadioButtonGroup id="radioBtnGroupBuildType"/>
+				
+				<mx:RadioButton id="buildTypeNative"
+								groupName="radioBtnGroupBuildType"
+								label="Native installer"
+								value="{SDKCompiler.PACKAGE_TYPE_NATIVE}"
+								selected="true"/>
+				
+				<mx:RadioButton id="buildTypePackage"
+								groupName="radioBtnGroupBuildType"
+								label="AIR package"
+								value="{SDKCompiler.PACKAGE_TYPE_AIR}"
+								selected="false"/>
+			</mx:VBox>
+			
+			<mx:Button id="buildBtn" label="Build" click="btnBuildClickHandler(event)" />
+		</mx:VBox>
+		
 	</mx:VBox>
 	
 	<mx:ControlBar width="100%" height="100%" styleName="dlgFooter"/>

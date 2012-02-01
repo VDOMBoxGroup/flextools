@@ -39,7 +39,7 @@ TitleBar
 	backgroundAlpha : 0;
 }
 
-RadioButton
+.questionAnswerRadioBtn
 {
 	fontFamily	: Arial;
 	fontSize	: 13;

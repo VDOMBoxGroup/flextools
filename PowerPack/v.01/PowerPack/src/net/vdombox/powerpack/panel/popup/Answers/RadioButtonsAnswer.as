@@ -57,7 +57,8 @@ package net.vdombox.powerpack.panel.popup.Answers
 				radBtn.value = value;
 				radBtn.label = value;
 				radBtn.group = radioBtnGroup;
-				
+				radBtn.styleName = "questionAnswerRadioBtn";
+					
 				vBox.addChild( radBtn );
 			}
 			

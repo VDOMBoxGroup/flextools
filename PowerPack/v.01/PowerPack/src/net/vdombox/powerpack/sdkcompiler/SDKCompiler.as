@@ -19,6 +19,11 @@ package net.vdombox.powerpack.sdkcompiler
 
 	public class SDKCompiler extends EventDispatcher
 	{
+		public static const PACKAGE_TYPE_AIR	: String = "AIR";
+		public static const PACKAGE_TYPE_NATIVE	: String = "NATIVE";
+		
+		private var _packageType : String = PACKAGE_TYPE_NATIVE;
+		
 		private var process : NativeProcess;
 
 		private var outputInstallerFolderPath : String;
@@ -32,7 +37,8 @@ package net.vdombox.powerpack.sdkcompiler
 		}
 		
 		public function buildInstallerPackage(outputFolderPath : String, outputFileName : String, 
-											  app : VDOMApplication, sdkPath : String) : void
+											  app : VDOMApplication, sdkPath : String,
+											  packageType : String) : void
 		{
 			var processEvent : SDKCompilerEvent;
 			
@@ -47,7 +53,22 @@ package net.vdombox.powerpack.sdkcompiler
 			installerApp = app;
 			sdk4_1Path = sdkPath;
 			
+			this.packageType = packageType;
+			
 			generateBuildingBatFiles();
+		}
+		
+		private function set packageType (value : String) : void
+		{
+			_packageType = value;
+			
+			if (!validPackageType)
+				_packageType = PACKAGE_TYPE_NATIVE;
+		}
+		
+		private function get validPackageType () : Boolean
+		{
+			return _packageType == PACKAGE_TYPE_AIR || _packageType == PACKAGE_TYPE_NATIVE;
 		}
 		
 		private function generateBuildingBatFiles () : void
@@ -97,9 +118,17 @@ package net.vdombox.powerpack.sdkcompiler
 			content += FileUtils.convertPathForCMD(sdk4_1Path + "/bin/adt.bat") + " ";
 			content += "-package -storetype pkcs12 -keystore ";
 			content += FileUtils.convertPathForCMD(sertificatePath) + " ";
-			content += "-storepass q -target native -storetype pkcs12 -keystore ";
-			content += FileUtils.convertPathForCMD(sertificatePath) + " ";
 			content += "-storepass q ";
+			
+			if (_packageType == PACKAGE_TYPE_NATIVE)
+			{
+				content += "-target native -storetype pkcs12 -keystore ";
+				content += FileUtils.convertPathForCMD(sertificatePath) + " ";
+				content += "-storepass q ";
+			} 
+			else
+				content += "-target air ";
+			
 			content += FileUtils.convertPathForCMD(outputPackagePath) + " ";
 			content += FileUtils.convertPathForCMD(powerPackProjectStoragePath + "/Installer-app.xml") + " ";
 			content += "-C ";
@@ -175,7 +204,18 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		public function get outputPackagePath () : String
 		{
+			var outputPath : String = outputInstallerFolderPath + "/" + outputInstallerFileName + outputPackageExtension; 
+			
+			return outputPath;
+		}
+		
+		private function get outputPackageExtension () : String
+		{
+			if (_packageType == PACKAGE_TYPE_AIR)
+				return ".air";
+			
 			var outputExtension	: String;
+			
 			var os : String = Capabilities.os.substr(0, 3).toUpperCase();
 			
 			switch(os)
@@ -194,14 +234,11 @@ package net.vdombox.powerpack.sdkcompiler
 				default:
 				{
 					outputExtension = ".exe";
-					
 					break;
 				}
 			}
 			
-			var outputPath : String = outputInstallerFolderPath + "/" + outputInstallerFileName + outputExtension; 
-			
-			return outputPath;
+			return outputExtension;
 		}
 		
 		private function get compilerArguments() : Vector.<String>
