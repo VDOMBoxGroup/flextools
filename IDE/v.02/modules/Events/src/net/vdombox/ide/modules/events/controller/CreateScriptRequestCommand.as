@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.events.controller
 {
 	import mx.utils.UIDUtil;
 	
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
@@ -20,9 +20,9 @@ package net.vdombox.ide.modules.events.controller
 			var scriptName : String = body.name;
 			var target : String = body.target;
 			
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
-			var selectedApplicationVO : ApplicationVO = sessionProxy.selectedApplication;
+			var selectedApplicationVO : ApplicationVO = statesProxy.selectedApplication;
 			
 			if ( !selectedApplicationVO || !scriptName || !target )
 				return;
@@ -52,16 +52,16 @@ package net.vdombox.ide.modules.events.controller
 					
 					serverActions.push( serverActionVO );
 					
-					if ( sessionProxy.selectedObject )
+					if ( statesProxy.selectedObject )
 					{
 						sendNotification( ApplicationFacade.SET_SERVER_ACTIONS,
-							{ objectVO: sessionProxy.selectedObject, serverActions: serverActions } );
+							{ objectVO: statesProxy.selectedObject, serverActions: serverActions } );
 					}
 						
-					else if ( sessionProxy.selectedPage )
+					else if ( statesProxy.selectedPage )
 					{
 						sendNotification( ApplicationFacade.SET_SERVER_ACTIONS,
-							{ pageVO: sessionProxy.selectedPage, serverActions: serverActions } );
+							{ pageVO: statesProxy.selectedPage, serverActions: serverActions } );
 					}
 					
 					break;

@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.events.view
 	
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -33,7 +33,7 @@ package net.vdombox.ide.modules.events.view
 		}
 
 		private var isActive : Boolean;
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		private var visibleElementProxy : VisibleElementProxy;
 		private var treePanelCreateCompleted : Boolean = false;
 		private var sendChildrenQuery : Boolean = false;
@@ -45,7 +45,7 @@ package net.vdombox.ide.modules.events.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			visibleElementProxy = facade.retrieveProxy( VisibleElementProxy.NAME ) as VisibleElementProxy;
 			isActive = false;
 
@@ -67,8 +67,8 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.APPLICATION_EVENTS_GETTED );
 			interests.push( ApplicationFacade.APPLICATION_EVENTS_SETTED );
 			
-			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
-			interests.push( SessionProxy.SELECTED_OBJECT_CHANGED );
+			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
+			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
 			
 			interests.push( ApplicationFacade.CHILDREN_ELEMENTS_GETTED );
 			interests.push( ApplicationFacade.STRUCTURE_GETTED );
@@ -106,14 +106,14 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case SessionProxy.SELECTED_PAGE_CHANGED:
+				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
-					if ( sessionProxy.selectedApplication && sessionProxy.selectedPage )
+					if ( statesProxy.selectedApplication && statesProxy.selectedPage )
 					{
 						workArea.dataProvider = null;
 						workArea.pageName.text = body.name;
 						sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
-										  { applicationVO: sessionProxy.selectedApplication, pageVO: sessionProxy.selectedPage } );
+										  { applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 					}
 					break;
 				}
@@ -133,7 +133,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case SessionProxy.SELECTED_OBJECT_CHANGED:
+				case StatesProxy.SELECTED_OBJECT_CHANGED:
 				{
 					setVisibleElementsForAllObjects();
 					setElementsCurrentVisibleState();
@@ -269,7 +269,7 @@ package net.vdombox.ide.modules.events.view
 			var leng : Number = workArea.contentGroup.numElements;
 			var element : BaseElement;
 			
-			var newTarget : Object = sessionProxy.selectedObject ? sessionProxy.selectedObject : sessionProxy.selectedPage;
+			var newTarget : Object = statesProxy.selectedObject ? statesProxy.selectedObject : statesProxy.selectedPage;
 			var objectID : String = newTarget.id;
 
 			for ( var i : int = 0; i < leng; i++ )
@@ -304,8 +304,8 @@ package net.vdombox.ide.modules.events.view
 		
 		private function saveHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SET_APPLICATION_EVENTS, { applicationVO: sessionProxy.selectedApplication,
-				pageVO : sessionProxy.selectedPage, applicationEventsVO : workArea.dataProvider } );
+			sendNotification( ApplicationFacade.SET_APPLICATION_EVENTS, { applicationVO: statesProxy.selectedApplication,
+				pageVO : statesProxy.selectedPage, applicationEventsVO : workArea.dataProvider } );
 		}
 		
 		private function undoHandler( event : WorkAreaEvent ) : void
@@ -313,7 +313,7 @@ package net.vdombox.ide.modules.events.view
 			workArea.dataProvider = null;
 			
 			sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
-				{ applicationVO: sessionProxy.selectedApplication, pageVO: sessionProxy.selectedPage } );
+				{ applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 		}
 		
 		private function showCurrentElementsStateChanged( event : WorkAreaEvent ) : void

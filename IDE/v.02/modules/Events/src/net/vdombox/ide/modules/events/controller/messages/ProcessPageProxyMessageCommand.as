@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.events.controller.messages
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	
@@ -14,7 +14,7 @@ package net.vdombox.ide.modules.events.controller.messages
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
@@ -48,7 +48,7 @@ package net.vdombox.ide.modules.events.controller.messages
 				{
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
 					sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
-						{ applicationVO: sessionProxy.selectedApplication, pageVO: sessionProxy.selectedPage } );
+						{ applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 					
 					break;
 				}	
@@ -60,21 +60,10 @@ package net.vdombox.ide.modules.events.controller.messages
 					
 				case PPMPageTargetNames.OBJECT:
 				{
-//					if ( operation == PPMOperationNames.CREATE )
-//					{
-//						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
-//						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
-//					}
-//					else 
 					if ( operation == PPMOperationNames.READ )
 					{
 						sendNotification( ApplicationFacade.OBJECT_GETTED, body.objectVO );
 					}
-//					else if ( operation == PPMOperationNames.DELETE )
-//					{
-//						sendNotification( ApplicationFacade.OBJECT_DELETED, body.objectVO );
-//						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
-//					}
 
 					break;
 				}
@@ -84,21 +73,6 @@ package net.vdombox.ide.modules.events.controller.messages
 					if ( operation == PPMOperationNames.READ )
 						sendNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, body );
 
-					break;
-				}
-
-				case PPMPageTargetNames.ATTRIBUTES:
-				{
-//					var pageAttributesVO : PageAttributesVO = body.pageAttributesVO as PageAttributesVO;
-//
-//					if ( operation == PPMOperationNames.READ )
-//						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, pageAttributesVO );
-//					else if ( operation == PPMOperationNames.UPDATE )
-//						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, pageAttributesVO );
-//
-//					if( needForUpdateObject.hasOwnProperty( pageAttributesVO.pageVO.id ) )
-//						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, pageAttributesVO.pageVO );
-						
 					break;
 				}
 			}

@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.events.view
 	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
 	
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ClientActionVO;
 	import net.vdombox.ide.common.model._vo.EventVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
@@ -44,7 +44,7 @@ package net.vdombox.ide.modules.events.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var currentTarget : Object;
 		private var currentTypeVO : TypeVO;
@@ -64,7 +64,7 @@ package net.vdombox.ide.modules.events.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			visibleElementProxy = facade.retrieveProxy( VisibleElementProxy.NAME ) as VisibleElementProxy;
 			isActive = false;
 
@@ -83,9 +83,9 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( SessionProxy.SELECTED_APPLICATION_CHANGED );
-			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
-			interests.push( SessionProxy.SELECTED_OBJECT_CHANGED );
+			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
+			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
+			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
 
 			interests.push( ApplicationFacade.SERVER_ACTIONS_LIST_GETTED );
 			interests.push( ApplicationFacade.SERVER_ACTIONS_GETTED );
@@ -164,10 +164,10 @@ package net.vdombox.ide.modules.events.view
 		{
 			var newTarget : Object;
 
-			if ( sessionProxy.selectedObject )
-				newTarget = sessionProxy.selectedObject;
-			else if ( sessionProxy.selectedPage )
-				newTarget = sessionProxy.selectedPage;
+			if ( statesProxy.selectedObject )
+				newTarget = statesProxy.selectedObject;
+			else if ( statesProxy.selectedPage )
+				newTarget = statesProxy.selectedPage;
 
 			if ( !isActive || !newTarget )
 			{
@@ -242,9 +242,9 @@ package net.vdombox.ide.modules.events.view
 			var dragSource : DragSource = new DragSource();
 			list.addDragData( dragSource );
 
-			var containerID : String = sessionProxy.selectedPage.id;
-			var objectID : String = sessionProxy.selectedObject ? sessionProxy.selectedObject.id : containerID;
-			var objectName : String = sessionProxy.selectedObject ? sessionProxy.selectedObject.name : sessionProxy.selectedPage.name;
+			var containerID : String = statesProxy.selectedPage.id;
+			var objectID : String = statesProxy.selectedObject ? statesProxy.selectedObject.id : containerID;
+			var objectName : String = statesProxy.selectedObject ? statesProxy.selectedObject.name : statesProxy.selectedPage.name;
 			
 			var elementVO : Object = list.selectedItem;
 			
@@ -263,7 +263,7 @@ package net.vdombox.ide.modules.events.view
 			}
 			else if ( elementVO is ServerActionVO )
 			{
-				ServerActionVO( elementVO ).setObjectName( sessionProxy.selectedPage.name );
+				ServerActionVO( elementVO ).setObjectName( statesProxy.selectedPage.name );
 			}
 
 			if ( elementVO )

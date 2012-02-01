@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.events.model
 {
 	import flash.net.SharedObject;
 	
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -12,7 +12,7 @@ package net.vdombox.ide.modules.events.model
 
 		public static const NAME : String = "VisibleElementProxy";
 		
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		
 		private var sharedObjects : Object = {};
 		
@@ -41,9 +41,9 @@ package net.vdombox.ide.modules.events.model
 		{
 			var selectedApplicationId : String; 
 			
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
-			selectedApplicationId = sessionProxy.selectedApplication.id;
+			selectedApplicationId = statesProxy.selectedApplication.id;
 			
 			if (!sharedObjects[ selectedApplicationId ])
 				sharedObjects[ selectedApplicationId ] =  SharedObject.getLocal( selectedApplicationId );

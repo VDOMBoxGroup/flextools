@@ -3,7 +3,6 @@ package net.vdombox.ide.modules.events.controller.messages
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
-	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -13,7 +12,6 @@ package net.vdombox.ide.modules.events.controller.messages
 	{	
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			var typesProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 			
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;

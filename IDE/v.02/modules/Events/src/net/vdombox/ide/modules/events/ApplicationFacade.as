@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.events
 {
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.Events;
 	import net.vdombox.ide.modules.events.controller.BodyCreatedCommand;
@@ -21,7 +21,6 @@ package net.vdombox.ide.modules.events
 	import net.vdombox.ide.modules.events.controller.messages.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.events.controller.messages.ProcessObjectProxyMessageCommand;
 	import net.vdombox.ide.modules.events.controller.messages.ProcessPageProxyMessageCommand;
-	import net.vdombox.ide.modules.events.controller.messages.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.events.controller.messages.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.events.controller.messages.ProcessTypesProxyMessageCommand;
 	
@@ -71,19 +70,10 @@ package net.vdombox.ide.modules.events
 		public static const SAVE_SETTINGS_TO_PROXY 			: String = "saveSettingsToProxy";
 
 //		pipe messages
-		public static const PROCESS_SERVER_PROXY_MESSAGE 		: String = "processServerProxyMessage";
-		public static const PROCESS_STATES_PROXY_MESSAGE 		: String = "processStatesProxyMessage";
 		public static const PROCESS_RESOURCES_PROXY_MESSAGE 	: String = "processResourcesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE	: String = "processApplicationProxyMessage";
 		public static const PROCESS_PAGE_PROXY_MESSAGE 			: String = "processPageProxyMessage";
 		public static const PROCESS_OBJECT_PROXY_MESSAGE 		: String = "processObjectProxyMessage";
-
-//		states
-		public static const GET_ALL_STATES 	  : String = "getAllStates";
-		public static const ALL_STATES_GETTED : String = "allStatesGetted";
-
-		public static const SET_ALL_STATES 	  : String = "setAllStates";
-		public static const ALL_STATES_SETTED : String = "allStatesSetted";
 
 //		pages
 		public static const GET_PAGES 	 : String = "getPages";
@@ -173,9 +163,8 @@ package net.vdombox.ide.modules.events
 			registerCommand( GET_SETTINGS, GetSettingsCommand );
 			registerCommand( SET_SETTINGS, SetSettingsCommand );
 			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
-
-			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
-			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
+			
+			registerCommand( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
@@ -183,8 +172,8 @@ package net.vdombox.ide.modules.events
 
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 
-			registerCommand( SessionProxy.CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
-			registerCommand( SessionProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
+			registerCommand( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
+			registerCommand( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 
 			registerCommand( TEAR_DOWN, TearDownCommand );
 			

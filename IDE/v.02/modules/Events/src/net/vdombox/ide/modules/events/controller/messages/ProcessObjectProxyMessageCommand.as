@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.events.controller.messages
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMObjectTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -14,7 +14,7 @@ package net.vdombox.ide.modules.events.controller.messages
 		override public function execute( notification : INotification ) : void
 		{
 
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
 			var body : Object = message.getBody();
@@ -45,7 +45,7 @@ package net.vdombox.ide.modules.events.controller.messages
 				{
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
 					sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
-						{ applicationVO: sessionProxy.selectedApplication, pageVO: sessionProxy.selectedPage } );
+						{ applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 					
 					break;
 				}	

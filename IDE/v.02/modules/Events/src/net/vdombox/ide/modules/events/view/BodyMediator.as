@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.events.view
 {
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.view.components.Body;
@@ -44,7 +45,7 @@ package net.vdombox.ide.modules.events.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.ALL_STATES_GETTED );
+			interests.push( StatesProxy.ALL_STATES_GETTED );
 
 			interests.push( ApplicationFacade.PIPES_READY );
 			interests.push( ApplicationFacade.MODULE_DESELECTED );
@@ -58,13 +59,13 @@ package net.vdombox.ide.modules.events.view
 			{
 				case ApplicationFacade.PIPES_READY:
 				{
-					sendNotification( ApplicationFacade.GET_ALL_STATES );
+					sendNotification( StatesProxy.GET_ALL_STATES );
 					sendNotification( TypesProxy.GET_TYPES );
 
 					break;
 				}
 
-				case ApplicationFacade.ALL_STATES_GETTED:
+				case StatesProxy.ALL_STATES_GETTED:
 				{
 					isReady = true;
 

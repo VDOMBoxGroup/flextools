@@ -17,7 +17,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.common.controller.names.PipeNames;
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -40,18 +40,6 @@ package net.vdombox.ide.modules.events.view
 		{
 			super( NAME, new Junction() );
 		}
-
-		private var sessionProxy : SessionProxy;
-		
-		override public function onRegister() : void
-		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-		}
-		
-		override public function onRemove() : void
-		{
-			sessionProxy = null;
-		}
 		
 		override public function listNotificationInterests() : Array
 		{
@@ -66,11 +54,11 @@ package net.vdombox.ide.modules.events.view
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
-			interests.push( ApplicationFacade.GET_ALL_STATES );
-			interests.push( ApplicationFacade.SET_ALL_STATES );
+			interests.push( StatesProxy.GET_ALL_STATES );
+			interests.push( StatesProxy.SET_ALL_STATES );
 			
-			interests.push( SessionProxy.SET_SELECTED_PAGE );
-			interests.push( SessionProxy.SET_SELECTED_OBJECT );
+			interests.push( StatesProxy.SET_SELECTED_PAGE );
+			interests.push( StatesProxy.SET_SELECTED_OBJECT );
 			
 			interests.push( ApplicationFacade.GET_SERVER_ACTIONS_LIST );
 			
@@ -179,7 +167,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case ApplicationFacade.GET_ALL_STATES:
+				case StatesProxy.GET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
 
@@ -188,7 +176,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.SET_ALL_STATES:
+				case StatesProxy.SET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
 					
@@ -197,7 +185,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case SessionProxy.SET_SELECTED_PAGE:
+				case StatesProxy.SET_SELECTED_PAGE:
 				{					
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
 					
@@ -206,7 +194,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case SessionProxy.SET_SELECTED_OBJECT:
+				case StatesProxy.SET_SELECTED_OBJECT:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
 					
@@ -439,13 +427,6 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case PPMPlaceNames.RESOURCES:
-				{
-					sendNotification( ApplicationFacade.PROCESS_RESOURCES_PROXY_MESSAGE, message );
-
-					break;
-				}
-
 				case PPMPlaceNames.TYPES:
 				{
 					sendNotification( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, message );
@@ -455,7 +436,7 @@ package net.vdombox.ide.modules.events.view
 
 				case PPMPlaceNames.STATES:
 				{
-					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
+					sendNotification( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, message );
 
 					break;
 				}

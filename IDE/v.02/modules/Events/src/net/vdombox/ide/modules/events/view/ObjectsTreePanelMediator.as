@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.events.view
 	import mx.events.ListEvent;
 	
 	import net.vdombox.ide.common.events.ResourceVOEvent;
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -34,7 +34,7 @@ package net.vdombox.ide.modules.events.view
 
 		private var isActive : Boolean;
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var _pages : Object;
 
@@ -67,7 +67,7 @@ package net.vdombox.ide.modules.events.view
 			objectsTree.labelField = "@name";
 			objectsTree.showRoot = true;
 
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			visibleElementProxy = facade.retrieveProxy( VisibleElementProxy.NAME ) as VisibleElementProxy;
 			
 			addHandlers();
@@ -110,11 +110,11 @@ package net.vdombox.ide.modules.events.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 						treePanelCreateCompleted = false;
-						sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
+						sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
 
 						break;
 					}
@@ -171,7 +171,7 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.OBJECT_GETTED:
 				{
 					selectedObject = body as ObjectVO;
-					sendNotification( SessionProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
+					sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 
 					break;
 				}
@@ -240,20 +240,20 @@ package net.vdombox.ide.modules.events.view
 		
 		private function selectCurrentPage(  needGetPageStructure : Boolean = true  ) : void
 		{
-			var sessionProxy   : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
-			if( sessionProxy.selectedPage )
+			if( statesProxy.selectedPage )
 			{
-				if ( sessionProxy.selectedObject )
-					objectsTreePanel.selectedPageID = sessionProxy.selectedObject.id;
+				if ( statesProxy.selectedObject )
+					objectsTreePanel.selectedPageID = statesProxy.selectedObject.id;
 				else
-					objectsTreePanel.selectedPageID = sessionProxy.selectedPage.id;
+					objectsTreePanel.selectedPageID = statesProxy.selectedPage.id;
 				
 				if ( !needGetPageStructure )
 					return;
 				
-				sendNotification( SessionProxy.SELECTED_PAGE_CHANGED, sessionProxy.selectedPage);
-				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
+				sendNotification( StatesProxy.SELECTED_PAGE_CHANGED, statesProxy.selectedPage);
+				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, statesProxy.selectedPage );
 				
 			}
 			else
@@ -283,7 +283,7 @@ package net.vdombox.ide.modules.events.view
 				if( currentPageXML )
 					delete currentPageXML.*;
 				
-				sendNotification( SessionProxy.CHANGE_SELECTED_PAGE_REQUEST, _pages[ id ] );
+				sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, _pages[ id ] );
 				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ id ] );
 			}
 			else if ( item.name() == "object" )

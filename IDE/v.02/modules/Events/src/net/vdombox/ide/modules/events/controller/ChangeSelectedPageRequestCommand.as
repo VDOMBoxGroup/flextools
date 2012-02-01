@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.events.controller
 {
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	
@@ -11,22 +11,22 @@ package net.vdombox.ide.modules.events.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
 			var selectedPageVO : PageVO = notification.getBody() as PageVO;
 			
-			if( sessionProxy.selectedPage.id == selectedPageVO.id )
+			if( statesProxy.selectedPage.id == selectedPageVO.id )
 			{
-				if( sessionProxy.selectedObject )
-					sendNotification( SessionProxy.SET_SELECTED_OBJECT, null );
+				if( statesProxy.selectedObject )
+					sendNotification( StatesProxy.SET_SELECTED_OBJECT, null );
 				
 				return;
 			}
 			
-			if( sessionProxy.selectedPage && selectedPageVO && sessionProxy.selectedPage.id == selectedPageVO.id )
+			if( statesProxy.selectedPage && selectedPageVO && statesProxy.selectedPage.id == selectedPageVO.id )
 				return;
 			
-			sendNotification( SessionProxy.SET_SELECTED_PAGE, selectedPageVO );
+			sendNotification( StatesProxy.SET_SELECTED_PAGE, selectedPageVO );
 		}
 	}
 }
