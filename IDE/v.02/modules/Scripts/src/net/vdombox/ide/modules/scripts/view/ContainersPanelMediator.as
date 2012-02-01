@@ -1,15 +1,15 @@
 package net.vdombox.ide.modules.scripts.view
 {
-	import net.vdombox.ide.common.view.components.itemrenderers.ObjectsTreePanelItemRenderer;
 	import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.common.view.components.itemrenderers.ObjectsTreePanelItemRenderer;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
-	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.ContainersPanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -69,7 +69,7 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( TypesProxy.TYPES_GETTED );
 			interests.push( ApplicationFacade.STRUCTURE_GETTED );
 			
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
 			
 			interests.push( ApplicationFacade.PAGES_GETTED );
 
@@ -165,7 +165,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				case SessionProxy.SELECTED_PAGE_CHANGED:
 				{
 					sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: sessionProxy.selectedPage } );
 					
@@ -305,22 +305,22 @@ package net.vdombox.ide.modules.scripts.view
 			 {
 				selectedObject = new ObjectVO( sessionProxy.selectedPage, typeVO );
 				selectedObject.setID( newObject.@id );
-				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
+				sendNotification( SessionProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 			 }
 			 else if ( newPage.@id != currentPageID )
 			 {
-				 sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
+				 sendNotification( SessionProxy.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
 				 if ( newObject && newObject.name() == "object" )
 				 {
 					 selectedObject = new ObjectVO( sessionProxy.selectedPage, typeVO );
 					 selectedObject.setID( newObject.@id );
-					 sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
+					 sendNotification( SessionProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 				 }
 				
 			 }
 			 else if ( !newObject )
 			 {
-				 sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
+				 sendNotification( SessionProxy.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
 			 }
 			
 		}

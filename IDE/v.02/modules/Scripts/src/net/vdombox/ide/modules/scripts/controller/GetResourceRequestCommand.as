@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.scripts.controller
 {
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
-	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

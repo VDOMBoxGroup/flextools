@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.scripts
 {
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.Scripts;
 	import net.vdombox.ide.modules.scripts.controller.BodyCreatedCommand;
@@ -79,16 +80,6 @@ package net.vdombox.ide.modules.scripts
 		
 		public static const SET_ALL_STATES : String = "setAllStates";
 		public static const ALL_STATES_SETTED : String = "allStatesSetted";
-		
-		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
-		
-		public static const CHANGE_SELECTED_PAGE_REQUEST : String = "changeSelectedPageRequest";
-		public static const SET_SELECTED_PAGE : String = "setSelectedPage";
-		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
-				
-		public static const CHANGE_SELECTED_OBJECT_REQUEST : String = "changeSelectedObjectRequest";
-		public static const SET_SELECTED_OBJECT : String = "setSelectedObject";
-		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
 		
 //		other
 		public static const DELIMITER : String = "/";
@@ -195,8 +186,8 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
 			
-			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
-			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
+			registerCommand( SessionProxy.CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
+			registerCommand( SessionProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 			registerCommand( GET_SERVER_ACTIONS_REQUEST, GetServerActionsRequestCommand );
 			
 			registerCommand( OPEN_CREATE_ACTION_WINDOW, OpenCreateActionWindowCommand );

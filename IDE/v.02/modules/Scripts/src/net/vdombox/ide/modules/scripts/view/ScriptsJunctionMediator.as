@@ -2,8 +2,11 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
-	import net.vdombox.ide.common.view.LoggingJunctionMediator;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.messages.SimpleMessage;
+	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMObjectTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
@@ -13,15 +16,13 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.common.controller.names.PipeNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
-	import net.vdombox.ide.common.controller.messages.SimpleMessage;
-	import net.vdombox.ide.common.SimpleMessageHeaders;
-	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.model.vo.SettingsVO;
 	
@@ -68,9 +69,9 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.GET_ALL_STATES );
 			interests.push( ApplicationFacade.SET_ALL_STATES );
 			
-			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
+			interests.push( SessionProxy.SET_SELECTED_PAGE );
 
-			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
+			interests.push( SessionProxy.SET_SELECTED_OBJECT );
 
 			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
 			interests.push( ApplicationFacade.SET_SERVER_ACTIONS );
@@ -211,7 +212,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case ApplicationFacade.SET_SELECTED_PAGE:
+				case SessionProxy.SET_SELECTED_PAGE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
 
@@ -220,7 +221,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case ApplicationFacade.SET_SELECTED_OBJECT:
+				case SessionProxy.SET_SELECTED_OBJECT:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
 

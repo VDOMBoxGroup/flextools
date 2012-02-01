@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.scripts.controller
 {
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
-	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -28,9 +28,9 @@ package net.vdombox.ide.modules.scripts.controller
 					pageVO =  selectedObjectVO["pageVO"];
 				
 				if ( (!selectedPage && pageVO ) || ( selectedPage && pageVO && selectedPage.id != pageVO.id ) )
-					sendNotification(ApplicationFacade.SET_SELECTED_PAGE, pageVO);
+					sendNotification(SessionProxy.SET_SELECTED_PAGE, pageVO);
 				
-				sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, selectedObjectVO );
+				sendNotification( SessionProxy.SET_SELECTED_OBJECT, selectedObjectVO );
 			}
 		}
 	}

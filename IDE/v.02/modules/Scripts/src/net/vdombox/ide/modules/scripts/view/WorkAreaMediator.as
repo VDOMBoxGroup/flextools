@@ -4,13 +4,13 @@ package net.vdombox.ide.modules.scripts.view
 	
 	import net.vdombox.ide.common.events.EditorEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
-	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	import net.vdombox.ide.modules.scripts.view.components.WorkArea;
 	

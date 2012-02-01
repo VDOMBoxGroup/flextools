@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.scripts.controller
 {
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
-	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -17,7 +17,7 @@ package net.vdombox.ide.modules.scripts.controller
 			if( sessionProxy.selectedPage.id == selectedPageVO.id )
 			{
 				if( sessionProxy.selectedObject )
-					sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, null );
+					sendNotification( SessionProxy.SET_SELECTED_OBJECT, null );
 				
 				return;
 			}
@@ -26,7 +26,7 @@ package net.vdombox.ide.modules.scripts.controller
 			var newPageID : String = selectedPageVO ? selectedPageVO.id : "";
 			
 			if( oldPageID != newPageID )
-				sendNotification( ApplicationFacade.SET_SELECTED_PAGE, selectedPageVO );
+				sendNotification( SessionProxy.SET_SELECTED_PAGE, selectedPageVO );
 		}
 	}
 }

@@ -2,10 +2,10 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
-	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.ServerScriptsPanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -61,8 +61,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
+			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
+			interests.push( SessionProxy.SELECTED_OBJECT_CHANGED );
 			
 			interests.push( ApplicationFacade.PAGES_GETTED );
 
@@ -108,7 +108,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				case SessionProxy.SELECTED_PAGE_CHANGED:
 				{
 					
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
@@ -126,7 +126,7 @@ package net.vdombox.ide.modules.scripts.view
 					
 					 
 
-				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
+				case SessionProxy.SELECTED_OBJECT_CHANGED:
 				{
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
 
