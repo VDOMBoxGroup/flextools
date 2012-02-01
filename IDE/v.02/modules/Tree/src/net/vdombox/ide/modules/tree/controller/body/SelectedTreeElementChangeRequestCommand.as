@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.tree.controller.body
 
 			var pageVO : PageVO = treeElementVO ? treeElementVO.pageVO : null;
 
-			sendNotification( ApplicationFacade.SET_SELECTED_PAGE, pageVO );
+			sendNotification( SessionProxy.SET_SELECTED_PAGE, pageVO );
 		}
 	}
 }

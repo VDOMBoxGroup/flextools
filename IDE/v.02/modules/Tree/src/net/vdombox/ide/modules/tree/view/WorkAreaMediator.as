@@ -69,8 +69,8 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.BODY_STOP );
 
 			interests.push( ApplicationFacade.PAGE_DELETED );
-			interests.push( ApplicationFacade.SELECTED_TREE_LEVEL_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
+			interests.push( SessionProxy.SELECTED_TREE_LEVEL_CHANGED );
+			interests.push( SessionProxy.SELECTED_APPLICATION_CHANGED );
 
 			interests.push( ApplicationFacade.TREE_ELEMENTS_CHANGED );
 			interests.push( ApplicationFacade.TREE_ELEMENT_ADD );
@@ -126,7 +126,7 @@ package net.vdombox.ide.modules.tree.view
 						break;
 					}
 				}
-				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
+				case SessionProxy.SELECTED_APPLICATION_CHANGED:
 				{
 					clearData();
 					
@@ -148,7 +148,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_TREE_LEVEL_CHANGED:
+				case SessionProxy.SELECTED_TREE_LEVEL_CHANGED:
 				{
 					workArea.selectedTreeLevelVO = sessionProxy.selectedTreeLevel;
 					

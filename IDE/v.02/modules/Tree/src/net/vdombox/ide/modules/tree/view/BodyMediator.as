@@ -2,10 +2,10 @@ package net.vdombox.ide.modules.tree.view
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-
+	
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
-
+	
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
@@ -16,11 +16,11 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.view.components.Body;
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.Group;
 	import spark.effects.Move;
 	import spark.effects.easing.EaseInOutBase;
@@ -77,7 +77,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.ALL_STATES_GETTED );
 			interests.push( ApplicationFacade.PAGES_GETTED );
 			interests.push( ApplicationFacade.APPLICATION_STRUCTURE_GETTED );
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
+			interests.push( SessionProxy.SELECTED_APPLICATION_CHANGED );
 
 			interests.push( ApplicationFacade.PIPES_READY );
 			interests.push( ApplicationFacade.MODULE_DESELECTED );
@@ -99,7 +99,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 				
-				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
+				case SessionProxy.SELECTED_APPLICATION_CHANGED:
 				{
 					isAllStatesGetted = true;
 					

@@ -39,6 +39,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.settings.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.settings.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.tree.controller.settings.SetSettingsCommand;
+	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -105,20 +106,6 @@ package net.vdombox.ide.modules.tree
 		public static const SET_ALL_STATES : String = "setAllStates";
 		public static const ALL_STATES_SETTED : String = "allStatesSetted";
 		
-		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
-		
-//		public static const CHANGE_SELECTED_PAGE_REQUEST : String = "changeSelectedPageRequest";
-		public static const SET_SELECTED_PAGE : String = "setSelectedPage";
-		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
-		
-//		public static const CHANGE_SELECTED_OBJECT_REQUEST : String = "changeSelectedObjectRequest";
-		public static const SET_SELECTED_OBJECT : String = "setSelectedObject";
-		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
-		
-		public static const SELECTED_TREE_ELEMENT_CHANGE_REQUEST : String = "selectedTreeElementChangeRequest";
-		public static const SELECTED_TREE_ELEMENT_CHANGED : String = "selectedTreeElementChanged";
-		
-
 //		resources
 		public static const GET_RESOURCES : String = "getResources";
 		public static const RESOURCES_GETTED : String = "resourcesGetted";
@@ -160,18 +147,10 @@ package net.vdombox.ide.modules.tree
 		public static const DELIMITER : String = "/";
 		public static const STATES : String = "states";
 		
-//		public static const SELECTED_APPLICATION : String = "selectedApplication";
-//		public static const SELECTED_TREE_ELEMENT : String = "selectedTreeElement";
-		public static const SELECTED_TREE_LEVEL : String = "selectedTreeLevel";
-		
 		public static const CREATE_PAGE_REQUEST : String = "createPageRequest";
 		public static const DELETE_PAGE_REQUEST : String = "deletePageRequest";
-//		public static const CREATE_LINKAGE_REQUEST : String = "createLinkageRequest";
 
 		public static const OPEN_CREATE_PAGE_WINDOW_REQUEST : String = "openCreatePageWindowRequest";
-//		public static const AUTO_SPACING_REQUEST : String = "autoSpacingRequest";
-//		public static const EXPAND_ALL_REQUEST : String = "expandAllRequest";
-//		public static const SHOW_SIGNATURE_REQUEST : String = "showSignatureRequest";
 		public static const SAVE_REQUEST : String = "saveRequest";
 		public static const UNDO_REQUEST : String = "undoRequest";
 		
@@ -182,10 +161,6 @@ package net.vdombox.ide.modules.tree
 		
 		public static const LINKAGE_CREATED : String = "linkageCreated";
 		public static const LINKAGE_REMOVED : String = "linkageRemoved";
-		
-//		public static const TREE_ELEMENT_SELECTION : String = "treeElementSelection";
-		
-//		public static const SELECTED_TREE_ELEMENT_CHANGED : String = "selectedTreeElementChanged";
 
 		public static const OPEN_RESOURCE_SELECTOR_REQUEST : String = "openResourceSelectorRequest";
 		
@@ -201,9 +176,6 @@ package net.vdombox.ide.modules.tree
 
 		public static const GET_TREE_LEVELS : String = "getTreeLevels";
 		public static const TREE_LEVELS_GETTED : String = "treeLevelsGetted";
-
-		public static const SELECTED_TREE_LEVEL_CHANGE_REQUEST : String = "selectedTreeLevelChangeRequest";
-		public static const SELECTED_TREE_LEVEL_CHANGED : String = "selectedTreeLevelChanged";
 
 		public static const PAGE_TYPE_ITEM_RENDERER_CREATED : String = "pageTypeItemRendererCreated";
 		
@@ -278,12 +250,8 @@ package net.vdombox.ide.modules.tree
 			registerCommand( PAGE_CREATED, PageCreatedCommand );
 			registerCommand( PAGE_DELETED, PageDeletedCommand );
 			
-//			registerCommand( EXPAND_ALL_REQUEST, ExpandAllRequestCommand );
-
-//			registerCommand( LINKAGES_CHANGED, LinkagesChangedCommand );
-			
-			registerCommand( SELECTED_TREE_LEVEL_CHANGE_REQUEST, SelectedTreeLevelChangeRequestCommand );
-			registerCommand( SELECTED_TREE_ELEMENT_CHANGE_REQUEST, SelectedTreeElementChangeRequestCommand );
+			registerCommand( SessionProxy.SELECTED_TREE_LEVEL_CHANGE_REQUEST, SelectedTreeLevelChangeRequestCommand );
+			registerCommand( SessionProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, SelectedTreeElementChangeRequestCommand );
 			
 			registerCommand( OPEN_RESOURCE_SELECTOR_REQUEST, OpenResourceSelectorRequestCommand );
 			

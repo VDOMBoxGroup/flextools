@@ -95,7 +95,7 @@ package net.vdombox.ide.modules.tree.view
 				{
 					levelsPanel.dataProvider = body as Array;
 
-					sendNotification( ApplicationFacade.SELECTED_TREE_LEVEL_CHANGE_REQUEST, levelsPanel.currentStructureLevel );
+					sendNotification( SessionProxy.SELECTED_TREE_LEVEL_CHANGE_REQUEST, levelsPanel.currentStructureLevel );
 					
 					break;
 				}
@@ -119,7 +119,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private function changeHandler( event : Event ) : void
 		{
-			sendNotification( ApplicationFacade.SELECTED_TREE_LEVEL_CHANGE_REQUEST, levelsPanel.currentStructureLevel );
+			sendNotification( SessionProxy.SELECTED_TREE_LEVEL_CHANGE_REQUEST, levelsPanel.currentStructureLevel );
 		}
 	}
 }

@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.tree.model
 {
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.common.model._vo.LevelObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.tree.model
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -232,7 +232,7 @@ package net.vdombox.ide.modules.tree.model
 		{			
 			if ( treeElementVO && treeElementVO.pageVO )
 			{
-				sendNotification( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );				
+				sendNotification( SessionProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );				
 			}
 		}
 

@@ -92,7 +92,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.OPEN_WINDOW );
 			interests.push( ApplicationFacade.CLOSE_WINDOW );
 
-			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
+			interests.push( SessionProxy.SET_SELECTED_PAGE );
 
 			interests.push( ApplicationFacade.CREATE_PAGE );
 			interests.push( ApplicationFacade.DELETE_PAGE );
@@ -364,7 +364,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.SET_SELECTED_PAGE:
+				case SessionProxy.SET_SELECTED_PAGE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
 

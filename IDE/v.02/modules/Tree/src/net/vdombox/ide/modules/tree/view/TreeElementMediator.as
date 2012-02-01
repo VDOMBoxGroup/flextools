@@ -74,7 +74,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
 
 			interests.push( ApplicationFacade.EXPAND_ALL_TREE_ELEMENTS );
 			interests.push( ApplicationFacade.COLLAPSE_ALL_TREE_ELEMENTS );
@@ -130,7 +130,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				case SessionProxy.SELECTED_PAGE_CHANGED:
 				{
 					if ( sessionProxy.selectedPage && sessionProxy.selectedPage.id == treeElementVO.pageVO.id )
 						treeElement.selected = true;
@@ -223,7 +223,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			if ( treeElementVO && treeElementVO.pageVO && sessionProxy.selectedPage != treeElementVO.pageVO )
 			{
-				sendNotification( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );
+				sendNotification( SessionProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );
 			}
 		}
 

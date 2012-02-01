@@ -56,7 +56,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
 
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + mediatorName );
@@ -98,7 +98,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				case SessionProxy.SELECTED_PAGE_CHANGED:
 				{
 					updateAttributes();
 
