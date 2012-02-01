@@ -9,16 +9,18 @@ package net.vdombox.ide.modules.events.view
 	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
 	
-	import net.vdombox.ide.common.view.components.windows.CreateActionWindow;
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model._vo.ClientActionVO;
 	import net.vdombox.ide.common.model._vo.EventVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
+	import net.vdombox.ide.common.view.components.windows.CreateActionWindow;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.events.EventsPanelEvent;
-	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.ActionElement;
 	import net.vdombox.ide.modules.events.view.components.BaseElement;
@@ -26,8 +28,6 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.EventItemRenderer;
 	import net.vdombox.ide.modules.events.view.components.EventsPanel;
-	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -45,9 +45,6 @@ package net.vdombox.ide.modules.events.view
 		}
 
 		private var sessionProxy : SessionProxy;
-
-//		private var currentPage : PageVO;
-//		private var currentObject : ObjectVO;
 
 		private var currentTarget : Object;
 		private var currentTypeVO : TypeVO;
@@ -86,9 +83,9 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
+			interests.push( SessionProxy.SELECTED_APPLICATION_CHANGED );
+			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
+			interests.push( SessionProxy.SELECTED_OBJECT_CHANGED );
 
 			interests.push( ApplicationFacade.SERVER_ACTIONS_LIST_GETTED );
 			interests.push( ApplicationFacade.SERVER_ACTIONS_GETTED );

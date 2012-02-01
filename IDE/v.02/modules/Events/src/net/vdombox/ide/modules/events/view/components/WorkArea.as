@@ -20,7 +20,6 @@ package net.vdombox.ide.modules.events.view.components
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
-	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.view.skins.WorkAreaSkin;
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.common.view.components.button.AlertButton;

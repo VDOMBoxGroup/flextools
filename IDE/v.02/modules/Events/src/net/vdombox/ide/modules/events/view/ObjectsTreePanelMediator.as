@@ -9,12 +9,12 @@ package net.vdombox.ide.modules.events.view
 	import mx.events.ListEvent;
 	
 	import net.vdombox.ide.common.events.ResourceVOEvent;
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
-	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.ObjectsTreePanel;
@@ -171,7 +171,7 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.OBJECT_GETTED:
 				{
 					selectedObject = body as ObjectVO;
-					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
+					sendNotification( SessionProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 
 					break;
 				}
@@ -252,7 +252,7 @@ package net.vdombox.ide.modules.events.view
 				if ( !needGetPageStructure )
 					return;
 				
-				sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, sessionProxy.selectedPage);
+				sendNotification( SessionProxy.SELECTED_PAGE_CHANGED, sessionProxy.selectedPage);
 				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, sessionProxy.selectedPage );
 				
 			}
@@ -283,7 +283,7 @@ package net.vdombox.ide.modules.events.view
 				if( currentPageXML )
 					delete currentPageXML.*;
 				
-				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, _pages[ id ] );
+				sendNotification( SessionProxy.CHANGE_SELECTED_PAGE_REQUEST, _pages[ id ] );
 				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ id ] );
 			}
 			else if ( item.name() == "object" )

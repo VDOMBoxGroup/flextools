@@ -2,10 +2,10 @@ package net.vdombox.ide.modules.events.controller
 {
 	import mx.utils.UIDUtil;
 	
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
-	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.view.EventsPanelMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

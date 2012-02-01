@@ -6,13 +6,13 @@ package net.vdombox.ide.modules.events.view
 	
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
-	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.ActionElement;
 	import net.vdombox.ide.modules.events.view.components.BaseElement;
@@ -67,8 +67,8 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.APPLICATION_EVENTS_GETTED );
 			interests.push( ApplicationFacade.APPLICATION_EVENTS_SETTED );
 			
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
+			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
+			interests.push( SessionProxy.SELECTED_OBJECT_CHANGED );
 			
 			interests.push( ApplicationFacade.CHILDREN_ELEMENTS_GETTED );
 			interests.push( ApplicationFacade.STRUCTURE_GETTED );
@@ -106,7 +106,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				case SessionProxy.SELECTED_PAGE_CHANGED:
 				{
 					if ( sessionProxy.selectedApplication && sessionProxy.selectedPage )
 					{
@@ -133,7 +133,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
+				case SessionProxy.SELECTED_OBJECT_CHANGED:
 				{
 					setVisibleElementsForAllObjects();
 					setElementsCurrentVisibleState();

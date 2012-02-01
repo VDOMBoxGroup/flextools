@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.events.controller
 {
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
-	import net.vdombox.ide.modules.events.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -21,7 +21,7 @@ package net.vdombox.ide.modules.events.controller
 			if( sessionProxy.selectedObject && selectedObjectVO && sessionProxy.selectedPage.id == selectedObjectVO.id )
 				return;
 				
-			sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, selectedObjectVO );
+			sendNotification( SessionProxy.SET_SELECTED_OBJECT, selectedObjectVO );
 		}
 	}
 }

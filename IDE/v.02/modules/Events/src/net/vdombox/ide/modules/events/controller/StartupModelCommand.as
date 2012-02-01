@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.events.controller
 {
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.model.SettingsProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	

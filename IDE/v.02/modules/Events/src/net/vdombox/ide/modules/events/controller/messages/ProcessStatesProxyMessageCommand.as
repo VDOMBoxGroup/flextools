@@ -1,12 +1,12 @@
 package net.vdombox.ide.modules.events.controller.messages
 {
-	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
-	import net.vdombox.ide.modules.events.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -37,7 +37,6 @@ package net.vdombox.ide.modules.events.controller.messages
 					var selectedApplicationVO : ApplicationVO = body as ApplicationVO;
 					
 					sessionProxy.selectedApplication = selectedApplicationVO
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, body );
 					
 					break;
 				}
@@ -47,7 +46,6 @@ package net.vdombox.ide.modules.events.controller.messages
 					var selectedPageVO : PageVO = body as PageVO;
 					
 					sessionProxy.selectedPage = selectedPageVO
-					sendNotification( ApplicationFacade.SELECTED_PAGE_GETTED, body );
 					
 					break;
 				}
@@ -57,7 +55,6 @@ package net.vdombox.ide.modules.events.controller.messages
 					var selectedObjectVO : ObjectVO = body as ObjectVO;
 					
 					sessionProxy.selectedObject = selectedObjectVO
-					sendNotification( ApplicationFacade.SELECTED_OBJECT_GETTED, body );
 					
 					break;
 				}

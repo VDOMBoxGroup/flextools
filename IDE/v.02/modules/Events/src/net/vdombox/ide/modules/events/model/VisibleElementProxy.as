@@ -2,6 +2,8 @@ package net.vdombox.ide.modules.events.model
 {
 	import flash.net.SharedObject;
 	
+	import net.vdombox.ide.common.model.SessionProxy;
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 

@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.events
 {
+	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.Events;
 	import net.vdombox.ide.modules.events.controller.BodyCreatedCommand;
@@ -83,26 +84,6 @@ package net.vdombox.ide.modules.events
 
 		public static const SET_ALL_STATES 	  : String = "setAllStates";
 		public static const ALL_STATES_SETTED : String = "allStatesSetted";
-
-		public static const GET_SELECTED_APPLICATION 	 : String = "getSelectedApplication";
-		public static const SELECTED_APPLICATION_GETTED  : String = "selectedApplicationGetted";
-		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
-
-		public static const GET_SELECTED_PAGE 	  : String = "getSelectedPage";
-		public static const SELECTED_PAGE_GETTED  : String = "selectedPageGetted";
-		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
-		
-		public static const CHANGE_SELECTED_PAGE_REQUEST : String = "changeSelectedPageRequest";
-		public static const SET_SELECTED_PAGE 	  : String = "setSelectedPage";
-		public static const SELECTED_PAGE_SETTED  : String = "selectedPageSetted";
-
-		public static const GET_SELECTED_OBJECT 	: String = "getSelectedObject";
-		public static const SELECTED_OBJECT_GETTED 	: String = "selectedObjectGetted";
-		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
-		
-		public static const CHANGE_SELECTED_OBJECT_REQUEST  : String = "changeSelectedObjectRequest";
-		public static const SET_SELECTED_OBJECT 			: String = "setSelectedObject";
-		public static const SELECTED_OBJECT_SETTED 			: String = "selectedObjectSetted";
 
 //		pages
 		public static const GET_PAGES 	 : String = "getPages";
@@ -202,8 +183,8 @@ package net.vdombox.ide.modules.events
 
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 
-			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
-			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
+			registerCommand( SessionProxy.CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
+			registerCommand( SessionProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 
 			registerCommand( TEAR_DOWN, TearDownCommand );
 			
