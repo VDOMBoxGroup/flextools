@@ -422,11 +422,13 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 
 	public function get label() : String
 	{
+        trace(">!"+_label + "!")
 		return _label;
 	}
 
 	public function set label( value : String ) : void
 	{
+        trace("!"+value + "!")
 		if ( _label != value )
 		{
 			_label = value;

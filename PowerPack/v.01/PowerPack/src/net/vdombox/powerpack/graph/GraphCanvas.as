@@ -29,6 +29,7 @@ import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
 import mx.utils.Base64Encoder;
 import mx.utils.NameUtil;
+import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
 import net.vdombox.powerpack.Template;
@@ -566,7 +567,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 				arrowXML.@source = arrow.fromObject.name;
 				arrowXML.@destination = arrow.toObject.name;
 				if ( arrow.label )
-					arrowXML.label = arrow.label;
+				{
+					var strXML : String = "<label><![CDATA["+arrow.label+"]\]></label>"
+					arrowXML.appendChild(new XML(strXML));
+				}
 
 				graphXML.transitions.appendChild( arrowXML );
 			}
