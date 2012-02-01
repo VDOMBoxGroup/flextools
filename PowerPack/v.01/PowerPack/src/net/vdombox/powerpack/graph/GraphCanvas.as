@@ -29,6 +29,7 @@ import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
 import mx.utils.Base64Encoder;
 import mx.utils.NameUtil;
+import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
 import net.vdombox.powerpack.Template;
@@ -76,8 +77,8 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		graph_alert_delete_text : "Are you sure want to delete seleted states?"
 	};
 
-	private static const CLIPBOARD_GRAPH_FORMAT : String = "GRAPH_FORMAT";
-
+	private static const CLIPBOARD_GRAPH_FORMAT : String = "GRAPH_FORMAT"; 
+	
 	// Define a static variable.
 	private static var _classConstructed : Boolean = classConstruct();
 
@@ -358,7 +359,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	//
 	//  Class methods
 	//
-	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------	
 
 	public function alertClear() : void
 	{
@@ -566,7 +567,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 				arrowXML.@source = arrow.fromObject.name;
 				arrowXML.@destination = arrow.toObject.name;
 				if ( arrow.label )
-					arrowXML.label.appendChild(arrow.label);
+				{
+					var strXML : String = "<label><![CDATA["+arrow.label+"]\]></label>"
+					arrowXML.appendChild(new XML(strXML));
+				}
 
 				graphXML.transitions.appendChild( arrowXML );
 			}
