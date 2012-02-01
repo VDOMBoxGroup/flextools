@@ -11,7 +11,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 	public class TextAnswer extends Answer
 	{
 		
-		private var textInput : TextInput;
+		public  var textInput : TextInput = new TextInput();
 		private var text1 : Text;
 		
 		public function TextAnswer(data:String )
@@ -30,7 +30,6 @@ package net.vdombox.powerpack.panel.popup.Answers
 		
 		private function createTextInput():void
 		{
-			textInput = new TextInput();
 			textInput.percentWidth = 100;
 			textInput.height = 27;
 			textInput.styleName = "answerInputTextStyle";

@@ -162,6 +162,7 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="PP_lib" level="application" />
   </component>
 </module>
 

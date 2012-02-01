@@ -11,8 +11,10 @@ package net.vdombox.powerpack.panel.popup.Answers
 		
 		public static const ANSWER_TYPE_TEXT			: String = "text";
 		public static const ANSWER_TYPE_TEXT_AREA		: String = "textArea";
+        public static const ANSWER_TYPE_TEXT_PASSWORD	: String = "password";
 		public static const ANSWER_TYPE_RADIO_BUTTONS	: String = "radioButtons";
 		public static const ANSWER_TYPE_BROWSE_FILE		: String = "browseFile";
+
 		public static const ANSWER_TYPE_COMBO_BOX		: String = "comboBox";
 		public static const ANSWER_TYPE_CHECK_BOX		: String = "checkBox";
 		
@@ -55,6 +57,13 @@ package net.vdombox.powerpack.panel.popup.Answers
 					
 					break;
 				}
+
+                case ANSWER_TYPE_TEXT_PASSWORD :
+                {
+                    answer = new PasswordAnswer (data);
+                    break;
+                }
+
 				default:
 				{
 					throw Error("Wrong type of answer");
