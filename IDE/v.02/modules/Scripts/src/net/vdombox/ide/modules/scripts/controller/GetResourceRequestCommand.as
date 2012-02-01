@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.scripts.controller
 {
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	
@@ -12,15 +12,15 @@ package net.vdombox.ide.modules.scripts.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var body : Object ;
-			var sessionProxy : SessionProxy;
+			var statesProxy : StatesProxy;
 			var resourceVO : ResourceVO;
 			
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
-			if ( !sessionProxy.selectedApplication )
+			if ( !statesProxy.selectedApplication )
 				return;
 			
-			resourceVO = new ResourceVO( sessionProxy.selectedApplication.id );
+			resourceVO = new ResourceVO( statesProxy.selectedApplication.id );
 			
 			body   = notification.getBody();
 			

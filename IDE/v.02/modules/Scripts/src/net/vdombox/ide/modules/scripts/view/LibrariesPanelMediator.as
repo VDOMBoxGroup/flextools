@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.scripts.view
 {
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.scripts.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		
 		private var isActive : Boolean;
 		
@@ -34,7 +34,7 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			isActive = false;
 			
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
 			addHandlers();
 		}
@@ -74,10 +74,10 @@ package net.vdombox.ide.modules.scripts.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
-						sendNotification( ApplicationFacade.GET_LIBRARIES, sessionProxy.selectedApplication );
+						sendNotification( ApplicationFacade.GET_LIBRARIES, statesProxy.selectedApplication );
 						
 						break;
 					}

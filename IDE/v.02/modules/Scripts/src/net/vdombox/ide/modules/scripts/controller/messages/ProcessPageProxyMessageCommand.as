@@ -12,8 +12,6 @@ package net.vdombox.ide.modules.scripts.controller.messages
 	{
 		override public function execute( notification : INotification ) : void
 		{
-//			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
 			var body : Object = message.getBody();
@@ -23,12 +21,6 @@ package net.vdombox.ide.modules.scripts.controller.messages
 
 			switch ( target )
 			{
-				case PPMPageTargetNames.OBJECTS:
-				{
-//					var pageAttributesVO : PageAttributesVO = body as PageAttributesVO;
-
-					break;
-				}
 					
 				case PPMPageTargetNames.STRUCTURE:
 				{

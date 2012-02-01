@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.scripts.controller
 {
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
@@ -14,9 +14,9 @@ package net.vdombox.ide.modules.scripts.controller
 		{
 			var libraryVO : LibraryVO = notification.getBody() as LibraryVO;
 			
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
-			var applicationVO : ApplicationVO = sessionProxy.selectedApplication;
+			var applicationVO : ApplicationVO = statesProxy.selectedApplication;
 			
 			if( libraryVO && applicationVO )
 				sendNotification( ApplicationFacade.DELETE_LIBRARY, { applicationVO : applicationVO, libraryVO : libraryVO } );

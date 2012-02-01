@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.scripts.view
 {
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
@@ -21,7 +21,7 @@ package net.vdombox.ide.modules.scripts.view
 			super( NAME, viewComponent );
 		}
 		
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		
 		private var isActive : Boolean;
 		
@@ -56,12 +56,12 @@ package net.vdombox.ide.modules.scripts.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 						globalScriptsPanel.actions = null;
 						_globalActions = new Object();
-						sendNotification( ApplicationFacade.GET_SERVER_ACTIONS, sessionProxy.selectedApplication );
+						sendNotification( ApplicationFacade.GET_SERVER_ACTIONS, statesProxy.selectedApplication );
 						
 						break;
 					}
@@ -123,7 +123,7 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			isActive = false;
 			
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
 			addHandlers();
 		}

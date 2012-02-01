@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -31,7 +31,7 @@ package net.vdombox.ide.modules.scripts.view
 		private var currentPageVO : PageVO;
 		private var currentObjectVO : ObjectVO;
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var isActive : Boolean;
 
@@ -47,7 +47,7 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			isActive = false;
 
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			addHandlers();
 		}
@@ -69,7 +69,7 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( TypesProxy.TYPES_GETTED );
 			interests.push( ApplicationFacade.STRUCTURE_GETTED );
 			
-			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
+			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 			
 			interests.push( ApplicationFacade.PAGES_GETTED );
 
@@ -88,7 +88,7 @@ package net.vdombox.ide.modules.scripts.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 						sendNotification( TypesProxy.GET_TYPES );
@@ -119,12 +119,6 @@ package net.vdombox.ide.modules.scripts.view
 					showPages( pages );
 					
 					selectCurrentPage();
-					
-					/*if ( containersPanel.selectedObjectID )
-						sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: sessionProxy.selectedPage } );
-					else if ( containersPanel.selectedPageID )
-						sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : sessionProxy.selectedApplication, pageID : dataTablesTree.selectedPageID } );
-					*/
 					break;
 				}
 
@@ -165,9 +159,9 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case SessionProxy.SELECTED_PAGE_CHANGED:
+				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
-					sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: sessionProxy.selectedPage } );
+					sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
 					
 					break;
 				}
@@ -186,26 +180,23 @@ package net.vdombox.ide.modules.scripts.view
 				typeID = objectXML.@typeID;
 				var rr : TypeVO = typeProxy.getTypeVObyID( typeID )
 				objectXML.@iconID = rr.structureIconID;
-				//				trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
 			}
 		}
 		
 		private function selectCurrentPage( needGetPageStructure : Boolean = true ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			
-			if ( !sessionProxy.selectedPage )
+			if ( !statesProxy.selectedPage )
 				return;
 			
-			if ( sessionProxy.selectedObject )
-				containersPanel.selectedPageID = sessionProxy.selectedObject.id;
+			if ( statesProxy.selectedObject )
+				containersPanel.selectedPageID = statesProxy.selectedObject.id;
 			else
-				containersPanel.selectedPageID = sessionProxy.selectedPage.id;
+				containersPanel.selectedPageID = statesProxy.selectedPage.id;
 			
 			if ( !needGetPageStructure )
 				return;
 			
-			sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: sessionProxy.selectedPage } );
+			sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
 		}
 		
 		private function showPages( pages : Array ) : void
@@ -266,22 +257,18 @@ package net.vdombox.ide.modules.scripts.view
 		
 		public function get currentObjectID() : String
 		{
-			return sessionProxy.selectedObject ? sessionProxy.selectedObject.id : null;
+			return statesProxy.selectedObject ? statesProxy.selectedObject.id : null;
 		}
 		
 		public function get currentPageID() : String
 		{
-			return sessionProxy.selectedPage ? sessionProxy.selectedPage.id : null;
+			return statesProxy.selectedPage ? statesProxy.selectedPage.id : null;
 		}
 
 		private function containerChangedHandler( event : ContainersPanelEvent ) : void
 		{
 			var newPage : XML = containersPanel.selectedPage;
 			var newObject : XML = containersPanel.selectedObject;
-			
-			trace("Page : " + newPage.@name);
-			if ( newObject )
-				trace("Object : " + newObject.@name);
 			
 			var selectedObject : ObjectVO;
 			
@@ -303,24 +290,24 @@ package net.vdombox.ide.modules.scripts.view
 			 
 			 if ( newObject && newObject.@id != currentObjectID &&  newObject.name() == "object" )
 			 {
-				selectedObject = new ObjectVO( sessionProxy.selectedPage, typeVO );
+				selectedObject = new ObjectVO( statesProxy.selectedPage, typeVO );
 				selectedObject.setID( newObject.@id );
-				sendNotification( SessionProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
+				sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 			 }
 			 else if ( newPage.@id != currentPageID )
 			 {
-				 sendNotification( SessionProxy.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
+				 sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
 				 if ( newObject && newObject.name() == "object" )
 				 {
-					 selectedObject = new ObjectVO( sessionProxy.selectedPage, typeVO );
+					 selectedObject = new ObjectVO( statesProxy.selectedPage, typeVO );
 					 selectedObject.setID( newObject.@id );
-					 sendNotification( SessionProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
+					 sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 				 }
 				
 			 }
 			 else if ( !newObject )
 			 {
-				 sendNotification( SessionProxy.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
+				 sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, pageVO );
 			 }
 			
 		}

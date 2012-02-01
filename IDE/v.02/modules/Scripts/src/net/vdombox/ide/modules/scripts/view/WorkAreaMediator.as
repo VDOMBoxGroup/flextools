@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.scripts.view
 	
 	import net.vdombox.ide.common.events.EditorEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.scripts.view
 		private var serverActionVO : ServerActionVO;
 		private var libraryVO : LibraryVO;
 		private var globalActionVO : GlobalActionVO;
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 		
 		public function WorkAreaMediator( viewComponent : Object )
 		{
@@ -42,7 +42,7 @@ package net.vdombox.ide.modules.scripts.view
 		override public function onRegister() : void
 		{
 			addHandlers();
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 		}
 		
 		override public function onRemove() : void
@@ -131,10 +131,10 @@ package net.vdombox.ide.modules.scripts.view
 				editor = workArea.getEditorByVO( objectVO ) as ScriptEditor;
 				if ( !editor )
 				{
-					if ( sessionProxy.selectedObject )
-						editor = workArea.openEditor( sessionProxy.selectedObject, objectVO ) as ScriptEditor;
+					if ( statesProxy.selectedObject )
+						editor = workArea.openEditor( statesProxy.selectedObject, objectVO ) as ScriptEditor;
 					else
-						editor = workArea.openEditor( sessionProxy.selectedPage, objectVO ) as ScriptEditor;
+						editor = workArea.openEditor( statesProxy.selectedPage, objectVO ) as ScriptEditor;
 					
 					if ( facade.retrieveMediator( ScriptEditorMediator.NAME + editor.editorID ) != null )
 						facade.removeMediator( ScriptEditorMediator.NAME + editor.editorID  );

@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.scripts.controller.messages
 {
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -21,14 +21,14 @@ package net.vdombox.ide.modules.scripts.controller.messages
 			var target : String = message.target;
 			var operation : String = message.operation;
 
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			switch ( target )
 			{
 				case PPMStatesTargetNames.ALL_STATES:
 				{
-					sessionProxy.setStates( body );
-					sendNotification( ApplicationFacade.ALL_STATES_GETTED, body );
+					statesProxy.setStates( body );
+					sendNotification( StatesProxy.ALL_STATES_GETTED, body );
 					
 					break;
 				}
@@ -36,7 +36,7 @@ package net.vdombox.ide.modules.scripts.controller.messages
 				case PPMStatesTargetNames.SELECTED_APPLICATION:
 				{
 					var selectedApplication : ApplicationVO = body as ApplicationVO;
-					sessionProxy.selectedApplication = selectedApplication;
+					statesProxy.selectedApplication = selectedApplication;
 
 					break;
 				}
@@ -44,7 +44,7 @@ package net.vdombox.ide.modules.scripts.controller.messages
 				case PPMStatesTargetNames.SELECTED_PAGE:
 				{
 					var selectedPageVO : PageVO = body as PageVO;
-					sessionProxy.selectedPage = selectedPageVO;
+					statesProxy.selectedPage = selectedPageVO;
 					
 					break;
 				}
@@ -52,7 +52,7 @@ package net.vdombox.ide.modules.scripts.controller.messages
 				case PPMStatesTargetNames.SELECTED_OBJECT:
 				{
 					var selectedObjectVO : ObjectVO = body as ObjectVO;
-					sessionProxy.selectedObject = selectedObjectVO;
+					statesProxy.selectedObject = selectedObjectVO;
 					
 					break;
 				}

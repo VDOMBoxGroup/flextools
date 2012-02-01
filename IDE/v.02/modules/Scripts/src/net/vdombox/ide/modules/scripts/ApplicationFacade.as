@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.scripts
 {
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.Scripts;
 	import net.vdombox.ide.modules.scripts.controller.BodyCreatedCommand;
@@ -21,7 +21,6 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessObjectProxyMessageCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessPageProxyMessageCommand;
-	import net.vdombox.ide.modules.scripts.controller.messages.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessTypesProxyMessageCommand;
 	import net.vdombox.ide.modules.scripts.controller.settings.GetSettingsCommand;
@@ -68,22 +67,12 @@ package net.vdombox.ide.modules.scripts
 		public static const SAVE_SETTINGS_TO_PROXY : String = "saveSettingsToProxy";
 		
 //		pipe messages
-		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
-		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
 		public static const PROCESS_OBJECT_PROXY_MESSAGE : String = "processObjectProxyMessage";
 		
-//		states
-		public static const GET_ALL_STATES : String = "getAllStates";
-		public static const ALL_STATES_GETTED : String = "allStatesGetted";
-		
-		public static const SET_ALL_STATES : String = "setAllStates";
-		public static const ALL_STATES_SETTED : String = "allStatesSetted";
-		
 //		other
 		public static const DELIMITER : String = "/";
-//		public static const STATES : String = "states";
 		
 		public static const BODY_CREATED : String = "bodyCreated";
 		public static const BODY_START : String = "bodyStart";
@@ -179,15 +168,14 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( SET_SETTINGS, SetSettingsCommand );
 			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 			
-			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
-			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
+			registerCommand( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
 			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
 			
-			registerCommand( SessionProxy.CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
-			registerCommand( SessionProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
+			registerCommand( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
+			registerCommand( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 			registerCommand( GET_SERVER_ACTIONS_REQUEST, GetServerActionsRequestCommand );
 			
 			registerCommand( OPEN_CREATE_ACTION_WINDOW, OpenCreateActionWindowCommand );

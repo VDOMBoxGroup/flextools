@@ -6,7 +6,6 @@ package net.vdombox.ide.modules.scripts.view
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.editors.PythonScriptEditor;
-	import net.vdombox.ide.common.model.SessionProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
@@ -29,11 +28,8 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var instanceName : String = NAME + viewComponent.editorID;
 			super( instanceName, viewComponent );
-			//scriptEditor.addEventListener( FlexEvent.SHOW, showHandler );
 			compliteSourceCode();
 		}
-
-		private var sessionProxy : SessionProxy;
 		
 		private var serverActionVO : ServerActionVO;
 		private var libraryVO : LibraryVO;
@@ -53,8 +49,6 @@ package net.vdombox.ide.modules.scripts.view
 
 		override public function onRegister() : void
 		{
-
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
 			addHandlers();
 		}

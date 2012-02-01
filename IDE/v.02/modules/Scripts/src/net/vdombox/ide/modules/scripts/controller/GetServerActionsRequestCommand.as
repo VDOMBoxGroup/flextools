@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.scripts.controller
 {
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -10,15 +10,15 @@ package net.vdombox.ide.modules.scripts.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
-			var currentContainer : Object = sessionProxy.selectedObject;
-			
-			if( !currentContainer )
-				currentContainer = sessionProxy.selectedPage;
+			var currentContainer : Object = statesProxy.selectedObject;
 			
 			if( !currentContainer )
-				currentContainer = sessionProxy.selectedApplication;
+				currentContainer = statesProxy.selectedPage;
+			
+			if( !currentContainer )
+				currentContainer = statesProxy.selectedApplication;
 			
 			if( !currentContainer )
 				return;

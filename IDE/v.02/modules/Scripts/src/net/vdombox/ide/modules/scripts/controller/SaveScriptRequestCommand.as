@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.scripts.controller
 	import mx.utils.ObjectUtil;
 	import mx.utils.UIDUtil;
 	
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
@@ -19,8 +19,8 @@ package net.vdombox.ide.modules.scripts.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var selectedApplicationVO : ApplicationVO = sessionProxy.selectedApplication;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			var selectedApplicationVO : ApplicationVO = statesProxy.selectedApplication;
 
 			var body : Object = notification.getBody();
 			

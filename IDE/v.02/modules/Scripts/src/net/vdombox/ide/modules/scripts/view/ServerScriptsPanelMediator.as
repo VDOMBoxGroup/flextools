@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.common.model.SessionProxy;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
@@ -21,7 +21,7 @@ package net.vdombox.ide.modules.scripts.view
 			super( NAME, viewComponent );
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var isActive : Boolean;
 
@@ -42,7 +42,7 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			isActive = false;
 
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			addHandlers();
 		}
@@ -61,8 +61,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( SessionProxy.SELECTED_PAGE_CHANGED );
-			interests.push( SessionProxy.SELECTED_OBJECT_CHANGED );
+			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
+			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
 			
 			interests.push( ApplicationFacade.PAGES_GETTED );
 
@@ -90,10 +90,10 @@ package net.vdombox.ide.modules.scripts.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
-						sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
+						sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
 
 						break;
 					}
@@ -108,11 +108,11 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case SessionProxy.SELECTED_PAGE_CHANGED:
+				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
 					
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
-					trace( "page - " + sessionProxy.selectedPage.name )
+					trace( "page - " + statesProxy.selectedPage.name )
 					
 					break;
 				}
@@ -126,7 +126,7 @@ package net.vdombox.ide.modules.scripts.view
 					
 					 
 
-				case SessionProxy.SELECTED_OBJECT_CHANGED:
+				case StatesProxy.SELECTED_OBJECT_CHANGED:
 				{
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
 
@@ -219,14 +219,14 @@ package net.vdombox.ide.modules.scripts.view
 				}
 			}
 			
-			if ( sessionProxy.selectedObject )
+			if ( statesProxy.selectedObject )
 			{
-				sendNotification( ApplicationFacade.SET_SERVER_ACTIONS, { objectVO: sessionProxy.selectedObject,
+				sendNotification( ApplicationFacade.SET_SERVER_ACTIONS, { objectVO: statesProxy.selectedObject,
 					serverActions: serverActions } );
 			}
-			else if ( sessionProxy.selectedPage )
+			else if ( statesProxy.selectedPage )
 			{
-				sendNotification( ApplicationFacade.SET_SERVER_ACTIONS, { pageVO: sessionProxy.selectedPage, serverActions: serverActions } );
+				sendNotification( ApplicationFacade.SET_SERVER_ACTIONS, { pageVO: statesProxy.selectedPage, serverActions: serverActions } );
 			}
 		}
 		
