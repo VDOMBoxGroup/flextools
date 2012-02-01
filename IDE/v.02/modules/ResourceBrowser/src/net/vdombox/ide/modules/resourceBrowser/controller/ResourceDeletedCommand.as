@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.resourceBrowser.controller
 {
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
+	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -14,10 +14,10 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 
 			if ( resourceVO )
 			{
-				var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+				var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 				
-				if( sessionProxy.selectedResource && sessionProxy.selectedResource.id == resourceVO.id )
-					sessionProxy.selectedResource = null;
+				if( statesProxy.selectedResource && statesProxy.selectedResource.id == resourceVO.id )
+					statesProxy.selectedResource = null;
 			}
 		}
 	}

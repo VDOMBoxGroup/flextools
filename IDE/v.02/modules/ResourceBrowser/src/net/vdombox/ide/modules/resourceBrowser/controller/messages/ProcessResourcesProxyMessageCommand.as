@@ -4,7 +4,6 @@ package net.vdombox.ide.modules.resourceBrowser.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
-	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -13,8 +12,6 @@ package net.vdombox.ide.modules.resourceBrowser.controller.messages
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
 			var place : String = message.proxy;

@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.resourceBrowser.controller
 {
-	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
+	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.model.SettingsProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 	{
 		override public function execute( note : INotification ) : void
 		{
-			facade.registerProxy( new SessionProxy() );
+			facade.registerProxy( new StatesProxy() );
 			facade.registerProxy( new SettingsProxy() );
 		}
 	}

@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.events.WorkAreaEvent;
-	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
+	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.PreviewArea;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.WorkArea;
 	
@@ -25,13 +25,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			return viewComponent as WorkArea;
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var isActive : Boolean;
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			isActive = false;
 
@@ -52,7 +52,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( ApplicationFacade.SELECTED_RESOURCE_CHANGED );
+			interests.push( StatesProxy.SELECTED_RESOURCE_CHANGED );
 			
 			interests.push( ApplicationFacade.RESOURCE_LOADED );
 
@@ -71,7 +71,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 
@@ -88,7 +88,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_RESOURCE_CHANGED:
+				case StatesProxy.SELECTED_RESOURCE_CHANGED:
 				{
 					workArea.resourceVO = body as ResourceVO;
 
@@ -130,7 +130,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		private function deleteResourceHandler( event : WorkAreaEvent ) : void
 		{
 			//sendNotification( ApplicationFacade.DELETE_RESOURCE_REQUEST );
-			sendNotification( ApplicationFacade.DELETE_RESOURCE, { applicationVO: sessionProxy.selectedApplication, resourceVO: workArea.resourceVO } );
+			sendNotification( ApplicationFacade.DELETE_RESOURCE, { applicationVO: statesProxy.selectedApplication, resourceVO: workArea.resourceVO } );
 		}
 		
 		private function loadResourceHandler( event : WorkAreaEvent ) : void
@@ -145,7 +145,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		
 		private function errorHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.WRITE_ERROR, { applicationVO: sessionProxy.selectedApplication, content: event.content } );
+			sendNotification( ApplicationFacade.WRITE_ERROR, { applicationVO: statesProxy.selectedApplication, content: event.content } );
 		}
 
 	}

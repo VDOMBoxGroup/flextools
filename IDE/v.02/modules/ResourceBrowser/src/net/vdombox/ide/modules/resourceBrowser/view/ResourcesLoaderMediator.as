@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderEvent;
-	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
+	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.ResourcesLoader;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -28,7 +28,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			return viewComponent as ResourcesLoader;
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var isActive : Boolean;
 
@@ -36,7 +36,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			isActive = false;
 
@@ -75,7 +75,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 
@@ -145,7 +145,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var resourceVO : ResourceVO;
 			
-			if( !sessionProxy.selectedApplication )
+			if( !statesProxy.selectedApplication )
 				return;
 			
 			if( resourcesLoader.resourcesArrayList.length > 0 )
@@ -173,7 +173,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			
 			var files : Array = event.files;
 			
-			if ( !sessionProxy.selectedApplication || !files || files.length == 0 )
+			if ( !statesProxy.selectedApplication || !files || files.length == 0 )
 				return;
 			
 			var uploadedFile : File;
@@ -185,7 +185,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				
 				if ( uploadedFile )
 				{
-					newResourceVO = new ResourceVO( sessionProxy.selectedApplication.id );
+					newResourceVO = new ResourceVO( statesProxy.selectedApplication.id );
 					
 					newResourceVO.name = uploadedFile.name;
 					newResourceVO.setPath( uploadedFile.nativePath );

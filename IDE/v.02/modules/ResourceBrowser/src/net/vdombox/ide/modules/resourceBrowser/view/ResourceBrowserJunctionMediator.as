@@ -20,6 +20,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
+	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.model.vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -58,8 +59,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
-			interests.push( ApplicationFacade.GET_ALL_STATES );
-			interests.push( ApplicationFacade.SET_ALL_STATES );
+			interests.push( StatesProxy.GET_ALL_STATES );
+			interests.push( StatesProxy.SET_ALL_STATES );
 
 			interests.push( ApplicationFacade.GET_RESOURCES );
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
@@ -154,7 +155,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.GET_ALL_STATES:
+				case StatesProxy.GET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
 
@@ -163,7 +164,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.SET_ALL_STATES:
+				case StatesProxy.SET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
 
@@ -376,20 +377,6 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 			switch ( place )
 			{
-				case PPMPlaceNames.SERVER:
-				{
-					sendNotification( ApplicationFacade.PROCESS_SERVER_PROXY_MESSAGE, message );
-					
-					break;
-				}
-
-				case PPMPlaceNames.TYPES:
-				{
-					sendNotification( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, message );
-					
-					break;
-				}
-
 				case PPMPlaceNames.RESOURCES:
 				{
 					sendNotification( ApplicationFacade.PROCESS_RESOURCES_PROXY_MESSAGE, message );
@@ -399,28 +386,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case PPMPlaceNames.STATES:
 				{
-					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
-					
-					break;
-				}
-
-				case PPMPlaceNames.APPLICATION:
-				{
-					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
-					
-					break;
-				}
-
-				case PPMPlaceNames.PAGE:
-				{
-					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );
-					
-					break;
-				}
-					
-				case PPMPlaceNames.OBJECT:
-				{
-					sendNotification( ApplicationFacade.PROCESS_OBJECT_PROXY_MESSAGE, message );
+					sendNotification( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, message );
 					
 					break;
 				}

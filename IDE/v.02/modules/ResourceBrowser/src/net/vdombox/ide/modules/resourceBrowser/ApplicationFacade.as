@@ -15,13 +15,9 @@ package net.vdombox.ide.modules.resourceBrowser
 	import net.vdombox.ide.modules.resourceBrowser.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.resourceBrowser.controller.StartupCommand;
 	import net.vdombox.ide.modules.resourceBrowser.controller.TearDownCommand;
-	import net.vdombox.ide.modules.resourceBrowser.controller.messages.ProcessApplicationProxyMessageCommand;
-	import net.vdombox.ide.modules.resourceBrowser.controller.messages.ProcessObjectProxyMessageCommand;
-	import net.vdombox.ide.modules.resourceBrowser.controller.messages.ProcessPageProxyMessageCommand;
 	import net.vdombox.ide.modules.resourceBrowser.controller.messages.ProcessResourcesProxyMessageCommand;
-	import net.vdombox.ide.modules.resourceBrowser.controller.messages.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.resourceBrowser.controller.messages.ProcessStatesProxyMessageCommand;
-	import net.vdombox.ide.modules.resourceBrowser.controller.messages.ProcessTypesProxyMessageCommand;
+	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -62,43 +58,8 @@ package net.vdombox.ide.modules.resourceBrowser
 		public static const SAVE_SETTINGS_TO_STORAGE : String = "saveSettingsToStorage";
 		public static const SAVE_SETTINGS_TO_PROXY : String = "saveSettingsToProxy";
 
-		//		pipe messages
-		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
-		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
+//		pipe messages
 		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
-		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
-		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
-		public static const PROCESS_OBJECT_PROXY_MESSAGE : String = "processObjectProxyMessage";
-
-		//		states
-		public static const GET_ALL_STATES : String = "getAllStates";
-		public static const ALL_STATES_GETTED : String = "allStatesGetted";
-
-		public static const SET_ALL_STATES : String = "setAllStates";
-		public static const ALL_STATES_SETTED : String = "allStatesSetted";
-
-		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
-		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";
-		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
-
-		public static const GET_SELECTED_PAGE : String = "getSelectedPage";
-		public static const SELECTED_PAGE_GETTED : String = "selectedPageGetted";
-		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
-
-		public static const CHANGE_SELECTED_PAGE_REQUEST : String = "changeSelectedPageRequest";
-		public static const SET_SELECTED_PAGE : String = "setSelectedPage";
-		public static const SELECTED_PAGE_SETTED : String = "selectedPageSetted";
-
-		public static const GET_SELECTED_OBJECT : String = "getSelectedObject";
-		public static const SELECTED_OBJECT_GETTED : String = "selectedObjectGetted";
-		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
-
-		public static const CHANGE_SELECTED_OBJECT_REQUEST : String = "changeSelectedObjectRequest";
-		public static const SET_SELECTED_OBJECT : String = "setSelectedObject";
-		public static const SELECTED_OBJECT_SETTED : String = "selectedObjectSetted";
-		
-		public static const CHANGE_SELECTED_RESOURCE_REQUEST : String = "changeSelectedResourceRequest";
-		public static const SELECTED_RESOURCE_CHANGED : String = "selectedResourceChanged";
 
 //		resources
 		public static const GET_RESOURCES : String = "getResources";
@@ -114,7 +75,7 @@ package net.vdombox.ide.modules.resourceBrowser
 		public static const DELETE_RESOURCE : String = "deleteResource";
 		public static const RESOURCE_DELETED : String = "resourceDeleted";
 		
-		//		icon
+//		icon
 		public static const GET_ICON	: String = "getIcon";
 		public static const ICON_GETTED : String = "iconGetted";
 
@@ -160,15 +121,10 @@ package net.vdombox.ide.modules.resourceBrowser
 			registerCommand( SET_SETTINGS, SetSettingsCommand );
 			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 
-			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
-			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
+			registerCommand( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
 			registerCommand( PROCESS_RESOURCES_PROXY_MESSAGE, ProcessResourcesProxyMessageCommand );
-			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
-			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
-			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
-			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 
-			registerCommand( CHANGE_SELECTED_RESOURCE_REQUEST, ChangeSelectedObjectRequestCommand );
+			registerCommand( StatesProxy.CHANGE_SELECTED_RESOURCE_REQUEST, ChangeSelectedObjectRequestCommand );
 			registerCommand( DELETE_RESOURCE_REQUEST, DeleteResourceRequestCommand )
 			
 			registerCommand( RESOURCE_DELETED, ResourceDeletedCommand );

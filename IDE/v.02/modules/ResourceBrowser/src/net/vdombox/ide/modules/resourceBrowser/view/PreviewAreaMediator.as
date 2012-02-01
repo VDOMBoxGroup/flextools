@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
-	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
+	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.PreviewArea;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -23,13 +23,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			return viewComponent as PreviewArea;
 		}
 
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var isActive : Boolean;
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			isActive = false;
 
@@ -50,7 +50,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( ApplicationFacade.SELECTED_RESOURCE_CHANGED );
+			interests.push( StatesProxy.SELECTED_RESOURCE_CHANGED );
 			
 			interests.push( ApplicationFacade.RESOURCE_LOADED );
 			interests.push( ApplicationFacade.RESOURCE_DELETED );
@@ -71,7 +71,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 
@@ -88,9 +88,9 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_RESOURCE_CHANGED:
+				case StatesProxy.SELECTED_RESOURCE_CHANGED:
 				{
-					previewArea.resourceVO = sessionProxy.selectedResource;
+					previewArea.resourceVO = statesProxy.selectedResource;
 
 					break;
 				}

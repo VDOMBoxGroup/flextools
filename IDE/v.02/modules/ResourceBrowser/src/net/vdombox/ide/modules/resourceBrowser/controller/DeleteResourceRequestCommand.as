@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 {
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
-	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
+	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -11,12 +11,12 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
-			var resourceVO : ResourceVO = sessionProxy.selectedResource;
+			var resourceVO : ResourceVO = statesProxy.selectedResource;
 
-			if ( resourceVO && sessionProxy.selectedApplication )
-				sendNotification( ApplicationFacade.DELETE_RESOURCE, { applicationVO: sessionProxy.selectedApplication, resourceVO: resourceVO } );
+			if ( resourceVO && statesProxy.selectedApplication )
+				sendNotification( ApplicationFacade.DELETE_RESOURCE, { applicationVO: statesProxy.selectedApplication, resourceVO: resourceVO } );
 		}
 	}
 }

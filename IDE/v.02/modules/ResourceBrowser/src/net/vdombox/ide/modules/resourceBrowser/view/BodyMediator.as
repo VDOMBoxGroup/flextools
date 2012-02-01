@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
+	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -54,7 +55,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.ALL_STATES_GETTED );
+			interests.push( StatesProxy.ALL_STATES_GETTED );
 			
 			interests.push( ApplicationFacade.PIPES_READY );
 			interests.push( ApplicationFacade.MODULE_DESELECTED );
@@ -70,12 +71,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case ApplicationFacade.PIPES_READY:
 				{
-					sendNotification( ApplicationFacade.GET_ALL_STATES );
+					sendNotification( StatesProxy.GET_ALL_STATES );
 					
 					break;
 				}
 					
-				case ApplicationFacade.ALL_STATES_GETTED:
+				case StatesProxy.ALL_STATES_GETTED:
 				{
 					isReady = true;
 					

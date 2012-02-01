@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.events.ResourcesListItemRendererEvent;
-	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
+	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.ResourcesList;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.ResourcesListItemRenderer;
 	
@@ -39,7 +39,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			return resourcesList.resources as List;
 		}
 		
-		private var sessionProxy : SessionProxy;
+		private var statesProxy : StatesProxy;
 
 		private var isActive : Boolean;
 		
@@ -47,7 +47,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			isActive = false;
 
@@ -90,9 +90,9 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case ApplicationFacade.BODY_START:
 				{
-					if ( sessionProxy.selectedApplication )
+					if ( statesProxy.selectedApplication )
 					{
-						sendNotification( ApplicationFacade.GET_RESOURCES, sessionProxy.selectedApplication );
+						sendNotification( ApplicationFacade.GET_RESOURCES, statesProxy.selectedApplication );
 
 						isActive = true;
 
