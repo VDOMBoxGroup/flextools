@@ -24,7 +24,6 @@
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.BoldSearchItemRenderer;
-			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.TextInputItemRenderers;
 			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;
 			
 			private var _objectVO : ObjectVO;

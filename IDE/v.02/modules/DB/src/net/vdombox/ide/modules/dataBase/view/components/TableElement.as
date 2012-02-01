@@ -11,13 +11,13 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
 	import net.vdombox.ide.modules.dataBase.events.TableElementEvent;
 	import net.vdombox.ide.modules.dataBase.view.components.windows.RenameTableWindow;
 	import net.vdombox.ide.modules.dataBase.view.skins.TableElementSkin;
 	import net.vdombox.utils.WindowManager;
-	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
 	
 	import spark.components.Label;
 	import spark.components.SkinnableContainer;
@@ -260,10 +260,16 @@ package net.vdombox.ide.modules.dataBase.view.components
 		public function setTableHeaders( tableStructureXML : XML ):void 
 		{
 			attributes.removeAllElements();
+			var i : int = 0;
 			for each (var xmlHeader:XML in tableStructureXML.column) 
 			{
 				var labelAttribute : ColumnElement = new ColumnElement();
 				labelAttribute.columnXML = xmlHeader;
+				if ( ++i == 2 )
+				{
+					i = 0;
+					labelAttribute.fon = true;
+				}
 				attributes.addElement( labelAttribute );
 					
 			}

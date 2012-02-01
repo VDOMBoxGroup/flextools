@@ -70,29 +70,49 @@
 		<s:State name="normal" />
 	</s:states>
 	
+	<s:RectangularDropShadow id="dropShadow"
+							 bottom="0" color="#B3B3B3" left="0" right="0"
+							 top="0"
+							 alpha="1" angle="45" blRadius="4" blurX="12"
+							 blurY="12" brRadius="4" distance="0" tlRadius="4"
+							 trRadius="4"/>
+	
 	<s:Rect bottom="0" left="0" right="0" top="0">
 		<s:fill>
-			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="#FFFFFF" />
-				<s:GradientEntry color="#E7E7E7" />
-			</s:LinearGradient>
+			<s:SolidColor color="#FFFFFF" />
 		</s:fill>
 	</s:Rect>
 	
-	<s:VGroup width="100%" height="100%" paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
-		<s:Label id="nameTable" text="{ hostComponent.objectVO.name }" textAlign="center" verticalCenter="0" left="5" right="5" width="100%"
-					 maxDisplayedLines="1"
-					 doubleClick="textinput1_doubleClickHandler(event)" doubleClickEnabled="true"/>
+	<s:VGroup width="100%" height="100%" paddingTop="10">
 		
-		<components1:VDOMScroller width="100%" height="100%">
+		<s:Label id="nameTable" text="{ hostComponent.objectVO.name }" verticalCenter="0" paddingLeft="10" paddingRight="10" width="100%"
+				maxDisplayedLines="1" fontWeight="bold" fontSize="12"
+				doubleClick="textinput1_doubleClickHandler(event)" doubleClickEnabled="true"/>
+		
+		<s:Group width="100%" height="100%">
+			<s:Rect  bottom="0" left="0" right="0" top="0">
+				<s:fill>
+					<s:BitmapFill source = "@Embed('assets/backgroundtable.png')" smooth="true" fillMode="repeat"/>
+				</s:fill>
+			</s:Rect>
 			
-			<s:VGroup id="attributes" width="100%" height="100%" gap="1"/>
+			<components1:VDOMScroller width="100%" height="100%">
+				
+				<s:VGroup id="attributes" width="100%" height="100%" gap="0"/>
+				
+			</components1:VDOMScroller>
 			
-		</components1:VDOMScroller>
+			<s:Rect  top="0" left="0" right="0" height="6">
+				<s:fill>
+					<s:BitmapFill source = "@Embed('assets/shadowtable.png')" smooth="true" fillMode="repeat"/>
+				</s:fill>
+			</s:Rect>
+		</s:Group>
+		
 		
 	</s:VGroup>
 	
 	<mx:Image id="angle" bottom="0" right="0" width="8" height="8"
-			  source="@Embed('assets/angle.png')" mouseDown="angle_mouseDownHandler(event)" />
+			  source="@Embed('assets/cornertable.png')" mouseDown="angle_mouseDownHandler(event)" />
 	
 </s:SparkSkin>
