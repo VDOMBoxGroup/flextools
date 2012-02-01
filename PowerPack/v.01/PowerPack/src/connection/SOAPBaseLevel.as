@@ -139,8 +139,27 @@ public class SOAPBaseLevel extends EventDispatcher
 			case 'remote_call':
 				remoteCall( args );
 				break;
+			
+			case 'list_applications':
+				listApplications( args );
+				break;
+			
+			
+			default:
+			{
+				_result = "['Error' 'function: " + functionName +" - does not exist ']";
+				
+				_resultType = ERROR;
+				
+//				Application.application.callLater(dispathRusult);
+				
+				break;
+			}
 
 		}
+		
+		
+			
 	}
 
 	// set_application_events //
@@ -354,5 +373,20 @@ trace(wsdl)
 		
 		soap.remote_call(   params[0], params[1], params[2], params[3],  params[4]  );
 	}
+	
+	private function listApplications( params  : Array ) : void
+	{
+		soap.list_applications.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.list_applications.addEventListener( FaultEvent.FAULT, soapError );
+		
+		soap.list_applications();
+	}
+	
+	
+	private function dispathRusult():void
+	{
+		dispatchEvent( new Event( RESULT_RECEIVED ) );
+	}
+		
 }
 }

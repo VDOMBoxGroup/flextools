@@ -881,9 +881,9 @@
 						if ( obj.search( /^__tmp_.*$/ ) < 0 )
 						{
 							fullValue  = context[obj];
-							value = (  fullValue is XML ) ? "[Object XML]" :  fullValue;
+							value = (  context[obj] is XML ) ? "[Object XML]" :  fullValue;
 							
-							arr.push( { Name : "$" + obj, Value : fullValue, FullValue : fullValue } );
+							arr.push( { Name : "$" + obj, Value : value, FullValue : fullValue } );
 						}
 					}
 				}
