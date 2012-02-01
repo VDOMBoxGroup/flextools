@@ -5,6 +5,7 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
+import mx.core.Application;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
@@ -151,7 +152,7 @@ public class SOAPBaseLevel extends EventDispatcher
 				
 				_resultType = ERROR;
 				
-//				Application.application.callLater(dispathRusult);
+				Application.application.callLater(dispathRusult);
 				
 				break;
 			}
