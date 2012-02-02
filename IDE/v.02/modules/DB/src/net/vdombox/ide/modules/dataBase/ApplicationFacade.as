@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.dataBase
 {
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.DataBase;
 	import net.vdombox.ide.modules.dataBase.controller.BodyCreatedCommand;
@@ -8,7 +9,6 @@ package net.vdombox.ide.modules.dataBase
 	import net.vdombox.ide.modules.dataBase.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.dataBase.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.dataBase.controller.CreateToolsetCommand;
-	import net.vdombox.ide.modules.dataBase.controller.DeleteResourceRequestCommand;
 	import net.vdombox.ide.modules.dataBase.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.dataBase.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.dataBase.controller.InitializeSettingsCommand;
@@ -64,39 +64,12 @@ package net.vdombox.ide.modules.dataBase
 
 		//		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
-		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
 		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
 		public static const PROCESS_OBJECT_PROXY_MESSAGE : String = "processObjectProxyMessage";
 
-		//		states
-		public static const GET_ALL_STATES : String = "getAllStates";
-		public static const ALL_STATES_GETTED : String = "allStatesGetted";
-
-		public static const SET_ALL_STATES : String = "setAllStates";
-		public static const ALL_STATES_SETTED : String = "allStatesSetted";
-
-		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
-		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";
-		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
-
-		public static const GET_SELECTED_PAGE : String = "getSelectedPage";
-		public static const SELECTED_PAGE_GETTED : String = "selectedPageGetted";
-		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
-
-		public static const CHANGE_SELECTED_PAGE_REQUEST : String = "changeSelectedPageRequest";
-		public static const SET_SELECTED_PAGE : String = "setSelectedPage";
-		public static const SELECTED_PAGE_SETTED : String = "selectedPageSetted";
-
-		public static const GET_SELECTED_OBJECT : String = "getSelectedObject";
-		public static const SELECTED_OBJECT_GETTED : String = "selectedObjectGetted";
-		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
-
-		public static const CHANGE_SELECTED_OBJECT_REQUEST : String = "changeSelectedObjectRequest";
-		public static const SET_SELECTED_OBJECT : String = "setSelectedObject";
-		public static const SELECTED_OBJECT_SETTED : String = "selectedObjectSetted";
-		
+		//		states		
 		public static const CHANGE_SELECTED_RESOURCE_REQUEST : String = "changeSelectedResourceRequest";
 		public static const SELECTED_RESOURCE_CHANGED : String = "selectedResourceChanged";
 
@@ -200,13 +173,13 @@ package net.vdombox.ide.modules.dataBase
 			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 
 			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
-			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
+			registerCommand( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
 			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 
-			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
+			registerCommand( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 			
 			
 			registerCommand( BODY_CREATED, BodyCreatedCommand );

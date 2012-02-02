@@ -19,6 +19,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.common.controller.names.PipeNames;
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -64,15 +65,13 @@ package net.vdombox.ide.modules.dataBase.view
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
-			interests.push( ApplicationFacade.GET_ALL_STATES );
-			interests.push( ApplicationFacade.SET_ALL_STATES );
+			interests.push( StatesProxy.GET_ALL_STATES );
+			interests.push( StatesProxy.SET_ALL_STATES );
 			interests.push( ApplicationFacade.GET_DATA_BASES );
 			interests.push( ApplicationFacade.GET_DATA_BASE_TABLES );
 			
 			interests.push( ApplicationFacade.GET_TABLE );
 			interests.push( ApplicationFacade.REMOTE_CALL_REQUEST );
-			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
-			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
 			
 			interests.push( ApplicationFacade.GET_OBJECTS );
 			
@@ -178,7 +177,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 
-				case ApplicationFacade.GET_ALL_STATES:
+				case StatesProxy.GET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
 
@@ -187,7 +186,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 
-				case ApplicationFacade.SET_ALL_STATES:
+				case StatesProxy.SET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
 
@@ -252,24 +251,6 @@ package net.vdombox.ide.modules.dataBase.view
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.REMOTE_CALL, body );
 					else if ( body.hasOwnProperty( "applicationVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.REMOTE_CALL, body );
-					
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
-					break;
-				}
-					
-				case ApplicationFacade.SET_SELECTED_PAGE:
-				{
-					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
-					
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
-					break;
-				}
-					
-				case ApplicationFacade.SET_SELECTED_OBJECT:
-				{
-					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -525,7 +506,7 @@ package net.vdombox.ide.modules.dataBase.view
 
 				case PPMPlaceNames.STATES:
 				{
-					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
+					sendNotification( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, message );
 					
 					break;
 				}

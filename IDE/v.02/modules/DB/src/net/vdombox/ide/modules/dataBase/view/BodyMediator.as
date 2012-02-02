@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
@@ -59,7 +60,7 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.ALL_STATES_GETTED );
+			interests.push( StatesProxy.ALL_STATES_GETTED );
 			interests.push( TypesProxy.TYPES_CHANGED );
 			
 			interests.push( ApplicationFacade.PIPES_READY );
@@ -76,13 +77,13 @@ package net.vdombox.ide.modules.dataBase.view
 			{
 				case ApplicationFacade.PIPES_READY:
 				{
-					sendNotification( ApplicationFacade.GET_ALL_STATES );
+					sendNotification( StatesProxy.GET_ALL_STATES );
 					sendNotification( TypesProxy.GET_TYPES );
 					
 					break;
 				}
 					
-				case ApplicationFacade.ALL_STATES_GETTED:
+				case StatesProxy.ALL_STATES_GETTED:
 				{
 					isAllStatesGetted = true;
 					

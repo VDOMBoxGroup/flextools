@@ -11,7 +11,6 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
-	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.BaseVisualEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
 	
@@ -25,7 +24,6 @@ package net.vdombox.ide.modules.dataBase.view
 		private var notRegisterDataEditorMediator : Boolean = true;
 		private var notRegisterBaseQueryMediator : Boolean = true;
 		
-		private var sessionProxy : SessionProxy;
 		private var typesProxy : TypesProxy;
 		
 		
@@ -42,7 +40,6 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		override public function onRegister() : void
 		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 			
 			if ( dataTable.objectVO is ObjectVO )
@@ -107,8 +104,8 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function newBaseHandler( event : DataTablesEvents ) : void
 		{
-			sendNotification( ApplicationFacade.CREATE_PAGE,
-				{ applicationVO: sessionProxy.selectedApplication, typeVO: dataTable.objectVO.typeVO } );		
+			/*sendNotification( ApplicationFacade.CREATE_PAGE,
+				{ applicationVO: sessionProxy.selectedApplication, typeVO: dataTable.objectVO.typeVO } );		*/
 		}
 		
 		private function newTableHandler( event : DataTablesEvents ) : void
@@ -124,7 +121,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function goToBaseHandler( event : DataTablesEvents ) : void
 		{		
-			sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : sessionProxy.selectedApplication, pageID : dataTable.objectVO.pageVO.id } );
+			sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : dataTable.objectVO.pageVO.applicationVO, pageID : dataTable.objectVO.pageVO.id } );
 		}
 	}
 }

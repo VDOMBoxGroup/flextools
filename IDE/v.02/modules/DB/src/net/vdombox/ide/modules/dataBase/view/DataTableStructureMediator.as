@@ -9,7 +9,6 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
-	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTableStructure;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -21,7 +20,6 @@ package net.vdombox.ide.modules.dataBase.view
 		public static const NAME : String = "DataTableStructureMediator";
 		
 		private var dispatcher : EventDispatcher;
-		private var sessionProxy : SessionProxy;
 		
 		public function DataTableStructureMediator( viewComponent : Object = null )
 		{
@@ -37,7 +35,6 @@ package net.vdombox.ide.modules.dataBase.view
 		override public function onRegister() : void
 		{
 			dispatcher = new EventDispatcher();
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			// FIXME: грубый хак. убрать.
 			dataTableStructure.externalManager = this as IExternalManager;
@@ -51,7 +48,6 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		override public function onRemove() : void
 		{
-			sessionProxy = null;
 			dispatcher = null;
 			
 			dataTableStructure.removeEventListener( DataTablesEvents.UPDATE_STRUCTURE,  sendCommit );
@@ -116,7 +112,7 @@ package net.vdombox.ide.modules.dataBase.view
 		// FIXME: нада ничего не возвращать.
 		public function remoteMethodCall( functionName : String, value : String ) : String
 		{
-			var objectVO : ObjectVO = sessionProxy.selectedTable;
+			var objectVO : ObjectVO = dataTableStructure.objectVO as ObjectVO;
 			
 			if ( objectVO )
 				sendNotification( ApplicationFacade.REMOTE_CALL_REQUEST, { objectVO: objectVO, functionName: functionName, value: value } );

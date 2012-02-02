@@ -9,7 +9,6 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
-	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTableQuery;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -22,7 +21,6 @@ package net.vdombox.ide.modules.dataBase.view
 		public static const NAME : String = "DataTableQueryMediator";
 		
 		private var dispatcher : EventDispatcher;
-		private var sessionProxy : SessionProxy;
 		
 		public function DataTableQueryMediator( viewComponent : Object = null )
 		{
@@ -38,7 +36,6 @@ package net.vdombox.ide.modules.dataBase.view
 		override public function onRegister() : void
 		{
 			dispatcher = new EventDispatcher();
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			dataTableQuery.externalManager = this as IExternalManager;
 		}
 		
@@ -49,7 +46,6 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		override public function onRemove() : void
 		{
-			sessionProxy = null;
 			dispatcher = null;
 		}
 		
@@ -96,7 +92,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		public function remoteMethodCall( functionName : String, value : String ) : String
 		{
-			var pageVO : PageVO = sessionProxy.selectedBase;
+			var pageVO : PageVO = dataTableQuery.objectVO as PageVO;
 			
 			if ( pageVO )
 				sendNotification( ApplicationFacade.REMOTE_CALL_REQUEST, { pageVO: pageVO, functionName: functionName, value: value } );

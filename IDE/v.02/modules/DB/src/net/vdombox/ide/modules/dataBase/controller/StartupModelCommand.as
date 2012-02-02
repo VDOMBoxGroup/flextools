@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.dataBase.controller
 {
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.modules.dataBase.model.SessionProxy;
 	import net.vdombox.ide.modules.dataBase.model.SettingsProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.dataBase.controller
 	{
 		override public function execute( note : INotification ) : void
 		{
-			facade.registerProxy( new SessionProxy() );
+			facade.registerProxy( new StatesProxy() );
 			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new TypesProxy() );
 		}

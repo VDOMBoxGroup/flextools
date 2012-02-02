@@ -2,11 +2,12 @@ package net.vdombox.ide.modules.dataBase.view
 {
 	import flash.events.Event;
 	
+	import net.vdombox.ide.common.events.EditorEvent;
+	import net.vdombox.ide.common.events.WorkAreaEvent;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
-	import net.vdombox.ide.common.events.EditorEvent;
-	import net.vdombox.ide.common.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTableEditor;
@@ -52,7 +53,7 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			interests.push( ApplicationFacade.PAGE_GETTED);
 			interests.push( ApplicationFacade.TABLE_GETTED);
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED);
+			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED);
 			
 			interests.push( ApplicationFacade.OBJECT_DELETED);
 			
@@ -124,7 +125,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
+				case StatesProxy.SELECTED_APPLICATION_CHANGED:
 				{
 					workArea.closeAllEditors();
 					
@@ -168,7 +169,7 @@ package net.vdombox.ide.modules.dataBase.view
 			{
 				
 				if ( selectedEditor.objectVO )
-					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.objectVO );
+					sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.objectVO );
 			}
 			
 		}
