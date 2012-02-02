@@ -209,7 +209,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			// Alexey Andreev: delete because do not used in outher modules 
 //			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 			
-			NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
+			workArea.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
 
 			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
 
@@ -280,6 +280,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function keyDownHandler( event : KeyboardEvent ) : void
 		{
+			if ( !isActive )
+				return;
+			
 			if ( event.ctrlKey && event.keyCode == Keyboard.Z )
 				sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
 			else if ( event.ctrlKey && event.keyCode == Keyboard.Y )
