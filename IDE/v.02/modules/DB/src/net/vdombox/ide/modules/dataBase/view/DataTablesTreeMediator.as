@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.events.ResourceVOEvent;
-	import net.vdombox.ide.common.model.StatesProxy;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
@@ -140,7 +140,7 @@ package net.vdombox.ide.modules.dataBase.view
 					
 					sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, statesProxy.selectedPage );
 					
-					if ( statesProxy.selectedPage && !statesProxy.selectedObject )
+					if ( !statesProxy.selectedPage )
 					{
 						for each ( var pageVO : PageVO in _dataBases )
 						{
@@ -149,15 +149,16 @@ package net.vdombox.ide.modules.dataBase.view
 							sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, pageVO );
 							break;
 						}
-						return;
 					}
-					
-					if ( statesProxy.selectedObject && _dataBases[ statesProxy.selectedPage.id ] )
+					else if ( statesProxy.selectedObject && _dataBases[ statesProxy.selectedPage.id ] )
+					{
 						sendNotification( ApplicationFacade.GET_TABLE, { pageVO: _dataBases[ statesProxy.selectedPage.id ], objectID: statesProxy.selectedObject.id } );
-					else if ( dataTablesTree.selectedPageID )
-						sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : statesProxy.selectedApplication, pageID : dataTablesTree.selectedPageID } );
-					
-					
+					}
+					else
+					{
+						sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : statesProxy.selectedApplication, pageID : statesProxy.selectedPage.id } );
+						sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, statesProxy.selectedPage );
+					}
 					break;
 				}
 					

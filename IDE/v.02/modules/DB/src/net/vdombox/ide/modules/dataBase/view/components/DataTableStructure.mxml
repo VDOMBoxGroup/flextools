@@ -3,9 +3,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
 		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
-		 xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*"
-		 creationComplete="group1_creationCompleteHandler(event)"
-		 removedFromStage="group1_removedFromStageHandler(event)">
+		 xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.CloseEvent;
@@ -289,33 +287,6 @@
 				addBtnHandler();
 			}
 			
-			protected function group1_creationCompleteHandler(event:FlexEvent):void
-			{
-				addEventListener( KeyboardEvent.KEY_DOWN, kaysHandler, true, 0 , true );
-				addEventListener( KeyboardEvent.KEY_DOWN, kaysHandler, false, 0 , true );
-			}
-			
-			protected function group1_removedFromStageHandler(event:Event):void
-			{
-				removeEventListener( KeyboardEvent.KEY_DOWN, kaysHandler, true );
-				removeEventListener( KeyboardEvent.KEY_DOWN, kaysHandler );
-			}
-			
-			private function kaysHandler( event : KeyboardEvent ) : void
-			{
-				if ( event.ctrlKey )
-				{
-					if ( event.keyCode == Keyboard.S )
-						applyBtnClickHandler();
-					else if ( event.keyCode == Keyboard.D )
-						removeBtnHandler();
-					else if ( event.keyCode == Keyboard.N )
-						addBtnHandler();
-				}
-				
-				event.stopImmediatePropagation();
-			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -336,7 +307,7 @@
 						alpha.Result="1" alpha.Progress="0.4" doubleClickEnabled="true" doubleClick="dataTable_doubleClickHandler(event)">
 				<mx:columns>
 					<mx:DataGridColumn dataField="name" headerText="Name"/>
-				
+					
 					<mx:DataGridColumn dataField="type" headerText="Type" editable="false" width="120">
 						<mx:itemRenderer>
 							<fx:Component>

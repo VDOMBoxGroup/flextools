@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import net.vdombox.ide.common.events.ExternalManagerEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
-	import net.vdombox.ide.common.model.StatesProxy;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

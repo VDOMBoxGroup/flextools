@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.dataBase.controller
 {
-	import net.vdombox.ide.common.model.StatesProxy;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	

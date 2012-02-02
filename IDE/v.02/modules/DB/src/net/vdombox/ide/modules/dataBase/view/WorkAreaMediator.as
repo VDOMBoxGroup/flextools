@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import net.vdombox.ide.common.events.EditorEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
-	import net.vdombox.ide.common.model.StatesProxy;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;

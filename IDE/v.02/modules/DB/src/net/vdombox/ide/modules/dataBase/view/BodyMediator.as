@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.common.model.StatesProxy;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;

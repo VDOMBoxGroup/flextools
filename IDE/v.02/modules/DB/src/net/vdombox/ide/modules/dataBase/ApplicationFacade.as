@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.dataBase
 {
-	import net.vdombox.ide.common.model.StatesProxy;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.DataBase;
 	import net.vdombox.ide.modules.dataBase.controller.BodyCreatedCommand;
