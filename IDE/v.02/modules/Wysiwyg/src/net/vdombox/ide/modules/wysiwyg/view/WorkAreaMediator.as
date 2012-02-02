@@ -271,7 +271,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
 			
 			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true );
-			//workArea.removeEventListener( RendererEvent.REMOVED, renderer_removedHandler, true );
 		}
 
 		private function removedFromStageHandler( event : Event ) : void
