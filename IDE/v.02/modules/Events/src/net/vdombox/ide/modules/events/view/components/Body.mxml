@@ -12,7 +12,7 @@
 
 	
 	
-	<mx1:VDividedBox height="100%" width="228" minWidth="200" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
+	<mx1:VDividedBox height="100%" width="228" minWidth="228" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
 
 		<components:ObjectsTreePanel id="objectsTreePanel"
 									 width="100%" height="40%"

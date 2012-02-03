@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.events.controller
 {
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.modules.events.model.SettingsProxy;
+	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

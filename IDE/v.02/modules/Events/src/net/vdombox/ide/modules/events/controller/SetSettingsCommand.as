@@ -1,8 +1,9 @@
 package net.vdombox.ide.modules.events.controller
 {
+	import net.vdombox.ide.common.model.SettingsProxy;
+	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
-	import net.vdombox.ide.modules.events.model.vo.SettingsVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -13,8 +14,8 @@ package net.vdombox.ide.modules.events.controller
 			var settingsVO : SettingsVO = notification.getBody() as SettingsVO;
 			var settings : Object = settingsVO.toObject();
 
-			sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_PROXY, settingsVO );
-			sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE, settings );
+			sendNotification( SettingsProxy.SAVE_SETTINGS_TO_PROXY, settingsVO );
+			sendNotification( SettingsProxy.SAVE_SETTINGS_TO_STORAGE, settings );
 		}
 	}
 }

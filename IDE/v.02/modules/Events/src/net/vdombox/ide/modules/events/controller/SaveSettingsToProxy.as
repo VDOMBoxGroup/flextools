@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.events.controller
 {
-	import net.vdombox.ide.modules.events.model.SettingsProxy;
-	import net.vdombox.ide.modules.events.model.vo.SettingsVO;
+	import net.vdombox.ide.common.model.SettingsProxy;
+	import net.vdombox.ide.common.model._vo.SettingsVO;
 
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
