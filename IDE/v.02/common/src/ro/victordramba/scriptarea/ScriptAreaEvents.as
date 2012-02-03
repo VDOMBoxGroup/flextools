@@ -75,10 +75,10 @@ package ro.victordramba.scriptarea
 				_setSelection( findWordBound( pos, true ), findWordBound( pos, false ), true );
 			} );
 
-			addEventListener( Event.CUT, onCut );
+			/*addEventListener( Event.CUT, onCut );
 			addEventListener( Event.COPY, onCopy );
 			addEventListener( Event.PASTE, onPaste );
-			addEventListener( Event.SELECT_ALL, onSelectAll );
+			addEventListener( Event.SELECT_ALL, onSelectAll );*/
 
 			addEventListener( MouseEvent.ROLL_OVER, function( e : MouseEvent ) : void
 			{
