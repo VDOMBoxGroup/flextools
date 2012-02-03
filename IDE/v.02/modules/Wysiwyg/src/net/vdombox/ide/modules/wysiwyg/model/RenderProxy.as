@@ -121,9 +121,13 @@ package net.vdombox.ide.modules.wysiwyg.model
 				return renderVO;
 			}
 
-			itemID = rawRenderData.@id
-
+			itemID = rawRenderData.@id;
+			
 			renderVO = new RenderVO( vdomObjectVO );
+			
+			var rendererBase : RendererBase = getRendererByVO( vdomObjectVO );
+			if ( rendererBase )
+				renderVO.parent = rendererBase.renderVO.parent;
 
 			createAttributes( renderVO, rawRenderData );
 			createChildren( renderVO, rawRenderData );
@@ -250,6 +254,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 		private function createChildren( renderVO : RenderVO, rawRenderData /*is Wysiwyg*/ : XML ) : void
 		{
+			
+			if ( renderVO.vdomObjectVO.id == "1e0680bc-e2b1-404c-adb9-14481f171cbc" )
+				trace("createChildren" );
 			var pageVO : PageVO = renderVO.vdomObjectVO is PageVO ? renderVO.vdomObjectVO as PageVO : ObjectVO( renderVO.vdomObjectVO ).pageVO;
 			var objectVO : ObjectVO;
 

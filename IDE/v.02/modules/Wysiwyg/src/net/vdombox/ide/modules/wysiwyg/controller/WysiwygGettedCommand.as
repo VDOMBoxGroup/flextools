@@ -25,10 +25,21 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var wysiwygXML : XML = body.wysiwyg;
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 
-			var renderVO : RenderVO = renderProxy.generateRenderVO( vdomObjectVO, wysiwygXML );
+			var renderVO : RenderVO;
+			var renderer : IRenderer;
+			
+			/*if ( vdomObjectVO is ObjectVO )
+			{
+				renderVO = renderProxy.generateRenderVO( (vdomObjectVO as ObjectVO).pageVO, wysiwygXML );
+				renderer = renderProxy.getRendererByVO( (vdomObjectVO as ObjectVO).pageVO );
+				renderer.renderVO = renderVO;
+			}*/
+			
+			
+			renderVO = renderProxy.generateRenderVO( vdomObjectVO, wysiwygXML );
 
 			var renderers : Array = renderProxy.getRenderersByVO( vdomObjectVO );
-			var renderer : IRenderer;
+			
 			
 			if( renderers && renderers.length != 0 )
 			{

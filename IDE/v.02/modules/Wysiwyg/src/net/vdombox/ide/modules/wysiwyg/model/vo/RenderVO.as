@@ -23,8 +23,8 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		
 		private var _name : String;
 		
-		public var parent : RenderVO;
-		public var children : Array;
+		private var _parent : RenderVO;
+		private var _children : Array;
 
 		public var visible : Boolean;
 		
@@ -38,6 +38,26 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		
 		private var _vdomObjectVO : IVDOMObjectVO;
 		
+		public function get parent():RenderVO
+		{
+			return _parent;
+		}
+
+		public function set parent(value:RenderVO):void
+		{
+			_parent = value;
+		}
+
+		public function get children():Array
+		{
+			return _children;
+		}
+
+		public function set children(value:Array):void
+		{
+			_children = value;
+		}
+
 		public function get name():String
 		{
 			return _name;

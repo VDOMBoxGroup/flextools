@@ -24,7 +24,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 
 	public class CreateLineLinkingCommand extends SimpleCommand
 	{
-		private var render : RendererBase;
+		private var rendererBase : RendererBase;
 		private var component : UIComponent;
 		private var pageRenderer : PageRenderer;
 		private var minEpsX : Number = 100;
@@ -40,25 +40,26 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var body : Object = notification.getBody();
 			if (  body.component is RendererBase )
 			{
-				render = body.component as RendererBase;
-				component = render as UIComponent;
+				rendererBase = body.component as RendererBase;
+				component = rendererBase as UIComponent;
 			}
 			else if (  body.component is TransformMarker )
 			{
-				render = body.component.renderer as RendererBase;
-				if ( render == null )
+				rendererBase = body.component.renderer as RendererBase;
+				if ( rendererBase == null )
 					return;
 				component = body.component as UIComponent;
 			}
 			
+			
 			renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-			pageRenderer = renderProxy.getRenderersByVO( (render.renderVO.vdomObjectVO as ObjectVO).pageVO )[0] as PageRenderer;
+			pageRenderer = renderProxy.getRenderersByVO( (rendererBase.renderVO.vdomObjectVO as ObjectVO).pageVO )[0] as PageRenderer;
 			
 			var listComponents : Array;
 			if ( body.ctrlKey as Boolean )
 				listComponents = foundComponents( pageRenderer.renderVO );
 			else
-				listComponents = foundComponentsPackage( pageRenderer.renderVO );
+				listComponents = foundComponentsPackage( rendererBase.renderVO.parent );
 			
 			var renderer : RendererBase;
 			var renderVO : RenderVO;
@@ -78,7 +79,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				renderer = renderProxy.getRendererByVO( renderVO.vdomObjectVO ) as RendererBase;
 				if ( !renderer.visible )
 					continue;
-				if ( render.vdomObjectVO.id != renderer.vdomObjectVO.id )
+				if ( rendererBase.vdomObjectVO.id != renderer.vdomObjectVO.id )
 				{
 					point = getCoordinateComponent( renderer );
 				
@@ -189,7 +190,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		
 		private function foundComponentsPackage ( renderVO : RenderVO ) : Array
 		{
-			if (renderVO.children == null)
+			if ( !renderVO || renderVO.children == null)
 				return null;
 			
 			var listComponents : Array = renderVO.children;
@@ -199,7 +200,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			for each (component in listComponents)
 			{
-				if (component.vdomObjectVO.id == render.vdomObjectVO.id)
+				if (component.vdomObjectVO.id == rendererBase.vdomObjectVO.id)
 					return listComponents;
 			}
 			
@@ -253,11 +254,17 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				var point : Point = new Point( marker.x, marker.y );
 				if ( marker.renderer.renderVO.parent )
 				{
-					var rend : RendererBase;
-					rend = renderProxy.getRenderersByVO( marker.renderer.renderVO.parent.vdomObjectVO )[0] as RendererBase;
-					point = DisplayUtils.getConvertedPoint( marker, rend );
+					var rend : RendererBase = renderProxy.getRenderersByVO( marker.renderer.renderVO.parent.vdomObjectVO )[0] as RendererBase;
+					point = marker.localToGlobal(point);
+					
+					point=rend.dataGroup.globalToContent(point);
+					
+					point.x -= marker.x;
+					point.y -= marker.y;
+					
+					/*point = DisplayUtils.getConvertedPoint( marker, rend );
 					point.x--;
-					point.y--;
+					point.y--;*/
 				}
 			
 				if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
@@ -364,11 +371,17 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				var point : Point = new Point( marker.x, marker.y );
 				if ( marker.renderer.renderVO.parent )
 				{
-					var rend : RendererBase;
-					rend = renderProxy.getRenderersByVO( marker.renderer.renderVO.parent.vdomObjectVO )[0] as RendererBase;
-					point = DisplayUtils.getConvertedPoint( marker, rend );
+					var rend : RendererBase = renderProxy.getRenderersByVO( marker.renderer.renderVO.parent.vdomObjectVO )[0] as RendererBase;
+					point = marker.localToGlobal(point);
+					
+					point=rend.dataGroup.globalToContent(point);
+					
+					point.x -= marker.x;
+					point.y -= marker.y;
+					
+					/*point = DisplayUtils.getConvertedPoint( marker, rend );
 					point.x--;
-					point.y--;
+					point.y--;*/
 				}
 				
 				if ( !marker.equallySize( component.measuredWidth, component.measuredHeight ) )
