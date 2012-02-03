@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.resourceBrowser.controller
 {
 	import net.vdombox.ide.modules.ResourceBrowser;
-	import net.vdombox.ide.modules.resourceBrowser.model.SettingsProxy;
+	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.ResourceBrowserJunctionMediator;
 	import net.vdombox.ide.modules.resourceBrowser.view.ResourceBrowserMediator;
 	

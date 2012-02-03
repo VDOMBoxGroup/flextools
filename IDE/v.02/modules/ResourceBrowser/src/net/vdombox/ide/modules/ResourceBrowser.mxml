@@ -13,17 +13,9 @@
 	
 	<fx:Script>
 		<![CDATA[
-//			${DOCUMENTS}\VdomIDE\src\modules\ResourceBrowser
-//
-//			-locale en_US fr_FR ru_RU 
-//			-source-path+=../locale/{locale}
-//			-load-externs=../../VdomIDE/bin-debug/report.xml
-//			
-//			C:\Program Files\Adobe\Adobe Flash Builder 4.5\sdks\4.1.0\frameworks\libs\air
-
-			
 			import mx.skins.spark.ButtonSkin;
 			
+			import net.vdombox.ide.common.model.SettingsProxy;
 			import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 			
 			import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -100,7 +92,7 @@
 			}
 			override public function initializeSettings() : void
 			{
-				facade.sendNotification( ApplicationFacade.INITIALIZE_SETTINGS );
+				facade.sendNotification( SettingsProxy.INITIALIZE_SETTINGS );
 			}
 		]]>
 	</fx:Script>
