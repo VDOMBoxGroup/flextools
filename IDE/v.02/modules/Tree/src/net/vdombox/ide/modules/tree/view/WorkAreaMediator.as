@@ -265,7 +265,7 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function createPageHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_CREATE_PAGE_WINDOW_REQUEST );
+			sendNotification( ApplicationFacade.OPEN_CREATE_PAGE_WINDOW_REQUEST, workArea );
 		}
 
 		private function treeElement_createdHandler( event : TreeElementEvent ) : void

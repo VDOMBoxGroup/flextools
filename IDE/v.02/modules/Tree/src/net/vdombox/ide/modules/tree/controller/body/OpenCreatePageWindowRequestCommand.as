@@ -1,10 +1,11 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
+	import mx.core.UIComponent;
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.view.components.windows.CreatePageWindow;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.view.CreatePageWindowMediator;
-	import net.vdombox.ide.common.view.components.windows.CreatePageWindow;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -21,9 +22,7 @@ package net.vdombox.ide.modules.tree.controller.body
 			
 			facade.registerMediator( new CreatePageWindowMediator( createPageWindow ) );
 			
-			WindowManager.getInstance().addWindow(createPageWindow, null, true);
-			
-			//sendNotification( ApplicationFacade.OPEN_WINDOW, { content: createPageWindow, title: "Create Page", isModal: true, resizable : true } );
+			WindowManager.getInstance().addWindow(createPageWindow, notification.getBody() as UIComponent, true);
 		}
 	}
 }

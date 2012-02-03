@@ -117,7 +117,7 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function menuPanel_createPageHandler( event : MenuPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_CREATE_PAGE_WINDOW_REQUEST );
+			sendNotification( ApplicationFacade.OPEN_CREATE_PAGE_WINDOW_REQUEST, menuPanel );
 		}
 
 		private function menuPanel_autoSpacingHandler( event : MenuPanelEvent ) : void
