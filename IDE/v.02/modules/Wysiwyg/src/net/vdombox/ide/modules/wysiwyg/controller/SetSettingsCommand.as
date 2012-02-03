@@ -1,7 +1,8 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
+	import net.vdombox.ide.common.model.SettingsProxy;
+	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.model.vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -17,8 +18,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 					lastApplicationID : settingsVO.lastApplicationID
 				};
 			
-			sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_PROXY, settingsVO );
-			sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE, settings );
+			sendNotification( SettingsProxy.SAVE_SETTINGS_TO_PROXY, settingsVO );
+			sendNotification( SettingsProxy.SAVE_SETTINGS_TO_STORAGE, settings );
 		}
 	}
 }

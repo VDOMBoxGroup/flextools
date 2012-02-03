@@ -4,8 +4,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.model.SettingsProxy;
+	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.model.vo.SettingsVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.main.SettingsScreen;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -32,8 +33,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( NAME + "/" + ApplicationFacade.SETTINGS_GETTED );
-			interests.push( ApplicationFacade.SETTINGS_CHANGED );
+			interests.push( NAME + "/" + SettingsProxy.SETTINGS_GETTED );
+			interests.push( SettingsProxy.SETTINGS_CHANGED );
 			
 			return interests;
 		}
@@ -57,7 +58,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			sendNotification( ApplicationFacade.GET_SETTINGS, NAME );
+			sendNotification( SettingsProxy.GET_SETTINGS, NAME );
 		}
 		
 		private function performOKHandler( event : Event ) : void
