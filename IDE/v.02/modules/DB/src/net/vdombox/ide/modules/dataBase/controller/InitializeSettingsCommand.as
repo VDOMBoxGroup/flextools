@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.dataBase.controller
 {
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
-	import net.vdombox.ide.modules.dataBase.model.SettingsProxy;
-	import net.vdombox.ide.modules.dataBase.model.vo.SettingsVO;
+	import net.vdombox.ide.common.model.SettingsProxy;
+	import net.vdombox.ide.common.model._vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -17,7 +17,7 @@ package net.vdombox.ide.modules.dataBase.controller
 			var settingsVO : SettingsVO = new SettingsVO( settings );
 			
 			settingeProxy.setSettings( settingsVO );
-			sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE, settings );
+			sendNotification( SettingsProxy.SAVE_SETTINGS_TO_STORAGE, settings );
 		}
 	}
 }

@@ -19,15 +19,16 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.common.controller.names.PipeNames;
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
-	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
+	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
-	import net.vdombox.ide.modules.dataBase.model.vo.SettingsVO;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
@@ -60,8 +61,8 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( ApplicationFacade.EXPORT_SETTINGS_SCREEN );
 			interests.push( ApplicationFacade.EXPORT_BODY );
 
-			interests.push( ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE );
-			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
+			interests.push( SettingsProxy.RETRIEVE_SETTINGS_FROM_STORAGE );
+			interests.push( SettingsProxy.SAVE_SETTINGS_TO_STORAGE );
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
@@ -148,7 +149,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 
-				case ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE:
+				case SettingsProxy.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE,
 						null, multitonKey );
@@ -158,7 +159,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 
-				case ApplicationFacade.SAVE_SETTINGS_TO_STORAGE:
+				case SettingsProxy.SAVE_SETTINGS_TO_STORAGE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body,
 						multitonKey );
@@ -397,7 +398,7 @@ package net.vdombox.ide.modules.dataBase.view
 
 					var settingsVO : SettingsVO = new SettingsVO( simpleMessage.getBody() );
 
-					sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_PROXY, settingsVO );
+					sendNotification( SettingsProxy.SAVE_SETTINGS_TO_PROXY, settingsVO );
 
 					break;
 				}
@@ -476,13 +477,6 @@ package net.vdombox.ide.modules.dataBase.view
 
 			switch ( place )
 			{
-				case PPMPlaceNames.SERVER:
-				{
-					sendNotification( ApplicationFacade.PROCESS_SERVER_PROXY_MESSAGE, message );
-					
-					break;
-				}
-					
 				case PPMPlaceNames.PAGE:
 				{
 					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );

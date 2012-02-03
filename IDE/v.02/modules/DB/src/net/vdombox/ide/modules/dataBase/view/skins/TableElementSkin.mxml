@@ -85,7 +85,7 @@
 	<s:RectangularDropShadow id="dropShadow"
 							 bottom="0" color="#505050" left="0" right="0"
 							 top="0"
-							 alpha="0.42" angle="45" blRadius="0" blurX="12"
+							 alpha="0.63" angle="45" blRadius="0" blurX="12"
 							 blurY="12" brRadius="0" distance="0" tlRadius="0"
 							 trRadius="0"/>
 	
@@ -102,7 +102,7 @@
 			
 			<s:RectangularDropShadow bottom="0" color="#000000" left="0" right="0"
 									 top="0"
-									 alpha="1" angle="45" blRadius="0" blurX="6"
+									 alpha="0.75" angle="45" blRadius="0" blurX="6"
 									 blurY="6" brRadius="0" distance="0" tlRadius="0"
 									 trRadius="0"/>
 			
@@ -122,7 +122,7 @@
 			
 			<s:RectangularDropShadow bottom="0" color="#000000" left="0" right="0"
 									 top="0"
-									 alpha="1" angle="45" blRadius="0" blurX="6"
+									 alpha="0.75" angle="45" blRadius="0" blurX="6"
 									 blurY="6" brRadius="0" distance="0" tlRadius="0"
 									 trRadius="0"/>
 			

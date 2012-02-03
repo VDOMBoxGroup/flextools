@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.dataBase
 {
-	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
+	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.DataBase;
 	import net.vdombox.ide.modules.dataBase.controller.BodyCreatedCommand;
@@ -19,9 +19,9 @@ package net.vdombox.ide.modules.dataBase
 	import net.vdombox.ide.modules.dataBase.controller.messages.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.dataBase.controller.messages.ProcessObjectProxyMessageCommand;
 	import net.vdombox.ide.modules.dataBase.controller.messages.ProcessPageProxyMessageCommand;
-	import net.vdombox.ide.modules.dataBase.controller.messages.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.dataBase.controller.messages.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.dataBase.controller.messages.ProcessTypesProxyMessageCommand;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -49,29 +49,11 @@ package net.vdombox.ide.modules.dataBase
 		//		tear down
 		public static const TEAR_DOWN : String = "tearDown";
 
-		//		settings
-		public static const INITIALIZE_SETTINGS : String = "initializeSettings";
-
-		public static const GET_SETTINGS : String = "getSettings";
-		public static const SET_SETTINGS : String = "setSettings";
-
-		public static const SETTINGS_GETTED : String = "settingsGetted";
-		public static const SETTINGS_CHANGED : String = "settingsChanged";
-
-		public static const RETRIEVE_SETTINGS_FROM_STORAGE : String = "retrieveSettingsFromStorage";
-		public static const SAVE_SETTINGS_TO_STORAGE : String = "saveSettingsToStorage";
-		public static const SAVE_SETTINGS_TO_PROXY : String = "saveSettingsToProxy";
-
 		//		pipe messages
-		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
 		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
 		public static const PROCESS_OBJECT_PROXY_MESSAGE : String = "processObjectProxyMessage";
-
-		//		states		
-		public static const CHANGE_SELECTED_RESOURCE_REQUEST : String = "changeSelectedResourceRequest";
-		public static const SELECTED_RESOURCE_CHANGED : String = "selectedResourceChanged";
 
 //		table panel
 		public static const GET_DATA_BASES : String = "getDataBases";
@@ -89,8 +71,6 @@ package net.vdombox.ide.modules.dataBase
 		
 		public static const GET_OBJECTS : String = "getObjects";
 		public static const OBJECTS_GETTED : String = "objectsGetted";
-		
-
 		
 		
 //		other
@@ -167,12 +147,11 @@ package net.vdombox.ide.modules.dataBase
 			registerCommand( CREATE_SETTINGS_SCREEN, CreateSettingsScreenCommand );
 			registerCommand( CREATE_BODY, CreateBodyCommand );
 
-			registerCommand( INITIALIZE_SETTINGS, InitializeSettingsCommand );
-			registerCommand( GET_SETTINGS, GetSettingsCommand );
-			registerCommand( SET_SETTINGS, SetSettingsCommand );
-			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
+			registerCommand( SettingsProxy.INITIALIZE_SETTINGS, InitializeSettingsCommand );
+			registerCommand( SettingsProxy.GET_SETTINGS, GetSettingsCommand );
+			registerCommand( SettingsProxy.SET_SETTINGS, SetSettingsCommand );
+			registerCommand( SettingsProxy.SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 
-			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
 			registerCommand( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );

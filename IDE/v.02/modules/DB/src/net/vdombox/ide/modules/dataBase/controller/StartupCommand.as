@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.dataBase.controller
 {
 	import net.vdombox.ide.modules.DataBase;
-	import net.vdombox.ide.modules.dataBase.model.SettingsProxy;
+	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.modules.dataBase.view.DataBaseJunctionMediator;
 	import net.vdombox.ide.modules.dataBase.view.DataBaseMediator;
 	
