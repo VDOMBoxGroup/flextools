@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.scripts
 {
+	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.Scripts;
@@ -52,19 +53,6 @@ package net.vdombox.ide.modules.scripts
 		
 //		tear down
 		public static const TEAR_DOWN : String = "tearDown";
-		
-//		settings
-		public static const INITIALIZE_SETTINGS : String = "initializeSettings";
-		
-		public static const GET_SETTINGS : String = "getSettings";
-		public static const SET_SETTINGS : String = "setSettings";
-		
-		public static const SETTINGS_GETTED : String = "settingsGetted";
-		public static const SETTINGS_CHANGED : String = "settingsChanged";
-		
-		public static const RETRIEVE_SETTINGS_FROM_STORAGE : String = "retrieveSettingsFromStorage";
-		public static const SAVE_SETTINGS_TO_STORAGE : String = "saveSettingsToStorage";
-		public static const SAVE_SETTINGS_TO_PROXY : String = "saveSettingsToProxy";
 		
 //		pipe messages
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
@@ -163,10 +151,10 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( CREATE_SETTINGS_SCREEN, CreateSettingsScreenCommand );
 			registerCommand( CREATE_BODY, CreateBodyCommand );
 			
-			registerCommand( INITIALIZE_SETTINGS, InitializeSettingsCommand );
-			registerCommand( GET_SETTINGS, GetSettingsCommand );
-			registerCommand( SET_SETTINGS, SetSettingsCommand );
-			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
+			registerCommand( SettingsProxy.INITIALIZE_SETTINGS, InitializeSettingsCommand );
+			registerCommand( SettingsProxy.GET_SETTINGS, GetSettingsCommand );
+			registerCommand( SettingsProxy.SET_SETTINGS, SetSettingsCommand );
+			registerCommand( SettingsProxy.SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 			
 			registerCommand( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
 			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );

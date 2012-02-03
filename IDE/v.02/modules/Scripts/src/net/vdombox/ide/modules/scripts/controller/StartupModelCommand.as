@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.scripts.controller
 {
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.modules.scripts.model.SettingsProxy;
+	import net.vdombox.ide.common.model.SettingsProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
