@@ -2,8 +2,11 @@ package net.vdombox.ide.modules.preview.view
 {
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
-	import net.vdombox.ide.common.view.LoggingJunctionMediator;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.messages.SimpleMessage;
+	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMObjectTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
@@ -12,14 +15,12 @@ package net.vdombox.ide.modules.preview.view
 	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.common.controller.names.PipeNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
-	import net.vdombox.ide.common.controller.messages.SimpleMessage;
-	import net.vdombox.ide.common.SimpleMessageHeaders;
-	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
+	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.preview.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -44,10 +45,6 @@ package net.vdombox.ide.modules.preview.view
 
 			interests.push( ApplicationFacade.EXPORT_TOOLSET );
 			interests.push( ApplicationFacade.SELECT_MODULE );
-			interests.push( ApplicationFacade.OPEN_WINDOW );
-			interests.push( ApplicationFacade.CLOSE_WINDOW );
-
-			 
 
 			return interests;
 		}
@@ -85,26 +82,6 @@ package net.vdombox.ide.modules.preview.view
 					break;
 				}
 
-			
-		
-				case ApplicationFacade.OPEN_WINDOW:
-				{
-					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, null, multitonKey );
-
-					junction.sendMessage( PipeNames.STDCORE, message );
-
-					break;
-				}
-
-				case ApplicationFacade.CLOSE_WINDOW:
-				{
-					message = new SimpleMessage( SimpleMessageHeaders.CLOSE_WINDOW, body, multitonKey );
-
-					junction.sendMessage( PipeNames.STDCORE, message );
-
-					break;
-				}
-
 				case ApplicationFacade.SELECT_MODULE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.OPEN_BROWSER, null, multitonKey );
@@ -114,12 +91,7 @@ package net.vdombox.ide.modules.preview.view
 					break;
 				}	
 		
-		
-		
-		
-		
-		
-					}
+			}
 
 			super.handleNotification( notification );
 		}
@@ -132,21 +104,6 @@ package net.vdombox.ide.modules.preview.view
 
 			switch ( simpleMessage.getHeader() )
 			{
-				case SimpleMessageHeaders.MODULE_SELECTED:
-				{
-					if ( recipientKey == multitonKey )
-					{
-//						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
-					}
-					else
-					{
-//						sendNotification( ApplicationFacade.MODULE_DESELECTED );
-//						junction.sendMessage( PipeNames.STDCORE,
-//											  new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
-					}
-
-					break;
-				}
 
 				case SimpleMessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
@@ -166,51 +123,6 @@ package net.vdombox.ide.modules.preview.view
 		public function handleProxyMessage( message : ProxyMessage ) : void
 		{
 			var place : String = message.proxy;
-
-			switch ( place )
-			{
-				case PPMPlaceNames.SERVER:
-				{
-					sendNotification( ApplicationFacade.PROCESS_SERVER_PROXY_MESSAGE, message );
-
-					break;
-				}
-
-				case PPMPlaceNames.STATES:
-				{
-					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
-
-					break;
-				}
-
-				case PPMPlaceNames.TYPES:
-				{
-					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
-
-					break;
-				}
-
-				case PPMPlaceNames.APPLICATION:
-				{
-					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
-
-					break;
-				}
-
-				case PPMPlaceNames.PAGE:
-				{
-					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );
-
-					break;
-				}
-
-				case PPMPlaceNames.OBJECT:
-				{
-					sendNotification( ApplicationFacade.PROCESS_OBJECT_PROXY_MESSAGE, message );
-
-					break;
-				}
-			}
 		}
 
 		public function tearDown() : void
