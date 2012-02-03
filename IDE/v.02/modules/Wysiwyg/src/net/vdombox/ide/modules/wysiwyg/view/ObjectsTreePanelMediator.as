@@ -498,7 +498,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function createNewPage( event : ObjectsTreePanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_CREATE_PAGE_WINDOW_REQUEST );
+			sendNotification( ApplicationFacade.OPEN_CREATE_PAGE_WINDOW_REQUEST, objectsTreePanel );
 		}
 
 		private function selectCurrentPage( needGetPageStructure : Boolean = true ) : void

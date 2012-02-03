@@ -381,7 +381,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 							element.x = element.x - stepX;
 							element.measuredWidth = element.measuredWidth + stepX;
 						}
-						else if ( marker.equallyPoint( point.x, point.y ) )
+						else if ( !marker.equallyWidth( element.measuredWidth) )
 						{
 							element.measuredWidth = element.measuredWidth - stepX;
 						}
@@ -391,20 +391,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 							element.y = element.y - stepY;
 							element.measuredHeight = element.measuredHeight + stepY;
 						}
-						else if ( marker.equallyPoint( point.x, point.y ) )
+						else if ( !marker.equallyHeight( element.measuredHeight) )
 						{
 							element.measuredHeight = element.measuredHeight - stepY;
 						}
-						
-						/*if ( marker.equallyX( point.x ) )
-							element.measuredWidth = element.measuredWidth - stepX;
-						else
-							element.measuredWidth = element.measuredWidth + stepX;
-						
-						if ( marker.equallyY( point.y ) )
-							element.measuredHeight = element.measuredHeight - stepY;
-						else
-							element.measuredHeight = element.measuredHeight + stepY;*/
 						
 						if ( stepX != 0 )
 							needDrawVLine = true;

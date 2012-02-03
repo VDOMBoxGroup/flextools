@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
+	import mx.core.UIComponent;
+	
 	import net.vdombox.ide.common.view.components.windows.CreatePageWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.CreatePageWindowMediator;
 	import net.vdombox.utils.WindowManager;
@@ -18,7 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			facade.registerMediator( new CreatePageWindowMediator( createPageWindow ) );
 			
-			WindowManager.getInstance().addWindow(createPageWindow, null, true);
+			WindowManager.getInstance().addWindow(createPageWindow, notification.getBody() as UIComponent, true);
 		}
 	}
 }
