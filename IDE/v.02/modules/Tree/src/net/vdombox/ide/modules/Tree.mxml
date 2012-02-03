@@ -22,6 +22,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.model.SettingsProxy;
 			import net.vdombox.ide.modules.tree.ApplicationFacade;
 
 			public static const MODULE_ID : String = "net.vdombox.ide.modules.Tree";
@@ -97,7 +98,7 @@
 
 			override public function initializeSettings() : void
 			{
-				facade.sendNotification( ApplicationFacade.INITIALIZE_SETTINGS );
+				facade.sendNotification( SettingsProxy.INITIALIZE_SETTINGS );
 			}
 		]]>
 	</fx:Script>

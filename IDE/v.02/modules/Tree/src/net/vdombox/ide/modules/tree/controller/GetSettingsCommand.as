@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.tree.controller
 {
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.model.SettingsProxy;
-	import net.vdombox.ide.modules.tree.model.vo.SettingsVO;
+	import net.vdombox.ide.common.model.SettingsProxy;
+	import net.vdombox.ide.common.model._vo.SettingsVO;
 
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.tree.controller
 
 			var mediatorName : String = notification.getBody().toString();
 			var settingsVO : SettingsVO = settingsProxy.getSettings();
-			var notificationName : String = ApplicationFacade.SETTINGS_GETTED;
+			var notificationName : String = SettingsProxy.SETTINGS_GETTED;
 
 			if ( settingsVO )
 			{
@@ -26,7 +26,7 @@ package net.vdombox.ide.modules.tree.controller
 			}
 			else
 			{
-				sendNotification( ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE );
+				sendNotification( SettingsProxy.RETRIEVE_SETTINGS_FROM_STORAGE );
 			}
 		}
 	}

@@ -4,8 +4,9 @@ package net.vdombox.ide.modules.tree.view
 	
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.model.SettingsProxy;
+	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.model.vo.SettingsVO;
 	import net.vdombox.ide.modules.tree.view.components.SettingsScreen;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -32,8 +33,8 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( NAME + ApplicationFacade.DELIMITER + ApplicationFacade.SETTINGS_GETTED );
-			interests.push( ApplicationFacade.SETTINGS_CHANGED );
+			interests.push( NAME + ApplicationFacade.DELIMITER + SettingsProxy.SETTINGS_GETTED );
+			interests.push( SettingsProxy.SETTINGS_CHANGED );
 			
 			return interests;
 		}
@@ -56,12 +57,12 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			sendNotification( ApplicationFacade.GET_SETTINGS, NAME );
+			sendNotification( SettingsProxy.GET_SETTINGS, NAME );
 		}
 		
 		private function performOKHandler( event : Event ) : void
 		{			
-			sendNotification( ApplicationFacade.SET_SETTINGS, settingsVO );
+			sendNotification( SettingsProxy.SET_SETTINGS, settingsVO );
 		}
 	}
 }
