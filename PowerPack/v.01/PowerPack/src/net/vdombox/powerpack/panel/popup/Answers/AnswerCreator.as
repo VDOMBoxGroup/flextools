@@ -23,7 +23,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 		{
 			var type : String = ListParser.getElmValue( data , 1, Answer.context).toString();
 			
-			var answer : *;
+			var answer : Answer;
 		
 			switch (type)
 			{	
