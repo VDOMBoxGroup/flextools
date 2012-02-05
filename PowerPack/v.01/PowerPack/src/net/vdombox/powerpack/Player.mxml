@@ -12,7 +12,7 @@
 
 		styleName="installerWindowStyle">
 
-	<mx:Style source="assets/style/style.css"/>
+	
 
 
 	<mx:Fade alphaFrom="0.0" alphaTo="1.0" duration="300" id="canvasShow"/>
