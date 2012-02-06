@@ -7,7 +7,7 @@
 		applicationComplete="show()"
 
 		xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
-		creationComplete="windowedapplication1_creationCompleteHandler(event)" horizontalScrollPolicy="off"
+		creationComplete="creationCompleteHandler(event)" horizontalScrollPolicy="off"
 		verticalScrollPolicy="off"
 		xmlns:control="net.vdombox.powerpack.control.*"
 		mouseDown="window_mouseDownHandler(event)"
@@ -19,7 +19,7 @@
 		import mx.core.Application;
 		import mx.core.FlexLoader;
 		import mx.events.FlexEvent;
-
+		
 		import net.vdombox.powerpack.customize.skins.CloseButtonSkin;
 		import net.vdombox.powerpack.customize.skins.MaximizeButtonSkin;
 		import net.vdombox.powerpack.customize.skins.MinimizeButtonSkin;
@@ -81,7 +81,7 @@
 			exit ();
 		}
 
-		protected function windowedapplication1_creationCompleteHandler( event:FlexEvent ):void
+		protected function creationCompleteHandler( event:FlexEvent ):void
 		{
 			openTemplateFile ( null, onTemplateLoad );
 
@@ -144,11 +144,11 @@
 			var xml:XML = XML ( fileStream.readUTFBytes ( fileStream.bytesAvailable ) );
 
 			fileStream.close ();
-			
+
 			player.dataProvider = xml;
 		}
 		]]></mx:Script>
-	<powerpack:Player id="player"  />
+	<powerpack:Player id="player"  close="nativeWindow.close()" />
 	<mx:HBox right="14" y="17"
 			 height="10" width="100%"
 			 verticalAlign="bottom" horizontalAlign="right"

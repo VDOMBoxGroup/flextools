@@ -13,7 +13,9 @@
 		styleName="installerWindowStyle">
 
 	
-
+	<mx:Metadata>
+		[Event(name="close", type="flash.events.Event")]
+	</mx:Metadata>
 
 	<mx:Fade alphaFrom="0.0" alphaTo="1.0" duration="300" id="canvasShow"/>
 	<mx:Fade alphaFrom="1.0" alphaTo="0.0" duration="300" id="canvasHide"/>
