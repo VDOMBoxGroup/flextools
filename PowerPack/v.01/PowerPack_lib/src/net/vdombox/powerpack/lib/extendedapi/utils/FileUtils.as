@@ -177,6 +177,7 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			
 			var fileExtension	: String = file.extension;
 			
+			// if ( aaa in array)
 			switch ( fileExtension.toLowerCase() )
 			{
 				case FILE_FORMAT_BMP:
@@ -197,6 +198,8 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 		
 		public static function getImagesFileExtension () : String
 		{
+			// for  ( fileformat in array) 
+			
 			var strExtension : String = "";
 			
 			strExtension += "*." + FILE_FORMAT_BMP + ";";
@@ -216,6 +219,7 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 		
 		public static function get cmdFile() : File
 		{
+			// returt  (OS == OS_WINDOWS) ?   windowsCmdFile : new File("/bin/sh");
 			switch (OS) 
 			{
 				case OS_WINDOWS :
@@ -237,6 +241,7 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 		
 		public static function get batFileExtension () : String
 		{
+			// returt  (OS == OS_WINDOWS) ?   "bat" :  "sh";
 			switch (OS) 
 			{
 				case OS_WINDOWS :
