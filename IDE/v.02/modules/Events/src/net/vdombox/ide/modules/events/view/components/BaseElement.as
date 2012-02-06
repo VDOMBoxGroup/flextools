@@ -7,8 +7,8 @@ package net.vdombox.ide.modules.events.view.components
 	
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.EventVO;
-	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.common.view.components.EyeImage;
+	import net.vdombox.ide.modules.events.events.ElementEvent;
 	
 	import spark.components.SkinnableContainer;
 	
@@ -23,6 +23,8 @@ package net.vdombox.ide.modules.events.view.components
 		
 		private var mouseOffcetX : int;
 		private var mouseOffcetY : int;
+		
+		private var moved : Boolean = false;
 		
 		
 		public function BaseElement()
@@ -62,6 +64,8 @@ package net.vdombox.ide.modules.events.view.components
 		
 		protected function header_mouseDownHandler( event : MouseEvent ) : void
 		{
+			setFocus();
+			moved = false;
 			stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
@@ -89,12 +93,18 @@ package net.vdombox.ide.modules.events.view.components
 		
 		protected function stage_mouseMoveHandlerExt( event : MouseEvent ) : void
 		{
-			dispatchEvent( new ElementEvent( ElementEvent.MOVED ) );
+			//dispatchEvent( new ElementEvent( ElementEvent.MOVED ) );
+			moved = true;
 			stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
 		}
 		
 		protected function stage_mouseUpHandler( event : MouseEvent ) : void
 		{
+			if ( moved )
+			{
+				dispatchEvent( new ElementEvent( ElementEvent.MOVED ) );
+				moved = false;
+			}
 			stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
 			stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 		}

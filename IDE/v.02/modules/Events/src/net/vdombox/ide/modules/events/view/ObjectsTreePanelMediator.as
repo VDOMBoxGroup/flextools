@@ -15,6 +15,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.modules.events.model.MessageProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.ObjectsTreePanel;
@@ -123,6 +124,9 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.BODY_STOP:
 				{
 					isActive = false;
+					
+					var messageProxy : MessageProxy = facade.retrieveProxy( MessageProxy.NAME ) as MessageProxy;
+					messageProxy.removeAll( _pages );
 
 					clearData();
 

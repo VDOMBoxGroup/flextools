@@ -12,17 +12,17 @@ package net.vdombox.ide.modules.events.view.components
 	import mx.utils.NameUtil;
 	import mx.utils.ObjectUtil;
 	
-	import net.vdombox.ide.common.view.components.VDOMScroller;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.ClientActionVO;
 	import net.vdombox.ide.common.model._vo.EventVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.common.view.components.VDOMScroller;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.events.view.skins.WorkAreaSkin;
-	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
 	
 	import spark.components.Button;
 	import spark.components.CheckBox;
@@ -44,9 +44,9 @@ package net.vdombox.ide.modules.events.view.components
 
 			addEventListener( ElementEvent.CREATE_LINKAGE, element_createLinkageHandler, true, 0, true );
 			addEventListener( ElementEvent.DELETE, element_deleteHandler, true, 0, true );
-			addEventListener( ElementEvent.MOVED, unsaveStateHandler, true, 0, true );
-			addEventListener( ElementEvent.STATE_CHANGED, unsaveStateHandler, true, 0, true );
-			addEventListener( ElementEvent.PARAMETER_EDIT, unsaveStateHandler, true, 0, true );
+			addEventListener( ElementEvent.MOVED, saveHandler, true, 0, true );
+			addEventListener( ElementEvent.STATE_CHANGED, saveHandler, true, 0, true );
+			addEventListener( ElementEvent.PARAMETER_EDIT, saveHandler, true, 0, true );
 			addEventListener( ElementEvent.DELETE_LINKAGE, linkage_deleteLinkageHandler, true, 0, true );
 		}
 
@@ -57,7 +57,7 @@ package net.vdombox.ide.modules.events.view.components
 		public var linkagesLayer : Group;
 
 		[SkinPart]
-		public var saveButton : WorkAreaButton;
+		public var redoButton : WorkAreaButton;
 		
 		[SkinPart]
 		public var undoButton : WorkAreaButton;
@@ -127,9 +127,9 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			super.partAdded( partName, instance );
 			
-			if( instance == saveButton )
+			if( instance == redoButton )
 			{
-				saveButton.addEventListener( MouseEvent.CLICK, saveButton_clickHandler );
+				redoButton.addEventListener( MouseEvent.CLICK, redoButton_clickHandler );
 			}
 			else if( instance == undoButton )
 			{
@@ -260,8 +260,6 @@ package net.vdombox.ide.modules.events.view.components
 			eventElement.data = eventVO;
 
 			addElement( eventElement );
-			
-			skin.currentState = "unsaved";
 		}
 
 		private function createClientAction( clientActionVO : ClientActionVO, coordinates : Point ) : void
@@ -290,8 +288,6 @@ package net.vdombox.ide.modules.events.view.components
 			actionElement.data = newClientActionVO;
 
 			addElement( actionElement );
-			
-			skin.currentState = "unsaved";
 		}
 
 		private function createServerAction( serverActionVO : ServerActionVO, coordinates : Point ) : void
@@ -316,8 +312,6 @@ package net.vdombox.ide.modules.events.view.components
 				
 			serverActionElements[ serverActionVO.id ] = actionElement; 
 			addElement( actionElement );
-			
-			skin.currentState = "unsaved";
 		}
 
 		private function deleteEventElement( eventElement : EventElement ) : void
@@ -357,8 +351,6 @@ package net.vdombox.ide.modules.events.view.components
 
 			if ( eventElement.owner == this )
 				removeElement( eventElement );
-			
-			skin.currentState = "unsaved";
 		}
 
 		private function deleteActionElement( actionElement : ActionElement ) : void
@@ -419,8 +411,6 @@ package net.vdombox.ide.modules.events.view.components
 			//Удаление actionElement
 			if ( actionElement.owner == this )
 				removeElement( actionElement );
-			
-			skin.currentState = "unsaved";
 		}
 
 		private function getActionElementFromParent( object : DisplayObjectContainer ) : ActionElement
@@ -494,6 +484,8 @@ package net.vdombox.ide.modules.events.view.components
 				createClientAction( newElementVO as ClientActionVO, coordinates );
 			else if ( newElementVO is ServerActionVO )
 				createServerAction( newElementVO as ServerActionVO, coordinates );
+			
+			sendSave();
 		}
 
 		private function mouseDownHandler( event : MouseEvent ) : void
@@ -512,8 +504,6 @@ package net.vdombox.ide.modules.events.view.components
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
-			/*shadowActionVO.left = linkagesLayer.contentMouseX;
-			shadowActionVO.top = linkagesLayer.contentMouseY;*/
 			shadowActionElement.x = linkagesLayer.contentMouseX;
 			shadowActionElement.y = linkagesLayer.contentMouseY;
 			
@@ -607,7 +597,7 @@ package net.vdombox.ide.modules.events.view.components
 						if ( !isAviable )
 						{
 							eventObject.actions.push( actionVO );
-							skin.currentState = "unsaved";
+							sendSave();
 						}
 
 						break;
@@ -626,9 +616,19 @@ package net.vdombox.ide.modules.events.view.components
 			removeShadowHandlers();
 		}
 
-		private function saveButton_clickHandler( event : MouseEvent ) : void
+		private function saveHandler( event : ElementEvent ) : void
+		{
+			sendSave();
+		}
+		
+		private function sendSave() : void
 		{
 			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.SAVE ) );
+		}
+		
+		private function redoButton_clickHandler( event : MouseEvent ) : void
+		{
+			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.REDO ) );
 		}
 		
 		private function undoButton_clickHandler( event : MouseEvent ) : void
@@ -659,6 +659,8 @@ package net.vdombox.ide.modules.events.view.components
 			shadowLinkage.target = shadowActionElement;
 
 			linkagesLayer.addElement( shadowLinkage );
+			
+			//sendSave();
 
 			addShadowHandlers();
 		}
@@ -688,15 +690,9 @@ package net.vdombox.ide.modules.events.view.components
 					else if ( event.target is ActionElement )
 						deleteActionElement( event.target as ActionElement );
 					
-					//TODO: сделать нормально
-					skin.currentState = "unsaved";
+					sendSave();
 				}
 			}
-		}
-		
-		private function unsaveStateHandler( event : ElementEvent ) : void
-		{
-			skin.currentState = "unsaved";
 		}
 		
 		private function linkage_deleteLinkageHandler( event : ElementEvent ) : void
@@ -732,7 +728,7 @@ package net.vdombox.ide.modules.events.view.components
 				}
 			}
 		
-			skin.currentState = "unsaved";
+			sendSave();
 			
 			if( linkage.parent == linkagesLayer )
 				linkagesLayer.removeElement( linkage );

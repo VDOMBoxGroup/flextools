@@ -25,6 +25,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.modules.events.model.MessageProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
@@ -36,10 +37,17 @@ package net.vdombox.ide.modules.events.view
 	public class EventsJunctionMediator extends LoggingJunctionMediator
 	{
 		public static const NAME : String = "EventsJunctionMediator";
+		
+		private var messageProxy : MessageProxy;
 
 		public function EventsJunctionMediator()
 		{
 			super( NAME, new Junction() );
+		}
+		
+		override public function onRegister() : void
+		{
+			messageProxy = facade.retrieveProxy( MessageProxy.NAME ) as MessageProxy;
 		}
 		
 		override public function listNotificationInterests() : Array
@@ -81,6 +89,9 @@ package net.vdombox.ide.modules.events.view
 			
 			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
 			interests.push( ApplicationFacade.SET_SERVER_ACTIONS );
+			
+			interests.push( ApplicationFacade.UNDO );
+			interests.push( ApplicationFacade.REDO );
 
 			return interests;
 		}
@@ -235,6 +246,7 @@ package net.vdombox.ide.modules.events.view
 					message = new ProxyMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.EVENTS, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
+					messageProxy.push( body.applicationEventsVO.pageVO, message as ProxyMessage );	
 					break;
 				}
 					
@@ -349,6 +361,25 @@ package net.vdombox.ide.modules.events.view
 					break
 				}
 					
+				case ApplicationFacade.UNDO:
+				{
+					message = messageProxy.getUndo( body as PageVO );
+					
+					if ( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.REDO:
+				{
+					message = messageProxy.getRedo( body as PageVO );
+					
+					if ( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
 					
 			}
 

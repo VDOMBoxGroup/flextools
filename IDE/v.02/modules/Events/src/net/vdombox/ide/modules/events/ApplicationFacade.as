@@ -133,6 +133,11 @@ package net.vdombox.ide.modules.events
 		public static const CHECK_SAVE_IN_WORKAREA : String = "checkSaveInWorkArea";
 		public static const SAVE_IN_WORKAREA_CHECKED : String = "saveInWorkAreaChecked";
 		
+		
+// Undo
+		public static const UNDO : String = "undo";
+		public static const REDO : String = "redo";
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )

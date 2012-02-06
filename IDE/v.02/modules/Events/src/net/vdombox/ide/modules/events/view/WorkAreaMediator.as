@@ -13,6 +13,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
+	import net.vdombox.ide.modules.events.model.MessageStackProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.ActionElement;
 	import net.vdombox.ide.modules.events.view.components.BaseElement;
@@ -124,6 +125,11 @@ package net.vdombox.ide.modules.events.view
 					showElementsView = visibleElementProxy.showCurrent;
 					setElementsCurrentVisibleState();
 					
+					
+					var messageStackProxy : MessageStackProxy = facade.retrieveProxy( MessageStackProxy.NAME + workArea.dataProvider.pageVO.id ) as MessageStackProxy;
+					if ( !messageStackProxy || messageStackProxy.length == 0 )
+						sendNotification( ApplicationFacade.SET_APPLICATION_EVENTS, { applicationEventsVO : workArea.dataProvider, needForUpdate: false } );
+						
 					break;
 				}
 					
@@ -217,6 +223,8 @@ package net.vdombox.ide.modules.events.view
 		{
 			workArea.addEventListener( WorkAreaEvent.SAVE, saveHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.UNDO, undoHandler, false, 0, true );
+			workArea.addEventListener( WorkAreaEvent.REDO, redoHandler, false, 0, true );
+			workArea.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
 			workArea.addEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged, true, 0, true );
 			NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_DOWN, shiftClickHandler );
 		}
@@ -226,6 +234,8 @@ package net.vdombox.ide.modules.events.view
 			//  addEventListener || remouve ? 
 			workArea.removeEventListener( WorkAreaEvent.SAVE, saveHandler );
 			workArea.removeEventListener( WorkAreaEvent.UNDO, undoHandler );
+			workArea.removeEventListener( WorkAreaEvent.REDO, redoHandler );
+			workArea.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true );
 			workArea.removeEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged );
 			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, shiftClickHandler );
 		}
@@ -304,16 +314,17 @@ package net.vdombox.ide.modules.events.view
 		
 		private function saveHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SET_APPLICATION_EVENTS, { applicationVO: statesProxy.selectedApplication,
-				pageVO : statesProxy.selectedPage, applicationEventsVO : workArea.dataProvider } );
+			sendNotification( ApplicationFacade.SET_APPLICATION_EVENTS, { applicationEventsVO : workArea.dataProvider, needForUpdate: false } );
 		}
 		
 		private function undoHandler( event : WorkAreaEvent ) : void
 		{
-			workArea.dataProvider = null;
-			
-			sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
-				{ applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
+			sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
+		}
+		
+		private function redoHandler( event : WorkAreaEvent ) : void
+		{
+			sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
 		}
 		
 		private function showCurrentElementsStateChanged( event : WorkAreaEvent ) : void
@@ -336,6 +347,24 @@ package net.vdombox.ide.modules.events.view
 			}
 			else if ( workArea.showElementsView == "Active" )
 				setVisibleElementsForCurrentObject();
+		}
+		
+		private function keyDownHandler( event : KeyboardEvent ) : void
+		{
+			if ( !isActive )
+				return;
+			
+			if( !event.ctrlKey )
+				return;
+			
+			if ( event.keyCode == Keyboard.Z )
+				sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
+			else if ( event.keyCode == Keyboard.Y )
+				sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
+			else if ( event.keyCode == Keyboard.S )
+				sendNotification( ApplicationFacade.SET_APPLICATION_EVENTS, { applicationEventsVO : workArea.dataProvider, needForUpdate: false } );
+			
+			event.stopImmediatePropagation();
 		}
 	}
 }

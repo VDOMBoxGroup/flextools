@@ -2,7 +2,12 @@
 <s:SparkSkin xmlns:components="net.vdombox.ide.modules.events.view.components.*"
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
-			 xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:components1="net.vdombox.components.*" xmlns:components2="net.vdombox.ide.common.view.components.*">
+			 xmlns:s="library://ns.adobe.com/flex/spark" 
+			 xmlns:mx1="library://ns.adobe.com/flex/mx" 
+			 xmlns:components1="net.vdombox.components.*" 
+			 xmlns:components2="net.vdombox.ide.common.view.components.*"
+			 creationComplete="sparkskin1_creationCompleteHandler(event)"
+			 remove="sparkskin1_removeHandler(event)">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -14,9 +19,9 @@
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.modules.events.events.WorkAreaEvent;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
+			import net.vdombox.ide.modules.events.events.WorkAreaEvent;
 			
 			import spark.events.IndexChangeEvent;
 			
@@ -47,6 +52,21 @@
 			private function mouseWheelHandler( event : MouseEvent ) : void
 			{
 				event.delta = event.delta > 0 ? 20 : -20;
+			}
+			
+			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true, 0 , true );
+			}
+			
+			private function setFocusOnWorkArea( event : MouseEvent ) : void
+			{
+				setFocus();
+			}
+			
+			protected function sparkskin1_removeHandler(event:FlexEvent):void
+			{
+				removeEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea,true );
 			}
 			
 		]]>
@@ -87,12 +107,11 @@
 	<s:HGroup height="20"
 			  left="1" right="1" top="1"
 			  gap="0" paddingRight="20" verticalAlign="middle">
-		<components:WorkAreaButton id="saveButton"
-								   enabled="true" enabled.disabled="false" height="20" icon="@Embed('assets/save.png')"
-								   label="{ resourceManager.getString( 'Events_General', 'work_area_save' ) }"
-								   highlighted="false" highlighted.unsaved="true"/>
+		<components:WorkAreaButton id="redoButton"
+								   height="20"
+								   label="{ resourceManager.getString( 'Events_General', 'work_area_redo' ) }"/>
 		<components:WorkAreaButton id="undoButton"
-								   enabled="false" enabled.unsaved="true" height="20" icon="@Embed('assets/undo.png')"
+								   height="20" icon="@Embed('assets/undo.png')"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_undo' ) }"/>
 		
 		<s:HGroup width="100%" horizontalAlign="center" gap="3" paddingLeft="10" paddingRight="10">

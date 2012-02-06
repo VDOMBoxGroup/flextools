@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.events.events
 	{
 		public static var SAVE : String = "save";
 		public static var UNDO : String = "undo";
+		public static var REDO : String = "redo";
 		
 		public static var SHOW_ELEMENTS_STATE_CHANGED : String = "showElementsStateChanged";
 		
