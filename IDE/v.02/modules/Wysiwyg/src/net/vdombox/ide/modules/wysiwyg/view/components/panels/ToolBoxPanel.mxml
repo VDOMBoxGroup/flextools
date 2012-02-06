@@ -130,6 +130,11 @@
 
 			protected function typeFilter_changeHandler(event:TextOperationEvent):void
 			{
+				find();
+			}
+			
+			private function find() : void
+			{
 				if ( typeFilter.text.length > 0 && typeFilter.text != resourceManager.getString( 'Wysiwyg_General', 'toolbox_panel_filter') )
 				{
 					typesAccordion.removeAllChildren();
@@ -142,12 +147,16 @@
 						if ( typeVO.displayName.toLowerCase().indexOf( typeFilter.text ) >= 0 )
 							typesCategory.addType( typeVO );
 					}
+					
+					cross.visible = true;
 				}
 				else
 				{
 					typesAccordion.removeAllChildren();
 					categories = [];
 					showTypes();
+					
+					cross.visible = false;
 				}
 			}
 			
@@ -161,6 +170,12 @@
 			{
 				if ( typeFilter.text == "" )
 					typeFilter.text = resourceManager.getString( 'Wysiwyg_General', 'toolbox_panel_filter');
+			}
+			
+			protected function cross_clickHandler(event:MouseEvent):void
+			{
+				typeFilter.text = "";
+				find();
 			}
 			
 		]]>
@@ -177,10 +192,16 @@
 	
 	<s:VGroup width="100%" height="100%">
 		
-		<s:TextInput id="typeFilter" width="100%" 
-					 text="{resourceManager.getString( 'Wysiwyg_General', 'toolbox_panel_filter')}" fontStyle="italic"
-					 change="typeFilter_changeHandler(event)" 
-					 focusIn="typeFilter_focusInHandler(event)" focusOut="typeFilter_focusOutHandler(event)"/>
+		<s:Group>
+			<s:TextInput id="typeFilter" width="100%" 
+						 text="{resourceManager.getString( 'Wysiwyg_General', 'toolbox_panel_filter')}" fontStyle="italic"
+						 change="typeFilter_changeHandler(event)" 
+						 focusIn="typeFilter_focusInHandler(event)" focusOut="typeFilter_focusOutHandler(event)"/>
+			
+			<mx:Image id="cross" height="100%" verticalAlign="middle" right="4" visible="false" source = "@Embed('assets/cross.png')" 
+					  click="cross_clickHandler(event)"/>
+		</s:Group>
+		
 		
 		<mx:Accordion id="typesAccordion" width="100%" height="100%" 
 					  borderVisible="false"

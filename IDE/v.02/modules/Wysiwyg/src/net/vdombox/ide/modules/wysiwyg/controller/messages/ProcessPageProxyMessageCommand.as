@@ -54,10 +54,10 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					else if ( operation == PPMOperationNames.DELETE )
 					{
 						sendNotification( ApplicationFacade.OBJECT_DELETED, body.objectVO );
-						if ( body.objectVO.parentID )
+						var rendererBase : RendererBase = renderProxy.getRendererByID( body.objectVO.id );
+						if ( rendererBase.renderVO.parent && rendererBase.renderVO.parent.vdomObjectVO is ObjectVO )
 						{
-							var rendererBase : RendererBase = renderProxy.getRendererByID( body.objectVO.parentID );
-							var objectVO : ObjectVO = rendererBase.renderVO.vdomObjectVO as ObjectVO;
+							var objectVO : ObjectVO = rendererBase.renderVO.parent.vdomObjectVO as ObjectVO;
 							sendNotification( ApplicationFacade.GET_WYSIWYG, objectVO );
 						}
 						else
