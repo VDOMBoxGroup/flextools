@@ -12,7 +12,6 @@ package net.vdombox.powerpack.panel.popup.Answers
 	{
 		
 		public  var textInput : TextInput = new TextInput();
-		private var text1 : Text;
 		
 		public function TextAnswer(data:String )
 		{

@@ -49,7 +49,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 				}
 				case ANSWER_TYPE_COMBO_BOX :
 				{
-					
+					answer = new ComboBoxAnswer (data);
 					break;
 				}	
 				case ANSWER_TYPE_CHECK_BOX :

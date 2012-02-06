@@ -106,7 +106,7 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		private function get packageBatFilePath () : String
 		{
-			var batFilePath : String = File.applicationStorageDirectory.nativePath + "/generatePlayerPackage.bat";
+			var batFilePath : String = File.applicationStorageDirectory.nativePath + "/generatePlayerPackage."+FileUtils.batFileExtension;
 			
 			return batFilePath;
 		}

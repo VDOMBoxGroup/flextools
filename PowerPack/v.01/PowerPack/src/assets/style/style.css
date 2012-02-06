@@ -415,3 +415,38 @@ AlertPopup
 	borderColor : red;
 	borderAlpha : 1;
 }
+
+.dropdownArrowBtnStyle
+{
+	backgroundGradientColors		: #ffffff, #c2c2c2;
+	backgroundOverGradientColors	: #ffffff, #c2c2c2;
+	borderColor						: #000000;
+	shadowColor						: #000000;
+	cornerRadius					: 4;
+	triangleLineColors				: #b2b2b2, #c4c4c4;
+	
+	skin : ClassReference("net.vdombox.powerpack.customize.skins.DropdownArrowButtonSkin");
+}
+
+DialogDropDownListBase
+{
+	borderColor						: #6d6d6d;
+	backgroundGradientColors		: #8c8c8c, #4e4e4e;
+	
+	textRollOverColor				: white;
+	textSelectedColor				: white;
+	color							: white;
+	fontWeight						: normal;
+	
+	useRollOver						: false;
+	
+	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.DropdownSkin");
+}
+
+DialogComboBox
+{
+	textRollOverColor				: black;
+	textSelectedColor				: black;
+	color							: black;
+	fontWeight						: normal;
+}
