@@ -209,31 +209,50 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			return strExtension;
 		}
 		
+		private static function get OS () : String
+		{
+			return Capabilities.os.substr(0, 3).toUpperCase();
+		}
+		
 		public static function get cmdFile() : File
 		{
-			var os : String = Capabilities.os.substr(0, 3).toUpperCase();
-			
-			switch (os) 
+			switch (OS) 
 			{
 				case OS_WINDOWS :
 				{
 					return windowsCmdFile;
-					
-					break;
 				}
 				case OS_LINUX:
 				{
-					//Linux OS
-					break;
+					return new File("/bin/sh");
 				}
 				case OS_MAC:
 				{
-					//Mac OS
-					break;
+					return new File("/bin/sh");
 				}
 			}
 			
 			return null;
+		}
+		
+		public static function get batFileExtension () : String
+		{
+			switch (OS) 
+			{
+				case OS_WINDOWS :
+				{
+					return "bat";
+				}
+				case OS_LINUX:
+				{
+					return "sh";
+				}
+				case OS_MAC:
+				{
+					return "sh";
+				}
+			}
+			return "bat";
 		}
 		
 		private static function get windowsCmdFile() : File
