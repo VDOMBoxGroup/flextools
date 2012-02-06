@@ -266,9 +266,13 @@ package net.vdombox.ide.core.model
 		}
 		
 		//click save button
-		public function setEvents( applicationEventsVO : ApplicationEventsVO ) : AsyncToken
+		
+		private var _needForUpdate : Boolean;
+		public function setEvents( applicationEventsVO : ApplicationEventsVO, needForUpdate : Boolean ) : AsyncToken
 		{
 			var token : AsyncToken;
+			
+			_needForUpdate = needForUpdate;
 			
 			//			var serverActionsXML : XML = applicationEventsVO.getServerActionsXML();
 			//
@@ -1033,7 +1037,7 @@ package net.vdombox.ide.core.model
 					
 				case "set_events_structure":
 				{
-					sendNotification( ApplicationFacade.APPLICATION_EVENTS_SETTED, { applicationVO: applicationVO } )
+					sendNotification( ApplicationFacade.APPLICATION_EVENTS_SETTED, { applicationVO: applicationVO, needForUpdate : _needForUpdate } )
 					
 					break;
 				}

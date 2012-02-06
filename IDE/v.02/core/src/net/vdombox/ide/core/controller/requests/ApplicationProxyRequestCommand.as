@@ -39,6 +39,8 @@ package net.vdombox.ide.core.controller.requests
 				applicationVO = body as ApplicationVO;
 			else if ( body && body.hasOwnProperty( "applicationVO" ) )
 				applicationVO = body.applicationVO as ApplicationVO;
+			else if ( body && body.hasOwnProperty( "applicationEventsVO" ) )
+				applicationVO = body.applicationEventsVO.pageVO.applicationVO as ApplicationVO;
 			else
 				throw new Error( "no application VO" );
 
@@ -116,7 +118,7 @@ package net.vdombox.ide.core.controller.requests
 					if ( operation == PPMOperationNames.READ )
 						applicationProxy.getEvents( body.pageVO );
 					else if( operation == PPMOperationNames.UPDATE )
-						applicationProxy.setEvents( body.applicationEventsVO );
+						applicationProxy.setEvents( body.applicationEventsVO, body.needForUpdate );
 
 					break;
 				}
