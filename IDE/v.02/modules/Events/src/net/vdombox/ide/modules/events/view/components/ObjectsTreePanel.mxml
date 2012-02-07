@@ -31,8 +31,8 @@
 			protected function objectsTree_creationCompleteHandler(event:FlexEvent):void
 			{
 				// TODO Auto-generated method stub
-				objectsTree.setStyle("disclosureOpenIcon", VDOMImage.Closed_Tree_Icon);
-				objectsTree.setStyle("disclosureClosedIcon", VDOMImage.Opened_Tree_Icon);
+				objectsTree.setStyle("disclosureOpenIcon", VDOMImage.Opened_Tree_Icon);
+				objectsTree.setStyle("disclosureClosedIcon", VDOMImage.Closed_Tree_Icon);
 			}
 			
 			public function get selectedObject() : XML
