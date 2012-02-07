@@ -5,6 +5,7 @@ package net.vdombox.ide.core.events
 	public class AlertWindowEvent extends Event
 	{
 		public static var OK : String = "alertOK";
+		public static var NO : String = "alertNO";
 		
 		public function AlertWindowEvent(type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

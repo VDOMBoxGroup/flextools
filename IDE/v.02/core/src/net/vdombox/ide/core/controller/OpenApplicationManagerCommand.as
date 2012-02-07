@@ -49,8 +49,8 @@ package net.vdombox.ide.core.controller
 			facade.registerProxy( new GalleryProxy() );
 
 			// popup Window
-			var mainWindowSkin : MainWindowSkin = notification.getBody() as MainWindowSkin;
-			WindowManager.getInstance().addWindow( applicationManagerWindow, mainWindowSkin, true );
+			var mainWindow : MainWindow = notification.getBody() as MainWindow;
+			WindowManager.getInstance().addWindow( applicationManagerWindow, mainWindow, true );
 			
 		}
 	}

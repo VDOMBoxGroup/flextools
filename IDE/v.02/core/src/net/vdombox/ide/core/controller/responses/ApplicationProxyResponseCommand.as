@@ -148,6 +148,20 @@ package net.vdombox.ide.core.controller.responses
 					
 					break;
 				}
+					
+				case ApplicationFacade.APPLICATION_CHECK_SAVED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.SAVED, body );
+					
+					break;
+				}
+					
+				case ApplicationFacade.APPLICATION_SET_SAVE:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.SAVED, body );
+					
+					break;
+				}
 				
 			}
 

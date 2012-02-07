@@ -397,7 +397,14 @@ package net.vdombox.ide.core
 //		errors
 		
 		public static const WRITE_ERROR : String = "writeError";
+		public static const WRITE_QUESTION : String = "writeQuestion";
 		
+		public static const APPLICATION_CHECK_SAVED : String = "applicationCheckSaved";
+		public static const APPLICATION_SAVE_CHECKED : String = "applicationSaveChecked";
+		
+		public static const APPLICATION_SET_SAVE : String = "applicationSetSave";
+		
+		public static const ALERT_WINDOW_CLOSE : String = "alertWindowClose";
 		
 
 		public static function getInstance( key : String ) : ApplicationFacade
@@ -493,6 +500,8 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_REMOTE_CALL_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_REMOTE_CALL_ERROR_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_COPY_CREATED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_CHECK_SAVED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_SET_SAVE, ApplicationProxyResponseCommand );
 
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
 			
@@ -594,6 +603,7 @@ package net.vdombox.ide.core
 			
 			registerCommand( CHECK_UPDATE, CheckUpdateCommand );
 			registerCommand( WRITE_ERROR, AlertSystemCommand );
+			registerCommand( WRITE_QUESTION, AlertSystemCommand );
 		}
 	}
 }

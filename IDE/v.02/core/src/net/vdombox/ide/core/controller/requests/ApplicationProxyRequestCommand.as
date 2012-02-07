@@ -178,6 +178,13 @@ package net.vdombox.ide.core.controller.requests
 					
 					break;
 				}
+					
+				case PPMApplicationTargetNames.SAVED:
+				{
+					sendNotification( ApplicationFacade.APPLICATION_SAVE_CHECKED, body.saved );
+					
+					break;
+				}
 			}
 		}
 	}

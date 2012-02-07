@@ -36,6 +36,8 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.model.ModulesProxy;
@@ -48,8 +50,6 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
 	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
-	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
 	
 	import org.osmf.utils.Version;
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -99,6 +99,9 @@ package net.vdombox.ide.core.view
 
 		private var windowManager : WindowManager = WindowManager.getInstance();
 
+		private var moduleVO : ModuleVO;
+		
+		private var typeCheckSaved : String = "";
 		/**
 		 *
 		 */
@@ -132,11 +135,18 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.CHANGE_SELECTED_MODULE:
 				{
 					var newSelectedModuleID : String = body as String;
-					var moduleVO : ModuleVO = modulesProxy.getModuleByID( newSelectedModuleID );
+					moduleVO = modulesProxy.getModuleByID( newSelectedModuleID );
 
 					if ( currentModule != moduleVO )
-						selectModule( moduleVO );
-
+					{
+						if ( currentModule.moduleID == "net.vdombox.ide.modules.Events" )
+						{
+							typeCheckSaved = "changeModule";
+							sendNotification( ApplicationFacade.APPLICATION_CHECK_SAVED, statesProxy.selectedApplication );
+						}
+						else 
+							selectModule( moduleVO );
+					}
 
 					break;
 				}
@@ -156,6 +166,36 @@ package net.vdombox.ide.core.view
 					selectModule( currentModule );
 					break;
 				}
+					
+				case ApplicationFacade.APPLICATION_SAVE_CHECKED:
+				{
+					if ( body as Boolean )
+					{
+						if ( typeCheckSaved == "changeModule" )
+							selectModule( moduleVO );
+						else
+							openAppManager();
+					}
+					else
+					{
+						sendNotification( ApplicationFacade.WRITE_QUESTION, "Save the changes?" );
+					}
+					
+					break;
+				}
+					
+				case ApplicationFacade.ALERT_WINDOW_CLOSE:
+				{
+					if ( body as Boolean )
+					{
+						sendNotification( ApplicationFacade.APPLICATION_SET_SAVE, statesProxy.selectedApplication );
+					}
+						
+					if ( typeCheckSaved == "changeModule" )
+						selectModule( moduleVO );
+					else
+						openAppManager();
+				}
 			}
 			
 			function alertResultHandler( event : CloseEvent ) : void
@@ -174,6 +214,8 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
 			interests.push( ApplicationFacade.OPEN_MAIN_WINDOW );
+			interests.push( ApplicationFacade.APPLICATION_SAVE_CHECKED );
+			interests.push( ApplicationFacade.ALERT_WINDOW_CLOSE );
 			
 			return interests;
 		}
@@ -229,9 +271,19 @@ package net.vdombox.ide.core.view
 
 		private function appManagerHandler( event : MainWindowEvent ) : void
 		{
+			if ( currentModule.moduleID == "net.vdombox.ide.modules.Events" )
+			{
+				typeCheckSaved = "appManagerOpened";
+				sendNotification( ApplicationFacade.APPLICATION_CHECK_SAVED, statesProxy.selectedApplication );
+			}
+			else
+				openAppManager();
+		}
+		
+		private function openAppManager() : void
+		{
 			currentModule.module.deSelect();
-			sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER, event.target );
-
+			sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER, mainWindow );
 		}
 
 		private function cleanup() : void

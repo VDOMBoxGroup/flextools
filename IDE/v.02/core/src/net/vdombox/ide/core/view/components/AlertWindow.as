@@ -3,6 +3,8 @@ package net.vdombox.ide.core.view.components
 	import flash.display.NativeWindowSystemChrome;
 	import flash.events.MouseEvent;
 	
+	import mx.controls.Image;
+	
 	import net.vdombox.ide.core.events.AlertWindowEvent;
 	import net.vdombox.ide.core.view.skins.AlertWindowSkin;
 	
@@ -15,6 +17,8 @@ package net.vdombox.ide.core.view.components
 		
 		[Bindable]
 		public var titleString : String = "";
+		
+		public var state : String;
 		
 		public function AlertWindow()
 		{
@@ -33,6 +37,15 @@ package net.vdombox.ide.core.view.components
 			this.setStyle( "skinClass", AlertWindowSkin );
 		}
 		
+		public function okClose() : void
+		{
+			dispatchEvent( new AlertWindowEvent ( AlertWindowEvent.OK ) );
+		}
+		
+		public function noClose() : void
+		{
+			dispatchEvent( new AlertWindowEvent ( AlertWindowEvent.NO ) );
+		}
 		
 	}
 }
