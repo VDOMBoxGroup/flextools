@@ -70,7 +70,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		
 		private function resourceButton_click( event : MouseEvent ) : void
 		{
-			toolset.toolsetButton.selected = true;
+			toolset.toolsetButton.selected = !toolset.toolsetButton.selected;
 			sendNotification( ApplicationFacade.SELECT_MODULE );
 		}
 	}
