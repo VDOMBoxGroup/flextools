@@ -110,9 +110,7 @@ package net.vdombox.ide.modules.scripts.view
 
 				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
-					
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
-					trace( "page - " + statesProxy.selectedPage.name )
 					
 					break;
 				}
