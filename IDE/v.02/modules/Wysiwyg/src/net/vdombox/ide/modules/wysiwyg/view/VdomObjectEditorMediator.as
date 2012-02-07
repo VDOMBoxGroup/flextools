@@ -26,6 +26,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -700,8 +701,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				var componentName : String = statesProxy.selectedObject.typeVO.displayName;
 				
-				Alert.noLabel = "Cancel";
-				Alert.yesLabel = "Delete";
+				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 				
 				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + componentName + " ?",AlertButton.OK_No, component.parentApplication, closeHandler);
 			}

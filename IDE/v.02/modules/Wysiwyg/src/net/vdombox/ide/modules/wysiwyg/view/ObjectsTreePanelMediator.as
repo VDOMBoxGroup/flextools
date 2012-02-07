@@ -24,6 +24,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -331,13 +332,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function keyDownDeleteHandler(event : ObjectsTreePanelEvent) : void
 		{
-			//trace ("[VdomObjectEditorMediator] keyDownDeleteHandler: " + event.keyCode + "; PHASE = " + event.eventPhase);
-			
 			var objectID : String = event.objectID;
 			var pageID : String = event.pageID;
 
-			Alert.noLabel = "Cancel";
-			Alert.yesLabel = "Delete";
+			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 				
 			Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + "?",AlertButton.OK_No, objectsTreePanel.parentApplication, closeHandler);
 			
@@ -542,12 +540,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			for ( var i : int = 0; i < pages.length; i++ )
 			{
-				if ( pages[ i ].typeVO.id != "753ea72c-475d-4a29-96be-71c522ca2097" )
-				{
-					_pages[ pages[ i ].id ] = pages[ i ];
+				_pages[ pages[ i ].id ] = pages[ i ];
 
-					pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}  iconID={pages[ i ].typeVO.structureIconID}  />;
-				}
+				pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}  iconID={pages[ i ].typeVO.structureIconID}  />;
 			}
 
 			objectsTreePanel.pages = pagesXMLList;

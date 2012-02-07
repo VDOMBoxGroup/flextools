@@ -15,6 +15,7 @@
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
 			
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 			
 			import spark.components.IItemRenderer;
@@ -217,12 +218,6 @@
 				}
 			}
 			
-			[Embed(source="assets/disclosureClosedIcon.png")]
-			public var plus:Class;
-			
-			[Embed(source="assets/disclosureOpenIcon.png")]
-			public var minus:Class;
-			
 
 			private function creationCompleteHandler() : void
 			{
@@ -233,8 +228,8 @@
 				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OVER, objectsTree_highlightChangeHandler, false, 0, true );
 				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OUT, objectsTree_highlightChangeHandler, false, 0, true );
 
-				objectsTree.setStyle("disclosureOpenIcon", minus);
-				objectsTree.setStyle("disclosureClosedIcon", plus);
+				objectsTree.setStyle("disclosureOpenIcon", VDOMImage.Closed_Tree_Icon);
+				objectsTree.setStyle("disclosureClosedIcon", VDOMImage.Opened_Tree_Icon);
 				
 				tbFill.height = 30;
 				//objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_UP, objectsTree_mouseHandler, false, 0, true );
@@ -326,7 +321,7 @@
 	
 	<s:Rect width="100%" height="100%">
 		<s:fill>
-			<s:BitmapFill source = "@Embed('assets/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+			<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
 	

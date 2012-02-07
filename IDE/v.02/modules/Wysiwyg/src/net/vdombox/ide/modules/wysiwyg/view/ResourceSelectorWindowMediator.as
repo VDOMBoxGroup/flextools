@@ -34,6 +34,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -372,8 +373,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			delResVO = event.resource;
 
-			Alert.noLabel = "Cancel";
-			Alert.yesLabel = "Delete";
+			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 
 			Alert.Show( "Are you sure want to delete\n " + componentName + " ?", 
 						AlertButton.OK_No, 
