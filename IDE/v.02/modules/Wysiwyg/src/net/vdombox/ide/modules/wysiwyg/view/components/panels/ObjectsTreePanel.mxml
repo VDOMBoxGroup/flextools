@@ -228,8 +228,8 @@
 				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OVER, objectsTree_highlightChangeHandler, false, 0, true );
 				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OUT, objectsTree_highlightChangeHandler, false, 0, true );
 
-				objectsTree.setStyle("disclosureOpenIcon", VDOMImage.Closed_Tree_Icon);
-				objectsTree.setStyle("disclosureClosedIcon", VDOMImage.Opened_Tree_Icon);
+				objectsTree.setStyle("disclosureOpenIcon", VDOMImage.Opened_Tree_Icon);
+				objectsTree.setStyle("disclosureClosedIcon", VDOMImage.Closed_Tree_Icon);
 				
 				tbFill.height = 30;
 				//objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_UP, objectsTree_mouseHandler, false, 0, true );
