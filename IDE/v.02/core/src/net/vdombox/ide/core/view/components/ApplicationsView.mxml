@@ -26,10 +26,6 @@
 				applicationList.scroller.setStyle( "horizontalScrollPolicy", "off" );
 				
 				applicationList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
-				
-				applicationList.scroller.verticalScrollBar.addEventListener( FlexEvent.UPDATE_COMPLETE, updateScroll );
-				
-				//applicationList.scroller.addEventListener( FlexEvent.UPDATE_COMPLETE, updateScroll );*/
 
 			}
 
@@ -52,16 +48,6 @@
 			private function get verticalScrollBar() : VScrollBar 
 			{
 				return applicationList.scroller.verticalScrollBar; 
-			}
-			
-			
-			private function updateScroll(event:FlexEvent):void
-			{
-				// TODO Auto-generated method stup
-				if( verticalScrollBar && verticalScrollBar.visible )
-				{
-					verticalScrollBar.x = 0;
-				}
 			}
 			
 		]]>
