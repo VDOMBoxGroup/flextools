@@ -16,9 +16,10 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.modules.tree.events.WorkAreaEvent;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
+			import net.vdombox.ide.modules.tree.events.WorkAreaEvent;
 
 			private var isExpanded : Boolean;
 
@@ -120,7 +121,7 @@
 			  gap="0">
 
 		<components:WorkAreaButton id="saveButton"
-								   enabled="true" enabled.disabled="false" height="20" icon="@Embed('assets/save.png')"
+								   enabled="true" enabled.disabled="false" height="20" icon="{VDOMImage.Save}"
 								   label="{ resourceManager.getString( 'Tree_General', 'work_area_save' ) }"
 								   highlighted="false" highlighted.unsaved="true"/>
 

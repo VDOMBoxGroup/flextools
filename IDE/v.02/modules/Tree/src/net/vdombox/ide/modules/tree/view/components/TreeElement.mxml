@@ -18,11 +18,12 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.ResourceVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.common.view.components.button.AlertButton;
+			import net.vdombox.ide.common.view.components.windows.Alert;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
-			import net.vdombox.ide.common.view.components.windows.Alert;
-			import net.vdombox.ide.common.view.components.button.AlertButton;
 			
 			import spark.components.Group;
 			import spark.filters.DropShadowFilter;
@@ -253,8 +254,7 @@
 			
 			private function deleteButton_clickHandler( event : MouseEvent ) :void
 			{
-				Alert.noLabel = "Cancel";
-				Alert.yesLabel = "Delete";
+				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 				
 				Alert.Show( "Are you sure want to delete " + title + " ?",AlertButton.OK_No, this.parentApplication, deleteHandler);
 				

@@ -12,6 +12,7 @@
 			import net.vdombox.ide.common.model._vo.ObjectVO;
 			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.tree.events.PropertiesPanelEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TextAreaShadowedSkin;
@@ -254,7 +255,7 @@
 	<s:controlBarContent>
 
 		<components:ElementButton id="makeStartButton"
-								  enabled="false" height="20" icon="@Embed('assets/save.png')" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_start' ) }"
+								  enabled="false" height="20" icon="{VDOMImage.Save}" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_start' ) }"
 								  width="100%"
 								  skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
 								  click="dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.MAKE_START_PAGE ) )"/>
@@ -266,7 +267,7 @@
 								  click="dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.DELETE_PAGE ) )"/>
 
 		<components:ElementButton id="saveButton"
-								  enabled="false" height="20" icon="@Embed('assets/save.png')" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_save' ) }"
+								  enabled="false" height="20" icon="{VDOMImage.Save}" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_save' ) }"
 								  width="100%"
 								  skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
 								  click="saveProperties()"/>
