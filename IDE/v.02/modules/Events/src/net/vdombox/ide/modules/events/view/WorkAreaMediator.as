@@ -76,6 +76,10 @@ package net.vdombox.ide.modules.events.view
 			
 			interests.push( ApplicationFacade.CHECK_SAVE_IN_WORKAREA );
 			
+			interests.push( ApplicationFacade.SAVE_CHANGED );
+			
+			interests.push( ApplicationFacade.UNDO_REDO_GETTED );
+			
 			return interests;
 		}
 
@@ -103,6 +107,7 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.BODY_STOP:
 				{
 					isActive = false;
+					workArea.dataProvider = null;
 
 					break;
 				}
@@ -111,10 +116,13 @@ package net.vdombox.ide.modules.events.view
 				{
 					if ( statesProxy.selectedApplication && statesProxy.selectedPage )
 					{
-						workArea.dataProvider = null;
+						workArea.removeAllElements();
+						workArea.linkagesLayer.removeAllElements();
 						workArea.pageName.text = body.name;
 						sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
 										  { applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
+						
+						workArea.skin.currentState = "normal"; 
 					}
 					break;
 				}
@@ -128,7 +136,7 @@ package net.vdombox.ide.modules.events.view
 					
 					var messageStackProxy : MessageStackProxy = facade.retrieveProxy( MessageStackProxy.NAME + workArea.dataProvider.pageVO.id ) as MessageStackProxy;
 					if ( !messageStackProxy || messageStackProxy.length == 0 )
-						sendNotification( ApplicationFacade.SET_APPLICATION_EVENTS, { applicationEventsVO : workArea.dataProvider, needForUpdate: false } );
+						setMessageHandler();
 						
 					break;
 				}
@@ -136,6 +144,7 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.APPLICATION_EVENTS_SETTED:
 				{
 					workArea.skin.currentState = "normal"; //TODO: добавить public свойство для изменения внутреннего state
+					
 					break;
 				}
 					
@@ -167,11 +176,25 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.CHECK_SAVE_IN_WORKAREA:
 				{
 					if ( workArea.skin.currentState == "unsaved" )
-						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, false );
+						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : false } );
 					else
-						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, true );
+						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : true } );
 					
 					break;
+				}
+					
+				case ApplicationFacade.SAVE_CHANGED:
+				{
+					saveHandler();
+					
+					break;
+				}
+					
+				case ApplicationFacade.UNDO_REDO_GETTED:
+				{
+					workArea.dataProvider = body as ApplicationEventsVO;
+					
+					workArea.skin.currentState = "unsaved"; 
 				}
 					
 			}
@@ -224,6 +247,7 @@ package net.vdombox.ide.modules.events.view
 			workArea.addEventListener( WorkAreaEvent.SAVE, saveHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.UNDO, undoHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.REDO, redoHandler, false, 0, true );
+			workArea.addEventListener( WorkAreaEvent.SET_MESSAGE, setMessageHandler, false, 0, true );
 			workArea.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
 			workArea.addEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged, true, 0, true );
 			NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_DOWN, shiftClickHandler );
@@ -235,6 +259,7 @@ package net.vdombox.ide.modules.events.view
 			workArea.removeEventListener( WorkAreaEvent.SAVE, saveHandler );
 			workArea.removeEventListener( WorkAreaEvent.UNDO, undoHandler );
 			workArea.removeEventListener( WorkAreaEvent.REDO, redoHandler );
+			workArea.removeEventListener( WorkAreaEvent.SET_MESSAGE, setMessageHandler );
 			workArea.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true );
 			workArea.removeEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged );
 			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, shiftClickHandler );
@@ -312,7 +337,7 @@ package net.vdombox.ide.modules.events.view
 			workArea.setVisibleStateForAllLinkages( false );
 		}
 		
-		private function saveHandler( event : WorkAreaEvent ) : void
+		private function saveHandler( event : WorkAreaEvent = null) : void
 		{
 			sendNotification( ApplicationFacade.SET_APPLICATION_EVENTS, { applicationEventsVO : workArea.dataProvider, needForUpdate: false } );
 		}
@@ -325,6 +350,11 @@ package net.vdombox.ide.modules.events.view
 		private function redoHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
+		}
+		
+		private function setMessageHandler( event : WorkAreaEvent = null) : void
+		{
+			sendNotification( ApplicationFacade.SET_MESSAGE, workArea.dataProvider );
 		}
 		
 		private function showCurrentElementsStateChanged( event : WorkAreaEvent ) : void
@@ -362,7 +392,7 @@ package net.vdombox.ide.modules.events.view
 			else if ( event.keyCode == Keyboard.Y )
 				sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
 			else if ( event.keyCode == Keyboard.S )
-				sendNotification( ApplicationFacade.SET_APPLICATION_EVENTS, { applicationEventsVO : workArea.dataProvider, needForUpdate: false } );
+				saveHandler();
 			
 			event.stopImmediatePropagation();
 		}

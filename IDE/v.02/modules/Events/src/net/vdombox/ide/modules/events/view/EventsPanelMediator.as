@@ -145,7 +145,10 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.SAVE_IN_WORKAREA_CHECKED:
 				{
-					if ( ( body as Boolean ) )
+					if ( body.object != this )
+						return;
+					
+					if ( ( body.saved as Boolean ) )
 						openCreateServerActionWindow();
 					else
 					{
@@ -281,7 +284,7 @@ package net.vdombox.ide.modules.events.view
 		
 		private function createServerActionHandler( event : EventsPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.CHECK_SAVE_IN_WORKAREA );
+			sendNotification( ApplicationFacade.CHECK_SAVE_IN_WORKAREA, this );
 		}
 		
 		private function openCreateServerActionWindow() : void
@@ -303,7 +306,7 @@ package net.vdombox.ide.modules.events.view
 			
 			createActionWindowMediator.creationTarget = ApplicationFacade.ACTION;
 			
-			var title : String = "111";
+			var title : String = "New Server Action";
 			
 			sendNotification( ApplicationFacade.OPEN_WINDOW, { content: createActionWindow, title: title, isModal: true, resizable: false } );
 		}

@@ -138,6 +138,12 @@ package net.vdombox.ide.modules.events
 		public static const UNDO : String = "undo";
 		public static const REDO : String = "redo";
 		
+		public static const SET_MESSAGE : String = "setMessage";
+		
+		public static const UNDO_REDO_GETTED : String = "undoRedoGetted";
+		
+		public static const SAVE_CHANGED : String = "saveChanged";
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )

@@ -8,6 +8,8 @@ package net.vdombox.ide.modules.events.events
 		public static var UNDO : String = "undo";
 		public static var REDO : String = "redo";
 		
+		public static var SET_MESSAGE : String = "setMessage";
+		
 		public static var SHOW_ELEMENTS_STATE_CHANGED : String = "showElementsStateChanged";
 		
 		public function WorkAreaEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )

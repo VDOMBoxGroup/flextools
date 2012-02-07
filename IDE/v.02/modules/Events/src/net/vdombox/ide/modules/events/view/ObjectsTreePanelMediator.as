@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.events.view
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Tree;
+	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	
@@ -14,6 +15,8 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.model.MessageProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
@@ -93,6 +96,9 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.OBJECT_GETTED );
 			
 			interests.push( ApplicationFacade.GET_CHILDREN_ELEMENTS );
+			
+			interests.push( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED );
+			interests.push( ApplicationFacade.APPLICATION_EVENTS_SETTED );
 
 			return interests;
 		}
@@ -155,6 +161,9 @@ package net.vdombox.ide.modules.events.view
 					}
 
 					// XXX: doun on quck switch (pagesXMLList == null)
+					if ( !pagesXMLList )
+						return;
+				
 					currentPageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
 					currentPageXML.setChildren( new XMLList() );
 					currentPageXML.appendChild( pageXMLTree.* );
@@ -186,7 +195,47 @@ package net.vdombox.ide.modules.events.view
 					
 					break;
 				}
+					
+				case ApplicationFacade.SAVE_IN_WORKAREA_CHECKED:
+				{
+					if ( body.object != this )
+						return;
+					
+					if ( ( body.saved as Boolean ) )
+						changeFunction();
+					else
+					{
+						Alert.noLabel = "No";
+						Alert.yesLabel = "Yes";
+						Alert.Show( "Save the changes?", AlertButton.OK_No, objectsTreePanel.parentApplication, alertHandler );
+					}
+					return;
+				}
+					
+				case ApplicationFacade.APPLICATION_EVENTS_SETTED:
+				{
+					if ( needChangePage )
+					{
+						needChangePage = false;
+						changeFunction();
+					}
+					
+					break;
+				}
 			}
+		}
+		
+		private var needChangePage : Boolean = false;
+		
+		private function alertHandler( event : CloseEvent ) : void
+		{
+			if (event.detail == Alert.YES)
+			{
+				needChangePage = true;
+				sendNotification( ApplicationFacade.SAVE_CHANGED );
+			}
+			else
+				changeFunction();
 		}
 		
 		private function setVisibleForElements( pageXML : XML) : void
@@ -277,11 +326,20 @@ package net.vdombox.ide.modules.events.view
 			return null;
 		}
 
+		private var item : XML;
+		
 		private function objectsTree_ChangeHandler( event : ListEvent ) : void
 		{
-			var item : XML = event.itemRenderer.data as XML;
+			item = event.itemRenderer.data as XML;
+			
+			sendNotification( ApplicationFacade.CHECK_SAVE_IN_WORKAREA, this );
+			
+		}
+		
+		private function changeFunction() : void
+		{
 			var id : String = item.@id;
-
+			
 			if ( item.name() == "page" )
 			{
 				if( currentPageXML )
@@ -294,7 +352,7 @@ package net.vdombox.ide.modules.events.view
 			{
 				var pageID : String
 				var parent : XML = item.parent();
-
+				
 				while ( parent )
 				{
 					if ( parent.name() != "page" )
@@ -302,14 +360,13 @@ package net.vdombox.ide.modules.events.view
 						parent = parent.parent();
 						continue;
 					}
-
+					
 					pageID = parent.@id;
 					parent = null;
 				}
-
+				
 				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ pageID ], objectID: id } );
 			}
-			
 		}
 		
 		private function getResourceRequestHandler( event : ResourceVOEvent ) : void

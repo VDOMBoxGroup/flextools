@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.events.model
 {
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.events.view.components.UndoStackItem;
 	
@@ -32,7 +33,7 @@ package net.vdombox.ide.modules.events.model
 			_index = -1;
 		}
 		
-		public function push( message : ProxyMessage ) : void
+		public function push( message : ApplicationEventsVO ) : void
 		{
 			if ( _index < _stack.length - 1 )
 				_stack.splice(_index + 1, _stack.length - 1 - _index);
@@ -41,7 +42,7 @@ package net.vdombox.ide.modules.events.model
 			_index = _stack.length - 1;0
 		}
 		
-		public function undo() : ProxyMessage
+		public function undo() : ApplicationEventsVO
 		{
 			if ( _index > 0 )
 				return _stack[--_index].undo();
@@ -49,12 +50,28 @@ package net.vdombox.ide.modules.events.model
 			return null;
 		}
 		
-		public function redo() : ProxyMessage
+		public function redo() : ApplicationEventsVO
 		{
 			if ( _index >= -1 && _index < _stack.length - 1 )
 				return _stack[++_index].redo();
 			
 			return null;
+		}
+		
+		public function get hasUndo() : Boolean
+		{
+			if ( _index > 0 )
+				return true;
+			
+			return false;
+		}
+		
+		public function get hasRedo() : Boolean
+		{
+			if ( _index >= -1 && _index < _stack.length - 1 )
+				return true;
+			
+			return false;
 		}
 		
 		public function removeAll() : void

@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.events.model
 {
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
@@ -17,7 +18,7 @@ package net.vdombox.ide.modules.events.model
 			super( NAME );
 		}
 		
-		public function push( pageVO : PageVO, message : ProxyMessage ) : void
+		public function push( pageVO : PageVO, message : ApplicationEventsVO ) : void
 		{
 			if ( !facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) )
 				facade.registerProxy( new MessageStackProxy( pageVO ) );
@@ -27,7 +28,7 @@ package net.vdombox.ide.modules.events.model
 			messageStackProxy.push( message );
 		}
 		
-		public function checkPush( pageVO : PageVO, message : ProxyMessage ) : void
+		public function checkPush( pageVO : PageVO, message : ApplicationEventsVO ) : void
 		{
 			if ( !facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) )
 				facade.registerProxy( new MessageStackProxy( pageVO ) );
@@ -39,7 +40,7 @@ package net.vdombox.ide.modules.events.model
 		
 		private var renderers : Array;
 		
-		public function getUndo( pageVO : PageVO ) : ProxyMessage
+		public function getUndo( pageVO : PageVO ) : ApplicationEventsVO
 		{
 			if ( !facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) )
 				return null;
@@ -49,7 +50,7 @@ package net.vdombox.ide.modules.events.model
 			return messageStackProxy.undo();
 		}
 		
-		public function getRedo( pageVO : PageVO ) : ProxyMessage
+		public function getRedo( pageVO : PageVO ) : ApplicationEventsVO
 		{
 			if ( !facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) )
 				return null;
@@ -57,6 +58,26 @@ package net.vdombox.ide.modules.events.model
 			messageStackProxy = facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) as MessageStackProxy;
 			
 			return messageStackProxy.redo();
+		}
+		
+		public function hasUndo( pageVO : PageVO ) : Boolean
+		{
+			if ( !facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) )
+				return false;
+			
+			messageStackProxy = facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) as MessageStackProxy;
+			
+			return messageStackProxy.hasUndo;
+		}
+		
+		public function hasRedo( pageVO : PageVO ) : Boolean
+		{
+			if ( !facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) )
+				return false;
+			
+			messageStackProxy = facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) as MessageStackProxy;
+			
+			return messageStackProxy.hasRedo;
 		}
 		
 		public function removeAll( pages : Object ) : void

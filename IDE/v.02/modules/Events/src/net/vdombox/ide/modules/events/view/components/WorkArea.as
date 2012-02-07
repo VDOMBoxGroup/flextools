@@ -44,9 +44,9 @@ package net.vdombox.ide.modules.events.view.components
 
 			addEventListener( ElementEvent.CREATE_LINKAGE, element_createLinkageHandler, true, 0, true );
 			addEventListener( ElementEvent.DELETE, element_deleteHandler, true, 0, true );
-			addEventListener( ElementEvent.MOVED, saveHandler, true, 0, true );
-			addEventListener( ElementEvent.STATE_CHANGED, saveHandler, true, 0, true );
-			addEventListener( ElementEvent.PARAMETER_EDIT, saveHandler, true, 0, true );
+			addEventListener( ElementEvent.MOVED, unsaveHandler, true, 0, true );
+			addEventListener( ElementEvent.STATE_CHANGED, unsaveHandler, true, 0, true );
+			addEventListener( ElementEvent.PARAMETER_EDIT, unsaveHandler, true, 0, true );
 			addEventListener( ElementEvent.DELETE_LINKAGE, linkage_deleteLinkageHandler, true, 0, true );
 		}
 
@@ -55,6 +55,9 @@ package net.vdombox.ide.modules.events.view.components
 
 		[SkinPart]
 		public var linkagesLayer : Group;
+		
+		[SkinPart]
+		public var saveButton : WorkAreaButton;
 
 		[SkinPart]
 		public var redoButton : WorkAreaButton;
@@ -113,10 +116,6 @@ package net.vdombox.ide.modules.events.view.components
 				skin.currentState = "disabled";
 				return;
 			}
-			else
-			{
-				skin.currentState = "normal";
-			}
 			
 			addClientActions();
 			
@@ -127,7 +126,11 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			super.partAdded( partName, instance );
 			
-			if( instance == redoButton )
+			if( instance == saveButton )
+			{
+				saveButton.addEventListener( MouseEvent.CLICK, saveButton_clickHandler );
+			}
+			else if( instance == redoButton )
 			{
 				redoButton.addEventListener( MouseEvent.CLICK, redoButton_clickHandler );
 			}
@@ -485,7 +488,7 @@ package net.vdombox.ide.modules.events.view.components
 			else if ( newElementVO is ServerActionVO )
 				createServerAction( newElementVO as ServerActionVO, coordinates );
 			
-			sendSave();
+			unsaveHandler();
 		}
 
 		private function mouseDownHandler( event : MouseEvent ) : void
@@ -597,7 +600,7 @@ package net.vdombox.ide.modules.events.view.components
 						if ( !isAviable )
 						{
 							eventObject.actions.push( actionVO );
-							sendSave();
+							unsaveHandler();
 						}
 
 						break;
@@ -615,13 +618,15 @@ package net.vdombox.ide.modules.events.view.components
 
 			removeShadowHandlers();
 		}
-
-		private function saveHandler( event : ElementEvent ) : void
+		
+		private function unsaveHandler( event : ElementEvent = null ) : void
 		{
-			sendSave();
+			skin.currentState = 'unsaved';
+			
+			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.SET_MESSAGE ) );
 		}
 		
-		private function sendSave() : void
+		private function saveButton_clickHandler( event : MouseEvent ) : void
 		{
 			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.SAVE ) );
 		}
@@ -690,7 +695,7 @@ package net.vdombox.ide.modules.events.view.components
 					else if ( event.target is ActionElement )
 						deleteActionElement( event.target as ActionElement );
 					
-					sendSave();
+					unsaveHandler();
 				}
 			}
 		}
@@ -728,7 +733,7 @@ package net.vdombox.ide.modules.events.view.components
 				}
 			}
 		
-			sendSave();
+			unsaveHandler();
 			
 			if( linkage.parent == linkagesLayer )
 				linkagesLayer.removeElement( linkage );

@@ -1,9 +1,12 @@
 package net.vdombox.ide.modules.events.view
 {
+	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.view.components.Body;
 	
@@ -77,11 +80,12 @@ package net.vdombox.ide.modules.events.view
 				case ApplicationFacade.MODULE_DESELECTED:
 				{
 					isReady = false;
-
+					
 					sendNotification( ApplicationFacade.BODY_STOP );
 
 					break;
 				}
+					
 			}
 		}
 

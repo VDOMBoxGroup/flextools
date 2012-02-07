@@ -32,6 +32,19 @@ package net.vdombox.ide.modules.events.controller.messages
 
 			switch ( target )
 			{
+				case PPMApplicationTargetNames.SAVED:
+				{
+					if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.CHECK_SAVE_IN_WORKAREA , null );
+					else if ( operation == PPMOperationNames.UPDATE )
+					{
+						sendNotification( ApplicationFacade.SAVE_CHANGED );
+					}
+						
+					
+					break;
+				}
+					
 				case PPMApplicationTargetNames.PAGES:
 				{
 					if ( operation == PPMOperationNames.READ )

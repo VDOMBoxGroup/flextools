@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.events.view
 {
+	import flashx.textLayout.elements.BreakElement;
+	
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.SimpleMessageHeaders;
@@ -20,6 +22,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
+	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
@@ -92,6 +95,10 @@ package net.vdombox.ide.modules.events.view
 			
 			interests.push( ApplicationFacade.UNDO );
 			interests.push( ApplicationFacade.REDO );
+			
+			interests.push( ApplicationFacade.SET_MESSAGE );
+			
+			interests.push( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED );
 
 			return interests;
 		}
@@ -246,7 +253,6 @@ package net.vdombox.ide.modules.events.view
 					message = new ProxyMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.EVENTS, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
-					messageProxy.push( body.applicationEventsVO.pageVO, message as ProxyMessage );	
 					break;
 				}
 					
@@ -363,21 +369,37 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.UNDO:
 				{
-					message = messageProxy.getUndo( body as PageVO );
-					
-					if ( message )
-						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					if ( messageProxy.hasUndo( body as PageVO) )
+						sendNotification( ApplicationFacade.UNDO_REDO_GETTED, messageProxy.getUndo( body as PageVO ) );
 					
 					break;
 				}
 					
 				case ApplicationFacade.REDO:
 				{
-					message = messageProxy.getRedo( body as PageVO );
+					if ( messageProxy.hasRedo( body as PageVO) )
+						sendNotification( ApplicationFacade.UNDO_REDO_GETTED, messageProxy.getRedo( body as PageVO ) );
 					
-					if ( message )
-						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					break;
+				}
 					
+				case ApplicationFacade.SET_MESSAGE:
+				{
+					messageProxy.push( body.pageVO, body as ApplicationEventsVO );	
+					
+					break;
+				}
+					
+				case ApplicationFacade.SAVE_IN_WORKAREA_CHECKED:
+				{
+					if ( !body.object )
+					{
+						message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.SAVED, body );
+						
+						if ( message )
+							junction.sendMessage( PipeNames.PROXIESOUT, message );
+					}
+			
 					break;
 				}
 					

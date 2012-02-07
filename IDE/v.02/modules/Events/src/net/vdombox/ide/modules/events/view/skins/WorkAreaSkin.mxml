@@ -107,6 +107,10 @@
 	<s:HGroup height="20"
 			  left="1" right="1" top="1"
 			  gap="0" paddingRight="20" verticalAlign="middle">
+		<components:WorkAreaButton id="saveButton"
+								   enabled="true" enabled.disabled="false" height="20" icon="@Embed('assets/save.png')"
+								   label="{ resourceManager.getString( 'Events_General', 'work_area_save' ) }"
+								   highlighted="false" highlighted.unsaved="true"/>
 		<components:WorkAreaButton id="redoButton"
 								   height="20"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_redo' ) }"/>

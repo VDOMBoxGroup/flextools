@@ -5,37 +5,21 @@ package net.vdombox.ide.modules.events.view.components
 
 	public class UndoStackItem
 	{
-		private var _message : ProxyMessage; 
-		private var _undoMessage : ProxyMessage;
+		private var _message : ApplicationEventsVO; 
+		private var _undoMessage : ApplicationEventsVO;
 		
-		public function UndoStackItem( message : ProxyMessage )
+		public function UndoStackItem( message : ApplicationEventsVO )
 		{
-			_message = getUndoContent( message );
+			_message = message.copy();;
 			_undoMessage = _message;
 		}
 		
-		private function getUndoContent( message : ProxyMessage ) : ProxyMessage
-		{
-			var body : Object = message.getBody();
-			var undoBody : Object = [];
-			
-			if ( body.hasOwnProperty("applicationEventsVO") )
-			{
-				var applicationEventsVO : ApplicationEventsVO =  (body.applicationEventsVO as ApplicationEventsVO).copy();
-				undoBody.needForUpdate = true;
-				undoBody.applicationEventsVO = applicationEventsVO;
-				return new ProxyMessage(message.proxy, message.operation, message.target, undoBody );
-			}
-			
-			return null;
-		}
-		
-		public function undo() : ProxyMessage
+		public function undo() : ApplicationEventsVO
 		{
 			return _undoMessage;
 		}
 		
-		public function redo() : ProxyMessage
+		public function redo() : ApplicationEventsVO
 		{
 			return _message;
 		}

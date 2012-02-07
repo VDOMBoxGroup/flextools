@@ -68,7 +68,7 @@ package net.vdombox.ide.modules.events.view
 
 		private function toolsetButton_clickHandler( event : MouseEvent ) : void
 		{
-			toolset.toolsetButton.selected = true;
+			toolset.toolsetButton.selected = !toolset.toolsetButton.selected;
 			sendNotification( ApplicationFacade.SELECT_MODULE );
 		}
 	}
