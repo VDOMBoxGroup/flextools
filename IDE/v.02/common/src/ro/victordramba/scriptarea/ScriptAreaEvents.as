@@ -33,6 +33,7 @@ package ro.victordramba.scriptarea
 
 		public function ScriptAreaEvents()
 		{
+			
 			doubleClickEnabled = true;
 			focusRect = false;
 

@@ -119,6 +119,7 @@ package net.vdombox.ide.common.model._vo
 		public function setParameters( value : Array ) : void
 		{
 			_parameters = value; 
+			
 		}
 		//TODO: Разобраться с переименованием!
 		public function setProperties( propertiesXML : XML ) : void
@@ -195,6 +196,26 @@ package net.vdombox.ide.common.model._vo
 			copy.setObjectName( _objectName );
 			
 			copy.setParameters( copyParametrs().slice() );
+			
+			return copy;
+		}
+		
+		public function clone() : ClientActionVO
+		{
+			var copy : ClientActionVO = new ClientActionVO();
+			
+			copy.setID( _id );
+			copy.setName( _name );
+			
+			copy.setObjectID( _objectID );
+			copy.setObjectName( _objectName );
+			
+			copy.setParameters( copyParametrs().slice() );
+			
+			copy.top = _top;
+			
+			copy.left = _left;
+			copy.state = _state;
 			
 			return copy;
 		}

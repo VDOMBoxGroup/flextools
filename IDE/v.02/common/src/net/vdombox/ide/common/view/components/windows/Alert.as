@@ -16,12 +16,12 @@ package net.vdombox.ide.common.view.components.windows
 	import mx.managers.ISystemManager;
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.button.VDOMButton;
 	import net.vdombox.ide.common.view.skins.windows.AlertSkin;
 	
 	import spark.components.Label;
 	import spark.components.TitleWindow;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
 
 	public class Alert extends TitleWindow
 	{
@@ -39,10 +39,16 @@ package net.vdombox.ide.common.view.components.windows
 		public var text : String;
 		
 		[Bindable]
-		public static var yesLabel : String = "Yes";
+		private static var _yesLabel : String = "Yes";
 		
 		[Bindable]
-		public static var noLabel : String = "No";
+		private static var _noLabel : String = "No";
+		
+		[Bindable]
+		private static var _yesImage : Class = null;
+		
+		[Bindable]
+		private static var _noImage : Class = null;
 		
 		[Bindable]
 		private static var _visibleNoButton : Boolean = false;
@@ -53,14 +59,32 @@ package net.vdombox.ide.common.view.components.windows
 		
 		private static var instance : Alert;
 		
+		public static function setPatametrs( yesLabel : String = "Yes", noLabel : String = "No", yesImage : Class = null, noImage : Class  = null) : void
+		{
+			_yesLabel = yesLabel;
+			_noLabel = noLabel;
+			_yesImage = yesImage;
+			_noImage = noImage;
+		}
+		
 		public function getNoLabel() : String
 		{
-			return noLabel;
+			return _noLabel;
 		}
 		
 		public function getYesLabel() : String
 		{
-			return yesLabel;
+			return _yesLabel;
+		}
+		
+		public function getNoImage() : Class
+		{
+			return _noImage;
+		}
+		
+		public function getYesImage() : Class
+		{
+			return _yesImage;
 		}
 		
 		public function getVisibleNoButton() : Boolean
@@ -106,6 +130,8 @@ package net.vdombox.ide.common.view.components.windows
 			
 			if (buttonView == AlertButton.OK_No)
 				_visibleNoButton = true;
+			else
+				_visibleNoButton = false;
 			
 			var alert : Alert = Alert.getInstance();
 			
@@ -147,6 +173,11 @@ package net.vdombox.ide.common.view.components.windows
 			var alert : Alert = Alert.getInstance();
 			mx.managers.PopUpManager.removePopUp(alert);
 			instance = null;
+			
+			_yesLabel = "Yes";
+			_noLabel = "No";
+			_yesImage = null;
+			_noImage = null;
 		}
 			
 		public function keyNoPush(event : KeyboardEvent) : void

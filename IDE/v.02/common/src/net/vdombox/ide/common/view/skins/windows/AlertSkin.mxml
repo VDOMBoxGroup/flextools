@@ -15,6 +15,7 @@
 			
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.components.windows.Alert;
 			
 			protected function sparkskin1_keyDownHandler(event:KeyboardEvent):void
@@ -68,7 +69,7 @@
 	<s:Group left="9" top="9" right="9" bottom="9">
 		<s:Rect width="100%" height="100%">
 			<s:fill>
-				<s:BitmapFill source = "@Embed('assets/texture_sidebar.png')" smooth="true" fillMode="repeat"/>
+				<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
 		
@@ -79,11 +80,11 @@
 			
 			<s:HGroup height="29" width="100%" horizontalAlign="center" gap="40">
 				<button:VDOMButton  id="noButton" tabIndex="-1" select="true"
-							label="{hostComponent.getNoLabel()}"
+							icon="{hostComponent.getNoImage()}" label="{hostComponent.getNoLabel()}"
 							visible="{hostComponent.getVisibleNoButton()}" includeInLayout="{hostComponent.getVisibleNoButton()}"
 							click="hostComponent.btnClickHandler(Alert.NO)" keyDown="hostComponent.keyNoPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
 				<button:VDOMButton  id="yesButton" tabIndex="-1"
-							icon="@Embed('assets/Cancel.png')" label="{hostComponent.getYesLabel()}"
+							icon="{hostComponent.getYesImage()}" label="{hostComponent.getYesLabel()}"
 							click="hostComponent.btnClickHandler(Alert.YES)" keyDown="hostComponent.keyYesPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
 			</s:HGroup>
 		</s:VGroup>

@@ -20,6 +20,7 @@ package net.vdombox.ide.common.view.components.tabnavigator
 		[Bindable]
 		public var closable : Boolean = true;
 		
+		[Bindable]
 		public var label : String = "Untitled";
 		public var id : String;
 		

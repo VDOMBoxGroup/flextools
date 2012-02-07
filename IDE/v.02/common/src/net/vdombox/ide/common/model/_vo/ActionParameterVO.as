@@ -111,6 +111,7 @@ package net.vdombox.ide.common.model._vo
 		{
 			var copy : ActionParameterVO = new ActionParameterVO();
 			copy.properties = _properties;
+			copy.value = value;
 			return copy;
 		}
 		

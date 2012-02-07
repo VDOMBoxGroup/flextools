@@ -73,6 +73,8 @@ package net.vdombox.ide.common.controller.names
 		
 		public static const COPY : String = "copy";
 		
+		public static const SAVED : String = "saved";
+		
 	
 	}
 }

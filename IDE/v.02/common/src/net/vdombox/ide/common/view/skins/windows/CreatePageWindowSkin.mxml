@@ -12,6 +12,7 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.events.WindowEvent;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
@@ -69,7 +70,7 @@
 				
 				<s:Rect width="100%" height="100%">
 					<s:fill>
-						<s:BitmapFill source = "@Embed('assets/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+						<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
 					</s:fill>
 				</s:Rect>
 				

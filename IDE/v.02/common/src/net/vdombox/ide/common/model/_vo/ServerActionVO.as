@@ -199,7 +199,34 @@ package net.vdombox.ide.common.model._vo
 			copy.setObjectID( _objectID );
 			copy.setObjectName( _objectName );
 			copy.setContainerID( _containerID );
+			
+			copy.top = _top;
+			
+			copy.left = _left;
+			copy.state = _state;
 
+			return copy;
+		}
+		
+		public function clone() : ServerActionVO
+		{
+			var copy : ServerActionVO = new ServerActionVO();
+			
+			copy.setID( _id );
+			copy.setName( _name );
+			
+			copy.setObjectID( _objectID );
+			copy.setObjectName( _objectName );
+			copy.setContainerID( _containerID );
+			
+			copy.top = _top;
+			
+			copy.left = _left;
+			copy.state = _state;
+			
+			copy.script = script;
+			copy.language = language;
+			
 			return copy;
 		}
 

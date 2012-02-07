@@ -1,5 +1,7 @@
 package net.vdombox.ide.common.model._vo
 {
+	import mx.utils.ObjectUtil;
+
 	/**
 	* The ApplicationEventsVO is Visual Object of VDOM Application.
 	* ApplicationEventsVO is contained in VDOM Application. 
@@ -24,6 +26,50 @@ package net.vdombox.ide.common.model._vo
 		public function get pageVO () : PageVO
 		{
 			return _pageVO;
+		}
+		
+		public function copy() : ApplicationEventsVO
+		{
+			var copyApplicationEventsVO : ApplicationEventsVO = new ApplicationEventsVO( _pageVO );
+			
+			var copyEvents : Array = new Array();
+			
+			for each ( var element : Object in events  )
+			{
+				var copyElement : Object = [];
+				var actions : Array = new Array();
+				for ( var i : int = 0; i < element.actions.length; i++ )
+				{
+					actions.push( element.actions[i].clone() );
+				}
+				var eventVO : EventVO = element.eventVO.clone();
+				copyElement.actions = actions;
+				copyElement.eventVO = eventVO;
+				
+				copyEvents.push( copyElement );
+			}
+			
+			copyApplicationEventsVO.events = copyEvents ;
+			
+			var copyClientActions : Array = new Array;
+			
+			for each ( var elementCA : ClientActionVO in clientActions  )
+			{
+				copyClientActions.push( elementCA.clone() );
+			}
+			
+			copyApplicationEventsVO.clientActions = copyClientActions;
+			
+			var copyServerActions : Array = new Array;
+			
+			for each ( var elementSA : ServerActionVO in serverActions  )
+			{
+				copyServerActions.push( elementSA.clone() );
+			}
+			
+			copyApplicationEventsVO.serverActions = copyServerActions;
+			
+			return copyApplicationEventsVO;
 		}
 		
 		public function getServetActionByID( actionID : String ) : ServerActionVO

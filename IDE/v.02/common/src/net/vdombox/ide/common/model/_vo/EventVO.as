@@ -188,6 +188,27 @@ package net.vdombox.ide.common.model._vo
 			copy.setContainerID( _containerID );
 			
 			copy.setParameters( _parameters.slice() );
+				
+			return copy;
+		}
+		
+		public function clone() : EventVO
+		{
+			var copy : EventVO = new EventVO();
+			
+			copy.setName( _name );
+			
+			copy.setObjectID( _objectID );
+			copy.setObjectName( _objectName );
+			copy.setContainerID( _containerID );
+			
+			copy.setParameters( _parameters.slice() );
+			
+			copy.top = _top;
+			
+			copy.left = _left;
+			copy.state = _state;
+			
 			
 			return copy;
 		}
