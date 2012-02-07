@@ -14,6 +14,7 @@
 			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.events.EditorEvent;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.scripts.events.EditAreaEvent;
 			import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 			
@@ -142,7 +143,7 @@
 					  paddingLeft="10" paddingTop="2" paddingBottom="2">
 				
 				<button:WorkAreaButton id="saveButton"
-										   enabled.unsaved="true" enabled="false" height="20" icon="@Embed('assets/save.png')"
+										   enabled.unsaved="true" enabled="false" height="20" icon="{VDOMImage.Save}"
 										   label="{ resourceManager.getString( 'Scripts_General', 'save' ) }" click="scriptEditor_saveHandler( event )"
 										   highlighted="false" highlighted.unsaved="true"/>
 				

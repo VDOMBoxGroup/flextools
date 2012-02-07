@@ -14,16 +14,11 @@
 			import mx.managers.DragManager;
 			
 			import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
 
 			[Bindable]
 			private var _structure : XMLList;
-			
-			[Embed(source="assets/disclosureClosedIcon.png")]
-			public var plus:Class;
-			
-			[Embed(source="assets/disclosureOpenIcon.png")]
-			public var minus:Class;
 
 			public function get selectedObject() : XML
 			{
@@ -207,8 +202,8 @@
 			
 			protected function containersTree_creationCompleteHandler(event:FlexEvent):void
 			{
-				containersTree.setStyle("disclosureOpenIcon", minus);
-				containersTree.setStyle("disclosureClosedIcon", plus);
+				containersTree.setStyle("disclosureOpenIcon", VDOMImage.Closed_Tree_Icon);
+				containersTree.setStyle("disclosureClosedIcon", VDOMImage.Opened_Tree_Icon);
 			}
 			
 			private function objectsTree_changeHandler( event : ListEvent ) : void
@@ -239,7 +234,7 @@
 	
 	<s:Rect width="100%" height="100%">
 		<s:fill>
-			<s:BitmapFill source = "@Embed('assets/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+			<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
 
