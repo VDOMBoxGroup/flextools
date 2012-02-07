@@ -7,6 +7,7 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.PageVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			
 			private var _objectVO : PageVO;
 			
@@ -40,7 +41,7 @@
 			 bottom="0" left="0" right="0" top="0">
 		<s:Rect height="100%" width="100%">
 			<s:fill>
-				<s:BitmapFill source = "@Embed('assets/bg_for_ide_bright.png')" smooth="true" fillMode="repeat"/>
+				<s:BitmapFill source = "{VDOMImage.BG_WorkArea]" smooth="true" fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
 		

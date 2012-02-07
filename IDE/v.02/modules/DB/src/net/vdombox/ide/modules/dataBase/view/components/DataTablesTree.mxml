@@ -11,13 +11,8 @@
 			import mx.events.ListEvent;
 			
 			import net.vdombox.ide.common.model._vo.TypeVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
-			
-			[Embed(source="assets/disclosureClosedIcon.png")]
-			public var plus:Class;
-			
-			[Embed(source="assets/disclosureOpenIcon.png")]
-			public var minus:Class;
 			
 			[Bindable]
 			private var _dataBases : XMLList;
@@ -163,8 +158,8 @@
 				tablesTree.addEventListener( ListEvent.ITEM_ROLL_OVER, objectsTree_highlightChangeHandler, false, 0, true );
 				tablesTree.addEventListener( ListEvent.ITEM_ROLL_OUT, objectsTree_highlightChangeHandler, false, 0, true );
 				
-				tablesTree.setStyle("disclosureOpenIcon", minus);
-				tablesTree.setStyle("disclosureClosedIcon", plus);
+				tablesTree.setStyle("disclosureOpenIcon", VDOMImage.Closed_Tree_Icon);
+				tablesTree.setStyle("disclosureClosedIcon", VDOMImage.Opened_Tree_Icon);
 					
 			}
 			
@@ -295,7 +290,7 @@
 	
 	<s:Rect width="100%" height="100%">
 		<s:fill>
-			<s:BitmapFill source = "@Embed('assets/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+			<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
 	

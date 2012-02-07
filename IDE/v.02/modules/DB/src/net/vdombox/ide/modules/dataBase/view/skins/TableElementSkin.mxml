@@ -46,7 +46,7 @@
 			
 			protected function angle_mouseDownHandler(event:MouseEvent):void
 			{
-				hostComponent.mouseDownAngleHandler();
+				hostComponent.mouseDownAngleHandler( event );
 			}
 			
 			protected function textinput1_doubleClickHandler(event:MouseEvent):void

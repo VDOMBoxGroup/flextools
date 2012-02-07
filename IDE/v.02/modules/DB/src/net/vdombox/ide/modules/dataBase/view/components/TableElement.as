@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
@@ -68,8 +69,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 		
 		private function delItemSelectHandler( event : Event ) : void
 		{
-			Alert.noLabel = "Cancel";
-			Alert.yesLabel = "Delete";
+			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 			
 			Alert.Show(resourceManager.getString( "DataBase_General", "delete_table" ) + "?" ,AlertButton.OK_No, parentApplication, closeHandler);
 			
@@ -198,16 +198,20 @@ package net.vdombox.ide.modules.dataBase.view.components
 			dispatchEvent( eventSave );
 		}
 		
-		public function mouseDownAngleHandler() : void
+		public function mouseDownAngleHandler( event : MouseEvent ) : void
 		{
+			
 			stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpAngleHandler );
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveAngleHandler );
+			
+			mouseOffcetX = 15 - event.localX;
+			mouseOffcetY = 15 - event.localY;
 		}
 		
 		protected function stage_mouseMoveAngleHandler( event : MouseEvent ) : void
 		{
-			var newW : Number = parent.mouseX - x;
-			var newH : Number = parent.mouseY - y;
+			var newW : Number = parent.mouseX - x + mouseOffcetX;
+			var newH : Number = parent.mouseY - y + mouseOffcetY;
 			
 			if ( newW < 1 )
 				newW = 1;
