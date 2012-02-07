@@ -13,14 +13,10 @@
 			import mx.controls.treeClasses.TreeItemRenderer;
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.common.view.components.VDOMImage;
+			
 			[Bindable]
 			private var _structure : XMLList;
-			
-			[Embed(source="assets/disclosureClosedIcon.png")]
-			public var plus:Class;
-			
-			[Embed(source="assets/disclosureOpenIcon.png")]
-			public var minus:Class;
 			
 			public function set structure( value : XMLList ) : void
 			{
@@ -35,8 +31,8 @@
 			protected function objectsTree_creationCompleteHandler(event:FlexEvent):void
 			{
 				// TODO Auto-generated method stub
-				objectsTree.setStyle("disclosureOpenIcon", minus);
-				objectsTree.setStyle("disclosureClosedIcon", plus);
+				objectsTree.setStyle("disclosureOpenIcon", VDOMImage.Closed_Tree_Icon);
+				objectsTree.setStyle("disclosureClosedIcon", VDOMImage.Opened_Tree_Icon);
 			}
 			
 			public function get selectedObject() : XML
@@ -180,7 +176,7 @@
 	
 	<s:Rect width="100%" height="100%">
 		<s:fill>
-			<s:BitmapFill source = "@Embed('assets/texture_ide_sidebar.png')" smooth="true" fillMode="repeat"/>
+			<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
 

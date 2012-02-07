@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.events.controller
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.view.EventsPanelMediator;
+	import net.vdombox.ide.modules.events.view.WorkAreaMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -35,10 +36,10 @@ package net.vdombox.ide.modules.events.controller
 					if ( !facade.hasMediator( EventsPanelMediator.NAME ) )
 						return;
 					
-					var eventsPanelMediator : EventsPanelMediator = facade.retrieveMediator( EventsPanelMediator.NAME ) as
-						EventsPanelMediator;
+					var workAreaMediator : WorkAreaMediator = facade.retrieveMediator( WorkAreaMediator.NAME ) as
+						WorkAreaMediator;
 					
-					var serverActions : Array = eventsPanelMediator.scripts;
+					var serverActions : Array = workAreaMediator.workArea.dataProvider.serverActions;
 					
 					if ( !serverActions )
 						return;

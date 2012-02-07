@@ -17,6 +17,7 @@ package net.vdombox.ide.modules.events.view.components
 	import net.vdombox.ide.common.model._vo.ClientActionVO;
 	import net.vdombox.ide.common.model._vo.EventVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.VDOMScroller;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
@@ -674,8 +675,7 @@ package net.vdombox.ide.modules.events.view.components
 
 		private function element_deleteHandler( event : ElementEvent ) : void
 		{
-			Alert.noLabel = "Cancel";
-			Alert.yesLabel = "Delete";
+			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 			
 			var strName : String = "";
 			if (event.target is EventElement)

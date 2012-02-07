@@ -205,8 +205,6 @@ package net.vdombox.ide.modules.events.view
 						changeFunction();
 					else
 					{
-						Alert.noLabel = "No";
-						Alert.yesLabel = "Yes";
 						Alert.Show( "Save the changes?", AlertButton.OK_No, objectsTreePanel.parentApplication, alertHandler );
 					}
 					return;

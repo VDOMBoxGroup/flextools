@@ -152,7 +152,7 @@ package net.vdombox.ide.modules.events.view
 						openCreateServerActionWindow();
 					else
 					{
-						Alert.yesLabel = "Ok";
+						Alert.setPatametrs( "Ok" );
 						Alert.Show( "First press to Save!!", AlertButton.OK, eventsPanel.parentApplication, null );
 					}
 					return;

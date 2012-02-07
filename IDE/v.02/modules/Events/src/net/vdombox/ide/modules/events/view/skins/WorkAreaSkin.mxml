@@ -19,6 +19,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			import net.vdombox.ide.modules.events.events.WorkAreaEvent;
@@ -108,14 +109,14 @@
 			  left="1" right="1" top="1"
 			  gap="0" paddingRight="20" verticalAlign="middle">
 		<components:WorkAreaButton id="saveButton"
-								   enabled="true" enabled.disabled="false" height="20" icon="@Embed('assets/save.png')"
+								   enabled="true" enabled.disabled="false" height="20" icon="{VDOMImage.Save}"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_save' ) }"
 								   highlighted="false" highlighted.unsaved="true"/>
 		<components:WorkAreaButton id="redoButton"
 								   height="20"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_redo' ) }"/>
 		<components:WorkAreaButton id="undoButton"
-								   height="20" icon="@Embed('assets/undo.png')"
+								   height="20" icon="{VDOMImage.Undo}"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_undo' ) }"/>
 		
 		<s:HGroup width="100%" horizontalAlign="center" gap="3" paddingLeft="10" paddingRight="10">
@@ -138,7 +139,7 @@
 			 bottom="0" left="0" right="0" top="22">
 		<s:Rect height="100%" width="100%">
 			<s:fill>
-				<s:BitmapFill source = "@Embed('assets/bg_for_ide_bright.png')" smooth="true" fillMode="repeat"/>
+				<s:BitmapFill source = "{VDOMImage.BG_WorkArea}" smooth="true" fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
 
