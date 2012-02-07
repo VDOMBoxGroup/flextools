@@ -1,5 +1,7 @@
 package net.vdombox.ide.core.controller
 {
+	import mx.resources.ResourceManager;
+	
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -31,14 +33,14 @@ package net.vdombox.ide.core.controller
 			{
 				case ApplicationFacade.WRITE_ERROR:
 				{
-					alertWindow.title = "Error!";
+					alertWindow.title = ResourceManager.getInstance().getString( 'Core_General', 'error' );
 					alertWindow.state = "normal";
 					break;
 				}
 					
 				case ApplicationFacade.WRITE_QUESTION:
 				{
-					alertWindow.title = "Wanted!";
+					alertWindow.title = ResourceManager.getInstance().getString( 'Core_General', 'wanted' );
 					alertWindow.state = "question";
 					break;
 				}

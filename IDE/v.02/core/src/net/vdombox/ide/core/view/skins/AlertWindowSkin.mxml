@@ -11,6 +11,8 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.common.view.components.VDOMImage;
+			
 			[Embed( source = "assets/Warning.png" )]
 			public var wanted : Class;
 			
@@ -82,7 +84,7 @@
 				
 			<s:Rect width="100%" height="100%">
 				<s:fill>
-					<s:BitmapFill source="@Embed('assets/texture_ide_sidebar.png')" />
+					<s:BitmapFill source="{VDOMImage.Fon_Texture}" />
 				</s:fill>
 			</s:Rect>
 				

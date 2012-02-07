@@ -266,8 +266,8 @@ package net.vdombox.ide.core.model
 				language = pageVO.applicationVO.scriptingLanguage;
 
 			var serverActionsXML : XML =
-				<ServerActions/>
-				;
+				<ServerActions/>;
+			
 			var serverActionVO : ServerActionVO;
 
 			for each ( serverActionVO in serverActions )
