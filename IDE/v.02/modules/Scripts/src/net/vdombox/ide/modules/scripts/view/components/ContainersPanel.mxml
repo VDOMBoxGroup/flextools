@@ -202,8 +202,8 @@
 			
 			protected function containersTree_creationCompleteHandler(event:FlexEvent):void
 			{
-				containersTree.setStyle("disclosureOpenIcon", VDOMImage.Closed_Tree_Icon);
-				containersTree.setStyle("disclosureClosedIcon", VDOMImage.Opened_Tree_Icon);
+				containersTree.setStyle("disclosureOpenIcon", VDOMImage.Opened_Tree_Icon);
+				containersTree.setStyle("disclosureClosedIcon", VDOMImage.Closed_Tree_Icon);
 			}
 			
 			private function objectsTree_changeHandler( event : ListEvent ) : void
