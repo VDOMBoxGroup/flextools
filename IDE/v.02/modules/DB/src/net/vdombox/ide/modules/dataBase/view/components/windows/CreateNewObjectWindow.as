@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.dataBase.view.components.windows
 {
+	import flash.display.NativeWindowSystemChrome;
 	import flash.events.KeyboardEvent;
 	
 	import mx.collections.ArrayCollection;
@@ -28,6 +29,9 @@ package net.vdombox.ide.modules.dataBase.view.components.windows
 		public function CreateNewObjectWindow()
 		{
 			super();
+			
+			systemChrome	= NativeWindowSystemChrome.NONE;
+			transparent 	= true;
 			
 			width = 400;
 			height = 110;
