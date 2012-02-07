@@ -158,8 +158,8 @@
 				tablesTree.addEventListener( ListEvent.ITEM_ROLL_OVER, objectsTree_highlightChangeHandler, false, 0, true );
 				tablesTree.addEventListener( ListEvent.ITEM_ROLL_OUT, objectsTree_highlightChangeHandler, false, 0, true );
 				
-				tablesTree.setStyle("disclosureOpenIcon", VDOMImage.Closed_Tree_Icon);
-				tablesTree.setStyle("disclosureClosedIcon", VDOMImage.Opened_Tree_Icon);
+				tablesTree.setStyle("disclosureOpenIcon", VDOMImage.Opened_Tree_Icon);
+				tablesTree.setStyle("disclosureClosedIcon", VDOMImage.Closed_Tree_Icon);
 					
 			}
 			

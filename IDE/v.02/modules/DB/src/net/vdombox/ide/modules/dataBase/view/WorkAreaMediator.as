@@ -4,11 +4,12 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import net.vdombox.ide.common.events.EditorEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
-	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTableEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.WorkArea;
@@ -56,6 +57,8 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED);
 			
 			interests.push( ApplicationFacade.OBJECT_DELETED);
+			
+			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
 			
 			return interests;
 		}
@@ -142,6 +145,16 @@ package net.vdombox.ide.modules.dataBase.view
 					}
 					
 					break
+				}
+					
+				case ApplicationFacade.OBJECT_NAME_SETTED:
+				{
+					var tab : Tab = workArea.getTabByID( body.id );
+					
+					if ( tab )
+						tab.label = body.name;
+					
+					break;
 				}
 					
 			}
