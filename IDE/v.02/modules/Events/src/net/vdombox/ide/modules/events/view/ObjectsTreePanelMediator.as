@@ -330,12 +330,6 @@ package net.vdombox.ide.modules.events.view
 		{
 			item = event.itemRenderer.data as XML;
 			
-			sendNotification( ApplicationFacade.CHECK_SAVE_IN_WORKAREA, this );
-			
-		}
-		
-		private function changeFunction() : void
-		{
 			var id : String = item.@id;
 			
 			if ( item.name() == "page" )
@@ -343,8 +337,10 @@ package net.vdombox.ide.modules.events.view
 				if( currentPageXML )
 					delete currentPageXML.*;
 				
-				sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, _pages[ id ] );
-				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ id ] );
+				if ( id != currentPageXML.@id )
+					sendNotification( ApplicationFacade.CHECK_SAVE_IN_WORKAREA, this );
+				else
+					changeFunction();
 			}
 			else if ( item.name() == "object" )
 			{
@@ -365,6 +361,16 @@ package net.vdombox.ide.modules.events.view
 				
 				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ pageID ], objectID: id } );
 			}
+			
+			
+		}
+		
+		private function changeFunction() : void
+		{
+			var id : String = item.@id;
+			
+			sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, _pages[ id ] );
+			sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ id ] );
 		}
 		
 		private function getResourceRequestHandler( event : ResourceVOEvent ) : void
