@@ -53,6 +53,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 				var variantsStr : String = variants[0];
 				var multyValue : Array = ListParser.list2Array( variantsStr );
 				
+				// data like  [ ['app1' 'guid1'] ['app2' 'guid2']  ['app3' 'guid3']]
 				if ( multyValue[0] is CodeFragment )
 				{
 					var dataBt : String; 
