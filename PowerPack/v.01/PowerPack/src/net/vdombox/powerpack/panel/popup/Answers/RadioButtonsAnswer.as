@@ -30,22 +30,11 @@ package net.vdombox.powerpack.panel.popup.Answers
 			super.createChildren();
 			
 			createRadioButtonsGroup();
-			
+			createRadioButtons();
 		}
 		
-		private function createRadioButtonsGroup():void
+		private function createRadioButtons():void
 		{
-			radioBtnGroup = new RadioButtonGroup();
-			
-			vBox= new VBox();
-			vBox.setStyle( "paddingLeft", 10  );
-			vBox.maxHeight = 200;
-			vBox.percentWidth = 100;
-
-			addChild( vBox );
-			
-			
-			  
 			var variants : Array = dataProvider.slice(2);
 			
 			if (variants.length == 1)
@@ -71,7 +60,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 					}
 					
 					selectFirstRadioButton();
-
+					
 					return;
 				}
 				else
@@ -86,8 +75,18 @@ package net.vdombox.powerpack.panel.popup.Answers
 			}
 			
 			selectFirstRadioButton();
+		}
+		
+		private function createRadioButtonsGroup():void
+		{
+			radioBtnGroup = new RadioButtonGroup();
 			
-			
+			vBox= new VBox();
+			vBox.setStyle( "paddingLeft", 10  );
+			vBox.maxHeight = 200;
+			vBox.percentWidth = 100;
+
+			addChild( vBox );
 		}
 		
 		private function selectFirstRadioButton():void
