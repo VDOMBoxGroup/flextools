@@ -30,5 +30,17 @@ package net.vdombox.ide.common.view.components
 		[Embed( source = "assets/vdomimage/undo.png" )]
 		public static var Undo : Class;
 		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/deleteWhite.png" )]
+		public static var DeleteWhite : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/arrow.png" )]
+		public static var Arrow : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/arr_2.png" )]
+		public static var ArrClose : Class;
+		
 	}
 }
