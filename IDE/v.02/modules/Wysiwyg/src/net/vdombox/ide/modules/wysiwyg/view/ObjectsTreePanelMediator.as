@@ -245,6 +245,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( statesProxy.selectedPage )
 					{
 						objectsTreePanel.selectedItem.@name = pageVO.name;
+						//sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
 					}
 					
 					break;
@@ -255,7 +256,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 					var _objectVO : ObjectVO = body as ObjectVO;
 					
 					if ( statesProxy.selectedObject && objectsTreePanel.selectedItem )
+					{
 						objectsTreePanel.selectedItem.@name = _objectVO.name;
+						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _objectVO.pageVO );
+					}
 
 					break;
 				}
@@ -520,9 +524,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function setVisibleForElements( pageXML : XML) : void
 		{
 			var xmlList : XMLList = pageXML..object;
+
 			var objectXML : XML;
 			var typeID : String;
 			var typeProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy ;
+			
+			var xmlListSort : XMLList = new XMLList();
 			
 			for each( objectXML in xmlList)
 			{

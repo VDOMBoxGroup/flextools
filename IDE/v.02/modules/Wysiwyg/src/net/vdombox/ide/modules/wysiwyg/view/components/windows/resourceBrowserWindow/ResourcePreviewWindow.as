@@ -5,8 +5,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 	import flash.display.NativeWindowSystemChrome;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.net.FileReference;
 	import flash.ui.Keyboard;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
 	import mx.core.FlexSprite;
 	import mx.events.CloseEvent;
@@ -155,6 +157,36 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserW
 		public function copyResourceID() : void
 		{
 			Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, resourceId.text);0
+		}
+		
+		public function getResourceButton(  ) : void
+		{
+			if ( !_resourceVO )
+			{
+				
+				return;
+			}
+			
+			
+			if ( !_resourceVO.data )
+			{
+				BindingUtils.bindSetter( dataChanged, _resourceVO, "data", true, true );
+				//dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.LOAD_RESOURCE ) );
+			}
+			else
+				saveResource( _resourceVO );
+		}
+		
+		private function dataChanged( value : Object ) : void
+		{
+			if ( _resourceVO.data )
+				saveResource( _resourceVO );
+		}
+		
+		private function saveResource ( value : ResourceVO ) : void
+		{
+			var fileUpload : FileReference = new FileReference();
+			fileUpload.save( value.data, value.name );
 		}
 
 	}

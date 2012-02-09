@@ -23,6 +23,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemNotEmptyContent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.SmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
@@ -35,6 +36,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import spark.components.TextInput;
 	import spark.components.TitleWindow;
 	import spark.components.Window;
+
 	public class ResourceSelectorWindow extends Window
 	{
 
@@ -232,19 +234,36 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			//TODO: need regexp
 			requiredID = _value.substring( 5, _value.length - 1 );
 
+			var i : int = -1;
+			
+			var array : Array = new Array();
+			var idd : String = "";
+			
 			for each ( resourceVO in _resources.source )
 			{
+				i++;
 				if ( !resourceVO )
 					continue;
 
 				if ( resourceVO.id == requiredID )
 				{
 					resourcesList.selectedItem = resourceVO;
-					//dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.GET_RESOURCE ) )
-
+					array.push( resourceVO);
+					idd = resourceVO.id;
+					
 					break;
 				}
 			}
+			
+			for each ( resourceVO in _resources.source )
+			{
+				if ( resourceVO.id != idd )
+					array.push( resourceVO );
+			}
+			
+			_resources.source = array;
+			
+			
 		}
 		
 		public function addResource( resourceVO : ResourceVO ) : void

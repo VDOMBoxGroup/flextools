@@ -103,6 +103,9 @@
 			{
 				attributeName = "value";
 				
+				if ( attributesObject[ attributeName ].value == elementForEditing.text )
+					return;
+				
 				dispatchEvent( new Event( Event.CHANGE ) );
 				
 				dispatchEvent( event );
@@ -172,11 +175,16 @@
 
 				enabled = false;
 				isInited = false;
-				attributesObject[ "value" ].value = elementForEditing.text;
 				
 				attributeName = "value";
+				if ( attributesObject[ attributeName ].value != elementForEditing.text )
+				{
+					attributesObject[ "value" ].value = elementForEditing.text;
 				
-				dispatchEvent( new Event( Event.CHANGE ) );
+					
+				
+					dispatchEvent( new Event( Event.CHANGE ) );
+				}
 
 				var attributeValue : String;
 

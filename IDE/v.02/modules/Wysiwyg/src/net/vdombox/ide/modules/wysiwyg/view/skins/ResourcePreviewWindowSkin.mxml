@@ -15,6 +15,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			]]>
 	</fx:Script>
 	
@@ -106,6 +107,12 @@
 								  tabEnabled="false"
 								  focusEnabled="false"
 								  useHandCursor="true"/>
+						
+						<mx:Image id="saveResource"
+								  enabled="true"
+								  width="14" height="16"
+								  source="{VDOMImage.Save}"
+								  click="hostComponent.getResourceButton()"/>
 						
 					</s:HGroup>
 				</s:VGroup>

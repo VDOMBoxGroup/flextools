@@ -18,6 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColorStroke;
 	import mx.resources.ResourceManager;
+	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.StatesProxy;
@@ -204,6 +205,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 						
 						if (editor.selectedRenderer != null)
 							editor.selectedRenderer.setFocus();
+							
 					}
 					else if (editor.state.substr( 0, 3 ) == "xml")
 					{
@@ -340,15 +342,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 					var point : Point = new Point( element.x, element.y );
 					if ( marker.renderer.renderVO.parent )
 					{
-						rend = rendProxy.getRenderersByVO( marker.renderer.renderVO.parent.vdomObjectVO )[0] as RendererBase;
-						//point = DisplayUtils.getConvertedPoint( element, rend );
+						rend = rendProxy.getRendererByVO( marker.renderer.renderVO.parent.vdomObjectVO ) as RendererBase;
 						
-						point = element.localToGlobal(point);
-						
-						point=rend.dataGroup.globalToContent(point);
-						
-						point.x -= element.x;
-						point.y -= element.y;
+						point =  DisplayUtils.getConvertedPoint( element, rend.dataGroup );
 					}
 					
 					var needDrawHLine : Boolean = false;
@@ -593,6 +589,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			component.addEventListener( FlexEvent.CREATION_COMPLETE, addOptions, true );
 			
+			component.addEventListener( KeyboardEvent.KEY_DOWN, keyHandler, true, 0 ,true );
+			
 			component.addEventListener( Event.CHANGE, saveOptions);
 		}
 
@@ -638,6 +636,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.removeEventListener( RendererEvent.GET_RESOURCE, renderer_getResourseHandler, true );
 			
 			component.removeEventListener( FlexEvent.CREATION_COMPLETE, addOptions, true );
+			
+			component.removeEventListener( KeyboardEvent.KEY_DOWN, keyHandler, true );
 			
 			component.removeEventListener( Event.CHANGE, saveOptions);
 		}
@@ -799,14 +799,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var sourceAppId : String = sourceInfo[1] as String;
 			var sourceObjId : String = sourceInfo[2] as String;
 			var typeObject : String = sourceInfo[3] as String;
+				
+			var object : IVDOMObjectVO = rend.vdomObjectVO;
+			if ( object is ObjectVO && 
+				(rend.typeVO.container != 2 || rend.typeVO.container == 2 && sourceObjId == object.id ) && rend.renderVO.parent )
+				object = rend.renderVO.parent.vdomObjectVO;
 			
 			if ( typeObject == "1" )
 				sendNotification( ApplicationFacade.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceID } );
-			else if ( rend.vdomObjectVO is PageVO )
-				sendNotification( ApplicationFacade.COPY_REQUEST, { pageVO : rend.vdomObjectVO, sourceID : sourceID } );
-			else if ( rend.vdomObjectVO is ObjectVO )
-				sendNotification( ApplicationFacade.COPY_REQUEST, {  objectVO : rend.vdomObjectVO, sourceID : sourceID } );
-			
+			else if ( object is PageVO )
+				sendNotification( ApplicationFacade.COPY_REQUEST, { pageVO : object, sourceID : sourceID } );
+			else if ( object is ObjectVO )
+				sendNotification( ApplicationFacade.COPY_REQUEST, {  objectVO : object, sourceID : sourceID } );
 		}
 
 		private function renderer_getResourseHandler( event : RendererEvent ) : void
@@ -888,6 +892,52 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 
 			sendNotification( ApplicationFacade.SAVE_ATTRIBUTES_REQUEST, event.vdomObjectAttributesVO );
+		}
+		
+		private function keyHandler( event : KeyboardEvent ) : void
+		{
+			if ( event.keyCode == Keyboard.G && event.ctrlKey )
+			{
+				if ( !editor.selectedRenderer )
+					return;
+				
+				var render : RendererBase = editor.selectedRenderer as RendererBase;
+				
+				var point : Point =  DisplayUtils.getConvertedPoint( render, component.renderer.dataGroup );
+				
+				var needScroll : Boolean = true;
+				
+				//vertical
+				if ( render.height < component.renderer.scroller.height )
+				{
+					if ( point.y + render.height > component.renderer.scroller.verticalScrollBar.value + component.renderer.scroller.height )
+						point.y -= ( component.renderer.scroller.height - render.height);
+					else if ( point.y > component.renderer.scroller.verticalScrollBar.value )
+						needScroll = false;
+				}
+				
+				if ( point.y < 0 )
+					point.y = 0;
+				if ( needScroll )
+					component.renderer.scroller.verticalScrollBar.value = point.y;
+				
+				
+				//horizontal
+				needScroll = true;
+				if ( render.width < component.renderer.scroller.width )
+				{
+					if ( point.x + render.width > component.renderer.scroller.horizontalScrollBar.value + component.renderer.scroller.width )
+						point.x -= ( component.renderer.scroller.width - render.width);
+					else if ( point.x > component.renderer.scroller.horizontalScrollBar.value )
+						needScroll = false;
+				}
+				
+				if ( point.x < 0 )
+					point.x = 0;
+				
+				if ( needScroll )
+					component.renderer.scroller.horizontalScrollBar.value = point.x;
+			}
 		}
 	}
 }

@@ -17,6 +17,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		
 		[SkinPart( required="true" )]
 		public var linegroup : Group;
+		
+	//	[SkinPart( required="true" )]
+		//public var scroll : VDOMScroller;
 
 		private var _selectedRenderer : IRenderer;
 		private var isSelectedRendererChanged : Boolean;
