@@ -377,10 +377,32 @@ trace(wsdl)
 	
 	private function listApplications( params  : Array ) : void
 	{
-		soap.list_applications.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.list_applications.addEventListener( ResultEvent.RESULT, listAppResultHandler );
 		soap.list_applications.addEventListener( FaultEvent.FAULT, soapError );
 		
 		soap.list_applications();
+		
+		function listAppResultHandler( event : ResultEvent ) : void
+		{
+			deleteListeners( event.target);
+
+			var result : XMLList = new XMLList( event.result );
+			var applicationsXML : XML = new XML(result[0]); 
+			var applicationsArr : Array = [];
+			
+			
+			for each (var application:XML in applicationsXML.children()) 
+			{
+				applicationsArr.push( [application.Information.Name[0],  application.@ID])
+			}
+			
+			_result = ListParser.array2List( applicationsArr );
+			
+			_resultType = SUCCESS;
+			
+			dispatchEvent( new Event( RESULT_RECEIVED ) );
+		}
+
 	}
 	
 	
