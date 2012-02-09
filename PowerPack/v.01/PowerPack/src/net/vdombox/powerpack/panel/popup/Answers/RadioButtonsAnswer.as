@@ -53,8 +53,8 @@ package net.vdombox.powerpack.panel.popup.Answers
 					{
 						dataBt  = ListParser.getElm( variantsStr, j+1 );
 						
-						labelBt  = ListParser.getElmValue( data, 1, context ).toString();
-						valueBt  = ListParser.getElmValue( data, 2, context ).toString();
+						labelBt  = ListParser.getElmValue( dataBt, 1, context ).toString();
+						valueBt  = ListParser.getElmValue( dataBt, 2, context ).toString();
 						
 						createRadioButton( labelBt, valueBt );
 					}
@@ -98,7 +98,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 				radBtn.selected = true;
 		}
 		
-		private function createRadioButton( label : String, data : String = null ):void
+		private function createRadioButton( labelBt : String, dataBt : String = null ):void
 		{
 			var radBtn : RadioButton;
 
@@ -106,8 +106,8 @@ package net.vdombox.powerpack.panel.popup.Answers
 				data = label;
 			
 			radBtn  = new RadioButton();
-			radBtn.label = label;
-			radBtn.value = data;
+			radBtn.label = labelBt;
+			radBtn.value = dataBt;
 			radBtn.group = radioBtnGroup;
 			radBtn.styleName = "questionAnswerRadioBtn";
 			
