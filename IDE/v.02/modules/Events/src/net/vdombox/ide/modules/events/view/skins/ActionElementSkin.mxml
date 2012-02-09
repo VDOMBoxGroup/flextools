@@ -18,6 +18,7 @@
 			import net.vdombox.ide.common.interfaces.IEventBaseVO;
 			import net.vdombox.ide.common.model._vo.ClientActionVO;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 
 			private var _data : IEventBaseVO;
@@ -195,7 +196,7 @@
 						
 					<s:HGroup id="imageGroup" height="100%" horizontalAlign="right" verticalAlign="middle" paddingRight="5">
 							
-						<mx1:Image id="imageDelete" source="@Embed('assets/delete.png')"
+						<mx1:Image id="imageDelete" source="{VDOMImage.DeleteWhite}"
 									   alpha=".5"  mouseOver="{ imageDelete.alpha = 1 }" mouseOut="{ imageDelete.alpha = .5 }"
 									   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )" />
 							
@@ -226,7 +227,7 @@
 				
 				<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 					
-					<mx1:Image source="@Embed('assets/arr_2.png')" click="hideButton_clickHandler(event)" />
+					<mx1:Image source="{VDOMImage.ArrClose}" click="hideButton_clickHandler(event)" />
 					
 				</s:HGroup>
 				

@@ -17,6 +17,7 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.EventVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 
 			protected function hideButton_clickHandler( event : MouseEvent ) : void
@@ -185,11 +186,11 @@
 						
 					<s:HGroup id="imageGroup" height="100%" horizontalAlign="right" verticalAlign="middle" paddingRight="5" gap="1">
 							
-						<mx1:Image id="imageArraw" source="@Embed('assets/arrow.png')" 
+						<mx1:Image id="imageArraw" source="{VDOMImage.Arrow}" 
 								   alpha=".5" mouseOver="{ imageArraw.alpha = 1 }" mouseOut="{ imageArraw.alpha = .5 }"
 								   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.CREATE_LINKAGE ) )" />
 							
-						<mx1:Image id="imageDelete" source="@Embed('assets/delete.png')" 
+						<mx1:Image id="imageDelete" source="{VDOMImage.DeleteWhite}" 
 								   alpha=".5" mouseOver="{ imageDelete.alpha = 1 }" mouseOut="{ imageDelete.alpha = .5 }"
 								   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )" />
 							
@@ -221,7 +222,7 @@
 				
 				<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 					
-					<mx1:Image source="@Embed('assets/arr_2.png')" click="hideButton_clickHandler(event)" />
+					<mx1:Image source="{VDOMImage.ArrClose}" click="hideButton_clickHandler(event)" />
 					
 				</s:HGroup>
 

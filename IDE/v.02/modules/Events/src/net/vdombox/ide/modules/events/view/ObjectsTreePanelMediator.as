@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.events.view
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
+	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
@@ -205,7 +206,7 @@ package net.vdombox.ide.modules.events.view
 						changeFunction();
 					else
 					{
-						Alert.Show( "Save the changes?", AlertButton.OK_No, objectsTreePanel.parentApplication, alertHandler );
+						Alert.Show( ResourceManager.getInstance().getString( 'Events_General', 'save_the_changes' ), AlertButton.OK_No, objectsTreePanel.parentApplication, alertHandler );
 					}
 					return;
 				}
