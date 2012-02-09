@@ -9,6 +9,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 	import mx.controls.TextInput;
 	
 	import net.vdombox.powerpack.gen.parse.ListParser;
+	import net.vdombox.powerpack.gen.parse.parseClasses.CodeFragment;
 	import net.vdombox.powerpack.gen.parse.parseClasses.LexemStruct;
 
 	public class RadioButtonsAnswer extends Answer
@@ -44,32 +45,77 @@ package net.vdombox.powerpack.panel.popup.Answers
 			addChild( vBox );
 			
 			
-			var radBtn : RadioButton;
-			
+			  
 			var variants : Array = dataProvider.slice(2);
 			
 			if (variants.length == 1)
-				variants = String(variants[0]).split(",");
+			{
+				var variantsStr : String = variants[0];
+				var multyValue : Array = ListParser.list2Array( variantsStr );
+				
+				if ( multyValue[0] is CodeFragment )
+				{
+					var dataBt : String; 
+					var labelBt : String; 
+					var valueBt : String;
+					
+					for (var j:int = 0; j < multyValue.length; j++) 
+					{
+						dataBt  = ListParser.getElm( variantsStr, j+1 );
+						
+						labelBt  = ListParser.getElmValue( data, 1, context ).toString();
+						valueBt  = ListParser.getElmValue( data, 2, context ).toString();
+						
+						createRadioButton( labelBt, valueBt );
+					}
+					
+					selectFirstRadioButton();
+
+					return;
+				}
+				else
+				{
+					variants = variantsStr.split(",");
+				}
+			}
 			
 			for each (var value:String in variants) 
 			{
-				radBtn  = new RadioButton();
-				radBtn.value = value;
-				radBtn.label = value;
-				radBtn.group = radioBtnGroup;
-				radBtn.styleName = "questionAnswerRadioBtn";
-					
-				vBox.addChild( radBtn );
+				createRadioButton( value );
 			}
 			
-			// select first radioButton
+			selectFirstRadioButton();
+			
+			
+		}
+		
+		private function selectFirstRadioButton():void
+		{
+			var radBtn : RadioButton;
 			radBtn = vBox.getChildAt(0) as RadioButton;
 			
 			if(radBtn)
 				radBtn.selected = true;
-			
 		}
 		
+		private function createRadioButton( label : String, data : String = null ):void
+		{
+			var radBtn : RadioButton;
+
+			if ( ! data )
+				data = label;
+			
+			radBtn  = new RadioButton();
+			radBtn.label = label;
+			radBtn.value = data;
+			radBtn.group = radioBtnGroup;
+			radBtn.styleName = "questionAnswerRadioBtn";
+			
+			vBox.addChild( radBtn );
+			
+			
+			
+		}
 		override public function get value () : String
 		{
 			if ( radioBtnGroup.numRadioButtons > 0 && radioBtnGroup.selectedValue)
