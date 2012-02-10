@@ -16,6 +16,7 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.EventVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			
@@ -64,7 +65,7 @@
 
 				var glowFilter : GlowFilter = new GlowFilter( 0xA8AAA9, 1, 6, 6, 3 );
 
-				selectionFilters = [ new GlowFilter( 0xDF341A, 1, 6, 6, 3 ) ];
+				selectionFilters = [ new GlowFilter( 0xF4E6A5, 1, 9, 9, 3 ) ];
 
 				typeImage.filters = [ glowFilter ];
 			}
@@ -177,32 +178,63 @@
 		<s:VGroup left="0" right="0"
 				  gap="1">
 
-			<s:Group id="headerGroup"
-					 width="100%">
+			<s:Group id="headerGroup" width="100%" 
+					 doubleClickEnabled="true" doubleClick="hideButton_clickHandler( event )">
 
 				<s:Rect height="25"
 						bottom="0" left="0" right="0">
 					<s:fill>
 						<s:LinearGradient rotation="90">
-							<s:GradientEntry color="{ isIndexPage ? 0xA90329 : 0x45484D }"/>
-							<s:GradientEntry color="{ isIndexPage ? 0x6E0019 : 0x000000 }"/>
+							<s:GradientEntry color="{ isIndexPage ? 0xD9686A : 0x959595 }"/>
+							<s:GradientEntry color="{ isIndexPage ? 0x952439 : 0x484848 }"/>
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
-
-
-				<s:Label id="pageNameLabel"
-						 text="{ hostComponent.nameAttribute }"
-						 toolTip="{ hostComponent.nameAttribute }"
-						 bottom="5" left="45" right="5"
-						 width="100%"
-						 color="#FFFFFF"
-						 textAlign="left"
-						 maxDisplayedLines="1"/>
+				
+				<s:HGroup width="100%" height="100%" verticalAlign="middle" paddingLeft="5" paddingRight="21">
+					
+					<components:SmoothImage id="typeImage"
+											height="16"  source="{ hostComponent.typeResource.data }"
+											width="16"/>
+					
+					
+					<s:Label id="pageNameLabel"
+							 text="{ hostComponent.nameAttribute }"
+							 toolTip="{ hostComponent.nameAttribute }"
+							 width="100%"
+							 color="#FFFFFF"
+							 textAlign="center"
+							 maxDisplayedLines="1"/>
+					
+				</s:HGroup>
+				
+				<s:Group top="0" bottom="0" right="0" width="40">
+					
+					<s:Rect bottom="0" left="0" right="0" top="0">
+						<s:fill>
+							<s:LinearGradient rotation="90">
+								<s:GradientEntry color="{ isIndexPage ? 0xD9686A : 0x959595 }"/>
+								<s:GradientEntry color="{ isIndexPage ? 0x952439 : 0x484848 }"/>
+							</s:LinearGradient>
+						</s:fill>
+					</s:Rect>
+					
+					<s:HGroup id="imageGroup" height="100%" horizontalAlign="right" verticalAlign="middle" paddingRight="5" gap="1">
+						
+						<mx:Image id="arrowButton" source="{VDOMImage.Arrow}" 
+								   alpha=".5" mouseOver="{ arrowButton.alpha = 1 }" mouseOut="{ arrowButton.alpha = .5 }"
+								   click="hostComponent.dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE ) )"/>
+						
+						<mx:Image id="deleteButton" source="{VDOMImage.DeleteWhite}" 
+								   alpha=".5" mouseOver="{ deleteButton.alpha = 1 }" mouseOut="{ deleteButton.alpha = .5 }"/>
+						
+					</s:HGroup>
+					
+				</s:Group>
 
 			</s:Group>
 
-			<s:Group width="100%">
+			<s:Group width="100%" itemCreationPolicy="immediate" includeIn="full">
 				<s:Rect bottom="0" left="0" right="0" top="0">
 					<s:fill>
 						<mx:SolidColor color="white"/>
@@ -210,23 +242,28 @@
 				</s:Rect>
 
 				<s:Group id="contentGroup"
-						 width="100%"
-						 itemCreationPolicy="immediate" includeIn="full"/>
+						 width="100%"/>
 			</s:Group>
 
 
-			<s:Group width="100%">
+			<s:Group width="100%" height="16" includeIn="full">
 
 				<s:Rect bottom="0" left="0" right="0" top="0">
 					<s:fill>
-						<s:SolidColor color="0x518000"/>
+						<s:LinearGradient rotation="90">
+							<s:GradientEntry color="{ isIndexPage ? 0xD9686A : 0x959595 }"/>
+							<s:GradientEntry color="{ isIndexPage ? 0x952439 : 0x484848 }"/>
+						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
 
-				<s:HGroup height="17" width="100%"
-						  gap="1">
+				<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+						
+					<mx:Image source="{VDOMImage.ArrClose}" click="hideButton_clickHandler( event )" />
+						
+				</s:HGroup>
 
-					<components:ElementButton id="hideButton"
+					<!--<components:ElementButton id="hideButton"
 											  height="17" icon.full="@Embed('assets/hide.png')" icon.short="@Embed('assets/show.png')" label.full="{ resourceManager.getString( 'Tree_General', 'tree_element_hide' ) }"
 											  label.short="{ resourceManager.getString( 'Tree_General', 'tree_element_show' ) }" minWidth="10" width="100%"
 											  cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
@@ -240,13 +277,9 @@
 					<components:ElementButton id="deleteButton"
 											  height="17" icon="@Embed('assets/delete.png')" label="{ resourceManager.getString( 'Tree_General', 'tree_element_delete' ) }" minWidth="10"
 											  width="100%"
-											  cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"/>
-				</s:HGroup>
+											  cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"/> -->
+				
 			</s:Group>
 		</s:VGroup>
 	</s:Group>
-
-	<components:SmoothImage id="typeImage"
-							height.full="35" height.short="25" source="{ hostComponent.typeResource.data }" width.full="35"
-							width.short="25" x="7" y.full="-7" y.short="-3"/>
 </s:SparkSkin>

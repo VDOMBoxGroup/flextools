@@ -17,7 +17,9 @@
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
+			import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.components.button.AlertButton;
 			import net.vdombox.ide.common.view.components.windows.Alert;
@@ -35,7 +37,7 @@
 			public var typeImage : SmoothImage;
 			
 			[SkinPart( required="true" )]
-			public var deleteButton : ElementButton;
+			public var deleteButton : Image;
 
 			[Bindable]
 			private var _typeResource : ResourceVO;
@@ -46,12 +48,10 @@
 			[Bindable]
 			private var _treeElementVO : TreeElementVO;
 
+			[Bindable]
 			private var _title : String;
 			
 			private var _nameAttribute : String;
-
-			[Bindable]
-			private var _description : String;
 
 			[Bindable]
 			private var _typeName : String;
@@ -64,6 +64,27 @@
 			private var mouseOffcetX : int;
 
 			private var mouseOffcetY : int;
+			
+			[Embed( source = "assets/arrow.png" )]
+			public static var array : Class;
+			
+			private var _vdomObjectAttributesVO : VdomObjectAttributesVO;
+			
+			[Bindable]
+			private var descriptionAttributeVO : AttributeVO;
+
+			public function get vdomObjectAttributesVO():VdomObjectAttributesVO
+			{
+				return _vdomObjectAttributesVO;
+			}
+
+			public function set vdomObjectAttributesVO(value:VdomObjectAttributesVO):void
+			{
+				_vdomObjectAttributesVO = value;
+				descriptionAttributeVO = getAttributeByName( "description" );
+				_title = getAttributeValue( "title" );
+				
+			}
 
 			[Bindable]
 			public function get typeResource() : ResourceVO
@@ -74,28 +95,6 @@
 			public function set typeResource( value : ResourceVO ) : void
 			{
 				_typeResource = value;
-			}
-
-			[Bindable]
-			public function get description() : String
-			{
-				return _description;
-			}
-
-			public function set description( value : String ) : void
-			{
-				_description = value;
-			}
-
-			[Bindable]
-			public function get title() : String
-			{
-				return _title;
-			}
-
-			public function set title( value : String ) : void
-			{
-				_title = value;
 			}
 
 			[Bindable]
@@ -136,6 +135,12 @@
 				
 				if (treeElementVO)
 					nameAttribute = treeElementVO.pageVO.name;
+				
+				/*if ( image && !treeElementVO.resourceVO )
+				{
+					image.source = array;
+					rectImage.visible = true;
+				}*/
 			}
 
 			[Bindable]
@@ -148,6 +153,39 @@
 			{
 				if ( _selected != value )
 					_selected = value;
+			}
+			
+			private function getAttributeValue( attributeName : String ) : String
+			{
+				var result : String;
+				
+				for each ( var attributeVO : AttributeVO in _vdomObjectAttributesVO.attributes )
+				{
+					if ( attributeVO.name == attributeName )
+					{
+						result = attributeVO.value;
+						break;
+					}
+				}
+				
+				return result;
+			}
+			
+			private function getAttributeByName( name : String ) : AttributeVO
+			{
+				var result : AttributeVO;
+				
+				for each ( var attributeVO : AttributeVO in _vdomObjectAttributesVO.attributes )
+				{
+					if ( attributeVO.name == name )
+					{
+						result = attributeVO;
+						
+						break;
+					}
+				}
+				
+				return result;
 			}
 
 			override protected function partAdded( partName : String, instance : Object ) : void
@@ -192,6 +230,14 @@
 								
 				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 				show();
+				
+				/*if ( !treeElementVO.resourceVO || !treeElementVO.resourceVO.data )
+				{
+					image.source = array;
+					rectImage.visible = true;
+				}*/
+				
+			
 			}
 
 			private function removeHandler() : void
@@ -256,7 +302,7 @@
 			{
 				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 				
-				Alert.Show( "Are you sure want to delete " + title + " ?",AlertButton.OK_No, this.parentApplication, deleteHandler);
+				Alert.Show( "Are you sure want to delete " + nameAttribute + " ?",AlertButton.OK_No, this.parentApplication, deleteHandler);
 				
 				function deleteHandler(event : CloseEvent) : void
 				{
@@ -267,6 +313,43 @@
 				}
 				
 			}
+			
+			protected function textinput1_keyDownHandler(event:KeyboardEvent):void
+			{
+				if (treeElementVO && treeElementVO.pageVO)
+				{
+					treeElementVO.pageVO.name = txtName.text;
+					dispatchEvent( new TreeElementEvent ( TreeElementEvent.SAVE_PAGE_NAME ) );
+				}
+			}
+			
+			protected function txtName_focusOutHandler(event:FocusEvent):void
+			{
+				if (treeElementVO && treeElementVO.pageVO)
+				{
+					treeElementVO.pageVO.name = txtName.text;
+					dispatchEvent( new TreeElementEvent ( TreeElementEvent.SAVE_PAGE_NAME ) );
+				}
+				
+				txtName.setStyle("borderVisible", false);
+				txtName.setStyle("contentBackgroundAlpha", 0);
+			}
+			
+			protected function txtDescription_focusOutHandler(event:FocusEvent):void
+			{
+				if ( _vdomObjectAttributesVO )
+				{
+					dispatchEvent( new TreeElementEvent ( TreeElementEvent.SAVE_PAGE_ATTRIBUTES ) )
+				}
+				
+			}
+			
+			protected function txtName_focusInHandler(event:FocusEvent):void
+			{
+				txtName.setStyle("borderVisible", true);
+				txtName.setStyle("contentBackgroundAlpha", 1);
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -275,35 +358,71 @@
 		<s:VerticalLayout gap="1"/>
 	</s:layout>
 
-	<s:Group height="80" width="100%">
+	<s:VGroup width="100%" gap="5">
 
-		<components:SmoothImage height="55" source="{ _treeElementVO.resourceVO.data }" width="55"
-								left="5" top="5"/>
-
-		<s:Rect bottom="19" left="64" right="4" top="4"
-				filters="{[ new DropShadowFilter(4, 45, 0xC7C7C7, 1,4,4,1,1,true,false) ]}">
-			<s:stroke>
-				<s:SolidColorStroke color="0xC7C7C7"
-									weight="2"/>
-			</s:stroke>
-			<s:fill>
-				<s:SolidColor color="white"/>
-			</s:fill>
-		</s:Rect>
-
-		<s:Scroller bottom="20" left="65" right="5" top="5">
-			<s:Group>
-				<s:RichText text="{ _description }" width="100%"
-							color="0x474747" paddingBottom="3" paddingLeft="3" paddingRight="3"
-							paddingTop="3"/>
+		<s:HGroup width="100%" height="100%" paddingLeft="5" paddingTop="5" gap="5">
+			
+			<!--<s:Group width="55" height="55">
+				<s:Rect id="rectImage" width="100%" height="100%" visible="false">
+					<s:stroke>
+						<s:SolidColorStroke color="0x000000"
+											weight="1"/>
+					</s:stroke>
+					<s:fill>
+						<s:SolidColor color="white"/>
+					</s:fill>
+				</s:Rect>
+				
+				<s:HGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+					<components:SmoothImage id="image" maxHeight="55" maxWidth="55"
+											source="{ _treeElementVO.resourceVO.data }" />
+				</s:HGroup>
+			</s:Group> -->
+			
+			
+			<s:Group width="100%" height="100%">
+				<s:Rect width="100%" height="100%"
+						filters="{[ new DropShadowFilter(4, 45, 0xC7C7C7, 1,4,4,1,1,true,false) ]}">
+					<s:stroke>
+						<s:SolidColorStroke color="0xC7C7C7"
+											weight="2"/>
+					</s:stroke>
+					<s:fill>
+						<s:SolidColor color="white"/>
+					</s:fill>
+				</s:Rect>
+				
+				<s:VGroup width="100%" height="100%" gap="0">
+					<s:TextInput id="txtName" text="{ nameAttribute }" width="100%"
+								 borderVisible="false" contentBackgroundAlpha="0" 
+								 keyDown="textinput1_keyDownHandler(event)" focusIn="txtName_focusInHandler(event)" focusOut="txtName_focusOutHandler(event)"/>
+					
+					<s:Line width="100%">
+						<s:stroke>
+							<s:SolidColorStroke color="0xC7C7C7" weight="2"/>
+						</s:stroke>
+					</s:Line>
+					
+					<s:Scroller width="100%" height="100%" maxHeight="150">
+						<s:Group>
+							<s:RichEditableText id="txtDescription" text="@{ descriptionAttributeVO.value }" width="100%"
+										color="0x474747" paddingBottom="3" paddingLeft="3" paddingRight="3"
+										paddingTop="3" focusOut="txtDescription_focusOutHandler(event)" />
+						</s:Group>
+					</s:Scroller>
+				</s:VGroup>
+				
+				
 			</s:Group>
-		</s:Scroller>
+			
+		</s:HGroup>
+		
 
 		<s:Label text="{_typeName.toUpperCase()}"
-				 bottom="3" color="0xC7C7C7" left="75" right="5"
-				 textAlign="right"
+				 bottom="3" color="0xC7C7C7" width="100%"
+				 textAlign="center"
 				 maxDisplayedLines="1"/>
 
-	</s:Group>
+	</s:VGroup>
 
 </s:SkinnableContainer>

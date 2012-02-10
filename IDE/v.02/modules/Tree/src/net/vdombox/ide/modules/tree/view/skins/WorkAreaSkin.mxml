@@ -3,7 +3,7 @@
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 creationComplete="creationCompleteHandler()" xmlns:components1="net.vdombox.components.*" xmlns:components2="net.vdombox.ide.common.view.components.*">
+			 creationComplete="creationCompleteHandler()" xmlns:button="net.vdombox.ide.common.view.components.button.*" xmlns:components1="net.vdombox.ide.common.view.components.*">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -120,30 +120,34 @@
 			  left="1" right="1" top="1"
 			  gap="0">
 
-		<components:WorkAreaButton id="saveButton"
+		<button:WorkAreaButton id="saveButton"
 								   enabled="true" enabled.disabled="false" height="20" icon="{VDOMImage.Save}"
 								   label="{ resourceManager.getString( 'Tree_General', 'work_area_save' ) }"
 								   highlighted="false" highlighted.unsaved="true"/>
 
-		<components:WorkAreaButton id="undoButton"
-								   enabled="false" enabled.unsaved="true" height="20" icon="@Embed('assets/undo.png')"
+		<button:WorkAreaButton id="undoButton"
+								   enabled="false" enabled.unsaved="true" height="20" icon="{VDOMImage.Undo}"
 								   label="{ resourceManager.getString( 'Tree_General', 'work_area_undo' ) }"/>
 
 		<mx:Spacer width="100%"/>
+		
+		<button:WorkAreaButton id="setHome"
+								   height="20" icon="@Embed('assets/home.png')" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_start' ) }"
+								   click="hostComponent.dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.SET_START ) )"/>
 
-		<components:WorkAreaButton id="newPageButton"
+		<button:WorkAreaButton id="newPageButton"
 								   height="20" icon="@Embed('assets/new.png')" label="{ resourceManager.getString( 'Tree_General', 'work_area_new_page' ) }"
 								   click="hostComponent.dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CREATE_PAGE ) )"/>
 
-		<components:WorkAreaButton id="autoSpaceingButton"
+		<button:WorkAreaButton id="autoSpaceingButton"
 								   height="20" icon="@Embed('assets/spacing.png')" label="{ resourceManager.getString( 'Tree_General', 'work_area_auto_spacing' ) }"
 								   click="hostComponent.dispatchEvent( new WorkAreaEvent( WorkAreaEvent.AUTO_SPACING ) )"/>
 
-		<components:WorkAreaButton id="expandAllButton"
+		<button:WorkAreaButton id="expandAllButton"
 								   height="20" icon="@Embed('assets/expand.png')"
 								   click="expandAllButton_clickHandler()"/>
 
-		<components:WorkAreaButton id="showSignatureButton"
+		<button:WorkAreaButton id="showSignatureButton"
 								   height="20" icon="@Embed('assets/signature.png')" label="{ hostComponent.isSignatureShowed ? resourceManager.getString( 'Tree_General', 'work_area_hide_signature' ) : resourceManager.getString( 'Tree_General', 'work_area_show_signature' ) }"
 								   click="showSignatureButton_clickHandler()"/>
 	</s:HGroup>
@@ -152,12 +156,11 @@
 			 bottom="0" left="0" right="0" top="22">
 		<s:Rect height="100%" width="100%">
 			<s:fill>
-				<s:SolidColor color="black"
-							  alpha="0.0"/>
+				<s:BitmapFill source = "{VDOMImage.BG_WorkArea}" smooth="true" fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
 
-		<components2:VDOMScroller id="scroller"
+		<components1:VDOMScroller id="scroller"
 					height="100%" width="100%" creationComplete="scroller_creationCompleteHandler(event)">
 			<s:VGroup paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
 				<s:Group>
@@ -165,6 +168,6 @@
 					<s:Group id="contentGroup"/>
 				</s:Group>
 			</s:VGroup>
-		</components2:VDOMScroller>
+		</components1:VDOMScroller>
 	</s:Group>
 </s:SparkSkin>

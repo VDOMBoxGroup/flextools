@@ -261,7 +261,7 @@
 								  click="dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.MAKE_START_PAGE ) )"/>
 
 		<components:ElementButton id="deleteButton"
-								  enabled="false" height="20" icon="@Embed('assets/delete.png')" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_delete' ) }"
+								  enabled="false" height="20" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_delete' ) }"
 								  width="100%"
 								  skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
 								  click="dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.DELETE_PAGE ) )"/>

@@ -78,6 +78,9 @@ package net.vdombox.ide.modules.tree.view
 
 			interests.push( ApplicationFacade.APPLICATION_STRUCTURE_SETTED );
 			
+			interests.push( ApplicationFacade.CHECK_SAVE_IN_WORKAREA );
+			interests.push( ApplicationFacade.SAVE_CHANGED );
+			
 			return interests;
 		}
 		
@@ -178,6 +181,23 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 					
+				case ApplicationFacade.CHECK_SAVE_IN_WORKAREA:
+				{
+					if ( workArea.skin.currentState == "unsaved" )
+						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : false } );
+					else
+						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : true } );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SAVE_CHANGED:
+				{
+					saveHandler();
+					
+					break;
+				}
+					
 //				case ApplicationFacade.CREATE_LINKAGE_REQUEST:
 //				{
 //					shadowLinkage = new Linkage();
@@ -225,6 +245,8 @@ package net.vdombox.ide.modules.tree.view
 
 			workArea.addEventListener( WorkAreaEvent.SHOW_SIGNATURE, showSignatureHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.HIDE_SIGNATURE, hideSignatureHandler, false, 0, true );
+			
+			workArea.addEventListener( WorkAreaEvent.SET_START, makeStartPageHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -253,7 +275,7 @@ package net.vdombox.ide.modules.tree.view
 			workArea.linkages = null;
 		}
 
-		private function saveHandler( event : WorkAreaEvent ) : void
+		private function saveHandler( event : WorkAreaEvent = null ) : void
 		{
 			sendNotification( ApplicationFacade.SAVE_REQUEST );
 		}
@@ -306,6 +328,11 @@ package net.vdombox.ide.modules.tree.view
 		private function hideSignatureHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( ApplicationFacade.HIDE_SIGNATURE );
+		}
+		
+		private function makeStartPageHandler( event : WorkAreaEvent ) : void
+		{
+			sendNotification( ApplicationFacade.SET_APPLICATION_INFORMATION, { applicationVO : statesProxy.selectedApplication, pageID : statesProxy.selectedPage.id } );
 		}
 	}
 }

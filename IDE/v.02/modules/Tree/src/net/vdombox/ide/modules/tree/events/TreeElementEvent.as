@@ -12,6 +12,8 @@ package net.vdombox.ide.modules.tree.events
 		public static var CREATE_LINKAGE : String = "createLinkage";
 		public static var DELETE_LINKAGE : String = "deleteLinkage";
 		public static var MOVED : String = "moved";
+		public static var SAVE_PAGE_NAME : String = "savePageName";
+		public static var SAVE_PAGE_ATTRIBUTES : String = "savePageAttributes";
 		
 		
 		public function TreeElementEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )

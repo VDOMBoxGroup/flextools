@@ -16,6 +16,8 @@ package net.vdombox.ide.modules.tree.events
 		
 		public static var UNDO : String = "undo";
 		public static var SAVE : String = "save";
+		
+		public static var SET_START : String = "setStart";
 
 		public function WorkAreaEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

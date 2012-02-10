@@ -166,6 +166,14 @@ package net.vdombox.ide.modules.tree
 		public static const HIDE_SIGNATURE : String = "hideSignature";
 		
 		public static const SEND_TO_LOG : String = "sendToLog";
+		
+		
+		public static const CHECK_SAVE_IN_WORKAREA : String = "checkSaveInWorkArea";
+		public static const SAVE_IN_WORKAREA_CHECKED : String = "saveInWorkAreaChecked";
+		
+		public static const SAVE_CHANGED : String = "saveChanged";
+		
+		
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

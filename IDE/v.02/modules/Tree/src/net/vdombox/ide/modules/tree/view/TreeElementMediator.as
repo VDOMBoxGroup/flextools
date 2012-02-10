@@ -46,8 +46,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			_vdomObjectAttributesVO = value;
 
-			treeElement.description = getAttributeValue( "description" );
-			treeElement.title = getAttributeValue( "title" );
+			treeElement.vdomObjectAttributesVO = _vdomObjectAttributesVO;
 		}
 
 		override public function onRegister() : void
@@ -194,29 +193,16 @@ package net.vdombox.ide.modules.tree.view
 		{
 			treeElement.addEventListener( TreeElementEvent.SELECTION, elementSelectionHandler, false, 0, true );
 			treeElement.addEventListener( TreeElementEvent.DELETE, deleteRequestHandler, false, 0, true );
-//			treeElement.addEventListener( TreeElementEvent.CREATE_LINKAGE_REQUEST, createLinkageRequestHandler, false, 0, true );
+			treeElement.addEventListener( TreeElementEvent.SAVE_PAGE_NAME, savePageNameHandler, false, 0, true );
+			treeElement.addEventListener( TreeElementEvent.SAVE_PAGE_ATTRIBUTES, savePageAttributesHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			treeElement.removeEventListener( TreeElementEvent.SELECTION, elementSelectionHandler );
 			treeElement.removeEventListener( TreeElementEvent.DELETE, deleteRequestHandler );
-		}
-
-		private function getAttributeValue( attributeName : String ) : String
-		{
-			var result : String;
-
-			for each ( var attributeVO : AttributeVO in _vdomObjectAttributesVO.attributes )
-			{
-				if ( attributeVO.name == attributeName )
-				{
-					result = attributeVO.value;
-					break;
-				}
-			}
-
-			return result;
+			treeElement.removeEventListener( TreeElementEvent.SAVE_PAGE_NAME, savePageNameHandler );
+			treeElement.removeEventListener( TreeElementEvent.SAVE_PAGE_ATTRIBUTES, savePageAttributesHandler );
 		}
 
 		private function elementSelectionHandler( event : TreeElementEvent ) : void
@@ -235,6 +221,20 @@ package net.vdombox.ide.modules.tree.view
 		private function createLinkageRequestHandler( event : TreeElementEvent ) : void
 		{
 //			sendNotification( ApplicationFacade.CREATE_LINKAGE_REQUEST, treeElementVO );
+		}
+		
+		private function savePageNameHandler( event : TreeElementEvent ) : void
+		{
+			sendNotification( ApplicationFacade.SET_PAGE_NAME, treeElement.treeElementVO.pageVO );
+		}
+		
+		private function savePageAttributesHandler( event : TreeElementEvent ) : void
+		{
+			if ( treeElement.vdomObjectAttributesVO )
+			{
+				sendNotification( ApplicationFacade.SET_PAGE_ATTRIBUTES,
+					treeElement.vdomObjectAttributesVO);
+			}
 		}
 	}
 }

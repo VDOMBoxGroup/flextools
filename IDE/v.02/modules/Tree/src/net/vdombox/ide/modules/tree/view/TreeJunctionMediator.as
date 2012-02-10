@@ -100,6 +100,8 @@ package net.vdombox.ide.modules.tree.view
 
 			interests.push( ApplicationFacade.SEND_TO_LOG );
 			interests.push( ApplicationFacade.BODY_STOP );
+			
+			interests.push( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED );
 
 			return interests;
 		}
@@ -406,6 +408,19 @@ package net.vdombox.ide.modules.tree.view
 					junction.sendMessage( PipeNames.STDCORE,
 						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
 				
+					break;
+				}
+					
+				case ApplicationFacade.SAVE_IN_WORKAREA_CHECKED:
+				{
+					if ( !body.object )
+					{
+						message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.SAVED, body );
+						
+						if ( message )
+							junction.sendMessage( PipeNames.PROXIESOUT, message );
+					}
+					
 					break;
 				}
 			}

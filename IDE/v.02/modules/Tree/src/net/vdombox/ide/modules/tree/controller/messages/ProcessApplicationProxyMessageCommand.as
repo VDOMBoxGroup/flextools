@@ -64,6 +64,19 @@ package net.vdombox.ide.modules.tree.controller.messages
 					
 					break;
 				}
+					
+				case PPMApplicationTargetNames.SAVED:
+				{
+					if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.CHECK_SAVE_IN_WORKAREA , null );
+					else if ( operation == PPMOperationNames.UPDATE )
+					{
+						sendNotification( ApplicationFacade.SAVE_CHANGED );
+					}
+					
+					
+					break;
+				}
 			}
 		}
 	}

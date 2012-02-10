@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.tree.view.components
 	import flash.events.MouseEvent;
 	import flash.net.sendToURL;
 	
+	import net.vdombox.ide.common.view.components.button.WorkAreaButton;
 	import net.vdombox.ide.modules.tree.events.LinkageEvent;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.events.WorkAreaEvent;

@@ -19,7 +19,6 @@ package net.vdombox.ide.modules.tree.controller.body
 			facade.registerMediator( new WorkAreaMediator( body.treeCanvas ) );
 			
 //			facade.registerMediator( new MenuPanelMediator( body.menuPanel ) );
-			facade.registerMediator( new PropertiesPanelMediator( body.propertiesPanel ) );
 			facade.registerMediator( new LevelsPanelMediator( body.levelsPanel ) );
 		}
 	}
