@@ -27,6 +27,10 @@ package net.vdombox.ide.common.view.components
 		public static var Save : Class;
 		
 		[Bindable]
+		[Embed( source = "assets/vdomimage/redo.png" )]
+		public static var Redo : Class;
+		
+		[Bindable]
 		[Embed( source = "assets/vdomimage/undo.png" )]
 		public static var Undo : Class;
 		
