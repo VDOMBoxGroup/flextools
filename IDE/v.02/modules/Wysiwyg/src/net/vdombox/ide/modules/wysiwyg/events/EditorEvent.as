@@ -19,6 +19,9 @@ package net.vdombox.ide.modules.wysiwyg.events
 		
 		public static var XML_SAVE : String = "xmlSave";
 		
+		public static var UNDO : String = "undo";
+		public static var REDO : String = "redo";
+		
 		public static var RENDERER_TRANSFORMED	: String = "editorRendererTransformed";
 		
 		public function EditorEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, renderer : IRenderer = null,

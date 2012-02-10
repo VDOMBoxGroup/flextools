@@ -210,6 +210,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 //			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 			
 			workArea.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
+			
+			workArea.addEventListener( EditorEvent.UNDO, undoHandler, true, 0, true );
+			workArea.addEventListener( EditorEvent.REDO, redoHandler, true, 0, true );
 
 			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
 
@@ -266,6 +269,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			workArea.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 
 			workArea.removeEventListener( WorkAreaEvent.CHANGE, changeHandler );
+			
+			workArea.removeEventListener( EditorEvent.UNDO, undoHandler, true );
+			workArea.removeEventListener( EditorEvent.REDO, redoHandler, true );
 
 			workArea.removeEventListener( EditorEvent.PREINITIALIZED, editor_preinitializedHandler, true );
 			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
@@ -284,9 +290,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 				return;
 			
 			if ( event.ctrlKey && event.keyCode == Keyboard.Z )
-				sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
+				undoHandler();
 			else if ( event.ctrlKey && event.keyCode == Keyboard.Y )
-				sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
+				redoHandler();
+		}
+		
+		private function undoHandler( event : EditorEvent = null ) : void
+		{			
+			sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
+		}
+		
+		private function redoHandler( event : EditorEvent = null ) : void
+		{			
+			sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
 		}
 	}
 }

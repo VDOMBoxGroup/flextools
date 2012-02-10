@@ -17,6 +17,9 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.events.StateChangeEvent;
+			
+			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 			private function creationCompleteHandler() : void
 			{
 				currentState = "wysiwyg";
@@ -84,18 +87,6 @@
 		<s:HGroup gap="0" height="25"
 				  left="1" right="1" top="1">
 			
-			<s:HGroup includeIn="xml, xmlDisabled">
-				<button:WorkAreaButton id="saveXMLButton"
-											  height="25" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_save_button_label' ) }"/>
-				
-				<mx:Spacer width="20"/>
-				
-				<s:Label id="statusLabel"
-						 height="25"
-						 color="gray" verticalAlign="middle"/>
-				
-			</s:HGroup>
-			
 			<s:HGroup gap="13" 
 					  height="100%" width="50%"
 					  paddingRight="15"  paddingLeft="14"  
@@ -136,6 +127,29 @@
 								  visible.xml="true" visible.wysiwyg="false"/>
 					</s:HGroup>
 				</s:VGroup>
+				
+				<s:HGroup includeIn="xml, xmlDisabled">
+					<button:WorkAreaButton id="saveXMLButton"
+										   height="25" icon="{VDOMImage.Save}"
+										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_save_button_label' ) }"/>
+					
+					<mx:Spacer width="5"/>
+					
+					<s:Label id="statusLabel"
+							 height="25"
+							 color="gray" verticalAlign="middle"/>
+					
+				</s:HGroup>
+				
+				<button:WorkAreaButton id="undoButton"
+									   height="25" icon="{VDOMImage.Undo}"
+									   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_undo' ) }"
+									   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.UNDO ) )"/>
+				
+				<button:WorkAreaButton id="redoButton"
+									   height="20" icon="{VDOMImage.Redo}"
+									   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_redo' ) }"
+									   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.REDO ) )"/>
 				
 			</s:HGroup>
 			
