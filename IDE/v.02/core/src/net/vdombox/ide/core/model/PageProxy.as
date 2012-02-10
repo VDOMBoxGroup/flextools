@@ -1,5 +1,8 @@
 package net.vdombox.ide.core.model
 {
+	import mx.collections.Sort;
+	import mx.collections.SortField;
+	import mx.collections.XMLListCollection;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.Fault;
 	import mx.rpc.events.FaultEvent;
@@ -584,6 +587,28 @@ package net.vdombox.ide.core.model
 			return token;
 			
 		}
+		
+		private function sortElementsTree( pageXML : XML ) : void
+		{
+			var objects : XMLList = pageXML.children();
+			
+			for ( var i : int = 0; i < objects.length(); i++ )
+			{
+				if ( objects[i].children() )
+					sortElementsTree( objects[i] );
+			}
+			
+			var sort:Sort = new Sort()
+			sort.fields = [new SortField("@name")];
+			/*for each (var a:XML in objects)
+			{*/
+				var xcoll:XMLListCollection = new XMLListCollection(pageXML.children());
+				xcoll.sort = sort;
+				xcoll.refresh();
+				pageXML.setChildren(xcoll.copy());
+			//}
+			
+		}
 
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
@@ -627,6 +652,9 @@ package net.vdombox.ide.core.model
 
 					if ( token.requestFunctionName == GET_STRUCTURE )
 					{
+						if ( structure.children() )
+							sortElementsTree( structure );
+						
 						notification = new ProxyNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, structure )
 						notification.token = token;
 					}

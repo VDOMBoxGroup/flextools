@@ -139,7 +139,8 @@ package net.vdombox.ide.core.view
 
 					if ( currentModule != moduleVO )
 					{
-						if ( currentModule.moduleID == "net.vdombox.ide.modules.Events" )
+						if ( currentModule.moduleID == "net.vdombox.ide.modules.Events" ||
+							 currentModule.moduleID == "net.vdombox.ide.modules.Tree")
 						{
 							typeCheckSaved = "changeModule";
 							sendNotification( ApplicationFacade.APPLICATION_CHECK_SAVED, statesProxy.selectedApplication );
@@ -271,7 +272,8 @@ package net.vdombox.ide.core.view
 
 		private function appManagerHandler( event : MainWindowEvent ) : void
 		{
-			if ( currentModule.moduleID == "net.vdombox.ide.modules.Events" )
+			if ( currentModule.moduleID == "net.vdombox.ide.modules.Events" ||
+				currentModule.moduleID == "net.vdombox.ide.modules.Tree" )
 			{
 				typeCheckSaved = "appManagerOpened";
 				sendNotification( ApplicationFacade.APPLICATION_CHECK_SAVED, statesProxy.selectedApplication );

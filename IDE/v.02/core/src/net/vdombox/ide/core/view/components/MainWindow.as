@@ -15,6 +15,8 @@ package net.vdombox.ide.core.view.components
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
+	import flash.filesystem.File;
+	import flash.filesystem.FileStream;
 	import flash.system.LoaderContext;
 	
 	import mx.binding.utils.BindingUtils;
@@ -23,10 +25,10 @@ package net.vdombox.ide.core.view.components
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
-	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
 	
 	import spark.components.Group;
 	import spark.components.Label;
@@ -53,7 +55,26 @@ package net.vdombox.ide.core.view.components
 			minWidth = 800;
 			minHeight = 600;
 			
-//			addEventListener( Event.CLOSE, closeEvent);
+			addEventListener( Event.CLOSING, saveAppPosition );
+		}
+		
+		private function saveAppPosition(e:Event = null):void
+		{
+			var xml:XML = new XML('<position x="'+this.nativeWindow.x+'" y="'+this.nativeWindow.y+'" width="'+this.width+'" height="'+this.height+'"/>');
+			
+			var f:File = File.applicationStorageDirectory.resolvePath("appPosition.xml");
+			var s:FileStream = new FileStream();
+			try
+			{
+				s.open(f,flash.filesystem.FileMode.WRITE);
+				
+				s.writeUTFBytes(xml.toXMLString());
+			}
+			catch(e:Error){}
+			finally
+			{
+				s.close();
+			}
 		}
 
 		[SkinPart( required = "true" )]
