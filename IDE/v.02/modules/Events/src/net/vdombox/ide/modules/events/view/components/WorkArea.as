@@ -20,6 +20,7 @@ package net.vdombox.ide.modules.events.view.components
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.VDOMScroller;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.button.WorkAreaButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;

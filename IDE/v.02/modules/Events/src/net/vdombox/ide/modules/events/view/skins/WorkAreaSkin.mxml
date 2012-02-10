@@ -4,10 +4,8 @@
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark" 
 			 xmlns:mx1="library://ns.adobe.com/flex/mx" 
-			 xmlns:components1="net.vdombox.components.*" 
-			 xmlns:components2="net.vdombox.ide.common.view.components.*"
 			 creationComplete="sparkskin1_creationCompleteHandler(event)"
-			 remove="sparkskin1_removeHandler(event)">
+			 remove="sparkskin1_removeHandler(event)" xmlns:button="net.vdombox.ide.common.view.components.button.*" xmlns:components1="net.vdombox.ide.common.view.components.*">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -108,16 +106,19 @@
 	<s:HGroup height="20"
 			  left="1" right="1" top="1"
 			  gap="0" paddingRight="20" verticalAlign="middle">
-		<components:WorkAreaButton id="saveButton"
+		<button:WorkAreaButton id="saveButton"
 								   enabled="true" enabled.disabled="false" height="20" icon="{VDOMImage.Save}"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_save' ) }"
 								   highlighted="false" highlighted.unsaved="true"/>
-		<components:WorkAreaButton id="redoButton"
-								   height="20"
+		
+		<button:WorkAreaButton id="undoButton"
+							   height="20" icon="{VDOMImage.Undo}"
+							   label="{ resourceManager.getString( 'Events_General', 'work_area_undo' ) }"/>
+		
+		<button:WorkAreaButton id="redoButton"
+								   height="20" icon="{VDOMImage.Redo}"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_redo' ) }"/>
-		<components:WorkAreaButton id="undoButton"
-								   height="20" icon="{VDOMImage.Undo}"
-								   label="{ resourceManager.getString( 'Events_General', 'work_area_undo' ) }"/>
+		
 		
 		<s:HGroup width="100%" horizontalAlign="center" gap="3" paddingLeft="10" paddingRight="10">
 			
@@ -143,11 +144,11 @@
 			</s:fill>
 		</s:Rect>
 
-		<components2:VDOMScroller id="scroller" height="100%" width="100%" creationComplete="scroller_creationCompleteHandler(event)">
+		<components1:VDOMScroller id="scroller" height="100%" width="100%" creationComplete="scroller_creationCompleteHandler(event)">
 			<s:Group>
 				<s:Group id="linkagesLayer"/>
 				<s:Group id="contentGroup"/>
 			</s:Group>
-		</components2:VDOMScroller>
+		</components1:VDOMScroller>
 	</s:Group>
 </s:SparkSkin>
