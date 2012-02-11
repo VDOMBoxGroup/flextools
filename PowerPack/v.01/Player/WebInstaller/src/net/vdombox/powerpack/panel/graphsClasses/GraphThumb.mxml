@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+		 horizontalAlign="center"
+		 verticalAlign="middle"
+		 borderStyle="none"
+		 height="60"
+		 backgroundAlpha="0.0">
+
+	<mx:Style>
+		.labelTextStyleName, .inputTextStyleName
+		{
+			fontFamily : Arial;
+			fontSize   : 12;
+			fontWeight : normal
+		}
+	</mx:Style>
+
+	<mx:Script>
+        <![CDATA[
+		import mx.binding.utils.BindingUtils;
+		import mx.binding.utils.ChangeWatcher;
+		import mx.core.EdgeMetrics;
+		import mx.core.IUITextField;
+		import mx.core.UITextField;
+
+		// Define a property for returning the new value to the item.
+		[Bindable]
+		public var returnText : String;
+
+		public var labelTextField : IUITextField;
+
+		private var watcher : ChangeWatcher;
+
+		//--------------------------------------------------------------------------
+		//
+		//  Properties
+		//
+		//--------------------------------------------------------------------------
+
+		//----------------------------------
+		//  editable
+		//----------------------------------
+
+		private var _editable : Boolean;
+
+		[Bindable("editableChange")]
+		public function set editable( value : Boolean ) : void
+		{
+			if ( _editable != value )
+			{
+				_editable = value;
+
+				if ( _editable )
+				{
+					labelTextField.visible = false;
+					labelTextField.includeInLayout = false;
+
+					txtThumb.visible = true;
+					txtThumb.includeInLayout = true;
+				}
+				else
+				{
+					txtThumb.includeInLayout = false;
+					txtThumb.visible = false;
+
+					labelTextField.visible = true;
+					labelTextField.includeInLayout = true;
+				}
+
+				invalidateDisplayList();
+
+				dispatchEvent( new Event( "editableChange" ) );
+			}
+		}
+
+		public function get editable() : Boolean
+		{
+			return _editable;
+		}
+
+		//--------------------------------------------------------------------------
+		//
+		//  Overridden methods
+		//
+		//--------------------------------------------------------------------------
+
+		override protected function createChildren() : void
+		{
+			super.createChildren();
+
+			if ( !labelTextField )
+			{
+				labelTextField = IUITextField( createInFontContext( UITextField ) );
+				labelTextField.text = txtThumb.text;
+				labelTextField.styleName = getStyle( "labelTextStyleName" );
+				labelTextField.enabled = true;
+				labelTextField.visible = true;
+				labelTextField.includeInLayout = true;
+
+				addChild( DisplayObject( labelTextField ) );
+			}
+
+			BindingUtils.bindSetter( onDataChange, this, 'data' );
+
+			function onDataChange( data : Object ) : void
+			{
+				if ( data )
+				{
+					if ( watcher )
+						watcher.unwatch();
+					watcher = BindingUtils.bindSetter( onLabelChange, data, 'name' );
+				}
+				else
+				{
+					txtThumb.text = '';
+					invalidateDisplayList();
+				}
+			}
+
+			function onLabelChange( label : String ) : void
+			{
+				txtThumb.text = label;
+				invalidateDisplayList();
+			}
+
+		}
+
+		/**
+		 *  @private
+		 */
+		override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
+		{
+			var edges : EdgeMetrics = viewMetricsAndPadding;
+			var contentAreaWidth : int = width - edges.left - edges.right;
+			var labelWidth : int = contentAreaWidth - 6;
+
+			if ( editable )
+			{
+				txtThumb.width = labelWidth;
+				txtThumb.x = 3;
+			}
+			else
+			{
+				labelTextField.text = txtThumb.text;
+				labelTextField.width = labelWidth;
+
+				labelTextField.x = 3;
+
+				if ( labelTextField.textWidth > labelWidth )
+				{
+					labelTextField.truncateToFit( "..." );
+				}
+			}
+
+			super.updateDisplayList( unscaledWidth, unscaledHeight );
+		}
+		]]>
+    </mx:Script>
+
+	<mx:Image id="imgThumb" scaleContent="true" autoLoad="true" source="@Embed('/assets/images/Tree.png')" width="24"
+			  height="24" />
+
+	<mx:TextInput id="txtThumb"
+				  styleName="inputTextStyleName" textAlign="center" visible="false" includeInLayout="false"
+				  change="returnText=txtThumb.text;"
+				  updateComplete="returnText=txtThumb.text;" />
+
+</mx:VBox>

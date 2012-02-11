@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas
+		xmlns:mx="http://www.adobe.com/2006/mxml"
+		xmlns:customize="net.vdombox.powerpack.customize.*"
+		width="739" height="388"
+		initialize="init()"
+
+		xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
+		horizontalScrollPolicy="off"
+		verticalScrollPolicy="off"
+		xmlns:control="net.vdombox.powerpack.control.*"
+
+		styleName="installerWindowStyle">
+
+	
+	<mx:Metadata>
+		[Event(name="close", type="flash.events.Event")]
+	</mx:Metadata>
+
+	<mx:Fade alphaFrom="0.0" alphaTo="1.0" duration="300" id="canvasShow"/>
+	<mx:Fade alphaFrom="1.0" alphaTo="0.0" duration="300" id="canvasHide"/>
+
+	<mx:Parallel id="picShow">
+		<mx:Move xBy="20" xTo="{tplPic.x}" duration="400"/>
+		<mx:Fade alphaFrom="0" alphaTo="1" duration="400"/>
+	</mx:Parallel>
+
+
+	<customize:GeneratorResources id="resources"/>
+
+	<mx:XML format="e4x" id="fileMenuData">
+		<root>
+			<menuitem label="{LanguageManager.sentences.menu_file}" id="file">
+				<menuitem label="{LanguageManager.sentences.menu_open_file}" id="open_file"/>
+				<!--menuitem label="{LanguageManager.sentences.menu_run_template}" id="run_template" enabled="false"/-->
+				<!--menuitem label="{LanguageManager.sentences.menu_install_app}" id="install_app" enabled="false"/-->
+				<menuitem type="separator"/>
+				<menuitem label="{LanguageManager.sentences.menu_exit}" id="exit"/>
+			</menuitem>
+			<menuitem label="{LanguageManager.sentences.menu_parameters}" id="parameters">
+				<menuitem label="{LanguageManager.sentences.menu_language}" id="language"/>
+				<menuitem label="{LanguageManager.sentences.menu_connection}" id="connection"/>
+				<menuitem label="{LanguageManager.sentences.menu_properties}" id="properties"/>
+			</menuitem>
+			<menuitem label="?" id="help"/>
+		</root>
+	</mx:XML>
+
+	<mx:Script>
+		<![CDATA[
+		import mx.collections.ArrayCollection;
+		import mx.core.Application;
+		import mx.events.CloseEvent;
+		import mx.events.EffectEvent;
+		import mx.events.IndexChangedEvent;
+
+		import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
+		import net.vdombox.powerpack.gen.TemplateStruct;
+		import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+		import net.vdombox.powerpack.managers.ContextManager;
+		import net.vdombox.powerpack.managers.LanguageManager;
+		import net.vdombox.powerpack.panel.popup.AlertPopup;
+
+		private var vsLastChanged:DisplayObject;
+		private var appGenerated:Boolean;
+		private var appInstalled:Boolean;
+		private var timer:Number;
+
+		private function init():void
+		{
+			var defaultCaptions:Object = {
+
+				app_title : "Power Pack Installer",
+				msg_input_template_key : "Please, input valid template key",
+				msg_exit_app : "Are you sure want to exit?",
+				msg_tpl_proceed_with_errs : "Error(s) exist in template\nProceed with launch?",
+				msg_gen_welcome : "Lorem ipsum dolor sit amet",
+				msg_gen_finish : "Installation is complete",
+
+				msg_save_appxml_to_server : "Save application xml to server.",
+				msg_connecting_fault : "A fault occured contacting the server. Fault message is:",
+				msg_try_to_reconnect : "Try to reconnect.",
+				msg_save_appxml_to_file : "Save application xml to file.",
+				msg_saving_appxml_fault : "A fault occured saving application xml. Fault message is:",
+				msg_proceed_interrupt_app_installing : "Are you sure want to interrupt process?",
+				msg_creation_app_interrupted : "Application creation process has been interrupted by user.",
+
+				prgrs_gen_tpl : "Generating application xml. Progress %3%%",
+				prgrs_save_to_server_tpl : "Saving to server. Progress %3%%",
+				prgrs_save_to_file_tpl : "Saving to file. Progress %3%%",
+				prgrs_launch_app : "Launching %3%%",
+
+				errs_in_tpl : "Errors in template",
+				menu_run_template : "_Run",
+				gen_result : "Result",
+				virtual_host_name : "Virtual host name",
+				save_to_server : "Save to server",
+				save_to_file : "Save to file"
+			};
+
+			LanguageManager.setSentences ( defaultCaptions );
+
+//			if ( File.applicationDirectory.resolvePath ( 'style/generator.swf' ).exists )
+//				StyleManager.loadStyleDeclarations ( "style/generator.swf" );
+
+		}
+
+
+		public function set  dataProvider( value:XML ):void
+		{
+			var template:Template = new Template ( value );
+			var templates:ArrayCollection = ContextManager.templates;
+
+			if ( templates.length == 0 )
+				templates.addItemAt ( template, 0 );
+			else
+				templates[0] = template;
+
+			showTemplateLogo ( getLogo () );
+
+			if ( template.isEncoded )
+			{
+				processStep ( cKeyRequest );
+			}
+			else
+			{
+				openTemplate ();
+			}
+
+			function getLogo():*
+			{
+				return value.picture[0] && Utils.getStringOrDefault ( value.picture[0], '' ) || resources.strLogo;
+			}
+		}
+
+		private function showTemplateLogo( sourceLogo:String ):void
+		{
+			if ( tplPic.visible && tplPic.value == sourceLogo )
+				return;
+
+			tplPic.visible = false;
+
+			tplPic.addEventListener ( "sourceChanged", onLogoScaleContentChanged );
+
+
+			tplPic.percentHeight = 100;
+
+			tplPic.value = sourceLogo;
+			tplPic.visible = true;
+		}
+
+		private function onLogoScaleContentChanged( evt:Event ):void
+		{
+			if ( tplPic.source && tplPic.source is Bitmap )
+			{
+				tplPic.removeEventListener ( "sourceChanged", onLogoScaleContentChanged );
+
+				var sourceBitmapData:BitmapData = tplPic.source.bitmapData;
+
+				if ( sourceBitmapData.width < tplPic.width && sourceBitmapData.height < tplPic.height )
+				{
+					tplPic.width = sourceBitmapData.width;
+					tplPic.height = sourceBitmapData.height;
+				}
+			}
+		}
+
+		private function onKeyAccept( event:Event ):void
+		{
+			openTemplate ( txtKey.text );
+		}
+
+		private function openTemplate( key:String = null ):void
+		{
+			var tpl:Template = ContextManager.templates[0];
+
+			if ( tpl.isEncoded )
+			{
+				tpl.key = key;
+				tpl.decode ();
+			}
+
+			if ( tpl.xmlStructure )
+			{
+				if ( fileMenuData..menuitem.(hasOwnProperty ( '@id' ) && @id == "run_template")[0] )
+					fileMenuData..menuitem.(hasOwnProperty ( '@id' ) && @id == "run_template")[0].@enabled = 'true';
+				processStep ( cGeneral );
+			}
+			else
+			{
+				AlertPopup.show ( LanguageManager.sentences['msg_cannot_open_tpl'], "", 4, nativeWindow as Sprite );
+			}
+		}
+
+
+		public function get nativeWindow():Sprite
+		{
+			return Application.application as Sprite;
+		}
+
+		private function vsChange( event:IndexChangedEvent ):void
+		{
+			var child:DisplayObject;
+
+			if ( !vsLastChanged || vsLastChanged == event.target )
+			{
+				if ( event.target == vsProcess )
+				{
+					child = vsProcess.getChildAt ( event.newIndex );
+				}
+
+
+				if ( child )
+					child.addEventListener ( EffectEvent.EFFECT_END, onEffectEnd );
+
+				vsLastChanged = null;
+			}
+		}
+
+		private function onEffectEnd( event:Event ):void
+		{
+			event.target.removeEventListener ( EffectEvent.EFFECT_END, onEffectEnd );
+
+		}
+
+		private function processStep( step:* ):void
+		{
+
+			switch ( step )
+			{
+				case cKeyRequest:
+					vsProcess.selectedChild = cKeyRequest;
+					break;
+				case cGeneral:
+					vsProcess.selectedChild = cGeneral;
+					btnRun.setFocus ();
+					break;
+
+				case cProcess:
+					vsProcess.selectedChild = cProcess;
+					break;
+
+				case cFinal:
+					vsProcess.selectedChild = cFinal;
+					break;
+			}
+		}
+
+
+		private function clearTemplateDebug():void
+		{
+			var tpl:TemplateStruct = ContextManager.templateStruct;
+
+			if ( tpl )
+			{
+//					tpl.removeEventListener( "stepComplete", stepCompleteHandler );
+				tpl.removeEventListener ( "generationComplete", generationComplete );
+				tpl.removeEventListener ( "error", debugErrorHandler );
+				ContextManager.templateStruct = null;
+			}
+		}
+
+		private function runingTemplate():void
+		{
+			vsProcess.selectedChild = cProcess;
+
+			try
+			{
+//					mnMain.enabled = false;
+				appGenerated = false;
+
+				var tpl:Template;
+
+				tpl = ContextManager.templates.getItemAt ( 0 ) as Template;
+
+				ContextManager.templateStruct = new TemplateStruct ( tpl.xmlStructure, tpl.fullID );
+
+				var validateArr:Array = ContextManager.templateStruct.validate ().array;
+
+				if ( validateArr && validateArr.filter ( isError ).length > 0 )
+					alertProceedRun ();
+				else
+					runTemplate ();
+
+				function isError( element:*, index:int, arr:Array ):Boolean
+				{
+					return (element.error.severity == BasicError.FATAL);
+				}
+			}
+			catch ( e:Error )
+			{
+				AlertPopup.show ( e.message, LanguageManager.sentences['warning'] );
+				clearTemplateDebug ();
+				processStep ( cGeneral );
+			}
+		}
+
+		public function alertProceedRun():void
+		{
+			AlertPopup.show (
+					LanguageManager.sentences['msg_tpl_proceed_with_errs'],
+					LanguageManager.sentences['errs_in_tpl'],
+					AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
+
+			function alertProceedRunHandler( event:CloseEvent ):void
+			{
+				if ( event.detail == AlertPopup.YES )
+				{
+					runTemplate ();
+				}
+				else
+				{
+					clearTemplateDebug ();
+					processStep ( cGeneral );
+				}
+			}
+		}
+
+		private function runTemplate():void
+		{
+			var templateStructure:TemplateStruct = ContextManager.templateStruct;
+			try
+			{
+				templateStructure.addEventListener ( "error", debugErrorHandler, false, 0, true );
+//					templateStructure.addEventListener( "stepComplete", stepCompleteHandler, false, 0, true );
+				templateStructure.addEventListener ( "generationComplete", generationComplete );
+				templateStructure.addEventListener ( TemplateLibEvent.SET_PROGRESS, setProgressHandler, false, 0, true );
+
+
+				timer = getTimer ();
+
+				templateStructure.generate ();
+			}
+			catch ( e:Error )
+			{
+				AlertPopup.show ( e.message, LanguageManager.sentences['warning'] );
+				clearTemplateDebug ();
+				processStep ( cGeneral );
+			}
+		}
+
+		private function setProgressHandler( event:TemplateLibEvent ):void
+		{
+			var value:Number = event.result.value as Number;
+			var description:String = event.result["description"] as String;
+
+			progressBar.setProgress ( value, 100 );
+			progressBar.label = description as String;
+
+			if ( value == 100 )
+				resultMessage.text = description;
+		}
+
+		private function debugErrorHandler( event:Event ):void
+		{
+			var error:* = event.target.error;
+			AlertPopup.show ( error.message, LanguageManager.sentences['error'] );
+			clearTemplateDebug ();
+			processStep ( cGeneral );
+		}
+
+
+		private function generationComplete( event:Event ):void
+		{
+			timer = getTimer () - timer;
+
+			appGenerated = true;
+			ContextManager.templateStruct.removeEventListener ( "generationComplete", generationComplete );
+			ContextManager.templateStruct.removeEventListener ( "error", debugErrorHandler );
+
+			processStep ( cFinal );
+		}
+
+
+		private function closeTemplateFile():void
+		{
+			clearTemplateDebug ();
+
+			ContextManager.instance.lastFile = false;
+			if ( ContextManager.templates.length > 0 )
+				ContextManager.templates.removeItemAt ( 0 );
+			if ( fileMenuData..menuitem.(hasOwnProperty ( '@id' ) && @id == "run_template")[0] )
+				fileMenuData..menuitem.(hasOwnProperty ( '@id' ) && @id == "run_template")[0].@enabled = 'false';
+			processStep ( cGeneral );
+		}
+
+		public function alertInterrupt():void
+		{
+//				if ( !appGenerated && ContextManager.templateStruct )
+//					ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
+
+			AlertPopup.show (
+					LanguageManager.sentences['msg_proceed_interrupt_app_installing'],
+					LanguageManager.sentences['question'],
+					AlertPopup.YES | AlertPopup.NO, null, alertProceedInterruptHandler, null, AlertPopup.NO );
+
+			function alertProceedInterruptHandler( event:CloseEvent ):void
+			{
+				if ( event.detail == AlertPopup.YES )
+				{
+					processStep ( cGeneral );
+				}
+				else if ( !appGenerated && ContextManager.templateStruct )
+				{
+//						ContextManager.templateStruct.addEventListener( "stepComplete", stepCompleteHandler );
+					ContextManager.templateStruct.generate ( true );
+				}
+			}
+		}
+
+		public function exitApplication():void
+		{
+			dispatchEvent ( new Event ( Event.CLOSE ) );
+		}
+
+
+		protected function txtKey_keyDownHandler( event:KeyboardEvent ):void
+		{
+			if ( event.keyCode == Keyboard.ENTER )
+				openTemplate ( txtKey.text );
+		}
+		]]>
+	</mx:Script>
+	<mx:Image source="assets/images/Background.png"/>
+
+
+	<controls:Base64Image id="tplPic" x="42" y="50"
+						  width="200" height="100%"
+
+						  showEffect="{picShow}"
+						  scaleContent="true" maintainAspectRatio="true"
+						  verticalAlign="top" horizontalAlign="right"/>
+
+	<mx:VBox x="250" y="40" width="460">
+
+
+		<mx:Label
+				width="100%"
+				text="{ContextManager.templates.getItemAt(0).name}"
+				styleName="installerHeaderLabel"/>
+
+		<mx:ViewStack id="vsProcess"
+					  width="100%" height="100%"
+					  creationPolicy="all" change="vsChange(event)" paddingTop="0">
+
+			<mx:Canvas id="cKeyRequest"
+					   width="100%"
+					   showEffect="{canvasShow}" hideEffect="{canvasHide}">
+
+				<!--mx:TextArea
+										width="100%"  height="70"
+												 text="{ContextManager.templates.getItemAt(0).description}"
+												 styleName="infoTextStyle"
+												 editable="false" selectable="false" focusEnabled="false"
+
+												 backgroundAlpha="0" borderStyle="none" /-->
+
+				<mx:Label y="70"
+						  styleName="infoTextStyle"
+						  text="{LanguageManager.sentences.msg_input_template_key}:"/>
+				<mx:TextInput y="95" width="100%" height="40" id="txtKey" styleName="keyEdtTextStyle"
+							  paddingTop="10" textIndent="10" creationComplete="{txtKey.setFocus()}"
+							  keyDown="txtKey_keyDownHandler(event)"/>
+
+				<mx:HBox y="162" width="100%"
+						 horizontalAlign="right" verticalAlign="middle">
+					<control:RoundButton id="btnAcceptKey"
+										 label="{LanguageManager.sentences.accept}"
+										 click="onKeyAccept(event)"/>
+				</mx:HBox>
+			</mx:Canvas>
+
+			<mx:Canvas id="cGeneral"
+					   width="100%"
+					   showEffect="{canvasShow}" hideEffect="{canvasHide}">
+
+
+				<mx:TextArea
+						width="100%" height="150"
+						text="{ContextManager.templates.getItemAt(0).description}"
+						styleName="infoTextStyle"
+						editable="false" selectable="false" focusEnabled="false"
+
+						backgroundAlpha="0" borderStyle="none"/>
+
+				<mx:HBox y="162" width="100%"
+						 horizontalAlign="right" verticalAlign="middle">
+					<control:RoundButton id="btnRun"
+										 label="{LanguageManager.sentences.run}"
+										 click="runingTemplate();"/>
+				</mx:HBox>
+			</mx:Canvas>
+
+			<mx:Canvas id="cProcess"
+					   height="100%" width="100%"
+					   showEffect="{canvasShow}" hideEffect="{canvasHide}">
+
+				<mx:ProgressBar id="progressBar"
+								y="110" width="100%"
+								minimum="0" maximum="100"
+								mode="manual"
+								styleName="infoTextStyle"/>
+
+				<mx:HBox y="162" width="100%"
+						 horizontalAlign="right" verticalAlign="middle">
+					<control:RoundButton id="btnCancel"
+										 label="{LanguageManager.sentences.cancel}"
+										 click="alertInterrupt()"/>
+				</mx:HBox>
+
+			</mx:Canvas>
+
+			<mx:Canvas id="cFinal" height="100%" width="100%"
+					   showEffect="{canvasShow}" hideEffect="{canvasHide}">
+
+
+				<mx:Text id="resultMessage" styleName="infoTextStyle"
+						 width="100%" height="70"
+						 text="{LanguageManager.sentences.msg_gen_finish}"/>
+
+				<mx:HBox y="162" width="100%"
+						 horizontalAlign="right" verticalAlign="middle">
+					<control:RoundButton id="btnExit"
+										 height="100%"
+										 label="{LanguageManager.sentences.exit}"
+										 click="exitApplication();"/>
+				</mx:HBox>
+
+			</mx:Canvas>
+
+		</mx:ViewStack>
+	</mx:VBox>
+</mx:Canvas>

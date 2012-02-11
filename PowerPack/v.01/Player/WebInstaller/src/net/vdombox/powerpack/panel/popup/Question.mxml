@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+				xmlns:popup="net.vdombox.powerpack.panel.popup.*" 
+				xmlns:control="net.vdombox.powerpack.control.*"
+				creationComplete="completeHandler(event)">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.containers.Canvas;
+			import mx.controls.HRule;
+			import mx.controls.Image;
+			import mx.controls.Text;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			import net.vdombox.powerpack.control.BrowseButton;
+			import net.vdombox.powerpack.customize.skins.PopupBackgroundSkin;
+			import net.vdombox.powerpack.gen.parse.ListParser;
+			import net.vdombox.powerpack.panel.popup.Answers.Answer;
+			import net.vdombox.powerpack.panel.popup.Answers.AnswerCreator;
+			
+			[Bindable]
+			public var question : String = "";
+			
+			public var strAnswer : String = "";
+			
+			private var _dataProvider : Array;
+			
+			public var context : Array;
+			
+			public function set dataProvider(value:Array):void
+			{
+				_dataProvider = QuestionParamsConvertor.convertToArrayOfLists(value);
+			}
+			
+			override protected function createChildren () : void
+			{
+				super.createChildren();
+				
+				if (!_dataProvider)
+				{
+					throw Error("Possible answers are not declared!");
+					return;
+				}
+				
+				var answer : Answer;
+				Answer.context = context;
+				
+				for each (var value : * in _dataProvider) 
+				{
+					answer = AnswerCreator.create( value);
+					answerBox.addChild( answer );
+				}
+			}
+						
+			private function get answersList () : String
+			{
+				var resultArray : Array = [];
+				
+				for each(var answer : Answer in answerBox.getChildren())
+				{
+					resultArray.push( answer.value);
+				}
+				
+				return ListParser.array2List( resultArray );
+			}
+			
+			protected function btnOkClickHandler(evt:MouseEvent) : void
+			{
+				btnOk.removeEventListener(MouseEvent.CLICK, btnOkClickHandler);
+				
+				closeDialog();
+			}
+			
+			protected function closeDialog() : void
+			{
+				var answers : Array =  answerBox.getChildren();
+				
+				strAnswer = answers.length == 1 ? answers[0].value : answersList;
+				
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+				
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function completeHandler(event:FlexEvent):void
+			{
+				width = 400;
+				PopUpManager.centerPopUp(this);
+			}
+			
+			private function get borderThickness () : Number
+			{
+				return getStyle("borderThickness");
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox width="100%" id="mainBox" 
+			 left="{borderThickness}" right="{borderThickness}" 
+			 top="{borderThickness}" bottom="{borderThickness}">
+		
+		<mx:Canvas width="100%" id="topPart">
+			<mx:HBox width="100%"
+					 paddingLeft="16" paddingTop="16" paddingRight="16" 
+					 horizontalGap="10" id="topH">
+				<mx:Image source="@Embed('/assets/images/question.png')" autoLoad="true" id="qImg"/>
+				<mx:Text width="100%" maxHeight="188"
+						 paddingTop="5" paddingBottom="5"
+						 styleName="infoTextStyle"
+						 text="{question}"
+						 selectable="false"
+						 id="qText"/>
+			</mx:HBox>
+		</mx:Canvas>
+		
+		<popup:PopupBottomPart width="100%" id="bottomPart">
+			<mx:VBox  verticalGap="12" id="t1" width="100%"
+					  paddingLeft="16" paddingTop="16" paddingRight="16" paddingBottom="16">
+				<mx:HBox width="100%" height="100%" id="t2">
+ 					<mx:Image source="@Embed('/assets/images/user.png')" autoLoad="true" id="t3"/>
+					<mx:VBox width="100%"  id="answerBox"  maxHeight="200" verticalGap="20" />
+					
+				</mx:HBox>
+				<mx:Canvas width="100%">
+					<control:RoundButton label="Ok" id="btnOk" 
+							   							bottom="0" right="0"
+														click="btnOkClickHandler(event)"/>
+				</mx:Canvas>
+			</mx:VBox>
+		</popup:PopupBottomPart>
+		
+	</mx:VBox>
+	
+</mx:Canvas>

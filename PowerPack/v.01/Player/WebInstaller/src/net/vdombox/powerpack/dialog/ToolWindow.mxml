@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SuperWindow xmlns="net.vdombox.powerpack.lib.extendedapi.containers.*"
+			 xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300"
+			 title="Tool window"
+			 startPosition="centerParent"
+			 systemChrome="standard"
+			 alwaysInFront="false"
+			 parentWindow="{Application.application.nativeWindow}"
+			 type="utility">
+
+	<mx:Script>
+		<![CDATA[
+		import mx.core.Application;
+		]]>
+	</mx:Script>
+
+</SuperWindow>
