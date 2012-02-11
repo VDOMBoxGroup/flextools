@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" minWidth="955" minHeight="600" creationComplete="creationCompleteHandler(event)" xmlns:powerpack="net.vdombox.powerpack.*">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+		]]>
+	</mx:Script>
+	<powerpack:Player id="player"/>
+	
+</mx:Application>
