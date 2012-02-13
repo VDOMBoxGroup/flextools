@@ -108,14 +108,14 @@ package net.vdombox.ide.modules.tree.view
 			_resourceSelector.value = resourceSelectorWindow.value;
 			facade.removeMediator( mediatorName );
 			
-			sendNotification( ApplicationFacade.CLOSE_WINDOW, resourceSelectorWindow );
+			//sendNotification( ApplicationFacade.CLOSE_WINDOW, resourceSelectorWindow );
 		}
 
 		private function cancelHandler( event : WindowEvent ) : void
 		{
 			facade.removeMediator( mediatorName );
 			
-			sendNotification( ApplicationFacade.CLOSE_WINDOW, resourceSelectorWindow );
+			//sendNotification( ApplicationFacade.CLOSE_WINDOW, resourceSelectorWindow );
 		}
 	}
 }

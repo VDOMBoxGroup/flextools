@@ -89,10 +89,6 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.SET_PAGE_ATTRIBUTES );
 
 			interests.push( ApplicationFacade.SET_PAGE_NAME );
-			
-			interests.push( ApplicationFacade.OPEN_WINDOW );
-			interests.push( ApplicationFacade.CLOSE_WINDOW );
-
 			interests.push( StatesProxy.SET_SELECTED_PAGE );
 
 			interests.push( ApplicationFacade.CREATE_PAGE );
@@ -209,24 +205,6 @@ package net.vdombox.ide.modules.tree.view
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
-					break;
-				}
-					
-				case ApplicationFacade.OPEN_WINDOW:
-				{
-					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, body, multitonKey );
-
-					junction.sendMessage( PipeNames.STDCORE, message );
-
-					break;
-				}
-					
-				case ApplicationFacade.CLOSE_WINDOW:
-				{
-					message = new SimpleMessage( SimpleMessageHeaders.CLOSE_WINDOW, body, multitonKey );
-
-					junction.sendMessage( PipeNames.STDCORE, message );
-
 					break;
 				}
 

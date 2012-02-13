@@ -151,9 +151,6 @@ package net.vdombox.ide.modules.tree
 		
 		public static const CREATE_PAGE_WINDOW_CREATED : String = "createPageWindowCreated";
 
-		public static const OPEN_WINDOW : String = "openWidow";
-		public static const CLOSE_WINDOW : String = "closeWidow";
-
 		public static const GET_TREE_LEVELS : String = "getTreeLevels";
 		public static const TREE_LEVELS_GETTED : String = "treeLevelsGetted";
 

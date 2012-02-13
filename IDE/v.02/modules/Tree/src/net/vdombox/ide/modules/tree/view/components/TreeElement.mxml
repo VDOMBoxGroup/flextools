@@ -14,18 +14,23 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.controls.Image;
+			import mx.core.UIComponent;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
 			
+			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.components.button.AlertButton;
 			import net.vdombox.ide.common.view.components.windows.Alert;
+			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
+			import net.vdombox.utils.WindowManager;
 			
 			import spark.components.Group;
 			import spark.filters.DropShadowFilter;
@@ -318,8 +323,11 @@
 			{
 				if (treeElementVO && treeElementVO.pageVO)
 				{
-					treeElementVO.pageVO.name = txtName.text;
-					dispatchEvent( new TreeElementEvent ( TreeElementEvent.SAVE_PAGE_NAME ) );
+					if ( event.keyCode == Keyboard.ENTER )
+					{
+						treeElementVO.pageVO.name = txtName.text;
+						dispatchEvent( new TreeElementEvent ( TreeElementEvent.SAVE_PAGE_NAME ) );
+					}
 				}
 			}
 			
@@ -331,8 +339,7 @@
 					dispatchEvent( new TreeElementEvent ( TreeElementEvent.SAVE_PAGE_NAME ) );
 				}
 				
-				txtName.setStyle("borderVisible", false);
-				txtName.setStyle("contentBackgroundAlpha", 0);
+				shadowName.visible = false;
 			}
 			
 			protected function txtDescription_focusOutHandler(event:FocusEvent):void
@@ -342,12 +349,48 @@
 					dispatchEvent( new TreeElementEvent ( TreeElementEvent.SAVE_PAGE_ATTRIBUTES ) )
 				}
 				
+				shadowDiscription.visible = false;
 			}
 			
 			protected function txtName_focusInHandler(event:FocusEvent):void
 			{
-				txtName.setStyle("borderVisible", true);
-				txtName.setStyle("contentBackgroundAlpha", 1);
+				shadowName.visible = true;
+			}
+			
+			protected function txtDescription_focusInHandler(event:FocusEvent):void
+			{
+				shadowDiscription.visible = true;
+			}
+			
+			protected function txtDescription_doubleClickHandler(event:MouseEvent):void
+			{
+				event.stopImmediatePropagation();
+				var stringAttributeEditWindow : StringAttributeEditWindow = new StringAttributeEditWindow();
+				stringAttributeEditWindow.value = txtDescription.text;
+				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.APPLY, applyHandler );
+				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.CANCEL, cancelHandler );
+				
+				WindowManager.getInstance().addWindow(stringAttributeEditWindow, parentApplication as UIComponent, true);
+				
+				function applyHandler( event : StringAttributeEditWindowEvent ) : void
+				{
+					txtDescription.text = event.value;
+					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
+				}
+				
+				function cancelHandler( event : StringAttributeEditWindowEvent ) : void
+				{
+					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
+				}
+			}
+			
+			protected function txtDescription_resizeHandler(event:ResizeEvent):void
+			{
+				// TODO Auto-generated method stub
+				if ( txtDescription.height < 150 )
+					scroll.height = txtDescription.height;
+				else
+					scroll.height = 150;
 			}
 			
 		]]>
@@ -360,56 +403,60 @@
 
 	<s:VGroup width="100%" gap="5">
 
-		<s:HGroup width="100%" height="100%" paddingLeft="5" paddingTop="5" gap="5">
-			
-			<!--<s:Group width="55" height="55">
-				<s:Rect id="rectImage" width="100%" height="100%" visible="false">
-					<s:stroke>
-						<s:SolidColorStroke color="0x000000"
-											weight="1"/>
-					</s:stroke>
-					<s:fill>
-						<s:SolidColor color="white"/>
-					</s:fill>
-				</s:Rect>
-				
-				<s:HGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
-					<components:SmoothImage id="image" maxHeight="55" maxWidth="55"
-											source="{ _treeElementVO.resourceVO.data }" />
-				</s:HGroup>
-			</s:Group> -->
-			
+		<s:HGroup width="100%" height="100%" paddingTop="5" gap="5">
 			
 			<s:Group width="100%" height="100%">
-				<s:Rect width="100%" height="100%"
-						filters="{[ new DropShadowFilter(4, 45, 0xC7C7C7, 1,4,4,1,1,true,false) ]}">
-					<s:stroke>
-						<s:SolidColorStroke color="0xC7C7C7"
-											weight="2"/>
-					</s:stroke>
-					<s:fill>
-						<s:SolidColor color="white"/>
-					</s:fill>
-				</s:Rect>
 				
 				<s:VGroup width="100%" height="100%" gap="0">
-					<s:TextInput id="txtName" text="{ nameAttribute }" width="100%"
-								 borderVisible="false" contentBackgroundAlpha="0" 
-								 keyDown="textinput1_keyDownHandler(event)" focusIn="txtName_focusInHandler(event)" focusOut="txtName_focusOutHandler(event)"/>
+					<s:Group width="100%">
+						<s:TextInput id="txtName" text="{ nameAttribute }" left="5" right="5"
+									 borderVisible="false" contentBackgroundAlpha="0" focusAlpha="0"
+									 keyDown="textinput1_keyDownHandler(event)" 
+									 focusIn="txtName_focusInHandler(event)" focusOut="txtName_focusOutHandler(event)"/>
+						
+						<s:Group id="shadowName" width="100%" height="100%" visible="false">
+							
+							<s:Rect top="0" width="100%" height="6">
+								<s:fill>
+									<s:BitmapFill source="{VDOMImage.ShadowLineWhite}" />
+								</s:fill>
+							</s:Rect>
+							
+						</s:Group>
+					</s:Group>
+					
 					
 					<s:Line width="100%">
 						<s:stroke>
-							<s:SolidColorStroke color="0xC7C7C7" weight="2"/>
+							<s:SolidColorStroke color="0xC7C7C7" weight="1"/>
 						</s:stroke>
 					</s:Line>
 					
-					<s:Scroller width="100%" height="100%" maxHeight="150">
+					<s:Scroller id="scroll" width="100%" maxHeight="150">
 						<s:Group>
 							<s:RichEditableText id="txtDescription" text="@{ descriptionAttributeVO.value }" width="100%"
-										color="0x474747" paddingBottom="3" paddingLeft="3" paddingRight="3"
-										paddingTop="3" focusOut="txtDescription_focusOutHandler(event)" />
+										color="0x474747" paddingBottom="3" paddingLeft="8" paddingRight="8" paddingTop="3" 
+										focusIn="txtDescription_focusInHandler(event)"  focusOut="txtDescription_focusOutHandler(event)"
+										doubleClick="txtDescription_doubleClickHandler(event)" resize="txtDescription_resizeHandler(event)"/>
+							
+							<s:Group id="shadowDiscription" width="100%" height="100%" visible="false">
+								
+								<s:Rect top="0" width="100%" height="6">
+									<s:fill>
+										<s:BitmapFill source="{VDOMImage.ShadowLineWhite}" />
+									</s:fill>
+								</s:Rect>
+								
+							</s:Group>
+							
 						</s:Group>
 					</s:Scroller>
+					
+					<s:Line width="100%">
+						<s:stroke>
+							<s:SolidColorStroke color="0xC7C7C7" weight="1"/>
+						</s:stroke>
+					</s:Line>
 				</s:VGroup>
 				
 				

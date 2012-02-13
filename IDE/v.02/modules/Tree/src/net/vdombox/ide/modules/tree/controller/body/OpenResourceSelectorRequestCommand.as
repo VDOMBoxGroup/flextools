@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.tree.controller.body
 
 			facade.registerMediator( resourceSelectorWindowMediator );
 
-			sendNotification( ApplicationFacade.OPEN_WINDOW, { content: resourceSelectorWindow, title: "Select Resource", isModal: true, resizable : true } );
+			//sendNotification( ApplicationFacade.OPEN_WINDOW, { content: resourceSelectorWindow, title: "Select Resource", isModal: true, resizable : true } );
 		}
 	}
 }

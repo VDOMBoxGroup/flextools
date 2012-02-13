@@ -65,7 +65,7 @@
 
 				var glowFilter : GlowFilter = new GlowFilter( 0xA8AAA9, 1, 6, 6, 3 );
 
-				selectionFilters = [ new GlowFilter( 0xF4E6A5, 1, 9, 9, 3 ) ];
+				selectionFilters = [ new GlowFilter( 0xFFFFFF, 1, 9, 9, 3 ) ];
 
 				typeImage.filters = [ glowFilter ];
 			}
@@ -185,8 +185,8 @@
 						bottom="0" left="0" right="0">
 					<s:fill>
 						<s:LinearGradient rotation="90">
-							<s:GradientEntry color="{ isIndexPage ? 0xD9686A : 0x959595 }"/>
-							<s:GradientEntry color="{ isIndexPage ? 0x952439 : 0x484848 }"/>
+							<s:GradientEntry color="{ isIndexPage ? 0xE64D4D : 0x737373 }"/>
+							<s:GradientEntry color="{ isIndexPage ? 0x960303 : 0x313131 }"/>
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
@@ -213,8 +213,8 @@
 					<s:Rect bottom="0" left="0" right="0" top="0">
 						<s:fill>
 							<s:LinearGradient rotation="90">
-								<s:GradientEntry color="{ isIndexPage ? 0xD9686A : 0x959595 }"/>
-								<s:GradientEntry color="{ isIndexPage ? 0x952439 : 0x484848 }"/>
+								<s:GradientEntry color="{ isIndexPage ? 0xE64D4D : 0x737373 }"/>
+								<s:GradientEntry color="{ isIndexPage ? 0x960303 : 0x313131 }"/>
 							</s:LinearGradient>
 						</s:fill>
 					</s:Rect>
@@ -251,8 +251,8 @@
 				<s:Rect bottom="0" left="0" right="0" top="0">
 					<s:fill>
 						<s:LinearGradient rotation="90">
-							<s:GradientEntry color="{ isIndexPage ? 0xD9686A : 0x959595 }"/>
-							<s:GradientEntry color="{ isIndexPage ? 0x952439 : 0x484848 }"/>
+							<s:GradientEntry color="{ isIndexPage ? 0xE64D4D : 0x737373 }"/>
+							<s:GradientEntry color="{ isIndexPage ? 0x960303 : 0x313131 }"/>
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
