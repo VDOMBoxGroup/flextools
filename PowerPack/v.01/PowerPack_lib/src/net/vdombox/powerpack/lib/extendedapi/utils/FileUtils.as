@@ -310,5 +310,51 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			return pathParts.join(delim);
 		}
 		
+		
+		public static function filePathExists (filePath : String, isDirectory : Boolean) : Boolean
+		{
+			try
+			{
+				var file : File = new File(filePath);
+			}
+			catch (e:Error)
+			{
+				return false;
+			}
+			
+			return fileExists(file, isDirectory);
+		}
+		
+		public static function fileExists (file : File, isDirectory : Boolean) : Boolean
+		{
+			if ( !file || !file.exists )
+				return false;
+			
+			return file.isDirectory == isDirectory;
+		}
+		
+		public static function isXMLFile (file : File) : Boolean
+		{
+			if ( !file || !file.exists )
+				return false;
+			
+			return file.extension.toLowerCase() == "xml";
+		}
+		
+		public static function getFileByPath (path : String) : File
+		{
+			try
+			{
+				var file : File = new File(path);
+			}
+			catch (e:Error)
+			{
+				return null;
+			}
+			
+			return file.exists ? file : null;
+		}
+		
+		
 	}
 }

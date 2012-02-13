@@ -39,12 +39,19 @@
 			
 			public static var memPath:String = ""; //File.documentsDirectory.nativePath;
 
-			public var files:Array = [];
-			public var filterArray:Array = [];
+			public var defaultPath : String = File.documentsDirectory.nativePath;
+			
+			public var files : Array = [];
+			public var filterArray : Array = [];
+			
+			public override function set errorString (value : String) : void
+			{
+				txtPathInput.errorString = value;
+			}
 			
 			public function get path () : String
 			{
-				return txtPathInput.text;
+				return StringUtil.trim(txtPathInput.text);
 			}
 			
 			public function set path (filePath : String):void
@@ -66,6 +73,7 @@
 			{
 				return super.enabled;
 			}
+			
 			override public function set enabled(value:Boolean):void
 			{
 				super.enabled = value;
@@ -112,7 +120,7 @@
             	}
             	
             	if (!file)
-            		file = new File(File.documentsDirectory.nativePath);
+            		file = new File(defaultPath);
             	
             	var filter : FileFilter = new FileFilter(
             		StringUtil.substitute("{0} ({1})", filterAll, "*.*"), 
@@ -129,18 +137,19 @@
 				{
 					switch(mode.toLowerCase())
 					{
-						case 'save':
+						case MODE_SAVE:
 							file.browseForSave(browseTitle);
 							break;
 							
-						case 'dir':
+						case MODE_DIR:
 							file.browseForDirectory(browseTitle);
 							break;
 							
-						case 'multi':
+						case MODE_MULTI:
 							file.browseForOpenMultiple(browseTitle, filters);
 							break;
-													
+									
+						case MODE_OPEN:
 						default:
 							file.browseForOpen(browseTitle, filters);
 					}
@@ -167,7 +176,7 @@
             {
             	files = event.files;
             	
-            	if(files && files.length)
+            	if (files && files.length)
             	{
 	           		//memPath = File(files[0]).parent.nativePath;
 					path = File(files[0]).parent.nativePath;
