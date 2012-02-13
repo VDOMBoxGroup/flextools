@@ -10,7 +10,7 @@ import mx.controls.Alert;
 import mx.utils.ObjectProxy;
 import mx.utils.StringUtil;
 
-import net.vdombox.powerpack.dialog.ModalDialog;
+//import net.vdombox.powerpack.dialog.ModalDialog;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 public class LanguageManager extends EventDispatcher
@@ -144,10 +144,10 @@ public class LanguageManager extends EventDispatcher
 			LanguageManager.bindSentence( 'no', Alert, "noLabel" );
 			LanguageManager.bindSentence( 'cancel', Alert, "cancelLabel" );
 
-			LanguageManager.bindSentence( 'ok', ModalDialog, "okLabel" );
-			LanguageManager.bindSentence( 'yes', ModalDialog, "yesLabel" );
-			LanguageManager.bindSentence( 'no', ModalDialog, "noLabel" );
-			LanguageManager.bindSentence( 'cancel', ModalDialog, "cancelLabel" );
+//			LanguageManager.bindSentence( 'ok', ModalDialog, "okLabel" );
+//			LanguageManager.bindSentence( 'yes', ModalDialog, "yesLabel" );
+//			LanguageManager.bindSentence( 'no', ModalDialog, "noLabel" );
+//			LanguageManager.bindSentence( 'cancel', ModalDialog, "cancelLabel" );
 		}
 
 		return _instance;

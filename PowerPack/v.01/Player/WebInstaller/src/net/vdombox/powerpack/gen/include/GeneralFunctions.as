@@ -4,15 +4,15 @@
 
 
 
-import flash.desktop.NativeApplication;
+//import flash.desktop.NativeApplication;
 import flash.display.Bitmap;
 import flash.display.DisplayObject;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
-import flash.filesystem.File;
-import flash.filesystem.FileMode;
-import flash.filesystem.FileStream;
+//import flash.filesystem.File;
+//import flash.filesystem.FileMode;
+//import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
 import mx.controls.Alert;
@@ -28,14 +28,14 @@ import mx.utils.Base64Encoder;
 import mx.utils.UIDUtil;
 
 import net.vdombox.powerpack.BasicError;
-import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
+import net.vdombox.powerpack.events.TemplateLibEvent;
 import net.vdombox.powerpack.gen.GraphContext;
 import net.vdombox.powerpack.gen.errorClasses.RunTimeError;
 import net.vdombox.powerpack.gen.structs.GraphStruct;
 import net.vdombox.powerpack.gen.structs.NodeStruct;
 import net.vdombox.powerpack.lib.extendedapi.codec.BMPEncoder;
 import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
-import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
+//import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.managers.LanguageManager;
 import net.vdombox.powerpack.panel.popup.PopupBox;
@@ -178,9 +178,9 @@ public function convert( type : String, value : Object ) : Function
 	}
 	else if ( value && type.toLowerCase() == "base64" )
 	{
-		var fileToBase64 : FileToBase64 = new FileToBase64( value.toString() );
-		fileToBase64.addEventListener( "dataConverted", completeConvertHandler );
-		fileToBase64.loadAndConvert();
+//		var fileToBase64 : FileToBase64 = new FileToBase64( value.toString() );
+//		fileToBase64.addEventListener( "dataConverted", completeConvertHandler );
+//		fileToBase64.loadAndConvert();
 		return completeConvertHandler;
 
 		function completeConvertHandler( event : Event ) : void
@@ -236,21 +236,21 @@ public function writeTo( filePath : String ) : void
 public function writeVarTo( filePath : String, value : Object ) : void
 {
 	// TODO: return operation result  ['error' 'description'] ['ok']
-	if ( !(value && filePath) )
-		return;
-	
-	var file : File = new File( filePath );
-
-	if(file.isDirectory || file.isPackage ||file.isSymbolicLink)
-		return;
-
-	var data : ByteArray = objectToByteArray(value, file.extension);
-
-	var fileStream : FileStream = new FileStream();
-
-	fileStream.open( file, FileMode.WRITE );
-	fileStream.writeBytes( data );
-	fileStream.close();
+//	if ( !(value && filePath) )
+//		return;
+//	
+//	var file : File = new File( filePath );
+//
+//	if(file.isDirectory || file.isPackage ||file.isSymbolicLink)
+//		return;
+//
+//	var data : ByteArray = objectToByteArray(value, file.extension);
+//
+//	var fileStream : FileStream = new FileStream();
+//
+//	fileStream.open( file, FileMode.WRITE );
+//	fileStream.writeBytes( data );
+//	fileStream.close();
 
 }
 private function objectToByteArray( value : Object, extension : String  ) : ByteArray
@@ -295,67 +295,69 @@ private function objectToByteArray( value : Object, extension : String  ) : Byte
 
 public function loadDataFrom( filePath : String ) : Function
 {
-	try
-	{
-		if ( !filePath )
-		{
-			throw new BasicError( "Not valid filepath" );
-		}
-
-		var file : File = new File( filePath );
-
-		if ( !file.exists )
-		{
-			if( file.extension.toLowerCase() == "xml" )
-			{
-				file  =  File.applicationDirectory.resolvePath( file.name);
-				
-				if ( !file.exists ) 
-					throw new BasicError( "File does not exist" );
-					
-			}else
-			{
-				throw new BasicError( "File does not exist" );
-			}
-		}
-
-		var fileStream : FileStream = new FileStream();
-		fileStream.addEventListener( Event.COMPLETE, onFileLoaded );
-		fileStream.addEventListener( IOErrorEvent.IO_ERROR, onFileStreamError );
-		fileStream.openAsync( file, FileMode.READ );
-	}
-	catch ( e : * )
-	{
-		Application.application.callLater( onFileStreamError, [new IOErrorEvent( IOErrorEvent.IO_ERROR )] );
-
-		return onFileStreamError;
-	}
-
-	return onFileLoaded;
-
-	function onFileStreamError( event : IOErrorEvent ) : void
-	{
-		setTransition( 'false' );
-		setReturnValue( 'false' );
-	}
-
-	function onFileLoaded( event : Event ) : void
-	{
-		var _stream : FileStream = event.target as FileStream;
-		var _strData : String = _stream.readUTFBytes( _stream.bytesAvailable );
-		_stream.close();
-		
-		setTransition( 'true' );
-		try{
-			var xml : XML = new XML(_strData);
-			setReturnValue( xml );
-		}
-		catch ( e : * )
-		{
-			setReturnValue( _strData );
-		}
-		
-	}
+//	try
+//	{
+//		if ( !filePath )
+//		{
+//			throw new BasicError( "Not valid filepath" );
+//		}
+//
+//		var file : File = new File( filePath );
+//
+//		if ( !file.exists )
+//		{
+//			if( file.extension.toLowerCase() == "xml" )
+//			{
+//				file  =  File.applicationDirectory.resolvePath( file.name);
+//				
+//				if ( !file.exists ) 
+//					throw new BasicError( "File does not exist" );
+//					
+//			}else
+//			{
+//				throw new BasicError( "File does not exist" );
+//			}
+//		}
+//
+//		var fileStream : FileStream = new FileStream();
+//		fileStream.addEventListener( Event.COMPLETE, onFileLoaded );
+//		fileStream.addEventListener( IOErrorEvent.IO_ERROR, onFileStreamError );
+//		fileStream.openAsync( file, FileMode.READ );
+//	}
+//	catch ( e : * )
+//	{
+//		Application.application.callLater( onFileStreamError, [new IOErrorEvent( IOErrorEvent.IO_ERROR )] );
+//
+//		return onFileStreamError;
+//	}
+//
+//	return onFileLoaded;
+//
+//	function onFileStreamError( event : IOErrorEvent ) : void
+//	{
+//		setTransition( 'false' );
+//		setReturnValue( 'false' );
+//	}
+//
+//	function onFileLoaded( event : Event ) : void
+//	{
+//		var _stream : FileStream = event.target as FileStream;
+//		var _strData : String = _stream.readUTFBytes( _stream.bytesAvailable );
+//		_stream.close();
+//		
+//		setTransition( 'true' );
+//		
+//		try{
+//			var xml : XML = new XML(_strData);
+//			setReturnValue( xml );
+//		}
+//		catch ( e : * )
+//		{
+//			setReturnValue( _strData );
+//		}
+//		
+//	}
+	return null;
 }
 
 public function GUID() : String

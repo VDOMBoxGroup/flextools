@@ -28,23 +28,6 @@
 
 	<customize:GeneratorResources id="resources"/>
 
-	<mx:XML format="e4x" id="fileMenuData">
-		<root>
-			<menuitem label="{LanguageManager.sentences.menu_file}" id="file">
-				<menuitem label="{LanguageManager.sentences.menu_open_file}" id="open_file"/>
-				<!--menuitem label="{LanguageManager.sentences.menu_run_template}" id="run_template" enabled="false"/-->
-				<!--menuitem label="{LanguageManager.sentences.menu_install_app}" id="install_app" enabled="false"/-->
-				<menuitem type="separator"/>
-				<menuitem label="{LanguageManager.sentences.menu_exit}" id="exit"/>
-			</menuitem>
-			<menuitem label="{LanguageManager.sentences.menu_parameters}" id="parameters">
-				<menuitem label="{LanguageManager.sentences.menu_language}" id="language"/>
-				<menuitem label="{LanguageManager.sentences.menu_connection}" id="connection"/>
-				<menuitem label="{LanguageManager.sentences.menu_properties}" id="properties"/>
-			</menuitem>
-			<menuitem label="?" id="help"/>
-		</root>
-	</mx:XML>
 
 	<mx:Script>
 		<![CDATA[
@@ -54,7 +37,7 @@
 		import mx.events.EffectEvent;
 		import mx.events.IndexChangedEvent;
 
-		import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
+		import net.vdombox.powerpack.events.TemplateLibEvent;
 		import net.vdombox.powerpack.gen.TemplateStruct;
 		import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 		import net.vdombox.powerpack.managers.ContextManager;
@@ -100,8 +83,6 @@
 
 			LanguageManager.setSentences ( defaultCaptions );
 
-//			if ( File.applicationDirectory.resolvePath ( 'style/generator.swf' ).exists )
-//				StyleManager.loadStyleDeclarations ( "style/generator.swf" );
 
 		}
 
@@ -182,13 +163,11 @@
 
 			if ( tpl.xmlStructure )
 			{
-				if ( fileMenuData..menuitem.(hasOwnProperty ( '@id' ) && @id == "run_template")[0] )
-					fileMenuData..menuitem.(hasOwnProperty ( '@id' ) && @id == "run_template")[0].@enabled = 'true';
 				processStep ( cGeneral );
 			}
 			else
 			{
-				AlertPopup.show ( LanguageManager.sentences['msg_cannot_open_tpl'], "", 4, nativeWindow as Sprite );
+				AlertPopup.show ( LanguageManager.sentences['msg_cannot_open_tpl'], "", 4 );
 			}
 		}
 
@@ -253,7 +232,6 @@
 
 			if ( tpl )
 			{
-//					tpl.removeEventListener( "stepComplete", stepCompleteHandler );
 				tpl.removeEventListener ( "generationComplete", generationComplete );
 				tpl.removeEventListener ( "error", debugErrorHandler );
 				ContextManager.templateStruct = null;
@@ -266,7 +244,6 @@
 
 			try
 			{
-//					mnMain.enabled = false;
 				appGenerated = false;
 
 				var tpl:Template;
@@ -322,7 +299,6 @@
 			try
 			{
 				templateStructure.addEventListener ( "error", debugErrorHandler, false, 0, true );
-//					templateStructure.addEventListener( "stepComplete", stepCompleteHandler, false, 0, true );
 				templateStructure.addEventListener ( "generationComplete", generationComplete );
 				templateStructure.addEventListener ( TemplateLibEvent.SET_PROGRESS, setProgressHandler, false, 0, true );
 
@@ -379,15 +355,11 @@
 			ContextManager.instance.lastFile = false;
 			if ( ContextManager.templates.length > 0 )
 				ContextManager.templates.removeItemAt ( 0 );
-			if ( fileMenuData..menuitem.(hasOwnProperty ( '@id' ) && @id == "run_template")[0] )
-				fileMenuData..menuitem.(hasOwnProperty ( '@id' ) && @id == "run_template")[0].@enabled = 'false';
 			processStep ( cGeneral );
 		}
 
 		public function alertInterrupt():void
 		{
-//				if ( !appGenerated && ContextManager.templateStruct )
-//					ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
 
 			AlertPopup.show (
 					LanguageManager.sentences['msg_proceed_interrupt_app_installing'],
@@ -402,7 +374,6 @@
 				}
 				else if ( !appGenerated && ContextManager.templateStruct )
 				{
-//						ContextManager.templateStruct.addEventListener( "stepComplete", stepCompleteHandler );
 					ContextManager.templateStruct.generate ( true );
 				}
 			}
@@ -447,17 +418,11 @@
 					   width="100%"
 					   showEffect="{canvasShow}" hideEffect="{canvasHide}">
 
-				<!--mx:TextArea
-										width="100%"  height="70"
-												 text="{ContextManager.templates.getItemAt(0).description}"
-												 styleName="infoTextStyle"
-												 editable="false" selectable="false" focusEnabled="false"
-
-												 backgroundAlpha="0" borderStyle="none" /-->
+				
 
 				<mx:Label y="70"
 						  styleName="infoTextStyle"
-						  text="{LanguageManager.sentences.msg_input_template_key}:"/>
+						  text="{LanguageManager.sentences.msg_input_template_key+':'}"/>
 				<mx:TextInput y="95" width="100%" height="40" id="txtKey" styleName="keyEdtTextStyle"
 							  paddingTop="10" textIndent="10" creationComplete="{txtKey.setFocus()}"
 							  keyDown="txtKey_keyDownHandler(event)"/>
@@ -465,7 +430,7 @@
 				<mx:HBox y="162" width="100%"
 						 horizontalAlign="right" verticalAlign="middle">
 					<control:RoundButton id="btnAcceptKey"
-										 label="{LanguageManager.sentences.accept}"
+										 label="LanguageManager.sentences.accept"
 										 click="onKeyAccept(event)"/>
 				</mx:HBox>
 			</mx:Canvas>
@@ -481,7 +446,7 @@
 						styleName="infoTextStyle"
 						editable="false" selectable="false" focusEnabled="false"
 
-						backgroundAlpha="0" borderStyle="none"/>
+						borderStyle="none"/>
 
 				<mx:HBox y="162" width="100%"
 						 horizontalAlign="right" verticalAlign="middle">

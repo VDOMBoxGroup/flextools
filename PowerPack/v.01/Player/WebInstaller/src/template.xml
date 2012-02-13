@@ -1,0 +1,31 @@
+<template ID="6F2A509F-8426-D35C-102E-768E4888FD1B">
+  <name>adelfos</name>
+  <id>adelfos</id>
+  <description>description</description>
+  <structure>
+    <categories>
+      <category name="application"/>
+      <category name="objects"/>
+      <category name="structure"/>
+      <category name="resources"/>
+    </categories>
+    <graph name="GraphCanvas1835" initial="true" category="application">
+      <states>
+        <state name="Node1899" type="Initial" category="Normal" enabled="true" breakpoint="false" x="167" y="55">
+          <text>State</text>
+        </state>
+        <state name="Node1947" type="Normal" category="Normal" enabled="true" breakpoint="false" x="241" y="190">
+          <text>State</text>
+        </state>
+        <state name="Node1919" type="Normal" category="Command" enabled="true" breakpoint="false" x="277" y="118">
+          <text>$a = [dialog "Privet" 'asd' 'asddsasd']</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector1967" highlighted="false" enabled="true" source="Node1919" destination="Node1947"/>
+        <transition name="Connector1946" highlighted="false" enabled="true" source="Node1899" destination="Node1919"/>
+      </transitions>
+    </graph>
+    <resources/>
+  </structure>
+</template>

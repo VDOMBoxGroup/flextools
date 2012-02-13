@@ -5,10 +5,10 @@ import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
-import flash.events.OutputProgressEvent;
-import flash.filesystem.File;
-import flash.filesystem.FileMode;
-import flash.filesystem.FileStream;
+//import flash.events.OutputProgressEvent;
+//import flash.filesystem.File;
+//import flash.filesystem.FileMode;
+//import flash.filesystem.FileStream;
 import flash.net.FileFilter;
 import flash.utils.ByteArray;
 
@@ -17,9 +17,9 @@ import mx.utils.Base64Encoder;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
-import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
+//import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-import net.vdombox.powerpack.managers.CashManager;
+//import net.vdombox.powerpack.managers.CashManager;
 import net.vdombox.powerpack.managers.ContextManager;
 import net.vdombox.powerpack.managers.LanguageManager;
 import net.vdombox.powerpack.managers.ProgressManager;
@@ -89,7 +89,7 @@ public class Template extends EventDispatcher
 
 	private static var _classConstructed : Boolean = classConstruct();
 	
-	private var fileStream : FileStream = new FileStream();
+//	private var fileStream : FileStream = new FileStream();
 
 	
 	public static function get classConstructed() : Boolean
@@ -147,8 +147,8 @@ public class Template extends EventDispatcher
 	public function dispose() : void
 	{
 		_xmlStructure = null;
-		_pictureFile = null;
-		file = null;
+//		_pictureFile = null;
+//		file = null;
 		_xml = null;
 	}
 
@@ -165,8 +165,8 @@ public class Template extends EventDispatcher
 	 *
 	 * template file (XML)
 	 */
-	[Bindable]
-	public var file : File;
+//	[Bindable]
+//	public var file : File;
 
 	private var _completelyOpened : Boolean;
 
@@ -188,10 +188,10 @@ public class Template extends EventDispatcher
 		{
 			_modified = value;
 
-			var mainIndex : XML = CashManager.getMainIndex();
-
-			CashManager.updateMainIndexEntry( mainIndex, fullID, 'saved', _modified ? 'false' : 'true' );
-			CashManager.setMainIndex( mainIndex );
+//			var mainIndex : XML = CashManager.getMainIndex();
+//
+//			CashManager.updateMainIndexEntry( mainIndex, fullID, 'saved', _modified ? 'false' : 'true' );
+//			CashManager.setMainIndex( mainIndex );
 		}
 	}
 
@@ -239,7 +239,7 @@ public class Template extends EventDispatcher
 
 	public static const DEFAULT_NAME			: String = 'installer';
 	public static const DEFAULT_INSTALLER_ID	: String = 'installer';
-	public static const DEFAULT_OUTPUT_FOLDER		: String = File.documentsDirectory.nativePath;
+//	public static const DEFAULT_OUTPUT_FOLDER		: String = File.documentsDirectory.nativePath;
 	public static const DEFAULT_OUTPUT_FILE_NAME	: String = "appInstaller";
 	public static const DEFAULT_APP_PATH			: String = "";
 	
@@ -282,9 +282,9 @@ public class Template extends EventDispatcher
 	
 	public function set installerFolderPath( value : String ) : void
 	{
-		if (!value)
-			value = DEFAULT_OUTPUT_FOLDER;
-		
+//		if (!value)
+//			value = DEFAULT_OUTPUT_FOLDER;
+//		
 		if ( _xml.outputFolder != value )
 		{
 			modified = true;
@@ -295,7 +295,8 @@ public class Template extends EventDispatcher
 	[Bindable]
 	public function get installerFolderPath() : String
 	{
-		return Utils.getStringOrDefault( _xml.outputFolder, DEFAULT_OUTPUT_FOLDER );
+//		return Utils.getStringOrDefault( _xml.outputFolder, DEFAULT_OUTPUT_FOLDER );
+		return Utils.getStringOrDefault( _xml.outputFolder, "")
 	}
 	
 	public function set installerFileName( value : String ) : void
@@ -387,8 +388,8 @@ public class Template extends EventDispatcher
 		{
 			_fullID = ID;
 
-			if ( file && file.exists )
-				_fullID += '_' + file.creationDate.getTime() + '_' + file.modificationDate.getTime() + '_' + file.size;
+//			if ( file && file.exists )
+//				_fullID += '_' + file.creationDate.getTime() + '_' + file.modificationDate.getTime() + '_' + file.size;
 		}
 
 		return _fullID;
@@ -398,22 +399,22 @@ public class Template extends EventDispatcher
 	//  picture
 	//----------------------------------
 
-	private var _pictureFile : File;
+//	private var _pictureFile : File;
 
-	public function set pictureFile( value : File ) : void
-	{
-		if ( !value || !_pictureFile || _pictureFile.nativePath != value.nativePath )
-		{
-			modified = true;
-			_pictureFile = value;
-		}
-	}
+//	public function set pictureFile( value : File ) : void
+//	{
+//		if ( !value || !_pictureFile || _pictureFile.nativePath != value.nativePath )
+//		{
+//			modified = true;
+//			_pictureFile = value;
+//		}
+//	}
 
-	[Bindable]
-	public function get pictureFile() : File
-	{
-		return _pictureFile;
-	}
+//	[Bindable]
+//	public function get pictureFile() : File
+//	{
+//		return _pictureFile;
+//	}
 
 	//----------------------------------
 	//  b64picture
@@ -468,94 +469,94 @@ public class Template extends EventDispatcher
 		if ( !_completelyOpened )
 			return;
 
-		if ( !file )
-		{
-			browseForSave();
-			return;
-		}
+//		if ( !file )
+//		{
+//			browseForSave();
+//			return;
+//		}
 
-		try
-		{
-			//ProgressManager.start( null, false );
-
-			// update tpl UID
-			_xml.@ID = UIDUtil.createUID();
-
-			// cash template structure
-			cashStructure();
-
-			/// get resources from cash 
-			fillFromCash();
-
-			// set (+encrypt) structure and resources data
-			encode();
-
-			ProgressManager.source = fileStream;
-			ProgressManager.start();
-
-			fileStream.addEventListener( Event.COMPLETE, saveHandler );
-			fileStream.addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
-			fileStream.addEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
-			
-			fileStream.openAsync( file, FileMode.WRITE );
-			fileStream.writeUTFBytes( _xml.toXMLString() );
-		}
-		catch ( e : Error )
-		{
-			fileStream.removeEventListener( Event.COMPLETE, saveHandler );
-			fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
-			fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
-			
-			file.cancel();
-			fileStream.close();
-			
-			ProgressManager.complete();
-			
-			showError(e.message);
-		}
+//		try
+//		{
+//			//ProgressManager.start( null, false );
+//
+//			// update tpl UID
+//			_xml.@ID = UIDUtil.createUID();
+//
+//			// cash template structure
+//			cashStructure();
+//
+//			/// get resources from cash 
+//			fillFromCash();
+//
+//			// set (+encrypt) structure and resources data
+//			encode();
+//
+//			ProgressManager.source = fileStream;
+//			ProgressManager.start();
+//
+//			fileStream.addEventListener( Event.COMPLETE, saveHandler );
+//			fileStream.addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+//			fileStream.addEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+//			
+//			fileStream.openAsync( file, FileMode.WRITE );
+//			fileStream.writeUTFBytes( _xml.toXMLString() );
+//		}
+//		catch ( e : Error )
+//		{
+//			fileStream.removeEventListener( Event.COMPLETE, saveHandler );
+//			fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+//			fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+//			
+//			file.cancel();
+//			fileStream.close();
+//			
+//			ProgressManager.complete();
+//			
+//			showError(e.message);
+//		}
 	}
 
 	public function open() : void
 	{
-		if ( !file )
-		{
-			browseForOpen();
-			return;
-		}
-
-		if ( !file.exists )
-		{
-			showError(LanguageManager.sentences['msg_file_not_exists']);
-			return;
-		}
-		
-		ProgressManager.source = fileStream;
-		ProgressManager.start();
-
-		fileStream.addEventListener( Event.COMPLETE, openHandler );
-		fileStream.addEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
-		
-		fileStream.openAsync( file, FileMode.READ );
+//		if ( !file )
+//		{
+//			browseForOpen();
+//			return;
+//		}
+//
+//		if ( !file.exists )
+//		{
+//			showError(LanguageManager.sentences['msg_file_not_exists']);
+//			return;
+//		}
+//		
+//		ProgressManager.source = fileStream;
+//		ProgressManager.start();
+//
+//		fileStream.addEventListener( Event.COMPLETE, openHandler );
+//		fileStream.addEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+//		
+//		fileStream.openAsync( file, FileMode.READ );
 	}
 
 	public function browseForSave() : void
 	{
-		var folder : File = ContextManager.instance.lastDir;
-
-		folder.addEventListener( Event.SELECT, fileBrowseHandler );
-		
-		browseType = BROWSE_TYPE_SAVE;
-		folder.browseForSave( LanguageManager.sentences['save_file'] );
+//		var folder : File = ContextManager.instance.lastDir;
+//
+//		folder.addEventListener( Event.SELECT, fileBrowseHandler );
+//		
+//		browseType = BROWSE_TYPE_SAVE;
+//		folder.browseForSave( LanguageManager.sentences['save_file'] );
 	}
 
 	public function browseForOpen() : void
 	{
-		var folder : File = ContextManager.instance.lastDir;
-
-		folder.addEventListener( Event.SELECT, fileBrowseHandler );
-		
-		browseType = BROWSE_TYPE_OPEN;
-		folder.browseForOpen( LanguageManager.sentences['open_file'], [tplFilter, allFilter] )
+//		var folder : File = ContextManager.instance.lastDir;
+//
+//		folder.addEventListener( Event.SELECT, fileBrowseHandler );
+//		
+//		browseType = BROWSE_TYPE_OPEN;
+//		folder.browseForOpen( LanguageManager.sentences['open_file'], [tplFilter, allFilter] )
 	}
 	
 	public function processOpened() : void
@@ -641,32 +642,32 @@ public class Template extends EventDispatcher
 
 	private function setPictureFromFile() : Boolean
 	{
-		if ( !pictureFile || !pictureFile.exists )
-		{
-			return false;
-		}
-
-		var fileToBase64 : FileToBase64 = new FileToBase64( pictureFile.nativePath );
-		fileToBase64.convert();
-		b64picture = fileToBase64.data.toString();
-
-		_xml.picture[0].@type = pictureFile.extension;
-		_xml.picture[0].@name = pictureFile.name;
-
+//		if ( !pictureFile || !pictureFile.exists )
+//		{
+//			return false;
+//		}
+//
+//		var fileToBase64 : FileToBase64 = new FileToBase64( pictureFile.nativePath );
+//		fileToBase64.convert();
+//		b64picture = fileToBase64.data.toString();
+//
+//		_xml.picture[0].@type = pictureFile.extension;
+//		_xml.picture[0].@name = pictureFile.name;
+//
 		return true;
 	}
 
 	private function getPictureFromCash() : void
 	{
-		var picObj : Object = CashManager.getObject( fullID, 'logo' );
-		if ( picObj )
-		{
-			var picData : ByteArray = ByteArray( picObj.data );
-
-			_xml.picture = picData.readUTFBytes( picData.bytesAvailable );
-			_xml.picture.@name = XML( picObj.entry ).@name;
-			_xml.picture.@type = XML( picObj.entry ).@type;
-		}
+//		var picObj : Object = CashManager.getObject( fullID, 'logo' );
+//		if ( picObj )
+//		{
+//			var picData : ByteArray = ByteArray( picObj.data );
+//
+//			_xml.picture = picData.readUTFBytes( picData.bytesAvailable );
+//			_xml.picture.@name = XML( picObj.entry ).@name;
+//			_xml.picture.@type = XML( picObj.entry ).@type;
+//		}
 	}
 
 	private function cash() : Boolean
@@ -675,35 +676,35 @@ public class Template extends EventDispatcher
 			return false;
 
 		// cash all resources
-		for each ( var res : XML in _xmlStructure.resources.resource )
-		{
-			CashManager.setStringObject( fullID,
-					XML(
-							"<resource " +
-									"category='" + Utils.getStringOrDefault( res.@category, "" ) + "' " +
-									"ID='" + Utils.getStringOrDefault( res.@ID, "" ) + "' " +
-									"name='" + Utils.getStringOrDefault( res.@name, "" ) + "' " +
-									"type='" + Utils.getStringOrDefault( res.@type, "" ) + "' />" ),
-					res );
-		}
+//		for each ( var res : XML in _xmlStructure.resources.resource )
+//		{
+//			CashManager.setStringObject( fullID,
+//					XML(
+//							"<resource " +
+//									"category='" + Utils.getStringOrDefault( res.@category, "" ) + "' " +
+//									"ID='" + Utils.getStringOrDefault( res.@ID, "" ) + "' " +
+//									"name='" + Utils.getStringOrDefault( res.@name, "" ) + "' " +
+//									"type='" + Utils.getStringOrDefault( res.@type, "" ) + "' />" ),
+//					res );
+//		}
 
 		delete _xmlStructure.resources;
 
 		// cash tpl picture
-		if ( b64picture )
-		{
-			var picXML : XML = _xml.picture[0];
-			CashManager.setStringObject( fullID,
-					XML(
-							"<resource " +
-									"category='logo' " +
-									"ID='logo' " +
-									"name='" + Utils.getStringOrDefault( picXML.@name, "" ) + "' " +
-									"type='" + Utils.getStringOrDefault( picXML.@type, "" ) + "' />" ),
-					b64picture );
-
-			//delete _xml.picture;
-		}
+//		if ( b64picture )
+//		{
+//			var picXML : XML = _xml.picture[0];
+//			CashManager.setStringObject( fullID,
+//					XML(
+//							"<resource " +
+//									"category='logo' " +
+//									"ID='logo' " +
+//									"name='" + Utils.getStringOrDefault( picXML.@name, "" ) + "' " +
+//									"type='" + Utils.getStringOrDefault( picXML.@type, "" ) + "' />" ),
+//					b64picture );
+//
+//			//delete _xml.picture;
+//		}
 
 		cashStructure();
 
@@ -712,64 +713,64 @@ public class Template extends EventDispatcher
 
 	private function cashStructure() : void
 	{
-		CashManager.setStringObject( fullID,
-				XML(
-						"<resource " +
-								"category='template' " +
-								"ID='template' " +
-								"name='" + name + "' " +
-								"type='" + TYPE_APPLICATION + "' />" ),
-				_xml.toXMLString() );
-
-		CashManager.setStringObject( fullID,
-				XML(
-						"<resource " +
-								"category='template' " +
-								"ID='structure' " +
-								"name='" + name + "' " +
-								"type='" + TYPE_APPLICATION + "' />" ),
-				_xmlStructure.toXMLString() );
+//		CashManager.setStringObject( fullID,
+//				XML(
+//						"<resource " +
+//								"category='template' " +
+//								"ID='template' " +
+//								"name='" + name + "' " +
+//								"type='" + TYPE_APPLICATION + "' />" ),
+//				_xml.toXMLString() );
+//
+//		CashManager.setStringObject( fullID,
+//				XML(
+//						"<resource " +
+//								"category='template' " +
+//								"ID='structure' " +
+//								"name='" + name + "' " +
+//								"type='" + TYPE_APPLICATION + "' />" ),
+//				_xmlStructure.toXMLString() );
 	}
 
 	private function fillFromCash() : void
 	{
 		// get tpl picture
-		if ( pictureFile )
-		{
-			delete _xml.picture;
-			setPictureFromFile();
-		}
-		
-		if (!b64picture)
-			delete _xml.picture;
-		
-		
-		// get resources		
-		delete _xmlStructure.resources;
-
-		var index : XML = CashManager.getIndex( fullID );
-		if ( index )
-		{
-			var resources : XMLList = index.resource.(hasOwnProperty( '@category' ) &&
-					(@category == 'image' || @category == 'database'));
-
-			_xmlStructure.appendChild( <resources/> );
-
-			for each ( var res : XML in resources )
-			{
-				var resObj : Object = CashManager.getObject( fullID, res.@ID );
-				var resData : ByteArray = ByteArray( resObj.data );
-				var content : String = resData.readUTFBytes( resData.bytesAvailable );
-
-				var resXML : XML = XML( '<resource><![CDATA[' + content + ']]></resource>' );
-				resXML.@category = resObj.entry.@category;
-				resXML.@ID = resObj.entry.@ID;
-				resXML.@type = resObj.entry.@type;
-				resXML.@name = resObj.entry.@name;
-
-				_xmlStructure.resources.appendChild( resXML );
-			}
-		}
+//		if ( pictureFile )
+//		{
+//			delete _xml.picture;
+//			setPictureFromFile();
+//		}
+//		
+//		if (!b64picture)
+//			delete _xml.picture;
+//		
+//		
+//		// get resources		
+//		delete _xmlStructure.resources;
+//
+//		var index : XML = CashManager.getIndex( fullID );
+//		if ( index )
+//		{
+//			var resources : XMLList = index.resource.(hasOwnProperty( '@category' ) &&
+//					(@category == 'image' || @category == 'database'));
+//
+//			_xmlStructure.appendChild( <resources/> );
+//
+//			for each ( var res : XML in resources )
+//			{
+//				var resObj : Object = CashManager.getObject( fullID, res.@ID );
+//				var resData : ByteArray = ByteArray( resObj.data );
+//				var content : String = resData.readUTFBytes( resData.bytesAvailable );
+//
+//				var resXML : XML = XML( '<resource><![CDATA[' + content + ']]></resource>' );
+//				resXML.@category = resObj.entry.@category;
+//				resXML.@ID = resObj.entry.@ID;
+//				resXML.@type = resObj.entry.@type;
+//				resXML.@name = resObj.entry.@name;
+//
+//				_xmlStructure.resources.appendChild( resXML );
+//			}
+//		}
 	}
 
 	//--------------------------------------------------------------------------
@@ -780,156 +781,156 @@ public class Template extends EventDispatcher
 
 	private function fileBrowseHandler (event : Event) : void
 	{
-		var f : File = event.target as File;
-		
-		f.removeEventListener( Event.SELECT, fileBrowseHandler );
-		
-		if ( f.isDirectory || f.isPackage || f.isSymbolicLink )
-		{
-			browseType = BROWSE_TYPE_NONE;
-			return;
-		}
-		
-		switch (browseType)
-		{
-			case BROWSE_TYPE_OPEN:
-			{
-				browseType = BROWSE_TYPE_NONE;
-				
-				file = f;
-				
-				open();
-				
-				/*var evnt : Event = new Event( 'opening', false, true );
-				dispatchEvent( evnt );
-				
-				if ( !evnt.isDefaultPrevented() )
-					open();*/
-				break;
-			}
-			case BROWSE_TYPE_SAVE:
-			{
-				browseType = BROWSE_TYPE_NONE;
-				
-				if ( !f.extension || f.extension.toLowerCase() != TPL_EXTENSION )
-					f = f.parent.resolvePath( f.name + '.' + TPL_EXTENSION );
-				
-				file = f;
-				
-				save();
-				
-				/*var evnt : Event = new Event( 'saving', false, true );
-				dispatchEvent( evnt );
-				
-				if ( !evnt.isDefaultPrevented() )
-					save();*/
-				break;
-			}
-			default:
-			{
-				browseType = BROWSE_TYPE_NONE;
-				break;
-			}
-		}
+//		var f : File = event.target as File;
+//		
+//		f.removeEventListener( Event.SELECT, fileBrowseHandler );
+//		
+//		if ( f.isDirectory || f.isPackage || f.isSymbolicLink )
+//		{
+//			browseType = BROWSE_TYPE_NONE;
+//			return;
+//		}
+//		
+//		switch (browseType)
+//		{
+//			case BROWSE_TYPE_OPEN:
+//			{
+//				browseType = BROWSE_TYPE_NONE;
+//				
+//				file = f;
+//				
+//				open();
+//				
+//				/*var evnt : Event = new Event( 'opening', false, true );
+//				dispatchEvent( evnt );
+//				
+//				if ( !evnt.isDefaultPrevented() )
+//					open();*/
+//				break;
+//			}
+//			case BROWSE_TYPE_SAVE:
+//			{
+//				browseType = BROWSE_TYPE_NONE;
+//				
+//				if ( !f.extension || f.extension.toLowerCase() != TPL_EXTENSION )
+//					f = f.parent.resolvePath( f.name + '.' + TPL_EXTENSION );
+//				
+//				file = f;
+//				
+//				save();
+//				
+//				/*var evnt : Event = new Event( 'saving', false, true );
+//				dispatchEvent( evnt );
+//				
+//				if ( !evnt.isDefaultPrevented() )
+//					save();*/
+//				break;
+//			}
+//			default:
+//			{
+//				browseType = BROWSE_TYPE_NONE;
+//				break;
+//			}
+//		}
 	}
 	
-	private function fileStreamOutputProgressHandler( event : OutputProgressEvent ) : void
-	{
-		if ( event.bytesPending == 0 )
-			fileStream.dispatchEvent( new Event( Event.COMPLETE ) );
-	}
+//	private function fileStreamOutputProgressHandler( event : OutputProgressEvent ) : void
+//	{
+//		if ( event.bytesPending == 0 )
+//			fileStream.dispatchEvent( new Event( Event.COMPLETE ) );
+//	}
 
 	private function saveHandler( event : Event ) : void
 	{
-		fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
-		fileStream.removeEventListener( Event.COMPLETE, saveHandler );
-		fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
-
-		try
-		{
-			fileStream.close();
-
-			ProgressManager.start( ProgressManager.DIALOG_MODE, false );
-
-			_xml = XML( CashManager.getStringObject( fullID, 'template' ) );
-
-			// update tpl UID
-			var oldID : String = fullID;
-			_fullID = null;
-			CashManager.updateID( oldID, fullID );
-
-			ProgressManager.complete();
-
-			modified = false;
-
-			dispatchEvent( new Event( Event.COMPLETE ) );
-		}
-		catch ( e : Error )
-		{
-			ProgressManager.complete();
-
-			showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
-		}
+//		fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+//		fileStream.removeEventListener( Event.COMPLETE, saveHandler );
+//		fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+//
+//		try
+//		{
+//			fileStream.close();
+//
+//			ProgressManager.start( ProgressManager.DIALOG_MODE, false );
+//
+//			_xml = XML( CashManager.getStringObject( fullID, 'template' ) );
+//
+//			// update tpl UID
+//			var oldID : String = fullID;
+//			_fullID = null;
+//			CashManager.updateID( oldID, fullID );
+//
+//			ProgressManager.complete();
+//
+//			modified = false;
+//
+//			dispatchEvent( new Event( Event.COMPLETE ) );
+//		}
+//		catch ( e : Error )
+//		{
+//			ProgressManager.complete();
+//
+//			showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
+//		}
 	}
 
 	private function openHandler( event : Event ) : void
 	{
-		fileStream.removeEventListener( Event.COMPLETE, openHandler );
-		fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
-
-		try
-		{
-			ProgressManager.start( ProgressManager.DIALOG_MODE, false );
-
-			var strData : String = fileStream.readUTFBytes( fileStream.bytesAvailable );
-			fileStream.close();
-
-			var xmlData : XML = XML( strData );
-
-			if ( !isValidTpl( xmlData ) )
-				throw new Error( LanguageManager.sentences['msg_not_valid_tpl_file'] );
-
-			_xml = xmlData;
-
-			_completelyOpened = false;
-
-			_fullID = null;
-
-			processOpened();
-
-			ProgressManager.complete();
-
-			modified = false;
-
-			dispatchEvent( new Event( Event.COMPLETE ) );
-		}
-		catch ( e : Error )
-		{
-			fileStream.close();
-
-			ProgressManager.complete();
-
-			showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
-		}
+//		fileStream.removeEventListener( Event.COMPLETE, openHandler );
+//		fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+//
+//		try
+//		{
+//			ProgressManager.start( ProgressManager.DIALOG_MODE, false );
+//
+//			var strData : String = fileStream.readUTFBytes( fileStream.bytesAvailable );
+//			fileStream.close();
+//
+//			var xmlData : XML = XML( strData );
+//
+//			if ( !isValidTpl( xmlData ) )
+//				throw new Error( LanguageManager.sentences['msg_not_valid_tpl_file'] );
+//
+//			_xml = xmlData;
+//
+//			_completelyOpened = false;
+//
+//			_fullID = null;
+//
+//			processOpened();
+//
+//			ProgressManager.complete();
+//
+//			modified = false;
+//
+//			dispatchEvent( new Event( Event.COMPLETE ) );
+//		}
+//		catch ( e : Error )
+//		{
+//			fileStream.close();
+//
+//			ProgressManager.complete();
+//
+//			showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
+//		}
 	}
 
 	private function fileStreamIOErrorHandler( event : IOErrorEvent ) : void
 	{
-		browseType = BROWSE_TYPE_NONE;
-		
-		fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
-		
-		fileStream.removeEventListener( Event.COMPLETE, saveHandler );
-		fileStream.removeEventListener( Event.COMPLETE, openHandler );
-		
-		fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
-		
-		file.cancel();
-		fileStream.close();
-		
-		ProgressManager.complete();
-
-		showError(event.text);
+//		browseType = BROWSE_TYPE_NONE;
+//		
+//		fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+//		
+//		fileStream.removeEventListener( Event.COMPLETE, saveHandler );
+//		fileStream.removeEventListener( Event.COMPLETE, openHandler );
+//		
+//		fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+//		
+//		file.cancel();
+//		fileStream.close();
+//		
+//		ProgressManager.complete();
+//
+//		showError(event.text);
 	}
 	
 	private function showError(errorText : String) : void

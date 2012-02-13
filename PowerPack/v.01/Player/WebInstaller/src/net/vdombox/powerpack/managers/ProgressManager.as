@@ -1,17 +1,17 @@
 package net.vdombox.powerpack.managers
 {
 
-import flash.desktop.NativeApplication;
+//import flash.desktop.NativeApplication;
 import flash.display.DisplayObject;
-import flash.display.NativeWindowSystemChrome;
-import flash.display.NativeWindowType;
+//import flash.display.NativeWindowSystemChrome;
+//import flash.display.NativeWindowType;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
 import flash.events.MouseEvent;
-import flash.events.OutputProgressEvent;
+//import flash.events.OutputProgressEvent;
 import flash.events.ProgressEvent;
-import flash.filesystem.FileStream;
+//import flash.filesystem.FileStream;
 
 import mx.containers.Box;
 import mx.containers.ControlBar;
@@ -35,9 +35,7 @@ import mx.managers.SystemManager;
 import mx.skins.halo.ProgressBarSkin;
 
 import net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar;
-import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
 import net.vdombox.powerpack.lib.extendedapi.controls.HDivider;
-import net.vdombox.powerpack.menu.MenuGeneral;
 
 public class ProgressManager extends EventDispatcher
 {
@@ -129,7 +127,7 @@ public class ProgressManager extends EventDispatcher
 	private var _win : Object;
 
 	private var _window : TitleWindow;
-	private var _dialog : SuperWindow;
+//	private var _dialog : SuperWindow;
 	private var _winBox : Box;
 	private var _panel : VBox;
 	private var _statusBar : HBox;
@@ -162,51 +160,53 @@ public class ProgressManager extends EventDispatcher
 	 */
 	public static function set source( value : Object ) : void
 	{
+		var mode : String;
 		if ( instance._bar.source != value )
 		{
-			var mode : String = ProgressBarMode.MANUAL;
+			mode  = ProgressBarMode.MANUAL;
 
-			if ( value is FileStream )
-			{
-				mode = ProgressBarMode.MANUAL;
-
-				(value as FileStream).addEventListener( ProgressEvent.PROGRESS, onFileStreamProgress );
-				(value as FileStream).addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress );
-
-				function onFileStreamProgress( event : Event ) : void
-				{
-					var stream : FileStream = event.target as FileStream;
-
-					if ( event is OutputProgressEvent )
-					{
-						instance._bar.setProgress( OutputProgressEvent( event ).bytesTotal, OutputProgressEvent( event ).bytesPending + OutputProgressEvent( event ).bytesTotal );
-					}
-					else
-					{
-						instance._bar.setProgress( ProgressEvent( event ).bytesLoaded, ProgressEvent( event ).bytesTotal );
-					}
-
-					if ( instance._bar.parent )
-						instance._bar.validateNow();
-				}
-
-				(value as FileStream).addEventListener( IOErrorEvent.IO_ERROR, onFileStreamClose );
-				(value as FileStream).addEventListener( Event.CLOSE, onFileStreamClose );
-				(value as FileStream).addEventListener( Event.COMPLETE, onFileStreamClose );
-
-				function onFileStreamClose( event : Event ) : void
-				{
-					var stream : FileStream = event.target as FileStream;
-					stream.removeEventListener( ProgressEvent.PROGRESS, onFileStreamProgress );
-					stream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress );
-					stream.removeEventListener( IOErrorEvent.IO_ERROR, onFileStreamClose );
-					stream.removeEventListener( Event.CLOSE, onFileStreamClose );
-					stream.removeEventListener( Event.COMPLETE, onFileStreamClose );
-
-					instance._bar.dispatchEvent( new Event( Event.COMPLETE ) );
-				}
-			}
-			else if ( value is EventDispatcher )
+//			if ( value is FileStream )
+//			{
+//				mode = ProgressBarMode.MANUAL;
+//
+//				(value as FileStream).addEventListener( ProgressEvent.PROGRESS, onFileStreamProgress );
+//				(value as FileStream).addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress );
+//
+//				function onFileStreamProgress( event : Event ) : void
+//				{
+//					var stream : FileStream = event.target as FileStream;
+//
+//					if ( event is OutputProgressEvent )
+//					{
+//						instance._bar.setProgress( OutputProgressEvent( event ).bytesTotal, OutputProgressEvent( event ).bytesPending + OutputProgressEvent( event ).bytesTotal );
+//					}
+//					else
+//					{
+//						instance._bar.setProgress( ProgressEvent( event ).bytesLoaded, ProgressEvent( event ).bytesTotal );
+//					}
+//
+//					if ( instance._bar.parent )
+//						instance._bar.validateNow();
+//				}
+//
+//				(value as FileStream).addEventListener( IOErrorEvent.IO_ERROR, onFileStreamClose );
+//				(value as FileStream).addEventListener( Event.CLOSE, onFileStreamClose );
+//				(value as FileStream).addEventListener( Event.COMPLETE, onFileStreamClose );
+//
+//				function onFileStreamClose( event : Event ) : void
+//				{
+//					var stream : FileStream = event.target as FileStream;
+//					stream.removeEventListener( ProgressEvent.PROGRESS, onFileStreamProgress );
+//					stream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress );
+//					stream.removeEventListener( IOErrorEvent.IO_ERROR, onFileStreamClose );
+//					stream.removeEventListener( Event.CLOSE, onFileStreamClose );
+//					stream.removeEventListener( Event.COMPLETE, onFileStreamClose );
+//
+//					instance._bar.dispatchEvent( new Event( Event.COMPLETE ) );
+//				}
+//			}
+//			else if ( value is EventDispatcher )
+			if ( value is EventDispatcher )
 			{
 				mode = ProgressBarMode.EVENT;
 			}
@@ -324,7 +324,7 @@ public class ProgressManager extends EventDispatcher
 				break;
 
 			case WINDOW_MODE:
-				MenuGeneral.disable();
+//				MenuGeneral.disable();
 
 				instance._bar.label = LanguageManager.sentences['progress_full_label'];
 				instance._bar.percentWidth = 100;
@@ -336,12 +336,8 @@ public class ProgressManager extends EventDispatcher
 
 				instance._window.addChild( instance._winBox );
 
-				var activeWin : Object = SuperWindow.getWindow( NativeApplication.nativeApplication.activeWindow );
-
-				if ( !activeWin )
-					activeWin = instance._win;
-
-				PopUpManager.addPopUp( instance._window, activeWin as DisplayObject, true );
+				
+				PopUpManager.addPopUp( instance._window, null, true );
 				PopUpManager.centerPopUp( instance._window );
 
 				instance._window.validateNow();
@@ -357,38 +353,38 @@ public class ProgressManager extends EventDispatcher
 				if ( showProgress )
 					instance._winBox.addChildAt( instance._bar, 1 );
 
-				instance._dialog = new SuperWindow( NativeApplication.nativeApplication.activeWindow );
-				instance._dialog.type = NativeWindowType.LIGHTWEIGHT;
-				instance._dialog.systemChrome = NativeWindowSystemChrome.NONE;
-				//instance._dialog.transparent = true;
-				instance._dialog.title = LanguageManager.sentences['progress_title'];
-				instance._dialog.showTitleBar = false;
-				instance._dialog.showStatusBar = false;
-				instance._dialog.showGripper = false;
-				instance._dialog.resizable = false;
-				instance._dialog.setStyle( "borderStyle", "none" );
-				instance._dialog.setStyle( 'cornerRadius', 0 );
-				instance._dialog.setStyle( 'backgroundAlpha', 0 );
-				instance._dialog.minWidth = 0;
-				instance._dialog.minHeight = 0;
+//				instance._dialog = new SuperWindow( NativeApplication.nativeApplication.activeWindow );
+//				instance._dialog.type = NativeWindowType.LIGHTWEIGHT;
+//				instance._dialog.systemChrome = NativeWindowSystemChrome.NONE;
+//				//instance._dialog.transparent = true;
+//				instance._dialog.title = LanguageManager.sentences['progress_title'];
+//				instance._dialog.showTitleBar = false;
+//				instance._dialog.showStatusBar = false;
+//				instance._dialog.showGripper = false;
+//				instance._dialog.resizable = false;
+//				instance._dialog.setStyle( "borderStyle", "none" );
+//				instance._dialog.setStyle( 'cornerRadius', 0 );
+//				instance._dialog.setStyle( 'backgroundAlpha', 0 );
+//				instance._dialog.minWidth = 0;
+//				instance._dialog.minHeight = 0;
+//
+//				instance._dialog.startPosition = SuperWindow.POS_CENTER_SCREEN;
+//				instance._dialog.modal = true;
+//
+//				instance._dialog.addChild( instance._winBox );
+//
+//				instance._dialog.open();
+//
+//				instance.doResizeDialog();
+//
+//				var parent : Window = SuperWindow.getWindow( instance._dialog.parentWindow );
 
-				instance._dialog.startPosition = SuperWindow.POS_CENTER_SCREEN;
-				instance._dialog.modal = true;
-
-				instance._dialog.addChild( instance._winBox );
-
-				instance._dialog.open();
-
-				instance.doResizeDialog();
-
-				var parent : Window = SuperWindow.getWindow( instance._dialog.parentWindow );
-
-				if ( parent )
-					parent.validateNow();
-				else
+//				if ( parent )
+//					parent.validateNow();
+//				else
 					Application.application.validateNow();
 
-				instance._dialog.activate();
+//				instance._dialog.activate();
 
 				viewMode = DIALOG_MODE;
 				break;
@@ -408,7 +404,7 @@ public class ProgressManager extends EventDispatcher
 		switch ( instance._viewMode )
 		{
 			case WINDOW_MODE:
-				MenuGeneral.enable();
+//				MenuGeneral.enable();
 				var parent : Object = instance._window;
 
 				if ( instance._winBox.parent )
@@ -424,24 +420,24 @@ public class ProgressManager extends EventDispatcher
 				break;
 
 			case DIALOG_MODE:
-				if ( instance._dialog && !instance._dialog.closed )
-				{
-					instance._dialog.visible = false;
-					instance._dialog.includeInLayout = false;
-
-					if ( instance._winBox.parent )
-						instance._winBox.parent.removeChild( instance._winBox );
-
-					parent = SuperWindow.getWindow( instance._dialog.parentWindow );
-					instance._dialog.nativeWindow.close();
-
-					if ( parent )
-						parent.validateNow();
-					else
-						instance._win.validateNow();
-
-					instance._dialog = null;
-				}
+//				if ( instance._dialog && !instance._dialog.closed )
+//				{
+//					instance._dialog.visible = false;
+//					instance._dialog.includeInLayout = false;
+//
+//					if ( instance._winBox.parent )
+//						instance._winBox.parent.removeChild( instance._winBox );
+//
+//					parent = SuperWindow.getWindow( instance._dialog.parentWindow );
+//					instance._dialog.nativeWindow.close();
+//
+//					if ( parent )
+//						parent.validateNow();
+//					else
+//						instance._win.validateNow();
+//
+//					instance._dialog = null;
+//				}
 				break;
 
 			case PANEL_MODE:
@@ -497,8 +493,8 @@ public class ProgressManager extends EventDispatcher
 
 			function onWindowRender( event : Event ) : void
 			{
-				if ( _dialog == null || _dialog.nativeWindow == null || _dialog.parent == null )
-					PopUpManager.centerPopUp( _window );
+//				if ( _dialog == null || _dialog.nativeWindow == null || _dialog.parent == null )
+//					PopUpManager.centerPopUp( _window );
 			}
 		}
 		if ( !_winBox )
@@ -613,23 +609,23 @@ public class ProgressManager extends EventDispatcher
 		_winBox.validateProperties();
 		_winBox.validateSize();
 
-		var edges : EdgeMetrics = _dialog.viewMetricsAndPadding;
-		var size : Object = {	w : _winBox.width + _winBox.maxHorizontalScrollPosition + edges.left + edges.right,
-			h : _winBox.height + _winBox.maxVerticalScrollPosition + edges.top + edges.bottom};
-
-		_dialog.width = size.w;
-		_dialog.height = size.h;
-
-		positioned = true;
-
-		_dialog.validateProperties();
-		_dialog.validateSize();
-		_dialog.setPosition();
-
-		if ( _dialog.parent )
-		{
-			_dialog.validateNow();
-		}
+//		var edges : EdgeMetrics = _dialog.viewMetricsAndPadding;
+//		var size : Object = {	w : _winBox.width + _winBox.maxHorizontalScrollPosition + edges.left + edges.right,
+//			h : _winBox.height + _winBox.maxVerticalScrollPosition + edges.top + edges.bottom};
+//
+//		_dialog.width = size.w;
+//		_dialog.height = size.h;
+//
+//		positioned = true;
+//
+//		_dialog.validateProperties();
+//		_dialog.validateSize();
+//		_dialog.setPosition();
+//
+//		if ( _dialog.parent )
+//		{
+//			_dialog.validateNow();
+//		}
 	}
 
 	//--------------------------------------------------------------------------
@@ -643,11 +639,11 @@ public class ProgressManager extends EventDispatcher
 	 */
 	private function resizeHandler( event : ResizeEvent ) : void
 	{
-		if ( _dialog == null || _dialog.nativeWindow == null || _dialog.parent == null )
-			return;
-
-		if ( _winBox == null || _winBox.parent == null )
-			return;
+//		if ( _dialog == null || _dialog.nativeWindow == null || _dialog.parent == null )
+//			return;
+//
+//		if ( _winBox == null || _winBox.parent == null )
+//			return;
 
 		doResizeDialog();
 	}
@@ -657,11 +653,11 @@ public class ProgressManager extends EventDispatcher
 	 */
 	private function moveHandler( event : MoveEvent ) : void
 	{
-		if ( _dialog == null || _dialog.nativeWindow == null || _dialog.parent == null )
-			return;
+//		if ( _dialog == null || _dialog.nativeWindow == null || _dialog.parent == null )
+//			return;
 
-		_dialog.nativeWindow.x += event.target.x - event.oldX
-		_dialog.nativeWindow.y += event.target.y - event.oldY
+//		_dialog.nativeWindow.x += event.target.x - event.oldX
+//		_dialog.nativeWindow.y += event.target.y - event.oldY
 
 		event.target.x = 3;
 		event.target.y = 3;
@@ -669,10 +665,10 @@ public class ProgressManager extends EventDispatcher
 		if ( !positioned )
 		{
 			positioned = true;
-			_dialog.setPosition();
+//			_dialog.setPosition();
 		}
 
-		_dialog.validateNow();
+//		_dialog.validateNow();
 	}
 
 }

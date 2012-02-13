@@ -3,14 +3,14 @@ package net.vdombox.powerpack.gen
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.filesystem.File;
-import flash.filesystem.FileMode;
-import flash.filesystem.FileStream;
+//import flash.filesystem.File;
+//import flash.filesystem.FileMode;
+//import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
 import mx.utils.UIDUtil;
 
-import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
+import net.vdombox.powerpack.events.TemplateLibEvent;
 import net.vdombox.powerpack.gen.errorClasses.RunTimeError;
 import net.vdombox.powerpack.gen.errorClasses.ValidationError;
 import net.vdombox.powerpack.gen.errorClasses.ValidationWarning;
@@ -21,8 +21,7 @@ import net.vdombox.powerpack.gen.structs.*;
 import net.vdombox.powerpack.graph.NodeCategory;
 import net.vdombox.powerpack.graph.NodeType;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-import net.vdombox.powerpack.managers.CashManager;
-import net.vdombox.powerpack.menu.MenuGeneral;
+//import net.vdombox.powerpack.managers.CashManager;
 
 import r1.deval.D;
 
@@ -177,35 +176,35 @@ public class TemplateStruct extends EventDispatcher
 
 	public static function loadLib() : void
 	{
-		lib = new TemplateLib();
-
-		var libFolder : File = File.applicationDirectory.resolvePath( 'libs' );
-
-		if ( !libFolder.exists )
-			return;
-
-		var libs : Array = libFolder.getDirectoryListing();
-		for each( var libFile : File in libs )
-		{
-			var stream : FileStream = new FileStream();
-			var strData : String;
-
-			if ( !libFile.isDirectory && !libFile.isPackage && !libFile.isSymbolicLink && libFile.exists &&
-					(libFile.extension == 'as' || libFile.extension == 'txt') )
-			{
-				stream.open( libFile, FileMode.READ );
-				strData = stream.readUTFBytes( stream.bytesAvailable );
-				stream.close();
-				D.setOutput( evalHandler );
-				strData = strData + ';true;';
-				D.eval( strData, lib );
-			}
-		}
-
-		function evalHandler( value : String ) : void
-		{
-			trace( value );
-		}
+//		lib = new TemplateLib();
+//
+//		var libFolder : File = File.applicationDirectory.resolvePath( 'libs' );
+//
+//		if ( !libFolder.exists )
+//			return;
+//
+//		var libs : Array = libFolder.getDirectoryListing();
+//		for each( var libFile : File in libs )
+//		{
+//			var stream : FileStream = new FileStream();
+//			var strData : String;
+//
+//			if ( !libFile.isDirectory && !libFile.isPackage && !libFile.isSymbolicLink && libFile.exists &&
+//					(libFile.extension == 'as' || libFile.extension == 'txt') )
+//			{
+//				stream.open( libFile, FileMode.READ );
+//				strData = stream.readUTFBytes( stream.bytesAvailable );
+//				stream.close();
+//				D.setOutput( evalHandler );
+//				strData = strData + ';true;';
+//				D.eval( strData, lib );
+//			}
+//		}
+//
+//		function evalHandler( value : String ) : void
+//		{
+//			trace( value );
+//		}
 	}
 
 	public function validate( options : uint = 0 ) : Object
@@ -613,12 +612,12 @@ public class TemplateStruct extends EventDispatcher
 
 							case NodeCategory.RESOURCE:
 
-								var resData : ByteArray = CashManager.getObject( ID, curGraphContext.curNode.text ).data;
-
-								curNodeContext.block = new ParsedBlock();
-								curNodeContext.block.print = true;
-								curNodeContext.block.retValue = resData.readUTFBytes( resData.length );
-								curNodeContext.block.executed = true;
+//								var resData : ByteArray = CashManager.getObject( ID, curGraphContext.curNode.text ).data;
+//
+//								curNodeContext.block = new ParsedBlock();
+//								curNodeContext.block.print = true;
+//								curNodeContext.block.retValue = resData.readUTFBytes( resData.length );
+//								curNodeContext.block.executed = true;
 								break;
 
 							case NodeCategory.SUBGRAPH:
@@ -721,7 +720,7 @@ public class TemplateStruct extends EventDispatcher
 						}
 						
 						//TODO : unblock
-						MenuGeneral.updateMenuState(MenuGeneral.MENU_RUN, true);
+//						MenuGeneral.updateMenuState(MenuGeneral.MENU_RUN, true);
 					}
 
 				case 'getNextNode': // transition to next node

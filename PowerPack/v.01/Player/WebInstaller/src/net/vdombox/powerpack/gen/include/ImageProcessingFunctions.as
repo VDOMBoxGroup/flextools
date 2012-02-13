@@ -7,9 +7,9 @@ import flash.display.Graphics;
 import flash.display.Loader;
 import flash.display.LoaderInfo;
 import flash.events.Event;
-import flash.filesystem.File;
-import flash.filesystem.FileMode;
-import flash.filesystem.FileStream;
+//import flash.filesystem.File;
+//import flash.filesystem.FileMode;
+//import flash.filesystem.FileStream;
 import flash.filters.BitmapFilter;
 import flash.filters.BlurFilter;
 import flash.filters.ColorMatrixFilter;
@@ -62,40 +62,42 @@ private function processFillList( list : String, g : Graphics, rect : Rectangle 
 
 public function loadImage( filePath : String ) : Function
 {
-	if ( !filePath )
-	{
-		throw new BasicError( "Not valid filepath" );
-	}
-
-	var file : File = new File( filePath );
-
-	if ( !file.exists )
-	{
-		throw new BasicError( "File does not exist" );
-	}
-
-	var fileStream : FileStream = new FileStream();
-	var bytes : ByteArray = new ByteArray();
-	fileStream.open( file, FileMode.READ );
-	fileStream.readBytes( bytes, 0, fileStream.bytesAvailable );
-	fileStream.close();
-
-	var loader : Loader = new Loader();
-	loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onImageLoaded );
-	loader.loadBytes( bytes );
-
-	return onImageLoaded;
-
-	function onImageLoaded( event : Event ) : void
-	{
-		var content : DisplayObject = LoaderInfo( event.target ).content;
-		var bitmapData : BitmapData = new BitmapData( content.width, content.height, true, 0x00000000 );
-		bitmapData.draw( content );
-		var bitmap : Bitmap = new Bitmap( bitmapData );
-
-		setReturnValue( bitmap );
-	}
+//	if ( !filePath )
+//	{
+//		throw new BasicError( "Not valid filepath" );
+//	}
+//
+//	var file : File = new File( filePath );
+//
+//	if ( !file.exists )
+//	{
+//		throw new BasicError( "File does not exist" );
+//	}
+//
+//	var fileStream : FileStream = new FileStream();
+//	var bytes : ByteArray = new ByteArray();
+//	fileStream.open( file, FileMode.READ );
+//	fileStream.readBytes( bytes, 0, fileStream.bytesAvailable );
+//	fileStream.close();
+//
+//	var loader : Loader = new Loader();
+//	loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onImageLoaded );
+//	loader.loadBytes( bytes );
+//
+//	return onImageLoaded;
+//
+//	function onImageLoaded( event : Event ) : void
+//	{
+//		var content : DisplayObject = LoaderInfo( event.target ).content;
+//		var bitmapData : BitmapData = new BitmapData( content.width, content.height, true, 0x00000000 );
+//		bitmapData.draw( content );
+//		var bitmap : Bitmap = new Bitmap( bitmapData );
+//
+//		setReturnValue( bitmap );
+//	}
+	return null;
 }
+
 
 public function createImage( width : int, height : int, bgColor : int ) : Object
 {

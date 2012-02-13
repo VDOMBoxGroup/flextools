@@ -2,7 +2,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.filesystem.File;
+//	import flash.filesystem.File;
 	import flash.net.FileFilter;
 	
 	import mx.containers.Canvas;
@@ -93,14 +93,14 @@ package net.vdombox.powerpack.panel.popup.Answers
 				StringUtil.substitute( LanguageManager.sentences.file + " ({0})", browseFilter ? browseFilter : '*.*' ),
 				browseFilter ? browseFilter : '*.*' );
 			
-			var file : File = new File();
-			
-			file.addEventListener( Event.SELECT, fileSelectHandler );
-			
-			if ( browseFilter )
-				file.browseForOpen( LanguageManager.sentences.select_file + '...', [filter] );
-			else
-				file.browseForOpen( LanguageManager.sentences.select_file + '...' );
+//			var file : File = new File();
+//			
+//			file.addEventListener( Event.SELECT, fileSelectHandler );
+//			
+//			if ( browseFilter )
+//				file.browseForOpen( LanguageManager.sentences.select_file + '...', [filter] );
+//			else
+//				file.browseForOpen( LanguageManager.sentences.select_file + '...' );
 		}
 		
 		private function fileSelectHandler( event : Event ) : void

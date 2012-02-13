@@ -4,7 +4,7 @@ package net.vdombox.powerpack.gen
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
 
-import net.vdombox.powerpack.events.TemplateLibEvents.TemplateLibEvent;
+import net.vdombox.powerpack.events.TemplateLibEvent;
 import net.vdombox.powerpack.gen.parse.parseClasses.CodeFragment;
 
 public dynamic class TemplateLib extends EventDispatcher

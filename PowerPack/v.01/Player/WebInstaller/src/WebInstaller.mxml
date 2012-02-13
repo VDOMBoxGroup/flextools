@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" minWidth="955" minHeight="600" creationComplete="creationCompleteHandler(event)" xmlns:powerpack="net.vdombox.powerpack.*">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" minWidth="955" minHeight="600" 
+				creationComplete="application1_creationCompleteHandler(event)" xmlns:powerpack="net.vdombox.powerpack.*"  >
 	<mx:Script>
 		<![CDATA[
+			
 			import mx.events.FlexEvent;
 			
-			protected function creationCompleteHandler(event:FlexEvent):void
+			private static var POST_ADDRESS : String = "template.xml";
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
+				var loader : URLLoader = new URLLoader();  
+				var request : URLRequest = new URLRequest(POST_ADDRESS);  
+				
+				// pass the post data  
+				request.method = URLRequestMethod.POST;
+				
+				var variables : URLVariables = new URLVariables();  
+				variables.type = "getXML";  
+				request.data = variables;  
+				
+				// Add Handlers
+				loader.addEventListener(Event.COMPLETE, on_complete);  
+				loader.load(request);  
 				
 			}
 			
+			private function on_complete(evt : Event):void{  
+				// do your stuff here  
+//				trace (evt.target.data);
+				player.dataProvider = new XML( evt.target.data);
+			}
 		]]>
 	</mx:Script>
 	<powerpack:Player id="player"/>
