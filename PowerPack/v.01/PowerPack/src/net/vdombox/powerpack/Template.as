@@ -301,7 +301,9 @@ public class Template extends EventDispatcher
 	public function set installerFileName( value : String ) : void
 	{
 		if (!value)
-			value = DEFAULT_OUTPUT_FILE_NAME;
+		{
+			value = installerId ? installerId : DEFAULT_OUTPUT_FILE_NAME;
+		}
 		
 		if ( _xml.outputFileName != value )
 		{

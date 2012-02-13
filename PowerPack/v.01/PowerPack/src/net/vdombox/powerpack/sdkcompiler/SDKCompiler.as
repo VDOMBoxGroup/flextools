@@ -2,6 +2,7 @@ package net.vdombox.powerpack.sdkcompiler
 {
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
+	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -14,6 +15,7 @@ package net.vdombox.powerpack.sdkcompiler
 	
 	import mx.utils.StringUtil;
 	
+	import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
@@ -22,22 +24,25 @@ package net.vdombox.powerpack.sdkcompiler
 		public static const PACKAGE_TYPE_AIR	: String = "AIR";
 		public static const PACKAGE_TYPE_NATIVE	: String = "NATIVE";
 		
-		private var _packageType : String = PACKAGE_TYPE_NATIVE;
+		protected var packageTypeNative : Boolean;
 		
-		private var process : NativeProcess;
+		protected var process : NativeProcess;
 
-		private var outputInstallerFolderPath : String;
-		private var outputInstallerFileName : String;
-		private var installerApp : VDOMApplication;
+		protected var outputInstallerFolderPath : String;
+		protected var outputInstallerFileName : String;
+		protected var installerApp : VDOMApplication;
 		
-		private var sdk4_1Path : String;
+		protected var flex_sdk4_1Path : String;
+		protected var airSDKForLinuxPath : String;
 		
 		public function SDKCompiler()
 		{
 		}
 		
 		public function buildInstallerPackage(outputFolderPath : String, outputFileName : String, 
-											  app : VDOMApplication, sdkPath : String,
+											  app : VDOMApplication, 
+											  flexSdkPath : String,
+											  airSdkForLinuxPath : String,
 											  packageType : String) : void
 		{
 			var processEvent : SDKCompilerEvent;
@@ -51,122 +56,28 @@ package net.vdombox.powerpack.sdkcompiler
 			outputInstallerFolderPath = outputFolderPath;
 			outputInstallerFileName = outputFileName;
 			installerApp = app;
-			sdk4_1Path = sdkPath;
+			flex_sdk4_1Path = flexSdkPath;
+			airSDKForLinuxPath = airSdkForLinuxPath;
 			
-			this.packageType = packageType;
+			this.packageTypeNative = packageType == PACKAGE_TYPE_NATIVE;
 			
-			generateBuildingBatFiles();
+			packageInstaller();
 		}
 		
-		private function set packageType (value : String) : void
+		protected function packageInstaller() : void
 		{
-			_packageType = value;
-			
-			if (!validPackageType)
-				_packageType = PACKAGE_TYPE_NATIVE;
+			// must be overrided by subclass
 		}
 		
-		private function get validPackageType () : Boolean
+		protected function initProcess():void
 		{
-			return _packageType == PACKAGE_TYPE_AIR || _packageType == PACKAGE_TYPE_NATIVE;
-		}
-		
-		private function generateBuildingBatFiles () : void
-		{
-			var batFileGenerated : Boolean;
-			
-			batFileGenerated = generateBuildingBatFile();
-			
-			if (batFileGenerated)
-				onBatFilesGenerated();
-			
-			function generateBuildingBatFile () : Boolean
-			{
-				var batFilePath : String = packageBatFilePath;
-				var batFileContent : String = packageBatFileContent;
-				
-				var fileStream : FileStream = new FileStream();
-				var batFile : File = new File(batFilePath);
-				
-				try
-				{
-					fileStream.openAsync(batFile, FileMode.WRITE);
-					fileStream.writeUTFBytes(batFileContent);
-					fileStream.close();
-				}
-				catch (e:Error)
-				{
-					sendEvent(SDKCompilerEvent.SDK_COMPILER_ERROR, "Error when creating bat file");
-					return false;
-				}
-				
-				return true;
-			}
-		}
-		
-		private function get packageBatFilePath () : String
-		{
-			var batFilePath : String = File.applicationStorageDirectory.nativePath + "/generatePlayerPackage."+FileUtils.batFileExtension;
-			
-			return batFilePath;
-		}
-		
-		private function get packageBatFileContent() : String
-		{
-			var content : String = "";
-			
-			content += FileUtils.convertPathForCMD(sdk4_1Path + "/bin/adt.bat") + " ";
-			content += "-package -storetype pkcs12 -keystore ";
-			content += FileUtils.convertPathForCMD(sertificatePath) + " ";
-			content += "-storepass q ";
-			
-			if (_packageType == PACKAGE_TYPE_NATIVE)
-			{
-				content += "-target native -storetype pkcs12 -keystore ";
-				content += FileUtils.convertPathForCMD(sertificatePath) + " ";
-				content += "-storepass q ";
-			} 
-			else
-				content += "-target air ";
-			
-			content += FileUtils.convertPathForCMD(outputPackagePath) + " ";
-			content += FileUtils.convertPathForCMD(powerPackProjectStoragePath + "/Installer-app.xml") + " ";
-			content += "-C ";
-			content += FileUtils.convertPathForCMD(powerPackProjectPath) + " ";
-			content += "Installer.swf ";
-			content += "-C ";
-			content += FileUtils.convertPathForCMD(powerPackProjectPath) + " ";
-			content += "assets" + " ";
-			content += "-C ";
-			content += FileUtils.convertPathForCMD(powerPackProjectStoragePath) + " ";
-			content += "assets/template.xml"
-			
-			if (installerApp.stored && installerApp.fileName)
-			{
-				content += " ";
-				content += "-C ";
-				content += FileUtils.convertPathForCMD(powerPackProjectStoragePath) + " ";
-				content += installerApp.fileName; //"app.xml";
-			}
-			
-			return content;
-		}
-		
-		private function onBatFilesGenerated():void
-		{
-			initProcess();
-			
-			buildPackage();
-		}
-		
-		private function initProcess():void
-		{
+			trace ('initProcess');
 			process = new NativeProcess();
 			
 			addProcessListeners();
 		}
 		
-		private function buildPackage() : void
+		protected function buildPackage() : void
 		{
 			process.start(processStartupInfo);
 		}
@@ -187,75 +98,48 @@ package net.vdombox.powerpack.sdkcompiler
 			return startupInfo;
 		}
 		
-		private function get powerPackProjectPath () : String
+		protected function get powerPackProjectPath () : String
 		{
 			return File.applicationDirectory.nativePath;
 		}
 		
-		private function get powerPackProjectStoragePath () : String
+		protected function get powerPackProjectStoragePath () : String
 		{
 			return File.applicationStorageDirectory.nativePath;
 		}
 		
-		private function get sertificatePath () : String
+		protected function get sertificatePath () : String
 		{
-			return powerPackProjectPath + "/assets/sert.p12";
+			return new File(powerPackProjectPath).resolvePath("assets/sert.p12").nativePath;
 		}
 		
-		public function get outputPackagePath () : String
+		protected function get outputPackagePath () : String
 		{
-			var outputPath : String = outputInstallerFolderPath + "/" + outputInstallerFileName + outputPackageExtension; 
+			var outputFileName : String = outputInstallerFileName + outputPackageExtension;
 			
-			return outputPath;
+			return new File(outputInstallerFolderPath).resolvePath(outputFileName).nativePath; 
 		}
 		
-		private function get outputPackageExtension () : String
+		protected function get outputPackageExtension () : String
 		{
-			if (_packageType == PACKAGE_TYPE_AIR)
-				return ".air";
-			
-			var outputExtension	: String;
-			
-			var os : String = Capabilities.os.substr(0, 3).toUpperCase();
-			
-			switch(os)
-			{
-				case FileUtils.OS_MAC:
-				{
-					outputExtension = ".dmg";
-					break;
-				}
-				case FileUtils.OS_LINUX:
-				{
-					outputExtension = ".deb";
-					break;
-				}
-				case FileUtils.OS_WINDOWS:
-				default:
-				{
-					outputExtension = ".exe";
-					break;
-				}
-			}
-			
-			return outputExtension;
+			return ".air";
 		}
 		
-		private function get compilerArguments() : Vector.<String>
+		protected function get compilerArguments() : Vector.<String>
 		{
 			var argVector : Vector.<String>		= new Vector.<String>();
 			
-			var batFilePath : String			= FileUtils.convertPathForCMD(packageBatFilePath, true);
-			
-			argVector.push("/c");
-			argVector.push(batFilePath);
-				
 			return argVector;
 		}
 		
 		private function get errorMsg () : String
 		{
 			return process.standardError ? process.standardError.readUTFBytes(process.standardError.bytesAvailable) : "";
+		}
+		
+		private function get outputMsg () : String
+		{
+			return process.standardError ? process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable) : "";
 		}
 
 		private function onProcessIOErrorEvent(evt:Event) : void
@@ -265,7 +149,7 @@ package net.vdombox.powerpack.sdkcompiler
 
 		private function onProcessProgressEvent(evt:ProgressEvent) : void
 		{
-			trace ("[SDKCompiler] onProcessProgressEvent");
+			trace ("[SDKCompiler] onProcessProgressEvent: ");
 			if (evt.type == ProgressEvent.STANDARD_ERROR_DATA)
 			{
 				sendEvent(SDKCompilerEvent.SDK_COMPILER_ERROR, errorMsg);
@@ -283,13 +167,20 @@ package net.vdombox.powerpack.sdkcompiler
 			trace ("[SDKCompiler] onProcessExitEvent");
 			if (evt.type == NativeProcessExitEvent.EXIT)
 			{
-				var exitMessage : String = evt.exitCode == 0 ? "Building process was completed Ok." : "Building process completed with errors.";
-				sendEvent(SDKCompilerEvent.SDK_COMPILER_COMPETE, exitMessage);
-				
 				removeProcessListeners();
 				
 				process = null;
+				
+				onProcessExit(evt.exitCode);
 			}
+		}
+		
+		protected function onProcessExit (exitCode : Number):void
+		{
+			trace ("22222222");
+			var exitMessage : String = exitCode == 0 ? "Building process was completed Ok." : "Building process completed with errors.";
+			
+			sendEvent(SDKCompilerEvent.SDK_COMPILER_COMPETE, exitMessage);
 		}
 
 		private function addProcessListeners() : void
@@ -314,7 +205,7 @@ package net.vdombox.powerpack.sdkcompiler
 			process.removeEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  onProcessIOErrorEvent);
 		}
 		
-		private function sendEvent (eventType : String, msg : String) : void
+		protected function sendEvent (eventType : String, msg : String) : void
 		{
 			var processEvent : SDKCompilerEvent = new SDKCompilerEvent(eventType);
 			processEvent.message = msg;

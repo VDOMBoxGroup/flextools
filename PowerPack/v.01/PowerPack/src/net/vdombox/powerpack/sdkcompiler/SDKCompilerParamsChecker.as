@@ -7,6 +7,8 @@ package net.vdombox.powerpack.sdkcompiler
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	
+	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
 	public class SDKCompilerParamsChecker extends EventDispatcher
 	{
@@ -18,51 +20,30 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 		}
 		
-		public function isSDKPathValid(sdkFolderPath : String) : Boolean
+		public function isFlexSDK_4_1_PathValid(sdkFolderPath : String) : Boolean
 		{
 			if ( !sdkFolderPath)
 				return false;
 			
-			try
-			{
-				var sdkFolder : File = new File(sdkFolderPath);
-			}
-			catch (e:Error)
-			{
+			if (!FileUtils.filePathExists(sdkFolderPath,true))
 				return false;
-			}
 			
-			if (!sdkFolderExists(sdkFolder))
+			var sdkFolder : File = FileUtils.getFileByPath(sdkFolderPath);
+			if (!sdkFolder)
 				return false;
 			
 			var sdkDescriptionFile : File = sdkFolder.resolvePath("flex-sdk-description.xml");
 			
-			return  sdkDescriptionFileExists(sdkDescriptionFile) &&
-					sdkDescriptionFileIsValid(sdkDescriptionFile);
+			return  FileUtils.fileExists(sdkDescriptionFile, false) &&
+					flexSDK_4_1_DescriptionFileIsValid(sdkDescriptionFile);
 				
 		}
 		
-		private function sdkFolderExists(sdkFolder : File) : Boolean
+		private function flexSDK_4_1_DescriptionFileIsValid(sdkDescriptionFile : File) : Boolean
 		{
-			return sdkFolder && sdkFolder.exists && sdkFolder.isDirectory;
-		}
-		
-		private function sdkDescriptionFileExists(sdkDescriptionFile : File) : Boolean
-		{
-			if (!sdkDescriptionFile || !sdkDescriptionFile.exists)
+			if( !sdkDescriptionFile || sdkDescriptionFile.extension.toLowerCase() != "xml")
 				return false;
 			
-			if( sdkDescriptionFile.isDirectory)
-				return false;
-			
-			if( sdkDescriptionFile.extension.toLowerCase() != "xml")
-				return false;
-			
-			return true;
-		}
-		
-		private function sdkDescriptionFileIsValid(sdkDescriptionFile : File) : Boolean
-		{
 			var sdkDescriptionXML : XML;
 			
 			try 
@@ -83,10 +64,10 @@ package net.vdombox.powerpack.sdkcompiler
 			if (sdkDescriptionXML.name() != "flex-sdk-description")
 				return false;
 			
-			return sdkVersionIsValid(sdkDescriptionXML);
+			return flexSDK_4_1_VersionIsValid(sdkDescriptionXML);
 		}
 		
-		private function sdkVersionIsValid(sdkDescriptionXML : XML) : Boolean
+		private function flexSDK_4_1_VersionIsValid(sdkDescriptionXML : XML) : Boolean
 		{
 			var sdkVersion : String = sdkDescriptionXML.version[0]; 
 			
@@ -98,34 +79,16 @@ package net.vdombox.powerpack.sdkcompiler
 			if ( appPath == "")
 				return true;
 			
-			try
-			{
-				var file : File = new File(appPath);
-			}
-			catch (e:Error)
-			{
-				return false;
-			}
-			
-			return selectedApplicationExist(file) && selectedApplicationValid(file);
+			return FileUtils.filePathExists(appPath, false) && selectedApplicationValid(appPath);
 		}
 		
-		private function selectedApplicationExist( file : File):Boolean
+		private function selectedApplicationValid(appPath : String) : Boolean
 		{
-			if ( !file || !file.exists )
+			var file : File = FileUtils.getFileByPath(appPath);
+			
+			if (!file || !FileUtils.isXMLFile(file))
 				return false;
 			
-			if( file.isDirectory)
-				return false;
-			
-			if( file.extension.toLowerCase() != "xml")
-				return false;
-			
-			return true;		
-		}
-		
-		private function selectedApplicationValid(file : File):Boolean
-		{
 			var appXml : XML;
 			
 			try 
@@ -148,6 +111,23 @@ package net.vdombox.powerpack.sdkcompiler
 			}
 			
 			return true;	
+		}
+		
+		public function isAirSDK_PathValid(airSDKFolderPath : String) : Boolean
+		{
+			if ( !airSDKFolderPath)
+				return false;
+			
+			if (!FileUtils.filePathExists(airSDKFolderPath,true))
+				return false;
+			
+			var airSDKFolder : File = FileUtils.getFileByPath(airSDKFolderPath);
+			if (!airSDKFolder)
+				return false;
+			
+			var airSDKRuntimeLinuxFolder : File = airSDKFolder.resolvePath("runtimes/air/linux");
+			
+			return  FileUtils.fileExists(airSDKRuntimeLinuxFolder, true);
 		}
 		
 		

@@ -2,12 +2,14 @@
 <ModalDialog
 	xmlns="net.vdombox.powerpack.dialog.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	width="500" height="420"
+	width="500" height="{windowHeight}"
 	title="Build installer"
 	creationComplete="onShow()"
 	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
 	xmlns:customize="net.vdombox.powerpack.customize.*"
-	resizable="false">
+	resizable="false"
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off">
 	
 	<customize:TemplateDefaultLogo id="defaultLogo" />
 	
@@ -23,6 +25,7 @@
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.panel.popup.AlertPopup;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
+			import net.vdombox.powerpack.sdkcompiler.SDKCompilerCreator;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompilerEvent;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompilerParamsChecker;
 			import net.vdombox.powerpack.sdkcompiler.VDOMApplication;
@@ -56,39 +59,90 @@
 				  </application>;
 			
 			
-			private  function onShow():void
+			private function get windowHeight () : Number
 			{
-				installerFolder.text = currentTemplate ? currentTemplate.installerFolderPath : Template.DEFAULT_OUTPUT_FOLDER;
-				
-				installerFileName.text = currentTemplate ? currentTemplate.installerFileName : Template.DEFAULT_OUTPUT_FILE_NAME;
-				
-				installerApplication.text = currentTemplate ? currentTemplate.installerAppPath : Template.DEFAULT_APP_PATH;
-				
-				if(shObject.data.hasOwnProperty("sdk_4_1")) 
-					sdkFolderTextInput.text = shObject.data["sdk_4_1"] ;
-				
-				validateAppPath();
-				validateSDKPath();
+				return useLinuxSDK ? 480 : 450;
 			}
 			
-			private function get outputFolderPath () : String
+			private  function onShow():void
 			{
-				return StringUtil.trim(installerFolder.text);
+				initOutputFolderPath();
+				initInstallerFileName();
+				initAppPath();
+				initFlexSDK_4_1_Path();
+				initAirSDKLinuxPath();
+			}
+			
+			private function initOutputFolderPath():void
+			{
+				outputInstallerFolderBrowseBox.path = curTemplateOutputInstallerFolder;
+				
+				validateOutputInstallerFolderPath();
+			}
+			
+			private function initInstallerFileName():void
+			{
+				installerFileName.text = curTemplateInstallerFileName;
+				
+				validateInstallerFileName();
+			}
+
+			private function initAppPath():void
+			{
+				installerApplicationBrowseBox.path = currentTemplate ? currentTemplate.installerAppPath : Template.DEFAULT_APP_PATH;
+				
+				validateAppPath();
+			}
+			
+			private function initFlexSDK_4_1_Path():void
+			{
+				if(shObject.data.hasOwnProperty("flex_sdk_4_1")) 
+					flexSDK_4_1_BrowseBox.path = shObject.data["flex_sdk_4_1"] ;
+				
+				validateFlexSDKPath();
+			}
+			
+			private function initAirSDKLinuxPath():void
+			{
+				if(shObject.data.hasOwnProperty("air_sdk_linux")) 
+					airSDKLinuxBrowseBox.path = shObject.data["air_sdk_linux"] ;
+				
+				validateAirSDKPath();
+			}
+			
+			private function get curTemplateInstallerFileName() : String
+			{
+				if (!currentTemplate)
+					return Template.DEFAULT_OUTPUT_FILE_NAME;
+				
+				if (!currentTemplate.installerFileName)
+				{
+					if (!currentTemplate.installerId)
+						return Template.DEFAULT_OUTPUT_FILE_NAME;
+					
+					return currentTemplate.installerId;
+				}
+				
+				return currentTemplate.installerFileName;
+			}
+			
+			private function get curTemplateOutputInstallerFolder() : String
+			{
+				if (!currentTemplate)
+					return Template.DEFAULT_OUTPUT_FOLDER;
+					
+				var outputFolderPath : String = currentTemplate.installerFolderPath;
+				
+				if (!FileUtils.filePathExists(outputFolderPath, true))
+					outputFolderPath = Template.DEFAULT_OUTPUT_FOLDER;
+					
+				return currentTemplate.installerFolderPath;
+				
 			}
 			
 			private function get outputFileName () : String
 			{
 				return StringUtil.trim(installerFileName.text);
-			}
-			
-			private function get appPath () : String
-			{
-				return StringUtil.trim(installerApplication.text);
-			}
-			
-			private function get sdkPath () : String
-			{
-				return StringUtil.trim(sdkFolderTextInput.text);
 			}
 			
 			static public function show( templateXmlStructure : XML, closeHandler : Function = null ) : AirBuildProperties
@@ -142,100 +196,6 @@
 				}
 			}
 			
-			protected function btnOutputFolderClickHandler(event:MouseEvent):void
-			{
-				var file : File = new File(outputFolderPath);
-				
-				file.addEventListener(Event.SELECT, folderSelectHandler);
-				
-				file.browseForDirectory("Select output folder");
-				
-				
-				function folderSelectHandler (evt:Event) : void
-				{
-					file.removeEventListener(Event.SELECT, folderSelectHandler);
-					
-					installerFolder.text = file.nativePath; 
-				}
-			}
-			
-			private static const FILE_TYPE_XML		: String = "xmlType";
-			private static const FILE_TYPE_FOLDER	: String = "folderType";
-			
-			protected function btnBrowseApplicationClickHandler(event:MouseEvent):void
-			{
-				browseFile(FILE_TYPE_XML);
-			}
-			
-			protected function btnBrowseSDKClickHandler(event:MouseEvent):void
-			{
-				browseFile(FILE_TYPE_FOLDER);
-			}
-			
-			private function browseFile(fileType : String):void
-			{
-				var filePath : String = fileType == FILE_TYPE_XML ? appPath : sdkPath;
-				var file : File;
-				
-				try
-				{
-					file = new File(filePath);
-				}
-				catch (e:Error)
-				{
-					file = new File();
-				}
-				
-				file.addEventListener(Event.SELECT, fileSelectHandler);
-				file.addEventListener(Event.CANCEL, fileCancelHandler);
-				
-				if (fileType == FILE_TYPE_XML)
-				{
-					var fileFilter : FileFilter = new FileFilter("XML", "*.xml");
-					file.browseForOpen("Select application", [fileFilter]);
-					
-				} 
-				else if (fileType == FILE_TYPE_FOLDER)
-				{
-					file.browseForDirectory("Select sdk4.1 directory");
-				}
-				
-				function fileSelectHandler (evt:Event) : void
-				{
-					file.removeEventListener(Event.SELECT, fileSelectHandler);
-					file.removeEventListener(Event.CANCEL, fileCancelHandler);
-					
-					if (fileType == FILE_TYPE_XML)
-					{
-						appFileSelectedHandler(file.nativePath);
-						
-					} else if (fileType == FILE_TYPE_FOLDER)
-					{
-						sdkFolderSelectedHandler(file.nativePath);
-					}
-				}
-				
-				function fileCancelHandler (evt:Event) : void
-				{
-					file.removeEventListener(Event.SELECT, fileSelectHandler);
-					file.removeEventListener(Event.CANCEL, fileCancelHandler);
-				}
-			}
-
-			private function appFileSelectedHandler (filePath : String) : void
-			{
-				installerApplication.text = filePath;
-				
-				validateAppPath();
-			}
-			
-			private function sdkFolderSelectedHandler (filePath : String) : void
-			{
-				sdkFolderTextInput.text = filePath;
-				
-				validateSDKPath();
-			}
-			
 			public function get currentTemplate() : Template
 			{
 				if ( !ContextManager.templates || ContextManager.templates.length == 0 )
@@ -251,11 +211,14 @@
 				
 				currentTemplate.xmlStructure = templateStructure;
 				
-				currentTemplate.installerAppPath = appPath;
-				currentTemplate.installerFolderPath = outputFolderPath;
+				currentTemplate.installerAppPath = installerApplicationBrowseBox.path;
+				currentTemplate.installerFolderPath = outputInstallerFolderBrowseBox.path;
 				currentTemplate.installerFileName = outputFileName;
 				
-				shObject.data["sdk_4_1"] = sdkPath;
+				shObject.data["flex_sdk_4_1"] = flexSDK_4_1_BrowseBox.path;
+				
+				if (useLinuxSDK)
+					shObject.data["air_sdk_linux"] = airSDKLinuxBrowseBox.path;
 			}
 			
 			private function saveTemplate () : void
@@ -288,7 +251,7 @@
 						return;
 					}
 					
-					compilePlayer();
+					buildInstaller();
 				}
 				
 				function templateSaveErrorHandler(evt:Event) : void
@@ -299,13 +262,13 @@
 				}
 			}
 			
-			private function compilePlayer():void
+			private function buildInstaller():void
 			{
 				var installerPropertiesXmlPrepeared : Boolean = prepareInstallerPropertiesXml();
 				
 				var app : VDOMApplication = new VDOMApplication();
 				app.stored = prepareInstallerApp();
-				app.fileName = FileUtils.getFileName(appPath);
+				app.fileName = FileUtils.getFileName(installerApplicationBrowseBox.path);
 				
 				if (!installerPropertiesXmlPrepeared)
 				{
@@ -313,7 +276,7 @@
 					return;
 				}
 				
-				var sdkCompiler : SDKCompiler = new SDKCompiler();
+				var sdkCompiler : SDKCompiler = SDKCompilerCreator.create();
 				
 				if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE))
 					sdkCompiler.addEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE, sdkCompilerEventHandler); 
@@ -325,7 +288,12 @@
 				ProgressManager.source = null;
 				ProgressManager.start( ProgressManager.DIALOG_MODE, false );
 				
-				sdkCompiler.buildInstallerPackage (outputFolderPath, outputFileName, app, sdkPath, radioBtnGroupBuildType.selectedValue.toString());
+				sdkCompiler.buildInstallerPackage (outputInstallerFolderBrowseBox.path, 
+													outputFileName, 
+													app, 
+													flexSDK_4_1_BrowseBox.path,
+													airSDKLinuxBrowseBox.path,
+													radioBtnGroupBuildType.selectedValue.toString());
 				
 				function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void
 				{
@@ -343,14 +311,14 @@
 			
 			private function prepareInstallerApp() : Boolean
 			{
-				if (!appPath || !validAppPath)
+				if (!installerApplicationBrowseBox.path || !validAppPath)
 					return false;
 				
 				try
 				{
-					var sourceAppFile : File = new File(appPath);
+					var sourceAppFile : File = new File(installerApplicationBrowseBox.path);
 					
-					var targetAppFile : File = File.applicationStorageDirectory.resolvePath(FileUtils.getFileName(appPath));
+					var targetAppFile : File = File.applicationStorageDirectory.resolvePath(FileUtils.getFileName(installerApplicationBrowseBox.path));
 					
 					sourceAppFile.copyTo(targetAppFile, true);
 				}
@@ -401,48 +369,97 @@
 				saveTemplate();
 			}
 			
-			protected function installerApplication_changeHandler(event:Event):void
+			private function validateOutputInstallerFolderPath():void
 			{
-				validateAppPath();
+				outputInstallerFolderBrowseBox.errorString = validOutputInstallerFolderPath ? null : "Error";
+				
+				buildBtn.enabled = buildAvailable;
+			}
+			
+			private function get validOutputInstallerFolderPath () : Boolean
+			{
+				return FileUtils.filePathExists(outputInstallerFolderBrowseBox.path, true);
+			}
+			
+			private function validateInstallerFileName():void
+			{
+				installerFileName.errorString = validInstallerFileName ? null : "Error";
+				
+				buildBtn.enabled = buildAvailable;
+			}
+			
+			private function get validInstallerFileName () : Boolean
+			{
+				return outputFileName != "";
 			}
 			
 			private function validateAppPath():void
 			{
-				installerApplication.errorString = validAppPath ? null : "Error";
+				installerApplicationBrowseBox.errorString = validAppPath ? null : "Error";
 				
-				buildBtn.enabled = validAppPath && validSDKPath;
+				buildBtn.enabled = buildAvailable;
 			}
 			
 			private function get validAppPath () : Boolean
 			{
-				return compilerParamsChecker.isAppPathValid(appPath);
+				return compilerParamsChecker.isAppPathValid(installerApplicationBrowseBox.path);
 			}
 			
-			protected function sdkFolderTextInput_changeHandler(event:Event):void
+			private function validateFlexSDKPath():void
 			{
-				validateSDKPath();
-			}
-			
-			private function validateSDKPath():void
-			{
-				sdkFolderTextInput.errorString = validSDKPath ? null : "Error";
+				flexSDK_4_1_BrowseBox.errorString = validFlexSDKPath ? null : "Error";
 				
-				buildBtn.enabled = validAppPath && validSDKPath;
+				buildBtn.enabled = buildAvailable;
 			}
 			
-			private function get validSDKPath () : Boolean
+			private function get validFlexSDKPath () : Boolean
 			{
-				return compilerParamsChecker.isSDKPathValid(sdkPath);
+				return compilerParamsChecker.isFlexSDK_4_1_PathValid(flexSDK_4_1_BrowseBox.path);
+			}
+			
+			public function sdkLinkHandler(event:TextEvent):void {
+				// Open the link in a new browser window.
+				navigateToURL(new URLRequest(event.text), '_blank')
+			}
+			
+			private function get useLinuxSDK () : Boolean
+			{
+				var os : String = Capabilities.os.substr(0, 3).toUpperCase();
+				
+				return os == FileUtils.OS_LINUX;
+			}
+			
+			private function validateAirSDKPath():void
+			{
+				if (!useLinuxSDK)
+					return;
+				
+				airSDKLinuxBrowseBox.errorString = validAirSDKPath ? null : "Error";
+				
+				buildBtn.enabled = buildAvailable;
+			}
+			
+			private function get validAirSDKPath () : Boolean
+			{
+				if (!useLinuxSDK)
+					return true;
+					
+				return compilerParamsChecker.isAirSDK_PathValid(airSDKLinuxBrowseBox.path);
 			}
 			
 			private function get buildAvailable (): Boolean
 			{
-				return validAppPath && validSDKPath;
+				return validAppPath && 
+					validFlexSDKPath && 
+					validAirSDKPath && 
+					validOutputInstallerFolderPath &&
+					validInstallerFileName;
 			}
 			
-			public function linkHandler(event:TextEvent):void {
-				// Open the link in a new browser window.
-				navigateToURL(new URLRequest(event.text), '_blank')
+			protected function airSDKCreationCompleteHandler(event:FlexEvent):void
+			{
+				if (!useLinuxSDK)
+					airSdkGroup.height = 0;
 			}
 			
 		]]>
@@ -459,44 +476,83 @@
 			 
 		<mx:HBox width="450" horizontalGap="3">
 			<mx:Label text="Output folder: " width="110"/>
-			<mx:TextInput id="installerFolder" width="100%" editable="false" toolTip="{installerFolder.text}"/>
-			<mx:Button label="Browse" click="btnOutputFolderClickHandler(event)" width="70"/>
+			<controls:FileBrowseBox id="outputInstallerFolderBrowseBox"
+									mode="{FileBrowseBox.MODE_DIR}"
+									browseTitle="Select output folder"
+									defaultPath="{File.desktopDirectory.nativePath}"
+									change="validateOutputInstallerFolderPath()"
+									select="validateOutputInstallerFolderPath()"
+									width="100%"/>
 		</mx:HBox>
 		
 		<mx:HBox width="450" horizontalGap="3">
 			<mx:Label text="Output file name: " width="110"/>
-			<mx:TextInput id="installerFileName" width="100%" restrict="a-zA-z0-9 \-_.()" toolTip="{installerFileName.text}"/>
+			<mx:TextInput id="installerFileName" 
+						  width="100%" 
+						  restrict="a-zA-z0-9 \-_.()" 
+						  toolTip="{installerFileName.text}"
+						  change="validateInstallerFileName()"/>
 			<mx:Spacer width="70"/>
 		</mx:HBox>
 		
 		<mx:HBox width="450" horizontalGap="3">
 			<mx:Label text="Application: " width="110"/>
-			<mx:TextInput id="installerApplication" width="100%" 
-						  editable="true" 
-						  toolTip="{installerApplication.text}" 
-						  change="installerApplication_changeHandler(event)"/>
-			<mx:Button label="Browse" click="btnBrowseApplicationClickHandler(event)" width="70"/>
+			<controls:FileBrowseBox id="installerApplicationBrowseBox"
+									mode="{FileBrowseBox.MODE_OPEN}"
+									defaultPath="{File.desktopDirectory.nativePath}"
+									change="validateAppPath()"
+									select="validateAppPath()"
+									width="100%"
+									filterArray="{[new FileFilter('Application XML', '*.xml')]}"/>
 		</mx:HBox>
 		
 		<mx:HBox width="450" horizontalGap="3">
-			<mx:Label text="SDK 4.1.0: " width="110"/>
+			<mx:Label text="Flex SDK 4.1.0: " width="110"/>
 			<mx:VBox width="100%" verticalAlign="middle" horizontalAlign="center" verticalGap="0">
-				<mx:TextInput id="sdkFolderTextInput" width="100%" 
-							  editable="true" 
-							  toolTip="{sdkFolderTextInput.text}" 
-							  change="sdkFolderTextInput_changeHandler(event)"/>
-				
-				<mx:Label link="linkHandler(event)" selectable="true" color="0x0000ff">
+				<controls:FileBrowseBox id="flexSDK_4_1_BrowseBox"
+										mode="{FileBrowseBox.MODE_DIR}"
+										defaultPath="{File.desktopDirectory.nativePath}"
+										browseTitle="Select Flex SDK 4.1.0 folder"
+										change="validateFlexSDKPath()"
+										select="validateFlexSDKPath()"
+										width="100%"/>
+				<mx:Label link="sdkLinkHandler(event)" 
+						  selectable="true" 
+						  color="0x0000ff"
+						  width="100%">
 					<mx:htmlText>
 						<![CDATA[<a href='http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4/flex_sdk_4.1.0.16076A.zip'>Download Flex SDK</a>]]>
 					</mx:htmlText>
 				</mx:Label>
 			</mx:VBox>
-			<mx:Button label="Browse" click="btnBrowseSDKClickHandler(event)" width="70"/>
+		</mx:HBox>
+		
+		<mx:HBox width="450" horizontalGap="3" visible="{useLinuxSDK}"
+				 creationComplete="airSDKCreationCompleteHandler(event)"
+				 id="airSdkGroup">
+			<mx:Label text="Air SDK 2.6: " width="110"/>
+			<mx:VBox width="100%" verticalAlign="middle" horizontalAlign="center" verticalGap="0">
+				<controls:FileBrowseBox id="airSDKLinuxBrowseBox"
+										mode="{FileBrowseBox.MODE_DIR}"
+										defaultPath="{File.desktopDirectory.nativePath}"
+										browseTitle="Select AIR SDK (for Linux) folder"
+										change="validateAirSDKPath()"
+										select="validateAirSDKPath()"
+										width="100%"/>
+				<mx:Label link="sdkLinkHandler(event)" 
+						  selectable="true" 
+						  color="0x0000ff"
+						  width="100%">
+					<mx:htmlText>
+						<![CDATA[<a href='http://airdownload.adobe.com/air/lin/download/2.6/AdobeAIRSDK.tbz2'>Download Air SDK (for Linux)</a>]]>
+					</mx:htmlText>
+				</mx:Label>
+			</mx:VBox>
 		</mx:HBox>
 		
 		<mx:VBox verticalGap="10"
-				 top="10" bottom="10" left="10" right="10">
+				 top="10" bottom="10" left="10" right="10"
+				 visible="true">
 			
 			<mx:VBox verticalGap="1">
 				<mx:Label text="Export as: "/>
@@ -520,7 +576,8 @@
 		
 	</mx:VBox>
 	
-	<mx:ControlBar width="100%" height="100%" styleName="dlgFooter"/>
+	<mx:ControlBar width="100%" height="100%" styleName="dlgFooter"
+				   visible="true"/>
 	
 	
 </ModalDialog>

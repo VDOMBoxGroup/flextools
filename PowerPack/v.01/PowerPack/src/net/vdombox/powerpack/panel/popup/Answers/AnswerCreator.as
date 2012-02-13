@@ -29,7 +29,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 			{	
 				case ANSWER_TYPE_TEXT :
 				{
-					answer = new TextAnswer (data);
+					answer = new TextAnswer (data );
 					break;
 				}
 				case ANSWER_TYPE_TEXT_AREA :
