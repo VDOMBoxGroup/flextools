@@ -2,11 +2,14 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.ServerScriptsPanel;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -191,7 +194,24 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function createActionHandler( event : ServerScriptsPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_CREATE_ACTION_WINDOW, ApplicationFacade.ACTION );
+			var renameWindow : NameObjectWindow = new NameObjectWindow( "" );	
+			renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
+			renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
+			
+			WindowManager.getInstance().addWindow(renameWindow, serverScriptsPanel.skin, true);
+			
+			function applyHandler( event : PopUpWindowEvent ) : void
+			{
+				WindowManager.getInstance().removeWindow( renameWindow );
+				
+				sendNotification( ApplicationFacade.CREATE_SCRIPT_REQUEST, { name : event.name, target : ApplicationFacade.ACTION } );
+				
+			}
+			
+			function cancelHandler( event : PopUpWindowEvent ) : void
+			{
+				WindowManager.getInstance().removeWindow( renameWindow );
+			}
 		}
 
 		private function deleteActionHandler( event : ServerScriptsPanelEvent ) : void

@@ -14,7 +14,6 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.DeleteLibraryRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.GetServerActionsRequestCommand;
-	import net.vdombox.ide.modules.scripts.controller.OpenCreateActionWindowCommand;
 	import net.vdombox.ide.modules.scripts.controller.SaveScriptRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.scripts.controller.StartupCommand;
@@ -97,8 +96,6 @@ package net.vdombox.ide.modules.scripts
 		public static const ACTION : String = "action";
 		public static const LIBRARY : String = "library";
 		
-		public static const OPEN_CREATE_ACTION_WINDOW : String = "openCreateActionWindow";
-		
 		public static const CREATE_SCRIPT_REQUEST : String = "createScriptRequest";
 		public static const SAVE_SCRIPT_REQUEST : String = "saveScriptRequest";
 		
@@ -115,9 +112,6 @@ package net.vdombox.ide.modules.scripts
 		
 		public static const DELETE_LIBRARY : String = "deleteLibrary";
 		public static const LIBRARY_DELETED : String = "libraryDeleted";
-		
-		public static const OPEN_WINDOW : String = "openWidow";
-		public static const CLOSE_WINDOW : String = "closeWidow";
 		
 		public static const OPEN_ONLOAD_SCRIPT : String = "openOnloadScript";
 		
@@ -165,8 +159,6 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
 			registerCommand( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 			registerCommand( GET_SERVER_ACTIONS_REQUEST, GetServerActionsRequestCommand );
-			
-			registerCommand( OPEN_CREATE_ACTION_WINDOW, OpenCreateActionWindowCommand );
 			
 			registerCommand( CREATE_SCRIPT_REQUEST, CreateScriptRequestCommand );
 			

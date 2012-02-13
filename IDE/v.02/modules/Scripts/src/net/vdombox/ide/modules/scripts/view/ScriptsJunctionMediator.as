@@ -56,9 +56,6 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
-			interests.push( ApplicationFacade.OPEN_WINDOW );
-			interests.push( ApplicationFacade.CLOSE_WINDOW );
-
 			interests.push( TypesProxy.GET_TYPES );
 
 			interests.push( ApplicationFacade.GET_PAGES );
@@ -171,24 +168,6 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.SELECT_MODULE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.SELECT_MODULE, null, multitonKey );
-
-					junction.sendMessage( PipeNames.STDCORE, message );
-
-					break;
-				}
-
-				case ApplicationFacade.OPEN_WINDOW:
-				{
-					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, body, multitonKey );
-
-					junction.sendMessage( PipeNames.STDCORE, message );
-
-					break;
-				}
-
-				case ApplicationFacade.CLOSE_WINDOW:
-				{
-					message = new SimpleMessage( SimpleMessageHeaders.CLOSE_WINDOW, body, multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
