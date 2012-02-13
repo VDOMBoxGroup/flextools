@@ -14,11 +14,12 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 		public static const FILE_FORMAT_GIF		: String = "gif";
 		public static const FILE_FORMAT_SVG		: String = "svg";
 		
+		public static const imgFormats : Array = [FILE_FORMAT_JPG, FILE_FORMAT_JPEG, FILE_FORMAT_BMP, FILE_FORMAT_PNG, FILE_FORMAT_GIF, FILE_FORMAT_SVG];
+		
 		public static const OS_LINUX	: String = "LIN";
 		public static const OS_WINDOWS	: String = "WIN";
 		public static const OS_MAC		: String = "MAC";
-		
-		
+		 
 		/*
 		* 	isRootFolder
 		* 	@param	folderPath path to a  folder to check
@@ -177,87 +178,66 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			
 			var fileExtension	: String = file.extension;
 			
-			// if ( aaa in array)
-			switch ( fileExtension.toLowerCase() )
+			for each (var format:String in imgFormats)
 			{
-				case FILE_FORMAT_BMP:
-				case FILE_FORMAT_PNG:
-				case FILE_FORMAT_GIF:
-				case FILE_FORMAT_SVG:
-				case FILE_FORMAT_JPG:
-				case FILE_FORMAT_JPEG:
+				if (fileExtension.toLowerCase() == format.toLowerCase())
 					return true;
-					
-				default:
-					return false;
 			}
-			
 			
 			return false;
 		}
 		
 		public static function getImagesFileExtension () : String
 		{
-			// for  ( fileformat in array) 
-			
 			var strExtension : String = "";
 			
-			strExtension += "*." + FILE_FORMAT_BMP + ";";
-			strExtension += "*." + FILE_FORMAT_PNG + ";";
-			strExtension += "*." + FILE_FORMAT_GIF + ";";
-			strExtension += "*." + FILE_FORMAT_SVG + ";";
-			strExtension += "*." + FILE_FORMAT_JPG + ";";
-			strExtension += "*." + FILE_FORMAT_JPEG;
-		
+			for each (var format:String in imgFormats)
+			{
+				strExtension += "*." + format + ";";
+			}
+			
 			return strExtension;
 		}
 		
-		private static function get OS () : String
+		public static function get OS () : String
 		{
 			return Capabilities.os.substr(0, 3).toUpperCase();
 		}
 		
 		public static function get cmdFile() : File
 		{
-			// returt  (OS == OS_WINDOWS) ?   windowsCmdFile : new File("/bin/sh");
-			switch (OS) 
-			{
-				case OS_WINDOWS :
-				{
-					return windowsCmdFile;
-				}
-				case OS_LINUX:
-				{
-					return new File("/bin/sh");
-				}
-				case OS_MAC:
-				{
-					return new File("/bin/sh");
-				}
-			}
-			
-			return null;
+			return  (OS == OS_WINDOWS) ?   windowsCmdFile : new File("/bin/sh");
 		}
 		
 		public static function get batFileExtension () : String
 		{
-			// returt  (OS == OS_WINDOWS) ?   "bat" :  "sh";
-			switch (OS) 
+			return  (OS == OS_WINDOWS) ?   "bat" :  "sh";
+		}
+		
+		public static function get nativeInstallerType() : String
+		{
+			switch(OS)
 			{
-				case OS_WINDOWS :
+				case OS_WINDOWS:
 				{
-					return "bat";
+					return ".exe";
 				}
 				case OS_LINUX:
 				{
-					return "sh";
+					return ".deb";
 				}
 				case OS_MAC:
 				{
-					return "sh";
+					return ".rpm";
+				}	
+				default:
+				{
+					throw Error ("Can't determine OS");
+					break;
 				}
 			}
-			return "bat";
+			
+			return ".exe";
 		}
 		
 		private static function get windowsCmdFile() : File

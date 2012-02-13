@@ -1,12 +1,9 @@
 package net.vdombox.powerpack.lib.extendedapi.ui
 {
-import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-
 import flash.display.NativeMenuItem;
 import flash.display.Stage;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
-import flash.system.Capabilities;
 import flash.ui.Keyboard;
 
 import mx.core.Application;
@@ -15,6 +12,9 @@ import mx.events.FlexEvent;
 import mx.events.PropertyChangeEvent;
 import mx.managers.ISystemManager;
 import mx.utils.ArrayUtil;
+
+import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 //--------------------------------------
 //  Events
@@ -541,8 +541,8 @@ public class SuperNativeMenuItem extends NativeMenuItem
     	{
     		_keyEquivalentModifiersChanged = false;
 
-			var isWin:Boolean = (Capabilities.os.indexOf("Windows") >= 0);
-			var isMac:Boolean = (Capabilities.os.indexOf("Mac OS") >= 0);
+			var isWin:Boolean = FileUtils.OS == FileUtils.OS_WINDOWS;
+			var isMac:Boolean = FileUtils.OS == FileUtils.OS_MAC;
 			var arr:Array = [];
                 
     		for each(var key:uint in keyEquivalentModifiers)
@@ -659,8 +659,8 @@ public class SuperNativeMenuItem extends NativeMenuItem
     
 	private function keyDown(event:KeyboardEvent):void
 	{
-		var isWin:Boolean = (Capabilities.os.indexOf("Windows") >= 0);
-		var isMac:Boolean = (Capabilities.os.indexOf("Mac OS") >= 0);		
+		var isWin:Boolean = FileUtils.OS == FileUtils.OS_WINDOWS;
+		var isMac:Boolean = FileUtils.OS == FileUtils.OS_MAC;		
 			
 		if(
 			event.altKey == ArrayUtil.getItemIndex(Keyboard.ALTERNATE, keyEquivalentModifiers)>=0 &&
