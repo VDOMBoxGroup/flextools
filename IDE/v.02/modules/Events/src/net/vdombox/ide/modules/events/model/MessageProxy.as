@@ -28,15 +28,7 @@ package net.vdombox.ide.modules.events.model
 			messageStackProxy.push( message );
 		}
 		
-		public function checkPush( pageVO : PageVO, message : ApplicationEventsVO ) : void
-		{
-			if ( !facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) )
-				facade.registerProxy( new MessageStackProxy( pageVO ) );
-			
-			messageStackProxy = facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) as MessageStackProxy;
-			
-			messageStackProxy.push( message );
-		}
+		
 		
 		private var renderers : Array;
 		

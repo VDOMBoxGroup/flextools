@@ -125,9 +125,6 @@ package net.vdombox.ide.modules.events
 		public static const SET_SERVER_ACTIONS : String = "setServerActions";
 		public static const SERVER_ACTIONS_SETTED : String = "serverActionsSetted";
 		
-		public static const OPEN_WINDOW : String = "openWidow";
-		public static const CLOSE_WINDOW : String = "closeWidow";
-		
 		public static const CREATE_SCRIPT_REQUEST : String = "createScriptRequest";
 		
 		public static const CHECK_SAVE_IN_WORKAREA : String = "checkSaveInWorkArea";

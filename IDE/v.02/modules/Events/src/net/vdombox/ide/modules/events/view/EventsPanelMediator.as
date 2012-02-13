@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.events.view
 	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
 	
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ClientActionVO;
 	import net.vdombox.ide.common.model._vo.EventVO;
@@ -19,6 +20,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.common.view.components.windows.CreateActionWindow;
+	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.events.EventsPanelEvent;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
@@ -28,6 +30,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.EventItemRenderer;
 	import net.vdombox.ide.modules.events.view.components.EventsPanel;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -289,26 +292,24 @@ package net.vdombox.ide.modules.events.view
 		
 		private function openCreateServerActionWindow() : void
 		{
-			var createActionWindow : CreateActionWindow;
-			var createActionWindowMediator : CreateActionWindowMediator;
+			var renameWindow : NameObjectWindow = new NameObjectWindow( "" );	
+			renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
+			renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 			
-			if( !facade.hasMediator( CreateActionWindowMediator.NAME ) )
+			WindowManager.getInstance().addWindow(renameWindow, eventsPanel.skin, true);
+			
+			function applyHandler( event : PopUpWindowEvent ) : void
 			{
-				createActionWindow = new CreateActionWindow();
-				createActionWindowMediator = new CreateActionWindowMediator( createActionWindow );
-				facade.registerMediator( createActionWindowMediator );
+				WindowManager.getInstance().removeWindow( renameWindow );
+				
+				sendNotification( ApplicationFacade.CREATE_SCRIPT_REQUEST, { name : event.name, target : ApplicationFacade.ACTION } );
+				
 			}
-			else
+			
+			function cancelHandler( event : PopUpWindowEvent ) : void
 			{
-				createActionWindowMediator = facade.retrieveMediator( CreateActionWindowMediator.NAME ) as CreateActionWindowMediator;
-				createActionWindow = createActionWindowMediator.createActionWindow;
+				WindowManager.getInstance().removeWindow( renameWindow );
 			}
-			
-			createActionWindowMediator.creationTarget = ApplicationFacade.ACTION;
-			
-			var title : String = "New Server Action";
-			
-			sendNotification( ApplicationFacade.OPEN_WINDOW, { content: createActionWindow, title: title, isModal: true, resizable: false } );
 		}
 	}
 }

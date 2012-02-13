@@ -39,7 +39,7 @@ package net.vdombox.ide.modules.events.model
 				_stack.splice(_index + 1, _stack.length - 1 - _index);
 			
 			_stack.push( new UndoStackItem( message ) );
-			_index = _stack.length - 1;0
+			_index = _stack.length - 1;
 		}
 		
 		public function undo() : ApplicationEventsVO

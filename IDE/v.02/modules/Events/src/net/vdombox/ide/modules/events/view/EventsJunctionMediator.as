@@ -87,9 +87,6 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
 			interests.push( TypesProxy.GET_TYPES );
 			
-			interests.push( ApplicationFacade.OPEN_WINDOW );
-			interests.push( ApplicationFacade.CLOSE_WINDOW );
-			
 			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
 			interests.push( ApplicationFacade.SET_SERVER_ACTIONS );
 			
@@ -309,24 +306,6 @@ package net.vdombox.ide.modules.events.view
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
-					break;
-				}
-					
-				case ApplicationFacade.OPEN_WINDOW:
-				{
-					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, body, multitonKey );
-					
-					junction.sendMessage( PipeNames.STDCORE, message );
-					
-					break;
-				}
-					
-				case ApplicationFacade.CLOSE_WINDOW:
-				{
-					message = new SimpleMessage( SimpleMessageHeaders.CLOSE_WINDOW, body, multitonKey );
-					
-					junction.sendMessage( PipeNames.STDCORE, message );
 					
 					break;
 				}
