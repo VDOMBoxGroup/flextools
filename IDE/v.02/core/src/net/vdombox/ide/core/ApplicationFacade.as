@@ -9,7 +9,6 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.CloseIDECommand;
 	import net.vdombox.ide.core.controller.CloseInitialWindowCommand;
 	import net.vdombox.ide.core.controller.CloseMainWindowCommand;
-	import net.vdombox.ide.core.controller.CloseWindowCommand;
 	import net.vdombox.ide.core.controller.CreateApplicationCommand;
 	import net.vdombox.ide.core.controller.CreateFirstPageCommand;
 	import net.vdombox.ide.core.controller.EditApplicationInformationCommand;
@@ -27,7 +26,6 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.OpenInitialWindowCommand;
 	import net.vdombox.ide.core.controller.OpenMainWindowCommand;
 	import net.vdombox.ide.core.controller.OpenPageInExternalBrowserCommand;
-	import net.vdombox.ide.core.controller.OpenWindowCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.ProcessLogMessage;
 	import net.vdombox.ide.core.controller.ProcessSimpleMessageCommand;
@@ -155,8 +153,8 @@ package net.vdombox.ide.core
 		public static const CLOSE_MAIN_WINDOW : String = "closeMainWindow";
 		public static const MAIN_WINDOW_CLOSED : String = "mainWindowClosed";
 		
-		public static const OPEN_WINDOW : String = "openWindow";
-		public static const CLOSE_WINDOW : String = "closeWindow";
+		/*public static const OPEN_WINDOW : String = "openWindow";
+		public static const CLOSE_WINDOW : String = "closeWindow";*/
 		
 		public static const SHOW_LOGIN_VIEW_REQUEST : String = "showLoginViewRequest";
 		
@@ -566,10 +564,6 @@ package net.vdombox.ide.core
 			registerCommand( SERVER_ERROR, ErrorMacroCommand );
 			registerCommand( SERVER_CONNECTION_ERROR, ErrorMacroCommand );
 			registerCommand( SERVER_LOGIN_ERROR, ErrorMacroCommand );
-			
-			
-			registerCommand( OPEN_WINDOW, OpenWindowCommand );
-			registerCommand( CLOSE_WINDOW, CloseWindowCommand );
 			
 			registerCommand( OPEN_PAGE_IN_EXTERNAL_BROWSER, OpenPageInExternalBrowserCommand );
 			

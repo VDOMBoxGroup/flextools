@@ -46,18 +46,6 @@ package net.vdombox.ide.core.controller
 					sendNotification( ApplicationFacade.SAVE_MODULE_SETTINGS, message );
 					break;
 				}
-
-				case SimpleMessageHeaders.OPEN_WINDOW:
-				{
-					sendNotification( ApplicationFacade.OPEN_WINDOW, body );
-					break;
-				}
-
-				case SimpleMessageHeaders.CLOSE_WINDOW:
-				{
-					sendNotification( ApplicationFacade.CLOSE_WINDOW, body );
-					break;
-				}
 					
 				case SimpleMessageHeaders.OPEN_BROWSER:
 				{

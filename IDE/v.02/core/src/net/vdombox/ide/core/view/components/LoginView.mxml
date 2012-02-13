@@ -115,7 +115,7 @@
 				<s:Label text="{ resourceManager.getString( 'LoginForm', 'username' ) }" width="100%"
 						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
 				
-				<s:TextInput id="user" text="@{ username }" skinClass="net.vdombox.ide.core.view.skins.TextInputCornerSkin"
+				<s:TextInput id="user" text="@{ username }" skinClass="net.vdombox.ide.common.view.skins.TextInputCornerSkin"
 							 width="100%" height="31"
 							 fontSize="18" fontFamily="Arial" 
 							 keyDown="{keyDownHandler(event)}"/>
@@ -128,7 +128,7 @@
 						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
 				 
 				<s:HGroup width="100%" gap="4">
-					<s:TextInput id="pass" text="@{ password }" skinClass="net.vdombox.ide.core.view.skins.TextInputCornerSkin"
+					<s:TextInput id="pass" text="@{ password }" skinClass="net.vdombox.ide.common.view.skins.TextInputCornerSkin"
 								 width="100%" height="31" displayAsPassword="true" 
 								 fontSize="18" fontFamily="Arial" 
 								 keyDown="{keyDownHandler(event)}"/>
