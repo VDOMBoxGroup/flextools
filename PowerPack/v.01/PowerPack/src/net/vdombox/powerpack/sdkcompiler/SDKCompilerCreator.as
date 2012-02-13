@@ -1,7 +1,5 @@
 package net.vdombox.powerpack.sdkcompiler
 {
-	import flash.system.Capabilities;
-	
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
 	public class SDKCompilerCreator
@@ -10,9 +8,7 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 			var compiler : SDKCompiler;
 			
-			var os : String = Capabilities.os.substr(0, 3).toUpperCase();
-			
-			switch(os)
+			switch(FileUtils.OS)
 			{
 				case FileUtils.OS_LINUX:
 				{

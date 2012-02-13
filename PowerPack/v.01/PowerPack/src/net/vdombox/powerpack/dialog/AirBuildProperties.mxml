@@ -40,7 +40,7 @@
 			
 			private var installerTplXml : XML = 
 				 <application xmlns="http://ns.adobe.com/air/application/2.0">
-				  <version>1.2.3.7836</version> 
+				  <version>1.2.3.7860</version> 
 				 <initialWindow>
 				  <content>Installer.swf</content> 
 				  <systemChrome>none</systemChrome> 
@@ -424,9 +424,7 @@
 			
 			private function get useLinuxSDK () : Boolean
 			{
-				var os : String = Capabilities.os.substr(0, 3).toUpperCase();
-				
-				return os == FileUtils.OS_LINUX;
+				return FileUtils.OS == FileUtils.OS_LINUX;
 			}
 			
 			private function validateAirSDKPath():void

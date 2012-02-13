@@ -53,6 +53,9 @@
 			[Bindable]
 			public var message : String = "";
 			
+			[Bindable]
+			public var messageAlign : String = "";
+			
 			private static var alert	: AlertPopup;
 			
 			
@@ -61,7 +64,8 @@
 										parent:Sprite = null, 
 										closeHandler:Function = null,
 										iconClass:Class = null, 
-										defaultButtonFlag:uint = 0x4 /* OK */):AlertPopup
+										defaultButtonFlag:uint = 0x4 /* OK */,
+										msgAlign : String = "center"):AlertPopup
 			{
 				var modal:Boolean = true;
 				
@@ -91,6 +95,7 @@
 					defaultButtonFlag = defaultButtonFlag;
 				}
 				
+				alert.messageAlign = msgAlign;
 				alert.message = text;
 				alert.title = title;
 				
@@ -238,18 +243,18 @@
 		<mx:VBox width="100%"  id="msgBox"
 				 paddingTop="10" paddingLeft="15" paddingRight="15"
 				 verticalGap="10">
+			
 			<mx:Text width="100%"
 					 text="{title}"
 					 textAlign="left"
 					 selectable="false"
 					 styleName="alertTitle"/>
 			
-			<mx:Text width="100%"
-					 	text="{message}"
-					 	textAlign="center"
+			<mx:Text 	maxWidth="550" maxHeight="200"
+						htmlText="{message}"
+					 	textAlign="{messageAlign}"
 					 	selectable="false" focusEnabled="false"
-					 	styleName="alertMessage"
-						/>
+					 	styleName="alertMessage"/>
 
 		</mx:VBox>
 		

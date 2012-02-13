@@ -28,6 +28,7 @@ package net.vdombox.powerpack.updater
 	import mx.events.CloseEvent;
 	import mx.utils.StringUtil;
 	
+	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 	import net.vdombox.powerpack.managers.ProgressManager;
 	import net.vdombox.powerpack.panel.popup.AlertPopup;
@@ -41,8 +42,7 @@ package net.vdombox.powerpack.updater
 		
 		private var fileStream : FileStream = new FileStream();
 		
-		private var buildUrl : String = "";
-		private var buildFile : File = File.applicationStorageDirectory.resolvePath("BuilderInstaller.exe");
+		private var buildFile : File = File.applicationStorageDirectory.resolvePath("BuilderInstaller"+FileUtils.nativeInstallerType);
 		
 		
 		public function BuilderUpdater()
@@ -57,7 +57,6 @@ package net.vdombox.powerpack.updater
 		private function updateXmlLoaded () : void
 		{
 			var updateTitle	: String = "Update available";
-			var updateMsg	: String = "Do you want to load update?";
 			
 			try
 			{
@@ -66,13 +65,31 @@ package net.vdombox.powerpack.updater
 				if (updateRequired)
 				{
 					
-					AlertPopup.show(updateMsg, updateTitle, AlertPopup.YES|AlertPopup.NO, Sprite(Application.application), updateAlertCloseHandler);
+					AlertPopup.show(updateQuestionText, updateTitle, 
+									AlertPopup.YES|AlertPopup.NO, 
+									Sprite(Application.application), 
+									updateAlertCloseHandler,
+									null, 
+									AlertPopup.YES, 
+									"left");
 				}
 				
 			}
 			catch (e:Error)
 			{
 			}
+		}
+		
+		private function get updateQuestionText () : String
+		{
+			var question	: String = "Do you want to load update?" + "\n";
+			
+			var curVersion : String = "<b>Current version: </b>" + Utils.getApplicationVersion() + "\n";
+			var newVersion : String = "<b>Update version:  </b>" + updateVersion + "\n";
+			
+			var description : String = updateDescription.length == 0 ? "" : "<b>Changes:</b>\n" + updateDescription + "\n\n";
+				
+			return curVersion + newVersion + description + question;
 		}
 		
 		private function updateAlertCloseHandler(event : CloseEvent) : void
@@ -142,9 +159,40 @@ package net.vdombox.powerpack.updater
 			return updateXml ? updateXml.version : "";
 		}
 		
+		private function get updateDescription () : String
+		{
+			return updateXml ? updateXml.description : "";
+		}
+		
 		private function get releaseUrl () : String
 		{
-			return updateXml ? StringUtil.trim(updateXml.url) : "";
+			var url : String = "";
+			
+			switch(FileUtils.OS)
+			{
+				case FileUtils.OS_WINDOWS:
+				{
+					url = updateXml.urlWin;
+					break;
+				}
+				case FileUtils.OS_LINUX:
+				{
+					url = updateXml.urlLinux;
+					break;
+				}
+				case FileUtils.OS_MAC:
+				{
+					url = updateXml.urlMac;
+					break;
+				}	
+				default:
+				{
+					throw Error ("Can't determine OS");
+					break;
+				}
+			}
+			
+			return url;
 		}
 		
 		private function loadFile(url:String, dataFormat:String):void

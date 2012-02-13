@@ -21,11 +21,6 @@ package net.vdombox.powerpack.sdkcompiler
 				onBatFilesGenerated();
 		}
 		
-		protected override function get outputPackageExtension () : String
-		{
-			return packageTypeNative ? ".exe" : ".air";
-		}
-		
 		private function generateBuildingBatFile () : Boolean
 		{
 			var batFilePath : String = packageBatFilePath;

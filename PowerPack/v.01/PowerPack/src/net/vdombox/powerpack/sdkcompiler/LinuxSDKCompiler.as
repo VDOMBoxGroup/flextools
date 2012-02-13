@@ -2,7 +2,6 @@ package net.vdombox.powerpack.sdkcompiler
 {
 	import flash.events.NativeProcessExitEvent;
 	import flash.filesystem.File;
-	import flash.system.Capabilities;
 	
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
@@ -27,22 +26,6 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 			initProcess();
 			buildPackage();
-		}
-		
-		protected override function get outputPackageExtension () : String
-		{
-			if (!packageTypeNative)
-				return ".air";
-			
-			var outputExtension	: String;
-			var os				: String = Capabilities.os.substr(0, 3).toUpperCase();
-			
-			if (os == FileUtils.OS_MAC)
-				outputExtension =  ".dmg";
-			else
-				outputExtension = ".deb";
-			
-			return outputExtension;
 		}
 		
 		protected override function get compilerArguments() : Vector.<String>

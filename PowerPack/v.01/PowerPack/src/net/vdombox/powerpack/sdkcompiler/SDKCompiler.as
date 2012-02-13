@@ -11,7 +11,6 @@ package net.vdombox.powerpack.sdkcompiler
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
-	import flash.system.Capabilities;
 	
 	import mx.utils.StringUtil;
 	
@@ -115,14 +114,14 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		protected function get outputPackagePath () : String
 		{
-			var outputFileName : String = outputInstallerFileName + outputPackageExtension;
+			var outputFileName : String = outputInstallerFileName + outputPackageType;
 			
 			return new File(outputInstallerFolderPath).resolvePath(outputFileName).nativePath; 
 		}
 		
-		protected function get outputPackageExtension () : String
+		protected function get outputPackageType () : String
 		{
-			return ".air";
+			return packageTypeNative ? FileUtils.nativeInstallerType : ".air";
 		}
 		
 		protected function get compilerArguments() : Vector.<String>
