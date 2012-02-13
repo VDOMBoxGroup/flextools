@@ -4,17 +4,21 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.view.components.BaseVisualEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
+	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
 	public class DataTableMediator extends Mediator implements IMediator
@@ -25,6 +29,8 @@ package net.vdombox.ide.modules.dataBase.view
 		private var notRegisterBaseQueryMediator : Boolean = true;
 		
 		private var typesProxy : TypesProxy;
+		
+		private var componentName : String;
 		
 		
 		public function DataTableMediator( viewComponent : Object = null )
@@ -49,6 +55,52 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			addHandlers();
 			
+		}
+		
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.OBJECT_CREATED );
+			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
+			
+			return interests;
+		}
+		
+		override public function handleNotification( notification : INotification ) : void
+		{
+			var name : String = notification.getName();
+			var body : Object = notification.getBody();
+			
+			
+			switch ( name )
+			{					
+				case ApplicationFacade.OBJECT_CREATED:
+				{
+					if ( componentName == "" || !componentName )
+					{
+						sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
+						sendNotification( ApplicationFacade.TABLE_CREATED, { pageVO : body.pageVO } );
+					}
+					else
+					{
+						body.name = componentName;
+						
+						componentName = "";
+						
+						sendNotification( ApplicationFacade.SET_OBJECT_NAME, body );
+					}
+					break;
+				}	
+					
+				case ApplicationFacade.OBJECT_NAME_SETTED:
+				{
+					sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
+					sendNotification( ApplicationFacade.TABLE_CREATED, { pageVO : body.pageVO } );
+					
+					break;
+				}	
+			}
 		}
 		
 		private function sendCommitEditor( event : DataTablesEvents ) : void
@@ -110,13 +162,32 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function newTableHandler( event : DataTablesEvents ) : void
 		{
-			var attributes : Array = [];
 			
-			attributes.push( new AttributeVO( "left", "0" ) );
-			attributes.push( new AttributeVO( "top", "0" ) );
+			var createNewObjectWindow : NameObjectWindow = new NameObjectWindow( "" );	
+			createNewObjectWindow.title = "New Table";
+			createNewObjectWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
+			createNewObjectWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 			
+			WindowManager.getInstance().addWindow(createNewObjectWindow, dataTable, true);
 			
-			sendNotification( ApplicationFacade.CREATE_OBJECT, { pageVO: dataTable.objectVO, attributes: attributes, typeVO: typesProxy.tableType } );		
+			function applyHandler( event : PopUpWindowEvent ) : void
+			{
+				componentName = event.name;
+				
+				var attributes : Array = [];
+				
+				attributes.push( new AttributeVO( "left", "0" ) );
+				attributes.push( new AttributeVO( "top", "0" ) );
+				
+				
+				sendNotification( ApplicationFacade.CREATE_OBJECT, { pageVO: dataTable.objectVO, attributes: attributes, typeVO: typesProxy.tableType } );		
+				WindowManager.getInstance().removeWindow( createNewObjectWindow );
+			}
+			
+			function cancelHandler( event : PopUpWindowEvent ) : void
+			{
+				WindowManager.getInstance().removeWindow( createNewObjectWindow );
+			}
 		}
 		
 		private function goToBaseHandler( event : DataTablesEvents ) : void

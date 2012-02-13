@@ -97,8 +97,12 @@ package net.vdombox.ide.modules.dataBase
 		
 		
 // add Bases and Tables
+		public static const CREATE_PAGE_REQUEST : String = "createPageRequest";
+		
 		public static const CREATE_PAGE : String = "createPage";
 		public static const PAGE_CREATED : String = "pageCreate";
+		
+		public static const CREATE_OBJECT_REQUEST : String = "createObjectRequest";
 		
 		public static const CREATE_OBJECT : String = "createObject";
 		public static const OBJECT_CREATED : String = "objectCreated";

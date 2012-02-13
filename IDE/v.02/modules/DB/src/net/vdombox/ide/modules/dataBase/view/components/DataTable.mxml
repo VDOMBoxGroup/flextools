@@ -92,7 +92,7 @@
 			}
 			
 			protected function newTable_clickHandler(event:MouseEvent):void
-			{
+			{				
 				dispatchEvent( new DataTablesEvents( DataTablesEvents.NEW_TABLE ));
 			}
 			

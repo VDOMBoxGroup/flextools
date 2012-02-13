@@ -50,6 +50,7 @@
 				event.stopImmediatePropagation();
 				var stringAttributeEditWindow : StringAttributeEditWindow = new StringAttributeEditWindow();
 				stringAttributeEditWindow.value = textArea.text;
+				stringAttributeEditWindow.title = "Edit attribute";
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.APPLY, applyHandler );
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.CANCEL, cancelHandler );
 				

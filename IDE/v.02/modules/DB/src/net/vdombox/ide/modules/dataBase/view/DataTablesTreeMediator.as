@@ -6,16 +6,18 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
-	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
-	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
+	import net.vdombox.ide.modules.dataBase.events.TableElementEvent;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTablesTree;
 	import net.vdombox.ide.modules.dataBase.view.components.windows.CreateNewObjectWindow;
 	import net.vdombox.utils.WindowManager;
@@ -70,7 +72,7 @@ package net.vdombox.ide.modules.dataBase.view
 		override public function onRemove() : void
 		{
 			dataTablesTree.removeEventListener( DataTablesEvents.CHANGE, changeHandler );
-			dataTablesTree.removeEventListener( DataTablesEvents.SELECT_CONTEXT_ITEM_NEW, createNewPageOrObject );
+			dataTablesTree.removeEventListener( DataTablesEvents.NEW_BASE, createNewPageOrObject );
 			dataTablesTree.removeEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler ); 
 			
 			statesProxy = null;
@@ -117,8 +119,8 @@ package net.vdombox.ide.modules.dataBase.view
 						isActive = true;
 						sendNotification( ApplicationFacade.GET_DATA_BASES, statesProxy.selectedApplication );
 						
-						dataTablesTree.createContextMenu();
-						dataTablesTree.setNewContextSubMenu( typesProxy.types );
+						/*dataTablesTree.createContextMenu();
+						dataTablesTree.setNewContextSubMenu( typesProxy.types );*/
 						
 						break;
 					}
@@ -321,7 +323,7 @@ package net.vdombox.ide.modules.dataBase.view
 		private function addHandlers() : void
 		{
 			dataTablesTree.addEventListener( DataTablesEvents.CHANGE, changeHandler, false, 0, true );
-			dataTablesTree.addEventListener( DataTablesEvents.SELECT_CONTEXT_ITEM_NEW, createNewPageOrObject, false, 0, true );
+			dataTablesTree.addEventListener( DataTablesEvents.NEW_BASE, createNewPageOrObject, false, 0, true );
 			dataTablesTree.addEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true ); 
 		}
 		
@@ -332,62 +334,30 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function createNew( object : Object ) : void
 		{
-			if ( object is TypeVO )
+			var createNewObjectWindow : NameObjectWindow = new NameObjectWindow( "" );	
+			createNewObjectWindow.title = "New DataBase";
+			createNewObjectWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
+			createNewObjectWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
+			
+			WindowManager.getInstance().addWindow(createNewObjectWindow, dataTablesTree, true);
+			
+			function applyHandler( event : PopUpWindowEvent ) : void
 			{
-				var _typeVO : TypeVO = object as TypeVO;
+				componentName = event.name;
 				
-				var createNewObjectWindow : CreateNewObjectWindow = new CreateNewObjectWindow();
-				
-				createNewObjectWindow.title = "New " + _typeVO.displayName;
-				createNewObjectWindow.typeVO = _typeVO;
-				
-				createNewObjectWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
-				createNewObjectWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
-				
-				if ( _typeVO.container != 3 )
+				if ( !typeVO )
+					sendNotification( TypesProxy.GET_TOP_LEVEL_TYPES );
+				else if ( statesProxy.selectedApplication )
 				{
-					for each ( var dataBase : Object in _dataBases )
-					{
-						createNewObjectWindow.dataBases.addItem( dataBase );
-					}
+					sendNotification( ApplicationFacade.CREATE_PAGE_REQUEST,
+						{ applicationVO: statesProxy.selectedApplication, typeVO: typeVO, name : event.name, element : dataTablesTree } );				
 				}
-				
-				WindowManager.getInstance().addWindow(createNewObjectWindow, dataTablesTree as UIComponent, true);
-				
-				function applyHandler( event : PopUpWindowEvent ) : void
-				{
-					componentName = event.name;
-					
-					if ( _typeVO.container == 3 )
-					{
-						if ( !typeVO )
-							sendNotification( TypesProxy.GET_TOP_LEVEL_TYPES );
-						else if ( statesProxy.selectedApplication )
-						{
-							sendNotification( ApplicationFacade.CREATE_PAGE,
-								{ applicationVO: statesProxy.selectedApplication, typeVO: typeVO } );				
-						}
-					}
-					else
-					{
-						var attributes : Array = [];
-						
-						if ( !event.base || !_typeVO )
-							return;
-						
-						attributes.push( new AttributeVO( "left", "0" ) );
-						attributes.push( new AttributeVO( "top", "0" ) );
-						
-						sendNotification( ApplicationFacade.CREATE_OBJECT, { pageVO: event.base, attributes: attributes, typeVO: _typeVO } );
-					}
-					WindowManager.getInstance().removeWindow( createNewObjectWindow );
-					
-				}
-				
-				function cancelHandler( event : PopUpWindowEvent ) : void
-				{
-					WindowManager.getInstance().removeWindow( createNewObjectWindow );
-				}
+				WindowManager.getInstance().removeWindow( createNewObjectWindow );
+			}
+			
+			function cancelHandler( event : PopUpWindowEvent ) : void
+			{
+				WindowManager.getInstance().removeWindow( createNewObjectWindow );
 			}
 		}
 		

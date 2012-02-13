@@ -2,7 +2,7 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 creationComplete="creationCompleteHandler(event)" xmlns:components="net.vdombox.components.*">
+		 creationComplete="creationCompleteHandler(event)" xmlns:components="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -272,14 +272,12 @@
 			
 			private function newSubItemSelectHandler( event : Event ) : void
 			{
-				genericNewPageOrObject( event.target.data );
+				//genericNewPageOrObject( event.target.data );
 			}
 			
-			private function genericNewPageOrObject( object : Object ) : void
+			protected function newBase_clickHandler(event:MouseEvent):void
 			{
-				var newEvent : DataTablesEvents = new DataTablesEvents( DataTablesEvents.SELECT_CONTEXT_ITEM_NEW );
-				newEvent.content = object;
-				dispatchEvent( newEvent );
+				dispatchEvent( new DataTablesEvents( DataTablesEvents.NEW_BASE ) );
 			}
 			
 		]]>
@@ -293,12 +291,20 @@
 			<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
-	
+		
+		
 	<s:VGroup width="100%" height="100%">
 		<mx:Tree id="tablesTree" width="100%" height="100%" doubleClickEnabled="true"
 				 dataProvider="{ _dataBases }" labelField="@name" contentBackgroundAlpha="0"
 				 itemRenderer="net.vdombox.ide.common.view.components.itemrenderers.ObjectsTreePanelItemRenderer"/>
+		
+		<s:HGroup width="100%" height="40" verticalAlign="middle" horizontalAlign="center">
+			<button:VDOMButton id="newBase" label="New Base" click="newBase_clickHandler(event)" />
+		</s:HGroup>
 	</s:VGroup>
+	
+	
+	
 	
 	
 </s:Group>

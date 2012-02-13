@@ -8,15 +8,15 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import mx.collections.ArrayList;
 	import mx.events.CloseEvent;
 	
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
+	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 	import net.vdombox.ide.modules.dataBase.events.TableElementEvent;
-	import net.vdombox.ide.modules.dataBase.view.components.windows.RenameTableWindow;
 	import net.vdombox.ide.modules.dataBase.view.skins.TableElementSkin;
 	import net.vdombox.utils.WindowManager;
 	
@@ -237,7 +237,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 		
 		public function openRenameWindow() : void
 		{
-			var renameWindow : RenameTableWindow = new RenameTableWindow( _objectVO.name );	
+			var renameWindow : NameObjectWindow = new NameObjectWindow( _objectVO.name );	
 			renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 			

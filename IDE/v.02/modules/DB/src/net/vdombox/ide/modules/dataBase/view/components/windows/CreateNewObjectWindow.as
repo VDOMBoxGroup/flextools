@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.dataBase.view.components.windows
 	import mx.collections.ArrayCollection;
 	
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.modules.dataBase.events.PopUpWindowEvent;
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.modules.dataBase.view.skins.CreateNewObjectWindowSkin;
 	
 	import spark.components.DropDownList;
