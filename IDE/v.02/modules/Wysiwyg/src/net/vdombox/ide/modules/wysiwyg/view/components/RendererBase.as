@@ -984,8 +984,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			var objectLeft : Number     = this.mouseX - 25 + this.layout.horizontalScrollPosition;
 			var objectTop : Number      = this.mouseY - 25 + this.layout.verticalScrollPosition;
+			
+			if ( objectLeft < 0 )
+				objectLeft = 0;
+			
+			if ( objectTop < 0 )
+				objectTop = 0;
 
-			var point : Point           = new Point( objectLeft, objectTop );
+			var point : Point = new Point( objectLeft, objectTop );
 
 			rde.typeVO = typeVO;
 			rde.point = point;
@@ -1007,17 +1013,23 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( _renderVO )
 				currentItemName = _renderVO.vdomObjectVO.typeVO.name;
 
+			var vdomDragManager : VdomDragManager = VdomDragManager.getInstance();;
 			if ( aviableContainers.indexOf( currentItemName ) != -1 )
 			{
-				var vdomDragManager : VdomDragManager = VdomDragManager.getInstance();
 				vdomDragManager.acceptDragDrop( UIComponent( this ) );
 				setState = "highlighted";
+			}
+			else
+			{
+				setState = "notPackeg";
+				vdomDragManager.hitTarget( UIComponent( this ) );
 			}
 		}
 
 		private function dragExitHandler( event : DragEvent ) : void
 		{
 			setState = "normal";
+			trace("dragExit");
 		}
 
 		private function findNearestItem( currentElement : DisplayObjectContainer ) : RendererBase
@@ -1464,6 +1476,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseOutHandler( event : MouseEvent ) : void
 		{
+			trace( "Out" );
 			if ( skin.currentState == "hovered" )
 				setState = "normal";
 			else
@@ -1472,7 +1485,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseOverHandler( event : MouseEvent ) : void
 		{
-			if ( skin.currentState == "highlighted" )
+			if ( skin.currentState == "highlighted" || skin.currentState == "notPackeg" )
 				return;
 
 			invalidateDisplayList();
@@ -1642,7 +1655,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			event.stopImmediatePropagation();
 			event.preventDefault();
 
-			stage.removeEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
+			if( stage )
+				stage.removeEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
 		}
 
 

@@ -15,6 +15,7 @@
 		<s:State name="normal" />
 		<s:State name="hovered" />
 		<s:State name="highlighted" />
+		<s:State name="notPackeg" />
 		<s:State name="locked" />
 		<s:State name="disabled" />
 		<s:State name="select" />
@@ -80,9 +81,9 @@
 		<s:stroke>
 
 			<s:SolidColorStroke id="strokeLine"
-								color="gray" color.highlighted="green" color.hovered="gray" color.select="#0000FF"
+								color="gray" color.highlighted="green" color.notPackeg="red" color.hovered="gray" color.select="#0000FF"
 								weight="2" 
-								alpha="0" alpha.hovered="1" alpha.highlighted="1" alpha.select="1"/>
+								alpha="0" alpha.hovered="1" alpha.highlighted="1"  alpha.notPackeg="1" alpha.select="1"/>
 		</s:stroke>
 	</s:Rect>
 </s:SparkSkin>

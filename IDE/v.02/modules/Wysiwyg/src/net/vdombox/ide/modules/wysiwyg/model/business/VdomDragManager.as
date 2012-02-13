@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 	import mx.core.IFlexModule;
 	import mx.core.IFlexModuleFactory;
 	import mx.core.IUIComponent;
+	import mx.core.UIComponent;
 	import mx.managers.DragManager;
 	import mx.managers.ISystemManager;
 	import mx.styles.CSSStyleDeclaration;
@@ -221,7 +222,17 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		public function acceptDragDrop( target : IUIComponent ) : void
 		{
 			if ( dragProxy )
+			{
 				dragProxy.target = target;
+			}
+		}
+		
+		public function hitTarget( target : IUIComponent ) : void
+		{
+			if ( dragProxy )
+			{
+				dragProxy.dispGragExit( target );
+			}
 		}
 
 		public function endDrag() : void

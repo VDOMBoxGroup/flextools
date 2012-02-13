@@ -120,6 +120,8 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		 *  @private
 		 */
 		public var _target : IUIComponent = null;
+		
+		public var _NotPackegeTarget : IUIComponent = null;
 
 		/**
 		 *  @private
@@ -174,10 +176,27 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			if ( _target != value )
 			{
 				if( _target )
+				{
 					dispatchDragEvent( DragEvent.DRAG_EXIT, new MouseEvent( MouseEvent.MOUSE_MOVE ), _target );
-				
+				}
+
 				_target = value;
 			}
+		}
+		
+		public function dispGragExit( value : IUIComponent ) : void
+		{
+			if ( _NotPackegeTarget != null )
+			{
+				if ( _NotPackegeTarget != value )
+				{
+					dispatchDragEvent( DragEvent.DRAG_EXIT, new MouseEvent( MouseEvent.MOUSE_MOVE ), _NotPackegeTarget );
+				
+					_NotPackegeTarget = value;
+				}
+			}
+			else
+				_NotPackegeTarget = value;
 		}
 		
 		//--------------------------------------------------------------------------
@@ -229,8 +248,6 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			var dragEvent : DragEvent;
 			var dropTarget : DisplayObject;
 			var i : int;
-			
-			trace("Drag");
 
 			lastMouseEvent = event;
 
@@ -266,6 +283,13 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 				
 				targetIndex--;
 			}
+			
+			if ( newTarget && newTarget != _NotPackegeTarget )
+				if ( _NotPackegeTarget )
+				{
+					dispatchDragEvent( DragEvent.DRAG_EXIT, new MouseEvent( MouseEvent.MOUSE_MOVE ), _NotPackegeTarget );
+					_NotPackegeTarget = null;
+				}
 
 			// If we already have a target, send it a dragOver event
 			// if we're still over it.
@@ -308,10 +332,12 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 				{
 					// Dispatch a "dragExit" event on the old target.
 					dispatchDragEvent( DragEvent.DRAG_EXIT, event, oldTarget );
-
+					
 					if ( _target == oldTarget )
 						_target = null;
 				}
+				
+				
 			}
 
 			// If we don't have an existing target, go look for one.
