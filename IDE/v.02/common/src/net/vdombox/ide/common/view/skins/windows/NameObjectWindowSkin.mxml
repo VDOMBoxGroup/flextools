@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("net.vdombox.ide.common.view.components.windows.NameObjectWindow")]
+	</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.common.view.components.VDOMImage;
+			
+			import spark.events.TextOperationEvent;
+			
+			
+			protected function tableName_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				tableName.text = hostComponent.nameTable;
+				tableName.selectAll();
+				tableName.setFocus();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="disabledAndInactive" />
+		<s:State name="normalAndInactive" />
+		<s:State name="disabled" />
+		<s:State name="normal" />
+	</s:states>
+	
+	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
+		<s:fill>
+			<s:SolidColor color="#424242"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:VGroup width="100%" height="100%"
+			  top="9" bottom="9" left="9" right="9" gap="1">
+		
+		<s:VGroup width="100%" height="100%" gap="0">
+			<s:Group width="100%" height="32">
+				<s:TitleBar id="titleBar"
+							minHeight="32" width="100%"
+							skinClass="net.vdombox.ide.common.view.skins.PopupWindowTitleBarSkin"/>
+			</s:Group>	
+			
+			<s:Group  width="100%" height="100%">
+				
+				<s:Rect width="100%" height="100%">
+					<s:fill>
+						<s:SolidColor color="#353535"/>
+					</s:fill>
+				</s:Rect>
+				
+				<s:VGroup width="100%" height="100%" verticalAlign="middle" paddingLeft="12" paddingRight="12" gap="8">
+					
+					<s:Label color="#FFFFFF" text="{ resourceManager.getString( 'DataBase_General', 'create_new_object_window_Name' ) }" />
+					
+					<s:TextInput id="tableName"  width="100%" creationComplete="tableName_creationCompleteHandler(event)"
+								 skinClass="net.vdombox.ide.common.view.skins.TextInputCornerSkin"/>
+					
+				</s:VGroup>
+				
+			</s:Group>
+		</s:VGroup>
+		
+		<s:Group  width="100%" height="45">
+			
+			<s:Rect width="100%" height="100%">
+				<s:fill>
+					<s:BitmapFill source="{VDOMImage.Fon_Texture}" />
+				</s:fill>
+			</s:Rect>
+			
+			<s:HGroup width="100%" height="45" verticalAlign="middle" horizontalAlign="right"  paddingRight="10">
+				
+				<button:VDOMButton id="ok" label="{ resourceManager.getString( 'DataBase_General', 'create_new_object_window_OK' ) }" click="{hostComponent.ok_close_window()}"/>
+				
+				<button:VDOMButton id="cancel" label="{ resourceManager.getString( 'DataBase_General', 'create_new_object_window_Cancel' ) }" click="{hostComponent.no_close_window()}"/>
+				
+			</s:HGroup>
+			
+			<s:Rect  top="0" left="0" right="0" height="9">
+				<s:fill>
+					<s:BitmapFill source = "{VDOMImage.ShadowLineBlack}" smooth="true" fillMode="repeat"/>
+				</s:fill>
+			</s:Rect>
+			
+		</s:Group>
+		
+	</s:VGroup>
+</s:SparkSkin>

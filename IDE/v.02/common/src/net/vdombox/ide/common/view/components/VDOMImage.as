@@ -46,5 +46,13 @@ package net.vdombox.ide.common.view.components
 		[Embed( source = "assets/vdomimage/arr_2.png" )]
 		public static var ArrClose : Class;
 		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/shadowlineWhite.png" )]
+		public static var ShadowLineWhite : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/shadowlineBlack.png" )]
+		public static var ShadowLineBlack : Class;
+		
 	}
 }

@@ -27,8 +27,8 @@ package net.vdombox.ide.common.view.components.windows
 		{
 			super();
 			
-			//systemChrome	= NativeWindowSystemChrome.NONE;
-			//transparent 	= true;
+			systemChrome	= NativeWindowSystemChrome.NONE;
+			transparent 	= true;
 			
 			width = 400;
 			height = 550;
