@@ -15,7 +15,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 	public class RadioButtonsAnswer extends Answer
 	{
 		
-		private var radioBtnGroup : RadioButtonGroup;
+		private var radioBtnGroup : RadioButtonGroup = new RadioButtonGroup();
 		private var vBox : VBox;
 		private var textLabel : Text;
 		
@@ -29,7 +29,7 @@ package net.vdombox.powerpack.panel.popup.Answers
 		{
 			super.createChildren();
 			
-			createRadioButtonsGroup();
+			createRadioButtonsBox();
 			createRadioButtons();
 		}
 		
@@ -77,17 +77,17 @@ package net.vdombox.powerpack.panel.popup.Answers
 			selectFirstRadioButton();
 		}
 		
-		private function createRadioButtonsGroup():void
+		private function createRadioButtonsBox():void
 		{
-			radioBtnGroup = new RadioButtonGroup();
-			
 			vBox= new VBox();
+			
 			vBox.setStyle( "paddingLeft", 10  );
 			vBox.maxHeight = 200;
 			vBox.percentWidth = 100;
-
+			
 			addChild( vBox );
 		}
+
 		
 		private function selectFirstRadioButton():void
 		{
