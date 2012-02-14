@@ -67,10 +67,10 @@ public class TemplateStruct extends EventDispatcher
 	public var forced : int;
 	public var terminated : Boolean;
 
-	public function TemplateStruct( tplStruct : XML, ID : String )
+	public function TemplateStruct( tplStruct : XML)
 	{
 		tplStructXML = tplStruct;
-		this.ID = ID;
+		
 		var _graphs : Array = [];
 		var _nodes : Array = [];
 		var _arrows : Array = [];

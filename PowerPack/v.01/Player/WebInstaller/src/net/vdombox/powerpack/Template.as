@@ -144,13 +144,13 @@ public class Template extends EventDispatcher
 	/**
 	 *	Destructor
 	 */
-	public function dispose() : void
-	{
-		_xmlStructure = null;
+//	public function dispose() : void
+//	{
+//		_xmlStructure = null;
 //		_pictureFile = null;
 //		file = null;
-		_xml = null;
-	}
+//		_xml = null;
+//	}
 
 	//--------------------------------------------------------------------------
 	//
@@ -218,14 +218,14 @@ public class Template extends EventDispatcher
 
 	private var _xmlStructure : XML;
 
-	public function set xmlStructure( value : XML ) : void
-	{
-		if ( _xmlStructure != value )
-		{
-			modified = true;
-			_xmlStructure = value;
-		}
-	}
+//	public function set xmlStructure( value : XML ) : void
+//	{
+//		if ( _xmlStructure != value )
+//		{
+//			modified = true;
+//			_xmlStructure = value;
+//		}
+//	}
 
 	[Bindable]
 	public function get xmlStructure() : XML
@@ -244,17 +244,17 @@ public class Template extends EventDispatcher
 	public static const DEFAULT_APP_PATH			: String = "";
 	
 	
-	public function set installerId( value : String ) : void
-	{
-		if (!value)
-			value = DEFAULT_INSTALLER_ID;
-		
-		if ( _xml.id != value )
-		{
-			modified = true;
-			_xml.id = value;
-		}
-	}
+//	public function set installerId( value : String ) : void
+//	{
+//		if (!value)
+//			value = DEFAULT_INSTALLER_ID;
+//
+//		if ( _xml.id != value )
+//		{
+//			modified = true;
+//			_xml.id = value;
+//		}
+//	}
 	
 	[Bindable]
 	public function get installerId() : String
@@ -262,17 +262,17 @@ public class Template extends EventDispatcher
 		return Utils.getStringOrDefault( _xml.id, DEFAULT_INSTALLER_ID );
 	}
 	
-	public function set installerAppPath( value : String ) : void
-	{
-		if (!value)
-			value = DEFAULT_APP_PATH;
-		
-		if ( _xml.appPath != value )
-		{
-			modified = true;
-			_xml.appPath = value;
-		}
-	}
+//	public function set installerAppPath( value : String ) : void
+//	{
+//		if (!value)
+//			value = DEFAULT_APP_PATH;
+//
+//		if ( _xml.appPath != value )
+//		{
+//			modified = true;
+//			_xml.appPath = value;
+//		}
+//	}
 	
 	[Bindable]
 	public function get installerAppPath() : String
@@ -280,17 +280,17 @@ public class Template extends EventDispatcher
 		return Utils.getStringOrDefault( _xml.appPath, DEFAULT_APP_PATH );
 	}
 	
-	public function set installerFolderPath( value : String ) : void
-	{
-//		if (!value)
-//			value = DEFAULT_OUTPUT_FOLDER;
-//		
-		if ( _xml.outputFolder != value )
-		{
-			modified = true;
-			_xml.outputFolder = value;
-		}
-	}
+//	public function set installerFolderPath( value : String ) : void
+//	{
+////		if (!value)
+////			value = DEFAULT_OUTPUT_FOLDER;
+////
+//		if ( _xml.outputFolder != value )
+//		{
+//			modified = true;
+//			_xml.outputFolder = value;
+//		}
+//	}
 	
 	[Bindable]
 	public function get installerFolderPath() : String
@@ -299,17 +299,17 @@ public class Template extends EventDispatcher
 		return Utils.getStringOrDefault( _xml.outputFolder, "")
 	}
 	
-	public function set installerFileName( value : String ) : void
-	{
-		if (!value)
-			value = DEFAULT_OUTPUT_FILE_NAME;
-		
-		if ( _xml.outputFileName != value )
-		{
-			modified = true;
-			_xml.outputFileName = value;
-		}
-	}
+//	public function set installerFileName( value : String ) : void
+//	{
+//		if (!value)
+//			value = DEFAULT_OUTPUT_FILE_NAME;
+//
+//		if ( _xml.outputFileName != value )
+//		{
+//			modified = true;
+//			_xml.outputFileName = value;
+//		}
+//	}
 	
 	[Bindable]
 	public function get installerFileName() : String
@@ -382,18 +382,18 @@ public class Template extends EventDispatcher
 
 	private var _fullID : String;
 
-	public function get fullID() : String
-	{
-		if ( !_fullID )
-		{
-			_fullID = ID;
-
-//			if ( file && file.exists )
-//				_fullID += '_' + file.creationDate.getTime() + '_' + file.modificationDate.getTime() + '_' + file.size;
-		}
-
-		return _fullID;
-	}
+//	public function get fullID() : String
+//	{
+//		if ( !_fullID )
+//		{
+//			_fullID = ID;
+//
+////			if ( file && file.exists )
+////				_fullID += '_' + file.creationDate.getTime() + '_' + file.modificationDate.getTime() + '_' + file.size;
+//		}
+//
+//		return _fullID;
+//	}
 
 	//----------------------------------
 	//  picture
@@ -420,17 +420,17 @@ public class Template extends EventDispatcher
 	//  b64picture
 	//----------------------------------
 
-	public function set b64picture( value : String ) : void
-	{
-		if ( _xml.picture[0] != value )
-		{
-			modified = true;
-			if (value)
-				_xml.picture = value;
-			else
-				delete _xml.picture; 
-		}
-	}
+//	public function set b64picture( value : String ) : void
+//	{
+//		if ( _xml.picture[0] != value )
+//		{
+//			modified = true;
+//			if (value)
+//				_xml.picture = value;
+//			else
+//				delete _xml.picture;
+//		}
+//	}
 
 	[Bindable]
 	public function get b64picture() : String
@@ -464,11 +464,11 @@ public class Template extends EventDispatcher
 		return true;
 	}
 
-	public function save() : void
-	{
-		if ( !_completelyOpened )
-			return;
-
+//	public function save() : void
+//	{
+//		if ( !_completelyOpened )
+//			return;
+//
 //		if ( !file )
 //		{
 //			browseForSave();
@@ -514,7 +514,7 @@ public class Template extends EventDispatcher
 //			
 //			showError(e.message);
 //		}
-	}
+//	}
 
 	public function open() : void
 	{
@@ -566,8 +566,8 @@ public class Template extends EventDispatcher
 
 		decode();
 
-		if ( _xmlStructure )
-			cash();
+//		if ( _xmlStructure )
+//			cash();
 
 		if ( !isEncoded )
 			_completelyOpened = true;
@@ -640,8 +640,8 @@ public class Template extends EventDispatcher
 		}
 	}
 
-	private function setPictureFromFile() : Boolean
-	{
+//	private function setPictureFromFile() : Boolean
+//	{
 //		if ( !pictureFile || !pictureFile.exists )
 //		{
 //			return false;
@@ -654,11 +654,11 @@ public class Template extends EventDispatcher
 //		_xml.picture[0].@type = pictureFile.extension;
 //		_xml.picture[0].@name = pictureFile.name;
 //
-		return true;
-	}
+//		return true;
+//	}
 
-	private function getPictureFromCash() : void
-	{
+//	private function getPictureFromCash() : void
+//	{
 //		var picObj : Object = CashManager.getObject( fullID, 'logo' );
 //		if ( picObj )
 //		{
@@ -668,12 +668,12 @@ public class Template extends EventDispatcher
 //			_xml.picture.@name = XML( picObj.entry ).@name;
 //			_xml.picture.@type = XML( picObj.entry ).@type;
 //		}
-	}
+//	}
 
-	private function cash() : Boolean
-	{
-		if ( _xmlStructure == null )
-			return false;
+//	private function cash() : Boolean
+//	{
+//		if ( _xmlStructure == null )
+//			return false;
 
 		// cash all resources
 //		for each ( var res : XML in _xmlStructure.resources.resource )
@@ -688,7 +688,7 @@ public class Template extends EventDispatcher
 //					res );
 //		}
 
-		delete _xmlStructure.resources;
+//		delete _xmlStructure.resources;
 
 		// cash tpl picture
 //		if ( b64picture )
@@ -706,13 +706,13 @@ public class Template extends EventDispatcher
 //			//delete _xml.picture;
 //		}
 
-		cashStructure();
+//		cashStructure();
+//
+//		return true;
+//	}
 
-		return true;
-	}
-
-	private function cashStructure() : void
-	{
+//	private function cashStructure() : void
+//	{
 //		CashManager.setStringObject( fullID,
 //				XML(
 //						"<resource " +
@@ -730,10 +730,10 @@ public class Template extends EventDispatcher
 //								"name='" + name + "' " +
 //								"type='" + TYPE_APPLICATION + "' />" ),
 //				_xmlStructure.toXMLString() );
-	}
+//	}
 
-	private function fillFromCash() : void
-	{
+//	private function fillFromCash() : void
+//	{
 		// get tpl picture
 //		if ( pictureFile )
 //		{
@@ -771,7 +771,7 @@ public class Template extends EventDispatcher
 //				_xmlStructure.resources.appendChild( resXML );
 //			}
 //		}
-	}
+//	}
 
 	//--------------------------------------------------------------------------
 	//
@@ -779,8 +779,8 @@ public class Template extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------
 
-	private function fileBrowseHandler (event : Event) : void
-	{
+//	private function fileBrowseHandler (event : Event) : void
+//	{
 //		var f : File = event.target as File;
 //		
 //		f.removeEventListener( Event.SELECT, fileBrowseHandler );
@@ -832,7 +832,7 @@ public class Template extends EventDispatcher
 //				break;
 //			}
 //		}
-	}
+//	}
 	
 //	private function fileStreamOutputProgressHandler( event : OutputProgressEvent ) : void
 //	{
@@ -840,8 +840,8 @@ public class Template extends EventDispatcher
 //			fileStream.dispatchEvent( new Event( Event.COMPLETE ) );
 //	}
 
-	private function saveHandler( event : Event ) : void
-	{
+//	private function saveHandler( event : Event ) : void
+//	{
 //		fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
 //		fileStream.removeEventListener( Event.COMPLETE, saveHandler );
 //		fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
@@ -871,11 +871,11 @@ public class Template extends EventDispatcher
 //
 //			showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
 //		}
-	}
+//	}
 
-	private function openHandler( event : Event ) : void
-	{
-//		fileStream.removeEventListener( Event.COMPLETE, openHandler );
+//	private function openHandler( event : Event ) : void
+//	{
+////		fileStream.removeEventListener( Event.COMPLETE, openHandler );
 //		fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
 //
 //		try
@@ -912,11 +912,11 @@ public class Template extends EventDispatcher
 //
 //			showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
 //		}
-	}
+//	}
 
-	private function fileStreamIOErrorHandler( event : IOErrorEvent ) : void
-	{
-//		browseType = BROWSE_TYPE_NONE;
+//	private function fileStreamIOErrorHandler( event : IOErrorEvent ) : void
+//	{
+////		browseType = BROWSE_TYPE_NONE;
 //		
 //		fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
 //		
@@ -931,13 +931,13 @@ public class Template extends EventDispatcher
 //		ProgressManager.complete();
 //
 //		showError(event.text);
-	}
+//	}
 	
-	private function showError(errorText : String) : void
-	{
-		AlertPopup.show( errorText,  LanguageManager.sentences['error']);
-	}
-	
+//	private function showError(errorText : String) : void
+//	{
+//		AlertPopup.show( errorText,  LanguageManager.sentences['error']);
+//	}
+//
 
 }
 }
