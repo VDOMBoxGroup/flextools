@@ -232,7 +232,7 @@ package net.vdombox.powerpack.updater
 					break;
 				}
 					
-				case URLLoaderDataFormat.BINARY: // exe loaded
+				case URLLoaderDataFormat.BINARY: // exe/deb/rmp loaded
 				{
 					releaseLoaded();
 					break;

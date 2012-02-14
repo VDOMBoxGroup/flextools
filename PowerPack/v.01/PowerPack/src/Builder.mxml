@@ -1208,6 +1208,7 @@
 		protected function creationCompleteHandler(event:FlexEvent):void
 		{
 			addEventListener("closeWithoutSave", closeWithoutSaveHandler);
+
 			checkUpdate();
 		}
 				
