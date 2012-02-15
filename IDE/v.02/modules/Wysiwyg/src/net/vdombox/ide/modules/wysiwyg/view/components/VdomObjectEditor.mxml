@@ -16,9 +16,9 @@
 			import mx.events.StateChangeEvent;
 			import mx.utils.DisplayUtil;
 			
-			import net.vdombox.ide.common.view.components.button.WorkAreaButton;
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 			import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
+			import net.vdombox.ide.common.view.components.button.WorkAreaButton;
 			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
@@ -165,6 +165,9 @@
 			private function removeHandlers() : void
 			{
 				removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+				
+				removeEventListener( EditorEvent.UNDO, undo_fun );
+				removeEventListener( EditorEvent.REDO, redo_fun );
 
 				if ( skin )
 					skin.removeEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler );
@@ -278,6 +281,21 @@
 			{
 				skin.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler, false, 0, true );
 				skin.addEventListener( "nerrr", changeHandler ); 
+				
+				addEventListener( EditorEvent.UNDO, undo_fun, false, 0 , true );
+				addEventListener( EditorEvent.REDO, redo_fun, false, 0 , true );
+			}
+			
+			private function undo_fun( event : EditorEvent ) : void
+			{
+				if ( xmlScriptEditor && skin.currentState == "xml" || skin.currentState == "xmlDisabled")
+					xmlScriptEditor.scriptAreaComponent.undo_fun();
+			}
+			
+			private function redo_fun( event : EditorEvent ) : void
+			{
+				if ( xmlScriptEditor && skin.currentState == "xml" || skin.currentState == "xmlDisabled")
+					xmlScriptEditor.scriptAreaComponent.redo_fun();
 			}
 			
 			private function changeHandler( event : Event ) : void

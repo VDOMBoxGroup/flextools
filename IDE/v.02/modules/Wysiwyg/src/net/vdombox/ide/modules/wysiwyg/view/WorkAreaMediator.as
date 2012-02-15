@@ -297,12 +297,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function undoHandler( event : EditorEvent = null ) : void
 		{			
-			sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
+			if ( event.target.skin.currentState == "wysiwyg" || event.target.skin.currentState == "wysiwygDisabled" )
+				sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
 		}
 		
 		private function redoHandler( event : EditorEvent = null ) : void
 		{			
-			sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
+			if ( event.target.skin.currentState == "wysiwyg" || event.target.skin.currentState == "wysiwygDisabled" )
+				sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
 		}
 	}
 }
