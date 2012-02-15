@@ -33,11 +33,7 @@ global
 	fontSize              : 10;
 }
 
-TitleBar
-{
-	/*titleBarButtonBgColors : #707173, #ffffff;*/
-	backgroundAlpha : 0;
-}
+
 
 .questionAnswerRadioBtn
 {

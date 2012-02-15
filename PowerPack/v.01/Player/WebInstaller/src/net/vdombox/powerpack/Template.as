@@ -731,7 +731,6 @@ public class Template extends EventDispatcher
 //								"type='" + TYPE_APPLICATION + "' />" ),
 //				_xmlStructure.toXMLString() );
 //	}
-
 //	private function fillFromCash() : void
 //	{
 		// get tpl picture

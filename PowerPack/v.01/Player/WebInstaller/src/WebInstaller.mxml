@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" minWidth="955" minHeight="600" 
 				creationComplete="application1_creationCompleteHandler(event)" xmlns:powerpack="net.vdombox.powerpack.*"  >
+	<mx:Style source="assets/style/style.css"/>
 	<mx:Script>
 		<![CDATA[
 		import mx.events.FlexEvent;
