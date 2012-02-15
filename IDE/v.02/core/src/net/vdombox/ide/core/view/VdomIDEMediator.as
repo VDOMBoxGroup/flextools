@@ -6,7 +6,6 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.TypesProxy;
 	import net.vdombox.ide.core.view.components.InitialWindow;
-	import net.vdombox.ide.core.view.components.MainWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

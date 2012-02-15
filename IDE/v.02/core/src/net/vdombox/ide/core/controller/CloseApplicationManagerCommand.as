@@ -6,7 +6,6 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
 	import net.vdombox.ide.core.view.ApplicationPropertiesViewMediator;
 	import net.vdombox.ide.core.view.ApplicationsViewMediator;
-	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -26,7 +25,6 @@ package net.vdombox.ide.core.controller
 			if ( facade.hasProxy( GalleryProxy.NAME ) )
 				facade.removeProxy( GalleryProxy.NAME );
 			
-			var mainWindowSkin : MainWindowSkin = notification.getBody() as MainWindowSkin;
 			var windowManager : WindowManager = WindowManager.getInstance();
 
 			if ( facade.hasMediator( ApplicationManagerWindowMediator.NAME ) )

@@ -12,15 +12,21 @@ package net.vdombox.ide.core.view.components
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.display.NativeWindowSystemChrome;
+	import flash.display.Screen;
+	import flash.display.StageAlign;
+	import flash.display.StageDisplayState;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileStream;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.system.LoaderContext;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
+	import mx.core.FlexGlobals;
 	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
@@ -55,12 +61,24 @@ package net.vdombox.ide.core.view.components
 			minWidth = 800;
 			minHeight = 600;
 			
-			addEventListener( Event.CLOSING, saveAppPosition );
+			addEventListener( Event.CLOSING, saveAppPosition, false, 0, true );
 		}
+		
+		public var notCenteralize : Boolean = true;
 		
 		private function saveAppPosition(e:Event = null):void
 		{
-			var xml:XML = new XML('<position x="'+this.nativeWindow.x+'" y="'+this.nativeWindow.y+'" width="'+this.width+'" height="'+this.height+'"/>');
+			removeEventListener( Event.CLOSING, saveAppPosition );
+			
+			var xml:XML;
+			
+			var scrWidth : Number = Screen.mainScreen.visibleBounds.width;
+			var scrHeight : Number = Screen.mainScreen.visibleBounds.height;
+			
+			if ( nativeWindow.displayState == "maximized" )
+				xml = new XML('<position x="'+this.nativeWindow.x+'" y="'+this.nativeWindow.y+'" width="'+this.width+'" height="'+this.height+'" full="'+true+'"/>');
+			else
+				xml = new XML('<position x="'+this.nativeWindow.x+'" y="'+this.nativeWindow.y+'" width="'+this.width+'" height="'+this.height+'" full="'+false+'"/>');
 			
 			var f:File = File.applicationStorageDirectory.resolvePath("appPosition.xml");
 			var s:FileStream = new FileStream();
@@ -75,6 +93,46 @@ package net.vdombox.ide.core.view.components
 			{
 				s.close();
 			}
+		}
+		
+		public function gotoLastPosition():void
+		{
+			//stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+			//nativeWindow.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+			
+			var f:File = File.applicationStorageDirectory.resolvePath("appPosition.xml");   
+			if(f.exists)
+			{
+				var s:FileStream = new FileStream();
+				s.open(f,flash.filesystem.FileMode.READ);
+				var xml:XML = XML(s.readUTFBytes(s.bytesAvailable));
+				
+				nativeWindow.x = xml.@x;
+				nativeWindow.y = xml.@y;
+				
+				
+				if ( xml.@full == "true" )
+				{
+					var screen : Screen = Screen.getScreensForRectangle( nativeWindow.bounds )[ 0 ];
+					
+					if( screen )
+						move( Math.max( screen.bounds.width / 2 - width / 2, 0 ), Math.max( screen.bounds.height / 2 - height / 2, 0 ));
+					
+					maximize();
+				}
+				else
+				{
+					width = xml.@width;
+					height = xml.@height;
+				}
+				
+			}
+			
+			if ( width < 800 )
+				width = 800;
+			
+			if ( height < 600 )
+				height = 600;
 		}
 
 		[SkinPart( required = "true" )]
@@ -146,6 +204,7 @@ package net.vdombox.ide.core.view.components
 			loader = new Loader();
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, setIconLoaded );
 			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, setIconLoaded );
+			
 
 			try
 			{

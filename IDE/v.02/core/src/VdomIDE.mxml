@@ -12,13 +12,10 @@
 	
 	<fx:Script>
 		<![CDATA[
-			// -source-path=locale\{locale} -locale en_US fr_FR ru_RU -link-report=report.xml
-//			-source-path=locale\{locale} -locale en_US fr_FR ru_RU -load-externs=../../VdomIDE/bin-debug/report.xml
-//			${DOCUMENTS}\Core\src\modules\ApplicationsManagment
-			
 			import mx.containers.Accordion;
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
-
+			
 			import net.vdombox.ide.core.ApplicationFacade;
 
 			public static const NAME : String = "VdomIDE";
