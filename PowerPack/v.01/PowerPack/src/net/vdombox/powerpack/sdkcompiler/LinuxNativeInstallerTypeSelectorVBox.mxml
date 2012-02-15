@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+		 hideEffect="{hideHeightEffect}"
+		 showEffect="{showHeightEffect}"
+		 verticalGap="0"
+		 height="45"
+		 verticalScrollPolicy="off"
+		 horizontalScrollPolicy="off">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.ItemClickEvent;
+			
+			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+			
+			protected function nativeTypeChangeHandler(event:ItemClickEvent):void
+			{
+				FileUtils.LINUX_NATIVE_INSTALLER_TYPE_DEBIAN = radioBtnGroupLinuxNativeType.selectedValue;
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:RadioButtonGroup id="radioBtnGroupLinuxNativeType"
+						 itemClick="nativeTypeChangeHandler(event)"/>
+	
+	<mx:RadioButton groupName="radioBtnGroupLinuxNativeType"
+					label=".deb"
+					value="{true}"
+					selected="true"/>
+	
+	<mx:RadioButton groupName="radioBtnGroupLinuxNativeType"
+					label=".rpm"
+					value="{false}"
+					selected="false"/>
+	
+	<mx:Resize id="hideHeightEffect" duration="200" heightFrom="45" heightTo="0" />
+	<mx:Resize id="showHeightEffect" duration="200" heightFrom="0" heightTo="45" />
+</mx:VBox>

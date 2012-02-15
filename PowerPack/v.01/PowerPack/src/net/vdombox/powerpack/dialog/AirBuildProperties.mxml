@@ -9,16 +9,18 @@
 	xmlns:customize="net.vdombox.powerpack.customize.*"
 	resizable="false"
 	verticalScrollPolicy="off"
-	horizontalScrollPolicy="off">
+	horizontalScrollPolicy="off" xmlns:sdkcompiler="net.vdombox.powerpack.sdkcompiler.*">
 	
 	<customize:TemplateDefaultLogo id="defaultLogo" />
 	
 	<mx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
 			import mx.utils.StringUtil;
 			
 			import net.vdombox.powerpack.Template;
+			import net.vdombox.powerpack.lib.extendedapi.controls.LinkObject;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 			import net.vdombox.powerpack.managers.ContextManager;
 			import net.vdombox.powerpack.managers.LanguageManager;
@@ -61,7 +63,7 @@
 			
 			private function get windowHeight () : Number
 			{
-				return useLinuxSDK ? 480 : 450;
+				return useLinuxSDK ? 530 : 450;
 			}
 			
 			private  function onShow():void
@@ -460,6 +462,26 @@
 					airSdkGroup.height = 0;
 			}
 			
+			protected function radiobutton1_clickHandler(event:MouseEvent):void
+			{
+				FileUtils.LINUX_NATIVE_INSTALLER_TYPE_DEBIAN = true;
+			}
+			
+			protected function radiobutton2_clickHandler(event:MouseEvent):void
+			{
+				FileUtils.LINUX_NATIVE_INSTALLER_TYPE_DEBIAN = false;
+			}
+			
+			private function get linuxNatineTypeSelectorVisible () : Boolean
+			{
+				return useLinuxSDK && buildTypeNative.selected;
+			}
+			
+			protected function buildTypeChangeHandler(event:ItemClickEvent):void
+			{
+				linuxNatineTypeSelector.visible = linuxNatineTypeSelectorVisible;
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -514,14 +536,9 @@
 										change="validateFlexSDKPath()"
 										select="validateFlexSDKPath()"
 										width="100%"/>
-				<mx:Label link="sdkLinkHandler(event)" 
-						  selectable="true" 
-						  color="0x0000ff"
-						  width="100%">
-					<mx:htmlText>
-						<![CDATA[<a href='http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4/flex_sdk_4.1.0.16076A.zip'>Download Flex SDK</a>]]>
-					</mx:htmlText>
-				</mx:Label>
+			
+				<controls:LinkLabel href="{new LinkObject('http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4/flex_sdk_4.1.0.16076A.zip', 'Download Flex SDK')}"/>
+
 			</mx:VBox>
 		</mx:HBox>
 		
@@ -537,14 +554,9 @@
 										change="validateAirSDKPath()"
 										select="validateAirSDKPath()"
 										width="100%"/>
-				<mx:Label link="sdkLinkHandler(event)" 
-						  selectable="true" 
-						  color="0x0000ff"
-						  width="100%">
-					<mx:htmlText>
-						<![CDATA[<a href='http://airdownload.adobe.com/air/lin/download/2.6/AdobeAIRSDK.tbz2'>Download Air SDK (for Linux)</a>]]>
-					</mx:htmlText>
-				</mx:Label>
+				
+				<controls:LinkLabel href="{new LinkObject('http://airdownload.adobe.com/air/lin/download/2.6/AdobeAIRSDK.tbz2', 'Download Air SDK (for Linux)')}"/>
+				
 			</mx:VBox>
 		</mx:HBox>
 		
@@ -552,9 +564,10 @@
 				 top="10" bottom="10" left="10" right="10"
 				 visible="true">
 			
-			<mx:VBox verticalGap="1">
+			<mx:VBox id="radioBtnsBox" verticalGap="1">
 				<mx:Label text="Export as: "/>
-				<mx:RadioButtonGroup id="radioBtnGroupBuildType"/>
+				<mx:RadioButtonGroup id="radioBtnGroupBuildType"
+									 itemClick="buildTypeChangeHandler(event)"/>
 				
 				<mx:RadioButton id="buildTypeNative"
 								groupName="radioBtnGroupBuildType"
@@ -562,6 +575,10 @@
 								value="{SDKCompiler.PACKAGE_TYPE_NATIVE}"
 								selected="true"/>
 				
+				<sdkcompiler:LinuxNativeInstallerTypeSelectorVBox id="linuxNatineTypeSelector" 
+																  visible="{linuxNatineTypeSelectorVisible}"
+																  paddingLeft="20"/>	
+					
 				<mx:RadioButton id="buildTypePackage"
 								groupName="radioBtnGroupBuildType"
 								label="AIR package"

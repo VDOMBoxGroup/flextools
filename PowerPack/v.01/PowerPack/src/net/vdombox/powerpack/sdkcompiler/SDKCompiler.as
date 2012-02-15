@@ -176,7 +176,6 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		protected function onProcessExit (exitCode : Number):void
 		{
-			trace ("22222222");
 			var exitMessage : String = exitCode == 0 ? "Building process was completed Ok." : "Building process completed with errors.";
 			
 			sendEvent(SDKCompilerEvent.SDK_COMPILER_COMPETE, exitMessage);

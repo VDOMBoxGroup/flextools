@@ -84,7 +84,6 @@ package net.vdombox.powerpack.sdkcompiler
 			trace ("compilerNativeArguments");
 			var argVector : Vector.<String>		= new Vector.<String>();
 			
-			// ------ LINUX---- --- Installer.deb ----------
 			argVector.push(new File(airSDKForLinuxPath).resolvePath("bin/adt").nativePath);
 			argVector.push("-package");
 			argVector.push("-target");

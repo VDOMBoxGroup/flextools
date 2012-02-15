@@ -6,6 +6,7 @@
 		<![CDATA[
 			import mx.containers.Canvas;
 			import mx.controls.Alert;
+			import mx.controls.HRule;
 			import mx.controls.Image;
 			import mx.controls.Text;
 			import mx.core.Application;
@@ -25,6 +26,8 @@
 			import net.vdombox.powerpack.control.BrowseButton;
 			import net.vdombox.powerpack.control.RoundButton;
 			import net.vdombox.powerpack.customize.skins.PopupBackgroundSkin;
+			import net.vdombox.powerpack.lib.extendedapi.controls.LinkLabel;
+			import net.vdombox.powerpack.lib.extendedapi.controls.LinkObject;
 			
 			public static var yesLabel : String = "Yes";
 			public static var noLabel : String = "No";
@@ -56,16 +59,19 @@
 			[Bindable]
 			public var messageAlign : String = "";
 			
+			public var messageLinks : Array;
+			
 			private static var alert	: AlertPopup;
 			
 			
 			public static function show(text:String = "", title:String = "",
-										flags:uint = 0x4 /* OK */, 
+										flags:uint = OK, 
 										parent:Sprite = null, 
 										closeHandler:Function = null,
 										iconClass:Class = null, 
-										defaultButtonFlag:uint = 0x4 /* OK */,
-										msgAlign : String = "center"):AlertPopup
+										defaultButtonFlag:uint = OK,
+										msgAlign : String = "center",
+										msgLinks : Array = null) : AlertPopup
 			{
 				var modal:Boolean = true;
 				
@@ -98,6 +104,7 @@
 				alert.messageAlign = msgAlign;
 				alert.message = text;
 				alert.title = title;
+				alert.messageLinks = msgLinks;
 				
 				if (closeHandler != null)
 					alert.addEventListener(CloseEvent.CLOSE, closeHandler);
@@ -168,6 +175,44 @@
 				{
 					RoundButton(defaultButton).setFocus();
 				}
+				
+			}
+			
+			protected override function childrenCreated():void
+			{
+				super.childrenCreated();
+				
+				createMessageLinks();
+			}
+			
+			private function createMessageLinks():void
+			{
+				if (!messageLinks || messageLinks.length == 0)
+					return;
+				
+				linkBox.addChild(horisontalLine);
+				
+				for each(var link : LinkObject in messageLinks)
+				{
+					var linkLabel : LinkLabel = new LinkLabel();
+					linkLabel.setStyle("color", 0xffffff);
+					
+					linkLabel.href = link;
+					
+					linkBox.addChild(linkLabel);
+				}
+			}
+			
+			private function get horisontalLine () : HRule
+			{
+				var hRuler : HRule = new HRule();
+				
+				hRuler.percentWidth = 100;
+				hRuler.height = 1;
+				
+				hRuler.setStyle("strokeColor", 0x555555);
+				
+				return hRuler;
 			}
 			
 			private function createButton(label:String, name:String) : RoundButton
@@ -255,7 +300,10 @@
 					 	textAlign="{messageAlign}"
 					 	selectable="false" focusEnabled="false"
 					 	styleName="alertMessage"/>
-
+			
+			<mx:VBox id="linkBox" 
+					 paddingLeft="5" paddingRight="5"
+					 verticalGap="2"/>
 		</mx:VBox>
 		
 		<popup:PopupBottomPart id="bottomPart" height="60" width="100%">

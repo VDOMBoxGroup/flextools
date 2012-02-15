@@ -28,6 +28,7 @@ package net.vdombox.powerpack.updater
 	import mx.events.CloseEvent;
 	import mx.utils.StringUtil;
 	
+	import net.vdombox.powerpack.lib.extendedapi.controls.LinkObject;
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 	import net.vdombox.powerpack.managers.ProgressManager;
@@ -56,23 +57,12 @@ package net.vdombox.powerpack.updater
 		
 		private function updateXmlLoaded () : void
 		{
-			var updateTitle	: String = "Update available";
-			
 			try
 			{
 				updateXml = new XML(urlLoader.data);
 				
 				if (updateRequired)
-				{
-					
-					AlertPopup.show(updateQuestionText, updateTitle, 
-									AlertPopup.YES|AlertPopup.NO, 
-									Sprite(Application.application), 
-									updateAlertCloseHandler,
-									null, 
-									AlertPopup.YES, 
-									"left");
-				}
+					showUpdateAvailableAlert();
 				
 			}
 			catch (e:Error)
@@ -80,19 +70,136 @@ package net.vdombox.powerpack.updater
 			}
 		}
 		
+		private function showUpdateAvailableAlert () : void
+		{
+			var updateTitle	: String = "Update available";
+			
+			AlertPopup.show(updateQuestionText, updateTitle, 
+								updateAvailableAlertBtns, 
+								Sprite(Application.application), 
+								updateAvailableAlertCloseHandler,
+								null, 
+								AlertPopup.YES, 
+								"left",
+								updateLinks);
+			
+		}
+		
+		private function get updateAvailableAlertBtns() : int
+		{
+			return FileUtils.OS == FileUtils.OS_WINDOWS ? AlertPopup.YES|AlertPopup.NO : AlertPopup.OK;
+		}
+		
 		private function get updateQuestionText () : String
 		{
-			var question	: String = "Do you want to load update?" + "\n";
-			
 			var curVersion : String = "<b>Current version: </b>" + Utils.getApplicationVersion() + "\n";
 			var newVersion : String = "<b>Update version:  </b>" + updateVersion + "\n";
 			
 			var description : String = updateDescription.length == 0 ? "" : "<b>Changes:</b>\n" + updateDescription + "\n\n";
 				
-			return curVersion + newVersion + description + question;
+			return curVersion + newVersion + description + updateQuestion;
 		}
 		
-		private function updateAlertCloseHandler(event : CloseEvent) : void
+		private function get updateQuestion() : String
+		{
+			if (FileUtils.OS == FileUtils.OS_LINUX)
+			{
+				return "\n";
+			}
+			
+			return "Do you want to load update?" + "\n";
+		}
+		
+		private function get updateLinks () : Array
+		{
+			switch(FileUtils.OS)
+			{
+				case FileUtils.OS_LINUX:
+				{
+					return linuxUpdateLinks;
+				}
+				case FileUtils.OS_MAC:
+				{
+					return macUpdateLinks;
+				}
+				case FileUtils.OS_WINDOWS:
+				{
+					return null;
+				}
+				default:
+				{
+					return null;
+				}
+					
+			}
+			
+		}
+		
+		private function get linuxUpdateLinks () : Array
+		{
+			if (FileUtils.OS != FileUtils.OS_LINUX)
+				return null;
+			
+			return [debLinkObject, rpmLinkObject];
+		}
+		
+		private function get debLinkObject () : LinkObject
+		{
+			var linkObj : LinkObject = new LinkObject();
+			
+			linkObj.href = releaseDebUrl;
+			linkObj.title = releaseDebUrl;
+			
+			return linkObj;
+		}
+		
+		private function get rpmLinkObject () : LinkObject
+		{
+			var linkObj : LinkObject = new LinkObject();
+			
+			linkObj.href = releaseRpmUrl;
+			linkObj.title = releaseRpmUrl;
+			
+			return linkObj;
+		}
+		
+		private function get windowsUpdateLinks () : Array
+		{
+			if (FileUtils.OS != FileUtils.OS_WINDOWS)
+				return null;
+			
+			return [exeLinkObject];
+		}
+		
+		private function get exeLinkObject () : LinkObject
+		{
+			var linkObj : LinkObject = new LinkObject();
+			
+			linkObj.href = releaseExeUrl;
+			linkObj.title = releaseExeUrl;
+			
+			return linkObj;
+		}
+		
+		private function get macUpdateLinks () : Array
+		{
+			if (FileUtils.OS != FileUtils.OS_MAC)
+				return null;
+			
+			return [dmgLinkObject];
+		}
+		
+		private function get dmgLinkObject () : LinkObject
+		{
+			var linkObj : LinkObject = new LinkObject();
+			
+			linkObj.href = releaseDmgUrl;
+			linkObj.title = releaseDmgUrl;
+			
+			return linkObj;
+		}
+		
+		private function updateAvailableAlertCloseHandler(event : CloseEvent) : void
 		{
 			if ( event.detail == AlertPopup.YES )
 			{
@@ -100,11 +207,6 @@ package net.vdombox.powerpack.updater
 				ProgressManager.show(ProgressManager.WINDOW_MODE, true);
 				
 				loadFile(releaseUrl, URLLoaderDataFormat.BINARY);
-				return;
-			}
-			
-			if (event.detail == AlertPopup.NO)
-			{
 				return;
 			}
 		}
@@ -164,35 +266,48 @@ package net.vdombox.powerpack.updater
 			return updateXml ? updateXml.description : "";
 		}
 		
+		private function get releaseExeUrl () : String
+		{
+			return updateXml.urlExe;
+		}
+		
+		private function get releaseDmgUrl () : String
+		{
+			return updateXml.urlDmg;
+		}
+		
+		private function get releaseDebUrl () : String
+		{
+			return updateXml.urlDeb;
+		}
+		
+		private function get releaseRpmUrl () : String
+		{
+			return updateXml.urlRpm;
+		}
+		
 		private function get releaseUrl () : String
 		{
-			var url : String = "";
-			
 			switch(FileUtils.OS)
 			{
-				case FileUtils.OS_WINDOWS:
-				{
-					url = updateXml.urlWin;
-					break;
-				}
 				case FileUtils.OS_LINUX:
 				{
-					url = updateXml.urlLinux;
-					break;
+					return releaseDebUrl || releaseRpmUrl;
 				}
 				case FileUtils.OS_MAC:
 				{
-					url = updateXml.urlMac;
-					break;
-				}	
+					return releaseDmgUrl;
+				}
+				case FileUtils.OS_WINDOWS:
+				{
+					return releaseExeUrl;
+				}
 				default:
 				{
-					throw Error ("Can't determine OS");
-					break;
+					return ""
 				}
+				
 			}
-			
-			return url;
 		}
 		
 		private function loadFile(url:String, dataFormat:String):void
