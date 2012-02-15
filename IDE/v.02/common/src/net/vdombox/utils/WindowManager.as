@@ -192,7 +192,9 @@ package net.vdombox.utils
 				return;
 			
 			fitToContent( window, windowData.content );
-			moveToCenter( window );
+			
+			if ( !window.hasOwnProperty( "notCenteralize" ) )
+				moveToCenter( window );
 			
 			var handlers : Array = 
 				[
@@ -305,7 +307,7 @@ package net.vdombox.utils
 		{
 			var screen : Screen = Screen.getScreensForRectangle( window.nativeWindow.bounds )[ 0 ];
 
-			if( screen && window )
+			if( screen && window && window )
 				window.move( Math.max( screen.bounds.width / 2 - window.width / 2, 0 ), Math.max( screen.bounds.height / 2 - window.height / 2, 0 ));
 		}
 
