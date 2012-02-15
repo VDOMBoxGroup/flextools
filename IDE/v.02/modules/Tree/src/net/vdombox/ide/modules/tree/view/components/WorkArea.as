@@ -700,8 +700,6 @@ package net.vdombox.ide.modules.tree.view.components
 		private function saveButton_clickHandler( event : MouseEvent ) : void
 		{
 			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.SAVE ) );
-			
-			skin.currentState = "normal";
 		}
 
 		private function undoButton_clickHandler( event : MouseEvent ) : void

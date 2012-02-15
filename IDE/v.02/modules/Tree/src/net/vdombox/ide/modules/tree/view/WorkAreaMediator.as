@@ -1,9 +1,13 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import flash.display.DisplayObjectContainer;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.ui.Keyboard;
 	
 	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.LinkageEvent;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
@@ -198,6 +202,13 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 					
+				case ApplicationFacade.APPLICATION_STRUCTURE_SETTED:
+				{
+					workArea.skin.currentState = "normal"; //TODO: добавить public свойство для изменения внутреннего state;
+					
+					break;
+				}	
+					
 //				case ApplicationFacade.CREATE_LINKAGE_REQUEST:
 //				{
 //					shadowLinkage = new Linkage();
@@ -247,6 +258,8 @@ package net.vdombox.ide.modules.tree.view
 			workArea.addEventListener( WorkAreaEvent.HIDE_SIGNATURE, hideSignatureHandler, false, 0, true );
 			
 			workArea.addEventListener( WorkAreaEvent.SET_START, makeStartPageHandler, false, 0, true );
+			
+			workArea.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -267,6 +280,8 @@ package net.vdombox.ide.modules.tree.view
 
 			workArea.removeEventListener( WorkAreaEvent.SHOW_SIGNATURE, showSignatureHandler );
 			workArea.removeEventListener( WorkAreaEvent.HIDE_SIGNATURE, hideSignatureHandler );
+			
+			workArea.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true );
 		}
 
 		private function clearData() : void
@@ -333,6 +348,29 @@ package net.vdombox.ide.modules.tree.view
 		private function makeStartPageHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( ApplicationFacade.SET_APPLICATION_INFORMATION, { applicationVO : statesProxy.selectedApplication, pageID : statesProxy.selectedPage.id } );
+		}
+		
+		private function keyDownHandler( event : KeyboardEvent ) : void
+		{
+			if( event.keyCode == Keyboard.F5 )
+			{
+				if ( workArea.skin.currentState == "unsaved" )
+				{
+					Alert.setPatametrs( "Ok" );
+					Alert.Show( "First press to Save!!", AlertButton.OK, workArea.parentApplication, null );
+				}
+				else
+				{
+					facade.sendNotification( ApplicationFacade.GET_PAGES, { applicationVO: statesProxy.selectedApplication} );
+					facade.sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, { applicationVO: statesProxy.selectedApplication} );
+				}
+			}
+			
+			if( !event.ctrlKey )
+				return;
+			
+			if ( event.keyCode == Keyboard.S )
+				saveHandler();
 		}
 	}
 }

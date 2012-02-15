@@ -3,7 +3,10 @@
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 creationComplete="creationCompleteHandler()" xmlns:button="net.vdombox.ide.common.view.components.button.*" xmlns:components1="net.vdombox.ide.common.view.components.*">
+			 xmlns:button="net.vdombox.ide.common.view.components.button.*" 
+			 xmlns:components1="net.vdombox.ide.common.view.components.*"
+			 creationComplete="creationCompleteHandler()" 
+			 remove="sparkskin1_removeHandler(event)">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -30,6 +33,13 @@
 
 				BindingUtils.bindSetter( allExpandedChanged, hostComponent, "isAllExpanded", true );
 				BindingUtils.bindSetter( allExpandedChanged, hostComponent, "isAllCollapsed", true );
+				
+				addEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true, 0 , true );
+			}
+			
+			private function setFocusOnWorkArea( event : MouseEvent ) : void
+			{
+				setFocus();
 			}
 
 			private function allExpandedChanged( value : Boolean ) : void
@@ -70,7 +80,6 @@
 			
 			protected function scroller_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
 				scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
 				scroller.horizontalScrollBar.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
 				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
@@ -78,7 +87,12 @@
 			
 			private function mouseWheelHandler( event : MouseEvent ) : void
 			{
-				event.delta = event.delta > 0 ? 20 : -20;
+				event.delta = event.delta > 0 ? 30 : -30;
+			}
+			
+			protected function sparkskin1_removeHandler(event:FlexEvent):void
+			{
+				removeEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true );
 			}
 			
 		]]>
