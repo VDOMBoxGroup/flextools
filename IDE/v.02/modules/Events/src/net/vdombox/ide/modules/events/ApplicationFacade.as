@@ -57,19 +57,6 @@ package net.vdombox.ide.modules.events
 //		tear down
 		public static const TEAR_DOWN : String = "tearDown";
 
-//		settings
-		/*public static const INITIALIZE_SETTINGS : String = "initializeSettings";
-
-		public static const GET_SETTINGS : String = "getSettings";
-		public static const SET_SETTINGS : String = "setSettings";
-
-		public static const SETTINGS_GETTED  : String = "settingsGetted";
-		public static const SETTINGS_CHANGED : String = "settingsChanged";
-
-		public static const RETRIEVE_SETTINGS_FROM_STORAGE 	: String = "retrieveSettingsFromStorage";
-		public static const SAVE_SETTINGS_TO_STORAGE 		: String = "saveSettingsToStorage";
-		public static const SAVE_SETTINGS_TO_PROXY 			: String = "saveSettingsToProxy";*/
-
 //		pipe messages
 		public static const PROCESS_RESOURCES_PROXY_MESSAGE 	: String = "processResourcesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE	: String = "processApplicationProxyMessage";

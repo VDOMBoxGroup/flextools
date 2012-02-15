@@ -50,7 +50,7 @@
 			
 			private function mouseWheelHandler( event : MouseEvent ) : void
 			{
-				event.delta = event.delta > 0 ? 20 : -20;
+				event.delta = event.delta > 0 ? 30 : -30;
 			}
 			
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
@@ -65,7 +65,7 @@
 			
 			protected function sparkskin1_removeHandler(event:FlexEvent):void
 			{
-				removeEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea,true );
+				removeEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true );
 			}
 			
 		]]>

@@ -10,6 +10,8 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
@@ -250,7 +252,6 @@ package net.vdombox.ide.modules.events.view
 			workArea.addEventListener( WorkAreaEvent.SET_MESSAGE, setMessageHandler, false, 0, true );
 			workArea.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
 			workArea.addEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged, true, 0, true );
-			NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_DOWN, shiftClickHandler );
 		}
 
 		private function removeHandlers() : void
@@ -262,7 +263,6 @@ package net.vdombox.ide.modules.events.view
 			workArea.removeEventListener( WorkAreaEvent.SET_MESSAGE, setMessageHandler );
 			workArea.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true );
 			workArea.removeEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged );
-			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, shiftClickHandler );
 		}
 		
 		private function set showElementsView ( value : String ) : void
@@ -275,28 +275,6 @@ package net.vdombox.ide.modules.events.view
 				workArea._showElementsView.toolTip = "ctrl + 2";
 			else if ( value == "Active" )
 				workArea._showElementsView.toolTip = "ctrl + 3";
-		}
-		
-		private function shiftClickHandler( event : KeyboardEvent ) : void
-		{
-			if ( !event.ctrlKey )
-				return;
-				
-			if ( event.keyCode == Keyboard.NUMBER_1 )
-			{
-				showElementsView = "Full View";
-				setVisibleElementsForAllObjects();
-			} 
-			else if ( event.keyCode == Keyboard.NUMBER_2 )
-			{
-				showElementsView = "Active + Embedded";
-				sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
-			}
-			else if ( event.keyCode == Keyboard.NUMBER_3 )
-			{
-				showElementsView = "Active";
-				setVisibleElementsForCurrentObject();
-			}
 		}
 		
 		private function setVisibleElementsForCurrentObject() : void
@@ -381,8 +359,19 @@ package net.vdombox.ide.modules.events.view
 		
 		private function keyDownHandler( event : KeyboardEvent ) : void
 		{
-			if ( !isActive )
-				return;
+			if ( event.keyCode == Keyboard.F5 )
+			{
+				if ( workArea.skin.currentState == "unsaved" )
+				{
+					Alert.setPatametrs( "Ok" );
+					Alert.Show( "First press to Save!!", AlertButton.OK, workArea.parentApplication, null );
+				}
+				else
+				{
+					sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
+						{ applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
+				}
+			}
 			
 			if( !event.ctrlKey )
 				return;
@@ -393,6 +382,21 @@ package net.vdombox.ide.modules.events.view
 				sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
 			else if ( event.keyCode == Keyboard.S )
 				saveHandler();
+			else if ( event.keyCode == Keyboard.NUMBER_1 )
+			{
+				showElementsView = "Full View";
+				setVisibleElementsForAllObjects();
+			} 
+			else if ( event.keyCode == Keyboard.NUMBER_2 )
+			{
+				showElementsView = "Active + Embedded";
+				sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
+			}
+			else if ( event.keyCode == Keyboard.NUMBER_3 )
+			{
+				showElementsView = "Active";
+				setVisibleElementsForCurrentObject();
+			}
 			
 			event.stopImmediatePropagation();
 		}

@@ -16,12 +16,12 @@ package net.vdombox.ide.modules.events.view.components
 		
 		public function undo() : ApplicationEventsVO
 		{
-			return _undoMessage;
+			return _undoMessage.copy();
 		}
 		
 		public function redo() : ApplicationEventsVO
 		{
-			return _message;
+			return _message.copy();
 		}
 	}
 }
