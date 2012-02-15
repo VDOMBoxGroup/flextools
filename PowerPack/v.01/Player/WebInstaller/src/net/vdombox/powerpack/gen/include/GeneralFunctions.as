@@ -41,7 +41,7 @@ import net.vdombox.powerpack.managers.LanguageManager;
 import net.vdombox.powerpack.panel.popup.PopupBox;
 import net.vdombox.powerpack.panel.popup.Question;
 
-import vdom.connection.SOAPBaseLevel;
+import net.vdombox.powerpack.connection.SOAPBaseLevel;
 
 public function sub( graph : String, ...args ) : *
 {
