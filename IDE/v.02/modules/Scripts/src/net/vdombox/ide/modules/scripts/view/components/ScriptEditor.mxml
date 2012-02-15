@@ -147,6 +147,16 @@
 										   label="{ resourceManager.getString( 'Scripts_General', 'save' ) }" click="scriptEditor_saveHandler( event )"
 										   highlighted="false" highlighted.unsaved="true"/>
 				
+				<button:WorkAreaButton id="undoButton"
+									   height="25" icon="{VDOMImage.Undo}"
+									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_undo' ) }"
+									   click="{pythonScriptEditor.scriptAreaComponent.undo_fun()}"/>
+				
+				<button:WorkAreaButton id="redoButton"
+									   height="25" icon="{VDOMImage.Redo}"
+									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_redo' ) }"
+									   click="{pythonScriptEditor.scriptAreaComponent.redo_fun()}"/>
+				
 			</s:HGroup>
 			
 			<s:Line top="0" width="100%">
