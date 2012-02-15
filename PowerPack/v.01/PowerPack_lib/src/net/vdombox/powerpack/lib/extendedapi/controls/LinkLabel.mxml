@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Label xmlns:mx="http://www.adobe.com/2006/mxml"
+		  link="linkHandler(event)" 
+		  selectable="true" 
+		  color="0x0000ff"
+		  width="100%">
+	
+	<mx:Script>
+		<![CDATA[
+			
+			private var _href : LinkObject;
+			
+			[Bindable]
+			public function get href():LinkObject
+			{
+				return _href;
+			}
+
+			public function set href(value:LinkObject):void
+			{
+				_href = value;
+				
+				updateHtmlText();
+			}
+			
+			protected function linkHandler(event:TextEvent):void
+			{
+				// Open the link in a new browser window.
+				navigateToURL(new URLRequest(event.text), '_blank')
+			}
+			
+			public function updateHtmlText():void
+			{
+				htmlText = "<a href='"+href.href+"'>"+href.title+"</a>";
+			}
+		]]>
+	</mx:Script>
+	
+</mx:Label>

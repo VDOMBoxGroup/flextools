@@ -224,11 +224,11 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 				}
 				case OS_LINUX:
 				{
-					return ".deb";
+					return linuxNativeInstallerType;
 				}
 				case OS_MAC:
 				{
-					return ".rpm";
+					return ".dmg";
 				}	
 				default:
 				{
@@ -238,6 +238,12 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			}
 			
 			return ".exe";
+		}
+		
+		public static var LINUX_NATIVE_INSTALLER_TYPE_DEBIAN : Boolean = true;
+		public static function get linuxNativeInstallerType() : String
+		{
+			return LINUX_NATIVE_INSTALLER_TYPE_DEBIAN ? ".deb" : ".rpm";
 		}
 		
 		private static function get windowsCmdFile() : File
