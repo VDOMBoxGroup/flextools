@@ -533,12 +533,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		
 		// TODO: rename function
-		private function addOptions( event : Event ) :void
+		private function writeLinkage( event : Event ) :void
 		{
 			component.showLinking = sharedObjectProxy.showLinking;
 		}
 		
-		private function saveOptions( event : Event ) :void
+		private function readLinkage( event : Event = null ) :void
 		{
 			sharedObjectProxy.showLinking = component.showLinking;
 		}
@@ -587,11 +587,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			editor.addEventListener( EditorEvent.ATTRIBUTES_CHANGED, attributesChangeHandler, true, 0, true );
 			
-			component.addEventListener( FlexEvent.CREATION_COMPLETE, addOptions, true );
+			component.addEventListener( FlexEvent.CREATION_COMPLETE, writeLinkage, true );
 			
 			component.addEventListener( KeyboardEvent.KEY_DOWN, keyHandler, true, 0 ,true );
 			
-			component.addEventListener( Event.CHANGE, saveOptions);
+			component.addEventListener( Event.CHANGE, readLinkage);
 		}
 
 		private function removeHandlers() : void
@@ -635,11 +635,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			editor.removeEventListener( RendererEvent.GET_RESOURCE, renderer_getResourseHandler, true );
 			
-			component.removeEventListener( FlexEvent.CREATION_COMPLETE, addOptions, true );
+			component.removeEventListener( FlexEvent.CREATION_COMPLETE, writeLinkage, true );
 			
 			component.removeEventListener( KeyboardEvent.KEY_DOWN, keyHandler, true );
 			
-			component.removeEventListener( Event.CHANGE, saveOptions);
+			component.removeEventListener( Event.CHANGE, readLinkage);
 		}
 		
 		private function hideRendererHandler ( event : FlexEvent ) : void
@@ -896,47 +896,59 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function keyHandler( event : KeyboardEvent ) : void
 		{
-			if ( event.keyCode == Keyboard.G && event.ctrlKey )
+			if ( event.keyCode == Keyboard.F5 )
 			{
-				if ( !editor.selectedRenderer )
-					return;
-				
-				var render : RendererBase = editor.selectedRenderer as RendererBase;
-				
-				var point : Point =  DisplayUtils.getConvertedPoint( render, component.renderer.dataGroup );
-				
-				var needScroll : Boolean = true;
-				
-				//vertical
-				if ( render.height < component.renderer.scroller.height )
+				sendNotification( ApplicationFacade.GET_WYSIWYG, statesProxy.selectedPage );
+			}
+			else if ( event.ctrlKey )
+			{
+				if ( event.keyCode == Keyboard.F )
 				{
-					if ( point.y + render.height > component.renderer.scroller.verticalScrollBar.value + component.renderer.scroller.height )
-						point.y -= ( component.renderer.scroller.height - render.height);
-					else if ( point.y > component.renderer.scroller.verticalScrollBar.value )
-						needScroll = false;
+					if ( !editor.selectedRenderer )
+						return;
+					
+					var render : RendererBase = editor.selectedRenderer as RendererBase;
+					
+					var point : Point =  DisplayUtils.getConvertedPoint( render, component.renderer.dataGroup );
+					
+					var needScroll : Boolean = true;
+					
+					//vertical
+					if ( render.height < component.renderer.scroller.height )
+					{
+						if ( point.y + render.height > component.renderer.scroller.verticalScrollBar.value + component.renderer.scroller.height )
+							point.y -= ( component.renderer.scroller.height - render.height);
+						else if ( point.y > component.renderer.scroller.verticalScrollBar.value )
+							needScroll = false;
+					}
+					
+					if ( point.y < 0 )
+						point.y = 0;
+					if ( needScroll )
+						component.renderer.scroller.verticalScrollBar.value = point.y;
+					
+					
+					//horizontal
+					needScroll = true;
+					if ( render.width < component.renderer.scroller.width )
+					{
+						if ( point.x + render.width > component.renderer.scroller.horizontalScrollBar.value + component.renderer.scroller.width )
+							point.x -= ( component.renderer.scroller.width - render.width);
+						else if ( point.x > component.renderer.scroller.horizontalScrollBar.value )
+							needScroll = false;
+					}
+					
+					if ( point.x < 0 )
+						point.x = 0;
+					
+					if ( needScroll )
+						component.renderer.scroller.horizontalScrollBar.value = point.x;
 				}
-				
-				if ( point.y < 0 )
-					point.y = 0;
-				if ( needScroll )
-					component.renderer.scroller.verticalScrollBar.value = point.y;
-				
-				
-				//horizontal
-				needScroll = true;
-				if ( render.width < component.renderer.scroller.width )
+				else if ( event.keyCode == Keyboard.D )
 				{
-					if ( point.x + render.width > component.renderer.scroller.horizontalScrollBar.value + component.renderer.scroller.width )
-						point.x -= ( component.renderer.scroller.width - render.width);
-					else if ( point.x > component.renderer.scroller.horizontalScrollBar.value )
-						needScroll = false;
+					component.showLinking = !component.showLinking;
+					readLinkage();
 				}
-				
-				if ( point.x < 0 )
-					point.x = 0;
-				
-				if ( needScroll )
-					component.renderer.scroller.horizontalScrollBar.value = point.x;
 			}
 		}
 	}

@@ -138,18 +138,21 @@
 					<s:Label id="statusLabel"
 							 height="25"
 							 color="gray" verticalAlign="middle"/>
-					
 				</s:HGroup>
 				
-				<button:WorkAreaButton id="undoButton"
-									   height="25" icon="{VDOMImage.Undo}"
-									   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_undo' ) }"
-									   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.UNDO ) )"/>
-				
-				<button:WorkAreaButton id="redoButton"
-									   height="20" icon="{VDOMImage.Redo}"
-									   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_redo' ) }"
-									   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.REDO ) )"/>
+				<s:HGroup gap="2">
+					
+					<button:WorkAreaButton id="undoButton"
+										   height="25" icon="{VDOMImage.Undo}"
+										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_undo' ) }"
+										   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.UNDO ) )"/>
+					
+					<button:WorkAreaButton id="redoButton"
+										   height="25" icon="{VDOMImage.Redo}"
+										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_redo' ) }"
+										   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.REDO ) )"/>
+					
+				</s:HGroup>
 				
 			</s:HGroup>
 			
