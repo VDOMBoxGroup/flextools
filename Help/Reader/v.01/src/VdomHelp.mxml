@@ -16,6 +16,7 @@
 	<mx:Script>
 	<![CDATA[
 		import mx.collections.XMLListCollection;
+		import mx.controls.Alert;
 		import mx.controls.Label;
 		import mx.controls.List;
 		import mx.events.CloseEvent;
@@ -322,26 +323,40 @@
 			var fileName : String = fullPath.substr( 13 ); 
 			var phraseRE:RegExp = /\\/gim;
 			fileName = fileName.replace(phraseRE,"/"); 
+			
+			var previousBookmarksLen : Number = bookmarksLength;
+			
 			sqlProxy.mark(fileName);
 		
-		/*	if(accordion.selectedIndex == 0 && tree.selectedItem)
+			updateMarkedPages();
+			
+			if (previousBookmarksLen == bookmarksLength)
 			{
-				trace("Tree: " + tree.selectedItem.@name);
-				sqlProxy.mark(tree.selectedItem.@name);
-			}else 
-			if(accordion.selectedIndex == 1 && pageList.selectedItem)
-			{ 	
-				trace("PageList: " + pageList.selectedItem.name);
-				sqlProxy.mark(pageList.selectedItem.name);
+				Alert.show(AlertMessages.MSG_BOOKMARK_ALREADY_EXISTS);
+			} else
+			{
+				Alert.show(AlertMessages.MSG_BOOKMARK_ADDED);
 			}
-		*/	
-			getMarkedPage();
 		}
 		
-		private function getMarkedPage():void
+		private function updateMarkedPages():void
 		{
-			 markList.dataProvider  = sqlProxy.getMarkedPage();
-			 trace("=========");
+			markList.dataProvider  = sqlProxy.getMarkedPages();
+		}
+		
+		private function get bookmarksLength () : Number
+		{
+			var markedPages : Object = bookmarksInitialized ? markList.dataProvider : sqlProxy.getMarkedPages();
+			
+			if (!markedPages || !markedPages.hasOwnProperty("length"))
+				return 0;
+			
+			return markedPages.length;
+		}
+		
+		private function get bookmarksInitialized () : Boolean
+		{
+			return markList && markList.dataProvider;
 		}
 		
 		private function runSettings():void 
@@ -353,8 +368,6 @@
 		private function closeSettingsHandler(clEvt:CloseEvent):void 
 		{
 			updateToc();
-//			var ID:String = adTrEvt.treeElementID
-	
 		}
 		
 	
@@ -408,7 +421,7 @@
 	<mx:HDividedBox y="60" width="100%" height="100%" 
 					horizontalGap="5"
 					dividerThickness="5">
-		<mx:Accordion id="accordion" width="155" minWidth="50" height="100%" addedEffect="false" backgroundColor="#000000" color="#FFFFFF" >
+		<mx:Accordion id="accordion" width="155" minWidth="50" height="100%" addedEffect="false" backgroundColor="#000000" color="#FFFFFF">
 			<mx:Canvas label="Content" width="100%" height="100%" icon="@Embed('../assets/contents.png')">
 				<mx:Tree id="tree" width="100%" height="100%" color="#000000"   	
 					labelField="@title" showRoot="true" change="{treeChangeHandler(event)}"  
@@ -416,7 +429,7 @@
 					defaultLeafIcon="@Embed('../assets/page.png')" /> 
 			</mx:Canvas>
 			<mx:Canvas id="searchResult" label="Search Result" width="100%" height="100%" icon="@Embed('../assets/search.png')" show="{pageList.selectedIndex = -1}"/>
-			<mx:Canvas  id="bookMarks" label="Bookmarks" width="100%" height="100%" icon="@Embed('../assets/bookmarks.png')" show="{getMarkedPage()}" creationComplete="{getMarkedPage()}"/>
+			<mx:Canvas  id="bookMarks" label="Bookmarks" width="100%" height="100%" icon="@Embed('../assets/bookmarks.png')" show="{updateMarkedPages()}" creationComplete="{updateMarkedPages()}"/>
 		</mx:Accordion>
 		<mx:VBox width="100%" height="100%" minWidth="50" verticalGap="0" verticalAlign="0">
 			<mx:Canvas color="#FCFBFB"  width="100%" backgroundColor="#E4E4E4" >
@@ -424,8 +437,8 @@
 					
 				</mx:HBox>
 				<mx:HBox right="0" paddingRight="10" paddingTop="5" paddingLeft="5" paddingBottom="5">
-					<mx:Image source="@Embed('../assets/printer.png')" click="{print()}"/>
-					<mx:Image source="@Embed('../assets/bookmark__plus.png')" click="{markPage()}"/>
+					<mx:Image source="@Embed('../assets/printer.png')" click="{print()}" toolTip="Print"/>
+					<mx:Image source="@Embed('../assets/bookmark__plus.png')" click="{markPage()}" toolTip="Add page to Bookmarks"/>
 				</mx:HBox>
 			</mx:Canvas>
 			<mx:HTML id="html"  width="100%" height="100%" 

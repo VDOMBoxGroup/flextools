@@ -10,10 +10,13 @@ package
 		public static const MSG_ERROR_ON_LOAD_XML				: String = "Error during xml loading.";
 		
 		public static const MSG_PRODUCTS_UPDATE_ERROR			: String = "Error during products updating.";
-		public static const MSG_PRODUCTS_UPDATE_SELECTED_ERROR	: String = "There are no selected products.";
+		public static const MSG_PRODUCTS_UPDATE_SELECTED_ERROR	: String = "No selected products.";
 		
 		public static const TEMPLATE_EXISTING_PRODUCT_VERSION	: String = "EXIST_VERSION";
 		public static const TEMPLATE_NEW_PRODUCT_VERSION		: String = "NEW_VERSION";
+		
+		public static const MSG_BOOKMARK_ADDED					: String = "Bookmark added.";
+		public static const MSG_BOOKMARK_ALREADY_EXISTS			: String = "Boockmark already exists.";
 		
 		public function AlertMessages()
 		{

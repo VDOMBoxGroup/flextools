@@ -180,7 +180,7 @@ package
 			return result;
 		}
 		
-		public function getMarkedPage():Object
+		public function getMarkedPages():Object
 		{
 			var query:String = "SELECT name, title " + 
 					"FROM page " + 
