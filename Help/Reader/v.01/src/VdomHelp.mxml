@@ -405,8 +405,10 @@
 			fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 	</mx:HBox>
 	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x4b4c4c"/>
-	<mx:HDividedBox y="60" width="100%" height="100%" horizontalGap="1">
-		<mx:Accordion id="accordion" width="155" height="100%" addedEffect="false" backgroundColor="#000000" color="#FFFFFF" >
+	<mx:HDividedBox y="60" width="100%" height="100%" 
+					horizontalGap="5"
+					dividerThickness="5">
+		<mx:Accordion id="accordion" width="155" minWidth="50" height="100%" addedEffect="false" backgroundColor="#000000" color="#FFFFFF" >
 			<mx:Canvas label="Content" width="100%" height="100%" icon="@Embed('../assets/contents.png')">
 				<mx:Tree id="tree" width="100%" height="100%" color="#000000"   	
 					labelField="@title" showRoot="true" change="{treeChangeHandler(event)}"  
@@ -416,7 +418,7 @@
 			<mx:Canvas id="searchResult" label="Search Result" width="100%" height="100%" icon="@Embed('../assets/search.png')" show="{pageList.selectedIndex = -1}"/>
 			<mx:Canvas  id="bookMarks" label="Bookmarks" width="100%" height="100%" icon="@Embed('../assets/bookmarks.png')" show="{getMarkedPage()}" creationComplete="{getMarkedPage()}"/>
 		</mx:Accordion>
-		<mx:VBox width="100%" height="100%" verticalGap="0" verticalAlign="0">
+		<mx:VBox width="100%" height="100%" minWidth="50" verticalGap="0" verticalAlign="0">
 			<mx:Canvas color="#FCFBFB"  width="100%" backgroundColor="#E4E4E4" >
 				<mx:HBox id="location" paddingRight="10" paddingTop="5" paddingLeft="5" paddingBottom="5" width="100%">
 					
