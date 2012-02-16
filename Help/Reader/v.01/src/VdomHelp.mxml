@@ -411,7 +411,7 @@
 	<mx:HBox paddingTop="5" paddingLeft="5" width="100%">
 		<local:LeftArrow click="{html.historyBack()}"  htmlPage="{html}"/>
 		<local:RightArrow click="{html.historyForward()}"  htmlPage="{html}"/>
-		<mx:Image source="@Embed('../assets/gear_i.png')" click="{runSettings();}" />
+		<mx:Image source="@Embed('../assets/gear_i.png')" click="{runSettings();}" toolTip="Settings"/>
 		
 		<mx:TextInput id="searchWord" x="185" y="14" width="141"  enter="{search();}" />
 		<mx:Button  label="Search" click="{search();}" icon="@Embed('../assets/search.png')" color="#FFFFFF" 
