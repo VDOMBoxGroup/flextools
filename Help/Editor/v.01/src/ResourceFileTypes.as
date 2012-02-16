@@ -4,11 +4,11 @@ package
 
 	public class ResourceFileTypes
 	{
-		public static const FILE_TYPE_PNG	: String = ".png";
-		public static const FILE_TYPE_JPG	: String = ".jpg";
-		public static const FILE_TYPE_JPEG	: String = ".jpeg";
-		public static const FILE_TYPE_GIF	: String = ".gif";
-		public static const FILE_TYPE_BMP	: String = ".bmp";
+		public static const FILE_TYPE_PNG	: String = "png";
+		public static const FILE_TYPE_JPG	: String = "jpg";
+		public static const FILE_TYPE_JPEG	: String = "jpeg";
+		public static const FILE_TYPE_GIF	: String = "gif";
+		public static const FILE_TYPE_BMP	: String = "bmp";
 		
 		public function ResourceFileTypes()
 		{
@@ -19,7 +19,13 @@ package
 			if (!file || !file.exists || !file.type)
 				return false;
 			
-			switch(file.type.toLowerCase())
+			return correctResourceType(file.extension.toLowerCase());
+		}
+		
+		
+		public static function correctResourceType(resourceType : String) : Boolean
+		{
+			switch (resourceType)
 			{
 				case ResourceFileTypes.FILE_TYPE_BMP:
 				case ResourceFileTypes.FILE_TYPE_GIF:
@@ -35,7 +41,9 @@ package
 					return false;
 				}
 			}
+				
 		}
+		
 		
 		
 	}

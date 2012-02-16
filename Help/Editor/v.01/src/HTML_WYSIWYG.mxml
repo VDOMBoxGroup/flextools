@@ -13,7 +13,7 @@
 			import mx.utils.Base64Encoder;
 			
 			private var clipboardManager : ClipboardManager = ClipboardManager.getInstance();
-			private var resourceImageUtils : ResourceImageUtils = ResourceImageUtils.getInstance(); 
+			private var resourceImageUtils : ResourceUtils = ResourceUtils.getInstance(); 
 			
 			private var instancesInitialized 	: Boolean;
 			private var pageContentToRefresh	: String;
@@ -268,7 +268,7 @@
 					
 					if ( imgSrc.indexOf("http://") >= 0 || imgSrc.indexOf("https://") >= 0 ) // image from http
 					{
-						this.addEventListener(ResourceImageUtils.HTTP_IMAGE_LOADED, this.dispatchEvent);
+						this.addEventListener(ResourceUtils.HTTP_IMAGE_LOADED, this.dispatchEvent);
 						newPath = resourceImageUtils.loadHttpImg(imgSrc);
 					} else 
 					{

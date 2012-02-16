@@ -709,7 +709,7 @@
 			protected function html_wysiwyg_initializeHandler(event:FlexEvent):void
 			{
 				this.html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED, onWysiwygSaveCombinationClicked);
-				this.html_wysiwyg.addEventListener(ResourceImageUtils.HTTP_IMAGE_LOADED, refreshPageContent);
+				this.html_wysiwyg.addEventListener(ResourceUtils.HTTP_IMAGE_LOADED, refreshPageContent);
 			}
 			
 			private function onTreeKeyboardKeyUp(aKeyboardEvent:KeyboardEvent) : void

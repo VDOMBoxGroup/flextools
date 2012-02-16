@@ -12,7 +12,7 @@ package
 	{
 		private static var instance : ClipboardManager;
 	
-		private var resourceImageUtils	: ResourceImageUtils = ResourceImageUtils.getInstance();
+		private var resourceImageUtils	: ResourceUtils = ResourceUtils.getInstance();
 		
 		private var wysiwygImage		: WysiwygImage; 
 		
@@ -90,7 +90,7 @@ package
 			
 			var imageFile : File = resourceImageUtils.createResourceFromBitmapData(sourceBitmapData);
 			
-			if (ResourceImageUtils.fileExists(imageFile))
+			if (ResourceUtils.fileExists(imageFile))
 				wysiwygImage.src = imageFile.url; 
 		}
 		
@@ -182,7 +182,7 @@ package
 			
 			for each (var file : File in clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT))
 			{
-				if (ResourceImageUtils.fileExists(file) && ResourceFileTypes.isImageFile(file))
+				if (ResourceUtils.fileExists(file) && ResourceFileTypes.isImageFile(file))
 				{
 					imgTargetSrc = resourceImageUtils.copyImg(file.url);
 					break;

@@ -21,25 +21,25 @@ package
 	import mx.graphics.codec.PNGEncoder;
 	import mx.utils.UIDUtil;
 
-	public class ResourceImageUtils extends EventDispatcher
+	public class ResourceUtils extends EventDispatcher
 	{
 		private static const DEFAULT_RESOURCE_FORMAT : String = ".jpg"; 
 		
-		private static var instance : ResourceImageUtils;
+		private static var instance : ResourceUtils;
 		
 		public static const HTTP_IMAGE_LOADED : String = "httpImageLoaded";
 		
-		public function ResourceImageUtils()
+		public function ResourceUtils()
 		{
 			if ( instance )
 				throw new Error( "Instance already exists." );
 		}
 		
-		public static function getInstance() : ResourceImageUtils
+		public static function getInstance() : ResourceUtils
 		{
 			if ( !instance )
 			{
-				instance = new ResourceImageUtils();
+				instance = new ResourceUtils();
 			}
 			
 			return instance;
@@ -67,7 +67,7 @@ package
 			
 			file = File.applicationStorageDirectory.resolvePath(targetPath);
 			
-			var ths:ResourceImageUtils = this;
+			var ths:ResourceUtils = this;
 			function urlLoader_complete(evt:Event) : void {
 				var fileStream : FileStream;
 				
@@ -219,5 +219,20 @@ package
 			
 			return imageFile;
 		}
+		
+		public static function filterResources(resources : Array) : Array
+		{
+			var filteredResources : Array = [];
+			for each (var resource:String in resources)
+			{
+				var resourceType : String = resource.substr(37,3);
+				
+				if (ResourceFileTypes.correctResourceType(resourceType))
+					filteredResources.push(resource);
+			}
+			
+			return filteredResources;
+		}
+		
 	}
 }

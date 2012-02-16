@@ -48,7 +48,6 @@ package
 		public static const EVENT_ON_XML_CREATION_COMPLETE	: String = "eventXMLCreationComplete";
 		
 		private const guidResourseRegExp	: RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
-		private const imgTagRegExp			: RegExp = /<[ ]*img[^>]*[ ]*\/[ ]*>/g;
 				
 		private var sqlProxy	: SQLProxy = new SQLProxy();
 		
@@ -313,7 +312,11 @@ package
 			// get resources ...	
 			pageResourcesXML = new XML("<resources/>");
 			
-			pageResourcesArr  = pageContent.match(guidResourseRegExp);
+			if (currentPageObj.name == "C30774AF-75D5-5123-3F22-6563A189B540")
+				trace ("PAGE WITH EMPTY RESOURCE");
+			
+			pageResourcesArr = pageContent.match(guidResourseRegExp);
+			pageResourcesArr = ResourceUtils.filterResources(pageResourcesArr);
 			
 			if (!pageResourcesArr || pageResourcesArr.length <= 0) {
 				curState = STATE_LAST_PAGE_RESOURCE_GENERATED;
@@ -639,7 +642,7 @@ package
 				md5Stream = new MD5Stream();
 				uid = md5Stream.complete(resultByteArray);
 				
-				newFileName = ResourceImageUtils.convertToUIDFormat(uid) + resourceType;
+				newFileName = ResourceUtils.convertToUIDFormat(uid) + resourceType;
 				onResourceDataGenerated(fileName, newFileName, source);
 			}
 			
