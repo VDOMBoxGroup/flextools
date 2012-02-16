@@ -66,11 +66,13 @@ package net.vdombox.powerpack.sdkcompiler
 		protected function packageInstaller() : void
 		{
 			// must be overrided by subclass
+			
+			initProcess();
+			buildPackage();
 		}
 		
 		protected function initProcess():void
 		{
-			trace ('initProcess');
 			process = new NativeProcess();
 			
 			addProcessListeners();

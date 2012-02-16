@@ -482,6 +482,11 @@
 				linuxNatineTypeSelector.visible = linuxNatineTypeSelectorVisible;
 			}
 			
+			protected function linuxNativeInstallerTypeSelectorCreationCompleteHandler(event:FlexEvent):void
+			{
+				linuxNatineTypeSelector.visible = linuxNatineTypeSelectorVisible;
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -576,7 +581,7 @@
 								selected="true"/>
 				
 				<sdkcompiler:LinuxNativeInstallerTypeSelectorVBox id="linuxNatineTypeSelector" 
-																  visible="{linuxNatineTypeSelectorVisible}"
+																  creationComplete="linuxNativeInstallerTypeSelectorCreationCompleteHandler(event)"
 																  paddingLeft="20"/>	
 					
 				<mx:RadioButton id="buildTypePackage"

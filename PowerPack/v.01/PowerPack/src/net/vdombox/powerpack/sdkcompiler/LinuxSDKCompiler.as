@@ -44,7 +44,6 @@ package net.vdombox.powerpack.sdkcompiler
 			
 			var argVector : Vector.<String>		= new Vector.<String>();
 			
-			// ------- LINUX -------- Installer.air ------------------
 			argVector.push(new File(flex_sdk4_1Path).resolvePath("bin/adt").nativePath);
 			argVector.push("-package");
 			argVector.push("-storetype");
@@ -69,7 +68,6 @@ package net.vdombox.powerpack.sdkcompiler
 			argVector.push("-C");
 			argVector.push(powerPackProjectStoragePath);
 			argVector.push("assets/template.xml");
-			
 			
 			return argVector;
 		}

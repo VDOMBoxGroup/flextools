@@ -3,7 +3,6 @@
 		 hideEffect="{hideHeightEffect}"
 		 showEffect="{showHeightEffect}"
 		 verticalGap="0"
-		 height="45"
 		 verticalScrollPolicy="off"
 		 horizontalScrollPolicy="off">
 	<mx:Script>
