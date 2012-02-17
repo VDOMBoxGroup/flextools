@@ -209,8 +209,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			// Alexey Andreev: delete because do not used in outher modules 
 //			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 			
-			workArea.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
-			
 			workArea.addEventListener( EditorEvent.UNDO, undoHandler, true, 0, true );
 			workArea.addEventListener( EditorEvent.REDO, redoHandler, true, 0, true );
 
@@ -275,8 +273,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			workArea.removeEventListener( EditorEvent.PREINITIALIZED, editor_preinitializedHandler, true );
 			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
-			
-			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true );
 		}
 
 		private function removedFromStageHandler( event : Event ) : void
@@ -284,24 +280,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 			clearData();
 		}
 		
-		private function keyDownHandler( event : KeyboardEvent ) : void
-		{
-			if ( !isActive )
-				return;
-			
-			if ( event.ctrlKey && event.keyCode == Keyboard.Z )
-				undoHandler();
-			else if ( event.ctrlKey && event.keyCode == Keyboard.Y )
-				redoHandler();
-		}
-		
-		private function undoHandler( event : EditorEvent = null ) : void
+		private function undoHandler( event : EditorEvent ) : void
 		{			
 			if ( event.target.skin.currentState == "wysiwyg" || event.target.skin.currentState == "wysiwygDisabled" )
 				sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
 		}
 		
-		private function redoHandler( event : EditorEvent = null ) : void
+		private function redoHandler( event : EditorEvent ) : void
 		{			
 			if ( event.target.skin.currentState == "wysiwyg" || event.target.skin.currentState == "wysiwygDisabled" )
 				sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );

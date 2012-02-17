@@ -170,8 +170,6 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const RENDERER_CLICKED : String = "rendererClicked";
 		
 		public static const RENDERER_TRANSFORMED : String = "rendererTransformed";
-		
-//		public static const SELECT_ITEM_REQUEST : String = "selectItemRequest";
 
 		public static const GET_RESOURCE_REQUEST : String = "getResourceRequest";
 		public static const OPEN_RESOURCE_SELECTOR_REQUEST : String = "openResourceSelectorRequest";

@@ -242,11 +242,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					var pageVO : PageVO = body as PageVO;
 					
-					if ( statesProxy.selectedPage )
-					{
-						objectsTreePanel.selectedItem.@name = pageVO.name;
-						//sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
-					}
+					objectsTreePanel.setNameByVo( pageVO );
+					//sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
 					
 					break;
 				}
@@ -255,11 +252,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					var _objectVO : ObjectVO = body as ObjectVO;
 					
-					if ( statesProxy.selectedObject && objectsTreePanel.selectedItem )
-					{
-						objectsTreePanel.selectedItem.@name = _objectVO.name;
-						sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _objectVO.pageVO );
-					}
+					objectsTreePanel.setNameByVo( _objectVO );
+					sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _objectVO.pageVO );
 
 					break;
 				}

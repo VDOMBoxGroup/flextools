@@ -822,26 +822,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST, { vdomObjectVO: ( event.target as IRenderer ).vdomObjectVO, typeVO: event.typeVO, point: event.point } )
 		}
-		
-		private function getAttributeVO( attributes : Array, attributeName : String, attributeValue : String ) : AttributeVO
-		{
-			var __attributeVO : AttributeVO;
-			
-			for each ( var atr : AttributeVO in attributes )
-			{
-				if ( atr.name == attributeName )
-					__attributeVO = atr;
-			}
-			
-			if ( !__attributeVO )
-			{
-				__attributeVO = new AttributeVO( attributeName );
-			}
-			
-			__attributeVO.value = attributeValue;
-			
-			return __attributeVO;
-		}
 
 		private function rendererTransformedHandler( event : EditorEvent ) : void
 		{
@@ -866,18 +846,30 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					attributeValue = event.attributes[ attributeName ];
 					attributeName = "left";
+					
+					attributeVO = new AttributeVO( attributeName, renderer.beforeLeft.toString() );
 				}
 				else if ( attributeName == "y" )
 				{
 					attributeValue = event.attributes[ attributeName ];
 					attributeName = "top";
+					
+					attributeVO = new AttributeVO( attributeName, renderer.beforeTop.toString() );
 				}
 				else
 				{
+					for each ( var attrVO : AttributeVO in attributesRender )
+					{
+						if ( attrVO.name == attributeName )
+						{
+							attributeVO = attrVO;
+						}
+					}
+					
 					attributeValue = event.attributes[ attributeName ];
 				}
-
-				attributeVO = getAttributeVO( attributesRender, attributeName, attributeValue );
+				
+				attributeVO.value = attributeValue;
 
 				attributes.push( attributeVO );
 			}
@@ -896,9 +888,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function keyHandler( event : KeyboardEvent ) : void
 		{
+			if ( !component.skin || component.skin.currentState == "xml" || component.skin.currentState == "xmlDisabled" )
+				return;
+			
 			if ( event.keyCode == Keyboard.F5 )
 			{
 				sendNotification( ApplicationFacade.GET_WYSIWYG, statesProxy.selectedPage );
+				sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
+				
+				if ( statesProxy.selectedObject )
+					sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
+				else if ( statesProxy.selectedPage )
+					sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
 			}
 			else if ( event.ctrlKey )
 			{
@@ -949,7 +950,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 					component.showLinking = !component.showLinking;
 					readLinkage();
 				}
+				else if ( event.keyCode == Keyboard.Z )
+					sendNotification( ApplicationFacade.UNDO, component.editorVO.vdomObjectVO );
+				else if ( event.keyCode == Keyboard.Y )
+					sendNotification( ApplicationFacade.REDO, component.editorVO.vdomObjectVO );
 			}
+			
 		}
 	}
 }

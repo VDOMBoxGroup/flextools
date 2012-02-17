@@ -15,6 +15,7 @@
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
 			
+			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 			
@@ -135,6 +136,7 @@
 			
 			private var elementForSelection : XML;
 			private var _needUpdateProperties : Boolean = false;
+			
 			private function setSelectionByID( id : String ) : void
 			{
 				try
@@ -154,6 +156,28 @@
 					_needUpdateProperties = true;
 					
 					invalidateProperties();
+				}
+			}
+			
+			public function setNameByVo( object : IVDOMObjectVO ) : void
+			{
+				var element : XML;
+				var id : String = object.id;
+				try
+				{
+					element = _pages.( @id == id )[ 0 ];
+					
+					if ( !element )
+						element = _pages..object.( @id == id)[ 0 ];
+				}
+				catch ( error : Error )
+				{
+					
+				}
+				
+				if ( element )
+				{
+					element.@name = object.name;
 				}
 			}
 			
@@ -325,7 +349,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<mx:Image source="@Embed('assets/green_plus.png')" width="20" height="20" top="-25" right="10"
+	<mx:Image source="{VDOMImage.Plus}" width="20" height="20" top="-25" right="10"
 			  click="image1_clickHandler(event)"/>
 	
 	<mx:Tree id="objectsTree" borderVisible="false" maxHorizontalScrollPosition="140" horizontalScrollPolicy="auto"

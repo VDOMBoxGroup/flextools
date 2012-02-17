@@ -6,20 +6,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	public class UndoStackItem
 	{
 		private var _message : ProxyMessage; 
-		private var _undoMessage : ProxyMessage;
+		private var _undoMessage : ProxyMessage; 
 		
 		public function UndoStackItem( message : ProxyMessage )
 		{
-			_message = message;
-			_undoMessage = getUndoContent( message );
+			_message = clone( message, false );
+			_undoMessage = clone( _message, true );
 		}
 		
-		private function getUndoContent( message : ProxyMessage ) : ProxyMessage
+		private function clone( message : ProxyMessage, getUndo : Boolean ) : ProxyMessage
 		{
 			var body : Object = message.getBody();
 			if ( body is VdomObjectAttributesVO )
 			{
-				var vdomObjectAttributeVO : VdomObjectAttributesVO = body.getUndo();
+				var vdomObjectAttributeVO : VdomObjectAttributesVO = body.clone( getUndo );
 				return new ProxyMessage(message.proxy, message.operation, message.target, vdomObjectAttributeVO );
 			}
 			
@@ -28,12 +28,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		
 		public function undo() : ProxyMessage
 		{
-			return _undoMessage;
+			return clone( _undoMessage, false );
 		}
 		
 		public function redo() : ProxyMessage
 		{
-			return _message;
+			return clone( _message, false );;
 		}
 	}
 }

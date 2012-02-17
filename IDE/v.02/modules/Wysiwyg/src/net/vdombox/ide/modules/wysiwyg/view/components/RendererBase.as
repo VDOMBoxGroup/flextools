@@ -1432,6 +1432,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 					beforeX = x;
 					beforeY = y;
+					
+					beforeLeft = x;
+					beforeTop = y;
 				}
 			}
 			
@@ -1506,6 +1509,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			
 		}
+		
+		public var beforeLeft : Number;
+		public var beforeTop : Number;
 
 		private function mouseUpHandler( event : MouseEvent ) : void
 		{
