@@ -54,5 +54,9 @@ package net.vdombox.ide.common.view.components
 		[Embed( source = "assets/vdomimage/shadowlineBlack.png" )]
 		public static var ShadowLineBlack : Class;
 		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/plus.png" )]
+		public static var Plus : Class;
+		
 	}
 }

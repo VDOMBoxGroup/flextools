@@ -21,14 +21,7 @@ package net.vdombox.ide.common.model._vo
 		
 		private var _containerID : String;
 		
-		private var _eyeOpened : Boolean = true;
-		
 		private var _parameters : Array = [];
-
-		public function get eyeOpened():Boolean
-		{
-			return _eyeOpened;
-		}
 
 		public function get id() : String
 		{
@@ -91,11 +84,6 @@ package net.vdombox.ide.common.model._vo
 		public function get parameters() : Array
 		{
 			return _parameters;
-		}
-		
-		public function set eyeOpened( value : Boolean ) : void
-		{
-			_eyeOpened = value;
 		}
 		
 		public function setName( value : String ) : void

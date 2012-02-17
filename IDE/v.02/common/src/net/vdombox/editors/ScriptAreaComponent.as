@@ -268,5 +268,15 @@ package net.vdombox.editors
 		private function updateScrollBars() : void
 		{
 		}
+		
+		public function undo_fun() : void
+		{
+			area.undo_fun();
+		}
+		
+		public function redo_fun() : void
+		{
+			area.redo_fun();
+		}
 	}
 }

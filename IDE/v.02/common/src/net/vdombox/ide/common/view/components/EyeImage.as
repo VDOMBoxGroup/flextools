@@ -3,17 +3,13 @@ package net.vdombox.ide.common.view.components
 	import mx.controls.Image;
 	
 	public class EyeImage extends Image
-	{
-		[Embed( source = "assets/eye_closed_white.png" )]
-		public var EyeClosedWhite : Class;
-		
+	{		
 		[Embed( source = "assets/eye_closed_black.png" )]
 		public var EyeClosedBlack : Class;
 		
 		[Embed( source = "assets/eye_opened.png" )]
 		public var EyeOpened : Class;
 		
-		public static const TYPE_WHITE : String = "white";
 		public static const TYPE_BLACK : String = "black";
 		
 		public var closedEyeType : String = TYPE_BLACK;
@@ -38,12 +34,6 @@ package net.vdombox.ide.common.view.components
 				case TYPE_BLACK:
 				{
 					source = EyeClosedBlack;
-					break;
-				}
-				
-				case TYPE_WHITE:
-				{
-					source = EyeClosedWhite;
 					break;
 				}
 					

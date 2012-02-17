@@ -1,11 +1,7 @@
 package net.vdombox.ide.common.interfaces
 {
 	public interface IEventBaseVO
-	{
-		function set eyeOpened( value : Boolean ) : void;
-		
-		function get eyeOpened() : Boolean;
-		
+	{		
 		function get name() : String;
 		
 		function get id() : String;

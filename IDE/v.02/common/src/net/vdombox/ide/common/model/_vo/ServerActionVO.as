@@ -33,8 +33,6 @@ package net.vdombox.ide.common.model._vo
 		private var _objectName : String;
 
 		private var _containerID : String;
-		
-		private var _eyeOpened : Boolean = true;
 
 		[Bindable]
 		public function get top():int
@@ -56,11 +54,6 @@ package net.vdombox.ide.common.model._vo
 		public function set left(value : int) : void
 		{
 			_left = value;
-		}
-		
-		public function get eyeOpened():Boolean
-		{
-			return _eyeOpened;
 		}
 
 		public function get name() : String
@@ -102,11 +95,6 @@ package net.vdombox.ide.common.model._vo
 		public function get containerID() : String
 		{
 			return _containerID;
-		}
-
-		public function set eyeOpened( value : Boolean ) : void
-		{
-			_eyeOpened = value;
 		}
 		
 		public function setID( value : String ) : void

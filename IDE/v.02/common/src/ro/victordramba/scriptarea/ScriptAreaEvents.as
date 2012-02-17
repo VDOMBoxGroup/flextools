@@ -200,6 +200,18 @@ package ro.victordramba.scriptarea
 				}
 			}
 		}
+		
+		public function undo_fun() : void
+		{
+			undo();
+			dipatchChange();
+		}
+		
+		public function redo_fun() : void
+		{
+			redo();
+			dipatchChange();
+		}
 
 		private function onKeyDown( e : KeyboardEvent ) : void
 		{
@@ -221,14 +233,12 @@ package ro.victordramba.scriptarea
 			else if (  e.altKey && k == Keyboard.BACKSPACE 
 				|| e.ctrlKey  &&  ( c ==  'z' || c ==  'Z')) // z & Z ?
 			{
-				undo();
-				dipatchChange();
+				undo_fun();
 				return;
 			}
 			else if ( e.ctrlKey &&  ( c ==  'y' || c ==  'Y') )
 			{
-				redo();
-				dipatchChange();
+				redo_fun();
 				return;
 				
 			}else if (  e.shiftKey && k == Keyboard.DELETE 

@@ -100,7 +100,7 @@ package net.vdombox.ide.common.model._vo
 			return result;
 		}
 		
-		public function getUndo() : VdomObjectAttributesVO
+		public function clone( getUndo : Boolean = false ) : VdomObjectAttributesVO
 		{
 			var result : Array = [];
 			
@@ -109,7 +109,9 @@ package net.vdombox.ide.common.model._vo
 			for each ( attributeVO in attributes )
 			{
 				attributeVONew = attributeVO.clone();
-				attributeVONew.replaceValue();
+				
+				if ( getUndo )
+					attributeVONew.replaceValue();
 				
 				result.push( attributeVONew );
 			}
