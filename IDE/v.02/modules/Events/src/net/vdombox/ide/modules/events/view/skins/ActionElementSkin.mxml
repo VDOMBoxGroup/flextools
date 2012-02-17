@@ -139,7 +139,7 @@
 			 bottom="0" left="0" right="0" top="0">
 
 		<s:Rect bottom="0" left="0" right="0" top="0"
-				radiusX="10" radiusY="10">
+				radiusX="6" radiusY="6">
 
 			<s:fill>
 

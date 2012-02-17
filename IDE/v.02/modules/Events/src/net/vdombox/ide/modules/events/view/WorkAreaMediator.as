@@ -398,7 +398,6 @@ package net.vdombox.ide.modules.events.view
 				setVisibleElementsForCurrentObject();
 			}
 			
-			event.stopImmediatePropagation();
 		}
 	}
 }

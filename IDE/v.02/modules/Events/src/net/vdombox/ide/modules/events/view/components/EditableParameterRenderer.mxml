@@ -64,7 +64,7 @@
 				}
 			}
 			
-			protected function actionText_keyDownHandler(event:KeyboardEvent):void
+			private function keyDownEnterHandler(event:KeyboardEvent):void
 			{
 				if (event.keyCode == Keyboard.ENTER && text != actionText.text )
 				{
@@ -100,7 +100,7 @@
 		<mx:Spacer width="4"/>
 		<s:TextInput id="actionText" minWidth="0" text="@{ data.value }" width="100%"
 					 focusAlpha="0" doubleClick="textinput1_doubleClickHandler(event)" focusOut="actionText_focusOutHandler(event)"
-					 keyDown="actionText_keyDownHandler(event)"/>
+					 keyDown="keyDownEnterHandler(event)"/>
 	</s:HGroup>
 
 	<s:Line xFrom="24" xTo="24" yFrom="0" yTo="20">

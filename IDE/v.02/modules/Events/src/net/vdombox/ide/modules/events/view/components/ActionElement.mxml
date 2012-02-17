@@ -16,7 +16,6 @@
 			import net.vdombox.ide.common.model._vo.ClientActionVO;
 			import net.vdombox.ide.common.model._vo.EventParameterVO;
 			import net.vdombox.ide.common.model._vo.EventVO;
-			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 			import net.vdombox.ide.modules.events.view.skins.EventElementSkin;
 			import net.vdombox.ide.common.view.components.EyeImage;
