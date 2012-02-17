@@ -65,7 +65,7 @@
 
 				var glowFilter : GlowFilter = new GlowFilter( 0xA8AAA9, 1, 6, 6, 3 );
 
-				selectionFilters = [ new GlowFilter( 0xFFFFFF, 1, 9, 9, 3 ) ];
+				selectionFilters = [ new GlowFilter( 0xFFFFFF, 1, 9, 9, 255 ) ];
 
 				typeImage.filters = [ glowFilter ];
 			}
@@ -156,7 +156,7 @@
 			 bottom="0" left="0" right="0" top="0">
 
 		<s:Rect bottom="0" left="0" right="0" top="0"
-				radiusX="10" radiusY="10">
+				radiusX="6" radiusY="6">
 			<s:fill>
 				<s:SolidColor color="gray"
 							  alpha="0"/>
