@@ -1,0 +1,448 @@
+/*
+Please remember to add the following effects to the main application.
+
+	<mx:Move duration="100" id="DockerMove"/>
+	<mx:Fade duration="100" id="DockerFade"/>
+*/
+
+@font-face
+{
+	src        : url("assets/fonts/arial.ttf");
+	fontFamily : Arial;
+}
+
+global
+{
+	/*backgroundAlpha: 1.0; /* this runs the opacity of nearly every square piece of the components */
+	/*backgroundSize: "auto";*/
+	
+	titleBarButtonBgColor : #494848;
+	
+	/*fillAlphas: 0.3, 0.3, 0.85, 0.75; /* last pair are for OVER state */
+	/*fillColors: #AE4731, #BFD5E8, #E42226, #A8D0E2;*/
+	
+	/*highlightAlphas: 0.08, 0.14; /* use this to control the 'light' cast on the components */
+	
+	themeColor            : #2ba6e5;
+	
+	focusThickness		  : 2.5;
+	/*rollOverColor: #D3BABA;*/
+	/*selectionColor: #D3989C;*/
+	
+	fontFamily            : Arial;
+	fontSize              : 10;
+}
+
+
+
+.questionAnswerRadioBtn
+{
+	fontFamily	: Arial;
+	fontSize	: 13;
+	
+	fillColor: #ffffff;
+	fillAlpha:  1;
+	
+	icon : ClassReference(null);
+	skin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.RadioBtnSkin");
+	
+	borderColor: #747474;
+	borderThickness: 2.5;
+	borderStyle : none;
+	
+	color: #ffffff;
+	disabledColor:  #ffffff;
+	textRollOverColor: #ffffff;
+	textSelectedColor: #ffffff;
+	
+	paddingLeft : 20;
+	iconRadius : 10;
+	
+	focusAlpha : 0;
+}
+
+
+.builderWindowStyle
+{
+    fontFamily : "Tahoma", "Helvetica", "_sans";
+    fontSize   : 11;
+}
+
+.installerWindowStyle
+{
+	headerHeight             : 30;
+	
+	
+	
+	titleTextStyleName       : "titleTextStyle";
+	
+	titleBarColors           : #ffeae6, #000000, #666666;
+	
+	titleBarButtonPadding    : 8;
+	titleBarBackgroundSkin   : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.GeneratorApplicationTitleBarBackgroundSkin");
+	
+	borderColor              : #424242;
+	borderThickness          : 0;
+	borderAlpha              : 0.0;				
+	
+	buttonPadding            : 2;
+	buttonAlignment          : "auto";
+	
+	backgroundAlpha			 :"0.0";
+	
+	minimizeButtonSkin		 : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.MinimizeButtonSkin");
+	maximizeButtonSkin		 : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.MaximizeButtonSkin");
+	closeButtonSkin			 : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.CloseButtonSkin");
+}
+
+Window
+{
+    backgroundColor : #e1e1e0;
+    verticalGap     : 0;
+    horizontalGap   : 0;
+}
+
+Docker
+{
+    paddingBottom        : 5;
+    paddingLeft          : 5;
+    paddingRight         : 5;
+    paddingTop           : 5;
+
+    dockingAreaStyleName : "dockingArea";
+    rowStyleName         : "dockingRow";
+}
+
+DockableToolBar
+{
+    /*addedEffect: "DockerFade";
+        borderStyle: "none";
+        horizontalGap: 2;
+        paddingBottom: 2;
+        paddingLeft: 0;
+        paddingRight: 8;
+        paddingTop: 2;*/
+    /*backgroundColor: #9199A4;*/
+}
+
+GridItem
+{
+    horizontalGap : 1;
+}
+
+.dockingArea
+{
+    /*horizontalScrollPolicy: "off";
+        verticalGap: 0;
+        borderStyle: "applicationControlBar";
+        dropShadowEnabled: true;	*/
+}
+
+.dockingRow
+{
+    /*horizontalGap: 1;
+        addedEffect: "DockerFade";
+        removedEffect: "DockerFade";*/
+}
+
+.headerLabel
+{
+    fontFamily : "Arial", "Helvetica", "_sans";
+    fontSize   : 16;
+    fontWeight : bold;
+    textIndent : 0;
+    color      : #16414A;
+}
+
+.installerHeaderLabel
+{
+	fontFamily : "Arial";
+	fontSize   : 46;
+	fontWeight : normal;
+	textIndent : 0;
+	color      : #ffffff;
+	letterSpacing : -2;
+}
+
+ProgressBar
+{
+	trackColors : #353535, #353535;
+	trackHeight : 12;
+	barColor    : #0c5d9b;
+	borderColor : #787878;
+	borderSkin  :  ClassReference("net.vdombox.powerpack.lib.player.customize.skins.GeneratorProgressBarSkin");
+	/* barSkin     : ClassReference("net.vdombox.powerpack.customize.skins.GeneratorProgressBarSkin");*/
+	color		: #ffffff;
+	
+}
+
+RoundButton
+{
+	color			: #000000;
+	disabledColor	: #888888;
+	
+	fontSize		: 15;
+	fontFamily		: Arial;
+	
+	fillColors 		: #ffffff, #c2c2c2;
+	fillColorDisabled	: #c1c1c1;
+	disabledfillColorBevelFilter	: #dadada;
+	
+	skin			: ClassReference("net.vdombox.powerpack.lib.player.customize.skins.RoundButtonSkin");
+	
+	cornerRadius	: 15;
+}
+
+
+BrowseButton
+{
+	color			: #000000;
+	
+	fontSize		: 15;
+	fontFamily		: Arial;
+	
+	fillColors 		: #ffffff, #c2c2c2;
+	borderColors	: #e5e5e5, #a8a8a8;
+	
+	skin			: ClassReference("net.vdombox.powerpack.lib.player.customize.skins.BrowseButtonSkin");
+	
+	cornerRadius	: 6;
+	
+}
+
+.keyEdtTextStyle
+{
+	fontFamily      : Arial;
+	fontSize        : 14;
+	fontWeight      : bold;
+	
+	color           : #666666;
+	
+	borderStyle     : solid;
+	borderColor     : #5A5859;
+	borderThickness : 2;
+	
+	cornerRadius 	: 10;
+	
+	backgroundGradientColors	: #e0e0e0, #ffffff;
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.KeyTextBackgroundSkin");
+	paddingLeft	: 20;
+}
+
+.browseFileTextStyle
+{
+	fontFamily      : Arial;
+	fontSize        : 13;
+	
+	color           : #848484;
+	
+	borderStyle     : solid;
+	borderColor     : #cccccc;
+	borderThickness : 1;
+	
+	cornerRadius 	: 6;
+	
+	paddingLeft		: 20;
+	paddingTop		: 3;
+	
+	top : 4;
+	focusRoundedCorners: tr tb;
+	
+	backgroundGradientColors	: #e0e0e0, #ffffff;
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.BrowseAnswerTextBackgroundSkin");
+}
+
+.titleTextStyle
+{
+	fontFamily : Arial;
+	fontSize   : 14;
+	fontWeight : bold;
+	color      : #d9dadb;
+	textIndent : 15;
+}
+
+.answerInputTextStyle
+{
+	cornerRadius				: 7;
+	fontSize					: 14;
+	backgroundGradientColors	: #e0e0e0, #ffffff;
+	
+	leading						: -2;
+	borderThickness				: 1.5;
+	borderColor					: #414141;
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.InputAnswerTextBackgroundSkin");
+	
+	paddingLeft	: 7;
+	paddingTop	: 3;
+}
+
+
+PopUpToolBar
+{
+    /*removedEffect: "DockerFade";
+        moveEffect: "DockerMove";*/
+
+    /*backgroundColor: #9199A4;*/
+
+    /*borderAlpha: 1.0;
+        borderStyle: "default";
+        borderThickness: 0;*/
+
+    /* borderThicknessBottom is NaN */
+
+    /*borderThicknessLeft: 0;
+        borderThicknessRight: 0;
+        borderThicknessTop: 0;
+        cornerRadius: 8;
+        dropShadowEnabled: true;
+        paddingBottom: 0;
+        paddingLeft: 0;
+        paddingRight: 0;
+        paddingTop: 0;
+        headerHeight: 20;*/
+}
+
+.infoTextStyle
+{
+	fontFamily : Arial;
+	fontSize   : 14;
+	color	   : #ffffff;
+	
+}
+
+.browseBtnStyle
+{
+	paddingLeft	: 2;
+	paddingRight : 2;
+	paddingTop : 0;
+	paddingBottom : 0;
+	
+	top : 4;
+	
+	backgroundColor: red;
+	backgroundGradientColors : #cccccc, #ffffff;
+}
+
+.dlgHeader
+{
+    paddingLeft     : 20;
+    paddingRight    : 10;
+    paddingTop      : 10;
+    paddingBottom   : 5;
+
+    percentWidth    : 100;
+
+    backgroundColor : #f1f1f0;
+}
+
+.dlgContent
+{
+    verticalGap     : 5;
+    paddingLeft     : 10;
+    paddingRight    : 10;
+    paddingTop      : 10;
+    paddingBottom   : 5;
+
+    percentWidth    : 100;
+    percentHeight   : 100;
+
+    horizontalAlign : center;
+}
+
+.dlgFooter
+{
+    percentWidth    : 100;
+
+    horizontalAlign : right;
+    verticalAlign   : bottom;
+}
+
+Question
+{
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.PopupBackgroundSkin");
+	
+	borderColor : #424242;
+	borderThickness :8;
+	
+	cornerRadius : 8;
+	
+	backgroundGradientColors : #333333, #242424;
+}
+
+PopupBottomPart
+{
+	borderThickness :8;
+	cornerRadius : 8;
+}
+
+AlertPopup
+{
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.PopupBackgroundSkin");
+	
+	backgroundGradientColors : #333333, #242424;
+	
+	borderColor : #424242;
+	borderThickness :8;
+	
+	cornerRadius : 8;
+}
+
+.alertTitle 
+{
+	fontSize: 14;
+	fontWeight:bold;
+	
+	color: #fffafc;
+	textRollOverColor : #fffafc;
+	textSelectedColor : #fffafc;
+	disabledColor : #fffafc;
+}
+
+.alertMessage 
+{
+	fontSize: 14;
+	fontWeight: normal;
+	
+	color: #fffafc;
+	textRollOverColor : #fffafc;
+	textSelectedColor : #fffafc;
+	disabledColor : #fffafc;
+	
+	borderColor : red;
+	borderAlpha : 1;
+}
+
+.dropdownArrowBtnStyle
+{
+	backgroundGradientColors		: #ffffff, #c2c2c2;
+	backgroundOverGradientColors	: #ffffff, #c2c2c2;
+	borderColor						: #000000;
+	shadowColor						: #000000;
+	cornerRadius					: 4;
+	triangleLineColors				: #b2b2b2, #c4c4c4;
+	
+	skin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.DropdownArrowButtonSkin");
+}
+
+DialogDropDownListBase
+{
+	borderColor						: #6d6d6d;
+	backgroundGradientColors		: #8c8c8c, #4e4e4e;
+	
+	textRollOverColor				: white;
+	textSelectedColor				: white;
+	color							: white;
+	fontWeight						: normal;
+	
+	useRollOver						: false;
+	
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.DropdownSkin");
+}
+
+DialogComboBox
+{
+	textRollOverColor				: black;
+	textSelectedColor				: black;
+	color							: black;
+	fontWeight						: normal;
+}

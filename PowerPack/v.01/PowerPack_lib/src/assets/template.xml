@@ -1,0 +1,134 @@
+<template ID="D83F371D-BECD-9334-E730-4EA3271350A9">
+  <structure>
+    <categories>
+      <category name="application"/>
+      <category name="objects"/>
+      <category name="structure"/>
+      <category name="resources"/>
+    </categories>
+    <graph name="SOAP" initial="false" category="application">
+      <states>
+        <state name="Node931" type="Initial" category="Normal" enabled="true" breakpoint="false" x="219" y="45">
+          <text>State</text>
+        </state>
+        <state name="Node1393" type="Normal" category="Normal" enabled="true" breakpoint="false" x="529" y="300">
+          <text>Eroor</text>
+        </state>
+        <state name="Node2688" type="Normal" category="Command" enabled="true" breakpoint="false" x="228" y="423">
+          <text>$asd = '123'</text>
+        </state>
+        <state name="Node3255" type="Normal" category="Normal" enabled="true" breakpoint="false" x="723" y="271">
+          <text>r: 1</text>
+        </state>
+        <state name="Node3276" type="Normal" category="Normal" enabled="true" breakpoint="false" x="892" y="304">
+          <text>r: 2</text>
+        </state>
+        <state name="Node3296" type="Normal" category="Normal" enabled="true" breakpoint="false" x="991" y="277">
+          <text>r: 3</text>
+        </state>
+        <state name="Node3316" type="Normal" category="Normal" enabled="true" breakpoint="false" x="1048" y="213">
+          <text>r: other</text>
+        </state>
+        <state name="Node4539" type="Normal" category="Normal" enabled="true" breakpoint="false" x="691" y="514">
+          <text>State</text>
+        </state>
+        <state name="Node4519" type="Normal" category="Normal" enabled="true" breakpoint="false" x="517" y="497">
+          <text>State</text>
+        </state>
+        <state name="Node3224" type="Normal" category="Command" enabled="true" breakpoint="false" x="805" y="148">
+          <text>[switch [sub g1] '1 ' '2 ' '3 '];</text>
+        </state>
+        <state name="Node3204" type="Normal" category="Normal" enabled="true" breakpoint="false" x="718" y="62">
+          <text>Begiso, just load, then try to run it by crtl + alt + D[31.01.2012 17:35:17] Korboulewsky Nicolas: then crtl + I[31.01.2012 17:35:28] Korboulewsky Nicolas: it should block in sub graphn</text>
+        </state>
+        <state name="Node1300" type="Normal" category="Command" enabled="true" breakpoint="false" x="269" y="117">
+          <text>$a = [wholeMethod "login" 'b2.vdombox.ru' "root" "ldthyjqghjtv" ]</text>
+        </state>
+        <state name="Node3760" type="Normal" category="Command" enabled="true" breakpoint="false" x="139" y="274">
+          <text>$a = [wholeMethod "list_applications123" ]</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector1821" highlighted="false" enabled="true" source="Node1300" destination="Node1393">
+          <label><![CDATA[Error]]></label>
+        </transition>
+        <transition name="Connector1820" highlighted="false" enabled="true" source="Node931" destination="Node1300"/>
+        <transition name="Connector1819" highlighted="false" enabled="true" source="Node3224" destination="Node3255">
+          <label><![CDATA[1 ]]></label>
+        </transition>
+        <transition name="Connector1818" highlighted="false" enabled="true" source="Node3224" destination="Node3276">
+          <label><![CDATA[1 ]]></label>
+        </transition>
+        <transition name="Connector1817" highlighted="false" enabled="true" source="Node3224" destination="Node3296">
+          <label><![CDATA[1 ]]></label>
+        </transition>
+        <transition name="Connector1816" highlighted="false" enabled="true" source="Node3224" destination="Node3316">
+          <label><![CDATA[other...]]></label>
+        </transition>
+        <transition name="Connector1815" highlighted="false" enabled="true" source="Node3204" destination="Node3224"/>
+        <transition name="Connector1814" highlighted="false" enabled="true" source="Node4519" destination="Node4539"/>
+        <transition name="Connector1813" highlighted="false" enabled="true" source="Node1300" destination="Node3760">
+          <label><![CDATA[Success]]></label>
+        </transition>
+        <transition name="Connector1812" highlighted="false" enabled="true" source="Node3760" destination="Node2688">
+          <label><![CDATA[Success]]></label>
+        </transition>
+        <transition name="Connector1811" highlighted="false" enabled="true" source="Node3760" destination="Node1393">
+          <label><![CDATA[Error]]></label>
+        </transition>
+      </transitions>
+    </graph>
+    <graph name="g1" initial="true" category="application">
+      <states>
+        <state name="Node2117" type="Normal" category="Normal" enabled="true" breakpoint="false" x="246" y="232">
+          <text>1</text>
+        </state>
+        <state name="Node2137" type="Normal" category="Normal" enabled="true" breakpoint="false" x="501" y="247">
+          <text>2</text>
+        </state>
+        <state name="Node2452" type="Normal" category="Normal" enabled="true" breakpoint="false" x="632" y="379">
+          <text>State</text>
+        </state>
+        <state name="Node1542" type="Normal" category="Normal" enabled="true" breakpoint="false" x="681" y="335">
+          <text>State</text>
+        </state>
+        <state name="Node2157" type="Normal" category="Normal" enabled="true" breakpoint="false" x="760" y="219">
+          <text>3</text>
+        </state>
+        <state name="Node2090" type="Initial" category="Command" enabled="true" breakpoint="false" x="452" y="130">
+          <text>$notused = [dialog  'Fill' [ 'text' 'Login ' 'root' ][ 'password' 'Password ' '123456' ]]</text>
+        </state>
+        <state name="Node1921" type="Normal" category="Command" enabled="true" breakpoint="false" x="241" y="76">
+          <text>[progress "100" "Hillou"]</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector1654" highlighted="false" enabled="true" source="Node2090" destination="Node2157"/>
+        <transition name="Connector1653" highlighted="false" enabled="true" source="Node2090" destination="Node2137"/>
+        <transition name="Connector1652" highlighted="false" enabled="true" source="Node2090" destination="Node2117"/>
+      </transitions>
+    </graph>
+    <graph name="XPath" initial="false" category="application">
+      <states>
+        <state name="Node2150" type="Initial" category="Normal" enabled="true" breakpoint="false" x="235" y="34">
+          <text>State</text>
+        </state>
+        <state name="Node2130" type="Normal" category="Command" enabled="true" breakpoint="false" x="166" y="166">
+          <text>$XMLApp = [setXMLValue $XMLApp "/a/b" "Hi"];</text>
+        </state>
+        <state name="Node2323" type="Normal" category="Normal" enabled="true" breakpoint="false" x="273" y="278">
+          <text>State</text>
+        </state>
+        <state name="Node2260" type="Normal" category="Command" enabled="true" breakpoint="false" x="407" y="67">
+          <text>$XMLApp = "&lt;a&gt;&lt;b&gt;iH&lt;/b&gt;&lt;/a&gt;"</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector1672" highlighted="false" enabled="true" source="Node2150" destination="Node2260"/>
+        <transition name="Connector1671" highlighted="false" enabled="true" source="Node2260" destination="Node2130"/>
+        <transition name="Connector1670" highlighted="false" enabled="true" source="Node2130" destination="Node2323"/>
+      </transitions>
+    </graph>
+    <resources/>
+  </structure>
+</template>

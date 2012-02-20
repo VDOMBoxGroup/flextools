@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			import mx.core.mx_internal;
+			import mx.events.FlexEvent;
+			
+			[Embed(source='/assets/images/texture_ide_sidebar.png')]
+			private var backgroundImageClass :Class;
+			private var backgroundImage :Bitmap;
+			private var backgroundBitmapData :BitmapData;
+			
+			override protected function updateDisplayList(unscaledWidth:Number,
+														  unscaledHeight:Number):void
+			{
+				backgroundImage = new backgroundImageClass();
+				backgroundBitmapData = new BitmapData( backgroundImage.width, backgroundImage.height, false, 0x000000);
+				backgroundBitmapData.draw( backgroundImage );
+				
+				var cornerRadius : Number = getStyle("cornerRadius");
+				
+				graphics.clear();
+				
+				graphics.beginBitmapFill(backgroundBitmapData, null, true, true);
+				//graphics.drawRect(0, 0, unscaledWidth, unscaledHeight);
+				drawRoundRect(0, 0, unscaledWidth, unscaledHeight, {tl:0, tr:0, bl:cornerRadius, br:cornerRadius});
+				graphics.endFill();
+				
+				var barHeight : Number = 10;
+				
+				var matr:Matrix = new Matrix();
+				matr.createGradientBox(unscaledWidth, barHeight, 1.57, 0, 0);
+				
+				graphics.beginGradientFill(GradientType.LINEAR, 
+					[0x000000, 0x000000], 
+					[0.2, 0.01], [0x44, 0xff], 
+					matr);
+				
+				graphics.drawRect(0, 0, unscaledWidth, barHeight);
+				graphics.endFill();
+				
+				graphics.moveTo(0,0);
+				graphics.lineStyle(1, 0x424242);
+				graphics.lineTo(unscaledWidth, 0);
+				
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+			}
+			
+			
+			
+		]]>
+	</mx:Script>
+	
+		
+</mx:Canvas>
