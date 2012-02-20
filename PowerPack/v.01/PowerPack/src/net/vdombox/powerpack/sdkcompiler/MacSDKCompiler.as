@@ -22,7 +22,12 @@ package net.vdombox.powerpack.sdkcompiler
 			argVector.push("-storepass");
 			argVector.push("q");
 			argVector.push("-target");
-			argVector.push("native");
+			
+			if (packageTypeNative)
+				argVector.push("native");
+			else
+				argVector.push("air");
+			
 			argVector.push(outputPackagePath);
 			
 //			argVector.push("-storetype");

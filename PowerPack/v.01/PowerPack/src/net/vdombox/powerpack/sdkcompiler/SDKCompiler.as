@@ -150,7 +150,7 @@ package net.vdombox.powerpack.sdkcompiler
 
 		private function onProcessProgressEvent(evt:ProgressEvent) : void
 		{
-			trace ("[SDKCompiler] onProcessProgressEvent: ");
+			trace ("[SDKCompiler] onProcessProgressEvent");
 			if (evt.type == ProgressEvent.STANDARD_ERROR_DATA)
 			{
 				sendEvent(SDKCompilerEvent.SDK_COMPILER_ERROR, errorMsg);

@@ -24,7 +24,7 @@ package net.vdombox.powerpack.sdkcompiler
 					
 				case FileUtils.OS_MAC:
 				{
-					// TODO: MAC
+					compiler = new MacSDKCompiler();
 					break;
 				}
 				default :
