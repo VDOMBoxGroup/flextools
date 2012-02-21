@@ -571,24 +571,27 @@
 			
 			<mx:VBox id="radioBtnsBox" verticalGap="1">
 				<mx:Label text="Export as: "/>
+				
 				<mx:RadioButtonGroup id="radioBtnGroupBuildType"
 									 itemClick="buildTypeChangeHandler(event)"/>
+				
+				<mx:RadioButton id="buildTypeAIR"
+								groupName="radioBtnGroupBuildType"
+								label="AIR package"
+								value="{SDKCompiler.PACKAGE_TYPE_AIR}"
+								selected="true"/>
 				
 				<mx:RadioButton id="buildTypeNative"
 								groupName="radioBtnGroupBuildType"
 								label="Native installer"
 								value="{SDKCompiler.PACKAGE_TYPE_NATIVE}"
-								selected="false"/>
+								selected="false"
+								visible="false" height="1"/>
 				
 				<sdkcompiler:LinuxNativeInstallerTypeSelectorVBox id="linuxNatineTypeSelector" 
 																  creationComplete="linuxNativeInstallerTypeSelectorCreationCompleteHandler(event)"
 																  paddingLeft="20"/>	
 					
-				<mx:RadioButton id="buildTypePackage"
-								groupName="radioBtnGroupBuildType"
-								label="AIR package"
-								value="{SDKCompiler.PACKAGE_TYPE_AIR}"
-								selected="true"/>
 			</mx:VBox>
 			
 			<mx:Button id="buildBtn" label="Build" click="btnBuildClickHandler(event)" />
