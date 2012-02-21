@@ -62,7 +62,7 @@
 			
 			protected function apply_clickHandler(event:MouseEvent):void
 			{
-				_queryString = "<where>";
+				_queryString = "<where><![CDATA"+'[';
 				
 				var querySimpleBuildBoxItemRenderer : QuerySimpleBuildBoxItemRenderer;
 				
@@ -70,16 +70,16 @@
 				{
 					querySimpleBuildBoxItemRenderer = dataGroup.getElementAt( i ) as QuerySimpleBuildBoxItemRenderer;
 					
-					if ( _queryString == "<where>" )
+					if ( _queryString == "<where><![CDATA"+'[' )
 						_queryString += querySimpleBuildBoxItemRenderer.queryShort;
 					else
 						_queryString += querySimpleBuildBoxItemRenderer.query;
 				}
 				
-				if ( _queryString == "<where>" )
+				if ( _queryString == "<where><![CDATA"+'[' )
 					_queryString = "";
 				else
-					_queryString += "</where>";
+					_queryString += ']'+']></where>';
 				
 				dispatchEvent( new ToolBoxPanelEvent( ToolBoxPanelEvent.SEND_QUERY_SIMPLE_CLICK ) );
 			}

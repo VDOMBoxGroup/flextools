@@ -4,7 +4,7 @@
 					  xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
 					  implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
 					  xmlns:components="net.vdombox.components.*" xmlns:components1="net.vdombox.ide.modules.dataBase.view.components.*"
-					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)">	
+					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)" xmlns:toolBoxComponents="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.*">	
 	
 	
 	<fx:Script>

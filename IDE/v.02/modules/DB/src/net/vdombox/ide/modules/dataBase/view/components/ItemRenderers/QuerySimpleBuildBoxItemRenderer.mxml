@@ -46,6 +46,9 @@
 				
 				operators.addItem( "==" );
 				operators.addItem( ">" );
+				operators.addItem( ">=" );
+				operators.addItem( "<" );
+				operators.addItem( "<=" );
 				operators.addItem( "!=" );
 				
 				cmbOperators.selectedItem = "==";
@@ -65,7 +68,7 @@
 				if ( !chkBoxEnable.selected )
 					return "";
 				
-				return (cmbColumns.selectedItem as String) + ' ' + ( cmbOperators.selectedItem as String ) + ' ' + '"' + txtValue.text + '"';
+				return (cmbColumns.selectedItem as String)  + ' ' + ( cmbOperators.selectedItem as String ) + ' ' + '"' + txtValue.text + '"';
 			}
 			
 			public function get query() : String
