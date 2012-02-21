@@ -3,11 +3,11 @@ package net.vdombox.ide.modules.scripts.controller
 	import mx.utils.ObjectUtil;
 	import mx.utils.UIDUtil;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.view.ServerScriptsPanelMediator;
 	import net.vdombox.utils.MD5Utils;
 	
@@ -32,7 +32,7 @@ package net.vdombox.ide.modules.scripts.controller
 
 			switch ( target )
 			{
-				case ApplicationFacade.ACTION:
+				case Notifications.ACTION:
 				{
 					//TODO: сделать более полную обработку исключения...
 					if ( !facade.hasMediator( ServerScriptsPanelMediator.NAME ) )
@@ -58,25 +58,25 @@ package net.vdombox.ide.modules.scripts.controller
 
 					if ( statesProxy.selectedObject )
 					{
-						sendNotification( ApplicationFacade.SET_SERVER_ACTIONS,
+						sendNotification( Notifications.SET_SERVER_ACTIONS,
 							{ objectVO: statesProxy.selectedObject, serverActions: serverActions } );
 					}
 
 					else if ( statesProxy.selectedPage )
 					{
-						sendNotification( ApplicationFacade.SET_SERVER_ACTIONS,
+						sendNotification( Notifications.SET_SERVER_ACTIONS,
 							{ pageVO: statesProxy.selectedPage, serverActions: serverActions } );
 					}
 
 					break;
 				}
 
-				case ApplicationFacade.LIBRARY:
+				case Notifications.LIBRARY:
 				{
 					var libraryVO : LibraryVO = new LibraryVO( scriptName, selectedApplicationVO );
 					libraryVO.script = "";
 					
-					sendNotification( ApplicationFacade.CREATE_LIBRARY, { applicationVO: selectedApplicationVO, libraryVO : libraryVO } );
+					sendNotification( Notifications.CREATE_LIBRARY, { applicationVO: selectedApplicationVO, libraryVO : libraryVO } );
 
 					break;
 				}

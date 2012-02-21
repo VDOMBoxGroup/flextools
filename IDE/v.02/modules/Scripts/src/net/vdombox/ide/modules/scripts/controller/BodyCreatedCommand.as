@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.scripts.controller
 {
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.view.ContainersPanelMediator;
 	import net.vdombox.ide.modules.scripts.view.GlobalScriptsPanelMediator;
 	import net.vdombox.ide.modules.scripts.view.LibrariesPanelMediator;

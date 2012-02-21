@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.scripts.controller
 {
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.view.BodyMediator;
 	import net.vdombox.ide.modules.scripts.view.ScriptsMediator;
 	import net.vdombox.ide.modules.scripts.view.components.Body;
@@ -29,8 +29,8 @@ package net.vdombox.ide.modules.scripts.controller
 			}
 
 			body.moduleFactory = scriptsMediator.scripts.moduleFactory;
-			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
-			facade.sendNotification( ApplicationFacade.MODULE_SELECTED );
+			facade.sendNotification( Notifications.EXPORT_BODY, body );
+			facade.sendNotification( Notifications.MODULE_SELECTED );
 		}
 	}
 }

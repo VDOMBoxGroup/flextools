@@ -8,7 +8,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.itemrenderers.ObjectsTreePanelItemRenderer;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.ContainersPanel;
 	
@@ -63,15 +63,15 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
 			interests.push( TypesProxy.TYPES_GETTED );
-			interests.push( ApplicationFacade.STRUCTURE_GETTED );
+			interests.push( Notifications.STRUCTURE_GETTED );
 			
 			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 			
-			interests.push( ApplicationFacade.PAGES_GETTED );
+			interests.push( Notifications.PAGES_GETTED );
 
 			return interests;
 		}
@@ -81,12 +81,12 @@ package net.vdombox.ide.modules.scripts.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
@@ -97,7 +97,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 
@@ -112,7 +112,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case ApplicationFacade.PAGES_GETTED:
+				case Notifications.PAGES_GETTED:
 				{
 					var pages : Array = body as Array;
 
@@ -122,7 +122,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case ApplicationFacade.STRUCTURE_GETTED:
+				case Notifications.STRUCTURE_GETTED:
 				{
 					if ( !containersPanel.structure )
 						return;
@@ -161,7 +161,7 @@ package net.vdombox.ide.modules.scripts.view
 					
 				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
-					sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
+					sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
 					
 					break;
 				}
@@ -196,7 +196,7 @@ package net.vdombox.ide.modules.scripts.view
 			if ( !needGetPageStructure )
 				return;
 			
-			sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
+			sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
 		}
 		
 		private function showPages( pages : Array ) : void
@@ -317,13 +317,13 @@ package net.vdombox.ide.modules.scripts.view
 			var treeItemRenderer : ObjectsTreePanelItemRenderer = event.target as ObjectsTreePanelItemRenderer;
 			if ( treeItemRenderer )
 			{
-				sendNotification( ApplicationFacade.OPEN_ONLOAD_SCRIPT, treeItemRenderer.objectID );
+				sendNotification( Notifications.OPEN_ONLOAD_SCRIPT, treeItemRenderer.objectID );
 			}
 		}
 		
 		private function getResourceRequestHandler( event : ResourceVOEvent ) : void
 		{
-			sendNotification( ApplicationFacade.GET_RESOURCE_REQUEST, event.target );
+			sendNotification( Notifications.GET_RESOURCE_REQUEST, event.target );
 		}
 	}
 }

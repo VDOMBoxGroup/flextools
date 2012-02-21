@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.scripts.controller
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.scripts.controller
 			var applicationVO : ApplicationVO = statesProxy.selectedApplication;
 			
 			if( libraryVO && applicationVO )
-				sendNotification( ApplicationFacade.DELETE_LIBRARY, { applicationVO : applicationVO, libraryVO : libraryVO } );
+				sendNotification( Notifications.DELETE_LIBRARY, { applicationVO : applicationVO, libraryVO : libraryVO } );
 		}
 	}
 }

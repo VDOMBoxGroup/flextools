@@ -6,13 +6,13 @@ package net.vdombox.ide.modules.scripts.view
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.editors.PythonScriptEditor;
-	import net.vdombox.ide.common.model._vo.ApplicationVO;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	
@@ -104,9 +104,9 @@ package net.vdombox.ide.modules.scripts.view
 				currentVO.script = scriptEditor.script;
 			
 			if ( scriptEditor.objectVO is PageVO )
-				sendNotification( ApplicationFacade.SAVE_SCRIPT_REQUEST, { pageVO : scriptEditor.objectVO, currentVO :  currentVO } );
+				sendNotification( Notifications.SAVE_SCRIPT_REQUEST, { pageVO : scriptEditor.objectVO, currentVO :  currentVO } );
 			else if ( scriptEditor.objectVO is ObjectVO )
-				sendNotification( ApplicationFacade.SAVE_SCRIPT_REQUEST, { objectVO : scriptEditor.objectVO, currentVO :  currentVO } );
+				sendNotification( Notifications.SAVE_SCRIPT_REQUEST, { objectVO : scriptEditor.objectVO, currentVO :  currentVO } );
 		}
 	}
 }

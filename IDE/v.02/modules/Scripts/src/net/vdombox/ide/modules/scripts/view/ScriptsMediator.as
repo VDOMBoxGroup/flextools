@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.scripts.view
 	import flash.events.Event;
 	
 	import net.vdombox.ide.modules.Scripts;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -30,7 +30,7 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function tearDownHandler( event : Event ) : void
 		{
-			sendNotification( ApplicationFacade.TEAR_DOWN );
+			sendNotification( Notifications.TEAR_DOWN );
 		}
 	}
 }

@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.ServerScriptsPanel;
 	import net.vdombox.utils.WindowManager;
@@ -61,20 +61,20 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
 			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
 			
-			interests.push( ApplicationFacade.PAGES_GETTED );
+			interests.push( Notifications.PAGES_GETTED );
 
-			interests.push( ApplicationFacade.SELECTED_LIBRARY_CHANGED );
+			interests.push( Notifications.SELECTED_LIBRARY_CHANGED );
 
-			interests.push( ApplicationFacade.SERVER_ACTIONS_GETTED );
-			interests.push( ApplicationFacade.SERVER_ACTIONS_SETTED );
+			interests.push( Notifications.SERVER_ACTIONS_GETTED );
+			interests.push( Notifications.SERVER_ACTIONS_SETTED );
 			
-			interests.push( ApplicationFacade.OPEN_ONLOAD_SCRIPT );
+			interests.push( Notifications.OPEN_ONLOAD_SCRIPT );
 
 			return interests;
 		}
@@ -86,23 +86,23 @@ package net.vdombox.ide.modules.scripts.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
-						sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
+						sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
 
 						break;
 					}
 				}
 
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 
@@ -113,14 +113,14 @@ package net.vdombox.ide.modules.scripts.view
 
 				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
-					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					sendNotification( Notifications.GET_SERVER_ACTIONS_REQUEST );
 					
 					break;
 				}
 					
-				case ApplicationFacade.PAGES_GETTED:
+				case Notifications.PAGES_GETTED:
 				{
-					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					sendNotification( Notifications.GET_SERVER_ACTIONS_REQUEST );
 					
 					break;
 				}
@@ -129,12 +129,12 @@ package net.vdombox.ide.modules.scripts.view
 
 				case StatesProxy.SELECTED_OBJECT_CHANGED:
 				{
-					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					sendNotification( Notifications.GET_SERVER_ACTIONS_REQUEST );
 
 					break;
 				}
 
-				case ApplicationFacade.SERVER_ACTIONS_GETTED:
+				case Notifications.SERVER_ACTIONS_GETTED:
 				{
 					serverScriptsPanel.scripts = body.serverActions as Array;
 					if ( onloadScriptOpening != "" )
@@ -145,14 +145,14 @@ package net.vdombox.ide.modules.scripts.view
 						
 				}
 					
-				case ApplicationFacade.SERVER_ACTIONS_SETTED:
+				case Notifications.SERVER_ACTIONS_SETTED:
 				{
 					serverScriptsPanel.scripts = body.serverActions as Array;
 					
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_LIBRARY_CHANGED:
+				case Notifications.SELECTED_LIBRARY_CHANGED:
 				{
 					if ( body )
 						serverScriptsPanel.selectedScript = null;
@@ -160,7 +160,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case ApplicationFacade.OPEN_ONLOAD_SCRIPT:
+				case Notifications.OPEN_ONLOAD_SCRIPT:
 				{
 					onloadScriptOpen( body as String );
 					
@@ -204,7 +204,7 @@ package net.vdombox.ide.modules.scripts.view
 			{
 				WindowManager.getInstance().removeWindow( renameWindow );
 				
-				sendNotification( ApplicationFacade.CREATE_SCRIPT_REQUEST, { name : event.name, target : ApplicationFacade.ACTION } );
+				sendNotification( Notifications.CREATE_SCRIPT_REQUEST, { name : event.name, target : Notifications.ACTION } );
 				
 			}
 			
@@ -239,12 +239,12 @@ package net.vdombox.ide.modules.scripts.view
 			
 			if ( statesProxy.selectedObject )
 			{
-				sendNotification( ApplicationFacade.SET_SERVER_ACTIONS, { objectVO: statesProxy.selectedObject,
+				sendNotification( Notifications.SET_SERVER_ACTIONS, { objectVO: statesProxy.selectedObject,
 					serverActions: serverActions } );
 			}
 			else if ( statesProxy.selectedPage )
 			{
-				sendNotification( ApplicationFacade.SET_SERVER_ACTIONS, { pageVO: statesProxy.selectedPage, serverActions: serverActions } );
+				sendNotification( Notifications.SET_SERVER_ACTIONS, { pageVO: statesProxy.selectedPage, serverActions: serverActions } );
 			}
 		}
 		
@@ -258,7 +258,7 @@ package net.vdombox.ide.modules.scripts.view
 					if ( serverActionVO.containerID == containerID )
 					{
 						onloadScriptOpening = "";
-						sendNotification( ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED, serverActionVO );
+						sendNotification( Notifications.SELECTED_SERVER_ACTION_CHANGED, serverActionVO );
 					}
 					else
 					{
@@ -272,7 +272,7 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function selectedServerActionChangedHandler( event : ServerScriptsPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED, serverScriptsPanel.selectedScript );
+			sendNotification( Notifications.SELECTED_SERVER_ACTION_CHANGED, serverScriptsPanel.selectedScript );
 		}
 	}
 }

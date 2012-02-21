@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.scripts.controller.messages
 {
+	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -32,14 +32,14 @@ package net.vdombox.ide.modules.scripts.controller.messages
 			{
 				case PPMApplicationTargetNames.PAGES:
 				{
-					sendNotification( ApplicationFacade.PAGES_GETTED, body.pages );
+					sendNotification( Notifications.PAGES_GETTED, body.pages );
 					
 					break;
 				}
 					
 				case PPMApplicationTargetNames.SERVER_ACTIONS:
 				{
-					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
+					sendNotification( Notifications.SERVER_ACTIONS_GETTED, body );
 					
 					break;
 				}
@@ -47,25 +47,25 @@ package net.vdombox.ide.modules.scripts.controller.messages
 				case PPMApplicationTargetNames.LIBRARY:
 				{
 					if( operation == PPMOperationNames.CREATE )
-						sendNotification( ApplicationFacade.LIBRARY_CREATED, body.libraryVO );
+						sendNotification( Notifications.LIBRARY_CREATED, body.libraryVO );
 					if( operation == PPMOperationNames.UPDATE )
-						sendNotification( ApplicationFacade.LIBRARY_SAVED, body.libraryVO );
+						sendNotification( Notifications.LIBRARY_SAVED, body.libraryVO );
 					else if( operation == PPMOperationNames.DELETE )
-						sendNotification( ApplicationFacade.LIBRARY_DELETED, body.libraryVO );
+						sendNotification( Notifications.LIBRARY_DELETED, body.libraryVO );
 					
 					break;
 				}
 					
 				case PPMApplicationTargetNames.LIBRARIES:
 				{
-					sendNotification( ApplicationFacade.LIBRARIES_GETTED, body.libraries );
+					sendNotification( Notifications.LIBRARIES_GETTED, body.libraries );
 					
 					break;
 				}
 					
 				case PPMApplicationTargetNames.SERVER_ACTIONS_LIST:
 				{
-					sendNotification( ApplicationFacade.GLOBAL_ACTIONS_GETTED, body );
+					sendNotification( Notifications.GLOBAL_ACTIONS_GETTED, body );
 					
 					break;
 				}

@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.GlobalScriptsPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.GlobalScriptsPanel;
 	
@@ -36,10 +36,10 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 			
-			interests.push( ApplicationFacade.GLOBAL_ACTIONS_GETTED );
+			interests.push( Notifications.GLOBAL_ACTIONS_GETTED );
 			
 			return interests;
 		}
@@ -49,32 +49,32 @@ package net.vdombox.ide.modules.scripts.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 			
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 			
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 						globalScriptsPanel.actions = null;
 						_globalActions = new Object();
-						sendNotification( ApplicationFacade.GET_SERVER_ACTIONS, statesProxy.selectedApplication );
+						sendNotification( Notifications.GET_SERVER_ACTIONS, statesProxy.selectedApplication );
 						
 						break;
 					}
 				}
 					
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 					
 					break;
 				}
 					
-				case ApplicationFacade.GLOBAL_ACTIONS_GETTED:
+				case Notifications.GLOBAL_ACTIONS_GETTED:
 				{
 					
 					var serverActionsXML : XML = body.serverActionsXML as XML;
@@ -146,7 +146,7 @@ package net.vdombox.ide.modules.scripts.view
 		private function selectedGlobalScriptChangedHandler( event : GlobalScriptsPanelEvent ) : void
 		{
 			var _globalScript : GlobalActionVO = _globalActions[ globalScriptsPanel.selectedScript.@id ];
-			sendNotification( ApplicationFacade.SELECTED_GLOBAL_ACTION_CHANGED, _globalScript );
+			sendNotification( Notifications.SELECTED_GLOBAL_ACTION_CHANGED, _globalScript );
 		}
 	}
 }

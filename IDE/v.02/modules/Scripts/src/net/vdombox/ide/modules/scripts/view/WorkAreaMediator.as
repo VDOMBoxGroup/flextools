@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	import net.vdombox.ide.modules.scripts.view.components.WorkArea;
 	
@@ -55,11 +55,11 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
-			interests.push( ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_LIBRARY_CHANGED );
-			interests.push( ApplicationFacade.SELECTED_GLOBAL_ACTION_CHANGED );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
+			interests.push( Notifications.SELECTED_SERVER_ACTION_CHANGED );
+			interests.push( Notifications.SELECTED_LIBRARY_CHANGED );
+			interests.push( Notifications.SELECTED_GLOBAL_ACTION_CHANGED );
 			
 			return interests;
 		}
@@ -72,21 +72,21 @@ package net.vdombox.ide.modules.scripts.view
 			//var objectVO : ObjectVO;
 			var editor : ScriptEditor;
 			
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 			
 			
 			
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					isActive = true;
 					
 					break;
 				}
 					
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					clearData();
 					
@@ -95,7 +95,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED:
+				case Notifications.SELECTED_SERVER_ACTION_CHANGED:
 				{
 					serverActionVO = body as ServerActionVO;
 					OpenAndFindEditor( serverActionVO );
@@ -103,7 +103,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case ApplicationFacade.SELECTED_LIBRARY_CHANGED:
+				case Notifications.SELECTED_LIBRARY_CHANGED:
 				{
 					libraryVO = body as LibraryVO
 					OpenAndFindEditor( libraryVO );
@@ -111,7 +111,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case ApplicationFacade.SELECTED_GLOBAL_ACTION_CHANGED:
+				case Notifications.SELECTED_GLOBAL_ACTION_CHANGED:
 				{
 					globalActionVO = body as GlobalActionVO;
 					OpenAndFindEditor( globalActionVO );

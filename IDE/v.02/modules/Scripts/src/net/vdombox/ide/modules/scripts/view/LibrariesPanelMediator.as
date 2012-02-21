@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.LibrariesPanel;
 	import net.vdombox.utils.WindowManager;
@@ -53,14 +53,14 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 			
-			interests.push( ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED );
+			interests.push( Notifications.SELECTED_SERVER_ACTION_CHANGED );
 			
-			interests.push( ApplicationFacade.LIBRARIES_GETTED );
-			interests.push( ApplicationFacade.LIBRARY_CREATED );
-			interests.push( ApplicationFacade.LIBRARY_DELETED );
+			interests.push( Notifications.LIBRARIES_GETTED );
+			interests.push( Notifications.LIBRARY_CREATED );
+			interests.push( Notifications.LIBRARY_DELETED );
 
 			return interests;
 		}
@@ -70,23 +70,23 @@ package net.vdombox.ide.modules.scripts.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 			
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
-						sendNotification( ApplicationFacade.GET_LIBRARIES, statesProxy.selectedApplication );
+						sendNotification( Notifications.GET_LIBRARIES, statesProxy.selectedApplication );
 						
 						break;
 					}
 				}
 					
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 					
@@ -95,7 +95,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 				
-				case ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED:
+				case Notifications.SELECTED_SERVER_ACTION_CHANGED:
 				{
 					if ( body )
 						librariesPanel.selectedLibrary = null;
@@ -103,7 +103,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case ApplicationFacade.LIBRARIES_GETTED:
+				case Notifications.LIBRARIES_GETTED:
 				{
 					libraries = body as Array;
 					librariesPanel.libraries = libraries.slice();
@@ -111,7 +111,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case ApplicationFacade.LIBRARY_CREATED:
+				case Notifications.LIBRARY_CREATED:
 				{
 					if ( libraries )
 					{
@@ -122,7 +122,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case ApplicationFacade.LIBRARY_DELETED:
+				case Notifications.LIBRARY_DELETED:
 				{
 					var libraryVO : LibraryVO = body as LibraryVO;
 
@@ -177,7 +177,7 @@ package net.vdombox.ide.modules.scripts.view
 			{
 				WindowManager.getInstance().removeWindow( renameWindow );
 				
-				sendNotification( ApplicationFacade.CREATE_SCRIPT_REQUEST, { name : event.name, target : ApplicationFacade.LIBRARY } );
+				sendNotification( Notifications.CREATE_SCRIPT_REQUEST, { name : event.name, target : Notifications.LIBRARY } );
 				
 			}
 			
@@ -192,12 +192,12 @@ package net.vdombox.ide.modules.scripts.view
 			var libraryVO : LibraryVO = librariesPanel.selectedLibrary;
 
 			if ( libraryVO )
-				sendNotification( ApplicationFacade.DELETE_LIBRARY_REQUEST, libraryVO );
+				sendNotification( Notifications.DELETE_LIBRARY_REQUEST, libraryVO );
 		}
 
 		private function selectedLibraryChangedHandler( event : LibrariesPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SELECTED_LIBRARY_CHANGED, librariesPanel.selectedLibrary );
+			sendNotification( Notifications.SELECTED_LIBRARY_CHANGED, librariesPanel.selectedLibrary );
 		}
 	}
 }

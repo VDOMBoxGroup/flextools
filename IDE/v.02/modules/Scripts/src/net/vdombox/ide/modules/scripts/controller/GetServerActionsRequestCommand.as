@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.scripts.controller
 {
 	import net.vdombox.ide.common.model.StatesProxy;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.scripts.controller
 			if( !currentContainer )
 				return;
 			
-			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS, currentContainer );
+			sendNotification( Notifications.GET_SERVER_ACTIONS, currentContainer );
 		}
 	}
 }
