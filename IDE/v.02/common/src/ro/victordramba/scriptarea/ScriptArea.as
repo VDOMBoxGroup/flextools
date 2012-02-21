@@ -347,9 +347,9 @@ package ro.victordramba.scriptarea
 
 		protected function undo() : void
 		{
-			if ( undoBuff.length == 2 )
+			if ( undoBuff.length == 2 || undoBuff.length == 0 )
 				return;
-
+			
 			var o : Object = undoBuff.pop();
 			redoBuff.push( { s: o.s, e: o.s + o.t.length, t: _text.substring( o.s, o.e ) } );
 

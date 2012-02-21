@@ -120,16 +120,17 @@ package net.vdombox.ide.common.model
 			return result;
 		}
 		
+		private var names : Array = new Array();
+		
 		public function getTypeVObyID( typeID : String ) : TypeVO
 		{
 			var result : TypeVO;
-			var typeVO : TypeVO;
 			
-			for each ( typeVO in _types )
+			for ( var i : int = 0; i < types.length; i++ )
 			{
-				if ( typeVO.id == typeID )
+				if ( types[i].id == typeID )
 				{
-					result = typeVO;
+					result = types[i];
 					break;
 				}
 			}

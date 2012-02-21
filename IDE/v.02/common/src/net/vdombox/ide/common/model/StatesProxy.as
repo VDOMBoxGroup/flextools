@@ -2,6 +2,7 @@ package net.vdombox.ide.common.model
 {
 	import flash.utils.Dictionary;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
