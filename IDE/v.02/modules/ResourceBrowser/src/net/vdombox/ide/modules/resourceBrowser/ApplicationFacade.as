@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.resourceBrowser
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.ResourceBrowser;
@@ -25,58 +26,6 @@ package net.vdombox.ide.modules.resourceBrowser
 
 	public class ApplicationFacade extends Facade implements IFacade
 	{
-		//		main
-		public static const STARTUP : String = "startup";
-
-		public static const CREATE_TOOLSET : String = "createToolset";
-		public static const CREATE_SETTINGS_SCREEN : String = "createSettingsScreen";
-		public static const CREATE_BODY : String = "createBody";
-
-		public static const EXPORT_TOOLSET : String = "exportToolset";
-		public static const EXPORT_SETTINGS_SCREEN : String = "exportSettingsScreen";
-		public static const EXPORT_BODY : String = "exportBody";
-
-		//		selection
-		public static const SELECT_MODULE : String = "selectModule";
-		public static const MODULE_SELECTED : String = "moduleSelected";
-		public static const MODULE_DESELECTED : String = "moduleDeselected";
-
-		public static const PIPES_READY : String = "pipesReady";
-
-		//		tear down
-		public static const TEAR_DOWN : String = "tearDown";
-
-//		pipe messages
-		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
-
-//		resources
-		public static const GET_RESOURCES : String = "getResources";
-		public static const RESOURCES_GETTED : String = "resourcesGetted";
-
-		public static const LOAD_RESOURCE : String = "loadResource";
-		public static const RESOURCE_LOADED : String = "resourceLoadded";
-
-		public static const UPLOAD_RESOURCE : String = "uploadResources";
-		public static const RESOURCE_UPLOADED : String = "resourceUploaded";
-
-		public static const DELETE_RESOURCE_REQUEST : String = "deleteResourceRequest";
-		public static const DELETE_RESOURCE : String = "deleteResource";
-		public static const RESOURCE_DELETED : String = "resourceDeleted";
-		
-//		icon
-		public static const GET_ICON	: String = "getIcon";
-		public static const ICON_GETTED : String = "iconGetted";
-
-//		other
-		public static const DELIMITER : String = "/";
-
-		public static const BODY_CREATED : String = "bodyCreated";
-		public static const BODY_START : String = "bodyStart";
-		public static const BODY_STOP : String = "bodyStop";
-		
-		public static const WRITE_ERROR : String = "writeError";
-
-
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )
@@ -91,18 +40,18 @@ package net.vdombox.ide.modules.resourceBrowser
 
 		public function startup( application : ResourceBrowser ) : void
 		{
-			sendNotification( STARTUP, application );
+			sendNotification( Notifications.STARTUP, application );
 		}
 
 		override protected function initializeController() : void
 		{
 			super.initializeController();
 			
-			registerCommand( STARTUP, StartupCommand );
+			registerCommand( Notifications.STARTUP, StartupCommand );
 
-			registerCommand( CREATE_TOOLSET, CreateToolsetCommand );
-			registerCommand( CREATE_SETTINGS_SCREEN, CreateSettingsScreenCommand );
-			registerCommand( CREATE_BODY, CreateBodyCommand );
+			registerCommand( Notifications.CREATE_TOOLSET, CreateToolsetCommand );
+			registerCommand( Notifications.CREATE_SETTINGS_SCREEN, CreateSettingsScreenCommand );
+			registerCommand( Notifications.CREATE_BODY, CreateBodyCommand );
 
 			registerCommand( SettingsProxy.INITIALIZE_SETTINGS, InitializeSettingsCommand );
 			registerCommand( SettingsProxy.GET_SETTINGS, GetSettingsCommand );
@@ -110,16 +59,16 @@ package net.vdombox.ide.modules.resourceBrowser
 			registerCommand( SettingsProxy.SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 
 			registerCommand( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
-			registerCommand( PROCESS_RESOURCES_PROXY_MESSAGE, ProcessResourcesProxyMessageCommand );
+			registerCommand( Notifications.PROCESS_RESOURCES_PROXY_MESSAGE, ProcessResourcesProxyMessageCommand );
 
 			registerCommand( StatesProxy.CHANGE_SELECTED_RESOURCE_REQUEST, ChangeSelectedObjectRequestCommand );
-			registerCommand( DELETE_RESOURCE_REQUEST, DeleteResourceRequestCommand )
+			registerCommand( Notifications.DELETE_RESOURCE_REQUEST, DeleteResourceRequestCommand )
 			
-			registerCommand( RESOURCE_DELETED, ResourceDeletedCommand );
+			registerCommand( Notifications.RESOURCE_DELETED, ResourceDeletedCommand );
 			
-			registerCommand( BODY_CREATED, BodyCreatedCommand );
+			registerCommand( Notifications.BODY_CREATED, BodyCreatedCommand );
 
-			registerCommand( TEAR_DOWN, TearDownCommand );
+			registerCommand( Notifications.TEAR_DOWN, TearDownCommand );
 		}
 	}
 }

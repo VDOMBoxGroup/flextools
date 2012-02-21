@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.resourceBrowser.controller
 {
 	import net.vdombox.ide.modules.ResourceBrowser;
-	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.view.BodyMediator;
 	import net.vdombox.ide.modules.resourceBrowser.view.ResourceBrowserMediator;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.Body;
@@ -30,7 +30,7 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 			}
 			
 			body.moduleFactory = resourceBrowserMediator.resourceBrowser.moduleFactory;
-			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
+			facade.sendNotification( Notifications.EXPORT_BODY, body );
 		}
 	}
 }

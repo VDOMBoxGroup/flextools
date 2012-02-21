@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.resourceBrowser.controller
 {
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -16,7 +16,7 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 			var resourceVO : ResourceVO = statesProxy.selectedResource;
 
 			if ( resourceVO && statesProxy.selectedApplication )
-				sendNotification( ApplicationFacade.DELETE_RESOURCE, { applicationVO: statesProxy.selectedApplication, resourceVO: resourceVO } );
+				sendNotification( Notifications.DELETE_RESOURCE, { applicationVO: statesProxy.selectedApplication, resourceVO: resourceVO } );
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.PreviewArea;
@@ -49,12 +49,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
 			interests.push( StatesProxy.SELECTED_RESOURCE_CHANGED );
 			
-			interests.push( ApplicationFacade.RESOURCE_LOADED );
+			interests.push( Notifications.RESOURCE_LOADED );
 
 			return interests;
 		}
@@ -64,12 +64,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
@@ -79,7 +79,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					}
 				}
 
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 
@@ -95,7 +95,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 					
-				case ApplicationFacade.RESOURCE_LOADED:
+				case Notifications.RESOURCE_LOADED:
 				{
 					workArea.resourceVO = body as ResourceVO;
 					
@@ -129,23 +129,23 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 		private function deleteResourceHandler( event : WorkAreaEvent ) : void
 		{
-			//sendNotification( ApplicationFacade.DELETE_RESOURCE_REQUEST );
-			sendNotification( ApplicationFacade.DELETE_RESOURCE, { applicationVO: statesProxy.selectedApplication, resourceVO: workArea.resourceVO } );
+			//sendNotification( Notifications.DELETE_RESOURCE_REQUEST );
+			sendNotification( Notifications.DELETE_RESOURCE, { applicationVO: statesProxy.selectedApplication, resourceVO: workArea.resourceVO } );
 		}
 		
 		private function loadResourceHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.LOAD_RESOURCE, workArea.previewArea.resourceVO );
+			sendNotification( Notifications.LOAD_RESOURCE, workArea.previewArea.resourceVO );
 		}
 		
 		private function getIconHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.GET_ICON, workArea.previewArea.resourceVO );
+			sendNotification( Notifications.GET_ICON, workArea.previewArea.resourceVO );
 		}
 		
 		private function errorHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.WRITE_ERROR, { applicationVO: statesProxy.selectedApplication, content: event.content } );
+			sendNotification( Notifications.WRITE_ERROR, { applicationVO: statesProxy.selectedApplication, content: event.content } );
 		}
 
 	}

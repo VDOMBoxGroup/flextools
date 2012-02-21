@@ -21,7 +21,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
-	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -51,25 +51,25 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.EXPORT_TOOLSET );
-			interests.push( ApplicationFacade.EXPORT_SETTINGS_SCREEN );
-			interests.push( ApplicationFacade.EXPORT_BODY );
+			interests.push( Notifications.EXPORT_TOOLSET );
+			interests.push( Notifications.EXPORT_SETTINGS_SCREEN );
+			interests.push( Notifications.EXPORT_BODY );
 
 			interests.push( SettingsProxy.RETRIEVE_SETTINGS_FROM_STORAGE );
 			interests.push( SettingsProxy.SAVE_SETTINGS_TO_STORAGE );
 
-			interests.push( ApplicationFacade.SELECT_MODULE );
+			interests.push( Notifications.SELECT_MODULE );
 
 			interests.push( StatesProxy.GET_ALL_STATES );
 			interests.push( StatesProxy.SET_ALL_STATES );
 
-			interests.push( ApplicationFacade.GET_RESOURCES );
-			interests.push( ApplicationFacade.LOAD_RESOURCE );
-			interests.push( ApplicationFacade.UPLOAD_RESOURCE );
-			interests.push( ApplicationFacade.DELETE_RESOURCE );
-			interests.push( ApplicationFacade.GET_ICON );
+			interests.push( Notifications.GET_RESOURCES );
+			interests.push( Notifications.LOAD_RESOURCE );
+			interests.push( Notifications.UPLOAD_RESOURCE );
+			interests.push( Notifications.DELETE_RESOURCE );
+			interests.push( Notifications.GET_ICON );
 			
-			interests.push( ApplicationFacade.WRITE_ERROR );
+			interests.push( Notifications.WRITE_ERROR );
 
 			return interests;
 		}
@@ -98,7 +98,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.EXPORT_TOOLSET:
+				case Notifications.EXPORT_TOOLSET:
 				{
 					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ),
 						multitonKey );
@@ -108,7 +108,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.EXPORT_SETTINGS_SCREEN:
+				case Notifications.EXPORT_SETTINGS_SCREEN:
 				{
 					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ),
 						multitonKey );
@@ -118,7 +118,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.EXPORT_BODY:
+				case Notifications.EXPORT_BODY:
 				{
 					message = new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( body ), multitonKey );
 
@@ -147,7 +147,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.SELECT_MODULE:
+				case Notifications.SELECT_MODULE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.SELECT_MODULE, null, multitonKey );
 
@@ -174,7 +174,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.GET_RESOURCES:
+				case Notifications.GET_RESOURCES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
 						PPMResourcesTargetNames.RESOURCES, body );
@@ -184,7 +184,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.LOAD_RESOURCE:
+				case Notifications.LOAD_RESOURCE:
 				{
 					var recipientKey : String;
 					var resourceVO : ResourceVO;
@@ -212,7 +212,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.UPLOAD_RESOURCE:
+				case Notifications.UPLOAD_RESOURCE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE,
 						PPMResourcesTargetNames.RESOURCE, body );
@@ -222,7 +222,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.DELETE_RESOURCE:
+				case Notifications.DELETE_RESOURCE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE,
 						PPMResourcesTargetNames.RESOURCE, body );
@@ -232,7 +232,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_ICON:
+				case Notifications.GET_ICON:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.ICON, body );
 					
@@ -241,7 +241,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 					
-				case ApplicationFacade.WRITE_ERROR:
+				case Notifications.WRITE_ERROR:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.ERROR, body );
 					
@@ -266,13 +266,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				{
 					if ( recipientKey == multitonKey )
 					{
-						sendNotification( ApplicationFacade.MODULE_SELECTED );
+						sendNotification( Notifications.MODULE_SELECTED );
 						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE,
 							null, multitonKey ) );
 					}
 					else
 					{
-						sendNotification( ApplicationFacade.MODULE_DESELECTED );
+						sendNotification( Notifications.MODULE_DESELECTED );
 						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE,
 							null, multitonKey ) );
 					}
@@ -288,7 +288,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module",
 						SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
-					sendNotification( ApplicationFacade.PIPES_READY );
+					sendNotification( Notifications.PIPES_READY );
 					break;
 				}
 
@@ -380,7 +380,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case PPMPlaceNames.RESOURCES:
 				{
-					sendNotification( ApplicationFacade.PROCESS_RESOURCES_PROXY_MESSAGE, message );
+					sendNotification( Notifications.PROCESS_RESOURCES_PROXY_MESSAGE, message );
 					
 					break;
 				}

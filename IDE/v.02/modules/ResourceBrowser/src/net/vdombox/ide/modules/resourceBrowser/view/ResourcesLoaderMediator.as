@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import flash.filesystem.File;
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderEvent;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.ResourcesLoader;
@@ -54,11 +54,11 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
-			interests.push( ApplicationFacade.RESOURCE_UPLOADED );
-			interests.push( ApplicationFacade.RESOURCES_GETTED );
+			interests.push( Notifications.RESOURCE_UPLOADED );
+			interests.push( Notifications.RESOURCES_GETTED );
 
 			return interests;
 		}
@@ -68,12 +68,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
@@ -83,7 +83,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					}
 				}
 
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 
@@ -92,12 +92,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.RESOURCES_GETTED:
+				case Notifications.RESOURCES_GETTED:
 				{
 					break;
 				}
 
-				case ApplicationFacade.RESOURCE_UPLOADED:
+				case Notifications.RESOURCE_UPLOADED:
 				{
 					var resourceVO : ResourceVO = body as ResourceVO;
 					
@@ -152,7 +152,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				resourceVO = resourcesLoader.resourcesArrayList.getItemAt( 0 ) as ResourceVO;
 			
 			if( resourceVO )
-				sendNotification( ApplicationFacade.UPLOAD_RESOURCE, resourceVO );
+				sendNotification( Notifications.UPLOAD_RESOURCE, resourceVO );
 		}
 		
 		private function addResourcesGroup_clickHandler( event : MouseEvent ) : void

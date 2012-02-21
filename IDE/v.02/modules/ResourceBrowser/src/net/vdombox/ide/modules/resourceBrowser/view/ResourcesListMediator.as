@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.events.ResourcesListItemRendererEvent;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.ResourcesList;
@@ -65,12 +65,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
-			interests.push( ApplicationFacade.RESOURCES_GETTED );
-			interests.push( ApplicationFacade.RESOURCE_UPLOADED );
-			interests.push( ApplicationFacade.RESOURCE_DELETED );
+			interests.push( Notifications.RESOURCES_GETTED );
+			interests.push( Notifications.RESOURCE_UPLOADED );
+			interests.push( Notifications.RESOURCE_DELETED );
 
 			return interests;
 		}
@@ -80,7 +80,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			var resourceVO : ResourceVO;
@@ -88,11 +88,11 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
-						sendNotification( ApplicationFacade.GET_RESOURCES, statesProxy.selectedApplication );
+						sendNotification( Notifications.GET_RESOURCES, statesProxy.selectedApplication );
 
 						isActive = true;
 
@@ -100,7 +100,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					}
 				}
 
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 
@@ -109,7 +109,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.RESOURCES_GETTED:
+				case Notifications.RESOURCES_GETTED:
 				{
 					allResources = new ArrayList( body as Array );
 
@@ -118,7 +118,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.RESOURCE_UPLOADED:
+				case Notifications.RESOURCE_UPLOADED:
 				{
 					resourceVO = body as ResourceVO;
 					//resourcesArrayList = resourcesProvider.dataProvider as ArrayList;
@@ -133,7 +133,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.RESOURCE_DELETED:
+				case Notifications.RESOURCE_DELETED:
 				{
 					resourceVO = body as ResourceVO;
 					var currentReourceVO : ResourceVO;
@@ -188,7 +188,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			var itemRenderer : ResourcesListItemRenderer = event.target as ResourcesListItemRenderer;
 			
 			if ( itemRenderer.data )
-				sendNotification( ApplicationFacade.GET_ICON, itemRenderer.data );
+				sendNotification( Notifications.GET_ICON, itemRenderer.data );
 		}
 		
 		private function findResource( nameFilter : String ) : void
@@ -223,8 +223,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			var selectedResourceVO : ResourceVO = resourcesProvider.selectedItem as ResourceVO;
 
 			if ( selectedResourceVO ) 
-				sendNotification( ApplicationFacade.LOAD_RESOURCE, selectedResourceVO );
-			//sendNotification( ApplicationFacade.CHANGE_SELECTED_RESOURCE_REQUEST, selectedResourceVO );
+				sendNotification( Notifications.LOAD_RESOURCE, selectedResourceVO );
+			//sendNotification( Notifications.CHANGE_SELECTED_RESOURCE_REQUEST, selectedResourceVO );
 			
 		}
 
@@ -233,7 +233,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			var itemRenderer : ResourcesListItemRenderer = event.target as ResourcesListItemRenderer;
 
 			/*if ( itemRenderer && itemRenderer.data && itemRenderer.data is ResourceVO )
-				sendNotification( ApplicationFacade.LOAD_RESOURCE, itemRenderer.data );*/
+				sendNotification( Notifications.LOAD_RESOURCE, itemRenderer.data );*/
 		}
 	}
 }

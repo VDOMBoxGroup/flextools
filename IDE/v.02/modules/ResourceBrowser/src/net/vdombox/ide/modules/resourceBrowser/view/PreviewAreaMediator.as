@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.PreviewArea;
 	
@@ -47,13 +47,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
 			interests.push( StatesProxy.SELECTED_RESOURCE_CHANGED );
 			
-			interests.push( ApplicationFacade.RESOURCE_LOADED );
-			interests.push( ApplicationFacade.RESOURCE_DELETED );
+			interests.push( Notifications.RESOURCE_LOADED );
+			interests.push( Notifications.RESOURCE_DELETED );
 			
 
 			return interests;
@@ -64,12 +64,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
@@ -79,7 +79,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					}
 				}
 
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 
@@ -95,14 +95,14 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 					
-				case ApplicationFacade.RESOURCE_LOADED:
+				case Notifications.RESOURCE_LOADED:
 				{
 					previewArea.resourceVO = body as ResourceVO;
 					
 					break;
 				}
 					
-				case ApplicationFacade.RESOURCE_DELETED:
+				case Notifications.RESOURCE_DELETED:
 				{
 					previewArea.resourceVO = null;
 					
