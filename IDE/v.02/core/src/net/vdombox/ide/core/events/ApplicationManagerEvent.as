@@ -11,6 +11,7 @@ package net.vdombox.ide.core.events
 		public static var CREATE_NEW_APPLICATION_REQUEST : String = "createNewApplicationRequest";
 		public static var SAVE_INFORMATION : String = "saveInformation";
 		public static var CANCEL : String = "CancelEdit";
+		public static var LOGOUT : String = "logout";
 		
 		public function ApplicationManagerEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

@@ -197,6 +197,13 @@ package net.vdombox.ide.core.view
 					else
 						openAppManager();
 				}
+					
+				case ApplicationFacade.SIGNOUT:
+				{
+					logoutHandler();
+					
+					break;
+				}
 			}
 			
 			function alertResultHandler( event : CloseEvent ) : void
@@ -217,6 +224,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.OPEN_MAIN_WINDOW );
 			interests.push( ApplicationFacade.APPLICATION_SAVE_CHECKED );
 			interests.push( ApplicationFacade.ALERT_WINDOW_CLOSE );
+			interests.push( ApplicationFacade.SIGNOUT );
 			
 			return interests;
 		}
@@ -318,7 +326,7 @@ package net.vdombox.ide.core.view
 			mainWindow.username = serverProxy.authInfo.username;
 		}
 
-		private function logoutHandler( event : MainWindowEvent ) : void
+		private function logoutHandler( event : MainWindowEvent = null ) : void
 		{
 			cleanup();
 

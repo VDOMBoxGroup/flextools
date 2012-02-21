@@ -10,9 +10,9 @@ package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
-
+	
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.ApplicationManagerEvent;
@@ -22,7 +22,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.view.components.ApplicationManagerWindow;
 	import net.vdombox.utils.WindowManager;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -99,11 +99,20 @@ package net.vdombox.ide.core.view
 			applicationManagerWindow.addEventListener( FlexEvent.REMOVE, closeHandler );
 			
 			applicationManagerWindow.addEventListener( Event.CLOSE, closeHandler );
+			
+			applicationManagerWindow.addEventListener( ApplicationManagerEvent.LOGOUT, logoutHandler );
 		}
 
 		private function closeHandler( event : * ) : void
 		{
 			closeWindow();
+		}
+		
+		private function logoutHandler( event : * ) : void
+		{
+			closeWindow();
+			sendNotification( ApplicationFacade.SIGNOUT );
+			
 		}
 
 
@@ -139,6 +148,8 @@ package net.vdombox.ide.core.view
 		private function removeHandlers() : void
 		{
 			applicationManagerWindow.removeEventListener( Event.CLOSE, closeHandler );
+			
+			applicationManagerWindow.removeEventListener( ApplicationManagerEvent.LOGOUT, logoutHandler );
 		}
 
 		public function get statesProxy() : StatesProxy

@@ -1,5 +1,8 @@
 package net.vdombox.ide.core.view.components
 {
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
+	
 	import net.vdombox.ide.core.view.skins.ComboBoxLoginSkin;
 	
 	import spark.components.ComboBox;
@@ -18,6 +21,7 @@ package net.vdombox.ide.core.view.components
 			super();
 			_editable = true;
 			_selecteble = true;
+			
 		}
 		
 		override public function stylesInitialized():void {
@@ -44,6 +48,13 @@ package net.vdombox.ide.core.view.components
 			}
 		}
 		
-		
+		override protected function capture_keyDownHandler(event:KeyboardEvent):void
+		{
+			if (event.keyCode == Keyboard.END ||
+				event.keyCode == Keyboard.HOME) 
+				return;
+			
+			super.capture_keyDownHandler(event);
+		}
 	}
 }

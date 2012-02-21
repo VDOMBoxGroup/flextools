@@ -110,29 +110,10 @@ package net.vdombox.ide.core
 		public static const REQUEST_FOR_SIGNUP : String = "requestForSignUp";
 		public static const REQUEST_FOR_SIGNOUT : String = "requestForSignOut";
 		
-//		public static const SHOW_LOGON_VIEW : String = "showLoginView";
-//		public static const SHOW_ERROR_VIEW : String = "showErrorView";
+		public static const SIGNOUT : String = "signOut";
 		
-//		public static const CLOSE_SETTINGS_WINDOW : String = "closeSettingsWindow";
 		public static const CHANGE_LOCALE : String = "changeLocale";
-//		public static const PROCESS_USER_INPUT : String = "processUserInput";
-		
-//		public static const CONNECT_SERVER : String = "connectServer";
-		
-		
-//		public static const LOGON_STARTS : String = "logonStarts";
-//		public static const LOGON_SUCCESS : String = "logonSuccess";
-//		public static const LOGON_ERROR : String = "logonError";
-//
-//		public static const LOGOFF_REQUEST : String = "logoffRequest";
-//		public static const LOGOFF_STARTS : String = "logoffStarts";
-//		public static const LOGOFF_SUCCESS : String = "logoffSuccess";
-//		public static const LOGOFF_ERROR : String = "logoffError";
-		
-//		public static const APPLICATIONS_LOADING : String = "applicationsLoading";
-//		public static const APPLICATIONS_LOADED : String = "applicationsLoaded";
-//		public static const APPLICATION_CREATED : String = "applicationCreated";
-//		public static const APPLICATION_CHANGED : String = "applicationChanged";
+
 		
 //		windows and views
 		
@@ -152,9 +133,6 @@ package net.vdombox.ide.core
 		
 		public static const CLOSE_MAIN_WINDOW : String = "closeMainWindow";
 		public static const MAIN_WINDOW_CLOSED : String = "mainWindowClosed";
-		
-		/*public static const OPEN_WINDOW : String = "openWindow";
-		public static const CLOSE_WINDOW : String = "closeWindow";*/
 		
 		public static const SHOW_LOGIN_VIEW_REQUEST : String = "showLoginViewRequest";
 		
