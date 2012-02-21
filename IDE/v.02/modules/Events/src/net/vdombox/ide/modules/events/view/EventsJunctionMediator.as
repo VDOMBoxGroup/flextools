@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.model.MessageProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -57,14 +57,14 @@ package net.vdombox.ide.modules.events.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.EXPORT_TOOLSET );
-			interests.push( ApplicationFacade.EXPORT_SETTINGS_SCREEN );
-			interests.push( ApplicationFacade.EXPORT_BODY );
+			interests.push( Notifications.EXPORT_TOOLSET );
+			interests.push( Notifications.EXPORT_SETTINGS_SCREEN );
+			interests.push( Notifications.EXPORT_BODY );
 
 			interests.push( SettingsProxy.RETRIEVE_SETTINGS_FROM_STORAGE );
 			interests.push( SettingsProxy.SAVE_SETTINGS_TO_STORAGE );
 
-			interests.push( ApplicationFacade.SELECT_MODULE );
+			interests.push( Notifications.SELECT_MODULE );
 
 			interests.push( StatesProxy.GET_ALL_STATES );
 			interests.push( StatesProxy.SET_ALL_STATES );
@@ -72,30 +72,30 @@ package net.vdombox.ide.modules.events.view
 			interests.push( StatesProxy.SET_SELECTED_PAGE );
 			interests.push( StatesProxy.SET_SELECTED_OBJECT );
 			
-			interests.push( ApplicationFacade.GET_SERVER_ACTIONS_LIST );
+			interests.push( Notifications.GET_SERVER_ACTIONS_LIST );
 			
-			interests.push( ApplicationFacade.GET_APPLICATION_EVENTS );
-			interests.push( ApplicationFacade.SET_APPLICATION_EVENTS );
+			interests.push( Notifications.GET_APPLICATION_EVENTS );
+			interests.push( Notifications.SET_APPLICATION_EVENTS );
 			
-			interests.push( ApplicationFacade.GET_PAGE_SRUCTURE );
+			interests.push( Notifications.GET_PAGE_SRUCTURE );
 
-			interests.push( ApplicationFacade.GET_PAGES );
+			interests.push( Notifications.GET_PAGES );
 			
-			interests.push( ApplicationFacade.GET_OBJECT );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.GET_OBJECT );
+			interests.push( Notifications.BODY_STOP );
 			
-			interests.push( ApplicationFacade.LOAD_RESOURCE );
+			interests.push( Notifications.LOAD_RESOURCE );
 			interests.push( TypesProxy.GET_TYPES );
 			
-			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
-			interests.push( ApplicationFacade.SET_SERVER_ACTIONS );
+			interests.push( Notifications.GET_SERVER_ACTIONS );
+			interests.push( Notifications.SET_SERVER_ACTIONS );
 			
-			interests.push( ApplicationFacade.UNDO );
-			interests.push( ApplicationFacade.REDO );
+			interests.push( Notifications.UNDO );
+			interests.push( Notifications.REDO );
 			
-			interests.push( ApplicationFacade.SET_MESSAGE );
+			interests.push( Notifications.SET_MESSAGE );
 			
-			interests.push( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED );
+			interests.push( Notifications.SAVE_IN_WORKAREA_CHECKED );
 
 			return interests;
 		}
@@ -127,7 +127,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case ApplicationFacade.EXPORT_TOOLSET:
+				case Notifications.EXPORT_TOOLSET:
 				{
 					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ), multitonKey );
 
@@ -136,7 +136,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case ApplicationFacade.EXPORT_SETTINGS_SCREEN:
+				case Notifications.EXPORT_SETTINGS_SCREEN:
 				{
 					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ), multitonKey );
 
@@ -145,7 +145,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case ApplicationFacade.EXPORT_BODY:
+				case Notifications.EXPORT_BODY:
 				{
 					message = new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( body ), multitonKey );
 
@@ -174,7 +174,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case ApplicationFacade.SELECT_MODULE:
+				case Notifications.SELECT_MODULE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.SELECT_MODULE, null, multitonKey );
 
@@ -219,7 +219,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_PAGES:
+				case Notifications.GET_PAGES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
 
@@ -228,7 +228,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_OBJECT:
+				case Notifications.GET_OBJECT:
 				{
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECT, body );
 					
@@ -237,7 +237,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_APPLICATION_EVENTS:
+				case Notifications.GET_APPLICATION_EVENTS:
 				{
 					message = new ProxyMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.EVENTS, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -245,7 +245,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.SET_APPLICATION_EVENTS:
+				case Notifications.SET_APPLICATION_EVENTS:
 				{
 					message = new ProxyMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.EVENTS, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -253,7 +253,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_PAGE_SRUCTURE:
+				case Notifications.GET_PAGE_SRUCTURE:
 				{
 					message = new ProxyMessage(  PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -261,7 +261,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_SERVER_ACTIONS_LIST:
+				case Notifications.GET_SERVER_ACTIONS_LIST:
 				{
 					
 					if ( body is ObjectVO )
@@ -284,7 +284,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.BODY_STOP :
+				case Notifications.BODY_STOP :
 				{
 					junction.sendMessage( PipeNames.STDCORE,
 						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
@@ -292,7 +292,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}		
 					
-				case ApplicationFacade.LOAD_RESOURCE:
+				case Notifications.LOAD_RESOURCE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
 					
@@ -310,7 +310,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_SERVER_ACTIONS:
+				case Notifications.GET_SERVER_ACTIONS:
 				{
 					
 					if ( body is ObjectVO )
@@ -333,7 +333,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.SET_SERVER_ACTIONS:
+				case Notifications.SET_SERVER_ACTIONS:
 				{
 					if ( body.hasOwnProperty( "objectVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTIONS_LIST, body );
@@ -346,30 +346,30 @@ package net.vdombox.ide.modules.events.view
 					break
 				}
 					
-				case ApplicationFacade.UNDO:
+				case Notifications.UNDO:
 				{
 					if ( messageProxy.hasUndo( body as PageVO) )
-						sendNotification( ApplicationFacade.UNDO_REDO_GETTED, messageProxy.getUndo( body as PageVO ) );
+						sendNotification( Notifications.UNDO_REDO_GETTED, messageProxy.getUndo( body as PageVO ) );
 					
 					break;
 				}
 					
-				case ApplicationFacade.REDO:
+				case Notifications.REDO:
 				{
 					if ( messageProxy.hasRedo( body as PageVO) )
-						sendNotification( ApplicationFacade.UNDO_REDO_GETTED, messageProxy.getRedo( body as PageVO ) );
+						sendNotification( Notifications.UNDO_REDO_GETTED, messageProxy.getRedo( body as PageVO ) );
 					
 					break;
 				}
 					
-				case ApplicationFacade.SET_MESSAGE:
+				case Notifications.SET_MESSAGE:
 				{
 					messageProxy.push( body.pageVO, body as ApplicationEventsVO );	
 					
 					break;
 				}
 					
-				case ApplicationFacade.SAVE_IN_WORKAREA_CHECKED:
+				case Notifications.SAVE_IN_WORKAREA_CHECKED:
 				{
 					if ( !body.object )
 					{
@@ -414,7 +414,7 @@ package net.vdombox.ide.modules.events.view
 					junction.sendMessage( PipeNames.STDLOG,
 										  new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
-					sendNotification( ApplicationFacade.PIPES_READY );
+					sendNotification( Notifications.PIPES_READY );
 
 					break;
 				}
@@ -441,21 +441,21 @@ package net.vdombox.ide.modules.events.view
 			{
 				case PPMPlaceNames.APPLICATION:
 				{
-					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
+					sendNotification( Notifications.PROCESS_APPLICATION_PROXY_MESSAGE, message );
 
 					break;
 				}
 
 				case PPMPlaceNames.PAGE:
 				{
-					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );
+					sendNotification( Notifications.PROCESS_PAGE_PROXY_MESSAGE, message );
 
 					break;
 				}
 
 				case PPMPlaceNames.OBJECT:
 				{
-					sendNotification( ApplicationFacade.PROCESS_OBJECT_PROXY_MESSAGE, message );
+					sendNotification( Notifications.PROCESS_OBJECT_PROXY_MESSAGE, message );
 
 					break;
 				}

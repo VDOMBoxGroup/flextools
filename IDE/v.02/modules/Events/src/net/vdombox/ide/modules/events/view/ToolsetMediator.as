@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.events.view
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.view.components.Toolset;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -37,8 +37,8 @@ package net.vdombox.ide.modules.events.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.MODULE_SELECTED );
-			interests.push( ApplicationFacade.MODULE_DESELECTED );
+			interests.push( Notifications.MODULE_SELECTED );
+			interests.push( Notifications.MODULE_DESELECTED );
 
 			return interests;
 		}
@@ -47,13 +47,13 @@ package net.vdombox.ide.modules.events.view
 		{
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.MODULE_SELECTED:
+				case Notifications.MODULE_SELECTED:
 				{
 					toolset.toolsetButton.selected = true;
 					break;
 				}
 
-				case ApplicationFacade.MODULE_DESELECTED:
+				case Notifications.MODULE_DESELECTED:
 				{
 					toolset.toolsetButton.selected = false;
 					break;
@@ -69,7 +69,7 @@ package net.vdombox.ide.modules.events.view
 		private function toolsetButton_clickHandler( event : MouseEvent ) : void
 		{
 			toolset.toolsetButton.selected = !toolset.toolsetButton.selected;
-			sendNotification( ApplicationFacade.SELECT_MODULE );
+			sendNotification( Notifications.SELECT_MODULE );
 		}
 	}
 }

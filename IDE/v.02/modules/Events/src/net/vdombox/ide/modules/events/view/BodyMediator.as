@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -50,8 +50,8 @@ package net.vdombox.ide.modules.events.view
 
 			interests.push( StatesProxy.ALL_STATES_GETTED );
 
-			interests.push( ApplicationFacade.PIPES_READY );
-			interests.push( ApplicationFacade.MODULE_DESELECTED );
+			interests.push( Notifications.PIPES_READY );
+			interests.push( Notifications.MODULE_DESELECTED );
 
 			return interests;
 		}
@@ -60,7 +60,7 @@ package net.vdombox.ide.modules.events.view
 		{
 			switch ( notification.getName())
 			{
-				case ApplicationFacade.PIPES_READY:
+				case Notifications.PIPES_READY:
 				{
 					sendNotification( StatesProxy.GET_ALL_STATES );
 					sendNotification( TypesProxy.GET_TYPES );
@@ -77,11 +77,11 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case ApplicationFacade.MODULE_DESELECTED:
+				case Notifications.MODULE_DESELECTED:
 				{
 					isReady = false;
 					
-					sendNotification( ApplicationFacade.BODY_STOP );
+					sendNotification( Notifications.BODY_STOP );
 
 					break;
 				}
@@ -101,7 +101,7 @@ package net.vdombox.ide.modules.events.view
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			sendNotification( ApplicationFacade.BODY_CREATED, body );
+			sendNotification( Notifications.BODY_CREATED, body );
 
 			checkConditions();
 		}
@@ -109,7 +109,7 @@ package net.vdombox.ide.modules.events.view
 		private function checkConditions() : void
 		{
 			if ( isReady && body.initialized )
-				sendNotification( ApplicationFacade.BODY_START );
+				sendNotification( Notifications.BODY_START );
 		}
 	}
 }

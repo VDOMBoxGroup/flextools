@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.events.controller
 	
 	import mx.modules.Module;
 	
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.view.BodyMediator;
 	import net.vdombox.ide.modules.events.view.EventsMediator;
 	import net.vdombox.ide.modules.events.view.components.Body;
@@ -40,8 +40,8 @@ package net.vdombox.ide.modules.events.controller
 			}
 			
 			body.moduleFactory = eventsMediator.events.moduleFactory;
-			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
-			facade.sendNotification( ApplicationFacade.MODULE_SELECTED );
+			facade.sendNotification( Notifications.EXPORT_BODY, body );
+			facade.sendNotification( Notifications.MODULE_SELECTED );
 		}
 	}
 }

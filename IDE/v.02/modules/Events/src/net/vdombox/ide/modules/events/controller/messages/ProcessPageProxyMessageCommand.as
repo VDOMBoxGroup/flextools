@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.events.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -29,7 +29,7 @@ package net.vdombox.ide.modules.events.controller.messages
 			{
 				case PPMPageTargetNames.SERVER_ACTIONS_LIST:
 				{
-					sendNotification( ApplicationFacade.SERVER_ACTIONS_LIST_GETTED, body.serverActions as Array );
+					sendNotification( Notifications.SERVER_ACTIONS_LIST_GETTED, body.serverActions as Array );
 					
 					break;
 				}
@@ -37,17 +37,17 @@ package net.vdombox.ide.modules.events.controller.messages
 				case PPMPageTargetNames.SERVER_ACTIONS:
 				{
 					if( PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
+						sendNotification( Notifications.SERVER_ACTIONS_GETTED, body );
 					else if( PPMOperationNames.UPDATE )
-						sendNotification( ApplicationFacade.SERVER_ACTIONS_SETTED, body.serverActions );
+						sendNotification( Notifications.SERVER_ACTIONS_SETTED, body.serverActions );
 					
 					break;
 				}
 					
 				case PPMPageTargetNames.SERVER_ACTION:
 				{
-					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
-					sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
+					sendNotification( Notifications.GET_SERVER_ACTIONS_REQUEST );
+					sendNotification( Notifications.GET_APPLICATION_EVENTS,
 						{ applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 					
 					break;
@@ -62,7 +62,7 @@ package net.vdombox.ide.modules.events.controller.messages
 				{
 					if ( operation == PPMOperationNames.READ )
 					{
-						sendNotification( ApplicationFacade.OBJECT_GETTED, body.objectVO );
+						sendNotification( Notifications.OBJECT_GETTED, body.objectVO );
 					}
 
 					break;
@@ -71,7 +71,7 @@ package net.vdombox.ide.modules.events.controller.messages
 				case PPMPageTargetNames.STRUCTURE:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, body );
+						sendNotification( Notifications.PAGE_STRUCTURE_GETTED, body );
 
 					break;
 				}

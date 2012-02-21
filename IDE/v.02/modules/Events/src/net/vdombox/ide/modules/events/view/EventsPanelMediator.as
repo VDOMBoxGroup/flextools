@@ -21,7 +21,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.common.view.components.windows.CreateActionWindow;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.events.EventsPanelEvent;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.ActionElement;
@@ -83,18 +83,18 @@ package net.vdombox.ide.modules.events.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
 			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
 			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
 
-			interests.push( ApplicationFacade.SERVER_ACTIONS_LIST_GETTED );
-			interests.push( ApplicationFacade.SERVER_ACTIONS_GETTED );
-			interests.push( ApplicationFacade.SERVER_ACTIONS_SETTED );
+			interests.push( Notifications.SERVER_ACTIONS_LIST_GETTED );
+			interests.push( Notifications.SERVER_ACTIONS_GETTED );
+			interests.push( Notifications.SERVER_ACTIONS_SETTED );
 			
-			interests.push( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED );
+			interests.push( Notifications.SAVE_IN_WORKAREA_CHECKED );
 			
 			return interests;
 		}
@@ -104,49 +104,49 @@ package net.vdombox.ide.modules.events.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 
 					break;
 				}
 
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					isActive = true;
 
 					break;
 				}
 
-				case ApplicationFacade.SERVER_ACTIONS_LIST_GETTED:
+				case Notifications.SERVER_ACTIONS_LIST_GETTED:
 				{
 					showActions( body as Array );
 					break;
 				}
 					
-				case ApplicationFacade.SERVER_ACTIONS_GETTED:
+				case Notifications.SERVER_ACTIONS_GETTED:
 				{
 					scripts = body.serverActions as Array;
-					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_LIST, currentTarget );
+					sendNotification( Notifications.GET_SERVER_ACTIONS_LIST, currentTarget );
 					
 					return;
 					
 				}
 					
-				case ApplicationFacade.SERVER_ACTIONS_SETTED:
+				case Notifications.SERVER_ACTIONS_SETTED:
 				{
 					scripts = body.serverActions as Array;
-					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_LIST, currentTarget );
-					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS, currentTarget );
+					sendNotification( Notifications.GET_SERVER_ACTIONS_LIST, currentTarget );
+					sendNotification( Notifications.GET_SERVER_ACTIONS, currentTarget );
 					return;
 				}
 					
-				case ApplicationFacade.SAVE_IN_WORKAREA_CHECKED:
+				case Notifications.SAVE_IN_WORKAREA_CHECKED:
 				{
 					if ( body.object != this )
 						return;
@@ -194,8 +194,8 @@ package net.vdombox.ide.modules.events.view
 			
 			eventsPanel.eventsList.dataProvider = new ArrayList( currentTypeVO.events );
 			
-			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_LIST, currentTarget );
-			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS, currentTarget );
+			sendNotification( Notifications.GET_SERVER_ACTIONS_LIST, currentTarget );
+			sendNotification( Notifications.GET_SERVER_ACTIONS, currentTarget );
 		}
 
 		private function showActions( serverActions : Array ) : void
@@ -287,7 +287,7 @@ package net.vdombox.ide.modules.events.view
 		
 		private function createServerActionHandler( event : EventsPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.CHECK_SAVE_IN_WORKAREA, this );
+			sendNotification( Notifications.CHECK_SAVE_IN_WORKAREA, this );
 		}
 		
 		private function openCreateServerActionWindow() : void
@@ -302,7 +302,7 @@ package net.vdombox.ide.modules.events.view
 			{
 				WindowManager.getInstance().removeWindow( renameWindow );
 				
-				sendNotification( ApplicationFacade.CREATE_SCRIPT_REQUEST, { name : event.name, target : ApplicationFacade.ACTION } );
+				sendNotification( Notifications.CREATE_SCRIPT_REQUEST, { name : event.name, target : Notifications.ACTION } );
 				
 			}
 			

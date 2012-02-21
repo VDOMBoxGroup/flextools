@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.events.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -35,10 +35,10 @@ package net.vdombox.ide.modules.events.controller.messages
 				case PPMApplicationTargetNames.SAVED:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.CHECK_SAVE_IN_WORKAREA , null );
+						sendNotification( Notifications.CHECK_SAVE_IN_WORKAREA , null );
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
-						sendNotification( ApplicationFacade.SAVE_CHANGED );
+						sendNotification( Notifications.SAVE_CHANGED );
 					}
 						
 					
@@ -48,7 +48,7 @@ package net.vdombox.ide.modules.events.controller.messages
 				case PPMApplicationTargetNames.PAGES:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.PAGES_GETTED, body.pages );
+						sendNotification( Notifications.PAGES_GETTED, body.pages );
 					
 					break;
 				}
@@ -56,14 +56,14 @@ package net.vdombox.ide.modules.events.controller.messages
 				case PPMApplicationTargetNames.EVENTS:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.APPLICATION_EVENTS_GETTED, body.applicationEvents );
+						sendNotification( Notifications.APPLICATION_EVENTS_GETTED, body.applicationEvents );
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
-						sendNotification( ApplicationFacade.APPLICATION_EVENTS_SETTED );
+						sendNotification( Notifications.APPLICATION_EVENTS_SETTED );
 						if ( body.hasOwnProperty("needForUpdate") )
 						{
 							if ( body.needForUpdate )
-								sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
+								sendNotification( Notifications.GET_APPLICATION_EVENTS,
 									{ applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 						}
 					}

@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.events.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMObjectTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.model.StatesProxy;
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -26,7 +26,7 @@ package net.vdombox.ide.modules.events.controller.messages
 			{
 				case PPMObjectTargetNames.SERVER_ACTIONS_LIST:
 				{
-					sendNotification( ApplicationFacade.SERVER_ACTIONS_LIST_GETTED, body.serverActions as Array );
+					sendNotification( Notifications.SERVER_ACTIONS_LIST_GETTED, body.serverActions as Array );
 					
 					break;
 				}
@@ -34,17 +34,17 @@ package net.vdombox.ide.modules.events.controller.messages
 				case PPMObjectTargetNames.SERVER_ACTIONS:
 				{
 					if( PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
+						sendNotification( Notifications.SERVER_ACTIONS_GETTED, body );
 					else if( PPMOperationNames.UPDATE )
-						sendNotification( ApplicationFacade.SERVER_ACTIONS_SETTED, body.serverActions );
+						sendNotification( Notifications.SERVER_ACTIONS_SETTED, body.serverActions );
 					
 					break;
 				}
 					
 				case PPMObjectTargetNames.SERVER_ACTION:
 				{
-					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
-					sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
+					sendNotification( Notifications.GET_SERVER_ACTIONS_REQUEST );
+					sendNotification( Notifications.GET_APPLICATION_EVENTS,
 						{ applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 					
 					break;

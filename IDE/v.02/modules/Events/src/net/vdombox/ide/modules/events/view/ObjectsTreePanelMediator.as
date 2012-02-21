@@ -18,7 +18,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.model.MessageProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.EventElement;
@@ -88,18 +88,18 @@ package net.vdombox.ide.modules.events.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
-			interests.push( ApplicationFacade.PAGES_GETTED );
-			interests.push( ApplicationFacade.PAGE_STRUCTURE_GETTED );
+			interests.push( Notifications.PAGES_GETTED );
+			interests.push( Notifications.PAGE_STRUCTURE_GETTED );
 
-			interests.push( ApplicationFacade.OBJECT_GETTED );
+			interests.push( Notifications.OBJECT_GETTED );
 			
-			interests.push( ApplicationFacade.GET_CHILDREN_ELEMENTS );
+			interests.push( Notifications.GET_CHILDREN_ELEMENTS );
 			
-			interests.push( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED );
-			interests.push( ApplicationFacade.APPLICATION_EVENTS_SETTED );
+			interests.push( Notifications.SAVE_IN_WORKAREA_CHECKED );
+			interests.push( Notifications.APPLICATION_EVENTS_SETTED );
 
 			return interests;
 		}
@@ -111,24 +111,24 @@ package net.vdombox.ide.modules.events.view
 
 			var pageXML : XML;
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 						treePanelCreateCompleted = false;
-						sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
+						sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
 
 						break;
 					}
 				}
 
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 					
@@ -140,14 +140,14 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 
-				case ApplicationFacade.PAGES_GETTED:
+				case Notifications.PAGES_GETTED:
 				{
 					showPages( notification.getBody() as Array );
 
 					break;
 				}
 
-				case ApplicationFacade.PAGE_STRUCTURE_GETTED:
+				case Notifications.PAGE_STRUCTURE_GETTED:
 				{
 					var pageXMLTree : XML = notification.getBody() as XML;
 					
@@ -175,14 +175,14 @@ package net.vdombox.ide.modules.events.view
 					if ( !treePanelCreateCompleted )
 					{
 						treePanelCreateCompleted = true;
-						sendNotification( ApplicationFacade.STRUCTURE_GETTED );
+						sendNotification( Notifications.STRUCTURE_GETTED );
 					}
 					
 					
 					break;
 				}
 
-				case ApplicationFacade.OBJECT_GETTED:
+				case Notifications.OBJECT_GETTED:
 				{
 					selectedObject = body as ObjectVO;
 					sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
@@ -190,14 +190,14 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_CHILDREN_ELEMENTS:
+				case Notifications.GET_CHILDREN_ELEMENTS:
 				{
-					sendNotification( ApplicationFacade.CHILDREN_ELEMENTS_GETTED, objectsTreePanel.selectedObject );
+					sendNotification( Notifications.CHILDREN_ELEMENTS_GETTED, objectsTreePanel.selectedObject );
 					
 					break;
 				}
 					
-				case ApplicationFacade.SAVE_IN_WORKAREA_CHECKED:
+				case Notifications.SAVE_IN_WORKAREA_CHECKED:
 				{
 					if ( body.object != this )
 						return;
@@ -211,7 +211,7 @@ package net.vdombox.ide.modules.events.view
 					return;
 				}
 					
-				case ApplicationFacade.APPLICATION_EVENTS_SETTED:
+				case Notifications.APPLICATION_EVENTS_SETTED:
 				{
 					if ( needChangePage )
 					{
@@ -231,7 +231,7 @@ package net.vdombox.ide.modules.events.view
 			if (event.detail == Alert.YES)
 			{
 				needChangePage = true;
-				sendNotification( ApplicationFacade.SAVE_CHANGED );
+				sendNotification( Notifications.SAVE_CHANGED );
 			}
 			else
 				changeFunction();
@@ -305,7 +305,7 @@ package net.vdombox.ide.modules.events.view
 					return;
 				
 				sendNotification( StatesProxy.SELECTED_PAGE_CHANGED, statesProxy.selectedPage);
-				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, statesProxy.selectedPage );
+				sendNotification( Notifications.GET_PAGE_SRUCTURE, statesProxy.selectedPage );
 				
 			}
 			else
@@ -339,7 +339,7 @@ package net.vdombox.ide.modules.events.view
 					delete currentPageXML.*;
 				
 				if ( id != currentPageXML.@id )
-					sendNotification( ApplicationFacade.CHECK_SAVE_IN_WORKAREA, this );
+					sendNotification( Notifications.CHECK_SAVE_IN_WORKAREA, this );
 				else
 					changeFunction();
 			}
@@ -360,7 +360,7 @@ package net.vdombox.ide.modules.events.view
 					parent = null;
 				}
 				
-				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ pageID ], objectID: id } );
+				sendNotification( Notifications.GET_OBJECT, { pageVO: _pages[ pageID ], objectID: id } );
 			}
 			
 			
@@ -371,12 +371,12 @@ package net.vdombox.ide.modules.events.view
 			var id : String = item.@id;
 			
 			sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, _pages[ id ] );
-			sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ id ] );
+			sendNotification( Notifications.GET_PAGE_SRUCTURE, _pages[ id ] );
 		}
 		
 		private function getResourceRequestHandler( event : ResourceVOEvent ) : void
 		{
-			sendNotification( ApplicationFacade.GET_RESOURCE_REQUEST, event.target );
+			sendNotification( Notifications.GET_RESOURCE_REQUEST, event.target );
 		}
 	}
 }

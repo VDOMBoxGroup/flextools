@@ -12,7 +12,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.events.model.MessageStackProxy;
@@ -64,23 +64,23 @@ package net.vdombox.ide.modules.events.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
-			interests.push( ApplicationFacade.APPLICATION_EVENTS_GETTED );
-			interests.push( ApplicationFacade.APPLICATION_EVENTS_SETTED );
+			interests.push( Notifications.APPLICATION_EVENTS_GETTED );
+			interests.push( Notifications.APPLICATION_EVENTS_SETTED );
 			
 			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
 			
-			interests.push( ApplicationFacade.CHILDREN_ELEMENTS_GETTED );
-			interests.push( ApplicationFacade.STRUCTURE_GETTED );
+			interests.push( Notifications.CHILDREN_ELEMENTS_GETTED );
+			interests.push( Notifications.STRUCTURE_GETTED );
 			
-			interests.push( ApplicationFacade.CHECK_SAVE_IN_WORKAREA );
+			interests.push( Notifications.CHECK_SAVE_IN_WORKAREA );
 			
-			interests.push( ApplicationFacade.SAVE_CHANGED );
+			interests.push( Notifications.SAVE_CHANGED );
 			
-			interests.push( ApplicationFacade.UNDO_REDO_GETTED );
+			interests.push( Notifications.UNDO_REDO_GETTED );
 			
 			return interests;
 		}
@@ -94,19 +94,19 @@ package net.vdombox.ide.modules.events.view
 			var element : Object;
 			var leng : Number;
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					isActive = true;
 					treePanelCreateCompleted = false;
 					break;
 				}
 
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 					workArea.dataProvider = null;
@@ -121,7 +121,7 @@ package net.vdombox.ide.modules.events.view
 						workArea.removeAllElements();
 						workArea.linkagesLayer.removeAllElements();
 						workArea.pageName.text = body.name;
-						sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
+						sendNotification( Notifications.GET_APPLICATION_EVENTS,
 										  { applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 						
 						workArea.skin.currentState = "normal"; 
@@ -129,7 +129,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.APPLICATION_EVENTS_GETTED:
+				case Notifications.APPLICATION_EVENTS_GETTED:
 				{
 					workArea.dataProvider = body as ApplicationEventsVO;
 					showElementsView = visibleElementProxy.showCurrent;
@@ -143,7 +143,7 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.APPLICATION_EVENTS_SETTED:
+				case Notifications.APPLICATION_EVENTS_SETTED:
 				{
 					workArea.skin.currentState = "normal"; //TODO: добавить public свойство для изменения внутреннего state
 					
@@ -157,42 +157,42 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case ApplicationFacade.CHILDREN_ELEMENTS_GETTED:
+				case Notifications.CHILDREN_ELEMENTS_GETTED:
 				{
 					setVisibleElementsForContainer( body as XML );
 					break;
 				}
 					
-				case ApplicationFacade.STRUCTURE_GETTED:
+				case Notifications.STRUCTURE_GETTED:
 				{
 					treePanelCreateCompleted = true;
 					if ( sendChildrenQuery )
 					{
 						sendChildrenQuery = false;
-						sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
+						sendNotification( Notifications.GET_CHILDREN_ELEMENTS );
 					}
 					
 					break;
 				}
 					
-				case ApplicationFacade.CHECK_SAVE_IN_WORKAREA:
+				case Notifications.CHECK_SAVE_IN_WORKAREA:
 				{
 					if ( workArea.skin.currentState == "unsaved" )
-						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : false } );
+						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : false } );
 					else
-						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : true } );
+						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : true } );
 					
 					break;
 				}
 					
-				case ApplicationFacade.SAVE_CHANGED:
+				case Notifications.SAVE_CHANGED:
 				{
 					saveHandler();
 					
 					break;
 				}
 					
-				case ApplicationFacade.UNDO_REDO_GETTED:
+				case Notifications.UNDO_REDO_GETTED:
 				{
 					workArea.dataProvider = body as ApplicationEventsVO;
 					
@@ -317,22 +317,22 @@ package net.vdombox.ide.modules.events.view
 		
 		private function saveHandler( event : WorkAreaEvent = null) : void
 		{
-			sendNotification( ApplicationFacade.SET_APPLICATION_EVENTS, { applicationEventsVO : workArea.dataProvider, needForUpdate: false } );
+			sendNotification( Notifications.SET_APPLICATION_EVENTS, { applicationEventsVO : workArea.dataProvider, needForUpdate: false } );
 		}
 		
 		private function undoHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
+			sendNotification( Notifications.UNDO, statesProxy.selectedPage );
 		}
 		
 		private function redoHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
+			sendNotification( Notifications.REDO, statesProxy.selectedPage );
 		}
 		
 		private function setMessageHandler( event : WorkAreaEvent = null) : void
 		{
-			sendNotification( ApplicationFacade.SET_MESSAGE, workArea.dataProvider );
+			sendNotification( Notifications.SET_MESSAGE, workArea.dataProvider );
 		}
 		
 		private function showCurrentElementsStateChanged( event : WorkAreaEvent ) : void
@@ -349,7 +349,7 @@ package net.vdombox.ide.modules.events.view
 			else if ( workArea.showElementsView == "Active + Embedded" )
 			{
 				if ( treePanelCreateCompleted )
-					sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
+					sendNotification( Notifications.GET_CHILDREN_ELEMENTS );
 				else
 					sendChildrenQuery = true;
 			}
@@ -368,7 +368,7 @@ package net.vdombox.ide.modules.events.view
 				}
 				else
 				{
-					sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
+					sendNotification( Notifications.GET_APPLICATION_EVENTS,
 						{ applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 				}
 			}
@@ -377,9 +377,9 @@ package net.vdombox.ide.modules.events.view
 				return;
 			
 			if ( event.keyCode == Keyboard.Z )
-				sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
+				sendNotification( Notifications.UNDO, statesProxy.selectedPage );
 			else if ( event.keyCode == Keyboard.Y )
-				sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
+				sendNotification( Notifications.REDO, statesProxy.selectedPage );
 			else if ( event.keyCode == Keyboard.S )
 				saveHandler();
 			else if ( event.keyCode == Keyboard.NUMBER_1 )
@@ -390,7 +390,7 @@ package net.vdombox.ide.modules.events.view
 			else if ( event.keyCode == Keyboard.NUMBER_2 )
 			{
 				showElementsView = "Active + Embedded";
-				sendNotification( ApplicationFacade.GET_CHILDREN_ELEMENTS );
+				sendNotification( Notifications.GET_CHILDREN_ELEMENTS );
 			}
 			else if ( event.keyCode == Keyboard.NUMBER_3 )
 			{

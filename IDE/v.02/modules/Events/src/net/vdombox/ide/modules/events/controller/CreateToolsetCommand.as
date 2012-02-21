@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.events.controller
 {
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.view.ToolsetMediator;
 	import net.vdombox.ide.modules.events.view.components.Toolset;
 
@@ -25,7 +25,7 @@ package net.vdombox.ide.modules.events.controller
 				facade.registerMediator( new ToolsetMediator( toolset ) )
 			}
 
-			facade.sendNotification( ApplicationFacade.EXPORT_TOOLSET, toolset );
+			facade.sendNotification( Notifications.EXPORT_TOOLSET, toolset );
 		}
 	}
 }

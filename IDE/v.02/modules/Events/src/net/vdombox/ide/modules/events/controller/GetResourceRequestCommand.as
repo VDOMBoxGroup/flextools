@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.events.controller
 {
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -30,7 +30,7 @@ package net.vdombox.ide.modules.events.controller
 				resourceVO.setID( body[ "resourceID" ] );
 				body[ "resourceVO" ] = resourceVO;
 				
-				sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+				sendNotification( Notifications.LOAD_RESOURCE, resourceVO );
 			}
 			
 			return;
