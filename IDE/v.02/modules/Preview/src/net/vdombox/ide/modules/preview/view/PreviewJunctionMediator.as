@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.preview.view
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.SimpleMessageHeaders;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.messages.SimpleMessage;
@@ -21,7 +22,6 @@ package net.vdombox.ide.modules.preview.view
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
-	import net.vdombox.ide.modules.preview.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
@@ -43,8 +43,8 @@ package net.vdombox.ide.modules.preview.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.EXPORT_TOOLSET );
-			interests.push( ApplicationFacade.SELECT_MODULE );
+			interests.push( Notifications.EXPORT_TOOLSET );
+			interests.push( Notifications.SELECT_MODULE );
 
 			return interests;
 		}
@@ -73,7 +73,7 @@ package net.vdombox.ide.modules.preview.view
 					break;
 				}
 
-				case ApplicationFacade.EXPORT_TOOLSET:
+				case Notifications.EXPORT_TOOLSET:
 				{
 					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ), multitonKey );
 
@@ -82,7 +82,7 @@ package net.vdombox.ide.modules.preview.view
 					break;
 				}
 
-				case ApplicationFacade.SELECT_MODULE:
+				case Notifications.SELECT_MODULE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.OPEN_BROWSER, null, multitonKey );
 					
@@ -113,7 +113,7 @@ package net.vdombox.ide.modules.preview.view
 					junction.sendMessage( PipeNames.STDLOG,
 										  new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
-					sendNotification( ApplicationFacade.PIPES_READY );
+					sendNotification( Notifications.PIPES_READY );
 					break;
 				}
 

@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.preview.view
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.modules.preview.ApplicationFacade; 
+	import net.vdombox.ide.common.controller.Notifications; 
 	import net.vdombox.ide.modules.preview.view.components.Toolset;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -35,24 +35,6 @@ package net.vdombox.ide.modules.preview.view
 			addEventListeners()
 		}
 
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-//			interests.push( ApplicationFacade.MODULE_SELECTED );
-//			interests.push( ApplicationFacade.MODULE_DESELECTED );
-
-			return interests;
-		}
-
-		override public function handleNotification( notification : INotification ) : void
-		{
-			switch ( notification.getName() )
-			{
-				
-			}
-		}
-
 		private function addEventListeners() : void
 		{
 			toolset.toolsetButton.addEventListener( MouseEvent.CLICK, toolsetButton_clickHandler )
@@ -60,7 +42,7 @@ package net.vdombox.ide.modules.preview.view
 
 		private function toolsetButton_clickHandler( event : MouseEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SELECT_MODULE );
+			sendNotification( Notifications.SELECT_MODULE );
 		}
 	}
 }

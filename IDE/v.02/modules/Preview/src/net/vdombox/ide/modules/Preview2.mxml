@@ -11,6 +11,7 @@
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.controller.Notifications;
 			import net.vdombox.ide.modules.preview.ApplicationFacade;
 
 			public static const MODULE_ID : String = "net.vdombox.ide.modules.Preview";
@@ -64,7 +65,7 @@
 
 			override public function getToolset() : void
 			{
-				facade.sendNotification( ApplicationFacade.CREATE_TOOLSET );
+				facade.sendNotification( Notifications.CREATE_TOOLSET );
 			}
 
 			override public function getSettingsScreen() : void
