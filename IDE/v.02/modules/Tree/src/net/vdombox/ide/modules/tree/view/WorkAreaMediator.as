@@ -8,7 +8,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.events.LinkageEvent;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.events.WorkAreaEvent;
@@ -69,21 +69,21 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
-			interests.push( ApplicationFacade.PAGE_DELETED );
+			interests.push( Notifications.PAGE_DELETED );
 			interests.push( StatesProxy.SELECTED_TREE_LEVEL_CHANGED );
 			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
 
-			interests.push( ApplicationFacade.TREE_ELEMENTS_CHANGED );
-			interests.push( ApplicationFacade.TREE_ELEMENT_ADD );
-			interests.push( ApplicationFacade.LINKAGES_CHANGED );
+			interests.push( Notifications.TREE_ELEMENTS_CHANGED );
+			interests.push( Notifications.TREE_ELEMENT_ADD );
+			interests.push( Notifications.LINKAGES_CHANGED );
 
-			interests.push( ApplicationFacade.APPLICATION_STRUCTURE_SETTED );
+			interests.push( Notifications.APPLICATION_STRUCTURE_SETTED );
 			
-			interests.push( ApplicationFacade.CHECK_SAVE_IN_WORKAREA );
-			interests.push( ApplicationFacade.SAVE_CHANGED );
+			interests.push( Notifications.CHECK_SAVE_IN_WORKAREA );
+			interests.push( Notifications.SAVE_CHANGED );
 			
 			return interests;
 		}
@@ -106,12 +106,12 @@ package net.vdombox.ide.modules.tree.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
@@ -139,7 +139,7 @@ package net.vdombox.ide.modules.tree.view
 					
 					break; 
 				}
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 
@@ -148,7 +148,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.PAGE_DELETED:
+				case Notifications.PAGE_DELETED:
 				{
 					var pageVO : PageVO = body.pageVO;
 
@@ -162,14 +162,14 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 					
-				case ApplicationFacade.TREE_ELEMENTS_CHANGED:
+				case Notifications.TREE_ELEMENTS_CHANGED:
 				{					
 					workArea.treeElements = body as Array;					
 					
 					break;			
 				}
 
-				case ApplicationFacade.TREE_ELEMENT_ADD:
+				case Notifications.TREE_ELEMENT_ADD:
 				{					
 					workArea.treeElements = body as Array;					
 					
@@ -178,38 +178,38 @@ package net.vdombox.ide.modules.tree.view
 					break;			
 				}
 
-				case ApplicationFacade.LINKAGES_CHANGED:
+				case Notifications.LINKAGES_CHANGED:
 				{
 					workArea.linkages = body as Array;
 
 					break;
 				}
 					
-				case ApplicationFacade.CHECK_SAVE_IN_WORKAREA:
+				case Notifications.CHECK_SAVE_IN_WORKAREA:
 				{
 					if ( workArea.skin.currentState == "unsaved" )
-						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : false } );
+						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : false } );
 					else
-						sendNotification( ApplicationFacade.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : true } );
+						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : true } );
 					
 					break;
 				}
 					
-				case ApplicationFacade.SAVE_CHANGED:
+				case Notifications.SAVE_CHANGED:
 				{
 					saveHandler();
 					
 					break;
 				}
 					
-				case ApplicationFacade.APPLICATION_STRUCTURE_SETTED:
+				case Notifications.APPLICATION_STRUCTURE_SETTED:
 				{
 					workArea.skin.currentState = "normal"; //TODO: добавить public свойство для изменения внутреннего state;
 					
 					break;
 				}	
 					
-//				case ApplicationFacade.CREATE_LINKAGE_REQUEST:
+//				case Notifications.CREATE_LINKAGE_REQUEST:
 //				{
 //					shadowLinkage = new Linkage();
 //
@@ -292,62 +292,62 @@ package net.vdombox.ide.modules.tree.view
 
 		private function saveHandler( event : WorkAreaEvent = null ) : void
 		{
-			sendNotification( ApplicationFacade.SAVE_REQUEST );
+			sendNotification( Notifications.SAVE_REQUEST );
 		}
 		
 		private function undoHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.UNDO_REQUEST );
+			sendNotification( Notifications.UNDO_REQUEST );
 		}
 		
 		private function createPageHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_CREATE_PAGE_WINDOW_REQUEST, workArea );
+			sendNotification( Notifications.OPEN_CREATE_PAGE_WINDOW_REQUEST, workArea );
 		}
 
 		private function treeElement_createdHandler( event : TreeElementEvent ) : void
 		{
-			sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, event.target as TreeElement );
+			sendNotification( Notifications.TREE_ELEMENT_CREATED, event.target as TreeElement );
 		}
 
 		private function treeElement_removedHandler( event : TreeElementEvent ) : void
 		{
-			sendNotification( ApplicationFacade.TREE_ELEMENT_REMOVED, event.target as TreeElement );
+			sendNotification( Notifications.TREE_ELEMENT_REMOVED, event.target as TreeElement );
 		}
 		
 		private function linkage_createdHandler( event : LinkageEvent ) : void
 		{
-			sendNotification( ApplicationFacade.LINKAGE_CREATED, event.target as Linkage );
+			sendNotification( Notifications.LINKAGE_CREATED, event.target as Linkage );
 		}
 		
 		private function linkage_removedHandler( event : LinkageEvent ) : void
 		{
-			sendNotification( ApplicationFacade.LINKAGE_REMOVED, event.target as Linkage );
+			sendNotification( Notifications.LINKAGE_REMOVED, event.target as Linkage );
 		}
 		
 		private function expandAllHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.EXPAND_ALL_TREE_ELEMENTS );
+			sendNotification( Notifications.EXPAND_ALL_TREE_ELEMENTS );
 		}
 
 		private function collapseAllHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.COLLAPSE_ALL_TREE_ELEMENTS );
+			sendNotification( Notifications.COLLAPSE_ALL_TREE_ELEMENTS );
 		}
 
 		private function showSignatureHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SHOW_SIGNATURE );
+			sendNotification( Notifications.SHOW_SIGNATURE );
 		}
 
 		private function hideSignatureHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.HIDE_SIGNATURE );
+			sendNotification( Notifications.HIDE_SIGNATURE );
 		}
 		
 		private function makeStartPageHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SET_APPLICATION_INFORMATION, { applicationVO : statesProxy.selectedApplication, pageID : statesProxy.selectedPage.id } );
+			sendNotification( Notifications.SET_APPLICATION_INFORMATION, { applicationVO : statesProxy.selectedApplication, pageID : statesProxy.selectedPage.id } );
 		}
 		
 		private function keyDownHandler( event : KeyboardEvent ) : void
@@ -361,8 +361,8 @@ package net.vdombox.ide.modules.tree.view
 				}
 				else
 				{
-					facade.sendNotification( ApplicationFacade.GET_PAGES, { applicationVO: statesProxy.selectedApplication} );
-					facade.sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, { applicationVO: statesProxy.selectedApplication} );
+					facade.sendNotification( Notifications.GET_PAGES, { applicationVO: statesProxy.selectedApplication} );
+					facade.sendNotification( Notifications.GET_APPLICATION_STRUCTURE, { applicationVO: statesProxy.selectedApplication} );
 				}
 			}
 			

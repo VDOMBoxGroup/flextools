@@ -8,7 +8,7 @@ package net.vdombox.ide.modules.tree.view
 	
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
@@ -75,12 +75,12 @@ package net.vdombox.ide.modules.tree.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( StatesProxy.ALL_STATES_GETTED );
-			interests.push( ApplicationFacade.PAGES_GETTED );
-			interests.push( ApplicationFacade.APPLICATION_STRUCTURE_GETTED );
+			interests.push( Notifications.PAGES_GETTED );
+			interests.push( Notifications.APPLICATION_STRUCTURE_GETTED );
 			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
 
-			interests.push( ApplicationFacade.PIPES_READY );
-			interests.push( ApplicationFacade.MODULE_DESELECTED );
+			interests.push( Notifications.PIPES_READY );
+			interests.push( Notifications.MODULE_DESELECTED );
 
 			return interests;
 		}
@@ -92,7 +92,7 @@ package net.vdombox.ide.modules.tree.view
 
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.PIPES_READY:
+				case Notifications.PIPES_READY:
 				{
 					sendNotification( StatesProxy.GET_ALL_STATES );
 
@@ -105,8 +105,8 @@ package net.vdombox.ide.modules.tree.view
 					
 					if ( statesProxy.selectedApplication )
 					{
-						sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
-						sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, statesProxy.selectedApplication );
+						sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
+						sendNotification( Notifications.GET_APPLICATION_STRUCTURE, statesProxy.selectedApplication );
 					}
 					
 					checkConditions();
@@ -120,8 +120,8 @@ package net.vdombox.ide.modules.tree.view
 
 					if ( statesProxy.selectedApplication )
 					{
-						sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
-						sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, statesProxy.selectedApplication );
+						sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
+						sendNotification( Notifications.GET_APPLICATION_STRUCTURE, statesProxy.selectedApplication );
 					}
 
 					checkConditions();
@@ -129,7 +129,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.PAGES_GETTED:
+				case Notifications.PAGES_GETTED:
 				{
 					isPagesGetted = true;
 
@@ -138,7 +138,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.APPLICATION_STRUCTURE_GETTED:
+				case Notifications.APPLICATION_STRUCTURE_GETTED:
 				{
 					isApplicationStructureGetted = true;
 
@@ -147,13 +147,13 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.MODULE_DESELECTED:
+				case Notifications.MODULE_DESELECTED:
 				{
 					isAllStatesGetted = false;
 					isApplicationStructureGetted = false;
 					isPagesGetted = false;
 
-					sendNotification( ApplicationFacade.BODY_STOP );
+					sendNotification( Notifications.BODY_STOP );
 					
 					isBodyStarted = false;
 
@@ -174,7 +174,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			sendNotification( ApplicationFacade.BODY_CREATED, body );
+			sendNotification( Notifications.BODY_CREATED, body );
 
 			checkConditions();
 		}
@@ -184,7 +184,7 @@ package net.vdombox.ide.modules.tree.view
 			if ( isAllStatesGetted && isPagesGetted && isApplicationStructureGetted && body.initialized && !isBodyStarted )
 			{
 				isBodyStarted = true;
-				sendNotification( ApplicationFacade.BODY_START );
+				sendNotification( Notifications.BODY_START );
 			}
 		}
 	}

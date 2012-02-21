@@ -137,7 +137,7 @@ package net.vdombox.ide.modules.tree.view.components
 
 				addElement( treeElement );
 
-//				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement, treeElementVO: treeElementVO } );
+//				sendNotification( Notifications.TREE_ELEMENT_CREATED, { viewComponent: treeElement, treeElementVO: treeElementVO } );
 			}
 
 			for each ( treeElement in oldElements )

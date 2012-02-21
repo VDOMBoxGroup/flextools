@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.tree.controller.body
 	import flash.utils.getQualifiedClassName;
 	
 	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	
@@ -17,7 +17,7 @@ package net.vdombox.ide.modules.tree.controller.body
 			var structureProxy : StructureProxy = facade.retrieveProxy( StructureProxy.NAME ) as StructureProxy;
 			var pageVO : PageVO = notification.getBody().pageVO as PageVO;
 			
-			sendNotification( ApplicationFacade.SEND_TO_LOG, getQualifiedClassName( this ) );
+			sendNotification( Notifications.SEND_TO_LOG, getQualifiedClassName( this ) );
 			
 			structureProxy.createTreeElementByVO( pageVO );
 			
@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.tree.controller.body
 			{
 				if (te.pageVO == pageVO)
 				{
-					sendNotification( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, te );
+					sendNotification( Notifications.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, te );
 				}
 			}	
 			*/

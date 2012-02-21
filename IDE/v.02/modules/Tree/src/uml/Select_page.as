@@ -35,7 +35,7 @@ PropertiesPanel.mxml -> PropertiesPanel.mxml: pageAttributesChanged()
 
 PropertiesPanel -> TreeJunction: AppF.GET_PAGE_ATTRIBUTES\n(selectedPage, mediatorName)
 TreeJunction -> ProcessPageProxyMessage: AppF.PROCESS_STATES_PROXY_MESSAGE\n(message)
-ProcessPageProxyMessage -> PropertiesPanel:AppF.PAGE_ATTRIBUTES_GETTED + \nApplicationFacade.DELIMITER + \nrecipientID, \nvdomObjectAttributesVO;
+ProcessPageProxyMessage -> PropertiesPanel:AppF.PAGE_ATTRIBUTES_GETTED + \nNotifications.DELIMITER + \nrecipientID, \nvdomObjectAttributesVO;
 PropertiesPanel -> PropertiesPanel.mxml: set vdomObjectAttributesVO(value)
 note right: set the necessary values
 PropertiesPanel.mxml -> PropertiesPanel.mxml: pageAttributesChanged()

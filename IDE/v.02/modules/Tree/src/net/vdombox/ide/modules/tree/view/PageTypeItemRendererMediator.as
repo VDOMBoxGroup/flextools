@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.tree.view
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.ItemRendererEvent;
 	import net.vdombox.ide.common.view.components.itemrenderers.PageTypeItemRenderer;
 	
@@ -77,7 +77,7 @@ package net.vdombox.ide.modules.tree.view
 
 			pageTypeItemRenderer.typeResource = resourceVO;
 
-			sendNotification( ApplicationFacade.GET_RESOURCE, resourceVO );
+			sendNotification( Notifications.GET_RESOURCE, resourceVO );
 		}
 	}
 }

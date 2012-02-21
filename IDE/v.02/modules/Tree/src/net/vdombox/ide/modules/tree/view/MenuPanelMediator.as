@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.tree.view
 {
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.events.MenuPanelEvent;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	
@@ -54,8 +54,8 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
 			return interests;
 		}
@@ -65,12 +65,12 @@ package net.vdombox.ide.modules.tree.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 			
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
@@ -80,7 +80,7 @@ package net.vdombox.ide.modules.tree.view
 					}
 				}
 					
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 					
@@ -117,23 +117,23 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function menuPanel_createPageHandler( event : MenuPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_CREATE_PAGE_WINDOW_REQUEST, menuPanel );
+			sendNotification( Notifications.OPEN_CREATE_PAGE_WINDOW_REQUEST, menuPanel );
 		}
 
 		private function menuPanel_autoSpacingHandler( event : MenuPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.AUTO_SPACING_REQUEST );
+			sendNotification( Notifications.AUTO_SPACING_REQUEST );
 		}
 
 		private function menuPanel_expandAllHandler( event : MenuPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.EXPAND_ALL_REQUEST, isExpand );
+			sendNotification( Notifications.EXPAND_ALL_REQUEST, isExpand );
 			isExpand = !isExpand;
 		}
 
 		private function menuPanel_showSignatureHandler( event : MenuPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SHOW_SIGNATURE_REQUEST );
+			sendNotification( Notifications.SHOW_SIGNATURE_REQUEST );
 		}
 
 		private function menuPanel_undoHandler( event : MenuPanelEvent ) : void
@@ -143,7 +143,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private function menuPanel_saveHandler( event : MenuPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SAVE_REQUEST );
+			sendNotification( Notifications.SAVE_REQUEST );
 		}
 	}
 }

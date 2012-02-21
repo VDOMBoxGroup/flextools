@@ -430,7 +430,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="net.vdombox.ide.core.model:ModulesProxy" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.core.model.vo:ModuleVO" />
       <dep id="net.vdombox.ide.common:SimpleMessage" />
@@ -498,7 +498,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.mediator:Mediator" />
       <dep id="net.vdombox.ide.core.view.components:Task" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.core.view.components:ProgressView" />
     </script>
@@ -1575,7 +1575,7 @@
       <dep id="net.vdombox.ide.common:PPMStatesTargetNames" />
       <dep id="net.vdombox.ide.common.vo:ObjectVO" />
       <dep id="net.vdombox.ide.common:PPMOperationNames" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.common:ProxyMessage" />
       <dep id="net.vdombox.ide.core.controller.requests:StatesProxyRequestCommand" />
@@ -1927,7 +1927,7 @@
       <dep id="flash.display:Bitmap" />
       <dep id="flash.errors:IOError" />
       <dep id="flash.filesystem:File" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="trace" />
       <dep id="mx.utils:Base64Decoder" />
       <dep id="flash.display:Loader" />
@@ -2029,7 +2029,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
       <dep id="net.vdombox.ide.common:PPMOperationNames" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="net.vdombox.ide.common.vo:ResourceVO" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.common:PPMResourcesTargetNames" />
@@ -2491,7 +2491,7 @@
       <dep id="net.vdombox.ide.common:UIQueryMessage" />
       <dep id="net.vdombox.ide.common:UIQueryMessageNames" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
     </script>
     <script name="C:\Program Files\Adobe\Adobe Flash Builder 4.5\sdks\4.5.0\frameworks\libs\framework.swc(mx.containers.errors:ConstraintError)" mod="1275497485961" size="574" optimizedsize="295">
@@ -2824,7 +2824,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
       <dep id="net.vdombox.ide.common:PPMOperationNames" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.common:ProxyMessage" />
       <dep id="net.vdombox.ide.common:PPMObjectTargetNames" />
@@ -4876,7 +4876,7 @@
       <dep id="net.vdombox.ide.common.interfaces:ISettingsScreen" />
       <dep id="net.vdombox.ide.core.model:ModulesProxy" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="mx.core:IVisualElement" />
       <dep id="net.vdombox.ide.core.view.components:SettingsWindow" />
       <dep id="net.vdombox.ide.common.interfaces:IVIModule" />
@@ -5034,7 +5034,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.mediator:Mediator" />
       <dep id="net.vdombox.ide.core.view.components:ErrorView" />
       <dep id="flash.events:Event" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.core.model:SessionProxy" />
     </script>
@@ -5277,7 +5277,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
       <dep id="net.vdombox.ide.common:PPMOperationNames" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.common:ProxyMessage" />
       <dep id="net.vdombox.ide.common:PPMPageTargetNames" />
@@ -6164,7 +6164,7 @@
       <dep id="net.vdombox.ide.common.vo:ObjectVO" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
       <dep id="net.vdombox.ide.common:PPMOperationNames" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.common:ProxyMessage" />
       <dep id="net.vdombox.ide.common:PPMPlaceNames" />
@@ -6213,7 +6213,7 @@
       <dep id="flash.events:Event" />
       <dep id="mx.collections:ArrayList" />
       <dep id="net.vdombox.ide.core.model.vo:LocaleVO" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.core.view.components:LoginView" />
       <dep id="net.vdombox.ide.core.model:SharedObjectProxy" />
@@ -7118,7 +7118,7 @@
       <def id="net.vdombox.ide.core.model:TypesProxy" />
       <pre id="org.puremvc.as3.multicore.interfaces:IProxy" />
       <pre id="org.puremvc.as3.multicore.patterns.proxy:Proxy" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.core.model.business:SOAP" />
       <dep id="net.vdombox.ide.common.vo:TypeVO" />
@@ -7164,7 +7164,7 @@
       <pre id="org.puremvc.as3.multicore.interfaces:IMediator" />
       <pre id="org.puremvc.as3.multicore.patterns.mediator:Mediator" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="net.vdombox.ide.core.events:InitialWindowEvent" />
       <dep id="spark.components:Button" />
       <dep id="net.vdombox.ide.core.model:SessionProxy" />
@@ -7346,7 +7346,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
       <dep id="net.vdombox.ide.common:PPMOperationNames" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.common:ProxyMessage" />
       <dep id="net.vdombox.ide.common:PPMApplicationTargetNames" />
@@ -7417,7 +7417,7 @@
       <def id="net.vdombox.ide.core.controller:OpenInitialWindowCommand" />
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.core.view.components:InitialWindow" />
       <dep id="net.vdombox.ide.core.view:InitialWindowMediator" />
@@ -7832,7 +7832,7 @@
       <def id="net.vdombox.ide.core.controller:StartupCommand" />
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
     </script>
     <script name="C:\Program Files\Adobe\Adobe Flash Builder 4.5\sdks\4.5.0\frameworks\libs\rpc.swc(mx.rpc.soap.types:ICustomSOAPType)" mod="1275497368804" size="693" optimizedsize="272">
@@ -7948,7 +7948,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.proxy:Proxy" />
       <dep id="net.vdombox.ide.core.model:ApplicationProxy" />
       <dep id="net.vdombox.ide.core.model.vo:AuthInfoVO" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="net.vdombox.ide.core.model.vo:ErrorVO" />
       <dep id="net.vdombox.ide.core.events:SOAPEvent" />
       <dep id="net.vdombox.ide.common.vo:ApplicationVO" />
@@ -8222,7 +8222,7 @@
       <def id="net.vdombox.ide.core.model:ObjectProxy" />
       <pre id="org.puremvc.as3.multicore.patterns.proxy:Proxy" />
       <dep id="net.vdombox.ide.common.vo:ObjectVO" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="net.vdombox.ide.common.vo:ServerActionVO" />
       <dep id="mx.rpc:AsyncToken" />
       <dep id="net.vdombox.ide.common.vo:VdomObjectAttributesVO" />
@@ -8751,7 +8751,7 @@
       <dep id="org.puremvc.as3.multicore.utilities.pipes.interfaces:IPipeMessage" />
       <dep id="net.vdombox.ide.core.model:PipesProxy" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="org.puremvc.as3.multicore.utilities.pipes.plumbing:TeeSplit" />
       <dep id="org.puremvc.as3.multicore.utilities.pipes.interfaces:IPipeAware" />
       <dep id="net.vdombox.ide.core.model.vo:ModuleVO" />
@@ -8988,7 +8988,7 @@
       <dep id="net.vdombox.ide.core.model:ModulesProxy" />
       <dep id="net.vdombox.ide.core.model:PipesProxy" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="org.puremvc.as3.multicore.utilities.pipes.plumbing:TeeSplit" />
       <dep id="trace" />
       <dep id="org.puremvc.as3.multicore.utilities.pipes.interfaces:IPipeAware" />
@@ -9167,7 +9167,7 @@
       <dep id="net.vdombox.ide.core.model:ModulesProxy" />
       <dep id="net.vdombox.ide.core.events:MainWindowEvent" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="mx.core:IVisualElement" />
       <dep id="net.vdombox.ide.core.model:ServerProxy" />
       <dep id="net.vdombox.ide.core.view.components:SettingsWindow" />
@@ -9264,7 +9264,7 @@
       <def id="net.vdombox.ide.core.model:ModulesProxy" />
       <pre id="org.puremvc.as3.multicore.interfaces:IProxy" />
       <pre id="org.puremvc.as3.multicore.patterns.proxy:Proxy" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="trace" />
       <dep id="net.vdombox.ide.core.model.vo:ModulesCategoryVO" />
       <dep id="net.vdombox.ide.core.model.vo:ModuleVO" />
@@ -9439,7 +9439,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="net.vdombox.ide.core.view:VIModuleMediator" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.core.model.vo:ModuleVO" />
     </script>
@@ -9471,7 +9471,7 @@
       <def id="net.vdombox.ide.core.controller:SaveModuleSettings" />
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.common:SimpleMessage" />
       <dep id="net.vdombox.ide.core.model:SettingsStorageProxy" />
@@ -9543,7 +9543,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
       <dep id="net.vdombox.ide.common:PPMOperationNames" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="net.vdombox.ide.common:PPMTypesTargetNames" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.common:ProxyMessage" />
@@ -10204,7 +10204,7 @@
       <def id="net.vdombox.ide.core.controller:ModuleUnloadingStartCommand" />
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.core.model.vo:ModuleVO" />
     </script>
@@ -10233,7 +10233,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="net.vdombox.ide.core.view.components:MainWindow" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.core.view:MainWindowMediator" />
     </script>
@@ -10806,7 +10806,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.proxy:Proxy" />
       <dep id="net.vdombox.ide.common.vo:ObjectVO" />
       <dep id="net.vdombox.ide.common.vo:ServerActionVO" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="mx.rpc:AsyncToken" />
       <dep id="net.vdombox.ide.core.model.vo:ErrorVO" />
       <dep id="net.vdombox.ide.core.events:SOAPEvent" />
@@ -11335,8 +11335,8 @@
       <dep id="AS3" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="D:\svn_projects\VDOM_IDE\core\src\net\vdombox\ide\core\ApplicationFacade.as" mod="1307339441649" size="13906" optimizedsize="10009">
-      <def id="net.vdombox.ide.core:ApplicationFacade" />
+    <script name="D:\svn_projects\VDOM_IDE\core\src\net\vdombox\ide\core\Notifications.as" mod="1307339441649" size="13906" optimizedsize="10009">
+      <def id="net.vdombox.ide.core:Notifications" />
       <pre id="org.puremvc.as3.multicore.patterns.facade:Facade" />
       <pre id="org.puremvc.as3.multicore.interfaces:IFacade" />
       <dep id="net.vdombox.ide.core.controller:ProcessSimpleMessageCommand" />
@@ -11574,7 +11574,7 @@
       <def id="net.vdombox.ide.core.model:ApplicationProxy" />
       <pre id="org.puremvc.as3.multicore.patterns.proxy:Proxy" />
       <dep id="net.vdombox.ide.core.model:PageProxy" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="net.vdombox.ide.common.vo:ServerActionVO" />
       <dep id="net.vdombox.ide.core.model:ServerProxy" />
       <dep id="mx.rpc:AsyncToken" />
@@ -12388,7 +12388,7 @@
       <dep id="mx.styles:CSSSelector" />
       <dep id="ru_RU$Core_General_properties" />
       <dep id="mx.styles:CSSStyleDeclaration" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="en_US$Core_General_properties" />
       <dep id="mx.core:mx_internal" />
       <dep id="mx.styles:CSSCondition" />
@@ -12946,7 +12946,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.mediator:Mediator" />
       <dep id="VdomIDE" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="flash.desktop:NativeApplication" />
     </script>
@@ -13554,7 +13554,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
       <dep id="net.vdombox.ide.common:PPMOperationNames" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.common:ProxyMessage" />
       <dep id="net.vdombox.ide.common:PPMPlaceNames" />
@@ -14139,7 +14139,7 @@
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
       <dep id="net.vdombox.ide.common:PPMOperationNames" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="net.vdombox.ide.common.vo:ResourceVO" />
       <dep id="net.vdombox.ide.core.model:ServerProxy" />
       <dep id="AS3" />
@@ -14320,7 +14320,7 @@
       <def id="net.vdombox.ide.core.controller:ProcessSimpleMessageCommand" />
       <pre id="org.puremvc.as3.multicore.patterns.command:SimpleCommand" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
-      <dep id="net.vdombox.ide.core:ApplicationFacade" />
+      <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="AS3" />
       <dep id="net.vdombox.ide.common:SimpleMessage" />
       <dep id="net.vdombox.ide.common:SimpleMessageHeaders" />

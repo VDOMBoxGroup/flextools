@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.windows.CreatePageWindow;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -98,12 +98,12 @@ package net.vdombox.ide.modules.tree.view
 			
 			WindowManager.getInstance().removeWindow( createPageWindow );
 			
-			//sendNotification( ApplicationFacade.CLOSE_WINDOW, createPageWindow );
+			//sendNotification( Notifications.CLOSE_WINDOW, createPageWindow );
 			
 			addTitle (selectedPageType);
 			
 			if( selectedPageType )
-				sendNotification( ApplicationFacade.CREATE_PAGE_REQUEST, selectedPageType );
+				sendNotification( Notifications.CREATE_PAGE_REQUEST, selectedPageType );
 			
 			facade.removeMediator( NAME );
 		}
@@ -121,7 +121,7 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function performCancelHandler ( event : WindowEvent ) : void
 		{
-			//sendNotification( ApplicationFacade.CLOSE_WINDOW, createPageWindow );
+			//sendNotification( Notifications.CLOSE_WINDOW, createPageWindow );
 			
 			WindowManager.getInstance().removeWindow( createPageWindow );
 			
@@ -130,7 +130,7 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function pagesItemRenderer_createdHandler( event : ItemRendererEvent ) : void
 		{
-			sendNotification( ApplicationFacade.PAGE_TYPE_ITEM_RENDERER_CREATED, event.target );
+			sendNotification( Notifications.PAGE_TYPE_ITEM_RENDERER_CREATED, event.target );
 		}
 	}
 }

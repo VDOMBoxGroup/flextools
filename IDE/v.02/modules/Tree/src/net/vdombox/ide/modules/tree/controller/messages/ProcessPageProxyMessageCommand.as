@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -29,8 +29,8 @@ package net.vdombox.ide.modules.tree.controller.messages
 				{
 					var vdomObjectAttributesVO : VdomObjectAttributesVO = body.vdomObjectAttributesVO as VdomObjectAttributesVO;
 
-					var allPageRecipients : Object = statesProxy.getObject( place + ApplicationFacade.DELIMITER + operation +
-						ApplicationFacade.DELIMITER + target );
+					var allPageRecipients : Object = statesProxy.getObject( place + Notifications.DELIMITER + operation +
+						Notifications.DELIMITER + target );
 
 					var pageRecipient : Array = allPageRecipients[ vdomObjectAttributesVO.vdomObjectVO.id ];
 					var recipientID : String;
@@ -39,17 +39,17 @@ package net.vdombox.ide.modules.tree.controller.messages
 					{
 						for each ( recipientID in pageRecipient )
 						{
-							sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + recipientID, vdomObjectAttributesVO );
+							sendNotification( Notifications.PAGE_ATTRIBUTES_GETTED + Notifications.DELIMITER + recipientID, vdomObjectAttributesVO );
 						}
 					}
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
 						for each ( recipientID in pageRecipient )
 						{
-							sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + recipientID, vdomObjectAttributesVO );
+							sendNotification( Notifications.PAGE_ATTRIBUTES_SETTED + Notifications.DELIMITER + recipientID, vdomObjectAttributesVO );
 						}
 						
-						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED, vdomObjectAttributesVO );
+						sendNotification( Notifications.PAGE_ATTRIBUTES_SETTED, vdomObjectAttributesVO );
 					}
 
 					delete allPageRecipients[ vdomObjectAttributesVO.vdomObjectVO.id ];
@@ -61,7 +61,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 				{
 					if ( operation == PPMOperationNames.UPDATE )
 					{
-						sendNotification( ApplicationFacade.PAGE_NAME_SETTED, body );
+						sendNotification( Notifications.PAGE_NAME_SETTED, body );
 					}
 					break;
 				}

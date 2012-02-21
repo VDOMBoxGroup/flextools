@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.view.TreeElementMediator;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.tree.controller.body
 			var treeElement : TreeElement = notification.getBody() as TreeElement;
 			
 			if( treeElement && treeElement.treeElementVO )
-				facade.removeMediator( TreeElementMediator.NAME + ApplicationFacade.DELIMITER + treeElement.treeElementVO.id );
+				facade.removeMediator( TreeElementMediator.NAME + Notifications.DELIMITER + treeElement.treeElementVO.id );
 		}
 	}
 }

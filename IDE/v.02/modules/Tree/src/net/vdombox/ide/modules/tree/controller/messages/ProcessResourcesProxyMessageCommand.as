@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 				{
 					if ( operation == PPMOperationNames.READ )
 					{
-						sendNotification( ApplicationFacade.RESOURCES_GETTED, body );
+						sendNotification( Notifications.RESOURCES_GETTED, body );
 					}
 					
 					break;

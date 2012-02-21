@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
 	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 

@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.controller
 {
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;
 	import net.vdombox.ide.modules.tree.view.WorkAreaMediator;
@@ -17,8 +17,8 @@ package net.vdombox.ide.modules.tree.controller
 
 			if( statesProxy.selectedApplication )
 			{ 
-				facade.sendNotification( ApplicationFacade.GET_PAGES, { applicationVO: statesProxy.selectedApplication} );
-				facade.sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, { applicationVO: statesProxy.selectedApplication} );
+				facade.sendNotification( Notifications.GET_PAGES, { applicationVO: statesProxy.selectedApplication} );
+				facade.sendNotification( Notifications.GET_APPLICATION_STRUCTURE, { applicationVO: statesProxy.selectedApplication} );
 			}
 		}
 	}

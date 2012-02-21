@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.tree.controller.body
 	
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.view.ResourceSelectorWindowMediator;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelector;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelectorWindow;
@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.tree.controller.body
 
 			facade.registerMediator( resourceSelectorWindowMediator );
 
-			//sendNotification( ApplicationFacade.OPEN_WINDOW, { content: resourceSelectorWindow, title: "Select Resource", isModal: true, resizable : true } );
+			//sendNotification( Notifications.OPEN_WINDOW, { content: resourceSelectorWindow, title: "Select Resource", isModal: true, resizable : true } );
 		}
 	}
 }

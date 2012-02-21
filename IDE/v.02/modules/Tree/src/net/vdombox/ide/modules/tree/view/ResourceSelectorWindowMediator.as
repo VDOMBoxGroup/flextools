@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.tree.view
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.WindowEvent;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelector;
@@ -49,7 +49,7 @@ package net.vdombox.ide.modules.tree.view
 
 			resourceSelectorWindow.value = _resourceSelector.value;
 
-			sendNotification( ApplicationFacade.GET_RESOURCES, statesProxy.selectedApplication );
+			sendNotification( Notifications.GET_RESOURCES, statesProxy.selectedApplication );
 		}
 
 		override public function onRemove() : void
@@ -63,7 +63,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.RESOURCES_GETTED );
+			interests.push( Notifications.RESOURCES_GETTED );
 
 			return interests;
 		}
@@ -75,7 +75,7 @@ package net.vdombox.ide.modules.tree.view
 
 			switch ( name )
 			{
-				case ApplicationFacade.RESOURCES_GETTED:
+				case Notifications.RESOURCES_GETTED:
 				{
 					resourceSelectorWindow.resources = body as Array;
 
@@ -83,7 +83,7 @@ package net.vdombox.ide.modules.tree.view
 
 					for each ( resourceVO in body )
 					{
-						sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+						sendNotification( Notifications.LOAD_RESOURCE, resourceVO );
 					}
 
 					break;
@@ -108,14 +108,14 @@ package net.vdombox.ide.modules.tree.view
 			_resourceSelector.value = resourceSelectorWindow.value;
 			facade.removeMediator( mediatorName );
 			
-			//sendNotification( ApplicationFacade.CLOSE_WINDOW, resourceSelectorWindow );
+			//sendNotification( Notifications.CLOSE_WINDOW, resourceSelectorWindow );
 		}
 
 		private function cancelHandler( event : WindowEvent ) : void
 		{
 			facade.removeMediator( mediatorName );
 			
-			//sendNotification( ApplicationFacade.CLOSE_WINDOW, resourceSelectorWindow );
+			//sendNotification( Notifications.CLOSE_WINDOW, resourceSelectorWindow );
 		}
 	}
 }

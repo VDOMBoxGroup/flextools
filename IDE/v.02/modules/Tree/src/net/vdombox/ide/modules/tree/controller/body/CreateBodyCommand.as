@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.view.BodyMediator;
 	import net.vdombox.ide.modules.tree.view.TreeMediator;
@@ -37,8 +37,8 @@ package net.vdombox.ide.modules.tree.controller.body
 			
 			body.moduleFactory = treeMediator.tree.moduleFactory;
 			
-			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
-			facade.sendNotification( ApplicationFacade.MODULE_SELECTED );
+			facade.sendNotification( Notifications.EXPORT_BODY, body );
+			facade.sendNotification( Notifications.MODULE_SELECTED );
 		}
 	}
 }

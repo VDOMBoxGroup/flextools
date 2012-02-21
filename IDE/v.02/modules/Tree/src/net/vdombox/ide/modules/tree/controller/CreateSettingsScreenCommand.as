@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.tree.controller
 {
 	import mx.controls.CheckBox;
 
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.view.SettingsScreenMediator;
 	import net.vdombox.ide.modules.tree.view.components.SettingsScreen;
 
@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.tree.controller
 
 			facade.registerMediator( new SettingsScreenMediator( settings ) )
 
-			facade.sendNotification( ApplicationFacade.EXPORT_SETTINGS_SCREEN, settings );
+			facade.sendNotification( Notifications.EXPORT_SETTINGS_SCREEN, settings );
 		}
 	}
 }

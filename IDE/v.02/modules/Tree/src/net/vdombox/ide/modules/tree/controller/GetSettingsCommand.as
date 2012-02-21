@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.tree.controller
 {
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 
@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.tree.controller
 			if ( settingsVO )
 			{
 				if ( mediatorName )
-					notificationName = mediatorName + ApplicationFacade.DELIMITER + notificationName;
+					notificationName = mediatorName + Notifications.DELIMITER + notificationName;
 
 				sendNotification( notificationName, settingsVO );
 			}

@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.tree.model
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.StructureObjectVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
@@ -138,7 +138,7 @@ package net.vdombox.ide.modules.tree.model
 			if ( treeElementsChanged )
 			{
 				commitProperties();
-				sendNotification( ApplicationFacade.TREE_ELEMENTS_CHANGED, treeElements );
+				sendNotification( Notifications.TREE_ELEMENTS_CHANGED, treeElements );
 			}
 		}
 
@@ -222,7 +222,7 @@ package net.vdombox.ide.modules.tree.model
 
 			commitProperties();
 			
-			sendNotification( ApplicationFacade.TREE_ELEMENT_ADD, treeElements );			
+			sendNotification( Notifications.TREE_ELEMENT_ADD, treeElements );			
 				
 			selectTreeElementChange(treeElementVO);
 		}
@@ -254,7 +254,7 @@ package net.vdombox.ide.modules.tree.model
 
 				treeElements.splice( i, 1 );
 
-				sendNotification( ApplicationFacade.TREE_ELEMENTS_CHANGED, treeElements );
+				sendNotification( Notifications.TREE_ELEMENTS_CHANGED, treeElements );
 
 				break;
 			}
@@ -264,7 +264,7 @@ package net.vdombox.ide.modules.tree.model
 		{
 			_linkages.push( value );
 
-			sendNotification( ApplicationFacade.LINKAGES_CHANGED, linkages );
+			sendNotification( Notifications.LINKAGES_CHANGED, linkages );
 		}
 
 		public function deleteLinkage( value : LinkageVO ) : void
@@ -299,7 +299,7 @@ package net.vdombox.ide.modules.tree.model
 
 			}
 
-			sendNotification( ApplicationFacade.LINKAGES_CHANGED, linkages );
+			sendNotification( Notifications.LINKAGES_CHANGED, linkages );
 		}
 
 		public function cleanup() : void
@@ -420,7 +420,7 @@ package net.vdombox.ide.modules.tree.model
 			}
 
 			if ( isLinkagesChanged )
-				sendNotification( ApplicationFacade.LINKAGES_CHANGED, linkages );
+				sendNotification( Notifications.LINKAGES_CHANGED, linkages );
 		}
 
 		private function deleteTreeElementLinkages( treeElementVO : TreeElementVO ) : void
@@ -444,7 +444,7 @@ package net.vdombox.ide.modules.tree.model
 			}
 
 			if ( isLinkagesChanged )
-				sendNotification( ApplicationFacade.LINKAGES_CHANGED, linkages );
+				sendNotification( Notifications.LINKAGES_CHANGED, linkages );
 		}
 
 		private function getStructureObjectByID( id : String ) : StructureObjectVO

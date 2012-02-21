@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.tree.view
 {
 	import flash.events.Event;
 
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
@@ -52,10 +52,10 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
-			interests.push( ApplicationFacade.TREE_LEVELS_GETTED );
+			interests.push( Notifications.TREE_LEVELS_GETTED );
 
 			return interests;
 		}
@@ -65,24 +65,24 @@ package net.vdombox.ide.modules.tree.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 						
-						sendNotification( ApplicationFacade.GET_TREE_LEVELS );
+						sendNotification( Notifications.GET_TREE_LEVELS );
 
 						break;
 					}
 				}
 
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 
@@ -91,7 +91,7 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.TREE_LEVELS_GETTED:
+				case Notifications.TREE_LEVELS_GETTED:
 				{
 					levelsPanel.dataProvider = body as Array;
 

@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -30,8 +30,8 @@ package net.vdombox.ide.modules.tree.controller.messages
 				{
 					var typeVO : TypeVO = body as TypeVO;
 
-					var allTypeRecipients : Object = statesProxy.getObject( place + ApplicationFacade.DELIMITER + operation +
-						ApplicationFacade.DELIMITER + target );
+					var allTypeRecipients : Object = statesProxy.getObject( place + Notifications.DELIMITER + operation +
+						Notifications.DELIMITER + target );
 
 					var typeRecipient : Array = allTypeRecipients[ typeVO.id ];
 
@@ -39,7 +39,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 
 					for each ( recipientID in typeRecipient )
 					{
-						sendNotification( TypesProxy.TYPE_GETTED + ApplicationFacade.DELIMITER + recipientID, typeVO );
+						sendNotification( TypesProxy.TYPE_GETTED + Notifications.DELIMITER + recipientID, typeVO );
 					}
 
 					delete allTypeRecipients[ typeVO.id ];

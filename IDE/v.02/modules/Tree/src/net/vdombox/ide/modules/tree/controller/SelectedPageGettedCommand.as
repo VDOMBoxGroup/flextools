@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.controller
 {
 	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
@@ -18,9 +18,9 @@ package net.vdombox.ide.modules.tree.controller
 			
 			var pageVO : PageVO = notification.getBody() as PageVO;
 			
-			var sessionObject : Object = statesProxy.getObject( ApplicationFacade.STATES );
+			var sessionObject : Object = statesProxy.getObject( Notifications.STATES );
 			
-			var currentSelectedTreeElement : TreeElementVO = sessionObject[ ApplicationFacade.SELECTED_TREE_ELEMENT ];
+			var currentSelectedTreeElement : TreeElementVO = sessionObject[ Notifications.SELECTED_TREE_ELEMENT ];
 			var selectedTreeElement : TreeElementVO;
 			
 			if( pageVO )
@@ -36,12 +36,12 @@ package net.vdombox.ide.modules.tree.controller
 				}
 				else
 				{
-					sendNotification( ApplicationFacade.SET_SELECTED_PAGE, currentSelectedTreeElement.pageVO );
+					sendNotification( Notifications.SET_SELECTED_PAGE, currentSelectedTreeElement.pageVO );
 				}
 			}
 			
 			if( selectedTreeElement && currentSelectedTreeElement != selectedTreeElement )
-				sendNotification( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED, selectedTreeElement );
+				sendNotification( Notifications.SELECTED_TREE_ELEMENT_CHANGED, selectedTreeElement );
 		}
 	}
 }

@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.tree.view
 	
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.view.components.SettingsScreen;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -33,7 +33,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( NAME + ApplicationFacade.DELIMITER + SettingsProxy.SETTINGS_GETTED );
+			interests.push( NAME + Notifications.DELIMITER + SettingsProxy.SETTINGS_GETTED );
 			interests.push( SettingsProxy.SETTINGS_CHANGED );
 			
 			return interests;

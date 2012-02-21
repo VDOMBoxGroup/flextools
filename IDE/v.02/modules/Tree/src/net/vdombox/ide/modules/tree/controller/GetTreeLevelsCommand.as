@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.tree.controller
 {
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -12,7 +12,7 @@ package net.vdombox.ide.modules.tree.controller
 		{
 			var structureLevelsProxy : StructureProxy = facade.retrieveProxy( StructureProxy.NAME ) as StructureProxy;
 			
-			sendNotification( ApplicationFacade.TREE_LEVELS_GETTED, structureLevelsProxy.treeLevels );
+			sendNotification( Notifications.TREE_LEVELS_GETTED, structureLevelsProxy.treeLevels );
 		}
 	}
 }

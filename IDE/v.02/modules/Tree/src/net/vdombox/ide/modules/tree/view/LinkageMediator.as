@@ -8,7 +8,7 @@ package net.vdombox.ide.modules.tree.view
 	
 	import mx.binding.utils.BindingUtils;
 	
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.tree.view
 
 		public function LinkageMediator( viewComponent : Linkage )
 		{
-			super( NAME + ApplicationFacade.DELIMITER + viewComponent.uid, viewComponent );
+			super( NAME + Notifications.DELIMITER + viewComponent.uid, viewComponent );
 		}
 
 		private var _linkageVO : LinkageVO;
@@ -50,8 +50,8 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.SHOW_SIGNATURE );
-			interests.push( ApplicationFacade.HIDE_SIGNATURE );
+			interests.push( Notifications.SHOW_SIGNATURE );
+			interests.push( Notifications.HIDE_SIGNATURE );
 			
 			return interests;
 		}
@@ -63,13 +63,13 @@ package net.vdombox.ide.modules.tree.view
 			
 			switch ( name )
 			{
-				case ApplicationFacade.SHOW_SIGNATURE:
+				case Notifications.SHOW_SIGNATURE:
 				{
 					linkage.signatureVisible = true;
 					break
 				}
 					
-				case ApplicationFacade.HIDE_SIGNATURE:
+				case Notifications.HIDE_SIGNATURE:
 				{
 					linkage.signatureVisible = false;
 					break

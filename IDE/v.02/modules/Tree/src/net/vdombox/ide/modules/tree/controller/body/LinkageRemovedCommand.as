@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
-	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.view.LinkageMediator;
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.tree.controller.body
 			var linkage : Linkage = notification.getBody() as Linkage;
 			
 			if( linkage )
-				facade.removeMediator( LinkageMediator.NAME + ApplicationFacade.DELIMITER + linkage.uid );
+				facade.removeMediator( LinkageMediator.NAME + Notifications.DELIMITER + linkage.uid );
 		}
 	}
 }
