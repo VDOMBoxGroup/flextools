@@ -17,7 +17,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.WorkAreaEvent;
@@ -52,19 +52,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 			
 			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 			
-			interests.push( ApplicationFacade.OPEN_PAGE_REQUEST );
-			interests.push( ApplicationFacade.OPEN_OBJECT_REQUEST );
+			interests.push( Notifications.OPEN_PAGE_REQUEST );
+			interests.push( Notifications.OPEN_OBJECT_REQUEST );
 			
-			interests.push( ApplicationFacade.PAGE_NAME_SETTED);
+			interests.push( Notifications.PAGE_NAME_SETTED);
 			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED);
 			
-			interests.push( ApplicationFacade.PAGE_DELETED);
-			interests.push( ApplicationFacade.PAGE_CREATED);
+			interests.push( Notifications.PAGE_DELETED);
+			interests.push( Notifications.PAGE_CREATED);
 			
 			return interests;
 		}
@@ -77,14 +77,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var vdomObjectVO : IVDOMObjectVO;
 			var editor : IEditor;
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 
 
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( !statesProxy.selectedApplication )
 						break;
@@ -97,7 +97,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 
@@ -119,11 +119,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.OPEN_PAGE_REQUEST:
+				case Notifications.OPEN_PAGE_REQUEST:
 				{
 				}
 
-				case ApplicationFacade.OPEN_OBJECT_REQUEST:
+				case Notifications.OPEN_OBJECT_REQUEST:
 				{
 					vdomObjectVO = body as IVDOMObjectVO;
 					editor = workArea.getEditorByVO( vdomObjectVO );
@@ -131,7 +131,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( !editor )
 					{
 						editor = workArea.openEditor( vdomObjectVO );
-						sendNotification( ApplicationFacade.EDITOR_CREATED, editor );
+						sendNotification( Notifications.EDITOR_CREATED, editor );
 					}
 					else
 					{
@@ -141,7 +141,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case ApplicationFacade.PAGE_NAME_SETTED:
+				case Notifications.PAGE_NAME_SETTED:
 				{
 					var pageVO : PageVO = body as PageVO;
 					
@@ -157,14 +157,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break
 				}
 					
-				case ApplicationFacade.PAGE_DELETED:
+				case Notifications.PAGE_DELETED:
 				{
 					workArea.closeEditor( body.pageVO as PageVO );;
 					
 					break
 				}
 					
-				case ApplicationFacade.PAGE_CREATED:
+				case Notifications.PAGE_CREATED:
 				{
 					vdomObjectVO = body.pageVO as IVDOMObjectVO;
 					
@@ -226,7 +226,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function renderer_removedHandler( event : RendererEvent ) : void
 		{
-			sendNotification( ApplicationFacade.RENDERER_REMOVED, event.target as IRenderer );
+			sendNotification( Notifications.RENDERER_REMOVED, event.target as IRenderer );
 		}
 
 		private function changeHandler( event : WorkAreaEvent ) : void
@@ -253,12 +253,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function editor_preinitializedHandler( event : EditorEvent ) : void
 		{
-			sendNotification( ApplicationFacade.EDITOR_CREATED, event.target as IEditor );
+			sendNotification( Notifications.EDITOR_CREATED, event.target as IEditor );
 		}
 
 		private function editor_removedHandler( event : EditorEvent ) : void
 		{
-			sendNotification( ApplicationFacade.EDITOR_REMOVED, event.target as IEditor );
+			sendNotification( Notifications.EDITOR_REMOVED, event.target as IEditor );
 		}
 
 		private function removeHandlers() : void
@@ -283,13 +283,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function undoHandler( event : EditorEvent ) : void
 		{			
 			if ( event.target.skin.currentState == "wysiwyg" || event.target.skin.currentState == "wysiwygDisabled" )
-				sendNotification( ApplicationFacade.UNDO, statesProxy.selectedPage );
+				sendNotification( Notifications.UNDO, statesProxy.selectedPage );
 		}
 		
 		private function redoHandler( event : EditorEvent ) : void
 		{			
 			if ( event.target.skin.currentState == "wysiwyg" || event.target.skin.currentState == "wysiwygDisabled" )
-				sendNotification( ApplicationFacade.REDO, statesProxy.selectedPage );
+				sendNotification( Notifications.REDO, statesProxy.selectedPage );
 		}
 	}
 }

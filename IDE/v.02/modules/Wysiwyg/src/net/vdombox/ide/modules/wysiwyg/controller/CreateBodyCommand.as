@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.view.BodyMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.WysiwygMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.components.main.Body;
@@ -34,8 +34,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			}
 
 			body.moduleFactory = wysiwygMediator.wysiwyg.moduleFactory;
-			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
-			facade.sendNotification( ApplicationFacade.MODULE_SELECTED );
+			facade.sendNotification( Notifications.EXPORT_BODY, body );
+			facade.sendNotification( Notifications.MODULE_SELECTED );
 		}
 	}
 }

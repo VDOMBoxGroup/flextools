@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
@@ -80,17 +80,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 
 			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
 			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 
-			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED );
-			interests.push( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED );
+			interests.push( Notifications.PAGE_ATTRIBUTES_GETTED );
+			interests.push( Notifications.OBJECT_ATTRIBUTES_GETTED );
 			
-			interests.push( ApplicationFacade.PAGE_NAME_SETTED );
-			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
+			interests.push( Notifications.PAGE_NAME_SETTED );
+			interests.push( Notifications.OBJECT_NAME_SETTED );
 
 			return interests;
 		}
@@ -100,7 +100,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 
 			var vdomObjectAttributesVO : VdomObjectAttributesVO;
@@ -110,22 +110,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
 
 						if ( statesProxy.selectedObject )
-							sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
+							sendNotification( Notifications.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
 						else if ( statesProxy.selectedPage )
-							sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
+							sendNotification( Notifications.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
 
 						break;
 					}
 				}
 
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 
@@ -137,9 +137,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case StatesProxy.SELECTED_OBJECT_CHANGED:
 				{
 					if ( statesProxy.selectedObject )
-						sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
+						sendNotification( Notifications.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
 					else if ( statesProxy.selectedPage )
-						sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
+						sendNotification( Notifications.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
 					else
 						clearData();
 
@@ -149,14 +149,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
 					if ( statesProxy.selectedPage  )
-						sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
+						sendNotification( Notifications.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
 					else
 						clearData();
 
 					break;
 				}
 
-				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED:
+				case Notifications.PAGE_ATTRIBUTES_GETTED:
 				{
 					if ( statesProxy.selectedObject )
 						break;
@@ -172,7 +172,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.OBJECT_ATTRIBUTES_GETTED:
+				case Notifications.OBJECT_ATTRIBUTES_GETTED:
 				{
 					vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
@@ -185,13 +185,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case ApplicationFacade.PAGE_NAME_SETTED:
+				case Notifications.PAGE_NAME_SETTED:
 				{
 					objectAttributesPanel.attributesVO = objectAttributesPanel.attributesVO;
 					break;
 				}
 					
-				case ApplicationFacade.OBJECT_NAME_SETTED:
+				case Notifications.OBJECT_NAME_SETTED:
 				{
 					objectAttributesPanel.attributesVO = objectAttributesPanel.attributesVO;
 					break;
@@ -249,9 +249,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 			}
 			if ( attributeRander.objectVO )
-				sendNotification( ApplicationFacade.SET_OBJECT_NAME, attributeRander.objectVO );
+				sendNotification( Notifications.SET_OBJECT_NAME, attributeRander.objectVO );
 			else
-				sendNotification( ApplicationFacade.SAVE_ATTRIBUTES_REQUEST, objectAttributesPanel.attributesVO );
+				sendNotification( Notifications.SAVE_ATTRIBUTES_REQUEST, objectAttributesPanel.attributesVO );
 		}
 
 		private function deleteRequestHandler( event : ObjectAttributesPanelEvent ) : void
@@ -268,7 +268,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if (event.detail == Alert.YES)
 			{
 				if ( statesProxy.selectedPage && statesProxy.selectedObject )
-					sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: statesProxy.selectedPage, objectVO: statesProxy.selectedObject } );
+					sendNotification( Notifications.DELETE_OBJECT, { pageVO: statesProxy.selectedPage, objectVO: statesProxy.selectedObject } );
 			}
 		}
 
@@ -284,17 +284,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 			}
 
-			sendNotification( ApplicationFacade.CURRENT_ATTRIBUTE_CHANGED, attributeDescription );
+			sendNotification( Notifications.CURRENT_ATTRIBUTE_CHANGED, attributeDescription );
 		}
 
 		private function openExternalHandler( event : AttributeEvent ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_EXTERNAL_EDITOR_REQUEST, event.target );
+			sendNotification( Notifications.OPEN_EXTERNAL_EDITOR_REQUEST, event.target );
 		}
 		
 		private function errorHandler( event : AttributeEvent ) : void
 		{
-			sendNotification( ApplicationFacade.WRITE_ERROR, { applicationVO: statesProxy.selectedApplication, content: event.value } );
+			sendNotification( Notifications.WRITE_ERROR, { applicationVO: statesProxy.selectedApplication, content: event.value } );
 		}
 
 		private function selectResourceHandler( event : AttributeEvent ) : void
@@ -321,7 +321,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function getResourcesAndPagesHandler( event : AttributeEvent ) : void
 		{
-			sendNotification( ApplicationFacade.GET_MULTILINE_RESOURCES, event.target );
+			sendNotification( Notifications.GET_MULTILINE_RESOURCES, event.target );
 		}
 	}
 }

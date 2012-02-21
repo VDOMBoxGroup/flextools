@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.HelpPanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -48,10 +48,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 			
-			interests.push( ApplicationFacade.CURRENT_ATTRIBUTE_CHANGED );
+			interests.push( Notifications.CURRENT_ATTRIBUTE_CHANGED );
 			
 			return interests;
 		}
@@ -61,12 +61,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 			
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 			
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
@@ -76,7 +76,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					}
 				}
 					
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 					
@@ -85,7 +85,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case ApplicationFacade.CURRENT_ATTRIBUTE_CHANGED:
+				case Notifications.CURRENT_ATTRIBUTE_CHANGED:
 				{
 					Alert
 					var currentAttribute : Object = body as Object;

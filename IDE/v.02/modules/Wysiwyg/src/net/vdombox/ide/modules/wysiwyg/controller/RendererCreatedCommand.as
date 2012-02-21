@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.StatesProxy;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	
@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			
 			// on start wysiwyg we need to set transform marker for selected object: 
-			// (we do it in VdomObjectEditorMediator, handler for ApplicationFacade.SELECTED_OBJECT_CHANGED msg )
+			// (we do it in VdomObjectEditorMediator, handler for Notifications.SELECTED_OBJECT_CHANGED msg )
 			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			var selectedObject : IVDOMObjectVO = statesProxy.selectedObject as IVDOMObjectVO;
 			

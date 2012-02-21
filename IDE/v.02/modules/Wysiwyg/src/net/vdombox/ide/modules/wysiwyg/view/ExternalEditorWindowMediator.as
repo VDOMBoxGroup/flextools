@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.interfaces.IExternalManager;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.ExternalEditorWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
@@ -55,7 +55,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			externalEditorWindow.externalManager = facade.retrieveMediator( ExternalManagerMediator.NAME ) as IExternalManager;
 			externalEditorWindow.resourceVO = resourceVO;
 			
-			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+			sendNotification( Notifications.LOAD_RESOURCE, resourceVO );
 		}
 		
 		override public function onRemove() : void
@@ -67,7 +67,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.RESOURCES_GETTED );
+			interests.push( Notifications.RESOURCES_GETTED );
 			
 			return interests;
 		}
@@ -79,7 +79,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			switch ( name )
 			{
-				case ApplicationFacade.RESOURCES_GETTED:
+				case Notifications.RESOURCES_GETTED:
 				{
 //					externalEditorWindow.resourceVO = body as Array;
 					
@@ -87,7 +87,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 //					
 //					for each( resourceVO in body )
 //					{
-//						sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+//						sendNotification( Notifications.LOAD_RESOURCE, resourceVO );
 //					}
 					
 					break;

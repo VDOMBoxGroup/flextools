@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.view.ToolsetMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.components.main.Toolset;
 	
@@ -25,7 +25,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				facade.registerMediator( new ToolsetMediator( toolset ) )
 			}
 			
-			facade.sendNotification( ApplicationFacade.EXPORT_TOOLSET, toolset );
+			facade.sendNotification( Notifications.EXPORT_TOOLSET, toolset );
 		}
 	}
 }

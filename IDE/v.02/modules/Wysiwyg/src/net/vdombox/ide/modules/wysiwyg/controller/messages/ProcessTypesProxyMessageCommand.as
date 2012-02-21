@@ -1,11 +1,11 @@
 package net.vdombox.ide.modules.wysiwyg.controller.messages
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	 *  <ul><br />
 	 * 
 	 *  <b>Registred on:</b><ul>
-	 *  ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE</ul><br />
+	 *  Notifications.PROCESS_TYPES_PROXY_MESSAGE</ul><br />
 	 * 
 	 * <b>Notifies:</b><ul>Is Missing </ul><br />
 	 * </ul> 
@@ -48,7 +48,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					
 				case PPMTypesTargetNames.TOP_LEVEL_TYPES:
 				{
-					sendNotification( ApplicationFacade.TOP_LEVEL_TYPES_GETTED, body );
+					sendNotification( Notifications.TOP_LEVEL_TYPES_GETTED, body );
 					
 					break;
 				}

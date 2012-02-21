@@ -6,8 +6,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import mx.core.Container;
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.LineVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
@@ -152,9 +152,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				minEpsY2 = 0;
 			
 			if ( component is TransformMarker && !marker.equallySize( component.measuredWidth, component.measuredHeight ))
-				sendNotification( ApplicationFacade.LINE_LIST_GETTED, { listLines : listLines, component : component, stepX : minEpsX2, stepY : minEpsY2 } );
+				sendNotification( Notifications.LINE_LIST_GETTED, { listLines : listLines, component : component, stepX : minEpsX2, stepY : minEpsY2 } );
 			else	
-				sendNotification( ApplicationFacade.LINE_LIST_GETTED, { listLines : listLines, component : component, stepX : minEpsX, stepY : minEpsY } );
+				sendNotification( Notifications.LINE_LIST_GETTED, { listLines : listLines, component : component, stepX : minEpsX, stepY : minEpsY } );
 		}
 		
 		private function foundComponents ( renderVO : RenderVO ) : Array

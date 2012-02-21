@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.TypeItemRendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.UserTypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
@@ -70,8 +70,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 			
 			return interests;
 		}
@@ -81,12 +81,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 			
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					if ( statesProxy.selectedApplication )
 					{
@@ -99,7 +99,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					}
 				}
 					
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					isActive = false;
 					
@@ -136,7 +136,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			typeItemRenderer.resourceVO = resourceVO;
 
-			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+			sendNotification( Notifications.LOAD_RESOURCE, resourceVO );
 		}
 		
 		private function addInUserCategory( event : TypeItemRendererEvent ) : void

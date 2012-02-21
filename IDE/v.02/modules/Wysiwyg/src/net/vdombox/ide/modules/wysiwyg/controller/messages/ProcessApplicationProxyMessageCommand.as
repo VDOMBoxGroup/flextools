@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.controller.messages
 {
+	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -35,7 +35,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMApplicationTargetNames.PAGES:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.PAGES_GETTED, body.pages );
+						sendNotification( Notifications.PAGES_GETTED, body.pages );
 					
 					break;
 				}
@@ -43,16 +43,16 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMApplicationTargetNames.PAGE:
 				{
 					if ( operation == PPMOperationNames.CREATE )
-						sendNotification( ApplicationFacade.PAGE_CREATED, body );
+						sendNotification( Notifications.PAGE_CREATED, body );
 					else if ( operation == PPMOperationNames.DELETE )
-						sendNotification( ApplicationFacade.PAGE_DELETED, body );
+						sendNotification( Notifications.PAGE_DELETED, body );
 					
 					break;
 				}
 					
 				case PPMApplicationTargetNames.COPY:
 				{
-					sendNotification( ApplicationFacade.GET_PAGES, body );
+					sendNotification( Notifications.GET_PAGES, body );
 					
 					break;
 				}
@@ -60,7 +60,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMApplicationTargetNames.REMOTE_CALL:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.REMOTE_CALL_RESPONSE, body.result );
+						sendNotification( Notifications.REMOTE_CALL_RESPONSE, body.result );
 					
 					break;
 				}

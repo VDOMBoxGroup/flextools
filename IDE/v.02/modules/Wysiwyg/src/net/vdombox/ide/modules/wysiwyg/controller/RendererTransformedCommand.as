@@ -2,12 +2,12 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	
@@ -89,7 +89,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				}
 			}
 			
-			sendNotification( ApplicationFacade.UPDATE_ATTRIBUTES, vdomObjectAttributesVO );
+			sendNotification( Notifications.UPDATE_ATTRIBUTES, vdomObjectAttributesVO );
 		}
 		
 		private function applyAttribute( attributeVO : AttributeVO ) : void

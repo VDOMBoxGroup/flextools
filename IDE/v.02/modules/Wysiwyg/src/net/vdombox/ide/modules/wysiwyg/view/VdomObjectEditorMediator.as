@@ -30,7 +30,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
@@ -127,17 +127,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_STOP );
 
-			interests.push( ApplicationFacade.XML_PRESENTATION_GETTED );
+			interests.push( Notifications.XML_PRESENTATION_GETTED );
 
 			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
 
-			interests.push( ApplicationFacade.XML_PRESENTATION_SETTED );
+			interests.push( Notifications.XML_PRESENTATION_SETTED );
 			
-			interests.push( ApplicationFacade.LINE_LIST_GETTED );
+			interests.push( Notifications.LINE_LIST_GETTED );
 			
-			interests.push( ApplicationFacade.PAGE_STRUCTURE_GETTED );
+			interests.push( Notifications.PAGE_STRUCTURE_GETTED );
 			
 			return interests;
 		}
@@ -156,7 +156,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					clearData();
 
@@ -210,15 +210,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 					else if (editor.state.substr( 0, 3 ) == "xml")
 					{
 						if (selectedObject == null)
-							sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { pageVO: editor.editorVO.vdomObjectVO } );
+							sendNotification( Notifications.GET_XML_PRESENTATION, { pageVO: editor.editorVO.vdomObjectVO } );
 						else
-							sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { objectVO: selectedObject } );
+							sendNotification( Notifications.GET_XML_PRESENTATION, { objectVO: selectedObject } );
 					}
 
 					break;
 				}
 
-				case ApplicationFacade.XML_PRESENTATION_SETTED:
+				case Notifications.XML_PRESENTATION_SETTED:
 				{
 //					if ( editor.vdomObjectVO && body.hasOwnProperty( "pageVO" ) && body.pageVO && body.pageVO.id == editor.vdomObjectVO.id )
 //					{
@@ -228,13 +228,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case ApplicationFacade.LINE_LIST_GETTED:
+				case Notifications.LINE_LIST_GETTED:
 				{			
 					drawLine( body );
 					break;
 				}
 					
-				case ApplicationFacade.PAGE_STRUCTURE_GETTED:
+				case Notifications.PAGE_STRUCTURE_GETTED:
 				{
 					var pageXMLTree : XML = notification.getBody() as XML;
 					var selectedPageVO : PageVO = statesProxy.selectedPage as PageVO;
@@ -696,7 +696,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function moveRendererHandler ( event : RendererEvent ) : void
 		{
 			if ( component.showLinking )
-				sendNotification( ApplicationFacade.OBJECT_MOVED, { component : event.target, ctrlKey : event.ctrlKey } );
+				sendNotification( Notifications.OBJECT_MOVED, { component : event.target, ctrlKey : event.ctrlKey } );
 		}
 		
 		private function keyDownDeleteHandler(event : KeyboardEvent) : void
@@ -717,7 +717,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if (event.detail == Alert.YES)
 			{
 				if ( statesProxy.selectedPage && statesProxy.selectedObject )
-					sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: statesProxy.selectedPage, objectVO: statesProxy.selectedObject } );
+					sendNotification( Notifications.DELETE_OBJECT, { pageVO: statesProxy.selectedPage, objectVO: statesProxy.selectedObject } );
 			}
 		}
 		
@@ -741,47 +741,47 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function partOpenedHandler( event : EditorEvent ) : void
 		{
 			if ( event.type == EditorEvent.WYSIWYG_OPENED && editor.editorVO.vdomObjectVO )
-				sendNotification( ApplicationFacade.GET_WYSIWYG, editor.editorVO.vdomObjectVO );
+				sendNotification( Notifications.GET_WYSIWYG, editor.editorVO.vdomObjectVO );
 			else if ( event.type == EditorEvent.XML_EDITOR_OPENED )
 			{
 				var selectedPage : IVDOMObjectVO = statesProxy.selectedPage as IVDOMObjectVO;
 				var selectedObject : IVDOMObjectVO = statesProxy.selectedObject as IVDOMObjectVO;
 				
 				if (selectedObject == null)
-					sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { pageVO: editor.editorVO.vdomObjectVO } );
+					sendNotification( Notifications.GET_XML_PRESENTATION, { pageVO: editor.editorVO.vdomObjectVO } );
 				else
-					sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { objectVO: selectedObject } );
+					sendNotification( Notifications.GET_XML_PRESENTATION, { objectVO: selectedObject } );
 			}
 		}
 
 		private function xmlSaveHandler( event : EditorEvent ) : void
 		{
 			editor.status = VdomObjectEditor.STATUS_SAVING;
-			sendNotification( ApplicationFacade.SET_XML_PRESENTATION, editor.xmlPresentation );
+			sendNotification( Notifications.SET_XML_PRESENTATION, editor.xmlPresentation );
 		}
 
 		private function vdomObjectVOChangedHandler( event : EditorEvent ) : void
 		{
 			if ( editor.editorVO.vdomObjectVO )
 			{
-				sendNotification( ApplicationFacade.GET_WYSIWYG, editor.editorVO.vdomObjectVO );
+				sendNotification( Notifications.GET_WYSIWYG, editor.editorVO.vdomObjectVO );
 			}
 		}
 
 		private function renderer_createdHandler( event : RendererEvent ) : void
 		{
-			sendNotification( ApplicationFacade.RENDERER_CREATED, event.target as IRenderer );
+			sendNotification( Notifications.RENDERER_CREATED, event.target as IRenderer );
 		}
 
 		private function renderer_removedHandler( event : RendererEvent ) : void
 		{
-			sendNotification( ApplicationFacade.RENDERER_REMOVED, event.target as IRenderer );
+			sendNotification( Notifications.RENDERER_REMOVED, event.target as IRenderer );
 		}
 
 		private function renderer_clickedHandler( event : RendererEvent ) : void
 		{
 			
-			sendNotification( ApplicationFacade.RENDERER_CLICKED, event.target as IRenderer );
+			sendNotification( Notifications.RENDERER_CLICKED, event.target as IRenderer );
 		}
 		
 		private function renderer_pasteHandler( event : RendererEvent ) : void
@@ -806,21 +806,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 				object = rend.renderVO.parent.vdomObjectVO;
 			
 			if ( typeObject == "1" )
-				sendNotification( ApplicationFacade.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceID } );
+				sendNotification( Notifications.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceID } );
 			else if ( object is PageVO )
-				sendNotification( ApplicationFacade.COPY_REQUEST, { pageVO : object, sourceID : sourceID } );
+				sendNotification( Notifications.COPY_REQUEST, { pageVO : object, sourceID : sourceID } );
 			else if ( object is ObjectVO )
-				sendNotification( ApplicationFacade.COPY_REQUEST, {  objectVO : object, sourceID : sourceID } );
+				sendNotification( Notifications.COPY_REQUEST, {  objectVO : object, sourceID : sourceID } );
 		}
 
 		private function renderer_getResourseHandler( event : RendererEvent ) : void
 		{
-			sendNotification( ApplicationFacade.GET_RESOURCE_REQUEST, event.object );
+			sendNotification( Notifications.GET_RESOURCE_REQUEST, event.object );
 		}
 
 		private function renderer_dropHandler( event : RendererDropEvent ) : void
 		{
-			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST, { vdomObjectVO: ( event.target as IRenderer ).vdomObjectVO, typeVO: event.typeVO, point: event.point } )
+			sendNotification( Notifications.CREATE_OBJECT_REQUEST, { vdomObjectVO: ( event.target as IRenderer ).vdomObjectVO, typeVO: event.typeVO, point: event.point } )
 		}
 
 		private function rendererTransformedHandler( event : EditorEvent ) : void
@@ -876,14 +876,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			vdomObjectAttributesVO.attributes = attributes;
 
-			sendNotification( ApplicationFacade.RENDERER_TRANSFORMED, vdomObjectAttributesVO );
-			//sendNotification( ApplicationFacade.GET_WYSIWYG, vdomObjectAttributesVO.vdomObjectVO );
+			sendNotification( Notifications.RENDERER_TRANSFORMED, vdomObjectAttributesVO );
+			//sendNotification( Notifications.GET_WYSIWYG, vdomObjectAttributesVO.vdomObjectVO );
 		}
 
 		private function attributesChangeHandler( event : EditorEvent ) : void
 		{
 
-			sendNotification( ApplicationFacade.SAVE_ATTRIBUTES_REQUEST, event.vdomObjectAttributesVO );
+			sendNotification( Notifications.SAVE_ATTRIBUTES_REQUEST, event.vdomObjectAttributesVO );
 		}
 		
 		private function keyHandler( event : KeyboardEvent ) : void
@@ -893,13 +893,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			if ( event.keyCode == Keyboard.F5 )
 			{
-				sendNotification( ApplicationFacade.GET_WYSIWYG, statesProxy.selectedPage );
-				sendNotification( ApplicationFacade.GET_PAGES, statesProxy.selectedApplication );
+				sendNotification( Notifications.GET_WYSIWYG, statesProxy.selectedPage );
+				sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
 				
 				if ( statesProxy.selectedObject )
-					sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
+					sendNotification( Notifications.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
 				else if ( statesProxy.selectedPage )
-					sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
+					sendNotification( Notifications.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
 			}
 			else if ( event.ctrlKey )
 			{
@@ -951,9 +951,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 					readLinkage();
 				}
 				else if ( event.keyCode == Keyboard.Z )
-					sendNotification( ApplicationFacade.UNDO, component.editorVO.vdomObjectVO );
+					sendNotification( Notifications.UNDO, component.editorVO.vdomObjectVO );
 				else if ( event.keyCode == Keyboard.Y )
-					sendNotification( ApplicationFacade.REDO, component.editorVO.vdomObjectVO );
+					sendNotification( Notifications.REDO, component.editorVO.vdomObjectVO );
 			}
 			
 		}

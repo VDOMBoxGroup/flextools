@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.events.ItemRendererEvent;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -75,7 +75,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			pageTypeItemRenderer.typeResource = resourceVO;
 			
-			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+			sendNotification( Notifications.LOAD_RESOURCE, resourceVO );
 		}
 	}
 }

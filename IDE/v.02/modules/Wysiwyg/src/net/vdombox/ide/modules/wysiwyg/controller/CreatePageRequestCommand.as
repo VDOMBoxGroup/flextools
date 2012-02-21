@@ -1,8 +1,8 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -17,7 +17,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			if ( statesProxy.selectedApplication )
 			{
-				sendNotification( ApplicationFacade.CREATE_PAGE,
+				sendNotification( Notifications.CREATE_PAGE,
 					{ applicationVO: statesProxy.selectedApplication, typeVO: typeVO } );				
 			}				
 		}

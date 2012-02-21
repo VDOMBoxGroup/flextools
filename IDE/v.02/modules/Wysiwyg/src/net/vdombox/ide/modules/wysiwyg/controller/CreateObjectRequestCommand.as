@@ -1,14 +1,14 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import flash.geom.Point;
-
+	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -36,9 +36,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			}
 
 			if ( vdomObjectVO is PageVO )
-				sendNotification( ApplicationFacade.CREATE_OBJECT, { pageVO: vdomObjectVO, attributes: attributes, typeVO: typeVO } );
+				sendNotification( Notifications.CREATE_OBJECT, { pageVO: vdomObjectVO, attributes: attributes, typeVO: typeVO } );
 			else
-				sendNotification( ApplicationFacade.CREATE_OBJECT, { objectVO: vdomObjectVO, attributes: attributes, typeVO: typeVO } );
+				sendNotification( Notifications.CREATE_OBJECT, { objectVO: vdomObjectVO, attributes: attributes, typeVO: typeVO } );
 		}
 	}
 }

@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.controller.messages
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.ResourcesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -26,7 +26,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMResourcesTargetNames.RESOURCE:
 				{
 					if ( operation == PPMOperationNames.CREATE )
-						sendNotification( ApplicationFacade.RESOURCE_SETTED, body );
+						sendNotification( Notifications.RESOURCE_SETTED, body );
 					
 					break;
 				}
@@ -34,7 +34,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMResourcesTargetNames.RESOURCES:
 				{					
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.RESOURCES_GETTED, body );
+						sendNotification( Notifications.RESOURCES_GETTED, body );
 
 					break;
 				}
@@ -42,7 +42,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMResourcesTargetNames.ICON:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.ICON_GETTED, body );	
+						sendNotification( Notifications.ICON_GETTED, body );	
 					
 					break;
 				}

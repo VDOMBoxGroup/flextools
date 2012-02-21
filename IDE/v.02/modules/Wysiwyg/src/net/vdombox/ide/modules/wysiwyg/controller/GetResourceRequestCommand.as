@@ -2,9 +2,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import com.zavoo.svg.nodes.SVGImageNode;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.ResourcesProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
@@ -35,7 +35,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				resourceVO.setID( body[ "resourceID" ] );
 				body[ "resourceVO" ] = resourceVO;
 				
-				sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+				sendNotification( Notifications.LOAD_RESOURCE, resourceVO );
 			}
 			
 			return;

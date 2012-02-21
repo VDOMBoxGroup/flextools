@@ -37,7 +37,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.SpinnerPopup;
@@ -120,14 +120,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			switch ( name )
 			{
-				case ApplicationFacade.RESOURCES_GETTED:
+				case Notifications.RESOURCES_GETTED:
 				{
 					resourceSelectorWindow.callLater(updateData, [body]);
 
 					break;
 				}
 
-				case ApplicationFacade.RESOURCE_SETTED:
+				case Notifications.RESOURCE_SETTED:
 				{
 					addNewResourceInList( body as ResourceVO );
 
@@ -151,9 +151,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.RESOURCES_GETTED );
+			interests.push( Notifications.RESOURCES_GETTED );
 
-			interests.push( ApplicationFacade.RESOURCE_SETTED );
+			interests.push( Notifications.RESOURCE_SETTED );
 
 			return interests;
 		}
@@ -166,7 +166,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			addHandlers();
 
-			sendNotification( ApplicationFacade.GET_RESOURCES, statesProxy.selectedApplication );
+			sendNotification( Notifications.GET_RESOURCES, statesProxy.selectedApplication );
 		}
 
 		override public function onRemove() : void
@@ -338,7 +338,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( event.detail == Alert.YES )
 			{
 				//delete from server
-				sendNotification( ApplicationFacade.DELETE_RESOURCE, { resourceVO: delResVO, applicationVO: statesProxy.selectedApplication } );
+				sendNotification( Notifications.DELETE_RESOURCE, { resourceVO: delResVO, applicationVO: statesProxy.selectedApplication } );
 
 				//delete from view
 				resourceSelectorWindow.deleteResourceID = delResVO.id;
@@ -384,12 +384,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var listItem : ListItem = event.target.parent as ListItem;
 
-			sendNotification( ApplicationFacade.GET_ICON, listItem.resourceVO );
+			sendNotification( Notifications.GET_ICON, listItem.resourceVO );
 		}
 
 		private function getResourcesRequestHandler( event : Event ) : void
 		{
-			sendNotification( ApplicationFacade.GET_RESOURCES, statesProxy.selectedApplication );
+			sendNotification( Notifications.GET_RESOURCES, statesProxy.selectedApplication );
 		}
 
 		private function initTitle() : void
@@ -435,7 +435,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				resourceVO.name = openFile.name;
 				resourceVO.type = openFile.type.slice(1); // type has "."
 
-				sendNotification( ApplicationFacade.SET_RESOURCE, resourceVO );
+				sendNotification( Notifications.SET_RESOURCE, resourceVO );
 			}
 		}
 
@@ -534,7 +534,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			BindingUtils.bindSetter( previewImage, resourceVO, "data", false, true  );
 
-			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+			sendNotification( Notifications.LOAD_RESOURCE, resourceVO );
 		}
 
 
