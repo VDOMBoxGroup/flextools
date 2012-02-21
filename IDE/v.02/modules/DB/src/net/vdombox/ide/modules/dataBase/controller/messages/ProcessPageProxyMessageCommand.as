@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -24,16 +24,16 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 				case PPMPageTargetNames.OBJECT:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.TABLE_GETTED, body.objectVO );
+						sendNotification( Notifications.TABLE_GETTED, body.objectVO );
 					else if ( operation == PPMOperationNames.CREATE )
 					{
-						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
+						sendNotification( Notifications.OBJECT_CREATED, body.objectVO );
 					}
 					else if ( operation == PPMOperationNames.DELETE )
 					{
-						sendNotification( ApplicationFacade.GET_OBJECTS, body.pageVO );
-						sendNotification( ApplicationFacade.OBJECT_DELETED, body.objectVO );
-						sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
+						sendNotification( Notifications.GET_OBJECTS, body.pageVO );
+						sendNotification( Notifications.OBJECT_DELETED, body.objectVO );
+						sendNotification( Notifications.GET_DATA_BASE_TABLES, body.pageVO );
 					}
 					break;
 				}
@@ -41,7 +41,7 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 				case PPMPageTargetNames.OBJECTS:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.OBJECTS_GETTED, body );
+						sendNotification( Notifications.OBJECTS_GETTED, body );
 
 					break;
 				}
@@ -49,7 +49,7 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 				case PPMPageTargetNames.STRUCTURE:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.DATA_BASE_TABLES_GETTED, body );
+						sendNotification( Notifications.DATA_BASE_TABLES_GETTED, body );
 				
 					break;
 				}
@@ -59,9 +59,9 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 					if ( operation == PPMOperationNames.READ )
 					{
 						if ( body.hasOwnProperty("result") )
-							sendNotification( ApplicationFacade.REMOTE_CALL_RESPONSE, body );
+							sendNotification( Notifications.REMOTE_CALL_RESPONSE, body );
 						else
-							sendNotification( ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR, body );
+							sendNotification( Notifications.REMOTE_CALL_RESPONSE_ERROR, body );
 					}
 					
 					break;
@@ -71,7 +71,7 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 				{
 					if ( operation == PPMOperationNames.UPDATE )
 					{
-						sendNotification( ApplicationFacade.PAGE_NAME_SETTED, body );
+						sendNotification( Notifications.PAGE_NAME_SETTED, body );
 					}
 					break;
 				}

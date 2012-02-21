@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
@@ -49,16 +49,16 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.BODY_START );
-			interests.push( ApplicationFacade.BODY_STOP );
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
 			
-			interests.push( ApplicationFacade.PAGE_GETTED);
-			interests.push( ApplicationFacade.TABLE_GETTED);
+			interests.push( Notifications.PAGE_GETTED);
+			interests.push( Notifications.TABLE_GETTED);
 			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED);
 			
-			interests.push( ApplicationFacade.OBJECT_DELETED);
+			interests.push( Notifications.OBJECT_DELETED);
 			
-			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
+			interests.push( Notifications.OBJECT_NAME_SETTED );
 			
 			return interests;
 		}
@@ -71,21 +71,21 @@ package net.vdombox.ide.modules.dataBase.view
 			var objectVO : ObjectVO;
 			var editor : DataTable;
 			
-			if ( !isActive && name != ApplicationFacade.BODY_START )
+			if ( !isActive && name != Notifications.BODY_START )
 				return;
 			
 			
 			
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
+				case Notifications.BODY_START:
 				{
 					isActive = true;
 					
 					break;
 				}
 					
-				case ApplicationFacade.BODY_STOP:
+				case Notifications.BODY_STOP:
 				{
 					clearData();
 					
@@ -94,7 +94,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.PAGE_GETTED:
+				case Notifications.PAGE_GETTED:
 				{
 					var pageVO : PageVO = body as PageVO;
 					editor = workArea.getEditorByVO( pageVO ) as DataTable;
@@ -111,7 +111,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.TABLE_GETTED:
+				case Notifications.TABLE_GETTED:
 				{
 					objectVO = body as ObjectVO;
 					editor = workArea.getEditorByVO( objectVO ) as DataTable;
@@ -135,7 +135,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break
 				}
 					
-				case ApplicationFacade.OBJECT_DELETED:
+				case Notifications.OBJECT_DELETED:
 				{
 					
 					if ( workArea.getEditorByVO( body) )
@@ -147,7 +147,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break
 				}
 					
-				case ApplicationFacade.OBJECT_NAME_SETTED:
+				case Notifications.OBJECT_NAME_SETTED:
 				{
 					var tab : Tab = workArea.getTabByID( body.id );
 					

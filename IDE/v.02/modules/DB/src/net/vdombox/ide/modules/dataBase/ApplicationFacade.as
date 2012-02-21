@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.dataBase
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.DataBase;
@@ -28,102 +29,6 @@ package net.vdombox.ide.modules.dataBase
 
 	public class ApplicationFacade extends Facade implements IFacade
 	{
-		//		main
-		public static const STARTUP : String = "startup";
-
-		public static const CREATE_TOOLSET : String = "createToolset";
-		public static const CREATE_SETTINGS_SCREEN : String = "createSettingsScreen";
-		public static const CREATE_BODY : String = "createBody";
-
-		public static const EXPORT_TOOLSET : String = "exportToolset";
-		public static const EXPORT_SETTINGS_SCREEN : String = "exportSettingsScreen";
-		public static const EXPORT_BODY : String = "exportBody";
-
-		//		selection
-		public static const SELECT_MODULE : String = "selectModule";
-		public static const MODULE_SELECTED : String = "moduleSelected";
-		public static const MODULE_DESELECTED : String = "moduleDeselected";
-
-		public static const PIPES_READY : String = "pipesReady";
-
-		//		tear down
-		public static const TEAR_DOWN : String = "tearDown";
-
-		//		pipe messages
-		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
-		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
-		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
-		public static const PROCESS_OBJECT_PROXY_MESSAGE : String = "processObjectProxyMessage";
-
-//		table panel
-		public static const GET_DATA_BASES : String = "getDataBases";
-		public static const DATA_BASES_GETTED : String = "dataBasesGetted";
-		
-		public static const GET_DATA_BASE_TABLES : String = "getDataBaseTables";
-		public static const DATA_BASE_TABLES_GETTED : String = "dataBaseTablesGetted";
-		
-		public static const CHANGE_SELECTED_DATA_BASE_REQUEST : String = "changeSelectedDataBaseRequest";
-		
-		public static const GET_PAGE : String = "getPage";
-		public static const PAGE_GETTED : String = "pageGetted";
-		public static const GET_TABLE : String = "getTable";
-		public static const TABLE_GETTED : String = "tableGetted";
-		
-		public static const GET_OBJECTS : String = "getObjects";
-		public static const OBJECTS_GETTED : String = "objectsGetted";
-		
-		
-//		other
-		public static const DELIMITER : String = "/";
-
-		public static const BODY_CREATED : String = "bodyCreated";
-		public static const BODY_START : String = "bodyStart";
-		public static const BODY_STOP : String = "bodyStop";
-		
-		public static const TABLE_CREATED : String = "tableCreated";
-		
-		
-//		removecall
-		
-		public static const REMOTE_CALL_REQUEST : String = "removeCallRequest";
-		public static const REMOTE_CALL_RESPONSE : String = "removeCallResponse";
-		public static const REMOTE_CALL_RESPONSE_ERROR : String = "removeCallResponseError";
-		
-		public static const COMMIT_DATA_STRUCTURE : String = "commitDataStructure";
-		public static const COMMIT_STRUCTURE : String = "commitStructure";
-		
-		public static const GET_TABLE_STRUCTURE : String = "getTableStructure";
-		public static const TABLE_STRUCTURE_GETTED : String = "tableStructureGetted";
-		
-		
-// add Bases and Tables
-		public static const CREATE_PAGE_REQUEST : String = "createPageRequest";
-		
-		public static const CREATE_PAGE : String = "createPage";
-		public static const PAGE_CREATED : String = "pageCreate";
-		
-		public static const CREATE_OBJECT_REQUEST : String = "createObjectRequest";
-		
-		public static const CREATE_OBJECT : String = "createObject";
-		public static const OBJECT_CREATED : String = "objectCreated";
-		
-		public static const SET_OBJECT_NAME : String = "setObjectName";
-		public static const OBJECT_NAME_SETTED : String = "objectNameSetted";
-		public static const PAGE_NAME_SETTED : String = "pageNameSetted";
-		
-		public static const DELETE_OBJECT : String = "deleteObject";
-		public static const OBJECT_DELETED : String = "objectDeleted";
-		
-// Resources
-		public static const GET_RESOURCE_REQUEST 	: String = "getResourceRequest";
-		public static const LOAD_RESOURCE 	: String = "loadResource";
-		
-// Attributes
-		public static const GET_OBJECT_ATTRIBUTES 	: String = "getObjectAttributes";
-		public static const OBJECT_ATTRIBUTES_GETTED 	: String = "objectAttributesGetted";
-		public static const UPDATE_ATTRIBUTES 	: String = "updateAttributes";
-		
-
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )
@@ -138,18 +43,18 @@ package net.vdombox.ide.modules.dataBase
 
 		public function startup( application : DataBase ) : void
 		{
-			sendNotification( STARTUP, application );
+			sendNotification( Notifications.STARTUP, application );
 		}
 
 		override protected function initializeController() : void
 		{
 			super.initializeController();
 			
-			registerCommand( STARTUP, StartupCommand );
+			registerCommand( Notifications.STARTUP, StartupCommand );
 
-			registerCommand( CREATE_TOOLSET, CreateToolsetCommand );
-			registerCommand( CREATE_SETTINGS_SCREEN, CreateSettingsScreenCommand );
-			registerCommand( CREATE_BODY, CreateBodyCommand );
+			registerCommand( Notifications.CREATE_TOOLSET, CreateToolsetCommand );
+			registerCommand( Notifications.CREATE_SETTINGS_SCREEN, CreateSettingsScreenCommand );
+			registerCommand( Notifications.CREATE_BODY, CreateBodyCommand );
 
 			registerCommand( SettingsProxy.INITIALIZE_SETTINGS, InitializeSettingsCommand );
 			registerCommand( SettingsProxy.GET_SETTINGS, GetSettingsCommand );
@@ -157,19 +62,19 @@ package net.vdombox.ide.modules.dataBase
 			registerCommand( SettingsProxy.SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 
 			registerCommand( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
-			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
-			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
-			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
+			registerCommand( Notifications.PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
+			registerCommand( Notifications.PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
+			registerCommand( Notifications.PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
 			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 
 			registerCommand( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 			
 			
-			registerCommand( BODY_CREATED, BodyCreatedCommand );
+			registerCommand( Notifications.BODY_CREATED, BodyCreatedCommand );
 
-			registerCommand( TEAR_DOWN, TearDownCommand );
-			registerCommand( CHANGE_SELECTED_DATA_BASE_REQUEST, ChangeSelectedDataBaseRequestCommand );
-			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
+			registerCommand( Notifications.TEAR_DOWN, TearDownCommand );
+			registerCommand( Notifications.CHANGE_SELECTED_DATA_BASE_REQUEST, ChangeSelectedDataBaseRequestCommand );
+			registerCommand( Notifications.GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 			
 		}
 	}

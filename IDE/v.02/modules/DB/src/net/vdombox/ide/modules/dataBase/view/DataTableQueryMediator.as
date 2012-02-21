@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.events.ExternalManagerEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
 	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTableQuery;
 	
@@ -53,8 +53,8 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE );
-			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR );
+			interests.push( Notifications.REMOTE_CALL_RESPONSE );
+			interests.push( Notifications.REMOTE_CALL_RESPONSE_ERROR );
 			
 			return interests;
 		}
@@ -70,7 +70,7 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			switch ( name )
 			{
-				case ApplicationFacade.REMOTE_CALL_RESPONSE:
+				case Notifications.REMOTE_CALL_RESPONSE:
 				{
 					event = new ExternalManagerEvent( ExternalManagerEvent.CALL_COMPLETE );
 					event.result = body.result;
@@ -79,7 +79,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR:
+				case Notifications.REMOTE_CALL_RESPONSE_ERROR:
 				{
 					event = new ExternalManagerEvent( ExternalManagerEvent.CALL_ERROR );
 					event.result = body.error;
@@ -95,7 +95,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var pageVO : PageVO = dataTableQuery.objectVO as PageVO;
 			
 			if ( pageVO )
-				sendNotification( ApplicationFacade.REMOTE_CALL_REQUEST, { pageVO: pageVO, functionName: functionName, value: value } );
+				sendNotification( Notifications.REMOTE_CALL_REQUEST, { pageVO: pageVO, functionName: functionName, value: value } );
 			
 			return null;
 		}

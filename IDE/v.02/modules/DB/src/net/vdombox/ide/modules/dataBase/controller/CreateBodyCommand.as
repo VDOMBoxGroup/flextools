@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.dataBase.controller
 {
 	import net.vdombox.ide.modules.DataBase;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.view.BodyMediator;
 	import net.vdombox.ide.modules.dataBase.view.DataBaseMediator;
 	import net.vdombox.ide.modules.dataBase.view.components.Body;
@@ -30,7 +30,7 @@ package net.vdombox.ide.modules.dataBase.controller
 			}
 			
 			body.moduleFactory = resourceBrowserMediator.resourceBrowser.moduleFactory;
-			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
+			facade.sendNotification( Notifications.EXPORT_BODY, body );
 		}
 	}
 }

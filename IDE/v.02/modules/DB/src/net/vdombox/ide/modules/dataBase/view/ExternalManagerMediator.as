@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.events.ExternalManagerEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -41,7 +41,7 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE );
+			interests.push( Notifications.REMOTE_CALL_RESPONSE );
 
 			return interests;
 		}
@@ -53,7 +53,7 @@ package net.vdombox.ide.modules.dataBase.view
 
 			switch ( name )
 			{
-				case ApplicationFacade.REMOTE_CALL_RESPONSE:
+				case Notifications.REMOTE_CALL_RESPONSE:
 				{
 					var event : ExternalManagerEvent = new ExternalManagerEvent( ExternalManagerEvent.CALL_COMPLETE );
 					event.result = body;
@@ -71,7 +71,7 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			var objectID : String = statesProxy.selectedObject ? statesProxy.selectedObject.id : statesProxy.selectedPage.id;
 
-			sendNotification( ApplicationFacade.REMOTE_CALL_REQUEST,
+			sendNotification( Notifications.REMOTE_CALL_REQUEST,
 							  { applicationVO: statesProxy.selectedApplication, objectID: objectID, functionName: functionName, value: value } );
 			return null;
 		}

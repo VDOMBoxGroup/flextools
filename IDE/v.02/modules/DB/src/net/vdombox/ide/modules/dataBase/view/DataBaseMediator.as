@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import flash.events.Event;
 	
 	import net.vdombox.ide.modules.DataBase;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -33,7 +33,7 @@ package net.vdombox.ide.modules.dataBase.view
 
 		private function tearDownHandler( event : Event ) : void
 		{
-			sendNotification( ApplicationFacade.TEAR_DOWN );
+			sendNotification( Notifications.TEAR_DOWN );
 		}
 	}
 }

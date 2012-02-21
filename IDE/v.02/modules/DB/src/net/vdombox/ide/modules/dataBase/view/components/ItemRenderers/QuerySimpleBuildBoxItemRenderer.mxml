@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="group1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;
+			
+			[Bindable]
+			private var columns : ArrayList;
+			
+			[Bindable]
+			private var operators : ArrayList;
+			
+			[Bindable]
+			private var between : ArrayList;
+			
+			public function set dataProvider(value:ArrayList):void
+			{
+				columns = value;
+			}
+			
+			public function set removeDisplay( value : Boolean ) : void
+			{
+				delOld.visible = value;
+				cmbBetween.visible = value;
+			}
+			
+			protected function addNew_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new ToolBoxPanelEvent ( ToolBoxPanelEvent.ADD_QUERY_SIMPLE ) );
+			}
+			
+			protected function delOld_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new ToolBoxPanelEvent ( ToolBoxPanelEvent.REMOVE_QUERY_SIMPLE ) );
+			}
+			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				operators = new ArrayList();
+				
+				operators.addItem( "==" );
+				operators.addItem( ">" );
+				operators.addItem( "!=" );
+				
+				cmbOperators.selectedItem = "==";
+				
+				between = new ArrayList();
+				
+				between.addItem( "AND" );
+				between.addItem( "OR" );
+				
+				cmbBetween.selectedItem = "AND";
+				
+				cmbColumns.selectedItem= columns.source[0];
+			}
+			
+			public function get queryShort() : String
+			{
+				if ( !chkBoxEnable.selected )
+					return "";
+				
+				return (cmbColumns.selectedItem as String) + ' ' + ( cmbOperators.selectedItem as String ) + ' ' + '"' + txtValue.text + '"';
+			}
+			
+			public function get query() : String
+			{
+				if ( !chkBoxEnable.selected )
+					return "";
+				
+				var str : String = (cmbColumns.selectedItem as String) + ' ' + ( cmbOperators.selectedItem as String ) + ' ' + '"' + txtValue.text + '"';
+				
+				if ( cmbBetween.visible )
+					str = " " + (cmbBetween.selectedItem as String) + " " + str;
+				
+				return str;
+			}
+			
+		]]>
+	</fx:Script>
+
+	<s:HGroup width="100%" height="100%" verticalAlign="middle">
+		
+		<s:CheckBox id="chkBoxEnable" selected="true"/>
+		
+		<s:ComboBox id="cmbBetween" dataProvider="{between}" width="50"/>
+		
+		<s:Label text="Column" />
+		
+		<s:ComboBox id="cmbColumns" dataProvider="{columns}"/>
+		
+		<s:ComboBox id="cmbOperators" dataProvider="{operators}" width="50"/>
+		
+		<s:TextInput id="txtValue" />
+		
+		<s:Button id="addNew" label="add" click="addNew_clickHandler(event)"/>
+		
+		<s:Button id="delOld" label="del" click="delOld_clickHandler(event)"/>
+		
+	</s:HGroup>
+	
+</s:Group>

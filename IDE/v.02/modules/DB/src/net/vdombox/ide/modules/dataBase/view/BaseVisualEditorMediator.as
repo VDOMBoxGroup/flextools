@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.dataBase.view
 {
 	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.events.TableElementEvent;
 	import net.vdombox.ide.modules.dataBase.view.components.BaseVisualEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.TableElement;
@@ -29,7 +29,7 @@ package net.vdombox.ide.modules.dataBase.view
 		override public function onRegister() : void
 		{
 			addHandlers();
-			sendNotification( ApplicationFacade.GET_OBJECTS, baseVisualEditor.objectVO );
+			sendNotification( Notifications.GET_OBJECTS, baseVisualEditor.objectVO );
 		}
 		
 		override public function onRemove() : void
@@ -54,8 +54,8 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.OBJECTS_GETTED );
-			interests.push( ApplicationFacade.TABLE_CREATED );
+			interests.push( Notifications.OBJECTS_GETTED );
+			interests.push( Notifications.TABLE_CREATED );
 			
 			return interests;
 		}
@@ -70,7 +70,7 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			switch ( name )
 			{
-				case ApplicationFacade.OBJECTS_GETTED:
+				case Notifications.OBJECTS_GETTED:
 				{
 					clearMediators();
 					baseVisualEditor.contentGroup.removeAllElements();
@@ -84,9 +84,9 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.TABLE_CREATED:
+				case Notifications.TABLE_CREATED:
 				{
-					sendNotification( ApplicationFacade.GET_OBJECTS, baseVisualEditor.objectVO );
+					sendNotification( Notifications.GET_OBJECTS, baseVisualEditor.objectVO );
 					break;
 				}
 			}
@@ -111,7 +111,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function saveTable( event : TableElementEvent ) : void
 		{
-			sendNotification( ApplicationFacade.UPDATE_ATTRIBUTES, event.value );
+			sendNotification( Notifications.UPDATE_ATTRIBUTES, event.value );
 		}
 		
 		

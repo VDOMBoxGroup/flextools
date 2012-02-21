@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.dataBase.controller
 {
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

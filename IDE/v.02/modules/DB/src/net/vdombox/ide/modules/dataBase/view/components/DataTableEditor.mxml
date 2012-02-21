@@ -3,7 +3,8 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
 					  xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
 					  implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
-					  xmlns:components="net.vdombox.components.*" xmlns:components1="net.vdombox.ide.modules.dataBase.view.components.*">	
+					  xmlns:components="net.vdombox.components.*" xmlns:components1="net.vdombox.ide.modules.dataBase.view.components.*"
+					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)">	
 	
 	
 	<fx:Script>
@@ -22,8 +23,10 @@
 			import net.vdombox.ide.common.events.EditorEvent;
 			import net.vdombox.ide.common.model._vo.ObjectVO;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
+			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.BoldSearchItemRenderer;
+			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.CheckBoxItemRenderers;
 			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;
 			
 			private var _objectVO : ObjectVO;
@@ -32,7 +35,11 @@
 			private var queue : QueueManager;
 			private var queryResult:XML;
 			private var tableStructureXML:XML;
+			
+			[Bindable]
 			public var dataGridColumns:Array;
+			
+			
 			private var dataGridColumnsProps:Array = [];
 			private var currentPage:int;
 			private var pages:Array = []; /* of XML */
@@ -47,12 +54,53 @@
 			
 			private var AMOUNT:int = 500;
 			
+			private var _oldState : String = "Result";
+			
 			[Bindable]
 			private var totalRecords:int = 0;
 			
 			[Bindable]
 			private var alertMessage:String = "";
 			
+			//private var defaultMessage : String = '<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset></range>';
+			
+			private var endMessage : String = "</getdata>";
+			
+			
+			private function get defaultMessage():String
+			{
+				return '<getdata><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset>';;
+			}
+
+			private function get addMessage():String
+			{
+				if ( !toolBoxPanel )
+					return "";
+				else
+				{
+					var str : String = "";
+					
+					if ( toolBoxPanel.sortQuery )
+						str += toolBoxPanel.sortQuery;
+					
+					if ( toolBoxPanel.queryString )
+						str += toolBoxPanel.queryString;
+					
+					return str;
+				}
+			}
+
+			public function get oldState():String
+			{
+				return _oldState;
+			}
+
+			public function set oldState(value:String):void
+			{
+				if ( value != "Progress" )
+					_oldState = value;
+			}
+
 			public function get editorID() : String
 			{
 				return _objectVO ? _objectVO.id : "";
@@ -113,8 +161,7 @@
 				queue.addRequest(
 					UIDUtil.createUID(),
 					'get_data',
-					'<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset></range>',
-					getPageResponseHandler, null );
+					defaultMessage + addMessage + endMessage, getPageResponseHandler, null );
 				
 				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
 				
@@ -122,13 +169,15 @@
 				
 				queue.execute();
 				
+				oldState = currentState;
+				
 				currentState = "Progress";
 			}
 			
 			private function queueOnLoadCompleteHandler( message : String ) : void 
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
-				currentState = "Result";
+				currentState = oldState;
 				updateQueueLength();
 			}
 			
@@ -183,6 +232,7 @@
 				if ( !dataGridColumns )
 				{	
 					dataGridColumns = [];
+					
 					for each (var xmlHeader:XML in tableStructureXML.column) 
 					{
 						var _header:AdvancedDataGridColumn = new AdvancedDataGridColumn();
@@ -248,11 +298,16 @@
 				/* Show current page */
 				dataGridProvider = new ArrayCollection();
 				dataGridProviderOld = new Dictionary( true );
-				for each ( var xmlRow:XML in pages[ currentPage ].row ) 
+				
+				var xmlRow:XML;
+				var cellIndex:int;
+				var tableRow:Object;
+				
+				for each ( xmlRow in pages[ currentPage ].row ) 
 				{
 					/* Create tableRow object */
-					var tableRow:Object = new Object();
-					var cellIndex:int = 0;
+					tableRow = new Object();
+					cellIndex = 0;
 					for each ( var xmlCell:XML in xmlRow.cell ) 
 					{
 						tableRow[ dataGridColumns[ cellIndex ].dataField ] = xmlCell.toString();
@@ -372,6 +427,7 @@
 			{
 				/* Handle page number click */
 				currentPage = int( mEvent.currentTarget.label ) - 1; 
+				
 				showPageData();
 			}
 			
@@ -383,20 +439,22 @@
 				queue.addRequest(
 					UIDUtil.createUID(),
 					'get_data',
-					'<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String( AMOUNT * currentPage ) + '</offset></range>',
+					defaultMessage + addMessage + endMessage,
 					getPageResponseHandler, null );
 				
 				updateQueueLength();
 				
 				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, getPageQueueCompleteHandler );
 				queue.execute();
+				
+				oldState = currentState;
 				currentState = "Progress";
 			}
 			
 			private function getPageQueueCompleteHandler( event : QueueEvent ) : void 
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, getPageQueueCompleteHandler );
-				currentState = "Result";
+				currentState = oldState;
 				
 				updateQueueLength();
 			}
@@ -501,6 +559,7 @@
 					queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
 					queue.execute();
 				
+					oldState = currentState;
 					currentState = "Progress";
 				
 					updateQueueLength();
@@ -527,20 +586,22 @@
 				queue.addRequest(
 					UIDUtil.createUID(),
 					'get_data',
-					'<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset></range>',
+					defaultMessage + addMessage + endMessage,
 					refreshDataGrid, null);
 				
 				verticalScrollPositionStore = dataTable.verticalScrollPosition;
 				
 				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, updateTableCompleteHandler );
 				queue.execute();
+				
+				oldState = currentState;
 				currentState = "Progress";
 			}
 			
 			private function updateTableCompleteHandler( event : QueueEvent ) : void 
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, updateTableCompleteHandler );
-				currentState = "Result";
+				currentState = oldState;
 			}
 			
 			private function refreshDataGrid( message : String ) : void 
@@ -582,7 +643,7 @@
 				updateQueueLength();
 			}
 			
-			protected function discard_clickHandler( event : MouseEvent ) : void
+			protected function discard_clickHandler( event : MouseEvent = null ) : void
 			{
 				queue.reset();
 				delete pages[currentPage];
@@ -605,6 +666,7 @@
 				
 				pages = [];
 				currentPage = 0;
+				
 				getPageRequest();
 			}
 			
@@ -633,6 +695,34 @@
 				addRowBtnClickHandler();
 			}
 			
+			
+			protected function query_clickHandler(event:MouseEvent):void
+			{
+				currentState = "Query"
+			}
+			
+			protected function skinnablecontainer1_creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener( ToolBoxPanelEvent.SORT_CHANGE, sortChangeHandler, true, 0 , true );
+				addEventListener( ToolBoxPanelEvent.QUERY_SIMPLE_CHANGE, querySimpleChangeHandler, true, 0 , true );
+			}
+			
+			private function sortChangeHandler( event : ToolBoxPanelEvent ) : void
+			{
+				pages.splice( 0, pages.length );
+				
+				queue.reset();
+				getPageRequest();
+			}
+			
+			private function querySimpleChangeHandler( event : ToolBoxPanelEvent ) : void
+			{
+				pages.splice( 0, pages.length );
+				
+				queue.reset();
+				getPageRequest();
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -643,6 +733,7 @@
 	<s:states>
 		<s:State name="Progress"/>
 		<s:State name="Result"/>
+		<s:State name="Query"/>
 	</s:states>
 	
 	<s:VGroup width="100%" height="100%">
@@ -658,16 +749,17 @@
 			<mx:Image source="@Embed('assets/spinner.swf')" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center"  includeIn="Progress" scaleContent="false" maintainAspectRatio="true"/>
 			
 		</s:Group>
-				<s:Group width="100%">
-			<s:Rect width="100%" height="70">
+		
+		<s:Group width="100%">
+			<s:Rect width="100%" height="100%">
 				<s:fill>
 					<s:SolidColor color="#F0F0F0"/>
 				</s:fill>
 			</s:Rect>
 			
-			<s:VGroup width="100%" height="102">
+			<s:VGroup width="100%">
 				
-				<components1:SearchBox target="{dataTable}" height="22"/>
+				<components1:ToolBoxPanel id="toolBoxPanel" width="100%" height="100" dataProvider="{dataTable}" includeIn="Query"/>
 				
 				<s:HGroup width="100%" height="20" horizontalAlign="left" verticalAlign="middle" gap="0" paddingRight="0" paddingLeft="0">
 					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_pages' ) }" />
@@ -688,6 +780,7 @@
 					
 					<s:Button id="discard" height="20"  label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_discard' ) }" click="discard_clickHandler(event)"/>
 					
+					<s:Button id="query" label="Query" click="query_clickHandler(event)"/>
 				</s:HGroup>
 			</s:VGroup>
 			

@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.events.ExternalManagerEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTableStructure;
 	
@@ -43,7 +43,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function sendCommit( event : DataTablesEvents ) : void
 		{
-			sendNotification( ApplicationFacade.COMMIT_DATA_STRUCTURE, { objectVO :dataTableStructure.objectVO, objectID: dataTableStructure.editorID  });
+			sendNotification( Notifications.COMMIT_DATA_STRUCTURE, { objectVO :dataTableStructure.objectVO, objectID: dataTableStructure.editorID  });
 		}
 		
 		override public function onRemove() : void
@@ -57,10 +57,10 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE );
-			interests.push( ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR );
-			interests.push( ApplicationFacade.COMMIT_STRUCTURE );
-			interests.push( ApplicationFacade.GET_TABLE_STRUCTURE );
+			interests.push( Notifications.REMOTE_CALL_RESPONSE );
+			interests.push( Notifications.REMOTE_CALL_RESPONSE_ERROR );
+			interests.push( Notifications.COMMIT_STRUCTURE );
+			interests.push( Notifications.GET_TABLE_STRUCTURE );
 			
 			return interests;
 		}
@@ -75,7 +75,7 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			switch ( name )
 			{
-				case ApplicationFacade.REMOTE_CALL_RESPONSE:
+				case Notifications.REMOTE_CALL_RESPONSE:
 				{
 					var event : ExternalManagerEvent = new ExternalManagerEvent( ExternalManagerEvent.CALL_COMPLETE );
 					event.result = body.result;
@@ -84,7 +84,7 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.REMOTE_CALL_RESPONSE_ERROR:
+				case Notifications.REMOTE_CALL_RESPONSE_ERROR:
 				{
 					dataTableStructure.currentState = "Result";
 					dataTableStructure.updateTable();
@@ -92,16 +92,16 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.COMMIT_STRUCTURE:
+				case Notifications.COMMIT_STRUCTURE:
 				{
 					dataTableStructure.updateTable();
 					
 					break;
 				}
 					
-				case ApplicationFacade.GET_TABLE_STRUCTURE:
+				case Notifications.GET_TABLE_STRUCTURE:
 				{
-					sendNotification( ApplicationFacade.TABLE_STRUCTURE_GETTED, { objectVO: dataTableStructure.objectVO, result : dataTableStructure.tableStructure } );
+					sendNotification( Notifications.TABLE_STRUCTURE_GETTED, { objectVO: dataTableStructure.objectVO, result : dataTableStructure.tableStructure } );
 					
 					break;
 				}
@@ -115,7 +115,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var objectVO : ObjectVO = dataTableStructure.objectVO as ObjectVO;
 			
 			if ( objectVO )
-				sendNotification( ApplicationFacade.REMOTE_CALL_REQUEST, { objectVO: objectVO, functionName: functionName, value: value } );
+				sendNotification( Notifications.REMOTE_CALL_REQUEST, { objectVO: objectVO, functionName: functionName, value: value } );
 			return null;
 		}
 		

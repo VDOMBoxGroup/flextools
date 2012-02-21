@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.view.components.SettingsScreen;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -65,7 +65,7 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 //			settingsVO.saveLastApplication = settingsScreen.saveLastApplication.selected;
 //			
-//			sendNotification( ApplicationFacade.SET_SETTINGS, settingsVO );
+//			sendNotification( Notifications.SET_SETTINGS, settingsVO );
 		}
 	}
 }

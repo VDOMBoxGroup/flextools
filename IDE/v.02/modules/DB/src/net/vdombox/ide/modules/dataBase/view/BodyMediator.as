@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -63,8 +63,8 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( StatesProxy.ALL_STATES_GETTED );
 			interests.push( TypesProxy.TYPES_CHANGED );
 			
-			interests.push( ApplicationFacade.PIPES_READY );
-			interests.push( ApplicationFacade.MODULE_DESELECTED );
+			interests.push( Notifications.PIPES_READY );
+			interests.push( Notifications.MODULE_DESELECTED );
 			
 			return interests;
 		}
@@ -75,7 +75,7 @@ package net.vdombox.ide.modules.dataBase.view
 
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.PIPES_READY:
+				case Notifications.PIPES_READY:
 				{
 					sendNotification( StatesProxy.GET_ALL_STATES );
 					sendNotification( TypesProxy.GET_TYPES );
@@ -101,11 +101,11 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}
 					
-				case ApplicationFacade.MODULE_DESELECTED:
+				case Notifications.MODULE_DESELECTED:
 				{
 					isReady = false;
 					
-					sendNotification( ApplicationFacade.BODY_STOP );
+					sendNotification( Notifications.BODY_STOP );
 					
 					break;
 				}
@@ -127,13 +127,13 @@ package net.vdombox.ide.modules.dataBase.view
 			if ( isTypesChanged && isAllStatesGetted && body.initialized )
 			{
 				isReady = true;
-				sendNotification( ApplicationFacade.BODY_START );
+				sendNotification( Notifications.BODY_START );
 			}
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			sendNotification( ApplicationFacade.BODY_CREATED, body );
+			sendNotification( Notifications.BODY_CREATED, body );
 			
 			checkConditions();
 		}

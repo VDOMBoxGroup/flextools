@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
-	import net.vdombox.ide.modules.dataBase.ApplicationFacade;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.view.components.BaseVisualEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
@@ -61,8 +61,8 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.OBJECT_CREATED );
-			interests.push( ApplicationFacade.OBJECT_NAME_SETTED );
+			interests.push( Notifications.OBJECT_CREATED );
+			interests.push( Notifications.OBJECT_NAME_SETTED );
 			
 			return interests;
 		}
@@ -75,12 +75,12 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			switch ( name )
 			{					
-				case ApplicationFacade.OBJECT_CREATED:
+				case Notifications.OBJECT_CREATED:
 				{
 					if ( componentName == "" || !componentName )
 					{
-						sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
-						sendNotification( ApplicationFacade.TABLE_CREATED, { pageVO : body.pageVO } );
+						sendNotification( Notifications.GET_DATA_BASE_TABLES, body.pageVO );
+						sendNotification( Notifications.TABLE_CREATED, { pageVO : body.pageVO } );
 					}
 					else
 					{
@@ -88,15 +88,15 @@ package net.vdombox.ide.modules.dataBase.view
 						
 						componentName = "";
 						
-						sendNotification( ApplicationFacade.SET_OBJECT_NAME, body );
+						sendNotification( Notifications.SET_OBJECT_NAME, body );
 					}
 					break;
 				}	
 					
-				case ApplicationFacade.OBJECT_NAME_SETTED:
+				case Notifications.OBJECT_NAME_SETTED:
 				{
-					sendNotification( ApplicationFacade.GET_DATA_BASE_TABLES, body.pageVO );
-					sendNotification( ApplicationFacade.TABLE_CREATED, { pageVO : body.pageVO } );
+					sendNotification( Notifications.GET_DATA_BASE_TABLES, body.pageVO );
+					sendNotification( Notifications.TABLE_CREATED, { pageVO : body.pageVO } );
 					
 					break;
 				}	
@@ -105,12 +105,12 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function sendCommitEditor( event : DataTablesEvents ) : void
 		{
-			sendNotification( ApplicationFacade.COMMIT_DATA_STRUCTURE, { objectVO : dataTable.objectVO, objectID: dataTable.editorID } );
+			sendNotification( Notifications.COMMIT_DATA_STRUCTURE, { objectVO : dataTable.objectVO, objectID: dataTable.editorID } );
 		}
 		
 		private function sendCommitSttructure( event : DataTablesEvents ) : void
 		{
-			sendNotification( ApplicationFacade.COMMIT_STRUCTURE, { objectVO : dataTable.objectVO, objectID: dataTable.editorID } );
+			sendNotification( Notifications.COMMIT_STRUCTURE, { objectVO : dataTable.objectVO, objectID: dataTable.editorID } );
 		}
 
 		private function addHandlers() : void
@@ -156,7 +156,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function newBaseHandler( event : DataTablesEvents ) : void
 		{
-			/*sendNotification( ApplicationFacade.CREATE_PAGE,
+			/*sendNotification( Notifications.CREATE_PAGE,
 				{ applicationVO: sessionProxy.selectedApplication, typeVO: dataTable.objectVO.typeVO } );		*/
 		}
 		
@@ -180,7 +180,7 @@ package net.vdombox.ide.modules.dataBase.view
 				attributes.push( new AttributeVO( "top", "0" ) );
 				
 				
-				sendNotification( ApplicationFacade.CREATE_OBJECT, { pageVO: dataTable.objectVO, attributes: attributes, typeVO: typesProxy.tableType } );		
+				sendNotification( Notifications.CREATE_OBJECT, { pageVO: dataTable.objectVO, attributes: attributes, typeVO: typesProxy.tableType } );		
 				WindowManager.getInstance().removeWindow( createNewObjectWindow );
 			}
 			
@@ -192,7 +192,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function goToBaseHandler( event : DataTablesEvents ) : void
 		{		
-			sendNotification( ApplicationFacade.GET_PAGE, { applicationVO : dataTable.objectVO.pageVO.applicationVO, pageID : dataTable.objectVO.pageVO.id } );
+			sendNotification( Notifications.GET_PAGE, { applicationVO : dataTable.objectVO.pageVO.applicationVO, pageID : dataTable.objectVO.pageVO.id } );
 		}
 	}
 }

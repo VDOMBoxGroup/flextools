@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:components="net.vdombox.ide.common.view.components.*" 
+		 xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*"
+		 creationComplete="group1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;
+			import net.vdombox.ide.modules.dataBase.view.components.VDOMAdvancedDataGrid;
+			
+			[Bindable]
+			private var columns : ArrayList;
+			
+			private var _queryString : String;
+			
+			public function get queryString():String
+			{
+				return _queryString;
+			}
+
+			public function set dataProvider(value:VDOMAdvancedDataGrid):void
+			{
+				columns = new ArrayList();
+				
+				for each ( var column : AdvancedDataGridColumn in value.columns )
+				{
+					columns.addItem( column.headerText );
+				}
+			}
+			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener( ToolBoxPanelEvent.ADD_QUERY_SIMPLE, addQuerySimple, true, 0 , true );
+				addEventListener( ToolBoxPanelEvent.REMOVE_QUERY_SIMPLE, removeQuerySimple, true, 0 , true );
+			}
+			
+			private function addQuerySimple( event : ToolBoxPanelEvent ) : void
+			{
+				var querySimpleBuildBoxItemRenderer : QuerySimpleBuildBoxItemRenderer = new QuerySimpleBuildBoxItemRenderer();
+				querySimpleBuildBoxItemRenderer.dataProvider = columns;
+				
+				var positionItemRenderer : int = dataGroup.getElementIndex( event.target as QuerySimpleBuildBoxItemRenderer ) + 1;
+				
+				dataGroup.addElementAt( querySimpleBuildBoxItemRenderer, positionItemRenderer );
+			}
+			
+			private function removeQuerySimple( event : ToolBoxPanelEvent ) : void
+			{
+				var querySimpleBuildBoxItemRenderer : QuerySimpleBuildBoxItemRenderer = new QuerySimpleBuildBoxItemRenderer();
+				querySimpleBuildBoxItemRenderer.dataProvider = columns;
+				
+				var positionItemRenderer : int = dataGroup.getElementIndex( event.target as QuerySimpleBuildBoxItemRenderer );
+				
+				dataGroup.removeElementAt( positionItemRenderer );
+			}
+			
+			protected function apply_clickHandler(event:MouseEvent):void
+			{
+				_queryString = "<where>";
+				
+				var querySimpleBuildBoxItemRenderer : QuerySimpleBuildBoxItemRenderer;
+				
+				for ( var i : int = 0; i < dataGroup.numElements - 1; i++ )
+				{
+					querySimpleBuildBoxItemRenderer = dataGroup.getElementAt( i ) as QuerySimpleBuildBoxItemRenderer;
+					
+					if ( _queryString == "<where>" )
+						_queryString += querySimpleBuildBoxItemRenderer.queryShort;
+					else
+						_queryString += querySimpleBuildBoxItemRenderer.query;
+				}
+				
+				if ( _queryString == "<where>" )
+					_queryString = "";
+				else
+					_queryString += "</where>";
+				
+				dispatchEvent( new ToolBoxPanelEvent( ToolBoxPanelEvent.SEND_QUERY_SIMPLE_CLICK ) );
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<components:VDOMScroller id="scroller" width="100%" height="100%">
+		
+		<s:VGroup id="dataGroup" width="100%" gap="0">
+			
+			<ItemRenderers:QuerySimpleBuildBoxItemRenderer dataProvider="{columns}" removeDisplay="false" />
+			
+			<s:Button id="apply" label="Apply" click="apply_clickHandler(event)"/>
+			
+		</s:VGroup>
+		
+	</components:VDOMScroller>
+</s:Group>
