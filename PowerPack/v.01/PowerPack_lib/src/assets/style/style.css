@@ -446,3 +446,24 @@ DialogComboBox
 	color							: black;
 	fontWeight						: normal;
 }
+
+ScrollBar {
+	cornerRadius	: 6;
+	fillColors		: #8b8b8b, #b8b8b8;
+	gripColor		: #323232;
+	
+	downArrowUpSkin: ClassReference(null);
+	downArrowOverSkin: ClassReference(null);
+	downArrowDownSkin: ClassReference(null);
+	
+	upArrowUpSkin: ClassReference(null);
+	upArrowOverSkin: ClassReference(null);
+	upArrowDownSkin: ClassReference(null);
+	
+	up-arrow-skin: ClassReference(null);
+	down-arrow-skin: ClassReference(null);
+	
+	trackSkin: ClassReference("net.vdombox.powerpack.customize.skins.ScrollTrackSkin");		
+	
+	thumbSkin : ClassReference("net.vdombox.powerpack.customize.skins.ScrollThumbSkin")
+}
