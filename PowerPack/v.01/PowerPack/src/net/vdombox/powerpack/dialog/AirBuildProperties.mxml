@@ -500,7 +500,7 @@
 		</mx:VBox>
 			 
 		<mx:HBox width="450" horizontalGap="3">
-			<mx:Label text="Output folder: " width="110"/>
+			<mx:Label text="Output folder: " width="115"/>
 			<controls:FileBrowseBox id="outputInstallerFolderBrowseBox"
 									mode="{FileBrowseBox.MODE_DIR}"
 									browseTitle="Select output folder"
@@ -511,7 +511,7 @@
 		</mx:HBox>
 		
 		<mx:HBox width="450" horizontalGap="3">
-			<mx:Label text="Output file name: " width="110"/>
+			<mx:Label text="Output file name: " width="115"/>
 			<mx:TextInput id="installerFileName" 
 						  width="100%" 
 						  restrict="a-zA-z0-9 \-_.()" 
@@ -521,7 +521,7 @@
 		</mx:HBox>
 		
 		<mx:HBox width="450" horizontalGap="3">
-			<mx:Label text="Embeded application: " width="110"/>
+			<mx:Label text="Embeded application: " width="115"/>
 			<controls:FileBrowseBox id="installerApplicationBrowseBox"
 									mode="{FileBrowseBox.MODE_OPEN}"
 									defaultPath="{File.desktopDirectory.nativePath}"
@@ -532,7 +532,7 @@
 		</mx:HBox>
 		
 		<mx:HBox width="450" horizontalGap="3">
-			<mx:Label text="Flex SDK 4.1.0: " width="110"/>
+			<mx:Label text="Flex SDK 4.1.0: " width="115"/>
 			<mx:VBox width="100%" verticalAlign="middle" horizontalAlign="center" verticalGap="0">
 				<controls:FileBrowseBox id="flexSDK_4_1_BrowseBox"
 										mode="{FileBrowseBox.MODE_DIR}"
@@ -550,7 +550,7 @@
 		<mx:HBox width="450" horizontalGap="3" visible="{useLinuxSDK}"
 				 creationComplete="airSDKCreationCompleteHandler(event)"
 				 id="airSdkGroup">
-			<mx:Label text="Air SDK 2.6: " width="110"/>
+			<mx:Label text="Air SDK 2.6: " width="115"/>
 			<mx:VBox width="100%" verticalAlign="middle" horizontalAlign="center" verticalGap="0">
 				<controls:FileBrowseBox id="airSDKLinuxBrowseBox"
 										mode="{FileBrowseBox.MODE_DIR}"
