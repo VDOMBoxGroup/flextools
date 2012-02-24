@@ -196,6 +196,8 @@ package net.vdombox.ide.core.view
 						selectModule( moduleVO );
 					else
 						openAppManager();
+					
+					break;
 				}
 					
 				case ApplicationFacade.SIGNOUT:

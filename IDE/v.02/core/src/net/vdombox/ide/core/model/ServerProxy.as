@@ -271,6 +271,8 @@ package net.vdombox.ide.core.model
 			var result : XML = event.result;
 			/*_authInfo.setUsername( result.Username[ 0 ] );
 			_authInfo.setHostname( result.Hostname[ 0 ] );*/
+			
+			_authInfo.serverVersion = result.ServerVersion[0].toString();
 
 			sendNotification( ApplicationFacade.SERVER_LOGIN_SUCCESSFUL, _authInfo );
 			startInfiniteSession();

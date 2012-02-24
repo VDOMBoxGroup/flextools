@@ -26,9 +26,16 @@
 				applicationList.scroller.setStyle( "horizontalScrollPolicy", "off" );
 				
 				applicationList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
+				
+				addEventListener( MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 
 			}
 
+			private function mouseWheelHandler( event : MouseEvent ) : void
+			{
+				event.delta = event.delta > 0 ? 1 : -1;
+			}
+			
 			private function getLocalesWord( word : String ) : String
 			{
 				return resourceManager.getString( 'Core_General', word );

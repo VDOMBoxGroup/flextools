@@ -170,7 +170,7 @@ package net.vdombox.ide.core.view
 					task = tasks[ "types" ];
 					if ( task )
 					{
-						task.description = "Types loading(" + notification.getBody().length + ")...";
+						//task.description = "Types loading(" + notification.getBody().length + ")...";
 						task.status = "OK";
 					}
 

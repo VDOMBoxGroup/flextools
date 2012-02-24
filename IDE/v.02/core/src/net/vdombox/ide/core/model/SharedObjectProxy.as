@@ -130,34 +130,5 @@ package net.vdombox.ide.core.model
 			shObjData.data.selectHost = i.toString();
 		}
 
-	/*	public function get password() : String
-		{
-			return shObjData.data.password ? shObjData.data.password : "";;
-		}
-
-		public function set password( value : String ) : void
-		{
-			shObjData.data.password = value;
-		}
-
-		public function get hostname() : String
-		{
-			return shObjData.data.hostname ? shObjData.data.hostname : "";
-		}
-
-		public function set hostname( value : String ) : void
-		{
-			shObjData.data.hostname = value;
-		}
-
-		public function get localeCode() : String
-		{
-			return shObjData.data.localeCode ? shObjData.data.localeCode : "";
-		}
-
-		public function set localeCode( value : String ) : void
-		{
-			shObjData.data.localeCode = value;
-		}*/
 	}
 }

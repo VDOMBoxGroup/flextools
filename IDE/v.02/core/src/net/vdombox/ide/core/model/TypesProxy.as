@@ -7,6 +7,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
+	import net.vdombox.ide.core.model.managers.TypesManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -46,6 +47,16 @@ package net.vdombox.ide.core.model
 
 		private var isSOAPConnected : Boolean;
 		
+		private var typesManager : TypesManager;
+		
+		private var updateTypesCount : int;
+		
+		public var isTypesLoaded : Boolean;
+		
+		public var hasTagVersion : Boolean;
+		
+		private var serverProxy : ServerProxy;
+		
 		override public function onRegister() : void
 		{
 			
@@ -59,6 +70,8 @@ package net.vdombox.ide.core.model
 				isSOAPConnected = false;
 				soap.addEventListener( SOAPEvent.CONNECTION_OK, soap_connectedHandler, false, 0, true );
 			}
+			
+			typesManager = TypesManager.getInstance();
 			
 			soap.addEventListener( SOAPEvent.DISCONNECTON_OK, soap_disconnectedHandler, false, 0, true );
 		}
@@ -93,7 +106,9 @@ package net.vdombox.ide.core.model
 			if( isSOAPConnected )
 			{
 				sendNotification( TYPES_LOADING );
-				soap.get_all_types();
+				isTypesLoaded = false;
+				
+				soap.list_types();
 			}
 			else
 			{
@@ -129,12 +144,24 @@ package net.vdombox.ide.core.model
 		{
 			soap.get_all_types.addEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
 			soap.get_all_types.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.list_types.addEventListener( SOAPEvent.RESULT, soap_getListTypesHandler );
+			soap.list_types.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.get_type.addEventListener( SOAPEvent.RESULT, soap_getTypeHandler );
+			soap.get_type.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function removeHandlers() : void
 		{
 			soap.get_all_types.removeEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
 			soap.get_all_types.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.list_types.removeEventListener( SOAPEvent.RESULT, soap_getListTypesHandler );
+			soap.list_types.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.get_type.addEventListener( SOAPEvent.RESULT, soap_getTypeHandler );
+			soap.get_type.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function soap_connectedHandler( event : SOAPEvent ) : void
@@ -146,6 +173,97 @@ package net.vdombox.ide.core.model
 		private function soap_disconnectedHandler( event : SOAPEvent ) : void
 		{
 			isSOAPConnected = false;
+		}
+		
+		private function soap_getTypeHandler( event : net.vdombox.ide.core.events.SOAPEvent ) : void
+		{
+			var typeXML : XML = event.result.Type[0];
+			
+			var typeVO : TypeVO = new TypeVO( typeXML );
+			
+			_types.push( typeVO );
+			
+			if( typeVO.container == 3 )
+				_topLevelTypes.push( typeVO );
+			
+			typesManager.setType( serverProxy.authInfo, typeXML );
+			
+			if ( --updateTypesCount <= 0 )
+			{
+				isTypesLoaded = true;
+				
+				sendNotification( TYPES_LOADED, _types );
+			}
+		}
+		
+		private function soap_getListTypesHandler( event : net.vdombox.ide.core.events.SOAPEvent ) : void
+		{
+			
+			var typesXML : XML = event.result.Types[ 0 ];
+			
+			serverProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			
+			hasTagVersion = typesXML.Type[0].@version[0];
+			
+			if ( !typesManager.hasServer( serverProxy.authInfo ) )
+			{
+				soap.get_all_types();
+				return;
+			}
+			else
+			{
+				var types : Array = typesManager.getTypes( serverProxy.authInfo, typesXML );
+				
+				_types = new Array();
+				_topLevelTypes = new Array();
+				
+				var updateTypes : Array = new Array();
+				
+				var _typesServer : Object = [];
+				
+				for each ( var type : XML in typesXML.* )
+				{
+					_typesServer[ type.@id ] = type.@id;
+				}
+				
+				for each ( var typeVO : TypeVO in types )
+				{
+					var xml : XML = typesXML..Type.( @id == typeVO.id )[ 0 ];
+					if ( xml )
+					{
+						if ( !hasTagVersion || typeVO.version == xml.@version )
+						{
+							delete _typesServer[ typeVO.id ];
+							_types.push( typeVO );
+							if( typeVO.container == 3 )
+								_topLevelTypes.push( typeVO );
+						}
+					}
+					else
+					{
+						var tt : int = 0 ;
+					}
+						
+				}
+				
+				for each ( var str : String in _typesServer )
+					updateTypes.push( str );
+				
+				if ( updateTypes.length == 0 )
+				{
+					isTypesLoaded = true;
+					sendNotification( TYPES_LOADED, _types );
+				}
+				else
+				{
+					updateTypesCount = updateTypes.length;
+					for each ( var typeID : String in updateTypes )
+					{
+						soap.get_type(typeID);
+					}
+				}
+				
+			}
 		}
 		
 		private function soap_getAllTypesHandler( event : net.vdombox.ide.core.events.SOAPEvent ) : void
@@ -169,8 +287,12 @@ package net.vdombox.ide.core.model
 			
 			if( topLevelTypes.length > 0 )
 				_topLevelTypes = topLevelTypes;
+			
+			typesManager.setTypes( serverProxy.authInfo, typesXML );
+			
+			sendNotification( TYPES_LOADED, _types );
 
-			sendNotification( TYPES_LOADED, types );
+			isTypesLoaded = true;
 		}
 		
 		private function soap_faultHandler( event : FaultEvent ) : void

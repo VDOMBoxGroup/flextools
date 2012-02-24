@@ -7,6 +7,8 @@ package net.vdombox.ide.core.model.vo
 //		private var _password : String;
 
 		private var _hostname : String;
+		
+		private var _serverVersion : String;
 
 		public function get username() : String
 		{
@@ -35,7 +37,7 @@ package net.vdombox.ide.core.model.vo
 		
 		public function setHostname( value : String ) : void
 		{
-			trace( "setHostname: " + value );
+//			trace( "setHostname: " + value );
 			_hostname = value;
 		}
 		
@@ -43,5 +45,17 @@ package net.vdombox.ide.core.model.vo
 		{
 			_username = value;
 		}
+		
+		public function set serverVersion( value : String ) : void
+		{
+			_serverVersion = value;
+		}
+		
+		public function get serverVersion() : String
+		{
+			return _serverVersion;
+		}
+		
+		
 	}
 }
