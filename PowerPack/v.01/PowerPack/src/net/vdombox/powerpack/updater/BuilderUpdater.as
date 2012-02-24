@@ -28,6 +28,7 @@ package net.vdombox.powerpack.updater
 	import mx.events.CloseEvent;
 	import mx.utils.StringUtil;
 	
+	import net.vdombox.powerpack.dialog.ModalDialog;
 	import net.vdombox.powerpack.dialog.UpdateMessageBox;
 	import net.vdombox.powerpack.lib.extendedapi.controls.LinkObject;
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
@@ -72,9 +73,24 @@ package net.vdombox.powerpack.updater
 		
 		private function showUpdateMessage () : void
 		{
-			UpdateMessageBox.show(FileUtils.OS == FileUtils.OS_WINDOWS, updateVersion, updateLinks);
+			UpdateMessageBox.show(FileUtils.OS == FileUtils.OS_WINDOWS, updateVersion, updateLinks, updateMsgBoxCloseHandler);
 		}
 		
+		private function updateMsgBoxCloseHandler( event : CloseEvent ):void
+		{
+			if ( event.detail == ModalDialog.YES )
+			{
+				autoLoadUpdale();
+			}
+		}
+		
+		private function autoLoadUpdale():void
+		{
+			ProgressManager.source = urlLoader;
+			ProgressManager.show(ProgressManager.WINDOW_MODE, true);
+			
+			loadFile(releaseUrl, URLLoaderDataFormat.BINARY);
+		}
 		
 		private function get updateLinks () : Array
 		{
