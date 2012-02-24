@@ -200,6 +200,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		 *
 		 * @return
 		 */
+		
+		private var beforeCreationComplete : Boolean = true;
+			
 		public function get data() : Object
 		{
 			return _data;
@@ -213,7 +216,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			_data = value;
 
-			renderVO = value as RenderVO;
+			if ( !beforeCreationComplete )
+				renderVO = value as RenderVO;
 			
 		}
 
@@ -950,6 +954,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
+			beforeCreationComplete = false;
+			if ( _data )
+				renderVO = _data as RenderVO;
+			
 			dispatchEvent( new RendererEvent( RendererEvent.CREATED ) );
 			createToolTip();
 		}
