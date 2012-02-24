@@ -521,7 +521,7 @@
 		</mx:HBox>
 		
 		<mx:HBox width="450" horizontalGap="3">
-			<mx:Label text="Application: " width="110"/>
+			<mx:Label text="Embeded application: " width="110"/>
 			<controls:FileBrowseBox id="installerApplicationBrowseBox"
 									mode="{FileBrowseBox.MODE_OPEN}"
 									defaultPath="{File.desktopDirectory.nativePath}"

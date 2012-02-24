@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModalDialog
+	xmlns="net.vdombox.powerpack.dialog.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="500" height="{msgBox.height + btnBox.height + 10}"
+	title="Update information"
+	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
+	xmlns:customize="net.vdombox.powerpack.customize.*"
+	resizable="false"
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off" 
+	xmlns:sdkcompiler="net.vdombox.powerpack.sdkcompiler.*"
+	creationComplete="creationCompleteHandler(event)">
+	
+	<customize:TemplateDefaultLogo id="defaultLogo" />
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.powerpack.lib.extendedapi.controls.LinkLabel;
+			import net.vdombox.powerpack.lib.extendedapi.controls.LinkObject;
+			private static var _dialog	: UpdateMessageBox;
+			
+			[Bindable]
+			public var useAutoLoad		: Boolean;
+			
+			[Bindable]
+			public var updateVersion 	: String;
+			
+			public var linkMessages		: Array;
+			
+			
+			static public function show(useAutoLoad:Boolean, 
+										updateVersion:String,
+										linkMessages:Array,
+										closeHandler : Function = null ) : UpdateMessageBox
+			{
+				if ( !_dialog || _dialog.closed )
+				{
+					_dialog = new UpdateMessageBox();
+					
+					_dialog.useAutoLoad = useAutoLoad;
+					_dialog.updateVersion = updateVersion;
+					_dialog.linkMessages = linkMessages;
+					
+					_dialog.open();
+					
+					if (useAutoLoad)
+						_dialog.show( YES | NO, closeHandler, null, YES );
+					else
+						_dialog.show( OK, closeHandler, null, OK );
+				}
+				else
+				{
+					_dialog.activate();
+				}
+				
+				return _dialog;
+			}
+			
+			protected override function removeDialog( buttonPressed : String ) : void
+			{
+				switch ( buttonPressed )
+				{
+					case BUTTON_NAME_YES:
+					{
+						_dialog.closeDetail = ModalDialog.YES;
+						_dialog.close();
+						break;
+					}
+					
+					case BUTTON_NAME_OK:
+					case BUTTON_NAME_NO:
+					case BUTTON_NAME_CANCEL:
+					default:
+					{
+						_dialog.closeDetail = ModalDialog.CANCEL;
+						_dialog.close();
+						break;
+					}
+				}
+			}
+			
+			private function createUpdateLinks():void
+			{
+				if (!linkMessages || linkMessages.length == 0)
+					return;
+				
+				for each(var link : LinkObject in linkMessages)
+				{
+					var linkLabel : LinkLabel = new LinkLabel();
+					linkLabel.setStyle("color", 0x0000ff);
+					linkLabel.setStyle("fontSize", 14);
+					
+					linkLabel.href = link;
+					
+					linkBox.addChild(linkLabel);
+				}
+			}
+			
+			protected function autoLoadMsgBox_creationCompleteHandler(event:FlexEvent):void
+			{
+				autoLoadMsgBox.visible = useAutoLoad;
+				autoLoadMsgBox.height = useAutoLoad ? 30 : 0;
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				createUpdateLinks();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox id="msgBox" verticalGap="5"
+			 paddingLeft="20" paddingRight="20" paddingTop="20" paddingBottom="5">
+		
+		<mx:Label text="Released a new version of Power Pack Builder program."
+				  fontSize="14"/>
+		
+		<mx:Label fontSize="14"
+				 htmlText="Version &lt;b&gt;{updateVersion}&lt;/b&gt; is available here: "
+				 selectable="false"/>
+		
+		<mx:VBox id="linkBox" verticalGap="3"/>
+		
+		<mx:Spacer height="10"/>
+		
+		<mx:VBox id="autoLoadMsgBox" creationComplete="autoLoadMsgBox_creationCompleteHandler(event)"
+				 height="100%">
+			<mx:HRule width="100%"/>
+			
+			<mx:Label text="Do you want to download and launch update automatically?" 
+					  fontSize="14"/>
+		</mx:VBox>
+		
+	</mx:VBox>
+	
+	<mx:ControlBar id="btnBox" width="100%" styleName="dlgFooter"
+				   visible="true"
+				   horizontalAlign="center"/>
+	
+	
+</ModalDialog>

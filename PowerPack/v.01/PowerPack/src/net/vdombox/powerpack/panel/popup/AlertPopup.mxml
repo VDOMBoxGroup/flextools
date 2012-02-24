@@ -297,7 +297,7 @@
 			
 			<mx:Text 	maxWidth="550" maxHeight="200"
 						htmlText="{message}"
-					 	textAlign="{messageAlign}"
+						textAlign="{messageAlign}"
 					 	selectable="false" focusEnabled="false"
 					 	styleName="alertMessage"/>
 			

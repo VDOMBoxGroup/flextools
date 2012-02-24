@@ -28,6 +28,7 @@ package net.vdombox.powerpack.updater
 	import mx.events.CloseEvent;
 	import mx.utils.StringUtil;
 	
+	import net.vdombox.powerpack.dialog.UpdateMessageBox;
 	import net.vdombox.powerpack.lib.extendedapi.controls.LinkObject;
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
@@ -60,55 +61,20 @@ package net.vdombox.powerpack.updater
 			try
 			{
 				updateXml = new XML(urlLoader.data);
-				
-				if (updateRequired)
-					showUpdateAvailableAlert();
-				
 			}
 			catch (e:Error)
 			{
 			}
+			
+			if (updateRequired)
+				showUpdateMessage();
 		}
 		
-		private function showUpdateAvailableAlert () : void
+		private function showUpdateMessage () : void
 		{
-			var updateTitle	: String = "Update available";
-			
-			AlertPopup.show(updateQuestionText, updateTitle, 
-								updateAvailableAlertBtns, 
-								Sprite(Application.application), 
-								updateAvailableAlertCloseHandler,
-								null, 
-								AlertPopup.YES, 
-								"left",
-								updateLinks);
-			
+			UpdateMessageBox.show(FileUtils.OS == FileUtils.OS_WINDOWS, updateVersion, updateLinks);
 		}
 		
-		private function get updateAvailableAlertBtns() : int
-		{
-			return FileUtils.OS == FileUtils.OS_WINDOWS ? AlertPopup.YES|AlertPopup.NO : AlertPopup.OK;
-		}
-		
-		private function get updateQuestionText () : String
-		{
-			var curVersion : String = "<b>Current version: </b>" + Utils.getApplicationVersion() + "\n";
-			var newVersion : String = "<b>Update version:  </b>" + updateVersion + "\n";
-			
-			var description : String = updateDescription.length == 0 ? "" : "<b>Changes:</b>\n" + updateDescription + "\n\n";
-				
-			return curVersion + newVersion + description + updateQuestion;
-		}
-		
-		private function get updateQuestion() : String
-		{
-			if (FileUtils.OS == FileUtils.OS_LINUX)
-			{
-				return "\n";
-			}
-			
-			return "Do you want to load update?" + "\n";
-		}
 		
 		private function get updateLinks () : Array
 		{
@@ -124,7 +90,7 @@ package net.vdombox.powerpack.updater
 				}
 				case FileUtils.OS_WINDOWS:
 				{
-					return null;
+					return windowsUpdateLinks;
 				}
 				default:
 				{

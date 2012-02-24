@@ -4,12 +4,13 @@ Please remember to add the following effects to the main application.
 	<mx:Move duration="100" id="DockerMove"/>
 	<mx:Fade duration="100" id="DockerFade"/>
 */
-
+/*
 @font-face
 {
 	src        : url("assets/fonts/arial.ttf");
 	fontFamily : Arial;
 }
+*/
 
 global
 {
