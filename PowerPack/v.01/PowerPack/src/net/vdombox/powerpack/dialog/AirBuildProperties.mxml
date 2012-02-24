@@ -487,6 +487,16 @@
 				linuxNatineTypeSelector.visible = linuxNatineTypeSelectorVisible;
 			}
 			
+			protected function buildTypeNativeRadioBtn_creationCompleteHandler(event:FlexEvent):void
+			{
+				if (useLinuxSDK)
+				{
+					buildTypeNative.visible = false;
+					buildTypeNative.height = 1;
+				}
+					
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -586,7 +596,7 @@
 								label="Native installer"
 								value="{SDKCompiler.PACKAGE_TYPE_NATIVE}"
 								selected="false"
-								visible="false" height="1"/>
+								creationComplete="buildTypeNativeRadioBtn_creationCompleteHandler(event)"/>
 				
 				<sdkcompiler:LinuxNativeInstallerTypeSelectorVBox id="linuxNatineTypeSelector" 
 																  creationComplete="linuxNativeInstallerTypeSelectorCreationCompleteHandler(event)"
