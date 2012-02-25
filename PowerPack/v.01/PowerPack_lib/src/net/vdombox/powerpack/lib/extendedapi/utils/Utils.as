@@ -390,5 +390,13 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			return str;
 		}
 		
+		public static function getApplicationName() : String
+		{
+			var appXML : XML = NativeApplication.nativeApplication.applicationDescriptor;
+			var ns : Namespace = appXML.namespace();
+			
+			return appXML.ns::name;
+		}
+		
 	}
 }
