@@ -159,6 +159,15 @@ GridItem
     color      : #16414A;
 }
 
+.appVersionLabel
+{
+	fontFamily : "Arial", "Helvetica", "_sans";
+	fontSize   : 14;
+	fontWeight : normal;
+	textIndent : 0;
+	color      : #16414A;
+}
+
 .installerHeaderLabel
 {
 	fontFamily : "Arial";

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModalDialog
+		xmlns="net.vdombox.powerpack.dialog.*"
+		xmlns:mx="http://www.adobe.com/2006/mxml"
+		width="300" height="100"
+		title="About Power Pack Builder"
+		horizontalAlign="center" verticalAlign="middle"
+		verticalScrollPolicy="off" horizontalScrollPolicy="off">
+	<mx:Script>
+		<![CDATA[
+			import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+			
+			private static var _dialog	: AboutProgramDialog;
+			
+			static public function show() : AboutProgramDialog
+			{
+				if ( !_dialog || _dialog.closed )
+				{
+					_dialog = new AboutProgramDialog();
+					
+					_dialog.open();
+					_dialog.show( OK );
+				}
+				else
+				{
+					_dialog.activate();
+				}
+				
+				return _dialog;
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:Spacer height="20" />
+	
+	<mx:Label text="{Utils.getApplicationName()}" styleName="appVersionLabel"/>
+
+	<mx:Spacer height="20" />
+	
+	<mx:ControlBar width="100%" styleName="dlgFooter"
+				   verticalAlign="middle" horizontalAlign="center">
+	</mx:ControlBar>
+
+</ModalDialog>

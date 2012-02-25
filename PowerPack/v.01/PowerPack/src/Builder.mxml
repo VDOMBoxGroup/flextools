@@ -77,7 +77,9 @@
 				
 			</menuitem>
 
-			<menuitem label="Help" id="help" enabled="false" />
+			<menuitem label="Help" id="help" enabled="true" >
+				<menuitem label="About" id="about_program" enabled="true" />
+			</menuitem>
 		</root>
 	</mx:XML>
 
@@ -93,6 +95,7 @@
 			import mx.utils.StringUtil;
 			
 			import net.vdombox.powerpack.*;
+			import net.vdombox.powerpack.dialog.AboutProgramDialog;
 			import net.vdombox.powerpack.dialog.AirBuildProperties;
 			import net.vdombox.powerpack.dialog.EditCaption;
 			import net.vdombox.powerpack.dialog.Import;
@@ -584,6 +587,10 @@
 					AirBuildProperties.show(pnl_graphs.toXML());
 					break;
 
+				case "about_program":
+					AboutProgramDialog.show();
+					break;
+				
 				case "validate":
 					//ValidateDialog.show(onValidate);
 					onValidate( new CloseEvent( CloseEvent.CLOSE, false, false, ModalDialog.OK ) );
