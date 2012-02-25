@@ -1,7 +1,5 @@
 package net.vdombox.powerpack.sdkcompiler
 {
-	import net.vdombox.powerpack.Template;
-
 	public class VDOMApplication
 	{
 		public function VDOMApplication()

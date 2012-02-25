@@ -4,7 +4,7 @@
 
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
 		static private var defaultCaptions : Object = {
 			importation_complete : "Importation complete"

@@ -48,16 +48,18 @@ import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
 import mx.utils.NameUtil;
 
-import net.vdombox.powerpack.Template;
 import net.vdombox.powerpack.lib.extendedapi.controls.SuperTextArea;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import net.vdombox.powerpack.lib.player.Template;
+import net.vdombox.powerpack.lib.player.graph.NodeCategory;
+import net.vdombox.powerpack.lib.player.graph.NodeType;
+import net.vdombox.powerpack.lib.player.managers.ContextManager;
+import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 import net.vdombox.powerpack.managers.CashManager;
-import net.vdombox.powerpack.managers.ContextManager;
-import net.vdombox.powerpack.managers.LanguageManager;
-import net.vdombox.powerpack.panel.popup.AlertPopup;
 import net.vdombox.powerpack.utils.GeneralUtils;
 import net.vdombox.powerpack.validators.NodeTextValidator;
 

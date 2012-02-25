@@ -8,7 +8,7 @@
 
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.managers.LanguageManager;
+		import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
 		private static var _dialog : ValidateDialog;
 

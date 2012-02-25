@@ -19,14 +19,14 @@
 			import mx.controls.Alert;
 			import mx.utils.StringUtil;
 			
-			import net.vdombox.powerpack.Template;
 			import net.vdombox.powerpack.importation.ImportApp;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+			import net.vdombox.powerpack.lib.player.Template;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 			import net.vdombox.powerpack.managers.ConnectionManager;
-			import net.vdombox.powerpack.managers.ContextManager;
-			import net.vdombox.powerpack.managers.LanguageManager;
 			import net.vdombox.powerpack.managers.ProgressManager;
-			import net.vdombox.powerpack.panel.popup.AlertPopup;
 
 		private static var _dialog : Import;
 		private var appsXML : XMLList;

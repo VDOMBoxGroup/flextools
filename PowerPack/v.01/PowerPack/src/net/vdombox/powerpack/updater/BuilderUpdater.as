@@ -33,8 +33,9 @@ package net.vdombox.powerpack.updater
 	import net.vdombox.powerpack.lib.extendedapi.controls.LinkObject;
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+	import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 	import net.vdombox.powerpack.managers.ProgressManager;
-	import net.vdombox.powerpack.panel.popup.AlertPopup;
+	import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 
 	public class BuilderUpdater extends EventDispatcher
 	{

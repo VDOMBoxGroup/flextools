@@ -23,7 +23,7 @@
 		import mx.managers.DragManager;
 
 		import net.vdombox.powerpack.graph.GraphCanvas;
-		import net.vdombox.powerpack.managers.LanguageManager;
+		import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
 		/**
 		 *  A reference to the UITextField that displays the status bar's text.

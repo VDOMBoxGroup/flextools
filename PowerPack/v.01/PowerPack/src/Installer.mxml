@@ -20,14 +20,15 @@
 		import mx.core.FlexLoader;
 		import mx.events.FlexEvent;
 		
-		import net.vdombox.powerpack.customize.skins.CloseButtonSkin;
-		import net.vdombox.powerpack.customize.skins.MaximizeButtonSkin;
-		import net.vdombox.powerpack.customize.skins.MinimizeButtonSkin;
-		import net.vdombox.powerpack.managers.ContextManager;
-		import net.vdombox.powerpack.managers.LanguageManager;
+		import net.vdombox.powerpack.lib.player.customize.skins.CloseButtonSkin;
+		import net.vdombox.powerpack.lib.player.customize.skins.MaximizeButtonSkin;
+		import net.vdombox.powerpack.lib.player.customize.skins.MinimizeButtonSkin;
+		import net.vdombox.powerpack.lib.player.managers.ContextManager;
+		import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+		import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+		import net.vdombox.powerpack.managers.BuilderContextManager;
 		import net.vdombox.powerpack.managers.ProgressManager;
 		import net.vdombox.powerpack.menu.MenuGeneral;
-		import net.vdombox.powerpack.panel.popup.AlertPopup;
 
 		private function show():void
 		{
@@ -43,14 +44,13 @@
 			var file:File;
 			var fileStream:FileStream;
 
-			for each ( file in [ContextManager.instance.dataStorage, ContextManager.instance.settingStorage] )
+			for each ( file in [BuilderContextManager.instance.dataStorage, BuilderContextManager.instance.settingStorage] )
 			{
 				if ( !file.exists ) file.createDirectory ();
 			}
 
 			// Load application settings
-			ContextManager.loadSettings ();
-
+			BuilderContextManager.loadSettings ();
 
 			// Load language file
 			file = File.applicationDirectory.resolvePath ( MenuGeneral.LANG_FOLDER + ContextManager.instance.lang.file );
@@ -77,7 +77,7 @@
 		private function exitApplication( event:Event = null ):void
 		{
 
-			ContextManager.saveSettings ();
+			BuilderContextManager.saveSettings ();
 			exit ();
 		}
 
@@ -122,7 +122,7 @@
 				stream.addEventListener ( Event.COMPLETE, handler );
 				stream.openAsync ( _file, FileMode.READ );
 
-				ContextManager.updateLastFiles ( _file );
+				BuilderContextManager.updateLastFiles ( _file );
 				MenuGeneral.updateLastFilesMenu ();
 			}
 
@@ -149,10 +149,10 @@
 		}
 		]]></mx:Script>
 	<!-- AIR player (old, supported full functional)-->
-	<powerpack:Player id="player"  close="nativeWindow.close()" />
+	<!--powerpack:Player id="player"  close="nativeWindow.close()" /-->
 	
 	<!-- WEB player (new, not full functionality)-->
-	<!--player:Player id="player"  close="nativeWindow.close()" /-->
+	<player:Player id="player"  close="nativeWindow.close()" />
 	<mx:HBox right="14" y="17"
 			 height="10" width="100%"
 			 verticalAlign="bottom" horizontalAlign="right"

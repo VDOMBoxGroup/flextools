@@ -11,8 +11,8 @@
 		<![CDATA[
 			import mx.events.ListEvent;
 			
-			import net.vdombox.powerpack.managers.ContextManager;
-			import net.vdombox.powerpack.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
 		static private var defaultCaptions : Object = {
 			variables_title : "Variables",

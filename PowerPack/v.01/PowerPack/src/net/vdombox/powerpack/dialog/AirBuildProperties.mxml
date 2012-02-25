@@ -19,13 +19,13 @@
 			import mx.events.ItemClickEvent;
 			import mx.utils.StringUtil;
 			
-			import net.vdombox.powerpack.Template;
+			import net.vdombox.powerpack.BuilderTemplate;
 			import net.vdombox.powerpack.lib.extendedapi.controls.LinkObject;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
-			import net.vdombox.powerpack.managers.ContextManager;
-			import net.vdombox.powerpack.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.Template;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 			import net.vdombox.powerpack.managers.ProgressManager;
-			import net.vdombox.powerpack.panel.popup.AlertPopup;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompilerCreator;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompilerEvent;
@@ -131,12 +131,12 @@
 			private function get curTemplateOutputInstallerFolder() : String
 			{
 				if (!currentTemplate)
-					return Template.DEFAULT_OUTPUT_FOLDER;
+					return BuilderTemplate.DEFAULT_OUTPUT_FOLDER;
 					
 				var outputFolderPath : String = currentTemplate.installerFolderPath;
 				
 				if (!FileUtils.filePathExists(outputFolderPath, true))
-					outputFolderPath = Template.DEFAULT_OUTPUT_FOLDER;
+					outputFolderPath = BuilderTemplate.DEFAULT_OUTPUT_FOLDER;
 					
 				return currentTemplate.installerFolderPath;
 				
@@ -198,12 +198,12 @@
 				}
 			}
 			
-			public function get currentTemplate() : Template
+			public function get currentTemplate() : BuilderTemplate
 			{
 				if ( !ContextManager.templates || ContextManager.templates.length == 0 )
 					return null;
 				
-				return ContextManager.templates.getItemAt( 0 ) as Template;
+				return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
 			}
 			
 			private function setTemplateBuildProperties () : void

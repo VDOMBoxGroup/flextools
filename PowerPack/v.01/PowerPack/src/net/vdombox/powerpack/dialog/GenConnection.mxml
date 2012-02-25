@@ -14,7 +14,7 @@
 		import mx.utils.StringUtil;
 
 		import net.vdombox.powerpack.managers.ContextManager;
-		import net.vdombox.powerpack.managers.LanguageManager;
+		import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
 		private static var _dialog : GenConnection;
 

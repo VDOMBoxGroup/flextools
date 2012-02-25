@@ -4,13 +4,13 @@ package net.vdombox.powerpack.validators
 import mx.validators.ValidationResult;
 import mx.validators.Validator;
 
-import net.vdombox.powerpack.gen.parse.CodeParser;
-import net.vdombox.powerpack.gen.parse.parseClasses.CodeFragment;
-import net.vdombox.powerpack.gen.parse.parseClasses.ParsedBlock;
 import net.vdombox.powerpack.graph.Node;
-import net.vdombox.powerpack.graph.NodeCategory;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-import net.vdombox.powerpack.managers.LanguageManager;
+import net.vdombox.powerpack.lib.player.gen.parse.CodeParser;
+import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
+import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.ParsedBlock;
+import net.vdombox.powerpack.lib.player.graph.NodeCategory;
+import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
 public class NodeTextValidator extends Validator
 {

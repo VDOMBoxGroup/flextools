@@ -7,7 +7,7 @@ import mx.core.UIComponent;
 import mx.core.mx_internal;
 import mx.core.windowClasses.TitleBar;
 
-import net.vdombox.powerpack.customize.skins.MinimizeButtonSkin;
+import net.vdombox.powerpack.lib.player.customize.skins.MinimizeButtonSkin;
 
 use namespace mx_internal;
 

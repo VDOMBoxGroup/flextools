@@ -12,7 +12,9 @@ import generated.webservices.Vdom;
 import mx.core.Window;
 import mx.rpc.events.FaultEvent;
 
-import net.vdombox.powerpack.panel.popup.AlertPopup;
+import net.vdombox.powerpack.lib.player.managers.ContextManager;
+import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 
 import vdom.connection.protect.Code;
 import vdom.connection.protect.MD5;

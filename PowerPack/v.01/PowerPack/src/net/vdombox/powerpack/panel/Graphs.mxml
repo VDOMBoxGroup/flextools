@@ -62,12 +62,12 @@
 			import net.vdombox.powerpack.graph.GraphCanvasEvent;
 			import net.vdombox.powerpack.graph.Node;
 			import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
-			import net.vdombox.powerpack.managers.ContextManager;
-			import net.vdombox.powerpack.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.panel.graphsClasses.AccordionChild;
 			import net.vdombox.powerpack.panel.graphsClasses.GraphsAccordionEvent;
-			import net.vdombox.powerpack.panel.popup.AlertPopup;
 
 		static private var defaultCaptions : Object = {
 			none : "none",

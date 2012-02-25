@@ -49,7 +49,7 @@ TitleBar
 	fillAlpha:  1;
 	
 	icon : ClassReference(null);
-	skin : ClassReference("net.vdombox.powerpack.customize.skins.RadioBtnSkin");
+	skin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.RadioBtnSkin");
 	
 	borderColor: #747474;
 	borderThickness: 2.5;
@@ -84,7 +84,7 @@ TitleBar
 	titleBarColors           : #ffeae6, #000000, #666666;
 	
 	titleBarButtonPadding    : 8;
-	titleBarBackgroundSkin   : ClassReference("net.vdombox.powerpack.customize.skins.GeneratorApplicationTitleBarBackgroundSkin");
+	titleBarBackgroundSkin   : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.GeneratorApplicationTitleBarBackgroundSkin");
 	
 	borderColor              : #424242;
 	borderThickness          : 0;
@@ -95,9 +95,9 @@ TitleBar
 	
 	backgroundAlpha			 :"0.0";
 	
-	minimizeButtonSkin		 : ClassReference("net.vdombox.powerpack.customize.skins.MinimizeButtonSkin");
-	maximizeButtonSkin		 : ClassReference("net.vdombox.powerpack.customize.skins.MaximizeButtonSkin");
-	closeButtonSkin			 : ClassReference("net.vdombox.powerpack.customize.skins.CloseButtonSkin");
+	minimizeButtonSkin		 : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.MinimizeButtonSkin");
+	maximizeButtonSkin		 : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.MaximizeButtonSkin");
+	closeButtonSkin			 : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.CloseButtonSkin");
 }
 
 Window
@@ -175,8 +175,8 @@ ProgressBar
 	trackHeight : 12;
 	barColor    : #0c5d9b;
 	borderColor : #787878;
-	borderSkin  :  ClassReference("net.vdombox.powerpack.customize.skins.GeneratorProgressBarSkin");
-	/* barSkin     : ClassReference("net.vdombox.powerpack.customize.skins.GeneratorProgressBarSkin");*/
+	borderSkin  :  ClassReference("net.vdombox.powerpack.lib.player.customize.skins.GeneratorProgressBarSkin");
+	/* barSkin     : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.GeneratorProgressBarSkin");*/
 	color		: #ffffff;
 	
 }
@@ -193,7 +193,7 @@ RoundButton
 	fillColorDisabled	: #c1c1c1;
 	disabledfillColorBevelFilter	: #dadada;
 	
-	skin			: ClassReference("net.vdombox.powerpack.customize.skins.RoundButtonSkin");
+	skin			: ClassReference("net.vdombox.powerpack.lib.player.customize.skins.RoundButtonSkin");
 	
 	cornerRadius	: 15;
 }
@@ -209,7 +209,7 @@ BrowseButton
 	fillColors 		: #ffffff, #c2c2c2;
 	borderColors	: #e5e5e5, #a8a8a8;
 	
-	skin			: ClassReference("net.vdombox.powerpack.customize.skins.BrowseButtonSkin");
+	skin			: ClassReference("net.vdombox.powerpack.lib.player.customize.skins.BrowseButtonSkin");
 	
 	cornerRadius	: 6;
 	
@@ -230,7 +230,7 @@ BrowseButton
 	cornerRadius 	: 10;
 	
 	backgroundGradientColors	: #e0e0e0, #ffffff;
-	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.KeyTextBackgroundSkin");
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.KeyTextBackgroundSkin");
 	paddingLeft	: 20;
 }
 
@@ -254,7 +254,7 @@ BrowseButton
 	focusRoundedCorners: tr tb;
 	
 	backgroundGradientColors	: #e0e0e0, #ffffff;
-	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.BrowseAnswerTextBackgroundSkin");
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.BrowseAnswerTextBackgroundSkin");
 }
 
 .titleTextStyle
@@ -275,7 +275,7 @@ BrowseButton
 	leading						: -2;
 	borderThickness				: 1.5;
 	borderColor					: #414141;
-	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.InputAnswerTextBackgroundSkin");
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.InputAnswerTextBackgroundSkin");
 	
 	paddingLeft	: 7;
 	paddingTop	: 3;
@@ -364,7 +364,7 @@ PopUpToolBar
 
 Question
 {
-	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.PopupBackgroundSkin");
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.PopupBackgroundSkin");
 	
 	borderColor : #424242;
 	borderThickness :8;
@@ -382,7 +382,7 @@ PopupBottomPart
 
 AlertPopup
 {
-	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.PopupBackgroundSkin");
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.PopupBackgroundSkin");
 	
 	backgroundGradientColors : #333333, #242424;
 	
@@ -426,7 +426,7 @@ AlertPopup
 	cornerRadius					: 4;
 	triangleLineColors				: #b2b2b2, #c4c4c4;
 	
-	skin : ClassReference("net.vdombox.powerpack.customize.skins.DropdownArrowButtonSkin");
+	skin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.DropdownArrowButtonSkin");
 }
 
 DialogDropDownListBase
@@ -441,7 +441,7 @@ DialogDropDownListBase
 	
 	useRollOver						: false;
 	
-	borderSkin : ClassReference("net.vdombox.powerpack.customize.skins.DropdownSkin");
+	borderSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.DropdownSkin");
 }
 
 DialogComboBox
@@ -468,7 +468,7 @@ ScrollBar {
 	up-arrow-skin: ClassReference(null);
 	down-arrow-skin: ClassReference(null);
 	
-	trackSkin: ClassReference("net.vdombox.powerpack.customize.skins.ScrollTrackSkin");		
+	trackSkin: ClassReference("net.vdombox.powerpack.lib.player.customize.skins.ScrollTrackSkin");		
 	
-	thumbSkin : ClassReference("net.vdombox.powerpack.customize.skins.ScrollThumbSkin")
+	thumbSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.ScrollThumbSkin")
 }

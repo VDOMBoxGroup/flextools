@@ -9,8 +9,8 @@
 
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.dialog.ToolWindow;
-		import net.vdombox.powerpack.managers.LanguageManager;
+			import net.vdombox.powerpack.dialog.ToolWindow;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
 		static private var defaultCaptions : Object = {
 			console_title : "Console"

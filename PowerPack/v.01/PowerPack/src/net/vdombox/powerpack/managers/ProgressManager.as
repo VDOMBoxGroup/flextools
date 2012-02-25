@@ -37,6 +37,7 @@ import mx.skins.halo.ProgressBarSkin;
 import net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar;
 import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
 import net.vdombox.powerpack.lib.extendedapi.controls.HDivider;
+import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 import net.vdombox.powerpack.menu.MenuGeneral;
 
 public class ProgressManager extends EventDispatcher

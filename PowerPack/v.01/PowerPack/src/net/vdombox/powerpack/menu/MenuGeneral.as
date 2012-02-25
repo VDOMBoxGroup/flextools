@@ -15,8 +15,8 @@ import mx.events.FlexNativeMenuEvent;
 
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
-import net.vdombox.powerpack.managers.ContextManager;
-import net.vdombox.powerpack.managers.LanguageManager;
+import net.vdombox.powerpack.lib.player.managers.ContextManager;
+import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
 public class MenuGeneral extends EventDispatcher
 {

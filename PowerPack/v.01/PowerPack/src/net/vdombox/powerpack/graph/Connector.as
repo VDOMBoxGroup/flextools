@@ -37,9 +37,9 @@ import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.lib.geomlib.GeomUtils;
 import net.vdombox.powerpack.lib.geomlib._2D.LineSegment;
-import net.vdombox.powerpack.managers.ContextManager;
-import net.vdombox.powerpack.managers.LanguageManager;
-import net.vdombox.powerpack.panel.popup.AlertPopup;
+import net.vdombox.powerpack.lib.player.managers.ContextManager;
+import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 
 //--------------------------------------
 //  Events

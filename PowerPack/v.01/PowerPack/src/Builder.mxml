@@ -15,14 +15,15 @@
 		xmlns:customize="net.vdombox.powerpack.customize.*"
 		xmlns:containers="net.vdombox.powerpack.lib.extendedapi.containers.*"
 		closing="closingApplicationHandler(event)"
-		styleName="builderWindowStyle">
+		styleName="builderWindowStyle" 
+		xmlns:customize1="net.vdombox.powerpack.lib.player.customize.*">
 
 	<mx:Style source="assets/style/style.css" />
 	
 	<mx:Move duration="100" id="DockerMove" />
 	<mx:Fade duration="100" id="DockerFade" />
 
-	<customize:GeneratorResources id="resources" />
+	<customize1:GeneratorResources id="resources" />
 
 	<mx:menu>
 		<ui:SuperFlexNativeMenu id="flexNativeMenu"
@@ -100,25 +101,33 @@
 			import net.vdombox.powerpack.dialog.TemplateKey;
 			import net.vdombox.powerpack.dialog.TemplateProperties;
 			import net.vdombox.powerpack.dialog.ValidateDialog;
-			import net.vdombox.powerpack.gen.*;
-			import net.vdombox.powerpack.gen.parse.parseClasses.CodeFragment;
-			import net.vdombox.powerpack.gen.structs.NodeStruct;
 			import net.vdombox.powerpack.graph.Connector;
 			import net.vdombox.powerpack.graph.GraphCanvas;
 			import net.vdombox.powerpack.graph.Node;
-			import net.vdombox.powerpack.graph.NodeCategory;
 			import net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
 			import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
 			import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+			import net.vdombox.powerpack.lib.player.BasicError;
+			import net.vdombox.powerpack.lib.player.gen.Dynamic;
+			import net.vdombox.powerpack.lib.player.gen.GraphContext;
+			import net.vdombox.powerpack.lib.player.gen.NodeContext;
+			import net.vdombox.powerpack.lib.player.gen.TemplateLib;
+			import net.vdombox.powerpack.lib.player.gen.TemplateStruct;
+			import net.vdombox.powerpack.lib.player.gen.TemplateValidateOptions;
+			import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
+			import net.vdombox.powerpack.lib.player.gen.structs.NodeStruct;
+			import net.vdombox.powerpack.lib.player.graph.NodeCategory;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+			import net.vdombox.powerpack.managers.BuilderContextManager;
 			import net.vdombox.powerpack.managers.CashManager;
-			import net.vdombox.powerpack.managers.ContextManager;
-			import net.vdombox.powerpack.managers.LanguageManager;
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.menu.MenuGeneral;
 			import net.vdombox.powerpack.panel.Console;
-			import net.vdombox.powerpack.panel.popup.AlertPopup;
 			import net.vdombox.powerpack.updater.BuilderUpdater;
+			import net.vdombox.powerpack.utils.LibLoader;
 
 		//--------------------------------------------------------------------------
 		//
@@ -173,7 +182,9 @@
 			var langFolder : File;
 			var fileStream : FileStream;
 
-			for each ( langFile in [ContextManager.instance.dataStorage, ContextManager.instance.settingStorage] )
+			trace ("BuilderContextManager.builderInstance: " + BuilderContextManager.instance);
+			trace ("BuilderContextManager.builderInstance: " + BuilderContextManager.instance);
+			for each ( langFile in [BuilderContextManager.instance.dataStorage, BuilderContextManager.instance.settingStorage] )
 			{
 				if ( !langFile.exists )
 					langFile.createDirectory();
@@ -184,10 +195,10 @@
 
 			CashManager.clear();
 
-			TemplateStruct.loadLib();
+			LibLoader.loadLib();
 
 			// Load application settings
-			ContextManager.loadSettings();
+			BuilderContextManager.loadSettings();
 
 			MenuGeneral.bindItems();
 			MenuGeneral.noTemplate();
@@ -229,7 +240,7 @@
 
 		private function openLastTemplate() : void
 		{
-			var tpl : Template = new Template();
+			var tpl : BuilderTemplate = new BuilderTemplate();
 
 			tpl.file = ContextManager.instance.files[0];
 			tpl.addEventListener( Event.COMPLETE, completeTemplateHandler );
@@ -260,7 +271,7 @@
 			}
 			else
 			{
-				ContextManager.saveSettings();
+				BuilderContextManager.saveSettings();
 				exit();
 			}
 
@@ -268,7 +279,7 @@
 			{
 				if ( event.detail == AlertPopup.YES )
 				{
-					ContextManager.saveSettings();
+					BuilderContextManager.saveSettings();
 					exit();
 				}
 			}
@@ -283,18 +294,18 @@
 				}
 				else if ( event.detail == AlertPopup.NO )
 				{
-					ContextManager.saveSettings();
+					BuilderContextManager.saveSettings();
 					exit();
 				}
 			}
 
 			function templateSaveAndExitHandler( event : Event ) : void
 			{
-				var tpl : Template = event.target as Template;
+				var tpl : BuilderTemplate = event.target as BuilderTemplate;
 				tpl.removeEventListener( Event.COMPLETE, templateSaveAndExitHandler );
 
 				processSavedTpl();
-				ContextManager.saveSettings();
+				BuilderContextManager.saveSettings();
 				exit();
 			}
 		}
@@ -365,7 +376,7 @@
 
 			function templateSaveAndCloseHandler( event : Event ) : void
 			{
-				var tpl : Template = event.target as Template;
+				var tpl : BuilderTemplate = event.target as BuilderTemplate;
 				tpl.removeEventListener( Event.COMPLETE, templateSaveAndCloseHandler );
 
 				processSavedTpl();
@@ -384,7 +395,7 @@
 			currentTemplate.modified = false;
 
 			ContextManager.instance.lastFile = true;
-			ContextManager.updateLastFiles( currentTemplate.file );
+			BuilderContextManager.updateLastFiles( currentTemplate.file );
 
 			MenuGeneral.updateLastFilesMenu();
 			MenuGeneral.openedTemplate();
@@ -398,7 +409,7 @@
 			currentTemplate.modified = false;
 
 			ContextManager.instance.lastFile = true;
-			ContextManager.updateLastFiles( currentTemplate.file );
+			BuilderContextManager.updateLastFiles( currentTemplate.file );
 
 			MenuGeneral.updateLastFilesMenu();
 			MenuGeneral.openedTemplate();
@@ -442,7 +453,7 @@
 
 		private function completeTemplateHandler( event : Event ) : void
 		{
-			var template : Template = event.target as Template;
+			var template : BuilderTemplate = event.target as BuilderTemplate;
 
 			template.removeEventListener( Event.COMPLETE, completeTemplateHandler );
 
@@ -501,7 +512,7 @@
 
 		public function newTpl() : void
 		{
-			var template : Template = new Template();
+			var template : BuilderTemplate = new BuilderTemplate();
 
 			ContextManager.templates.addItemAt( template, 0 );
 
@@ -510,7 +521,7 @@
 
 		public function openTpl( file : File = null ) : void
 		{
-			var tpl : Template = new Template();
+			var tpl : BuilderTemplate = new BuilderTemplate();
 			tpl.addEventListener( Event.COMPLETE, completeTemplateHandler );
 
 			if ( file )
@@ -525,9 +536,9 @@
 			event.stopImmediatePropagation();
 
 			var menuItem : SuperNativeMenuItem = event.nativeMenuItem as SuperNativeMenuItem;
-			var file : File = ContextManager.instance.lastDir;
+			var file : File = BuilderContextManager.instance.lastDir;
 			var fileStream : FileStream = new FileStream();
-			var tpl : Template;
+			var tpl : BuilderTemplate;
 
 			switch ( menuItem.name )
 			{
@@ -584,55 +595,55 @@
 				case "debug":
 				case "step_by_step":
 					//try
-				{
-					if ( ContextManager.templateStruct )
-						ContextManager.templateStruct.terminated = true;
-
-					ContextManager.templateStruct = new TemplateStruct(
-							pnl_graphs.toXML(),
-							(ContextManager.templates.getItemAt( 0 ) as Template).fullID );
-
-					switch ( menuItem.name )
 					{
-						case 'run':
-							ContextManager.templateStruct.isDebug = false;
-							ContextManager.templateStruct.isStepDebug = false;
-							break;
-						case 'debug':
-							ContextManager.templateStruct.isDebug = true;
-							ContextManager.templateStruct.isStepDebug = false;
-							break;
-						case 'step_by_step':
-							ContextManager.templateStruct.isDebug = true;
-							ContextManager.templateStruct.isStepDebug = true;
-							break;
+						if ( ContextManager.templateStruct )
+							ContextManager.templateStruct.terminated = true;
+	
+						ContextManager.templateStruct = new TemplateStruct(
+								pnl_graphs.toXML(),
+								(ContextManager.templates.getItemAt( 0 ) as BuilderTemplate).fullID );
+	
+						switch ( menuItem.name )
+						{
+							case 'run':
+								ContextManager.templateStruct.isDebug = false;
+								ContextManager.templateStruct.isStepDebug = false;
+								break;
+							case 'debug':
+								ContextManager.templateStruct.isDebug = true;
+								ContextManager.templateStruct.isStepDebug = false;
+								break;
+							case 'step_by_step':
+								ContextManager.templateStruct.isDebug = true;
+								ContextManager.templateStruct.isStepDebug = true;
+								break;
+						}
+						// проверка графа на ошибки
+						var validateArr : Array = ContextManager.templateStruct.validate().array;
+	
+						pnl_problems.array = validateArr;
+	
+						function isError( element : *, index : int, arr : Array ) : Boolean
+						{
+							return (element.error.severity == BasicError.FATAL);
+						}
+	
+						if ( validateArr && validateArr.filter( isError ).length > 0 )
+						{
+							alertProceedRun();
+						}
+						else
+						{
+							switchDebug( true );
+	
+							ProgressManager.start( ProgressManager.WINDOW_MODE, false );
+	
+							ContextManager.templateStruct.addEventListener( "generationComplete", generationComplete );
+							ContextManager.templateStruct.addEventListener( "stepComplete", stepCompleteHandler );
+							ContextManager.templateStruct.addEventListener( "error", debugErrorHandler );
+							ContextManager.templateStruct.generate();
+						}
 					}
-					// проверка графа на ошибки
-					var validateArr : Array = ContextManager.templateStruct.validate().array;
-
-					pnl_problems.array = validateArr;
-
-					function isError( element : *, index : int, arr : Array ) : Boolean
-					{
-						return (element.error.severity == BasicError.FATAL);
-					}
-
-					if ( validateArr && validateArr.filter( isError ).length > 0 )
-					{
-						alertProceedRun();
-					}
-					else
-					{
-						switchDebug( true );
-
-						ProgressManager.start( ProgressManager.WINDOW_MODE, false );
-
-						ContextManager.templateStruct.addEventListener( "generationComplete", generationComplete );
-						ContextManager.templateStruct.addEventListener( "stepComplete", stepCompleteHandler );
-						ContextManager.templateStruct.addEventListener( "error", debugErrorHandler );
-						ContextManager.templateStruct.generate();
-					}
-				}
 					/*
 					 catch(e:Error)
 					 {
@@ -640,11 +651,11 @@
 
 					 switchDebug(false);
 
-					 ContextManager.templateStruct.removeEventListener("generationComplete", generationComplete);
-					 ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-					 ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);
+					 ContextManager.templatestruct.removeEventListener("generationComplete", generationComplete);
+					 ContextManager.templatestruct.removeEventListener("stepComplete", stepCompleteHandler);
+					 ContextManager.templatestruct.removeEventListener("error", debugErrorHandler);
 
-					 ContextManager.templateStruct = null;
+					 ContextManager.templatestruct = null;
 					 Alert.show(e.message, LanguageManager.sentences['warning']);
 					 }
 					 */
@@ -709,13 +720,13 @@
 
 		}
 
-		public function get currentTemplate() : Template
-		{
-			if ( !ContextManager.templates || ContextManager.templates.length == 0 )
-				return null;
-
-			return ContextManager.templates.getItemAt( 0 ) as Template;
-		}
+			public function get currentTemplate() : BuilderTemplate
+			{
+				if ( !ContextManager.templates || ContextManager.templates.length == 0 )
+					return null;
+				
+				return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
+			}
 
 		private function onTemplatePropertiesClose( event : CloseEvent ) : void
 		{
@@ -780,7 +791,6 @@
 
 		public function alertProceedRun() : void
 		{
-//			AlertPopup.show( "Error(s) exist in template\nProceed with launch?", "Errors in template", AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
 			AlertPopup.show( "Error(s) exist in template\nProceed with launch?", "Errors in template", AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
 		}
 
@@ -1041,7 +1051,7 @@
 
 		private function templateSaveHandler( event : Event ) : void
 		{
-			var tpl : Template = event.target as Template;
+			var tpl : BuilderTemplate = event.target as BuilderTemplate;
 			tpl.removeEventListener( Event.COMPLETE, templateSaveHandler );
 
 			processSavedTpl();
@@ -1067,7 +1077,7 @@
 			if ( event is CloseEvent && CloseEvent( event ).detail == ModalDialog.OK )
 			{
 				var tree : Tree = event.target.tplTree;
-				var tpl : Template = event.target.template;
+				var tpl : BuilderTemplate = event.target.template;
 				var xmlListCol : XMLListCollection = new XMLListCollection();
 
 				ProgressManager.start( ProgressManager.WINDOW_MODE, false );
@@ -1126,7 +1136,7 @@
 
 				closeTpl( false );
 
-				var template : Template = Import( event.target ).template;
+				var template : BuilderTemplate = Import( event.target ).template as BuilderTemplate;
 
 				ContextManager.templates.addItemAt( template, 0 );
 
@@ -1159,14 +1169,14 @@
 
 			if ( ContextManager.templateStruct.buffer )
 			{
-				var file : File = ContextManager.instance.file;
+				var file : File = BuilderContextManager.instance.file;
 				var stream : FileStream = new FileStream();
 
 				stream.open( file, FileMode.WRITE );
 				stream.writeUTFBytes( ContextManager.templateStruct.buffer );
 				stream.close();
 
-				Console.show( StringUtil.substitute( "Data saved to {0}.\n{1}", ContextManager.instance.file.nativePath,
+				Console.show( StringUtil.substitute( "Data saved to {0}.\n{1}", BuilderContextManager.instance.file.nativePath,
 						ContextManager.templateStruct.buffer ), "Result" );
 			}
 

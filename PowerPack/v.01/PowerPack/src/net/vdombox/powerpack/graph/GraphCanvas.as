@@ -32,17 +32,19 @@ import mx.utils.NameUtil;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
-import net.vdombox.powerpack.Template;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import net.vdombox.powerpack.lib.player.Template;
+import net.vdombox.powerpack.lib.player.graph.NodeCategory;
+import net.vdombox.powerpack.lib.player.graph.NodeType;
+import net.vdombox.powerpack.lib.player.managers.ContextManager;
+import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 import net.vdombox.powerpack.managers.CashManager;
-import net.vdombox.powerpack.managers.ContextManager;
-import net.vdombox.powerpack.managers.LanguageManager;
 import net.vdombox.powerpack.managers.ProgressManager;
 import net.vdombox.powerpack.managers.SelectionManager;
-import net.vdombox.powerpack.panel.popup.AlertPopup;
 import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
 
 public class GraphCanvas extends Canvas implements IFocusManagerComponent

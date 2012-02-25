@@ -14,9 +14,10 @@
 			import mx.collections.XMLListCollection;
 			import mx.events.CloseEvent;
 			
-			import net.vdombox.powerpack.Template;
-			import net.vdombox.powerpack.managers.LanguageManager;
-			import net.vdombox.powerpack.panel.popup.AlertPopup;
+			import net.vdombox.powerpack.BuilderTemplate;
+			import net.vdombox.powerpack.lib.player.Template;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 
 		private static var _dialog : ImportFromTpl;
 
@@ -44,7 +45,7 @@
 			return _dialog;
 		}
 
-		public var template : Template;
+		public var template : BuilderTemplate;
 
 		private function onShow( event : Event ) : void
 		{
@@ -58,7 +59,7 @@
 		{
 			tplTree.dataProvider = [];
 
-			template = new Template();
+			template = new BuilderTemplate();
 			template.file = new File( tplBrowse.path );
 			template.addEventListener( Event.COMPLETE, completeTemplateHandler );
 			template.open();

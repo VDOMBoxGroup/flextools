@@ -16,10 +16,11 @@
 			import mx.events.FlexEvent;
 			import mx.utils.StringUtil;
 			
-			import net.vdombox.powerpack.Template;
+			import net.vdombox.powerpack.BuilderTemplate;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
-			import net.vdombox.powerpack.managers.ContextManager;
-			import net.vdombox.powerpack.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.Template;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
 		private static var _dialog	: TemplateProperties;
 		
@@ -117,12 +118,12 @@
 			txtName.setFocus();
 		}
 
-		public function get currentTemplate() : Template
+		public function get currentTemplate() : BuilderTemplate
 		{
 			if ( !ContextManager.templates || ContextManager.templates.length == 0 )
 				return null;
 
-			return ContextManager.templates.getItemAt( 0 ) as Template;
+			return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
 		}
 
 		public function get templatePicturePath() : String

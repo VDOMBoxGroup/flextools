@@ -5,8 +5,8 @@
 
 	<mx:Script>
 		<![CDATA[
-		import net.vdombox.powerpack.managers.ContextManager;
-		import net.vdombox.powerpack.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
 		static private var defaultCaptions : Object = {
 			import_from : "Import from",
