@@ -23,7 +23,7 @@
 		import net.vdombox.powerpack.customize.skins.CloseButtonSkin;
 		import net.vdombox.powerpack.customize.skins.MaximizeButtonSkin;
 		import net.vdombox.powerpack.customize.skins.MinimizeButtonSkin;
-		import net.vdombox.powerpack.managers.AdvansedContextManager;
+		import net.vdombox.powerpack.managers.ContextManager;
 		import net.vdombox.powerpack.managers.LanguageManager;
 		import net.vdombox.powerpack.managers.ProgressManager;
 		import net.vdombox.powerpack.menu.MenuGeneral;
@@ -43,17 +43,17 @@
 			var file:File;
 			var fileStream:FileStream;
 
-			for each ( file in [AdvansedContextManager.instance.dataStorage, AdvansedContextManager.instance.settingStorage] )
+			for each ( file in [ContextManager.instance.dataStorage, ContextManager.instance.settingStorage] )
 			{
 				if ( !file.exists ) file.createDirectory ();
 			}
 
 			// Load application settings
-			AdvansedContextManager.loadSettings ();
+			ContextManager.loadSettings ();
 
 
 			// Load language file
-			file = File.applicationDirectory.resolvePath ( MenuGeneral.LANG_FOLDER + AdvansedContextManager.instance.lang.file );
+			file = File.applicationDirectory.resolvePath ( MenuGeneral.LANG_FOLDER + ContextManager.instance.lang.file );
 			if ( file && file.exists )
 			{
 				fileStream = new FileStream ();
@@ -70,14 +70,14 @@
 			fileStream.close ();
 
 			LanguageManager.languageXML = xml;
-			AdvansedContextManager.instance.lang.label = LanguageManager.languageXML.@label.toLowerCase ();
-			AdvansedContextManager.instance.lang.file = LanguageManager.languageXML.@data;
+			ContextManager.instance.lang.label = LanguageManager.languageXML.@label.toLowerCase ();
+			ContextManager.instance.lang.file = LanguageManager.languageXML.@data;
 		}
 
 		private function exitApplication( event:Event = null ):void
 		{
 
-			AdvansedContextManager.saveSettings ();
+			ContextManager.saveSettings ();
 			exit ();
 		}
 
@@ -122,7 +122,7 @@
 				stream.addEventListener ( Event.COMPLETE, handler );
 				stream.openAsync ( _file, FileMode.READ );
 
-				AdvansedContextManager.updateLastFiles ( _file );
+				ContextManager.updateLastFiles ( _file );
 				MenuGeneral.updateLastFilesMenu ();
 			}
 
