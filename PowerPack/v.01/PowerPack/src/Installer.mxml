@@ -11,7 +11,7 @@
 		verticalScrollPolicy="off"
 		xmlns:control="net.vdombox.powerpack.control.*"
 		mouseDown="window_mouseDownHandler(event)"
-		styleName="installerWindowStyle" xmlns:powerpack="net.vdombox.powerpack.*">
+		styleName="installerWindowStyle" xmlns:powerpack="net.vdombox.powerpack.*" xmlns:player="net.vdombox.powerpack.lib.player.*">
 
 	<mx:Style source="assets/style/style.css"/>
 
@@ -23,7 +23,7 @@
 		import net.vdombox.powerpack.customize.skins.CloseButtonSkin;
 		import net.vdombox.powerpack.customize.skins.MaximizeButtonSkin;
 		import net.vdombox.powerpack.customize.skins.MinimizeButtonSkin;
-		import net.vdombox.powerpack.managers.ContextManager;
+		import net.vdombox.powerpack.managers.AdvansedContextManager;
 		import net.vdombox.powerpack.managers.LanguageManager;
 		import net.vdombox.powerpack.managers.ProgressManager;
 		import net.vdombox.powerpack.menu.MenuGeneral;
@@ -43,17 +43,17 @@
 			var file:File;
 			var fileStream:FileStream;
 
-			for each ( file in [ContextManager.instance.dataStorage, ContextManager.instance.settingStorage] )
+			for each ( file in [AdvansedContextManager.instance.dataStorage, AdvansedContextManager.instance.settingStorage] )
 			{
 				if ( !file.exists ) file.createDirectory ();
 			}
 
 			// Load application settings
-			ContextManager.loadSettings ();
+			AdvansedContextManager.loadSettings ();
 
 
 			// Load language file
-			file = File.applicationDirectory.resolvePath ( MenuGeneral.LANG_FOLDER + ContextManager.instance.lang.file );
+			file = File.applicationDirectory.resolvePath ( MenuGeneral.LANG_FOLDER + AdvansedContextManager.instance.lang.file );
 			if ( file && file.exists )
 			{
 				fileStream = new FileStream ();
@@ -70,14 +70,14 @@
 			fileStream.close ();
 
 			LanguageManager.languageXML = xml;
-			ContextManager.instance.lang.label = LanguageManager.languageXML.@label.toLowerCase ();
-			ContextManager.instance.lang.file = LanguageManager.languageXML.@data;
+			AdvansedContextManager.instance.lang.label = LanguageManager.languageXML.@label.toLowerCase ();
+			AdvansedContextManager.instance.lang.file = LanguageManager.languageXML.@data;
 		}
 
 		private function exitApplication( event:Event = null ):void
 		{
 
-			ContextManager.saveSettings ();
+			AdvansedContextManager.saveSettings ();
 			exit ();
 		}
 
@@ -122,7 +122,7 @@
 				stream.addEventListener ( Event.COMPLETE, handler );
 				stream.openAsync ( _file, FileMode.READ );
 
-				ContextManager.updateLastFiles ( _file );
+				AdvansedContextManager.updateLastFiles ( _file );
 				MenuGeneral.updateLastFilesMenu ();
 			}
 
@@ -148,7 +148,11 @@
 			player.dataProvider = xml;
 		}
 		]]></mx:Script>
+	<!-- AIR player (old, supported full functional)-->
 	<powerpack:Player id="player"  close="nativeWindow.close()" />
+	
+	<!-- WEB player (new, not full functionality)-->
+	<!--player:Player id="player"  close="nativeWindow.close()" /-->
 	<mx:HBox right="14" y="17"
 			 height="10" width="100%"
 			 verticalAlign="bottom" horizontalAlign="right"
