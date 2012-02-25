@@ -40,17 +40,17 @@ package net.vdombox.powerpack
 			super(xml);
 		}
 		
-			public function set installerFolderPath( value : String ) : void
+		public function set installerFolderPath( value : String ) : void
+		{
+			if (!value)
+				value = DEFAULT_OUTPUT_FOLDER;
+	
+			if ( _xml.outputFolder != value )
 			{
-				if (!value)
-					value = DEFAULT_OUTPUT_FOLDER;
-		
-				if ( _xml.outputFolder != value )
-				{
-					modified = true;
-					_xml.outputFolder = value;
-				}
+				modified = true;
+				_xml.outputFolder = value;
 			}
+		}
 		
 		[Bindable]
 		public function get installerFolderPath() : String
@@ -79,57 +79,97 @@ package net.vdombox.powerpack
 			return _pictureFile;
 		}
 		
-			public function save() : void
+		//----------------------------------
+		//  fullID
+		//----------------------------------
+		
+		private var _fullID : String;
+		
+		public function get fullID() : String
+		{
+			if ( !_fullID )
 			{
-				if ( !_completelyOpened )
-					return;
-		
-				if ( !file )
-				{
-					browseForSave();
-					return;
-				}
-		
-				try
-				{
-					//ProgressManager.start( null, false );
-		
-					// update tpl UID
-					_xml.@ID = UIDUtil.createUID();
-		
-					// cash template structure
-					cashStructure();
-		
-					/// get resources from cash 
-					fillFromCash();
-		
-					// set (+encrypt) structure and resources data
-					encode();
-		
-					ProgressManager.source = fileStream;
-					ProgressManager.start();
-		
-					fileStream.addEventListener( Event.COMPLETE, saveHandler );
-					fileStream.addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
-					fileStream.addEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
-					
-					fileStream.openAsync( file, FileMode.WRITE );
-					fileStream.writeUTFBytes( _xml.toXMLString() );
-				}
-				catch ( e : Error )
-				{
-					fileStream.removeEventListener( Event.COMPLETE, saveHandler );
-					fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
-					fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
-					
-					file.cancel();
-					fileStream.close();
-					
-					ProgressManager.complete();
-					
-					showError(e.message);
-				}
+				_fullID = ID;
+				
+				if ( file && file.exists )
+					_fullID += '_' + file.creationDate.getTime() + '_' + file.modificationDate.getTime() + '_' + file.size;
 			}
+			
+			return _fullID;
+		}
+		
+		//---------------------------------------------------------
+		override public function set modified( value : Boolean ) : void
+		{
+			if ( _modified != value )
+			{
+				_modified = value;
+				
+				var mainIndex : XML = CashManager.getMainIndex();
+				
+				CashManager.updateMainIndexEntry( mainIndex, fullID, 'saved', _modified ? 'false' : 'true' );
+				CashManager.setMainIndex( mainIndex );
+			}
+		}
+		
+		[Bindable]
+		override public function get modified() : Boolean
+		{
+			return super.modified;
+		}
+		
+		//---------------------------------------------------------
+		//---------------------------------------------------------
+		
+		public function save() : void
+		{
+			if ( !_completelyOpened )
+				return;
+			
+			if ( !file )
+			{
+				browseForSave();
+				return;
+			}
+			
+			try
+			{
+				// update tpl UID
+				_xml.@ID = UIDUtil.createUID();
+				
+				// cash template structure
+				cashStructure();
+				
+				/// get resources from cash 
+				fillFromCash();
+				
+				// set (+encrypt) structure and resources data
+				encode();
+				
+				ProgressManager.source = fileStream;
+				ProgressManager.start();
+				
+				fileStream.addEventListener( Event.COMPLETE, saveHandler );
+				fileStream.addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+				fileStream.addEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+				
+				fileStream.openAsync( file, FileMode.WRITE );
+				fileStream.writeUTFBytes( _xml.toXMLString() );
+			}
+			catch ( e : Error )
+			{
+				fileStream.removeEventListener( Event.COMPLETE, saveHandler );
+				fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+				fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
+				
+				file.cancel();
+				fileStream.close();
+				
+				ProgressManager.complete();
+				
+				showError(e.message);
+			}
+		}
 		
 		public function open() : void
 		{
@@ -138,7 +178,7 @@ package net.vdombox.powerpack
 				browseForOpen();
 				return;
 			}
-	
+			
 			if ( !file.exists )
 			{
 				showError(LanguageManager.sentences['msg_file_not_exists']);
@@ -147,7 +187,7 @@ package net.vdombox.powerpack
 			
 			ProgressManager.source = fileStream;
 			ProgressManager.start();
-	
+			
 			fileStream.addEventListener( Event.COMPLETE, openHandler );
 			fileStream.addEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
 			
@@ -157,7 +197,7 @@ package net.vdombox.powerpack
 		public function browseForSave() : void
 		{
 			var folder : File = BuilderContextManager.instance.lastDir;
-	
+			
 			folder.addEventListener( Event.SELECT, fileBrowseHandler );
 			
 			browseType = BROWSE_TYPE_SAVE;
@@ -167,7 +207,7 @@ package net.vdombox.powerpack
 		public function browseForOpen() : void
 		{
 			var folder : File = BuilderContextManager.instance.lastDir;
-	
+			
 			folder.addEventListener( Event.SELECT, fileBrowseHandler );
 			
 			browseType = BROWSE_TYPE_OPEN;
@@ -180,14 +220,14 @@ package net.vdombox.powerpack
 			{
 				return false;
 			}
-	
+			
 			var fileToBase64 : FileToBase64 = new FileToBase64( pictureFile.nativePath );
 			fileToBase64.convert();
 			b64picture = fileToBase64.data.toString();
-	
+			
 			_xml.picture[0].@type = pictureFile.extension;
 			_xml.picture[0].@name = pictureFile.name;
-	
+			
 			return true;
 		}
 	
@@ -197,7 +237,7 @@ package net.vdombox.powerpack
 			if ( picObj )
 			{
 				var picData : ByteArray = ByteArray( picObj.data );
-	
+				
 				_xml.picture = picData.readUTFBytes( picData.bytesAvailable );
 				_xml.picture.@name = XML( picObj.entry ).@name;
 				_xml.picture.@type = XML( picObj.entry ).@type;
@@ -208,66 +248,65 @@ package net.vdombox.powerpack
 		{
 			if ( _xmlStructure == null )
 				return false;
-	
-	 		//cash all resources
+			
+			// cash all resources
 			for each ( var res : XML in _xmlStructure.resources.resource )
 			{
 				CashManager.setStringObject( fullID,
-						XML(
-								"<resource " +
-										"category='" + Utils.getStringOrDefault( res.@category, "" ) + "' " +
-										"ID='" + Utils.getStringOrDefault( res.@ID, "" ) + "' " +
-										"name='" + Utils.getStringOrDefault( res.@name, "" ) + "' " +
-										"type='" + Utils.getStringOrDefault( res.@type, "" ) + "' />" ),
-						res );
+					XML(
+						"<resource " +
+						"category='" + Utils.getStringOrDefault( res.@category, "" ) + "' " +
+						"ID='" + Utils.getStringOrDefault( res.@ID, "" ) + "' " +
+						"name='" + Utils.getStringOrDefault( res.@name, "" ) + "' " +
+						"type='" + Utils.getStringOrDefault( res.@type, "" ) + "' />" ),
+					res );
 			}
-	
+			
 			delete _xmlStructure.resources;
-	
-	 		//cash tpl picture
+			
+			// cash tpl picture
 			if ( b64picture )
 			{
 				var picXML : XML = _xml.picture[0];
 				CashManager.setStringObject( fullID,
-						XML(
-								"<resource " +
-										"category='logo' " +
-										"ID='logo' " +
-										"name='" + Utils.getStringOrDefault( picXML.@name, "" ) + "' " +
-										"type='" + Utils.getStringOrDefault( picXML.@type, "" ) + "' />" ),
-						b64picture );
-	
-				//delete _xml.picture;
+					XML(
+						"<resource " +
+						"category='logo' " +
+						"ID='logo' " +
+						"name='" + Utils.getStringOrDefault( picXML.@name, "" ) + "' " +
+						"type='" + Utils.getStringOrDefault( picXML.@type, "" ) + "' />" ),
+					b64picture );
 			}
-	
+			
 			cashStructure();
-	
+			
 			return true;
 		}
 	
 		private function cashStructure() : void
 		{
 			CashManager.setStringObject( fullID,
-					XML(
-							"<resource " +
-									"category='template' " +
-									"ID='template' " +
-									"name='" + name + "' " +
-									"type='" + TYPE_APPLICATION + "' />" ),
-					_xml.toXMLString() );
-	
+				XML(
+					"<resource " +
+					"category='template' " +
+					"ID='template' " +
+					"name='" + name + "' " +
+					"type='" + TYPE_APPLICATION + "' />" ),
+				_xml.toXMLString() );
+			
 			CashManager.setStringObject( fullID,
-					XML(
-							"<resource " +
-									"category='template' " +
-									"ID='structure' " +
-									"name='" + name + "' " +
-									"type='" + TYPE_APPLICATION + "' />" ),
-					_xmlStructure.toXMLString() );
+				XML(
+					"<resource " +
+					"category='template' " +
+					"ID='structure' " +
+					"name='" + name + "' " +
+					"type='" + TYPE_APPLICATION + "' />" ),
+				_xmlStructure.toXMLString() );
 		}
+		
 		private function fillFromCash() : void
 		{
-	 		//get tpl picture
+			// get tpl picture
 			if ( pictureFile )
 			{
 				delete _xml.picture;
@@ -280,27 +319,27 @@ package net.vdombox.powerpack
 			
 			// get resources		
 			delete _xmlStructure.resources;
-	
+			
 			var index : XML = CashManager.getIndex( fullID );
 			if ( index )
 			{
 				var resources : XMLList = index.resource.(hasOwnProperty( '@category' ) &&
-						(@category == 'image' || @category == 'database'));
-	
+					(@category == 'image' || @category == 'database'));
+				
 				_xmlStructure.appendChild( <resources/> );
-	
+				
 				for each ( var res : XML in resources )
 				{
 					var resObj : Object = CashManager.getObject( fullID, res.@ID );
 					var resData : ByteArray = ByteArray( resObj.data );
 					var content : String = resData.readUTFBytes( resData.bytesAvailable );
-	
+					
 					var resXML : XML = XML( '<resource><![CDATA[' + content + ']]></resource>' );
 					resXML.@category = resObj.entry.@category;
 					resXML.@ID = resObj.entry.@ID;
 					resXML.@type = resObj.entry.@type;
 					resXML.@name = resObj.entry.@name;
-	
+					
 					_xmlStructure.resources.appendChild( resXML );
 				}
 			}
@@ -334,11 +373,6 @@ package net.vdombox.powerpack
 					
 					open();
 					
-					/*var evnt : Event = new Event( 'opening', false, true );
-					dispatchEvent( evnt );
-					
-					if ( !evnt.isDefaultPrevented() )
-						open();*/
 					break;
 				}
 				case BROWSE_TYPE_SAVE:
@@ -351,7 +385,7 @@ package net.vdombox.powerpack
 					file = f;
 					
 					save();
-
+					
 					break;
 				}
 				default:
@@ -361,92 +395,87 @@ package net.vdombox.powerpack
 				}
 			}
 		}
-	
+		
 		private function fileStreamOutputProgressHandler( event : OutputProgressEvent ) : void
 		{
 			if ( event.bytesPending == 0 )
 				fileStream.dispatchEvent( new Event( Event.COMPLETE ) );
 		}
-	
+		
 		private function saveHandler( event : Event ) : void
 		{
 			fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
 			fileStream.removeEventListener( Event.COMPLETE, saveHandler );
 			fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
-	
+			
 			try
 			{
 				fileStream.close();
-	
+				
 				ProgressManager.start( ProgressManager.DIALOG_MODE, false );
-	
+				
 				_xml = XML( CashManager.getStringObject( fullID, 'template' ) );
-	
+				
 				// update tpl UID
 				var oldID : String = fullID;
 				_fullID = null;
 				CashManager.updateID( oldID, fullID );
-	
+				
 				ProgressManager.complete();
-	
+				
 				modified = false;
-	
+				
 				dispatchEvent( new Event( Event.COMPLETE ) );
 			}
 			catch ( e : Error )
 			{
 				ProgressManager.complete();
-	
-				trace ("msg_not_valid_tpl_file 1");
+				
 				showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
 			}
 		}
-	
+		
 		private function openHandler( event : Event ) : void
 		{
-	//		fileStream.removeEventListener( Event.COMPLETE, openHandler );
+			fileStream.removeEventListener( Event.COMPLETE, openHandler );
 			fileStream.removeEventListener( IOErrorEvent.IO_ERROR, fileStreamIOErrorHandler );
-	
+			
 			try
 			{
 				ProgressManager.start( ProgressManager.DIALOG_MODE, false );
-	
+				
 				var strData : String = fileStream.readUTFBytes( fileStream.bytesAvailable );
 				fileStream.close();
-	
+				
 				var xmlData : XML = XML( strData );
-	
+				
 				if ( !isValidTpl( xmlData ) )
-				{
-					trace ("msg_not_valid_tpl_file 2");
 					throw new Error( LanguageManager.sentences['msg_not_valid_tpl_file'] );
-				}
-	
+				
 				_xml = xmlData;
-	
+				
 				_completelyOpened = false;
-	
+				
 				_fullID = null;
-	
+				
 				processOpened();
-	
+				
 				ProgressManager.complete();
-	
+				
 				modified = false;
-	
+				
 				dispatchEvent( new Event( Event.COMPLETE ) );
 			}
 			catch ( e : Error )
 			{
 				fileStream.close();
-	
+				
 				ProgressManager.complete();
-	
-				trace ("msg_not_valid_tpl_file 3");
+				
 				showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
 			}
 		}
-	
+		
 		private function fileStreamIOErrorHandler( event : IOErrorEvent ) : void
 		{
 			browseType = BROWSE_TYPE_NONE;
@@ -462,10 +491,11 @@ package net.vdombox.powerpack
 			fileStream.close();
 			
 			ProgressManager.complete();
-	
+			
 			showError(event.text);
 		}
-		
+
+		//-------------------------------------------------------
 		override public function dispose() : void
 		{
 			super.dispose();
@@ -473,5 +503,16 @@ package net.vdombox.powerpack
 			_pictureFile = null;
 			file = null;
 		}
+		
+		//-------------------------------------------------------
+		//-------------------------------------------------------
+		override public function processOpened() : void
+		{
+			super.processOpened();
+			
+			if ( _xmlStructure )
+				cash();
+		}
+		
 	}
 }

@@ -48,6 +48,7 @@ import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
 import mx.utils.NameUtil;
 
+import net.vdombox.powerpack.BuilderTemplate;
 import net.vdombox.powerpack.lib.extendedapi.controls.SuperTextArea;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
@@ -822,7 +823,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 					nodeCB.includeInLayout = true;
 
 					var curTplIndex : int = 0;
-					var tpl : Template = ContextManager.templates[curTplIndex];
+					var tpl : BuilderTemplate = ContextManager.templates[curTplIndex] as BuilderTemplate;
 					var objIndex : XML = CashManager.getIndex( tpl.fullID );
 					var objList : XMLList = new XMLList();
 
@@ -1378,7 +1379,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 		tipImage.visible = false;
 		tipImage.scaleContent = true;
 
-		var curTpl : Template = ContextManager.templates[0];
+		var curTpl : BuilderTemplate = ContextManager.templates[0];
 		var index : XML = CashManager.getIndex( curTpl.fullID );
 		var thumbFile : File = CashManager.cashFolder.resolvePath( index.@folder ).resolvePath( nodeCB.selectedItem.@thumb );
 
@@ -1414,9 +1415,9 @@ public class Node extends Canvas implements IFocusManagerComponent
 	{
 		destroyTimers( true, false );
 
-		var curTpl : Template;
+		var curTpl : BuilderTemplate;
 		if ( ContextManager.templates.length > 0 )
-			curTpl = ContextManager.templates[0];
+			curTpl = ContextManager.templates[0] as BuilderTemplate;
 
 		if ( !curTpl || CashManager.objectUpdated( curTpl.fullID, nodeCB.selectedItem.@ID, Number( nodeCB.selectedItem.@lastUpdate ) ) )
 		{

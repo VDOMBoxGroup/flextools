@@ -6,6 +6,7 @@ import flash.events.EventDispatcher;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
+import net.vdombox.powerpack.BuilderTemplate;
 import net.vdombox.powerpack.graph.GraphCanvas;
 import net.vdombox.powerpack.graph.Node;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
@@ -24,7 +25,7 @@ public class ImportApp extends EventDispatcher
 		this.typesXML = types;
 	}
 
-	public var template : Template = new Template();
+	public var template : BuilderTemplate = new BuilderTemplate();
 
 	public var appXML : XML;
 

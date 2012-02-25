@@ -168,7 +168,7 @@
 			if ( File.applicationDirectory.resolvePath( 'style/builder.swf' ).exists )
 				StyleManager.loadStyleDeclarations( "style/builder.swf" );
 		}
-
+		
 		private function init() : void
 		{
 			MenuGeneral.menu = flexNativeMenu;
@@ -182,8 +182,6 @@
 			var langFolder : File;
 			var fileStream : FileStream;
 
-			trace ("BuilderContextManager.builderInstance: " + BuilderContextManager.instance);
-			trace ("BuilderContextManager.builderInstance: " + BuilderContextManager.instance);
 			for each ( langFile in [BuilderContextManager.instance.dataStorage, BuilderContextManager.instance.settingStorage] )
 			{
 				if ( !langFile.exists )
@@ -1217,6 +1215,7 @@
 		
 		protected function creationCompleteHandler(event:FlexEvent):void
 		{
+			trace ("111");
 			addEventListener("closeWithoutSave", closeWithoutSaveHandler);
 
 			checkUpdate();

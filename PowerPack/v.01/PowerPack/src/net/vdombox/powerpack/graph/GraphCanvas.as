@@ -32,6 +32,7 @@ import mx.utils.NameUtil;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
+import net.vdombox.powerpack.BuilderTemplate;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
@@ -718,7 +719,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 			function _doGetBitmapClipBoard() : void
 			{
-				var template : Template = ContextManager.templates[0];
+				var template : BuilderTemplate = ContextManager.templates[0] as BuilderTemplate;
 				var bitmapData : BitmapData = BitmapData( Clipboard.generalClipboard.getData( ClipboardFormats.BITMAP_FORMAT ) );
 
 				var pngEncoder : PNGEncoder = new PNGEncoder();
