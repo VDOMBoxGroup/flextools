@@ -171,7 +171,7 @@ ProgressBar
 	barColor    : #0c5d9b;
 	borderColor : #787878;
 	borderSkin  :  ClassReference("net.vdombox.powerpack.lib.player.customize.skins.GeneratorProgressBarSkin");
-	/* barSkin     : ClassReference("net.vdombox.powerpack.customize.skins.GeneratorProgressBarSkin");*/
+	/* barSkin     : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.GeneratorProgressBarSkin");*/
 	color		: #ffffff;
 	
 }
@@ -463,7 +463,7 @@ ScrollBar {
 	up-arrow-skin: ClassReference(null);
 	down-arrow-skin: ClassReference(null);
 	
-	trackSkin: ClassReference("net.vdombox.powerpack.customize.skins.ScrollTrackSkin");		
+	trackSkin: ClassReference("net.vdombox.powerpack.lib.player.customize.skins.ScrollTrackSkin");		
 	
-	thumbSkin : ClassReference("net.vdombox.powerpack.customize.skins.ScrollThumbSkin")
+	thumbSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.ScrollThumbSkin")
 }

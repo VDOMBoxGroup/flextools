@@ -170,39 +170,6 @@ public class TemplateStruct extends EventDispatcher
 		return null;
 	}
 
-	public static function loadLib() : void
-	{
-//		lib = new TemplateLib();
-//
-//		var libFolder : File = File.applicationDirectory.resolvePath( 'libs' );
-//
-//		if ( !libFolder.exists )
-//			return;
-//
-//		var libs : Array = libFolder.getDirectoryListing();
-//		for each( var libFile : File in libs )
-//		{
-//			var stream : FileStream = new FileStream();
-//			var strData : String;
-//
-//			if ( !libFile.isDirectory && !libFile.isPackage && !libFile.isSymbolicLink && libFile.exists &&
-//					(libFile.extension == 'as' || libFile.extension == 'txt') )
-//			{
-//				stream.open( libFile, FileMode.READ );
-//				strData = stream.readUTFBytes( stream.bytesAvailable );
-//				stream.close();
-//				D.setOutput( evalHandler );
-//				strData = strData + ';true;';
-//				D.eval( strData, lib );
-//			}
-//		}
-//
-//		function evalHandler( value : String ) : void
-//		{
-//			trace( value );
-//		}
-	}
-
 	public function validate( options : uint = 0 ) : Object
 	{
 		var retVal : Object = {result : false, array : []};
