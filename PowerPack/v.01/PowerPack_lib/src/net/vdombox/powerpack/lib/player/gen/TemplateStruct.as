@@ -3,13 +3,11 @@ package net.vdombox.powerpack.lib.player.gen
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
-//import flash.filesystem.File;
-//import flash.filesystem.FileMode;
-//import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
 import mx.utils.UIDUtil;
 
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
 import net.vdombox.powerpack.lib.player.gen.errorClasses.RunTimeError;
 import net.vdombox.powerpack.lib.player.gen.errorClasses.ValidationError;
@@ -20,8 +18,6 @@ import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.ParsedBlock;
 import net.vdombox.powerpack.lib.player.gen.structs.*;
 import net.vdombox.powerpack.lib.player.graph.NodeCategory;
 import net.vdombox.powerpack.lib.player.graph.NodeType;
-import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-//import net.vdombox.powerpack.managers.CashManager;
 
 import r1.deval.D;
 
@@ -67,7 +63,7 @@ public class TemplateStruct extends EventDispatcher
 	public var forced : int;
 	public var terminated : Boolean;
 
-	public function TemplateStruct( tplStruct : XML)
+	public function TemplateStruct( tplStruct : XML, tt : String = "")
 	{
 		tplStructXML = tplStruct;
 		

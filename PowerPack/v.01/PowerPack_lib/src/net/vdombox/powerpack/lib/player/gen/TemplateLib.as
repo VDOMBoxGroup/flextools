@@ -41,7 +41,7 @@ import net.vdombox.powerpack.lib.graphicapi.drawing.PStroke;
 import net.vdombox.powerpack.lib.player.connection.SOAPBaseLevel;
 import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
 import net.vdombox.powerpack.lib.player.gen.errorClasses.RunTimeError;
-import net.vdombox.powerpack.lib.player.gen.functions.File;
+import net.vdombox.powerpack.lib.player.gen.functions.DataLoader;
 import net.vdombox.powerpack.lib.player.gen.parse.ListParser;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
 import net.vdombox.powerpack.lib.player.gen.structs.GraphStruct;
@@ -613,80 +613,21 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	public function loadDataFrom( filePath : String ) : Function
 	{
-		var file : File = new File();
+		var file : DataLoader = new DataLoader();
 		
 		file.addEventListener(TemplateLibEvent.RESULT_GETTED, resultGettedHandler );
+		
+//		Application.application.callLater(file.load, [filePath]);
 			
-		file.loadDataFrom( filePath );
+		file.load( filePath );
+		
 		function resultGettedHandler ( event : TemplateLibEvent): void
 		{
 			setTransition( event.transition );
 			setReturnValue( event.result );
 		}
+		return resultGettedHandler;	
 			
-		//	try
-		//	{
-		//		if ( !filePath )
-		//		{
-		//			throw new BasicError( "Not valid filepath" );
-		//		}
-		//
-		//		var file : File = new File( filePath );
-		//
-		//		if ( !file.exists )
-		//		{
-		//			if( file.extension.toLowerCase() == "xml" )
-		//			{
-		//				file  =  File.applicationDirectory.resolvePath( file.name);
-		//				
-		//				if ( !file.exists ) 
-		//					throw new BasicError( "File does not exist" );
-		//					
-		//			}else
-		//			{
-		//				throw new BasicError( "File does not exist" );
-		//			}
-		//		}
-		//
-		//		var fileStream : FileStream = new FileStream();
-		//		fileStream.addEventListener( Event.COMPLETE, onFileLoaded );
-		//		fileStream.addEventListener( IOErrorEvent.IO_ERROR, onFileStreamError );
-		//		fileStream.openAsync( file, FileMode.READ );
-		//	}
-		//	catch ( e : * )
-		//	{
-		//		Application.application.callLater( onFileStreamError, [new IOErrorEvent( IOErrorEvent.IO_ERROR )] );
-		//
-		//		return onFileStreamError;
-		//	}
-		//
-		//	return onFileLoaded;
-		//
-		//	function onFileStreamError( event : IOErrorEvent ) : void
-		//	{
-		//		setTransition( 'false' );
-		//		setReturnValue( 'false' );
-		//	}
-		//
-		//	function onFileLoaded( event : Event ) : void
-		//	{
-		//		var _stream : FileStream = event.target as FileStream;
-		//		var _strData : String = _stream.readUTFBytes( _stream.bytesAvailable );
-		//		_stream.close();
-		//		
-		//		setTransition( 'true' );
-		//		
-		//		try{
-		//			var xml : XML = new XML(_strData);
-		//			setReturnValue( xml );
-		//		}
-		//		catch ( e : * )
-		//		{
-		//			setReturnValue( _strData );
-		//		}
-		//		
-		//	}
-		return null;
 	}
 	
 	public function GUID() : String
