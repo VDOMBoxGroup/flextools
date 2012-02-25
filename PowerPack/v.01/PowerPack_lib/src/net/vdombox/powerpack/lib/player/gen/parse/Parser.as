@@ -656,8 +656,6 @@ public class Parser
 		var typeDescr : XML = describeType( TemplateStruct.lib );
 		var funcDescr : XMLList = typeDescr..method.(@name == funcName);
 		
-		trace ("TemplateStruct.lib: " + TemplateStruct.lib);
-		
 		return (funcDescr.length() > 0 || TemplateStruct.lib[funcName] is FunctionDef);
 	}
 

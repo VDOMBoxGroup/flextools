@@ -5,10 +5,6 @@ import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
-//import flash.events.OutputProgressEvent;
-//import flash.filesystem.File;
-//import flash.filesystem.FileMode;
-//import flash.filesystem.FileStream;
 import flash.net.FileFilter;
 import flash.utils.ByteArray;
 
@@ -17,9 +13,7 @@ import mx.utils.Base64Encoder;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
-//import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-//import net.vdombox.powerpack.managers.CashManager;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 import net.vdombox.powerpack.lib.player.popup.AlertPopup;
@@ -166,20 +160,16 @@ public class Template extends EventDispatcher
 	//  modified
 	//----------------------------------
 
-	private var _modified : Boolean;
+	protected var _modified : Boolean;
 
 	public function set modified( value : Boolean ) : void
 	{
 		if ( _modified != value )
 		{
 			_modified = value;
-
-//			var mainIndex : XML = CashManager.getMainIndex();
-//
-//			CashManager.updateMainIndexEntry( mainIndex, fullID, 'saved', _modified ? 'false' : 'true' );
-//			CashManager.setMainIndex( mainIndex );
 		}
 	}
+
 
 	[Bindable]
 	public function get modified() : Boolean
@@ -345,25 +335,6 @@ public class Template extends EventDispatcher
 	}
 
 	//----------------------------------
-	//  fullID
-	//----------------------------------
-
-	protected var _fullID : String;
-
-	public function get fullID() : String
-	{
-		if ( !_fullID )
-		{
-			_fullID = ID;
-
-//			if ( file && file.exists )
-//				_fullID += '_' + file.creationDate.getTime() + '_' + file.modificationDate.getTime() + '_' + file.size;
-		}
-
-		return _fullID;
-	}
-
-	//----------------------------------
 	//  b64picture
 	//----------------------------------
 	
@@ -419,9 +390,6 @@ public class Template extends EventDispatcher
 			return;
 
 		decode();
-
-//		if ( _xmlStructure )
-//			cash();
 
 		if ( !isEncoded )
 			_completelyOpened = true;
