@@ -165,6 +165,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.OPEN_MAIN_WINDOW:
 				{
 					selectModule( currentModule );
+					
 					break;
 				}
 					
@@ -319,7 +320,10 @@ package net.vdombox.ide.core.view
 
 		private function initTitle() : void
 		{
-			mainWindow.title = VersionUtils.getApplicationName();
+			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			mainWindow.title = serverProxy.authInfo.hostname;
+			
+			//mainWindow.title = VersionUtils.getApplicationName();
 		}
 
 		private function initUser() : void
