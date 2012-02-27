@@ -270,28 +270,9 @@ package net.vdombox.ide.modules.dataBase.view
 					break;
 				}	
 					
-				case Notifications.OBJECT_CREATED:
-				{
-					if ( componentName == "" || !componentName )
-					{
-						sendNotification( Notifications.GET_DATA_BASE_TABLES, body.pageVO );
-						sendNotification( Notifications.TABLE_CREATED, { pageVO : body.pageVO } );
-					}
-					else
-					{
-						body.name = componentName;
-						
-						componentName = "";
-					
-						sendNotification( Notifications.SET_OBJECT_NAME, body );
-					}
-					break;
-				}	
-					
 				case Notifications.OBJECT_NAME_SETTED:
 				{
 					sendNotification( Notifications.GET_DATA_BASE_TABLES, body.pageVO );
-					sendNotification( Notifications.TABLE_CREATED, { pageVO : body.pageVO } );
 					
 					break;
 				}	

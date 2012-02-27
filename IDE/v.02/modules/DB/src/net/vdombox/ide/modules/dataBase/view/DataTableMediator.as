@@ -80,7 +80,6 @@ package net.vdombox.ide.modules.dataBase.view
 					if ( componentName == "" || !componentName )
 					{
 						sendNotification( Notifications.GET_DATA_BASE_TABLES, body.pageVO );
-						sendNotification( Notifications.TABLE_CREATED, { pageVO : body.pageVO } );
 					}
 					else
 					{
@@ -96,7 +95,6 @@ package net.vdombox.ide.modules.dataBase.view
 				case Notifications.OBJECT_NAME_SETTED:
 				{
 					sendNotification( Notifications.GET_DATA_BASE_TABLES, body.pageVO );
-					sendNotification( Notifications.TABLE_CREATED, { pageVO : body.pageVO } );
 					
 					break;
 				}	

@@ -7,7 +7,8 @@ package net.vdombox.ide.modules.dataBase.events
 		public static var SORT_ELEMENT_CHANGE : String = "sortElementChange";
 		public static var SORT_CHANGE : String = "sortChange";
 		
-		public static var ADD_QUERY_SIMPLE : String = "addQuerySimple";
+		public static var UP_QUERY_SIMPLE : String = "upQuerySimple";
+		public static var DOWN_QUERY_SIMPLE : String = "downQuerySimple";
 		public static var REMOVE_QUERY_SIMPLE : String = "removeQuerySimple";
 		public static var SEND_QUERY_SIMPLE_CLICK : String = "sendQuerySimpleClick";
 		public static var QUERY_SIMPLE_CHANGE : String = "querySimpleChange";

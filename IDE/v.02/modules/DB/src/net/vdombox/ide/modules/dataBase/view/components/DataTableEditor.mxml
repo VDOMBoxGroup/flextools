@@ -689,9 +689,32 @@
 			}
 			
 			
+			private function setHighlighted() : void
+			{
+				if ( toolBoxPanel.currentState == "SearchBox" )
+				{
+					search.highlighted = true;
+					sort.highlighted = false;
+					querySimple.highlighted = false;
+				}
+				else if ( toolBoxPanel.currentState == "SortQueryBox" )
+				{
+					search.highlighted = false;
+					sort.highlighted = true;
+					querySimple.highlighted = false;
+				}
+				else if ( toolBoxPanel.currentState == "QuerySimpleBuildBox" )
+				{
+					search.highlighted = false;
+					sort.highlighted = false;
+					querySimple.highlighted = true;
+				}
+			}
+			
 			protected function query_clickHandler(event:MouseEvent):void
 			{
-				currentState = "Query"
+				currentState = "Query";
+				setHighlighted();
 			}
 			
 			protected function skinnablecontainer1_creationCompleteHandler(event:FlexEvent):void
@@ -719,25 +742,40 @@
 			protected function search_clickHandler(event:MouseEvent):void
 			{
 				if ( toolBoxPanel.currentState == 'SearchBox' )
-					currentState = "Result"
+				{
+					currentState = "Result";
+				}
 				else
+				{
 					toolBoxPanel.currentState = 'SearchBox';
+					setHighlighted();
+				}
 			}
 			
 			protected function sort_clickHandler(event:MouseEvent):void
 			{
 				if ( toolBoxPanel.currentState == 'SortQueryBox' )
-					currentState = "Result"
+				{
+					currentState = "Result";
+				}
 				else
+				{
 					toolBoxPanel.currentState = 'SortQueryBox';
+					setHighlighted();
+				}
 			}
 			
 			protected function querySimple_clickHandler(event:MouseEvent):void
 			{
 				if ( toolBoxPanel.currentState == 'QuerySimpleBuildBox' )
-					currentState = "Result"
+				{
+					currentState = "Result";
+				}
 				else
+				{
 					toolBoxPanel.currentState = 'QuerySimpleBuildBox';
+					setHighlighted();
+				}
 			}
 			
 		]]>

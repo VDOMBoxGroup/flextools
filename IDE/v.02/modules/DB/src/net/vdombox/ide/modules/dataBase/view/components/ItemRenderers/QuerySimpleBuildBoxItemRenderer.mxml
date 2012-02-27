@@ -2,7 +2,7 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 creationComplete="group1_creationCompleteHandler(event)">
+		 creationComplete="group1_creationCompleteHandler(event)" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
@@ -30,9 +30,19 @@
 				cmbBetween.visible = value;
 			}
 			
-			protected function addNew_clickHandler(event:MouseEvent):void
+			public function set upDisplay( value : Boolean ) : void
 			{
-				dispatchEvent( new ToolBoxPanelEvent ( ToolBoxPanelEvent.ADD_QUERY_SIMPLE ) );
+				up.visible = value;
+			}
+			
+			public function set downDisplay( value : Boolean ) : void
+			{
+				down.visible = value;
+			}
+			
+			public function set betweenDisplay( value : Boolean ) : void
+			{
+				cmbBetween.visible = value;
 			}
 			
 			protected function delOld_clickHandler(event:MouseEvent):void
@@ -84,6 +94,16 @@
 				return str;
 			}
 			
+			protected function up_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new ToolBoxPanelEvent ( ToolBoxPanelEvent.UP_QUERY_SIMPLE ) );
+			}
+			
+			protected function down_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new ToolBoxPanelEvent ( ToolBoxPanelEvent.DOWN_QUERY_SIMPLE ) );
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -91,17 +111,22 @@
 		
 		<s:CheckBox id="chkBoxEnable" selected="true"/>
 		
-		<s:ComboBox id="cmbBetween" dataProvider="{between}" width="50"/>
+		<s:DropDownList id="cmbBetween" dataProvider="{between}" width="70"/>
 		
-		<s:ComboBox id="cmbColumns" dataProvider="{columns}"/>
+		<s:DropDownList id="cmbColumns" dataProvider="{columns}" width="150"/>
 		
-		<s:ComboBox id="cmbOperators" dataProvider="{operators}" width="50"/>
+		<s:DropDownList id="cmbOperators" dataProvider="{operators}" width="60"/>
 		
 		<s:TextInput id="txtValue" />
 		
-		<s:Button id="addNew" label="add" click="addNew_clickHandler(event)"/>
+		<button:WorkAreaButton id="up" width="20" icon="@Embed('assets/Arrow_Up.png')"
+							   click="up_clickHandler(event)"/>
 		
-		<s:Button id="delOld" label="del" click="delOld_clickHandler(event)"/>
+		<button:WorkAreaButton id="down" width="20" icon="@Embed('assets/Arrow_Down.png')"
+							   click="down_clickHandler(event)"/>
+		
+		<button:WorkAreaButton id="delOld" width="20" icon="@Embed('assets/delete.png')"
+							   click="delOld_clickHandler(event)"/>
 		
 	</s:HGroup>
 	

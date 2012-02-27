@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.dataBase.view
 {
-	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.modules.dataBase.events.TableElementEvent;
 	import net.vdombox.ide.modules.dataBase.view.components.BaseVisualEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.TableElement;
@@ -55,7 +55,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( Notifications.OBJECTS_GETTED );
-			interests.push( Notifications.TABLE_CREATED );
+			interests.push( Notifications.OBJECT_CREATED );
 			
 			return interests;
 		}
@@ -68,6 +68,8 @@ package net.vdombox.ide.modules.dataBase.view
 			if ( body.pageVO.id != baseVisualEditor.objectVO.id )
 				return;
 			
+			var tableElement : TableElement;
+			
 			switch ( name )
 			{
 				case Notifications.OBJECTS_GETTED:
@@ -77,17 +79,17 @@ package net.vdombox.ide.modules.dataBase.view
 					
 					for each ( var objectVO : ObjectVO in body.objects )
 					{
-						var tableElement : TableElement = new TableElement( objectVO );
+						tableElement = new TableElement( objectVO );
 						baseVisualEditor.contentGroup.addElement( tableElement ); 
 						
 					}
 					break;
 				}
 					
-				case Notifications.TABLE_CREATED:
+				case Notifications.OBJECT_CREATED:
 				{
-					sendNotification( Notifications.GET_OBJECTS, baseVisualEditor.objectVO );
-					break;
+					tableElement = new TableElement( body as ObjectVO );
+					baseVisualEditor.contentGroup.addElement( tableElement ); 
 				}
 			}
 		}

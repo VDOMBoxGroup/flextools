@@ -75,27 +75,24 @@
 		</s:fill>
 	</s:Rect>
 	
-	<components1:VDOMScroller width="100%" maxHeight="200">
-		<s:VGroup width="100%" height="100%">
-			
-			<s:Label color="#FF0000" text="Не забудь нажать прежде commit" includeIn="QuerySimpleBuildBox, SortQueryBox"/>
-			
-			<s:HGroup width="100%" height="100%">
-				
-				<s:Group width="100%" height="100%">
-					
-					<toolBoxComponents:SearchBox target="{dataTable}" height="22" includeIn="SearchBox"/>
-					
-					<toolBoxComponents:SortQueryBox id="sortQueryBox" dataProvider="{dataTable}" includeIn="SortQueryBox"/>
-					
-					<toolBoxComponents:QuerySimpleBuildBox id="querySimpleBuilderBox" dataProvider="{dataTable}" includeIn="QuerySimpleBuildBox"/>
-					
-				</s:Group>
-				
-			</s:HGroup>
-			
-		</s:VGroup>
+	<s:VGroup width="100%" height="100%">
 		
-	</components1:VDOMScroller>
+		<s:Label color="#FF0000" text="Не забудь нажать прежде commit" includeIn="QuerySimpleBuildBox, SortQueryBox"/>
+		
+		<s:HGroup width="100%" height="100%">
+			
+			<s:Group width="100%" height="100%">
+				
+				<toolBoxComponents:SearchBox target="{dataTable}" height="35" width="250" includeIn="SearchBox"/>
+				
+				<toolBoxComponents:SortQueryBox id="sortQueryBox" dataProvider="{dataTable}" includeIn="SortQueryBox"/>
+				
+				<toolBoxComponents:QuerySimpleBuildBox id="querySimpleBuilderBox" dataProvider="{dataTable}" includeIn="QuerySimpleBuildBox"/>
+				
+			</s:Group>
+			
+		</s:HGroup>
+		
+	</s:VGroup>
 
 </s:Group>
