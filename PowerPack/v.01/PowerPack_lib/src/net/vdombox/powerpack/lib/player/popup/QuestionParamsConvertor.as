@@ -46,8 +46,9 @@ package net.vdombox.powerpack.lib.player.popup
 			if ( params.length == 1 && params[0].toString() == "*")
 				return QT_INPUT;
 			
-			if ( params.length == 1 && isFileMask(params[0].toString()) )
-				return QT_BROWSE;
+//			Browse file type - temporary not supported		
+//			if ( params.length == 1 && isFileMask(params[0].toString()) )
+//				return QT_BROWSE;
 			
 			if ((params.length > 1) ||
 				(params.length == 1 && String(params[0]).split(",").length > 0))

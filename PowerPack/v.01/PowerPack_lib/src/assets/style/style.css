@@ -61,6 +61,31 @@ global
 	focusAlpha : 0;
 }
 
+.questionAnswerCheckBoxStyle
+{
+	fontFamily	: Arial;
+	fontSize	: 13;
+	
+	fillGradientColors: #fcfcfc, #c8c8c8;
+	fillAlpha:  1;
+	
+	icon : ClassReference(null);
+	skin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.CheckBoxSkin");
+	
+	borderGradientColors: #808080, #6e6e6e;
+	borderThickness: 2.5;
+	borderStyle : none;
+	
+	color: #ffffff;
+	disabledColor:  #ffffff;
+	textRollOverColor: #ffffff;
+	textSelectedColor: #ffffff;
+	
+	paddingLeft : 24;
+	iconRadius : 10;
+	
+	focusAlpha : 0;
+}
 
 .builderWindowStyle
 {

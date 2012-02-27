@@ -35,43 +35,9 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 		
 		private function createRadioButtons():void
 		{
-			var variants : Array = dataProvider.slice(2);
-			
-			if (variants.length == 1)
+			for each (var variant:AnswerVariant in answerVariants) 
 			{
-				var variantsStr : String = variants[0];
-				var multyValue : Array = ListParser.list2Array( variantsStr );
-				
-				// data like  [ ['app1' 'guid1'] ['app2' 'guid2']  ['app3' 'guid3']]
-				if ( multyValue[0] is CodeFragment )
-				{
-					var dataBt : String; 
-					var labelBt : String; 
-					var valueBt : String;
-					
-					for (var j:int = 0; j < multyValue.length; j++) 
-					{
-						dataBt  = ListParser.getElm( variantsStr, j+1 );
-						
-						labelBt  = ListParser.getElmValue( dataBt, 1, context ).toString();
-						valueBt  = ListParser.getElmValue( dataBt, 2, context ).toString();
-						
-						createRadioButton( labelBt, valueBt );
-					}
-					
-					selectFirstRadioButton();
-					
-					return;
-				}
-				else
-				{
-					variants = variantsStr.split(",");
-				}
-			}
-			
-			for each (var value:String in variants) 
-			{
-				createRadioButton( value );
+				createRadioButton( variant );
 			}
 			
 			selectFirstRadioButton();
@@ -98,16 +64,16 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 				radBtn.selected = true;
 		}
 		
-		private function createRadioButton( labelBt : String, dataBt : String = null ):void
+		private function createRadioButton( variant : AnswerVariant ):void
 		{
 			var radBtn : RadioButton;
 
-			if ( ! data )
-				data = label;
+			if ( ! variant.value )
+				variant.value = variant.label;
 			
 			radBtn  = new RadioButton();
-			radBtn.label = labelBt;
-			radBtn.value = dataBt;
+			radBtn.label = variant.label;
+			radBtn.value = variant.value;
 			radBtn.group = radioBtnGroup;
 			radBtn.styleName = "questionAnswerRadioBtn";
 			

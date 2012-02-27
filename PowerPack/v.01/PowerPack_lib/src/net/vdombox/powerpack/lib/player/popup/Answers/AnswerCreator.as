@@ -42,11 +42,12 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 					answer = new RadioButtonsAnswer (data);
 					break;
 				}
-				case ANSWER_TYPE_BROWSE_FILE :
-				{
-					answer = new BrowseFileAnswer (data);
-					break;
-				}
+//			Browse file type - temporary not supported
+//				case ANSWER_TYPE_BROWSE_FILE :
+//				{
+//					answer = new BrowseFileAnswer (data);
+//					break;
+//				}
 				case ANSWER_TYPE_COMBO_BOX :
 				{
 					answer = new ComboBoxAnswer (data);
@@ -54,7 +55,7 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 				}	
 				case ANSWER_TYPE_CHECK_BOX :
 				{
-					
+					answer = new CheckBoxAnswer (data);
 					break;
 				}
 
