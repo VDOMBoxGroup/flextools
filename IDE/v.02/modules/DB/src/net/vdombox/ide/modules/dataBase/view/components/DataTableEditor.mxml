@@ -4,12 +4,13 @@
 					  xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
 					  implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
 					  xmlns:components="net.vdombox.components.*" xmlns:components1="net.vdombox.ide.modules.dataBase.view.components.*"
-					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)" xmlns:toolBoxComponents="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.*">	
+					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)" xmlns:toolBoxComponents="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">	
 	
 	
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.containers.HBox;
 			import mx.controls.LinkButton;
 			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
 			import mx.controls.dataGridClasses.DataGridColumn;
@@ -22,6 +23,7 @@
 			
 			import net.vdombox.ide.common.events.EditorEvent;
 			import net.vdombox.ide.common.model._vo.ObjectVO;
+			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
@@ -61,6 +63,9 @@
 			
 			[Bindable]
 			private var alertMessage:String = "";
+			
+			[Bindable]
+			public var pagesArea : HBox;
 			
 			//private var defaultMessage : String = '<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset></range>';
 			
@@ -329,7 +334,10 @@
 			private function buildPagesTickets() : void 
 			{
 				/* (Re)Build pages tickets */
-				amount.text = AMOUNT.toString();
+				var applyEvent : DataTablesEvents = new DataTablesEvents( DataTablesEvents.CHANGE_ROWS_IN_PAGE );
+				applyEvent.content = AMOUNT.toString();
+				dispatchEvent( applyEvent );
+				
 				pagesArea.removeAllChildren();
 				
 				var lastPageNumber:int = Math.floor(totalRecords / AMOUNT) - 1;
@@ -339,8 +347,8 @@
 				var fp:int;
 				var lp:int;
 				
-				fp = currentPage - 5;
-				lp = currentPage + 5;
+				fp = currentPage - 3;
+				lp = currentPage + 3;
 				
 				if ( fp < 0 && lp <= lastPageNumber ) 
 				{
@@ -650,32 +658,17 @@
 				getPageRequest();
 			}
 			
-			private function amountApplyBtnClickHandler() : void 
-			{
-				try 
-				{
-					AMOUNT = int(amount.text);
-				}
-				catch (err:Error) 
-				{
-					AMOUNT = 500;
-				}
-				
-				AMOUNT = AMOUNT > 2000 ? 2000 : AMOUNT;
-				AMOUNT = AMOUNT <= 0 ? 500 : AMOUNT;
-				
-				pages = [];
-				currentPage = 0;
-				
-				getPageRequest();
-			}
-			
-			protected function button1_clickHandler(event:MouseEvent):void
+			/*protected function button1_clickHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
+				
+			}*/
+			
+			public function applyClicked( amount : String ) : void
+			{
 				try 
 				{
-					AMOUNT = int(amount.text);
+					AMOUNT = int(amount);
 				}
 				catch (err:Error) 
 				{
@@ -723,6 +716,30 @@
 				getPageRequest();
 			}
 			
+			protected function search_clickHandler(event:MouseEvent):void
+			{
+				if ( toolBoxPanel.currentState == 'SearchBox' )
+					currentState = "Result"
+				else
+					toolBoxPanel.currentState = 'SearchBox';
+			}
+			
+			protected function sort_clickHandler(event:MouseEvent):void
+			{
+				if ( toolBoxPanel.currentState == 'SortQueryBox' )
+					currentState = "Result"
+				else
+					toolBoxPanel.currentState = 'SortQueryBox';
+			}
+			
+			protected function querySimple_clickHandler(event:MouseEvent):void
+			{
+				if ( toolBoxPanel.currentState == 'QuerySimpleBuildBox' )
+					currentState = "Result"
+				else
+					toolBoxPanel.currentState = 'QuerySimpleBuildBox';
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -736,7 +753,7 @@
 		<s:State name="Query"/>
 	</s:states>
 	
-	<s:VGroup width="100%" height="100%">
+	<s:VGroup width="100%" height="100%" gap="0">
 		
 		<s:Group width="100%" height="100%" >
 			
@@ -759,28 +776,43 @@
 			
 			<s:VGroup width="100%">
 				
-				<components1:ToolBoxPanel id="toolBoxPanel" width="100%" height="100" dataProvider="{dataTable}" includeIn="Query"/>
+				<components1:ToolBoxPanel id="toolBoxPanel" width="100%" dataProvider="{dataTable}" includeIn="Query"/>
 				
-				<s:HGroup width="100%" height="20" horizontalAlign="left" verticalAlign="middle" gap="0" paddingRight="0" paddingLeft="0">
+				<!--<s:HGroup width="100%" height="20" horizontalAlign="left" verticalAlign="middle" gap="0" paddingRight="0" paddingLeft="0">
 					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_pages' ) }" />
 					<mx:HBox id="pagesArea" width="100%" height="20" verticalAlign="middle" horizontalGap="0"
 							 disabledOverlayAlpha="0.1" />
 					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_records' ) }" fontSize="9" />
 					<s:TextInput id="amount" borderColor="#999999" fontWeight="bold" height="20" fontSize="9" width="45" />
 					<s:Button height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_apply' ) }" cornerRadius="0" click="button1_clickHandler(event)"/>
-				</s:HGroup>
+				</s:HGroup>-->
 				
-				<s:HGroup width="100%" height="50" verticalAlign="top" horizontalAlign="left" paddingLeft="10" paddingTop="5">
+				<s:HGroup width="100%" height="50" verticalAlign="top" horizontalAlign="left" paddingLeft="10" paddingTop="5" paddingRight="10">
 					
-					<s:Button id="addRow" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_add_row' ) }" click="addRow_clickHandler(event)"/>
+					<button:WorkAreaButton id="addRow" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_add_row' ) }" 
+										   icon="@Embed('assets/Add.png')" click="addRow_clickHandler(event)"/>
 					
-					<s:Button id="deleteRow" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_delete_row' ) }" click="deleteRow_clickHandler(event)"/>
+					<button:WorkAreaButton id="deleteRow" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_delete_row' ) }" 
+										   icon="@Embed('assets/delete.png')" click="deleteRow_clickHandler(event)"/>
 					
-					<s:Button id="commit" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_commit' ) }" click="commit_clickHandler(event)"/>
+					<button:WorkAreaButton id="commit" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_commit' ) }" 
+										   icon="@Embed('assets/commit.png')" click="commit_clickHandler(event)"/>
 					
-					<s:Button id="discard" height="20"  label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_discard' ) }" click="discard_clickHandler(event)"/>
+					<button:WorkAreaButton id="discard" height="20"  label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_discard' ) }" 
+										   icon="@Embed('assets/discard.png')" click="discard_clickHandler(event)"/>
 					
-					<s:Button id="query" label="Query" click="query_clickHandler(event)"/>
+					<mx:Spacer width="100%"/>
+					
+					<button:WorkAreaButton id="additional"  height="20" label="Additional" click="query_clickHandler(event)" includeIn="Result"/>
+					
+					<button:WorkAreaButton id="querySimple"  height="20" label="Query Simple" click="querySimple_clickHandler(event)" includeIn="Query"/>
+					
+					<button:WorkAreaButton id="sort"  height="20" label="Sort" 
+										   icon="@Embed('assets/sort.png')" click="sort_clickHandler(event)" includeIn="Query"/>
+					
+					<button:WorkAreaButton id="search"  height="20" label="Search" 
+										   icon="@Embed('assets/search.png')" click="search_clickHandler(event)" includeIn="Query"/>
+					
 				</s:HGroup>
 			</s:VGroup>
 			

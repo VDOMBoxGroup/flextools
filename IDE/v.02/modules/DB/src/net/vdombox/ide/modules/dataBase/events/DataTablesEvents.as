@@ -11,6 +11,8 @@ package net.vdombox.ide.modules.dataBase.events
 		public static var NEW_TABLE : String = "newTable";
 		public static var GO_TO_BASE : String = "goToBase";
 		
+		public static var CHANGE_ROWS_IN_PAGE : String = "changeRowsInPage";
+		
 		public var content : Object;
 		
 		public function DataTablesEvents( type : String, bubbles : Boolean = false,

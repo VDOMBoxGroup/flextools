@@ -4,7 +4,11 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
 		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
 		 xmlns:components="net.vdombox.ide.modules.dataBase.view.components.*"
-		 removedFromStage="group1_removedFromStageHandler(event)" xmlns:components1="net.vdombox.ide.common.components.*" xmlns:components2="net.vdombox.ide.common.view.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+		 xmlns:components1="net.vdombox.ide.common.components.*" 
+		 xmlns:components2="net.vdombox.ide.common.view.components.*" 
+		 xmlns:button="net.vdombox.ide.common.view.components.button.*"
+		 removedFromStage="group1_removedFromStageHandler(event)" 
+		 creationComplete="group1_creationCompleteHandler(event)">
 	
 	<s:states>
 		<s:State name="tableEditor"/>
@@ -96,11 +100,21 @@
 				dispatchEvent( new DataTablesEvents( DataTablesEvents.NEW_TABLE ));
 			}
 			
-			protected function goToBase_clickHandler(event:MouseEvent):void
+			
+			protected function button1_clickHandler(event:MouseEvent):void
 			{
-				dispatchEvent( new DataTablesEvents( DataTablesEvents.GO_TO_BASE ));
+				dataEditor.applyClicked( amount.text )
 			}
 			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener( DataTablesEvents.CHANGE_ROWS_IN_PAGE, changeRowsInPageHandler, true, 0 , true );
+			}
+			
+			private function changeRowsInPageHandler( event : DataTablesEvents ) : void
+			{
+				amount.text = event.content.toString();
+			}
 			
 		]]>
 	</fx:Script>
@@ -131,13 +145,20 @@
 			
 			<!--<components1:WorkAreaButton id="newBase" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_base' ) }" height="20" click="newBase_clickHandler(event)" includeIn="baseVisual"/>-->
 			
-			<button:WorkAreaButton id="goToBase" label="{ resourceManager.getString( 'DataBase_General', 'data_table_go_to_base' ) }" height="20" click="goToBase_clickHandler(event)" includeIn="tableEditor,tableStructure"/>
-			
+			<s:HGroup includeIn="tableEditor" height="100%" verticalAlign="middle">
+				<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_pages' ) }" />
+				<mx:HBox id="pagesArea" width="100%" height="20" verticalAlign="middle" horizontalGap="0"
+						 disabledOverlayAlpha="0.1" />
+				<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_records' ) }" fontSize="9" />
+				<s:TextInput id="amount" borderColor="#999999" fontWeight="bold" height="20" fontSize="9" width="45" />
+				<button:WorkAreaButton height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_apply' ) }" click="button1_clickHandler(event)"/>
+				
+			</s:HGroup>
 		</s:HGroup>
 		
 		<s:Group width="100%" height="100%">
 			
-			<components:DataTableEditor  id="dataEditor" width="100%" height="100%" objectVO="{_objectVO as ObjectVO}" visible="false" visible.tableEditor="true"/>
+			<components:DataTableEditor  id="dataEditor" width="100%" height="100%" objectVO="{_objectVO as ObjectVO}" visible="false" visible.tableEditor="true" pagesArea="{pagesArea}"/>
 			
 			<components:DataTableStructure id="DataStructure" width="100%" height="100%" objectVO="{_objectVO as ObjectVO}" visible="false" visible.tableStructure="true"/>
 			

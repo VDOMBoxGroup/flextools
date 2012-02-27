@@ -93,8 +93,6 @@
 		
 		<s:ComboBox id="cmbBetween" dataProvider="{between}" width="50"/>
 		
-		<s:Label text="Column" />
-		
 		<s:ComboBox id="cmbColumns" dataProvider="{columns}"/>
 		
 		<s:ComboBox id="cmbOperators" dataProvider="{operators}" width="50"/>
