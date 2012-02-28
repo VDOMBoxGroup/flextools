@@ -59,7 +59,7 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 			{
 				var variantsStr : * = sourceVariants[0];
 				
-				if ( ListParser.getType(data, 3) == ElmType.LIST)
+				if ( ListParser.getType(data, 3) == ElmType.LIST || ListParser.getType(data, 3) == ElmType.VARIABLE)
 				{
 					var multyValue : Array = ListParser.list2Array( variantsStr );
 					
