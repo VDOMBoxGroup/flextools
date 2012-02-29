@@ -157,7 +157,7 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:VGroup  width="100%" gap="5">
+	<s:VGroup  width="100%" gap="5" paddingLeft="10">
 	
 		<components:VDOMScroller id="scroller" width="100%" maxHeight="150">
 		

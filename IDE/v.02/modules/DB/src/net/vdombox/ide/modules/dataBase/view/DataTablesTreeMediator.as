@@ -235,7 +235,7 @@ package net.vdombox.ide.modules.dataBase.view
 						}
 					}
 					
-					if ( !typeVO )
+					if ( !(body as Array) )
 						return;
 					
 					if ( statesProxy.selectedApplication )
@@ -330,8 +330,8 @@ package net.vdombox.ide.modules.dataBase.view
 					sendNotification( TypesProxy.GET_TOP_LEVEL_TYPES );
 				else if ( statesProxy.selectedApplication )
 				{
-					sendNotification( Notifications.CREATE_PAGE_REQUEST,
-						{ applicationVO: statesProxy.selectedApplication, typeVO: typeVO, name : event.name, element : dataTablesTree } );				
+					sendNotification( Notifications.CREATE_PAGE,
+						{ applicationVO: statesProxy.selectedApplication, typeVO: typeVO } );				
 				}
 				WindowManager.getInstance().removeWindow( createNewObjectWindow );
 			}
