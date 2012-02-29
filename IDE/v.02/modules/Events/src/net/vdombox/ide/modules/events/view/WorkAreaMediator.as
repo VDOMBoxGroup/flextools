@@ -1,18 +1,19 @@
 package net.vdombox.ide.modules.events.view
 {
 	import flash.desktop.NativeApplication;
+	import flash.display.NativeWindow;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.events.model.MessageStackProxy;
@@ -251,6 +252,7 @@ package net.vdombox.ide.modules.events.view
 			workArea.addEventListener( WorkAreaEvent.REDO, redoHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.SET_MESSAGE, setMessageHandler, false, 0, true );
 			workArea.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
+			NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_DOWN, appKeyDownHandler, true, 0, true );
 			workArea.addEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged, true, 0, true );
 		}
 
@@ -262,6 +264,7 @@ package net.vdombox.ide.modules.events.view
 			workArea.removeEventListener( WorkAreaEvent.REDO, redoHandler );
 			workArea.removeEventListener( WorkAreaEvent.SET_MESSAGE, setMessageHandler );
 			workArea.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true );
+			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, appKeyDownHandler, true );
 			workArea.removeEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged );
 		}
 		
@@ -358,7 +361,24 @@ package net.vdombox.ide.modules.events.view
 		}
 		
 		private function keyDownHandler( event : KeyboardEvent ) : void
+		{			
+			if( !event.ctrlKey )
+				return;
+			
+			if ( event.keyCode == Keyboard.Z )
+				sendNotification( Notifications.UNDO, statesProxy.selectedPage );
+			else if ( event.keyCode == Keyboard.Y )
+				sendNotification( Notifications.REDO, statesProxy.selectedPage );
+			else if ( event.keyCode == Keyboard.S )
+				saveHandler();
+			
+		}
+		
+		private function appKeyDownHandler( event : KeyboardEvent ) : void
 		{
+			if( !isActive )
+				return;
+			
 			if ( event.keyCode == Keyboard.F5 )
 			{
 				if ( workArea.skin.currentState == "unsaved" )
@@ -376,13 +396,7 @@ package net.vdombox.ide.modules.events.view
 			if( !event.ctrlKey )
 				return;
 			
-			if ( event.keyCode == Keyboard.Z )
-				sendNotification( Notifications.UNDO, statesProxy.selectedPage );
-			else if ( event.keyCode == Keyboard.Y )
-				sendNotification( Notifications.REDO, statesProxy.selectedPage );
-			else if ( event.keyCode == Keyboard.S )
-				saveHandler();
-			else if ( event.keyCode == Keyboard.NUMBER_1 )
+			if ( event.keyCode == Keyboard.NUMBER_1 )
 			{
 				showElementsView = "Full View";
 				setVisibleElementsForAllObjects();
@@ -397,7 +411,6 @@ package net.vdombox.ide.modules.events.view
 				showElementsView = "Active";
 				setVisibleElementsForCurrentObject();
 			}
-			
 		}
 	}
 }

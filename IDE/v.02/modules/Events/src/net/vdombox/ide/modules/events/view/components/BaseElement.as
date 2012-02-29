@@ -66,9 +66,9 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			setFocus();
 			moved = false;
-			stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
-			stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
-			stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
+			stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler, false, 0, true );
+			stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler, false, 0, true );
+			stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt, false, 0, true );
 			
 			mouseOffcetX = mouseX;
 			mouseOffcetY = mouseY;
@@ -95,7 +95,8 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			//dispatchEvent( new ElementEvent( ElementEvent.MOVED ) );
 			moved = true;
-			stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
+			if ( stage )
+				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
 		}
 		
 		protected function stage_mouseUpHandler( event : MouseEvent ) : void
@@ -105,8 +106,12 @@ package net.vdombox.ide.modules.events.view.components
 				dispatchEvent( new ElementEvent( ElementEvent.MOVED ) );
 				moved = false;
 			}
-			stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
-			stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
+			
+			if ( stage )
+			{
+				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
+				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
+			}
 		}
 		
 		protected function skinnablecontainer1_creationCompleteHandler(event:FlexEvent):void

@@ -163,7 +163,10 @@ package net.vdombox.ide.modules.events.view
 
 					// XXX: doun on quck switch (pagesXMLList == null)
 					if ( !pagesXMLList )
+					{
+						sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
 						return;
+					}
 				
 					currentPageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
 					currentPageXML.setChildren( new XMLList() );

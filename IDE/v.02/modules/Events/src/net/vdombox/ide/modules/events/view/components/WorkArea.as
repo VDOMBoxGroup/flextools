@@ -676,7 +676,7 @@ package net.vdombox.ide.modules.events.view.components
 
 		private function element_deleteHandler( event : ElementEvent ) : void
 		{
-			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
+			/*Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 			
 			var strName : String = "";
 			if (event.target is EventElement)
@@ -690,15 +690,15 @@ package net.vdombox.ide.modules.events.view.components
 			function deleteHandler(_event : CloseEvent) : void
 			{
 				if (_event.detail == Alert.YES)
-				{
+				{*/
 					if ( event.target is EventElement )
 						deleteEventElement( event.target as EventElement );
 					else if ( event.target is ActionElement )
 						deleteActionElement( event.target as ActionElement );
 					
 					unsaveHandler();
-				}
-			}
+				/*}
+			}*/
 		}
 		
 		private function linkage_deleteLinkageHandler( event : ElementEvent ) : void
