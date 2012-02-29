@@ -64,9 +64,6 @@
 			[Bindable]
 			private var alertMessage:String = "";
 			
-			[Bindable]
-			public var pagesArea : HBox;
-			
 			//private var defaultMessage : String = '<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset></range>';
 			
 			private var endMessage : String = "</getdata>";
@@ -841,7 +838,13 @@
 					
 					<mx:Spacer width="100%"/>
 					
-					<button:WorkAreaButton id="additional"  height="20" label="Additional" click="query_clickHandler(event)" includeIn="Result"/>
+					<mx:HBox id="pagesArea" width="100%" height="20" verticalAlign="middle" horizontalGap="0"
+							 disabledOverlayAlpha="0.1" />
+					
+					<mx:Spacer width="100%"/>
+					
+					<button:WorkAreaButton id="additional"  height="20" label="Additional" 
+										   icon="@Embed('assets/Additions.png')" click="query_clickHandler(event)" includeIn="Result"/>
 					
 					<button:WorkAreaButton id="querySimple"  height="20" label="Query Simple" click="querySimple_clickHandler(event)" includeIn="Query"/>
 					
