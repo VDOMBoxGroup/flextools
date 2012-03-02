@@ -30,11 +30,11 @@
 		</s:fill>
 	</s:Rect>
 
-	<components:ScriptEditor id="scriptEditor"
-							 height="100%" width="100%"/>
-	
-<!--	<components:WorkArea id="workArea"
+	<!--	<components:ScriptEditor id="scriptEditor"
 							 height="100%" width="100%"/>-->
+	
+	<components:WorkArea id="workArea"
+							 height="100%" width="100%"/>
 	
 	<s:Rect width="8" height="100%">
 		<s:fill>

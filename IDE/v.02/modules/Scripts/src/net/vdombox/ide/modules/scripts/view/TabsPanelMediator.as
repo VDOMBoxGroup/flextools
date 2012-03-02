@@ -109,16 +109,23 @@ package net.vdombox.ide.modules.scripts.view
 		private function addHandlers() : void
 		{
 			tabsPanel.addEventListener( TabsPanelEvent.SELECTED_TAB_CHANGED, selectedTabHandler, false, 0 , true );
+			tabsPanel.addEventListener( TabsPanelEvent.TAB_DELETE, tabDeleteHandler, false, 0 , true );
 		}
 		
 		private function removeHandlers() : void
 		{
 			tabsPanel.removeEventListener( TabsPanelEvent.SELECTED_TAB_CHANGED, selectedTabHandler );
+			tabsPanel.removeEventListener( TabsPanelEvent.TAB_DELETE, tabDeleteHandler );
 		}
 		
 		private function selectedTabHandler( event : TabsPanelEvent ) : void
 		{
 			sendNotification( Notifications.SELECTED_TAB_CHANGED, tabsPanel.tabs.selectedItem );
+		}
+		
+		private function tabDeleteHandler( event : TabsPanelEvent ) : void
+		{
+			sendNotification( Notifications.DELETE_TAB, event.tab );
 		}
 	}
 }

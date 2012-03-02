@@ -5,7 +5,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 height="300" width="400" xmlns:editors="net.vdombox.editors.*"
 		 xmlns:components1="net.vdombox.components.*"
-		 removedFromStage="navigatorcontent1_removedFromStageHandler(event)" xmlns:components2="net.vdombox.ide.common.components.*" xmlns:components3="net.vdombox.ide.common.view.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*" xmlns:mx1="library://ns.adobe.com/flex/mx">
+		 remove="navigatorcontent2_removeHandler(event)" xmlns:components2="net.vdombox.ide.common.components.*" xmlns:components3="net.vdombox.ide.common.view.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*" xmlns:mx1="library://ns.adobe.com/flex/mx">
 
 	<fx:Script>
 		<![CDATA[
@@ -28,15 +28,20 @@
 
 			private var _syntax : String = "vscript";
 
+			[Bindable]
 			public function get script() : String
 			{
-				return pythonScriptEditor ? pythonScriptEditor.scriptAreaComponent.text : null;
+				return  pythonScriptEditor ? pythonScriptEditor.scriptAreaComponent.text : "";
 			}
 
 			public function set script( value : String ) : void
 			{
-				pythonScriptEditor.scriptAreaComponent.text = value;
-				pythonScriptEditor.dispatchEvent( new Event ( Event.CHANGE ) );
+				_script = value;
+				if ( pythonScriptEditor )
+				{
+					pythonScriptEditor.scriptAreaComponent.text = value;
+					pythonScriptEditor.dispatchEvent( new Event ( Event.CHANGE ) );
+				}
 			}
 			
 			public function get editorID() : String
@@ -95,13 +100,6 @@
 				
 			}
 			
-			protected function navigatorcontent1_removedFromStageHandler(event:Event):void
-			{
-				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
-				removeEventListener(Event.CHANGE, setStateInUnsave, true );
-				pythonScriptEditor.removeEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true );
-			}
-			
 			private function setStateInUnsave( event : Event = null ) : void
 			{
 				if ( !(event.target is ScriptAreaEvents) )
@@ -125,6 +123,13 @@
 			{
 				addEventListener(Event.CHANGE, setStateInUnsave, true, 0, true );
 				pythonScriptEditor.addEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true, 0, true );
+			}
+			
+			protected function navigatorcontent2_removeHandler(event:FlexEvent):void
+			{
+				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
+				removeEventListener(Event.CHANGE, setStateInUnsave, true );
+				pythonScriptEditor.removeEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true );
 			}
 			
 		]]>
@@ -195,7 +200,8 @@
 		</s:Group>
 		
 		<editors:PythonScriptEditor id="pythonScriptEditor" creationComplete="pythonScriptEditor_creationCompleteHandler(event)"
-									height="100%" width="100%"  scriptAreaComponent="{new ScriptAreaComponent()}"/>
+									height="100%" width="100%"
+									scriptAreaComponent="{new ScriptAreaComponent()}"/>
 	</s:VGroup>
 
 	

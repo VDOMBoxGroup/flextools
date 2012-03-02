@@ -2,6 +2,9 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import flash.events.Event;
 	
+	import mx.events.FlexEvent;
+	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.EditorEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
@@ -10,7 +13,6 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	import net.vdombox.ide.modules.scripts.view.components.WorkArea;
 	
@@ -57,9 +59,8 @@ package net.vdombox.ide.modules.scripts.view
 			
 			interests.push( Notifications.BODY_START );
 			interests.push( Notifications.BODY_STOP );
-			interests.push( Notifications.SELECTED_SERVER_ACTION_CHANGED );
-			interests.push( Notifications.SELECTED_LIBRARY_CHANGED );
-			interests.push( Notifications.SELECTED_GLOBAL_ACTION_CHANGED );
+			interests.push( Notifications.SELECTED_TAB_CHANGED );
+			interests.push( Notifications.DELETE_TAB );
 			
 			return interests;
 		}
@@ -95,27 +96,16 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case Notifications.SELECTED_SERVER_ACTION_CHANGED:
+				case Notifications.SELECTED_TAB_CHANGED:
 				{
-					serverActionVO = body as ServerActionVO;
-					OpenAndFindEditor( serverActionVO );
+					OpenAndFindEditor( body );
 					
 					break;
 				}
 					
-				case Notifications.SELECTED_LIBRARY_CHANGED:
+				case Notifications.DELETE_TAB:
 				{
-					libraryVO = body as LibraryVO
-					OpenAndFindEditor( libraryVO );
-					
-					break;
-				}
-					
-				case Notifications.SELECTED_GLOBAL_ACTION_CHANGED:
-				{
-					globalActionVO = body as GlobalActionVO;
-					OpenAndFindEditor( globalActionVO );
-					
+					workArea.closeEditor( body );
 					
 					break;
 				}
@@ -139,16 +129,20 @@ package net.vdombox.ide.modules.scripts.view
 					if ( facade.retrieveMediator( ScriptEditorMediator.NAME + editor.editorID ) != null )
 						facade.removeMediator( ScriptEditorMediator.NAME + editor.editorID  );
 					
-					facade.registerMediator( new ScriptEditorMediator( editor ) );
-					editor.enabled = true;
-					editor.script = objectVO.script;
+					editor.addEventListener( FlexEvent.CREATION_COMPLETE, setMediator, false, 0 , true );
 				}
 				else
 					workArea.selectedEditor = editor;
-				
-				
-				
 			}
+		}
+		
+		private function setMediator( event : FlexEvent ) : void
+		{
+			var editor : ScriptEditor = event.target as ScriptEditor;
+			facade.registerMediator( new ScriptEditorMediator( editor ) );
+			editor.enabled = true;
+			
+			editor.script = editor.actionVO.script;;
 		}
 		
 		private function addHandlers() : void

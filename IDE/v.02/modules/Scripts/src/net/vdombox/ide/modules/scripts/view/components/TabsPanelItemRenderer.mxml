@@ -3,13 +3,21 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				width="100%" height="20"
-				autoDrawBackground="true" click="itemrenderer2_clickHandler(event)">
+				autoDrawBackground="true" click="itemrenderer2_clickHandler(event)"
+				mouseOver="itemrenderer2_mouseOverHandler(event)"
+				mouseOut="itemrenderer2_mouseOutHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
 			
 			private var _data : Object;
+			private var _actionName : String;
+
+			private function set actionName(value:String):void
+			{
+				_actionName = value;
+			}
 
 			override public function set data( value : Object ) : void
 			{
@@ -23,9 +31,33 @@
 				return _data;
 			}
 			
+			[Bindable]
+			public function get actionName() : String
+			{
+				if ( data is ServerActionVO )
+					return data.name + ' : ' + data.containerName;
+				else
+					return data.name;
+			}
+			
 			protected function itemrenderer2_clickHandler(event:MouseEvent):void
 			{
 				dispatchEvent( new ListItemRendererEvent ( ListItemRendererEvent.ITEM_CHENGED ) );
+			}
+			
+			protected function image1_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new ListItemRendererEvent ( ListItemRendererEvent.DELETE_PRESS ) );
+			}
+			
+			protected function itemrenderer2_mouseOverHandler(event:MouseEvent):void
+			{
+				btnDalete.visible = true;
+			}
+			
+			protected function itemrenderer2_mouseOutHandler(event:MouseEvent):void
+			{
+				btnDalete.visible = false;
 			}
 			
 		]]>
@@ -42,7 +74,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:Label id="itemName" text="{data.saved? data.name : '*' + data.name}" color="#000000" height="100%" verticalAlign="middle" paddingLeft="10"/>
+	<s:Label id="itemName" text="{data.saved? actionName : '*' + actionName}" color="#000000" height="100%" verticalAlign="middle" paddingLeft="10"/>
 	
 	<s:Line top="0" left="0" width="100%">
 		<s:stroke>
@@ -55,5 +87,8 @@
 			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1" />
 		</s:stroke>
 	</s:Line>
+	
+	<mx:Image id="btnDalete" right="10" height="100%" verticalAlign="middle" source="@Embed('assets/Close.png')"
+			  visible="false" click="image1_clickHandler(event)" />
 	
 </s:ItemRenderer>

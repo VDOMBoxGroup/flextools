@@ -38,7 +38,7 @@ package net.vdombox.ide.modules.scripts.view
 			
 			interests.push( Notifications.BODY_START );
 			interests.push( Notifications.BODY_STOP );
-			interests.push( Notifications.SELECTED_TAB_CHANGED );
+			
 			
 			return interests;
 		}
@@ -71,12 +71,6 @@ package net.vdombox.ide.modules.scripts.view
 					
 					isActive = false;
 					
-					break;
-				}
-					
-				case Notifications.SELECTED_TAB_CHANGED:
-				{
-					currentVO = body;
 					break;
 				}
 					
@@ -116,21 +110,21 @@ package net.vdombox.ide.modules.scripts.view
 		private function addHandlers() : void
 		{
 			scriptEditor.addEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler, false, 0, true );
+			scriptEditor.addEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode, false, 0, true );
 		}
 		
-		private function showHandler(event:FlexEvent):void
-		{
-			scriptEditor.removeEventListener(FlexEvent.SHOW, showHandler);
-			compliteSourceCode();
-		}
-		
-		protected function compliteSourceCode( ):void
+		private function compliteSourceCode( event : FlexEvent = null ):void
 		{	
 			var pythonScriptEditor: PythonScriptEditor = scriptEditor.pythonScriptEditor;
+			
+			if ( !pythonScriptEditor )
+				return;
+			
 			pythonScriptEditor.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			//pythonScriptEditor.addEventListener( Event.CHANGE, validateObjectTypeVO );
 			pythonScriptEditor.addedToStageHadler(null);
 			pythonScriptEditor.loadSource( "", "zzz" );
+			pythonScriptEditor.scriptAreaComponent.text = scriptEditor.script;
 		}	
 		
 		private function keyDownHandler(event:KeyboardEvent):void

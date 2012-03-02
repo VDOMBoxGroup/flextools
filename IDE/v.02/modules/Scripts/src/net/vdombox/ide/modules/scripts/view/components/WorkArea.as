@@ -3,49 +3,30 @@ package net.vdombox.ide.modules.scripts.view.components
 	import flash.events.Event;
 	import flash.utils.Dictionary;
 	
-	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
-	import net.vdombox.ide.common.view.components.tabnavigator.TabNavigator;
+	import mx.containers.ViewStack;
+	
 	import net.vdombox.ide.common.events.WorkAreaEvent;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
+	import net.vdombox.ide.common.view.components.tabnavigator.TabNavigator;
 
-	public class WorkArea extends TabNavigator
+	public class WorkArea extends ViewStack
 	{
 		
 		private var _editors : Dictionary;
 		
+		private var _selectedEditor : ScriptEditor;
+		
 		public function WorkArea()
 		{
-			addEventListener( "selectedTabChanged", selectedTabChangedHandler );
-			addEventListener( "tabAdded", numTabChangedHandler );
-			addEventListener( "tabRemoved", numTabChangedHandler );
 		}
 		
-		private function selectedTabChangedHandler( event : Event ) : void
+		private function scriptEditorName( actionVO : Object ) : String
 		{
-			// CHANGE
-			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CHANGE ) );
-		}
-		
-		private function numTabChangedHandler( event : Event ) : void
-		{
-			if( tabBar.dataProvider && tabBar.dataProvider.length == 0 )
-				return;
-			
-			var tab0 : Tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;
-			var tab1 : Tab
-			
-			if( tabBar.dataProvider.length == 1 )
-			{
-				tab0.closable = false;
-			}
-			else if( tabBar.dataProvider.length == 2 )
-			{
-				tab0.closable = true;
-				
-				tab1 = tabBar.dataProvider.getItemAt( 1 ) as Tab;
-				if( tab1 )
-					tab1.closable = true;
-			}
+			if ( actionVO is ServerActionVO )
+				return actionVO.name + actionVO.containerID;
+			else
+				return actionVO.name;
 		}
 		
 		public function openEditor( objectVO : Object, actionVO : Object ) : ScriptEditor
@@ -53,52 +34,56 @@ package net.vdombox.ide.modules.scripts.view.components
 			var editor : ScriptEditor = new ScriptEditor();
 			editor.percentHeight = 100;
 			editor.percentWidth = 100;
+			
+			addChild( editor );
+			selectedEditor = editor;
+			
 			editor.actionVO = actionVO;
 			editor.objectVO = objectVO;
 			
-			var tab : Tab = new Tab();
-			tab.label = actionVO.name;
+			editor.id = scriptEditorName( actionVO );
 			
-			addTab( tab );
 			
-			tab.addElement( editor );
 			
 			if ( !_editors )
 				_editors = new Dictionary( true );
 			
-			_editors[ editor ] = tab;
+			_editors[ editor ] = editor;
 			
-			selectedEditor = editor;
+			
 			
 			return editor;
 		}
 		
-		public function closeEditor( objectVO : Object ) : ScriptEditor
+		public function closeEditor( actionVO : Object ) : ScriptEditor
 		{
 			var result : ScriptEditor;
 			var tab : Tab;
 			
-			result = getEditorByVO( objectVO );
+			result = getEditorByVO( actionVO );
 			
 			if ( result )
+			{
 				delete _editors[ result ];
+				removeChild( result );
+			}
 			
 			return result;
 		}
 		
-		public function getEditorByVO( objectVO : Object ) : ScriptEditor
+		public function getEditorByVO( actionVO : Object ) : ScriptEditor
 		{
 			var result : ScriptEditor;
 			var editor : *;
 			
-			if ( !objectVO )
+			if ( !actionVO )
 				return null;
 			
-			if ( objectVO is ServerActionVO )
+			if ( actionVO is ServerActionVO )
 			{
 				for ( editor in _editors )
 				{ 
-					if ( editor.actionVO is ServerActionVO && editor.actionVO.id == objectVO.id )
+					if ( editor.actionVO is ServerActionVO && editor.actionVO.id == actionVO.id )
 					{
 						result = editor;
 						break;
@@ -109,7 +94,7 @@ package net.vdombox.ide.modules.scripts.view.components
 			{
 				for ( editor in _editors )
 				{ 
-					if ( !(editor.actionVO is ServerActionVO) && editor.actionVO.name == objectVO.name )
+					if ( !(editor.actionVO is ServerActionVO) && editor.actionVO.name == actionVO.name )
 					{
 						result = editor;
 						break;
@@ -122,7 +107,7 @@ package net.vdombox.ide.modules.scripts.view.components
 		
 		public function closeAllEditors() : void
 		{
-			//			затычка нада разобраться в чем дело
+			/*//			затычка нада разобраться в чем дело
 			if (tabBar.dataProvider == null )
 				return 
 			
@@ -131,24 +116,12 @@ package net.vdombox.ide.modules.scripts.view.components
 			{
 				tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;
 				removeTab( tab );
-			}			
+			}		*/	
 		}
 		
 		public function get selectedEditor() : ScriptEditor
 		{
-			var result : ScriptEditor;
-			var editor : *;
-			
-			for ( editor in _editors )
-			{
-				if ( _editors[ editor ] == selectedTab )
-				{
-					result = editor as ScriptEditor;
-					break;
-				}
-			}
-			
-			return result;
+			return _selectedEditor;
 		}
 		
 		public function set selectedEditor( value : ScriptEditor ) : void
@@ -156,12 +129,9 @@ package net.vdombox.ide.modules.scripts.view.components
 			if ( !value )
 				return;
 			
-			var tab : Tab;
+			_selectedEditor = value;
+			selectedChild = value;
 			
-			tab = _editors[ value ];
-			
-			if ( tab )
-				selectedTab = tab;
 		}
 	}
 }

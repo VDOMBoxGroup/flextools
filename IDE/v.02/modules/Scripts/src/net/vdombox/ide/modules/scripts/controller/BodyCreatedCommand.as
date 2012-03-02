@@ -21,7 +21,7 @@ package net.vdombox.ide.modules.scripts.controller
 
 			//facade.registerMediator( new ScriptEditorMediator( body.sriptEditor ) );
 			
-			facade.registerMediator( new ScriptEditorMediator( body.scriptEditor ) );
+			facade.registerMediator( new WorkAreaMediator( body.workArea ) );
 			
 			facade.registerMediator( new TabsPanelMediator( body.tabsPanel ) );
 			facade.registerMediator( new GlobalScriptsPanelMediator( body.globalScriptsPanel ) );

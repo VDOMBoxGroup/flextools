@@ -292,6 +292,7 @@ package net.vdombox.ide.modules.scripts.view
 			 {
 				selectedObject = new ObjectVO( statesProxy.selectedPage, typeVO );
 				selectedObject.setID( newObject.@id );
+				selectedObject.name = newObject.@name;
 				sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 			 }
 			 else if ( newPage.@id != currentPageID )
@@ -301,6 +302,7 @@ package net.vdombox.ide.modules.scripts.view
 				 {
 					 selectedObject = new ObjectVO( statesProxy.selectedPage, typeVO );
 					 selectedObject.setID( newObject.@id );
+					 selectedObject.name = newObject.@name;
 					 sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 				 }
 				
