@@ -5,7 +5,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 height="300" width="400" xmlns:editors="net.vdombox.editors.*"
 		 xmlns:components1="net.vdombox.components.*"
-		 removedFromStage="navigatorcontent1_removedFromStageHandler(event)" xmlns:components2="net.vdombox.ide.common.components.*" xmlns:components3="net.vdombox.ide.common.view.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+		 removedFromStage="navigatorcontent1_removedFromStageHandler(event)" xmlns:components2="net.vdombox.ide.common.components.*" xmlns:components3="net.vdombox.ide.common.view.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*" xmlns:mx1="library://ns.adobe.com/flex/mx">
 
 	<fx:Script>
 		<![CDATA[
@@ -18,8 +18,12 @@
 			import net.vdombox.ide.modules.scripts.events.EditAreaEvent;
 			import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 			
+			import ro.victordramba.scriptarea.ScriptAreaEvents;
+			
 			private var _script : String;
 			private var _objectVO : Object;
+			
+			[Bindable]
 			private var _actionVO : Object;
 
 			private var _syntax : String = "vscript";
@@ -69,12 +73,24 @@
 			
 			public function set actionVO( value : Object ) : void
 			{
+				if ( _actionVO )
+					_actionVO.script = script;
+				
 				_actionVO = value;
+				script = value.script;
+				if ( value.saved )
+					currentState = "disabled";
+				else
+					currentState = "unsaved";
 			}
 			
-			private function scriptEditor_saveHandler( event : MouseEvent ) : void
+			private function scriptEditor_saveHandler( event : MouseEvent  = null ) : void
 			{
 				dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SAVE ) );
+				
+				if (_actionVO)
+					_actionVO.saved = true;
+				
 				currentState = "disabled";
 				
 			}
@@ -86,17 +102,22 @@
 				pythonScriptEditor.removeEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true );
 			}
 			
-			private function setStateInUnsave( event : Event ) : void
+			private function setStateInUnsave( event : Event = null ) : void
 			{
+				if ( !(event.target is ScriptAreaEvents) )
+					return;
+				
 				currentState = "unsaved";
+				
+				if (_actionVO)
+					_actionVO.saved = false;
 			}
 			
 			private function onCtrlSDown( e : KeyboardEvent ) : void
 			{
 				if ( e.ctrlKey && e.keyCode == Keyboard.S )
 				{
-					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SAVE ) );
-					currentState = "disabled";
+					scriptEditor_saveHandler();
 				}
 			}
 			
@@ -128,7 +149,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:VGroup width="100%" height="100%" gap="0">
+	<s:VGroup width="100%" height="100%" gap="0" visible="{_actionVO ? true : false}">
 		<s:Group width="100%" height="24">
 			<s:Rect width="100%" height="100%">
 				<s:fill>

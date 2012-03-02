@@ -8,10 +8,13 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayList;
+			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.common.view.components.button.AlertButton;
+			import net.vdombox.ide.common.view.components.windows.Alert;
 			import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
 			import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
 			
@@ -103,21 +106,20 @@
 
 			protected function creationCompleteHandler() : void
 			{
-				BindingUtils.bindSetter( indexChanged, actionList, "selectedIndex", true );
-				actionList.addEventListener( ListItemRendererEvent.DOUBLE_CLICK, actionList_changeHandler, true, 0, true );
+				actionList.addEventListener( ListItemRendererEvent.ITEM_CHENGED, actionList_changeHandler, true, 0, true );
+				actionList.addEventListener( KeyboardEvent.KEY_DOWN, itemrenderer1_keyDownHandler, false, 0, true );
 			}
-
-			protected function deleteButton_clickHandler() : void
+			
+			private function itemrenderer1_keyDownHandler(event:KeyboardEvent):void
 			{
-				dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION ) )
+				if ( event.keyCode == Keyboard.DELETE )
+					Alert.Show( "You are wont to delete?", AlertButton.OK_No, this.parentApplication, removeactionRequest );
 			}
-
-			private function indexChanged( value : int ) : void
+			
+			private function removeactionRequest( event : CloseEvent ) : void 
 			{
-				if ( value == -1 && deleteButton.enabled )
-					deleteButton.enabled = false;
-				else if ( !deleteButton.enabled && value != -1 )
-					deleteButton.enabled = true;
+				if ( event.detail == Alert.YES )
+					dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION ) );	
 			}
 			
 		]]>
@@ -128,22 +130,13 @@
 			<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
+	
+	<mx:Image id="createServerAction" source="{VDOMImage.Plus}" height="20" width="20" right="10" top="-23" 
+			  smoothBitmapContent="true" click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.CREATE_ACTION ) )"/>
 
 	<s:List id="actionList"
 			dataProvider="{ _scripts }" height="100%" labelField="name" width="100%"
 			contentBackgroundAlpha="0" borderVisible="false"
 			itemRenderer="net.vdombox.ide.modules.scripts.view.components.ListItemRenderer"
 			doubleClickEnabled="true"/>
-
-	<s:controlBarContent>
-
-		<mx:Spacer width="100%"/>
-
-		<s:Button label="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_add' ) }"
-				  click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.CREATE_ACTION ) )"/>
-
-		<s:Button id="deleteButton"
-				  label="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_delete' ) }"
-				  click="deleteButton_clickHandler()"/>
-	</s:controlBarContent>
 </s:Panel>

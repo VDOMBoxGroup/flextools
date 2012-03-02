@@ -8,6 +8,8 @@ package net.vdombox.ide.modules.scripts.controller
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.view.ServerScriptsPanelMediator;
 	import net.vdombox.utils.MD5Utils;
@@ -24,7 +26,7 @@ package net.vdombox.ide.modules.scripts.controller
 
 			var body : Object = notification.getBody();
 			
-			var actionVO : Object = body.currentVO;
+			var actionVO : Object = body;
 			var scriptName : String = actionVO.name;
 
 			if ( !selectedApplicationVO || !scriptName )
@@ -32,17 +34,18 @@ package net.vdombox.ide.modules.scripts.controller
 
 			if ( actionVO is ServerActionVO )
 			{
+				var object : Object = actionVO.containerVO;
 
-				if ( body.hasOwnProperty( "objectVO" ) )
+				if ( object is ObjectVO )
 				{
 					sendNotification( Notifications.SET_SERVER_ACTION,
-						{ objectVO: body.objectVO, serverActionVO: actionVO } );
+						{ objectVO: object, serverActionVO: actionVO } );
 				}
 
-				else if ( body.hasOwnProperty( "pageVO" )  )
+				else if ( object is PageVO  )
 				{
 					sendNotification( Notifications.SET_SERVER_ACTION,
-						{ pageVO: body.pageVO, serverActionVO: actionVO } );
+						{ pageVO: object, serverActionVO: actionVO } );
 				}
 
 			}

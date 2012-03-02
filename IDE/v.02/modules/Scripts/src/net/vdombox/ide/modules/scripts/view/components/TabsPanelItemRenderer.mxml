@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				width="100%" height="20"
+				autoDrawBackground="true" click="itemrenderer2_clickHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.common.model._vo.ServerActionVO;
+			import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
+			
+			private var _data : Object;
+
+			override public function set data( value : Object ) : void
+			{
+				super.data = value;
+				_data = value;
+			}
+			
+			[Bindable]
+			override public function get data() : Object
+			{
+				return _data;
+			}
+			
+			protected function itemrenderer2_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new ListItemRendererEvent ( ListItemRendererEvent.ITEM_CHENGED ) );
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" /> 
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor color.normal="#F8F9F9" color.selected="#DADADA" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:Label id="itemName" text="{data.saved? data.name : '*' + data.name}" color="#000000" height="100%" verticalAlign="middle" paddingLeft="10"/>
+	
+	<s:Line top="0" left="0" width="100%">
+		<s:stroke>
+			<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1" />
+		</s:stroke>
+	</s:Line>
+	
+	<s:Line bottom="0" left="0" width="100%" >
+		<s:stroke>
+			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1" />
+		</s:stroke>
+	</s:Line>
+	
+</s:ItemRenderer>

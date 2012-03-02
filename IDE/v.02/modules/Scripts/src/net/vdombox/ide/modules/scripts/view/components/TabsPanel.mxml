@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
+		 creationComplete="panel1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+			import net.vdombox.ide.common.model._vo.ServerActionVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
+			import net.vdombox.ide.modules.scripts.events.TabsPanelEvent;
+			
+			[Bindable]
+			private var _tabs : ArrayList;
+			
+			private function findServerAction( action : ServerActionVO ) : ServerActionVO
+			{
+				for each( var serverActionVO : Object in _tabs.source )
+				{
+					if ( serverActionVO is ServerActionVO && serverActionVO.name == action.name 
+						&& serverActionVO.containerID == action.containerID )
+					{
+						return  serverActionVO as ServerActionVO;
+					}
+				}
+				
+				return null;
+			}
+			
+			private function findGlobalActionOrLibrary( action : Object ) : Object
+			{
+				for each( var object : Object in _tabs.source )
+				{
+					if ( !(object is ServerActionVO) && object.name == action.name )
+					{
+						return  object;
+					}
+				}
+				
+				return null;
+			}
+			
+			public function addAction( action : Object ) : void
+			{
+				if ( !_tabs )
+					_tabs = new ArrayList();
+				
+				var tabsItem : Object;
+				
+				if ( action is ServerActionVO )
+					tabsItem = findServerAction( action as ServerActionVO );
+				else
+					tabsItem = findGlobalActionOrLibrary( action );
+					
+				if ( tabsItem )
+				{
+						tabs.selectedItem = tabsItem;
+						tabs_changeHandler();
+						return;
+				}
+				
+				
+				
+				_tabs.addItem( action );
+				tabs.selectedIndex = tabs.dataProvider.length - 1;
+				tabs_changeHandler();
+			}
+			
+			protected function panel1_creationCompleteHandler(event:FlexEvent):void
+			{
+				tabs.addEventListener( ListItemRendererEvent.ITEM_CHENGED,tabs_changeHandler, true, 0, true );
+			}
+			
+			private function tabs_changeHandler( event : ListItemRendererEvent = null ) : void
+			{
+				dispatchEvent( new TabsPanelEvent( TabsPanelEvent.SELECTED_TAB_CHANGED ) );
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:List id="tabs" dataProvider="{_tabs}"
+			width="100%" height="100%"
+			itemRenderer="net.vdombox.ide.modules.scripts.view.components.TabsPanelItemRenderer"
+			contentBackgroundAlpha="0" borderVisible="false"
+			doubleClickEnabled="true"/>
+</s:Panel>

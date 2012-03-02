@@ -9,9 +9,32 @@
 			import net.vdombox.ide.modules.scripts.view.skins.PanelSkin;
 		]]>
 	</fx:Script>
+	
+	<mx1:VDividedBox height="100%" width="228" minWidth="200" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
+		
+		<components:TabsPanel id="tabsPanel" 
+							  width="100%" height="50%"
+							  skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
+							  title="{ resourceManager.getString( 'Scripts_General', 'tabs_panel_title' ) }"/>
+		
+		<components:LibrariesPanel id="librariesPanel"
+								   width="100%" height="50%"
+								   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
+								   title="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_title' ) }"/>
+		
+	</mx1:VDividedBox>
+	
+	<s:Rect width="8" height="100%">
+		<s:fill>
+			<s:SolidColor color="#424242"/>
+		</s:fill>
+	</s:Rect>
 
-	<components:WorkArea id="workArea"
+	<components:ScriptEditor id="scriptEditor"
 							 height="100%" width="100%"/>
+	
+<!--	<components:WorkArea id="workArea"
+							 height="100%" width="100%"/>-->
 	
 	<s:Rect width="8" height="100%">
 		<s:fill>
@@ -22,22 +45,17 @@
 	<mx1:VDividedBox height="100%" width="228" minWidth="200" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
 
 		<components:ContainersPanel id="containersPanel"
-									width="100%" height="25%" 
+									width="100%" height="40%" 
 									skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
 									title="{ resourceManager.getString( 'Scripts_General', 'containers_panel_title' ) }"/>
 
 		<components:ServerScriptsPanel id="serverScriptsPanel"
-									   width="100%" height="25%"
+									   width="100%" height="40%"
 									   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
 									   title="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_title' ) }"/>
 
-		<components:LibrariesPanel id="librariesPanel"
-								   width="100%" height="25%"
-								   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
-								   title="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_title' ) }"/>
-		
 		<components:GlobalScriptsPanel id="globalScriptsPanel"
-								   width="100%" height="25%"
+								   width="100%" height="20%"
 								   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
 								   title="{ resourceManager.getString( 'Scripts_General', 'global_scripts_panel_title' ) }"/>
 		

@@ -14,7 +14,6 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.scripts.controller.DeleteLibraryRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.GetResourceRequestCommand;
-	import net.vdombox.ide.modules.scripts.controller.GetServerActionsRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.SaveScriptRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.scripts.controller.StartupCommand;
@@ -74,7 +73,6 @@ package net.vdombox.ide.modules.scripts
 			
 			registerCommand( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
 			registerCommand( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
-			registerCommand( Notifications.GET_SERVER_ACTIONS_REQUEST, GetServerActionsRequestCommand );
 			
 			registerCommand( Notifications.CREATE_SCRIPT_REQUEST, CreateScriptRequestCommand );
 			

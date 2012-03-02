@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.scripts.controller
 	import net.vdombox.ide.modules.scripts.view.LibrariesPanelMediator;
 	import net.vdombox.ide.modules.scripts.view.ScriptEditorMediator;
 	import net.vdombox.ide.modules.scripts.view.ServerScriptsPanelMediator;
+	import net.vdombox.ide.modules.scripts.view.TabsPanelMediator;
 	import net.vdombox.ide.modules.scripts.view.WorkAreaMediator;
 	import net.vdombox.ide.modules.scripts.view.components.Body;
 	
@@ -20,8 +21,9 @@ package net.vdombox.ide.modules.scripts.controller
 
 			//facade.registerMediator( new ScriptEditorMediator( body.sriptEditor ) );
 			
-			facade.registerMediator( new WorkAreaMediator( body.workArea ) );
+			facade.registerMediator( new ScriptEditorMediator( body.scriptEditor ) );
 			
+			facade.registerMediator( new TabsPanelMediator( body.tabsPanel ) );
 			facade.registerMediator( new GlobalScriptsPanelMediator( body.globalScriptsPanel ) );
 			facade.registerMediator( new ContainersPanelMediator( body.containersPanel ) );
 			facade.registerMediator( new ServerScriptsPanelMediator( body.serverScriptsPanel ) );

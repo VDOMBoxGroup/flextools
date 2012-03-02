@@ -113,14 +113,14 @@ package net.vdombox.ide.modules.scripts.view
 
 				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
-					sendNotification( Notifications.GET_SERVER_ACTIONS_REQUEST );
+					sendNotification( Notifications.GET_SERVER_ACTIONS, statesProxy.selectedPage );
 					
 					break;
 				}
 					
 				case Notifications.PAGES_GETTED:
 				{
-					sendNotification( Notifications.GET_SERVER_ACTIONS_REQUEST );
+					sendNotification( Notifications.GET_SERVER_ACTIONS, statesProxy.selectedPage );
 					
 					break;
 				}
@@ -129,7 +129,7 @@ package net.vdombox.ide.modules.scripts.view
 
 				case StatesProxy.SELECTED_OBJECT_CHANGED:
 				{
-					sendNotification( Notifications.GET_SERVER_ACTIONS_REQUEST );
+					sendNotification( Notifications.GET_SERVER_ACTIONS, statesProxy.selectedObject );
 
 					break;
 				}

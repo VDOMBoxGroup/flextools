@@ -69,6 +69,9 @@ package net.vdombox.ide.modules.scripts.view
 					
 				case Notifications.BODY_STOP:
 				{
+					globalScriptsPanel.actions = null;
+					_globalActions = new Object();
+					
 					isActive = false;
 					
 					break;
@@ -146,7 +149,8 @@ package net.vdombox.ide.modules.scripts.view
 		private function selectedGlobalScriptChangedHandler( event : GlobalScriptsPanelEvent ) : void
 		{
 			var _globalScript : GlobalActionVO = _globalActions[ globalScriptsPanel.selectedScript.@id ];
-			sendNotification( Notifications.SELECTED_GLOBAL_ACTION_CHANGED, _globalScript );
+			if ( _globalScript )
+				sendNotification( Notifications.SELECTED_GLOBAL_ACTION_CHANGED, _globalScript );
 		}
 	}
 }

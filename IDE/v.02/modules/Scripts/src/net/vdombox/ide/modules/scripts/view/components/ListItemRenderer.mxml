@@ -3,7 +3,8 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true" minHeight="22" width="100%"
-				doubleClickEnabled="true" doubleClick="itemrenderer1_doubleClickHandler(event)" >
+				doubleClickEnabled="true" doubleClick="itemrenderer1_doubleClickHandler(event)" 
+				keyDown="itemrenderer1_keyDownHandler(event)">
 	
 	<fx:Script>
 		<![CDATA[
@@ -26,7 +27,7 @@
 			protected function itemrenderer1_doubleClickHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
-				dispatchEvent( new ListItemRendererEvent ( ListItemRendererEvent.DOUBLE_CLICK ) );
+				dispatchEvent( new ListItemRendererEvent ( ListItemRendererEvent.ITEM_CHENGED ) );
 			}
 			
 			override public function set selected( value : Boolean ) : void
@@ -35,6 +36,13 @@
 				
 				currentState = value ? "selected" : "normal"
 			}
+			
+			protected function itemrenderer1_keyDownHandler(event:KeyboardEvent):void
+			{
+				if ( event.keyCode == Keyboard.DELETE )
+					dispatchEvent( new ListItemRendererEvent ( ListItemRendererEvent.DELETE_PRESS ) );
+			}
+			
 		]]>
 	</fx:Script>
 	

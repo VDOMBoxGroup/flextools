@@ -4,7 +4,8 @@ package net.vdombox.ide.modules.scripts.events
 
 	public class ListItemRendererEvent extends Event
 	{
-		public static var DOUBLE_CLICK : String = "doubleClickItem";
+		public static var ITEM_CHENGED : String = "itemChanged";
+		public static var DELETE_PRESS : String = "deletePress";
 		
 		public function ListItemRendererEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

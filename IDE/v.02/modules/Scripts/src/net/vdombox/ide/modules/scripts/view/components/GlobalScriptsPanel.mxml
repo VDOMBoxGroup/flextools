@@ -12,6 +12,7 @@
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.scripts.events.GlobalScriptsPanelEvent;
+			
 			[Bindable]
 			private var _actions : XMLList;
 			

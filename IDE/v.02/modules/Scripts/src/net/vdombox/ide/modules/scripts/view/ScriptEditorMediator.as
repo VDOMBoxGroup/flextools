@@ -12,7 +12,6 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	
@@ -31,9 +30,58 @@ package net.vdombox.ide.modules.scripts.view
 			compliteSourceCode();
 		}
 		
-		private var serverActionVO : ServerActionVO;
-		private var libraryVO : LibraryVO;
-		private var globalActionVO : GlobalActionVO;
+		private var isActive : Boolean;
+		
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( Notifications.BODY_START );
+			interests.push( Notifications.BODY_STOP );
+			interests.push( Notifications.SELECTED_TAB_CHANGED );
+			
+			return interests;
+		}
+		
+		override public function handleNotification( notification : INotification ) : void
+		{
+			var name : String = notification.getName();
+			var body : Object = notification.getBody();
+			
+			//var objectVO : ObjectVO;
+			var editor : ScriptEditor;
+			
+			if ( !isActive && name != Notifications.BODY_START )
+				return;
+			
+			
+			
+			switch ( name )
+			{
+				case Notifications.BODY_START:
+				{
+					isActive = true;
+					
+					break;
+				}
+					
+				case Notifications.BODY_STOP:
+				{
+					clearData();
+					
+					isActive = false;
+					
+					break;
+				}
+					
+				case Notifications.SELECTED_TAB_CHANGED:
+				{
+					currentVO = body;
+					break;
+				}
+					
+			}
+		}
 
 		
 		
@@ -45,6 +93,11 @@ package net.vdombox.ide.modules.scripts.view
 		private function get currentVO() : Object
 		{
 			return scriptEditor.actionVO;
+		}
+		
+		private function set currentVO( value : Object ) : void
+		{
+			scriptEditor.actionVO = value;
 		}
 
 		override public function onRegister() : void
@@ -93,9 +146,7 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function clearData() : void
 		{
-			serverActionVO = null;
-			libraryVO = null;
-			globalActionVO = null;
+			
 		}
 		
 		private function scriptEditor_saveHandler( event : ScriptEditorEvent ) : void
@@ -103,10 +154,7 @@ package net.vdombox.ide.modules.scripts.view
 			if( currentVO is ServerActionVO || currentVO is LibraryVO || currentVO is GlobalActionVO )
 				currentVO.script = scriptEditor.script;
 			
-			if ( scriptEditor.objectVO is PageVO )
-				sendNotification( Notifications.SAVE_SCRIPT_REQUEST, { pageVO : scriptEditor.objectVO, currentVO :  currentVO } );
-			else if ( scriptEditor.objectVO is ObjectVO )
-				sendNotification( Notifications.SAVE_SCRIPT_REQUEST, { objectVO : scriptEditor.objectVO, currentVO :  currentVO } );
+			sendNotification( Notifications.SAVE_SCRIPT_REQUEST, currentVO );
 		}
 	}
 }

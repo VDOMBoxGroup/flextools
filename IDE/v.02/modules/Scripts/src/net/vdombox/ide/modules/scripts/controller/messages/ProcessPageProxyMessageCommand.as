@@ -1,9 +1,10 @@
 package net.vdombox.ide.modules.scripts.controller.messages
 {
+	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
-	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -40,7 +41,9 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					
 				case PPMPageTargetNames.SERVER_ACTION:
 				{
-					sendNotification( Notifications.GET_SERVER_ACTIONS_REQUEST );
+					var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+					
+					sendNotification( Notifications.GET_SERVER_ACTIONS, statesProxy.selectedPage );
 					
 					break;
 				}	
