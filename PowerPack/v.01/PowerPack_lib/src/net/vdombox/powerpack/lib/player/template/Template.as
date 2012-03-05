@@ -599,5 +599,13 @@ package net.vdombox.powerpack.lib.player.template
 			}
 		}
 		
+		public function set allProjectsInitGraphName(graphName : String) : void
+		{
+			for each (var project : TemplateProject in projects)
+			{
+				project.initialGraphName = graphName;
+			}
+		}
+		
 	}
 }
