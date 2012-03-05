@@ -1,29 +1,121 @@
-<template ID="6F2A509F-8426-D35C-102E-768E4888FD1B">
+<template ID="786D6180-37AE-3A86-3730-C4E5FAF2905C">
   <name>adelfos</name>
   <id>adelfos</id>
   <description>description</description>
+  <outputFolder>C:\temp</outputFolder>
+  <outputFileName>appInstaller123</outputFileName>
   <structure>
     <categories>
       <category name="application"/>
       <category name="objects"/>
       <category name="structure"/>
       <category name="resources"/>
+      <category name="main"/>
     </categories>
-    <graph name="GraphCanvas1835" initial="true" category="application">
+    <graph name="GraphCanvas1835" initial="false" category="application">
       <states>
-        <state name="Node1899" type="Initial" category="Normal" enabled="true" breakpoint="false" x="167" y="55">
+        <state name="Node1899" type="Normal" category="Normal" enabled="true" breakpoint="false" x="167" y="55">
           <text>State</text>
         </state>
         <state name="Node1947" type="Normal" category="Normal" enabled="true" breakpoint="false" x="241" y="190">
           <text>State</text>
         </state>
-        <state name="Node1919" type="Normal" category="Command" enabled="true" breakpoint="false" x="277" y="118">
-          <text>$a = [dialog "Privet" 'asd' 'asddsasd']</text>
+        <state name="Node1365" type="Initial" category="Command" enabled="true" breakpoint="false" x="467" y="89">
+          <text>[loadDataFrom "d:/FlexProjects/Power2Pack/WebInstaller/bin-debug/template.xml"]</text>
+        </state>
+        <state name="Node1919" type="Normal" category="Command" enabled="true" breakpoint="false" x="277" y="117">
+          <text>$a = [dialog "Privet"  '#()']</text>
+        </state>
+        <state name="Node1741" type="Normal" category="Normal" enabled="true" breakpoint="false" x="132" y="282">
+          <text>State</text>
+        </state>
+        <state name="Node1609" type="Normal" category="Normal" enabled="true" breakpoint="false" x="459" y="316">
+          <text>State</text>
         </state>
       </states>
       <transitions>
-        <transition name="Connector1967" highlighted="false" enabled="true" source="Node1919" destination="Node1947"/>
-        <transition name="Connector1946" highlighted="false" enabled="true" source="Node1899" destination="Node1919"/>
+        <transition name="Connector1590" highlighted="true" enabled="true" source="Node1365" destination="Node1899">
+          <label><![CDATA[false]]></label>
+        </transition>
+        <transition name="Connector1589" highlighted="true" enabled="true" source="Node1365" destination="Node1947">
+          <label><![CDATA[true]]></label>
+        </transition>
+        <transition name="Connector1588" highlighted="false" enabled="true" source="Node1919" destination="Node1947"/>
+        <transition name="Connector1587" highlighted="false" enabled="true" source="Node1899" destination="Node1919"/>
+      </transitions>
+    </graph>
+    <graph name="start" initial="false" category="main">
+      <states>
+        <state name="Node1457" type="Initial" category="Command" enabled="true" breakpoint="false" x="277" y="117">
+          <text>$a = [dialog "Privet" "Privet" "Privet" "Privet" "Privet" "Privet" "Privet" "Privet" "Privet" ]</text>
+        </state>
+      </states>
+      <transitions/>
+    </graph>
+    <graph name="432" initial="true" category="application">
+      <states>
+        <state name="Node1456" type="Normal" category="Normal" enabled="true" breakpoint="false" x="294" y="487">
+          <text>State</text>
+        </state>
+        <state name="Node1459" type="Normal" category="Normal" enabled="true" breakpoint="false" x="193" y="304">
+          <text>State</text>
+        </state>
+        <state name="Node1802" type="Initial" category="Normal" enabled="true" breakpoint="false" x="310" y="34">
+          <text>State</text>
+        </state>
+        <state name="Node1756" type="Normal" category="Command" enabled="true" breakpoint="false" x="447" y="92">
+          <text>$loginRes = [wholeMethod "login" "192.168.0.201" "root" "root"]</text>
+        </state>
+        <state name="Node1780" type="Normal" category="Normal" enabled="true" breakpoint="false" x="139" y="168">
+          <text>State</text>
+        </state>
+        <state name="Node1432" type="Normal" category="Normal" enabled="true" breakpoint="false" x="208" y="243">
+          <text>State</text>
+        </state>
+        <state name="Node1683" type="Normal" category="Command" enabled="true" breakpoint="false" x="345" y="170">
+          <text>$apps = [wholeMethod 'list_applications']</text>
+        </state>
+        <state name="Node1812" type="Normal" category="Command" enabled="true" breakpoint="false" x="423" y="232">
+          <text>$appGUID= [dialog "Select app" ['radioButtons' 'radioButtonsLabel' $apps ] ]</text>
+        </state>
+        <state name="Node2032" type="Normal" category="Command" enabled="true" breakpoint="true" x="418" y="285">
+          <text>$app = [wholeMethod "export_application" $appGUID]</text>
+        </state>
+        <state name="Node1622" type="Normal" category="Command" enabled="true" breakpoint="false" x="498" y="447">
+          <text>[dialog "Hi a you agree?" ['checkBox' 'hi3' 'ggg1' 'ggg2' 'ttt'  ]]</text>
+        </state>
+        <state name="Node1523" type="Normal" category="Command" enabled="true" breakpoint="false" x="497" y="402">
+          <text>[dialog "Hi a you agree?" ['checkBox' 'hi2' [['ggg1' 'true'] ['ggg2' 'true'] ['ttt' 'false']] ]]</text>
+        </state>
+        <state name="Node2003" type="Normal" category="Command" enabled="true" breakpoint="false" x="440" y="325">
+          <text>$res=[wholeMethod "install_application" "myapp.com" $app]</text>
+        </state>
+        <state name="Node1502" type="Normal" category="Command" enabled="true" breakpoint="false" x="71" y="427">
+          <text>[dialog "Hi a you agree?" ['radioButtons' 'hi1' 'ggg1,ggg2,ttt,dfgsdfgdg' ]]</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector2111" highlighted="false" enabled="true" source="Node2032" destination="Node2003">
+          <label><![CDATA[Success]]></label>
+        </transition>
+        <transition name="Connector2097" highlighted="false" enabled="true" source="Node1812" destination="Node2032"/>
+        <transition name="Connector1931" highlighted="false" enabled="true" source="Node1432" destination="Node1780"/>
+        <transition name="Connector1894" highlighted="false" enabled="true" source="Node1683" destination="Node1432">
+          <label><![CDATA[Error]]></label>
+        </transition>
+        <transition name="Connector1853" highlighted="false" enabled="true" source="Node1683" destination="Node1812">
+          <label><![CDATA[Success]]></label>
+        </transition>
+        <transition name="Connector1779" highlighted="false" enabled="true" source="Node1780" destination="Node1802"/>
+        <transition name="Connector1750" highlighted="false" enabled="true" source="Node1756" destination="Node1780">
+          <label><![CDATA[Error]]></label>
+        </transition>
+        <transition name="Connector1707" highlighted="false" enabled="true" source="Node1756" destination="Node1683">
+          <label><![CDATA[Success]]></label>
+        </transition>
+        <transition name="Connector1674" highlighted="false" enabled="true" source="Node1802" destination="Node1756"/>
+        <transition name="Connector1422" highlighted="false" enabled="true" source="Node1502" destination="Node1523"/>
+        <transition name="Connector1421" highlighted="false" enabled="true" source="Node1523" destination="Node1622"/>
       </transitions>
     </graph>
     <resources/>

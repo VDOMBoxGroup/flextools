@@ -2,27 +2,183 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="1f9b1d50-d437-45c7-b82a-09adcc8be828" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/untitled" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/html-template" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/Player.mxml" afterPath="$PROJECT_DIR$/src/net/vdombox/powerpack/Player.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/gen/TemplateStruct.as" afterPath="$PROJECT_DIR$/src/net/vdombox/powerpack/gen/TemplateStruct.as" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/assets/icons" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/assets/images" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/assets/lang" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/connection/protect" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/connection/style" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/connection/utils" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/connection" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/control" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/customize/core/windowClasses" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/customize/core" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/customize/skins" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/customize" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/dialog" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/events" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/gen/errorClasses" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/gen/include" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/gen/parse/listClasses" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/gen/parse/parseClasses" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/gen/parse" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/gen/structs" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/gen" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/graph" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/importation" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/managers" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/menu" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/panel/popup/Answers" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/panel/popup" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/utils" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/vdom/connection" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/vdom" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$" afterPath="$PROJECT_DIR$" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
     </list>
     <list id="2068b745-721b-4548-a54d-d8ad31a23474" name="New changelist" comment="">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebInstaller.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/untitled/src/AC_OETags.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/untitled/src/Untitled.mxml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/untitled/src/untitled.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/untitled/untitled.iml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/html-template/AC_OETags.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/html-template/index.template.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/html-template/playerProductInstall.swf" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\lang\english.xml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\lang\russian.xml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\style\generator.css" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\template.xml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\BasicError.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\Player.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\Template.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\connection\SOAP.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\connection\SOAPBaseLevel.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\connection\SOAPEvent.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\connection\protect\Code.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\connection\protect\MD5.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\connection\protect\VDOM_session_protector.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\connection\utils\Extract.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\connection\utils\FileUpload.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\connection\utils\UtilsEvent.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\control\BrowseButton.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\control\DialogComboBox.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\control\DialogDropDownListBase.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\control\RoundButton.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\GeneratorResources.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\BrowseAnswerTextBackgroundSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\BrowseButtonSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\CloseButtonSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\DropdownArrowButtonSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\DropdownSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\GeneratorApplicationTitleBarBackgroundSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\GeneratorProgressBarSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\InputAnswerTextBackgroundSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\KeyTextBackgroundSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\MaximizeButtonSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\MinimizeButtonSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\PopupBackgroundSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\RadioBtnSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\customize\skins\RoundButtonSkin.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\dialog\EditCaption.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\dialog\GenConnection.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\dialog\GenModalDialog.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\dialog\GenProperties.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\dialog\ImportFromTpl.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\dialog\TemplateKey.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\dialog\TemplateProperties.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\dialog\ToolWindow.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\dialog\ValidateDialog.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\events\TemplateLibEvent.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\Dynamic.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\GraphContext.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\NodeContext.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\TemplateLib.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\TemplateStruct.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\TemplateValidateOptions.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\errorClasses\CompilerError.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\errorClasses\CompilerWarning.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\errorClasses\RunTimeError.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\errorClasses\ValidationError.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\errorClasses\ValidationWarning.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\include\ApplicationFunctions.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\include\GeneralFunctions.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\include\GraphicFunctions.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\include\ImageProcessingFunctions.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\include\ListManipulationFunctions.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\include\XMLFunctions.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\parse\CodeParser.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\parse\ListParser.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\parse\Parser.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\parse\listClasses\ElmType.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\parse\parseClasses\CodeFragment.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\parse\parseClasses\LexemStruct.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\parse\parseClasses\ParsedBlock.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\structs\ArrowStruct.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\structs\GraphStruct.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\gen\structs\NodeStruct.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\graph\NodeCategory.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\graph\NodeType.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\managers\ContextManager.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\managers\LanguageManager.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\managers\ProgressManager.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\AlertPopup.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\Answers\Answer.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\Answers\AnswerCreator.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\Answers\BrowseFileAnswer.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\Answers\ComboBoxAnswer.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\Answers\PasswordAnswer.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\Answers\RadioButtonsAnswer.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\Answers\TextAnswer.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\Answers\TextAreaAnswer.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\PopupBottomPart.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\PopupBox.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\Question.mxml" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\panel\popup\QuestionParamsConvertor.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\net\vdombox\powerpack\utils\CryptUtils.as" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\fonts\Square721ExBT.ttf" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\Installer128.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\Installer16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\Installer32.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\Installer48.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\add_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\bug_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\copy_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\delete_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\edit_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\error_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\expand_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\help_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\helptip_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\icon_128.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\icon_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\icon_32.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\icon_48.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\info_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\variable_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\icons\warning_16.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\Background.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\Background_.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\File-off.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\Install-off.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\Install-on.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\Question-off.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\Question-on.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\Tree.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\Web-site-on.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\dropdownArrow.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\file-on.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\key.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\logo.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\powerpack_sign.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\question.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\texture_ide_sidebar.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\txt_logo.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\user.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\images\web-site-off.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\FlexProjects\PowerPack\WebInstaller\src\assets\sert.p12" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WebInstaller.mxml" afterPath="$PROJECT_DIR$/src/WebInstaller.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/vdombox/powerpack/Template.as" afterPath="$PROJECT_DIR$/src/net/vdombox/powerpack/Template.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/assets/style/style.css" afterPath="$PROJECT_DIR$/src/assets/style/style.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/template.xml" afterPath="$PROJECT_DIR$/src/template.xml" />
     </list>
     <ignored path="WebInstaller.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="$PROJECT_DIR$/src/net/vdombox/powerpack/Template.as" changelist="1f9b1d50-d437-45c7-b82a-09adcc8be828" time="1329238283162" ignored="false" />
-    <file path="$PROJECT_DIR$/src/WebInstaller.mxml" changelist="1f9b1d50-d437-45c7-b82a-09adcc8be828" time="1329237309589" ignored="false" />
+    <file path="$PROJECT_DIR$/src/template.xml" changelist="1f9b1d50-d437-45c7-b82a-09adcc8be828" time="1329752784106" ignored="false" />
+    <file path="$PROJECT_DIR$/src/WebInstaller.mxml" changelist="1f9b1d50-d437-45c7-b82a-09adcc8be828" time="1329752781077" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,33 +233,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Untitled.mxml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/untitled/src/Untitled.mxml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.33333334">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WebInstaller.mxml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="WebInstaller.mxml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/WebInstaller.mxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="33" selection-start="1090" selection-end="1090" vertical-scroll-proportion="0.32692307">
+            <state line="36" column="33" selection-start="1261" selection-end="1261" vertical-scroll-proportion="0.04931507">
               <folding>
-                <marker date="1329237309598" expanded="true" signature="459:871" placeholder="{...}" />
-                <marker date="1329237309598" expanded="true" signature="924:1039" placeholder="{...}" />
-                <marker date="1329237309598" expanded="true" signature="929:981" placeholder="//..." />
+                <marker date="1330935551650" expanded="false" signature="346:395" placeholder="..." />
+                <marker date="1330935551650" expanded="true" signature="456:582" placeholder="//..." />
+                <marker date="1330935551650" expanded="true" signature="668:1261" placeholder="{...}" />
+                <marker date="1330935551650" expanded="true" signature="1314:1464" placeholder="{...}" />
+                <marker date="1330935551650" expanded="true" signature="1319:1371" placeholder="//..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Template.as" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/net/vdombox/powerpack/Template.as">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="733" column="79" selection-start="16893" selection-end="16893" vertical-scroll-proportion="29.65675">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -123,16 +263,19 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/WebInstaller.mxml" />
         <option value="$PROJECT_DIR$/src/net/vdombox/powerpack/Template.as" />
+        <option value="$PROJECT_DIR$/src/net/vdombox/powerpack/control/DialogComboBox.mxml" />
+        <option value="$PROJECT_DIR$/src/net/vdombox/powerpack/events/TemplateLibEvent.as" />
+        <option value="$PROJECT_DIR$/src/net/vdombox/powerpack/gen/parse/Parser.as" />
+        <option value="$PROJECT_DIR$/src/WebInstaller.mxml" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1" />
-    <option name="y" value="1" />
-    <option name="width" value="1438" />
-    <option name="height" value="858" />
+    <option name="x" value="293" />
+    <option name="y" value="6" />
+    <option name="width" value="1280" />
+    <option name="height" value="860" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -162,7 +305,12 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scope">
+        <subPane subId="Problems" />
+      </pane>
+      <pane id="PackagesPane">
+        <subPane />
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -191,58 +339,17 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="untitled" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebInstaller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebInstaller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebInstaller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebInstaller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="net" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vdombox" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="powerpack" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Global Libraries" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="MemberChooser.sorted" value="false" />
@@ -254,8 +361,8 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RunManager" selected="Flex.WebInstaller.html">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -289,7 +396,17 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <configuration default="true" type="FlexRunConfigurationType" factoryName="Flex" browser_family="FIREFOX" debugger_sdk="3.6.0 (player 9.0)" html_or_swf_file_path="" launcher_type="OSDefault" main_class_name="" module_name="WebInstaller" player_path="FlashPlayer.exe" run_mode="HtmlOrSwfFile" run_trusted="true" url_to_launch="http://">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -330,17 +447,7 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
+    <configuration default="true" type="FlexRunConfigurationType" factoryName="Flex" browser_family="FIREFOX" debugger_sdk="3.6.0 (player 9.0)" html_or_swf_file_path="" launcher_type="OSDefault" main_class_name="" module_name="WebInstaller" player_path="FlashPlayer.exe" run_mode="HtmlOrSwfFile" run_trusted="true" url_to_launch="http://">
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -436,6 +543,10 @@
           <option name="myVcsRoot" value="D:\FlexProjects\PowerPack\WebInstaller" />
           <option name="myCopyRoot" value="D:\FlexProjects\PowerPack\WebInstaller" />
         </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\FlexProjects\PowerPack\WebInstaller\.idea" />
+          <option name="myCopyRoot" value="D:\FlexProjects\PowerPack\WebInstaller\.idea" />
+        </SvnCopyRootSimple>
       </list>
     </option>
     <option name="myMoreRealMappingRoots">
@@ -449,37 +560,44 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+      <changelist id="1f9b1d50-d437-45c7-b82a-09adcc8be828" name="Default" comment="" />
       <created>1329234966462</created>
       <updated>1329234966462</updated>
     </task>
+    <task id="LOCAL-00001" summary="New changelist">
+      <changelist id="2068b745-721b-4548-a54d-d8ad31a23474" name="New changelist" comment="" />
+      <created>1329323992681</created>
+      <updated>1329323992681</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="1" width="1438" height="858" extended-state="0" />
-    <editor active="true" />
+    <frame x="293" y="6" width="1280" height="860" extended-state="0" />
+    <editor active="false" />
     <layout>
-      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24896266" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35185185" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25218022" sideWeight="0.75" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3848684" sideWeight="0.6481481" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -572,28 +690,16 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/untitled/src/Untitled.mxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/WebInstaller.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="33" selection-start="1090" selection-end="1090" vertical-scroll-proportion="0.32692307">
+        <state line="36" column="33" selection-start="1261" selection-end="1261" vertical-scroll-proportion="0.04931507">
           <folding>
-            <marker date="1329237309598" expanded="true" signature="459:871" placeholder="{...}" />
-            <marker date="1329237309598" expanded="true" signature="924:1039" placeholder="{...}" />
-            <marker date="1329237309598" expanded="true" signature="929:981" placeholder="//..." />
+            <marker date="1330935551650" expanded="false" signature="346:395" placeholder="..." />
+            <marker date="1330935551650" expanded="true" signature="456:582" placeholder="//..." />
+            <marker date="1330935551650" expanded="true" signature="668:1261" placeholder="{...}" />
+            <marker date="1330935551650" expanded="true" signature="1314:1464" placeholder="{...}" />
+            <marker date="1330935551650" expanded="true" signature="1319:1371" placeholder="//..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/vdombox/powerpack/Template.as">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="733" column="79" selection-start="16893" selection-end="16893" vertical-scroll-proportion="29.65675">
-          <folding />
         </state>
       </provider>
     </entry>
@@ -655,6 +761,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
