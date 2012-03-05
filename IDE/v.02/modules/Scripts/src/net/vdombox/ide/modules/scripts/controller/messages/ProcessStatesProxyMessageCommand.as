@@ -37,6 +37,8 @@ package net.vdombox.ide.modules.scripts.controller.messages
 				{
 					var selectedApplication : ApplicationVO = body as ApplicationVO;
 					statesProxy.selectedApplication = selectedApplication;
+					
+					sendNotification( StatesProxy.SELECTED_APPLICATION_CHANGED );
 
 					break;
 				}

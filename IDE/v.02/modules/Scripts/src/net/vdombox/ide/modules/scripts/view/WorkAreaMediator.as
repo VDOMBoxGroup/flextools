@@ -62,6 +62,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.SELECTED_TAB_CHANGED );
 			interests.push( Notifications.DELETE_TAB );
 			
+			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
+			
 			return interests;
 		}
 		
@@ -89,7 +91,7 @@ package net.vdombox.ide.modules.scripts.view
 					
 				case Notifications.BODY_STOP:
 				{
-					clearData();
+					
 					
 					isActive = false;
 					
@@ -108,6 +110,11 @@ package net.vdombox.ide.modules.scripts.view
 					workArea.closeEditor( body );
 					
 					break;
+				}
+					
+				case StatesProxy.SELECTED_APPLICATION_CHANGED:
+				{
+					clearData();
 				}
 					
 			}

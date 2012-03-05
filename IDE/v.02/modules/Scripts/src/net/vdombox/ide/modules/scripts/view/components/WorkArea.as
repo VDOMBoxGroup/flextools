@@ -107,16 +107,8 @@ package net.vdombox.ide.modules.scripts.view.components
 		
 		public function closeAllEditors() : void
 		{
-			/*//			затычка нада разобраться в чем дело
-			if (tabBar.dataProvider == null )
-				return 
-			
-			var tab : Tab;
-			while ( tabBar.dataProvider.length  > 0 ) 
-			{
-				tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;
-				removeTab( tab );
-			}		*/	
+			_editors = null;
+			removeAllChildren();	
 		}
 		
 		public function get selectedEditor() : ScriptEditor

@@ -119,6 +119,11 @@
 				dispatchEvent( new TabsPanelEvent( TabsPanelEvent.TAB_DELETE, actionVO ) );
 			}
 			
+			public function removeAll() : void
+			{
+				_tabs.removeAll();
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>

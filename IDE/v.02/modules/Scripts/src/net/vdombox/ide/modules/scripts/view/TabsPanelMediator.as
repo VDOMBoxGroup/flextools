@@ -53,6 +53,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.SELECTED_LIBRARY_CHANGED );
 			interests.push( Notifications.SELECTED_GLOBAL_ACTION_CHANGED );
 			
+			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
+			
 			interests.push( Notifications.OBJECT_DELETED );
 			
 			return interests;
@@ -77,7 +79,9 @@ package net.vdombox.ide.modules.scripts.view
 					
 				case Notifications.BODY_STOP:
 				{
+					
 					isActive = false;
+					
 					
 					break;
 				}
@@ -104,6 +108,13 @@ package net.vdombox.ide.modules.scripts.view
 					
 					break;
 				}
+					
+					
+					
+				case StatesProxy.SELECTED_APPLICATION_CHANGED:
+				{
+					tabsPanel.removeAll();
+				}	
 					
 				case Notifications.OBJECT_DELETED:
 				{
