@@ -34,7 +34,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
-	import mx.collections.SortField;
 	import mx.controls.HScrollBar;
 	import mx.controls.HTML;
 	import mx.controls.Image;

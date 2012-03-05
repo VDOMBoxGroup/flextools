@@ -349,7 +349,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<mx:Image source="{VDOMImage.Plus}" width="20" height="20" top="-25" right="10"
+	<mx:Image source="{VDOMImage.Plus}" width="20" height="20" top="-23" right="10" smoothBitmapContent="true"
 			  click="image1_clickHandler(event)"/>
 	
 	<mx:Tree id="objectsTree" borderVisible="false" maxHorizontalScrollPosition="140" horizontalScrollPolicy="auto"
