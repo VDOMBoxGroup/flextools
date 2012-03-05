@@ -11,7 +11,7 @@
 		xmlns:control="net.vdombox.powerpack.lib.player.control.*"
 
 		styleName="installerWindowStyle">
-
+	<!--mx:Style source="assets/style/style.css"/-->
 	
 	<mx:Metadata>
 		[Event(name="close", type="flash.events.Event")]
