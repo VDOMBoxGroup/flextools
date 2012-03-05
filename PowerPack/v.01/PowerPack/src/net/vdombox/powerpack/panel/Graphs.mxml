@@ -534,6 +534,12 @@
 
 		private function onLstGraphsEditingComplete( event : GraphsAccordionEvent ) : void
 		{
+			if (event.graph && editableGraphLastName && editableGraphLastName != event.graph.name)
+			{
+				currentTemplate.validateProjectsInitGraphs(editableGraphLastName, event.graph.name);
+				editableGraphLastName = "";
+			}
+				
 			vsViewStack.invalidateDisplayList();
 			
 			dispatchEvent( new Event( TPL_CHANGED ) );
@@ -597,8 +603,14 @@
 
 			newGraph.label = newGraph.name;
 			newGraph.category = child.label;
-
+			
 			addGraph( newGraph );
+			
+			if (graphs.source.length == 1)
+			{
+				editableGraphLastName = newGraph.name;
+				currentTemplate.allProjectsInitGraphName = newGraph.name;
+			}
 
 			selectGraph( newGraph );
 
@@ -610,12 +622,15 @@
 			dispatchEvent( new Event( TPL_CHANGED ) );
 		}
 
+		private var editableGraphLastName : String;
 		private function btnRenameClickHandler( event : MouseEvent ) : void
 		{
 			if ( !curGraph )
 				return;
 
 			selectGraph( curGraph );
+			
+			editableGraphLastName = curGraph.name;
 
 			curTab.lstGraphs.editable = true;
 			curTab.lstGraphs.editedItemPosition = {rowIndex : curTab.lstGraphs.selectedIndex, columnIndex : 0};
