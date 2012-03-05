@@ -513,6 +513,9 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 		if ( focused )
 			newNode.setFocus();
+		
+		if (getChildren().length == 1)
+			newNode.type = NodeType.INITIAL;
 
 		dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
 
