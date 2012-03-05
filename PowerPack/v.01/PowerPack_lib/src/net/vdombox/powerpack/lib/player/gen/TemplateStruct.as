@@ -63,7 +63,7 @@ public class TemplateStruct extends EventDispatcher
 	public var forced : int;
 	public var terminated : Boolean;
 
-	public function TemplateStruct( tplStruct : XML, tt : String = "")
+	public function TemplateStruct( tplStruct : XML, initialGraphName : String)
 	{
 		tplStructXML = tplStruct;
 		
@@ -72,18 +72,21 @@ public class TemplateStruct extends EventDispatcher
 		var _arrows : Array = [];
 		var _initGraph : GraphStruct;
 
+		// MINE TODO
+		var initGraphName : String = initialGraphName;
+		
 		for each ( var graphXML : XML in tplStructXML.elements( "graph" ) )
 		{
+			var graphName : String = Utils.getStringOrDefault( graphXML.@name );
+			
 			var graphStruct : GraphStruct = new GraphStruct(
-					Utils.getStringOrDefault( graphXML.@name ),
-					Utils.getStringOrDefault( graphXML.@name ),
-					Utils.getBooleanOrDefault( graphXML.@initial ),
+					graphName,
+					graphName,
+					initGraphName ? initialGraphName == graphName : Utils.getBooleanOrDefault( graphXML.@initial ),
 					Utils.getBooleanOrDefault( graphXML.@global ) );
 
 			if ( graphStruct.bInitial )
-			{
 				_initGraph = graphStruct;
-			}
 
 			for each ( var nodeXML : XML in graphXML.states.elements( "state" ) )
 			{
@@ -514,7 +517,7 @@ public class TemplateStruct extends EventDispatcher
 			isRunning = false;
 			throw new ValidationError( null, 9001 );
 		}
-
+		
 		if ( over )
 			forced = 0;
 

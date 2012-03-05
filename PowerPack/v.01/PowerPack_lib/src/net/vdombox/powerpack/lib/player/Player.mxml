@@ -11,7 +11,8 @@
 		xmlns:control="net.vdombox.powerpack.lib.player.control.*"
 
 		styleName="installerWindowStyle">
-	<!--mx:Style source="assets/style/style.css"/-->
+		
+		<!--<mx:Style source="assets/style/style.css"/>-->
 	
 	<mx:Metadata>
 		[Event(name="close", type="flash.events.Event")]
@@ -31,18 +32,19 @@
 
 	<mx:Script>
 		<![CDATA[
-		import mx.collections.ArrayCollection;
-		import mx.core.Application;
-		import mx.events.CloseEvent;
-		import mx.events.EffectEvent;
-		import mx.events.IndexChangedEvent;
-
-		import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
-		import net.vdombox.powerpack.lib.player.gen.TemplateStruct;
-		import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-		import net.vdombox.powerpack.lib.player.managers.ContextManager;
-		import net.vdombox.powerpack.lib.player.managers.LanguageManager;
-		import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+			import mx.collections.ArrayCollection;
+			import mx.core.Application;
+			import mx.events.CloseEvent;
+			import mx.events.EffectEvent;
+			import mx.events.IndexChangedEvent;
+			
+			import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+			import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
+			import net.vdombox.powerpack.lib.player.gen.TemplateStruct;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+			import net.vdombox.powerpack.lib.player.template.Template;
 
 		private var vsLastChanged:DisplayObject;
 		private var appGenerated:Boolean;
@@ -146,18 +148,27 @@
 			}
 		}
 
+		private function get currentTemplate() : Template
+		{
+			if ( !ContextManager.templates || ContextManager.templates.length == 0 )
+				return null;
+			
+			return ContextManager.templates.getItemAt( 0 ) as Template;
+		}
+			
 		private function onKeyAccept( event:Event ):void
 		{
-			openTemplate ( txtKey.text );
+			currentTemplate.selectedProject.key = txtKey.text;
+			
+			openTemplate ();
 		}
 
-		private function openTemplate( key:String = null ):void
+		private function openTemplate():void
 		{
 			var tpl:Template = ContextManager.templates[0];
 
 			if ( tpl.isEncoded )
 			{
-				tpl.key = key;
 				tpl.decode ();
 			}
 
@@ -170,7 +181,6 @@
 				AlertPopup.show ( LanguageManager.sentences['msg_cannot_open_tpl'], "", 4 );
 			}
 		}
-
 
 		public function get nativeWindow():Sprite
 		{
@@ -250,7 +260,7 @@
 
 				tpl = ContextManager.templates.getItemAt ( 0 ) as Template;
 
-				ContextManager.templateStruct = new TemplateStruct ( tpl.xmlStructure );
+				ContextManager.templateStruct = new TemplateStruct ( tpl.xmlStructure, currentTemplate.selectedProject.initialGraphName );
 
 				var validateArr:Array = ContextManager.templateStruct.validate ().array;
 
@@ -388,11 +398,17 @@
 		protected function txtKey_keyDownHandler( event:KeyboardEvent ):void
 		{
 			if ( event.keyCode == Keyboard.ENTER )
-				openTemplate ( txtKey.text );
+			{
+				currentTemplate.selectedProject.key = txtKey.text;
+				
+				openTemplate ();
+			}
 		}
 		]]>
 	</mx:Script>
-	<mx:Image source="assets/images/Background.png"/>
+	
+	
+	<mx:Image source="@Embed('assets/images/Background.png')"/>
 
 
 	<controls:Base64Image id="tplPic" x="42" y="50"
