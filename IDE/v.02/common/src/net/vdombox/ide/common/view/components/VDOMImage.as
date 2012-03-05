@@ -58,5 +58,17 @@ package net.vdombox.ide.common.view.components
 		[Embed( source = "assets/vdomimage/plus.png" )]
 		public static var Plus : Class;
 		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/ServerScripts.png" )]
+		public static var ServerActionIcon : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/GlobalScript.png" )]
+		public static var GlobalActionIcon : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/Libraries.png" )]
+		public static var LibrariesIcon : Class;
+		
 	}
 }

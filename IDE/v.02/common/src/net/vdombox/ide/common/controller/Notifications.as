@@ -246,6 +246,9 @@ package net.vdombox.ide.common.controller
 		public static const SELECTED_SERVER_ACTION_CHANGED : String = "selectedServerActionChanged";
 		public static const SELECTED_LIBRARY_CHANGED : String = "selectedLibraryChanged";
 		public static const SELECTED_GLOBAL_ACTION_CHANGED : String = "selectedGlobalActionChanged";
+		public static const SELECTED_TAB_CHANGED : String = "selectedTabChanged";
+		
+		public static const DELETE_TAB : String = "deleteTab";
 		
 		public static const ACTION : String = "action";
 		public static const LIBRARY : String = "library";

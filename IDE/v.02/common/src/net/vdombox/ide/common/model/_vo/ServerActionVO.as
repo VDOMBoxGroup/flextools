@@ -3,6 +3,8 @@ package net.vdombox.ide.common.model._vo
 	import mx.utils.StringUtil;
 	
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
+	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	
 	/**
 	 * The ServerActionVO is Visual Object of VDOM Server Action.
@@ -24,6 +26,9 @@ package net.vdombox.ide.common.model._vo
 
 		[Bindable]
 		public var language : String = "";
+		
+		[Bindable]
+		public var saved : Boolean = true;
 
 		private var _name : String = "";
 
@@ -33,6 +38,26 @@ package net.vdombox.ide.common.model._vo
 		private var _objectName : String;
 
 		private var _containerID : String;
+		
+		private var _containerVO : IVDOMObjectVO;
+
+		public function get containerName():String
+		{
+			if ( _containerVO )
+				return _containerVO.name;
+			else
+				return "";
+		}
+		
+		public function get containerVO():IVDOMObjectVO
+		{
+			return _containerVO;
+		}
+
+		public function set containerVO(value:IVDOMObjectVO):void
+		{
+			_containerVO = value;
+		}
 
 		[Bindable]
 		public function get top():int
@@ -240,6 +265,11 @@ package net.vdombox.ide.common.model._vo
 				result.@ID = _id;
 			trace(result.toXMLString());
 			return result;
+		}
+		
+		public function get icon() : Class
+		{
+			return VDOMImage.ServerActionIcon;
 		}
 	}
 }
