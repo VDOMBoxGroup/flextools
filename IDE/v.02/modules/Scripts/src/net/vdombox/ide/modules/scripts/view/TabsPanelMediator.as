@@ -53,6 +53,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.SELECTED_LIBRARY_CHANGED );
 			interests.push( Notifications.SELECTED_GLOBAL_ACTION_CHANGED );
 			
+			interests.push( Notifications.OBJECT_DELETED );
+			
 			return interests;
 		}
 		
@@ -101,6 +103,11 @@ package net.vdombox.ide.modules.scripts.view
 					tabsPanel.addAction( body );
 					
 					break;
+				}
+					
+				case Notifications.OBJECT_DELETED:
+				{
+					
 				}
 					
 			}

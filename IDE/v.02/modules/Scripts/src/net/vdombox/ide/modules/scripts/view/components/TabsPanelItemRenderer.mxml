@@ -74,7 +74,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:Label id="itemName" text="{data.saved? actionName : '*' + actionName}" color="#000000" height="100%" verticalAlign="middle" paddingLeft="10"/>
+	<s:Label id="itemName" text="{data.saved? actionName : '*' + actionName}" color="#000000" height="100%" verticalAlign="middle" paddingLeft="30"/>
 	
 	<s:Line top="0" left="0" width="100%">
 		<s:stroke>
@@ -88,7 +88,9 @@
 		</s:stroke>
 	</s:Line>
 	
-	<mx:Image id="btnDalete" right="10" height="100%" verticalAlign="middle" source="@Embed('assets/Close.png')"
+	<mx:Image id="btnIcon" left="10" height="100%" verticalAlign="middle" source="{data.icon}"/>
+	
+	<mx:Image id="btnDalete" right="7" height="100%" verticalAlign="middle" source="@Embed('assets/Close.png')"
 			  visible="false" click="image1_clickHandler(event)" />
 	
 </s:ItemRenderer>

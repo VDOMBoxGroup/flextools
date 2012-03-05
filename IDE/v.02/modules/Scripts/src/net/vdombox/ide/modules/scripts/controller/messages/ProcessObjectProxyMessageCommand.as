@@ -41,6 +41,16 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					
 					break;
 				}
+					
+				case PPMObjectTargetNames.OBJECT:
+				{
+					if ( operation == PPMOperationNames.DELETE )
+					{
+						sendNotification( Notifications.OBJECT_DELETED, body.objectVO );
+					}
+					
+					break;
+				}
 			}
 		}
 	}
