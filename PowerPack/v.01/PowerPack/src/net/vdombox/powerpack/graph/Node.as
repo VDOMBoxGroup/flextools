@@ -48,13 +48,13 @@ import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
 import mx.utils.NameUtil;
 
-import net.vdombox.powerpack.BuilderTemplate;
+import net.vdombox.powerpack.template.BuilderTemplate;
 import net.vdombox.powerpack.lib.extendedapi.controls.SuperTextArea;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-import net.vdombox.powerpack.lib.player.Template;
+import net.vdombox.powerpack.lib.player.template.Template;
 import net.vdombox.powerpack.lib.player.graph.NodeCategory;
 import net.vdombox.powerpack.lib.player.graph.NodeType;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;

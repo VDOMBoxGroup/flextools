@@ -14,10 +14,11 @@
 			import mx.collections.XMLListCollection;
 			import mx.events.CloseEvent;
 			
-			import net.vdombox.powerpack.BuilderTemplate;
-			import net.vdombox.powerpack.lib.player.Template;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
 			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+			import net.vdombox.powerpack.lib.player.template.Template;
+			import net.vdombox.powerpack.template.BuilderTemplate;
 
 		private static var _dialog : ImportFromTpl;
 
@@ -83,7 +84,7 @@
 			{
 				if ( event.target.txtKey.text )
 				{
-					template.key = event.target.txtKey.text;
+					currentTemplate.selectedProject.key = event.target.txtKey.text;
 
 					template.processOpened();
 
@@ -96,6 +97,14 @@
 				template = null;
 				AlertPopup.show( "Invalid secret key." );
 			}
+		}
+			
+		private function get currentTemplate() : Template
+		{
+			if ( !ContextManager.templates || ContextManager.templates.length == 0 )
+				return null;
+			
+			return ContextManager.templates.getItemAt( 0 ) as Template;
 		}
 
 		private function populateList() : void

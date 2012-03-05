@@ -17,6 +17,7 @@ package net.vdombox.powerpack.sdkcompiler
 	import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+	import net.vdombox.powerpack.lib.player.template.VDOMApplication;
 
 	public class SDKCompiler extends EventDispatcher
 	{

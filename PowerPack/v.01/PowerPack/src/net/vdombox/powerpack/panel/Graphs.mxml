@@ -68,6 +68,7 @@
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.panel.graphsClasses.AccordionChild;
 			import net.vdombox.powerpack.panel.graphsClasses.GraphsAccordionEvent;
+			import net.vdombox.powerpack.template.BuilderTemplate;
 
 		static private var defaultCaptions : Object = {
 			none : "none",
@@ -106,10 +107,7 @@
 		private var tabMap : Dictionary = new Dictionary();
 
 		[Bindable]
-		private var initGraphs : ArrayCollection = new ArrayCollection();
-
-		[Bindable]
-		public var graphs : ArrayCollection = new ArrayCollection();
+		public static var graphs : ArrayCollection = new ArrayCollection();
 
 		//--------------------------------------------------------------------------
 		//
@@ -119,13 +117,6 @@
 
 		private function init() : void
 		{
-			initGraphs.addItem( new ObjectProxy( {	name : LanguageManager.sentences['none'],
-				initial : false,
-				className : 'ObjectProxy' } ) );
-
-			// Binding to first initial combobox element label
-			LanguageManager.bindSentence( 'none', initGraphs.getItemAt( 0 ), 'name' );
-
 			// We need to repopulate graphs if templateXML has been changed
 			BindingUtils.bindSetter( populateGraphs, this, "templateXML" );
 
@@ -134,15 +125,10 @@
 				createCategoryTab( label );
 			}
 
-			initGraphs.addEventListener( CollectionEvent.COLLECTION_CHANGE, onInitGraphsChange );
 		}
 
 		public function clear() : void
 		{
-			// remove all from init cbox except first 'none' position
-			while ( initGraphs.length > 1 )
-				initGraphs.removeItemAt( 1 );
-
 			for each ( var child : DisplayObject in graphsAccordion.getChildren() )
 			{
 				AccordionChild( child ).graphs.removeAll();
@@ -212,11 +198,7 @@
 
 		public function addGraph( graph : GraphCanvas, processAfterAdding : Boolean = true ) : void
 		{
-			if ( !processAfterAdding )
-				initGraphs.removeEventListener( CollectionEvent.COLLECTION_CHANGE, onInitGraphsChange );
-
 			graphs.addItem( graph );
-			initGraphs.addItem( graph );
 
 			graph.addEventListener( GraphCanvasEvent.GRAPH_CHANGED, onGraphChange );
 			graph.addEventListener( GraphCanvasEvent.JUMP_TO_GRAPH, onJumpToGraph );
@@ -245,52 +227,17 @@
 				tabMap[graphAccordionChild][graph] = graph;
 			}
 
-			if ( graph.initial && processAfterAdding )
-				cbInitGraph.selectedItem = graph;
-
-			if ( !processAfterAdding )
-				initGraphs.addEventListener( CollectionEvent.COLLECTION_CHANGE, onInitGraphsChange );
-
 			dispatchEvent( new Event( TPL_CHANGED ) );
 		}
-
-		public function processAfterGraphAdding() : void
+			
+		private function get currentTemplate() : BuilderTemplate
 		{
-			for ( var i : int = initGraphs.length - 1; i >= 0; i-- )
-			{
-				var graph : Object = initGraphs[i];
-				if ( graph is GraphCanvas && GraphCanvas( graph ).initial )
-					break;
-			}
-
-			setInitial( i );
-
-			onInitGraphsChange( null );
+			if ( !ContextManager.templates || ContextManager.templates.length == 0 )
+				return null;
+			
+			return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
 		}
 
-		public function setInitial( arg : Object ) : void
-		{
-			for each ( var graph : GraphCanvas in graphs )
-			{
-				graph.initial = false;
-			}
-
-			if ( arg is GraphCanvas )
-			{
-				GraphCanvas( arg ).initial = true;
-				cbInitGraph.selectedItem = arg;
-			}
-			else if ( typeof(arg) == "number" )
-			{
-				var index : int = int( arg );
-				if ( index < 0 )
-					index = 0;
-
-				if ( initGraphs[index] is GraphCanvas )
-					GraphCanvas( initGraphs[index] ).initial = true;
-				cbInitGraph.selectedIndex = index;
-			}
-		}
 
 		public function findFirstGraph() : GraphCanvas
 		{
@@ -419,8 +366,6 @@
 					populateGraph( graphXML );
 				}
 
-				processAfterGraphAdding();
-
 				selectGraph( findFirstGraph() );
 
 				ProgressManager.complete();
@@ -534,18 +479,6 @@
 		//
 		//--------------------------------------------------------------------------
 
-		private function onInitGraphsChange( event : CollectionEvent ) : void
-		{
-			if ( !event || event.kind != CollectionEventKind.REFRESH )
-			{
-				var sort : Sort = new Sort();
-				sort.fields = [new SortField( 'className', true, true ), new SortField( 'name', true )];
-
-				initGraphs.sort = sort;
-				initGraphs.refresh();
-			}
-		}
-
 		private function tabChangeHandler( event : IndexChangedEvent ) : void
 		{
 			var tab : AccordionChild = event.relatedObject as AccordionChild;
@@ -602,8 +535,7 @@
 		private function onLstGraphsEditingComplete( event : GraphsAccordionEvent ) : void
 		{
 			vsViewStack.invalidateDisplayList();
-			cbInitGraph.invalidateDisplayList();
-
+			
 			dispatchEvent( new Event( TPL_CHANGED ) );
 		}
 
@@ -611,20 +543,6 @@
 		{
 			if ( event.graph )
 				selectGraph( event.graph );
-		}
-
-		private function cbInitGraphChangeHandler( event : ListEvent ) : void
-		{
-			setInitial( ComboBox( event.target ).selectedItem );
-
-			dispatchEvent( new Event( TPL_CHANGED ) );
-		}
-
-		private function cbInitGraphCloseHandler( event : DropdownEvent ) : void
-		{
-			setInitial( ComboBox( event.target ).selectedItem );
-
-			dispatchEvent( new Event( TPL_CHANGED ) );
 		}
 
 		private function captionValueEnteredHandler( event : GraphsAccordionEvent ) : void
@@ -781,11 +699,9 @@
 			var newIndex : int = curTab.lstGraphs.selectedIndex - 1;
 			newIndex = newIndex < 0 ? 0 : newIndex;
 
-			if ( cbInitGraph.selectedItem == curGraph )
-				cbInitGraph.selectedIndex = 0;
-
+			var removedGraphName : String = curGraph.name;
+			
 			graphs.removeItemAt( graphs.getItemIndex( curGraph ) );
-			initGraphs.removeItemAt( initGraphs.getItemIndex( curGraph ) );
 			curTab.graphs.removeItemAt( curTab.lstGraphs.selectedIndex );
 			GraphCanvas( curGraph ).dispose();
 			
@@ -827,12 +743,30 @@
 			}
 
 			dispatchEvent( new Event( TPL_CHANGED ) );
+			
+			var firstGraphName : String = "";
+			if (graphs && graphs.source && graphs.source.length > 0)
+				firstGraphName = GraphCanvas(graphs.source[0]).name;
+			
+			currentTemplate.validateProjectsInitGraphs(removedGraphName, firstGraphName);
 		}
 
 		private function btnHelpClickHandler( event : MouseEvent ) : void
 		{
 			// TODO
 		}
+			
+		public static function getGraphByName (graphName : String) : GraphCanvas
+		{
+			for each (var graph : GraphCanvas in graphs.source)
+			{
+				if (graph.name == graphName)
+					return graph;
+			}
+			
+			return null;
+		}
+			
 		]]>
 	</mx:Script>
 
@@ -865,11 +799,6 @@
 
 		</mx:VBox>
 
-	</mx:Panel>
-
-	<mx:Panel width="100%" layout="absolute" title="{LanguageManager.sentences.initial_graph}">
-		<mx:ComboBox id="cbInitGraph" close="cbInitGraphCloseHandler(event)" change="cbInitGraphChangeHandler(event)"
-					 dataProvider="{initGraphs}" labelField="name" width="100%" />
 	</mx:Panel>
 
 </mx:VBox>

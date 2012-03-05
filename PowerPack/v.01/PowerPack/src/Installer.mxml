@@ -148,8 +148,6 @@
 			player.dataProvider = xml;
 		}
 		]]></mx:Script>
-	<!-- AIR player (old, supported full functional)-->
-	<!--powerpack:Player id="player"  close="nativeWindow.close()" /-->
 	
 	<!-- WEB player (new, not full functionality)-->
 	<player:Player id="player"  close="nativeWindow.close()" />

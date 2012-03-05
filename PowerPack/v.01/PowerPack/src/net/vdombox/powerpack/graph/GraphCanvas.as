@@ -32,21 +32,21 @@ import mx.utils.NameUtil;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
-import net.vdombox.powerpack.BuilderTemplate;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-import net.vdombox.powerpack.lib.player.Template;
 import net.vdombox.powerpack.lib.player.graph.NodeCategory;
 import net.vdombox.powerpack.lib.player.graph.NodeType;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+import net.vdombox.powerpack.lib.player.template.Template;
 import net.vdombox.powerpack.managers.CashManager;
 import net.vdombox.powerpack.managers.ProgressManager;
 import net.vdombox.powerpack.managers.SelectionManager;
 import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
+import net.vdombox.powerpack.template.BuilderTemplate;
 
 public class GraphCanvas extends Canvas implements IFocusManagerComponent
 {
@@ -260,8 +260,8 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		if ( _initial != value )
 		{
 			_initial = value;
-			if ( xml )
-				xml.@initial = value;
+			/*if ( xml )
+				xml.@initial = value;*/
 
 			_initialChanged = true;
 
@@ -275,16 +275,23 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	public function get initial() : Boolean
 	{
 		if ( xml )
-			return Utils.getBooleanOrDefault( xml.@initial, false );
+			return currentTemplate.selectedProject.initialGraphName ? currentTemplate.selectedProject.initialGraphName == name : Utils.getBooleanOrDefault( _initial, false );
 
 		return _initial;
+	}
+	
+	private function get currentTemplate() : BuilderTemplate
+	{
+		if ( !ContextManager.templates || ContextManager.templates.length == 0 )
+			return null;
+		
+		return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
 	}
 
 	//----------------------------------
 	//  name
 	//----------------------------------
 
-	[Bindable("nameChanged")]
 	override public function set name( value : String ) : void
 	{
 		if ( super.name != value )
@@ -300,6 +307,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		}
 	}
 
+	[Bindable("nameChanged")]
 	override public function get name() : String
 	{
 		if ( xml )
@@ -552,7 +560,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		var children : Array = getChildren();
 
 		graphXML.@name = name;
-		graphXML.@initial = initial.toString().toLowerCase();
+		//graphXML.@initial = initial.toString().toLowerCase();
 		graphXML.@category = category;
 
 		graphXML.appendChild( <states/> );
@@ -604,7 +612,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		clear();
 
 		name = Utils.getStringOrDefault( graphXML.@name, '' );
-		initial = Utils.getBooleanOrDefault( graphXML.@initial );
+		
+		//initial = Utils.getBooleanOrDefault( graphXML.@initial );
+		initial = currentTemplate.selectedProject.initialGraphName ? currentTemplate.selectedProject.initialGraphName == name : Utils.getBooleanOrDefault( graphXML.@initial );
+		
 		category = Utils.getStringOrDefault( graphXML.@category, 'other' );
 
 		for each ( var nodeXML : XML in graphXML.states.elements( "state" ) )

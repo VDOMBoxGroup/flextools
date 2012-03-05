@@ -1,4 +1,4 @@
-package net.vdombox.powerpack
+package net.vdombox.powerpack.template
 {
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -12,17 +12,16 @@ package net.vdombox.powerpack
 	
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-	import net.vdombox.powerpack.lib.player.Template;
 	import net.vdombox.powerpack.lib.player.managers.ContextManager;
 	import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+	import net.vdombox.powerpack.lib.player.template.Template;
+	import net.vdombox.powerpack.lib.player.template.TemplateProject;
 	import net.vdombox.powerpack.managers.BuilderContextManager;
 	import net.vdombox.powerpack.managers.CashManager;
 	import net.vdombox.powerpack.managers.ProgressManager;
 	
 	public class BuilderTemplate extends Template
 	{
-		public static const DEFAULT_OUTPUT_FOLDER		: String = File.documentsDirectory.nativePath;
-		
 		private static const BROWSE_TYPE_OPEN : String = "browseForOpen";
 		private static const BROWSE_TYPE_SAVE : String = "browseForSave";
 		private static const BROWSE_TYPE_NONE : String = "browseNone";
@@ -40,44 +39,6 @@ package net.vdombox.powerpack
 			super(xml);
 		}
 		
-		public function set installerFolderPath( value : String ) : void
-		{
-			if (!value)
-				value = DEFAULT_OUTPUT_FOLDER;
-	
-			if ( _xml.outputFolder != value )
-			{
-				modified = true;
-				_xml.outputFolder = value;
-			}
-		}
-		
-		[Bindable]
-		public function get installerFolderPath() : String
-		{
-			return Utils.getStringOrDefault( _xml.outputFolder, DEFAULT_OUTPUT_FOLDER );
-		}
-		
-		//----------------------------------
-		//  picture
-		//----------------------------------
-		
-		private var _pictureFile : File;
-	
-		public function set pictureFile( value : File ) : void
-		{
-			if ( !value || !_pictureFile || _pictureFile.nativePath != value.nativePath )
-			{
-				modified = true;
-				_pictureFile = value;
-			}
-		}
-	
-		[Bindable]
-		public function get pictureFile() : File
-		{
-			return _pictureFile;
-		}
 		
 		//----------------------------------
 		//  fullID
@@ -117,6 +78,17 @@ package net.vdombox.powerpack
 		{
 			return super.modified;
 		}
+				
+		override protected function clearOldProjectVariant () : void
+		{
+			super.clearOldProjectVariant();
+			
+			if (!xml) return;
+			
+			delete xml.appPath;
+			delete xml.outputFolder;
+			delete xml.outputFileName;
+		}
 		
 		//---------------------------------------------------------
 		//---------------------------------------------------------
@@ -136,6 +108,8 @@ package net.vdombox.powerpack
 			{
 				// update tpl UID
 				_xml.@ID = UIDUtil.createUID();
+				
+				fillProjects();
 				
 				// cash template structure
 				cashStructure();
@@ -214,36 +188,6 @@ package net.vdombox.powerpack
 			folder.browseForOpen( LanguageManager.sentences['open_file'], [tplFilter, allFilter] )
 		}
 		
-		private function setPictureFromFile() : Boolean
-		{
-			if ( !pictureFile || !pictureFile.exists )
-			{
-				return false;
-			}
-			
-			var fileToBase64 : FileToBase64 = new FileToBase64( pictureFile.nativePath );
-			fileToBase64.convert();
-			b64picture = fileToBase64.data.toString();
-			
-			_xml.picture[0].@type = pictureFile.extension;
-			_xml.picture[0].@name = pictureFile.name;
-			
-			return true;
-		}
-	
-		private function getPictureFromCash() : void
-		{
-			var picObj : Object = CashManager.getObject( fullID, 'logo' );
-			if ( picObj )
-			{
-				var picData : ByteArray = ByteArray( picObj.data );
-				
-				_xml.picture = picData.readUTFBytes( picData.bytesAvailable );
-				_xml.picture.@name = XML( picObj.entry ).@name;
-				_xml.picture.@type = XML( picObj.entry ).@type;
-			}
-		}
-	
 		private function cash() : Boolean
 		{
 			if ( _xmlStructure == null )
@@ -264,20 +208,6 @@ package net.vdombox.powerpack
 			
 			delete _xmlStructure.resources;
 			
-			// cash tpl picture
-			if ( b64picture )
-			{
-				var picXML : XML = _xml.picture[0];
-				CashManager.setStringObject( fullID,
-					XML(
-						"<resource " +
-						"category='logo' " +
-						"ID='logo' " +
-						"name='" + Utils.getStringOrDefault( picXML.@name, "" ) + "' " +
-						"type='" + Utils.getStringOrDefault( picXML.@type, "" ) + "' />" ),
-					b64picture );
-			}
-			
 			cashStructure();
 			
 			return true;
@@ -290,7 +220,7 @@ package net.vdombox.powerpack
 					"<resource " +
 					"category='template' " +
 					"ID='template' " +
-					"name='" + name + "' " +
+					"name='" + selectedProject.name + "' " +
 					"type='" + TYPE_APPLICATION + "' />" ),
 				_xml.toXMLString() );
 			
@@ -299,24 +229,13 @@ package net.vdombox.powerpack
 					"<resource " +
 					"category='template' " +
 					"ID='structure' " +
-					"name='" + name + "' " +
+					"name='" + selectedProject.name + "' " +
 					"type='" + TYPE_APPLICATION + "' />" ),
 				_xmlStructure.toXMLString() );
 		}
 		
 		private function fillFromCash() : void
 		{
-			// get tpl picture
-			if ( pictureFile )
-			{
-				delete _xml.picture;
-				setPictureFromFile();
-			}
-			
-			if (!b64picture)
-				delete _xml.picture;
-			
-			
 			// get resources		
 			delete _xmlStructure.resources;
 			
@@ -414,7 +333,7 @@ package net.vdombox.powerpack
 				
 				ProgressManager.start( ProgressManager.DIALOG_MODE, false );
 				
-				_xml = XML( CashManager.getStringObject( fullID, 'template' ) );
+				xml = XML( CashManager.getStringObject( fullID, 'template' ) );
 				
 				// update tpl UID
 				var oldID : String = fullID;
@@ -424,6 +343,7 @@ package net.vdombox.powerpack
 				ProgressManager.complete();
 				
 				modified = false;
+				selectedProject.modified = false;
 				
 				dispatchEvent( new Event( Event.COMPLETE ) );
 			}
@@ -431,6 +351,7 @@ package net.vdombox.powerpack
 			{
 				ProgressManager.complete();
 				
+				trace ("0");
 				showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
 			}
 		}
@@ -450,9 +371,12 @@ package net.vdombox.powerpack
 				var xmlData : XML = XML( strData );
 				
 				if ( !isValidTpl( xmlData ) )
+				{
+					trace ("1");
 					throw new Error( LanguageManager.sentences['msg_not_valid_tpl_file'] );
+				}
 				
-				_xml = xmlData;
+				xml = xmlData;
 				
 				_completelyOpened = false;
 				
@@ -472,6 +396,7 @@ package net.vdombox.powerpack
 				
 				ProgressManager.complete();
 				
+				trace ("2");
 				showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
 			}
 		}
@@ -500,7 +425,6 @@ package net.vdombox.powerpack
 		{
 			super.dispose();
 			
-			_pictureFile = null;
 			file = null;
 		}
 		
@@ -513,6 +437,22 @@ package net.vdombox.powerpack
 			if ( _xmlStructure )
 				cash();
 		}
+		
+		//
+		// projects 
+		//
+		
+		override public function createNewProject () : TemplateProject
+		{
+			var newProject : BuilderTemplateProject = new BuilderTemplateProject();
+			
+			projects.addItem( newProject );
+			
+			modified = true;
+			
+			return newProject;
+		}
+		
 		
 	}
 }

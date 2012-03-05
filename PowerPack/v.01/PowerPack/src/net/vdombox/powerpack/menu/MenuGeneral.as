@@ -30,7 +30,9 @@ public class MenuGeneral extends EventDispatcher
 	public static const MENU_RUN		: String = "run";
 	public static const MENU_TEMPLATE	: String = "template";
 	
+	[Bindable]
 	public static var state : String;
+	
 	private static var _menu : FlexNativeMenu;
 	private static var memMenu : Dictionary;
 

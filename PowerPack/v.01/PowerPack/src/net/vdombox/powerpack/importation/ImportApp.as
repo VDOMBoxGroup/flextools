@@ -6,11 +6,11 @@ import flash.events.EventDispatcher;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
-import net.vdombox.powerpack.BuilderTemplate;
+import net.vdombox.powerpack.template.BuilderTemplate;
 import net.vdombox.powerpack.graph.GraphCanvas;
 import net.vdombox.powerpack.graph.Node;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-import net.vdombox.powerpack.lib.player.Template;
+import net.vdombox.powerpack.lib.player.template.Template;
 import net.vdombox.powerpack.lib.player.graph.NodeCategory;
 import net.vdombox.powerpack.lib.player.graph.NodeType;
 import net.vdombox.powerpack.managers.CashManager;

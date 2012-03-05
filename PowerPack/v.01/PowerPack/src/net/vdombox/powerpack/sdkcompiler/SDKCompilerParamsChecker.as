@@ -8,16 +8,30 @@ package net.vdombox.powerpack.sdkcompiler
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	
+	import mx.utils.StringUtil;
+	
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
 	public class SDKCompilerParamsChecker extends EventDispatcher
 	{
+		private static var _instance : SDKCompilerParamsChecker;
+		
 		private static const SDK_4_1_VERSION	: String = "4.1.0";
 		
 		private var fileStream : FileStream = new FileStream();
 		
 		public function SDKCompilerParamsChecker()
 		{
+			if (_instance)
+				throw new Error( "SDKCompilerParamsChecker and can only be accessed through SDKCompilerParamsChecker.getInstance()" ); 
+		}
+		
+		public static function getInstance () : SDKCompilerParamsChecker
+		{
+			if (!_instance)
+				_instance = new SDKCompilerParamsChecker();
+			
+			return _instance;
 		}
 		
 		public function isFlexSDK_4_1_PathValid(sdkFolderPath : String) : Boolean
@@ -72,6 +86,16 @@ package net.vdombox.powerpack.sdkcompiler
 			var sdkVersion : String = sdkDescriptionXML.version[0]; 
 			
 			return sdkVersion == SDK_4_1_VERSION;
+		}
+		
+		public function isValidInstallerFileName (installerFileName : String) : Boolean
+		{
+			return StringUtil.trim(installerFileName) != "";
+		}
+		
+		public function isValidInstallerOutputFolderPath (installerFolderPath : String) : Boolean
+		{
+			return FileUtils.filePathExists(installerFolderPath, true);
 		}
 		
 		public function isAppPathValid(appPath : String) : Boolean
