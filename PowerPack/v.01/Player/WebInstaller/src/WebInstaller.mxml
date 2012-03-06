@@ -13,7 +13,9 @@
 		<![CDATA[
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
-
+			
+			import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+			
 			private static var POST_ADDRESS:String = "template.xml";
 //			private static var POST_ADDRESS:String = "http://192.168.0.201/API.vdom?id=14";
 //			d:\FlexProjects\PowerPack\WebInstaller\src\template.xml 
@@ -54,7 +56,7 @@
 		}
 		]]>
 	</mx:Script>
-	<player:Player id="player"/>
+	<player:Player id="player" isDescktopApplication="false"/>
 	
 	
 	
