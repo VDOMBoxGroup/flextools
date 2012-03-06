@@ -150,7 +150,8 @@
 		]]></mx:Script>
 	
 	<!-- WEB player (new, not full functionality)-->
-	<player:Player id="player"  close="nativeWindow.close()" />
+	<player:Player id="player"  close="nativeWindow.close()" isDesktopApplication="true"/>
+	
 	<mx:HBox right="14" y="17"
 			 height="10" width="100%"
 			 verticalAlign="bottom" horizontalAlign="right"
