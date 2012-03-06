@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" minWidth="955" minHeight="600" 
-				creationComplete="application1_creationCompleteHandler(event)" xmlns:powerpack="net.vdombox.powerpack.*" xmlns:player="net.vdombox.powerpack.lib.player.*"  >
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				xmlns:powerpack="net.vdombox.powerpack.*" 
+				xmlns:player="net.vdombox.powerpack.lib.player.*"
+				layout="absolute" 
+				minWidth="739" minHeight="388" 
+				width="739" height="388"
+				creationComplete="application1_creationCompleteHandler(event)">
+	
+	<mx:Style source="assets/style/style.css"/>
 	
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 
-//		private static var POST_ADDRESS:String = "template.xml";
-			private static var POST_ADDRESS:String = "http://192.168.0.201/API.vdom?id=14";
+			private static var POST_ADDRESS:String = "template.xml";
+//			private static var POST_ADDRESS:String = "http://192.168.0.201/API.vdom?id=14";
 //			d:\FlexProjects\PowerPack\WebInstaller\src\template.xml 
 
 		protected function application1_creationCompleteHandler( event:FlexEvent ):void

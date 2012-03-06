@@ -1,33 +1,10 @@
-/*
-Please remember to add the following effects to the main application.
-
-	<mx:Move duration="100" id="DockerMove"/>
-	<mx:Fade duration="100" id="DockerFade"/>
-*/
-
-@font-face
-{
-	src        : url("assets/fonts/arial.ttf");
-	fontFamily : Arial;
-}
-
 global
 {
-	/*backgroundAlpha: 1.0; /* this runs the opacity of nearly every square piece of the components */
-	/*backgroundSize: "auto";*/
-	
 	titleBarButtonBgColor : #494848;
-	
-	/*fillAlphas: 0.3, 0.3, 0.85, 0.75; /* last pair are for OVER state */
-	/*fillColors: #AE4731, #BFD5E8, #E42226, #A8D0E2;*/
-	
-	/*highlightAlphas: 0.08, 0.14; /* use this to control the 'light' cast on the components */
-	
+
 	themeColor            : #2ba6e5;
 	
 	focusThickness		  : 2.5;
-	/*rollOverColor: #D3BABA;*/
-	/*selectionColor: #D3989C;*/
 	
 	fontFamily            : Arial;
 	fontSize              : 10;
@@ -61,6 +38,31 @@ global
 	focusAlpha : 0;
 }
 
+.questionAnswerCheckBoxStyle
+{
+	fontFamily	: Arial;
+	fontSize	: 13;
+	
+	fillGradientColors: #fcfcfc, #c8c8c8;
+	fillAlpha:  1;
+	
+	icon : ClassReference(null);
+	skin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.CheckBoxSkin");
+	
+	borderGradientColors: #808080, #6e6e6e;
+	borderThickness: 2.5;
+	borderStyle : none;
+	
+	color: #ffffff;
+	disabledColor:  #ffffff;
+	textRollOverColor: #ffffff;
+	textSelectedColor: #ffffff;
+	
+	paddingLeft : 24;
+	iconRadius : 10;
+	
+	focusAlpha : 0;
+}
 
 .builderWindowStyle
 {
@@ -71,8 +73,6 @@ global
 .installerWindowStyle
 {
 	headerHeight             : 30;
-	
-	
 	
 	titleTextStyleName       : "titleTextStyle";
 	
@@ -95,22 +95,35 @@ global
 	closeButtonSkin			 : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.CloseButtonSkin");
 }
 
+Window
+{
+    backgroundColor : #e1e1e0;
+    verticalGap     : 0;
+    horizontalGap   : 0;
+}
 
+Docker
+{
+    paddingBottom        : 5;
+    paddingLeft          : 5;
+    paddingRight         : 5;
+    paddingTop           : 5;
 
+    dockingAreaStyleName : "dockingArea";
+    rowStyleName         : "dockingRow";
+}
+
+GridItem
+{
+    horizontalGap : 1;
+}
 
 .dockingArea
 {
-    /*horizontalScrollPolicy: "off";
-        verticalGap: 0;
-        borderStyle: "applicationControlBar";
-        dropShadowEnabled: true;	*/
 }
 
 .dockingRow
 {
-    /*horizontalGap: 1;
-        addedEffect: "DockerFade";
-        removedEffect: "DockerFade";*/
 }
 
 .headerLabel
@@ -139,7 +152,6 @@ ProgressBar
 	barColor    : #0c5d9b;
 	borderColor : #787878;
 	borderSkin  :  ClassReference("net.vdombox.powerpack.lib.player.customize.skins.GeneratorProgressBarSkin");
-	/* barSkin     : ClassReference("net.vdombox.powerpack.customize.skins.GeneratorProgressBarSkin");*/
 	color		: #ffffff;
 	
 }
@@ -244,15 +256,12 @@ BrowseButton
 	paddingTop	: 3;
 }
 
-
-
-
 .infoTextStyle
 {
 	fontFamily : Arial;
 	fontSize   : 14;
 	color	   : #ffffff;
-	
+	backgroundAlpha : 0;
 }
 
 .browseBtnStyle
@@ -390,4 +399,25 @@ DialogComboBox
 	textSelectedColor				: black;
 	color							: black;
 	fontWeight						: normal;
-} 
+}
+
+ScrollBar {
+	cornerRadius	: 6;
+	fillColors		: #8b8b8b, #b8b8b8;
+	gripColor		: #323232;
+	
+	downArrowUpSkin: ClassReference(null);
+	downArrowOverSkin: ClassReference(null);
+	downArrowDownSkin: ClassReference(null);
+	
+	upArrowUpSkin: ClassReference(null);
+	upArrowOverSkin: ClassReference(null);
+	upArrowDownSkin: ClassReference(null);
+	
+	up-arrow-skin: ClassReference(null);
+	down-arrow-skin: ClassReference(null);
+	
+	trackSkin: ClassReference("net.vdombox.powerpack.lib.player.customize.skins.ScrollTrackSkin");		
+	
+	thumbSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.ScrollThumbSkin")
+}

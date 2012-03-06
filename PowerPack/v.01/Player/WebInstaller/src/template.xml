@@ -1,121 +1,148 @@
-<template ID="786D6180-37AE-3A86-3730-C4E5FAF2905C">
-  <name>adelfos</name>
-  <id>adelfos</id>
-  <description>description</description>
-  <outputFolder>C:\temp</outputFolder>
-  <outputFileName>appInstaller123</outputFileName>
+<template ID="496271D7-C3D8-4760-B4FB-E6A490E9AA59">
+  <selectedProject id="CD2F57F9-9376-BBB5-8A47-E21DA0EA2AF7"/>
+  <projects>
+    <project id="BCFDF0A5-EAAB-D71C-143B-E21456CF8674">
+      <name>000</name>
+      <installerId>000</installerId>
+      <description>000 description</description>
+      <picture/>
+      <initialGraph name="graph1111"/>
+      <outputFolderPath>\\CSD\Home\Employee\Salova OO</outputFolderPath>
+      <outputFileName>appInstaller</outputFileName>
+      <embededAppPath/>
+    </project>
+    <project id="CD2F57F9-9376-BBB5-8A47-E21DA0EA2AF7">
+      <name>installer</name>
+      <installerId>installer</installerId>
+      <description>installer description</description>
+      <picture>R0lGODlhHgAeAPcAAAAAAP///9HR0ba2tmKjzQ5Uiw9XjBBZkBBYjhFbkhBXjRJZjxNajxZbkV+T
+udrf4xFelRJhlxdlmhlfkh1qnSt1qDB3qTV6rEWPwUaPwUWItkuNuVibyGOfyJC/4Ja+2ZrB26fL
+48bP1UWQwEaQwE2VxE6WxE6VxFecyFicyEyEqFqaxFOJrGyq0myq0W6r0niy13ex1m+lx3qz13ev
+0miYtX622Xqv0WiVsIG22VqAl4W52ou93Yu+3Ye31o2+3ZHB35nF4qLA0pawwK6+yHusyGWIm4as
+wq7S56/F0crW3IeVmpSdngVdIQhfHwlhHgxkHBBpGRNvFxZyFBd1ExdzExp4ERt5EB59Dh+ADCSG
+CSKDCiWIByaICCeKBS2SAi+TBTKYADWXBTicADebADabAjaZAjqcAEKmAUuxAlW+A1vFBGHMBGLM
+BF7HBFzFBHLPHmrRBGXPBGLJBGzVBnvZH5PeSp/jXHXcBZDjNaLlXKzpbX7mCaLtTYjsCrLzX8H1
+fsf2i314boF6b4J8cod/c//v2fzasf3iwf7mydXQyvzWrfzas/3hwYByYv7myrSFV5pzTdKfbNOg
+bey2gMOWarSLY7WMZMKXbbmQaPnFj9Sne7eRatOpfbeSbfrJl8SddvvKmfvKmu7Ak9WthPvMnPvN
+nu7Dl/vOofzQo4BsV/zVrf3WrvzXsP3atb+0qcO4rbyyqL65tKqnpM/MyfWtbPWvbfWvb92fZfaw
+cfezcuqqbfe0duutcfe3fNGcarWHXPi5f/e5f+qweNKdbM+ca/m7g/i8gsOVabaKY/nAibWLZPrB
+i/nCjbGKZfrGlZBzWZF1W5V7YopyW5l/Z5V/a52IdbCfj6+ejp6Qg8i+teqma/i2fJxzT5N9aqON
+eqKRg7ammLiqnrWqoeDd29fU0ubm5uXl5d/f39ra2tjY2NfX19TU1NPT09DQ0M/Pz8zMzMnJycTE
+xMPDw7+/v76+vry8vLq6urm5ubS0tLOzs7CwsK2trampqaSkpP///yH5BAEAAP8ALAAAAAAeAB4A
+AAj/AP8JHEiwoMGDCBMqXHiQHKxr2F6VY7hQmydSp0Z1chYrHcWDsEClWuSKFSpNmMap+0hQEadS
+rRA9QsQqlDFLsjyy/BdukylXjww9OiTqWDFw73b+o0bp0yJHiRqpeiasVzR5Oj9KG9bM1CpGrEwx
+87ULWr11O79NCqbsWahnyrjpklTNHlqW4jLl4gWsWyRIuG4ty0YvK0Va1pDVumXLVi1blbzNmreS
+4YMkR2oYGXSJ2LZtv5IJ0sECxxARC5UcKQIiBBIhTApNm0ZoiRAkIT7IcEAEXcIxZ4KT4fHDQ48b
+NGzs6AEESJAgPlS4S3gmECBAYTrE2M49BowOMGDk/9hBYZ5hgmf++PETZkWLFi7eu5i/AX6LFxLu
+sTuY7kwfPnx8oQEBBBZI4IAFRjCAAASRUUYZZoiRBx54eMGFFlpsgUIKHKZwwYYcoADBggSBsceJ
+etRBBx113OHiFSeYIOMJFpwQYwkJkDgQGHbEEYccbQTJRhtssHEFBhmQgMEIFWQwAgkkHKCjQGDA
+Mcccbryh5RpvrLHGFRM0wMACBihQZgEGIGDPfgN1scUWWWChxpxWUDHFFFL0s08+A/Tp5wD2xGNY
+OvHYo08VaSQqhT/86IMPPfG8I8CklArAznn/pMMOPFGg4SkU/NADTzuVKZVOp5/qAw+mOz3hxKtN
+rBeplEGE2gOooLPSyo6lrM5qzjnAmjNrQAA7</picture>
+      <initialGraph name="graph1111"/>
+      <outputFolderPath>\\CSD\Home\Employee\Salova OO</outputFolderPath>
+      <outputFileName>appInstaller</outputFileName>
+      <embededAppPath/>
+    </project>
+  </projects>
   <structure>
     <categories>
       <category name="application"/>
       <category name="objects"/>
       <category name="structure"/>
       <category name="resources"/>
-      <category name="main"/>
     </categories>
-    <graph name="GraphCanvas1835" initial="false" category="application">
+    <graph name="graph1111" category="application">
       <states>
-        <state name="Node1899" type="Normal" category="Normal" enabled="true" breakpoint="false" x="167" y="55">
+        <state name="Node2381" type="Initial" category="Normal" enabled="true" breakpoint="false" x="92" y="83">
           <text>State</text>
         </state>
-        <state name="Node1947" type="Normal" category="Normal" enabled="true" breakpoint="false" x="241" y="190">
+        <state name="Node2650" type="Normal" category="Command" enabled="true" breakpoint="false" x="673" y="163">
+          <text>[dialog "Hi a you agree?" ['browseFile' '' '#(*.png)' ]]</text>
+        </state>
+        <state name="Node2194" type="Normal" category="Command" enabled="true" breakpoint="false" x="673" y="89">
+          <text>[dialog "MyQuestion" ['textArea' '' $a] ]</text>
+        </state>
+        <state name="Node2827" type="Normal" category="Command" enabled="true" breakpoint="false" x="672" y="205">
+          <text>[dialog "Hi a you agree?" ['radioButtons' '' 'ggg1' 'ggg2' $a ] ['browseFile' '' '#(*.png)' ] ['textArea' 'TextArea' $a] ['text' 'Text' $a] ]</text>
+        </state>
+        <state name="Node3341" type="Normal" category="Command" enabled="true" breakpoint="false" x="941" y="330">
+          <text>[question "MyQuestion" 'v1,v2,v3' ]</text>
+        </state>
+        <state name="Node2049" type="Normal" category="Command" enabled="true" breakpoint="false" x="942" y="417">
+          <text>[question "MyQuestion" '#(*.xml; *.ppt)' ]</text>
+        </state>
+        <state name="Node3537" type="Normal" category="Command" enabled="true" breakpoint="false" x="944" y="465">
+          <text>[question "MyQuestion" '*' ]</text>
+        </state>
+        <state name="Node1725" type="Normal" category="Command" enabled="true" breakpoint="false" x="940" y="364">
+          <text>[question "MyQuestion" 'v1' 'v2' $a ]</text>
+        </state>
+        <state name="Node1581" type="Normal" category="Command" enabled="true" breakpoint="false" x="1002" y="539">
+          <text>[qSwitch 'title' 'v1' 'v2' 'v3']</text>
+        </state>
+        <state name="Node1556" type="Normal" category="Command" enabled="true" breakpoint="false" x="673" y="126">
+          <text>[dialog "Hi a you agree?" ['radioButtons' '' 'ggg1' 'ggg2' ${'a_'+$i} ]]</text>
+        </state>
+        <state name="Node2582" type="Normal" category="Command" enabled="true" breakpoint="false" x="677" y="17">
+          <text>[dialog "MyQuestion" ['text' '' $a] ]</text>
+        </state>
+        <state name="Node1630" type="Normal" category="Command" enabled="true" breakpoint="false" x="673" y="52">
+          <text>[dialog "MyQuestion" ['password' '' $a] ]</text>
+        </state>
+        <state name="Node2288" type="Normal" category="Normal" enabled="true" breakpoint="false" x="946" y="54">
           <text>State</text>
         </state>
-        <state name="Node1365" type="Initial" category="Command" enabled="true" breakpoint="false" x="467" y="89">
-          <text>[loadDataFrom "d:/FlexProjects/Power2Pack/WebInstaller/bin-debug/template.xml"]</text>
+        <state name="Node1465" type="Normal" category="Command" enabled="true" breakpoint="false" x="856" y="259">
+          <text>$a='111'</text>
         </state>
-        <state name="Node1919" type="Normal" category="Command" enabled="true" breakpoint="false" x="277" y="117">
-          <text>$a = [dialog "Privet"  '#()']</text>
+        <state name="Node2473" type="Normal" category="Command" enabled="true" breakpoint="false" x="35" y="516">
+          <text>[dialog "Hi a you agree?" ['radioButtons' ${'a'+$i} [['ggg1' 'v1'] ['ggg2' 'v2'] ['ttt' 'v3']] ]]</text>
         </state>
-        <state name="Node1741" type="Normal" category="Normal" enabled="true" breakpoint="false" x="132" y="282">
-          <text>State</text>
+        <state name="Node2175" type="Normal" category="Command" enabled="true" breakpoint="false" x="35" y="443">
+          <text>[dialog "Hi a you agree?" ['radioButtons' ${'a'+$i} 'ggg1,ggg2,ttt,dfgsdfgdg' ]]</text>
         </state>
-        <state name="Node1609" type="Normal" category="Normal" enabled="true" breakpoint="false" x="459" y="316">
-          <text>State</text>
+        <state name="Node2377" type="Normal" category="Command" enabled="true" breakpoint="false" x="35" y="600">
+          <text>[dialog "Hi a you agree?" ['checkBox' ${'a'+$i} 'ggg1' 'ggg2' 'ttt'  ]]</text>
+        </state>
+        <state name="Node2393" type="Normal" category="Command" enabled="true" breakpoint="false" x="34" y="636">
+          <text>[dialog "Hi a you agree?" ['radioButtons' ${'a'+$i} 'ggg1' 'ggg2' 'ttt'  ]]</text>
+        </state>
+        <state name="Node2122" type="Normal" category="Command" enabled="true" breakpoint="false" x="37" y="409">
+          <text>[dialog "Hi a you agree?" ['checkBox' ${'a'+$i} 'ggg1,ggg2,ttt,dfgsdfgdg' ]]</text>
+        </state>
+        <state name="Node2805" type="Normal" category="Command" enabled="true" breakpoint="false" x="40" y="303">
+          <text>[dialog "QuestionText" ['checkBox' 'CheckBoxLabel' 'ans1' 'ans2' 'ans3' ]]</text>
+        </state>
+        <state name="Node1928" type="Normal" category="Command" enabled="true" breakpoint="false" x="35" y="548">
+          <text>[dialog "Hi a you agree?" ['checkBox' ${'a'+$i} [['ggg1' 'true'] ['ggg2' 'true'] ['ttt' 'false']] ]]</text>
+        </state>
+        <state name="Node2139" type="Normal" category="Command" enabled="true" breakpoint="false" x="789" y="373">
+          <text>$i = 1</text>
+        </state>
+        <state name="Node2101" type="Normal" category="Command" enabled="true" breakpoint="false" x="700" y="301">
+          <text>$a_1 = 777</text>
+        </state>
+        <state name="Node3941" type="Normal" category="Command" enabled="true" breakpoint="false" x="43" y="338">
+          <text>[dialog "QuestionText" ['checkBox' 'CheckBoxLabel' [['ans1' 'true'] ['ans2' 'true'] ['ans3' 'false']] ]]</text>
+        </state>
+        <state name="Node2156" type="Normal" category="Command" enabled="true" breakpoint="false" x="41" y="269">
+          <text>[dialog "QuestionText" ['checkBox' 'CheckBoxLabel' 'ans1,ans2,ans3' ]]</text>
+        </state>
+        <state name="Node2458" type="Normal" category="Command" enabled="true" breakpoint="false" x="41" y="234">
+          <text>[dialog "QuestionText" ['checkBox' 'CheckBoxLabel' $variants ]]</text>
+        </state>
+        <state name="Node2718" type="Normal" category="Command" enabled="true" breakpoint="false" x="88" y="145">
+          <text>$variants=[['ans1' 'true'] ['ans2' 'true'] ['ans3' 'false']]</text>
         </state>
       </states>
       <transitions>
-        <transition name="Connector1590" highlighted="true" enabled="true" source="Node1365" destination="Node1899">
-          <label><![CDATA[false]]></label>
-        </transition>
-        <transition name="Connector1589" highlighted="true" enabled="true" source="Node1365" destination="Node1947">
-          <label><![CDATA[true]]></label>
-        </transition>
-        <transition name="Connector1588" highlighted="false" enabled="true" source="Node1919" destination="Node1947"/>
-        <transition name="Connector1587" highlighted="false" enabled="true" source="Node1899" destination="Node1919"/>
-      </transitions>
-    </graph>
-    <graph name="start" initial="false" category="main">
-      <states>
-        <state name="Node1457" type="Initial" category="Command" enabled="true" breakpoint="false" x="277" y="117">
-          <text>$a = [dialog "Privet" "Privet" "Privet" "Privet" "Privet" "Privet" "Privet" "Privet" "Privet" ]</text>
-        </state>
-      </states>
-      <transitions/>
-    </graph>
-    <graph name="432" initial="true" category="application">
-      <states>
-        <state name="Node1456" type="Normal" category="Normal" enabled="true" breakpoint="false" x="294" y="487">
-          <text>State</text>
-        </state>
-        <state name="Node1459" type="Normal" category="Normal" enabled="true" breakpoint="false" x="193" y="304">
-          <text>State</text>
-        </state>
-        <state name="Node1802" type="Initial" category="Normal" enabled="true" breakpoint="false" x="310" y="34">
-          <text>State</text>
-        </state>
-        <state name="Node1756" type="Normal" category="Command" enabled="true" breakpoint="false" x="447" y="92">
-          <text>$loginRes = [wholeMethod "login" "192.168.0.201" "root" "root"]</text>
-        </state>
-        <state name="Node1780" type="Normal" category="Normal" enabled="true" breakpoint="false" x="139" y="168">
-          <text>State</text>
-        </state>
-        <state name="Node1432" type="Normal" category="Normal" enabled="true" breakpoint="false" x="208" y="243">
-          <text>State</text>
-        </state>
-        <state name="Node1683" type="Normal" category="Command" enabled="true" breakpoint="false" x="345" y="170">
-          <text>$apps = [wholeMethod 'list_applications']</text>
-        </state>
-        <state name="Node1812" type="Normal" category="Command" enabled="true" breakpoint="false" x="423" y="232">
-          <text>$appGUID= [dialog "Select app" ['radioButtons' 'radioButtonsLabel' $apps ] ]</text>
-        </state>
-        <state name="Node2032" type="Normal" category="Command" enabled="true" breakpoint="true" x="418" y="285">
-          <text>$app = [wholeMethod "export_application" $appGUID]</text>
-        </state>
-        <state name="Node1622" type="Normal" category="Command" enabled="true" breakpoint="false" x="498" y="447">
-          <text>[dialog "Hi a you agree?" ['checkBox' 'hi3' 'ggg1' 'ggg2' 'ttt'  ]]</text>
-        </state>
-        <state name="Node1523" type="Normal" category="Command" enabled="true" breakpoint="false" x="497" y="402">
-          <text>[dialog "Hi a you agree?" ['checkBox' 'hi2' [['ggg1' 'true'] ['ggg2' 'true'] ['ttt' 'false']] ]]</text>
-        </state>
-        <state name="Node2003" type="Normal" category="Command" enabled="true" breakpoint="false" x="440" y="325">
-          <text>$res=[wholeMethod "install_application" "myapp.com" $app]</text>
-        </state>
-        <state name="Node1502" type="Normal" category="Command" enabled="true" breakpoint="false" x="71" y="427">
-          <text>[dialog "Hi a you agree?" ['radioButtons' 'hi1' 'ggg1,ggg2,ttt,dfgsdfgdg' ]]</text>
-        </state>
-      </states>
-      <transitions>
-        <transition name="Connector2111" highlighted="false" enabled="true" source="Node2032" destination="Node2003">
-          <label><![CDATA[Success]]></label>
-        </transition>
-        <transition name="Connector2097" highlighted="false" enabled="true" source="Node1812" destination="Node2032"/>
-        <transition name="Connector1931" highlighted="false" enabled="true" source="Node1432" destination="Node1780"/>
-        <transition name="Connector1894" highlighted="false" enabled="true" source="Node1683" destination="Node1432">
-          <label><![CDATA[Error]]></label>
-        </transition>
-        <transition name="Connector1853" highlighted="false" enabled="true" source="Node1683" destination="Node1812">
-          <label><![CDATA[Success]]></label>
-        </transition>
-        <transition name="Connector1779" highlighted="false" enabled="true" source="Node1780" destination="Node1802"/>
-        <transition name="Connector1750" highlighted="false" enabled="true" source="Node1756" destination="Node1780">
-          <label><![CDATA[Error]]></label>
-        </transition>
-        <transition name="Connector1707" highlighted="false" enabled="true" source="Node1756" destination="Node1683">
-          <label><![CDATA[Success]]></label>
-        </transition>
-        <transition name="Connector1674" highlighted="false" enabled="true" source="Node1802" destination="Node1756"/>
-        <transition name="Connector1422" highlighted="false" enabled="true" source="Node1502" destination="Node1523"/>
-        <transition name="Connector1421" highlighted="false" enabled="true" source="Node1523" destination="Node1622"/>
+        <transition name="Connector1662" highlighted="false" enabled="true" source="Node2381" destination="Node2718"/>
+        <transition name="Connector1661" highlighted="false" enabled="true" source="Node1630" destination="Node2288"/>
+        <transition name="Connector1660" highlighted="false" enabled="true" source="Node2139" destination="Node1725"/>
+        <transition name="Connector1659" highlighted="false" enabled="true" source="Node1465" destination="Node2101"/>
+        <transition name="Connector1658" highlighted="false" enabled="true" source="Node2101" destination="Node2139"/>
+        <transition name="Connector1657" highlighted="false" enabled="true" source="Node2718" destination="Node2458"/>
       </transitions>
     </graph>
     <resources/>
