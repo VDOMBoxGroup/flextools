@@ -51,6 +51,8 @@
 		private var appInstalled:Boolean;
 		private var timer:Number;
 
+		public var isDesktopApplication : Boolean = true;
+			
 		private function init():void
 		{
 			var defaultCaptions:Object = {
@@ -446,7 +448,7 @@
 				<mx:HBox y="162" width="100%"
 						 horizontalAlign="right" verticalAlign="middle">
 					<control:RoundButton id="btnAcceptKey"
-										 label="LanguageManager.sentences.accept"
+										 label="{LanguageManager.sentences.accept}"
 										 click="onKeyAccept(event)"/>
 				</mx:HBox>
 			</mx:Canvas>
@@ -504,7 +506,8 @@
 					<control:RoundButton id="btnExit"
 										 height="100%"
 										 label="{LanguageManager.sentences.exit}"
-										 click="exitApplication();"/>
+										 click="exitApplication();"
+										 visible="{isDesktopApplication}"/>
 				</mx:HBox>
 
 			</mx:Canvas>
