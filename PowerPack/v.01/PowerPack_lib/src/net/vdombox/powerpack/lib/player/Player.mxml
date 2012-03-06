@@ -222,6 +222,7 @@
 				case cKeyRequest:
 					vsProcess.selectedChild = cKeyRequest;
 					break;
+				
 				case cGeneral:
 					vsProcess.selectedChild = cGeneral;
 					btnRun.setFocus ();
@@ -233,6 +234,10 @@
 
 				case cFinal:
 					vsProcess.selectedChild = cFinal;
+					break;
+				
+				default:
+					vsProcess.selectedChild = cEmpty;
 					break;
 			}
 		}
@@ -430,7 +435,13 @@
 
 		<mx:ViewStack id="vsProcess"
 					  width="100%" height="100%"
-					  creationPolicy="all" change="vsChange(event)" paddingTop="0">
+					  creationPolicy="all" 
+					  change="vsChange(event)" 
+					  paddingTop="0">
+
+			<mx:Canvas id="cEmpty"
+					   width="100%"
+					   showEffect="{canvasShow}" hideEffect="{canvasHide}"/>
 
 			<mx:Canvas id="cKeyRequest"
 					   width="100%"
