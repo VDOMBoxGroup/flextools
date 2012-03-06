@@ -12,7 +12,7 @@
 
 		styleName="installerWindowStyle">
 		
-		<!--<mx:Style source="assets/style/style.css"/>-->
+		<mx:Style source="assets/style/style.css"/>
 	
 	<mx:Metadata>
 		[Event(name="close", type="flash.events.Event")]
@@ -112,7 +112,7 @@
 
 			function getLogo():*
 			{
-				return value.picture[0] && Utils.getStringOrDefault ( value.picture[0], '' ) || resources.strLogo;
+				return currentTemplate.selectedProject.picture || resources.strLogo;
 			}
 		}
 
@@ -423,7 +423,7 @@
 
 		<mx:Label
 				width="100%"
-				text="{ContextManager.templates.getItemAt(0).name}"
+				text="{ContextManager.templates.getItemAt( 0 ).selectedProject.name}"
 				styleName="installerHeaderLabel"/>
 
 		<mx:ViewStack id="vsProcess"
@@ -458,7 +458,7 @@
 
 				<mx:TextArea
 						width="100%" height="150"
-						text="{ContextManager.templates.getItemAt(0).description}"
+						text="{ContextManager.templates.getItemAt( 0 ).selectedProject.description}"
 						styleName="infoTextStyle"
 						editable="false" selectable="false" focusEnabled="false"
 

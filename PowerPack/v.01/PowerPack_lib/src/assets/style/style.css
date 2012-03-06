@@ -1,33 +1,10 @@
-/*
-Please remember to add the following effects to the main application.
-
-	<mx:Move duration="100" id="DockerMove"/>
-	<mx:Fade duration="100" id="DockerFade"/>
-*/
-/*
-@font-face
-{
-	src        : url("assets/fonts/arial.ttf");
-	fontFamily : Arial;
-}
-*/
 global
 {
-	/*backgroundAlpha: 1.0; /* this runs the opacity of nearly every square piece of the components */
-	/*backgroundSize: "auto";*/
-	
 	titleBarButtonBgColor : #494848;
-	
-	/*fillAlphas: 0.3, 0.3, 0.85, 0.75; /* last pair are for OVER state */
-	/*fillColors: #AE4731, #BFD5E8, #E42226, #A8D0E2;*/
-	
-	/*highlightAlphas: 0.08, 0.14; /* use this to control the 'light' cast on the components */
-	
+
 	themeColor            : #2ba6e5;
 	
 	focusThickness		  : 2.5;
-	/*rollOverColor: #D3BABA;*/
-	/*selectionColor: #D3989C;*/
 	
 	fontFamily            : Arial;
 	fontSize              : 10;
@@ -97,8 +74,6 @@ global
 {
 	headerHeight             : 30;
 	
-	
-	
 	titleTextStyleName       : "titleTextStyle";
 	
 	titleBarColors           : #ffeae6, #000000, #666666;
@@ -138,18 +113,6 @@ Docker
     rowStyleName         : "dockingRow";
 }
 
-DockableToolBar
-{
-    /*addedEffect: "DockerFade";
-        borderStyle: "none";
-        horizontalGap: 2;
-        paddingBottom: 2;
-        paddingLeft: 0;
-        paddingRight: 8;
-        paddingTop: 2;*/
-    /*backgroundColor: #9199A4;*/
-}
-
 GridItem
 {
     horizontalGap : 1;
@@ -157,17 +120,10 @@ GridItem
 
 .dockingArea
 {
-    /*horizontalScrollPolicy: "off";
-        verticalGap: 0;
-        borderStyle: "applicationControlBar";
-        dropShadowEnabled: true;	*/
 }
 
 .dockingRow
 {
-    /*horizontalGap: 1;
-        addedEffect: "DockerFade";
-        removedEffect: "DockerFade";*/
 }
 
 .headerLabel
@@ -196,7 +152,6 @@ ProgressBar
 	barColor    : #0c5d9b;
 	borderColor : #787878;
 	borderSkin  :  ClassReference("net.vdombox.powerpack.lib.player.customize.skins.GeneratorProgressBarSkin");
-	/* barSkin     : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.GeneratorProgressBarSkin");*/
 	color		: #ffffff;
 	
 }
@@ -301,38 +256,12 @@ BrowseButton
 	paddingTop	: 3;
 }
 
-
-PopUpToolBar
-{
-    /*removedEffect: "DockerFade";
-        moveEffect: "DockerMove";*/
-
-    /*backgroundColor: #9199A4;*/
-
-    /*borderAlpha: 1.0;
-        borderStyle: "default";
-        borderThickness: 0;*/
-
-    /* borderThicknessBottom is NaN */
-
-    /*borderThicknessLeft: 0;
-        borderThicknessRight: 0;
-        borderThicknessTop: 0;
-        cornerRadius: 8;
-        dropShadowEnabled: true;
-        paddingBottom: 0;
-        paddingLeft: 0;
-        paddingRight: 0;
-        paddingTop: 0;
-        headerHeight: 20;*/
-}
-
 .infoTextStyle
 {
 	fontFamily : Arial;
 	fontSize   : 14;
 	color	   : #ffffff;
-	
+	backgroundAlpha : 0;
 }
 
 .browseBtnStyle
