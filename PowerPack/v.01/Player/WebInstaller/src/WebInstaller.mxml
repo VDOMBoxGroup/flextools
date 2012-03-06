@@ -56,7 +56,7 @@
 		}
 		]]>
 	</mx:Script>
-	<player:Player id="player" isDescktopApplication="false"/>
+	<player:Player id="player" isDesktopApplication="false"/>
 	
 	
 	
