@@ -320,7 +320,7 @@ package net.vdombox.powerpack.lib.player.template
 		{
 			_xml.projects = convertProjectsToXML();
 			
-			_xml.selectedProject = selectedProjectToXML();
+			_xml.selectedProjectID = selectedProject ? selectedProject.id : "";
 		}
 	
 		public function decode() : void
