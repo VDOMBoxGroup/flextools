@@ -18,7 +18,7 @@ import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
-public class MenuGeneral extends EventDispatcher
+public class MenuManager extends EventDispatcher
 {
 	public static const LANG_FOLDER	: String = "assets/lang";
 	public static const STATE_NO	: String = "noTemplate";
@@ -30,28 +30,45 @@ public class MenuGeneral extends EventDispatcher
 	public static const MENU_RUN		: String = "run";
 	public static const MENU_TEMPLATE	: String = "template";
 	
-	[Bindable]
-	public static var state : String;
+	private static var _instance : MenuManager;
 	
-	private static var _menu : FlexNativeMenu;
-	private static var memMenu : Dictionary;
+	public function MenuManager()
+	{
+		if (_instance)
+			throw new Error( "MenuGeneral and can only be accessed through MenuGeneral.getInstance()" ); 
+	}
+	
+	public static function getInstance () : MenuManager
+	{
+		if (!_instance)
+			_instance = new MenuManager();
+		
+		return _instance;
+	}
+	
+	[Bindable]
+	public var state : String;
+	
+	private var _menu : FlexNativeMenu;
+	private var memMenu : Dictionary;
 
-	public static function get menu():FlexNativeMenu
+	
+	public function get menu():FlexNativeMenu
 	{
 		return _menu;
 	}
 
-	public static function set menu(value:FlexNativeMenu):void
+	public function set menu(value:FlexNativeMenu):void
 	{
 		_menu = value;
 	}
 
-	public static function bindItems() : void
+	public function bindItems() : void
 	{
-		bindItemsRecursive( MenuGeneral.menu.nativeMenu );
+		bindItemsRecursive( menu.nativeMenu );
 	}
 
-	private static function bindItemsRecursive( menu : NativeMenu ) : void
+	private function bindItemsRecursive( menu : NativeMenu ) : void
 	{
 		for each ( var item : NativeMenuItem in menu.items )
 		{
@@ -62,7 +79,7 @@ public class MenuGeneral extends EventDispatcher
 		}
 	}
 
-	public static function enable() : void
+	public function enable() : void
 	{
 		if ( memMenu )
 		{
@@ -74,17 +91,23 @@ public class MenuGeneral extends EventDispatcher
 			for each( item in menu.nativeMenu.items )
 				item.enabled = true;
 		}
+		
+		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_RUN_STATE_CHANGED));
+		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_TEMPLATE_STATE_CHANGED));
 	}
 
-	public static function disable() : void
+	public function disable() : void
 	{
 		memMenu = new Dictionary( true );
 
 		for each( var item : NativeMenuItem in menu.nativeMenu.items )
 			memMenu[item] = item.enabled;
+			
+		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_RUN_STATE_CHANGED));
+		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_TEMPLATE_STATE_CHANGED));
 	}
 
-	public static function noTemplate() : void
+	public function noTemplate() : void
 	{
 		state = STATE_NO;
 
@@ -98,7 +121,7 @@ public class MenuGeneral extends EventDispatcher
 		updateMenuState(MENU_RUN, false);
 	}
 
-	public static function newTemplate() : void
+	public function newTemplate() : void
 	{
 		state = STATE_NEW;
 
@@ -112,7 +135,7 @@ public class MenuGeneral extends EventDispatcher
 		enableDebugStartMenu();
 	}
 	
-	public static function modifiedTemplate() : void
+	public function modifiedTemplate() : void
 	{
 		state = STATE_MOD;
 
@@ -126,7 +149,7 @@ public class MenuGeneral extends EventDispatcher
 		enableDebugStartMenu();
 	}
 
-	public static function openedTemplate() : void
+	public function openedTemplate() : void
 	{
 		state = STATE_OPEN;
 
@@ -140,7 +163,7 @@ public class MenuGeneral extends EventDispatcher
 		enableDebugStartMenu();
 	}
 
-	public static function updateLangMenu() : void
+	public function updateLangMenu() : void
 	{
 		// get language folder
 		var langsDir : File = File.applicationDirectory.resolvePath( LANG_FOLDER );
@@ -149,7 +172,7 @@ public class MenuGeneral extends EventDispatcher
 		{
 			var fileList : Array = langsDir.getDirectoryListing();
 
-			var settingsItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "settings" );
+			var settingsItem : NativeMenuItem = menu.nativeMenu.getItemByName( "settings" );
 			var langItem : NativeMenuItem = settingsItem.submenu.getItemByName( "language" );
 
 			if ( langItem.submenu )
@@ -172,7 +195,7 @@ public class MenuGeneral extends EventDispatcher
 							item.label,
 							item.menu.getItemIndex( item ) );
 
-					MenuGeneral.menu.dispatchEvent( clickEvent );
+					menu.dispatchEvent( clickEvent );
 				}
 			}
 
@@ -215,14 +238,14 @@ public class MenuGeneral extends EventDispatcher
 		}
 	}
 
-	public static function updateLastFilesMenu() : void
+	public function updateLastFilesMenu() : void
 	{
 		if ( ContextManager.instance.files && ContextManager.instance.files.length > 0 )
 		{
-			if (!MenuGeneral.menu)
+			if (!menu)
 				return;
 			
-			var fileItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "file" );
+			var fileItem : NativeMenuItem = menu.nativeMenu.getItemByName( "file" );
 			var exitItem : NativeMenuItem = fileItem.submenu.getItemByName( "exit" );
 
 			for each( var item : SuperNativeMenuItem in fileItem.submenu.items )
@@ -262,7 +285,7 @@ public class MenuGeneral extends EventDispatcher
 							item.label,
 							item.menu.getItemIndex( item ) );
 
-					MenuGeneral.menu.dispatchEvent( clickEvent );
+					menu.dispatchEvent( clickEvent );
 				}
 			}
 
@@ -277,24 +300,29 @@ public class MenuGeneral extends EventDispatcher
 		}
 	}
 	
-	public static function updateMenuState (menuType : String, enabled : Boolean) : void 
+	public function updateMenuState (menuType : String, enabled : Boolean) : void 
 	{
-		return;
-//		if ( !MenuGeneral.menu)
-//			return;
+		if ( !menu)
+			return;
 		
-		var menuItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( menuType );
+		var menuItem : NativeMenuItem = menu.nativeMenu.getItemByName( menuType );
 		menuItem.enabled = enabled;
 		
 		for each ( var subItem : NativeMenuItem in menuItem.submenu.items )
 		{
 			subItem.enabled = enabled;
 		}
+		
+		if (menuType == MENU_RUN)
+			dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_RUN_STATE_CHANGED));
+		
+		if (menuType == MENU_TEMPLATE)
+			dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_TEMPLATE_STATE_CHANGED));
 	}
 	
-	private static function enableDebugStartMenu () : void 
+	private function enableDebugStartMenu () : void 
 	{
-		var runItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "run" );
+		var runItem : NativeMenuItem = menu.nativeMenu.getItemByName( MENU_RUN );
 		runItem.enabled = true;
 		
 		for each ( var item : NativeMenuItem in runItem.submenu.items )
@@ -305,11 +333,26 @@ public class MenuGeneral extends EventDispatcher
 		runItem.submenu.getItemByName( "run" ).enabled = true;
 		runItem.submenu.getItemByName( "debug" ).enabled = true;
 		runItem.submenu.getItemByName( "step_by_step" ).enabled = true;
+		
+		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_RUN_STATE_CHANGED));
 	}
 	
-	public static function updateFileSubMenuState (enabled : Boolean, tplFileModified : Boolean = true) : void 
+	public function switchDebug (enable : Boolean) : void
 	{
-		var fileMenu : NativeMenu = MenuGeneral.menu.nativeMenu.getItemByName( "file" ).submenu;
+		var runItem : NativeMenuItem = menu.nativeMenu.getItemByName( MENU_RUN );
+		
+		runItem.submenu.getItemByName( "resume" ).enabled = enable;
+		runItem.submenu.getItemByName( "step_into" ).enabled = enable;
+		runItem.submenu.getItemByName( "step_over" ).enabled = enable;
+		runItem.submenu.getItemByName( "step_return" ).enabled = enable;
+		runItem.submenu.getItemByName( "break" ).enabled = enable;
+
+		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_RUN_STATE_CHANGED));
+	}
+	
+	public function updateFileSubMenuState (enabled : Boolean, tplFileModified : Boolean = true) : void 
+	{
+		var fileMenu : NativeMenu = menu.nativeMenu.getItemByName( "file" ).submenu;
 		
 		fileMenu.getItemByName( "new_category" ).enabled = enabled;
 		fileMenu.getItemByName( "close" ).enabled = enabled;

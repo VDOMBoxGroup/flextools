@@ -90,8 +90,6 @@
 			
 			static public function show( closeHandler : Function = null ) : AirBuildProperties
 			{
-				
-				
 				if ( !_dialog || _dialog.closed )
 				{
 					_dialog = new AirBuildProperties();
@@ -312,7 +310,7 @@
 			{
 				flexSDK_4_1_BrowseBox.errorString = validFlexSDKPath ? null : "Error";
 				
-				buildBtn.enabled = buildAvailable;
+				updateBuildEnableState();
 			}
 			
 			private function get validAppPath () : Boolean
@@ -358,7 +356,7 @@
 				
 				airSDKLinuxBrowseBox.errorString = validAirSDKPath ? null : "Error";
 				
-				buildBtn.enabled = buildAvailable;
+				updateBuildEnableState();
 			}
 			
 			private function get validAirSDKPath () : Boolean
@@ -417,6 +415,22 @@
 					buildTypeNative.height = 1;
 				}
 					
+			}
+			
+			private function updateBuildEnableState() : void
+			{
+				buildBtn.enabled = buildAvailable;
+				
+				if (buildBtn.enabled)
+				{
+					buildLabel.text = "";
+					return;
+				}
+				
+				var msgErrorAppParams	: String = "Builder not available. Check application params.";
+				var msgErrorSDKPath		: String = "Builder not available. Check SDK path.";
+				
+				buildLabel.text = validFlexSDKPath && validAirSDKPath ? msgErrorAppParams : msgErrorSDKPath;
 			}
 			
 		]]>
@@ -494,7 +508,18 @@
 					
 			</mx:VBox>
 			
-			<mx:Button id="buildBtn" label="Build" click="btnBuildClickHandler(event)" />
+			<mx:HBox horizontalAlign="center" verticalAlign="middle">
+				
+				<mx:Button id="buildBtn" label="Build" click="btnBuildClickHandler(event)" />
+				
+				<mx:Label id="buildLabel" 
+						  text=""
+						  visible="{!buildBtn.enabled}"
+						  color="red"
+						  paddingTop="3"/>
+				
+			</mx:HBox>
+			
 		</mx:VBox>
 		
 	</mx:VBox>

@@ -38,7 +38,7 @@ import net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar;
 import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
 import net.vdombox.powerpack.lib.extendedapi.controls.HDivider;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
-import net.vdombox.powerpack.menu.MenuGeneral;
+import net.vdombox.powerpack.menu.MenuManager;
 
 public class ProgressManager extends EventDispatcher
 {
@@ -325,7 +325,7 @@ public class ProgressManager extends EventDispatcher
 				break;
 
 			case WINDOW_MODE:
-				MenuGeneral.disable();
+				MenuManager.getInstance().disable();
 
 				instance._bar.label = LanguageManager.sentences['progress_full_label'];
 				instance._bar.percentWidth = 100;
@@ -409,7 +409,7 @@ public class ProgressManager extends EventDispatcher
 		switch ( instance._viewMode )
 		{
 			case WINDOW_MODE:
-				MenuGeneral.enable();
+				MenuManager.getInstance().enable();
 				var parent : Object = instance._window;
 
 				if ( instance._winBox.parent )

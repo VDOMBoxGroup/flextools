@@ -28,7 +28,7 @@
 		import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 		import net.vdombox.powerpack.managers.BuilderContextManager;
 		import net.vdombox.powerpack.managers.ProgressManager;
-		import net.vdombox.powerpack.menu.MenuGeneral;
+		//import net.vdombox.powerpack.menu.MenuGeneral;
 
 		private function show():void
 		{
@@ -53,13 +53,13 @@
 			BuilderContextManager.loadSettings ();
 
 			// Load language file
-			file = File.applicationDirectory.resolvePath ( MenuGeneral.LANG_FOLDER + ContextManager.instance.lang.file );
+			/*file = File.applicationDirectory.resolvePath ( MenuGeneral.LANG_FOLDER + ContextManager.instance.lang.file );
 			if ( file && file.exists )
 			{
 				fileStream = new FileStream ();
 				fileStream.addEventListener ( Event.COMPLETE, onLanguageLoad );
 				fileStream.openAsync ( file, FileMode.READ );
-			}
+			}*/
 
 		}
 
@@ -123,7 +123,7 @@
 				stream.openAsync ( _file, FileMode.READ );
 
 				BuilderContextManager.updateLastFiles ( _file );
-				MenuGeneral.updateLastFilesMenu ();
+				//MenuGeneral.updateLastFilesMenu ();
 			}
 
 			return stream;

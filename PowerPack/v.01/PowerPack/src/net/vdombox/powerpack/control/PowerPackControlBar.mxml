@@ -1,28 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:ControlBar xmlns:mx="http://www.adobe.com/2006/mxml" 
-			   horizontalGap="3" verticalAlign="middle" 
-			   height="35">
+			   horizontalGap="7" verticalAlign="middle" 
+			   height="35"
+			   creationComplete="creationCompleteHandler(event)" xmlns:control="net.vdombox.powerpack.lib.player.control.*">
 	<mx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.powerpack.dialog.AirBuildProperties;
 			import net.vdombox.powerpack.dialog.ProjectsSettingsDialog;
 			import net.vdombox.powerpack.lib.player.managers.ContextManager;
 			import net.vdombox.powerpack.lib.player.template.Template;
 			import net.vdombox.powerpack.lib.player.template.TemplateProject;
+			import net.vdombox.powerpack.menu.MenuGeneralEvent;
+			import net.vdombox.powerpack.menu.MenuManager;
 			import net.vdombox.powerpack.panel.Graphs;
 			import net.vdombox.powerpack.template.BuilderTemplate;
 			import net.vdombox.powerpack.template.BuilderTemplateProject;
 			
-			static public const TPL_CHANGED : String = "templateChanged";
+			public static const ITEM_TYPE_APP_PROPERIES		: String = "properties";
+			public static const ITEM_TYPE_BUILD_INSTALLER	: String = "air_builder";
 			
-			private function cbInitGraphChangeHandler( event : Event ) : void
+			public static const ITEM_TYPE_RUN				: String = "run";
+			public static const ITEM_TYPE_DEBUG				: String = "debug";
+			public static const ITEM_TYPE_STEP_BY_STEP		: String = "step_by_step";
+			
+			public static const ITEM_TYPE_STEP_INTO			: String = "step_into";
+			public static const ITEM_TYPE_STEP_OVER			: String = "step_over";
+			public static const ITEM_TYPE_STEP_RETURN		: String = "step_return";
+			public static const ITEM_TYPE_RESUME			: String = "resume";
+			public static const ITEM_TYPE_BREAK				: String = "break";
+			
+			private function cbApplicationsChangeHandler( event : Event ) : void
 			{
 				currentTemplate.selectedProject = appsComboBox.selectedItem as TemplateProject;
 				
 				appsComboBox.selectedItem = currentTemplate.selectedProject;
 				
-				dispatchEvent( new Event( TPL_CHANGED ) );
+				dispatchEvent( new ControlBarEvent( ControlBarEvent.TPL_CHANGED ) );
 			}
 			
 			private function get currentTemplate() : BuilderTemplate
@@ -33,9 +48,48 @@
 				return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
 			}
 			
-			protected function appSettings_clickHandler(event:MouseEvent):void
+			protected function menuItem_clickHandler(event:MouseEvent, itemType : String):void
 			{
-				ProjectsSettingsDialog.show(Graphs.graphs);
+				var evt : ControlBarEvent = new ControlBarEvent(ControlBarEvent.EVENT_ITEM_CLICK);
+				evt.targetItemType = itemType;
+				
+				dispatchEvent(evt);
+			}
+			
+			public function menuRunStateChangedHandler (event : MenuGeneralEvent) : void
+			{
+				if (!MenuManager.getInstance().menu)
+					return;
+				
+				var runMenuItem : NativeMenuItem = MenuManager.getInstance().menu.nativeMenu.getItemByName( MenuManager.MENU_RUN );
+				
+				menuBtnRun.enabled = runMenuItem.submenu.getItemByName( "run" ).enabled;
+				menuBtnStepByStep.enabled = runMenuItem.submenu.getItemByName( "step_by_step" ).enabled;
+				menuBtnDebug.enabled = runMenuItem.submenu.getItemByName( "debug" ).enabled;
+				
+				menuBtnBreak.enabled = runMenuItem.submenu.getItemByName( "break" ).enabled;
+				menuBtnResume.enabled = runMenuItem.submenu.getItemByName( "resume" ).enabled;
+				
+				menuBtnStepInto.enabled = runMenuItem.submenu.getItemByName( "step_into" ).enabled;
+				menuBtnStepOver.enabled = runMenuItem.submenu.getItemByName( "step_over" ).enabled;
+				menuBtnStepReturn.enabled = runMenuItem.submenu.getItemByName( "step_return" ).enabled;
+			}
+		
+			public function menuTemplateStateChangedHandler (event : MenuGeneralEvent) : void
+			{
+				if (!MenuManager.getInstance().menu)
+					return;
+				
+				var templateMenuItem : NativeMenuItem = MenuManager.getInstance().menu.nativeMenu.getItemByName( MenuManager.MENU_TEMPLATE );
+				
+				menuAppSettings.enabled = menuBuild.enabled = templateMenuItem.enabled;
+				
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				MenuManager.getInstance().addEventListener(MenuGeneralEvent.MENU_RUN_STATE_CHANGED, menuRunStateChangedHandler);
+				MenuManager.getInstance().addEventListener(MenuGeneralEvent.MENU_TEMPLATE_STATE_CHANGED, menuTemplateStateChangedHandler);
 			}
 			
 		]]>
@@ -48,13 +102,72 @@
 				 dataProvider="{ContextManager.templates.getItemAt( 0 ).projects}" 
 				 labelField="name"
 				 selectedIndex="{ContextManager.templates.getItemAt( 0 ).selectedProjectIndex}"
-				 change="cbInitGraphChangeHandler(event)"/>
+				 change="cbApplicationsChangeHandler(event)"/>
 	
-	<mx:Image source="@Embed('assets/icons/settings.png')" 
-			  toolTip="Application settings"
-			  click="appSettings_clickHandler(event)"/>
+	<control:ControlBarImage id="menuAppSettings" 
+							 sourceEnabled="@Embed('assets/icons/settingsEnabled.png')" 
+							 sourceDisabled="@Embed('assets/icons/settingsDisabled.png')"
+							 toolTip="Application settings"
+							 click="menuItem_clickHandler(event, ITEM_TYPE_APP_PROPERIES)"/>
 	
 	<mx:VRule height="20"/>
 	
-	<mx:Button label="Build "/>
+	<control:ControlBarImage id="menuBuild"
+							 sourceEnabled="@Embed('assets/icons/exportBuildEnabled.png')" 
+							 sourceDisabled="@Embed('assets/icons/exportBuildDisabled.png')"
+							 click="menuItem_clickHandler(event, ITEM_TYPE_BUILD_INSTALLER)" 
+							 toolTip="Export project build (Adobe AIR or native file)"/>
+	
+	<mx:VRule height="20"/>
+	
+	<control:ControlBarImage id="menuBtnRun"
+							 sourceEnabled="@Embed('assets/icons/runEnabled.png')"
+							 sourceDisabled="@Embed('assets/icons/runDisabled.png')"
+							 click="menuItem_clickHandler(event, ITEM_TYPE_RUN)"
+							 toolTip="Run (Ctrl + R)"/>
+	
+	<control:ControlBarImage id="menuBtnDebug"
+							 sourceEnabled="@Embed('assets/icons/debugEnabled.png')"
+							 sourceDisabled="@Embed('assets/icons/debugDisabled.png')"
+							 click="menuItem_clickHandler(event, ITEM_TYPE_DEBUG)" 
+							 toolTip="Debug (Ctrl + D)"/>
+	
+	<control:ControlBarImage id="menuBtnStepByStep"
+							 sourceEnabled="@Embed('assets/icons/stepByStepEnabled.png')"
+							 sourceDisabled="@Embed('assets/icons/stepByStepDisabled.png')"
+							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_BY_STEP)" 
+							 toolTip="Step by step (Ctrl + Alt + D)"/>
+
+	<mx:VRule height="20"/>
+	
+	<control:ControlBarImage id="menuBtnResume"
+							 sourceEnabled="@Embed('assets/icons/ResumeEnabled.png')"
+							 sourceDisabled="@Embed('assets/icons/ResumeDisabled.png')"
+							 click="menuItem_clickHandler(event, ITEM_TYPE_RESUME)" 
+							 toolTip="Resume (Ctrl + M)"/>
+	
+	<control:ControlBarImage id="menuBtnStepInto"
+							 sourceEnabled="@Embed('assets/icons/StepIntoEnabled.png')"
+							 sourceDisabled="@Embed('assets/icons/StepIntoDisabled.png')"
+							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_INTO)" 
+							 toolTip="Step Into (Ctrl + I)"/>
+	
+	<control:ControlBarImage id="menuBtnStepOver"
+							 sourceEnabled="@Embed('assets/icons/StepOverEnabled.png')"
+							 sourceDisabled="@Embed('assets/icons/StepOverDisabled.png')"
+							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_OVER)" 
+							 toolTip="Step Over (Ctrl + O)"/>
+
+	<control:ControlBarImage id="menuBtnStepReturn"
+							 sourceEnabled="@Embed('assets/icons/StepReturnEnabled.png')"
+							 sourceDisabled="@Embed('assets/icons/StepReturnDisabled.png')"
+							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_RETURN)" 
+							 toolTip="Step Return (Ctrl + E)"/>
+	
+	<control:ControlBarImage id="menuBtnBreak"
+							 sourceEnabled="@Embed('assets/icons/BreakEnabled.png')"
+							 sourceDisabled="@Embed('assets/icons/BreakDisabled.png')"
+							 click="menuItem_clickHandler(event, ITEM_TYPE_BREAK)" 
+							 toolTip="Break (Ctrl + B)"/>
+	
 </mx:ControlBar>

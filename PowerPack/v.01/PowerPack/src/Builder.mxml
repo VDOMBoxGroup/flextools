@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication
-		title="{LanguageManager.sentences.app_title} - {selectedTemplateProject &amp;&amp; selectedTemplateProject.name ? selectedTemplateProject.name : LanguageManager.sentences.noname} - {MenuGeneral.state == MenuGeneral.STATE_MOD ? '*' : ''}"
+		title="{LanguageManager.sentences.app_title} - {selectedTemplateProject &amp;&amp; selectedTemplateProject.name ? selectedTemplateProject.name : LanguageManager.sentences.noname} - {MenuManager.getInstance().state == MenuManager.STATE_MOD ? '*' : ''}"
 		titleIcon="@Embed(source='assets/icons/icon_16.png')"
 		layout="absolute"
 		statusBarFactory="net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar"
@@ -96,6 +96,7 @@
 			import mx.utils.StringUtil;
 			
 			import net.vdombox.powerpack.*;
+			import net.vdombox.powerpack.control.ControlBarEvent;
 			import net.vdombox.powerpack.dialog.AboutProgramDialog;
 			import net.vdombox.powerpack.dialog.AirBuildProperties;
 			import net.vdombox.powerpack.dialog.EditCaption;
@@ -129,7 +130,7 @@
 			import net.vdombox.powerpack.managers.BuilderContextManager;
 			import net.vdombox.powerpack.managers.CashManager;
 			import net.vdombox.powerpack.managers.ProgressManager;
-			import net.vdombox.powerpack.menu.MenuGeneral;
+			import net.vdombox.powerpack.menu.MenuManager;
 			import net.vdombox.powerpack.panel.Console;
 			import net.vdombox.powerpack.template.BuilderTemplate;
 			import net.vdombox.powerpack.template.BuilderTemplateProject;
@@ -178,7 +179,7 @@
 		
 		private function init() : void
 		{
-			MenuGeneral.menu = flexNativeMenu;
+			MenuManager.getInstance().menu = flexNativeMenu;
 		}
 			
 		private function show() : void
@@ -205,13 +206,13 @@
 			// Load application settings
 			BuilderContextManager.loadSettings();
 
-			MenuGeneral.bindItems();
-			MenuGeneral.noTemplate();
-			MenuGeneral.updateLangMenu();
-			MenuGeneral.updateLastFilesMenu();
+			MenuManager.getInstance().bindItems();
+			MenuManager.getInstance().noTemplate();
+			MenuManager.getInstance().updateLangMenu();
+			MenuManager.getInstance().updateLastFilesMenu();
 
 			// Load language file
-			langFolder = File.applicationDirectory.resolvePath( MenuGeneral.LANG_FOLDER );
+			langFolder = File.applicationDirectory.resolvePath( MenuManager.LANG_FOLDER );
 			langFile = langFolder.resolvePath( ContextManager.instance.lang.file );
 
 			if ( langFile && langFile.exists )
@@ -334,7 +335,7 @@
 
 			pnl_graphs.clear();
 
-			MenuGeneral.noTemplate();
+			MenuManager.getInstance().noTemplate();
 
 			workStage.visible = false;
 			workStage.includeInLayout = false;
@@ -402,8 +403,8 @@
 			ContextManager.instance.lastFile = true;
 			BuilderContextManager.updateLastFiles( currentTemplate.file );
 
-			MenuGeneral.updateLastFilesMenu();
-			MenuGeneral.openedTemplate();
+			MenuManager.getInstance().updateLastFilesMenu();
+			MenuManager.getInstance().openedTemplate();
 		}
 
 		public function processSavedTpl() : void
@@ -416,8 +417,8 @@
 			ContextManager.instance.lastFile = true;
 			BuilderContextManager.updateLastFiles( currentTemplate.file );
 
-			MenuGeneral.updateLastFilesMenu();
-			MenuGeneral.openedTemplate();
+			MenuManager.getInstance().updateLastFilesMenu();
+			MenuManager.getInstance().openedTemplate();
 		}
 
 		public function processNewTpl() : void
@@ -433,7 +434,7 @@
 
 			ContextManager.instance.lastFile = false;
 
-			MenuGeneral.newTemplate();
+			MenuManager.getInstance().newTemplate();
 		}
 
 		//--------------------------------------------------------------------------
@@ -507,10 +508,10 @@
 		{
 			if ( ContextManager.templates.length > 0 )
 			{
-				if ( MenuGeneral.state != MenuGeneral.STATE_MOD )
+				if ( MenuManager.getInstance().state != MenuManager.STATE_MOD )
 				{
 					currentTemplate.modified = true;
-					MenuGeneral.modifiedTemplate();
+					MenuManager.getInstance().modifiedTemplate();
 				}
 			}
 		}
@@ -536,16 +537,24 @@
 		}
 
 		// Event handler for the MenuBar control's itemClick event.
-		private function menuHandler( event : FlexNativeMenuEvent ) : void
+		private function menuHandler( event : FlexNativeMenuEvent , itemName : String = "") : void
 		{
-			event.stopImmediatePropagation();
+			if (event)
+				event.stopImmediatePropagation();
 
-			var menuItem : SuperNativeMenuItem = event.nativeMenuItem as SuperNativeMenuItem;
+			var menuItemName : String = itemName;
+			
+			if (event)
+			{
+				var menuItem : SuperNativeMenuItem = event.nativeMenuItem as SuperNativeMenuItem;
+				menuItemName = menuItem.name;
+			}
+			
 			var file : File = BuilderContextManager.instance.lastDir;
 			var fileStream : FileStream = new FileStream();
 			var tpl : BuilderTemplate;
 
-			switch ( menuItem.name )
+			switch ( menuItemName )
 			{
 				case "new_template":
 					closeTpl( true, newTpl );
@@ -588,7 +597,7 @@
 					break;
 				
 				case "air_builder":
-					AirBuildProperties.show(onTemplateBuildPropertiesClose);
+					AirBuildProperties.show();
 					break;
 
 				case "about_program":
@@ -610,7 +619,7 @@
 	
 						ContextManager.templateStruct = new TemplateStruct( pnl_graphs.toXML(), currentTemplate.selectedProject.initialGraphName);
 	
-						switch ( menuItem.name )
+						switch ( menuItemName )
 						{
 							case 'run':
 								ContextManager.templateStruct.isDebug = false;
@@ -676,7 +685,7 @@
 					if ( !ContextManager.templateStruct )
 						return;
 
-					switch ( menuItem.name )
+					switch ( menuItemName )
 					{
 						case 'resume':
 							ProgressManager.start( ProgressManager.WINDOW_MODE, false );
@@ -714,13 +723,16 @@
 					break;
 			}
 
+			if (!event)
+				return;
+			
 			if ( menuItem.groupName == "lastfiles" )
 			{
 				closeTpl( true, openTpl, [new File( menuItem.data.toString() )] );
 			}
 			else if ( menuItem.groupName == "language" )
 			{
-				file = File.applicationDirectory.resolvePath( MenuGeneral.LANG_FOLDER ).resolvePath( menuItem.data.toString() );
+				file = File.applicationDirectory.resolvePath( MenuManager.LANG_FOLDER ).resolvePath( menuItem.data.toString() );
 				fileStream.addEventListener( Event.COMPLETE, completeLangHandler );
 				fileStream.openAsync( file, FileMode.READ );
 			}
@@ -733,15 +745,6 @@
 				return null;
 			
 			return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
-		}
-
-		private function onTemplateBuildPropertiesClose( event : CloseEvent ) : void
-		{
-			if ( event.detail == ModalDialog.OK )
-			{
-				templateChanged();
-			}
-
 		}
 		
 		private function onProjectsSettingsDialogClose( event : CloseEvent ) : void
@@ -975,14 +978,8 @@
 
 		public function switchDebug( enable : Boolean = true ) : void
 		{
-			var runItem : NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName( "run" );
-
-			runItem.submenu.getItemByName( "resume" ).enabled = enable;
-			runItem.submenu.getItemByName( "step_into" ).enabled = enable;
-			runItem.submenu.getItemByName( "step_over" ).enabled = enable;
-			runItem.submenu.getItemByName( "step_return" ).enabled = enable;
-			runItem.submenu.getItemByName( "break" ).enabled = enable;
-
+			MenuManager.getInstance().switchDebug(enable);
+			
 			//if(!enable)
 			{
 				pnl_variables.grid.dataProvider = null;
@@ -1214,12 +1211,24 @@
 		}
 		
 		
+		protected function powerpackcontrolbar_creationCompleteHandler(event:FlexEvent):void
+		{
+			powerpackControlBar.addEventListener(ControlBarEvent.EVENT_ITEM_CLICK, itemClickHandler);
+			
+			function itemClickHandler (controlBarEvent : ControlBarEvent) : void
+			{
+				menuHandler(null, controlBarEvent.targetItemType);
+			}
+			
+		}
+		
 		]]>
 	</mx:Script>
 	
 	<mx:VBox width="100%" height="100%">
 
-		<control:PowerPackControlBar />
+		<control:PowerPackControlBar 	id="powerpackControlBar"
+										creationComplete="powerpackcontrolbar_creationCompleteHandler(event)"/>
 		
 		<mx:HRule width="100%" />
 		

@@ -536,7 +536,7 @@
 		{
 			if (event.graph && editableGraphLastName && editableGraphLastName != event.graph.name)
 			{
-				currentTemplate.validateProjectsInitGraphs(editableGraphLastName, event.graph.name);
+				currentTemplate.updateProjectsInitGraphName(editableGraphLastName, event.graph.name);
 				editableGraphLastName = "";
 			}
 				
@@ -609,7 +609,7 @@
 			if (graphs.source.length == 1)
 			{
 				editableGraphLastName = newGraph.name;
-				currentTemplate.allProjectsInitGraphName = newGraph.name;
+				currentTemplate.updateProjectsInitGraphName ("", newGraph.name);
 			}
 
 			selectGraph( newGraph );
@@ -763,7 +763,7 @@
 			if (graphs && graphs.source && graphs.source.length > 0)
 				firstGraphName = GraphCanvas(graphs.source[0]).name;
 			
-			currentTemplate.validateProjectsInitGraphs(removedGraphName, firstGraphName);
+			currentTemplate.updateProjectsInitGraphName(removedGraphName, firstGraphName);
 		}
 
 		private function btnHelpClickHandler( event : MouseEvent ) : void
