@@ -529,10 +529,12 @@ package net.vdombox.powerpack.lib.player.template
 		
 		public function selectedProjectToXML () : XML
 		{
-			if (!selectedProject)
-				return <selectedProject />;
+			var xml : XML = <selectedProjectID/>
 			
-			return <selectedProject id={selectedProject.id}/>;
+			if (selectedProject)
+				xml.appendChild( selectedProject.id ); 
+			
+			return xml;
 		}
 		
 		public function convertXMLToProjects (xml:XML) : void
