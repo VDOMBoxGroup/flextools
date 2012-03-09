@@ -548,14 +548,14 @@ package net.vdombox.powerpack.lib.player.template
 				return;
 			}
 			
-			
 			for each (var projectXML : XML in xml.projects.project)
 			{
 				templateProject = createNewProject();
 				
 				templateProject.fillFromXML(projectXML);
-				setSelectedProjectById(xml.selectedProject.@id);
 			}
+			
+			var selProjectId : String = xml.selectedProjectID;
 			
 			if (!projects || projects.length == 0)
 			{
@@ -564,8 +564,10 @@ package net.vdombox.powerpack.lib.player.template
 				if (xml.name[0])
 					templateProject.fillParamsFromEntireTemplateXML(xml);
 				
-				selectedProject = templateProject;
-			}
+				selProjectId = templateProject.id;
+			} 
+			
+			setSelectedProjectById(selProjectId);
 			
 		}
 		
