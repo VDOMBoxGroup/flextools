@@ -163,10 +163,10 @@ package net.vdombox.powerpack.lib.player.template
 			picture			= xml.picture;
 		}
 		
-		public function validateInitGraph(removedGraphName : String, firstGraphName : String = ""):void
+		public function updateInitGraphName(oldGraphName : String, newGraphName : String = ""):void
 		{
-			if (initialGraphName == removedGraphName)
-				initialGraphName = firstGraphName;
+			if (!oldGraphName || initialGraphName == oldGraphName)
+				initialGraphName = newGraphName;
 		}
 		
 		

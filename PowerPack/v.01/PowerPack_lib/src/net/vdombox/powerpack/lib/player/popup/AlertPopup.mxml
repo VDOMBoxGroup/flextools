@@ -230,7 +230,8 @@
 		]]>
 	</mx:Script>
 	
-	<mx:VBox maxWidth="600" maxHeight="600" id="mainBox" minWidth="200"
+	<mx:VBox maxWidth="600" maxHeight="450" id="mainBox" 
+			 minWidth="300" minHeight="150"
 			 verticalGap="10" 
 			 paddingTop="{borderthickness}" paddingLeft="{borderthickness}" 
 			 paddingRight="{borderthickness}" paddingBottom="{borderthickness}">
@@ -245,6 +246,7 @@
 					 styleName="alertTitle"/>
 			
 			<mx:Text width="100%"
+					 maxHeight="300"
 					 	text="{message}"
 					 	textAlign="center"
 					 	selectable="false" focusEnabled="false"
@@ -252,6 +254,8 @@
 						/>
 
 		</mx:VBox>
+		
+		<mx:Spacer height="100%"/>
 		
 		<popup:PopupBottomPart id="bottomPart" height="60" width="100%">
 			<mx:HBox horizontalGap="8" verticalAlign="middle" horizontalAlign="center"

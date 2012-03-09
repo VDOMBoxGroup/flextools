@@ -43,6 +43,7 @@ public class TemplateStruct extends EventDispatcher
 
 	public var buffer : String = "";
 
+	[Bindable]
 	public var isRunning : Boolean;
 
 	[ArrayElementType("net.vdombox.powerpack.lib.player.gen.GraphContext")]

@@ -569,18 +569,6 @@ package net.vdombox.powerpack.lib.player.template
 			
 		}
 		
-		public function convertXMLToGraphs (xml:XML) : void
-		{
-			if (!xml)
-				return;
-			
-			for each (var projectXML : XML in xml.projects.project)
-			{
-				// TODO oska
-				// populateGraph !!
-			}
-		}
-		
 		public function clearProjects () : void
 		{
 			for each (var project : TemplateProject in projects)
@@ -591,19 +579,11 @@ package net.vdombox.powerpack.lib.player.template
 			selectedProjectIndex = 0;
 		}
 		
-		public function validateProjectsInitGraphs(removedGraphName : String, firstGraphName : String = ""):void
+		public function updateProjectsInitGraphName(oldGraphName : String, newGraphName : String = ""):void
 		{
 			for each (var project : TemplateProject in projects)
 			{
-				project.validateInitGraph(removedGraphName, firstGraphName);
-			}
-		}
-		
-		public function set allProjectsInitGraphName(graphName : String) : void
-		{
-			for each (var project : TemplateProject in projects)
-			{
-				project.initialGraphName = graphName;
+				project.updateInitGraphName(oldGraphName, newGraphName);
 			}
 		}
 		
