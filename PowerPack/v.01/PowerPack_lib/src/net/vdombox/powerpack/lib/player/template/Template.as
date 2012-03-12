@@ -8,6 +8,7 @@ package net.vdombox.powerpack.lib.player.template
 	import flash.net.FileFilter;
 	import flash.utils.ByteArray;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.utils.Base64Decoder;
 	import mx.utils.Base64Encoder;
@@ -119,6 +120,7 @@ package net.vdombox.powerpack.lib.player.template
 				modified = true;
 				_completelyOpened = true;
 			}
+			
 		}
 	
 		//--------------------------------------------------------------------------
@@ -189,6 +191,13 @@ package net.vdombox.powerpack.lib.player.template
 			convertXMLToProjects(_xml);
 			
 			clearOldProjectVariant();
+			
+			BindingUtils.bindSetter(selectedProjectChangeHandler, selectedProject, 'modified');
+		}
+		
+		private function selectedProjectChangeHandler (object:Object) : void 
+		{
+			modified = object as Boolean;
 		}
 		
 		protected function clearOldProjectVariant () : void
@@ -396,16 +405,21 @@ package net.vdombox.powerpack.lib.player.template
 		[Bindable]
 		public var projects	: ArrayCollection = new ArrayCollection();
 		
-		[Bindable]
-		public var selectedProjectIndex	: int = 0;
+		private var _selectedProjectIndex	: int = 0;
+		
+		public function set selectedProjectIndex (value : int) : void
+		{
+			if (_selectedProjectIndex != value)
+			{	
+				_selectedProjectIndex = value;
+				modified = true;
+			}
+		}
 		
 		[Bindable]
-		public function get selectedProject () : TemplateProject
+		public function get selectedProjectIndex ()	: int
 		{
-			if (!correctSelectedProjectIndex || !projects || projects.length == 0)
-				return null;
-			
-			return projects[selectedProjectIndex];
+			return _selectedProjectIndex;
 		}
 		
 		public function set selectedProject (project : TemplateProject) : void
@@ -415,14 +429,25 @@ package net.vdombox.powerpack.lib.player.template
 			{
 				if (tplProject.id == project.id)
 				{
-					selectedProjectIndex = index;
+					if (selectedProjectIndex != index)
+						modified = true;
 					
-					modified = true;
+					selectedProjectIndex = index;
 					break;
 				}
 				
 				index ++;
 			}
+
+		}
+		
+		[Bindable]
+		public function get selectedProject () : TemplateProject
+		{
+			if (!correctSelectedProjectIndex || !projects || projects.length == 0)
+				return null;
+			
+			return projects[selectedProjectIndex];
 		}
 		
 		public function setSelectedProjectById (selProjectId : String) : void

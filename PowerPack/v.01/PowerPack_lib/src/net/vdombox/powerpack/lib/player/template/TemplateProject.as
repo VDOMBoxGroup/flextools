@@ -28,7 +28,7 @@ package net.vdombox.powerpack.lib.player.template
 		//
 		//	modified
 		//
-		private var _modified : Boolean;
+		protected var _modified : Boolean;
 		
 		public function set modified( value : Boolean ) : void
 		{
