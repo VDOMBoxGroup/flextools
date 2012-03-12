@@ -5,6 +5,7 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
+import mx.controls.Alert;
 import mx.core.Application;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
@@ -73,6 +74,7 @@ public class SOAPBaseLevel extends EventDispatcher
 			_result = "['Error' '" + event.fault.faultString + "']";
 
         _resultType = ERROR;
+		Alert.show(_result.toString())
 
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
 	}
@@ -297,7 +299,7 @@ trace(wsdl)
 		soap.addEventListener( "loadWsdlComplete", soap_initCompleteHandler );
 		soap.addEventListener( FaultEvent.FAULT, soapError );
 		soap.init( wsdl );
-
+		
 		function soap_initCompleteHandler( event : Event ) : void
 		{
 			soap.removeEventListener( "loadWsdlComplete", soap_initCompleteHandler );
@@ -310,7 +312,7 @@ trace(wsdl)
 		{
 			soap.removeEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
 
-
+			
 			var result : XML =  event.result as XML;
 
 			var resultArray : Array = ["Success", result.Hostname, result.Username, result.ServerVersion]
