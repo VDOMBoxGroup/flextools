@@ -2,7 +2,8 @@
 <ModalDialog
 	xmlns="net.vdombox.powerpack.dialog.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	width="660" height="630"
+	minWidth="700" minHeight="670"
+	width="700" height="670"
 	title="{LanguageManager.sentences.template_properties}"
 	xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*" 
 	xmlns:customize="net.vdombox.powerpack.customize.*"
@@ -45,7 +46,7 @@
 					_dialog.show( OK | CANCEL, closeHandler, null, OK );
 					
 					var defaultCaptions : Object = {
-						template_properties : "Settings"
+						template_properties : "Properties"
 					};
 					
 					LanguageManager.setSentences( defaultCaptions );
@@ -160,29 +161,45 @@
 			 width="100%" height="100%"
 			 paddingLeft="10" paddingRight="10">
 
-		<mx:VBox height="100%">
+		<mx:Panel height="100%" layout="absolute" title="Projects:"
+				  verticalScrollPolicy="off" horizontalScrollPolicy="off"
+				  backgroundAlpha="0"
+				  borderAlpha="0">
+		
+			<mx:VBox height="100%">
 				
-			<mx:Label text="Applications:" fontSize="14" fontWeight="bold"/>
-
-			<mx:List id="projectsList"
-					 width="200" height="100%"
-					 dataProvider="{ContextManager.templates.getItemAt( 0 ).projects}"
-					 labelField="name"
-					 selectedIndex="{ContextManager.templates.getItemAt( 0 ).selectedProjectIndex}"
-					 change="projectsList_changeHandler(event)"
-					 creationComplete="projectsList_creationCompleteHandler(event)"
-					 borderStyle="solid"/>
-			
-			<mx:HBox width="100%">
-				<mx:Button label="newProject" click="buttonNewProject_clickHandler(event)"/>
-				<mx:Button label="removeProject" click="buttonRemoveProject_clickHandler(event)"/>
-			</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Button id="newProject" 
+							   icon="{ContextManager.addClass}"
+							   toolTip="Add new project"
+							   click="buttonNewProject_clickHandler(event)"/>
+					<mx:Button id="removeProject" 
+							   icon="{ContextManager.deleteClass}"
+							   toolTip="Remove project"
+							   click="buttonRemoveProject_clickHandler(event)"/>
+				</mx:HBox>
+				
+				<mx:List id="projectsList"
+						 width="200" height="100%"
+						 dataProvider="{ContextManager.templates.getItemAt( 0 ).projects}"
+						 labelField="name"
+						 selectedIndex="{ContextManager.templates.getItemAt( 0 ).selectedProjectIndex}"
+						 change="projectsList_changeHandler(event)"
+						 creationComplete="projectsList_creationCompleteHandler(event)"
+						 borderStyle="solid"/>
+				
+			</mx:VBox>
+		</mx:Panel>
 		
-		</mx:VBox>
-		
-		<mx:ViewStack	id="vsProperties" 
-						width="100%" height="100%"
-						borderStyle="solid" borderThickness="1"/>
+		<mx:Panel width="100%" height="100%" layout="absolute"
+				  verticalScrollPolicy="off" horizontalScrollPolicy="off"
+				  title="Project properties:"
+				  fontWeight="bold"
+				  backgroundAlpha="0"
+				  borderAlpha="0">
+			<mx:ViewStack	id="vsProperties" 
+							width="100%" height="100%"/>
+		</mx:Panel>
 	</mx:HBox>
 	
 	<mx:Spacer height="10"/>

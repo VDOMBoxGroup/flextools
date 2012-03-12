@@ -118,7 +118,7 @@
 		]]>
 	</mx:Script>
 	
-	<mx:Label text="Applications:" />
+	<mx:Label text="Projects:" />
 	
 	<mx:ComboBox id="appsComboBox"
 				 width="200"
@@ -130,16 +130,8 @@
 	<control:ControlBarImage id="menuAppSettings" 
 							 sourceEnabled="@Embed('assets/icons/settingsEnabled.png')" 
 							 sourceDisabled="@Embed('assets/icons/settingsDisabled.png')"
-							 toolTip="Application settings"
+							 toolTip="Template properties"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_APP_PROPERIES)"/>
-	
-	<mx:VRule height="20"/>
-	
-	<control:ControlBarImage id="menuBuild"
-							 sourceEnabled="@Embed('assets/icons/exportBuildEnabled.png')" 
-							 sourceDisabled="@Embed('assets/icons/exportBuildDisabled.png')"
-							 click="menuItem_clickHandler(event, ITEM_TYPE_BUILD_INSTALLER)" 
-							 toolTip="Export project build (Adobe AIR or native file)"/>
 	
 	<mx:VRule height="20"/>
 	
@@ -192,5 +184,14 @@
 							 sourceDisabled="@Embed('assets/icons/BreakDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_BREAK)" 
 							 toolTip="Break ({ctrlString}{separator}B)"/>
+	
+	<mx:VRule height="20"/>
+	
+	<control:ControlBarImage id="menuBuild"
+							 sourceEnabled="@Embed('assets/icons/exportBuildEnabled.png')" 
+							 sourceDisabled="@Embed('assets/icons/exportBuildDisabled.png')"
+							 click="menuItem_clickHandler(event, ITEM_TYPE_BUILD_INSTALLER)" 
+							 toolTip="Export project build (Adobe AIR or native file)"/>
+	
 	
 </mx:ControlBar>

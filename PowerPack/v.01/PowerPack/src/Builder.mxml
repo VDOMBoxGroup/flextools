@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication
-		title="{ContextManager.templates.getItemAt( 0 ).modified}"
+		title="{LanguageManager.sentences.app_title}{ContextManager.templates.length &amp;&amp; BuilderTemplate(ContextManager.templates.getItemAt(0)).file ? ' - '+ContextManager.templates.getItemAt(0).file.nativePath : ''} - {ContextManager.templates.length &amp;&amp; BuilderTemplate(ContextManager.templates.getItemAt(0)).selectedProject &amp;&amp; BuilderTemplate(ContextManager.templates.getItemAt(0)).selectedProject.name ? BuilderTemplate(ContextManager.templates.getItemAt(0)).selectedProject.name : LanguageManager.sentences.noname}{ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).modified ? '*' : ''}"
 		titleIcon="@Embed(source='assets/icons/icon_16.png')"
 		layout="absolute"
 		statusBarFactory="net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar"
@@ -72,7 +72,7 @@
 				<menuitem label="Break" id="break" enabled="false" keyEquivalent="b" ctrlKey="true" />
 			</menuitem>
 
-			<menuitem label="Settings" id="settings">
+			<menuitem label="Properties" id="settings">
 				<menuitem label="Language" id="language" enabled="false" />
 				
 			</menuitem>
