@@ -9,8 +9,8 @@ package net.vdombox.powerpack.lib.player.template
 	
 	public class TemplateProject extends EventDispatcher
 	{
-		public static const DEFAULT_NAME			: String = 'installer';
-		public static const DEFAULT_INSTALLER_ID	: String = 'installer';
+		public static const DEFAULT_NAME			: String = "newProject";
+		public static const DEFAULT_INSTALLER_ID	: String = "newProject";
 		
 		[Bindable]
 		public var key : String;

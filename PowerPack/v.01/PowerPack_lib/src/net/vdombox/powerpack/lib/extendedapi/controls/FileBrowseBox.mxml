@@ -5,7 +5,8 @@
 	horizontalAlign="right" 
 	disabledOverlayAlpha="0.0"
 	preinitialize="onPreinitialize(event)"
-	childAdd="onChildAdd(event)">
+	childAdd="onChildAdd(event)"
+	creationPolicy="all">
 
 	<mx:String id="browseTitle">Select file...</mx:String>
 	<mx:String id="browseLabel">Browse...</mx:String>
@@ -61,6 +62,15 @@
 					txtPathInput.text = filePath;
 					txtPathInput.toolTip = filePath;
 				}
+			}
+			
+			private var _pathTooltip : String;
+			override public function set toolTip(value:String):void
+			{
+				_pathTooltip = value;
+				
+				if (txtPathInput)
+					txtPathInput.toolTip = _pathTooltip;
 			}
 		    //----------------------------------
 		    //  enabled
@@ -189,6 +199,11 @@
 
             }	
             
+			protected function pathInput_creationCompleteHandler(event:FlexEvent):void
+			{
+				txtPathInput.toolTip = _pathTooltip;
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -196,7 +211,8 @@
 		text="" 
 		change="onInputTextChange(event)"
 		visible="true"
-		width="100%"/>
+		width="100%"
+		creationComplete="pathInput_creationCompleteHandler(event)"/>
 		
 	<mx:Button id="btnBrowse"
 		label="{browseLabel}"		
