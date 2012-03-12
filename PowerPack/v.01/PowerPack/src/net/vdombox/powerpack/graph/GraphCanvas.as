@@ -260,8 +260,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		if ( _initial != value )
 		{
 			_initial = value;
-			/*if ( xml )
-				xml.@initial = value;*/
 
 			_initialChanged = true;
 
@@ -275,7 +273,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	public function get initial() : Boolean
 	{
 		if ( xml )
-			return currentTemplate.selectedProject.initialGraphName ? currentTemplate.selectedProject.initialGraphName == name : Utils.getBooleanOrDefault( _initial, false );
+			return currentTemplate.selectedProject.initialGraphName == name;
 
 		return _initial;
 	}
@@ -563,7 +561,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		var children : Array = getChildren();
 
 		graphXML.@name = name;
-		//graphXML.@initial = initial.toString().toLowerCase();
 		graphXML.@category = category;
 
 		graphXML.appendChild( <states/> );
@@ -616,8 +613,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 		name = Utils.getStringOrDefault( graphXML.@name, '' );
 		
-		//initial = Utils.getBooleanOrDefault( graphXML.@initial );
-		initial = currentTemplate.selectedProject.initialGraphName ? currentTemplate.selectedProject.initialGraphName == name : Utils.getBooleanOrDefault( graphXML.@initial );
+		initial = currentTemplate.selectedProject.initialGraphName == name;
 		
 		category = Utils.getStringOrDefault( graphXML.@category, 'other' );
 

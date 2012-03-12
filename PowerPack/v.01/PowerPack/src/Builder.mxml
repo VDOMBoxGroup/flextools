@@ -617,7 +617,7 @@
 						if ( ContextManager.templateStruct )
 							ContextManager.templateStruct.terminated = true;
 	
-						ContextManager.templateStruct = new TemplateStruct( pnl_graphs.toXML(), currentTemplate.selectedProject.initialGraphName);
+						ContextManager.templateStruct = new TemplateStruct( pnl_graphs.toXML() );
 	
 						switch ( menuItemName )
 						{
@@ -770,7 +770,7 @@
 					if ( dialog.chkNames )	 flags |= TemplateValidateOptions.SET_UNIQ_NAMES;
 				}
 
-				ContextManager.templateStruct = new TemplateStruct( currentTemplate.xmlStructure, currentTemplate.selectedProject.initialGraphName );
+				ContextManager.templateStruct = new TemplateStruct( currentTemplate.xmlStructure );
 
 				var validateArr : Array = ContextManager.templateStruct.validate( flags ).array;
 
