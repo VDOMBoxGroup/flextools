@@ -90,7 +90,6 @@
 		}
 
 		static public const TPL_CHANGED : String = "templateChanged";
-		static public const POPULATED : String = "templateChanged";
 		static public const DEFAULT_TABS : Array = ["application", "objects", "structure", "resources"];
 
 		//--------------------------------------------------------------------------

@@ -64,13 +64,13 @@ package net.vdombox.powerpack.template
 		{
 			if ( _modified != value )
 			{
-				_modified = value;
-				
 				var mainIndex : XML = CashManager.getMainIndex();
 				
 				CashManager.updateMainIndexEntry( mainIndex, fullID, 'saved', _modified ? 'false' : 'true' );
 				CashManager.setMainIndex( mainIndex );
 			}
+			
+			super.modified = value;
 		}
 		
 		[Bindable]

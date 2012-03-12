@@ -17,6 +17,7 @@ import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+import net.vdombox.powerpack.template.BuilderTemplate;
 
 public class MenuManager extends EventDispatcher
 {
@@ -358,7 +359,23 @@ public class MenuManager extends EventDispatcher
 		fileMenu.getItemByName( "close" ).enabled = enabled;
 		fileMenu.getItemByName( "save_as" ).enabled = enabled;
 		
-		fileMenu.getItemByName( "save" ).enabled = enabled ? tplFileModified : enabled;
+		fileMenu.getItemByName( "save" ).enabled = enabled ? templateChanged : false;
+	}
+	
+	private function get templateChanged () : Boolean
+	{
+		if (!currentTemplate)
+			return false;
+		
+		return currentTemplate.modified;
+	}
+	
+	private function get currentTemplate() : BuilderTemplate
+	{
+		if ( !ContextManager.templates || ContextManager.templates.length == 0 )
+			return null;
+		
+		return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
 	}
 	
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication
-		title="{LanguageManager.sentences.app_title} - {selectedTemplateProject &amp;&amp; selectedTemplateProject.name ? selectedTemplateProject.name : LanguageManager.sentences.noname} - {MenuManager.getInstance().state == MenuManager.STATE_MOD ? '*' : ''}"
+		title="{ContextManager.templates.getItemAt( 0 ).modified}"
 		titleIcon="@Embed(source='assets/icons/icon_16.png')"
 		layout="absolute"
 		statusBarFactory="net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar"
@@ -85,6 +85,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import mx.binding.utils.BindingUtils;
 			import mx.collections.HierarchicalData;
 			import mx.collections.XMLListCollection;
 			import mx.controls.Tree;
@@ -126,6 +127,7 @@
 			import net.vdombox.powerpack.lib.player.managers.ContextManager;
 			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+			import net.vdombox.powerpack.lib.player.template.Template;
 			import net.vdombox.powerpack.lib.player.template.TemplateProject;
 			import net.vdombox.powerpack.managers.BuilderContextManager;
 			import net.vdombox.powerpack.managers.CashManager;
@@ -318,16 +320,16 @@
 
 		public function closeTpl( askForSave : Boolean = true, action : Function = null, args : Array = null ) : void
 		{
-			if ( ContextManager.templates.length > 0 )
+			if ( currentTemplate && currentTemplate.modified && askForSave)
 			{
-				if ( (currentTemplate.modified || !currentTemplate.file) && askForSave )
-				{
-					alertSaveAndCloseTemplate( action, args );
-					return;
-				}
+				alertSaveAndCloseTemplate( action, args );
+				return;
+			}
 
+			if ( currentTemplate )
+			{
 				currentTemplate.dispose();
-
+	
 				ContextManager.templates.removeItemAt( 0 );
 			}
 
@@ -398,6 +400,7 @@
 			workStage.validateNow();
 
 			pnl_graphs.templateXML = currentTemplate.xmlStructure;
+			currentTemplate.selectedProject.modified = false;
 			currentTemplate.modified = false;
 
 			ContextManager.instance.lastFile = true;
@@ -412,8 +415,9 @@
 			workStage.visible = true;
 			workStage.includeInLayout = true;
 
+			currentTemplate.selectedProject.modified = false;
 			currentTemplate.modified = false;
-
+			
 			ContextManager.instance.lastFile = true;
 			BuilderContextManager.updateLastFiles( currentTemplate.file );
 
@@ -429,7 +433,8 @@
 			if ( currentTemplate )
 			{
 				pnl_graphs.templateXML = currentTemplate.xmlStructure;
-				currentTemplate.modified = true;
+				currentTemplate.selectedProject.modified = false;
+				currentTemplate.modified = false;
 			}
 
 			ContextManager.instance.lastFile = false;
@@ -465,8 +470,8 @@
 
 			closeTpl( false );
 
-			ContextManager.templates.addItemAt( template, 0 );
-
+			addTemplate(template);
+			
 			if ( template.isEncoded )
 			{
 				TemplateKey.show( onKeyDialogClose );
@@ -506,21 +511,15 @@
 
 		public function templateChanged() : void
 		{
-			if ( ContextManager.templates.length > 0 )
-			{
-				if ( MenuManager.getInstance().state != MenuManager.STATE_MOD )
-				{
-					currentTemplate.modified = true;
-					MenuManager.getInstance().modifiedTemplate();
-				}
-			}
+			if ( MenuManager.getInstance().state != MenuManager.STATE_MOD )
+				MenuManager.getInstance().modifiedTemplate();
 		}
 
 		public function newTpl() : void
 		{
 			var template : BuilderTemplate = new BuilderTemplate();
 
-			ContextManager.templates.addItemAt( template, 0 );
+			addTemplate(template);
 
 			processNewTpl();
 		}
@@ -593,7 +592,7 @@
 					break;
 
 				case "properties":
-					ProjectsSettingsDialog.show( Graphs.graphs, onProjectsSettingsDialogClose );
+					ProjectsSettingsDialog.show( Graphs.graphs );
 					break;
 				
 				case "air_builder":
@@ -747,12 +746,6 @@
 			return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
 		}
 		
-		private function onProjectsSettingsDialogClose( event : CloseEvent ) : void
-		{
-			if ( event.detail == ModalDialog.OK )
-				templateChanged();
-		}
-
 		private function onValidate( event : CloseEvent ) : void
 		{
 			if ( event.detail == ModalDialog.OK )
@@ -1111,6 +1104,13 @@
 			ProgressManager.complete();
 		}
 
+		private function addTemplate (template : BuilderTemplate) : void
+		{
+			ContextManager.templates.addItemAt( template, 0 );
+			
+			BindingUtils.bindSetter(templateChangeHandler, currentTemplate, 'modified');
+		}
+		
 		private function onImportClose( event : CloseEvent ) : void
 		{
 			if ( event.detail == ModalDialog.OK )
@@ -1121,7 +1121,7 @@
 
 				var template : BuilderTemplate = Import( event.target ).template as BuilderTemplate;
 
-				ContextManager.templates.addItemAt( template, 0 );
+				addTemplate(template);
 
 				processNewTpl();
 
@@ -1201,8 +1201,14 @@
 		protected function creationCompleteHandler(event:FlexEvent):void
 		{
 			addEventListener("closeWithoutSave", closeWithoutSaveHandler);
-
+			
 			checkUpdate();
+		}
+		
+		private function templateChangeHandler (object:Object) : void 
+		{
+			if (object as Boolean == true)
+				templateChanged();
 		}
 				
 		private function get selectedTemplateProject () : BuilderTemplateProject
@@ -1220,6 +1226,12 @@
 				menuHandler(null, controlBarEvent.targetItemType);
 			}
 			
+		}
+		
+		private function graphsChangeHandler () : void
+		{
+			if (currentTemplate)
+				currentTemplate.modified = true;
 		}
 		
 		]]>
@@ -1242,7 +1254,7 @@
 								  id="pnl_graphs"
 
 								  vsViewStack="{viewstack}"
-								  templateChanged="templateChanged();">
+								  templateChanged="{graphsChangeHandler()}">
 					</panel:Graphs>
 
 					<mx:Panel creationIndex="1" width="100%" height="100%" layout="absolute"
@@ -1296,5 +1308,5 @@
 
 		</containers:Docker>
 	</mx:VBox>
-
+	
 </mx:WindowedApplication>

@@ -5,7 +5,6 @@ package net.vdombox.powerpack.control
 	public class ControlBarEvent extends Event
 	{
 		public static const EVENT_ITEM_CLICK			: String = "controlBarItemClick";
-		public static const TPL_CHANGED					: String = "templateChanged";
 		
 		public var targetItemType : String;
 		

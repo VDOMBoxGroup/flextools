@@ -37,8 +37,6 @@
 				currentTemplate.selectedProject = appsComboBox.selectedItem as TemplateProject;
 				
 				appsComboBox.selectedItem = currentTemplate.selectedProject;
-				
-				dispatchEvent( new ControlBarEvent( ControlBarEvent.TPL_CHANGED ) );
 			}
 			
 			private function get currentTemplate() : BuilderTemplate
