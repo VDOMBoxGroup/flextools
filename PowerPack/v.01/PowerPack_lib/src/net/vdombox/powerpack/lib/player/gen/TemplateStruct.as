@@ -18,6 +18,8 @@ import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.ParsedBlock;
 import net.vdombox.powerpack.lib.player.gen.structs.*;
 import net.vdombox.powerpack.lib.player.graph.NodeCategory;
 import net.vdombox.powerpack.lib.player.graph.NodeType;
+import net.vdombox.powerpack.lib.player.managers.ContextManager;
+import net.vdombox.powerpack.lib.player.template.Template;
 
 import r1.deval.D;
 
@@ -64,7 +66,7 @@ public class TemplateStruct extends EventDispatcher
 	public var forced : int;
 	public var terminated : Boolean;
 
-	public function TemplateStruct( tplStruct : XML, initialGraphName : String)
+	public function TemplateStruct( tplStruct : XML )
 	{
 		tplStructXML = tplStruct;
 		
@@ -73,9 +75,6 @@ public class TemplateStruct extends EventDispatcher
 		var _arrows : Array = [];
 		var _initGraph : GraphStruct;
 
-		// MINE TODO
-		var initGraphName : String = initialGraphName;
-		
 		for each ( var graphXML : XML in tplStructXML.elements( "graph" ) )
 		{
 			var graphName : String = Utils.getStringOrDefault( graphXML.@name );
@@ -83,7 +82,7 @@ public class TemplateStruct extends EventDispatcher
 			var graphStruct : GraphStruct = new GraphStruct(
 					graphName,
 					graphName,
-					initGraphName ? initialGraphName == graphName : Utils.getBooleanOrDefault( graphXML.@initial ),
+					graphName == currentTemplate.selectedProject.initialGraphName,
 					Utils.getBooleanOrDefault( graphXML.@global ) );
 
 			if ( graphStruct.bInitial )
@@ -149,6 +148,14 @@ public class TemplateStruct extends EventDispatcher
 		arrows = _arrows;
 
 		init();
+	}
+	
+	private function get currentTemplate() : Template
+	{
+		if ( !ContextManager.templates || ContextManager.templates.length == 0 )
+			return null;
+		
+		return ContextManager.templates.getItemAt( 0 ) as Template;
 	}
 
 	public function get curGraphContext() : GraphContext

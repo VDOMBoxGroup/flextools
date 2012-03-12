@@ -155,12 +155,34 @@ package net.vdombox.powerpack.lib.player.template
 		}
 		
 		// for template xml that supports only 1 project (version <= 1.2.3.7939)
-		public function fillParamsFromEntireTemplateXML (xml : XML) : void 
+		public function fillParamsFromEntireTemplateXML (templateXml : XML) : void 
 		{
-			name			= xml.name;
-			installerId		= xml.id;
-			description		= xml.description;
-			picture			= xml.picture;
+			name				= templateXml.name;
+			installerId			= templateXml.id;
+			description			= templateXml.description;
+			picture				= templateXml.picture;
+			
+			setInitialGraphNameFromTemplateStructure(templateXml);
+		}
+		
+		// for template xml that supports only 1 project (version <= 1.2.3.7939)
+		private function setInitialGraphNameFromTemplateStructure (templateXml : XML) : void
+		{
+			initialGraphName = "";
+			
+			var graphs : XMLList = templateXml.structure.graph;
+			for each (var graphXML : XML in graphs)
+			{
+				if (graphXML.@initial == "true")
+				{
+					initialGraphName = graphXML.@name;
+					break;
+				}
+			}
+			
+			if (!initialGraphName && graphs.length() > 0)
+				initialGraphName = graphs[0].@name;
+			
 		}
 		
 		public function updateInitGraphName(oldGraphName : String, newGraphName : String = ""):void

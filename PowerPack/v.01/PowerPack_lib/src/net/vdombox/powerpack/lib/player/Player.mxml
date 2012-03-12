@@ -267,7 +267,7 @@
 
 				tpl = ContextManager.templates.getItemAt ( 0 ) as Template;
 
-				ContextManager.templateStruct = new TemplateStruct ( tpl.xmlStructure, currentTemplate.selectedProject.initialGraphName );
+				ContextManager.templateStruct = new TemplateStruct ( tpl.xmlStructure );
 
 				var validateArr:Array = ContextManager.templateStruct.validate ().array;
 
