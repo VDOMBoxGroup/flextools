@@ -90,7 +90,6 @@
 		}
 
 		static public const TPL_CHANGED : String = "templateChanged";
-		static public const DEFAULT_TABS : Array = ["application", "objects", "structure", "resources"];
 
 		//--------------------------------------------------------------------------
 		//
@@ -118,12 +117,6 @@
 		{
 			// We need to repopulate graphs if templateXML has been changed
 			BindingUtils.bindSetter( populateGraphs, this, "templateXML" );
-
-			for each( var label : String in DEFAULT_TABS )
-			{
-				createCategoryTab( label );
-			}
-
 		}
 
 		public function clear() : void
@@ -134,11 +127,6 @@
 			}
 			graphsAccordion.removeAllChildren();
 			tabMap = new Dictionary();
-
-			for each( var label : String in DEFAULT_TABS )
-			{
-				createCategoryTab( label );
-			}
 
 			for each ( var obj : Object in graphs )
 			{
@@ -765,10 +753,7 @@
 			currentTemplate.updateProjectsInitGraphName(removedGraphName, firstGraphName);
 		}
 
-		private function btnHelpClickHandler( event : MouseEvent ) : void
-		{
-			// TODO
-		}
+		
 			
 		public static function getGraphByName (graphName : String) : GraphCanvas
 		{
@@ -789,22 +774,22 @@
 		<mx:VBox width="100%" height="100%" verticalGap="0">
 
 			<mx:ControlBar id="ctrlBar" width="100%" styleName="categoryCtrlBarStyle">
+				<mx:Button id="btnNewCategory" click="createCategoryTab('New category');"
+						   toolTip="{LanguageManager.sentences.lbl_new + ' category'}" width="100%" icon="{ContextManager.addCategoryClass}"
+						   styleName="categoryCtrlBtnStyle" />
 				<mx:Button id="btnNew" click="btnNewClickHandler(event);"
-						   toolTip="{LanguageManager.sentences.lbl_new}" width="100%" icon="{ContextManager.addClass}"
+						   toolTip="{LanguageManager.sentences.lbl_new + ' graph'}" width="100%" icon="{ContextManager.addClass}"
 						   styleName="categoryCtrlBtnStyle" />
 				<mx:Button id="btnRename" click="btnRenameClickHandler(event);"
-						   toolTip="{LanguageManager.sentences.lbl_rename}" width="100%"
+						   toolTip="{LanguageManager.sentences.lbl_rename+ ' graph'}" width="100%"
 						   icon="{ContextManager.editClass}" styleName="categoryCtrlBtnStyle" />
 				<mx:Button id="btnCopy" click="btnCopyClickHandler(event);"
-						   toolTip="{LanguageManager.sentences.lbl_copy}" width="100%" icon="{ContextManager.copyClass}"
+						   toolTip="{LanguageManager.sentences.lbl_copy + ' graph'}" width="100%" icon="{ContextManager.copyClass}"
 						   styleName="categoryCtrlBtnStyle" />
 				<mx:Button id="btnDelete" click="btnDeleteClickHandler(event);"
-						   toolTip="{LanguageManager.sentences.lbl_delete}" width="100%"
+						   toolTip="{LanguageManager.sentences.lbl_delete + ' graph'}" width="100%"
 						   icon="{ContextManager.deleteClass}" styleName="categoryCtrlBtnStyle" />
-				<mx:Button id="btnHelp" click="btnHelpClickHandler(event);"
-						   toolTip="{LanguageManager.sentences.lbl_help}" width="100%" icon="{ContextManager.helpClass}"
-						   styleName="categoryCtrlBtnStyle"
-						   visible="false" includeInLayout="false" />
+				
 			</mx:ControlBar>
 
 			<mx:Accordion change="tabChangeHandler(event);"

@@ -38,7 +38,6 @@
 		<root>
 			<menuitem label="File" id="file">
 				<menuitem label="New Template" id="new_template" keyEquivalent="n" ctrlKey="true" />
-				<menuitem label="New Category" id="new_category" keyEquivalent="t" ctrlKey="true" />
 				<menuitem label="Open File..." id="open_file" />
 				<menuitem type="separator" id="separator" />
 				<menuitem label="Close" id="close" keyEquivalent="w" ctrlKey="true" />
@@ -575,9 +574,7 @@
 					closeTpl();
 					break;
 
-				case "new_category":
-					EditCaption.show( "New category", onCategoryDialogClose, onCategoryDialogCheckLabel );
-					break;
+				
 
 				case "import_from_app":
 					Import.show( onImportClose );
@@ -1033,15 +1030,7 @@
 			processSavedTpl();
 		}
 
-		private function onCategoryDialogClose( event : CloseEvent ) : void
-		{
-			if ( event.detail == ModalDialog.OK )
-			{
-				var categoryLabel : String = event.target.txtCaption.text;
-
-				pnl_graphs.createCategoryTab( categoryLabel );
-			}
-		}
+		
 
 		private function onCategoryDialogCheckLabel( categoryLabel : String ) : void
 		{

@@ -355,7 +355,7 @@ public class MenuManager extends EventDispatcher
 	{
 		var fileMenu : NativeMenu = menu.nativeMenu.getItemByName( "file" ).submenu;
 		
-		fileMenu.getItemByName( "new_category" ).enabled = enabled;
+		
 		fileMenu.getItemByName( "close" ).enabled = enabled;
 		fileMenu.getItemByName( "save_as" ).enabled = enabled;
 		
