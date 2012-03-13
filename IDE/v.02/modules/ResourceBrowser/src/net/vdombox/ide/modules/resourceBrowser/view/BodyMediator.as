@@ -65,8 +65,6 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 		override public function handleNotification( notification : INotification ) : void
 		{
-			var resourceVO : ResourceVO;
-
 			switch ( notification.getName() )
 			{
 				case Notifications.PIPES_READY:
@@ -78,6 +76,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					
 				case StatesProxy.ALL_STATES_GETTED:
 				{
+					trace(notification.getName() + "  " + StatesProxy.ALL_STATES_GETTED);
+					
 					isReady = true;
 					
 					checkConditions();

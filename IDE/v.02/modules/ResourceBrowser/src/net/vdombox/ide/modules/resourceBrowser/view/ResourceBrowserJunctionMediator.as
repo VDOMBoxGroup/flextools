@@ -51,6 +51,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
+			
+			interests.push( Notifications.BODY_STOP );
 			interests.push( Notifications.EXPORT_TOOLSET );
 			interests.push( Notifications.EXPORT_SETTINGS_SCREEN );
 			interests.push( Notifications.EXPORT_BODY );
@@ -84,6 +86,14 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 			switch ( notification.getName() )
 			{
+				case Notifications.BODY_STOP :
+				{
+					junction.sendMessage( PipeNames.STDCORE,
+						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+					
+					break;
+				}	
+				
 				case JunctionMediator.ACCEPT_INPUT_PIPE:
 				{
 					processInputPipe( notification );
