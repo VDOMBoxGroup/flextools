@@ -103,7 +103,16 @@ package net.vdombox.ide.core.model.managers
 			
 			if ( !serverTypes.exists )
 			{
-				serverTypes.createDirectory();
+				try
+				{
+					serverTypes.createDirectory();
+				}
+				catch ( error : IOError )
+				{
+					trace("setTypes ERROR");
+					
+					return;
+				}
 			}
 			
 			fileType = serverTypes.resolvePath( "info" );

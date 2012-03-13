@@ -5,7 +5,7 @@ package net.vdombox.ide.core.model.managers
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
-
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.IViewCursor;
 	import mx.collections.Sort;
@@ -194,7 +194,7 @@ package net.vdombox.ide.core.model.managers
 
 				var days : Number = ( currentDate - file.creationDate.time ) / 1000 / 60 / 60 / 24;
 
-				if ( days > 4 )
+				if ( days > 17 )
 				{
 					file.deleteFile();
 					continue;

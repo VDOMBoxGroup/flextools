@@ -11,6 +11,7 @@
 			import mx.collections.ArrayList;
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.core.events.LoginViewEvent;
 			import net.vdombox.ide.core.model.vo.LocaleVO;
 			
@@ -93,6 +94,12 @@
 					saveButton.currentState = "save";
 			}
 			
+			protected function selectLang_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				selectLang.selectedItem = selectedLanguage;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -105,7 +112,7 @@
 						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
 
 				<components:ComboBoxLogin id="host" openOnInput="false" labelField="host" width="100%" height="31"
-								fontSize="18" fontFamily="Arial"
+								fontSize="18" fontFamily="Arial" focusIn="{deleteHost.visible = true}" focusOut="{deleteHost.visible = false}"
 								keyDown="{keyDownHandler(event)}"/>
 	
 			</s:VGroup>
@@ -150,7 +157,7 @@
 				
 				<components:ComboBoxLogin id="selectLang" editable="false" selecteble="false"
 							dataProvider="{ languages }" labelField="description" width="100%" height="31"
-							change="selectLang_changeHandler()" 
+							change="selectLang_changeHandler()" creationComplete="selectLang_creationCompleteHandler(event)"
 							fontSize="18" fontFamily="Arial"
 							selectedItem="@{ _selectedLanguage }"/>
 				
@@ -158,7 +165,10 @@
 			
 		</s:VGroup>
 		
-	
+		<mx:Image id="deleteHost" right="18" top="60"
+				  source="{VDOMImage.Delete}" visible="false" alpha="0.3" 
+				  mouseOver="{deleteHost.alpha = 1}" mouseOut="{deleteHost.alpha = 0.3}"
+				  click="{ dispatchEvent( new LoginViewEvent( LoginViewEvent.DELETE_CLICK ) ) }"/>
 	
 </s:Group>
 

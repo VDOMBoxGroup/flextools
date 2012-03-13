@@ -322,8 +322,6 @@ package net.vdombox.ide.core.view
 		{
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			mainWindow.title = serverProxy.authInfo.hostname;
-			
-			//mainWindow.title = VersionUtils.getApplicationName();
 		}
 
 		private function initUser() : void

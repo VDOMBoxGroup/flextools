@@ -6,6 +6,7 @@ package net.vdombox.ide.core.events
 	{
 		public static var SUBMIT : String = "submit";
 		public static var LANGUAGE_CHANGED : String = "languageChanged";
+		public static var DELETE_CLICK : String = "deleteClick";
 		
 		public function LoginViewEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

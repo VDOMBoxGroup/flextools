@@ -74,7 +74,7 @@ package net.vdombox.ide.core.view
 		{
 			//applicationUpdater.updateURL = "http://ehb.tomsk.ru/maks/update.xml"; 
 			
-			applicationUpdater.updateURL = "http://83.172.38.197:82/updaterLink/update.xml"
+			applicationUpdater.updateURL = "http://update.vdombox.ru/ide/update.xml"
 			//applicationUpdater.updateURL = "http://83.172.38.197:82/updaterLink/updateRelise.xml"
 			
 			applicationUpdater.isCheckForUpdateVisible = false; // We won't ask permission to check for an update

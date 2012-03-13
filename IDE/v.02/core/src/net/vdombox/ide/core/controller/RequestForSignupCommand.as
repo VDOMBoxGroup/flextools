@@ -20,7 +20,7 @@ package net.vdombox.ide.core.controller
 			var hostVO : HostVO;
 			if ( loginViewMediator.selectedHost )
 			{
-				if ( loginViewMediator.selectedHost.local.code != loginViewMediator.selectedLanguage.code )
+				if ( loginViewMediator.selectedLanguage && loginViewMediator.selectedHost.local.code != loginViewMediator.selectedLanguage.code )
 				{
 					sharedObjectProxy.setLocal( loginViewMediator.selectedHostIndex, loginViewMediator.selectedLanguage );
 					loginViewMediator.selectedHost = new HostVO( loginViewMediator.selectedHost.host, loginViewMediator.selectedHost.user, loginViewMediator.selectedHost.password, loginViewMediator.selectedLanguage );

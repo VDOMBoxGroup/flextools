@@ -120,6 +120,8 @@ package net.vdombox.ide.core.view
 
 			loginView.addEventListener( LoginViewEvent.LANGUAGE_CHANGED, languageChangedHandler, false, 0, true );
 			
+			loginView.addEventListener( LoginViewEvent.DELETE_CLICK, deleteHostHandler, false, 0, true );
+			
 			loginView.user.addEventListener( Event.CHANGE, usernameChangeHandler , false, 0, true);
 			
 			loginView.host.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHostHandler , false, 0, true);
@@ -136,6 +138,8 @@ package net.vdombox.ide.core.view
 			loginView.removeEventListener( LoginViewEvent.SUBMIT, submitHandler );
 
 			loginView.removeEventListener( LoginViewEvent.LANGUAGE_CHANGED, languageChangedHandler );
+			
+			loginView.removeEventListener( LoginViewEvent.DELETE_CLICK, deleteHostHandler );
 			
 			loginView.host.removeEventListener( Event.CHANGE, setLoginInformation);
 			
@@ -282,7 +286,7 @@ package net.vdombox.ide.core.view
 		public function get selectedLanguage() : LocaleVO
 		{
 			return loginView.selectedLanguage;
-		}
+		}	
 
 		private function submitHandler( event : Event ) : void
 		{
@@ -298,6 +302,12 @@ package net.vdombox.ide.core.view
 				selectedHostIndex = -1;
 			}
 			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNUP );
+		}
+		
+		private function deleteHostHandler( event : LoginViewEvent ): void
+		{
+			sharedObjectProxy.removeHost( loginView.host.textInput.text );
+			validateProperties();
 		}
 	}
 }

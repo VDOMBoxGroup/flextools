@@ -129,6 +129,47 @@ package net.vdombox.ide.core.model
 			shObjData.data["localdescription" + i.toString()] = value.local.description;
 			shObjData.data.selectHost = i.toString();
 		}
+		
+		public function removeHost( name : String ) : void
+		{
+			i = 0;
+			var decNeed : Boolean = false;
+			
+			while ( shObjData.data["host" + i.toString()] )
+			{
+				if ( decNeed )
+				{
+					shObjData.data["host" + (i - 1).toString()] = shObjData.data["host" + i.toString()];
+					shObjData.data["user" + (i - 1).toString()] = shObjData.data["user" + i.toString()];
+					shObjData.data["password" + (i - 1).toString()] = shObjData.data["password" + i.toString()] ;
+					shObjData.data["localcode" + (i - 1).toString()] = shObjData.data["localcode" + i.toString()] ;
+					shObjData.data["localdescription" + (i - 1).toString()] = shObjData.data["localdescription" + i.toString()] ;
+				}
+				
+				else if ( shObjData.data["host" + i.toString()] == name )
+				{
+					delete shObjData.data["host" + i.toString()];
+					delete shObjData.data["user" + i.toString()];
+					delete shObjData.data["password" + i.toString()];
+					delete shObjData.data["localcode" + i.toString()];
+					delete shObjData.data["localdescription" + i.toString()];
+					if ( shObjData.data.selectHost == i.toString() )
+						shObjData.data.selectHost = -1;
+					decNeed = true;
+				}
+				i++;
+			}
+			
+			if ( decNeed )
+			{
+				i--;
+				delete shObjData.data["host" + i.toString()];
+				delete shObjData.data["user" + i.toString()];
+				delete shObjData.data["password" + i.toString()];
+				delete shObjData.data["localcode" + i.toString()];
+				delete shObjData.data["localdescription" + i.toString()];
+			}
+		}
 
 	}
 }

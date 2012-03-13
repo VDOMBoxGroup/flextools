@@ -56,10 +56,10 @@ package net.vdombox.ide.core.view.components
 			super();
 			systemChrome = NativeWindowSystemChrome.NONE;
 			transparent = true;
-			width = 800;
-			height = 600;
-			minWidth = 800;
-			minHeight = 600;
+			width = 1000;
+			height = 800;
+			minWidth = 1000;
+			minHeight = 800;
 			
 			addEventListener( Event.CLOSING, saveAppPosition, false, 0, true );
 		}
@@ -128,11 +128,11 @@ package net.vdombox.ide.core.view.components
 				
 			}
 			
-			if ( width < 800 )
-				width = 800;
+			if ( width < 1000 )
+				width = 1000;
 			
-			if ( height < 600 )
-				height = 600;
+			if ( height < 800 )
+				height = 800;
 		}
 
 		[SkinPart( required = "true" )]
