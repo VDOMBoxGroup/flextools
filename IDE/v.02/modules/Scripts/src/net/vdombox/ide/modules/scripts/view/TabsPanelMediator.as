@@ -74,6 +74,9 @@ package net.vdombox.ide.modules.scripts.view
 				{
 					isActive = true;
 					
+					if ( tabsPanel.checkTabs( statesProxy.selectedApplication.id ) )
+						sendNotification( Notifications.ALL_TABS_DELETED );
+					
 					break;
 				}
 					

@@ -119,6 +119,36 @@
 				dispatchEvent( new TabsPanelEvent( TabsPanelEvent.TAB_DELETE, actionVO ) );
 			}
 			
+			public function checkTabs( applicationID : String ) : Boolean
+			{
+				var flag : Boolean = false;
+				
+				if ( _tabs && _tabs.length > 0 )
+				{
+					if ( _tabs[0] is ServerActionVO )
+					{
+						if ( _tabs[0].containerVO is PageVO && _tabs[0].containerVO.applicationVO.id != applicationID)
+							flag = true;
+						else if ( _tabs[0].containerVO is ObjectVO && _tabs[0].containerVO.pageVO.applicationVO.id != applicationID )
+							flag = true;
+					}
+					else
+					{
+						if ( _tabs[0].applicationVO.id != applicationID )
+							flag = true;
+					}
+				}
+				
+				if ( flag )
+				{
+					removeAll();
+					return true;
+				}
+				else
+					return false;
+					
+			}
+			
 			public function removeAll() : void
 			{
 				_tabs.removeAll();

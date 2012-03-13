@@ -62,7 +62,7 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.SELECTED_TAB_CHANGED );
 			interests.push( Notifications.DELETE_TAB );
 			
-			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
+			interests.push( Notifications.ALL_TABS_DELETED );
 			
 			return interests;
 		}
@@ -112,7 +112,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case StatesProxy.SELECTED_APPLICATION_CHANGED:
+				case Notifications.ALL_TABS_DELETED:
 				{
 					clearData();
 				}
@@ -155,13 +155,11 @@ package net.vdombox.ide.modules.scripts.view
 		private function addHandlers() : void
 		{
 			workArea.addEventListener( EditorEvent.REMOVED, editor_removedHandler, true, 0, true );
-			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 		}
 		
 		private function removeHandlers() : void
 		{
 			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
-			workArea.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 		}
 		
 		private function editor_removedHandler( event : EditorEvent ) : void
@@ -172,11 +170,6 @@ package net.vdombox.ide.modules.scripts.view
 				facade.removeMediator( ScriptEditorMediator.NAME + editor.editorID  );
 				workArea.closeEditor( editor.actionVO );
 			}
-		}
-		
-		private function removedFromStageHandler( event : Event ) : void
-		{
-			clearData();
 		}
 		
 		private function clearData() : void
