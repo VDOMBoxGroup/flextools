@@ -128,68 +128,68 @@
 				 change="cbApplicationsChangeHandler(event)"/>
 	
 	<control:ControlBarImage id="menuAppSettings" 
-							 sourceEnabled="@Embed('assets/icons/settingsEnabled.png')" 
-							 sourceDisabled="@Embed('assets/icons/settingsDisabled.png')"
+							 sourceEnabled="@Embed('/assets/icons/settingsEnabled.png')" 
+							 sourceDisabled="@Embed('/assets/icons/settingsDisabled.png')"
 							 toolTip="Template properties"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_APP_PROPERIES)"/>
 	
 	<mx:VRule height="20"/>
 	
 	<control:ControlBarImage id="menuBtnRun"
-							 sourceEnabled="@Embed('assets/icons/runEnabled.png')"
-							 sourceDisabled="@Embed('assets/icons/runDisabled.png')"
+							 sourceEnabled="@Embed('/assets/icons/runEnabled.png')"
+							 sourceDisabled="@Embed('/assets/icons/runDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_RUN)"
 							 toolTip="Run ({ctrlString}{separator}R)"/>
 	
 	<control:ControlBarImage id="menuBtnDebug"
-							 sourceEnabled="@Embed('assets/icons/debugEnabled.png')"
-							 sourceDisabled="@Embed('assets/icons/debugDisabled.png')"
+							 sourceEnabled="@Embed('/assets/icons/debugEnabled.png')"
+							 sourceDisabled="@Embed('/assets/icons/debugDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_DEBUG)" 
 							 toolTip="Debug ({ctrlString}{separator}D)"/>
 	
 	<control:ControlBarImage id="menuBtnStepByStep"
-							 sourceEnabled="@Embed('assets/icons/stepByStepEnabled.png')"
-							 sourceDisabled="@Embed('assets/icons/stepByStepDisabled.png')"
+							 sourceEnabled="@Embed('/assets/icons/stepByStepEnabled.png')"
+							 sourceDisabled="@Embed('/assets/icons/stepByStepDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_BY_STEP)" 
 							 toolTip="Step by step ({ctrlAndAltString}{separator}D)"/>
 
 	<mx:VRule height="20"/>
 	
 	<control:ControlBarImage id="menuBtnResume"
-							 sourceEnabled="@Embed('assets/icons/ResumeEnabled.png')"
-							 sourceDisabled="@Embed('assets/icons/ResumeDisabled.png')"
+							 sourceEnabled="@Embed('/assets/icons/ResumeEnabled.png')"
+							 sourceDisabled="@Embed('/assets/icons/ResumeDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_RESUME)" 
 							 toolTip="Resume ({ctrlString}{separator}M)"/>
 	
 	<control:ControlBarImage id="menuBtnStepInto"
-							 sourceEnabled="@Embed('assets/icons/StepIntoEnabled.png')"
-							 sourceDisabled="@Embed('assets/icons/StepIntoDisabled.png')"
+							 sourceEnabled="@Embed('/assets/icons/StepIntoEnabled.png')"
+							 sourceDisabled="@Embed('/assets/icons/StepIntoDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_INTO)" 
 							 toolTip="Step Into ({ctrlString}{separator}I)"/>
 	
 	<control:ControlBarImage id="menuBtnStepOver"
-							 sourceEnabled="@Embed('assets/icons/StepOverEnabled.png')"
-							 sourceDisabled="@Embed('assets/icons/StepOverDisabled.png')"
+							 sourceEnabled="@Embed('/assets/icons/StepOverEnabled.png')"
+							 sourceDisabled="@Embed('/assets/icons/StepOverDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_OVER)" 
 							 toolTip="Step Over ({ctrlString}{separator}O)"/>
 
 	<control:ControlBarImage id="menuBtnStepReturn"
-							 sourceEnabled="@Embed('assets/icons/StepReturnEnabled.png')"
-							 sourceDisabled="@Embed('assets/icons/StepReturnDisabled.png')"
+							 sourceEnabled="@Embed('/assets/icons/StepReturnEnabled.png')"
+							 sourceDisabled="@Embed('/assets/icons/StepReturnDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_RETURN)" 
 							 toolTip="Step Return ({ctrlString}{separator}E)"/>
 	
 	<control:ControlBarImage id="menuBtnBreak"
-							 sourceEnabled="@Embed('assets/icons/BreakEnabled.png')"
-							 sourceDisabled="@Embed('assets/icons/BreakDisabled.png')"
+							 sourceEnabled="@Embed('/assets/icons/BreakEnabled.png')"
+							 sourceDisabled="@Embed('/assets/icons/BreakDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_BREAK)" 
 							 toolTip="Break ({ctrlString}{separator}B)"/>
 	
 	<mx:VRule height="20"/>
 	
 	<control:ControlBarImage id="menuBuild"
-							 sourceEnabled="@Embed('assets/icons/exportBuildEnabled.png')" 
-							 sourceDisabled="@Embed('assets/icons/exportBuildDisabled.png')"
+							 sourceEnabled="@Embed('/assets/icons/exportBuildEnabled.png')" 
+							 sourceDisabled="@Embed('/assets/icons/exportBuildDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_BUILD_INSTALLER)" 
 							 toolTip="Export project build (Adobe AIR or native file)"/>
 	
