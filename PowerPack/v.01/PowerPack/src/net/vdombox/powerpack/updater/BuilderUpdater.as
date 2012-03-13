@@ -41,7 +41,7 @@ package net.vdombox.powerpack.updater
 	{
 		private var urlLoader : URLLoader = new URLLoader();
 		
-		private var updateXmlUrl : String = "http://83.172.38.197:82/updaterLink/updatePowerPack.xml";
+		private var updateXmlUrl : String = "http://update.vdombox.ru/powerpack/updatePowerPack.xml";
 		private var updateXml : XML;
 		
 		private var fileStream : FileStream = new FileStream();
