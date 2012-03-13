@@ -59,6 +59,11 @@ public class Parser
 		
 		"progress" : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2 },
 		
+		'getFlashVars' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2 },
+		
+		
+		
+		
 
 
 		//*********************

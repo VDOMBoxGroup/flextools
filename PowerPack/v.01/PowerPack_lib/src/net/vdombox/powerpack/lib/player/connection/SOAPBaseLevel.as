@@ -74,7 +74,7 @@ public class SOAPBaseLevel extends EventDispatcher
 			_result = "['Error' '" + event.fault.faultString + "']";
 
         _resultType = ERROR;
-		Alert.show(_result.toString())
+//		Alert.show(_result.toString())
 
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
 	}

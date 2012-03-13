@@ -119,6 +119,10 @@ public class ContextManager extends EventDispatcher
 	[Embed(source="/assets/icons/add_16.png")]
 	[Bindable]
 	public static var addClass : Class;
+	
+	[Embed(source="/assets/icons/add_category16.png")]
+	[Bindable]
+	public static var addCategoryClass : Class;
 
 	[Embed(source="/assets/icons/copy_16.png")]
 	[Bindable]

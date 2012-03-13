@@ -24,6 +24,7 @@ import flash.utils.ByteArray;
 
 import memorphic.xpath.XPathQuery;
 
+import mx.controls.Alert;
 import mx.core.Application;
 import mx.events.CloseEvent;
 import mx.graphics.codec.JPEGEncoder;
@@ -662,9 +663,9 @@ public dynamic class TemplateLib extends EventDispatcher
 		return rnd.toString();
 	}
 	
-	public function alert( strr : String ) : void
+	public function alert( strr : Object ) : void
 	{
-		
+		Alert.show(strr.toString())
 	}
 	
 	public function wholeMethod( funct : String, ...args ) : Function
@@ -697,6 +698,12 @@ public dynamic class TemplateLib extends EventDispatcher
 		}
 	}
 	
+	public function getFlashVars ( varName: String, defaultValue : Object ):Object
+	{
+		var vars : Object = Application.application.parameters;
+		
+		return vars.hasOwnProperty( varName ) ? vars [varName] : defaultValue;
+	}
 	
 	private function processFillList( list : String, g : Graphics, rect : Rectangle ) : *
 	{
