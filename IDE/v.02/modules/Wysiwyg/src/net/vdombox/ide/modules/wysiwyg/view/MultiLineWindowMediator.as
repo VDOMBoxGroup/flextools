@@ -12,7 +12,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
-	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;

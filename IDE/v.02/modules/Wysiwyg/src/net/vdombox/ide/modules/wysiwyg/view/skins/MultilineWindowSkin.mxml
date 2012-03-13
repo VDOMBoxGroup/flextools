@@ -79,7 +79,7 @@
 				  bottom="0" gap="15" paddingLeft="25" paddingTop="10"
 				  paddingRight="15" verticalAlign="middle">
 			
-			<button:VDOMButton icon="@Embed(source='assets/Add.png')"
+			<button:VDOMButton icon="{VDOMImage.Add}"
 					  label="{ resourceManager.getString( 'Wysiwyg_General', 'multiline_window_add_resource' ) }"
 					  click="{hostComponent.showResourceSelecterWindow()}"/>
 			
@@ -95,7 +95,7 @@
 		
 		<s:Button id="gripper" 
 				  right="0" bottom="0"
-				  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PopupWindowGripperSkin" 
+				  skinClass="net.vdombox.ide.common.view.skins.PopupWindowGripperSkin" 
 				  tabEnabled="false"
 				  alpha="0.9"/>
 	</s:Group>	

@@ -3,7 +3,7 @@
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
-			 xmlns:resourceBrowserWindow="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.*"
+			 xmlns:resourceBrowserWindow="net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.*"
 			 width="790" height="550" minWidth="700" minHeight="500"
 			 focusColor="#CCCCCC" xmlns:components="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Metadata>
@@ -18,11 +18,11 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.common.events.ResourceVOEvent;
 			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItem;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
-			import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
-			import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
 			
 			
 			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
@@ -102,7 +102,7 @@
 				
 				<button:VDOMButton label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_upload' ) }" 
 						   click="hostComponent.uploadFile(event)"
-						   icon="@Embed(source='assets/Add.png')"
+						   icon="{VDOMImage.Add}"
 						   focusColor="#CCCCCC"/>	
 			</s:HGroup>
 		</s:Group>
@@ -141,7 +141,7 @@
 							creationComplete="resourcesList_creationCompleteHandler(event)"
 							dataProvider="{ hostComponent._resources }"
 							enabled="true" focusColor="#CCCCCC"
-							itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem">
+							itemRenderer="net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItem">
 						<s:layout>
 							<s:TileLayout horizontalGap="4" verticalGap="8" requestedColumnCount="-1"  requestedRowCount="-1"
 										  >
@@ -172,7 +172,7 @@
 			
 			<s:Button id="gripper" 
 					  right="0" bottom="0"
-					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PopupWindowGripperSkin" 
+					  skinClass="net.vdombox.ide.common.view.skins.PopupWindowGripperSkin" 
 					  tabEnabled="false"
 					  alpha="0.9"/>
 		</s:Group>

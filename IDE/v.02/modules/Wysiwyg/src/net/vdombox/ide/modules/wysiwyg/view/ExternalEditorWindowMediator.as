@@ -4,12 +4,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.ExternalEditorWindowEvent;
-	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ExternalEditorWindow;
 	

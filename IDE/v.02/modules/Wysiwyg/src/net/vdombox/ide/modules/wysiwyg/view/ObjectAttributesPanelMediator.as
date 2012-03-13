@@ -22,7 +22,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
-	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase;

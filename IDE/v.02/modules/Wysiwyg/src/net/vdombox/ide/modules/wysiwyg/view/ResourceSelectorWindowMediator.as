@@ -32,18 +32,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.resources.ResourceManager;
 	import mx.validators.Validator;
 	
+	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.controller.Notifications;
-	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
+	import net.vdombox.ide.common.view.components.windows.SpinnerPopup;
+	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItem;
+	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItemEvent;
+	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.SpinnerPopup;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemEvent;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -116,7 +116,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
-			var resVO : ResourceVO;
 
 			switch ( name )
 			{

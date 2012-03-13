@@ -20,12 +20,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
-	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.controller.Notifications;
-	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItem;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.ListItemNotEmptyContent;
-	import net.vdombox.ide.modules.wysiwyg.view.components.windows.resourceBrowserWindow.SmoothImage;
+	import net.vdombox.ide.common.events.ResourceVOEvent;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItem;
+	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItemNotEmptyContent;
+	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.SmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
 	import net.vdombox.utils.WindowManager;
 	

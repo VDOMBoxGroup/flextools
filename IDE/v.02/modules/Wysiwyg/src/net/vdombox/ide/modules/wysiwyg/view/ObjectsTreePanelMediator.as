@@ -18,6 +18,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.ListEvent;
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
@@ -27,9 +29,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
-	import net.vdombox.ide.modules.wysiwyg.events.ResourceVOEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.VisibleRendererProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer;
