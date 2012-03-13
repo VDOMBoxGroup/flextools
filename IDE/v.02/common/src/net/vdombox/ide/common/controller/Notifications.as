@@ -281,6 +281,8 @@ package net.vdombox.ide.common.controller
 		public static const DELETE_RESOURCE_REQUEST : String = "deleteResourceRequest";
 		public static const RESOURCE_DELETED : String = "resourceDeleted";
 		
+		public static const ALL_TABS_DELETED : String = "allTabsDeleted";
+		
 		
 ///////////////////////////////////////////Preview////////////////////////////////////////////////////////////
 		

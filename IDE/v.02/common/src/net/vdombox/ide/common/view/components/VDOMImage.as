@@ -70,5 +70,9 @@ package net.vdombox.ide.common.view.components
 		[Embed( source = "assets/vdomimage/Libraries.png" )]
 		public static var LibrariesIcon : Class;
 		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/Add.png" )]
+		public static var Add : Class;
+		
 	}
 }

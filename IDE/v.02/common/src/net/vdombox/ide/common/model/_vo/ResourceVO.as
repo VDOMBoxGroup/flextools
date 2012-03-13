@@ -29,11 +29,16 @@ package net.vdombox.ide.common.model._vo
 
 		public static const LOAD_ICON : uint = 8;
 
-		public static const ICON_SIZE : Number = 42;
+		public static const ICON_SIZE : Number = 160;
 
 		public static const RESOURCE_TEMP : String = "tempResource";
 
 		public static const RESOURCE_NONE : String = "noneResource";
+		
+		//viewType
+		public static const STANDARD_VIEW : String = "standardView";
+		
+		public static const BIG_PICTURE_VIEW : String = "bigPictureView";
 
 		public function ResourceVO( ownerID : String )
 		{
@@ -60,6 +65,8 @@ package net.vdombox.ide.common.model._vo
 		private var _data : ByteArray;
 
 		public var icon : ByteArray;
+		
+		public var viewType : String = STANDARD_VIEW;
 
 		private var _iconID : String;
 
