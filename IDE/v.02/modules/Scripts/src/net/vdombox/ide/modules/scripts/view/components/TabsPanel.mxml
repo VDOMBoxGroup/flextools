@@ -79,6 +79,40 @@
 				tabs_changeHandler();
 			}
 			
+			public function RemoveAction( action : Object ) : Object
+			{
+				if ( !_tabs )
+					return null;
+				
+				var tabsItem : Object;
+				
+				if ( action is ServerActionVO )
+					tabsItem = findServerAction( action as ServerActionVO );
+				else
+					tabsItem = findGlobalActionOrLibrary( action );
+				
+				if ( tabsItem )
+				{
+					if ( tabs.selectedItem == tabsItem )
+					{
+						if ( tabs.selectedIndex != 0 )
+						{
+							tabs.selectedIndex = 0;
+							tabs_changeHandler();
+						}
+						else if ( tabs.dataProvider.length > 1 )
+						{
+							tabs.selectedIndex = 1;
+							tabs_changeHandler();
+						}
+					}
+					_tabs.removeItemAt( _tabs.getItemIndex( tabsItem ) );
+					return tabsItem;
+				}
+				
+				return null;
+			}
+			
 			public function deleteActionByObjectVO( objectVO : IVDOMObjectVO ) : void
 			{
 				/*if ( objectVO is ObjectVO )

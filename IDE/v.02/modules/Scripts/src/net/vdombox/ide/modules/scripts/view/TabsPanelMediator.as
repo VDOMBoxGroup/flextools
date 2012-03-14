@@ -57,6 +57,9 @@ package net.vdombox.ide.modules.scripts.view
 			
 			interests.push( Notifications.OBJECT_DELETED );
 			
+			interests.push( Notifications.LIBRARY_DELETED );
+			interests.push( Notifications.DELETE_TAB_BY_ACTIONVO );
+			
 			return interests;
 		}
 		
@@ -121,7 +124,22 @@ package net.vdombox.ide.modules.scripts.view
 					
 				case Notifications.OBJECT_DELETED:
 				{
+					break;
+				}
 					
+				case Notifications.LIBRARY_DELETED:
+				{
+					
+				}
+					
+				case Notifications.DELETE_TAB_BY_ACTIONVO:
+				{
+					var action : Object = tabsPanel.RemoveAction( body );
+					
+					if ( action )
+						sendNotification( Notifications.DELETE_TAB, action );
+					
+					break;
 				}
 					
 			}

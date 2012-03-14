@@ -262,6 +262,9 @@ package net.vdombox.ide.modules.scripts.view
 			{
 				sendNotification( Notifications.SET_SERVER_ACTIONS, { pageVO: statesProxy.selectedPage, serverActions: serverActions } );
 			}
+			
+			sendNotification( Notifications.DELETE_TAB_BY_ACTIONVO, deletedServerActionVO );
+			
 		}
 		
 		private function onloadScriptOpen( containerID : String ) : void
