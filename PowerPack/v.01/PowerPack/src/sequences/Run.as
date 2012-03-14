@@ -1,4 +1,4 @@
-@startumlimg/
+/*@startumlimg/
 sequence_img001.png
 Builder.mxml - > ProgressManager
 :
@@ -12,3 +12,4 @@ ContextManager - > TemplateStruct
 generate()
 
 @enduml
+*/

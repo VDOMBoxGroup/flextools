@@ -46,7 +46,7 @@
 				<menuitem label="Save As..." id="save_as" keyEquivalent="s" ctrlKey="true" shiftKey="true" />
 				<menuitem type="separator" />
 				<menuitem label="Import" id="import">
-					<menuitem label="From VDOM Application..." id="import_from_app" />
+					
 					<menuitem label="From Template..." id="import_from_tpl" />
 				</menuitem>
 				<menuitem type="separator" />
@@ -100,7 +100,6 @@
 			import net.vdombox.powerpack.dialog.AboutProgramDialog;
 			import net.vdombox.powerpack.dialog.AirBuildProperties;
 			import net.vdombox.powerpack.dialog.EditCaption;
-			import net.vdombox.powerpack.dialog.Import;
 			import net.vdombox.powerpack.dialog.ImportFromTpl;
 			import net.vdombox.powerpack.dialog.ModalDialog;
 			import net.vdombox.powerpack.dialog.ProjectsSettingsDialog;
@@ -574,11 +573,6 @@
 					closeTpl();
 					break;
 
-				
-
-				case "import_from_app":
-					Import.show( onImportClose );
-					break;
 
 				case "import_from_tpl":
 					ImportFromTpl.show( onImportFromTplClose );
@@ -1100,38 +1094,38 @@
 			BindingUtils.bindSetter(templateChangeHandler, currentTemplate, 'modified');
 		}
 		
-		private function onImportClose( event : CloseEvent ) : void
-		{
-			if ( event.detail == ModalDialog.OK )
-			{
-				var graphs : Array = event.target.graphs;
-
-				closeTpl( false );
-
-				var template : BuilderTemplate = Import( event.target ).template as BuilderTemplate;
-
-				addTemplate(template);
-
-				processNewTpl();
-
-				ProgressManager.start( ProgressManager.DIALOG_MODE, true );
-
-				var i : int = 0;
-				if ( graphs.length > 0 )
-				{
-					ProgressManager.step( i++, graphs.length );
-
-					for each ( var graph : GraphCanvas in graphs )
-					{
-						pnl_graphs.addGraph( graph );
-					}
-				}
-
-				pnl_graphs.selectGraph( pnl_graphs.findFirstGraph() );
-
-				ProgressManager.complete();
-			}
-		}
+//		private function onImportClose( event : CloseEvent ) : void
+//		{
+//			if ( event.detail == ModalDialog.OK )
+//			{
+//				var graphs : Array = event.target.graphs;
+//
+//				closeTpl( false );
+//
+//				var template : BuilderTemplate = Import( event.target ).template as BuilderTemplate;
+//
+//				addTemplate(template);
+//
+//				processNewTpl();
+//
+//				ProgressManager.start( ProgressManager.DIALOG_MODE, true );
+//
+//				var i : int = 0;
+//				if ( graphs.length > 0 )
+//				{
+//					ProgressManager.step( i++, graphs.length );
+//
+//					for each ( var graph : GraphCanvas in graphs )
+//					{
+//						pnl_graphs.addGraph( graph );
+//					}
+//				}
+//
+//				pnl_graphs.selectGraph( pnl_graphs.findFirstGraph() );
+//
+//				ProgressManager.complete();
+//			}
+//		}
 
 		private function generationComplete( event : Event ) : void
 		{
