@@ -20,6 +20,9 @@ package ro.victordramba.scriptarea
 
 			selectionShape = new Shape;
 			addChild( selectionShape );
+			
+			selectionShapeRects = new Shape;
+			addChild( selectionShapeRects );
 
 			tf = new TextField;
 			tf.multiline = true;
@@ -83,6 +86,8 @@ package ro.victordramba.scriptarea
 		private var _maxScrollV : int = 0;
 
 		private var selectionShape : Shape;
+		
+		private var selectionShapeRects : Shape;
 
 		private var undoBuff : Array = [];
 		private var redoBuff : Array = [];
@@ -208,6 +213,48 @@ package ro.victordramba.scriptarea
 
 			setSelection( pos, pos );
 		}
+		
+		private var _selectRects : Array = new Array();
+		
+		private function setSelectionRects() : void
+		{
+			var g : Graphics = selectionShapeRects.graphics;
+			g.clear();
+			
+			if ( _selStart == _selEnd )
+				return;
+			
+			var _start : int = _selStart;
+			var _end : int = _selStart;
+			
+			while ( /\w/.test( _text.charAt( _start ) ) )
+				_start--;
+			
+			_start++;
+			
+			while ( /\w/.test( _text.charAt( _end ) ) )
+				_end++;
+			
+			var strFind : String = text.slice( _start, _end );
+			
+			if ( strFind == "" )
+				return;
+			
+			var index : int = text.indexOf( strFind );
+			var step : int = _end - _start;
+			
+			g.beginFill( 0x8DC846, .3 );
+			
+			while ( index != -1 )
+			{
+				var p0 : Point = getPointForIndex( index );
+				var p1 : Point = getPointForIndex( index + step );
+				
+				g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
+				
+				index = text.indexOf( strFind, index + 1 );
+			}
+		}
 
 		public function _setSelection( beginIndex : int, endIndex : int, caret : Boolean = false ) : void
 		{
@@ -255,10 +302,12 @@ package ro.victordramba.scriptarea
 				cursor.visible = _caret <= lastPos && _caret >= firstPos;
 				_caret = endIndex;
 				cursor.pauseBlink();
-				cursor.x = p1.x + tf.x;
+				cursor.setX( p1.x + tf.x );
 				cursor.y = p1.y + tf.y;
 				checkScrollToCursor();
 			}
+			
+			setSelectionRects();
 		}
 
 		public function updateCaret() : void
@@ -266,7 +315,7 @@ package ro.victordramba.scriptarea
 			cursor.visible = _caret <= lastPos && _caret >= firstPos;
 			cursor.pauseBlink();
 			var p : Point = getPointForIndex( _caret );
-			cursor.x = p.x + tf.x;
+			cursor.setX( p.x + tf.x );
 			cursor.y = p.y + tf.y;
 		}
 
@@ -498,26 +547,26 @@ package ro.victordramba.scriptarea
 			}
 			
 			//var newX : Number = tf.width - width;
-			var newX : Number = cursor.x - tf.x - width + 48;
+			var newX : Number = cursor.getX() - tf.x - width + 48;
 			
-			if ( tf.x < newX && cursor.x > width - 48 )
+			if ( tf.x < newX && cursor.getX() > width - 48 )
 			{
 				if ( newX < 0 )
 					newX = 0;
 				tf.x = -newX;
 				selectionShape.x = -newX;
 			} 
-			else if ( cursor.x < 0 )
+			else if ( cursor.getX() < 0 )
 			{
-				if ( cursor.x < tf.x )
+				if ( cursor.getX() < tf.x )
 				{
 					tf.x = 0;
 					selectionShape.x -= 0;
 				}
 				else
 				{
-					tf.x -= cursor.x;
-					selectionShape.x -= cursor.x;
+					tf.x -= cursor.getX();
+					selectionShape.x -= cursor.getX();
 				}
 			}
 

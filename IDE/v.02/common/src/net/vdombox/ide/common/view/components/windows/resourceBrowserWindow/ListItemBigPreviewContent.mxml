@@ -248,9 +248,9 @@
 				
 				<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
 					<s:fill>
-						<s:LinearGradient>
-							<s:GradientEntry color="#FFFFFF" color.selected="#b50000" />
-							<s:GradientEntry color="#BBBBBB" color.selected="#9e0000"/>
+						<s:LinearGradient rotation="90">
+							<s:GradientEntry color="#3F3F3F" color.selected="#b50000" />
+							<s:GradientEntry color="#191919" color.selected="#9e0000"/>
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
@@ -259,8 +259,8 @@
 					<s:Group width="160" height="160">
 						<resourceBrowserWindow:SmoothImage id="smoothImage" height="100%" width="100%"
 														   verticalAlign="middle" horizontalAlign="center" 
-														   maintainAspectRatio="true"
-														   scaleContent="true" 
+														   maintainAspectRatio="false"
+														   scaleContent="false" 
 														   smoothBitmapContent="true"
 														   cacheAsBitmap="true" />
 						

@@ -241,7 +241,8 @@ package ro.victordramba.scriptarea
 				redo_fun();
 				return;
 				
-			}else if (  e.shiftKey && k == Keyboard.DELETE 
+			}
+			else if (  e.shiftKey && k == Keyboard.DELETE 
 				|| e.ctrlKey  &&  ( c ==  'x' || c ==  'X') )
 			{
 				onCopy();
@@ -252,6 +253,13 @@ package ro.victordramba.scriptarea
 					replaceSelection( '' );
 				
 				dipatchChange();
+				return;
+				
+			}
+			
+			else if ( e.ctrlKey  &&  ( c ==  'a' || c ==  'A') )
+			{
+				_setSelection( 0, this.length, false );
 				return;
 				
 			}

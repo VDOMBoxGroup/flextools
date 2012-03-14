@@ -249,6 +249,7 @@ package net.vdombox.ide.common.controller
 		public static const SELECTED_TAB_CHANGED : String = "selectedTabChanged";
 		
 		public static const DELETE_TAB : String = "deleteTab";
+		public static const DELETE_TAB_BY_ACTIONVO : String = "deleteTabByActionVO";
 		
 		public static const ACTION : String = "action";
 		public static const LIBRARY : String = "library";

@@ -41,8 +41,8 @@
 
 				this.dispatchEvent(new ResourceVOEvent(ResourceVOEvent.LIST_ITEM_CREATION_COMPLETE));
 				
-				if ( value == super.data )
-					return;
+				/*if ( value == super.data )
+					return;*/
 				
 				super.data = value;
 

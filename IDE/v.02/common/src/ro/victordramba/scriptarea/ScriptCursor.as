@@ -5,11 +5,16 @@ package ro.victordramba.scriptarea
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.utils.setInterval;
+	
+	import mx.states.OverrideBase;
 
 	internal class ScriptCursor extends Sprite
 	{
 		public static var height:int;
 		private var crs:Shape;
+		
+		private var w : int;
+		private var h : int;
 		
 		public function ScriptCursor()
 		{
@@ -38,10 +43,12 @@ package ro.victordramba.scriptarea
 		
 		public function setSize(w:int, h:int):void
 		{
+			this.w = w;
+			this.h = h;
 			graphics.clear();
 			var m:Matrix = new Matrix;
 			m.createGradientBox(w, h, Math.PI/2);
-			graphics.beginGradientFill(GradientType.LINEAR, [0,0], [0.03,.08],[0,255], m);
+			graphics.beginGradientFill(GradientType.LINEAR, [0,0], [0.04,.09],[0,255], m);
 			graphics.drawRect(0, 0, w, h);
 			graphics.endFill();
 		}
