@@ -42,16 +42,22 @@
 				else
 					verticalScrollPosition = 0;
 				
-				_attributesVO = value;
-
+				var oneObject : Boolean = false;
+				
 				if ( !value )
 				{
+					_attributesVO = value;
 					typeNameLabel.text = "";
 					attributesList.dataProvider = null;
 					return;
 				}
+				
+				if ( _attributesVO && _attributesVO.vdomObjectVO == value.vdomObjectVO )
+					oneObject = true;
+					
+				//_attributesVO = value;
 
-				_typeVO = _attributesVO.vdomObjectVO.typeVO;
+				_typeVO = value.vdomObjectVO.typeVO;
 
 				typeNameLabel.text = _typeVO.displayName;
 
@@ -61,14 +67,14 @@
 				
 				attributesArray.push( { group: 0, 
 					name: 					"id", 
-					objectVO: 			_attributesVO.vdomObjectVO,
+					objectVO: 			value.vdomObjectVO,
 					attributeDescriptionVO: null, 
 					objectsList:	 		null,
 					pageLinks: 				null } );
 				
 				attributesArray.push( { group: 0, 
 					name: 					resourceManager.getString( 'Wysiwyg_General', 'attribut_name'), 
-					objectVO: 			_attributesVO.vdomObjectVO,
+					objectVO: 			value.vdomObjectVO,
 					attributeDescriptionVO: null, 
 					objectsList:	 		null,
 					pageLinks: 				null } );
@@ -78,7 +84,7 @@
 					if ( !attrDescrVO.visible )
 						continue;
 					
-					attributeVO = _attributesVO.getAttributeVOByName( attrDescrVO.name );
+					attributeVO = value.getAttributeVOByName( attrDescrVO.name );
 					 
 					// TODO: Why so many arguments? ( attrDescrVO.colorGroup,  attrDescrVO)
 					
@@ -86,14 +92,95 @@
 						name: 					attrDescrVO.name, 
 						attributeVO: 			attributeVO,
 						attributeDescriptionVO: attrDescrVO, 
-						objectsList:	 		_attributesVO.objectsList,
-						pageLinks: 				_attributesVO.pageLinks } );
+						objectsList:	 		value.objectsList,
+						pageLinks: 				value.pageLinks } );
 				}
 				
 //				// TODO: need used "attributesList.dataProvider = attributesArray"
 				NeedSetVerticalScrollPosition = true;
-				attributesList.dataProvider = new ArrayCollection( attributesArray );
 				
+				var dataProvider : ArrayCollection =  new ArrayCollection( attributesArray );
+				
+				if ( !oneObject )
+				{
+					_attributesVO = value;
+					attributesList.dataProvider = dataProvider;
+				}
+				else
+				{
+					var attribute : AttributeVO;
+					
+					for each ( var object : Object in dataProvider.source )
+					{
+						if ( !object.hasOwnProperty( "attributeVO" ) )
+							continue;
+						
+						attributeVO = object.attributeVO;
+						
+						var objectTemp : Object = findAttribute( attributeVO );
+						
+						if ( !objectTemp )
+						{
+							_attributesVO = value;
+							attributesList.dataProvider = dataProvider;
+						}
+						else
+						{
+							
+							attribute = objectTemp.attributeVO;
+							if ( attributeVO.value != attribute.value || attributeVO.defaultValue != attribute.defaultValue )
+							{
+								setAttribute( object );
+							}
+						}
+					}
+				}
+				
+			}
+			
+			private function setAttribute ( object : Object ) : void
+			{
+				var attribute : AttributeVO = object.attributeVO;
+				
+				var newAttributes : Array = new Array();
+				
+				for each ( var attributeVO : AttributeVO in _attributesVO.attributes )
+				{
+					if ( attributeVO.name == attribute.name )
+						newAttributes.push( attribute );
+					else
+						newAttributes.push( attributeVO );
+				}
+				
+				_attributesVO.attributes = newAttributes;
+				
+				var attrProvider : ArrayCollection = attributesList.dataProvider as ArrayCollection;
+				for each ( var object2 : Object in attrProvider.source )
+				{
+					if ( object2.name == object.name )
+					{
+						var index : int = attrProvider.getItemIndex( object2 );
+						attrProvider.removeItemAt( index );
+						attrProvider.addItemAt( object, index );
+					}
+				}
+			}
+			
+			private function findAttribute( attribute : AttributeVO ) : Object
+			{
+				var attrProvider : ArrayCollection = attributesList.dataProvider as ArrayCollection;
+				
+				for each ( var object : Object in attrProvider.source )
+				{
+					if ( !object.hasOwnProperty( "attributeVO" ) )
+						continue;
+					
+					var attributeVO : AttributeVO = object.attributeVO;
+					if ( attributeVO.name == attribute.name )
+						return object;
+				}
+				
+				return attribute;
 			}
 
 			private function getAttributeDesctriptionVOByName( name : String ) : AttributeDescriptionVO

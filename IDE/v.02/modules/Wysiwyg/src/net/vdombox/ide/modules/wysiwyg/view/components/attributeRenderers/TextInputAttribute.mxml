@@ -13,6 +13,7 @@
 			
 			import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
+			
 			[Bindable]
 			private var _value : String;
 			private var regExpValidator : AttributeValidator = new AttributeValidator();
