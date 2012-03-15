@@ -2,10 +2,10 @@ package net.vdombox.ide.modules.events.controller
 {
 	import mx.utils.UIDUtil;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.view.EventsPanelMediator;
 	import net.vdombox.ide.modules.events.view.WorkAreaMediator;
 	
@@ -36,10 +36,10 @@ package net.vdombox.ide.modules.events.controller
 					if ( !facade.hasMediator( EventsPanelMediator.NAME ) )
 						return;
 					
-					var workAreaMediator : WorkAreaMediator = facade.retrieveMediator( WorkAreaMediator.NAME ) as
-						WorkAreaMediator;
+					var eventsPanelMediator : EventsPanelMediator = facade.retrieveMediator( EventsPanelMediator.NAME ) as
+						EventsPanelMediator;
 					
-					var serverActions : Array = workAreaMediator.workArea.dataProvider.serverActions;
+					var serverActions : Array = eventsPanelMediator.scripts;
 					
 					if ( !serverActions )
 						return;
