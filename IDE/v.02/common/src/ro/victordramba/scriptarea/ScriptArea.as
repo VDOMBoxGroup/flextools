@@ -227,6 +227,9 @@ package ro.victordramba.scriptarea
 			var _start : int = _selStart;
 			var _end : int = _selStart;
 			
+			var _startRect : int;
+			var _endRect : int;
+			
 			while ( /\w/.test( _text.charAt( _start ) ) )
 				_start--;
 			
@@ -236,6 +239,7 @@ package ro.victordramba.scriptarea
 				_end++;
 			
 			var strFind : String = text.slice( _start, _end );
+			var strTemp : String;
 			
 			if ( strFind == "" )
 				return;
@@ -243,14 +247,29 @@ package ro.victordramba.scriptarea
 			var index : int = text.indexOf( strFind );
 			var step : int = _end - _start;
 			
-			g.beginFill( 0x8DC846, .3 );
+			g.beginFill( 0x597C7A, .3 );
 			
 			while ( index != -1 )
 			{
-				var p0 : Point = getPointForIndex( index );
-				var p1 : Point = getPointForIndex( index + step );
+				_startRect = _endRect = index;
 				
-				g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
+				while ( /\w/.test( _text.charAt( _startRect ) ) )
+					_startRect--;
+				
+				_startRect++;
+				
+				while ( /\w/.test( _text.charAt( _endRect ) ) )
+					_endRect++;
+				
+				if ( text.slice( _startRect, _endRect ) == strFind )
+				{
+				
+					var p0 : Point = getPointForIndex( index );
+					var p1 : Point = getPointForIndex( index + step );
+				
+					g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
+					
+				}
 				
 				index = text.indexOf( strFind, index + 1 );
 			}
@@ -273,10 +292,12 @@ package ro.victordramba.scriptarea
 			var g : Graphics = selectionShape.graphics;
 
 			g.clear();
+			
+			setSelectionRects();
 
 			if ( _selStart != _selEnd && _selStart <= lastPos && _selEnd >= firstPos )
 			{
-				g.beginFill( 0x8DC846, .3 );
+				g.beginFill( 0x0000FF, .3 );
 
 				if ( p0.y == p1.y )
 				{
@@ -306,8 +327,6 @@ package ro.victordramba.scriptarea
 				cursor.y = p1.y + tf.y;
 				checkScrollToCursor();
 			}
-			
-			setSelectionRects();
 		}
 
 		public function updateCaret() : void
