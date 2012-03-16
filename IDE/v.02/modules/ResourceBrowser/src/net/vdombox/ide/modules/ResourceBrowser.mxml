@@ -9,7 +9,46 @@
 		[ResourceBundle("ResourceBrowser_General")] 
 	</fx:Metadata>
 	
-	
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/halo";
+		@namespace common "net.vdombox.ide.common.*";
+		@namespace mx1 "library://ns.adobe.com/flex/mx";
+		
+		mx1|ScrollBar
+		{
+			cornerRadius : 4;
+			fillColors  : #707070, #909090;
+			gripColor  : #323232;
+			
+			downArrowUpSkin: ClassReference(null);
+			downArrowOverSkin: ClassReference(null);
+			downArrowDownSkin: ClassReference(null);
+			
+			upArrowUpSkin: ClassReference(null);
+			upArrowOverSkin: ClassReference(null);
+			upArrowDownSkin: ClassReference(null);
+			
+			up-arrow-skin: ClassReference(null);
+			down-arrow-skin: ClassReference(null);
+			
+			
+			
+			trackSkin: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMMXHScrollTrackSkin");  
+			
+			thumbSkin : ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMMXHScrollTrumbSkin");
+		}
+		
+		s|VScrollBar
+		{	
+			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin");  
+		}
+		
+		s|HScrollBar
+		{	
+			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin");  
+		}
+	</fx:Style>
 	
 	<fx:Script>
 		<![CDATA[
