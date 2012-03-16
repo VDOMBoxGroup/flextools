@@ -21,8 +21,6 @@
 			import net.vdombox.ide.common.events.PopUpWindowEvent;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			import net.vdombox.ide.modules.events.events.EventsPanelEvent;
 			import net.vdombox.utils.WindowManager;
 			
@@ -40,18 +38,6 @@
 									resourceManager.getString( "Events_General", "events_panel_actions_title" ) ] );
 				titleBar.selectedIndex = 0;
 			}*/
-			
-			protected function eventsList_creationCompleteHandler(event:FlexEvent):void
-			{
-				eventsList.scroller.verticalScrollBar.setStyle("skinClass", VDOMVScrollBarSkin );
-				eventsList.scroller.horizontalScrollBar.setStyle("skinClass", VDOMHScrollBarSkin );
-			}
-			
-			protected function actionsList_creationCompleteHandler(event:FlexEvent):void
-			{
-				actionsList.scroller.verticalScrollBar.setStyle("skinClass", VDOMVScrollBarSkin );
-				actionsList.scroller.horizontalScrollBar.setStyle("skinClass", VDOMHScrollBarSkin );
-			}
 			
 			protected function createServerAction_clickHandler(event:MouseEvent):void
 			{
@@ -115,8 +101,7 @@
 			
 		<s:List id="eventsList"
 					height="100%" labelField="name" width="100%" contentBackgroundAlpha="0"
-					dragEnabled="true" itemRenderer="net.vdombox.ide.modules.events.view.components.EventItemRenderer"
-					creationComplete="eventsList_creationCompleteHandler(event)"/>
+					dragEnabled="true" itemRenderer="net.vdombox.ide.modules.events.view.components.EventItemRenderer"/>
 	</s:VGroup>
 		
 	<s:VGroup width="100%" height="100%" gap="0">
@@ -156,8 +141,7 @@
 
 		<s:List id="actionsList"
 						height="100%" labelField="name" width="100%" contentBackgroundAlpha="0"
-						dragEnabled="true" itemRenderer="net.vdombox.ide.modules.events.view.components.ActionItemRenderer"
-						creationComplete="actionsList_creationCompleteHandler(event)"/>
+						dragEnabled="true" itemRenderer="net.vdombox.ide.modules.events.view.components.ActionItemRenderer"/>
 	</s:VGroup>
 
 		

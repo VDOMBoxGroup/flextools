@@ -14,6 +14,8 @@ package net.vdombox.ide.modules.events.controller
 
 	public class CreateScriptRequestCommand extends SimpleCommand
 	{
+		private var eventsPanelMediator : EventsPanelMediator ;
+		
 		override public function execute( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
@@ -36,13 +38,28 @@ package net.vdombox.ide.modules.events.controller
 					if ( !facade.hasMediator( EventsPanelMediator.NAME ) )
 						return;
 					
-					var eventsPanelMediator : EventsPanelMediator = facade.retrieveMediator( EventsPanelMediator.NAME ) as
+					eventsPanelMediator = facade.retrieveMediator( EventsPanelMediator.NAME ) as
 						EventsPanelMediator;
 					
-					var serverActions : Array = eventsPanelMediator.scripts;
-					
-					if ( !serverActions )
+					if ( !facade.hasMediator( WorkAreaMediator.NAME ) )
 						return;
+					
+					var workAreaMediator : WorkAreaMediator = facade.retrieveMediator( WorkAreaMediator.NAME ) as
+						WorkAreaMediator;
+					
+					var serverActionsTemp : Array = workAreaMediator.workArea.dataProvider.serverActions;
+					
+					if ( !serverActionsTemp )
+						return;
+					
+					var serverActions : Array = new Array();
+					
+					for each ( var action : ServerActionVO in serverActionsTemp )
+					{
+						serverActions.push( setScriptAction( action ) );
+					}
+					
+					
 					
 					var serverActionVO : ServerActionVO;
 					
@@ -67,6 +84,20 @@ package net.vdombox.ide.modules.events.controller
 					
 					break;
 				}
+			}
+			
+			function setScriptAction ( action : ServerActionVO ) : ServerActionVO
+			{
+				for each ( var actionVO : ServerActionVO in eventsPanelMediator.scripts )
+				{
+					if ( actionVO.name == action.name )
+					{
+						action.script = actionVO.script;
+						return action;
+					}
+				}
+				
+				return action;
 			}
 		}
 	}
