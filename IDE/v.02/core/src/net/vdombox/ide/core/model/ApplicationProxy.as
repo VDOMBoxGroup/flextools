@@ -254,11 +254,13 @@ package net.vdombox.ide.core.model
 			delete instances[ proxyName ];
 		}
 		
+		private var rmcXML : XML = new XML("<Arguments><CallType>rmc</CallType></Arguments>");
+		
 		public function remoteCall( objectID : String, functionName : String, value : String ) : AsyncToken
 		{
 			var token : AsyncToken;
 			
-			token = soap.remote_method_call( applicationVO.id, objectID, functionName, value, "" );
+			token = soap.remote_call( applicationVO.id, objectID, functionName, rmcXML, value );
 			
 			token.recipientName = proxyName;
 			
@@ -663,8 +665,8 @@ package net.vdombox.ide.core.model
 			soap.set_events_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.set_events_structure.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
 			
-			soap.remote_method_call.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-			soap.remote_method_call.addEventListener(  FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			soap.remote_call.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.remote_call.addEventListener(  FaultEvent.FAULT, soap_faultHandler, false, 0, true );
 			
 			soap.copy_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true  );
 			soap.copy_object.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true  );
@@ -710,8 +712,8 @@ package net.vdombox.ide.core.model
 			soap.set_events_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_events_structure.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
-			soap.remote_method_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.remote_method_call.removeEventListener(  FaultEvent.FAULT, soap_faultHandler );
+			soap.remote_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.remote_call.removeEventListener(  FaultEvent.FAULT, soap_faultHandler );
 			
 			soap.copy_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.copy_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
@@ -736,7 +738,7 @@ package net.vdombox.ide.core.model
 			
 			switch ( operationName )
 			{
-				case "remote_method_call":
+				case "remote_call":
 				{
 					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_ERROR_GETTED, { applicationVO: applicationVO, error: fault.detail } );
 					
@@ -1018,7 +1020,7 @@ package net.vdombox.ide.core.model
 					break;
 				}
 					
-				case "remote_method_call":
+				case "remote_call":
 				{
 					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_GETTED, { applicationVO: applicationVO, result: result } );
 					

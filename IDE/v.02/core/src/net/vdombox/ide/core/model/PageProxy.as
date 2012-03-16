@@ -91,11 +91,13 @@ package net.vdombox.ide.core.model
 			delete instances[ proxyName ];
 		}
 
+		private var rmcXML : XML = new XML("<Arguments><CallType>rmc</CallType></Arguments>");
+		
 		public function remoteCall( functionName : String, value : String ) : AsyncToken
 		{
 			var token : AsyncToken;
 			
-			token = soap.remote_method_call( pageVO.applicationVO.id, pageVO.id, functionName, value, "" );
+			token = soap.remote_call( pageVO.applicationVO.id, pageVO.id, functionName, rmcXML, value );
 			
 			token.recipientName = proxyName;
 			
@@ -436,8 +438,8 @@ package net.vdombox.ide.core.model
 			soap.copy_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.copy_object.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
-			soap.remote_method_call.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-			soap.remote_method_call.addEventListener(  FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			soap.remote_call.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.remote_call.addEventListener(  FaultEvent.FAULT, soap_faultHandler, false, 0, true );
 			
 		}
 
@@ -489,8 +491,8 @@ package net.vdombox.ide.core.model
 			soap.copy_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.copy_object.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
-			soap.remote_method_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.remote_method_call.removeEventListener(  FaultEvent.FAULT, soap_faultHandler );
+			soap.remote_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.remote_call.removeEventListener(  FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function createObjectsList( objects : XML ) : void
@@ -896,7 +898,7 @@ package net.vdombox.ide.core.model
 					break;
 				}
 					
-				case "remote_method_call":
+				case "remote_call":
 				{
 					sendNotification( ApplicationFacade.PAGE_REMOTE_CALL_GETTED, { pageVO: pageVO, result: result } );
 					
@@ -945,7 +947,7 @@ package net.vdombox.ide.core.model
 					break;
 				}
 					
-				case "remote_method_call":
+				case "remote_call":
 				{
 					sendNotification( ApplicationFacade.PAGE_REMOTE_CALL_ERROR_GETTED, { pageVO: pageVO, error: fault.detail } );
 					

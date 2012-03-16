@@ -229,7 +229,7 @@ package net.vdombox.ide.core.model.managers
 
 				var item : Object = {}
 
-				while ( cacheSize > 10000 )
+				while ( cacheSize > 1000000 )
 				{
 
 					item = cachedFiles.getItemAt( 0 )

@@ -1,7 +1,10 @@
 package net.vdombox.ide.core.view.components
 {
 	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
+	
+	import mx.states.OverrideBase;
 	
 	import net.vdombox.ide.core.view.skins.ComboBoxLoginSkin;
 	
@@ -46,6 +49,12 @@ package net.vdombox.ide.core.view.components
 				(skin as ComboBoxLoginSkin).textInput.editable = _editable;
 				(skin as ComboBoxLoginSkin).textInput.selectable = _selecteble;
 			}
+		}
+		
+		override protected function item_mouseDownHandler(event:MouseEvent):void
+		{
+			super.item_mouseDownHandler(event);
+			event.stopImmediatePropagation();
 		}
 		
 		override protected function capture_keyDownHandler(event:KeyboardEvent):void

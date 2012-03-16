@@ -13,6 +13,7 @@
 		<![CDATA[
 			import flash.display.NativeWindowSystemChrome;
 			import flash.events.MouseEvent;
+			import flash.text.engine.TextLine;
 			
 			import mx.controls.SWFLoader;
 			import mx.modules.ModuleLoader;
@@ -27,8 +28,11 @@
 			{
 				var target : Object = event.target;
 
-				if ( target is RichEditableText || target is Button )
+				if ( target is RichEditableText || target is Button || target is TextLine )
+				{
+					event.stopImmediatePropagation();
 					return;
+				}
 
 				nativeWindow.startMove();
 				event.stopImmediatePropagation();

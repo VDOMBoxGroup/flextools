@@ -14,7 +14,6 @@
 			
 			import net.vdombox.ide.common.model._vo.ApplicationVO;
 			import net.vdombox.ide.core.events.ApplicationManagerEvent;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			
 			import spark.components.Application;
 			import spark.components.Scroller;
@@ -24,8 +23,6 @@
 			protected function applicationList_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				applicationList.scroller.setStyle( "horizontalScrollPolicy", "off" );
-				
-				applicationList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 				
 				addEventListener( MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 
