@@ -15,7 +15,6 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			import net.vdombox.ide.modules.dataBase.events.TableElementEvent;
 			
 			import spark.components.Button;
@@ -61,11 +60,6 @@
 					return;
 				
 				hostComponent.sendGoToTable();
-			}
-			
-			protected function scroller_creationCompleteHandler(event:FlexEvent):void
-			{
-				scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 			}
 			
 		]]>
@@ -127,7 +121,7 @@
 									 blurY="6" brRadius="0" distance="0" tlRadius="0"
 									 trRadius="0"/>
 			
-			<components1:VDOMScroller id="scroller" width="100%" height="100%" creationComplete="scroller_creationCompleteHandler(event)">
+			<components1:VDOMScroller id="scroller" width="100%" height="100%">
 				
 				<s:VGroup id="attributes" width="100%" height="100%" gap="0"/>
 				

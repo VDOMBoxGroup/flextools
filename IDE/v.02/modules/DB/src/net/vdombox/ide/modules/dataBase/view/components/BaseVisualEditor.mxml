@@ -31,6 +31,17 @@
 				_objectVO = value as PageVO;
 			}
 			
+			protected function scroller_creationCompleteHandler(event:FlexEvent):void
+			{
+				scroller.horizontalScrollBar.height = 12;
+				
+				scroller.horizontalScrollBar.thumb.height = 12;
+				scroller.verticalScrollBar.thumb.width = 12;
+				
+				scroller.horizontalScrollBar.track.height = 12;
+				scroller.verticalScrollBar.track.width = 12;
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -45,7 +56,7 @@
 			</s:fill>
 		</s:Rect>
 		
-		<components1:VDOMScroller id="scroller" height="100%" width="100%">
+		<components1:VDOMScroller id="scroller" height="100%" width="100%" creationComplete="scroller_creationCompleteHandler(event)">
 			<s:Group>
 				<s:Group id="linkagesLayer"/>
 				<s:Group id="contentGroup"/>

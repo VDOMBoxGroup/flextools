@@ -33,12 +33,18 @@
 				stringAttributeEditWindow.value = textArea.text;
 				stringAttributeEditWindow.editable = false;
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.APPLY, applyHandler );
+				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.CANCEL, cancelHandler );
 					
 				WindowManager.getInstance().addWindow(stringAttributeEditWindow, this, true);
 					
 				function applyHandler( event : StringAttributeEditWindowEvent ) : void
 				{
 					textArea.text = event.value;
+					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
+				}
+				
+				function cancelHandler( event : StringAttributeEditWindowEvent ) : void
+				{
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
 				}
 			}
