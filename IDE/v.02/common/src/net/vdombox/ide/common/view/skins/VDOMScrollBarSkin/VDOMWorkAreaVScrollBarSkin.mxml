@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
-    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" minWidth="12" minHeight="35" height="100%"
-    alpha.disabled="0.5" alpha.inactive="0.5" >
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" 
+	width="100%" height="100%"
+    alpha.normal="1" alpha.disabled="0.5" alpha.inactive="0.5" >
 
     <fx:Metadata>
     <![CDATA[ 
@@ -50,13 +51,13 @@
     </s:states>
    
  
-    <s:Button id="track" top="0" bottom="0" height="100%"
+    <s:Button id="track" top="0" bottom="0" height="100%" width="8"
               focusEnabled="false" 
               skinClass="net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarTrackSkin" />
     
 
     <s:Button id="thumb" 
-              focusEnabled="false" visible.inactive="false"
+              focusEnabled="false" visible.inactive="false" cornerRadius="4" width="8"
               skinClass="net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarThumbSkin" />
 
 </s:SparkSkin>

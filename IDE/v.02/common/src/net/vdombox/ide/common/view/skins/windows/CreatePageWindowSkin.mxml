@@ -13,7 +13,7 @@
 			
 			import net.vdombox.ide.common.events.WindowEvent;
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
 			{
@@ -24,7 +24,7 @@
 			protected function pageTypeList_creationCompleteHandler(event:FlexEvent):void
 			{
 				// TODO Auto-generated method stub
-				pageTypeList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
+				pageTypeList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
 				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 			}
 			

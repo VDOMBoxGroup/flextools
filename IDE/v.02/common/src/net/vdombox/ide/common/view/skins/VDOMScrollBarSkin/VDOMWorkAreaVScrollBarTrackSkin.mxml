@@ -51,7 +51,7 @@
     </s:states>
 
     <!-- border/fill -->
-    <s:Rect top="0" bottom="0" left="0" right="0" minWidth="12" minHeight="30">
+    <s:Rect top="0" bottom="0" left="0" right="0" width="100%" minHeight="30">
 		<s:fill>
 			<s:BitmapFill source = "@Embed('assets/vdomscrollbar/vertical-bg.png')" smooth="true" fillMode="repeat"/>
 		</s:fill>
