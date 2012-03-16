@@ -15,6 +15,8 @@
 		@namespace components "net.vdombox.ide.modules.wysiwyg.view.components.*";
 		@namespace controls "net.vdombox.ide.modules.wysiwyg.view.components.controls.*";
 		@namespace mx "library://ns.adobe.com/flex/mx";
+		@namespace spark "spark.skins.spark.*";
+		@namespace spark1 "mx.skins.spark.*";
 		 
 		components|RendererBase
 		{
@@ -59,6 +61,40 @@
 			content-background-alpha: 0.0;
 			content-background-color: #000000;
 			font-family: Arial;
+		}
+		
+		mx|ScrollBar
+		{
+			cornerRadius : 4;
+			fillColors  : #707070, #909090;
+			gripColor  : #323232;
+			
+			downArrowUpSkin: ClassReference(null);
+			downArrowOverSkin: ClassReference(null);
+			downArrowDownSkin: ClassReference(null);
+			
+			upArrowUpSkin: ClassReference(null);
+			upArrowOverSkin: ClassReference(null);
+			upArrowDownSkin: ClassReference(null);
+			
+			up-arrow-skin: ClassReference(null);
+			down-arrow-skin: ClassReference(null);
+			
+			
+			
+			trackSkin: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMMXHScrollTrackSkin");  
+			
+			thumbSkin : ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMMXHScrollTrumbSkin");
+		}
+		
+		s|VScrollBar
+		{	
+			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin");  
+		}
+		
+		s|HScrollBar
+		{	
+			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin");  
 		}
 	</fx:Style>
 	

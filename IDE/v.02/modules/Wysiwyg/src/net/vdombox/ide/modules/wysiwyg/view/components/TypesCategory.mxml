@@ -16,7 +16,6 @@
 			
 			import net.vdombox.ide.common.model._vo.TypeVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 
 			[Bindable]
 			private var typeData : ArrayCollection;
@@ -39,8 +38,6 @@
 			{
 				// TODO Auto-generated method stub
 				types.addEventListener(MouseEvent.MOUSE_WHEEL, list_mouseWheelHandler, true);
-	
-				types.scroller.verticalScrollBar.setStyle("skinClass", VDOMVScrollBarSkin);
 			}
 			
 			private function list_mouseWheelHandler( event : MouseEvent ) : void

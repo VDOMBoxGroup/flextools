@@ -869,6 +869,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 					attributeValue = event.attributes[ attributeName ];
 				}
 				
+				if ( !attributeVO )
+					continue;
+				
 				attributeVO.value = attributeValue;
 
 				attributes.push( attributeVO );

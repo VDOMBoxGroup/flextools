@@ -505,20 +505,21 @@
 				var attributeVO : AttributeVO;
 				if ( attributeName == "value" )
 				{
-					attributeVO = new AttributeVO( attributeName );
+					/*attributeVO = new AttributeVO( attributeName );*/
 					attributesObject[ attributeName ].value = elementForEditing.text;
-					attributeVO.value = attributesObject[ attributeName ].value;
+					attributeVO = attributesObject[ attributeName ].clone();
+					/*attributeVO.value = attributesObject[ attributeName ].value;*/
 					attributesVO.push( attributeVO );
 				}
 				else
 				{
-					attributeVO = new AttributeVO( attributeName );
-					attributeVO.value = attributesObject[ attributeName ].value;
+					//attributeVO = new AttributeVO( attributeName );
+					attributeVO = attributesObject[ attributeName ].clone();
 					attributesVO.push( attributeVO );
 					
-					attributeVO = new AttributeVO( "value" );
+					//attributeVO = new AttributeVO( "value" );
 					attributesObject[ "value" ].value = elementForEditing.text;
-					attributeVO.value = attributesObject[ "value" ].value;
+					attributeVO = attributesObject[ "value" ].clone();
 					attributesVO.push( attributeVO );
 				}
 				

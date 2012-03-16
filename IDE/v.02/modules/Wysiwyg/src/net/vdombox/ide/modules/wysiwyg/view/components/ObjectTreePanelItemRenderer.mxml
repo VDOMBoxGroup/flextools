@@ -3,8 +3,7 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
 					  height="25"
-					  width="100%"
-					  minWidth="225"
+					  minWidth="200"
 					  contentBackgroundAlpha="0" 
 					  contextMenu="mxtreeitemrenderer1_contextMenuHandler(event)" xmlns:view="net.vdombox.view.*" xmlns:view1="net.vdombox.ide.common.view.*" xmlns:components="net.vdombox.ide.common.view.components.*">
 

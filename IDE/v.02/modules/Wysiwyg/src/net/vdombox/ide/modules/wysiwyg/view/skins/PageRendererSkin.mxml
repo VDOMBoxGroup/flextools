@@ -8,15 +8,17 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.view.components.VDOMScroller;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMHScrollBarSkin;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			
 			protected function scroller_creationCompleteHandler(event:FlexEvent):void
 			{
-				scroller.verticalScrollBar.setStyle("skinClass", VDOMWorkAreaVScrollBarSkin );
-				scroller.horizontalScrollBar.setStyle("skinClass", VDOMWorkAreaHScrollBarSkin );
+				scroller.horizontalScrollBar.height = 12;
+				
+				scroller.horizontalScrollBar.thumb.height = 12;
+				scroller.verticalScrollBar.thumb.width = 12;
+				
+				scroller.horizontalScrollBar.track.height = 12;
+				scroller.verticalScrollBar.track.width = 12;
+				
 				addEventListener( MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 			}
 			

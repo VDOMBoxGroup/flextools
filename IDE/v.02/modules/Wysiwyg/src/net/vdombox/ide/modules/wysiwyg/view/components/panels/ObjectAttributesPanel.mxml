@@ -17,7 +17,6 @@
 			import net.vdombox.ide.common.model._vo.TypeVO;
 			import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 
 			private var _attributesVO : VdomObjectAttributesVO;
@@ -207,7 +206,6 @@
 			
 			protected function attributesList_creationCompleteHandler(event:FlexEvent):void
 			{
-				attributesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 			}
 			

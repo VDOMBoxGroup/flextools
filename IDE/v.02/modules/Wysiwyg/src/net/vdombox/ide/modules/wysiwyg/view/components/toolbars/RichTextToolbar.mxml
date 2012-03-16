@@ -53,9 +53,11 @@
 			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
 			{
 				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO(_item.vdomObjectVO);
-				var attributeVO : AttributeVO = new AttributeVO( "value" );
+				/*var attributeVO : AttributeVO = new AttributeVO( "value" );
 				
-				attributeVO.value = activeEditor.getContent();
+				attributeVO.value = activeEditor.getContent();*/
+				
+				var attributeVO : AttributeVO = attributesObject["value"].clone();
 				vdomObjectAttributesVO.attributes = [attributeVO];
 				
 				return vdomObjectAttributesVO;
