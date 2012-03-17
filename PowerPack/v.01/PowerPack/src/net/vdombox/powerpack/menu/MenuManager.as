@@ -17,6 +17,7 @@ import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+import net.vdombox.powerpack.managers.BuilderContextManager;
 import net.vdombox.powerpack.template.BuilderTemplate;
 
 public class MenuManager extends EventDispatcher
@@ -372,10 +373,7 @@ public class MenuManager extends EventDispatcher
 	
 	private function get currentTemplate() : BuilderTemplate
 	{
-		if ( !ContextManager.templates || ContextManager.templates.length == 0 )
-			return null;
-		
-		return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
+		return BuilderContextManager.currentTemplate;
 	}
 	
 }

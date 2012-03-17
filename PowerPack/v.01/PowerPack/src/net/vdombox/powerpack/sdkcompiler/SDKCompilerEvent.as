@@ -6,8 +6,8 @@ package net.vdombox.powerpack.sdkcompiler
 
 	public class SDKCompilerEvent extends Event
 	{
-		public static var SDK_COMPILER_COMPETE		: String = "sdkCompilerComplete";
-		public static var SDK_COMPILER_ERROR		: String = "sdkCompilerError";
+		public static var BUILD_COMPETE			: String = "buildComplete";
+		public static var BUILD_ERROR			: String = "buildError";
 
 		private var _message : String;
 

@@ -155,7 +155,9 @@ package net.vdombox.powerpack.template
 			
 			if ( !file.exists )
 			{
-				showError(LanguageManager.sentences['msg_file_not_exists']);
+				var filePathMsg : String = file.nativePath ? "\n(" + file.nativePath + ")" : "";
+				
+				showError(LanguageManager.sentences['msg_file_not_exists'] + filePathMsg);
 				return;
 			}
 			

@@ -42,6 +42,7 @@ import net.vdombox.powerpack.lib.player.managers.ContextManager;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 import net.vdombox.powerpack.lib.player.template.Template;
+import net.vdombox.powerpack.managers.BuilderContextManager;
 import net.vdombox.powerpack.managers.CashManager;
 import net.vdombox.powerpack.managers.ProgressManager;
 import net.vdombox.powerpack.managers.SelectionManager;
@@ -278,14 +279,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		return _initial;
 	}
 	
-	private function get currentTemplate() : BuilderTemplate
-	{
-		if ( !ContextManager.templates || ContextManager.templates.length == 0 )
-			return null;
-		
-		return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
-	}
-
 	//----------------------------------
 	//  name
 	//----------------------------------
@@ -1019,5 +1012,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
 	}
 
+	private function get currentTemplate() : BuilderTemplate
+	{
+		return BuilderContextManager.currentTemplate;
+	}
+	
 }
 }

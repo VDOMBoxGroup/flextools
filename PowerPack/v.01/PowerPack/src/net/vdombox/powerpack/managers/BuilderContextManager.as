@@ -15,6 +15,7 @@ package net.vdombox.powerpack.managers
 	import net.vdombox.powerpack.lib.player.gen.TemplateStruct;
 	import net.vdombox.powerpack.lib.player.managers.ContextManager;
 	import net.vdombox.powerpack.lib.player.utils.CryptUtils;
+	import net.vdombox.powerpack.template.BuilderTemplate;
 	
 	public class BuilderContextManager extends EventDispatcher
 	{
@@ -294,6 +295,11 @@ package net.vdombox.powerpack.managers
 		public static function get templates() : ArrayCollection
 		{
 			return ContextManager.templates;
+		}
+		
+		public static function get currentTemplate () : BuilderTemplate
+		{
+			return ContextManager.currentTemplate as BuilderTemplate;
 		}
 		
 		//----------------------------------

@@ -26,6 +26,7 @@
 			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 			import net.vdombox.powerpack.lib.player.template.Template;
 			import net.vdombox.powerpack.lib.player.template.TemplateProject;
+			import net.vdombox.powerpack.managers.BuilderContextManager;
 			import net.vdombox.powerpack.template.BuilderTemplate;
 			import net.vdombox.powerpack.template.BuilderTemplateProject;
 			
@@ -90,21 +91,41 @@
 			
 			protected function projectsList_creationCompleteHandler(event:FlexEvent):void
 			{
-				var projectPropertiesControl : ProjectProperties;
-				
-				for each (var project : BuilderTemplateProject in projectsList.dataProvider)
+				for each (var project : BuilderTemplateProject in projects)
 				{
-					projectPropertiesControl = new ProjectProperties();
-					projectPropertiesControl.project = project;
-					projectPropertiesControl.graphs = graphs;
-					
-					vsProperties.addChild(projectPropertiesControl);
+					addNewProjectProperties(project);
 				}
 				
-				vsProperties.selectedIndex = projectsList.selectedIndex;
+				updatePropertiesView ();
 			}
 			
 			protected function projectsList_changeHandler(event:ListEvent):void
+			{
+				updatePropertiesView ();
+			}
+			
+			protected function buttonNewProject_clickHandler(event:MouseEvent):void
+			{
+				currentTemplate.createNewProject();
+				
+				var newProjectIndex : Number = projects.length-1;
+				
+				addNewProjectProperties(projects[newProjectIndex] as BuilderTemplateProject);
+			}
+			
+			protected function buttonRemoveProject_clickHandler(event:MouseEvent):void
+			{
+				if (projectsList.selectedIndex < 0 || projects.length <= 1)
+					return;
+				
+				removeProjectPropertiesAt (projectsList.selectedIndex);
+				
+				currentTemplate.deleteProject ( projectsList.selectedItem as BuilderTemplateProject );
+				
+				projectsList.selectedIndex = currentTemplate.selectedProjectIndex;
+			}
+			
+			private function updatePropertiesView () : void
 			{
 				vsProperties.selectedIndex = projectsList.selectedIndex;
 			}
@@ -117,31 +138,30 @@
 				}
 			}
 			
-			protected function buttonNewProject_clickHandler(event:MouseEvent):void
+			private function get currentTemplate () : BuilderTemplate
 			{
-				BuilderTemplate(ContextManager.templates.getItemAt( 0 )).createNewProject();
-				
+				return BuilderContextManager.currentTemplate;
+			}
+			
+			private function get projects () : Array
+			{
+				return ArrayCollection(projectsList.dataProvider).source;
+			}
+			
+			private function addNewProjectProperties (project : BuilderTemplateProject) : void
+			{
 				var projectPropertiesControl : ProjectProperties;
 				
 				projectPropertiesControl = new ProjectProperties();
-				
-				var newProjectIndex : Number = ArrayCollection(projectsList.dataProvider).source.length-1;
-				projectPropertiesControl.project = projectsList.dataProvider.source[newProjectIndex] as BuilderTemplateProject;
+				projectPropertiesControl.project = project;
 				projectPropertiesControl.graphs = graphs;
 				
 				vsProperties.addChild(projectPropertiesControl);
 			}
 			
-			protected function buttonRemoveProject_clickHandler(event:MouseEvent):void
+			private function removeProjectPropertiesAt (index : int) : void
 			{
-				if (projectsList.selectedIndex < 0 || ArrayCollection(projectsList.dataProvider).source.length <= 1)
-					return;
-				
-				vsProperties.removeChildAt(projectsList.selectedIndex);
-				
-				BuilderTemplate(ContextManager.templates.getItemAt( 0 )).deleteProject(projectsList.selectedItem as BuilderTemplateProject);
-				
-				projectsList.selectedIndex = BuilderTemplate(ContextManager.templates.getItemAt( 0 )).selectedProjectIndex;
+				vsProperties.removeChildAt(index);
 			}
 			
 		]]>
@@ -182,9 +202,9 @@
 				
 				<mx:List id="projectsList"
 						 width="200" height="100%"
-						 dataProvider="{ContextManager.templates.getItemAt( 0 ).projects}"
+						 dataProvider="{currentTemplate.projects}"
 						 labelField="name"
-						 selectedIndex="{ContextManager.templates.getItemAt( 0 ).selectedProjectIndex}"
+						 selectedIndex="{currentTemplate.selectedProjectIndex}"
 						 change="projectsList_changeHandler(event)"
 						 creationComplete="projectsList_creationCompleteHandler(event)"
 						 borderStyle="solid"/>

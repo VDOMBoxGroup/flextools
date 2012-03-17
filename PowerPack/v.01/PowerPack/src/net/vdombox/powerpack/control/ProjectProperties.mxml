@@ -217,7 +217,7 @@
 			
 			private function get validAppPath () : Boolean
 			{
-				return compilerParamsChecker.isAppPathValid(embededApplicationBrowseBox.path);
+				return compilerParamsChecker.isValidAppPath(embededApplicationBrowseBox.path);
 			}
 			
 			private function get buildAvailable (): Boolean

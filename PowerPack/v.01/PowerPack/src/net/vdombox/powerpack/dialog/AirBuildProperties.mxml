@@ -25,7 +25,7 @@
 			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 			import net.vdombox.powerpack.lib.player.template.Template;
 			import net.vdombox.powerpack.lib.player.template.TemplateProject;
-			import net.vdombox.powerpack.lib.player.template.VDOMApplication;
+			import net.vdombox.powerpack.managers.BuilderContextManager;
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
 			import net.vdombox.powerpack.sdkcompiler.SDKCompilerCreator;
@@ -36,29 +36,11 @@
 			
 			private var compilerParamsChecker	: SDKCompilerParamsChecker = SDKCompilerParamsChecker.getInstance();
 			
+			private var sdkCompiler : SDKCompiler = SDKCompilerCreator.create();
+			
 			private var shObject : SharedObject = SharedObject.getLocal( "air_properties" );
 			
 			private static var _dialog	: AirBuildProperties;
-			
-			private var installerTplXml : XML = 
-				 <application xmlns="http://ns.adobe.com/air/application/2.0">
-				  <version>1.2.4.8017</version> 
-				 <initialWindow>
-				  <content>Installer.swf</content> 
-				  <systemChrome>none</systemChrome> 
-				  <transparent>true</transparent> 
-				  <maximizable>false</maximizable> 
-				  <resizable>false</resizable> 
-				  </initialWindow>
-				  <installFolder>VDOM</installFolder> 
-				  <programMenuFolder>VDOM</programMenuFolder> 
-				 <icon>
-				  <image16x16>assets/icons/Installer16.png</image16x16> 
-				  <image32x32>assets/icons/Installer32.png</image32x32> 
-				  <image48x48>assets/icons/Installer48.png</image48x48> 
-				  <image128x128>assets/icons/Installer128.png</image128x128> 
-				  </icon>
-				  </application>;
 			
 			
 			private function get windowHeight () : Number
@@ -115,8 +97,7 @@
 							_dialog.closeDetail = ModalDialog.OK;
 							_dialog.close();
 							
-							if (currentTemplate)
-								setTemplateBuildProperties();
+							saveSDKPath();
 							
 						break;
 					}
@@ -135,20 +116,7 @@
 				}
 			}
 			
-			public function get currentTemplate() : BuilderTemplate
-			{
-				if ( !ContextManager.templates || ContextManager.templates.length == 0 )
-					return null;
-				
-				return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
-			}
-			
-			private function get selectedBuilderProject () : BuilderTemplateProject
-			{
-				return currentTemplate.selectedProject as BuilderTemplateProject
-			}
-			
-			private function setTemplateBuildProperties () : void
+			private function saveSDKPath () : void
 			{
 				shObject.data["flex_sdk_4_1"] = flexSDK_4_1_BrowseBox.path;
 				
@@ -156,200 +124,91 @@
 					shObject.data["air_sdk_linux"] = airSDKLinuxBrowseBox.path;
 			}
 			
-			private function saveTemplate () : void
-			{ 
-				if (!currentTemplate)
-				{
-					AlertPopup.show("No opened template", "Error", OK, _dialog);
-					return;
-				}
-				
-				currentTemplate.addEventListener( Event.COMPLETE, templateSaveCompleteHandler );
-				currentTemplate.addEventListener( ErrorEvent.ERROR, templateSaveErrorHandler );
-				
-				setTemplateBuildProperties();
-				
-				currentTemplate.save();
-				
-				function templateSaveCompleteHandler(evt:Event) : void
-				{
-					currentTemplate.removeEventListener( Event.COMPLETE, templateSaveCompleteHandler );
-					
-					try
-					{
-						var tplTargetFile : File = File.applicationStorageDirectory.resolvePath("assets/template.xml");
-						currentTemplate.file.copyTo(tplTargetFile, true);
-					}
-					catch (e:Error)
-					{
-						AlertPopup.show("Can't save template", "Error", OK, _dialog);
-						return;
-					}
-					
-					buildInstaller();
-				}
-				
-				function templateSaveErrorHandler(evt:Event) : void
-				{
-					currentTemplate.removeEventListener( ErrorEvent.ERROR, templateSaveErrorHandler );
-					
-					AlertPopup.show("Can't save template", "Error", OK, _dialog);
-				}
-			}
-			
 			private function buildInstaller():void
 			{
-				var installerPropertiesXmlPrepeared : Boolean = prepareInstallerPropertiesXml();
+				if (!sdkCompiler.hasEventListener(SDKCompilerEvent.BUILD_COMPETE))
+					sdkCompiler.addEventListener(SDKCompilerEvent.BUILD_COMPETE, sdkCompilerEventHandler); 
 				
-				var app : VDOMApplication = new VDOMApplication();
-				app.stored = prepareInstallerApp();
-				app.path = BuilderTemplateProject(currentTemplate.selectedProject).embededAppPath;
-				
-				if (!installerPropertiesXmlPrepeared)
-				{
-					AlertPopup.show("Can't prepare installer properties xml", "Error", OK, _dialog);
-					return;
-				}
-				
-				var sdkCompiler : SDKCompiler = SDKCompilerCreator.create();
-				
-				if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE))
-					sdkCompiler.addEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE, sdkCompilerEventHandler); 
-				
-				if (!sdkCompiler.hasEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR))
-					sdkCompiler.addEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR, sdkCompilerEventHandler);
+				if (!sdkCompiler.hasEventListener(SDKCompilerEvent.BUILD_ERROR))
+					sdkCompiler.addEventListener(SDKCompilerEvent.BUILD_ERROR, sdkCompilerEventHandler);
 				
 				ProgressManager.complete();
 				ProgressManager.source = null;
 				ProgressManager.start( ProgressManager.DIALOG_MODE, false );
 				
-				sdkCompiler.buildInstallerPackage ( BuilderTemplateProject(currentTemplate.selectedProject).outputFolderPath, 
-													BuilderTemplateProject(currentTemplate.selectedProject).outputFileName, 
-													app, 
-													flexSDK_4_1_BrowseBox.path,
+				sdkCompiler.buildInstallerPackage ( flexSDK_4_1_BrowseBox.path,
 													airSDKLinuxBrowseBox.path,
 													radioBtnGroupBuildType.selectedValue.toString());
 				
-				function sdkCompilerEventHandler (evt:SDKCompilerEvent) : void
+			}
+			
+			private function sdkCompilerEventHandler (event : SDKCompilerEvent) : void
+			{
+				sdkCompiler.removeEventListener(SDKCompilerEvent.BUILD_COMPETE, sdkCompilerEventHandler);
+				sdkCompiler.removeEventListener(SDKCompilerEvent.BUILD_ERROR, sdkCompilerEventHandler);
+				
+				ProgressManager.complete();
+				
+				if (event.message)
 				{
-					sdkCompiler.removeEventListener(SDKCompilerEvent.SDK_COMPILER_COMPETE, sdkCompilerEventHandler);
-					sdkCompiler.removeEventListener(SDKCompilerEvent.SDK_COMPILER_ERROR, sdkCompilerEventHandler);
-					
-					ProgressManager.complete();
-					
-					if (evt.message)
-					{
-						AlertPopup.show(evt.message,"", OK, _dialog);
-					}
+					AlertPopup.show(event.message,"", OK, _dialog);
 				}
 			}
 			
-			private function prepareInstallerApp() : Boolean
+			protected function btnBuildClickHandler (event:MouseEvent) : void
 			{
-				var embededAppPath : String = BuilderTemplateProject(currentTemplate.selectedProject).embededAppPath;
+				saveSDKPath();
 				
-				if (!embededAppPath || !validAppPath)
-					return false;
-				
-				try
-				{
-					var sourceAppFile : File = new File(embededAppPath);
-					
-					var targetAppFile : File = File.applicationStorageDirectory.resolvePath(FileUtils.getFileName(embededAppPath));
-					
-					sourceAppFile.copyTo(targetAppFile, true);
-				}
-				catch (e:Error)
-				{
-					return false;
-				}
-				
-				return true;
-				
+				buildInstaller();
 			}
 			
-			private function prepareInstallerPropertiesXml() : Boolean
+			public function sdkLinkHandler (event:TextEvent) : void 
 			{
-				var fileStream : FileStream = new FileStream();
-				
-				var targetXmlFile : File = File.applicationStorageDirectory.resolvePath("Installer-app.xml");
-				
-				var installerXML : XML;
-				var targetXmlSource : String;
-				
-				try 
-				{
-					installerXML = installerTplXml;
-					
-					installerXML.id = "net.vdom." + selectedBuilderProject.installerId;
-					installerXML.name = selectedBuilderProject.name;
-					installerXML.filename = selectedBuilderProject.name;
-					
-					installerXML.normalize();
-					
-					fileStream.open(targetXmlFile, FileMode.WRITE);
-					fileStream.writeUTFBytes( '<?xml version="1.0" encoding="UTF-8"?>' + "\n" + installerXML.toXMLString() );
-					fileStream.close();
-				} 
-				catch (e:Error)
-				{
-					fileStream.close();
-					
-					return false;
-				}
-				
-				return true;
-			}
-			
-			protected function btnBuildClickHandler(event:MouseEvent):void
-			{
-				saveTemplate();
-			}
-			
-			private function validateFlexSDKPath():void
-			{
-				flexSDK_4_1_BrowseBox.errorString = validFlexSDKPath ? null : "Error";
-				
-				updateBuildEnableState();
-			}
-			
-			private function get validAppPath () : Boolean
-			{
-				var embededAppPath : String = BuilderTemplateProject(currentTemplate.selectedProject).embededAppPath;
-				
-				return compilerParamsChecker.isAppPathValid(embededAppPath);
-			}
-			
-			private function get validOutputInstallerFolderPath () : Boolean
-			{
-				var outputFolderPath : String = BuilderTemplateProject(currentTemplate.selectedProject).outputFolderPath;
-				
-				return compilerParamsChecker.isValidInstallerOutputFolderPath(outputFolderPath);
-			}
-			
-			private function get validInstallerFileName () : Boolean
-			{
-				var outputFileName : String = BuilderTemplateProject(currentTemplate.selectedProject).outputFileName;
-				
-				return compilerParamsChecker.isValidInstallerFileName(outputFileName);
-			}
-			
-			private function get validFlexSDKPath () : Boolean
-			{
-				return compilerParamsChecker.isFlexSDK_4_1_PathValid(flexSDK_4_1_BrowseBox.path);
-			}
-			
-			public function sdkLinkHandler(event:TextEvent):void {
-				// Open the link in a new browser window.
 				navigateToURL(new URLRequest(event.text), '_blank')
 			}
 			
-			private function get useLinuxSDK () : Boolean
+			protected function airSDKCreationCompleteHandler (event:FlexEvent) : void
 			{
-				return FileUtils.OS == FileUtils.OS_LINUX;
+				if (!useLinuxSDK)
+					airSdkGroup.height = 0;
 			}
 			
-			private function validateAirSDKPath():void
+			protected function radiobutton1_clickHandler (event:MouseEvent) : void
+			{
+				FileUtils.LINUX_NATIVE_INSTALLER_TYPE_DEBIAN = true;
+			}
+			
+			protected function radiobutton2_clickHandler (event:MouseEvent) : void
+			{
+				FileUtils.LINUX_NATIVE_INSTALLER_TYPE_DEBIAN = false;
+			}
+			
+			protected function buildTypeChangeHandler (event:ItemClickEvent) : void
+			{
+				linuxNatineTypeSelector.visible = linuxNatineTypeSelectorVisible;
+			}
+			
+			protected function linuxNativeInstallerTypeSelectorCreationCompleteHandler (event:FlexEvent) : void
+			{
+				linuxNatineTypeSelector.visible = linuxNatineTypeSelectorVisible;
+			}
+			
+			protected function buildTypeNativeRadioBtn_creationCompleteHandler (event:FlexEvent) : void
+			{
+				if (useLinuxSDK)
+				{
+					buildTypeNative.visible = false;
+					buildTypeNative.height = 1;
+				}
+					
+			}
+			
+			private function get linuxNatineTypeSelectorVisible () : Boolean
+			{
+				return useLinuxSDK && buildTypeNative.selected;
+			}
+			
+			private function validateAirSDKPath () : void
 			{
 				if (!useLinuxSDK)
 					return;
@@ -363,8 +222,41 @@
 			{
 				if (!useLinuxSDK)
 					return true;
-					
+				
 				return compilerParamsChecker.isAirSDK_PathValid(airSDKLinuxBrowseBox.path);
+			}
+			
+			private function validateFlexSDKPath () : void
+			{
+				flexSDK_4_1_BrowseBox.errorString = validFlexSDKPath ? null : "Error";
+				
+				updateBuildEnableState();
+			}
+			
+			private function get validAppPath () : Boolean
+			{
+				var embededAppPath : String = selectedTemplateProject.embededAppPath;
+				
+				return compilerParamsChecker.isValidAppPath(embededAppPath);
+			}
+			
+			private function get validOutputInstallerFolderPath () : Boolean
+			{
+				var outputFolderPath : String = selectedTemplateProject.outputFolderPath;
+				
+				return compilerParamsChecker.isValidInstallerOutputFolderPath(outputFolderPath);
+			}
+			
+			private function get validInstallerFileName () : Boolean
+			{
+				var outputFileName : String = selectedTemplateProject.outputFileName;
+				
+				return compilerParamsChecker.isValidInstallerFileName(outputFileName);
+			}
+			
+			private function get validFlexSDKPath () : Boolean
+			{
+				return compilerParamsChecker.isFlexSDK_4_1_PathValid(flexSDK_4_1_BrowseBox.path);
 			}
 			
 			private function get buildAvailable (): Boolean
@@ -376,45 +268,9 @@
 					validInstallerFileName;
 			}
 			
-			protected function airSDKCreationCompleteHandler(event:FlexEvent):void
+			private function get useLinuxSDK () : Boolean
 			{
-				if (!useLinuxSDK)
-					airSdkGroup.height = 0;
-			}
-			
-			protected function radiobutton1_clickHandler(event:MouseEvent):void
-			{
-				FileUtils.LINUX_NATIVE_INSTALLER_TYPE_DEBIAN = true;
-			}
-			
-			protected function radiobutton2_clickHandler(event:MouseEvent):void
-			{
-				FileUtils.LINUX_NATIVE_INSTALLER_TYPE_DEBIAN = false;
-			}
-			
-			private function get linuxNatineTypeSelectorVisible () : Boolean
-			{
-				return useLinuxSDK && buildTypeNative.selected;
-			}
-			
-			protected function buildTypeChangeHandler(event:ItemClickEvent):void
-			{
-				linuxNatineTypeSelector.visible = linuxNatineTypeSelectorVisible;
-			}
-			
-			protected function linuxNativeInstallerTypeSelectorCreationCompleteHandler(event:FlexEvent):void
-			{
-				linuxNatineTypeSelector.visible = linuxNatineTypeSelectorVisible;
-			}
-			
-			protected function buildTypeNativeRadioBtn_creationCompleteHandler(event:FlexEvent):void
-			{
-				if (useLinuxSDK)
-				{
-					buildTypeNative.visible = false;
-					buildTypeNative.height = 1;
-				}
-					
+				return FileUtils.OS == FileUtils.OS_LINUX;
 			}
 			
 			private function updateBuildEnableState() : void
@@ -431,6 +287,16 @@
 				var msgErrorSDKPath		: String = "Builder not available. Check SDK folder path.";
 				
 				buildLabel.text = validFlexSDKPath && validAirSDKPath ? msgErrorAppParams : msgErrorSDKPath;
+			}
+			
+			private function get currentTemplate() : BuilderTemplate
+			{
+				return BuilderContextManager.currentTemplate;
+			}
+			
+			private function get selectedTemplateProject () : BuilderTemplateProject
+			{
+				return currentTemplate.selectedProject as BuilderTemplateProject
 			}
 			
 		]]>

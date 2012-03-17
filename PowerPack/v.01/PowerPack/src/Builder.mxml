@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication
-		title="{LanguageManager.sentences.app_title}{ContextManager.templates.length &amp;&amp; BuilderTemplate(ContextManager.templates.getItemAt(0)).file ? ' - '+ContextManager.templates.getItemAt(0).file.nativePath : ''} - {ContextManager.templates.length &amp;&amp; BuilderTemplate(ContextManager.templates.getItemAt(0)).selectedProject &amp;&amp; BuilderTemplate(ContextManager.templates.getItemAt(0)).selectedProject.name ? BuilderTemplate(ContextManager.templates.getItemAt(0)).selectedProject.name : LanguageManager.sentences.noname}{ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).modified ? '*' : ''}"
+		title="{LanguageManager.sentences.app_title}{ContextManager.templates.length &amp;&amp; currentTemplate.file ? ' - '+ currentTemplate.file.nativePath : ''} - {ContextManager.templates.length &amp;&amp; currentTemplate.selectedProject &amp;&amp; currentTemplate.selectedProject.name ? currentTemplate.selectedProject.name : LanguageManager.sentences.noname}{ContextManager.templates.length &amp;&amp; currentTemplate.modified ? '*' : ''}"
 		titleIcon="@Embed(source='assets/icons/icon_16.png')"
 		layout="absolute"
 		statusBarFactory="net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar"
@@ -267,7 +267,7 @@
 
 		public function exitApplication( event : Event = null, askForSave : Boolean = true ) : void
 		{
-			if ( ContextManager.templates.length > 0 && currentTemplate.modified && askForSave)
+			if ( currentTemplate && currentTemplate.modified && askForSave)
 			{
 				AlertPopup.show("Do you want to save file before exit?", 
 					LanguageManager.sentences['confirmation'], 
@@ -281,22 +281,11 @@
 				exit();
 			}
 
-			function alertExitHandler( event : CloseEvent ) : void
-			{
-				if ( event.detail == AlertPopup.YES )
-				{
-					BuilderContextManager.saveSettings();
-					exit();
-				}
-			}
-
 			function alertSaveBeforeExitHandler( event : CloseEvent ) : void
 			{
 				if ( event.detail == AlertPopup.YES )
 				{
-					currentTemplate.addEventListener( Event.COMPLETE, templateSaveAndExitHandler );
-					currentTemplate.xmlStructure = pnl_graphs.toXML();
-					currentTemplate.save();
+					saveTpl(templateSaveAndExitHandler);
 				}
 				else if ( event.detail == AlertPopup.NO )
 				{
@@ -304,16 +293,20 @@
 					exit();
 				}
 			}
-
+			
 			function templateSaveAndExitHandler( event : Event ) : void
 			{
+				templateSaveHandler(event);
+				
 				var tpl : BuilderTemplate = event.target as BuilderTemplate;
 				tpl.removeEventListener( Event.COMPLETE, templateSaveAndExitHandler );
-
+				
 				processSavedTpl();
+				
 				BuilderContextManager.saveSettings();
 				exit();
 			}
+
 		}
 
 		public function closeTpl( askForSave : Boolean = true, action : Function = null, args : Array = null ) : void
@@ -344,11 +337,11 @@
 				action.apply( this, args );
 		}
 			
-		public function saveTpl( browseForSave : Boolean = false ) : void
+		public function saveTpl( afterSaveHandler : Function, browseForSave : Boolean = false ) : void
 		{
-			if ( ContextManager.templates.length > 0 )
+			if ( currentTemplate )
 			{
-				currentTemplate.addEventListener( Event.COMPLETE, templateSaveHandler );
+				currentTemplate.addEventListener( Event.COMPLETE, afterSaveHandler );
 				currentTemplate.xmlStructure = pnl_graphs.toXML();
 				
 				if (browseForSave)
@@ -370,27 +363,62 @@
 			{
 				if ( event.detail == AlertPopup.YES )
 				{
-					currentTemplate.addEventListener( Event.COMPLETE, templateSaveAndCloseHandler );
-					currentTemplate.xmlStructure = pnl_graphs.toXML();
-					currentTemplate.save();
+					saveTpl(templateSaveAndCloseHandler);
 				}
 				else if ( event.detail == AlertPopup.NO )
 				{
 					closeTpl( false, action, args );
 				}
 			}
-
+			
 			function templateSaveAndCloseHandler( event : Event ) : void
 			{
 				var tpl : BuilderTemplate = event.target as BuilderTemplate;
 				tpl.removeEventListener( Event.COMPLETE, templateSaveAndCloseHandler );
-
+				
 				processSavedTpl();
-
+				
 				closeTpl( false, action, args );
 			}
+
 		}
 
+		public function alertSaveAndExportReleaseBuild( ) : void
+		{
+			if (currentTemplate && currentTemplate.modified)
+			{
+				AlertPopup.show(
+					"Before building you should save template. \nDo you want to save template and launch building?",
+					LanguageManager.sentences['confirmation'],
+					AlertPopup.YES | AlertPopup.NO, this.nativeWindow as Sprite, alertSaveAndCloseHandler, null, AlertPopup.YES );
+			} 
+			else
+			{
+				AirBuildProperties.show();
+			}
+				
+			
+			function alertSaveAndCloseHandler( event : CloseEvent ) : void
+			{
+				if ( event.detail == AlertPopup.YES )
+				{
+					saveTpl(templateSaveAndBuildHandler);
+				}
+			}
+			
+			function templateSaveAndBuildHandler( event : Event ) : void
+			{
+				var tpl : BuilderTemplate = event.target as BuilderTemplate;
+				tpl.removeEventListener( Event.COMPLETE, templateSaveAndBuildHandler );
+				
+				processSavedTpl();
+				
+				AirBuildProperties.show();
+			}
+			
+		}
+
+			
 		public function processOpenedTpl() : void
 		{
 			workStage.visible = true;
@@ -562,11 +590,11 @@
 					break;
 
 				case "save":
-					saveTpl();
+					saveTpl(templateSaveHandler);
 					break;
 
 				case "save_as":
-					saveTpl(true);
+					saveTpl(templateSaveHandler, true);
 					break;
 
 				case "close":
@@ -587,7 +615,7 @@
 					break;
 				
 				case "air_builder":
-					AirBuildProperties.show();
+					alertSaveAndExportReleaseBuild();
 					break;
 
 				case "about_program":
@@ -729,12 +757,9 @@
 
 		}
 
-		public function get currentTemplate() : BuilderTemplate
+		private function get currentTemplate() : BuilderTemplate
 		{
-			if ( !ContextManager.templates || ContextManager.templates.length == 0 )
-				return null;
-			
-			return ContextManager.templates.getItemAt( 0 ) as BuilderTemplate;
+			return BuilderContextManager.currentTemplate;
 		}
 		
 		private function onValidate( event : CloseEvent ) : void
@@ -1023,8 +1048,6 @@
 
 			processSavedTpl();
 		}
-
-		
 
 		private function onCategoryDialogCheckLabel( categoryLabel : String ) : void
 		{

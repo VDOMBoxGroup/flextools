@@ -8,7 +8,7 @@ package net.vdombox.powerpack.template
 	
 	public class BuilderTemplateProject extends TemplateProject
 	{
-		public static const DEFAULT_OUTPUT_FOLDER_PATH	: String = File.documentsDirectory.nativePath;
+		public static const DEFAULT_OUTPUT_FOLDER_PATH	: String = File.desktopDirectory.nativePath;
 		public static const DEFAULT_OUTPUT_FILE_NAME	: String = "newProject";
 		public static const DEFAULT_EMBEDED_APP_PATH	: String = "";
 		

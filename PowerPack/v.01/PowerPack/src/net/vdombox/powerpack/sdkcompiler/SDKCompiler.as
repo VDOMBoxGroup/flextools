@@ -3,6 +3,7 @@ package net.vdombox.powerpack.sdkcompiler
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
 	import flash.errors.IllegalOperationError;
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -17,7 +18,9 @@ package net.vdombox.powerpack.sdkcompiler
 	import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-	import net.vdombox.powerpack.lib.player.template.VDOMApplication;
+	import net.vdombox.powerpack.managers.BuilderContextManager;
+	import net.vdombox.powerpack.template.BuilderTemplate;
+	import net.vdombox.powerpack.template.BuilderTemplateProject;
 
 	public class SDKCompiler extends EventDispatcher
 	{
@@ -28,48 +31,154 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		protected var process : NativeProcess;
 
-		protected var outputInstallerFolderPath : String;
-		protected var outputInstallerFileName : String;
-		protected var installerApp : VDOMApplication;
+		protected var embeddedAppFileName : String;
 		
 		protected var flex_sdk4_1Path : String;
 		protected var airSDKForLinuxPath : String;
+		
+		private var installerTplXml : XML = 
+			<application xmlns="http://ns.adobe.com/air/application/2.0">
+			 <version>1.2.4.8017</version> 
+			<initialWindow>
+			 <content>Installer.swf</content> 
+			 <systemChrome>none</systemChrome> 
+			 <transparent>true</transparent> 
+			 <maximizable>false</maximizable> 
+			 <resizable>false</resizable> 
+			 </initialWindow>
+			 <installFolder>VDOM</installFolder> 
+			 <programMenuFolder>VDOM</programMenuFolder> 
+			<icon>
+			 <image16x16>assets/icons/Installer16.png</image16x16> 
+			 <image32x32>assets/icons/Installer32.png</image32x32> 
+			 <image48x48>assets/icons/Installer48.png</image48x48> 
+			 <image128x128>assets/icons/Installer128.png</image128x128> 
+			 </icon>
+			 </application>;
 		
 		public function SDKCompiler()
 		{
 		}
 		
-		public function buildInstallerPackage(outputFolderPath : String, outputFileName : String, 
-											  app : VDOMApplication, 
-											  flexSdkPath : String,
+		// ---------- BUILD ---------------------
+		public function buildInstallerPackage(flexSdkPath : String,
 											  airSdkForLinuxPath : String,
-											  packageType : String) : void
+											  packageType : String = PACKAGE_TYPE_AIR) : void
 		{
-			var processEvent : SDKCompilerEvent;
-			
 			if (!NativeProcess.isSupported)
 			{
-				sendEvent(SDKCompilerEvent.SDK_COMPILER_ERROR, "Native process is not available");
+				sendEvent(SDKCompilerEvent.BUILD_ERROR, "Native process is not available");
 				return;
 			}
 			
-			outputInstallerFolderPath = outputFolderPath;
-			outputInstallerFileName = outputFileName;
-			installerApp = app;
 			flex_sdk4_1Path = flexSdkPath;
 			airSDKForLinuxPath = airSdkForLinuxPath;
 			
 			this.packageTypeNative = packageType == PACKAGE_TYPE_NATIVE;
 			
-			packageInstaller();
+			var prepareComplete : Boolean = prepareForBuild();
+			
+			if (prepareComplete)
+				packageInstaller();
 		}
+		
+		// ---------- PREPARE FOR BUILD ... ---------------------
+		private function prepareForBuild () : Boolean
+		{
+			prepareInstallerApp ();
+			
+			var templateXMLFilePrepared : Boolean = prepareTemplateXMLFile ();
+			
+			var installerPropertiesXMLPrepared : Boolean = prepareInstallerPropertiesXml ();
+			
+			if (!templateXMLFilePrepared || !installerPropertiesXMLPrepared)
+				return false;
+			
+			return true;
+		}
+		
+		private function prepareTemplateXMLFile() : Boolean
+		{
+			try
+			{
+				var targetTemplateFile : File = File.applicationStorageDirectory.resolvePath("assets/template.xml");
+				
+				currentTemplate.file.copyTo(targetTemplateFile, true);
+			}
+			catch (e:Error)
+			{
+				sendEvent(SDKCompilerEvent.BUILD_ERROR, "Can't prepare template xml");				
+				return false;
+			}
+			
+			return true;
+		}
+		
+		private function prepareInstallerPropertiesXml() : Boolean
+		{
+			var fileStream : FileStream = new FileStream();
+			
+			var targetXmlFile : File = File.applicationStorageDirectory.resolvePath("Installer-app.xml");
+			
+			var installerXML : XML;
+			var targetXmlSource : String;
+			
+			try 
+			{
+				installerXML = installerTplXml;
+				
+				installerXML.id = "net.vdom." + selectedTemplateProject.installerId;
+				installerXML.name = selectedTemplateProject.name;
+				installerXML.filename = selectedTemplateProject.name;
+				
+				installerXML.normalize();
+				
+				fileStream.open(targetXmlFile, FileMode.WRITE);
+				fileStream.writeUTFBytes( '<?xml version="1.0" encoding="UTF-8"?>' + "\n" + installerXML.toXMLString() );
+				fileStream.close();
+			} 
+			catch (e:Error)
+			{
+				fileStream.close();
+				
+				sendEvent(SDKCompilerEvent.BUILD_ERROR, "Can't prepare installer properties xml");
+				return false;
+			}
+			
+			return true;
+		}
+		
+		private function prepareInstallerApp() : void
+		{
+			var embededAppPath : String = selectedTemplateProject.embededAppPath;
+			
+			embeddedAppFileName = FileUtils.getFileName(embededAppPath);
+			
+			if (!embededAppPath)
+				return;
+			
+			try
+			{
+				var sourceAppFile : File = new File(embededAppPath);
+				
+				var targetAppFile : File = File.applicationStorageDirectory.resolvePath(embeddedAppFileName);
+				
+				sourceAppFile.copyTo(targetAppFile, true);
+			}
+			catch (e:Error)
+			{
+				embeddedAppFileName = "";
+				
+				return;
+			}
+			
+		}
+		// ---------- ... PREPARE FOR BUILD ---------------------
 		
 		protected function packageInstaller() : void
 		{
-			// must be overrided by subclass
-			
 			initProcess();
-			buildPackage();
+			startProcess();
 		}
 		
 		protected function initProcess():void
@@ -79,7 +188,7 @@ package net.vdombox.powerpack.sdkcompiler
 			addProcessListeners();
 		}
 		
-		protected function buildPackage() : void
+		protected function startProcess() : void
 		{
 			process.start(processStartupInfo);
 		}
@@ -117,9 +226,9 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		protected function get outputPackagePath () : String
 		{
-			var outputFileName : String = outputInstallerFileName + outputPackageType;
+			var outputFileName : String = selectedTemplateProject.outputFileName + outputPackageType;
 			
-			return new File(outputInstallerFolderPath).resolvePath(outputFileName).nativePath; 
+			return new File(selectedTemplateProject.outputFolderPath).resolvePath(outputFileName).nativePath; 
 		}
 		
 		protected function get outputPackageType () : String
@@ -189,7 +298,7 @@ package net.vdombox.powerpack.sdkcompiler
 			trace ("[SDKCompiler] onProcessProgressEvent");
 			if (evt.type == ProgressEvent.STANDARD_ERROR_DATA)
 			{
-				sendEvent(SDKCompilerEvent.SDK_COMPILER_ERROR, errorMsg);
+				sendEvent(SDKCompilerEvent.BUILD_ERROR, errorMsg);
 				
 				removeProcessListeners()
 
@@ -216,7 +325,7 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 			var exitMessage : String = exitCode == 0 ? "Building process was completed Ok." : "Building process completed with errors.";
 			
-			sendEvent(SDKCompilerEvent.SDK_COMPILER_COMPETE, exitMessage);
+			sendEvent(SDKCompilerEvent.BUILD_COMPETE, exitMessage);
 		}
 
 		private function addProcessListeners() : void
@@ -241,12 +350,22 @@ package net.vdombox.powerpack.sdkcompiler
 			process.removeEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  onProcessIOErrorEvent);
 		}
 		
-		protected function sendEvent (eventType : String, msg : String) : void
+		protected function sendEvent (eventType : String, msg : String = "") : void
 		{
 			var processEvent : SDKCompilerEvent = new SDKCompilerEvent(eventType);
 			processEvent.message = msg;
 			
 			dispatchEvent(processEvent);
+		}
+		
+		private function get currentTemplate() : BuilderTemplate
+		{
+			return BuilderContextManager.currentTemplate;
+		}
+		
+		private function get selectedTemplateProject () : BuilderTemplateProject
+		{
+			return currentTemplate.selectedProject as BuilderTemplateProject
 		}
 
 	}

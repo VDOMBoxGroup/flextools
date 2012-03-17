@@ -98,7 +98,7 @@ package net.vdombox.powerpack.sdkcompiler
 			return FileUtils.filePathExists(installerFolderPath, true);
 		}
 		
-		public function isAppPathValid(appPath : String) : Boolean
+		public function isValidAppPath(appPath : String) : Boolean
 		{
 			if ( appPath == "")
 				return true;

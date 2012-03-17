@@ -37,7 +37,7 @@ package net.vdombox.powerpack.sdkcompiler
 			}
 			catch (e:Error)
 			{
-				sendEvent(SDKCompilerEvent.SDK_COMPILER_ERROR, "Error when creating bat file");
+				sendEvent(SDKCompilerEvent.BUILD_ERROR, "Error when creating bat file");
 				return false;
 			}
 			
@@ -89,11 +89,11 @@ package net.vdombox.powerpack.sdkcompiler
 			argVector.push(FileUtils.convertPathForCMD(powerPackProjectStoragePath));
 			argVector.push("assets/template.xml");
 			
-			if (installerApp.stored && installerApp.fileName)
+			if (embeddedAppFileName)
 			{
 				argVector.push("-C");
 				argVector.push(FileUtils.convertPathForCMD(powerPackProjectStoragePath));
-				argVector.push(installerApp.fileName);
+				argVector.push(embeddedAppFileName);
 			}
 			
 			return argVector.join(" ");
@@ -103,7 +103,7 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 			initProcess();
 			
-			buildPackage();
+			startProcess();
 		}
 		
 		protected override function get compilerArguments() : Vector.<String>

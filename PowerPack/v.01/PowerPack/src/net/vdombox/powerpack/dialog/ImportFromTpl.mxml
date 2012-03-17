@@ -18,6 +18,7 @@
 			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 			import net.vdombox.powerpack.lib.player.template.Template;
+			import net.vdombox.powerpack.managers.BuilderContextManager;
 			import net.vdombox.powerpack.template.BuilderTemplate;
 
 		private static var _dialog : ImportFromTpl;
@@ -101,10 +102,7 @@
 			
 		private function get currentTemplate() : Template
 		{
-			if ( !ContextManager.templates || ContextManager.templates.length == 0 )
-				return null;
-			
-			return ContextManager.templates.getItemAt( 0 ) as Template;
+			return ContextManager.currentTemplate;
 		}
 
 		private function populateList() : void
