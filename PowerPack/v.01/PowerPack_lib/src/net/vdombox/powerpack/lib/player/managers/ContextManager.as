@@ -9,8 +9,9 @@ import mx.core.Application;
 import mx.utils.Base64Decoder;
 import mx.utils.Base64Encoder;
 
-import net.vdombox.powerpack.lib.player.gen.TemplateStruct;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import net.vdombox.powerpack.lib.player.gen.TemplateStruct;
+import net.vdombox.powerpack.lib.player.template.Template;
 import net.vdombox.powerpack.lib.player.utils.CryptUtils;
 
 public class ContextManager extends EventDispatcher
@@ -223,6 +224,14 @@ public class ContextManager extends EventDispatcher
 	public static function get templates() : ArrayCollection
 	{
 		return instance._templates;
+	}
+	
+	public static function get currentTemplate () : Template
+	{
+		if ( !ContextManager.templates || ContextManager.templates.length == 0 )
+			return null;
+		
+		return ContextManager.templates.getItemAt( 0 ) as Template;
 	}
 
 	//----------------------------------

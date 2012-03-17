@@ -152,10 +152,7 @@ public class TemplateStruct extends EventDispatcher
 	
 	private function get currentTemplate() : Template
 	{
-		if ( !ContextManager.templates || ContextManager.templates.length == 0 )
-			return null;
-		
-		return ContextManager.templates.getItemAt( 0 ) as Template;
+		return ContextManager.currentTemplate;
 	}
 
 	public function get curGraphContext() : GraphContext
