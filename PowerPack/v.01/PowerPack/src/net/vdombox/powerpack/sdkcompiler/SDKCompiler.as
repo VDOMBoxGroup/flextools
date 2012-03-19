@@ -38,23 +38,22 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		private var installerTplXml : XML = 
 			<application xmlns="http://ns.adobe.com/air/application/2.0">
-			 <version>1.2.4.8017</version> 
-			<initialWindow>
-			 <content>Installer.swf</content> 
-			 <systemChrome>none</systemChrome> 
-			 <transparent>true</transparent> 
-			 <maximizable>false</maximizable> 
-			 <resizable>false</resizable> 
+			 <initialWindow>
+			  <content>Installer.swf</content> 
+			  <systemChrome>none</systemChrome> 
+			  <transparent>true</transparent> 
+			  <maximizable>false</maximizable> 
+			  <resizable>false</resizable> 
 			 </initialWindow>
 			 <installFolder>VDOM</installFolder> 
 			 <programMenuFolder>VDOM</programMenuFolder> 
-			<icon>
-			 <image16x16>assets/icons/Installer16.png</image16x16> 
-			 <image32x32>assets/icons/Installer32.png</image32x32> 
-			 <image48x48>assets/icons/Installer48.png</image48x48> 
-			 <image128x128>assets/icons/Installer128.png</image128x128> 
+			 <icon>
+			  <image16x16>assets/icons/Installer16.png</image16x16> 
+			  <image32x32>assets/icons/Installer32.png</image32x32> 
+			  <image48x48>assets/icons/Installer48.png</image48x48> 
+			  <image128x128>assets/icons/Installer128.png</image128x128> 
 			 </icon>
-			 </application>;
+			</application>;
 		
 		public function SDKCompiler()
 		{
@@ -130,6 +129,7 @@ package net.vdombox.powerpack.sdkcompiler
 				installerXML.id = "net.vdom." + selectedTemplateProject.installerId;
 				installerXML.name = selectedTemplateProject.name;
 				installerXML.filename = selectedTemplateProject.name;
+				installerXML.version = Utils.getApplicationVersion();
 				
 				installerXML.normalize();
 				
