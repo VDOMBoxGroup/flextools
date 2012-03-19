@@ -117,12 +117,14 @@ package net.vdombox.powerpack.lib.player.template
 			}
 			else if ( !templateXML )
 			{
+				xmlStructure = emptyStructure;
+				
 				modified = true;
 				_completelyOpened = true;
 			}
 			
 		}
-	
+		
 		//--------------------------------------------------------------------------
 		//
 		//  Destructor
@@ -134,7 +136,7 @@ package net.vdombox.powerpack.lib.player.template
 		 */
 		public function dispose() : void
 		{
-			_xmlStructure = null;
+			xmlStructure = null;
 			xml = null;
 		}
 	
@@ -219,7 +221,44 @@ package net.vdombox.powerpack.lib.player.template
 		//  xmlStructure
 		//----------------------------------
 	
-		protected var _xmlStructure : XML;
+		private function get emptyStructure () : XML
+		{
+			var emptyStructureXml : XML = 
+				<structure>
+					<categories/>
+					<resources/> 
+				</structure>;
+			
+			return emptyStructureXml;
+		}
+
+		
+		private static const DEFAULT_CATEGORY_NAME	: String = "Main";
+		private static const DEFAULT_GRAPH_NAME		: String = "defaultGraph";
+		private static const DEFAULT_NODE_NAME		: String = "defaultNode";
+		
+		private function get defaultStructure () : XML
+		{
+			var defStructureXml : XML = 
+				<structure>
+					<categories>
+						<category name={DEFAULT_CATEGORY_NAME} /> 
+					</categories>
+					<graph name={DEFAULT_GRAPH_NAME} category={DEFAULT_CATEGORY_NAME}>
+						<states>
+							<state name={DEFAULT_NODE_NAME} type="Initial" category="Normal" enabled="true" breakpoint="false" x="50" y="50">
+								<text>State</text> 
+							</state>
+						</states>
+						<transitions /> 
+					</graph>
+					<resources /> 
+				</structure>;
+			
+			return defStructureXml;
+		}
+		
+		private var _xmlStructure : XML;
 	
 		public function set xmlStructure( value : XML ) : void
 		{
@@ -228,6 +267,16 @@ package net.vdombox.powerpack.lib.player.template
 				modified = true;
 				_xmlStructure = value;
 			}
+			
+			if (!xmlStructure || !xmlStructure.graph[0])
+			{
+				xmlStructure = defaultStructure;
+				modified = true;
+				
+				if (selectedProject)
+					selectedProject.initialGraphName = DEFAULT_GRAPH_NAME;
+			}
+				
 		}
 	
 		[Bindable]
@@ -308,7 +357,7 @@ package net.vdombox.powerpack.lib.player.template
 			delete _xml.encoded;
 			delete _xml.structure;
 	
-			var structData : XML = _xmlStructure ? _xmlStructure : new XML( <structure/> );
+			var structData : XML = xmlStructure ? xmlStructure : new XML( <structure/> );
 	
 			if ( selectedProject.key )
 			{
@@ -334,7 +383,7 @@ package net.vdombox.powerpack.lib.player.template
 	
 		public function decode() : void
 		{
-			_xmlStructure = null;
+			xmlStructure = null;
 	
 			if ( isEncoded && _xml.hasOwnProperty( 'structure' ) )
 				delete _xml.structure;
@@ -356,24 +405,24 @@ package net.vdombox.powerpack.lib.player.template
 					
 					strDecoded = bytes.readUTFBytes( bytes.length );
 					
-					_xmlStructure = XML( strDecoded );
+					xmlStructure = XML( strDecoded );
 	
-					if ( _xmlStructure )
+					if ( xmlStructure )
 					{
-						if ( _xmlStructure.name().localName == 'structure' )
+						if ( xmlStructure.name().localName == 'structure' )
 							delete _xml.encoded;
 						else
-							_xmlStructure = null;
+							xmlStructure = null;
 					}
 				}
 				catch ( e : * )
 				{
-					_xmlStructure = null;
+					xmlStructure = null;
 				}
 			}
 			else if ( _xml.hasOwnProperty( 'structure' ) )
 			{
-				_xmlStructure = _xml.structure[0];
+				xmlStructure = _xml.structure[0];
 				delete _xml.structure;
 			}
 		}
