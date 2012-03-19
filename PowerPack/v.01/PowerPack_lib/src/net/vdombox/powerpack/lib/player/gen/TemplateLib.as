@@ -6,9 +6,12 @@ import flash.display.BitmapData;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
+import flash.errors.IOError;
+import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
+import flash.events.SecurityErrorEvent;
 import flash.filters.BitmapFilter;
 import flash.filters.BlurFilter;
 import flash.filters.ColorMatrixFilter;
@@ -17,10 +20,15 @@ import flash.geom.ColorTransform;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.net.URLLoader;
+import flash.net.URLRequest;
+import flash.net.URLRequestMethod;
+import flash.net.URLVariables;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 import flash.utils.ByteArray;
+import flash.utils.setTimeout;
 
 import memorphic.xpath.XPathQuery;
 
@@ -93,25 +101,51 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	public function httpPost(url : String, vars : String ) : Function
 	{
-		// addEventLis(event, handler);
+		var loader:URLLoader = new URLLoader ();
+		var request:URLRequest = new URLRequest ( url );
 		
-		function handler (event : Event ):void
+		// pass the post data
+		request.data = vars;
+		
+		// Add Handlers
+		loader.addEventListener ( Event.COMPLETE, loaderHandler, false, 0, true );
+		loader.addEventListener ( IOErrorEvent.IO_ERROR, loaderHandler, false, 0, true );
+		loader.addEventListener ( SecurityErrorEvent.SECURITY_ERROR, loaderHandler, false, 0, true );
+		
+		var answerRecieved : Boolean = false;
+		
+		setTimeout(loaderHandler, 30000, null);
+		
+		loader.load ( request );
+		
+		function loaderHandler (event : Event ):void
 		{
-			if ( 1 == 1)
+			loader.removeEventListener ( Event.COMPLETE, loaderHandler );
+			loader.removeEventListener ( IOErrorEvent.IO_ERROR, loaderHandler );
+			loader.removeEventListener ( SecurityErrorEvent.SECURITY_ERROR, loaderHandler );
+			
+			if (answerRecieved)
+				return;
+			
+			answerRecieved = true;
+			
+			if ( event && event.type == Event.COMPLETE)
 			{
 				setTransition( "Success" );
 				
-				setReturnValue( "[ 'Success' "+ "result" +" ]" );
+				setReturnValue( "[ 'Success' "+ event.target.data.toString() +" ]" );
 			}
 			else
 			{
+				var errorStr : String = event && event["text"] ? event["text"] : "No response from server.";
+				
 				setTransition( "Error" ); 
 				
-				setReturnValue( "[ 'Error' "+ "result" +" ]" );
+				setReturnValue( "[ 'Error' "+ errorStr +" ]" );
 			}
 		}
 		
-		return handler;
+		return loaderHandler;
 	}
 	
 	public function setApplicationValue( applicationXML : XML, queryStr : String, value : Object ) : XML
