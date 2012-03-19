@@ -61,6 +61,9 @@ public class Parser
 		
 		'getFlashVars' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2 },
 		
+		'httpPost' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2, trans : ['Success', 'Error'] },
+		
+		
 		
 		
 		

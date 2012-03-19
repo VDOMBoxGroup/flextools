@@ -91,7 +91,28 @@ public dynamic class TemplateLib extends EventDispatcher
 	}
 	
 	
-	
+	public function httpPost(url : String, vars : String ) : Function
+	{
+		// addEventLis(event, handler);
+		
+		function handler (event : Event ):void
+		{
+			if ( 1 == 1)
+			{
+				setTransition( "Success" );
+				
+				setReturnValue( "[ 'Success' "+ "result" +" ]" );
+			}
+			else
+			{
+				setTransition( "Error" ); 
+				
+				setReturnValue( "[ 'Error' "+ "result" +" ]" );
+			}
+		}
+		
+		return handler;
+	}
 	
 	public function setApplicationValue( applicationXML : XML, queryStr : String, value : Object ) : XML
 	{
