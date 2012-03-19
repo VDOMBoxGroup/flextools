@@ -116,7 +116,7 @@
 	<mx:VBox id="msgBox" verticalGap="5"
 			 paddingLeft="20" paddingRight="20" paddingTop="20" paddingBottom="5">
 		
-		<mx:Label text="Released a new version of Power Pack Builder program."
+		<mx:Label text="New version of Power Pack Builder is available."
 				  fontSize="14"/>
 		
 		<mx:Label fontSize="14"

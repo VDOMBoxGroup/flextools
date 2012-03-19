@@ -12,18 +12,19 @@
 
 	<mx:Script>
 		<![CDATA[
-		import mx.controls.TextInput;
-		import mx.core.Container;
-		import mx.core.EdgeMetrics;
-		import mx.core.IUIComponent;
-		import mx.core.IUITextField;
-		import mx.core.UITextField;
-		import mx.events.DragEvent;
-		import mx.events.FlexEvent;
-		import mx.managers.DragManager;
-
-		import net.vdombox.powerpack.graph.GraphCanvas;
-		import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+			import mx.controls.TextInput;
+			import mx.core.Container;
+			import mx.core.EdgeMetrics;
+			import mx.core.IUIComponent;
+			import mx.core.IUITextField;
+			import mx.core.UITextField;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.DragManager;
+			
+			import net.vdombox.powerpack.graph.GraphCanvas;
+			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 
 		/**
 		 *  A reference to the UITextField that displays the status bar's text.
@@ -306,7 +307,7 @@
 		private function closeTabHandler( event : Event ) : void
 		{
 			event.stopPropagation();
-
+			
 			var e : Event = new GraphsAccordionEvent( GraphsAccordionEvent.TAB_CLOSING, null, true, true );
 			accordChild.dispatchEvent( e );
 

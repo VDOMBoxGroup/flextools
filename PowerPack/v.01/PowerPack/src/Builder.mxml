@@ -388,7 +388,7 @@
 			if (currentTemplate && currentTemplate.modified)
 			{
 				AlertPopup.show(
-					"Before building you should save template. \nDo you want to save template and launch building?",
+					"You must save template before building.\nDo you want to save template and launch building now?",
 					LanguageManager.sentences['confirmation'],
 					AlertPopup.YES | AlertPopup.NO, this.nativeWindow as Sprite, alertSaveAndCloseHandler, null, AlertPopup.YES );
 			} 

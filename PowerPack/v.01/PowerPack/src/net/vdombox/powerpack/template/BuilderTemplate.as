@@ -192,11 +192,11 @@ package net.vdombox.powerpack.template
 		
 		private function cash() : Boolean
 		{
-			if ( _xmlStructure == null )
+			if ( xmlStructure == null )
 				return false;
 			
 			// cash all resources
-			for each ( var res : XML in _xmlStructure.resources.resource )
+			for each ( var res : XML in xmlStructure.resources.resource )
 			{
 				CashManager.setStringObject( fullID,
 					XML(
@@ -208,7 +208,7 @@ package net.vdombox.powerpack.template
 					res );
 			}
 			
-			delete _xmlStructure.resources;
+			delete xmlStructure.resources;
 			
 			cashStructure();
 			
@@ -233,13 +233,13 @@ package net.vdombox.powerpack.template
 					"ID='structure' " +
 					"name='" + selectedProject.name + "' " +
 					"type='" + TYPE_APPLICATION + "' />" ),
-				_xmlStructure.toXMLString() );
+				xmlStructure.toXMLString() );
 		}
 		
 		private function fillFromCash() : void
 		{
 			// get resources		
-			delete _xmlStructure.resources;
+			delete xmlStructure.resources;
 			
 			var index : XML = CashManager.getIndex( fullID );
 			if ( index )
@@ -247,7 +247,7 @@ package net.vdombox.powerpack.template
 				var resources : XMLList = index.resource.(hasOwnProperty( '@category' ) &&
 					(@category == 'image' || @category == 'database'));
 				
-				_xmlStructure.appendChild( <resources/> );
+				xmlStructure.appendChild( <resources/> );
 				
 				for each ( var res : XML in resources )
 				{
@@ -261,7 +261,7 @@ package net.vdombox.powerpack.template
 					resXML.@type = resObj.entry.@type;
 					resXML.@name = resObj.entry.@name;
 					
-					_xmlStructure.resources.appendChild( resXML );
+					xmlStructure.resources.appendChild( resXML );
 				}
 			}
 		}
@@ -436,7 +436,7 @@ package net.vdombox.powerpack.template
 		{
 			super.processOpened();
 			
-			if ( _xmlStructure )
+			if ( xmlStructure )
 				cash();
 		}
 		

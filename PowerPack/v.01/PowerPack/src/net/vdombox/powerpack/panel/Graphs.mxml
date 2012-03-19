@@ -503,8 +503,16 @@
 			if ( accordChild.graphs && accordChild.graphs.length > 0 ||
 						 tabMap[accordChild] && ObjectUtils.dictLength( tabMap[accordChild] ) > 0 )
 			{
-				AlertPopup.show( LanguageManager.sentences['msg_cannot_remove_nonempty_cat'] );
 				event.preventDefault();
+				AlertPopup.show( LanguageManager.sentences['msg_cannot_remove_nonempty_cat'] );
+				return;
+			}
+			
+			if (accordChild.parent.numChildren == 1)
+			{
+				event.preventDefault();
+				AlertPopup.show( "You can't remove the last category." );
+				return;
 			}
 		}
 
@@ -696,6 +704,12 @@
 			if ( !curGraph )
 				return;
 
+			if ( graphs.length == 1 )
+			{
+				AlertPopup.show("You cannot remove the last graph.");
+				return;
+			}
+			
 			var newIndex : int = curTab.lstGraphs.selectedIndex - 1;
 			newIndex = newIndex < 0 ? 0 : newIndex;
 
