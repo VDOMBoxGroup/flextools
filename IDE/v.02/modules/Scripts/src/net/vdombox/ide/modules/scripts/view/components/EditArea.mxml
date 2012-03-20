@@ -89,7 +89,7 @@
 
 			private function test( ... arg ) : void
 			{
-//				trace( arg );
+//				//trace( arg );
 			}
 
 			private function getTemplateString() : String
@@ -106,7 +106,7 @@
 				}
 				catch ( error : Error )
 				{
-					trace( " get tmpl error " );
+					////trace( " get tmpl error " );
 				}
 
 				return template;

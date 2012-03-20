@@ -173,7 +173,7 @@
 				</s:Rect>
 				
 				<s:Label id="titleDisplay"
-						 top="7" color="white" left="3" right="3" paddingLeft="10"
+						 top="7" color="white" left="25" right="3" paddingLeft="10"
 						 textAlign="left" verticalAlign="middle" paddingBottom="6"
 						 maxDisplayedLines="1" fontSize="15" fontWeight="bold">
 				</s:Label>

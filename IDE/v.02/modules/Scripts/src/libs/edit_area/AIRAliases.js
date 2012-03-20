@@ -33,7 +33,7 @@ if (window.runtime)
 {
     if (!air) air = {};
     // functions
-    air.trace = window.runtime.trace;
+    air.//trace = window.runtime.//trace;
     air.navigateToURL = window.runtime.flash.net.navigateToURL;
     air.sendToURL = window.runtime.flash.net.sendToURL;
 

@@ -200,7 +200,7 @@ EditAreaLoader.prototype ={
 		
 	init : function(settings){
 //		alert("init begin") //<---
-//		air.trace("init begin")
+//		air.//trace("init begin")
 		for(var i=0; i<this.scripts_to_load.length; i++){
 			var path = this.baseURL + this.scripts_to_load[i]+ ".js"
 			this.waiting_loading[this.scripts_to_load[i]+ ".js"]= false;

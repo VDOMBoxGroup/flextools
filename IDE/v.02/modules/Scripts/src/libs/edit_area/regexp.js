@@ -67,9 +67,9 @@
 	*/
 	
 	// return identication that allow to know if revalidating only the text line won't make the syntax go mad
-	EditArea.prototype.get_syntax_trace= function(text){
-		if(this.settings["syntax"].length>0 && parent.editAreaLoader.syntax[this.settings["syntax"]]["syntax_trace_regexp"])
-			return text.replace(parent.editAreaLoader.syntax[this.settings["syntax"]]["syntax_trace_regexp"], "$3");
+	EditArea.prototype.get_syntax_//trace= function(text){
+		if(this.settings["syntax"].length>0 && parent.editAreaLoader.syntax[this.settings["syntax"]]["syntax_//trace_regexp"])
+			return text.replace(parent.editAreaLoader.syntax[this.settings["syntax"]]["syntax_//trace_regexp"], "$3");
 	};
 	
 		

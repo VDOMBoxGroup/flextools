@@ -116,7 +116,7 @@
 				actionList.addEventListener( ListItemRendererEvent.ITEM_CHENGED, actionList_changeHandler, true, 0, true );
 				actionList.addEventListener( KeyboardEvent.KEY_DOWN, itemrenderer1_keyDownHandler, false, 0, true );
 				
-				titleDisplay.left = 25;
+				//titleDisplay.left = 25;
 			}
 			
 			private function itemrenderer1_keyDownHandler(event:KeyboardEvent):void

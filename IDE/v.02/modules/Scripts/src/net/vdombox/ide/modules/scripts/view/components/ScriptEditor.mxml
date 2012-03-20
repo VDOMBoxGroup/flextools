@@ -5,7 +5,8 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 height="300" width="400" xmlns:editors="net.vdombox.editors.*"
 		 xmlns:components1="net.vdombox.components.*"
-		 remove="navigatorcontent2_removeHandler(event)" xmlns:components2="net.vdombox.ide.common.components.*" xmlns:components3="net.vdombox.ide.common.view.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*" xmlns:mx1="library://ns.adobe.com/flex/mx">
+		 remove="navigatorcontent2_removeHandler(event)" xmlns:components2="net.vdombox.ide.common.components.*" xmlns:components3="net.vdombox.ide.common.view.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*" xmlns:mx1="library://ns.adobe.com/flex/mx"
+		 skinClass="spark.skins.spark.SkinnableContainerSkin">
 
 	<fx:Script>
 		<![CDATA[

@@ -70,7 +70,7 @@
 				
 				
 		//		/(("(\\"|[^"])*"?)|('(\\'|[^'])*'?)|(//(.|\r|\t)*\n)|(/\*(.|\n|\r|\t)*\*/)|(<!--(.|\n|\r|\t)*-->))/gi
-				var syntax_trace=new Array();
+				var syntax_//trace=new Array();
 				
 		//		/("(?:[^"\\]*(\\\\)*(\\"?)?)*("|$))/g
 				
@@ -83,7 +83,7 @@
 						this.syntax[lang]["quotes"][x]=x;
 						//quote_tab[quote_tab.length]="("+x+"(?:\\\\"+x+"|[^"+x+"])*("+x+"|$))";
 						quote_tab[quote_tab.length]="("+x+"(?:[^"+x+"\\\\]*(\\\\\\\\)*(\\\\"+x+"?)?)*("+x+"|$))";
-						syntax_trace.push(x);			
+						syntax_//trace.push(x);			
 					}			
 				}
 						
@@ -93,7 +93,7 @@
 						if(typeof(this.load_syntax[lang]['COMMENT_SINGLE'][i])=="function") continue;						
 						var x=this.get_escaped_regexp(this.load_syntax[lang]['COMMENT_SINGLE'][i]);
 						quote_tab[quote_tab.length]="("+x+"(.|\\r|\\t)*(\\n|$))";
-						syntax_trace.push(x);
+						syntax_//trace.push(x);
 						this.syntax[lang]["comments"][x]="\n";
 					}			
 				}		
@@ -104,16 +104,16 @@
 						var start=this.get_escaped_regexp(i);
 						var end=this.get_escaped_regexp(this.load_syntax[lang]['COMMENT_MULTI'][i]);
 						quote_tab[quote_tab.length]="("+start+"(.|\\n|\\r)*?("+end+"|$))";
-						syntax_trace.push(start);
-						syntax_trace.push(end);
+						syntax_//trace.push(start);
+						syntax_//trace.push(end);
 						this.syntax[lang]["comments"][i]=this.load_syntax[lang]['COMMENT_MULTI'][i];
 					}			
 				}		
 				if(quote_tab.length>0)
 					this.syntax[lang]["comment_or_quote_reg_exp"]= new RegExp("("+quote_tab.join("|")+")","gi");
 				
-				if(syntax_trace.length>0) //   /((.|\n)*?)(\\*("|'|\/\*|\*\/|\/\/|$))/g
-					this.syntax[lang]["syntax_trace_regexp"]= new RegExp("((.|\n)*?)(\\\\*("+ syntax_trace.join("|") +"|$))", "gmi");
+				if(syntax_//trace.length>0) //   /((.|\n)*?)(\\*("|'|\/\*|\*\/|\/\/|$))/g
+					this.syntax[lang]["syntax_//trace_regexp"]= new RegExp("((.|\n)*?)(\\\\*("+ syntax_//trace.join("|") +"|$))", "gmi");
 				
 				if(this.load_syntax[lang]['SCRIPT_DELIMITERS']){
 					this.syntax[lang]["script_delimiters"]= new Object();
