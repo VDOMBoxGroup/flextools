@@ -98,7 +98,6 @@
 				}
 				else
 				{
-					trace("\nT R E E: PropertiesPanel: _vdomObjectAttributesVO == null");
 					saveButton.enabled = false;
 					makeStartButton.enabled = false;
 					deleteButton.enabled = false;

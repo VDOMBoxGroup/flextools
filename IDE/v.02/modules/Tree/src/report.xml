@@ -801,7 +801,7 @@
       <dep id="flash.events:NativeDragEvent" />
       <dep id="mx.styles:CSSStyleDeclaration" />
       <dep id="flash.events:IEventDispatcher" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="flash.desktop:NativeDragOptions" />
       <dep id="mx.events:InterDragManagerEvent" />
       <dep id="flash.desktop:Clipboard" />
@@ -1928,7 +1928,7 @@
       <dep id="flash.errors:IOError" />
       <dep id="flash.filesystem:File" />
       <dep id="net.vdombox.ide.core:Notifications" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="mx.utils:Base64Decoder" />
       <dep id="flash.display:Loader" />
       <dep id="net.vdombox.ide.core.events:SOAPEvent" />
@@ -4806,7 +4806,7 @@
       <dep id="mx.messaging.messages:HTTPRequestMessage" />
       <dep id="mx.messaging.messages:AcknowledgeMessage" />
       <dep id="mx.accessibility:ComboBoxAccImpl" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="spark.accessibility:ButtonBarBaseAccImpl" />
       <dep id="Error" />
       <dep id="spark.accessibility:ListBaseAccImpl" />
@@ -5730,7 +5730,7 @@
       <dep id="net.vdombox.ide.common:LogMessage" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
       <dep id="AS3" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="mx.utils:StringUtil" />
     </script>
     <script name="C:\Program Files\Adobe\Adobe Flash Builder 4.5\sdks\4.5.0\frameworks\libs\spark.swc(spark.components:SkinnableDataContainer)" mod="1300915924713" size="8883" optimizedsize="3856">
@@ -6079,7 +6079,7 @@
       <dep id="mx.utils:LoaderUtil" />
       <dep id="flash.events:Event" />
       <dep id="flash.net:URLRequest" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="mx.events:RSLEvent" />
       <dep id="flash.events:IOErrorEvent" />
       <dep id="flash.display:Loader" />
@@ -8487,7 +8487,7 @@
       <pre id="mx.core:IEmbeddedFontRegistry" />
       <pre id="Object" />
       <dep id="mx.core:EmbeddedFont" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="flash.text:FontStyle" />
       <dep id="mx.core:mx_internal" />
       <dep id="mx.resources:ResourceManager" />
@@ -8990,7 +8990,7 @@
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
       <dep id="net.vdombox.ide.core:Notifications" />
       <dep id="org.puremvc.as3.multicore.utilities.pipes.plumbing:TeeSplit" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="org.puremvc.as3.multicore.utilities.pipes.interfaces:IPipeAware" />
       <dep id="net.vdombox.ide.common:PPMPlaceNames" />
       <dep id="net.vdombox.ide.core.model.vo:ModuleVO" />
@@ -9265,7 +9265,7 @@
       <pre id="org.puremvc.as3.multicore.interfaces:IProxy" />
       <pre id="org.puremvc.as3.multicore.patterns.proxy:Proxy" />
       <dep id="net.vdombox.ide.core:Notifications" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="net.vdombox.ide.core.model.vo:ModulesCategoryVO" />
       <dep id="net.vdombox.ide.core.model.vo:ModuleVO" />
       <dep id="mx.resources:ResourceManager" />
@@ -9583,7 +9583,7 @@
       <dep id="mx.resources:LocaleSorter" />
       <dep id="flash.events:IEventDispatcher" />
       <dep id="mx.resources:IResourceModule" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="mx.utils:StringUtil" />
       <dep id="mx.resources:ResourceBundle" />
       <dep id="mx.core:mx_internal" />
@@ -9667,7 +9667,7 @@
       <dep id="mx.events:ListEventReason" />
       <dep id="mx.managers:IFocusManager" />
       <dep id="flash.utils:Dictionary" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="mx.core:IInvalidating" />
       <dep id="mx.core:EdgeMetrics" />
       <dep id="mx.core:EventPriority" />
@@ -11199,7 +11199,7 @@
       <dep id="flash.utils:ByteArray" />
       <dep id="net.vdombox.ide.common.vo:ResourceVO" />
       <dep id="AS3" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="flash.events:IOErrorEvent" />
       <dep id="flash.filesystem:File" />
       <dep id="Error" />
@@ -11266,7 +11266,7 @@
       <def id="mx.binding:BindabilityInfo" />
       <pre id="Object" />
       <dep id="AS3" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="XML" />
       <dep id="mx.core:mx_internal" />
       <dep id="XMLList" />
@@ -13103,7 +13103,7 @@
       <dep id="flash.events:Event" />
       <dep id="mx.rpc.soap:LoadEvent" />
       <dep id="QName" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="mx.rpc:AsyncToken" />
       <dep id="net.vdombox.ide.core.events:SOAPEvent" />
       <dep id="XMLList" />
@@ -13817,7 +13817,7 @@
       <pre id="Object" />
       <dep id="RangeError" />
       <dep id="AS3" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="mx.collections.errors:ItemPendingError" />
       <dep id="mx.core:mx_internal" />
       <dep id="XML" />
@@ -14688,7 +14688,7 @@
       <dep id="flash.utils:getQualifiedClassName" />
       <dep id="flash.events:IEventDispatcher" />
       <dep id="AS3" />
-      <dep id="trace" />
+      <dep id="//trace" />
       <dep id="mx.binding:BindabilityInfo" />
       <dep id="mx.utils:DescribeTypeCache" />
       <dep id="mx.core:mx_internal" />
@@ -15517,7 +15517,7 @@
     <ext id="flash.text.engine:ElementFormat" />
     <ext id="flash.utils:Dictionary" />
     <ext id="flash.events:ErrorEvent" />
-    <ext id="trace" />
+    <ext id="//trace" />
     <ext id="flash.events:EventDispatcher" />
     <ext id="flash.external:ExternalInterface" />
     <ext id="flash.media:SoundTransform" />
