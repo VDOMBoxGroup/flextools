@@ -15,7 +15,6 @@ package net.vdombox.ide.modules.dataBase.view
 
 		public function DataBaseMediator( vObject : DataBase )
 		{
-			trace("DataBaseMediator");
 			super( NAME, vObject );
 		}
 

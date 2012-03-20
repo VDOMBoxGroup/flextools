@@ -17,6 +17,7 @@
 			import mx.utils.UIDUtil;
 			
 			import net.vdombox.ide.common.model._vo.PageVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.LabelItemRenderers;
@@ -236,9 +237,19 @@
 		
 		<s:Group width="100%" height="100%">
 			
-			<mx:AdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}"
+			
+			<mx:AdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}" alternatingItemColors="[#EFF3FA, #FFFFFF]"
 								 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
-								 editable="false" sortableColumns="true"/>
+								 editable="false" sortableColumns="true"
+								 headerSeparatorSkin="mx.skins.halo.DataGridHeaderSeparator"
+								 headerHorizontalSeparatorSkin="mx.skins.halo.AdvancedDataGridHeaderHorizontalSeparator"
+								 headerBackgroundSkin="mx.skins.halo.DataGridHeaderBackgroundSkin"
+								 headerColors="{[0xFFFFFF, 0xE6E6E6]}"
+								 columnDropIndicatorSkin="mx.skins.halo.DataGridColumnDropIndicator"
+								 columnResizeSkin="mx.skins.halo.DataGridColumnResizeSkin"
+								 stretchCursor="@Embed('assets/cursor_width.png')"
+								 headerStyleName="advancedDataGridStyles"
+								 headerDragProxyStyleName="headerDragProxyStyle"/>
 			
 			<mx:Image id="imageProgress" source="@Embed('assets/spinner.swf')" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center"  visible="false" scaleContent="false" maintainAspectRatio="true"/>
 			

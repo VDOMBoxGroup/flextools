@@ -53,6 +53,6 @@
 	</fx:Script>
 	
 	<s:TextInput id="textArea" top="0" left="0" right="0" bottom="0" text="{listData.label}" doubleClick="lblData_doubleClickHandler(event)"
-				 contentBackgroundAlpha="0" borderVisible="false" maxHeight="18" paddingTop="4" editable="false"
+				 contentBackgroundAlpha="0" borderVisible="false" borderAlpha="0" maxHeight="18" paddingTop="4" editable="false"
 				 focusIn="{textArea.setStyle( 'contentBackgroundAlpha', '1' ) }" focusOut="{textArea.setStyle( 'contentBackgroundAlpha', '0' ) }"/>
 </s:MXAdvancedDataGridItemRenderer>

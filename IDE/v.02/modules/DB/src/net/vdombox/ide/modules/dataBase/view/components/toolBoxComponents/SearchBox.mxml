@@ -38,7 +38,7 @@
 				  change="{target.find(searchInput.text)}" focusIn="searchInput_focusInHandler(event)" focusOut="searchInput_focusOutHandler(event)"
 				  contentBackgroundColor="{!target.searchString || target.found ? 0xffffff:0xff0000}" fontStyle="italic"
 				  enter="{target.findNext()}"
-				  toolTip="Live search"
+				  toolTip="Live search" borderColor="#FF0000"
 				  skinClass="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.SearchTextInputSkin"/>
 	
 	<button:WorkAreaButton id="nextButton" icon="@Embed('assets/Arrow_Right.png')" height="{searchInput.height}" width="20"

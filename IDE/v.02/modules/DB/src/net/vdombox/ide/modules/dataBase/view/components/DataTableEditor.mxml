@@ -4,7 +4,8 @@
 					  xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
 					  implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
 					  xmlns:components="net.vdombox.components.*" xmlns:components1="net.vdombox.ide.modules.dataBase.view.components.*"
-					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)" xmlns:toolBoxComponents="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">	
+					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)" xmlns:toolBoxComponents="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.*" xmlns:button="net.vdombox.ide.common.view.components.button.*"
+					  skinClass="spark.skins.spark.SkinnableContainerSkin">	
 	
 	
 	<fx:Script>
@@ -23,6 +24,7 @@
 			
 			import net.vdombox.ide.common.events.EditorEvent;
 			import net.vdombox.ide.common.model._vo.ObjectVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;
@@ -796,7 +798,7 @@
 											  width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"				 
 											  draggableColumns="true" sortableColumns="true" doubleClickEnabled="true"
 											  allowMultipleSelection="true" alpha.Result="1" alpha.Progress="0.4"
-											  doubleClick="dataTable_doubleClickHandler(event)"/>
+											  doubleClick="dataTable_doubleClickHandler(event)" borderVisible="false"/>
 			
 			<mx:Image source="@Embed('assets/spinner.swf')" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center"  includeIn="Progress" scaleContent="false" maintainAspectRatio="true"/>
 			

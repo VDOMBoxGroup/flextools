@@ -68,7 +68,7 @@ package net.vdombox.ide.modules.dataBase.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 			
-			if ( body.objectVO.id != dataTableEditor.editorID)
+			if ( body.hasOwnProperty("objectVO") && body.objectVO.id != dataTableEditor.editorID)
 				return;
 			
 			switch ( name )

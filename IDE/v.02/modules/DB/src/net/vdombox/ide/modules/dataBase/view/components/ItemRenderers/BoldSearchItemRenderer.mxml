@@ -77,6 +77,6 @@
 		]]>
 	</fx:Script>
 	<mx:TextInput id="textArea" top="0" left="0" right="0" bottom="0" text="{listData.label}" doubleClickEnabled="true" doubleClick="textArea_doubleClickHandler(event)"
-				 contentBackgroundAlpha="0" borderVisible="false" maxHeight="20"  change="textArea_changeHandler(event)" paddingTop="-2"
+				 contentBackgroundAlpha="0" borderVisible="false" minHeight="24" maxHeight="24"  change="textArea_changeHandler(event)" paddingTop="2"
 				 focusIn="{textArea.setStyle( 'contentBackgroundAlpha', '1' ) }" focusOut="{textArea.setStyle( 'contentBackgroundAlpha', '0' ) }"/>
 </s:MXAdvancedDataGridItemRenderer>

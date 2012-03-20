@@ -1,17 +1,54 @@
 package net.vdombox.ide.modules.dataBase.view.components
 {
+	import flash.display.Sprite;
 	import flash.events.Event;
 	
 	import mx.collections.CursorBookmark;
 	import mx.collections.IViewCursor;
 	import mx.controls.AdvancedDataGrid;
 	import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
+	import mx.skins.halo.AdvancedDataGridHeaderHorizontalSeparator;
+	import mx.skins.halo.DataGridColumnDropIndicator;
+	import mx.skins.halo.DataGridColumnResizeSkin;
+	import mx.skins.halo.DataGridHeaderSeparator;
+	import mx.skins.spark.DataGridHeaderBackgroundSkin;
+	import mx.skins.spark.DataGridSortArrow;
 	
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.modules.dataBase.interfaces.ISearchable;
 	import net.vdombox.ide.modules.dataBase.utils.WildcardUtils;
 
 	public class VDOMAdvancedDataGrid extends AdvancedDataGrid implements ISearchable
 	{
+		[Embed( source = "assets/cursor_width.png" )]
+		private var stretchCursor : Class;
+		
+		override public function stylesInitialized():void 
+		{
+			super.stylesInitialized();
+			this.setStyle( "headerSeparatorSkin", DataGridHeaderSeparator );
+			this.setStyle( "headerHorizontalSeparatorSkin", AdvancedDataGridHeaderHorizontalSeparator );
+			this.setStyle( "headerBackgroundSkin", DataGridHeaderBackgroundSkin );
+			this.setStyle( "columnDropIndicatorSkin", DataGridColumnDropIndicator );
+			this.setStyle( "columnResizeSkin", DataGridColumnResizeSkin );
+			this.setStyle( "headerSeparatorSkin", DataGridHeaderSeparator );
+			
+			this.setStyle( "headerColors", [0xFFFFFF, 0xE6E6E6] );
+			this.setStyle( "stretchCursor", stretchCursor );
+			
+			/*this.setStyle( "headerStyleName", "advancedDataGridStyles" );
+			this.setStyle( "headerDragProxyStyleName", "headerDragProxyStyle" );*/
+			
+			this.setStyle( "sortArrowSkin", DataGridSortArrow );
+			
+			this.setStyle( "alternatingItemColors", [0xF7F7F7, 0xFFFFFF] );
+			
+			this.setStyle( "verticalGridLineColor", 0xCCCCCC );
+			
+			this.setStyle( "sortFontFamily", "Verdana" );
+			this.setStyle( "sortFontWeight", "normal" );
+			
+		}  
 		
 		/**
 		 * @copy com.iwobanas.core.ISearchable#found
