@@ -78,7 +78,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		graph_alert_clear_title : "Confirmation",
 		graph_alert_clear_text : "Are you sure want to clear stage?",
 		graph_alert_delete_title : "Confirmation",
-		graph_alert_delete_text : "Are you sure want to delete seleted states?"
+		graph_alert_delete_text : "Are you sure you want to remove selected states?"
 	};
 
 	private static const CLIPBOARD_GRAPH_FORMAT : String = "GRAPH_FORMAT"; 

@@ -310,17 +310,6 @@
 			
 			var e : Event = new GraphsAccordionEvent( GraphsAccordionEvent.TAB_CLOSING, null, true, true );
 			accordChild.dispatchEvent( e );
-
-			if ( e.isDefaultPrevented() )
-			{
-				event.preventDefault();
-			}
-			else
-			{
-				event.preventDefault();
-				accordChild.parent.removeChild( accordChild );
-				accordChild.dispatchEvent( new GraphsAccordionEvent( GraphsAccordionEvent.TAB_CLOSE ) );
-			}
 		}
 
 		private function dragEnterHandler( event : DragEvent ) : void

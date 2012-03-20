@@ -48,6 +48,7 @@
 			import mx.controls.Alert;
 			import mx.controls.ComboBox;
 			import mx.controls.List;
+			import mx.events.CloseEvent;
 			import mx.events.CollectionEvent;
 			import mx.events.CollectionEventKind;
 			import mx.events.DropdownEvent;
@@ -79,7 +80,9 @@
 			lbl_delete : "Delete",
 			lbl_help : "Help",
 			initial_graph : "Initial Graph",
-			graph_explorer : "Graph Explorer"
+			graph_explorer : "Graph Explorer",
+			alert_delete_graph_title : "Confirmation",
+			alert_delete_graph_text : "Are you sure you want to remove selected graph?"
 		}
 
 		static private var _classConstructed : Boolean = classConstruct();
@@ -514,8 +517,34 @@
 				AlertPopup.show( "You can't remove the last category." );
 				return;
 			}
+			
+			var confirmRemoveMsg : String = "Are you sure you want to remove '"+ accordChild.label  +"' category?"
+			
+			AlertPopup.show(
+				confirmRemoveMsg,
+				LanguageManager.sentences['alert_delete_graph_title'],
+				Alert.YES | Alert.NO, null, deleteCategoryAlertCloseHandler, null, Alert.YES );
+			
+			function deleteCategoryAlertCloseHandler( event : CloseEvent ) : void
+			{
+				if ( event.detail == Alert.YES )
+				{
+					removeCategory (accordChild);
+				}
+			}
 		}
 
+		private function removeCategory (accordChild : AccordionChild) : void
+		{
+			if (!accordChild)
+				return;
+			
+			accordChild.parent.removeChild( accordChild );
+			
+			accordChild.dispatchEvent( new GraphsAccordionEvent( GraphsAccordionEvent.TAB_CLOSE ) );
+
+		}
+			
 		private function onLstGraphsValueChecked( event : GraphsAccordionEvent ) : void
 		{
 			var selectedAccordionChild : AccordionChild = graphsAccordion.selectedChild as AccordionChild;
@@ -701,18 +730,35 @@
 
 		private function btnDeleteClickHandler( event : MouseEvent ) : void
 		{
-			if ( !curGraph )
-				return;
-
 			if ( graphs.length == 1 )
 			{
 				AlertPopup.show("You can not remove the last graph.");
 				return;
 			}
 			
+			AlertPopup.show(
+					LanguageManager.sentences['alert_delete_graph_text'],
+					LanguageManager.sentences['alert_delete_graph_title'],
+					Alert.YES | Alert.NO, null, deleteGraphAlertCloseHandler, null, Alert.YES );
+			
+			function deleteGraphAlertCloseHandler (event : CloseEvent) : void
+			{
+				if ( event.detail == Alert.YES )
+				{
+					deleteGraph();
+				}
+			}
+			
+		}
+			
+		private function deleteGraph () : void
+		{
+			if ( !curGraph )
+				return;
+			
 			var newIndex : int = curTab.lstGraphs.selectedIndex - 1;
 			newIndex = newIndex < 0 ? 0 : newIndex;
-
+			
 			var removedGraphName : String = curGraph.name;
 			
 			graphs.removeItemAt( graphs.getItemIndex( curGraph ) );
@@ -721,7 +767,7 @@
 			
 			GraphCanvas( curGraph ).removeEventListener( GraphCanvasEvent.GRAPH_CHANGED, onGraphChange );
 			GraphCanvas( curGraph ).removeEventListener( GraphCanvasEvent.JUMP_TO_GRAPH, onJumpToGraph );
-
+			
 			if ( curTab.graphs.length > 0 )
 			{
 				selectGraph( curTab.graphs[newIndex] );
@@ -730,11 +776,11 @@
 			{
 				var index : int = graphsAccordion.getChildIndex( curTab );
 				var graphToSelect : GraphCanvas;
-
+				
 				for ( var i : int = index - 1; i >= 0; i-- )
 				{
 					var tab : AccordionChild = graphsAccordion.getChildAt( i ) as AccordionChild;
-
+					
 					if ( tabMap[tab] )
 					{
 						var arr : ArrayCollection = getTabMapGraphs( tab, true );
@@ -745,17 +791,17 @@
 					{
 						graphToSelect = tab.graphs.getItemAt( 0 ) as GraphCanvas;
 					}
-
+					
 					if ( graphToSelect )
 						break;
 				}
-
+				
 				if ( !graphToSelect )
 					graphToSelect = findFirstGraph();
-
+				
 				selectGraph( graphToSelect );
 			}
-
+			
 			dispatchEvent( new Event( TPL_CHANGED ) );
 			
 			var firstGraphName : String = "";
