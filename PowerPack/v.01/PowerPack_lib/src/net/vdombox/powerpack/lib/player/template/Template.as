@@ -197,6 +197,11 @@ package net.vdombox.powerpack.lib.player.template
 			BindingUtils.bindSetter(selectedProjectChangeHandler, selectedProject, 'modified');
 		}
 		
+		public function get xml() : XML
+		{
+			return _xml;
+		}
+		
 		private function selectedProjectChangeHandler (object:Object) : void 
 		{
 			modified = object as Boolean;
@@ -212,11 +217,6 @@ package net.vdombox.powerpack.lib.player.template
 			delete xml.picture;
 		}
 		
-		public function get xml() : XML
-		{
-			return _xml;
-		}
-	
 		//----------------------------------
 		//  xmlStructure
 		//----------------------------------
@@ -233,9 +233,9 @@ package net.vdombox.powerpack.lib.player.template
 		}
 
 		
-		private static const DEFAULT_CATEGORY_NAME	: String = "Main";
-		private static const DEFAULT_GRAPH_NAME		: String = "defaultGraph";
-		private static const DEFAULT_NODE_NAME		: String = "defaultNode";
+		public static const DEFAULT_CATEGORY_NAME	: String = "Main";
+		public static const DEFAULT_GRAPH_NAME		: String = "defaultGraph";
+		public static const DEFAULT_NODE_NAME		: String = "defaultNode";
 		
 		private function get defaultStructure () : XML
 		{
@@ -268,14 +268,14 @@ package net.vdombox.powerpack.lib.player.template
 				_xmlStructure = value;
 			}
 			
-			if (!xmlStructure || !xmlStructure.graph[0])
+			if (xmlStructure && !xmlStructure.graph[0])
 			{
 				xmlStructure = defaultStructure;
 				modified = true;
 				
 				if (selectedProject)
 					selectedProject.initialGraphName = DEFAULT_GRAPH_NAME;
-			}
+			}	
 				
 		}
 	

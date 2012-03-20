@@ -125,14 +125,14 @@ public class LanguageManager extends EventDispatcher
 
 				// common messages
 				msg_file_not_exists : "File doesn't exist.",
-				msg_cannot_save_file : "Cannot save to this location.",
+				msg_cannot_save_file : "Can not save to this location.",
 				msg_ioerror_occurs : "IOError exception occurs.",
-				msg_cannot_open_tpl : "Cannot open template.",
+				msg_cannot_open_tpl : "Can not open template.",
 				msg_not_valid_tpl_file : "Not valid template file.",
 				msg_enter_valid_graph_name : "Enter a valid graph name.",
 				msg_enter_unique_graph_name : "Enter unique graph name.",
 				msg_enter_unique_category_label : "Enter unique category label.",
-				msg_cannot_remove_nonempty_cat : "You cannot remove non empty category.",
+				msg_cannot_remove_nonempty_cat : "The category is not empty. You can not remove it.",
 				msg_enter_correct_image_file : "Enter correct image file.",
 				msg_no_graph_by_name : "There is no graph with the given name."
 			};

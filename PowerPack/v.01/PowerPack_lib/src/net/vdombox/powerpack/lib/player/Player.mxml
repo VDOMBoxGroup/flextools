@@ -60,7 +60,7 @@
 				app_title : "Power Pack Installer",
 				msg_input_template_key : "Please, input valid template key",
 				msg_exit_app : "Are you sure want to exit?",
-				msg_tpl_proceed_with_errs : "Error(s) exist in template\nProceed with launch?",
+				msg_tpl_proceed_with_errs : "The template contains error(s).\nDo you want to proceed launching?",
 				msg_gen_welcome : "Lorem ipsum dolor sit amet",
 				msg_gen_finish : "Installation is complete",
 

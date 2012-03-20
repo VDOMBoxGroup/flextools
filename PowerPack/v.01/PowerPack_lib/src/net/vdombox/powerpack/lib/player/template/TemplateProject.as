@@ -16,7 +16,7 @@ package net.vdombox.powerpack.lib.player.template
 		public var key : String;
 		
 		[Bindable]
-		public var initialGraphName : String = "";
+		public var initialGraphName : String = Template.DEFAULT_GRAPH_NAME;
 		
 		public var id : String; // GUID
 		
@@ -168,7 +168,7 @@ package net.vdombox.powerpack.lib.player.template
 		// for template xml that supports only 1 project (version <= 1.2.3.7939)
 		private function setInitialGraphNameFromTemplateStructure (templateXml : XML) : void
 		{
-			initialGraphName = "";
+			initialGraphName = Template.DEFAULT_GRAPH_NAME;
 			
 			var graphs : XMLList = templateXml.structure.graph;
 			for each (var graphXML : XML in graphs)
