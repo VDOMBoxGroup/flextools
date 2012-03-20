@@ -75,9 +75,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				}
 					
 				case StatesProxy.ALL_STATES_GETTED:
-				{
-					trace(notification.getName() + "  " + StatesProxy.ALL_STATES_GETTED);
-					
+				{					
 					isReady = true;
 					
 					checkConditions();

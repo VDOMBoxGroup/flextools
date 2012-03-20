@@ -15,7 +15,6 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 		public function ResourceBrowserMediator( vObject : ResourceBrowser )
 		{
-			trace("ResourceBrowserMediator");
 			super( NAME, vObject );
 		}
 
