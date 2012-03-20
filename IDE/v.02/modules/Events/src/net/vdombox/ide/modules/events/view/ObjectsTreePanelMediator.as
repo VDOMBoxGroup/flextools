@@ -252,7 +252,7 @@ package net.vdombox.ide.modules.events.view
 				typeID = objectXML.@typeID;
 				var typeVO : TypeVO = typeProxy.getTypeVObyID( typeID )
 				objectXML.@iconID = typeVO.structureIconID;
-				//				trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
+				//				//trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
 			}
 		}
 
@@ -313,7 +313,7 @@ package net.vdombox.ide.modules.events.view
 			}
 			else
 			{
-				trace("Error: not selected Page in Event Modul");
+				////trace("Error: not selected Page in Event Modul");
 			}
 		}
 		
