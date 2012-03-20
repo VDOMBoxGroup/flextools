@@ -706,7 +706,7 @@
 
 			if ( graphs.length == 1 )
 			{
-				AlertPopup.show("You cannot remove the last graph.");
+				AlertPopup.show("You can not remove the last graph.");
 				return;
 			}
 			

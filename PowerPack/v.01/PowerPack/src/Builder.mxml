@@ -789,7 +789,7 @@
 
 		public function alertProceedRun() : void
 		{
-			AlertPopup.show( "Error(s) exist in template\nProceed with launch?", "Errors in template", AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
+			AlertPopup.show( "The template contains error(s).\nDo you want to proceed launching?", "Errors in template", AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
 		}
 
 		private function alertProceedRunHandler( event : CloseEvent ) : void

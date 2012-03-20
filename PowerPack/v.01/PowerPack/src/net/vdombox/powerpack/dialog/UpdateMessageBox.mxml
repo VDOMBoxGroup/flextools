@@ -131,7 +131,7 @@
 				 height="100%">
 			<mx:HRule width="100%"/>
 			
-			<mx:Label text="Do you want to download and launch update automatically?" 
+			<mx:Label text="Do you want to download and launch updates automatically?" 
 					  fontSize="14"/>
 		</mx:VBox>
 		
