@@ -183,9 +183,9 @@
 			var change_last_text_line= this.last_text_to_highlight.split("\n").slice(line_start_change, line_last_end_change+1).join("\n");
 		
 			// check if it can only reparse the changed text
-			var trace_new= this.get_syntax_trace(change_new_text_line);
-			var trace_last= this.get_syntax_trace(change_last_text_line);
-			if(trace_new == trace_last){
+			var //trace_new= this.get_syntax_//trace(change_new_text_line);
+			var //trace_last= this.get_syntax_//trace(change_last_text_line);
+			if(//trace_new == //trace_last){
 						
 			
 			
@@ -206,12 +206,12 @@
 				
 			}
 			if(this.settings["debug"]){
-				debug_opti= (trace_new == trace_last)?"Optimisation": "No optimisation";
+				debug_opti= (//trace_new == //trace_last)?"Optimisation": "No optimisation";
 				debug_opti+= " start: "+pos_start_change +"("+line_start_change+")";
 				debug_opti+=" end_new: "+ pos_new_end_change+"("+line_new_end_change+")";
 				debug_opti+=" end_last: "+ pos_last_end_change+"("+line_last_end_change+")";
-				debug_opti+="\nchanged_text: "+change_new_text+" => trace: "+trace_new;
-				debug_opti+="\nchanged_last_text: "+change_last_text+" => trace: "+trace_last;
+				debug_opti+="\nchanged_text: "+change_new_text+" => //trace: "+//trace_new;
+				debug_opti+="\nchanged_last_text: "+change_last_text+" => //trace: "+//trace_last;
 				//debug_opti+= "\nchanged: "+ infos["full_text"].substring(pos_start_change, pos_new_end_change);
 				debug_opti+= "\nchanged_line: "+change_new_text_line;
 				debug_opti+= "\nlast_changed_line: "+change_last_text_line;

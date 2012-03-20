@@ -88,7 +88,7 @@ editAreaLoader.load_syntax["python"] = {
 			'StringIO', 'stringprep', 'struct', 'subprocess', 'sunau', 'SUNAUDIODEV', 'sunaudiodev',
 			'symbol', 'sys', 'syslog', 'tabnanny', 'tarfile', 'telnetlib', 'tempfile', 'termios',
 			'test', 'textwrap', 'thread', 'threading', 'time', 'timeit', 'Tix', 'Tkinter', 'token',
-			'tokenize', 'traceback', 'tty', 'turtle', 'types', 'unicodedata', 'unittest', 'urllib2',
+			'tokenize', '//traceback', 'tty', 'turtle', 'types', 'unicodedata', 'unittest', 'urllib2',
 			'urllib', 'urlparse', 'user', 'UserDict', 'UserList', 'UserString', 'uu', 'warnings',
 			'wave', 'weakref', 'webbrowser', 'whichdb', 'whrandom', 'winsound', 'xdrlib', 'xml',
 			'xmllib', 'xmlrpclib', 'zipfile', 'zipimport', 'zlib'
