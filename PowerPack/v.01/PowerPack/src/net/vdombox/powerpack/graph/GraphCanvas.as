@@ -68,7 +68,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	private static var defaultItemCaptions : Object = {
 		graph_add_state : "Add state",
 		graph_add_command : "Add command",
-		graph_add_sub : "Add sub",
+		graph_add_sub : "Add subgraph",
 		graph_cut : "Cut",
 		graph_copy : "Copy",
 		graph_paste : "Paste",
@@ -494,9 +494,9 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		return newCanvas;
 	}
 
-	public function createNode( x : Number = NaN, y : Number = NaN, focused : Boolean = true ) : Node
+	public function createNode( category : String = NodeCategory.NORMAL, x : Number = NaN, y : Number = NaN, focused : Boolean = true ) : Node
 	{
-		var newNode : Node = new Node();
+		var newNode : Node = new Node(category);
 
 		addChild( newNode );
 
@@ -510,6 +510,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 		dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
 
+		newNode.edit();
+		
+		newNode.preventValidation = true;
+		
 		return newNode;
 	}
 
@@ -738,9 +742,8 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 				var ID : String = UIDUtil.createUID();
 				CashManager.setObject( template.fullID, XML( "<object category='image' ID='" + ID + "' name='" + ID + ".png' type='png'/>" ), data );
 
-				newNode = createNode();
+				newNode = createNode(NodeCategory.RESOURCE);
 				newNode.text = ID;
-				newNode.category = NodeCategory.RESOURCE;
 
 				CursorManager.removeBusyCursor();
 				ProgressManager.complete();
@@ -879,14 +882,12 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 			case "add_command":
 				selectionManager.deselectAll();
-				var comNode : Node = createNode();
-				comNode.category = NodeCategory.COMMAND;
+				createNode(NodeCategory.COMMAND);
 				break;
 
 			case "add_sub":
 				selectionManager.deselectAll();
-				var subNode : Node = createNode();
-				subNode.category = NodeCategory.SUBGRAPH;
+				createNode(NodeCategory.SUBGRAPH);
 				break;
 
 			case "cut":

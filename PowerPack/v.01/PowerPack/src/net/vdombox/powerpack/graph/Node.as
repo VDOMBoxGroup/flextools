@@ -48,19 +48,19 @@ import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
 import mx.utils.NameUtil;
 
-import net.vdombox.powerpack.template.BuilderTemplate;
 import net.vdombox.powerpack.lib.extendedapi.controls.SuperTextArea;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-import net.vdombox.powerpack.lib.player.template.Template;
 import net.vdombox.powerpack.lib.player.graph.NodeCategory;
 import net.vdombox.powerpack.lib.player.graph.NodeType;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+import net.vdombox.powerpack.lib.player.template.Template;
 import net.vdombox.powerpack.managers.CashManager;
+import net.vdombox.powerpack.template.BuilderTemplate;
 import net.vdombox.powerpack.utils.GeneralUtils;
 import net.vdombox.powerpack.validators.NodeTextValidator;
 
@@ -173,8 +173,8 @@ public class Node extends Canvas implements IFocusManagerComponent
 	/**
 	 *	Constructor
 	 */
-	public function Node( category : String = 'Normal', //NodeCategory.NORMAL,
-						  type : String = 'Normal', //NodeType.NORMAL,
+	public function Node( category : String = NodeCategory.NORMAL,
+						  type : String = NodeType.NORMAL,
 						  text : String = null )
 	{
 		super();
@@ -188,8 +188,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 			this.text = LanguageManager.sentences['node_label'];
 
 		doubleClickEnabled = true;
-		//focusEnabled = true;
-		//mouseFocusEnabled = true;
+
 		tabEnabled = true;
 		tabChildren = false;
 		styleName = this.className;
@@ -290,6 +289,8 @@ public class Node extends Canvas implements IFocusManagerComponent
 	private var _isValidText : Boolean;
 	private var _rightPadding : int;
 	private var _needValidate : Boolean;
+	
+	public var preventValidation : Boolean = false;
 
 	/**
 	 * possible values: M_NORMAL, M_EDITING
@@ -913,11 +914,16 @@ public class Node extends Canvas implements IFocusManagerComponent
 			invalidateDisplayList();
 		}
 
-		if ( validator && _needValidate )
+		if ( validator && _needValidate)
 		{
 			_needRefreshStyles = true;
 			_needValidate = false;
-			validator.validate();
+			
+			if (!preventValidation)
+				validator.validate();
+			
+			preventValidation = false;
+			
 			invalidateDisplayList();
 		}
 
@@ -1224,18 +1230,12 @@ public class Node extends Canvas implements IFocusManagerComponent
 		beginShowImageTip();
 	}
 
-	public function edit() : void
-	{
-		setEditMode( true );
-	}
-
 	private function setEditMode( isEditing : Boolean ) : void
 	{
 		if ( !enabled )
 			return;
 
-		if ( isEditing && _mode == M_EDITING ||
-				!isEditing && _mode == M_NORMAL )
+		if ( isEditing && _mode == M_EDITING || !isEditing && _mode == M_NORMAL )
 			return;
 
 		if ( isEditing )
@@ -1285,8 +1285,9 @@ public class Node extends Canvas implements IFocusManagerComponent
 			nodeTextArea.selectable = false;
 			nodeTextArea.editable = false;
 			nodeTextArea.setSelection( 0, 0 );
-		}
 
+		}
+		
 		_needRefreshStyles = true;
 		invalidateProperties();
 	}
@@ -1665,6 +1666,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 
 		_over = true;
 
+		
 		if ( canvas )
 		{
 			if ( canvas.addingTransition )
@@ -1820,7 +1822,10 @@ public class Node extends Canvas implements IFocusManagerComponent
 			event.stopPropagation();
 
 			if ( _mode == M_NORMAL )
+			{
+				_needValidate = true;
 				setEditMode( true );
+			}
 		}
 		else if ( event.keyCode == Keyboard.A && (event.commandKey || event.controlKey) )
 		{
@@ -1911,6 +1916,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 				}
 				else
 				{
+					_needValidate = true;
 					setEditMode( false );
 					text = nodeTextArea.text;
 				}
@@ -1981,15 +1987,21 @@ public class Node extends Canvas implements IFocusManagerComponent
 	{
 		event.stopPropagation();
 
-		beginHideImageTip();
-
-		if ( canvas && canvas.addingTransition )
-			return;
-
-		bringToFront();
-		setEditMode( true );
+		edit();
 	}
 
+	public function edit () : void
+	{
+		beginHideImageTip();
+		
+		if ( canvas && canvas.addingTransition )
+			return;
+		
+		bringToFront();
+		
+		setEditMode( true );
+	}
+	
 	private function wheelHandler( event : MouseEvent ) : void
 	{
 		if ( nodeTextArea.maxVerticalScrollPosition == 0 )
