@@ -98,6 +98,7 @@ package net.vdombox.ide.modules.wysiwyg
 
 			registerCommand( Notifications.RENDERER_CREATED, RendererCreatedCommand );
 			registerCommand( Notifications.RENDERER_REMOVED, RendererRemovedCommand );
+			registerCommand( Notifications.ALL_RENDERERS_REMOVED, RendererRemovedCommand );
 
 			registerCommand( Notifications.RENDERER_CLICKED, RendererClickedCommand );
 			

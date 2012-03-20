@@ -143,7 +143,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 */
 		public function ioErrorHandler( event : IOErrorEvent ) : void
 		{
-			trace( "###################### ERROR" + event.text );
+			//trace( "###################### ERROR" + event.text );
 		}
 
 		override public function listNotificationInterests() : Array
@@ -159,7 +159,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRegister() : void
 		{
-			trace("Res: onRegister()");
+			//trace("Res: onRegister()");
 			
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
@@ -170,7 +170,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRemove() : void
 		{
-			trace("Res: onRemove()");
+			//trace("Res: onRemove()");
 			
 			removeHandlers();
 
@@ -246,7 +246,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
-			trace("Res: addHandlers()");
+			//trace("Res: addHandlers()");
 			resourceSelectorWindow.addEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
 			resourceSelectorWindow.addEventListener( Event.CLOSE, closeHandler );
 //			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
@@ -560,7 +560,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function removeHandlers() : void
 		{
-			trace("Res: removeHandlers()");
+			//trace("Res: removeHandlers()");
 			resourceSelectorWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
 			resourceSelectorWindow.removeEventListener( Event.CLOSE, closeHandler );
 			resourceSelectorWindow.removeEventListener( ResourceVOEvent.LOAD_RESOURCE, loadFileHandler ); //коряво очень поменять местами

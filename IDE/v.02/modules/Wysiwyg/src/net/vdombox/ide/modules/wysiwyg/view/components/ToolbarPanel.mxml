@@ -136,14 +136,14 @@
 			
 			public function refresh() : void 
 			{
-				trace ('ToolbarPanel refresh: _currentToolbar = ' + _currentToolbar);
+				//trace ('ToolbarPanel refresh: _currentToolbar = ' + _currentToolbar);
 				if (currentToolbar)
 					currentToolbar.refresh(_selectedRenderer);
 			}
 			
 			public function saveProperties():void
 			{
-				trace ('ToolbarPanel saveProperties');
+				//trace ('ToolbarPanel saveProperties');
 				if (currentToolbar)
 					currentToolbar.saveValue();
 			}

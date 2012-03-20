@@ -400,12 +400,12 @@
 			
 			private function tracer(p1:*, p2:*=null, p3:*=null):void
 			{
-				trace ('tracer: ' + p1);				
+				//trace ('//tracer: ' + p1);				
 			}
 			
 			private function onEditorAdded():void
 			{
-				if (tinyMCE && activeEditor)
+				if (tinyMCE && activeEditor && startContent)
 				{
 					activeEditor.startContent = startContent;
 					activeEditor.setContent(startContent);

@@ -256,7 +256,7 @@
 
 			private function transformMarker_tansformBeginHandler( event : TransformMarkerEvent ) : void
 			{
-				trace ("-- [VdomObjectEditor] transformMarker_tansformBegin");
+				//trace ("-- [VdomObjectEditor] transformMarker_tansformBegin");
 				toolbarPanel.saveProperties();
 			}
 			

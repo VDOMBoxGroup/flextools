@@ -138,7 +138,7 @@ package com.zavoo.svg.nodes
 						break;			
 								
 					default:
-						trace("Unknown Segment Type: " + command);
+						//trace("Unknown Segment Type: " + command);
 						break;
 				}			
 			}			

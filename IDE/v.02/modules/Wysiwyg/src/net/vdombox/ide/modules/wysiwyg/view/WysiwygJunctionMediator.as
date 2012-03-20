@@ -661,7 +661,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			var proxy : String = message.proxy;
 			var now:Date = new Date();
-			trace("                                       "+ now.toLocaleTimeString()+"   <<- "+message.proxy +"  "+message.operation +"  "+  message.target);
+			//trace("                                       "+ now.toLocaleTimeString()+"   <<- "+message.proxy +"  "+message.operation +"  "+  message.target);
 
 			switch ( proxy )
 			{

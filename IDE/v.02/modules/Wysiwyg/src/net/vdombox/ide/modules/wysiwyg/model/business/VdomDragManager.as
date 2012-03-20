@@ -134,6 +134,8 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			var proxyWidth : Number;
 			var proxyHeight : Number;
 
+			dragImage
+			
 			// Can't start a new drag if we're already in the middle of one...
 			if ( bDoingDrag )
 				return;

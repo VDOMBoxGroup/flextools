@@ -540,7 +540,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseUpHandler( event : MouseEvent ) : void
 		{
-			trace ("-- mouseUpHandler");
+			//trace ("-- mouseUpHandler");
 			if ( !stage )
 				return;
 
@@ -637,7 +637,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
-			trace ("-- mouseMoveHandler");
+			//trace ("-- mouseMoveHandler");
 			if ( itemChanged )
 				return;
 
@@ -845,7 +845,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function stage_mouseClickHandler( event : MouseEvent ) : void
 		{
-			trace ("-- stage_mouseClickHandler");
+			//trace ("-- stage_mouseClickHandler");
 			stage.removeEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
 			
 			event.stopImmediatePropagation();

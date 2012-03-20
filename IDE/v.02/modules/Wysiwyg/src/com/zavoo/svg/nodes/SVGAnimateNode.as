@@ -109,7 +109,7 @@ package com.zavoo.svg.nodes
 				var factor:Number = runTime / this._duration;
 				newVal = this._fromVal + (factor * this._valSpan);
 				SVGNode(this.parent).setStyle(this._field, newVal.toString());
-				/* trace('Tween: ' + this.parent.toString() + ' - Time: ' + timeElapsed.toString() + ' - Field: ' + this._field 
+				/* //trace('Tween: ' + this.parent.toString() + ' - Time: ' + timeElapsed.toString() + ' - Field: ' + this._field 
 					+ ' - Delay: ' + this._begin.toString() + ' - Duration: ' + this._duration.toString() + ' End: ' + this._end.toString()
 					+ ' - Value: ' + newVal.toString()); */
 			}
@@ -117,7 +117,7 @@ package com.zavoo.svg.nodes
 				newVal = this._toVal;
 				if (this._state == this.STATE_RUN) {
 					SVGNode(this.parent).setStyle(this._field, newVal.toString());
-					/* trace('Tween: ' + this.parent.toString() + ' - Time: ' + timeElapsed.toString() + ' - Field: ' + this._field 
+					/* //trace('Tween: ' + this.parent.toString() + ' - Time: ' + timeElapsed.toString() + ' - Field: ' + this._field 
 						+ ' - Delay: ' + this._begin.toString() + ' - Duration: ' + this._duration.toString() + ' End: ' + this._end.toString()
 						+ ' - Value: ' + newVal.toString()); */
 				}

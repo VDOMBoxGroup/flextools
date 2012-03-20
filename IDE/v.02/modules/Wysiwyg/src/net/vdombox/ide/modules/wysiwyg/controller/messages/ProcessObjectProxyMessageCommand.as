@@ -79,7 +79,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 							if ( vdomObjectVO && vdomObjectVO.id == vdomObjectAttributesVO.vdomObjectVO.id )
 							{
 								sendNotification( Notifications.GET_WYSIWYG, vdomObjectAttributesVO.vdomObjectVO );
-								trace("sendNotification: Notifications.GET_WYSIWYG");
+								//trace("sendNotification: Notifications.GET_WYSIWYG");
 								break;
 							}
 						}

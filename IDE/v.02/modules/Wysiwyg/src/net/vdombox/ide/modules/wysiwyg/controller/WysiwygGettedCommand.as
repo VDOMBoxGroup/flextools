@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			trace ('--- Wysiwyg: WysiwygGettedCommand');
+			//trace ('--- Wysiwyg: WysiwygGettedCommand');
 			var body : Object = notification.getBody();
 			var vdomObjectVO : IVDOMObjectVO = body.pageVO ? body.pageVO : body.objectVO;
 			

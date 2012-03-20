@@ -75,6 +75,8 @@
 					addItem.addEventListener( Event.SELECT, addContextMenuHandler, false, 0, true );
 					contextMenu.addItem( addItem );
 				}
+				
+				dispatchEvent( new TypeItemRendererEvent ( TypeItemRendererEvent.DATA_CHANGE ) );
 			}
 
 			override public function set selected( value : Boolean ) : void

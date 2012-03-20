@@ -20,6 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.resources.ResourceManager;
 	import mx.utils.ObjectUtil;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
@@ -30,7 +31,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
@@ -728,10 +728,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function removedFromStageHandler( event : Event ) : void
 		{
+			
 			//for each( var render : RenderVO in editor.editorVO.renderVO.children )
 			//editor.editorVO.renderVO.children.splice(); 
+			
+			
+			
+				
+			/*for each ( var render : RenderVO in editorVO.renderVO.children )
+			{
+				sendNotification( Notifications.RENDERER_REMOVED, render );	
+			}
+			
+			editorVO.renderVO.children.splice( 0, editorVO.renderVO.children.length );
+				
+			sendNotification( Notifications.RENDERER_REMOVED, editorVO.renderVO );	*/
+			
 			facade.removeMediator( mediatorName );
 			delete instancesNameList[ mediatorName ];
+			
+			
 		}
 
 		private function partAddedHandler( event : SkinPartEvent ) : void

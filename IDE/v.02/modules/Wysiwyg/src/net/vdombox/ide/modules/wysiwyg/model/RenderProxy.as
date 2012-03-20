@@ -15,13 +15,13 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import mx.collections.XMLListCollection;
 	import mx.core.IUIComponent;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
@@ -189,7 +189,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 		 */
 		public function removeRenderer( renderer : IRenderer ) : void
 		{
-			var renderVO : RenderVO = IItemRenderer( renderer ).data as RenderVO;
+			var renderVO : RenderVO = renderer.renderVO;
 
 			if ( renderVO && renderVO.vdomObjectVO && renderersIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
 			{
@@ -204,6 +204,31 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGED, renderer_renderchangedHandler );
 			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGING, renderer_renderchangingHandler );
+			
+			renderer.renderVO = null;
+			renderer = null;
+		}
+		
+		public function removeRendererByVO( renderVO : RenderVO ) : void
+		{
+			var renderer : IRenderer = getRendererByVO( renderVO.vdomObjectVO );
+			
+			if ( renderVO && renderVO.vdomObjectVO && renderersIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
+			{
+				var index : int = renderersIndex[ renderVO.vdomObjectVO.id ].indexOf( renderer );
+				
+				if ( index != -1 )
+				{
+					renderersIndex[ renderVO.vdomObjectVO.id ].splice( index, 1 );
+					trace("Delete");
+				}
+			}
+			
+			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGED, renderer_renderchangedHandler );
+			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGING, renderer_renderchangingHandler );
+			
+			renderer.renderVO = null;
+			renderer = null;
 		}
 
 		/**

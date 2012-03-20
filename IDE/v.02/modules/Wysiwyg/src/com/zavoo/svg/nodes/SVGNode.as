@@ -214,7 +214,7 @@ package com.zavoo.svg.nodes
 								break;
 								
 							default:
-								trace('Unknown Transformation: ' + command);
+								//trace('Unknown Transformation: ' + command);
 						}
 					}
 				}				
@@ -526,7 +526,7 @@ package com.zavoo.svg.nodes
 							break;
 							
 						default:
-							trace("Unknown Element: " + nodeName);
+							//trace("Unknown Element: " + nodeName);
 							break;	
 					}
 					

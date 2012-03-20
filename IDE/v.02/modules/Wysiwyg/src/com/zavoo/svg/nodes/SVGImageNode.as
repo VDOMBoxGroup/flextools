@@ -194,7 +194,7 @@ package com.zavoo.svg.nodes
 	   var args:String = String(tranArray[1]);
 	   args = args.replace(')','');
 	   var argsArray:Array = args.split(/[, ]/);
-	   //trace('Transform: ' + tran);
+	   ////trace('Transform: ' + tran);
 	   switch (command) {
 	   case "matrix":
 	   if (argsArray.length == 6) {
@@ -209,7 +209,7 @@ package com.zavoo.svg.nodes
 	   break;
 
 	   default:
-	   //trace('Unknown Transformation: ' + command);
+	   ////trace('Unknown Transformation: ' + command);
 	   }
 	   }
 	   }

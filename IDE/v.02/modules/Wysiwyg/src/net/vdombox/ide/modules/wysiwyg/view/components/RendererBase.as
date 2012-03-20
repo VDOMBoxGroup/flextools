@@ -108,16 +108,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			ToolTip.maxWidth = 180;
 
 			addHandlers();
-			
-			/*var timer : Timer = new Timer( 1000, 1000 );
-			timer.addEventListener(TimerEvent.TIMER, settimerFun, false, 0 ,true );
-			timer.start();*/
 		}
-		
-		/*private function settimerFun( event : TimerEvent ) : void
-		{
-			trace( name );
-		}*/
 
 		[SkinPart( required = "true" )]
 		/**
@@ -215,10 +206,24 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			_data = value;
 
-			if ( !beforeCreationComplete )
+			if ( !beforeCreationComplete && value )
 				renderVO = value as RenderVO;
 			
 		}
+		
+		/*public function remove() : void
+		{
+			_data = null;
+			
+			if ( renderVO )
+			{
+				if( renderVO.children )
+					renderVO.children.splice(0, renderVO.children.length);
+				
+				renderVO.parent = null;
+				renderVO = null;
+			}
+		}*/
 
 		/**
 		 *
@@ -537,7 +542,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		protected function addHandlers() : void
 		{
 			addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
-			addEventListener( Event.REMOVED_FROM_STAGE, removeHandler, false, 0, true );
+			addEventListener( Event.REMOVED, removeHandler, false, 0, true );
 
 			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, false, 0, true );
 			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler, false, 0, true );
@@ -556,7 +561,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		protected function removeHandlers() : void
 		{
 			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-			removeEventListener( Event.REMOVED_FROM_STAGE, removeHandler );
+			removeEventListener( Event.REMOVED, removeHandler );
 
 			removeEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
 			removeEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
@@ -1646,9 +1651,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( event.target == this )
 			{
 				//TODO: check who is lissener
-				trace("Remove From Stage - " + name);
+				trace("Remove - " + name);
+				
 				dispatchEvent( new RendererEvent( RendererEvent.REMOVED ) );
 				removeHandlers();
+				
+				delete this;
 			}
 		}
 
