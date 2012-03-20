@@ -263,7 +263,7 @@ package net.vdombox.ide.common.model._vo
 
 			if( _id && _id != "" )
 				result.@ID = _id;
-			trace(result.toXMLString());
+			
 			return result;
 		}
 		

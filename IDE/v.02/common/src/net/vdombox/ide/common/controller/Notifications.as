@@ -123,6 +123,7 @@ package net.vdombox.ide.common.controller
 		
 		public static const RENDERER_CREATED : String = "rendererCreated";
 		public static const RENDERER_REMOVED : String = "rendererRemoved";
+		public static const ALL_RENDERERS_REMOVED : String = "allRenderersRemoved";
 		
 		public static const RENDERER_CLICKED : String = "rendererClicked";
 		

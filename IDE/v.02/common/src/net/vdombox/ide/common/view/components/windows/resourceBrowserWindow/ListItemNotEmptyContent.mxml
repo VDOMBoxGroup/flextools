@@ -128,7 +128,7 @@
 					
 					return;
 				} else {			
-					trace ("Error: null resource in notEmptyElement");
+					////trace ("Error: null resource in notEmptyElement");
 				}
 			}
 			
@@ -182,7 +182,7 @@
 				
 				function requestIcon(event:TimerEvent):void
 				{
-//					trace ("requestIcon : " + resourceVO.name);
+//					//trace ("requestIcon : " + resourceVO.name);
 					dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_ICON ) );
 				}
 				

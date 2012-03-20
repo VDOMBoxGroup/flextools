@@ -4,7 +4,7 @@
 			xmlns:mx="library://ns.adobe.com/flex/mx"
 			creationComplete="creationCompleteHandler(event)"
 			remove="removeHandler(event)"
-			>
+			skinClass="spark.skins.spark.ScrollerSkin">
 	
 	<fx:Script>
 		<![CDATA[

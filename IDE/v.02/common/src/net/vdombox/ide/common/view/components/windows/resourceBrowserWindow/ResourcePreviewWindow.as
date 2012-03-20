@@ -110,7 +110,6 @@ package net.vdombox.ide.common.view.components.windows.resourceBrowserWindow
 
 		private function createComleatHandler(event : FlexEvent) : void
 		{
-			trace("RPWind: createComleatHandler()");
 			loadingImage.rotateImage();
 		}
 
@@ -120,8 +119,6 @@ package net.vdombox.ide.common.view.components.windows.resourceBrowserWindow
 			loadingImage.stopRotateImage();
 
 			removeHandlers();
-			
-			trace("RPWind: closeHandler()");
 		}
 
 		private function removeHandlers() : void
