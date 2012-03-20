@@ -14,8 +14,6 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			trace("*** Begin cansel ***");	
-
 			var opened : Array = NativeApplication.nativeApplication.openedWindows;
 			
 			for ( var i : int = 0; i < opened.length; i++ )
@@ -40,7 +38,6 @@ package net.vdombox.ide.core.controller
 				opened[ i ].close();
 			}
 			
-			trace("*** End cansel ***");
 			NativeApplication.nativeApplication.exit();
 		}
 	}

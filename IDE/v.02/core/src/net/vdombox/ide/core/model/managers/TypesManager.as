@@ -109,7 +109,7 @@ package net.vdombox.ide.core.model.managers
 				}
 				catch ( error : IOError )
 				{
-					trace("setTypes ERROR");
+					////trace("setTypes ERROR");
 					
 					return;
 				}
@@ -125,7 +125,7 @@ package net.vdombox.ide.core.model.managers
 			}
 			catch ( error : IOError )
 			{
-				trace("setTypes ERROR");
+				////trace("setTypes ERROR");
 				
 				return;
 			}
@@ -143,7 +143,7 @@ package net.vdombox.ide.core.model.managers
 				}
 				catch ( error : IOError )
 				{
-					trace("setTypes2 ERROR");
+					////trace("setTypes2 ERROR");
 					continue;
 				}
 			}

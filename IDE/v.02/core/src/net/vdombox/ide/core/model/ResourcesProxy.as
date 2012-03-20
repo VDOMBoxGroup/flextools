@@ -444,7 +444,6 @@ package net.vdombox.ide.core.model
 
 					var data : String = event.result.Resource;
 					
-					trace("get_resource: lenght -  " +data.length);
 					var decoder : Base64Decoder = new Base64Decoder();
 					decoder.decode( data );
 
@@ -537,7 +536,6 @@ package net.vdombox.ide.core.model
 			{
 				case "get_resource":
 				{
-					trace("error get_resource");
 					resourceVO = event.token.resourceVO as ResourceVO;
 					resourceVO.setData( null );
 //					soap_setResource();

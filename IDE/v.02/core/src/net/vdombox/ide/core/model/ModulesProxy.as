@@ -30,25 +30,15 @@ package net.vdombox.ide.core.model
 				<category name="Edition">									
 
 					<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
+					<module name="Events" path="app:/modules/Events/Events.swf"/>
 					<module name="Preview" path="app:/modules/Preview/Preview2.swf"/>
 					<module name="Trees" path="app:/modules/Tree/Tree.swf"/>
-					<module name="Events" path="app:/modules/Events/Events.swf"/>
 					<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
 					<module name="DB" path="app:/modules/DataBase/DataBase.swf"/>
 					<module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/>
 			
 				</category>
 			</modules>
-
-		/*//<module name="DB" path="app:/modules/DataBase/DataBase.swf"/>
-			<module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/>
-				<module name="ApplicationsSearch" path="app:/modules/ApplicationsSearch/ApplicationsSearch.swf"/>
-		<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
-		<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
-		<module name="Tree" path="app:/modules/Tree/Tree.swf"/>
-		<module name="Events" path="app:/modules/Events/Events.swf"/>
-		<module name="ResourceBrowser" path="app:/modules/Resource Browser/ResourceBrowser.swf"/>
-		*/
 
 		public function ModulesProxy( data : Object = null )
 		{
@@ -215,7 +205,6 @@ package net.vdombox.ide.core.model
 		private function moduleErrorHandler( event : ModuleEvent ) : void
 		{
 			var moduleVO : ModuleVO = event.module.data as ModuleVO;
-			trace( "\n *************** MODULES_LOADING_ERROR *********************" + moduleVO.path );
 			sendNotification( ApplicationFacade.MODULES_LOADING_ERROR, moduleVO );
 		}
 	}

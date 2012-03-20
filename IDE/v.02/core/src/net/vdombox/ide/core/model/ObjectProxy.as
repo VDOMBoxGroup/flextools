@@ -47,8 +47,6 @@ package net.vdombox.ide.core.model
 			super( NAME + "/" + objectVO.pageVO.applicationVO.id + "/" + objectVO.pageVO.id + "/" + objectVO.id, objectVO );
 			
 			instances[ this.proxyName ] = "";
-			
-			trace( "proxy - " + proxyName );
 		}
 		
 		private var soap : SOAP = SOAP.getInstance();

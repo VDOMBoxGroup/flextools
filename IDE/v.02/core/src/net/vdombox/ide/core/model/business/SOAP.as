@@ -224,7 +224,7 @@ package net.vdombox.ide.core.model.business
 			}
 			catch ( error : Error )
 			{
-				trace( "\n\n*********  XML ERROR: *************\n" + event.result )
+				////trace( "\n\n*********  XML ERROR: *************\n" + event.result )
 				var faultEvent : FaultEvent = FaultEvent.createEvent( new Fault( "i101", "Parse XML data error" ) );
 				faultHandler( faultEvent );
 				return;

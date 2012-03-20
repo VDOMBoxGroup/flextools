@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<application xmlns="http://ns.adobe.com/air/application/2.0">
+<application xmlns="http://ns.adobe.com/air/application/2.6">
 
 <!-- Adobe AIR Application Descriptor File Template.
 
@@ -27,7 +27,7 @@
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
 	
 
-	<version>2.2.21.8042</version>
+	<versionNumber>2.220.804</versionNumber>
 
 	<!-- versionNumber>2.0.2</versionNumber-->
 

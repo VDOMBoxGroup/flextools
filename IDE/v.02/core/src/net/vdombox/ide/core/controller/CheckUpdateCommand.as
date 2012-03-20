@@ -48,7 +48,7 @@ package net.vdombox.ide.core.controller
 			
 			function onDeactive( event : Event ) : void
 			{
-				trace("************* !  onDeactive  ************************");
+				////trace("************* !  onDeactive  ************************");
 			}
 
 		}
