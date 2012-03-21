@@ -15,8 +15,11 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.controls.TextInput;
+			import mx.events.ChildExistenceChangedEvent;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
+			import mx.events.IndexChangedEvent;
 			import mx.events.ListEvent;
 			import mx.utils.StringUtil;
 			
@@ -119,6 +122,10 @@
 				var newProjectIndex : Number = projects.length-1;
 				
 				addNewProjectProperties(projects[newProjectIndex] as BuilderTemplateProject);
+				
+				projectsList.selectedIndex = newProjectIndex;
+				
+				updatePropertiesView();
 			}
 			
 			protected function buttonRemoveProject_clickHandler(event:MouseEvent):void
@@ -155,11 +162,15 @@
 				currentTemplate.deleteProject ( projectsList.selectedItem as BuilderTemplateProject );
 				
 				projectsList.selectedIndex = currentTemplate.selectedProjectIndex;
+				
+				updatePropertiesView();
 			}
 			
 			private function updatePropertiesView () : void
 			{
 				vsProperties.selectedIndex = projectsList.selectedIndex;
+				
+				vsProperties.selectedChild.setFocus();
 			}
 			
 			private function saveSettings () : void
@@ -189,6 +200,21 @@
 				projectPropertiesControl.graphs = graphs;
 				
 				vsProperties.addChild(projectPropertiesControl);
+				
+				projectPropertiesControl.addEventListener(FlexEvent.CREATION_COMPLETE, projectPropertiesCreationCompleteHandler);
+			
+			}
+			
+			private function projectPropertiesCreationCompleteHandler (event : FlexEvent) : void
+			{
+				var projectPropertiesControl : ProjectProperties = event.target as ProjectProperties;
+				
+				projectPropertiesControl.removeEventListener(FlexEvent.CREATION_COMPLETE, projectPropertiesCreationCompleteHandler);
+				
+				if (projectPropertiesControl == vsProperties.selectedChild)
+				{
+					projectPropertiesControl.setFocus();
+				}
 			}
 			
 			private function removeProjectPropertiesAt (index : int) : void
