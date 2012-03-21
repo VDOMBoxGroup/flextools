@@ -80,18 +80,15 @@
 						
 						break;
 					}
+						
 					case BUTTON_NAME_CANCEL:
-					{
-						_dialog.closeDetail = ModalDialog.CANCEL;
-						_dialog.close();
-						break;
-					}
 					default:
 					{
 						_dialog.closeDetail = ModalDialog.CANCEL;
 						_dialog.close();
 						break;
 					}
+					
 				}
 			}
 			
@@ -173,8 +170,14 @@
 				vsProperties.selectedChild.setFocus();
 			}
 			
-			private function saveSettings () : void
+			private function saveSettings (project : ProjectProperties = null) : void
 			{
+				if (project)
+				{
+					project.saveSettings();
+					return;
+				}
+					
 				for each (var projectProperties : ProjectProperties in vsProperties.getChildren())
 				{
 					projectProperties.saveSettings();
@@ -220,6 +223,11 @@
 			private function removeProjectPropertiesAt (index : int) : void
 			{
 				vsProperties.removeChildAt(index);
+			}
+			
+			protected function buttonApply_clickHandler(event:MouseEvent):void
+			{
+				saveSettings(vsProperties.selectedChild as ProjectProperties);
 			}
 			
 		]]>
@@ -288,6 +296,9 @@
 	<mx:HRule width="100%" />
 	
 	<mx:ControlBar width="100%" styleName="dlgFooter">
+		<mx:Button id="btnApply" 
+				   label="Apply" 
+				   click="buttonApply_clickHandler(event)"/>
 	</mx:ControlBar>
 	
 </ModalDialog>
