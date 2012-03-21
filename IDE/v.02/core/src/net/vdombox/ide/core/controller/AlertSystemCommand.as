@@ -34,7 +34,15 @@ package net.vdombox.ide.core.controller
 				case ApplicationFacade.WRITE_ERROR:
 				{
 					alertWindow.title = ResourceManager.getInstance().getString( 'Core_General', 'error' );
-					alertWindow.state = "normal";
+					
+					if ( label == "Session ID error" )
+					{
+						alertWindow.state = "question";	
+						alertWindow.content += " Do you want to log out?"
+					}
+					else
+						alertWindow.state = "normal";
+					
 					break;
 				}
 					
@@ -45,15 +53,24 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 			}
+			
 			alertWindow.addEventListener( AlertWindowEvent.OK, okHandler );
 			alertWindow.addEventListener( AlertWindowEvent.NO, noHandler );
-
+			
 			WindowManager.getInstance().addWindow(alertWindow, null, true);
 			
 			function okHandler( event : AlertWindowEvent ) : void
 			{
 				WindowManager.getInstance().removeWindow( alertWindow );
-				sendNotification( ApplicationFacade.ALERT_WINDOW_CLOSE, true );
+				
+				if ( label == "Session ID error" )
+				{
+					sendNotification( ApplicationFacade.SIGNOUT );
+				}
+				else
+				{
+					sendNotification( ApplicationFacade.ALERT_WINDOW_CLOSE, true );
+				}
 			}
 			
 			function noHandler( event : AlertWindowEvent ) : void
