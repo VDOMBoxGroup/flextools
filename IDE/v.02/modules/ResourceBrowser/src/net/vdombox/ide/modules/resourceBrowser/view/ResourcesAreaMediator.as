@@ -132,6 +132,9 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				
 				case Notifications.RESOURCES_GETTED:
 				{
+					if ( body.length == 0 )
+						removeSpinnerPopup();
+					
 					resourcesArea.callLater(updateData, [body]);
 					
 					break;
