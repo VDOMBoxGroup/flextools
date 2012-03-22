@@ -28,6 +28,12 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 			validateLabel();
 			
 			percentWidth = 100;
+			
+		}
+		
+		override public function setFocus () : void
+		{
+			super.setFocus();
 		}
 
 		public function get dataProvider() : Array

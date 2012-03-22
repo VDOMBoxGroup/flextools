@@ -1,5 +1,8 @@
 package net.vdombox.powerpack.lib.player.popup.Answers
 {
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
+	
 	import mx.controls.Button;
 	import mx.controls.Text;
 	import mx.controls.TextArea;
@@ -28,6 +31,17 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 			
 		}
 		
+		override public function setFocus () : void
+		{
+			if (textInput)
+			{
+				textInput.setFocus();
+				return;
+			}
+			
+			setFocus();
+		}
+		
 		private function createTextArea():void
 		{
 			textInput = new TextArea();
@@ -45,6 +59,15 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 					textInput.text = defaulValue;
 			}
 			
+			textInput.addEventListener(KeyboardEvent.KEY_DOWN, textAreaKeyDownHandler)
+		}
+		
+		private function textAreaKeyDownHandler (event : KeyboardEvent) : void
+		{
+			if (event.keyCode != Keyboard.ENTER)
+				return;
+			
+			event.stopPropagation();
 		}
 		
 		override public function get value () : String

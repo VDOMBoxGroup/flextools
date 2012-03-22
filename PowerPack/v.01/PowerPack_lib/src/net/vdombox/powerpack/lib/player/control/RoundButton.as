@@ -29,13 +29,17 @@ package net.vdombox.powerpack.lib.player.control
 		
 		override protected function keyDownHandler(event:KeyboardEvent):void
 		{
-			super.keyDownHandler(event);
-			
 			if (!enabled)
 				return;
 			
 			if (event.keyCode == Keyboard.ENTER)
+			{
 				dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+				return;
+			}
+			
+			super.keyDownHandler(event);
+			
 		}
 
 	}

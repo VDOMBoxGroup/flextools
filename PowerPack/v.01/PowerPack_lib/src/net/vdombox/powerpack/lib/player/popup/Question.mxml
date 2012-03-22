@@ -2,7 +2,8 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
 				xmlns:popup="net.vdombox.powerpack.lib.player.popup.*" 
 				xmlns:control="net.vdombox.powerpack.lib.player.control.*"
-				creationComplete="completeHandler(event)">
+				creationComplete="completeHandler(event)"
+				keyDown="keyDown_Handler(event)">
 	
 	<mx:Script>
 		<![CDATA[
@@ -81,6 +82,9 @@
 			{
 				width = 400;
 				PopUpManager.centerPopUp(this);
+				
+				if (answerBox.numChildren > 0)
+					Answer(answerBox.getChildAt(0)).setFocus();
 			}
 			
 			private function get borderThickness () : Number
@@ -91,6 +95,29 @@
 			protected function btnOkClickHandler(evt:MouseEvent) : void
 			{
 				btnOk.removeEventListener(MouseEvent.CLICK, btnOkClickHandler);
+				
+				closeDialog();
+			}
+			
+			protected function btnOk_keyDownHandler(event:KeyboardEvent):void
+			{
+				if (!btnOk.enabled)
+					return;
+				
+				if (event.keyCode != Keyboard.ENTER)
+					return;
+				
+				event.stopPropagation();
+				btnOk.removeEventListener(KeyboardEvent.KEY_DOWN, btnOk_keyDownHandler);
+			}
+			
+			protected function keyDown_Handler(event:KeyboardEvent):void
+			{
+				if (event.keyCode != Keyboard.ENTER)
+					return;
+				
+				event.stopPropagation();
+				removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler)
 				
 				closeDialog();
 			}
@@ -128,7 +155,8 @@
 				<mx:Canvas width="100%">
 					<control:RoundButton label="Ok" id="btnOk" 
 							   							bottom="0" right="0"
-														click="btnOkClickHandler(event)"/>
+														click="btnOkClickHandler(event)"
+														keyDown="btnOk_keyDownHandler(event)"/>
 				</mx:Canvas>
 			</mx:VBox>
 		</popup:PopupBottomPart>

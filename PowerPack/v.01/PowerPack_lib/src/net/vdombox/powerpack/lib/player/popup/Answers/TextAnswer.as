@@ -4,6 +4,7 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 	import mx.controls.Text;
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
+	import mx.events.FlexEvent;
 	
 	import net.vdombox.powerpack.lib.player.gen.parse.ListParser;
 	import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.LexemStruct;
@@ -16,7 +17,17 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 		public function TextAnswer(data:String )
 		{
 			super(data);
+		}
+		
+		override public function setFocus () : void
+		{
+			if (textInput)
+			{
+				textInput.setFocus();
+				return;
+			}
 			
+			setFocus();
 		}
 		
 		override protected function createChildren () : void
