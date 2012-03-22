@@ -122,7 +122,7 @@
 			// We need to repopulate graphs if templateXML has been changed
 			BindingUtils.bindSetter( populateGraphs, this, "templateXML" );
 		}
-
+		
 		public function clear() : void
 		{
 			for each ( var child : DisplayObject in graphsAccordion.getChildren() )
@@ -190,6 +190,8 @@
 		public function addGraph( graph : GraphCanvas, processAfterAdding : Boolean = true ) : void
 		{
 			graphs.addItem( graph );
+			
+			sortGraphs();
 
 			graph.addEventListener( GraphCanvasEvent.GRAPH_CHANGED, onGraphChange );
 			graph.addEventListener( GraphCanvasEvent.JUMP_TO_GRAPH, onJumpToGraph );
@@ -565,6 +567,8 @@
 			vsViewStack.invalidateDisplayList();
 			
 			dispatchEvent( new Event( TPL_CHANGED ) );
+			
+			sortGraphs();
 		}
 
 		private function onSelectedGraphChanged( event : GraphsAccordionEvent ) : void
@@ -762,6 +766,9 @@
 			var removedGraphName : String = curGraph.name;
 			
 			graphs.removeItemAt( graphs.getItemIndex( curGraph ) );
+			
+			sortGraphs();
+			
 			curTab.graphs.removeItemAt( curTab.lstGraphs.selectedIndex );
 			GraphCanvas( curGraph ).dispose();
 			
@@ -822,6 +829,15 @@
 			}
 			
 			return null;
+		}
+			
+		private function sortGraphs () : void
+		{
+			var sort : Sort = new Sort();
+			sort.fields = [new SortField( 'className', true, true ), new SortField( 'name', true )];
+
+			graphs.sort = sort;
+			graphs.refresh();
 		}
 			
 		]]>
