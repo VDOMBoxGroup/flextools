@@ -1,37 +1,43 @@
 package net.vdombox.powerpack.utils
 {
 
-import flash.events.KeyboardEvent;
-import flash.ui.Keyboard;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
+	
+	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 
-public class GeneralUtils
-{
-	public static function isCopyCombination( event : KeyboardEvent ) : Boolean
+	public class GeneralUtils
 	{
-		if ( event.controlKey && event.keyCode == Keyboard.C )
-			return true;
-		return false;
+		public static function isCopyCombination( event : KeyboardEvent ) : Boolean
+		{
+			return isCtrlKeyPressed(event) && event.keyCode == Keyboard.C;
+		}
+	
+		public static function isCutCombination( event : KeyboardEvent ) : Boolean
+		{
+			return isCtrlKeyPressed(event) && event.keyCode == Keyboard.X;
+		}
+	
+		public static function isPasteCombination( event : KeyboardEvent ) : Boolean
+		{
+			return isCtrlKeyPressed(event) && event.keyCode == Keyboard.V;
+		}
+	
+		public static function isSelectAllCombination( event : KeyboardEvent ) : Boolean
+		{
+			return isCtrlKeyPressed(event) && event.keyCode == Keyboard.A;
+		}
+		
+		public static function isCtrlKeyPressed (event : KeyboardEvent) : Boolean
+		{
+			return isMac ? event.commandKey : event.ctrlKey;
+		}
+		
+		private static function get isMac () : Boolean
+		{
+			return FileUtils.OS == FileUtils.OS_MAC;;
+		}
+		
+		
 	}
-
-	public static function isCutCombination( event : KeyboardEvent ) : Boolean
-	{
-		if ( event.controlKey && event.keyCode == Keyboard.X )
-			return true;
-		return false;
-	}
-
-	public static function isPasteCombination( event : KeyboardEvent ) : Boolean
-	{
-		if ( event.controlKey && event.keyCode == Keyboard.V )
-			return true;
-		return false;
-	}
-
-	public static function isSelectAllCombination( event : KeyboardEvent ) : Boolean
-	{
-		if ( event.controlKey && event.keyCode == Keyboard.A )
-			return true;
-		return false;
-	}
-}
 }

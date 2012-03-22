@@ -40,6 +40,7 @@ import net.vdombox.powerpack.lib.geomlib._2D.LineSegment;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+import net.vdombox.powerpack.utils.GeneralUtils;
 
 //--------------------------------------
 //  Events
@@ -1323,7 +1324,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			event.stopPropagation();
 			beginEdit( false );
 		}
-		else if ( event.keyCode == Keyboard.A && (event.commandKey || event.controlKey) )
+		else if ( GeneralUtils.isSelectAllCombination(event) )
 		{
 			event.stopPropagation();
 			if ( parent )

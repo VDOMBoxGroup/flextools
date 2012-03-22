@@ -1827,7 +1827,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 				setEditMode( true );
 			}
 		}
-		else if ( event.keyCode == Keyboard.A && (event.commandKey || event.controlKey) )
+		else if ( GeneralUtils.isSelectAllCombination(event) )
 		{
 			if ( _mode == M_NORMAL )
 			{
@@ -1902,20 +1902,11 @@ public class Node extends Canvas implements IFocusManagerComponent
 		{
 			if ( _mode == M_EDITING )
 			{
-				event.stopPropagation();
-				event.preventDefault();
-
-				if ( event.controlKey || event.commandKey )
+				if ( !GeneralUtils.isCtrlKeyPressed(event) )
 				{
-					var caretPos : int = nodeTextArea.field.caretIndex;
-
-					var txt : String = nodeTextArea.text.substr( 0, caretPos ) +
-							'\n' + nodeTextArea.text.substr( caretPos );
-					nodeTextArea.text = txt;
-					nodeTextArea.setSelection( caretPos + 1, caretPos + 1 );
-				}
-				else
-				{
+					event.stopPropagation();
+					event.preventDefault();
+					
 					_needValidate = true;
 					setEditMode( false );
 					text = nodeTextArea.text;

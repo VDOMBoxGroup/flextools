@@ -48,6 +48,7 @@ import net.vdombox.powerpack.managers.ProgressManager;
 import net.vdombox.powerpack.managers.SelectionManager;
 import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
 import net.vdombox.powerpack.template.BuilderTemplate;
+import net.vdombox.powerpack.utils.GeneralUtils;
 
 public class GraphCanvas extends Canvas implements IFocusManagerComponent
 {
@@ -804,19 +805,19 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 			if ( selectionManager && ObjectUtils.dictLength( selectionManager.selection ) > 0 )
 				alertDelete();
 		}
-		else if ( event.controlKey || event.commandKey )
+		else 
 		{
-			if ( event.keyCode == Keyboard.X )
+			if ( GeneralUtils.isCutCombination(event) )
 			{
 				event.stopPropagation();
 				doCut();
 			}
-			else if ( event.keyCode == Keyboard.C )
+			else if ( GeneralUtils.isCopyCombination(event) )
 			{
 				//event.stopPropagation();
 				doCopy();
 			}
-			else if ( event.keyCode == Keyboard.V )
+			else if ( GeneralUtils.isPasteCombination(event) )
 			{
 				event.stopPropagation();
 				doPaste();

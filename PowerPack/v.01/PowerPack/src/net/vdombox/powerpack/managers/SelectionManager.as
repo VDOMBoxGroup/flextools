@@ -421,7 +421,7 @@ public class SelectionManager extends EventDispatcher
 						regDeltaElmPts[child] = {boundsRect : rect2};
 					}
 
-					if ( !event.shiftKey && !event.commandKey && !event.controlKey && !event.altKey )
+					if ( !event.shiftKey && !event.commandKey && !event.ctrlKey && !event.altKey )
 					{
 						if ( rect1.intersects( rect2 ) )
 							select( child );
@@ -438,9 +438,9 @@ public class SelectionManager extends EventDispatcher
 				}
 			}
 
-			if ( event.shiftKey || event.commandKey || event.controlKey && !event.altKey )
+			if ( event.shiftKey || event.commandKey || event.ctrlKey && !event.altKey )
 				addPreselected();
-			else if ( !event.shiftKey && !event.commandKey && !event.controlKey && event.altKey )
+			else if ( !event.shiftKey && !event.commandKey && !event.ctrlKey && event.altKey )
 				subtractPreselected();
 		}
 		else
@@ -493,7 +493,7 @@ public class SelectionManager extends EventDispatcher
 		if ( event.target != _container )
 			return;
 
-		if ( !event.shiftKey && !event.controlKey && !event.commandKey && !event.altKey )
+		if ( !event.shiftKey && !event.ctrlKey && !event.commandKey && !event.altKey )
 			deselectAll();
 
 		if ( isNaN( regX ) )
@@ -512,7 +512,7 @@ public class SelectionManager extends EventDispatcher
 
 		var elm : DisplayObject = event.currentTarget as DisplayObject;
 
-		if ( event.controlKey || event.commandKey )
+		if ( event.ctrlKey || event.commandKey )
 		{
 			if ( isSelected( elm ) )
 				deselect( elm );
@@ -534,7 +534,7 @@ public class SelectionManager extends EventDispatcher
 	{
 		_groupMoved = false;
 
-		if ( event.controlKey || event.commandKey || event.shiftKey )
+		if ( event.ctrlKey || event.commandKey || event.shiftKey )
 		{
 			// prevent from change focus
 			event.stopImmediatePropagation();
@@ -552,7 +552,7 @@ public class SelectionManager extends EventDispatcher
 			return;
 
 		if ( event.keyCode == Keyboard.A &&
-				(event.controlKey || event.commandKey) )
+				(event.ctrlKey || event.commandKey) )
 		{
 			event.stopImmediatePropagation();
 
