@@ -66,13 +66,6 @@
 				return ListParser.array2List( resultArray );
 			}
 			
-			protected function btnOkClickHandler(evt:MouseEvent) : void
-			{
-				btnOk.removeEventListener(MouseEvent.CLICK, btnOkClickHandler);
-				
-				closeDialog();
-			}
-			
 			protected function closeDialog() : void
 			{
 				var answers : Array =  answerBox.getChildren();
@@ -94,6 +87,14 @@
 			{
 				return getStyle("borderThickness");
 			}
+			
+			protected function btnOkClickHandler(evt:MouseEvent) : void
+			{
+				btnOk.removeEventListener(MouseEvent.CLICK, btnOkClickHandler);
+				
+				closeDialog();
+			}
+			
 			
 		]]>
 	</mx:Script>
