@@ -659,14 +659,21 @@ public class SuperNativeMenuItem extends NativeMenuItem
     
 	private function keyDown(event:KeyboardEvent):void
 	{
+		trace ("[SuperNativeMenuItem] keyDown");
+		
 		var isWin:Boolean = FileUtils.OS == FileUtils.OS_WINDOWS;
 		var isMac:Boolean = FileUtils.OS == FileUtils.OS_MAC;		
 			
+		
+		var altKeyEquivalentModifierExists		: Boolean = ArrayUtil.getItemIndex(Keyboard.ALTERNATE, keyEquivalentModifiers) >= 0;
+		var shiftKeyEquivalentModifierExists	: Boolean = ArrayUtil.getItemIndex(Keyboard.SHIFT, keyEquivalentModifiers) >= 0;
+		var commandKeyEquivalentModifierExists	: Boolean = ArrayUtil.getItemIndex(Keyboard.COMMAND, keyEquivalentModifiers) >= 0;
+		var ctrlKeyEquivalentModifierExists		: Boolean = ArrayUtil.getItemIndex(Keyboard.CONTROL, keyEquivalentModifiers) >= 0;
+		
 		if(
-			event.altKey == ArrayUtil.getItemIndex(Keyboard.ALTERNATE, keyEquivalentModifiers)>=0 &&
-			(isMac && event.commandKey == ArrayUtil.getItemIndex(Keyboard.COMMAND, keyEquivalentModifiers)>=0 ||
-			!isMac && event.controlKey == ArrayUtil.getItemIndex(Keyboard.CONTROL, keyEquivalentModifiers)>=0) &&
-			event.shiftKey == ArrayUtil.getItemIndex(Keyboard.SHIFT, keyEquivalentModifiers)>=0 &&			
+			event.altKey == altKeyEquivalentModifierExists &&
+			(isMac && event.commandKey ==  commandKeyEquivalentModifierExists || !isMac && event.ctrlKey == ctrlKeyEquivalentModifierExists) &&
+			event.shiftKey == shiftKeyEquivalentModifierExists &&			
 			(keyEquivalent && /^[^\w]$/i.test(keyEquivalent) ? keyEquivalent.charCodeAt(0) == event.charCode :
 				Utils.keyCodeFromName(keyEquivalent)==event.keyCode) )
 		{
@@ -674,6 +681,7 @@ public class SuperNativeMenuItem extends NativeMenuItem
 			event.stopPropagation();
 			event.preventDefault();
 		
+			trace ("[SuperNativeMenuItem] keyDown: SELECT");
 			dispatchEvent(new Event(Event.SELECT));
 		}
 	}
