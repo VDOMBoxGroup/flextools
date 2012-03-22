@@ -445,9 +445,6 @@ package net.vdombox.powerpack.lib.player.template
 			selectedProject.key = tplKey;
 		}
 		
-		[Bindable]
-		public var graphs	: ArrayCollection = new ArrayCollection();
-		
 		//
 		// projects 
 		//
