@@ -173,9 +173,9 @@
 					skin.removeEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler );
 			}
 
-			private function refreshToolbar() : void
+			private function refreshToolbar( renderer : RendererBase ) : void
 			{
-				toolbarPanel.refresh();
+				toolbarPanel.refresh( renderer );
 			}
 
 			private function createEditorVO() : EditorVO
@@ -251,7 +251,7 @@
 			
 			private function renderer_htmlAddedHandler(event : RendererEvent):void
 			{
-				refreshToolbar();
+				refreshToolbar( event.target as RendererBase );
 			}
 
 			private function transformMarker_tansformBeginHandler( event : TransformMarkerEvent ) : void

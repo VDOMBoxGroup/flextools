@@ -134,10 +134,10 @@
 					dispatchEvent( editorEvent );
 			}
 			
-			public function refresh() : void 
+			public function refresh( renderer : RendererBase ) : void 
 			{
 				//trace ('ToolbarPanel refresh: _currentToolbar = ' + _currentToolbar);
-				if (currentToolbar)
+				if (currentToolbar && renderer.vdomObjectVO.id == _selectedRenderer.vdomObjectVO.id )
 					currentToolbar.refresh(_selectedRenderer);
 			}
 			

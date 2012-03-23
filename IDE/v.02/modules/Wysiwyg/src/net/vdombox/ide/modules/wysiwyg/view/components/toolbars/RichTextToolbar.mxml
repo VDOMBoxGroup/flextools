@@ -53,11 +53,9 @@
 			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
 			{
 				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO(_item.vdomObjectVO);
-				/*var attributeVO : AttributeVO = new AttributeVO( "value" );
+				var attributeVO : AttributeVO = new AttributeVO( "value" );
 				
-				attributeVO.value = activeEditor.getContent();*/
-				
-				var attributeVO : AttributeVO = attributesObject["value"].clone();
+				attributeVO.value = activeEditor.getContent();
 				vdomObjectAttributesVO.attributes = [attributeVO];
 				
 				return vdomObjectAttributesVO;
@@ -180,13 +178,9 @@
 				if ( tinyMCE && activeEditor)
 				{
 					value = activeEditor.getContent();
+					attributesObject[ "value" ].value = value;
 					
-					if ( attributesObject[ "value" ].value != value )
-					{
-						attributesObject[ "value" ].value = value;
-					
-						dispatchEvent( new Event( Event.CHANGE ) );
-					}
+					dispatchEvent( new Event( Event.CHANGE ) );
 				}
 				
 				return value;
@@ -292,7 +286,7 @@
 					
 					return;
 				}
-					
+				
 				var htmlLink : String = "<a href=\""+href+"\" target=\"_blank\" >"+selection.getContent()+"</a>";
 				tinyMCE.execCommand('insertHTML', false, htmlLink);
 				
@@ -323,7 +317,7 @@
 			private function changeFont( event : ListEvent ) : void
 			{
 				var val : String = fontSelector.selectedItem.data
-
+				
 				tinyMCE.execCommand( "FontName", false, val );
 			}
 			
@@ -369,7 +363,7 @@
 			}
 			
 			private var startContent : String;
-
+			
 			private function editableHTML_completeHandler( event : Event ) : void
 			{
 				editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
@@ -385,7 +379,7 @@
 				startContent = editableHTML.htmlText;
 				
 				editableHTML.addEventListener( Event.HTML_DOM_INITIALIZE, onTinyHTMLDomInitalize );
-
+				
 				editableHTML.location = "app:/modules/wysiwyg/libs/tinymce/examples/full.html";
 			}
 			
@@ -400,12 +394,12 @@
 			
 			private function tracer(p1:*, p2:*=null, p3:*=null):void
 			{
-				//trace ('//tracer: ' + p1);				
+				trace ('tracer: ' + p1);				
 			}
 			
 			private function onEditorAdded():void
 			{
-				if (tinyMCE && activeEditor && startContent)
+				if (tinyMCE && activeEditor)
 				{
 					activeEditor.startContent = startContent;
 					activeEditor.setContent(startContent);
@@ -453,7 +447,7 @@
 					return;
 				
 				foreColorPicker.selectedColor = resoultColor; 
-					
+				
 			}
 			
 			private function updateFillColor():void
@@ -678,7 +672,7 @@
 			private function updateFontSize():void
 			{
 				var fontSizeRecieved : String = activeEditor.queryCommandValue('FontSize');
-					
+				
 				if (!fontSizeRecieved)
 				{
 					fontSizeRecieved = RichTextToolbarConstants.FONT_STR_SIZE_4;
@@ -752,7 +746,7 @@
 			private function rgb2hex(r:Number, g:Number, b:Number):Number {
 				return(r<<16 | g<<8 | b);
 			}
-		
+			
 			private function HTMLEditorLoader_uncaughtScriptException( event : HTMLUncaughtScriptExceptionEvent ) : void
 			{
 			}

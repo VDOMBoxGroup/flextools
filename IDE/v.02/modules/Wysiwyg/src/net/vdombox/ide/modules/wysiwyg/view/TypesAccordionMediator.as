@@ -6,11 +6,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.containers.Accordion;
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.TypeItemRendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.UserTypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
@@ -113,19 +113,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function addHandlers() : void
 		{
 			
-			typesAccordion.addEventListener( TypeItemRendererEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
+			typesAccordion.addEventListener( FlexEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
 			typesAccordion.addEventListener( TypeItemRendererEvent.ADD_IN_USER_CATIGORY, addInUserCategory, true );
 			typesAccordion.addEventListener( TypeItemRendererEvent.DELET_IN_USER_CATIGORY, delFromUserCategory, true );
 		}
 
 		private function removeHandlers() : void
 		{
-			typesAccordion.removeEventListener( TypeItemRendererEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
+			typesAccordion.removeEventListener( FlexEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
 			typesAccordion.removeEventListener( TypeItemRendererEvent.ADD_IN_USER_CATIGORY, addInUserCategory, true );
 			typesAccordion.removeEventListener( TypeItemRendererEvent.DELET_IN_USER_CATIGORY, delFromUserCategory, true );
 		}
 
-		private function typeRendererCreatedHandler( event : TypeItemRendererEvent ) : void
+		private function typeRendererCreatedHandler( event : FlexEvent ) : void
 		{
 			var typeItemRenderer : TypeItemRenderer = event.target as TypeItemRenderer;
 
