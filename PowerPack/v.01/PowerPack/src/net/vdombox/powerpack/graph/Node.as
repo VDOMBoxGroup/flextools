@@ -51,6 +51,7 @@ import mx.utils.NameUtil;
 import net.vdombox.powerpack.lib.extendedapi.controls.SuperTextArea;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
+import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.lib.player.graph.NodeCategory;
@@ -1910,7 +1911,27 @@ public class Node extends Canvas implements IFocusManagerComponent
 					_needValidate = true;
 					setEditMode( false );
 					text = nodeTextArea.text;
+				} else
+				{
+					if (isMac)
+					{
+						event.stopPropagation();
+						event.preventDefault();
+						
+						var txt : String;
+					
+						txt = nodeTextArea.text.substring(0, nodeTextArea.selectionBeginIndex);
+						txt += "\n";
+						txt += nodeTextArea.text.substr(nodeTextArea.selectionEndIndex);
+						
+						var newCaretPos : int = nodeTextArea.selectionBeginIndex + 1;
+						
+						nodeTextArea.text = txt;
+						nodeTextArea.setSelection( newCaretPos, newCaretPos );
+					}
+					
 				}
+				
 			}
 		}
 		else if ( event.keyCode == Keyboard.ESCAPE )
@@ -1932,6 +1953,11 @@ public class Node extends Canvas implements IFocusManagerComponent
 			invalidateSize();
 			invalidateDisplayList();
 		}
+	}
+	
+	private function get isMac () : Boolean
+	{
+		return FileUtils.OS == FileUtils.OS_MAC;
 	}
 
 	private function comboBoxKeyDown( event : KeyboardEvent ) : void
