@@ -110,6 +110,12 @@
 			protected function group1_creationCompleteHandler(event:FlexEvent):void
 			{
 				resourcesList.addEventListener( ResourceVOEvent.PREVIEW_RESOURCE, previewResource, true, 0 ,true );
+				resourcesList.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
+			}
+			
+			private function mouseWheelHandler( event : MouseEvent ) : void
+			{
+				event.delta = event.delta > 0 ? 1 : -1;
 			}
 			
 			public function previewResource(event:Event) : void
