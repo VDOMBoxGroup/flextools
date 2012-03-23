@@ -138,7 +138,15 @@
 				if ( obj is GraphCanvas )
 					GraphCanvas( obj ).dispose();
 			}
-			graphs.removeAll();
+			
+			try
+			{
+				graphs.removeAll();
+			} 
+			catch (e:Error) 
+			{
+				trace ("Error on graphs.removeAll()");
+			}
 
 			selectGraph( null );
 
@@ -224,7 +232,6 @@
 			
 			function graph_creationCompleteHandler (event : FlexEvent) : void
 			{
-				trace ("[Graphs] graphCanvasCreationComplete");
 				event.target.removeEventListener(FlexEvent.CREATION_COMPLETE, graph_creationCompleteHandler);
 				
 				graph.addEventListener( GraphCanvasEvent.GRAPH_CHANGED, onGraphChange );
@@ -615,7 +622,6 @@
 
 		private function onGraphChange( event : GraphCanvasEvent ) : void
 		{
-			trace ("[Graphs] onGraphChange");
 			event.stopImmediatePropagation();
 			dispatchEvent( new Event( TPL_CHANGED ) );
 		}
