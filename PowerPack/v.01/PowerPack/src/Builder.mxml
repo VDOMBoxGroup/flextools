@@ -93,6 +93,7 @@
 			import mx.events.DropdownEvent;
 			import mx.events.FlexEvent;
 			import mx.events.FlexNativeMenuEvent;
+			import mx.managers.PopUpManager;
 			import mx.utils.StringUtil;
 			
 			import net.vdombox.powerpack.*;
@@ -113,6 +114,7 @@
 			import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 			import net.vdombox.powerpack.lib.player.BasicError;
+			import net.vdombox.powerpack.lib.player.Player;
 			import net.vdombox.powerpack.lib.player.gen.Dynamic;
 			import net.vdombox.powerpack.lib.player.gen.GraphContext;
 			import net.vdombox.powerpack.lib.player.gen.NodeContext;
@@ -623,14 +625,15 @@
 					break;
 				
 				case "validate":
-					//ValidateDialog.show(onValidate);
 					onValidate( new CloseEvent( CloseEvent.CLOSE, false, false, ModalDialog.OK ) );
 					break;
 
 				case "run":
+					runTemplate();
+					break;
+				
 				case "debug":
 				case "step_by_step":
-					//try
 					{
 						if ( ContextManager.templateStruct )
 							ContextManager.templateStruct.terminated = true;
@@ -639,10 +642,6 @@
 	
 						switch ( menuItemName )
 						{
-							case 'run':
-								ContextManager.templateStruct.isDebug = false;
-								ContextManager.templateStruct.isStepDebug = false;
-								break;
 							case 'debug':
 								ContextManager.templateStruct.isDebug = true;
 								ContextManager.templateStruct.isStepDebug = false;
@@ -678,21 +677,7 @@
 							ContextManager.templateStruct.generate();
 						}
 					}
-					/*
-					 catch(e:Error)
-					 {
-					 ProgressManager.complete();
-
-					 switchDebug(false);
-
-					 ContextManager.templatestruct.removeEventListener("generationComplete", generationComplete);
-					 ContextManager.templatestruct.removeEventListener("stepComplete", stepCompleteHandler);
-					 ContextManager.templatestruct.removeEventListener("error", debugErrorHandler);
-
-					 ContextManager.templatestruct = null;
-					 Alert.show(e.message, LanguageManager.sentences['warning']);
-					 }
-					 */
+					
 					break;
 
 				case "resume":
@@ -756,7 +741,69 @@
 			}
 
 		}
-
+	
+		private function runTemplate () : void
+		{
+			if (currentTemplate && currentTemplate.modified)
+			{
+				AlertPopup.show(
+					"You must save template before running.\nDo you want to save template and run it now?",
+					LanguageManager.sentences['confirmation'],
+					AlertPopup.YES | AlertPopup.NO, this.nativeWindow as Sprite, alertSaveAndCloseHandler, null, AlertPopup.YES );
+			} 
+			else
+			{
+				showPlayer();
+			}
+			
+			function alertSaveAndCloseHandler( event : CloseEvent ) : void
+			{
+				if ( event.detail == AlertPopup.YES )
+				{
+					saveTpl(templateSaveAndBuildHandler);
+				}
+			}
+			
+			function templateSaveAndBuildHandler( event : Event ) : void
+			{
+				var tpl : BuilderTemplate = event.target as BuilderTemplate;
+				tpl.removeEventListener( Event.COMPLETE, templateSaveAndBuildHandler );
+				
+				processSavedTpl();
+				
+				showPlayer();
+			}
+			
+		}
+		
+		private function showPlayer () : void
+		{
+			var playerObj : Player = new Player();
+			playerObj.isDesktopApplication = true;
+			
+			playerObj.addEventListener(FlexEvent.CREATION_COMPLETE, playerCreationCompleteHandler);
+			playerObj.addEventListener(Event.CLOSE, playerCloseHandler);
+			
+			PopUpManager.addPopUp(playerObj, this, true);
+			PopUpManager.centerPopUp(playerObj);
+			
+			function playerCreationCompleteHandler (event : FlexEvent) : void
+			{
+				playerObj.removeEventListener(FlexEvent.CREATION_COMPLETE, playerCreationCompleteHandler);
+				
+				playerObj.openTemplate(true);
+			}
+			
+			function playerCloseHandler (event : Event) : void
+			{
+				playerObj.removeEventListener(Event.CLOSE, playerCloseHandler)
+				
+				PopUpManager.removePopUp(playerObj);
+				
+				playerObj = null;
+			}
+		}
+		
 		private function get currentTemplate() : BuilderTemplate
 		{
 			return BuilderContextManager.currentTemplate;
