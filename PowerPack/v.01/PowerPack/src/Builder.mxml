@@ -760,14 +760,14 @@
 			{
 				if ( event.detail == AlertPopup.YES )
 				{
-					saveTpl(templateSaveAndBuildHandler);
+					saveTpl(templateSaveAndRunHandler);
 				}
 			}
 			
-			function templateSaveAndBuildHandler( event : Event ) : void
+			function templateSaveAndRunHandler( event : Event ) : void
 			{
 				var tpl : BuilderTemplate = event.target as BuilderTemplate;
-				tpl.removeEventListener( Event.COMPLETE, templateSaveAndBuildHandler );
+				tpl.removeEventListener( Event.COMPLETE, templateSaveAndRunHandler );
 				
 				processSavedTpl();
 				
