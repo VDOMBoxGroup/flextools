@@ -145,6 +145,8 @@
 		//
 		//--------------------------------------------------------------------------
 
+		public var bbb : Boolean = false;	
+			
 		private var curDebugNode : Node = null;
 		private var curDebugBufLen : int = 0;
 
@@ -427,15 +429,25 @@
 			workStage.includeInLayout = true;
 			workStage.validateNow();
 
+			pnl_graphs.addEventListener(Graphs.TPL_POPULATE_COMPLETE, graphsPopulateCompleteHandler);
 			pnl_graphs.templateXML = currentTemplate.xmlStructure;
+			
 			currentTemplate.selectedProject.modified = false;
 			currentTemplate.modified = false;
-
+			
 			ContextManager.instance.lastFile = true;
 			BuilderContextManager.updateLastFiles( currentTemplate.file );
 
 			MenuManager.getInstance().updateLastFilesMenu();
 			MenuManager.getInstance().openedTemplate();
+			
+			function graphsPopulateCompleteHandler (event : Event) : void
+			{
+				pnl_graphs.removeEventListener(Graphs.TPL_POPULATE_COMPLETE, graphsPopulateCompleteHandler);
+				
+				currentTemplate.selectedProject.modified = false;
+				currentTemplate.modified = false;
+			}
 		}
 
 		public function processSavedTpl() : void

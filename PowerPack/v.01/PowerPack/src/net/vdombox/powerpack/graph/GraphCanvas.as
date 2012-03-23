@@ -1000,7 +1000,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 	private function childRemoveHandler( event : ChildExistenceChangedEvent ) : void
 	{
-		event.relatedObject.removeEventListener( GraphCanvasEvent.GRAPH_CHANGED, graphChangedHadler );
+		event.relatedObject.addEventListener( GraphCanvasEvent.GRAPH_CHANGED, graphChangedHadler );
 	}
 
 	private function childAddHandler( event : ChildExistenceChangedEvent ) : void

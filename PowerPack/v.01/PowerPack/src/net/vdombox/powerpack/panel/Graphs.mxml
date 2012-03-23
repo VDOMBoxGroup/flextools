@@ -93,7 +93,8 @@
 			return true
 		}
 
-		static public const TPL_CHANGED : String = "templateChanged";
+		static public const TPL_POPULATE_COMPLETE	: String = "populateComplete";
+		static public const TPL_CHANGED				: String = "templateChanged";
 
 		//--------------------------------------------------------------------------
 		//
@@ -193,9 +194,8 @@
 			
 			sortGraphs();
 
-			graph.addEventListener( GraphCanvasEvent.GRAPH_CHANGED, onGraphChange );
-			graph.addEventListener( GraphCanvasEvent.JUMP_TO_GRAPH, onJumpToGraph );
-
+			graph.addEventListener(FlexEvent.CREATION_COMPLETE, graph_creationCompleteHandler);
+			
 			var graphAccordionChild : AccordionChild = null;
 
 			for each ( var tab : AccordionChild in graphsAccordion.getChildren() )
@@ -221,6 +221,15 @@
 			}
 
 			dispatchEvent( new Event( TPL_CHANGED ) );
+			
+			function graph_creationCompleteHandler (event : FlexEvent) : void
+			{
+				trace ("[Graphs] graphCanvasCreationComplete");
+				event.target.removeEventListener(FlexEvent.CREATION_COMPLETE, graph_creationCompleteHandler);
+				
+				graph.addEventListener( GraphCanvasEvent.GRAPH_CHANGED, onGraphChange );
+				graph.addEventListener( GraphCanvasEvent.JUMP_TO_GRAPH, onJumpToGraph );
+			}
 		}
 			
 		private function get currentTemplate() : BuilderTemplate
@@ -360,8 +369,8 @@
 
 				ProgressManager.complete();
 
-				dispatchEvent( new Event( "populateComplete" ) );
 				dispatchEvent( new Event( TPL_CHANGED ) );
+				dispatchEvent( new Event( TPL_POPULATE_COMPLETE ) );
 			}
 		}
 
@@ -606,6 +615,7 @@
 
 		private function onGraphChange( event : GraphCanvasEvent ) : void
 		{
+			trace ("[Graphs] onGraphChange");
 			event.stopImmediatePropagation();
 			dispatchEvent( new Event( TPL_CHANGED ) );
 		}
