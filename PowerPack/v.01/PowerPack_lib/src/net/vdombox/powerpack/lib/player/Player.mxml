@@ -91,17 +91,19 @@
 		}
 
 
-		public function set  dataProvider( value:XML ):void
+		public function set  dataProvider( value : XML ):void
 		{
-			var template:Template = new Template ( value );
-			var templates:ArrayCollection = ContextManager.templates;
-
+			var template	: Template;
+			var templates	: ArrayCollection = ContextManager.templates;
+			
+			template = new Template ( value );
+			
 			if ( templates.length == 0 )
 				templates.addItemAt ( template, 0 );
 			else
 				templates[0] = template;
-
-			showTemplateLogo ( getLogo () );
+			
+			showTemplateLogo();
 
 			if ( template.isEncoded )
 			{
@@ -112,14 +114,12 @@
 				openTemplate ();
 			}
 
-			function getLogo():*
-			{
-				return currentTemplate.selectedProject.picture || resources.strLogo;
-			}
 		}
 
-		private function showTemplateLogo( sourceLogo:String ):void
+		public function showTemplateLogo () : void
 		{
+			var sourceLogo : String = getLogo();
+			
 			if ( tplPic.visible && tplPic.value == sourceLogo )
 				return;
 
@@ -132,6 +132,11 @@
 
 			tplPic.value = sourceLogo;
 			tplPic.visible = true;
+			
+			function getLogo () : String
+			{
+				return currentTemplate.selectedProject.picture || resources.strLogo;
+			}
 		}
 
 		private function onLogoScaleContentChanged( evt:Event ):void
@@ -162,16 +167,17 @@
 			openTemplate ();
 		}
 
-		private function openTemplate():void
+		public function openTemplate (showLogo : Boolean = false) : void
 		{
-			var tpl:Template = ContextManager.templates[0];
-
-			if ( tpl.isEncoded )
+			if (showLogo)
+				showTemplateLogo();
+			
+			if ( currentTemplate.isEncoded )
 			{
-				tpl.decode ();
+				currentTemplate.decode ();
 			}
 
-			if ( tpl.xmlStructure )
+			if ( currentTemplate.xmlStructure )
 			{
 				processStep ( cGeneral );
 			}
@@ -260,11 +266,7 @@
 			{
 				appGenerated = false;
 
-				var tpl:Template;
-
-				tpl = ContextManager.templates.getItemAt ( 0 ) as Template;
-
-				ContextManager.templateStruct = new TemplateStruct ( tpl.xmlStructure );
+				ContextManager.templateStruct = new TemplateStruct ( currentTemplate.xmlStructure );
 
 				var validateArr:Array = ContextManager.templateStruct.validate ().array;
 
@@ -367,8 +369,10 @@
 			clearTemplateDebug ();
 
 			ContextManager.instance.lastFile = false;
+			
 			if ( ContextManager.templates.length > 0 )
 				ContextManager.templates.removeItemAt ( 0 );
+			
 			processStep ( cGeneral );
 		}
 
@@ -427,7 +431,7 @@
 
 		<mx:Label
 				width="100%"
-				text="{ContextManager.templates.getItemAt( 0 ).selectedProject.name}"
+				text="{currentTemplate.selectedProject.name}"
 				styleName="installerHeaderLabel"/>
 
 		<mx:ViewStack id="vsProcess"
@@ -468,7 +472,7 @@
 
 				<mx:TextArea
 						width="100%" height="150"
-						text="{ContextManager.templates.getItemAt( 0 ).selectedProject.description}"
+						text="{currentTemplate.selectedProject.description}"
 						styleName="infoTextStyle"
 						editable="false" selectable="false" focusEnabled="false"
 
