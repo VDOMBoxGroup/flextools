@@ -82,9 +82,7 @@
 			<s:SolidColor color="#FFFFFF"/>
 		</s:fill>
 	</s:Rect>
-	<mx:Text id="txt"/>
 	<s:DropDownList id="valueField" width="100%" height="100%"
-				itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ComboBoxObjectItemRenderer"
 				skinClass="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.DropDownListSkin"
 				change="changeHandler()" open="{valueField.scroller.setStyle( 'horizontalScrollPolicy', 'off' ) }" />
 	

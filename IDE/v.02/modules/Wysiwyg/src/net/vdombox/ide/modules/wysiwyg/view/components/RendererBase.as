@@ -206,7 +206,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			_data = value;
 
-			if ( !beforeCreationComplete && value )
+			if ( !beforeCreationComplete )
 				renderVO = value as RenderVO;
 			
 		}
@@ -1666,10 +1666,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			invalidateDisplayList();
 		}
 		
-		private function showHandler( event : FlexEvent ) : void
+		/*private function showHandler( event : FlexEvent ) : void
 		{
 			addHandlers();
-		}
+		}*/
 
 		private function stage_mouseClickHandler( event : MouseEvent ) : void
 		{
