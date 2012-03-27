@@ -12,6 +12,7 @@
 			import mx.collections.SortField;
 			
 			import net.vdombox.ide.common.model._vo.ObjectListVO;
+			import net.vdombox.ide.common.view.components.VDOMScroller;
 			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 			
 			import spark.events.IndexChangeEvent;
