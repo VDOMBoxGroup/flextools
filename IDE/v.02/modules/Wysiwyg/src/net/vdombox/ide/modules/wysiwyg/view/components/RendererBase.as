@@ -210,20 +210,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				renderVO = value as RenderVO;
 			
 		}
-		
-		/*public function remove() : void
-		{
-			_data = null;
-			
-			if ( renderVO )
-			{
-				if( renderVO.children )
-					renderVO.children.splice(0, renderVO.children.length);
-				
-				renderVO.parent = null;
-				renderVO = null;
-			}
-		}*/
 
 		/**
 		 *
@@ -542,7 +528,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		protected function addHandlers() : void
 		{
 			addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
-			addEventListener( Event.REMOVED, removeHandler, false, 0, true );
+			addEventListener( Event.REMOVED_FROM_STAGE, removeHandler, false, 0, true );
 
 			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, false, 0, true );
 			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler, false, 0, true );
@@ -561,7 +547,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		protected function removeHandlers() : void
 		{
 			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-			removeEventListener( Event.REMOVED, removeHandler );
+			removeEventListener( Event.REMOVED_FROM_STAGE, removeHandler );
 
 			removeEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
 			removeEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
@@ -1655,8 +1641,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				
 				dispatchEvent( new RendererEvent( RendererEvent.REMOVED ) );
 				removeHandlers();
-				
-				delete this;
 			}
 		}
 
@@ -1666,10 +1650,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			invalidateDisplayList();
 		}
 		
-		/*private function showHandler( event : FlexEvent ) : void
+		private function showHandler( event : FlexEvent ) : void
 		{
 			addHandlers();
-		}*/
+		}
 
 		private function stage_mouseClickHandler( event : MouseEvent ) : void
 		{

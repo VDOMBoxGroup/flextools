@@ -11,16 +11,10 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var body : Object = notification.getBody();
+			var renderer : IRenderer = notification.getBody() as IRenderer;
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-			
-			if ( body is IRenderer )
-			{
-				var renderer : IRenderer = body as IRenderer;
-				renderProxy.removeRenderer( renderer );
-			}
-			else if ( body as RenderVO )
-				renderProxy.removeRendererByVO( body as RenderVO );
+
+			renderProxy.removeRenderer( renderer );
 		}
 	}
 }
