@@ -56,7 +56,7 @@
 			<menuitem label="Template" id="template">
 				<!--menuitem label="Validate" id="validate"/-->
 				<menuitem label="Properties" id="properties" />
-				<menuitem label="Build installer" id="air_builder" />
+				<menuitem label="Export project build" id="air_builder" />
 			</menuitem>
 
 			<menuitem label="Run" id="run">

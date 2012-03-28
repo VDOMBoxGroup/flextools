@@ -70,12 +70,17 @@ public class SelectionManager extends EventDispatcher
 		deselectAll();
 		removeAll();
 
+		if (!_container)
+			return;
+		
+		
 		_container.removeEventListener( MouseEvent.MOUSE_DOWN, onContainerMouseDown );
 		_container.removeEventListener( KeyboardEvent.KEY_DOWN, onContainerKeyDown );
 		_container.removeEventListener( ChildExistenceChangedEvent.CHILD_ADD, onChildAdd );
 		_container.removeEventListener( FlexEvent.REMOVE, onContainerRemove );
-
+		
 		_container = null;
+				
 	}
 
 	//--------------------------------------------------------------------------
