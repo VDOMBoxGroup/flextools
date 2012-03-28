@@ -114,7 +114,7 @@ package ro.victordramba.scriptarea
 			if ( -tf.x == value )
 				return;
 
-			tf.x = selectionShape.x = -value;
+			tf.x = selectionShape.x = selectionShapeRects.x = -value;
 
 			updateCaret();
 			dispatchEvent( new Event( Event.SCROLL, true ) );
@@ -357,6 +357,10 @@ package ro.victordramba.scriptarea
 			
 			text = text.replace( /\r\n/g, NL );
 			text = text.replace( /\n/g, NL );
+			
+			if ( _text == text )
+				return;
+			
 			undoBuff.push( { s: startIndex, e: startIndex + text.length, t: _text.substring( startIndex, endIndex ) } );
 			redoBuff.length = 0;
 			_replaceText( startIndex, endIndex, text );
@@ -414,13 +418,13 @@ package ro.victordramba.scriptarea
 		}
 
 		protected function undo() : void
-		{
-			if ( undoBuff.length == 2 || undoBuff.length == 0 )
+		{		
+			if ( undoBuff.length <= 1 )
 				return;
 			
 			var o : Object = undoBuff.pop();
 			redoBuff.push( { s: o.s, e: o.s + o.t.length, t: _text.substring( o.s, o.e ) } );
-
+			
 			_replaceText( o.s, o.e, o.t );
 			_caret = o.s + o.t.length;
 			_setSelection( _caret, _caret, true );
@@ -573,7 +577,7 @@ package ro.victordramba.scriptarea
 				if ( newX < 0 )
 					newX = 0;
 				tf.x = -newX;
-				selectionShape.x = -newX;
+				selectionShape.x = selectionShapeRects.x = -newX;
 			} 
 			else if ( cursor.getX() < 0 )
 			{
@@ -584,8 +588,10 @@ package ro.victordramba.scriptarea
 				}
 				else
 				{
-					tf.x -= cursor.getX();
-					selectionShape.x -= cursor.getX();
+					var getX : int = cursor.getX();
+					tf.x -= getX;
+					selectionShape.x -= getX;
+					selectionShapeRects.x -= getX;
 				}
 			}
 

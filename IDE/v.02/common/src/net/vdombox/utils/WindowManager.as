@@ -103,9 +103,20 @@ package net.vdombox.utils
 		}
 		
 		public function addWindow( window : Window, parent : UIComponent = null, isModal : Boolean = false ) : void
-		{
+		{			
 			if ( !windowsInfo )
 				windowsInfo = [];
+			
+			var win2 : Object = window;
+			
+			if ( windowsInfo.length > 0 && win2.hasOwnProperty( "content" ) )
+			{
+				var win1 : Object = windowsInfo[ windowsInfo.length - 1 ].window;
+				
+				if ( win1.hasOwnProperty( "content" ) && win1.content == win2.content )
+					return;
+				
+			}
 			
 			if ( !handlerDictionary )
 				handlerDictionary = new Dictionary();
