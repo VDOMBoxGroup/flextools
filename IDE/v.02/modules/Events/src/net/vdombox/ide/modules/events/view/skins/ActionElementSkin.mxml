@@ -26,6 +26,8 @@
 			private var isDataChanged : Boolean = false;
 			private var isStateChanged : Boolean = false;
 			
+			private var creationCompleted : Boolean = false;
+			
 			public function set data( value : IEventBaseVO ) : void
 			{
 				_data = value;
@@ -82,6 +84,15 @@
 				}
 			}
 			
+			public function setLayout( flag : Boolean ) : void
+			{
+				if ( bottomGroup.includeInLayout == !flag )
+				{
+					bottomGroup.includeInLayout = flag;
+					arrayImage.includeInLayout = flag;
+				}
+			}
+			
 			override protected function stateChanged( oldState : String, newState : String, recursive : Boolean ) : void
 			{
 				if ( !hostComponent.data )
@@ -96,6 +107,9 @@
 						titleLabel.text = headerGroup.toolTip = "Client Action";
 					else if ( hostComponent.data is ServerActionVO )
 						titleLabel.text = headerGroup.toolTip = "Server Action";
+					
+					if ( creationCompleted )
+						setLayout(true);
 				}
 				else
 				{
@@ -103,6 +117,9 @@
 						titleLabel.text = headerGroup.toolTip = hostComponent.data.objectName + ":" + hostComponent.data.name;
 					else if ( hostComponent.data is ServerActionVO )
 						titleLabel.text = headerGroup.toolTip = hostComponent.data.name;
+					
+					if ( creationCompleted  )
+						setLayout(false);
 				}
 			}
 
@@ -110,6 +127,7 @@
 			{
 				doubleClickEnabled = true;
 				BindingUtils.bindProperty( this, "data", hostComponent, "data", true );
+				creationCompleted = true;
 			}
 
 		]]>
@@ -117,12 +135,13 @@
 
 
 	<s:states>
+		
+		<s:State name="normalAndShort" stateGroups="short"/>
+		<s:State name="disabledAndShort" stateGroups="short"/>
 
 		<s:State name="normal" stateGroups="full"/>
 		<s:State name="disabled" stateGroups="full"/>
 
-		<s:State name="normalAndShort" stateGroups="short"/>
-		<s:State name="disabledAndShort" stateGroups="short"/>
 	</s:states>
 
 	<!--Shadow-->
@@ -209,7 +228,7 @@
 					 width="100%"
 					 itemCreationPolicy="immediate" includeIn="full"/>
 
-			<s:Group width="100%" height="16" includeIn="full">
+			<s:Group id="bottomGroup" width="100%" height="16" includeInLayout="false">
 				
 				<s:Rect bottom="0" left="0" right="0" top="0">
 					<s:fill>
@@ -227,7 +246,7 @@
 				
 				<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
 					
-					<mx1:Image source="{VDOMImage.ArrClose}" click="hideButton_clickHandler(event)" />
+					<mx1:Image id="arrayImage" source="{VDOMImage.ArrClose}" click="hideButton_clickHandler(event)" includeInLayout="false"/>
 					
 				</s:HGroup>
 				

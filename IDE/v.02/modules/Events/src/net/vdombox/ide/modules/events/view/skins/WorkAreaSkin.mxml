@@ -22,10 +22,18 @@
 			
 			import spark.events.IndexChangeEvent;
 			
+			[Bindable]
+			private var scale : Number = 1;
+			
+			private var scrollPosition : Point;
+			private var _NeedSetVerticalScrollPosition : Boolean = false;
+			
 			protected function scroller_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
+				
+				addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler, true, 0, true );
 				
 				scroller.horizontalScrollBar.height = 12;
 				
@@ -48,12 +56,40 @@
 			
 			protected function _showElementsView_changeHandler( event : IndexChangeEvent ) : void
 			{
-				// TODO Auto-generated method stub
 				dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED ) );
 			}
 			
+			private function mouseDownHandler( event : MouseEvent ) : void
+			{
+				if ( !event.ctrlKey )
+					return;
+				
+				scale = 1;
+				
+				_NeedSetVerticalScrollPosition = true;
+				
+				var pt:Point = new Point(event.localX, event.localY);
+				pt = event.target.localToGlobal(pt);
+				
+				pt=scroller.globalToContent(pt);
+				
+				scrollPosition = pt;
+			}
+			
+			
 			private function mouseWheelHandler( event : MouseEvent ) : void
 			{
+				if ( event.ctrlKey )
+				{		
+					if ( event.delta > 0 && scale < 3)
+						scale += 0.1;
+					else if ( event.delta < 0 && scale > 0.25 )
+						scale -= 0.1;
+					
+									
+					event.stopImmediatePropagation();
+				}
+				
 				event.delta = event.delta > 0 ? 30 : -30;
 			}
 			
@@ -70,6 +106,22 @@
 			protected function sparkskin1_removeHandler(event:FlexEvent):void
 			{
 				removeEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true );
+			}
+			
+			protected function scaleSlider_changeHandler(event:Event):void
+			{
+				scale = scaleSlider.value;
+			}
+			
+			protected function scroller_updateCompleteHandler(event:FlexEvent):void
+			{
+				if ( _NeedSetVerticalScrollPosition )
+				{
+					_NeedSetVerticalScrollPosition = false;
+					
+					scroller.verticalScrollBar.viewport.verticalScrollPosition = scrollPosition.y - scroller.height / 2;
+					scroller.horizontalScrollBar.viewport.horizontalScrollPosition = scrollPosition.x - scroller.width / 2;
+				}
 			}
 			
 		]]>
@@ -132,6 +184,13 @@
 			
 		</s:HGroup>
 		
+		
+		<s:HSlider id="scaleSlider" width="100" visible="false"
+				   minimum=".1" maximum="3" value="{scale}" 
+				   stepSize=".1" changeEnd="scaleSlider_changeHandler(event)" />
+		
+		<s:Label text="{Math.round( scale * 10 ) / 10}" visible="false"/>
+		
 		<s:Label text="{ resourceManager.getString( 'Events_General', 'work_area_show_current' ) }" />
 		
 		<mx1:Spacer width="5" />
@@ -141,15 +200,18 @@
 	</s:HGroup>
 
 	<s:Group id="workLayers"
-			 bottom="0" left="0" right="0" top="22">
+			 bottom="0" left="0" right="0" top="22"
+			 >
 		<s:Rect height="100%" width="100%">
 			<s:fill>
 				<s:BitmapFill source = "{VDOMImage.BG_WorkArea}" smooth="true" fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
 
-		<components1:VDOMScroller id="scroller" height="100%" width="100%" creationComplete="scroller_creationCompleteHandler(event)">
-			<s:Group>
+		<components1:VDOMScroller id="scroller" height="100%" width="100%" 
+								  creationComplete="scroller_creationCompleteHandler(event)"
+								  updateComplete="scroller_updateCompleteHandler(event)">
+			<s:Group id="scaleGroup" scaleX="{scale}" scaleY="{scale}">
 				<s:Group id="linkagesLayer"/>
 				<s:Group id="contentGroup"/>
 			</s:Group>

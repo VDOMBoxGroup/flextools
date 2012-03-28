@@ -19,6 +19,8 @@ package net.vdombox.ide.modules.events.view.components
 		[Bindable]
 		public var title : String;
 		
+		protected var parameters : Array;
+		
 		protected var isNeedUpdateParameters : Boolean;
 		
 		private var mouseOffcetX : int;
