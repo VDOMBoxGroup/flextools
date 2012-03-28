@@ -49,6 +49,9 @@
 					
 					nameGroup.includeInLayout = true;
 					actionRenderer.includeInLayout = true;
+					
+					if ( skin.currentState == "normal" || skin.currentState == "disabled" )
+						(skin as ActionElementSkin).setLayout(true);
 
 					if ( data.parameters.length == 0 )
 						return;
@@ -72,9 +75,6 @@
 					{
 						nameGroup.visible = data is ClientActionVO;
 					}
-					
-					if ( skin.currentState == "normal" || skin.currentState == "disabled" )
-						(skin as ActionElementSkin).setLayout(true);
 				}
 			}
 

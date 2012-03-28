@@ -42,6 +42,9 @@
 					
 					nameGroup.includeInLayout = true;
 					eventRenderer.includeInLayout = true;
+					
+					if ( skin.currentState == "normal" || skin.currentState == "disabled" )
+						(skin as EventElementSkin).setLayout(true);
 				
 					if ( data.parameters.length == 0 )
 						return;
@@ -60,9 +63,6 @@
 					
 						parametersContainer.addElement( parameterRenderer );
 					}
-					
-					if ( skin.currentState == "normal" || skin.currentState == "disabled" )
-						(skin as EventElementSkin).setLayout(true);
 				}
 				
 				/*if( objectNameGroup )
