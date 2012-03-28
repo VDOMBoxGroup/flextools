@@ -40,7 +40,7 @@ package net.vdombox.ide.core.model.managers
 			init();
 		}
 
-		private const CACHE_SIZE : uint = 100000000;
+		private const CACHE_SIZE : uint = 150000000;
 
 		private var applicationId : String;
 
@@ -64,7 +64,7 @@ package net.vdombox.ide.core.model.managers
 
 			var fileSize : uint = content.bytesAvailable;
 
-			if ( fileSize > 90000000 )
+			if ( fileSize > 10000000 )
 				return;
 
 			var newFileName : String = contentName;
@@ -127,7 +127,6 @@ package net.vdombox.ide.core.model.managers
 
 				try
 				{
-
 					cacheFolder.resolvePath( fileName ).deleteFile();
 					isDone = true
 				}
@@ -185,24 +184,8 @@ package net.vdombox.ide.core.model.managers
 				cacheFolder.createDirectory();
 				return;
 			}
-
-			var currentDate : Number = new Date().getTime();
-			var fileList : Array = cacheFolder.getDirectoryListing();
-
-			for each ( var file : File in fileList )
-			{
-
-				var days : Number = ( currentDate - file.creationDate.time ) / 1000 / 60 / 60 / 24;
-
-				if ( days > 17 )
-				{
-					file.deleteFile();
-					continue;
-				}
-
-				cacheSize += file.size;
-				cachedFiles.addItem( { create: file.creationDate.time, name: file.name, size: file.size } );
-			}
+			
+			sortCache();
 		}
 
 
@@ -213,6 +196,27 @@ package net.vdombox.ide.core.model.managers
 				return applicationId.substr( 0, 8 );
 			else
 				return "";
+		}
+		
+		private function sortCache(  ) : void
+		{
+			var currentDate : Number = new Date().getTime();
+			var fileList : Array = cacheFolder.getDirectoryListing();
+			
+			for each ( var file : File in fileList )
+			{
+				
+				var days : Number = ( currentDate - file.creationDate.time ) / 1000 / 60 / 60 / 24;
+				
+				if ( days > 17 )
+				{
+					file.deleteFile();
+					continue;
+				}
+				
+				cacheSize += file.size;
+				cachedFiles.addItem( { create: file.creationDate.time, name: file.name, size: file.size } );
+			}
 		}
 
 		private function cleanupCache( size : uint ) : void
@@ -228,8 +232,10 @@ package net.vdombox.ide.core.model.managers
 				cachedFiles.refresh();
 
 				var item : Object = {}
+					
+				var halfCacheSize : Number = CACHE_SIZE / 2;
 
-				while ( cacheSize > 1000000 )
+				while ( cacheSize > halfCacheSize )
 				{
 
 					item = cachedFiles.getItemAt( 0 )

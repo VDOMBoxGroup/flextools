@@ -268,6 +268,8 @@ package net.vdombox.ide.core.view
 				loginView.password = "";
 				
 				loginView.saveButton.currentState = "notsave";
+				
+				loginView.host.addEventListener( Event.CHANGE, setLoginInformation);
 			}
 
 			loginView.languages = new ArrayList( localeProxy.locales );
