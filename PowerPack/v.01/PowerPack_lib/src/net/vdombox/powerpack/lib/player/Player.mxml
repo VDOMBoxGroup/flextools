@@ -36,6 +36,7 @@
 			import mx.core.Application;
 			import mx.events.CloseEvent;
 			import mx.events.EffectEvent;
+			import mx.events.FlexEvent;
 			import mx.events.IndexChangedEvent;
 			
 			import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
@@ -412,6 +413,20 @@
 				openTemplate ();
 			}
 		}
+			
+			protected function label1_creationCompleteHandler(event:FlexEvent):void
+			{
+				var appNameLen : Number = appNameLabel.text.length;
+				
+				if (appNameLen > 12)
+				{
+					if (appNameLen < 16)
+						appNameLabel.setStyle("fontSize", 40);
+					else
+						appNameLabel.setStyle("fontSize", 30);
+				}
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -426,13 +441,18 @@
 						  scaleContent="true" maintainAspectRatio="true"
 						  verticalAlign="top" horizontalAlign="right"/>
 
-	<mx:VBox x="250" y="40" width="460">
+	<mx:VBox x="250" y="40" width="460"
+			 maxWidth="460"
+			 horizontalScrollPolicy="off"
+			 verticalScrollPolicy="off">
 
 
 		<mx:Label
-				width="100%"
+				id="appNameLabel"
+				width="450"
 				text="{ContextManager.templates.getItemAt( 0 ).selectedProject.name}"
-				styleName="installerHeaderLabel"/>
+				styleName="installerHeaderLabel"
+				creationComplete="label1_creationCompleteHandler(event)"/>
 
 		<mx:ViewStack id="vsProcess"
 					  width="100%" height="100%"
