@@ -13,15 +13,12 @@ package net.vdombox.editors.parsers.python
 		public static const KEYWORD:String = "keyword";
 		public static const KEYWORD2:String = "keyword2";
 		public static const COMMENT:String = "comment";
+		public static const NAMEFUNCTION:String = "nameFunction";
+		public static const NAMECLASS:String = "nameClass";
 		
 		public static const REGEXP:String = "regexp";
 		
 		public static const E4X:String = "e4x";
-		/*public static const E4X_TAG:String = "e4xTag";
-		public static const E4X_TEXT:String = "e4xText";
-		public static const E4X_CDATA:String = "e4xCdata";
-		public static const E4X_COMMENT:String = "e4xComment";
-		public static const E4X_COMMAND:String = "e4xCommand";*/
 
 		public var string:String;
 		public var type:String;

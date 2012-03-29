@@ -27,7 +27,11 @@ package net.vdombox.editors.parsers.python
 			formats.setValue( Token.E4X, new TextFormat( null, null, 0x613BB9, false, false ) );
 			formats.setValue( Token.COMMENT, new TextFormat( null, null, 0x109900, false, true ) );
 			formats.setValue( Token.REGEXP, new TextFormat( null, null, 0xa3a020, false, false ) );
-			formats.setValue( Token.STRING, new TextFormat( null, null, 0xB30000, false, false ) );
+			formats.setValue( Token.STRING, new TextFormat( null, null, 0x990000, false, false ) );
+			formats.setValue( Token.NUMBER, new TextFormat( null, null, 0x990099, false, false ) );
+			formats.setValue( Token.SYMBOL, new TextFormat( null, null, 0x000099, false, false ) );
+			formats.setValue( Token.NAMEFUNCTION, new TextFormat( null, null, 0xFF00FF, false, false ) );
+			formats.setValue( Token.NAMECLASS, new TextFormat( null, null, 0x000000, true, false ) );
 			formats.setValue( 'topType', new TextFormat( null, null, 0x981056, false, false ) );
 		}
 

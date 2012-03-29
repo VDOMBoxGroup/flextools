@@ -10,32 +10,18 @@ package net.vdombox.editors.parsers.python
 
 		private var string : String;
 		private var pos : uint;
+		private var str : String;
+		private var nameFunction : Boolean = false;
+		private var nameClass : Boolean = false;
 
 		private static const keywordsA : Array = [
-			"and", "as", "assert", "break", "class", "continue", "def", "del", "elif",
-			"else", "except", "exec", "finally", "for", "from", "global", "if",
-			"import", "is", "in", "lambda", "not", "or", "pass", "print", "raise",
-			"return", "try", "while", "with", "yield",
-			"False", "True", "None" ];
-
-//		private static const keywordsA:Array = [
-//			"as", "is", "in", "break", "case", "continue", "default", "do", "while", "else", "for", "in", "each",
-//			"if", "label", "return", "super", "switch", "throw", "try", "catch", "finally", "while",
-//			"with", "dynamic", "final", "internal", "native", "override", "private", "protected",
-//			"public", "static", "extends", "implements", "new",
-//			"interface", "namespace", "default xml namespace", "import",
-//			"include", "use", "delete", "use namespace", "false", "null", "this", "true", "undefined"];
+			"and", "as", "del", "for", "is", "raise", "assert", "elif", "from", "lambda", "return", "break", "else", "global", "None", "not", "try", "class", "except", "if", "or", "while", "continue", "exec", "import", "pass", "yield", "def", "finally", "in", "print"
+		];
 
 		private static const keywords2A : Array = [
 //			"const", "package", "var", "function", "get", "set", "class" 
 			];
 
-//		private static const symbolsA : Array = [
-//			"+", "--", "/", "\\", "++", "%", "*", "-", "+=", "/=", "%=", "*=", "-=", "=", "&", "<<",
-//			"~", "|", ">>", ">>>", "^", "&=", "<<=", "|=", ">>=", ">>>=", "^=", "==", ">",
-//			">=", "!=", /*"<", special, can start an E4X*/ "<=", "===", "!==", "&&", "&&=", "!", "||", "||=", "[", "]",
-//			"as", ",", "?", ".", "instanceof", "::", "new", "{", "}",
-//			"(", ")", "typeof", ";", ":", "...", "..", "#", "`" /*just to unlock*/ ];
 		private static const symbolsA : Array = [
 			"+", "-", "/", "*", "=", "<", ">", "%", "!", "&", ";", "?", "`", ":", "," ];
 
@@ -95,7 +81,6 @@ package net.vdombox.editors.parsers.python
 
 			var c : String = string.charAt( pos );
 			var start : uint = pos;
-			var str : String;
 			var lt : String; //previous token
 
 			if ( isWhitespace( c ) )
@@ -148,6 +133,12 @@ package net.vdombox.editors.parsers.python
 			if ( isLetter( c ) )
 			{
 				skipToStringEnd();
+				
+				
+				nameFunction = str == "def" ? true : false;
+				
+				nameClass = str == "class" ? true : false;
+				
 				str = string.substring( start, pos );
 				var type : String;
 				if ( isKeyword( str ) )
@@ -157,6 +148,10 @@ package net.vdombox.editors.parsers.python
 				else if ( tokens.length && tokens[ tokens.length - 1 ].string == "[" &&
 					( str == "Embed" || str == "Event" || str == "SWF" || str == "Bindable" ) )
 					type = Token.KEYWORD;
+				else if ( nameFunction )
+					type = Token.NAMEFUNCTION;
+				else if ( nameClass )
+					type = Token.NAMECLASS;
 				else
 					type = Token.STRING_LITERAL;
 				return new Token( str, type, pos );
