@@ -11,19 +11,18 @@ package net.vdombox.editors.parsers.python
 		private var string : String;
 		private var pos : uint;
 		private var str : String;
-		private var nameFunction : Boolean = false;
-		private var nameClass : Boolean = false;
+		private var prevStr : String
 
 		private static const keywordsA : Array = [
 			"and", "as", "del", "for", "is", "raise", "assert", "elif", "from", "lambda", "return", "break", "else", "global", "None", "not", "try", "class", "except", "if", "or", "while", "continue", "exec", "import", "pass", "yield", "def", "finally", "in", "print"
 		];
 
 		private static const keywords2A : Array = [
-//			"const", "package", "var", "function", "get", "set", "class" 
+			"self" 
 			];
 
 		private static const symbolsA : Array = [
-			"+", "-", "/", "*", "=", "<", ">", "%", "!", "&", ";", "?", "`", ":", "," ];
+			"+", "-", "/", "*", "=", "<", ">", "%", "!", "&", ";", "?", "`", ":", ",", "." ];
 
 		private static const keywords : HashMap = new HashMap();
 		private static const keywords2 : HashMap = new HashMap();
@@ -81,7 +80,7 @@ package net.vdombox.editors.parsers.python
 
 			var c : String = string.charAt( pos );
 			var start : uint = pos;
-			var lt : String; //previous token
+			prevStr = str; //previous token
 
 			if ( isWhitespace( c ) )
 			{
@@ -103,41 +102,9 @@ package net.vdombox.editors.parsers.python
 				return new Token( string.substring( start, pos ), Token.COMMENT, pos );
 			}
 
-//			if ( c == "/" )
-//			{
-//				if ( nextChar() == "*" )
-//				{
-//					skipUntil( "*/" );
-//					return new Token( string.substring( start, pos ), Token.COMMENT, pos );
-//				}
-//				else if ( nextChar() == "/" )
-//				{
-//					skipUntil( "\r" );
-//					pos--;
-//					return new Token( string.substring( start, pos ), Token.COMMENT, pos );
-//				}
-//				else
-//				{
-//					//look for regexp syntax
-//					lt = tokens.length > 0 ? tokens[ tokens.length - 1 ].string : "";
-//					if ( lt == "=" || lt == "," || lt == "[" || lt == "(" || lt == "}" || lt == "{" || lt == ";" || lt == "&&" || lt == "|" )
-//					{
-//						skipUntilWithEscNL( "/" );
-//						while ( isLetter( string.charAt( pos ) ) )
-//							pos++;
-//						return new Token( string.substring( start, pos ), Token.REGEXP, pos );
-//					}
-//				}
-//			}
-
 			if ( isLetter( c ) )
 			{
 				skipToStringEnd();
-				
-				
-				nameFunction = str == "def" ? true : false;
-				
-				nameClass = str == "class" ? true : false;
 				
 				str = string.substring( start, pos );
 				var type : String;
@@ -148,9 +115,9 @@ package net.vdombox.editors.parsers.python
 				else if ( tokens.length && tokens[ tokens.length - 1 ].string == "[" &&
 					( str == "Embed" || str == "Event" || str == "SWF" || str == "Bindable" ) )
 					type = Token.KEYWORD;
-				else if ( nameFunction )
+				else if ( prevStr == "def" )
 					type = Token.NAMEFUNCTION;
-				else if ( nameClass )
+				else if ( prevStr == "class" )
 					type = Token.NAMECLASS;
 				else
 					type = Token.STRING_LITERAL;
@@ -161,30 +128,6 @@ package net.vdombox.editors.parsers.python
 				pos += str.length;
 				return new Token( str, Token.SYMBOL, pos );
 			}
-			//look for E4X
-//			else if ( c == "<" )
-//			{
-//				lt = tokens.length > 0 ? tokens[ tokens.length - 1 ].string : "";
-//				if ( lt == "=" || lt == "," || lt == "[" || lt == "(" || lt == "==" || lt == "!=" )
-//				{
-//					do
-//					{
-//						skipUntil( ">" );
-//						str = string.substring( start, pos );
-//						try
-//						{
-//							XML( str.replace( /[{}]/g, "\"" ) );
-//							return new Token( str, Token.E4X, pos );
-//						}
-//						catch ( e : Error )
-//						{
-//						}
-//						;
-//					} while ( pos < string.length );
-//					pos = start;
-//				}
-//				return new Token( c, Token.SYMBOL, ++pos );
-//			}
 			else if ( c == "\"" )
 			{ 
 				if( string.length - pos > 2 && string.substr( pos + 1, 2 ) == "\"\"" )
@@ -280,9 +223,8 @@ package net.vdombox.editors.parsers.python
 			var c : String;
 			while ( true )
 			{
-				var dot : Boolean = c == ".";
 				c = currentChar();
-				if ( !( isLetter( c ) || isNumber( c ) || c == "." || ( dot && c == "*" ) ) )
+				if ( !( isLetter( c ) || isNumber( c ) ) )
 					break;
 				pos++;
 			}

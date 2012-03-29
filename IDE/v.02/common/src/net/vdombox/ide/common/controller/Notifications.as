@@ -241,6 +241,12 @@ package net.vdombox.ide.common.controller
 		
 		public static const SET_SERVER_ACTION : String = "setServerAction";
 		
+		public static const CREATE_SERVER_ACTION : String = "createServerAction";
+		public static const SERVER_ACTION_CREATED : String = "serverActionCrteated";
+		
+		public static const DELETE_SERVER_ACTION : String = "deleteServerAction";
+		public static const SERVER_ACTION_DELETED : String = "serverActionDeleted";
+		
 		public static const GET_LIBRARIES : String = "getLibraries";
 		public static const LIBRARIES_GETTED : String = "librariesGetted";
 		

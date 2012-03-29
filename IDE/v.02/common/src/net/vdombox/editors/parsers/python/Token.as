@@ -4,7 +4,7 @@ package net.vdombox.editors.parsers.python
 	
 	import ro.victordramba.util.HashMap;
 
-	internal class Token 
+	internal class Token
 	{
 		public static const STRING_LITERAL:String = "stringLiteral";
 		public static const SYMBOL:String = "symbol";

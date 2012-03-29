@@ -17,13 +17,13 @@ package ro.victordramba.scriptarea
 			mouseEnabled = true;
 			buttonMode = true;
 			useHandCursor = false;
-
-			selectionShape = new Shape;
-			addChild( selectionShape );
 			
 			selectionShapeRects = new Shape;
 			addChild( selectionShapeRects );
 
+			selectionShape = new Shape;
+			addChild( selectionShape );
+			
 			tf = new TextField;
 			tf.multiline = true;
 			tf.wordWrap = false;
@@ -247,7 +247,7 @@ package ro.victordramba.scriptarea
 			var index : int = text.indexOf( strFind );
 			var step : int = _end - _start;
 			
-			g.beginFill( 0x597C7A, .3 );
+			g.beginFill( 0x9DFBAB, .9 );
 			
 			while ( index != -1 )
 			{
@@ -260,15 +260,14 @@ package ro.victordramba.scriptarea
 				
 				while ( /\w/.test( _text.charAt( _endRect ) ) )
 					_endRect++;
-				
+					
 				if ( text.slice( _startRect, _endRect ) == strFind )
 				{
-				
+					
 					var p0 : Point = getPointForIndex( index );
 					var p1 : Point = getPointForIndex( index + step );
-				
-					g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
 					
+					g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
 				}
 				
 				index = text.indexOf( strFind, index + 1 );
@@ -297,7 +296,7 @@ package ro.victordramba.scriptarea
 
 			if ( _selStart != _selEnd && _selStart <= lastPos && _selEnd >= firstPos )
 			{
-				g.beginFill( 0x0000FF, .3 );
+				g.beginFill( 0x64FF53, 1 );
 
 				if ( p0.y == p1.y )
 				{
