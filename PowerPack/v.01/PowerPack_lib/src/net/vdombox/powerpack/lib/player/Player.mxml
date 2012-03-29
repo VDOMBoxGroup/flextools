@@ -431,7 +431,7 @@
 
 		<mx:Label
 				width="100%"
-				text="{currentTemplate.selectedProject.name}"
+				text="{ContextManager.templates.getItemAt( 0 ).selectedProject.name}"
 				styleName="installerHeaderLabel"/>
 
 		<mx:ViewStack id="vsProcess"
@@ -472,7 +472,7 @@
 
 				<mx:TextArea
 						width="100%" height="150"
-						text="{currentTemplate.selectedProject.description}"
+						text="{ContextManager.templates.getItemAt( 0 ).selectedProject.description}"
 						styleName="infoTextStyle"
 						editable="false" selectable="false" focusEnabled="false"
 
