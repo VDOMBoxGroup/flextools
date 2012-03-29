@@ -8,7 +8,6 @@ package net.vdombox.ide.modules.scripts.controller
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	import net.vdombox.ide.modules.scripts.view.ServerScriptsPanelMediator;
 	import net.vdombox.utils.MD5Utils;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -34,18 +33,6 @@ package net.vdombox.ide.modules.scripts.controller
 			{
 				case Notifications.ACTION:
 				{
-					//TODO: сделать более полную обработку исключения...
-					if ( !facade.hasMediator( ServerScriptsPanelMediator.NAME ) )
-						return;
-
-					var serverScriptsPanelMediator : ServerScriptsPanelMediator = facade.retrieveMediator( ServerScriptsPanelMediator.NAME ) as
-						ServerScriptsPanelMediator;
-
-					var serverActions : Array = serverScriptsPanelMediator.serverScripts;
-
-					//TODO: сделать более полную обработку исключения...
-					if ( !serverActions )
-						return;
 
 					var serverActionVO : ServerActionVO;
 
@@ -54,18 +41,16 @@ package net.vdombox.ide.modules.scripts.controller
 					serverActionVO.setName( scriptName );
 					serverActionVO.script = "";
 
-					serverActions.push( serverActionVO );
-
 					if ( statesProxy.selectedObject )
 					{
-						sendNotification( Notifications.SET_SERVER_ACTIONS,
-							{ objectVO: statesProxy.selectedObject, serverActions: serverActions } );
+						sendNotification( Notifications.CREATE_SERVER_ACTION,
+							{ objectVO: statesProxy.selectedObject, serverActionVO: serverActionVO } );
 					}
 
 					else if ( statesProxy.selectedPage )
 					{
-						sendNotification( Notifications.SET_SERVER_ACTIONS,
-							{ pageVO: statesProxy.selectedPage, serverActions: serverActions } );
+						sendNotification( Notifications.CREATE_SERVER_ACTION,
+							{ pageVO: statesProxy.selectedPage, serverActionVO: serverActionVO } );
 					}
 
 					break;

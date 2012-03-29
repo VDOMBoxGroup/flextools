@@ -25,9 +25,9 @@ package net.vdombox.ide.modules.scripts.controller.messages
 			{
 				case PPMObjectTargetNames.SERVER_ACTIONS:
 				{
-					if( PPMOperationNames.READ )
+					if( operation == PPMOperationNames.READ )
 						sendNotification( Notifications.SERVER_ACTIONS_GETTED, body );
-					else if( PPMOperationNames.UPDATE )
+					else if( operation == PPMOperationNames.UPDATE )
 						sendNotification( Notifications.SERVER_ACTIONS_SETTED, body.serverActions );
 					
 					break;
@@ -35,9 +35,16 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					
 				case PPMObjectTargetNames.SERVER_ACTION:
 				{
-					var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+					if( operation == PPMOperationNames.CREATE )
+						sendNotification( Notifications.SERVER_ACTION_CREATED, body );
+					else if( operation == PPMOperationNames.DELETE )
+						sendNotification( Notifications.SERVER_ACTION_DELETED, body );
+					else
+					{
+						var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 					
-					sendNotification( Notifications.GET_SERVER_ACTIONS, statesProxy.selectedObject );
+						sendNotification( Notifications.GET_SERVER_ACTIONS, statesProxy.selectedObject );
+					}
 					
 					break;
 				}

@@ -2,11 +2,11 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.ServerScriptsPanel;
 	import net.vdombox.utils.WindowManager;
@@ -75,6 +75,9 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.SERVER_ACTIONS_SETTED );
 			
 			interests.push( Notifications.OPEN_ONLOAD_SCRIPT );
+				
+			interests.push( Notifications.SERVER_ACTION_CREATED );
+			interests.push( Notifications.SERVER_ACTION_DELETED );
 
 			return interests;
 		}
@@ -182,6 +185,43 @@ package net.vdombox.ide.modules.scripts.view
 					
 					break;
 				}
+					
+				case Notifications.SERVER_ACTION_CREATED:
+				{
+					if ( !serverScriptsPanel.scripts ) 
+					{
+						var arr : Array = new Array();
+						arr.push( body.serverActionVO);
+						serverScriptsPanel.scripts = arr;
+					}
+					else
+					{
+						serverScriptsPanel.scripts.push( body.serverActionVO );
+						serverScriptsPanel.scripts = serverScriptsPanel.scripts;
+						
+					}
+					
+					break;
+				}
+					
+				case Notifications.SERVER_ACTION_DELETED:
+				{
+					var action : ServerActionVO = body.serverActionVO as ServerActionVO;
+					var i : int;
+					var count : int = serverScriptsPanel.scripts.length;
+					for( i = 0; i < count; i++ )
+					{
+						if ( serverScriptsPanel.scripts[i] == action )
+						{
+							serverScriptsPanel.scripts.splice( i, 1 );
+							serverScriptsPanel.scripts = serverScriptsPanel.scripts;
+							
+							break;
+						}
+					}
+					
+					break;
+				}
 			}
 		}
 		
@@ -236,31 +276,15 @@ package net.vdombox.ide.modules.scripts.view
 
 			if ( !deletedServerActionVO )
 				return;
-
-			var serverActions : Array = serverScriptsPanel.scripts;
-
-			if ( !serverActions )
-				return;
-
-			serverActions = serverActions.slice();
-
-			for ( var i : uint = 0; i < serverActions.length; i++ )
-			{
-				if ( serverActions[ i ].name == deletedServerActionVO.name )
-				{
-					serverActions.splice( i, 1 );
-					break;
-				}
-			}
 			
 			if ( statesProxy.selectedObject )
 			{
-				sendNotification( Notifications.SET_SERVER_ACTIONS, { objectVO: statesProxy.selectedObject,
-					serverActions: serverActions } );
+				sendNotification( Notifications.DELETE_SERVER_ACTION, { objectVO: statesProxy.selectedObject,
+					serverActionVO: deletedServerActionVO } );
 			}
 			else if ( statesProxy.selectedPage )
 			{
-				sendNotification( Notifications.SET_SERVER_ACTIONS, { pageVO: statesProxy.selectedPage, serverActions: serverActions } );
+				sendNotification( Notifications.DELETE_SERVER_ACTION, { pageVO: statesProxy.selectedPage, serverActionVO: deletedServerActionVO } );
 			}
 			
 			sendNotification( Notifications.DELETE_TAB_BY_ACTIONVO, deletedServerActionVO );

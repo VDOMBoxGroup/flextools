@@ -76,6 +76,9 @@ package net.vdombox.ide.modules.scripts.view
 			
 			interests.push( Notifications.SET_SERVER_ACTION );
 			
+			interests.push( Notifications.CREATE_SERVER_ACTION );
+			interests.push( Notifications.DELETE_SERVER_ACTION );
+			
 			interests.push( Notifications.GET_LIBRARIES );
 
 			interests.push( Notifications.CREATE_LIBRARY );
@@ -303,6 +306,32 @@ package net.vdombox.ide.modules.scripts.view
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTION, body );
 					else if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTION, body );
+					
+					if( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break
+				}
+					
+				case Notifications.CREATE_SERVER_ACTION:
+				{
+					if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.SERVER_ACTION, body );
+					else if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.SERVER_ACTION, body );
+					
+					if( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break
+				}
+					
+				case Notifications.DELETE_SERVER_ACTION:
+				{
+					if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.DELETE, PPMObjectTargetNames.SERVER_ACTION, body );
+					else if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.DELETE, PPMPageTargetNames.SERVER_ACTION, body );
 					
 					if( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
