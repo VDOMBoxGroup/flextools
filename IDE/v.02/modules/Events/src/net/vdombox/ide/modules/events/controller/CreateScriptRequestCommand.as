@@ -6,16 +6,12 @@ package net.vdombox.ide.modules.events.controller
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	import net.vdombox.ide.modules.events.view.EventsPanelMediator;
-	import net.vdombox.ide.modules.events.view.WorkAreaMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
 	public class CreateScriptRequestCommand extends SimpleCommand
-	{
-		private var eventsPanelMediator : EventsPanelMediator ;
-		
+	{		
 		override public function execute( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
@@ -34,33 +30,6 @@ package net.vdombox.ide.modules.events.controller
 			{
 				case Notifications.ACTION:
 				{
-					//TODO: сделать более полную обработку исключения...
-					if ( !facade.hasMediator( EventsPanelMediator.NAME ) )
-						return;
-					
-					eventsPanelMediator = facade.retrieveMediator( EventsPanelMediator.NAME ) as
-						EventsPanelMediator;
-					
-					if ( !facade.hasMediator( WorkAreaMediator.NAME ) )
-						return;
-					
-					var workAreaMediator : WorkAreaMediator = facade.retrieveMediator( WorkAreaMediator.NAME ) as
-						WorkAreaMediator;
-					
-					var serverActionsTemp : Array = workAreaMediator.workArea.dataProvider.serverActions;
-					
-					if ( !serverActionsTemp )
-						return;
-					
-					var serverActions : Array = new Array();
-					
-					for each ( var action : ServerActionVO in serverActionsTemp )
-					{
-						serverActions.push( setScriptAction( action ) );
-					}
-					
-					
-					
 					var serverActionVO : ServerActionVO;
 					
 					serverActionVO = new ServerActionVO();
@@ -68,36 +37,20 @@ package net.vdombox.ide.modules.events.controller
 					serverActionVO.setName( scriptName );
 					serverActionVO.script = "";
 					
-					serverActions.push( serverActionVO );
-					
 					if ( statesProxy.selectedObject )
 					{
-						sendNotification( Notifications.SET_SERVER_ACTIONS,
-							{ objectVO: statesProxy.selectedObject, serverActions: serverActions } );
+						sendNotification( Notifications.CREATE_SERVER_ACTION,
+							{ objectVO: statesProxy.selectedObject, serverActionVO: serverActionVO } );
 					}
 						
 					else if ( statesProxy.selectedPage )
 					{
-						sendNotification( Notifications.SET_SERVER_ACTIONS,
-							{ pageVO: statesProxy.selectedPage, serverActions: serverActions } );
+						sendNotification( Notifications.CREATE_SERVER_ACTION,
+							{ pageVO: statesProxy.selectedPage, serverActionVO: serverActionVO } );
 					}
 					
 					break;
 				}
-			}
-			
-			function setScriptAction ( action : ServerActionVO ) : ServerActionVO
-			{
-				for each ( var actionVO : ServerActionVO in eventsPanelMediator.scripts )
-				{
-					if ( actionVO.name == action.name )
-					{
-						action.script = actionVO.script;
-						return action;
-					}
-				}
-				
-				return action;
 			}
 		}
 	}

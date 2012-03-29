@@ -88,7 +88,6 @@ package net.vdombox.ide.modules.events.view
 			interests.push( TypesProxy.GET_TYPES );
 			
 			interests.push( Notifications.GET_SERVER_ACTIONS );
-			interests.push( Notifications.SET_SERVER_ACTIONS );
 			
 			interests.push( Notifications.UNDO );
 			interests.push( Notifications.REDO );
@@ -96,6 +95,8 @@ package net.vdombox.ide.modules.events.view
 			interests.push( Notifications.SET_MESSAGE );
 			
 			interests.push( Notifications.SAVE_IN_WORKAREA_CHECKED );
+			
+			interests.push( Notifications.CREATE_SERVER_ACTION );
 
 			return interests;
 		}
@@ -333,19 +334,6 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
-				case Notifications.SET_SERVER_ACTIONS:
-				{
-					if ( body.hasOwnProperty( "objectVO" ) )
-						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTIONS_LIST, body );
-					else if ( body.hasOwnProperty( "pageVO" ) )
-						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTIONS_LIST, body );
-					
-					if( message )
-						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
-					break
-				}
-					
 				case Notifications.UNDO:
 				{
 					if ( messageProxy.hasUndo( body as PageVO) )
@@ -380,6 +368,19 @@ package net.vdombox.ide.modules.events.view
 					}
 			
 					break;
+				}
+					
+				case Notifications.CREATE_SERVER_ACTION:
+				{
+					if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.SERVER_ACTION, body );
+					else if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.SERVER_ACTION, body );
+					
+					if( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break
 				}
 					
 			}
