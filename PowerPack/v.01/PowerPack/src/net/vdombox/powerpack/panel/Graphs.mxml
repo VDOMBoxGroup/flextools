@@ -44,6 +44,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
+			import mx.containers.TabNavigator;
 			import mx.containers.ViewStack;
 			import mx.controls.Alert;
 			import mx.controls.ComboBox;
@@ -62,6 +63,7 @@
 			import net.vdombox.powerpack.graph.GraphCanvas;
 			import net.vdombox.powerpack.graph.GraphCanvasEvent;
 			import net.vdombox.powerpack.graph.Node;
+			import net.vdombox.powerpack.lib.extendedapi.containers.tabnavigator.ViewNavigator;
 			import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 			import net.vdombox.powerpack.lib.player.managers.ContextManager;
 			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
@@ -102,7 +104,7 @@
 		//
 		//--------------------------------------------------------------------------
 
-		public var vsViewStack : ViewStack;
+		public var vsViewStack : ViewNavigator;
 
 		private var curTab : AccordionChild;
 		private var curGraph : GraphCanvas;
@@ -312,11 +314,18 @@
 					{
 						ProgressManager.start( null, false );
 						vsViewStack.addChild( graph );
-						graph.addEventListener( FlexEvent.CREATION_COMPLETE, completeHandler );
+						
+						if (graph.creationCompleted)
+							graphCreationCompleteHandler();
+						else
+							graph.addEventListener( FlexEvent.CREATION_COMPLETE, graphCreationCompleteHandler );
 
-						function completeHandler( event : FlexEvent ) : void
+						function graphCreationCompleteHandler( event : FlexEvent = null) : void
 						{
-							graph.removeEventListener( FlexEvent.CREATION_COMPLETE, completeHandler );
+							graph.removeEventListener( FlexEvent.CREATION_COMPLETE, graphCreationCompleteHandler );
+							
+							graph.creationCompleted = true;
+							
 							ProgressManager.complete();
 						}
 					}

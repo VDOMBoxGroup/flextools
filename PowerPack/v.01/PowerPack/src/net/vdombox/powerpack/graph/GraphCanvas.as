@@ -64,6 +64,8 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	//
 	//--------------------------------------------------------------------------
 
+	public var creationCompleted : Boolean = false;
+	
 	public static var graphs : Dictionary = new Dictionary();
 
 	private static var defaultItemCaptions : Object = {
