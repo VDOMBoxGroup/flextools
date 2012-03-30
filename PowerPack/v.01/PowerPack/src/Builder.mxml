@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication
-		title="{LanguageManager.sentences.app_title}{ContextManager.templates.length &amp;&amp; currentTemplate.file ? ' - '+ currentTemplate.file.nativePath : ''} - {ContextManager.templates.length &amp;&amp; currentTemplate.selectedProject &amp;&amp; currentTemplate.selectedProject.name ? currentTemplate.selectedProject.name : LanguageManager.sentences.noname}{ContextManager.templates.length &amp;&amp; currentTemplate.modified ? '*' : ''}"
+		title="{LanguageManager.sentences.app_title}{ContextManager.templates.length &amp;&amp; currentTemplate.file ? ' - '+ currentTemplate.file.nativePath : ''} - {ContextManager.templates.length &amp;&amp; currentTemplate.selectedProject &amp;&amp; currentTemplate.selectedProject.name ? currentTemplate.selectedProject.name : LanguageManager.sentences.noname} (init graph: {ContextManager.templates.length &amp;&amp; currentTemplate.selectedProject ? ContextManager.templates.getItemAt(0).selectedProject.initialGraphName : ''}){ContextManager.templates.length &amp;&amp; currentTemplate.modified ? '*' : ''}"
 		titleIcon="@Embed(source='assets/icons/icon_16.png')"
 		layout="absolute"
 		statusBarFactory="net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar"
