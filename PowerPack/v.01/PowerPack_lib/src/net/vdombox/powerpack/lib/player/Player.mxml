@@ -414,7 +414,7 @@
 			}
 		}
 			
-			protected function label1_creationCompleteHandler(event:FlexEvent):void
+			protected function appNameLabel_creationCompleteHandler(event:FlexEvent):void
 			{
 				var appNameLen : Number = appNameLabel.text.length;
 				
@@ -422,8 +422,10 @@
 				{
 					if (appNameLen < 16)
 						appNameLabel.setStyle("fontSize", 40);
-					else
+					else if (appNameLen < 22)
 						appNameLabel.setStyle("fontSize", 30);
+					else
+						appNameLabel.setStyle("fontSize", 26);
 				}
 			}
 			
@@ -452,7 +454,7 @@
 				width="450"
 				text="{ContextManager.templates.getItemAt( 0 ).selectedProject.name}"
 				styleName="installerHeaderLabel"
-				creationComplete="label1_creationCompleteHandler(event)"/>
+				creationComplete="appNameLabel_creationCompleteHandler(event)"/>
 
 		<mx:ViewStack id="vsProcess"
 					  width="100%" height="100%"
