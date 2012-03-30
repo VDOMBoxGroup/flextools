@@ -21,6 +21,8 @@ import flash.ui.Keyboard;
 import flash.utils.Dictionary;
 import flash.utils.Timer;
 
+import gearsandcogs.text.UndoTextFields;
+
 import mx.collections.ArrayCollection;
 import mx.containers.Canvas;
 import mx.controls.Alert;
@@ -198,6 +200,9 @@ public class Node extends Canvas implements IFocusManagerComponent
 		addEventListener( FlexEvent.ADD, addHandler );
 
 		nodes[this] = this;
+		
+		undoTextFields = new UndoTextFields();
+		undoTextFields.target = this;
 	}
 
 	//--------------------------------------------------------------------------
@@ -330,6 +335,8 @@ public class Node extends Canvas implements IFocusManagerComponent
 	 *  The TextArea sub-control that displays the node text.
 	 */
 	public var nodeTextArea : SuperTextArea;
+	
+	private var undoTextFields : UndoTextFields;
 
 	/**
 	 *  The ComboBox sub-control that displays the resource.
