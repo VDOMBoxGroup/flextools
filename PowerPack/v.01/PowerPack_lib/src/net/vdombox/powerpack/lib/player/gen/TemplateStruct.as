@@ -469,7 +469,7 @@ public class TemplateStruct extends EventDispatcher
 		lib.tplStruct = this;
 		context[CNTXT_INSTANCE] = lib;
 		
-		lib.addEventListener( TemplateLibEvent.SET_PROGRESS, setProgerssHendler);
+		lib.addEventListener( TemplateLibEvent.PROGRESS, setProgerssHendler);
 		
 		function setProgerssHendler( event : TemplateLibEvent ):void
 		{

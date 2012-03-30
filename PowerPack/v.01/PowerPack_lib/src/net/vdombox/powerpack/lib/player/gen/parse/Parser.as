@@ -56,6 +56,7 @@ public class Parser
 		"getXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
 		
 		'dialog' : { pattern : /^\[n[vscVSA][nvscVSA]*\]$/, argNum : -1 },
+		'cancelableDialog' : { pattern : /^\[n[vscVSA][nvscVSA]*\]$/, argNum : -1 , trans : ['ok', 'cancel']},
 		
 		"progress" : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2 },
 		

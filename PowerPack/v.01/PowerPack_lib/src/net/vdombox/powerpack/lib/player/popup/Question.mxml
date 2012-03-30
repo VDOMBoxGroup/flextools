@@ -8,6 +8,7 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.containers.Canvas;
+			import mx.controls.Alert;
 			import mx.controls.HRule;
 			import mx.controls.Image;
 			import mx.controls.Text;
@@ -17,6 +18,8 @@
 			
 			import net.vdombox.powerpack.lib.player.control.BrowseButton;
 			import net.vdombox.powerpack.lib.player.customize.skins.PopupBackgroundSkin;
+			import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
+			import net.vdombox.powerpack.lib.player.events.TemplateTransition;
 			import net.vdombox.powerpack.lib.player.gen.parse.ListParser;
 			import net.vdombox.powerpack.lib.player.popup.Answers.Answer;
 			import net.vdombox.powerpack.lib.player.popup.Answers.AnswerCreator;
@@ -29,6 +32,9 @@
 			private var _dataProvider : Array;
 			
 			public var context : Array;
+			
+			[Bindable]
+			public var cancelable : Boolean = false;
 			
 			public function set dataProvider(value:Array):void
 			{
@@ -67,14 +73,21 @@
 				return ListParser.array2List( resultArray );
 			}
 			
-			protected function closeDialog() : void
+			protected function closeDialog (closeDetail : String = TemplateTransition.OK) : void
 			{
-				var answers : Array =  answerBox.getChildren();
+				if (closeDetail == TemplateTransition.CANCEL)
+					strAnswer = "";
+				else
+				{
+					var answers : Array =  answerBox.getChildren();
+					
+					strAnswer =  answers.length == 1 ? answers[0].value : answersList;
+				}
 				
-				strAnswer = answers.length == 1 ? answers[0].value : answersList;
+				var evt : TemplateLibEvent = new TemplateLibEvent( TemplateLibEvent.COMPLETE, strAnswer, closeDetail );
+				dispatchEvent( evt );
 				
-				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
-				
+				removeListeners();
 				PopUpManager.removePopUp(this);
 			}
 			
@@ -94,21 +107,7 @@
 			
 			protected function btnOkClickHandler(evt:MouseEvent) : void
 			{
-				btnOk.removeEventListener(MouseEvent.CLICK, btnOkClickHandler);
-				
 				closeDialog();
-			}
-			
-			protected function btnOk_keyDownHandler(event:KeyboardEvent):void
-			{
-				if (!btnOk.enabled)
-					return;
-				
-				if (event.keyCode != Keyboard.ENTER)
-					return;
-				
-				event.stopPropagation();
-				btnOk.removeEventListener(KeyboardEvent.KEY_DOWN, btnOk_keyDownHandler);
 			}
 			
 			protected function keyDown_Handler(event:KeyboardEvent):void
@@ -117,11 +116,25 @@
 					return;
 				
 				event.stopPropagation();
-				removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler)
 				
-				closeDialog();
+				if (event.target == btnCancel)
+					closeDialog(TemplateTransition.CANCEL);
+				else
+					closeDialog();
 			}
 			
+			protected function btnCancel_clickHandler(event:MouseEvent):void
+			{
+				closeDialog(TemplateTransition.CANCEL);
+			}
+			
+			private function removeListeners () : void
+			{
+				btnOk.removeEventListener(MouseEvent.CLICK, btnOkClickHandler);
+				btnCancel.removeEventListener(MouseEvent.CLICK, btnCancel_clickHandler);
+				
+				removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler)
+			}
 			
 		]]>
 	</mx:Script>
@@ -152,12 +165,16 @@
 					<mx:VBox width="100%"  id="answerBox"  maxHeight="200" verticalGap="20" />
 					
 				</mx:HBox>
-				<mx:Canvas width="100%">
+				<mx:HBox width="100%" bottom="0" right="0"
+						 horizontalAlign="right" verticalAlign="middle">
 					<control:RoundButton label="Ok" id="btnOk" 
-							   							bottom="0" right="0"
-														click="btnOkClickHandler(event)"
-														keyDown="btnOk_keyDownHandler(event)"/>
-				</mx:Canvas>
+							   							click="btnOkClickHandler(event)"/>
+					<control:RoundButton label="Cancel" id="btnCancel" 
+										 click="btnCancel_clickHandler(event)"
+										 visible="{cancelable}"
+										 enabled="{cancelable}"
+										 includeInLayout="{cancelable}"/>
+				</mx:HBox>
 			</mx:VBox>
 		</popup:PopupBottomPart>
 		

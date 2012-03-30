@@ -473,7 +473,7 @@ public dynamic class TemplateLib extends EventDispatcher
 		return new Function;
 	}
 	
-	private function _dialog( closeHandler : Function, question : String, params : Array = null ) : Function
+	private function _dialog( closeHandler : Function, question : String, params : Array = null, cancelable : Boolean = false) : Function
 	{
 		var popupParent		: Sprite = Sprite(Application.application);
 		var questionPopup	: Question = new Question();
@@ -481,8 +481,9 @@ public dynamic class TemplateLib extends EventDispatcher
 		questionPopup.question = question;
 		questionPopup.context = getContexts();
 		questionPopup.dataProvider = params;
+		questionPopup.cancelable = cancelable;
 		
-		questionPopup.addEventListener( CloseEvent.CLOSE, closeHandler); 
+		questionPopup.addEventListener( TemplateLibEvent.COMPLETE, closeHandler); 
 		PopUpManager.addPopUp(questionPopup, popupParent, true);
 		
 		return closeHandler;
@@ -492,15 +493,15 @@ public dynamic class TemplateLib extends EventDispatcher
 	{
 		return _dialog(questionCloseHandler, question, args);
 		
-		function questionCloseHandler( event : Event ) : void
+		function questionCloseHandler( event : TemplateLibEvent ) : void
 		{
-			setReturnValue( event.target.strAnswer );
+			setReturnValue ( event.result );
 		}
 	}
 	
 	public function progress( value : Number, description : String ) : void
 	{
-		dispatchEvent( new TemplateLibEvent( TemplateLibEvent.SET_PROGRESS, 
+		dispatchEvent( new TemplateLibEvent( TemplateLibEvent.PROGRESS, 
 			{value : value, description : description} ) );
 	}
 	
@@ -508,14 +509,19 @@ public dynamic class TemplateLib extends EventDispatcher
 	{
 		return _dialog( questionCloseHandler, question, args );
 		
-		function questionCloseHandler( event : Event) : void
+		function questionCloseHandler( event : TemplateLibEvent ) : void
 		{
 			var retVal : String = LanguageManager.sentences['other'] + '...';
 			
+			var result : String = event.result.toString();
+			
 			for each ( var arg : String in args )
 			{
-				if ( event.target.strAnswer == arg )
-					retVal = event.target.strAnswer;
+				if (result == arg )
+				{
+					retVal = result;
+					break;
+				}
 			}
 			
 			setReturnValue( retVal );
@@ -671,7 +677,7 @@ public dynamic class TemplateLib extends EventDispatcher
 	{
 		var file : DataLoader = new DataLoader();
 		
-		file.addEventListener(TemplateLibEvent.RESULT_GETTED, resultGettedHandler );
+		file.addEventListener(TemplateLibEvent.COMPLETE, resultGettedHandler );
 		
 //		Application.application.callLater(file.load, [filePath]);
 			
@@ -747,9 +753,23 @@ public dynamic class TemplateLib extends EventDispatcher
 	{
 		return _dialog(dialogCloseHandler, question, args);
 		
-		function dialogCloseHandler( event : Event ) : void
+		function dialogCloseHandler( event : TemplateLibEvent ) : void
 		{
-			setReturnValue( event.target.strAnswer );
+			setTransition ( event.transition );
+			
+			setReturnValue ( event.result );
+		}
+	}
+	
+	public function cancelableDialog( question : String, ...args ) : Function
+	{
+		return _dialog(dialogCloseHandler, question, args, true);
+		
+		function dialogCloseHandler( event : TemplateLibEvent ) : void
+		{
+			setTransition ( event.transition );
+			
+			setReturnValue ( event.result );
 		}
 	}
 	

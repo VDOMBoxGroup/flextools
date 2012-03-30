@@ -72,12 +72,12 @@ package net.vdombox.powerpack.lib.player.gen.functions
 			{
 			}
 			
-			dispatchEvent( new  TemplateLibEvent( TemplateLibEvent.RESULT_GETTED, fileContent,  "true"));
+			dispatchEvent( new  TemplateLibEvent( TemplateLibEvent.COMPLETE, fileContent,  "true"));
 		}
 		
 		private  function dispathError():void
 		{
-			dispatchEvent( new  TemplateLibEvent( TemplateLibEvent.RESULT_GETTED, "false",  "false"));
+			dispatchEvent( new  TemplateLibEvent( TemplateLibEvent.COMPLETE, "false",  "false"));
 		}
 		
 		private function errorHandler( event : IOErrorEvent): void

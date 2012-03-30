@@ -317,7 +317,7 @@
 			{
 				templateStructure.addEventListener ( "error", debugErrorHandler, false, 0, true );
 				templateStructure.addEventListener ( "generationComplete", generationComplete );
-				templateStructure.addEventListener ( TemplateLibEvent.SET_PROGRESS, setProgressHandler, false, 0, true );
+				templateStructure.addEventListener ( TemplateLibEvent.PROGRESS, setProgressHandler, false, 0, true );
 
 
 				timer = getTimer ();

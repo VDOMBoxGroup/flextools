@@ -11,9 +11,9 @@ import flash.events.Event;
 
 public class TemplateLibEvent extends Event
 {
-	static  public const   RESULT_GETTED : String = "rusulGetted";
+	static  public const   COMPLETE : String = "complete";
 	
-	static  public const  SET_PROGRESS : String = "setProgeress";
+	static  public const  PROGRESS : String = "progress";
 
 	public var result : Object;
 	public var transition : String;

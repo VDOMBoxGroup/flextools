@@ -27,20 +27,5 @@ package net.vdombox.powerpack.lib.player.control
 			super.commitProperties();
 		}
 		
-		override protected function keyDownHandler(event:KeyboardEvent):void
-		{
-			if (!enabled)
-				return;
-			
-			if (event.keyCode == Keyboard.ENTER)
-			{
-				dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-				return;
-			}
-			
-			super.keyDownHandler(event);
-			
-		}
-
 	}
 }
