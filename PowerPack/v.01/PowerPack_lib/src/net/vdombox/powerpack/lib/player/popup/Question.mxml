@@ -112,15 +112,26 @@
 			
 			protected function keyDown_Handler(event:KeyboardEvent):void
 			{
-				if (event.keyCode != Keyboard.ENTER)
+				if (event.keyCode == Keyboard.ENTER)
+				{
+					event.stopPropagation();
+					
+					if (event.target == btnCancel && btnCancel.enabled)
+						closeDialog(TemplateTransition.CANCEL);
+					else if (btnOk.enabled)
+						closeDialog();
+					
 					return;
+				}
 				
-				event.stopPropagation();
-				
-				if (event.target == btnCancel)
-					closeDialog(TemplateTransition.CANCEL);
-				else
-					closeDialog();
+				if (event.keyCode == Keyboard.ESCAPE)
+				{
+					event.stopPropagation();
+					
+					if (btnCancel.enabled)
+						closeDialog(TemplateTransition.CANCEL);
+				}
+					
 			}
 			
 			protected function btnCancel_clickHandler(event:MouseEvent):void
