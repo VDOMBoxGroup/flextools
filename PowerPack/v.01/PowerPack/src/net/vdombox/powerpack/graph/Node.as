@@ -1920,7 +1920,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 					text = nodeTextArea.text;
 				} else
 				{
-					if (isMac)
+					if (isMac || isLinux)
 					{
 						event.stopPropagation();
 						event.preventDefault();
@@ -1965,6 +1965,11 @@ public class Node extends Canvas implements IFocusManagerComponent
 	private function get isMac () : Boolean
 	{
 		return FileUtils.OS == FileUtils.OS_MAC;
+	}
+	
+	private function get isLinux () : Boolean
+	{
+		return FileUtils.OS == FileUtils.OS_LINUX;
 	}
 
 	private function comboBoxKeyDown( event : KeyboardEvent ) : void
