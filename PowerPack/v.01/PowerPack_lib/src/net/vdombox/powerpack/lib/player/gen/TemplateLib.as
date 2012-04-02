@@ -755,7 +755,7 @@ public dynamic class TemplateLib extends EventDispatcher
 		
 		function dialogCloseHandler( event : TemplateLibEvent ) : void
 		{
-			setTransition ( event.transition );
+//			setTransition ( event.transition );
 			
 			setReturnValue ( event.result );
 		}
