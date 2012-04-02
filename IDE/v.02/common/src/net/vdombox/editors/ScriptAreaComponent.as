@@ -31,6 +31,10 @@ package net.vdombox.editors
 
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
 			addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
+			
+			addEventListener(FocusEvent.FOCUS_IN, function(e:Event):void {
+				stage.focus = area;
+			});
 		}
 
 		private var area : ScriptAreaEvents;

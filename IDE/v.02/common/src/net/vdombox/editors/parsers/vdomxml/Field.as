@@ -1,6 +1,8 @@
 package net.vdombox.editors.parsers.vdomxml
 {
 
+	import net.vdombox.ide.common.model._vo.TypeVO;
+	
 	import ro.victordramba.util.HashList;
 	import ro.victordramba.util.HashMap;
 
@@ -29,7 +31,9 @@ package net.vdombox.editors.parsers.vdomxml
 		/**
 		 * top packages, package classes, class members, function local vars
 		 */
-		public var members : HashMap /*of Field*/ = new HashMap
+		public var members : HashMap /*of Field*/ = new HashMap;
+		
+		public var typeVO : TypeVO;
 
 		public function addMember( field : Field ) : void
 		{

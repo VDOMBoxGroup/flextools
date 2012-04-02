@@ -6,6 +6,7 @@ package net.vdombox.editors
 	import net.vdombox.editors.skins.ScriptEditorSkin;
 	
 	import spark.components.SkinnableContainer;
+	import net.vdombox.editors.parsers.vdomxml.AssistMenuVdomXML;
 
 	public class XMLScriptEditor extends SkinnableContainer
 	{
@@ -19,7 +20,7 @@ package net.vdombox.editors
 
 		private var controller : Controller;
 		private var fileName : String;
-		private var assistMenu : AssistMenu;
+		private var assistMenu : AssistMenuVdomXML;
 
 		public function loadSource( source : String, filePath : String ) : void
 		{
@@ -44,7 +45,7 @@ package net.vdombox.editors
 
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
 
-			assistMenu = new AssistMenu( scriptAreaComponent, controller, stage, assistCompleteHandler );
+			assistMenu = new AssistMenuVdomXML( scriptAreaComponent, controller, stage, assistCompleteHandler );
 
 			scriptAreaComponent.addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );

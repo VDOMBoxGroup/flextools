@@ -107,10 +107,12 @@ package net.vdombox.ide.common.model
 			{
 				typeField = new Field( "type", 0, typeVO.name );
 				
-				for each ( attributeDescriptionVO in typeVO.attributeDescriptions )
+				typeField.typeVO = typeVO;
+				
+				/*for each ( attributeDescriptionVO in typeVO.attributeDescriptions )
 				{
 					typeField.members.setValue( attributeDescriptionVO.name, new Field( "attribute", 0, attributeDescriptionVO.name ) );
-				}
+				}*/
 				
 				typeField.members.setValue( "name", new Field( "attribute", 0, "name" ) );
 				

@@ -2,7 +2,9 @@ package net.vdombox.editors
 {
 	import flash.events.Event;
 	
+	import net.vdombox.editors.parsers.python.AssistMenuPython;
 	import net.vdombox.editors.parsers.python.Controller;
+	import net.vdombox.editors.parsers.vdomxml.AssistMenuVdomXML;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
 	
 	import spark.components.SkinnableContainer;
@@ -21,7 +23,7 @@ package net.vdombox.editors
 
 		private var controller : Controller;
 		private var fileName : String;
-		private var assistMenu : AssistMenu;
+		private var assistMenu : AssistMenuPython;
 
 		public function loadSource( source : String, filePath : String ) : void
 		{
@@ -38,7 +40,7 @@ package net.vdombox.editors
 
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
 
-//			assistMenu = new AssistMenu( scriptAreaComponent, controller, stage, assistCompleteHandler );
+			assistMenu = new AssistMenuPython( scriptAreaComponent, controller, stage, assistCompleteHandler );
 
 			addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );

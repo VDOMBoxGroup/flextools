@@ -485,16 +485,16 @@ package ro.victordramba.scriptarea
 			{
 				i = _text.lastIndexOf( NL, _caret - 1 );
 				str = _text.substring( i + 1, _caret ).match( /^\s*/ )[ 0 ];
-				if ( _text.charAt( _caret - 1 ) == '{' )
+				if ( _text.charAt( _caret - 1 ) == ':' )
 					str += '\t';
 				replaceSelection( '\r' + str );
 				dipatchChange();
 			}
-			else if ( c == '}' && _text.charAt( _caret - 1 ) == '\t' )
+			/*else if ( c == '}' && _text.charAt( _caret - 1 ) == '\t' )
 			{
 				replaceText( _caret - 1, _caret, '}' );
 				dipatchChange();
-			}
+			}*/
 				//else if (e.ctrlKey) return;
 			else if ( e.charCode != 0 )
 			{

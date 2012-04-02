@@ -11,10 +11,10 @@ package net.vdombox.editors.parsers.python
 		private var string : String;
 		private var pos : uint;
 		private var str : String;
-		private var prevStr : String
+		private var prevStr : String;
 
 		private static const keywordsA : Array = [
-			"and", "as", "del", "for", "is", "raise", "assert", "elif", "from", "lambda", "return", "break", "else", "global", "None", "not", "try", "class", "except", "if", "or", "while", "continue", "exec", "import", "pass", "yield", "def", "finally", "in", "print"
+			"and", "as", "del", "for", "is", "raise", "assert", "elif", "from", "lambda", "return", "break", "else", "global", "None", "not", "try", "True", "False", "class", "except", "if", "or", "while", "continue", "exec", "import", "pass", "yield", "def", "finally", "in", "print"
 		];
 
 		private static const keywords2A : Array = [

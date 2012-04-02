@@ -3,6 +3,9 @@ package net.vdombox.editors.parsers.vdomxml
 	import flash.net.registerClassAlias;
 	import flash.utils.ByteArray;
 	
+	import net.vdombox.ide.common.model.TypesProxy;
+	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
+	
 	import ro.victordramba.util.HashMap;
 
 	public class TypeDB
@@ -81,7 +84,20 @@ package net.vdombox.editors.parsers.vdomxml
 		{
 			typeName = typeName.toLowerCase();
 			
-			return data.getValue( typeName );
+			var typeField : Field = data.getValue( typeName );
+			
+			if ( typeField.members.toArray().length == 1 )
+			{
+				var attributeDescriptions : Array = typeField.typeVO.attributeDescriptions;
+				var attributeDescriptionVO : AttributeDescriptionVO;
+				
+				for each ( attributeDescriptionVO in attributeDescriptions )
+				{
+					typeField.members.setValue( attributeDescriptionVO.name, new Field( "attribute", 0, attributeDescriptionVO.name ) );
+				}
+			}
+			
+			return typeField;
 		}
 		
 		public function toString() : String

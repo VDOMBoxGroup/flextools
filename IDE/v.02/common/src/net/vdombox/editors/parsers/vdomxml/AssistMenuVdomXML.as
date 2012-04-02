@@ -1,4 +1,4 @@
-package net.vdombox.editors
+package net.vdombox.editors.parsers.vdomxml
 {
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -7,15 +7,15 @@ package net.vdombox.editors
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	import flash.utils.setTimeout;
+	
+	import mx.core.UIComponent;
+	
 	import net.vdombox.editors.PopUpMenu;
-	
-	 import mx.core.UIComponent;
-	
-	import net.vdombox.editors.parsers.vdomxml.Controller;
+	import net.vdombox.editors.ScriptAreaComponent;
 	
 	import ro.victordramba.util.vectorToArray;
 
-	public class AssistMenu
+	public class AssistMenuVdomXML
 	{
 		private var menuData : Vector.<Object>
 		private var fld : ScriptAreaComponent;
@@ -29,7 +29,7 @@ package net.vdombox.editors
 //		private var tooltip:JToolTip;
 		private var tooltipCaret : int;
 
-		public function AssistMenu( field : ScriptAreaComponent, ctrl : Controller, stage : Stage, onComplete : Function )
+		public function AssistMenuVdomXML( field : ScriptAreaComponent, ctrl : Controller, stage : Stage, onComplete : Function )
 		{
 			fld = field;
 			this.ctrl = ctrl;
@@ -52,6 +52,7 @@ package net.vdombox.editors
 
 			//used to close the tooltip
 			fld.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+			//fld.addEventListener( Event.CHANGE, onKeyUp );
 		}
 
 		private function filterMenu() : Boolean
@@ -72,8 +73,13 @@ package net.vdombox.editors
 
 		private function onKeyDown( e : KeyboardEvent ) : void
 		{
-			if ( String.fromCharCode( e.keyCode ) == " " && e.ctrlKey )
+			if ( e.keyCode == Keyboard.SPACE && e.ctrlKey)
 				triggerAssist();
+		}
+		
+		private function onKeyUp( e : Event ) : void
+		{
+			//triggerAssist();
 		}
 
 		private function onMenuKey( e : KeyboardEvent ) : void

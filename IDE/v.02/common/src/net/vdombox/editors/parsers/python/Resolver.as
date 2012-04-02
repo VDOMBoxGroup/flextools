@@ -98,18 +98,316 @@ package net.vdombox.editors.parsers.python
 		{
 			var f : Field;
 
-			var a : Vector.<String> = new Vector.<String>;
-			a.push( 'function ' );
-			//all package level items
+			var a : Vector.<String> = new Vector.<String>();//all package level items
+			
+			// default keywords
+				
+			a.push( "AST" );
+			a.push( "ArithmeticError" );
+			a.push( "AssertionError" );
+			a.push( "AttributeError" );
+			a.push( "BaseHTTPServer" );
+			a.push( "Bastion" );
+			a.push( "CGIHTTPServer" );
+			a.push( "Complex" );
+			a.push( "EOFError" );
+			a.push( "Exception" );
+			a.push( "FloatingPointError" );
+			a.push( "IOError" );
+			a.push( "ImportError" );
+			a.push( "IndentationError" );
+			a.push( "IndexError" );
+			a.push( "KeyError" );
+			a.push( "KeyboardInterrupt" );
+			a.push( "LookupError" );
+			a.push( "MemoryError" );
+			a.push( "Mimewriter" );
+			a.push( "NameError" );
+			a.push( "None" );
+			a.push( "OverflowError" );
+			a.push( "Para" );
+			a.push( "Queue" );
+			a.push( "RuntimeError" );
+			a.push( "SimpleHTTPServer" );
+			a.push( "SocketServer" );
+			a.push( "StandardError" );
+			a.push( "StringIO" );
+			a.push( "SyntaxError" );
+			a.push( "SystemError" );
+			a.push( "SystemExit" );
+			a.push( "TabError" );
+			a.push( "Tkinter" );
+			a.push( "TypeError" );
+			a.push( "UserDict" );
+			a.push( "UserList" );
+			a.push( "ValueError" );
+			a.push( "ZeroDivisionError" );
+			a.push( "__abs__" );
+			a.push( "__add__" );
+			a.push( "__and__" );
+			a.push( "__bases__" );
+			a.push( "__call__" );
+			a.push( "__class__" );
+			a.push( "__cmp__" );
+			a.push( "__coerce__" );
+			a.push( "__del__" );
+			a.push( "__delattr__" );
+			a.push( "__delitem__" );
+			a.push( "__delslice__" );
+			a.push( "__dict__" );
+			a.push( "__div__" );
+			a.push( "__divmod__" );
+			a.push( "__float__" );
+			a.push( "__getattr__" );
+			a.push( "__getitem__" );
+			a.push( "__getslice__" );
+			a.push( "__hash__" );
+			a.push( "__hex__" );
+			a.push( "__iadd__" );
+			a.push( "__iand__" );
+			a.push( "__idiv__" );
+			a.push( "__ilshift__" );
+			a.push( "__imod__" );
+			a.push( "__import__" );
+			a.push( "__init__" );
+			a.push( "__int__" );
+			a.push( "__invert__" );
+			a.push( "__ior__" );
+			a.push( "__ipow__" );
+			a.push( "__irshift__" );
+			a.push( "__isub__" );
+			a.push( "__ixor__" );
+			a.push( "__len__" );
+			a.push( "__long__" );
+			a.push( "__lshift__" );
+			a.push( "__members__" );
+			a.push( "__methods__" );
+			a.push( "__mod__" );
+			a.push( "__mul__" );
+			a.push( "__name__" );
+			a.push( "__neg__" );
+			a.push( "__nonzero__" );
+			a.push( "__oct__" );
+			a.push( "__or__" );
+			a.push( "__pos__" );
+			a.push( "__pow__" );
+			a.push( "__radd__" );
+			a.push( "__rand__" );
+			a.push( "__rdiv__" );
+			a.push( "__rdivmod__" );
+			a.push( "__repr__" );
+			a.push( "__rlshift__" );
+			a.push( "__rmod__" );
+			a.push( "__rmul__" );
+			a.push( "__ror__" );
+			a.push( "__rpow__" );
+			a.push( "__rrshift__" );
+			a.push( "__rshift__" );
+			a.push( "__rsub__" );
+			a.push( "__rxor__" );
+			a.push( "__setattr__" );
+			a.push( "__setitem__" );
+			a.push( "__setslice__" );
+			a.push( "__str__" );
+			a.push( "__sub__" );
+			a.push( "__version__" );
+			a.push( "__xor__" );
+			a.push( "abs" );
+			a.push( "and" );
+			a.push( "apply" );
+			a.push( "array" );
+			a.push( "assert" );
+			a.push( "atexit" );
+			a.push( "break" );
+			a.push( "callable" );
+			a.push( "chr" );
+			a.push( "class" );
+			a.push( "cmd" );
+			a.push( "cmp" );
+			a.push( "codecs" );
+			a.push( "coerce" );
+			a.push( "commands" );
+			a.push( "compile" );
+			a.push( "compileall" );
+			a.push( "complex" );
+			a.push( "continue" );
+			a.push( "copy" );
+			a.push( "dbhash" );
+			a.push( "def" );
+			a.push( "del" );
+			a.push( "delattr" );
+			a.push( "dir" );
+			a.push( "dircmp" );
+			a.push( "dis" );
+			a.push( "divmod" );
+			a.push( "dospath" );
+			a.push( "dumbdbm" );
+			a.push( "elif" );
+			a.push( "else" );
+			a.push( "emacs" );
+			a.push( "eval" );
+			a.push( "except" );
+			a.push( "exec" );
+			a.push( "execfile" );
+			a.push( "filter" );
+			a.push( "finally" );
+			a.push( "find" );
+			a.push( "float" );
+			a.push( "fmt" );
+			a.push( "fnmatch" );
+			a.push( "for" );
+			a.push( "from" );
+			a.push( "ftplib" );
+			a.push( "getattr" );
+			a.push( "getopt" );
+			a.push( "glob" );
+			a.push( "global" );
+			a.push( "globals" );
+			a.push( "gopherlib" );
+			a.push( "grep" );
+			a.push( "group" );
+			a.push( "hasattr" );
+			a.push( "hash" );
+			a.push( "hex" );
+			a.push( "htmllib" );
+			a.push( "httplib" );
+			a.push( "id" );
+			a.push( "if" );
+			a.push( "ihooks" );
+			a.push( "imghdr" );
+			a.push( "import" );
+			a.push( "imputil" );
+			a.push( "in" );
+			a.push( "input" );
+			a.push( "int" );
+			a.push( "intern" );
+			a.push( "is" );
+			a.push( "isinstance" );
+			a.push( "issubclass" );
+			a.push( "joinfields" );
+			a.push( "lambda" );
+			a.push( "len" );
+			a.push( "linecache" );
+			a.push( "list" );
+			a.push( "local" );
+			a.push( "lockfile" );
+			a.push( "long" );
+			a.push( "macpath" );
+			a.push( "macurl2path" );
+			a.push( "mailbox" );
+			a.push( "mailcap" );
+			a.push( "map" );
+			a.push( "match" );
+			a.push( "math" );
+			a.push( "max" );
+			a.push( "mimetools" );
+			a.push( "mimify" );
+			a.push( "min" );
+			a.push( "mutex" );
+			a.push( "newdir" );
+			a.push( "ni" );
+			a.push( "nntplib" );
+			a.push( "not" );
+			a.push( "ntpath" );
+			a.push( "nturl2path" );
+			a.push( "oct" );
+			a.push( "open" );
+			a.push( "or" );
+			a.push( "ord" );
+			a.push( "os" );
+			a.push( "ospath" );
+			a.push( "pass" );
+			a.push( "pdb" );
+			a.push( "pickle" );
+			a.push( "pipes" );
+			a.push( "poly" );
+			a.push( "popen2" );
+			a.push( "posixfile" );
+			a.push( "posixpath" );
+			a.push( "pow" );
+			a.push( "print" );
+			a.push( "profile" );
+			a.push( "pstats" );
+			a.push( "pyclbr" );
+			a.push( "pyexpat" );
+			a.push( "quopri" );
+			a.push( "raise" );
+			a.push( "rand" );
+			a.push( "random" );
+			a.push( "range" );
+			a.push( "raw_input" );
+			a.push( "reduce" );
+			a.push( "regex" );
+			a.push( "regsub" );
+			a.push( "reload" );
+			a.push( "repr" );
+			a.push( "return" );
+			a.push( "rfc822" );
+			a.push( "round" );
+			a.push( "sched" );
+			a.push( "search" );
+			a.push( "self" );
+			a.push( "setattr" );
+			a.push( "setdefault" );
+			a.push( "sgmllib" );
+			a.push( "shelve" );
+			a.push( "site" );
+			a.push( "slice" );
+			a.push( "sndhdr" );
+			a.push( "snmp" );
+			a.push( "splitfields" );
+			a.push( "str" );
+			a.push( "string" );
+			a.push( "struct" );
+			a.push( "sys" );
+			a.push( "tb" );
+			a.push( "tempfile" );
+			a.push( "toaiff" );
+			a.push( "token" );
+			a.push( "tokenize" );
+			a.push( "traceback" );
+			a.push( "try" );
+			a.push( "tty" );
+			a.push( "tuple" );
+			a.push( "type" );
+			a.push( "types" );
+			a.push( "tzparse" );
+			a.push( "unichr" );
+			a.push( "unicode" );
+			a.push( "unicodedata" );
+			a.push( "urllib" );
+			a.push( "urlparse" );
+			a.push( "util" );
+			a.push( "uu" );
+			a.push( "vars" );
+			a.push( "wave" );
+			a.push( "webbrowser" );
+			a.push( "whatsound" );
+			a.push( "whichdb" );
+			a.push( "while" );
+			a.push( "whrandom" );
+			a.push( "xdrlib" );
+			a.push( "xml" );
+			a.push( "xmlpackage" );
+			a.push( "xrange" );
+			a.push( "zip" );
+			a.push( "zmod" );
+			
 			for each ( f in typeDB.listAll() )
+			{
 				a.push( f.name );
-
+				if ( !f.name )
+					var tt : int = 0;
+			}
+			
+			
 			//find the scope
 			var t : Token = tokenizer.tokenByPos( pos );
 			if ( !t )
 				return a;
-
-			if ( t.scope.fieldType == 'class' )
+			
+			
+			/*if ( t.scope.fieldType == 'class' )
 			{
 				a.push( 'private function ' );
 				a.push( 'protected function ' );
@@ -118,7 +416,7 @@ package net.vdombox.editors.parsers.python
 				a.push( 'protected var ' );
 				a.push( 'public var ' );
 				a.push( 'static ' );
-			}
+			}*/
 
 			var hash : HashMap = new HashMap;
 			var scope : Field;
@@ -126,7 +424,7 @@ package net.vdombox.editors.parsers.python
 			function addKeys( map : HashMap ) : void
 			{
 				for each ( var name : String in map.getKeys() )
-					a.push( name );
+					a.push( name);
 			}
 
 			//find items in function scope chain
@@ -152,6 +450,7 @@ package net.vdombox.editors.parsers.python
 				for each ( f in tokenScopeClass.members.toArray() )
 					if ( !isStatic || f.isStatic )
 						a.push( f.name );
+					
 
 				//inheritance
 				scope = tokenScopeClass;
@@ -199,7 +498,7 @@ package net.vdombox.editors.parsers.python
 					str += ':' + par.type.type;
 				if ( par.defaultValue )
 					str += '=' + par.defaultValue;
-				a.push( str );
+				a.push( { label: str, value: str });
 			}
 			//rest
 			if ( field.hasRestParams )
@@ -221,7 +520,7 @@ package net.vdombox.editors.parsers.python
 			var a : Vector.<String> = new Vector.<String>;
 
 			for each ( var m : Field in listMembers( resolved, resolvedIsClass ).toArray() )
-				a.push( m.name );
+				a.push(m.name );
 			a.sort( Array.CASEINSENSITIVE );
 			return a;
 		}

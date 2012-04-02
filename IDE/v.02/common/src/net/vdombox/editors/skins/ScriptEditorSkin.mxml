@@ -12,12 +12,14 @@
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.ResizeEvent;
 			
+			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 
 
 			private var hcw : ChangeWatcher;
 			private var vcw : ChangeWatcher;
+		
 
 			private function updateScrollBar() : void
 			{
@@ -110,6 +112,7 @@
 			{
 				scriptAreaComponent.scrollV = vsb.value;
 			}
+			
 		]]>
 	</fx:Script>
 

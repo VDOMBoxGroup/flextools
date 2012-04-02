@@ -12,7 +12,11 @@
 
 			public function setListData( value : Array ) : void
 			{
-				value.sortOn( "label", Array.CASEINSENSITIVE );
+				if ( value.hasOwnProperty( "label" ) )
+					value.sortOn( "label" );
+				else
+					value.sort(Array.CASEINSENSITIVE);
+				
 				dataProvider = new ArrayList( value );
 			}
 
@@ -23,7 +27,7 @@
 
 			public function getSelectedValue() : String
 			{
-				return selectedItem.value;
+				return selectedItem.hasOwnProperty( "value" )? selectedItem.value : selectedItem;
 			}
 
 			public function show( owner : DisplayObjectContainer, x : int, y : int ) : void

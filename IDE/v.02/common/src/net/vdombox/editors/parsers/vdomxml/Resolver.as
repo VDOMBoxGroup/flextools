@@ -87,6 +87,8 @@ package net.vdombox.editors.parsers.vdomxml
 			if ( type )
 			{
 				a = new Vector.<Object>;
+				
+				
 
 				for each ( var m : Field in type.members.toArray() )
 				{

@@ -20,9 +20,11 @@ Author: Victor Dramba
 
 package ro.victordramba.util
 {
+	import mx.utils.ObjectUtil;
+
 	public function vectorToArray(v:Object):Array
 	{
-		var a:Array = [];
+		var a:Array = new Array( v.length );
 		for (var i:int=0; i<v.length; i++)
 			a[i] = v[i];
 		return a;

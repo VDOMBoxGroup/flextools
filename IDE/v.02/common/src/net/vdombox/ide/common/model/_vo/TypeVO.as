@@ -10,15 +10,20 @@ package net.vdombox.ide.common.model._vo
 	public class TypeVO
 	{
 		private const STANDART_CATEGORIES : Array = [ "usual", "standard", "form", "table", "database", "debug" ];
+		
+		private var attributesXML : XML;
+		private var eventsXML : XML;
+		private var actionsXML : XML;
+		private var languages : XMLList;
 
 		public function TypeVO( typeXML : XML )
 		{
-			var languages : XMLList = typeXML.Languages.*;
+			languages = typeXML.Languages.*;
 
 			var informationXML : XML = typeXML.Information[ 0 ];
-			var attributesXML : XML = typeXML.Attributes[ 0 ];
-			var eventsXML : XML = typeXML.E2vdom.Events[ 0 ];
-			var actionsXML : XML = typeXML.E2vdom.Actions[ 0 ];
+			attributesXML = typeXML.Attributes[ 0 ];
+			eventsXML = typeXML.E2vdom.Events[ 0 ];
+			actionsXML = typeXML.E2vdom.Actions[ 0 ];
 
 			var child : XML;
 			var propertyName : String;
@@ -41,50 +46,11 @@ package net.vdombox.ide.common.model._vo
 				}
 			}
 			
-			if( attributesXML )
-			{
-				var attributesXMLList : XMLList = attributesXML.*;
-				
-				extractResources( attributesXMLList, languages );
-				
-				for each ( child in attributesXML.* )
-				{
-					_attributeDescriptions.push( new AttributeDescriptionVO( _typeID, child ) );
-				}
-				
-			}
+			_attributeDescriptions = null;
 			
-			if( eventsXML )
-			{
-				var eventsXMLList : XMLList = eventsXML..Event;
-				var eventVO : EventVO;
-				
-				extractResources( eventsXMLList, languages );
-				
-				for each ( child in eventsXMLList )
-				{
-					eventVO = new EventVO();
-					eventVO.setProperties( child );
-					
-					_events.push( eventVO );
-				}
-			}
+			_events = null;
 			
-			if( actionsXML )
-			{
-				var actionsXMLList : XMLList = actionsXML..Action;
-				var clientActionVO : ClientActionVO;
-				
-				extractResources( actionsXMLList, languages );
-				
-				for each ( child in actionsXMLList )
-				{
-					clientActionVO = new ClientActionVO();
-					clientActionVO.setProperties( child );
-					
-					_actions.push( clientActionVO );
-				}
-			}
+			_actions = null;
 		}
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
@@ -95,9 +61,9 @@ package net.vdombox.ide.common.model._vo
 
 		private var _information : TypeInformationVO;
 		
-		private var _attributeDescriptions : Array = [];
-		private var _events : Array = [];
-		private var _actions : Array = [];
+		private var _attributeDescriptions : Array;
+		private var _events : Array;
+		private var _actions : Array;
 
 		private var informationPropertyObject : Object = {};
 		
@@ -110,16 +76,82 @@ package net.vdombox.ide.common.model._vo
 
 		public function get attributeDescriptions() : Array
 		{
+			if ( !_attributeDescriptions )
+			{
+				_attributeDescriptions = [];
+				
+				if( attributesXML )
+				{
+					var attributesXMLList : XMLList = attributesXML.*;
+					
+					extractResources( attributesXMLList, languages );
+					
+					var child : XML;
+					
+					for each ( child in attributesXML.* )
+					{
+						_attributeDescriptions.push( new AttributeDescriptionVO( _typeID, child ) );
+					}
+					
+				}
+			}
+			
 			return _attributeDescriptions.slice();
 		}
 
 		public function get actions() : Array
 		{
+			if ( !_actions )
+			{
+				_actions = [];
+				
+				if( actionsXML )
+				{
+					var actionsXMLList : XMLList = actionsXML..Action;
+					var clientActionVO : ClientActionVO;
+					
+					extractResources( actionsXMLList, languages );
+					
+					var child : XML;
+					
+					for each ( child in actionsXMLList )
+					{
+						clientActionVO = new ClientActionVO();
+						clientActionVO.setProperties( child );
+						
+						_actions.push( clientActionVO );
+					}
+				}
+			}
+			
 			return _actions.slice();
 		}
 		
 		public function get events() : Array
 		{
+			if ( !_events )
+			{
+				_events = [];
+				
+				if( eventsXML )
+				{
+					var eventsXMLList : XMLList = eventsXML..Event;
+					var eventVO : EventVO;
+					
+					extractResources( eventsXMLList, languages );
+					
+					var child : XML;
+					
+					for each ( child in eventsXMLList )
+					{
+						eventVO = new EventVO();
+						eventVO.setProperties( child );
+						
+						_events.push( eventVO );
+					}
+				}
+			}
+			
 			return _events.slice();
 		}
 		
