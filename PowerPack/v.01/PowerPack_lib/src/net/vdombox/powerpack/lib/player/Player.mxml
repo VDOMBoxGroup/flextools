@@ -2,14 +2,15 @@
 <mx:Canvas
 		xmlns:mx="http://www.adobe.com/2006/mxml"
 		xmlns:customize="net.vdombox.powerpack.lib.player.customize.*"
-		width="739" height="388"
-		initialize="init()"
-
 		xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
+		xmlns:control="net.vdombox.powerpack.lib.player.control.*"
+		
+		width="739" height="388"
+		
+		initialize="init()"
+		
 		horizontalScrollPolicy="off"
 		verticalScrollPolicy="off"
-		xmlns:control="net.vdombox.powerpack.lib.player.control.*"
-
 		styleName="installerWindowStyle">
 		
 		<mx:Style source="assets/style/style.css"/>
@@ -105,6 +106,7 @@
 				templates[0] = template;
 			
 			showTemplateLogo();
+			updateAppLabelFormat();
 
 			if ( template.isEncoded )
 			{
@@ -172,6 +174,8 @@
 		{
 			if (showLogo)
 				showTemplateLogo();
+			
+			updateAppLabelFormat();
 			
 			if ( currentTemplate.isEncoded )
 			{
@@ -253,8 +257,8 @@
 
 			if ( tpl )
 			{
-				tpl.removeEventListener ( "generationComplete", generationComplete );
-				tpl.removeEventListener ( "error", debugErrorHandler );
+				tpl.removeEventListener ( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+				tpl.removeEventListener ( TemplateStruct.EVENT_ERROR, debugErrorHandler );
 				ContextManager.templateStruct = null;
 			}
 		}
@@ -304,8 +308,7 @@
 				}
 				else
 				{
-					clearTemplateDebug ();
-					processStep ( cGeneral );
+					completeWithError();
 				}
 			}
 		}
@@ -315,8 +318,8 @@
 			var templateStructure:TemplateStruct = ContextManager.templateStruct;
 			try
 			{
-				templateStructure.addEventListener ( "error", debugErrorHandler, false, 0, true );
-				templateStructure.addEventListener ( "generationComplete", generationComplete );
+				templateStructure.addEventListener ( TemplateStruct.EVENT_ERROR, debugErrorHandler, false, 0, true );
+				templateStructure.addEventListener ( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
 				templateStructure.addEventListener ( TemplateLibEvent.PROGRESS, setProgressHandler, false, 0, true );
 
 
@@ -327,6 +330,7 @@
 			catch ( e:Error )
 			{
 				AlertPopup.show ( e.message, LanguageManager.sentences['warning'] );
+				
 				clearTemplateDebug ();
 				processStep ( cGeneral );
 			}
@@ -347,34 +351,31 @@
 		private function debugErrorHandler( event:Event ):void
 		{
 			var error:* = event.target.error;
-			AlertPopup.show ( error.message, LanguageManager.sentences['error'] );
-			clearTemplateDebug ();
-			processStep ( cGeneral );
+			AlertPopup.show ( error.message, LanguageManager.sentences['error'], AlertPopup.OK, null, debugErrorCloseHandler );
+			
+			function debugErrorCloseHandler (error : CloseEvent) : void
+			{
+				completeWithError();
+			}
 		}
 
+		private function completeWithError() : void
+		{
+			clearTemplateDebug ();
+			
+			resultMessage.text = "Error during execution. Impossible to complete the process.";
+			processStep ( cFinal );
+		}
 
 		private function generationComplete( event:Event ):void
 		{
 			timer = getTimer () - timer;
 
 			appGenerated = true;
-			ContextManager.templateStruct.removeEventListener ( "generationComplete", generationComplete );
-			ContextManager.templateStruct.removeEventListener ( "error", debugErrorHandler );
+			ContextManager.templateStruct.removeEventListener ( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+			ContextManager.templateStruct.removeEventListener ( TemplateStruct.EVENT_ERROR, debugErrorHandler );
 
 			processStep ( cFinal );
-		}
-
-
-		private function closeTemplateFile():void
-		{
-			clearTemplateDebug ();
-
-			ContextManager.instance.lastFile = false;
-			
-			if ( ContextManager.templates.length > 0 )
-				ContextManager.templates.removeItemAt ( 0 );
-			
-			processStep ( cGeneral );
 		}
 
 		public function alertInterrupt():void
@@ -414,20 +415,21 @@
 			}
 		}
 			
-			protected function appNameLabel_creationCompleteHandler(event:FlexEvent):void
+		private function updateAppLabelFormat () : void
+		{
+			var appNameLen : Number = appNameLabel.text.length;
+			
+			if (appNameLen > 12)
 			{
-				var appNameLen : Number = appNameLabel.text.length;
-				
-				if (appNameLen > 12)
-				{
-					if (appNameLen < 16)
-						appNameLabel.setStyle("fontSize", 40);
-					else if (appNameLen < 22)
-						appNameLabel.setStyle("fontSize", 30);
-					else
-						appNameLabel.setStyle("fontSize", 26);
-				}
+				if (appNameLen < 16)
+					appNameLabel.setStyle("fontSize", 40);
+				else if (appNameLen < 22)
+					appNameLabel.setStyle("fontSize", 30);
+				else
+					appNameLabel.setStyle("fontSize", 26);
 			}
+		}
+		
 			
 		]]>
 	</mx:Script>
@@ -453,8 +455,7 @@
 				id="appNameLabel"
 				width="450"
 				text="{ContextManager.templates.getItemAt( 0 ).selectedProject.name}"
-				styleName="installerHeaderLabel"
-				creationComplete="appNameLabel_creationCompleteHandler(event)"/>
+				styleName="installerHeaderLabel"/>
 
 		<mx:ViewStack id="vsProcess"
 					  width="100%" height="100%"
@@ -533,7 +534,7 @@
 
 				<mx:Text id="resultMessage" styleName="infoTextStyle"
 						 width="100%" height="70"
-						 text="{LanguageManager.sentences.msg_gen_finish}"/>
+						 text=""/>
 
 				<mx:HBox y="162" width="100%"
 						 horizontalAlign="right" verticalAlign="middle">

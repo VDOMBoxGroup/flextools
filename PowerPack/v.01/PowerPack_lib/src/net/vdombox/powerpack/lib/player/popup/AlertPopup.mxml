@@ -215,10 +215,10 @@
 				else if (buttonPressed == BUTTON_NAME_CANCEL)
 					closeEvent.detail = CANCEL;
 				
-				dispatchEvent(closeEvent);
-				
 				PopUpManager.removePopUp(alert);
 				alert = null;
+				
+				dispatchEvent(closeEvent);
 				
 			}
 			

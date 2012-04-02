@@ -25,6 +25,10 @@ import r1.deval.D;
 
 public class TemplateStruct extends EventDispatcher
 {
+	public static const EVENT_ERROR					: String = "error";
+	public static const EVENT_GENERATION_COMPLETE	: String = "generationComplete";
+	public static const EVENT_STEP_COMPLETE			: String = "stepComplete";
+	
 	public static const MSG_PARSE_ERR : String = "Runtime error.\nGraph: {0}\nState: {1}";
 	public static var lib : TemplateLib;
 
@@ -496,260 +500,261 @@ public class TemplateStruct extends EventDispatcher
 
 	public function generate( force : Boolean = false, over : Boolean = false, ret : Boolean = false ) : String
 	{
-		//try {
-
-		if ( terminated )
+		try 
 		{
-			return null;
-			terminated = false;
-		}
-
-		if ( isRunning )
-		{
-			//Application.application.callLater(generate, [force, over, ret]);
-			return null;
-		}
-		isRunning = true;
-
-		if ( buffer )
-		{
-			isRunning = false;
-			return buffer;
-		}
-
-		if ( !initGraph )
-		{
-			isRunning = false;
-			throw new ValidationError( null, 9001 );
-		}
-		
-		if ( over )
-			forced = 0;
-
-		if ( ret )
-			forced = 1;
-
-		do
-		{
-			// check for current node	
-			if ( !curGraphContext.curNode )
+			if ( terminated )
+			{
+				return null;
+				terminated = false;
+			}
+	
+			if ( isRunning )
+			{
+				//Application.application.callLater(generate, [force, over, ret]);
+				return null;
+			}
+			isRunning = true;
+	
+			if ( buffer )
 			{
 				isRunning = false;
-				throw new ValidationError( null, 9002, [curGraphContext.curGraph.name] );
+				return buffer;
 			}
-
-			switch ( step )
+	
+			if ( !initGraph )
 			{
-				case 'parseNewNode': // parse current node
-
-					if ( forced > 0 || over )
-						force = true;
-
-					dispatchEvent( new Event( "processNode" ) );
-
-					if ( isStepDebug && !force )
-					{
-						dispatchEvent( new Event( "stepComplete" ) );
-						isRunning = false;
-						forced = -1;
-						return null;
-					}
-
-					if ( isDebug && !force && curGraphContext.curNode.breakpoint )
-					{
-						dispatchEvent( new Event( "stepComplete" ) );
-						isRunning = false;
-						forced = -1;
-						return null;
-					}
-
-					force = false;
-					over = false;
-
-					////////////////////////////////////////////////////////////////////
-
-					if ( curGraphContext.curNode.enabled )
-					{
-						curGraphContext.contextStack.push( new NodeContext( curGraphContext.curNode, null ) );
-
-						switch ( curGraphContext.curNode.category )
+				isRunning = false;
+				throw new ValidationError( null, 9001 );
+			}
+			
+			if ( over )
+				forced = 0;
+	
+			if ( ret )
+				forced = 1;
+	
+			do
+			{
+				// check for current node	
+				if ( !curGraphContext.curNode )
+				{
+					isRunning = false;
+					throw new ValidationError( null, 9002, [curGraphContext.curGraph.name] );
+				}
+	
+				switch ( step )
+				{
+					case 'parseNewNode': // parse current node
+	
+						if ( forced > 0 || over )
+							force = true;
+	
+						dispatchEvent( new Event( "processNode" ) );
+	
+						if ( isStepDebug && !force )
 						{
-							case NodeCategory.NORMAL:
-
-								curNodeContext.block = CodeParser.ParseText(
-										curGraphContext.curNode.text );
-								break;
-
-							case NodeCategory.RESOURCE:
-
-//								var resData : ByteArray = CashManager.getObject( ID, curGraphContext.curNode.text ).data;
-//
-//								curNodeContext.block = new ParsedBlock();
-//								curNodeContext.block.print = true;
-//								curNodeContext.block.retValue = resData.readUTFBytes( resData.length );
-//								curNodeContext.block.executed = true;
-								break;
-
-							case NodeCategory.SUBGRAPH:
-
-								curNodeContext.block = CodeParser.ParseSubgraphNode(
-										curGraphContext.curNode.text );
-
+							dispatchEvent( new Event( EVENT_STEP_COMPLETE ) );
+							isRunning = false;
+							forced = -1;
+							return null;
+						}
+	
+						if ( isDebug && !force && curGraphContext.curNode.breakpoint )
+						{
+							dispatchEvent( new Event( EVENT_STEP_COMPLETE ) );
+							isRunning = false;
+							forced = -1;
+							return null;
+						}
+	
+						force = false;
+						over = false;
+	
+						////////////////////////////////////////////////////////////////////
+	
+						if ( curGraphContext.curNode.enabled )
+						{
+							curGraphContext.contextStack.push( new NodeContext( curGraphContext.curNode, null ) );
+	
+							switch ( curGraphContext.curNode.category )
+							{
+								case NodeCategory.NORMAL:
+	
+									curNodeContext.block = CodeParser.ParseText(
+											curGraphContext.curNode.text );
+									break;
+	
+								case NodeCategory.RESOURCE:
+	
+	//								var resData : ByteArray = CashManager.getObject( ID, curGraphContext.curNode.text ).data;
+	//
+	//								curNodeContext.block = new ParsedBlock();
+	//								curNodeContext.block.print = true;
+	//								curNodeContext.block.retValue = resData.readUTFBytes( resData.length );
+	//								curNodeContext.block.executed = true;
+									break;
+	
+								case NodeCategory.SUBGRAPH:
+	
+									curNodeContext.block = CodeParser.ParseSubgraphNode(
+											curGraphContext.curNode.text );
+	
+									if ( curNodeContext.block.error )
+									{
+										isRunning = false;
+										throw new ValidationError( null, 9000 );
+									}
+									else
+									{
+										curNodeContext.block = CodeParser.ParseCode(
+												'[sub ' + curGraphContext.curNode.text + ']' );
+									}
+									break;
+	
+								case NodeCategory.COMMAND:
+									curNodeContext.block = CodeParser.ParseCode( curGraphContext.curNode.text );
+									break;
+	
+							}
+	
+							curNodeContext.block.varPrefix = curGraphContext.varPrefix;
+	
+							if ( curNodeContext.block.error && curNodeContext.block.errFragment )
+							{
+								isRunning = false;
 								if ( curNodeContext.block.error )
 								{
-									isRunning = false;
-									throw new ValidationError( null, 9000 );
+									throw curNodeContext.block.error;
+								}
+								else if ( curNodeContext.block.errFragment )
+								{
+									throw curNodeContext.block.errFragment.error;
 								}
 								else
 								{
-									curNodeContext.block = CodeParser.ParseCode(
-											'[sub ' + curGraphContext.curNode.text + ']' );
+									throw new RunTimeError( MSG_PARSE_ERR, -1,
+											[curGraphContext.curNode.graph.name,
+												curGraphContext.curNode.text] );
 								}
-								break;
-
-							case NodeCategory.COMMAND:
-								curNodeContext.block = CodeParser.ParseCode( curGraphContext.curNode.text );
-								break;
-
-						}
-
-						curNodeContext.block.varPrefix = curGraphContext.varPrefix;
-
-						if ( curNodeContext.block.error && curNodeContext.block.errFragment )
-						{
-							isRunning = false;
-							if ( curNodeContext.block.error )
-							{
-								throw curNodeContext.block.error;
 							}
-							else if ( curNodeContext.block.errFragment )
+						}
+	
+					case 'executeCode':
+	
+						if ( curNodeContext.block )
+						{
+							if ( !curNodeContext.block.executed )
 							{
-								throw curNodeContext.block.errFragment.error;
+								// TODO : block run menu
+	//							MenuGeneral.updateMenuState(MenuGeneral.MENU_RUN, false);
+								step = 'processExecResult';
+	
+								CodeParser.executeBlock(
+										curNodeContext.block,
+										[context, curGraphContext.context],
+										true );
+	
+								if ( curNodeContext.block.lastExecutedFragment.retValue is Function )
+								{
+									isRunning = false;
+									return null;
+								}
+							}
+						}
+	
+					case 'processExecResult':
+	
+						if ( curNodeContext.block )
+						{
+							var lastExecFrag : CodeFragment = curNodeContext.block.lastExecutedFragment;
+	
+							if ( lastExecFrag )
+							{
+								if ( lastExecFrag.print )
+									curGraphContext.buffer += lastExecFrag.retValue + " ";
+	
+								transition = lastExecFrag.transition;
+	
+								if ( lastExecFrag.trans.length )
+								{
+									if ( !transition )
+										transition = lastExecFrag.retValue;
+								}
 							}
 							else
 							{
-								throw new RunTimeError( MSG_PARSE_ERR, -1,
-										[curGraphContext.curNode.graph.name,
-											curGraphContext.curNode.text] );
+								if ( curNodeContext.block.print )
+									curGraphContext.buffer += curNodeContext.block.retValue + " ";
 							}
-						}
-					}
-
-				case 'executeCode':
-
-					if ( curNodeContext.block )
-					{
-						if ( !curNodeContext.block.executed )
-						{
-							// TODO : block run menu
-//							MenuGeneral.updateMenuState(MenuGeneral.MENU_RUN, false);
-							step = 'processExecResult';
-
-							CodeParser.executeBlock(
-									curNodeContext.block,
-									[context, curGraphContext.context],
-									true );
-
-							if ( curNodeContext.block.lastExecutedFragment.retValue is Function )
+	
+							if ( !curNodeContext.block.executed )
 							{
-								isRunning = false;
-								return null;
+								step = 'executeCode';
+								continue;
 							}
+							
+							//TODO : unblock
+	//						MenuGeneral.updateMenuState(MenuGeneral.MENU_RUN, true);
 						}
-					}
-
-				case 'processExecResult':
-
-					if ( curNodeContext.block )
-					{
-						var lastExecFrag : CodeFragment = curNodeContext.block.lastExecutedFragment;
-
-						if ( lastExecFrag )
+	
+					case 'getNextNode': // transition to next node
+	
+						var index : int = GetArrowIndex( curGraphContext.curNode.outArrows, transition );
+						transition = null;
+	
+						if ( index == -1 ||
+								curGraphContext.curNode.type == NodeType.TERMINAL )
 						{
-							if ( lastExecFrag.print )
-								curGraphContext.buffer += lastExecFrag.retValue + " ";
-
-							transition = lastExecFrag.transition;
-
-							if ( lastExecFrag.trans.length )
+	
+							var tmpBuf : String = curGraphContext.buffer;
+	
+							forced--;
+							contextStack.pop();
+	
+							if ( contextStack.length > 0 )
 							{
-								if ( !transition )
-									transition = lastExecFrag.retValue;
+								curNodeContext.block.lastExecutedFragment.retValue =
+										tmpBuf;
+	
+								context[curNodeContext.block.lastExecutedFragment.retVarName] =
+										curNodeContext.block.lastExecutedFragment.retValue;
+	
+								step = 'processExecResult';
+	
+								continue;
 							}
+	
+							if ( contextStack.length == 0 )
+								break;
 						}
 						else
 						{
-							if ( curNodeContext.block.print )
-								curGraphContext.buffer += curNodeContext.block.retValue + " ";
+							nodeStack.push( curNodeContext );
 						}
+	
+						// select next node
+						curGraphContext.curNode =
+								ArrowStruct( curGraphContext.curNode.outArrows[index] ).toObj;
+	
+						step = 'parseNewNode';
+				}
+			} while ( contextStack.length > 0 );
+	
+			// replace special sequences
+			buffer = Utils.replaceEscapeSequences( tmpBuf, "\\-" );
+	
+			isRunning = false;
+	
+			dispatchEvent( new Event( EVENT_GENERATION_COMPLETE ) );
+	
+			return buffer;
 
-						if ( !curNodeContext.block.executed )
-						{
-							step = 'executeCode';
-							continue;
-						}
-						
-						//TODO : unblock
-//						MenuGeneral.updateMenuState(MenuGeneral.MENU_RUN, true);
-					}
-
-				case 'getNextNode': // transition to next node
-
-					var index : int = GetArrowIndex( curGraphContext.curNode.outArrows, transition );
-					transition = null;
-
-					if ( index == -1 ||
-							curGraphContext.curNode.type == NodeType.TERMINAL )
-					{
-
-						var tmpBuf : String = curGraphContext.buffer;
-
-						forced--;
-						contextStack.pop();
-
-						if ( contextStack.length > 0 )
-						{
-							curNodeContext.block.lastExecutedFragment.retValue =
-									tmpBuf;
-
-							context[curNodeContext.block.lastExecutedFragment.retVarName] =
-									curNodeContext.block.lastExecutedFragment.retValue;
-
-							step = 'processExecResult';
-
-							continue;
-						}
-
-						if ( contextStack.length == 0 )
-							break;
-					}
-					else
-					{
-						nodeStack.push( curNodeContext );
-					}
-
-					// select next node
-					curGraphContext.curNode =
-							ArrowStruct( curGraphContext.curNode.outArrows[index] ).toObj;
-
-					step = 'parseNewNode';
-			}
-		} while ( contextStack.length > 0 );
-
-		// replace special sequences
-		buffer = Utils.replaceEscapeSequences( tmpBuf, "\\-" );
-
-		isRunning = false;
-
-		dispatchEvent( new Event( "generationComplete" ) );
-
-		return buffer;
-
-		//} catch (e:Error) {
-		//	error = e;
-		//	isRunning = false;
-		//	dispatchEvent(new Event("error"));
-		//}
+		} 
+		catch (e:Error) {
+			error = e;
+			isRunning = false;
+			dispatchEvent(new Event(EVENT_ERROR));
+		}
 
 		return null;
 	}
