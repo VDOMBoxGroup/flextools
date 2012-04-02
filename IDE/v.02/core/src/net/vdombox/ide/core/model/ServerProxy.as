@@ -8,7 +8,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
 	
-	import net.vdombox.editors.AssistMenu;
+	import net.vdombox.editors.parsers.vdomxml.AssistMenuVdomXML;
 	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;

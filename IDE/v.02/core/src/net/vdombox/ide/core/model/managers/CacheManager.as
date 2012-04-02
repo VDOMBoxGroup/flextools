@@ -206,13 +206,13 @@ package net.vdombox.ide.core.model.managers
 			for each ( var file : File in fileList )
 			{
 				
-				var days : Number = ( currentDate - file.creationDate.time ) / 1000 / 60 / 60 / 24;
+				/*var days : Number = ( currentDate - file.creationDate.time ) / 1000 / 60 / 60 / 24;
 				
 				if ( days > 17 )
 				{
 					file.deleteFile();
 					continue;
-				}
+				}*/
 				
 				cacheSize += file.size;
 				cachedFiles.addItem( { create: file.creationDate.time, name: file.name, size: file.size } );
@@ -237,6 +237,7 @@ package net.vdombox.ide.core.model.managers
 
 				while ( cacheSize > halfCacheSize )
 				{
+					
 
 					item = cachedFiles.getItemAt( 0 )
 

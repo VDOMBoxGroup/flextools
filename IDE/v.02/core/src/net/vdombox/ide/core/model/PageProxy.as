@@ -251,8 +251,12 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 		
+		private var _serverActionVO : ServerActionVO;
+		
 		public function deleteServerAction( serverActionVO : ServerActionVO ) : AsyncToken
 		{
+			_serverActionVO = serverActionVO;
+			
 			var token : AsyncToken;
 			token = soap.delete_server_action( pageVO.applicationVO.id, pageVO.id, serverActionVO.id );
 			
@@ -716,8 +720,12 @@ package net.vdombox.ide.core.model
 					
 				case "get_server_actions":
 				{
-					
-					serverActionsXMLList = result.ServerActions.Container.( @ID == pageVO.id )[0].children();
+					if ( result.ServerActions.Container )
+					{
+						var  containerXML : XML = result.ServerActions.Container.( @ID == pageVO.id )[0]
+						if(containerXML)
+							serverActionsXMLList = containerXML.children();
+					}
 					
 					for each ( serverActionXML in serverActionsXMLList )
 					{
@@ -740,7 +748,7 @@ package net.vdombox.ide.core.model
 
 				case "get_server_action":
 				{
-					var iyt : int = 3;
+					
 					break;
 				}
 					
@@ -757,6 +765,16 @@ package net.vdombox.ide.core.model
 				case "create_server_action":
 				{
 					
+					serverActionVO = new ServerActionVO();
+					
+					serverActionVO.setContainerID( pageVO.id );
+					
+					serverActionVO.setProperties( result.Action[0] )
+					
+					serverActionVO.script = "";
+					
+					sendNotification( ApplicationFacade.PAGE_SERVER_ACTION_CREATED, { pageVO: pageVO, serverActionVO: serverActionVO } );
+					
 					break;
 				}
 					
@@ -768,6 +786,7 @@ package net.vdombox.ide.core.model
 					
 				case "delete_server_action":
 				{
+					sendNotification( ApplicationFacade.PAGE_SERVER_ACTION_DELETED, { pageVO: pageVO, serverActionVO: _serverActionVO } );
 					
 					break;
 				}

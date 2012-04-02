@@ -240,8 +240,12 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 		
+		private var _serverActionVO : ServerActionVO;
+		
 		public function deleteServerAction( serverActionVO : ServerActionVO ) : AsyncToken
 		{
+			_serverActionVO = serverActionVO;
+			
 			var token : AsyncToken;
 			token = soap.delete_server_action( objectVO.pageVO.applicationVO.id, objectVO.id, serverActionVO.id );
 			
@@ -709,6 +713,28 @@ package net.vdombox.ide.core.model
 				case "remote_call":
 				{
 					sendNotification( ApplicationFacade.OBJECT_REMOTE_CALL_GETTED, { objectVO: objectVO, result: result } );
+					
+					break;
+				}
+					
+				case "create_server_action":
+				{
+					serverActionVO = new ServerActionVO();
+					
+					serverActionVO.setContainerID( objectVO.id );
+					
+					serverActionVO.setProperties( result.Action[0] )
+					
+					serverActionVO.script = "";
+					
+					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTION_CREATED, { objectVO: objectVO, serverActionVO: serverActionVO } );
+					
+					break;
+				}
+					
+				case "delete_server_action":
+				{
+					sendNotification( ApplicationFacade.PAGE_SERVER_ACTION_DELETED, { objectVO: objectVO, serverActionVO: _serverActionVO } );
 					
 					break;
 				}

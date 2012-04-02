@@ -19,6 +19,8 @@ package net.vdombox.ide.core.model.managers
 		
 		private var fileStream : FileStream = new FileStream();
 		
+		private var hostName : Array;
+		
 		public static function getInstance() : TypesManager
 		{
 			if ( !instance )
@@ -48,7 +50,16 @@ package net.vdombox.ide.core.model.managers
 		
 		public function hasServer( serverInfo : AuthInfoVO ) : Boolean
 		{
-			var serverTypes : File = typesFolder.resolvePath(serverInfo.hostname);
+			hostName = serverInfo.hostname.split(":");
+			
+			serverTypes = typesFolder.resolvePath(hostName[0] as String);
+			if ( !serverTypes.exists )
+				return false;
+			
+			if ( hostName.length == 1 )
+				hostName.push("80");
+			
+			serverTypes = serverTypes.resolvePath(hostName[1] as String);
 			if ( !serverTypes.exists )
 				return false;
 			
@@ -75,12 +86,18 @@ package net.vdombox.ide.core.model.managers
 		
 		public function setType( serverInfo: AuthInfoVO, typeXML : XML ) : void
 		{
-			serverTypes = typesFolder.resolvePath(serverInfo.hostname);
+			hostName = serverInfo.hostname.split(":");
 			
+			serverTypes = typesFolder.resolvePath(hostName[0] as String);
 			if ( !serverTypes.exists )
-			{
 				serverTypes.createDirectory();
-			}
+			
+			if ( hostName.length == 1 )
+				hostName.push("80");
+			
+			serverTypes = serverTypes.resolvePath(hostName[1] as String);
+			if ( !serverTypes.exists )
+				serverTypes.createDirectory();
 			
 			fileType = serverTypes.resolvePath( typeXML.Information.ID.toString() );
 			
@@ -99,21 +116,18 @@ package net.vdombox.ide.core.model.managers
 		
 		public function setTypes( serverInfo : AuthInfoVO, typesXML : XML ) : void
 		{
-			serverTypes = typesFolder.resolvePath(serverInfo.hostname);
+			hostName = serverInfo.hostname.split(":");
 			
+			serverTypes = typesFolder.resolvePath(hostName[0] as String);
 			if ( !serverTypes.exists )
-			{
-				try
-				{
-					serverTypes.createDirectory();
-				}
-				catch ( error : IOError )
-				{
-					////trace("setTypes ERROR");
-					
-					return;
-				}
-			}
+				serverTypes.createDirectory();
+			
+			if ( hostName.length == 1 )
+				hostName.push("80");
+			
+			serverTypes = serverTypes.resolvePath(hostName[1] as String);
+			if ( !serverTypes.exists )
+				serverTypes.createDirectory();
 			
 			fileType = serverTypes.resolvePath( "info" );
 			
@@ -154,7 +168,14 @@ package net.vdombox.ide.core.model.managers
 			var typesVO : Array = new Array();
 			var typeVO : TypeVO;
 			
-			serverTypes = typesFolder.resolvePath(serverInfo.hostname);
+			hostName = serverInfo.hostname.split(":");
+			
+			serverTypes = typesFolder.resolvePath(hostName[0] as String);
+			
+			if ( hostName.length == 1 )
+				hostName.push("80");
+			
+			serverTypes = serverTypes.resolvePath(hostName[1] as String);
 			
 			var _types : Object = [];
 			
