@@ -683,9 +683,9 @@
 	
 							ProgressManager.start( ProgressManager.WINDOW_MODE, false );
 	
-							ContextManager.templateStruct.addEventListener( "generationComplete", generationComplete );
-							ContextManager.templateStruct.addEventListener( "stepComplete", stepCompleteHandler );
-							ContextManager.templateStruct.addEventListener( "error", debugErrorHandler );
+							ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+							ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
+							ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
 							ContextManager.templateStruct.generate();
 						}
 					}
@@ -725,9 +725,9 @@
 						case 'break':
 							ProgressManager.complete();
 
-							ContextManager.templateStruct.removeEventListener( "generationComplete", generationComplete );
-							ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
-							ContextManager.templateStruct.removeEventListener( "error", debugErrorHandler );
+							ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+							ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
+							ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
 
 							ContextManager.templateStruct.terminated = true;
 							ContextManager.templateStruct = null;
@@ -855,15 +855,14 @@
 		{
 			if ( event.detail == AlertPopup.YES )
 			{
-				//try
 				{
 					switchDebug( true );
 
 					ProgressManager.start( ProgressManager.WINDOW_MODE, false );
 
-					ContextManager.templateStruct.addEventListener( "generationComplete", generationComplete );
-					ContextManager.templateStruct.addEventListener( "stepComplete", stepCompleteHandler );
-					ContextManager.templateStruct.addEventListener( "error", debugErrorHandler );
+					ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+					ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
+					ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
 					ContextManager.templateStruct.generate();
 				}
 			}
@@ -1228,9 +1227,9 @@
 						ContextManager.templateStruct.buffer ), "Result" );
 			}
 
-			ContextManager.templateStruct.removeEventListener( "generationComplete", generationComplete );
-			ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
-			ContextManager.templateStruct.removeEventListener( "error", debugErrorHandler );
+			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
+			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
 
 			ContextManager.templateStruct = null;
 		}
@@ -1249,9 +1248,9 @@
 		{
 			switchDebug( false );
 
-			ContextManager.templateStruct.removeEventListener( "generationComplete", generationComplete );
-			ContextManager.templateStruct.removeEventListener( "stepComplete", stepCompleteHandler );
-			ContextManager.templateStruct.removeEventListener( "error", debugErrorHandler );
+			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
+			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
 
 			ContextManager.templateStruct = null;
 		}
