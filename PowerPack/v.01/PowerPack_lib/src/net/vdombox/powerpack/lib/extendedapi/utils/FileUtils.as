@@ -341,6 +341,17 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			return file.exists ? file : null;
 		}
 		
+		public static function getFileExtention (path : String) : String
+		{
+			var extention : String = "";
+			
+			var lastDotIndex : int = path.lastIndexOf(".");
+			
+			if (lastDotIndex >= 0)
+				extention = path.substring(lastDotIndex+1);
+			
+			return extention;
+		}
 		
 	}
 }

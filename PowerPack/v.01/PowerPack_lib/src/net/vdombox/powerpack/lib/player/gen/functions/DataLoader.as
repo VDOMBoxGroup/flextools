@@ -8,9 +8,12 @@ package net.vdombox.powerpack.lib.player.gen.functions
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
+	import flash.utils.ByteArray;
 	
 	import mx.controls.Alert;
+	import mx.utils.Base64Decoder;
 	
+	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 	import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
 
 	[Event(name="rusulGetted", type="net.vdombox.powerpack.lib.player.events.TemplateLibEvent")]
@@ -38,7 +41,6 @@ package net.vdombox.powerpack.lib.player.gen.functions
 			loader.load ( request );
 		}
 		
-		
 		private function addHandlers():void
 		{
 			loader.addEventListener ( Event.COMPLETE, completeHadler, false, 0, true );
@@ -64,15 +66,51 @@ package net.vdombox.powerpack.lib.player.gen.functions
 		{
 			var fileContent : Object = data;
 			
-			try
+			if (loadedXMLFormat)
 			{
-				fileContent = new XML(data);
-			}
-			catch ( e : * )
-			{
+				fileContent = getXMLData(data);
 			}
 			
 			dispatchEvent( new  TemplateLibEvent( TemplateLibEvent.COMPLETE, fileContent,  "true"));
+		}
+		
+		private function get loadedXMLFormat () : Boolean
+		{
+			return FileUtils.getFileExtention(path).toLowerCase() == "xml";
+		}
+		
+		private function getXMLData (data : Object) : Object
+		{
+			try
+			{
+				var xmlData : XML = XML(data);
+				
+				if (!xmlData.name() || xmlData.name().localName != "Application")
+					xmlData = decodeXMLData(xmlData);
+			}
+			catch ( e : Error )
+			{
+				return data;
+			}
+			
+			return xmlData;
+		}
+		
+		private function decodeXMLData (sourceData : XML) : XML
+		{
+			var decoder : Base64Decoder = new Base64Decoder();
+			decoder.decode( sourceData.toString() );
+			
+			var decodedByteArray : ByteArray = decoder.toByteArray();
+			decodedByteArray.position = 0;
+			decodedByteArray.uncompress();
+			
+			decodedByteArray.position = 0;
+			var decodedData : String = decodedByteArray.readUTFBytes(decodedByteArray.bytesAvailable);
+			
+			if (!decodedData) return sourceData;
+			
+			return new XML(decodedData);
 		}
 		
 		private  function dispathError():void
@@ -101,6 +139,7 @@ package net.vdombox.powerpack.lib.player.gen.functions
 			
 			return fileType == ".xml"
 		}
+		
 		private  function shortPathOpen():void
 		{
 			firstTry = false;
