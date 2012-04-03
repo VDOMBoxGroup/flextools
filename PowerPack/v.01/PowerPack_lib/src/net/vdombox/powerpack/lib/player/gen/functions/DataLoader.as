@@ -13,7 +13,6 @@ package net.vdombox.powerpack.lib.player.gen.functions
 	import mx.controls.Alert;
 	import mx.utils.Base64Decoder;
 	
-	import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 	import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
 
 	[Event(name="rusulGetted", type="net.vdombox.powerpack.lib.player.events.TemplateLibEvent")]
@@ -76,7 +75,19 @@ package net.vdombox.powerpack.lib.player.gen.functions
 		
 		private function get loadedXMLFormat () : Boolean
 		{
-			return FileUtils.getFileExtention(path).toLowerCase() == "xml";
+			return loadedFileExtention.toLowerCase() == "xml";
+		}
+		
+		public function get loadedFileExtention () : String
+		{
+			var extention : String = "";
+			
+			var lastDotIndex : int = path.lastIndexOf(".");
+			
+			if (lastDotIndex >= 0)
+				extention = path.substring(lastDotIndex+1);
+			
+			return extention;
 		}
 		
 		private function getXMLData (data : Object) : Object
