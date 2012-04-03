@@ -67,7 +67,7 @@
 		</controls:columns>
 	</controls:SuperDataGrid>
 
-	<mx:TextArea id="txt" width="100%"   />
+	<mx:TextArea id="txt" width="100%" editable="false"  />
 
 	<mx:ControlBar visible="false" includeInLayout="false"></mx:ControlBar>
 
