@@ -66,15 +66,7 @@ package net.vdombox.powerpack.sdkcompiler
 			if (!packageTypeNative)
 				argVector.push("air");
 			else
-			{
 				argVector.push("native");
-				/*argVector.push("-storetype");
-				argVector.push("pkcs12");
-				argVector.push("-keystore");
-				argVector.push(FileUtils.convertPathForCMD(sertificatePath));
-				argVector.push("-storepass");
-				argVector.push("q");*/
-			}
 			
 			argVector.push(FileUtils.convertPathForCMD(outputPackagePath));
 			argVector.push(FileUtils.convertPathForCMD(new File(powerPackProjectStoragePath).resolvePath("Installer-app.xml").nativePath));

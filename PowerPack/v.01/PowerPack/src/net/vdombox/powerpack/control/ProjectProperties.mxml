@@ -383,7 +383,7 @@
 				<mx:ComboBox id="graphsComboBox"
 							 dataProvider="{graphs}"
 							 labelField="name"
-							 width="200"
+							 width="200" height="20"
 							 selectedIndex="{initialGraphIndex}"
 							 change="graphsComboBox_changeHandler(event)"/>
 			</mx:GridItem>

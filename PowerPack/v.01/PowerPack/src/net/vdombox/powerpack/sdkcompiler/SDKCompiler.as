@@ -12,7 +12,9 @@ package net.vdombox.powerpack.sdkcompiler
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.utils.ByteArray;
 	
+	import mx.utils.Base64Encoder;
 	import mx.utils.StringUtil;
 	
 	import net.vdombox.powerpack.lib.extendedapi.containers.SuperAlert;
@@ -84,16 +86,7 @@ package net.vdombox.powerpack.sdkcompiler
 		// ---------- PREPARE FOR BUILD ... ---------------------
 		private function prepareForBuild () : Boolean
 		{
-			prepareInstallerApp ();
-			
-			var templateXMLFilePrepared : Boolean = prepareTemplateXMLFile ();
-			
-			var installerPropertiesXMLPrepared : Boolean = prepareInstallerPropertiesXml ();
-			
-			if (!templateXMLFilePrepared || !installerPropertiesXMLPrepared)
-				return false;
-			
-			return true;
+			return prepareInstallerApp() && prepareTemplateXMLFile() && prepareInstallerPropertiesXml();
 		}
 		
 		private function prepareTemplateXMLFile() : Boolean
@@ -148,30 +141,76 @@ package net.vdombox.powerpack.sdkcompiler
 			return true;
 		}
 		
-		private function prepareInstallerApp() : void
+		private function prepareInstallerApp() : Boolean
 		{
 			var embededAppPath : String = selectedTemplateProject.embededAppPath;
 			
+			if (!embededAppPath)
+				return true;
+			
 			embeddedAppFileName = FileUtils.getFileName(embededAppPath);
 			
-			if (!embededAppPath)
-				return;
+			var compressedEmbeddedApp : String = compressEmbeddedApplication();
+			if (!compressedEmbeddedApp)
+			{
+				embeddedAppFileName = "";
+				
+				sendEvent(SDKCompilerEvent.BUILD_ERROR, "Error when trying to compress embedded application xml");
+				return false;
+			}
 			
 			try
 			{
-				var sourceAppFile : File = new File(embededAppPath);
-				
 				var targetAppFile : File = File.applicationStorageDirectory.resolvePath(embeddedAppFileName);
 				
-				sourceAppFile.copyTo(targetAppFile, true);
+				var fileStream : FileStream = new FileStream();
+				fileStream.open(targetAppFile, FileMode.WRITE);
+				fileStream.writeUTF(compressedEmbeddedApp);
+				
+				fileStream.close();
+				fileStream = null;
+				
 			}
 			catch (e:Error)
 			{
 				embeddedAppFileName = "";
 				
-				return;
+				sendEvent(SDKCompilerEvent.BUILD_ERROR, "Error when trying to copy embedded application xml");
+				return false;
 			}
 			
+			return true;
+			
+		}
+		
+		private function compressEmbeddedApplication () : String
+		{
+			var sourceAppFile : File = new File(selectedTemplateProject.embededAppPath);
+			
+			var fileStream : FileStream = new FileStream();
+			var fileData : ByteArray = new ByteArray();
+			
+			try
+			{
+				fileStream.open( sourceAppFile, FileMode.READ );
+				fileStream.readBytes( fileData );
+			}
+			catch ( error : Error )
+			{
+				return "";
+			}
+			
+			if ( !fileData || fileData.bytesAvailable == 0 )
+				return "";
+			
+			fileData.compress();
+			fileData.position = 0;
+			
+			var base64Data : Base64Encoder = new Base64Encoder();
+			base64Data.insertNewLines = false;
+			base64Data.encodeBytes( fileData );
+			
+			return base64Data.toString();
 		}
 		// ---------- ... PREPARE FOR BUILD ---------------------
 		
@@ -274,6 +313,12 @@ package net.vdombox.powerpack.sdkcompiler
 			argVector.push(powerPackProjectStoragePath);
 			argVector.push("assets/template.xml");
 			
+			if (embeddedAppFileName)
+			{
+				argVector.push("-C");
+				argVector.push(powerPackProjectStoragePath);
+				argVector.push(embeddedAppFileName);
+			}
 			
 			return argVector;
 		}
