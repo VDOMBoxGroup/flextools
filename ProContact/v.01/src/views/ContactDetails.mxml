@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<components:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				 xmlns:s="library://ns.adobe.com/flex/spark" xmlns:components="spark.components.*" title="ContactDetails" >
+	<components:layout>
+		<s:VerticalLayout paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10" />
+	</components:layout>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<components:navigationContent >
+		<s:Button label="Back" click="navigator.popView();"/>
+	</components:navigationContent>
+	<s:HGroup>
+		
+	<s:BitmapImage source="{data.image}" smooth="true" />
+	<s:VGroup>
+		<s:Label text="{data.last_name}" />
+		<s:Label text="{data.first_name}" />
+	</s:VGroup>
+	</s:HGroup>
+	<s:Label text="{data.company}" />
+	<s:Label text="{data.position}" />
+	<s:Label text="{data.note}" />
+	
+</components:View>

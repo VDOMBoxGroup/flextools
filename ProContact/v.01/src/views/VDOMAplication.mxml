@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<components:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				 xmlns:s="library://ns.adobe.com/flex/spark" xmlns:components="spark.components.*" title="Contacts"
+				 creationComplete="{listApplications()}">
+	<fx:Script>
+		<![CDATA[
+			import connection.SOAP;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ArrayList;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import net.vdombox.ide.common.view.components.windows.Alert;
+			
+			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
+			
+			private var soap : SOAP = SOAP.getInstance();
+			[Bindable]
+			private var allUsers : ArrayList = new ArrayList();
+			
+				private function listApplications(  ) : void
+				{
+					soap.remote_call.addEventListener( ResultEvent.RESULT, listAppResultHandler );
+					soap.remote_call.addEventListener( FaultEvent.FAULT, soapError );
+					
+					var xml_param : String	= "<Arguments><CallType>server_action</CallType></Arguments>";
+					var appID : String = "526ae088-8004-469c-9d8e-cea715f8f63b";
+					var pageID : String = "79e13aa6-4498-4b1c-be99-47373df2cae2";
+					
+					
+					soap.remote_call( appID, pageID,  "retrieve_contact", xml_param, '{}' );
+					
+					function listAppResultHandler( event : ResultEvent ) : void
+					{
+						
+						soap.remote_call.removeEventListener( ResultEvent.RESULT, listAppResultHandler );
+						soap.remote_call.removeEventListener( FaultEvent.FAULT, soapError );
+						
+						var resultStr : String =  event.result as String;
+						
+						
+						resultStr = resultStr.replace(/<Key>[0-9]+_[0-9]<\/Key>/, ""); 
+						
+						var resultArray : Array = JSON.parse( resultStr ) as Array;
+						
+						
+						for (var i:int = 0; i < resultArray.length; i++) 
+						{
+							resultArray[i]['label'] =  resultArray[i]['first_name'] +" "+ resultArray[i]['last_name'];
+							resultArray[i]['image'] =  "http://" + data.server + resultArray[i]['picture'];
+							
+//							users.addItem({"label" : userName, image : img });
+						}
+						
+						resultArray.sortOn(["label"]);
+						allUsers = new ArrayList( resultArray );
+						contactsList.dataProvider = allUsers;
+						
+					}
+					
+					 function soapError( event : FaultEvent ) : void
+					{
+						var _result : String ;
+					}
+					
+					
+				
+			}
+			
+			protected function contacts_changeHandler(event:IndexChangeEvent):void
+			{
+				// TODO Auto-generated method stub
+				navigator.pushView( views.ContactDetails, contactsList.selectedItem );
+			}
+			
+			protected function searchContact(event:TextOperationEvent):void
+			{
+				// TODO Auto-generated method stub
+				if (search.text.length == 0 )
+				{
+					contactsList.dataProvider = allUsers;
+				}
+				else 
+				{
+					var searchResult : ArrayList = new ArrayList();
+					var full_name : String;
+					var usersCount : int = allUsers.source.length;
+					var searchWord : String = search.text.toLowerCase();
+					var found : Boolean;
+					
+					for (var i:int = 0; i < usersCount; i++) 
+					{
+						full_name =  allUsers.source[i]['label'];
+						full_name = full_name.toLowerCase();
+						
+						found = full_name.search( searchWord ) != -1
+						
+						if ( found  )
+							searchResult.addItem(  allUsers.source[i] );
+						
+						//							users.addItem({"label" : userName, image : img });
+					}
+					
+					contactsList.dataProvider = searchResult;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<components:layout>
+		<s:VerticalLayout />
+	</components:layout>
+	<components:navigationContent>
+		<s:Button label="Home" click="navigator.popToFirstView();"/>
+	</components:navigationContent>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:HGroup horizontalAlign="center" verticalAlign="middle">
+		<s:TextInput id="search" change="searchContact(event)" width="100%" />
+		<s:BitmapImage source="@Embed('assets/search.png')" height="32" width="32"   smooth="true" />
+	</s:HGroup>
+	<s:List id="contactsList"  change="contacts_changeHandler(event)" width="100%"  height="100%"  >
+		<s:itemRenderer>
+			<fx:Component>
+				<components:IconItemRenderer  iconField = "image" iconScaleMode="letterbox" iconFillMode="scale" iconWidth="46"   iconHeight="46"  verticalAlign="top" />
+				
+			</fx:Component>
+			
+		</s:itemRenderer>
+	</s:List>
+	
+		
+	
+</components:View>
