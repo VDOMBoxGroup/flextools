@@ -25,6 +25,7 @@
 			import net.vdombox.powerpack.lib.player.control.BrowseButton;
 			import net.vdombox.powerpack.lib.player.control.RoundButton;
 			import net.vdombox.powerpack.lib.player.customize.skins.PopupBackgroundSkin;
+			import net.vdombox.powerpack.lib.player.utils.RuntimeUtils;
 			
 			public static var yesLabel : String = "Yes";
 			public static var noLabel : String = "No";
@@ -91,7 +92,7 @@
 					defaultButtonFlag = defaultButtonFlag;
 				}
 				
-				alert.message = text;
+				alert.message = RuntimeUtils.isRuntimeError(text) ? RuntimeUtils.getRuntimeErrorMessage(text) : text;
 				alert.title = title;
 				
 				if (closeHandler != null)
