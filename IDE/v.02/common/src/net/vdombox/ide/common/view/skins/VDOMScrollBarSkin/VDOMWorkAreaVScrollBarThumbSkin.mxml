@@ -68,7 +68,7 @@
 				<s:BitmapFill source = "@Embed('assets/vdomscrollbar/vertical-scroll-bottom.png')" smooth="true"/>
 			</s:fill>
 		</s:Rect>
-	</s:VGroup> -->
+	</s:VGroup>-->
 	
 	
 	<s:Rect top="1" width="100%" height="100%" radiusX="{width / 2}" radiusY="{ width / 2 }"
