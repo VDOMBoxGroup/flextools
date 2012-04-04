@@ -335,13 +335,13 @@ public class CodeParser
 	public static function ParseSubgraphNode( nodeText : String ) : ParsedBlock
 	{
 		var pattern : RegExp;
-		var str : String = nodeText.concat();
+		var str  : String = nodeText.concat();
 		var block : ParsedBlock = new ParsedBlock();
 
 		pattern = /[\W]/gi;
 		block.retValue = str;
 
-		if ( pattern.test( str ) )
+		if ( !str || pattern.test( str ))
 		{
 			block.error = new ValidationError( MSG_SN_SYNTAX_ERR );
 		}
