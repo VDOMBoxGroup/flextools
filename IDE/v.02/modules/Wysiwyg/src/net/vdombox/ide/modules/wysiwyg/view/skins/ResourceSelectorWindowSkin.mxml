@@ -21,12 +21,16 @@
 			import net.vdombox.ide.common.events.ResourceVOEvent;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItem;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			
 			
 			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
 			{
 				resourcesList.addEventListener(ResourceVOEvent.PREVIEW_RESOURCE, hostComponent.previewResource, true);
 				resourcesList.addEventListener(ListItem.ITEM_DOUBLE_CLICKED, hostComponent.onApplyClick, true);
+				resourcesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
+				resourcesList.scroller.horizontalScrollBar.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
 			}
 			
 			protected function nameFilter_focusInHandler(event:FocusEvent):void

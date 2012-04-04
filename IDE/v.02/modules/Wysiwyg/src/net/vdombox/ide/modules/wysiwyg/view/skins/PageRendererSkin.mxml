@@ -8,6 +8,8 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.view.components.VDOMScroller;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			
 			[Bindable]
 			private var scale : Number = 1;
@@ -17,6 +19,9 @@
 			
 			protected function scroller_creationCompleteHandler(event:FlexEvent):void
 			{
+				scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
+				scroller.horizontalScrollBar.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
+				
 				scroller.horizontalScrollBar.height = 12;
 				
 				scroller.horizontalScrollBar.thumb.height = 12;

@@ -15,6 +15,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var RENDER_CHANGED : String = "rendererRenderChanged";
 
 		public static var GET_RESOURCE : String = "rendererGetResource";
+		
+		public static var MOUSE_DOWN : String = "rendererMouseDown";
 
 		public static var CLICKED : String = "rendererClicked";
 
@@ -33,14 +35,18 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var HTML_ADDED	: String = "rendererHTMLAdded";
 		
 		public static var PASTE_SELECTED	: String = "pasteSelected";
+		
+		public static var MULTI_SELECTED_MOVED	: String = "multiSelectedMoved";
 
 		public var object : Object;
 		
 		public var ctrlKey : Boolean;
+		public var shiftKey : Boolean;
 
-		public function RendererEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
+		public function RendererEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, shift : Boolean = false )
 		{
 			super( type, bubbles, cancelable );
+			shiftKey = shift;
 		}
 
 		override public function clone() : Event

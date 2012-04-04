@@ -10,6 +10,7 @@
 			import net.vdombox.ide.common.model._vo.TypeVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
+			import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 			import net.vdombox.ide.modules.wysiwyg.view.components.TypesAccordionHeader;
 			import net.vdombox.ide.modules.wysiwyg.view.components.TypesCategory;
 			

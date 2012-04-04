@@ -118,6 +118,9 @@
 			private function stage_mouseUpHandler( event : MouseEvent ) : void
 			{
 				removeEventListener( MouseEvent.MOUSE_MOVE, dragIt );
+				if ( !stage )
+					return;
+				
 				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 			}
 			

@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
@@ -19,7 +20,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
@@ -237,7 +237,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 				if ( renderBase && renderBase.editableComponent && renderBase.editableComponent is RichEditableText && renderBase.typeVO.name == "text" )
 				{
 					var attributeVO : AttributeVO;
-					for each ( attributeVO in objectAttributesPanel.attributesVO.attributes )
+					var attr : Array = objectAttributesPanel.attributesVO.attributes;
+					for each ( attributeVO in attr )
 					{
 						if ( attributeVO.name == "value" )
 						{

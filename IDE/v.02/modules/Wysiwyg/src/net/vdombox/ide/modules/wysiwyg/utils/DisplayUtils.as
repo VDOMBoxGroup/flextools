@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.wysiwyg.utils
 	import mx.core.FlexGlobals;
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
 	
 	import spark.components.Application;
@@ -22,6 +23,7 @@ package net.vdombox.ide.modules.wysiwyg.utils
 		public static function getObjectsUnderMouse( rootContainer : DisplayObjectContainer, targetClassName : String,
 													 filterFunction : Function = null ) : Array
 		{
+			var rb : RendererBase = new RendererBase();
 			var app : Application = FlexGlobals.topLevelApplication as Application;
 
 			var allObjectUnderPoint : Array = rootContainer.getObjectsUnderPoint( new Point( rootContainer.mouseX, rootContainer.mouseY ) );

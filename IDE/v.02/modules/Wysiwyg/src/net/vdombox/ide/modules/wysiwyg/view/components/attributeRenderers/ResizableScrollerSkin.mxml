@@ -34,6 +34,8 @@ viewport property to link them together.
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.view.components.resize.ResizeManager;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			
 			import spark.components.supportClasses.Skin;
 			
@@ -77,6 +79,9 @@ viewport property to link them together.
 			private function created(event:FlexEvent):void {
 				// the component being resized is assumed to be the parent of the scroller
 				// since most scrollers set left/right/top/bottom=0
+				verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
+				horizontalScrollBar.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
+				
 				var resizeComponent:UIComponent = (hostComponent.parent as UIComponent);
 				// Sometimes the parent is actually a skin, in which case we need to resize the host component, not the skin
 				if (resizeComponent is Skin) {

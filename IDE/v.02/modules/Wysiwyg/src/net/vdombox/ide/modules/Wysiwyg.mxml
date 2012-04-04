@@ -86,16 +86,6 @@
 			
 			thumbSkin : ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMMXHScrollTrumbSkin");
 		}
-		
-		s|VScrollBar
-		{	
-			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin");  
-		}
-		
-		s|HScrollBar
-		{	
-			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin");  
-		}
 	</fx:Style>
 	
 	<fx:Script>

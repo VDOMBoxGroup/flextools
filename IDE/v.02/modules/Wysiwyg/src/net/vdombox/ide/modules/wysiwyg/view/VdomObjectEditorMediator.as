@@ -54,6 +54,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import spark.components.Application;
 	import spark.primitives.Line;
+	import spark.primitives.Rect;
 
 
 	/**
@@ -65,6 +66,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 		public static const NAME : String = "VdomObjectEditorMediator";
 
 		public static var instancesNameList : Object = {};
+		
+		private var selectPage : IVDOMObjectVO;
+		private var rendProxy : RenderProxy;
+		private var pageRender : PageRenderer;
 
 		public function VdomObjectEditorMediator( editor : IEditor )
 		{
@@ -108,6 +113,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			
+			rendProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			
 			sharedObjectProxy = facade.retrieveProxy( SettingsApplicationProxy.NAME ) as SettingsApplicationProxy;
 
@@ -306,9 +313,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var lineVO : LineVO;
 			var line : Line;
 			
-			var selectPage : IVDOMObjectVO = statesProxy.selectedPage as IVDOMObjectVO;
-			var rendProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-			var pageRender : PageRenderer = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
+			selectPage = statesProxy.selectedPage as IVDOMObjectVO;
+			pageRender = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
 			pageRender.linegroup.removeAllElements();
 			
 			var strokeColor : SolidColorStroke = new SolidColorStroke();
@@ -579,6 +585,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0 , true );
 			editor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
 			
+			editor.addEventListener( RendererEvent.MOUSE_DOWN, renderer_DownHandler, true, 0, true );
+			editor.addEventListener( RendererEvent.MULTI_SELECTED_MOVED, renderer_multiSelectedMovedHandler, true, 0, true );
+			
 			editor.addEventListener( RendererEvent.PASTE_SELECTED, renderer_pasteHandler, true, 0, true );
 
 			editor.addEventListener( RendererEvent.GET_RESOURCE, renderer_getResourseHandler, true, 0, true );
@@ -701,8 +710,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function keyDownDeleteHandler(event : KeyboardEvent) : void
 		{
-			//trace ("[VdomObjectEditorMediator] keyDownDeleteHandler: " + event.keyCode + "; PHASE = " + event.eventPhase);
-			if ( statesProxy.selectedObject != null)
+			var arr : Array = new Array();
+			
+			if ( multiSelectRenderers )
+			{
+				for each ( var renderer : RendererBase in multiSelectRenderers )
+					arr.push( renderer.vdomObjectVO );
+				
+				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
+				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + arr.length.toString() + " elements ?",AlertButton.OK_No, component.parentApplication, closeHandler);
+			}
+			else if ( statesProxy.selectedObject != null)
 			{
 				var componentName : String = statesProxy.selectedObject.typeVO.displayName;
 				
@@ -710,14 +728,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 				
 				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + componentName + " ?",AlertButton.OK_No, component.parentApplication, closeHandler);
 			}
-		}
-
-		private function closeHandler(event : CloseEvent) : void
-		{
-			if (event.detail == Alert.YES)
+			
+			function closeHandler(event : CloseEvent) : void
 			{
-				if ( statesProxy.selectedPage && statesProxy.selectedObject )
-					sendNotification( Notifications.DELETE_OBJECT, { pageVO: statesProxy.selectedPage, objectVO: statesProxy.selectedObject } );
+				if (event.detail == Alert.YES)
+				{
+					if ( multiSelectRenderers )
+						sendNotification( Notifications.DELETE_OBJECT, { pageVO: statesProxy.selectedPage, objectVO: arr } );
+					else if ( statesProxy.selectedPage && statesProxy.selectedObject )
+						sendNotification( Notifications.DELETE_OBJECT, { pageVO: statesProxy.selectedPage, objectVO: statesProxy.selectedObject } );
+				}
 			}
 		}
 		
@@ -793,11 +813,120 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sendNotification( Notifications.RENDERER_REMOVED, event.target as IRenderer );
 		}
+		
+		private var multiSelectRenderers : Object;
+		private var addInMultiSelect : String;
+		private var deleteInMultiSelect : String;
 
 		private function renderer_clickedHandler( event : RendererEvent ) : void
 		{
+			var target : RendererBase = event.target as RendererBase;
 			
-			sendNotification( Notifications.RENDERER_CLICKED, event.target as IRenderer );
+			var renderer : RendererBase;
+			
+			if (  target.getState == "multiSelect" )
+			{
+				if ( target.vdomObjectVO.id == deleteInMultiSelect )
+				{
+					target.setState = "normal";
+					delete multiSelectRenderers[ deleteInMultiSelect ];
+					
+					if ( multiSelectRenderers )
+					{
+						for each ( renderer in multiSelectRenderers )
+						{
+							renderer.setFocus();
+							break;
+						}
+					}
+					
+					if ( !renderer )
+					{
+						if ( statesProxy.selectedObject )
+						{
+							renderer = rendProxy.getRendererByVO( statesProxy.selectedObject );
+							
+							renderer.setFocus();
+						}
+						else if ( statesProxy.selectedPage )
+						{
+							renderer = rendProxy.getRendererByVO( statesProxy.selectedPage );
+							
+							renderer.setFocus();
+						}
+					}
+					
+					deleteInMultiSelect = "";
+					
+					return;
+				}
+				else if (  target.vdomObjectVO.id == addInMultiSelect )
+				{
+					addInMultiSelect = "";
+					
+					return;
+				}
+			}
+			
+			if ( multiSelectRenderers )
+			{
+				for each ( renderer in multiSelectRenderers )
+				{
+					renderer.setState = "normal";
+				}
+				
+				multiSelectRenderers = null;
+			}
+			
+			sendNotification( Notifications.RENDERER_CLICKED, target as IRenderer );
+			
+			
+		}
+		
+		private function renderer_DownHandler( event : RendererEvent ) : void
+		{
+			var target : RendererBase = event.target as RendererBase;
+			
+			if ( target is PageRenderer )
+				return;
+			
+			
+			if ( target.getState == "multiSelect" )
+			{
+				deleteInMultiSelect = target.vdomObjectVO.id;
+			}
+			else
+			{
+				target.setFocus();
+				target.setState = "multiSelect";
+				if ( !multiSelectRenderers )
+					multiSelectRenderers = [];
+				
+				addInMultiSelect = target.vdomObjectVO.id;
+				multiSelectRenderers[ target.vdomObjectVO.id ] = target ;
+			}
+		}
+		
+		private function renderer_multiSelectedMovedHandler( event : RendererEvent ) : void
+		{
+			if ( !multiSelectRenderers )
+				return;
+			
+			var dx : int = event.object.dx;
+			var dy : int = event.object.dy;
+			
+			var renderer : RendererBase;
+			
+			for each ( renderer in multiSelectRenderers )
+			{
+				if ( !renderer.hasMoved( dx, dy ) )
+					return;
+			}
+			
+			for each ( renderer in multiSelectRenderers )
+			{
+				renderer.moveRenderer( dx, dy );
+			}
 		}
 		
 		private function renderer_pasteHandler( event : RendererEvent ) : void

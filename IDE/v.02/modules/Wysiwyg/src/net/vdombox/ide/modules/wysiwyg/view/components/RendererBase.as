@@ -238,12 +238,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		}
 		
 		public function set setState( value : String ) : void
-		{
+		{			
 			skin.currentState = value;
 			if ( value != "hovered" )
 				hideToolTip();
 		}
-
 		public function get getState() : String
 		{
 			return skin.currentState;
@@ -677,7 +676,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				conatiner = parentContainer;
 
 			// TODO: need sort 'contetnt.children()' by 'z-index'
-			for each ( var contetntPart : XML in contetnt.children() )
+			
+			var childrenXMLList : XMLList = contetnt.children();
+			
+			for each ( var contetntPart : XML in childrenXMLList )
 			{
 				choiceContentType( contetntPart, conatiner );
 			}
@@ -787,7 +789,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				conatiner = parentContainer;
 			
 			// TODO: need sort 'contetnt.children()' by 'z-index'
-			for each ( var contetntPart : XML in contetnt.children() )
+			
+			var childrenXMLList : XMLList = contetnt.children();
+			
+			for each ( var contetntPart : XML in childrenXMLList )
 			{
 				choiceContentType( contetntPart, conatiner );
 			}
@@ -802,7 +807,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				conatiner = parentContainer;
 			
 			// TODO: need sort 'contetnt.children()' by 'z-index'
-			for each ( var contetntPart : XML in contetnt.children() )
+			
+			var childrenXMLList : XMLList = contetnt.children();
+			
+			for each ( var contetntPart : XML in childrenXMLList )
 			{
 				choiceContentType( contetntPart, conatiner );
 			}
@@ -816,7 +824,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				conatiner = parentContainer;
 			
 			// TODO: need sort 'contetnt.children()' by 'z-index'
-			for each ( var contetntPart : XML in contetnt.children() )
+			var childrenXMLList : XMLList = contetnt.children();
+			
+			for each ( var contetntPart : XML in childrenXMLList )
 			{
 				choiceContentType( contetntPart, conatiner );
 			}
@@ -1027,7 +1037,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function dragExitHandler( event : DragEvent ) : void
 		{
 			setState = "normal";
-			trace("dragExit");
 		}
 
 		private function findNearestItem( currentElement : DisplayObjectContainer ) : RendererBase
@@ -1357,14 +1366,43 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( event.shiftKey )
 				step = 10;
 
-			if ( event.keyCode == Keyboard.LEFT )
-				x = x - step > 0 ? x - step : 0;
-			else if ( event.keyCode == Keyboard.RIGHT )
-				x = x + step;
-			else if ( event.keyCode == Keyboard.UP )
-				y = y - step > 0 ? y - step : 0;
-			else if ( event.keyCode == Keyboard.DOWN )
-				y = y + step;
+			if ( event.keyCode >= 37 && event.keyCode <= 40 )
+			{
+				if ( skin.currentState == "multiSelect" )
+				{
+					var dx : int = 0;
+					var dy : int = 0;
+					if ( event.keyCode == Keyboard.LEFT || event.keyCode == Keyboard.RIGHT )
+					{
+						if ( event.keyCode == Keyboard.LEFT )
+							dx = -step;
+						else
+							dx = step;
+					}
+					else
+					{
+						if ( event.keyCode == Keyboard.UP )
+							dy = -step;
+						else
+							dy = step;
+					}
+					
+					var rendererEvent : RendererEvent = new RendererEvent( RendererEvent.MULTI_SELECTED_MOVED );
+					rendererEvent.object = { dx : dx, dy : dy };
+					dispatchEvent( rendererEvent );
+				}
+				else
+				{
+					if ( event.keyCode == Keyboard.LEFT )
+						x = x - step > 0 ? x - step : 0;
+					else if ( event.keyCode == Keyboard.RIGHT )
+						x = x + step;
+					else if ( event.keyCode == Keyboard.UP )
+						y = y - step > 0 ? y - step : 0;
+					else
+						y = y + step;
+				}
+			}
 			else
 			{
 				if ( event.keyCode == Keyboard.DELETE )
@@ -1409,15 +1447,25 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			event.stopPropagation();
 
 			if ( !isScroller( event.target as DisplayObjectContainer ) )
-				dispatchEvent( new RendererEvent( RendererEvent.CLICKED ) );
+				dispatchEvent( new RendererEvent( RendererEvent.CLICKED, false, true, event.shiftKey ) );
 		}
+		
+		private var selecteRectDraw : Boolean = false;
 
 		private function mouseDownHandler( event : MouseEvent ) : void
-		{
+		{		
+			if ( event.shiftKey )
+			{
+				dispatchEvent( new RendererEvent ( RendererEvent.MOUSE_DOWN, false, true, true ) );
+				event.stopImmediatePropagation();
+				event.preventDefault();
+				
+				return;
+			}
+			
 			if ( !( editableComponent && editableComponent is RichEditableText && !( event.target is Group ) ) )
 			{
 				setFocus();
-			
 				var isScroller : Boolean = isScroller( event.target as DisplayObjectContainer ); 
 			
 				if ( movable && !isScroller )
@@ -1427,7 +1475,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 					mDeltaX = mouseX;
 					mDeltaY = mouseY;
-
+	
 					beforeX = x;
 					beforeY = y;
 					
@@ -1444,9 +1492,18 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			if ( !event.buttonDown )
 				return;
-
+			
 			var dx : int = mouseX - mDeltaX;
 			var dy : int = mouseY - mDeltaY;
+			
+			if ( skin.currentState == "multiSelect" )
+			{
+				var rendererEvent : RendererEvent = new RendererEvent( RendererEvent.MULTI_SELECTED_MOVED );
+				rendererEvent.object = { dx : dx, dy : dy };
+				dispatchEvent( rendererEvent );
+				
+				return;
+			}
 
 			x = x + dx > 0 ? x + dx : 0;
 			y = y + dy > 0 ? y + dy : 0;
@@ -1474,10 +1531,25 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			moveEvent.ctrlKey = event.ctrlKey;
 			dispatchEvent( moveEvent );
 		}
+		
+		public function hasMoved( dx : int, dy : int ) : Boolean
+		{
+			if ( x + dx < 0 || y + dy < 0 )
+				return false;
+			
+			return true;
+		}
+		
+		public function moveRenderer( dx : int, dy : int ) : void
+		{
+			x += dx;
+			y += dy;
+			
+			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
+		}
 
 		private function mouseOutHandler( event : MouseEvent ) : void
 		{
-			trace( "Out" );
 			if ( skin.currentState == "hovered" )
 				setState = "normal";
 			else
@@ -1486,7 +1558,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseOverHandler( event : MouseEvent ) : void
 		{
-			if ( skin.currentState == "highlighted" || skin.currentState == "notPackeg" )
+			if ( skin.currentState == "highlighted" || skin.currentState == "notPackeg" || skin.currentState == "multiSelect")
 				return;
 
 			invalidateDisplayList();
@@ -1625,8 +1697,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function refreshContent() : void
 		{
 			background.removeAllElements();
+			
+			var contentXMLList : XMLList = _renderVO.content;
 
-			for each ( var contetntPart : XML in _renderVO.content )
+			for each ( var contetntPart : XML in contentXMLList )
 			{
 				choiceContentType( contetntPart, background );
 			}
@@ -1648,11 +1722,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			backgroundRefreshNeedFlag = true;
 			invalidateDisplayList();
-		}
-		
-		private function showHandler( event : FlexEvent ) : void
-		{
-			addHandlers();
 		}
 
 		private function stage_mouseClickHandler( event : MouseEvent ) : void
