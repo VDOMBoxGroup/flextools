@@ -20,6 +20,10 @@
 			import net.vdombox.powerpack.template.BuilderTemplate;
 			import net.vdombox.powerpack.template.BuilderTemplateProject;
 			
+			public static const ITEM_TYPE_NEW_TEMPLATE		: String = "new_template";
+			public static const ITEM_TYPE_SAVE_TEMPLATE		: String = "save";
+			public static const ITEM_TYPE_OPEN_TEMPLATE		: String = "open_file";
+			
 			public static const ITEM_TYPE_APP_PROPERIES		: String = "properties";
 			public static const ITEM_TYPE_BUILD_INSTALLER	: String = "air_builder";
 			
@@ -83,10 +87,25 @@
 				
 			}
 			
+			public function menuFileStateChangedHandler (event : MenuGeneralEvent) : void
+			{
+				if (!MenuManager.getInstance().menu)
+					return;
+				
+				var fileMenuItem : NativeMenuItem = MenuManager.getInstance().menu.nativeMenu.getItemByName( MenuManager.MENU_FILE );
+				
+				menuBtnNewTemplate.enabled = fileMenuItem.submenu.getItemByName( "new_template" ).enabled;
+				menuBtnOpenTemplate.enabled = fileMenuItem.submenu.getItemByName( "open_file" ).enabled;
+				menuBtnSaveTemplate.enabled = fileMenuItem.submenu.getItemByName( "save" ).enabled;
+				
+			}
+			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				MenuManager.getInstance().addEventListener(MenuGeneralEvent.MENU_RUN_STATE_CHANGED, menuRunStateChangedHandler);
 				MenuManager.getInstance().addEventListener(MenuGeneralEvent.MENU_TEMPLATE_STATE_CHANGED, menuTemplateStateChangedHandler);
+				
+				MenuManager.getInstance().addEventListener(MenuGeneralEvent.MENU_FILE_STATE_CHANGED, menuFileStateChangedHandler);
 			}
 			
 			private function get ctrlString () : String
@@ -115,6 +134,26 @@
 			}
 		]]>
 	</mx:Script>
+	
+	<control1:ControlBarButton id="menuBtnNewTemplate"
+							   sourceEnabled="@Embed('/assets/icons/newTemplateEnabled.png')"
+							   sourceDisabled="@Embed('/assets/icons/newTemplateDisabled.png')"
+							   click="menuItem_clickHandler(event, ITEM_TYPE_NEW_TEMPLATE)" 
+							   toolTip="New template ({ctrlString}{separator}N)"/>
+	
+	<control1:ControlBarButton id="menuBtnOpenTemplate"
+							   sourceEnabled="@Embed('/assets/icons/OpenTemplateEnabled.png')"
+							   sourceDisabled="@Embed('/assets/icons/OpenTemplateDisabled.png')"
+							   click="menuItem_clickHandler(event, ITEM_TYPE_OPEN_TEMPLATE)"
+							   toolTip="Open file"/>
+	
+	<control1:ControlBarButton id="menuBtnSaveTemplate"
+							   sourceEnabled="@Embed('/assets/icons/SaveTemplateEnabled.png')"
+							   sourceDisabled="@Embed('/assets/icons/SaveTemplateDisabled.png')"
+							   click="menuItem_clickHandler(event, ITEM_TYPE_SAVE_TEMPLATE)" 
+							   toolTip="Save template ({ctrlString}{separator}S)"/>
+	
+	<mx:VRule height="20"/>
 	
 	<mx:Label text="Projects:" />
 	

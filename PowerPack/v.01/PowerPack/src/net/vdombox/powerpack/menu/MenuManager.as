@@ -96,6 +96,7 @@ public class MenuManager extends EventDispatcher
 		
 		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_RUN_STATE_CHANGED));
 		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_TEMPLATE_STATE_CHANGED));
+		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_FILE_STATE_CHANGED));
 	}
 
 	public function disable() : void
@@ -107,6 +108,7 @@ public class MenuManager extends EventDispatcher
 			
 		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_RUN_STATE_CHANGED));
 		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_TEMPLATE_STATE_CHANGED));
+		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_FILE_STATE_CHANGED));
 	}
 
 	public function noTemplate() : void
@@ -299,6 +301,8 @@ public class MenuManager extends EventDispatcher
 					"lastfiles" );
 
 			fileItem.submenu.addItemAt( item, exitItem.menu.getItemIndex( exitItem ) );
+			
+			dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_FILE_STATE_CHANGED));
 		}
 	}
 	
@@ -320,6 +324,9 @@ public class MenuManager extends EventDispatcher
 		
 		if (menuType == MENU_TEMPLATE)
 			dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_TEMPLATE_STATE_CHANGED));
+		
+		if (menuType == MENU_FILE)
+			dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_FILE_STATE_CHANGED));
 	}
 	
 	private function enableDebugStartMenu () : void 
@@ -361,6 +368,8 @@ public class MenuManager extends EventDispatcher
 		fileMenu.getItemByName( "save_as" ).enabled = enabled;
 		
 		fileMenu.getItemByName( "save" ).enabled = enabled ? templateChanged : false;
+		
+		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_FILE_STATE_CHANGED));
 	}
 	
 	private function get templateChanged () : Boolean
