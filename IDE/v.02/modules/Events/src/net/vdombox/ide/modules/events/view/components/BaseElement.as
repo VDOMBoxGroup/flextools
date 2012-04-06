@@ -10,6 +10,7 @@ package net.vdombox.ide.modules.events.view.components
 	import net.vdombox.ide.common.view.components.EyeImage;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	
+	import spark.components.RichEditableText;
 	import spark.components.SkinnableContainer;
 	
 	public class BaseElement extends SkinnableContainer
@@ -28,11 +29,23 @@ package net.vdombox.ide.modules.events.view.components
 		
 		private var moved : Boolean = false;
 		
+		[Bindable]
+		public var selected : Boolean = false;
+		
 		
 		public function BaseElement()
 		{
 			super();
+			
+			//addEventListener( FlexEvent.CREATION_COMPLETE, addHandlers, false, 0 , true );
 		}
+		
+		/*private function addHandlers( event : FlexEvent ) : void
+		{
+			removeEventListener( FlexEvent.CREATION_COMPLETE, addHandlers );
+			
+			skin.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, true, 0, true );
+		}*/
 		
 		[Bindable]
 		public function get data() : IEventBaseVO
@@ -68,26 +81,89 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			setFocus();
 			moved = false;
+			
+			if ( event.shiftKey )
+			{
+				return;
+			}
+			
 			stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler, false, 0, true );
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler, false, 0, true );
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt, false, 0, true );
 			
-			mouseOffcetX = mouseX;
-			mouseOffcetY = mouseY;
+			mouseOffcetX = int( mouseX);
+			mouseOffcetY = int (mouseY);
+		}
+		
+		protected function header_skinMouseDownHandler( event : MouseEvent ) : void
+		{			
+			moved = false;
+			
+			if ( event.shiftKey )
+			{
+				if ( event.target is RichEditableText )
+					selected = true;
+				else
+					selected = !selected;
+				
+				dispatchEvent( new ElementEvent ( ElementEvent.MULTI_SELECTED ) );
+			}
+			else
+			{
+				skin.addEventListener( MouseEvent.MOUSE_UP, header_skinMouseClickHandler, true, 0, true );
+			}
+		}
+		
+		protected function header_skinMouseClickHandler( event : MouseEvent ) : void
+		{		
+			skin.removeEventListener( MouseEvent.MOUSE_UP, header_skinMouseClickHandler, true );
+			if ( !moved )
+				dispatchEvent( new ElementEvent ( ElementEvent.CLICK ) );
 		}
 		
 		protected function stage_mouseMoveHandler( event : MouseEvent ) : void
-		{
+		{			
 			var newX : int = parent.mouseX - mouseOffcetX;
 			var newY : int = parent.mouseY - mouseOffcetY;
 			
 			if ( newX < 0 )
 				newX = 0;
-			x = newX;
 			
 			if ( newY < 0 )
 				newY = 0;
-			y = newY;
+			
+			if ( selected )
+			{
+				var dx : int = int( newX - x );
+				var dy : int = int ( newY - y );
+				
+				var moveEvent : ElementEvent = new ElementEvent ( ElementEvent.MULTI_SELECT_MOVED );
+				moveEvent.object = { dx : dx, dy : dy };
+				dispatchEvent( moveEvent );
+			}
+			else
+			{
+			
+				x = newX;
+				y = newY;
+			
+				data.left = x;
+				data.top = y;
+			}
+		}
+		
+		public function hasMoved( dx : int, dy : int ) : Boolean
+		{
+			if ( x + dx < 0 || y + dy < 0 )
+				return false;
+			
+			return true;
+		}
+		
+		public function moveElement( dx : int, dy : int ) : void
+		{
+			x += dx;
+			y += dy;
 			
 			data.left = x;
 			data.top = y;
@@ -120,6 +196,8 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			x = data.left; 
 			y = data.top;
+			
+			skin.addEventListener( MouseEvent.MOUSE_DOWN, header_skinMouseDownHandler, true, 0, true );
 		}
 		
 	}

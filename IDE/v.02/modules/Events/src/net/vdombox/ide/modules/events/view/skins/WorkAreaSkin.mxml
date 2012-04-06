@@ -15,10 +15,13 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.modules.events.events.ElementEvent;
 			import net.vdombox.ide.modules.events.events.WorkAreaEvent;
+			import net.vdombox.ide.modules.events.view.components.BaseElement;
 			
 			import spark.events.IndexChangeEvent;
 			
@@ -28,12 +31,16 @@
 			private var scrollPosition : Point;
 			private var _NeedSetVerticalScrollPosition : Boolean = false;
 			
+			private var multiRect : Rect = new Rect();
+			
 			protected function scroller_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 				
 				addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler, true, 0, true );
+				
+				addEventListener(ElementEvent.MOUSE_DOWN, elementMouseDownHandler, true, 0, true );
 				
 				scroller.horizontalScrollBar.height = 12;
 				
@@ -59,21 +66,72 @@
 				dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED ) );
 			}
 			
+			private function mouseMoveHandler( event : MouseEvent ) : void
+			{				
+				var pt:Point;
+				
+				pt = new Point(event.localX, event.localY);
+				pt = event.target.localToGlobal(pt);
+				
+				pt=MultiRectGroup.globalToContent(pt);
+				
+				multiRect.width = pt.x - multiRect.x;
+				multiRect.height = pt.y - multiRect.y;
+			}
+			
+			private function mouseUpHandler( event : MouseEvent ) : void
+			{
+				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
+				removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true );
+				
+				hostComponent.setMultiSelectInRect( multiRect.x, multiRect.y, multiRect.x + multiRect.width, multiRect.y + multiRect.height );
+				
+				multiRect.width = 0;
+				multiRect.height = 0;
+				
+				MultiRectGroup.removeAllElements();
+			}
+			
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
-				if ( !event.ctrlKey )
+				if ( !event.ctrlKey && event.target is Group && event.target.id == "scaleGroup" )
+				{
+					if ( !event.shiftKey )
+						hostComponent.removeAllSelectedElements();
+					
+					var pt:Point;
+				
+					pt = new Point(event.localX, event.localY);
+					pt = event.target.localToGlobal(pt);
+					
+					pt=MultiRectGroup.globalToContent(pt);
+					
+					multiRect.left = pt.x;
+					multiRect.top = pt.y;
+					
+					MultiRectGroup.addElement( multiRect );
+					
+					addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
+					addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true, 0, true );
+					
 					return;
+				}
 				
 				scale = 1;
 				
 				_NeedSetVerticalScrollPosition = true;
 				
-				var pt:Point = new Point(event.localX, event.localY);
+				pt = new Point(event.localX, event.localY);
 				pt = event.target.localToGlobal(pt);
 				
 				pt=scroller.globalToContent(pt);
 				
 				scrollPosition = pt;
+			}
+			
+			private function elementMouseDownHandler( event : ElementEvent ) : void
+			{
+				contentGroup.swapElementsAt( contentGroup.getElementIndex( UIComponent(event.target) ), contentGroup.numElements - 1 );
 			}
 			
 			
@@ -96,6 +154,12 @@
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
 			{
 				addEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true, 0 , true );
+				
+				var strokeColor : SolidColorStroke = new SolidColorStroke();
+				strokeColor.color = 0x0000FF;
+				strokeColor.weight = 1;
+				
+				multiRect.stroke = strokeColor;
 			}
 			
 			private function setFocusOnWorkArea( event : MouseEvent ) : void
@@ -214,6 +278,7 @@
 			<s:Group id="scaleGroup" scaleX="{scale}" scaleY="{scale}">
 				<s:Group id="linkagesLayer"/>
 				<s:Group id="contentGroup"/>
+				<s:Group id="MultiRectGroup"/>
 			</s:Group>
 		</components1:VDOMScroller>
 	</s:Group>

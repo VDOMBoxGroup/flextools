@@ -145,6 +145,14 @@
 	</s:states>
 
 	<!--Shadow-->
+	
+	<s:Rect left="-2" top="-2" right="-2" bottom="-2"
+			visible="{hostComponent.selected}"
+			radiusX="6" radiusY="6">
+		<s:fill>
+			<s:SolidColor color="#0000FF"/>
+		</s:fill>
+	</s:Rect>
 
 	<s:RectangularDropShadow id="dropShadow"
 							 bottom="0" color="#000000" left="0" right="0"

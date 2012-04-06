@@ -4,7 +4,9 @@
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 minWidth="200"
-			 creationComplete="sparkskin1_creationCompleteHandler(event)" xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:view="net.vdombox.ide.common.view.*">
+			 creationComplete="sparkskin1_creationCompleteHandler(event)" 
+			 remove="sparkskin1_removeHandler(event)"
+			 xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:view="net.vdombox.ide.common.view.*">
 
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.events.view.components.EventElement")]
@@ -43,11 +45,6 @@
 			
 			private var creationCompleted : Boolean = false;
 
-//			public function get data() : EventVO
-//			{
-//				return _data;
-//			}
-
 			public function set data( value : EventVO ) : void
 			{
 				_data = value;
@@ -61,6 +58,13 @@
 				BindingUtils.bindProperty( this, "data", hostComponent, "data", true );
 				doubleClickEnabled = true;
 				creationCompleted = true;
+				
+				addEventListener( MouseEvent.MOUSE_DOWN, mouseDown, true, 0, true );
+			}
+			
+			private function mouseDown( event : MouseEvent ) : void
+			{
+				hostComponent.dispatchEvent( new ElementEvent ( ElementEvent.MOUSE_DOWN ) );
 			}
 
 			override protected function commitProperties() : void
@@ -129,6 +133,11 @@
 				}
 			}
 			
+			protected function sparkskin1_removeHandler(event:FlexEvent):void
+			{
+				removeEventListener( MouseEvent.MOUSE_DOWN, mouseDown, true );
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -143,6 +152,14 @@
 
 		
 	</s:states>
+	
+	<s:Rect left="-2" top="-2" right="-2" bottom="-2"
+			visible="{hostComponent.selected}"
+			radiusX="6" radiusY="6">
+		<s:fill>
+			<s:SolidColor color="#0000FF"/>
+		</s:fill>
+	</s:Rect>
 
 	<!--Shadow-->
 

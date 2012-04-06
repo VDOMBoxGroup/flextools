@@ -50,6 +50,10 @@ package net.vdombox.ide.modules.events.view.components
 			addEventListener( ElementEvent.STATE_CHANGED, unsaveHandler, true, 0, true );
 			addEventListener( ElementEvent.PARAMETER_EDIT, unsaveHandler, true, 0, true );
 			addEventListener( ElementEvent.DELETE_LINKAGE, linkage_deleteLinkageHandler, true, 0, true );
+			
+			addEventListener( ElementEvent.CLICK, elementClickHandler, true, 0, true );
+			addEventListener( ElementEvent.MULTI_SELECTED, elementMultiSelectedHandler, true, 0, true );
+			addEventListener( ElementEvent.MULTI_SELECT_MOVED, elementMultiSelectMovedHandler, true, 0, true );
 		}
 
 		[SkinPart]
@@ -88,6 +92,8 @@ package net.vdombox.ide.modules.events.view.components
 
 		private var clientActionElements : Object;
 		private var serverActionElements : Object;
+		
+		private var multiSelectElements : Object;
 		
 		public function get showElementsView() : String
 		{
@@ -738,6 +744,86 @@ package net.vdombox.ide.modules.events.view.components
 			
 			if( linkage.parent == linkagesLayer )
 				linkagesLayer.removeElement( linkage );
+		}
+		
+		private function elementClickHandler( event : ElementEvent ) : void
+		{
+			var baseElement : BaseElement = event.target as BaseElement;
+			
+			removeAllSelectedElements();
+			
+			multiSelectElements = [];
+			
+			baseElement.selected = true;
+			
+			multiSelectElements[ baseElement.uniqueName ] = baseElement;
+		}
+		
+		private function elementMultiSelectedHandler( event : ElementEvent ) : void
+		{
+			var baseElement : BaseElement = event.target as BaseElement;
+			
+			if ( !baseElement.selected )
+			{
+				delete multiSelectElements[ baseElement.uniqueName ];
+				return;
+			}
+			
+			if ( !multiSelectElements )
+				multiSelectElements = [];
+			
+			multiSelectElements[ baseElement.uniqueName ] = baseElement;
+		}
+		
+		private function elementMultiSelectMovedHandler( event : ElementEvent ) : void
+		{
+			var dx : int = event.object.dx;
+			var dy : int = event.object.dy;
+			
+			var baseElement : BaseElement;
+			
+			for each ( baseElement in multiSelectElements )
+				if ( !baseElement.hasMoved( dx, dy ) )
+					return;
+			
+			for each ( baseElement in multiSelectElements )
+				baseElement.moveElement( dx, dy );
+		}
+		
+		public function removeAllSelectedElements ( ) : void
+		{
+			if ( multiSelectElements )
+			{
+				var element : BaseElement;
+				for each ( element in multiSelectElements )
+					element.selected = false;
+				
+				multiSelectElements = null;
+			}
+		}
+		
+		public function setMultiSelectInRect ( rectLeft : int, rectTop : int, rectRigth : int, rectBottom : int ) : void
+		{
+			var count : int = contentGroup.numElements;
+			
+			var i : int;
+			var baseElement : BaseElement;
+			
+			for ( i = 0; i < count; i++ )
+			{
+				baseElement = contentGroup.getElementAt( i ) as BaseElement;
+				
+				if ( baseElement.x + baseElement.width > rectLeft && baseElement.x < rectRigth
+					&& baseElement.y + baseElement.height > rectTop && baseElement.y < rectBottom )
+				{
+					baseElement.selected = true;
+					
+					if ( !multiSelectElements )
+						multiSelectElements = [];
+					
+					multiSelectElements[ baseElement.uniqueName ] = baseElement;
+				}
+			}
 		}
 		
 		public function get showHidden():Boolean
