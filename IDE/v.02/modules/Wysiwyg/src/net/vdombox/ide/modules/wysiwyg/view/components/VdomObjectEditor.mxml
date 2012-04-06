@@ -244,7 +244,7 @@
 				var ee : EditorEvent = new EditorEvent( EditorEvent.RENDERER_TRANSFORMED );
 
 				ee.renderer = event.target as IRenderer;
-				ee.attributes = { x: UIComponent( ee.renderer ).x, y: UIComponent( ee.renderer ).y };
+				ee.attributes = { x: int( UIComponent( ee.renderer ).x ), y: int (UIComponent( ee.renderer ).y) };
 
 				dispatchEvent( ee );
 			}

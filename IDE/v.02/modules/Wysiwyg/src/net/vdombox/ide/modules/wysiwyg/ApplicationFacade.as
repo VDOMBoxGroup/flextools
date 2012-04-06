@@ -65,6 +65,9 @@ package net.vdombox.ide.modules.wysiwyg
 		{
 			sendNotification( Notifications.STARTUP, application );
 		}
+		
+		public static const MULTI_SELECT_START : String = "multiSelectStart";
+		public static const MULTI_SELECT_END : String = "multiSelectEnd";
 
 		override protected function initializeController() : void
 		{

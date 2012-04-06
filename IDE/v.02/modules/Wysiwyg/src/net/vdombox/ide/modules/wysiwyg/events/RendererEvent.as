@@ -36,6 +36,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		
 		public static var PASTE_SELECTED	: String = "pasteSelected";
 		
+		public static var MULTI_SELECTED_MOVE	: String = "multiSelectedMove";
+		
 		public static var MULTI_SELECTED_MOVED	: String = "multiSelectedMoved";
 
 		public var object : Object;

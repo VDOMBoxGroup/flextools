@@ -31,6 +31,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
+	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
@@ -586,6 +587,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
 			
 			editor.addEventListener( RendererEvent.MOUSE_DOWN, renderer_DownHandler, true, 0, true );
+			
+			editor.addEventListener( RendererEvent.MULTI_SELECTED_MOVE, renderer_multiSelectedMoveHandler, true, 0, true );
 			editor.addEventListener( RendererEvent.MULTI_SELECTED_MOVED, renderer_multiSelectedMovedHandler, true, 0, true );
 			
 			editor.addEventListener( RendererEvent.PASTE_SELECTED, renderer_pasteHandler, true, 0, true );
@@ -900,7 +903,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 				target.setFocus();
 				target.setState = "multiSelect";
 				if ( !multiSelectRenderers )
+				{
 					multiSelectRenderers = [];
+					
+					if ( statesProxy.selectedObject )
+					{
+						var targetTemp : RendererBase = rendProxy.getRendererByVO( statesProxy.selectedObject );
+						targetTemp.setState = "multiSelect";
+						multiSelectRenderers[ statesProxy.selectedObject.id ] = targetTemp;
+						
+						sendNotification( ApplicationFacade.MULTI_SELECT_START );
+						sendNotification( Notifications.RENDERER_CLICKED, rendProxy.getRendererByVO( statesProxy.selectedPage ) );
+					}
+					
+				}
 				
 				addInMultiSelect = target.vdomObjectVO.id;
 				multiSelectRenderers[ target.vdomObjectVO.id ] = target ;
@@ -908,6 +924,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 		
 		private function renderer_multiSelectedMovedHandler( event : RendererEvent ) : void
+		{
+			var renderer : RendererBase;
+			
+			for each ( renderer in multiSelectRenderers )
+			{
+				renderer.savePosition();
+			}
+		}
+		
+		private function renderer_multiSelectedMoveHandler( event : RendererEvent ) : void
 		{
 			if ( !multiSelectRenderers )
 				return;

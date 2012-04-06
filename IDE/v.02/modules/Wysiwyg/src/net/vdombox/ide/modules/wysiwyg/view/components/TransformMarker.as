@@ -576,7 +576,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				if ( rectangle[ name ] != beforeTransform[ name ] )
 				{
-					prop[ name ] = rectangle[ name ];
+					prop[ name ] = int( rectangle[ name ] );
 					changeFlag = true;
 				}
 			}

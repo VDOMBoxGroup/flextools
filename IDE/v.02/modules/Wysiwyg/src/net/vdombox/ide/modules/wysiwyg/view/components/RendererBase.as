@@ -1387,7 +1387,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 							dy = step;
 					}
 					
-					var rendererEvent : RendererEvent = new RendererEvent( RendererEvent.MULTI_SELECTED_MOVED );
+					var rendererEvent : RendererEvent = new RendererEvent( RendererEvent.MULTI_SELECTED_MOVE );
 					rendererEvent.object = { dx : dx, dy : dy };
 					dispatchEvent( rendererEvent );
 				}
@@ -1460,6 +1460,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				event.stopImmediatePropagation();
 				event.preventDefault();
 				
+				stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
+				
 				return;
 			}
 			
@@ -1473,8 +1475,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
 					stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
 
-					mDeltaX = mouseX;
-					mDeltaY = mouseY;
+					mDeltaX = int(mouseX);
+					mDeltaY = int(mouseY);
 	
 					beforeX = x;
 					beforeY = y;
@@ -1493,12 +1495,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( !event.buttonDown )
 				return;
 			
-			var dx : int = mouseX - mDeltaX;
-			var dy : int = mouseY - mDeltaY;
+			var dx : int = int( mouseX - mDeltaX );
+			var dy : int = int( mouseY - mDeltaY);
 			
 			if ( skin.currentState == "multiSelect" )
 			{
-				var rendererEvent : RendererEvent = new RendererEvent( RendererEvent.MULTI_SELECTED_MOVED );
+				var rendererEvent : RendererEvent = new RendererEvent( RendererEvent.MULTI_SELECTED_MOVE );
 				rendererEvent.object = { dx : dx, dy : dy };
 				dispatchEvent( rendererEvent );
 				
@@ -1507,6 +1509,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			x = x + dx > 0 ? x + dx : 0;
 			y = y + dy > 0 ? y + dy : 0;
+			
+			trace("x = " + x + " " + "y = " + y);
 
 			if ( event.shiftKey )
 			{
@@ -1544,8 +1548,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			x += dx;
 			y += dy;
-			
-			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
 		}
 
 		private function mouseOutHandler( event : MouseEvent ) : void
@@ -1582,11 +1584,26 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		
 		public var beforeLeft : Number;
 		public var beforeTop : Number;
+		
+		public function savePosition() : void
+		{
+			if ( x != beforeX || y != beforeY )
+			{
+				beforeX = x;
+				beforeY = y;
+				
+				dispatchEvent( new RendererEvent( RendererEvent.MOVE ) );
+				
+				stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
+			}
+		}
 
 		private function mouseUpHandler( event : MouseEvent ) : void
 		{
+			dispatchEvent( new RendererEvent ( RendererEvent.MULTI_SELECTED_MOVED ) );
 			if ( !stage )
 				return;
+			
 			stage.removeEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 			stage.removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler );
 

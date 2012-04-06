@@ -82,7 +82,7 @@
 		<s:stroke>
 
 			<s:SolidColorStroke id="strokeLine"
-								color="gray" color.highlighted="green" color.notPackeg="red" color.hovered="gray" color.select="#0000FF" color.multiSelect="#FFFF00"
+								color="gray" color.highlighted="green" color.notPackeg="red" color.hovered="gray" color.select="#0000FF" color.multiSelect="#A8C6EE"
 								weight="2" 
 								alpha="0" alpha.hovered="1" alpha.highlighted="1"  alpha.notPackeg="1" alpha.select="1" alpha.multiSelect="1"/>
 		</s:stroke>
