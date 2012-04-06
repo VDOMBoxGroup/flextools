@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.events.view
 	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ClientActionVO;
@@ -21,7 +22,6 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.common.view.components.windows.CreateActionWindow;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.events.EventsPanelEvent;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.ActionElement;
@@ -200,6 +200,8 @@ package net.vdombox.ide.modules.events.view
 
 		private function showActions( serverActions : Array ) : void
 		{
+			serverActions.sortOn( "name", Array.CASEINSENSITIVE );
+			
 			var allActions : Array = currentTypeVO.actions;
 
 			allActions = allActions.concat( serverActions );

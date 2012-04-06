@@ -91,8 +91,8 @@ package net.vdombox.ide.modules.events.view.components
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler, false, 0, true );
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt, false, 0, true );
 			
-			mouseOffcetX = int( mouseX);
-			mouseOffcetY = int (mouseY);
+			mouseOffcetX = mouseX;
+			mouseOffcetY = mouseY;
 		}
 		
 		protected function header_skinMouseDownHandler( event : MouseEvent ) : void
