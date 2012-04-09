@@ -110,13 +110,13 @@ package net.vdombox.ide.modules.events.view.components
 			}
 			else
 			{
-				skin.addEventListener( MouseEvent.MOUSE_UP, header_skinMouseClickHandler, true, 0, true );
+				skin.addEventListener( MouseEvent.MOUSE_UP, skinMouseUpHandler, true, 0, true );
 			}
 		}
 		
-		protected function header_skinMouseClickHandler( event : MouseEvent ) : void
+		private function skinMouseUpHandler( event : MouseEvent ) : void
 		{		
-			skin.removeEventListener( MouseEvent.MOUSE_UP, header_skinMouseClickHandler, true );
+			skin.removeEventListener( MouseEvent.MOUSE_UP, skinMouseUpHandler, true );
 			if ( !moved )
 				dispatchEvent( new ElementEvent ( ElementEvent.CLICK ) );
 		}
