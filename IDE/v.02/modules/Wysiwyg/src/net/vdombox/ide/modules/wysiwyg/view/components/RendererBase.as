@@ -1496,7 +1496,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 			
 			var dx : int = int( mouseX - mDeltaX );
-			var dy : int = int( mouseY - mDeltaY);
+			var dy : int = int( mouseY - mDeltaY );
 			
 			if ( skin.currentState == "multiSelect" )
 			{
@@ -1509,8 +1509,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			x = x + dx > 0 ? x + dx : 0;
 			y = y + dy > 0 ? y + dy : 0;
-			
-			trace("x = " + x + " " + "y = " + y);
 
 			if ( event.shiftKey )
 			{

@@ -9,10 +9,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.utils.Timer;
 	
 	import mx.core.IVisualElement;
 	import mx.core.UIComponent;
@@ -103,8 +101,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var transformation : Boolean;
 
 		private var beforeTransform : Object;
-
-		private var timer : Timer;
 		
 		public function get resizeMode() : uint
 		{
@@ -475,10 +471,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			this.dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN));
 			
-			stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
-			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
+			stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0 , true );
+			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0 , true );
 
-			stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
+			stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0 , true );
 		}
 
 		private function mouseOutHandler( event : MouseEvent ) : void
@@ -588,10 +584,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			rmEvent.renderer = _selectedItem as IRenderer;
 			event.stopImmediatePropagation();
 			dispatchEvent( rmEvent );
-			
-			timer.reset();
-			timer.addEventListener( TimerEvent.TIMER, timerHandler )
-			timer.start();
 			
 			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );
 		}
@@ -860,8 +852,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			parent.addEventListener( Event.CHANGE, scrollHandler, true, 0, true );
 			parent.addEventListener( RendererEvent.MOVED, render_movedHandler, true, 0, true );
-			
-			timer = new Timer( 100 ); //TODO: cleanup all handlers, timers and other variables aftrer removedFromStage.
 		}
 		
 		private function scrollHandler( event : Event ) :void
@@ -898,14 +888,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			if( inMovedObject )
 				refresh();
-		
-			
-		}
-		
-		private function timerHandler( event : TimerEvent ) : void
-		{
-			stage.removeEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
-			timer.stop();
 		}
 	}
 }
