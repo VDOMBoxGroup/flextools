@@ -43,6 +43,7 @@
 			import net.vdombox.powerpack.lib.player.managers.ContextManager;
 			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+			import net.vdombox.powerpack.lib.player.template.TemplateProject;
 			import net.vdombox.powerpack.managers.BuilderContextManager;
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.panel.graphsClasses.AccordionChild;
@@ -112,9 +113,14 @@
 				vsViewStack.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, viewStack_childRemoveHandler);
 		}
 			
-		private function selectedProjectChanged (obj : Object) : void
+		private function selectedProjectChanged (selProject : TemplateProject) : void
 		{
-			selectGraph(getGraphByName(currentTemplate.selectedProject.initialGraphName));
+			if (selProject)
+			{
+				var selectedProjectInitialGraph : GraphCanvas = getGraphByName(selProject.initialGraphName);
+				
+				selectGraph ( selectedProjectInitialGraph );
+			}
 		}
 		
 		private function graphEditor_controlBarItemClickHandler (controlBarEvent : ControlBarEvent) : void
@@ -265,6 +271,14 @@
 
 		public function findFirstGraph() : GraphCanvas
 		{
+			if (currentTemplate && currentTemplate.selectedProject)
+			{
+				var selectedProjectInitialGraph : GraphCanvas = getGraphByName(currentTemplate.selectedProject.initialGraphName);
+				
+				if (selectedProjectInitialGraph)
+					return selectedProjectInitialGraph;
+			}
+					
 			for each( var child : AccordionChild in graphsAccordion.getChildren() )
 			{
 				if ( tabMap[child] )
@@ -396,8 +410,6 @@
 				{
 					populateGraph( graphXML );
 				}
-
-				selectGraph( findFirstGraph() );
 
 				ProgressManager.complete();
 
