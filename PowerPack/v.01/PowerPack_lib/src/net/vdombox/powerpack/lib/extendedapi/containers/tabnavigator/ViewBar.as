@@ -34,24 +34,32 @@ package net.vdombox.powerpack.lib.extendedapi.containers.tabnavigator
 		
 		override protected function createNavItem(
 										label:String,
-										icon:Class = null):IFlexDisplayObject{
+										icon:Class = null):IFlexDisplayObject
+		{
 											
 			var ifdo:IFlexDisplayObject = super.createNavItem(label,icon);
+		
 			ifdo.addEventListener(ViewTab.CLOSE_TAB, onCloseTabClicked);
 			ifdo.addEventListener(MouseEvent.MOUSE_DOWN, tryDrag);
 			ifdo.addEventListener(MouseEvent.MOUSE_UP, removeDrag);
+			
 			return ifdo;
 		}
 		
-		private function tryDrag(e:MouseEvent):void{
+		private function tryDrag(e:MouseEvent):void
+		{
 			e.target.addEventListener(MouseEvent.MOUSE_MOVE, doDrag);
 		}
 		
-		private function removeDrag(e:MouseEvent):void{
+		private function removeDrag(e:MouseEvent):void
+		{
 			e.target.removeEventListener(MouseEvent.MOUSE_MOVE,doDrag);
 		}
-		public function onCloseTabClicked(event:Event):void{
+		
+		public function onCloseTabClicked(event:Event):void
+		{
 			var index:int = getChildIndex(DisplayObject(event.currentTarget));
+			
 			if(dataProvider is IList){
 				dataProvider.removeItemAt(index);
 			}
@@ -60,29 +68,39 @@ package net.vdombox.powerpack.lib.extendedapi.containers.tabnavigator
 			}
 		}
 		
-		private function doDrag(event:MouseEvent):void{
+		private function doDrag(event:MouseEvent):void
+		{
 				var ds:DragSource = new DragSource();
+				
 				ds.addData(event.currentTarget,'tabDrag');
+				
 				DragManager.doDrag(IUIComponent(event.target),ds,event);						
 		}
 		
-		private function onDragEnter(event:DragEvent):void{
-			if(event.dragSource.hasFormat('tabDrag')){
+		private function onDragEnter(event:DragEvent):void
+		{
+			if(event.dragSource.hasFormat('tabDrag'))
+			{
 				DragManager.acceptDragDrop(IUIComponent(event.target));
 			}
 		}
 		
-		private function onDragDrop(event:DragEvent):void{
+		private function onDragDrop(event:DragEvent):void
+		{
 			var d:ViewTab = ViewTab(event.dragSource.dataForFormat('tabDrag'));
 			var childrenArr:Array = new Array();
+			
 			d.x = mouseX;
 			//d.x = DragManager.dragProxy.x;
+			
 			for(var i:Number=0; i<numChildren; i++){
 				var childRef:DisplayObject = getChildAt(i);
 				childrenArr.push(childRef);	
 			}
+			
 			childrenArr.sortOn("x",Array.NUMERIC);
 			childrenArr[0].x=0;
+			
 			for(var c:Number = 1; c<childrenArr.length; c++){
 				childrenArr[c].x = childrenArr[c-1].x+childrenArr[c-1].width;
 			}
