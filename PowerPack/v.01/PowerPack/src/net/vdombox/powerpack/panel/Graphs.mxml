@@ -1,39 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
-		 initialize="init();"
-		 height="100%">
-
-	<mx:Style>
-		.categoryCtrlBtnStyle
-		{
-			labelPlacement : bottom;
-			fontFamily     : Arial;
-			fontSize       : 9;
-			textAlign      : center;
-			cornerRadius   : 2;
-			alpha          : 0.9;
-			paddingLeft    : 0;
-			paddingTop     : 3;
-			paddingRight   : 0;
-			paddingBottom  : 3;
-			horizontalGap  : 0;
-			verticalGap    : 0;
-			borderColor    : #CCD1D5
-		}
-
-		.categoryCtrlBarStyle
-		{
-			paddingTop      : 0;
-			paddingLeft     : 0;
-			paddingBottom   : 0;
-			paddingRight    : 0;
-			horizontalGap   : 1;
-			horizontalAlign : center
-		}
-	</mx:Style>
+		 initialize="init()"
+		 creationComplete="creationCompleteHandler(event)"
+		 height="100%" xmlns:control="net.vdombox.powerpack.control.*">
 
 	<mx:XML id="templateXML"></mx:XML>
-
+	
 	<mx:Metadata>
 		[Event(name="templateChanged", type="flash.events.Event")]
 	</mx:Metadata>
@@ -49,6 +21,7 @@
 			import mx.controls.Alert;
 			import mx.controls.ComboBox;
 			import mx.controls.List;
+			import mx.events.ChildExistenceChangedEvent;
 			import mx.events.CloseEvent;
 			import mx.events.CollectionEvent;
 			import mx.events.CollectionEventKind;
@@ -60,6 +33,8 @@
 			import mx.utils.NameUtil;
 			import mx.utils.ObjectProxy;
 			
+			import net.vdombox.powerpack.control.ControlBarEvent;
+			import net.vdombox.powerpack.control.GraphEditorControlBar;
 			import net.vdombox.powerpack.graph.GraphCanvas;
 			import net.vdombox.powerpack.graph.GraphCanvasEvent;
 			import net.vdombox.powerpack.graph.Node;
@@ -105,7 +80,9 @@
 		//--------------------------------------------------------------------------
 
 		public var vsViewStack : ViewNavigator;
-
+			
+		public var graphEditorControlBar : GraphEditorControlBar;
+			
 		private var curTab : AccordionChild;
 		private var curGraph : GraphCanvas;
 
@@ -124,6 +101,40 @@
 		{
 			// We need to repopulate graphs if templateXML has been changed
 			BindingUtils.bindSetter( populateGraphs, this, "templateXML" );
+		}
+			
+		protected function creationCompleteHandler(event:FlexEvent):void
+		{
+			if (graphEditorControlBar && !graphEditorControlBar.hasEventListener(ControlBarEvent.EVENT_ITEM_CLICK))
+				graphEditorControlBar.addEventListener(ControlBarEvent.EVENT_ITEM_CLICK, graphEditor_controlBarItemClickHandler);
+			
+			if (vsViewStack)
+				vsViewStack.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, viewStack_childRemoveHandler);
+		}
+		
+		private function graphEditor_controlBarItemClickHandler (controlBarEvent : ControlBarEvent) : void
+		{
+			var selectedGraph : GraphCanvas = vsViewStack.selectedChild as GraphCanvas;  
+			
+			if (!selectedGraph)
+				return;
+			
+			selectedGraph.controlBarItemClickHandler(controlBarEvent.targetItemType, controlBarEvent.destinationObjectType);
+		}
+			
+		private function viewStack_childRemoveHandler (event : ChildExistenceChangedEvent) : void
+		{
+			updateControlBar(true);
+		}
+			
+		private function updateControlBar (onRemove : Boolean = false) : void
+		{
+			if (!graphEditorControlBar)
+				return;
+			
+			var graphCanvasAmount : int = onRemove ? vsViewStack.numChildren -1 : vsViewStack.numChildren;
+			
+			graphEditorControlBar.updateButtonsState(graphCanvasAmount);
 		}
 		
 		public function clear() : void
@@ -324,12 +335,12 @@
 						{
 							graph.removeEventListener( FlexEvent.CREATION_COMPLETE, graphCreationCompleteHandler );
 							
-							graph.creationCompleted = true;
-							
 							ProgressManager.complete();
 						}
 					}
 					vsViewStack.selectedChild = graph;
+					
+					updateControlBar();
 				}
 			}
 		}
@@ -632,6 +643,7 @@
 		private function onGraphChange( event : GraphCanvasEvent ) : void
 		{
 			event.stopImmediatePropagation();
+			
 			dispatchEvent( new Event( TPL_CHANGED ) );
 		}
 			

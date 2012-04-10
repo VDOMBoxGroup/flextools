@@ -21,6 +21,7 @@ import mx.effects.Move;
 import mx.events.ChildExistenceChangedEvent;
 import mx.events.CloseEvent;
 import mx.events.DragEvent;
+import mx.events.FlexEvent;
 import mx.graphics.codec.PNGEncoder;
 import mx.managers.CursorManager;
 import mx.managers.DragManager;
@@ -32,6 +33,7 @@ import mx.utils.NameUtil;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
+import net.vdombox.powerpack.control.GraphEditorControlBar;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
@@ -150,6 +152,15 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		addEventListener( MouseEvent.CONTEXT_MENU, contextMenuDisplayingHandler );
 
 		graphs[this] = this;
+		
+		addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
+	}
+	
+	private function creationCompleteHandler (event : FlexEvent) : void
+	{
+		removeEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
+		
+		creationCompleted = true;
 	}
 
 	//--------------------------------------------------------------------------
@@ -330,31 +341,34 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		}
 
 		if ( ContextManager.FLASH_CONTEXT_MENU && !contextMenu )
-		{
-			contextMenu = new SuperNativeMenu();
-
-			contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_add_state'], 'add_state' ) );
-			contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_add_command'], 'add_command' ) );
-			contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_add_sub'], 'add_sub' ) );
-			contextMenu.addItem( new SuperNativeMenuItem( 'separator' ) );
-			contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_cut'], 'cut', false, null, false, false ) );
-			contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_copy'], 'copy', false, null, false, false ) );
-			contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_paste'], 'paste', false, null, false, false ) );
-			contextMenu.addItem( new SuperNativeMenuItem( 'separator' ) );
-			contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_clear'], 'clear' ) );
-			contextMenu.addItem( new SuperNativeMenuItem( 'separator' ) );
-			contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_expand_space'], 'expand_space' ) );
-			contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_collapse_space'], 'collapse_space' ) );
-
-			contextMenu.addEventListener( Event.SELECT, contextMenuSelectHandler );
-		}
+			addContextMenu();
 
 		if ( xml )
 		{
 			fromXML( xml.toXMLString() );
 		}
 	}
-
+	
+	private function addContextMenu () : void
+	{
+		contextMenu = new SuperNativeMenu();
+		
+		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_add_state'], 'add_state' ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_add_command'], 'add_command' ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_add_sub'], 'add_sub' ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'separator' ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_cut'], 'cut', false, null, false, false ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_copy'], 'copy', false, null, false, false ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_paste'], 'paste', false, null, false, false ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'separator' ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_clear'], 'clear' ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'separator' ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_expand_space'], 'expand_space' ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_collapse_space'], 'collapse_space' ) );
+		
+		contextMenu.addEventListener( Event.SELECT, contextMenuSelectHandler );
+	}
+	
 	override protected function commitProperties() : void
 	{
 		super.commitProperties();
@@ -379,13 +393,32 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 	public function alertDelete() : void
 	{
-		if ( parent )
+		if (selectedNodesCount <= 0)
+			return;
+		
+		if ( parent && selectionManager.selection)
 		{
 			AlertPopup.show(
 					LanguageManager.sentences['graph_alert_delete_text'],
 					LanguageManager.sentences['graph_alert_delete_title'],
 					Alert.YES | Alert.NO, null, alertDeleteHandler, null, Alert.YES );
 		}
+	}
+	
+	private function get selectedNodesCount () : Number
+	{
+		var nodesAmount : Number = 0;
+		
+		if (!selectionManager)
+			return nodesAmount;
+		
+		for each (var selectedObject : Object in selectionManager.selection)
+		{
+			if (selectedObject is Node)
+				nodesAmount ++;
+		}
+		
+		return nodesAmount;
 	}
 
 	public function clear() : void
@@ -412,6 +445,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 	public function expandSpace() : void
 	{
+		var yBy : Number = Node.DEFAULT_HEIGHT * 3;
+		
+		var topY : Number = contentMouseY >= 0 ? contentMouseY : 0;
+		
 		var children : Array = getChildren();
 		var arr : Array = [];
 
@@ -420,7 +457,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 			if ( child is Node )
 			{
 				var node : Node = child as Node;
-				if ( node.y >= contentMouseY )
+				if ( node.y >= topY )
 				{
 					node.endEffectsStarted();
 					arr.push( node );
@@ -430,7 +467,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 		var move : Move = new Move();
 		move.duration = 300;
-		move.yBy = Node.DEFAULT_HEIGHT * 3;
+		move.yBy = yBy;
 		move.play( arr );
 
 		dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
@@ -438,6 +475,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 	public function collapseSpace() : void
 	{
+		var yBy : Number = -Node.DEFAULT_HEIGHT * 2;
+		
+		var topY : Number = contentMouseY >= 0 ? contentMouseY : 0;
+		
 		var children : Array = getChildren();
 		var arr : Array = [];
 
@@ -446,7 +487,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 			if ( child is Node )
 			{
 				var node : Node = child as Node;
-				if ( node.y >= contentMouseY )
+				if ( node.y >= topY && node.y + yBy >= topY)
 				{
 					node.endEffectsStarted();
 					arr.push( node );
@@ -456,7 +497,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 		var move : Move = new Move();
 		move.duration = 300;
-		move.yBy = -Node.DEFAULT_HEIGHT * 2;
+		move.yBy = yBy;
 		move.play( arr );
 
 		dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
@@ -503,7 +544,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 		addChild( newNode );
 
-		newNode.move( isNaN( x ) ? contentMouseX : x, isNaN( y ) ? contentMouseY : y );
+		var nodeX : Number = isNaN( x ) ? (contentMouseX > 0 ? contentMouseX : 10) : x;
+		var nodeY : Number = isNaN( y ) ? (contentMouseY > 0 ? contentMouseY : 10) : y;
+		
+		newNode.move( nodeX , nodeY );
 
 		if ( focused )
 			newNode.setFocus();
@@ -874,9 +918,78 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		doSelectAll();
 	}
 
-	private function contextMenuSelectHandler( event : Event ) : void
+	public function controlBarItemClickHandler (itemName : String, destinationObjectType : String) : void
 	{
-		switch ( event.target.name )
+		switch(destinationObjectType)
+		{
+			case GraphEditorControlBar.DESTINATION_OBJECT_GRAPH_NODE:
+			{
+				controlBarNode_ItemClickHandler(itemName)
+				break;
+			}
+			case GraphEditorControlBar.DESTINATION_OBJECT_GRAPH_TRANSITION:
+			{
+				controlBarTransition_ItemClickHandler(itemName)
+				break;
+			}
+			case GraphEditorControlBar.DESTINATION_OBJECT_GRAPH_CANVAS:
+			default:
+			{
+				contextMenuSelectHandler(null, itemName)
+				
+				if (itemName == GraphEditorControlBar.ITEM_TYPE_DELETE)
+					controlBarTransition_ItemClickHandler(itemName);
+				
+				break;
+			}	
+			
+		}	
+		
+	}
+	
+	private function controlBarNode_ItemClickHandler (itemName : String) : void
+	{
+		if (!selectionManager)
+			return;
+		
+		for each ( var obj : Object in selectionManager.selection )
+		{
+			if ( obj is Node )
+			{
+				Node(obj).controlBarItemClickHandler(itemName);
+				
+				// TODO : remove it
+				if (itemName == "add_transition" || itemName == "jump" || itemName == "initial")
+					break;
+			}
+		}
+
+	}
+	
+	private function controlBarTransition_ItemClickHandler (itemName : String) : void
+	{
+		for each( var child : Object in getChildren() )
+		{
+			if ( child is Connector )
+			{
+				if (Connector(child).focused)
+				{
+					Connector(child).controlBarItemClickHandler(itemName);
+					break;
+				}
+			}
+		}
+		
+	}
+	
+	private function contextMenuSelectHandler( event : Event, itemName:String = "" ) : void
+	{
+		var contextMenuItemName : String = itemName;
+		
+		if (event)
+			contextMenuItemName = event.target.name;
+		
+		switch ( contextMenuItemName )
 		{
 			case "add_state":
 				selectionManager.deselectAll();
@@ -903,6 +1016,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 			case "paste":
 				doPaste();
+				break;
+			
+			case "delete":
+				alertDelete();
 				break;
 
 			case "clear":

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ControlBar xmlns:mx="http://www.adobe.com/2006/mxml"
+			   xmlns:control="net.vdombox.powerpack.control.*"
+			   styleName="categoryCtrlBarStyle"
+			   height="24"
+			   horizontalAlign="left" verticalAlign="center"
+			   horizontalGap="2"
+			   tabChildren="false">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.powerpack.graph.GraphCanvas;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			
+			public static const DESTINATION_OBJECT_GRAPH_CANVAS		: String = "graph_canvas";
+			public static const DESTINATION_OBJECT_GRAPH_NODE		: String = "graph_node";
+			public static const DESTINATION_OBJECT_GRAPH_TRANSITION	: String = "graph_transition";
+			
+			// graph canvas items
+			public static const ITEM_TYPE_ADD_NORMAL_STATE			: String = "add_state";
+			public static const ITEM_TYPE_ADD_SUBGRAPH_STATE		: String = "add_sub";
+			public static const ITEM_TYPE_ADD_COMMAND_STATE			: String = "add_command";
+			
+			public static const ITEM_TYPE_CUT						: String = "cut";
+			public static const ITEM_TYPE_COPY						: String = "copy";
+			public static const ITEM_TYPE_PASTE						: String = "paste";
+			public static const ITEM_TYPE_DELETE					: String = "delete";
+			public static const ITEM_TYPE_CLEAR						: String = "clear";
+			
+			public static const ITEM_TYPE_EXPAND_SPACE				: String = "expand_space";
+			public static const ITEM_TYPE_COLLAPSE_SPACE			: String = "collapse_space";
+			
+			// graph node items
+			public static const ITEM_TYPE_ADD_TRANSITION			: String = "add_trans";
+			public static const ITEM_TYPE_JUMP_TO_GRAPH				: String = "jump";
+			public static const ITEM_TYPE_INITIAL_NODE				: String = "initial";
+			public static const ITEM_TYPE_TERMINAL_NODE				: String = "terminal";
+			public static const ITEM_TYPE_CONVERT_TO_NORMAL_NODE	: String = "normal";
+			public static const ITEM_TYPE_CONVERT_TO_SUBGRAPH_NODE	: String = "subgraph";
+			public static const ITEM_TYPE_CONVERT_TO_COMMAND_NODE	: String = "command";
+			public static const ITEM_TYPE_CONVERT_TO_RESOURCE_NODE	: String = "resource";
+			public static const ITEM_TYPE_ENABLE_NODE				: String = "enabled";
+			public static const ITEM_TYPE_TOGGLE_BREAKPOINT			: String = "breakpoint";
+			
+			// graph transition items
+			public static const ITEM_TYPE_SELECT_TRANSITION			: String = "select_trans";
+			public static const ITEM_TYPE_CHANGE_TRANSITION_ENABLE	: String = "enable";
+			
+			protected function controlBarItem_clickHandler(event:MouseEvent, itemType : String, objectType:String=DESTINATION_OBJECT_GRAPH_CANVAS):void
+			{
+				var evt : ControlBarEvent = new ControlBarEvent(ControlBarEvent.EVENT_ITEM_CLICK);
+				evt.targetItemType = itemType;
+				evt.destinationObjectType = objectType;
+				
+				dispatchEvent(evt);
+			}
+			
+			public function updateButtonsState (graphsCount : int) : void
+			{
+				if (graphsCount <= 0)
+				{
+					if (!locked)
+						lock();
+				}
+				else
+				{
+					if (locked)
+						unlock();
+				}
+			}
+			
+			private var locked : Boolean;
+			
+			private function lock () : void
+			{
+				for each (var obj : Object in getChildren())
+				{
+					if (obj is ControlBarButton)
+						obj.enabled = false;
+				}
+				
+				locked = true;
+			}
+			
+			private function unlock () : void
+			{
+				for each (var obj : Object in getChildren())
+				{
+					if (obj is ControlBarButton)
+						obj.enabled = true;
+				}
+				
+				locked = false;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<control:ControlBarButton id="btnNewNormalState" 
+							   click="controlBarItem_clickHandler(event, ITEM_TYPE_ADD_NORMAL_STATE)"
+							   sourceEnabled="@Embed('/assets/icons/addNormalStateEnabled.png')" 
+							   sourceDisabled="@Embed('/assets/icons/addStateDisabled.png')"
+							   toolTip="Add normal state"
+							   styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnNewSubgraphState" 
+							   click="controlBarItem_clickHandler(event, ITEM_TYPE_ADD_SUBGRAPH_STATE)"
+							   sourceEnabled="@Embed('/assets/icons/addSubgraphStateEnabled.png')"
+							   sourceDisabled="@Embed('/assets/icons/addStateDisabled.png')"
+							   toolTip="Add subgraph state"
+							   styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnNewCommandState" 
+							   click="controlBarItem_clickHandler(event, ITEM_TYPE_ADD_COMMAND_STATE)"
+							   sourceEnabled="@Embed('/assets/icons/addCommandStateEnabled.png')"
+							   sourceDisabled="@Embed('/assets/icons/addStateDisabled.png')"
+							   toolTip="Add command state"
+							   styleName="categoryCtrlBtnStyle"/>
+	
+	<mx:Spacer width="2"/>
+	<mx:VRule height="20"/>
+	<mx:Spacer width="2"/>
+	
+	<control:ControlBarButton id="btnCut" 
+							   click="controlBarItem_clickHandler(event, ITEM_TYPE_CUT)"
+							   sourceEnabled="@Embed('/assets/icons/cutEnabled.png')"
+							   sourceDisabled="@Embed('/assets/icons/cutDisabled.png')"
+							   toolTip="Cut"
+							   styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnCopy" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_COPY)"
+							  sourceEnabled="@Embed('/assets/icons/copyEnabled.png')"
+							  sourceDisabled="@Embed('/assets/icons/copyDisabled.png')"
+							  toolTip="Copy"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnPaste" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_PASTE)"
+							  sourceEnabled="@Embed('/assets/icons/pasteEnabled.png')"
+							  sourceDisabled="@Embed('/assets/icons/pasteDisabled.png')"
+							  toolTip="Paste"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnDelete" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_DELETE)"
+							  sourceEnabled="@Embed('/assets/icons/deleteEnabled.png')"
+							  sourceDisabled="@Embed('/assets/icons/deleteDisabled.png')"
+							  toolTip="Delete"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnClear" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_CLEAR)"
+							  sourceEnabled="@Embed('/assets/icons/clearEnabled.png')"
+							  sourceDisabled="@Embed('/assets/icons/clearDisabled.png')"
+							  toolTip="Clear"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<mx:Spacer width="2"/>
+	<mx:VRule height="20"/>
+	<mx:Spacer width="2"/>
+	
+	<control:ControlBarButton id="btnAddTransition" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_ADD_TRANSITION, DESTINATION_OBJECT_GRAPH_NODE)"
+							  sourceEnabled="@Embed('/assets/icons/addArrowEnabled.png')"
+							  sourceDisabled="@Embed('/assets/icons/addArrowDisabled.png')"
+							  toolTip="Add transition"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnJump" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_JUMP_TO_GRAPH, DESTINATION_OBJECT_GRAPH_NODE)"
+							  sourceEnabled="@Embed('/assets/icons/jumpToGraphEnabled.png')"
+							  sourceDisabled="@Embed('/assets/icons/jumpToGraphDisabled.png')"
+							  toolTip="Jump to graph"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnInitialNode" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_INITIAL_NODE, DESTINATION_OBJECT_GRAPH_NODE)"
+							  sourceEnabled="@Embed('/assets/icons/setInitial.png')"
+							  sourceDisabled="@Embed('/assets/icons/setInitialTerminalDisabled.png')"
+							  toolTip="Mark node as initial"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnTerminalNode" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_TERMINAL_NODE, DESTINATION_OBJECT_GRAPH_NODE)"
+							  sourceEnabled="@Embed('/assets/icons/setTerminal.png')"
+							  sourceDisabled="@Embed('/assets/icons/setInitialTerminalDisabled.png')"
+							  toolTip="Mark node as terminal"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnToggleBreakpoint" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_TOGGLE_BREAKPOINT, DESTINATION_OBJECT_GRAPH_NODE)"
+							  sourceEnabled="@Embed('/assets/icons/breakpointEnabled.png')"
+							  sourceDisabled="@Embed('/assets/icons/breakpointDisabled.png')"
+							  toolTip="Toggle breakpoint"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<mx:Spacer width="2"/>
+	<mx:VRule height="20"/>
+	<mx:Spacer width="2"/>
+	
+	<control:ControlBarButton id="btnConvertToNormal" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_CONVERT_TO_NORMAL_NODE, DESTINATION_OBJECT_GRAPH_NODE)"
+							  sourceEnabled="@Embed('/assets/icons/convertToNormalEnabled.png')"
+							  sourceDisabled="@Embed('/assets/icons/convertDisabled.png')"
+							  toolTip="Convert node type to 'Normal'"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnConvertToSubgraph" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_CONVERT_TO_SUBGRAPH_NODE, DESTINATION_OBJECT_GRAPH_NODE)"
+							  sourceEnabled="@Embed('/assets/icons/convertToSubgraphEnabled.png')"
+							  sourceDisabled="@Embed('/assets/icons/convertDisabled.png')"
+							  toolTip="Convert node type to 'Subgraph'"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<control:ControlBarButton id="btnConvertToCommand" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_CONVERT_TO_COMMAND_NODE, DESTINATION_OBJECT_GRAPH_NODE)"
+							  sourceEnabled="@Embed('/assets/icons/convertToCommandEnabled.png')"
+							  sourceDisabled="@Embed('/assets/icons/convertDisabled.png')"
+							  toolTip="Convert node type to 'Command'"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	<mx:Spacer width="2"/>
+	<mx:VRule height="20"/>
+	<mx:Spacer width="2"/>
+	
+	<control:ControlBarButton id="btnEditTransition" 
+							  click="controlBarItem_clickHandler(event, ITEM_TYPE_SELECT_TRANSITION, DESTINATION_OBJECT_GRAPH_TRANSITION)"
+							  sourceEnabled="@Embed('/assets/icons/editTransitionEnabled.png')"
+							  sourceDisabled="@Embed('/assets/icons/editTransitionDisabled.png')"
+							  toolTip="Edit transition"
+							  styleName="categoryCtrlBtnStyle"/>
+	
+	
+</mx:ControlBar>

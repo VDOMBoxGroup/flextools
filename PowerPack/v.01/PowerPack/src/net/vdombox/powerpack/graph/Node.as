@@ -1599,15 +1599,28 @@ public class Node extends Canvas implements IFocusManagerComponent
 		}
 	}
 
-	private function contextMenuSelectHandler( event : Event ) : void
+	public function controlBarItemClickHandler (itemName:String) : void
 	{
-		switch ( event.target.name )
+		contextMenuSelectHandler(null, itemName);
+	}
+	
+	private function contextMenuSelectHandler( event : Event, itemName:String = "" ) : void
+	{
+		var contextMenuItemName : String = itemName;
+		
+		if (event)
+			contextMenuItemName = event.target.name;
+		
+		switch ( contextMenuItemName )
 		{
 			case "add_trans":
 				beginTransition();
 				break;
 
 			case "jump":
+				if (category!= NodeCategory.SUBGRAPH)
+					return;
+				
 				var jumpEvent : GraphCanvasEvent = new GraphCanvasEvent(GraphCanvasEvent.JUMP_TO_GRAPH);
 				jumpEvent.graphToJumpName = text;
 				
@@ -2116,10 +2129,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 
 	private function contextHandler( event : MouseEvent ) : void
 	{
-		if ( category == NodeCategory.SUBGRAPH )
-			contextMenu.getItemByName( "jump" ).enabled = true;
-		else
-			contextMenu.getItemByName( "jump" ).enabled = false;
+		contextMenu.getItemByName( "jump" ).enabled = category == NodeCategory.SUBGRAPH;
 
 		for each ( var item : NativeMenuItem in contextMenu.items )
 		{

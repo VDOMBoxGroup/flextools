@@ -6,7 +6,8 @@ package net.vdombox.powerpack.control
 	{
 		public static const EVENT_ITEM_CLICK			: String = "controlBarItemClick";
 		
-		public var targetItemType : String;
+		public var targetItemType			: String;
+		public var destinationObjectType		: String;
 		
 		public function ControlBarEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{

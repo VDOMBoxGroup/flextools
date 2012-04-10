@@ -89,10 +89,12 @@
 			import mx.collections.XMLListCollection;
 			import mx.controls.Tree;
 			import mx.core.Application;
+			import mx.events.ChildExistenceChangedEvent;
 			import mx.events.CloseEvent;
 			import mx.events.DropdownEvent;
 			import mx.events.FlexEvent;
 			import mx.events.FlexNativeMenuEvent;
+			import mx.events.IndexChangedEvent;
 			import mx.managers.PopUpManager;
 			import mx.utils.StringUtil;
 			
@@ -1318,52 +1320,59 @@
 								  id="pnl_graphs"
 
 								  vsViewStack="{viewstack}"
+								  graphEditorControlBar="{graphEditorControlBar}"
 								  templateChanged="{graphsChangeHandler()}">
 					</panel:Graphs>
 
 					<mx:Panel creationIndex="1" width="100%" height="100%" layout="absolute"
 							  title="{LanguageManager.sentences.graph_editor}" backgroundAlpha="0.5">
-
-						<mx:VDividedBox height="100%" width="100%">
-
-							<mx:HDividedBox height="100%" width="100%">
-
-								<tabnavigator:ViewNavigator id="viewstack" width="100%" height="100%" borderStyle="solid" />
-
-								<containers:SuperTabNavigator creationPolicy="all" height="100%" dragEnabled="true"
-															  dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
-
-									<panel:Variables id="pnl_variables" minWidth="150" />
-
-								</containers:SuperTabNavigator>
-
-							</mx:HDividedBox>
-
-							<mx:HDividedBox width="100%">
-
-								<containers:SuperTabNavigator creationPolicy="all" width="100%" height="100%"
-															  dragEnabled="true" dropEnabled="true"
-															  closePolicy="{SuperTab.CLOSE_NEVER}">
-
-									<panel:Problems id="pnl_problems" />
-
-									<!--panel:Properties id="pnl_properties"/-->
-
-									<panel:Output id="pnl_output" />
-
-								</containers:SuperTabNavigator>
-
-								<containers:SuperTabNavigator creationPolicy="all" width="100%" height="100%"
-															  dragEnabled="true" dropEnabled="true"
-															  closePolicy="{SuperTab.CLOSE_NEVER}">
-
-									<panel:NodeValue id="pnl_node_value" />
-
-								</containers:SuperTabNavigator>
-
-							</mx:HDividedBox>
-
-						</mx:VDividedBox>
+						<mx:VBox height="100%" width="100%" verticalGap="1">
+							<control:GraphEditorControlBar id="graphEditorControlBar"
+														   width="100%"/>
+							
+							<mx:HRule width="100%" />
+							
+							<mx:VDividedBox height="100%" width="100%">
+								
+								<mx:HDividedBox height="100%" width="100%">
+	
+									<tabnavigator:ViewNavigator id="viewstack" width="100%" height="100%" borderStyle="solid"/>
+	
+									<containers:SuperTabNavigator creationPolicy="all" height="100%" dragEnabled="true"
+																  dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
+	
+										<panel:Variables id="pnl_variables" minWidth="150" />
+	
+									</containers:SuperTabNavigator>
+	
+								</mx:HDividedBox>
+	
+								<mx:HDividedBox width="100%">
+	
+									<containers:SuperTabNavigator creationPolicy="all" width="100%" height="100%"
+																  dragEnabled="true" dropEnabled="true"
+																  closePolicy="{SuperTab.CLOSE_NEVER}">
+	
+										<panel:Problems id="pnl_problems" />
+	
+										<!--panel:Properties id="pnl_properties"/-->
+	
+										<panel:Output id="pnl_output" />
+	
+									</containers:SuperTabNavigator>
+	
+									<containers:SuperTabNavigator creationPolicy="all" width="100%" height="100%"
+																  dragEnabled="true" dropEnabled="true"
+																  closePolicy="{SuperTab.CLOSE_NEVER}">
+	
+										<panel:NodeValue id="pnl_node_value" />
+	
+									</containers:SuperTabNavigator>
+	
+								</mx:HDividedBox>
+	
+							</mx:VDividedBox>
+						</mx:VBox>
 					</mx:Panel>
 
 				</mx:HDividedBox>

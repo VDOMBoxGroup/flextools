@@ -908,9 +908,9 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		if ( !fromObject && !toObject || !parent )
 			return;
 
-		var fromP : Point = new Point(
-				Container( parent ).contentMouseX,
-				Container( parent ).contentMouseY );
+		var pointX : Number = Container( parent ).contentMouseX >= 0 ? Container( parent ).contentMouseX : 0;
+		var pointY : Number = Container( parent ).contentMouseY >= 0 ? Container( parent ).contentMouseY : 0; 
+		var fromP : Point = new Point(pointX,pointY);
 
 		var toP : Point = fromP.clone();
 
@@ -1246,10 +1246,20 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 
 		setFocus();
 	}
-
-	private function contextMenuSelectHandler( event : Event ) : void
+	
+	public function controlBarItemClickHandler (itemName:String) : void
 	{
-		switch ( event.target.name )
+		contextMenuSelectHandler(null, itemName);
+	}
+
+	private function contextMenuSelectHandler( event : Event, itemName : String = "" ) : void
+	{
+		var contextMenuItemName : String = itemName;
+		
+		if (event)
+			contextMenuItemName = event.target.name;
+		
+		switch ( contextMenuItemName )
 		{
 			case "select_trans":
 				beginEdit( false );

@@ -6,15 +6,6 @@
 		 height="60"
 		 backgroundAlpha="0.0">
 
-	<mx:Style>
-		.labelTextStyleName, .inputTextStyleName
-		{
-			fontFamily : Arial;
-			fontSize   : 12;
-			fontWeight : normal
-		}
-	</mx:Style>
-
 	<mx:Script>
         <![CDATA[
 		import mx.binding.utils.BindingUtils;

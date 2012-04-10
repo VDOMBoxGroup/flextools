@@ -421,3 +421,37 @@ ScrollBar {
 	
 	thumbSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.ScrollThumbSkin")
 }
+
+.labelTextStyleName, .inputTextStyleName
+{
+	fontFamily : Arial;
+	fontSize   : 12;
+	fontWeight : normal
+}
+
+.categoryCtrlBtnStyle
+{
+	labelPlacement : bottom;
+	fontFamily     : Arial;
+	fontSize       : 9;
+	textAlign      : center;
+	cornerRadius   : 2;
+	alpha          : 0.9;
+	paddingLeft    : 0;
+	paddingTop     : 3;
+	paddingRight   : 0;
+	paddingBottom  : 3;
+	horizontalGap  : 0;
+	verticalGap    : 0;
+	borderColor    : #CCD1D5
+}
+
+.categoryCtrlBarStyle
+{
+	paddingTop      : 0;
+	paddingLeft     : 0;
+	paddingBottom   : 0;
+	paddingRight    : 0;
+	horizontalGap   : 1;
+	horizontalAlign : center
+}
