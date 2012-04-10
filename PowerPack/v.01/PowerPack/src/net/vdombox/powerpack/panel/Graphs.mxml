@@ -111,6 +111,11 @@
 			if (vsViewStack)
 				vsViewStack.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, viewStack_childRemoveHandler);
 		}
+			
+		private function selectedProjectChanged (obj : Object) : void
+		{
+			selectGraph(getGraphByName(currentTemplate.selectedProject.initialGraphName));
+		}
 		
 		private function graphEditor_controlBarItemClickHandler (controlBarEvent : ControlBarEvent) : void
 		{
@@ -398,9 +403,11 @@
 
 				dispatchEvent( new Event( TPL_CHANGED ) );
 				dispatchEvent( new Event( TPL_POPULATE_COMPLETE ) );
+				
+				BindingUtils.bindSetter( selectedProjectChanged, currentTemplate, "selectedProject");
 			}
 		}
-
+		
 		/**
 		 *	Gen XML that represents template
 		 */
