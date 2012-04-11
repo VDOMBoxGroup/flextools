@@ -85,6 +85,7 @@ package net.vdombox.ide.modules.dataBase.view
 				case Notifications.REMOTE_CALL_RESPONSE_ERROR:
 				{
 					dataTableEditor.currentState = "Result";
+					dataTableEditor.resetQueue();
 					
 					break;
 				}	

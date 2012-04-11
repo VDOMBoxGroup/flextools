@@ -26,10 +26,12 @@ package net.vdombox.ide.modules.dataBase.controller
 				var pageVO : PageVO; 
 				if ( objectVO is PageVO )
 					pageVO = objectVO as PageVO;
+				else if ( !objectVO )
+					pageVO = null;
 				else if ("pageVO" in objectVO )
 					pageVO =  objectVO["pageVO"];
 				
-				if ( (!selectedPage && pageVO ) || ( selectedPage && pageVO && selectedPage.id != pageVO.id ) )
+				if ( (!selectedPage && pageVO ) || ( selectedPage && pageVO && selectedPage.id != pageVO.id ) || ( selectedPage && !pageVO ) )
 					statesProxy.selectedPage = pageVO;
 				
 				statesProxy.selectedObject = objectVO as ObjectVO;

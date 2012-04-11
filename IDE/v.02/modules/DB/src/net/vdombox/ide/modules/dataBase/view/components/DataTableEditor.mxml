@@ -777,6 +777,11 @@
 				}
 			}
 			
+			public function resetQueue() : void
+			{
+				queue.reset();
+			}
+			
 		]]>
 	</fx:Script>
 	

@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.SimpleMessageHeaders;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.messages.SimpleMessage;
@@ -27,7 +28,6 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -92,6 +92,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( Notifications.UPDATE_ATTRIBUTES );
 			
 			interests.push( Notifications.DELETE_OBJECT );
+			interests.push( Notifications.DELETE_PAGE );
 			
 			return interests;
 		}
@@ -342,6 +343,15 @@ package net.vdombox.ide.modules.dataBase.view
 				case Notifications.DELETE_OBJECT:
 				{
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.DELETE, PPMPageTargetNames.OBJECT, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+
+				case Notifications.DELETE_PAGE:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.PAGE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

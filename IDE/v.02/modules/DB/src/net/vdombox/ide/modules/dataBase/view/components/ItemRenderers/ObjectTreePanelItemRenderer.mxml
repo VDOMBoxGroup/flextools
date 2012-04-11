@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  width="100%" minWidth="225" xmlns:view="net.vdombox.ide.common.view.*"
+					  doubleClickEnabled="true" doubleClick="mxtreeitemrenderer1_doubleClickHandler(event)"
+					  contextMenu="mxtreeitemrenderer1_contextMenuHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
+			import net.vdombox.ide.common.events.PopUpWindowEvent;
+			import net.vdombox.ide.common.events.ResourceVOEvent;
+			import net.vdombox.ide.common.model._vo.ResourceVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.common.view.components.button.AlertButton;
+			import net.vdombox.ide.common.view.components.windows.Alert;
+			import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
+			import net.vdombox.ide.modules.dataBase.events.ObjectTreePanelEvent;
+			import net.vdombox.utils.WindowManager;
+			
+			private var _data : XML;
+			
+			private var _resourceVO : ResourceVO;
+			
+			private var loader : Loader;
+			
+			override public function set data( value : Object ) : void
+			{
+				super.data = value;
+				
+				_data = value as XML;
+				
+				if ( data && data.name().localName == "page" )
+				{
+					if ( !contextMenu )
+						contextMenu = new ContextMenu();
+				}
+				else
+					contextMenu = null;
+				
+				
+			}
+			
+			public function get objectID() : String
+			{
+				return _data.@id;
+			}
+			
+			public function set resourceVO(value:ResourceVO) : void
+			{
+				_resourceVO = value;
+				
+				if ( !value.data )
+				{
+					BindingUtils.bindSetter( dataLoaded, value, "data", false, true );
+					return;
+				}
+				
+				dataLoaded();
+			}
+			
+			public function get resourceID() : String
+			{
+				if ( _data )
+					return _data.@iconID;
+				else
+					return "";
+			}
+			
+			private function dataLoaded( object : Object = null ) : void
+			{
+				loader = new Loader();
+				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
+				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+				
+				try
+				{
+					loader.loadBytes( _resourceVO.data );
+					
+				}
+				catch ( error : Error )
+				{
+					// FIXME Сделать обработку исключения если не грузится изображение
+				}
+			}
+			
+			private function onBytesLoaded( event : Event ) : void
+			{
+				loader = null;
+				
+				if ( event.type == IOErrorEvent.IO_ERROR )
+					return;
+				
+				componentIcon.source = Bitmap( event.target.content )
+			}
+			
+			override public function validateProperties() : void
+			{
+				super.validateProperties();
+				
+				if ( !_data )
+					return
+				
+				if ( !_resourceVO ||( _resourceVO && _resourceVO.id != _data.@iconID ) )
+					dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCE_REQUEST));
+			}
+			
+			protected function mxtreeitemrenderer1_doubleClickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				dispatchEvent( new ObjectsTreePanelEvent ( ObjectsTreePanelEvent.DOUBLE_CLICK ) );
+			}
+			
+			protected function mxtreeitemrenderer1_contextMenuHandler(event:MouseEvent):void
+			{
+				if ( !data || data.name().localName != "page" )
+					return;
+				
+				contextMenu.removeAllItems();
+				
+				var renameItem : ContextMenuItem = new ContextMenuItem( "Rename" );
+				renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );
+				contextMenu.addItem( renameItem );
+				
+				var deleteItem : ContextMenuItem = new ContextMenuItem( "Delete" );
+				deleteItem.addEventListener( Event.SELECT, deleteContextMenuHandler, false, 0, true );
+				contextMenu.addItem( deleteItem );
+			}
+			
+			private function renameContextMenuHandler( event : Event ) : void
+			{
+				var renameWindow : NameObjectWindow = new NameObjectWindow( treeListData.label );	
+				renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
+				renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
+				
+				WindowManager.getInstance().addWindow(renameWindow, this, true);
+				
+				function applyHandler( event : PopUpWindowEvent ) : void
+				{
+					WindowManager.getInstance().removeWindow( renameWindow );
+					var renameEvent : ObjectTreePanelEvent = new ObjectTreePanelEvent ( ObjectTreePanelEvent.NAME_CHANGE );
+					renameEvent.value = { basaID : data.@id.toString(), newName : event.name };
+					dispatchEvent( renameEvent );
+				}
+				
+				function cancelHandler( event : PopUpWindowEvent ) : void
+				{
+					WindowManager.getInstance().removeWindow( renameWindow );
+				}
+			}
+			
+			private function deleteContextMenuHandler( event : Event ) : void
+			{
+				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
+				
+				Alert.Show(resourceManager.getString( "DataBase_General", "delete_table" ) + "?" ,AlertButton.OK_No, parentApplication, closeHandler);
+				
+				function closeHandler( event : CloseEvent ) : void
+				{
+					if (event.detail == Alert.YES)
+					{
+						var deleteEvent : ObjectTreePanelEvent = new ObjectTreePanelEvent ( ObjectTreePanelEvent.DELETE );
+						deleteEvent.value = data.@id.toString();
+						dispatchEvent( deleteEvent );
+					}
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />            
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:Rect left="-2" width="100%" top="-2" bottom="-2">
+		<s:fill>
+			<s:SolidColor id="rectColor"
+						  color.normal="#3A3A3A"
+						  color.hovered="#00000A"
+						  alpha.hovered="0.8"
+						  color.selected="#00000A" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:Group id="groupContent"
+			 width="100%" minWidth="200"
+			 top="-2"
+			 bottom="-2">
+		
+		<s:HGroup width="100%" height="100%" verticalAlign="middle">
+			
+			<s:Rect id="indentationSpacer" width="{treeListData.indent}" percentHeight="100">
+				<s:fill>
+					<s:SolidColor color="#585858" />
+				</s:fill>
+			</s:Rect>
+			
+			<s:Group id="disclosureGroup">
+				<s:BitmapImage source="{treeListData.disclosureIcon}" visible="{treeListData.hasChildren}" />
+			</s:Group>
+			
+			<s:BitmapImage id="componentIcon" />
+			
+			<s:TextInput id="labelField"
+						 color="#FFFFFF"
+						 text="{treeListData.label}"
+						 width="100%"
+						 paddingTop="2"
+						 editable="false" contentBackgroundAlpha="0"
+						 borderVisible="false" selectable="false"/>
+			
+		</s:HGroup>
+		
+	</s:Group>
+	
+	<s:Line top="-2" left="-2" width="100%">
+		<s:stroke>
+			<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1" />
+		</s:stroke>
+	</s:Line>
+	
+	<s:Line bottom="-2" left="-2" width="100%">
+		<s:stroke>
+			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1" />
+		</s:stroke>
+	</s:Line>
+	
+</s:MXTreeItemRenderer>

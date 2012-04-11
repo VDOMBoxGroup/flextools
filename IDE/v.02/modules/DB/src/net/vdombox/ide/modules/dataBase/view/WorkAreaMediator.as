@@ -1,13 +1,17 @@
 package net.vdombox.ide.modules.dataBase.view
 {
 	import flash.events.Event;
+	import flash.utils.Dictionary;
 	
+	import mx.utils.ObjectUtil;
+	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.EditorEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
+	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
@@ -60,6 +64,8 @@ package net.vdombox.ide.modules.dataBase.view
 			
 			interests.push( Notifications.OBJECT_NAME_SETTED );
 			
+			interests.push( Notifications.PAGE_DELETED );
+			
 			return interests;
 		}
 		
@@ -74,7 +80,7 @@ package net.vdombox.ide.modules.dataBase.view
 			if ( !isActive && name != Notifications.BODY_START )
 				return;
 			
-			
+			var pageVO : PageVO;
 			
 			switch ( name )
 			{
@@ -96,7 +102,7 @@ package net.vdombox.ide.modules.dataBase.view
 					
 				case Notifications.PAGE_GETTED:
 				{
-					var pageVO : PageVO = body as PageVO;
+					pageVO = body as PageVO;
 					editor = workArea.getEditorByVO( pageVO ) as DataTable;
 					
 					if ( !editor )
@@ -153,6 +159,35 @@ package net.vdombox.ide.modules.dataBase.view
 					
 					if ( tab )
 						tab.label = body.name;
+					
+					break;
+				}
+					
+				case Notifications.PAGE_DELETED:
+				{
+					pageVO = body as PageVO;
+					
+					var editors : Dictionary = workArea.editors;
+					var dataTable : *;
+					var closeTabs : Vector.<IVDOMObjectVO> = new Vector.<IVDOMObjectVO>(); 
+					
+					for ( dataTable in editors )
+					{
+						if ( dataTable.objectVO is PageVO && dataTable.objectVO.id == pageVO.id ||
+							dataTable.objectVO is ObjectVO && dataTable.objectVO.pageVO.id == pageVO.id )
+						{
+							closeTabs.push( dataTable.objectVO );
+						}
+					}
+					
+					for ( var i : int = 0; i < closeTabs.length; i++ )
+					{
+						var object : IVDOMObjectVO = closeTabs[i];
+						facade.removeMediator( DataTableMediator.NAME + object.id );
+						workArea.closeTab( object );
+					}
+					
+					
 					
 					break;
 				}

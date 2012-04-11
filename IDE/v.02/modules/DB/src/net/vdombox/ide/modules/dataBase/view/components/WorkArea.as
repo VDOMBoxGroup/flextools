@@ -27,6 +27,11 @@ package net.vdombox.ide.modules.dataBase.view.components
 			addEventListener( "tabRemoved", numTabChangedHandler );
 		}
 		
+		public function get editors():Dictionary
+		{
+			return _editors;
+		}
+
 		public function openEditor( objectVO : Object ) : IEditor
 		{
 			var editor : DataTable = new DataTable();

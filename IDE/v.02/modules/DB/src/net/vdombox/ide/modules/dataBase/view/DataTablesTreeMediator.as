@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.dataBase.view
 	
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.TypesProxy;
@@ -14,8 +15,8 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
+	import net.vdombox.ide.modules.dataBase.events.ObjectTreePanelEvent;
 	import net.vdombox.ide.modules.dataBase.events.TableElementEvent;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTablesTree;
@@ -74,6 +75,7 @@ package net.vdombox.ide.modules.dataBase.view
 			dataTablesTree.removeEventListener( DataTablesEvents.CHANGE, changeHandler );
 			dataTablesTree.removeEventListener( DataTablesEvents.NEW_BASE, createNewPageOrObject );
 			dataTablesTree.removeEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler ); 
+			dataTablesTree.removeEventListener( TableElementEvent.NAME_CHANGE, updateBaseName, true );
 			
 			statesProxy = null;
 			
@@ -96,6 +98,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( Notifications.OBJECT_CREATED );
 			interests.push( Notifications.OBJECT_NAME_SETTED );
 			interests.push( Notifications.PAGE_NAME_SETTED );
+			interests.push( Notifications.PAGE_DELETED );
 			
 			return interests;
 		}
@@ -283,6 +286,13 @@ package net.vdombox.ide.modules.dataBase.view
 					
 					break;
 				}
+					
+				case Notifications.PAGE_DELETED:
+				{
+					sendNotification( Notifications.GET_DATA_BASES, statesProxy.selectedApplication );
+					
+					break;
+				}
 			}
 		}
 		
@@ -306,6 +316,9 @@ package net.vdombox.ide.modules.dataBase.view
 			dataTablesTree.addEventListener( DataTablesEvents.CHANGE, changeHandler, false, 0, true );
 			dataTablesTree.addEventListener( DataTablesEvents.NEW_BASE, createNewPageOrObject, false, 0, true );
 			dataTablesTree.addEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true ); 
+			
+			dataTablesTree.addEventListener( TableElementEvent.NAME_CHANGE, updateBaseName, true, 0 , true );
+			dataTablesTree.addEventListener( TableElementEvent.DELETE, deleteBase, true, 0 , true );
 		}
 		
 		private function createNewPageOrObject( event : DataTablesEvents ) : void
@@ -415,6 +428,20 @@ package net.vdombox.ide.modules.dataBase.view
 		private function getResourceRequestHandler( event : ResourceVOEvent ) : void
 		{
 			sendNotification( Notifications.GET_RESOURCE_REQUEST, event.target );
+		}
+		
+		private function updateBaseName( event : ObjectTreePanelEvent ) : void
+		{
+			
+			var basa : PageVO = _dataBases[ event.value.basaID as String ];
+			basa.name = event.value.newName as String;
+			
+			sendNotification( Notifications.SET_OBJECT_NAME, basa );
+		}
+		
+		private function deleteBase( event : ObjectTreePanelEvent ) : void
+		{			
+			sendNotification( Notifications.DELETE_PAGE, { applicationVO: statesProxy.selectedApplication, pageVO: _dataBases[ event.value as String ] } );
 		}
 	}
 }

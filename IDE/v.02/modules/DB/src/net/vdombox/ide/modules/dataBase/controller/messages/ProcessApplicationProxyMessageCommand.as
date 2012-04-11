@@ -1,9 +1,10 @@
 package net.vdombox.ide.modules.dataBase.controller.messages
 {
+	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
-	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -35,6 +36,12 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 						sendNotification( Notifications.PAGE_CREATED, body );
 					else if ( operation == PPMOperationNames.READ )
 						sendNotification( Notifications.PAGE_GETTED, body );
+					else if ( operation == PPMOperationNames.DELETE )
+					{
+						sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, null );
+						sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, null );
+						sendNotification( Notifications.PAGE_DELETED, body.pageVO );
+					}
 					
 					break;
 				}
