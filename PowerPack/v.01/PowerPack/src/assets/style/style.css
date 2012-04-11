@@ -455,3 +455,14 @@ ScrollBar {
 	horizontalGap   : 1;
 	horizontalAlign : center
 }
+
+GraphThumb
+{
+	horizontalAlign	: center;
+	verticalAlign	: middle;
+	
+	backgroundAlpha : 0.7;
+	backgroundUsualColor : #fbfbfb;
+	backgroundInitialColor : #d1ffd1;
+	backgroundCurrentInitialColor : #88ff88;
+}

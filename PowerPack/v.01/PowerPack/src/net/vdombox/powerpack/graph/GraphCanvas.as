@@ -66,6 +66,9 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	//
 	//--------------------------------------------------------------------------
 
+	[Bindable]
+	public var initial : Boolean;
+	
 	public var creationCompleted : Boolean = false;
 	
 	public static var graphs : Dictionary = new Dictionary();
@@ -135,7 +138,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	public function GraphCanvas()
 	{
 		super();
-
+			
 		doubleClickEnabled = true;
 
 		addEventListener( MouseEvent.DOUBLE_CLICK, doubleClickHandler );
@@ -152,7 +155,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		addEventListener( MouseEvent.CONTEXT_MENU, contextMenuDisplayingHandler );
 
 		graphs[this] = this;
-		
+			
 		addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 	}
 	
@@ -261,37 +264,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 		return _category;
 	}
-
-	//----------------------------------
-	//  initial
-	//----------------------------------
-
-	private var _initial : Boolean;
-	private var _initialChanged : Boolean;
-
-	[Bindable("initialChanged")]
-	public function set initial( value : Boolean ) : void
-	{
-		if ( _initial != value )
-		{
-			_initial = value;
-
-			_initialChanged = true;
-
-			invalidateProperties();
-
-			dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.INITIAL_CHANGED ) );
-			dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
-		}
-	}
-
-	public function get initial() : Boolean
-	{
-		if ( xml )
-			return currentTemplate.selectedProject.initialGraphName == name;
-
-		return _initial;
-	}
 	
 	//----------------------------------
 	//  name
@@ -306,10 +278,11 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 			if ( xml )
 				xml.@name = value;
-
+			
 			dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.NAME_CHANGED ) );
 			dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
 		}
+		
 	}
 
 	[Bindable("nameChanged")]
@@ -509,7 +482,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 		newCanvas.xml = xml;
 		newCanvas.category = category;
-		newCanvas.initial = initial;
 
 		var dict : Dictionary = new Dictionary( true );
 		for each ( var obj : Object in getChildren() )
@@ -656,8 +628,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		clear();
 
 		name = Utils.getStringOrDefault( graphXML.@name, '' );
-		
-		initial = currentTemplate.selectedProject.initialGraphName == name;
 		
 		category = Utils.getStringOrDefault( graphXML.@category, 'other' );
 

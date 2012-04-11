@@ -24,6 +24,7 @@
 			import mx.utils.StringUtil;
 			
 			import net.vdombox.powerpack.control.ProjectProperties;
+			import net.vdombox.powerpack.graph.GraphCanvas;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 			import net.vdombox.powerpack.lib.player.managers.ContextManager;
@@ -202,10 +203,25 @@
 				projectPropertiesControl.project = project;
 				projectPropertiesControl.graphs = graphs;
 				
+				projectPropertiesControl.addEventListener(ProjectProperties.EVENT_INITIAL_GRAPH_CHANGED, projectInitialGraphChangedHandler);
+				
 				vsProperties.addChild(projectPropertiesControl);
 				
 				projectPropertiesControl.addEventListener(FlexEvent.CREATION_COMPLETE, projectPropertiesCreationCompleteHandler);
 			
+			}
+			
+			private function projectInitialGraphChangedHandler (event : Event ) : void
+			{
+				for each (var graph : GraphCanvas in graphs)
+				{
+					var newInitialValue : Boolean = currentTemplate.isInitialGraphForAnyProject(graph.name);
+					
+					if (newInitialValue && graph.initial)
+						graph.initial = false;
+					
+					graph.initial = newInitialValue;
+				}
 			}
 			
 			private function projectPropertiesCreationCompleteHandler (event : FlexEvent) : void

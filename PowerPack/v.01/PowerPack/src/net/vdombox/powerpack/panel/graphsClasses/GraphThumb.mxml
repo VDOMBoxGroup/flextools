@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
-		 horizontalAlign="center"
-		 verticalAlign="middle"
-		 borderStyle="none"
 		 height="60"
-		 backgroundAlpha="0.0">
+		 borderStyle="solid">
 
 	<mx:Script>
         <![CDATA[
-		import mx.binding.utils.BindingUtils;
-		import mx.binding.utils.ChangeWatcher;
-		import mx.core.EdgeMetrics;
-		import mx.core.IUITextField;
-		import mx.core.UITextField;
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+			import mx.controls.HRule;
+			import mx.core.EdgeMetrics;
+			import mx.core.IUITextField;
+			import mx.core.UITextField;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.powerpack.managers.BuilderContextManager;
+			import net.vdombox.powerpack.template.BuilderTemplate;
 
 		// Define a property for returning the new value to the item.
 		[Bindable]
@@ -20,7 +22,9 @@
 
 		public var labelTextField : IUITextField;
 
-		private var watcher : ChangeWatcher;
+		private var graphNameWatcher : ChangeWatcher;
+		private var initialGraphWatcher : ChangeWatcher;
+		private var selProjectWatcher : ChangeWatcher;
 
 		//--------------------------------------------------------------------------
 		//
@@ -90,32 +94,101 @@
 
 				addChild( DisplayObject( labelTextField ) );
 			}
-
-			BindingUtils.bindSetter( onDataChange, this, 'data' );
-
-			function onDataChange( data : Object ) : void
+			
+		}
+			
+		override public function set data(value:Object):void
+		{
+			if (data == value)
+				return;
+			
+			super.data = value;
+			
+			if ( data )
 			{
-				if ( data )
-				{
-					if ( watcher )
-						watcher.unwatch();
-					watcher = BindingUtils.bindSetter( onLabelChange, data, 'name' );
-				}
-				else
-				{
-					txtThumb.text = '';
-					invalidateDisplayList();
-				}
+				if ( graphNameWatcher )
+					graphNameWatcher.unwatch();
+				
+				if ( initialGraphWatcher )
+					initialGraphWatcher.unwatch();
+				
+				if ( selProjectWatcher )
+					selProjectWatcher.unwatch();
+				
+				graphNameWatcher = BindingUtils.bindSetter( onLabelChange, data, 'name' );
+				
+				initialGraphWatcher = BindingUtils.bindSetter( onInitialChange, data, 'initial' );
+				
+				selProjectWatcher = BindingUtils.bindSetter( onSelectedProjectChange, currentTemplate, 'selectedProject' );
 			}
-
-			function onLabelChange( label : String ) : void
+			else
 			{
-				txtThumb.text = label;
+				txtThumb.text = '';
 				invalidateDisplayList();
 			}
-
+			
+		}
+			
+		private function onLabelChange( label : String ) : void
+		{
+			txtThumb.text = label;
+			invalidateDisplayList();
 		}
 
+		private function onInitialChange( init : Boolean ) : void
+		{
+			if (init)
+			{
+				if (currentTemplate.selectedProject.initialGraphName == data.name)
+					updateInitialGraphViewState(STATE_INITIAL_AND_CURRENT)
+				else
+					updateInitialGraphViewState(STATE_INITIAL)
+			}
+			else
+				updateInitialGraphViewState(STATE_USUAL)
+		}
+	
+		private function onSelectedProjectChange( obj : Object ) : void
+		{
+			
+			if (obj && obj.initialGraphName == data.name)
+				updateInitialGraphViewState(STATE_INITIAL_AND_CURRENT)
+			else
+				onInitialChange(data.initial);
+		}
+			
+		private static const STATE_USUAL				: String = "stateUsual";
+		private static const STATE_INITIAL				: String = "stateInitial";
+		private static const STATE_INITIAL_AND_CURRENT	: String = "stateInitialAndCurrent";
+		
+		private function updateInitialGraphViewState (viewState : String = STATE_USUAL) : void
+		{
+			switch(viewState)
+			{
+				case STATE_INITIAL_AND_CURRENT:
+				{
+					setStyle("backgroundColor", getStyle("backgroundCurrentInitialColor"));
+					break;
+				}
+				case STATE_INITIAL:
+				{
+					setStyle("backgroundColor", getStyle("backgroundInitialColor"));
+					break;
+				}
+				case STATE_USUAL:
+				default:
+				{
+					setStyle("backgroundColor", getStyle("backgroundUsualColor"));
+					break;
+				}
+			}
+		}
+		
+		private function get currentTemplate() : BuilderTemplate
+		{
+			return BuilderContextManager.currentTemplate;
+		}
+		
 		/**
 		 *  @private
 		 */
@@ -142,9 +215,11 @@
 					labelTextField.truncateToFit( "..." );
 				}
 			}
-
+			
 			super.updateDisplayList( unscaledWidth, unscaledHeight );
 		}
+		
+			
 		]]>
     </mx:Script>
 

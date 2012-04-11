@@ -26,6 +26,8 @@
 			import net.vdombox.powerpack.sdkcompiler.SDKCompilerParamsChecker;
 			import net.vdombox.powerpack.template.BuilderTemplateProject;
 			
+			public static const EVENT_INITIAL_GRAPH_CHANGED : String = "initialGraphChanged";
+			
 			private var compilerParamsChecker	: SDKCompilerParamsChecker = SDKCompilerParamsChecker.getInstance();
 			
 			[Bindable]
@@ -298,18 +300,16 @@
 				_initialGraphIndex = index;
 			}
 			
-			public function set initialGraph ( initialGraph : GraphCanvas ) : void
+			public function set initialGraph ( graph : GraphCanvas ) : void
 			{
-				for each ( var graph : GraphCanvas in graphs )
-				{
-					graph.initial = false;
-				}
-
-				project.initialGraphName = initialGraph.name;
+				if (graph.name == project.initialGraphName)
+					return;
 				
-				initialGraph.initial = true;
+				project.initialGraphName = graph.name;
 				
-				graphsComboBox.selectedItem = initialGraph;
+				graphsComboBox.selectedItem = graph;
+				
+				dispatchEvent (new Event(EVENT_INITIAL_GRAPH_CHANGED));
 			}
 			
 			protected function graphsComboBox_changeHandler(event:ListEvent):void

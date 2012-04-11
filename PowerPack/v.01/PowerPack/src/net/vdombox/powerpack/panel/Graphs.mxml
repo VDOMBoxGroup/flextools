@@ -224,6 +224,8 @@
 		{
 			graphs.addItem( graph );
 			
+			graph.initial = currentTemplate.isInitialGraphForAnyProject(graph.name);
+			
 			sortGraphs();
 
 			graph.addEventListener(FlexEvent.CREATION_COMPLETE, graph_creationCompleteHandler);
@@ -727,7 +729,6 @@
 
 			var newGraph : GraphCanvas = curGraph.clone();
 
-			newGraph.initial = false;
 			newGraph.name = NameUtil.createUniqueName( newGraph );
 			newGraph.name = createUniqueCopyName( curGraph.name, child.graphs );
 			newGraph.label = newGraph.name;

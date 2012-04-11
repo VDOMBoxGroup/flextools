@@ -176,12 +176,13 @@
 			 labelField="name"
 			 dragEnabled="true"
 			 allowDragSelection="true"
-			 alternatingItemColors="[#FFFFFF, #f6f6f6]"
 			 doubleClickEnabled="true"
 			 itemRenderer="net.vdombox.powerpack.panel.graphsClasses.GraphThumb"
 			 itemEditor="net.vdombox.powerpack.panel.graphsClasses.GraphThumb"
 			 editorDataField="returnText"
 			 itemEditBegin="beginEdit(event);"
-			 itemEditEnd="endEdit(event);"></mx:List>
+			 itemEditEnd="endEdit(event);"
+			 paddingLeft="2" paddingRight="2">
+	</mx:List>
 
 </mx:VBox>
