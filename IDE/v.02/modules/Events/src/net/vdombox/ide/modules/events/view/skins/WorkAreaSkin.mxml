@@ -84,6 +84,18 @@
 				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 				removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true );
 				
+				if ( multiRect.width < 0 )
+				{
+					multiRect.x += multiRect.width;
+					multiRect.width = -1 * multiRect.width;
+				}
+				
+				if ( multiRect.height < 0 )
+				{
+					multiRect.y += multiRect.height;
+					multiRect.height = -1 * multiRect.height;
+				}
+				
 				hostComponent.setMultiSelectInRect( multiRect.x, multiRect.y, multiRect.x + multiRect.width, multiRect.y + multiRect.height );
 				
 				multiRect.width = 0;
