@@ -5,9 +5,13 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
+	import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
 	import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
+	import net.vdombox.ide.modules.scripts.view.components.ListItemRenderer;
 	import net.vdombox.ide.modules.scripts.view.components.ServerScriptsPanel;
 	import net.vdombox.utils.WindowManager;
 	
@@ -233,6 +237,9 @@ package net.vdombox.ide.modules.scripts.view
 				false, 0, true );
 			serverScriptsPanel.addEventListener( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED,
 				selectedServerActionChangedHandler, false, 0, true );
+			
+			serverScriptsPanel.addEventListener( ListItemRendererEvent.NAME_CHANGE,
+				serverActionNameChangeHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -241,6 +248,9 @@ package net.vdombox.ide.modules.scripts.view
 			serverScriptsPanel.removeEventListener( ServerScriptsPanelEvent.DELETE_ACTION, deleteActionHandler );
 			serverScriptsPanel.removeEventListener( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED,
 				selectedServerActionChangedHandler );
+			
+			serverScriptsPanel.removeEventListener( ListItemRendererEvent.NAME_CHANGE,
+				serverActionNameChangeHandler );
 		}
 
 		private function clearData() : void
@@ -272,7 +282,7 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function deleteActionHandler( event : ServerScriptsPanelEvent ) : void
 		{
-			var deletedServerActionVO : ServerActionVO = serverScriptsPanel.selectedScript;
+			var deletedServerActionVO : ServerActionVO = event.object as ServerActionVO;
 
 			if ( !deletedServerActionVO )
 				return;
@@ -317,5 +327,16 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			sendNotification( Notifications.SELECTED_SERVER_ACTION_CHANGED, serverScriptsPanel.selectedScript );
 		}
+		
+		private function serverActionNameChangeHandler( event : ListItemRendererEvent ) : void
+		{
+			var action : ServerActionVO =  ListItemRenderer(event.target).data as ServerActionVO;
+			if ( statesProxy.selectedObject )  
+				sendNotification( Notifications.RENAME_SERVER_ACTION, { objectVO : statesProxy.selectedObject, serverActionVO : action, newName : event.object } );
+			else if ( statesProxy.selectedPage )  
+				sendNotification( Notifications.RENAME_SERVER_ACTION, { pageVO : statesProxy.selectedPage, serverActionVO : action, newName : event.object } );
+			}
+		
+		
 	}
 }

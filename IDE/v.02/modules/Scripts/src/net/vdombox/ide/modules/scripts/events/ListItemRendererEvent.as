@@ -6,6 +6,9 @@ package net.vdombox.ide.modules.scripts.events
 	{
 		public static var ITEM_CHENGED : String = "itemChanged";
 		public static var DELETE_PRESS : String = "deletePress";
+		public static var NAME_CHANGE : String = "nameChange";
+		
+		public var object : Object;
 		
 		public function ListItemRendererEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

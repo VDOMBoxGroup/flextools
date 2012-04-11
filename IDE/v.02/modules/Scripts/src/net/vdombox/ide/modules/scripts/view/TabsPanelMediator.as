@@ -60,6 +60,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.LIBRARY_DELETED );
 			interests.push( Notifications.DELETE_TAB_BY_ACTIONVO );
 			
+			interests.push( Notifications.SERVER_ACTION_RENAMED );
+			
 			return interests;
 		}
 		
@@ -138,6 +140,16 @@ package net.vdombox.ide.modules.scripts.view
 					
 					if ( action )
 						sendNotification( Notifications.DELETE_TAB, action );
+					
+					break;
+				}
+					
+				case Notifications.SERVER_ACTION_RENAMED:
+				{
+					var actionID : String = body.serverActionID as String;
+					var newName  :String = body.newName as String;
+					
+					tabsPanel.renameAction( actionID, newName );
 					
 					break;
 				}

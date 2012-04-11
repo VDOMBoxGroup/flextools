@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.LibrariesPanel;
 	import net.vdombox.utils.WindowManager;
@@ -189,7 +189,7 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function deleteLibraryHandler( event : LibrariesPanelEvent ) : void
 		{
-			var libraryVO : LibraryVO = librariesPanel.selectedLibrary;
+			var libraryVO : LibraryVO = event.object as LibraryVO;
 
 			if ( libraryVO )
 				sendNotification( Notifications.DELETE_LIBRARY_REQUEST, libraryVO );

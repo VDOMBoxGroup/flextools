@@ -8,6 +8,8 @@ package net.vdombox.ide.modules.scripts.events
 		public static var CREATE_LIBRARY : String = "createLibrary";
 		public static var DELETE_LIBRARY : String = "deleteLibrary";
 		
+		public var object : Object;
+		
 		public function LibrariesPanelEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{
 			super( type, bubbles, cancelable );

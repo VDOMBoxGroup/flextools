@@ -115,8 +115,7 @@
 			{
 				actionList.addEventListener( ListItemRendererEvent.ITEM_CHENGED, actionList_changeHandler, true, 0, true );
 				actionList.addEventListener( KeyboardEvent.KEY_DOWN, itemrenderer1_keyDownHandler, false, 0, true );
-				
-				//titleDisplay.left = 25;
+				actionList.addEventListener( ListItemRendererEvent.DELETE_PRESS, itemrenderer1_DeleteHandler, true, 0, true );
 			}
 			
 			private function itemrenderer1_keyDownHandler(event:KeyboardEvent):void
@@ -128,7 +127,18 @@
 			private function removeactionRequest( event : CloseEvent ) : void 
 			{
 				if ( event.detail == Alert.YES )
-					dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION ) );	
+				{
+					var deleteEvent : ServerScriptsPanelEvent = new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION );
+					deleteEvent.object = selectedScript;
+					dispatchEvent( deleteEvent );	
+				}
+			}
+			
+			private function itemrenderer1_DeleteHandler( event : ListItemRendererEvent ) : void 
+			{
+				var deleteEvent : ServerScriptsPanelEvent = new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION );
+				deleteEvent.object = event.target.data;
+				dispatchEvent( deleteEvent );	
 			}
 			
 		]]>

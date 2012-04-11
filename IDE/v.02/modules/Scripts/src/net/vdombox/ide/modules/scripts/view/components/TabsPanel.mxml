@@ -183,6 +183,31 @@
 					
 			}
 			
+			public function renameAction( actionID : String, newName : String ) : void
+			{
+				if ( !_tabs )
+					return;
+				
+				var count : int = _tabs.source.length;
+				
+				for( var i : int; i < count; i++ )
+				{
+					if ( _tabs.source[i] is ServerActionVO && _tabs.source[i].id == actionID )
+					{
+						_tabs.source[i].setName( newName );
+						_tabs.source[i].saved = !_tabs.source[i].saved
+						_tabs.source[i].saved = !_tabs.source[i].saved
+						
+						_tabs.sort = new Sort();
+						_tabs.sort.fields = [ new SortField( "name" ), new SortField( "containerName" ) ];
+						_tabs.refresh();
+						
+						break;
+					}
+				}
+			
+			}
+			
 			public function removeAll() : void
 			{
 				_tabs.removeAll();

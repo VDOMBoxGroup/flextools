@@ -78,6 +78,7 @@ package net.vdombox.ide.modules.scripts.view
 			
 			interests.push( Notifications.CREATE_SERVER_ACTION );
 			interests.push( Notifications.DELETE_SERVER_ACTION );
+			interests.push( Notifications.RENAME_SERVER_ACTION );
 			
 			interests.push( Notifications.GET_LIBRARIES );
 
@@ -332,6 +333,19 @@ package net.vdombox.ide.modules.scripts.view
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.DELETE, PPMObjectTargetNames.SERVER_ACTION, body );
 					else if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.DELETE, PPMPageTargetNames.SERVER_ACTION, body );
+					
+					if( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break
+				}
+					
+				case Notifications.RENAME_SERVER_ACTION:
+				{
+					if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.RENAME, PPMObjectTargetNames.SERVER_ACTION, body );
+					else if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.RENAME, PPMPageTargetNames.SERVER_ACTION, body );
 					
 					if( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );

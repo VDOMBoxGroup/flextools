@@ -106,6 +106,14 @@
 			{
 				librariesList.addEventListener( ListItemRendererEvent.ITEM_CHENGED,librariesList_changeHandler, true, 0, true );
 				librariesList.addEventListener( KeyboardEvent.KEY_DOWN, itemrenderer1_keyDownHandler, false, 0, true );
+				librariesList.addEventListener( ListItemRendererEvent.DELETE_PRESS,librariesList_delete, true, 0, true );
+			}
+			
+			private function librariesList_delete(event:ListItemRendererEvent):void
+			{
+				var deleteEvent : LibrariesPanelEvent = new LibrariesPanelEvent( LibrariesPanelEvent.DELETE_LIBRARY);
+				deleteEvent.object = event.target.data;
+				dispatchEvent( deleteEvent );	
 			}
 			
 			private function itemrenderer1_keyDownHandler(event:KeyboardEvent):void
@@ -117,7 +125,11 @@
 			private function removeactionRequest( event : CloseEvent ) : void 
 			{
 				if ( event.detail == Alert.YES )
-					dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.DELETE_LIBRARY ) );
+				{
+					var deleteEvent : LibrariesPanelEvent = new LibrariesPanelEvent( LibrariesPanelEvent.DELETE_LIBRARY);
+					deleteEvent.object = selectedLibrary;
+					dispatchEvent( deleteEvent );
+				}
 			}
 			
 			protected function panel1_removeHandler(event:FlexEvent):void

@@ -9,6 +9,8 @@ package net.vdombox.ide.modules.scripts.events
 		public static var DELETE_ACTION : String = "deleteAction";
 		public static var ACTION_DELETED : String = "actionDeleted";
 		
+		public var object : Object;
+		
 		public function ServerScriptsPanelEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{
 			super( type, bubbles, cancelable );

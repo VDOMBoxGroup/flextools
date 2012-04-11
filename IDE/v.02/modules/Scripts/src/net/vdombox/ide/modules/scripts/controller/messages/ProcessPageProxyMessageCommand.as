@@ -47,6 +47,9 @@ package net.vdombox.ide.modules.scripts.controller.messages
 						sendNotification( Notifications.SERVER_ACTION_DELETED, body );
 					else
 					{
+						if( operation == PPMOperationNames.RENAME )
+							sendNotification( Notifications.SERVER_ACTION_RENAMED, body );
+						
 						var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 					
 						sendNotification( Notifications.GET_SERVER_ACTIONS, statesProxy.selectedPage );
