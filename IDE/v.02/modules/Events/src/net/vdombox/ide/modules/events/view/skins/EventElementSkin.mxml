@@ -157,7 +157,7 @@
 			visible="{hostComponent.selected}"
 			radiusX="6" radiusY="6">
 		<s:fill>
-			<s:SolidColor color="#0000FF"/>
+			<s:SolidColor color="#A8C6EE"/>
 		</s:fill>
 	</s:Rect>
 
