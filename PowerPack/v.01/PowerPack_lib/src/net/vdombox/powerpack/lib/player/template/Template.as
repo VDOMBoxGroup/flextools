@@ -534,6 +534,17 @@ package net.vdombox.powerpack.lib.player.template
 			return true;
 		}
 		
+		public function isInitialGraphForAnyProject (graphName : String) : Boolean
+		{
+			for each (var project : TemplateProject in projects)
+			{
+				if (project.initialGraphName == graphName)
+					return true;
+			}
+			
+			return false;
+		}
+		
 		public function createNewProject () : TemplateProject
 		{
 			var newProject : TemplateProject = new TemplateProject();

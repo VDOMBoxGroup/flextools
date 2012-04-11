@@ -15,14 +15,31 @@ package net.vdombox.powerpack.lib.player.template
 		[Bindable]
 		public var key : String;
 		
-		[Bindable]
-		public var initialGraphName : String = Template.DEFAULT_GRAPH_NAME;
-		
 		public var id : String; // GUID
 		
 		public function TemplateProject()
 		{
 			id = UIDUtil.createUID();
+		}
+		
+		private var _initialGraphName : String;
+		
+		public function set initialGraphName(value : String) : void
+		{
+			if (!value)
+				value = DEFAULT_NAME;
+			
+			if ( _initialGraphName != value )
+			{
+				modified = true;
+				_initialGraphName = value;
+			}
+		}
+		
+		[Bindable]
+		public function get initialGraphName () : String
+		{
+			return Utils.getStringOrDefault( _initialGraphName, Template.DEFAULT_GRAPH_NAME );
 		}
 		
 		//
