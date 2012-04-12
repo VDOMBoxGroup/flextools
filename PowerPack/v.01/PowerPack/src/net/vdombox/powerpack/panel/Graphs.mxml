@@ -35,6 +35,8 @@
 			
 			import net.vdombox.powerpack.control.ControlBarEvent;
 			import net.vdombox.powerpack.control.GraphEditorControlBar;
+			import net.vdombox.powerpack.dialog.EditCaption;
+			import net.vdombox.powerpack.dialog.ModalDialog;
 			import net.vdombox.powerpack.graph.GraphCanvas;
 			import net.vdombox.powerpack.graph.GraphCanvasEvent;
 			import net.vdombox.powerpack.graph.Node;
@@ -177,12 +179,34 @@
 			dispatchEvent( new Event( TPL_CHANGED ) );
 		}
 
+			
+		protected function btnNewCategory_clickHandler(event:MouseEvent):void
+		{
+			EditCaption.show( "New category", onCategoryDialogClose, onCategoryDialogCheckLabel );
+			
+			function onCategoryDialogClose( event : CloseEvent ) : void
+			{
+				if ( event.detail == ModalDialog.OK )
+				{
+					var categoryLabel : String = event.target.txtCaption.text;
+					
+					createCategoryTab( categoryLabel );
+				}
+			}
+			
+			function onCategoryDialogCheckLabel( categoryLabel : String ) : void
+			{
+				EditCaption.correctCategory = checkCategoryLabelUnique( categoryLabel );
+			}
+		}
+		
 		public function createCategoryTab( label : String ) : AccordionChild
 		{
 			var graphAccordionChild : AccordionChild = new AccordionChild();
 			graphAccordionChild.label = label;
+			
 			graphsAccordion.addChild( graphAccordionChild );
-
+			
 			graphAccordionChild.lstGraphs.addEventListener( ListEvent.CHANGE, changeLstGraphsHandler );
 			graphAccordionChild.lstGraphs.addEventListener( MouseEvent.DOUBLE_CLICK, btnRenameClickHandler );
 
@@ -676,7 +700,7 @@
 			showGraphByName(event.graphToJumpName);
 		}
 			
-		private function btnNewClickHandler( event : MouseEvent ) : void
+		private function btnNewGraphClickHandler( event : MouseEvent ) : void
 		{
 			var child : AccordionChild = AccordionChild( graphsAccordion.selectedChild );
 
@@ -720,7 +744,7 @@
 			curTab.lstGraphs.editedItemPosition = {rowIndex : curTab.lstGraphs.selectedIndex, columnIndex : 0};
 		}
 
-		private function btnCopyClickHandler( event : MouseEvent ) : void
+		private function btnCopyGraphClickHandler( event : MouseEvent ) : void
 		{
 			var child : AccordionChild = AccordionChild( graphsAccordion.selectedChild );
 
@@ -905,16 +929,16 @@
 		<mx:VBox width="100%" height="100%" verticalGap="0">
 
 			<mx:ControlBar id="ctrlBar" width="100%" styleName="categoryCtrlBarStyle">
-				<mx:Button id="btnNewCategory" click="createCategoryTab('New category');"
+				<mx:Button id="btnNewCategory" click="btnNewCategory_clickHandler(event)"
 						   toolTip="{LanguageManager.sentences.lbl_new + ' category'}" width="100%" icon="{ContextManager.addCategoryClass}"
 						   styleName="categoryCtrlBtnStyle" />
-				<mx:Button id="btnNew" click="btnNewClickHandler(event);"
+				<mx:Button id="btnNewGraph" click="btnNewGraphClickHandler(event);"
 						   toolTip="{LanguageManager.sentences.lbl_new + ' graph'}" width="100%" icon="{ContextManager.addClass}"
 						   styleName="categoryCtrlBtnStyle" />
 				<mx:Button id="btnRename" click="btnRenameClickHandler(event);"
 						   toolTip="{LanguageManager.sentences.lbl_rename+ ' graph'}" width="100%"
 						   icon="{ContextManager.editClass}" styleName="categoryCtrlBtnStyle" />
-				<mx:Button id="btnCopy" click="btnCopyClickHandler(event);"
+				<mx:Button id="btnCopy" click="btnCopyGraphClickHandler(event);"
 						   toolTip="{LanguageManager.sentences.lbl_copy + ' graph'}" width="100%" icon="{ContextManager.copyClass}"
 						   styleName="categoryCtrlBtnStyle" />
 				<mx:Button id="btnDelete" click="btnDeleteClickHandler(event);"

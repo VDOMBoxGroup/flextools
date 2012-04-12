@@ -1109,11 +1109,6 @@
 			processSavedTpl();
 		}
 
-		private function onCategoryDialogCheckLabel( categoryLabel : String ) : void
-		{
-			EditCaption.correctCategory = pnl_graphs.checkCategoryLabelUnique( categoryLabel );
-		}
-
 		private function onImportFromTplClose( event : Event ) : void
 		{
 			if ( event is CloseEvent && CloseEvent( event ).detail == ModalDialog.OK )
