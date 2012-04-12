@@ -1156,7 +1156,7 @@
 					graph.fromXML( itm );
 
 					var newGraph : GraphCanvas = graph.clone();
-					newGraph.name = "Imported_" + graph.name;
+					newGraph.name = pnl_graphs.createUniqueGraphName("Imported_" + graph.name);
 					pnl_graphs.addGraph( newGraph );
 				}
 			}
