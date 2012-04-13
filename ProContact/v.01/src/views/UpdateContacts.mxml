@@ -7,130 +7,27 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import connection.SOAP;
-			import connection.SOAPEvent;
+			import events.ContactsProxyEvent;
 			
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
-			private var soap : SOAP = SOAP.getInstance();
+			import model.ContactsProxy;
+			
+			
 			private var sharedObject :SharedObject = SharedObject.getLocal("loginData");
 
+			private var contactsProxy : ContactsProxy = ContactsProxy.getInstance();
 			
-			protected function serverConnect(event:MouseEvent):void
-			{
-				okButton.enabled = false;
-				stateMessage.text = "Connect to server..."
-				invalidateDisplayList();
-				
-				
-				var wsdl : String = "http://" + server.text + "/vdom.wsdl";
-				
-				soap.addEventListener( "loadWsdlComplete", soap_initCompleteHandler );
-				soap.addEventListener( FaultEvent.FAULT, soapError );
-				soap.init( wsdl );
-				
-				function soap_initCompleteHandler( event : Event ) : void
-				{
-					sharedObject.data.server = server.text;
-					sharedObject.flush();
-					
-					soap.removeEventListener( "loadWsdlComplete", soap_initCompleteHandler );
-					soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
-					
-					soap.login( login.text, password.text );
-					
-					stateMessage.text = "Login to server..."
-					invalidateDisplayList();
-				}
-				
-				function soap_loginOKHandler( event : SOAPEvent ) : void
-				{
-					soap.removeEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
-					
-					sharedObject.data.login = login.text;
-					sharedObject.data.password = password.text;
-					
-					sharedObject.flush();
-
-					listApplications();
-				}
-				
-			}
-			
-			public function soapError( event : FaultEvent ) : void
-			{
-				var _result : String ;
-				if ( "faultstring" in event.fault )
-					stateMessage.text =  event.fault["faultstring"] ;
-				else
-					stateMessage.text =  event.fault.faultString ;
-				
-				okButton.enabled = true;
-			}
-			private function listApplications(  ) : void
-			{
-				stateMessage.text = "Login to ProContact..."
-				invalidateDisplayList();
-				
-				if( user.text == "" || userPassword.text == "")
-				{
-					stateMessage.text = "Input user and user password"
-					okButton.enabled = true;
-					
-					return;
-				}
-				
-				soap.remote_call.addEventListener( ResultEvent.RESULT, listAppResultHandler );
-				soap.remote_call.addEventListener( FaultEvent.FAULT, soapError );
-				
-				
-				var xml_param : String	= "<Arguments><CallType>server_action</CallType></Arguments>";
-				var appID : String = "526ae088-8004-469c-9d8e-cea715f8f63b";
-				var pageID : String = "79e13aa6-4498-4b1c-be99-47373df2cae2";
-				var actionName : String = "login";
-				var data : String = '{"login" : "'+user.text+'", "password" : "'+ userPassword.text+'"}';
-//				var data : String = '{"login" : "root", "password" : "root"}';
-				
-				
-				soap.remote_call( appID, pageID,  "login", xml_param, data );
-				
-				function listAppResultHandler( event : ResultEvent ) : void
-				{
-					 
-						
-					soap.remote_call.removeEventListener( ResultEvent.RESULT, listAppResultHandler );
-					soap.remote_call.removeEventListener( FaultEvent.FAULT, soapError );
-					var result : String =  event.result as String;
-					
-					result = result.replace(/<Key>[0-9]+_[0-9]<\/Key>/, ""); 
-					
-					var curUser : Object = JSON.parse(result);
-					if ( curUser[0] == 'error')
-					{
-						stateMessage.text = curUser[1] as String;
-						okButton.enabled = true;
-						
-						invalidateDisplayList();
-					}
-					else
-					{
-						sharedObject.data.user = user.text;
-						sharedObject.data.userPassword = userPassword.text;
-						
-						sharedObject.flush();
-						
-						navigator.pushView(Contacts, {'server' : server.text } );
-					}
-					
-					
-				}
-			}
-		
 			protected function getSharedObjectData(name : String) : String
 			{
 			 	return	sharedObject.data[ name ] ? sharedObject.data[name] : ""
+			}
+			
+			protected function setSharedObjectData(name : String, value : String) : String
+			{
+				return	sharedObject.data[ name ] =value;
 			}
 				
 			protected function creationCompleteHandler(event:FlexEvent):void
@@ -140,6 +37,50 @@
 				password.text = getSharedObjectData( "password" );
 				user.text = 	getSharedObjectData( "user" );
 				userPassword.text = getSharedObjectData( "userPassword" );
+				
+				contactsProxy.addEventListener( Event.COMPLETE,  contactsProxyComplete, false, 0, true ) ;
+				contactsProxy.addEventListener( ContactsProxyEvent.FAULT,  contactsProxyFault, false, 0, true );
+				contactsProxy.addEventListener( ContactsProxyEvent.INFORMATION,  contactsProxyInformation, false, 0, true );
+			}
+			
+			private function contactsProxyComplete( event : Event ):void
+			{
+				contactsProxy.removeEventListener( Event.COMPLETE,  contactsProxyComplete) ;
+				contactsProxy.removeEventListener( ContactsProxyEvent.FAULT,  contactsProxyFault);
+				contactsProxy.removeEventListener( ContactsProxyEvent.INFORMATION,  contactsProxyInformation);
+				
+				trace("contactsProxyComplete");
+				stateMessage.text = "Ok"
+				navigator.pushView( Contacts);
+			}
+			
+			
+			private function contactsProxyFault( event : ContactsProxyEvent ):void
+			{
+				stateMessage.text = event.message;
+				stateMessage.setStyle("color", "red");
+			}
+			
+			private function contactsProxyInformation( event : ContactsProxyEvent ):void
+			{
+				stateMessage.text = event.message;
+				stateMessage.setStyle("color", "green");
+			}
+			
+			
+			
+			private function serverConnect():void
+			{
+				
+				  	setSharedObjectData( "server" , server.text); 
+					setSharedObjectData( "login" , login.text);
+					setSharedObjectData( "password", password.text );
+					setSharedObjectData( "user", user.text );
+					setSharedObjectData( "userPassword", userPassword.text );
+				
+				
+				contactsProxy.updateContacts( server.text, login.text, password.text,
+					user.text, userPassword.text );
 			}
 			
 		]]>
@@ -178,7 +119,7 @@
 		<s:Label text="User password" />
 		<s:TextInput  id="userPassword" text="" change="{stateMessage.text=''}" displayAsPassword="true"/>
 		
-		<s:Button id="okButton" label="Ok" click="serverConnect(event)"/>
+		<s:Button id="okButton" label="Ok" click="serverConnect()"/>
 		
 	</s:VGroup>
 		

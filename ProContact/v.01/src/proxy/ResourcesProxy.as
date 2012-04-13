@@ -54,15 +54,7 @@ package proxy
 			
 			_contacts = JSON.parse( value ) as Array;
 			
-			for (var i:int = 0; i < _contacts.length; i++) 
-			{
-				_contacts[i]['label'] =  _contacts[i]['first_name'] +" "+ _contacts[i]['last_name'];
-//				_contacts[i]['image'] =  "app-storage:"  + _contacts[i]['picture'];
-				
-				resourcesStack.push( _contacts[i]['picture'] );
-			}
 			
-			_contacts.sortOn(["label"]);
 			
 			// save to File store
 			saveContacts()
