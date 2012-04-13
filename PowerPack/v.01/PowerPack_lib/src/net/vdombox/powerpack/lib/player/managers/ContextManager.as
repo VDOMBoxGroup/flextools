@@ -121,21 +121,41 @@ public class ContextManager extends EventDispatcher
 	[Bindable]
 	public static var addClass : Class;
 	
+	[Embed(source="/assets/icons/add_disabled_16.png")]
+	[Bindable]
+	public static var addDisabledClass : Class;
+	
 	[Embed(source="/assets/icons/add_category16.png")]
 	[Bindable]
 	public static var addCategoryClass : Class;
+	
+	[Embed(source="/assets/icons/add_categoryDisabled.png")]
+	[Bindable]
+	public static var addCategoryDisabledClass : Class;
 
 	[Embed(source="/assets/icons/copy_16.png")]
 	[Bindable]
 	public static var copyClass : Class;
+	
+	[Embed(source="/assets/icons/copy_disabled.png")]
+	[Bindable]
+	public static var copyDisabledClass : Class;
 
 	[Embed(source="/assets/icons/edit_16.png")]
 	[Bindable]
 	public static var editClass : Class;
+	
+	[Embed(source="/assets/icons/edit_disabled.png")]
+	[Bindable]
+	public static var editDisabledClass : Class;
 
 	[Embed(source="/assets/icons/delete_16.png")]
 	[Bindable]
 	public static var deleteClass : Class;
+	
+	[Embed(source="/assets/icons/delete_disabled.png")]
+	[Bindable]
+	public static var deleteDisabledClass : Class;
 
 	[Embed(source="/assets/icons/help_16.png")]
 	[Bindable]
