@@ -466,3 +466,8 @@ GraphThumb
 	backgroundInitialColor : #d1ffd1;
 	backgroundCurrentInitialColor : #88ff88;
 }
+
+SuperTextArea
+{
+	fontSize : 13;
+}
