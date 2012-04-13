@@ -21,6 +21,7 @@
 			import mx.controls.Alert;
 			import mx.controls.ComboBox;
 			import mx.controls.List;
+			import mx.core.UITextField;
 			import mx.events.ChildExistenceChangedEvent;
 			import mx.events.CloseEvent;
 			import mx.events.CollectionEvent;
@@ -49,6 +50,7 @@
 			import net.vdombox.powerpack.managers.BuilderContextManager;
 			import net.vdombox.powerpack.managers.ProgressManager;
 			import net.vdombox.powerpack.panel.graphsClasses.AccordionChild;
+			import net.vdombox.powerpack.panel.graphsClasses.GraphThumb;
 			import net.vdombox.powerpack.panel.graphsClasses.GraphsAccordionEvent;
 			import net.vdombox.powerpack.template.BuilderTemplate;
 
@@ -85,10 +87,34 @@
 		public var vsViewStack : ViewNavigator;
 			
 		public var graphEditorControlBar : GraphEditorControlBar;
+		
+		private function set curTab (tab : AccordionChild) : void
+		{
+			if (graphsAccordion)
+				graphsAccordion.selectedChild = tab;
+		}
 			
-		private var curTab : AccordionChild;
-		private var curGraph : GraphCanvas;
-
+		private function get curTab () : AccordionChild
+		{
+			return graphsAccordion.selectedChild as AccordionChild;
+		}
+		
+		private function set curGraph (graph : GraphCanvas) : void
+		{
+			if (!curTab)
+				return;
+			
+			curTab.lstGraphs.selectedItem = graph;
+		}
+		
+		private function get curGraph () : GraphCanvas
+		{
+			if (!curTab)
+				return null;
+			
+			return curTab.lstGraphs.selectedItem as GraphCanvas;
+		}
+		
 		private var tabMap : Dictionary = new Dictionary();
 
 		[Bindable]
@@ -208,7 +234,8 @@
 			graphsAccordion.addChild( graphAccordionChild );
 			
 			graphAccordionChild.lstGraphs.addEventListener( ListEvent.CHANGE, changeLstGraphsHandler );
-			graphAccordionChild.lstGraphs.addEventListener( MouseEvent.DOUBLE_CLICK, btnRenameClickHandler );
+			//graphAccordionChild.lstGraphs.addEventListener( MouseEvent.DOUBLE_CLICK, btnRenameClickHandler );
+			graphAccordionChild.lstGraphs.addEventListener( MouseEvent.DOUBLE_CLICK, doubleClickHandler );
 
 			graphAccordionChild.lstGraphs.addEventListener( GraphsAccordionEvent.GRAPH_VALUE_ENTERED, onLstGraphsValueChecked );
 			graphAccordionChild.lstGraphs.addEventListener( GraphsAccordionEvent.GRAPH_VALUE_EDITING_COMPLETE, onLstGraphsEditingComplete );
@@ -325,8 +352,7 @@
 			{
 				if ( curTab )
 					curTab.lstGraphs.selectedIndex = -1;
-				curTab = null;
-				curGraph = null;
+
 				graphsAccordion.selectedIndex = -1;
 				vsViewStack.selectedIndex = -1;
 			}
@@ -356,13 +382,11 @@
 
 				if ( index >= 0 )
 				{
-					curGraph = graph;
 					if ( curTab && curTab != child )
 						curTab.lstGraphs.selectedIndex = -1;
-					curTab = child;
 
-					graphsAccordion.selectedChild = curTab;
-					curTab.lstGraphs.selectedItem = curGraph;
+					curTab = child;
+					curGraph = graph;
 
 					curTab.lstGraphs.scrollToIndex( curTab.graphs.getItemIndex( curGraph ) );
 
@@ -574,14 +598,12 @@
 			}
 		}
 
-		private function changeLstGraphsHandler( event : Event ) : void
+		private function changeLstGraphsHandler( event : Event) : void
 		{
-			if ( !DragManager.isDragging )
-				selectGraph( GraphCanvas( List( event.target ).selectedItem ) );
-			//else
-			//callLater(selectGraph, [GraphCanvas(vsViewStack.selectedChild)]);
+			event.preventDefault();
+			event.stopImmediatePropagation();
 		}
-
+			
 		private function closingEditLstGraphsHandler( event : Event ) : void
 		{
 			var accordChild : AccordionChild = event.currentTarget as AccordionChild;
@@ -730,14 +752,20 @@
 			dispatchEvent( new Event( TPL_CHANGED ) );
 		}
 
+		private function doubleClickHandler (event : MouseEvent) : void
+		{
+			if (event.target is GraphThumb)
+				selectGraph( event.target.data );
+			else if (event.target is  UITextField)
+				renameGraph();
+		}
+			
 		private var editableGraphLastName : String;
-		private function btnRenameClickHandler( event : MouseEvent ) : void
+		private function renameGraph() : void
 		{
 			if ( !curGraph )
 				return;
 
-			selectGraph( curGraph );
-			
 			editableGraphLastName = curGraph.name;
 
 			curTab.lstGraphs.editable = true;
@@ -838,23 +866,25 @@
 			
 		private function deleteGraph () : void
 		{
-			if ( !curGraph )
+			if ( !curGraph)
 				return;
+			
+			var graphToRemove : GraphCanvas = curGraph;
 			
 			var newIndex : int = curTab.lstGraphs.selectedIndex - 1;
 			newIndex = newIndex < 0 ? 0 : newIndex;
 			
-			var removedGraphName : String = curGraph.name;
+			var removedGraphName : String = graphToRemove.name;
 			
-			graphs.removeItemAt( graphs.getItemIndex( curGraph ) );
+			graphs.removeItemAt( graphs.getItemIndex( graphToRemove ) );
 			
 			sortGraphs();
 			
 			curTab.graphs.removeItemAt( curTab.lstGraphs.selectedIndex );
-			GraphCanvas( curGraph ).dispose();
+			graphToRemove.dispose();
 			
-			GraphCanvas( curGraph ).removeEventListener( GraphCanvasEvent.GRAPH_CHANGED, onGraphChange );
-			GraphCanvas( curGraph ).removeEventListener( GraphCanvasEvent.JUMP_TO_GRAPH, onJumpToGraph );
+			graphToRemove.removeEventListener( GraphCanvasEvent.GRAPH_CHANGED, onGraphChange );
+			graphToRemove.removeEventListener( GraphCanvasEvent.JUMP_TO_GRAPH, onJumpToGraph );
 			
 			if ( curTab.graphs.length > 0 )
 			{
@@ -920,7 +950,7 @@
 			graphs.sort = sort;
 			graphs.refresh();
 		}
-			
+		
 		]]>
 	</mx:Script>
 
@@ -935,7 +965,7 @@
 				<mx:Button id="btnNewGraph" click="btnNewGraphClickHandler(event);"
 						   toolTip="{LanguageManager.sentences.lbl_new + ' graph'}" width="100%" icon="{ContextManager.addClass}"
 						   styleName="categoryCtrlBtnStyle" />
-				<mx:Button id="btnRename" click="btnRenameClickHandler(event);"
+				<mx:Button id="btnRename" click="renameGraph()"
 						   toolTip="{LanguageManager.sentences.lbl_rename+ ' graph'}" width="100%"
 						   icon="{ContextManager.editClass}" styleName="categoryCtrlBtnStyle" />
 				<mx:Button id="btnCopy" click="btnCopyGraphClickHandler(event);"
@@ -949,7 +979,7 @@
 
 			<mx:Accordion change="tabChangeHandler(event);"
 						  headerRenderer="net.vdombox.powerpack.panel.graphsClasses.AccordionHeader"
-						  id="graphsAccordion" fontFamily="Verdana" borderStyle="solid" width="100%" height="100%" />
+						  id="graphsAccordion" fontFamily="Verdana" borderStyle="solid" width="100%" height="100%"/>
 
 		</mx:VBox>
 
