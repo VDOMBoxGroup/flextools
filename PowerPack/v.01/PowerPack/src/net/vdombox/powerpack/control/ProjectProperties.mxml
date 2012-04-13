@@ -28,6 +28,8 @@
 			
 			public static const EVENT_INITIAL_GRAPH_CHANGED : String = "initialGraphChanged";
 			
+			private var shObject : SharedObject = SharedObject.getLocal( "project_settings" );
+			
 			private var compilerParamsChecker	: SDKCompilerParamsChecker = SDKCompilerParamsChecker.getInstance();
 			
 			[Bindable]
@@ -174,7 +176,15 @@
 			
 			private function initOutputFolderPath():void
 			{
-				outputInstallerFolderBrowseBox.path = project.outputFolderPath;
+				var initPath : String = project.outputFolderPath;
+				
+				if (initPath == BuilderTemplateProject.DEFAULT_OUTPUT_FOLDER_PATH && shObject.data.hasOwnProperty("output_folder_path"))
+					initPath = shObject.data["output_folder_path"];
+				
+				outputInstallerFolderBrowseBox.path = initPath;
+				
+				if (!validOutputInstallerFolderPath)
+					outputInstallerFolderBrowseBox.path = "";
 				
 				validateOutputInstallerFolderPath();
 			}
@@ -189,6 +199,9 @@
 			private function initAppPath():void
 			{
 				embededApplicationBrowseBox.path = project.embededAppPath;
+				
+				if (!validAppPath)
+					embededApplicationBrowseBox.path = "";
 				
 				validateAppPath();
 			}
@@ -266,7 +279,10 @@
 				project.description = txtDesc.text;
 				
 				project.outputFileName = installerFileName.text;
+				
 				project.outputFolderPath = StringUtil.trim(outputInstallerFolderBrowseBox.path);
+				shObject.data["output_folder_path"] = project.outputFolderPath;
+				
 				project.embededAppPath = StringUtil.trim(embededApplicationBrowseBox.path);
 				
 				if (templateB64Picture)
