@@ -147,6 +147,19 @@ public class SOAPBaseLevel extends EventDispatcher
 				listApplications( args );
 				break;
 			
+			case 'backup_application':
+				backupApplication( args );
+				break;
+			
+			case 'restore_application':
+				restoreApplication( args );
+				break;
+			
+			case 'list_backup_drivers':
+				listBackupDrivers(  );
+				break;
+			
+			
 			
 			default:
 			{
@@ -406,6 +419,62 @@ trace(wsdl)
 		}
 
 	}
+	
+	private function backupApplication( params : Array ) : void
+	{
+		var applicationID : String = params[0];
+		var driverID : String = params[1];
+		var revision : String = params[2];
+		
+		soap.backup_application.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.backup_application.addEventListener( FaultEvent.FAULT, soapError );
+		
+		soap.backup_application(  applicationID, driverID,  revision );
+	}
+	
+	
+	private function restoreApplication( params : Array ) : void
+	{
+		var applicationID : String = params[0];
+		var driverID : String = params[1];
+		var revision : String = params[2];
+		
+		soap.restore_application.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.restore_application.addEventListener( FaultEvent.FAULT, soapError );
+		
+		soap.restore_application(  applicationID, driverID,  revision );
+	}
+	
+	private function  listBackupDrivers(  ) : void
+	{
+		soap.list_backup_drivers.addEventListener( ResultEvent.RESULT, listBackupDriversHandler );
+		soap.list_backup_drivers.addEventListener( FaultEvent.FAULT, soapError );
+		
+		soap.list_backup_drivers(    );
+		
+		
+		function listBackupDriversHandler( event : ResultEvent ) : void
+		{
+			deleteListeners( event.target);
+			
+			var result : XMLList = new XMLList( event.result );
+			var backupDriversXML : XML = new XML(result[0]); 
+			var backupDrivers : Array = [];
+			
+			
+			for each (var driver:XML in backupDriversXML.children()) 
+			{
+				backupDrivers.push( [driver.Name[0],  driver.ID[0], driver.Description[0] ] );
+			}
+			
+			_result = ListParser.array2List( backupDrivers );
+			
+			_resultType = SUCCESS;
+			
+			dispatchEvent( new Event( RESULT_RECEIVED ) );
+		}
+	}
+	
 	
 	
 	private function dispathRusult():void
