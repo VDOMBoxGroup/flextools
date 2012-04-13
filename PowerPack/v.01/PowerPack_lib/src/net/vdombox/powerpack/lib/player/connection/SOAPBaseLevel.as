@@ -49,10 +49,12 @@ public class SOAPBaseLevel extends EventDispatcher
 		deleteListeners( event.target);
 
 		var result : XMLList = new XMLList( event.result );
+		
+		
 
 		_result = result[0];
-
-        _resultType = SUCCESS;
+		
+		_resultType = _result.name().localName == "Error" ? ERROR : SUCCESS;
 
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
 	}
