@@ -2,7 +2,7 @@
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
 		 initialize="init()"
 		 creationComplete="creationCompleteHandler(event)"
-		 height="100%" xmlns:control="net.vdombox.powerpack.control.*">
+		 height="100%" xmlns:control="net.vdombox.powerpack.control.*" xmlns:graphsClasses="net.vdombox.powerpack.panel.graphsClasses.*" xmlns:controlbar="net.vdombox.powerpack.control.controlbar.*">
 
 	<mx:XML id="templateXML"></mx:XML>
 	
@@ -34,8 +34,8 @@
 			import mx.utils.NameUtil;
 			import mx.utils.ObjectProxy;
 			
-			import net.vdombox.powerpack.control.ControlBarEvent;
-			import net.vdombox.powerpack.control.GraphEditorControlBar;
+			import net.vdombox.powerpack.control.controlbar.ControlBarEvent;
+			import net.vdombox.powerpack.control.controlbar.GraphEditorControlBar;
 			import net.vdombox.powerpack.dialog.EditCaption;
 			import net.vdombox.powerpack.dialog.ModalDialog;
 			import net.vdombox.powerpack.graph.GraphCanvas;
@@ -206,7 +206,7 @@
 		}
 
 			
-		protected function btnNewCategory_clickHandler(event:MouseEvent):void
+		protected function createNewCategory():void
 		{
 			EditCaption.show( "New category", onCategoryDialogClose, onCategoryDialogCheckLabel );
 			
@@ -226,7 +226,7 @@
 			}
 		}
 		
-		public function createCategoryTab( label : String ) : AccordionChild
+		public function createCategoryTab( label : String) : AccordionChild
 		{
 			var graphAccordionChild : AccordionChild = new AccordionChild();
 			graphAccordionChild.label = label;
@@ -234,7 +234,6 @@
 			graphsAccordion.addChild( graphAccordionChild );
 			
 			graphAccordionChild.lstGraphs.addEventListener( ListEvent.CHANGE, changeLstGraphsHandler );
-			//graphAccordionChild.lstGraphs.addEventListener( MouseEvent.DOUBLE_CLICK, btnRenameClickHandler );
 			graphAccordionChild.lstGraphs.addEventListener( MouseEvent.DOUBLE_CLICK, doubleClickHandler );
 
 			graphAccordionChild.lstGraphs.addEventListener( GraphsAccordionEvent.GRAPH_VALUE_ENTERED, onLstGraphsValueChecked );
@@ -722,7 +721,7 @@
 			showGraphByName(event.graphToJumpName);
 		}
 			
-		private function btnNewGraphClickHandler( event : MouseEvent ) : void
+		private function createNewGraph() : void
 		{
 			var child : AccordionChild = AccordionChild( graphsAccordion.selectedChild );
 
@@ -772,7 +771,7 @@
 			curTab.lstGraphs.editedItemPosition = {rowIndex : curTab.lstGraphs.selectedIndex, columnIndex : 0};
 		}
 
-		private function btnCopyGraphClickHandler( event : MouseEvent ) : void
+		private function copyGraph() : void
 		{
 			var child : AccordionChild = AccordionChild( graphsAccordion.selectedChild );
 
@@ -841,7 +840,7 @@
 			return true;
 		}
 
-		private function btnDeleteClickHandler( event : MouseEvent ) : void
+		private function confirmToDeleteGraph() : void
 		{
 			if ( graphs.length == 1 )
 			{
@@ -951,6 +950,119 @@
 			graphs.refresh();
 		}
 		
+		private const GRAPH_FILTER_DEF_TEXT	: String = "Graph filter";
+			
+		protected function graphFilter_changeHandler(event:Event):void
+		{
+			if ( graphFilter.text.length > 0 && graphFilter.text != GRAPH_FILTER_DEF_TEXT )
+			{
+				findGraphs();
+			}
+			else
+			{
+				cancelFindGraphs();
+			}
+		}
+			
+		private function findGraphs() : void
+		{
+			founsGraphs.removeAll(); 
+			
+			for each ( var graph : GraphCanvas in graphs )
+			{
+				if ( graph.name.toLowerCase().indexOf(graphFilter.text.toLowerCase()) >= 0)
+					founsGraphs.addItem(graph);
+			}
+			
+			foundCategory.lstGraphs.addEventListener( MouseEvent.DOUBLE_CLICK, foundGraphsDoubleClickHandler );
+			
+			graphsAccordionsViewStack.selectedChild = graphsFindAccordion;
+			
+			ctrlBar.lock();
+		}
+		
+		private function cancelFindGraphs() : void
+		{
+			foundCategory.lstGraphs.removeEventListener( MouseEvent.DOUBLE_CLICK, foundGraphsDoubleClickHandler );
+			founsGraphs.removeAll();
+			
+			graphsAccordionsViewStack.selectedChild = graphsAccordion;
+			
+			ctrlBar.unLock();
+		}
+			
+		private function foundGraphsDoubleClickHandler (event : MouseEvent) : void
+		{
+			if (event.target is GraphThumb)
+				selectGraph( event.target.data );
+			else if (event.target is  UITextField)
+				selectGraph( event.target.parent.data );
+		}
+	
+		[Bindable]
+		public var founsGraphs : ArrayCollection = new ArrayCollection();
+		
+		protected function graphFilter_focusInHandler(event:FocusEvent):void
+		{
+			if ( graphFilter.text == GRAPH_FILTER_DEF_TEXT )
+				graphFilter.text = "";
+		}
+		
+		protected function graphFilter_focusOutHandler(event:FocusEvent):void
+		{
+			if ( graphFilter.text == "" )
+				graphFilter.text = GRAPH_FILTER_DEF_TEXT;
+		}
+			
+		private var foundCategory : AccordionChild; 
+		protected function graphsFindAccordion_creationCompleteHandler(event:FlexEvent):void
+		{
+			foundCategory = new AccordionChild();
+			foundCategory.label = "Graphs found";
+			
+			graphsFindAccordion.addChild( foundCategory );
+			
+			foundCategory.graphs = founsGraphs;
+			foundCategory.setStyle("headerRenderer", null);
+		}
+			
+		protected function ctrlBar_itemClickHandler(event:ControlBarEvent):void
+		{
+			switch (event.targetItemType)
+			{
+				case GraphsControlBar.ITEM_TYPE_CREATE_NEW_CATEGORY:
+				{
+					createNewCategory();
+					break;
+				}
+					
+				case GraphsControlBar.ITEM_TYPE_CREATE_NEW_GRAPH:
+				{
+					createNewGraph()
+					break;
+				}
+					
+				case GraphsControlBar.ITEM_TYPE_RENAME_GRAPH:
+				{
+					renameGraph();
+					break;
+				}
+					
+				case GraphsControlBar.ITEM_TYPE_COPY_GRAPH:
+				{
+					copyGraph();
+					break;
+				}
+					
+				case GraphsControlBar.ITEM_TYPE_DELETE_GRAPH:
+				{
+					confirmToDeleteGraph();
+					break;
+				}
+			}
+			
+		}
+			
 		]]>
 	</mx:Script>
 
@@ -958,28 +1070,31 @@
 
 		<mx:VBox width="100%" height="100%" verticalGap="0">
 
-			<mx:ControlBar id="ctrlBar" width="100%" styleName="categoryCtrlBarStyle">
-				<mx:Button id="btnNewCategory" click="btnNewCategory_clickHandler(event)"
-						   toolTip="{LanguageManager.sentences.lbl_new + ' category'}" width="100%" icon="{ContextManager.addCategoryClass}"
-						   styleName="categoryCtrlBtnStyle" />
-				<mx:Button id="btnNewGraph" click="btnNewGraphClickHandler(event);"
-						   toolTip="{LanguageManager.sentences.lbl_new + ' graph'}" width="100%" icon="{ContextManager.addClass}"
-						   styleName="categoryCtrlBtnStyle" />
-				<mx:Button id="btnRename" click="renameGraph()"
-						   toolTip="{LanguageManager.sentences.lbl_rename+ ' graph'}" width="100%"
-						   icon="{ContextManager.editClass}" styleName="categoryCtrlBtnStyle" />
-				<mx:Button id="btnCopy" click="btnCopyGraphClickHandler(event);"
-						   toolTip="{LanguageManager.sentences.lbl_copy + ' graph'}" width="100%" icon="{ContextManager.copyClass}"
-						   styleName="categoryCtrlBtnStyle" />
-				<mx:Button id="btnDelete" click="btnDeleteClickHandler(event);"
-						   toolTip="{LanguageManager.sentences.lbl_delete + ' graph'}" width="100%"
-						   icon="{ContextManager.deleteClass}" styleName="categoryCtrlBtnStyle" />
+			<controlbar:GraphsControlBar id="ctrlBar" width="100%"
+										 itemClick="ctrlBar_itemClickHandler(event)"/>
+			
+			<mx:TextInput id="graphFilter" width="100%" 
+						  text="{GRAPH_FILTER_DEF_TEXT}" fontStyle="italic"
+						  change="graphFilter_changeHandler(event)" 
+						  focusIn="graphFilter_focusInHandler(event)" 
+						  focusOut="graphFilter_focusOutHandler(event)"/>
+			
+			<mx:ViewStack id="graphsAccordionsViewStack" 
+						width="100%" height="100%">
+				<mx:Accordion id="graphsAccordion"
+							  change="tabChangeHandler(event);"
+							  headerRenderer="net.vdombox.powerpack.panel.graphsClasses.AccordionHeader"
+							  fontFamily="Verdana" borderStyle="solid" 
+							  width="100%" height="100%"/>
 				
-			</mx:ControlBar>
-
-			<mx:Accordion change="tabChangeHandler(event);"
-						  headerRenderer="net.vdombox.powerpack.panel.graphsClasses.AccordionHeader"
-						  id="graphsAccordion" fontFamily="Verdana" borderStyle="solid" width="100%" height="100%"/>
+				<mx:Accordion id="graphsFindAccordion"
+							  width="100%" height="100%"
+							  fontFamily="Verdana" borderStyle="solid"
+							  creationComplete="graphsFindAccordion_creationCompleteHandler(event)">
+				</mx:Accordion>
+					
+			</mx:ViewStack>
+			
 
 		</mx:VBox>
 

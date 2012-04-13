@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ControlBar xmlns:mx="http://www.adobe.com/2006/mxml" 
+			   styleName="categoryCtrlBarStyle" xmlns:controlbar="net.vdombox.powerpack.control.controlbar.*">
+	
+	<mx:Metadata>
+		[Event(name="itemClick", type="net.vdombox.powerpack.control.controlbar.ControlBarEvent")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			
+			public static const ITEM_TYPE_CREATE_NEW_CATEGORY	: String = "createNewCategory";
+			public static const ITEM_TYPE_CREATE_NEW_GRAPH		: String = "createNewGraph";
+			public static const ITEM_TYPE_RENAME_GRAPH			: String = "renameGraph";
+			public static const ITEM_TYPE_COPY_GRAPH			: String = "copyGraph";
+			public static const ITEM_TYPE_DELETE_GRAPH			: String = "deleteGraph";
+			
+			public function lock () : void
+			{
+				btnNewCategory.enabled = false;
+				btnNewGraph.enabled = false;
+				btnRename.enabled = false;
+				btnCopy.enabled = false;
+				btnDelete.enabled = false;
+			}
+			
+			public function unLock () : void
+			{
+				btnNewCategory.enabled = true;
+				btnNewGraph.enabled = true;
+				btnRename.enabled = true;
+				btnCopy.enabled = true;
+				btnDelete.enabled = true;
+			}
+			
+			protected function item_clickHandler(event:MouseEvent, itemType : String):void
+			{
+				var evt : ControlBarEvent = new ControlBarEvent(ControlBarEvent.EVENT_ITEM_CLICK);
+				evt.targetItemType = itemType;
+				
+				dispatchEvent(evt);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<controlbar:ControlBarButton id="btnNewCategory" 
+			   click="item_clickHandler(event, ITEM_TYPE_CREATE_NEW_CATEGORY)"
+			   toolTip="New category" 
+			   width="100%" 
+			   sourceEnabled="{ContextManager.addCategoryClass}"
+			   sourceDisabled="{ContextManager.addCategoryDisabledClass}"/>
+	
+	<controlbar:ControlBarButton id="btnNewGraph" 
+			   click="item_clickHandler(event, ITEM_TYPE_CREATE_NEW_GRAPH)"
+			   toolTip="New graph" 
+			   width="100%" 
+			   sourceEnabled="{ContextManager.addClass}"
+			   sourceDisabled="{ContextManager.addDisabledClass}"/>
+	
+	<controlbar:ControlBarButton id="btnRename" 
+			   click="item_clickHandler(event, ITEM_TYPE_RENAME_GRAPH)"
+			   toolTip="Rename graph" 
+			   width="100%"
+			   sourceEnabled="{ContextManager.editClass}"
+			   sourceDisabled="{ContextManager.editDisabledClass}"/>
+	
+	<controlbar:ControlBarButton id="btnCopy" 
+			   click="item_clickHandler(event, ITEM_TYPE_COPY_GRAPH)"
+			   toolTip="Copy graph" 
+			   width="100%" 
+			   sourceEnabled="{ContextManager.copyClass}"
+			   sourceDisabled="{ContextManager.copyDisabledClass}"/>
+	
+	<controlbar:ControlBarButton id="btnDelete" 
+			   click="item_clickHandler(event, ITEM_TYPE_DELETE_GRAPH)"
+			   toolTip="Delete graph" 
+			   width="100%"
+			   sourceEnabled="{ContextManager.deleteClass}"
+			   sourceDisabled="{ContextManager.deleteDisabledClass}"/>
+	
+</mx:ControlBar>

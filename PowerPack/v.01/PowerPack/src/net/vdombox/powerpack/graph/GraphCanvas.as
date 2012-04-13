@@ -33,7 +33,7 @@ import mx.utils.NameUtil;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
-import net.vdombox.powerpack.control.GraphEditorControlBar;
+import net.vdombox.powerpack.control.controlbar.GraphEditorControlBar;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;

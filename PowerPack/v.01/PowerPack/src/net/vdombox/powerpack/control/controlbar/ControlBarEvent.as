@@ -1,12 +1,12 @@
-package net.vdombox.powerpack.control
+package net.vdombox.powerpack.control.controlbar
 {
 	import flash.events.Event;
 	
 	public class ControlBarEvent extends Event
 	{
-		public static const EVENT_ITEM_CLICK			: String = "controlBarItemClick";
+		public static const EVENT_ITEM_CLICK			: String = "itemClick";
 		
-		public var targetItemType			: String;
+		public var targetItemType				: String;
 		public var destinationObjectType		: String;
 		
 		public function ControlBarEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)

@@ -2,7 +2,7 @@
 <mx:ControlBar xmlns:mx="http://www.adobe.com/2006/mxml" 
 			   horizontalGap="7" verticalAlign="middle" 
 			   height="35"
-			   creationComplete="creationCompleteHandler(event)" xmlns:control="net.vdombox.powerpack.lib.player.control.*" xmlns:control1="net.vdombox.powerpack.control.*">
+			   creationComplete="creationCompleteHandler(event)" xmlns:control="net.vdombox.powerpack.lib.player.control.*" xmlns:control1="net.vdombox.powerpack.control.*" xmlns:controlbar="net.vdombox.powerpack.control.controlbar.*">
 	<mx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
@@ -135,19 +135,19 @@
 		]]>
 	</mx:Script>
 	
-	<control1:ControlBarButton id="menuBtnNewTemplate"
+	<controlbar:ControlBarButton id="menuBtnNewTemplate"
 							   sourceEnabled="@Embed('/assets/icons/newTemplateEnabled.png')"
 							   sourceDisabled="@Embed('/assets/icons/newTemplateDisabled.png')"
 							   click="menuItem_clickHandler(event, ITEM_TYPE_NEW_TEMPLATE)" 
 							   toolTip="New template ({ctrlString}{separator}N)"/>
 	
-	<control1:ControlBarButton id="menuBtnOpenTemplate"
+	<controlbar:ControlBarButton id="menuBtnOpenTemplate"
 							   sourceEnabled="@Embed('/assets/icons/OpenTemplateEnabled.png')"
 							   sourceDisabled="@Embed('/assets/icons/OpenTemplateDisabled.png')"
 							   click="menuItem_clickHandler(event, ITEM_TYPE_OPEN_TEMPLATE)"
 							   toolTip="Open file"/>
 	
-	<control1:ControlBarButton id="menuBtnSaveTemplate"
+	<controlbar:ControlBarButton id="menuBtnSaveTemplate"
 							   sourceEnabled="@Embed('/assets/icons/SaveTemplateEnabled.png')"
 							   sourceDisabled="@Embed('/assets/icons/SaveTemplateDisabled.png')"
 							   click="menuItem_clickHandler(event, ITEM_TYPE_SAVE_TEMPLATE)" 
@@ -164,7 +164,7 @@
 				 selectedIndex="{ContextManager.templates.getItemAt( 0 ).selectedProjectIndex}"
 				 change="cbApplicationsChangeHandler(event)"/>
 	
-	<control1:ControlBarButton id="menuAppSettings" 
+	<controlbar:ControlBarButton id="menuAppSettings" 
 							 sourceEnabled="@Embed('/assets/icons/settingsEnabled.png')" 
 							 sourceDisabled="@Embed('/assets/icons/settingsDisabled.png')"
 							 toolTip="Template properties"
@@ -172,19 +172,19 @@
 	
 	<mx:VRule height="20"/>
 	
-	<control1:ControlBarButton id="menuBtnRun"
+	<controlbar:ControlBarButton id="menuBtnRun"
 							 sourceEnabled="@Embed('/assets/icons/runEnabled.png')"
 							 sourceDisabled="@Embed('/assets/icons/runDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_RUN)"
 							 toolTip="Run ({ctrlString}{separator}R)"/>
 	
-	<control1:ControlBarButton id="menuBtnDebug"
+	<controlbar:ControlBarButton id="menuBtnDebug"
 							 sourceEnabled="@Embed('/assets/icons/debugEnabled.png')"
 							 sourceDisabled="@Embed('/assets/icons/debugDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_DEBUG)" 
 							 toolTip="Debug ({ctrlString}{separator}D)"/>
 	
-	<control1:ControlBarButton id="menuBtnStepByStep"
+	<controlbar:ControlBarButton id="menuBtnStepByStep"
 							 sourceEnabled="@Embed('/assets/icons/stepByStepEnabled.png')"
 							 sourceDisabled="@Embed('/assets/icons/stepByStepDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_BY_STEP)" 
@@ -192,31 +192,31 @@
 
 	<mx:VRule height="20"/>
 	
-	<control1:ControlBarButton id="menuBtnResume"
+	<controlbar:ControlBarButton id="menuBtnResume"
 							 sourceEnabled="@Embed('/assets/icons/ResumeEnabled.png')"
 							 sourceDisabled="@Embed('/assets/icons/ResumeDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_RESUME)" 
 							 toolTip="Resume ({ctrlString}{separator}M)"/>
 	
-	<control1:ControlBarButton id="menuBtnStepInto"
+	<controlbar:ControlBarButton id="menuBtnStepInto"
 							 sourceEnabled="@Embed('/assets/icons/StepIntoEnabled.png')"
 							 sourceDisabled="@Embed('/assets/icons/StepIntoDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_INTO)" 
 							 toolTip="Step Into ({ctrlString}{separator}I)"/>
 	
-	<control1:ControlBarButton id="menuBtnStepOver"
+	<controlbar:ControlBarButton id="menuBtnStepOver"
 							 sourceEnabled="@Embed('/assets/icons/StepOverEnabled.png')"
 							 sourceDisabled="@Embed('/assets/icons/StepOverDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_OVER)" 
 							 toolTip="Step Over ({ctrlString}{separator}O)"/>
 
-	<control1:ControlBarButton id="menuBtnStepReturn"
+	<controlbar:ControlBarButton id="menuBtnStepReturn"
 							 sourceEnabled="@Embed('/assets/icons/StepReturnEnabled.png')"
 							 sourceDisabled="@Embed('/assets/icons/StepReturnDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_STEP_RETURN)" 
 							 toolTip="Step Return ({ctrlString}{separator}E)"/>
 	
-	<control1:ControlBarButton id="menuBtnBreak"
+	<controlbar:ControlBarButton id="menuBtnBreak"
 							 sourceEnabled="@Embed('/assets/icons/BreakEnabled.png')"
 							 sourceDisabled="@Embed('/assets/icons/BreakDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_BREAK)" 
@@ -224,7 +224,7 @@
 	
 	<mx:VRule height="20"/>
 	
-	<control1:ControlBarButton id="menuBuild"
+	<controlbar:ControlBarButton id="menuBuild"
 							 sourceEnabled="@Embed('/assets/icons/exportBuildEnabled.png')" 
 							 sourceDisabled="@Embed('/assets/icons/exportBuildDisabled.png')"
 							 click="menuItem_clickHandler(event, ITEM_TYPE_BUILD_INSTALLER)" 

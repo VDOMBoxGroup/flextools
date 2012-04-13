@@ -5,7 +5,7 @@
 			   height="24"
 			   horizontalAlign="left" verticalAlign="center"
 			   horizontalGap="2"
-			   tabChildren="false">
+			   tabChildren="false" xmlns:controlbar="net.vdombox.powerpack.control.controlbar.*">
 	<mx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
@@ -97,21 +97,21 @@
 		]]>
 	</mx:Script>
 	
-	<control:ControlBarButton id="btnNewNormalState" 
+	<controlbar:ControlBarButton id="btnNewNormalState" 
 							   click="controlBarItem_clickHandler(event, ITEM_TYPE_ADD_NORMAL_STATE)"
 							   sourceEnabled="@Embed('/assets/icons/addNormalStateEnabled.png')" 
 							   sourceDisabled="@Embed('/assets/icons/addStateDisabled.png')"
 							   toolTip="Add normal state"
 							   styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnNewSubgraphState" 
+	<controlbar:ControlBarButton id="btnNewSubgraphState" 
 							   click="controlBarItem_clickHandler(event, ITEM_TYPE_ADD_SUBGRAPH_STATE)"
 							   sourceEnabled="@Embed('/assets/icons/addSubgraphStateEnabled.png')"
 							   sourceDisabled="@Embed('/assets/icons/addStateDisabled.png')"
 							   toolTip="Add subgraph state"
 							   styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnNewCommandState" 
+	<controlbar:ControlBarButton id="btnNewCommandState" 
 							   click="controlBarItem_clickHandler(event, ITEM_TYPE_ADD_COMMAND_STATE)"
 							   sourceEnabled="@Embed('/assets/icons/addCommandStateEnabled.png')"
 							   sourceDisabled="@Embed('/assets/icons/addStateDisabled.png')"
@@ -122,35 +122,35 @@
 	<mx:VRule height="20"/>
 	<mx:Spacer width="2"/>
 	
-	<control:ControlBarButton id="btnCut" 
+	<controlbar:ControlBarButton id="btnCut" 
 							   click="controlBarItem_clickHandler(event, ITEM_TYPE_CUT)"
 							   sourceEnabled="@Embed('/assets/icons/cutEnabled.png')"
 							   sourceDisabled="@Embed('/assets/icons/cutDisabled.png')"
 							   toolTip="Cut"
 							   styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnCopy" 
+	<controlbar:ControlBarButton id="btnCopy" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_COPY)"
 							  sourceEnabled="@Embed('/assets/icons/copyEnabled.png')"
 							  sourceDisabled="@Embed('/assets/icons/copyDisabled.png')"
 							  toolTip="Copy"
 							  styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnPaste" 
+	<controlbar:ControlBarButton id="btnPaste" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_PASTE)"
 							  sourceEnabled="@Embed('/assets/icons/pasteEnabled.png')"
 							  sourceDisabled="@Embed('/assets/icons/pasteDisabled.png')"
 							  toolTip="Paste"
 							  styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnDelete" 
+	<controlbar:ControlBarButton id="btnDelete" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_DELETE)"
 							  sourceEnabled="@Embed('/assets/icons/deleteEnabled.png')"
 							  sourceDisabled="@Embed('/assets/icons/deleteDisabled.png')"
 							  toolTip="Delete"
 							  styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnClear" 
+	<controlbar:ControlBarButton id="btnClear" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_CLEAR)"
 							  sourceEnabled="@Embed('/assets/icons/clearEnabled.png')"
 							  sourceDisabled="@Embed('/assets/icons/clearDisabled.png')"
@@ -161,35 +161,35 @@
 	<mx:VRule height="20"/>
 	<mx:Spacer width="2"/>
 	
-	<control:ControlBarButton id="btnAddTransition" 
+	<controlbar:ControlBarButton id="btnAddTransition" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_ADD_TRANSITION, DESTINATION_OBJECT_GRAPH_NODE)"
 							  sourceEnabled="@Embed('/assets/icons/addArrowEnabled.png')"
 							  sourceDisabled="@Embed('/assets/icons/addArrowDisabled.png')"
 							  toolTip="Add transition"
 							  styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnJump" 
+	<controlbar:ControlBarButton id="btnJump" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_JUMP_TO_GRAPH, DESTINATION_OBJECT_GRAPH_NODE)"
 							  sourceEnabled="@Embed('/assets/icons/jumpToGraphEnabled.png')"
 							  sourceDisabled="@Embed('/assets/icons/jumpToGraphDisabled.png')"
 							  toolTip="Jump to graph"
 							  styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnInitialNode" 
+	<controlbar:ControlBarButton id="btnInitialNode" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_INITIAL_NODE, DESTINATION_OBJECT_GRAPH_NODE)"
 							  sourceEnabled="@Embed('/assets/icons/setInitial.png')"
 							  sourceDisabled="@Embed('/assets/icons/setInitialTerminalDisabled.png')"
 							  toolTip="Mark node as initial"
 							  styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnTerminalNode" 
+	<controlbar:ControlBarButton id="btnTerminalNode" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_TERMINAL_NODE, DESTINATION_OBJECT_GRAPH_NODE)"
 							  sourceEnabled="@Embed('/assets/icons/setTerminal.png')"
 							  sourceDisabled="@Embed('/assets/icons/setInitialTerminalDisabled.png')"
 							  toolTip="Mark node as terminal"
 							  styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnToggleBreakpoint" 
+	<controlbar:ControlBarButton id="btnToggleBreakpoint" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_TOGGLE_BREAKPOINT, DESTINATION_OBJECT_GRAPH_NODE)"
 							  sourceEnabled="@Embed('/assets/icons/breakpointEnabled.png')"
 							  sourceDisabled="@Embed('/assets/icons/breakpointDisabled.png')"
@@ -200,21 +200,21 @@
 	<mx:VRule height="20"/>
 	<mx:Spacer width="2"/>
 	
-	<control:ControlBarButton id="btnConvertToNormal" 
+	<controlbar:ControlBarButton id="btnConvertToNormal" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_CONVERT_TO_NORMAL_NODE, DESTINATION_OBJECT_GRAPH_NODE)"
 							  sourceEnabled="@Embed('/assets/icons/convertToNormalEnabled.png')"
 							  sourceDisabled="@Embed('/assets/icons/convertDisabled.png')"
 							  toolTip="Convert node type to 'Normal'"
 							  styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnConvertToSubgraph" 
+	<controlbar:ControlBarButton id="btnConvertToSubgraph" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_CONVERT_TO_SUBGRAPH_NODE, DESTINATION_OBJECT_GRAPH_NODE)"
 							  sourceEnabled="@Embed('/assets/icons/convertToSubgraphEnabled.png')"
 							  sourceDisabled="@Embed('/assets/icons/convertDisabled.png')"
 							  toolTip="Convert node type to 'Subgraph'"
 							  styleName="categoryCtrlBtnStyle"/>
 	
-	<control:ControlBarButton id="btnConvertToCommand" 
+	<controlbar:ControlBarButton id="btnConvertToCommand" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_CONVERT_TO_COMMAND_NODE, DESTINATION_OBJECT_GRAPH_NODE)"
 							  sourceEnabled="@Embed('/assets/icons/convertToCommandEnabled.png')"
 							  sourceDisabled="@Embed('/assets/icons/convertDisabled.png')"
@@ -225,7 +225,7 @@
 	<mx:VRule height="20"/>
 	<mx:Spacer width="2"/>
 	
-	<control:ControlBarButton id="btnEditTransition" 
+	<controlbar:ControlBarButton id="btnEditTransition" 
 							  click="controlBarItem_clickHandler(event, ITEM_TYPE_SELECT_TRANSITION, DESTINATION_OBJECT_GRAPH_TRANSITION)"
 							  sourceEnabled="@Embed('/assets/icons/editTransitionEnabled.png')"
 							  sourceDisabled="@Embed('/assets/icons/editTransitionDisabled.png')"
