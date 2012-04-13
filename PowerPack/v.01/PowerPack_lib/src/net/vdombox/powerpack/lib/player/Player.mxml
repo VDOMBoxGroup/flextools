@@ -429,13 +429,12 @@
 					appNameLabel.setStyle("fontSize", 26);
 			}
 		}
-		
 			
 		]]>
 	</mx:Script>
 	
 	
-	<mx:Image source="@Embed('assets/images/Background.png')"/>
+	<mx:Image id="bgImage" source="@Embed('assets/images/Background.png')"/>
 
 
 	<controls:Base64Image id="tplPic" x="42" y="50"
