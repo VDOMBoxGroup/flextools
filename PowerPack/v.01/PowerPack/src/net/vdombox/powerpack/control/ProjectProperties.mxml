@@ -28,8 +28,6 @@
 			
 			public static const EVENT_INITIAL_GRAPH_CHANGED : String = "initialGraphChanged";
 			
-			private var shObject : SharedObject = SharedObject.getLocal( "project_settings" );
-			
 			private var compilerParamsChecker	: SDKCompilerParamsChecker = SDKCompilerParamsChecker.getInstance();
 			
 			[Bindable]
@@ -176,12 +174,7 @@
 			
 			private function initOutputFolderPath():void
 			{
-				var initPath : String = project.outputFolderPath;
-				
-				if (initPath == BuilderTemplateProject.DEFAULT_OUTPUT_FOLDER_PATH && shObject.data.hasOwnProperty("output_folder_path"))
-					initPath = shObject.data["output_folder_path"];
-				
-				outputInstallerFolderBrowseBox.path = initPath;
+				outputInstallerFolderBrowseBox.path = project.outputFolderPath;
 				
 				if (!validOutputInstallerFolderPath)
 					outputInstallerFolderBrowseBox.path = "";
@@ -279,10 +272,7 @@
 				project.description = txtDesc.text;
 				
 				project.outputFileName = installerFileName.text;
-				
 				project.outputFolderPath = StringUtil.trim(outputInstallerFolderBrowseBox.path);
-				shObject.data["output_folder_path"] = project.outputFolderPath;
-				
 				project.embededAppPath = StringUtil.trim(embededApplicationBrowseBox.path);
 				
 				if (templateB64Picture)

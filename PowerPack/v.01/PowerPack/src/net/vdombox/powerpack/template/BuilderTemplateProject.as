@@ -1,6 +1,7 @@
 package net.vdombox.powerpack.template
 {
 	import flash.filesystem.File;
+	import flash.net.SharedObject;
 	
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
@@ -68,6 +69,8 @@ package net.vdombox.powerpack.template
 		//
 		//	outputFileName
 		//
+		private var shObject : SharedObject = SharedObject.getLocal( "project_settings" );
+		
 		private var _outputFolderPath : String;
 		
 		public function set outputFolderPath( value : String ) : void
@@ -79,13 +82,16 @@ package net.vdombox.powerpack.template
 			{
 				modified = true;
 				_outputFolderPath = value;
+				shObject.data["output_folder_path"] = _outputFolderPath;
 			}
 		}
 		
 		[Bindable]
 		public function get outputFolderPath() : String
 		{
-			return Utils.getStringOrDefault( _outputFolderPath, DEFAULT_OUTPUT_FOLDER_PATH );
+			var path : String = _outputFolderPath || shObject.data["output_folder_path"];
+			
+			return Utils.getStringOrDefault( path, DEFAULT_OUTPUT_FOLDER_PATH );
 		}
 		
 		override public function toXML () : XML
