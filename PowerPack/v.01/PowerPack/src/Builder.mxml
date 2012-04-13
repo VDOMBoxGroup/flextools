@@ -89,6 +89,7 @@
 			import mx.collections.XMLListCollection;
 			import mx.controls.Tree;
 			import mx.core.Application;
+			import mx.core.IFlexDisplayObject;
 			import mx.events.ChildExistenceChangedEvent;
 			import mx.events.CloseEvent;
 			import mx.events.DropdownEvent;
@@ -798,12 +799,18 @@
 			playerObj.addEventListener(FlexEvent.CREATION_COMPLETE, playerCreationCompleteHandler);
 			playerObj.addEventListener(Event.CLOSE, playerCloseHandler);
 			
+			playerObj.scrollRect = new Rectangle(0, 0, width, height);
+			
+			playerObj.addEventListener(MouseEvent.MOUSE_DOWN, playerMouseDownHandler);
+			playerObj.addEventListener(MouseEvent.MOUSE_UP, playerMouseUpHandler);
+			
 			PopUpManager.addPopUp(playerObj, this, true);
-			PopUpManager.centerPopUp(playerObj);
 			
 			function playerCreationCompleteHandler (event : FlexEvent) : void
 			{
 				playerObj.removeEventListener(FlexEvent.CREATION_COMPLETE, playerCreationCompleteHandler);
+			
+				PopUpManager.centerPopUp(playerObj);
 				
 				playerObj.openTemplate(true);
 			}
@@ -815,6 +822,17 @@
 				PopUpManager.removePopUp(playerObj);
 				
 				playerObj = null;
+				
+			}
+			
+			function playerMouseDownHandler (event : MouseEvent) : void
+			{
+				playerObj.startDrag();
+			}
+			
+			function playerMouseUpHandler (event : MouseEvent) : void
+			{
+				playerObj.stopDrag();
 			}
 		}
 		

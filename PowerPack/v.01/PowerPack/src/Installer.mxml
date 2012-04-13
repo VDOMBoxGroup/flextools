@@ -10,7 +10,6 @@
 		creationComplete="creationCompleteHandler(event)" horizontalScrollPolicy="off"
 		verticalScrollPolicy="off"
 		xmlns:control="net.vdombox.powerpack.control.*"
-		mouseDown="window_mouseDownHandler(event)"
 		styleName="installerWindowStyle" xmlns:powerpack="net.vdombox.powerpack.*" xmlns:player="net.vdombox.powerpack.lib.player.*">
 
 	<mx:Style source="assets/style/style.css"/>
@@ -129,15 +128,6 @@
 			return stream;
 		}
 
-		protected function window_mouseDownHandler( event:MouseEvent ):void
-		{
-			if ( event.target is FlexLoader )
-			{
-				event.stopImmediatePropagation ();
-				nativeWindow.startMove ();
-			}
-		}
-
 		private function onTemplateLoad( event:Event ):void
 		{
 			var fileStream:FileStream = event.target as FileStream;
@@ -147,10 +137,20 @@
 
 			player.dataProvider = xml;
 		}
-		]]></mx:Script>
+		
+		protected function player_mouseDownHandler(event:MouseEvent):void
+		{
+			nativeWindow.startMove();
+		}
+		
+		
+	]]></mx:Script>
 	
 	<!-- WEB player (new, not full functionality)-->
-	<player:Player id="player"  close="nativeWindow.close()" isDesktopApplication="true"/>
+	<player:Player id="player"  
+				   close="nativeWindow.close()"
+				   isDesktopApplication="true"
+				   mouseDown="player_mouseDownHandler(event)"/>
 	
 	<mx:HBox right="14" y="17"
 			 height="10" width="100%"
