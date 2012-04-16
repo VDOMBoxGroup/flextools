@@ -165,6 +165,10 @@ public class ContextManager extends EventDispatcher
 	[Bindable]
 	public static var problemsClass : Class;
 
+	[Embed(source="/assets/icons/search.png")]
+	[Bindable]
+	public static var searchClass : Class;
+		
 	[Embed(source="/assets/icons/variable_16.png")]
 	[Bindable]
 	public static var variablesClass : Class;

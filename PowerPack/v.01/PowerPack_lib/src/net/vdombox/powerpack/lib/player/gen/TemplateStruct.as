@@ -785,6 +785,7 @@ public class TemplateStruct extends EventDispatcher
 		}
 		return index;
 	}
-
+	
+	
 }
 }
