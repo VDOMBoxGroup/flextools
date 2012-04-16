@@ -344,7 +344,7 @@
 			}
 			return null;
 		}
-
+			
 		public function selectGraph( graph : GraphCanvas ) : void
 		{
 			if ( !graph )
@@ -391,25 +391,30 @@
 
 					if ( !vsViewStack.contains( graph ) )
 					{
-						ProgressManager.start( null, false );
-						vsViewStack.addChild( graph );
-						
-						if (graph.creationCompleted)
-							graphCreationCompleteHandler();
-						else
-							graph.addEventListener( FlexEvent.CREATION_COMPLETE, graphCreationCompleteHandler );
-
-						function graphCreationCompleteHandler( event : FlexEvent = null) : void
-						{
-							graph.removeEventListener( FlexEvent.CREATION_COMPLETE, graphCreationCompleteHandler );
-							
-							ProgressManager.complete();
-						}
+						addGraphToViewStack (graph);
 					}
 					vsViewStack.selectedChild = graph;
 					
 					updateControlBar();
 				}
+			}
+		}
+			
+		public function addGraphToViewStack (graph : GraphCanvas) : void
+		{
+			ProgressManager.start( null, false );
+			vsViewStack.addChild( graph );
+			
+			if (graph.creationCompleted)
+				graphCreationCompleteHandler();
+			else
+				graph.addEventListener( FlexEvent.CREATION_COMPLETE, graphCreationCompleteHandler );
+			
+			function graphCreationCompleteHandler( event : FlexEvent = null) : void
+			{
+				graph.removeEventListener( FlexEvent.CREATION_COMPLETE, graphCreationCompleteHandler );
+				
+				ProgressManager.complete();
 			}
 		}
 
@@ -493,33 +498,55 @@
 			return structXML;
 		}
 
-		public function getNodeByName( name : String ) : Node
+		public function getNodeByName( name : String, graphName:String="" ) : Node
 		{
 			var node : Node;
-			for each( var graph : GraphCanvas in graphs )
+			var graph : GraphCanvas;
+			
+			if (graphName!="")
 			{
-				var obj : Object = graph.getChildByName( name );
-
-				if ( obj && obj is Node )
-				{
-					node = obj as Node;
-					break;
-				}
+				graph = getGraphByName(graphName);
+				node = getNodeInGraph();
+				
+				return node;
 			}
+			
+			for each( graph in graphs )
+			{
+				node = getNodeInGraph();
+				
+				if (node)
+					return node;
+			}
+				
+			function getNodeInGraph () : Node
+			{
+				if (!graph)
+					return null;
+				
+				if (!graph.creationCompleted && graph.containsNodeInXml(name))
+				{
+					graph.fromXML();
+				}
+				
+				return graph.getNodeByName(name);
+			}
+				
 			return node;
 		}
 
-		public function showNodeByName( name : String ) : Node
+		public function showNodeByName( name : String, graphName:String="" ) : Node
 		{
-			var node : Node = getNodeByName( name );
+			var node : Node = getNodeByName( name, graphName );
 			if ( node )
 			{
 				showGraphByName( node.parent.name );
 				node.scrollToNode();
 			}
+				
 			return node;
 		}
-
+		
 		public function getGraphByName( name : String ) : GraphCanvas
 		{
 			for each( var graph : GraphCanvas in graphs )
@@ -1061,6 +1088,21 @@
 				}
 			}
 			
+		}
+			
+		public function findValue (value : String, useWholeWord : Boolean = false) : Array
+		{
+			var resultArray : Array = [];
+			
+			for each ( var graph : GraphCanvas in graphs )
+			{
+				var resultStates : Array = graph.findValue(value, useWholeWord);
+				
+				if (resultStates && resultStates.length > 0)
+					resultArray.push( {"graph": graph, "states": resultStates} );
+			}
+			
+			return resultArray;
 		}
 			
 		]]>

@@ -193,6 +193,8 @@
 		{
 			pnl_problems.grid.addEventListener( MouseEvent.DOUBLE_CLICK, problemsDoubleClickHandler );
 
+			configureSearchPanel();
+			
 			var langFile : File;
 			var langFolder : File;
 			var fileStream : FileStream;
@@ -231,6 +233,48 @@
 			}
 
 			openTemplate();
+		}
+			
+		private function configureSearchPanel () : void
+		{
+			pnl_search.addEventListener(Search.SEARCH, searchValueHandler);
+			pnl_search.grid.addEventListener(MouseEvent.DOUBLE_CLICK, searchResultsItemClickHandler);
+			
+			function searchValueHandler (event : Event) : void
+			{
+				pnl_search.searchResultsArray = pnl_graphs.findValue(pnl_search.searchValue, pnl_search.searchWholeWordOnly);
+			}
+		
+			function searchResultsItemClickHandler (event : MouseEvent) : void
+			{
+				var object : Object = event.target;
+				while ( object.parent )
+				{
+					if ( object is SuperDataGrid )
+						break;
+					
+					object = object.parent;
+				}
+				
+				var grid : SuperDataGrid = object as SuperDataGrid;
+				
+				if ( !grid || !grid.selectedItem || !grid.selectedItem.data )
+					return;
+				
+				var item : Object = grid.selectedItem;
+				
+				if ( item.data is GraphCanvas)
+					pnl_graphs.selectGraph(item.data as GraphCanvas);
+				else
+				{
+					var node: Node = pnl_graphs.showNodeByName(item["name"], item["parentGraphName"]);
+					if (node)
+					{
+						node.setFocus();
+						node.edit();
+					}
+				}
+			}
 		}
 
 		private function openTemplate() : void
@@ -334,6 +378,7 @@
 			ContextManager.instance.lastFile = false;
 
 			pnl_graphs.clear();
+			pnl_search.clear();
 
 			MenuManager.getInstance().noTemplate();
 
@@ -1111,7 +1156,8 @@
 			if ( grid.selectedItem.data.node )
 			{
 				var node : Node = pnl_graphs.showNodeByName( grid.selectedItem.data.node.id );
-				node.setFocus();
+				if (node)
+					node.setFocus();
 			}
 			else if ( grid.selectedItem.data.graph )
 			{
@@ -1354,7 +1400,7 @@
 																  dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
 	
 										<panel:Variables id="pnl_variables" minWidth="150" />
-	
+										
 									</containers:SuperTabNavigator>
 	
 								</mx:HDividedBox>
@@ -1370,6 +1416,8 @@
 										<!--panel:Properties id="pnl_properties"/-->
 	
 										<panel:Output id="pnl_output" />
+										
+										<panel:Search id="pnl_search" />
 	
 									</containers:SuperTabNavigator>
 	

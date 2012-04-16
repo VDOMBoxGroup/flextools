@@ -318,7 +318,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 		if ( xml )
 		{
-			fromXML( xml.toXMLString() );
+			fromXML();
 		}
 	}
 	
@@ -621,9 +621,14 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	}
 
 	// gen graph from XML
-	public function fromXML( strXML : String ) : Boolean
+	public function fromXML( strXML : String = "" ) : Boolean
 	{
-		var graphXML : XML = new XML( strXML );
+		var graphXML : XML;
+		
+		if (!strXML)
+			graphXML = xml;
+		else
+			graphXML = new XML( strXML );
 
 		clear();
 
@@ -1106,6 +1111,65 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	private function get currentTemplate() : BuilderTemplate
 	{
 		return BuilderContextManager.currentTemplate;
+	}
+	
+	public function findValue (value : String, useWholeWord : Boolean = false) : Array
+	{
+		var resultStatesArray : Array = [];
+		
+		value = value.replace("$", "\\$");
+		
+		var searchRegExp : RegExp;
+		
+		searchRegExp = useWholeWord ? new RegExp("\\W" + value + "\\W") : new RegExp(value);
+		
+		var graphXML : XML = toXML();
+		
+		if (!graphXML)
+			return [];
+		
+		var stateText : String;
+		
+		for each (var graphState : XML in graphXML.states.state)
+		{
+			stateText = graphState.text[0];
+			
+			var index : int = stateText.search(searchRegExp);
+			if (index >= 0)
+			{
+				var node : Object = {"name": graphState.@name, "text": stateText, "category": graphState.@category, "parentGraphName": name};
+				
+				resultStatesArray.push(node);
+			}
+		}
+		
+		return resultStatesArray;
+		
+	}
+	
+	public function getNodeByName( name : String ) : Node
+	{
+		var node : Node;
+		var obj : Object = getChildByName( name );
+			
+		if ( obj && obj is Node )
+			node = obj as Node;
+	
+		return node;
+	}
+	
+	public function containsNodeInXml (nodeName:String) : Boolean
+	{
+		if (!xml)
+			return false;
+		
+		for each (var stateXML : XML in xml.states.state)
+		{
+			if (stateXML.@name == nodeName)
+				return true;
+		}
+		
+		return false; 
 	}
 	
 }

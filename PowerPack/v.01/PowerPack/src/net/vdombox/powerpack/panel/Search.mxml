@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="100%" height="100%"
+	verticalGap="0"
+	label="Search"
+	initialize="init()"
+	icon="{ContextManager.searchClass}" xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*">
+	
+	<mx:Array id="searchResultsArray" />
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.collections.ArrayCollection;
+			import mx.collections.HierarchicalData;
+			import mx.utils.StringUtil;
+			
+			import net.vdombox.powerpack.graph.Node;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			
+			public static const SEARCH		: String = "search";
+
+			private function init() : void
+			{
+				BindingUtils.bindSetter( populateSearchResults, this, "searchResultsArray" );
+			}
+			
+			private function populateSearchResults( array : Array ) : void
+			{
+				clearResults();
+				
+				grid.dataProvider = new HierarchicalData( parseResult );
+			}
+			
+			private function get parseResult () : Array
+			{
+				var newLineRegExp : RegExp = /\r\n{0,1}/g;
+				var graph : Object;
+				var node : Object;
+				
+				var nodes : Array = [];
+				var graphs : Array = [];
+				
+				if ( !searchResultsArray || searchResultsArray.length <= 0 )
+					return null;
+				
+				for each ( var item : Object in searchResultsArray )
+				{
+					nodes = [];
+					
+					for each (var state : Object in item["states"])
+					{
+						node = new Object();
+						node["description"]		= "(" + state["category"] + "): " +state["text"].replace(newLineRegExp, "");
+						node["toolTip"]			= state["text"];
+						node["data"]			= state["text"];
+						node["name"]			= state["name"];
+						node["parentGraphName"]	= state["parentGraphName"];
+						
+						nodes.push(node);
+					}
+					
+					graph = new Object();
+					graph["description"]	= item["graph"].name;
+					graph["data"]			= item["graph"];
+					graph["children"]		= nodes;
+					
+					graphs.push(graph);
+				}
+				
+				return graphs;
+			}
+			
+			protected function btnSearch_clickHandler(event:MouseEvent):void
+			{
+				startSearch();
+			}
+			
+			protected function searchValue_keyDownHandler(event:KeyboardEvent):void
+			{
+				if (event.keyCode == Keyboard.ENTER)
+				{
+					event.preventDefault();
+					event.stopPropagation();
+					
+					startSearch();
+				}
+			}
+			
+			public var graphs : ArrayCollection;
+			
+			private function startSearch () : void
+			{
+				if (searchValue.length == 0)
+					return;
+					
+				clearResults();
+				
+				dispatchEvent(new Event(SEARCH));
+			}
+			
+			public function get searchValue () : String
+			{
+				return searchValue_TextInput.text;
+			}
+			
+			public function get searchWholeWordOnly () : Boolean
+			{
+				return wholeWord_CheckBox.selected;
+			}
+			
+			protected function btnClear_clickHandler(event:MouseEvent):void
+			{
+				clearResults();
+			}
+			
+			private function clearResults () : void
+			{
+				grid.dataProvider = null;
+			}
+			
+			public function clear () : void
+			{
+				searchValue_TextInput.text = "";
+				
+				clearResults();
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+	
+	<mx:ControlBar visible="false" includeInLayout="false"></mx:ControlBar>
+	
+	<mx:HBox width="100%" height="25">
+		<mx:Label text="Search: " />
+		<mx:TextInput id="searchValue_TextInput" 
+					  keyDown="searchValue_keyDownHandler(event)"/>
+		
+		<mx:Button id="btnSearch" 
+				   label="Search"
+				   click="btnSearch_clickHandler(event)"/>
+		
+		<mx:Button id="btnClear" 
+				   label="Clear"
+				   click="btnClear_clickHandler(event)"/>
+		<mx:VRule height="100%"/>
+		<mx:CheckBox id="wholeWord_CheckBox" 
+					 label="Whole word"
+					 selected="false"/>
+		
+	</mx:HBox>
+	
+	<mx:Spacer height="5" />
+	
+	<controls:SuperDataGrid doubleClickEnabled="true"
+							id="grid"
+							designViewDataType="tree"
+							width="100%" height="100%"
+							defaultLeafIcon="{null}"
+							folderOpenIcon="{ContextManager.expandClass}"
+							folderClosedIcon="{ContextManager.expandClass}">
+	
+		<controls:columns>
+			<mx:AdvancedDataGridColumn
+							   headerText="Search results"
+							   dataTipField="toolTip"
+							   dataField="description"
+							   editable="false"
+							   showDataTips="true"/>
+		</controls:columns>
+	</controls:SuperDataGrid>
+	
+</mx:VBox>
