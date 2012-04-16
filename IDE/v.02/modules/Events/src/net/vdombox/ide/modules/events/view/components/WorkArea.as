@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.events.view.components
 {
 	import flash.display.DisplayObjectContainer;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
@@ -46,6 +47,7 @@ package net.vdombox.ide.modules.events.view.components
 
 			addEventListener( ElementEvent.CREATE_LINKAGE, element_createLinkageHandler, true, 0, true );
 			addEventListener( ElementEvent.DELETE, element_deleteHandler, true, 0, true );
+			addEventListener( ElementEvent.MOVE, moveElementHandler, true, 0, true );
 			addEventListener( ElementEvent.MOVED, unsaveHandler, true, 0, true );
 			addEventListener( ElementEvent.STATE_CHANGED, unsaveHandler, true, 0, true );
 			addEventListener( ElementEvent.PARAMETER_EDIT, unsaveHandler, true, 0, true );
@@ -58,6 +60,9 @@ package net.vdombox.ide.modules.events.view.components
 
 		[SkinPart]
 		public var workLayers : Group;
+		
+		[SkinPart]
+		public var scaleGroup : Group;
 
 		[SkinPart]
 		public var linkagesLayer : Group;
@@ -627,6 +632,86 @@ package net.vdombox.ide.modules.events.view.components
 			removeShadowHandlers();
 		}
 		
+		private var point : Point;
+		private var temp : Number;
+		private var element : BaseElement;
+		private var offsetX : Number;
+		private var offsetY : Number;
+		
+		private var dx : int;
+		private var dy : int;
+		
+		private var verticalScrollPosition : int;
+		private var horizontalScrollPosition : int;
+		
+		private function changeSizeGroupToBottom( event : Event ) : void
+		{
+			element.moveElement( 0, dy );
+			temp = element.y + offsetY - scroller.height / scaleGroup.scaleX;
+			
+			if ( temp > verticalScrollPosition )
+				scroller.verticalScrollBar.viewport.verticalScrollPosition = temp;
+			else
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom );
+		}
+		
+		private function changeSizeGroupToRight( event : Event ) : void
+		{
+			element.moveElement( dx, 0 );
+			temp = ( element.x + offsetX ) - scroller.width / scaleGroup.scaleX;
+			
+			if ( temp > horizontalScrollPosition )
+				scroller.horizontalScrollBar.viewport.horizontalScrollPosition = temp;
+			else
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToRight );
+		}
+		
+		private function changeSizeGroupToTop( event : Event ) : void
+		{
+			element.moveElement( 0, dy );
+			
+			if ( element.y + offsetY < verticalScrollPosition )
+				scroller.verticalScrollBar.viewport.verticalScrollPosition = element.y + offsetY;
+			else
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToTop );
+		}
+		
+		private function changeSizeGroupToLeft( event : Event ) : void
+		{
+			element.moveElement( dx, 0 );
+			
+			if ( element.x + offsetX  < horizontalScrollPosition )
+				scroller.horizontalScrollBar.viewport.horizontalScrollPosition =element.x + offsetX;
+			else
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft );
+		}
+			
+		private function moveElementHandler( event : ElementEvent ) : void
+		{
+			element = event.target as BaseElement;
+			
+			offsetX = event.object.x;
+			offsetY = event.object.y;
+			
+			dx = event.object.dx;
+			dy = event.object.dy;
+			
+			verticalScrollPosition = scroller.verticalScrollBar.viewport.verticalScrollPosition;
+			horizontalScrollPosition = scroller.horizontalScrollBar.viewport.horizontalScrollPosition;
+			
+			if ( verticalScrollPosition + ( element.y - verticalScrollPosition + offsetY ) * scaleGroup.scaleX > verticalScrollPosition + scroller.height )
+				addEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom, false, 0, true );
+			
+			if ( horizontalScrollPosition + ( element.x - horizontalScrollPosition + offsetX ) * scaleGroup.scaleX > horizontalScrollPosition + scroller.width )
+				addEventListener( Event.ENTER_FRAME, changeSizeGroupToRight, false, 0, true );
+			
+			if ( element.y + offsetY < verticalScrollPosition )
+				addEventListener( Event.ENTER_FRAME, changeSizeGroupToTop, false, 0, true );
+			
+			if ( element.x + offsetX  < horizontalScrollPosition )
+				addEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft, false, 0, true );
+		}
+		
 		private function unsaveHandler( event : ElementEvent = null ) : void
 		{
 			skin.currentState = 'unsaved';
@@ -781,14 +866,16 @@ package net.vdombox.ide.modules.events.view.components
 			var dy : int = event.object.dy;
 			
 			var baseElement : BaseElement;
+			var target : BaseElement = event.target as BaseElement;
 			
 			for each ( baseElement in multiSelectElements )
 				if ( !baseElement.hasMoved( dx, dy ) )
 					return;
 			
 			for each ( baseElement in multiSelectElements )
-				baseElement.moveElement( dx, dy );
+				baseElement.moveTo( dx, dy, target );
 		}
+		
 		
 		public function removeAllSelectedElements ( ) : void
 		{

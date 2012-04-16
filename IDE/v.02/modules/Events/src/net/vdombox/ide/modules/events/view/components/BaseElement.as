@@ -132,24 +132,29 @@ package net.vdombox.ide.modules.events.view.components
 			if ( newY < 0 )
 				newY = 0;
 			
+			var dx : int = int( newX - x );
+			var dy : int = int ( newY - y );
+			
 			if ( selected )
-			{
-				var dx : int = int( newX - x );
-				var dy : int = int ( newY - y );
-				
+			{				
 				var moveEvent : ElementEvent = new ElementEvent ( ElementEvent.MULTI_SELECT_MOVED );
 				moveEvent.object = { dx : dx, dy : dy };
 				dispatchEvent( moveEvent );
+				
+				
 			}
 			else
 			{
-			
 				x = newX;
 				y = newY;
 			
 				data.left = x;
 				data.top = y;
+				
+				dispatchEvent( new ElementEvent( ElementEvent.MOVE, {x : mouseOffcetX, y :  mouseOffcetY, dx : dx, dy : dy} ) );
 			}
+			
+			
 		}
 		
 		public function hasMoved( dx : int, dy : int ) : Boolean
@@ -162,11 +167,34 @@ package net.vdombox.ide.modules.events.view.components
 		
 		public function moveElement( dx : int, dy : int ) : void
 		{
+			if (  selected )
+			{				
+				var moveEvent : ElementEvent = new ElementEvent ( ElementEvent.MULTI_SELECT_MOVED );
+				moveEvent.object = { dx : dx, dy : dy };
+				dispatchEvent( moveEvent );
+			}
+			else
+			{
+				x += dx;
+				y += dy;
+			
+				data.left = x;
+				data.top = y;
+			}
+		}
+		
+		public function moveTo( dx : int, dy : int, target : BaseElement ) : void
+		{
 			x += dx;
 			y += dy;
 			
 			data.left = x;
 			data.top = y;
+			
+			if ( target == this )
+			{
+				dispatchEvent( new ElementEvent( ElementEvent.MOVE, {x : mouseOffcetX, y :  mouseOffcetY, dx : dx, dy : dy} ) );
+			}
 		}
 		
 		protected function stage_mouseMoveHandlerExt( event : MouseEvent ) : void
