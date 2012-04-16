@@ -707,8 +707,123 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function moveRendererHandler ( event : RendererEvent ) : void
 		{
-			if ( component.showLinking )
+			if ( component.showLinking && !multiSelectRenderers )
 				sendNotification( Notifications.OBJECT_MOVED, { component : event.target, ctrlKey : event.ctrlKey } );
+			
+			if ( event.target is RendererBase )
+				element = event.target as RendererBase;
+			else
+				return;
+			
+			offsetX = event.object.x;
+			offsetY = event.object.y;
+			
+			dx = event.object.dx;
+			dy = event.object.dy;
+			
+			renderer_movedHandler();
+		}
+		
+		private var temp : Number;
+		private var rendererXY : Point  = new Point();
+		private var element : RendererBase;
+		private var offsetX : Number;
+		private var offsetY : Number;
+		
+		private var dx : int;
+		private var dy : int;
+		
+		private var verticalScrollPosition : int;
+		private var horizontalScrollPosition : int;
+		private var parentRenderer : RendererBase ;
+		
+		private function changeSizeGroupToBottom( event : Event ) : void
+		{
+			element.moveRenderer( 0, dy );
+			
+			transformrendererXY();
+			
+			temp = rendererXY.y + offsetY - component.renderer.scroller.height / component.renderer.scaleGroup.scaleX;
+			
+			if ( temp > verticalScrollPosition )
+				component.renderer.scroller.verticalScrollBar.viewport.verticalScrollPosition = temp;
+			else
+				element.removeEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom );
+		}
+		
+		private function changeSizeGroupToRight( event : Event ) : void
+		{
+			element.moveRenderer( dx, 0 );
+			
+			transformrendererXY();
+			
+			trace("rendererXY.x = " + rendererXY.x + " offsetX = " + offsetX + " temp = " + temp + " horizontalScrollPosition = " + horizontalScrollPosition);
+			
+			temp = rendererXY.x + offsetX - component.renderer.scroller.width / component.renderer.scaleGroup.scaleX;
+			
+			if ( temp > horizontalScrollPosition )
+				component.renderer.scroller.horizontalScrollBar.viewport.horizontalScrollPosition = temp;
+			else
+				element.removeEventListener( Event.ENTER_FRAME, changeSizeGroupToRight );
+		}
+		
+		private function changeSizeGroupToTop( event : Event ) : void
+		{
+			element.moveRenderer( 0, dy );
+			
+			transformrendererXY();
+			
+			if ( rendererXY.y + offsetY  < component.renderer.scroller.verticalScrollBar.viewport.verticalScrollPosition )
+				component.renderer.scroller.verticalScrollBar.viewport.verticalScrollPosition = rendererXY.y  + offsetY ;
+			else
+				element.removeEventListener( Event.ENTER_FRAME, changeSizeGroupToTop );
+		}
+		
+		private function changeSizeGroupToLeft( event : Event ) : void
+		{
+			element.moveRenderer( dx, 0 );
+			
+			transformrendererXY();
+			
+			if ( rendererXY.x + offsetX < component.renderer.scroller.horizontalScrollBar.viewport.horizontalScrollPosition )
+				component.renderer.scroller.horizontalScrollBar.viewport.horizontalScrollPosition = rendererXY.x + offsetX ;
+			else
+				element.removeEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft );
+		}
+		
+		private function transformrendererXY() : void
+		{
+			rendererXY.x = element.x;
+			rendererXY.y = element.y;
+			
+			if ( !( parentRenderer is PageRenderer ) )
+			{
+				rendererXY = parentRenderer.localToGlobal(rendererXY);
+				
+				rendererXY = component.renderer.scaleGroup.globalToContent(rendererXY);
+			}
+		}
+		
+		private function renderer_movedHandler() : void
+		{
+			parentRenderer = rendProxy.getRendererByVO( element.renderVO.parent.vdomObjectVO );
+			
+			transformrendererXY();
+			
+			verticalScrollPosition = component.renderer.scroller.verticalScrollBar.viewport.verticalScrollPosition;
+			horizontalScrollPosition = component.renderer.scroller.horizontalScrollBar.viewport.horizontalScrollPosition;
+			
+			if ( verticalScrollPosition + ( rendererXY.y - verticalScrollPosition + offsetY ) * component.renderer.scaleGroup.scaleX > verticalScrollPosition + component.renderer.scroller.height )
+				element.addEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom, false, 0, true );
+			
+			if ( horizontalScrollPosition + ( rendererXY.x - horizontalScrollPosition + offsetX ) * component.renderer.scaleGroup.scaleX > horizontalScrollPosition + component.renderer.scroller.width )
+				element.addEventListener( Event.ENTER_FRAME, changeSizeGroupToRight, false, 0, true );
+			
+			if ( rendererXY.y + offsetY < verticalScrollPosition )
+				element.addEventListener( Event.ENTER_FRAME, changeSizeGroupToTop, false, 0, true );
+			
+			if ( rendererXY.x + offsetX < horizontalScrollPosition )
+				element.addEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft, false, 0, true );
 		}
 		
 		private function keyDownDeleteHandler(event : KeyboardEvent) : void
@@ -951,7 +1066,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			for each ( renderer in multiSelectRenderers )
 			{
-				renderer.moveRenderer( dx, dy );
+				renderer.moveTo( dx, dy, event.target as RendererBase );
 			}
 		}
 		

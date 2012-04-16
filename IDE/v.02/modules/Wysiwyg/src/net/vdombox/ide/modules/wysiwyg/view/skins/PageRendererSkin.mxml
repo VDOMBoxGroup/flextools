@@ -10,6 +10,8 @@
 			import net.vdombox.ide.common.view.components.VDOMScroller;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
+			import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
+			import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 			
 			[Bindable]
 			private var scale : Number = 1;
@@ -77,7 +79,6 @@
 					scroller.horizontalScrollBar.viewport.horizontalScrollPosition = scrollPosition.x - scroller.width / 2;
 				}
 			}
-			
 		]]>
 	</fx:Script>
 	

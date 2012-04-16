@@ -1498,12 +1498,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var dx : int = int( mouseX - mDeltaX );
 			var dy : int = int( mouseY - mDeltaY );
 			
+			var moveEvent : RendererEvent = new RendererEvent( RendererEvent.MOVE_MEDIATOR );
+			moveEvent.ctrlKey = event.ctrlKey;
+			moveEvent.object = { x : mDeltaX, y : mDeltaY, dx : dx, dy : dy };
+			
 			if ( skin.currentState == "multiSelect" )
 			{
 				var rendererEvent : RendererEvent = new RendererEvent( RendererEvent.MULTI_SELECTED_MOVE );
 				rendererEvent.object = { dx : dx, dy : dy };
 				dispatchEvent( rendererEvent );
 				
+				//dispatchEvent( moveEvent );
 				return;
 			}
 
@@ -1529,8 +1534,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
 
-			var moveEvent : RendererEvent = new RendererEvent( RendererEvent.MOVE_MEDIATOR );
-			moveEvent.ctrlKey = event.ctrlKey;
 			dispatchEvent( moveEvent );
 		}
 		
@@ -1544,10 +1547,36 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		
 		public function moveRenderer( dx : int, dy : int ) : void
 		{
-			x += dx;
-			y += dy;
+			if (  skin.currentState == "multiSelect" )
+			{				
+				var rendererEvent : RendererEvent = new RendererEvent( RendererEvent.MULTI_SELECTED_MOVE );
+				rendererEvent.object = { dx : dx, dy : dy };
+				dispatchEvent( rendererEvent );
+			}
+			else
+			{
+				x += dx;
+				y += dy;
+				
+				dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
+			}
 		}
 
+		public function moveTo( dx : int, dy : int, target : RendererBase = null ) : void
+		{
+			x += dx;
+			y += dy;
+			
+			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
+			
+			if ( target == this )
+			{
+				var moveEvent : RendererEvent = new RendererEvent( RendererEvent.MOVE_MEDIATOR );
+				moveEvent.object = { x : mDeltaX, y : mDeltaY, dx : dx, dy : dy };
+				dispatchEvent( moveEvent );
+			}
+		}
+		
 		private function mouseOutHandler( event : MouseEvent ) : void
 		{
 			if ( skin.currentState == "hovered" )

@@ -153,7 +153,7 @@
 			{
 				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
-				addEventListener( RendererEvent.MOVE, renderer_movedHandler, true, 0, true );
+				addEventListener( RendererEvent.MOVE, renderer_moveHandler, true, 0, true );
 				addEventListener( RendererEvent.HTML_ADDED, renderer_htmlAddedHandler, true, 0, true );
 				
 				addEventListener( TransformMarkerEvent.TRANSFORM_BEGIN, transformMarker_tansformBeginHandler, true, 0, true );
@@ -239,7 +239,7 @@
 				}
 			}
 
-			private function renderer_movedHandler( event : RendererEvent ) : void
+			private function renderer_moveHandler( event : RendererEvent ) : void
 			{
 				var ee : EditorEvent = new EditorEvent( EditorEvent.RENDERER_TRANSFORMED );
 
