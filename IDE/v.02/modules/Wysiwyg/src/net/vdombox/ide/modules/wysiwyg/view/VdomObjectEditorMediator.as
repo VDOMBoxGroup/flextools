@@ -743,7 +743,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			transformrendererXY();
 			
-			temp = rendererXY.y + offsetY - component.renderer.scroller.height / component.renderer.scaleGroup.scaleX;
+			temp = rendererXY.y + offsetY - component.renderer.scroller.height / component.renderer.scaleGroup.scaleX + 10;
 			
 			if ( temp > verticalScrollPosition )
 				component.renderer.scroller.verticalScrollBar.viewport.verticalScrollPosition = temp;
@@ -785,8 +785,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			transformrendererXY();
 			
-			if ( rendererXY.x + offsetX < component.renderer.scroller.horizontalScrollBar.viewport.horizontalScrollPosition )
-				component.renderer.scroller.horizontalScrollBar.viewport.horizontalScrollPosition = rendererXY.x + offsetX ;
+			if ( rendererXY.x + offsetX - 10 < component.renderer.scroller.horizontalScrollBar.viewport.horizontalScrollPosition )
+				component.renderer.scroller.horizontalScrollBar.viewport.horizontalScrollPosition = rendererXY.x + offsetX - 10 ;
 			else
 				element.removeEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft );
 		}
@@ -813,7 +813,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			verticalScrollPosition = component.renderer.scroller.verticalScrollBar.viewport.verticalScrollPosition;
 			horizontalScrollPosition = component.renderer.scroller.horizontalScrollBar.viewport.horizontalScrollPosition;
 			
-			if ( verticalScrollPosition + ( rendererXY.y - verticalScrollPosition + offsetY ) * component.renderer.scaleGroup.scaleX > verticalScrollPosition + component.renderer.scroller.height )
+			if ( verticalScrollPosition + ( rendererXY.y - verticalScrollPosition + offsetY ) * component.renderer.scaleGroup.scaleX > verticalScrollPosition + component.renderer.scroller.height - 10)
 				element.addEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom, false, 0, true );
 			
 			if ( horizontalScrollPosition + ( rendererXY.x - horizontalScrollPosition + offsetX ) * component.renderer.scaleGroup.scaleX > horizontalScrollPosition + component.renderer.scroller.width )
@@ -822,7 +822,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( rendererXY.y + offsetY < verticalScrollPosition )
 				element.addEventListener( Event.ENTER_FRAME, changeSizeGroupToTop, false, 0, true );
 			
-			if ( rendererXY.x + offsetX < horizontalScrollPosition )
+			if ( rendererXY.x + offsetX - 10 < horizontalScrollPosition )
 				element.addEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft, false, 0, true );
 		}
 		

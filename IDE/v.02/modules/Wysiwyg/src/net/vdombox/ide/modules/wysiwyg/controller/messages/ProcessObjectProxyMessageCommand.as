@@ -138,8 +138,9 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					
 				case PPMObjectTargetNames.COPY:
 				{
-					sendNotification( Notifications.GET_WYSIWYG, body );
-					sendNotification( Notifications.GET_PAGE_SRUCTURE, body.pageVO );
+					sendNotification( Notifications.GET_WYSIWYG, body.targetObject );
+					sendNotification( Notifications.GET_PAGE_SRUCTURE, body.targetObject.pageVO );
+					sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, body.newObject );
 					
 					break;
 				}

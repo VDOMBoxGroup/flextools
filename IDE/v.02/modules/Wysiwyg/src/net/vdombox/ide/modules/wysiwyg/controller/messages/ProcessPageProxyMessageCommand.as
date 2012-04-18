@@ -89,8 +89,9 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					
 				case PPMPageTargetNames.COPY:
 				{
-					sendNotification( Notifications.GET_WYSIWYG, body );
-					sendNotification( Notifications.GET_PAGE_SRUCTURE, body );
+					sendNotification( Notifications.GET_WYSIWYG, body.pageVO );
+					sendNotification( Notifications.GET_PAGE_SRUCTURE, body.pageVO );
+					sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, body.objectVO );
 					
 					break;
 				}
