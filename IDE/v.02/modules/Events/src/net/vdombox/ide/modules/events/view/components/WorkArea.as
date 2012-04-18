@@ -647,7 +647,7 @@ package net.vdombox.ide.modules.events.view.components
 		private function changeSizeGroupToBottom( event : Event ) : void
 		{
 			element.moveElement( 0, dy );
-			temp = element.y + offsetY - scroller.height / scaleGroup.scaleX;
+			temp = element.y + offsetY - scroller.height / scaleGroup.scaleX + 10;
 			
 			if ( temp > verticalScrollPosition )
 				scroller.verticalScrollBar.viewport.verticalScrollPosition = temp;
@@ -680,8 +680,8 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			element.moveElement( dx, 0 );
 			
-			if ( element.x + offsetX  < horizontalScrollPosition )
-				scroller.horizontalScrollBar.viewport.horizontalScrollPosition =element.x + offsetX;
+			if ( element.x + offsetX - 10 < horizontalScrollPosition )
+				scroller.horizontalScrollBar.viewport.horizontalScrollPosition =element.x + offsetX - 10;
 			else
 				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft );
 		}
@@ -698,8 +698,9 @@ package net.vdombox.ide.modules.events.view.components
 			
 			verticalScrollPosition = scroller.verticalScrollBar.viewport.verticalScrollPosition;
 			horizontalScrollPosition = scroller.horizontalScrollBar.viewport.horizontalScrollPosition;
+			trace((verticalScrollPosition + ( element.y - verticalScrollPosition + offsetY ) * scaleGroup.scaleX) + "     " + (verticalScrollPosition + scroller.height));
 			
-			if ( verticalScrollPosition + ( element.y - verticalScrollPosition + offsetY ) * scaleGroup.scaleX > verticalScrollPosition + scroller.height )
+			if ( verticalScrollPosition + ( element.y - verticalScrollPosition + offsetY ) * scaleGroup.scaleX > verticalScrollPosition + scroller.height - 10)
 				addEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom, false, 0, true );
 			
 			if ( horizontalScrollPosition + ( element.x - horizontalScrollPosition + offsetX ) * scaleGroup.scaleX > horizontalScrollPosition + scroller.width )
@@ -708,7 +709,7 @@ package net.vdombox.ide.modules.events.view.components
 			if ( element.y + offsetY < verticalScrollPosition )
 				addEventListener( Event.ENTER_FRAME, changeSizeGroupToTop, false, 0, true );
 			
-			if ( element.x + offsetX  < horizontalScrollPosition )
+			if ( element.x + offsetX  < horizontalScrollPosition + 10 )
 				addEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft, false, 0, true );
 		}
 		
