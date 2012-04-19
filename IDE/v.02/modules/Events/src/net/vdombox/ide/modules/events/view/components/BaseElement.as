@@ -140,8 +140,6 @@ package net.vdombox.ide.modules.events.view.components
 				var moveEvent : ElementEvent = new ElementEvent ( ElementEvent.MULTI_SELECT_MOVED );
 				moveEvent.object = { dx : dx, dy : dy };
 				dispatchEvent( moveEvent );
-				
-				
 			}
 			else
 			{

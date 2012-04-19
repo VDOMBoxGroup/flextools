@@ -73,7 +73,7 @@
 				pt = new Point(event.localX, event.localY);
 				pt = event.target.localToGlobal(pt);
 				
-				pt=MultiRectGroup.globalToContent(pt);
+				pt=multiRectGroup.globalToContent(pt);
 				
 				multiRect.width = pt.x - multiRect.x;
 				multiRect.height = pt.y - multiRect.y;
@@ -101,7 +101,7 @@
 				multiRect.width = 0;
 				multiRect.height = 0;
 				
-				MultiRectGroup.removeAllElements();
+				multiRectGroup.removeAllElements();
 			}
 			
 			private function mouseDownHandler( event : MouseEvent ) : void
@@ -116,12 +116,12 @@
 					pt = new Point(event.localX, event.localY);
 					pt = event.target.localToGlobal(pt);
 					
-					pt=MultiRectGroup.globalToContent(pt);
+					pt=multiRectGroup.globalToContent(pt);
 					
 					multiRect.left = pt.x;
 					multiRect.top = pt.y;
 					
-					MultiRectGroup.addElement( multiRect );
+					multiRectGroup.addElement( multiRect );
 					
 					addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
 					addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true, 0, true );
@@ -170,11 +170,7 @@
 			{
 				addEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true, 0 , true );
 				
-				var strokeColor : SolidColorStroke = new SolidColorStroke();
-				strokeColor.color = 0x0000FF;
-				strokeColor.weight = 1;
-				
-				multiRect.stroke = strokeColor;
+				multiRect.stroke =  new SolidColorStroke( 0x0000FF, 1 );
 			}
 			
 			private function setFocusOnWorkArea( event : MouseEvent ) : void
@@ -293,7 +289,7 @@
 			<s:Group id="scaleGroup" scaleX="{scale}" scaleY="{scale}">
 				<s:Group id="linkagesLayer"/>
 				<s:Group id="contentGroup"/>
-				<s:Group id="MultiRectGroup"/>
+				<s:Group id="multiRectGroup"/>
 			</s:Group>
 		</components1:VDOMScroller>
 	</s:Group>

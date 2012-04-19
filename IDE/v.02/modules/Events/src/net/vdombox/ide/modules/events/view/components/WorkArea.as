@@ -632,7 +632,6 @@ package net.vdombox.ide.modules.events.view.components
 			removeShadowHandlers();
 		}
 		
-		private var point : Point;
 		private var temp : Number;
 		private var element : BaseElement;
 		private var offsetX : Number;
@@ -698,7 +697,6 @@ package net.vdombox.ide.modules.events.view.components
 			
 			verticalScrollPosition = scroller.verticalScrollBar.viewport.verticalScrollPosition;
 			horizontalScrollPosition = scroller.horizontalScrollBar.viewport.horizontalScrollPosition;
-			trace((verticalScrollPosition + ( element.y - verticalScrollPosition + offsetY ) * scaleGroup.scaleX) + "     " + (verticalScrollPosition + scroller.height));
 			
 			if ( verticalScrollPosition + ( element.y - verticalScrollPosition + offsetY ) * scaleGroup.scaleX > verticalScrollPosition + scroller.height - 10)
 				addEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom, false, 0, true );
