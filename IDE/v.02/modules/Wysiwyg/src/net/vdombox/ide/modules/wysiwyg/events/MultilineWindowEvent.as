@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 	{
 		public var value : String;
 		public static var CLOSE 			: String = "closeWindow1";
-		public static var APPLY 			: String = "apply";
+		public static var APPLY			: String = "apply";
 
 		public function MultilineWindowEvent( type : String, value : String )
 		{
