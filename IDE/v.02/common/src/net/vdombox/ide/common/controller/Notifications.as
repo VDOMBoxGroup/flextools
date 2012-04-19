@@ -247,6 +247,9 @@ package net.vdombox.ide.common.controller
 		public static const DELETE_SERVER_ACTION : String = "deleteServerAction";
 		public static const SERVER_ACTION_DELETED : String = "serverActionDeleted";
 		
+		public static const RENAME_SERVER_ACTION : String = "renameServerAction";
+		public static const SERVER_ACTION_RENAMED : String = "serverActionRenamed";
+		
 		public static const GET_LIBRARIES : String = "getLibraries";
 		public static const LIBRARIES_GETTED : String = "librariesGetted";
 		

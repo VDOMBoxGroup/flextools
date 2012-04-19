@@ -329,7 +329,7 @@ package net.vdombox.editors.parsers.python
 			tokens.push( t );
 			t.parent = currentBlock;
 			currentBlock.children.push( t );
-			if ( t.string == "{" /* || t.string=="[" || t.string=="("*/ )
+			if ( t.string == "{" )
 			{
 				currentBlock = t;
 				t.children = [];
@@ -375,8 +375,8 @@ package net.vdombox.editors.parsers.python
 			{
 				//do nothing
 			}
-			else if ( tp && ( tp.string == "package" || tp.string == "class" || tp.string == "interface" ||
-				tp.string == "function" || tp.string == "catch" || tp.string == "get" || tp.string == "set" ||
+			else if ( tp && ( tp.string == "class" ||
+				tp.string == "def" || tp.string == "catch" || tp.string == "get" || tp.string == "set" ||
 				tp.string == "var" || tp.string == "const" ) )
 			{
 				//for package, merge classes in the existing omonimus package
@@ -397,19 +397,23 @@ package net.vdombox.editors.parsers.python
 						field.isStatic = true;
 						isStatic = false;
 					}
-					if ( access ) //consume access specifier
-					{
-						field.access = access;
-						access = null;
-
-					}
+					
+					if ( t.string.slice(0, 2) == "__" )
+						access = "private";
+					else if ( t.string.slice(0, 1) == "_" )
+						access = "protected";
+					else
+						access = "public";
+					
+					field.access = access;
+						
 					//all interface methods are public
 					if ( scope.fieldType == "interface" )
 						field.access = "public";
 					//this is so members will have the parent set to the scope
 					field.parent = scope;
 				}
-				if ( _scope && ( tp.string == "class" || tp.string == "interface" || scope.fieldType == "package" ) )
+				if ( _scope && ( tp.string == "class" ) )
 				{
 					_scope.type = new Multiname( "Class" );
 					try
