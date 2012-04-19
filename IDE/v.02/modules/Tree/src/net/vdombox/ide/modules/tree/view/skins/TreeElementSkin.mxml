@@ -22,7 +22,11 @@
 			
 			import spark.filters.GlowFilter;
 
+			[Bindable]
 			private var selectionFilters : Array;
+			
+			[Bindable]
+			private var multiSelectionFilters : Array;
 
 			private var _treeElementVO : TreeElementVO;
 
@@ -66,6 +70,7 @@
 				var glowFilter : GlowFilter = new GlowFilter( 0xA8AAA9, 1, 6, 6, 3 );
 
 				selectionFilters = [ new GlowFilter( 0xFFFFFF, 1, 9, 9, 255 ) ];
+				multiSelectionFilters = [ new GlowFilter( 0xA8C6EE, 1, 9, 9, 255 ) ];
 
 				typeImage.filters = [ glowFilter ];
 			}
@@ -114,7 +119,7 @@
 
 			private function selectionChanged( value : Boolean ) : void
 			{
-				if ( value && !isSelected )
+				/*if ( value && !isSelected )
 				{
 					mainGroup.filters = selectionFilters;
 					isSelected = true;					
@@ -123,7 +128,7 @@
 				{
 					mainGroup.filters = null;
 					isSelected = false;
-				}
+				}*/
 			}
 			
 			private function indexPageChanged( value : Boolean ) : void
@@ -165,7 +170,7 @@
 
 	</s:Group>
 
-	<s:Group id="mainGroup"
+	<s:Group id="mainGroup" filters="{ hostComponent.multiSelected ? multiSelectionFilters : hostComponent.selected ? selectionFilters : null }"
 			 bottom="0" left="0" right="0" top="0"
 			 mask="{backgroundMask}">
 

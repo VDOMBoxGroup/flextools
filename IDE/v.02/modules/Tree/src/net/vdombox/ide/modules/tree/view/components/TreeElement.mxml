@@ -29,6 +29,7 @@
 			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
+			import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
 			import net.vdombox.utils.WindowManager;
 			
@@ -65,10 +66,15 @@
 			public var isIndexPage : Boolean;
 			
 			private var _selected : Boolean;
+			
+			[Bindable]
+			public var multiSelected : Boolean = false;
 
 			private var mouseOffcetX : int;
 
 			private var mouseOffcetY : int;
+			
+			private var moved : Boolean = false;
 			
 			[Embed( source = "assets/arrow.png" )]
 			public static var array : Class;
@@ -233,7 +239,9 @@
 				BindingUtils.bindSetter( sizeChanged, this, "width" );
 				BindingUtils.bindSetter( sizeChanged, this, "height" );
 								
-				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
+				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0 , true );
+				skin.addEventListener( MouseEvent.MOUSE_DOWN, skinMouseDownHandler, true, 0 , true );
+				
 				show();
 				
 				/*if ( !treeElementVO.resourceVO || !treeElementVO.resourceVO.data )
@@ -252,12 +260,38 @@
 			
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
-				if( deleteButton !== event.target )
+				if( deleteButton !== event.target && !event.shiftKey && !multiSelected )
 					dispatchEvent( new TreeElementEvent( TreeElementEvent.SELECTION ) );
+			}
+			
+			private function skinMouseDownHandler( event : MouseEvent ) : void
+			{
+				if ( event.shiftKey )
+				{
+					if ( event.target is RichEditableText )
+						multiSelected = true;
+					else
+						multiSelected = !multiSelected;
+					
+					dispatchEvent( new TreeElementEvent ( TreeElementEvent.MULTI_SELECTED ) );
+				}
+				else
+				{
+					skin.addEventListener( MouseEvent.MOUSE_UP, skinMouseUpHandler, true, 0, true );
+				}
+			}
+			
+			private function skinMouseUpHandler( event : MouseEvent ) : void
+			{		
+				skin.removeEventListener( MouseEvent.MOUSE_UP, skinMouseUpHandler, true );
+				if ( !moved )
+					dispatchEvent( new TreeElementEvent ( TreeElementEvent.CLICK ) );
 			}
 
 			private function header_mouseDownHandler( event : MouseEvent ) : void
 			{
+				moved = false;
+				
 				stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
@@ -268,18 +302,33 @@
 
 			private function stage_mouseMoveHandler( event : MouseEvent ) : void
 			{
+				moved = true;
+				
 				var newX : int = parent.mouseX - mouseOffcetX;
 				var newY : int = parent.mouseY - mouseOffcetY;
 
 				if ( newX < 0 )
-					x = 0;
-				else
-					x = newX;
+					newX = 0;
 
 				if ( newY < 0 )
-					y = 0;
+					newY = 0;
+				
+				var dx : int = int( newX - x );
+				var dy : int = int ( newY - y );
+				
+				if ( multiSelected )
+				{				
+					var moveEvent : TreeElementEvent = new TreeElementEvent ( TreeElementEvent.MULTI_SELECT_MOVED );
+					moveEvent.object = { dx : dx, dy : dy };
+					dispatchEvent( moveEvent );
+				}
 				else
+				{
+					x = newX;
 					y = newY;
+					
+					dispatchEvent( new TreeElementEvent( TreeElementEvent.MOVE, {x : mouseOffcetX, y :  mouseOffcetY, dx : dx, dy : dy} ) );
+				}
 				
 			/*	treeElementVO.left = x;
 				treeElementVO.top = y;*/
@@ -391,6 +440,40 @@
 					scroll.height = txtDescription.height;
 				else
 					scroll.height = 150;
+			}
+			
+			public function hasMoved( dx : int, dy : int ) : Boolean
+			{
+				if ( x + dx < 0 || y + dy < 0 )
+					return false;
+				
+				return true;
+			}
+			
+			public function moveElement( dx : int, dy : int ) : void
+			{
+				if ( multiSelected )
+				{				
+					var moveEvent : TreeElementEvent = new TreeElementEvent ( TreeElementEvent.MULTI_SELECT_MOVED );
+					moveEvent.object = { dx : dx, dy : dy };
+					dispatchEvent( moveEvent );
+				}
+				else
+				{
+					x += dx;
+					y += dy;
+				}
+			}
+			
+			public function moveTo( dx : int, dy : int, target : TreeElement ) : void
+			{
+				x += dx;
+				y += dy;
+				
+				if ( target == this )
+				{
+					dispatchEvent( new TreeElementEvent( TreeElementEvent.MOVE, {x : mouseOffcetX, y :  mouseOffcetY, dx : dx, dy : dy} ) );
+				}
 			}
 			
 		]]>

@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.tree.view.components
 {
 	import flash.display.DisplayObjectContainer;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.net.sendToURL;
 	
@@ -39,6 +40,14 @@ package net.vdombox.ide.modules.tree.view.components
 			addEventListener( TreeElementEvent.DELETE_LINKAGE, treeElement_deleteLinkageHandler, true, 0, true );
 			
 			addEventListener( TreeElementEvent.DELETE, treeElement_deleteHandler, true, 0, true );
+			
+			addEventListener( TreeElementEvent.MULTI_SELECTED, elementMultiSelectedHandler, true, 0, true );
+			
+			addEventListener( TreeElementEvent.CLICK, elementClickHandler, true, 0, true );
+			
+			addEventListener( TreeElementEvent.MULTI_SELECT_MOVED, elementMultiSelectMovedHandler, true, 0, true );
+			
+			addEventListener( TreeElementEvent.MOVE, moveElementHandler, true, 0, true );
 		}
 
 		[SkinPart( required="true" )]
@@ -47,6 +56,9 @@ package net.vdombox.ide.modules.tree.view.components
 		[SkinPart( required="true" )]
 		public var scroller : Scroller;
 
+		[SkinPart]
+		public var scaleGroup : Group;
+		
 		[SkinPart]
 		public var saveButton : WorkAreaButton;
 
@@ -61,6 +73,8 @@ package net.vdombox.ide.modules.tree.view.components
 
 		[Bindable]
 		public var isSignatureShowed : Boolean;
+		
+		private var multiSelectElements : Object;
 
 		private var isStatePropertyChanged : Boolean;
 
@@ -684,6 +698,162 @@ package net.vdombox.ide.modules.tree.view.components
 			}
 
 			skin.currentState = "unsaved";
+		}
+		
+		private function elementMultiSelectedHandler( event : TreeElementEvent ) : void
+		{
+			var treeElement : TreeElement = event.target as TreeElement;
+			
+			if ( !treeElement.multiSelected )
+			{
+				delete multiSelectElements[ treeElement.treeElementVO.pageVO.id ];
+				return;
+			}
+			
+			if ( !multiSelectElements )
+				multiSelectElements = [];
+			
+			multiSelectElements[ treeElement.treeElementVO.pageVO.id ] = treeElement;
+		}
+		
+		private function elementClickHandler( event : TreeElementEvent ) : void
+		{
+			var treeElement : TreeElement = event.target as TreeElement;
+			
+			removeAllSelectedElements();
+			
+			multiSelectElements = [];
+		}
+		
+		public function removeAllSelectedElements( ) : void
+		{
+			if ( multiSelectElements )
+			{
+				var element : TreeElement;
+				for each ( element in multiSelectElements )
+					element.multiSelected = false;
+				
+				multiSelectElements = null;
+			}
+		}
+		
+		private function elementMultiSelectMovedHandler( event : TreeElementEvent ) : void
+		{
+			var dx : int = event.object.dx;
+			var dy : int = event.object.dy;
+			
+			var baseElement : TreeElement;
+			var target : TreeElement = event.target as TreeElement;
+			
+			for each ( baseElement in multiSelectElements )
+			if ( !baseElement.hasMoved( dx, dy ) )
+				return;
+			
+			for each ( baseElement in multiSelectElements )
+				baseElement.moveTo( dx, dy, target );
+		}
+		
+		private var temp : Number;
+		private var element : TreeElement;
+		private var offsetX : Number;
+		private var offsetY : Number;
+		
+		private var dx : int;
+		private var dy : int;
+		
+		private var verticalScrollPosition : int;
+		private var horizontalScrollPosition : int;
+		
+		private function changeSizeGroupToBottom( event : Event ) : void
+		{
+			element.moveElement( 0, dy );
+			temp = element.y + offsetY - scroller.height / scaleGroup.scaleX + 10;
+			
+			if ( temp > verticalScrollPosition )
+				scroller.verticalScrollBar.viewport.verticalScrollPosition = temp;
+			else
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom );
+		}
+		
+		private function changeSizeGroupToRight( event : Event ) : void
+		{
+			element.moveElement( dx, 0 );
+			temp = ( element.x + offsetX ) - scroller.width / scaleGroup.scaleX;
+			
+			if ( temp > horizontalScrollPosition )
+				scroller.horizontalScrollBar.viewport.horizontalScrollPosition = temp;
+			else
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToRight );
+		}
+		
+		private function changeSizeGroupToTop( event : Event ) : void
+		{
+			element.moveElement( 0, dy );
+			
+			if ( element.y + offsetY < verticalScrollPosition )
+				scroller.verticalScrollBar.viewport.verticalScrollPosition = element.y + offsetY;
+			else
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToTop );
+		}
+		
+		private function changeSizeGroupToLeft( event : Event ) : void
+		{
+			element.moveElement( dx, 0 );
+			
+			if ( element.x + offsetX - 10 < horizontalScrollPosition )
+				scroller.horizontalScrollBar.viewport.horizontalScrollPosition =element.x + offsetX - 10;
+			else
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft );
+		}
+		
+		private function moveElementHandler( event : TreeElementEvent ) : void
+		{
+			element = event.target as TreeElement;
+			
+			offsetX = event.object.x;
+			offsetY = event.object.y;
+			
+			dx = event.object.dx;
+			dy = event.object.dy;
+			
+			verticalScrollPosition = scroller.verticalScrollBar.viewport.verticalScrollPosition;
+			horizontalScrollPosition = scroller.horizontalScrollBar.viewport.horizontalScrollPosition;
+			
+			if ( verticalScrollPosition + ( element.y - verticalScrollPosition + offsetY ) * scaleGroup.scaleX > verticalScrollPosition + scroller.height - 10)
+				addEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom, false, 0, true );
+			
+			if ( horizontalScrollPosition + ( element.x - horizontalScrollPosition + offsetX ) * scaleGroup.scaleX > horizontalScrollPosition + scroller.width )
+				addEventListener( Event.ENTER_FRAME, changeSizeGroupToRight, false, 0, true );
+			
+			if ( element.y + offsetY < verticalScrollPosition )
+				addEventListener( Event.ENTER_FRAME, changeSizeGroupToTop, false, 0, true );
+			
+			if ( element.x + offsetX  < horizontalScrollPosition + 10 )
+				addEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft, false, 0, true );
+		}
+		
+		public function setMultiSelectInRect ( rectLeft : int, rectTop : int, rectRigth : int, rectBottom : int ) : void
+		{
+			var count : int = contentGroup.numElements;
+			
+			var i : int;
+			var baseElement : TreeElement;
+			
+			for ( i = 0; i < count; i++ )
+			{
+				baseElement = contentGroup.getElementAt( i ) as TreeElement;
+				
+				if ( baseElement.x + baseElement.width > rectLeft && baseElement.x < rectRigth
+					&& baseElement.y + baseElement.height > rectTop && baseElement.y < rectBottom )
+				{
+					baseElement.multiSelected = true;
+					
+					if ( !multiSelectElements )
+						multiSelectElements = [];
+					
+					multiSelectElements[ baseElement.treeElementVO.pageVO.id ] = baseElement;
+				}
+			}
 		}
 
 		private function treeElement_deleteLinkageHandler( event : TreeElementEvent ) : void

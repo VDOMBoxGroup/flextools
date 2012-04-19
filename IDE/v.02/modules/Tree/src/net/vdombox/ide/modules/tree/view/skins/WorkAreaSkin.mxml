@@ -31,6 +31,10 @@
 			
 			private var scrollPosition : Point;
 			private var _NeedSetVerticalScrollPosition : Boolean = false;
+			
+			private var multiRect : Rect = new Rect();
+			
+			private var pt:Point = new Point();
 
 			private function creationCompleteHandler() : void
 			{
@@ -40,12 +44,9 @@
 				BindingUtils.bindSetter( allExpandedChanged, hostComponent, "isAllExpanded", true );
 				BindingUtils.bindSetter( allExpandedChanged, hostComponent, "isAllCollapsed", true );
 				
-				addEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true, 0 , true );
-			}
-			
-			private function setFocusOnWorkArea( event : MouseEvent ) : void
-			{
-				setFocus();
+				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, true, 0 , true );
+				
+				multiRect.stroke =  new SolidColorStroke( 0x0000FF, 1 );
 			}
 
 			private function allExpandedChanged( value : Boolean ) : void
@@ -118,11 +119,72 @@
 			
 			protected function sparkskin1_removeHandler(event:FlexEvent):void
 			{
-				removeEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true );
+				removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, true );
+			}
+			
+			private function mouseMoveHandler( event : MouseEvent ) : void
+			{	
+				pt = new Point(event.localX, event.localY);
+				
+				pt = event.target.localToGlobal(pt);
+				
+				pt=multiRectGroup.globalToContent(pt);
+				
+				multiRect.width = pt.x - multiRect.x;
+				multiRect.height = pt.y - multiRect.y;
+			}
+			
+			private function mouseUpHandler( event : MouseEvent ) : void
+			{
+				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
+				removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true );
+				
+				if ( multiRect.width < 0 )
+				{
+					multiRect.x += multiRect.width;
+					multiRect.width = -1 * multiRect.width;
+				}
+				
+				if ( multiRect.height < 0 )
+				{
+					multiRect.y += multiRect.height;
+					multiRect.height = -1 * multiRect.height;
+				}
+				
+				hostComponent.setMultiSelectInRect( multiRect.x, multiRect.y, multiRect.x + multiRect.width, multiRect.y + multiRect.height );
+				
+				multiRect.width = 0;
+				multiRect.height = 0;
+				
+				multiRectGroup.removeAllElements();
 			}
 			
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
+				setFocus();
+				
+				if ( !event.ctrlKey && event.target is Group && event.target.id == "scaleGroup" )
+				{
+					if ( !event.shiftKey )
+						hostComponent.removeAllSelectedElements();
+					
+					pt = new Point(event.localX, event.localY);
+					
+					pt = event.target.localToGlobal(pt);
+					
+					pt=multiRectGroup.globalToContent(pt);
+					
+					multiRect.left = pt.x;
+					multiRect.top = pt.y;
+					
+					multiRectGroup.addElement( multiRect );
+					
+					addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
+					addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true, 0, true );
+					
+					return;
+				}
+				
 				if ( !event.ctrlKey )
 					return;
 				
@@ -130,7 +192,7 @@
 				
 				_NeedSetVerticalScrollPosition = true;
 				
-				var pt:Point = new Point(event.localX, event.localY);
+				pt = new Point(event.localX, event.localY);
 				pt = event.target.localToGlobal(pt);
 				
 				pt=scroller.globalToContent(pt);
@@ -235,6 +297,7 @@
 			<s:Group id="scaleGroup" scaleX="{scale}" scaleY="{scale}">
 				<s:Group id="linkagesLayer"/>
 				<s:Group id="contentGroup"/>
+				<s:Group id="multiRectGroup"/>
 			</s:Group>
 		</components1:VDOMScroller>
 	</s:Group>
