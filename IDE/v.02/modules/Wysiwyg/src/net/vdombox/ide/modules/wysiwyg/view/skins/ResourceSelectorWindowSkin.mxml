@@ -28,7 +28,7 @@
 			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
 			{
 				resourcesList.addEventListener(ResourceVOEvent.PREVIEW_RESOURCE, hostComponent.previewResource, true);
-				resourcesList.addEventListener(ListItem.ITEM_DOUBLE_CLICKED, hostComponent.onApplyClick, true);
+				resourcesList.addEventListener(ListItem.ITEM_DOUBLE_CLICKED, hostComponent.apply, true);
 				resourcesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
 				resourcesList.scroller.horizontalScrollBar.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
 			}
@@ -156,13 +156,13 @@
 						  verticalAlign="middle" horizontalAlign="right">
 					
 					<button:VDOMButton id="cancelButton" width="48"
-							  click="hostComponent.onCancelClick()"
+							  click="hostComponent.close()"
 							  icon="@Embed(source='assets/Cancel.png')"
 							  focusColor.normal="#CCCCCC"/>
 					
 					<button:VDOMButton focusColor.normal="#CCCCCC"
 							  label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_insert' ) }"
-							  click="hostComponent.onApplyClick()" color="#B33535"
+							  click="hostComponent.apply()" color="#B33535"
 							  />
 					
 				</s:HGroup>
