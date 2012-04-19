@@ -20,7 +20,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
-	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
@@ -31,7 +30,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.managers.PopUpManagerChildList;
 	import mx.resources.ResourceManager;
 	import mx.validators.Validator;
-	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
@@ -45,7 +43,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.utils.WindowManager;
-	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -73,44 +70,23 @@ package net.vdombox.ide.modules.wysiwyg.view
 			super( NAME, viewComponent );
 		}
 
-		private var _filters : ArrayCollection = new ArrayCollection();
+		private var _filters : ArrayCollection          = new ArrayCollection();
 
 		private var allResourcesList : ArrayList;
 
 		private var delResVO : ResourceVO;
 
-		private var noneIcon : ResourceVO  = new ResourceVO( ResourceVO.RESOURCE_NONE );
+		private var noneIcon : ResourceVO               = new ResourceVO( ResourceVO.RESOURCE_NONE );
 
 		private var resourcePreviewWindow : ResourcePreviewWindow;
 
-		private var resourceVO : ResourceVO  = new ResourceVO( ResourceVO.RESOURCE_TEMP );
-
-		private var statesProxy : StatesProxy;
+		private var resourceVO : ResourceVO             = new ResourceVO( ResourceVO.RESOURCE_TEMP );
 
 		private var showSpinnerOnListCreation : Boolean = true;
 
 		private var spinnerPopup : SpinnerPopup;
-		
-		
 
-		private function updateData(resources: Array) : void
-		{
-			_filters.removeAll();
-			_filters.addItem( { label: 'NONE', data: '*' } );
-
-			allResourcesList = new ArrayList( resources );
-			resourceSelectorWindow.resources = new ArrayList( resources );
-
-			for each ( var resVO : ResourceVO in resources )
-			{
-				addFilter(resVO.type);
-			}
-
-			// set empty resource as null in ListItem
-			resourceSelectorWindow.resources.addItemAt( null, 0 );
-			resourceSelectorWindow.totalResources = allResourcesList.source.length - 1;
-
-		}
+		private var statesProxy : StatesProxy;
 
 		override public function handleNotification( notification : INotification ) : void
 		{
@@ -160,7 +136,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			//trace("Res: onRegister()");
-			
+
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			addHandlers();
@@ -171,7 +147,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRemove() : void
 		{
 			//trace("Res: onRemove()");
-			
+
 			removeHandlers();
 
 			statesProxy = null;
@@ -203,12 +179,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( !showSpinnerOnListCreation )
 			{
 				showSpinnerOnListCreation = true;
-				
+
 				return;
 			}
 
 			var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_create_resources' );
-			
+
 			createSpinnerPopup(spinnerTxt);
 		}
 
@@ -302,7 +278,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				if ( !resVO )
 					continue;
 
-				if ( resVO.name.toLowerCase().indexOf( nameFilter ) >= 0 || resVO.type.toLowerCase().indexOf( nameFilter ) >= 0)
+				if ( resVO.name.toLowerCase().indexOf( nameFilter ) >= 0 || resVO.type.toLowerCase().indexOf( nameFilter ) >= 0 )
 				{
 					resourceSelectorWindow.filteredResources++;
 					newResourcesList.addItem( resVO );
@@ -351,20 +327,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 		}
 
-		private function deleteResourceInArray( idRes : String ) : void
-		{
-			var i : int;
-
-			for ( i = 1; i < allResourcesList.source.length; i++ )
-			{
-				if ( allResourcesList.getItemAt( i ).id == idRes )
-				{
-					allResourcesList.removeItemAt( i );
-					break;
-				}
-			}
-		}
-
 
 		private function deleteResourceHandler( event : ListItemEvent ) : void
 		{
@@ -379,11 +341,44 @@ package net.vdombox.ide.modules.wysiwyg.view
 						resourceSelectorWindow, deleteResourceCloseHandler);
 		}
 
+		private function deleteResourceInArray( idRes : String ) : void
+		{
+			var i : int;
+
+			for ( i = 1; i < allResourcesList.source.length; i++ )
+			{
+				if ( allResourcesList.getItemAt( i ).id == idRes )
+				{
+					allResourcesList.removeItemAt( i );
+					break;
+				}
+			}
+		}
+
 		private function getIconRequestHendler( event: ResourceVOEvent) : void
 		{
 			var listItem : ListItem = event.target.parent as ListItem;
 
 			sendNotification( Notifications.GET_ICON, listItem.resourceVO );
+		}
+
+		private function getImageRectangle( loaderInfo : LoaderInfo ) : Rectangle
+		{
+			var maxPisels : Number = 16777215;
+
+			var width : Number     = loaderInfo.width;
+			var height : Number    = loaderInfo.height;
+
+			if ( width * height > maxPisels )
+			{
+				var proportioWidth : Number  = 1 / height;
+				var proportioHeight : Number = 1 / width;
+
+				width = maxPisels * proportioWidth;
+				height = maxPisels * proportioHeight;
+			}
+
+			return new Rectangle(0, 0, width, height);
 		}
 
 		private function getResourcesRequestHandler( event : Event ) : void
@@ -472,14 +467,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 				if ( resourcePreviewWindow )
 				{
 					// размер height пространства меньше height картинки
-					if ( resourcePreviewWindow.resourceImage.height < bitmap.height 
-						||	 resourcePreviewWindow.resourceImage.width < bitmap.width )
+					if ( resourcePreviewWindow.resourceImage.height < bitmap.height
+						|| resourcePreviewWindow.resourceImage.width < bitmap.width )
 					{
-							resourcePreviewWindow.resourceImage.maintainAspectRatio = true;
-							resourcePreviewWindow.resourceImage.scaleContent = true;
+						resourcePreviewWindow.resourceImage.maintainAspectRatio = true;
+						resourcePreviewWindow.resourceImage.scaleContent = true;
 
 					}
-					
+
 					resourcePreviewWindow.resourceImage.source = bitmap;
 
 					resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height, resourceVO.mastHasPreview);
@@ -489,29 +484,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 		}
 
-		private function getImageRectangle( loaderInfo : LoaderInfo ) : Rectangle
-		{
-			var maxPisels : Number = 16777215;
-
-			var width : Number     = loaderInfo.width;
-			var height : Number    = loaderInfo.height;
-
-			if ( width * height > maxPisels )
-			{
-				var proportioWidth : Number  = 1 / height;
-				var proportioHeight : Number = 1 / width;
-
-				width = maxPisels * proportioWidth;
-				height = maxPisels * proportioHeight;
-			}
-
-			return new Rectangle(0, 0, width, height);
-		}
-
 		private function onClosePreview( event : Event ) : void
 		{
 			resourcePreviewWindow.removeEventListener( Event.CLOSE, onClosePreview );
-			
+
 			WindowManager.getInstance().removeWindow( resourcePreviewWindow );
 
 			resourcePreviewWindow = null;
@@ -578,15 +554,36 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			if ( !spinnerPopup )
 				return;
-			
+
 			spinnerPopup.close();
-			
+
 			spinnerPopup = null;
 		}
 
 		private function get resourceSelectorWindow() : ResourceSelectorWindow
 		{
 			return viewComponent as ResourceSelectorWindow;
+		}
+
+
+
+		private function updateData(resources: Array) : void
+		{
+			_filters.removeAll();
+			_filters.addItem( { label: 'NONE', data: '*' } );
+
+			allResourcesList = new ArrayList( resources );
+			resourceSelectorWindow.resources = new ArrayList( resources );
+
+			for each ( var resVO : ResourceVO in resources )
+			{
+				addFilter(resVO.type);
+			}
+
+			// set empty resource as null in ListItem
+			resourceSelectorWindow.resources.addItemAt( null, 0 );
+			resourceSelectorWindow.totalResources = allResourcesList.source.length - 1;
+
 		}
 	}
 }
