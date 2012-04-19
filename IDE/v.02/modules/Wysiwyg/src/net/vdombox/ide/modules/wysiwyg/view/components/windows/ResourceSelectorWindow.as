@@ -13,13 +13,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
-	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.controls.TileList;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
-	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
@@ -28,7 +26,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.SmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
 	import net.vdombox.utils.WindowManager;
-	
 	import spark.components.ComboBox;
 	import spark.components.Label;
 	import spark.components.List;
@@ -60,13 +57,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[Bindable]
 		public var _resources : ArrayList;
 
-		public var deleteResourceID : String = null;
+		public var deleteResourceID : String   = null;
 
 		[Bindable]
-		public var filteredResources : int = 0;
+		public var filteredResources : int     = 0;
 
 		[Bindable]
-		public var multiSelect : Boolean = false;
+		public var multiSelect : Boolean       = false;
 
 		[SkinPart( required = "true" )]
 		public var nameFilter : TextInput;
@@ -74,36 +71,52 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[SkinPart( required = "true" )]
 		public var resourcesList : List;
 
-		public var scrollToIndex : int = -1;
+		public var scrollToIndex : int         = -1;
 
 		public var selectedResourceIndex : int = -1;
 
 		[Bindable]
-		public var totalResources : int = 0;
+		public var totalResources : int        = 0;
 
 		private var _value : String;
 
 		public function addHandlers() : void
 		{
 			addEventListener( KeyboardEvent.KEY_DOWN, keyDownWindowHendler );
+			addEventListener( Event.CLOSE, closeHandler );
 		}
 
-		public function onApplyClick(event:Event = null) : void
+		public function addResource( resourceVO : ResourceVO ) : void
+		{
+			totalResources++;
+
+			resources.addItem( resourceVO );
+
+			selectedResourceIndex = scrollToIndex = resources.length - 1;
+
+			invalidateProperties();
+		}
+
+		public function closeHandler(event:Event) : void
+		{
+			removeEventListener( Event.CLOSE, closeHandler );
+			WindowManager.getInstance().removeWindow(this);
+		}
+
+		public function apply(event:Event = null) : void
 		{
 			dispatchEvent( new Event( Event.CHANGE ) );
-			
+
 			close();
 		}
 
-		public function onCancelClick() : void
-		{
-			close();
-		}
+		
 
 		public function previewResource(event:Event) : void
 		{
 			dispatchEvent(new Event(ResourceVOEvent.PREVIEW_RESOURCE));
 		}
+
 
 		public function refreshFile(event:MouseEvent) : void
 		{
@@ -123,7 +136,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function set resources( value : ArrayList ) : void
 		{
 			_resources = value;
-			
+
 			setSelectedItem();
 		}
 
@@ -219,8 +232,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		 */
 		private function keyDownWindowHendler( event: KeyboardEvent ) : void
 		{
-				if ( event.charCode == Keyboard.ESCAPE )
-					close();
+			if ( event.charCode == Keyboard.ESCAPE )
+				close();
 		}
 
 		private function setSelectedItem() : void
@@ -234,14 +247,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			//TODO: need regexp
 			requiredID = _value.substring( 5, _value.length - 1 );
 
-			var i : int = -1;
-			
+			var i : int       = -1;
+
 			var array : Array = new Array();
-			var idd : String = "";
-			
+			var idd : String  = "";
+
 			for each ( resourceVO in _resources.source )
 			{
 				i++;
+
 				if ( !resourceVO )
 					continue;
 
@@ -250,33 +264,21 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 					resourcesList.selectedItem = resourceVO;
 					array.push( resourceVO);
 					idd = resourceVO.id;
-					
+
 					break;
 				}
 			}
-			
+
 			for each ( resourceVO in _resources.source )
 			{
 				if ( resourceVO.id != idd )
 					array.push( resourceVO );
 			}
-			
+
 			_resources.source = array;
-			
-			
+
+
 		}
-		
-		public function addResource( resourceVO : ResourceVO ) : void
-		{
-			totalResources++;
-			
-			resources.addItem( resourceVO );
-			
-			selectedResourceIndex = scrollToIndex = resources.length - 1;
-			
-			invalidateProperties();
-		}
-		
 //		public function set 
 	}
 }

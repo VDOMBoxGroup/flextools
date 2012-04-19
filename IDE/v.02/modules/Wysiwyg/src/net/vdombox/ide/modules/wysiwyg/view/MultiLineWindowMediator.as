@@ -1,22 +1,27 @@
+//------------------------------------------------------------------------------
+//
+//   Copyright 2011 
+//   VDOMBOX Resaerch  
+//   All rights reserved. 
+//
+//------------------------------------------------------------------------------
+
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
-
 	import mx.collections.ArrayCollection;
 	import mx.core.UIComponent;
 	import mx.managers.PopUpManager;
-
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	import net.vdombox.utils.WindowManager;
-
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -39,6 +44,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var multilineWindow : MultilineWindow;
 
+		override public function handleNotification( notification : INotification ) : void
+		{
+
+		}
+
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+
+			return interests;
+		}
+
 		override public function onRegister() : void
 		{
 			multilineWindow.addEventListener( MultilineWindowEvent.APPLY, removeYourself, false, 0, true );
@@ -51,41 +68,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			multilineWindow.removeEventListener( MultilineWindowEvent.APPLY, removeYourself, false );
 			multilineWindow.removeEventListener( MultilineWindowEvent.CLOSE, removeYourself, false);
-			multilineWindow.addEventListener( Event.CLOSE, closeHandler, false, 0, true );
+			multilineWindow.removeEventListener( Event.CLOSE, closeHandler, false);
 			multilineWindow.removeEventListener(AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false);
-		}
 
-		private function removeYourself( event : MultilineWindowEvent ) : void
-		{
-			facade.removeMediator( NAME );
-		}
-
-		private function closeHandler( event : Event ) : void
-		{
-			facade.removeMediator( NAME );
-		}
-
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-			return interests;
-		}
-
-		private function selectResourceHandler( event : AttributeEvent ) : void
-		{
-			var windowManager : WindowManager                                   = WindowManager.getInstance();
-			var multilineWindow : MultilineWindow                               = event.target as MultilineWindow;
-			var resourceSelectorWindow : ResourceSelectorWindow                 = new ResourceSelectorWindow();
-			var resourceSelectorWindowMediator : ResourceSelectorWindowMediator = new ResourceSelectorWindowMediator( resourceSelectorWindow );
-
-			facade.registerMediator( resourceSelectorWindowMediator );
-
-			resourceSelectorWindow.multiSelect = true;
-
-			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler, false, 0, true);
-
-			windowManager.addWindow(resourceSelectorWindow, UIComponent(multilineWindow), true);
 		}
 
 		private function applyHandler(event: Event) : void
@@ -104,8 +89,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var str2 : String = multilineWindow.textAreaContainer.text;
 
 			multilineWindow.attributeValue = autoPasteCommon(str1, str2);
-
-			WindowManager.getInstance().removeWindow(resourceSelectorWindow);
 		}
 
 		private function autoPasteCommon(str1 : String, str2 : String) : String
@@ -161,9 +144,34 @@ package net.vdombox.ide.modules.wysiwyg.view
 			return str2;
 		}
 
-		override public function handleNotification( notification : INotification ) : void
+		private function closeHandler( event : Event ) : void
 		{
+			facade.removeMediator( NAME );
 
+			WindowManager.getInstance().removeWindow(multilineWindow);
+		}
+
+		private function removeYourself( event : MultilineWindowEvent ) : void
+		{
+			facade.removeMediator( NAME );
+
+			WindowManager.getInstance().removeWindow(multilineWindow);
+		}
+
+		private function selectResourceHandler( event : AttributeEvent ) : void
+		{
+			var windowManager : WindowManager                                   = WindowManager.getInstance();
+			var multilineWindow : MultilineWindow                               = event.target as MultilineWindow;
+			var resourceSelectorWindow : ResourceSelectorWindow                 = new ResourceSelectorWindow();
+			var resourceSelectorWindowMediator : ResourceSelectorWindowMediator = new ResourceSelectorWindowMediator( resourceSelectorWindow );
+
+			facade.registerMediator( resourceSelectorWindowMediator );
+
+			resourceSelectorWindow.multiSelect = true;
+
+			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler, false, 0, true);
+
+			windowManager.addWindow(resourceSelectorWindow,  UIComponent(multilineWindow), true);
 		}
 	}
 }
