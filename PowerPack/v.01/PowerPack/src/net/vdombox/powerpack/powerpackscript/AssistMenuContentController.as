@@ -80,5 +80,10 @@ package net.vdombox.powerpack.powerpackscript
 			return graphsNames;
 		}
 		
+		public static function get functionDetails () : String
+		{
+			return "111"
+		}
+		
 	}
 }

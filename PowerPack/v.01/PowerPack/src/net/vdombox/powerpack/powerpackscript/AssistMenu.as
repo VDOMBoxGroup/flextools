@@ -162,6 +162,7 @@ package net.vdombox.powerpack.powerpackscript
 			var regexpTrigWholeFunction	: RegExp = /^['|\"][ ]+dohteMelohw[ ]*\[/;
 			var regexpWord				: RegExp = /^(\w*)\b/;
 			var regexpTrigVar			: RegExp = /^\$/;
+			var regexpTrigSubgraph		: RegExp = /^[ ]+bus[ ]*\[/;
 			
 			var sourceText		: String = fld.text;
 			var prevText		: String = sourceText.substring(0, caretIndex).split('').reverse().join('');
@@ -174,8 +175,12 @@ package net.vdombox.powerpack.powerpackscript
 				prevText = prevText.substr(menuPrevWord.length);
 			}
 			
-			if (prevText.length == 0 && node.category == NodeCategory.SUBGRAPH)
+			if (node.category == NodeCategory.SUBGRAPH && prevText.length == 0 ||
+				node.category != NodeCategory.SUBGRAPH && prevText.search(regexpTrigSubgraph) == 0)
 				return TRIGGER_TYPE_SUBGRAPH;
+			
+			if (node.category == NodeCategory.SUBGRAPH)
+				return TRIGGER_TYPE_NONE;
 			
 			if (prevText.search(regexpTrigVar) == 0)
 				return TRIGGER_TYPE_VARIABLE;
