@@ -63,6 +63,7 @@ import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 import net.vdombox.powerpack.lib.player.template.Template;
 import net.vdombox.powerpack.managers.CashManager;
+import net.vdombox.powerpack.powerpackscript.AssistMenu;
 import net.vdombox.powerpack.template.BuilderTemplate;
 import net.vdombox.powerpack.utils.GeneralUtils;
 import net.vdombox.powerpack.validators.NodeTextValidator;
@@ -188,7 +189,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 		if ( text )
 			this.text = text;
 		else
-			this.text = LanguageManager.sentences['node_label'];
+			this.text = defaultNodeText;
 
 		doubleClickEnabled = true;
 
@@ -203,6 +204,14 @@ public class Node extends Canvas implements IFocusManagerComponent
 		
 		undoTextFields = new UndoTextFields();
 		undoTextFields.target = this;
+	}
+	
+	private function get defaultNodeText () : String
+	{
+		if (category == NodeCategory.SUBGRAPH)
+			return "";
+		
+		return LanguageManager.sentences['node_label'];
 	}
 
 	//--------------------------------------------------------------------------
@@ -602,6 +611,15 @@ public class Node extends Canvas implements IFocusManagerComponent
 	/**
 	 *  Create child objects.
 	 */
+	private var assistMenu : AssistMenu;
+	
+	private function onAssistComplete():void
+	{
+		invalidateSize();
+		
+		edit(assistMenu.newCursorPosition);
+	}
+	
 	override protected function createChildren() : void
 	{
 		super.createChildren();
@@ -633,8 +651,10 @@ public class Node extends Canvas implements IFocusManagerComponent
 
 			nodeTextArea.addEventListener( MouseEvent.MOUSE_WHEEL, wheelHandler );
 			nodeTextArea.addEventListener( KeyboardEvent.KEY_DOWN, textAreaKeyDown );
+			
+			assistMenu = new AssistMenu(this, stage, onAssistComplete);
 		}
-
+		
 		if ( !flagShape )
 		{
 			flagShape = new Shape();
@@ -1238,7 +1258,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 		beginShowImageTip();
 	}
 
-	private function setEditMode( isEditing : Boolean ) : void
+	private function setEditMode( isEditing : Boolean, cursorPosition : int = -1 ) : void
 	{
 		if ( !enabled )
 			return;
@@ -1259,7 +1279,10 @@ public class Node extends Canvas implements IFocusManagerComponent
 
 				nodeTextArea.editable = true;
 				nodeTextArea.selectable = true;
-				nodeTextArea.setSelection( 0, nodeTextArea.text.length );
+				if (cursorPosition >= 0)
+					nodeTextArea.setSelection( cursorPosition, cursorPosition );
+				else
+					nodeTextArea.setSelection( 0, nodeTextArea.text.length );
 
 				systemManager.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownOutsideHandler, true );
 				nodeTextArea.addEventListener( Event.CHANGE, textAreaChange );
@@ -1562,7 +1585,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 		if ( !isNaN( regX ) )
 			stopDragging();
 	}
-
+	
 	private function addHandler( event : FlexEvent ) : void
 	{
 		var node : Node = event.target as Node;
@@ -2032,7 +2055,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 		edit();
 	}
 
-	public function edit () : void
+	public function edit (cursorPosition : int = -1) : void
 	{
 		beginHideImageTip();
 		
@@ -2041,7 +2064,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 		
 		bringToFront();
 		
-		setEditMode( true );
+		setEditMode( true, cursorPosition );
 	}
 	
 	private function wheelHandler( event : MouseEvent ) : void
@@ -2109,7 +2132,15 @@ public class Node extends Canvas implements IFocusManagerComponent
 			invalidateProperties();
 			invalidateSize();
 			invalidateDisplayList();
+			
+			//triggerAssistMenu();
 		}
+	}
+	
+	public function triggerAssistMenu() : void
+	{
+		if (assistMenu)
+			assistMenu.triggerAssist();
 	}
 
 	private function validatorHandler( event : ValidationResultEvent ) : void

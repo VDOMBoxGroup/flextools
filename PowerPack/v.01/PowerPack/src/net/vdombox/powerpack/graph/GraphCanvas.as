@@ -14,6 +14,7 @@ import flash.ui.Keyboard;
 import flash.utils.ByteArray;
 import flash.utils.Dictionary;
 
+import mx.collections.Sort;
 import mx.containers.Canvas;
 import mx.controls.Alert;
 import mx.core.UIComponent;
@@ -532,6 +533,9 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		newNode.edit();
 		
 		newNode.preventValidation = true;
+		
+		if (category == NodeCategory.SUBGRAPH)
+			newNode.triggerAssistMenu();
 		
 		return newNode;
 	}
@@ -1171,6 +1175,40 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		
 		return false; 
 	}
+	
+	public function get allVariables () : Array
+	{
+		var resultVariablesArray : Array = [];
+		
+		var variableRegExp : RegExp = /\$\w+/g;
+		
+		var graphXML : XML = toXML();
+		
+		if (!graphXML)
+			return [];
+		
+		var stateText : String;
+		
+		var variables : Array = [];
+		for each (var graphState : XML in graphXML.states.state)
+		{
+			stateText = graphState.text[0];
+			
+			variables = stateText.match(variableRegExp);
+			
+			if (!variables || variables.length == 0)
+				continue;
+			
+			resultVariablesArray = resultVariablesArray.concat(variables);
+		}
+		
+		resultVariablesArray = Utils.filterArrayUniqueValues(resultVariablesArray);
+		
+		resultVariablesArray.sort();
+
+		return resultVariablesArray;
+	}
+	
 	
 }
 }
