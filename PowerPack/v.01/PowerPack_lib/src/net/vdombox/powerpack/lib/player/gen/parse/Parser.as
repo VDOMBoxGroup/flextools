@@ -131,7 +131,7 @@ public class Parser
 		"sharpen" : { pattern : /^\[n[vA][viVNA]\]$/, argNum : 2 },
 		"emboss" : { pattern : /^\[n[vA]\]$/, argNum : 1 }
 	};
-
+	
 	public static function getLexemArray( sourceText : String, isCode : Boolean = true ) : Array
 	{
 		var lexems : Array = new Array();

@@ -398,5 +398,27 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			return appXML.ns::name;
 		}
 		
+		public static function filterArrayUniqueValues (array : Array) : Array
+		{
+			if (!array)
+				return [];
+			
+			var keys:Object = {};
+			
+			var resultArray : Array = array.filter(removedDuplicates);
+				
+			function removedDuplicates(item:Object, idx:uint, arr:Array):Boolean {
+				if (keys.hasOwnProperty(item)) {
+					return false;
+				} else {
+					keys[item] = item;
+					return true;
+				}
+				
+			}
+			
+			return resultArray;
+		}
+		
 	}
 }

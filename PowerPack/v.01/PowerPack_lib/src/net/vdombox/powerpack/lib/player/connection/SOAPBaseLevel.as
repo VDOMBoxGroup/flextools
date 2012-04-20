@@ -81,6 +81,28 @@ public class SOAPBaseLevel extends EventDispatcher
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
 	}
 
+	public static const wholeMethodFunctions : Array = 
+		[	"login",
+			"get_object_script_presentation",
+			"submit_object_script_presentation",
+			"create_object",
+			"get_server_actions",
+			"set_server_actions",
+			"get_application_events",
+			"export_application",
+			"install_application",
+			"update_application",
+			"get_application_info",
+			"set_application_events",
+			"close_session",
+			"check_application_exists",
+			"remote_call",
+			"list_applications",
+			"list_backup_drivers",
+			"restore_application",
+			"backup_application"
+		];
+	
 	public function execute( functionName : String, args : Array ) : void
 	{
 		switch ( functionName )
