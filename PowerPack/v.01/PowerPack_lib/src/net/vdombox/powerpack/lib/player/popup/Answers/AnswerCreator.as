@@ -18,6 +18,12 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 		public static const ANSWER_TYPE_COMBO_BOX		: String = "comboBox";
 		public static const ANSWER_TYPE_CHECK_BOX		: String = "checkBox";
 		
+		public static const answer_types : Array = [AnswerCreator.ANSWER_TYPE_TEXT, 
+													AnswerCreator.ANSWER_TYPE_TEXT_AREA, 
+													AnswerCreator.ANSWER_TYPE_TEXT_PASSWORD, 
+													AnswerCreator.ANSWER_TYPE_RADIO_BUTTONS, 
+													AnswerCreator.ANSWER_TYPE_COMBO_BOX, 
+													AnswerCreator.ANSWER_TYPE_CHECK_BOX];
 		
 		public static function create( data : *) : Answer
 		{
