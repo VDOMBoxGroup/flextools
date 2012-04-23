@@ -49,8 +49,6 @@ public class Parser
 
 		"alert" : { pattern : /^\[n[vscVSA]*\]$/, argNum : 1 },
 		"wholeMethod" : { pattern : /^\[n[vscVSA][vscVSA]*\]$/, argNum : -1, trans : ['Success', 'Error']  },
-		"XML" : { pattern : /^\[n\]$/, argNum : 0 },
-		"getApplicationValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
 
         "setXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]*\]$/, argNum : 3 },
 		"getXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
@@ -60,7 +58,7 @@ public class Parser
 		
 		"progress" : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2 },
 		
-		'getFlashVars' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2 },
+		'getFlashVar' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2 },
 		
 		'httpPost' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2, trans : ['Success', 'Error'] },
 		

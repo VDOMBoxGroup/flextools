@@ -331,6 +331,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		var server : String = params[0];
 		var login : String = params[1];
 		var pass : String = params[2];
+		
 		var wsdl : String = "http://" + server + "/vdom.wsdl";
 trace(wsdl)
 		soap.addEventListener( "loadWsdlComplete", soap_initCompleteHandler );

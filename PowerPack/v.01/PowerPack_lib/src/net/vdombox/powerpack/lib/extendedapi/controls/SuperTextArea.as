@@ -47,14 +47,13 @@ package net.vdombox.powerpack.lib.extendedapi.controls
 			
 			var letterWidth : Number = lineWidth ? Math.floor(lineWidth / field.getLineText(curLine).length) + 1 : 0;
 			
-			var distX : Number = 5;
-			var distY : Number = 5 + lineHeight;
-			
-			var x : Number = ( index - field.getLineOffset(curLine) ) * letterWidth + distX;
-			var y : Number = curLine * lineHeight + distY;
+			var x : Number = ( index - field.getLineOffset(curLine) ) * letterWidth;
+			var y : Number = curLine * lineHeight;
 			
 			return new Point(x , y);
 		}
+		
+		
 		
 	}
 }

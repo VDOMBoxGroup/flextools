@@ -773,7 +773,7 @@ public dynamic class TemplateLib extends EventDispatcher
 		}
 	}
 	
-	public function getFlashVars ( varName: String, defaultValue : Object ):Object
+	public function getFlashVar ( varName: String, defaultValue : Object ):Object
 	{
 		var vars : Object = Application.application.parameters;
 		
