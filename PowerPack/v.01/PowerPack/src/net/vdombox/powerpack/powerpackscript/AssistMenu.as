@@ -26,7 +26,7 @@ package net.vdombox.powerpack.powerpackscript
 		private var fld		: IUITextField;
 		private var node	: Node;
 		
-		private var menu	: PopupAssistMenu;
+		private var menu	: AssistMenuPopup;
 		private var menuData:Array;
 		
 		private var onComplete	: Function;
@@ -42,7 +42,7 @@ package net.vdombox.powerpack.powerpackscript
 			this.onComplete = onComplete;
 			this.stage = stage;
 
-			menu = new PopupAssistMenu();
+			menu = new AssistMenuPopup();
 			menu.doubleClickEnabled = true;
 			
 			fld.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
@@ -152,17 +152,20 @@ package net.vdombox.powerpack.powerpackscript
 		private static const TRIGGER_TYPE_VARIABLE			: String = "triggerTypeVariable";
 		private static const TRIGGER_TYPE_FUNCTION			: String = "triggerTypeFunction";
 		private static const TRIGGER_TYPE_WHOLE_FUNCTION	: String = "triggerTypeWholeFunction";
+		private static const TRIGGER_TYPE_DIALOG_TYPE		: String = "triggerTypeDialogType";
 		private static const TRIGGER_TYPE_NONE				: String = "triggerTypeNone";
 		
-		private var wholeQuote : String;
+		private var quoteSymbol : String;
 		
 		private function get trigerType () : String
 		{
 			var regexpTrigFunction		: RegExp = /^[ ]*\[/;
-			var regexpTrigWholeFunction	: RegExp = /^['|\"][ ]+dohteMelohw[ ]*\[/;
+			var regexpTrigWholeFunction	: RegExp = /^['|\"][ ]+dohteMelohw[ ]*\[/i;
 			var regexpWord				: RegExp = /^(\w*)\b/;
 			var regexpTrigVar			: RegExp = /^\$/;
-			var regexpTrigSubgraph		: RegExp = /^[ ]+bus[ ]*\[/;
+			var regexpTrigSubgraph		: RegExp = /^[ ]+bus[ ]*\[/i;
+			var regexpTrigDialogType	: RegExp = /^['|\"][ ]*\[/;
+			var regexpTrigDialog		: RegExp = /[ ]golaid[ ]*\[/i;
 			
 			var sourceText		: String = fld.text;
 			var prevText		: String = sourceText.substring(0, caretIndex).split('').reverse().join('');
@@ -190,8 +193,17 @@ package net.vdombox.powerpack.powerpackscript
 			
 			if (prevText.search(regexpTrigWholeFunction) == 0)
 			{
-				wholeQuote = prevText.charAt(0);
+				quoteSymbol = prevText.charAt(0);
 				return TRIGGER_TYPE_WHOLE_FUNCTION;
+			}
+			
+			if (prevText.search(regexpTrigDialogType) == 0)
+			{
+				if (prevText.search(regexpTrigDialog) > 0)
+				{
+					quoteSymbol = prevText.charAt(0);
+					return TRIGGER_TYPE_DIALOG_TYPE;
+				}
 			}
 			
 			return TRIGGER_TYPE_NONE;
@@ -227,6 +239,11 @@ package net.vdombox.powerpack.powerpackscript
 				case TRIGGER_TYPE_WHOLE_FUNCTION:
 				{
 					menuData = AssistMenuContentController.wholeMethodFunctions;
+					break;
+				}
+				case TRIGGER_TYPE_DIALOG_TYPE:
+				{
+					menuData = AssistMenuContentController.allDialogTypes;
 					break;
 				}
 			}
@@ -271,19 +288,23 @@ package net.vdombox.powerpack.powerpackscript
 			{
 				case TRIGGER_TYPE_SUBGRAPH:
 				{
-					return PopupAssistMenu.TITLE_GRAPHS;
+					return AssistMenuPopup.TITLE_GRAPHS;
 				}
 				case TRIGGER_TYPE_FUNCTION:
 				{
-					return PopupAssistMenu.TITLE_FUNCTIONS;
+					return AssistMenuPopup.TITLE_FUNCTIONS;
 				}
 				case TRIGGER_TYPE_WHOLE_FUNCTION:
 				{
-					return PopupAssistMenu.TITLE_WHOLE_FUNCTIONS;
+					return AssistMenuPopup.TITLE_WHOLE_FUNCTIONS;
 				}
 				case TRIGGER_TYPE_VARIABLE:
 				{
-					return PopupAssistMenu.TITLE_VARIABLES;
+					return AssistMenuPopup.TITLE_VARIABLES;
+				}
+				case TRIGGER_TYPE_DIALOG_TYPE:
+				{
+					return AssistMenuPopup.TITLE_DIALOG_TYPES;
 				}
 			}
 			
@@ -311,8 +332,8 @@ package net.vdombox.powerpack.powerpackscript
 			{
 				if (trigerType == TRIGGER_TYPE_FUNCTION || trigerType == TRIGGER_TYPE_VARIABLE)
 					selectedValue += " ";
-				else if (trigerType == TRIGGER_TYPE_WHOLE_FUNCTION)
-					selectedValue += wholeQuote + " ";
+				else if (trigerType == TRIGGER_TYPE_WHOLE_FUNCTION || trigerType == TRIGGER_TYPE_DIALOG_TYPE)
+					selectedValue += quoteSymbol + " ";
 					
 			}
 			

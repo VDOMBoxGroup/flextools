@@ -420,34 +420,34 @@ package net.vdombox.powerpack.powerpackscript
 				"text"								: "<b>Description:</b>\n" +
 														"Single line text field.\n" +
 														"<b>Syntax:</b>\n" +
-														"['text' LABEL DEFAULT_VALUE]",
+														"['text' $Label $DefaultValue]",
 				
 				"textArea"								: "<b>Description:</b>\n" +
 															"Multi line text field.\n" +
 															"<b>Syntax:</b>\n" +
-															"['textArea' LABEL DEFAULT_VALUE]",
+															"['textArea' $Label $DefaultValue]",
 															
 				"password"								: "<b>Description:</b>\n" +
 															"Single line password text field.\n" +
 															"<b>Syntax:</b>\n" +
-															"['password' LABEL DEFAULT_VALUE]",
+															"['password' $Label $DefaultValue]",
 															
 				"radioButtons"							: "<b>Description:</b>\n" +
 															"Radio buttons group.\n" +
 															"<b>Syntax:</b>\n" +
-															"['radioButtons' LABEL $value1 $value2 ... $valueN]",
+															"['radioButtons' $Label $value1 $value2 ... $valueN]",
 															
 				"comboBox"								: "<b>Description:</b>\n" +
 															"Drop down menu.\n" +
 															"<b>Syntax:</b>\n" +
-															"['comboBox' LABEL $value1 $value2 ... $valueN]",
+															"['comboBox' $Label $value1 $value2 ... $valueN]",
 															
 				"checkBox"								: "<b>Description:</b>\n" +
 															"Checkbox group.\n" +
 															"<b>Syntax:</b>\n" +
-															"$variants=[[Value1 DefaultValue] [Value2 DefaultValue] ... [ValueN DefaultValue]]" +
-															"['checkBox' LABEL $variants]" +
-															"* DefaultValue - 'true'|'false'."
+															"$variants=[[Value1 $DefaultValue] [Value2 $DefaultValue] ... [ValueN $DefaultValue]]\n" +
+															"['checkBox' $Label $variants]\n\n" +
+															"* $DefaultValue - 'true'|'false'."
 
 															
 			};

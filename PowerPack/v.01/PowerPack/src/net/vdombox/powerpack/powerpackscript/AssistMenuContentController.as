@@ -4,6 +4,7 @@ package net.vdombox.powerpack.powerpackscript
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 	import net.vdombox.powerpack.lib.player.connection.SOAPBaseLevel;
 	import net.vdombox.powerpack.lib.player.gen.parse.Parser;
+	import net.vdombox.powerpack.lib.player.popup.Answers.AnswerCreator;
 	import net.vdombox.powerpack.panel.Graphs;
 
 	public class AssistMenuContentController
@@ -82,6 +83,24 @@ package net.vdombox.powerpack.powerpackscript
 			return graphsNames;
 		}
 		
+		public static function get allDialogTypes () : Array
+		{
+			var dialogAnswerTypes : Array =  [];
+			var listObject : Object;
+			
+			for each (var ansType:String in AnswerCreator.answer_types)
+			{
+				listObject = new Object();
+				listObject["data"] = ansType;
+				listObject["label"] = ansType;
+				listObject["description"] = getDialogTypesDetails(ansType);
+				
+				dialogAnswerTypes.push(listObject);
+			}
+			
+			return dialogAnswerTypes;
+		}
+		
 		public static function getFunctionDetails (functionName : String) : String
 		{
 			return FunctionsDescription.funcDetails[functionName] || "";
@@ -90,6 +109,11 @@ package net.vdombox.powerpack.powerpackscript
 		public static function getWholeFunctionDetails (functionName : String) : String
 		{
 			return FunctionsDescription.wholeMethodFunctionsDescription[functionName] || "";
+		}
+		
+		public static function getDialogTypesDetails (dialogType : String) : String
+		{
+			return FunctionsDescription.dialogAnswerTypesDescription[dialogType] || "";
 		}
 		
 	}

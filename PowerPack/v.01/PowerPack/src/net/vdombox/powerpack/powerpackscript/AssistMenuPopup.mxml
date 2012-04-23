@@ -17,6 +17,7 @@
 			public static const TITLE_WHOLE_FUNCTIONS		: String = "wholeMethod functions:"
 			public static const TITLE_VARIABLES				: String = "Variables:"
 			public static const TITLE_GRAPHS				: String = "Graphs:"
+			public static const TITLE_DIALOG_TYPES			: String = "Dialog types:"
 			
 			private var _listData : Array;
 			
