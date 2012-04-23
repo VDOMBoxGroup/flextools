@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:powerpackscript="net.vdombox.powerpack.powerpackscript.*"
+		  removedFromStage="removedFromStageHandler(event)">
 	<mx:Script>
 		<![CDATA[
 			import flash.display.DisplayObjectContainer;
 			
 			import flexunit.utils.ArrayList;
 			
+			import mx.charts.HitData;
 			import mx.controls.List;
 			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
 			import mx.managers.PopUpManager;
 			
 			public static const TITLE_FUNCTIONS				: String = "Functions:"
@@ -39,7 +42,7 @@
 				return _listData;
 			}
 			
-			public function getSelectedValue() : String
+			public function get selectedValue() : String
 			{
 				if (!list || !list.selectedItem)
 					return "";
@@ -47,36 +50,50 @@
 				return list.selectedItem.hasOwnProperty( "data" ) ? list.selectedItem["data"] : list.selectedItem.toString();
 			}
 			
+			public function get selectedTipValue() : String
+			{
+				if (!list || !list.selectedItem)
+					return "";
+				
+				return list.selectedItem.hasOwnProperty( "description" ) ? list.selectedItem["description"] : "";
+			}
+			
 			public function show( owner : DisplayObjectContainer, x : int, y : int ) : void
 			{
 				this.x = x;
 				this.y = y;
 				
-				PopUpManager.addPopUp( this, owner.parent );
+				PopUpManager.addPopUp( this, owner );
 			}
 			
-			private var _maxItemLength : int;
+			private var _listWidth : int;
 			
-			public function set maxItemLength (value : int) : void
+			public function set listWidth (value : int) : void
 			{
-				_maxItemLength = value;
+				_listWidth = value;
 			}
 			
 			[Bindable]
-			public function get maxItemLength () : int
+			public function get listWidth () : int
 			{
+				minWidth = 80;
+				
 				if (!listData)
 					return 1;
 				
-				var maxLength : Number = 1;
+				var maxItemLabelLength : Number = 1;
 				
-				for each (var itemData:String in listData)
+				for each (var itemData:Object in listData)
 				{
-					if (itemData.length > maxLength)
-						maxLength = itemData.length;
+					var labelText : String = itemData.hasOwnProperty( "label" ) ? itemData["label"] : itemData.toString();
+					
+					if (labelText.length > maxItemLabelLength)
+						maxItemLabelLength = labelText.length;
 				}
 				
-				return maxLength;
+				_listWidth = maxItemLabelLength * 8 > minWidth ? maxItemLabelLength * 8 : minWidth;
+				
+				return _listWidth;
 			}
 			
 			public function dispose() : void
@@ -84,15 +101,63 @@
 				PopUpManager.removePopUp( this );
 			}
 			
+			public function get selectedRowY () : Number
+			{
+				return list.cursorManager.currentCursorYOffset;
+			}
+			
+			private var assistTooltip : AssistMenuTooltip = new AssistMenuTooltip();
+			
+			public function showTooltip () : void
+			{
+				assistTooltip.data = selectedTipValue;
+				
+				if (!assistTooltip.data)
+				{
+					hideTooltip();
+					return;
+				}
+				
+				if (assistTooltip.isShowing)
+					return;
+				
+				var point : Point = list.rowTopRightPoint;
+				point = list.contentToGlobal(point);
+				
+				var distance : int = 5;
+				
+				assistTooltip.show(this, point.x+distance, point.y+distance);
+			}
+			
+			public function hideTooltip () : void
+			{
+				assistTooltip.data = "";
+				
+				if (!assistTooltip.isShowing)
+					return;
+				
+				assistTooltip.dispose();
+			}
+			
+			protected function removedFromStageHandler(event:Event):void
+			{
+				hideTooltip();
+			}
+			
+			protected function list_changeHandler(event:ListEvent):void
+			{
+				showTooltip();
+			}
 			
 		]]>
 	</mx:Script>
 	
-	<mx:List id="list"
-			 height="100%"
-			 width="{maxItemLength * 8}"
-			 dataProvider="{listData}"
-			 selectedIndex="0"
-			 labelField="label"/>
+	<powerpackscript:AssistList id="list"
+								 height="100%"
+								 width="{listWidth}"
+								 dataProvider="{listData}"
+								 selectedIndex="-1"
+								 labelField="label"
+								 change="list_changeHandler(event)"/>
 		
 </mx:Panel>

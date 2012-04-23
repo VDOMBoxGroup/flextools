@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:List xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.listClasses.ListRowInfo;
+			
+			public function get rowTopRightPoint () : Point
+			{
+				if (!selectedItem) 
+					return new Point(0, 0);
+				
+				var x : Number = width;
+				var y : Number = 0;
+				
+				for each (var obj : Object in rowInfo)
+				{
+					if (obj.data == dataProvider[selectedIndex])
+					{
+						y = obj.y;
+						break;
+					}
+				}
+				
+				return new Point(x, y);
+			}
+		]]>
+	</mx:Script>
+	
+</mx:List>

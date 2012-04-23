@@ -17,11 +17,12 @@ package net.vdombox.powerpack.powerpackscript
 			var functions : Array =  [];
 			var listObject : Object;
 			
-			for (var i:* in Parser.funcDefinition)
+			for (var func:String in Parser.funcDefinition)
 			{
 				listObject = new Object();
-				listObject["data"] = i;
-				listObject["label"] = i;
+				listObject["data"] = func;
+				listObject["label"] = func;
+				listObject["description"] = getFunctionDetails(func);
 				
 				functions.push(listObject);
 			}
@@ -39,6 +40,7 @@ package net.vdombox.powerpack.powerpackscript
 				listObject = new Object();
 				listObject["data"] = func;
 				listObject["label"] = func;
+				listObject["description"] = getWholeFunctionDetails(func);
 				
 				wholefunctions.push(listObject);
 			}
@@ -80,9 +82,14 @@ package net.vdombox.powerpack.powerpackscript
 			return graphsNames;
 		}
 		
-		public static function get functionDetails () : String
+		public static function getFunctionDetails (functionName : String) : String
 		{
-			return "111"
+			return FunctionsDescription.funcDetails[functionName] || "";
+		}
+		
+		public static function getWholeFunctionDetails (functionName : String) : String
+		{
+			return FunctionsDescription.wholeMethodFunctionsDescription[functionName] || "";
 		}
 		
 	}

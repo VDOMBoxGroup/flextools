@@ -23,11 +23,11 @@ package net.vdombox.powerpack.powerpackscript
 	
 	public class AssistMenu extends EventDispatcher
 	{
-		private var menuData:Array
-		
 		private var fld		: IUITextField;
 		private var node	: Node;
+		
 		private var menu	: PopupAssistMenu;
+		private var menuData:Array;
 		
 		private var onComplete	: Function;
 		private var stage		: Stage;
@@ -64,8 +64,6 @@ package net.vdombox.powerpack.powerpackscript
 				return false;
 			
 			menu.listData = a;
-			
-			rePositionMenu();
 			
 			return true;
 		}
@@ -111,6 +109,8 @@ package net.vdombox.powerpack.powerpackscript
 					if (menuPrevWord.length > 0)
 					{
 						menuPrevWord = menuPrevWord.substr(0, -1);
+						caretIndex --;
+						
 						if (filterMenu()) 
 							return;
 					}
@@ -246,23 +246,20 @@ package net.vdombox.powerpack.powerpackscript
 			
 			p = node.nodeTextArea.getPointForIndex(index);
 			
-			p.x += fld.scrollH;
+			p = node.contentToGlobal(p);
 			
-			p = node.localToGlobal(p);
-			menuRefY = p.y;
+			var distance : Number = 5;
 			
-			menu.show(node, p.x, 0);
+			menu.show(node, p.x + distance, p.y + distance);
 			menu.title = menuTitle;
 				
 			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
 			
 			menu.addEventListener(KeyboardEvent.KEY_DOWN, onMenuKey);
 			menu.addEventListener(Event.REMOVED_FROM_STAGE, menuRemovedFromStageHandler);
-			menu.addEventListener(MouseEvent.DOUBLE_CLICK, onMenuDoubleClick);
+			menu.list.addEventListener(MouseEvent.DOUBLE_CLICK, onMenuDoubleClick);
 			
 			stage.focus = menu.list;
-			
-			rePositionMenu();
 			
 			if (menuPrevWord)
 				filterMenu();
@@ -299,7 +296,7 @@ package net.vdombox.powerpack.powerpackscript
 			
 			menu.removeEventListener(KeyboardEvent.KEY_DOWN, onMenuKey);
 			menu.removeEventListener(Event.REMOVED_FROM_STAGE, menuRemovedFromStageHandler);
-			menu.removeEventListener(MouseEvent.DOUBLE_CLICK, onMenuDoubleClick);
+			menu.list.removeEventListener(MouseEvent.DOUBLE_CLICK, onMenuDoubleClick);
 			
 			menuPrevWord = "";
 			
@@ -308,7 +305,7 @@ package net.vdombox.powerpack.powerpackscript
 		
 		private function get menuSelectedValue () : String
 		{
-			var selectedValue : String = menu.getSelectedValue();
+			var selectedValue : String = menu.selectedValue;
 			
 			if (selectedValue)
 			{
@@ -326,18 +323,15 @@ package net.vdombox.powerpack.powerpackscript
 		{
 			if (event.target is IUITextField)
 			{
-				// TODO: show tooltip
 				return;
 			}
-			
-			// TODO: remove tooltip
 			
 			var parent : UIComponent = event.target as UIComponent;
 			var isMenu : Boolean;
 			
 			while ( parent )
 			{
-				if ( parent == menu )
+				if ( parent is AssistMenu || parent is AssistMenuTooltip)
 				{
 					isMenu = true;
 					break;
@@ -364,15 +358,5 @@ package net.vdombox.powerpack.powerpackscript
 			return a;
 		}
 		
-		private function rePositionMenu():void
-		{
-			var menuH:int = 8;
-			
-			if ( menuRefY + 15 + menuH > fld.height )
-				menu.y = menuRefY - menuH - 2;
-			else
-				menu.y = menuRefY + 15;
-		}
-
 	}
 }
