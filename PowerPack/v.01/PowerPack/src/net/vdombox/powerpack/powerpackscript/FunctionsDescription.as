@@ -106,7 +106,7 @@ package net.vdombox.powerpack.powerpackscript
 										  "[wholeMethod 'function_name' Param1 ... ParamN]",
 				
 				"setXMLValue"			: "<b>Description:</b>\n" +
-										  "Sets the value from XML by specified XPATH.\n" +
+										  "Sets the value to XML by specified XPATH.\n" +
 										  "<b>Syntax:</b>\n" +
 										  "[setXMLValue XPATH VALUE]",
 										  

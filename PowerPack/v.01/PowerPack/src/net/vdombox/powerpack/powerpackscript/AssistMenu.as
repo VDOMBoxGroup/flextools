@@ -266,9 +266,10 @@ package net.vdombox.powerpack.powerpackscript
 			
 			p = node.contentToGlobal(p);
 			
-			var distance : Number = 5;
+			var distanceX : Number = 5;
+			var distanceY : Number = 10;
 			
-			menu.show(node, p.x + distance, p.y + distance);
+			menu.show(node, p.x + distanceX, p.y + distanceY);
 			menu.title = menuTitle;
 				
 			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
