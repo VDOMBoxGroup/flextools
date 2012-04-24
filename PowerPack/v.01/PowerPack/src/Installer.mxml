@@ -148,11 +148,16 @@
 	
 	<!-- WEB player (new, not full functionality)-->
 	<player:Player id="player"  
-				   close="nativeWindow.close()"
 				   isDesktopApplication="true"
-				   mouseDown="player_mouseDownHandler(event)"/>
+				   mouseDown="player_mouseDownHandler(event)"
+				   maximizable="{nativeWindow.maximizable}"
+				   minimizable="true"
+				   closable="true"
+				   close="nativeWindow.close()"
+				   minimize="nativeWindow.minimize()"
+				   maximize="nativeWindow.maximize()"/>
 	
-	<mx:HBox right="14" y="17"
+	<!--<mx:HBox right="14" y="17"
 			 height="10" width="100%"
 			 verticalAlign="bottom" horizontalAlign="right"
 			 horizontalGap="20">
@@ -171,6 +176,6 @@
 				   focusEnabled="false"/>
 
 		<mx:Spacer width="10"/>
-	</mx:HBox>
+	</mx:HBox>-->
 	
 </mx:WindowedApplication>
