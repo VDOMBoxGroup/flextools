@@ -25,9 +25,11 @@ package net.vdombox.powerpack.powerpackscript
 										  "[subPrefix GRAPH PREFIX param1 param2 … paramN]",
 										  
 				'question'				: "<b>Description:</b>\n" +
-										  "Shows popup dialog window with the question to user.\n\n" +
-										  "<b>Syntax:</b>\n" +
-										  "[question QUESTION_TEXT [AnswerType_1] ... [AnswerType_N]]",
+											"Shows popup dialog window with the question to user.\n\n" +
+											"<b>Syntax:</b>\n" +
+											"[question QUESTION_TEXT [AnswerType_1] ... [AnswerType_N]]\n\n" +
+											"* AnswerType: [Type Label DefaultValue],\n" +
+											"Example: ['text' 'Username:' 'root']",
 				
 				'qSwitch'				: "<b>Description:</b>\n" +
 										  "Shows popup dialog window for user\n" +
@@ -116,10 +118,17 @@ package net.vdombox.powerpack.powerpackscript
 				'dialog'				: "<b>Description:</b>\n" +
 											"Shows popup dialog window with the question to user.\n\n" +
 											"<b>Syntax:</b>\n" +
-											"[dialog QUESTION_TEXT [AnswerType_1] ... [AnswerType_N]]",
+											"[dialog QUESTION_TEXT [AnswerType_1] ... [AnswerType_N]]\n\n" +
+											"* AnswerType: [Type Label DefaultValue],\n" +
+											"Example: ['text' 'Username:' 'root']",
 				
-				'cancelableDialog'		: "The same like usual 'dialog' function.\n" +
-											"Only it has 'Cancel' button.",
+				'cancelableDialog'		: "<b>Description:</b>\n" +
+											"Shows popup dialog window with the question to user.\n" +
+											"Dialog window has 2 buttons: 'Ok' and 'Cancel'.\n\n" +
+											"<b>Syntax:</b>\n" +
+											"[cancelableDialog QUESTION_TEXT [AnswerType_1] ... [AnswerType_N]]\n\n" +
+											"* AnswerType: [Type Label DefaultValue],\n" +
+											"Example: ['text' 'Username:' 'root']",
 				
 				"progress"				: "<b>Description:</b>\n" +
 										  "Shows progress bar filled with VALUE percent and some description.\n" +
