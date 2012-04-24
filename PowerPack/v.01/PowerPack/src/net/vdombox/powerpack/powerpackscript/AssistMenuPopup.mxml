@@ -143,6 +143,9 @@
 			
 			public function hideTooltip () : void
 			{
+				if (!assistTooltip)
+					return;
+				
 				assistTooltip.data = "";
 				
 				if (!assistTooltip.isShowing)
