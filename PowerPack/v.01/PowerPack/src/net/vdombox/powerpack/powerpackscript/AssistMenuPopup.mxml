@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:powerpackscript="net.vdombox.powerpack.powerpackscript.*"
 		  removedFromStage="removedFromStageHandler(event)"
+		  creationComplete="creationCompleteHandler(event)"
 		  borderAlpha="0.8">
 	<mx:Script>
 		<![CDATA[
@@ -153,6 +154,8 @@
 			protected function removedFromStageHandler(event:Event):void
 			{
 				hideTooltip();
+				
+				titleBar.removeEventListener(MouseEvent.MOUSE_DOWN, titleBar_mouseDownHandler, true);
 			}
 			
 			protected function list_changeHandler(event:ListEvent):void
@@ -171,6 +174,18 @@
 					y -= height;            
 			}
 
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				titleBar.addEventListener(MouseEvent.MOUSE_DOWN, titleBar_mouseDownHandler, true);
+			}
+			
+			private function titleBar_mouseDownHandler(event:MouseEvent):void
+			{
+				event.preventDefault();
+				event.stopImmediatePropagation();
+			}
+
+			
 		]]>
 	</mx:Script>
 	
