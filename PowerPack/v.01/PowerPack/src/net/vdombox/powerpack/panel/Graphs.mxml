@@ -781,10 +781,12 @@
 
 		private function doubleClickHandler (event : MouseEvent) : void
 		{
-			if (event.target is GraphThumb)
-				selectGraph( event.target.data );
-			else if (event.target is  UITextField)
+			if (event.target is  UITextField)
 				renameGraph();
+			else if (event.target is GraphThumb)
+				selectGraph( event.target.data );
+			else if (event.target.parent && event.target.parent is GraphThumb)
+				selectGraph( event.target.parent.data );
 		}
 			
 		private var editableGraphLastName : String;
@@ -1021,10 +1023,11 @@
 			
 		private function foundGraphsDoubleClickHandler (event : MouseEvent) : void
 		{
-			if (event.target is GraphThumb)
-				selectGraph( event.target.data );
-			else if (event.target is  UITextField)
+			if (event.target.parent && 
+				(event.target is  UITextField || event.target.parent is GraphThumb))
 				selectGraph( event.target.parent.data );
+			else if (event.target is GraphThumb)
+				selectGraph( event.target.data );
 		}
 	
 		[Bindable]
