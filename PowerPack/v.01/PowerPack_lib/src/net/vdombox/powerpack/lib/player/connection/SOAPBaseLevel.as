@@ -50,13 +50,18 @@ public class SOAPBaseLevel extends EventDispatcher
 
 		var result : XMLList = new XMLList( event.result );
 		
-		
-
 		_result = result[0];
 		
-		_resultType = _result.name().localName == "Error" ? ERROR : SUCCESS;
+		_resultType = getResultType( result );
 
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
+	}
+	
+	private function getResultType( value : XMLList ) : String
+	{
+		var xml : XML = value[0];
+		
+		return xml.name().localName == "Error" ? ERROR : SUCCESS;
 	}
 
 	private function deleteListeners( target : Object) : void
@@ -333,7 +338,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		var pass : String = params[2];
 		
 		var wsdl : String = "http://" + server + "/vdom.wsdl";
-trace(wsdl)
+
 		soap.addEventListener( "loadWsdlComplete", soap_initCompleteHandler );
 		soap.addEventListener( FaultEvent.FAULT, soapError );
 		soap.init( wsdl );
@@ -451,10 +456,23 @@ trace(wsdl)
 		var driverID : String = params[1];
 		
 		
-		soap.backup_application.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.backup_application.addEventListener( ResultEvent.RESULT, backup_applicationResultHandler );
 		soap.backup_application.addEventListener( FaultEvent.FAULT, soapError );
 		
 		soap.backup_application(  applicationID, driverID );
+		
+		function backup_applicationResultHandler(event : ResultEvent) : void
+		{
+			deleteListeners( event.target);
+			
+			var result : XMLList = new XMLList( event.result );
+			
+			_resultType = getResultType( result );;
+			_result = _resultType == SUCCESS ? result[0].Revision : result[0];
+				
+			
+			dispatchEvent( new Event( RESULT_RECEIVED ) );
+		}
 	}
 	
 	
