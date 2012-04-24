@@ -501,6 +501,9 @@ package net.vdombox.powerpack.lib.player.template
 			if (!projects || projects.length == 0)
 				return;
 			
+			if (selectedProject && selProjectId && selectedProject.id == selProjectId)
+				return;
+			
 			if (!selProjectId)
 				selectedProject = projects[0];
 			
@@ -662,7 +665,7 @@ package net.vdombox.powerpack.lib.player.template
 			
 			projects.removeAll();
 			
-			selectedProjectIndex = 0;
+			//selectedProjectIndex = 0;
 		}
 		
 		public function updateProjectsInitGraphName(oldGraphName : String, newGraphName : String = ""):void
