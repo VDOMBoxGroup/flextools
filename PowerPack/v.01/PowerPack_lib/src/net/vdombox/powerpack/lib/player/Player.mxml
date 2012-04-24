@@ -17,6 +17,8 @@
 	
 	<mx:Metadata>
 		[Event(name="close", type="flash.events.Event")]
+		[Event(name="minimize", type="flash.events.Event")]
+		[Event(name="maximize", type="flash.events.Event")]
 	</mx:Metadata>
 
 	<mx:Fade alphaFrom="0.0" alphaTo="1.0" duration="300" id="canvasShow"/>
@@ -54,6 +56,10 @@
 		private var timer:Number;
 
 		public var isDesktopApplication : Boolean = true;
+		
+		public var closable		: Boolean = false;
+		public var maximizable	: Boolean = false;
+		public var minimizable	: Boolean = false;
 			
 		private function init():void
 		{
@@ -436,7 +442,35 @@
 	
 	<mx:Image id="bgImage" source="@Embed('assets/images/Background.png')"/>
 
-
+	<mx:HBox right="14" y="17"
+			 height="10" width="100%"
+			 verticalAlign="bottom" horizontalAlign="right"
+			 horizontalGap="20"
+			 visible="{isDesktopApplication}">
+		
+		<mx:Spacer width="100%"/>
+		
+		<mx:Button skin="{MinimizeButtonSkin}"
+				   focusEnabled="false"
+				   alpha="{minimizable ? 1 : 0.5}"
+				   enabled="{minimizable}"
+				   click="{dispatchEvent ( new Event ( 'minimize' ) );}"/>
+		
+		<mx:Button skin="{MaximizeButtonSkin}"
+				   focusEnabled="false"
+				   alpha="{maximizable ? 1 : 0.5}"
+				   enabled="{maximizable}"
+				   click="{dispatchEvent ( new Event ( 'maximize' ) );}"/>
+		
+		<mx:Button skin="{CloseButtonSkin}"
+				   focusEnabled="false"
+				   alpha="{closable ? 1 : 0.5}"
+				   enabled="{closable}"
+				   click="{exitApplication()}"/>
+		
+		<mx:Spacer width="10"/>
+	</mx:HBox>
+	
 	<controls:Base64Image id="tplPic" x="42" y="50"
 						  width="200" height="100%"
 
