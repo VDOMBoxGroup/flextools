@@ -258,7 +258,8 @@ package net.vdombox.powerpack.powerpackscript
 		
 		private function showMenu(index:int):void
 		{
-			var p:Point;
+			var p : Point;
+			
 			menu.listData = menuData;
 			
 			p = node.nodeTextArea.getPointForIndex(index);
@@ -352,9 +353,12 @@ package net.vdombox.powerpack.powerpackscript
 			
 			while ( parent )
 			{
-				if ( parent is AssistMenu || parent is AssistMenuTooltip)
+				if ( parent is AssistMenu || parent is AssistMenuPopup || parent is AssistMenuTooltip)
 				{
 					isMenu = true;
+					
+					if (!(parent is AssistMenuTooltip))
+						menu.hideTooltip();
 					break;
 				}
 				

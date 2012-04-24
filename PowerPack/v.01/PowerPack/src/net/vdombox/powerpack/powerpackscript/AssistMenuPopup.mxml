@@ -119,15 +119,24 @@
 					return;
 				}
 				
-				if (assistTooltip.isShowing)
-					return;
-				
 				var point : Point = list.rowTopRightPoint;
 				point = list.contentToGlobal(point);
 				
 				var distance : int = 5;
 				
-				assistTooltip.show(this, point.x+distance, point.y+distance);
+				var defX : Number = point.x+distance;
+				var defY : Number = point.y+distance;
+				
+				if (assistTooltip.isShowing)
+				{
+					assistTooltip.defaultX = defX;
+					assistTooltip.defaultY = defY;
+					
+					assistTooltip.invalidateDisplayList();
+					return;
+				}
+				
+				assistTooltip.show(this, defX, defY);
 			}
 			
 			public function hideTooltip () : void
@@ -150,6 +159,17 @@
 				showTooltip();
 			}
 			
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				
+				if (x+width > screen.width)
+					x -= width;
+				
+				if (y+height > screen.height)
+					y -= height;            
+			}
+
 		]]>
 	</mx:Script>
 	

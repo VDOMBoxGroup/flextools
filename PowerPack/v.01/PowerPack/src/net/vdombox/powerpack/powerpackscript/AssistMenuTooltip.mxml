@@ -10,10 +10,16 @@
 			
 			public var isShowing : Boolean;
 			
+			public var defaultX : Number;
+			public var defaultY : Number;
+			
 			public function show( owner : DisplayObjectContainer, x : int, y : int ) : void
 			{
-				this.x = x;
-				this.y = y;
+				defaultX = this.x = x;
+				defaultY = this.y = y;
+				
+				this.owner = owner;
+				
 				
 				PopUpManager.addPopUp( this, owner );
 				
@@ -25,6 +31,24 @@
 				PopUpManager.removePopUp( this );
 				
 				isShowing = false;
+			}
+			
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				
+				this.x = defaultX;
+				this.y = defaultY;
+				
+				if (x + width > screen.width)
+					x -= width + owner.width;
+				
+				if (y+height > screen.height)
+				{
+					var yDistance : Number = y + height - screen.height + 10;
+					
+					y -= yDistance;
+				}
 			}
 			
 		]]>
