@@ -19,6 +19,8 @@ public class ConnectorEvent extends Event
 	public static const DIRECTION_CHANGED : String = "directionChanged";
 
 	public static const DISPOSED : String = "disposed";
+	
+	public static const SELECTION_CHANGED : String = "selectionChanged";
 
 	public function ConnectorEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 	{

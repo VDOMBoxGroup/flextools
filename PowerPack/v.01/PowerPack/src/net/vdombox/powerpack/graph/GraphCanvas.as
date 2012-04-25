@@ -90,7 +90,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		graph_alert_delete_text : "Are you sure you want to remove selected states?"
 	};
 
-	private static const CLIPBOARD_GRAPH_FORMAT : String = "GRAPH_FORMAT"; 
+	public static const CLIPBOARD_GRAPH_FORMAT : String = "GRAPH_FORMAT"; 
 	
 	// Define a static variable.
 	private static var _classConstructed : Boolean = classConstruct();
@@ -187,6 +187,8 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		if ( selectionManager )
 		{
 			selectionManager.removeEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+			selectionManager.removeEventListener( SelectionManager.SELECTION_CHANGED, selManagerSelectionChangedHandler );
+				
 			selectionManager.dispose();
 		}
 
@@ -311,7 +313,9 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		if ( !selectionManager )
 		{
 			selectionManager = new SelectionManager( this );
+			
 			selectionManager.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+			selectionManager.addEventListener( SelectionManager.SELECTION_CHANGED, selManagerSelectionChangedHandler );
 		}
 
 		if ( ContextManager.FLASH_CONTEXT_MENU && !contextMenu )
@@ -321,6 +325,11 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		{
 			fromXML();
 		}
+	}
+	
+	public function selManagerSelectionChangedHandler (event : Event) : void
+	{
+		dispatchEvent ( new GraphCanvasEvent(GraphCanvasEvent.SELECTION_CHANGED) );
 	}
 	
 	private function addContextMenu () : void
@@ -365,9 +374,54 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		}
 	}
 
+	public function get selectedNodesAmount () : int
+	{
+		if (!selectionManager)
+			return 0;
+		
+		var nodesAmount : Number = 0;
+		
+		for each (var selectedObject : Object in selectionManager.selection)
+		{
+			if (selectedObject is Node)
+				nodesAmount ++;
+		}
+		
+		return nodesAmount;
+	}
+	
+	public function get selectedNodes () : Array
+	{
+		var selectedNodes : Array = [];
+		
+		if (!selectionManager)
+			return selectedNodes;
+		
+		for each (var selectedObject : Object in selectionManager.selection)
+		{
+			if (selectedObject is Node)
+				selectedNodes.push(selectedObject as Node);
+		}
+		
+		return selectedNodes;
+	}
+	
+	public function get selectedArrowsAmount () : int
+	{
+		var selArrowsAmount : int = 0;
+		
+		for each( var child : Object in getChildren() )
+		{
+			if ( child is Connector && Connector(child).focused)
+				selArrowsAmount ++;
+		}
+		
+		return selArrowsAmount;
+	}
+	
 	public function alertDelete() : void
 	{
-		if (selectedNodesCount <= 0)
+		if (selectedNodesAmount <= 0)
 			return;
 		
 		if ( parent && selectionManager.selection)
@@ -379,22 +433,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		}
 	}
 	
-	private function get selectedNodesCount () : Number
-	{
-		var nodesAmount : Number = 0;
-		
-		if (!selectionManager)
-			return nodesAmount;
-		
-		for each (var selectedObject : Object in selectionManager.selection)
-		{
-			if (selectedObject is Node)
-				nodesAmount ++;
-		}
-		
-		return nodesAmount;
-	}
-
 	public function clear() : void
 	{
 		xml = null;
@@ -551,11 +589,32 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		if ( newArrow.fromObject )
 			newArrow.data = Node( newArrow.fromObject ).arrTrans;
 
+		newArrow.addEventListener( ConnectorEvent.SELECTION_CHANGED, arrowSelectionChangeHandler )
+		
 		addArrow( newArrow );
 
 		dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
 
 		return newArrow;
+	}
+	
+	private function arrowSelectionChangeHandler (event : ConnectorEvent) : void
+	{
+		dispatchEvent ( new GraphCanvasEvent(GraphCanvasEvent.SELECTION_CHANGED) );
+	}
+	
+	public function get selectedArrow () : Connector
+	{
+		for each( var child : Object in getChildren() )
+		{
+			if ( child is Connector )
+			{
+				if (Connector(child).focused)
+					return child as Connector;
+			}
+		}
+		
+		return null;
 	}
 
 	private function addArrow( arrow : Connector, canvas : GraphCanvas = null ) : void
@@ -671,8 +730,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 	public function doCopy() : void
 	{
-		var selectionNum : int = ObjectUtils.dictLength( selectionManager.selection );
-		if ( selectionManager && selectionNum > 0 )
+		if ( selectionManager && selectionManager.selectedObjectsAmount > 0 )
 		{
 			var dataXML : XML = new XML( <copy/> );
 			var outArrows : Dictionary = new Dictionary( true );
@@ -937,7 +995,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 			{
 				Node(obj).controlBarItemClickHandler(itemName);
 				
-				// TODO : remove it
 				if (itemName == "add_transition" || itemName == "jump" || itemName == "initial")
 					break;
 			}

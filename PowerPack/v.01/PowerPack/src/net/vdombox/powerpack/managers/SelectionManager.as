@@ -17,6 +17,7 @@ import mx.core.UIComponent;
 import mx.events.ChildExistenceChangedEvent;
 import mx.events.FlexEvent;
 
+import net.vdombox.powerpack.graph.Node;
 import net.vdombox.powerpack.graph.NodeEvent;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 
@@ -30,6 +31,8 @@ public class SelectionManager extends EventDispatcher
 
 	public static var isLiveDragging : Boolean = true;
 	public static var drawShadows : Boolean = true;
+	
+	public static const SELECTION_CHANGED : String = "selectionChanged";
 
 	//--------------------------------------------------------------------------
 	//
@@ -114,6 +117,11 @@ public class SelectionManager extends EventDispatcher
 		return _group;
 	}
 
+	public function get selectedObjectsAmount () : int
+	{
+		return ObjectUtils.dictLength( selection );
+	}
+	
 	public function addElement( elm : DisplayObject ) : void
 	{
 		if ( !elm.hasOwnProperty( "selected" ) )
@@ -379,6 +387,8 @@ public class SelectionManager extends EventDispatcher
 			if ( _group[elm] )
 				delete _group[elm];
 		}
+		
+		dispatchEvent( new Event(SELECTION_CHANGED) );
 	}
 
 	private function systemManager_mouseMoveHandler( event : MouseEvent ) : void

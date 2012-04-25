@@ -139,7 +139,38 @@
 				graphEditorControlBar.addEventListener(ControlBarEvent.EVENT_ITEM_CLICK, graphEditor_controlBarItemClickHandler);
 			
 			if (vsViewStack)
+			{
 				vsViewStack.addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, viewStack_childRemoveHandler);
+				vsViewStack.addEventListener(Event.CHANGE, tabIndexChangeHandler);
+			}
+		}
+			
+		private function viewStack_childRemoveHandler (event : ChildExistenceChangedEvent) : void
+		{
+			if (numChildren == 1)
+				graphEditorControlBar.updateButtonsState(null);
+				
+		}
+		
+		private function tabIndexChangeHandler (event : Event) : void
+		{
+			for each (var graph : GraphCanvas in vsViewStack)
+			{
+				if (graph.hasEventListener(GraphCanvasEvent.SELECTION_CHANGED))
+					graph.removeEventListener(GraphCanvasEvent.SELECTION_CHANGED, graphSelectionChangeHandler);
+			}
+			
+			var openedGraph : GraphCanvas = vsViewStack.selectedChild as GraphCanvas;
+			
+			graphEditorControlBar.updateButtonsState(openedGraph);
+			
+			openedGraph.addEventListener(GraphCanvasEvent.SELECTION_CHANGED, graphSelectionChangeHandler);
+			
+		}
+			
+		private function graphSelectionChangeHandler (event : GraphCanvasEvent) : void
+		{
+			graphEditorControlBar.updateButtonsState(event.target as GraphCanvas);
 		}
 			
 		private function selectedProjectChanged (selProject : TemplateProject) : void
@@ -160,21 +191,6 @@
 				return;
 			
 			selectedGraph.controlBarItemClickHandler(controlBarEvent.targetItemType, controlBarEvent.destinationObjectType);
-		}
-			
-		private function viewStack_childRemoveHandler (event : ChildExistenceChangedEvent) : void
-		{
-			updateControlBar(true);
-		}
-			
-		private function updateControlBar (onRemove : Boolean = false) : void
-		{
-			if (!graphEditorControlBar)
-				return;
-			
-			var graphCanvasAmount : int = onRemove ? vsViewStack.numChildren -1 : vsViewStack.numChildren;
-			
-			graphEditorControlBar.updateButtonsState(graphCanvasAmount);
 		}
 		
 		public function clear() : void
@@ -395,8 +411,6 @@
 						addGraphToViewStack (graph);
 					}
 					vsViewStack.selectedChild = graph;
-					
-					updateControlBar();
 				}
 			}
 		}
@@ -404,7 +418,9 @@
 		public function addGraphToViewStack (graph : GraphCanvas) : void
 		{
 			ProgressManager.start( null, false );
+			
 			vsViewStack.addChild( graph );
+			graph.addEventListener(GraphCanvasEvent.SELECTION_CHANGED, graphSelectionChangeHandler);
 			
 			if (graph.creationCompleted)
 				graphCreationCompleteHandler();

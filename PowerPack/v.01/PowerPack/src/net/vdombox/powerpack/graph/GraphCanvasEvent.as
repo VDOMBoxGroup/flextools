@@ -14,8 +14,10 @@ public class GraphCanvasEvent extends Event
 	public static const GRAPH_CHANGED : String = "graphChanged";
 	
 	public static const JUMP_TO_GRAPH : String = "jumpToGraph";
-
+	
 	public static const SELECT_ALL : String = "selectAll";
+	
+	public static const SELECTION_CHANGED : String = "selectionChanged";
 	
 	
 	public var graphToJumpName : String = "";

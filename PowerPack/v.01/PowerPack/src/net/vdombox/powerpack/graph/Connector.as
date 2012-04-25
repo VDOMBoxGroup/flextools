@@ -318,11 +318,21 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	public function get focused() : Boolean
 	{
 		if ( focusManager && focusManager.getFocus() == this )
-			_focused = true;
+			focused = true;
 		else
-			_focused = false;
+			focused = false;
 
 		return _focused;
+	}
+	
+	public function set focused (value : Boolean) : void
+	{
+		if (_focused != value)
+		{
+			_focused = value;
+			
+			dispatchEvent (new ConnectorEvent(ConnectorEvent.SELECTION_CHANGED));
+		}
 	}
 
 	//----------------------------------
@@ -1347,7 +1357,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	 */
 	override protected function focusOutHandler( event : FocusEvent ) : void
 	{
-		_focused = false;
+		focused = false;
 
 		super.focusOutHandler( event );
 
@@ -1365,7 +1375,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		}
 		else
 		{
-			_focused = true;
+			focused = true;
 
 			super.focusInHandler( event );
 
