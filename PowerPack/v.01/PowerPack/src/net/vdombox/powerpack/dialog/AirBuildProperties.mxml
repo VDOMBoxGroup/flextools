@@ -134,7 +134,7 @@
 				
 				ProgressManager.complete();
 				ProgressManager.source = null;
-				ProgressManager.start( ProgressManager.DIALOG_MODE, false );
+				ProgressManager.start( ProgressManager.WINDOW_MODE, false );
 				
 				sdkCompiler.buildInstallerPackage ( flexSDK_4_1_BrowseBox.path,
 													airSDKLinuxBrowseBox.path,

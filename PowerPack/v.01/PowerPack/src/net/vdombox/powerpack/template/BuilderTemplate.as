@@ -22,9 +22,10 @@ package net.vdombox.powerpack.template
 	
 	public class BuilderTemplate extends Template
 	{
-		private static const BROWSE_TYPE_OPEN : String = "browseForOpen";
-		private static const BROWSE_TYPE_SAVE : String = "browseForSave";
-		private static const BROWSE_TYPE_NONE : String = "browseNone";
+		private static const BROWSE_TYPE_OPEN	: String = "browseForOpen";
+		private static const BROWSE_TYPE_SAVE	: String = "browseForSave";
+		private static const BROWSE_TYPE_EXPORT	: String = "browseForExport";
+		private static const BROWSE_TYPE_NONE	: String = "browseNone";
 		
 		private var browseType : String = BROWSE_TYPE_NONE;
 		
@@ -32,6 +33,9 @@ package net.vdombox.powerpack.template
 		
 		[Bindable]
 		public var file : File;
+		
+		public var fileToExport : File;
+		private var needToExportAfterSave : Boolean;
 
 		
 		public function BuilderTemplate(xml:XML=null)
@@ -104,6 +108,14 @@ package net.vdombox.powerpack.template
 				return;
 			}
 			
+			saveXmlToFile();
+		}
+		
+		private function saveXmlToFile () : void
+		{
+			if (!file)
+				return;
+			
 			try
 			{
 				// update tpl UID
@@ -170,14 +182,16 @@ package net.vdombox.powerpack.template
 			fileStream.openAsync( file, FileMode.READ );
 		}
 		
-		public function browseForSave() : void
+		public function browseForSave ( type:String = BROWSE_TYPE_SAVE ) : void
 		{
 			var folder : File = BuilderContextManager.instance.lastDir;
 			
 			folder.addEventListener( Event.SELECT, fileBrowseHandler );
 			
-			browseType = BROWSE_TYPE_SAVE;
-			folder.browseForSave( LanguageManager.sentences['save_file'] );
+			browseType = type;
+			
+			var browseTitle : String = type == BROWSE_TYPE_EXPORT ? "Export template xml" : LanguageManager.sentences['save_file'];
+			folder.browseForSave( browseTitle );
 		}
 		
 		public function browseForOpen() : void
@@ -188,6 +202,14 @@ package net.vdombox.powerpack.template
 			
 			browseType = BROWSE_TYPE_OPEN;
 			folder.browseForOpen( LanguageManager.sentences['open_file'], [tplFilter, allFilter] )
+		}
+		
+		public function export () : void
+		{
+			if (!file)
+				return;
+			
+			browseForSave (BROWSE_TYPE_EXPORT);
 		}
 		
 		private function cash() : Boolean
@@ -309,12 +331,57 @@ package net.vdombox.powerpack.template
 					
 					break;
 				}
+				case BROWSE_TYPE_EXPORT:
+				{
+					browseType = BROWSE_TYPE_NONE;
+					
+					if ( !f.extension || f.extension.toLowerCase() != TPL_EXTENSION )
+						f = f.parent.resolvePath( f.name + '.' + TPL_EXTENSION );
+					
+					fileToExport = f;
+					
+					if (modified)
+					{
+						needToExportAfterSave = true;
+						
+						save();
+					}
+					else
+					{
+						ProgressManager.start();
+						
+						exportAfterSave(true);
+					}
+					
+					
+					break;
+				}
 				default:
 				{
 					browseType = BROWSE_TYPE_NONE;
 					break;
 				}
 			}
+		}
+		
+		private function exportAfterSave (completeProgress:Boolean = false) : void
+		{
+			needToExportAfterSave = false;
+			
+			if (!fileToExport || !file)
+				return;
+			
+			try 
+			{
+				file.copyTo(fileToExport, true);
+			} 
+			catch (e:Error)
+			{
+				showError("Can't export template file");
+			}
+			
+			if (completeProgress)
+				ProgressManager.complete();
 		}
 		
 		private function fileStreamOutputProgressHandler( event : OutputProgressEvent ) : void
@@ -332,6 +399,9 @@ package net.vdombox.powerpack.template
 			try
 			{
 				fileStream.close();
+				
+				if (needToExportAfterSave)
+					exportAfterSave();
 				
 				ProgressManager.start( ProgressManager.DIALOG_MODE, false );
 				
@@ -353,7 +423,6 @@ package net.vdombox.powerpack.template
 			{
 				ProgressManager.complete();
 				
-				trace ("0");
 				showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
 			}
 		}
@@ -374,7 +443,6 @@ package net.vdombox.powerpack.template
 				
 				if ( !isValidTpl( xmlData ) )
 				{
-					trace ("1");
 					throw new Error( LanguageManager.sentences['msg_not_valid_tpl_file'] );
 				}
 				
@@ -398,7 +466,6 @@ package net.vdombox.powerpack.template
 				
 				ProgressManager.complete();
 				
-				trace ("2");
 				showError(LanguageManager.sentences['msg_not_valid_tpl_file']);
 			}
 		}
@@ -406,6 +473,8 @@ package net.vdombox.powerpack.template
 		private function fileStreamIOErrorHandler( event : IOErrorEvent ) : void
 		{
 			browseType = BROWSE_TYPE_NONE;
+			
+			needToExportAfterSave = false;
 			
 			fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
 			

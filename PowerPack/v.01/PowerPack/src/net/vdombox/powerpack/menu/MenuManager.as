@@ -369,6 +369,8 @@ public class MenuManager extends EventDispatcher
 		
 		fileMenu.getItemByName( "save" ).enabled = enabled ? templateChanged : false;
 		
+		fileMenu.getItemByName( "export_xml" ).enabled = enabled && currentTemplate ? currentTemplate.file && currentTemplate.file.exists : false;
+		
 		dispatchEvent(new MenuGeneralEvent(MenuGeneralEvent.MENU_FILE_STATE_CHANGED));
 	}
 	

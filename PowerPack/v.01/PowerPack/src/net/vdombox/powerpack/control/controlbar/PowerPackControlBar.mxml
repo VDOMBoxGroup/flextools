@@ -2,7 +2,8 @@
 <mx:ControlBar xmlns:mx="http://www.adobe.com/2006/mxml" 
 			   horizontalGap="7" verticalAlign="middle" 
 			   height="35"
-			   creationComplete="creationCompleteHandler(event)" xmlns:control="net.vdombox.powerpack.lib.player.control.*" xmlns:control1="net.vdombox.powerpack.control.*" xmlns:controlbar="net.vdombox.powerpack.control.controlbar.*">
+			   creationComplete="creationCompleteHandler(event)" 
+			   xmlns:controlbar="net.vdombox.powerpack.control.controlbar.*">
 	<mx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
@@ -22,6 +23,7 @@
 			
 			public static const ITEM_TYPE_NEW_TEMPLATE		: String = "new_template";
 			public static const ITEM_TYPE_SAVE_TEMPLATE		: String = "save";
+			public static const ITEM_TYPE_EXPORT_TEMPLATE	: String = "export_xml";
 			public static const ITEM_TYPE_OPEN_TEMPLATE		: String = "open_file";
 			
 			public static const ITEM_TYPE_APP_PROPERIES		: String = "properties";
@@ -97,6 +99,7 @@
 				menuBtnNewTemplate.enabled = fileMenuItem.submenu.getItemByName( "new_template" ).enabled;
 				menuBtnOpenTemplate.enabled = fileMenuItem.submenu.getItemByName( "open_file" ).enabled;
 				menuBtnSaveTemplate.enabled = fileMenuItem.submenu.getItemByName( "save" ).enabled;
+				menuBtnExportTemplate.enabled = fileMenuItem.submenu.getItemByName( "export_xml" ).enabled;
 				
 			}
 			
@@ -152,6 +155,12 @@
 							   sourceDisabled="@Embed('/assets/icons/SaveTemplateDisabled.png')"
 							   click="menuItem_clickHandler(event, ITEM_TYPE_SAVE_TEMPLATE)" 
 							   toolTip="Save template ({ctrlString}{separator}S)"/>
+	
+	<controlbar:ControlBarButton id="menuBtnExportTemplate"
+								 sourceEnabled="@Embed('/assets/icons/exportXMLEnabled.png')"
+								 sourceDisabled="@Embed('/assets/icons/exportXMLDisabled.png')"
+								 click="menuItem_clickHandler(event, ITEM_TYPE_EXPORT_TEMPLATE)" 
+								 toolTip="Export template ({ctrlString}{separator}E)"/>
 	
 	<mx:VRule height="20"/>
 	

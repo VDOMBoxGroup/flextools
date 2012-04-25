@@ -44,6 +44,7 @@
 				<menuitem type="separator" />
 				<menuitem label="Save" id="save" keyEquivalent="s" ctrlKey="true" />
 				<menuitem label="Save As..." id="save_as" keyEquivalent="s" ctrlKey="true" shiftKey="true" />
+				<menuitem label="Export template" id="export_xml" keyEquivalent="e" ctrlKey="true"/>
 				<menuitem type="separator" />
 				<menuitem label="Import" id="import">
 					
@@ -403,6 +404,28 @@
 			}
 			
 		}
+			
+		public function exportTpl() : void
+		{
+			if (currentTemplate)
+			{
+				if (currentTemplate.modified)
+				{
+					currentTemplate.addEventListener( Event.COMPLETE, afterExportHandler );
+					currentTemplate.xmlStructure = pnl_graphs.toXML();
+				}
+				
+				currentTemplate.export();
+			}
+			
+			function afterExportHandler (event : Event) : void
+			{
+				currentTemplate.removeEventListener( Event.COMPLETE, afterExportHandler );
+				
+				processSavedTpl();
+			}
+				
+		}
 
 		public function alertSaveAndCloseTemplate( action : Function = null, args : Array = null ) : void
 		{
@@ -658,7 +681,11 @@
 				case "save_as":
 					saveTpl(templateSaveHandler, true);
 					break;
-
+				
+				case "export_xml" :
+					exportTpl();
+					break;
+				
 				case "close":
 					closeTpl();
 					break;
