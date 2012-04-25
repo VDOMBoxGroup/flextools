@@ -6,6 +6,7 @@
 		 verticalAlign="middle" gap="0" paddingLeft="10">
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.interfaces.ISearchable;
 			
 			[Bindable]
@@ -30,7 +31,7 @@
 	</fx:Declarations>
 	
 	
-	<button:WorkAreaButton id="previousButton" icon="@Embed('assets/Arrow_Left.png')" height="{searchInput.height}" width="20"
+	<button:WorkAreaButton id="previousButton" icon="{VDOMImage.Arrow_Left}" height="{searchInput.height}" width="20"
 						   skinClass="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.SearchWorkAreaButtonSkin" 
 						   click="{target.findPrevious()}" toolTip="Previous" />
 	
@@ -41,7 +42,7 @@
 				  toolTip="Live search" borderColor="#FF0000"
 				  skinClass="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.SearchTextInputSkin"/>
 	
-	<button:WorkAreaButton id="nextButton" icon="@Embed('assets/Arrow_Right.png')" height="{searchInput.height}" width="20"
+	<button:WorkAreaButton id="nextButton" icon="{VDOMImage.Arrow_Right}" height="{searchInput.height}" width="20"
 						   skinClass="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.SearchWorkAreaButtonSkin"
 						   click="{target.findNext()}" toolTip="Next" />
 </s:HGroup>
