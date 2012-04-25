@@ -3,9 +3,14 @@
 		 xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:components2="net.vdombox.ide.common.components.*" 
+		 xmlns:components3="net.vdombox.ide.common.view.components.*" 
+		 xmlns:button="net.vdombox.ide.common.view.components.button.*" 
+		 xmlns:mx1="library://ns.adobe.com/flex/mx"
 		 height="300" width="400" xmlns:editors="net.vdombox.editors.*"
 		 xmlns:components1="net.vdombox.components.*"
-		 remove="navigatorcontent2_removeHandler(event)" xmlns:components2="net.vdombox.ide.common.components.*" xmlns:components3="net.vdombox.ide.common.view.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*" xmlns:mx1="library://ns.adobe.com/flex/mx"
+		 remove="navigatorcontent2_removeHandler(event)" 
+		 creationComplete="navigatorcontent2_creationCompleteHandler(event)"
 		 skinClass="spark.skins.spark.SkinnableContainerSkin">
 
 	<fx:Script>
@@ -14,12 +19,16 @@
 			
 			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.events.EditorEvent;
+			import net.vdombox.ide.common.events.FindBoxEvent;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.scripts.events.EditAreaEvent;
 			import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 			
 			import ro.victordramba.scriptarea.ScriptAreaEvents;
+			
+			[Bindable]
+			private var unsaved : Boolean = false;
 			
 			private var _script : String;
 			private var _objectVO : Object;
@@ -28,6 +37,8 @@
 			private var _actionVO : Object;
 
 			private var _syntax : String = "vscript";
+			
+			private var findResult : Boolean;
 
 			[Bindable]
 			public function get script() : String
@@ -85,9 +96,9 @@
 				_actionVO = value;
 				script = value.script;
 				if ( value.saved )
-					currentState = "disabled";
+					unsaved = false;
 				else
-					currentState = "unsaved";
+					unsaved = true;
 			}
 			
 			private function scriptEditor_saveHandler( event : MouseEvent  = null ) : void
@@ -97,7 +108,7 @@
 				if (_actionVO)
 					_actionVO.saved = true;
 				
-				currentState = "disabled";
+				unsaved = false;
 				
 			}
 			
@@ -106,7 +117,7 @@
 				if ( !(event.target is ScriptAreaEvents) )
 					return;
 				
-				currentState = "unsaved";
+				unsaved = true;
 				
 				if (_actionVO)
 					_actionVO.saved = false;
@@ -115,22 +126,96 @@
 			private function onCtrlSDown( e : KeyboardEvent ) : void
 			{
 				if ( e.ctrlKey && e.keyCode == Keyboard.S )
-				{
 					scriptEditor_saveHandler();
+				else if ( e.ctrlKey && e.keyCode == Keyboard.F )
+				{
+					if ( currentState != "find" )
+						currentState = "find";
+					else
+						findBox.findText.setFocus();
 				}
-			}
-			
-			protected function pythonScriptEditor_creationCompleteHandler(event:FlexEvent):void
-			{
-				addEventListener(Event.CHANGE, setStateInUnsave, true, 0, true );
-				pythonScriptEditor.addEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true, 0, true );
 			}
 			
 			protected function navigatorcontent2_removeHandler(event:FlexEvent):void
 			{
 				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
 				removeEventListener(Event.CHANGE, setStateInUnsave, true );
+				
+				if ( findBox )
+				{
+					findBox.removeEventListener( FindBoxEvent.CLOSE, setNormalState );
+					findBox.removeEventListener( FindBoxEvent.FIND_TEXT_CHANGE, findTextChange );
+					findBox.removeEventListener( FindBoxEvent.PREVIOUS_FIND_TEXT, previousFindText );
+					findBox.removeEventListener( FindBoxEvent.NEXT_FIND_TEXT, nextFindText );
+					findBox.removeEventListener( FindBoxEvent.REPLACE_TEXT, replaceText );
+					findBox.removeEventListener( FindBoxEvent.REPLACE_ALL_TEXT, replaceAllText );
+				}
+				
+				
 				pythonScriptEditor.removeEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true );
+			}
+			
+			protected function navigatorcontent2_creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener(Event.CHANGE, setStateInUnsave, true, 0, true );
+				pythonScriptEditor.addEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true, 0, true );
+			}
+			
+			protected function findBox_creationCompleteHandler(event:FlexEvent):void
+			{
+				findBox.addEventListener( FindBoxEvent.CLOSE, setNormalState, false, 0 , true );
+				findBox.addEventListener( FindBoxEvent.FIND_TEXT_CHANGE, findTextChange, false, 0 , true );
+				findBox.addEventListener( FindBoxEvent.PREVIOUS_FIND_TEXT, previousFindText, false, 0 , true );
+				findBox.addEventListener( FindBoxEvent.NEXT_FIND_TEXT, nextFindText, false, 0 , true );
+				findBox.addEventListener( FindBoxEvent.REPLACE_TEXT, replaceText, false, 0 , true );
+				findBox.addEventListener( FindBoxEvent.REPLACE_ALL_TEXT, replaceAllText, false, 0 , true );
+				
+				findBox.findText.setFocus();
+			}
+			
+			private function setNormalState( event : FindBoxEvent ) : void
+			{
+				currentState = "normal";
+			}
+			
+			private function findTextChange( event : FindBoxEvent ) : void
+			{				
+				findResult = pythonScriptEditor.scriptAreaComponent.findText( ( event.target as FindBox ).findText.text, 0 );
+				
+				if ( findResult || findBox.findText.text == "" )
+					findBox.findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
+				else
+					findBox.findText.setStyle( "contentBackgroundColor", 0xFF0000 );
+			}
+			
+			private function previousFindText( event : FindBoxEvent ) : void
+			{				
+				findResult = pythonScriptEditor.scriptAreaComponent.findText( ( event.target as FindBox ).findText.text, 1 );
+				
+				if ( findResult || findBox.findText.text == "" )
+					findBox.findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
+				else
+					findBox.findText.setStyle( "contentBackgroundColor", 0xFF0000 );
+			}
+			
+			private function nextFindText( event : FindBoxEvent ) : void
+			{				
+				findResult = pythonScriptEditor.scriptAreaComponent.findText( ( event.target as FindBox ).findText.text, 2 );
+				
+				if ( findResult || findBox.findText.text == "" )
+					findBox.findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
+				else
+					findBox.findText.setStyle( "contentBackgroundColor", 0xFF0000 );
+			}
+			
+			private function replaceText( event : FindBoxEvent ) : void
+			{				
+				pythonScriptEditor.scriptAreaComponent.replaceFind( ( event.target as FindBox ).findText.text, ( event.target as FindBox ).replaceText.text );
+			}
+			
+			private function replaceAllText( event : FindBoxEvent ) : void
+			{				
+				pythonScriptEditor.scriptAreaComponent.replaceFind( ( event.target as FindBox ).findText.text, ( event.target as FindBox ).replaceText.text, true );
 			}
 			
 		]]>
@@ -139,7 +224,7 @@
 	<s:states>
 		
 		<s:State name="normal"/>
-		<s:State name="unsaved"/>
+		<s:State name="find"/>
 		<s:State name="disabled"/>
 	</s:states>
 	
@@ -170,9 +255,9 @@
 					  paddingLeft="10" paddingTop="2" paddingBottom="2">
 				
 				<button:WorkAreaButton id="saveButton"
-										   enabled.unsaved="true" enabled="false" height="20" icon="{VDOMImage.Save}"
+										   enabled="{unsaved}" height="20" icon="{VDOMImage.Save}"
 										   label="{ resourceManager.getString( 'Scripts_General', 'save' ) }" click="scriptEditor_saveHandler( event )"
-										   highlighted="false" highlighted.unsaved="true"/>
+										   highlighted="{unsaved}"/>
 				
 				<button:WorkAreaButton id="undoButton"
 									   height="25" icon="{VDOMImage.Undo}"
@@ -200,9 +285,15 @@
 			
 		</s:Group>
 		
-		<editors:PythonScriptEditor id="pythonScriptEditor" creationComplete="pythonScriptEditor_creationCompleteHandler(event)"
+		<components:FindBox id="findBox" width="100%"
+							includeIn="find" creationComplete="findBox_creationCompleteHandler(event)"/>
+		
+		<editors:PythonScriptEditor id="pythonScriptEditor"
 									height="100%" width="100%"
 									scriptAreaComponent="{new ScriptAreaComponent()}"/>
+		
+		
+		
 	</s:VGroup>
 
 	

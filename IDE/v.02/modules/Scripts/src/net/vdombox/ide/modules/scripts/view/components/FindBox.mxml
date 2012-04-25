@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.common.events.FindBoxEvent;
+			import net.vdombox.ide.common.view.components.VDOMImage;
+			
+			import spark.events.TextOperationEvent;
+			
+			private var lastButton :WorkAreaButton;
+			
+			protected function image1_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new FindBoxEvent ( FindBoxEvent.CLOSE ) );
+			}
+			
+			protected function findText_changeHandler(event:TextOperationEvent):void
+			{
+				dispatchEvent( new FindBoxEvent ( FindBoxEvent.FIND_TEXT_CHANGE ) );
+			}
+			
+			protected function previous_clickHandler(event:MouseEvent):void
+			{
+				lastButton = previous;
+				dispatchEvent( new FindBoxEvent ( FindBoxEvent.PREVIOUS_FIND_TEXT ) );
+			}
+			
+			protected function next_clickHandler(event:MouseEvent):void
+			{
+				lastButton = next;
+				dispatchEvent( new FindBoxEvent ( FindBoxEvent.NEXT_FIND_TEXT ) );
+			}
+			
+			protected function findText_keyDownHandler(event:KeyboardEvent):void
+			{
+				if ( event.keyCode == Keyboard.ENTER )
+				{
+					if ( lastButton == previous )
+						dispatchEvent( new FindBoxEvent ( FindBoxEvent.PREVIOUS_FIND_TEXT ) );
+					else
+						dispatchEvent( new FindBoxEvent ( FindBoxEvent.NEXT_FIND_TEXT ) );
+				}
+					
+			}
+			
+			protected function replace_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new FindBoxEvent ( FindBoxEvent.REPLACE_TEXT ) );
+			}
+			
+			protected function replaceAll_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new FindBoxEvent ( FindBoxEvent.REPLACE_ALL_TEXT ) );
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor color="#999999" />
+		</s:fill>
+	</s:Rect>
+	
+	<mx:Image right="10" top="5"
+		source="{VDOMImage.Delete}" click="image1_clickHandler(event)"/>
+	
+	<s:VGroup width="100%" height="100%" paddingLeft="20" paddingTop="5" paddingBottom="5" verticalAlign="middle">
+		
+		<s:Group width="100%" height="100%">
+			
+			<s:HGroup left="0" height="100%" verticalAlign="middle">
+				
+				<s:Label text="{ resourceManager.getString( 'Scripts_General', 'find' ) }" />
+				
+			</s:HGroup>
+			
+			<s:HGroup left="100" width="100%" height="100%" verticalAlign="middle">
+				
+				<s:TextInput id="findText" width="200" change="findText_changeHandler(event)" keyDown="findText_keyDownHandler(event)"/>
+				
+				<button:WorkAreaButton id="previous" icon="{VDOMImage.Arrow_Left}" click="previous_clickHandler(event)" />
+				
+				<button:WorkAreaButton id="next" icon="{VDOMImage.Arrow_Right}" click="next_clickHandler(event)"/>
+				
+			</s:HGroup>
+			
+		</s:Group>
+		
+		<s:Group width="100%" height="100%">
+			
+			<s:HGroup left="0" height="100%" verticalAlign="middle">
+				
+				<s:Label text="{ resourceManager.getString( 'Scripts_General', 'replaceWith' ) }" />
+				
+			</s:HGroup>
+			
+			<s:HGroup left="100" width="100%" height="100%" verticalAlign="middle">
+			
+				<s:TextInput id="replaceText" width="200"/>
+			
+				<button:WorkAreaButton id="replace" label="{ resourceManager.getString( 'Scripts_General', 'replace' ) }" click="replace_clickHandler(event)"/>
+			
+				<button:WorkAreaButton id="replaceAll" label="{ resourceManager.getString( 'Scripts_General', 'replaceAll' ) }" click="replaceAll_clickHandler(event)"/>
+				
+			</s:HGroup>
+			
+		</s:Group>
+		
+	</s:VGroup>
+	
+</s:Group>
