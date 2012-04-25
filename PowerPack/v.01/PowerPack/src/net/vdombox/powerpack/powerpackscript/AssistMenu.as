@@ -165,7 +165,7 @@ package net.vdombox.powerpack.powerpackscript
 			var regexpTrigVar			: RegExp = /^\$/;
 			var regexpTrigSubgraph		: RegExp = /^[ ]+bus[ ]*\[/i;
 			var regexpTrigDialogType	: RegExp = /^['|\"][ ]*\[/;
-			var regexpTrigDialog		: RegExp = /[ ]golaid[ ]*\[/i;
+			var regexpTrigDialog		: RegExp = /[ ](golaid|golaidelbalecnac|noitseuq)[ ]*\[/i;
 			
 			var sourceText		: String = fld.text;
 			var prevText		: String = sourceText.substring(0, caretIndex).split('').reverse().join('');
