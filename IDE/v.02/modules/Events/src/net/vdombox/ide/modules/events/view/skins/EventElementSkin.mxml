@@ -117,7 +117,7 @@
 
 				if ( newState == "normal" || newState == "disabled" )
 				{
-					titleLabel.text = headerGroup.toolTip = hostComponent.data.name;
+					titleLabel.text = headerGroup.toolTip = "Event";
 					
 					if ( creationCompleted)
 						setLayout(true);

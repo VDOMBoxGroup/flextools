@@ -113,10 +113,8 @@
 				}
 				else
 				{
-					if ( hostComponent.data is ClientActionVO )
+					if ( hostComponent.data is ClientActionVO || hostComponent.data is ServerActionVO )
 						titleLabel.text = headerGroup.toolTip = hostComponent.data.objectName + ":" + hostComponent.data.name;
-					else if ( hostComponent.data is ServerActionVO )
-						titleLabel.text = headerGroup.toolTip = hostComponent.data.name;
 					
 					if ( creationCompleted  )
 						setLayout(false);
