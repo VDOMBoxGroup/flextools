@@ -214,7 +214,153 @@ package ro.victordramba.scriptarea
 			setSelection( pos, pos );
 		}
 		
+		public function replaceFind( findText : String, _replaceText : String, replaceAll : Boolean = false ) : void
+		{
+			if ( findText == "" )
+				return;
+			
+			var index : int;
+			
+			if ( replaceAll )
+			{
+				index = text.indexOf( findText );
+				while ( index != -1 )
+				{
+					replaceText( index, index + findText.length, _replaceText );
+					index = text.indexOf( findText, index + 1 );
+				}
+			}
+			else
+			{
+				index = text.indexOf( findText, _caret );
+				
+				if ( index == -1 )
+					return;
+				
+				replaceText( index, index + findText.length, _replaceText );
+			}
+			
+			_caret = index;
+			
+			updateCaret();
+			checkScrollToCursor();
+			updateScrollProps();
+			
+			var g : Graphics = selectionShape.graphics;
+			g.clear();
+			
+			g.beginFill( 0x64FF53, 1 );
+			
+			var p0 : Point = getPointForIndex( index );
+			var p1 : Point = getPointForIndex( index + _replaceText.length );
+			
+			g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
+			
+			selectionRects( findText );
+		}	
 		private var _selectRects : Array = new Array();
+		
+		private function clearRect() : void
+		{
+			var g : Graphics = selectionShapeRects.graphics;
+			g.clear();
+			
+			g = selectionShape.graphics;
+			g.clear();
+		}
+		
+		public function findText( findText : String, type : int ) : Boolean
+		{
+			
+			clearRect();
+			
+			if ( findText == "" )
+				return false;
+			
+			var index : int;
+			
+			if ( type == 0 )
+			{
+				index = text.indexOf( findText, _caret );
+				
+				if ( index == -1 )
+					index = text.indexOf( findText );
+			}
+			
+			else if ( type == 1 )
+			{
+				var saveInd : int = -1;
+				var ind : int = text.indexOf( findText );
+				var car : int = _caret;
+				
+				while ( saveInd == -1 && ind != -1)
+				{
+					while ( ind < car && ind != -1 )
+					{
+						saveInd = ind;
+						ind = text.indexOf( findText, ind + 1 );
+					}
+					
+					if ( saveInd == -1 )
+						car = text.length - 1;
+				}
+				
+				index = saveInd;
+			}
+			else if ( type == 2 )
+			{
+				index = text.indexOf( findText, _caret );
+				
+				if ( index == _caret )
+					index = text.indexOf( findText, _caret + 1 );
+				
+				if ( index == -1 )
+					index = text.indexOf( findText );
+			}
+			
+			if ( index == -1 )
+				return false;
+			
+			_caret = index;
+			
+			updateCaret();
+			checkScrollToCursor();
+			updateScrollProps();
+			
+			var g : Graphics = selectionShape.graphics;
+			g.clear();
+			
+			g.beginFill( 0x64FF53, 1 );
+			
+			var p0 : Point = getPointForIndex( index );
+			var p1 : Point = getPointForIndex( index + findText.length );
+				
+			g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
+			
+			selectionRects( findText );
+			
+			return true;
+		}
+		
+		private function selectionRects( findText : String ) : void
+		{
+			var index : int = text.indexOf( findText );
+			var step : int = findText.length;
+			
+			var g : Graphics = selectionShapeRects.graphics;
+			g.clear();
+			g.beginFill( 0x9DFBAB, .9 );
+			
+			while ( index != -1 )
+			{
+				var p0 : Point = getPointForIndex( index );
+				var p1 : Point = getPointForIndex( index + step );
+					
+				g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
+				
+				index = text.indexOf( findText, index + 1 );
+			}
+		}
 		
 		private function setSelectionRects() : void
 		{

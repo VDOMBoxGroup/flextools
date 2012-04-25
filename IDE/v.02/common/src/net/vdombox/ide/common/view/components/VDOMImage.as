@@ -74,5 +74,13 @@ package net.vdombox.ide.common.view.components
 		[Embed( source = "assets/vdomimage/Add.png" )]
 		public static var Add : Class;
 		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/Arrow_Left.png" )]
+		public static var Arrow_Left : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/Arrow_Right.png" )]
+		public static var Arrow_Right : Class;
+		
 	}
 }

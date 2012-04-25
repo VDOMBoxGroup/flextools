@@ -91,7 +91,7 @@ package net.vdombox.editors.parsers.python
 				if ( fmt )
 					textField.addFormatRun( t.pos, t.pos + t.string.length, fmt.bold, fmt.italic, Number( fmt.color ).toString( 16 ) );
 				//textField.setTextFormat(fmt, t.pos, t.pos+t.string.length);
-				else if ( t.string.indexOf( 'this.' ) == 0 )
+				else if ( t.string.indexOf( 'self.' ) == 0 )
 				{
 					fmt = formats.getValue( Token.KEYWORD );
 					textField.addFormatRun( t.pos, t.pos + 4, fmt.bold, fmt.italic, Number( fmt.color ).toString( 16 ) );

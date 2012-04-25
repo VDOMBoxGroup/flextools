@@ -185,7 +185,7 @@ package net.vdombox.editors.parsers.python
 			//debug(field);
 
 			//we didn't find it
-			if ( !field || field.fieldType != 'function' )
+			if ( !field || field.fieldType != 'def' )
 				return null;
 
 
@@ -204,7 +204,7 @@ package net.vdombox.editors.parsers.python
 			if ( field.hasRestParams )
 				a[ a.length - 1 ] = '...' + par.name;
 
-			return 'function ' + field.name + '(' + a.join( ', ' ) + ')' + ( field.type ? ':' + field.type.type : '' );
+			return 'def ' + field.name + '(' + a.join( ', ' ) + ')' + ( field.type ? ':' + field.type.type : '' );
 		}
 
 		/**
@@ -330,7 +330,7 @@ package net.vdombox.editors.parsers.python
 			//1. is it in function scope chain?
 			var isStatic : Boolean = false;
 			for ( scope = t.scope; scope &&
-				scope.fieldType == 'function' || scope.fieldType == 'get' || scope.fieldType == 'set'; scope = scope.parent )
+				scope.fieldType == 'def' || scope.fieldType == 'get' || scope.fieldType == 'set'; scope = scope.parent )
 			{
 				if ( scope.isStatic )
 					isStatic = true;
@@ -353,7 +353,7 @@ package net.vdombox.editors.parsers.python
 			{
 				//non-static instance context
 				var cond : Boolean = t.scope.parent && t.scope.parent.fieldType == 'class' && !isStatic;
-				if ( name == 'this' && cond )
+				if ( name == 'self' && cond )
 					resolved = t.scope.parent;
 				if ( name == 'super' && cond )
 					resolved = typeDB.resolveName( t.scope.parent.extendz );
@@ -421,13 +421,13 @@ package net.vdombox.editors.parsers.python
 
 
 				if ( resolved.fieldType == 'var' || resolved.fieldType == 'get' || resolved.fieldType == 'set' ||
-					( itemType == BackwardsParser.FUNCTION && resolved.fieldType == 'function' ) )
+					( itemType == BackwardsParser.FUNCTION && resolved.fieldType == 'def' ) )
 				{
 					resolved = typeDB.resolveName( resolved.type );
 				}
-				else if ( resolved.fieldType == 'function' && itemType != BackwardsParser.FUNCTION )
+				else if ( resolved.fieldType == 'def' && itemType != BackwardsParser.FUNCTION )
 				{
-					resolved = typeDB.resolveName( new Multiname( 'Function' ) );
+					resolved = typeDB.resolveName( new Multiname( 'Def' ) );
 				}
 			}
 		}

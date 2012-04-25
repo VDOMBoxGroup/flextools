@@ -438,7 +438,7 @@ package net.vdombox.editors.parsers.python
 			}
 
 			//parse function params
-			else if ( _scope && ( _scope.fieldType == "function" || _scope.fieldType == "catch" || _scope.fieldType == "set" ) )
+			else if ( _scope && ( _scope.fieldType == "def" || _scope.fieldType == "catch" || _scope.fieldType == "set" ) )
 			{
 				if ( tp && tp.string == "(" && t.string != ")" )
 					paramsBlock = true;

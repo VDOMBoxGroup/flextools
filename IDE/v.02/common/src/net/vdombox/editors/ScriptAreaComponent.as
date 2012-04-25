@@ -165,6 +165,16 @@ package net.vdombox.editors
 		{
 			area.setSelection( beginIndex, endIndex );
 		}
+		
+		public function findText( findText : String, type : int ) : Boolean
+		{
+			return area.findText( findText, type );
+		}
+		
+		public function replaceFind( findText : String, replaceText : String, replaceAll : Boolean = false ) : void
+		{
+			area.replaceFind( findText, replaceText, replaceAll );
+		}
 
 		//------------------------------------------------------------------------------------
 		// Viewportable
