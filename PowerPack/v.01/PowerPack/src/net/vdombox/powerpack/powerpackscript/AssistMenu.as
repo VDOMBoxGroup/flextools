@@ -19,6 +19,7 @@ package net.vdombox.powerpack.powerpackscript
 	
 	import net.vdombox.powerpack.graph.Node;
 	import net.vdombox.powerpack.lib.player.graph.NodeCategory;
+	import net.vdombox.powerpack.utils.GeneralUtils;
 
 	
 	public class AssistMenu extends EventDispatcher
@@ -80,7 +81,7 @@ package net.vdombox.powerpack.powerpackscript
 		
 		private function onKeyDown(e:KeyboardEvent):void
 		{
-			if (String.fromCharCode(e.keyCode) == ' ' && e.ctrlKey)
+			if (GeneralUtils.isCtrlSpaceCombination(e))
 			{
 				e.preventDefault();
 				
