@@ -30,6 +30,9 @@ package net.vdombox.powerpack.utils
 		
 		public static function isCtrlSpaceCombination( event : KeyboardEvent ) : Boolean
 		{
+			if (isMac)
+				return event.altKey && event.keyCode == Keyboard.ESCAPE;
+				
 			return isCtrlKeyPressed(event) && event.keyCode == Keyboard.SPACE;
 		}
 		
