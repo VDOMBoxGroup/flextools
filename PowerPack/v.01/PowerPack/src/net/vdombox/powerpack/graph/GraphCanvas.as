@@ -165,6 +165,8 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		removeEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 		
 		creationCompleted = true;
+		
+		dispatchEvent ( new GraphCanvasEvent(GraphCanvasEvent.SELECTION_CHANGED) );
 	}
 
 	//--------------------------------------------------------------------------

@@ -147,7 +147,7 @@
 			
 		private function viewStack_childRemoveHandler (event : ChildExistenceChangedEvent) : void
 		{
-			if (numChildren == 1)
+			if (vsViewStack.numChildren <= 1)
 				graphEditorControlBar.updateButtonsState(null);
 				
 		}
