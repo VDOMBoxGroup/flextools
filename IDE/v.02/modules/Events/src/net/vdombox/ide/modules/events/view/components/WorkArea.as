@@ -2,8 +2,10 @@ package net.vdombox.ide.modules.events.view.components
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.ui.Keyboard;
 	
 	import mx.core.DragSource;
 	import mx.events.CloseEvent;
@@ -33,6 +35,7 @@ package net.vdombox.ide.modules.events.view.components
 	import spark.components.Group;
 	import spark.components.Label;
 	import spark.components.List;
+	import spark.components.RichEditableText;
 	import spark.components.SkinnableContainer;
 	import spark.components.TextInput;
 	import spark.skins.spark.PanelSkin;
@@ -56,6 +59,8 @@ package net.vdombox.ide.modules.events.view.components
 			addEventListener( ElementEvent.CLICK, elementClickHandler, true, 0, true );
 			addEventListener( ElementEvent.MULTI_SELECTED, elementMultiSelectedHandler, true, 0, true );
 			addEventListener( ElementEvent.MULTI_SELECT_MOVED, elementMultiSelectMovedHandler, true, 0, true );
+			
+			addEventListener( KeyboardEvent.KEY_DOWN, keyboardHandler, true, 0, true );
 		}
 
 		[SkinPart]
@@ -789,6 +794,26 @@ package net.vdombox.ide.modules.events.view.components
 					unsaveHandler();
 				/*}
 			}*/
+		}
+		
+		private function keyboardHandler( event : KeyboardEvent ) : void
+		{
+			if ( event.keyCode != Keyboard.DELETE )
+				return;
+			
+			if ( !multiSelectElements || event.target is RichEditableText )
+				return;
+			
+			var baseElement : BaseElement;
+			for each ( baseElement in multiSelectElements )
+			{
+				if ( baseElement is EventElement )
+					deleteEventElement( baseElement as EventElement );
+				else if ( baseElement is ActionElement )
+					deleteActionElement( baseElement as ActionElement );
+			}
+			
+			unsaveHandler();
 		}
 		
 		private function linkage_deleteLinkageHandler( event : ElementEvent ) : void

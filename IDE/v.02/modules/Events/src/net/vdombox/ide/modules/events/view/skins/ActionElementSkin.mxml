@@ -127,7 +127,7 @@
 				BindingUtils.bindProperty( this, "data", hostComponent, "data", true );
 				creationCompleted = true;
 			}
-
+			
 		]]>
 	</fx:Script>
 
