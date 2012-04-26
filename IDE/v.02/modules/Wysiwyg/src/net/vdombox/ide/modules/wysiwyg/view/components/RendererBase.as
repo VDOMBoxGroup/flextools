@@ -1027,7 +1027,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				vdomDragManager.acceptDragDrop( UIComponent( this ) );
 				setState = "highlighted";
 			}
-			else
+			else if ( typeVO.container == 2 )
 			{
 				setState = "notPackeg";
 				vdomDragManager.hitTarget( UIComponent( this ) );
