@@ -32,7 +32,7 @@
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			
-			import spinnerFolder.SpinnerPopUpManager;
+			import net.vdombox.helpeditor.controller.SpinnerPopUpManager;
 			
 			private var sqlProxy				: SQLProxy = new SQLProxy();
 			

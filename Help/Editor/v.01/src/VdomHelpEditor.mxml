@@ -47,7 +47,7 @@
 			import mx.utils.UIDUtil;
 			import mx.validators.StringValidator;
 			
-			import spinnerFolder.SpinnerPopUpManager;
+			import net.vdombox.helpeditor.controller.SpinnerPopUpManager;
 
 			private var sqlProxy : SQLProxy = new SQLProxy();
 

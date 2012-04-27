@@ -24,9 +24,8 @@ package net.vdombox.helpeditor.controller
 	import mx.graphics.codec.PNGEncoder;
 	import mx.utils.Base64Encoder;
 	
-	import spinnerFolder.SpinnerPopUp;
-	import spinnerFolder.SpinnerPopUpManager;
-	import spinnerFolder.SpinnerPopupMessages;
+	import net.vdombox.helpeditor.view.spinner.SpinnerPopUp;
+	import net.vdombox.helpeditor.model.SpinnerPopupMessages;
 	import net.vdombox.helpeditor.utils.Utils;
 	import net.vdombox.helpeditor.model.SQLProxy;
 	import net.vdombox.helpeditor.model.ImageProperties;

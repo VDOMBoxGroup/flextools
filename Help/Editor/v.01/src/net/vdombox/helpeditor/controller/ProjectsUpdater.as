@@ -18,9 +18,8 @@ package net.vdombox.helpeditor.controller
 	import mx.events.FlexEvent;
 	import mx.utils.Base64Decoder;
 	
-	import spinnerFolder.SpinnerPopUp;
-	import spinnerFolder.SpinnerPopUpManager;
-	import spinnerFolder.SpinnerPopupMessages;
+	import net.vdombox.helpeditor.view.spinner.SpinnerPopUp;
+	import net.vdombox.helpeditor.model.SpinnerPopupMessages;
 	import net.vdombox.helpeditor.model.SQLProxy;
 
 	public class ProjectsUpdater extends EventDispatcher

@@ -1,4 +1,4 @@
-package spinnerFolder
+package net.vdombox.helpeditor.model
 {
 	public class SpinnerPopupMessages
 	{
