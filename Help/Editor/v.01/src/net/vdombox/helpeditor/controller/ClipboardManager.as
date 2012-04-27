@@ -1,4 +1,4 @@
-package
+package net.vdombox.helpeditor.controller
 {
 	import flash.desktop.Clipboard;
 	import flash.desktop.ClipboardFormats;
@@ -7,6 +7,11 @@ package
 	import flash.filesystem.File;
 	
 	import mx.controls.Alert;
+	
+	import net.vdombox.helpeditor.model.AlertMessages;
+	import net.vdombox.helpeditor.model.WysiwygImage;
+	import net.vdombox.helpeditor.utils.ResourceUtils;
+	import net.vdombox.helpeditor.utils.Utils;
 
 	public class ClipboardManager
 	{
@@ -182,7 +187,7 @@ package
 			
 			for each (var file : File in clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT))
 			{
-				if (ResourceUtils.fileExists(file) && ResourceFileTypes.isImageFile(file))
+				if (ResourceUtils.fileExists(file) && ResourceUtils.isImageFile(file))
 				{
 					imgTargetSrc = resourceImageUtils.copyImg(file.url);
 					break;

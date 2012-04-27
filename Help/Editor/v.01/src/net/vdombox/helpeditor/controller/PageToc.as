@@ -1,4 +1,4 @@
-package
+package net.vdombox.helpeditor.controller
 {
 	import mx.utils.UIDUtil;
 

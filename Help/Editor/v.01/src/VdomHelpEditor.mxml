@@ -9,7 +9,7 @@
 						titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Editor Application"
 						titleTextStyleName="tbStyle"
 						titleIcon="@Embed('icons/16_vdom_icon_editor.png')"
-						xmlns:local="*">
+						xmlns:local="*" xmlns:view="net.vdombox.helpeditor.view.*">
 	<mx:Style>
 		.tbStyle {
 			color : #FFFFFF;
@@ -17,6 +17,16 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
+			import net.vdombox.helpeditor.view.HTML_WYSIWYG;
+			import net.vdombox.helpeditor.utils.ResourceUtils;
+			import net.vdombox.helpeditor.view.panel.Products;
+			import net.vdombox.helpeditor.controller.PageToc;
+			import net.vdombox.helpeditor.controller.ProductXMLCreator;
+			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.utils.Utils;
+			import net.vdombox.helpeditor.view.panel.EditPage;
+			import net.vdombox.helpeditor.controller.CSSStyleManager;
+			import net.vdombox.helpeditor.model.AlertMessages;
 			import com.adobe.crypto.MD5Stream;
 			
 			import flash.text.engine.EastAsianJustifier;
@@ -690,6 +700,9 @@
 
 			private function editPage() : void
 			{
+				if (!cmboxProduct.selectedItem)
+					return;
+				
 				var editPage : EditPage = EditPage(PopUpManager.createPopUp(this, EditPage, true));
 				editPage.addEventListener(CloseEvent.CLOSE, editPageHandler);
 
@@ -923,7 +936,7 @@
 						<!--mx:HBox width="100%" color="#000000" backgroundColor="#E4E4E4"  >
 						</mx:HBox-->
 
-						<local:HTML_WYSIWYG id="html_wysiwyg" width="100%" height="100%" initialize="html_wysiwyg_initializeHandler(event)"/>
+						<view:HTML_WYSIWYG id="html_wysiwyg" width="100%" height="100%" initialize="html_wysiwyg_initializeHandler(event)"/>
 						<mx:HBox width="100%" backgroundColor="0x373739" paddingBottom="3">
 							<mx:Canvas height="100%">
 								<mx:Label id="pageInformation"

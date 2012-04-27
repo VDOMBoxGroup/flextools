@@ -1,4 +1,4 @@
-package
+package net.vdombox.helpeditor.utils
 {
 	import com.adobe.crypto.MD5Stream;
 	

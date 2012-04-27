@@ -20,6 +20,9 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
+			import net.vdombox.helpeditor.controller.ProjectsUpdater;
+			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.model.AlertMessages;
 			import flash.utils.setTimeout;
 			
 			import mx.collections.ArrayCollection;

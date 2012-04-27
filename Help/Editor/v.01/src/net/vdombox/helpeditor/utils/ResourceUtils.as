@@ -1,4 +1,4 @@
-package
+package net.vdombox.helpeditor.utils
 {
 	import com.adobe.crypto.MD5Stream;
 	
@@ -23,7 +23,11 @@ package
 
 	public class ResourceUtils extends EventDispatcher
 	{
-		private static const DEFAULT_RESOURCE_FORMAT : String = ".jpg"; 
+		public static const FILE_TYPE_PNG	: String = "png";
+		public static const FILE_TYPE_JPG	: String = "jpg";
+		public static const FILE_TYPE_JPEG	: String = "jpeg";
+		public static const FILE_TYPE_GIF	: String = "gif";
+		public static const FILE_TYPE_BMP	: String = "bmp";
 		
 		private static var instance : ResourceUtils;
 		
@@ -159,7 +163,7 @@ package
 			var hash		: MD5Stream = new MD5Stream();
 			var uid			: String = hash.complete(byteArray);;
 			
-			var fileName 	: String = convertToUIDFormat(uid) + DEFAULT_RESOURCE_FORMAT;
+			var fileName 	: String = convertToUIDFormat(uid) + "." + FILE_TYPE_JPG;
 			
 			return fileName;
 		}
@@ -227,11 +231,41 @@ package
 			{
 				var resourceType : String = resource.substr(37,3);
 				
-				if (ResourceFileTypes.correctResourceType(resourceType))
+				if (correctResourceType(resourceType))
 					filteredResources.push(resource);
 			}
 			
 			return filteredResources;
+		}
+		
+		public static function isImageFile(file:File) : Boolean
+		{
+			if (!file || !file.exists || !file.type)
+				return false;
+			
+			return correctResourceType(file.extension.toLowerCase());
+		}
+		
+		
+		public static function correctResourceType(resourceType : String) : Boolean
+		{
+			switch (resourceType)
+			{
+				case FILE_TYPE_BMP:
+				case FILE_TYPE_GIF:
+				case FILE_TYPE_JPEG:
+				case FILE_TYPE_JPG:
+				case FILE_TYPE_PNG:
+				{
+					return true;
+				}
+					
+				default:
+				{
+					return false;
+				}
+			}
+			
 		}
 		
 	}

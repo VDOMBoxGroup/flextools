@@ -1,4 +1,4 @@
-package
+package net.vdombox.helpeditor.controller
 {
 	import com.adobe.crypto.MD5Stream;
 	
@@ -18,6 +18,7 @@ package
 	
 	import mx.controls.Image;
 	import mx.graphics.codec.PNGEncoder;
+	import net.vdombox.helpeditor.utils.Utils;
 	
 	public class CSSStyleManager extends EventDispatcher
 	{

@@ -1,4 +1,4 @@
-package
+package net.vdombox.helpeditor.controller
 {
 	import air.update.ApplicationUpdater;
 	import air.update.ApplicationUpdaterUI;

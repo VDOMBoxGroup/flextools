@@ -20,6 +20,8 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
+			import net.vdombox.helpeditor.view.HTML_WYSIWYG;
+			import net.vdombox.helpeditor.model.SQLProxy;
 			import mx.collections.ArrayCollection;
 			import mx.controls.CheckBox;
 			import mx.controls.Label;

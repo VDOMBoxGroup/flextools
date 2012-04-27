@@ -1,4 +1,4 @@
-package
+package net.vdombox.helpeditor.controller
 {
 	import flash.errors.IOError;
 	import flash.events.Event;
@@ -21,6 +21,7 @@ package
 	import spinnerFolder.SpinnerPopUp;
 	import spinnerFolder.SpinnerPopUpManager;
 	import spinnerFolder.SpinnerPopupMessages;
+	import net.vdombox.helpeditor.model.SQLProxy;
 
 	public class ProjectsUpdater extends EventDispatcher
 	{
