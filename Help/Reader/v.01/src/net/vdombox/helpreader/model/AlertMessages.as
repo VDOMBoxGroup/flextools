@@ -1,4 +1,4 @@
-package
+package net.vdombox.helpreader.model
 {
 	public class AlertMessages
 	{

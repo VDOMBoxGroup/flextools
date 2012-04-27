@@ -1,4 +1,4 @@
-package
+package net.vdombox.helpreader.view
 {
 	import flash.events.MouseEvent;
 	

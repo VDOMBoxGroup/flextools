@@ -1,4 +1,4 @@
-package spinnerFolder
+package net.vdombox.helpreader.controller
 {
 	import flash.display.DisplayObject;
 	import flash.display.Stage;
@@ -11,6 +11,7 @@ package spinnerFolder
 	import mx.core.Application;
 	import mx.core.UIComponent;
 	import mx.managers.PopUpManager;
+	import net.vdombox.helpreader.view.spinner.SpinnerPopUp;
 	
 	public class SpinnerPopUpManager extends UIComponent
 	{

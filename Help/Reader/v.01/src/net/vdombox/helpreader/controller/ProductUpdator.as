@@ -1,4 +1,4 @@
-package 
+package net.vdombox.helpreader.controller 
 {
 	import flash.errors.IOError;
 	import flash.events.Event;
@@ -17,8 +17,9 @@ package
 	import mx.core.UIComponent;
 	import mx.utils.Base64Decoder;
 	
-	import spinnerFolder.SpinnerPopUpManager;
-	import spinnerFolder.SpinnerPopupMessages;
+	import net.vdombox.helpreader.model.SpinnerPopupMessages;
+	import net.vdombox.helpreader.model.SQLProxy;
+	import net.vdombox.helpreader.events.ProductsUpdatorEvent;
 	
 	public class ProductUpdator extends EventDispatcher 
 	{

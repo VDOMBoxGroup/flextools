@@ -1,4 +1,4 @@
-package spinnerFolder
+package net.vdombox.helpreader.view.spinner
 {
 	import flash.events.Event;
 	

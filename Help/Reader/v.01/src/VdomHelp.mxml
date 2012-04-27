@@ -7,7 +7,7 @@
 						layout="absolute" showGripper="false" showStatusBar="false"
 						showTitleBar="false" title="VDOM Help Aplication"
 						titleBarColors="[ 0x666666, 0x222222 ]"
-						titleIcon="@Embed('icons/16_vdom_icon.png')" titleTextStyleName="tbStyle">
+						titleIcon="@Embed('icons/16_vdom_icon.png')" titleTextStyleName="tbStyle" xmlns:view="net.vdombox.helpreader.view.*">
 	<mx:Style>
 		.tbStyle {
 			color : #FFFFFF;
@@ -15,6 +15,11 @@
 	</mx:Style>
 	<mx:Script>
 	<![CDATA[
+		import net.vdombox.helpreader.view.Location;
+		import net.vdombox.helpreader.controller.CSSStyleManager;
+		import net.vdombox.helpreader.model.AlertMessages;
+		import net.vdombox.helpreader.view.panel.Settings;
+		import net.vdombox.helpreader.model.SQLProxy;
 		import mx.collections.XMLListCollection;
 		import mx.controls.Alert;
 		import mx.controls.Label;
@@ -409,8 +414,8 @@
 	
 	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x737373"/>
 	<mx:HBox paddingTop="5" paddingLeft="5" width="100%">
-		<local:LeftArrow click="{html.historyBack()}"  htmlPage="{html}"/>
-		<local:RightArrow click="{html.historyForward()}"  htmlPage="{html}"/>
+		<view:LeftArrow click="{html.historyBack()}"  htmlPage="{html}"/>
+		<view:RightArrow click="{html.historyForward()}"  htmlPage="{html}"/>
 		<mx:Image source="@Embed('../assets/gear_i.png')" click="{runSettings();}" toolTip="Settings"/>
 		
 		<mx:TextInput id="searchWord" x="185" y="14" width="141"  enter="{search();}" />

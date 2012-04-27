@@ -1,4 +1,4 @@
-package 
+package net.vdombox.helpreader.model 
 {
 	import flash.data.SQLConnection;
 	import flash.data.SQLMode;

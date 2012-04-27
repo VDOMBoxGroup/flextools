@@ -23,6 +23,12 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
+			import net.vdombox.helpreader.events.ProductsUpdatorEvent;
+			import net.vdombox.helpreader.controller.ProductsUpdator;
+			import net.vdombox.helpreader.model.AlertMessages;
+			import net.vdombox.helpreader.controller.ProductXMLLoader;
+			import net.vdombox.helpreader.model.SQLProxy;
+			import net.vdombox.helpreader.utils.Utils;
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.controls.CheckBox;

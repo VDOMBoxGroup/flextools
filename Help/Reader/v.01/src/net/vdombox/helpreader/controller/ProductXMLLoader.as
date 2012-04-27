@@ -1,4 +1,4 @@
-package
+package net.vdombox.helpreader.controller
 {
 	import flash.events.*;
 	import flash.external.ExternalInterface;
@@ -10,8 +10,7 @@ package
 	import flash.utils.Timer;
 	import flash.utils.setTimeout;
 	
-	import spinnerFolder.SpinnerPopUpManager;
-	import spinnerFolder.SpinnerPopupMessages;
+	import net.vdombox.helpreader.model.SpinnerPopupMessages;
 	
 	public class ProductXMLLoader extends EventDispatcher
 	{

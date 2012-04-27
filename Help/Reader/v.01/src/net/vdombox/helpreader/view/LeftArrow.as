@@ -1,4 +1,4 @@
-package 
+package net.vdombox.helpreader.view 
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -9,15 +9,15 @@ package
 
 	public class LeftArrow extends Canvas
 	{
-		[Embed(source='../assets/arrow_right_active.png')]
+		[Embed(source='./assets/arrow_right_active.png')]
 		[Bindable]
 		public var active:Class;
 		
-		[Embed(source='../assets/arrow_right_inactive.png')]
+		[Embed(source='./assets/arrow_right_inactive.png')]
 		[Bindable]
 		public var inactive:Class;
 		
-		[Embed(source='../assets/arrow_right_active_o.png')]
+		[Embed(source='./assets/arrow_right_active_o.png')]
 		[Bindable]
 		public var active_o:Class;
 		

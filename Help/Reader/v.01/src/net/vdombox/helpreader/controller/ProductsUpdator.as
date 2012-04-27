@@ -1,4 +1,4 @@
-package
+package net.vdombox.helpreader.controller
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -6,8 +6,8 @@ package
 	
 	import mx.collections.ArrayCollection;
 	
-	import spinnerFolder.SpinnerPopUpManager;
-	import spinnerFolder.SpinnerPopupMessages;
+	import net.vdombox.helpreader.model.SpinnerPopupMessages;
+	import net.vdombox.helpreader.events.ProductsUpdatorEvent;
 	
 	public class ProductsUpdator extends EventDispatcher
 	{
