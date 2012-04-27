@@ -7,16 +7,18 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.helpeditor.utils.ResourceUtils;
-			import net.vdombox.helpeditor.model.HtmlPageProperties;
-			import net.vdombox.helpeditor.controller.PageToc;
-			import net.vdombox.helpeditor.model.WysiwygImage;
-			import net.vdombox.helpeditor.utils.Utils;
-			import net.vdombox.helpeditor.controller.ClipboardManager;
 			import com.adobe.images.PNGEncoder;
+			import com.adobe.utils.StringUtil;
 			
 			import mx.controls.Alert;
 			import mx.utils.Base64Encoder;
+			
+			import net.vdombox.helpeditor.controller.ClipboardManager;
+			import net.vdombox.helpeditor.controller.PageToc;
+			import net.vdombox.helpeditor.model.HtmlPageProperties;
+			import net.vdombox.helpeditor.model.WysiwygImage;
+			import net.vdombox.helpeditor.utils.ResourceUtils;
+			import net.vdombox.helpeditor.utils.Utils;
 			
 			private var clipboardManager : ClipboardManager = ClipboardManager.getInstance();
 			private var resourceImageUtils : ResourceUtils = ResourceUtils.getInstance(); 
@@ -267,7 +269,7 @@
 				for each (var xmlImg:XML in resourcesList)
 				{
 					var newPath : String;
-					var imgSrc : String = String(xmlImg.@src);
+					var imgSrc : String = StringUtil.trim(xmlImg.@src);
 					
 					if ( !imgSrc || imgSrc.indexOf("app-storage:/resources") >= 0 || imgSrc.indexOf("app-storage:\resources") >= 0 ) // resource exists
 						continue;
@@ -278,7 +280,7 @@
 						newPath = resourceImageUtils.loadHttpImg(imgSrc);
 					} else 
 					{
-						newPath = resourceImageUtils.copyImg(removeWhiteSpacingAfterFileName(imgSrc)); // image from file system
+						newPath = resourceImageUtils.copyImg(imgSrc); // image from file system
 					}
 					
 					if (!newPath)
@@ -288,14 +290,6 @@
 					
 					setHTML(pageContent);
 				}
-			}
-			
-			private function removeWhiteSpacingAfterFileName(path:String) : String
-			{
-				path = path.substring(0 , path.lastIndexOf(".")) +
-					path.substring(path.lastIndexOf("."), path.length).replace(" ", "");
-				
-				return path;
 			}
 			
 			public function resetImagesWidth(content : String = null):void
@@ -374,7 +368,7 @@
 					return;
 				}
 				
-				var imagePath : String = String(xmlImg.@src);
+				var imagePath : String = StringUtil.trim(xmlImg.@src);
 				var file : File = new File(imagePath);
 				
 				if (!imagePath || !file.exists)
