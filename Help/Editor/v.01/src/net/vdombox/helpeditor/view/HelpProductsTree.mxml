@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Tree xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			
+			override protected function keyDownHandler(event:KeyboardEvent):void
+			{
+				if (isCopyKeyCombination(event) || isPasteKeyCombination(event))
+					return;
+				
+				super.keyDownHandler(event);
+			}
+			
+			public function isCopyKeyCombination (event : KeyboardEvent) : Boolean
+			{
+				return event.ctrlKey && event.keyCode == Keyboard.C; 
+			}
+			
+			public function isPasteKeyCombination (event : KeyboardEvent) : Boolean
+			{
+				return event.ctrlKey && event.keyCode == Keyboard.V; 
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:Tree>
