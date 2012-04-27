@@ -37,16 +37,6 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.helpeditor.view.HTML_WYSIWYG;
-			import net.vdombox.helpeditor.utils.ResourceUtils;
-			import net.vdombox.helpeditor.view.panel.Products;
-			import net.vdombox.helpeditor.controller.PageToc;
-			import net.vdombox.helpeditor.controller.ProductXMLCreator;
-			import net.vdombox.helpeditor.model.SQLProxy;
-			import net.vdombox.helpeditor.utils.Utils;
-			import net.vdombox.helpeditor.view.panel.EditPage;
-			import net.vdombox.helpeditor.controller.CSSStyleManager;
-			import net.vdombox.helpeditor.model.AlertMessages;
 			import com.adobe.crypto.MD5Stream;
 			
 			import flash.text.engine.EastAsianJustifier;
@@ -67,7 +57,17 @@
 			import mx.utils.UIDUtil;
 			import mx.validators.StringValidator;
 			
+			import net.vdombox.helpeditor.controller.CSSStyleManager;
+			import net.vdombox.helpeditor.controller.PageToc;
+			import net.vdombox.helpeditor.controller.ProductXMLCreator;
 			import net.vdombox.helpeditor.controller.SpinnerPopUpManager;
+			import net.vdombox.helpeditor.model.AlertMessages;
+			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.utils.ResourceUtils;
+			import net.vdombox.helpeditor.utils.Utils;
+			import net.vdombox.helpeditor.view.HTML_WYSIWYG;
+			import net.vdombox.helpeditor.view.panel.EditPage;
+			import net.vdombox.helpeditor.view.panel.Products;
 
 			private var sqlProxy : SQLProxy = new SQLProxy();
 
@@ -536,6 +536,7 @@
 				productXMLFile.addEventListener(Event.CANCEL, onCancelSelectProductXML); 
 				productXMLFile.addEventListener(IOErrorEvent.IO_ERROR, onProductXMLError); 
 				productXMLFile.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onProductXMLError);
+				
 				productXMLFile.browseForSave("Save product as .XML");
 				
 			}
@@ -549,7 +550,11 @@
 			{
 				productXMLFile = aEvent.target as File; 
 				
-				if (!isCorrectFileFormat(productXMLFile.type)) {
+				if ( !productXMLFile.extension || productXMLFile.extension.toLowerCase() != "xml" )
+					productXMLFile = productXMLFile.parent.resolvePath( productXMLFile.name + '.' + "xml" );
+				
+				if (!isCorrectFileFormat(productXMLFile.extension)) 
+				{
 					Alert.show(AlertMessages.MSG_INCORRECT_XML_FILE_FORMAT, AlertMessages.MSG_TYPE_ERROR);
 					return;
 				}
@@ -562,7 +567,7 @@
 					return false;
 				}
 				
-				if (fileFormat.toLowerCase() == ".xml") {
+				if (fileFormat.toLowerCase() == "xml") {
 					return true;
 				}
 				
