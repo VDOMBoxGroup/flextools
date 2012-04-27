@@ -2,17 +2,39 @@
 <mx:WindowedApplication xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
 						xmlns:mx="http://www.adobe.com/2006/mxml"
 						xmlns:local="*"
-						width="800" height="600" minWidth="800" minHeight="600"
+						width="800" height="600" 
+						minWidth="800" minHeight="600"
 						backgroundColor="0x373739" creationComplete="{creatComleatHandler()}"
 						layout="absolute" showGripper="false" showStatusBar="false"
 						showTitleBar="false" title="VDOM Help Aplication"
 						titleBarColors="[ 0x666666, 0x222222 ]"
-						titleIcon="@Embed('icons/16_vdom_icon.png')" titleTextStyleName="tbStyle" xmlns:view="net.vdombox.helpreader.view.*">
+						titleIcon="@Embed('icons/16_vdom_icon.png')" titleTextStyleName="tbStyle" xmlns:view="net.vdombox.helpreader.view.*"
+						borderStyle="solid" borderThickness="4" borderColor="0x434343">
 	<mx:Style>
 		.tbStyle {
 			color : #FFFFFF;
 		}
+		
+		ScrollBar
+		{
+			downArrowUpSkin: ClassReference(null);
+			downArrowOverSkin: ClassReference(null);
+			downArrowDownSkin: ClassReference(null);
+			
+			upArrowUpSkin: ClassReference(null);
+			upArrowOverSkin: ClassReference(null);
+			upArrowDownSkin: ClassReference(null);
+			
+			up-arrow-skin: ClassReference(null);
+			down-arrow-skin: ClassReference(null);
+			
+			trackSkin: ClassReference("net.vdombox.helpreader.view.skins.ScrollTrackSkin");		
+			
+			thumbSkin : ClassReference("net.vdombox.helpreader.view.skins.ScrollThumbSkin")
+		}
+		
 	</mx:Style>
+	
 	<mx:Script>
 	<![CDATA[
 		import net.vdombox.helpreader.view.Location;
@@ -236,7 +258,6 @@
 			var parentItem:Object = XML(item).parent();
 			if (parentItem)
 			{
-//				distan.text = item.@title +' \\ '+  distan.text;
 				openTree(parentItem);
 				tree.expandItem(parentItem, true, false);
 				tree.validateNow();
@@ -246,13 +267,11 @@
 		private function findDistanition(fileName:String):void
 		{
 			location.removeAllChildren();
-//			distan.text = "";
+			
 			var currentElement:XML = tree.dataProvider.source..page.(@name == fileName)[0];
 			
 			find(currentElement);
 
-//			distan.text = "\\" + distan.text;
-			
 			function find(item:XML):void
 			{
 				var parentItem:Object = XML(item).parent();
@@ -263,19 +282,15 @@
 
 					find(parentItem);
 					
-					if(location.numChildren  == 0)
-//						distan.text = item.@title;
-						location.addChild(loc);
-					else	
+					if(location.numChildren  > 0)
 					{
 						var lb : Label = new Label();
-							lb.text = "->";
-							lb.setStyle("color", "#333333");
-							location.addChild(lb);
-							
-						location.addChild(loc);	
+						lb.text = "->";
+						lb.setStyle("color", "#333333");
+						location.addChild(lb);
 					}
-//						distan.text = item.@title +' -> '+  distan.text;
+					
+					location.addChild(loc);
 					
 				}
 			}
@@ -437,15 +452,26 @@
 			<mx:Canvas  id="bookMarks" label="Bookmarks" width="100%" height="100%" icon="@Embed('../assets/bookmarks.png')" show="{updateMarkedPages()}" creationComplete="{updateMarkedPages()}"/>
 		</mx:Accordion>
 		<mx:VBox width="100%" height="100%" minWidth="50" verticalGap="0" verticalAlign="0">
-			<mx:Canvas color="#FCFBFB"  width="100%" backgroundColor="#E4E4E4" >
-				<mx:HBox id="location" paddingRight="10" paddingTop="5" paddingLeft="5" paddingBottom="5" width="100%">
-					
+			<mx:HBox width="100%" height="33"
+					   color="#FCFBFB"
+					   backgroundColor="#E4E4E4"
+					   horizontalScrollPolicy="off" verticalScrollPolicy="off"
+					   horizontalGap="0">
+				
+				<mx:HBox id="location" 
+						 paddingRight="10" paddingTop="5" paddingLeft="5" paddingBottom="5" 
+						 height="33"
+						 width="{width-accordion.width-70}"
+						 verticalScrollPolicy="off" horizontalScrollPolicy="auto">
 				</mx:HBox>
+				
+				<mx:VRule width="2"/>
+				
 				<mx:HBox right="0" paddingRight="10" paddingTop="5" paddingLeft="5" paddingBottom="5">
 					<mx:Image source="@Embed('../assets/printer.png')" click="{print()}" toolTip="Print"/>
 					<mx:Image source="@Embed('../assets/bookmark__plus.png')" click="{markPage()}" toolTip="Add page to Bookmarks"/>
 				</mx:HBox>
-			</mx:Canvas>
+			</mx:HBox>
 			<mx:HTML id="html"  width="100%" height="100%" 
 				locationChange="{pageChangedHandler(event)}"/>
 		</mx:VBox>

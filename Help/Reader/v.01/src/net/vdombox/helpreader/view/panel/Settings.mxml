@@ -5,7 +5,8 @@
 -->
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="absolute" width="600" height="450"
+	layout="absolute" 
+	width="600" height="450"
 	title="Settings"
 	creationComplete="creationComplete()"
 	showCloseButton="true"
@@ -172,8 +173,11 @@
 				{
 					var chBox : CheckBox = new CheckBox();
 					
+					chBox.maxWidth = 565;
+						
 					chBox.label = title + " (" + size + ")" + " (" + unescape(url) + ")";
 					chBox.selected = true;
+					chBox.toolTip = chBox.label;
 					
 					newProducts.addChild(chBox);
 					
@@ -285,17 +289,25 @@
 		
 	</mx:Script>
 	<mx:TabNavigator width="100%" height="100%">
-		<mx:VBox label="Products" width="100%" height="100%" show="{getAllProducts()}" 
-				paddingBottom="10" paddingLeft="10" paddingRight="10">
+		<mx:VBox label="Products" 
+				 width="100%" height="100%" 
+				 show="{getAllProducts()}" 
+				 paddingBottom="10" paddingLeft="10" paddingRight="10"
+				 horizontalScrollPolicy="off" verticalScrollPolicy="off">
 			
 			<mx:Label text="Select Necessary Products: " width="100%" textAlign="center" fontSize="20"/>
-			<mx:VBox id="applications" paddingLeft="5"   borderStyle="solid" width="100%" height="100%" />
+			<mx:VBox id="applications" 
+					 paddingLeft="5"   
+					 borderStyle="solid" 
+					 width="100%" height="100%"
+					 horizontalScrollPolicy="off" verticalScrollPolicy="off"/>
 		</mx:VBox>
 		<mx:VBox   label="Update" 
 				   height="100%"
 				   verticalGap="2"
 				   paddingLeft="5" paddingRight="5" paddingBottom="10"
-				   creationComplete="checkUpdate()">
+				   creationComplete="checkUpdate()"
+				   horizontalScrollPolicy="off" verticalScrollPolicy="off">
 			<mx:HBox height="35"
 					   horizontalGap="3" 
 					   verticalAlign="middle"
@@ -317,8 +329,8 @@
 			
 			<mx:VBox id="newProducts" 
 					 borderStyle="solid"
-					 width="100%" height="100%"
-					 paddingLeft="3" paddingRight="3"/>
+					 paddingLeft="3" paddingRight="3"
+					 width="100%" height="100%"/>
 			
 		</mx:VBox>
 	</mx:TabNavigator>
