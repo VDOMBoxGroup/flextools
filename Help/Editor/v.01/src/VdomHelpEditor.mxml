@@ -9,11 +9,31 @@
 						titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Editor Application"
 						titleTextStyleName="tbStyle"
 						titleIcon="@Embed('icons/16_vdom_icon_editor.png')"
-						xmlns:local="*" xmlns:view="net.vdombox.helpeditor.view.*">
+						xmlns:local="*" xmlns:view="net.vdombox.helpeditor.view.*"
+						borderStyle="solid" borderThickness="4" borderColor="0x434343">
 	<mx:Style>
 		.tbStyle {
 			color : #FFFFFF;
 		}
+		
+		ScrollBar
+		{
+			downArrowUpSkin: ClassReference(null);
+			downArrowOverSkin: ClassReference(null);
+			downArrowDownSkin: ClassReference(null);
+			
+			upArrowUpSkin: ClassReference(null);
+			upArrowOverSkin: ClassReference(null);
+			upArrowDownSkin: ClassReference(null);
+			
+			up-arrow-skin: ClassReference(null);
+			down-arrow-skin: ClassReference(null);
+			
+			trackSkin: ClassReference("net.vdombox.helpeditor.view.skins.ScrollTrackSkin");		
+			
+			thumbSkin : ClassReference("net.vdombox.helpeditor.view.skins.ScrollThumbSkin")
+		}
+		
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
