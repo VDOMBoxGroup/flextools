@@ -505,6 +505,7 @@ package net.vdombox.helpreader.model
 					parameters = [];
 					parameters[":resourceName"] = resourceName;
 					parameters[":result"] = result[0]['id'];
+					
 					executeQuery(query, parameters);
 				}
 				

@@ -37,11 +37,6 @@
 	
 	<mx:Script>
 	<![CDATA[
-		import net.vdombox.helpreader.view.Location;
-		import net.vdombox.helpreader.controller.CSSStyleManager;
-		import net.vdombox.helpreader.model.AlertMessages;
-		import net.vdombox.helpreader.view.panel.Settings;
-		import net.vdombox.helpreader.model.SQLProxy;
 		import mx.collections.XMLListCollection;
 		import mx.controls.Alert;
 		import mx.controls.Label;
@@ -55,6 +50,12 @@
 		import mx.printing.FlexPrintJobScaleType;
 		import mx.utils.Base64Decoder;
 		import mx.utils.StringUtil;
+		
+		import net.vdombox.helpreader.controller.CSSStyleManager;
+		import net.vdombox.helpreader.model.AlertMessages;
+		import net.vdombox.helpreader.model.SQLProxy;
+		import net.vdombox.helpreader.view.Location;
+		import net.vdombox.helpreader.view.panel.Settings;
 		
 		
 		/**
@@ -170,33 +171,14 @@
 		
 		private function listChangeHandler(object:ListEvent):void
 		{
-//			showSelectedPage(pageList.selectedItem.name);
-			var fileName:String = pageList.selectedItem.name;
-			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
-			var fullPath : String = newFile.url;
+			var fileName : String = pageList.selectedItem.name;
 			
-//			var phraseRE1:RegExp = new RegExp(">[^<]*?("+"and" +").*?<","gimsx");
-//			 fullPath.replace(phraseRE1, "<b>and</b>");
+			var pageFile : File = File.applicationStorageDirectory.resolvePath(fileName);
+			
+			var fullPath : String = unescape(pageFile.url);
+			
 			html.addEventListener(Event.COMPLETE, zzz );
 			html.location = fullPath; 
-//			html.
-//			fileStream.close();
-		}
-		
-		
-		private function showSelectedPage(pageName:String):void
-		{
-			findDistanition(pageName);
-			
-			var fileName:String = pageName	;
-			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
-			var fullPath : String = unescape(newFile.url);
-			var f : File = File.applicationStorageDirectory; 
-			html.location = fullPath; 
-			
-			
-//			fileStream.close();
-			
 		}
 		
 		private function zzz( event : Event ) : void
@@ -211,6 +193,20 @@
 			
 			if(html.htmlLoader.window.localSearchHighlight)
 				html.htmlLoader.window.localSearchHighlight(searhWord);
+		}
+		
+		private function showSelectedPage(pageName:String):void
+		{
+			findDistanition(pageName);
+			
+			var fileName : String = pageName;
+			
+			var pageFile : File = File.applicationStorageDirectory.resolvePath(fileName);
+			
+			var fullPath : String = unescape(pageFile.url);
+			
+			html.location = fullPath; 
+			
 		}
 		
 		private function pageChangedHandler(event:Event):void
@@ -444,7 +440,8 @@
 		<mx:Accordion id="accordion" width="155" minWidth="50" height="100%" addedEffect="false" backgroundColor="#000000" color="#FFFFFF">
 			<mx:Canvas label="Content" width="100%" height="100%" icon="@Embed('../assets/contents.png')">
 				<mx:Tree id="tree" width="100%" height="100%" color="#000000"   	
-					labelField="@title" showRoot="true" change="{treeChangeHandler(event)}"  
+					labelField="@title" showRoot="true" 
+					change="{treeChangeHandler(event)}"  
 					folderOpenIcon="@Embed('../assets/open_folder.png')" folderClosedIcon="@Embed('../assets/close_folder.png')" 
 					defaultLeafIcon="@Embed('../assets/page.png')" /> 
 			</mx:Canvas>

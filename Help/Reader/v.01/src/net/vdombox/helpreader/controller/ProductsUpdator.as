@@ -76,7 +76,7 @@ package net.vdombox.helpreader.controller
 			productUpdator.addEventListener(ProductsUpdatorEvent.UPDATE_NOT_REQUIED, productUpdateHandler);
 			
 			if (!product["xmlContent"])
-				productUpdator.load(product["url"], product["title"]);
+				productUpdator.load(product["url"]);
 			else
 				productUpdator.parseData(product["xmlContent"]);
 		}
