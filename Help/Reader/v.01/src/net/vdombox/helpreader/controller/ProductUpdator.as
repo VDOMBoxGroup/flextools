@@ -35,6 +35,11 @@ package net.vdombox.helpreader.controller
 		
 		private static const STATE_INSTALLED_PRODUCT_DELETING_STARTS	: String = "stateInstalledProductDeletingStarts";
 		private static const STATE_INSTALLED_PAGE_DELETING_STARTS		: String = "stateInstalledPageDeletingStarts";
+		private static const STATE_INSTALLED_PAGE_DELETING_NEXT_RESOURCE_FILE	: String = "stateInstalledPageDeletingNextResourceFile";
+		private static const STATE_INSTALLED_PAGE_DELETING_NEXT_RESOURCE_FILE_COMPLETE	: String = "stateInstalledPageDeletingNextResourceFileComplete";
+		private static const STATE_INSTALLED_PAGE_DELETING_LAST_RESOURCE_FILE_COMPLETE	: String = "stateInstalledPageDeletingLastResourceFileComplete";
+		private static const STATE_INSTALLED_PAGE_DELETING_RESOURCES_FROM_DB	: String = "stateInstalledPageDeletingResourcesFromDB";
+		private static const STATE_INSTALLED_PAGE_DELETING_PAGE_FROM_DB	: String = "stateInstalledPageDeletingPageFromDB";
 		private static const STATE_INSTALLED_PAGE_DELETING_COMPLETE		: String = "stateInstalledPageDeletingComplete";
 		private static const STATE_INSTALLED_LAST_PAGE_DELETING_COMPLETE		: String = "stateInstalledLastPageDeletingComplete";
 		private static const STATE_INSTALLED_PRODUCT_DELETING_COMPLETE	: String = "stateInstalledProductDeletingComplete";
@@ -44,6 +49,9 @@ package net.vdombox.helpreader.controller
 		private static const STATE_PAGE_GENERATING_UPDATE_CONTENT_LINKS	: String = "statePageGeneratingUpdateContentLinks";
 		private static const STATE_PAGE_GENERATING_ADD_TO_DB			: String = "statePageGeneratingAddToDB";
 		private static const STATE_PAGE_GENERATING_CACHE_RESOURCES		: String = "statePageGeneratingCacheResources";
+		private static const STATE_PAGE_GENERATING_CACHE_NEXT_RESOURCE	: String = "statePageGeneratingCacheNextResource";
+		private static const STATE_PAGE_GENERATING_CACHE_NEXT_RESOURCE_COMPLETE	: String = "statePageGeneratingCacheNextResourceComplete";
+		private static const STATE_PAGE_GENERATING_CACHE_LAST_RESOURCE_COMPLETE	: String = "statePageGeneratingCacheLastResourceComplete";
 		private static const STATE_PAGE_GENERATING_CACHE_PAGE			: String = "statePageGeneratingCachePage";
 		private static const STATE_PAGE_GENERATING_COMPLETE		: String = "statePageGeneratingComplete";
 		private static const STATE_LAST_PAGE_GENERATED			: String = "stateLastPageGenerated";
@@ -52,6 +60,7 @@ package net.vdombox.helpreader.controller
 		private static const STATE_PROJECT_UPDATE_CANCELED				: String = "stateProjectUpdateCanceled";
 		private static const STATE_PROJECT_UPDATE_NOT_REQUIRED			: String = "stateProjectUpdateNotRequired";
 		
+		private var stateAfterDeletePage : String = STATE_INSTALLED_PAGE_DELETING_COMPLETE;
 		
 		
 		private var xmlLoader				: ProductXMLLoader = new ProductXMLLoader();
@@ -63,6 +72,7 @@ package net.vdombox.helpreader.controller
 		private var productXML				: XML;
 		private var productPages			: XMLList;
 		private var pagesCounter			: Number = 0;
+		private var resourcesCounter		: Number = 0;
 		
 		private var fileStream				: FileStream = new FileStream();
 		
@@ -80,7 +90,6 @@ package net.vdombox.helpreader.controller
 		
 		private function onAppEnterFrame(aEvent : Event):void
 		{
-			trace ("++ [ProductUpdater] onAppEnterFrame: " + curState);
 			switch(curState)
 			{
 				case STATE_PRODUCT_XML_LOADING_STARTS:
@@ -133,11 +142,64 @@ package net.vdombox.helpreader.controller
 						return;
 					}
 					
+					stateAfterDeletePage = STATE_INSTALLED_PAGE_DELETING_COMPLETE;
+					
 					deletePage(installedProductId, installedPages[pagesCounter].name);
 					
-					curState = STATE_INSTALLED_PAGE_DELETING_COMPLETE;
 					break;
 				}
+				case STATE_INSTALLED_PAGE_DELETING_NEXT_RESOURCE_FILE:
+				{
+					if (resourcesCounter >= installedResources.length)
+					{
+						curState = STATE_INSTALLED_PAGE_DELETING_LAST_RESOURCE_FILE_COMPLETE;
+						return;
+					}
+						
+					deleteFile(installedResources[resourcesCounter]['name']);
+					
+					curState = STATE_INSTALLED_PAGE_DELETING_NEXT_RESOURCE_FILE_COMPLETE;
+					
+					break;
+				}
+				case STATE_INSTALLED_PAGE_DELETING_NEXT_RESOURCE_FILE_COMPLETE:
+				{
+					resourcesCounter ++;
+					
+					if (resourcesCounter >= installedResources.length)
+					{
+						resourcesCounter = 0;
+						
+						curState = STATE_INSTALLED_PAGE_DELETING_LAST_RESOURCE_FILE_COMPLETE;
+					}
+					else
+						curState = STATE_INSTALLED_PAGE_DELETING_NEXT_RESOURCE_FILE;
+					
+					break;
+				}
+				case STATE_INSTALLED_PAGE_DELETING_LAST_RESOURCE_FILE_COMPLETE:
+				{
+					curState = STATE_INSTALLED_PAGE_DELETING_RESOURCES_FROM_DB;
+					
+					break;
+				}
+				case STATE_INSTALLED_PAGE_DELETING_RESOURCES_FROM_DB:
+				{
+					sqlProxy.deleteResources(installedProductId, deletingPageName);
+					
+					curState = STATE_INSTALLED_PAGE_DELETING_PAGE_FROM_DB;
+					break;
+				}
+				case STATE_INSTALLED_PAGE_DELETING_PAGE_FROM_DB:
+				{
+					sqlProxy.deletePage(installedProductId, deletingPageName);
+					
+					deleteFile(deletingPageName);
+					
+					curState = stateAfterDeletePage ? stateAfterDeletePage : STATE_INSTALLED_PAGE_DELETING_COMPLETE;
+					break;
+				}
+				
 				case STATE_INSTALLED_PAGE_DELETING_COMPLETE:
 				{
 					pagesCounter ++;
@@ -239,8 +301,33 @@ package net.vdombox.helpreader.controller
 				{
 					createPageResources();
 					
-					curState = STATE_PAGE_GENERATING_COMPLETE;
+					break;
+				}
+				case STATE_PAGE_GENERATING_CACHE_NEXT_RESOURCE:
+				{
+					createPageResource();
 					
+					break;
+				}
+				case STATE_PAGE_GENERATING_CACHE_NEXT_RESOURCE_COMPLETE:
+				{
+					resourcesCounter ++;
+					
+					if (resourcesCounter >= curPageResources.length())
+					{
+						resourcesCounter = 0;
+						curState = STATE_PAGE_GENERATING_CACHE_LAST_RESOURCE_COMPLETE;
+						return;
+					}
+					
+					curState = STATE_PAGE_GENERATING_CACHE_NEXT_RESOURCE;
+					break;
+				}
+				case STATE_PAGE_GENERATING_CACHE_LAST_RESOURCE_COMPLETE:
+				{
+					resourcesCounter = 0;
+					
+					curState = STATE_PAGE_GENERATING_COMPLETE;
 					break;
 				}
 				case STATE_PAGE_GENERATING_COMPLETE:
@@ -461,6 +548,14 @@ package net.vdombox.helpreader.controller
 			return productPages[pagesCounter];
 		}
 		
+		private function get curPageResources () : XMLList
+		{
+			if (!currentPage)
+				return null;
+			
+			return currentPage.resources.children();
+		}
+		
 		private function get curPageLocation () : String
 		{
 			if (!currentPage)
@@ -522,9 +617,9 @@ package net.vdombox.helpreader.controller
 			
 			if (Number(installedPageVersion) < Number(curPageVersion))
 			{
-				deletePage(installedProductId, curPageLocation);
+				stateAfterDeletePage = STATE_PAGE_GENERATING_UPDATE_CONTENT_LINKS;
 				
-				curState = STATE_PAGE_GENERATING_UPDATE_CONTENT_LINKS;
+				deletePage(installedProductId, curPageLocation);
 				
 				return;
 			}
@@ -616,22 +711,32 @@ package net.vdombox.helpreader.controller
 		
 		private function createPageResources () : void
 		{
-			trace (" == createPageResources == ");
-			for each(var resource:XML in currentPage.resources.children())
+			if (!curPageResources || curPageResources.length() == 0)
 			{
-				trace (" -- resource");
-				var base64 : Base64Decoder = new Base64Decoder();
-				base64.decode(resource.toString());
-				
-				var byteArray0 : ByteArray = base64.toByteArray();
-				
-				var resourceName : String = "resources/"+ resource.@id + "." + resource.@type;
-				
-				sqlProxy.setResource(curPageLocation, location + resourceName);
-				
-				cacheFile(location + resourceName , byteArray0);
+				curState = STATE_PAGE_GENERATING_CACHE_LAST_RESOURCE_COMPLETE;
+				return;
 			}
 			
+			resourcesCounter = 0;
+			curState = STATE_PAGE_GENERATING_CACHE_NEXT_RESOURCE;
+		}
+		
+		private function createPageResource () : void
+		{
+			var resource : XML = curPageResources[resourcesCounter];
+			
+			var base64 : Base64Decoder = new Base64Decoder();
+			base64.decode(resource.toString());
+			
+			var byteArray0 : ByteArray = base64.toByteArray();
+			
+			var resourceName : String = "resources/"+ resource.@id + "." + resource.@type;
+			
+			sqlProxy.setResource(curPageLocation, location + resourceName);
+			
+			cacheFile(location + resourceName , byteArray0);
+			
+			curState = STATE_PAGE_GENERATING_CACHE_NEXT_RESOURCE_COMPLETE;
 		}
 		
 		private function onPageGenerated():void
@@ -651,6 +756,7 @@ package net.vdombox.helpreader.controller
 		}
 		
 		private var installedPages : Object;
+		private var installedResources : Object;
 		
 		private function get installedProductId () : Number
 		{
@@ -694,22 +800,23 @@ package net.vdombox.helpreader.controller
 			deleteFile(productLocation);
 		}
 		
+		private var deletingPageName : String;
 		private function deletePage(productId:Number, namePage:String):void
 		{
-			// delete resources
-			var resources:Object = sqlProxy.getResourcesOfPage(namePage);
+			deletingPageName = namePage;
 			
-			for(var index:String in resources)
+			installedResources = sqlProxy.getResourcesOfPage(deletingPageName);
+			
+			if (installedResources && installedResources.length > 0)
 			{
-				deleteFile(resources[index]['name']);
+				resourcesCounter = 0;
+				
+				curState = STATE_INSTALLED_PAGE_DELETING_NEXT_RESOURCE_FILE;
 			}
-			
-			sqlProxy.deleteResources(productId, namePage);
-			
-			// delete file
-			sqlProxy.deletePage(productId, namePage);
-			
-			deleteFile(namePage);
+			else
+			{
+				curState = STATE_INSTALLED_PAGE_DELETING_LAST_RESOURCE_FILE_COMPLETE;
+			}
 		}
 		
 		private function deleteFile(location:String):void
