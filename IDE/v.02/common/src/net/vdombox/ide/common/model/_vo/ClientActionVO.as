@@ -14,7 +14,7 @@ package net.vdombox.ide.common.model._vo
 		
 		private var _left : int;
 		
-		private var _state : Boolean;
+		private var _state : Boolean = true;
 		
 		private var _id : String;
 		

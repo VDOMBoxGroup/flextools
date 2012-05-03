@@ -5,13 +5,11 @@ package net.vdombox.ide.common.events
 	public class FindBoxEvent extends Event
 	{
 		public static const CLOSE : String = "findClose";
-		public static const FIND_TEXT_CHANGE : String = "findTextChange";
+		public static const CREATION_COMPLETE : String = "findBoxCreationComplete";
 		
-		public static const PREVIOUS_FIND_TEXT : String = "previousFindText";
-		public static const NEXT_FIND_TEXT : String = "nextFindText";
+		public static const FIND_TEXT_IN_SELECTED_TYPE : String = "findTextInSelectedType";
 		
-		public static const REPLACE_TEXT : String = "replaceText";
-		public static const REPLACE_ALL_TEXT : String = "replaceAllText";
+		public static const ITEM_CLICK : String = "findItemClick";
 		
 		public function FindBoxEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{

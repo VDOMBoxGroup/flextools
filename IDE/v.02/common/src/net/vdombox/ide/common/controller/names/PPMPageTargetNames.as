@@ -2,6 +2,7 @@ package net.vdombox.ide.common.controller.names
 {
 	public class PPMPageTargetNames
 	{
+		public static const ALL_SERVER_ACTIONS : String = "all_ServerActions";
 		public static const SERVER_ACTIONS : String = "serverActions";
 		public static const STRUCTURE : String = "structure";
 		public static const OBJECTS : String = "objects";

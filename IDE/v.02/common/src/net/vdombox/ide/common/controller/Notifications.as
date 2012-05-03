@@ -228,6 +228,7 @@ package net.vdombox.ide.common.controller
 		
 		public static const GET_STRUCTURE : String = "getStructure";
 		public static const STRUCTURE_GETTED : String = "structureGetted";
+		public static const STRUCTURE_GETTED_REQUEST : String = "structureGettedRequest";
 		
 		public static const GET_GLOBAL_ACTIONS : String = "getGlobalActions";
 		public static const GLOBAL_ACTIONS_GETTED : String = "globalActionsGetted";
@@ -235,6 +236,9 @@ package net.vdombox.ide.common.controller
 		public static const GET_SERVER_ACTIONS_REQUEST : String = "getServerActionsRequest";
 		public static const GET_SERVER_ACTIONS : String = "getServerActions";
 		public static const SERVER_ACTIONS_GETTED : String = "serverActionsGetted";
+		
+		public static const GET_ALL_SERVER_ACTIONS : String = "getAllServerActions";
+		public static const ALL_SERVER_ACTIONS_GETTED : String = "allServerActionsGetted";
 		
 		public static const SET_SERVER_ACTIONS : String = "setServerActions";
 		public static const SERVER_ACTIONS_SETTED : String = "serverActionsSetted";
@@ -282,6 +286,13 @@ package net.vdombox.ide.common.controller
 		public static const LIBRARY_DELETED : String = "libraryDeleted";
 		
 		public static const OPEN_ONLOAD_SCRIPT : String = "openOnloadScript";
+		
+		public static const CHANGE_SELECTED_SCRIPT : String = "changeSelectedScript";
+		public static const OPEN_FIND_SCRIPT : String = "openFindScript";
+		
+		public static const GET_PAGES_STRUCTURE : String = "getPagesStructure";
+		public static const PAGES_STRUCTURE_GETTED : String = "pagesStructureGetted";
+		
 		
 		
 //////////////////////////////////////////ResourceBrowser/////////////////////////////////////////////

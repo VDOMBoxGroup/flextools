@@ -181,7 +181,7 @@ package net.vdombox.ide.common.model._vo
 			testValue = propertiesXML.@State[ 0 ];
 
 			if ( testValue !== null )
-				state = testValue == "true" ? true : false;
+				state = testValue == "false" ? false : true;
 
 			testValue = propertiesXML.@ContainerID[ 0 ];
 

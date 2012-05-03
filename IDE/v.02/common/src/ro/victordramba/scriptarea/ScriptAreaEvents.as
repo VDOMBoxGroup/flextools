@@ -158,7 +158,11 @@ package ro.victordramba.scriptarea
 			var dragStart : int;
 			if ( e.shiftKey )
 			{
-				dragStart = _caret;
+				if ( _selStart == _selEnd )
+					dragStart = _caret;
+				else
+					dragStart = _start;
+				
 				_setSelection( dragStart, getIndexForPoint( new Point( mouseX, mouseY ) ), true );
 			}
 			else

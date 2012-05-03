@@ -62,6 +62,7 @@ package ro.victordramba.scriptarea
 		}
 
 		protected var _caret : int;
+		protected var _start : int;
 		protected var _selStart : int = 0;
 		protected var _selEnd : int = 0;
 
@@ -214,7 +215,7 @@ package ro.victordramba.scriptarea
 			setSelection( pos, pos );
 		}
 		
-		public function replaceFind( findText : String, _replaceText : String, replaceAll : Boolean = false ) : void
+		public function replaceFind( findText : String, reText : String, replaceAll : Boolean = false ) : void
 		{
 			if ( findText == "" )
 				return;
@@ -226,7 +227,7 @@ package ro.victordramba.scriptarea
 				index = text.indexOf( findText );
 				while ( index != -1 )
 				{
-					replaceText( index, index + findText.length, _replaceText );
+					replaceText( index, index + findText.length, reText );
 					index = text.indexOf( findText, index + 1 );
 				}
 			}
@@ -237,7 +238,7 @@ package ro.victordramba.scriptarea
 				if ( index == -1 )
 					return;
 				
-				replaceText( index, index + findText.length, _replaceText );
+				replaceText( index, index + findText.length, reText );
 			}
 			
 			_caret = index;
@@ -249,7 +250,7 @@ package ro.victordramba.scriptarea
 			var g : Graphics = selectionShape.graphics;
 			g.clear();
 			
-			g.beginFill( 0x64FF53, 1 );
+			g.beginFill( 0x3399FF, 1 );
 			
 			var p0 : Point = getPointForIndex( index );
 			var p1 : Point = getPointForIndex( index + _replaceText.length );
@@ -257,7 +258,10 @@ package ro.victordramba.scriptarea
 			g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
 			
 			selectionRects( findText );
+			
+			_replaceText( 0, 0, "" );
 		}	
+		
 		private var _selectRects : Array = new Array();
 		
 		private function clearRect() : void
@@ -327,17 +331,22 @@ package ro.victordramba.scriptarea
 			checkScrollToCursor();
 			updateScrollProps();
 			
+			_selStart = index;
+			_selEnd = index + findText.length;
+			
 			var g : Graphics = selectionShape.graphics;
 			g.clear();
 			
-			g.beginFill( 0x64FF53, 1 );
+			g.beginFill( 0x3399FF, 1 );
 			
-			var p0 : Point = getPointForIndex( index );
-			var p1 : Point = getPointForIndex( index + findText.length );
+			var p0 : Point = getPointForIndex( _selStart );
+			var p1 : Point = getPointForIndex( _selEnd );
 				
 			g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
 			
 			selectionRects( findText );
+			
+			_replaceText( 0, 0, "" );
 			
 			return true;
 		}
@@ -349,7 +358,7 @@ package ro.victordramba.scriptarea
 			
 			var g : Graphics = selectionShapeRects.graphics;
 			g.clear();
-			g.beginFill( 0x9DFBAB, .9 );
+			g.beginFill( 0xD4D4D4, .9 );
 			
 			while ( index != -1 )
 			{
@@ -393,7 +402,7 @@ package ro.victordramba.scriptarea
 			var index : int = text.indexOf( strFind );
 			var step : int = _end - _start;
 			
-			g.beginFill( 0x9DFBAB, .9 );
+			g.beginFill( 0xD4D4D4, 1 );
 			
 			while ( index != -1 )
 			{
@@ -424,12 +433,16 @@ package ro.victordramba.scriptarea
 		{
 			_selStart = beginIndex;
 			_selEnd = endIndex;
+			
+			_start = _selStart;
 
 			if ( _selStart > _selEnd )
 			{
 				var tmp : int = _selEnd;
 				_selEnd = _selStart;
 				_selStart = tmp;
+				
+				_start = _selEnd;
 			}
 
 			var p0 : Point = getPointForIndex( Math.max( _selStart, firstPos ) );
@@ -442,7 +455,7 @@ package ro.victordramba.scriptarea
 
 			if ( _selStart != _selEnd && _selStart <= lastPos && _selEnd >= firstPos )
 			{
-				g.beginFill( 0x64FF53, 1 );
+				g.beginFill( 0x3399FF, 1 );
 
 				if ( p0.y == p1.y )
 				{
@@ -472,6 +485,8 @@ package ro.victordramba.scriptarea
 				cursor.y = p1.y + tf.y;
 				checkScrollToCursor();
 			}
+			
+			_replaceText( 0, 0, "" );
 		}
 
 		public function updateCaret() : void
@@ -549,6 +564,20 @@ package ro.victordramba.scriptarea
 
 		public function addFormatRun( beginIndex : int, endIndex : int, bold : Boolean, italic : Boolean, color : String ) : void
 		{
+			if ( beginIndex > _selStart && beginIndex < _selEnd )
+			{
+				if ( endIndex < _selEnd )
+					return;
+				else
+					beginIndex = _selEnd;
+			}
+			
+			if ( endIndex > _selStart && endIndex < _selEnd )
+			{
+				endIndex = _selStart;
+			}
+				
+				
 			runs.push( { begin: beginIndex, end: endIndex, color: color, bold: bold, italic: italic } );
 		}
 
@@ -834,18 +863,9 @@ package ro.victordramba.scriptarea
 					break;
 
 				if ( o.begin > pos )
-					slices.push( htmlEnc( _text.substring( pos, o.begin ) ) );
-
-				var str : String =
-					"<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
-
-				if ( o.bold )
-					str = "<b>" + str + "</b>";
-
-				if ( o.italic )
-					str = "<i>" + str + "</i>";
-
-				slices.push( str );
+					slices.push( setColorForSimpleText( pos, o.begin ) );
+				
+				slices.push( setColorForSpecialText() );
 
 				if ( o.end > lastPos )
 				{
@@ -856,7 +876,7 @@ package ro.victordramba.scriptarea
 			}
 
 			if ( pos < lastPos )
-				slices.push( htmlEnc( _text.substring( pos, lastPos ) ) );
+				slices.push( setColorForSimpleText( pos, lastPos ));
 
 			var visibleText : String = slices.join( "" );
 
@@ -864,6 +884,84 @@ package ro.victordramba.scriptarea
 			visibleText = visibleText.replace( /\t/g, "    " );
 
 			tf.htmlText = visibleText;
+			
+			function setColorForSpecialText() : String
+			{
+				var str : String;
+				
+				if ( o.begin >= _selStart && o.begin <= _selEnd )
+				{
+					if ( o.end < _selEnd )
+						str = "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
+					else
+					{
+						str = "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selEnd ) ) + "</font>";
+						str += "<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( _selEnd, o.end ) ) + "</font>";
+					}
+				}
+				else if ( o.begin <= _selStart && o.end >= _selStart)
+				{
+					if ( o.end <= _selEnd )
+					{
+						str = "<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selStart ) ) + "</font>";
+						str += "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( _selStart, o.end ) ) + "</font>";
+					}
+					else
+					{
+						str = "<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selStart ) ) + "</font>";
+						str += "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( _selStart, _selEnd ) ) + "</font>";
+						str += "<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( _selEnd, o.end ) ) + "</font>";
+					}
+				}
+				else
+				{
+					str = "<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
+					
+					if ( o.bold )
+						str = "<b>" + str + "</b>";
+					
+					if ( o.italic )
+						str = "<i>" + str + "</i>";
+				}
+				
+				return str;
+			}
+			
+			function setColorForSimpleText( begin : int, end : int ) : String
+			{
+				var str : String;
+				
+				if ( begin >= _selStart && begin <= _selEnd )
+				{
+					if ( end <= _selEnd )
+						str = "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( Math.max( begin, firstPos ), end ) ) + "</font>";
+					else
+					{
+						str = "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( Math.max( begin, firstPos ), _selEnd ) ) + "</font>";
+						str += htmlEnc( _text.substring( _selEnd, end ) );
+					}
+				}
+				else if ( begin <= _selStart && end >= _selStart)
+				{
+					if ( end <= _selEnd )
+					{
+						str = htmlEnc( _text.substring( Math.max( begin, firstPos ), _selStart ) );
+						str += "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( _selStart, end ) ) + "</font>";
+					}
+					else
+					{
+						str = htmlEnc( _text.substring( Math.max( begin, firstPos ), _selStart ) );
+						str += "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( _selStart, _selEnd ) ) + "</font>";
+						str += htmlEnc( _text.substring( _selEnd, end ) );
+					}
+				}
+				else
+				{
+					str = htmlEnc( _text.substring( Math.max( begin, firstPos ), end ) );
+				}
+				
+				return str;
+			}
 		}
 
 		private function htmlEnc( str : String ) : String
