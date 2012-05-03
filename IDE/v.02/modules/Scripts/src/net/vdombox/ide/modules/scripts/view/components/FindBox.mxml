@@ -1,15 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:button="net.vdombox.ide.common.view.components.button.*"
+		 creationComplete="group1_creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.events.FindBoxEvent;
+			import net.vdombox.ide.common.model._vo.LibraryVO;
+			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			
 			import spark.events.TextOperationEvent;
 			
 			private var lastButton :WorkAreaButton;
+			public var selectedScriptAreaComponent : ScriptAreaComponent;
+			
+			[Bindable]
+			public var findType : String = "current";
+			
+			[Bindable]
+			public var findString : String;
+			private var findResult : Boolean;
+			
+			private var serverActions : Array;
+			private var containerActions : Object;
+			
+			
+			
+			[Bindable]
+			private var scriptsXMLList : XMLList = null;
+			
+			
 			
 			protected function image1_clickHandler(event:MouseEvent):void
 			{
@@ -17,20 +41,37 @@
 			}
 			
 			protected function findText_changeHandler(event:TextOperationEvent):void
-			{
-				dispatchEvent( new FindBoxEvent ( FindBoxEvent.FIND_TEXT_CHANGE ) );
+			{				
+				findResult = selectedScriptAreaComponent.findText( findText.text, 0 );
+				
+				if ( findResult || findText.text == "" )
+					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
+				else
+					findText.setStyle( "contentBackgroundColor", 0xFF0000 );
 			}
 			
-			protected function previous_clickHandler(event:MouseEvent):void
+			protected function previous_clickHandler(event:MouseEvent = null):void
 			{
 				lastButton = previous;
-				dispatchEvent( new FindBoxEvent ( FindBoxEvent.PREVIOUS_FIND_TEXT ) );
+				
+				findResult = selectedScriptAreaComponent.findText( findText.text, 1 );
+				
+				if ( findResult || findText.text == "" )
+					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
+				else
+					findText.setStyle( "contentBackgroundColor", 0xFF0000 );
 			}
 			
-			protected function next_clickHandler(event:MouseEvent):void
+			protected function next_clickHandler(event:MouseEvent = null):void
 			{
 				lastButton = next;
-				dispatchEvent( new FindBoxEvent ( FindBoxEvent.NEXT_FIND_TEXT ) );
+				
+				findResult = selectedScriptAreaComponent.findText( findText.text, 2 );
+				
+				if ( findResult || findText.text == "" )
+					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
+				else
+					findText.setStyle( "contentBackgroundColor", 0xFF0000 );
 			}
 			
 			protected function findText_keyDownHandler(event:KeyboardEvent):void
@@ -38,21 +79,198 @@
 				if ( event.keyCode == Keyboard.ENTER )
 				{
 					if ( lastButton == previous )
-						dispatchEvent( new FindBoxEvent ( FindBoxEvent.PREVIOUS_FIND_TEXT ) );
+						previous_clickHandler();
 					else
-						dispatchEvent( new FindBoxEvent ( FindBoxEvent.NEXT_FIND_TEXT ) );
+						next_clickHandler();
 				}
 					
 			}
 			
 			protected function replace_clickHandler(event:MouseEvent):void
 			{
-				dispatchEvent( new FindBoxEvent ( FindBoxEvent.REPLACE_TEXT ) );
+				selectedScriptAreaComponent.replaceFind( findText.text, replaceText.text );
 			}
 			
 			protected function replaceAll_clickHandler(event:MouseEvent):void
 			{
-				dispatchEvent( new FindBoxEvent ( FindBoxEvent.REPLACE_ALL_TEXT ) );
+				selectedScriptAreaComponent.replaceFind( findText.text, replaceText.text, true );
+			}
+			
+			protected function find_clickHandler(event:MouseEvent):void
+			{
+				scriptsXMLList = new XMLList();
+				containerActions = [];
+				findString = findText.text;
+				
+				if ( findString == "" )
+					return;
+				
+				serverActions = new Array();
+				dispatchEvent( new FindBoxEvent ( FindBoxEvent.FIND_TEXT_IN_SELECTED_TYPE ) );
+			}
+			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				dispatchEvent( new FindBoxEvent ( FindBoxEvent.CREATION_COMPLETE ) );
+				
+				addEventListener( FindBoxEvent.ITEM_CLICK, changeItem, true, 0, true );
+			}
+			
+			private function changeItem( event : FindBoxEvent ) : void
+			{
+				var objectID : String = FindTreeItemRenderer( event.target ).data.@id;
+				
+				/*if ( !containerActions.hasOwnProperty( objectID ) )
+				{
+					findStringTree.dataProvider = null;
+					return;
+				}
+				
+				findStringTree.dataProvider = containerActions[ objectID ];*/
+			}
+			
+			public function findStringInServerActions( actions : Array ) : void
+			{
+				var serverActionVO : ServerActionVO;
+				var script : String;
+				var index : int;
+				
+				var start : int = 0;
+				var end : int = 0;
+				
+				for each ( serverActionVO in actions )
+				{
+					if ( serverActionVO.script == "" )
+						continue;
+					
+					script = serverActionVO.script;
+					
+					index = script.indexOf( findString );
+					
+					if ( index == -1 )
+						continue;
+					
+					serverActions.push( serverActionVO );
+					
+					var serverActionXML : XML = <script name={ serverActionVO.name } />;
+					
+					var serverActionXMLList : XMLList;
+					
+					if ( containerActions.hasOwnProperty( serverActionVO.containerID ) )
+						serverActionXMLList = containerActions[ serverActionVO.containerID ];
+					else
+						serverActionXMLList = new XMLList();
+					
+					serverActionXMLList += serverActionXML;
+					
+					serverActionXML = serverActionXMLList.( @name == serverActionVO.name )[ 0 ];
+					
+					var serverActionXML2 : XML = <script name={ serverActionVO.name } />;
+					
+					while ( index != -1 )
+					{
+						start = index;
+						end = index;
+						
+						while ( script.charAt( --start ) != '\n' && start >= 0 )
+							true;
+						
+						while ( script.charAt( ++end ) != '\n' && end < script.length - 1 )
+							true;
+						
+						serverActionXML2.appendChild( <text name={ script.slice( start+1, end ) } index={ index } />);
+						index = script.indexOf( findString, index + 1 );
+					}
+					
+					serverActionXML.appendChild( serverActionXML2.* );
+					
+					containerActions[ serverActionVO.containerID ] = serverActionXMLList;
+				}
+			}
+			
+			public function findObjectsInStructure( structure : XMLList ) : void
+			{
+				var objects : XMLList = structure..object;
+				var completed : Boolean;
+				var i : uint;
+				
+				do
+				{
+					completed = true;
+					
+					for ( i = 0; i < objects.length(); i++ )
+					{
+						if ( objects[i].children().length() == 0 && !containerActions.hasOwnProperty( objects[i].@id ))
+						{
+							delete objects[i--];
+							completed = false;
+						}
+					}
+				}
+				while ( !completed );
+				
+				for ( i = 0; i < structure.length(); i++ )
+				{
+					if ( structure[i].children().length() == 0 && !containerActions.hasOwnProperty( structure[i].@id ) ) 
+						delete structure[i--];
+						
+				}
+				
+				scriptsXMLList = structure;
+			}
+			
+			public function addFindLibraries( libraries : Array ) : void
+			{
+				scriptsXMLList = new XMLList();
+				
+				var libraryVO : LibraryVO;
+				var index : int = -1;
+				
+				var start : int = 0;
+				var end : int = 0;
+				var script: String;
+				
+				for each ( libraryVO in libraries )
+				{
+					script = libraryVO.script;
+					index = script.indexOf( findString );
+					
+					if ( index == -1 )
+						continue;
+					
+					var libraryXML : XML = <script name={ libraryVO.name } />;
+					scriptsXMLList += libraryXML;
+					
+					libraryXML = scriptsXMLList.( @name == libraryVO.name )[ 0 ];
+										
+					var libraryXML2 : XML = <script name={ libraryVO.name } />;
+					
+					while ( index != -1 )
+					{
+						start = index;
+						end = index;
+						
+						while ( script.charAt( --start ) != '\n' )
+							true;
+						
+						while ( script.charAt( ++end ) != '\n' )
+							true;
+						
+						libraryXML2.appendChild( <text name={ script.slice( start+1, end ) } index={ index } />);
+						index = libraryVO.script.indexOf( findString, index + 1 );
+					}
+					
+					libraryXML.appendChild( libraryXML2.* );
+					
+				}
+			}
+			
+			protected function findOrReplace_clickHandler(event:MouseEvent):void
+			{
+				if ( currentState == "find" )
+					currentState = "replace";
+				else
+					currentState = "find";
 			}
 			
 		]]>
@@ -60,6 +278,12 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="find" />
+		
+		<s:State name="replace" />
+	</s:states>
 	
 	<s:Rect width="100%" height="100%">
 		<s:fill>
@@ -80,19 +304,36 @@
 				
 			</s:HGroup>
 			
-			<s:HGroup left="100" width="100%" height="100%" verticalAlign="middle">
+			<s:HGroup left="100" width="100%" height="100%" verticalAlign="middle" paddingRight="50">
 				
-				<s:TextInput id="findText" width="200" change="findText_changeHandler(event)" keyDown="findText_keyDownHandler(event)"/>
+				<s:TextInput id="findText" width="200"
+							 change="findText_changeHandler(event)" keyDown="findText_keyDownHandler(event)"/>
+					
+				<button:WorkAreaButton id="previous" icon="{VDOMImage.Arrow_Left}"
+									   click="previous_clickHandler(event)" />
+					
+				<button:WorkAreaButton id="next" icon="{VDOMImage.Arrow_Right}"
+									   click="next_clickHandler(event)"/>
 				
-				<button:WorkAreaButton id="previous" icon="{VDOMImage.Arrow_Left}" click="previous_clickHandler(event)" />
+				<button:WorkAreaButton id="findOrReplace" label.find="{ resourceManager.getString( 'Scripts_General', 'replace' ) }"
+									   label.replace="Find" click="findOrReplace_clickHandler(event)"/>
 				
-				<button:WorkAreaButton id="next" icon="{VDOMImage.Arrow_Right}" click="next_clickHandler(event)"/>
+				<!--<button:WorkAreaButton id="find" label="Find" includeIn="other" 
+									   click="find_clickHandler(event)"/>-->
+				
+				<!--<mx:Spacer width="100%"/>
+				
+				<button:WorkAreaButton id="current" label="current" highlighted="{ findType == 'current' ? true : false }" 
+									   click="{ findType = 'current'; currentState='current' }"/>
+				
+				<button:WorkAreaButton id="inLibs" label="In Library" highlighted="{ findType == 'inLibs' ? true : false }" 
+									   click="{ findType = 'inLibs'; currentState='other' }"/>-->
 				
 			</s:HGroup>
 			
 		</s:Group>
 		
-		<s:Group width="100%" height="100%">
+		<s:Group width="100%" height="100%" includeIn="replace">
 			
 			<s:HGroup left="0" height="100%" verticalAlign="middle">
 				
@@ -111,6 +352,18 @@
 			</s:HGroup>
 			
 		</s:Group>
+		
+		<!--<s:HGroup width="100%" height="100%">
+			
+			<mx:Tree id="findResultTree" width="100%" height="150"
+					 dataProvider="{scriptsXMLList}" labelField="@name"
+					 itemRenderer="net.vdombox.ide.modules.scripts.view.components.FindTreeItemRenderer"/>
+			
+			<mx:Tree id="findStringTree" width="100%" height="150"
+					 labelField="@name"/>
+		</s:HGroup>-->
+		
+		
 		
 	</s:VGroup>
 	

@@ -103,7 +103,6 @@ package net.vdombox.ide.modules.scripts.view
 					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
-						sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
 
 						break;
 					}
@@ -130,15 +129,19 @@ package net.vdombox.ide.modules.scripts.view
 				}
 					
 				case Notifications.PAGES_GETTED:
-				{
+				{					
 					if ( statesProxy.selectedObject )
+					{
+						onloadScriptOpening = statesProxy.selectedObject.id;
 						sendNotification( Notifications.GET_SERVER_ACTIONS, statesProxy.selectedObject );
+					}
 					else if ( statesProxy.selectedPage )
+					{
+						onloadScriptOpening = statesProxy.selectedPage.id;
 						sendNotification( Notifications.GET_SERVER_ACTIONS, statesProxy.selectedPage );
+					}
 					else
 						clearData();
-					
-					break;
 					
 					break;
 				}
@@ -160,6 +163,8 @@ package net.vdombox.ide.modules.scripts.view
 				case Notifications.SERVER_ACTIONS_GETTED:
 				{
 					serverScriptsPanel.scripts = body.serverActions as Array;
+					
+					
 					if ( onloadScriptOpening != "" )
 					{
 						onloadScriptOpen( onloadScriptOpening );
@@ -325,7 +330,8 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function selectedServerActionChangedHandler( event : ServerScriptsPanelEvent ) : void
 		{
-			sendNotification( Notifications.SELECTED_SERVER_ACTION_CHANGED, serverScriptsPanel.selectedScript );
+			if ( serverScriptsPanel.selectedScript )
+				sendNotification( Notifications.SELECTED_SERVER_ACTION_CHANGED, serverScriptsPanel.selectedScript );
 		}
 		
 		private function serverActionNameChangeHandler( event : ListItemRendererEvent ) : void

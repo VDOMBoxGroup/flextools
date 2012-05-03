@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import flash.utils.flash_proxy;
+	
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.SimpleMessageHeaders;
@@ -72,6 +74,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( StatesProxy.SET_SELECTED_OBJECT );
 
 			interests.push( Notifications.GET_SERVER_ACTIONS );
+			interests.push( Notifications.GET_ALL_SERVER_ACTIONS );
+			
 			interests.push( Notifications.SET_SERVER_ACTIONS );
 			
 			interests.push( Notifications.SET_SERVER_ACTION );
@@ -93,7 +97,7 @@ package net.vdombox.ide.modules.scripts.view
 			
 			interests.push( Notifications.LOAD_RESOURCE );
 			interests.push( TypesProxy.GET_TYPES );
-			 
+			
 
 			return interests;
 		}
@@ -279,6 +283,17 @@ package net.vdombox.ide.modules.scripts.view
 
 					break;
 				}
+					
+				case Notifications.GET_ALL_SERVER_ACTIONS:
+				{
+					if ( body is PageVO )
+					{
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ALL_SERVER_ACTIONS, body );
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					}
+					
+					break;
+				}
 
 				case Notifications.GET_LIBRARIES:
 				{
@@ -409,7 +424,7 @@ package net.vdombox.ide.modules.scripts.view
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
-				}
+				}	
 			}
 
 			super.handleNotification( notification );

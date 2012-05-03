@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.scripts.events
 	public class ScriptEditorEvent extends Event
 	{
 		public static var SAVE : String = "save";
+		public static var OPEN_FIND : String = "openFind";
 		
 		public function ScriptEditorEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{

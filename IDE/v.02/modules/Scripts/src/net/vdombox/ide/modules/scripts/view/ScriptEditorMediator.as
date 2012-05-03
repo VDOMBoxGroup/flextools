@@ -7,12 +7,14 @@ package net.vdombox.ide.modules.scripts.view
 	
 	import net.vdombox.editors.PythonScriptEditor;
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.events.FindBoxEvent;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
+	import net.vdombox.ide.modules.scripts.view.components.FindBox;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -110,6 +112,7 @@ package net.vdombox.ide.modules.scripts.view
 		private function addHandlers() : void
 		{
 			scriptEditor.addEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler, false, 0, true );
+			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_FIND, scriptEditor_openFindHandler, false, 0, true );
 			scriptEditor.addEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode, false, 0, true );
 		}
 		
@@ -149,6 +152,11 @@ package net.vdombox.ide.modules.scripts.view
 				currentVO.script = scriptEditor.script;
 			
 			sendNotification( Notifications.SAVE_SCRIPT_REQUEST, currentVO );
+		}
+		
+		private function scriptEditor_openFindHandler( event : ScriptEditorEvent ) : void
+		{			
+			sendNotification( Notifications.OPEN_FIND_SCRIPT );
 		}
 	}
 }

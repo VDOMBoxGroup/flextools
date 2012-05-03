@@ -57,6 +57,13 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					
 					break;
 				}	
+					
+				case PPMPageTargetNames.OBJECTS:
+				{
+					sendNotification( Notifications.OBJECTS_GETTED, body );
+					
+					break;
+				}	
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
@@ -8,7 +9,6 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.itemrenderers.ObjectsTreePanelItemRenderer;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.ContainersPanel;
 	
@@ -72,6 +72,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 			
 			interests.push( Notifications.PAGES_GETTED );
+			
+			interests.push( Notifications.GET_PAGES_STRUCTURE );
 
 			return interests;
 		}
@@ -92,6 +94,7 @@ package net.vdombox.ide.modules.scripts.view
 					{
 						isActive = true;
 						sendNotification( TypesProxy.GET_TYPES );
+						sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
 					}
 
 					break;
@@ -115,6 +118,13 @@ package net.vdombox.ide.modules.scripts.view
 				case Notifications.PAGES_GETTED:
 				{
 					var pages : Array = body as Array;
+					
+					var pageVO : PageVO;
+					
+					for each ( pageVO in pages )
+					{
+						sendNotification( Notifications.GET_STRUCTURE, { pageVO: pageVO } );
+					}
 
 					showPages( pages );
 					
@@ -154,14 +164,27 @@ package net.vdombox.ide.modules.scripts.view
 						var pageXML : XML = containersPanel.structure.( @id == structure.@id )[ 0 ];
 						pageXML.setChildren( new XMLList() ); //TODO: strange construction
 						pageXML.appendChild( structure.* );
-						selectCurrentPage( false );
+						
+						if ( structure.@id == statesProxy.selectedPage.id )
+							selectCurrentPage( false );
 					}
 					break;
 				}
 					
 				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
-					sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
+					//sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
+					
+					selectCurrentPage( false );
+					
+					break;
+				}
+					
+				case Notifications.GET_PAGES_STRUCTURE:
+				{
+					//sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
+					
+					sendNotification( Notifications.PAGES_STRUCTURE_GETTED, containersPanel.structure );
 					
 					break;
 				}
@@ -196,7 +219,7 @@ package net.vdombox.ide.modules.scripts.view
 			if ( !needGetPageStructure )
 				return;
 			
-			sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
+			//sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
 		}
 		
 		private function showPages( pages : Array ) : void

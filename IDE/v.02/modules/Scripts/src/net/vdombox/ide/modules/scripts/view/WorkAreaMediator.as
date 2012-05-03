@@ -141,6 +141,8 @@ package net.vdombox.ide.modules.scripts.view
 				else
 					workArea.selectedEditor = editor;
 			}
+			
+			sendNotification( Notifications.CHANGE_SELECTED_SCRIPT, editor );
 		}
 		
 		private function setMediator( event : FlexEvent ) : void

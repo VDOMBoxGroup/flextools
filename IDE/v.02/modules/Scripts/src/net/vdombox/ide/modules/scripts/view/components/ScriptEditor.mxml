@@ -37,8 +37,6 @@
 			private var _actionVO : Object;
 
 			private var _syntax : String = "vscript";
-			
-			private var findResult : Boolean;
 
 			[Bindable]
 			public function get script() : String
@@ -128,29 +126,13 @@
 				if ( e.ctrlKey && e.keyCode == Keyboard.S )
 					scriptEditor_saveHandler();
 				else if ( e.ctrlKey && e.keyCode == Keyboard.F )
-				{
-					if ( currentState != "find" )
-						currentState = "find";
-					else
-						findBox.findText.setFocus();
-				}
+					dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.OPEN_FIND ) );
 			}
 			
 			protected function navigatorcontent2_removeHandler(event:FlexEvent):void
 			{
 				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
 				removeEventListener(Event.CHANGE, setStateInUnsave, true );
-				
-				if ( findBox )
-				{
-					findBox.removeEventListener( FindBoxEvent.CLOSE, setNormalState );
-					findBox.removeEventListener( FindBoxEvent.FIND_TEXT_CHANGE, findTextChange );
-					findBox.removeEventListener( FindBoxEvent.PREVIOUS_FIND_TEXT, previousFindText );
-					findBox.removeEventListener( FindBoxEvent.NEXT_FIND_TEXT, nextFindText );
-					findBox.removeEventListener( FindBoxEvent.REPLACE_TEXT, replaceText );
-					findBox.removeEventListener( FindBoxEvent.REPLACE_ALL_TEXT, replaceAllText );
-				}
-				
 				
 				pythonScriptEditor.removeEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true );
 			}
@@ -161,70 +143,11 @@
 				pythonScriptEditor.addEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true, 0, true );
 			}
 			
-			protected function findBox_creationCompleteHandler(event:FlexEvent):void
-			{
-				findBox.addEventListener( FindBoxEvent.CLOSE, setNormalState, false, 0 , true );
-				findBox.addEventListener( FindBoxEvent.FIND_TEXT_CHANGE, findTextChange, false, 0 , true );
-				findBox.addEventListener( FindBoxEvent.PREVIOUS_FIND_TEXT, previousFindText, false, 0 , true );
-				findBox.addEventListener( FindBoxEvent.NEXT_FIND_TEXT, nextFindText, false, 0 , true );
-				findBox.addEventListener( FindBoxEvent.REPLACE_TEXT, replaceText, false, 0 , true );
-				findBox.addEventListener( FindBoxEvent.REPLACE_ALL_TEXT, replaceAllText, false, 0 , true );
-				
-				findBox.findText.setFocus();
-			}
-			
-			private function setNormalState( event : FindBoxEvent ) : void
-			{
-				currentState = "normal";
-			}
-			
-			private function findTextChange( event : FindBoxEvent ) : void
-			{				
-				findResult = pythonScriptEditor.scriptAreaComponent.findText( ( event.target as FindBox ).findText.text, 0 );
-				
-				if ( findResult || findBox.findText.text == "" )
-					findBox.findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
-				else
-					findBox.findText.setStyle( "contentBackgroundColor", 0xFF0000 );
-			}
-			
-			private function previousFindText( event : FindBoxEvent ) : void
-			{				
-				findResult = pythonScriptEditor.scriptAreaComponent.findText( ( event.target as FindBox ).findText.text, 1 );
-				
-				if ( findResult || findBox.findText.text == "" )
-					findBox.findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
-				else
-					findBox.findText.setStyle( "contentBackgroundColor", 0xFF0000 );
-			}
-			
-			private function nextFindText( event : FindBoxEvent ) : void
-			{				
-				findResult = pythonScriptEditor.scriptAreaComponent.findText( ( event.target as FindBox ).findText.text, 2 );
-				
-				if ( findResult || findBox.findText.text == "" )
-					findBox.findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
-				else
-					findBox.findText.setStyle( "contentBackgroundColor", 0xFF0000 );
-			}
-			
-			private function replaceText( event : FindBoxEvent ) : void
-			{				
-				pythonScriptEditor.scriptAreaComponent.replaceFind( ( event.target as FindBox ).findText.text, ( event.target as FindBox ).replaceText.text );
-			}
-			
-			private function replaceAllText( event : FindBoxEvent ) : void
-			{				
-				pythonScriptEditor.scriptAreaComponent.replaceFind( ( event.target as FindBox ).findText.text, ( event.target as FindBox ).replaceText.text, true );
-			}
-			
 		]]>
 	</fx:Script>
 	
 	<s:states>
-		
 		<s:State name="normal"/>
-		<s:State name="find"/>
 		<s:State name="disabled"/>
 	</s:states>
 	
@@ -284,9 +207,6 @@
 			</s:Line>
 			
 		</s:Group>
-		
-		<components:FindBox id="findBox" width="100%"
-							includeIn="find" creationComplete="findBox_creationCompleteHandler(event)"/>
 		
 		<editors:PythonScriptEditor id="pythonScriptEditor"
 									height="100%" width="100%"
