@@ -77,7 +77,6 @@ package net.vdombox.helpeditor.controller
 		
 		private function onAppEnterFrame(aEvent : Event):void
 		{
-			trace ("-- onAppEnterFrame: " + curState);
 			switch (curState)
 			{
 				case STATE_XML_START_LOAD: 
