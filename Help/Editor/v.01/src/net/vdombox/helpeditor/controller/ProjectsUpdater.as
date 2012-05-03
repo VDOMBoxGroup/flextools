@@ -18,22 +18,31 @@ package net.vdombox.helpeditor.controller
 	import mx.events.FlexEvent;
 	import mx.utils.Base64Decoder;
 	
-	import net.vdombox.helpeditor.view.spinner.SpinnerPopUp;
-	import net.vdombox.helpeditor.model.SpinnerPopupMessages;
 	import net.vdombox.helpeditor.model.SQLProxy;
+	import net.vdombox.helpeditor.model.SpinnerPopupMessages;
+	import net.vdombox.helpeditor.view.spinner.SpinnerPopUp;
 
 	public class ProjectsUpdater extends EventDispatcher
 	{
 		private static const STATE_XML_START_LOAD						: String = "stateXMLStartLoad";
 		private static const STATE_XML_LOADING							: String = "stateXMLLoading";
 		private static const STATE_XML_PARSING							: String = "stateXMLParsing";
-		private static const STATE_PRODUCT_CREATING						: String = "stateProductCreating";
 		
-		private static const STATE_PAGES_GENERATING						: String = "statePagesGenerating";
-		private static const STATE_NEXT_PAGE_GENERATING_START			: String = "stateNextPageGeneratingStart";
-		private static const STATE_PAGE_GENERATING_IN_PROGRESS			: String = "statePageGeneratingInProgress";
-		private static const STATE_PAGE_GENERATING_COMPLETE				: String = "statePageGeneratingComplete";
-		private static const STATE_LAST_PAGE_GENERATED					: String = "stateLastPageGenerated";
+		private static const STATE_PRODUCT_CREATING						: String = "stateProductCreating";
+		private static const STATE_PRODUCT_ADD_TO_DB					: String = "stateProductAddToDB";
+		private static const STATE_PRODUCT_DELETING_STARTS				: String = "stateProductDeletingStarts";
+		private static const STATE_PRODUCT_DELETING_NEXT_PAGE			: String = "stateProductDeletingNextPage";
+		private static const STATE_PRODUCT_DELETING_NEXT_PAGE_COMPLETE	: String = "stateProductDeletingNextPageComplete";
+		private static const STATE_PRODUCT_DELETING_LAST_PAGE_COMPLETE	: String = "stateProductDeletingLastPageComplete";
+		
+		private static const STATE_PAGES_GENERATING									: String = "statePagesGenerating";
+		private static const STATE_NEXT_PAGE_GENERATING_START						: String = "stateNextPageGeneratingStart";
+		private static const STATE_NEXT_PAGE_GENERATING_RESOURCES_CREATING_START			: String = "stateNextPageGeneratingResourcesCreatingStart";
+		private static const STATE_NEXT_PAGE_GENERATING_NEXT_RESOURCE_CREATING				: String = "stateNextPageGeneratingNextResourceCreating";
+		private static const STATE_NEXT_PAGE_GENERATING_NEXT_RESOURCE_CREATING_COMPLETE		: String = "stateNextPageGeneratingNextResourceCreatingComplete";
+		private static const STATE_NEXT_PAGE_GENERATING_LAST_RESOURCE_CREATING_COMPLETE		: String = "stateNextPageGeneratingLastResourceCreatingComplete";
+		private static const STATE_NEXT_PAGE_GENERATING_COMPLETE					: String = "stateNextPageGeneratingComplete";
+		private static const STATE_LAST_PAGE_GENERATED								: String = "stateLastPageGenerated";
 		
 		private static const STATE_PROJECT_UPDATE_COMPLETE				: String = "stateProjectUpdateComplete";
 		private static const STATE_PROJECT_UPDATE_CANCELED				: String = "stateProjectUpdateCanceled";
@@ -51,13 +60,12 @@ package net.vdombox.helpeditor.controller
 		
 		private var pagesCounter	: Number = 0;
 		private var productPages	: XMLList;
-		private var currentPage		: XML;
+		
+		private var pageResources	: XMLList;
+		
+		private var resourcesCounter : Number = 0;
 		
 		private var productXML	: XML;
-		private var productId	: Number;
-		private var productName	: String = ""; 
-		private var language	: String = ""; 
-		private var location	: String = ""; 
 		
 		private var curState			: String;
 		
@@ -69,6 +77,7 @@ package net.vdombox.helpeditor.controller
 		
 		private function onAppEnterFrame(aEvent : Event):void
 		{
+			trace ("-- onAppEnterFrame: " + curState);
 			switch (curState)
 			{
 				case STATE_XML_START_LOAD: 
@@ -96,6 +105,67 @@ package net.vdombox.helpeditor.controller
 					createProduct();
 					break;
 				}
+				case STATE_PRODUCT_ADD_TO_DB:
+				{
+					addProductToDB();
+					
+					if (isNaN(installedProductId))
+					{
+						curState = STATE_PROJECT_UPDATE_CANCELED;
+						return;
+					}
+					
+					curState = STATE_PAGES_GENERATING;
+					break;
+				}
+				case STATE_PRODUCT_DELETING_STARTS:
+				{
+					pagesCounter = 0;
+					
+					if (!installedProductPages || installedProductPages.length == 0)
+					{
+						curState = STATE_PRODUCT_DELETING_LAST_PAGE_COMPLETE;
+						return;
+					}
+					
+					curState = STATE_PRODUCT_DELETING_NEXT_PAGE;
+					break;
+				}
+				case STATE_PRODUCT_DELETING_NEXT_PAGE:
+				{
+					if (pagesCounter >= installedProductPages.length)
+					{
+						curState = STATE_PRODUCT_DELETING_LAST_PAGE_COMPLETE;
+						return;
+					}
+					
+					deletePageFromDB(installedProductId, installedProductPages[pagesCounter].name);
+					
+					curState = STATE_PRODUCT_DELETING_NEXT_PAGE_COMPLETE;
+					break;
+				}
+				case STATE_PRODUCT_DELETING_NEXT_PAGE_COMPLETE:
+				{
+					pagesCounter ++;
+					
+					if (pagesCounter >= installedProductPages.length)
+					{
+						curState = STATE_PRODUCT_DELETING_LAST_PAGE_COMPLETE;
+						return;
+					}
+					
+					curState = STATE_PRODUCT_DELETING_NEXT_PAGE;
+					break;
+				}
+				case STATE_PRODUCT_DELETING_LAST_PAGE_COMPLETE:
+				{
+					pagesCounter = 0;
+					
+					deleteProductFromDB();
+					
+					curState = STATE_PRODUCT_ADD_TO_DB;
+					break;
+				}
 				case STATE_PAGES_GENERATING : 
 				{
 					spinnerManager.setSpinnerText(SpinnerPopupMessages.MSG_PAGES_CREATING);
@@ -117,11 +187,45 @@ package net.vdombox.helpeditor.controller
 					generateNextPage();
 					break;
 				}
-				case STATE_PAGE_GENERATING_IN_PROGRESS :
+				case STATE_NEXT_PAGE_GENERATING_RESOURCES_CREATING_START:
 				{
+					createPageResources();
 					break;
 				}
-				case STATE_PAGE_GENERATING_COMPLETE : 
+				case STATE_NEXT_PAGE_GENERATING_NEXT_RESOURCE_CREATING:
+				{
+					if (resourcesCounter >= pageResources.length())
+					{
+						curState = STATE_NEXT_PAGE_GENERATING_LAST_RESOURCE_CREATING_COMPLETE;
+						return;
+					}
+					
+					createNextPageResource();
+					
+					curState = STATE_NEXT_PAGE_GENERATING_NEXT_RESOURCE_CREATING_COMPLETE;
+					break;
+				}
+				case STATE_NEXT_PAGE_GENERATING_NEXT_RESOURCE_CREATING_COMPLETE:
+				{
+					resourcesCounter ++;
+					
+					if (resourcesCounter >= pageResources.length())
+					{
+						curState = STATE_NEXT_PAGE_GENERATING_LAST_RESOURCE_CREATING_COMPLETE;
+						return;
+					}
+					
+					curState = STATE_NEXT_PAGE_GENERATING_NEXT_RESOURCE_CREATING;
+					break;
+				}
+				case STATE_NEXT_PAGE_GENERATING_LAST_RESOURCE_CREATING_COMPLETE:
+				{
+					resourcesCounter = 0;
+					
+					curState = STATE_NEXT_PAGE_GENERATING_COMPLETE;
+					break;
+				}
+				case STATE_NEXT_PAGE_GENERATING_COMPLETE : 
 				{
 					onPageGenerated();
 					break;
@@ -236,9 +340,7 @@ package net.vdombox.helpeditor.controller
 		{ 
 			productXML = new XML(file.data);
 			
-			productXML = resetPagesLinks(productXML);
-			
-			if(productXML == null || productXML.name() != "product")
+			if (productXML == null || productXML.name() != "product")
 			{
 				trace("!!!!!!!!!!!! not Correct data from server !!!!!!!!!!!!!");
 				curState = STATE_PROJECT_UPDATE_CANCELED;
@@ -250,104 +352,96 @@ package net.vdombox.helpeditor.controller
 			
 		}
 		
+		private function get productName () : String
+		{
+			if (!productXML)
+				return "";
+			
+			return productXML.name.toString();
+		}
+		
+		private function get productVersion () : String
+		{
+			if (!productXML)
+				return "";
+			
+			return productXML.version.toString();
+		}
+		
+		private function get productTitle () : String
+		{
+			if (!productXML)
+				return "";
+			
+			return productXML.title.toString();
+		}
+		
+		private function get productDescription () : String
+		{
+			if (!productXML)
+				return "";
+			
+			return productXML.description.toString();
+		}
+		
+		private function get productLang () : String
+		{
+			if (!productXML)
+				return "";
+			
+			return productXML.language.toString();
+		}
+		
+		private function get installedProductVersion () : String
+		{
+			return sqlProxy.getVersionOfProduct(productName, productLang);
+		}
+		
+		private function get installedProductId () : Number
+		{
+			return sqlProxy.getProductId(productName, productLang);
+		}
+		
+		private function get installedProductPages () : Object
+		{
+			return sqlProxy.getProductsPages(productName, productLang);
+		}
+		
 		private function createProduct():void
 		{
-			var name:String = productXML.name.toString();
-			var version:int = int(productXML.version);
-			var title:String = productXML.title.toString();
-			var description:String = productXML.description.toString();
-			var language:String = productXML.language.toString();
-			var toc:XML = tocToBD(productXML.toc[0],language, name);
-			
-			
-			// save product to data base
 			spinnerManager.setSpinnerText(SpinnerPopupMessages.MSG_PRODUCT_CREATING);
 			
-			var curProductVersion:String = sqlProxy.getVersionOfProduct(name, language);			
-			if(curProductVersion == '')
+			if (installedProductVersion == '')
 			{
-				//sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
-				sqlProxy.setProduct(name,version,title,description, language, toc);
-			}
-			else 
-			{
-				if (int(curProductVersion)< version)
-				{
-					//delete old data Find nessasri page 
-					deleteProduct(name, language);
-					//					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
-					
-					sqlProxy.setProduct(name, version, title, description, language, toc);
-				} else
-				{
-					//this.dispatchEvent(new Event(UPDATE_NOT_REQUIRED));
-					curState = STATE_PROJECT_UPDATE_NOT_REQUIRED;
-					return;
-				}
-			}
-			
-			productId= sqlProxy.getProductId(name, language);
-			
-			if (isNaN(productId))
-			{
-				curState = STATE_PROJECT_UPDATE_CANCELED;
+				curState = STATE_PRODUCT_ADD_TO_DB;
 				return;
 			}
 			
-			curState = STATE_PAGES_GENERATING;
-		}
-		
-		private function resetPagesLinks(xml: XML):XML
-		{
-			var pattern		 : RegExp;
-			var arrMatch	 : Array;
-			var strXML		 : String;
-			var strPageGUID	 : String;
-			
-			
-			strXML = xml.toXMLString();
-			
-			pattern = /\#Page\([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\)/ig;
-			arrMatch = strXML.match(pattern);
-			
-			var i:uint = 0;
-			for each ( var oldPageName : String in arrMatch )
+			if (Number(installedProductVersion) < Number(productVersion))
 			{
-				strPageGUID = oldPageName.substr(6, 36);
-				strXML = strXML.replace(oldPageName, strPageGUID);
-			}
+				curState = STATE_PRODUCT_DELETING_STARTS;
+				return;
+			} 
 			
-			return new XML(strXML);
+			curState = STATE_PROJECT_UPDATE_NOT_REQUIRED;
 		}
 		
-		private function deleteProduct(name:String, language:String):void
+		private function addProductToDB () : void
 		{
-			//			get All pages of product 
-			var pages:Object = sqlProxy.getProductsPages(name, language);
-			var productId : Number = sqlProxy.getProductId(name, language);
+			tocToBD();
 			
-			if (isNaN(productId)) return;
-			
-			for (var page:String in pages)
-				deletePage(productId, pages[page].name);
-			
-			sqlProxy.deleteProduct(name, language);
+			sqlProxy.setProduct(productName, productVersion, productTitle, productDescription, productLang, productXML.toc[0]);
 		}
 		
-		private function deletePage(productId:Number, namePage:String):void
+		private function deleteProductFromDB () : void
 		{
-			sqlProxy.deletePage(productId, namePage);
+			sqlProxy.deleteProduct(productName, productLang);
 		}
 		
 		private function savePages():void
 		{
-			var spinnerTxt : String = "";
-			
-			productName	= productXML.name.toString(); 
-			language = productXML.language.toString(); 
-			location = language +"/"+productName+"/"; 
-			
 			pagesCounter = 0;
+			
 			productPages = productXML.pages.children();
 			
 			if (!productPages || productPages.length() <= 0) {
@@ -361,6 +455,61 @@ package net.vdombox.helpeditor.controller
 			
 		}  
 		
+		private function get currentPage () : XML
+		{
+			if (!productPages)
+				return null;
+			
+			if (isNaN(pagesCounter) || pagesCounter >= productPages.length())
+				return null;
+			
+			return productPages[pagesCounter];
+		}
+		
+		private function get curPageName () : String
+		{
+			if (!currentPage)
+				return "";
+			
+			return currentPage.name.toString();
+		}
+		
+		private function get curPageTitle () : String
+		{
+			if (!currentPage)
+				return "";
+			
+			return currentPage.title.toString();
+		}
+		
+		private function get curPageVersion () : String
+		{
+			if (!currentPage)
+				return "";
+			
+			return currentPage.version.toString();
+		}
+		
+		private function get curPageDescription () : String
+		{
+			if (!currentPage)
+				return "";
+			
+			return currentPage.description.toString();
+		}
+		
+		private function get curPageContent () : String
+		{
+			if (!currentPage)
+				return "";
+			
+			resetImgPath();
+			
+			resetPagesLinks();
+			
+			return currentPage.content[0];
+		}
+		
 		private function generateNextPage():void
 		{
 			if (pagesCounter >= productPages.length())
@@ -369,51 +518,73 @@ package net.vdombox.helpeditor.controller
 				return;
 			}
 			
-			curState = STATE_PAGE_GENERATING_IN_PROGRESS;
+			var curPageVersion	: String = sqlProxy.getVersionOfPage(installedProductId, curPageName);
 			
-			currentPage = productPages[pagesCounter];
-			
-			var pageName		: String = currentPage.name.toString();// + ".html"; 
-			var version			: String = currentPage.version.toString(); 
-			var title			: String = currentPage.title.toString();
-			var description		: String = currentPage.description.toString();
-			var content			: String = contentToBD(currentPage.content.toString(), currentPage.resources.toString());
-			var pageLocation	: String = location + pageName;
-			
-			var curPageVersion	: String = sqlProxy.getVersionOfPage(productId, pageName);
-			
-			if(curPageVersion == '')
+			if (curPageVersion == '')
 			{
-				sqlProxy.addPage(productName, language, pageName, Number(version), title, description, content);
-			}
-			else if (Number(curPageVersion)< Number(version))
-			{
-				//delete old data
-				deletePage(productId, pageLocation);
-				sqlProxy.addPage(productName, language, pageName, Number(version), title, description, content);
-			} else
-			{
-				curState = STATE_PAGE_GENERATING_COMPLETE;
+				addPageToDB();
+				
+				curState = STATE_NEXT_PAGE_GENERATING_RESOURCES_CREATING_START;
+				
 				return;
 			}
 			
-			var base64 : Base64Decoder = new Base64Decoder();
-			var byteArray0 : ByteArray;
-			var resourceName : String;
-			//*************  Creat Resources  ***************//
-			for each(var resource:XML in currentPage.resources.children())
+			if (Number(curPageVersion) < Number(curPageVersion))
 			{
-				base64.reset();
-				base64.decode(resource.toString());
+				deletePageFromDB(installedProductId, curPageName);
 				
-				byteArray0 = base64.toByteArray();
+				addPageToDB();
 				
-				resourceName = "resources/"+ resource.@id + "." + resource.@type;
+				curState = STATE_NEXT_PAGE_GENERATING_RESOURCES_CREATING_START;
 				
-				cacheFile(resourceName , byteArray0);
+				return;
+			} 
+			
+			curState = STATE_NEXT_PAGE_GENERATING_COMPLETE;
+			
+		}
+		
+		private function createPageResources () : void
+		{
+			resourcesCounter = 0;
+			
+			pageResources = currentPage.resources.children();
+			
+			if (!pageResources || pageResources.length() == 0)
+			{
+				curState = STATE_NEXT_PAGE_GENERATING_LAST_RESOURCE_CREATING_COMPLETE;
+				return;
 			}
 			
-			curState = STATE_PAGE_GENERATING_COMPLETE;
+			curState = STATE_NEXT_PAGE_GENERATING_NEXT_RESOURCE_CREATING;
+		}
+		
+		private function createNextPageResource () : void
+		{
+			var resource : XML = pageResources[resourcesCounter];
+			var resourceName : String;
+			
+			var base64 : Base64Decoder = new Base64Decoder();
+			var byteArray : ByteArray;
+			
+			base64.reset();
+			base64.decode(resource.toString());
+			
+			byteArray = base64.toByteArray();
+			
+			resourceName = "resources/"+ resource.@id + "." + resource.@type;
+			
+			cacheFile(resourceName , byteArray);
+		}
+		
+		private function addPageToDB () : void
+		{
+			sqlProxy.addPage(productName, productLang, curPageName, Number(curPageVersion), curPageTitle, curPageDescription, curPageContent);
+		}
+		
+		private function deletePageFromDB (productId : Number, pageName : String) : void
+		{
+			sqlProxy.deletePage(productId, pageName);
 		}
 		
 		private function onPageGenerated():void
@@ -451,60 +622,63 @@ package net.vdombox.helpeditor.controller
 			this.dispatchEvent(new Event(UPDATE_NOT_REQUIRED));
 		}
 		
-		private function contentToBD(content:String, resources:String):String
-		{
-			return resetImgPath(content, resources);
-		}
-		
-		private function resetImgPath(content:String, resources:String) : String
+		private function resetImgPath() : void
 		{
 			var pattern 		: RegExp;
-			var patternLastInd	: Number;
 			var arrMatch 		: Array;
 			var newResPath 		: String;
-			var newContent		: String;
-			var pageType		: String;
 			var resourceGUID	: String;
 			
-			
-			newContent = content;
+			var content : String = currentPage.content.toXMLString();
 			
 			pattern = /\#Res\([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\)/ig;
 			arrMatch = content.match(pattern);
-			
-			var i:uint = 0;
+
 			for each ( var oldResName : String in arrMatch )
 			{
 				resourceGUID = oldResName.substr(5, 36);
-				patternLastInd = content.search(pattern) + oldResName.length; 
-				newResPath = "app-storage:/resources/" + resourceGUID + "." + getResourceType(resources, resourceGUID);
-				newContent = newContent.replace(oldResName, newResPath);
+				newResPath = "app-storage:/resources/" + resourceGUID + "." + getResourceType(resourceGUID);
+				
+				content = content.replace(oldResName, newResPath);
 			}
 			
-			return newContent;
+			currentPage.content = new XML(content);
 		}
 		
-		private function getResourceType(content:String, resourceName:String) : String
+		private function getResourceType(resourceId:String) : String
 		{
-			var pattern 		: RegExp;
-			var arrMatch 		: Array;
-			var resourceType 	: String = "";
-			
-			pattern = /type[ ]*=[ ]*"[A-Z]+"/i;
-			
-			if (content.indexOf(resourceName) != -1) {
-				content = content.substring(content.indexOf(resourceName) + resourceName.length, content.length);
-				
-				arrMatch = content.match(pattern);
-				if (arrMatch.length > 0) {
-					resourceType = String(arrMatch[0]).split("\"")[String(arrMatch[0]).split("\"").length - 2]
-				}
+			for each (var res : XML in currentPage.resources.resource)
+			{
+				if (res.@id == resourceId)
+					return res.@type;
 			}
-				
-			return resourceType;
+			
+			return "";
 		}
 		
-		public function cacheFile(contentName:String, content:ByteArray):void 
+		private function resetPagesLinks() : void
+		{
+			var pattern		 : RegExp;
+			var arrMatch	 : Array;
+			var pageGUID	 : String;
+			
+			
+			var content : String = currentPage.content.toXMLString();
+			
+			pattern = /\#Page\([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\)/ig;
+			arrMatch = content.match(pattern);
+			
+			for each ( var oldPageName : String in arrMatch )
+			{
+				pageGUID = oldPageName.substr(6, 36);
+				
+				content = content.replace(oldPageName, pageGUID);
+			}
+			
+			currentPage.content = new XML(content);
+		}
+		
+		private function cacheFile(contentName:String, content:ByteArray):void 
 		{
 			var fileStream:FileStream = new FileStream();
 			var newFileName:String = contentName;
@@ -523,26 +697,14 @@ package net.vdombox.helpeditor.controller
 			}
 		}
 		
-		private function tocToBD(value:XML, lan:String, product:String):XML
+		private function tocToBD() : void
 		{
-			changeStruxcture(value);
-			
-			return value ;
-			
-			function changeStruxcture(xml:XML):void
+			for each (var tocPage : XML in productXML.toc..page)
 			{
-				for each(var page:XML in xml.children())
-				{
-					if (String(page.@name).lastIndexOf("/") >= 0) {
-						page.@name = String(page.@name).substring(String(page.@name).lastIndexOf("/")+1, String(page.@name).length);
-					}
-					
-					if (String(page.@name).lastIndexOf(".") >= 0) {
-						page.@name = String(page.@name).substring(0, String(page.@name).lastIndexOf("."));
-					}
-					page.@isBranch = "true"; 
-					changeStruxcture(page);
-				}
+				var oldPageName : String = tocPage.@name;
+				
+				if (oldPageName.indexOf("#Page(") == 0)
+					tocPage.@name = oldPageName.substr(6, 36); 
 			}
 		}
 		

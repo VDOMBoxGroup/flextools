@@ -661,7 +661,7 @@ package net.vdombox.helpeditor.model
 		 * @param toc
 		 * 
 		 */		
-		public function setProduct(name:String, version:int, title:String,
+		public function setProduct(name:String, version:String, title:String,
 																description:String,
 																language:String,
 																toc:XML):void
