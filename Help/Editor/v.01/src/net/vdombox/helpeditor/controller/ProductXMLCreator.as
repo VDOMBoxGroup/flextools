@@ -2,6 +2,7 @@ package net.vdombox.helpeditor.controller
 {
 	
 	import com.adobe.crypto.MD5Stream;
+	import com.adobe.utils.StringUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -24,35 +25,42 @@ package net.vdombox.helpeditor.controller
 	import mx.graphics.codec.PNGEncoder;
 	import mx.utils.Base64Encoder;
 	
-	import net.vdombox.helpeditor.view.spinner.SpinnerPopUp;
-	import net.vdombox.helpeditor.model.SpinnerPopupMessages;
-	import net.vdombox.helpeditor.utils.Utils;
-	import net.vdombox.helpeditor.model.SQLProxy;
-	import net.vdombox.helpeditor.model.ImageProperties;
 	import net.vdombox.helpeditor.model.HtmlPageProperties;
+	import net.vdombox.helpeditor.model.ImageProperties;
+	import net.vdombox.helpeditor.model.SQLProxy;
+	import net.vdombox.helpeditor.model.SpinnerPopupMessages;
 	import net.vdombox.helpeditor.utils.ResourceUtils;
+	import net.vdombox.helpeditor.utils.Utils;
 	import net.vdombox.helpeditor.view.HTML_WYSIWYG;
+	import net.vdombox.helpeditor.view.spinner.SpinnerPopUp;
 
 	public class ProductXMLCreator extends EventDispatcher
 	{
 		// states ...
 		private static const STATE_PRODUCT_XML_CREATING					: String = "stateProductXMLCreating";
+		
+		private static const STATE_TOC_GENERATING						: String = "stateProductTocCreating";
+		
 		private static const STATE_PAGES_GENERATING						: String = "statePagesGenerating";
 		private static const STATE_NEXT_PAGE_GENERATING_START			: String = "stateNextPageGeneratingStart";
+		private static const STATE_NEXT_PAGE_CHECK_IMAGES_WIDTH			: String = "stateNextPageCheckImagesWidth";
+		private static const STATE_NEXT_PAGE_IMAGES_WIDTH_CHECKING		: String = "stateNextPageImagesWidthChecking";
+		private static const STATE_NEXT_PAGE_IMAGES_WIDTH_CHECKED		: String = "stateNextPageImagesWidthChecked";
 		private static const STATE_PAGE_GENERATING_COMPLETE				: String = "statePageGeneratingComplete";
 		private static const STATE_LAST_PAGE_GENERATED					: String = "stateLastPageGenerated";
 		
-		private static const STATE_NEXT_PAGE_RESOURCE_GENERATING_START	: String = "stateNextPageResourceGeneratingStart";
-		private static const STATE_PAGE_RESOURCE_GENERATING_IN_PROGRESS	: String = "statePageResourceGeneratingInProgress";
-		private static const STATE_PAGE_RESOURCE_GENERATING_COMPLETE	: String = "statePageResourceGeneratingComplete";
-		private static const STATE_LAST_PAGE_RESOURCE_GENERATED			: String = "stateLastPageResourceGenerated";
+		private static const STATE_PAGE_RESOURCES_GENERATING_START				: String = "statePageResourcesGeneratingStart";
+		private static const STATE_PAGE_NEXT_RESOURCE_GENERATING_START			: String = "statePageNextResourceGeneratingStart";
+		private static const STATE_PAGE_NEXT_RESOURCE_GENERATING_IN_PROGRESS	: String = "statePageNextResourceGeneratingInProgress";
+		private static const STATE_PAGE_NEXT_RESOURCE_GENERATING_COMPLETE		: String = "statePageNextResourceGeneratingComplete";
+		private static const STATE_PAGE_LAST_RESOURCE_GENERATING_COMPLETE		: String = "statePageLastResourceGenerated";
 		
 		private static const STATE_XML_CREATION_COMPLETE				: String = "stateXMLCreationComplete";
 		// ... states
 		
 		public static const EVENT_ON_XML_CREATION_COMPLETE	: String = "eventXMLCreationComplete";
 		
-		private const guidResourseRegExp	: RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
+		private const guidResourseRegExp	: RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]+\b/gim;
 				
 		private var sqlProxy	: SQLProxy = new SQLProxy();
 		
@@ -64,16 +72,18 @@ package net.vdombox.helpeditor.controller
 		private var pagesXML		: XML;
 		private var pagesCounter	: Number = 0;
 		
-		private var tocXML				: XML;
+		private var productTocXML				: XML;
 		private var pageXML				: XML;
-		private var pageResourcesArr	: Array;
+		
+		private var pageResources		: XMLList;
+		private var currentResource		: XML;
 		private var pageResourcesXML	: XML;
 		private var pageResourceXML		: XML;
 		private var pageResourcesCounter: Number = 0;
-		private var pageContentForXml	: String;
 		
 		private var currentPageObj		: Object;
 		private var pageContent			: String;
+		private var pageContentXML		: XML;
 		
 		private var productName			: String;
 		private var productTitle		: String;
@@ -81,6 +91,8 @@ package net.vdombox.helpeditor.controller
 		private var treeData			: *;
 		
 		private var appendPage			: Boolean = true;
+		private var appendPageRes		: Boolean = true;
+		
 		private var spinnerManager		: SpinnerPopUpManager = SpinnerPopUpManager.getInstance();
 		
 		private var curState			: String;
@@ -90,7 +102,6 @@ package net.vdombox.helpeditor.controller
 		
 		public function ProductXMLCreator()
 		{
-			curState = STATE_PRODUCT_XML_CREATING;
 		}
 		
 		public function get productXML():XML
@@ -136,7 +147,13 @@ package net.vdombox.helpeditor.controller
 					spinnerManager.setSpinnerText(SpinnerPopupMessages.MSG_PRODUCT_XML_CREATING);
 					spinnerManager.setSpinnerResourceText("");
 					
-					createXML();
+					createProductXML();
+					break;
+				}
+				
+				case STATE_TOC_GENERATING : 
+				{
+					addProductToc();
 					break;
 				}
 					
@@ -162,26 +179,44 @@ package net.vdombox.helpeditor.controller
 					generateNextPage();
 					break;
 				}
+					
+				case STATE_NEXT_PAGE_CHECK_IMAGES_WIDTH : 
+				{
+					checkAndResetPageImagesWidth();
+					break;
+				}
+					
+				case STATE_NEXT_PAGE_IMAGES_WIDTH_CHECKED : 
+				{
+					startGeneratingPageContent();
+					break;
+				}
 				
-				case STATE_NEXT_PAGE_RESOURCE_GENERATING_START : 
+				case STATE_PAGE_RESOURCES_GENERATING_START : 
+				{
+					startGeneratingPageResources();
+					break;
+				}
+					
+				case STATE_PAGE_NEXT_RESOURCE_GENERATING_START : 
 				{
 					generateNextPageResource();
 					break;
 				}
-				case STATE_PAGE_RESOURCE_GENERATING_IN_PROGRESS :
+				case STATE_PAGE_NEXT_RESOURCE_GENERATING_IN_PROGRESS :
 				{
 					break;
 				}
-				case STATE_PAGE_RESOURCE_GENERATING_COMPLETE : 
+				case STATE_PAGE_NEXT_RESOURCE_GENERATING_COMPLETE : 
 				{
-					onPageResourceGenerated();
+					onPageResourceGenerationComplete();
 					break;
 				}
-				case STATE_LAST_PAGE_RESOURCE_GENERATED : 
+				case STATE_PAGE_LAST_RESOURCE_GENERATING_COMPLETE : 
 				{
 					spinnerManager.setSpinnerResourceText("");
 					
-					onLastPageResourceGenerated();
+					onPageLastResourceGenerated();
 					break;
 				}
 					
@@ -208,7 +243,7 @@ package net.vdombox.helpeditor.controller
 			}
 		}
 			
-		private function createXML():void
+		private function createProductXML():void
 		{
 			productXML  = new XML("<product/>");
 			
@@ -218,16 +253,30 @@ package net.vdombox.helpeditor.controller
 			productXML.description = "";
 			productXML.language = productLanguage;
 			
-			// generate toc ...
-			tocXML      = new XML("<toc/>");
-			var tocString : String = resetToc(treeData);
-			var regExp : RegExp    = /isBranch="true"/gim;
+			curState = STATE_TOC_GENERATING;
+		}
+		
+		private function addProductToc () : void
+		{
+			productTocXML      = new XML("<toc/>");
 			
-			tocXML.appendChild(XML(tocString.replace(regExp,' ')));
-			productXML.appendChild(tocXML);
-			// ... generate toc
+			var toc : XML = sqlProxy.getToc(productName) as XML;
 			
-			//generatePages();
+			if (!toc || !toc.children() || toc.children().length() == 0)
+			{
+				curState = STATE_XML_CREATION_COMPLETE;
+				return;
+			}
+			
+			productTocXML.appendChild(toc);
+			
+			for each (var page : XML in productTocXML..page)
+			{
+				page.@name = "#Page(" + page.@name + ")";
+			}
+			
+			productXML.appendChild(productTocXML);
+			
 			curState = STATE_PAGES_GENERATING;
 		}
 		
@@ -265,7 +314,7 @@ package net.vdombox.helpeditor.controller
 			
 			appendPage = true;
 			
-			if (tocXML.toString().indexOf(currentPageObj["name"]) == -1) // page doesn't exist in toc 
+			if (productTocXML.toString().indexOf(currentPageObj["name"]) == -1) // page doesn't exist in toc 
 			{
 				appendPage = false;
 
@@ -278,30 +327,34 @@ package net.vdombox.helpeditor.controller
 			
 			if (html_wysiwyg)
 			{
-				html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, onImageMaxWidthChecked);
-				html_wysiwyg.resetImagesWidth(pageContent);
+				curState = STATE_NEXT_PAGE_CHECK_IMAGES_WIDTH;
 				return;
 			}
 			
-			onImageMaxWidthChecked(null);
-
+			curState = STATE_NEXT_PAGE_IMAGES_WIDTH_CHECKED;
 		}
 		
-		private function onImageMaxWidthChecked(aEvent : Event):void
+		private function checkAndResetPageImagesWidth () : void
 		{
-			if (aEvent)
-				html_wysiwyg.removeEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, onImageMaxWidthChecked);
+			curState = STATE_NEXT_PAGE_IMAGES_WIDTH_CHECKING;
 			
+			html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, imagesWidthChecked);
+			html_wysiwyg.resetImagesWidth(pageContent);
+			
+			function imagesWidthChecked (event : Event) : void
+			{
+				if (html_wysiwyg && html_wysiwyg.hasEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED))
+					html_wysiwyg.removeEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, imagesWidthChecked);
+				
+				curState = STATE_NEXT_PAGE_IMAGES_WIDTH_CHECKED;
+			}
+		}
+		
+		private function startGeneratingPageContent() : void
+		{
 			pageContent = html_wysiwyg.pageContent;
 			
-			var pageContentWithToc	: String;
-			
-			pageContentWithToc = VdomHelpEditor.getPageContentWithToc(pageContent, 
-																		Boolean(currentPageObj["useToc"]),
-																		getPageChildren(currentPageObj["name"])
-																		);
-			
-			pageContentForXml = resetLinksToResourcesAndPages(pageContentWithToc);
+			pageContentXML = new XML(pageContent);
 			
 			pageXML = new XML("<page/>");
 			
@@ -314,22 +367,21 @@ package net.vdombox.helpeditor.controller
 			
 			pageXML.appendChild(content);
 			
-			// get resources ...	
+			curState = STATE_PAGE_RESOURCES_GENERATING_START;
+		}
+		
+		private function startGeneratingPageResources () : void
+		{
 			pageResourcesXML = new XML("<resources/>");
 			
-			if (currentPageObj.name == "C30774AF-75D5-5123-3F22-6563A189B540")
-				trace ("PAGE WITH EMPTY RESOURCE");
+			pageResources = pageContentXML..img;
 			
-			pageResourcesArr = pageContent.match(guidResourseRegExp);
-			pageResourcesArr = ResourceUtils.filterResources(pageResourcesArr);
-			
-			if (!pageResourcesArr || pageResourcesArr.length <= 0) {
-				curState = STATE_LAST_PAGE_RESOURCE_GENERATED;
+			if (!pageResources || pageResources.length() <= 0) {
+				curState = STATE_PAGE_LAST_RESOURCE_GENERATING_COMPLETE;
 				return;			
 			}
 			
-			curState = STATE_NEXT_PAGE_RESOURCE_GENERATING_START;
-			// ... get resources
+			curState = STATE_PAGE_NEXT_RESOURCE_GENERATING_START;
 		}
 		
 		private function onPageGenerated():void
@@ -366,99 +418,111 @@ package net.vdombox.helpeditor.controller
 		
 		private function generateNextPageResource():void
 		{
-			if (pageResourcesCounter >= pageResourcesArr.length)
+			if (pageResourcesCounter >= pageResources.length())
 			{
-				curState = STATE_LAST_PAGE_RESOURCE_GENERATED;
+				curState = STATE_PAGE_LAST_RESOURCE_GENERATING_COMPLETE;
 				return;
 			}
 			
-			var currentResource : String = pageResourcesArr[pageResourcesCounter];
+			appendPageRes = true;
 			
-			if (currentResource.indexOf(".htm") != -1) 
+			currentResource = pageResources[pageResourcesCounter];
+			pageResourceXML = null;
+			
+			if (!ResourceUtils.correctResourceType(currentResourceType)) 
 			{
-				curState = STATE_PAGE_RESOURCE_GENERATING_COMPLETE;
+				appendPageRes = false;
+				
+				curState = STATE_PAGE_NEXT_RESOURCE_GENERATING_COMPLETE;
 				return;
 			}
 			
-			pageResourceXML = new XML("<resource/>");
-			
-			pageResourceXML.@id = currentResource.substr(0,36);
-			pageResourceXML.@type = currentResource.substr(37,3);
-			
-			getResourceCDATA(currentResource);
+			getResourceCDATA();
 			
 		}
 		
-		private function onPageResourceGenerated():void
+		private function get currentResourceGUID () : String
 		{
-			var curResourceId : String = String(pageResourceXML.@id);
-			var resourcesListByID : XMLList = pageResourcesXML.resource.(@id == curResourceId);
+			var resourceSrc : String = String(currentResource.@src);
 			
-			if (pageResourcesXML.resource.length() == 0 || resourcesListByID.length() == 0)
-				pageResourcesXML.appendChild(pageResourceXML);
+			var patternGUID : RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\b/gim;
+			
+			var resourceGUIDStartIndex : int = resourceSrc.search(patternGUID);
+			
+			if (resourceGUIDStartIndex == -1)
+				return "";
+			
+			return resourceSrc.substr(resourceGUIDStartIndex, 36);
+		}
+		
+		private function get currentResourceType () : String
+		{
+			var resourceSrc : String = String(currentResource.@src);
+			
+			var lastDotIndex : int = resourceSrc.indexOf(".");
+			if (lastDotIndex == -1)
+				return "";
+			
+			return resourceSrc.substr(lastDotIndex+1);
+		}
+		
+		private function onPageResourceGenerationComplete():void
+		{
+			if (appendPage && pageResourceXML && currentResourceGUID != "")
+			{
+				var resourcesListByID : XMLList = pageResourcesXML.resource.(@id == currentResourceGUID);
+				
+				if (pageResourcesXML.resource.length() == 0 || resourcesListByID.length() == 0)
+				{
+					pageResourceXML.@id = currentResourceGUID;
+					pageResourceXML.@type = currentResourceType;
+					
+					pageResourcesXML.appendChild(pageResourceXML);
+					
+					currentResource.@src = "#Res(" + currentResourceGUID + ")";
+				}
+			}
 			
 			pageResourcesCounter ++;
 			
-			curState = STATE_NEXT_PAGE_RESOURCE_GENERATING_START;
+			curState = STATE_PAGE_NEXT_RESOURCE_GENERATING_START;
 		}
 		
-		private function onLastPageResourceGenerated ():void
+		private function onPageLastResourceGenerated ():void
 		{
 			pageResourcesCounter = 0;
+			pageResources = null;
 			
-			pageXML.content.appendChild( XML("<![CDATA[" + appendHighlightScriptToPageContent(pageContentForXml) + "]"+ "]>"));
+			pageContent = VdomHelpEditor.getPageContentWithToc( pageContentXML.toString(), 
+																		Boolean(currentPageObj["useToc"]),
+																		getPageChildren(currentPageObj["name"]) );
+			
+			resetLinksToPages();
+			
+			pageContent = pageContentXML.toString();
+			
+			appendHighlightScriptToPageContent();
+			
+			pageXML.content.appendChild( XML("<![CDATA[" + pageContent + "]"+ "]>"));
 			pageXML.appendChild(pageResourcesXML);
 			
 			curState = STATE_PAGE_GENERATING_COMPLETE;
 		}
 		
-		private function appendHighlightScriptToPageContent(pageContent : String) : String
+		private function appendHighlightScriptToPageContent() : void
 		{
 			if (!pageContent)
-				return "";
+				return;
 			
 			if (pageContent.indexOf(HtmlPageProperties.highlightAllTemplate) >= 0)
 				pageContent = pageContent.replace(HtmlPageProperties.highlightAllTemplate, "");
 			
 			if (pageContent.indexOf(HtmlPageProperties.jsCoreFileName) == -1)
-				return pageContent; 
+				return; 
 				
 			var pageBodyEndWithHighkightAllScript : String = HtmlPageProperties.highlightAllTemplate.concat("\n</body>");
-			
-			
-			return pageContent.replace("</body>",pageBodyEndWithHighkightAllScript);
-		}
-		
-		private function resetToc(tocObject:Object) : String
-		{
-			var strToc	: String = "";
-			var xmlToc	: XML;
-			
-			try {
-				xmlToc = XML (tocObject);
-			}
-			catch (e:Error) {
-				strToc = tocObject.toString();
-				return strToc;
-			}
-			
-			
-			xmlToc.@name = "#Page(" + xmlToc.@name + ")";
-			
-			changePageName(xmlToc);
-			
-			strToc = xmlToc.toXMLString();
-			
-			return strToc;
-			
-			function changePageName(xml:XML):void
-			{
-				for each(var page:XML in xml.children())
-				{
-					page.@name = "#Page(" + page.@name + ")";
-					changePageName(page);
-				}
-			}
+ 
+			pageContent = pageContent.replace("</body>",pageBodyEndWithHighkightAllScript);
 		}
 		
 		private function getPageChildren(pageName:String) : XMLList
@@ -474,26 +538,21 @@ package net.vdombox.helpeditor.controller
 		{
 			var imageProperties : ImageProperties = new ImageProperties();
 			
-			var xmlContent : XML = XML(pageContentForXml);
-			var resourcesList	: XMLList	= xmlContent..img; 
-			
-			if (resourcesList.length() == 0 || pageResourcesCounter >= resourcesList.length())
+			if (pageResources.length() == 0 || pageResourcesCounter >= pageResources.length())
 			{
 				return imageProperties;
 			}
 			
-			var imgTag : XML = xmlContent..img[pageResourcesCounter];
-				
-			if ( String(imgTag.@width) != "" && !isNaN(Number(imgTag.@width)) )
-				imageProperties.width = Number(imgTag.@width);
+			if ( String(currentResource.@width) != "" && !isNaN(Number(currentResource.@width)) )
+				imageProperties.width = Number(currentResource.@width);
 						
-			if ( String(imgTag.@height) != "" && !isNaN(Number(imgTag.@height)) )
-				imageProperties.height = Number(imgTag.@height);
+			if ( String(currentResource.@height) != "" && !isNaN(Number(currentResource.@height)) )
+				imageProperties.height = Number(currentResource.@height);
 			
-			if (String(imgTag.@style) != "")
+			if (String(currentResource.@style) != "")
 			{
-				imageProperties.width = Utils.getSizeFromStyle(String(imgTag.@style).toLowerCase(), Utils.TYPE_WIDTH); 
-				imageProperties.height = Utils.getSizeFromStyle(String(imgTag.@style).toLowerCase(), Utils.TYPE_HEIGHT);
+				imageProperties.width = Utils.getSizeFromStyle(String(currentResource.@style).toLowerCase(), Utils.TYPE_WIDTH); 
+				imageProperties.height = Utils.getSizeFromStyle(String(currentResource.@style).toLowerCase(), Utils.TYPE_HEIGHT);
 			}
 
 			return imageProperties;
@@ -501,22 +560,18 @@ package net.vdombox.helpeditor.controller
 		
 		
 		
-		private function getResourceCDATA(fileName:String) : void
+		private function getResourceCDATA() : void
 		{
-			curState = STATE_PAGE_RESOURCE_GENERATING_IN_PROGRESS;
+			curState = STATE_PAGE_NEXT_RESOURCE_GENERATING_IN_PROGRESS;
+			
+			var fileName : String = currentResourceGUID + "." + currentResourceType;
 			
 			var imageProperties : ImageProperties = getImagePropertiesForCurrentResource();
 			var imageWidth	: Number = imageProperties.width;
 			var imageHeight : Number = imageProperties.height;
 			
-			var resourceType : String = fileName.substr(37,3);
-			
-			var newFileName	: String;
-			
 			var fileStream	: FileStream;
 			var location	: File;
-			
-			newFileName = fileName;
 			
 			location   = File.applicationStorageDirectory.resolvePath("resources/"+fileName);
 			fileStream = new FileStream();
@@ -526,8 +581,8 @@ package net.vdombox.helpeditor.controller
 			
 			if (!location.exists)
 			{
-				source = base64.toString();
-				onResourceDataGenerated(fileName, newFileName, source);
+				source = "";
+				onResourceDataGenerated(source);
 				return;
 			}
 				
@@ -542,7 +597,7 @@ package net.vdombox.helpeditor.controller
 			if (imageWidth <= 0 && imageHeight <= 0)
 			{
 				source = base64.toString();
-				onResourceDataGenerated(fileName, newFileName, source);
+				onResourceDataGenerated(source);
 				return;
 			} 
 			
@@ -550,7 +605,7 @@ package net.vdombox.helpeditor.controller
 			if (!originalByteArray || originalByteArray.length == 0)
 			{
 				source = base64.toString();
-				onResourceDataGenerated(fileName, newFileName, source);
+				onResourceDataGenerated(source);
 				return;
 			}
 			
@@ -564,7 +619,7 @@ package net.vdombox.helpeditor.controller
 			function contentLoaderInfoErrorHandler (evt:Event) : void 
 			{
 				source = base64.toString();
-				onResourceDataGenerated(fileName, newFileName, source);
+				onResourceDataGenerated(source);
 				return;
 			}
 			
@@ -595,7 +650,7 @@ package net.vdombox.helpeditor.controller
 				catch ( e : Error )
 				{
 					source = base64.toString();
-					onResourceDataGenerated(fileName, newFileName, source);
+					onResourceDataGenerated(source);
 					return;
 				}
 				
@@ -627,7 +682,7 @@ package net.vdombox.helpeditor.controller
 				catch ( e : Error )
 				{
 					source = base64.toString();
-					onResourceDataGenerated(fileName, newFileName, source);
+					onResourceDataGenerated(source);
 					return;
 				}
 				
@@ -647,104 +702,56 @@ package net.vdombox.helpeditor.controller
 				md5Stream = new MD5Stream();
 				uid = md5Stream.complete(resultByteArray);
 				
-				newFileName = ResourceUtils.convertToUIDFormat(uid) + resourceType;
-				onResourceDataGenerated(fileName, newFileName, source);
+				currentResource.@src = ResourceUtils.convertToUIDFormat(uid) + "." + currentResourceType;
+				onResourceDataGenerated(source);
 			}
 			
 		}
 		
-		private function onResourceDataGenerated(oldFileName:String, newFileName:String, source:String):void
+		private function onResourceDataGenerated (source : String) : void
 		{
-			if (oldFileName != newFileName)
+			if (!source)
 			{
-				pageResourceXML.@id = newFileName.substr(0,36);
+				appendPageRes = false;
 				
-				var oldResourceSrc : String = "#Res(" + oldFileName.substr(0, 36) + ")";
-				var newResourceSrc : String = "#Res(" + newFileName.substr(0, 36) + ")";
-				
-				// rename resource in page content
-				var xmlContent		: XML		= XML(pageContentForXml);
-				var resourcesList	: XMLList	= xmlContent..img; 
-				
-				if (resourcesList.length() == 0 || pageResourcesCounter >= resourcesList.length())
-				{
-					curState = STATE_PAGE_RESOURCE_GENERATING_COMPLETE;
-					return;
-				}
-				
-				var imgTag : XML = xmlContent..img[pageResourcesCounter];
-				imgTag.@src = newResourceSrc;
-				pageContentForXml = xmlContent.toString();
-			
+				curState = STATE_PAGE_NEXT_RESOURCE_GENERATING_COMPLETE;
+				return;
 			}
+			
+			pageResourceXML = new XML("<resource/>");
 			
 			pageResourceXML.appendChild(XML("<![CDATA[" + source +"]"+ "]>"));
 			
-			curState = STATE_PAGE_RESOURCE_GENERATING_COMPLETE;
+			curState = STATE_PAGE_NEXT_RESOURCE_GENERATING_COMPLETE;
 		}
 		
-		private function resetLinksToResourcesAndPages(aPageContent:String) : String
+		private function isGUID (value : String) : Boolean
 		{
-			var patternRes		: RegExp;
-			var patternGUID		: RegExp;
-			var patternPageLink	: RegExp;
+			if (!value)
+				return false;
+			
+			var patternGUID		: RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\b/gim;;
+			
+			return (value.search(patternGUID) == 0) && (value.length == 36);
+		}
+		
+		private function resetLinksToPages() : void
+		{
+			
 			var arrMatchRes		: Array;
 			var resourceGUID	: String;
 			var pageGUID		: String;
-			var aPageNewContent	: String;
 			
-			aPageNewContent = aPageContent;
-			
-			patternRes = /"[ ]*(app-storage:\/resources)[^"]+"/g;
-			patternGUID = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\b/gim;
-			patternPageLink = /<[ ]*a[ ]*href[ ]*=[ ]*"[^"]+"/g;
-			
-			arrMatchRes = aPageContent.match(patternRes);
-			
-			// reset resources
-			for each ( var strRes : String in arrMatchRes )
+			var href : String = "";
+			for each (var link : XML in pageContentXML..a)
 			{
-				resourceGUID = "";
-				if (strRes.search(patternGUID) != -1)
-				{
-					resourceGUID = strRes.substr(strRes.search(patternGUID), 36);  
-				}
+				href = StringUtil.trim(link.@href);
 				
-				var newResource : String = "\"#Res(" + resourceGUID + ")\"";
-				
-				aPageNewContent = aPageNewContent.replace(strRes, newResource);
+				if (isGUID(href))
+					link.@href = "#Page(" + href + ")";
 			}
 			
-			arrMatchRes = [];
-			
-			// reset links to pages
-			arrMatchRes = aPageNewContent.match(patternPageLink);
-			
-			for each ( var strPageLink : String in arrMatchRes )
-			{
-				pageGUID = "";
-				if (strPageLink.search(patternGUID) != -1)
-				{
-					pageGUID = strPageLink.substr(strPageLink.search(patternGUID), 36);
-					if (!pageExistsInDB(pageGUID)) {
-						continue;
-					}
-					
-					function pageExistsInDB(pageName:String) : Boolean 
-					{
-						if (sqlProxy.getPage(productName, productLanguage, pageName)) 
-							return true;
-						return false;
-					}
-				}
-				
-				var newPageLink : String = "<a href=\"#Page(" + pageGUID + ")\"";
-				
-				aPageNewContent = aPageNewContent.replace(strPageLink, newPageLink);
-			}
-			
-			return aPageNewContent;
 		}
-
+		
 	}
 }

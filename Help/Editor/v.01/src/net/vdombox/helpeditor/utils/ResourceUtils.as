@@ -229,7 +229,7 @@ package net.vdombox.helpeditor.utils
 			var filteredResources : Array = [];
 			for each (var resource:String in resources)
 			{
-				var resourceType : String = resource.substr(37,3);
+				var resourceType : String = resource.substr(37);
 				
 				if (correctResourceType(resourceType))
 					filteredResources.push(resource);
