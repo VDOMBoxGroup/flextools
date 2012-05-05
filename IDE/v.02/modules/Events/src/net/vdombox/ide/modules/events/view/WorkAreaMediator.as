@@ -8,8 +8,11 @@ package net.vdombox.ide.modules.events.view
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
+	import net.vdombox.ide.common.model._vo.ClientActionVO;
+	import net.vdombox.ide.common.model._vo.EventVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
@@ -46,7 +49,7 @@ package net.vdombox.ide.modules.events.view
 		{
 			return viewComponent as WorkArea;
 		}
-
+		
 		override public function onRegister() : void
 		{
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
@@ -82,6 +85,11 @@ package net.vdombox.ide.modules.events.view
 			interests.push( Notifications.SAVE_CHANGED );
 			
 			interests.push( Notifications.UNDO_REDO_GETTED );
+			
+			interests.push( Notifications.SET_SELECTED_ACTION );
+			interests.push( Notifications.SET_SELECTED_ACTION );
+			
+			interests.push( Notifications.GET_USED_ACTIONS );
 			
 			return interests;
 		}
@@ -155,6 +163,8 @@ package net.vdombox.ide.modules.events.view
 				{
 					setVisibleElementsForAllObjects();
 					setElementsCurrentVisibleState();
+					
+					sendActions();
 					break;
 				}
 					
@@ -198,6 +208,16 @@ package net.vdombox.ide.modules.events.view
 					workArea.dataProvider = body as ApplicationEventsVO;
 					
 					workArea.skin.currentState = "unsaved"; 
+				}
+					
+				case Notifications.SET_SELECTED_ACTION:
+				{
+					workArea.showSelectedAction( body as String );
+				}
+					
+				case Notifications.GET_USED_ACTIONS:
+				{
+					sendActions();
 				}
 					
 			}
@@ -250,6 +270,7 @@ package net.vdombox.ide.modules.events.view
 			workArea.addEventListener( WorkAreaEvent.SAVE, saveHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.UNDO, undoHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.REDO, redoHandler, false, 0, true );
+			workArea.addEventListener( WorkAreaEvent.CHANGE_ACTIONS, sendActions, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.SET_MESSAGE, setMessageHandler, false, 0, true );
 			workArea.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
 			NativeApplication.nativeApplication.addEventListener( KeyboardEvent.KEY_DOWN, appKeyDownHandler, true, 0, true );
@@ -342,6 +363,7 @@ package net.vdombox.ide.modules.events.view
 		{
 			showElementsView = workArea.showElementsView ;
 			setElementsCurrentVisibleState();
+			sendActions();
 		}
 		
 		private function setElementsCurrentVisibleState() : void
@@ -411,6 +433,31 @@ package net.vdombox.ide.modules.events.view
 				showElementsView = "Active";
 				setVisibleElementsForCurrentObject();
 			}
+		}
+		
+		private function sendActions( event : WorkAreaEvent = null ) : void
+		{
+			var clientActions : Object = [];
+			var serverActions : Object = [];
+			var events : Object = [];
+			
+			var leng : int = workArea.contentGroup.numElements;
+			var baseElement : BaseElement;
+				
+			for ( var i : int = 0; i < leng; i++ )
+			{
+				baseElement = workArea.contentGroup.getElementAt( i ) as BaseElement;
+				
+				if ( baseElement.data is EventVO )
+					events[ baseElement.uniqueName ] = baseElement;
+				else if ( baseElement.data is ClientActionVO )
+					clientActions[ baseElement.data.name + baseElement.data.objectID ] = baseElement;
+				else
+					serverActions[ baseElement.data.name + baseElement.data.objectID ] = baseElement;
+			}
+			
+			sendNotification( Notifications.SET_USED_ACTIONS, { events : events, clientActions : clientActions, serverActions : serverActions } );
+				
 		}
 	}
 }

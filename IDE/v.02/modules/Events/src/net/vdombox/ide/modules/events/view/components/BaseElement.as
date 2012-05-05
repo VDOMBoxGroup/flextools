@@ -32,6 +32,9 @@ package net.vdombox.ide.modules.events.view.components
 		[Bindable]
 		public var selected : Boolean = false;
 		
+		[Bindable]
+		public var used : Boolean = false;
+		
 		
 		public function BaseElement()
 		{

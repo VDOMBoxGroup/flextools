@@ -197,9 +197,9 @@
 
 						<s:LinearGradient rotation="90">
 
-							<s:GradientEntry color="0x8023Ef"/>
+							<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x8023Ef }"/>
 
-							<s:GradientEntry color="0x5C07B9"/>
+							<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x5C07B9 }"/>
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
@@ -213,8 +213,8 @@
 					<s:Rect width="100%" height="100%">						
 						<s:fill>						
 							<s:LinearGradient rotation="90">				
-								<s:GradientEntry color="0x8023Ef"/>				
-								<s:GradientEntry color="0x5C07B9"/>
+								<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x8023Ef }"/>				
+								<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x5C07B9 }"/>
 							</s:LinearGradient>
 						</s:fill>
 					</s:Rect>
@@ -241,9 +241,9 @@
 						
 						<s:LinearGradient rotation="90">
 							
-							<s:GradientEntry color="0x7A1EE5"/>
+							<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x7A1EE5 }"/>
 							
-							<s:GradientEntry color="0x5905B5"/>
+							<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x5905B5 }"/>
 						</s:LinearGradient>
 						
 					</s:fill>

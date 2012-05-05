@@ -23,6 +23,11 @@
 				super.data = value;
 			}
 			
+			override public function get data() : Object
+			{
+				return super.data;
+			}
+			
 			
 		]]>
 	</fx:Script>

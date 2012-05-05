@@ -105,6 +105,8 @@ package net.vdombox.ide.modules.events.view.components
 		
 		private var multiSelectElements : Object;
 		
+		private var usedElements : Object;
+		
 		public function get showElementsView() : String
 		{
 			return _showElementsView.selectedItem as String;
@@ -138,6 +140,8 @@ package net.vdombox.ide.modules.events.view.components
 			addClientActions();
 			
 			addEvents();
+			
+			//changeActions();
 		}
 
 		override protected function partAdded(partName:String, instance:Object):void
@@ -507,6 +511,8 @@ package net.vdombox.ide.modules.events.view.components
 				createServerAction( newElementVO as ServerActionVO, coordinates );
 			
 			unsaveHandler();
+			
+			changeActions();
 		}
 
 		private function mouseDownHandler( event : MouseEvent ) : void
@@ -723,6 +729,11 @@ package net.vdombox.ide.modules.events.view.components
 			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.SET_MESSAGE ) );
 		}
 		
+		private function changeActions() : void
+		{
+			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CHANGE_ACTIONS ) );
+		}
+		
 		private function saveButton_clickHandler( event : MouseEvent ) : void
 		{
 			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.SAVE ) );
@@ -792,6 +803,8 @@ package net.vdombox.ide.modules.events.view.components
 						deleteActionElement( event.target as ActionElement );
 					
 					unsaveHandler();
+					
+					changeActions();
 				/*}
 			}*/
 		}
@@ -814,6 +827,8 @@ package net.vdombox.ide.modules.events.view.components
 			}
 			
 			unsaveHandler();
+			
+			changeActions();
 		}
 		
 		private function linkage_deleteLinkageHandler( event : ElementEvent ) : void
@@ -860,6 +875,8 @@ package net.vdombox.ide.modules.events.view.components
 			var baseElement : BaseElement = event.target as BaseElement;
 			
 			removeAllSelectedElements();
+			
+			clearUsedElements();
 			
 			multiSelectElements = [];
 			
@@ -1051,6 +1068,44 @@ package net.vdombox.ide.modules.events.view.components
 					return true;
 			}
 			return false;
+		}
+		
+		public function showSelectedAction( scringID : String ) : void
+		{
+			var count : int = contentGroup.numElements;
+			
+			var i : int;
+			var baseElement : BaseElement;
+			
+			clearUsedElements();
+			
+			usedElements = [];
+			
+			for ( i = 0; i < count; i++ )
+			{
+				baseElement = contentGroup.getElementAt( i ) as BaseElement;
+				
+				if ( baseElement.data.name + baseElement.data.objectID == scringID )
+				{
+					baseElement.used = true;
+					usedElements[ baseElement ] = baseElement;
+				}
+				else
+					baseElement.used = false;
+			}
+		}
+		
+		public function clearUsedElements() : void
+		{
+			if ( usedElements )
+			{
+				var baseElement : BaseElement;
+				
+				for each ( baseElement in usedElements )
+					baseElement.used = false;
+					
+				usedElements = null;
+			}
 		}
 
 	}

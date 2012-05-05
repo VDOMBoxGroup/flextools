@@ -109,7 +109,10 @@
 				if ( !event.ctrlKey && event.target is Group && event.target.id == "scaleGroup" )
 				{
 					if ( !event.shiftKey )
+					{
 						hostComponent.removeAllSelectedElements();
+						hostComponent.clearUsedElements();
+					}
 					
 					var pt:Point;
 				

@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.events.view
 {
 	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.filters.DisplacementMapFilter;
 	
 	import mx.collections.ArrayList;
@@ -11,6 +12,7 @@ package net.vdombox.ide.modules.events.view
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ClientActionVO;
 	import net.vdombox.ide.common.model._vo.EventVO;
@@ -96,6 +98,8 @@ package net.vdombox.ide.modules.events.view
 			
 			interests.push( Notifications.SAVE_IN_WORKAREA_CHECKED );
 			
+			interests.push( Notifications.SET_USED_ACTIONS );
+			
 			return interests;
 		}
 
@@ -126,6 +130,7 @@ package net.vdombox.ide.modules.events.view
 				case Notifications.SERVER_ACTIONS_LIST_GETTED:
 				{
 					showActions( body as Array );
+					
 					break;
 				}
 					
@@ -158,6 +163,55 @@ package net.vdombox.ide.modules.events.view
 						Alert.setPatametrs( "Ok" );
 						Alert.Show( "First press to Save!!", AlertButton.OK, eventsPanel.parentApplication, null );
 					}
+					return;
+				}
+					
+				case Notifications.SET_USED_ACTIONS:
+				{
+					var clientActions : Object = body.clientActions as Array;
+					var serverActions : Object = body.serverActions as  Array;
+					var events : Object = body.events as  Array;
+					
+					var event : EventVO;
+					var list : Array = ( eventsPanel.eventsList.dataProvider as ArrayList ).source;
+					
+					var selectedID : String;
+					var i : int;
+					
+					if ( statesProxy.selectedObject )
+						selectedID = statesProxy.selectedObject.id;
+					else
+						selectedID = statesProxy.selectedPage.id;
+					
+					for ( i = 0; i < list.length; i++ )
+					{
+						if ( events.hasOwnProperty( list[i].name + selectedID ) )
+							list[i].used = true;
+						else
+							list[i].used = false;
+					}
+					
+					list = ( eventsPanel.actionsList.dataProvider as ArrayList ).source;
+					
+					for ( i = 0; i < list.length; i++ )
+					{
+						if ( list[i] is ClientActionVO )
+						{							
+							if ( clientActions.hasOwnProperty( list[i].name + selectedID ) )
+								list[i].used = true;
+							else
+								list[i].used = false;
+						}
+						else
+						{
+							
+							if ( serverActions.hasOwnProperty( list[i].name + selectedID ) )
+								list[i].used = true;
+							else
+								list[i].used = false;
+						}
+					}
+					
 					return;
 				}
 					
@@ -207,6 +261,8 @@ package net.vdombox.ide.modules.events.view
 			allActions = allActions.concat( serverActions );
 
 			eventsPanel.actionsList.dataProvider = new ArrayList( allActions );
+			
+			sendNotification( Notifications.GET_USED_ACTIONS );
 		}
 
 		private function clearData() : void
@@ -222,6 +278,8 @@ package net.vdombox.ide.modules.events.view
 			eventsPanel.eventsList.addEventListener( DragEvent.DRAG_START, dragStartHandler );
 			eventsPanel.actionsList.addEventListener( DragEvent.DRAG_START, dragStartHandler );
 			eventsPanel.addEventListener( EventsPanelEvent.CREATE_SERVER_ACTION_CLICK, createServerActionHandler, true );
+			
+			eventsPanel.addEventListener( EventsPanelEvent.RENDERER_CLICK, sendActionClicked, true, 0, true );
 		}
 		
 		
@@ -231,6 +289,8 @@ package net.vdombox.ide.modules.events.view
 			eventsPanel.eventsList.removeEventListener( DragEvent.DRAG_START, dragStartHandler );
 			eventsPanel.actionsList.removeEventListener( DragEvent.DRAG_START, dragStartHandler );
 			eventsPanel.removeEventListener( EventsPanelEvent.CREATE_SERVER_ACTION_CLICK, createServerActionHandler, true );
+			
+			eventsPanel.removeEventListener( EventsPanelEvent.RENDERER_CLICK, sendActionClicked, true );
 		}
 
 		private function dragStartHandler( event : DragEvent ) : void
@@ -285,6 +345,15 @@ package net.vdombox.ide.modules.events.view
 				0 /*yOffset*/,
 				0.5 /*imageAlpha*/,
 				list.dragMoveEnabled );
+		}
+		
+		private function sendActionClicked( event : EventsPanelEvent ) : void
+		{
+			var stringID : String = BaseItemRenderer( event.target ).data.name;
+			
+			stringID += statesProxy.selectedObject ? statesProxy.selectedObject.id : statesProxy.selectedPage.id;
+			
+			sendNotification( Notifications.SET_SELECTED_ACTION, stringID );
 		}
 		
 		private function createServerActionHandler( event : EventsPanelEvent ) : void

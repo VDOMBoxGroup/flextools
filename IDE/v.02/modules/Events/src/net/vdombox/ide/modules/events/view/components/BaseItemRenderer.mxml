@@ -4,7 +4,8 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				
 				focusEnabled="false" xmlns:view="net.vdombox.ide.common.view.*"
-				minHeight="22">
+				minHeight="22"
+				click="itemrenderer1_clickHandler(event)">
 	
 	<fx:Script>
 		<![CDATA[
@@ -12,11 +13,11 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.EventVO;
+			import net.vdombox.ide.modules.events.events.EventsPanelEvent;
 			
 			[Bindable]
 			protected var currentIcon : Class;
 			
-			[Bindable]
 			private var _data : Object;
 			
 			override public function set data( value : Object ) : void
@@ -25,7 +26,17 @@
 				
 				super.data = value;
 			}
-
+			
+			[Bindable]
+			override public function get data() : Object
+			{
+				return _data;
+			}
+			
+			protected function itemrenderer1_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new EventsPanelEvent ( EventsPanelEvent.RENDERER_CLICK ) );
+			}
 			
 		]]>
 	</fx:Script>
@@ -48,7 +59,7 @@
 	<s:Rect left="-2" width="100%" top="-2" bottom="-2">
 		<s:fill>
 			<s:SolidColor id="rectColor"
-						  color.normal="#3A3A3A"
+						  color.normal="{ data.used ? 0x292C38 : 0x3A3A3A }"
 						  color.hovered="#00000A"
 						  alpha.hovered="0.8"
 						  color.selected="#00000A" />
