@@ -61,7 +61,15 @@ public class SOAPBaseLevel extends EventDispatcher
 	{
 		var xml : XML = value[0];
 		
-		return xml.name().localName == "Error" ? ERROR : SUCCESS;
+		if (xml.name())
+		{
+			if (xml.name().hasOwnProperty("localName")) 
+				return xml.name().localName == "Error" ? ERROR : SUCCESS;
+			else
+				return xml.name() == "Error" ? ERROR : SUCCESS;
+		}
+		
+		return SUCCESS;
 	}
 
 	private function deleteListeners( target : Object) : void
