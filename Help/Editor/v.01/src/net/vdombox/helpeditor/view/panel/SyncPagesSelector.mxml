@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			
+			import net.vdombox.helpeditor.model.SQLProxy;
+			
+			public var syncGroupName : String;
+			
+			private var sqlProxy : SQLProxy = new SQLProxy();
+			
+			private var products : Object = sqlProxy.getAllProducts();
+			
+			public function get pages () : XMLList
+			{
+				var xmlList : XMLList = new XMLList();
+				
+				if (!products)
+					return null;
+				
+				for each (var product : Object in products)
+				{
+					var xmlProductPages : XML = product.toc;
+					
+					setPageProperties(xmlProductPages);
+					xmlProductPages.@language = product.language;
+						
+					for each (var pageXml : XML in xmlProductPages..page)
+					{
+						setPageProperties(pageXml);
+					}
+					
+					xmlList += xmlProductPages;
+				}
+				
+				function setPageProperties (page : XML) : void
+				{
+					var pageSyncGroup : String = sqlProxy.getPageSyncGroup(page.@name);
+					
+					page.@selected = pageSyncGroup != null && pageSyncGroup != "";
+					page.@available = !pageSyncGroup || pageSyncGroup == syncGroupName;
+				}
+				
+				return xmlList;
+			}
+			
+			public function updatePages () : void
+			{
+				pagesTree.dataProvider = null;
+				pagesTree.dataProvider = pages;
+			}
+			
+			public function get selectedPagesToDB () : Array
+			{
+				var selectedPages : Array = [];
+				
+				for each (var product : XML in pagesTree.dataProvider)
+				{
+					addPageIfSelected(product);
+					
+					for each (var page:XML in product..page)
+					{
+						addPageIfSelected(page);
+					}
+				}
+				
+				function addPageIfSelected (p:XML) : void
+				{
+					var pSelString : String = p.@selected;
+					var pAvailableString : String = p.@available;
+					
+					if ( pSelString == "true" && pAvailableString == "true")
+					{
+						var groupPageXml : XML = <page productName={product.@name} language={product.@language} pageName={p.@name} />;
+						
+						selectedPages.push(groupPageXml.toXMLString());
+					}
+				}
+				
+				return selectedPages;
+			}
+			
+			protected function pagesTree_creationCompleteHandler(event:FlexEvent):void
+			{
+				pagesTree.addEventListener("selectionChanged", this.dispatchEvent, true);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Tree id="pagesTree"
+			 width="100%" height="100%"
+			 itemRenderer="net.vdombox.helpeditor.view.itemrenderers.TreeItemRenderer"
+			 dataProvider="{pages}"
+			 labelField="@title"
+			 defaultLeafIcon="{null}"
+			 folderClosedIcon="{null}"
+			 folderOpenIcon="{null}"
+			 creationComplete="pagesTree_creationCompleteHandler(event)"/>
+	
+</mx:VBox>

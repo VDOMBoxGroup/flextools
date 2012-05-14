@@ -18,6 +18,7 @@
 			fontWeight:bold;
 		}
 	</mx:Style>
+	
 	<mx:Script>
 		<![CDATA[
 			import net.vdombox.helpeditor.view.HTML_WYSIWYG;
@@ -40,6 +41,7 @@
 				PopUpManager.centerPopUp(this);
 				
 				addEventListener(KeyboardEvent.KEY_UP, keyboardHandler);
+				
 				this.pageDescription.addEventListener(KeyboardEvent.KEY_UP, keyboardHandler);
 				this.pageDescription.addEventListener(KeyboardEvent.KEY_DOWN, keyboardDownHandler);
 				

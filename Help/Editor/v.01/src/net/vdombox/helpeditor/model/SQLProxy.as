@@ -15,27 +15,40 @@ package net.vdombox.helpeditor.model
 	{
 		private var file : File;
 
-		private var connection : SQLConnection = new SQLConnection();
-
+		private var sqlStatement : SQLStatement = new SQLStatement();
 
 		public function SQLProxy()
 		{
 			super();
 			file = File.applicationStorageDirectory.resolvePath("HelpDB.db");
+			
+			sqlStatement.sqlConnection = new SQLConnection();
 		}
 
+		private function addHandlers () : void
+		{
+			if (!sqlStatement.hasEventListener(SQLEvent.RESULT))
+				sqlStatement.addEventListener(SQLEvent.RESULT, resultHandler);
+			
+			if (!sqlStatement.hasEventListener(SQLErrorEvent.ERROR))
+				sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandler);
+		}
+		
+		private function removeHandlers () : void
+		{
+			sqlStatement.removeEventListener(SQLEvent.RESULT, resultHandler);
+			sqlStatement.removeEventListener(SQLErrorEvent.ERROR, errorHandler);
+		}
 		/**
 		 * create tables in DB if not exist
 		 * 
 		 * @return 
 		 * 
-		 */		
+		 */	
+		
 		public function creatDB() : Boolean
 		{
-			var sqlStatement : SQLStatement = new SQLStatement;
-			sqlStatement.sqlConnection = connection;
-			sqlStatement.addEventListener(SQLEvent.RESULT, resultHandler);
-			sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandler);
+			addHandlers();
 
 			try
 			{
@@ -43,52 +56,88 @@ package net.vdombox.helpeditor.model
 
 				/*****************  !!!   проверить необходимость создания каждой таблички отдельно !!!   *******************/
 
-				//       PAGE    (id, name, version, title, description, content ) //
-				sqlStatement.text = "CREATE TABLE IF NOT EXISTS page   (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-					"name TEXT NOT NULL,  " +
-					"version INTEGER NOT NULL,  " +
-					"title TEXT NOT NULL,  " +
-					"description TEXT , " +
-					"content TEXT, " +
-					"mark TEXT, " +
-					"useToc INTEGER NOT NULL,  " +
-					"id_product INTEGER);";
-				sqlStatement.execute();
+				tryToCreatePageTable();
 				
+				tryToCreateProductTable();
 				
-				sqlStatement.text = "SELECT useToc FROM page;";
-				try {
-					sqlStatement.execute();
-				} catch (e:Error) {
-					sqlStatement.text = "ALTER TABLE page ADD COLUMN useToc INTEGER;";
-					sqlStatement.execute();
-					
-					sqlStatement.text = "UPDATE page SET useToc = 1";
-					sqlStatement.execute();
-				}
+				tryToCreatePagesSyncronizationTable();
 				
-				//       PRODUCT  (id, name, version, title, description, language, toc )   //
-				sqlStatement.text = "CREATE TABLE IF NOT EXISTS product (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-					"name CHAR NOT NULL, " +
-					"version INTEGER NOT NULL,  " +
-					"title TEXT NOT NULL,  " +
-					"description TEXT , " +
-					"language TEXT," +
-					"toc XML);";
-				sqlStatement.execute();
 				sqlStatement.sqlConnection.close();
+				removeHandlers();
 
 			}
 			catch ( err : SQLError )
 			{
 				// since there is no column "name", an error will be thrown
 				sqlStatement.sqlConnection.close();
+				removeHandlers();
 
 				localizeError(err);
 				return false;
 			}
 
 			return true;
+		}
+		
+		private function tryToCreatePageTable () : void
+		{
+			//       PAGE    (id, name, version, title, description, content ) //
+			sqlStatement.text = "CREATE TABLE IF NOT EXISTS page   (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"name TEXT NOT NULL,  " +
+				"version INTEGER NOT NULL,  " +
+				"title TEXT NOT NULL,  " +
+				"description TEXT , " +
+				"content TEXT, " +
+				"mark TEXT, " +
+				"useToc INTEGER NOT NULL,  " +
+				"sync_group TEXT,  " +
+				"id_product INTEGER);";
+			sqlStatement.execute();
+			
+			
+			sqlStatement.text = "SELECT useToc FROM page;";
+			try {
+				sqlStatement.execute();
+			} catch (e:Error) {
+				sqlStatement.text = "ALTER TABLE page ADD COLUMN useToc INTEGER;";
+				sqlStatement.execute();
+				
+				sqlStatement.text = "UPDATE page SET useToc = 1";
+				sqlStatement.execute();
+			}
+			
+			sqlStatement.text = "SELECT sync_group FROM page;";
+			try {
+				sqlStatement.execute();
+			} catch (e:Error) {
+				sqlStatement.text = "ALTER TABLE page ADD COLUMN sync_group TEXT;";
+				sqlStatement.execute();
+			}
+		}
+		
+		private function tryToCreateProductTable () : void
+		{
+			//       PRODUCT  (id, name, version, title, description, language, toc )   //
+			sqlStatement.text = "CREATE TABLE IF NOT EXISTS product (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"name CHAR NOT NULL, " +
+				"version INTEGER NOT NULL,  " +
+				"title TEXT NOT NULL,  " +
+				"description TEXT , " +
+				"language TEXT," +
+				"toc XML);";
+			
+			sqlStatement.execute();
+		}
+		
+		private function tryToCreatePagesSyncronizationTable () : void
+		{
+			//       PAGES_SYNC  (id, group_name, pages)   //
+			sqlStatement.text = "CREATE TABLE IF NOT EXISTS pages_sync (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"group_name TEXT NOT NULL, " +
+				"group_title TEXT NOT NULL, " +
+				"pages TEXT);";
+			
+			sqlStatement.execute();
 		}
 
 		/**
@@ -355,8 +404,8 @@ package net.vdombox.helpeditor.model
 			if ( result )
 			{
 				var productID : int = result[ 0 ][ 'id' ];
-				query = "INSERT INTO page(name, version, title, description, content, id_product, useToc) " +
-					"VALUES(:pageName , :version, :title,	:description, :content, :id_product, 1);";
+				query = "INSERT INTO page(name, version, title, description, content, id_product, useToc, sync_group) " +
+					"VALUES(:pageName , :version, :title,	:description, :content, :id_product, 1, :sync_group);";
 
 				parameters = [];
 				parameters[ ":pageName" ] = pageName;
@@ -365,6 +414,7 @@ package net.vdombox.helpeditor.model
 				parameters[ ":description" ] = description;
 				parameters[ ":content" ] = content;
 				parameters[ ":id_product" ] = productID;
+				parameters[ ":sync_group" ] = "";
 
 				executeQuery(query, parameters);
 				
@@ -413,6 +463,21 @@ package net.vdombox.helpeditor.model
 
 			return result;
 
+		}
+		
+		public function getPageVersion (pageName:String) : Object
+		{
+			var query : String = "SELECT * " +
+				"FROM page " +
+				"WHERE name = :name;";
+			
+			var parameters : Object = {};
+			parameters[ ":name" ] = pageName;
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			return result[0]["version"];
+			
 		}
 		
 		/**
@@ -648,6 +713,53 @@ package net.vdombox.helpeditor.model
 			}
 			return result;
 		}
+		
+		public function changePageSyncProperty( productName:String, ln:String, pageName:String, syncGroupName:String) : Object
+		{
+			var query : String      = "SELECT id " +
+				"FROM product " +
+				"WHERE name = :name  AND language = :language;";
+			
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = productName;
+			parameters[ ":language" ] = ln;
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			if ( result )
+			{
+				query = "UPDATE page " +
+					"SET sync_group = :sync_group " +
+					"WHERE id_product = :id_product AND name = :page_name ;";
+				
+				var id_product : Number = result[ 0 ][ 'id' ];
+				
+				parameters = {};
+				parameters[ ":id_product" ] = id_product;
+				parameters[ ":page_name" ] = pageName;
+				parameters[ ":sync_group" ] = syncGroupName;
+				
+				result = executeQuery(query, parameters);
+			}
+			return result;
+		}
+		
+		public function getPageSyncGroup (pageName:String) : String
+		{
+			var query : String = "SELECT sync_group " +
+				"FROM page " +
+				"WHERE name = :name;";
+			
+			var parameters : Object = {};
+			parameters[ ":name" ] = pageName;
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			if (!result)
+				return "";
+			
+			return result[ 0 ][ 'sync_group' ];
+		}
 
 		/**
 		 * import product to DB
@@ -728,6 +840,8 @@ package net.vdombox.helpeditor.model
 		 */		
 		public function deletePage(productId:Number, namePage:String):void
 		{
+			deletePageFromSyncGroup(namePage);
+			
 			var query:String = "DELETE FROM 	page WHERE name = :namePage" +
 														   " AND id_product = :productId ;";
 			var parameters:Object = new Object();
@@ -735,6 +849,228 @@ package net.vdombox.helpeditor.model
 				parameters[":productId"] = productId;
 				
 			executeQuery(query, parameters);
+			
+		}
+		
+		private function deletePageFromSyncGroup (pageName:String) : void
+		{
+			var syncGroupName : String = getPageSyncGroup(pageName);
+			
+			if (!syncGroupName)
+				return;
+			
+			var groupPages : Array = getGroupPages(syncGroupName);
+			
+			if (!groupPages)
+				return;
+			
+			var pageParamsXml : XML;
+			var pageNameFromDB : String;
+			
+			var i:int=0;
+			
+			for each (var pageParams : String in groupPages)
+			{
+				try 
+				{
+					pageParamsXml = new XML(pageParams);
+				} 
+				catch (e : Error) 
+				{
+					i++;
+					continue;
+				}
+				
+				pageNameFromDB = pageParamsXml.@pageName;
+				
+				if (pageName == pageNameFromDB)
+				{
+					groupPages.splice(i,1);
+					break;
+				}
+				
+				i++;
+			}
+			
+			updateSyncGroupPages(syncGroupName, groupPages);
+		}
+		
+		public function addSyncGroup (groupName:String, groupTitle:String, pages:Array) : void
+		{
+			var query : String      = "SELECT pages_sync.id " +
+				"FROM pages_sync " +
+				"WHERE group_name = :name;";
+			
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = groupName;
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			if ( !result )
+			{
+				query = "INSERT INTO pages_sync(group_name, group_title, pages) " +
+					"VALUES(:name, :title, :pages);";
+				
+				parameters = [];
+				parameters[ ":name" ] = groupName;
+				parameters[ ":title" ] = groupTitle;
+				parameters[ ":pages" ] = !pages ? "" : pages.join(",");
+				
+				executeQuery(query, parameters);
+			}
+		}
+		
+		public function updateSyncGroupTitle (groupName:String, groupTitle:String) : void
+		{
+			var query : String    = "UPDATE pages_sync " +
+									"SET group_title = :group_title" +
+									"WHERE group_name = :group_name;";
+			
+			var parameters : Object = new Object();
+			parameters[ ":group_title" ] = groupTitle;
+			parameters[ ":group_name" ] = groupName;
+			
+			var result : Object = executeQuery(query, parameters);
+		}
+		
+		public function updateSyncGroupPages (groupName:String, pages:Array) : void
+		{
+			clearPagesSyncProperty(groupName);
+			
+			var query : String    = "UPDATE pages_sync " +
+				"SET pages = :pages " +
+				"WHERE group_name = :group_name;";
+			
+			var parameters : Object = new Object();
+			parameters[ ":group_name" ] = groupName;
+			parameters[ ":pages" ] = pages.join(",");
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			updatePagesSyncProperty(groupName);
+		}
+		
+		public function removeSyncGroup (groupName:String) : void
+		{
+			clearPagesSyncProperty(groupName);
+			
+			var query:String = "DELETE FROM pages_sync WHERE group_name = :name;";
+			
+			var parameters:Object = new Object();
+			parameters[":name"] = groupName;
+			
+			executeQuery(query, parameters);
+		}
+		
+		public function getGroupPages (groupName:String) : Array
+		{
+			var query : String      = "SELECT pages_sync.pages FROM pages_sync WHERE group_name = :name ;";
+			
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = groupName;
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			var pagesStr : String = result[0]["pages"];
+			
+			if (!pagesStr)
+				return null;
+			
+			return pagesStr.split(",");
+		}
+		
+		private function clearPagesSyncProperty (groupName : String) : void
+		{
+			var groupPages : Array = getGroupPages(groupName);
+			
+			if (!groupPages)
+				return;
+			
+			var pageParamsXml : XML;
+			for each (var pageParams : String in groupPages)
+			{
+				try 
+				{
+					pageParamsXml = new XML(pageParams);
+				} 
+				catch (e : Error) 
+				{
+					continue;
+				}
+				
+				changePageSyncProperty(pageParamsXml.@productName, pageParamsXml.@language, pageParamsXml.@pageName, "");
+			}
+			
+		}
+		
+		private function updatePagesSyncProperty (groupName : String) : void
+		{
+			var groupPages : Array = getGroupPages(groupName);
+			
+			if (!groupPages)
+				return;
+			
+			var pageParamsXml : XML;
+			for each (var pageParams : String in groupPages)
+			{
+				try 
+				{
+					pageParamsXml = new XML(pageParams);
+				} 
+				catch (e : Error) 
+				{
+					continue;
+				}
+				
+				changePageSyncProperty(pageParamsXml.@productName, pageParamsXml.@language, pageParamsXml.@pageName, groupName);
+			}
+			
+		}
+		
+		public function getAllSyncGroups() : Object
+		{
+			var query : String      = "SELECT * FROM pages_sync;";
+			
+			var parameters : Object = new Object();
+			
+			var result : Object     = executeQuery(query, parameters);
+			
+			if ( !result )
+				return null;
+			
+			return result;
+		}
+		
+		public function syncronizePagesContent (sourcePageName:String, sourcePageContent:String, groupName:String) : void
+		{
+			var groupPages : Array = getGroupPages(groupName);
+			
+			if (!groupPages)
+				return;
+			
+			var pageParamsXml : XML;
+			var pageName : String;
+			for each (var pageParams : String in groupPages)
+			{
+				try 
+				{
+					pageParamsXml = new XML(pageParams);
+				} 
+				catch (e : Error) 
+				{
+					continue;
+				}
+				
+				pageName = pageParamsXml.@pageName;
+				
+				if (sourcePageName == pageName)
+					continue;
+				
+				var pageVersion : Number = Number(getPageVersion(pageName));
+				pageVersion = isNaN(pageVersion) ? 0 : pageVersion + 1;
+				
+				setPageContent(pageParamsXml.@productName, pageParamsXml.@language, pageName, sourcePageContent, pageVersion);
+			}
 		}
 
 		/**
@@ -747,17 +1083,16 @@ package net.vdombox.helpeditor.model
 		 */		
 		private function executeQuery(query:String, parameters:Object) : Object
 		{
-			var sqlStatement : SQLStatement = new SQLStatement;
-			sqlStatement.sqlConnection = connection;
-			sqlStatement.addEventListener(SQLEvent.RESULT, resultHandler);
-			sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandler);
-
+			addHandlers();
+			
 			try
 			{
 				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
 				sqlStatement.text = query;
 
-				for ( var name : String in parameters )
+				sqlStatement.clearParameters();
+				
+				for (var name:String in parameters )
 				{
 					sqlStatement.parameters[ name ] = parameters[ name ];
 				}
@@ -766,11 +1101,14 @@ package net.vdombox.helpeditor.model
 
 
 				var result : SQLResult = sqlStatement.getResult();
+				
 				sqlStatement.sqlConnection.close();
+				removeHandlers();
 			}
 			catch ( err : SQLError )
 			{
 				sqlStatement.sqlConnection.close();
+				removeHandlers();
 
 				localizeError(err);
 				return null;

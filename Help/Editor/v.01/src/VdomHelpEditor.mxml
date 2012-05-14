@@ -68,6 +68,7 @@
 			import net.vdombox.helpeditor.view.HTML_WYSIWYG;
 			import net.vdombox.helpeditor.view.panel.EditPage;
 			import net.vdombox.helpeditor.view.panel.Products;
+			import net.vdombox.helpeditor.view.panel.SyncronizePages;
 
 			private var sqlProxy : SQLProxy = new SQLProxy();
 
@@ -524,8 +525,18 @@
 			
 			private function refreshPageContent(aEvent : Event = null):void
 			{
-				sqlProxy.setPageContent(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, tree.selectedItem.@name, html_wysiwyg.getHTML(), pageVersion);
+				var pageNewContent : String = html_wysiwyg.getHTML();
+				
+				sqlProxy.setPageContent(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, tree.selectedItem.@name, pageNewContent, pageVersion);
+				
 				getCurrentPage();
+				
+				var pageSyncGroupName : String = sqlProxy.getPageSyncGroup(tree.selectedItem.@name);
+				
+				if (!pageSyncGroupName)
+					return;
+				
+				sqlProxy.syncronizePagesContent(tree.selectedItem.@name, pageNewContent, pageSyncGroupName);
 			}
 
 			private function selectXMLFile():void
@@ -837,6 +848,17 @@
 				treePagesBuffer = null;
 			}
 			
+			private function openPagesSyncronizationPanel() : void
+			{
+				var syncPagesPanel : SyncronizePages = PopUpManager.createPopUp(this, SyncronizePages, true) as SyncronizePages;
+				
+				syncPagesPanel.addEventListener(CloseEvent.CLOSE, syncPagesPanelCloseHandler);
+				
+				function syncPagesPanelCloseHandler (event : CloseEvent) : void
+				{
+					trace ("-- syncPagesPanelCloseHandler");
+				}
+			}
 		]]>
 	</mx:Script>
 
@@ -879,6 +901,16 @@
 
 			<mx:Button label="Create products XML"
 					   click="{selectXMLFile()}"
+					   color="#FFFFFF"
+					   fillColors="#333333"
+					   textSelectedColor="#FFFFFF"
+					   cornerRadius="1"
+					   borderColor="#999999"
+					   themeColor="#656565"
+					   textRollOverColor="#FFFFFF"
+					   enabled="{Boolean(cmboxProduct.selectedItem)}" />
+			<mx:Button label="Syncronization properties"
+					   click="{openPagesSyncronizationPanel()}"
 					   color="#FFFFFF"
 					   fillColors="#333333"
 					   textSelectedColor="#FFFFFF"

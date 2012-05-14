@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	width="600" height="500"
+	title="Pages Settings"
+	creationComplete="creationCompleteHandler(event)"
+	showCloseButton="true"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
+	borderAlpha="0.98" cornerRadius="1" 
+	visible="true" shadowDirection="right"
+	backgroundColor="#373739"
+	borderColor="#373739" titleStyleName="resourceBrowserTitle"
+	borderThicknessLeft="1" borderThicknessRight="1" xmlns:panel="net.vdombox.helpeditor.view.panel.*"
+	keyDown="window_keyDownHandler(event)">
+	
+	<mx:Style>
+		.resourceBrowserTitle 
+		{
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			import mx.managers.PopUpManager;
+			import mx.utils.UIDUtil;
+			
+			import net.vdombox.helpeditor.model.AlertMessages;
+			import net.vdombox.helpeditor.model.SQLProxy;
+			
+			private var sqlProxy : SQLProxy = new SQLProxy();
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener(CloseEvent.CLOSE, closeHandler);
+				
+				PopUpManager.centerPopUp(this);
+			}
+			
+			private function closeHandler(cEvent:CloseEvent):void 
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			[Bindable]
+			private var allGroups : Object;
+			
+			private function addNewGroup () : void
+			{
+				sqlProxy.addSyncGroup(UIDUtil.createUID(), "New group", []);
+				
+				updateGroupsList();
+				
+				syncGroupsList.selectedIndex = syncGroupsList.dataProvider.length-1;
+				
+				updateSelectorView();
+			}
+			
+			private function askToRemoveGroup () : void
+			{
+				if (syncGroupsList.selectedIndex >= 0)
+					Alert.show(AlertMessages.MSG_ASK_DELETE_GROUP, AlertMessages.MSG_TYPE_DELETE, Alert.YES|Alert.NO, this, alertRemoveGroupCloseHandler);
+			}
+			
+			private function alertRemoveGroupCloseHandler(event:CloseEvent):void
+			{
+				if (event.detail == Alert.YES)
+					removeGroup();
+			}
+			
+			private function removeGroup () : void
+			{
+				sqlProxy.removeSyncGroup(syncGroupsList.selectedItem.group_name);
+				
+				vsGroupPages.removeChildAt(syncGroupsList.selectedIndex);
+				
+				updateGroupsList();
+			}
+			
+			private function updateGroupsList() : void
+			{
+				allGroups = sqlProxy.getAllSyncGroups();
+				
+				var rememberedListItemIndex : int = syncGroupsList && syncGroupsList.selectedIndex > 0 ? syncGroupsList.selectedIndex : 0;
+					
+				if (!vsGroupPages)
+					return;
+					
+				vsGroupPages.removeAllChildren();
+				
+				for each (var syncGroup : Object in allGroups)
+				{
+					addNewPagesSelector();
+				}
+				
+				syncGroupsList.selectedIndex = rememberedListItemIndex < syncGroupsList.dataProvider.length ? rememberedListItemIndex : 0;
+				
+				updateSelectorView();
+				
+				function addNewPagesSelector() : void
+				{
+					var pagesSelector : SyncPagesSelector;
+					
+					pagesSelector = new SyncPagesSelector();
+					pagesSelector.syncGroupName = syncGroup.group_name;
+					
+					pagesSelector.addEventListener("selectionChanged", groupPagesChangeHandler);
+					
+					vsGroupPages.addChild(pagesSelector);
+				}
+			}
+			
+			private function groupPagesChangeHandler (event : Event) : void
+			{
+				var pagesSelector : SyncPagesSelector = event.target as SyncPagesSelector;
+				var pagesSelectorIndex : int = vsGroupPages.getChildIndex(pagesSelector);
+					
+				applyGroupChanges(pagesSelectorIndex);
+			}
+			
+			private function updateSelectorView () : void
+			{
+				vsGroupPages.selectedIndex = syncGroupsList.selectedIndex;
+				
+				SyncPagesSelector(vsGroupPages.selectedChild).updatePages();
+				
+				
+				if (vsGroupPages.numChildren > 0 && vsGroupPages.selectedChild)
+					vsGroupPages.selectedChild.setFocus();
+			}
+			
+			protected function window_keyDownHandler(event:KeyboardEvent):void
+			{
+				if (event.charCode == Keyboard.ESCAPE)
+					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
+			protected function syncGroupsList_doubleClickHandler(event:ListEvent):void
+			{
+				syncGroupsList.editable = true;
+			}
+			
+			protected function syncGroupsList_itemEditEndHandler(event:ListEvent):void
+			{
+				syncGroupsList.editable = false;
+			}
+			
+			private function applyGroupChanges (groupIndex : int) : void
+			{
+				var groupName	: String = syncGroupsList.dataProvider[groupIndex]["group_name"];
+				
+				var pagesSelector : SyncPagesSelector = vsGroupPages.getChildAt(groupIndex) as SyncPagesSelector;
+				var pages : Array = pagesSelector.selectedPagesToDB;
+				
+				sqlProxy.updateSyncGroupPages(groupName, pages);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:HBox width="100%" height="100%"
+			 paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10"
+			 horizontalGap="5">
+		<mx:VBox width="50%" height="100%">
+			<mx:Label text="Groups: "
+					  paddingLeft="5"
+					  color="white"/>
+			
+			<mx:HBox>
+				<mx:Button id="btnNewGroup" 
+						   label="New" toolTip="New group"
+						   click="{addNewGroup()}"/>
+				
+				<mx:Button id="btnRemoveGroup" 
+						   label="Remove" toolTip="Remove group"
+						   enabled="{syncGroupsList.dataProvider.length>0}"
+						   click="{askToRemoveGroup()}"/>
+			</mx:HBox>
+			
+			<mx:List width="100%" height="100%"
+					 id="syncGroupsList"
+					 dataProvider="{allGroups}"
+					 labelField="group_title"
+					 change="{updateSelectorView()}"
+					 selectedIndex="-1"
+					 creationComplete="updateGroupsList()"
+					 doubleClickEnabled="true"
+					 itemDoubleClick="syncGroupsList_doubleClickHandler(event)"
+					 itemEditEnd="syncGroupsList_itemEditEndHandler(event)"/>
+		</mx:VBox>
+		
+		<mx:VBox width="100%" height="100%">
+			<mx:Label text="Pages: "
+					  paddingLeft="5"
+					  color="white"/>
+			
+			<mx:ViewStack id="vsGroupPages" 
+						  width="100%" height="100%"
+						  backgroundColor="white"/>
+			
+		</mx:VBox>
+	</mx:HBox>
+	
+</mx:TitleWindow>

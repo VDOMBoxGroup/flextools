@@ -2,7 +2,8 @@
 
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="absolute" width="400" height="300"
+	layout="absolute" 
+	width="400" height="330"
 	title="Edit"
 	creationComplete="creationComplete()"
 	showCloseButton="true"
@@ -20,11 +21,12 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
-			import net.vdombox.helpeditor.model.SQLProxy;
 			import mx.collections.ArrayCollection;
 			import mx.controls.CheckBox;
-			import mx.managers.PopUpManager;
 			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			
+			import net.vdombox.helpeditor.model.SQLProxy;
 			
 			public var curentProduct : Object; 
 			
@@ -107,6 +109,7 @@
 				
 				<mx:Label x="16" y="67" text="Description:"/>
 				<mx:TextArea id="productDescription" x="18" y="93" width="258" height="87"/>
+				
 			</mx:Canvas>
 		</mx:VBox>
 		
