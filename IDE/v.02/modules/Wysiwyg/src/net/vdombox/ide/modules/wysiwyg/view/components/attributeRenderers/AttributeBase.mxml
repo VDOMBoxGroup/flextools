@@ -250,7 +250,7 @@
 
 				valueField.initChars(uint( codeInterface[ "value" ] ),_attributeDescriptionVO);
 
-
+				valueField.addEventListener(Event.CHANGE, changeHandler, false, 0 , true );
 			}
 
 			private function eventCompleleHandler(event : Event) : void

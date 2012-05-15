@@ -21,6 +21,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var DELETE : String        = "otpe_delete";
 		public static var COPY : String        = "otpe_copy";
 		public static var PASTE : String        = "otpe_paste";
+		
 		public static const CREATE_NEW_CLICK : String = 'createNewClick';
 
 		public function ObjectsTreePanelEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, pageID : String = null,

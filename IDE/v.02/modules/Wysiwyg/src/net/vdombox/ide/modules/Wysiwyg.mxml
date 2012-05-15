@@ -3,7 +3,8 @@
 				 xmlns:mx="library://ns.adobe.com/flex/halo"
 				 xmlns:s="library://ns.adobe.com/flex/spark"
 				 
-				 xmlns:common="net.vdombox.ide.common.*">
+				 xmlns:common="net.vdombox.ide.common.*"
+				 >
 
 	<fx:Metadata> 
 		[ResourceBundle("Wysiwyg_General")] 
@@ -90,10 +91,15 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.core.UIComponentGlobals;
+			import mx.events.DynamicEvent;
+			import mx.events.FlexEvent;
 			import mx.skins.spark.ButtonSkin;
 			
 			import net.vdombox.ide.common.controller.Notifications;
 			import net.vdombox.ide.common.model.SettingsProxy;
+			import net.vdombox.ide.common.view.components.button.AlertButton;
+			import net.vdombox.ide.common.view.components.windows.Alert;
 			import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 			
 			import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -157,6 +163,12 @@
 			{
 				facade.sendNotification( Notifications.CREATE_SETTINGS_SCREEN );
 			}
+			
+			private function onUncaughtError(e:UncaughtErrorEvent):void 
+			{ 
+				// Do something with your error
+				var tt : int = 0; 
+			}
 
 			override public function getBody() : void
 			{
@@ -172,6 +184,7 @@
 			{
 				facade.sendNotification( SettingsProxy.INITIALIZE_SETTINGS );
 			}
+			
 		]]>
 	</fx:Script>
 </common:VIModule>

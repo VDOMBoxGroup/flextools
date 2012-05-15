@@ -319,7 +319,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler, false, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.OPEN, openHandler, false, 0, true );
-			objectsTreePanel.addEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
+			objectsTreePanel.addEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CREATE_NEW_CLICK, createNewPage, false, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true, 0, true );
@@ -445,7 +445,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.OPEN, openHandler );
-			objectsTreePanel.removeEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
+			objectsTreePanel.removeEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CREATE_NEW_CLICK, createNewPage );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true );
