@@ -923,7 +923,7 @@ package net.vdombox.helpeditor.model
 		public function updateSyncGroupTitle (groupName:String, groupTitle:String) : void
 		{
 			var query : String    = "UPDATE pages_sync " +
-									"SET group_title = :group_title" +
+									"SET group_title = :group_title " +
 									"WHERE group_name = :group_name;";
 			
 			var parameters : Object = new Object();

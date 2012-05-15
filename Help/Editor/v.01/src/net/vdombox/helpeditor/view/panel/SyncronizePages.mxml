@@ -24,9 +24,14 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
+			import mx.controls.Text;
+			import mx.controls.TextInput;
+			import mx.core.IUITextField;
+			import mx.core.UITextField;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
+			import mx.events.ListEventReason;
 			import mx.managers.PopUpManager;
 			import mx.utils.UIDUtil;
 			
@@ -59,6 +64,8 @@
 				syncGroupsList.selectedIndex = syncGroupsList.dataProvider.length-1;
 				
 				updateSelectorView();
+				
+				syncGroupsList_itemEditBegin();
 			}
 			
 			private function askToRemoveGroup () : void
@@ -98,7 +105,10 @@
 					addNewPagesSelector();
 				}
 				
-				syncGroupsList.selectedIndex = rememberedListItemIndex < syncGroupsList.dataProvider.length ? rememberedListItemIndex : 0;
+				if (syncGroupsList.dataProvider.length == 0)
+					syncGroupsList.selectedIndex = -1;
+				else
+					syncGroupsList.selectedIndex = rememberedListItemIndex < syncGroupsList.dataProvider.length ? rememberedListItemIndex : 0;
 				
 				updateSelectorView();
 				
@@ -120,37 +130,31 @@
 				var pagesSelector : SyncPagesSelector = event.target as SyncPagesSelector;
 				var pagesSelectorIndex : int = vsGroupPages.getChildIndex(pagesSelector);
 					
-				applyGroupChanges(pagesSelectorIndex);
+				applyGroupPagesChanges(pagesSelectorIndex);
 			}
 			
 			private function updateSelectorView () : void
 			{
 				vsGroupPages.selectedIndex = syncGroupsList.selectedIndex;
 				
-				SyncPagesSelector(vsGroupPages.selectedChild).updatePages();
-				
-				
 				if (vsGroupPages.numChildren > 0 && vsGroupPages.selectedChild)
+				{
+					SyncPagesSelector(vsGroupPages.selectedChild).updatePages();
+					
 					vsGroupPages.selectedChild.setFocus();
+				}
 			}
 			
 			protected function window_keyDownHandler(event:KeyboardEvent):void
 			{
+				if (event.target is UITextField)
+					return;
+				
 				if (event.charCode == Keyboard.ESCAPE)
 					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 			}
 			
-			protected function syncGroupsList_doubleClickHandler(event:ListEvent):void
-			{
-				syncGroupsList.editable = true;
-			}
-			
-			protected function syncGroupsList_itemEditEndHandler(event:ListEvent):void
-			{
-				syncGroupsList.editable = false;
-			}
-			
-			private function applyGroupChanges (groupIndex : int) : void
+			private function applyGroupPagesChanges (groupIndex : int) : void
 			{
 				var groupName	: String = syncGroupsList.dataProvider[groupIndex]["group_name"];
 				
@@ -160,6 +164,71 @@
 				sqlProxy.updateSyncGroupPages(groupName, pages);
 			}
 			
+			protected function syncGroupsList_doubleClickHandler(event:ListEvent):void
+			{
+				syncGroupsList_itemEditBegin();
+			}
+			
+			private function syncGroupsList_itemEditBegin () : void
+			{
+				syncGroupsList.editable = true;
+				syncGroupsList.editedItemPosition = {rowIndex : syncGroupsList.selectedIndex, columnIndex : 0};
+			}
+			
+			protected function syncGroupsList_itemEditEndHandler(event:ListEvent):void
+			{
+				event.preventDefault();
+				
+				if ( event.reason == ListEventReason.CANCELLED )
+				{
+					destroyItemEditor();
+					return;
+				}
+				
+				if (!isCorrectGroupName)
+				{
+					event.stopImmediatePropagation();
+					
+					listItemEditorInstance.errorString = "Error: empty group name";
+					return;
+				}
+				
+				applyGroupLabel();
+				
+				destroyItemEditor();
+			}
+			
+			private function applyGroupLabel () : void
+			{
+				var editedItemData : Object = syncGroupsList.editedItemRenderer.data;
+				
+				editedItemData.group_title = listItemEditorInstance.text;
+				
+				syncGroupsList.selectedItem = editedItemData;
+				
+				sqlProxy.updateSyncGroupTitle(editedItemData.group_name, editedItemData.group_title);
+			}
+			
+			private function get isCorrectGroupName () : Boolean
+			{
+				var groupNameText : String = listItemEditorInstance.text;
+				
+				if (!groupNameText)
+					return false;
+				
+				return true;
+			}
+			
+			private function get listItemEditorInstance () : TextInput
+			{
+				return syncGroupsList.itemEditorInstance as TextInput;
+			}
+			
+			private function destroyItemEditor() : void
+			{
+				syncGroupsList.destroyItemEditor();
+				syncGroupsList.editable = false;
+			}
 		]]>
 	</mx:Script>
 	
@@ -191,7 +260,9 @@
 					 creationComplete="updateGroupsList()"
 					 doubleClickEnabled="true"
 					 itemDoubleClick="syncGroupsList_doubleClickHandler(event)"
-					 itemEditEnd="syncGroupsList_itemEditEndHandler(event)"/>
+					 itemEditEnd="syncGroupsList_itemEditEndHandler(event)"
+					 itemEditor="net.vdombox.helpeditor.view.itemrenderers.ListItemEditor"/>
+			
 		</mx:VBox>
 		
 		<mx:VBox width="100%" height="100%">

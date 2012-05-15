@@ -94,7 +94,6 @@
 	<mx:Tree id="pagesTree"
 			 width="100%" height="100%"
 			 itemRenderer="net.vdombox.helpeditor.view.itemrenderers.TreeItemRenderer"
-			 dataProvider="{pages}"
 			 labelField="@title"
 			 defaultLeafIcon="{null}"
 			 folderClosedIcon="{null}"
