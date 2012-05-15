@@ -5,6 +5,7 @@ package net.vdombox.helpeditor.controller.events
 	public class PagesSyncronizationEvent extends Event
 	{
 		public static const SELECTION_CHANGED	: String = "selectionChanged";
+		public static const GET_CUR_SYNC_GROUP_NAME	: String = "getCurrentSyncronizationGroupName";
 		
 		
 		public var pageName		: String = "";

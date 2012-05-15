@@ -121,7 +121,6 @@
 				
 				syncGroupsList.selectedIndex = 0;
 				
-				trace ("updateGroupsList -> updateSelectorView");
 				updateSelectorView();
 			}
 			
@@ -149,7 +148,6 @@
 		
 			private function updateSelectorView () : void
 			{
-				trace ("updateSelectorView");
 				vsGroupPages.selectedIndex = syncGroupsList.selectedIndex;
 				
 				if (vsGroupPages.numChildren > 0 && currentPagesSelector)
@@ -271,7 +269,7 @@
 			<mx:List width="100%" height="100%"
 					 id="syncGroupsList"
 					 labelField="group_title"
-					 change="{trace ('change -> updateSelectorView');updateSelectorView()}"
+					 change="{updateSelectorView()}"
 					 selectedIndex="-1"
 					 creationComplete="createGroupsList()"
 					 doubleClickEnabled="true"

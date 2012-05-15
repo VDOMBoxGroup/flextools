@@ -5,18 +5,25 @@ package net.vdombox.helpeditor.view.itemrenderers
 	
 	import mx.controls.CheckBox;
 	import mx.controls.treeClasses.TreeItemRenderer;
+	import mx.events.FlexEvent;
 	
 	import net.vdombox.helpeditor.controller.events.PagesSyncronizationEvent;
+	import net.vdombox.helpeditor.model.SQLProxy;
+	import net.vdombox.helpeditor.view.panel.SyncPagesSelector;
 	
 	public class TreeItemRenderer extends mx.controls.treeClasses.TreeItemRenderer
 	{
+		private var sqlProxy : SQLProxy = new SQLProxy();
+		
 		public var pageCheckBox : CheckBox;
+		
+		private var syncGroupName : String;
 		
 		public function TreeItemRenderer()
 		{
 			super();
 		}
-		
+
 		override protected function commitProperties():void
 		{
 			if (pageCheckBox)
@@ -48,12 +55,11 @@ package net.vdombox.helpeditor.view.itemrenderers
 		{
 			xmlData.@selected = pageCheckBox.selected;
 			
-			//parent.dispatchEvent(new Event("selectionChanged"));
 			var syncEvent : PagesSyncronizationEvent = new PagesSyncronizationEvent(PagesSyncronizationEvent.SELECTION_CHANGED);
 			syncEvent.pageName		= xmlData.@name;
-			syncEvent.pageSelected	=pageCheckBox.selected;
+			syncEvent.pageSelected	= pageCheckBox.selected;
 			
-			parent.dispatchEvent(syncEvent);
+			dispatchEvent(syncEvent);
 		}
 		
 		private function get pageSyncAvailable () : Boolean
@@ -103,6 +109,30 @@ package net.vdombox.helpeditor.view.itemrenderers
 		override public function set data (value:Object) : void
 		{
 			super.data = value;
+			
+			syncGroupName = sqlProxy.getPageSyncGroup(xmlData.@name);
+			
+			xmlData.@selected = syncGroupName != null && syncGroupName != "";
+			
+			if (!syncGroupName)
+			{
+				xmlData.@available = true;
+				return;
+			}
+			
+			xmlData.@available = false;
+			
+			requestCurrentSyncGroupName();
+		}
+		
+		public function requestCurrentSyncGroupName () : void
+		{
+			dispatchEvent(new PagesSyncronizationEvent(PagesSyncronizationEvent.GET_CUR_SYNC_GROUP_NAME));
+		}
+		
+		public function set currentSyncGroupName (curGroupName : String) : void
+		{
+			xmlData.@available = !syncGroupName || syncGroupName == curGroupName;
 		}
 		
 		private function get xmlData () : XML

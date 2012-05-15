@@ -5,9 +5,11 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
+			import mx.events.TreeEvent;
 			
 			import net.vdombox.helpeditor.controller.events.PagesSyncronizationEvent;
 			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.view.itemrenderers.TreeItemRenderer;
 			
 			public var syncGroupName : String;
 			
@@ -26,22 +28,7 @@
 				{
 					var xmlProductPages : XML = product.toc;
 					
-					setPageProperties(xmlProductPages);
-						
-					for each (var pageXml : XML in xmlProductPages..page)
-					{
-						setPageProperties(pageXml);
-					}
-					
 					xmlList += xmlProductPages;
-				}
-				
-				function setPageProperties (page : XML) : void
-				{
-					var pageSyncGroup : String = sqlProxy.getPageSyncGroup(page.@name);
-					
-					page.@selected = pageSyncGroup != null && pageSyncGroup != "";
-					page.@available = !pageSyncGroup || pageSyncGroup == syncGroupName;
 				}
 				
 				return xmlList;
@@ -58,6 +45,18 @@
 				pagesTree.addEventListener(PagesSyncronizationEvent.SELECTION_CHANGED, this.dispatchEvent, true);
 			}
 			
+			private function treeItemRenderer_getCurrentSyncGroupNameHandler (event : PagesSyncronizationEvent) : void
+			{
+				var selectedTreeItemRenderer : TreeItemRenderer = event.target as TreeItemRenderer;
+				
+				selectedTreeItemRenderer.currentSyncGroupName = syncGroupName;
+			}
+			
+			protected function pagesTree_initializeHandler(event:FlexEvent):void
+			{
+				pagesTree.addEventListener(PagesSyncronizationEvent.GET_CUR_SYNC_GROUP_NAME, treeItemRenderer_getCurrentSyncGroupNameHandler, true);
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -68,6 +67,7 @@
 			 defaultLeafIcon="{null}"
 			 folderClosedIcon="{null}"
 			 folderOpenIcon="{null}"
-			 creationComplete="pagesTree_creationCompleteHandler(event)"/>
+			 creationComplete="pagesTree_creationCompleteHandler(event)"
+			 initialize="pagesTree_initializeHandler(event)"/>
 	
 </mx:VBox>
