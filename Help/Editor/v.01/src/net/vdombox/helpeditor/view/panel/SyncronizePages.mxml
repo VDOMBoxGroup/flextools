@@ -23,6 +23,7 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.controls.Text;
 			import mx.controls.TextInput;
@@ -35,6 +36,7 @@
 			import mx.managers.PopUpManager;
 			import mx.utils.UIDUtil;
 			
+			import net.vdombox.helpeditor.controller.events.PagesSyncronizationEvent;
 			import net.vdombox.helpeditor.model.AlertMessages;
 			import net.vdombox.helpeditor.model.SQLProxy;
 			
@@ -52,16 +54,22 @@
 				PopUpManager.removePopUp(this);
 			}
 			
-			[Bindable]
-			private var allGroups : Object;
-			
 			private function addNewGroup () : void
 			{
-				sqlProxy.addSyncGroup(UIDUtil.createUID(), "New group", []);
+				var newGroup : Object = {};
+				newGroup.group_name = UIDUtil.createUID();
+				newGroup.group_title = "New group";
+				newGroup.pages = [];
 				
-				updateGroupsList();
+				sqlProxy.addSyncGroup(newGroup.group_name, newGroup.group_title, newGroup.pages);
 				
-				syncGroupsList.selectedIndex = syncGroupsList.dataProvider.length-1;
+				var groups : Array = syncGroupsList.dataProvider.source;
+				groups.push(newGroup);
+				syncGroupsList.dataProvider = groups;
+				
+				syncGroupsList.selectedIndex = syncGroupsList.dataProvider.length - 1;
+				
+				addNewPagesSelector(newGroup.group_name);
 				
 				updateSelectorView();
 				
@@ -86,63 +94,82 @@
 				
 				vsGroupPages.removeChildAt(syncGroupsList.selectedIndex);
 				
-				updateGroupsList();
+				var groupsCollection : ArrayCollection = syncGroupsList.dataProvider as ArrayCollection;
+				groupsCollection.removeItemAt(syncGroupsList.selectedIndex);
+				
+				syncGroupsList.selectedIndex = 0;
+				
+				updateSelectorView();
 			}
 			
-			private function updateGroupsList() : void
+			private function createGroupsList() : void
 			{
-				allGroups = sqlProxy.getAllSyncGroups();
+				var allGroups : Array = sqlProxy.getAllSyncGroups() as Array;
 				
-				var rememberedListItemIndex : int = syncGroupsList && syncGroupsList.selectedIndex > 0 ? syncGroupsList.selectedIndex : 0;
-					
+				syncGroupsList.dataProvider = allGroups;
+				
 				if (!vsGroupPages)
 					return;
 					
-				vsGroupPages.removeAllChildren();
+				if (!allGroups || allGroups.length == 0)
+					return;
 				
 				for each (var syncGroup : Object in allGroups)
 				{
-					addNewPagesSelector();
+					addNewPagesSelector(syncGroup.group_name);
 				}
 				
-				if (syncGroupsList.dataProvider.length == 0)
-					syncGroupsList.selectedIndex = -1;
-				else
-					syncGroupsList.selectedIndex = rememberedListItemIndex < syncGroupsList.dataProvider.length ? rememberedListItemIndex : 0;
+				syncGroupsList.selectedIndex = 0;
 				
+				trace ("updateGroupsList -> updateSelectorView");
 				updateSelectorView();
-				
-				function addNewPagesSelector() : void
-				{
-					var pagesSelector : SyncPagesSelector;
-					
-					pagesSelector = new SyncPagesSelector();
-					pagesSelector.syncGroupName = syncGroup.group_name;
-					
-					pagesSelector.addEventListener("selectionChanged", groupPagesChangeHandler);
-					
-					vsGroupPages.addChild(pagesSelector);
-				}
 			}
 			
-			private function groupPagesChangeHandler (event : Event) : void
+			private function addNewPagesSelector(syncGroupName : String) : void
+			{
+				var pagesSelector : SyncPagesSelector;
+				
+				pagesSelector = new SyncPagesSelector();
+				pagesSelector.syncGroupName = syncGroupName;
+				
+				pagesSelector.addEventListener(PagesSyncronizationEvent.SELECTION_CHANGED, groupPagesChangeHandler);
+				
+				vsGroupPages.addChild(pagesSelector);
+			}
+			
+			private function groupPagesChangeHandler (event : PagesSyncronizationEvent) : void
 			{
 				var pagesSelector : SyncPagesSelector = event.target as SyncPagesSelector;
-				var pagesSelectorIndex : int = vsGroupPages.getChildIndex(pagesSelector);
-					
-				applyGroupPagesChanges(pagesSelectorIndex);
+				
+				if (event.pageSelected)
+					sqlProxy.addPageToSyncGroup(event.pageName, pagesSelector.syncGroupName);
+				else
+					sqlProxy.removePageFromSyncGroup(event.pageName, pagesSelector.syncGroupName);
 			}
-			
+		
 			private function updateSelectorView () : void
 			{
+				trace ("updateSelectorView");
 				vsGroupPages.selectedIndex = syncGroupsList.selectedIndex;
 				
-				if (vsGroupPages.numChildren > 0 && vsGroupPages.selectedChild)
+				if (vsGroupPages.numChildren > 0 && currentPagesSelector)
 				{
-					SyncPagesSelector(vsGroupPages.selectedChild).updatePages();
-					
-					vsGroupPages.selectedChild.setFocus();
+					currentPagesSelector.updatePages();
+										
+					currentPagesSelector.setFocus();
 				}
+			}
+			
+			private function get currentPagesSelector () : SyncPagesSelector
+			{
+				try
+				{
+					return vsGroupPages && vsGroupPages.selectedChild ? vsGroupPages.selectedChild as SyncPagesSelector : null;
+				}
+				catch (e:Error)
+				{}
+				
+				return null;
 			}
 			
 			protected function window_keyDownHandler(event:KeyboardEvent):void
@@ -152,16 +179,6 @@
 				
 				if (event.charCode == Keyboard.ESCAPE)
 					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
-			}
-			
-			private function applyGroupPagesChanges (groupIndex : int) : void
-			{
-				var groupName	: String = syncGroupsList.dataProvider[groupIndex]["group_name"];
-				
-				var pagesSelector : SyncPagesSelector = vsGroupPages.getChildAt(groupIndex) as SyncPagesSelector;
-				var pages : Array = pagesSelector.selectedPagesToDB;
-				
-				sqlProxy.updateSyncGroupPages(groupName, pages);
 			}
 			
 			protected function syncGroupsList_doubleClickHandler(event:ListEvent):void
@@ -253,11 +270,10 @@
 			
 			<mx:List width="100%" height="100%"
 					 id="syncGroupsList"
-					 dataProvider="{allGroups}"
 					 labelField="group_title"
-					 change="{updateSelectorView()}"
+					 change="{trace ('change -> updateSelectorView');updateSelectorView()}"
 					 selectedIndex="-1"
-					 creationComplete="updateGroupsList()"
+					 creationComplete="createGroupsList()"
 					 doubleClickEnabled="true"
 					 itemDoubleClick="syncGroupsList_doubleClickHandler(event)"
 					 itemEditEnd="syncGroupsList_itemEditEndHandler(event)"

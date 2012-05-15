@@ -6,6 +6,8 @@ package net.vdombox.helpeditor.view.itemrenderers
 	import mx.controls.CheckBox;
 	import mx.controls.treeClasses.TreeItemRenderer;
 	
+	import net.vdombox.helpeditor.controller.events.PagesSyncronizationEvent;
+	
 	public class TreeItemRenderer extends mx.controls.treeClasses.TreeItemRenderer
 	{
 		public var pageCheckBox : CheckBox;
@@ -46,7 +48,12 @@ package net.vdombox.helpeditor.view.itemrenderers
 		{
 			xmlData.@selected = pageCheckBox.selected;
 			
-			parent.dispatchEvent(new Event("selectionChanged"));
+			//parent.dispatchEvent(new Event("selectionChanged"));
+			var syncEvent : PagesSyncronizationEvent = new PagesSyncronizationEvent(PagesSyncronizationEvent.SELECTION_CHANGED);
+			syncEvent.pageName		= xmlData.@name;
+			syncEvent.pageSelected	=pageCheckBox.selected;
+			
+			parent.dispatchEvent(syncEvent);
 		}
 		
 		private function get pageSyncAvailable () : Boolean

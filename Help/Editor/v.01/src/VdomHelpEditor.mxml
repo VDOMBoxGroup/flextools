@@ -527,7 +527,7 @@
 			{
 				var pageNewContent : String = html_wysiwyg.getHTML();
 				
-				sqlProxy.setPageContent(cmboxProduct.selectedItem.name, cmboxProduct.selectedItem.language, tree.selectedItem.@name, pageNewContent, pageVersion);
+				sqlProxy.setPageContent(tree.selectedItem.@name, pageNewContent, pageVersion);
 				
 				getCurrentPage();
 				
@@ -850,14 +850,7 @@
 			
 			private function openPagesSyncronizationPanel() : void
 			{
-				var syncPagesPanel : SyncronizePages = PopUpManager.createPopUp(this, SyncronizePages, true) as SyncronizePages;
-				
-				syncPagesPanel.addEventListener(CloseEvent.CLOSE, syncPagesPanelCloseHandler);
-				
-				function syncPagesPanelCloseHandler (event : CloseEvent) : void
-				{
-					trace ("-- syncPagesPanelCloseHandler");
-				}
+				PopUpManager.createPopUp(this, SyncronizePages, true);
 			}
 		]]>
 	</mx:Script>

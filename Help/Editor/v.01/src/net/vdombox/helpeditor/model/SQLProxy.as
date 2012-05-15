@@ -491,37 +491,18 @@ package net.vdombox.helpeditor.model
 		 * @return 
 		 * 
 		 */
-		public function setPageContent(productName:String, language:String, pageName:String, content:String, version:int ) : Object
+		public function setPageContent(pageName:String, content:String, version:int ) : void
 		{
-			var query : String      = "SELECT id " +
-				"FROM product " +
-				"WHERE name = :name  AND language = :language;";
+			var query : String = "UPDATE page " +
+								"SET content = :content, version = :version " +
+								"WHERE name = :name;";
 
-			var parameters : Object = new Object();
-			parameters[ ":name" ] = productName;
-			parameters[ ":language" ] = language;
+			var parameters : Object = {};
+			parameters[ ":name" ] = pageName;
+			parameters[ ":content" ] = content;
+			parameters[ ":version" ] = version + 1;
 
-			var result : Object = executeQuery(query, parameters);
-
-			if ( result )
-			{
-				var productID : int = result[ 0 ][ 'id' ];
-
-				query = "UPDATE page " +
-					"SET content = :content , version = :version " +
-					"WHERE name = :name  AND id_product = :id_product ;";
-
-				parameters = {};
-				parameters[ ":name" ] = pageName;
-				parameters[ ":id_product" ] = productID;
-				parameters[ ":content" ] = content;
-				parameters[ ":version" ] = version + 1;
-
-
-				result = executeQuery(query, parameters);
-			}
-
-			return result;
+			executeQuery(query, parameters);
 		}
 
 		/**
@@ -714,41 +695,26 @@ package net.vdombox.helpeditor.model
 			return result;
 		}
 		
-		public function changePageSyncProperty( productName:String, ln:String, pageName:String, syncGroupName:String) : Object
+		public function changePageSyncProperty( pageName:String, syncGroupName:String) : Object
 		{
-			var query : String      = "SELECT id " +
-				"FROM product " +
-				"WHERE name = :name  AND language = :language;";
+			var query : String = "UPDATE page " +
+								"SET sync_group = :sync_group " +
+								"WHERE name = :page_name ;";
 			
-			var parameters : Object = new Object();
-			parameters[ ":name" ] = productName;
-			parameters[ ":language" ] = ln;
+			var parameters : Object = {};
+			parameters[ ":page_name" ] = pageName;
+			parameters[ ":sync_group" ] = syncGroupName;
 			
 			var result : Object = executeQuery(query, parameters);
-			
-			if ( result )
-			{
-				query = "UPDATE page " +
-					"SET sync_group = :sync_group " +
-					"WHERE id_product = :id_product AND name = :page_name ;";
-				
-				var id_product : Number = result[ 0 ][ 'id' ];
-				
-				parameters = {};
-				parameters[ ":id_product" ] = id_product;
-				parameters[ ":page_name" ] = pageName;
-				parameters[ ":sync_group" ] = syncGroupName;
-				
-				result = executeQuery(query, parameters);
-			}
+		
 			return result;
 		}
 		
 		public function getPageSyncGroup (pageName:String) : String
 		{
 			var query : String = "SELECT sync_group " +
-				"FROM page " +
-				"WHERE name = :name;";
+								"FROM page " +
+								"WHERE name = :name;";
 			
 			var parameters : Object = {};
 			parameters[ ":name" ] = pageName;
@@ -840,7 +806,7 @@ package net.vdombox.helpeditor.model
 		 */		
 		public function deletePage(productId:Number, namePage:String):void
 		{
-			deletePageFromSyncGroup(namePage);
+			removePageFromSyncGroup(namePage);
 			
 			var query:String = "DELETE FROM 	page WHERE name = :namePage" +
 														   " AND id_product = :productId ;";
@@ -850,49 +816,6 @@ package net.vdombox.helpeditor.model
 				
 			executeQuery(query, parameters);
 			
-		}
-		
-		private function deletePageFromSyncGroup (pageName:String) : void
-		{
-			var syncGroupName : String = getPageSyncGroup(pageName);
-			
-			if (!syncGroupName)
-				return;
-			
-			var groupPages : Array = getGroupPages(syncGroupName);
-			
-			if (!groupPages)
-				return;
-			
-			var pageParamsXml : XML;
-			var pageNameFromDB : String;
-			
-			var i:int=0;
-			
-			for each (var pageParams : String in groupPages)
-			{
-				try 
-				{
-					pageParamsXml = new XML(pageParams);
-				} 
-				catch (e : Error) 
-				{
-					i++;
-					continue;
-				}
-				
-				pageNameFromDB = pageParamsXml.@pageName;
-				
-				if (pageName == pageNameFromDB)
-				{
-					groupPages.splice(i,1);
-					break;
-				}
-				
-				i++;
-			}
-			
-			updateSyncGroupPages(syncGroupName, groupPages);
 		}
 		
 		public function addSyncGroup (groupName:String, groupTitle:String, pages:Array) : void
@@ -916,7 +839,7 @@ package net.vdombox.helpeditor.model
 				parameters[ ":title" ] = groupTitle;
 				parameters[ ":pages" ] = !pages ? "" : pages.join(",");
 				
-				executeQuery(query, parameters);
+				result = executeQuery(query, parameters);
 			}
 		}
 		
@@ -933,23 +856,19 @@ package net.vdombox.helpeditor.model
 			var result : Object = executeQuery(query, parameters);
 		}
 		
-		public function updateSyncGroupPages (groupName:String, pages:Array) : void
+		public function updateSyncGroupPages (groupName:String, groupPages:Array) : void
 		{
-			clearPagesSyncProperty(groupName);
-			
 			var query : String    = "UPDATE pages_sync " +
 				"SET pages = :pages " +
 				"WHERE group_name = :group_name;";
 			
 			var parameters : Object = new Object();
 			parameters[ ":group_name" ] = groupName;
-			parameters[ ":pages" ] = pages.join(",");
+			parameters[ ":pages" ] = groupPages.join(",");
 			
-			var result : Object = executeQuery(query, parameters);
-			
-			updatePagesSyncProperty(groupName);
+			executeQuery(query, parameters);
 		}
-		
+
 		public function removeSyncGroup (groupName:String) : void
 		{
 			clearPagesSyncProperty(groupName);
@@ -960,6 +879,44 @@ package net.vdombox.helpeditor.model
 			parameters[":name"] = groupName;
 			
 			executeQuery(query, parameters);
+		}
+		
+		public function addPageToSyncGroup (pageName : String, groupName:String) : void
+		{
+			var groupPages : Array = getGroupPages(groupName);
+			
+			if (!groupPages)
+				groupPages = [pageName];
+			else 
+				groupPages.push(pageName);
+			
+			updateSyncGroupPages(groupName, groupPages);
+			
+			changePageSyncProperty(pageName, groupName);
+		}
+		
+		public function removePageFromSyncGroup (pageName : String, groupName : String = "") : void
+		{
+			var syncGroupName : String = groupName || getPageSyncGroup(pageName);
+			
+			if (!syncGroupName)
+				return;
+			
+			var groupPages : Array = getGroupPages(syncGroupName);
+			
+			if (!groupPages)
+				return;
+			
+			var pageIndex : int = groupPages.indexOf(pageName);
+			
+			if (pageIndex >= 0)
+			{
+				groupPages.splice(pageIndex,1);
+				
+				updateSyncGroupPages(syncGroupName, groupPages);
+			}
+			
+			changePageSyncProperty(pageName, "");
 		}
 		
 		public function getGroupPages (groupName:String) : Array
@@ -986,43 +943,9 @@ package net.vdombox.helpeditor.model
 			if (!groupPages)
 				return;
 			
-			var pageParamsXml : XML;
-			for each (var pageParams : String in groupPages)
+			for each (var pageName : String in groupPages)
 			{
-				try 
-				{
-					pageParamsXml = new XML(pageParams);
-				} 
-				catch (e : Error) 
-				{
-					continue;
-				}
-				
-				changePageSyncProperty(pageParamsXml.@productName, pageParamsXml.@language, pageParamsXml.@pageName, "");
-			}
-			
-		}
-		
-		private function updatePagesSyncProperty (groupName : String) : void
-		{
-			var groupPages : Array = getGroupPages(groupName);
-			
-			if (!groupPages)
-				return;
-			
-			var pageParamsXml : XML;
-			for each (var pageParams : String in groupPages)
-			{
-				try 
-				{
-					pageParamsXml = new XML(pageParams);
-				} 
-				catch (e : Error) 
-				{
-					continue;
-				}
-				
-				changePageSyncProperty(pageParamsXml.@productName, pageParamsXml.@language, pageParamsXml.@pageName, groupName);
+				changePageSyncProperty(pageName, "");
 			}
 			
 		}
@@ -1048,28 +971,15 @@ package net.vdombox.helpeditor.model
 			if (!groupPages)
 				return;
 			
-			var pageParamsXml : XML;
-			var pageName : String;
-			for each (var pageParams : String in groupPages)
+			for each (var pageName : String in groupPages)
 			{
-				try 
-				{
-					pageParamsXml = new XML(pageParams);
-				} 
-				catch (e : Error) 
-				{
-					continue;
-				}
-				
-				pageName = pageParamsXml.@pageName;
-				
 				if (sourcePageName == pageName)
 					continue;
 				
 				var pageVersion : Number = Number(getPageVersion(pageName));
 				pageVersion = isNaN(pageVersion) ? 0 : pageVersion + 1;
 				
-				setPageContent(pageParamsXml.@productName, pageParamsXml.@language, pageName, sourcePageContent, pageVersion);
+				setPageContent(pageName, sourcePageContent, pageVersion);
 			}
 		}
 

@@ -6,6 +6,7 @@
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
 			
+			import net.vdombox.helpeditor.controller.events.PagesSyncronizationEvent;
 			import net.vdombox.helpeditor.model.SQLProxy;
 			
 			public var syncGroupName : String;
@@ -26,7 +27,6 @@
 					var xmlProductPages : XML = product.toc;
 					
 					setPageProperties(xmlProductPages);
-					xmlProductPages.@language = product.language;
 						
 					for each (var pageXml : XML in xmlProductPages..page)
 					{
@@ -53,39 +53,9 @@
 				pagesTree.dataProvider = pages;
 			}
 			
-			public function get selectedPagesToDB () : Array
-			{
-				var selectedPages : Array = [];
-				
-				for each (var product : XML in pagesTree.dataProvider)
-				{
-					addPageIfSelected(product);
-					
-					for each (var page:XML in product..page)
-					{
-						addPageIfSelected(page);
-					}
-				}
-				
-				function addPageIfSelected (p:XML) : void
-				{
-					var pSelString : String = p.@selected;
-					var pAvailableString : String = p.@available;
-					
-					if ( pSelString == "true" && pAvailableString == "true")
-					{
-						var groupPageXml : XML = <page productName={product.@name} language={product.@language} pageName={p.@name} />;
-						
-						selectedPages.push(groupPageXml.toXMLString());
-					}
-				}
-				
-				return selectedPages;
-			}
-			
 			protected function pagesTree_creationCompleteHandler(event:FlexEvent):void
 			{
-				pagesTree.addEventListener("selectionChanged", this.dispatchEvent, true);
+				pagesTree.addEventListener(PagesSyncronizationEvent.SELECTION_CHANGED, this.dispatchEvent, true);
 			}
 			
 		]]>
