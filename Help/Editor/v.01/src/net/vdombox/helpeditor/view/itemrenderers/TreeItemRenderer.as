@@ -56,8 +56,6 @@ package net.vdombox.helpeditor.view.itemrenderers
 			xmlData.@selected = pageCheckBox.selected;
 			
 			var syncEvent : PagesSyncronizationEvent = new PagesSyncronizationEvent(PagesSyncronizationEvent.SELECTION_CHANGED);
-			syncEvent.pageName		= xmlData.@name;
-			syncEvent.pageSelected	= pageCheckBox.selected;
 			
 			dispatchEvent(syncEvent);
 		}
@@ -72,7 +70,7 @@ package net.vdombox.helpeditor.view.itemrenderers
 			return pageAvailableStr == "true";
 		}
 
-		private function get pageSyncSelected () : Boolean
+		public function get pageSyncSelected () : Boolean
 		{
 			if (!data)
 				return false;
@@ -138,6 +136,14 @@ package net.vdombox.helpeditor.view.itemrenderers
 		private function get xmlData () : XML
 		{
 			return data as XML;
+		}
+		
+		public function get pageName () : String
+		{
+			if (!xmlData)
+				return "";
+			
+			return xmlData.@name;
 		}
 		
 	}

@@ -40,11 +40,6 @@
 				pagesTree.dataProvider = pages;
 			}
 			
-			protected function pagesTree_creationCompleteHandler(event:FlexEvent):void
-			{
-				pagesTree.addEventListener(PagesSyncronizationEvent.SELECTION_CHANGED, this.dispatchEvent, true);
-			}
-			
 			private function treeItemRenderer_getCurrentSyncGroupNameHandler (event : PagesSyncronizationEvent) : void
 			{
 				var selectedTreeItemRenderer : TreeItemRenderer = event.target as TreeItemRenderer;
@@ -67,7 +62,6 @@
 			 defaultLeafIcon="{null}"
 			 folderClosedIcon="{null}"
 			 folderOpenIcon="{null}"
-			 creationComplete="pagesTree_creationCompleteHandler(event)"
 			 initialize="pagesTree_initializeHandler(event)"/>
 	
 </mx:VBox>
