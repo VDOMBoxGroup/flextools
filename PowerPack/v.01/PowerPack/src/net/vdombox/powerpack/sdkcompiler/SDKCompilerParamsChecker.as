@@ -154,6 +154,18 @@ package net.vdombox.powerpack.sdkcompiler
 			return  FileUtils.fileExists(airSDKRuntimeLinuxFolder, true);
 		}
 		
+		public function isValidInstallerId (value : String) : Boolean
+		{
+			if (!value)
+				return false;
+			
+			var regExp : RegExp = /[^a-zA-Z0-9\-.]/;
+			
+			if (value.search(regExp) >= 0)
+				return false;
+			
+			return true;
+		}
 		
 	}
 }

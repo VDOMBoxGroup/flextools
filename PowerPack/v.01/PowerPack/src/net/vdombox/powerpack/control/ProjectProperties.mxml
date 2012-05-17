@@ -230,11 +230,29 @@
 				return compilerParamsChecker.isValidAppPath(embededApplicationBrowseBox.path);
 			}
 			
+			private function initInstallerID():void
+			{
+				txtInstallerId.text = project.installerId;
+				
+				validateInstallerId();
+			}
+			
+			private function validateInstallerId():void
+			{
+				txtInstallerId.errorString = validInstallerId ? null : "Possible symbols:\n* a-z\n* A-Z\n* 0-9\n* -\n* .";
+			}
+			
+			private function get validInstallerId () : Boolean
+			{
+				return compilerParamsChecker.isValidInstallerId(txtInstallerId.text);
+			}
+			
 			private function get buildAvailable (): Boolean
 			{
 				return validAppPath && 
 					validOutputInstallerFolderPath &&
-					validInstallerFileName;
+					validInstallerFileName &&
+					validInstallerId;
 			}
 			
 			private function get curTemplateOutputInstallerFolder() : String
@@ -253,10 +271,10 @@
 					return;
 				
 				txtName.text = project.name;
-				txtInstallerId.text = project.installerId;
 				txtDesc.text = project.description;
 				txtKey.text = project.key;
 				
+				initInstallerID();
 				initInstallerFileName();
 				initOutputFolderPath();
 				initAppPath();
@@ -361,7 +379,8 @@
 				<mx:TextInput width="300" id="txtInstallerId" 
 							  toolTip="{LanguageManager.sentences.template_ID_tooltip}"
 							  restrict="a-zA-Z0-9\-."
-							  maxChars="212"/>
+							  maxChars="212"
+							  change="validateInstallerId()"/>
 			</mx:GridItem>
 		</mx:GridRow>
 		

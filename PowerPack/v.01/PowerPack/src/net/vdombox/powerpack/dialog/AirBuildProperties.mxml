@@ -259,13 +259,19 @@
 				return compilerParamsChecker.isFlexSDK_4_1_PathValid(flexSDK_4_1_BrowseBox.path);
 			}
 			
+			private function get validInstallerId () : Boolean
+			{
+				return compilerParamsChecker.isValidInstallerId(selectedTemplateProject.installerId);
+			}
+			
 			private function get buildAvailable (): Boolean
 			{
 				return validAppPath && 
 					validFlexSDKPath && 
 					validAirSDKPath && 
 					validOutputInstallerFolderPath &&
-					validInstallerFileName;
+					validInstallerFileName
+					&& validInstallerId;
 			}
 			
 			private function get useLinuxSDK () : Boolean
