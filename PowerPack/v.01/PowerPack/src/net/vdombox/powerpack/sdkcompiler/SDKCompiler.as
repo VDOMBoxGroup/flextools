@@ -154,8 +154,6 @@ package net.vdombox.powerpack.sdkcompiler
 			if (!compressedEmbeddedApp)
 			{
 				embeddedAppFileName = "";
-				
-				sendEvent(SDKCompilerEvent.BUILD_ERROR, "Error when trying to compress embedded application xml");
 				return false;
 			}
 			
@@ -173,9 +171,14 @@ package net.vdombox.powerpack.sdkcompiler
 			}
 			catch (e:Error)
 			{
+				fileStream.close();
+				
 				embeddedAppFileName = "";
 				
-				sendEvent(SDKCompilerEvent.BUILD_ERROR, "Error when trying to copy embedded application xml");
+				//sendEvent(SDKCompilerEvent.BUILD_ERROR, "Error when trying to copy embedded application xml");
+				var msg:String = "Compressing embedded application:\n\n" + e.message.toString();
+				
+				sendEvent(SDKCompilerEvent.BUILD_ERROR, msg);
 				return false;
 			}
 			
@@ -187,6 +190,15 @@ package net.vdombox.powerpack.sdkcompiler
 		{
 			var sourceAppFile : File = new File(selectedTemplateProject.embededAppPath);
 			
+			if (!sourceAppFile || !sourceAppFile.exists)
+			{
+				var msg : String = "File '" + sourceAppFile.nativePath + "' doesn't exist.";
+				
+				sendEvent(SDKCompilerEvent.BUILD_ERROR, "");
+				
+				return "";
+			}
+			
 			var fileStream : FileStream = new FileStream();
 			var fileData : ByteArray = new ByteArray();
 			
@@ -194,14 +206,26 @@ package net.vdombox.powerpack.sdkcompiler
 			{
 				fileStream.open( sourceAppFile, FileMode.READ );
 				fileStream.readBytes( fileData );
+				fileStream.close();
 			}
 			catch ( error : Error )
 			{
+				fileStream.close();
+				
+				msg = "Compressing embedded application:\n\n" + error.message.toString();
+				sendEvent(SDKCompilerEvent.BUILD_ERROR, msg);
+				
 				return "";
 			}
 			
 			if ( !fileData || fileData.bytesAvailable == 0 )
+			{
+				msg = "File '" + sourceAppFile.nativePath + "' is empty.";
+				
+				sendEvent(SDKCompilerEvent.BUILD_ERROR, "");
+				
 				return "";
+			}
 			
 			fileData.compress();
 			fileData.position = 0;

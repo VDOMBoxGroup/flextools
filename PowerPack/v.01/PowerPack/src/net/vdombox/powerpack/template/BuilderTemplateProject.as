@@ -11,7 +11,7 @@ package net.vdombox.powerpack.template
 	{
 		public static const DEFAULT_OUTPUT_FOLDER_PATH	: String = File.desktopDirectory.nativePath;
 		public static const DEFAULT_OUTPUT_FILE_NAME	: String = "newProject";
-		public static const DEFAULT_EMBEDED_APP_PATH	: String = "";
+		//public static const DEFAULT_EMBEDED_APP_PATH	: String = "";
 		
 		public function BuilderTemplateProject()
 		{
@@ -25,8 +25,8 @@ package net.vdombox.powerpack.template
 		
 		public function set embededAppPath( value : String ) : void
 		{
-			if (!value)
-				value = DEFAULT_EMBEDED_APP_PATH;
+//			if (!value)
+//				value = DEFAULT_EMBEDED_APP_PATH;
 			
 			if ( _embededAppPath != value )
 			{
@@ -38,7 +38,8 @@ package net.vdombox.powerpack.template
 		[Bindable]
 		public function get embededAppPath() : String
 		{
-			return Utils.getStringOrDefault( _embededAppPath, DEFAULT_EMBEDED_APP_PATH );
+			//return Utils.getStringOrDefault( _embededAppPath, DEFAULT_EMBEDED_APP_PATH );
+			return _embededAppPath;
 		}
 		
 		

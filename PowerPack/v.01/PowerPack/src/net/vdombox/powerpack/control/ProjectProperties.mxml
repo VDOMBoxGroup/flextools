@@ -193,8 +193,8 @@
 			{
 				embededApplicationBrowseBox.path = project.embededAppPath;
 				
-				if (!validAppPath)
-					embededApplicationBrowseBox.path = "";
+//				if (!validAppPath)
+//					embededApplicationBrowseBox.path = "";
 				
 				validateAppPath();
 			}
