@@ -10,6 +10,8 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
@@ -67,6 +69,7 @@
 				
 				attributesArray.push( { group: 0, 
 					name: 					"id", 
+					displayName: 			"id", 
 					objectVO: 			value.vdomObjectVO,
 					attributeDescriptionVO: null, 
 					objectsList:	 		null,
@@ -74,6 +77,7 @@
 				
 				attributesArray.push( { group: 0, 
 					name: 					resourceManager.getString( 'Wysiwyg_General', 'attribut_name'), 
+					displayName: 			"name",
 					objectVO: 			value.vdomObjectVO,
 					attributeDescriptionVO: null, 
 					objectsList:	 		null,
@@ -90,6 +94,7 @@
 					
 					attributesArray.push( { group: attrDescrVO.colorGroup, 
 						name: 					attrDescrVO.name, 
+						displayName: 			attrDescrVO.displayName, 
 						attributeVO: 			attributeVO,
 						attributeDescriptionVO: attrDescrVO, 
 						objectsList:	 		value.objectsList,
@@ -100,6 +105,10 @@
 				NeedSetVerticalScrollPosition = true;
 				
 				var dataProvider : ArrayCollection =  new ArrayCollection( attributesArray );
+				
+				dataProvider.sort = new Sort();
+				dataProvider.sort.fields = [ new SortField( "group" ), new SortField( "displayName" ) ];
+				dataProvider.refresh();
 				
 				if ( !oneObject )
 				{

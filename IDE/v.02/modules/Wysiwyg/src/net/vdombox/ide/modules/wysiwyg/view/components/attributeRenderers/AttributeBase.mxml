@@ -22,13 +22,13 @@
 			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.common.model._vo.ObjectListVO;
 			import net.vdombox.ide.common.model._vo.PageVO;
+			import net.vdombox.ide.common.view.components.button.AlertButton;
+			import net.vdombox.ide.common.view.components.windows.Alert;
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
 			import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
-			import net.vdombox.ide.common.view.components.windows.Alert;
-			import net.vdombox.ide.common.view.components.button.AlertButton;
 			
 			import spark.components.TextInput;
 
@@ -135,6 +135,12 @@
 							newDropdown();
 							break;
 						}
+							
+						case "font":
+						{
+							newFont();
+							break;
+						}
 
 						case "externaleditor":
 						{
@@ -209,6 +215,33 @@
 
 				valueField.init(codeInterface[ "value" ], _attributeVO.value);
 
+				valueField.addEventListener(Event.CHANGE, changeHandler, false, 0 , true );
+			}
+			
+			private function newFont() : void
+			{
+				valueField = new ComboBoxAttribute;
+				valueField.toolTip = help;
+				valueField.width = 128;
+				valueField.height = 21;
+				secondElement = valueField as UIComponent;
+				
+				var strFont : String = '(Arial|Arial, "Helvetica CY", "Nimbus Sans L", helvetica, sans-serif)|' +
+										'(Arial Black|"Arial Black", "Helvetica CY", "avant garde", "Nimbus Sans L", sans-serif)|' +
+										'(Book Antiqua|"Palatino Linotype", "Book Antiqua", Palatino, serif)|' + 
+										'(Courier New|"Courier New", "Nimbus Mono L", monospace)|' +  
+										'(Georgia|Georgia, "Century Schoolbook L", Serif)|' +  
+										'(Impact|Impact, "Charcoal CY", sans-serif)|' +  
+										'(Lucida Console|"Lucida Console", Monaco, monospace)|' +  
+										'(Lucida Sans Unicode|"Lucida Sans Unicode", "Lucida Grande", sans-serif)|' + 
+										'(Tahoma|Tahoma, "Geneva CY", geneva, sans-serif)|' +  
+										'(Times New Roman|"Times New Roman", "Times CY", times, "Nimbus Roman No9 L", serif)|' + 
+										'(Trebuchet MS|"Trebuchet MS", "Helvetica CY", helvetica, sans-serif)|' + 
+										'(Verdana|Verdana, "Geneva CY", geneva, "DejaVu Sans", sans-serif)' +
+										'(Wingdings|wingdings, "zapf dingbats")';
+				
+				valueField.init( strFont, _attributeVO.value);
+				
 				valueField.addEventListener(Event.CHANGE, changeHandler, false, 0 , true );
 			}
 

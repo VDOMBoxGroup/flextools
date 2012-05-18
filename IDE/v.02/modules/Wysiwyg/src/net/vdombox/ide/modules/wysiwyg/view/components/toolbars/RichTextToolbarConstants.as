@@ -3,22 +3,24 @@ package net.vdombox.ide.modules.wysiwyg.view.components.toolbars
 	public class RichTextToolbarConstants
 	{
 		
-		public static const FONT_NAME_ANDALE_MONO		: String = "andale mono,times";
-		public static const FONT_NAME_ARIAL_HELVETICA	: String = "arial,helvetica,sans-serif";
-		public static const FONT_NAME_ARIAL_BLACK		: String = "arial black,avant garde";
-		public static const FONT_NAME_BOOK_ANTIQUA		: String = "book antiqua,palatino";
-		public static const FONT_NAME_COMIC_SANS		: String = "comic sans ms,sans-serif";
-		public static const FONT_NAME_COURIER_NEW		: String = "courier new,courier";
-		public static const FONT_NAME_GEORGIA			: String = "georgia,palatino";
-		public static const FONT_NAME_HELVETICA			: String = "helvetica";
-		public static const FONT_NAME_IMPACT_CHICAGO	: String = "impact,chicago";
-		public static const FONT_NAME_SYMBOL			: String = "symbol";
-		public static const FONT_NAME_TAHOMA			: String = "tahoma,arial,helvetica,sans-serif";
-		public static const FONT_NAME_TERMINAL_MONACO	: String = "terminal,monaco";
-		public static const FONT_NAME_TIMES_NEW_ROMAN	: String = "times new roman,times";
-		public static const FONT_NAME_TREBUCHET			: String = "trebuchet ms,geneva";
-		public static const FONT_NAME_VERDANA			: String = "verdana,geneva";
-		public static const FONT_NAME_WEBDINGS			: String = "webdings";
+		public static const FONT_NAME_ARIAL_HELVETICA	: String = "arial,helvetica cy,nimbus sans l,helvetica,sans-serif";
+		//public static const FONT_NAME_ANDALE_MONO	: String = "arial,helvetica,sans-serif";
+		public static const FONT_NAME_ARIAL_BLACK		: String = "arial black,helvetica cy,avant garde,nimbus sans l,sans-serif";
+		public static const FONT_NAME_BOOK_ANTIQUA		: String = "palatino linotype,book antiqua,palatino,serif";
+		//public static const FONT_NAME_COMIC_SANS		: String = "comic sans ms,sans-serif";
+		public static const FONT_NAME_COURIER_NEW		: String = "courier new,nimbus mono l,monospace";
+		public static const FONT_NAME_GEORGIA			: String = "georgia,century schoolbook l,serif";
+		//public static const FONT_NAME_HELVETICA			: String = "helvetica";
+		public static const FONT_NAME_IMPACT_CHICAGO	: String = "impact,charcoal cy,sans-serif";
+		public static const FONT_NAME_LUCIDA_CONSOLE	: String = "lucida console,monaco,monospace";
+		public static const FONT_NAME_LUCIDA_SANS		: String = "lucida sans unicode,lucida grande,sans-serif";
+		//public static const FONT_NAME_SYMBOL			: String = "symbol";
+		public static const FONT_NAME_TAHOMA			: String = "tahoma,geneva cy,geneva,sans-serif";
+		//public static const FONT_NAME_TERMINAL_MONACO	: String = "terminal,monaco";
+		public static const FONT_NAME_TIMES_NEW_ROMAN	: String = "times new roman,times cy,times,nimbus roman no9 l,serif";
+		public static const FONT_NAME_TREBUCHET			: String = "trebuchet ms,helvetica cy,helvetica,sans-serif";
+		public static const FONT_NAME_VERDANA			: String = "verdana,geneva cy,geneva,dejavu sans,sans-serif";
+		//public static const FONT_NAME_WEBDINGS			: String = "webdings";
 		public static const FONT_NAME_WINGDINGS			: String = "wingdings,zapf dingbats";
 		
 		public static const FONT_STR_SIZE_1				: String = "xx-small";

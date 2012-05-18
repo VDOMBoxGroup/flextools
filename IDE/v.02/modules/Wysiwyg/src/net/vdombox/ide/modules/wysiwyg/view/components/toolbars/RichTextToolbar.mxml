@@ -575,95 +575,75 @@
 				
 				switch(fontFamilyRecieved.toLowerCase())
 				{
-					case RichTextToolbarConstants.FONT_NAME_ANDALE_MONO:
+					case RichTextToolbarConstants.FONT_NAME_ARIAL_HELVETICA:
 					{
 						fontSelector.selectedIndex = 0;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_ARIAL_HELVETICA:
+					case RichTextToolbarConstants.FONT_NAME_ARIAL_BLACK:
 					{
 						fontSelector.selectedIndex = 1;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_ARIAL_BLACK:
+					case RichTextToolbarConstants.FONT_NAME_BOOK_ANTIQUA:
 					{
 						fontSelector.selectedIndex = 2;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_BOOK_ANTIQUA:
+					case RichTextToolbarConstants.FONT_NAME_COURIER_NEW:
 					{
 						fontSelector.selectedIndex = 3;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_COMIC_SANS:
+					case RichTextToolbarConstants.FONT_NAME_GEORGIA:
 					{
 						fontSelector.selectedIndex = 4;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_COURIER_NEW:
+					case RichTextToolbarConstants.FONT_NAME_IMPACT_CHICAGO:
 					{
 						fontSelector.selectedIndex = 5;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_GEORGIA:
+					case RichTextToolbarConstants.FONT_NAME_LUCIDA_CONSOLE:
 					{
 						fontSelector.selectedIndex = 6;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_HELVETICA:
+					case RichTextToolbarConstants.FONT_NAME_LUCIDA_SANS:
 					{
 						fontSelector.selectedIndex = 7;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_IMPACT_CHICAGO:
+					case RichTextToolbarConstants.FONT_NAME_TAHOMA:
 					{
 						fontSelector.selectedIndex = 8;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_SYMBOL:
+					case RichTextToolbarConstants.FONT_NAME_TIMES_NEW_ROMAN:
 					{
 						fontSelector.selectedIndex = 9;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_TAHOMA:
+					case RichTextToolbarConstants.FONT_NAME_TREBUCHET:
 					{
 						fontSelector.selectedIndex = 10;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_TERMINAL_MONACO:
+					case RichTextToolbarConstants.FONT_NAME_VERDANA:
 					{
 						fontSelector.selectedIndex = 11;
 						break;
 					}
-					case RichTextToolbarConstants.FONT_NAME_TIMES_NEW_ROMAN:
-					{
-						fontSelector.selectedIndex = 12;
-						break;
-					}
-					case RichTextToolbarConstants.FONT_NAME_TREBUCHET:
-					{
-						fontSelector.selectedIndex = 13;
-						break;
-					}
-					case RichTextToolbarConstants.FONT_NAME_VERDANA:
-					{
-						fontSelector.selectedIndex = 14;
-						break;
-					}
-					case RichTextToolbarConstants.FONT_NAME_WEBDINGS:
-					{
-						fontSelector.selectedIndex = 15;
-						break;
-					}
 					case RichTextToolbarConstants.FONT_NAME_WINGDINGS:
 					{
-						fontSelector.selectedIndex = 16;
+						fontSelector.selectedIndex = 12;
 						break;
 					}
 						
 					default:
 					{
-						fontSelector.selectedIndex = 14;
+						fontSelector.selectedIndex = 13;
 						break;
 					}
 				}
@@ -935,38 +915,30 @@
 			<mx:dataProvider>
 				
 				<mx:ArrayCollection>
-					
-					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_ANDALE_MONO}" label="Andale Mono"/>
-					
+										
 					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_ARIAL_HELVETICA}" label="Arial"/>
 					
 					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_ARIAL_BLACK}" label="Arial Black"/>
 					
 					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_BOOK_ANTIQUA}" label="Book Antiqua"/>
 					
-					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_COMIC_SANS}" label="Comic Sans MS"/>
-					
 					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_COURIER_NEW}" label="Courier New"/>
 					
 					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_GEORGIA}" label="Georgia"/>
 					
-					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_HELVETICA}" label="Helvetica"/>
-					
 					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_IMPACT_CHICAGO}" label="Impact"/>
 					
-					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_SYMBOL}" label="Symbol"/>
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_LUCIDA_CONSOLE}" label="Lucida Console"/>
+					
+					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_LUCIDA_SANS}" label="Lucida Sans Unicode"/>
 					
 					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_TAHOMA}" label="Tahoma"/>
-					
-					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_TERMINAL_MONACO}" label="Terminal"/>
 					
 					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_TIMES_NEW_ROMAN}" label="Times New Roman"/>
 					
 					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_TREBUCHET}" label="Trebuchet MS"/>
 					
 					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_VERDANA}" label="Verdana"/>
-					
-					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_WEBDINGS}" label="Webdings"/>
 					
 					<fx:Object data="{RichTextToolbarConstants.FONT_NAME_WINGDINGS}" label="Wingdings"/>
 				</mx:ArrayCollection>

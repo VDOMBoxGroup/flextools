@@ -165,7 +165,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( statesProxy.selectedPage && vdomObjectAttributesVO &&
 						statesProxy.selectedPage.id == vdomObjectAttributesVO.vdomObjectVO.id )
 					{
-						objectAttributesPanel.attributesVO = body as VdomObjectAttributesVO;
+						objectAttributesPanel.attributesVO = vdomObjectAttributesVO;
 					}
 
 					break;
