@@ -103,10 +103,12 @@
 
 				if ( newState == "normal" || newState == "disabled" )
 				{
-					if ( hostComponent.data is ClientActionVO )
+					/*if ( hostComponent.data is ClientActionVO )
 						titleLabel.text = headerGroup.toolTip = "Client Action";
 					else if ( hostComponent.data is ServerActionVO )
-						titleLabel.text = headerGroup.toolTip = "Server Action";
+						titleLabel.text = headerGroup.toolTip = "Server Action";*/
+					
+					titleLabel.text = headerGroup.toolTip = hostComponent.data.name;
 					
 					if ( creationCompleted )
 						setLayout(true);

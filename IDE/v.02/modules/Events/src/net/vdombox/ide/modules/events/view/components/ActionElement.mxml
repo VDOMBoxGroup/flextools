@@ -48,7 +48,7 @@
 					parametersContainer.removeAllElements();
 					
 					nameGroup.includeInLayout = true;
-					actionRenderer.includeInLayout = true;
+					//actionRenderer.includeInLayout = true;
 					
 					if ( skin.currentState == "normal" || skin.currentState == "disabled" )
 						(skin as ActionElementSkin).setLayout(true);
@@ -120,8 +120,8 @@
 		<s:Label text="{ data.objectName }" textAlign="center" verticalCenter="0" left="5" right="5" width="100%" maxDisplayedLines="1"/>
 	</s:Group>
 
-	<components:ParameterRenderer id="actionRenderer" icon="@Embed('assets/event.png')" width="100%"
-								  title="{ title }" includeInLayout="false"/>
+	<!--<components:ParameterRenderer id="actionRenderer" icon="@Embed('assets/event.png')" width="100%"
+								  title="{ title }" includeInLayout="false"/>-->
 
 	<s:VGroup id="parametersContainer"
 			  width="100%"

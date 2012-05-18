@@ -115,9 +115,11 @@
 					return;
 				}
 
+				
+				
 				if ( newState == "normal" || newState == "disabled" )
-				{
-					titleLabel.text = headerGroup.toolTip = "Event";
+				{	
+					titleLabel.text = headerGroup.toolTip = hostComponent.data.name;
 					
 					if ( creationCompleted)
 						setLayout(true);
@@ -127,9 +129,7 @@
 					titleLabel.text = headerGroup.toolTip = hostComponent.data.objectName + ":" + hostComponent.data.name;
 					
 					if ( creationCompleted )
-					{
 						setLayout(false);
-					}
 				}
 			}
 			
