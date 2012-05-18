@@ -15,8 +15,6 @@ package ro.victordramba.scriptarea
 	import flash.ui.MouseCursor;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
-	
-	import net.vdombox.utils.WindowManager;
 
 	/*import flash.desktop.Clipboard;
 	   import flash.desktop.ClipboardFormats;

@@ -245,6 +245,9 @@ package net.vdombox.ide.common.controller
 		
 		public static const SET_SERVER_ACTION : String = "setServerAction";
 		
+		public static const GET_SERVER_ACTION : String = "getServerAction";
+		public static const SERVER_ACTION_GETTED : String = "serverActionGetted";
+		
 		public static const CREATE_SERVER_ACTION : String = "createServerAction";
 		public static const SERVER_ACTION_CREATED : String = "serverActionCrteated";
 		
@@ -253,6 +256,9 @@ package net.vdombox.ide.common.controller
 		
 		public static const RENAME_SERVER_ACTION : String = "renameServerAction";
 		public static const SERVER_ACTION_RENAMED : String = "serverActionRenamed";
+		
+		public static const GET_LIBRARY : String = "getLibrary";
+		public static const LIBRARY_GETTED : String = "libraryGetted";
 		
 		public static const GET_LIBRARIES : String = "getLibraries";
 		public static const LIBRARIES_GETTED : String = "librariesGetted";
@@ -327,6 +333,10 @@ package net.vdombox.ide.common.controller
 		
 		public static const UNDO_REDO_GETTED : String = "undoRedoGetted";
 		
+		
+		public static const GET_USED_ACTIONS : String = "getUsedActions";
+		public static const SET_USED_ACTIONS : String = "setUsedActions";
+		public static const SET_SELECTED_ACTION : String = "setSelectedAction";
 		
 ///////////////////////////////////////////DataBases//////////////////////////////////////////////////////////////
 		

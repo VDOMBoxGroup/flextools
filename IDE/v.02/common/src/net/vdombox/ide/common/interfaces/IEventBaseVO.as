@@ -1,7 +1,7 @@
 package net.vdombox.ide.common.interfaces
 {
 	public interface IEventBaseVO
-	{		
+	{				
 		function get name() : String;
 		
 		function get id() : String;

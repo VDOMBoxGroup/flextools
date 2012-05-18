@@ -40,6 +40,9 @@ package net.vdombox.ide.common.model._vo
 		private var _containerID : String;
 		
 		private var _containerVO : IVDOMObjectVO;
+		
+		[Bindable]
+		public var used : Boolean = false;
 
 		public function get containerName():String
 		{
