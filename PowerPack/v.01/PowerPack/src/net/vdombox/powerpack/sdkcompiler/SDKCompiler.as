@@ -163,7 +163,7 @@ package net.vdombox.powerpack.sdkcompiler
 				
 				var fileStream : FileStream = new FileStream();
 				fileStream.open(targetAppFile, FileMode.WRITE);
-				fileStream.writeUTF(compressedEmbeddedApp);
+				fileStream.writeUTFBytes(compressedEmbeddedApp);
 				
 				fileStream.close();
 				fileStream = null;
