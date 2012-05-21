@@ -32,7 +32,7 @@ package net.vdombox.helpeditor.controller
 			}
 			else
 			{
-				throw new Error( "Singleton can only be accessed through Soap.anyFunction()" );
+				throw new Error( "Singleton can only be accessed through SpinnerPopUpManager.getInstance()" );
 			}
 			
 		}

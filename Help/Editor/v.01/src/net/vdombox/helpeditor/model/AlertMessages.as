@@ -12,6 +12,7 @@ package net.vdombox.helpeditor.model
 		public static const MSG_ASK_DELETE_PRODUCT				: String = "Delete this Product?";
 		public static const MSG_ASK_DELETE_PAGE					: String = "Delete this page?";
 		public static const MSG_ASK_DELETE_GROUP				: String = "Delete this group?";
+		public static const MSG_ASK_DELETE_TEMPLATE				: String = "Delete this template?";
 		public static const MSG_IMPOSSIBLE_OPERATION			: String = "Impossible operation.";
 		public static const MSG_XML_CREATING_ERROR				: String = "Error on product xml creating";
 		public static const MSG_INCORRECT_XML_FILE_FORMAT		: String = "The file format is incorrect. It should be in xml format.";

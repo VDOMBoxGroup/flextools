@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+				layout="absolute" 
+				width="600" height="500"
+				title="Templates"
+				showCloseButton="true"
+				verticalScrollPolicy="off" horizontalScrollPolicy="off" 
+				borderAlpha="0.98" cornerRadius="1" 
+				visible="true" shadowDirection="right"
+				backgroundColor="#373739"
+				borderColor="#373739" titleStyleName="resourceBrowserTitle"
+				borderThicknessLeft="1" borderThicknessRight="1"
+				creationComplete="creationCompleteHandler(event)"
+				keyDown="window_keyDownHandler(event)" 
+				xmlns:components="net.vdombox.helpeditor.view.components.*">
+	
+	<mx:Metadata>
+	</mx:Metadata>
+	
+	<mx:Style>
+		.resourceBrowserTitle 
+		{
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.controls.TextInput;
+			import mx.core.UITextField;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			import mx.events.ListEventReason;
+			import mx.managers.PopUpManager;
+			import mx.utils.UIDUtil;
+			
+			import net.vdombox.helpeditor.model.AlertMessages;
+			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.view.components.TemplateContentEditor;
+			
+			private var sqlProxy : SQLProxy = new SQLProxy();
+			
+			[Bindable]
+			public var allowInsert : Boolean = false;
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener(CloseEvent.CLOSE, closeHandler);
+				
+				PopUpManager.centerPopUp(this);
+				
+				createTemplatesList();
+			}
+			
+			private function closeHandler(cEvent:CloseEvent):void 
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function window_keyDownHandler(event:KeyboardEvent):void
+			{
+				if (event.target is UITextField)
+					return;
+				
+				if (event.charCode == Keyboard.ESCAPE)
+					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
+			private function closeWindow () : void
+			{
+				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
+			private function createTemplatesList () : void
+			{
+				var allTemplates : Array = sqlProxy.getAllTemplates() as Array;
+				
+				templatesList.dataProvider = allTemplates;
+				
+				if (!vsTemplatesEditors)
+					return;
+				
+				if (!allTemplates || allTemplates.length == 0)
+					return;
+				
+				for each (var template : Object in allTemplates)
+				{
+					addNewTemplateEditor(template.content);
+				}
+				
+				templatesList.selectedIndex = 0;
+				
+				updateTemplateEditor();
+			}
+			
+			private function addNewTemplateEditor(content : String = "") : void
+			{
+				var templateEditor : TemplateContentEditor;
+				
+				templateEditor = new TemplateContentEditor();
+				templateEditor.percentWidth = 100;
+				templateEditor.percentHeight = 100;
+				
+				templateEditor.startContent = content;
+					
+				vsTemplatesEditors.addChild(templateEditor);
+			}
+			
+			private function updateTemplateEditor () : void
+			{
+				vsTemplatesEditors.selectedIndex = templatesList.selectedIndex;
+				
+				if (currentTemplateEditor)
+					currentTemplateEditor.setFocus();
+			}
+			
+			private function get currentTemplateEditor () : TemplateContentEditor
+			{
+				if (!vsTemplatesEditors || 
+					vsTemplatesEditors.numChildren == 0 ||
+					vsTemplatesEditors.selectedIndex < 0 ||
+					vsTemplatesEditors.selectedIndex >= vsTemplatesEditors.numChildren)
+					return null;
+				
+				return vsTemplatesEditors.selectedChild as TemplateContentEditor; 
+			}
+			
+			protected function addTemplate():void
+			{
+				var newTemplate : Object = {};
+				newTemplate.name = UIDUtil.createUID();
+				newTemplate.title = "New template";
+				newTemplate.content = "";
+				
+				sqlProxy.addTemplate(newTemplate.name, newTemplate.title, newTemplate.content);
+				
+				var allTemplates : Array = templatesList.dataProvider.source;
+				allTemplates.push(newTemplate);
+				templatesList.dataProvider = allTemplates;
+				
+				templatesList.selectedIndex = templatesList.dataProvider.source.length - 1;
+				
+				addNewTemplateEditor();
+				
+				updateTemplateEditor();
+				
+				templatesList_itemEditBegin();
+			}
+			
+			private function askToRemoveTemplate () : void
+			{
+				if (templatesList.selectedIndex >= 0)
+					Alert.show(AlertMessages.MSG_ASK_DELETE_TEMPLATE, AlertMessages.MSG_TYPE_DELETE, Alert.YES|Alert.NO, this, alertRemoveTemplateCloseHandler);
+			}
+			
+			private function alertRemoveTemplateCloseHandler(event:CloseEvent):void
+			{
+				if (event.detail == Alert.YES)
+					removeTemplate();
+			}
+			
+			protected function removeTemplate():void
+			{
+				if (templatesList.numChildren == 0 || templatesList.dataProvider.length == 0 || !templatesList.selectedItem)
+					return;
+				
+				sqlProxy.removeTemplate(templatesList.selectedItem.name);
+				
+				vsTemplatesEditors.removeChildAt(vsTemplatesEditors.selectedIndex);
+				
+				var groupsCollection : ArrayCollection = templatesList.dataProvider as ArrayCollection;
+				groupsCollection.removeItemAt(templatesList.selectedIndex);
+				
+				if (templatesList.numChildren > 0)
+					templatesList.selectedIndex = 0;
+				else
+					templatesList.selectedIndex = -1;
+				
+				updateTemplateEditor();
+			}
+			
+			public function get templates () : Object
+			{
+				return sqlProxy.getAllTemplates();
+			}
+			
+			protected function templatesList_changeHandler(event:ListEvent):void
+			{
+				updateTemplateEditor();
+			}
+			
+			public function get selectedTemplateContent () : String
+			{
+				if (!templatesList.selectedItem)
+					return "";
+				
+				return sqlProxy.getTemplateContent(templatesList.selectedItem.name);
+			}
+			
+			public function get selectedTemplateName () : String
+			{
+				if (!templatesList.selectedItem)
+					return "";
+				
+				return templatesList.selectedItem.name; 
+			}
+			
+			private function templatesList_itemEditBegin () : void
+			{
+				templatesList.editable = true;
+				templatesList.editedItemPosition = {rowIndex : templatesList.selectedIndex, columnIndex : 0};
+			}
+			
+			protected function templatesList_itemEditEndHandler(event:ListEvent):void
+			{
+				event.preventDefault();
+				
+				if ( event.reason == ListEventReason.CANCELLED )
+				{
+					destroyItemEditor();
+					return;
+				}
+				
+				if (!isCorrectTemplateTitle)
+				{
+					event.stopImmediatePropagation();
+					
+					listItemEditorInstance.errorString = "Error: empty template name";
+					return;
+				}
+				
+				applyTemplateTitle();
+				
+				destroyItemEditor();
+			}
+			
+			private function applyTemplateTitle () : void
+			{
+				var editedItemData : Object = templatesList.editedItemRenderer.data;
+				
+				editedItemData.title = listItemEditorInstance.text;
+				
+				templatesList.selectedItem = editedItemData;
+				
+				sqlProxy.updateTemplateTitle(editedItemData.name, editedItemData.title);
+			}
+			
+			private function get isCorrectTemplateTitle () : Boolean
+			{
+				var templateTitle : String = listItemEditorInstance.text;
+				
+				if (!templateTitle)
+					return false;
+				
+				return true;
+			}
+			
+			private function get listItemEditorInstance () : TextInput
+			{
+				return templatesList.itemEditorInstance as TextInput;
+			}
+			
+			private function destroyItemEditor() : void
+			{
+				templatesList.destroyItemEditor();
+				templatesList.editable = false;
+			}
+			
+			protected function btnApply_clickHandler(event:MouseEvent):void
+			{
+				if (!vsTemplatesEditors.selectedChild)
+					return;
+				
+				saveTemplate(vsTemplatesEditors.selectedIndex);
+			}
+			
+			protected function btnOK_clickHandler(event:MouseEvent):void
+			{
+				saveTemplates();
+				
+				closeWindow();
+			}
+			
+			
+			protected function btnInsert_clickHandler(event:MouseEvent):void
+			{
+				if (!vsTemplatesEditors.selectedChild)
+					return;
+				
+				saveTemplate(vsTemplatesEditors.selectedIndex);
+				
+				dispatchEvent(new Event("insertClick"));
+				
+				closeWindow();
+			}
+			
+			private function saveTemplates () : void
+			{
+				var i:int=0;
+				while (i < templatesList.dataProvider.source.length)
+				{
+					saveTemplate (i);
+					
+					i++;
+				}
+			}
+			
+			private function saveTemplate (templateIndex : int) : void
+			{
+				if (vsTemplatesEditors.numChildren == 0 || templatesList.dataProvider.source.length == 0)
+					return;
+				
+				if (templateIndex < 0 || templateIndex >= templatesList.dataProvider.source.length)
+					return;
+				
+				var templateEditor : TemplateContentEditor = vsTemplatesEditors.getChildAt(templateIndex) as TemplateContentEditor;
+				var templateName : String = templatesList.dataProvider.source[templateIndex]["name"];
+				
+				sqlProxy.updateTemplateContent(templateName, templateEditor.content);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:HBox width="100%" height="100%"
+			 left="10" right="10" top="10" bottom="10" >
+		
+		<mx:VBox width="170" height="100%">
+			<mx:HBox width="100%" 
+					 verticalAlign="middle" horizontalAlign="left">
+				
+				<mx:Spacer width="5"/>
+				
+				<mx:Button id="btnAddTemplate"
+						   label="Add"
+						   toolTip="Add template"
+						   click="{addTemplate()}"
+						   color="#FFFFFF"
+						   fillColors="#333333"
+						   textSelectedColor="#FFFFFF"
+						   cornerRadius="1"
+						   borderColor="#999999"
+						   themeColor="#656565"
+						   textRollOverColor="#FFFFFF" />
+				
+				<mx:Button id="btnRemoveTemplate"
+						   label="Remove"
+						   toolTip="Remove template"
+						   click="{askToRemoveTemplate()}"
+						   color="#FFFFFF"
+						   fillColors="#333333"
+						   textSelectedColor="#FFFFFF"
+						   cornerRadius="1"
+						   borderColor="#999999"
+						   themeColor="#656565"
+						   textRollOverColor="#FFFFFF"
+						   enabled="{templatesList.dataProvider.length > 0}"/>
+				
+			</mx:HBox>
+			
+			<mx:List width="100%" height="100%"
+					 id="templatesList"
+					 dataProvider="{templates}"
+					 labelField="title"
+					 change="templatesList_changeHandler(event)"
+					 selectedIndex="-1"
+					 doubleClickEnabled="true"
+					 itemDoubleClick="{templatesList_itemEditBegin()}"
+					 itemEditEnd="templatesList_itemEditEndHandler(event)"
+					 itemEditor="net.vdombox.helpeditor.view.itemrenderers.ListItemEditor"/>
+		</mx:VBox>
+		
+		<mx:VBox width="100%" height="100%">
+			<mx:ViewStack id="vsTemplatesEditors" 
+						  width="100%" height="100%"
+						  backgroundColor="white"/>
+			
+			
+		</mx:VBox>
+		
+	</mx:HBox>
+	
+	<mx:ControlBar horizontalAlign="right">
+		
+		<mx:Button id="btnInsert"
+				   label="Insert"
+				   click="btnInsert_clickHandler(event)"
+				   color="#FFFFFF"
+				   fillColors="#333333"
+				   textSelectedColor="#FFFFFF"
+				   cornerRadius="1"
+				   borderColor="#999999"
+				   themeColor="#656565"
+				   textRollOverColor="#FFFFFF"
+				   enabled="{templatesList.selectedItem != null}"
+				   visible="{allowInsert}"/>
+		
+		<mx:Button id="btnApply"
+				   label="Apply"
+				   click="btnApply_clickHandler(event)"
+				   color="#FFFFFF"
+				   fillColors="#333333"
+				   textSelectedColor="#FFFFFF"
+				   cornerRadius="1"
+				   borderColor="#999999"
+				   themeColor="#656565"
+				   textRollOverColor="#FFFFFF"
+				   enabled="{templatesList.selectedItem != null}"/>
+		
+		<mx:Button id="btnOK"
+				   label="OK"
+				   click="btnOK_clickHandler(event)"
+				   color="#FFFFFF"
+				   fillColors="#333333"
+				   textSelectedColor="#FFFFFF"
+				   cornerRadius="1"
+				   borderColor="#999999"
+				   themeColor="#656565"
+				   textRollOverColor="#FFFFFF"/>
+		
+		<mx:Button id="btnCancel"
+				   label="Cancel"
+				   click="closeWindow()"
+				   color="#FFFFFF"
+				   fillColors="#333333"
+				   textSelectedColor="#FFFFFF"
+				   cornerRadius="1"
+				   borderColor="#999999"
+				   themeColor="#656565"
+				   textRollOverColor="#FFFFFF"/>
+		
+	</mx:ControlBar>
+	
+</mx:TitleWindow>

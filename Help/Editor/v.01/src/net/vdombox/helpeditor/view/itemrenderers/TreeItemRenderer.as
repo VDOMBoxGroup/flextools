@@ -9,7 +9,7 @@ package net.vdombox.helpeditor.view.itemrenderers
 	
 	import net.vdombox.helpeditor.controller.events.PagesSyncronizationEvent;
 	import net.vdombox.helpeditor.model.SQLProxy;
-	import net.vdombox.helpeditor.view.panel.SyncPagesSelector;
+	import net.vdombox.helpeditor.view.components.SyncPagesSelector;
 	
 	public class TreeItemRenderer extends mx.controls.treeClasses.TreeItemRenderer
 	{

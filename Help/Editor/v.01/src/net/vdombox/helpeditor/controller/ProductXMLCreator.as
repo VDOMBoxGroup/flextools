@@ -29,9 +29,10 @@ package net.vdombox.helpeditor.controller
 	import net.vdombox.helpeditor.model.ImageProperties;
 	import net.vdombox.helpeditor.model.SQLProxy;
 	import net.vdombox.helpeditor.model.SpinnerPopupMessages;
+	import net.vdombox.helpeditor.utils.PageUtils;
 	import net.vdombox.helpeditor.utils.ResourceUtils;
 	import net.vdombox.helpeditor.utils.Utils;
-	import net.vdombox.helpeditor.view.HTML_WYSIWYG;
+	import net.vdombox.helpeditor.view.components.wysiwyg.HTML_WYSIWYG;
 	import net.vdombox.helpeditor.view.spinner.SpinnerPopUp;
 
 	public class ProductXMLCreator extends EventDispatcher
@@ -496,6 +497,10 @@ package net.vdombox.helpeditor.controller
 			pageContent = VdomHelpEditor.getPageContentWithToc( pageContentXML.toString(), 
 																		Boolean(currentPageObj["useToc"]),
 																		getPageChildren(currentPageObj["name"]) );
+			
+			pageContent = PageUtils.getInstance().replacePageTemplates(pageContent);
+			
+			pageContentXML = new XML(pageContent);
 			
 			resetLinksToPages();
 			

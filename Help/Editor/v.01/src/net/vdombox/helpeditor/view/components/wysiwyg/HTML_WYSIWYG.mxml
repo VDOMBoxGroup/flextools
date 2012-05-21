@@ -5,6 +5,13 @@
 	uncaughtScriptException="onJavaScriptException(event)"
 	complete="htmlCompleteHandler(event)">
 	
+	<mx:Metadata>
+		[Event(name="saveContent", type="flash.events.Event")]
+		[Event(name="imagesWidthSetted", type="flash.events.Event")]
+		[Event(name="httpImageLoaded", type="flash.events.Event")]
+		[Event(name="requestTemplate", type="flash.events.Event")]
+	</mx:Metadata>
+	
 	<mx:Script>
 		<![CDATA[
 			import com.adobe.images.PNGEncoder;
@@ -38,9 +45,8 @@
 			
 			private var rewritePageContent	: Boolean;
 			
-			public static const EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED	: String = "EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED"; 
-			public static const EVENT_WYSIWYG_HTTP_IMAGE_LOADED			: String = "EVENT_WYSIWYG_HTTP_IMAGE_LOADED";
-			public static const EVENT_WYSIWYG_IMAGES_WIDTH_SETTED		: String = "EVENT_WYSIWYG_IMAGES_WIDTH_SETTED";
+			public static const EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED	: String = "saveContent"; 
+			public static const EVENT_WYSIWYG_IMAGES_WIDTH_SETTED		: String = "imagesWidthSetted";
 			
 			public function get pageContentXML():XML
 			{
@@ -120,6 +126,13 @@
 				editor.insertHtml(element);
 			}
 			
+			public function insertTemplate (templateName : String) : void
+			{
+				var template : String = "#Template(" + templateName + ")";
+				
+				setElement(template);
+			}
+			
 			public function getHTML(showPageToc:Boolean = false) : String
 			{
 				var editorData	: String;
@@ -169,11 +182,6 @@
 				bodyContent = bodyContent.replace(HtmlPageProperties.highlightAllTemplate, "");
 				
 				var highlightAllScript : String = showPageToc ? HtmlPageProperties.highlightAllTemplate : "";
-				
-				/*if (showPageToc) {
-					bodyContent = Utils.convertSpaces(bodyContent);
-				}*/
-				
 				
 				htmlTxt = "<html>" + "\n" + 
 								HtmlPageProperties.headTemplate +
@@ -276,9 +284,10 @@
 					
 					if ( imgSrc.indexOf("http://") >= 0 || imgSrc.indexOf("https://") >= 0 ) // image from http
 					{
-						this.addEventListener(ResourceUtils.HTTP_IMAGE_LOADED, this.dispatchEvent);
+						resourceImageUtils.addEventListener(ResourceUtils.HTTP_IMAGE_LOADED, this.dispatchEvent);
 						newPath = resourceImageUtils.loadHttpImg(imgSrc);
-					} else 
+					} 
+					else 
 					{
 						newPath = resourceImageUtils.copyImg(imgSrc); // image from file system
 					}
@@ -406,9 +415,6 @@
 						ratioX =  MAX_IMAGE_WIDTH / imageWidthInTag;
 						imageWidthInTag = MAX_IMAGE_WIDTH;
 						imageHeightInTag = Math.floor(imageHeightInTag * ratioX);
-						
-						//onImageWidthSetted();
-						//return;
 					}
 					
 					onImageWidthSetted();
@@ -459,7 +465,8 @@
 			{
 				instancesInitialized = true;
 				
-				domWindow.pasteImageFromClipboard = pasteImageFromClipboard;
+				domWindow.pasteImageFromClipboard	= pasteImageFromClipboard;
+				domWindow.pasteTemplate				= pasteTemplate;
 				
 				if (refreshPageAfterInit) {
 					setHTML(pageContentToRefresh);
@@ -483,6 +490,11 @@
 					return;
 				
 				setElement(imageTeg.toXMLString());
+			}
+			
+			public function pasteTemplate () : void
+			{
+				dispatchEvent(new Event("requestTemplate"));
 			}
 			
 			private function getImageTag(wysiwygImage : WysiwygImage) : XML

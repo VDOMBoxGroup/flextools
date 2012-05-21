@@ -10,7 +10,7 @@
 						titleTextStyleName="tbStyle"
 						titleIcon="@Embed('icons/16_vdom_icon_editor.png')"
 						xmlns:local="*" xmlns:view="net.vdombox.helpeditor.view.*"
-						borderStyle="solid" borderThickness="4" borderColor="0x434343">
+						borderStyle="solid" borderThickness="4" borderColor="0x434343" xmlns:components="net.vdombox.helpeditor.view.components.*" xmlns:wysiwyg="net.vdombox.helpeditor.view.components.wysiwyg.*">
 	<mx:Style>
 		.tbStyle {
 			color : #FFFFFF;
@@ -35,6 +35,7 @@
 		}
 		
 	</mx:Style>
+	
 	<mx:Script>
 		<![CDATA[
 			import com.adobe.crypto.MD5Stream;
@@ -63,12 +64,14 @@
 			import net.vdombox.helpeditor.controller.SpinnerPopUpManager;
 			import net.vdombox.helpeditor.model.AlertMessages;
 			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.utils.PageUtils;
 			import net.vdombox.helpeditor.utils.ResourceUtils;
 			import net.vdombox.helpeditor.utils.Utils;
-			import net.vdombox.helpeditor.view.HTML_WYSIWYG;
+			import net.vdombox.helpeditor.view.components.wysiwyg.HTML_WYSIWYG;
 			import net.vdombox.helpeditor.view.panel.EditPage;
 			import net.vdombox.helpeditor.view.panel.Products;
 			import net.vdombox.helpeditor.view.panel.SyncronizePages;
+			import net.vdombox.helpeditor.view.panel.Templates;
 
 			private var sqlProxy : SQLProxy = new SQLProxy();
 
@@ -298,7 +301,7 @@
 
 			private function selectNecessaryItem(fileName:String) : void
 			{
-				var currentElement : XML = tree.dataProvider.source..page.( @name == fileName )[ 0 ]; // tree.dataProvider.source..page.(@name == fileName)[0];
+				var currentElement : XML = tree.dataProvider.source..page.( @name == fileName )[ 0 ];
 
 				if ( currentElement )
 				{
@@ -506,8 +509,6 @@
 
 			private function savePage() : void
 			{
-				//trace("[VdomHelpEditor] savePage");
-				
 				if (!tree.selectedItem) return;
 
 				html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_IMAGES_WIDTH_SETTED, onWysiwygImagesWidthSetted);
@@ -523,7 +524,7 @@
 				refreshPageContent();
 			}
 			
-			private function refreshPageContent(aEvent : Event = null):void
+			private function refreshPageContent():void
 			{
 				var pageNewContent : String = html_wysiwyg.getHTML();
 				
@@ -704,6 +705,8 @@
 				if ( html_wysiwyg )
 					sourseTxt = html_wysiwyg.getHTML(true);
 				
+				sourseTxt = PageUtils.getInstance().replacePageTemplates(sourseTxt);
+				
 				content.writeMultiByte(sourseTxt, "utf-8");
 
 				saveFile(fileName, content);
@@ -715,25 +718,11 @@
 
 				if ( html )
 				{
-					//html.addEventListener(Event.COMPLETE, onPreviewLoadingComplete);
 					html.location = fullPath;
 					html.validateDisplayList();
 				}
 			}
 			
-			/*private function onPreviewLoadingComplete(event:Event) : void
-			{
-				html.removeEventListener(Event.COMPLETE, onPreviewLoadingComplete);
-				
-				//if(html.domWindow.dp.SyntaxHighlighter.HighlightAll)
-					//html.domWindow.dp.SyntaxHighlighter.HighlightAll('code', true, false, false);
-			}*/
-
-			private function dragDropHandler(event:Event) : void
-			{
-				trace ("[VdomHelpEditor] dragDropHandler");
-			}
-
 			private function editPage() : void
 			{
 				if (!cmboxProduct.selectedItem)
@@ -753,12 +742,6 @@
 					// обновить данные вверху и внизу
 					getCurrentPage();
 				}
-			}
-			
-			protected function html_wysiwyg_initializeHandler(event:FlexEvent):void
-			{
-				this.html_wysiwyg.addEventListener(HTML_WYSIWYG.EVENT_WYSIWYG_SAVE_COMBINATION_CLICKED, onWysiwygSaveCombinationClicked);
-				this.html_wysiwyg.addEventListener(ResourceUtils.HTTP_IMAGE_LOADED, refreshPageContent);
 			}
 			
 			private function onTreeKeyboardKeyUp(aKeyboardEvent:KeyboardEvent) : void
@@ -852,6 +835,22 @@
 			{
 				PopUpManager.createPopUp(this, SyncronizePages, true);
 			}
+			
+			private function openTemplates(allowInsert : Boolean = false) : void
+			{
+				var templatesPanel : Templates = new Templates();
+				templatesPanel.allowInsert = allowInsert;
+				
+				templatesPanel.addEventListener("insertClick", insertTemplateHandler);
+								
+				PopUpManager.addPopUp(templatesPanel, this, true);
+				
+				function insertTemplateHandler (event:Event) : void
+				{
+					html_wysiwyg.insertTemplate(templatesPanel.selectedTemplateName);
+				}
+			}
+			
 		]]>
 	</mx:Script>
 
@@ -912,6 +911,16 @@
 					   themeColor="#656565"
 					   textRollOverColor="#FFFFFF"
 					   enabled="{Boolean(cmboxProduct.selectedItem)}" />
+			<mx:Button label="Templates"
+					   click="{openTemplates()}"
+					   color="#FFFFFF"
+					   fillColors="#333333"
+					   textSelectedColor="#FFFFFF"
+					   cornerRadius="1"
+					   borderColor="#999999"
+					   themeColor="#656565"
+					   textRollOverColor="#FFFFFF"
+					   enabled="{Boolean(cmboxProduct.selectedItem)}" />
 
 			<!--
 		   <mx:ProgressBar id="progressBar" labelPlacement="top" themeColor="#F20D7A"
@@ -920,6 +929,7 @@
 			 -->
 		</mx:HBox>
 		<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x4b4c4c" />
+		
 		<mx:HDividedBox y="60" width="100%" height="100%" 
 						horizontalGap="5"
 						dividerThickness="5">
@@ -934,20 +944,19 @@
 								 labelField="title" rollOverColor="#cccccc" selectionColor="#666666"
 								 textRollOverColor="#000000" textSelectedColor="#FFFFFF"
 								 themeColor="#000000" toolTip="{cmboxProduct.selectedItem.title}"/>
-
+					
 				</mx:HBox>
-				<view:HelpProductsTree id="tree" 
-						 width="100%" height="100%" 
-						 color="#000000" showRoot="true" labelField="@title"
-						 dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
-						 folderOpenIcon="@Embed('../assets/open_folder.png')"
-						 folderClosedIcon="@Embed('../assets/close_folder.png')"
-						 openDuration="0"
-						 defaultLeafIcon="@Embed('../assets/page.png')" 
-						 dragDrop="dragDropHandler(event);"
-						 change="{treeChangeHandler(event)}"
-						 keyDown="onTreeKeyboardKeyUp(event)"/>
-
+				<components:HelpProductsTree id="tree" 
+									   width="100%" height="100%" 
+									   color="#000000" showRoot="true" labelField="@title"
+									   dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
+									   folderOpenIcon="@Embed('../assets/open_folder.png')"
+									   folderClosedIcon="@Embed('../assets/close_folder.png')"
+									   openDuration="0"
+									   defaultLeafIcon="@Embed('../assets/page.png')" 
+									   change="{treeChangeHandler(event)}"
+									   keyDown="onTreeKeyboardKeyUp(event)"/>
+				
 				<mx:HBox paddingLeft="3">
 					<mx:Button label="Add Page"
 							   click="{addItem();}"
@@ -975,8 +984,13 @@
 					<mx:VBox width="100%" height="100%" verticalGap="0" verticalAlign="0">
 						<!--mx:HBox width="100%" color="#000000" backgroundColor="#E4E4E4"  >
 						</mx:HBox-->
-
-						<view:HTML_WYSIWYG id="html_wysiwyg" width="100%" height="100%" initialize="html_wysiwyg_initializeHandler(event)"/>
+						
+						<wysiwyg:HTML_WYSIWYG id="html_wysiwyg" 
+											  width="100%" height="100%"
+											  saveContent="onWysiwygSaveCombinationClicked(event)"
+											  httpImageLoaded="refreshPageContent()"
+											  requestTemplate="openTemplates(true)"/>
+						
 						<mx:HBox width="100%" backgroundColor="0x373739" paddingBottom="3">
 							<mx:Canvas height="100%">
 								<mx:Label id="pageInformation"
@@ -987,7 +1001,7 @@
 										  left="5" />
 							</mx:Canvas>
 							<mx:HBox width="100%" horizontalAlign="right" paddingTop="3" paddingRight="3">
-
+								
 								<mx:Button label="Save"
 										   click="{savePage()}"
 										   toolTip="Save page"
@@ -998,7 +1012,7 @@
 										   borderColor="#999999"
 										   themeColor="#656565"
 										   textRollOverColor="#FFFFFF" />
-
+								
 								<mx:Button label="Page Settings"
 										   click="{editPage()}"
 										   color="#FFFFFF"
@@ -1016,7 +1030,7 @@
 					<mx:HTML id="html" width="100%" height="100%" />
 				</mx:Canvas>
 				<!--mx:Canvas width="100%" height="100%" label="Sourse" color="#00FF00" >
-					<mx:TextArea id="htmlSource" width="100%" height="100%"  focusAlpha="0" />
+				<mx:TextArea id="htmlSource" width="100%" height="100%"  focusAlpha="0" />
 				</mx:Canvas-->
 			</mx:TabNavigator>
 		</mx:HDividedBox>

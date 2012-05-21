@@ -23,6 +23,7 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
+			import net.vdombox.helpeditor.view.components.SyncPagesSelector;
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.controls.Text;
@@ -91,6 +92,9 @@
 			
 			private function removeGroup () : void
 			{
+				if (syncGroupsList.numChildren == 0 || !syncGroupsList.selectedItem)
+					return;
+				
 				sqlProxy.removeSyncGroup(syncGroupsList.selectedItem.group_name);
 				
 				vsGroupPages.removeChildAt(syncGroupsList.selectedIndex);
@@ -98,7 +102,10 @@
 				var groupsCollection : ArrayCollection = syncGroupsList.dataProvider as ArrayCollection;
 				groupsCollection.removeItemAt(syncGroupsList.selectedIndex);
 				
-				syncGroupsList.selectedIndex = 0;
+				if (syncGroupsList.numChildren > 0)
+					syncGroupsList.selectedIndex = 0;
+				else
+					syncGroupsList.selectedIndex = -1;
 				
 				updateSelectorView();
 			}

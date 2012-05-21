@@ -51,6 +51,8 @@ package net.vdombox.helpeditor.utils
 		
 		public function loadHttpImg(aImageOldSrc_str:String) : String
 		{
+			trace ("loadHttpImg");
+			
 			var targetPath : String;
 			var urlRequest : URLRequest;
 			var urlLoader : URLLoader;
@@ -72,7 +74,9 @@ package net.vdombox.helpeditor.utils
 			file = File.applicationStorageDirectory.resolvePath(targetPath);
 			
 			var ths:ResourceUtils = this;
-			function urlLoader_complete(evt:Event) : void {
+			
+			function urlLoader_complete(evt:Event) : void 
+			{
 				var fileStream : FileStream;
 				
 				fileStream = new FileStream();
@@ -124,9 +128,18 @@ package net.vdombox.helpeditor.utils
 		
 		public static function generateFileNameByDefault(filePath : String = "") : String
 		{
-			var fileType : String = filePath.substring(filePath.lastIndexOf("."), filePath.length);
+			var regExp : RegExp = /\W[0-9_]/;
 			
-			return UIDUtil.createUID() + fileType;
+			var lastDotIndex : int = filePath.lastIndexOf(".");
+			
+			var fileName : String = UIDUtil.createUID();
+			
+			var fileType : String = filePath.substring(lastDotIndex, filePath.length);
+			
+			if (fileType.search(regExp) >= 0)
+				fileType = "";
+				
+			return fileName + fileType;
 		}
 		
 		public static function generateFileNameBySourceFile(file : File) : String

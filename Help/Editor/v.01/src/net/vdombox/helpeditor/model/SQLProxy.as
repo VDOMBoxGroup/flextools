@@ -62,6 +62,8 @@ package net.vdombox.helpeditor.model
 				
 				tryToCreatePagesSyncronizationTable();
 				
+				tryToCreateTemplateTable();
+				
 				sqlStatement.sqlConnection.close();
 				removeHandlers();
 
@@ -131,7 +133,7 @@ package net.vdombox.helpeditor.model
 		
 		private function tryToCreatePagesSyncronizationTable () : void
 		{
-			//       PAGES_SYNC  (id, group_name, pages)   //
+			//       PAGES_SYNC  (id, group_name, group_title, pages)   //
 			sqlStatement.text = "CREATE TABLE IF NOT EXISTS pages_sync (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 				"group_name TEXT NOT NULL, " +
 				"group_title TEXT NOT NULL, " +
@@ -139,7 +141,18 @@ package net.vdombox.helpeditor.model
 			
 			sqlStatement.execute();
 		}
-
+		
+		private function tryToCreateTemplateTable () : void
+		{
+			//       TEMPLATE  (id, name, title, content )   //
+			sqlStatement.text = "CREATE TABLE IF NOT EXISTS template (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+								"name CHAR NOT NULL, " +
+								"title TEXT NOT NULL,  " +
+								"content TEXT);";
+			
+			sqlStatement.execute();
+		}
+		
 		/**
 		 * add new (empty) product to DB 
 		 * (if this product doesn't exist)
@@ -475,6 +488,9 @@ package net.vdombox.helpeditor.model
 			parameters[ ":name" ] = pageName;
 			
 			var result : Object = executeQuery(query, parameters);
+			
+			if (!result)
+				return "";
 			
 			return result[0]["version"];
 			
@@ -1085,7 +1101,103 @@ package net.vdombox.helpeditor.model
 					displayLocalizedDetail(e.details);
 				}
 			}
+			
 		}
+		
+		// template table ...
+		public function addTemplate (name:String, title:String, content:String) : void
+		{
+			var query : String      = "SELECT template.id " +
+									"FROM template " +
+									"WHERE name = :name;";
+			
+			var parameters : Object = {};
+			parameters[ ":name" ] = name;
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			if ( !result )
+			{
+				query = "INSERT INTO template(name, title, content) " +
+					"VALUES(:name, :title, :content);";
+				
+				parameters = [];
+				parameters[ ":name" ] = name;
+				parameters[ ":title" ] = title;
+				parameters[ ":content" ] = content;
+				
+				executeQuery(query, parameters);
+			}
+		}
+		
+		public function removeTemplate (name:String) : void
+		{
+			var query:String = "DELETE FROM template WHERE name = :name;";
+			
+			var parameters:Object = {};
+			parameters[":name"] = name;
+			
+			executeQuery(query, parameters);
+		}
+		
+		public function updateTemplateTitle (name:String, title:String) : void
+		{
+			var query : String = "UPDATE template " +
+								"SET title = :title " +
+								"WHERE name = :name;";
+			
+			var parameters : Object = {};
+			parameters[ ":name" ] = name;
+			parameters[ ":title" ] = title;
+			
+			executeQuery(query, parameters);
+
+		}
+		
+		public function updateTemplateContent (name:String, content:String) : void
+		{
+			var query : String = "UPDATE template " +
+				"SET content = :content " +
+				"WHERE name = :name;";
+			
+			var parameters : Object = {};
+			parameters[ ":name" ] = name;
+			parameters[ ":content" ] = content;
+			
+			executeQuery(query, parameters);
+			
+		}
+		
+		public function getTemplateContent (name:String) : String
+		{
+			var query : String = "SELECT content " +
+									"FROM template " +
+									"WHERE name = :name;";
+			
+			var parameters : Object = {};
+			parameters[ ":name" ] = name;
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			if (!result)
+				return "";
+			
+			return result[0]["content"];
+		}
+		
+		public function getAllTemplates() : Object
+		{
+			var query : String      = "SELECT * FROM template;";
+			
+			var result : Object     = executeQuery(query, {});
+			
+			if ( !result )
+				return null;
+			
+			return result;
+		}
+		// ... template table
+		
 
 	}
 }
