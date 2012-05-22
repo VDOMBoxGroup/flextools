@@ -134,11 +134,10 @@
 			protected function addTemplate():void
 			{
 				var newTemplate : Object = {};
-				newTemplate.name = UIDUtil.createUID();
-				newTemplate.title = "New template";
+				newTemplate.name = "New template";
 				newTemplate.content = "";
 				
-				sqlProxy.addTemplate(newTemplate.name, newTemplate.title, newTemplate.content);
+				sqlProxy.addTemplate(newTemplate.name, newTemplate.content);
 				
 				var allTemplates : Array = templatesList.dataProvider.source;
 				
@@ -247,20 +246,23 @@
 					return;
 				}
 				
-				applyTemplateTitle();
+				applyTemplateName();
 				
 				destroyItemEditor();
 			}
 			
-			private function applyTemplateTitle () : void
+			private function applyTemplateName () : void
 			{
 				var editedItemData : Object = templatesList.editedItemRenderer.data;
 				
-				editedItemData.title = listItemEditorInstance.text;
+				var oldName : String = editedItemData.name;
+				var newName : String = listItemEditorInstance.text;
+				
+				editedItemData.name = listItemEditorInstance.text;
 				
 				templatesList.selectedItem = editedItemData;
 				
-				sqlProxy.updateTemplateTitle(editedItemData.name, editedItemData.title);
+				sqlProxy.updateTemplateName(oldName, newName);
 			}
 			
 			private function get isCorrectTemplateTitle () : Boolean
@@ -379,7 +381,7 @@
 			<mx:List width="100%" height="100%"
 					 id="templatesList"
 					 dataProvider="{templates}"
-					 labelField="title"
+					 labelField="name"
 					 change="templatesList_changeHandler(event)"
 					 selectedIndex="-1"
 					 doubleClickEnabled="true"

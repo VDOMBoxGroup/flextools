@@ -6,6 +6,10 @@ package net.vdombox.helpeditor.utils
 	{
 		private static var _instance	: PageUtils;
 		
+		private static var MAX_RECURSION_DEPTH	: int = 10;
+		
+		private var recursionDepth : int = 0;
+		
 		private var sqlProxy : SQLProxy = new SQLProxy();
 		
 		public function PageUtils()
@@ -28,7 +32,7 @@ package net.vdombox.helpeditor.utils
 		{
 			var paragraphContent : String;
 			
-			var templateRegExp : RegExp = /(<p[^>]*>[ \n\t\r]*){0,1}#Template\([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\)(<\/p>){0,1}/g;
+			var templateRegExp : RegExp = /(<p[^>]*>[ \n\t\r]*){0,1}#Template\([a-zA-Z0-9\-. ]+\)[ \n\t\r]*(<\/p>){0,1}/ig;
 			
 			var templates : Array = pageContent.match(templateRegExp);
 			
@@ -38,15 +42,26 @@ package net.vdombox.helpeditor.utils
 			var templateName : String; 
 			var templateContent : String
 			var nameStartIndex : int;
+			var nameEndIndex : int;
 			
 			for each (var template : String in templates)
 			{
-				nameStartIndex =  template.indexOf("(") + 1;
-				templateName = template.substr(nameStartIndex, 36);
+				nameStartIndex =  template.indexOf("#Template(") + 10;
+				nameEndIndex = template.indexOf(")",nameStartIndex);
+				
+				templateName = template.substring(nameStartIndex, nameEndIndex);
 				templateContent = sqlProxy.getTemplateContent(templateName);
 				
 				pageContent = pageContent.replace(template, templateContent);
 			}
+			
+			recursionDepth ++;
+			if (recursionDepth < MAX_RECURSION_DEPTH && pageContent.search(templateRegExp) >= 0)
+			{
+				pageContent = replacePageTemplates(pageContent);
+			}
+			
+			recursionDepth = 0;
 			
 			return pageContent;
 		}

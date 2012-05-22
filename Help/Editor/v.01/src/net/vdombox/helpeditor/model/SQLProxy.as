@@ -144,10 +144,9 @@ package net.vdombox.helpeditor.model
 		
 		private function tryToCreateTemplateTable () : void
 		{
-			//       TEMPLATE  (id, name, title, content )   //
+			//       TEMPLATE  (id, name, content )   //
 			sqlStatement.text = "CREATE TABLE IF NOT EXISTS template (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 								"name CHAR NOT NULL, " +
-								"title TEXT NOT NULL,  " +
 								"content TEXT);";
 			
 			sqlStatement.execute();
@@ -1108,7 +1107,7 @@ package net.vdombox.helpeditor.model
 		}
 		
 		// template table ...
-		public function addTemplate (name:String, title:String, content:String) : void
+		public function addTemplate (name:String, content:String) : void
 		{
 			var query : String      = "SELECT template.id " +
 									"FROM template " +
@@ -1121,12 +1120,11 @@ package net.vdombox.helpeditor.model
 			
 			if ( !result )
 			{
-				query = "INSERT INTO template(name, title, content) " +
-					"VALUES(:name, :title, :content);";
+				query = "INSERT INTO template(name, content) " +
+					"VALUES(:name, :content);";
 				
 				parameters = [];
 				parameters[ ":name" ] = name;
-				parameters[ ":title" ] = title;
 				parameters[ ":content" ] = content;
 				
 				executeQuery(query, parameters);
@@ -1143,15 +1141,15 @@ package net.vdombox.helpeditor.model
 			executeQuery(query, parameters);
 		}
 		
-		public function updateTemplateTitle (name:String, title:String) : void
+		public function updateTemplateName (name:String, newName:String) : void
 		{
 			var query : String = "UPDATE template " +
-								"SET title = :title " +
+								"SET name = :newName " +
 								"WHERE name = :name;";
 			
 			var parameters : Object = {};
 			parameters[ ":name" ] = name;
-			parameters[ ":title" ] = title;
+			parameters[ ":newName" ] = newName;
 			
 			executeQuery(query, parameters);
 
