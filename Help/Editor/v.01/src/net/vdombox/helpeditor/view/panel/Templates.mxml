@@ -81,6 +81,8 @@
 				
 				templatesList.dataProvider = allTemplates;
 				
+				templatesList.validateNow();
+				
 				if (!vsTemplatesEditors)
 					return;
 				
@@ -139,8 +141,15 @@
 				sqlProxy.addTemplate(newTemplate.name, newTemplate.title, newTemplate.content);
 				
 				var allTemplates : Array = templatesList.dataProvider.source;
-				allTemplates.push(newTemplate);
+				
+				if (!allTemplates)
+					allTemplates = [newTemplate];
+				else
+					allTemplates.push(newTemplate);
+				
 				templatesList.dataProvider = allTemplates;
+				
+				templatesList.validateNow();
 				
 				templatesList.selectedIndex = templatesList.dataProvider.source.length - 1;
 				
@@ -165,20 +174,25 @@
 			
 			protected function removeTemplate():void
 			{
-				if (templatesList.numChildren == 0 || templatesList.dataProvider.length == 0 || !templatesList.selectedItem)
+				if (!templatesList.dataProvider ||
+					!templatesList.dataProvider.source ||
+					templatesList.dataProvider.source.length == 0 || 
+					!templatesList.selectedItem)
 					return;
 				
 				sqlProxy.removeTemplate(templatesList.selectedItem.name);
 				
-				vsTemplatesEditors.removeChildAt(vsTemplatesEditors.selectedIndex);
+				if (templatesList.selectedIndex < vsTemplatesEditors.numChildren)
+					vsTemplatesEditors.removeChildAt(templatesList.selectedIndex);
 				
-				var groupsCollection : ArrayCollection = templatesList.dataProvider as ArrayCollection;
-				groupsCollection.removeItemAt(templatesList.selectedIndex);
+				var templatesArr : Array = templatesList.dataProvider.source as Array;
+				templatesArr.splice(templatesList.selectedIndex, 1);
 				
-				if (templatesList.numChildren > 0)
-					templatesList.selectedIndex = 0;
-				else
-					templatesList.selectedIndex = -1;
+				templatesList.dataProvider = templatesArr;
+				
+				templatesList.validateNow();
+				
+				templatesList.selectedIndex = templatesArr.length > 0 ? 0 : -1;
 				
 				updateTemplateEditor();
 			}

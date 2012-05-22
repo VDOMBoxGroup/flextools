@@ -943,6 +943,9 @@ package net.vdombox.helpeditor.model
 			parameters[ ":name" ] = groupName;
 			
 			var result : Object = executeQuery(query, parameters);
+	
+			if (!result)
+				return null;
 			
 			var pagesStr : String = result[0]["pages"];
 			

@@ -66,8 +66,14 @@
 				sqlProxy.addSyncGroup(newGroup.group_name, newGroup.group_title, newGroup.pages);
 				
 				var groups : Array = syncGroupsList.dataProvider.source;
-				groups.push(newGroup);
+				if (!groups)
+					groups = [newGroup];
+				else
+					groups.push(newGroup);
+				
 				syncGroupsList.dataProvider = groups;
+				
+				syncGroupsList.validateNow();
 				
 				syncGroupsList.selectedIndex = syncGroupsList.dataProvider.length - 1;
 				
@@ -92,20 +98,24 @@
 			
 			private function removeGroup () : void
 			{
-				if (syncGroupsList.numChildren == 0 || !syncGroupsList.selectedItem)
+				if (!syncGroupsList.dataProvider ||
+					!syncGroupsList.dataProvider.source ||
+					syncGroupsList.dataProvider.source.length == 0 || 
+					!syncGroupsList.selectedItem)
 					return;
 				
 				sqlProxy.removeSyncGroup(syncGroupsList.selectedItem.group_name);
 				
 				vsGroupPages.removeChildAt(syncGroupsList.selectedIndex);
 				
-				var groupsCollection : ArrayCollection = syncGroupsList.dataProvider as ArrayCollection;
-				groupsCollection.removeItemAt(syncGroupsList.selectedIndex);
+				var groupsCollection : Array = syncGroupsList.dataProvider.source as Array;
+				groupsCollection.splice(syncGroupsList.selectedIndex, 1);
 				
-				if (syncGroupsList.numChildren > 0)
-					syncGroupsList.selectedIndex = 0;
-				else
-					syncGroupsList.selectedIndex = -1;
+				syncGroupsList.dataProvider = groupsCollection;
+				
+				syncGroupsList.validateNow();
+				
+				syncGroupsList.selectedIndex = syncGroupsList.numChildren > 0 ? 0 : -1;
 				
 				updateSelectorView();
 			}
@@ -115,6 +125,8 @@
 				var allGroups : Array = sqlProxy.getAllSyncGroups() as Array;
 				
 				syncGroupsList.dataProvider = allGroups;
+				
+				syncGroupsList.validateNow();
 				
 				if (!vsGroupPages)
 					return;
