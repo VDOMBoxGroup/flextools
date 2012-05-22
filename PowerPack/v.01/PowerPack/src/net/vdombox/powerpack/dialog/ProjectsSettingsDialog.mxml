@@ -159,6 +159,8 @@
 				
 				currentTemplate.deleteProject ( projectsList.selectedItem as BuilderTemplateProject );
 				
+				projectsList.validateNow();
+				
 				projectsList.selectedIndex = currentTemplate.selectedProjectIndex;
 				
 				updatePropertiesView();
