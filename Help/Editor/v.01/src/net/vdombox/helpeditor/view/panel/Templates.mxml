@@ -134,7 +134,7 @@
 			protected function addTemplate():void
 			{
 				var newTemplate : Object = {};
-				newTemplate.name = "New template";
+				newTemplate.name = createUniqueTemplateName("New template");
 				newTemplate.content = "";
 				
 				sqlProxy.addTemplate(newTemplate.name, newTemplate.content);
@@ -157,6 +157,23 @@
 				updateTemplateEditor();
 				
 				templatesList_itemEditBegin();
+			}
+			
+			private function createUniqueTemplateName (templateName : String) : String
+			{
+				var index : int = 1;
+				var isUniqueName : Boolean = true;
+				var newName : String;
+				
+				do
+				{
+					newName = templateName + '-' + index;
+					isUniqueName = isUniqueTemplateName(newName, true);
+					
+					index++;
+				} while ( !isUniqueName )
+				
+				return newName;
 			}
 			
 			private function askToRemoveTemplate () : void
@@ -196,7 +213,7 @@
 				updateTemplateEditor();
 			}
 			
-			public function get templates () : Object
+			public function get dbTemplates () : Object
 			{
 				return sqlProxy.getAllTemplates();
 			}
@@ -232,17 +249,17 @@
 			{
 				event.preventDefault();
 				
-				if ( event.reason == ListEventReason.CANCELLED )
-				{
-					destroyItemEditor();
-					return;
-				}
-				
-				if (!isCorrectTemplateTitle)
+				if (!isCorrectTemplateName)
 				{
 					event.stopImmediatePropagation();
 					
-					listItemEditorInstance.errorString = "Error: empty template name";
+					listItemEditorInstance.errorString = !isUniqueTemplateName(listItemEditorInstance.text) ? "Enter unique template name" : "Error: empty template name";
+					return;
+				}
+				
+				if ( event.reason == ListEventReason.CANCELLED )
+				{
+					destroyItemEditor();
 					return;
 				}
 				
@@ -265,12 +282,38 @@
 				sqlProxy.updateTemplateName(oldName, newName);
 			}
 			
-			private function get isCorrectTemplateTitle () : Boolean
+			private function get isCorrectTemplateName () : Boolean
 			{
-				var templateTitle : String = listItemEditorInstance.text;
+				var templateName : String = listItemEditorInstance.text;
 				
-				if (!templateTitle)
+				if (!templateName || !isUniqueTemplateName(templateName))
 					return false;
+				
+				return true;
+			}
+			
+			private function isUniqueTemplateName(templateName:String, isNewTemplate : Boolean = false) : Boolean
+			{
+				if (!templatesList ||
+					!templatesList.dataProvider ||
+					!templatesList.dataProvider.source ||
+					templatesList.dataProvider.source.length == 0)
+					return true;
+				
+				var i:int=0;
+				for each (var template : Object in templatesList.dataProvider.source)
+				{
+					if (template.name == templateName)
+					{
+						if (isNewTemplate)
+							return false;
+						
+						if (i != templatesList.selectedIndex)
+							return false;
+					}
+					
+					i++;
+				}
 				
 				return true;
 			}
@@ -380,7 +423,7 @@
 			
 			<mx:List width="100%" height="100%"
 					 id="templatesList"
-					 dataProvider="{templates}"
+					 dataProvider="{dbTemplates}"
 					 labelField="name"
 					 change="templatesList_changeHandler(event)"
 					 selectedIndex="-1"

@@ -32,7 +32,7 @@ package net.vdombox.helpeditor.utils
 		{
 			var paragraphContent : String;
 			
-			var templateRegExp : RegExp = /(<p[^>]*>[ \n\t\r]*){0,1}#Template\([a-zA-Z0-9\-. ]+\)[ \n\t\r]*(<\/p>){0,1}/ig;
+			var templateRegExp : RegExp = /(<p[^>]*>[ \n\t\r]*){0,1}#Template\([a-zA-Z0-9\- ]+\)[ \n\t\r]*(<\/p>){0,1}/ig;
 			
 			var templates : Array = pageContent.match(templateRegExp);
 			

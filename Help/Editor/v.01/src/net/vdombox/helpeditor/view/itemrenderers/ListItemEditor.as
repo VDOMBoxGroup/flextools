@@ -8,7 +8,7 @@ package net.vdombox.helpeditor.view.itemrenderers
 		{
 			super();
 			
-			restrict = "a-zA-Z0-9- ";
+			restrict = "a-zA-Z0-9\- ";
 		}
 	}
 }
