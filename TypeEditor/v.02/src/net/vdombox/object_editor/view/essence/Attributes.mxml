@@ -66,7 +66,7 @@
 			
 			[Bindable]
 			public var arColorGroup:ArrayCollection = new ArrayCollection(
-				[ 	{label:"SELECT VALUE", 	data:0},
+				[ 	{label:"None", 	data:0},
 					{label:"Grey", 		 	data:1}, 
 					{label:"Green",			data:2}, 
 					{label:"Red",			data:3}, 
@@ -78,7 +78,7 @@
 				[ 	"TextField",					
 					"Number1", 
 					"MultiLine", 
-					"!Font", 
+					"Font", 
 					"DropDown", 
 					"File", 
 					"Color", 

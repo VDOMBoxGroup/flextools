@@ -18,6 +18,7 @@ package net.vdombox.editors
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
 		}
 
+		[Bindable]
 		[SkinPart( required="true" )]
 		public var scriptAreaComponent : ScriptAreaComponent;
 

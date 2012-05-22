@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.editors.ScriptAreaComponent;
+			
+			import spark.events.TextOperationEvent;
+			
+			private var lastButton :Button;
+			public var selectedScriptAreaComponent : ScriptAreaComponent;
+			
+			[Bindable]
+			public var findType : String = "current";
+			
+			[Bindable]
+			public var findString : String;
+			private var findResult : Boolean;
+			
+			private var serverActions : Array;
+			private var containerActions : Object;
+			
+			
+			
+			[Bindable]
+			private var scriptsXMLList : XMLList = null;
+			
+			
+			
+			protected function image1_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new Event( Event.CLOSE ) );
+			}
+			
+			protected function findText_changeHandler(event:TextOperationEvent):void
+			{				
+				findResult = selectedScriptAreaComponent.findText( findText.text, 0 );
+				
+				if ( findResult || findText.text == "" )
+					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
+				else
+					findText.setStyle( "contentBackgroundColor", 0xFF0000 );
+			}
+			
+			protected function previous_clickHandler(event:MouseEvent = null):void
+			{
+				lastButton = previous;
+				
+				findResult = selectedScriptAreaComponent.findText( findText.text, 1 );
+				
+				if ( findResult || findText.text == "" )
+					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
+				else
+					findText.setStyle( "contentBackgroundColor", 0xFF0000 );
+			}
+			
+			protected function next_clickHandler(event:MouseEvent = null):void
+			{
+				lastButton = next;
+				
+				findResult = selectedScriptAreaComponent.findText( findText.text, 2 );
+				
+				if ( findResult || findText.text == "" )
+					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
+				else
+					findText.setStyle( "contentBackgroundColor", 0xFF0000 );
+			}
+			
+			protected function findText_keyDownHandler(event:KeyboardEvent):void
+			{
+				if ( event.keyCode == Keyboard.ENTER )
+				{
+					if ( lastButton == previous )
+						previous_clickHandler();
+					else
+						next_clickHandler();
+				}
+				
+			}
+			
+			protected function replace_clickHandler(event:MouseEvent):void
+			{
+				selectedScriptAreaComponent.replaceFind( findText.text, replaceText.text );
+			}
+			
+			protected function replaceAll_clickHandler(event:MouseEvent):void
+			{
+				selectedScriptAreaComponent.replaceFind( findText.text, replaceText.text, true );
+			}
+			
+			
+			protected function findOrReplace_clickHandler(event:MouseEvent):void
+			{
+				if ( currentState == "find" )
+					currentState = "replace";
+				else
+					currentState = "find";
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="find" />
+		
+		<s:State name="replace" />
+	</s:states>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor color="#999999" />
+		</s:fill>
+	</s:Rect>
+	
+	<mx:Image right="10" top="5"
+			  source="@Embed('assets/icons/Delete.png')" click="image1_clickHandler(event)"/>
+	
+	<s:VGroup width="100%" height="100%" paddingLeft="20" paddingTop="5" paddingBottom="5" verticalAlign="middle">
+		
+		<s:Group width="100%" height="100%">
+			
+			<s:HGroup left="0" height="100%" verticalAlign="middle">
+				
+				<s:Label text="find" />
+				
+			</s:HGroup>
+			
+			<s:HGroup left="100" width="100%" height="100%" verticalAlign="middle" paddingRight="50">
+				
+				<s:TextInput id="findText" width="200"
+							 change="findText_changeHandler(event)" keyDown="findText_keyDownHandler(event)"/>
+				
+				<s:Button id="previous" label="previous"
+									   click="previous_clickHandler(event)" />
+				
+				<s:Button id="next" label="next"
+									   click="next_clickHandler(event)"/>
+				
+				<s:Button id="findOrReplace" label.find="replace"
+									   label.replace="Find" click="findOrReplace_clickHandler(event)"/>
+				
+			</s:HGroup>
+			
+		</s:Group>
+		
+		<s:Group width="100%" height="100%" includeIn="replace">
+			
+			<s:HGroup left="0" height="100%" verticalAlign="middle">
+				
+				<s:Label text="replaceWith" />
+				
+			</s:HGroup>
+			
+			<s:HGroup left="100" width="100%" height="100%" verticalAlign="middle">
+				
+				<s:TextInput id="replaceText" width="200"/>
+				
+				<s:Button id="replace" label="replace" click="replace_clickHandler(event)"/>
+				
+				<s:Button id="replaceAll" label="replace all" click="replaceAll_clickHandler(event)"/>
+				
+			</s:HGroup>
+			
+		</s:Group>
+	</s:VGroup>
+	
+</s:Group>

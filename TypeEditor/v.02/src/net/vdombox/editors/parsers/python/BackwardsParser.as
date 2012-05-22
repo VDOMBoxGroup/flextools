@@ -6,7 +6,7 @@ package net.vdombox.editors.parsers.python
 	public class BackwardsParser
 	{
 		public static const EXPR : String = 'expr';
-		public static const FUNCTION : String = 'function';
+		public static const FUNCTION : String = 'def';
 		public static const NAME : String = 'name';
 
 

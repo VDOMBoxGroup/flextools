@@ -23,12 +23,12 @@ package net.vdombox.editors.parsers.python
 			fld = textField;
 			
 			//TODO refactor, Controller should probably be a singleton
-			if ( !tc )
-			{
+			/*if ( !tc )
+			{*/
 				tc = new ThreadsController( stage );
 				//TypeDB.setDB('global', TypeDB.formByteArray(new GlobalTypesAsset));
 				//TypeDB.setDB('playerglobal', TypeDB.formByteArray(new PlayerglobalAsset));
-			}
+			/*}*/
 			
 			parser = new Parser;
 			

@@ -1,6 +1,8 @@
 package net.vdombox.object_editor.model.vo
 {
 	import mx.collections.ArrayCollection;
+	import mx.collections.Sort;
+	import mx.collections.SortField;
 	import mx.messaging.SubscriptionInfo;
 
 	public class LanguagesVO
@@ -18,6 +20,13 @@ package net.vdombox.object_editor.model.vo
 
 		public function LanguagesVO()
 		{			
+		}
+		
+		public function sortOnID() : void
+		{
+			words.sort = new Sort();
+			words.sort.fields = [ new SortField( "ID" ) ];
+			words.refresh();
 		}
 
 		public function tempGetNextId(startId: String, newValue:String = "", oldWord:Object = null):String

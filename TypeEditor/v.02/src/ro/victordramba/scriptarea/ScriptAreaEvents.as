@@ -15,7 +15,7 @@ package ro.victordramba.scriptarea
 	import flash.ui.MouseCursor;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
-
+	
 	import mx.events.IndexChangedEvent;
 
 	/*import flash.desktop.Clipboard;
@@ -35,6 +35,7 @@ package ro.victordramba.scriptarea
 
 		public function ScriptAreaEvents()
 		{
+			
 			doubleClickEnabled = true;
 			focusRect = false;
 
@@ -43,53 +44,53 @@ package ro.victordramba.scriptarea
 			inputTF.addEventListener( TextEvent.TEXT_INPUT, onInputText );
 			var me : ScriptAreaEvents = this;
 			inputTF.addEventListener( KeyboardEvent.KEY_UP, function( e : KeyboardEvent ) : void
-				{
-					if ( stage )
-						stage.focus = me;
-				} );
+			{
+				if ( stage )
+					stage.focus = me;
+			} );
 
 
 			addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 			addEventListener( FocusEvent.KEY_FOCUS_CHANGE, function( e : FocusEvent ) : void
-				{
-					e.preventDefault();
-					e.stopImmediatePropagation();
-				} );
+			{
+				e.preventDefault();
+				e.stopImmediatePropagation();
+			} );
 			addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
 
 			addEventListener( FocusEvent.FOCUS_IN, function( e : FocusEvent ) : void
-				{
-					cursor.alpha = 1;
-				} );
+			{
+				cursor.alpha = 1;
+			} );
 
 
 			addEventListener( FocusEvent.FOCUS_OUT, function( e : FocusEvent ) : void
-				{
-					if ( e.relatedObject != inputTF )
-						cursor.alpha = 0;
-				} );
+			{
+				if ( e.relatedObject != inputTF )
+					cursor.alpha = 0;
+			} );
 
 			addEventListener( MouseEvent.MOUSE_WHEEL, onMouseWheel );
 
 			addEventListener( MouseEvent.DOUBLE_CLICK, function( e : Event ) : void
-				{
-					var pos : int = getIndexForPoint( new Point( mouseX, mouseY ) );
-					_setSelection( findWordBound( pos, true ), findWordBound( pos, false ), true );
-				} );
+			{
+				var pos : int = getIndexForPoint( new Point( mouseX, mouseY ) );
+				_setSelection( findWordBound( pos, true ), findWordBound( pos, false ), true );
+			} );
 
-			addEventListener( Event.CUT, onCut );
+			/*addEventListener( Event.CUT, onCut );
 			addEventListener( Event.COPY, onCopy );
 			addEventListener( Event.PASTE, onPaste );
-			addEventListener( Event.SELECT_ALL, onSelectAll );
+			addEventListener( Event.SELECT_ALL, onSelectAll );*/
 
 			addEventListener( MouseEvent.ROLL_OVER, function( e : MouseEvent ) : void
-				{
-					Mouse.cursor = MouseCursor.IBEAM;
-				} );
+			{
+				Mouse.cursor = MouseCursor.IBEAM;
+			} );
 			addEventListener( MouseEvent.ROLL_OUT, function( e : MouseEvent ) : void
-				{
-					Mouse.cursor = MouseCursor.AUTO;
-				} );
+			{
+				Mouse.cursor = MouseCursor.AUTO;
+			} );
 		}
 
 		private function findWordBound( start : int, left : Boolean ) : int
@@ -157,7 +158,11 @@ package ro.victordramba.scriptarea
 			var dragStart : int;
 			if ( e.shiftKey )
 			{
-				dragStart = _caret;
+				if ( _selStart == _selEnd )
+					dragStart = _caret;
+				else
+					dragStart = _start;
+				
 				_setSelection( dragStart, getIndexForPoint( new Point( mouseX, mouseY ) ), true );
 			}
 			else
@@ -201,10 +206,22 @@ package ro.victordramba.scriptarea
 				}
 			}
 		}
+		
+		public function undo_fun() : void
+		{
+			undo();
+			dipatchChange();
+		}
+		
+		public function redo_fun() : void
+		{
+			redo();
+			dipatchChange();
+		}
 
 		private function onKeyDown( e : KeyboardEvent ) : void
 		{
-
+			
 			var c : String = String.fromCharCode( e.charCode );
 			var k : int = e.keyCode;
 			var i : int;
@@ -216,62 +233,68 @@ package ro.victordramba.scriptarea
 				|| e.ctrlKey  &&  ( c ==  'v' || c ==  'V') )
 			{
 				onPaste();
-					//dipatchChange(); //?
+				//dipatchChange(); //?
 			}
-
+				
 			else if (  e.altKey && k == Keyboard.BACKSPACE 
 				|| e.ctrlKey  &&  ( c ==  'z' || c ==  'Z')) // z & Z ?
 			{
-				undo();
-				dipatchChange();
+				undo_fun();
 				return;
 			}
 			else if ( e.ctrlKey &&  ( c ==  'y' || c ==  'Y') )
 			{
-				redo();
-				dipatchChange();
+				redo_fun();
 				return;
-
-			}else if (  e.shiftKey && k == Keyboard.DELETE 
+				
+			}
+			else if (  e.shiftKey && k == Keyboard.DELETE 
 				|| e.ctrlKey  &&  ( c ==  'x' || c ==  'X') )
 			{
 				onCopy();
-
+				
 				if ( _caret < length && _selStart == _selEnd )
 					replaceText( _caret, _caret + 1, '' );
 				else
 					replaceSelection( '' );
-
+				
 				dipatchChange();
 				return;
-
+				
 			}
-
-
+			
+			else if ( e.ctrlKey  &&  ( c ==  'a' || c ==  'A') )
+			{
+				_setSelection( 0, this.length, false );
+				return;
+				
+			}
+			
+			
 			/*if (extChar==0 && e.charCode > 127)
-			   {
-			   extChar = e.charCode;
-			   return;
-			   }
-
-			   if (extChar > 0)
-			   {
-			   c = Util.decodeUTF(e.charCode, extChar);
-			   extChar = 0;
-			 }*/
-
-
-
-
+			{
+			extChar = e.charCode;
+			return;
+			}
+			
+			if (extChar > 0)
+			{
+			c = Util.decodeUTF(e.charCode, extChar);
+			extChar = 0;
+			}*/
+			
+			
+			
+			
 			if ( k == Keyboard.CONTROL || k == Keyboard.SHIFT || e.keyCode == 3 /*ALT*/ || e.keyCode == Keyboard.ESCAPE )
 				return;
-
+			
 			//debug(e.charCode+' '+e.keyCode);
-
+			
 			//var line:TextLine = getLineAt(_caret);
 			var re : RegExp;
 			var pos : int;
-
+			
 			if ( k == Keyboard.RIGHT )
 			{
 				if ( e.ctrlKey )
@@ -324,20 +347,20 @@ package ro.victordramba.scriptarea
 				if ( i != -1 )
 				{
 					_caret = i + 1;
-
+					
 					//line = lines[line.index+1];
-
+					
 					i = _text.indexOf( NL, _caret );
 					if ( i == -1 )
 						i = _text.length;
-
-
+					
+					
 					//restore col
 					if ( i - _caret > lastCol )
 						_caret += lastCol;
 					else
 						_caret = i;
-
+					
 					if ( e.shiftKey )
 						extendSel( false );
 				}
@@ -353,16 +376,16 @@ package ro.victordramba.scriptarea
 						_caret = i + 1;
 					else
 						_caret = 0;
-
+					
 					//line = lines[line.index - 1];
 					//_caret = line.start;
-
+					
 					//restore col
 					if ( lineBegin - _caret > lastCol )
 						_caret += lastCol;
 					else
 						_caret = lineBegin;
-
+					
 					if ( e.shiftKey )
 						extendSel( true );
 				}
@@ -453,12 +476,12 @@ package ro.victordramba.scriptarea
 						end = _text.length - 1;
 					var begin : int = _text.lastIndexOf( NL, _selStart - 1 ) + 1;
 					var str : String = _text.substring( begin, end );
-
+					
 					if ( e.shiftKey )
 						str = str.replace( /\r\s/g, '\r' ).replace( /^\s/, '' );
 					else
 						str = '\t' + str.replace( /\r/g, '\r\t' );
-
+					
 					replaceText( begin, end, str );
 					_setSelection( begin, begin + str.length + 1, true );
 				}
@@ -468,22 +491,22 @@ package ro.victordramba.scriptarea
 			{
 				i = _text.lastIndexOf( NL, _caret - 1 );
 				str = _text.substring( i + 1, _caret ).match( /^\s*/ )[ 0 ];
-				if ( _text.charAt( _caret - 1 ) == '{' )
+				if ( _text.charAt( _caret - 1 ) == ':' )
 					str += '\t';
 				replaceSelection( '\r' + str );
 				dipatchChange();
 			}
-			else if ( c == '}' && _text.charAt( _caret - 1 ) == '\t' )
+			/*else if ( c == '}' && _text.charAt( _caret - 1 ) == '\t' )
 			{
 				replaceText( _caret - 1, _caret, '}' );
 				dipatchChange();
-			}
-			//else if (e.ctrlKey) return;
+			}*/
+				//else if (e.ctrlKey) return;
 			else if ( e.charCode != 0 )
 			{
 				//replaceSelection(c);
 				//dipatchChange();
-
+				
 				//don't capture CTRL+Key
 				if ( e.ctrlKey && !e.altKey )
 					return;
@@ -492,19 +515,20 @@ package ro.victordramba.scriptarea
 			}
 			else
 				return;
-
+			
 			if ( !e.shiftKey && k != Keyboard.TAB )
 				_setSelection( _caret, _caret );
-
+			
 			updateCaret();
-
+			updateSize();
+			
 			//save last column
 			if ( k != Keyboard.UP && k != Keyboard.DOWN && k != Keyboard.TAB )
 				saveLastCol();
-
+			
 			checkScrollToCursor();
 			e.updateAfterEvent();
-
+			
 			//local function
 			function extendSel( left : Boolean ) : void
 			{
@@ -555,5 +579,3 @@ package ro.victordramba.scriptarea
 		}
 	}
 }
-
-

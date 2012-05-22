@@ -307,7 +307,7 @@ package net.vdombox.object_editor.view.mediators
 			view.codeInterface.selectedItem = codeinterfaceLabel;	
 			
 			
-			if (codeinterfaceLabel != "!Font" &&
+			if (codeinterfaceLabel != "Font" &&
 				codeinterfaceLabel != "File"  &&
 				codeinterfaceLabel != "Color" &&
 				codeinterfaceLabel != "PageLink" &&
@@ -344,7 +344,7 @@ package net.vdombox.object_editor.view.mediators
 					{
 						view.CIViewStack.selectedIndex = 3;
 						view.CIViewStack.validateNow();
-						var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d\/w.`-]+)/g;
+						var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d\/w.`-]*)/g;
 						var langs:Array = [];							
 						
 						while (langs = regLangs.exec(arguments[0]))
@@ -417,7 +417,8 @@ package net.vdombox.object_editor.view.mediators
 			languagesProxy.deleteWord(objectTypeVO, str);
 			view.vGroup.removeElement( button.parent as IVisualElement );
 			view.validateNow();
-			changeCodeInterfaceStack(false);		
+			changeCodeInterfaceStack(false);	
+			addStar();
 		}
 		
 		private function setData( label:String, isChangeStack:Boolean):void
@@ -503,7 +504,7 @@ package net.vdombox.object_editor.view.mediators
 				clearCodeInterfaceFields();
 
 			var label:String = view.codeInterface.selectedItem;
-			if (label != "!Font" &&
+			if (label != "Font" &&
 				label != "File"  &&
 				label != "Color" &&
 				label != "PageLink" &&
@@ -526,7 +527,7 @@ package net.vdombox.object_editor.view.mediators
 			var num:int 	 = view.CodeInterfaceValue.indexOf("(");				
 			var label:String = view.CodeInterfaceValue.slice(0,num); 
 			
-			if (label != "!Font"	&&
+			if (label != "Font"	&&
 				label != "File"		&&
 				label != "Color"	&&
 				label != "PageLink"	&&

@@ -25,9 +25,13 @@ package net.vdombox.editors.parsers.python
 			formats.setValue( Token.KEYWORD, new TextFormat( null, null, 0x1039FF, true, false ) );
 			formats.setValue( Token.KEYWORD2, new TextFormat( null, null, 0x247ECE, true, false ) );
 			formats.setValue( Token.E4X, new TextFormat( null, null, 0x613BB9, false, false ) );
-			formats.setValue( Token.COMMENT, new TextFormat( null, null, 0x109900, false, true ) );
+			formats.setValue( Token.COMMENT, new TextFormat( null, null, 0x008000, false, true ) );
 			formats.setValue( Token.REGEXP, new TextFormat( null, null, 0xa3a020, false, false ) );
-			formats.setValue( Token.STRING, new TextFormat( null, null, 0xB30000, false, false ) );
+			formats.setValue( Token.STRING, new TextFormat( null, null, 0x990000, false, false ) );
+			formats.setValue( Token.NUMBER, new TextFormat( null, null, 0x990099, false, false ) );
+			formats.setValue( Token.SYMBOL, new TextFormat( null, null, 0x006060, false, false ) );
+			formats.setValue( Token.NAMEFUNCTION, new TextFormat( null, null, 0xFF00FF, false, false ) );
+			formats.setValue( Token.NAMECLASS, new TextFormat( null, null, 0xFF7200, false, false ) );
 			formats.setValue( 'topType', new TextFormat( null, null, 0x981056, false, false ) );
 		}
 
@@ -87,7 +91,7 @@ package net.vdombox.editors.parsers.python
 				if ( fmt )
 					textField.addFormatRun( t.pos, t.pos + t.string.length, fmt.bold, fmt.italic, Number( fmt.color ).toString( 16 ) );
 				//textField.setTextFormat(fmt, t.pos, t.pos+t.string.length);
-				else if ( t.string.indexOf( 'this.' ) == 0 )
+				else if ( t.string.indexOf( 'self.' ) == 0 )
 				{
 					fmt = formats.getValue( Token.KEYWORD );
 					textField.addFormatRun( t.pos, t.pos + 4, fmt.bold, fmt.italic, Number( fmt.color ).toString( 16 ) );

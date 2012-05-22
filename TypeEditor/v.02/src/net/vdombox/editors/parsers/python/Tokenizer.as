@@ -10,34 +10,19 @@ package net.vdombox.editors.parsers.python
 
 		private var string : String;
 		private var pos : uint;
+		private var str : String;
+		private var prevStr : String;
 
 		private static const keywordsA : Array = [
-			"and", "as", "assert", "break", "class", "continue", "def", "del", "elif",
-			"else", "except", "exec", "finally", "for", "from", "global", "if",
-			"import", "is", "in", "lambda", "not", "or", "pass", "print", "raise",
-			"return", "try", "while", "with", "yield",
-			"False", "True", "None" ];
-
-//		private static const keywordsA:Array = [
-//			"as", "is", "in", "break", "case", "continue", "default", "do", "while", "else", "for", "in", "each",
-//			"if", "label", "return", "super", "switch", "throw", "try", "catch", "finally", "while",
-//			"with", "dynamic", "final", "internal", "native", "override", "private", "protected",
-//			"public", "static", "extends", "implements", "new",
-//			"interface", "namespace", "default xml namespace", "import",
-//			"include", "use", "delete", "use namespace", "false", "null", "this", "true", "undefined"];
+			"and", "as", "del", "for", "is", "raise", "assert", "elif", "from", "lambda", "return", "break", "else", "global", "None", "not", "try", "True", "False", "class", "except", "if", "or", "while", "continue", "exec", "import", "pass", "yield", "def", "finally", "in", "print"
+		];
 
 		private static const keywords2A : Array = [
-//			"const", "package", "var", "function", "get", "set", "class" 
+			"self" 
 			];
 
-//		private static const symbolsA : Array = [
-//			"+", "--", "/", "\\", "++", "%", "*", "-", "+=", "/=", "%=", "*=", "-=", "=", "&", "<<",
-//			"~", "|", ">>", ">>>", "^", "&=", "<<=", "|=", ">>=", ">>>=", "^=", "==", ">",
-//			">=", "!=", /*"<", special, can start an E4X*/ "<=", "===", "!==", "&&", "&&=", "!", "||", "||=", "[", "]",
-//			"as", ",", "?", ".", "instanceof", "::", "new", "{", "}",
-//			"(", ")", "typeof", ";", ":", "...", "..", "#", "`" /*just to unlock*/ ];
 		private static const symbolsA : Array = [
-			"+", "-", "/", "*", "=", "<", ">", "%", "!", "&", ";", "?", "`", ":", "," ];
+			"+", "-", "/", "*", "=", "<", ">", "%", "!", "&", ";", "?", "`", ":", ",", "." ];
 
 		private static const keywords : HashMap = new HashMap();
 		private static const keywords2 : HashMap = new HashMap();
@@ -95,8 +80,7 @@ package net.vdombox.editors.parsers.python
 
 			var c : String = string.charAt( pos );
 			var start : uint = pos;
-			var str : String;
-			var lt : String; //previous token
+			prevStr = str; //previous token
 
 			if ( isWhitespace( c ) )
 			{
@@ -118,36 +102,10 @@ package net.vdombox.editors.parsers.python
 				return new Token( string.substring( start, pos ), Token.COMMENT, pos );
 			}
 
-//			if ( c == "/" )
-//			{
-//				if ( nextChar() == "*" )
-//				{
-//					skipUntil( "*/" );
-//					return new Token( string.substring( start, pos ), Token.COMMENT, pos );
-//				}
-//				else if ( nextChar() == "/" )
-//				{
-//					skipUntil( "\r" );
-//					pos--;
-//					return new Token( string.substring( start, pos ), Token.COMMENT, pos );
-//				}
-//				else
-//				{
-//					//look for regexp syntax
-//					lt = tokens.length > 0 ? tokens[ tokens.length - 1 ].string : "";
-//					if ( lt == "=" || lt == "," || lt == "[" || lt == "(" || lt == "}" || lt == "{" || lt == ";" || lt == "&&" || lt == "|" )
-//					{
-//						skipUntilWithEscNL( "/" );
-//						while ( isLetter( string.charAt( pos ) ) )
-//							pos++;
-//						return new Token( string.substring( start, pos ), Token.REGEXP, pos );
-//					}
-//				}
-//			}
-
 			if ( isLetter( c ) )
 			{
 				skipToStringEnd();
+				
 				str = string.substring( start, pos );
 				var type : String;
 				if ( isKeyword( str ) )
@@ -157,6 +115,10 @@ package net.vdombox.editors.parsers.python
 				else if ( tokens.length && tokens[ tokens.length - 1 ].string == "[" &&
 					( str == "Embed" || str == "Event" || str == "SWF" || str == "Bindable" ) )
 					type = Token.KEYWORD;
+				else if ( prevStr == "def" )
+					type = Token.NAMEFUNCTION;
+				else if ( prevStr == "class" )
+					type = Token.NAMECLASS;
 				else
 					type = Token.STRING_LITERAL;
 				return new Token( str, type, pos );
@@ -166,30 +128,6 @@ package net.vdombox.editors.parsers.python
 				pos += str.length;
 				return new Token( str, Token.SYMBOL, pos );
 			}
-			//look for E4X
-//			else if ( c == "<" )
-//			{
-//				lt = tokens.length > 0 ? tokens[ tokens.length - 1 ].string : "";
-//				if ( lt == "=" || lt == "," || lt == "[" || lt == "(" || lt == "==" || lt == "!=" )
-//				{
-//					do
-//					{
-//						skipUntil( ">" );
-//						str = string.substring( start, pos );
-//						try
-//						{
-//							XML( str.replace( /[{}]/g, "\"" ) );
-//							return new Token( str, Token.E4X, pos );
-//						}
-//						catch ( e : Error )
-//						{
-//						}
-//						;
-//					} while ( pos < string.length );
-//					pos = start;
-//				}
-//				return new Token( c, Token.SYMBOL, ++pos );
-//			}
 			else if ( c == "\"" )
 			{ 
 				if( string.length - pos > 2 && string.substr( pos + 1, 2 ) == "\"\"" )
@@ -285,9 +223,8 @@ package net.vdombox.editors.parsers.python
 			var c : String;
 			while ( true )
 			{
-				var dot : Boolean = c == ".";
 				c = currentChar();
-				if ( !( isLetter( c ) || isNumber( c ) || c == "." || ( dot && c == "*" ) ) )
+				if ( !( isLetter( c ) || isNumber( c ) ) )
 					break;
 				pos++;
 			}
@@ -392,7 +329,7 @@ package net.vdombox.editors.parsers.python
 			tokens.push( t );
 			t.parent = currentBlock;
 			currentBlock.children.push( t );
-			if ( t.string == "{" /* || t.string=="[" || t.string=="("*/ )
+			if ( t.string == "{" )
 			{
 				currentBlock = t;
 				t.children = [];
@@ -438,8 +375,8 @@ package net.vdombox.editors.parsers.python
 			{
 				//do nothing
 			}
-			else if ( tp && ( tp.string == "package" || tp.string == "class" || tp.string == "interface" ||
-				tp.string == "function" || tp.string == "catch" || tp.string == "get" || tp.string == "set" ||
+			else if ( tp && ( tp.string == "class" ||
+				tp.string == "def" || tp.string == "catch" || tp.string == "get" || tp.string == "set" ||
 				tp.string == "var" || tp.string == "const" ) )
 			{
 				//for package, merge classes in the existing omonimus package
@@ -460,19 +397,23 @@ package net.vdombox.editors.parsers.python
 						field.isStatic = true;
 						isStatic = false;
 					}
-					if ( access ) //consume access specifier
-					{
-						field.access = access;
-						access = null;
-
-					}
+					
+					if ( t.string.slice(0, 2) == "__" )
+						access = "private";
+					else if ( t.string.slice(0, 1) == "_" )
+						access = "protected";
+					else
+						access = "public";
+					
+					field.access = access;
+						
 					//all interface methods are public
 					if ( scope.fieldType == "interface" )
 						field.access = "public";
 					//this is so members will have the parent set to the scope
 					field.parent = scope;
 				}
-				if ( _scope && ( tp.string == "class" || tp.string == "interface" || scope.fieldType == "package" ) )
+				if ( _scope && ( tp.string == "class" ) )
 				{
 					_scope.type = new Multiname( "Class" );
 					try
@@ -497,7 +438,7 @@ package net.vdombox.editors.parsers.python
 			}
 
 			//parse function params
-			else if ( _scope && ( _scope.fieldType == "function" || _scope.fieldType == "catch" || _scope.fieldType == "set" ) )
+			else if ( _scope && ( _scope.fieldType == "def" || _scope.fieldType == "catch" || _scope.fieldType == "set" ) )
 			{
 				if ( tp && tp.string == "(" && t.string != ")" )
 					paramsBlock = true;

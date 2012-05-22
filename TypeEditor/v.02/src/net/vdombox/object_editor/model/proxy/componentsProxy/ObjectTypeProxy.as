@@ -129,15 +129,31 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			{
 				var codeIntValue:String = codeInterfaceLabel + "(";
 				
-				var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d\/w.`-]+)/g;
+				var regLangs:RegExp = /(#Lang\(\d+\))\|([\w\d\/w.`-]*)/g;
 				var langs:Array = [];
 				var tempStr:String;
+				
+				/*var blocks : Array = attr.codeInterface.match( regLangs );
+				
+				for each ( var str : String in blocks )
+				{
+					var ind : int = str.indexOf('|');
+					var str1 : String = str.slice( 0, ind );
+					var str2 : String = str.slice( ind + 1, str.length );
+					
+					var id:String = languagesProxy.getRegExpID(objTypeVO.languages, str1);
+					tempStr		  = languagesProxy.used(objTypeVO.languages, 4, str1, "Attributes."+ attr.name +".CodeInterface."+str2);
+					codeIntValue += "(" + tempStr + "|" + str2 + ")|";
+				}*/
+				
+				
 				while (langs = regLangs.exec(attr.codeInterface))
 				{
 					var id:String = languagesProxy.getRegExpID(objTypeVO.languages, langs[1]);
 					tempStr		  = languagesProxy.used(objTypeVO.languages, 4, langs[1], "Attributes."+ attr.name +".CodeInterface."+langs[2]);
 					codeIntValue += "(" + tempStr + "|" + langs[2] + ")|";
 				}	
+				
 				codeIntValue = codeIntValue.slice(0,codeIntValue.length-1);
 				
 				//if xml file have errors

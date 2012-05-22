@@ -50,6 +50,7 @@
 		
 		<s:Button label="Save"		id="saveObjectTypeButton"	enabled="{isEnabled}"/>
 		<s:Button label="Save as"	id="saveAsObjectTypeButton"	enabled="{isEnabled}"/>
+		<s:Button label="load"		id="loadObjectTypeToServerButton"	enabled="{isEnabled}"/>
 		<s:Button label="Reload"	id="restartButton"			enabled="{isEnabled}"/>
 	</s:HGroup>	
 </mx:VBox>

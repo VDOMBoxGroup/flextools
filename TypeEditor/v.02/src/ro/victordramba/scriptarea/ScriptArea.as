@@ -17,10 +17,13 @@ package ro.victordramba.scriptarea
 			mouseEnabled = true;
 			buttonMode = true;
 			useHandCursor = false;
+			
+			selectionShapeRects = new Shape;
+			addChild( selectionShapeRects );
 
 			selectionShape = new Shape;
 			addChild( selectionShape );
-
+			
 			tf = new TextField;
 			tf.multiline = true;
 			tf.wordWrap = false;
@@ -59,6 +62,7 @@ package ro.victordramba.scriptarea
 		}
 
 		protected var _caret : int;
+		protected var _start : int;
 		protected var _selStart : int = 0;
 		protected var _selEnd : int = 0;
 
@@ -83,6 +87,8 @@ package ro.victordramba.scriptarea
 		private var _maxScrollV : int = 0;
 
 		private var selectionShape : Shape;
+		
+		private var selectionShapeRects : Shape;
 
 		private var undoBuff : Array = [];
 		private var redoBuff : Array = [];
@@ -109,7 +115,7 @@ package ro.victordramba.scriptarea
 			if ( -tf.x == value )
 				return;
 
-			tf.x = selectionShape.x = -value;
+			tf.x = selectionShape.x = selectionShapeRects.x = -value;
 
 			updateCaret();
 			dispatchEvent( new Event( Event.SCROLL, true ) );
@@ -208,17 +214,235 @@ package ro.victordramba.scriptarea
 
 			setSelection( pos, pos );
 		}
+		
+		public function replaceFind( findText : String, reText : String, replaceAll : Boolean = false ) : void
+		{
+			if ( findText == "" )
+				return;
+			
+			var index : int;
+			
+			if ( replaceAll )
+			{
+				index = text.indexOf( findText );
+				while ( index != -1 )
+				{
+					replaceText( index, index + findText.length, reText );
+					index = text.indexOf( findText, index + 1 );
+				}
+			}
+			else
+			{
+				index = text.indexOf( findText, _caret );
+				
+				if ( index == -1 )
+					return;
+				
+				replaceText( index, index + findText.length, reText );
+			}
+			
+			_caret = index;
+			
+			updateCaret();
+			checkScrollToCursor();
+			updateScrollProps();
+			
+			var g : Graphics = selectionShape.graphics;
+			g.clear();
+			
+			g.beginFill( 0x3399FF, 1 );
+			
+			var p0 : Point = getPointForIndex( index );
+			var p1 : Point = getPointForIndex( index + _replaceText.length );
+			
+			g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
+			
+			selectionRects( findText );
+			
+			_replaceText( 0, 0, "" );
+		}	
+		
+		private var _selectRects : Array = new Array();
+		
+		private function clearRect() : void
+		{
+			var g : Graphics = selectionShapeRects.graphics;
+			g.clear();
+			
+			g = selectionShape.graphics;
+			g.clear();
+		}
+		
+		public function findText( findText : String, type : int ) : Boolean
+		{
+			
+			clearRect();
+			
+			if ( findText == "" )
+				return false;
+			
+			var index : int;
+			
+			if ( type == 0 )
+			{
+				index = text.indexOf( findText, _caret );
+				
+				if ( index == -1 )
+					index = text.indexOf( findText );
+			}
+			
+			else if ( type == 1 )
+			{
+				var saveInd : int = -1;
+				var ind : int = text.indexOf( findText );
+				var car : int = _caret;
+				
+				while ( saveInd == -1 && ind != -1)
+				{
+					while ( ind < car && ind != -1 )
+					{
+						saveInd = ind;
+						ind = text.indexOf( findText, ind + 1 );
+					}
+					
+					if ( saveInd == -1 )
+						car = text.length - 1;
+				}
+				
+				index = saveInd;
+			}
+			else if ( type == 2 )
+			{
+				index = text.indexOf( findText, _caret );
+				
+				if ( index == _caret )
+					index = text.indexOf( findText, _caret + 1 );
+				
+				if ( index == -1 )
+					index = text.indexOf( findText );
+			}
+			
+			if ( index == -1 )
+				return false;
+			
+			_caret = index;
+			
+			updateCaret();
+			checkScrollToCursor();
+			updateScrollProps();
+			
+			_selStart = index;
+			_selEnd = index + findText.length;
+			
+			var g : Graphics = selectionShape.graphics;
+			g.clear();
+			
+			g.beginFill( 0x3399FF, 1 );
+			
+			var p0 : Point = getPointForIndex( _selStart );
+			var p1 : Point = getPointForIndex( _selEnd );
+				
+			g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
+			
+			selectionRects( findText );
+			
+			_replaceText( 0, 0, "" );
+			
+			return true;
+		}
+		
+		private function selectionRects( findText : String ) : void
+		{
+			var index : int = text.indexOf( findText );
+			var step : int = findText.length;
+			
+			var g : Graphics = selectionShapeRects.graphics;
+			g.clear();
+			g.beginFill( 0xD4D4D4, .9 );
+			
+			while ( index != -1 )
+			{
+				var p0 : Point = getPointForIndex( index );
+				var p1 : Point = getPointForIndex( index + step );
+					
+				g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
+				
+				index = text.indexOf( findText, index + 1 );
+			}
+		}
+		
+		private function setSelectionRects() : void
+		{
+			var g : Graphics = selectionShapeRects.graphics;
+			g.clear();
+			
+			if ( _selStart == _selEnd )
+				return;
+			
+			var _start : int = _selStart;
+			var _end : int = _selStart;
+			
+			var _startRect : int;
+			var _endRect : int;
+			
+			while ( /\w/.test( _text.charAt( _start ) ) )
+				_start--;
+			
+			_start++;
+			
+			while ( /\w/.test( _text.charAt( _end ) ) )
+				_end++;
+			
+			var strFind : String = text.slice( _start, _end );
+			var strTemp : String;
+			
+			if ( strFind == "" )
+				return;
+			
+			var index : int = text.indexOf( strFind );
+			var step : int = _end - _start;
+			
+			g.beginFill( 0xD4D4D4, 1 );
+			
+			while ( index != -1 )
+			{
+				_startRect = _endRect = index;
+				
+				while ( /\w/.test( _text.charAt( _startRect ) ) )
+					_startRect--;
+				
+				_startRect++;
+				
+				while ( /\w/.test( _text.charAt( _endRect ) ) )
+					_endRect++;
+					
+				if ( text.slice( _startRect, _endRect ) == strFind )
+				{
+					
+					var p0 : Point = getPointForIndex( index );
+					var p1 : Point = getPointForIndex( index + step );
+					
+					g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
+				}
+				
+				index = text.indexOf( strFind, index + 1 );
+			}
+		}
 
 		public function _setSelection( beginIndex : int, endIndex : int, caret : Boolean = false ) : void
 		{
 			_selStart = beginIndex;
 			_selEnd = endIndex;
+			
+			_start = _selStart;
 
 			if ( _selStart > _selEnd )
 			{
 				var tmp : int = _selEnd;
 				_selEnd = _selStart;
 				_selStart = tmp;
+				
+				_start = _selEnd;
 			}
 
 			var p0 : Point = getPointForIndex( Math.max( _selStart, firstPos ) );
@@ -226,10 +450,12 @@ package ro.victordramba.scriptarea
 			var g : Graphics = selectionShape.graphics;
 
 			g.clear();
+			
+			setSelectionRects();
 
 			if ( _selStart != _selEnd && _selStart <= lastPos && _selEnd >= firstPos )
 			{
-				g.beginFill( 0x8DC846, .3 );
+				g.beginFill( 0x3399FF, 1 );
 
 				if ( p0.y == p1.y )
 				{
@@ -259,6 +485,8 @@ package ro.victordramba.scriptarea
 				cursor.y = p1.y + tf.y;
 				checkScrollToCursor();
 			}
+			
+			_replaceText( 0, 0, "" );
 		}
 
 		public function updateCaret() : void
@@ -286,9 +514,13 @@ package ro.victordramba.scriptarea
 		{
 			if( !text )
 				text = "";
-
+			
 			text = text.replace( /\r\n/g, NL );
 			text = text.replace( /\n/g, NL );
+			
+			if ( _text == text )
+				return;
+			
 			undoBuff.push( { s: startIndex, e: startIndex + text.length, t: _text.substring( startIndex, endIndex ) } );
 			redoBuff.length = 0;
 			_replaceText( startIndex, endIndex, text );
@@ -332,6 +564,20 @@ package ro.victordramba.scriptarea
 
 		public function addFormatRun( beginIndex : int, endIndex : int, bold : Boolean, italic : Boolean, color : String ) : void
 		{
+			if ( beginIndex > _selStart && beginIndex < _selEnd )
+			{
+				if ( endIndex < _selEnd )
+					return;
+				else
+					beginIndex = _selEnd;
+			}
+			
+			if ( endIndex > _selStart && endIndex < _selEnd )
+			{
+				endIndex = _selStart;
+			}
+				
+				
 			runs.push( { begin: beginIndex, end: endIndex, color: color, bold: bold, italic: italic } );
 		}
 
@@ -346,13 +592,13 @@ package ro.victordramba.scriptarea
 		}
 
 		protected function undo() : void
-		{
+		{		
 			if ( undoBuff.length <= 1 )
 				return;
-
+			
 			var o : Object = undoBuff.pop();
 			redoBuff.push( { s: o.s, e: o.s + o.t.length, t: _text.substring( o.s, o.e ) } );
-
+			
 			_replaceText( o.s, o.e, o.t );
 			_caret = o.s + o.t.length;
 			_setSelection( _caret, _caret, true );
@@ -489,20 +735,38 @@ package ro.victordramba.scriptarea
 			_maxScrollV = Math.max( 0, lineCount - visibleRows );
 
 			var newWidth : Number = Math.max( maxLength * ( letterBoxWidth + 1 ), width ); //TODO почему + 1
-
+			
 			if( tf.width != newWidth )
 			{
 				tf.width = newWidth;
 				_setSelection( selectionBeginIndex, selectionEndIndex, true )
 				updateCaret();
 			}
-
-			var newX : Number = width - tf.width;
-
-			if ( tf.x < newX )
+			
+			//var newX : Number = tf.width - width;
+			var newX : Number = cursor.getX() - tf.x - width + 48;
+			
+			if ( tf.x < newX && cursor.getX() > width - 48 )
 			{
-				tf.x = newX;
-				selectionShape.x = newX;
+				if ( newX < 0 )
+					newX = 0;
+				tf.x = -newX;
+				selectionShape.x = selectionShapeRects.x = -newX;
+			} 
+			else if ( cursor.getX() < 0 )
+			{
+				if ( cursor.getX() < tf.x )
+				{
+					tf.x = 0;
+					selectionShape.x -= 0;
+				}
+				else
+				{
+					var getX : int = cursor.getX();
+					tf.x -= getX;
+					selectionShape.x -= getX;
+					selectionShapeRects.x -= getX;
+				}
 			}
 
 			if ( _scrollV > _maxScrollV )
@@ -599,18 +863,9 @@ package ro.victordramba.scriptarea
 					break;
 
 				if ( o.begin > pos )
-					slices.push( htmlEnc( _text.substring( pos, o.begin ) ) );
-
-				var str : String =
-					"<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
-
-				if ( o.bold )
-					str = "<b>" + str + "</b>";
-
-				if ( o.italic )
-					str = "<i>" + str + "</i>";
-
-				slices.push( str );
+					slices.push( setColorForSimpleText( pos, o.begin ) );
+				
+				slices.push( setColorForSpecialText() );
 
 				if ( o.end > lastPos )
 				{
@@ -621,7 +876,7 @@ package ro.victordramba.scriptarea
 			}
 
 			if ( pos < lastPos )
-				slices.push( htmlEnc( _text.substring( pos, lastPos ) ) );
+				slices.push( setColorForSimpleText( pos, lastPos ));
 
 			var visibleText : String = slices.join( "" );
 
@@ -629,6 +884,84 @@ package ro.victordramba.scriptarea
 			visibleText = visibleText.replace( /\t/g, "    " );
 
 			tf.htmlText = visibleText;
+			
+			function setColorForSpecialText() : String
+			{
+				var str : String;
+				
+				if ( o.begin >= _selStart && o.begin <= _selEnd )
+				{
+					if ( o.end < _selEnd )
+						str = "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
+					else
+					{
+						str = "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selEnd ) ) + "</font>";
+						str += "<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( _selEnd, o.end ) ) + "</font>";
+					}
+				}
+				else if ( o.begin <= _selStart && o.end >= _selStart)
+				{
+					if ( o.end <= _selEnd )
+					{
+						str = "<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selStart ) ) + "</font>";
+						str += "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( _selStart, o.end ) ) + "</font>";
+					}
+					else
+					{
+						str = "<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selStart ) ) + "</font>";
+						str += "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( _selStart, _selEnd ) ) + "</font>";
+						str += "<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( _selEnd, o.end ) ) + "</font>";
+					}
+				}
+				else
+				{
+					str = "<font color=\"#" + o.color + "\">" + htmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
+					
+					if ( o.bold )
+						str = "<b>" + str + "</b>";
+					
+					if ( o.italic )
+						str = "<i>" + str + "</i>";
+				}
+				
+				return str;
+			}
+			
+			function setColorForSimpleText( begin : int, end : int ) : String
+			{
+				var str : String;
+				
+				if ( begin >= _selStart && begin <= _selEnd )
+				{
+					if ( end <= _selEnd )
+						str = "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( Math.max( begin, firstPos ), end ) ) + "</font>";
+					else
+					{
+						str = "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( Math.max( begin, firstPos ), _selEnd ) ) + "</font>";
+						str += htmlEnc( _text.substring( _selEnd, end ) );
+					}
+				}
+				else if ( begin <= _selStart && end >= _selStart)
+				{
+					if ( end <= _selEnd )
+					{
+						str = htmlEnc( _text.substring( Math.max( begin, firstPos ), _selStart ) );
+						str += "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( _selStart, end ) ) + "</font>";
+					}
+					else
+					{
+						str = htmlEnc( _text.substring( Math.max( begin, firstPos ), _selStart ) );
+						str += "<font color=\"#" + "ffffff" + "\">" + htmlEnc( _text.substring( _selStart, _selEnd ) ) + "</font>";
+						str += htmlEnc( _text.substring( _selEnd, end ) );
+					}
+				}
+				else
+				{
+					str = htmlEnc( _text.substring( Math.max( begin, firstPos ), end ) );
+				}
+				
+				return str;
+			}
 		}
 
 		private function htmlEnc( str : String ) : String
@@ -637,4 +970,3 @@ package ro.victordramba.scriptarea
 		}
 	}
 }
-

@@ -19,6 +19,8 @@ package net.vdombox.editors
 			super();
 
 			area = new ScriptAreaEvents();
+			
+			area.width = width;
 
 			addChild( area );
 
@@ -29,6 +31,10 @@ package net.vdombox.editors
 
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
 			addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
+			
+			addEventListener(FocusEvent.FOCUS_IN, function(e:Event):void {
+				stage.focus = area;
+			});
 		}
 
 		private var area : ScriptAreaEvents;
@@ -159,6 +165,16 @@ package net.vdombox.editors
 		{
 			area.setSelection( beginIndex, endIndex );
 		}
+		
+		public function findText( findText : String, type : int ) : Boolean
+		{
+			return area.findText( findText, type );
+		}
+		
+		public function replaceFind( findText : String, replaceText : String, replaceAll : Boolean = false ) : void
+		{
+			area.replaceFind( findText, replaceText, replaceAll );
+		}
 
 		//------------------------------------------------------------------------------------
 		// Viewportable
@@ -265,6 +281,16 @@ package net.vdombox.editors
 
 		private function updateScrollBars() : void
 		{
+		}
+		
+		public function undo_fun() : void
+		{
+			area.undo_fun();
+		}
+		
+		public function redo_fun() : void
+		{
+			area.redo_fun();
 		}
 	}
 }
