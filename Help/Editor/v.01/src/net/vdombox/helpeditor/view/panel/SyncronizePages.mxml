@@ -298,7 +298,7 @@
 					 doubleClickEnabled="true"
 					 itemDoubleClick="syncGroupsList_doubleClickHandler(event)"
 					 itemEditEnd="syncGroupsList_itemEditEndHandler(event)"
-					 itemEditor="net.vdombox.helpeditor.view.itemrenderers.ListItemEditor"/>
+					 itemEditor="net.vdombox.helpeditor.view.itemrenderers.ItemEditor"/>
 			
 		</mx:VBox>
 		

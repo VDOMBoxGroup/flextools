@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CanvasButtonAccordionHeader
+	xmlns="flexlib.containers.accordionClasses.*"
+	xmlns:flexlib="http://code.google.com/p/flexlib/"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	mouseChildren="true"
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off"
+	doubleClickEnabled="true">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.TextInput;
+			import mx.core.Container;
+			import mx.core.EdgeMetrics;
+			import mx.core.IUITextField;
+			import mx.core.UITextField;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.helpeditor.controller.events.TemplatesAccordionEvent;
+			import net.vdombox.helpeditor.view.itemrenderers.ItemEditor;
+			
+			private var labelTextField : IUITextField;
+			
+			public var txtInput		   : ItemEditor;
+			
+			private var _isEditing : Boolean;
+			
+			private var _label : String;
+			
+			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
+			{
+				super.updateDisplayList( unscaledWidth, unscaledHeight );
+				
+				boxHeader.setActualSize( unscaledWidth, unscaledHeight );
+				
+				var boxEdges : EdgeMetrics = boxHeader.viewMetricsAndPadding;
+				cbarHeader.move( boxHeader.width - boxEdges.left - boxEdges.right - cbarHeader.getExplicitOrMeasuredWidth(), cbarHeader.y );
+				
+				if ( boxHeader.contains( labelTextFieldAsDisplayObj ) )
+				{
+					lblFieldResize();
+				}
+				
+				if ( txtInput && boxHeader.contains( txtInput ) )
+				{
+					edtFieldResize();
+				}
+			}
+			
+			public function get labelTextFieldAsDisplayObj() : DisplayObject
+			{
+				return labelTextField as DisplayObject;
+			}
+			
+			override public function set label( value : String ) : void
+			{
+				if ( _label != value )
+				{
+					super.label = "";
+					
+					_label = value;
+					
+					if ( labelTextField )
+						labelTextField.text = _label;
+					
+					if ( txtInput )
+						txtInput.text = _label;
+				}
+			}
+			
+			override protected function createChildren() : void
+			{
+				super.createChildren();
+				
+				if ( !labelTextField )
+				{
+					labelTextField = IUITextField( createInFontContext( UITextField ) );
+					labelTextField.text = _label;
+					labelTextField.styleName = getStyle( "labelTextStyleName" );
+					labelTextField.enabled = true;
+					labelTextField.doubleClickEnabled = true;
+					labelTextField.addEventListener( MouseEvent.DOUBLE_CLICK, doubleClickHandler );
+					
+					boxHeader.addChildAt( labelTextFieldAsDisplayObj, 0 );
+				}
+				if ( !txtInput )
+				{
+					txtInput = new ItemEditor();
+					txtInput.text = _label;
+					txtInput.styleName = getStyle( "inputTextStyleName" );
+					
+					txtInput.addEventListener( FocusEvent.FOCUS_OUT, endEdit );
+					txtInput.addEventListener( FlexEvent.ENTER, endEdit );
+					txtInput.addEventListener( KeyboardEvent.KEY_DOWN, endEdit );
+					txtInput.addEventListener( FocusEvent.FOCUS_IN, onFocus );
+					
+					function onFocus( event : Event ) : void
+					{
+						event.stopPropagation();
+					}
+				}
+			}
+			
+			override protected function measure() : void
+			{
+				super.measure();
+				
+				if (!parent)
+					return;
+				
+				var parentMetrics : EdgeMetrics = Container( parent ).viewMetricsAndPadding;
+				
+				var parentContentArea : Object = {	w : Container( parent ).getExplicitOrMeasuredWidth() - parentMetrics.left - parentMetrics.right,
+													h : Container( parent ).getExplicitOrMeasuredHeight() - parentMetrics.top - parentMetrics.bottom};
+				
+				measuredWidth = parentContentArea.w;
+			}
+			
+			public function beginEdit() : void
+			{
+				if ( _isEditing )
+					return;
+				
+				_isEditing = true;
+				
+				showTextInput();
+				
+				edtFieldResize();
+				
+				txtInput.setFocus();
+				
+				deactivateErrorString();
+				
+				invalidateDisplayList();
+			}
+			
+			private function activateErrorString() : void
+			{
+				txtInput.errorString = "Error";
+			}
+			
+			private function deactivateErrorString() : void
+			{
+				txtInput.errorString = null;
+			}
+			
+			public function endEdit( event : Event ) : void
+			{
+				if ( !_isEditing )
+					return;
+				
+				deactivateErrorString();
+				
+				var bCommit : Boolean = true;
+				var bEndEdit : Boolean = true;
+				
+				if ( event is KeyboardEvent )
+				{
+					if ( KeyboardEvent( event ).keyCode == Keyboard.ESCAPE )
+					{
+						revertChanges();
+					}
+					else if ( KeyboardEvent( event ).keyCode == Keyboard.ENTER )
+					{
+						commitChanges();
+					}
+					return;
+				}
+				
+				if ( event is FocusEvent && event.type == FocusEvent.FOCUS_OUT )
+					revertChanges();
+				
+			}
+			
+			private function commitChanges() : void
+			{
+				var evt : TemplatesAccordionEvent = new TemplatesAccordionEvent( TemplatesAccordionEvent.FOLDER_NEW_LABEL_ENTERED );
+				evt.templatesAccordionHeader = this;
+					
+				accordChild.dispatchEvent( evt );
+			}
+			
+			private function revertChanges() : void
+			{
+				_isEditing = false;
+				
+				txtInput.text = _label;
+				
+				applyCorrectHeaderlabel();
+			}
+			
+			public function set uniqueFolderName( unique : Boolean ) : void
+			{
+				if ( !unique )
+				{
+					applyErrorHeaderLabel();
+					return;
+				}
+				
+				_isEditing = false;
+				
+				accordChild.oldFolderLabel = _label;
+				label = txtInput.text;
+				accordChild.label = txtInput.text;
+				
+				applyCorrectHeaderlabel();
+				
+				var evt : TemplatesAccordionEvent = new TemplatesAccordionEvent( TemplatesAccordionEvent.FOLDER_NEW_LABEL_ACCEPTED );
+				accordChild.dispatchEvent( evt );
+			}
+			
+			private function applyCorrectHeaderlabel() : void
+			{
+				showTextLabel();
+				
+				lblFieldResize();
+				
+				invalidateDisplayList();
+			}
+			
+			private function showTextInput() : void
+			{
+				if ( boxHeader.contains( labelTextFieldAsDisplayObj ) )
+					boxHeader.removeChild( labelTextFieldAsDisplayObj );
+				
+				if ( !boxHeader.contains( txtInput ) )
+					boxHeader.addChildAt( txtInput, 0 );
+			}
+			
+			private function showTextLabel() : void
+			{
+				if ( boxHeader.contains( txtInput ) )
+				{
+					stage.focus = null;
+					boxHeader.removeChild( txtInput );
+				}
+				
+				if ( !boxHeader.contains( labelTextFieldAsDisplayObj ) )
+					boxHeader.addChildAt( labelTextFieldAsDisplayObj, 0 );
+			}
+			
+			private function applyErrorHeaderLabel() : void
+			{
+				txtInput.setFocus();
+				
+				activateErrorString();
+				
+				invalidateDisplayList();
+			}
+			
+			public function get accordChild() : TemplatesAccordionChild
+			{
+				return data as TemplatesAccordionChild;
+			}
+
+			private function getTxtFieldWidth() : int
+			{
+				var boxEdges : EdgeMetrics = boxHeader.viewMetricsAndPadding;
+				var width : int = boxHeader.width - cbarHeader.getExplicitOrMeasuredWidth() -
+					boxEdges.left - boxEdges.right;
+				
+				return width;
+			}
+			
+			private function lblFieldResize() : void
+			{
+				var lblWidth : int = getTxtFieldWidth();
+				labelTextField.text = _label;
+				labelTextField.x = 2;
+				labelTextField.y = (boxHeader.height - labelTextField.textHeight) / 2 - 2;
+				labelTextField.width = lblWidth - labelTextField.x;
+				
+				if ( labelTextField.x + labelTextField.textWidth > lblWidth )
+					labelTextField.truncateToFit( "..." );
+			}
+			
+			private function edtFieldResize() : void
+			{
+				var edtWidth : int = getTxtFieldWidth();
+				
+				txtInput.width = edtWidth;
+			}
+			
+			private function doubleClickHandler( event : Event ) : void
+			{
+				beginEdit();
+			}
+			
+			/**
+			 *  @private
+			 */
+			private function removeTabHandler( event : Event ) : void
+			{
+				event.stopPropagation();
+				
+				var e : Event = new TemplatesAccordionEvent( TemplatesAccordionEvent.FOLDER_REMOVE_CLICK, null, true, true );
+				accordChild.dispatchEvent( e );
+			}
+			
+			public function get newEnteredName () : String
+			{
+				return txtInput.text;
+			}
+
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Canvas id="boxHeader">
+		
+		<mx:ControlBar id="cbarHeader" 
+					   horizontalAlign="right" 
+					   paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2">
+			
+			<flexlib:CanvasButton
+				paddingTop="0"
+				paddingLeft="0"
+				paddingBottom="0"
+				paddingRight="0"
+				cornerRadius="2"
+				click="removeTabHandler(event);">
+				<mx:Label id="label_x" text="x" />
+			</flexlib:CanvasButton>
+			
+		</mx:ControlBar>
+		
+	</mx:Canvas>
+
+</CanvasButtonAccordionHeader>

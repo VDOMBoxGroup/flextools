@@ -39,10 +39,8 @@
 			import mx.utils.UIDUtil;
 			
 			import net.vdombox.helpeditor.model.AlertMessages;
-			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.model.vo.TemplateVO;
 			import net.vdombox.helpeditor.view.components.TemplateContentEditor;
-			
-			private var sqlProxy : SQLProxy = new SQLProxy();
 			
 			[Bindable]
 			public var allowInsert : Boolean = false;
@@ -52,8 +50,6 @@
 				addEventListener(CloseEvent.CLOSE, closeHandler);
 				
 				PopUpManager.centerPopUp(this);
-				
-				createTemplatesList();
 			}
 			
 			private function closeHandler(cEvent:CloseEvent):void 
@@ -75,271 +71,14 @@
 				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 			}
 			
-			private function createTemplatesList () : void
-			{
-				var allTemplates : Array = sqlProxy.getAllTemplates() as Array;
-				
-				templatesList.dataProvider = allTemplates;
-				
-				templatesList.validateNow();
-				
-				if (!vsTemplatesEditors)
-					return;
-				
-				if (!allTemplates || allTemplates.length == 0)
-					return;
-				
-				for each (var template : Object in allTemplates)
-				{
-					addNewTemplateEditor(template.content);
-				}
-				
-				templatesList.selectedIndex = 0;
-				
-				updateTemplateEditor();
-			}
-			
-			private function addNewTemplateEditor(content : String = "") : void
-			{
-				var templateEditor : TemplateContentEditor;
-				
-				templateEditor = new TemplateContentEditor();
-				templateEditor.percentWidth = 100;
-				templateEditor.percentHeight = 100;
-				
-				templateEditor.startContent = content;
-					
-				vsTemplatesEditors.addChild(templateEditor);
-			}
-			
-			private function updateTemplateEditor () : void
-			{
-				vsTemplatesEditors.selectedIndex = templatesList.selectedIndex;
-				
-				if (currentTemplateEditor)
-					currentTemplateEditor.setFocus();
-			}
-			
-			private function get currentTemplateEditor () : TemplateContentEditor
-			{
-				if (!vsTemplatesEditors || 
-					vsTemplatesEditors.numChildren == 0 ||
-					vsTemplatesEditors.selectedIndex < 0 ||
-					vsTemplatesEditors.selectedIndex >= vsTemplatesEditors.numChildren)
-					return null;
-				
-				return vsTemplatesEditors.selectedChild as TemplateContentEditor; 
-			}
-			
-			protected function addTemplate():void
-			{
-				var newTemplate : Object = {};
-				newTemplate.name = createUniqueTemplateName("New template");
-				newTemplate.content = "";
-				
-				sqlProxy.addTemplate(newTemplate.name, newTemplate.content);
-				
-				var allTemplates : Array = templatesList.dataProvider.source;
-				
-				if (!allTemplates)
-					allTemplates = [newTemplate];
-				else
-					allTemplates.push(newTemplate);
-				
-				templatesList.dataProvider = allTemplates;
-				
-				templatesList.validateNow();
-				
-				templatesList.selectedIndex = templatesList.dataProvider.source.length - 1;
-				
-				addNewTemplateEditor();
-				
-				updateTemplateEditor();
-				
-				templatesList_itemEditBegin();
-			}
-			
-			private function createUniqueTemplateName (templateName : String) : String
-			{
-				var index : int = 1;
-				var isUniqueName : Boolean = true;
-				var newName : String;
-				
-				do
-				{
-					newName = templateName + '-' + index;
-					isUniqueName = isUniqueTemplateName(newName, true);
-					
-					index++;
-				} while ( !isUniqueName )
-				
-				return newName;
-			}
-			
-			private function askToRemoveTemplate () : void
-			{
-				if (templatesList.selectedIndex >= 0)
-					Alert.show(AlertMessages.MSG_ASK_DELETE_TEMPLATE, AlertMessages.MSG_TYPE_DELETE, Alert.YES|Alert.NO, this, alertRemoveTemplateCloseHandler);
-			}
-			
-			private function alertRemoveTemplateCloseHandler(event:CloseEvent):void
-			{
-				if (event.detail == Alert.YES)
-					removeTemplate();
-			}
-			
-			protected function removeTemplate():void
-			{
-				if (!templatesList.dataProvider ||
-					!templatesList.dataProvider.source ||
-					templatesList.dataProvider.source.length == 0 || 
-					!templatesList.selectedItem)
-					return;
-				
-				sqlProxy.removeTemplate(templatesList.selectedItem.name);
-				
-				if (templatesList.selectedIndex < vsTemplatesEditors.numChildren)
-					vsTemplatesEditors.removeChildAt(templatesList.selectedIndex);
-				
-				var templatesArr : Array = templatesList.dataProvider.source as Array;
-				templatesArr.splice(templatesList.selectedIndex, 1);
-				
-				templatesList.dataProvider = templatesArr;
-				
-				templatesList.validateNow();
-				
-				templatesList.selectedIndex = templatesArr.length > 0 ? 0 : -1;
-				
-				updateTemplateEditor();
-			}
-			
-			public function get dbTemplates () : Object
-			{
-				return sqlProxy.getAllTemplates();
-			}
-			
-			protected function templatesList_changeHandler(event:ListEvent):void
-			{
-				updateTemplateEditor();
-			}
-			
-			public function get selectedTemplateContent () : String
-			{
-				if (!templatesList.selectedItem)
-					return "";
-				
-				return sqlProxy.getTemplateContent(templatesList.selectedItem.name);
-			}
-			
-			public function get selectedTemplateName () : String
-			{
-				if (!templatesList.selectedItem)
-					return "";
-				
-				return templatesList.selectedItem.name; 
-			}
-			
-			private function templatesList_itemEditBegin () : void
-			{
-				templatesList.editable = true;
-				templatesList.editedItemPosition = {rowIndex : templatesList.selectedIndex, columnIndex : 0};
-			}
-			
-			protected function templatesList_itemEditEndHandler(event:ListEvent):void
-			{
-				event.preventDefault();
-				
-				if (!isCorrectTemplateName)
-				{
-					event.stopImmediatePropagation();
-					
-					listItemEditorInstance.errorString = !isUniqueTemplateName(listItemEditorInstance.text) ? "Enter unique template name" : "Error: empty template name";
-					return;
-				}
-				
-				if ( event.reason == ListEventReason.CANCELLED )
-				{
-					destroyItemEditor();
-					return;
-				}
-				
-				applyTemplateName();
-				
-				destroyItemEditor();
-			}
-			
-			private function applyTemplateName () : void
-			{
-				var editedItemData : Object = templatesList.editedItemRenderer.data;
-				
-				var oldName : String = editedItemData.name;
-				var newName : String = listItemEditorInstance.text;
-				
-				editedItemData.name = listItemEditorInstance.text;
-				
-				templatesList.selectedItem = editedItemData;
-				
-				sqlProxy.updateTemplateName(oldName, newName);
-			}
-			
-			private function get isCorrectTemplateName () : Boolean
-			{
-				var templateName : String = listItemEditorInstance.text;
-				
-				if (!templateName || !isUniqueTemplateName(templateName))
-					return false;
-				
-				return true;
-			}
-			
-			private function isUniqueTemplateName(templateName:String, isNewTemplate : Boolean = false) : Boolean
-			{
-				if (!templatesList ||
-					!templatesList.dataProvider ||
-					!templatesList.dataProvider.source ||
-					templatesList.dataProvider.source.length == 0)
-					return true;
-				
-				var i:int=0;
-				for each (var template : Object in templatesList.dataProvider.source)
-				{
-					if (template.name == templateName)
-					{
-						if (isNewTemplate)
-							return false;
-						
-						if (i != templatesList.selectedIndex)
-							return false;
-					}
-					
-					i++;
-				}
-				
-				return true;
-			}
-			
-			private function get listItemEditorInstance () : TextInput
-			{
-				return templatesList.itemEditorInstance as TextInput;
-			}
-			
-			private function destroyItemEditor() : void
-			{
-				templatesList.destroyItemEditor();
-				templatesList.editable = false;
-			}
-			
 			protected function btnApply_clickHandler(event:MouseEvent):void
 			{
-				if (!vsTemplatesEditors.selectedChild)
-					return;
-				
-				saveTemplate(vsTemplatesEditors.selectedIndex);
+				templatesGroup.saveTemplate(templatesGroup.selectedTemplate);
 			}
 			
 			protected function btnOK_clickHandler(event:MouseEvent):void
 			{
-				saveTemplates();
+				templatesGroup.saveTemplates();
 				
 				closeWindow();
 			}
@@ -347,39 +86,25 @@
 			
 			protected function btnInsert_clickHandler(event:MouseEvent):void
 			{
-				if (!vsTemplatesEditors.selectedChild)
+				if (!templatesGroup.selectedTemplate)
+				{
+					closeWindow();
 					return;
-				
-				saveTemplate(vsTemplatesEditors.selectedIndex);
+				}
+					
+				templatesGroup.saveTemplate(templatesGroup.selectedTemplate);
 				
 				dispatchEvent(new Event("insertClick"));
 				
 				closeWindow();
 			}
 			
-			private function saveTemplates () : void
+			public function get selectedTemplateName () : String
 			{
-				var i:int=0;
-				while (i < templatesList.dataProvider.source.length)
-				{
-					saveTemplate (i);
-					
-					i++;
-				}
-			}
-			
-			private function saveTemplate (templateIndex : int) : void
-			{
-				if (vsTemplatesEditors.numChildren == 0 || templatesList.dataProvider.source.length == 0)
-					return;
+				if (!templatesGroup.selectedTemplate)
+					return "";
 				
-				if (templateIndex < 0 || templateIndex >= templatesList.dataProvider.source.length)
-					return;
-				
-				var templateEditor : TemplateContentEditor = vsTemplatesEditors.getChildAt(templateIndex) as TemplateContentEditor;
-				var templateName : String = templatesList.dataProvider.source[templateIndex]["name"];
-				
-				sqlProxy.updateTemplateContent(templateName, templateEditor.content);
+				return templatesGroup.selectedTemplate.name;
 			}
 			
 		]]>
@@ -388,58 +113,8 @@
 	<mx:HBox width="100%" height="100%"
 			 left="10" right="10" top="10" bottom="10" >
 		
-		<mx:VBox width="170" height="100%">
-			<mx:HBox width="100%" 
-					 verticalAlign="middle" horizontalAlign="left">
-				
-				<mx:Spacer width="5"/>
-				
-				<mx:Button id="btnAddTemplate"
-						   label="Add"
-						   toolTip="Add template"
-						   click="{addTemplate()}"
-						   color="#FFFFFF"
-						   fillColors="#333333"
-						   textSelectedColor="#FFFFFF"
-						   cornerRadius="1"
-						   borderColor="#999999"
-						   themeColor="#656565"
-						   textRollOverColor="#FFFFFF" />
-				
-				<mx:Button id="btnRemoveTemplate"
-						   label="Remove"
-						   toolTip="Remove template"
-						   click="{askToRemoveTemplate()}"
-						   color="#FFFFFF"
-						   fillColors="#333333"
-						   textSelectedColor="#FFFFFF"
-						   cornerRadius="1"
-						   borderColor="#999999"
-						   themeColor="#656565"
-						   textRollOverColor="#FFFFFF"
-						   enabled="{templatesList.dataProvider.length > 0}"/>
-				
-			</mx:HBox>
-			
-			<mx:List width="100%" height="100%"
-					 id="templatesList"
-					 dataProvider="{dbTemplates}"
-					 labelField="name"
-					 change="templatesList_changeHandler(event)"
-					 selectedIndex="-1"
-					 doubleClickEnabled="true"
-					 itemDoubleClick="{templatesList_itemEditBegin()}"
-					 itemEditEnd="templatesList_itemEditEndHandler(event)"
-					 itemEditor="net.vdombox.helpeditor.view.itemrenderers.ListItemEditor"/>
-		</mx:VBox>
-		
-		<mx:VBox width="100%" height="100%">
-			<mx:ViewStack id="vsTemplatesEditors" 
-						  width="100%" height="100%"
-						  backgroundColor="white"/>
-			
-			
-		</mx:VBox>
+		<components:TemplatesGroup  id="templatesGroup"
+									width="100%" height="100%"/>
 		
 	</mx:HBox>
 	
@@ -455,8 +130,8 @@
 				   borderColor="#999999"
 				   themeColor="#656565"
 				   textRollOverColor="#FFFFFF"
-				   enabled="{templatesList.selectedItem != null}"
 				   visible="{allowInsert}"/>
+		<!--enabled="{templatesList.selectedItem != null}"-->
 		
 		<mx:Button id="btnApply"
 				   label="Apply"
@@ -467,8 +142,8 @@
 				   cornerRadius="1"
 				   borderColor="#999999"
 				   themeColor="#656565"
-				   textRollOverColor="#FFFFFF"
-				   enabled="{templatesList.selectedItem != null}"/>
+				   textRollOverColor="#FFFFFF"/>
+		<!--enabled="{templatesList.selectedItem != null}"-->
 		
 		<mx:Button id="btnOK"
 				   label="OK"

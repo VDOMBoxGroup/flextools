@@ -64,6 +64,7 @@
 			import net.vdombox.helpeditor.controller.SpinnerPopUpManager;
 			import net.vdombox.helpeditor.model.AlertMessages;
 			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.model.vo.TemplateVO;
 			import net.vdombox.helpeditor.utils.PageUtils;
 			import net.vdombox.helpeditor.utils.ResourceUtils;
 			import net.vdombox.helpeditor.utils.Utils;
@@ -847,7 +848,9 @@
 				
 				function insertTemplateHandler (event:Event) : void
 				{
-					html_wysiwyg.insertTemplate(templatesPanel.selectedTemplateName);
+					var templateName : String = templatesPanel.selectedTemplateName;
+					
+					html_wysiwyg.insertTemplate(templateName);
 				}
 			}
 			

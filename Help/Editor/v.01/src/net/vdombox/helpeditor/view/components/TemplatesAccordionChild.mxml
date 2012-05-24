@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+		 width="100%" height="100%">
+	
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			import mx.controls.TextInput;
+			import mx.events.CollectionEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			import mx.events.ListEventReason;
+			
+			import net.vdombox.helpeditor.controller.events.TemplatesAccordionEvent;
+			import net.vdombox.helpeditor.model.vo.TemplateVO;
+			
+			private static const ERROR_TYPE_NOT_UNIQUE_NAME : int = 1;
+			private static const ERROR_TYPE_NOT_VALID_NAME : int = 0;
+			
+			public var oldFolderLabel : String = "";
+			
+			public var oldTemplateName : String = "";
+			public var newTemplateName : String = "";
+			
+			protected function templatesList_changeHandler(event:ListEvent):void
+			{
+				dispatchEvent(new TemplatesAccordionEvent(TemplatesAccordionEvent.SELECTED_TEMPLATE_CHANGED));
+			}
+			
+			private function templatesList_itemEditBegin () : void
+			{
+				oldTemplateName = templatesList.selectedItem.name;
+				
+				templatesList.editable = true;
+				templatesList.editedItemPosition = {rowIndex : templatesList.selectedIndex, columnIndex : 0};
+			}
+			
+			protected function templatesList_itemEditEndHandler(event:ListEvent):void
+			{
+				event.preventDefault();
+				
+				listItemEditorInstance.errorString = null;
+				
+				if ( event.reason == ListEventReason.CANCELLED )
+				{
+					destroyItemEditor();
+					return;
+				}
+				
+				if (!isCorrectTemplateName)
+				{
+					event.stopImmediatePropagation();
+					
+					applyErrorTemplateName();
+					return;
+				}
+								
+				newTemplateName = listItemEditorInstance.text;
+				
+				dispatchEvent (new TemplatesAccordionEvent(TemplatesAccordionEvent.TEMPLATE_NEW_NAME_ENTERED));
+			}
+			
+			private function get isCorrectTemplateName () : Boolean
+			{
+				var templateName : String = listItemEditorInstance.text;
+				
+				if (!templateName)
+					return false;
+				
+				return true;
+			}
+			
+			public function set uniqueTemplateName( unique : Boolean ) : void
+			{
+				if ( !unique )
+				{
+					applyErrorTemplateName( ERROR_TYPE_NOT_UNIQUE_NAME );
+					return;
+				}
+				
+				applyCorrectTemplateName();
+			}
+			
+			private function applyCorrectTemplateName () : void
+			{
+				var editedItemData : Object = templatesList.editedItemRenderer.data;
+				
+				var oldName : String = editedItemData.name;
+				var newName : String = newTemplateName;
+				
+				editedItemData.name = listItemEditorInstance.text;
+				
+				sortTemplates ();
+				
+				templatesList.selectedItem = editedItemData;
+				
+				dispatchEvent (new TemplatesAccordionEvent(TemplatesAccordionEvent.TEMPLATE_NEW_NAME_ACCEPTED));
+				
+				destroyItemEditor();
+			}
+			
+			private function applyErrorTemplateName (errorType : Number = ERROR_TYPE_NOT_VALID_NAME) : void
+			{
+				listItemEditorInstance.errorString = (errorType == ERROR_TYPE_NOT_VALID_NAME) ? "Enter unique template name" : "Error: empty template name";;
+				listItemEditorInstance.setFocus();
+			}
+			
+			private function get listItemEditorInstance () : TextInput
+			{
+				return templatesList.itemEditorInstance as TextInput;
+			}
+			
+			private function destroyItemEditor() : void
+			{
+				templatesList.destroyItemEditor();
+				templatesList.editable = false;
+			}
+			
+			private var _templates : ArrayCollection;
+			public function set templates (value : ArrayCollection) : void
+			{
+				_templates = value;
+				
+				if (!templates)
+					return;
+				
+				sortTemplates();
+			}
+			
+			[Bindable]
+			public function get templates () : ArrayCollection
+			{
+				return _templates;
+			}
+			
+			public function changeTemplatesFolder (folderName : String) : void
+			{
+				for each (var template : TemplateVO in templates)
+					template.folder = folderName;
+			}
+			
+			public function addTemplate (templateName : String) : TemplateVO
+			{
+				var newTemplate : TemplateVO = new TemplateVO();
+				newTemplate.name = templateName;
+				newTemplate.content = "";
+				newTemplate.folder = label;
+				
+				if (!templates)
+					templates = new ArrayCollection([newTemplate]);
+				else
+					templates.addItem(newTemplate);
+				
+				sortTemplates ();
+				
+				templatesList.selectedItem = newTemplate;
+				
+				dispatchEvent(new TemplatesAccordionEvent(TemplatesAccordionEvent.SELECTED_TEMPLATE_CHANGED));
+				
+				templatesList_itemEditBegin();
+				
+				return newTemplate;
+			}
+			
+			public function removeSelectedtemplate () : TemplateVO
+			{
+				if (!selectedTemplate)
+					return null;
+				
+				if (!templates || templates.length == 0)
+					return null;
+				
+				var removingTemplate : TemplateVO = selectedTemplate;
+				
+				templates.removeItemAt(templatesList.selectedIndex);
+				
+				sortTemplates ();
+				
+				templatesList.selectedIndex = templates.length > 0 ? 0 : -1;
+				
+				return removingTemplate;
+			}
+			
+			public function get selectedTemplate () : TemplateVO
+			{
+				if (!templatesList)
+					return null;
+				
+				if (!templatesList.selectedItem)
+					return null;
+				
+				return templatesList.selectedItem as TemplateVO;
+			}
+			
+			public function set selectedTemplate (template : TemplateVO) : void
+			{
+				if (!templatesList)
+					return;
+				
+				templatesList.selectedItem = template;
+			}
+			
+			public function get selectedTemplateIndex () : int
+			{
+				if (!templatesList)
+					return -1;
+				
+				return templatesList.selectedIndex;
+			}
+			
+			private function sortTemplates () : void
+			{
+				var sort : Sort = new Sort();
+				sort.fields = [new SortField( 'name', true )];
+				
+				templates.sort = sort;
+				templates.refresh();
+				
+				if (templatesList)
+					templatesList.validateNow();
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+	<mx:List width="100%" height="100%"
+			 id="templatesList"
+			 dataProvider="{templates}"
+			 labelField="name"
+			 selectedIndex="-1"
+			 doubleClickEnabled="true"
+			 itemDoubleClick="{templatesList_itemEditBegin()}"
+			 itemEditEnd="templatesList_itemEditEndHandler(event)"
+			 itemEditor="net.vdombox.helpeditor.view.itemrenderers.ItemEditor"
+			 change="templatesList_changeHandler(event)"/>
+	
+</mx:VBox>

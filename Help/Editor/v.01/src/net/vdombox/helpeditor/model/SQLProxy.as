@@ -10,6 +10,8 @@ package net.vdombox.helpeditor.model
 	import flash.filesystem.File;
 	
 	import mx.controls.Alert;
+	
+	import net.vdombox.helpeditor.model.vo.TemplateVO;
 
 	public class SQLProxy
 	{
@@ -63,6 +65,8 @@ package net.vdombox.helpeditor.model
 				tryToCreatePagesSyncronizationTable();
 				
 				tryToCreateTemplateTable();
+				
+				tryToCreateFoldersTable();
 				
 				sqlStatement.sqlConnection.close();
 				removeHandlers();
@@ -147,7 +151,18 @@ package net.vdombox.helpeditor.model
 			//       TEMPLATE  (id, name, content )   //
 			sqlStatement.text = "CREATE TABLE IF NOT EXISTS template (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 								"name CHAR NOT NULL, " +
-								"content TEXT);";
+								"content TEXT, " +
+								"folder TEXT" +
+								");";
+			
+			sqlStatement.execute();
+		}
+		
+		private function tryToCreateFoldersTable () : void
+		{
+			//       template_folder  (id, name)   //
+			sqlStatement.text = "CREATE TABLE IF NOT EXISTS template_folder (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"name CHAR NOT NULL);";
 			
 			sqlStatement.execute();
 		}
@@ -1107,7 +1122,7 @@ package net.vdombox.helpeditor.model
 		}
 		
 		// template table ...
-		public function addTemplate (name:String, content:String) : void
+		public function addTemplate (name:String, content:String, folderName:String) : void
 		{
 			var query : String      = "SELECT template.id " +
 									"FROM template " +
@@ -1120,12 +1135,13 @@ package net.vdombox.helpeditor.model
 			
 			if ( !result )
 			{
-				query = "INSERT INTO template(name, content) " +
-					"VALUES(:name, :content);";
+				query = "INSERT INTO template(name, content, folder) " +
+						"VALUES(:name, :content, :folderName);";
 				
 				parameters = [];
 				parameters[ ":name" ] = name;
 				parameters[ ":content" ] = content;
+				parameters[ ":folderName" ] = folderName;
 				
 				executeQuery(query, parameters);
 			}
@@ -1186,7 +1202,38 @@ package net.vdombox.helpeditor.model
 			return result[0]["content"];
 		}
 		
-		public function getAllTemplates() : Object
+		public function updateTemplateFolder (name:String, folder:String) : void
+		{
+			var query : String = "UPDATE template " +
+								"SET folder = :content " +
+								"WHERE name = :name;";
+			
+			var parameters : Object = {};
+			parameters[ ":name" ] = name;
+			parameters[ ":folder" ] = folder;
+			
+			executeQuery(query, parameters);
+			
+		}
+		
+		public function getTemplateFolder (name:String) : String
+		{
+			var query : String = "SELECT folder " +
+								"FROM template " +
+								"WHERE name = :name;";
+			
+			var parameters : Object = {};
+			parameters[ ":name" ] = name;
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			if (!result)
+				return "";
+			
+			return result[0]["folder"];
+		}
+		
+		public function getAllTemplates() : Array
 		{
 			var query : String      = "SELECT * FROM template;";
 			
@@ -1195,10 +1242,106 @@ package net.vdombox.helpeditor.model
 			if ( !result )
 				return null;
 			
-			return result;
+			return convertTemplates(result);
+		}
+		
+		private function convertTemplates(templates:Object) : Array
+		{
+			if (!templates)
+				return null;
+			
+			var resultTemplates : Array = [];
+			
+			for each (var template : Object in templates)
+			{
+				resultTemplates.push(new TemplateVO(template));
+			}
+			
+			return resultTemplates;
+		}
+		
+		public function getTemplatesByFolderName (folderName:String) : Array
+		{
+			var query : String      = "SELECT * FROM template WHERE folder=:folderName;";
+			
+			var parameters : Object = {};
+			parameters[ ":folderName" ] = folderName;
+			
+			var result : Object     = executeQuery(query, parameters);
+			 
+			if ( !result )
+				return null;
+				
+			return convertTemplates(result);
 		}
 		// ... template table
 		
+		// template folders ...
+		public function getAllFolders() : Object
+		{
+			var query : String      = "SELECT * FROM template_folder;";
+			
+			var result : Object     = executeQuery(query, {});
+			
+			if ( !result )
+				return null;
+			
+			return result;
+		}
+		
+		public function addFolder (name:String) : void
+		{
+			var query : String      = "SELECT id " +
+										"FROM template_folder " +
+										"WHERE name = :name;";
+			
+			var parameters : Object = {};
+			parameters[ ":name" ] = name;
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			if ( !result )
+			{
+				query = "INSERT INTO template_folder(name) " +
+						"VALUES(:name);";
+				
+				executeQuery(query, parameters);
+			}
+		}
+		
+		public function removeFolder (name:String) : void
+		{
+			var query:String = "DELETE FROM template_folder WHERE name = :name;";
+			
+			var parameters:Object = {};
+			parameters[":name"] = name;
+			
+			executeQuery(query, parameters);
+		}
+		
+		public function updateFolderName (name:String, newName:String) : void
+		{
+			var query : String = "UPDATE template_folder " +
+									"SET name = :newName " +
+									"WHERE name = :name;";
+			
+			var parameters : Object = {};
+			parameters[ ":name" ] = name;
+			parameters[ ":newName" ] = newName;
+			
+			executeQuery(query, parameters);
+			
+			query = "UPDATE template " +
+					"SET folder = :folder " +
+					"WHERE folder = :oldFolder;";
+			
+			parameters = {};
+			parameters[ ":oldFolder" ] = name;
+			parameters[ ":folder" ] = newName;
+			
+			executeQuery(query, parameters);
+		}
+		// ... template folders
 
 	}
 }

@@ -3,8 +3,22 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import net.vdombox.helpeditor.model.vo.TemplateVO;
 			
-			public var startContent : String = "";
+			private var startContent : String = "";
+			
+			private var _template : TemplateVO; 
+			public function set template (value : TemplateVO) : void
+			{
+				_template = value;
+				
+				startContent = template.content;
+			}
+			
+			public function get template () : TemplateVO
+			{
+				return _template;
+			}
 			
 			public function get content () : String
 			{

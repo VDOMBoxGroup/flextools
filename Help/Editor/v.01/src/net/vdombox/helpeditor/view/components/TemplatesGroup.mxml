@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.events.IndexChangedEvent;
+			
+			import net.vdombox.helpeditor.controller.events.TemplatesAccordionEvent;
+			import net.vdombox.helpeditor.model.AlertMessages;
+			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.model.vo.TemplateVO;
+			
+			private const FILTER_DEF_TEXT	: String = "filter";
+			
+			private var sqlProxy : SQLProxy = new SQLProxy();
+			
+			public function get selectedTemplate () : TemplateVO
+			{
+				if (!selectedFolder)
+					return null;
+					
+				return selectedFolder.selectedTemplate;
+			}
+			
+			public function get selectedFolder () : TemplatesAccordionChild
+			{
+				if (!templatesAccordion)
+					return null;
+				
+				if (!templatesAccordion.selectedChild)
+					return null;
+				
+				return templatesAccordion.selectedChild as TemplatesAccordionChild
+			}
+			
+			protected function templatesAccordion_creationCompleteHandler(event:FlexEvent):void
+			{
+				var foldersFromBD : Array = sqlProxy.getAllFolders() as Array;
+				
+				if (!foldersFromBD || foldersFromBD.length == 0)
+				{
+					createNewFolder("New folder");
+					return;
+				}
+				
+				for each (var folder : Object in foldersFromBD)
+				{
+					createNewFolder(folder.name);
+				}
+			}
+			
+			private function addFolder () : void
+			{
+				var newFolderName : String = createUniqueFolderName("New folder");
+				
+				createNewFolder(newFolderName);
+				
+				sqlProxy.addFolder(newFolderName);
+			}
+			
+			private function createNewFolder( label : String) : TemplatesAccordionChild
+			{
+				sqlProxy.addFolder(label);
+				
+				var folder : TemplatesAccordionChild = new TemplatesAccordionChild();
+				folder.label = label;
+				
+				var templatesArray : Array = sqlProxy.getTemplatesByFolderName(folder.label) as Array;
+				folder.templates = new ArrayCollection(templatesArray);
+				
+				templatesAccordion.addChild(folder);
+
+				folder.addEventListener( TemplatesAccordionEvent.SELECTED_TEMPLATE_CHANGED, selectedTemplateChanged);
+				
+				folder.addEventListener( TemplatesAccordionEvent.TEMPLATE_NEW_NAME_ENTERED, templateNewNameEnteredHandler);
+				folder.addEventListener( TemplatesAccordionEvent.TEMPLATE_NEW_NAME_ACCEPTED, templateNewNameAcceptedHandler);
+				
+				folder.addEventListener( TemplatesAccordionEvent.FOLDER_REMOVE_CLICK, removeTemplatesFolderClickHander );
+				
+				folder.addEventListener( TemplatesAccordionEvent.FOLDER_NEW_LABEL_ENTERED, folderNewLabelEnteredHandler );
+				folder.addEventListener( TemplatesAccordionEvent.FOLDER_NEW_LABEL_ACCEPTED, folderNewLabelAcceptedHandler );
+
+				return folder;
+			}
+			
+			private function createUniqueFolderName (folderName : String) : String
+			{
+				var index : int = 1;
+				var isUniqueName : Boolean = true;
+				var newName : String;
+				
+				do
+				{
+					newName = folderName + '-' + index;
+					isUniqueName = isUniqueFolderName(newName, "");
+					
+					index++;
+				} while ( !isUniqueName )
+				
+				return newName;
+			}
+			
+			private function removeTemplatesFolderClickHander( event : TemplatesAccordionEvent ) : void
+			{
+				var accordChild : TemplatesAccordionChild = event.target as TemplatesAccordionChild;
+				
+				if ( accordChild.templates && accordChild.templates.length > 0 )
+				{
+					event.preventDefault();
+					
+					Alert.show( "You can't remove non empty folder." );
+					return;
+				}
+				
+				if (accordChild.parent.numChildren == 1)
+				{
+					event.preventDefault();
+					
+					Alert.show( "You can't remove the last category." );
+					return;
+				}
+				
+				var confirmRemoveMsg : String = "Are you sure you want to remove '"+ accordChild.label  +"' folder?"
+				
+				Alert.show(
+					confirmRemoveMsg,
+					"Confirmation:",
+					Alert.YES | Alert.NO, null, deleteFolderAlertCloseHandler, null, Alert.YES );
+				
+				function deleteFolderAlertCloseHandler( event : CloseEvent ) : void
+				{
+					if ( event.detail == Alert.YES )
+					{
+						removeFolder (accordChild);
+					}
+				}
+			}
+
+			private function removeFolder (accordChild : TemplatesAccordionChild) : void
+			{
+				if (!accordChild)
+					return;
+				
+				sqlProxy.removeFolder(accordChild.label);
+				
+				accordChild.parent.removeChild( accordChild );
+			}
+			
+			private function folderNewLabelEnteredHandler( event : TemplatesAccordionEvent ) : void
+			{
+				if ( !event.templatesAccordionHeader )
+				{
+					throw Error( "Accordion header is undefined" );
+					return;
+				}
+				
+				var accordChild : TemplatesAccordionChild = event.target as TemplatesAccordionChild;
+				var folderLabel : String = event.templatesAccordionHeader.newEnteredName;
+				
+				event.templatesAccordionHeader.uniqueFolderName = isUniqueFolderName( folderLabel, accordChild.label );
+			}
+			
+			private function isUniqueFolderName( folderLabel : String, folderName : String = "" ) : Boolean
+			{
+				if ( !folderLabel )
+					return false;
+				
+				for each ( var folder : TemplatesAccordionChild in templatesAccordion.getChildren() )
+				{
+					if ( folder.name == folderName )
+						continue;
+					
+					if ( folder.label == folderLabel )
+					{
+						return false;
+					}
+				}
+				
+				return true;
+			}
+			
+			private function folderNewLabelAcceptedHandler( event : TemplatesAccordionEvent ) : void
+			{
+				var folder : TemplatesAccordionChild = event.target as TemplatesAccordionChild;
+				
+				sqlProxy.updateFolderName(folder.oldFolderLabel, folder.label);
+				
+				folder.changeTemplatesFolder(folder.label);
+				
+			}
+			
+			private function templateNewNameEnteredHandler( event : TemplatesAccordionEvent ) : void
+			{
+				var folder : TemplatesAccordionChild = event.target as TemplatesAccordionChild;
+				
+				folder.uniqueTemplateName = isUniqueTemplateName( folder.newTemplateName, folder.oldTemplateName );
+			}
+ 			
+			private function isUniqueTemplateName(templateNewName:String, templateOldName:String = "") : Boolean
+			{
+				var templates : Array = sqlProxy.getAllTemplates() as Array;
+				
+				for each (var template : TemplateVO in templates)
+				{
+					if (template.name == templateOldName)
+						continue;
+					
+					if (template.name == templateNewName)
+						return false;
+				}
+				
+				return true;
+			}
+			
+			private function templateNewNameAcceptedHandler( event : TemplatesAccordionEvent ) : void
+			{
+				var folder : TemplatesAccordionChild = event.target as TemplatesAccordionChild;
+				
+				sqlProxy.updateTemplateName(folder.oldTemplateName, folder.newTemplateName);
+			}
+			
+			protected function addTemplate():void
+			{
+				if (!selectedFolder)
+					return;
+				
+				var newTemplateName : String = createUniqueTemplateName("New template");
+				
+				var newTemplate : TemplateVO = selectedFolder.addTemplate(newTemplateName);
+				
+				sqlProxy.addTemplate(newTemplate.name, newTemplate.content, newTemplate.folder);
+			}
+			
+			private function createUniqueTemplateName (templateName : String) : String
+			{
+				var index : int = 1;
+				var isUniqueName : Boolean = true;
+				var newName : String;
+				
+				do
+				{
+					newName = templateName + '-' + index;
+					isUniqueName = isUniqueTemplateName(newName, "");
+					
+					index++;
+				} while ( !isUniqueName )
+				
+				return newName;
+			}
+			
+			private function askToRemoveTemplate () : void
+			{
+				if (!selectedFolder)
+					return;
+				
+				if (selectedTemplate)
+					Alert.show(AlertMessages.MSG_ASK_DELETE_TEMPLATE, AlertMessages.MSG_TYPE_DELETE, Alert.YES|Alert.NO, null, alertRemoveTemplateCloseHandler);
+			}
+			
+			private function alertRemoveTemplateCloseHandler(event:CloseEvent):void
+			{
+				if (event.detail == Alert.YES)
+					removeTemplate();
+			}
+			
+			protected function removeTemplate():void
+			{
+				if (!selectedFolder)
+					return;
+				
+				var removedTemplate : TemplateVO = selectedFolder.removeSelectedtemplate();
+				
+				sqlProxy.removeTemplate(removedTemplate.name);
+				
+				var removingTemplateEditor : TemplateContentEditor = getContentEditorByTemplate(removedTemplate);
+				if (removingTemplateEditor)
+					vsTemplatesEditors.removeChild(removingTemplateEditor);
+				
+				removedTemplate = null;
+			}
+			
+			private function selectedTemplateChanged(event : TemplatesAccordionEvent) : void
+			{
+				trace ("selectedTemplateChanged");
+				if (!selectedTemplate)
+					return;
+				
+				var contentEditor : TemplateContentEditor = getContentEditorByTemplate(selectedTemplate);
+				if (!contentEditor)
+					contentEditor = addNewTemplateEditor(selectedTemplate);
+				
+				vsTemplatesEditors.selectedChild = contentEditor;
+				contentEditor.setFocus();
+			}
+			
+			private function getContentEditorByTemplate(template : TemplateVO) : TemplateContentEditor
+			{
+				if (!template)
+					return null;
+				
+				for each (var editor:TemplateContentEditor in vsTemplatesEditors.getChildren())
+				{
+					if (editor.template == template)
+						return editor;
+				}
+				
+				return null;
+			}
+			
+			private function addNewTemplateEditor(template : TemplateVO) : TemplateContentEditor
+			{
+				var templateEditor : TemplateContentEditor;
+				
+				templateEditor = new TemplateContentEditor();
+				templateEditor.percentWidth = 100;
+				templateEditor.percentHeight = 100;
+				
+				templateEditor.template = template;
+				
+				vsTemplatesEditors.addChild(templateEditor);
+				
+				return templateEditor;
+			}
+			
+			protected function templatesAccordion_changeHandler(event:IndexChangedEvent):void
+			{
+				for each (var folder : TemplatesAccordionChild in templatesAccordion.getChildren())
+				{
+					if (folder == selectedFolder)
+						continue;
+					
+					folder.selectedTemplate = null;
+				}
+			}
+			
+			public function saveTemplates () : void
+			{
+				for each (var folder : TemplatesAccordionChild in templatesAccordion.getChildren())
+					for each (var template : TemplateVO in folder.templates)
+						saveTemplate(template);
+			}
+			
+			public function saveTemplate (template : TemplateVO) : void
+			{
+				if (!template)
+					return;
+				
+				var templateContentEditor : TemplateContentEditor = getContentEditorByTemplate(template);
+				
+				if (!templateContentEditor)
+					return;
+				
+				template.content = templateContentEditor.content;
+				
+				sqlProxy.updateTemplateContent(template.name, template.content);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox width="170" height="100%">
+	
+		<mx:HBox width="100%" 
+				 verticalAlign="middle" horizontalAlign="left">
+			
+			<mx:Spacer width="5"/>
+			
+			<mx:Button id="btnAddFolder"
+					   label="A f"
+					   toolTip="Add folder"
+					   color="#FFFFFF"
+					   fillColors="#333333"
+					   textSelectedColor="#FFFFFF"
+					   cornerRadius="1"
+					   borderColor="#999999"
+					   themeColor="#656565"
+					   textRollOverColor="#FFFFFF" 
+					   click="{addFolder()}"/>
+			
+			<mx:Button id="btnAddTemplate"
+					   label="A t"
+					   toolTip="Add template"
+					   click="{addTemplate()}"
+					   color="#FFFFFF"
+					   fillColors="#333333"
+					   textSelectedColor="#FFFFFF"
+					   cornerRadius="1"
+					   borderColor="#999999"
+					   themeColor="#656565"
+					   textRollOverColor="#FFFFFF" />
+			
+			<mx:Button id="btnRemoveTemplate"
+					   label="R t"
+					   toolTip="Remove template"
+					   click="{askToRemoveTemplate()}"
+					   color="#FFFFFF"
+					   fillColors="#333333"
+					   textSelectedColor="#FFFFFF"
+					   cornerRadius="1"
+					   borderColor="#999999"
+					   themeColor="#656565"
+					   textRollOverColor="#FFFFFF"/>
+			
+		</mx:HBox>
+		
+		<mx:VBox width="100%" height="100%" verticalGap="0">
+			
+			<mx:TextInput id="filter" width="100%" 
+						  text="{FILTER_DEF_TEXT}" fontStyle="italic"/>
+						  <!--change="filter_changeHandler(event)" 
+						  focusIn="filter_focusInHandler(event)" 
+						  focusOut="filter_focusOutHandler(event)"-->
+			
+			<mx:ViewStack id="accordionsViewStack" 
+						  width="100%" height="100%">
+				
+				<mx:Box width="100%" height="100%">
+					<mx:Accordion id="templatesAccordion"
+								  headerRenderer="net.vdombox.helpeditor.view.components.TemplatesAccordionHeader"
+								  fontFamily="Verdana" borderStyle="solid" 
+								  width="100%" height="100%"
+								  creationComplete="templatesAccordion_creationCompleteHandler(event)"
+								  change="templatesAccordion_changeHandler(event)"/>
+				</mx:Box>
+				
+				
+				<mx:Accordion id="templatesFoundAccordion"
+							  width="100%" height="100%"
+							  fontFamily="Verdana" borderStyle="solid">
+							  <!--creationComplete="templatesFoundAccordion_creationCompleteHandler(event)"-->
+				</mx:Accordion>
+				
+			</mx:ViewStack>
+			
+			
+		</mx:VBox>
+			
+	</mx:VBox>
+	
+	<mx:ViewStack id="vsTemplatesEditors" 
+				  width="100%" height="100%"
+				  backgroundColor="white"/>
+	
+</mx:HBox>
