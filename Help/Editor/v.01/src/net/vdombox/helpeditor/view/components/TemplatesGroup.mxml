@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="net.vdombox.helpeditor.view.components.*">
 	
 	<mx:Script>
 		<![CDATA[
@@ -285,7 +285,6 @@
 			
 			private function selectedTemplateChanged(event : TemplatesAccordionEvent) : void
 			{
-				trace ("selectedTemplateChanged");
 				if (!selectedTemplate)
 					return;
 				
@@ -369,41 +368,20 @@
 			
 			<mx:Spacer width="5"/>
 			
-			<mx:Button id="btnAddFolder"
-					   label="A f"
+			<components:BlackButton id="btnAddFolder"
 					   toolTip="Add folder"
-					   color="#FFFFFF"
-					   fillColors="#333333"
-					   textSelectedColor="#FFFFFF"
-					   cornerRadius="1"
-					   borderColor="#999999"
-					   themeColor="#656565"
-					   textRollOverColor="#FFFFFF" 
-					   click="{addFolder()}"/>
+					   click="{addFolder()}"
+					   icon="@Embed('icons/add_folder.png')"/>
 			
-			<mx:Button id="btnAddTemplate"
-					   label="A t"
+			<components:BlackButton id="btnAddTemplate"
 					   toolTip="Add template"
 					   click="{addTemplate()}"
-					   color="#FFFFFF"
-					   fillColors="#333333"
-					   textSelectedColor="#FFFFFF"
-					   cornerRadius="1"
-					   borderColor="#999999"
-					   themeColor="#656565"
-					   textRollOverColor="#FFFFFF" />
+					   icon="@Embed('icons/add_template.png')"/>
 			
-			<mx:Button id="btnRemoveTemplate"
-					   label="R t"
+			<components:BlackButton id="btnRemoveTemplate"
 					   toolTip="Remove template"
 					   click="{askToRemoveTemplate()}"
-					   color="#FFFFFF"
-					   fillColors="#333333"
-					   textSelectedColor="#FFFFFF"
-					   cornerRadius="1"
-					   borderColor="#999999"
-					   themeColor="#656565"
-					   textRollOverColor="#FFFFFF"/>
+					   icon="@Embed('icons/delete_template.png')"/>
 			
 		</mx:HBox>
 		

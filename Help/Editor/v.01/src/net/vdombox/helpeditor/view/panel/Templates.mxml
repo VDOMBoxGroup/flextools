@@ -120,52 +120,22 @@
 	
 	<mx:ControlBar horizontalAlign="right">
 		
-		<mx:Button id="btnInsert"
+		<components:BlackButton id="btnInsert"
 				   label="Insert"
 				   click="btnInsert_clickHandler(event)"
-				   color="#FFFFFF"
-				   fillColors="#333333"
-				   textSelectedColor="#FFFFFF"
-				   cornerRadius="1"
-				   borderColor="#999999"
-				   themeColor="#656565"
-				   textRollOverColor="#FFFFFF"
 				   visible="{allowInsert}"/>
-		<!--enabled="{templatesList.selectedItem != null}"-->
 		
-		<mx:Button id="btnApply"
+		<components:BlackButton id="btnApply"
 				   label="Apply"
-				   click="btnApply_clickHandler(event)"
-				   color="#FFFFFF"
-				   fillColors="#333333"
-				   textSelectedColor="#FFFFFF"
-				   cornerRadius="1"
-				   borderColor="#999999"
-				   themeColor="#656565"
-				   textRollOverColor="#FFFFFF"/>
-		<!--enabled="{templatesList.selectedItem != null}"-->
+				   click="btnApply_clickHandler(event)"/>
 		
-		<mx:Button id="btnOK"
+		<components:BlackButton id="btnOK"
 				   label="OK"
-				   click="btnOK_clickHandler(event)"
-				   color="#FFFFFF"
-				   fillColors="#333333"
-				   textSelectedColor="#FFFFFF"
-				   cornerRadius="1"
-				   borderColor="#999999"
-				   themeColor="#656565"
-				   textRollOverColor="#FFFFFF"/>
+				   click="btnOK_clickHandler(event)"/>
 		
-		<mx:Button id="btnCancel"
+		<components:BlackButton id="btnCancel"
 				   label="Cancel"
-				   click="closeWindow()"
-				   color="#FFFFFF"
-				   fillColors="#333333"
-				   textSelectedColor="#FFFFFF"
-				   cornerRadius="1"
-				   borderColor="#999999"
-				   themeColor="#656565"
-				   textRollOverColor="#FFFFFF"/>
+				   click="closeWindow()"/>
 		
 	</mx:ControlBar>
 	

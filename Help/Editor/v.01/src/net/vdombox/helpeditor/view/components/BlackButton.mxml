@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Button xmlns:mx="http://www.adobe.com/2006/mxml"
+		   color="#FFFFFF"
+		   fillColors="#333333"
+		   textSelectedColor="#FFFFFF"
+		   cornerRadius="1"
+		   borderColor="#999999"
+		   themeColor="#656565"
+		   textRollOverColor="#FFFFFF" >
+	
+</mx:Button>
