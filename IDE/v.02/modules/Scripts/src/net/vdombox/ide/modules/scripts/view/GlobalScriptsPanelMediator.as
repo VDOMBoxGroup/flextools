@@ -80,7 +80,7 @@ package net.vdombox.ide.modules.scripts.view
 				case Notifications.GLOBAL_ACTIONS_GETTED:
 				{
 					
-					var serverActionsXML : XML = body.serverActionsXML as XML;
+					var globalActions : Array = body.globalActions as Array
 					var _applicationVO : ApplicationVO = body.applicationVO as ApplicationVO;
 					//globalScriptsPanel.actions
 					
@@ -88,26 +88,23 @@ package net.vdombox.ide.modules.scripts.view
 					if ( !pagesXMLList )
 						pagesXMLList = new XMLList();
 					
-					var groupName : String = serverActionsXML.ServerActions.Container.@ID;
+					var groupName : String = (globalActions[0] as GlobalActionVO).scriptsGroupName;
 					
 					pagesXMLList += <page Name={groupName} />;
 					pagesXMLList.children();
 					
 					globalScriptsPanel.actions = pagesXMLList;
 					
-					var _action : XML;
+					var _action : GlobalActionVO;
 					
-					var _actions : XMLList = serverActionsXML.ServerActions.Container..Action;
 					var _actionsXML : XMLList = new XMLList();
 					
 					var _globalAction : GlobalActionVO;
 						
-					for each( _action in _actions )
+					for each( _action in globalActions )
 					{
-						_actionsXML += < Action id={_action.@ID} Name={_action.@Name} parent={groupName}/>
-						_globalAction = new GlobalActionVO( _action.@ID, groupName, _applicationVO );
-						_globalAction.script = _action[ 0 ];
-						_globalActions[ _action.@ID ] = _globalAction;
+						_actionsXML += < Action id={_action.name} Name={_action.displayName} parent={groupName}/>
+						_globalActions[ _action.name ] = _action;
 					}
 					
 					
@@ -150,7 +147,7 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var _globalScript : GlobalActionVO = _globalActions[ globalScriptsPanel.selectedScript.@id ];
 			if ( _globalScript )
-				sendNotification( Notifications.SELECTED_GLOBAL_ACTION_CHANGED, _globalScript );
+				sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : _globalScript, check : false } );
 		}
 	}
 }

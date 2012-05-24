@@ -148,10 +148,11 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private function scriptEditor_saveHandler( event : ScriptEditorEvent ) : void
 		{
-			if( currentVO is ServerActionVO || currentVO is LibraryVO || currentVO is GlobalActionVO )
-				currentVO.script = scriptEditor.script;
+			/*if( currentVO is ServerActionVO || currentVO is LibraryVO || currentVO is GlobalActionVO )
+				currentVO.script = scriptEditor.script;*/
 			
-			sendNotification( Notifications.SAVE_SCRIPT_REQUEST, currentVO );
+			sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : currentVO, check : true } );
+			//sendNotification( Notifications.SAVE_SCRIPT_REQUEST, currentVO );
 		}
 		
 		private function scriptEditor_openFindHandler( event : ScriptEditorEvent ) : void

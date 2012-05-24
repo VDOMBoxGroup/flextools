@@ -44,11 +44,31 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					break;
 				}
 					
+				case PPMApplicationTargetNames.SERVER_ACTION:
+				{
+					if( operation == PPMOperationNames.READ )
+					{
+						if ( body.check )
+							sendNotification( Notifications.SCRIPT_CHECKED, body.globalActionVO );
+						else
+							sendNotification( Notifications.GLOBAL_ACTION_GETTED, body.globalActionVO );
+					}
+					
+					break;
+				}
+					
 				case PPMApplicationTargetNames.LIBRARY:
 				{
-					if( operation == PPMOperationNames.CREATE )
+					if( operation == PPMOperationNames.READ )
+					{
+						if ( body.check )
+							sendNotification( Notifications.SCRIPT_CHECKED, body.libraryVO );
+						else
+							sendNotification( Notifications.LIBRARY_GETTED, body.libraryVO );
+					}
+					else if( operation == PPMOperationNames.CREATE )
 						sendNotification( Notifications.LIBRARY_CREATED, body.libraryVO );
-					if( operation == PPMOperationNames.UPDATE )
+					else if( operation == PPMOperationNames.UPDATE )
 						sendNotification( Notifications.LIBRARY_SAVED, body.libraryVO );
 					else if( operation == PPMOperationNames.DELETE )
 						sendNotification( Notifications.LIBRARY_DELETED, body.libraryVO );

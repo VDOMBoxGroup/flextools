@@ -148,8 +148,6 @@
 			{
 				var actionVO : Object =(event.target as TabsPanelItemRenderer).data;
 				
-				_tabs.removeItemAt(  _tabs.getItemIndex( actionVO ) );
-				
 				dispatchEvent( new TabsPanelEvent( TabsPanelEvent.TAB_DELETE, actionVO ) );
 			}
 			

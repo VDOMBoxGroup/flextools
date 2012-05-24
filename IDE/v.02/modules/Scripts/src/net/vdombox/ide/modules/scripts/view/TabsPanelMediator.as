@@ -49,9 +49,9 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.BODY_START );
 			interests.push( Notifications.BODY_STOP );
 			
-			interests.push( Notifications.SELECTED_SERVER_ACTION_CHANGED );
-			interests.push( Notifications.SELECTED_LIBRARY_CHANGED );
-			interests.push( Notifications.SELECTED_GLOBAL_ACTION_CHANGED );
+			interests.push( Notifications.SERVER_ACTION_GETTED );
+			interests.push( Notifications.LIBRARY_GETTED );
+			interests.push( Notifications.GLOBAL_ACTION_GETTED );
 			
 			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
 			
@@ -94,15 +94,15 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case Notifications.SELECTED_SERVER_ACTION_CHANGED:
+				case Notifications.SERVER_ACTION_GETTED:
 				{
 				}
 					
-				case Notifications.SELECTED_LIBRARY_CHANGED:
+				case Notifications.LIBRARY_GETTED:
 				{
 				}
 					
-				case Notifications.SELECTED_GLOBAL_ACTION_CHANGED:
+				case Notifications.GLOBAL_ACTION_GETTED:
 				{
 					if ( body is ServerActionVO )
 					{
@@ -136,10 +136,7 @@ package net.vdombox.ide.modules.scripts.view
 					
 				case Notifications.DELETE_TAB_BY_ACTIONVO:
 				{
-					var action : Object = tabsPanel.RemoveAction( body );
-					
-					if ( action )
-						sendNotification( Notifications.DELETE_TAB, action );
+					tabsPanel.RemoveAction( body );
 					
 					break;
 				}
@@ -176,7 +173,7 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private function tabDeleteHandler( event : TabsPanelEvent ) : void
 		{
-			sendNotification( Notifications.DELETE_TAB, event.tab );
+			sendNotification( Notifications.DELETE_TAB, { actionVO : event.tab, askBeforeRemove : true } );
 		}
 	}
 }

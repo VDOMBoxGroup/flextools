@@ -41,18 +41,23 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					
 				case PPMPageTargetNames.SERVER_ACTION:
 				{
-					if( operation == PPMOperationNames.CREATE )
-						sendNotification( Notifications.SERVER_ACTION_CREATED, body );
-					else if( operation == PPMOperationNames.DELETE )
-						sendNotification( Notifications.SERVER_ACTION_DELETED, body );
+					if( operation == PPMOperationNames.READ )
+					{
+						if ( body.check )
+							sendNotification( Notifications.SCRIPT_CHECKED, body.serverActionVO );
+						else
+							sendNotification( Notifications.SERVER_ACTION_GETTED, body.serverActionVO );
+					}
 					else
 					{
-						if( operation == PPMOperationNames.RENAME )
+						if( operation == PPMOperationNames.CREATE )
+							sendNotification( Notifications.SERVER_ACTION_CREATED, body );
+						else if( operation == PPMOperationNames.DELETE )
+							sendNotification( Notifications.SERVER_ACTION_DELETED, body );
+						else if( operation == PPMOperationNames.RENAME )
 							sendNotification( Notifications.SERVER_ACTION_RENAMED, body );
 						
-						var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-					
-						sendNotification( Notifications.GET_SERVER_ACTIONS, statesProxy.selectedPage );
+						sendNotification( Notifications.GET_SERVER_ACTIONS, body.pageVO );
 					}
 					
 					break;

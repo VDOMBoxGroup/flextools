@@ -2,17 +2,21 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import flash.events.Event;
 	
+	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.EditorEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	import net.vdombox.ide.modules.scripts.view.components.WorkArea;
 	
@@ -30,6 +34,7 @@ package net.vdombox.ide.modules.scripts.view
 		private var libraryVO : LibraryVO;
 		private var globalActionVO : GlobalActionVO;
 		private var statesProxy : StatesProxy;
+		private var closedScript : Boolean = false;
 		
 		public function WorkAreaMediator( viewComponent : Object )
 		{
@@ -62,6 +67,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.SELECTED_TAB_CHANGED );
 			interests.push( Notifications.DELETE_TAB );
 			
+			interests.push( Notifications.SCRIPT_CHECKED );
+			
 			interests.push( Notifications.ALL_TABS_DELETED );
 			
 			return interests;
@@ -78,7 +85,7 @@ package net.vdombox.ide.modules.scripts.view
 			if ( !isActive && name != Notifications.BODY_START )
 				return;
 			
-			
+			var actionVO : Object;
 			
 			switch ( name )
 			{
@@ -107,7 +114,51 @@ package net.vdombox.ide.modules.scripts.view
 					
 				case Notifications.DELETE_TAB:
 				{
-					workArea.closeEditor( body );
+					actionVO = body.actionVO;
+					
+					editor = workArea.getEditorByVO( actionVO );
+					
+					if ( !body.askBeforeRemove || editor.actionVO.saved )
+					{
+						workArea.closeEditor( actionVO );
+						
+						sendNotification( Notifications.DELETE_TAB_BY_ACTIONVO, actionVO );
+					}
+					else if ( body.askBeforeRemove )
+					{
+						Alert.Show( "Script has been modified. Save changes?", AlertButton.OK_No_Cancel, workArea.parentApplication, chackActionRequest );
+					}
+					
+					
+					break;
+				}
+					
+				case Notifications.SCRIPT_CHECKED:
+				{
+					actionVO = body;
+					editor = workArea.getEditorByVO( actionVO );
+					
+					if ( actionVO.script == editor.actionVO.script.replace( /\r/g, "\n" ) )
+					{
+						var script : String = editor.script;
+						while ( script.slice( script.length - 1 ) == "\r" || script.slice( script.length - 1 ) == " " || script.slice( script.length - 1 ) == "\t" )
+							script = script.slice( 0, script.length - 1);
+						
+						editor.actionVO.script = script;
+						sendNotification( Notifications.SAVE_SCRIPT_REQUEST, editor.actionVO );
+						
+						if ( closedScript )
+						{
+							closedScript = false;
+							workArea.closeEditor( actionVO );
+							sendNotification( Notifications.DELETE_TAB_BY_ACTIONVO, actionVO );
+						}
+					}
+					else
+					{
+						Alert.setPatametrs( "Save", "Load" );
+						Alert.Show(	"Server action 'Maks' has been modified on the server and is in the conflict with your changes.\nDo you want to load from server or save your modification?", AlertButton.OK_No_Cancel, workArea.parentApplication, saveActionRequest );
+					}
 					
 					break;
 				}
@@ -115,8 +166,45 @@ package net.vdombox.ide.modules.scripts.view
 				case Notifications.ALL_TABS_DELETED:
 				{
 					clearData();
+					
+					break;
 				}
 					
+			}
+			
+			function chackActionRequest( event : CloseEvent ) : void 
+			{
+				if ( event.detail == Alert.YES )
+				{
+					closedScript = true;
+					sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : actionVO, check : true } );
+				}
+				
+				if ( event.detail == Alert.NO )
+				{
+					workArea.closeEditor( actionVO );
+					
+					sendNotification( Notifications.DELETE_TAB_BY_ACTIONVO, actionVO );
+				}
+			}
+			
+			function saveActionRequest( event : CloseEvent ) : void 
+			{
+				if ( event.detail == Alert.NO )
+				{
+					editor.script = actionVO.script;
+					editor.actionVO = actionVO;
+				}
+				
+				if ( event.detail == Alert.YES )
+				{
+					var script : String = editor.script;
+					while ( script.slice( script.length - 1 ) == "\r" || script.slice( script.length - 1 ) == " " || script.slice( script.length - 1 ) == "\t" )
+						script = script.slice( 0, script.length - 1);
+					
+					editor.actionVO.script = script;
+					sendNotification( Notifications.SAVE_SCRIPT_REQUEST, editor.actionVO );
+				}
 			}
 		}
 		

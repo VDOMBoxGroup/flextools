@@ -14,6 +14,7 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.scripts.controller.DeleteLibraryRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.GetResourceRequestCommand;
+	import net.vdombox.ide.modules.scripts.controller.GetScriptRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.SaveScriptRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.scripts.controller.StartupCommand;
@@ -77,6 +78,8 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( Notifications.CREATE_SCRIPT_REQUEST, CreateScriptRequestCommand );
 			
 			registerCommand( Notifications.SAVE_SCRIPT_REQUEST, SaveScriptRequestCommand );
+			
+			registerCommand( Notifications.GET_SCRIPT_REQUEST, GetScriptRequestCommand );
 			
 			registerCommand( Notifications.DELETE_LIBRARY_REQUEST, DeleteLibraryRequestCommand );
 			

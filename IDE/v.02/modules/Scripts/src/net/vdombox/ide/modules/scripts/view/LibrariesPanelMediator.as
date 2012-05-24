@@ -56,7 +56,7 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.BODY_START );
 			interests.push( Notifications.BODY_STOP );
 			
-			interests.push( Notifications.SELECTED_SERVER_ACTION_CHANGED );
+			interests.push( Notifications.SERVER_ACTION_GETTED );
 			
 			interests.push( Notifications.LIBRARIES_GETTED );
 			interests.push( Notifications.LIBRARY_CREATED );
@@ -95,7 +95,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 				
-				case Notifications.SELECTED_SERVER_ACTION_CHANGED:
+				case Notifications.SERVER_ACTION_GETTED:
 				{
 					if ( body )
 						librariesPanel.selectedLibrary = null;
@@ -197,7 +197,7 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function selectedLibraryChangedHandler( event : LibrariesPanelEvent ) : void
 		{
-			sendNotification( Notifications.SELECTED_LIBRARY_CHANGED, librariesPanel.selectedLibrary );
+			sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : librariesPanel.selectedLibrary, check : false } );
 		}
 	}
 }

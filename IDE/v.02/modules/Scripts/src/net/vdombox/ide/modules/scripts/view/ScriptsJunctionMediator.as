@@ -73,6 +73,7 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( StatesProxy.SET_SELECTED_OBJECT );
 
+			interests.push( Notifications.GET_SERVER_ACTION );
 			interests.push( Notifications.GET_SERVER_ACTIONS );
 			interests.push( Notifications.GET_ALL_SERVER_ACTIONS );
 			
@@ -84,11 +85,13 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.DELETE_SERVER_ACTION );
 			interests.push( Notifications.RENAME_SERVER_ACTION );
 			
+			interests.push( Notifications.GET_LIBRARY );
 			interests.push( Notifications.GET_LIBRARIES );
 
 			interests.push( Notifications.CREATE_LIBRARY );
 			interests.push( Notifications.SAVE_LIBRARY );
 			
+			interests.push( Notifications.GET_GLOBAL_ACTION );
 			interests.push( Notifications.SAVE_GLOBAL_ACTION );
 			
 			interests.push( Notifications.DELETE_LIBRARY );
@@ -109,6 +112,9 @@ package net.vdombox.ide.modules.scripts.view
 			var body : Object = notification.getBody();
 
 			var message : IPipeMessage;
+			
+			var placeName : String;
+			var targetName : String;
 
 			switch ( notification.getName() )
 			{
@@ -253,12 +259,31 @@ package net.vdombox.ide.modules.scripts.view
 
 					break;
 				}
+					
+				case Notifications.GET_SERVER_ACTION:
+				{					
+					if ( body.hasOwnProperty( "objectVO" ) )
+					{
+						placeName = PPMPlaceNames.OBJECT;
+						targetName = PPMObjectTargetNames.SERVER_ACTION;
+					}
+					else if ( body.hasOwnProperty( "pageVO" ) )
+					{
+						placeName = PPMPlaceNames.PAGE;
+						targetName = PPMPageTargetNames.SERVER_ACTION;
+					}
+					
+					if ( placeName && targetName )
+					{
+						message = new ProxyMessage( placeName, PPMOperationNames.READ, targetName, body );
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					}
+					
+					break;
+				}
 
 				case Notifications.GET_SERVER_ACTIONS:
 				{
-					var placeName : String;
-					var targetName : String;
-
 					if ( body is ObjectVO )
 					{
 						placeName = PPMPlaceNames.OBJECT;
@@ -293,6 +318,14 @@ package net.vdombox.ide.modules.scripts.view
 					}
 					
 					break;
+				}
+					
+				case Notifications.GET_LIBRARY:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.LIBRARY, body );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break
 				}
 
 				case Notifications.GET_LIBRARIES:
@@ -379,6 +412,14 @@ package net.vdombox.ide.modules.scripts.view
 				case Notifications.SAVE_LIBRARY:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.LIBRARY, body );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break
+				}
+					
+				case Notifications.GET_GLOBAL_ACTION:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.GLOBAL_ACTION, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break

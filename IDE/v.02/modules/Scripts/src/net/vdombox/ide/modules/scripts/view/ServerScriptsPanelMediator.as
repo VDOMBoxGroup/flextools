@@ -73,7 +73,7 @@ package net.vdombox.ide.modules.scripts.view
 			
 			interests.push( Notifications.PAGES_GETTED );
 
-			interests.push( Notifications.SELECTED_LIBRARY_CHANGED );
+			interests.push( Notifications.LIBRARY_GETTED );
 
 			interests.push( Notifications.SERVER_ACTIONS_GETTED );
 			interests.push( Notifications.SERVER_ACTIONS_SETTED );
@@ -180,7 +180,7 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case Notifications.SELECTED_LIBRARY_CHANGED:
+				case Notifications.LIBRARY_GETTED:
 				{
 					if ( body )
 						serverScriptsPanel.selectedScript = null;
@@ -302,7 +302,7 @@ package net.vdombox.ide.modules.scripts.view
 				sendNotification( Notifications.DELETE_SERVER_ACTION, { pageVO: statesProxy.selectedPage, serverActionVO: deletedServerActionVO } );
 			}
 			
-			sendNotification( Notifications.DELETE_TAB_BY_ACTIONVO, deletedServerActionVO );
+			sendNotification( Notifications.DELETE_TAB, { actionVO : deletedServerActionVO, askBeforeRemove : false });
 			
 		}
 		
@@ -316,7 +316,7 @@ package net.vdombox.ide.modules.scripts.view
 					if ( serverActionVO.containerID == containerID )
 					{
 						onloadScriptOpening = "";
-						sendNotification( Notifications.SELECTED_SERVER_ACTION_CHANGED, serverActionVO );
+						sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : serverActionVO, check : false } );
 					}
 					else
 					{
@@ -331,7 +331,7 @@ package net.vdombox.ide.modules.scripts.view
 		private function selectedServerActionChangedHandler( event : ServerScriptsPanelEvent ) : void
 		{
 			if ( serverScriptsPanel.selectedScript )
-				sendNotification( Notifications.SELECTED_SERVER_ACTION_CHANGED, serverScriptsPanel.selectedScript );
+				sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : serverScriptsPanel.selectedScript, check : false } );
 		}
 		
 		private function serverActionNameChangeHandler( event : ListItemRendererEvent ) : void
