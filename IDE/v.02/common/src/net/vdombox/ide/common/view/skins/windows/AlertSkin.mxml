@@ -2,7 +2,7 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/mx"
-		maxWidth="338" xmlns:components="net.vdombox.components.*"
+		maxWidth="450" xmlns:components="net.vdombox.components.*"
 		creationComplete="sparkskin2_creationCompleteHandler(event)"
 		removedFromStage="sparkskin2_removedFromStageHandler(event)" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<!-- host component -->
@@ -16,6 +16,7 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.common.view.components.button.AlertButton;
 			import net.vdombox.ide.common.view.components.windows.Alert;
 			
 			protected function sparkskin1_keyDownHandler(event:KeyboardEvent):void
@@ -81,11 +82,15 @@
 			<s:HGroup height="29" width="100%" horizontalAlign="center" gap="40">
 				<button:VDOMButton  id="noButton" tabIndex="-1" select="true"
 							icon="{hostComponent.getNoImage()}" label="{hostComponent.getNoLabel()}"
-							visible="{hostComponent.getVisibleNoButton()}" includeInLayout="{hostComponent.getVisibleNoButton()}"
+							visible="{hostComponent.getVisibleTypeButton() == 'ok' ? false : true}" includeInLayout="{hostComponent.getVisibleTypeButton() == 'ok' ? false : true}"
 							click="hostComponent.btnClickHandler(Alert.NO)" keyDown="hostComponent.keyNoPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
 				<button:VDOMButton  id="yesButton" tabIndex="-1"
 							icon="{hostComponent.getYesImage()}" label="{hostComponent.getYesLabel()}"
 							click="hostComponent.btnClickHandler(Alert.YES)" keyDown="hostComponent.keyYesPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
+				<button:VDOMButton  id="cancelButton" tabIndex="-1" select="true"
+									icon="{hostComponent.getCancelImage()}" label="{hostComponent.getCancelLabel()}"
+									visible="{hostComponent.getVisibleTypeButton() == 'okNoCancel' ? true : false}" includeInLayout="{hostComponent.getVisibleTypeButton() == 'okNoCancel' ? true : false}"
+									click="hostComponent.btnClickHandler(Alert.CANCEL)" keyDown="hostComponent.keyNoPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
 			</s:HGroup>
 		</s:VGroup>
 		

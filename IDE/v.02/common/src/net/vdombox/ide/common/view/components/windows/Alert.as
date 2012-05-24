@@ -45,26 +45,35 @@ package net.vdombox.ide.common.view.components.windows
 		private static var _noLabel : String = "No";
 		
 		[Bindable]
+		private static var _cancelLabel : String = "Cancel";
+		
+		[Bindable]
 		private static var _yesImage : Class = null;
 		
 		[Bindable]
 		private static var _noImage : Class = null;
 		
 		[Bindable]
-		private static var _visibleNoButton : Boolean = false;
+		private static var _cancelImage : Class = null;
+		
+		[Bindable]
+		private static var _visibleTypeButton : String = "ok";
 		
 		public static const YES:uint = 0x0004;
 		
 		public static const NO:uint = 0x0008;
 		
+		public static const CANCEL:uint = 0x0016;
+		
 		private static var instance : Alert;
 		
-		public static function setPatametrs( yesLabel : String = "Yes", noLabel : String = "No", yesImage : Class = null, noImage : Class  = null) : void
+		public static function setPatametrs( yesLabel : String = "Yes", noLabel : String = "No", yesImage : Class = null, noImage : Class  = null, cancelImage : Class  = null ) : void
 		{
 			_yesLabel = yesLabel;
 			_noLabel = noLabel;
 			_yesImage = yesImage;
 			_noImage = noImage;
+			_cancelImage = cancelImage;
 		}
 		
 		public function getNoLabel() : String
@@ -77,6 +86,11 @@ package net.vdombox.ide.common.view.components.windows
 			return _yesLabel;
 		}
 		
+		public function getCancelLabel() : String
+		{
+			return _cancelLabel;
+		}
+		
 		public function getNoImage() : Class
 		{
 			return _noImage;
@@ -87,9 +101,14 @@ package net.vdombox.ide.common.view.components.windows
 			return _yesImage;
 		}
 		
-		public function getVisibleNoButton() : Boolean
+		public function getCancelImage() : Class
 		{
-			return _visibleNoButton;
+			return _cancelImage;
+		}
+		
+		public function getVisibleTypeButton() : String
+		{
+			return _visibleTypeButton;
 		}
 		
 		
@@ -128,10 +147,12 @@ package net.vdombox.ide.common.view.components.windows
 			if (!parent) 
 				return null;
 			
-			if (buttonView == AlertButton.OK_No)
-				_visibleNoButton = true;
+			if(buttonView == AlertButton.OK_No)
+				_visibleTypeButton = "okNo";
+			else if(buttonView == AlertButton.OK_No_Cancel)
+				_visibleTypeButton = "okNoCancel";
 			else
-				_visibleNoButton = false;
+				_visibleTypeButton = "ok";
 			
 			var alert : Alert = Alert.getInstance();
 			
@@ -176,8 +197,10 @@ package net.vdombox.ide.common.view.components.windows
 			
 			_yesLabel = "Yes";
 			_noLabel = "No";
+			_cancelLabel = "Cancel";
 			_yesImage = null;
 			_noImage = null;
+			_cancelImage = null;
 		}
 			
 		public function keyNoPush(event : KeyboardEvent) : void
@@ -190,6 +213,12 @@ package net.vdombox.ide.common.view.components.windows
 		{
 			if (event.keyCode == Keyboard.ENTER)
 				btnClickHandler(Alert.YES);
+		}
+		
+		public function keyCancelPush(event : KeyboardEvent) : void
+		{
+			if (event.keyCode == Keyboard.ENTER)
+				btnClickHandler(Alert.CANCEL);
 		}
 		
 		public function btnClickHandler(type : uint) : void

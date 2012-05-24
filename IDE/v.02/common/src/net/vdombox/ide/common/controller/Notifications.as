@@ -233,6 +233,8 @@ package net.vdombox.ide.common.controller
 		public static const GET_GLOBAL_ACTIONS : String = "getGlobalActions";
 		public static const GLOBAL_ACTIONS_GETTED : String = "globalActionsGetted";
 		
+		public static const GET_SCRIPT_REQUEST : String = "getScriptRequest";
+		
 		public static const GET_SERVER_ACTIONS_REQUEST : String = "getServerActionsRequest";
 		public static const GET_SERVER_ACTIONS : String = "getServerActions";
 		public static const SERVER_ACTIONS_GETTED : String = "serverActionsGetted";
@@ -263,9 +265,11 @@ package net.vdombox.ide.common.controller
 		public static const GET_LIBRARIES : String = "getLibraries";
 		public static const LIBRARIES_GETTED : String = "librariesGetted";
 		
-		public static const SELECTED_SERVER_ACTION_CHANGED : String = "selectedServerActionChanged";
-		public static const SELECTED_LIBRARY_CHANGED : String = "selectedLibraryChanged";
-		public static const SELECTED_GLOBAL_ACTION_CHANGED : String = "selectedGlobalActionChanged";
+		public static const SCRIPT_CHECKED: String = "scriptChecked";
+		
+		public static const GET_GLOBAL_ACTION : String = "getGlobalAction";
+		public static const GLOBAL_ACTION_GETTED : String = "globalActionGetted";
+		
 		public static const SELECTED_TAB_CHANGED : String = "selectedTabChanged";
 		
 		public static const DELETE_TAB : String = "deleteTab";

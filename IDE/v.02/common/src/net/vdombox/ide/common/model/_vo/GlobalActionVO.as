@@ -5,11 +5,18 @@ package net.vdombox.ide.common.model._vo
 	public class GlobalActionVO extends LibraryVO
 	{
 		private var _scriptsGroupName : String;
+		private var _displayName : String;
 		
-		public function GlobalActionVO(name:String, scriptsGroupName : String, applicationVO:ApplicationVO)
+		public function GlobalActionVO(name:String, displayName : String, scriptsGroupName : String, applicationVO:ApplicationVO)
 		{
 			super(name, applicationVO);
+			_displayName = displayName;
 			_scriptsGroupName = scriptsGroupName;
+		}
+		
+		public function get displayName():String
+		{
+			return _displayName;
 		}
 		
 		public function get scriptsGroupName():String
