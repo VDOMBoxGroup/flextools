@@ -104,7 +104,7 @@
 			
 			private function applyErrorTemplateName (errorType : Number = ERROR_TYPE_NOT_VALID_NAME) : void
 			{
-				listItemEditorInstance.errorString = (errorType == ERROR_TYPE_NOT_VALID_NAME) ? "Enter unique template name" : "Error: empty template name";;
+				listItemEditorInstance.errorString = (errorType == ERROR_TYPE_NOT_UNIQUE_NAME) ? "Enter unique template name" : "Error: empty template name";;
 				listItemEditorInstance.setFocus();
 			}
 			

@@ -26,15 +26,45 @@
 				return selectedFolder.selectedTemplate;
 			}
 			
+			public function set selectedTemplate (template : TemplateVO) : void
+			{
+				for each ( var folder : TemplatesAccordionChild in templatesAccordion.getChildren() )
+				{
+					if (!folder.templates)
+						continue;
+					
+					if (folder.templates.contains(template))
+					{
+						templatesAccordion.selectedChild = folder;
+						folder.selectedTemplate = template;
+						break;
+					}
+				}
+			}
+			
 			public function get selectedFolder () : TemplatesAccordionChild
 			{
-				if (!templatesAccordion)
+				var currentAccordion : Accordion = accordionsViewStack.selectedChild as Accordion;
+				
+				if (!currentAccordion)
 					return null;
 				
-				if (!templatesAccordion.selectedChild)
+				if (!currentAccordion.selectedChild)
 					return null;
 				
-				return templatesAccordion.selectedChild as TemplatesAccordionChild
+				return currentAccordion.selectedChild as TemplatesAccordionChild;
+			}
+			
+			private function get allTemplates () : Array
+			{
+				var allTemplatesArray : Array = [];
+				
+				for each ( var folder : TemplatesAccordionChild in templatesAccordion.getChildren() )
+				{
+					allTemplatesArray = allTemplatesArray.concat(folder.templates.source);
+				}
+				
+				return allTemplatesArray;
 			}
 			
 			protected function templatesAccordion_creationCompleteHandler(event:FlexEvent):void
@@ -202,9 +232,7 @@
  			
 			private function isUniqueTemplateName(templateNewName:String, templateOldName:String = "") : Boolean
 			{
-				var templates : Array = sqlProxy.getAllTemplates() as Array;
-				
-				for each (var template : TemplateVO in templates)
+				for each (var template : TemplateVO in allTemplates)
 				{
 					if (template.name == templateOldName)
 						continue;
@@ -358,6 +386,101 @@
 				sqlProxy.updateTemplateContent(template.name, template.content);
 			}
 			
+			// filter
+			[Bindable]
+			public var foundTemplates : ArrayCollection = new ArrayCollection();
+			
+			private var foundFolder : TemplatesAccordionChild;
+			
+			protected function filter_focusInHandler(event:FocusEvent):void
+			{
+				if ( filter.text == FILTER_DEF_TEXT )
+					filter.text = "";
+			}
+			
+			protected function filter_focusOutHandler(event:FocusEvent):void
+			{
+				if ( filter.text == "" )
+					filter.text = FILTER_DEF_TEXT;
+			}
+			
+			protected function filter_changeHandler(event:Event):void
+			{
+				if ( filter.text.length > 0 && filter.text != FILTER_DEF_TEXT )
+				{
+					filterTemplates();
+				}
+				else
+				{
+					cancelFilterTemplates();
+				}
+			}
+			
+			private function filterTemplates () : void
+			{
+				foundTemplates.removeAll(); 
+				
+				for each ( var template : TemplateVO in allTemplates)
+				{
+					if ( template.name.toLowerCase().indexOf(filter.text.toLowerCase()) >= 0)
+						foundTemplates.addItem(template);
+				}
+				
+				vsTemplatesEditors.selectedChild = emptyContentEditor; 
+				
+				accordionsViewStack.selectedChild = templatesFilteredAccordion;
+				
+				lockButtons();
+			}
+			
+			private function cancelFilterTemplates () : void
+			{
+				accordionsViewStack.selectedChild = templatesAccordion;
+				
+				if (foundFolder.selectedTemplate)
+					selectedTemplate = foundFolder.selectedTemplate;
+				
+				foundTemplates.removeAll();
+					
+				unlockButtons();
+			}
+			
+			private function lockButtons () : void
+			{
+				btnAddFolder.enabled = false;
+				btnAddTemplate.enabled = false;
+				btnRemoveTemplate.enabled = false;
+			}
+			
+			private function unlockButtons () : void
+			{
+				btnAddFolder.enabled = true;
+				btnAddTemplate.enabled = true;
+				btnRemoveTemplate.enabled = true;
+			}
+			
+			protected function templatesFilteredAccordion_creationCompleteHandler(event:FlexEvent):void
+			{
+				foundFolder = new TemplatesAccordionChild();
+				foundFolder.label = "Templates found";
+				
+				foundFolder.addEventListener(FlexEvent.CREATION_COMPLETE, folderCreationCompleteHandler);
+				
+				templatesFilteredAccordion.addChild( foundFolder );
+				
+				foundFolder.addEventListener( TemplatesAccordionEvent.SELECTED_TEMPLATE_CHANGED, selectedTemplateChanged);
+				
+				foundFolder.templates = foundTemplates;
+				foundFolder.setStyle("headerRenderer", null);
+				
+				function folderCreationCompleteHandler (event : FlexEvent) : void
+				{
+					foundFolder.removeEventListener(FlexEvent.CREATION_COMPLETE, folderCreationCompleteHandler);
+					
+					foundFolder.templatesList.doubleClickEnabled = false;
+				}
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -388,29 +511,26 @@
 		<mx:VBox width="100%" height="100%" verticalGap="0">
 			
 			<mx:TextInput id="filter" width="100%" 
-						  text="{FILTER_DEF_TEXT}" fontStyle="italic"/>
-						  <!--change="filter_changeHandler(event)" 
+						  text="{FILTER_DEF_TEXT}" fontStyle="italic"
 						  focusIn="filter_focusInHandler(event)" 
-						  focusOut="filter_focusOutHandler(event)"-->
+						  focusOut="filter_focusOutHandler(event)"
+						  change="filter_changeHandler(event)"/>
 			
 			<mx:ViewStack id="accordionsViewStack" 
 						  width="100%" height="100%">
 				
-				<mx:Box width="100%" height="100%">
-					<mx:Accordion id="templatesAccordion"
-								  headerRenderer="net.vdombox.helpeditor.view.components.TemplatesAccordionHeader"
-								  fontFamily="Verdana" borderStyle="solid" 
-								  width="100%" height="100%"
-								  creationComplete="templatesAccordion_creationCompleteHandler(event)"
-								  change="templatesAccordion_changeHandler(event)"/>
-				</mx:Box>
-				
-				
-				<mx:Accordion id="templatesFoundAccordion"
+				<mx:Accordion id="templatesAccordion"
+							  headerRenderer="net.vdombox.helpeditor.view.components.TemplatesAccordionHeader"
+							  fontFamily="Verdana" borderStyle="solid" 
 							  width="100%" height="100%"
-							  fontFamily="Verdana" borderStyle="solid">
-							  <!--creationComplete="templatesFoundAccordion_creationCompleteHandler(event)"-->
-				</mx:Accordion>
+							  creationComplete="templatesAccordion_creationCompleteHandler(event)"
+							  change="templatesAccordion_changeHandler(event)"/>
+				
+				
+				<mx:Accordion id="templatesFilteredAccordion"
+							  width="100%" height="100%"
+							  fontFamily="Verdana" borderStyle="solid"
+							  creationComplete="templatesFilteredAccordion_creationCompleteHandler(event)"/>
 				
 			</mx:ViewStack>
 			
@@ -421,6 +541,9 @@
 	
 	<mx:ViewStack id="vsTemplatesEditors" 
 				  width="100%" height="100%"
-				  backgroundColor="white"/>
+				  backgroundColor="white">
+		<components:TemplateContentEditor id="emptyContentEditor" enabled="false"/>
+	</mx:ViewStack>
+		
 	
 </mx:HBox>
