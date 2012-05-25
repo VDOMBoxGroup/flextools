@@ -4,6 +4,7 @@
 	<mx:Script>
 		<![CDATA[
 			import net.vdombox.helpeditor.model.vo.TemplateVO;
+			import net.vdombox.helpeditor.utils.PageUtils;
 			
 			private var startContent : String = "";
 			
@@ -23,6 +24,11 @@
 			public function get content () : String
 			{
 				return textInputField.text;
+			}
+			
+			public function set content (value : String) : void
+			{
+				textInputField.text = value;
 			}
 			
 			protected function textInputField_keyDownHandler(event:KeyboardEvent):void
@@ -47,6 +53,13 @@
 				}
 			}
 			
+			public function refreshTemplateLinks (oldTemplateName:String, newTemplateName:String) : void
+			{
+				content = PageUtils.getInstance().renameTemplateInPage(content, oldTemplateName, newTemplateName);
+				
+				invalidateDisplayList();
+			}
+					
 		]]>
 	</mx:Script>
 	

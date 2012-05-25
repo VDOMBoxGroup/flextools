@@ -39,7 +39,7 @@
 			
 			import net.vdombox.helpeditor.controller.events.PagesSyncronizationEvent;
 			import net.vdombox.helpeditor.model.AlertMessages;
-			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.model.proxy.SQLProxy;
 			import net.vdombox.helpeditor.view.itemrenderers.TreeItemRenderer;
 			
 			private var sqlProxy : SQLProxy = new SQLProxy();

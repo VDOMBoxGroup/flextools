@@ -9,10 +9,14 @@
 			import mx.events.FlexEvent;
 			import mx.events.IndexChangedEvent;
 			
+			import net.vdombox.helpeditor.controller.events.TemplateRenameEvent;
 			import net.vdombox.helpeditor.controller.events.TemplatesAccordionEvent;
 			import net.vdombox.helpeditor.model.AlertMessages;
-			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.model.proxy.SQLProxy;
 			import net.vdombox.helpeditor.model.vo.TemplateVO;
+			import net.vdombox.helpeditor.utils.PageUtils;
+			
+			public static const EVENT_TEMPLATE_NAME_CHANGED : String = "templateNameChanged";
 			
 			private const FILTER_DEF_TEXT	: String = "filter";
 			
@@ -249,6 +253,9 @@
 				var folder : TemplatesAccordionChild = event.target as TemplatesAccordionChild;
 				
 				sqlProxy.updateTemplateName(folder.oldTemplateName, folder.newTemplateName);
+				
+				refreshTemplatesContent(folder.oldTemplateName, folder.newTemplateName);
+				refreshPagesContent(folder.oldTemplateName, folder.newTemplateName);
 			}
 			
 			protected function addTemplate():void
@@ -386,7 +393,7 @@
 				sqlProxy.updateTemplateContent(template.name, template.content);
 			}
 			
-			// filter
+			// filter ...
 			[Bindable]
 			public var foundTemplates : ArrayCollection = new ArrayCollection();
 			
@@ -480,7 +487,36 @@
 					foundFolder.templatesList.doubleClickEnabled = false;
 				}
 			}
+			// .. filter
 			
+			private function refreshTemplatesContent (oldTemplateName:String, newTemplateName:String) : void
+			{
+				for each (var template : TemplateVO in allTemplates)
+				{
+					var templateContentEditor : TemplateContentEditor = getContentEditorByTemplate(template);
+					
+					if (templateContentEditor)
+					{
+						if (templateContentEditor.content.indexOf(oldTemplateName) >= 0)
+							templateContentEditor.refreshTemplateLinks(oldTemplateName, newTemplateName);
+					}
+					
+					template.content = PageUtils.getInstance().renameTemplateInPage(template.content, oldTemplateName, newTemplateName);
+						
+					sqlProxy.updateTemplateContent(template.name, template.content);
+				}
+			}
+			
+			private function refreshPagesContent (oldTemplateName:String, newTemplateName:String) : void
+			{
+				PageUtils.getInstance().renameTemplateInPages(oldTemplateName, newTemplateName);
+				
+				var renameEvent : TemplateRenameEvent = new TemplateRenameEvent(TemplateRenameEvent.TEMPLATE_RENAMED);
+				renameEvent.oldTemplateName = oldTemplateName;
+				renameEvent.newTemplateName = newTemplateName;
+				
+				dispatchEvent(renameEvent);
+			}
 		]]>
 	</mx:Script>
 	

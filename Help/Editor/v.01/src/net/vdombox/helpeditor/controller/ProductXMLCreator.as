@@ -27,7 +27,7 @@ package net.vdombox.helpeditor.controller
 	
 	import net.vdombox.helpeditor.model.HtmlPageProperties;
 	import net.vdombox.helpeditor.model.ImageProperties;
-	import net.vdombox.helpeditor.model.SQLProxy;
+	import net.vdombox.helpeditor.model.proxy.SQLProxy;
 	import net.vdombox.helpeditor.model.SpinnerPopupMessages;
 	import net.vdombox.helpeditor.utils.PageUtils;
 	import net.vdombox.helpeditor.utils.ResourceUtils;
@@ -498,7 +498,7 @@ package net.vdombox.helpeditor.controller
 																		Boolean(currentPageObj["useToc"]),
 																		getPageChildren(currentPageObj["name"]) );
 			
-			pageContent = PageUtils.getInstance().replacePageTemplates(pageContent);
+			pageContent = PageUtils.getInstance().replaceTemplatesLinksByTemplateContent(pageContent);
 			
 			pageContentXML = new XML(pageContent);
 			

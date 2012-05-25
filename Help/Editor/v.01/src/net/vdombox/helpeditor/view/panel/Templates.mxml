@@ -42,6 +42,7 @@
 			import net.vdombox.helpeditor.model.vo.TemplateVO;
 			import net.vdombox.helpeditor.view.components.TemplateContentEditor;
 			
+			public static const EVENT_INSERT_TEMPLATE_CLICK : String = "insertClick";
 			[Bindable]
 			public var allowInsert : Boolean = false;
 			
@@ -94,7 +95,7 @@
 					
 				templatesGroup.saveTemplate(templatesGroup.selectedTemplate);
 				
-				dispatchEvent(new Event("insertClick"));
+				dispatchEvent(new Event(EVENT_INSERT_TEMPLATE_CLICK));
 				
 				closeWindow();
 			}

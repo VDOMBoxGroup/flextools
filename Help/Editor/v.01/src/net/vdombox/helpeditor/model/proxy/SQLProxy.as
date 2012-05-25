@@ -1,4 +1,4 @@
-package net.vdombox.helpeditor.model
+package net.vdombox.helpeditor.model.proxy
 {
 	import flash.data.SQLConnection;
 	import flash.data.SQLMode;
@@ -12,6 +12,7 @@ package net.vdombox.helpeditor.model
 	import mx.controls.Alert;
 	
 	import net.vdombox.helpeditor.model.vo.TemplateVO;
+	import net.vdombox.helpeditor.model.AlertMessages;
 
 	public class SQLProxy
 	{

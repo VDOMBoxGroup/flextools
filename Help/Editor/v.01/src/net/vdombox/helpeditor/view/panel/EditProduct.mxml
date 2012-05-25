@@ -26,7 +26,7 @@
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			
-			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.model.proxy.SQLProxy;
 			
 			public var curentProduct : Object; 
 			

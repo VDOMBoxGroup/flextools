@@ -8,7 +8,7 @@ package net.vdombox.helpeditor.view.itemrenderers
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.helpeditor.controller.events.PagesSyncronizationEvent;
-	import net.vdombox.helpeditor.model.SQLProxy;
+	import net.vdombox.helpeditor.model.proxy.SQLProxy;
 	import net.vdombox.helpeditor.view.components.SyncPagesSelector;
 	
 	public class TreeItemRenderer extends mx.controls.treeClasses.TreeItemRenderer

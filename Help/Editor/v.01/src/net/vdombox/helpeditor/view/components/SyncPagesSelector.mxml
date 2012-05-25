@@ -8,7 +8,7 @@
 			import mx.events.TreeEvent;
 			
 			import net.vdombox.helpeditor.controller.events.PagesSyncronizationEvent;
-			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.model.proxy.SQLProxy;
 			import net.vdombox.helpeditor.view.itemrenderers.TreeItemRenderer;
 			
 			public var syncGroupName : String;

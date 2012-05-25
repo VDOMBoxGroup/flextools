@@ -18,7 +18,7 @@ package net.vdombox.helpeditor.controller
 	import mx.events.FlexEvent;
 	import mx.utils.Base64Decoder;
 	
-	import net.vdombox.helpeditor.model.SQLProxy;
+	import net.vdombox.helpeditor.model.proxy.SQLProxy;
 	import net.vdombox.helpeditor.model.SpinnerPopupMessages;
 	import net.vdombox.helpeditor.view.spinner.SpinnerPopUp;
 

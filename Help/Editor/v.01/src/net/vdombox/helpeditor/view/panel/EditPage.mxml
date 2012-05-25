@@ -22,7 +22,7 @@
 	<mx:Script>
 		<![CDATA[
 			import net.vdombox.helpeditor.view.components.wysiwyg.HTML_WYSIWYG;
-			import net.vdombox.helpeditor.model.SQLProxy;
+			import net.vdombox.helpeditor.model.proxy.SQLProxy;
 			import net.vdombox.helpeditor.utils.Utils;
 			import mx.collections.ArrayCollection;
 			import mx.controls.CheckBox;
