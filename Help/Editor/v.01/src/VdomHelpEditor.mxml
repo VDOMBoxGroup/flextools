@@ -871,6 +871,26 @@
 				}
 			}
 			
+			// sort pages ...
+			protected function tree_sortPagesByTitleHandler(event:Event):void
+			{
+				var xmlToSort : XML = new XML(event.target.data);
+				
+				if (toc.@name.toString() == xmlToSort.@name.toString())
+				{
+					toc = Utils.sortXMLByAttributeName(xmlToSort, "title", Array.CASEINSENSITIVE);
+					tree.dataProvider = toc;
+					tree.validateNow();
+				}
+				else
+					toc..page.(@name == xmlToSort.@name)[0] = Utils.sortXMLByAttributeName(xmlToSort, "title", Array.CASEINSENSITIVE);
+				
+				sqlProxy.setToc(tree.dataProvider.toXMLString(), cmboxProduct.selectedItem.name);
+				
+				tree.validateNow();
+			}
+			// ... sort pages
+			
 		]]>
 	</mx:Script>
 
@@ -942,11 +962,6 @@
 					   textRollOverColor="#FFFFFF"
 					   enabled="{Boolean(cmboxProduct.selectedItem)}" />
 
-			<!--
-		   <mx:ProgressBar id="progressBar" labelPlacement="top" themeColor="#F20D7A"
-			   minimum="0" visible="true" maximum="100" label="CurrentProgress 0%"
-			   direction="right" mode="manual" width="100%"/>
-			 -->
 		</mx:HBox>
 		<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x4b4c4c" />
 		
@@ -975,7 +990,8 @@
 									   openDuration="0"
 									   defaultLeafIcon="@Embed('../assets/page.png')" 
 									   change="{treeChangeHandler(event)}"
-									   keyDown="onTreeKeyboardKeyUp(event)"/>
+									   keyDown="onTreeKeyboardKeyUp(event)"
+									   sortPagesByTitle="tree_sortPagesByTitleHandler(event)"/>
 				
 				<mx:HBox paddingLeft="3">
 					<mx:Button label="Add Page"

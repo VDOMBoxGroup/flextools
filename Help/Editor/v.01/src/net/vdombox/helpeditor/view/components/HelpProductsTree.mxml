@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Tree xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Tree xmlns:mx="http://www.adobe.com/2006/mxml"
+		 itemRenderer="net.vdombox.helpeditor.view.itemrenderers.TreeItemRenderer">
+	
+	<mx:Metadata>
+		[Event(name="sortPagesByTitle", type="flash.events.Event")]
+	</mx:Metadata>
+	
 	<mx:Script>
 		<![CDATA[
 			

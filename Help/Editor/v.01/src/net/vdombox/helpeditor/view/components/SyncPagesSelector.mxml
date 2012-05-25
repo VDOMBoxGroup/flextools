@@ -9,7 +9,7 @@
 			
 			import net.vdombox.helpeditor.controller.events.PagesSyncronizationEvent;
 			import net.vdombox.helpeditor.model.proxy.SQLProxy;
-			import net.vdombox.helpeditor.view.itemrenderers.TreeItemRenderer;
+			import net.vdombox.helpeditor.view.itemrenderers.CheckBoxesTreeItemRenderer;
 			
 			public var syncGroupName : String;
 			
@@ -42,7 +42,7 @@
 			
 			private function treeItemRenderer_getCurrentSyncGroupNameHandler (event : PagesSyncronizationEvent) : void
 			{
-				var selectedTreeItemRenderer : TreeItemRenderer = event.target as TreeItemRenderer;
+				var selectedTreeItemRenderer : CheckBoxesTreeItemRenderer = event.target as CheckBoxesTreeItemRenderer;
 				
 				selectedTreeItemRenderer.currentSyncGroupName = syncGroupName;
 			}
@@ -57,7 +57,7 @@
 	
 	<mx:Tree id="pagesTree"
 			 width="100%" height="100%"
-			 itemRenderer="net.vdombox.helpeditor.view.itemrenderers.TreeItemRenderer"
+			 itemRenderer="net.vdombox.helpeditor.view.itemrenderers.CheckBoxesTreeItemRenderer"
 			 labelField="@title"
 			 defaultLeafIcon="{null}"
 			 folderClosedIcon="{null}"

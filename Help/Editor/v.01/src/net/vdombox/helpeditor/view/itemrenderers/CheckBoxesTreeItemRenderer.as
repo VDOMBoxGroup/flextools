@@ -11,7 +11,7 @@ package net.vdombox.helpeditor.view.itemrenderers
 	import net.vdombox.helpeditor.model.proxy.SQLProxy;
 	import net.vdombox.helpeditor.view.components.SyncPagesSelector;
 	
-	public class TreeItemRenderer extends mx.controls.treeClasses.TreeItemRenderer
+	public class CheckBoxesTreeItemRenderer extends mx.controls.treeClasses.TreeItemRenderer
 	{
 		private var sqlProxy : SQLProxy = new SQLProxy();
 		
@@ -19,7 +19,7 @@ package net.vdombox.helpeditor.view.itemrenderers
 		
 		private var syncGroupName : String;
 		
-		public function TreeItemRenderer()
+		public function CheckBoxesTreeItemRenderer()
 		{
 			super();
 		}

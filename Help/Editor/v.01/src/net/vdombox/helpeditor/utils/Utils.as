@@ -242,5 +242,34 @@ package net.vdombox.helpeditor.utils
 			return value.replace(regExpControlCodes, "");
 		}
 		
+		public static function sortXMLByAttributeName (xml:XML, attributeName:String, options:Object=null) : XML
+		{
+			//store in array to sort on
+			var xmlArray:Array	= new Array();
+			var item:XML;
+			
+			for each(item in xml.children())
+			{
+				var object:Object = {
+					data	: item, 
+					order	: item.attribute(attributeName)
+				};
+				xmlArray.push(object);
+			}
+			
+			//sort using the power of Array.sortOn()
+			xmlArray.sortOn('order',options);
+			
+			//create a new XMLList with sorted XML
+			var sortedXmlList:XMLList = new XMLList();
+			var xmlObject:Object;
+			for each(xmlObject in xmlArray )
+			{
+				sortedXmlList += xmlObject.data;
+			}
+			
+			return	xml.copy().setChildren(sortedXmlList);
+		}
+		
 	}
 }

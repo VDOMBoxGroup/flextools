@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<treeClasses:TreeItemRenderer xmlns:mx="http://www.adobe.com/2006/mxml" 
+							  xmlns:treeClasses="mx.controls.treeClasses.*">
+	
+	<mx:Script>
+		<![CDATA[
+			
+			override protected function createChildren():void
+			{
+				super.createChildren();
+
+				if (!contextMenu)
+					addContextMenu();
+			}
+			
+			private function addContextMenu () : void
+			{
+				contextMenu = new NativeMenu();
+				
+				var sortItem : ContextMenuItem = new ContextMenuItem("Sort by title");
+				contextMenu.addItem( sortItem );
+				
+				sortItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, sortPagesByLabelClickHandler);  
+			}
+			
+			private function sortPagesByLabelClickHandler (event : ContextMenuEvent) : void
+			{
+				dispatchEvent(new Event("sortPagesByTitle", true));
+			}
+		]]>
+	</mx:Script>
+	
+	
+</treeClasses:TreeItemRenderer>
