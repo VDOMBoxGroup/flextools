@@ -17,7 +17,10 @@ package net.vdombox.ide.modules.tree.view.components
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	
+	import spark.components.Button;
+	import spark.components.DropDownList;
 	import spark.components.Group;
+	import spark.events.IndexChangeEvent;
 
 	public class Linkage extends UIComponent
 	{
@@ -31,6 +34,7 @@ package net.vdombox.ide.modules.tree.view.components
 			addEventListener( MouseEvent.CLICK, clickHandler, false, 0, true );
 			addEventListener( FlexEvent.REMOVE, removeHandler, false, 0, true );
 			addEventListener( FlexEvent.CREATION_COMPLETE, createionCompleteHandler, false, 0, true );
+			addEventListener( IndexChangeEvent.CHANGE, chengIndex, true, 0, true );
 		}
 
 		[Embed( source="assets/delete_linkage.png" )]
@@ -63,10 +67,15 @@ package net.vdombox.ide.modules.tree.view.components
 		private var watchers : Object;
 
 		private var deleteImage : SmoothImage;
-		private var signatureGroup : SignatureGroup;
+		private var _signatureGroup : SignatureGroup;
 
 		private var _signatureVisible : Boolean;
 		private var isSignatureVisibleChanged : Boolean;
+
+		public function get signatureGroup():SignatureGroup
+		{
+			return _signatureGroup;
+		}
 
 		public function get linkageVO() : LinkageVO
 		{
@@ -145,7 +154,7 @@ package net.vdombox.ide.modules.tree.view.components
 
 			if ( !signatureGroup )
 			{
-				signatureGroup = new SignatureGroup();
+				_signatureGroup = new SignatureGroup();
 				signatureGroup.addEventListener( MouseEvent.CLICK, signatureGroup_clickHandler, false, 0, true );
 				
 				if( _linkageVO )
@@ -475,7 +484,7 @@ package net.vdombox.ide.modules.tree.view.components
 			if ( !stage )
 				return;
 
-			if( event.target is SignatureGroup )
+			if( event.target is SignatureGroup || event.target is Button )
 				return;
 			
 			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
@@ -509,7 +518,28 @@ package net.vdombox.ide.modules.tree.view.components
 
 		private function signatureGroup_clickHandler( event : MouseEvent ) : void
 		{
+			if ( event.target is Button )
+				return;
+			
+			var linkageEvent : LinkageEvent = new LinkageEvent( LinkageEvent.CLICK );
+			linkageEvent.detail = { x : event.localX, y : event.localY };
+			dispatchEvent( linkageEvent );
+			
 			event.stopImmediatePropagation();
+		}
+		
+		public function updateNumber() : void
+		{
+			signatureGroup.number = linkageVO.index;
+		}
+		
+		private function chengIndex( event : IndexChangeEvent ) : void
+		{
+			var linkVO : LinkageVO = (event.target as DropDownList).selectedItem as LinkageVO;
+			
+			var linkageEvent : LinkageEvent = new LinkageEvent( LinkageEvent.INDEX_CHANGE );
+			linkageEvent.detail = { firstLinkageVO : this.linkageVO, secondLinkageVO : linkVO };
+			dispatchEvent( linkageEvent );
 		}
 	}
 }

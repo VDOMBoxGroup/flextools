@@ -5,10 +5,10 @@ package net.vdombox.ide.modules.tree.view
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.events.LinkageEvent;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.events.WorkAreaEvent;
@@ -79,6 +79,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( Notifications.TREE_ELEMENTS_CHANGED );
 			interests.push( Notifications.TREE_ELEMENT_ADD );
 			interests.push( Notifications.LINKAGES_CHANGED );
+			interests.push( Notifications.LINKAGES_INDEX_UPDATE );
 
 			interests.push( Notifications.APPLICATION_STRUCTURE_SETTED );
 			
@@ -122,8 +123,9 @@ package net.vdombox.ide.modules.tree.view
 						if ( structureProxy.treeElements )
 							workArea.treeElements = structureProxy.treeElements;
 
-						if ( structureProxy.linkages )
-							workArea.linkages = structureProxy.linkages;
+						sendNotification( Notifications.GET_APPLICATION_STRUCTURE, statesProxy.selectedApplication );
+						/*if ( structureProxy.linkages )
+							workArea.linkages = structureProxy.linkages;*/
 
 						if ( statesProxy.selectedPage )
 						{
@@ -182,6 +184,13 @@ package net.vdombox.ide.modules.tree.view
 				{
 					workArea.linkages = body as Array;
 
+					break;
+				}
+					
+				case Notifications.LINKAGES_INDEX_UPDATE:
+				{
+					workArea.updateLinkageIndex();
+					
 					break;
 				}
 					
@@ -260,6 +269,8 @@ package net.vdombox.ide.modules.tree.view
 			workArea.addEventListener( WorkAreaEvent.SET_START, makeStartPageHandler, false, 0, true );
 			
 			workArea.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
+			workArea.addEventListener( LinkageEvent.CLICK, signatureGroupClick, true, 0, true );
+			workArea.addEventListener( LinkageEvent.INDEX_CHANGE, indexChangeHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -282,12 +293,16 @@ package net.vdombox.ide.modules.tree.view
 			workArea.removeEventListener( WorkAreaEvent.HIDE_SIGNATURE, hideSignatureHandler );
 			
 			workArea.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true );
+			workArea.removeEventListener( LinkageEvent.CLICK, signatureGroupClick, true );
+			workArea.removeEventListener( LinkageEvent.INDEX_CHANGE, indexChangeHandler, true );
 		}
 
 		private function clearData() : void
 		{
 			workArea.treeElements = null;
 			workArea.linkages = null;
+			workArea.linkagesLayer.removeAllElements();
+			workArea.removeAllElements();
 		}
 
 		private function saveHandler( event : WorkAreaEvent = null ) : void
@@ -372,5 +387,19 @@ package net.vdombox.ide.modules.tree.view
 			if ( event.keyCode == Keyboard.S )
 				saveHandler();
 		}
+		
+		private function signatureGroupClick( event : LinkageEvent ) : void
+		{
+			var linkage : Linkage = event.target as Linkage;
+			
+			workArea.openIndexList( structureProxy.linkages, linkage, event.detail );
+		}
+		
+		private function indexChangeHandler( event : LinkageEvent ) : void
+		{			
+			structureProxy.exchange( event.detail.firstLinkageVO, event.detail.secondLinkageVO );
+		}
+		
+		
 	}
 }

@@ -238,6 +238,24 @@ package net.vdombox.ide.modules.tree.view.components
 			invalidateProperties();
 		}
 
+		public function updateLinkageIndex( ) : void
+		{
+			
+			var numLinkages : int = linkagesLayer.numElements;
+			var currentLinkage : Linkage;
+			
+			for ( var i : int = 0; i < numLinkages; i++ )
+			{
+				currentLinkage = linkagesLayer.getElementAt( i ) as Linkage;
+				
+				if( currentLinkage )
+				{
+					currentLinkage.updateNumber();
+				}
+			}
+			
+		}
+		
 		public function set selectedTreeLevelVO( value : TreeLevelVO ) : void
 		{
 			_selectedTreeLevelVO = value;
@@ -1037,6 +1055,22 @@ package net.vdombox.ide.modules.tree.view.components
 
 			removeShadowHandlers();
 		}
+		
+		public function openIndexList( linkages : Array, link : Linkage, coordinates : Object ) : void
+		{
+			var linkVO : LinkageVO = link.linkageVO;
+			var linkVO2 : LinkageVO;
+			var sourceLinkages : Array = new Array();
+			
+			for each( linkVO2 in linkages )
+			{
+				if ( linkVO2.source == linkVO.source && linkVO2.level == linkVO.level && linkVO2 != linkVO )
+					sourceLinkages.push( linkVO2 )
+			}
+			
+			link.signatureGroup.openIndexList( sourceLinkages, coordinates );
+		}
+			
 	}
 }
 

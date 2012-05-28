@@ -3,14 +3,15 @@ package net.vdombox.ide.modules.tree.model
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.LevelObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.StructureObjectVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
+	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -184,7 +185,7 @@ package net.vdombox.ide.modules.tree.model
 					{
 						levelObjectVO = new LevelObjectVO( linkageVO.target.id );
 						levelObjectVO.level = linkageVO.level.level;
-						levelObjectVO.index = index;
+						levelObjectVO.index = linkageVO.index;
 						index++;
 
 						levels.push( levelObjectVO );
@@ -262,9 +263,19 @@ package net.vdombox.ide.modules.tree.model
 
 		public function createLinkage( value : LinkageVO ) : void
 		{
+			var linkageVO : LinkageVO;
+			if ( value.target.width == 0 )
+				return;
+			
+			for each( linkageVO in linkages )
+			{
+				if ( linkageVO == value )
+					return;
+			}
+			
 			_linkages.push( value );
 
-			sendNotification( Notifications.LINKAGES_CHANGED, linkages );
+			//sendNotification( Notifications.LINKAGES_CHANGED, linkages );
 		}
 
 		public function deleteLinkage( value : LinkageVO ) : void
@@ -273,6 +284,7 @@ package net.vdombox.ide.modules.tree.model
 				return;
 
 			var currentLinkageVO : LinkageVO;
+			var deleteLinkage : LinkageVO;
 			var thisIndex : Boolean = false;
 			for ( var i : int = 0; i < _linkages.length; i++ )
 			{
@@ -293,13 +305,53 @@ package net.vdombox.ide.modules.tree.model
 
 				if ( thisIndex )
 				{
+					deleteLinkage = currentLinkageVO;
 					_linkages.splice( i, 1 );
+					
+					for ( i = 0; i < _linkages.length; i++ )
+					{
+						if ( _linkages[i].source == deleteLinkage.source  && _linkages[i].level == deleteLinkage.level && _linkages[i].index > deleteLinkage.index )
+							_linkages[i].index--;
+					}
+					
+					sendNotification( Notifications.LINKAGES_INDEX_UPDATE, linkages );
 					break;
 				}
-
 			}
-
-			sendNotification( Notifications.LINKAGES_CHANGED, linkages );
+		}
+		
+		public function exchange( firstLinkVO : LinkageVO, secondLinkVO : LinkageVO ) : void
+		{
+			var currentLinkageVO : LinkageVO;
+			var firstLinkageIndex : int = -1;
+			var secondLinkageIndex : int = -1;
+			
+			for ( var i : int = 0; i < _linkages.length; i++ )
+			{
+				currentLinkageVO = _linkages[ i ] as LinkageVO;
+				if ( currentLinkageVO === firstLinkVO ||
+					( currentLinkageVO.source.id == firstLinkVO.source.id && currentLinkageVO.target.id == firstLinkVO.target.id &&
+						currentLinkageVO.level.level == firstLinkVO.level.level ) )
+				{
+					firstLinkageIndex = i;
+				}
+				else if ( currentLinkageVO === secondLinkVO ||
+					( currentLinkageVO.source.id == secondLinkVO.source.id && currentLinkageVO.target.id == secondLinkVO.target.id &&
+						currentLinkageVO.level.level == secondLinkVO.level.level ) )
+				{
+					secondLinkageIndex = i;
+				}
+				
+				if ( firstLinkageIndex >= 0 && secondLinkageIndex >= 0 )
+				{
+					var tempIndex : int = _linkages[firstLinkageIndex].index;
+					_linkages[firstLinkageIndex].index = _linkages[secondLinkageIndex].index;
+					_linkages[secondLinkageIndex].index = tempIndex;
+						
+					sendNotification( Notifications.LINKAGES_INDEX_UPDATE, linkages );
+					break;
+				}
+			}
 		}
 
 		public function cleanup() : void

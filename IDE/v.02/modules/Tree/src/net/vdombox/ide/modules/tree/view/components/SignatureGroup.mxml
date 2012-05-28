@@ -7,6 +7,15 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.ArrayList;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			
+			import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
+			
+			import spark.components.Button;
+			import spark.components.DropDownList;
+			import spark.events.IndexChangeEvent;
 			import spark.filters.DropShadowFilter;
 			import spark.skins.spark.ComboBoxSkin;
 			[Bindable]
@@ -14,6 +23,45 @@
 
 			[Bindable]
 			public var number : uint;
+			
+			private var dropDown : DropDownList;
+			
+			public function openIndexList( source : Array, coordinates : Object ) : void
+			{
+				if ( !dropDown )
+				{
+					dropDown = new DropDownList();
+					dropDown.width = 50;
+					addElement( dropDown );
+				}
+				else
+				{
+					dropDown.visible = true;
+				}
+				
+				stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
+				
+				dropDown.x = coordinates.x;
+				dropDown.y = coordinates.y;
+				dropDown.labelField = "index";
+				
+				dropDown.dataProvider = new ArrayList( source.sortOn( "index", Array.NUMERIC ) );
+				
+			}
+			
+			private function stage_mouseDownHandler( event : MouseEvent ) : void
+			{
+				if ( stage && event.target != this && !( event.target is Button ) )
+				{
+					stage.removeEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler );
+					
+					if ( dropDown.parent == this )
+					{
+						dropDown.visible = false;
+					}
+				}
+			}
+			
 		]]>
 	</fx:Script>
 
