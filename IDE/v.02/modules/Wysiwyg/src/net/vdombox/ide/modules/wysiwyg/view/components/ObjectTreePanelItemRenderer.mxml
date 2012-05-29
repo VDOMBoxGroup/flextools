@@ -28,6 +28,7 @@
 			import mx.events.ResourceEvent;
 			
 			import net.vdombox.ide.common.events.ResourceVOEvent;
+			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 			
@@ -138,6 +139,13 @@
 			{
 				_contextMenu.removeAllItems();
 				
+				if ( _data.name().localName == "page" )
+				{
+					var startItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_start' ));
+					startItem.addEventListener( Event.SELECT, startContextMenuHandler, false, 0, true );
+					_contextMenu.addItem( startItem );
+				}
+				
 				var copyItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_copy' ));
 				copyItem.addEventListener( Event.SELECT, copyContextMenuHandler, false, 0, true );
 				_contextMenu.addItem( copyItem );
@@ -227,6 +235,13 @@
 					}
 				}
 				dispatchEvent( deleteEvent );
+			}
+			
+			private function startContextMenuHandler( event : Event ) : void
+			{
+				var startEvent : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.SET_START );
+				startEvent.pageID = _data.@id;
+				dispatchEvent( startEvent );
 			}
 			
 			private function copyContextMenuHandler( event : Event ) : void

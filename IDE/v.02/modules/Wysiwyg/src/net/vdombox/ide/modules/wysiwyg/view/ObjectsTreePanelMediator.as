@@ -322,10 +322,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.addEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CREATE_NEW_CLICK, createNewPage, false, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true, 0, true );
+			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.SET_START, startItemRendererHandler, true, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.COPY, copyItemRendererHandler, true, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.PASTE, pasteItemRendererHandler, true, 0, true );
 			
+		}
+		
+		private function startItemRendererHandler(event : ObjectsTreePanelEvent) : void
+		{
+			var pageID : String = event.pageID;
+			if ( _pages.hasOwnProperty( pageID ) )
+				sendNotification( Notifications.SET_APPLICATION_INFORMATION, { applicationVO : statesProxy.selectedApplication, pageID : pageID } );
 		}
 		
 		private function keyDownDeleteHandler(event : ObjectsTreePanelEvent) : void
@@ -448,6 +456,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.removeEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CREATE_NEW_CLICK, createNewPage );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.EYE_CHANGED, eyeChangeHandler, true );
+			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.SET_START, startItemRendererHandler, true );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.COPY, copyItemRendererHandler, true );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.PASTE, pasteItemRendererHandler, true );

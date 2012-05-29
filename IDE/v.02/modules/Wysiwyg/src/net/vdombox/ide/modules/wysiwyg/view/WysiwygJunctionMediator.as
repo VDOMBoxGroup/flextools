@@ -118,6 +118,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			interests.push( Notifications.UNDO );
 			interests.push( Notifications.REDO );
+			
+			interests.push( Notifications.SET_APPLICATION_INFORMATION );
 
 			return interests;
 		}
@@ -539,6 +541,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case Notifications.SET_APPLICATION_INFORMATION:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.INFORMATION, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
 				}

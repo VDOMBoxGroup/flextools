@@ -18,6 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 
 		public static var OPEN : String        = "otpe_open";
 		
+		public static var SET_START : String        = "otpe_SetStart";
 		public static var DELETE : String        = "otpe_delete";
 		public static var COPY : String        = "otpe_copy";
 		public static var PASTE : String        = "otpe_paste";
@@ -31,7 +32,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 			this.pageID = pageID;
 			this.objectID = objectID;
 		}
-
+		
 		public var objectID : String;
 
 		public var pageID : String;
