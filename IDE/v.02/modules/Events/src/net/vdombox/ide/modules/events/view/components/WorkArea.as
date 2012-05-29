@@ -514,6 +514,22 @@ package net.vdombox.ide.modules.events.view.components
 			
 			changeActions();
 		}
+		
+		public function createBaseAction( newElementVO : IEventBaseVO ) : void
+		{
+			var coordinates : Point = new Point( 0 , 0 );
+			
+			if ( newElementVO is EventVO )
+				createEvent( newElementVO as EventVO, coordinates );
+			else if ( newElementVO is ClientActionVO )
+				createClientAction( newElementVO as ClientActionVO, coordinates );
+			else if ( newElementVO is ServerActionVO )
+				createServerAction( newElementVO as ServerActionVO, coordinates );
+			
+			unsaveHandler();
+			
+			changeActions();
+		}
 
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{

@@ -91,6 +91,8 @@ package net.vdombox.ide.modules.events.view
 			
 			interests.push( Notifications.GET_USED_ACTIONS );
 			
+			interests.push( Notifications.CREATE_SELECTED_ACTION );
+			
 			return interests;
 		}
 
@@ -208,16 +210,29 @@ package net.vdombox.ide.modules.events.view
 					workArea.dataProvider = body as ApplicationEventsVO;
 					
 					workArea.skin.currentState = "unsaved"; 
+					
+					break;
 				}
 					
 				case Notifications.SET_SELECTED_ACTION:
 				{
 					workArea.showSelectedAction( body as String );
+					
+					break;
 				}
 					
 				case Notifications.GET_USED_ACTIONS:
 				{
 					sendActions();
+					
+					break;
+				}
+					
+				case Notifications.CREATE_SELECTED_ACTION:
+				{
+					workArea.createBaseAction( body as IEventBaseVO );
+					
+					break;
 				}
 					
 			}

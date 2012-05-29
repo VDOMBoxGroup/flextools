@@ -5,7 +5,8 @@
 				
 				focusEnabled="false" xmlns:view="net.vdombox.ide.common.view.*"
 				minHeight="22"
-				click="itemrenderer1_clickHandler(event)">
+				click="itemrenderer1_clickHandler(event)"
+				doubleClickEnabled="true" doubleClick="itemrenderer1_doubleClickHandler(event)">
 	
 	<fx:Script>
 		<![CDATA[
@@ -36,6 +37,11 @@
 			protected function itemrenderer1_clickHandler(event:MouseEvent):void
 			{
 				dispatchEvent( new EventsPanelEvent ( EventsPanelEvent.RENDERER_CLICK ) );
+			}
+			
+			protected function itemrenderer1_doubleClickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new EventsPanelEvent ( EventsPanelEvent.RENDERER_DOUBLE_CLICK ) );
 			}
 			
 		]]>

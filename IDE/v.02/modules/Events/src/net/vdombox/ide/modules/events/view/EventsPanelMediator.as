@@ -280,6 +280,7 @@ package net.vdombox.ide.modules.events.view
 			eventsPanel.addEventListener( EventsPanelEvent.CREATE_SERVER_ACTION_CLICK, createServerActionHandler, true );
 			
 			eventsPanel.addEventListener( EventsPanelEvent.RENDERER_CLICK, sendActionClicked, true, 0, true );
+			eventsPanel.addEventListener( EventsPanelEvent.RENDERER_DOUBLE_CLICK, createActionClicked, true, 0, true );
 		}
 		
 		
@@ -291,6 +292,7 @@ package net.vdombox.ide.modules.events.view
 			eventsPanel.removeEventListener( EventsPanelEvent.CREATE_SERVER_ACTION_CLICK, createServerActionHandler, true );
 			
 			eventsPanel.removeEventListener( EventsPanelEvent.RENDERER_CLICK, sendActionClicked, true );
+			eventsPanel.removeEventListener( EventsPanelEvent.RENDERER_DOUBLE_CLICK, createActionClicked, true );
 		}
 
 		private function dragStartHandler( event : DragEvent ) : void
@@ -354,6 +356,35 @@ package net.vdombox.ide.modules.events.view
 			stringID += statesProxy.selectedObject ? statesProxy.selectedObject.id : statesProxy.selectedPage.id;
 			
 			sendNotification( Notifications.SET_SELECTED_ACTION, stringID );
+		}
+		
+		private function createActionClicked( event : EventsPanelEvent ) : void
+		{
+			var elementVO : Object = BaseItemRenderer( event.target ).data;
+			
+			var containerID : String = statesProxy.selectedPage.id;
+			var objectID : String = statesProxy.selectedObject ? statesProxy.selectedObject.id : containerID;
+			var objectName : String = statesProxy.selectedObject ? statesProxy.selectedObject.name : statesProxy.selectedPage.name;
+			
+			if ( elementVO is EventVO )
+			{	
+				elementVO = elementVO.copy();
+				EventVO( elementVO ).setObjectID( objectID );
+				EventVO( elementVO ).setContainerID( containerID );
+				EventVO( elementVO ).setObjectName( objectName );
+			}
+			else if ( elementVO is ClientActionVO )
+			{
+				elementVO = elementVO.copy();
+				ClientActionVO( elementVO ).setObjectID( objectID );
+				ClientActionVO( elementVO ).setObjectName( objectName );
+			}
+			else if ( elementVO is ServerActionVO )
+			{
+				ServerActionVO( elementVO ).setObjectName( statesProxy.selectedPage.name );
+			}
+			
+			sendNotification( Notifications.CREATE_SELECTED_ACTION, elementVO );
 		}
 		
 		private function createServerActionHandler( event : EventsPanelEvent ) : void

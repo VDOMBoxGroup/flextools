@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.events.events
 	{
 		public static var CREATE_SERVER_ACTION_CLICK : String = "createServerActionClick";
 		public static var RENDERER_CLICK : String = "rendererClick";
+		public static var RENDERER_DOUBLE_CLICK : String = "rendererDoubleClick";
 		
 		public function EventsPanelEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{
