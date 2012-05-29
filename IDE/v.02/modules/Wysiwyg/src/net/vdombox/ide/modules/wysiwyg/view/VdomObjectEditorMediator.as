@@ -1106,7 +1106,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function renderer_dropHandler( event : RendererDropEvent ) : void
 		{
-			sendNotification( Notifications.CREATE_OBJECT_REQUEST, { vdomObjectVO: ( event.target as IRenderer ).vdomObjectVO, typeVO: event.typeVO, point: event.point } )
+			sendNotification( Notifications.CREATE_OBJECT_REQUEST, { vdomObjectVO: ( event.target as IRenderer ).vdomObjectVO, typeVO: event.typeVO, point: event.point } );
 		}
 
 		private function rendererTransformedHandler( event : EditorEvent ) : void

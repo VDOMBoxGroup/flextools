@@ -2,11 +2,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.geom.Point;
 	
 	import mx.containers.Accordion;
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
@@ -37,6 +39,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var userTypesProxy : UserTypesProxy;
 
 		private var isActive : Boolean;
+		
+		private var zeroPoint : Point = new Point( 0, 0 );
 		
 		public function get toolboxPanel() : ToolBoxPanel
 		{
@@ -116,6 +120,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			typesAccordion.addEventListener( FlexEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
 			typesAccordion.addEventListener( TypeItemRendererEvent.ADD_IN_USER_CATIGORY, addInUserCategory, true );
 			typesAccordion.addEventListener( TypeItemRendererEvent.DELET_IN_USER_CATIGORY, delFromUserCategory, true );
+			typesAccordion.addEventListener( TypeItemRendererEvent.DOUBLE_CLICK, createNewObjectHandler, true, 0 , true );
 		}
 
 		private function removeHandlers() : void
@@ -123,6 +128,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			typesAccordion.removeEventListener( FlexEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
 			typesAccordion.removeEventListener( TypeItemRendererEvent.ADD_IN_USER_CATIGORY, addInUserCategory, true );
 			typesAccordion.removeEventListener( TypeItemRendererEvent.DELET_IN_USER_CATIGORY, delFromUserCategory, true );
+			typesAccordion.removeEventListener( TypeItemRendererEvent.DOUBLE_CLICK, createNewObjectHandler, true );
 		}
 
 		private function typeRendererCreatedHandler( event : FlexEvent ) : void
@@ -159,6 +165,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 			userTypesProxy.removeTypeId( typeRenderer.typeVO.id );
 			
 			toolboxPanel.updateUserCategory();
+		}
+		
+		private function createNewObjectHandler( event : TypeItemRendererEvent ) : void
+		{
+			var typeRenderer : TypeItemRenderer = event.target as TypeItemRenderer;
+			if ( !typeRenderer )
+				return;
+			
+			var vdomObjectVO : IVDOMObjectVO;
+			if ( statesProxy.selectedObject )
+				vdomObjectVO = statesProxy.selectedObject;
+			else
+				vdomObjectVO = statesProxy.selectedPage;
+			
+			sendNotification( Notifications.CREATE_OBJECT_REQUEST, { vdomObjectVO: vdomObjectVO, typeVO: typeRenderer.typeVO, point: zeroPoint } )
 		}
 	}
 }

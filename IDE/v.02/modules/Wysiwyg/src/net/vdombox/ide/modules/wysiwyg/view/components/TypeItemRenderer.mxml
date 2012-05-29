@@ -134,6 +134,11 @@
 				dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.DELET_IN_USER_CATIGORY ) );
 			}
 			
+			protected function group1_doubleClickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.DOUBLE_CLICK ) );
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -142,7 +147,7 @@
 		<s:State name="selected"/>
 	</s:states>
 
-		<s:Group width="87" height="87">
+		<s:Group width="87" height="87" doubleClickEnabled="true" doubleClick="group1_doubleClickHandler(event)">
 			<s:Rect width="100%" height="100%" radiusX="10" radiusY="10" visible.selected="true" visible="false">
 				<s:fill>
 					<s:SolidColor color="#121212" alpha="0.5"/>
