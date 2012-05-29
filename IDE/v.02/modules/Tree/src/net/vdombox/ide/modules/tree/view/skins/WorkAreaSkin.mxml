@@ -256,7 +256,7 @@
 								   highlighted="false" highlighted.unsaved="true"/>
 
 		<button:WorkAreaButton id="undoButton"
-								   enabled="false" enabled.unsaved="true" height="20" icon="{VDOMImage.Undo}"
+								   enabled="false" enabled.unsaved="true" height="20" icon="{VDOMImage.Undo}" visible="false"
 								   label="{ resourceManager.getString( 'Tree_General', 'work_area_undo' ) }"/>
 
 		<mx:Spacer width="100%"/>

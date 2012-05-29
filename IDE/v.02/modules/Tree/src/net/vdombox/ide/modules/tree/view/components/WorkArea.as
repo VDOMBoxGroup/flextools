@@ -254,6 +254,8 @@ package net.vdombox.ide.modules.tree.view.components
 				}
 			}
 			
+			skin.currentState = "unsaved";
+			
 		}
 		
 		public function set selectedTreeLevelVO( value : TreeLevelVO ) : void
