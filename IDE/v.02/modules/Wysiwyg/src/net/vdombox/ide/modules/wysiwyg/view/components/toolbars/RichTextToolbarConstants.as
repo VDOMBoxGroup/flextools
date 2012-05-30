@@ -23,13 +23,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.toolbars
 		//public static const FONT_NAME_WEBDINGS			: String = "webdings";
 		public static const FONT_NAME_WINGDINGS			: String = "wingdings,zapf dingbats";
 		
-		public static const FONT_STR_SIZE_1				: String = "xx-small";
-		public static const FONT_STR_SIZE_2				: String = "x-small";
-		public static const FONT_STR_SIZE_3				: String = "small";
-		public static const FONT_STR_SIZE_4				: String = "medium";
-		public static const FONT_STR_SIZE_5				: String = "large";
-		public static const FONT_STR_SIZE_6				: String = "x-large";
-		public static const FONT_STR_SIZE_7				: String = "xx-large";
+		public static const FONT_STR_SIZE_1				: String = "8pt";
+		public static const FONT_STR_SIZE_2				: String = "10pt";
+		public static const FONT_STR_SIZE_3				: String = "12pt";
+		public static const FONT_STR_SIZE_4				: String = "14pt";
+		public static const FONT_STR_SIZE_5				: String = "18pt";
+		public static const FONT_STR_SIZE_6				: String = "24pt";
+		public static const FONT_STR_SIZE_7				: String = "36pt";
 		
 		public static const FORMAT_TYPE_P				: String = "p";
 		public static const FORMAT_TYPE_ADDRESS			: String = "address";

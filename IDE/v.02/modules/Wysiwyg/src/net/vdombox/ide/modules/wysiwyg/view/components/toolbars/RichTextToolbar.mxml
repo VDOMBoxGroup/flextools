@@ -731,6 +731,11 @@
 			{
 			}
 			
+			protected function sizeSelector_changeHandler(event:ListEvent):void
+			{
+				tinyMCE.execCommand('FontSize', false, sizeSelector.selectedItem.data);
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -953,25 +958,25 @@
 					 focusEnabled="false"
 					 height="24" styleName="toolbarComboBox" width="100"
 					 color="black"
-					 change="{tinyMCE.execCommand('FontSize', false, sizeSelector.selectedItem.data);}">
+					 change="sizeSelector_changeHandler(event)">
 			
 			<mx:dataProvider>
 				
 				<mx:ArrayCollection>
 					
-					<fx:Object data="1" label="1 (8 pt)"/>
+					<fx:Object data="8pt" label="1 (8 pt)"/>
 					
-					<fx:Object data="2" label="2 (10 pt)"/>
+					<fx:Object data="10pt" label="2 (10 pt)"/>
 					
-					<fx:Object data="3" label="3 (12 pt)"/>
+					<fx:Object data="12pt" label="3 (12 pt)"/>
 					
-					<fx:Object data="4" label="4 (14 pt)"/>
+					<fx:Object data="14pt" label="4 (14 pt)"/>
 					
-					<fx:Object data="5" label="5 (18 pt)"/>
+					<fx:Object data="18pt" label="5 (18 pt)"/>
 					
-					<fx:Object data="6" label="6 (24 pt)"/>
+					<fx:Object data="24pt" label="6 (24 pt)"/>
 					
-					<fx:Object data="7" label="7 (36 pt)"/>
+					<fx:Object data="36pt" label="7 (36 pt)"/>
 				</mx:ArrayCollection>
 			</mx:dataProvider>
 		</mx:ComboBox>
