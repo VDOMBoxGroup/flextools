@@ -92,6 +92,7 @@
 					_actionVO.script = script;
 				
 				_actionVO = value;
+				value.script= value.script.replace(/&nbsp;/g, " ");
 				script = value.script;
 				if ( value.saved )
 					unsaved = false;

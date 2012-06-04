@@ -137,10 +137,18 @@ package net.vdombox.ide.modules.scripts.view
 				{
 					actionVO = body;
 					editor = workArea.getEditorByVO( actionVO );
+					var editorScript : String = editor.actionVO.script.replace( /\r/g, "\n" );
+					var index : int = editorScript.indexOf( "]]]]><![CDATA[>" );
+					while ( index != -1 )
+					{
+						editorScript = editorScript.slice( 0, index + 2 ) + editorScript.slice( index + 14) ;
+						index = editorScript.indexOf( "]]]]><![CDATA[>" );
+					}
 					
-					if ( actionVO.script == editor.actionVO.script.replace( /\r/g, "\n" ) )
+					if ( actionVO.script == editorScript )
 					{
 						var script : String = editor.script;
+						script = script.replace(/]]>/g, "]]]]><![CDATA[>");
 						while ( script.slice( script.length - 1 ) == "\r" || script.slice( script.length - 1 ) == " " || script.slice( script.length - 1 ) == "\t" )
 							script = script.slice( 0, script.length - 1);
 						
@@ -199,6 +207,7 @@ package net.vdombox.ide.modules.scripts.view
 				if ( event.detail == Alert.YES )
 				{
 					var script : String = editor.script;
+					script = script.replace(/]]>/g, "]]]]><![CDATA[>");
 					while ( script.slice( script.length - 1 ) == "\r" || script.slice( script.length - 1 ) == " " || script.slice( script.length - 1 ) == "\t" )
 						script = script.slice( 0, script.length - 1);
 					

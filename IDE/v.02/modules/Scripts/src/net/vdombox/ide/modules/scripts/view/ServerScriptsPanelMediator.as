@@ -170,6 +170,8 @@ package net.vdombox.ide.modules.scripts.view
 						onloadScriptOpen( onloadScriptOpening );
 						onloadScriptOpening = "";
 					}
+					
+					break;
 						
 				}
 					

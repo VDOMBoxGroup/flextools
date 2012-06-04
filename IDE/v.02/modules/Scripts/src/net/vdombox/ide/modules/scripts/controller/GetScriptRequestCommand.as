@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.scripts.controller
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -22,16 +23,26 @@ package net.vdombox.ide.modules.scripts.controller
 			
 			if ( actionVO is ServerActionVO )
 			{				
-				if ( statesProxy.selectedObject )
+				var object : Object = actionVO.containerVO;
+				
+				if ( !object )
 				{
-					sendNotification( Notifications.GET_SERVER_ACTION,
-						{ objectVO: statesProxy.selectedObject, serverActionVO: actionVO, check : body.check } );
+					object = statesProxy.selectedObject;
+					if ( !object )
+						object = statesProxy.selectedPage;
 				}
 					
-				else if ( statesProxy.selectedPage  )
+				
+				if ( object is ObjectVO )
 				{
 					sendNotification( Notifications.GET_SERVER_ACTION,
-						{ pageVO: statesProxy.selectedPage, serverActionVO: actionVO, check : body.check } );
+						{ objectVO: object, serverActionVO: actionVO, check : body.check } );
+				}
+					
+				else if ( object is PageVO  )
+				{
+					sendNotification( Notifications.GET_SERVER_ACTION,
+						{ pageVO: object, serverActionVO: actionVO, check : body.check } );
 				}
 				
 			}
