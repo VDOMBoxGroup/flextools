@@ -169,8 +169,7 @@ package net.vdombox.ide.core.model.managers
 					createIcon();
 					
 				}
-			}
-
+			}else
 			if ( !fileExists( file ) )
 				file = getStandartIcon();
 

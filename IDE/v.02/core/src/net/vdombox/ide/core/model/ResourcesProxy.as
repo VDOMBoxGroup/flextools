@@ -1,25 +1,13 @@
 package net.vdombox.ide.core.model
 {
-	import flash.desktop.Icon;
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.Loader;
-	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
-	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
-	import flash.utils.clearTimeout;
-	import flash.utils.setTimeout;
+	import flash.utils.Dictionary;
 	
-	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
-	import mx.controls.Image;
-	import mx.effects.Resize;
-	import mx.graphics.codec.PNGEncoder;
-	import mx.resources.ResourceBundle;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
@@ -36,8 +24,6 @@ package net.vdombox.ide.core.model
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-	
-	import spark.components.Application;
 
 	/**
 	 * ResourcesProxy is wrapper on VDOM Resources.
@@ -85,7 +71,8 @@ package net.vdombox.ide.core.model
 
 		private var cacheManager : CacheManager = CacheManager.getInstance();
 
-		private var loadQue : Array;
+		private var upLoadQue : Array;
+		private var loadQue : Dictionary = new Dictionary();
 		
 
 //		private var loadableTypesIcons : ArrayCollection = new ArrayCollection();
@@ -154,9 +141,13 @@ package net.vdombox.ide.core.model
 
 		private function getResourceFromServer( resourceVO : ResourceVO ) : void
 		{
+			if ( loadQue[ resourceVO ] )	
+				return;
+			
+			loadQue[ resourceVO ] = true;
 			
 			var token : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
-
+			
 			token.recipientName = proxyName;
 			token.resourceVO = resourceVO;
 		}
@@ -167,11 +158,11 @@ package net.vdombox.ide.core.model
 		 */
 		public function setResource( resourceVO : ResourceVO ) : void
 		{
-			if ( !loadQue )
-				loadQue = [];
+			if ( !upLoadQue )
+				upLoadQue = [];
 
-			if ( loadQue.indexOf( resourceVO ) == -1 )
-				loadQue.push( resourceVO );
+			if ( upLoadQue.indexOf( resourceVO ) == -1 )
+				upLoadQue.push( resourceVO );
 
 			soap_setResource();
 		}
@@ -185,12 +176,12 @@ package net.vdombox.ide.core.model
 			if ( !resources || resources.length == 0 )
 				return;
 
-			if ( !loadQue )
-				loadQue = [];
+			if ( !upLoadQue )
+				upLoadQue = [];
 
-			if ( loadQue.length == 0 )
+			if ( upLoadQue.length == 0 )
 			{
-				loadQue = loadQue.concat( resources );
+				upLoadQue = upLoadQue.concat( resources );
 			}
 			else
 			{
@@ -198,8 +189,8 @@ package net.vdombox.ide.core.model
 				{
 					var resourceVO : ResourceVO = resources[ i ];
 
-					if ( loadQue.indexOf( resourceVO ) != -1 )
-						loadQue.push( resourceVO );
+					if ( upLoadQue.indexOf( resourceVO ) != -1 )
+						upLoadQue.push( resourceVO );
 				}
 			}
 
@@ -227,7 +218,7 @@ package net.vdombox.ide.core.model
 		 */
 		public function cleanup() : void
 		{
-			loadQue = null;
+			upLoadQue = null;
 		}
 
 		/**
@@ -237,6 +228,8 @@ package net.vdombox.ide.core.model
 		public function getIcon( resourceVO : ResourceVO ) : void
 		{
 			var iconManager : IconManager = new IconManager( resourceVO );
+			
+			// todo: "loadResourceRequest" 
 			iconManager.addEventListener( "loadResourceRequest", loadResourceRequestHandler )
 			iconManager.setIconForResourceVO();
 
@@ -250,6 +243,11 @@ package net.vdombox.ide.core.model
 				getResourceFromServer( rIconManager.resourceVO );
 			}
 
+		}
+		
+		public function reAddHandlers() : void
+		{
+			addHandlers();
 		}
 
 		private function addHandlers() : void
@@ -268,6 +266,7 @@ package net.vdombox.ide.core.model
 
 			soap.modify_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.modify_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 		}
 
 		private function removeHandlers() : void
@@ -286,6 +285,7 @@ package net.vdombox.ide.core.model
 
 			soap.modify_resource.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.modify_resource.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 		}
 
 		private function soap_connectedHandler( event : SOAPEvent ) : void
@@ -358,10 +358,10 @@ package net.vdombox.ide.core.model
 
 		private function soap_setResource() : void
 		{
-			if ( loadQue.length == 0 )
+			if ( upLoadQue.length == 0 )
 				return;
 
-			var resourceVO : ResourceVO = loadQue.shift() as ResourceVO;
+			var resourceVO : ResourceVO = upLoadQue.shift() as ResourceVO;
 			var data : ByteArray;
 
 			if ( resourceVO.data )
@@ -427,7 +427,7 @@ package net.vdombox.ide.core.model
 			
 			if ( result.hasOwnProperty( "Error" ) )
 			{
-				//sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
+				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
 				return;
 			}
 
@@ -444,30 +444,8 @@ package net.vdombox.ide.core.model
 
 					var data : String = event.result.Resource;
 					
-					var decoder : Base64Decoder = new Base64Decoder();
-					decoder.decode( data );
-
-					var imageSource : ByteArray = decoder.toByteArray();
-
-					imageSource.uncompress();
-					// TODO: resourceVO.icon = img
-					cacheManager.cacheFile( resourceVO.id, imageSource );
-
-					resourceVO.setData( imageSource );
+					processIncomingData( data, resourceVO);
 					
-					if (resourceVO.status == ResourceVO.LOAD_ICON)
-					{
-						var iconManager : IconManager = new IconManager(resourceVO);
-						iconManager.setIconForResourceVO();
-					}
-
-					resourceVO.setStatus( ResourceVO.LOADED );
-
-					resourceVO.icon = null;
-
-
-					sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
-
 					break;
 				}
 
@@ -518,6 +496,34 @@ package net.vdombox.ide.core.model
 				}
 			}
 		}
+		
+		
+		private function processIncomingData( data : String, resourceVO : ResourceVO): void
+		{
+			var decoder : Base64Decoder = new Base64Decoder();
+			decoder.decode( data );
+			
+			var imageSource : ByteArray = decoder.toByteArray();
+			
+			imageSource.uncompress();
+			// TODO: resourceVO.icon = img
+			cacheManager.cacheFile( resourceVO.id, imageSource );
+			
+			resourceVO.setData( imageSource );
+			
+			if (resourceVO.status == ResourceVO.LOAD_ICON)
+			{
+				var iconManager : IconManager = new IconManager(resourceVO);
+				iconManager.setIconForResourceVO();
+			}
+			
+			resourceVO.setStatus( ResourceVO.LOADED );
+			
+			delete loadQue[ resourceVO ] ;
+			
+			sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
+
+		}
 
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{
@@ -537,7 +543,7 @@ package net.vdombox.ide.core.model
 				case "get_resource":
 				{
 					resourceVO = event.token.resourceVO as ResourceVO;
-					resourceVO.setData( null );
+//					resourceVO.setData( null ); 
 //					soap_setResource();
 					break;
 				}
