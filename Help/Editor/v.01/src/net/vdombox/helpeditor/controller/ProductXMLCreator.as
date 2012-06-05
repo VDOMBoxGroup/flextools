@@ -274,6 +274,7 @@ package net.vdombox.helpeditor.controller
 			for each (var page : XML in productTocXML..page)
 			{
 				page.@name = "#Page(" + page.@name + ")";
+				delete page.@isBranch;
 			}
 			
 			productXML.appendChild(productTocXML);

@@ -703,7 +703,9 @@ package net.vdombox.helpeditor.controller
 				var oldPageName : String = tocPage.@name;
 				
 				if (oldPageName.indexOf("#Page(") == 0)
-					tocPage.@name = oldPageName.substr(6, 36); 
+					tocPage.@name = oldPageName.substr(6, 36);
+				
+				tocPage.@isBranch='true';
 			}
 		}
 		
