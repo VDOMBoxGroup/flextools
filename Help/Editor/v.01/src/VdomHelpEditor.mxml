@@ -911,11 +911,14 @@
 				if (pageName.indexOf("#") == 0)
 					return;
 				
-				tree.expandItem(tree.selectedItem, true);
+				var pageToSelect : XML = XML(tree.dataProvider.source..page.( @name == pageName )[ 0 ]);
+				
+				if (!pageToSelect)
+					return;
 				
 				tree.selectedItem = null;
 				
-				var pageToSelect : XML = XML(tree.dataProvider.source..page.( @name == pageName )[ 0 ]);
+				tree.expandItem(pageToSelect.parent(), true);
 				
 				selectTreePage(pageToSelect);
 			}
