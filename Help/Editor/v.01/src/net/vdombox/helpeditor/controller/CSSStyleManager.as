@@ -28,6 +28,7 @@ package net.vdombox.helpeditor.controller
 		private const cssImagesFolder			: String = "images";
 		private const syntaxHighliterJSFolder	: String = "assets/syntax_highlighter/js";
 		private const syntaxHighliterCSSFolder	: String = "assets/syntax_highlighter/css";
+		private const jsQueryFileName			: String = "assets/jquery-1.7.2.min.js";
 		
 		
 		private var currentFileName		: String = "";
@@ -80,10 +81,17 @@ package net.vdombox.helpeditor.controller
 			switch(currentFileName)
 			{
 				case cssFileName:
+					currentFileName = jsQueryFileName;
+					
+					loadFile();
+					return;
+					
+				case jsQueryFileName:
 					currentFileName = cssImagesFolder;
 					
 					addDirectoryContent();
 					break;
+				
 				case cssImagesFolder:
 				{
 					if (isEmptyDirectory)

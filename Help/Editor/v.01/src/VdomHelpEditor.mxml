@@ -64,6 +64,7 @@
 			import net.vdombox.helpeditor.controller.SpinnerPopUpManager;
 			import net.vdombox.helpeditor.controller.events.TemplateRenameEvent;
 			import net.vdombox.helpeditor.model.AlertMessages;
+			import net.vdombox.helpeditor.model.HtmlPageProperties;
 			import net.vdombox.helpeditor.model.proxy.SQLProxy;
 			import net.vdombox.helpeditor.model.vo.TemplateVO;
 			import net.vdombox.helpeditor.utils.PageUtils;
@@ -138,8 +139,19 @@
 			
 			private function treeChangeHandler(lstEvt:ListEvent) : void
 			{	
+				if (!lstEvt.itemRenderer ||
+					!lstEvt.itemRenderer.data)
+					return;
+				
+				var pageToSelect : XML = XML(lstEvt.itemRenderer.data.toXMLString());
+				
+				selectTreePage(pageToSelect);
+			}
+			
+			private function selectTreePage (page : XML) : void
+			{
 				var tocString : String = tree.dataProvider.toXMLString();
-
+				
 				try
 				{
 					// some code that could throw an error
@@ -152,15 +164,15 @@
 					Alert.show(AlertMessages.MSG_IMPOSSIBLE_OPERATION, AlertMessages.MSG_TYPE_ERROR);
 					return;
 				}
-
+				
 				sqlProxy.setToc(tocString, cmboxProduct.selectedItem.name);
-
+				
 				if ( !tree.selectedItem )
 				{
-					tree.selectedItem = XML(lstEvt.itemRenderer.data.toXMLString());
+					tree.selectedItem = page;
 					tree.validateNow();
 				}
-
+				
 				html_wysiwyg.preventRefresh();
 				
 				getCurrentPage();
@@ -506,7 +518,7 @@
 				tree.selectedIndex = 0;
 				tree.validateNow();
 
-				tree.dispatchEvent(new ListEvent(ListEvent.CHANGE));
+				selectTreePage(tree.selectedItem as XML);
 			}
 
 			private function savePage() : void
@@ -707,6 +719,9 @@
 				if ( html_wysiwyg )
 					sourseTxt = html_wysiwyg.getHTML(true);
 				
+				sourseTxt = sourseTxt.replace("</head>", HtmlPageProperties.importJQueryScript + "\n</head>");
+				sourseTxt = sourseTxt.replace("</body>", HtmlPageProperties.hrefScript + "\n</body>");
+				
 				sourseTxt = PageUtils.getInstance().replaceTemplatesLinksByTemplateContent(sourseTxt);
 				
 				content.writeMultiByte(sourseTxt, "utf-8");
@@ -891,6 +906,25 @@
 			}
 			// ... sort pages
 			
+			private function linkToPage (pageName:String) : void
+			{
+				if (pageName.indexOf("#") == 0)
+					return;
+				
+				tree.expandItem(tree.selectedItem, true);
+				
+				tree.selectedItem = null;
+				
+				var pageToSelect : XML = XML(tree.dataProvider.source..page.( @name == pageName )[ 0 ]);
+				
+				selectTreePage(pageToSelect);
+			}
+			
+			protected function html_htmlDOMInitializeHandler(event:Event):void
+			{
+				html.domWindow.dohref = linkToPage;
+			}
+			
 		]]>
 	</mx:Script>
 
@@ -1063,7 +1097,8 @@
 					</mx:VBox>
 				</mx:Canvas>
 				<mx:Canvas width="100%" height="100%" label="Preview" show="{htmlShowHandler()}">
-					<mx:HTML id="html" width="100%" height="100%" />
+					<mx:HTML id="html" width="100%" height="100%" 
+							 htmlDOMInitialize="html_htmlDOMInitializeHandler(event)"/>
 				</mx:Canvas>
 			</mx:TabNavigator>
 		</mx:HDividedBox>

@@ -62,6 +62,10 @@ package net.vdombox.helpeditor.model
 		public static const highlightAllTemplate : String = "<script type=\"text/javascript\">dp.SyntaxHighlighter.HighlightAll('code', true, false, false);</script>";
 		// ... syntaxhighlighter
 		
+		//public static const hrefScript			: String = "<script type='text/javascript'>jQuery(function($){ $('a').click(function(){  dohref($(this).attr('href'));  return false; });};);</script>";
+		public static const hrefScript			: String = "<script type='text/javascript'>$('a').click(function () {    dohref($(this).attr('href'));    });</script>";
+		
+		public static const importJQueryScript	: String = "<script type='text/javascript' src='app-storage:/assets/jquery-1.7.2.min.js'></script>";
 		
 		public function HtmlPageProperties()
 		{
