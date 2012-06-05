@@ -580,15 +580,65 @@ package net.vdombox.helpreader.model
 		
 		private function cleanContent(value:String):String
 		{
-			var phraseRE1:RegExp = new RegExp("<script.*?>.*?<\/script>|<style.*?>.*?<\/style>|<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->|<\!\[CDATA\[.*?\]\]>|&#?[\w\d]+","gimsx");
 			
-			var phraseRE2:RegExp = new RegExp("[^\w]+","gimsx");
-//  
-			var words:String = value.replace(phraseRE1," "); 
-//				words = words.replace(phraseRE2," ");
-			return words;
+			var page : XML;
+			var pageBody : XML;
+			
+			try
+			{
+				page = new XML(value);
+				
+				if (!page)
+					return value;
+				
+				pageBody = page.body[0];
+				
+				if (!pageBody)
+					return value;
+			}
+			catch (e:Error)
+			{
+				return value;
+			}
+			
+			var newValue : String = "";
+					
+			clearTags(pageBody);
+			
+			function clearTags (xml:XML) : void
+			{
+				for each (var xmlChild : XML in xml.children())
+				{
+					if (isScriptXml(xmlChild))
+						continue;
+					
+					if (!xmlChild.children() || (xmlChild.children().length() == 1 && !xmlChild.children()[0].name()))
+						newValue += xmlChild.toString() + " ";
+					else
+						clearTags(xmlChild);
+				}
+			}
+				
+			return newValue;
 		}
 		
-		
+		private function isScriptXml (xml : XML) : Boolean
+		{
+			if (!xml)
+				return false;
+			
+			var xmlName : String;
+			
+			if (xml.name() is QName)
+				xmlName = xml.name().localName;
+			
+			if (xml.name() is String)
+				xmlName = xml.name();
+			
+			if (!xmlName)
+				return false;
+			
+			return xmlName.toLowerCase() == "script";
+		}
 	}
 }
