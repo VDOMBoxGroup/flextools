@@ -1051,7 +1051,7 @@
 				}
 				arr.push( { Name : "this", Value : curGraphContext.curGraph.name, children : subArr } );
 
-				pnl_variables.grid.dataProvider = new HierarchicalData( arr );
+				pnl_variables.grid.dataProvider = new HierarchicalData( arr.sortOn("Name", Array.CASEINSENSITIVE) );
 				pnl_variables.grid.invalidateList();
 
 				// --------------------------
