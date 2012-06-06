@@ -144,22 +144,27 @@ package net.vdombox.ide.common.model
 			if ( ( selectedApplicationVO && data[ SELECTED_APPLICATION ] && selectedApplicationVO.id != data[ SELECTED_APPLICATION ].id ) ||
 				selectedApplicationVO != data[ SELECTED_APPLICATION ] )
 			{
+				if ( data[ SELECTED_APPLICATION ] )
+					isSelectedApplicationChanged = true;
+				
 				data[ SELECTED_APPLICATION ] = states.selectedApplication;
-				isSelectedApplicationChanged = true;
+				
 			}
 			
 			if ( ( selectedPageVO && data[ SELECTED_PAGE ] && selectedPageVO.id != data[ SELECTED_PAGE ].id ) ||
 				selectedPageVO != data[ SELECTED_PAGE ] )
 			{
+				if ( data[ SELECTED_PAGE ] )
+					isSelectedPageChanged = true;
 				data[ SELECTED_PAGE ] = states.selectedPage;
-				isSelectedPageChanged = true;
 			}
 			
 			if ( ( selectedObjectVO && data[ SELECTED_OBJECT ] && selectedObjectVO.id != data[ SELECTED_OBJECT ].id ) ||
 				selectedObjectVO != data[ SELECTED_OBJECT ] )
 			{
+				if ( data[ SELECTED_OBJECT ] )
+					isSelectedObjectChanged = true;
 				data[ SELECTED_OBJECT ] = states.selectedObject;
-				isSelectedObjectChanged = true;
 			}
 			
 			sendNotifications();

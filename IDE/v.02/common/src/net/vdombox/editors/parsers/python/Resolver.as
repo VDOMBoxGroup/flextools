@@ -100,6 +100,7 @@ package net.vdombox.editors.parsers.python
 			
 			//all package level items
 																																																																																																																																																																																																																																														 																										 																																																																																																																																																																												 																																																																																																																																																																																																																																																																																																																																					                                                                                             
+	//		var a : Vector.<String> = new <String>["__abs__", "__add__", "__and__", "__bases__", "__call__", "__class__", "__cmp__", "__coerce__", "__del__", "__delattr__", "__delitem__", "__delslice__", "__dict__", "__div__", "__divmod__", "__float__", "__getattr__", "__getitem__", "__getslice__", "__hash__", "__hex__", "__iadd__", "__iand__", "__idiv__", "__ilshift__", "__imod__", "__import__", "__init__", "__int__", "__invert__", "__ior__", "__ipow__", "__irshift__", "__isub__", "__ixor__", "__len__", "__long__", "__lshift__", "__members__", "__methods__", "__mod__", "__mul__", "__name__", "__neg__", "__nonzero__", "__oct__", "__or__", "__pos__", "__pow__", "__radd__", "__rand__", "__rdiv__", "__rdivmod__", "__repr__", "__rlshift__", "__rmod__", "__rmul__", "__ror__", "__rpow__", "__rrshift__", "__rshift__", "__rsub__", "__rxor__", "__setattr__", "__setitem__", "__setslice__", "__str__", "__sub__", "__version__", "__xor__", "abs", "and", "apply", "ArithmeticError", "array", "assert", "AssertionError", "AST", "atexit", "AttributeError", "BaseHTTPServer", "Bastion", "break", "callable", "CGIHTTPServer", "chr", "class", "cmd", "cmp", "codecs", "coerce", "commands", "compile", "compileall", "Complex", "complex", "continue", "copy", "dbhash", "def", "del", "delattr", "dir", "dircmp", "dis", "divmod", "dospath", "dumbdbm", "elif", "else", "emacs", "EOFError", "eval", "except", "Exception", "exec", "execfile", "filter", "finally", "find", "float", "FloatingPointError", "fmt", "fnmatch", "for", "from", "ftplib", "getattr", "getopt", "glob", "global", "globals", "gopherlib", "grep", "group", "hasattr", "hash", "hex", "htmllib", "httplib", "id", "if", "ihooks", "imghdr", "import", "ImportError","imputil", "in", "IndentationError", "IndexError", "input", "int", "intern", "IOError", "is", "isinstance", "issubclass", "joinfields", "KeyError", "KeyboardInterrupt", "lambda", "len", "linecache", "list", "local", "lockfile", "long", "LookupError", "macpath", "macurl2path", "mailbox", "mailcap", "map", "match", "math", "max", "MemoryError", "mimetools", "Mimewriter", "mimify", "min", "mutex", "NameError", "newdir", "ni", "nntplib", "None", "not", "ntpath", "nturl2path", "oct", "open", "or", "ord", "os", "ospath", "OverflowError", "Para", "pass", "pdb", "pickle", "pipes", "poly", "popen2", "posixfile", "posixpath", "pow", "print", "profile", "pstats", "pyclbr", "pyexpat", "Queue", "quopri", "raise", "rand", "random", "range", "raw_input", "reduce", "regex", "regsub", "reload", "repr", "return", "rfc822", "round", "RuntimeError", "sched", "search", "self", "setattr", "setdefault", "sgmllib", "shelve", "SimpleHTTPServer", "site", "slice", "sndhdr", "snmp", "SocketServer", "splitfields", "StandardError", "str", "string", "StringIO", "struct", "SyntaxError", "sys", "SystemError", "SystemExit", "TabError", "tb", "tempfile", "Tkinter", "toaiff", "token", "tokenize", "traceback", "try", "tty", "tuple", "type", "TypeError", "types", "tzparse", "unichr", "unicode", "unicodedata", "urllib", "urlparse", "UserDict", "UserList", "util", "uu", "ValueError", "vars", "wave", "webbrowser", "whatsound", "whichdb", "while", "whrandom", "xdrlib", "xml", "xmlpackage", "xrange", "ZeroDivisionError",  "zip", "zmod"];
 			var a : Vector.<String> = new <String>["__abs__", "__add__", "__and__", "__bases__", "__call__", "__class__", "__cmp__", "__coerce__", "__del__", "__delattr__", "__delitem__", "__delslice__", "__dict__", "__div__", "__divmod__", "__float__", "__getattr__", "__getitem__", "__getslice__", "__hash__", "__hex__", "__iadd__", "__iand__", "__idiv__", "__ilshift__", "__imod__", "__import__", "__init__", "__int__", "__invert__", "__ior__", "__ipow__", "__irshift__", "__isub__", "__ixor__", "__len__", "__long__", "__lshift__", "__members__", "__methods__", "__mod__", "__mul__", "__name__", "__neg__", "__nonzero__", "__oct__", "__or__", "__pos__", "__pow__", "__radd__", "__rand__", "__rdiv__", "__rdivmod__", "__repr__", "__rlshift__", "__rmod__", "__rmul__", "__ror__", "__rpow__", "__rrshift__", "__rshift__", "__rsub__", "__rxor__", "__setattr__", "__setitem__", "__setslice__", "__str__", "__sub__", "__version__", "__xor__", "abs", "and", "apply", "ArithmeticError", "array", "assert", "AssertionError", "AST", "atexit", "AttributeError", "BaseHTTPServer", "Bastion", "break", "callable", "CGIHTTPServer", "chr", "class", "cmd", "cmp", "codecs", "coerce", "commands", "compile", "compileall", "Complex", "complex", "continue", "copy", "dbhash", "def", "del", "delattr", "dir", "dircmp", "dis", "divmod", "dospath", "dumbdbm", "elif", "else", "emacs", "EOFError", "eval", "except", "Exception", "exec", "execfile", "filter", "finally", "find", "float", "FloatingPointError", "fmt", "fnmatch", "for", "from", "ftplib", "getattr", "getopt", "glob", "global", "globals", "gopherlib", "grep", "group", "hasattr", "hash", "hex", "htmllib", "httplib", "id", "if", "ihooks", "imghdr", "import", "ImportError","imputil", "in", "IndentationError", "IndexError", "input", "int", "intern", "IOError", "is", "isinstance", "issubclass", "joinfields", "KeyError", "KeyboardInterrupt", "lambda", "len", "linecache", "list", "local", "lockfile", "long", "LookupError", "macpath", "macurl2path", "mailbox", "mailcap", "map", "match", "math", "max", "MemoryError", "mimetools", "Mimewriter", "mimify", "min", "mutex", "NameError", "newdir", "ni", "nntplib", "None", "not", "ntpath", "nturl2path", "oct", "open", "or", "ord", "os", "ospath", "OverflowError", "Para", "pass", "pdb", "pickle", "pipes", "poly", "popen2", "posixfile", "posixpath", "pow", "print", "profile", "pstats", "pyclbr", "pyexpat", "Queue", "quopri", "raise", "rand", "random", "range", "raw_input", "reduce", "regex", "regsub", "reload", "repr", "return", "rfc822", "round", "RuntimeError", "sched", "search", "self", "setattr", "setdefault", "sgmllib", "shelve", "SimpleHTTPServer", "site", "slice", "sndhdr", "snmp", "SocketServer", "splitfields", "StandardError", "str", "string", "StringIO", "struct", "SyntaxError", "sys", "SystemError", "SystemExit", "TabError", "tb", "tempfile", "Tkinter", "toaiff", "token", "tokenize", "traceback", "try", "tty", "tuple", "type", "TypeError", "types", "tzparse", "unichr", "unicode", "unicodedata", "urllib", "urlparse", "UserDict", "UserList", "util", "uu", "ValueError", "vars", "wave", "webbrowser", "whatsound", "whichdb", "while", "whrandom", "xdrlib", "xml", "xmlpackage", "xrange", "ZeroDivisionError",  "zip", "zmod"];
 			
 			// default keywords
@@ -108,8 +109,6 @@ package net.vdombox.editors.parsers.python
 			for each ( f in typeDB.listAll() )
 			{
 				a.push( f.name );
-				if ( !f.name )
-					var tt : int = 0;
 			}
 			
 			
@@ -126,38 +125,46 @@ package net.vdombox.editors.parsers.python
 				for each ( var name : String in map.getKeys() )
 					a.push( name);
 			}
-
+			
 			//find items in function scope chain
 			//also, find if we are in static scope
 			var isStatic : Boolean = false;
+			
 			for ( scope = t.scope; scope &&
 				scope.fieldType == 'def'; scope = scope.parent )
 			{
-				addKeys( scope.members );
+				//addKeys( scope.members );
 				addKeys( scope.params );
 				if ( scope.isStatic )
 					isStatic = true;
 			}
 
 			//compute tokenScopeClass
-			findScopeClass( t.scope );
+			//findScopeClass( t.scope );
 
 			//class scope
-			if ( tokenScopeClass )
+			if ( t.scope.members )
 			{
 				//for static scope, add only static members
 				//current class
-				for each ( f in tokenScopeClass.members.toArray() )
-					if ( !isStatic || f.isStatic )
-						a.push( f.name );
+				for each ( f in t.scope.members.toArray() )
+					a.push( f.name );
 					
 
 				//inheritance
-				scope = tokenScopeClass;
+				/*scope = tokenScopeClass;
 				while ( ( scope = typeDB.resolveName( scope.extendz ) ) )
 					for each ( f in scope.members.toArray() )
 						if ( f.access != 'private' && ( !isStatic || f.isStatic ) )
-							a.push( f.name );
+							a.push( f.name );*/
+				scope = t.scope;
+				if ( scope.type )
+				{
+					var ff : Object;
+					if ( scope.type.imports )
+						for each ( ff in scope.type.imports.toArray() )
+							a.push( ff.name );
+				}
 			}
 			return a;
 		}
@@ -233,7 +240,7 @@ package net.vdombox.editors.parsers.python
 		private function listStaticMembers( type : Field ) : HashMap
 		{
 			var map : HashMap = new HashMap;
-			for each ( var m : Field in type.members.toArray() )
+			for each ( var m : Field in type.selfMembers.toArray() )
 				if ( m.isStatic && ( m.access == 'public' || tokenScopeClass == type ) )
 					map.setValue( m.name, m );
 			return map;
@@ -242,8 +249,8 @@ package net.vdombox.editors.parsers.python
 
 		private function listTypeMembers( type : Field, skipConstructor : Boolean = true ) : HashMap
 		{
-			if ( type.fieldType != 'class' && type.fieldType != 'interface' )
-				throw new Error( 'type has to be class' );
+			/*if ( type.fieldType != 'class' && type.fieldType != 'interface' )
+				throw new Error( 'type has to be class' );*/
 
 			var map : HashMap = new HashMap;
 
@@ -260,6 +267,14 @@ package net.vdombox.editors.parsers.python
 				}
 
 				for each ( var m : Field in type.members.toArray() )
+				{
+					if ( m.isStatic )
+						continue;
+					if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) && !constrCond )
+						map.setValue( m.name, m );
+				}
+				
+				for each ( m in type.selfMembers.toArray() )
 				{
 					if ( m.isStatic )
 						continue;
@@ -330,7 +345,7 @@ package net.vdombox.editors.parsers.python
 			//1. is it in function scope chain?
 			var isStatic : Boolean = false;
 			for ( scope = t.scope; scope &&
-				scope.fieldType == 'def' || scope.fieldType == 'get' || scope.fieldType == 'set'; scope = scope.parent )
+				scope.fieldType == 'def' || scope.fieldType == 'top' || scope.fieldType == 'class'; scope = scope.parent )
 			{
 				if ( scope.isStatic )
 					isStatic = true;
@@ -349,19 +364,18 @@ package net.vdombox.editors.parsers.python
 			var scope : Field;
 
 			//2. is it this or super?
-			if ( !resolved )
+			if ( resolved )
 			{
 				//non-static instance context
-				var cond : Boolean = t.scope.parent && t.scope.parent.fieldType == 'class' && !isStatic;
-				if ( name == 'self' && cond )
-					resolved = t.scope.parent;
-				if ( name == 'super' && cond )
+				if ( name == 'self' && tokenScopeClass )
+					resolved.selfMembers = tokenScopeClass.selfMembers;
+				if ( name == 'super' )
 					resolved = typeDB.resolveName( t.scope.parent.extendz );
 			}
 
 
 			//3. or is it in the class/inheritance scope?
-			for ( scope = tokenScopeClass; !resolved && scope; scope = typeDB.resolveName( scope.extendz ) )
+			for ( scope = tokenScopeClass; !resolved && scope; scope = typeDB.resolveName(scope.extendz) )
 			{
 				var m : Field = scope.members.getValue( name );
 				if ( !m )
@@ -420,12 +434,12 @@ package net.vdombox.editors.parsers.python
 				}
 
 
-				if ( resolved.fieldType == 'var' || resolved.fieldType == 'get' || resolved.fieldType == 'set' ||
+				/*if ( resolved.type && resolved.fieldType == 'var' || resolved.fieldType == 'get' || resolved.fieldType == 'set' ||
 					( itemType == BackwardsParser.FUNCTION && resolved.fieldType == 'def' ) )
 				{
 					resolved = typeDB.resolveName( resolved.type );
 				}
-				else if ( resolved.fieldType == 'def' && itemType != BackwardsParser.FUNCTION )
+				else*/ if ( resolved.fieldType == 'def' && itemType != BackwardsParser.FUNCTION )
 				{
 					resolved = typeDB.resolveName( new Multiname( 'Def' ) );
 				}

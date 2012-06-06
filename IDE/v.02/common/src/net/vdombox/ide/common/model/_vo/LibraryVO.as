@@ -21,6 +21,7 @@ package net.vdombox.ide.common.model._vo
 		
 		private var _name : String;
 		private var _applicationVO : ApplicationVO;
+		public var containerName : String;
 		
 		public function get name() : String
 		{

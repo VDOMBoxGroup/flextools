@@ -13,6 +13,7 @@ package net.vdombox.editors.parsers.python
 		public static const KEYWORD:String = "keyword";
 		public static const KEYWORD2:String = "keyword2";
 		public static const COMMENT:String = "comment";
+		public static const ENDLINE:String = "endLine";
 		public static const NAMEFUNCTION:String = "nameFunction";
 		public static const NAMECLASS:String = "nameClass";
 		
@@ -30,6 +31,7 @@ package net.vdombox.editors.parsers.python
 
 		public var scope:Field;//lexical scope
 		public var imports:HashMap;//used to solve names and types
+		public var otstyp:Object;//used to solve names and types
 
 		public static const map:Dictionary = new Dictionary(true);
 

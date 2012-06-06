@@ -63,5 +63,14 @@ package ro.victordramba.util
 			for each(var key:String in hm.getKeys())
 				setValue(key, hm.getValue(key));
 		}
+		
+		public function clone():HashMap
+		{
+			var ret:HashMap = new HashMap;
+			for each(var key:String in getKeys())
+				ret.setValue(key, getValue(key));
+				
+			return ret;
+		}
 	}
 }

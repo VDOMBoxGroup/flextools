@@ -156,17 +156,11 @@ package net.vdombox.editors.parsers.python
 			if (!imports)
 				imports = new HashMap;
 
-			if (!imports.hasKey('.*'))
-				imports.setValue('.*', '.*');
+			/*if (!imports.hasKey('.*'))
+				imports.setValue('.*', '.*');*/
 			
-			for each (var item:String in imports.toArray())
-			{
-				var p:int = item.lastIndexOf('.');
-				var pack:String = item.substr(0, p);
-				if (pack == '') pack = '-';
-				var cls:String = item.substr(p+1);
-				if (type.type != cls && cls != '*') continue;
-				var packMap:HashMap = data.getValue(pack);
+
+				var packMap:HashMap = data.getValue('top');
 				if (packMap && packMap.hasKey(type.type))
 				{
 					//debug(type.type + ' resolved in ' + pack + ' DB:'+dbName);
@@ -174,7 +168,6 @@ package net.vdombox.editors.parsers.python
 					res.sourcePath = dbName;
 					return res;
 				}
-			}
 			
 			if (parentDB) 
 				return parentDB.resolveName(type);

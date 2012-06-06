@@ -206,7 +206,8 @@ package net.vdombox.ide.common.controller
 		public static const TREE_ELEMENTS_CHANGED : String = "treeElementsChanged";
 		public static const TREE_ELEMENT_ADD : String = "treeElementAdd";
 		
-		public static const LINKAGES_CHANGED : String = "linkagesChanged";		
+		public static const LINKAGES_CHANGED : String = "linkagesChanged";	
+		public static const LINKAGES_INDEX_UPDATE : String = "linkagesIndexUpdate";	
 		
 		public static const CREATE_PAGE_WINDOW_CREATED : String = "createPageWindowCreated";
 		
@@ -218,6 +219,9 @@ package net.vdombox.ide.common.controller
 		
 		public static const SHOW_SIGNATURE : String = "showSignature";
 		public static const HIDE_SIGNATURE : String = "hideSignature";
+		
+		public static const CHECK_SIGNATURE : String = "checkSignature";
+		public static const SIGNATURE_CHECKED : String = "signatureChecked";
 		
 		public static const SEND_TO_LOG : String = "sendToLog";
 		
@@ -341,6 +345,8 @@ package net.vdombox.ide.common.controller
 		public static const GET_USED_ACTIONS : String = "getUsedActions";
 		public static const SET_USED_ACTIONS : String = "setUsedActions";
 		public static const SET_SELECTED_ACTION : String = "setSelectedAction";
+		
+		public static const CREATE_SELECTED_ACTION : String = "createSelectedAction";
 		
 ///////////////////////////////////////////DataBases//////////////////////////////////////////////////////////////
 		
