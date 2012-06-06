@@ -467,6 +467,11 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 
 	public function set data( value : Object ) : void
 	{
+		if (value && 
+			value.hasOwnProperty("length") &&
+			value["length"]==0)
+				value = null;
+		
 		if ( _data != value )
 		{
 			_data = value;
@@ -818,10 +823,12 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	public function clone() : Connector
 	{
 		var newConnector : Connector = new Connector();
+		
 		newConnector.enabled = enabled;
 		newConnector.highlighted = highlighted;
 		newConnector.label = label;
 		newConnector.data = ObjectUtils.baseClone( data );
+		
 		return newConnector;
 	}
 
