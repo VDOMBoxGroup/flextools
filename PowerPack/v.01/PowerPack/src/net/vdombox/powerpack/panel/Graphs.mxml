@@ -1020,19 +1020,16 @@
 					founsGraphs.addItem(graph);
 			}
 			
-			foundCategory.lstGraphs.addEventListener( MouseEvent.DOUBLE_CLICK, foundGraphsDoubleClickHandler );
-			
-			graphsAccordionsViewStack.selectedChild = graphsFindAccordion;
+			graphsAccordionsViewStack.selectedChild = filteredGraphsBox;
 			
 			ctrlBar.lock();
 		}
 		
 		private function cancelFindGraphs() : void
 		{
-			foundCategory.lstGraphs.removeEventListener( MouseEvent.DOUBLE_CLICK, foundGraphsDoubleClickHandler );
 			founsGraphs.removeAll();
 			
-			graphsAccordionsViewStack.selectedChild = graphsAccordion;
+			graphsAccordionsViewStack.selectedChild = normalGraphsBox;
 			
 			ctrlBar.unLock();
 		}
@@ -1061,17 +1058,7 @@
 				graphFilter.text = GRAPH_FILTER_DEF_TEXT;
 		}
 			
-		private var foundCategory : AccordionChild; 
-		protected function graphsFindAccordion_creationCompleteHandler(event:FlexEvent):void
-		{
-			foundCategory = new AccordionChild();
-			foundCategory.label = "Graphs found";
-			
-			graphsFindAccordion.addChild( foundCategory );
-			
-			foundCategory.graphs = founsGraphs;
-			foundCategory.setStyle("headerRenderer", null);
-		}
+		private var foundCategory : AccordionChild  = new AccordionChild(); 
 			
 		protected function ctrlBar_itemClickHandler(event:ControlBarEvent):void
 		{
@@ -1140,6 +1127,18 @@
 			
 			return variables;
 		}
+		
+		protected function graphsFindAccordion_initializeHandler(event:FlexEvent):void
+		{
+			foundCategory.label = "Graphs found";
+			
+			graphsFindAccordion.addChild( foundCategory );
+			
+			foundCategory.lstGraphs.addEventListener( MouseEvent.DOUBLE_CLICK, foundGraphsDoubleClickHandler );
+			
+			foundCategory.graphs = founsGraphs;
+			foundCategory.setStyle("headerRenderer", null);	
+		}
 			
 		]]>
 	</mx:Script>
@@ -1159,18 +1158,23 @@
 			
 			<mx:ViewStack id="graphsAccordionsViewStack" 
 						width="100%" height="100%">
-				<mx:Accordion id="graphsAccordion"
-							  change="tabChangeHandler(event);"
-							  headerRenderer="net.vdombox.powerpack.panel.graphsClasses.AccordionHeader"
-							  fontFamily="Verdana" borderStyle="solid" 
-							  width="100%" height="100%"/>
 				
-				<mx:Accordion id="graphsFindAccordion"
-							  width="100%" height="100%"
-							  fontFamily="Verdana" borderStyle="solid"
-							  creationComplete="graphsFindAccordion_creationCompleteHandler(event)">
-				</mx:Accordion>
-					
+				<mx:Box width="100%" height="100%"
+						id="normalGraphsBox">
+					<mx:Accordion id="graphsAccordion"
+								  change="tabChangeHandler(event);"
+								  headerRenderer="net.vdombox.powerpack.panel.graphsClasses.AccordionHeader"
+								  fontFamily="Verdana" borderStyle="solid" 
+								  width="100%" height="100%"/>
+				</mx:Box>
+				
+				<mx:Box width="100%" height="100%"
+						id="filteredGraphsBox">
+					<mx:Accordion id="graphsFindAccordion"
+								  width="100%" height="100%"
+								  fontFamily="Verdana" borderStyle="solid"
+								  initialize="graphsFindAccordion_initializeHandler(event)"/>
+				</mx:Box>	
 			</mx:ViewStack>
 			
 
