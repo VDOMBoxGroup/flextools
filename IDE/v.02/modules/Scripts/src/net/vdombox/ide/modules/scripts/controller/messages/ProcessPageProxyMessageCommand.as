@@ -57,7 +57,7 @@ package net.vdombox.ide.modules.scripts.controller.messages
 						else if( operation == PPMOperationNames.RENAME )
 							sendNotification( Notifications.SERVER_ACTION_RENAMED, body );
 						
-						if ( operation != PPMOperationNames.UPDATE )
+						if ( operation == PPMOperationNames.RENAME )
 							sendNotification( Notifications.GET_SERVER_ACTIONS, body.pageVO );
 					}
 					
