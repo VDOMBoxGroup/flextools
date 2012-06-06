@@ -22,7 +22,11 @@ public class ObjectUtils
 	/**
 	 * Deep clone object using thiswind@gmail.com 's solution
 	 */
-	public static function baseClone(source:*):*{
+	public static function baseClone(source:*):*
+	{
+		if (!source)
+			return null;
+		
 		var typeName:String = getQualifiedClassName(source);
         var packageName:String = typeName.split("::")[1];
         var type:Class = Class(getDefinitionByName(typeName));
