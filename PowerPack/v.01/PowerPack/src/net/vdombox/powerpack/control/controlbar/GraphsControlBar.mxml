@@ -13,6 +13,7 @@
 			public static const ITEM_TYPE_CREATE_NEW_CATEGORY	: String = "createNewCategory";
 			public static const ITEM_TYPE_CREATE_NEW_GRAPH		: String = "createNewGraph";
 			public static const ITEM_TYPE_RENAME_GRAPH			: String = "renameGraph";
+			public static const ITEM_TYPE_EXPORT_GRAPH			: String = "exportGraph";
 			public static const ITEM_TYPE_COPY_GRAPH			: String = "copyGraph";
 			public static const ITEM_TYPE_DELETE_GRAPH			: String = "deleteGraph";
 			
@@ -21,6 +22,7 @@
 				btnNewCategory.enabled = false;
 				btnNewGraph.enabled = false;
 				btnRename.enabled = false;
+				btnExportGraph.enabled = false;
 				btnCopy.enabled = false;
 				btnDelete.enabled = false;
 			}
@@ -30,6 +32,7 @@
 				btnNewCategory.enabled = true;
 				btnNewGraph.enabled = true;
 				btnRename.enabled = true;
+				btnExportGraph.enabled = true;
 				btnCopy.enabled = true;
 				btnDelete.enabled = true;
 			}
@@ -65,6 +68,13 @@
 			   width="100%"
 			   sourceEnabled="{ContextManager.editClass}"
 			   sourceDisabled="{ContextManager.editDisabledClass}"/>
+	
+	<controlbar:ControlBarButton id="btnExportGraph" 
+								 click="item_clickHandler(event, ITEM_TYPE_EXPORT_GRAPH)"
+								 toolTip="Export graph" 
+								 width="100%" 
+								 sourceEnabled="{ContextManager.exportGraphEnabledClass}"
+								 sourceDisabled="{ContextManager.exportGraphDisabledClass}"/>
 	
 	<controlbar:ControlBarButton id="btnCopy" 
 			   click="item_clickHandler(event, ITEM_TYPE_COPY_GRAPH)"

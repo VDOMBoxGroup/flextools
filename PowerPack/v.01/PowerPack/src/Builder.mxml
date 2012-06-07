@@ -1246,17 +1246,21 @@
 				}
 
 				for each ( var itm : XML in xmlListCol )
-				{
-					var graph : GraphCanvas = new GraphCanvas();
-					graph.fromXML( itm );
-
-					var newGraph : GraphCanvas = graph.clone();
-					newGraph.name = pnl_graphs.createUniqueGraphName("Imported_" + graph.name);
-					pnl_graphs.addGraph( newGraph );
-				}
+					importTemplate(itm);
 			}
 
 			ProgressManager.complete();
+		}
+		
+		private function importTemplate (tplXML : XML) : void
+		{
+			var graph : GraphCanvas = new GraphCanvas();
+			graph.fromXML( tplXML );
+			
+			var newGraph : GraphCanvas = graph.clone();
+			newGraph.name = pnl_graphs.createUniqueGraphName("Imported_" + graph.name);
+			pnl_graphs.addGraph( newGraph );
+
 		}
 
 		private function addTemplate (template : BuilderTemplate) : void

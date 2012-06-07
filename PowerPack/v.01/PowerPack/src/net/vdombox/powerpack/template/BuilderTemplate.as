@@ -212,6 +212,87 @@ package net.vdombox.powerpack.template
 			browseForSave (BROWSE_TYPE_EXPORT);
 		}
 		
+		public function exportGraph (graphXML : XML) : void
+		{
+			if (!graphXML)
+				return;
+			
+			var folder : File = BuilderContextManager.instance.lastDir;
+			
+			folder.addEventListener( Event.SELECT, graphFileSelectHandler );
+			
+			folder.browseForSave( "Export graph" );
+			
+			var fileToExport : File;
+			function graphFileSelectHandler (event : Event) : void
+			{
+				folder.removeEventListener( Event.SELECT, graphFileSelectHandler );
+				
+				fileToExport = event.target as File;
+				
+				if ( !fileToExport.extension || fileToExport.extension.toLowerCase() != TPL_EXTENSION )
+					fileToExport = fileToExport.parent.resolvePath( fileToExport.name + '.' + TPL_EXTENSION );
+				
+				try
+				{
+					ProgressManager.source = fileStream;
+					ProgressManager.start();
+					
+					addListeners();
+					
+					fileStream.openAsync( fileToExport, FileMode.WRITE );
+					fileStream.writeUTFBytes( graphXML.toXMLString() );
+				}
+				catch ( e : Error )
+				{
+					removeListeners();
+					
+					cancelWithError(e.message);
+				}
+			}
+			
+			function addListeners () : void
+			{
+				fileStream.addEventListener( Event.COMPLETE, graphExportCompleteHandler );
+				fileStream.addEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+				fileStream.addEventListener( IOErrorEvent.IO_ERROR, graphExportErrorHandler );
+			}
+			
+			function removeListeners () : void
+			{
+				fileStream.removeEventListener( Event.COMPLETE, graphExportCompleteHandler );
+				fileStream.removeEventListener( OutputProgressEvent.OUTPUT_PROGRESS, fileStreamOutputProgressHandler );
+				fileStream.removeEventListener( IOErrorEvent.IO_ERROR, graphExportErrorHandler );
+			}
+			
+			function graphExportCompleteHandler (e:Event) : void
+			{
+				removeListeners();
+				
+				fileStream.close();
+				
+				ProgressManager.complete();
+			}
+			
+			function graphExportErrorHandler (e:IOErrorEvent) : void
+			{
+				removeListeners();
+				
+				cancelWithError(e.text);
+			}
+			
+			function cancelWithError (msg : String) : void
+			{
+				fileToExport.cancel();
+				fileStream.close();
+				
+				ProgressManager.complete();
+				
+				showError(msg);
+			}
+				
+		}
+		
 		private function cash() : Boolean
 		{
 			if ( xmlStructure == null )

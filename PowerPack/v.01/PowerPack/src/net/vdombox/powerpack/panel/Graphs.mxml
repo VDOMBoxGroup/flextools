@@ -816,6 +816,19 @@
 			curTab.lstGraphs.editable = true;
 			curTab.lstGraphs.editedItemPosition = {rowIndex : curTab.lstGraphs.selectedIndex, columnIndex : 0};
 		}
+			
+		private function exportGraph () : void
+		{
+			if ( !curGraph )
+				return;
+			
+			var curGraphXML : XML = curGraph.toXML();
+			
+			if (!curGraphXML)
+				return;
+			
+			currentTemplate.exportGraph(curGraphXML);
+		}
 
 		private function copyGraph() : void
 		{
@@ -1079,6 +1092,12 @@
 				case GraphsControlBar.ITEM_TYPE_RENAME_GRAPH:
 				{
 					renameGraph();
+					break;
+				}
+					
+				case GraphsControlBar.ITEM_TYPE_EXPORT_GRAPH:
+				{
+					exportGraph();
 					break;
 				}
 					
