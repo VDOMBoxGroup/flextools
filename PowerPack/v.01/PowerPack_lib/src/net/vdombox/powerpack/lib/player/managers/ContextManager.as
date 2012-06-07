@@ -148,7 +148,15 @@ public class ContextManager extends EventDispatcher
 	[Embed(source="/assets/icons/edit_disabled.png")]
 	[Bindable]
 	public static var editDisabledClass : Class;
+	
+	[Embed(source="/assets/icons/export_graph_disabled.png")]
+	[Bindable]
+	public static var exportGraphDisabledClass : Class;
 
+	[Embed(source="/assets/icons/export_graph_enabled.png")]
+	[Bindable]
+	public static var exportGraphEnabledClass : Class;
+	
 	[Embed(source="/assets/icons/delete_16.png")]
 	[Bindable]
 	public static var deleteClass : Class;
