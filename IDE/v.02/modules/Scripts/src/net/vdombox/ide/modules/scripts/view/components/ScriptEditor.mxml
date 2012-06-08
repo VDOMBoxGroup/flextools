@@ -17,6 +17,7 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.editors.HashLibraryArray;
 			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.events.EditorEvent;
 			import net.vdombox.ide.common.events.FindBoxEvent;
@@ -142,6 +143,11 @@
 			{
 				addEventListener(Event.CHANGE, setStateInUnsave, true, 0, true );
 				pythonScriptEditor.addEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true, 0, true );
+			}
+			
+			public function set hashLibraryArray( hashLibraries : HashLibraryArray ) : void
+			{
+				pythonScriptEditor.hashLibraryArray = hashLibraries;
 			}
 			
 		]]>

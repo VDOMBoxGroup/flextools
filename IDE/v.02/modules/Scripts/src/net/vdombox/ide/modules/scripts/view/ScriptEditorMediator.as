@@ -14,6 +14,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
+	import net.vdombox.ide.modules.scripts.model.HashLibraryProxy;
 	import net.vdombox.ide.modules.scripts.view.components.FindBox;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	
@@ -33,14 +34,13 @@ package net.vdombox.ide.modules.scripts.view
 		}
 		
 		private var isActive : Boolean;
+		private var hashLibraryProxy : HashLibraryProxy;
 		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( Notifications.BODY_START );
-			interests.push( Notifications.BODY_STOP );
-			
+			interests.push( HashLibraryProxy.HASH_LIBRARIES_CHANGE );
 			
 			return interests;
 		}
@@ -50,28 +50,11 @@ package net.vdombox.ide.modules.scripts.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 			
-			//var objectVO : ObjectVO;
-			var editor : ScriptEditor;
-			
-			if ( !isActive && name != Notifications.BODY_START )
-				return;
-			
-			
-			
 			switch ( name )
-			{
-				case Notifications.BODY_START:
+			{					
+				case HashLibraryProxy.HASH_LIBRARIES_CHANGE:
 				{
-					isActive = true;
-					
-					break;
-				}
-					
-				case Notifications.BODY_STOP:
-				{
-					clearData();
-					
-					isActive = false;
+					scriptEditor.hashLibraryArray = hashLibraryProxy.hashLibraries;
 					
 					break;
 				}
@@ -98,7 +81,10 @@ package net.vdombox.ide.modules.scripts.view
 
 		override public function onRegister() : void
 		{
-
+			hashLibraryProxy = facade.retrieveProxy( HashLibraryProxy.NAME ) as HashLibraryProxy;
+			
+			scriptEditor.hashLibraryArray = hashLibraryProxy.hashLibraries;
+			
 			addHandlers();
 		}
 
@@ -128,6 +114,7 @@ package net.vdombox.ide.modules.scripts.view
 			pythonScriptEditor.addedToStageHadler(null);
 			pythonScriptEditor.loadSource( "", "zzz" );
 			pythonScriptEditor.scriptAreaComponent.text = scriptEditor.script;
+			
 		}	
 		
 		private function keyDownHandler(event:KeyboardEvent):void
@@ -143,7 +130,7 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function clearData() : void
 		{
-			
+			hashLibraryProxy = null;
 		}
 		
 		private function scriptEditor_saveHandler( event : ScriptEditorEvent ) : void
