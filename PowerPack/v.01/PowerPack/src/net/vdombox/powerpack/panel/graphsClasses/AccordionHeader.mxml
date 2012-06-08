@@ -23,6 +23,7 @@
 			import mx.managers.DragManager;
 			
 			import net.vdombox.powerpack.graph.GraphCanvas;
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
 			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 
@@ -308,7 +309,7 @@
 		{
 			event.stopPropagation();
 			
-			var e : Event = new GraphsAccordionEvent( GraphsAccordionEvent.TAB_CLOSING, null, true, true );
+			var e : Event = new GraphsAccordionEvent( GraphsAccordionEvent.TAB_CLOSING, null, null, null, true, true );
 			accordChild.dispatchEvent( e );
 		}
 
@@ -345,23 +346,38 @@
 				destination.dispatchEvent( evt );
 			}
 		}
+			
+		protected function importGraphHandler(event:MouseEvent):void
+		{
+			event.stopPropagation();
+			
+			var e : Event = new GraphsAccordionEvent( GraphsAccordionEvent.IMPORT_GRAPH, null, null, null, true, true );
+			accordChild.dispatchEvent( e );
+		}
+			
 		]]>
 	</mx:Script>
 
 	<mx:Canvas id="boxHeader">
 
-		<mx:ControlBar id="cbarHeader" horizontalAlign="right" paddingBottom="2" paddingLeft="2"
-					   paddingRight="2" paddingTop="2">
+		<mx:ControlBar id="cbarHeader" 
+					   horizontalAlign="right" verticalAlign="middle"
+					   paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2"
+					   horizontalGap="5">
 
 			<flexlib:CanvasButton
-					paddingTop="0"
-					paddingLeft="0"
-					paddingBottom="0"
-					paddingRight="0"
+					width="20" height="20"
 					cornerRadius="2"
-					click="closeTabHandler(event);">
-				<mx:Label id="label_x" text="x" />
-			</flexlib:CanvasButton>
+					click="importGraphHandler(event)"
+					icon="{ContextManager.importGraphClass}"
+					toolTip="Import graph"/>
+			
+			<flexlib:CanvasButton
+					width="20" height="20"
+					cornerRadius="2"
+					click="closeTabHandler(event);"
+					icon="{ContextManager.deleteCategoryClass}"
+					toolTip="Remove category"/>
 
 		</mx:ControlBar>
 

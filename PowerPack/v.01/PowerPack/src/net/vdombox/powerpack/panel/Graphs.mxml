@@ -8,6 +8,7 @@
 	
 	<mx:Metadata>
 		[Event(name="templateChanged", type="flash.events.Event")]
+		[Event(name="importGraphClick", type="net.vdombox.powerpack.panel.graphsClasses.GraphsAccordionEvent")]
 	</mx:Metadata>
 
 	<mx:Script>
@@ -259,6 +260,7 @@
 			graphAccordionChild.addEventListener( GraphsAccordionEvent.GRAPH_VALUE_EDITING_COMPLETE, onLstGraphsEditingComplete );
 
 			graphAccordionChild.addEventListener( GraphsAccordionEvent.TAB_CLOSING, closingEditLstGraphsHandler );
+			//graphAccordionChild.addEventListener( GraphsAccordionEvent.IMPORT_GRAPH, importGraphClickHandler );
 
 			graphAccordionChild.addEventListener( GraphsAccordionEvent.CAPTION_VALUE_ENTERED, captionValueEnteredHandler );
 			graphAccordionChild.addEventListener( GraphsAccordionEvent.CAPTION_CHANGED, captionChangedHandler );
@@ -682,6 +684,13 @@
 			}
 		}
 
+//		private function importGraphClickHandler( event : GraphsAccordionEvent ) : void
+//		{
+//			var accordChild : AccordionChild = event.currentTarget as AccordionChild;
+//			
+//			var graphAccordEvent : 
+//		}
+		
 		private function removeCategory (accordChild : AccordionChild) : void
 		{
 			if (!accordChild)

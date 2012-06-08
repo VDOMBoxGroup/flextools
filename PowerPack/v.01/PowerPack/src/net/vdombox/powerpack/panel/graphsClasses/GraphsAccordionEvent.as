@@ -20,20 +20,29 @@ public class GraphsAccordionEvent extends Event
 
 	public static const CAPTION_VALUE_ENTERED : String = 'captionValueEntered';
 	public static const CAPTION_CHANGED : String = 'captionChanged';
+	
+	public static const IMPORT_GRAPH	: String = "importGraphClick";
 
 	public var graph : GraphCanvas;
 	public var accordHeader : AccordionHeader;
+	public var accordChild : AccordionChild;
 
-	public function GraphsAccordionEvent( type : String, aGraph : GraphCanvas = null, bubbles : Boolean = false, cancelable : Boolean = false )
+	public function GraphsAccordionEvent( type : String, 
+										  aGraph : GraphCanvas = null, 
+										  aAccordHeader : AccordionHeader = null, 
+										  aAccordChild : AccordionChild = null, 
+										  bubbles : Boolean = false, cancelable : Boolean = false )
 	{
 		super( type, bubbles, cancelable );
 
 		graph = aGraph;
+		accordHeader = aAccordHeader;
+		accordChild = aAccordChild;
 	}
 
 	override public function clone() : Event
 	{
-		return new GraphsAccordionEvent( type, graph, bubbles, cancelable );
+		return new GraphsAccordionEvent( type, graph, accordHeader, accordChild, bubbles, cancelable );
 	}
 
 }
