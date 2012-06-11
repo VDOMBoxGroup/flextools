@@ -18,15 +18,15 @@
     <id>net.vdom.powerpack.builder</id>
 
     <!-- Used as the filename for the application. Required. -->
-    <filename>Power Pack Builder v.1.2.6.8243</filename>
+    <filename>Power Pack Builder v.1.2.6.8289</filename>
 
     <!-- The name that is displayed in the AIR application installer. Optional. -->
-    <name>Power Pack Builder 1.2.6 (8243)</name>
+    <name>Power Pack Builder 1.2.6 (8289)</name>
 
 	<supportedProfiles>extendedDesktop desktop</supportedProfiles>
 	
     <!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-    <version>1.2.6.8243</version>
+    <version>1.2.6.8289</version>
 
     <!-- Description, displayed in the AIR application installer. Optional. -->
     <!-- <description></description> -->
