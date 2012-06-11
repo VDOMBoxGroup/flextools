@@ -652,7 +652,8 @@ public class Node extends Canvas implements IFocusManagerComponent
 			nodeTextArea.addEventListener( MouseEvent.MOUSE_WHEEL, wheelHandler );
 			nodeTextArea.addEventListener( KeyboardEvent.KEY_DOWN, textAreaKeyDown );
 			
-			assistMenu = new AssistMenu(this, stage, onAssistComplete);
+			if (stage)
+				assistMenu = new AssistMenu(this, stage, onAssistComplete);
 		}
 		
 		if ( !flagShape )
@@ -1641,11 +1642,11 @@ public class Node extends Canvas implements IFocusManagerComponent
 				break;
 
 			case "jump":
-				if (category!= NodeCategory.SUBGRAPH)
+				if (!canJumpToGraph)
 					return;
 				
 				var jumpEvent : GraphCanvasEvent = new GraphCanvasEvent(GraphCanvasEvent.JUMP_TO_GRAPH);
-				jumpEvent.graphToJumpName = text;
+				jumpEvent.graphToJumpName = graphToJumpName;
 				
 				parent.dispatchEvent( jumpEvent );
 				break;
@@ -2160,13 +2161,52 @@ public class Node extends Canvas implements IFocusManagerComponent
 
 	private function contextHandler( event : MouseEvent ) : void
 	{
-		contextMenu.getItemByName( "jump" ).enabled = category == NodeCategory.SUBGRAPH;
+		contextMenu.getItemByName( "jump" ).enabled = canJumpToGraph;
 
 		for each ( var item : NativeMenuItem in contextMenu.items )
 		{
 			item.label = LanguageManager.sentences['node_' + item.name];
 		}
 	}
+	
+	private static var subCommandRegExp : RegExp = /[[ ]*(sub|subPrefix) \w+/i;
+	
+	public function get canJumpToGraph () : Boolean
+	{
+		if (category == NodeCategory.SUBGRAPH)
+			return true;
+		
+		if (category == NodeCategory.COMMAND)
+		{
+			if (text.search(subCommandRegExp) >= 0)
+				return true;
+		}
+			
+		return false;
+	}
 
+	public function get graphToJumpName () : String
+	{
+		if (!canJumpToGraph)
+			return "";
+		
+		if (category == NodeCategory.SUBGRAPH)
+			return text;
+		
+		if (category == NodeCategory.COMMAND)
+		{
+			var subCommandText : String = text.match(subCommandRegExp)[0];
+			
+			var lastSpaceIndex : int = subCommandText.lastIndexOf(" ");
+			
+			var subGraphName : String = subCommandText.substring(lastSpaceIndex+1);
+			
+			return subGraphName;
+		}
+		
+		return "";
+	}
+	
+	
 }
 }

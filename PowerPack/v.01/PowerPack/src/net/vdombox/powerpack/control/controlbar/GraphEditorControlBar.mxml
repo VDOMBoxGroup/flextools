@@ -132,8 +132,7 @@
 						
 						var selectedNode : Node = graph.selectedNodes[0];
 						
-						if (selectedNode.category == NodeCategory.SUBGRAPH)
-							btnJump.enabled = true;
+						btnJump.enabled = selectedNode.canJumpToGraph;
 					}
 				}
 					
