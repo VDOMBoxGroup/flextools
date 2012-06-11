@@ -1180,11 +1180,26 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	{
 		var resultStatesArray : Array = [];
 		
+		value = value.replace("^", "\\^");
 		value = value.replace("$", "\\$");
+		value = value.replace(".", "\\.");
+		value = value.replace("*", "\\*");
+		value = value.replace("+", "\\+");
+		value = value.replace("?", "\\?");
+		value = value.replace("[", "\\[");
+		value = value.replace("]", "\\]");
+		value = value.replace("(", "\\(");
+		value = value.replace(")", "\\)");
+		value = value.replace("|", "\\|");
+		value = value.replace("{", "\\{");
+		value = value.replace("}", "\\}");
 		
 		var searchRegExp : RegExp;
 		
-		searchRegExp = useWholeWord ? new RegExp("\\W" + value + "\\W") : new RegExp(value);
+		if (value.search(new RegExp("\\s", "m")) >= 0)
+			useWholeWord = false;
+			
+		searchRegExp = useWholeWord ? new RegExp("(\\b|\\s)" + value + "(\\b|\\s)", "im") : new RegExp(value, "i");
 		
 		var graphXML : XML = toXML();
 		
