@@ -1272,39 +1272,6 @@
 			BindingUtils.bindSetter(templateChangeHandler, currentTemplate, 'modified');
 		}
 		
-//		private function onImportClose( event : CloseEvent ) : void
-//		{
-//			if ( event.detail == ModalDialog.OK )
-//			{
-//				var graphs : Array = event.target.graphs;
-//
-//				closeTpl( false );
-//
-//				var template : BuilderTemplate = Import( event.target ).template as BuilderTemplate;
-//
-//				addTemplate(template);
-//
-//				processNewTpl();
-//
-//				ProgressManager.start( ProgressManager.DIALOG_MODE, true );
-//
-//				var i : int = 0;
-//				if ( graphs.length > 0 )
-//				{
-//					ProgressManager.step( i++, graphs.length );
-//
-//					for each ( var graph : GraphCanvas in graphs )
-//					{
-//						pnl_graphs.addGraph( graph );
-//					}
-//				}
-//
-//				pnl_graphs.selectGraph( pnl_graphs.findFirstGraph() );
-//
-//				ProgressManager.complete();
-//			}
-//		}
-
 		private function generationComplete( event : Event ) : void
 		{
 			ProgressManager.complete();
