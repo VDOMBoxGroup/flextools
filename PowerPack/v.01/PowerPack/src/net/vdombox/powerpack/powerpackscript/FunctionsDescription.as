@@ -47,10 +47,16 @@ package net.vdombox.powerpack.powerpackscript
 										  "[convert TYPE VALUE]",
 										  
 				'loadDataFrom'			: "<b>Description:</b>\n" +
-										  "Returna a string that keeps file content.\n\n" +
+										  "Returns a string that keeps file content.\n\n" +
 										  "<b>Syntax:</b>\n" +
-										  "[loadDataFrom 'FileName']",
+										  "[loadDataFrom $FilePath]",
 				
+				'loadData'				: "<b>Description:</b>\n" +
+										  "Offers to select file and\nreturns selected file content.\n\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[loadData $DialogLabel $FileFilter]\n\n" +
+										  "* $FileFilter example: '*.xml; *.txt',\n",
+
 				'writeTo'				: "<b>Description:</b>\n" +
 										  "Writes the result of the current state of the graph\n" +
 										  "into a file whose name is specified by FileName.\n\n" +
