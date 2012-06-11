@@ -48,12 +48,12 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 					answer = new RadioButtonsAnswer (data);
 					break;
 				}
-//			Browse file type - temporary not supported
-//				case ANSWER_TYPE_BROWSE_FILE :
-//				{
-//					answer = new BrowseFileAnswer (data);
-//					break;
-//				}
+
+				case ANSWER_TYPE_BROWSE_FILE :
+				{
+					answer = new BrowseFileAnswer (data);
+					break;
+				}
 				case ANSWER_TYPE_COMBO_BOX :
 				{
 					answer = new ComboBoxAnswer (data);

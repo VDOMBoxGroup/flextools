@@ -38,6 +38,7 @@ public class Parser
 		"_switch" : { pattern : /^\[n[nvscVSA][nsc]*\]$/, argNum : -2, trans : [] },
 		'convert' : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2 },
 		'loadDataFrom' : { pattern : /^\[n[vscVSA]\]$/, argNum : 1, trans : ['true', 'false'] },
+		'loadData' : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2, trans : ['true', 'false'] },
 		'writeTo' : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
 		'writeVarTo' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2 },
 		'GUID' : { pattern : /^\[n\]$/, argNum : 0 },

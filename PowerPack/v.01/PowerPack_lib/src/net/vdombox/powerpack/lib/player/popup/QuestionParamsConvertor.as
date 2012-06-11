@@ -10,7 +10,6 @@ package net.vdombox.powerpack.lib.player.popup
 		public static const QT_NONE		: int = -1;
 		public static const QT_INPUT	: int = 0;
 		public static const QT_SELECT	: int = 1;
-		public static const QT_BROWSE	: int = 2;
 		
 		public function QuestionParamsConvertor()
 		{
@@ -45,10 +44,6 @@ package net.vdombox.powerpack.lib.player.popup
 			
 			if ( params.length == 1 && params[0].toString() == "*")
 				return QT_INPUT;
-			
-//			Browse file type - temporary not supported		
-//			if ( params.length == 1 && isFileMask(params[0].toString()) )
-//				return QT_BROWSE;
 			
 			if ((params.length > 1) ||
 				(params.length == 1 && String(params[0]).split(",").length > 0))
@@ -103,14 +98,6 @@ package net.vdombox.powerpack.lib.player.popup
 					else
 						listParamsArr = listParamsArr.concat(String(params[0]).split(","));
 						
-					break;
-				}
-				case QT_BROWSE:
-				{
-					listParamsArr.push(AnswerCreator.ANSWER_TYPE_BROWSE_FILE); // ans type
-					listParamsArr.push(""); // ans label
-					
-					listParamsArr.push(getFileMask(params[0].toString()));
 					break;
 				}
 				default:

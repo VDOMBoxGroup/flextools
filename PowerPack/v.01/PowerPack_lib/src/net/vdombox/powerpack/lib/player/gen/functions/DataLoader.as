@@ -4,6 +4,7 @@ package net.vdombox.powerpack.lib.player.gen.functions
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.net.FileReference;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
@@ -40,18 +41,58 @@ package net.vdombox.powerpack.lib.player.gen.functions
 			loader.load ( request );
 		}
 		
+		public function loadFile( file : FileReference ):void
+		{
+			if (!file)
+				dispathError();
+			
+			path = file.name;
+				
+			file.addEventListener(Event.COMPLETE, loadFileCompleteHandler); 
+			file.addEventListener(IOErrorEvent.IO_ERROR, loadFileErrorHandler); 
+			file.addEventListener(SecurityErrorEvent.SECURITY_ERROR, loadFileErrorHandler);
+			
+			file.load();
+			
+			function loadFileCompleteHandler (event : Event) : void
+			{
+				file.removeEventListener(Event.COMPLETE, loadFileCompleteHandler); 
+				file.removeEventListener(IOErrorEvent.IO_ERROR, loadFileErrorHandler); 
+				file.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, loadFileErrorHandler);
+				
+				var fileData : ByteArray = file.data;
+				var fileContent : String;
+				
+				if (!fileData)
+					fileContent = "";
+				else
+				 	fileContent = fileData.readUTFBytes(fileData.length);
+				
+				dispathcSuccess( fileContent );
+			}
+			
+			function loadFileErrorHandler (event : Event) : void
+			{
+				file.removeEventListener(Event.COMPLETE, loadFileCompleteHandler); 
+				file.removeEventListener(IOErrorEvent.IO_ERROR, loadFileErrorHandler); 
+				file.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, loadFileErrorHandler);
+				
+				dispathError();
+			}
+		}
+		
 		private function addHandlers():void
 		{
 			loader.addEventListener ( Event.COMPLETE, completeHadler, false, 0, true );
-			loader.addEventListener(IOErrorEvent.IO_ERROR, errorHandler, false, 0, true);
-			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler, false, 0, true);
+			loader.addEventListener (IOErrorEvent.IO_ERROR, errorHandler, false, 0, true);
+			loader.addEventListener (SecurityErrorEvent.SECURITY_ERROR, errorHandler, false, 0, true);
 		} 
 		
 		private function removeHandlers():void
 		{
 			loader.removeEventListener ( Event.COMPLETE, completeHadler);
-			loader.removeEventListener(IOErrorEvent.IO_ERROR, errorHandler);
-			loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
+			loader.removeEventListener (IOErrorEvent.IO_ERROR, errorHandler);
+			loader.removeEventListener (SecurityErrorEvent.SECURITY_ERROR, errorHandler);
 		}
 		
 		private function completeHadler( evt:Event ):void
@@ -66,20 +107,24 @@ package net.vdombox.powerpack.lib.player.gen.functions
 			var fileContent : Object = data;
 			
 			if (loadedXMLFormat)
-			{
 				fileContent = getXMLData(data);
-			}
 			
 			dispatchEvent( new  TemplateLibEvent( TemplateLibEvent.COMPLETE, fileContent,  "true"));
 		}
 		
 		private function get loadedXMLFormat () : Boolean
 		{
+			if (!loadedFileExtention)
+				return false;
+			
 			return loadedFileExtention.toLowerCase() == "xml";
 		}
 		
 		public function get loadedFileExtention () : String
 		{
+			if (!path)
+				return "";
+			
 			var extention : String = "";
 			
 			var lastDotIndex : int = path.lastIndexOf(".");
@@ -94,9 +139,9 @@ package net.vdombox.powerpack.lib.player.gen.functions
 		{
 			try
 			{
-				var xmlData : XML = XML(data);
+				var xmlData : XML = new XML(data);
 				
-				if (!xmlData.name() || xmlData.name().localName != "Application")
+				if (!xmlData.name())
 					xmlData = decodeXMLData(xmlData);
 			}
 			catch ( e : Error )

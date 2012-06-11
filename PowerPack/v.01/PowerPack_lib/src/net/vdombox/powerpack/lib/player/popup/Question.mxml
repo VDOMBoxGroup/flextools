@@ -23,6 +23,7 @@
 			import net.vdombox.powerpack.lib.player.gen.parse.ListParser;
 			import net.vdombox.powerpack.lib.player.popup.Answers.Answer;
 			import net.vdombox.powerpack.lib.player.popup.Answers.AnswerCreator;
+			import net.vdombox.powerpack.lib.player.popup.Answers.BrowseFileAnswer;
 			
 			[Bindable]
 			public var question : String = "";
@@ -75,16 +76,28 @@
 			
 			protected function closeDialog (closeDetail : String = TemplateTransition.OK) : void
 			{
+				var qResult : Object;
+				
 				if (closeDetail == TemplateTransition.CANCEL)
-					strAnswer = "";
+					qResult = "";
 				else
 				{
 					var answers : Array =  answerBox.getChildren();
 					
-					strAnswer =  answers.length == 1 ? answers[0].value : answersList;
+					if (!answers)
+						qResult = "";
+					else
+					{
+						if (answers.length == 1)
+						{
+							qResult = answers[0] is BrowseFileAnswer ? BrowseFileAnswer(answers[0]).selectedFile : answers[0].value;
+						}
+						else
+							qResult = answersList;
+					}
 				}
 				
-				var evt : TemplateLibEvent = new TemplateLibEvent( TemplateLibEvent.COMPLETE, strAnswer, closeDetail );
+				var evt : TemplateLibEvent = new TemplateLibEvent( TemplateLibEvent.COMPLETE, qResult, closeDetail );
 				dispatchEvent( evt );
 				
 				removeListeners();

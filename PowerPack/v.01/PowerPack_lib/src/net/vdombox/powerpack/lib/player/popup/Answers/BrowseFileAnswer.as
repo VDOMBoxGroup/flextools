@@ -1,9 +1,11 @@
 package net.vdombox.powerpack.lib.player.popup.Answers
 {
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
-//	import flash.filesystem.File;
+	import flash.events.SecurityErrorEvent;
 	import flash.net.FileFilter;
+	import flash.net.FileReference;
 	
 	import mx.containers.Canvas;
 	import mx.controls.Button;
@@ -25,6 +27,8 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 		
 		private var _browseFilter : String = "*.*";
 		
+		public var selectedFile : FileReference;
+		
 		public function BrowseFileAnswer(data:String )
 		{
 			super(data);
@@ -36,9 +40,6 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 		public function set browseFilter (value : String) : void
 		{
 			_browseFilter = value;
-			
-			if (_browseFilter.indexOf("#(") == 0 &&	_browseFilter.charAt(_browseFilter.length-1) == ")")
-				_browseFilter = _browseFilter.substring(2, _browseFilter.length-1);
 		}
 		
 		public function get browseFilter () : String
@@ -93,25 +94,37 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 				StringUtil.substitute( LanguageManager.sentences.file + " ({0})", browseFilter ? browseFilter : '*.*' ),
 				browseFilter ? browseFilter : '*.*' );
 			
-//			var file : File = new File();
-//			
-//			file.addEventListener( Event.SELECT, fileSelectHandler );
-//			
-//			if ( browseFilter )
-//				file.browseForOpen( LanguageManager.sentences.select_file + '...', [filter] );
-//			else
-//				file.browseForOpen( LanguageManager.sentences.select_file + '...' );
+			var file : FileReference = new FileReference();
+			
+			file.addEventListener( Event.SELECT, fileSelectHandler );
+			file.addEventListener(IOErrorEvent.IO_ERROR, fileSelectHandler); 
+			file.addEventListener(SecurityErrorEvent.SECURITY_ERROR, fileSelectHandler);
+			
+			if ( browseFilter )
+				file.browse([filter]);
+			else
+				file.browse();
 		}
 		
 		private function fileSelectHandler( event : Event ) : void
 		{
-			filePathTextInput.text = event.target.nativePath;
-			filePathTextInput.toolTip = event.target.nativePath;
+			selectedFile = event.target as FileReference;
+			
+			selectedFile.removeEventListener( Event.SELECT, fileSelectHandler );
+			selectedFile.removeEventListener(IOErrorEvent.IO_ERROR, fileSelectHandler); 
+			selectedFile.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, fileSelectHandler);
+			
+			if (event.type == IOErrorEvent.IO_ERROR || event.type == SecurityErrorEvent.SECURITY_ERROR)
+				filePathTextInput.text = filePathTextInput.toolTip = "";
+			else
+				filePathTextInput.text = filePathTextInput.toolTip = selectedFile.name;
 		}
+		
 		
 		override public function get value () : String
 		{
 			return StringUtil.trim( filePathTextInput.text );
 		}
+		
 	}
 }

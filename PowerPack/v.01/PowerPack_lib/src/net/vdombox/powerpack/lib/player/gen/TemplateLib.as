@@ -20,6 +20,7 @@ import flash.geom.ColorTransform;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.net.FileReference;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
 import flash.net.URLRequestMethod;
@@ -56,6 +57,7 @@ import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
 import net.vdombox.powerpack.lib.player.gen.structs.GraphStruct;
 import net.vdombox.powerpack.lib.player.gen.structs.NodeStruct;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+import net.vdombox.powerpack.lib.player.popup.Answers.AnswerCreator;
 import net.vdombox.powerpack.lib.player.popup.Question;
 
 public dynamic class TemplateLib extends EventDispatcher
@@ -483,7 +485,8 @@ public dynamic class TemplateLib extends EventDispatcher
 		questionPopup.dataProvider = params;
 		questionPopup.cancelable = cancelable;
 		
-		questionPopup.addEventListener( TemplateLibEvent.COMPLETE, closeHandler); 
+		questionPopup.addEventListener( TemplateLibEvent.COMPLETE, closeHandler);
+		
 		PopUpManager.addPopUp(questionPopup, popupParent, true);
 		
 		return closeHandler;
@@ -679,8 +682,6 @@ public dynamic class TemplateLib extends EventDispatcher
 		
 		file.addEventListener(TemplateLibEvent.COMPLETE, resultGettedHandler );
 		
-//		Application.application.callLater(file.load, [filePath]);
-			
 		file.load( filePath );
 		
 		function resultGettedHandler ( event : TemplateLibEvent): void
@@ -690,6 +691,48 @@ public dynamic class TemplateLib extends EventDispatcher
 		}
 		return resultGettedHandler;	
 			
+	}
+	
+	public function loadData( questionLabel : String, fileFilter : String ) : Function
+	{
+		var args : Array = ["['"+AnswerCreator.ANSWER_TYPE_BROWSE_FILE+"' '' '"+fileFilter+"']"];
+		
+		_dialog(browseFileCloseHandler, questionLabel, args);
+		
+		function browseFileCloseHandler(event : TemplateLibEvent) : void
+		{
+			var fileRef : FileReference = event.result as FileReference;
+			
+			if (!fileRef)
+			{
+				dataLoadComleteHandler(null);
+				return;
+			}
+				
+			var dataLoader : DataLoader = new DataLoader();
+			
+			dataLoader.addEventListener(TemplateLibEvent.COMPLETE, dataLoadComleteHandler );
+			
+			dataLoader.loadFile(fileRef);
+		}
+		
+		function dataLoadComleteHandler ( event : TemplateLibEvent): void
+		{
+			if (!event)
+			{
+				setTransition( "false" );
+				setReturnValue( "false" );
+				
+				return;
+			}
+			
+			event.target.removeEventListener(TemplateLibEvent.COMPLETE, dataLoadComleteHandler );
+			
+			setTransition( event.transition );
+			setReturnValue( event.result );
+		}
+		
+		return dataLoadComleteHandler;
 	}
 	
 	public function GUID() : String
