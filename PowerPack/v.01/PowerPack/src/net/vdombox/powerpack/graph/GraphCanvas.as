@@ -7,8 +7,11 @@ import flash.display.BitmapData;
 import flash.display.DisplayObject;
 import flash.display.NativeMenuItem;
 import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.events.SecurityErrorEvent;
+import flash.filesystem.File;
 import flash.geom.Point;
 import flash.ui.Keyboard;
 import flash.utils.ByteArray;
@@ -78,6 +81,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		graph_add_state : "Add state",
 		graph_add_command : "Add command",
 		graph_add_sub : "Add subgraph",
+		graph_add_resource : "Add resource",
 		graph_cut : "Cut",
 		graph_copy : "Copy",
 		graph_paste : "Paste",
@@ -341,6 +345,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_add_state'], 'add_state' ) );
 		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_add_command'], 'add_command' ) );
 		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_add_sub'], 'add_sub' ) );
+		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_add_resource'], 'add_resource' ) );
 		contextMenu.addItem( new SuperNativeMenuItem( 'separator' ) );
 		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_cut'], 'cut', false, null, false, false ) );
 		contextMenu.addItem( new SuperNativeMenuItem( 'normal', LanguageManager.sentences['graph_copy'], 'copy', false, null, false, false ) );
@@ -825,12 +830,9 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 				var data : ByteArray = new ByteArray();
 				data.writeUTFBytes( b64Data );
-				var ID : String = UIDUtil.createUID();
-				CashManager.setObject( template.fullID, XML( "<object category='image' ID='" + ID + "' name='" + ID + ".png' type='png'/>" ), data );
-
-				newNode = createNode(NodeCategory.RESOURCE);
-				newNode.text = ID;
-
+				
+				createNewResource("", "png", data);
+				
 				CursorManager.removeBusyCursor();
 				ProgressManager.complete();
 
@@ -841,6 +843,115 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		{
 			return;
 		}
+	}
+	
+	private function addResource () : void
+	{
+		var folder : File = new File (File.desktopDirectory.nativePath);
+		var selectedResource : File;
+		
+		selectResource();
+		
+		function selectResource () : void
+		{
+			folder.addEventListener(Event.SELECT, resourceSelectHandler);
+			folder.addEventListener(Event.CANCEL, resourceCancelHandler);
+			
+			folder.browseForOpen("Select resource");
+		}
+		
+		function resourceSelectHandler (event : Event) : void
+		{
+			folder.removeEventListener(Event.SELECT, resourceSelectHandler);
+			folder.removeEventListener(Event.CANCEL, resourceCancelHandler);
+			
+			selectedResource = event.target as File;
+			
+			selectedResource.addEventListener(Event.COMPLETE, loadCompleteHandler);
+			selectedResource.addEventListener(IOErrorEvent.IO_ERROR, loadErrorHandler);
+			selectedResource.addEventListener(SecurityErrorEvent.SECURITY_ERROR, loadErrorHandler);
+			
+			CursorManager.setBusyCursor();
+			
+			ProgressManager.complete();
+			ProgressManager.show( ProgressManager.DIALOG_MODE, false );
+			
+			selectedResource.load();
+		}
+		
+		function resourceCancelHandler (event : Event) : void
+		{
+			folder.removeEventListener(Event.CANCEL, resourceCancelHandler);
+			
+			if (!selectedResource)
+				return;
+			
+			selectedResource.removeEventListener(Event.COMPLETE, loadCompleteHandler);
+			selectedResource.removeEventListener(IOErrorEvent.IO_ERROR, loadErrorHandler);
+			selectedResource.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, loadErrorHandler);
+			
+			CursorManager.removeBusyCursor();
+			ProgressManager.complete();
+		}
+		
+		function loadErrorHandler (event : Event) : void
+		{
+			folder.removeEventListener(Event.CANCEL, resourceCancelHandler);
+			
+			selectedResource.removeEventListener(Event.COMPLETE, loadCompleteHandler);
+			selectedResource.removeEventListener(IOErrorEvent.IO_ERROR, loadErrorHandler);
+			selectedResource.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, loadErrorHandler);
+			
+			CursorManager.removeBusyCursor();
+			ProgressManager.complete();
+			
+			AlertPopup.show("Error loading resource.", "Error");
+		}
+		
+		function loadCompleteHandler (event : Event) : void
+		{
+			folder.removeEventListener(Event.CANCEL, resourceCancelHandler);
+			
+			selectedResource.removeEventListener(Event.COMPLETE, loadCompleteHandler);
+			selectedResource.removeEventListener(IOErrorEvent.IO_ERROR, loadErrorHandler);
+			selectedResource.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, loadErrorHandler);
+			
+			var resourceData : ByteArray = selectedResource.data;
+			resourceData.position = 0;
+			
+			var encoder : Base64Encoder = new Base64Encoder();
+			encoder.encodeBytes( resourceData );
+			var b64Data : String = encoder.flush();
+			
+			var data : ByteArray = new ByteArray();
+			data.writeUTFBytes( b64Data );
+			
+			createNewResource(selectedResource.name, selectedResource.extension, data);
+			
+			CursorManager.removeBusyCursor();
+			ProgressManager.complete();
+		}
+		
+		
+	}
+	
+	private function createNewResource (name: String, type : String, data : ByteArray) : void
+	{
+		var newNode : Node;
+		
+		var ID : String = UIDUtil.createUID();
+		var name : String = !name ? ID + "." + type : name;
+		
+		if (!type)
+			type = "";
+		
+		var category : String = CashManager.typeCategoryMap.hasOwnProperty(type) ? CashManager.typeCategoryMap[type] : CashManager.typeCategoryMap["other"];
+			
+		if (currentTemplate)
+			CashManager.setObject( currentTemplate.fullID, <object category={category} ID={ID} name={name} type={type} />, data );
+		
+		newNode = createNode(NodeCategory.RESOURCE);
+		newNode.text = ID;
 	}
 
 	public function doSelectAll() : void
@@ -913,11 +1024,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 	
 	private function contextMenuDisplayingHandler( event : Event ) : void
 	{
-		for each ( var item : NativeMenuItem in contextMenu.items )
-		{
-			item.label = LanguageManager.sentences['graph_' + item.name];
-		}
-
 		if ( selectionManager && ObjectUtils.dictLength( selectionManager.selection ) > 0 )
 		{
 			contextMenu.getItemByName( "cut" ).enabled = true;
@@ -1044,6 +1150,11 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 				createNode(NodeCategory.SUBGRAPH);
 				break;
 
+			case "add_resource":
+				selectionManager.deselectAll();
+				addResource();
+				break;
+			
 			case "cut":
 				doCut();
 				break;

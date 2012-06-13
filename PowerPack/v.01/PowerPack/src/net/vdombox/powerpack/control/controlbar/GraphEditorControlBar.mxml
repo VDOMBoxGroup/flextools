@@ -23,6 +23,7 @@
 			public static const ITEM_TYPE_ADD_NORMAL_STATE			: String = "add_state";
 			public static const ITEM_TYPE_ADD_SUBGRAPH_STATE		: String = "add_sub";
 			public static const ITEM_TYPE_ADD_COMMAND_STATE			: String = "add_command";
+			public static const ITEM_TYPE_ADD_RESOURCE_STATE		: String = "add_resource";
 			
 			public static const ITEM_TYPE_CUT						: String = "cut";
 			public static const ITEM_TYPE_COPY						: String = "copy";
@@ -97,6 +98,7 @@
 				btnNewNormalState.enabled = true;
 				btnNewCommandState.enabled = true;
 				btnNewSubgraphState.enabled = true;
+				btnNewResourceState.enabled = true;
 				
 				if (selectedArrowsAmount == 1)
 				{
@@ -161,6 +163,13 @@
 							   sourceDisabled="@Embed('/assets/icons/addStateDisabled.png')"
 							   toolTip="Add command state"
 							   styleName="categoryCtrlBtnStyle"/>
+	
+	<controlbar:ControlBarButton id="btnNewResourceState" 
+								 click="controlBarItem_clickHandler(event, ITEM_TYPE_ADD_RESOURCE_STATE)"
+								 sourceEnabled="@Embed('/assets/icons/addCommandStateEnabled.png')"
+								 sourceDisabled="@Embed('/assets/icons/addStateDisabled.png')"
+								 toolTip="Add resource state"
+								 styleName="categoryCtrlBtnStyle"/>
 	
 	<mx:Spacer width="2"/>
 	<mx:VRule height="20"/>

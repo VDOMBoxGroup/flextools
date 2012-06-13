@@ -46,9 +46,11 @@ public class CashManager extends EventDispatcher
 		png : 'image',
 		gif : 'image',
 		jpg : 'image',
+		jpeg : 'image',
 		bmp : 'image',
 		sqlite : 'database',
-		xml : 'database'
+		xml : 'database',
+		other : 'database'
 	}
 
 	/**

@@ -347,8 +347,7 @@ package net.vdombox.powerpack.template
 			var index : XML = CashManager.getIndex( fullID );
 			if ( index )
 			{
-				var resources : XMLList = index.resource.(hasOwnProperty( '@category' ) &&
-					(@category == 'image' || @category == 'database'));
+				var resources : XMLList = index.resource.(hasOwnProperty( '@category' ) && (@category == 'image' || @category == 'database'));
 				
 				xmlStructure.appendChild( <resources/> );
 				
