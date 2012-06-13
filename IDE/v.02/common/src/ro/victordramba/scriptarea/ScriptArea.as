@@ -28,7 +28,6 @@ package ro.victordramba.scriptarea
 			tf.multiline = true;
 			tf.wordWrap = false;
 
-
 			fmt = new TextFormat( "Courier New", 14, 0 );
 
 			for each ( var fnt : Font in Font.enumerateFonts( true ) )

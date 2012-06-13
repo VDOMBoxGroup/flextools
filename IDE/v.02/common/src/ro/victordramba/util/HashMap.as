@@ -28,6 +28,11 @@ package ro.victordramba.util
 		{
 			data['$' + key] = value;
 		}
+		
+		public function removeValue(key:String):void
+		{
+			delete data['$' + key];
+		}
 
 		public function getValue(key:String):*
 		{

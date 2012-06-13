@@ -118,7 +118,7 @@ package net.vdombox.editors.parsers.python
 
 		public function getMemberList( index : int ) : Vector.<String>
 		{
-			return parser.newResolver().getMemberList( fld.text, index );
+			return parser.newResolver().getMemberList( fld.text, index, hashLibraries );
 		}
 
 		public function getFunctionDetails( index : int ) : String

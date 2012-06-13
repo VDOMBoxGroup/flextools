@@ -229,14 +229,20 @@ package net.vdombox.editors.parsers.python
 		/**
 		 * called when you enter a dot
 		 */
-		public function getMemberList( text : String, pos : int ) : Vector.<String>
+		public function getMemberList( text : String, pos : int, hashLibraries : HashLibraryArray ) : Vector.<String>
 		{
-			resolve( text, pos );
+			var a : Vector.<String> = resolve( text, pos, hashLibraries );
+			
+			if ( a )
+				return a;
+			else
+				a = new Vector.<String>;
+			
 			if ( !resolved )
 				return null;
 
 			//convert member list in string list
-			var a : Vector.<String> = new Vector.<String>;
+			
 
 			for each ( var m : Field in listMembers( resolved, resolvedIsClass ).toArray() )
 				a.push(m.name );
@@ -331,7 +337,7 @@ package net.vdombox.editors.parsers.python
 		private var resolvedIsClass : Boolean;
 		private var resolvedRef : Field;
 
-		private function resolve( text : String, pos : int ) : void
+		private function resolve( text : String, pos : int, hashLibraries : HashLibraryArray = null ) : Vector.<String>
 		{
 			resolved = null;
 			resolvedRef = null;
@@ -339,18 +345,24 @@ package net.vdombox.editors.parsers.python
 
 			var t0 : Token = tokenizer.tokenByPos( pos );
 			if ( t0.type == Token.COMMENT )
-				return;
+				return null;
+			
+			if ( t0.parent.imports && t0.parent.imports.hasKey( t0.string ) )
+			{
+				var impotrElement : Object = t0.parent.imports.getValue( t0.string );
+				return hashLibraries.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName );
+			}
 
 			var bp : BackwardsParser = new BackwardsParser;
 			if ( !bp.parse( text, pos ) )
-				return;
+				return null;
 
 			//debug('bp names: '+bp.names);
 
 			//find the scope
 			var t : Token = tokenizer.tokenByPos( bp.startPos );
 			if ( !t )
-				return;
+				return null;
 
 			var i : int = 0;
 			var name : String = bp.names[ 0 ];
@@ -432,7 +444,7 @@ package net.vdombox.editors.parsers.python
 
 			//we didn't find the first name, we quit
 			if ( !resolved )
-				return;
+				return null;
 			checkReturnType();
 
 
@@ -447,7 +459,7 @@ package net.vdombox.editors.parsers.python
 				resolvedIsClass = false;
 				itemType = bp.types[ i ];
 				if ( !resolved )
-					return;
+					return null;
 				checkReturnType();
 			} while ( resolved );
 
@@ -474,6 +486,8 @@ package net.vdombox.editors.parsers.python
 					resolved = typeDB.resolveName( new Multiname( 'Def' ) );
 				}
 			}
+			
+			return null;
 		}
 
 		private function findScopeClass( scope : Field ) : void

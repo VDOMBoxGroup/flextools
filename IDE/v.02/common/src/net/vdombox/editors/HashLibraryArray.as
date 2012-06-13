@@ -58,5 +58,50 @@ package net.vdombox.editors
 			
 			return a;
 		}
+		
+		public function getTokensToLibratyClass( importFrom : String, importToken : String ) : Vector.<String>
+		{
+			if ( importFrom == importToken )
+				return getImportToLibraty( importFrom );
+			
+			var a : Vector.<String> = new Vector.<String>();
+			
+			var path : Array = importFrom.split( "." );
+			
+			if ( !hashLibraries.hasOwnProperty( path[0] ) )
+				return null;
+			
+			var string : String = hashLibraries[ path[0] ].libraryVO.script;
+			
+			var tokenizer : Tokenizer = new Tokenizer( string );
+			
+			while ( tokenizer.runSlice() )
+				;
+			
+			var t : Token = tokenizer.tokenByPos(1);
+			
+			if ( t && t.scope && t.scope.selfMembers )
+			{	
+				var f : Field;
+				for each ( f in t.scope.selfMembers.toArray() )
+				{
+					if ( f.name == importToken )
+					{
+						if ( f.selfMembers )
+						{
+							var f2 : Field;
+							for each ( f2 in f.selfMembers.toArray() )
+							{
+								if ( f2.isStatic || f2.isClassMethod )
+									a.push( f2.name );
+							}
+						}
+					}
+				}
+			}
+			
+			return a;
+		}
+		
 	}
 }

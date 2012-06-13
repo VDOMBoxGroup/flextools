@@ -338,6 +338,7 @@ package net.vdombox.editors.parsers.python
 		private var importFrom : String;
 		private var scope : Field;
 		private var isStatic : Boolean = false;
+		private var isClassMethod : Boolean = false;
 		private var access : String;
 
 		internal var topScope : Field;
@@ -447,9 +448,18 @@ package net.vdombox.editors.parsers.python
 				
 				t.importFrom = importFrom;
 				
+				var systemName : String = t.string;
+				
+				if ( tp.string == "as" )
+				{
+					imports[ imports.length - 1 ].removeValue( tp.string );
+					imports[ imports.length - 1 ].removeValue( tp2.string );
+					systemName = tp2.string;
+				}
+				
 				if ( t.type != Token.SYMBOL )
 				{
-					imports[ imports.length - 1 ].setValue( t.string, { name : t.string, source : importFrom } );
+					imports[ imports.length - 1 ].setValue( t.string, { name : t.string, systemName : systemName, source : importFrom } );
 					
 					position = t.pos + t.string.length;
 					while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
@@ -485,6 +495,10 @@ package net.vdombox.editors.parsers.python
 			{
 				isStatic = true;
 			}
+			else if ( t.string == "@classmethod" )
+			{
+				isClassMethod = true;
+			}
 			else if ( t.string == "get" || t.string == "set" )
 			{
 				//do nothing
@@ -511,6 +525,12 @@ package net.vdombox.editors.parsers.python
 					{
 						field.isStatic = true;
 						isStatic = false;
+					}
+					
+					if ( isClassMethod ) 
+					{
+						field.isClassMethod = true;
+						isClassMethod = false;
 					}
 					
 					if ( t.string.slice(0, 2) == "__" )

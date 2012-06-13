@@ -72,6 +72,8 @@ package net.vdombox.editors.parsers.python
 		
 		public var isStatic:Boolean;
 		
+		public var isClassMethod:Boolean;
+		
 		public var indent:String;
 		
 		/**
