@@ -50,8 +50,8 @@ package net.vdombox.editors.parsers.python
 		/**
 		 * top packages, package classes, class members, function local vars
 		 */
-		public var members:HashMap/*of Field*/ = new HashMap
-		public var selfMembers:HashMap/*of Field*/ = new HashMap
+		public var members:HashMap/*of Field*/ = new HashMap;   
+		public var selfMembers:HashMap/*of Field*/ = new HashMap;
 		
 		public function addMember(field:Field, isStatic:Boolean):void
 		{

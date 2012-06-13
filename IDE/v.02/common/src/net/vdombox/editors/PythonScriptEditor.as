@@ -66,5 +66,10 @@ package net.vdombox.editors
 		{
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
 		}
+		
+		public function set hashLibraryArray( hashLibraries : HashLibraryArray ) : void
+		{
+			controller.hashLibraryArray = hashLibraries;
+		}
 	}
 }

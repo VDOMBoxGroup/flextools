@@ -8,6 +8,7 @@ package net.vdombox.editors.parsers.python
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
 	
+	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.Location;
 	import net.vdombox.editors.ScriptAreaComponent;
 	
@@ -71,6 +72,8 @@ package net.vdombox.editors.parsers.python
 		//public var typeInfo:Array/*of String*/
 
 		private var fld : ScriptAreaComponent;
+		
+		private var hashLibraries : HashLibraryArray;
 
 		
 
@@ -130,7 +133,7 @@ package net.vdombox.editors.parsers.python
 
 		public function getAllOptions( index : int ) : Vector.<String>
 		{
-			return parser.newResolver().getAllOptions( index );
+			return parser.newResolver().getAllOptions( index, hashLibraries );
 		}
 
 		public function getMissingImports( name : String, pos : int ) : Vector.<String>
@@ -157,6 +160,11 @@ package net.vdombox.editors.parsers.python
 				}
 			}
 			return new Location( null, field.pos );
+		}
+		
+		public function set hashLibraryArray( _hashLibraries : HashLibraryArray ) : void
+		{
+			hashLibraries = _hashLibraries;
 		}
 	}
 }

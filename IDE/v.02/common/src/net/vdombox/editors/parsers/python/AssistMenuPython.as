@@ -10,6 +10,7 @@ package net.vdombox.editors.parsers.python
 	
 	import mx.core.UIComponent;
 	
+	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
 	
@@ -254,6 +255,5 @@ package net.vdombox.editors.parsers.python
 				menu.dispose();
 			}
 		}
-
 	}
 }

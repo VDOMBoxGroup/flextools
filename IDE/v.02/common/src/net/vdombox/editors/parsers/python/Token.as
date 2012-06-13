@@ -4,7 +4,7 @@ package net.vdombox.editors.parsers.python
 	
 	import ro.victordramba.util.HashMap;
 
-	internal class Token
+	public class Token
 	{
 		public static const STRING_LITERAL:String = "stringLiteral";
 		public static const SYMBOL:String = "symbol";
@@ -32,6 +32,9 @@ package net.vdombox.editors.parsers.python
 		public var scope:Field;//lexical scope
 		public var imports:HashMap;//used to solve names and types
 		public var otstyp:Object;//used to solve names and types
+		public var fromZone:Boolean = false;
+		public var importZone:Boolean = false;
+		public var importFrom:String = "";
 
 		public static const map:Dictionary = new Dictionary(true);
 

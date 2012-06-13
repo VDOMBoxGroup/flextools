@@ -1,13 +1,27 @@
 package net.vdombox.editors
 {
+	import net.vdombox.ide.common.model._vo.LibraryVO;
+
 	public class HashLibrary
 	{		
-		public var name : String;
+		private var _libraryVO : LibraryVO;
 		public var members : Object;
 		
-		public function HashLibrary( _name : String )
+		
+		public function HashLibrary( libVO : LibraryVO )
 		{
-			name = _name;
+			_libraryVO = libVO;
 		}
+
+		public function get libraryVO():LibraryVO
+		{
+			return _libraryVO;
+		}
+		
+		public function get name():String
+		{
+			return _libraryVO.name;
+		}
+
 	}
 }
