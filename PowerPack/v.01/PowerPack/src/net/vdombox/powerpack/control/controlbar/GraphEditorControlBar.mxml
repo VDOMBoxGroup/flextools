@@ -167,7 +167,7 @@
 	<controlbar:ControlBarButton id="btnNewResourceState" 
 								 click="controlBarItem_clickHandler(event, ITEM_TYPE_ADD_RESOURCE_STATE)"
 								 sourceEnabled="@Embed('/assets/icons/addImageStateEnabled.png')"
-								 sourceDisabled="@Embed('/assets/icons/addImageStateEnabled.png')"
+								 sourceDisabled="@Embed('/assets/icons/addImageStateDisabled.png')"
 								 toolTip="Add resource state"
 								 styleName="categoryCtrlBtnStyle"/>
 	
