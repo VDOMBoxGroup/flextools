@@ -104,9 +104,9 @@ package net.vdombox.editors.parsers.python
 			//all package level items
 			var t : Token = tokenizer.tokenByPos( pos );
 			
-			if ( t.string == "from" || t.importZone && !t.importFrom )
+			if ( t && ( t.string == "from" || t.importZone && !t.importFrom ) )
 				return hashLibraries.getLibrariesName();
-			else if ( t.importZone )
+			else if ( t && t.importZone )
 				return hashLibraries.getImportToLibraty( t.importFrom );
 			
 			// default keywords
@@ -162,20 +162,20 @@ package net.vdombox.editors.parsers.python
 					for each ( f in scope.members.toArray() )
 						if ( f.access != 'private' && ( !isStatic || f.isStatic ) )
 							a.push( f.name );*/
-				scope = t.scope;
-				if ( scope.type )
-				{
-					var ff : Object;
-					if ( scope.type.imports )
-						for each ( ff in scope.type.imports.toArray() )
-							a.push( ff.name );
-				}
+				
 			}
 			
-			if ( t.scope.fieldType == "class" && t.scope.selfMembers )
+			if ( t.parent.imports )
+			{
+				var ff : Object;
+				for each ( ff in t.parent.imports.toArray() )
+					a.push( ff.name );
+			}
+			
+			if ( t.scope.fieldType == "class" || t.scope.fieldType == "top" && t.scope.selfMembers )
 			{
 				for each ( f in t.scope.selfMembers.toArray() )
-				a.push( f.name );
+					a.push( f.name );
 			}
 			
 			return a;
@@ -347,11 +347,11 @@ package net.vdombox.editors.parsers.python
 			if ( t0.type == Token.COMMENT )
 				return null;
 			
-			if ( t0.parent.imports && t0.parent.imports.hasKey( t0.string ) )
+			/*if ( t0.parent.imports && t0.parent.imports.hasKey( t0.string ) )
 			{
 				var impotrElement : Object = t0.parent.imports.getValue( t0.string );
 				return hashLibraries.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName );
-			}
+			}*/
 
 			var bp : BackwardsParser = new BackwardsParser;
 			if ( !bp.parse( text, pos ) )
@@ -383,11 +383,23 @@ package net.vdombox.editors.parsers.python
 					resolved = scope.members.getValue( name );
 					break;
 				}
+				if ( scope.selfMembers.hasKey( name ) )
+				{
+					resolved = scope.selfMembers.getValue( name );
+					break;
+				}
 				if ( scope.params.hasKey( name ) )
 				{
 					resolved = scope.params.getValue( name );
 					break;
 				}
+				if ( t.parent.imports.hasKey( name ) )
+				{
+					var impotrElement : Object = t.parent.imports.getValue( name );
+					return hashLibraries.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp );
+					//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );
+				}
+					
 			}
 
 			var scope : Field;

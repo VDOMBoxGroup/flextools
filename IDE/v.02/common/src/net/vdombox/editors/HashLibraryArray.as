@@ -1,5 +1,8 @@
 package net.vdombox.editors
 {
+	import flashx.textLayout.tlf_internal;
+	
+	import net.vdombox.editors.parsers.python.BackwardsParser;
 	import net.vdombox.editors.parsers.python.Field;
 	import net.vdombox.editors.parsers.python.Token;
 	import net.vdombox.editors.parsers.python.Tokenizer;
@@ -59,9 +62,13 @@ package net.vdombox.editors
 			return a;
 		}
 		
-		public function getTokensToLibratyClass( importFrom : String, importToken : String ) : Vector.<String>
+		public function getTokensToLibratyClass( importFrom : String, importToken : String, bp : BackwardsParser ) : Vector.<String>
 		{
-			if ( importFrom == importToken )
+			var len : int = bp.names.length;
+			
+			bp.names[0] = importToken;
+			
+			if ( len == 1 && importFrom == importToken || len > 1 && importFrom == bp.names[len - 1] )
 				return getImportToLibraty( importFrom );
 			
 			var a : Vector.<String> = new Vector.<String>();
@@ -79,23 +86,35 @@ package net.vdombox.editors
 				;
 			
 			var t : Token = tokenizer.tokenByPos(1);
+			var scope : Field = t.scope;
+			
+			
 			
 			if ( t && t.scope && t.scope.selfMembers )
 			{	
 				var f : Field;
-				for each ( f in t.scope.selfMembers.toArray() )
+				var flag : Boolean = true;
+				for ( var i : int = 0; i < len; i++ )
 				{
-					if ( f.name == importToken )
+					flag = false;
+					for each ( f in scope.selfMembers.toArray() )
 					{
-						if ( f.selfMembers )
+						if ( f.name == bp.names[i] )
 						{
-							var f2 : Field;
-							for each ( f2 in f.selfMembers.toArray() )
-							{
-								if ( f2.isStatic || f2.isClassMethod )
-									a.push( f2.name );
-							}
+							scope = f;
+							flag = true;
+							break;
 						}
+					}
+				}
+				
+				if ( flag && scope.selfMembers )
+				{
+					var f2 : Field;
+					for each ( f2 in scope.selfMembers.toArray() )
+					{
+						if ( f2.isStatic || f2.isClassMethod )
+							a.push( f2.name );
 					}
 				}
 			}

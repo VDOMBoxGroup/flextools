@@ -411,7 +411,8 @@ package net.vdombox.editors.parsers.python
 					}
 					while ( string.charAt( position ) == '\r' || string.charAt( position ) == '\n' );
 						
-					if ( currentBlock.otstyp.tabs > tabOtstyp || currentBlock.otstyp.spaces > spaceOtstyp )
+					if ( ( currentBlock.otstyp.tabs > tabOtstyp || currentBlock.otstyp.spaces > spaceOtstyp ) && string.charAt( position ) != '#'
+					&& string.substr( position, 3 ) != "'''" )
 					{
 						while ( currentBlock.otstyp.tabs > tabOtstyp || currentBlock.otstyp.spaces > spaceOtstyp )
 						{						
@@ -443,7 +444,7 @@ package net.vdombox.editors.parsers.python
 			{
 				t.importZone = true;
 				
-				if ( importFrom == "" )
+				if ( !importFrom || importFrom == "" )
 					importFrom = t.string;
 				
 				t.importFrom = importFrom;
@@ -671,9 +672,9 @@ package net.vdombox.editors.parsers.python
 						field.access = access;
 						
 						if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top")
-							currentBlock.scope.selfMembers.setValue( tp.string, field );
+							currentBlock.scope.selfMembers.setValue( curToken.string, field );
 						else
-							scope.members.setValue( tp.string, field );
+							scope.members.setValue( curToken.string, field );
 					}
 					var tField : Field = field;
 					
@@ -790,7 +791,7 @@ package net.vdombox.editors.parsers.python
 
 		public function tokenByPos( pos : uint ) : Token
 		{
-			if ( !tokens || tokens.length < 3 )
+			if ( !tokens /*|| tokens.length < 3 */)
 				return null;
 			//TODO: binary search
 			for ( var i : int = tokens.length - 1; i >= 0; i-- )
