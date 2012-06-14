@@ -21,8 +21,6 @@ import flash.ui.Keyboard;
 import flash.utils.Dictionary;
 import flash.utils.Timer;
 
-import gearsandcogs.text.UndoTextFields;
-
 import mx.collections.ArrayCollection;
 import mx.containers.Canvas;
 import mx.controls.Alert;
@@ -56,6 +54,7 @@ import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import net.vdombox.powerpack.lib.player.control.UndoTextFields;
 import net.vdombox.powerpack.lib.player.graph.NodeCategory;
 import net.vdombox.powerpack.lib.player.graph.NodeType;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;

@@ -772,11 +772,13 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 	public function doPaste() : void
 	{
-		if ( Clipboard.generalClipboard.hasFormat( CLIPBOARD_GRAPH_FORMAT ) )
+		var clipboard : Clipboard = Clipboard.generalClipboard;
+		
+		if ( clipboard.hasFormat( CLIPBOARD_GRAPH_FORMAT ) )
 		{
 			selectionManager.deselectAll();
 
-			var dataXML : XML = XML( Clipboard.generalClipboard.getData( CLIPBOARD_GRAPH_FORMAT ) );
+			var dataXML : XML = XML( clipboard.getData( CLIPBOARD_GRAPH_FORMAT ) );
 			var namesMap : Object = new Object();
 
 			for each( var xmlNode : XML in dataXML.state )
@@ -801,15 +803,21 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 			dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
 		}
-		else if ( Clipboard.generalClipboard.hasFormat( ClipboardFormats.TEXT_FORMAT ) )
+		else if ( clipboard.hasFormat( ClipboardFormats.TEXT_FORMAT ) )
 		{
+			var clipboardText : String = String(clipboard.getData( ClipboardFormats.TEXT_FORMAT ));
+			
+			if (!clipboardText)
+				return;
+			
 			newNode = createNode();
-			newNode.text = String( Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) );
-
+			newNode.text = clipboardText;
+			
 			dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
 		}
-		else if ( Clipboard.generalClipboard.hasFormat( ClipboardFormats.BITMAP_FORMAT ) )
+		else if ( clipboard.hasFormat( ClipboardFormats.BITMAP_FORMAT ) )
 		{
+			trace ("3");
 			CursorManager.setBusyCursor();
 
 			ProgressManager.show( ProgressManager.DIALOG_MODE, false );
@@ -818,7 +826,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 			function _doGetBitmapClipBoard() : void
 			{
 				var template : BuilderTemplate = ContextManager.templates[0] as BuilderTemplate;
-				var bitmapData : BitmapData = BitmapData( Clipboard.generalClipboard.getData( ClipboardFormats.BITMAP_FORMAT ) );
+				var bitmapData : BitmapData = BitmapData( clipboard.getData( ClipboardFormats.BITMAP_FORMAT ) );
 
 				var pngEncoder : PNGEncoder = new PNGEncoder();
 				var pngData : ByteArray = pngEncoder.encode( bitmapData );
@@ -839,8 +847,9 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 				dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
 			}
 		}
-		else if ( Clipboard.generalClipboard.hasFormat( ClipboardFormats.FILE_LIST_FORMAT ) )
+		else if ( clipboard.hasFormat( ClipboardFormats.FILE_LIST_FORMAT ) )
 		{
+			trace ("4");
 			return;
 		}
 	}
