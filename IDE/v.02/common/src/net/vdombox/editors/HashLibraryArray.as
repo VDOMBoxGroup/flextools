@@ -59,6 +59,15 @@ package net.vdombox.editors
 				}
 			}
 			
+			if ( t && t.parent && t.parent.imports )
+			{
+				var importLibrary : Object;
+				for each ( importLibrary in t.parent.imports.toArray() )
+				{
+					a.push( importLibrary.name );
+				}
+			}
+			
 			return a;
 		}
 		

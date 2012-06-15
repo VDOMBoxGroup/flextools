@@ -33,6 +33,8 @@ package net.vdombox.editors.parsers.python
 			
 			parser = new Parser;
 			
+			trace( "new parser" + parser );
+			
 			//parser.addTypeData(TypeDB.formByteArray(new GlobalTypesAsset), 'global');
 			//parser.addTypeData(TypeDB.formByteArray(new PlayerglobalAsset), 'player');
 			//parser.addTypeData(TypeDB.formByteArray(new ASwingAsset), 'aswing');
@@ -63,7 +65,7 @@ package net.vdombox.editors.parsers.python
 		private var parser : Parser;
 		
 		private var t0 : Number;
-		static private var tc : ThreadsController;
+		 private var tc : ThreadsController;
 
 		public var status : String;
 		public var percentReady : Number = 0;

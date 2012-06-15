@@ -74,12 +74,16 @@ package ro.victordramba.thread
 			if (list[thread]) throw new Error('Thread is already running');
 			stage.addEventListener(Event.ENTER_FRAME, doFrame);
 			list[thread] = thread;
+			
+			trace("run" + thread);
 		}
 		
 		public function kill(thread:IThread):void
 		{
 			thread.kill();
 			delete list[thread];
+			
+			trace("kill" + thread);
 		}
 		
 		public function isRunning(thread:IThread):Boolean

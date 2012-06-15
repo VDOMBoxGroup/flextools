@@ -394,7 +394,7 @@ package net.vdombox.editors.parsers.python
 			
 			if ( t.type == Token.ENDLINE )
 			{
-				if ( currentBlock && tokens.length >= 2 && tokens[ tokens.length - 2 ].type != Token.COMMENT && string.charAt( position + 1 ) != "\r" && string.charAt( position + 1 ) != "\n" )
+				if ( currentBlock && tokens.length >= 2 /*&& tokens[ tokens.length - 2 ].type != Token.COMMENT */&& string.charAt( position + 1 ) != "\r" && string.charAt( position + 1 ) != "\n" )
 				{
 					do
 					{
