@@ -585,11 +585,13 @@ public class SuperNativeMenuItem extends NativeMenuItem
 	override public function clone():NativeMenuItem
 	{
 		var clone:SuperNativeMenuItem = SuperNativeMenuItem(super.clone());		
+		
 		clone.type = this.type;
 		clone.groupName = this.groupName;
 		clone.checked = this.checked;
 		clone.isRequired = this.isRequired;
 		clone.keyEquivalent = this.keyEquivalent;
+		
 		return clone;
 	}
 	

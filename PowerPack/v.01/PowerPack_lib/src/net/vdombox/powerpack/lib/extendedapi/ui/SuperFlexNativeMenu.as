@@ -505,7 +505,8 @@ public class SuperFlexNativeMenu extends FlexNativeMenu
         menuEvent.nativeMenuItem = nativeMenuItem;
         menuEvent.label = nativeMenuItem.label;
         menuEvent.item = nativeMenuItem.data;
-        dispatchEvent(menuEvent);
+        
+		dispatchEvent(menuEvent);
     }
         	
     /**
