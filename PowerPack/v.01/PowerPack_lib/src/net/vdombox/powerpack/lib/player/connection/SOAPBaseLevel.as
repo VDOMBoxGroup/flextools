@@ -9,6 +9,7 @@ import mx.controls.Alert;
 import mx.core.Application;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
+import mx.utils.StringUtil;
 
 import net.vdombox.powerpack.lib.player.gen.parse.ListParser;
 
@@ -533,6 +534,9 @@ public class SOAPBaseLevel extends EventDispatcher
 	private function setType( params : Array ) : void
 	{
 		var typeXML : String = params[0];
+		
+		if (StringUtil.trim(typeXML).indexOf('<?xml') != 0)
+			typeXML = '<?xml version="1.0" encoding="UTF-8" ?>' + typeXML;
 		
 		soap.set_type.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.set_type.addEventListener( FaultEvent.FAULT, soapError );
