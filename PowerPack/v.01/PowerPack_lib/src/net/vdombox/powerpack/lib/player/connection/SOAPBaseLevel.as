@@ -113,7 +113,8 @@ public class SOAPBaseLevel extends EventDispatcher
 			"list_applications",
 			"list_backup_drivers",
 			"restore_application",
-			"backup_application"
+			"backup_application",
+			"set_type"
 		];
 	
 	public function execute( functionName : String, args : Array ) : void
@@ -196,6 +197,9 @@ public class SOAPBaseLevel extends EventDispatcher
 				listBackupDrivers(  );
 				break;
 			
+			case 'set_type':
+				setType(args);
+				break;
 			
 			
 			default:
@@ -525,6 +529,17 @@ public class SOAPBaseLevel extends EventDispatcher
 			dispatchEvent( new Event( RESULT_RECEIVED ) );
 		}
 	}
+	
+	private function setType( params : Array ) : void
+	{
+		var typeXML : String = params[0];
+		
+		soap.set_type.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.set_type.addEventListener( FaultEvent.FAULT, soapError );
+		
+		soap.set_type( typeXML );
+	}
+
 	
 	
 	
