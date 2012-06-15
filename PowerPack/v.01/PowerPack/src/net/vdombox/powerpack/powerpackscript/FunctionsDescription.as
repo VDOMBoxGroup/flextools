@@ -427,7 +427,13 @@ package net.vdombox.powerpack.powerpackscript
 				"backup_application"				: "<b>Description:</b>\n" +
 														"Calls SOAP method 'backup_application'.\n" +
 														"<b>Syntax:</b>\n" +
-														"[wholeMethod 'backup_application' $AppId $DriverId]"
+														"[wholeMethod 'backup_application' $AppId $DriverId]",
+														
+				"set_type"							: "<b>Description:</b>\n" +
+														"Calls SOAP method 'set_type'.\n" +
+														"<b>Syntax:</b>\n" +
+														"[wholeMethod 'set_type' $TypeXML]"
+														
 			};
 		
 		public static const dialogAnswerTypesDescription : Object =
