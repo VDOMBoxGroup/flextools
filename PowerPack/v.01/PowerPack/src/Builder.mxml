@@ -43,8 +43,8 @@
 				<menuitem label="Close" id="close" keyEquivalent="w" ctrlKey="true" />
 				<menuitem type="separator" />
 				<menuitem label="Save" id="save" keyEquivalent="s" ctrlKey="true" />
-				<menuitem label="Save As..." id="save_as" keyEquivalent="s" ctrlKey="true" shiftKey="true" />
-				<menuitem label="Export template" id="export_xml" keyEquivalent="e" ctrlKey="true"/>
+				<menuitem label="Save As..." id="save_as" keyEquivalent="s" ctrlKey="true" altKey="true" />
+				<menuitem label="Export template" id="export_xml" keyEquivalent="e" ctrlKey="true" altKey="true"/>
 				<menuitem type="separator" />
 				<menuitem label="Import" id="import">
 					
