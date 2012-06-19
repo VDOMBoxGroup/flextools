@@ -48,7 +48,10 @@
 			
 			public function get selectedFolder () : TemplatesAccordionChild
 			{
-				var currentAccordion : Accordion = accordionsViewStack.selectedChild as Accordion;
+				if (!accordionsViewStack.selectedChild)
+					return null;
+				
+				var currentAccordion : Accordion = accordionsViewStack.selectedChild == normalTemplatesBox ? templatesAccordion: templatesFilteredAccordion;
 				
 				if (!currentAccordion)
 					return null;
@@ -435,14 +438,16 @@
 				
 				vsTemplatesEditors.selectedChild = emptyContentEditor; 
 				
-				accordionsViewStack.selectedChild = templatesFilteredAccordion;
+				//accordionsViewStack.selectedChild = templatesFilteredAccordion;
+				accordionsViewStack.selectedChild = filteredTemplatesBox;
 				
 				lockButtons();
 			}
 			
 			private function cancelFilterTemplates () : void
 			{
-				accordionsViewStack.selectedChild = templatesAccordion;
+				//accordionsViewStack.selectedChild = templatesAccordion;
+				accordionsViewStack.selectedChild = normalTemplatesBox;
 				
 				if (foundFolder.selectedTemplate)
 					selectedTemplate = foundFolder.selectedTemplate;
@@ -555,18 +560,23 @@
 			<mx:ViewStack id="accordionsViewStack" 
 						  width="100%" height="100%">
 				
-				<mx:Accordion id="templatesAccordion"
-							  headerRenderer="net.vdombox.helpeditor.view.components.TemplatesAccordionHeader"
-							  fontFamily="Verdana" borderStyle="solid" 
-							  width="100%" height="100%"
-							  creationComplete="templatesAccordion_creationCompleteHandler(event)"
-							  change="templatesAccordion_changeHandler(event)"/>
+				<mx:VBox width="100%" height="100%"
+						 id="normalTemplatesBox">
+					<mx:Accordion id="templatesAccordion"
+								  headerRenderer="net.vdombox.helpeditor.view.components.TemplatesAccordionHeader"
+								  fontFamily="Verdana" borderStyle="solid" 
+								  width="100%" height="100%"
+								  creationComplete="templatesAccordion_creationCompleteHandler(event)"
+								  change="templatesAccordion_changeHandler(event)"/>
+				</mx:VBox>
 				
-				
-				<mx:Accordion id="templatesFilteredAccordion"
-							  width="100%" height="100%"
-							  fontFamily="Verdana" borderStyle="solid"
-							  creationComplete="templatesFilteredAccordion_creationCompleteHandler(event)"/>
+				<mx:VBox width="100%" height="100%"
+						 id="filteredTemplatesBox">
+					<mx:Accordion id="templatesFilteredAccordion"
+								  width="100%" height="100%"
+								  fontFamily="Verdana" borderStyle="solid"
+								  creationComplete="templatesFilteredAccordion_creationCompleteHandler(event)"/>
+				</mx:VBox>
 				
 			</mx:ViewStack>
 			
