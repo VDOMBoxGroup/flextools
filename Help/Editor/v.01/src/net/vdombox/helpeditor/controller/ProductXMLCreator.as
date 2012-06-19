@@ -242,6 +242,13 @@ package net.vdombox.helpeditor.controller
 				}
 			}
 		}
+		
+		private function completeWithError (errorMsg : String) : void
+		{
+			dispatchError(errorMsg);
+			
+			Application.application.removeEventListener(Event.ENTER_FRAME, onAppEnterFrame);
+		}
 			
 		private function createProductXML():void
 		{
@@ -288,6 +295,7 @@ package net.vdombox.helpeditor.controller
 			pagesXML = null;
 			
 			pagesObj = sqlProxy.getProductsPages(productName, productLanguage);
+			
 			pagesXML = new XML("<pages/>");
 			
 			// generate pages ...
@@ -353,12 +361,19 @@ package net.vdombox.helpeditor.controller
 		
 		private function startGeneratingPageContent() : void
 		{
-			if (pagesCounter == 52)
-				trace ("000");
-			
 			pageContent = html_wysiwyg.pageContent;
 			
-			pageContentXML = new XML(pageContent);
+			try 
+			{
+				pageContentXML = new XML(pageContent);
+			} 
+			catch (e:Error)
+			{
+				var msg : String = "Page '" + currentPageObj["title"] + "' (" + currentPageObj["name"] + "):\n" + e.message;
+				
+				completeWithError(msg);
+				return;
+			}
 			
 			pageXML = new XML("<page/>");
 			
@@ -523,9 +538,6 @@ package net.vdombox.helpeditor.controller
 		
 		private function onPageLastResourceGenerated ():void
 		{
-			if (pagesCounter == 52)
-				trace ('111');
-			
 			pageResourcesCounter = 0;
 			pageResources = null;
 			
@@ -542,9 +554,8 @@ package net.vdombox.helpeditor.controller
 			catch (e:Error) 
 			{
 				var msg : String = "Page '" + currentPageObj["title"] + "' (" + currentPageObj["name"] + "):\n" + e.message;
-				dispatchError(msg);
 				
-				Application.application.removeEventListener(Event.ENTER_FRAME, onAppEnterFrame);
+				completeWithError(msg);
 				return;
 			}
 			
@@ -559,8 +570,6 @@ package net.vdombox.helpeditor.controller
 			
 			curState = STATE_PAGE_GENERATING_COMPLETE;
 		}
-		
-		//private function 
 		
 		private function appendHighlightScriptToPageContent() : void
 		{
@@ -581,6 +590,7 @@ package net.vdombox.helpeditor.controller
 		private function getPageChildren(pageName:String) : XMLList
 		{
 			var xmlToc : XML = new XML(treeData);
+			
 			if (xmlToc.@name == pageName) {
 				return xmlToc.children();
 			}
