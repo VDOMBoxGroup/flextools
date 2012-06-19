@@ -2,6 +2,7 @@ package net.vdombox.helpeditor.view.itemrenderers
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	import mx.controls.CheckBox;
 	import mx.controls.treeClasses.TreeItemRenderer;
@@ -22,6 +23,20 @@ package net.vdombox.helpeditor.view.itemrenderers
 		public function CheckBoxesTreeItemRenderer()
 		{
 			super();
+			
+			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+		}
+		
+		protected function mouseOverHandler (evt:MouseEvent) : void
+		{
+			if (!syncGroupName)
+			{
+				toolTip = "";
+				
+				return;
+			}
+			
+			toolTip = sqlProxy.getGroupTitle(syncGroupName);
 		}
 
 		override protected function commitProperties():void

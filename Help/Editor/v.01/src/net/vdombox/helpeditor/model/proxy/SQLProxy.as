@@ -11,8 +11,8 @@ package net.vdombox.helpeditor.model.proxy
 	
 	import mx.controls.Alert;
 	
-	import net.vdombox.helpeditor.model.vo.TemplateVO;
 	import net.vdombox.helpeditor.model.AlertMessages;
+	import net.vdombox.helpeditor.model.vo.TemplateVO;
 
 	public class SQLProxy
 	{
@@ -968,6 +968,21 @@ package net.vdombox.helpeditor.model.proxy
 				return null;
 			
 			return pagesStr.split(",");
+		}
+		
+		public function getGroupTitle (groupName:String) : String
+		{
+			var query : String      = "SELECT pages_sync.group_title FROM pages_sync WHERE group_name = :name ;";
+			
+			var parameters : Object = new Object();
+			parameters[ ":name" ] = groupName;
+			
+			var result : Object = executeQuery(query, parameters);
+			
+			if (!result)
+				return "";
+			
+			return result[0]["group_title"];
 		}
 		
 		private function clearPagesSyncProperty (groupName : String) : void
