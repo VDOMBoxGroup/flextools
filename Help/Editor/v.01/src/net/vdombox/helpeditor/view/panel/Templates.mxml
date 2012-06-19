@@ -74,12 +74,38 @@
 			
 			protected function btnApply_clickHandler(event:MouseEvent):void
 			{
+				if (!templatesGroup.selectedTemplate)
+					return;
+				
 				templatesGroup.saveTemplate(templatesGroup.selectedTemplate);
+				
+				if (!templatesGroup.selectedTemplate.validXMLFormat)
+					showInvalidTemplates([templatesGroup.selectedTemplate]);
 			}
 			
 			protected function btnOK_clickHandler(event:MouseEvent):void
 			{
 				templatesGroup.saveTemplates();
+				
+				var invalidTemplates : Array = [];
+				
+				for each (var tplVO : TemplateVO in templatesGroup.allTemplates)
+				{
+					if (!tplVO.validXMLFormat)
+						invalidTemplates.push(tplVO);
+				}
+				
+				if (invalidTemplates && invalidTemplates.length > 0)
+				{
+					showInvalidTemplates(invalidTemplates, invalidTemplatesCloseHandler);
+					return;
+				}
+				
+				function invalidTemplatesCloseHandler (closeType : String) : void
+				{
+					if (closeType == TemplatesErrorDescriptionPanel.CLOSE_TYPE_IGNORE)
+						closeWindow();
+				}
 				
 				closeWindow();
 			}
@@ -95,6 +121,22 @@
 					
 				templatesGroup.saveTemplate(templatesGroup.selectedTemplate);
 				
+				if (!templatesGroup.selectedTemplate.validXMLFormat)
+				{
+					showInvalidTemplates([templatesGroup.selectedTemplate], invalidTemplateCloseHandler);
+					return;
+				}
+				
+				function invalidTemplateCloseHandler (closeType : String) : void
+				{
+					if (closeType == TemplatesErrorDescriptionPanel.CLOSE_TYPE_IGNORE)
+					{
+						dispatchEvent(new Event(EVENT_INSERT_TEMPLATE_CLICK));
+						
+						closeWindow();
+					}
+				}
+				
 				dispatchEvent(new Event(EVENT_INSERT_TEMPLATE_CLICK));
 				
 				closeWindow();
@@ -106,6 +148,16 @@
 					return "";
 				
 				return templatesGroup.selectedTemplate.name;
+			}
+			
+			private function showInvalidTemplates (templates:Array, closeHandler:Function = null) : void
+			{
+				var invalidTemplatesPopup : TemplatesErrorDescriptionPanel = new TemplatesErrorDescriptionPanel();
+				
+				invalidTemplatesPopup.templates = templates;
+				invalidTemplatesPopup.closeHandler = closeHandler;
+				
+				PopUpManager.addPopUp(invalidTemplatesPopup, this, true);
 			}
 			
 		]]>

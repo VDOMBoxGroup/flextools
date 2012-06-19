@@ -59,7 +59,7 @@
 				return currentAccordion.selectedChild as TemplatesAccordionChild;
 			}
 			
-			private function get allTemplates () : Array
+			public function get allTemplates () : Array
 			{
 				var allTemplatesArray : Array = [];
 				

@@ -25,10 +25,11 @@ package net.vdombox.helpeditor.controller
 	import mx.graphics.codec.PNGEncoder;
 	import mx.utils.Base64Encoder;
 	
+	import net.vdombox.helpeditor.controller.events.ProductXMLCreatorEvent;
 	import net.vdombox.helpeditor.model.HtmlPageProperties;
 	import net.vdombox.helpeditor.model.ImageProperties;
-	import net.vdombox.helpeditor.model.proxy.SQLProxy;
 	import net.vdombox.helpeditor.model.SpinnerPopupMessages;
+	import net.vdombox.helpeditor.model.proxy.SQLProxy;
 	import net.vdombox.helpeditor.utils.PageUtils;
 	import net.vdombox.helpeditor.utils.ResourceUtils;
 	import net.vdombox.helpeditor.utils.Utils;
@@ -58,8 +59,6 @@ package net.vdombox.helpeditor.controller
 		
 		private static const STATE_XML_CREATION_COMPLETE				: String = "stateXMLCreationComplete";
 		// ... states
-		
-		public static const EVENT_ON_XML_CREATION_COMPLETE	: String = "eventXMLCreationComplete";
 		
 		private const guidResourseRegExp	: RegExp = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]+\b/gim;
 				
@@ -354,6 +353,9 @@ package net.vdombox.helpeditor.controller
 		
 		private function startGeneratingPageContent() : void
 		{
+			if (pagesCounter == 52)
+				trace ("000");
+			
 			pageContent = html_wysiwyg.pageContent;
 			
 			pageContentXML = new XML(pageContent);
@@ -407,7 +409,13 @@ package net.vdombox.helpeditor.controller
 		
 		private function onXMLCreationComplete():void
 		{
-			spinnerManager.addEventListener(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_HIDE, spinnerHideHandler);
+			hideSpinner(spinnerHideHandler);
+		}
+		
+		private function hideSpinner (spinnerHideCompleteHandler : Function) : void
+		{
+			spinnerManager.addEventListener(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_HIDE, spinnerHideCompleteHandler);
+			
 			setTimeout(spinnerManager.hideSpinner, 50);
 		}
 		
@@ -415,7 +423,30 @@ package net.vdombox.helpeditor.controller
 		{
 			spinnerManager.removeEventListener(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_HIDE, spinnerHideHandler);
 			
-			this.dispatchEvent(new Event(EVENT_ON_XML_CREATION_COMPLETE));
+			dispatchSuccess();
+		}
+		
+		private function dispatchSuccess() : void
+		{
+			var event : ProductXMLCreatorEvent = new ProductXMLCreatorEvent(ProductXMLCreatorEvent.EVENT_ON_XML_CREATION_COMPLETE);
+			dispatchEvent(event);
+		}
+		
+		private function dispatchError(msg : String = "") : void
+		{
+			hideSpinner(spinnerHideCompleteHandler);
+			
+			var ths : ProductXMLCreator = this;
+			
+			function spinnerHideCompleteHandler (evt:Event) : void
+			{
+				spinnerManager.removeEventListener(SpinnerPopUpManager.EVENT_SPINNER_WINDOW_HIDE, spinnerHideCompleteHandler);
+				
+				var event : ProductXMLCreatorEvent = new ProductXMLCreatorEvent(ProductXMLCreatorEvent.EVENT_ON_XML_CREATION_ERROR);
+				event.message = msg;
+				
+				ths.dispatchEvent(event);
+			}
 		}
 		
 		private function generateNextPageResource():void
@@ -492,16 +523,30 @@ package net.vdombox.helpeditor.controller
 		
 		private function onPageLastResourceGenerated ():void
 		{
+			if (pagesCounter == 52)
+				trace ('111');
+			
 			pageResourcesCounter = 0;
 			pageResources = null;
 			
-			pageContent = VdomHelpEditor.getPageContentWithToc( pageContentXML.toString(), 
+			try 
+			{
+				pageContent = VdomHelpEditor.getPageContentWithToc( pageContentXML.toString(), 
 																		Boolean(currentPageObj["useToc"]),
 																		getPageChildren(currentPageObj["name"]) );
 			
-			pageContent = PageUtils.getInstance().replaceTemplatesLinksByTemplateContent(pageContent);
-			
-			pageContentXML = new XML(pageContent);
+				pageContent = PageUtils.getInstance().replaceTemplatesLinksByTemplateContent(pageContent);
+				
+				pageContentXML = new XML(pageContent);
+			} 
+			catch (e:Error) 
+			{
+				var msg : String = "Page '" + currentPageObj["title"] + "' (" + currentPageObj["name"] + "):\n" + e.message;
+				dispatchError(msg);
+				
+				Application.application.removeEventListener(Event.ENTER_FRAME, onAppEnterFrame);
+				return;
+			}
 			
 			resetLinksToPages();
 			
@@ -514,6 +559,8 @@ package net.vdombox.helpeditor.controller
 			
 			curState = STATE_PAGE_GENERATING_COMPLETE;
 		}
+		
+		//private function 
 		
 		private function appendHighlightScriptToPageContent() : void
 		{

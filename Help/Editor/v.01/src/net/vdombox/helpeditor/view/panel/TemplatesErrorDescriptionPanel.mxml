@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+		   width="400" height="300"
+		   backgroundAlpha="1" backgroundColor="white"
+		   borderThickness="1.5" borderStyle="solid" borderColor="black"
+		   cornerRadius="5"
+		   creationComplete="creationCompleteHandler(event)">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			import mx.managers.PopUpManager;
+			
+			import net.vdombox.helpeditor.model.vo.TemplateVO;
+			
+			[Bindable]
+			public var templates : Array = [];
+			
+			public static const CLOSE_TYPE_OK		: String = "closeOK";
+			public static const CLOSE_TYPE_IGNORE	: String = "closeIgnore";
+			
+			public var closeHandler : Function;
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				PopUpManager.centerPopUp(this);
+			}
+			
+			private function closePopup (closeType : String = CLOSE_TYPE_OK) : void
+			{
+				if (closeHandler != null)
+					closeHandler(closeType);
+				
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function btnOK_clickHandler(event:MouseEvent):void
+			{
+				closePopup(CLOSE_TYPE_OK);
+			}
+			
+			protected function btnIgnore_clickHandler(event:MouseEvent):void
+			{
+				closePopup(CLOSE_TYPE_IGNORE);
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:VBox width="100%" height="100%"
+			 paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+		
+		<mx:Label text="Invalid template(s): "/>
+		
+		<mx:HDividedBox width="100%" height="100%">
+			<mx:List id="templatesList" 
+					 width="150" height="100%"
+					 minWidth="150"
+					 dataProvider="{templates}" 
+					 labelField="name"
+					 selectedIndex="0"/>
+			
+			<mx:TextArea width="100%" height="100%"
+						 editable="false"
+						 text="{templatesList.selectedItem ? templatesList.selectedItem.errorMsg : ''}"/>
+		</mx:HDividedBox>
+		
+		<mx:ControlBar width="100%" horizontalAlign="right">
+			<mx:Button id="btnOK" 
+					   label="OK"
+					   click="btnOK_clickHandler(event)"/>
+			<mx:Button id="btnIgnore" 
+					   label="Ignore"
+					   click="btnIgnore_clickHandler(event)"/>
+		</mx:ControlBar>
+		
+	</mx:VBox>
+	
+</mx:Canvas>

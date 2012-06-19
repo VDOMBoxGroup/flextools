@@ -1,10 +1,16 @@
 package net.vdombox.helpeditor.model.vo
 {
+	import net.vdombox.helpeditor.utils.RuntimeUtils;
+
 	public class TemplateVO
 	{
 		private var _name		: String;
 		private var _content	: String;
 		private var _folder	: String;
+		
+		private var _invalidXMLFormat : Boolean;
+		
+		public var errorMsg : String;
 		
 		public function TemplateVO(templateObj : Object = null)
 		{
@@ -19,6 +25,22 @@ package net.vdombox.helpeditor.model.vo
 			
 			if (templateObj.hasOwnProperty("folder"))
 				folder = templateObj.folder;
+		}
+		
+		public function get validXMLFormat () : Boolean
+		{
+			try 
+			{
+				var xml : XML = new XML(content);
+			} 
+			catch (error:Error) 
+			{
+				errorMsg = RuntimeUtils.isRuntimeError(error.message) ? RuntimeUtils.getRuntimeErrorMessage(error.message) : error.message;
+				
+				return false;
+			}
+			
+			return true;
 		}
 		
 		public function set name (value : String) : void

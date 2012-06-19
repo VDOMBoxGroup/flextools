@@ -62,6 +62,7 @@
 			import net.vdombox.helpeditor.controller.PageToc;
 			import net.vdombox.helpeditor.controller.ProductXMLCreator;
 			import net.vdombox.helpeditor.controller.SpinnerPopUpManager;
+			import net.vdombox.helpeditor.controller.events.ProductXMLCreatorEvent;
 			import net.vdombox.helpeditor.controller.events.TemplateRenameEvent;
 			import net.vdombox.helpeditor.model.AlertMessages;
 			import net.vdombox.helpeditor.model.HtmlPageProperties;
@@ -604,11 +605,25 @@
 			{
 			}
 			
-			private function onProductXMLCreationComplete(aEvent:Event):void
+			private function onProductXMLCreationError(aEvent:ProductXMLCreatorEvent):void
 			{
-				ProductXMLCreator(aEvent.target).removeEventListener(ProductXMLCreator.EVENT_ON_XML_CREATION_COMPLETE, onProductXMLCreationComplete);
+				var xmlCreator : ProductXMLCreator = aEvent.target as ProductXMLCreator;
 				
-				var product		: XML = ProductXMLCreator(aEvent.target).productXML;
+				xmlCreator.removeEventListener(ProductXMLCreatorEvent.EVENT_ON_XML_CREATION_COMPLETE, onProductXMLCreationComplete);
+				xmlCreator.removeEventListener(ProductXMLCreatorEvent.EVENT_ON_XML_CREATION_ERROR, onProductXMLCreationError);
+				
+				if (aEvent.message)
+					Alert.show( aEvent.message, AlertMessages.MSG_TYPE_ERROR);
+			}
+			
+			private function onProductXMLCreationComplete(aEvent:ProductXMLCreatorEvent):void
+			{
+				var xmlCreator : ProductXMLCreator = aEvent.target as ProductXMLCreator;
+				
+				xmlCreator.removeEventListener(ProductXMLCreatorEvent.EVENT_ON_XML_CREATION_COMPLETE, onProductXMLCreationComplete);
+				xmlCreator.removeEventListener(ProductXMLCreatorEvent.EVENT_ON_XML_CREATION_ERROR, onProductXMLCreationError);
+				
+				var product		: XML = xmlCreator.productXML;
 				
 				var fileStream	: FileStream	= new FileStream();
 				var fileName	: String		= cmboxProduct.selectedItem.title;
@@ -677,7 +692,9 @@
 				
 				var productCreator : ProductXMLCreator = new ProductXMLCreator();
 				
-				productCreator.addEventListener(ProductXMLCreator.EVENT_ON_XML_CREATION_COMPLETE, onProductXMLCreationComplete);
+				productCreator.addEventListener(ProductXMLCreatorEvent.EVENT_ON_XML_CREATION_COMPLETE, onProductXMLCreationComplete);
+				productCreator.addEventListener(ProductXMLCreatorEvent.EVENT_ON_XML_CREATION_ERROR, onProductXMLCreationError);
+				
 				productCreator.generateProductXML(cmboxProduct.selectedItem.name, 
 													cmboxProduct.selectedItem.title,
 													cmboxProduct.selectedItem.language,
