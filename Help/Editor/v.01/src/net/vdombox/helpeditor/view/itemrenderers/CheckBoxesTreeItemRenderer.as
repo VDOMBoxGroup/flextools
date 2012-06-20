@@ -36,7 +36,7 @@ package net.vdombox.helpeditor.view.itemrenderers
 				return;
 			}
 			
-			toolTip = sqlProxy.getGroupTitle(syncGroupName);
+			toolTip = "Group: " + sqlProxy.getGroupTitle(syncGroupName);
 		}
 
 		override protected function commitProperties():void

@@ -10,6 +10,7 @@ package net.vdombox.helpeditor.model.vo
 		
 		private var _invalidXMLFormat : Boolean;
 		
+		[Bindable]
 		public var errorMsg : String;
 		
 		public function TemplateVO(templateObj : Object = null)
@@ -31,7 +32,7 @@ package net.vdombox.helpeditor.model.vo
 		{
 			try 
 			{
-				var xml : XML = new XML(content);
+				var xml : XMLList = new XMLList(content);
 			} 
 			catch (error:Error) 
 			{
