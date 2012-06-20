@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Tree xmlns:mx="http://www.adobe.com/2006/mxml"
+		 itemRenderer="net.vdombox.helpeditor.view.itemrenderers.CheckBoxesTreeItemRenderer"
+		 defaultLeafIcon="{null}"
+		 folderClosedIcon="{null}"
+		 folderOpenIcon="{null}">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.core.mx_internal;
+			
+			import net.vdombox.helpeditor.view.itemrenderers.CheckBoxesTreeItemRenderer;
+			
+			use namespace mx_internal;
+			
+			public function refreshSyncData () : void
+			{
+				if (!dataProvider || !dataProvider.source)
+					return;
+				
+				var itemRend : CheckBoxesTreeItemRenderer;
+				
+				for each (var item : XML in dataProvider.source)
+				{
+					itemRend = getMeasuringRenderer(item) as CheckBoxesTreeItemRenderer;
+					
+					itemRend.refreshSyncGroup();
+				}
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:Tree>

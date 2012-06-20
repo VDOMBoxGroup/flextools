@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="net.vdombox.helpeditor.view.components.*">
 	
 	<mx:Script>
 		<![CDATA[
@@ -16,8 +16,6 @@
 			private var sqlProxy : SQLProxy = new SQLProxy();
 			
 			private var products : Object = sqlProxy.getAllProducts();
-			
-			private var lastSelectedPageName : String;
 			
 			public function get pages () : XMLList
 			{
@@ -38,29 +36,10 @@
 			
 			public function updatePages () : void
 			{
-				pagesTree.dataProvider = null;
-				pagesTree.dataProvider = pages;
-				
-			}
-			
-			private function get lastSelectedPage () : XML
-			{
-				for each (var product : XML in pagesTree.dataProvider)
-				{
-					var pageName : String = product.@name;
-					
-					if (pageName == lastSelectedPageName)
-						return product;
-					
-					for each (var page : XML in product..page)
-					{
-						pageName = page.@name;
-						if (pageName == lastSelectedPageName)
-							return page;
-					}
-				}
-				
-				return null;
+				if (!pagesTree.dataProvider)
+					pagesTree.dataProvider = pages;
+				else
+					pagesTree.refreshSyncData();
 			}
 			
 			private function treeItemRenderer_getCurrentSyncGroupNameHandler (event : PagesSyncronizationEvent) : void
@@ -75,26 +54,13 @@
 				pagesTree.addEventListener(PagesSyncronizationEvent.GET_CUR_SYNC_GROUP_NAME, treeItemRenderer_getCurrentSyncGroupNameHandler, true);
 			}
 			
-			protected function pagesTree_changeHandler(event:ListEvent):void
-			{
-				if (!pagesTree.selectedItem)
-					return;
-				
-				var selectedPage : XML = pagesTree.selectedItem as XML;
-				lastSelectedPageName = selectedPage.@name;
-			}
-			
+		
 		]]>
 	</mx:Script>
 	
-	<mx:Tree id="pagesTree"
+	<components:PagesSyncTree id="pagesTree"
 			 width="100%" height="100%"
-			 itemRenderer="net.vdombox.helpeditor.view.itemrenderers.CheckBoxesTreeItemRenderer"
 			 labelField="@title"
-			 defaultLeafIcon="{null}"
-			 folderClosedIcon="{null}"
-			 folderOpenIcon="{null}"
-			 initialize="pagesTree_initializeHandler(event)"
-			 change="pagesTree_changeHandler(event)"/>
+			 initialize="pagesTree_initializeHandler(event)"/>
 	
 </mx:VBox>

@@ -123,6 +123,11 @@ package net.vdombox.helpeditor.view.itemrenderers
 		{
 			super.data = value;
 			
+			refreshSyncGroup();
+		}
+		
+		public function refreshSyncGroup () : void
+		{
 			syncGroupName = sqlProxy.getPageSyncGroup(xmlData.@name);
 			
 			xmlData.@selected = syncGroupName != null && syncGroupName != "";
