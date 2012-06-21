@@ -36,8 +36,18 @@
 			
 			protected function grid_changeHandler(event:ListEvent):void
 			{
-				// TODO Auto-generated method stub
-				txt.text = event.itemRenderer.data["FullValue"]	
+				var selValue : * = event.itemRenderer.data["FullValue"];
+				
+				if (!selValue)
+				{
+					txt.text = "";
+					return;
+				}
+				
+				if (selValue is XML)
+					txt.text = selValue.toXMLString();
+				else
+					txt.text = selValue.toString();
 			}
 			
 		]]>

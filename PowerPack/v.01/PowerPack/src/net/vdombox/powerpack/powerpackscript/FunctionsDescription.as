@@ -114,12 +114,12 @@ package net.vdombox.powerpack.powerpackscript
 				"setXMLValue"			: "<b>Description:</b>\n" +
 										  "Sets the value to XML by specified XPATH.\n" +
 										  "<b>Syntax:</b>\n" +
-										  "[setXMLValue XPATH VALUE]",
+										  "[setXMLValue $xml $XPATH $value]",
 										  
 				"getXMLValue"			: "<b>Description:</b>\n" +
 										  "Returns the value from XML using query string.\n" +
 										  "<b>Syntax:</b>\n" +
-										  "[getXMLValue QUERY_STRING]",
+										  "[getXMLValue $xml $QueryString]",
 				
 				'dialog'				: "<b>Description:</b>\n" +
 											"Shows popup dialog window with the question to user.\n\n" +
