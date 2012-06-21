@@ -3,8 +3,10 @@
 */
 package net.vdombox.object_editor.controller
 {
+    import net.vdombox.object_editor.model.proxy.ConnectToServerProxy;
     import net.vdombox.object_editor.model.proxy.FileProxy;
     import net.vdombox.object_editor.model.proxy.ObjectsProxy;
+    import net.vdombox.object_editor.model.proxy.ServerProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.ActionContainersProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.AttributesProxy;
     import net.vdombox.object_editor.model.proxy.componentsProxy.EventsProxy;
@@ -16,7 +18,7 @@ package net.vdombox.object_editor.controller
     
     import org.puremvc.as3.interfaces.*;
     import org.puremvc.as3.patterns.command.*;
-    import org.puremvc.as3.patterns.observer.*;  
+    import org.puremvc.as3.patterns.observer.*;
         
     public class PreinitializeCommand extends SimpleCommand
     {        
@@ -33,6 +35,8 @@ package net.vdombox.object_editor.controller
 			facade.registerProxy(new LanguagesProxy());			
 			facade.registerProxy(new LibrariesProxy());			
 			facade.registerProxy(new ResourcesProxy());
+			facade.registerProxy(new ServerProxy());
+			facade.registerProxy(new ConnectToServerProxy());
 			facade.registerMediator( new ApplicationMediator( note.getBody() ) );			
 		} 
     }

@@ -22,7 +22,6 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Actions;
-	import net.vdombox.object_editor.view.popups.ChangeWord;
 	import net.vdombox.object_editor.view.popups.Containers;
 
 	import org.puremvc.as3.interfaces.IMediator;

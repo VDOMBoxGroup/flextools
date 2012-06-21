@@ -210,6 +210,15 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return objTypeXML;
 		}
 
+		public function toXMLString( objTypeVO: ObjectTypeVO):String
+		{
+			var objTypeXML:XML = createXML( objTypeVO );
+			
+			var str : String = '<?xml version="1.0" encoding="utf-8"?>\n'+ objTypeXML.toString()
+			
+			return str;
+		}
+		
 		public function getObjectTypeVO(id:String):ObjectTypeVO
 		{
 			return _objectTypeList[id];

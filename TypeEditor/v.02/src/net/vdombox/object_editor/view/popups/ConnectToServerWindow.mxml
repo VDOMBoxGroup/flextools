@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   creationComplete="titlewindow1_creationCompleteHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			import net.vdombox.object_editor.Utils.MD5Utils;
+			import net.vdombox.object_editor.event.PopupEvent;
+			import net.vdombox.object_editor.model.vo.ConnectInfoVO;
+			
+			import spark.events.TextOperationEvent;
+			
+			public var connectInformation : ConnectInfoVO;
+			
+			[Bindable]
+			private var hostString : String;
+			
+			[Bindable]
+			private var userString : String;
+			
+			[Bindable]
+			private var passString : String;
+			
+			protected function ok_clickHandler(event:MouseEvent):void
+			{
+				var passwd : String;
+				if ( host.text == connectInformation.serverAddress && user.text == connectInformation.userName && pass.text == connectInformation.password )
+					passwd = pass.text;
+				else
+					passwd = MD5Utils.encrypt( pass.text );
+				
+				connectInformation = new ConnectInfoVO( host.text, user.text, passwd );
+				
+				dispatchEvent( new PopupEvent( PopupEvent.APPLY ) );
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+			}
+			
+			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener(CloseEvent.CLOSE, closeHandler); 
+			}
+			
+			private function closeHandler( event : CloseEvent ) : void
+			{
+				removeEventListener(CloseEvent.CLOSE, closeHandler); 
+				PopUpManager.removePopUp(this);
+			}
+			
+			public function InitializeValue( connectInfoVO : ConnectInfoVO ) : void
+			{
+				hostString = connectInfoVO.serverAddress;
+				userString = connectInfoVO.userName;
+				passString = connectInfoVO.password;
+				
+				connectInformation = connectInfoVO;
+			}
+			
+			protected function host_changeHandler(event:TextOperationEvent):void
+			{
+				if ( user.text == connectInformation.userName )
+					user.text = "";
+				
+				if ( pass.text == connectInformation.password )
+					pass.text = "";
+			}
+			
+			protected function user_changeHandler(event:TextOperationEvent):void
+			{				
+				if ( pass.text == connectInformation.password )
+					pass.text = "";
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:VGroup height="100%" width="100%" paddingLeft="10" paddingTop="10" paddingRight="10" paddingBottom="10">
+		
+		<s:VGroup gap="3" width="100%">
+			
+			<s:Label text="Server address" width="100%"
+					 fontFamily="Arial" fontSize="14" textAlign="left"/>
+			
+			<s:TextInput id="host" width="100%" height="31" text="{hostString}" change="host_changeHandler(event)"/>
+			
+		</s:VGroup>
+		
+		<s:VGroup gap="3" width="100%">
+			
+			<s:Label text="username" width="100%"
+					 fontFamily="Arial" fontSize="14" textAlign="left" />
+			
+			<s:TextInput id="user" width="100%" height="31" text="{userString}" change="user_changeHandler(event)"/>
+			
+		</s:VGroup>
+		
+		<s:VGroup gap="3" width="100%">
+			
+			<s:Label text="password" width="100%"
+					 fontFamily="Arial" fontSize="14" textAlign="left"/>
+			
+			<s:TextInput id="pass" width="100%" height="31" text="{passString}" displayAsPassword="true" />
+			
+			
+		</s:VGroup>
+		
+		<s:Button id="ok" label="OK" click="ok_clickHandler(event)"/>
+		
+	</s:VGroup>
+	
+</s:TitleWindow>

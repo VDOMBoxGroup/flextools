@@ -16,6 +16,7 @@
 			
 			private var _tabNavigator:TabNavigator;
 			private var _saveButton:Button;
+			
 			[Bindable]
 			public 	var	 isEnabled:Boolean = false;
 			
@@ -48,9 +49,10 @@
 	<s:HGroup right="453" width="100%" gap="19" verticalAlign="top" paddingBottom="10" paddingRight="10">
 		<s:Group width="100%"/>
 		
-		<s:Button label="Save"		id="saveObjectTypeButton"	enabled="{isEnabled}"/>
-		<s:Button label="Save as"	id="saveAsObjectTypeButton"	enabled="{isEnabled}"/>
-		<s:Button label="load"		id="loadObjectTypeToServerButton"	enabled="{isEnabled}"/>
-		<s:Button label="Reload"	id="restartButton"			enabled="{isEnabled}"/>
+		<s:Button label="Save"		id="saveObjectTypeButton"				enabled="{isEnabled}"/>
+		<s:Button label="Save as"	id="saveAsObjectTypeButton"				enabled="{isEnabled}"/>
+		<s:Button label="connect"	id="connectObjectTypeToServerButton"	/>
+		<s:Button label="load"		id="loadObjectTypeToServerButton"		enabled="false"/>
+		<s:Button label="Reload"	id="restartButton"						enabled="{isEnabled}"/>
 	</s:HGroup>	
 </mx:VBox>
