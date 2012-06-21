@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
-				layout="absolute" 
-				width="600" height="500"
-				title="Templates"
-				showCloseButton="true"
-				verticalScrollPolicy="off" horizontalScrollPolicy="off" 
-				borderAlpha="0.98" cornerRadius="1" 
-				visible="true" shadowDirection="right"
-				backgroundColor="#373739"
-				borderColor="#373739" titleStyleName="resourceBrowserTitle"
-				borderThicknessLeft="1" borderThicknessRight="1"
-				creationComplete="creationCompleteHandler(event)"
-				keyDown="window_keyDownHandler(event)" 
-				xmlns:components="net.vdombox.helpeditor.view.components.*">
+<components:ResizableTitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+								 xmlns:components="net.vdombox.helpeditor.view.components.*"
+								layout="absolute" 
+								minWidth="600" minHeight="500"
+								title="Templates"
+								showCloseButton="true"
+								verticalScrollPolicy="off" horizontalScrollPolicy="off" 
+								borderAlpha="0.98" cornerRadius="1" 
+								visible="true" shadowDirection="right"
+								backgroundColor="#373739"
+								borderColor="#373739" titleStyleName="resourceBrowserTitle"
+								borderThicknessLeft="1" borderThicknessRight="1"
+								resizable="true"
+								shareId="TemplatesTitleWindow">
 	
 	<mx:Metadata>
 	</mx:Metadata>
@@ -46,30 +46,20 @@
 			[Bindable]
 			public var allowInsert : Boolean = false;
 			
-			protected function creationCompleteHandler(event:FlexEvent):void
+			override protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				addEventListener(CloseEvent.CLOSE, closeHandler);
+				super.creationCompleteHandler(event);
 				
 				PopUpManager.centerPopUp(this);
 			}
-			
-			private function closeHandler(cEvent:CloseEvent):void 
-			{
-				PopUpManager.removePopUp(this);
-			}
-			
-			protected function window_keyDownHandler(event:KeyboardEvent):void
+				
+			override protected function keyHandler(event:KeyboardEvent) : void 
 			{
 				if (event.target is UITextField)
 					return;
 				
 				if (event.charCode == Keyboard.ESCAPE)
-					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
-			}
-			
-			private function closeWindow () : void
-			{
-				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+					close();
 			}
 			
 			protected function btnApply_clickHandler(event:MouseEvent):void
@@ -104,10 +94,10 @@
 				function invalidTemplatesCloseHandler (closeType : String) : void
 				{
 					if (closeType == TemplatesErrorDescriptionPanel.CLOSE_TYPE_IGNORE)
-						closeWindow();
+						close();
 				}
 				
-				closeWindow();
+				close();
 			}
 			
 			
@@ -115,7 +105,7 @@
 			{
 				if (!templatesGroup.selectedTemplate)
 				{
-					closeWindow();
+					close();
 					return;
 				}
 					
@@ -133,13 +123,13 @@
 					{
 						dispatchEvent(new Event(EVENT_INSERT_TEMPLATE_CLICK));
 						
-						closeWindow();
+						close();
 					}
 				}
 				
 				dispatchEvent(new Event(EVENT_INSERT_TEMPLATE_CLICK));
 				
-				closeWindow();
+				close();
 			}
 			
 			public function get selectedTemplateName () : String
@@ -188,8 +178,8 @@
 		
 		<components:BlackButton id="btnCancel"
 				   label="Cancel"
-				   click="closeWindow()"/>
+				   click="close()"/>
 		
 	</mx:ControlBar>
 	
-</mx:TitleWindow>
+</components:ResizableTitleWindow>

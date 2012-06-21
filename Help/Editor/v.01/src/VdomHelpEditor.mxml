@@ -2,15 +2,18 @@
 <mx:WindowedApplication showStatusBar="false" showGripper="false" showTitleBar="false"
 						xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
 						xmlns:mx="http://www.adobe.com/2006/mxml"
-						minWidth="800" minHeight="600" width="800" height="600"
+						xmlns:components="net.vdombox.helpeditor.view.components.*" 
+						xmlns:wysiwyg="net.vdombox.helpeditor.view.components.wysiwyg.*"
+						minWidth="800" minHeight="600"
 						layout="absolute"
-						creationComplete="{creationCompleteHandler()}"
 						backgroundColor="0x373739"
 						titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Editor Application"
 						titleTextStyleName="tbStyle"
 						titleIcon="@Embed('icons/16_vdom_icon_editor.png')"
 						xmlns:local="*" xmlns:view="net.vdombox.helpeditor.view.*"
-						borderStyle="solid" borderThickness="4" borderColor="0x434343" xmlns:components="net.vdombox.helpeditor.view.components.*" xmlns:wysiwyg="net.vdombox.helpeditor.view.components.wysiwyg.*">
+						borderStyle="solid" borderThickness="4" borderColor="0x434343" 
+						creationComplete="{creationCompleteHandler()}"
+						close="closeHandler(event)">
 	<mx:Style>
 		.tbStyle {
 			color : #FFFFFF;
@@ -115,16 +118,61 @@
 			 *
 			 */
 
-
-
 			private function creationCompleteHandler() : void
 			{
+				restoreApplicationMetrics();
+				
+				nativeWindow.x = (Capabilities.screenResolutionX - width) / 2;
+				nativeWindow.y = (Capabilities.screenResolutionY - height) / 2;
+				
 				Utils.configureXMLForDisplaying();
 				
 				sqlProxy.creatDB();
 				
 				stylesManager.addEventListener(CSSStyleManager.STYLE_SETTED, onStylesLoaded);
 				stylesManager.setStyle();
+			}
+			
+			private var sharedObj : SharedObject = SharedObject.getLocal( "mainWindow" );
+			protected function closeHandler(event:Event):void
+			{
+				storeApplicationMetrics();
+			}
+			
+			private function storeApplicationMetrics() : void
+			{
+				if (!sharedObj)
+					return;
+				
+				sharedObj.data["width"] = width;
+				sharedObj.data["height"] = height;
+			}
+			
+			private function storedWindowMetric (metricType: String) : Number
+			{
+				if (!sharedObj)
+					return NaN;
+				
+				if (sharedObj.data.hasOwnProperty(metricType))
+					return Number(sharedObj.data[metricType])
+				
+				return NaN;
+			}
+			
+			private function restoreApplicationMetrics() : void
+			{
+				if (!sharedObj)
+					return;
+				
+				var mainScreenBounds : Rectangle = Screen.mainScreen.bounds;
+				
+				width = storedWindowMetric("width") || minWidth;
+				if (mainScreenBounds.width < width)
+					width = mainScreenBounds.width;
+				
+				height = storedWindowMetric("height") || minHeight;
+				if (mainScreenBounds.height < height)
+					height = mainScreenBounds.height;
 			}
 			
 			private function onStylesLoaded(evt : Event):void

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="net.vdombox.helpeditor.view.components.*">
 	
 	<mx:Script>
 		<![CDATA[
@@ -63,7 +63,8 @@
 		]]>
 	</mx:Script>
 	
-	<mx:TextArea id="textInputField"
+	<components:TemplateTextArea 
+				  id="textInputField"
 				  width="100%" height="100%"
 				  text="{startContent}"
 				  keyDown="textInputField_keyDownHandler(event)"/>

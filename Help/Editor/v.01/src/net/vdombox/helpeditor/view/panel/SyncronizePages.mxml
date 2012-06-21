@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow 
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+<components:ResizableTitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:components="net.vdombox.helpeditor.view.components.*"
+	xmlns:panel="net.vdombox.helpeditor.view.panel.*"
 	layout="absolute" 
-	width="600" height="500"
+	minWidth="600" minHeight="500"
 	title="Pages Settings"
-	creationComplete="creationCompleteHandler(event)"
 	showCloseButton="true"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
 	borderAlpha="0.98" cornerRadius="1" 
 	visible="true" shadowDirection="right"
 	backgroundColor="#373739"
 	borderColor="#373739" titleStyleName="resourceBrowserTitle"
-	borderThicknessLeft="1" borderThicknessRight="1" xmlns:panel="net.vdombox.helpeditor.view.panel.*"
-	keyDown="window_keyDownHandler(event)">
+	borderThicknessLeft="1" borderThicknessRight="1"
+	resizable="true"
+	shareId="SyncPagesTitleWindow">
 	
 	<mx:Style>
 		.resourceBrowserTitle 
@@ -44,16 +46,11 @@
 			
 			private var sqlProxy : SQLProxy = new SQLProxy();
 			
-			protected function creationCompleteHandler(event:FlexEvent):void
+			override protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				addEventListener(CloseEvent.CLOSE, closeHandler);
+				super.creationCompleteHandler(event);
 				
 				PopUpManager.centerPopUp(this);
-			}
-			
-			private function closeHandler(cEvent:CloseEvent):void 
-			{
-				PopUpManager.removePopUp(this);
 			}
 			
 			private function addNewGroup () : void
@@ -193,13 +190,13 @@
 				return null;
 			}
 			
-			protected function window_keyDownHandler(event:KeyboardEvent):void
+			override protected function keyHandler(event:KeyboardEvent) : void 
 			{
 				if (event.target is UITextField)
 					return;
 				
 				if (event.charCode == Keyboard.ESCAPE)
-					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+					close();
 			}
 			
 			protected function syncGroupsList_doubleClickHandler(event:ListEvent):void
@@ -314,4 +311,4 @@
 		</mx:VBox>
 	</mx:HBox>
 	
-</mx:TitleWindow>
+</components:ResizableTitleWindow>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TextArea xmlns:mx="http://www.adobe.com/2006/mxml"
+			 mouseEnabled="false">
+	
+	<mx:Script>
+		<![CDATA[
+			import flexlib.mdi.containers.MDIWindow;
+			
+			import mx.core.mx_internal;
+			import mx.events.FlexEvent;
+			
+			override protected function createChildren() : void
+			{
+				super.createChildren();
+				
+				if (!contextMenu)
+					addContextMenu();
+			}
+			
+			private function addContextMenu () : void
+			{
+				contextMenu = new ContextMenu();
+				contextMenu.addItem(new ContextMenuItem("ddd"));
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+	
+</mx:TextArea>
