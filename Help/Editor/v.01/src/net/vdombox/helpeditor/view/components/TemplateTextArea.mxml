@@ -1,29 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TextArea xmlns:mx="http://www.adobe.com/2006/mxml"
-			 mouseEnabled="false">
+			 mouseEnabled="false"
+			 creationComplete="textarea1_creationCompleteHandler(event)">
 	
 	<mx:Script>
 		<![CDATA[
 			import flexlib.mdi.containers.MDIWindow;
 			
-			import mx.core.mx_internal;
+			import mx.core.UITextField;
 			import mx.events.FlexEvent;
+			
+			import net.vdombox.helpeditor.controller.events.TemplateContentEditorEvent;
+			import net.vdombox.helpeditor.utils.PageUtils;
 			
 			override protected function createChildren() : void
 			{
 				super.createChildren();
 				
-				if (!contextMenu)
-					addContextMenu();
 			}
 			
-			private function addContextMenu () : void
+			protected function textarea1_creationCompleteHandler(event:FlexEvent):void
 			{
-				contextMenu = new ContextMenu();
-				contextMenu.addItem(new ContextMenuItem("ddd"));
 				
+				addItemsToContextMenu();
 			}
 			
+			private function addItemsToContextMenu() : void
+			{
+				var cm : NativeMenu = uiTextField.contextMenu;
+				
+				if (!cm)
+					return;
+					
+				var cmJumpToTemplateItem : NativeMenuItem = new NativeMenuItem("Jump to template");
+				cmJumpToTemplateItem.addEventListener(Event.SELECT, menuItemJumpToTemplateSelectHandler);
+				
+				cm.addItem(cmJumpToTemplateItem);
+			}
+			
+			private function menuItemJumpToTemplateSelectHandler (event : Event) : void
+			{
+				if (!selectedTemplateName)
+					return;
+				
+				var editorEvent : TemplateContentEditorEvent = new TemplateContentEditorEvent(TemplateContentEditorEvent.JUMP_TO_TEMPLATE);
+				editorEvent.templateName = selectedTemplateName;
+				
+				dispatchEvent(editorEvent);
+			}
+			
+			public function get uiTextField () : UITextField
+			{
+				return textField as UITextField;
+			}
+			
+			private function get selectedTemplateName () : String
+			{
+				var templateCombStartIndex	: int = uiTextField.text.substring(0, uiTextField.caretIndex).lastIndexOf("#Template(");
+				if (templateCombStartIndex < 0)
+					return "";
+				
+				if (uiTextField.caretIndex < templateCombStartIndex)
+					return "";
+				
+				templateCombStartIndex = uiTextField.text.substring(templateCombStartIndex, uiTextField.caretIndex).lastIndexOf("\n");
+				templateCombStartIndex = uiTextField.text.substring(templateCombStartIndex, uiTextField.caretIndex).lastIndexOf("\r");
+				
+				var matchedTemplates : Array = uiTextField.text.substr(templateCombStartIndex).match(PageUtils.templateRegExp);
+				
+				if (!matchedTemplates || matchedTemplates.length == 0)
+					return "";
+				
+				var selTemplateComb : String = matchedTemplates[0];
+				
+				if (uiTextField.caretIndex > templateCombStartIndex + selTemplateComb.length)
+					return "";
+				
+				var tplNameStartIndex : int = selTemplateComb.indexOf("#Template(") + 10;
+				var tplNameEndIndex : int = selTemplateComb.indexOf(")", tplNameStartIndex);
+				
+				return selTemplateComb.substring(tplNameStartIndex, tplNameEndIndex);
+			}
 		]]>
 	</mx:Script>
 	

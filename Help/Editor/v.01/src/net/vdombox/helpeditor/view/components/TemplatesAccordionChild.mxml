@@ -200,6 +200,12 @@
 				if (!templatesList)
 					return;
 				
+				var index : int = templates.getItemIndex(template);
+				
+				if (index < 0)
+					return;
+				
+				templatesList.scrollToIndex(index);				
 				templatesList.selectedItem = template;
 			}
 			

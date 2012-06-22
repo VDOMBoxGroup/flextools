@@ -9,6 +9,7 @@
 			import mx.events.FlexEvent;
 			import mx.events.IndexChangedEvent;
 			
+			import net.vdombox.helpeditor.controller.events.TemplateContentEditorEvent;
 			import net.vdombox.helpeditor.controller.events.TemplateRenameEvent;
 			import net.vdombox.helpeditor.controller.events.TemplatesAccordionEvent;
 			import net.vdombox.helpeditor.model.AlertMessages;
@@ -316,7 +317,12 @@
 				
 				var removingTemplateEditor : TemplateContentEditor = getContentEditorByTemplate(removedTemplate);
 				if (removingTemplateEditor)
+				{
+					removingTemplateEditor.removeEventListener(TemplateContentEditorEvent.JUMP_TO_TEMPLATE, jumpToTemplateClick);
+					
 					vsTemplatesEditors.removeChild(removingTemplateEditor);
+					removingTemplateEditor = null;
+				}
 				
 				removedTemplate = null;
 			}
@@ -358,9 +364,42 @@
 				
 				templateEditor.template = template;
 				
+				templateEditor.addEventListener(TemplateContentEditorEvent.JUMP_TO_TEMPLATE, jumpToTemplateClick, true);
+				
 				vsTemplatesEditors.addChild(templateEditor);
 				
 				return templateEditor;
+			}
+			
+			private function jumpToTemplateClick (event : TemplateContentEditorEvent) : void
+			{
+				var templateName : String = event.templateName;
+				
+				if (!templateName)
+					return;
+				
+				var alertMsg : String = "Jump to template '" + templateName + "'?";
+				Alert.show(alertMsg, "Confirmation: ", Alert.YES|Alert.NO, null, alertAskToJumpCloseHandler);
+				
+				function alertAskToJumpCloseHandler(event:CloseEvent):void
+				{
+					if (event.detail == Alert.YES)
+						jumpToTemplate(templateName);
+				}
+
+			}
+			
+			private function jumpToTemplate (tplName : String) : void
+			{
+				for each ( var template : TemplateVO in allTemplates)
+				{
+					if ( template.name == tplName)
+					{
+						selectedTemplate = template;
+						selectedTemplateChanged(null);
+						return;
+					}
+				}
 			}
 			
 			protected function templatesAccordion_changeHandler(event:IndexChangedEvent):void
@@ -438,7 +477,6 @@
 				
 				vsTemplatesEditors.selectedChild = emptyContentEditor; 
 				
-				//accordionsViewStack.selectedChild = templatesFilteredAccordion;
 				accordionsViewStack.selectedChild = filteredTemplatesBox;
 				
 				lockButtons();
@@ -446,11 +484,14 @@
 			
 			private function cancelFilterTemplates () : void
 			{
-				//accordionsViewStack.selectedChild = templatesAccordion;
 				accordionsViewStack.selectedChild = normalTemplatesBox;
 				
 				if (foundFolder.selectedTemplate)
-					selectedTemplate = foundFolder.selectedTemplate;
+				{
+					jumpToTemplate(foundFolder.selectedTemplate.name);
+				}
+				else
+					selectedTemplateChanged(null);
 				
 				foundTemplates.removeAll();
 					

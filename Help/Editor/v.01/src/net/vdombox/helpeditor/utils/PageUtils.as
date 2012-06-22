@@ -133,5 +133,10 @@ package net.vdombox.helpeditor.utils
 			
 		}
 		
+		public static function templateCombination (templateName:String) : String
+		{
+			return "#Template(" + templateName + ")";
+		}
+		
 	}
 }

@@ -24,6 +24,7 @@
 			import net.vdombox.helpeditor.controller.PageToc;
 			import net.vdombox.helpeditor.model.HtmlPageProperties;
 			import net.vdombox.helpeditor.model.WysiwygImage;
+			import net.vdombox.helpeditor.utils.PageUtils;
 			import net.vdombox.helpeditor.utils.ResourceUtils;
 			import net.vdombox.helpeditor.utils.Utils;
 			
@@ -131,7 +132,7 @@
 				if (!templateName)
 					return;
 				
-				var template : String = "#Template(" + templateName + ")";
+				var template : String = PageUtils.templateCombination(templateName);
 				
 				setElement(template);
 			}

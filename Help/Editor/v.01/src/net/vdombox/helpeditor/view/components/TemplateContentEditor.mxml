@@ -59,7 +59,7 @@
 				
 				invalidateDisplayList();
 			}
-					
+			
 		]]>
 	</mx:Script>
 	
