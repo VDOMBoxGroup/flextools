@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import flash.ui.ContextMenu;
 	
 	import mx.core.UIComponent;
+	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
@@ -328,7 +329,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function createNew( object : Object ) : void
 		{
-			var createNewObjectWindow : NameObjectWindow = new NameObjectWindow( "" );	
+			var createNewObjectWindow : NameObjectWindow = new NameObjectWindow( "", ResourceManager.getInstance().getString( "DataBase_General", "renaem_table_window_title" ) );	
 			createNewObjectWindow.title = "New DataBase";
 			createNewObjectWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			createNewObjectWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );

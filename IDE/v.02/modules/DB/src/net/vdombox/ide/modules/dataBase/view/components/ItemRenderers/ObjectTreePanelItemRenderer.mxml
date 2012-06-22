@@ -133,7 +133,7 @@
 			
 			private function renameContextMenuHandler( event : Event ) : void
 			{
-				var renameWindow : NameObjectWindow = new NameObjectWindow( treeListData.label );	
+				var renameWindow : NameObjectWindow = new NameObjectWindow( treeListData.label, resourceManager.getString( "DataBase_General", "renaem_table_window_title" ) );	
 				renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 				renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 				

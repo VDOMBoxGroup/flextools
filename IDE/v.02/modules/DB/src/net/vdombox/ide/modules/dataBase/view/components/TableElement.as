@@ -237,7 +237,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 		
 		public function openRenameWindow() : void
 		{
-			var renameWindow : NameObjectWindow = new NameObjectWindow( _objectVO.name );	
+			var renameWindow : NameObjectWindow = new NameObjectWindow( _objectVO.name, resourceManager.getString( "DataBase_General", "renaem_table_window_title" ) );	
 			renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 			

@@ -3,7 +3,9 @@ package net.vdombox.ide.modules.dataBase.view
 	import flash.events.Event;
 	
 	import mx.events.FlexEvent;
+	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
@@ -11,7 +13,6 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.view.components.BaseVisualEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
@@ -161,7 +162,7 @@ package net.vdombox.ide.modules.dataBase.view
 		private function newTableHandler( event : DataTablesEvents ) : void
 		{
 			
-			var createNewObjectWindow : NameObjectWindow = new NameObjectWindow( "" );	
+			var createNewObjectWindow : NameObjectWindow = new NameObjectWindow( "", ResourceManager.getInstance().getString( "DataBase_General", "renaem_table_window_title" ) );	
 			createNewObjectWindow.title = "New Table";
 			createNewObjectWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			createNewObjectWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
