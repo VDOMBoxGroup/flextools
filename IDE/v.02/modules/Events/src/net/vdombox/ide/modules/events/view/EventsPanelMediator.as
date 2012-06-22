@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.events.view
 	import mx.events.DragEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
+	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
@@ -394,7 +395,7 @@ package net.vdombox.ide.modules.events.view
 		
 		private function openCreateServerActionWindow() : void
 		{
-			var renameWindow : NameObjectWindow = new NameObjectWindow( "" );	
+			var renameWindow : NameObjectWindow = new NameObjectWindow( "", ResourceManager.getInstance().getString( "Scripts_General", "create_action_window_action_title" ) );	
 			renameWindow.title = "Add Server Action";
 			renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
