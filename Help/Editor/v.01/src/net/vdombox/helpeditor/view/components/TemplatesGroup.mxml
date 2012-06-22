@@ -404,13 +404,8 @@
 			
 			protected function templatesAccordion_changeHandler(event:IndexChangedEvent):void
 			{
-				for each (var folder : TemplatesAccordionChild in templatesAccordion.getChildren())
-				{
-					if (folder == selectedFolder)
-						continue;
-					
-					folder.selectedTemplate = null;
-				}
+				if (selectedTemplate)
+					selectedTemplateChanged(null);
 			}
 			
 			public function saveTemplates () : void
@@ -563,6 +558,8 @@
 				
 				dispatchEvent(renameEvent);
 			}
+			
+			
 		]]>
 	</mx:Script>
 	
