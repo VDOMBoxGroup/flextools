@@ -21,6 +21,7 @@
 			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.events.EditorEvent;
 			import net.vdombox.ide.common.events.FindBoxEvent;
+			import net.vdombox.ide.common.interfaces.IEventBaseVO;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.scripts.events.EditAreaEvent;
@@ -148,6 +149,11 @@
 			public function set hashLibraryArray( hashLibraries : HashLibraryArray ) : void
 			{
 				pythonScriptEditor.hashLibraryArray = hashLibraries;
+			}
+			
+			public function setActionVO() : void
+			{
+				pythonScriptEditor.actionVO = actionVO as IEventBaseVO;
 			}
 			
 		]]>

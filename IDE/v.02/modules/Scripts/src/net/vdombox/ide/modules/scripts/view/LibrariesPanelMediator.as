@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import mx.resources.ResourceManager;
+	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
@@ -173,7 +175,7 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private function createLibraryHandler( event : LibrariesPanelEvent ) : void
 		{
-			var renameWindow : NameObjectWindow = new NameObjectWindow( "" );	
+			var renameWindow : NameObjectWindow = new NameObjectWindow( "", ResourceManager.getInstance().getString( "Scripts_General", "create_action_window_library_title" ) );	
 			renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 			

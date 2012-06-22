@@ -12,7 +12,6 @@ package net.vdombox.ide.modules.scripts.controller
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.view.ServerScriptsPanelMediator;
-	import net.vdombox.utils.MD5Utils;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

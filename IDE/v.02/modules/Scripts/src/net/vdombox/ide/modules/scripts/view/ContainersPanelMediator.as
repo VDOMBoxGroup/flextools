@@ -72,8 +72,6 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 			
 			interests.push( Notifications.PAGES_GETTED );
-			
-			interests.push( Notifications.GET_PAGES_STRUCTURE );
 
 			return interests;
 		}
@@ -94,7 +92,6 @@ package net.vdombox.ide.modules.scripts.view
 					{
 						isActive = true;
 						sendNotification( TypesProxy.GET_TYPES );
-						sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
 					}
 
 					break;
@@ -112,19 +109,14 @@ package net.vdombox.ide.modules.scripts.view
 				case TypesProxy.TYPES_GETTED:
 				{
 					types = body as Array;
+					
+					sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication  );
 					break;
 				}
 					
 				case Notifications.PAGES_GETTED:
 				{
 					var pages : Array = body as Array;
-					
-					var pageVO : PageVO;
-					
-					for each ( pageVO in pages )
-					{
-						sendNotification( Notifications.GET_STRUCTURE, { pageVO: pageVO } );
-					}
 
 					showPages( pages );
 					
@@ -164,27 +156,14 @@ package net.vdombox.ide.modules.scripts.view
 						var pageXML : XML = containersPanel.structure.( @id == structure.@id )[ 0 ];
 						pageXML.setChildren( new XMLList() ); //TODO: strange construction
 						pageXML.appendChild( structure.* );
-						
-						if ( structure.@id == statesProxy.selectedPage.id )
-							selectCurrentPage( false );
+						selectCurrentPage( false );
 					}
 					break;
 				}
 					
 				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
-					//sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
-					
-					selectCurrentPage( false );
-					
-					break;
-				}
-					
-				case Notifications.GET_PAGES_STRUCTURE:
-				{
-					//sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
-					
-					sendNotification( Notifications.PAGES_STRUCTURE_GETTED, containersPanel.structure );
+					sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
 					
 					break;
 				}
@@ -219,7 +198,7 @@ package net.vdombox.ide.modules.scripts.view
 			if ( !needGetPageStructure )
 				return;
 			
-			//sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
+			sendNotification( Notifications.GET_STRUCTURE, { pageVO: statesProxy.selectedPage } );
 		}
 		
 		private function showPages( pages : Array ) : void

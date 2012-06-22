@@ -51,7 +51,7 @@
 			
 			private function renameContextMenuHandler( event : Event ) : void
 			{
-				var renameWindow : NameObjectWindow = new NameObjectWindow( data.name );	
+				var renameWindow : NameObjectWindow = new NameObjectWindow( data.name, resourceManager.getString( "Scripts_General", "create_action_window_action_title" ) );	
 				renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 				renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 				

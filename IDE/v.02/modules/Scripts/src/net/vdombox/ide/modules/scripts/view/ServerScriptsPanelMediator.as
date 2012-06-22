@@ -267,7 +267,7 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function createActionHandler( event : ServerScriptsPanelEvent ) : void
 		{
-			var renameWindow : NameObjectWindow = new NameObjectWindow( "" );	
+			var renameWindow : NameObjectWindow = new NameObjectWindow( "", ResourceManager.getInstance().getString( "Scripts_General", "create_action_window_action_title" ) );	
 			renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 			

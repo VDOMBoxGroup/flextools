@@ -84,6 +84,7 @@ package net.vdombox.ide.modules.scripts.view
 			hashLibraryProxy = facade.retrieveProxy( HashLibraryProxy.NAME ) as HashLibraryProxy;
 			
 			scriptEditor.hashLibraryArray = hashLibraryProxy.hashLibraries;
+			scriptEditor.setActionVO();
 			
 			addHandlers();
 		}
