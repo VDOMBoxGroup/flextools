@@ -1,6 +1,7 @@
 package net.vdombox.editors.parsers.python
 {
 	import net.vdombox.editors.HashLibraryArray;
+	import net.vdombox.editors.parsers.StructureDB;
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
@@ -425,7 +426,9 @@ package net.vdombox.editors.parsers.python
 			
 			
 			if ( name == 'self' && actionVO is ServerActionVO && !tokenScopeClass )
-				a = typeDB.getVectorByType( ServerActionVO( actionVO ).containerVO.typeVO.name );
+			{
+				a = StructureDB.getChildrenForObject( ServerActionVO( actionVO ).containerVO, bp );
+			}
 
 
 			//3. or is it in the class/inheritance scope?

@@ -100,11 +100,14 @@ package net.vdombox.editors.parsers.vdomxml
 			return typeField;
 		}
 		
-		public function getVectorByType( typeName : String ) : Vector.<String>
-		{
-			typeName = typeName.toLowerCase();
-			
-			var typeField : Field = data.getValue( typeName );
+		public function getVectorByType( typeID : String ) : Vector.<String>
+		{			
+			var typeField : Field;
+			for each( typeField in data.toArray() )
+			{
+				if ( typeField.typeVO.id == typeID )
+					break;
+			}
 			
 			var a : Vector.<String> = new Vector.<String>();
 			
