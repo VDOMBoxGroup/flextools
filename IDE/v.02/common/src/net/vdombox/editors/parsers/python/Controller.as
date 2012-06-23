@@ -11,6 +11,7 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.Location;
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	
 	import ro.victordramba.thread.ThreadEvent;
 	import ro.victordramba.thread.ThreadsController;
@@ -76,7 +77,8 @@ package net.vdombox.editors.parsers.python
 		private var fld : ScriptAreaComponent;
 		
 		private var hashLibraries : HashLibraryArray;
-
+		
+		private var _actionVO : IEventBaseVO;
 		
 
 		public function saveTypeDB() : void
@@ -95,7 +97,7 @@ package net.vdombox.editors.parsers.python
 		{
 			throw new Error( 'restoreTypeDB not supported' );
 			var so : SharedObject = SharedObject.getLocal( 'ascc-type' );
-			TypeDB.setDB( 'restored', so.data.typeDB );
+			ClassDB.setDB( 'restored', so.data.typeDB );
 		}
 
 		/*public function addTypeDB(typeDB:TypeDB, name:String):void
@@ -120,7 +122,7 @@ package net.vdombox.editors.parsers.python
 
 		public function getMemberList( index : int ) : Vector.<String>
 		{
-			return parser.newResolver().getMemberList( fld.text, index, hashLibraries );
+			return parser.newResolver().getMemberList( fld.text, index, hashLibraries , _actionVO );
 		}
 
 		public function getFunctionDetails( index : int ) : String
@@ -167,6 +169,11 @@ package net.vdombox.editors.parsers.python
 		public function set hashLibraryArray( _hashLibraries : HashLibraryArray ) : void
 		{
 			hashLibraries = _hashLibraries;
+		}
+		
+		public function set actionVO( actVO : IEventBaseVO ) : void
+		{
+			_actionVO = actVO;
 		}
 	}
 }

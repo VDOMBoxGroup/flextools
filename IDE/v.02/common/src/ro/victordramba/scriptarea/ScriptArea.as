@@ -881,6 +881,7 @@ package ro.victordramba.scriptarea
 
 			//simple tabs, 4 spaces, no align
 			visibleText = visibleText.replace( /\t/g, "    " );
+			//visibleText = visibleText.replace( /&/g, "&amp;" );
 
 			tf.htmlText = visibleText;
 			
@@ -965,7 +966,7 @@ package ro.victordramba.scriptarea
 
 		private function htmlEnc( str : String ) : String
 		{
-			return str.replace( /\</g, "&lt;" ).replace( /\>/g, "&gt;" );
+			return str.replace( /&/g, "&amp;" ).replace( /\</g, "&lt;" ).replace( /\>/g, "&gt;" );
 		}
 	}
 }

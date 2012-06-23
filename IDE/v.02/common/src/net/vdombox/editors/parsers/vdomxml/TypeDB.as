@@ -100,6 +100,28 @@ package net.vdombox.editors.parsers.vdomxml
 			return typeField;
 		}
 		
+		public function getVectorByType( typeName : String ) : Vector.<String>
+		{
+			typeName = typeName.toLowerCase();
+			
+			var typeField : Field = data.getValue( typeName );
+			
+			var a : Vector.<String> = new Vector.<String>();
+			
+			if ( typeField.members.toArray().length == 1 )
+			{
+				var attributeDescriptions : Array = typeField.typeVO.attributeDescriptions;
+				var attributeDescriptionVO : AttributeDescriptionVO;
+				
+				for each ( attributeDescriptionVO in attributeDescriptions )
+				{
+					a.push( attributeDescriptionVO.name );
+				}
+			}
+			
+			return a;
+		}
+		
 		public function toString() : String
 		{
 			//return data.toArray().join(',');

@@ -58,7 +58,7 @@ package net.vdombox.editors.parsers.python
 			this.fileName = fileName;
 		}
 
-		private function get typeDB() : TypeDB
+		private function get typeDB() : ClassDB
 		{
 			return tokenizer.typeDB;
 		}
@@ -121,7 +121,7 @@ package net.vdombox.editors.parsers.python
 			{
 				tokenizer = tokenizer2;
 				tokenizer2 = null;
-				TypeDB.setDB( fileName, tokenizer.typeDB );
+				ClassDB.setDB( fileName, tokenizer.typeDB );
 			}
 			return b;
 		}

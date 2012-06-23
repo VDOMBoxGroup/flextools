@@ -1,20 +1,27 @@
 package net.vdombox.editors.parsers.python
 {
 	import net.vdombox.editors.HashLibraryArray;
+	import net.vdombox.editors.parsers.vdomxml.TypeDB;
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
+	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import ro.victordramba.util.HashMap;
 
 
 	internal class Resolver
 	{
+		private var classDB : ClassDB;
 		private var typeDB : TypeDB;
 		private var tokenizer : Tokenizer;
 
 		private var tokenScopeClass : Field;
+		
+		private var a : Vector.<String>;
 
 		public function Resolver( tokenizer : Tokenizer )
 		{
 			this.tokenizer = tokenizer;
+			this.classDB = ClassDB.inst;
 			this.typeDB = TypeDB.inst;
 		}
 
@@ -57,7 +64,7 @@ package net.vdombox.editors.parsers.python
 
 				//inheritance
 				scope = tokenScopeClass;
-				while ( ( scope = typeDB.resolveName( scope.extendz ) ) )
+				while ( ( scope = classDB.resolveName( scope.extendz ) ) )
 					for each ( f in scope.members.toArray() )
 						if ( f.access != 'private' && ( !isStatic || f.isStatic ) && f.name == name )
 							return true;
@@ -76,7 +83,7 @@ package net.vdombox.editors.parsers.python
 			var imports : HashMap = findImports( t );
 
 			var found : Boolean = false;
-			var missing : Vector.<String> = typeDB.listImportsFor( name )
+			var missing : Vector.<String> = classDB.listImportsFor( name )
 			loop1: for each ( var pack : String in missing )
 			{
 				for each ( var line : String in imports.toArray() )
@@ -114,7 +121,7 @@ package net.vdombox.editors.parsers.python
 			var a : Vector.<String> = new <String>["__abs__", "__add__", "__and__", "__bases__", "__call__", "__class__", "__cmp__", "__coerce__", "__del__", "__delattr__", "__delitem__", "__delslice__", "__dict__", "__div__", "__divmod__", "__float__", "__getattr__", "__getitem__", "__getslice__", "__hash__", "__hex__", "__iadd__", "__iand__", "__idiv__", "__ilshift__", "__imod__", "__import__", "__init__", "__int__", "__invert__", "__ior__", "__ipow__", "__irshift__", "__isub__", "__ixor__", "__len__", "__long__", "__lshift__", "__members__", "__methods__", "__mod__", "__mul__", "__name__", "__neg__", "__nonzero__", "__oct__", "__or__", "__pos__", "__pow__", "__radd__", "__rand__", "__rdiv__", "__rdivmod__", "__repr__", "__rlshift__", "__rmod__", "__rmul__", "__ror__", "__rpow__", "__rrshift__", "__rshift__", "__rsub__", "__rxor__", "__setattr__", "__setitem__", "__setslice__", "__str__", "__sub__", "__version__", "__xor__", "abs", "and", "apply", "ArithmeticError", "array", "assert", "AssertionError", "AST", "atexit", "AttributeError", "BaseHTTPServer", "Bastion", "break", "callable", "CGIHTTPServer", "chr", "class", "cmd", "cmp", "codecs", "coerce", "commands", "compile", "compileall", "Complex", "complex", "continue", "copy", "dbhash", "def", "del", "delattr", "dir", "dircmp", "dis", "divmod", "dospath", "dumbdbm", "elif", "else", "emacs", "EOFError", "eval", "except", "Exception", "exec", "execfile", "filter", "finally", "find", "float", "FloatingPointError", "fmt", "fnmatch", "for", "from", "ftplib", "getattr", "getopt", "glob", "global", "globals", "gopherlib", "grep", "group", "hasattr", "hash", "hex", "htmllib", "httplib", "id", "if", "ihooks", "imghdr", "import", "ImportError","imputil", "in", "IndentationError", "IndexError", "input", "int", "intern", "IOError", "is", "isinstance", "issubclass", "joinfields", "KeyError", "KeyboardInterrupt", "lambda", "len", "linecache", "list", "local", "lockfile", "long", "LookupError", "macpath", "macurl2path", "mailbox", "mailcap", "map", "match", "math", "max", "MemoryError", "mimetools", "Mimewriter", "mimify", "min", "mutex", "NameError", "newdir", "ni", "nntplib", "None", "not", "ntpath", "nturl2path", "oct", "open", "or", "ord", "os", "ospath", "OverflowError", "Para", "pass", "pdb", "pickle", "pipes", "poly", "popen2", "posixfile", "posixpath", "pow", "print", "profile", "pstats", "pyclbr", "pyexpat", "Queue", "quopri", "raise", "rand", "random", "range", "raw_input", "reduce", "regex", "regsub", "reload", "repr", "return", "rfc822", "round", "RuntimeError", "sched", "search", "self", "setattr", "setdefault", "sgmllib", "shelve", "SimpleHTTPServer", "site", "slice", "sndhdr", "snmp", "SocketServer", "splitfields", "StandardError", "str", "string", "StringIO", "struct", "SyntaxError", "sys", "SystemError", "SystemExit", "TabError", "tb", "tempfile", "Tkinter", "toaiff", "token", "tokenize", "traceback", "try", "tty", "tuple", "type", "TypeError", "types", "tzparse", "unichr", "unicode", "unicodedata", "urllib", "urlparse", "UserDict", "UserList", "util", "uu", "ValueError", "vars", "wave", "webbrowser", "whatsound", "whichdb", "while", "whrandom", "xdrlib", "xml", "xmlpackage", "xrange", "ZeroDivisionError",  "zip", "zmod"];
 			
 			
-			for each ( f in typeDB.listAll() )
+			for each ( f in classDB.listAll() )
 			{
 				a.push( f.name );
 			}
@@ -184,7 +191,7 @@ package net.vdombox.editors.parsers.python
 
 		public function getAllTypes( isFunction : Boolean = true ) : Vector.<String>
 		{
-			var lst : Vector.<Field> = typeDB.listAllTypes();
+			var lst : Vector.<Field> = classDB.listAllTypes();
 			var a : Vector.<String> = new Vector.<String>;
 			for each ( var f : Field in lst )
 				a.push( f.name );
@@ -229,17 +236,21 @@ package net.vdombox.editors.parsers.python
 		/**
 		 * called when you enter a dot
 		 */
-		public function getMemberList( text : String, pos : int, hashLibraries : HashLibraryArray ) : Vector.<String>
+		public function getMemberList( text : String, pos : int, hashLibraries : HashLibraryArray, actionVO : IEventBaseVO ) : Vector.<String>
 		{
-			var a : Vector.<String> = resolve( text, pos, hashLibraries );
+			a = new Vector.<String>;
 			
-			if ( a )
+			var flag : Boolean = resolve( text, pos, hashLibraries, actionVO );
+			
+			if ( flag )
 				return a;
-			else
-				a = new Vector.<String>;
+				
 			
 			if ( !resolved )
-				return null;
+				if ( !a )
+					return null;
+				else
+					return a;
 
 			//convert member list in string list
 			
@@ -275,7 +286,7 @@ package net.vdombox.editors.parsers.python
 
 			var protectedOK : Boolean = false;
 
-			for ( ; type; type = typeDB.resolveName( type.extendz ) )
+			for ( ; type; type = classDB.resolveName( type.extendz ) )
 			{
 				if ( tokenScopeClass == type )
 				{
@@ -337,7 +348,7 @@ package net.vdombox.editors.parsers.python
 		private var resolvedIsClass : Boolean;
 		private var resolvedRef : Field;
 
-		private function resolve( text : String, pos : int, hashLibraries : HashLibraryArray = null ) : Vector.<String>
+		private function resolve( text : String, pos : int, hashLibraries : HashLibraryArray = null, actionVO : IEventBaseVO = null ) : Boolean
 		{
 			resolved = null;
 			resolvedRef = null;
@@ -345,24 +356,16 @@ package net.vdombox.editors.parsers.python
 
 			var t0 : Token = tokenizer.tokenByPos( pos );
 			if ( t0.type == Token.COMMENT )
-				return null;
-			
-			/*if ( t0.parent.imports && t0.parent.imports.hasKey( t0.string ) )
-			{
-				var impotrElement : Object = t0.parent.imports.getValue( t0.string );
-				return hashLibraries.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName );
-			}*/
+				return false;
 
 			var bp : BackwardsParser = new BackwardsParser;
 			if ( !bp.parse( text, pos ) )
-				return null;
-
-			//debug('bp names: '+bp.names);
+				return false;
 
 			//find the scope
 			var t : Token = tokenizer.tokenByPos( bp.startPos );
 			if ( !t )
-				return null;
+				return false;
 
 			var i : int = 0;
 			var name : String = bp.names[ 0 ];
@@ -396,7 +399,8 @@ package net.vdombox.editors.parsers.python
 				if ( t.parent.imports.hasKey( name ) )
 				{
 					var impotrElement : Object = t.parent.imports.getValue( name );
-					return hashLibraries.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp );
+					a = hashLibraries.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp );
+					return true;
 					//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );
 				}
 					
@@ -419,17 +423,13 @@ package net.vdombox.editors.parsers.python
 				}
 			}
 			
-			if ( resolved )
-			{
-				//non-static instance context
-				
-				if ( name == 'super' )
-					resolved = typeDB.resolveName( t.scope.parent.extendz );
-			}
+			
+			if ( name == 'self' && actionVO is ServerActionVO && !tokenScopeClass )
+				a = typeDB.getVectorByType( ServerActionVO( actionVO ).containerVO.typeVO.name );
 
 
 			//3. or is it in the class/inheritance scope?
-			for ( scope = tokenScopeClass; !resolved && scope; scope = typeDB.resolveName(scope.extendz) )
+			for ( scope = tokenScopeClass; !resolved && scope; scope = classDB.resolveName(scope.extendz) )
 			{
 				var m : Field = scope.members.getValue( name );
 				if ( !m )
@@ -449,14 +449,14 @@ package net.vdombox.editors.parsers.python
 			//4. last, is it an imported thing?
 			if ( !resolved && imports )
 			{
-				resolved = typeDB.resolveName( new Multiname( name, imports ) );
+				resolved = classDB.resolveName( new Multiname( name, imports ) );
 				if ( resolved && resolved.fieldType == 'class' && itemType == BackwardsParser.NAME )
 					resolvedIsClass = true;
 			}
 
 			//we didn't find the first name, we quit
 			if ( !resolved )
-				return null;
+				return false;
 			checkReturnType();
 
 
@@ -471,7 +471,7 @@ package net.vdombox.editors.parsers.python
 				resolvedIsClass = false;
 				itemType = bp.types[ i ];
 				if ( !resolved )
-					return null;
+					return false;
 				checkReturnType();
 			} while ( resolved );
 
@@ -495,11 +495,11 @@ package net.vdombox.editors.parsers.python
 				}
 				else*/ if ( resolved.fieldType == 'def' && itemType != BackwardsParser.FUNCTION )
 				{
-					resolved = typeDB.resolveName( new Multiname( 'Def' ) );
+					resolved = classDB.resolveName( new Multiname( 'Def' ) );
 				}
 			}
 			
-			return null;
+			return false;
 		}
 
 		private function findScopeClass( scope : Field ) : void

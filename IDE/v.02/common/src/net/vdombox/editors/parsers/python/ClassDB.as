@@ -5,16 +5,16 @@ package net.vdombox.editors.parsers.python
 	
 	import ro.victordramba.util.HashMap;
 
-	public class TypeDB
+	public class ClassDB
 	{
-		static private var dbList:Vector.<TypeDB> = new Vector.<TypeDB>;
+		static private var dbList:Vector.<ClassDB> = new Vector.<ClassDB>;
 		
-		static public function get inst():TypeDB
+		static public function get inst():ClassDB
 		{
 			return dbList[0];
 		}
 		
-		static public function setDB(name:String, typeDB:TypeDB):void
+		static public function setDB(name:String, typeDB:ClassDB):void
 		{
 			typeDB.dbName = name;
 			for (var i:int=0; i<dbList.length; i++)
@@ -34,7 +34,7 @@ package net.vdombox.editors.parsers.python
 		{
 			//TODO remove it from the list!
 			//quick one :D
-			setDB(name, new TypeDB);
+			setDB(name, new ClassDB);
 		}
 		
 		
@@ -44,7 +44,7 @@ package net.vdombox.editors.parsers.python
 		
 		private var dbIndex:int;
 		
-		private function get parentDB():TypeDB
+		private function get parentDB():ClassDB
 		{
 			return dbIndex < dbList.length-1 ? dbList[dbIndex+1] : null;
 		}
@@ -249,87 +249,19 @@ package net.vdombox.editors.parsers.python
 		static private var fieldLst:Array = ('pos,fieldType,name,access,' + 
 				'hasRestParams,isGetter,defaultValue,isStatic').split(',');
 		
-		/*public function set ser(arr:Array):void
-		{
-			var list:Array = arr[0];
-			var tList:Array = arr[1];
-			var des:Array = [];
-			
-			function deserFld(id:int):Field
-			{
-				if (des[id]) return des[id];
-				
-				var o:Object = list[id];
-				var fld:Field = new Field(null);
-				des[id] = fld;
-				for each (var k:String in fieldLst)
-					fld[k] = o[k];
-				
-				var fld2:Field;
-				for each (id in o.members)
-				{
-					fld2 = deserFld(id);
-					fld.members.setValue(fld2.name, fld2);
-				}
-				for each (id in o.params)
-				{
-					fld2 = deserFld(id);
-					fld.params.setValue(fld2.name, fld2);
-				}
-				if (o.parent)
-					fld.parent = deserFld(o.parent);
-					
-				if (o.type)
-					fld.type = deserMName(o.type);
-				if (o.extendz)
-					fld.extendz = deserMName(o.extendz);
-				
-					
-				return fld;
-			}
-			
-			function deserMName(a:Array):Multiname
-			{
-				var imports:HashMap = new HashMap;
-				for (var i:uint=1; i<a.length; i++)
-					imports.setValue(a[i], a[i]);
-				return new Multiname(a[0], imports);
-			}
-			
-			for each (var pair:Array in tList)
-			{
-				addDefinition(pair[0], deserFld(pair[1]));
-			}
-		}*/
-		
 		public function toByteArray():ByteArray
 		{
-			registerClassAlias('TypeDB', TypeDB);
+			registerClassAlias('TypeDB', ClassDB);
 			
 			var ba:ByteArray = new ByteArray;
 			ba.writeObject(this);
 			return ba;
 		}
 		
-		/*public static function fromByteArray(ba:ByteArray):TypeDB
-		{
-			registerClassAlias('TypeDB', TypeDB);
-			return ba.readObject() as TypeDB;
-		}*/
-		
 		public function toString():String
 		{
 			//return data.toArray().join(',');
 			return '[TypeDB '+dbName+']';
 		}
-		
-		/*public function getQualifiedType(packageName:String, className:String):Field
-		{
-			var pack:HashMap = data.getValue(packageName);
-			if (!pack) return null;
-			if (pack.hasKey(className))
-				return pack.getValue(className);
-			return null; 
-		}*/
 	}
 }

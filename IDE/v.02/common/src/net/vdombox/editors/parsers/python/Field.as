@@ -1,6 +1,8 @@
 package net.vdombox.editors.parsers.python
 {
 	
+	import net.vdombox.ide.common.model._vo.TypeVO;
+	
 	import ro.victordramba.util.HashList;
 	import ro.victordramba.util.HashMap;
 
@@ -27,6 +29,8 @@ package net.vdombox.editors.parsers.python
 		 * unresolved type
 		 */
 		public var type:Multiname;
+		
+		public var typeVO : TypeVO;
 
 
 		/**

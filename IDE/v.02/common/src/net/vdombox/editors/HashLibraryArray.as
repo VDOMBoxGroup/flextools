@@ -122,7 +122,7 @@ package net.vdombox.editors
 					var f2 : Field;
 					for each ( f2 in scope.selfMembers.toArray() )
 					{
-						if ( f2.isStatic || f2.isClassMethod )
+						if ( f2.isStatic || f2.isClassMethod || ( f2.fieldType == "var" && f2.access == "public" && f2.parent && f2.parent.name == importToken ) )
 							a.push( f2.name );
 					}
 				}

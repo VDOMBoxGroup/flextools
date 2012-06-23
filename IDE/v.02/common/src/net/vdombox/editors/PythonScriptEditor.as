@@ -6,6 +6,7 @@ package net.vdombox.editors
 	import net.vdombox.editors.parsers.python.Controller;
 	import net.vdombox.editors.parsers.vdomxml.AssistMenuVdomXML;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	
 	import spark.components.SkinnableContainer;
 
@@ -70,6 +71,11 @@ package net.vdombox.editors
 		public function set hashLibraryArray( hashLibraries : HashLibraryArray ) : void
 		{
 			controller.hashLibraryArray = hashLibraries;
+		}
+		
+		public function set actionVO( actionVO : IEventBaseVO ) : void
+		{
+			controller.actionVO = actionVO;
 		}
 	}
 }

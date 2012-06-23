@@ -17,7 +17,7 @@ package net.vdombox.ide.common.view.components.windows
 		[SkinPart( required="true" )]
 		public var tableName : TextInput;
 		
-		public function NameObjectWindow( __nameTable : String )
+		public function NameObjectWindow( __nameTable : String, __nameWindow : String )
 		{
 			super();
 			
@@ -34,7 +34,8 @@ package net.vdombox.ide.common.view.components.windows
 			maxHeight = 170;
 			
 			_nameTable = __nameTable;
-			title = resourceManager.getString( "DataBase_General", "renaem_table_window_title" );
+			title = __nameWindow;
+			//title = resourceManager.getString( "DataBase_General", "renaem_table_window_title" );
 			
 			addEventListener( KeyboardEvent.KEY_DOWN, keyDownEnterEscHandler, true, 0 , true );
 			

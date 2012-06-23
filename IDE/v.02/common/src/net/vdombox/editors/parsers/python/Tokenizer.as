@@ -61,7 +61,7 @@ package net.vdombox.editors.parsers.python
 
 		public function Tokenizer( str : String )
 		{
-			_typeDB = new TypeDB;
+			_typeDB = new ClassDB;
 
 			this.string = str;
 			pos = 0;
@@ -342,14 +342,14 @@ package net.vdombox.editors.parsers.python
 		private var access : String;
 
 		internal var topScope : Field;
-		private var _typeDB : TypeDB;
+		private var _typeDB : ClassDB;
 		private var newBlock : Boolean;
 		
 		private var tabOtstyp : int = 0;
 		private var spaceOtstyp : int = 0;
 		
 
-		internal function get typeDB() : TypeDB
+		internal function get typeDB() : ClassDB
 		{
 			return _typeDB;
 		}
@@ -646,9 +646,9 @@ package net.vdombox.editors.parsers.python
 				}
 				else
 				{
-					var currentPos : int = tokens.length - 4;
+					var currentPos : int = tokens.length - 2;
 					var prevToken : Token = tokens[currentPos - 1];
-					while ( prevToken.string == "." )
+					while ( prevToken && prevToken.string == "." )
 					{
 						currentPos -= 2;
 						prevToken = tokens[currentPos - 1];
@@ -795,7 +795,7 @@ package net.vdombox.editors.parsers.python
 				return null;
 			//TODO: binary search
 			for ( var i : int = tokens.length - 1; i >= 0; i-- )
-				if ( tokens[ i ] && pos > tokens[ i ].pos )
+				if ( tokens[ i ] && pos >= tokens[ i ].pos )
 					return Token.map[ tokens[ i ].id ];
 			return null;
 		}

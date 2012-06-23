@@ -98,10 +98,12 @@ package net.vdombox.editors.parsers.python
 			}
 			else
 				return false;
-
-			startPos--;
-			if ( text.charAt( startPos ) == '.' )
+			
+			if ( text.charAt( startPos - 1) == '.' )
+			{
+				startPos--;
 				return _parse( false );
+			}
 			return true;
 		}
 
