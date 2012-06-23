@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import mx.utils.ObjectUtil;
+	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
@@ -129,7 +131,7 @@ package net.vdombox.ide.modules.scripts.view
 					if ( !containersPanel.structure )
 						return;
 					
-					var structure : XML = body as XML;
+					var structure : XML = ObjectUtil.copy( body ) as XML;
 					if ( !structure )
 						structure = new XML();
 					else

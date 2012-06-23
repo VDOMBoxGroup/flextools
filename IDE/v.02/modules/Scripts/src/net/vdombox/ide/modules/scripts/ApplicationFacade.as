@@ -17,6 +17,7 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.GetScriptRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.SaveScriptRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.SetSettingsCommand;
+	import net.vdombox.ide.modules.scripts.controller.SetStructureProxyCommand;
 	import net.vdombox.ide.modules.scripts.controller.StartupCommand;
 	import net.vdombox.ide.modules.scripts.controller.TearDownCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessApplicationProxyMessageCommand;
@@ -88,6 +89,9 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( Notifications.TEAR_DOWN, TearDownCommand );
 			
 			registerCommand( Notifications.GET_RESOURCE_REQUEST, GetResourceRequestCommand );
+			
+			registerCommand( Notifications.STRUCTURE_GETTED, SetStructureProxyCommand );
+			
 		}
 	}
 }
