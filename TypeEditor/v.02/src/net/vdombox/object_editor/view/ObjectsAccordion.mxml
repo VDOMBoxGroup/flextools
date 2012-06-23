@@ -12,7 +12,11 @@
 	
 	<fx:Script>
 		<![CDATA[		
+			import net.vdombox.object_editor.model.Item;
+			
 			import spark.events.TextOperationEvent;
+			
+			public var types : Array = new Array();
 						
 			public function  addObject(object:DisplayObject):void
 			{
@@ -37,27 +41,69 @@
 			
 			private function find() : void
 			{
-				if ( typeFilter.text.length > 0 && typeFilter.text != resourceManager.getString( 'Wysiwyg_General', 'toolbox_panel_filter') )
+				if ( typeFilter.text.length > 0 && typeFilter.text != "Find type" )
 				{
 					accordion.removeAllChildren();
 					
+					var list:AccordionNavigatorContent = new AccordionNavigatorContent();
+					list.name  = "Find types";
+					list.label = "Find types";
 					
-					/*for each ( var typeVO : TypeVO in _types )
+					for each ( var item : Item in types )
 					{
-						if ( typeVO.displayName.toLowerCase().indexOf( typeFilter.text ) >= 0 )
-							typesCategory.addType( typeVO );
-					}*/
+						if ( item.label.toLocaleLowerCase().indexOf( typeFilter.text.toLocaleLowerCase() ) != -1 )
+							list.appendObject(item);
+					}
+					
+					addObject( list );
 					
 					cross.visible = true;
 				}
 				else
 				{
-					accordion.removeAllChildren();
-					/*categories = [];
-					showTypes();*/
+					writeOutAllTypes();
 					
 					cross.visible = false;
 				}
+			}
+			
+			protected function typeFilter_focusInHandler(event:FocusEvent):void
+			{
+				if ( typeFilter.text == "Find type" )
+					typeFilter.text = "";
+			}
+			
+			protected function typeFilter_focusOutHandler(event:FocusEvent):void
+			{
+				if ( typeFilter.text == "" )
+				{
+					typeFilter.text = "Find type";
+					writeOutAllTypes();
+				}
+			}
+			
+			private function writeOutAllTypes() : void
+			{
+				accordion.removeAllChildren();
+				
+				for each ( var item : Item in types )
+				{
+					var list:AccordionNavigatorContent =  getObjectByName(item.groupName) as AccordionNavigatorContent;
+					if (!list)
+					{
+						list  	   = new AccordionNavigatorContent();
+						list.name  = item.groupName;
+						list.label = item.groupName;
+						addObject(list);
+					}			
+					list.appendObject(item);
+				}
+			}
+			
+			protected function cross_clickHandler(event:MouseEvent):void
+			{
+				typeFilter.text = "";
+				find();
 			}
 			
 		]]>
@@ -70,16 +116,17 @@
 			<s:VerticalLayout paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2"/>
 		</s:layout>
 		
-		<s:Group>
+		<s:Group width="100%">
 			<s:TextInput id="typeFilter" width="100%" 
 						 text="Find type" fontStyle="italic"
-						 change="typeFilter_changeHandler(event)" />
+						 change="typeFilter_changeHandler(event)" 
+						 focusIn="typeFilter_focusInHandler(event)" focusOut="typeFilter_focusOutHandler(event)" />
 			
 			<mx:Image id="cross" height="100%" verticalAlign="middle" right="4" visible="false" 
-					  />
+					  source="@Embed('assets/cross.png')" click="cross_clickHandler(event)"/>
 		</s:Group>
 		
-		<mx:Accordion id="accordion" color="0x323232" width="100%" height="100%" doubleClickEnabled="true"/>						
+		<mx:Accordion id="accordion" color="0x323232" width="100%" height="100%" doubleClickEnabled="true"/>
 	</s:Panel>	
 </s:Group>
 

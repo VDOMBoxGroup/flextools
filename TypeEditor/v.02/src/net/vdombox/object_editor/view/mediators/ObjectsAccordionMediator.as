@@ -42,7 +42,8 @@ package net.vdombox.object_editor.view.mediators
 				list.label = item.groupName;
 				view.addObject(list);
 			}			
-			list.appendObject(item);			
+			list.appendObject(item);	
+			view.types.push( item );
 		}
 
 		public function removeAllObjects():void
