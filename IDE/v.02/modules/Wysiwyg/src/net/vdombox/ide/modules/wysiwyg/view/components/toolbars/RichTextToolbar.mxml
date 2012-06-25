@@ -399,7 +399,7 @@
 			
 			private function onEditorAdded():void
 			{
-				if (tinyMCE && activeEditor)
+				if (tinyMCE && activeEditor && startContent)
 				{
 					activeEditor.startContent = startContent;
 					activeEditor.setContent(startContent);

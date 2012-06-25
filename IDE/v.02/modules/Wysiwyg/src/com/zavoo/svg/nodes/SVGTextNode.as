@@ -54,6 +54,8 @@ package com.zavoo.svg.nodes
 			if (this._text != '') {
 				this._textField = new TextField();
 				this._textField.autoSize = TextFieldAutoSize.LEFT;
+				
+				setAttributes();
 			}
 			
 			super.parse();
