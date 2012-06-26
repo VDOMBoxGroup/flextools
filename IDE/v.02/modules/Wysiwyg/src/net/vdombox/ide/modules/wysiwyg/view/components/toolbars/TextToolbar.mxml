@@ -113,6 +113,9 @@
 			
 			public function init( item : IRenderer ) : void
 			{
+				visible = false;
+				includeInLayout = false;
+				
 				try
 				{
 				_item = item;
@@ -143,9 +146,6 @@
 				RichEditableText( elementForEditing ).setFocus();
 				focusManager.setFocus( elementForEditing as IFocusManagerComponent );
 				
-				visible = false;
-				includeInLayout = false;
-
 				isInited = true;
 				enabled = true;
 
@@ -264,7 +264,7 @@
 
 				var cursor : IViewCursor = fonts.createCursor();
 
-				if ( attributesObject.hasOwnProperty( "fontfamily" ) )
+				if ( attributesObject.hasOwnProperty( "fontfamily" ) &&  attributesObject[ "fontfamily" ] != null )
 				{
 					if ( cursor.findFirst( { data: attributesObject[ "fontfamily" ].value.toLowerCase() } ) )
 						fontSelector.selectedItem = cursor.current;
@@ -280,7 +280,7 @@
 
 				cursor = fontSize.createCursor();
 
-				if ( attributesObject.hasOwnProperty( "fontsize" ) )
+				if ( attributesObject.hasOwnProperty( "fontsize" ) && attributesObject[ "fontsize" ] != null )
 				{
 					if ( cursor.findFirst( { data: attributesObject[ "fontsize" ].value.toLowerCase() } ) )
 						sizeSelector.selectedItem = cursor.current;
@@ -288,7 +288,7 @@
 						sizeSelector.selectedItem = null;
 				}
 
-				if ( attributesObject.hasOwnProperty( "fontweight" ) )
+				if ( attributesObject.hasOwnProperty( "fontweight" ) && attributesObject[ "fontweight" ] != null )
 				{
 					if ( attributesObject[ "fontweight" ].value == "bold" )
 						weightButton.selected = true;
@@ -296,7 +296,7 @@
 						weightButton.selected = false;
 				}
 
-				if ( attributesObject.hasOwnProperty( "fontstyle" ) )
+				if ( attributesObject.hasOwnProperty( "fontstyle" ) && attributesObject[ "fontstyle" ] != null )
 				{
 					if ( attributesObject[ "fontstyle" ].value == "italic" )
 						styleButton.selected = true;
@@ -304,7 +304,7 @@
 						styleButton.selected = false;
 				}
 
-				if ( attributesObject.hasOwnProperty( "textdecoration" ) )
+				if ( attributesObject.hasOwnProperty( "textdecoration" ) && attributesObject[ "textdecoration" ] != null )
 				{
 					if ( attributesObject[ "textdecoration" ].value == "underline" )
 						decorationButton.selected = true;
@@ -312,7 +312,7 @@
 						decorationButton.selected = false;
 				}
 
-				if ( attributesObject.hasOwnProperty( "color" ) )
+				if ( attributesObject.hasOwnProperty( "color" ) && attributesObject[ "color" ] != null )
 				{
 					var colorValue : String = attributesObject[ "color" ].value;
 
@@ -322,7 +322,7 @@
 					textColor.selectedColor = int( "0x" + colorValue );
 				}
 
-				if ( attributesObject.hasOwnProperty( "align" ) )
+				if ( attributesObject.hasOwnProperty( "align" ) && attributesObject[ "align" ] != null)
 				{
 					if ( attributesObject[ "align" ].value == "center" )
 					{
