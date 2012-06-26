@@ -20,7 +20,6 @@ package net.vdombox.ide.core.model.business
 	import net.vdombox.ide.core.events.SOAPErrorEvent;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.protect.Code;
-	import net.vdombox.utils.MD5Utils;
 
 	public dynamic class SOAP extends Proxy implements IEventDispatcher
 	{
@@ -34,7 +33,7 @@ package net.vdombox.ide.core.model.business
 			return instance;
 		}
 
-		private var webService : WebService;
+		private var webService : WebService = new WebService();;
 
 		private var dispatcher : EventDispatcher = new EventDispatcher();
 
@@ -45,7 +44,7 @@ package net.vdombox.ide.core.model.business
 		private var isLoadWSDLProcess : Boolean;
 
 		public function SOAP()
-		{
+		{			
 			if ( instance )
 				throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 		}
@@ -57,8 +56,6 @@ package net.vdombox.ide.core.model.business
 
 		public function connect( wsdl : String ) : void
 		{
-			webService = new WebService();
-
 			webService.wsdl = wsdl;
 			webService.useProxy = false;
 
@@ -67,6 +64,16 @@ package net.vdombox.ide.core.model.business
 
 			isLoadWSDLProcess = true;
 
+			webService.loadWSDL();
+		}
+		
+		public function reconnect() : void
+		{
+			webService.addEventListener( LoadEvent.LOAD, loadHandler );
+			webService.addEventListener( FaultEvent.FAULT, faultHandler );
+			
+			isLoadWSDLProcess = true;
+			
 			webService.loadWSDL();
 		}
 

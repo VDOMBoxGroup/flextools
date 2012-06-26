@@ -1,8 +1,8 @@
 package net.vdombox.ide.core.controller.requests
 {
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
@@ -86,7 +86,9 @@ package net.vdombox.ide.core.controller.requests
 				{
 					libraryVO = body.libraryVO as LibraryVO;
 					
-					if ( operation == PPMOperationNames.CREATE )
+					if ( operation == PPMOperationNames.READ )
+						applicationProxy.getLibrary( libraryVO, body.check as Boolean );
+					else if ( operation == PPMOperationNames.CREATE )
 						applicationProxy.createLibrary( libraryVO );
 					else if ( operation == PPMOperationNames.UPDATE )
 						applicationProxy.updateLibrary( libraryVO );
@@ -107,7 +109,13 @@ package net.vdombox.ide.core.controller.requests
 				{
 					globalActionVO = body.globalActionVO as GlobalActionVO;
 					
-					if ( operation == PPMOperationNames.UPDATE )
+					if ( operation == PPMOperationNames.READ )
+					{
+						applicationProxy.getServerActions("application", globalActionVO, body.check);
+						applicationProxy.getServerActions("session", globalActionVO, body.check);
+						applicationProxy.getServerActions("request", globalActionVO, body.check);
+					}
+					else if ( operation == PPMOperationNames.UPDATE )
 						applicationProxy.updateGlobal( globalActionVO );
 					
 					break;

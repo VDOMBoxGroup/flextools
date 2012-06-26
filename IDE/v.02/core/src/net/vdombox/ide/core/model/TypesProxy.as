@@ -208,7 +208,6 @@ package net.vdombox.ide.core.model
 			if ( !typesManager.hasServer( serverProxy.authInfo ) )
 			{
 				soap.get_all_types();
-				return;
 			}
 			else
 			{
@@ -238,12 +237,7 @@ package net.vdombox.ide.core.model
 							if( typeVO.container == 3 )
 								_topLevelTypes.push( typeVO );
 						}
-					}
-					else
-					{
-						var tt : int = 0 ;
-					}
-						
+					}						
 				}
 				
 				for each ( var str : String in _typesServer )

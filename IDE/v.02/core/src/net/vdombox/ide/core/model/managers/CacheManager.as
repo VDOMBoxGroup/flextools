@@ -202,8 +202,9 @@ package net.vdombox.ide.core.model.managers
 		{
 			var currentDate : Number = new Date().getTime();
 			var fileList : Array = cacheFolder.getDirectoryListing();
+			var file : File;
 			
-			for each ( var file : File in fileList )
+			for each ( file in fileList )
 			{
 				
 				/*var days : Number = ( currentDate - file.creationDate.time ) / 1000 / 60 / 60 / 24;
@@ -233,7 +234,7 @@ package net.vdombox.ide.core.model.managers
 
 				var item : Object = {}
 					
-				var halfCacheSize : Number = CACHE_SIZE / 2;
+				var halfCacheSize : Number = CACHE_SIZE * 0.5;
 
 				while ( cacheSize > halfCacheSize )
 				{

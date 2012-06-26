@@ -11,6 +11,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.model.ObjectProxy;
 	import net.vdombox.ide.core.model.PageProxy;
 	import net.vdombox.ide.core.model.ResourcesProxy;
+	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.TypesProxy;
 	import net.vdombox.ide.core.view.components.AlertWindow;
 	import net.vdombox.utils.WindowManager;
@@ -38,7 +39,7 @@ package net.vdombox.ide.core.controller
 					if ( label == "Session ID error" )
 					{
 						alertWindow.state = "question";	
-						alertWindow.content += " Do you want to log out?"
+						alertWindow.content += " Do you want to reconnect?"
 					}
 					else
 						alertWindow.state = "normal";
@@ -66,6 +67,9 @@ package net.vdombox.ide.core.controller
 				if ( label == "Session ID error" )
 				{
 					sendNotification( ApplicationFacade.SIGNOUT );
+					//sendNotification( ApplicationFacade.REQUEST_FOR_SIGNUP );
+					/*var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+					serverProxy.reconnect();*/
 				}
 				else
 				{

@@ -76,11 +76,13 @@ package net.vdombox.ide.core.controller.requests
 					if ( operation == PPMOperationNames.CREATE )
 						objectProxy.createServerAction( body.serverActionVO );
 					else if ( operation == PPMOperationNames.READ )
-						objectProxy.getServerAction( body.serverActionVO );
+						objectProxy.getServerAction( body.serverActionVO, body.check );
 					else if ( operation == PPMOperationNames.UPDATE )
 						objectProxy.setServerAction( body.serverActionVO );
 					else if ( operation == PPMOperationNames.DELETE )
 						objectProxy.deleteServerAction( body.serverActionVO );
+					else if( operation == PPMOperationNames.RENAME )
+						objectProxy.renameServerAction( body.serverActionVO, body.newName );
 					break;
 				}
 

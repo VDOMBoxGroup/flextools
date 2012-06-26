@@ -3,6 +3,7 @@ package net.vdombox.ide.core.view
 	import flash.desktop.NativeApplication;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.TypesProxy;
 	import net.vdombox.ide.core.view.components.InitialWindow;
@@ -56,6 +57,8 @@ package net.vdombox.ide.core.view
 //					if (statesProxy.selectedApplication)
 //						sendNotification( ApplicationFacade.OPEN_MAIN_WINDOW );
 //					else
+					var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+					if ( !serverProxy.reconected )
 						sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER );
 
 					break;

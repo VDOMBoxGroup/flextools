@@ -65,6 +65,13 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				}
 					
+				case ApplicationFacade.OBJECT_ALL_SERVER_ACTIONS_GETTED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.ALL_SERVER_ACTIONS, body );
+					
+					break;
+				}
+					
 				case ApplicationFacade.OBJECT_SERVER_ACTION_SETTED:
 				{
 					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTION, body );
@@ -79,12 +86,12 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				}
 					
-				/*case ApplicationFacade.OBJECT_SERVER_ACTION_RENAMED:
+				case ApplicationFacade.OBJECT_SERVER_ACTION_RENAMED:
 				{
-				message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.SERVER_ACTION, body );
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.RENAME, PPMObjectTargetNames.SERVER_ACTION, body );
 				
-				break;
-				}*/
+					break;
+				}
 					
 				case ApplicationFacade.OBJECT_SERVER_ACTION_DELETED:
 				{

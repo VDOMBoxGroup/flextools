@@ -32,7 +32,7 @@ package net.vdombox.ide.core.model
 		 * 15 minutes.
 		 * defolt SESSION-LIFETIME = 20 minutes.  
 		 */		
-		private static const PING_TIMER : uint = 1000 * 60 * 15;    
+		private static const PING_TIMER : uint = 900000;    
 		
 		public static const NAME : String = "ServerProxy";
 
@@ -64,6 +64,8 @@ package net.vdombox.ide.core.model
 		private var _pingServerTimer : Timer;
 		
 		private var hostVO : HostVO;
+		
+		public var reconected : Boolean = false;
 
 		public function get applications():Array
 		{
@@ -102,6 +104,8 @@ package net.vdombox.ide.core.model
 
 		public function connect( host : HostVO ) : void
 		{
+			reconected = false;
+			
 			_authInfo = new AuthInfoVO();
 			
 			hostVO = host;
@@ -112,6 +116,13 @@ package net.vdombox.ide.core.model
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_START );
 
 			soap.connect( _authInfo.WSDLFilePath );				
+		}
+		
+		public function reconnect( ) : void
+		{
+			reconected = true;
+			
+			soap.connect( _authInfo.WSDLFilePath );					
 		}
 
 		public function disconnect() : void
@@ -273,8 +284,9 @@ package net.vdombox.ide.core.model
 			_authInfo.setHostname( result.Hostname[ 0 ] );*/
 			
 			_authInfo.serverVersion = result.ServerVersion[0].toString();
-
+			
 			sendNotification( ApplicationFacade.SERVER_LOGIN_SUCCESSFUL, _authInfo );
+			
 			startInfiniteSession();
 			addHostInSharedObject();
 		}
@@ -325,8 +337,9 @@ package net.vdombox.ide.core.model
 				case "list_applications":
 				{
 					createApplicationList( result.Applications[ 0 ] );
-
-					sendNotification( ApplicationFacade.SERVER_APPLICATIONS_GETTED, _applications.slice() );
+					
+					if ( !reconected )
+						sendNotification( ApplicationFacade.SERVER_APPLICATIONS_GETTED, _applications.slice() );
 
 					break;
 				}

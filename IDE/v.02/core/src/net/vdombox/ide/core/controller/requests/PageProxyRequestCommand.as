@@ -1,8 +1,9 @@
 package net.vdombox.ide.core.controller.requests
 {
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
@@ -68,7 +69,12 @@ package net.vdombox.ide.core.controller.requests
 					else if( operation == PPMOperationNames.CREATE )
 						pageProxy.createObject( body.typeVO, body.attributes );
 					else if( operation == PPMOperationNames.DELETE )
-						pageProxy.deleteObject( body.objectVO );
+					{
+						if ( body.objectVO is ObjectVO )
+							pageProxy.deleteObject( body.objectVO );
+						else
+							pageProxy.deleteObjects( body.objectVO );
+					}
 					
 
 					break;
@@ -119,16 +125,26 @@ package net.vdombox.ide.core.controller.requests
 					break;
 				}
 					
+				case PPMPageTargetNames.ALL_SERVER_ACTIONS:
+				{
+					if ( operation == PPMOperationNames.READ )
+						pageProxy.getAllServerActions();
+					
+					break;
+				}
+					
 				case PPMPageTargetNames.SERVER_ACTION:
 				{
 					if( operation == PPMOperationNames.CREATE )
 						pageProxy.createServerAction( body.serverActionVO );
 					else if( operation == PPMOperationNames.READ )
-						pageProxy.getServerAction( body.serverActionVO );
+						pageProxy.getServerAction( body.serverActionVO, body.check );
 					else if( operation == PPMOperationNames.UPDATE )
 						pageProxy.setServerAction( body.serverActionVO );
 					else if( operation == PPMOperationNames.DELETE )
 						pageProxy.deleteServerAction( body.serverActionVO );
+					else if( operation == PPMOperationNames.RENAME )
+						pageProxy.renameServerAction( body.serverActionVO, body.newName );
 					break;
 				}
 					

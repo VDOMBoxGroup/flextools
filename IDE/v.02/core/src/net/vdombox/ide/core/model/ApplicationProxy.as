@@ -87,6 +87,28 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 		
+		public function getLibrary( libraryVO : LibraryVO, check : Boolean ) : AsyncToken
+		{
+			
+			if ( !serverProxy )
+				serverProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			
+			var token : AsyncToken;
+			
+			if ( serverProxy.authInfo.serverVersion >= '1.3.8179' )
+			    token = soap.get_library( applicationVO.id, libraryVO.name );
+			else
+			{
+				token = soap.get_libraries( applicationVO.id );
+				token.requestFunctionName = libraryVO.name;
+			
+			}
+			token.detail = check;
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
 		public function createLibrary( libraryVO : LibraryVO ) : AsyncToken
 		{
 			var token : AsyncToken;
@@ -110,8 +132,9 @@ package net.vdombox.ide.core.model
 					<Attributes/>;
 				
 				var attributeVO : AttributeVO;
+				var attr : Array = pageAttributesVO.attributes;
 				
-				for each ( attributeVO in pageAttributesVO.attributes )
+				for each ( attributeVO in attr )
 				{
 					attributesXML.appendChild( attributeVO.toXML() );
 				}
@@ -169,6 +192,7 @@ package net.vdombox.ide.core.model
 			token = soap.get_libraries( applicationVO.id );
 			
 			token.recipientName = proxyName;
+			token.requestFunctionName = "";
 			
 			return token;
 		}
@@ -212,12 +236,14 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 		
-		public function getServerActions( typeAction : String ) : AsyncToken
+		public function getServerActions( typeAction : String, globalActionVO : GlobalActionVO = null, check : Boolean = false ) : AsyncToken
 		{
 			var token : AsyncToken;
 			token = soap.get_server_actions( applicationVO.id, typeAction );
 			
 			token.recipientName = proxyName;
+			token.check = check;
+			token.globalActionVO = globalActionVO;
 			
 			return token;
 		}
@@ -360,10 +386,20 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 		
+		public function getGlobal( globalActionVO : GlobalActionVO, check : Boolean ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.set_server_action( applicationVO.id, globalActionVO.scriptsGroupName, globalActionVO.name, globalActionVO.script );
+			
+			token.recipientName = proxyName;
+			token.requestFunctionName = UPDATE_LIBRARY;
+			
+			return token;
+		}
+		
 		public function updateGlobal( globalActionVO : GlobalActionVO ) : AsyncToken
 		{
 			var token : AsyncToken;
-			//token = soap.set_library( applicationVO.id, globalActionVO.name, globalActionVO.script );
 			token = soap.set_server_action( applicationVO.id, globalActionVO.scriptsGroupName, globalActionVO.name, globalActionVO.script );
 			
 			token.recipientName = proxyName;
@@ -626,6 +662,11 @@ package net.vdombox.ide.core.model
 			return structure;
 		}
 		
+		public function reAddHandlers() : void
+		{
+			addHandlers();
+		}
+		
 		private function addHandlers() : void
 		{
 			soap.get_top_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
@@ -652,6 +693,8 @@ package net.vdombox.ide.core.model
 			soap.set_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.set_server_actions.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
 			
+			soap.get_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.get_library.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
 			soap.set_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.set_library.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
 			soap.remove_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
@@ -699,6 +742,8 @@ package net.vdombox.ide.core.model
 			soap.set_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_server_actions.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			
+			soap.get_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_library.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.set_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_library.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
 			soap.remove_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -836,25 +881,39 @@ package net.vdombox.ide.core.model
 					
 				case "get_server_actions":
 				{
+					var groupName : String = result.ServerActions.Container.@ID;
+					var _actions : XMLList = result.ServerActions.Container..Action;
 					
-					/*var groupActionsName : String = result.ServerActions.Container;
+					var _action : XML;
 					
-					var serverActionVO : ServerActionVO;
-					var serverActionXML : XML;
+					var _globalAction : GlobalActionVO;
+					var globalActions : Array = new Array;
 					
-					for each ( serverActionXML in serverActionsXML )
+					for each ( _action in _actions )
 					{
-					serverActionVO = new ServerActionVO();
-					
-					serverActionVO.setID( serverActionXML.@ID[ 0 ] );
-					
-					serverActionVO.script = serverActionXML[ 0 ];
-					
-					serverActions.push( serverActionVO );
+						_globalAction = new GlobalActionVO( _action.@ID, _action.@Name, groupName, applicationVO );
+						_globalAction.script = _action[ 0 ];
+						globalActions.push( _globalAction );
 					}
-					*/
-					sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_LIST_GETTED,
-						{ applicationVO: applicationVO, serverActionsXML: result } );
+					
+					if ( token.globalActionVO )
+					{
+						for each ( _globalAction in globalActions )
+						{
+							if ( _globalAction.name == token.globalActionVO.name )
+							{
+								sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTION_GETTED,
+									{ applicationVO: applicationVO, globalActionVO: _globalAction, check : token.check } );
+								
+								break;
+							}
+						}
+					}
+					else
+					{
+						sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_LIST_GETTED,
+							{ applicationVO: applicationVO, globalActions: globalActions } );
+					}
 					
 					break;
 				}
@@ -906,6 +965,18 @@ package net.vdombox.ide.core.model
 					break;
 				}
 					
+				case "get_library":
+				{
+					libraryXML = result.Library[ 0 ];
+					
+					libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
+					libraryVO.script = libraryXML[ 0 ];
+					
+					sendNotification( ApplicationFacade.APPLICATION_LIBRARY_GETTED, { applicationVO: applicationVO, libraryVO: libraryVO, check : token.detail } );
+					
+					break;
+				}
+					
 				case "set_library":
 				{
 					libraryXML = result.Library[ 0 ];
@@ -938,15 +1009,36 @@ package net.vdombox.ide.core.model
 				{
 					var libraries : Array = [];
 					
-					for each ( libraryXML in result.Libraries.Library )
+					if ( token.requestFunctionName == "" )
 					{
-						libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
-						libraryVO.script = libraryXML[ 0 ];
+						for each ( libraryXML in result.Libraries.Library )
+						{
+							libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
+							libraryVO.script = libraryXML[ 0 ];
+							
+							libraries.push( libraryVO );
+						}
 						
-						libraries.push( libraryVO );
+						sendNotification( ApplicationFacade.APPLICATION_LIBRARIES_GETTED, { applicationVO: applicationVO, libraries: libraries } );
 					}
-					
-					sendNotification( ApplicationFacade.APPLICATION_LIBRARIES_GETTED, { applicationVO: applicationVO, libraries: libraries } );
+					else
+					{
+						var libraryName : String = token.requestFunctionName;
+						
+						for each ( libraryXML in result.Libraries.Library )
+						{
+							if ( libraryXML.@Name == libraryName )
+							{
+								libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
+								libraryVO.script = libraryXML[ 0 ];
+								
+								break;
+							}
+						}
+						
+						sendNotification( ApplicationFacade.APPLICATION_LIBRARY_GETTED, { applicationVO: applicationVO, libraryVO: libraryVO, check : token.detail } );
+						
+					}
 					
 					break;
 				}

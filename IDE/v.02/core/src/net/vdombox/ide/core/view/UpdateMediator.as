@@ -6,14 +6,15 @@ package net.vdombox.ide.core.view
 	import air.update.events.UpdateEvent;
 	
 	import flash.desktop.NativeApplication;
+	import flash.display.NativeWindow;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	
 	import mx.controls.Alert;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
+	import net.vdombox.ide.core.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -65,7 +66,7 @@ package net.vdombox.ide.core.view
 		
 		override public function onRemove() : void
 		{
-//			removeHandlers();
+			removeHandlers();
 			
 			applicationUpdater = null;
 		}
@@ -107,11 +108,14 @@ package net.vdombox.ide.core.view
 		
 		private function onUpdate( event : UpdateEvent ) : void
 		{
-				applicationUpdater.checkNow();
+			removeHandlers();
+			
+			applicationUpdater.checkNow();
 		}
 		
 		private function onError( event : ErrorEvent ) : void
 		{
+			removeHandlers();
 //			Alert.show( event.toString(), AlertButton.OK );
 		}
 		

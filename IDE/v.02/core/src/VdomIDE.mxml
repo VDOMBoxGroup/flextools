@@ -54,7 +54,9 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.containers.Accordion;
+			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
+			import mx.core.UIComponentGlobals;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.core.ApplicationFacade;
@@ -70,7 +72,24 @@
 
 			protected function application_applicationCompleteHandler() : void
 			{
+				loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onUncaughtError);
+				
 				facade.startup( this );
+			}
+			
+			private function onUncaughtError(e:UncaughtErrorEvent):void
+			{
+				// Do something with your error.
+				if (e.error is Error)
+				{
+					var error:Error = e.error as Error;
+					trace(error.errorID, error.name, error.message);
+				}
+				else
+				{
+					var errorEvent:ErrorEvent = e.error as ErrorEvent;
+					trace(errorEvent.errorID);
+				}
 			}
 		]]>
 	</fx:Script>

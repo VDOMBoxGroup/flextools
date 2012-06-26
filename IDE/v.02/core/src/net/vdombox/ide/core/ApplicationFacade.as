@@ -265,11 +265,13 @@ package net.vdombox.ide.core
 		public static const APPLICATION_REMOTE_CALL_ERROR_GETTED : String = "applicationRemoteCallErrorGetted";
 		
 		public static const APPLICATION_SERVER_ACTIONS_LIST_GETTED : String = "applicationServerActionsGetted";
+		public static const APPLICATION_SERVER_ACTION_GETTED : String = "applicationServerActionGetted";
 		
 		public static const APPLICATION_LIBRARIES_GETTED : String = "applicationLibrariesGetted";
 		
 		public static const APPLICATION_LIBRARY_CREATED : String = "applicationLibraryCreated";
 		public static const APPLICATION_LIBRARY_UPDATED : String = "applicationLibraryUpdated";
+		public static const APPLICATION_LIBRARY_GETTED : String = "applicationLibraryGetted";
 		public static const APPLICATION_LIBRARY_DELETED : String = "applicationLibraryDeleted";
 		
 		public static const APPLICATION_EVENTS_GETTED : String = "applicationEventsGetted";
@@ -303,6 +305,8 @@ package net.vdombox.ide.core
 		
 		public static const PAGE_SERVER_ACTIONS_LIST_GETTED : String = "pageServerActionsListGetted";
 		public static const PAGE_SERVER_ACTIONS_GETTED : String = "pageServerActionsGetted";
+		public static const PAGE_ALL_SERVER_ACTIONS_GETTED : String = "pageAllServerActionsGetted";
+		
 		public static const PAGE_SERVER_ACTION_GETTED : String = "pageServerActionGetted";
 		public static const PAGE_SERVER_ACTION_SETTED : String = "pageServerActionSetted";
 		public static const PAGE_SERVER_ACTION_CREATED : String = "pageServerActionCreated";
@@ -328,6 +332,7 @@ package net.vdombox.ide.core
 		
 		public static const OBJECT_SERVER_ACTIONS_LIST_GETTED : String = "objectServerActionsListGetted";
 		public static const OBJECT_SERVER_ACTIONS_GETTED : String = "objectServerActionsGetted";
+		public static const OBJECT_ALL_SERVER_ACTIONS_GETTED : String = "objectAllServerActionsGetted";
 			
 		public static const OBJECT_SERVER_ACTION_GETTED : String = "objectServerActionGetted";
 		public static const OBJECT_SERVER_ACTION_SETTED : String = "objectServerActionSetted";
@@ -468,8 +473,10 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_PAGE_CREATED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_PAGE_DELETED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_SERVER_ACTIONS_LIST_GETTED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_SERVER_ACTION_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARIES_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARY_CREATED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_LIBRARY_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARY_DELETED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_EVENTS_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_EVENTS_SETTED, ApplicationProxyResponseCommand );
@@ -497,6 +504,7 @@ package net.vdombox.ide.core
 			registerCommand( PAGE_OBJECT_DELETED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTIONS_LIST_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTIONS_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_ALL_SERVER_ACTIONS_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTION_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTION_SETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTION_CREATED, PageProxyResponseCommand );
@@ -515,6 +523,7 @@ package net.vdombox.ide.core
 			registerCommand( OBJECT_NAME_SETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTIONS_LIST_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTIONS_GETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_ALL_SERVER_ACTIONS_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTION_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTION_SETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTION_CREATED, ObjectProxyResponseCommand );
