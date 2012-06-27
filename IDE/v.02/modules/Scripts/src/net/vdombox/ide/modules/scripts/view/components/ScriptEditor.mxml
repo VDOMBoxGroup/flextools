@@ -29,8 +29,7 @@
 			
 			import ro.victordramba.scriptarea.ScriptAreaEvents;
 			
-			[Bindable]
-			private var unsaved : Boolean = false;
+			private var _unsaved : Boolean = false;
 			
 			private var _script : String;
 			private var _objectVO : Object;
@@ -39,6 +38,21 @@
 			private var _actionVO : Object;
 
 			private var _syntax : String = "vscript";
+
+			[Bindable]
+			private function get unsaved():Boolean
+			{
+				return _unsaved;
+			}
+
+			private function set unsaved(value:Boolean):void
+			{
+				_unsaved = value;
+				if ( value )
+					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.NOT_SAVED ));
+				else
+					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SAVED ));
+			}
 
 			[Bindable]
 			public function get script() : String

@@ -7,6 +7,9 @@ package net.vdombox.ide.modules.scripts.events
 		public static var SAVE : String = "save";
 		public static var OPEN_FIND : String = "openFind";
 		
+		public static var SAVED : String = "actionSaved";
+		public static var NOT_SAVED : String = "actionNotSaved";
+		
 		public function ScriptEditorEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);

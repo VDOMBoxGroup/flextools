@@ -3,30 +3,101 @@ package net.vdombox.ide.modules.scripts.view.components
 	import flash.events.Event;
 	import flash.utils.Dictionary;
 	
-	import mx.containers.ViewStack;
+	import mx.events.ListEvent;
 	
+	import net.vdombox.ide.common.events.TabEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
 	import net.vdombox.ide.common.view.components.tabnavigator.TabNavigator;
-
-	public class WorkArea extends ViewStack
+	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
+	import net.vdombox.ide.modules.scripts.view.ScriptsMediator;
+	
+	public class WorkArea extends TabNavigator
 	{
 		
 		private var _editors : Dictionary;
 		
-		private var _selectedEditor : ScriptEditor;
-		
 		public function WorkArea()
 		{
+			addEventListener( "selectedTabChanged", selectedTabChangedHandler );
+			addEventListener( "tabAdded", numTabChangedHandler );
+			addEventListener( "tabRemoved", numTabChangedHandler );
+			
+			addEventListener( ScriptEditorEvent.SAVED, savedActionHandler, true, 0, true );
+			addEventListener( ScriptEditorEvent.NOT_SAVED, notSavedActionHandler, true, 0, true );
 		}
 		
-		private function scriptEditorName( actionVO : Object ) : String
+		private function selectedTabChangedHandler( event : Event ) : void
 		{
-			if ( actionVO is ServerActionVO )
-				return actionVO.name + actionVO.containerID;
-			else
-				return actionVO.name;
+			// CHANGE
+			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CHANGE ) );
+		}
+		
+		protected override function closeTabHandler( event : ListEvent ) : void
+		{
+			var index : int = event.rowIndex;
+			
+			if ( index >= 0 )
+			{
+				var tab : Tab = getTabAt( index );
+				
+				var scriptEditor : ScriptEditor = tab.getElementAt( 0 ) as ScriptEditor;
+				
+				if ( scriptEditor.actionVO && !scriptEditor.actionVO.saved )
+				{
+					var tabEvent : TabEvent = new TabEvent( TabEvent.ELEMENT_REMOVE );
+					tabEvent.element = scriptEditor;
+					tabEvent.index = index;
+					dispatchEvent( tabEvent );	
+				}
+				else
+				{
+					closeTab( index );
+				}
+			}
+			
+		}
+		
+		public function closeTab( index : int ) : void
+		{
+			removeTabAt( index );
+			
+			dispatchEvent( new Event( "tabRemoved" ) );
+			showTabElements( selectedTab );
+			dispatchEvent( new Event( "selectedTabChanged" ) );
+		}
+		
+		private function numTabChangedHandler( event : Event ) : void
+		{
+			if( tabBar.dataProvider && tabBar.dataProvider.length == 0 )
+				return;
+			
+			var tab0 : Tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;
+			var tab1 : Tab
+			
+			if( tabBar.dataProvider.length == 1 )
+			{
+				tab0.closable = false;
+			}
+			else if( tabBar.dataProvider.length == 2 )
+			{
+				tab0.closable = true;
+				
+				tab1 = tabBar.dataProvider.getItemAt( 1 ) as Tab;
+				if( tab1 )
+					tab1.closable = true;
+			}
+		}
+		
+		private function savedActionHandler( event : ScriptEditorEvent ) : void
+		{
+			setSaveAction( true, event.target as ScriptEditor );
+		}
+		
+		private function notSavedActionHandler( event : ScriptEditorEvent ) : void
+		{
+			setSaveAction( false, event.target as ScriptEditor );
 		}
 		
 		public function openEditor( objectVO : Object, actionVO : Object ) : ScriptEditor
@@ -34,56 +105,77 @@ package net.vdombox.ide.modules.scripts.view.components
 			var editor : ScriptEditor = new ScriptEditor();
 			editor.percentHeight = 100;
 			editor.percentWidth = 100;
-			
-			addChild( editor );
-			selectedEditor = editor;
-			
 			editor.actionVO = actionVO;
 			editor.objectVO = objectVO;
 			
-			editor.id = scriptEditorName( actionVO );
+			var tab : Tab = new Tab();
+			if ( actionVO is ServerActionVO )
+				tab.label = actionVO.name + ':' + objectVO.name;
+			else
+				tab.label = actionVO.name;
 			
+			addTab( tab );
 			
+			tab.addElement( editor );
 			
 			if ( !_editors )
 				_editors = new Dictionary( true );
 			
-			_editors[ editor ] = editor;
+			_editors[ editor ] = tab;
 			
-			
+			selectedEditor = editor;
 			
 			return editor;
 		}
 		
-		public function closeEditor( actionVO : Object ) : ScriptEditor
+		public function closeEditor( objectVO : Object ) : ScriptEditor
 		{
 			var result : ScriptEditor;
 			var tab : Tab;
 			
-			result = getEditorByVO( actionVO );
+			result = getEditorByVO( objectVO );
 			
 			if ( result )
-			{
+			{				
 				delete _editors[ result ];
-				removeChild( result );
 			}
 			
 			return result;
 		}
 		
-		public function getEditorByVO( actionVO : Object ) : ScriptEditor
+		public function closeTabByAction( objectVO : Object ) : ScriptEditor
+		{
+			var result : ScriptEditor;
+			var tab : Tab;
+			
+			result = getEditorByVO( objectVO );
+			
+			var index : int = getElementIndex( result );
+			
+			if ( result )
+			{								
+				tab = _editors[ result ];
+				removeTab( tab );
+		
+				showTabElements( selectedTab );
+			}
+			
+			return result;
+		}
+		
+		public function getEditorByVO( objectVO : Object ) : ScriptEditor
 		{
 			var result : ScriptEditor;
 			var editor : *;
 			
-			if ( !actionVO )
+			if ( !objectVO )
 				return null;
 			
-			if ( actionVO is ServerActionVO )
+			if ( objectVO is ServerActionVO )
 			{
 				for ( editor in _editors )
 				{ 
-					if ( editor.actionVO is ServerActionVO && editor.actionVO.id == actionVO.id )
+					if ( editor.actionVO is ServerActionVO && editor.actionVO.id == objectVO.id )
 					{
 						result = editor;
 						break;
@@ -94,7 +186,7 @@ package net.vdombox.ide.modules.scripts.view.components
 			{
 				for ( editor in _editors )
 				{ 
-					if ( !(editor.actionVO is ServerActionVO) && editor.actionVO.name == actionVO.name )
+					if ( !(editor.actionVO is ServerActionVO) && editor.actionVO.name == objectVO.name )
 					{
 						result = editor;
 						break;
@@ -107,13 +199,33 @@ package net.vdombox.ide.modules.scripts.view.components
 		
 		public function closeAllEditors() : void
 		{
-			_editors = null;
-			removeAllChildren();	
+			//			затычка нада разобраться в чем дело
+			if (tabBar.dataProvider == null )
+				return 
+			
+			var tab : Tab;
+			while ( tabBar.dataProvider.length  > 0 ) 
+			{
+				tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;
+				removeTab( tab );
+			}			
 		}
 		
 		public function get selectedEditor() : ScriptEditor
 		{
-			return _selectedEditor;
+			var result : ScriptEditor;
+			var editor : *;
+			
+			for ( editor in _editors )
+			{
+				if ( _editors[ editor ] == selectedTab )
+				{
+					result = editor as ScriptEditor;
+					break;
+				}
+			}
+			
+			return result;
 		}
 		
 		public function set selectedEditor( value : ScriptEditor ) : void
@@ -121,8 +233,24 @@ package net.vdombox.ide.modules.scripts.view.components
 			if ( !value )
 				return;
 			
-			_selectedEditor = value;
-			selectedChild = value;
+			var tab : Tab;
+			
+			tab = _editors[ value ];
+			
+			if ( tab )
+				selectedTab = tab;
+		}
+		
+		public function setSaveAction( saved : Boolean, scriptEditor : ScriptEditor) : void
+		{
+			var tab : Tab= _editors[ scriptEditor ];
+			if ( !tab ) 
+				return;
+			
+			if ( !saved && tab.label.charAt(0) != '*')
+				tab.label = "*" + tab.label;
+			else if ( saved && tab.label.charAt(0) == '*' )
+				tab.label = tab.label.slice( 1 );
 			
 		}
 	}

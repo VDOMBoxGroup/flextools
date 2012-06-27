@@ -7,8 +7,8 @@ package net.vdombox.ide.modules.scripts.view
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.EditorEvent;
+	import net.vdombox.ide.common.events.TabEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
-	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
@@ -17,6 +17,8 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
+	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	import net.vdombox.ide.modules.scripts.view.components.WorkArea;
 	
@@ -34,6 +36,7 @@ package net.vdombox.ide.modules.scripts.view
 		private var libraryVO : LibraryVO;
 		private var globalActionVO : GlobalActionVO;
 		private var statesProxy : StatesProxy;
+
 		private var closedScript : Boolean = false;
 		
 		public function WorkAreaMediator( viewComponent : Object )
@@ -64,12 +67,11 @@ package net.vdombox.ide.modules.scripts.view
 			
 			interests.push( Notifications.BODY_START );
 			interests.push( Notifications.BODY_STOP );
-			interests.push( Notifications.SELECTED_TAB_CHANGED );
-			interests.push( Notifications.DELETE_TAB );
-			
+			interests.push( Notifications.LIBRARY_GETTED );
+			interests.push( Notifications.SERVER_ACTION_GETTED );
+			interests.push( Notifications.GLOBAL_ACTION_GETTED );
+
 			interests.push( Notifications.SCRIPT_CHECKED );
-			
-			interests.push( Notifications.ALL_TABS_DELETED );
 			
 			return interests;
 		}
@@ -85,7 +87,7 @@ package net.vdombox.ide.modules.scripts.view
 			if ( !isActive && name != Notifications.BODY_START )
 				return;
 			
-			var actionVO : Object;
+			
 			
 			switch ( name )
 			{
@@ -98,44 +100,44 @@ package net.vdombox.ide.modules.scripts.view
 					
 				case Notifications.BODY_STOP:
 				{
-					
-					
 					isActive = false;
 					
 					break;
 				}
 					
-				case Notifications.SELECTED_TAB_CHANGED:
+				case Notifications.SERVER_ACTION_GETTED:
 				{
-					OpenAndFindEditor( body );
+					serverActionVO = body as ServerActionVO;
+					
+					if ( statesProxy.selectedObject )
+						serverActionVO.containerVO = statesProxy.selectedObject;
+					else if ( statesProxy.selectedPage )
+						serverActionVO.containerVO = statesProxy.selectedPage;	
+					
+					OpenAndFindEditor( serverActionVO );
+					break;
+				}
+					
+				case Notifications.LIBRARY_GETTED:
+				{
+					libraryVO = body as LibraryVO
+					OpenAndFindEditor( libraryVO );
 					
 					break;
 				}
 					
-				case Notifications.DELETE_TAB:
+				case Notifications.GLOBAL_ACTION_GETTED:
 				{
-					actionVO = body.actionVO;
-					
-					editor = workArea.getEditorByVO( actionVO );
-					
-					if ( !body.askBeforeRemove || editor.actionVO.saved )
-					{
-						workArea.closeEditor( actionVO );
-						
-						sendNotification( Notifications.DELETE_TAB_BY_ACTIONVO, actionVO );
-					}
-					else if ( body.askBeforeRemove )
-					{
-						Alert.Show( "Script has been modified. Save changes?", AlertButton.OK_No_Cancel, workArea.parentApplication, chackActionRequest );
-					}
+					globalActionVO = body as GlobalActionVO;
+					OpenAndFindEditor( globalActionVO );
 					
 					
 					break;
 				}
-					
+
 				case Notifications.SCRIPT_CHECKED:
 				{
-					actionVO = body;
+					var actionVO : Object = body;
 					editor = workArea.getEditorByVO( actionVO );
 					var editorScript : String = editor.actionVO.script.replace( /\r/g, "\n" );
 					var index : int = editorScript.indexOf( "]]]]><![CDATA[>" );
@@ -158,7 +160,7 @@ package net.vdombox.ide.modules.scripts.view
 						if ( closedScript )
 						{
 							closedScript = false;
-							workArea.closeEditor( actionVO );
+							workArea.closeTabByAction( actionVO );
 							sendNotification( Notifications.DELETE_TAB_BY_ACTIONVO, actionVO );
 						}
 					}
@@ -171,31 +173,8 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
-				case Notifications.ALL_TABS_DELETED:
-				{
-					clearData();
-					
-					break;
-				}
-					
 			}
-			
-			function chackActionRequest( event : CloseEvent ) : void 
-			{
-				if ( event.detail == Alert.YES )
-				{
-					closedScript = true;
-					sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : actionVO, check : true } );
-				}
-				
-				if ( event.detail == Alert.NO )
-				{
-					workArea.closeEditor( actionVO );
-					
-					sendNotification( Notifications.DELETE_TAB_BY_ACTIONVO, actionVO );
-				}
-			}
-			
+
 			function saveActionRequest( event : CloseEvent ) : void 
 			{
 				if ( event.detail == Alert.NO )
@@ -238,12 +217,13 @@ package net.vdombox.ide.modules.scripts.view
 				else
 					workArea.selectedEditor = editor;
 			}
-			
-			sendNotification( Notifications.CHANGE_SELECTED_SCRIPT, editor );
-		}
 		
+			sendNotification( Notifications.CHANGE_SELECTED_SCRIPT, editor );
+
+		}
+
 		private function setMediator( event : FlexEvent ) : void
-		{
+		{			
 			var editor : ScriptEditor = event.target as ScriptEditor;
 			facade.registerMediator( new ScriptEditorMediator( editor ) );
 			editor.enabled = true;
@@ -254,11 +234,15 @@ package net.vdombox.ide.modules.scripts.view
 		private function addHandlers() : void
 		{
 			workArea.addEventListener( EditorEvent.REMOVED, editor_removedHandler, true, 0, true );
+			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
+			workArea.addEventListener( TabEvent.ELEMENT_REMOVE, removeTabHandler, false, 0, true );
 		}
 		
 		private function removeHandlers() : void
 		{
 			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
+			workArea.removeEventListener( WorkAreaEvent.CHANGE, changeHandler );
+			workArea.removeEventListener( TabEvent.ELEMENT_REMOVE, removeTabHandler );
 		}
 		
 		private function editor_removedHandler( event : EditorEvent ) : void
@@ -268,6 +252,33 @@ package net.vdombox.ide.modules.scripts.view
 			{
 				facade.removeMediator( ScriptEditorMediator.NAME + editor.editorID  );
 				workArea.closeEditor( editor.actionVO );
+			}
+		}
+		
+		private function changeHandler( event : WorkAreaEvent ) : void
+		{
+			sendNotification( Notifications.CHANGE_SELECTED_SCRIPT, workArea.selectedEditor );
+		}
+		
+		private function removeTabHandler( event : TabEvent ) : void
+		{
+			Alert.Show( "Script has been modified. Save changes?", AlertButton.OK_No_Cancel, workArea.parentApplication, chackActionRequest );
+			
+			var actionVO : Object = ScriptEditor( event.element ).actionVO;
+			var index : int = event.index;
+			
+			function chackActionRequest( event : CloseEvent ) : void 
+			{
+				if ( event.detail == Alert.YES )
+				{
+					closedScript = true;
+					sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : actionVO, check : true } );
+				}
+				
+				if ( event.detail == Alert.NO )
+				{
+					workArea.closeTab( index );
+				}
 			}
 		}
 		

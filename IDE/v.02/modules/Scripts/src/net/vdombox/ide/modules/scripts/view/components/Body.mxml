@@ -12,11 +12,6 @@
 	
 	<mx1:VDividedBox height="100%" width="228" minWidth="200" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
 		
-		<components:TabsPanel id="tabsPanel" 
-							  width="100%" height="50%"
-							  skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
-							  title="{ resourceManager.getString( 'Scripts_General', 'tabs_panel_title' ) }"/>
-		
 		<components:LibrariesPanel id="librariesPanel"
 								   width="100%" height="50%"
 								   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
