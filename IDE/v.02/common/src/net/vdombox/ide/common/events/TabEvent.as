@@ -6,8 +6,8 @@ package net.vdombox.ide.common.events
 
 	public class TabEvent extends Event
 	{
-		public static const ELEMENT_ADD : String = "elementAdd";
-		public static const ELEMENT_REMOVE : String = "elementRemove";
+		public static const ELEMENT_ADD : String = "element_Add";
+		public static const ELEMENT_REMOVE : String = "element_Remove";
 
 		public function TabEvent( type : String, bubbles : Boolean = false,
 			cancelable : Boolean = false,

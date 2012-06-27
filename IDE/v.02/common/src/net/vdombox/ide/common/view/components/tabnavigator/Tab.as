@@ -22,6 +22,9 @@ package net.vdombox.ide.common.view.components.tabnavigator
 		
 		[Bindable]
 		public var label : String = "Untitled";
+		
+		public var originLabel : String = "Untitled";
+		
 		public var id : String;
 		
 		private var _objects : Vector.<IVisualElement>;

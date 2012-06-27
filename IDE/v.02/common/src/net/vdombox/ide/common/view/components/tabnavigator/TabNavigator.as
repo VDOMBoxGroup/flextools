@@ -174,7 +174,7 @@ package net.vdombox.ide.common.view.components.tabnavigator
 				tabBar.removeEventListener( TabBarButton.CLOSE_TAB, closeTabHandler );
 		}
 		
-		private function showTabElements( tab : Tab ) : void
+		protected function showTabElements( tab : Tab ) : void
 		{
 			var element : IVisualElement;
 			var i : int;
@@ -227,7 +227,7 @@ package net.vdombox.ide.common.view.components.tabnavigator
 			}
 		}
 		
-		private function closeTabHandler( event : ListEvent ) : void
+		protected function closeTabHandler( event : ListEvent ) : void
 		{
 			var index : int = event.rowIndex;
 			
