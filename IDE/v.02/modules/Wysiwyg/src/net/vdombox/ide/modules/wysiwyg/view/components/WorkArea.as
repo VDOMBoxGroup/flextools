@@ -12,12 +12,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.core.UIComponent;
 	import mx.utils.UIDUtil;
 	
-	import net.vdombox.ide.common.view.components.tabnavigator.TabNavigator;
-	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
-	import net.vdombox.ide.common.view.components.tabnavigator.TabBarButton;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
+	import net.vdombox.ide.common.view.components.tabnavigator.TabBarButton;
+	import net.vdombox.ide.common.view.components.tabnavigator.TabNavigator;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;

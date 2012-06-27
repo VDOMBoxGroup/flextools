@@ -40,6 +40,11 @@
 					nameFilter.text = "";
 			}
 			
+			protected function resourcesList_mouseWheelHandler(event:MouseEvent):void
+			{
+				event.delta = event.delta > 0 ? 1 : -1;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -137,6 +142,7 @@
 							selectionColor="#383838"
 							rollOverColor="#383838"
 							symbolColor="#383838"
+							mouseWheel="resourcesList_mouseWheelHandler(event)"
 							creationComplete="resourcesList_creationCompleteHandler(event)"
 							dataProvider="{ hostComponent._resources }"
 							enabled="true" focusColor="#CCCCCC"
