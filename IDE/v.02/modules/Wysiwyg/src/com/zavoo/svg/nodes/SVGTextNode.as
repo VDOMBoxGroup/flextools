@@ -9,6 +9,8 @@ package com.zavoo.svg.nodes
 	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
 	
+	import flashx.textLayout.formats.TextAlign;
+	
 	/** SVG Text element node **/
 	public class SVGTextNode extends SVGNode
 	{	
@@ -74,6 +76,7 @@ package com.zavoo.svg.nodes
 				var fontFamily:String = this.getStyle('font-family');				
 				var fontSize:String = this.getStyle('font-size');
 				var fill:String = this.getStyle('fill');
+				var textWidth : Number = Number(this.getStyle('width'));
 				
 				var textFormat:TextFormat = this._textField.getTextFormat();
 				
@@ -90,6 +93,12 @@ package com.zavoo.svg.nodes
 								
 				this._textField.text = this._text;
 				this._textField.setTextFormat(textFormat);
+				
+				if (!isNaN(textWidth) && textWidth != 0)
+				{
+					this._textField.autoSize = TextFieldAutoSize.NONE;
+					this._textField.width = textWidth;
+				}
 				
 				var bitmapData:BitmapData = new BitmapData(this._textField.width, this._textField.height, true, 0x000000);
 				
