@@ -122,8 +122,10 @@ package com.zavoo.svg.nodes
 			
 			var drawRectWidth : Number;
 			var drawRectHeight : Number;
+			
+			var containerWidth : Number;
+			var containerHeight : Number;
 
-			var svgViewer : SVGViewer = svgRoot.parent as SVGViewer;
 			//--------------------------------------------------------------------
 			
 			if ( _xml.@width[ 0 ])
@@ -136,6 +138,16 @@ package com.zavoo.svg.nodes
 			else
 				bitmapHeight = content.height;
 
+			if (_xml.@containerWidth[0] && _xml.@containerWidth[0] > 0)
+				containerWidth = _xml.@containerWidth;
+			else
+				containerWidth = bitmapWidth;
+			
+			if (_xml.@containerHeight[0] && _xml.@containerHeight[0] > 0)
+				containerHeight = _xml.@containerHeight;
+			else
+				containerHeight = bitmapHeight;
+				
 			if (_xml.@repeat[0] && _xml.@repeat[0] != "")
 				repeatValue = _xml.@repeat;
 			else
@@ -146,24 +158,24 @@ package com.zavoo.svg.nodes
 			
 			m.scale( sx, sy );
 			
-			if (bitmapWidth > svgViewer.width && svgViewer.width > 0)
-				bitmapWidth = svgViewer.width;
+			if (bitmapWidth > containerWidth && containerWidth > 0)
+				bitmapWidth = containerWidth;
 			
-			if (bitmapHeight > svgViewer.height && svgViewer.height > 0)
-				bitmapHeight = svgViewer.height;
+			if (bitmapHeight > containerHeight && containerHeight > 0)
+				bitmapHeight = containerHeight;
 			
 			switch ( repeatValue )
 			{
 				case "repeat":
 				{
-					drawRectWidth = svgViewer.width || bitmapWidth;
-					drawRectHeight = svgViewer.height || bitmapHeight;
+					drawRectWidth = containerWidth || bitmapWidth;
+					drawRectHeight = containerHeight || bitmapHeight;
 					repeat = true;
 					break;
 				}
 				case "repeat-x":
 				{
-					drawRectWidth = svgViewer.width || bitmapWidth;
+					drawRectWidth = containerWidth || bitmapWidth;
 					drawRectHeight = bitmapHeight;
 					repeat = true;
 					break;
@@ -171,7 +183,7 @@ package com.zavoo.svg.nodes
 				case "repeat-y":
 				{
 					drawRectWidth= bitmapWidth;
-					drawRectHeight = svgViewer.height || bitmapHeight;
+					drawRectHeight = containerHeight || bitmapHeight;
 					repeat = true;
 					break;
 				}
