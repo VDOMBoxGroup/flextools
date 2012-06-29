@@ -4,18 +4,27 @@ package com.zavoo.svg.nodes
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.PixelSnapping;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
 	
 	import mx.binding.utils.BindingUtils;
+	import mx.containers.Canvas;
+	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
+	import mx.graphics.SolidColor;
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
+	
+	import spark.components.Group;
+	import spark.primitives.Rect;
+	import spark.primitives.supportClasses.FilledElement;
 
 	public class SVGImageNode extends SVGNode
 	{
@@ -56,8 +65,6 @@ package com.zavoo.svg.nodes
 			resourceID = href;
 			svgRoot.parent.addEventListener( FlexEvent.CREATION_COMPLETE, ccHandler )
 
-//			var fileManager:FileManager = FileManager.getInstance();
-//			fileManager.loadResource("123123", href, this, "resource", true);
 		}
 
 		public var resourceID : String;
@@ -92,25 +99,12 @@ package com.zavoo.svg.nodes
 			}
 		}
 		
-//		
-//		/**
-//		 * Load image byte array
-//		 **/
-//		private function loadBytes( byteArray : ByteArray ) : void
-//		{
-//			var loader : Loader = new Loader();
-//			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
-//			loader.loadBytes( byteArray );
-//		}
 
 		/**
 		 * Display image bitmap once bytes have loaded
 		 **/
 		private function onBytesLoaded( event : Event ) : void
 		{
-			
-//			event.target.contentLoaderInfo.removeEventListener( Event.COMPLETE, onBytesLoaded );
-//			event.target.contentLoaderInfo.removeEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
 			loader = null;
 			
 			if ( event.type == IOErrorEvent.IO_ERROR )
@@ -122,40 +116,81 @@ package com.zavoo.svg.nodes
 
 			var sx : Number, sy : Number;
 			var bitmapWidth : Number, bitmapHeight : Number;
+			
+			var repeat : Boolean;
+			var repeatValue : String;
+			
+			var drawRectWidth : Number;
+			var drawRectHeight : Number;
 
-			if ( _xml.@width[ 0 ] )
+			var svgViewer : SVGViewer = svgRoot.parent as SVGViewer;
+			//--------------------------------------------------------------------
+			
+			if ( _xml.@width[ 0 ])
 				bitmapWidth = _xml.@width;
 			else
 				bitmapWidth = content.width;
 
-			if ( _xml.@height[ 0 ] )
+			if ( _xml.@height[ 0 ])
 				bitmapHeight = _xml.@height;
 			else
 				bitmapHeight = content.height;
 
+			if (_xml.@repeat[0] && _xml.@repeat[0] != "")
+				repeatValue = _xml.@repeat;
+			else
+				repeatValue = "";
+			
 			sx = bitmapWidth / content.width;
 			sy = bitmapHeight / content.height;
-
+			
 			m.scale( sx, sy );
-
-			try
+			
+			if (bitmapWidth > svgViewer.width && svgViewer.width > 0)
+				bitmapWidth = svgViewer.width;
+			
+			if (bitmapHeight > svgViewer.height && svgViewer.height > 0)
+				bitmapHeight = svgViewer.height;
+			
+			switch ( repeatValue )
 			{
-				var scaledImage : Bitmap = new Bitmap( new BitmapData( bitmapWidth, bitmapHeight, true, 0x00000000 ), PixelSnapping.AUTO, true );
+				case "repeat":
+				{
+					drawRectWidth = svgViewer.width || bitmapWidth;
+					drawRectHeight = svgViewer.height || bitmapHeight;
+					repeat = true;
+					break;
+				}
+				case "repeat-x":
+				{
+					drawRectWidth = svgViewer.width || bitmapWidth;
+					drawRectHeight = bitmapHeight;
+					repeat = true;
+					break;
+				}
+				case "repeat-y":
+				{
+					drawRectWidth= bitmapWidth;
+					drawRectHeight = svgViewer.height || bitmapHeight;
+					repeat = true;
+					break;
+				}
+				default:
+				case "no-repeat":
+				{
+					drawRectWidth = bitmapWidth;
+					drawRectHeight = bitmapHeight;
+					repeat = false;
+					break;
+				}	
 			}
-			catch ( erroe : Error )
-			{
-				return;
-			}
-			scaledImage.bitmapData.draw( BitmapData( content.bitmapData ), m );
-
-			scaledImage.opaqueBackground = null;
-			this.addChild( scaledImage );
-
-			//this.addImageMask();	
-			//this.transformImage();
-
+			
+			graphics.clear();
+			graphics.beginBitmapFill(content.bitmapData, m, repeat, true);
+			graphics.drawRect( 0, 0, drawRectWidth, drawRectHeight );
+			graphics.endFill();
+			
 		}
-
 
 		private function ccHandler( event : FlexEvent ) : void 
 		{
@@ -169,53 +204,6 @@ package com.zavoo.svg.nodes
 				
 			svgViewer.getResource = this;
 		}
-		
-	/*private function transformImage():void {
-	   var trans:String = String(this.getAttribute('transform', ''));
-	   this.transform.matrix = this.getTransformMatrix(trans);
-	   //spriteMask.transform.matrix = bitmap.transform.matrix.clone();
-	 }*/
-
-	/*override protected function transformNode():void {
-
-	 }*/
-
-	/*private function getTransformMatrix(transform:String):Matrix {
-	   var newMatrix:Matrix = new Matrix();
-	   var trans:String = String(this.getAttribute('transform', ''));
-
-	   if (trans != '') {
-	   var transArray:Array = trans.match(/\S+\(.*?\)/sg);
-	   for each(var tran:String in transArray) {
-	   var tranArray:Array = tran.split('(',2);
-	   if (tranArray.length == 2)
-	   {
-	   var command:String = String(tranArray[0]);
-	   var args:String = String(tranArray[1]);
-	   args = args.replace(')','');
-	   var argsArray:Array = args.split(/[, ]/);
-	   ////trace('Transform: ' + tran);
-	   switch (command) {
-	   case "matrix":
-	   if (argsArray.length == 6) {
-	   newMatrix.a = argsArray[0];
-	   newMatrix.b = argsArray[1];
-	   newMatrix.c = argsArray[2];
-	   newMatrix.d = argsArray[3];
-	   newMatrix.tx = argsArray[4];
-	   newMatrix.ty = argsArray[5];
-	   return newMatrix;
-	   }
-	   break;
-
-	   default:
-	   ////trace('Unknown Transformation: ' + command);
-	   }
-	   }
-	   }
-	   }
-	   return null;
-	 }*/
-
+	
 	}
 }
