@@ -46,6 +46,9 @@
 			
 			public function set value( colorValue : String ) : void
 			{
+				rectColorPicker.visible = colorValue != "";
+				rectEmptyColor.visible = colorValue == "";
+					
 				var newColor : uint = uint( ( colorValue == "" ) ? "0" : "0x" + colorValue )
 				_color = colorValue;
 				_colorInNumber = newColor;
@@ -71,9 +74,16 @@
 		]]>
 	</fx:Script>
 	<s:Group width="100%" height="100%" toolTip="{_color}">
-		<s:Rect width="100%" height="100%" id="rectColorPicker">
+		
+		<s:Rect id="rectColorPicker" width="100%" height="100%">
 			<s:fill>
 				<s:SolidColor color="{_colorInNumber}"/>
+			</s:fill>
+		</s:Rect>
+		
+		<s:Rect id="rectEmptyColor" left="0" right="0" top="0" bottom="0" visible="false">
+			<s:fill>
+				<s:BitmapFill source="@Embed('assets/empty.png')" fillMode="repeat" />
 			</s:fill>
 		</s:Rect>
 	</s:Group>
