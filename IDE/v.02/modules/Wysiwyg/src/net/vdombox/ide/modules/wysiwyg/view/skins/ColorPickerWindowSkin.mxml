@@ -185,21 +185,32 @@
 				<s:HGroup styleName="bbbox"
 					 	 gap="1" paddingBottom="1" paddingLeft="10" paddingRight="10" paddingTop="1">
 				
-					<mx:Box height="22" width="32"
-							backgroundColor="{hostComponent._color}" />
-				
-					<mx:Box height="22" width="32"
-							backgroundColor="{hostComponent.old_color}"
-							click="hostComponent.on_restore_color()"/>
+					<s:Group height="22" width="32">
+						<mx:Box height="100%" width="100%"
+								backgroundColor="{hostComponent._color}" />
+						
+						<s:Rect width="100%" height="100%"
+								visible="{hostComponent.colorValue == ''}">
+							<s:fill>
+								<s:BitmapFill source="@Embed('assets/empty.png')" fillMode="repeat" />
+							</s:fill>
+						</s:Rect>
+					</s:Group>
+					
+					<s:Group height="22" width="32">
+						<mx:Box height="22" width="32"
+								backgroundColor="{hostComponent.old_color}"
+								click="hostComponent.on_restore_color()"/>
+						
+						<s:Rect width="100%" height="100%"
+								visible="{hostComponent.oldColorValue == ''}">
+							<s:fill>
+								<s:BitmapFill source="@Embed('assets/empty.png')" fillMode="repeat" />
+							</s:fill>
+						</s:Rect>
+					</s:Group>	
+					
 				</s:HGroup>
-			
-				<!--<mx:VBox height="26" horizontalScrollPolicy="off" styleName="bbbox" verticalScrollPolicy="off"
-					 	width="56"
-					 	backgroundAlpha="0.4" borderColor="#808080" horizontalAlign="center" paddingLeft="4"
-					 	paddingRight="4" verticalAlign="middle">
-				
-					<mx:SWFLoader id="osi_view" />
-				</mx:VBox>-->
 			
 				<s:HGroup gap="0">
 				

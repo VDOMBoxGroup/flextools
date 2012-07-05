@@ -55,7 +55,6 @@ package com.zavoo.svg.nodes
 			
 			if (this._text != '') {
 				this._textField = new TextField();
-				this._textField.autoSize = TextFieldAutoSize.LEFT;
 				
 				setAttributes();
 			}
@@ -72,11 +71,15 @@ package com.zavoo.svg.nodes
 			
 			super.setAttributes();
 			
-			if (this._textField != null) {
+			if (this._textField != null) 
+			{
+				var moveToLeft : Boolean = true;
+				
 				var fontFamily:String = this.getStyle('font-family');				
 				var fontSize:String = this.getStyle('font-size');
 				var fill:String = this.getStyle('fill');
 				var textWidth : Number = Number(this.getStyle('width'));
+				var textAlign : String = this.getStyle('align');
 				
 				var textFormat:TextFormat = this._textField.getTextFormat();
 				
@@ -90,15 +93,20 @@ package com.zavoo.svg.nodes
 				if (fill != null) {
 					textFormat.color = SVGColors.getColor(fill);
 				}
-								
-				this._textField.text = this._text;
-				this._textField.setTextFormat(textFormat);
+				if (textAlign != null) {
+					this._textField.autoSize = TextFieldAutoSize.NONE;
+					textFormat.align = textAlign;
+					
+					moveToLeft = false;
+				}
 				
 				if (!isNaN(textWidth) && textWidth != 0)
 				{
-					this._textField.autoSize = TextFieldAutoSize.NONE;
 					this._textField.width = textWidth;
 				}
+				
+				this._textField.defaultTextFormat = textFormat;
+				this._textField.text = this._text;
 				
 				var bitmapData:BitmapData = new BitmapData(this._textField.width, this._textField.height, true, 0x000000);
 				
@@ -111,9 +119,12 @@ package com.zavoo.svg.nodes
 				this._textBitmap = new Bitmap(bitmapData);
 				this._textBitmap.smoothing = true;
 				
-				var textLineMetrics:TextLineMetrics = this._textField.getLineMetrics(0);
-				this._textBitmap.x = -textLineMetrics.x - 2; //account for 2px gutter
-				this._textBitmap.y =  -textLineMetrics.ascent - 2; //account for 2px gutter
+				if (moveToLeft)
+				{
+					var textLineMetrics:TextLineMetrics = this._textField.getLineMetrics(0);
+					this._textBitmap.x = -textLineMetrics.x - 2; //account for 2px gutter
+					this._textBitmap.y =  -textLineMetrics.ascent - 2; //account for 2px gutter
+				}
 			}
 		}	
 		

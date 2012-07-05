@@ -35,7 +35,6 @@
 				addEventListener( MouseEvent.CLICK, mouseClickandler );
 				
 				addEventListener( ColorPickerEvent.APPLY, applyHandler );
-//				addEventListener( "cancel", colorCompleteHandler );
 			}
 			
 			[Bindable( event="valueCommit" )]
@@ -58,7 +57,7 @@
 			
 			public function mouseClickandler( event : MouseEvent ) : void
 			{
-				ColorPickerWindow.show_window( this, _colorInNumber, true );
+				ColorPickerWindow.show_window( this, _color, true );
 			}
 			
 			private function change(event:ColorPickerEvent):void 
