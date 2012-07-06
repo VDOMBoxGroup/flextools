@@ -61,6 +61,13 @@ package net.vdombox.powerpack.sdkcompiler
 			argVector.push(FileUtils.convertPathForCMD(sertificatePath));
 			argVector.push("-storepass");
 			argVector.push("q");
+			
+			if (!useTimestamp)
+			{
+				argVector.push("-tsa");
+				argVector.push("none");
+			}
+			
 			argVector.push("-target");
 			
 			if (!packageTypeNative)

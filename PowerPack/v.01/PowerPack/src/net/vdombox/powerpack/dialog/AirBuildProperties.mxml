@@ -45,7 +45,7 @@
 			
 			private function get windowHeight () : Number
 			{
-				return useLinuxSDK ? 530 : 450;
+				return useLinuxSDK ? 555 : 475;
 			}
 			
 			private  function onShow():void
@@ -138,7 +138,8 @@
 				
 				sdkCompiler.buildInstallerPackage ( flexSDK_4_1_BrowseBox.path,
 													airSDKLinuxBrowseBox.path,
-													radioBtnGroupBuildType.selectedValue.toString());
+													radioBtnGroupBuildType.selectedValue.toString(),
+													timeStampCheckBox.selected);
 				
 			}
 			
@@ -365,18 +366,25 @@
 								groupName="radioBtnGroupBuildType"
 								label="AIR package"
 								value="{SDKCompiler.PACKAGE_TYPE_AIR}"
-								selected="true"/>
+								selected="true"
+								paddingLeft="20"/>
 				
 				<mx:RadioButton id="buildTypeNative"
 								groupName="radioBtnGroupBuildType"
 								label="Native installer"
 								value="{SDKCompiler.PACKAGE_TYPE_NATIVE}"
 								selected="false"
+								paddingLeft="20"
 								creationComplete="buildTypeNativeRadioBtn_creationCompleteHandler(event)"/>
 				
 				<sdkcompiler:LinuxNativeInstallerTypeSelectorVBox id="linuxNatineTypeSelector" 
 																  creationComplete="linuxNativeInstallerTypeSelectorCreationCompleteHandler(event)"
-																  paddingLeft="20"/>	
+																  paddingLeft="35"/>
+				
+				<mx:Spacer height="3"/>
+				<mx:CheckBox id="timeStampCheckBox" 
+							 label="Timestamp"
+							 selected="true"/>
 					
 			</mx:VBox>
 			

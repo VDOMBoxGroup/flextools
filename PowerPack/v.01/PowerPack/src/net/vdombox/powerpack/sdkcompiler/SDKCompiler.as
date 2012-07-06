@@ -38,6 +38,8 @@ package net.vdombox.powerpack.sdkcompiler
 		protected var flex_sdk4_1Path : String;
 		protected var airSDKForLinuxPath : String;
 		
+		protected var useTimestamp : Boolean = true;
+		
 		private var installerTplXml : XML = 
 			<application xmlns="http://ns.adobe.com/air/application/2.0">
 			 <initialWindow>
@@ -64,7 +66,8 @@ package net.vdombox.powerpack.sdkcompiler
 		// ---------- BUILD ---------------------
 		public function buildInstallerPackage(flexSdkPath : String,
 											  airSdkForLinuxPath : String,
-											  packageType : String = PACKAGE_TYPE_AIR) : void
+											  packageType : String = PACKAGE_TYPE_AIR,
+											  timeStamp : Boolean = true) : void
 		{
 			if (!NativeProcess.isSupported)
 			{
@@ -74,6 +77,8 @@ package net.vdombox.powerpack.sdkcompiler
 			
 			flex_sdk4_1Path = flexSdkPath;
 			airSDKForLinuxPath = airSdkForLinuxPath;
+			
+			this.useTimestamp = timeStamp;
 			
 			this.packageTypeNative = packageType == PACKAGE_TYPE_NATIVE;
 			
@@ -316,6 +321,13 @@ package net.vdombox.powerpack.sdkcompiler
 			argVector.push(sertificatePath);
 			argVector.push("-storepass");
 			argVector.push("q");
+			
+			if (!useTimestamp)
+			{
+				argVector.push("-tsa");
+				argVector.push("none");
+			}
+			
 			argVector.push("-target");
 			
 			if (packageTypeNative)
