@@ -12,22 +12,13 @@ package net.vdombox.editors.parsers.vdomxml
 	
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.editors.parsers.AssistMenu;
 	
 	import ro.victordramba.util.vectorToArray;
 
-	public class AssistMenuVdomXML
+	public class AssistMenuVdomXML extends AssistMenu
 	{
-		private var menuData : Vector.<Object>
-		private var fld : ScriptAreaComponent;
-		private var menu : net.vdombox.editors.PopUpMenu;
 		private var ctrl : Controller;
-		private var onComplete : Function;
-		private var stage : Stage;
-
-		private var menuStr : String;
-
-//		private var tooltip:JToolTip;
-		private var tooltipCaret : int;
 
 		public function AssistMenuVdomXML( field : ScriptAreaComponent, ctrl : Controller, stage : Stage, onComplete : Function )
 		{
@@ -55,7 +46,7 @@ package net.vdombox.editors.parsers.vdomxml
 			//fld.addEventListener( Event.CHANGE, onKeyUp );
 		}
 
-		private function filterMenu() : Boolean
+		protected override function filterMenu() : Boolean
 		{
 			var a : Array = [];
 			for each ( var s : Object in menuData )
@@ -82,55 +73,9 @@ package net.vdombox.editors.parsers.vdomxml
 			//triggerAssist();
 		}
 
-		private function onMenuKey( e : KeyboardEvent ) : void
-		{
-			if ( e.charCode != 0 )
-			{
-				var c : int = fld.caretIndex;
+		
 
-				if ( e.ctrlKey )
-				{
-
-				}
-				else if ( e.keyCode == Keyboard.BACKSPACE )
-				{
-					fldReplaceText( c - 1, c, '' );
-					if ( menuStr.length > 0 )
-					{
-						menuStr = menuStr.substr( 0, -1 );
-						if ( filterMenu() )
-							return;
-					}
-				}
-				else if ( e.keyCode == Keyboard.DELETE )
-				{
-					fldReplaceText( c, c + 1, '' );
-				}
-				else if ( e.charCode > 31 && e.charCode < 127 )
-				{
-					var ch : String = String.fromCharCode( e.charCode );
-					menuStr += ch.toLowerCase();
-					fldReplaceText( c, c, ch );
-					if ( filterMenu() )
-						return;
-				}
-				else if ( e.keyCode == Keyboard.ENTER || e.keyCode == Keyboard.TAB )
-				{
-					fldReplaceText( c - menuStr.length, c, menu.getSelectedValue() );
-					onComplete();
-				}
-
-				menu.dispose();
-			}
-		}
-
-		private function fldReplaceText( begin : int, end : int, text : String ) : void
-		{
-			//var scrl:int = fld.scrollV;
-			fld.replaceText( begin, end, text );
-			fld.setSelection( begin + text.length, begin + text.length );
-			//fld.scrollV = scrl;
-		}
+		
 
 		private function onMenuRemoved( e : Event ) : void
 		{

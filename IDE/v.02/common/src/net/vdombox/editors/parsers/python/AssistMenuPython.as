@@ -13,22 +13,18 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.editors.parsers.AssistMenu;
+	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	
 	import ro.victordramba.util.vectorToArray;
 
-	public class AssistMenuPython
+	public class AssistMenuPython extends AssistMenu
 	{
-		private var menuData : Vector.<String>;
-		private var fld : ScriptAreaComponent;
-		private var menu : PopUpMenu;
+		
 		private var ctrl : Controller;
-		private var onComplete : Function;
-		private var stage : Stage;
-
-		private var menuStr : String;
-
-//		private var tooltip:JToolTip;
-		private var tooltipCaret : int;
+		
+		private var menuDataStr : Vector.<String>;
+		
 
 		public function AssistMenuPython( field : ScriptAreaComponent, ctrl : Controller, stage : Stage, onComplete : Function )
 		{
@@ -52,13 +48,14 @@ package net.vdombox.editors.parsers.python
 //			tooltip = new JToolTip;
 
 			//used to close the tooltip
-			fld.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+			fld.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown, true );
+			fld.addEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, onTextInput );
 		}
 
-		private function filterMenu() : Boolean
+		protected override function filterMenu() : Boolean
 		{
 			var a : Array = [];
-			for each ( var s : Object in menuData )
+			for each ( var s : Object in menuDataStr )
 			{
 				if ( s.hasOwnProperty( "value" ) )
 				{
@@ -86,55 +83,10 @@ package net.vdombox.editors.parsers.python
 			if ( e.keyCode == Keyboard.SPACE && e.ctrlKey )
 				triggerAssist();
 		}
-
-		private function onMenuKey( e : KeyboardEvent ) : void
-		{
-			if ( e.charCode != 0 )
-			{
-				var c : int = fld.caretIndex;
-
-				if ( e.ctrlKey )
-				{
-
-				}
-				else if ( e.keyCode == Keyboard.BACKSPACE )
-				{
-					fldReplaceText( c - 1, c, '' );
-					if ( menuStr.length > 0 )
-					{
-						menuStr = menuStr.substr( 0, -1 );
-						if ( filterMenu() )
-							return;
-					}
-				}
-				else if ( e.keyCode == Keyboard.DELETE )
-				{
-					fldReplaceText( c, c + 1, '' );
-				}
-				else if ( e.charCode > 31 && e.charCode < 127 )
-				{
-					var ch : String = String.fromCharCode( e.charCode );
-					menuStr += ch.toLowerCase();
-					fldReplaceText( c, c, ch );
-					if ( filterMenu() )
-						return;
-				}
-				else if ( e.keyCode == Keyboard.ENTER || e.keyCode == Keyboard.TAB )
-				{
-					fldReplaceText( c - menuStr.length, c, menu.getSelectedValue() );
-					onComplete();
-				}
-
-				menu.dispose();
-			}
-		}
-
-		private function fldReplaceText( begin : int, end : int, text : String ) : void
-		{
-			//var scrl:int = fld.scrollV;
-			fld.replaceText( begin, end, text );
-			fld.setSelection( begin + text.length, begin + text.length );
-			//fld.scrollV = scrl;
+		
+		private function onTextInput( e : ScriptAreaComponenrEvent ) : void
+		{				
+			triggerAssist();
 		}
 
 		private function onMenuRemoved( e : Event ) : void
@@ -166,15 +118,15 @@ package net.vdombox.editors.parsers.python
 			menuStr = menuStr.split( "" ).reverse().join( "" );
 			pos -= menuStr.length + 1;
 
-			menuData = null;
+			menuDataStr = null;
 			
 			var rt:String = trigger.split('').reverse().join('');
 			/*if (rt == 'new' || rt == 'as' || rt == 'is' || rt == ':' || rt == 'extends' || rt == 'implements')
-				menuData = ctrl.getTypeOptions();*/
+				menuDataStr = ctrl.getTypeOptions();*/
 			if (trigger == '.')
-				menuData = ctrl.getMemberList(pos);
+				menuDataStr = ctrl.getMemberList(pos);
 			else if (trigger == '')
-				menuData = ctrl.getAllOptions(pos);
+				menuDataStr = ctrl.getAllOptions(pos);
 			/*else if (trigger == '(')
 			{
 				var fd:String = ctrl.getFunctionDetails(pos);
@@ -190,13 +142,18 @@ package net.vdombox.editors.parsers.python
 				}
 			}*/
 
-			if ( !menuData || menuData.length == 0 )
+			if ( !menuDataStr || menuDataStr.length == 0 )
 				return;
+			
+			menu.setListData( vectorToArray( menuDataStr ) );
+			menu.setSelectedIndex( 0 );
 
-			showMenu( pos + 1 );
-
+			var showingMenu : Boolean = true;
 			if ( menuStr.length )
-				filterMenu();
+				showingMenu = filterMenu();
+			
+			if ( showingMenu )
+				showMenu( pos + 1 );
 		}
 
 		private var menuRefY : int;
@@ -204,9 +161,7 @@ package net.vdombox.editors.parsers.python
 		private function showMenu( index : int ) : void
 		{
 			var p : Point;
-			menu.setListData( vectorToArray( menuData ) );
-			menu.setSelectedIndex( 0 );
-
+			
 			p = fld.getPointForIndex( index );
 			p.x += fld.scrollH;
 

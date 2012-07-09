@@ -1,6 +1,8 @@
 package net.vdombox.editors.parsers.vdomxml
 {
 
+	import net.vdombox.editors.parsers.BackwardsParser;
+	
 	import ro.victordramba.util.HashMap;
 
 

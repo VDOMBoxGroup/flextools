@@ -1,6 +1,8 @@
 package net.vdombox.editors.parsers.python
 {
 
+	import net.vdombox.editors.parsers.Multiname;
+	
 	import ro.victordramba.util.HashMap;
 
 

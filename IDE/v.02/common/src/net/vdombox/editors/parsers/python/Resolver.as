@@ -1,6 +1,8 @@
 package net.vdombox.editors.parsers.python
 {
 	import net.vdombox.editors.HashLibraryArray;
+	import net.vdombox.editors.parsers.BackwardsParser;
+	import net.vdombox.editors.parsers.Multiname;
 	import net.vdombox.editors.parsers.StructureDB;
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;

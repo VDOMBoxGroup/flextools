@@ -1,6 +1,5 @@
 package net.vdombox.editors.parsers
 {
-	import net.vdombox.editors.parsers.python.BackwardsParser;
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;

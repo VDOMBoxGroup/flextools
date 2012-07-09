@@ -7,6 +7,7 @@ package net.vdombox.editors.parsers.vdomxml
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 	
 	import ro.victordramba.util.HashMap;
+	import net.vdombox.editors.parsers.vdomxml.Field;
 
 	public class TypeDB
 	{
