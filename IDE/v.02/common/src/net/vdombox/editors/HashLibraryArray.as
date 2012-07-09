@@ -2,7 +2,7 @@ package net.vdombox.editors
 {
 	import flashx.textLayout.tlf_internal;
 	
-	import net.vdombox.editors.parsers.python.BackwardsParser;
+	import net.vdombox.editors.parsers.BackwardsParser;
 	import net.vdombox.editors.parsers.python.Field;
 	import net.vdombox.editors.parsers.python.Token;
 	import net.vdombox.editors.parsers.python.Tokenizer;

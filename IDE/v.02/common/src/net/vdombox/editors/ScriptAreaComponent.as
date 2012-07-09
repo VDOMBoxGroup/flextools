@@ -8,6 +8,8 @@ package net.vdombox.editors
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
+	
 	import ro.victordramba.scriptarea.ScriptAreaEvents;
 	
 	import spark.core.SpriteVisualElement;
@@ -119,6 +121,11 @@ package net.vdombox.editors
 
 			update();
 		}
+		
+		public function set scriptLang( value : String ) : void
+		{
+			area.scriptLang = value;
+		}
 
 		override public function setLayoutBoundsSize( width : Number, height : Number, postLayoutTransform : Boolean = true ) : void
 		{
@@ -228,6 +235,7 @@ package net.vdombox.editors
 			{
 				area.addEventListener( Event.SCROLL, area_srollHandler, false, 0, true );
 				area.addEventListener( Event.CHANGE, area_changeHandler, false, 0, true );
+				area.addEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, area_textInputHandler, false, 0, true );
 			}
 
 			if ( lineNums )
@@ -245,6 +253,7 @@ package net.vdombox.editors
 			{
 				area.removeEventListener( Event.SCROLL, area_srollHandler );
 				area.removeEventListener( Event.CHANGE, area_changeHandler );
+				area.removeEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, area_textInputHandler );
 			}
 
 			if ( lineNums )
@@ -277,6 +286,11 @@ package net.vdombox.editors
 		private function area_changeHandler( event : Event ) : void
 		{
 			dispatchEvent( new Event( Event.CHANGE ) );
+		}
+		
+		private function area_textInputHandler( event : ScriptAreaComponenrEvent ) : void
+		{
+			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_INPUT ) );
 		}
 
 		private function updateScrollBars() : void

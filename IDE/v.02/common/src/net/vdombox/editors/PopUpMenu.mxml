@@ -9,6 +9,8 @@
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import mx.managers.PopUpManager;
+			
+			private var showed : Boolean = false;
 
 			public function setListData( value : Array ) : void
 			{
@@ -32,16 +34,18 @@
 
 			public function show( owner : DisplayObjectContainer, x : int, y : int ) : void
 			{
-//				this.owner = owner;
-//				updateSize();
+				if ( showed )
+					dispose();
+				
 				this.x = x;
 				this.y = y;
+				showed = true;
 				PopUpManager.addPopUp( this, owner.parent );
-//				(getUI() as PopupUI).resetIndex();
 			}
 
 			public function dispose() : void
 			{
+				showed = false;
 				PopUpManager.removePopUp( this );
 			}
 		]]>

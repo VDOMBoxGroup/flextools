@@ -15,6 +15,8 @@ package ro.victordramba.scriptarea
 	import flash.ui.MouseCursor;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
+	
+	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 
 	/*import flash.desktop.Clipboard;
 	   import flash.desktop.ClipboardFormats;
@@ -30,6 +32,8 @@ package ro.victordramba.scriptarea
 		private var lastCol : int = 0;
 		private var extChar : int;
 		private var inputTF : TextField;
+		
+		public var scriptLang : String = "pytnon";
 
 		public function ScriptAreaEvents()
 		{
@@ -489,8 +493,28 @@ package ro.victordramba.scriptarea
 			{
 				i = _text.lastIndexOf( NL, _caret - 1 );
 				str = _text.substring( i + 1, _caret ).match( /^\s*/ )[ 0 ];
-				if ( _text.charAt( _caret - 1 ) == ':' )
-					str += '\t';
+				
+				switch(scriptLang)
+				{
+					case "vscript":
+					{
+						
+						
+						break;
+					}
+						
+					default:
+					{
+						if ( _text.charAt( _caret - 1 ) == ':' )
+							str += '\t';
+						
+						break;
+					}
+				}
+				
+				
+				
+				
 				replaceSelection( '\r' + str );
 				dipatchChange();
 			}
@@ -564,6 +588,7 @@ package ro.victordramba.scriptarea
 			if ( stage )
 				stage.focus = this;
 			dipatchChange();
+			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_INPUT ) );
 		}
 
 		private function saveLastCol() : void
