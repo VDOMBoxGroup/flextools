@@ -106,9 +106,9 @@
 				
 				var dataProvider : ArrayCollection =  new ArrayCollection( attributesArray );
 				
-				dataProvider.sort = new Sort();
+				/*dataProvider.sort = new Sort();
 				dataProvider.sort.fields = [ new SortField( "group" ), new SortField( "displayName" ) ];
-				dataProvider.refresh();
+				dataProvider.refresh();*/
 				
 				if ( !oneObject )
 				{
