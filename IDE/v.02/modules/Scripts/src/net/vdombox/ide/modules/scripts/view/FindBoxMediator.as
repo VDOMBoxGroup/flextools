@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 	import net.vdombox.ide.modules.scripts.view.components.FindBox;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptArea;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
@@ -96,15 +97,15 @@ package net.vdombox.ide.modules.scripts.view
 				{
 					selectedScriptEditor = body as ScriptEditor;
 					
-					if ( selectedScriptEditor.pythonScriptEditor )
+					if ( selectedScriptEditor.scriptEditor )
 					{
-						selectedScriptAreaComponent = selectedScriptEditor.pythonScriptEditor.scriptAreaComponent;
+						selectedScriptAreaComponent = selectedScriptEditor.scriptEditor.scriptAreaComponent;
 						if ( findBox )
 							findBox.selectedScriptAreaComponent = selectedScriptAreaComponent;
 					}
 					else
 					{
-						selectedScriptEditor.addEventListener( FlexEvent.CREATION_COMPLETE, setSelectedScriptAreaComponent, false, 0, true );
+						selectedScriptEditor.addEventListener( ScriptEditorEvent.SCRIPT_EDITOR_ADDED, setSelectedScriptAreaComponent, false, 0, true );
 					}
 					
 					break;
@@ -156,9 +157,9 @@ package net.vdombox.ide.modules.scripts.view
 			}
 		}
 		
-		private function setSelectedScriptAreaComponent( event : FlexEvent ) : void
+		private function setSelectedScriptAreaComponent( event : ScriptEditorEvent ) : void
 		{
-			selectedScriptAreaComponent = selectedScriptEditor.pythonScriptEditor.scriptAreaComponent;
+			selectedScriptAreaComponent = selectedScriptEditor.scriptEditor.scriptAreaComponent;
 			
 			if ( findBox )
 				findBox.selectedScriptAreaComponent = selectedScriptAreaComponent;

@@ -17,7 +17,9 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.editors.BaseScriptEditor;
 			import net.vdombox.editors.HashLibraryArray;
+			import net.vdombox.editors.PythonScriptEditor;
 			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.events.EditorEvent;
 			import net.vdombox.ide.common.events.FindBoxEvent;
@@ -38,6 +40,8 @@
 			private var _actionVO : Object;
 
 			private var _syntax : String = "vscript";
+			
+			public var scriptEditor : BaseScriptEditor;
 
 			[Bindable]
 			private function get unsaved():Boolean
@@ -57,16 +61,16 @@
 			[Bindable]
 			public function get script() : String
 			{
-				return  pythonScriptEditor ? pythonScriptEditor.scriptAreaComponent.text : "";
+				return  scriptEditor ? scriptEditor.scriptAreaComponent.text : "";
 			}
 
 			public function set script( value : String ) : void
 			{
 				_script = value;
-				if ( pythonScriptEditor )
+				if ( scriptEditor )
 				{
-					pythonScriptEditor.scriptAreaComponent.text = value;
-					pythonScriptEditor.dispatchEvent( new Event ( Event.CHANGE ) );
+					scriptEditor.scriptAreaComponent.text = value;
+					scriptEditor.dispatchEvent( new Event ( Event.CHANGE ) );
 				}
 			}
 			
@@ -151,23 +155,34 @@
 				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
 				removeEventListener(Event.CHANGE, setStateInUnsave, true );
 				
-				pythonScriptEditor.removeEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true );
+				scriptEditor.removeEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true );
 			}
 			
 			protected function navigatorcontent2_creationCompleteHandler(event:FlexEvent):void
 			{
 				addEventListener(Event.CHANGE, setStateInUnsave, true, 0, true );
-				pythonScriptEditor.addEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true, 0, true );
 			}
 			
 			public function set hashLibraryArray( hashLibraries : HashLibraryArray ) : void
 			{
-				pythonScriptEditor.hashLibraryArray = hashLibraries;
+				scriptEditor.hashLibraryArray = hashLibraries;
 			}
 			
 			public function setActionVO() : void
 			{
-				pythonScriptEditor.actionVO = actionVO as IEventBaseVO;
+				scriptEditor.actionVO = actionVO as IEventBaseVO;
+			}
+			
+			public function addScriptEditor() : void
+			{
+				contetn.addElement( scriptEditor );
+				
+				scriptEditor.percentWidth = 100;
+				scriptEditor.percentHeight = 100;
+				
+				scriptEditor.addEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true, 0, true );
+				
+				dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.SCRIPT_EDITOR_ADDED ) );
 			}
 			
 		]]>
@@ -190,7 +205,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:VGroup width="100%" height="100%" gap="0" visible="{_actionVO ? true : false}">
+	<s:VGroup id="contetn" width="100%" height="100%" gap="0" visible="{_actionVO ? true : false}">
 		<s:Group width="100%" height="24">
 			<s:Rect width="100%" height="100%">
 				<s:fill>
@@ -212,12 +227,12 @@
 				<button:WorkAreaButton id="undoButton"
 									   height="25" icon="{VDOMImage.Undo}"
 									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_undo' ) }"
-									   click="{pythonScriptEditor.scriptAreaComponent.undo_fun()}"/>
+									   click="{scriptEditor.scriptAreaComponent.undo_fun()}"/>
 				
 				<button:WorkAreaButton id="redoButton"
 									   height="25" icon="{VDOMImage.Redo}"
 									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_redo' ) }"
-									   click="{pythonScriptEditor.scriptAreaComponent.redo_fun()}"/>
+									   click="{scriptEditor.scriptAreaComponent.redo_fun()}"/>
 				
 			</s:HGroup>
 			
@@ -235,9 +250,9 @@
 			
 		</s:Group>
 		
-		<editors:PythonScriptEditor id="pythonScriptEditor"
+		<!--<editors:PythonScriptEditor id="pythonScriptEditor"
 									height="100%" width="100%"
-									scriptAreaComponent="{new ScriptAreaComponent()}"/>
+									scriptAreaComponent="{new ScriptAreaComponent()}"/> -->
 		
 		
 		

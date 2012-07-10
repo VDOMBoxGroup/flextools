@@ -5,6 +5,8 @@ package net.vdombox.ide.modules.scripts.view
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.editors.PythonScriptEditor;
+	import net.vdombox.editors.VScriptEditor;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.EditorEvent;
 	import net.vdombox.ide.common.events.TabEvent;
@@ -225,6 +227,26 @@ package net.vdombox.ide.modules.scripts.view
 		private function setMediator( event : FlexEvent ) : void
 		{			
 			var editor : ScriptEditor = event.target as ScriptEditor;
+			
+			switch(statesProxy.selectedApplication.scriptingLanguage)
+			{
+				case "vscript":
+				{
+					editor.scriptEditor = new VScriptEditor();
+					break;
+				}
+					
+				default:
+				{
+					editor.scriptEditor = new PythonScriptEditor();
+					break;
+				}
+			}
+			
+			editor.addScriptEditor();
+			
+			editor.scriptEditor.scriptAreaComponent.scriptLang = statesProxy.selectedApplication.scriptingLanguage;
+			
 			facade.registerMediator( new ScriptEditorMediator( editor ) );
 			editor.enabled = true;
 			

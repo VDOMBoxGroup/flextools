@@ -10,6 +10,8 @@ package net.vdombox.ide.modules.scripts.events
 		public static var SAVED : String = "actionSaved";
 		public static var NOT_SAVED : String = "actionNotSaved";
 		
+		public static var SCRIPT_EDITOR_ADDED : String = "scriptEditorAdded";
+		
 		public function ScriptEditorEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);

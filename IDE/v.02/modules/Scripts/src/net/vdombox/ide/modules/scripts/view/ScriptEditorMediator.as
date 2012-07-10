@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.scripts.view
 	
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.editors.BaseScriptEditor;
 	import net.vdombox.editors.PythonScriptEditor;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.FindBoxEvent;
@@ -105,7 +106,7 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private function compliteSourceCode( event : FlexEvent = null ):void
 		{	
-			var pythonScriptEditor: PythonScriptEditor = scriptEditor.pythonScriptEditor;
+			var pythonScriptEditor: BaseScriptEditor = scriptEditor.scriptEditor;
 			
 			if ( !pythonScriptEditor )
 				return;
