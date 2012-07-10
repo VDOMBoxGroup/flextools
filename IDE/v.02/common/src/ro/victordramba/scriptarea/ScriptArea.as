@@ -743,6 +743,10 @@ package ro.victordramba.scriptarea
 			}
 			
 			//var newX : Number = tf.width - width;
+			
+			if( width == 0 )
+				return;
+			
 			var newX : Number = cursor.getX() - tf.x - width + 48;
 			
 			if ( tf.x < newX && cursor.getX() > width - 48 )

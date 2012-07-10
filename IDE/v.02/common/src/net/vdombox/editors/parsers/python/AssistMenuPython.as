@@ -81,12 +81,12 @@ package net.vdombox.editors.parsers.python
 		private function onKeyDown( e : KeyboardEvent ) : void
 		{
 			if ( e.keyCode == Keyboard.SPACE && e.ctrlKey )
-				triggerAssist();
+				triggerAssist(true);
 		}
 		
 		private function onTextInput( e : ScriptAreaComponenrEvent ) : void
 		{				
-			triggerAssist();
+			triggerAssist(false);
 		}
 
 		private function onMenuRemoved( e : Event ) : void
@@ -97,7 +97,7 @@ package net.vdombox.editors.parsers.python
 			}, 1 );
 		}
 
-		public function triggerAssist() : void
+		public function triggerAssist( forced : Boolean ) : void
 		{
 			var pos : int = fld.caretIndex;
 
@@ -151,6 +151,8 @@ package net.vdombox.editors.parsers.python
 			var showingMenu : Boolean = true;
 			if ( menuStr.length )
 				showingMenu = filterMenu();
+			else if ( !forced )
+				return;
 			
 			if ( showingMenu )
 				showMenu( pos + 1 );
@@ -160,9 +162,7 @@ package net.vdombox.editors.parsers.python
 
 		private function showMenu( index : int ) : void
 		{
-			var p : Point;
-			
-			p = fld.getPointForIndex( index );
+			var p : Point = fld.getPointForIndex( index );
 			p.x += fld.scrollH;
 
 			p = fld.localToGlobal( p );

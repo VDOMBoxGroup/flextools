@@ -12,6 +12,7 @@ package net.vdombox.editors.parsers.vscript
 	
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AssistMenu;
+	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	
 	import ro.victordramba.util.vectorToArray;
 
@@ -46,6 +47,7 @@ package net.vdombox.editors.parsers.vscript
 			
 			//used to close the tooltip
 			fld.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+			fld.addEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, onTextInput );
 		}
 		
 		protected override function filterMenu() : Boolean
@@ -77,7 +79,12 @@ package net.vdombox.editors.parsers.vscript
 		private function onKeyDown( e : KeyboardEvent ) : void
 		{
 			if ( e.keyCode == Keyboard.SPACE && e.ctrlKey )
-				triggerAssist();
+				triggerAssist(true);
+		}
+		
+		private function onTextInput( e : ScriptAreaComponenrEvent ) : void
+		{				
+			triggerAssist(false);
 		}
 		
 		private function onMenuRemoved( e : Event ) : void
@@ -88,7 +95,7 @@ package net.vdombox.editors.parsers.vscript
 			}, 1 );
 		}
 		
-		public function triggerAssist() : void
+		public function triggerAssist( forced : Boolean ) : void
 		{
 			var pos : int = fld.caretIndex;
 			
@@ -136,21 +143,24 @@ package net.vdombox.editors.parsers.vscript
 			if ( !menuDataStr || menuDataStr.length == 0 )
 				return;
 			
-			showMenu( pos + 1 );
+			menu.setListData( vectorToArray( menuDataStr ) );
+			menu.setSelectedIndex( 0 );
 			
+			var showingMenu : Boolean = true;
 			if ( menuStr.length )
-				filterMenu();
+				showingMenu = filterMenu();
+			else if ( !forced )
+				return;
+			
+			if ( showingMenu )
+				showMenu( pos + 1 );
 		}
 		
 		private var menuRefY : int;
 		
 		private function showMenu( index : int ) : void
 		{
-			var p : Point;
-			menu.setListData( vectorToArray( menuDataStr ) );
-			menu.setSelectedIndex( 0 );
-			
-			p = fld.getPointForIndex( index );
+			var p : Point = fld.getPointForIndex( index );
 			p.x += fld.scrollH;
 			
 			p = fld.localToGlobal( p );
