@@ -27,7 +27,7 @@ package net.vdombox.editors.parsers.vdomxml
 			this.onComplete = onComplete;
 			this.stage = stage;
 
-			menu = new net.vdombox.editors.PopUpMenu();
+			_menu = new net.vdombox.editors.PopUpMenu();
 			//restore the focus to the textfield, delayed			
 			menu.addEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
 			//menu in action

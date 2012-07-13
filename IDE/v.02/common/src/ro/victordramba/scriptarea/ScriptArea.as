@@ -165,6 +165,16 @@ package ro.victordramba.scriptarea
 		{
 			return _caret;
 		}
+		
+		public function set caretIndex( value : int ) : void
+		{
+			if ( value < 0 || value > text.length )
+				return;
+			
+			_caret = value;
+			_setSelection( value, value );
+			updateCaret();
+		}
 
 		public function get selectionBeginIndex() : int
 		{
@@ -561,7 +571,7 @@ package ro.victordramba.scriptarea
 			return new Point( ( index - lastNL + tabs * 3 ) * letterBoxWidth + 1, ( lines - _scrollV ) * letterBoxHeight + 2 );
 		}
 
-		public function addFormatRun( beginIndex : int, endIndex : int, bold : Boolean, italic : Boolean, color : String ) : void
+		public function addFormatRun( beginIndex : int, endIndex : int, bold : Boolean, italic : Boolean, color : String, error : Boolean = false ) : void
 		{
 			if ( beginIndex > _selStart && beginIndex < _selEnd )
 			{
@@ -577,7 +587,7 @@ package ro.victordramba.scriptarea
 			}
 				
 				
-			runs.push( { begin: beginIndex, end: endIndex, color: color, bold: bold, italic: italic } );
+			runs.push( { begin: beginIndex, end: endIndex, color: color, bold: bold, italic: italic, error : error } );
 		}
 
 		public function clearFormatRuns() : void
@@ -926,6 +936,9 @@ package ro.victordramba.scriptarea
 					
 					if ( o.italic )
 						str = "<i>" + str + "</i>";
+					
+					if ( o.error )
+						str = "<u>" + str + "</u>";
 				}
 				
 				return str;

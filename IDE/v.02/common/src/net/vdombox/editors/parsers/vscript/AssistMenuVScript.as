@@ -31,7 +31,7 @@ package net.vdombox.editors.parsers.vscript
 			this.onComplete = onComplete;
 			this.stage = stage;
 			
-			menu = new net.vdombox.editors.PopUpMenu();
+			_menu = new net.vdombox.editors.PopUpMenu();
 			//restore the focus to the textfield, delayed			
 			menu.addEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
 			//menu in action
@@ -83,7 +83,9 @@ package net.vdombox.editors.parsers.vscript
 		}
 		
 		private function onTextInput( e : ScriptAreaComponenrEvent ) : void
-		{				
+		{		
+			/*if (  )
+			*/
 			triggerAssist(false);
 		}
 		

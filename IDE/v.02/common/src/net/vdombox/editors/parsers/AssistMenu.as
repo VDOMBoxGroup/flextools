@@ -1,6 +1,7 @@
 package net.vdombox.editors.parsers
 {
 	import flash.display.Stage;
+	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
@@ -11,7 +12,13 @@ package net.vdombox.editors.parsers
 	{
 		protected var menuData : Vector.<Object>;
 		protected var fld : ScriptAreaComponent;
-		protected var menu : PopUpMenu;
+		protected var _menu : PopUpMenu;
+
+		public function get menu():PopUpMenu
+		{
+			return _menu;
+		}
+
 		protected var onComplete : Function;
 		protected var stage : Stage;
 		
@@ -68,6 +75,8 @@ package net.vdombox.editors.parsers
 		{
 			fld.replaceText( begin, end, text );
 			fld.setSelection( begin + text.length, begin + text.length );
+			
+			fld.dispatchEvent( new Event( Event.CHANGE, true, false ) );
 		}
 		
 		protected function filterMenu() : Boolean

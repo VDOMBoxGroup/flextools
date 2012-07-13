@@ -51,6 +51,11 @@ package net.vdombox.editors
 		{
 			return area.caretIndex;
 		}
+		
+		public function set caretIndex( value : int ) : void
+		{
+			area.caretIndex = value;
+		}
 
 		public function get selectionBeginIndex() : int
 		{
@@ -144,9 +149,9 @@ package net.vdombox.editors
 			area.clearFormatRuns();
 		}
 
-		public function addFormatRun( beginIndex : int, endIndex : int, bold : Boolean, italic : Boolean, color : String ) : void
+		public function addFormatRun( beginIndex : int, endIndex : int, bold : Boolean, italic : Boolean, color : String, error : Boolean = false ) : void
 		{
-			area.addFormatRun( beginIndex, endIndex, bold, italic, color );
+			area.addFormatRun( beginIndex, endIndex, bold, italic, color, error );
 		}
 
 

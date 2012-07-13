@@ -86,10 +86,10 @@ package net.vdombox.editors.parsers.vscript
 			for ( var i : int = 0; i < tokenizer.tokens.length; i++ )
 			{
 				var t : Token = tokenizer.tokens[ i ];
-				var type : String = topType.test( t.string ) ? 'topType' : t.type;
+				var type : String = /*topType.test( t.string ) ? 'topType' : */t.type;
 				var fmt : TextFormat = formats.getValue( type );
 				if ( fmt )
-					textField.addFormatRun( t.pos, t.pos + t.string.length, fmt.bold, fmt.italic, Number( fmt.color ).toString( 16 ) );
+					textField.addFormatRun( t.pos, t.pos + t.string.length, fmt.bold, fmt.italic, Number( fmt.color ).toString( 16 ), t.error );
 					//textField.setTextFormat(fmt, t.pos, t.pos+t.string.length);
 				else if ( t.string.indexOf( 'this.' ) == 0 )
 				{
@@ -146,6 +146,11 @@ package net.vdombox.editors.parsers.vscript
 		public function newResolver() : Resolver
 		{
 			return new Resolver( tokenizer );
+		}
+		
+		public function getTokenByPos( pos : int ) : Token
+		{
+			return tokenizer.tokenByPos( pos );
 		}
 	}
 }

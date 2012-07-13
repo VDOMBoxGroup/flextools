@@ -151,5 +151,15 @@ package net.vdombox.editors.parsers.vscript
 		{
 			_actionVO = actVO;
 		}
+		
+		public function getTokenByPos( pos : int ) : Token
+		{
+			return parser.getTokenByPos( pos );
+		}
+		
+		public function runSlice() : Boolean
+		{
+			return parser.runSlice();
+		}
 	}
 }

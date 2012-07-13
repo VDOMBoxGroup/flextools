@@ -3,6 +3,7 @@ package net.vdombox.editors
 	import flash.events.Event;
 	
 	import net.vdombox.editors.parsers.vscript.AssistMenuVScript;
+	import net.vdombox.editors.parsers.vscript.AutoCompleteCodeBlockVScript;
 	import net.vdombox.editors.parsers.vscript.Controller;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
@@ -18,6 +19,7 @@ package net.vdombox.editors
 		
 		private var controller : Controller;
 		private var fileName : String;
+		private var autoCompleteCodeBlock : AutoCompleteCodeBlockVScript;
 		
 		public override function loadSource( source : String, filePath : String ) : void
 		{
@@ -35,6 +37,8 @@ package net.vdombox.editors
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
 			
 			assistMenu = new AssistMenuVScript( scriptAreaComponent, controller, stage, assistCompleteHandler );
+			
+			autoCompleteCodeBlock = new AutoCompleteCodeBlockVScript( scriptAreaComponent, controller, assistMenu );
 			
 			addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );

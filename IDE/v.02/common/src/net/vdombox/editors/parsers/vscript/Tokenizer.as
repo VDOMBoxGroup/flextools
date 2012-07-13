@@ -15,11 +15,11 @@ package net.vdombox.editors.parsers.vscript
 		private var prevStr : String;
 		
 		private static const keywordsA : Array = [
-			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "class", "clng", "const", "csng", "cstr", "date", "dim", "do", "each", "else", "end", "erase", "error", "exit", "false", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "wend", "while", "with", "xor"
+			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "class", "clng", "const", "csng", "cstr", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "wend", "while", "with", "xor"
 		];
 		
 		private static const keywords2A : Array = [
-			"self" 
+			"this" 
 		];
 		
 		private static const symbolsA : Array = [
@@ -92,6 +92,12 @@ package net.vdombox.editors.parsers.vscript
 				start = pos;
 			}
 			
+			if ( isNorR( c ) )
+			{
+				pos++;
+				return new Token( string.substring( start, pos ), Token.ENDLINE, pos );
+			}
+			
 			if ( isNumber( c ) )
 			{
 				skipToStringEnd();
@@ -118,9 +124,9 @@ package net.vdombox.editors.parsers.vscript
 				else if ( tokens.length && tokens[ tokens.length - 1 ].string == "[" &&
 					( str == "Embed" || str == "Event" || str == "SWF" || str == "Bindable" ) )
 					type = Token.KEYWORD;
-				else if ( prevStr == "def" )
+				else if ( prevStr && prevStr.toLowerCase() == "function" )
 					type = Token.NAMEFUNCTION;
-				else if ( prevStr == "class" )
+				else if ( prevStr && prevStr.toLowerCase() == "class" )
 					type = Token.NAMECLASS;
 				else
 					type = Token.STRING_LITERAL;
@@ -133,24 +139,18 @@ package net.vdombox.editors.parsers.vscript
 			}
 			else if ( c == "\"" )
 			{ 
-				if( string.length - pos > 2 && string.substr( pos + 1, 2 ) == "\"\"" )
-				{
-					skipUntil( "\"\"\"" )					
-				}
-				else
-				{
-					skipUntilWithEscNL( c )
-				}
 				
-				return new Token( string.substring( start, pos ), Token.STRING, pos );
-			}
-				
-			else if (  c == "'" )
-			{
 				skipUntilWithEscNL( c )
 				
 				return new Token( string.substring( start, pos ), Token.STRING, pos );
 			}
+				
+			/*else if (  c == "'" )
+			{
+				skipUntilWithEscNL( c )
+				
+				return new Token( string.substring( start, pos ), Token.STRING, pos );
+			}*/
 			
 			//unknown
 			return new Token( c, Token.SYMBOL, ++pos );
@@ -211,9 +211,9 @@ package net.vdombox.editors.parsers.vscript
 			//this is faster than regexp
 			pos++;
 			var c : String;
-			while ( ( c = string.charAt( pos ) ) != exit && c != "\r" && c )
+			while ( ( c = string.charAt( pos ) ) != exit && c != "\r" && c || ( c == "\"" && string.charAt( pos + 1 ) == "\"" ))
 			{
-				if ( c == "\\" )
+				if ( c == "\\" || c == "\"")
 					pos++;
 				pos++;
 			}
@@ -232,9 +232,14 @@ package net.vdombox.editors.parsers.vscript
 			}
 		}
 		
+		private function isNorR( str : String ) : Boolean
+		{
+			return str == "\n" || str == "\r";
+		}
+		
 		private function isWhitespace( str : String ) : Boolean
 		{
-			return str == " " || str == "\n" || str == "\t" || str == "\r";
+			return str == " " || str == "\t" ;
 		}
 		
 		private function skipToStringEnd() : void
@@ -299,6 +304,11 @@ package net.vdombox.editors.parsers.vscript
 			return 0;
 		}
 		
+		private var t : Token
+		private var tp : Token;
+		private var tp2 : Token;
+		private var tp3 : Token;
+		
 		internal var tokens : Array;
 		private var currentBlock : Token;
 		private var countSpaceToCurrentBlock : int;
@@ -322,8 +332,7 @@ package net.vdombox.editors.parsers.vscript
 		private var _typeDB : ClassDB;
 		private var newBlock : Boolean;
 		
-		private var tabOtstyp : int = 0;
-		private var spaceOtstyp : int = 0;
+		private var error : Boolean = false;
 		
 		
 		internal function get typeDB() : ClassDB
@@ -334,12 +343,16 @@ package net.vdombox.editors.parsers.vscript
 		public function runSlice() : Boolean
 		{
 			//init (first run)
-			if ( !tokens )
+			if ( !tokens || error)
 			{
+				if ( error )
+				{
+					error = false;
+					return false;
+				}
 				tokens = [];
 				tree = new Token( "top", null, 0 );
 				tree.children = [];
-				tree.otstyp = { tabs : 0, spaces : 0 };
 				
 				currentBlock = tree;
 				
@@ -357,76 +370,43 @@ package net.vdombox.editors.parsers.vscript
 				currentBlock.scope = scope;
 			}
 			
-			var t : Token = nextToken();
+			t = nextToken();
 			if ( !t )
 				return false;
 			
 			tokens.push( t );
 			
-			tabOtstyp = 0;
-			spaceOtstyp = 0;
-			newBlock = false;
-			
 			var position : int = pos - 1;
-			
-			/*if ( t.type == Token.ENDLINE )
-			{
-				if ( currentBlock && tokens.length >= 2 /*&& tokens[ tokens.length - 2 ].type != Token.COMMENT && string.charAt( position + 1 ) != "\r" && string.charAt( position + 1 ) != "\n" )
-				/*{
-					do
-					{
-						position++;
-						
-						while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
-						{
-							if ( string.charAt( position ) == '\t' )
-								tabOtstyp++;
-							else
-								spaceOtstyp++;
-							position++;
-						}
-					}
-					while ( string.charAt( position ) == '\r' || string.charAt( position ) == '\n' );
-					
-					if ( ( currentBlock.otstyp.tabs > tabOtstyp || currentBlock.otstyp.spaces > spaceOtstyp ) && string.charAt( position ) != '#'
-						&& string.substr( position, 3 ) != "'''" )
-					{
-						while ( currentBlock.otstyp.tabs > tabOtstyp || currentBlock.otstyp.spaces > spaceOtstyp )
-						{						
-							if ( currentBlock.pos == scope.pos )
-							{
-								scope = scope.parent;
-							}
-							
-							currentBlock = currentBlock.parent;
-							imports.pop();
-						}
-					}
-				}
-			}*/
 			
 			t.parent = currentBlock;
 			currentBlock.children.push( t );
 			
-			
-			
 			t.scope = scope;
 			
 			var tokensLength : uint = tokens.length - 1;
-			var tp : Token = tokens[ tokensLength - 1 ];
-			var tp2 : Token = tokens[ tokensLength - 2 ];
-			var tp3 : Token = tokens[ tokensLength - 3 ];
+			tp = tokens[ tokensLength - 1 ];
+			tp2 = tokens[ tokensLength - 2 ];
+			tp3 = tokens[ tokensLength - 3 ];
+			
+			var tString : String = t.string.toLowerCase();
+			var tpString : String = tp ? tp.string.toLowerCase() : "";
+			
+			
+			if ( ( tpString == "end" || tString == "next" || tString == "wend" || tString == "loop" ) && tp.type != Token.COMMENT )
+			{
+				closeBlock( tString );
+			}
 			
 			if ( importZone )
 			{
 				t.importZone = true;
 				
 				if ( !importFrom || importFrom == "" )
-					importFrom = t.string;
+					importFrom = tString;
 				
 				t.importFrom = importFrom;
 				
-				var systemName : String = t.string;
+				var systemName : String = tString;
 				
 				if ( tp.string == "as" )
 				{
@@ -437,9 +417,9 @@ package net.vdombox.editors.parsers.vscript
 				
 				if ( t.type != Token.SYMBOL )
 				{
-					imports[ imports.length - 1 ].setValue( t.string, { name : t.string, systemName : systemName, source : importFrom } );
+					imports[ imports.length - 1 ].setValue( tString, { name : tString, systemName : systemName, source : importFrom } );
 					
-					position = t.pos + t.string.length;
+					position = t.pos + tString.length;
 					while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
 						position++;
 					
@@ -451,13 +431,13 @@ package net.vdombox.editors.parsers.vscript
 				}
 				
 			}
-			else if ( t && t.string == "from" )
+			else if ( t && tString == "from" )
 			{
 				fromZone = true;
 				t.fromZone = true;
 				importFrom = "";
 			}
-			else if ( t && t.string == "import" )
+			else if ( t && tString == "import" )
 			{
 				fromZone = false;
 				importZone = true;
@@ -467,36 +447,36 @@ package net.vdombox.editors.parsers.vscript
 			else if ( fromZone )
 			{
 				t.fromZone = true;
-				importFrom += t.string;
+				importFrom += tString;
 			}
-			else if ( t.string == "@staticmethod" )
+			/*else if ( t.string == "@staticmethod" )
 			{
 				isStatic = true;
 			}
 			else if ( t.string == "@classmethod" )
 			{
 				isClassMethod = true;
-			}
-			else if ( t.string == "get" || t.string == "set" )
+			}*/
+			else if ( tString == "get" || tString == "set" )
 			{
 				//do nothing
 			}
 				
-			else if ( tp && ( tp.string == "class" ||
-				tp.string == "def" || tp.string == "catch" || tp.string == "get" || tp.string == "set" ||
-				tp.string == "const" ) )
+			else if ( tp && ( tpString == "class" ||
+				tpString == "function" ||
+				tpString == "const" ) )
 			{
 				//for package, merge classes in the existing omonimus package
-				if ( tp.string == "package" && scope.members.hasKey( t.string ) )
-					_scope = scope.members.getValue( t.string );
+				if ( tpString == "package" && scope.members.hasKey( tString ) )
+					_scope = scope.members.getValue( tString );
 				else
 				{
 					//debug("field-"+tp.string);
 					//TODO if is "set" make it "*set"
-					field = new Field( tp.string, t.pos, t.string );
-					if ( t.string != "(" ) //anonimus functions are not members
-						scope.selfMembers.setValue( t.string, field );
-					if ( tp.string != "var" && tp.string != "const" )
+					field = new Field( tpString, t.pos, tString );
+					if ( tString != "(" ) //anonimus functions are not members
+						scope.selfMembers.setValue( tString, field );
+					if ( tpString != "var" && tpString != "const" )
 						_scope = field;
 					
 					if ( isStatic ) //consume "static" declaration
@@ -511,11 +491,11 @@ package net.vdombox.editors.parsers.vscript
 						isClassMethod = false;
 					}
 					
-					if ( t.string.slice(0, 2) == "__" )
+					/*if ( t.string.slice(0, 2) == "__" )
 						access = "private";
 					else if ( t.string.slice(0, 1) == "_" )
 						access = "protected";
-					else
+					else*/
 						access = "public";
 					
 					field.access = access;
@@ -526,7 +506,7 @@ package net.vdombox.editors.parsers.vscript
 					//this is so members will have the parent set to the scope
 					field.parent = scope;
 				}
-				if ( _scope && ( tp.string == "class" ) )
+				if ( _scope && ( tpString == "class" ) )
 				{
 					_scope.type = new Multiname( "Class" );
 					try
@@ -540,10 +520,14 @@ package net.vdombox.editors.parsers.vscript
 				}
 				//add current package to imports
 				if ( tp.string == "package" )
-					imports.setValue( t.string + ".*", t.string + ".*" );
+					imports.setValue( tString + ".*", tString + ".*" );
+			}
+			else if ( checkNewBlock( tString, tpString ) )
+			{
+				_scope = new Field( tpString, t.pos, tString );
 			}
 			
-			if ( t.string == ";" )
+			if ( tString == ";" )
 			{
 				field = null;
 				_scope = null;
@@ -553,38 +537,38 @@ package net.vdombox.editors.parsers.vscript
 				//parse function params
 			else if ( _scope && ( _scope.fieldType == "def" || _scope.fieldType == "catch" || _scope.fieldType == "set" ) )
 			{
-				if ( tp && tp.string == "(" && t.string != ")" )
+				if ( tp && tpString == "(" && tString != ")" )
 					paramsBlock = true;
 				
 				if ( paramsBlock )
 				{
 					if ( !param && t.string != "..." )
 					{
-						param = new Field( "var", pos, t.string );
+						param = new Field( "var", pos, tString );
 						t.scope = _scope;
 						_scope.params.setValue( param.name, param );
-						if ( tp.string == "..." )
+						if ( tpString == "..." )
 						{
 							_scope.hasRestParams = true;
 							param.type = new Multiname( "Array" );
 						}
 					}
-					else if ( tp.string == ":" )
+					else if ( tpString == ":" )
 					{
 						if ( _scope.fieldType == "set" )
 						{
-							_scope.type = new Multiname( t.string, imports[ imports.length - 1 ] );
+							_scope.type = new Multiname( tString, imports[ imports.length - 1 ] );
 						}
 						else
-							param.type = new Multiname( t.string, imports[ imports.length - 1 ] );
+							param.type = new Multiname( tString, imports[ imports.length - 1 ] );
 					}
 						
-					else if ( t.string == "=" )
+					else if ( tString == "=" )
 						defParamValue = "";
 						
-					else if ( t.string == "," || t.string == ")" )
+					else if ( tString == "," || tString == ")" )
 					{
-						if ( t.string == ")" )
+						if ( tString == ")" )
 						{
 							paramsBlock = false;
 						}
@@ -599,22 +583,22 @@ package net.vdombox.editors.parsers.vscript
 						defParamValue += t.string;
 				}
 			}
-			else if ( t.string == "=" && tp.type == Token.STRING_LITERAL )
+			else if ( tString == "=" && tp.type == Token.STRING_LITERAL )
 			{
 				if ( tp2 && tp2.string != "." )
 				{
-					field = new Field( "var", t.pos, tp.string );
+					field = new Field( "var", t.pos, tpString );
 					
 					if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top")
-						currentBlock.scope.selfMembers.setValue( tp.string, field );
+						currentBlock.scope.selfMembers.setValue( tpString, field );
 					else
-						scope.members.setValue( tp.string, field );
+						scope.members.setValue( tpString, field );
 					
-					if ( tp.string.slice(0, 2) == "__" )
+					/*if ( tp.string.slice(0, 2) == "__" )
 						access = "private";
 					else if ( t.string.slice(0, 1) == "_" )
 						access = "protected";
-					else
+					else*/
 						access = "public";
 					
 					field.access = access;
@@ -639,11 +623,11 @@ package net.vdombox.editors.parsers.vscript
 					else 
 					{
 						field = new Field( "var", t.pos, curToken.string );
-						if ( curToken.string.slice(0, 2) == "__" )
+						/*if ( curToken.string.slice(0, 2) == "__" )
 							access = "private";
 						else if ( curToken.string.slice(0, 1) == "_" )
 							access = "protected";
-						else
+						else*/
 							access = "public";
 						
 						field.access = access;
@@ -668,11 +652,11 @@ package net.vdombox.editors.parsers.vscript
 						else 
 						{
 							tField2 = new Field( "var", t.pos, curToken.string );
-							if ( curToken.string.slice(0, 2) == "__" )
+							/*if ( curToken.string.slice(0, 2) == "__" )
 								access = "private";
 							else if ( curToken.string.slice(0, 1) == "_" )
 								access = "protected";
-							else
+							else*/
 								access = "public";
 							
 							tField2.access = access;
@@ -684,11 +668,11 @@ package net.vdombox.editors.parsers.vscript
 					
 					
 					
-					if ( tp.string.slice(0, 2) == "__" )
+					/*if ( tp.string.slice(0, 2) == "__" )
 						access = "private";
 					else if ( t.string.slice(0, 1) == "_" )
 						access = "protected";
-					else
+					else*/
 						access = "public";
 					
 					field.access = access;
@@ -700,44 +684,99 @@ package net.vdombox.editors.parsers.vscript
 			
 			
 			
-			if ( field && tp3 && tp.string == ":" )
+			if ( field && tp3 && tpString == ":" )
 			{
 				if ( tp3.string == "var" || tp3.string == "const" || tp2.string == ")" )
 				{
 					if ( field.fieldType != "set" )
 					{
-						field.type = new Multiname( t.string, imports[ imports.length - 1 ] );
+						field.type = new Multiname( tString, imports[ imports.length - 1 ] );
 					}
 					field = null;
 				}
 			}
 			
 			
-			if ( t.string == ":" && _scope )
+			//new block
+			if ( checkNewBlock( tString, tpString ) && _scope )
 			{	
-				currentBlock = t;
-				t.children = [];				
-				do
+				newBlock = true;
+				
+				if ( tString == "elseif" || tString == "else"  )
 				{
-					countSpaceToCurrentBlock = 0;
-					countTabToCurrentBlock = 0;
-					position++;
-					
-					while( string.charAt( position ) == '\n' || string.charAt( position ) == '\r' )
-						position++;
-					
-					while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
+					t.parent = currentBlock.parent;
+					if ( currentBlock.blockType == BlockType.IF || currentBlock.blockType == BlockType.ELSEIF )
 					{
-						if ( string.charAt( position ) == '\t' )
-							countTabToCurrentBlock++;
-						else
-							countSpaceToCurrentBlock++;
-						position++;
+						createBlock( tString, tString );
+						currentBlock.mainBlockType = BlockType.IF;
+					}
+					else
+					{
+						t.error = true;
+						error = true;
 					}
 				}
-				while ( string.charAt( position ) == '\n' || string.charAt( position ) == '\r'  )
-				
-				currentBlock.otstyp = { tabs : countTabToCurrentBlock, spaces : countSpaceToCurrentBlock };
+				else if ( tString == "case" && tpString != "select" )
+				{
+					t.parent = currentBlock.parent;
+					if ( currentBlock.blockType == BlockType.CASE || currentBlock.blockType == BlockType.SELECT )
+					{
+						createBlock( BlockType.CASE, tString );
+						currentBlock.mainBlockType = BlockType.SELECT;
+					}
+					else
+					{
+						t.error = true;
+						error = true;
+					}
+				}
+				else 
+				{
+					currentBlock = t;
+					t.children = [];
+					
+					if ( tString == "if" || ( tString == "then" && currentBlock.parent.blockType == BlockType.IF) )
+					{
+						currentBlock.blockType = BlockType.IF;
+						currentBlock.mainBlockType = BlockType.IF;
+					}
+					else if ( tString == "each" && currentBlock.parent.blockType == BlockType.FOR)
+					{
+						currentBlock.blockType = BlockType.FOREACH;
+						currentBlock.mainBlockType = BlockType.FOR;
+					}
+					else if ( tString == "select" || tString == "case" )
+					{
+						currentBlock.blockType = BlockType.SELECT;
+						currentBlock.mainBlockType = BlockType.SELECT;
+					}
+					else if ( tString == "sub" )
+					{
+						currentBlock.blockType = BlockType.SUB;
+						currentBlock.mainBlockType = BlockType.SUB;
+					}
+					else if ( tString == "function" )
+					{
+						currentBlock.blockType = BlockType.FUNCTION;
+						currentBlock.mainBlockType = BlockType.FUNCTION;
+					}
+					else if ( tString == "for" )
+					{
+						currentBlock.blockType = BlockType.FOR;
+						currentBlock.mainBlockType = BlockType.FOR;
+					}
+					else if ( tString == "do" )
+					{
+						currentBlock.blockType = BlockType.DO;
+						currentBlock.mainBlockType = BlockType.DO;
+					}
+					else if ( tString == "while" )
+					{
+						currentBlock.blockType = BlockType.WHILE;
+						currentBlock.mainBlockType = BlockType.WHILE;
+					}
+					
+				}
 				
 				imports.push( imports[ imports.length - 1 ].clone() );
 				currentBlock.imports = imports[ imports.length - 1 ];
@@ -748,17 +787,233 @@ package net.vdombox.editors.parsers.vscript
 				scope = _scope;
 				t.scope = scope;
 				
-				
-				
-				
-				
-				
-				
-				//info += pos + ")" + scope.parent.name + "->" + scope.name+"\n";
 				_scope = null;
 			}
 			
+			if ( newBlock && ( tString == "then" ) )
+			{
+				t.createConstruction = true;
+			}
+			
+			if ( t.type == Token.ENDLINE && newBlock )
+			{
+				newBlock = false;
+			}
+			
+			if ( newBlock )
+			{
+				if ( currentBlock.blockType == BlockType.FOR || currentBlock.blockType == BlockType.FOREACH
+					|| currentBlock.blockType == BlockType.SELECT || currentBlock.blockType == BlockType.CASE
+				   || currentBlock.blockType == BlockType.SUB || currentBlock.blockType == BlockType.FUNCTION
+				   || currentBlock.blockType == BlockType.DO || currentBlock.blockType == BlockType.WHILE)
+					t.createConstruction = true;
+			}
+			
 			return true;
+			
+			function createBlock( typeBLock : String, endString : String ) : void
+			{
+				closeBlock( endString );
+				currentBlock = t;
+				t.children = [];
+				currentBlock.blockType = typeBLock;
+			}
+		}
+		
+		private function closeBlock( endString : String ) : void
+		{
+			switch(endString)
+			{
+				case "if":
+				{
+					if ( currentBlock.blockType == BlockType.IF || currentBlock.blockType == BlockType.ELSE || currentBlock.blockType == BlockType.ELSEIF )
+					{
+						currentBlock.blockClosed = true;
+						
+						if ( currentBlock.pos == scope.pos )
+						{
+							scope = scope.parent;
+						}
+						
+						currentBlock = currentBlock.parent;
+						imports.pop();
+						
+						currentBlock.blockClosed = true;
+					}
+					else
+					{
+						t.error = true;
+						tp.error = true;
+						error = true;
+					}
+						
+					
+					break;
+				}
+					
+				case "else":
+				{
+					if ( currentBlock.blockType == BlockType.IF || currentBlock.blockType == BlockType.ELSE || currentBlock.blockType == BlockType.ELSEIF )
+						currentBlock.blockClosed = true;
+					
+					break;
+				}
+					
+				case "elseif":
+				{
+					if ( currentBlock.blockType == BlockType.IF || currentBlock.blockType == BlockType.ELSE || currentBlock.blockType == BlockType.ELSEIF )
+						currentBlock.blockClosed = true;
+					
+					break;
+				}
+					
+				case "select":
+				{
+					if ( currentBlock.blockType == BlockType.CASE || currentBlock.blockType == BlockType.SELECT )
+					{
+						currentBlock.blockClosed = true;
+						
+						if ( currentBlock.pos == scope.pos )
+						{
+							scope = scope.parent;
+						}
+						
+						currentBlock = currentBlock.parent;
+						imports.pop();
+						
+						currentBlock.blockClosed = true;
+					}
+					else
+					{
+						t.error = true;
+						tp.error = true;
+						error = true;
+					}
+					
+					
+					break;
+				}
+					
+				case "next":
+				{					
+					if ( currentBlock.blockType == BlockType.FOR || currentBlock.blockType == BlockType.FOREACH )
+					{
+						currentBlock.blockClosed = true;
+						if ( currentBlock.blockType == BlockType.FOR )
+							break;
+						
+						if ( currentBlock.pos == scope.pos )
+						{
+							scope = scope.parent;
+						}
+						
+						currentBlock = currentBlock.parent;
+						imports.pop();
+						
+						currentBlock.blockClosed = true;
+					}
+					else
+					{
+						t.error = true;
+						tp.error = true;
+						error = true;
+					}
+					
+					break;
+				}
+					
+				case "sub":
+				{
+					if ( currentBlock.blockType == BlockType.SUB )
+						currentBlock.blockClosed = true;
+					else
+					{
+						t.error = true;
+						tp.error = true;
+						error = true;
+					}
+					
+					break;
+				}
+					
+				case "function":
+				{
+					if ( currentBlock.blockType == BlockType.FUNCTION )
+						currentBlock.blockClosed = true;
+					else
+					{
+						t.error = true;
+						tp.error = true;
+						error = true;
+					}
+					
+					break;
+				}
+					
+				case "loop":
+				{
+					if ( currentBlock.blockType == BlockType.DO )
+						currentBlock.blockClosed = true;
+					else
+					{
+						t.error = true;
+						tp.error = true;
+						error = true;
+					}
+					
+					break;
+				}
+					
+				case "wend":
+				{
+					if ( currentBlock.blockType == BlockType.WHILE )
+						currentBlock.blockClosed = true;
+					else
+					{
+						t.error = true;
+						tp.error = true;
+						error = true;
+					}
+					
+					break;
+				}
+					
+				default:
+				{
+					break;
+				}
+			}
+			
+			if ( currentBlock.pos == scope.pos )
+			{
+				scope = scope.parent;
+			}
+			
+			currentBlock = currentBlock.parent;
+			imports.pop();
+		}
+		
+		private function checkNewBlock(value : String, prevValue : String) : Boolean
+		{
+			if ( value == "elseif" ||  value == "for" || value == "do" || ( value == "then" && currentBlock && currentBlock.blockType == BlockType.IF ) )
+				return true;
+			
+			if ( ( value == "if" || value == "select" || value == "sub" || value == "function" ) && prevValue != "end"  )
+				return true;
+			
+			if ( value == "else" && prevValue != "case" )
+				return true;
+				
+			if ( value == "case" )
+				return true;
+					
+			if ( value == "while" && prevValue != "do" )
+				return true;
+			
+			if ( value == "each" && prevValue == "for" )
+				return true;
+				
+			return false;
 		}
 		
 		internal function kill() : void
