@@ -34,7 +34,7 @@ package net.vdombox.editors
 		}
 		
 		public function addedToStageHadler( event : Event ) : void
-		{
+		{			
 			if ( scriptAreaComponent )
 				initiaize();
 		}

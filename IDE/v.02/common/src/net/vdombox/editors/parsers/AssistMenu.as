@@ -83,5 +83,9 @@ package net.vdombox.editors.parsers
 		{
 			return true;
 		}
+		
+		public function clear() : void
+		{
+		}
 	}
 }

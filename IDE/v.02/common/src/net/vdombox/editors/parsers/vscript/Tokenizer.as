@@ -105,7 +105,7 @@ package net.vdombox.editors.parsers.vscript
 				return new Token( str, Token.NUMBER, pos );
 			}
 			
-			if ( c == "#" )
+			if ( c == "'" || string.substr( pos, 3 ).toLowerCase() == "rem" )
 			{
 				skipUntilEnd();
 				return new Token( string.substring( start, pos ), Token.COMMENT, pos );
@@ -193,18 +193,6 @@ package net.vdombox.editors.parsers.vscript
 			else
 				pos = p + '\r'.length;
 		}
-		
-		/** Patch from http://www.physicsdev.com/blog/?p=14#comments - thanks */
-		/*private function skipUntilWithEsc(exit:String):void
-		{
-		pos++;
-		var c:String;
-		while ((c=string.charAt(pos)) != exit && c) {
-		if (c == "\\") pos++;
-		pos++;
-		}
-		if (c) pos++;
-		}*/
 		
 		private function skipUntilWithEscNL( exit : String ) : void
 		{
@@ -379,6 +367,7 @@ package net.vdombox.editors.parsers.vscript
 			var position : int = pos - 1;
 			
 			t.parent = currentBlock;
+
 			currentBlock.children.push( t );
 			
 			t.scope = scope;
@@ -802,10 +791,8 @@ package net.vdombox.editors.parsers.vscript
 			
 			if ( newBlock )
 			{
-				if ( currentBlock.blockType == BlockType.FOR || currentBlock.blockType == BlockType.FOREACH
-					|| currentBlock.blockType == BlockType.SELECT || currentBlock.blockType == BlockType.CASE
-				   || currentBlock.blockType == BlockType.SUB || currentBlock.blockType == BlockType.FUNCTION
-				   || currentBlock.blockType == BlockType.DO || currentBlock.blockType == BlockType.WHILE)
+				if ( currentBlock.blockType != BlockType.IF && currentBlock.blockType != BlockType.ELSE
+					&& currentBlock.blockType != BlockType.ELSEIF )
 					t.createConstruction = true;
 			}
 			
@@ -842,9 +829,7 @@ package net.vdombox.editors.parsers.vscript
 					}
 					else
 					{
-						t.error = true;
-						tp.error = true;
-						error = true;
+						setError()
 					}
 						
 					
@@ -885,9 +870,7 @@ package net.vdombox.editors.parsers.vscript
 					}
 					else
 					{
-						t.error = true;
-						tp.error = true;
-						error = true;
+						setError()
 					}
 					
 					
@@ -914,9 +897,7 @@ package net.vdombox.editors.parsers.vscript
 					}
 					else
 					{
-						t.error = true;
-						tp.error = true;
-						error = true;
+						setError()
 					}
 					
 					break;
@@ -927,11 +908,7 @@ package net.vdombox.editors.parsers.vscript
 					if ( currentBlock.blockType == BlockType.SUB )
 						currentBlock.blockClosed = true;
 					else
-					{
-						t.error = true;
-						tp.error = true;
-						error = true;
-					}
+						setError()
 					
 					break;
 				}
@@ -941,11 +918,7 @@ package net.vdombox.editors.parsers.vscript
 					if ( currentBlock.blockType == BlockType.FUNCTION )
 						currentBlock.blockClosed = true;
 					else
-					{
-						t.error = true;
-						tp.error = true;
-						error = true;
-					}
+						setError()
 					
 					break;
 				}
@@ -955,11 +928,7 @@ package net.vdombox.editors.parsers.vscript
 					if ( currentBlock.blockType == BlockType.DO )
 						currentBlock.blockClosed = true;
 					else
-					{
-						t.error = true;
-						tp.error = true;
-						error = true;
-					}
+						setError()
 					
 					break;
 				}
@@ -969,11 +938,7 @@ package net.vdombox.editors.parsers.vscript
 					if ( currentBlock.blockType == BlockType.WHILE )
 						currentBlock.blockClosed = true;
 					else
-					{
-						t.error = true;
-						tp.error = true;
-						error = true;
-					}
+						setError()
 					
 					break;
 				}
@@ -1014,6 +979,13 @@ package net.vdombox.editors.parsers.vscript
 				return true;
 				
 			return false;
+		}
+		
+		private function setError() : void
+		{
+			t.error = true;
+			tp.error = true;
+			error = true;
 		}
 		
 		internal function kill() : void

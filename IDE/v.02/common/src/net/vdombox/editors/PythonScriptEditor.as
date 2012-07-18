@@ -30,9 +30,15 @@ package net.vdombox.editors
 
 		protected override function initiaize() : void
 		{
+			/*if ( controller )
+				return;*/
+			
 			controller = new Controller( stage, scriptAreaComponent );
 
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
+			
+			if ( assistMenu )
+				assistMenu.clear();
 
 			assistMenu = new AssistMenuPython( scriptAreaComponent, controller, stage, assistCompleteHandler );
 

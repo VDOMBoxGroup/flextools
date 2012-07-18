@@ -210,5 +210,13 @@ package net.vdombox.editors.parsers.python
 				menu.dispose();
 			}
 		}
+		
+		public override function clear() : void
+		{
+			menu.removeEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
+			menu.removeEventListener( KeyboardEvent.KEY_DOWN, onMenuKey );
+			fld.removeEventListener( KeyboardEvent.KEY_DOWN, onKeyDown, true );
+			fld.removeEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, onTextInput );
+		}
 	}
 }

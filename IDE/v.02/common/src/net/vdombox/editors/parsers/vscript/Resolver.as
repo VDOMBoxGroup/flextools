@@ -113,13 +113,16 @@ package net.vdombox.editors.parsers.vscript
 			//all package level items
 			var t : Token = tokenizer.tokenByPos( pos );
 			
+			if ( t && ( t.type == Token.COMMENT || t.type == Token.STRING ) )
+				return null;
+			
 			if ( t && ( t.string == "from" || t.importZone && !t.importFrom ) )
 				return hashLibraries.getLibrariesName();
 			else if ( t && t.importZone )
 				return hashLibraries.getImportToLibraty( t.importFrom );
 			
 			// default keywords
-			var a : Vector.<String> = new <String>["Array", "As", "Binary", "Boolean", "Case", "Class", "Date", "Dictionary", "Do", "Double", "Empty", "Error", "Integer", "Generic", "Mismatch", "Nothing", "Null", "Mod", "Is", "IsNot", "False", "True", "Not", "And", "Xor", "Or", "Dim", "ReDim", "Preserve", "Const", "Sub", "Exit", "End", "this", "Function", "If", "Then", "Else", "ElseIf", "Select", "Loop", "For", "Next", "Each", "In", "New", "Print", "Set", "Step", "String", "To", "Wend", "While", "Until" ];
+			var a : Vector.<String> = new <String>["And", "application", "As", "AsJSON", "Case", "Class", "Connection", "Const", "cstr", "Dim", "Do", "Each", "Else", "ElseIf", "Empty", "End", "Exit", "False", "For", "Function", "Generic", "If", "In", "Is", "IsNot", "Loop", "Match", "Matches", "Mismatch", "Mod", "New", "Next", "Not", "Nothing", "Null", "Or", "Preserve", "Print", "Proxy", "ReDim", "RegExp", "request", "Rem", "replace", "response", "Select", "server", "Session", "Set", "Step", "String", "Sub", "Then", "this", "To", "ToJSON", "True", "UBound", "Until", "Uses", "VdomDbConnection", "VDOMDBRecordSet", "VDOMDBRow", "VDOMImaging", "Wend", "While", "XMLDocument", "XMLNode", "Xor"  ];
 			
 			
 			for each ( f in classDB.listAll() )
@@ -193,12 +196,12 @@ package net.vdombox.editors.parsers.vscript
 		public function getAllTypes( isFunction : Boolean = true ) : Vector.<String>
 		{
 			var lst : Vector.<Field> = classDB.listAllTypes();
-			var a : Vector.<String> = new Vector.<String>;
+			var a : Vector.<String> = new <String>["Array", "Binary", "Boolean", "Date", "Dictionary", "Double", "Error", "Integer", ];
 			for each ( var f : Field in lst )
-			a.push( f.name );
+				a.push( f.name );
 			
-			if ( isFunction )
-				a.push( 'void' );
+			/*if ( isFunction )
+				a.push( 'void' );*/
 			
 			a.sort( Array.CASEINSENSITIVE );
 			return a;
@@ -356,7 +359,7 @@ package net.vdombox.editors.parsers.vscript
 			resolvedIsClass = false;
 			
 			var t0 : Token = tokenizer.tokenByPos( pos );
-			if ( t0.type == Token.COMMENT )
+			if ( t0.type == Token.COMMENT || t0.type == Token.STRING )
 				return false;
 			
 			var bp : BackwardsParser = new BackwardsParser;

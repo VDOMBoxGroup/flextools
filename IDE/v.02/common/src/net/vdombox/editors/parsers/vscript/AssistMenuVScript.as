@@ -120,10 +120,16 @@ package net.vdombox.editors.parsers.vscript
 			
 			menuDataStr = null;
 			
-			var rt:String = trigger.split('').reverse().join('');
-			/*if (rt == 'new' || rt == 'as' || rt == 'is' || rt == ':' || rt == 'extends' || rt == 'implements')
-			menuDataStr = ctrl.getTypeOptions();*/
-			if (trigger == '.')
+			var rt : String =  tmp.replace( /^\s+|\s+$/g, '' );
+			if ( rt.length > 3 )
+				rt = rt.substr( 0, 3 ).toLowerCase();
+			
+			if ( rt != "wen" )
+				rt = rt.substr( 0, 2 );
+				
+			if (rt == 'wen' || rt == 'sa' )
+				menuDataStr = ctrl.getTypeOptions();
+			else if (trigger == '.')
 				menuDataStr = ctrl.getMemberList(pos);
 			else if (trigger == '')
 				menuDataStr = ctrl.getAllOptions(pos);
@@ -209,6 +215,14 @@ package net.vdombox.editors.parsers.vscript
 				stage.removeEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler );
 				menu.dispose();
 			}
+		}
+		
+		public override function clear() : void
+		{
+			menu.removeEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
+			menu.removeEventListener( KeyboardEvent.KEY_DOWN, onMenuKey );
+			fld.removeEventListener( KeyboardEvent.KEY_DOWN, onKeyDown, true );
+			fld.removeEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, onTextInput );
 		}
 	}
 }

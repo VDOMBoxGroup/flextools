@@ -368,7 +368,6 @@ package net.vdombox.editors.parsers.python
 				
 				currentBlock = tree;
 				
-
 				//top scope
 				topScope = scope = new Field( "top", 0, "top" );
 
@@ -508,7 +507,7 @@ package net.vdombox.editors.parsers.python
 			}
 			
 			else if ( tp && ( tp.string == "class" ||
-				tp.string == "def" || tp.string == "catch" || tp.string == "get" || tp.string == "set" ||
+				tp.string == "def" ||
 				 tp.string == "const" ) )
 			{
 				//for package, merge classes in the existing omonimus package
@@ -632,8 +631,9 @@ package net.vdombox.editors.parsers.python
 					
 					if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top")
 						currentBlock.scope.selfMembers.setValue( tp.string, field );
-					else
-						scope.members.setValue( tp.string, field );
+
+						
+					scope.members.setValue( tp.string, field );
 					
 					if ( tp.string.slice(0, 2) == "__" )
 						access = "private";
@@ -738,15 +738,15 @@ package net.vdombox.editors.parsers.python
 			}
 
 
-			if ( t.string == ":" && _scope )
+			if ( tp && tp.string == ":" && t.type == Token.ENDLINE )
 			{	
 				currentBlock = t;
-				t.children = [];				
+				t.children = [];	
+				position = pos;
 				do
 				{
 					countSpaceToCurrentBlock = 0;
 					countTabToCurrentBlock = 0;
-					position++;
 					
 					while( string.charAt( position ) == '\n' || string.charAt( position ) == '\r' )
 						position++;
@@ -767,17 +767,15 @@ package net.vdombox.editors.parsers.python
 				imports.push( imports[ imports.length - 1 ].clone() );
 				currentBlock.imports = imports[ imports.length - 1 ];
 				currentBlock.scope = scope;
+				
+				if ( !_scope )
+					_scope = new Field( "none", t.pos, t.string );
+				
 				_scope.pos = t.pos;
 				_scope.parent = scope;
-				_scope.members = scope.members;
+				_scope.members = scope.members.clone();
 				scope = _scope;
 				t.scope = scope;
-				
-				
-					
-					
-					
-				
 				
 				//info += pos + ")" + scope.parent.name + "->" + scope.name+"\n";
 				_scope = null;

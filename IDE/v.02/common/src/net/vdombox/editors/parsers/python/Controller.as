@@ -34,8 +34,6 @@ package net.vdombox.editors.parsers.python
 			
 			parser = new Parser;
 			
-			trace( "new parser" + parser );
-			
 			//parser.addTypeData(TypeDB.formByteArray(new GlobalTypesAsset), 'global');
 			//parser.addTypeData(TypeDB.formByteArray(new PlayerglobalAsset), 'player');
 			//parser.addTypeData(TypeDB.formByteArray(new ASwingAsset), 'aswing');

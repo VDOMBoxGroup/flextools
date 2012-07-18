@@ -36,6 +36,9 @@ package net.vdombox.editors
 			
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
 			
+			if ( assistMenu )
+				assistMenu.clear();
+			
 			assistMenu = new AssistMenuVScript( scriptAreaComponent, controller, stage, assistCompleteHandler );
 			
 			autoCompleteCodeBlock = new AutoCompleteCodeBlockVScript( scriptAreaComponent, controller, assistMenu );

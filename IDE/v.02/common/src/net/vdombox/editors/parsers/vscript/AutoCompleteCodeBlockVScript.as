@@ -71,7 +71,12 @@ package net.vdombox.editors.parsers.vscript
 							}
 						}
 						
-						if ( block.blockType == BlockType.IF )
+							
+						if ( t.blockType == BlockType.DO )
+						{
+							pasteCode( "Loop" );
+						}
+						else if ( block.blockType == BlockType.IF )
 						{
 							pasteCode( "End If" );
 						}
@@ -95,7 +100,7 @@ package net.vdombox.editors.parsers.vscript
 						{
 							pasteCode( "Wend" );
 						}
-						else if ( block.blockType == BlockType.DO || t.blockType == BlockType.DO )
+						else if ( block.blockType == BlockType.DO )
 						{
 							pasteCode( "Loop" );
 						}
@@ -146,27 +151,14 @@ package net.vdombox.editors.parsers.vscript
 					{				
 						case "case":
 						{
-							if ( t.parent && t.parent.parent && t.blockType == BlockType.CASE )
-							{
-								i = t.parent.pos;
-								i = fld.text.lastIndexOf( "\r", i );
-								str = fld.text.substring( i + 1, currentPos ).match( /^\s*/ )[ 0 ] + "\t";
-								
-								pos = t.pos - 1;
-								while ( fld.text.charAt( pos ) == " " || fld.text.charAt( pos ) == "\t" )
-								{
-									pos--;
-								}
-								
-								if ( t.pos - pos - 1 != str.length )
-								{
-									fld.replaceText( pos + 1, t.pos, str );
-									fld.caretIndex = currentPos + ( str.length - ( t.pos - pos - 1)) ;
-								}
-								
-								fld.dispatchEvent( new Event( Event.CHANGE, true, false ) );
-							}
+							pasteCode2( BlockType.CASE );
 							
+							break;
+						}
+							
+						case "elseif":
+						{
+							pasteCode2( BlockType.CASE );
 							
 							break;
 						}
@@ -191,6 +183,30 @@ package net.vdombox.editors.parsers.vscript
 				fld.caretIndex = currentPos + 1;
 				
 				fld.dispatchEvent( new Event( Event.CHANGE, true, false ) );
+			}
+			
+			function pasteCode2( value : String ) : void
+			{
+				if ( t.parent && t.parent.parent && t.blockType == value )
+				{
+					i = t.parent.pos;
+					i = fld.text.lastIndexOf( "\r", i );
+					str = fld.text.substring( i + 1, currentPos ).match( /^\s*/ )[ 0 ] + "\t";
+					
+					pos = t.pos - 1;
+					while ( fld.text.charAt( pos ) == " " || fld.text.charAt( pos ) == "\t" )
+					{
+						pos--;
+					}
+					
+					if ( t.pos - pos - 1 != str.length )
+					{
+						fld.replaceText( pos + 1, t.pos, str );
+						fld.caretIndex = currentPos + ( str.length - ( t.pos - pos - 1)) ;
+					}
+					
+					fld.dispatchEvent( new Event( Event.CHANGE, true, false ) );
+				}
 			}
 		}
 	}

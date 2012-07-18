@@ -19,5 +19,15 @@ package net.vdombox.utils
 		{
 			return ch >= '0' && ch <= '9';
 		}
+		
+		public static function getCDataParserString( str : Object ) : String
+		{
+			return str.replace(/]]>/g, "]]]]><![CDATA[>");
+		}
+		
+		public static function htmlEnc( str : String ) : String
+		{
+			return str.replace( /&/g, "&amp;" ).replace( /\</g, "&lt;" ).replace( /\>/g, "&gt;" );
+		}
 	}
 }
