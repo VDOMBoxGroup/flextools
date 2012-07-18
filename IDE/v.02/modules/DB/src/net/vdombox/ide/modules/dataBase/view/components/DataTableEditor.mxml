@@ -35,6 +35,7 @@
 			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.BoldSearchItemRenderer;
 			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.CheckBoxItemRenderers;
 			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;
+			import net.vdombox.utils.StringUtils;
 			
 			private var _objectVO : ObjectVO;
 			
@@ -521,7 +522,7 @@
 				{
 					xmlRow.appendChild(
 						<cell name={dataGridCell.dataField}>
-						{item[dataGridCell.dataField]}
+						{StringUtils.getCDataParserString( item[dataGridCell.dataField] )}
 						</cell> );
 				}
 				

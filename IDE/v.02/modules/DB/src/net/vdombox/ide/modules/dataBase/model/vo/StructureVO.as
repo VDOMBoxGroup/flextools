@@ -30,7 +30,7 @@ package net.vdombox.ide.modules.dataBase.model.vo
 			}
 			else
 			{
-				name = "New Column";
+				name = "NewColumn";
 				type = "TEXT";
 				id = UIDUtil.createUID().toLowerCase();
 				primary = false;

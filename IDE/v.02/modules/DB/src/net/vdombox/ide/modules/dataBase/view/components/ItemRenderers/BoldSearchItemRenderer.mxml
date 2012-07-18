@@ -8,10 +8,12 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.dataGridClasses.DataGridListData;
+			import mx.controls.textClasses.TextRange;
 			
-			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
+			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.ide.modules.dataBase.interfaces.ISearchable;
+			import net.vdombox.utils.StringUtils;
 			import net.vdombox.utils.WindowManager;
 			
 			import spark.events.TextOperationEvent;
@@ -32,18 +34,15 @@
 				super.validateProperties();
 				
 				// if owner is searchable and searchExpression si set we highlight all matches of searchExpression
-				if (listData && listData.owner is ISearchable)
+				/*if (listData && listData.owner is ISearchable)
 				{
 					var dg:ISearchable = ISearchable(listData.owner);
+					
+					textArea.htmlText = StringUtils.htmlEnc( data[DataGridListData(listData).dataField] );
+					
 					if (dg.searchExpression)
-					{
-						textArea.htmlText = data[DataGridListData(listData).dataField].replace(dg.searchExpression, "<b><font size='13'>$&</font></b>");
-					}
-					else
-					{
-						textArea.htmlText = data[DataGridListData(listData).dataField];
-					}
-				}
+						textArea.htmlText = textArea.htmlText.replace( dg.searchExpression, "<b><font size='13'>$&</font></b>" );
+				}*/
 			}
 			
 			protected function textArea_doubleClickHandler(event:MouseEvent):void
@@ -63,6 +62,7 @@
 					textArea.text = event.value;
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
 					data[DataGridListData(listData).dataField] = textArea.text;
+					invalidateProperties();
 				}
 				
 				function cancelHandler( event : StringAttributeEditWindowEvent ) : void

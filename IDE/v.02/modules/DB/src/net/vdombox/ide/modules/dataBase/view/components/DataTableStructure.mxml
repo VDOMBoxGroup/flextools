@@ -13,12 +13,12 @@
 			import mx.utils.UIDUtil;
 			
 			import net.vdombox.ide.common.model._vo.ObjectVO;
+			import net.vdombox.ide.common.view.components.button.AlertButton;
+			import net.vdombox.ide.common.view.components.windows.Alert;
 			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;
-			import net.vdombox.ide.common.view.components.windows.Alert;
-			import net.vdombox.ide.common.view.components.button.AlertButton;
 			
 			private var _objectVO : ObjectVO;
 			
@@ -33,6 +33,8 @@
 			private var columnsProviderOld:Array = [];	/* of Object */
 			
 			private var selectedItem : StructureVO;
+			
+			private var numberErrors : int = 0;
 			
 			public function get tableStructure():XML
 			{
@@ -107,6 +109,9 @@
 				}
 				
 				dataTable.dataProvider = columnsProvider;
+				
+				commit.enabled = true;
+				numberErrors = 0;
 			}
 			
 			private function findRecordInOldDataProvider( structureID : String ) : StructureVO
@@ -128,6 +133,12 @@
 				
 				for each ( newStructureVO in columnsProvider )
 				{
+					if( newStructureVO.name.indexOf( " " ) != -1 )
+					{
+						Alert.Show( resourceManager.getString( 'DataBase_General', 'data_table_structure_space_in_name_column_dialog' ), AlertButton.OK, this, null );
+						return;
+					}
+					
 					requestXML =
 						<tableStructure>
 							<column 
@@ -276,7 +287,6 @@
 			
 			private function discardChanges() : void 
 			{
-				//__applyBtn.enabled = false;
 				queue.reset();
 				queue.addRequest(UIDUtil.createUID(), 'get_structure', '', getTableStructureHandler, null);
 				queue.execute();
@@ -303,11 +313,11 @@
 		<s:Group width="100%" height="100%">
 		
 			<mx:DataGrid id="dataTable" width="100%" height="100%" dataProvider="{columnsProvider}" draggableColumns="false"
-					 	sortableColumns="false" editable="true" change="dataTable_changeHandler(event)"
+					 	sortableColumns="false" change="dataTable_changeHandler(event)" editable="true"
 						alpha.Result="1" alpha.Progress="0.4" doubleClickEnabled="true" doubleClick="dataTable_doubleClickHandler(event)">
 				<mx:columns>
 					<mx:DataGridColumn dataField="name" headerText="Name"/>
-					
+						
 					<mx:DataGridColumn dataField="type" headerText="Type" editable="false" width="120">
 						<mx:itemRenderer>
 							<fx:Component>
