@@ -1,0 +1,194 @@
+<?xml version="1.0"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+					   creationComplete="init()">
+	<fx:Script><![CDATA[
+		import mx.controls.Alert;
+
+		import net.vdombox.proshare.Event.FilesProxyEvent;
+		import net.vdombox.proshare.model.FileProxy;
+
+		import net.vdombox.proshare.model.FilesProxy;
+
+		import net.vdombox.proshare.model.ServerProxy;
+
+		import spark.events.TextOperationEvent;
+
+		private var serverProxy:ServerProxy;
+		private var filesProxy:FilesProxy;
+
+
+		private function init():void
+		{
+			toLog ( "init" );
+			serverProxy = new ServerProxy ();
+			filesProxy = new FilesProxy ();
+
+			serverProxy.addEventListener ( ServerProxy.RESULT_RECEIVED, rusultRecevedHandler, false, 0, true );
+			filesProxy.addEventListener ( FilesProxyEvent.MESSAGE, filesProxyEventMessage, false, 0, true );
+			filesProxy.addEventListener ( ProgressEvent.PROGRESS, progresshandler, false, 0, true );
+		}
+
+		private function progresshandler( event:ProgressEvent ):void
+		{
+			progress.text = event.bytesLoaded + " / " + event.bytesTotal + " bytes of a file loaded.";
+		}
+
+		private function connect():void
+		{
+			if ( !pathIsDirectory )
+			{
+				Alert.show ( "Path - must be an existing folder." );
+				return;
+			}
+
+			FileProxy.outputPath = path.text;
+			currentState = "Working";
+			toLog ( "Login..." );
+			serverProxy.login ( server.text, login.text, password.text );
+
+			filesProxy.server = server.text;
+		}
+
+		private function rusultRecevedHandler( event:Event ):void
+		{
+			if ( serverProxy.resultType == ServerProxy.SUCCESS )
+			{
+				switch ( serverProxy.state )
+				{
+
+					case ServerProxy.LOGIN:
+						toLog ( "Login Ok." );
+
+						serverProxy.loadSpacesInfo ();
+
+						toLog ( "Loading spaces info..." );
+						break;
+
+					case ServerProxy.LOAD_SPACES_INFO:
+						filesProxy.createSpacesVO ( serverProxy.result );
+						toLog ( "Loaded  spaces info Ok" );
+						serverProxy.loadFilesInfo ();
+
+						toLog ( "Loading files info..." );
+						break;
+
+					case ServerProxy.LOAD_FILES_INFO:
+						toLog ( "Loading files info Ok." );
+
+						filesProxy.createFilesVO ( serverProxy.result );
+
+						toLog ( filesProxy.filesVO.length + "  files. " + filesProxy.fullSize );
+
+						filesProxy.download ();
+
+						break;
+
+					default:
+						trace ( "\n********\n Unknown serverProxy.state: " + serverProxy.state );
+				}
+			}
+			else
+			{
+				Alert.show ( serverProxy.result.toString () );
+
+				toLog ( "Error: " + serverProxy.result );
+			}
+		}
+
+		private function filesProxyEventMessage( event:FilesProxyEvent ):void
+		{
+			toLog ( event.message );
+			progressLabel.text = filesProxy.progress;
+		}
+
+		private function toLog( value:String ):void
+		{
+			trace ( value );
+			if ( !logArea )
+				return;
+
+			logArea.text += "\n" + value;
+			logArea.scroller.verticalScrollBar.viewport.verticalScrollPosition = 100000000;
+			;
+
+		}
+
+
+		private function get pathIsDirectory():Boolean
+		{
+			var file:File;
+
+			try
+			{
+				file = new File ( path.text );
+			}
+			catch ( e:Error )
+			{
+			}
+
+			return file && file.isDirectory;
+		}
+
+		private function path_focusInHandler( event:FocusEvent ):void
+		{
+			var directory:File   = new File;
+			//directory.nativePath = so.data.path;
+
+			try
+			{
+				directory.addEventListener(Event.SELECT, directorySelected);
+
+				directory.browseForDirectory("Select Directory");
+			}
+			catch (error:Error)
+			{
+//				ErrorLogger.instance.logError("Failed: path is not correct", "OpenDirectoryCommand.execute()");
+				trace("Failed:", error.message);
+			}
+
+			function directorySelected(event:Event):void
+			{
+				directory = event.target as File;
+				path.text    = directory.nativePath;
+			}
+		}
+		]]></fx:Script>
+	<s:states>
+		<!-- Define the new view states. -->
+		<s:State name="default"/>
+		<s:State name="Working"/>
+	</s:states>
+
+	<s:VGroup y="20" x="20"    visible.Working="false"
+			  horizontalAlign="right">
+		<s:Label text="Proshare downloader" fontSize="20"/>
+		<s:HGroup>
+			<s:Label text="Server:"/>
+			<s:TextInput id="server" text=""/>
+		</s:HGroup>
+		<s:HGroup>
+			<s:Label text="Login:"/>
+			<s:TextInput id="login" text="root"/>
+		</s:HGroup>
+		<s:HGroup>
+			<s:Label text="Password:"/>
+			<s:TextInput id="password" text="" displayAsPassword="true"/>
+		</s:HGroup>
+		<s:HGroup>
+			<s:Label text="Path:"/>
+			<s:TextInput id="path" text="" focusIn="path_focusInHandler(event)" />
+		</s:HGroup>
+
+		<s:Button click="connect()" label="Start"/>
+	</s:VGroup>
+<s:VGroup  includeIn="Working"
+		y="20" x="20" bottom="20" right="20"
+		  width="100%" height="100%">
+	<s:Label text="Log" fontSize="20"   />
+	<s:TextArea id="logArea" width="100%" height="100%"  />
+	<s:Label id="progress" fontSize="14"/>
+	<s:Label id="progressLabel" fontSize="14"/>
+
+</s:VGroup>
+
+</s:WindowedApplication>
