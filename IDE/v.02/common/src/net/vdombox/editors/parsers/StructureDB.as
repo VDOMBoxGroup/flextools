@@ -78,7 +78,7 @@ package net.vdombox.editors.parsers
 				
 				for each ( object in objects )
 				{
-					if ( object.@name == selfObjectVO.name )
+					if ( object.@id == selfObjectVO.id )
 					{
 						objects = object.children();
 						flag = true;

@@ -3,8 +3,8 @@ package net.vdombox.editors
 	import flashx.textLayout.tlf_internal;
 	
 	import net.vdombox.editors.parsers.BackwardsParser;
-	import net.vdombox.editors.parsers.python.Field;
-	import net.vdombox.editors.parsers.python.Token;
+	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.python.PythonToken;
 	import net.vdombox.editors.parsers.python.Tokenizer;
 
 	public class HashLibraryArray
@@ -48,7 +48,7 @@ package net.vdombox.editors
 			while ( tokenizer.runSlice() )
 				;
 			
-			var t : Token = tokenizer.tokenByPos(1);
+			var t : PythonToken = tokenizer.tokenByPos(1);
 			
 			if ( t && t.scope && t.scope.selfMembers )
 			{
@@ -92,9 +92,11 @@ package net.vdombox.editors
 			var tokenizer : Tokenizer = new Tokenizer( string );
 			
 			while ( tokenizer.runSlice() )
-				;
+			{
+				
+			}
 			
-			var t : Token = tokenizer.tokenByPos(1);
+			var t : PythonToken = tokenizer.tokenByPos(1);
 			var scope : Field = t.scope;
 			
 			

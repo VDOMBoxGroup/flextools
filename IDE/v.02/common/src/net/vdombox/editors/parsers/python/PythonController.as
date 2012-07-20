@@ -2,7 +2,6 @@ package net.vdombox.editors.parsers.python
 {
 	import flash.display.Stage;
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
 	import flash.net.FileReference;
 	import flash.net.SharedObject;
 	import flash.utils.ByteArray;
@@ -11,34 +10,29 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.Location;
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.editors.parsers.Controller;
+	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
+	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import ro.victordramba.thread.ThreadEvent;
 	import ro.victordramba.thread.ThreadsController;
 
 	[Event( type="flash.events.Event", name="change" )]
 
-	public class Controller extends EventDispatcher
+	public class PythonController extends Controller
 	{
-		public function Controller( stage : Stage, textField : ScriptAreaComponent )
+		public function PythonController( stage : Stage, textField : ScriptAreaComponent, __actionVO : IEventBaseVO )
 		{
 			fld = textField;
+			_actionVO = __actionVO;
 			
 			//TODO refactor, Controller should probably be a singleton
-			/*if ( !tc )
-			{*/
-				tc = new ThreadsController( stage );
-				//TypeDB.setDB('global', TypeDB.formByteArray(new GlobalTypesAsset));
-				//TypeDB.setDB('playerglobal', TypeDB.formByteArray(new PlayerglobalAsset));
-			/*}*/
+			
+			tc = new ThreadsController( stage );
 			
 			parser = new Parser;
-			
-			//parser.addTypeData(TypeDB.formByteArray(new GlobalTypesAsset), 'global');
-			//parser.addTypeData(TypeDB.formByteArray(new PlayerglobalAsset), 'player');
-			//parser.addTypeData(TypeDB.formByteArray(new ASwingAsset), 'aswing');
-			
-			
 			
 			tc.addEventListener( ThreadEvent.THREAD_READY, function( e : ThreadEvent ) : void
 			{
@@ -62,33 +56,12 @@ package net.vdombox.editors.parsers.python
 		}
 
 		private var parser : Parser;
-		
-		private var t0 : Number;
-		 private var tc : ThreadsController;
-
-		public var status : String;
-		public var percentReady : Number = 0;
-		//public var tokenInfo:String;
-		//public var scopeInfo:Array/*of String*/
-		//public var typeInfo:Array/*of String*/
-
-		private var fld : ScriptAreaComponent;
-		
-		private var hashLibraries : HashLibraryArray;
-		
-		private var _actionVO : IEventBaseVO;
-		
 
 		public function saveTypeDB() : void
 		{
-			/*var so:SharedObject = SharedObject.getLocal('ascc-type');
-			   so.data.typeDB = parser.getTypeData();
-			 so.flush();*/
-
 			var file : FileReference = new FileReference;
 			var ret : ByteArray = parser.getTypeData();
 			file.save( ret, 'globals.amf' );
-
 		}
 
 		public function restoreTypeDB() : void
@@ -97,16 +70,6 @@ package net.vdombox.editors.parsers.python
 			var so : SharedObject = SharedObject.getLocal( 'ascc-type' );
 			ClassDB.setDB( 'restored', so.data.typeDB );
 		}
-
-		/*public function addTypeDB(typeDB:TypeDB, name:String):void
-		   {
-		   parser.addTypeData(typeDB, name);
-		 }*/
-
-//		public function loadSWFLib( swfData : ByteArray, fileName : String ) : void
-//		{
-//			TypeDB.setDB( fileName, SWFParser.parse( swfData ) );
-//		}
 
 		public function sourceChanged( source : String, fileName : String ) : void
 		{
@@ -172,6 +135,11 @@ package net.vdombox.editors.parsers.python
 		public function set actionVO( actVO : IEventBaseVO ) : void
 		{
 			_actionVO = actVO;
+		}
+		
+		public override function getTokenByPos( pos : int ) : Token
+		{
+			return parser.getTokenByPos( pos );
 		}
 	}
 }

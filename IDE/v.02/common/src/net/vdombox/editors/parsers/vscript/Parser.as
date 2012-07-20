@@ -22,16 +22,16 @@ package net.vdombox.editors.parsers.vscript
 		{
 			//syntax highlighting
 			formats.setValue( 'default', new TextFormat( null, null, 0x111111, false, false ) );
-			formats.setValue( Token.KEYWORD, new TextFormat( null, null, 0x1039FF, true, false ) );
-			formats.setValue( Token.KEYWORD2, new TextFormat( null, null, 0x247ECE, true, false ) );
-			formats.setValue( Token.E4X, new TextFormat( null, null, 0x613BB9, false, false ) );
-			formats.setValue( Token.COMMENT, new TextFormat( null, null, 0x008000, false, true ) );
-			formats.setValue( Token.REGEXP, new TextFormat( null, null, 0xa3a020, false, false ) );
-			formats.setValue( Token.STRING, new TextFormat( null, null, 0x990000, false, false ) );
-			formats.setValue( Token.NUMBER, new TextFormat( null, null, 0x990099, false, false ) );
-			formats.setValue( Token.SYMBOL, new TextFormat( null, null, 0x006060, false, false ) );
-			formats.setValue( Token.NAMEFUNCTION, new TextFormat( null, null, 0xFF00FF, false, false ) );
-			formats.setValue( Token.NAMECLASS, new TextFormat( null, null, 0xFF7200, false, false ) );
+			formats.setValue( VScriptToken.KEYWORD, new TextFormat( null, null, 0x1039FF, true, false ) );
+			formats.setValue( VScriptToken.KEYWORD2, new TextFormat( null, null, 0x247ECE, true, false ) );
+			formats.setValue( VScriptToken.E4X, new TextFormat( null, null, 0x613BB9, false, false ) );
+			formats.setValue( VScriptToken.COMMENT, new TextFormat( null, null, 0x008000, false, true ) );
+			formats.setValue( VScriptToken.REGEXP, new TextFormat( null, null, 0xa3a020, false, false ) );
+			formats.setValue( VScriptToken.STRING, new TextFormat( null, null, 0x990000, false, false ) );
+			formats.setValue( VScriptToken.NUMBER, new TextFormat( null, null, 0x990099, false, false ) );
+			formats.setValue( VScriptToken.SYMBOL, new TextFormat( null, null, 0x006060, false, false ) );
+			formats.setValue( VScriptToken.NAMEFUNCTION, new TextFormat( null, null, 0xFF00FF, false, false ) );
+			formats.setValue( VScriptToken.NAMECLASS, new TextFormat( null, null, 0xFF7200, false, false ) );
 			formats.setValue( 'topType', new TextFormat( null, null, 0x981056, false, false ) );
 		}
 		
@@ -85,7 +85,7 @@ package net.vdombox.editors.parsers.vscript
 			
 			for ( var i : int = 0; i < tokenizer.tokens.length; i++ )
 			{
-				var t : Token = tokenizer.tokens[ i ];
+				var t : VScriptToken = tokenizer.tokens[ i ];
 				var type : String = /*topType.test( t.string ) ? 'topType' : */t.type;
 				var fmt : TextFormat = formats.getValue( type );
 				if ( fmt )
@@ -93,7 +93,7 @@ package net.vdombox.editors.parsers.vscript
 					//textField.setTextFormat(fmt, t.pos, t.pos+t.string.length);
 				else if ( t.string.indexOf( 'this.' ) == 0 )
 				{
-					fmt = formats.getValue( Token.KEYWORD );
+					fmt = formats.getValue( VScriptToken.KEYWORD );
 					textField.addFormatRun( t.pos, t.pos + 4, fmt.bold, fmt.italic, Number( fmt.color ).toString( 16 ) );
 					//textField.setTextFormat(formats.getValue(Token.KEYWORD), t.pos, t.pos+4);
 				}
@@ -148,7 +148,7 @@ package net.vdombox.editors.parsers.vscript
 			return new Resolver( tokenizer );
 		}
 		
-		public function getTokenByPos( pos : int ) : Token
+		public function getTokenByPos( pos : int ) : VScriptToken
 		{
 			return tokenizer.tokenByPos( pos );
 		}

@@ -7,6 +7,7 @@ package ro.victordramba.scriptarea
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
+	import net.vdombox.editors.parsers.Controller;
 	import net.vdombox.utils.StringUtils;
 
 	public class ScriptArea extends Base
@@ -100,6 +101,8 @@ package ro.victordramba.scriptarea
 		private var fmt : TextFormat;
 
 		private var savedUndoIndex : int = 0;
+		
+		public var controller : Controller;
 
 		public function get textFormat() : TextFormat
 		{
@@ -286,7 +289,6 @@ package ro.victordramba.scriptarea
 		
 		public function findText( findText : String, type : int ) : Boolean
 		{
-			
 			clearRect();
 			
 			if ( findText == "" )
@@ -336,14 +338,25 @@ package ro.victordramba.scriptarea
 			if ( index == -1 )
 				return false;
 			
-			_caret = index;
+			goToPos( index, findText.length );
+			
+			//selectionRects( findText );
+			
+			_replaceText( 0, 0, "" );
+			
+			return true;
+		}
+		
+		protected function goToPos( pos : int, len : int ) : void
+		{
+			_caret = pos;
 			
 			updateCaret();
 			checkScrollToCursor();
 			updateScrollProps();
 			
-			_selStart = index;
-			_selEnd = index + findText.length;
+			_selStart = pos;
+			_selEnd = pos + len;
 			
 			var g : Graphics = selectionShape.graphics;
 			g.clear();
@@ -352,14 +365,12 @@ package ro.victordramba.scriptarea
 			
 			var p0 : Point = getPointForIndex( _selStart );
 			var p1 : Point = getPointForIndex( _selEnd );
-				
+			
 			g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
 			
-			selectionRects( findText );
+			setSelectionRects();
 			
 			_replaceText( 0, 0, "" );
-			
-			return true;
 		}
 		
 		private function selectionRects( findText : String ) : void

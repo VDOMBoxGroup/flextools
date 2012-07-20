@@ -50,6 +50,9 @@ package ro.victordramba.thread
 		
 		function ThreadsController(stage:Stage)
 		{
+			if ( !stage )
+				return;
+			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onUIEvent, true, 100);
 			//stage.addEventListener(MouseEvent.MOUSE_MOVE, onUIEvent, true, 100);
 			this.stage = stage;

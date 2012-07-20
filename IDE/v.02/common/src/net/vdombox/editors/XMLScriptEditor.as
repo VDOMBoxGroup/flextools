@@ -2,7 +2,7 @@ package net.vdombox.editors
 {
 	import flash.events.Event;
 	
-	import net.vdombox.editors.parsers.vdomxml.Controller;
+	import net.vdombox.editors.parsers.vdomxml.VdomXMLController;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
 	
 	import spark.components.SkinnableContainer;
@@ -18,7 +18,7 @@ package net.vdombox.editors
 		[SkinPart( required="true" )]
 		public var scriptAreaComponent : ScriptAreaComponent;
 
-		private var controller : Controller;
+		private var controller : VdomXMLController;
 		private var fileName : String;
 		private var assistMenu : AssistMenuVdomXML;
 
@@ -41,7 +41,7 @@ package net.vdombox.editors
 		
 		private function initiaize() : void
 		{
-			controller = new Controller( stage, scriptAreaComponent );
+			controller = new VdomXMLController( stage, scriptAreaComponent );
 
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
 

@@ -2,7 +2,6 @@ package net.vdombox.editors.parsers.vscript
 {
 	import flash.display.Stage;
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
 	import flash.net.FileReference;
 	import flash.net.SharedObject;
 	import flash.utils.ByteArray;
@@ -11,6 +10,9 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.Location;
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.editors.parsers.Controller;
+	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	
 	import ro.victordramba.thread.ThreadEvent;
@@ -18,11 +20,13 @@ package net.vdombox.editors.parsers.vscript
 	
 	[Event( type="flash.events.Event", name="change" )]
 	
-	public class Controller extends EventDispatcher
+	public class VScriptController extends Controller
 	{
-		public function Controller( stage : Stage, textField : ScriptAreaComponent )
+		public function VScriptController( stage : Stage, textField : ScriptAreaComponent, __actionVO : IEventBaseVO )
 		{
 			fld = textField;
+			
+			_actionVO = __actionVO;
 			
 			tc = new ThreadsController( stage );
 			
@@ -49,30 +53,10 @@ package net.vdombox.editors.parsers.vscript
 			} );
 		}
 		
-		private var parser : Parser;
-		
-		private var t0 : Number;
-		private var tc : ThreadsController;
-		
-		public var status : String;
-		public var percentReady : Number = 0;
-		//public var tokenInfo:String;
-		//public var scopeInfo:Array/*of String*/
-		//public var typeInfo:Array/*of String*/
-		
-		private var fld : ScriptAreaComponent;
-		
-		private var hashLibraries : HashLibraryArray;
-		
-		private var _actionVO : IEventBaseVO;
-		
+		private var parser : Parser;		
 		
 		public function saveTypeDB() : void
-		{
-			/*var so:SharedObject = SharedObject.getLocal('ascc-type');
-			so.data.typeDB = parser.getTypeData();
-			so.flush();*/
-			
+		{			
 			var file : FileReference = new FileReference;
 			var ret : ByteArray = parser.getTypeData();
 			file.save( ret, 'globals.amf' );
@@ -152,7 +136,7 @@ package net.vdombox.editors.parsers.vscript
 			_actionVO = actVO;
 		}
 		
-		public function getTokenByPos( pos : int ) : Token
+		public override function getTokenByPos( pos : int ) : Token
 		{
 			return parser.getTokenByPos( pos );
 		}

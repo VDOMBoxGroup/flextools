@@ -3,6 +3,7 @@ package net.vdombox.editors.parsers.python
 	import flash.net.registerClassAlias;
 	import flash.utils.ByteArray;
 	
+	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
 	
 	import ro.victordramba.util.HashMap;

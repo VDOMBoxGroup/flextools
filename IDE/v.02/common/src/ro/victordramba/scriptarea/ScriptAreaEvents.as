@@ -16,6 +16,9 @@ package ro.victordramba.scriptarea
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
 	
+	import net.vdombox.editors.parsers.BackwardsParser;
+	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 
 	/*import flash.desktop.Clipboard;
@@ -59,6 +62,8 @@ package ro.victordramba.scriptarea
 				e.stopImmediatePropagation();
 			} );
 			addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
+			addEventListener( MouseEvent.CLICK, onMouseClick );
+			addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
 
 			addEventListener( FocusEvent.FOCUS_IN, function( e : FocusEvent ) : void
 			{
@@ -206,6 +211,65 @@ package ro.victordramba.scriptarea
 					scrollV += scrollDelta;
 					_setSelection( dragStart, getIndexForPoint( new Point( mouseX, mouseY ) ) );
 				}
+			}
+		}
+		
+		public function onMouseClick( e : MouseEvent ) : void
+		{
+			if ( e.ctrlKey )
+			{
+				var cursorPosition : int = getIndexForPoint( new Point( mouseX, mouseY ) );
+				var t : Token = controller.getTokenByPos( cursorPosition );
+				
+				var bp : BackwardsParser = new BackwardsParser;
+				if ( !bp.parse( text, t.pos + t.string.length ) )
+					return;
+				
+				if ( t.scope )
+				
+				getFiled( t.scope, t );
+			}
+		}
+		
+		private function getFiled( scp : Field, t : Token ) : Boolean
+		{
+			if ( scp.members.hasKey( t.string ) )
+			{
+				var variablePosition : int = Field( scp.members.getValue( t.string ) ).pos;
+				goToPos( variablePosition, t.string.length );
+			} 
+			else if ( scp.selfMembers.hasKey( t.string ) )
+			{
+				variablePosition = Field( scp.selfMembers.getValue( t.string ) ).pos;
+				goToPos( variablePosition, t.string.length );
+			}
+			else
+			{
+				var field : Field;
+				for each ( field in scp.members.toArray())
+				{
+					if ( getFiled( field, t ) )
+						return true;
+				}
+				
+				for each ( field in scp.selfMembers.toArray())
+				{
+					if ( getFiled( field, t ) )
+						return true;
+				}
+				
+				return false;
+			}
+			
+			return true;
+		}
+		
+		
+		public function onMouseMove( e : MouseEvent ) : void
+		{
+			if ( e.ctrlKey )
+			{
+				var tt : int = 0
 			}
 		}
 		

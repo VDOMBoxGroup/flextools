@@ -2,9 +2,11 @@ package net.vdombox.editors.parsers.python
 {
 	import flash.utils.Dictionary;
 	
+	import net.vdombox.editors.parsers.Token;
+	
 	import ro.victordramba.util.HashMap;
 
-	public class Token
+	public class PythonToken extends Token
 	{
 		public static const STRING_LITERAL:String = "stringLiteral";
 		public static const SYMBOL:String = "symbol";
@@ -21,15 +23,8 @@ package net.vdombox.editors.parsers.python
 		
 		public static const E4X:String = "e4x";
 
-		public var string:String;
-		public var type:String;
-		public var pos:uint;
-		public var id:uint;
+		public var parent:PythonToken;
 
-		public var children:Array/*of Token*/;
-		public var parent:Token;
-
-		public var scope:Field;//lexical scope
 		public var imports:HashMap;//used to solve names and types
 		public var otstyp:Object;//used to solve names and types
 		public var fromZone:Boolean = false;
@@ -41,7 +36,7 @@ package net.vdombox.editors.parsers.python
 		static private var count:Number = 0;
 
 
-		public function Token(string:String, type:String, endPos:uint) 
+		public function PythonToken(string:String, type:String, endPos:uint) 
 		{
 			this.string = string;
 			this.type = type;

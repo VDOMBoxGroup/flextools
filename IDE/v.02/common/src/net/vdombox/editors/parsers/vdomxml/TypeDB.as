@@ -3,11 +3,11 @@ package net.vdombox.editors.parsers.vdomxml
 	import flash.net.registerClassAlias;
 	import flash.utils.ByteArray;
 	
+	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 	
 	import ro.victordramba.util.HashMap;
-	import net.vdombox.editors.parsers.vdomxml.Field;
 
 	public class TypeDB
 	{

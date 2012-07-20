@@ -2,6 +2,7 @@ package net.vdombox.editors.parsers.vdomxml
 {
 
 	import net.vdombox.editors.parsers.BackwardsParser;
+	import net.vdombox.editors.parsers.Field;
 	
 	import ro.victordramba.util.HashMap;
 
@@ -21,12 +22,12 @@ package net.vdombox.editors.parsers.vdomxml
 		{
 			var result : Boolean = false;
 
-			var token : Token = tokenizer.tokenByPos( position );
+			var token : VdomXMLToken = tokenizer.tokenByPos( position );
 
 			if ( token &&
-				( ( token.type == Token.TAGNAME && position <= token.pos + token.string.length ) ||
-				( token.type == Token.OPENTAG && position == token.pos + token.string.length ) ) ||
-				( token.type == Token.CLOSETAG && token.string == "</" && position == token.pos + token.string.length ))
+				( ( token.type == VdomXMLToken.TAGNAME && position <= token.pos + token.string.length ) ||
+				( token.type == VdomXMLToken.OPENTAG && position == token.pos + token.string.length ) ) ||
+				( token.type == VdomXMLToken.CLOSETAG && token.string == "</" && position == token.pos + token.string.length ))
 				result = true;
 
 			return result;
@@ -36,13 +37,13 @@ package net.vdombox.editors.parsers.vdomxml
 		{
 			var result : Boolean = false;
 
-			var token : Token = tokenizer.tokenByPos( position );
+			var token : VdomXMLToken = tokenizer.tokenByPos( position );
 
 			if ( token && token.string != "<" )
 			{
-				if ( ( token.type == Token.TAGNAME && position > token.pos + token.string.length ) ||
-					( token.type == Token.ATTRIBUTENAME && position <= token.pos + token.string.length ) ||
-					( token.type == Token.ATTRIBUTEVALUE && position > token.pos + token.string.length ) )
+				if ( ( token.type == VdomXMLToken.TAGNAME && position > token.pos + token.string.length ) ||
+					( token.type == VdomXMLToken.ATTRIBUTENAME && position <= token.pos + token.string.length ) ||
+					( token.type == VdomXMLToken.ATTRIBUTEVALUE && position > token.pos + token.string.length ) )
 				{
 					result = true;
 				}
@@ -65,7 +66,7 @@ package net.vdombox.editors.parsers.vdomxml
 		public function getAttributesList( pos : int ) : Vector.<Object>
 		{
 
-			var token : Token = tokenizer.tokenByPos( pos )
+			var token : VdomXMLToken = tokenizer.tokenByPos( pos )
 			var typeName : String;
 			var type : Field;
 
@@ -75,10 +76,10 @@ package net.vdombox.editors.parsers.vdomxml
 			{
 				token = token.parent;
 
-				if ( token.type == Token.OPENTAG && token.children && token.children.length > 0 )
+				if ( token.type == VdomXMLToken.OPENTAG && token.children && token.children.length > 0 )
 					token = token.children[ 0 ];
 
-				if ( token.type == Token.TAGNAME )
+				if ( token.type == VdomXMLToken.TAGNAME )
 					typeName = token.string;
 			}
 
@@ -163,7 +164,7 @@ package net.vdombox.editors.parsers.vdomxml
 		}
 
 		//find the imports for this token
-		private function findImports( token : Token ) : HashMap
+		private function findImports( token : VdomXMLToken ) : HashMap
 		{
 			do
 			{
@@ -183,8 +184,8 @@ package net.vdombox.editors.parsers.vdomxml
 			resolvedRef = null;
 			resolvedIsClass = false;
 
-			var t0 : Token = tokenizer.tokenByPos( pos );
-			if ( t0.type == Token.COMMENT )
+			var t0 : VdomXMLToken = tokenizer.tokenByPos( pos );
+			if ( t0.type == VdomXMLToken.COMMENT )
 				return;
 
 			var bp : BackwardsParser = new BackwardsParser;
@@ -194,7 +195,7 @@ package net.vdombox.editors.parsers.vdomxml
 			//debug('bp names: '+bp.names);
 
 			//find the scope
-			var t : Token = tokenizer.tokenByPos( bp.startPos );
+			var t : VdomXMLToken = tokenizer.tokenByPos( bp.startPos );
 			if ( !t )
 				return;
 

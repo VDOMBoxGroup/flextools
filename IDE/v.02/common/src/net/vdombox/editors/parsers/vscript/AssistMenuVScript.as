@@ -19,12 +19,12 @@ package net.vdombox.editors.parsers.vscript
 	public class AssistMenuVScript extends AssistMenu
 	{
 		
-		private var ctrl : Controller;
+		private var ctrl : VScriptController;
 		
 		private var menuDataStr : Vector.<String>;
 		
 		
-		public function AssistMenuVScript( field : ScriptAreaComponent, ctrl : Controller, stage : Stage, onComplete : Function )
+		public function AssistMenuVScript( field : ScriptAreaComponent, ctrl : VScriptController, stage : Stage, onComplete : Function )
 		{
 			fld = field;
 			this.ctrl = ctrl;
@@ -221,7 +221,7 @@ package net.vdombox.editors.parsers.vscript
 		{
 			menu.removeEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
 			menu.removeEventListener( KeyboardEvent.KEY_DOWN, onMenuKey );
-			fld.removeEventListener( KeyboardEvent.KEY_DOWN, onKeyDown, true );
+			fld.removeEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 			fld.removeEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, onTextInput );
 		}
 	}

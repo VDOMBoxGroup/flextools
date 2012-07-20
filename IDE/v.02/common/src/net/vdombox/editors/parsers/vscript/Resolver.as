@@ -2,6 +2,7 @@ package net.vdombox.editors.parsers.vscript
 {
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.BackwardsParser;
+	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
 	import net.vdombox.editors.parsers.StructureDB;
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
@@ -34,7 +35,7 @@ package net.vdombox.editors.parsers.vscript
 		public function isInScope( name : String, pos : int ) : Boolean
 		{
 			//find the scope
-			var t : Token = tokenizer.tokenByPos( pos );
+			var t : VScriptToken = tokenizer.tokenByPos( pos );
 			if ( !t )
 				return false;
 			
@@ -79,7 +80,7 @@ package net.vdombox.editors.parsers.vscript
 		public function getMissingImports( name : String, pos : int ) : Vector.<String>
 		{
 			//find the scope
-			var t : Token = tokenizer.tokenByPos( pos );
+			var t : VScriptToken = tokenizer.tokenByPos( pos );
 			if ( !t )
 				return null;
 			var imports : HashMap = findImports( t );
@@ -111,9 +112,9 @@ package net.vdombox.editors.parsers.vscript
 			var f : Field;
 			
 			//all package level items
-			var t : Token = tokenizer.tokenByPos( pos );
+			var t : VScriptToken = tokenizer.tokenByPos( pos );
 			
-			if ( t && ( t.type == Token.COMMENT || t.type == Token.STRING ) )
+			if ( t && ( t.type == VScriptToken.COMMENT || t.type == VScriptToken.STRING ) )
 				return null;
 			
 			if ( t && ( t.string == "from" || t.importZone && !t.importFrom ) )
@@ -338,7 +339,7 @@ package net.vdombox.editors.parsers.vscript
 		}
 		
 		//find the imports for this token
-		private function findImports( token : Token ) : HashMap
+		private function findImports( token : VScriptToken ) : HashMap
 		{
 			do
 			{
@@ -358,8 +359,8 @@ package net.vdombox.editors.parsers.vscript
 			resolvedRef = null;
 			resolvedIsClass = false;
 			
-			var t0 : Token = tokenizer.tokenByPos( pos );
-			if ( t0.type == Token.COMMENT || t0.type == Token.STRING )
+			var t0 : VScriptToken = tokenizer.tokenByPos( pos );
+			if ( t0.type == VScriptToken.COMMENT || t0.type == VScriptToken.STRING )
 				return false;
 			
 			var bp : BackwardsParser = new BackwardsParser;
@@ -367,7 +368,7 @@ package net.vdombox.editors.parsers.vscript
 				return false;
 			
 			//find the scope
-			var t : Token = tokenizer.tokenByPos( bp.startPos );
+			var t : VScriptToken = tokenizer.tokenByPos( bp.startPos );
 			if ( !t )
 				return false;
 			

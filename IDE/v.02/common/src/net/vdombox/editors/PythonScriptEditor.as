@@ -3,7 +3,7 @@ package net.vdombox.editors
 	import flash.events.Event;
 	
 	import net.vdombox.editors.parsers.python.AssistMenuPython;
-	import net.vdombox.editors.parsers.python.Controller;
+	import net.vdombox.editors.parsers.python.PythonController;
 	import net.vdombox.editors.parsers.vdomxml.AssistMenuVdomXML;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
@@ -16,7 +16,7 @@ package net.vdombox.editors
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
 		}
 
-		private var controller : Controller;
+		private var controller : PythonController;
 		private var fileName : String;
 
 		public override function loadSource( source : String, filePath : String ) : void
@@ -33,7 +33,7 @@ package net.vdombox.editors
 			/*if ( controller )
 				return;*/
 			
-			controller = new Controller( stage, scriptAreaComponent );
+			controller = new PythonController( stage, scriptAreaComponent, _actionVO );
 
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
 			
@@ -44,6 +44,8 @@ package net.vdombox.editors
 
 			addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
+			
+			scriptAreaComponent.controller = controller;
 		}
 
 		
@@ -68,9 +70,10 @@ package net.vdombox.editors
 			controller.hashLibraryArray = hashLibraries;
 		}
 		
-		public override function set actionVO( actionVO : IEventBaseVO ) : void
+		public override function set actionVO( value : IEventBaseVO ) : void
 		{
-			controller.actionVO = actionVO;
+			_actionVO = value;
+			controller.actionVO = _actionVO;
 		}
 	}
 }

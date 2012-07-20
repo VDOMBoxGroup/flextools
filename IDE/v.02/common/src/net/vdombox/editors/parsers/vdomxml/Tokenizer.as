@@ -1,6 +1,8 @@
 package net.vdombox.editors.parsers.vdomxml
 {
 
+	import net.vdombox.editors.parsers.Field;
+	
 	import ro.victordramba.util.HashMap;
 
 
@@ -14,12 +16,12 @@ package net.vdombox.editors.parsers.vdomxml
 			position = 0;
 		}
 
-		public var tree : Token;
+		public var tree : VdomXMLToken;
 
 		internal var tokens : Array;
 		internal var topScope : Field;
 
-		private var currentBlock : Token;
+		private var currentBlock : VdomXMLToken;
 		private var _scope : Field;
 		private var field : Field;
 		private var param : Field;
@@ -105,7 +107,7 @@ package net.vdombox.editors.parsers.vdomxml
 			return position / string.length;
 		}
 
-		public function nextToken() : Token
+		public function nextToken() : VdomXMLToken
 		{
 			if ( position >= string.length )
 				return null;
@@ -115,7 +117,7 @@ package net.vdombox.editors.parsers.vdomxml
 			var tempPosition : uint = position;
 
 			var tokenString : String;
-			var prevToken : Token;
+			var prevToken : VdomXMLToken;
 
 			if ( isWhitespace( char ) )
 			{
@@ -133,14 +135,14 @@ package net.vdombox.editors.parsers.vdomxml
 						skipUntil( "\]\]>" );
 						tokenString = string.substring( startPosition, position );
 
-						return new Token( tokenString, Token.CDATA, position );
+						return new VdomXMLToken( tokenString, VdomXMLToken.CDATA, position );
 					}
 					else if ( ( string.length - position > 3 && string.substr( position + 1, 3 ) == "!--" ) )
 					{
 						skipUntil( "-->" );
 						tokenString = string.substring( startPosition, position );
 
-						return new Token( tokenString, Token.COMMENT, position );
+						return new VdomXMLToken( tokenString, VdomXMLToken.COMMENT, position );
 					}
 				}
 				else if ( nextChar() == "?" )
@@ -148,20 +150,20 @@ package net.vdombox.editors.parsers.vdomxml
 					skipUntil( "?>" );
 					tokenString = string.substring( startPosition, position );
 
-					return new Token( tokenString, Token.PROCESSING_INSTRUCTIONS, position );
+					return new VdomXMLToken( tokenString, VdomXMLToken.PROCESSING_INSTRUCTIONS, position );
 				}
 				else if ( nextChar() == "/" )
 				{
 					skipUntil( ">" );
 					tokenString = string.substring( startPosition, position );
 
-					return new Token( tokenString, Token.CLOSETAG, position );
+					return new VdomXMLToken( tokenString, VdomXMLToken.CLOSETAG, position );
 				}
 				else
 				{
 					tokenString = string.substring( startPosition, ++position );
 
-					return new Token( tokenString, Token.OPENTAG, position );
+					return new VdomXMLToken( tokenString, VdomXMLToken.OPENTAG, position );
 				}
 
 			}
@@ -171,7 +173,7 @@ package net.vdombox.editors.parsers.vdomxml
 				position += 2;
 				tokenString = string.substring( startPosition, position );
 
-				return new Token( tokenString, Token.CLOSETAG, position );
+				return new VdomXMLToken( tokenString, VdomXMLToken.CLOSETAG, position );
 			}
 
 			else if ( char == ">" )
@@ -179,7 +181,7 @@ package net.vdombox.editors.parsers.vdomxml
 				tokenString = string.substring( startPosition, ++position );
 				isTagInside = false;
 
-				return new Token( tokenString, Token.TAGNAME, position );
+				return new VdomXMLToken( tokenString, VdomXMLToken.TAGNAME, position );
 			}
 
 			else if ( char == "\"" && isTagInside )
@@ -187,14 +189,14 @@ package net.vdombox.editors.parsers.vdomxml
 				skipUntil( "\"" );
 				tokenString = string.substring( startPosition, position );
 
-				return new Token( tokenString, Token.ATTRIBUTEVALUE, position );
+				return new VdomXMLToken( tokenString, VdomXMLToken.ATTRIBUTEVALUE, position );
 			}
 
 			else if ( char == "=" && isTagInside )
 			{
 				tokenString = string.substring( startPosition, ++position );
 				
-				return new Token( tokenString, Token.EQUAL, position );
+				return new VdomXMLToken( tokenString, VdomXMLToken.EQUAL, position );
 			}
 			
 			else if ( isLetter( char ) )
@@ -206,7 +208,7 @@ package net.vdombox.editors.parsers.vdomxml
 					skipUntil( "<" );
 					tokenString = string.substring( startPosition, position );
 
-					return new Token( tokenString, Token.COMMENT, position );
+					return new VdomXMLToken( tokenString, VdomXMLToken.COMMENT, position );
 				}
 
 				if ( prevToken.string == "<" )
@@ -216,7 +218,7 @@ package net.vdombox.editors.parsers.vdomxml
 
 					isTagInside = true;
 
-					return new Token( tokenString, Token.TAGNAME, position );
+					return new VdomXMLToken( tokenString, VdomXMLToken.TAGNAME, position );
 				}
 				else if ( prevToken.string == "</" )
 				{
@@ -228,7 +230,7 @@ package net.vdombox.editors.parsers.vdomxml
 					if ( getCurrentChar() != ">" )
 						skipUntil( ">" );
 
-					return new Token( tokenString, Token.TAGNAME, tempPosition );
+					return new VdomXMLToken( tokenString, VdomXMLToken.TAGNAME, tempPosition );
 				}
 				else if ( isTagInside )
 				{
@@ -238,9 +240,9 @@ package net.vdombox.editors.parsers.vdomxml
 						tokenString = string.substring( startPosition, position );
 
 						if ( prevToken.string == "\"" )
-							return new Token( tokenString, Token.ATTRIBUTEVALUE, position );
+							return new VdomXMLToken( tokenString, VdomXMLToken.ATTRIBUTEVALUE, position );
 						else
-							return new Token( tokenString, Token.ATTRIBUTENAME, position );
+							return new VdomXMLToken( tokenString, VdomXMLToken.ATTRIBUTENAME, position );
 					}
 
 				}
@@ -257,17 +259,17 @@ package net.vdombox.editors.parsers.vdomxml
 
 
 			//unknown
-			return new Token( char, Token.SYMBOL, ++position );
+			return new VdomXMLToken( char, VdomXMLToken.SYMBOL, ++position );
 		}
 
-		public function tokenByPos( pos : uint ) : Token
+		public function tokenByPos( pos : uint ) : VdomXMLToken
 		{
 			if ( !tokens || tokens.length < 3 )
 				return null;
 			//TODO: binary search
 			for ( var i : int = tokens.length - 1; i >= 0; i-- )
 				if ( tokens[ i ] && pos > tokens[ i ].pos )
-					return Token.map[ tokens[ i ].id ];
+					return VdomXMLToken.map[ tokens[ i ].id ];
 			return null;
 		}
 
@@ -282,7 +284,7 @@ package net.vdombox.editors.parsers.vdomxml
 			if ( !tokens )
 			{
 				tokens = [];
-				tree = new Token( "top", null, 0 );
+				tree = new VdomXMLToken( "top", null, 0 );
 				tree.children = [];
 				currentBlock = tree;
 
@@ -294,7 +296,7 @@ package net.vdombox.editors.parsers.vdomxml
 				paramsBlock = false;
 			}
 
-			var t : Token = nextToken();
+			var t : VdomXMLToken = nextToken();
 			if ( !t )
 				return false;
 

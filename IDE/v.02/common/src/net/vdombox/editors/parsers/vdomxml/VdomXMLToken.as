@@ -1,10 +1,12 @@
 package net.vdombox.editors.parsers.vdomxml
 {
 	import flash.utils.Dictionary;
-
+	
+	import net.vdombox.editors.parsers.Token;
+	
 	import ro.victordramba.util.HashMap;
 
-	internal class Token
+	internal class VdomXMLToken extends Token
 	{
 		public static const TAGNAME : String = "tagName";
 		public static const OPENTAG : String = "openTag";
@@ -17,15 +19,8 @@ package net.vdombox.editors.parsers.vdomxml
 		public static const COMMENT : String = "comment";
 		public static const SYMBOL : String = "symbol";
 
-		public var string : String;
-		public var type : String;
-		public var pos : uint;
-		public var id : uint;
-
-		public var children : Array /*of Token*/;
-		public var parent : Token;
-
-		public var scope : Field; //lexical scope
+		public var parent : VdomXMLToken;
+		
 		public var imports : HashMap; //used to solve names and types
 
 		public static const map : Dictionary = new Dictionary( true );
@@ -33,7 +28,7 @@ package net.vdombox.editors.parsers.vdomxml
 		static private var count : Number = 0;
 
 
-		public function Token( string : String, type : String, endPos : uint )
+		public function VdomXMLToken( string : String, type : String, endPos : uint )
 		{
 			this.string = string;
 			this.type = type;

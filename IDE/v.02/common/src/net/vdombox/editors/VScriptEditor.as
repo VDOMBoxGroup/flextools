@@ -4,7 +4,7 @@ package net.vdombox.editors
 	
 	import net.vdombox.editors.parsers.vscript.AssistMenuVScript;
 	import net.vdombox.editors.parsers.vscript.AutoCompleteCodeBlockVScript;
-	import net.vdombox.editors.parsers.vscript.Controller;
+	import net.vdombox.editors.parsers.vscript.VScriptController;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 
@@ -17,7 +17,7 @@ package net.vdombox.editors
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
 		}
 		
-		private var controller : Controller;
+		private var controller : VScriptController;
 		private var fileName : String;
 		private var autoCompleteCodeBlock : AutoCompleteCodeBlockVScript;
 		
@@ -32,7 +32,7 @@ package net.vdombox.editors
 		
 		protected override function initiaize() : void
 		{
-			controller = new Controller( stage, scriptAreaComponent );
+			controller = new VScriptController( stage, scriptAreaComponent, _actionVO );
 			
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
 			
@@ -67,9 +67,10 @@ package net.vdombox.editors
 			controller.hashLibraryArray = hashLibraries;
 		}
 		
-		public override function set actionVO( actionVO : IEventBaseVO ) : void
+		public override function set actionVO( value : IEventBaseVO ) : void
 		{
-			controller.actionVO = actionVO;
+			_actionVO = value;
+			controller.actionVO = value;
 		}
 	}
 }

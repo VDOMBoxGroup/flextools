@@ -18,9 +18,9 @@ package net.vdombox.editors.parsers.vdomxml
 
 	public class AssistMenuVdomXML extends AssistMenu
 	{
-		private var ctrl : Controller;
+		private var ctrl : VdomXMLController;
 
-		public function AssistMenuVdomXML( field : ScriptAreaComponent, ctrl : Controller, stage : Stage, onComplete : Function )
+		public function AssistMenuVdomXML( field : ScriptAreaComponent, ctrl : VdomXMLController, stage : Stage, onComplete : Function )
 		{
 			fld = field;
 			this.ctrl = ctrl;

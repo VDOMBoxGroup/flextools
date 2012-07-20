@@ -22,16 +22,16 @@ package net.vdombox.editors.parsers.vdomxml
 		{
 			//syntax highlighting
 			formats.setValue( 'default', new TextFormat( null, null, 0x111111, false, false ) );
-			formats.setValue( Token.TAGNAME, new TextFormat( null, null, 0x952a57, true, false ) );
-			formats.setValue( Token.CLOSETAG, new TextFormat( null, null, 0x952a57, true, false ) );
-			formats.setValue( Token.OPENTAG, new TextFormat( null, null, 0x952a57, true, false ) );
-			formats.setValue( Token.ATTRIBUTENAME, new TextFormat( null, null, 0x9f992f, true, false ) );
-			formats.setValue( Token.ATTRIBUTEVALUE, new TextFormat( null, null, 0x657bd4, false, false ) );
-			formats.setValue( Token.PROCESSING_INSTRUCTIONS, new TextFormat( null, null, 0xa3a020, false, true ) );
-			formats.setValue( Token.COMMENT, new TextFormat( null, null, 0xAAAAAA, false, true ) );
-			formats.setValue( Token.CDATA, new TextFormat( null, null, 0x439f15, false, false ) );
-			formats.setValue( Token.SYMBOL, new TextFormat( null, null, 0x9f992f, false, false ) );
-			formats.setValue( Token.EQUAL, new TextFormat( null, null, 0x9f992f, false, false ) );
+			formats.setValue( VdomXMLToken.TAGNAME, new TextFormat( null, null, 0x952a57, true, false ) );
+			formats.setValue( VdomXMLToken.CLOSETAG, new TextFormat( null, null, 0x952a57, true, false ) );
+			formats.setValue( VdomXMLToken.OPENTAG, new TextFormat( null, null, 0x952a57, true, false ) );
+			formats.setValue( VdomXMLToken.ATTRIBUTENAME, new TextFormat( null, null, 0x9f992f, true, false ) );
+			formats.setValue( VdomXMLToken.ATTRIBUTEVALUE, new TextFormat( null, null, 0x657bd4, false, false ) );
+			formats.setValue( VdomXMLToken.PROCESSING_INSTRUCTIONS, new TextFormat( null, null, 0xa3a020, false, true ) );
+			formats.setValue( VdomXMLToken.COMMENT, new TextFormat( null, null, 0xAAAAAA, false, true ) );
+			formats.setValue( VdomXMLToken.CDATA, new TextFormat( null, null, 0x439f15, false, false ) );
+			formats.setValue( VdomXMLToken.SYMBOL, new TextFormat( null, null, 0x9f992f, false, false ) );
+			formats.setValue( VdomXMLToken.EQUAL, new TextFormat( null, null, 0x9f992f, false, false ) );
 			formats.setValue( 'topType', new TextFormat( null, null, 0x981056, false, false ) );
 		}
 
@@ -81,7 +81,7 @@ package net.vdombox.editors.parsers.vdomxml
 
 			for ( var i : int = 0; i < tokenizer.tokens.length; i++ )
 			{
-				var t : Token = tokenizer.tokens[ i ];
+				var t : VdomXMLToken = tokenizer.tokens[ i ];
 				var type : String = topType.test( t.string ) ? 'topType' : t.type;
 				var fmt : TextFormat = formats.getValue( type );
 				if ( fmt )
@@ -89,7 +89,7 @@ package net.vdombox.editors.parsers.vdomxml
 				//textField.setTextFormat(fmt, t.pos, t.pos+t.string.length);
 				else if ( t.string.indexOf( 'this.' ) == 0 )
 				{
-					fmt = formats.getValue( Token.SYMBOL );
+					fmt = formats.getValue( VdomXMLToken.SYMBOL );
 					textField.addFormatRun( t.pos, t.pos + 4, fmt.bold, fmt.italic, Number( fmt.color ).toString( 16 ) );
 						//textField.setTextFormat(formats.getValue(Token.KEYWORD), t.pos, t.pos+4);
 				}

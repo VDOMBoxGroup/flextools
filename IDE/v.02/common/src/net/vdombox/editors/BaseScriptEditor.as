@@ -14,6 +14,7 @@ package net.vdombox.editors
 		public var scriptAreaComponent : ScriptAreaComponent;
 		
 		protected var assistMenu : AssistMenu;
+		protected var _actionVO : IEventBaseVO;
 		
 		public function BaseScriptEditor()
 		{

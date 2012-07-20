@@ -20,6 +20,8 @@ Author: Victor Dramba
 
 package ro.victordramba.util
 {
+	import net.vdombox.editors.parsers.Field;
+
 	public class HashMap
 	{
 		private var data:Object = {};
@@ -67,6 +69,18 @@ package ro.victordramba.util
 			var ret:HashMap = new HashMap;
 			for each(var key:String in hm.getKeys())
 				setValue(key, hm.getValue(key));
+		}
+		
+		public function mergeExcOneField(hm:HashMap, excField : Field ):void
+		{
+			var ret:HashMap = new HashMap;
+			for each(var key:String in hm.getKeys())
+			{
+				var field : Field = hm.getValue(key) as Field;
+				if ( field != excField )
+					setValue(key, hm.getValue(key));
+			}
+				
 		}
 		
 		public function clone():HashMap

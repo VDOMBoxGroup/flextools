@@ -8,6 +8,7 @@ package net.vdombox.editors
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import net.vdombox.editors.parsers.Controller;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	
 	import ro.victordramba.scriptarea.ScriptAreaEvents;
@@ -46,6 +47,16 @@ package net.vdombox.editors
 		private var lineNums : LineNumbers;
 
 		private var viewPos : Point = new Point();
+		
+		public function set controller( value : Controller ) : void
+		{
+			area.controller = value;
+		}
+		
+		public function get controller( ) : Controller
+		{
+			return area.controller;
+		}
 
 		public function get caretIndex() : int
 		{

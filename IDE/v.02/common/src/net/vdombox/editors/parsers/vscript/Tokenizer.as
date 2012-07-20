@@ -1,5 +1,6 @@
 package net.vdombox.editors.parsers.vscript
 {
+	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
 	
 	import ro.victordramba.util.HashMap;
@@ -7,7 +8,7 @@ package net.vdombox.editors.parsers.vscript
 	
 	public class Tokenizer
 	{
-		public var tree : Token;
+		public var tree : VScriptToken;
 		
 		private var string : String;
 		private var pos : uint;
@@ -73,7 +74,7 @@ package net.vdombox.editors.parsers.vscript
 			return pos / string.length;
 		}
 		
-		public function nextToken() : Token
+		public function nextToken() : VScriptToken
 		{
 			if ( pos >= string.length )
 				return null;
@@ -95,20 +96,20 @@ package net.vdombox.editors.parsers.vscript
 			if ( isNorR( c ) )
 			{
 				pos++;
-				return new Token( string.substring( start, pos ), Token.ENDLINE, pos );
+				return new VScriptToken( string.substring( start, pos ), VScriptToken.ENDLINE, pos );
 			}
 			
 			if ( isNumber( c ) )
 			{
 				skipToStringEnd();
 				str = string.substring( start, pos );
-				return new Token( str, Token.NUMBER, pos );
+				return new VScriptToken( str, VScriptToken.NUMBER, pos );
 			}
 			
 			if ( c == "'" || string.substr( pos, 3 ).toLowerCase() == "rem" )
 			{
 				skipUntilEnd();
-				return new Token( string.substring( start, pos ), Token.COMMENT, pos );
+				return new VScriptToken( string.substring( start, pos ), VScriptToken.COMMENT, pos );
 			}
 			
 			if ( isLetter( c ) )
@@ -118,31 +119,31 @@ package net.vdombox.editors.parsers.vscript
 				str = string.substring( start, pos );
 				var type : String;
 				if ( isKeyword( str ) )
-					type = Token.KEYWORD;
+					type = VScriptToken.KEYWORD;
 				else if ( isKeyword2( str ) )
-					type = Token.KEYWORD2;
+					type = VScriptToken.KEYWORD2;
 				else if ( tokens.length && tokens[ tokens.length - 1 ].string == "[" &&
 					( str == "Embed" || str == "Event" || str == "SWF" || str == "Bindable" ) )
-					type = Token.KEYWORD;
+					type = VScriptToken.KEYWORD;
 				else if ( prevStr && prevStr.toLowerCase() == "function" )
-					type = Token.NAMEFUNCTION;
+					type = VScriptToken.NAMEFUNCTION;
 				else if ( prevStr && prevStr.toLowerCase() == "class" )
-					type = Token.NAMECLASS;
+					type = VScriptToken.NAMECLASS;
 				else
-					type = Token.STRING_LITERAL;
-				return new Token( str, type, pos );
+					type = VScriptToken.STRING_LITERAL;
+				return new VScriptToken( str, type, pos );
 			}
 			else if ( ( str = isSymbol( pos ) ) != null )
 			{
 				pos += str.length;
-				return new Token( str, Token.SYMBOL, pos );
+				return new VScriptToken( str, VScriptToken.SYMBOL, pos );
 			}
 			else if ( c == "\"" )
 			{ 
 				
 				skipUntilWithEscNL( c )
 				
-				return new Token( string.substring( start, pos ), Token.STRING, pos );
+				return new VScriptToken( string.substring( start, pos ), VScriptToken.STRING, pos );
 			}
 				
 			/*else if (  c == "'" )
@@ -153,7 +154,7 @@ package net.vdombox.editors.parsers.vscript
 			}*/
 			
 			//unknown
-			return new Token( c, Token.SYMBOL, ++pos );
+			return new VScriptToken( c, VScriptToken.SYMBOL, ++pos );
 		}
 		
 		private function currentChar() : String
@@ -292,13 +293,13 @@ package net.vdombox.editors.parsers.vscript
 			return 0;
 		}
 		
-		private var t : Token
-		private var tp : Token;
-		private var tp2 : Token;
-		private var tp3 : Token;
+		private var t : VScriptToken
+		private var tp : VScriptToken;
+		private var tp2 : VScriptToken;
+		private var tp3 : VScriptToken;
 		
 		internal var tokens : Array;
-		private var currentBlock : Token;
+		private var currentBlock : VScriptToken;
 		private var countSpaceToCurrentBlock : int;
 		private var countTabToCurrentBlock : int;
 		private var _scope : Field;
@@ -339,7 +340,7 @@ package net.vdombox.editors.parsers.vscript
 					return false;
 				}
 				tokens = [];
-				tree = new Token( "top", null, 0 );
+				tree = new VScriptToken( "top", null, 0 );
 				tree.children = [];
 				
 				currentBlock = tree;
@@ -381,7 +382,7 @@ package net.vdombox.editors.parsers.vscript
 			var tpString : String = tp ? tp.string.toLowerCase() : "";
 			
 			
-			if ( ( tpString == "end" || tString == "next" || tString == "wend" || tString == "loop" ) && tp.type != Token.COMMENT )
+			if ( ( tpString == "end" || tString == "next" || tString == "wend" || tString == "loop" ) && tp.type != VScriptToken.COMMENT )
 			{
 				closeBlock( tString );
 			}
@@ -404,7 +405,7 @@ package net.vdombox.editors.parsers.vscript
 					systemName = tp2.string;
 				}
 				
-				if ( t.type != Token.SYMBOL )
+				if ( t.type != VScriptToken.SYMBOL )
 				{
 					imports[ imports.length - 1 ].setValue( tString, { name : tString, systemName : systemName, source : importFrom } );
 					
@@ -572,7 +573,7 @@ package net.vdombox.editors.parsers.vscript
 						defParamValue += t.string;
 				}
 			}
-			else if ( tString == "=" && tp.type == Token.STRING_LITERAL )
+			else if ( tString == "=" && tp.type == VScriptToken.STRING_LITERAL )
 			{
 				if ( tp2 && tp2.string != "." )
 				{
@@ -597,13 +598,13 @@ package net.vdombox.editors.parsers.vscript
 				else
 				{
 					var currentPos : int = tokens.length - 2;
-					var prevToken : Token = tokens[currentPos - 1];
+					var prevToken : VScriptToken = tokens[currentPos - 1];
 					while ( prevToken && prevToken.string == "." )
 					{
 						currentPos -= 2;
 						prevToken = tokens[currentPos - 1];
 					}
-					var curToken : Token = tokens[currentPos];
+					var curToken : VScriptToken = tokens[currentPos];
 					
 					if ( scope.members.hasKey( curToken.string ) )
 					{
@@ -784,7 +785,7 @@ package net.vdombox.editors.parsers.vscript
 				t.createConstruction = true;
 			}
 			
-			if ( t.type == Token.ENDLINE && newBlock )
+			if ( t.type == VScriptToken.ENDLINE && newBlock )
 			{
 				newBlock = false;
 			}
@@ -993,14 +994,14 @@ package net.vdombox.editors.parsers.vscript
 			tokens = null;
 		}
 		
-		public function tokenByPos( pos : uint ) : Token
+		public function tokenByPos( pos : uint ) : VScriptToken
 		{
 			if ( !tokens /*|| tokens.length < 3 */)
 				return null;
 			//TODO: binary search
 			for ( var i : int = tokens.length - 1; i >= 0; i-- )
 				if ( tokens[ i ] && pos >= tokens[ i ].pos )
-					return Token.map[ tokens[ i ].id ];
+					return VScriptToken.map[ tokens[ i ].id ];
 			return null;
 		}
 	}

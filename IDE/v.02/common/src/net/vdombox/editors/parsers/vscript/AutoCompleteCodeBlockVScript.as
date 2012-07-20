@@ -11,10 +11,10 @@ package net.vdombox.editors.parsers.vscript
 	public class AutoCompleteCodeBlockVScript
 	{
 		private var fld : ScriptAreaComponent;
-		private var ctrl : Controller;
+		private var ctrl : VScriptController;
 		private var assistMenu : AssistMenu;
 		
-		public function AutoCompleteCodeBlockVScript( field : ScriptAreaComponent, ctrl : Controller, assistMenu : AssistMenu )
+		public function AutoCompleteCodeBlockVScript( field : ScriptAreaComponent, ctrl : VScriptController, assistMenu : AssistMenu )
 		{
 			fld = field;
 			this.ctrl = ctrl;
@@ -41,7 +41,7 @@ package net.vdombox.editors.parsers.vscript
 					char = fld.text.charAt( --curPos );
 				}
 				
-				var t : Token = ctrl.getTokenByPos( curPos );
+				var t : VScriptToken = ctrl.getTokenByPos( curPos ) as VScriptToken;
 				
 				if ( !t )
 					return;
@@ -49,13 +49,13 @@ package net.vdombox.editors.parsers.vscript
 				{
 					if ( t.createConstruction )
 					{   
-						var block : Token = t.parent;
+						var block : VScriptToken = t.parent;
 						if( !block )
 							return;
 						
 						if( block.blockClosed )
 						{
-							var parentBlock : Token = block.parent;
+							var parentBlock : VScriptToken = block.parent;
 							while ( parentBlock && parentBlock.mainBlockType == block.mainBlockType && parentBlock.blockClosed )
 							{
 								parentBlock = parentBlock.parent;

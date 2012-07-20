@@ -2,6 +2,7 @@ package net.vdombox.editors.parsers.python
 {
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.BackwardsParser;
+	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
 	import net.vdombox.editors.parsers.StructureDB;
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
@@ -35,7 +36,7 @@ package net.vdombox.editors.parsers.python
 		public function isInScope( name : String, pos : int ) : Boolean
 		{
 			//find the scope
-			var t : Token = tokenizer.tokenByPos( pos );
+			var t : PythonToken = tokenizer.tokenByPos( pos );
 			if ( !t )
 				return false;
 
@@ -80,7 +81,7 @@ package net.vdombox.editors.parsers.python
 		public function getMissingImports( name : String, pos : int ) : Vector.<String>
 		{
 			//find the scope
-			var t : Token = tokenizer.tokenByPos( pos );
+			var t : PythonToken = tokenizer.tokenByPos( pos );
 			if ( !t )
 				return null;
 			var imports : HashMap = findImports( t );
@@ -111,9 +112,9 @@ package net.vdombox.editors.parsers.python
 			var f : Field;
 			
 			//all package level items
-			var t : Token = tokenizer.tokenByPos( pos );
+			var t : PythonToken = tokenizer.tokenByPos( pos );
 			
-			if (  t && ( t.type == Token.COMMENT || t.type == Token.STRING ) )
+			if (  t && ( t.type == PythonToken.COMMENT || t.type == PythonToken.STRING ) )
 				return null;
 			
 			if ( t && ( t.string == "from" || t.importZone && !t.importFrom ) )
@@ -154,25 +155,13 @@ package net.vdombox.editors.parsers.python
 					isStatic = true;
 			}
 
-			//compute tokenScopeClass
-			//findScopeClass( t.scope );
-
-			//class scope
-			if ( t.parent && t.parent.scope.members )
-			{
+			
+			
 				//for static scope, add only static members
 				//current class
-				for each ( f in t.parent.scope.members.toArray() )
-					a.push( f.name );
+			for each ( f in tokenizer.members.toArray() )
+				a.push( f.name );
 				
-				//inheritance
-				/*scope = tokenScopeClass;
-				while ( ( scope = typeDB.resolveName( scope.extendz ) ) )
-					for each ( f in scope.members.toArray() )
-						if ( f.access != 'private' && ( !isStatic || f.isStatic ) )
-							a.push( f.name );*/
-				
-			}
 			
 			if ( t.parent.imports )
 			{
@@ -336,7 +325,7 @@ package net.vdombox.editors.parsers.python
 		}
 
 		//find the imports for this token
-		private function findImports( token : Token ) : HashMap
+		private function findImports( token : PythonToken ) : HashMap
 		{
 			do
 			{
@@ -356,8 +345,8 @@ package net.vdombox.editors.parsers.python
 			resolvedRef = null;
 			resolvedIsClass = false;
 
-			var t0 : Token = tokenizer.tokenByPos( pos );
-			if ( t0.type == Token.COMMENT || t0.type == Token.STRING )
+			var t0 : PythonToken = tokenizer.tokenByPos( pos );
+			if ( t0.type == PythonToken.COMMENT || t0.type == PythonToken.STRING )
 				return false;
 
 			var bp : BackwardsParser = new BackwardsParser;
@@ -365,7 +354,7 @@ package net.vdombox.editors.parsers.python
 				return false;
 
 			//find the scope
-			var t : Token = tokenizer.tokenByPos( bp.startPos );
+			var t : PythonToken = tokenizer.tokenByPos( bp.startPos );
 			if ( !t )
 				return false;
 
