@@ -65,11 +65,6 @@ package net.vdombox.editors
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
 		}
 		
-		public override function set hashLibraryArray( hashLibraries : HashLibraryArray ) : void
-		{
-			controller.hashLibraryArray = hashLibraries;
-		}
-		
 		public override function set actionVO( value : IEventBaseVO ) : void
 		{
 			_actionVO = value;

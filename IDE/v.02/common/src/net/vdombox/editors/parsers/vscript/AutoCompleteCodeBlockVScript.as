@@ -49,16 +49,16 @@ package net.vdombox.editors.parsers.vscript
 				{
 					if ( t.createConstruction )
 					{   
-						var block : VScriptToken = t.parent;
+						var block : VScriptToken = t.parent as VScriptToken;
 						if( !block )
 							return;
 						
 						if( block.blockClosed )
 						{
-							var parentBlock : VScriptToken = block.parent;
+							var parentBlock : VScriptToken = block.parent as VScriptToken;
 							while ( parentBlock && parentBlock.mainBlockType == block.mainBlockType && parentBlock.blockClosed )
 							{
-								parentBlock = parentBlock.parent;
+								parentBlock = parentBlock.parent as VScriptToken;
 							}
 							
 							if ( !parentBlock || parentBlock.mainBlockType != block.mainBlockType )
@@ -103,6 +103,10 @@ package net.vdombox.editors.parsers.vscript
 						else if ( block.blockType == BlockType.DO )
 						{
 							pasteCode( "Loop" );
+						}
+						else if ( block.blockType == BlockType.CLASS )
+						{
+							pasteCode( "End Class" );
 						}
 					}
 					else

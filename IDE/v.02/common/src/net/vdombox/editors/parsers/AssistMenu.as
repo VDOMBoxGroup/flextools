@@ -87,5 +87,9 @@ package net.vdombox.editors.parsers
 		public function clear() : void
 		{
 		}
+		
+		public function triggerAssist( forced : Boolean = false ) : void
+		{
+		}
 	}
 }

@@ -83,7 +83,7 @@ package net.vdombox.editors.parsers.python
 
 		public function getMemberList( index : int ) : Vector.<String>
 		{
-			return parser.newResolver().getMemberList( fld.text, index, hashLibraries , _actionVO );
+			return parser.newResolver().getMemberList( fld.text, index , _actionVO );
 		}
 
 		public function getFunctionDetails( index : int ) : String
@@ -98,7 +98,7 @@ package net.vdombox.editors.parsers.python
 
 		public function getAllOptions( index : int ) : Vector.<String>
 		{
-			return parser.newResolver().getAllOptions( index, hashLibraries );
+			return parser.newResolver().getAllOptions( index );
 		}
 
 		public function getMissingImports( name : String, pos : int ) : Vector.<String>
@@ -127,14 +127,10 @@ package net.vdombox.editors.parsers.python
 			return new Location( null, field.pos );
 		}
 		
-		public function set hashLibraryArray( _hashLibraries : HashLibraryArray ) : void
-		{
-			hashLibraries = _hashLibraries;
-		}
-		
 		public function set actionVO( actVO : IEventBaseVO ) : void
 		{
 			_actionVO = actVO;
+			parser.actionVO = actVO;
 		}
 		
 		public override function getTokenByPos( pos : int ) : Token

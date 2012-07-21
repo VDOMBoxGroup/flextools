@@ -49,6 +49,8 @@ package net.vdombox.editors
 
 			scriptAreaComponent.addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
+			
+			scriptAreaComponent.controller = controller;
 		}
 
 		private function controller_statusHandler( event : Event ) : void

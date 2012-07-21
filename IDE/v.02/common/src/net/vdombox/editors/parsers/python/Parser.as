@@ -5,6 +5,7 @@ package net.vdombox.editors.parsers.python
 	import flash.utils.setTimeout;
 	
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	
 	import ro.victordramba.thread.IThread;
 	import ro.victordramba.util.HashMap;
@@ -17,6 +18,8 @@ package net.vdombox.editors.parsers.python
 
 		private var formats : HashMap = new HashMap;
 		private var fileName : String;
+		
+		private var _actionVO : IEventBaseVO;
 
 		public function Parser()
 		{
@@ -55,6 +58,7 @@ package net.vdombox.editors.parsers.python
 		public function load( source : String, fileName : String ) : void
 		{
 			tokenizer2 = new Tokenizer( source );
+			tokenizer2.actionVO = _actionVO;
 			this.fileName = fileName;
 		}
 
@@ -136,8 +140,17 @@ package net.vdombox.editors.parsers.python
 		}
 		
 		public function getTokenByPos( pos : int ) : PythonToken
+		{	
+			if ( tokenizer )
+				return tokenizer.tokenByPos( pos ) as PythonToken;
+			else
+				return tokenizer2.tokenByPos( pos ) as PythonToken;
+		}
+		
+		public function set actionVO( value : IEventBaseVO ) : void
 		{
-			return tokenizer.tokenByPos( pos );
+			_actionVO = value;
+			tokenizer? tokenizer.actionVO = value : tokenizer2.actionVO = value;
 		}
 	}
 }

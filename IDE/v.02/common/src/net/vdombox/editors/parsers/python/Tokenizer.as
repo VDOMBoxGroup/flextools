@@ -3,6 +3,9 @@ package net.vdombox.editors.parsers.python
 
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
+	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
+	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import ro.victordramba.util.HashMap;
 
@@ -33,6 +36,8 @@ package net.vdombox.editors.parsers.python
 		private static const keywords2 : HashMap = new HashMap();
 		private static const symbols : HashMap = new HashMap();
 		private static const symbolsLengths : Array = [];
+		
+		public var actionVO : Object;
 
 		//static class init
 		private static var init : Boolean = ( function() : Boolean
@@ -372,12 +377,14 @@ package net.vdombox.editors.parsers.python
 			
 			for each ( var children : Field in scp.children )
 			{
-				setMembers( children );
-				
 				if ( children.name == "none" )
 					children.selfMembers.mergeExcOneField( scp.selfMembers, children );
+				else
+					children.selfMembers.mergeExcOneField( scp.selfMembers.getNotVariableFields(), children );
 				
 				children.members.mergeExcOneField( scp.members, children );
+				
+				setMembers( children );
 			}
 		}
 
@@ -450,7 +457,7 @@ package net.vdombox.editors.parsers.python
 						{						
 							scope = scope.parent;
 							
-							currentBlock = currentBlock.parent;
+							currentBlock = currentBlock.parent as PythonToken;
 							imports.pop();
 						}
 					}
@@ -548,9 +555,9 @@ package net.vdombox.editors.parsers.python
 					field = new Field( tp.string, t.pos, t.string );
 					if ( t.string != "(" ) //anonimus functions are not members
 					{
-						if ( findClassParent( scope ) )
+						if ( findClassParent( scope ) || ( !( actionVO is ServerActionVO ) && scope == topScope ) )
 						{
-							if ( scope.selfMembers.hasKey( t.string ) )
+							if ( !scope.selfMembers.hasKey( t.string ) )
 								scope.selfMembers.setValue( t.string, field );
 						}
 						else if ( !scope.members.hasKey( t.string ) )
@@ -624,7 +631,7 @@ package net.vdombox.editors.parsers.python
 				{
 					if ( !param && t.string != "..." )
 					{
-						param = new Field( "var", pos, t.string );
+						param = new Field( "var", t.pos, t.string );
 						t.scope = _scope;
 						_scope.params.setValue( param.name, param );
 						if ( tp.string == "..." )
@@ -662,6 +669,26 @@ package net.vdombox.editors.parsers.python
 					else if ( defParamValue != null )
 						defParamValue += t.string;
 				}
+			}
+			if ( tp && tp.string == "for" && t.type == PythonToken.STRING_LITERAL  )
+			{
+				field = new Field( "var", t.pos, t.string );
+				
+				if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top" )
+				{
+					if ( !currentBlock.scope.selfMembers.hasKey( t.string ) )
+						currentBlock.scope.selfMembers.setValue( t.string, field );
+				}
+				else if ( !scope.members.hasKey( t.string ) )
+				{
+					scope.members.setValue( t.string, field );
+					_members.setValue( t.string, field );
+				}
+				
+				access = "private";
+				field.access = access;
+				
+				field.parent = scope;
 			}
 			else if ( t.string == "=" && tp.type == PythonToken.STRING_LITERAL  )
 			{
@@ -794,7 +821,7 @@ package net.vdombox.editors.parsers.python
 			}
 
 
-			if ( tp && tp.string == ":" && t.type == PythonToken.ENDLINE )
+			if ( tp && tp.string == ":" && t.type == PythonToken.ENDLINE && _scope )
 			{	
 				currentBlock = t;
 				t.children = [];	
@@ -824,8 +851,8 @@ package net.vdombox.editors.parsers.python
 				currentBlock.imports = imports[ imports.length - 1 ];
 				currentBlock.scope = scope;
 				
-				if ( !_scope )
-					_scope = new Field( scope.fieldType, t.pos, "none" );
+				/*if ( !_scope )
+					_scope = new Field( scope.fieldType, t.pos, "none" );*/
 				
 				
 				_scope.parent = scope;
@@ -859,7 +886,7 @@ package net.vdombox.editors.parsers.python
 			tokens = null;
 		}
 
-		public function tokenByPos( pos : uint ) : PythonToken
+		public function tokenByPos( pos : uint ) : Token
 		{
 			if ( !tokens /*|| tokens.length < 3 */)
 				return null;

@@ -36,7 +36,7 @@ package net.vdombox.editors.parsers.python
 		public function isInScope( name : String, pos : int ) : Boolean
 		{
 			//find the scope
-			var t : PythonToken = tokenizer.tokenByPos( pos );
+			var t : PythonToken = PythonToken( tokenizer.tokenByPos( pos ) );
 			if ( !t )
 				return false;
 
@@ -81,7 +81,7 @@ package net.vdombox.editors.parsers.python
 		public function getMissingImports( name : String, pos : int ) : Vector.<String>
 		{
 			//find the scope
-			var t : PythonToken = tokenizer.tokenByPos( pos );
+			var t : PythonToken = PythonToken( tokenizer.tokenByPos( pos ) );
 			if ( !t )
 				return null;
 			var imports : HashMap = findImports( t );
@@ -107,20 +107,20 @@ package net.vdombox.editors.parsers.python
 			return null;
 		}
 
-		public function getAllOptions( pos : int, hashLibraries : HashLibraryArray ) : Vector.<String>
+		public function getAllOptions( pos : int ) : Vector.<String>
 		{	
 			var f : Field;
 			
 			//all package level items
-			var t : PythonToken = tokenizer.tokenByPos( pos );
+			var t : PythonToken = PythonToken( tokenizer.tokenByPos( pos ) );
 			
 			if (  t && ( t.type == PythonToken.COMMENT || t.type == PythonToken.STRING ) )
 				return null;
 			
 			if ( t && ( t.string == "from" || t.importZone && !t.importFrom ) )
-				return hashLibraries.getLibrariesName();
+				return HashLibraryArray.getLibrariesName();
 			else if ( t && t.importZone )
-				return hashLibraries.getImportToLibraty( t.importFrom );
+				return HashLibraryArray.getImportToLibraty( t.importFrom );
 			
 			// default keywords
 			var a : Vector.<String> = new <String>["abs", "and", "apply", "ArithmeticError", "array", "assert", "AssertionError", "AST", "atexit", "AttributeError", "BaseHTTPServer", "Bastion", "break", "callable", "CGIHTTPServer", "chr", "class", "cmd", "cmp", "codecs", "coerce", "commands", "compile", "compileall", "Complex", "complex", "continue", "copy", "dbhash", "def", "del", "delattr", "dir", "dircmp", "dis", "divmod", "dospath", "dumbdbm", "elif", "else", "emacs", "EOFError", "eval", "except", "Exception", "exec", "execfile", "filter", "finally", "find", "float", "FloatingPointError", "fmt", "fnmatch", "for", "from", "ftplib", "getattr", "getopt", "glob", "global", "globals", "gopherlib", "grep", "group", "hasattr", "hash", "hex", "htmllib", "httplib", "id", "if", "ihooks", "imghdr", "import", "ImportError","imputil", "in", "IndentationError", "IndexError", "input", "int", "intern", "IOError", "is", "isinstance", "issubclass", "joinfields", "KeyError", "KeyboardInterrupt", "lambda", "len", "linecache", "list", "local", "lockfile", "long", "LookupError", "macpath", "macurl2path", "mailbox", "mailcap", "map", "match", "math", "max", "MemoryError", "mimetools", "Mimewriter", "mimify", "min", "mutex", "NameError", "newdir", "ni", "nntplib", "None", "not", "ntpath", "nturl2path", "oct", "open", "or", "ord", "os", "ospath", "OverflowError", "Para", "pass", "pdb", "pickle", "pipes", "poly", "popen2", "posixfile", "posixpath", "pow", "print", "profile", "pstats", "pyclbr", "pyexpat", "Queue", "quopri", "raise", "rand", "random", "range", "raw_input", "reduce", "request", "regex", "regsub", "reload", "repr", "return", "rfc822", "round", "RuntimeError", "sched", "search", "self", "session", "setattr", "setdefault", "sgmllib", "shelve", "SimpleHTTPServer", "site", "slice", "sndhdr", "snmp", "SocketServer", "splitfields", "StandardError", "str", "string", "StringIO", "struct", "SyntaxError", "sys", "SystemError", "SystemExit", "TabError", "tb", "tempfile", "Tkinter", "toaiff", "token", "tokenize", "traceback", "try", "tty", "tuple", "type", "TypeError", "types", "tzparse", "unichr", "unicode", "unicodedata", "urllib", "urlparse", "UserDict", "UserList", "util", "uu", "ValueError", "vars", "wave", "webbrowser", "whatsound", "whichdb", "while", "whrandom", "xdrlib", "xml", "xmlpackage", "xrange", "ZeroDivisionError",  "zip", "zmod"];
@@ -227,11 +227,11 @@ package net.vdombox.editors.parsers.python
 		/**
 		 * called when you enter a dot
 		 */
-		public function getMemberList( text : String, pos : int, hashLibraries : HashLibraryArray, actionVO : IEventBaseVO ) : Vector.<String>
+		public function getMemberList( text : String, pos : int, actionVO : IEventBaseVO ) : Vector.<String>
 		{
 			a = new Vector.<String>;
 			
-			var flag : Boolean = resolve( text, pos, hashLibraries, actionVO );
+			var flag : Boolean = resolve( text, pos, actionVO );
 			
 			if ( flag )
 				return a;
@@ -329,7 +329,7 @@ package net.vdombox.editors.parsers.python
 		{
 			do
 			{
-				token = token.parent;
+				token = token.parent as PythonToken;
 			} while ( token.parent && !token.imports );
 			return token.imports;
 		}
@@ -339,13 +339,13 @@ package net.vdombox.editors.parsers.python
 		private var resolvedIsClass : Boolean;
 		private var resolvedRef : Field;
 
-		private function resolve( text : String, pos : int, hashLibraries : HashLibraryArray = null, actionVO : IEventBaseVO = null ) : Boolean
+		private function resolve( text : String, pos : int, actionVO : IEventBaseVO = null ) : Boolean
 		{
 			resolved = null;
 			resolvedRef = null;
 			resolvedIsClass = false;
 
-			var t0 : PythonToken = tokenizer.tokenByPos( pos );
+			var t0 : PythonToken = PythonToken( tokenizer.tokenByPos( pos ) );
 			if ( t0.type == PythonToken.COMMENT || t0.type == PythonToken.STRING )
 				return false;
 
@@ -354,7 +354,7 @@ package net.vdombox.editors.parsers.python
 				return false;
 
 			//find the scope
-			var t : PythonToken = tokenizer.tokenByPos( bp.startPos );
+			var t : PythonToken = PythonToken( tokenizer.tokenByPos( bp.startPos ) );
 			if ( !t )
 				return false;
 
@@ -390,7 +390,7 @@ package net.vdombox.editors.parsers.python
 				if ( t.parent.imports.hasKey( name ) )
 				{
 					var impotrElement : Object = t.parent.imports.getValue( name );
-					a = hashLibraries.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp );
+					a = HashLibraryArray.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp );
 					return true;
 					//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );
 				}

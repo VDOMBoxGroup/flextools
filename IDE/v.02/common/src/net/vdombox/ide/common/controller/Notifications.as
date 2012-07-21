@@ -307,6 +307,8 @@ package net.vdombox.ide.common.controller
 		public static const GET_PAGES_STRUCTURE : String = "getPagesStructure";
 		public static const PAGES_STRUCTURE_GETTED : String = "pagesStructureGetted";
 		
+		public static const HASH_LIBRARIES_CHANGE : String = "hashLibrariesChange";
+		
 		
 		
 //////////////////////////////////////////ResourceBrowser/////////////////////////////////////////////

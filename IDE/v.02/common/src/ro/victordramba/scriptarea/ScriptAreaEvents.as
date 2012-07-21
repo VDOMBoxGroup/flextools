@@ -16,10 +16,12 @@ package ro.victordramba.scriptarea
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
 	
+	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.BackwardsParser;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
+	import net.vdombox.ide.common.model._vo.LibraryVO;
 
 	/*import flash.desktop.Clipboard;
 	   import flash.desktop.ClipboardFormats;
@@ -64,6 +66,7 @@ package ro.victordramba.scriptarea
 			addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
 			addEventListener( MouseEvent.CLICK, onMouseClick );
 			addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
+			addEventListener( KeyboardEvent.KEY_UP, onKeyUp );
 
 			addEventListener( FocusEvent.FOCUS_IN, function( e : FocusEvent ) : void
 			{
@@ -218,59 +221,78 @@ package ro.victordramba.scriptarea
 		{
 			if ( e.ctrlKey )
 			{
-				var cursorPosition : int = getIndexForPoint( new Point( mouseX, mouseY ) );
-				var t : Token = controller.getTokenByPos( cursorPosition );
-				
-				var bp : BackwardsParser = new BackwardsParser;
-				if ( !bp.parse( text, t.pos + t.string.length ) )
-					return;
-				
-				if ( t.scope )
-				
-				getFiled( t.scope, t );
+				CheckGoTo( true );
 			}
 		}
-		
-		private function getFiled( scp : Field, t : Token ) : Boolean
-		{
-			if ( scp.members.hasKey( t.string ) )
-			{
-				var variablePosition : int = Field( scp.members.getValue( t.string ) ).pos;
-				goToPos( variablePosition, t.string.length );
-			} 
-			else if ( scp.selfMembers.hasKey( t.string ) )
-			{
-				variablePosition = Field( scp.selfMembers.getValue( t.string ) ).pos;
-				goToPos( variablePosition, t.string.length );
-			}
-			else
-			{
-				var field : Field;
-				for each ( field in scp.members.toArray())
-				{
-					if ( getFiled( field, t ) )
-						return true;
-				}
-				
-				for each ( field in scp.selfMembers.toArray())
-				{
-					if ( getFiled( field, t ) )
-						return true;
-				}
-				
-				return false;
-			}
-			
-			return true;
-		}
-		
 		
 		public function onMouseMove( e : MouseEvent ) : void
 		{
 			if ( e.ctrlKey )
 			{
-				var tt : int = 0
+				if ( !CheckGoTo( false ) )
+					ClearLineGoToToken();
 			}
+		}
+		
+		private function onKeyUp( event : KeyboardEvent ):void
+		{
+			ClearLineGoToToken();
+		}
+		
+		private function CheckGoTo( needGo : Boolean ):Boolean
+		{
+			var cursorPosition : int = getIndexForPoint( new Point( mouseX, mouseY ) );
+			var t : Token = controller.getTokenByPos( cursorPosition );
+			
+			var bp : BackwardsParser = new BackwardsParser;
+			if ( !bp.parse( text, t.pos + t.string.length ) )
+				return false;
+			
+			if ( t.parent && t.parent.imports && t.parent.imports.hasKey( bp.names[0] ) )
+			{
+				var lib : Object = t.parent.imports.getValue( bp.names[0] );
+				var info : Object = HashLibraryArray.getPositionToken( lib.source, lib.systemName, bp );
+				if ( !info )
+					return false;
+				var position : int = info.position;
+				
+				if ( position != -1 )
+				{
+					if ( needGo )
+						dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.GO_TO_DEFENITION, false, false, info ) );
+					else
+						drawGoToToken( t.pos, t.string.length );
+					return true;
+				}
+			}
+			
+			return getFiled( t, bp, needGo );
+		}
+		
+		private function getFiled( t : Token, bp : BackwardsParser, needGo : Boolean ) : Boolean
+		{
+			var scope : Field = t.scope;
+			var name : String;
+			
+			for ( var i : int = 0; i < bp.names.length; i++ )
+			{
+				name = bp.names[i];
+				
+				if ( scope.params.hasKey( name ) )
+					scope = scope.params.getValue( name );
+				else if ( scope.selfMembers.hasKey( name ) )
+					scope = scope.selfMembers.getValue( name );
+				else if ( scope.members.hasKey( name ) )
+					scope = scope.members.getValue( name );
+				else
+					return false;
+			}
+			
+			if ( needGo )
+				goToPos( scope.pos, t.string.length );
+			else
+				drawGoToToken( t.pos, t.string.length );
+			return true;
 		}
 		
 		public function undo_fun() : void

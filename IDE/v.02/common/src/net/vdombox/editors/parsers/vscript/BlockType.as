@@ -13,5 +13,6 @@ package net.vdombox.editors.parsers.vscript
 		public static const FOREACH:String = "foreach";
 		public static const DO:String = "do";
 		public static const WHILE:String = "while";
+		public static const CLASS:String = "class";
 	}
 }

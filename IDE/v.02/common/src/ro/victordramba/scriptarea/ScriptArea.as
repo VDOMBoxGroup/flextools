@@ -27,6 +27,9 @@ package ro.victordramba.scriptarea
 			selectionShape = new Shape;
 			addChild( selectionShape );
 			
+			linesShape = new Shape;
+			addChild( linesShape );
+			
 			tf = new TextField;
 			tf.multiline = true;
 			tf.wordWrap = false;
@@ -91,6 +94,8 @@ package ro.victordramba.scriptarea
 		private var selectionShape : Shape;
 		
 		private var selectionShapeRects : Shape;
+		
+		private var linesShape : Shape;
 
 		private var undoBuff : Array = [];
 		private var redoBuff : Array = [];
@@ -347,7 +352,7 @@ package ro.victordramba.scriptarea
 			return true;
 		}
 		
-		protected function goToPos( pos : int, len : int ) : void
+		public function goToPos( pos : int, len : int ) : void
 		{
 			_caret = pos;
 			
@@ -887,9 +892,11 @@ package ro.victordramba.scriptarea
 
 				if ( o.begin > lastPos && o.end > lastPos )
 					break;
-
+				
 				if ( o.begin > pos )
+				{
 					slices.push( setColorForSimpleText( pos, o.begin ) );
+				}
 				
 				slices.push( setColorForSpecialText() );
 
@@ -992,6 +999,25 @@ package ro.victordramba.scriptarea
 				
 				return str;
 			}
+		}
+		
+		protected function drawGoToToken( pos : int, len : int ):void
+		{
+			var g : Graphics = selectionShape.graphics;
+			g.clear();
+			
+			g.beginFill( 0x0000FF, 1 );
+			
+			var p0 : Point = getPointForIndex( pos );
+			var p1 : Point = getPointForIndex( pos + len );
+			
+			g.drawRect( p0.x, p0.y + letterBoxHeight, p1.x - p0.x, 1 );
+		}
+		
+		protected function ClearLineGoToToken():void
+		{
+			var g : Graphics = selectionShape.graphics;
+			g.clear();
 		}
 	}
 }

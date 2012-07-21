@@ -97,7 +97,7 @@ package net.vdombox.editors.parsers.vscript
 			}, 1 );
 		}
 		
-		public function triggerAssist( forced : Boolean ) : void
+		public override function triggerAssist( forced : Boolean = false ) : void
 		{
 			var pos : int = fld.caretIndex;
 			

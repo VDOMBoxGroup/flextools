@@ -23,9 +23,6 @@ package net.vdombox.editors.parsers.vscript
 		
 		public static const E4X:String = "e4x";
 		
-		public var parent:VScriptToken;
-		
-		public var imports:HashMap;//used to solve names and types
 		public var fromZone:Boolean = false;
 		public var importZone:Boolean = false;
 		public var importFrom:String = "";

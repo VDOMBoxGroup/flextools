@@ -45,6 +45,8 @@ package net.vdombox.editors
 			
 			addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
+			
+			scriptAreaComponent.controller = controller;
 		}
 		
 		private function controller_statusHandler( event : Event ) : void
@@ -60,11 +62,6 @@ package net.vdombox.editors
 		private function assistCompleteHandler() : void
 		{
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
-		}
-		
-		public override function set hashLibraryArray( hashLibraries : HashLibraryArray ) : void
-		{
-			controller.hashLibraryArray = hashLibraries;
 		}
 		
 		public override function set actionVO( value : IEventBaseVO ) : void

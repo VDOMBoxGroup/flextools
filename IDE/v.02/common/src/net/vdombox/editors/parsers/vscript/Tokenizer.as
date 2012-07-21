@@ -577,19 +577,19 @@ package net.vdombox.editors.parsers.vscript
 			{
 				if ( tp2 && tp2.string != "." )
 				{
-					field = new Field( "var", t.pos, tpString );
+					field = new Field( "var", tp.pos, tpString );
 					
 					if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top")
-						currentBlock.scope.selfMembers.setValue( tpString, field );
-					else
+					{
+						if ( !currentBlock.scope.selfMembers.hasKey( tp.string ) )
+							currentBlock.scope.selfMembers.setValue( tpString, field );
+					}
+					else if ( !scope.members.hasKey( tp.string ) )
+					{
 						scope.members.setValue( tpString, field );
+					}
 					
-					/*if ( tp.string.slice(0, 2) == "__" )
-						access = "private";
-					else if ( t.string.slice(0, 1) == "_" )
-						access = "protected";
-					else*/
-						access = "public";
+					access = "public";
 					
 					field.access = access;
 					
@@ -610,6 +610,10 @@ package net.vdombox.editors.parsers.vscript
 					{
 						field = scope.members.getValue( curToken.string );
 					}
+					else if ( scope.selfMembers.hasKey( curToken.string ) )
+					{
+						field = scope.selfMembers.getValue( curToken.string );
+					} 
 					else 
 					{
 						field = new Field( "var", t.pos, curToken.string );
@@ -623,9 +627,14 @@ package net.vdombox.editors.parsers.vscript
 						field.access = access;
 						
 						if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top")
-							currentBlock.scope.selfMembers.setValue( curToken.string, field );
-						else
+						{
+							if ( !currentBlock.scope.selfMembers.hasKey( tp.string ) )
+								currentBlock.scope.selfMembers.setValue( curToken.string, field );
+						}
+						else if ( !scope.members.hasKey( tp.string ) )
+						{
 							scope.members.setValue( curToken.string, field );
+						}
 					}
 					var tField : Field = field;
 					
@@ -641,7 +650,7 @@ package net.vdombox.editors.parsers.vscript
 						}
 						else 
 						{
-							tField2 = new Field( "var", t.pos, curToken.string );
+							tField2 = new Field( "var", curToken.pos, curToken.string );
 							/*if ( curToken.string.slice(0, 2) == "__" )
 								access = "private";
 							else if ( curToken.string.slice(0, 1) == "_" )
@@ -650,7 +659,9 @@ package net.vdombox.editors.parsers.vscript
 								access = "public";
 							
 							tField2.access = access;
-							tField.members.setValue( curToken.string, tField2 );
+							
+							if ( !tField.members.hasKey( curToken.string ) )
+								tField.members.setValue( curToken.string, tField2 );
 						}
 						
 						tField = tField2;
@@ -725,12 +736,12 @@ package net.vdombox.editors.parsers.vscript
 					currentBlock = t;
 					t.children = [];
 					
-					if ( tString == "if" || ( tString == "then" && currentBlock.parent.blockType == BlockType.IF) )
+					if ( tString == "if" || ( tString == "then" && VScriptToken( currentBlock.parent ).blockType == BlockType.IF) )
 					{
 						currentBlock.blockType = BlockType.IF;
 						currentBlock.mainBlockType = BlockType.IF;
 					}
-					else if ( tString == "each" && currentBlock.parent.blockType == BlockType.FOR)
+					else if ( tString == "each" && VScriptToken( currentBlock.parent ).blockType == BlockType.FOR)
 					{
 						currentBlock.blockType = BlockType.FOREACH;
 						currentBlock.mainBlockType = BlockType.FOR;
@@ -749,6 +760,11 @@ package net.vdombox.editors.parsers.vscript
 					{
 						currentBlock.blockType = BlockType.FUNCTION;
 						currentBlock.mainBlockType = BlockType.FUNCTION;
+					}
+					else if ( tString == "class" )
+					{
+						currentBlock.blockType = BlockType.CLASS;
+						currentBlock.mainBlockType = BlockType.CLASS;
 					}
 					else if ( tString == "for" )
 					{
@@ -823,7 +839,7 @@ package net.vdombox.editors.parsers.vscript
 							scope = scope.parent;
 						}
 						
-						currentBlock = currentBlock.parent;
+						currentBlock = currentBlock.parent as VScriptToken;
 						imports.pop();
 						
 						currentBlock.blockClosed = true;
@@ -864,7 +880,7 @@ package net.vdombox.editors.parsers.vscript
 							scope = scope.parent;
 						}
 						
-						currentBlock = currentBlock.parent;
+						currentBlock = currentBlock.parent as VScriptToken;
 						imports.pop();
 						
 						currentBlock.blockClosed = true;
@@ -891,7 +907,7 @@ package net.vdombox.editors.parsers.vscript
 							scope = scope.parent;
 						}
 						
-						currentBlock = currentBlock.parent;
+						currentBlock = currentBlock.parent as VScriptToken;
 						imports.pop();
 						
 						currentBlock.blockClosed = true;
@@ -917,6 +933,16 @@ package net.vdombox.editors.parsers.vscript
 				case "function":
 				{
 					if ( currentBlock.blockType == BlockType.FUNCTION )
+						currentBlock.blockClosed = true;
+					else
+						setError()
+					
+					break;
+				}
+					
+				case "class":
+				{
+					if ( currentBlock.blockType == BlockType.CLASS )
 						currentBlock.blockClosed = true;
 					else
 						setError()
@@ -955,7 +981,7 @@ package net.vdombox.editors.parsers.vscript
 				scope = scope.parent;
 			}
 			
-			currentBlock = currentBlock.parent;
+			currentBlock = currentBlock.parent as VScriptToken;
 			imports.pop();
 		}
 		
@@ -964,7 +990,7 @@ package net.vdombox.editors.parsers.vscript
 			if ( value == "elseif" ||  value == "for" || value == "do" || ( value == "then" && currentBlock && currentBlock.blockType == BlockType.IF ) )
 				return true;
 			
-			if ( ( value == "if" || value == "select" || value == "sub" || value == "function" ) && prevValue != "end"  )
+			if ( ( value == "if" || value == "select" || value == "sub" || value == "class" || value == "function" ) && prevValue != "end"  )
 				return true;
 			
 			if ( value == "else" && prevValue != "case" )

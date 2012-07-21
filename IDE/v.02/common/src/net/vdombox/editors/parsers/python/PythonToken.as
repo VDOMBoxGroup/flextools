@@ -23,9 +23,6 @@ package net.vdombox.editors.parsers.python
 		
 		public static const E4X:String = "e4x";
 
-		public var parent:PythonToken;
-
-		public var imports:HashMap;//used to solve names and types
 		public var otstyp:Object;//used to solve names and types
 		public var fromZone:Boolean = false;
 		public var importZone:Boolean = false;

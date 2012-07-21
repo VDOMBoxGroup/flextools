@@ -17,8 +17,6 @@ package net.vdombox.editors.parsers
 		public var percentReady : Number = 0;
 		protected var t0 : Number;
 		
-		protected var hashLibraries : HashLibraryArray;
-		
 		protected var _actionVO : IEventBaseVO;
 		
 		public function Controller()

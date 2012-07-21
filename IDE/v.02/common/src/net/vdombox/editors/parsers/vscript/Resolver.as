@@ -106,7 +106,7 @@ package net.vdombox.editors.parsers.vscript
 			return null;
 		}
 		
-		public function getAllOptions( pos : int, hashLibraries : HashLibraryArray ) : Vector.<String>
+		public function getAllOptions( pos : int ) : Vector.<String>
 		{
 			
 			var f : Field;
@@ -118,9 +118,9 @@ package net.vdombox.editors.parsers.vscript
 				return null;
 			
 			if ( t && ( t.string == "from" || t.importZone && !t.importFrom ) )
-				return hashLibraries.getLibrariesName();
+				return HashLibraryArray.getLibrariesName();
 			else if ( t && t.importZone )
-				return hashLibraries.getImportToLibraty( t.importFrom );
+				return HashLibraryArray.getImportToLibraty( t.importFrom );
 			
 			// default keywords
 			var a : Vector.<String> = new <String>["And", "application", "As", "AsJSON", "Case", "Class", "Connection", "Const", "cstr", "Dim", "Do", "Each", "Else", "ElseIf", "Empty", "End", "Exit", "False", "For", "Function", "Generic", "If", "In", "Is", "IsNot", "Loop", "Match", "Matches", "Mismatch", "Mod", "New", "Next", "Not", "Nothing", "Null", "Or", "Preserve", "Print", "Proxy", "ReDim", "RegExp", "request", "Rem", "replace", "response", "Select", "server", "Session", "Set", "Step", "String", "Sub", "Then", "this", "To", "ToJSON", "True", "UBound", "Until", "Uses", "VdomDbConnection", "VDOMDBRecordSet", "VDOMDBRow", "VDOMImaging", "Wend", "While", "XMLDocument", "XMLNode", "Xor"  ];
@@ -241,11 +241,11 @@ package net.vdombox.editors.parsers.vscript
 		/**
 		 * called when you enter a dot
 		 */
-		public function getMemberList( text : String, pos : int, hashLibraries : HashLibraryArray, actionVO : IEventBaseVO ) : Vector.<String>
+		public function getMemberList( text : String, pos : int, actionVO : IEventBaseVO ) : Vector.<String>
 		{
 			a = new Vector.<String>;
 			
-			var flag : Boolean = resolve( text, pos, hashLibraries, actionVO );
+			var flag : Boolean = resolve( text, pos, actionVO );
 			
 			if ( flag )
 				return a;
@@ -343,7 +343,7 @@ package net.vdombox.editors.parsers.vscript
 		{
 			do
 			{
-				token = token.parent;
+				token = token.parent as VScriptToken;
 			} while ( token.parent && !token.imports );
 			return token.imports;
 		}
@@ -353,7 +353,7 @@ package net.vdombox.editors.parsers.vscript
 		private var resolvedIsClass : Boolean;
 		private var resolvedRef : Field;
 		
-		private function resolve( text : String, pos : int, hashLibraries : HashLibraryArray = null, actionVO : IEventBaseVO = null ) : Boolean
+		private function resolve( text : String, pos : int, actionVO : IEventBaseVO = null ) : Boolean
 		{
 			resolved = null;
 			resolvedRef = null;
@@ -404,7 +404,7 @@ package net.vdombox.editors.parsers.vscript
 				if ( t.parent.imports.hasKey( name ) )
 				{
 					var impotrElement : Object = t.parent.imports.getValue( name );
-					a = hashLibraries.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp );
+					a = HashLibraryArray.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp );
 					return true;
 					//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );
 				}

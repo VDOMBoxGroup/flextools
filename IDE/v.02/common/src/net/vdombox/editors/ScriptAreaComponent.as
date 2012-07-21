@@ -322,5 +322,10 @@ package net.vdombox.editors
 		{
 			area.redo_fun();
 		}
+		
+		public function goToPos( pos : int, len : int ) : void
+		{
+			area.goToPos(pos, len);
+		}
 	}
 }

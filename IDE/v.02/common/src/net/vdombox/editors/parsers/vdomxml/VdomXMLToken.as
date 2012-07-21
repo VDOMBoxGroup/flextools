@@ -19,10 +19,6 @@ package net.vdombox.editors.parsers.vdomxml
 		public static const COMMENT : String = "comment";
 		public static const SYMBOL : String = "symbol";
 
-		public var parent : VdomXMLToken;
-		
-		public var imports : HashMap; //used to solve names and types
-
 		public static const map : Dictionary = new Dictionary( true );
 
 		static private var count : Number = 0;

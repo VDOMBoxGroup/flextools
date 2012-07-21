@@ -120,7 +120,6 @@ package net.vdombox.editors.parsers
 			}
 			
 			return a;
-		}
-		
+		}		
 	}
 }

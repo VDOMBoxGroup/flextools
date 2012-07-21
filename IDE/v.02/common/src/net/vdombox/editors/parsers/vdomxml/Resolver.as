@@ -74,7 +74,7 @@ package net.vdombox.editors.parsers.vdomxml
 
 			if ( token && token.parent )
 			{
-				token = token.parent;
+				token = token.parent as VdomXMLToken;
 
 				if ( token.type == VdomXMLToken.OPENTAG && token.children && token.children.length > 0 )
 					token = token.children[ 0 ];
@@ -168,7 +168,7 @@ package net.vdombox.editors.parsers.vdomxml
 		{
 			do
 			{
-				token = token.parent;
+				token = token.parent as VdomXMLToken;
 			} while ( token.parent && !token.imports );
 			return token.imports;
 		}

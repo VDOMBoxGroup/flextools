@@ -91,5 +91,18 @@ package ro.victordramba.util
 				
 			return ret;
 		}
+		
+		public function getNotVariableFields():HashMap
+		{
+			var ret:HashMap = new HashMap;
+			for each(var key:String in getKeys())
+			{
+				var field : Field = getValue(key) as Field;
+				if ( field.fieldType == "class" || field.fieldType == "def" )
+					ret.setValue(key, getValue(key));
+			}
+			
+			return ret;
+		}
 	}
 }

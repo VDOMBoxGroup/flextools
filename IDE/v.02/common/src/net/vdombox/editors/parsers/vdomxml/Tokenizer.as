@@ -312,7 +312,7 @@ package net.vdombox.editors.parsers.vdomxml
 			
 			else if ( ( t.string == ">" || t.string == "/>" ) && currentBlock.parent )
 			{
-				currentBlock = currentBlock.parent;
+				currentBlock = currentBlock.parent as VdomXMLToken;
 			}
 
 			t.scope = scope;

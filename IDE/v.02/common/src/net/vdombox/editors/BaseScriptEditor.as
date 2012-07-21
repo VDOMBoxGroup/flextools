@@ -26,10 +26,6 @@ package net.vdombox.editors
 			
 		}
 		
-		public function set hashLibraryArray( hashLibraries : HashLibraryArray ) : void
-		{
-		}
-		
 		public function set actionVO( actionVO : IEventBaseVO ) : void
 		{
 		}

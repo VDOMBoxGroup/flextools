@@ -97,7 +97,7 @@ package net.vdombox.editors.parsers.python
 			}, 1 );
 		}
 
-		public function triggerAssist( forced : Boolean ) : void
+		public override function triggerAssist( forced : Boolean = false ) : void
 		{
 			var pos : int = fld.caretIndex;
 
@@ -117,6 +117,9 @@ package net.vdombox.editors.parsers.python
 
 			menuStr = menuStr.split( "" ).reverse().join( "" );
 			pos -= menuStr.length + 1;
+			
+			if ( !forced )
+				pos--;
 
 			menuDataStr = null;
 			
@@ -126,7 +129,9 @@ package net.vdombox.editors.parsers.python
 			if (trigger == '.')
 				menuDataStr = ctrl.getMemberList(pos);
 			else if (trigger == '')
+			{
 				menuDataStr = ctrl.getAllOptions(pos);
+			}
 			/*else if (trigger == '(')
 			{
 				var fd:String = ctrl.getFunctionDetails(pos);
@@ -174,6 +179,7 @@ package net.vdombox.editors.parsers.python
 			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
 
 			stage.focus = menu;
+			trace( "stage" );
 //			FocusManager.getManager( stage ).setFocusOwner( menu );
 
 			rePositionMenu();
