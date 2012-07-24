@@ -340,7 +340,7 @@ package net.vdombox.editors.parsers.vscript
 			return _typeDB;
 		}
 		
-		private function setMembers( scp : Field ) : void
+		/*private function setMembers( scp : Field ) : void
 		{
 			if ( !scp.children )
 				return;
@@ -356,7 +356,7 @@ package net.vdombox.editors.parsers.vscript
 				
 				setMembers( children );
 			}
-		}
+		}*/
 		
 		public function runSlice() : Boolean
 		{
@@ -393,7 +393,7 @@ package net.vdombox.editors.parsers.vscript
 			t = nextToken();
 			if ( !t )
 			{
-				setMembers( topScope );
+				//setMembers( topScope );
 				
 				return false;
 			}
@@ -500,12 +500,7 @@ package net.vdombox.editors.parsers.vscript
 					field = new Field( tpString, t.pos, tString );
 					if ( tString != "(" ) //anonimus functions are not members
 					{
-						if ( findClassParent( scope ) || ( !( actionVO is ServerActionVO ) && scope == topScope ) )
-						{
-							if ( !scope.selfMembers.hasKey( t.string ) )
-								scope.selfMembers.setValue( t.string, field );
-						}
-						else if ( !scope.members.hasKey( t.string ) )
+						if ( !scope.members.hasKey( t.string ) )
 						{
 							scope.members.setValue( t.string, field );
 							_members.setValue( t.string, field );
@@ -623,12 +618,7 @@ package net.vdombox.editors.parsers.vscript
 			{
 				field = new Field( "var", t.pos, tString );
 				
-				if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top" )
-				{
-					if ( !currentBlock.scope.selfMembers.hasKey( tString ) )
-						currentBlock.scope.selfMembers.setValue( tString, field );
-				}
-				else if ( !scope.members.hasKey( tString ) )
+				if ( !scope.members.hasKey( tString ) )
 				{
 					scope.members.setValue( tString, field );
 					_members.setValue( tString, field );
@@ -645,12 +635,7 @@ package net.vdombox.editors.parsers.vscript
 				{
 					field = new Field( "var", tp.pos, tpString );
 					
-					if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top")
-					{
-						if ( !currentBlock.scope.selfMembers.hasKey( tp.string ) )
-							currentBlock.scope.selfMembers.setValue( tpString, field );
-					}
-					else if ( !scope.members.hasKey( tp.string ) )
+					if ( !scope.members.hasKey( tp.string ) )
 					{
 						scope.members.setValue( tpString, field );
 						_members.setValue( tpString, field );
@@ -677,10 +662,6 @@ package net.vdombox.editors.parsers.vscript
 					{
 						field = scope.members.getValue( curToken.string );
 					}
-					else if ( scope.selfMembers.hasKey( curToken.string ) )
-					{
-						field = scope.selfMembers.getValue( curToken.string );
-					} 
 					else 
 					{
 						field = new Field( "var", t.pos, curToken.string );
@@ -693,12 +674,7 @@ package net.vdombox.editors.parsers.vscript
 						
 						field.access = access;
 						
-						if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top")
-						{
-							if ( !currentBlock.scope.selfMembers.hasKey( tp.string ) )
-								currentBlock.scope.selfMembers.setValue( curToken.string, field );
-						}
-						else if ( !scope.members.hasKey( tp.string ) )
+						if ( !scope.members.hasKey( tp.string ) )
 						{
 							scope.members.setValue( curToken.string, field );
 						}

@@ -31,9 +31,7 @@ package net.vdombox.editors.parsers
 		/**
 		 * top packages, package classes, class members, function local vars
 		 */
-		public var members:HashMap/*of Field*/ = new HashMap;   
-		public var selfMembers:HashMap/*of Field*/ = new HashMap;
-		public var fieldMembers:HashMap/*of Field*/ = new HashMap;
+		public var members:HashMap/*of Field*/ = new HashMap;
 		
 		//set at resolve time, late
 		public var sourcePath:String;
@@ -105,8 +103,6 @@ package net.vdombox.editors.parsers
 		{
 			if ( params.hasKey( name ) )
 				return params.getValue( name );
-			else if ( selfMembers.hasKey( name ) )
-				return selfMembers.getValue( name );
 			else if ( members.hasKey( name ) )
 				return members.getValue( name );
 			else

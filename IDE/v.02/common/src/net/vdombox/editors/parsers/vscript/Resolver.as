@@ -171,10 +171,10 @@ package net.vdombox.editors.parsers.vscript
 				a.push( ff.name );
 			}
 			
-			if ( t.scope.fieldType == "class" || t.scope.fieldType == "top" && t.scope.selfMembers )
+			if ( t.scope.fieldType == "class" || t.scope.fieldType == "top" )
 			{
-				for each ( f in t.scope.selfMembers.toArray() )
-				a.push( f.name );
+				for each ( f in t.scope.members.toArray() )
+					a.push( f.name );
 			}
 			
 			return a;
@@ -261,7 +261,7 @@ package net.vdombox.editors.parsers.vscript
 		private function listStaticMembers( type : Field ) : HashMap
 		{
 			var map : HashMap = new HashMap;
-			for each ( var m : Field in type.selfMembers.toArray() )
+			for each ( var m : Field in type.members.toArray() )
 			if ( m.isStatic && ( m.access == 'public' || tokenScopeClass == type ) )
 				map.setValue( m.name, m );
 			return map;
@@ -283,11 +283,11 @@ package net.vdombox.editors.parsers.vscript
 				if ( tokenScopeClass == type )
 				{
 					protectedOK = true;
-					for each ( var m : Field in type.selfMembers.toArray() )
+					for each ( var m : Field in type.members.toArray() )
 					{
 						if ( m.isStatic )
 							continue;
-						if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) && !constrCond )
+						if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) )
 							map.setValue( m.name, m );
 					}
 					continue;
@@ -297,16 +297,7 @@ package net.vdombox.editors.parsers.vscript
 				{
 					if ( m.isStatic )
 						continue;
-					if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) && !constrCond )
-						map.setValue( m.name, m );
-				}
-				
-				for each ( m in type.selfMembers.toArray() )
-				{
-					if ( m.isStatic )
-						continue;
-					var constrCond : Boolean = ( m.name == type.name ) && skipConstructor;
-					if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) && !constrCond )
+					if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) )
 						map.setValue( m.name, m );
 				}
 			}
@@ -378,11 +369,6 @@ package net.vdombox.editors.parsers.vscript
 					resolved = scope.members.getValue( name );
 					break;
 				}
-				if ( scope.selfMembers.hasKey( name ) )
-				{
-					resolved = scope.selfMembers.getValue( name );
-					break;
-				}
 				if ( scope.params.hasKey( name ) )
 				{
 					resolved = scope.params.getValue( name );
@@ -405,13 +391,13 @@ package net.vdombox.editors.parsers.vscript
 			if ( name == 'this' && tokenScopeClass )
 			{
 				if ( resolved )
-					tokenScopeClass.selfMembers.merge( resolved.members );
+					tokenScopeClass.members.merge( resolved.members );
 				resolved = tokenScopeClass;
 				
 				for each( var field : Field in tokenScopeClass.members.toArray() )
 				{
 					if ( field.parent.name == tokenScopeClass.name )
-						resolved.selfMembers.setValue( field.name, field );
+						resolved.members.setValue( field.name, field );
 				}
 			}
 			

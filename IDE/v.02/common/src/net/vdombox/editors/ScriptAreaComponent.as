@@ -67,6 +67,12 @@ package net.vdombox.editors
 		{
 			area.caretIndex = value;
 		}
+		
+		public function setFocus() : void
+		{
+			if ( stage )
+				stage.focus = area;
+		}
 
 		public function get selectionBeginIndex() : int
 		{

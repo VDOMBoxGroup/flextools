@@ -55,10 +55,10 @@ package net.vdombox.editors
 			
 			var t : Token = tokenizer.tokenByPos(1);
 			
-			if ( t && t.scope && t.scope.selfMembers )
+			if ( t && t.scope && t.scope.members )
 			{
 				var f : Field;
-				for each ( f in t.scope.selfMembers.toArray() )
+				for each ( f in t.scope.members.toArray() )
 				{
 					a.push( f.name );
 				}
@@ -106,14 +106,14 @@ package net.vdombox.editors
 			
 			
 			
-			if ( t && t.scope && t.scope.selfMembers )
+			if ( t && t.scope && t.scope.members )
 			{	
 				var f : Field;
 				var flag : Boolean = true;
 				for ( var i : int = 0; i < len; i++ )
 				{
 					flag = false;
-					for each ( f in scope.selfMembers.toArray() )
+					for each ( f in scope.members.toArray() )
 					{
 						if ( f.name == bp.names[i] )
 						{
@@ -124,10 +124,10 @@ package net.vdombox.editors
 					}
 				}
 				
-				if ( flag && scope.selfMembers )
+				if ( flag && scope.members )
 				{
 					var f2 : Field;
-					for each ( f2 in scope.selfMembers.toArray() )
+					for each ( f2 in scope.members.toArray() )
 					{
 						if ( f2.isStatic || f2.isClassMethod || ( f2.fieldType == "var" && f2.access == "public" && f2.parent && f2.parent.name == importToken ) )
 							a.push( f2.name );
@@ -169,14 +169,14 @@ package net.vdombox.editors
 			
 			
 			
-			if ( t && t.scope && t.scope.selfMembers )
+			if ( t && t.scope && t.scope.members )
 			{	
 				var f : Field;
 				var flag : Boolean = true;
 				for ( var i : int = 0; i < len; i++ )
 				{
 					flag = false;
-					for each ( f in scope.selfMembers.toArray() )
+					for each ( f in scope.members.toArray() )
 					{
 						if ( f.name == bp.names[i] )
 						{

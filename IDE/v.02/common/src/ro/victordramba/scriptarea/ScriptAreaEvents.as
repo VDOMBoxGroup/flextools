@@ -22,6 +22,7 @@ package ro.victordramba.scriptarea
 	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
+	import net.vdombox.ide.common.model._vo.ServerActionVO;
 
 	/*import flash.desktop.Clipboard;
 	   import flash.desktop.ClipboardFormats;
@@ -39,6 +40,8 @@ package ro.victordramba.scriptarea
 		private var inputTF : TextField;
 		
 		public var scriptLang : String = "pytnon";
+		
+		private var token : Token;
 
 		public function ScriptAreaEvents()
 		{
@@ -242,15 +245,17 @@ package ro.victordramba.scriptarea
 		private function CheckGoTo( needGo : Boolean ):Boolean
 		{
 			var cursorPosition : int = getIndexForPoint( new Point( mouseX, mouseY ) );
-			var t : Token = controller.getTokenByPos( cursorPosition );
-			
-			var bp : BackwardsParser = new BackwardsParser;
-			if ( !bp.parse( text, t.pos + t.string.length ) )
+			token = controller.getTokenByPos( cursorPosition );
+			if ( !token )
 				return false;
 			
-			if ( t.parent && t.parent.imports && t.parent.imports.hasKey( bp.names[0] ) )
+			var bp : BackwardsParser = new BackwardsParser;
+			if ( !bp.parse( text, token.pos + token.string.length ) )
+				return false;
+			
+			if ( token.parent && token.parent.imports && token.parent.imports.hasKey( bp.names[0] ) )
 			{
-				var lib : Object = t.parent.imports.getValue( bp.names[0] );
+				var lib : Object = token.parent.imports.getValue( bp.names[0] );
 				var info : Object = HashLibraryArray.getPositionToken( lib.source, lib.systemName, bp );
 				if ( !info )
 					return false;
@@ -261,16 +266,22 @@ package ro.victordramba.scriptarea
 					if ( needGo )
 						dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.GO_TO_DEFENITION, false, false, info ) );
 					else
-						drawGoToToken( t.pos, t.string.length );
+						drawGoToToken( token.pos, token.string.length );
 					return true;
 				}
 			}
 			
-			return getFiled( t, bp, needGo );
+			return getFiled( token.parent, bp, needGo );
 		}
 		
 		private function getFiled( t : Token, bp : BackwardsParser, needGo : Boolean ) : Boolean
 		{
+			if ( !t )
+				return false;
+			
+			if ( getFiled( t.parent, bp, needGo ) )
+				return true;
+			
 			var scope : Field = t.scope;
 			var name : String;
 			
@@ -278,19 +289,16 @@ package ro.victordramba.scriptarea
 			{
 				name = bp.names[i];
 				
-				if ( i == 0 )
-					scope = scope.getField( name );
-				else
-					scope = scope.fieldMembers.hasKey( name ) ? scope.fieldMembers.getValue( name ) : null;
+				scope = scope.getField( name );
 				
-				if ( !scope )
+				if ( !scope || ( t.scope.fieldType == "class" && scope.fieldType != "def" ) || ( t.scope != token.scope && t.scope.fieldType == "top" && controller.actionVO is ServerActionVO ) )
 					return false;
 			}
 			
 			if ( needGo )
-				goToPos( scope.pos, t.string.length );
+				goToPos( scope.pos, token.string.length );
 			else
-				drawGoToToken( t.pos, t.string.length );
+				drawGoToToken( token.pos, token.string.length );
 			return true;
 		}
 		

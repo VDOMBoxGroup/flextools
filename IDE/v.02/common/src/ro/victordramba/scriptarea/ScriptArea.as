@@ -411,6 +411,9 @@ package ro.victordramba.scriptarea
 			
 			var t : Token = controller.getTokenByPos( _selStart );
 			
+			if ( !t )
+				return;
+			
 			var _start : int = _selStart;
 			var _end : int = _selStart;
 			
@@ -455,6 +458,9 @@ package ro.victordramba.scriptarea
 					var p1 : Point = getPointForIndex( index + step );
 					
 					var t2 : Token = controller.getTokenByPos( index );
+					if ( !t2 )
+						return;
+					
 					if ( t.string == t2.string )
 						g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
 				}

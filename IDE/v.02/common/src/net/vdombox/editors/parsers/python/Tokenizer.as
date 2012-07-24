@@ -371,7 +371,7 @@ package net.vdombox.editors.parsers.python
 			return _typeDB;
 		}
 		
-		private function setMembers( scp : Field ) : void
+		/*private function setMembers( scp : Field ) : void
 		{
 			if ( !scp.children )
 				return;
@@ -387,7 +387,7 @@ package net.vdombox.editors.parsers.python
 				
 				setMembers( children );
 			}
-		}
+		}*/
 
 		public function runSlice() : Boolean
 		{
@@ -420,7 +420,7 @@ package net.vdombox.editors.parsers.python
 			var t : PythonToken = nextToken();
 			if ( !t )
 			{
-				setMembers( topScope );
+				//setMembers( topScope );
 				
 				return false;
 			}
@@ -573,12 +573,7 @@ package net.vdombox.editors.parsers.python
 					field = new Field( tp.string, t.pos, t.string );
 					if ( t.string != "(" ) //anonimus functions are not members
 					{
-						if ( findClassParent( scope ) || ( !( actionVO is ServerActionVO ) && scope == topScope ) )
-						{
-							if ( !scope.selfMembers.hasKey( t.string ) )
-								scope.selfMembers.setValue( t.string, field );
-						}
-						else if ( !scope.members.hasKey( t.string ) )
+						if ( !scope.members.hasKey( t.string ) )
 						{
 							scope.members.setValue( t.string, field );
 							_members.setValue( t.string, field );
@@ -691,12 +686,7 @@ package net.vdombox.editors.parsers.python
 			{
 				field = new Field( "var", t.pos, t.string );
 				
-				if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top" )
-				{
-					if ( !currentBlock.scope.selfMembers.hasKey( t.string ) )
-						currentBlock.scope.selfMembers.setValue( t.string, field );
-				}
-				else if ( !scope.members.hasKey( t.string ) )
+				if ( !scope.members.hasKey( t.string ) )
 				{
 					scope.members.setValue( t.string, field );
 					_members.setValue( t.string, field );
@@ -707,18 +697,13 @@ package net.vdombox.editors.parsers.python
 				
 				field.parent = scope;
 			}
-			else if ( t.string == "=" && tp.type == PythonToken.STRING_LITERAL  )
+			else if ( t.string == "=" && tp.type == PythonToken.STRING_LITERAL && !paramsBlock )
 			{
 				if ( !tp2 || ( tp2 && tp2.string != "." ) )
 				{
 					field = new Field( "var", tp.pos, tp.string );
 					
-					if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top" )
-					{
-						if ( !currentBlock.scope.selfMembers.hasKey( tp.string ) )
-							currentBlock.scope.selfMembers.setValue( tp.string, field );
-					}
-					else if ( !scope.members.hasKey( tp.string ) )
+					if ( !scope.members.hasKey( tp.string ) )
 					{
 						scope.members.setValue( tp.string, field );
 						_members.setValue( tp.string, field );
@@ -750,10 +735,6 @@ package net.vdombox.editors.parsers.python
 					{
 						field = scope.members.getValue( curToken.string );
 					} 
-					else if ( scope.selfMembers.hasKey( curToken.string ) )
-					{
-						field = scope.selfMembers.getValue( curToken.string );
-					} 
 					else 
 					{
 						field = new Field( "var", t.pos, curToken.string );
@@ -766,12 +747,7 @@ package net.vdombox.editors.parsers.python
 						
 						field.access = access;
 						
-						if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top")
-						{
-							if ( !currentBlock.scope.selfMembers.hasKey( tp.string ) )
-								currentBlock.scope.selfMembers.setValue( curToken.string, field );
-						}
-						else if ( !scope.members.hasKey( tp.string ) )
+						if ( !scope.members.hasKey( tp.string ) )
 						{
 							scope.members.setValue( curToken.string, field );
 						}
@@ -786,7 +762,7 @@ package net.vdombox.editors.parsers.python
 						
 						if ( tField.members.hasKey( curToken.string ) )
 						{
-							tField2 = tField.fieldMembers.getValue( curToken.string );
+							tField2 = tField.members.getValue( curToken.string );
 						}
 						else 
 						{
@@ -800,8 +776,8 @@ package net.vdombox.editors.parsers.python
 							
 							tField2.access = access;
 							
-							if ( !tField.fieldMembers.hasKey( curToken.string ) )
-								tField.fieldMembers.setValue( curToken.string, tField2 );
+							if ( !tField.members.hasKey( curToken.string ) )
+								tField.members.setValue( curToken.string, tField2 );
 						}
 						
 						tField = tField2;

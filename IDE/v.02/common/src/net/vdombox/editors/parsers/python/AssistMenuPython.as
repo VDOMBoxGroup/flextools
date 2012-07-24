@@ -118,8 +118,8 @@ package net.vdombox.editors.parsers.python
 			menuStr = menuStr.split( "" ).reverse().join( "" );
 			pos -= menuStr.length + 1;
 			
-			if ( !forced )
-				pos--;
+			/*if ( !forced )
+				pos++;*/
 
 			menuDataStr = null;
 			
@@ -156,7 +156,7 @@ package net.vdombox.editors.parsers.python
 			var showingMenu : Boolean = true;
 			if ( menuStr.length )
 				showingMenu = filterMenu();
-			else if ( !forced )
+			else if ( !forced && trigger != '.' )
 				return;
 			
 			if ( showingMenu )
