@@ -548,6 +548,9 @@ package net.vdombox.ide.core.model
 			var objectID : String;
 			var typeID : String;
 
+			if ( !objects )
+				return;
+			
 			for each ( var object : XML in objects.* )
 			{
 				objectID = object.@ID[ 0 ];
