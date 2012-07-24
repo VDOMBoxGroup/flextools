@@ -126,11 +126,6 @@ package net.vdombox.editors.parsers.vscript
 			return new Location( null, field.pos );
 		}
 		
-		public function set actionVO( actVO : IEventBaseVO ) : void
-		{
-			_actionVO = actVO;
-		}
-		
 		public override function getTokenByPos( pos : int ) : Token
 		{
 			return parser.getTokenByPos( pos );

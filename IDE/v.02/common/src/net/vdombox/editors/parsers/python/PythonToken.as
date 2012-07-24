@@ -2,6 +2,7 @@ package net.vdombox.editors.parsers.python
 {
 	import flash.utils.Dictionary;
 	
+	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Token;
 	
 	import ro.victordramba.util.HashMap;

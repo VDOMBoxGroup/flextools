@@ -2,6 +2,7 @@ package net.vdombox.editors.parsers.vscript
 {
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
+	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import ro.victordramba.util.HashMap;
 	
@@ -14,6 +15,11 @@ package net.vdombox.editors.parsers.vscript
 		private var pos : uint;
 		private var str : String;
 		private var prevStr : String;
+		
+		private var _members : HashMap;
+		
+		public var actionVO : Object;
+		private var newLogicBlock : Boolean = false;
 		
 		private static const keywordsA : Array = [
 			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "class", "clng", "const", "csng", "cstr", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "wend", "while", "with", "xor"
@@ -67,6 +73,11 @@ package net.vdombox.editors.parsers.vscript
 			
 			this.string = str;
 			pos = 0;
+		}
+		
+		public function get members():HashMap
+		{
+			return _members;
 		}
 		
 		public function get precentReady() : Number
@@ -329,6 +340,24 @@ package net.vdombox.editors.parsers.vscript
 			return _typeDB;
 		}
 		
+		private function setMembers( scp : Field ) : void
+		{
+			if ( !scp.children )
+				return;
+			
+			for each ( var children : Field in scp.children )
+			{
+				if ( children.name == "none" )
+					children.selfMembers.mergeExcOneField( scp.selfMembers, children );
+				else
+					children.selfMembers.mergeExcOneField( scp.selfMembers.getNotVariableFields(), children );
+				
+				children.members.mergeExcOneField( scp.members, children );
+				
+				setMembers( children );
+			}
+		}
+		
 		public function runSlice() : Boolean
 		{
 			//init (first run)
@@ -357,11 +386,17 @@ package net.vdombox.editors.parsers.vscript
 				imports.push( new HashMap() );
 				currentBlock.imports = imports[0];
 				currentBlock.scope = scope;
+				
+				_members = new HashMap();
 			}
 			
 			t = nextToken();
 			if ( !t )
+			{
+				setMembers( topScope );
+				
 				return false;
+			}
 			
 			tokens.push( t );
 			
@@ -453,8 +488,7 @@ package net.vdombox.editors.parsers.vscript
 			}
 				
 			else if ( tp && ( tpString == "class" ||
-				tpString == "function" ||
-				tpString == "const" ) )
+				tpString == "function" ) && ( !tp2 || tp2.string.toLowerCase() != "end" ) )
 			{
 				//for package, merge classes in the existing omonimus package
 				if ( tpString == "package" && scope.members.hasKey( tString ) )
@@ -465,9 +499,21 @@ package net.vdombox.editors.parsers.vscript
 					//TODO if is "set" make it "*set"
 					field = new Field( tpString, t.pos, tString );
 					if ( tString != "(" ) //anonimus functions are not members
-						scope.selfMembers.setValue( tString, field );
-					if ( tpString != "var" && tpString != "const" )
-						_scope = field;
+					{
+						if ( findClassParent( scope ) || ( !( actionVO is ServerActionVO ) && scope == topScope ) )
+						{
+							if ( !scope.selfMembers.hasKey( t.string ) )
+								scope.selfMembers.setValue( t.string, field );
+						}
+						else if ( !scope.members.hasKey( t.string ) )
+						{
+							scope.members.setValue( t.string, field );
+							_members.setValue( t.string, field );
+						}
+					}
+					
+					_scope = field;
+					newLogicBlock = true;
 					
 					if ( isStatic ) //consume "static" declaration
 					{
@@ -512,10 +558,10 @@ package net.vdombox.editors.parsers.vscript
 				if ( tp.string == "package" )
 					imports.setValue( tString + ".*", tString + ".*" );
 			}
-			else if ( checkNewBlock( tString, tpString ) )
+			/*else if ( checkNewBlock( tString, tpString ) )
 			{
 				_scope = new Field( tpString, t.pos, tString );
-			}
+			}*/
 			
 			if ( tString == ";" )
 			{
@@ -525,7 +571,7 @@ package net.vdombox.editors.parsers.vscript
 			}
 				
 				//parse function params
-			else if ( _scope && ( _scope.fieldType == "def" || _scope.fieldType == "catch" || _scope.fieldType == "set" ) )
+			else if ( _scope && ( _scope.fieldType == "function" || _scope.fieldType == "catch" || _scope.fieldType == "set" ) )
 			{
 				if ( tp && tpString == "(" && tString != ")" )
 					paramsBlock = true;
@@ -573,6 +619,26 @@ package net.vdombox.editors.parsers.vscript
 						defParamValue += t.string;
 				}
 			}
+			if ( tp2 && tp2.string.toLowerCase() == "for" && tpString == "each" && t.type == VScriptToken.STRING_LITERAL  )
+			{
+				field = new Field( "var", t.pos, tString );
+				
+				if ( currentBlock.scope.fieldType == "class" || currentBlock.scope.fieldType == "top" )
+				{
+					if ( !currentBlock.scope.selfMembers.hasKey( tString ) )
+						currentBlock.scope.selfMembers.setValue( tString, field );
+				}
+				else if ( !scope.members.hasKey( tString ) )
+				{
+					scope.members.setValue( tString, field );
+					_members.setValue( tString, field );
+				}
+				
+				access = "private";
+				field.access = access;
+				
+				field.parent = scope;
+			}
 			else if ( tString == "=" && tp.type == VScriptToken.STRING_LITERAL )
 			{
 				if ( tp2 && tp2.string != "." )
@@ -587,6 +653,7 @@ package net.vdombox.editors.parsers.vscript
 					else if ( !scope.members.hasKey( tp.string ) )
 					{
 						scope.members.setValue( tpString, field );
+						_members.setValue( tpString, field );
 					}
 					
 					access = "public";
@@ -697,9 +764,18 @@ package net.vdombox.editors.parsers.vscript
 				}
 			}
 			
+			if( newLogicBlock )
+			{
+				_scope.pos = t.pos;
+				_scope.parent = scope;
+				scope = _scope;
+				
+				newLogicBlock = false;
+				_scope = null;
+			}
 			
 			//new block
-			if ( checkNewBlock( tString, tpString ) && _scope )
+			if ( checkNewBlock( tString, tpString ) )
 			{	
 				newBlock = true;
 				
@@ -787,13 +863,8 @@ package net.vdombox.editors.parsers.vscript
 				imports.push( imports[ imports.length - 1 ].clone() );
 				currentBlock.imports = imports[ imports.length - 1 ];
 				currentBlock.scope = scope;
-				_scope.pos = t.pos;
-				_scope.parent = scope;
-				_scope.members = scope.members;
-				scope = _scope;
-				t.scope = scope;
 				
-				_scope = null;
+				t.scope = scope;
 			}
 			
 			if ( newBlock && ( tString == "then" ) )
@@ -824,6 +895,18 @@ package net.vdombox.editors.parsers.vscript
 			}
 		}
 		
+		private function findClassParent( scp : Field ):Boolean
+		{
+			for ( var _scp : Field = scp; _scp && _scp.fieldType != "class"; _scp = _scp.parent )
+			{
+				
+			}
+			if ( _scp )
+				return true;
+			else
+				return false;
+		}
+		
 		private function closeBlock( endString : String ) : void
 		{
 			switch(endString)
@@ -833,11 +916,6 @@ package net.vdombox.editors.parsers.vscript
 					if ( currentBlock.blockType == BlockType.IF || currentBlock.blockType == BlockType.ELSE || currentBlock.blockType == BlockType.ELSEIF )
 					{
 						currentBlock.blockClosed = true;
-						
-						if ( currentBlock.pos == scope.pos )
-						{
-							scope = scope.parent;
-						}
 						
 						currentBlock = currentBlock.parent as VScriptToken;
 						imports.pop();
@@ -875,11 +953,6 @@ package net.vdombox.editors.parsers.vscript
 					{
 						currentBlock.blockClosed = true;
 						
-						if ( currentBlock.pos == scope.pos )
-						{
-							scope = scope.parent;
-						}
-						
 						currentBlock = currentBlock.parent as VScriptToken;
 						imports.pop();
 						
@@ -901,11 +974,6 @@ package net.vdombox.editors.parsers.vscript
 						currentBlock.blockClosed = true;
 						if ( currentBlock.blockType == BlockType.FOR )
 							break;
-						
-						if ( currentBlock.pos == scope.pos )
-						{
-							scope = scope.parent;
-						}
 						
 						currentBlock = currentBlock.parent as VScriptToken;
 						imports.pop();
@@ -933,7 +1001,10 @@ package net.vdombox.editors.parsers.vscript
 				case "function":
 				{
 					if ( currentBlock.blockType == BlockType.FUNCTION )
+					{
 						currentBlock.blockClosed = true;
+						scope = scope.parent;
+					}
 					else
 						setError()
 					
@@ -943,7 +1014,10 @@ package net.vdombox.editors.parsers.vscript
 				case "class":
 				{
 					if ( currentBlock.blockType == BlockType.CLASS )
+					{
 						currentBlock.blockClosed = true;
+						scope = scope.parent;
+					}
 					else
 						setError()
 					
@@ -974,11 +1048,6 @@ package net.vdombox.editors.parsers.vscript
 				{
 					break;
 				}
-			}
-			
-			if ( currentBlock.pos == scope.pos )
-			{
-				scope = scope.parent;
 			}
 			
 			currentBlock = currentBlock.parent as VScriptToken;

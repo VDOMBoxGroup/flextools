@@ -8,6 +8,8 @@ package ro.victordramba.scriptarea
 	import flash.text.TextFormat;
 	
 	import net.vdombox.editors.parsers.Controller;
+	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.utils.StringUtils;
 
 	public class ScriptArea extends Base
@@ -373,7 +375,7 @@ package ro.victordramba.scriptarea
 			
 			g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
 			
-			setSelectionRects();
+			//setSelectionRects();
 			
 			_replaceText( 0, 0, "" );
 		}
@@ -387,6 +389,7 @@ package ro.victordramba.scriptarea
 			g.clear();
 			g.beginFill( 0xD4D4D4, .9 );
 			
+			var t : Token = controller.getTokenByPos( index );
 			while ( index != -1 )
 			{
 				var p0 : Point = getPointForIndex( index );
@@ -405,6 +408,8 @@ package ro.victordramba.scriptarea
 			
 			if ( _selStart == _selEnd )
 				return;
+			
+			var t : Token = controller.getTokenByPos( _selStart );
 			
 			var _start : int = _selStart;
 			var _end : int = _selStart;
@@ -449,7 +454,9 @@ package ro.victordramba.scriptarea
 					var p0 : Point = getPointForIndex( index );
 					var p1 : Point = getPointForIndex( index + step );
 					
-					g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
+					var t2 : Token = controller.getTokenByPos( index );
+					if ( t.string == t2.string )
+						g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
 				}
 				
 				index = text.indexOf( strFind, index + 1 );
@@ -1003,7 +1010,7 @@ package ro.victordramba.scriptarea
 		
 		protected function drawGoToToken( pos : int, len : int ):void
 		{
-			var g : Graphics = selectionShape.graphics;
+			var g : Graphics = linesShape.graphics;
 			g.clear();
 			
 			g.beginFill( 0x0000FF, 1 );
@@ -1016,7 +1023,7 @@ package ro.victordramba.scriptarea
 		
 		protected function ClearLineGoToToken():void
 		{
-			var g : Graphics = selectionShape.graphics;
+			var g : Graphics = linesShape.graphics;
 			g.clear();
 		}
 	}

@@ -227,7 +227,7 @@ package net.vdombox.editors.parsers.python
 		/**
 		 * called when you enter a dot
 		 */
-		public function getMemberList( text : String, pos : int, actionVO : IEventBaseVO ) : Vector.<String>
+		public function getMemberList( text : String, pos : int, actionVO : Object ) : Vector.<String>
 		{
 			a = new Vector.<String>;
 			
@@ -261,7 +261,7 @@ package net.vdombox.editors.parsers.python
 		{
 			var map : HashMap = new HashMap;
 			for each ( var m : Field in type.selfMembers.toArray() )
-				if ( m.isStatic && ( m.access == 'public' || tokenScopeClass == type ) )
+				if ( ( m.isStatic || m.isClassMethod ) && ( m.access == 'public' || tokenScopeClass == type ) )
 					map.setValue( m.name, m );
 			return map;
 		}
@@ -286,28 +286,28 @@ package net.vdombox.editors.parsers.python
 					{
 						if ( m.isStatic )
 							continue;
-						if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) && !constrCond )
+						if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) )
 							map.setValue( m.name, m );
 					}
 					continue;
 				}
 
-				for each ( m  in type.members.toArray() )
+				for each ( m  in type.fieldMembers.toArray() )
 				{
 					if ( m.isStatic )
 						continue;
-					if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) && !constrCond )
+					if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) )
 						map.setValue( m.name, m );
 				}
 				
-				for each ( m in type.selfMembers.toArray() )
+				/*for each ( m in type.selfMembers.toArray() )
 				{
 					if ( m.isStatic )
 						continue;
 					var constrCond : Boolean = ( m.name == type.name ) && skipConstructor;
 					if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) && !constrCond )
 						map.setValue( m.name, m );
-				}
+				}*/
 			}
 
 			return map;
@@ -339,7 +339,7 @@ package net.vdombox.editors.parsers.python
 		private var resolvedIsClass : Boolean;
 		private var resolvedRef : Field;
 
-		private function resolve( text : String, pos : int, actionVO : IEventBaseVO = null ) : Boolean
+		private function resolve( text : String, pos : int, actionVO : Object = null ) : Boolean
 		{
 			resolved = null;
 			resolvedRef = null;
@@ -443,13 +443,15 @@ package net.vdombox.editors.parsers.python
 			if ( !resolved && imports )
 			{
 				resolved = classDB.resolveName( new Multiname( name, imports ) );
-				if ( resolved && resolved.fieldType == 'class' && itemType == BackwardsParser.NAME )
-					resolvedIsClass = true;
+				
 			}
 
 			//we didn't find the first name, we quit
 			if ( !resolved )
 				return false;
+			else if ( resolved.fieldType == 'class' && itemType == BackwardsParser.NAME )
+				resolvedIsClass = true;
+			
 			checkReturnType();
 
 

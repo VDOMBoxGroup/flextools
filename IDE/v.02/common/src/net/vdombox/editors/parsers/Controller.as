@@ -17,7 +17,7 @@ package net.vdombox.editors.parsers
 		public var percentReady : Number = 0;
 		protected var t0 : Number;
 		
-		protected var _actionVO : IEventBaseVO;
+		protected var _actionVO : Object;
 		
 		public function Controller()
 		{
@@ -26,6 +26,16 @@ package net.vdombox.editors.parsers
 		public function getTokenByPos( pos : int ) : Token
 		{
 			return null
+		}
+		
+		public function set actionVO( actVO : Object ) : void
+		{
+			_actionVO = actVO;
+		}
+		
+		public function get actionVO() : Object
+		{
+			return _actionVO;
 		}
 	}
 }

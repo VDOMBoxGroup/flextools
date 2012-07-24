@@ -49,5 +49,14 @@ package ro.victordramba.util
 		{
 			throw new Error('Not implemented');
 		}
+		
+		override public function clone():HashMap
+		{
+			var ret:HashList = new HashList;
+			for each(var key:String in getKeys())
+				ret.setValue(key, getValue(key));
+			
+			return ret;
+		}
 	}
 }

@@ -33,6 +33,7 @@ package net.vdombox.editors.parsers
 		 */
 		public var members:HashMap/*of Field*/ = new HashMap;   
 		public var selfMembers:HashMap/*of Field*/ = new HashMap;
+		public var fieldMembers:HashMap/*of Field*/ = new HashMap;
 		
 		//set at resolve time, late
 		public var sourcePath:String;
@@ -98,6 +99,18 @@ package net.vdombox.editors.parsers
 		{
 			return fieldType + " " + name;
 			//return (access ? access + ' ' : '') + fieldType + ' ' + name + (type? ': '+type.type : '');
+		}
+		
+		public function getField( name : String ) : Field
+		{
+			if ( params.hasKey( name ) )
+				return params.getValue( name );
+			else if ( selfMembers.hasKey( name ) )
+				return selfMembers.getValue( name );
+			else if ( members.hasKey( name ) )
+				return members.getValue( name );
+			else
+				return null;
 		}
 	}
 }

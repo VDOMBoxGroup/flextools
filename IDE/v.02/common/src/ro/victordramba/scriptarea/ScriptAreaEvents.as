@@ -278,13 +278,12 @@ package ro.victordramba.scriptarea
 			{
 				name = bp.names[i];
 				
-				if ( scope.params.hasKey( name ) )
-					scope = scope.params.getValue( name );
-				else if ( scope.selfMembers.hasKey( name ) )
-					scope = scope.selfMembers.getValue( name );
-				else if ( scope.members.hasKey( name ) )
-					scope = scope.members.getValue( name );
+				if ( i == 0 )
+					scope = scope.getField( name );
 				else
+					scope = scope.fieldMembers.hasKey( name ) ? scope.fieldMembers.getValue( name ) : null;
+				
+				if ( !scope )
 					return false;
 			}
 			

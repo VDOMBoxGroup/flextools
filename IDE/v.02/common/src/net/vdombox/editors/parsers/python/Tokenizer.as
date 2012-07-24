@@ -1,6 +1,7 @@
 package net.vdombox.editors.parsers.python
 {
 
+	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
 	import net.vdombox.editors.parsers.Token;
@@ -377,12 +378,12 @@ package net.vdombox.editors.parsers.python
 			
 			for each ( var children : Field in scp.children )
 			{
-				if ( children.name == "none" )
-					children.selfMembers.mergeExcOneField( scp.selfMembers, children );
+				if ( children.name == "none" || !( actionVO is ServerActionVO ) )
+					children.selfMembers.merge( scp.selfMembers );
 				else
-					children.selfMembers.mergeExcOneField( scp.selfMembers.getNotVariableFields(), children );
+					children.selfMembers.merge( scp.selfMembers.getNotVariableFields() );
 				
-				children.members.mergeExcOneField( scp.members, children );
+				children.members.merge( scp.members );
 				
 				setMembers( children );
 			}
@@ -508,6 +509,23 @@ package net.vdombox.editors.parsers.python
 						importFrom = "";
 					}
 				}
+				else if ( t.string == "*" )
+				{
+					for each ( var name : String in HashLibraryArray.getImportToLibraty( importFrom ) )
+					{
+						imports[ imports.length - 1 ].setValue( name, { name : name, systemName : name, source : importFrom } );
+					}
+					
+					position = t.pos + t.string.length;
+					while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
+						position++;
+					
+					if ( string.charAt( position ) == '\r' || string.charAt( position ) == '\n' )
+					{
+						importZone = false;
+						importFrom = "";
+					}
+				}
 					
 			}
 			else if ( t && t.string == "from" )
@@ -563,12 +581,11 @@ package net.vdombox.editors.parsers.python
 						else if ( !scope.members.hasKey( t.string ) )
 						{
 							scope.members.setValue( t.string, field );
-							members.setValue( t.string, field );
+							_members.setValue( t.string, field );
 						}
 					}
 					
-					if ( tp.string != "var" && tp.string != "const" )
-						_scope = field;
+					_scope = field;
 
 					if ( isStatic ) //consume "static" declaration
 					{
@@ -769,7 +786,7 @@ package net.vdombox.editors.parsers.python
 						
 						if ( tField.members.hasKey( curToken.string ) )
 						{
-							tField2 = tField.members.getValue( curToken.string );
+							tField2 = tField.fieldMembers.getValue( curToken.string );
 						}
 						else 
 						{
@@ -783,8 +800,8 @@ package net.vdombox.editors.parsers.python
 							
 							tField2.access = access;
 							
-							if ( !tField.members.hasKey( curToken.string ) )
-								tField.members.setValue( curToken.string, tField2 );
+							if ( !tField.fieldMembers.hasKey( curToken.string ) )
+								tField.fieldMembers.setValue( curToken.string, tField2 );
 						}
 						
 						tField = tField2;

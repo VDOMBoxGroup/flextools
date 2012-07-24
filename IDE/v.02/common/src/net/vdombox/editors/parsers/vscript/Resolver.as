@@ -161,21 +161,8 @@ package net.vdombox.editors.parsers.vscript
 			//findScopeClass( t.scope );
 			
 			//class scope
-			if ( t.scope.members )
-			{
-				//for static scope, add only static members
-				//current class
-				for each ( f in t.scope.members.toArray() )
+			for each ( f in tokenizer.members.toArray() )
 				a.push( f.name );
-				
-				//inheritance
-				/*scope = tokenScopeClass;
-				while ( ( scope = typeDB.resolveName( scope.extendz ) ) )
-				for each ( f in scope.members.toArray() )
-				if ( f.access != 'private' && ( !isStatic || f.isStatic ) )
-				a.push( f.name );*/
-				
-			}
 			
 			if ( t.parent.imports )
 			{
@@ -241,7 +228,7 @@ package net.vdombox.editors.parsers.vscript
 		/**
 		 * called when you enter a dot
 		 */
-		public function getMemberList( text : String, pos : int, actionVO : IEventBaseVO ) : Vector.<String>
+		public function getMemberList( text : String, pos : int, actionVO : Object ) : Vector.<String>
 		{
 			a = new Vector.<String>;
 			
@@ -353,7 +340,7 @@ package net.vdombox.editors.parsers.vscript
 		private var resolvedIsClass : Boolean;
 		private var resolvedRef : Field;
 		
-		private function resolve( text : String, pos : int, actionVO : IEventBaseVO = null ) : Boolean
+		private function resolve( text : String, pos : int, actionVO : Object = null ) : Boolean
 		{
 			resolved = null;
 			resolvedRef = null;

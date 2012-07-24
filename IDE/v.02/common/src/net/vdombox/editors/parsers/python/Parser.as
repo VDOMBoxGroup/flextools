@@ -19,7 +19,7 @@ package net.vdombox.editors.parsers.python
 		private var formats : HashMap = new HashMap;
 		private var fileName : String;
 		
-		private var _actionVO : IEventBaseVO;
+		private var _actionVO : Object;
 
 		public function Parser()
 		{
@@ -147,7 +147,7 @@ package net.vdombox.editors.parsers.python
 				return tokenizer2.tokenByPos( pos ) as PythonToken;
 		}
 		
-		public function set actionVO( value : IEventBaseVO ) : void
+		public function set actionVO( value : Object ) : void
 		{
 			_actionVO = value;
 			tokenizer? tokenizer.actionVO = value : tokenizer2.actionVO = value;

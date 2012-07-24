@@ -127,7 +127,7 @@ package net.vdombox.editors.parsers.python
 			return new Location( null, field.pos );
 		}
 		
-		public function set actionVO( actVO : IEventBaseVO ) : void
+		public override function set actionVO( actVO : Object ) : void
 		{
 			_actionVO = actVO;
 			parser.actionVO = actVO;
