@@ -8,6 +8,15 @@
 		<![CDATA[
 			[Bindable]
 			public var text : String;
+			
+			protected function maximizeButton_clickHandler(event:MouseEvent):void
+			{
+				if ( currentState == "normal" )
+					currentState = "maximized";
+				else
+					currentState = "normal";
+			}
+			
 		]]>
 	</fx:Script>
 	

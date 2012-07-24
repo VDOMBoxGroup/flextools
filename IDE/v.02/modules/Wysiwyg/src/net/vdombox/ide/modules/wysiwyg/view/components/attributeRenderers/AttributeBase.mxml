@@ -4,7 +4,8 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				width="100%"
 				minHeight="23"
-				contentBackgroundAlpha="0">
+				contentBackgroundAlpha="0"
+				click="itemrenderer1_clickHandler(event)">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -348,8 +349,6 @@
 					_objectVO.name = valueField.value;
 				else
 					_attributeVO.value = valueField.value;
-				
-				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ) );
 			}
 			
 			private function errorHandler2(event : AttributeEvent) : void
@@ -455,6 +454,12 @@
 				group.addElement(rtextLabel);
 				group.addElement(object);
 			}
+			
+			protected function itemrenderer1_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED ))
+			}
+			
 		]]>
 	</fx:Script>
 
