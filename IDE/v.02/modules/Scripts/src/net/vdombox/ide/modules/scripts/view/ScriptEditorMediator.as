@@ -6,16 +6,18 @@ package net.vdombox.ide.modules.scripts.view
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.editors.BaseScriptEditor;
+	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.PythonScriptEditor;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.FindBoxEvent;
+	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
-	import net.vdombox.ide.modules.scripts.model.HashLibraryProxy;
+	import net.vdombox.ide.modules.scripts.model.GoToPositionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.FindBox;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	
@@ -34,36 +36,9 @@ package net.vdombox.ide.modules.scripts.view
 			compliteSourceCode();
 		}
 		
-		private var isActive : Boolean;
-		private var hashLibraryProxy : HashLibraryProxy;
+		private var isActive : Boolean;	
 		
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-			
-			interests.push( HashLibraryProxy.HASH_LIBRARIES_CHANGE );
-			
-			return interests;
-		}
-		
-		override public function handleNotification( notification : INotification ) : void
-		{
-			var name : String = notification.getName();
-			var body : Object = notification.getBody();
-			
-			switch ( name )
-			{					
-				case HashLibraryProxy.HASH_LIBRARIES_CHANGE:
-				{
-					scriptEditor.hashLibraryArray = hashLibraryProxy.hashLibraries;
-					
-					break;
-				}
-					
-			}
-		}
-
-		
+		private var goToDefenitionProxy : GoToPositionProxy;		
 		
 		public function get scriptEditor() : ScriptEditor
 		{
@@ -82,9 +57,8 @@ package net.vdombox.ide.modules.scripts.view
 
 		override public function onRegister() : void
 		{
-			hashLibraryProxy = facade.retrieveProxy( HashLibraryProxy.NAME ) as HashLibraryProxy;
+			goToDefenitionProxy = facade.retrieveProxy( GoToPositionProxy.NAME ) as GoToPositionProxy;
 			
-			scriptEditor.hashLibraryArray = hashLibraryProxy.hashLibraries;
 			scriptEditor.setActionVO();
 			
 			addHandlers();
@@ -102,6 +76,8 @@ package net.vdombox.ide.modules.scripts.view
 			scriptEditor.addEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler, false, 0, true );
 			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_FIND, scriptEditor_openFindHandler, false, 0, true );
 			scriptEditor.addEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode, false, 0, true );
+			
+			scriptEditor.addEventListener( ScriptAreaComponenrEvent.GO_TO_DEFENITION, goToDefenitionHandler, true, 0, true );
 		}
 		
 		private function compliteSourceCode( event : FlexEvent = null ):void
@@ -132,7 +108,6 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function clearData() : void
 		{
-			hashLibraryProxy = null;
 		}
 		
 		private function scriptEditor_saveHandler( event : ScriptEditorEvent ) : void
@@ -147,6 +122,18 @@ package net.vdombox.ide.modules.scripts.view
 		private function scriptEditor_openFindHandler( event : ScriptEditorEvent ) : void
 		{			
 			sendNotification( Notifications.OPEN_FIND_SCRIPT );
+		}
+		
+		private function goToDefenitionHandler( event : ScriptAreaComponenrEvent ):void
+		{
+			var detail : Object = event.detail;
+			
+			if ( !detail )
+				return;
+			
+			goToDefenitionProxy.add( detail.libraryVO, detail.position, detail.length );
+			
+			sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : detail.libraryVO, check : false } );
 		}
 	}
 }

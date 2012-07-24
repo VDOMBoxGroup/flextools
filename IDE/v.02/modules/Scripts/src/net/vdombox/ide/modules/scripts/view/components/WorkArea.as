@@ -32,6 +32,8 @@ package net.vdombox.ide.modules.scripts.view.components
 		{
 			// CHANGE
 			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CHANGE ) );
+			if ( selectedEditor.scriptEditor )
+				selectedEditor.scriptEditor.scriptAreaComponent.setFocus();
 		}
 		
 		protected override function closeTabHandler( event : ListEvent ) : void

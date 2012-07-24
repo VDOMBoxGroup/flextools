@@ -21,8 +21,10 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
+	import net.vdombox.ide.modules.scripts.model.GoToPositionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	import net.vdombox.ide.modules.scripts.view.components.WorkArea;
+	import net.vdombox.utils.StringUtils;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -41,6 +43,8 @@ package net.vdombox.ide.modules.scripts.view
 
 		private var closedScript : Boolean = false;
 		
+		private var goToDefenitionProxy : GoToPositionProxy;
+		
 		public function WorkAreaMediator( viewComponent : Object )
 		{
 			super( NAME, viewComponent );
@@ -55,6 +59,7 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			addHandlers();
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			goToDefenitionProxy = facade.retrieveProxy( GoToPositionProxy.NAME ) as GoToPositionProxy;
 		}
 		
 		override public function onRemove() : void
@@ -152,7 +157,7 @@ package net.vdombox.ide.modules.scripts.view
 					if ( actionVO.script == editorScript )
 					{
 						var script : String = editor.script;
-						script = script.replace(/]]>/g, "]]]]><![CDATA[>");
+						script = StringUtils.getCDataParserString( script );
 						while ( script.slice( script.length - 1 ) == "\r" || script.slice( script.length - 1 ) == " " || script.slice( script.length - 1 ) == "\t" )
 							script = script.slice( 0, script.length - 1);
 						
@@ -217,7 +222,10 @@ package net.vdombox.ide.modules.scripts.view
 					editor.addEventListener( FlexEvent.CREATION_COMPLETE, setMediator, false, 0 , true );
 				}
 				else
+				{
 					workArea.selectedEditor = editor;
+					goToPos( editor );
+				}
 			}
 		
 			sendNotification( Notifications.CHANGE_SELECTED_SCRIPT, editor );
@@ -250,7 +258,20 @@ package net.vdombox.ide.modules.scripts.view
 			facade.registerMediator( new ScriptEditorMediator( editor ) );
 			editor.enabled = true;
 			
-			editor.script = editor.actionVO.script;;
+			editor.script = editor.actionVO.script;
+			
+			goToPos( editor );
+			
+			editor.scriptEditor.scriptAreaComponent.setFocus();
+		}
+		
+		private function goToPos( editor : ScriptEditor ) : void
+		{
+			var detail : Object = goToDefenitionProxy.getPosition( editor.actionVO );
+			if ( detail && editor.script.length > detail.position )
+			{
+				editor.scriptEditor.scriptAreaComponent.goToPos( detail.position, detail.length );
+			}
 		}
 		
 		private function addHandlers() : void

@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.scripts.controller
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.modules.scripts.model.HashLibraryProxy;
+	import net.vdombox.ide.modules.scripts.model.GoToPositionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.scripts.controller
 			facade.registerProxy( new StatesProxy() );
 			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new TypesProxy() );
-			facade.registerProxy( new HashLibraryProxy() );
+			facade.registerProxy( new GoToPositionProxy() );
 		}
 	}
 }

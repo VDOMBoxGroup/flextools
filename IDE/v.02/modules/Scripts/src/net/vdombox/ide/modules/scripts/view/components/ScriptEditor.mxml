@@ -163,11 +163,6 @@
 				addEventListener(Event.CHANGE, setStateInUnsave, true, 0, true );
 			}
 			
-			public function set hashLibraryArray( hashLibraries : HashLibraryArray ) : void
-			{
-				scriptEditor.hashLibraryArray = hashLibraries;
-			}
-			
 			public function setActionVO() : void
 			{
 				scriptEditor.actionVO = actionVO as IEventBaseVO;

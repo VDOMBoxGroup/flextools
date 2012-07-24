@@ -2,13 +2,13 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 	import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
-	import net.vdombox.ide.modules.scripts.model.HashLibraryProxy;
 	import net.vdombox.ide.modules.scripts.view.components.LibrariesPanel;
 	import net.vdombox.utils.WindowManager;
 	
@@ -27,8 +27,6 @@ package net.vdombox.ide.modules.scripts.view
 
 		private var statesProxy : StatesProxy;
 		
-		private var hashLibraryProxy : HashLibraryProxy;
-		
 		private var isActive : Boolean;
 		
 		private var libraries : Array;
@@ -43,7 +41,6 @@ package net.vdombox.ide.modules.scripts.view
 			isActive = false;
 			
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-			hashLibraryProxy = facade.retrieveProxy( HashLibraryProxy.NAME ) as HashLibraryProxy;
 			
 			addHandlers();
 		}
@@ -114,7 +111,7 @@ package net.vdombox.ide.modules.scripts.view
 					libraries = body as Array;
 					librariesPanel.libraries = libraries.slice();
 					
-					hashLibraryProxy.setLibraries( libraries.slice() );
+					HashLibraryArray.setLibraries( libraries.slice() );
 
 					break;
 				}
