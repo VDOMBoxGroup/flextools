@@ -74,7 +74,11 @@
 					_libraries = new ArrayCollection( value );
 					
 					_libraries.sort = new Sort();
-					_libraries.sort.fields = [ new SortField( "name" ) ];
+					
+					var sortField : SortField = new SortField( "name" );
+					sortField.caseInsensitive = true;
+					
+					_libraries.sort.fields = [ sortField ];
 					_libraries.refresh();
 
 					if ( newSelectedIndex != -1 )

@@ -80,7 +80,11 @@
 					_scripts = new ArrayCollection( value );
 					
 					_scripts.sort = new Sort();
-					_scripts.sort.fields = [ new SortField( "name" ) ];
+					
+					var sortField : SortField = new SortField( "name" );
+					sortField.caseInsensitive = true;
+					
+					_scripts.sort.fields = [ sortField ];
 					_scripts.refresh();
 					
 					if( newSelectedIndex != -1 )
