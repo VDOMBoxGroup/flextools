@@ -80,7 +80,7 @@ package net.vdombox.editors.parsers.vscript
 			status = 'Processing ...';
 		}
 		
-		public function getMemberList( index : int ) : Vector.<String>
+		public override function getMemberList( index : int ) : Vector.<String>
 		{
 			return parser.newResolver().getMemberList( fld.text, index , _actionVO );
 		}
@@ -90,12 +90,12 @@ package net.vdombox.editors.parsers.vscript
 			return parser.newResolver().getFunctionDetails( fld.text, index );
 		}
 		
-		public function getTypeOptions() : Vector.<String>
+		public override function getTypeOptions() : Vector.<String>
 		{
 			return parser.newResolver().getAllTypes();
 		}
 		
-		public function getAllOptions( index : int ) : Vector.<String>
+		public override function getAllOptions( index : int ) : Vector.<String>
 		{
 			return parser.newResolver().getAllOptions( index );
 		}

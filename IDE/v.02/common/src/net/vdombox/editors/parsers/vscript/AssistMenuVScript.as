@@ -17,37 +17,13 @@ package net.vdombox.editors.parsers.vscript
 	import ro.victordramba.util.vectorToArray;
 
 	public class AssistMenuVScript extends AssistMenu
-	{
-		
-		private var ctrl : VScriptController;
-		
+	{		
 		private var menuDataStr : Vector.<String>;
 		
 		
 		public function AssistMenuVScript( field : ScriptAreaComponent, ctrl : VScriptController, stage : Stage, onComplete : Function )
 		{
-			fld = field;
-			this.ctrl = ctrl;
-			this.onComplete = onComplete;
-			this.stage = stage;
-			
-			_menu = new net.vdombox.editors.PopUpMenu();
-			//restore the focus to the textfield, delayed			
-			menu.addEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
-			//menu in action
-			menu.addEventListener( KeyboardEvent.KEY_DOWN, onMenuKey );
-			/*menu.addEventListener(MouseEvent.DOUBLE_CLICK, function(e:Event):void {
-			var c:int = fld.caretIndex;
-			fldReplaceText(c-menuStr.length, c, menu.getSelectedValue());
-			ctrl.sourceChanged(fld.text);
-			menu.dispose();
-			})*/
-			
-			//			tooltip = new JToolTip;
-			
-			//used to close the tooltip
-			fld.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
-			fld.addEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, onTextInput );
+			super( field, ctrl, stage, onComplete );
 		}
 		
 		protected override function filterMenu() : Boolean
@@ -74,27 +50,6 @@ package net.vdombox.editors.parsers.vscript
 			
 			rePositionMenu();
 			return true;
-		}
-		
-		private function onKeyDown( e : KeyboardEvent ) : void
-		{
-			if ( e.keyCode == Keyboard.SPACE && e.ctrlKey )
-				triggerAssist(true);
-		}
-		
-		private function onTextInput( e : ScriptAreaComponenrEvent ) : void
-		{		
-			/*if (  )
-			*/
-			triggerAssist(false);
-		}
-		
-		private function onMenuRemoved( e : Event ) : void
-		{
-			setTimeout( function() : void
-			{
-				stage.focus = fld;
-			}, 1 );
 		}
 		
 		public override function triggerAssist( forced : Boolean = false ) : void
@@ -157,7 +112,7 @@ package net.vdombox.editors.parsers.vscript
 			var showingMenu : Boolean = true;
 			if ( menuStr.length )
 				showingMenu = filterMenu();
-			else if ( !forced )
+			else if ( !forced && trigger != '.'  )
 				return;
 			
 			if ( showingMenu )
@@ -215,14 +170,6 @@ package net.vdombox.editors.parsers.vscript
 				stage.removeEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler );
 				menu.dispose();
 			}
-		}
-		
-		public override function clear() : void
-		{
-			menu.removeEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
-			menu.removeEventListener( KeyboardEvent.KEY_DOWN, onMenuKey );
-			fld.removeEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
-			fld.removeEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, onTextInput );
 		}
 	}
 }

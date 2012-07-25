@@ -699,7 +699,7 @@ package net.vdombox.editors.parsers.python
 			}
 			else if ( t.string == "=" && tp.type == PythonToken.STRING_LITERAL && !paramsBlock )
 			{
-				if ( !tp2 || ( tp2 && tp2.string != "." ) )
+				if ( !tp2 || ( tp2 && tp2.string != "." ) && tp.string != "self" )
 				{
 					field = new Field( "var", tp.pos, tp.string );
 					
@@ -747,7 +747,17 @@ package net.vdombox.editors.parsers.python
 						
 						field.access = access;
 						
-						if ( !scope.members.hasKey( tp.string ) )
+						field.parent = scope;
+						
+						if ( findClassParent( scope ) )
+						{
+							var scp : Field = findClassParent( scope );
+							if ( !scp.members.hasKey( tp.string ) )
+							{
+								field = scp;
+							}
+						}
+						else if ( !scope.members.hasKey( tp.string ) )
 						{
 							scope.members.setValue( curToken.string, field );
 						}
@@ -775,6 +785,7 @@ package net.vdombox.editors.parsers.python
 								access = "public";
 							
 							tField2.access = access;
+							tField2.parent = tField;
 							
 							if ( !tField.members.hasKey( curToken.string ) )
 								tField.members.setValue( curToken.string, tField2 );
@@ -782,19 +793,6 @@ package net.vdombox.editors.parsers.python
 						
 						tField = tField2;
 					}
-					
-					
-					
-					if ( tp.string.slice(0, 2) == "__" )
-						access = "private";
-					else if ( t.string.slice(0, 1) == "_" )
-						access = "protected";
-					else
-						access = "public";
-					
-					field.access = access;
-					
-					field.parent = scope;
 				}
 				
 			}
@@ -862,16 +860,13 @@ package net.vdombox.editors.parsers.python
 			return true;
 		}
 		
-		private function findClassParent( scp : Field ):Boolean
+		private function findClassParent( scp : Field ):Field
 		{
 			for ( var _scp : Field = scp; _scp && _scp.fieldType != "class"; _scp = _scp.parent )
 			{
 				
 			}
-			if ( _scp )
-				return true;
-			else
-				return false;
+			return _scp;
 		}
 
 		internal function kill() : void

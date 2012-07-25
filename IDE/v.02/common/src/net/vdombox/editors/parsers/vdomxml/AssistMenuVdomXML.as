@@ -13,37 +13,17 @@ package net.vdombox.editors.parsers.vdomxml
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AssistMenu;
+	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	
 	import ro.victordramba.util.vectorToArray;
 
 	public class AssistMenuVdomXML extends AssistMenu
 	{
-		private var ctrl : VdomXMLController;
-
 		public function AssistMenuVdomXML( field : ScriptAreaComponent, ctrl : VdomXMLController, stage : Stage, onComplete : Function )
 		{
-			fld = field;
-			this.ctrl = ctrl;
-			this.onComplete = onComplete;
-			this.stage = stage;
-
-			_menu = new net.vdombox.editors.PopUpMenu();
-			//restore the focus to the textfield, delayed			
-			menu.addEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
-			//menu in action
-			menu.addEventListener( KeyboardEvent.KEY_DOWN, onMenuKey );
-			/*menu.addEventListener(MouseEvent.DOUBLE_CLICK, function(e:Event):void {
-			   var c:int = fld.caretIndex;
-			   fldReplaceText(c-menuStr.length, c, menu.getSelectedValue());
-			   ctrl.sourceChanged(fld.text);
-			   menu.dispose();
-			 })*/
-
-//			tooltip = new JToolTip;
-
-			//used to close the tooltip
-			fld.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
-			//fld.addEventListener( Event.CHANGE, onKeyUp );
+			super( field, ctrl, stage, onComplete );
+			
+			fld.removeEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, onTextInput );
 		}
 
 		protected override function filterMenu() : Boolean
@@ -73,18 +53,6 @@ package net.vdombox.editors.parsers.vdomxml
 			//triggerAssist();
 		}
 
-		
-
-		
-
-		private function onMenuRemoved( e : Event ) : void
-		{
-			setTimeout( function() : void
-			{
-				stage.focus = fld;
-			}, 1 );
-		}
-
 		public override function triggerAssist( forced : Boolean = false ) : void
 		{
 			var pos : int = fld.caretIndex;
@@ -98,9 +66,9 @@ package net.vdombox.editors.parsers.vdomxml
 
 			menuData = null;
 
-			if ( ctrl.isInTag( pos ) )
+			if ( VdomXMLController( ctrl ).isInTag( pos ) )
 			{
-				menuData = ctrl.getAllTypes();
+				menuData = VdomXMLController( ctrl ).getAllTypes();
 
 				if ( menuData && menuData.length > 0 )
 				{
@@ -115,9 +83,9 @@ package net.vdombox.editors.parsers.vdomxml
 
 				menuData.push( { label: "attribute", value: "ATTRIBUTE" } );
 			}
-			else if ( ctrl.isInAttribute( pos ) )
+			else if ( VdomXMLController( ctrl ).isInAttribute( pos ) )
 			{
-				menuData = ctrl.getAttributesList( pos );
+				menuData = VdomXMLController( ctrl ).getAttributesList( pos );
 				var eqStr : String = "=\"\"";
 
 				if ( menuData && menuData.length > 0 )

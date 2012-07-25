@@ -3,14 +3,20 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		maxHeight="300"
-		requireSelection="true">
+		requireSelection="true"
+		doubleClickEnabled="true">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import mx.managers.PopUpManager;
 			
-			private var showed : Boolean = false;
+			private var _showed : Boolean = false;
+
+			public function get showed():Boolean
+			{
+				return _showed;
+			}
 
 			public function setListData( value : Array ) : void
 			{
@@ -39,13 +45,13 @@
 				
 				this.x = x;
 				this.y = y;
-				showed = true;
+				_showed = true;
 				PopUpManager.addPopUp( this, owner.parent );
 			}
 
 			public function dispose() : void
 			{
-				showed = false;
+				_showed = false;
 				PopUpManager.removePopUp( this );
 			}
 		]]>

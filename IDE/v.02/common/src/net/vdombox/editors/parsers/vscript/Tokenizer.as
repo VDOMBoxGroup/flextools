@@ -497,7 +497,7 @@ package net.vdombox.editors.parsers.vscript
 				{
 					//debug("field-"+tp.string);
 					//TODO if is "set" make it "*set"
-					field = new Field( tpString, t.pos, tString );
+					field = new Field( tpString, t.pos, t.string );
 					if ( tString != "(" ) //anonimus functions are not members
 					{
 						if ( !scope.members.hasKey( t.string ) )
@@ -616,12 +616,12 @@ package net.vdombox.editors.parsers.vscript
 			}
 			if ( tp2 && tp2.string.toLowerCase() == "for" && tpString == "each" && t.type == VScriptToken.STRING_LITERAL  )
 			{
-				field = new Field( "var", t.pos, tString );
+				field = new Field( "var", t.pos, t.string );
 				
 				if ( !scope.members.hasKey( tString ) )
 				{
 					scope.members.setValue( tString, field );
-					_members.setValue( tString, field );
+					_members.setValue( t.string, field );
 				}
 				
 				access = "private";
@@ -631,14 +631,14 @@ package net.vdombox.editors.parsers.vscript
 			}
 			else if ( tString == "=" && tp.type == VScriptToken.STRING_LITERAL )
 			{
-				if ( tp2 && tp2.string != "." )
+				if ( !tp2 || ( tp2 && tp2.string != "." ) && tp.string != "this" )
 				{
-					field = new Field( "var", tp.pos, tpString );
+					field = new Field( "var", tp.pos, tp.string );
 					
-					if ( !scope.members.hasKey( tp.string ) )
+					if ( !scope.members.hasKey( tpString ) )
 					{
 						scope.members.setValue( tpString, field );
-						_members.setValue( tpString, field );
+						_members.setValue( tp.string, field );
 					}
 					
 					access = "public";
@@ -658,9 +658,9 @@ package net.vdombox.editors.parsers.vscript
 					}
 					var curToken : VScriptToken = tokens[currentPos];
 					
-					if ( scope.members.hasKey( curToken.string ) )
+					if ( scope.members.hasKey( curToken.string.toLowerCase() ) )
 					{
-						field = scope.members.getValue( curToken.string );
+						field = scope.members.getValue( curToken.string.toLowerCase() );
 					}
 					else 
 					{
@@ -674,9 +674,9 @@ package net.vdombox.editors.parsers.vscript
 						
 						field.access = access;
 						
-						if ( !scope.members.hasKey( tp.string ) )
+						if ( !scope.members.hasKey( tpString ) )
 						{
-							scope.members.setValue( curToken.string, field );
+							scope.members.setValue( curToken.string.toLowerCase(), field );
 						}
 					}
 					var tField : Field = field;
@@ -703,8 +703,8 @@ package net.vdombox.editors.parsers.vscript
 							
 							tField2.access = access;
 							
-							if ( !tField.members.hasKey( curToken.string ) )
-								tField.members.setValue( curToken.string, tField2 );
+							if ( !tField.members.hasKey( curToken.string.toLowerCase() ) )
+								tField.members.setValue( curToken.string.toLowerCase(), tField2 );
 						}
 						
 						tField = tField2;

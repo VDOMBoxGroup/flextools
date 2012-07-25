@@ -87,6 +87,9 @@ package net.vdombox.editors.parsers.vdomxml
 			
 			var typeField : Field = data.getValue( typeName );
 			
+			if ( !typeField )
+				return null;
+			
 			if ( typeField.members.toArray().length == 1 )
 			{
 				var attributeDescriptions : Array = typeField.typeVO.attributeDescriptions;

@@ -73,7 +73,6 @@ package net.vdombox.editors.parsers.vscript
 						return true;
 			}
 			
-			
 			return false;
 		}
 		
@@ -124,13 +123,7 @@ package net.vdombox.editors.parsers.vscript
 			
 			// default keywords
 			var a : Vector.<String> = new <String>["And", "application", "As", "AsJSON", "Case", "Class", "Connection", "Const", "cstr", "Dim", "Do", "Each", "Else", "ElseIf", "Empty", "End", "Exit", "False", "For", "Function", "Generic", "If", "In", "Is", "IsNot", "Loop", "Match", "Matches", "Mismatch", "Mod", "New", "Next", "Not", "Nothing", "Null", "Or", "Preserve", "Print", "Proxy", "ReDim", "RegExp", "request", "Rem", "replace", "response", "Select", "server", "Session", "Set", "Step", "String", "Sub", "Then", "this", "To", "ToJSON", "True", "UBound", "Until", "Uses", "VdomDbConnection", "VDOMDBRecordSet", "VDOMDBRow", "VDOMImaging", "Wend", "While", "XMLDocument", "XMLNode", "Xor"  ];
-			
-			
-			for each ( f in classDB.listAll() )
-			{
-				a.push( f.name );
-			}
-			
+						
 			//find the scope
 			if ( !t )
 				return a;
@@ -169,12 +162,6 @@ package net.vdombox.editors.parsers.vscript
 				var ff : Object;
 				for each ( ff in t.parent.imports.toArray() )
 				a.push( ff.name );
-			}
-			
-			if ( t.scope.fieldType == "class" || t.scope.fieldType == "top" )
-			{
-				for each ( f in t.scope.members.toArray() )
-					a.push( f.name );
 			}
 			
 			return a;
@@ -248,7 +235,11 @@ package net.vdombox.editors.parsers.vscript
 			
 			
 			for each ( var m : Field in listMembers( resolved, resolvedIsClass ).toArray() )
-			a.push(m.name );
+			{
+				if ( a.indexOf( m.name ) == -1 )
+					a.push(m.name );
+			}
+				
 			a.sort( Array.CASEINSENSITIVE );
 			return a;
 		}
@@ -351,7 +342,7 @@ package net.vdombox.editors.parsers.vscript
 				return false;
 			
 			var i : int = 0;
-			var name : String = bp.names[ 0 ];
+			var name : String = bp.names[ 0 ].toLowerCase();
 			var itemType : String = bp.types[ 0 ];
 			
 			var imports : HashMap = findImports( t );
@@ -437,6 +428,9 @@ package net.vdombox.editors.parsers.vscript
 			//we didn't find the first name, we quit
 			if ( !resolved )
 				return false;
+			else if ( resolved.fieldType == 'class' && itemType == BackwardsParser.NAME && name != 'self' )
+				resolvedIsClass = true;
+			
 			checkReturnType();
 			
 			
@@ -447,7 +441,7 @@ package net.vdombox.editors.parsers.vscript
 				if ( i > bp.names.length - 1 )
 					break;
 				aM = listMembers( resolved, resolvedIsClass );
-				resolved = aM.getValue( bp.names[ i ] );
+				resolved = aM.getValue( bp.names[ i ].toLowerCase() );
 				resolvedIsClass = false;
 				itemType = bp.types[ i ];
 				if ( !resolved )

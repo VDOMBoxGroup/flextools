@@ -154,15 +154,11 @@ package net.vdombox.editors.parsers.python
 				if ( scope.isStatic )
 					isStatic = true;
 			}
-
-			
-			
 				//for static scope, add only static members
 				//current class
 			for each ( f in tokenizer.members.toArray() )
 				a.push( f.name );
 				
-			
 			if ( t.parent.imports )
 			{
 				var ff : Object;
@@ -245,9 +241,12 @@ package net.vdombox.editors.parsers.python
 
 			//convert member list in string list
 			
-
 			for each ( var m : Field in listMembers( resolved, resolvedIsClass ).toArray() )
-				a.push(m.name );
+			{
+				if ( a.indexOf( m.name ) == -1 )
+					a.push(m.name );
+			}
+			
 			a.sort( Array.CASEINSENSITIVE );
 			return a;
 		}
@@ -444,7 +443,7 @@ package net.vdombox.editors.parsers.python
 			//we didn't find the first name, we quit
 			if ( !resolved )
 				return false;
-			else if ( resolved.fieldType == 'class' && itemType == BackwardsParser.NAME )
+			else if ( resolved.fieldType == 'class' && itemType == BackwardsParser.NAME && name != 'self' )
 				resolvedIsClass = true;
 			
 			checkReturnType();

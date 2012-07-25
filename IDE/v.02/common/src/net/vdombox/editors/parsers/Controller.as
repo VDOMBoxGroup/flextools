@@ -37,5 +37,20 @@ package net.vdombox.editors.parsers
 		{
 			return _actionVO;
 		}
+		
+		public function getAllOptions( index : int ) : Vector.<String>
+		{
+			return null;
+		}
+		
+		public function getMemberList( index : int ) : Vector.<String>
+		{
+			return null;
+		}
+		
+		public function getTypeOptions() : Vector.<String>
+		{
+			return null;
+		}
 	}
 }

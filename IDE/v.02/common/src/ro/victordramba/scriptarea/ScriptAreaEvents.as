@@ -225,6 +225,7 @@ package ro.victordramba.scriptarea
 			if ( e.ctrlKey )
 			{
 				CheckGoTo( true );
+				ClearLineGoToToken();
 			}
 		}
 		
@@ -341,7 +342,6 @@ package ro.victordramba.scriptarea
 			{
 				redo_fun();
 				return;
-				
 			}
 			else if (  e.shiftKey && k == Keyboard.DELETE 
 				|| e.ctrlKey  &&  ( c ==  'x' || c ==  'X') )
@@ -357,12 +357,20 @@ package ro.victordramba.scriptarea
 				return;
 				
 			}
-			
 			else if ( e.ctrlKey  &&  ( c ==  'a' || c ==  'A') )
 			{
 				_setSelection( 0, this.length, false );
 				return;
+			}
+			else if ( e.ctrlKey  &&  ( c ==  'd' || c ==  'D') )
+			{
+				var p : int = text.lastIndexOf( "\r", _caret - 1 );
 				
+				_selStart = p != -1 ? p + 1 : 0;
+				_selEnd = text.indexOf("\r", _caret ) + 1;
+				replaceSelection('');
+				
+				return;
 			}
 			
 			
