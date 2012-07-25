@@ -326,7 +326,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.COPY, copyItemRendererHandler, true, 0, true );
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.PASTE, pasteItemRendererHandler, true, 0, true );
-			
+			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.PASTE, pastePageHandler, false, 0, true );
 		}
 		
 		private function startItemRendererHandler(event : ObjectsTreePanelEvent) : void
@@ -460,6 +460,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.DELETE, keyDownDeleteHandler, true );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.COPY, copyItemRendererHandler, true );
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.PASTE, pasteItemRendererHandler, true );
+			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.PASTE, pastePageHandler );
 		}
 		
 		private function copyItemRendererHandler( event : ObjectsTreePanelEvent ) : void
@@ -499,6 +500,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 				var rendererBase : RendererBase =  renderProxy.getRendererByID( containerID );
 				sendNotification( Notifications.COPY_REQUEST, {  objectVO : rendererBase.vdomObjectVO, sourceID : sourceID } );
 			}
+		}
+		
+		private function pastePageHandler( event : ObjectsTreePanelEvent ) : void
+		{
+			sourceID = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
+			sendNotification( Notifications.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceID } );
 		}
 		
 		private function createNewPage( event : ObjectsTreePanelEvent ) : void

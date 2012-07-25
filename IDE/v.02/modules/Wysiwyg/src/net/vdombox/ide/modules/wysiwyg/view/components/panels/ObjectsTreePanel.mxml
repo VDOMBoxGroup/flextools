@@ -8,10 +8,13 @@
 
 	<fx:Script>
 		<![CDATA[
+			import flash.desktop.Clipboard;
+			import flash.desktop.ClipboardFormats;
 			import flash.sampler.NewObjectSample;
 			
 			import mx.collections.ArrayList;
 			import mx.collections.IList;
+			import mx.controls.listClasses.ListBaseContentHolder;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
 			
@@ -338,6 +341,37 @@
 				
 			}
 			
+			protected function objectsTree_contextMenuHandler(event:MouseEvent):void
+			{
+				if ( !contextMenu )
+					contextMenu = new ContextMenu();
+				
+				contextMenu.removeAllItems();
+				
+				var bufferContent : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
+				
+				if ( event.target is ListBaseContentHolder && bufferContent && bufferContent.slice(0, 13) == "Vlt+VDOMIDE2+" && bufferContent.split(' ').length == 4 )
+				{				
+					var sourceID : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
+					
+					var sourceInfo : Array = sourceID.split( " " );
+					
+					var typeObject : String = sourceInfo[3] as String;
+					
+					if ( typeObject == "1" )
+					{
+						var pasteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_paste' ));
+						pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
+						contextMenu.addItem( pasteItem );
+					}
+				}
+			}
+			
+			private function pasteContextMenuHandler( event : Event ) : void
+			{
+				dispatchEvent( new ObjectsTreePanelEvent( ObjectsTreePanelEvent.PASTE ) );
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -354,7 +388,8 @@
 	
 	<mx:Tree id="objectsTree" borderVisible="false" maxHorizontalScrollPosition="140" horizontalScrollPolicy="auto"
 			 dataProvider="{ _pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"
-			 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer"/>
+			 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer"
+			 contextMenu="objectsTree_contextMenuHandler(event)"/>
 	
 	
 </panels:PanelBase>

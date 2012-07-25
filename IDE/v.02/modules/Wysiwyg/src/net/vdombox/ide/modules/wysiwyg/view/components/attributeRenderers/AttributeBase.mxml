@@ -349,6 +349,8 @@
 					_objectVO.name = valueField.value;
 				else
 					_attributeVO.value = valueField.value;
+
+				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ) );
 			}
 			
 			private function errorHandler2(event : AttributeEvent) : void
