@@ -306,7 +306,10 @@ package com.zavoo.svg.nodes
 					line_alpha = Number(this.getStyle('stroke-opacity'));
 				else
 					line_alpha = 1;
+				
 				line_width = Number(this.getStyle('stroke-width'));
+				if (isNaN(line_width) || line_width == 0)
+					line_alpha = 0;
 			}
 			
 			var capsStyle:String = this.getStyle('stroke-linecap');
