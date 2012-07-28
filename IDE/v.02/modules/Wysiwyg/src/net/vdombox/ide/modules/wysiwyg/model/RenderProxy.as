@@ -162,6 +162,15 @@ package net.vdombox.ide.modules.wysiwyg.model
 			return rendererBase;
 		}
 		
+		public function setNormalScinToRenderers() : void
+		{
+			for each( var object : Array in renderersIndex )
+			{
+				if ( object.length > 0 )
+					object[0].setState = "normal";
+			}
+		}
+		
 		public function setVisibleRenderer( rendererID : String, flag : Boolean ) : void
 		{
 			

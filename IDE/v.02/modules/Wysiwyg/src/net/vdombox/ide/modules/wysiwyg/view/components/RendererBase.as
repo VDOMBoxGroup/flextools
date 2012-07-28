@@ -533,7 +533,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler, false, 0, true );
 
 			addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
-
 			addEventListener( MouseEvent.CLICK, mouseClickHandler, false, 0, true );
 
 			addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler, false, 0, true );
@@ -554,8 +553,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 
-			removeEventListener( MouseEvent.CLICK, mouseClickHandler );
-
+            removeEventListener( MouseEvent.CLICK, mouseClickHandler );
+			
 			removeEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
 			removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
 			removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
@@ -774,11 +773,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			applyStyles( richText, contetntPart );
 			
 			parentContainer.addElement( richText );
-		}
-		
-		private function mouseDownClick( event : MouseEvent ) : void
-		{
-			event.stopImmediatePropagation();
 		}
 		
 		private function caseTable( contetnt : XML, parentContainer : Group ) : void
@@ -1409,27 +1403,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					dispatchEvent( new KeyboardEvent( "deleteObjectOnScreen" ) );
 				else if ( event.ctrlKey )
 				{
-					var sourceID : String;
+					
 					if ( event.keyCode == Keyboard.C )
-					{
-						
-						if ( renderVO && renderVO.vdomObjectVO is ObjectVO )
-						{
-							var obj : ObjectVO = renderVO.vdomObjectVO as ObjectVO;
-							sourceID = "Vlt+VDOMIDE2+ " + obj.pageVO.applicationVO.id  + " " + obj.id + " 0";
-						}
-						else if ( renderVO && renderVO.vdomObjectVO is PageVO )
-						{
-							var pg : PageVO = renderVO.vdomObjectVO as PageVO;
-							sourceID = "Vlt+VDOMIDE2+ " + pg.applicationVO.id  + " " + pg.id + " 1";
-						}
-						
-						Clipboard.generalClipboard.setData( ClipboardFormats.TEXT_FORMAT, sourceID );
-					}
+						dispatchEvent( new RendererEvent( RendererEvent.COPY_SELECTED ) );
 					else if ( event.keyCode == Keyboard.V )
-					{
 						dispatchEvent( new RendererEvent( RendererEvent.PASTE_SELECTED ) );
-					}
 					
 				}
 				return;
@@ -1441,19 +1419,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			dispatchEvent( new RendererEvent( RendererEvent.CLEAR_RENDERER ) );
 		}
-
-		private function mouseClickHandler( event : MouseEvent ) : void
-		{
-			event.stopPropagation();
-
-			if ( !isScroller( event.target as DisplayObjectContainer ) )
-				dispatchEvent( new RendererEvent( RendererEvent.CLICKED, false, true, event.shiftKey ) );
-		}
 		
 		private var selecteRectDraw : Boolean = false;
 
 		private function mouseDownHandler( event : MouseEvent ) : void
-		{		
+		{					
+			stage.focus = this;
+			
 			if ( event.shiftKey )
 			{
 				dispatchEvent( new RendererEvent ( RendererEvent.MOUSE_DOWN, false, true, true ) );
@@ -1489,6 +1461,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			event.stopImmediatePropagation();
 			event.preventDefault();
 		}
+		
+		private function mouseClickHandler( event : MouseEvent ) : void
+		{
+			event.stopPropagation();
+			
+			if ( !isScroller( event.target as DisplayObjectContainer ) )
+				dispatchEvent( new RendererEvent( RendererEvent.CLICKED, false, true, event.shiftKey ) );
+		}
+		
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
@@ -1626,7 +1607,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		}
 
 		private function mouseUpHandler( event : MouseEvent ) : void
-		{
+		{					
 			dispatchEvent( new RendererEvent ( RendererEvent.MULTI_SELECTED_MOVED ) );
 			if ( !stage )
 				return;

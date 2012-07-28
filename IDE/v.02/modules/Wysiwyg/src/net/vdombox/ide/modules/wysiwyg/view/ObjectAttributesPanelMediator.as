@@ -20,6 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
+	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
@@ -51,6 +52,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var renderProxy : RenderProxy;
 
 		private var isActive : Boolean;
+		
+		private var savedAttributesVO : VdomObjectAttributesVO;
 
 		public function get objectAttributesPanel() : ObjectAttributesPanel
 		{
@@ -90,6 +93,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			interests.push( Notifications.PAGE_NAME_SETTED );
 			interests.push( Notifications.OBJECT_NAME_SETTED );
+			
+			interests.push( ApplicationFacade.MULTI_SELECT_START );
+			interests.push( ApplicationFacade.MULTI_SELECT_END );
 
 			return interests;
 		}
@@ -193,6 +199,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case Notifications.OBJECT_NAME_SETTED:
 				{
 					objectAttributesPanel.attributesVO = objectAttributesPanel.attributesVO;
+					break;
+				}
+					
+				case ApplicationFacade.MULTI_SELECT_START:
+				{
+					if ( objectAttributesPanel.attributesVO )
+					{
+					    savedAttributesVO = objectAttributesPanel.attributesVO.clone();
+					    objectAttributesPanel.attributesVO = null;
+					}
+					break;
+				}
+					
+				case ApplicationFacade.MULTI_SELECT_END:
+				{
+					objectAttributesPanel.attributesVO = savedAttributesVO;;
 					break;
 				}
 			}

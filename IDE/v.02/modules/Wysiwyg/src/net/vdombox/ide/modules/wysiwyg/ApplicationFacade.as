@@ -68,6 +68,9 @@ package net.vdombox.ide.modules.wysiwyg
 		
 		public static const MULTI_SELECT_START : String = "multiSelectStart";
 		public static const MULTI_SELECT_END : String = "multiSelectEnd";
+		public static const SET_MULTISELECTION_OBJECTS : String = "setMultiselectionObjects";
+		public static const DRAW_MULTISELECTION_OBJECTS : String = "drawMultiselectionObjects";
+		
 
 		override protected function initializeController() : void
 		{

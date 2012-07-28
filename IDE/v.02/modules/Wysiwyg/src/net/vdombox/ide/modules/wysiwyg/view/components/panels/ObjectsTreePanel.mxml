@@ -135,7 +135,11 @@
 			{
 				return objectsTree.selectedItem as XML;
 			}
-
+			
+			public function get selectedItems() : Array
+			{
+				return objectsTree.selectedItems;
+			}
 			
 			private var elementForSelection : XML;
 			private var _needUpdateProperties : Boolean = false;
@@ -194,7 +198,8 @@
 					_needValideteDisplayList 	= true;
 					
 					openTree( elementForSelection );
-				
+					
+					//objectsTree.selectedItems = new Array( elementForSelection );
 					objectsTree.selectedItem = elementForSelection;
 					
 					invalidateDisplayList();
@@ -234,7 +239,7 @@
 				}*/
 			}
 
-			private function openTree( item : Object ) : void
+			public function openTree( item : Object ) : void
 			{
 				var parentItem : Object = XML( item ).parent();
 
@@ -343,6 +348,7 @@
 			
 			protected function objectsTree_contextMenuHandler(event:MouseEvent):void
 			{
+				
 				if ( !contextMenu )
 					contextMenu = new ContextMenu();
 				
@@ -350,20 +356,25 @@
 				
 				var bufferContent : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
 				
-				if ( event.target is ListBaseContentHolder && bufferContent && bufferContent.slice(0, 13) == "Vlt+VDOMIDE2+" && bufferContent.split(' ').length == 4 )
-				{				
-					var sourceID : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
+				if ( event.target is ListBaseContentHolder && bufferContent && bufferContent.slice(0, 13) == "Vlt+VDOMIDE2+" )
+				{	
+					var sourceItems : Array = bufferContent.split( "^" );
+					var sourceInfo : Array;
 					
-					var sourceInfo : Array = sourceID.split( " " );
-					
-					var typeObject : String = sourceInfo[3] as String;
-					
-					if ( typeObject == "1" )
+					for each ( var sourceString : String in sourceItems )
 					{
-						var pasteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_paste' ));
-						pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
-						contextMenu.addItem( pasteItem );
+						sourceInfo = sourceString.split( " " );
+						var sourceAppId : String = sourceInfo[1] as String;
+						var sourceObjId : String = sourceInfo[2] as String;
+						var typeObject : String = sourceInfo[3] as String;
+						
+						if ( typeObject != "1" )
+						    return;
 					}
+					
+				    var pasteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_paste' ));
+				    pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
+				    contextMenu.addItem( pasteItem );
 				}
 			}
 			
@@ -388,6 +399,7 @@
 	
 	<mx:Tree id="objectsTree" borderVisible="false" maxHorizontalScrollPosition="140" horizontalScrollPolicy="auto"
 			 dataProvider="{ _pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"
+			 allowMultipleSelection="true"
 			 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer"
 			 contextMenu="objectsTree_contextMenuHandler(event)"/>
 	

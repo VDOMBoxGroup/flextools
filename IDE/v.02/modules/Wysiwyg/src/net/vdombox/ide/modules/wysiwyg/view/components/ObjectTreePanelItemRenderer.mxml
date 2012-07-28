@@ -156,7 +156,7 @@
 				
 				var bufferContent : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
 				
-				if ( bufferContent && ( bufferContent.slice(0, 13) != "Vlt+VDOMIDE2+" || bufferContent.split(' ').length != 4 ) )
+				if ( bufferContent && ( bufferContent.slice(0, 13) != "Vlt+VDOMIDE2+" ) )
 				{
 					pasteItem.enabled = false;
 				}

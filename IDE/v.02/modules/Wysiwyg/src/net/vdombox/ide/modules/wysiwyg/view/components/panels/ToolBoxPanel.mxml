@@ -146,7 +146,7 @@
 					
 					for each ( var typeVO : TypeVO in _types )
 					{
-						if ( typeVO.displayName.toLowerCase().indexOf( typeFilter.text ) >= 0 )
+						if ( typeVO.displayName.toLowerCase().indexOf( typeFilter.text.toLowerCase() ) >= 0 )
 							typesCategory.addType( typeVO );
 					}
 					
@@ -174,7 +174,7 @@
 					typeFilter.text = resourceManager.getString( 'Wysiwyg_General', 'toolbox_panel_filter');
 			}
 			
-			protected function cross_clickHandler(event:MouseEvent):void
+			protected function cross_mouseDownHandler(event:MouseEvent):void
 			{
 				typeFilter.text = "";
 				find();
@@ -201,7 +201,7 @@
 						 focusIn="typeFilter_focusInHandler(event)" focusOut="typeFilter_focusOutHandler(event)"/>
 			
 			<mx:Image id="cross" height="100%" verticalAlign="middle" right="4" visible="false" source = "@Embed('assets/cross.png')" 
-					  click="cross_clickHandler(event)"/>
+					  mouseDown="cross_mouseDownHandler(event)"/>
 		</s:Group>
 		
 		

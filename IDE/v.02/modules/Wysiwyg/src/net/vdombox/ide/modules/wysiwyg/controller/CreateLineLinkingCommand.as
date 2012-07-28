@@ -161,7 +161,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		{
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			var renderer : RendererBase = renderProxy.getRenderersByVO( renderVO.vdomObjectVO )[0] as RendererBase;
-			if (renderVO.children == null || !renderer.visible )
+			if (renderVO.children == null || !renderer || !renderer.visible )
 				return null;
 			
 			var listComponents : Array = new Array();

@@ -29,6 +29,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
+	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.VisibleRendererProxy;
@@ -126,6 +127,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			interests.push( Notifications.PAGE_DELETED );
 			interests.push( Notifications.PAGE_CREATED);
+			
+			interests.push( ApplicationFacade.SET_MULTISELECTION_OBJECTS);
+			interests.push( ApplicationFacade.MULTI_SELECT_END);
 			
 			return interests;
 		}
@@ -280,6 +284,44 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
+				case ApplicationFacade.SET_MULTISELECTION_OBJECTS:
+				{
+					var selectElements : Object = body;
+					var rendererID : String;
+					var elementForSelection : XML;
+					var elementsForSelection : Array = new Array();
+					
+					for each ( var rendererBase : RendererBase in selectElements )
+					{
+						if ( !rendererBase.vdomObjectVO )
+							continue;
+						
+						rendererID = rendererBase.vdomObjectVO.id;
+						elementForSelection = objectsTreePanel.pages..object.( @id == rendererID )[ 0 ];
+						if ( elementForSelection )
+						{
+							elementsForSelection.push( elementForSelection );
+							objectsTreePanel.openTree( elementForSelection );
+						}
+					}
+					
+					if ( elementsForSelection.length > 0 )
+						objectsTreePanel.objectsTree.selectedItems = elementsForSelection;
+					
+					break;
+				}
+					
+				case ApplicationFacade.MULTI_SELECT_END:
+				{
+					var renderer : RendererBase = body as RendererBase;
+					if ( !renderer )
+						return;
+					
+					objectsTreePanel.selectedObjectID = renderer.renderVO.vdomObjectVO.id;
+					
+					break;
+				}
+					
 			}
 		}
 		/**
@@ -336,29 +378,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 				sendNotification( Notifications.SET_APPLICATION_INFORMATION, { applicationVO : statesProxy.selectedApplication, pageID : pageID } );
 		}
 		
-		private function keyDownDeleteHandler(event : ObjectsTreePanelEvent) : void
-		{
-			var objectID : String = event.objectID;
-			var pageID : String = event.pageID;
-
-			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
-				
-			Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + "?",AlertButton.OK_No, objectsTreePanel.parentApplication, closeHandler);
-			
-			function closeHandler( event : CloseEvent ) : void
-			{
-				if (event.detail == Alert.YES)
-				{
-					if ( pageID )
-						sendNotification( Notifications.DELETE_OBJECT, { pageVO: renderProxy.getRendererByID( pageID ).renderVO.vdomObjectVO, objectVO: renderProxy.getRendererByID( objectID ).renderVO.vdomObjectVO } );
-					else
-						sendNotification( Notifications.DELETE_PAGE, { applicationVO: statesProxy.selectedApplication, pageVO: _pages[objectID] } );
-				}
-			}
-		}
-		
-		
-		
 		private function eyeChangeHandler( event : ObjectsTreePanelEvent ) : void
 		{
 			var itemRenderer : ObjectTreePanelItemRenderer = event.target as ObjectTreePanelItemRenderer;
@@ -379,35 +398,53 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 */
 		private function changeHandler( event : ObjectsTreePanelEvent ) : void
 		{
-			var newPageID : String = objectsTreePanel.selectedPageID;
-			var newObjectID : String = objectsTreePanel.selectedObjectID;
-
-			if ( !_pages.hasOwnProperty( newPageID ) )
-				return;
-
-			if ( newObjectID && newObjectID != currentObjectID )
+			var newPageID : String;
+			var newObjectID : String;
+			
+			if ( objectsTreePanel.selectedItems.length > 1 )
 			{
-				if ( !requestQue )
-					requestQue = {};
-
+				var objects : Object = [];
+				for each ( var objectXML : XML in objectsTreePanel.selectedItems )
+				{
+					if ( objectXML.name().localName == "page" )
+						objects[ objectXML.@id ] = { objectID : objectXML.@id[0].toString(), pageID : objectXML.@id[0].toString() };
+					else
+						objects[ objectXML.@id ] = { objectID : objectXML.@id[0].toString(), pageID : objectXML.@pageID[0].toString() };
+				}
 				
-				if ( !requestQue.hasOwnProperty( newObjectID ) )
-					requestQue[ newObjectID ] = { open: false, change: true };
-				else
-					requestQue[ newObjectID ][ "change" ] = true;
-
-				sendNotification( Notifications.GET_OBJECT, { pageVO: _pages[ newPageID ], objectID: newObjectID } );
+				sendNotification( ApplicationFacade.DRAW_MULTISELECTION_OBJECTS, objects );
 			}
-			else if ( newPageID != currentPageID )
+			else
 			{
-				sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, _pages[ newPageID ] );
-				sendNotification( Notifications.GET_PAGE_SRUCTURE, _pages[ newPageID ] );
-			}
-
-			else if ( newPageID == currentPageID && !newObjectID )
-			{
-				
-				sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, _pages[ newPageID ] );
+				newPageID = objectsTreePanel.selectedPageID;
+				newObjectID = objectsTreePanel.selectedObjectID;
+	
+				if ( !_pages.hasOwnProperty( newPageID ) )
+					return;
+	
+				if ( newObjectID && newObjectID != currentObjectID )
+				{
+					if ( !requestQue )
+						requestQue = {};
+	
+					
+					if ( !requestQue.hasOwnProperty( newObjectID ) )
+						requestQue[ newObjectID ] = { open: false, change: true };
+					else
+						requestQue[ newObjectID ][ "change" ] = true;
+	
+					sendNotification( Notifications.GET_OBJECT, { pageVO: _pages[ newPageID ], objectID: newObjectID } );
+				}
+				else if ( newPageID != currentPageID )
+				{
+					sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, _pages[ newPageID ] );
+					sendNotification( Notifications.GET_PAGE_SRUCTURE, _pages[ newPageID ] );
+				}
+	
+				else if ( newPageID == currentPageID && !newObjectID )
+				{
+					sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, _pages[ newPageID ] );
+				}
 			}
 		}
 
@@ -465,12 +502,28 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function copyItemRendererHandler( event : ObjectsTreePanelEvent ) : void
 		{
-			sourceID = "Vlt+VDOMIDE2+ " + statesProxy.selectedApplication.id + " " + event.objectID + " ";
-			
-			if ( !event.pageID )
-				sourceID += "1";
+			if ( objectsTreePanel.selectedItems.length > 1 )
+			{
+				var objects : Object = [];
+				sourceID = "";
+				for each ( var objectXML : XML in objectsTreePanel.selectedItems )
+				{
+					if ( objectXML.name().localName == "page" )
+						sourceID += "Vlt+VDOMIDE2+ " + statesProxy.selectedApplication.id + " " + objectXML.@id[0].toString() + " 1^";
+					else
+						sourceID += "Vlt+VDOMIDE2+ " + statesProxy.selectedApplication.id + " " + objectXML.@id[0].toString() + " 0^";
+				}
+				sourceID = sourceID.substr(0, sourceID.length - 1 );
+			}
 			else
-				sourceID += "0";
+			{
+				sourceID = "Vlt+VDOMIDE2+ " + statesProxy.selectedApplication.id + " " + event.objectID + " ";
+				
+				if ( !event.pageID )
+					sourceID += "1";
+				else
+					sourceID += "0";
+			}
 			
 			
 			Clipboard.generalClipboard.setData( ClipboardFormats.TEXT_FORMAT, sourceID );
@@ -482,23 +535,62 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			sourceID = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
 			
-			var sourceInfo : Array = sourceID.split( " " );
+			var sourceItems : Array = sourceID.split( "^" );
+			var sourceInfo : Array = sourceItems[0].split( " " );
 			
-			var sourceAppId : String = sourceInfo[1] as String;
-			var sourceObjId : String = sourceInfo[2] as String;
-			var typeObject : String = sourceInfo[3] as String;
+			if ( sourceInfo.length != 4 || sourceInfo[0] != "Vlt+VDOMIDE2+" )
+				return;
 			
 			if ( !sourceID || !containerID )
 				return;
 			
-			if ( typeObject == "1" )
-				sendNotification( Notifications.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceID } );
-			else if ( containerID == event.pageID )
-				sendNotification( Notifications.COPY_REQUEST, { pageVO : _pages[containerID], sourceID : sourceID } );
-			else
+			for each ( var sourceString : String in sourceItems )
 			{
-				var rendererBase : RendererBase =  renderProxy.getRendererByID( containerID );
-				sendNotification( Notifications.COPY_REQUEST, {  objectVO : rendererBase.vdomObjectVO, sourceID : sourceID } );
+				sourceInfo = sourceString.split( " " );
+				var sourceAppId : String = sourceInfo[1] as String;
+				var sourceObjId : String = sourceInfo[2] as String;
+				var typeObject : String = sourceInfo[3] as String;
+				
+				if ( typeObject == "1" )
+					sendNotification( Notifications.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceString } );
+				else if ( containerID == event.pageID )
+					sendNotification( Notifications.COPY_REQUEST, { pageVO : _pages[containerID], sourceID : sourceString } );
+				else
+				{
+					var rendererBase : RendererBase =  renderProxy.getRendererByID( containerID );
+					sendNotification( Notifications.COPY_REQUEST, {  objectVO : rendererBase.vdomObjectVO, sourceID : sourceString } );
+				}
+			}
+		}
+		
+		private function keyDownDeleteHandler(event : ObjectsTreePanelEvent) : void
+		{
+			
+			var objectID : String = event.objectID;
+			var pageID : String = event.pageID;
+			
+			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
+			
+			var textAlert : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' );
+			
+			if ( objectsTreePanel.selectedItems.length > 1 )
+				textAlert += " " + objectsTreePanel.selectedItems.length.toString()+ " " + ResourceManager.getInstance().getString( 'Wysiwyg_General', 'elements' );
+			
+			Alert.Show( textAlert + " ?",AlertButton.OK_No, objectsTreePanel.parentApplication, closeHandler);
+					
+				
+			function closeHandler( event : CloseEvent ) : void
+			{
+				if (event.detail == Alert.YES)
+				{
+					for each ( var objectXML : XML in objectsTreePanel.selectedItems )
+					{
+						if ( objectXML.name().localName == "page" )
+							sendNotification( Notifications.DELETE_PAGE, { applicationVO: statesProxy.selectedApplication, pageVO: _pages[ objectXML.@id[0].toString() ] } );
+						else
+							sendNotification( Notifications.DELETE_OBJECT, { pageVO:  _pages[ objectXML.@pageID[0].toString() ], objectVO: renderProxy.getRendererByID( objectXML.@id[0].toString() ).renderVO.vdomObjectVO } );			
+					}						
+				}
 			}
 		}
 		

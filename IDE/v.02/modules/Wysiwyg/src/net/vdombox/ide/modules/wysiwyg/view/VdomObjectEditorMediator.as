@@ -140,12 +140,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( Notifications.XML_PRESENTATION_GETTED );
 
 			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
-
-			interests.push( Notifications.XML_PRESENTATION_SETTED );
 			
 			interests.push( Notifications.LINE_LIST_GETTED );
 			
 			interests.push( Notifications.PAGE_STRUCTURE_GETTED );
+			
+			interests.push( ApplicationFacade.DRAW_MULTISELECTION_OBJECTS );
 			
 			return interests;
 		}
@@ -222,17 +222,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 						else
 							sendNotification( Notifications.GET_XML_PRESENTATION, { objectVO: selectedObject } );
 					}
-
-					break;
-				}
-
-				case Notifications.XML_PRESENTATION_SETTED:
-				{
-//					if ( editor.vdomObjectVO && body.hasOwnProperty( "pageVO" ) && body.pageVO && body.pageVO.id == editor.vdomObjectVO.id )
-//					{
-//						editor.status = PageEditor.STATUS_SAVING_OK;
-//					}
 					
+					if ( multiSelectRenderers )
+					{
+						for each ( renderer in multiSelectRenderers )
+						{
+							renderer.setState = "normal";
+						}
+						
+						multiSelectRenderers = null;
+					}
+
 					break;
 				}
 					
@@ -247,6 +247,40 @@ package net.vdombox.ide.modules.wysiwyg.view
 					var pageXMLTree : XML = notification.getBody() as XML;
 					var selectedPageVO : PageVO = statesProxy.selectedPage as PageVO;
 					break;
+				}
+					
+				case ApplicationFacade.DRAW_MULTISELECTION_OBJECTS:
+				{
+					var objects : Object = body;
+					renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+					
+					if ( editor.state.substr( 0, 7 ) != "wysiwyg")
+						return;
+					
+					renderProxy.setNormalScinToRenderers();
+					
+					if ( !multiSelectRenderers )
+						sendNotification( ApplicationFacade.MULTI_SELECT_START );
+					
+					multiSelectRenderers = [];
+					
+					for each ( var object : Object in objects )
+					{
+						if ( object.objectID != object.pageID )
+						{
+							renderer = renderProxy.getRendererByID( object.objectID );
+							
+							if ( renderer && renderer.renderVO.vdomObjectVO.id == object.objectID )
+							{
+								renderer.setState = "multiSelect";
+								multiSelectRenderers[ object.objectID ] = renderer;
+							}
+							else
+								renderer.setState = "normal"
+						}						
+					}
+					
+					editor.selectedRenderer = null;
 				}
 					
 			}
@@ -591,6 +625,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererEvent.MULTI_SELECTED_MOVE, renderer_multiSelectedMoveHandler, true, 0, true );
 			editor.addEventListener( RendererEvent.MULTI_SELECTED_MOVED, renderer_multiSelectedMovedHandler, true, 0, true );
 			
+			editor.addEventListener( RendererEvent.COPY_SELECTED, renderer_copyHandler, true, 0, true );
+			
 			editor.addEventListener( RendererEvent.PASTE_SELECTED, renderer_pasteHandler, true, 0, true );
 
 			editor.addEventListener( RendererEvent.GET_RESOURCE, renderer_getResourseHandler, true, 0, true );
@@ -836,7 +872,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					arr.push( renderer.vdomObjectVO );
 				
 				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
-				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + arr.length.toString() + " elements ?",AlertButton.OK_No, component.parentApplication, closeHandler);
+				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + arr.length.toString() + " " + ResourceManager.getInstance().getString( 'Wysiwyg_General', 'elements' ) + " ?",AlertButton.OK_No, component.parentApplication, closeHandler);
 			}
 			else if ( statesProxy.selectedObject != null)
 			{
@@ -975,6 +1011,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					}
 					
 					deleteInMultiSelect = "";
+					sendNotification( ApplicationFacade.SET_MULTISELECTION_OBJECTS, multiSelectRenderers );
 					
 					return;
 				}
@@ -984,6 +1021,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					return;
 				}
+				
+				
 			}
 			
 			if ( multiSelectRenderers )
@@ -994,11 +1033,23 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 				
 				multiSelectRenderers = null;
+				
+				if ( statesProxy.selectedObject )
+				{
+					editor.selectedRenderer = rendProxy.getRendererByVO( statesProxy.selectedObject );
+				}
+				else if ( statesProxy.selectedPage )
+				{
+					editor.selectedRenderer = rendProxy.getRendererByVO( statesProxy.selectedPage );
+				}
+				
+				//if (editor.selectedRenderer != null)
+					//editor.selectedRenderer.setFocus();
+				
+				sendNotification( ApplicationFacade.MULTI_SELECT_END, target );
 			}
 			
 			sendNotification( Notifications.RENDERER_CLICKED, target as IRenderer );
-			
-			
 		}
 		
 		private function renderer_DownHandler( event : RendererEvent ) : void
@@ -1020,22 +1071,25 @@ package net.vdombox.ide.modules.wysiwyg.view
 				if ( !multiSelectRenderers )
 				{
 					multiSelectRenderers = [];
+					sendNotification( ApplicationFacade.MULTI_SELECT_START );
 					
 					if ( statesProxy.selectedObject )
 					{
 						var targetTemp : RendererBase = rendProxy.getRendererByVO( statesProxy.selectedObject );
 						targetTemp.setState = "multiSelect";
 						multiSelectRenderers[ statesProxy.selectedObject.id ] = targetTemp;
-						
-						sendNotification( ApplicationFacade.MULTI_SELECT_START );
-						sendNotification( Notifications.RENDERER_CLICKED, rendProxy.getRendererByVO( statesProxy.selectedPage ) );
+						//sendNotification( Notifications.RENDERER_CLICKED, rendProxy.getRendererByVO( statesProxy.selectedPage ) );
 					}
-					
 				}
 				
+				editor.selectedRenderer = null;
 				addInMultiSelect = target.vdomObjectVO.id;
 				multiSelectRenderers[ target.vdomObjectVO.id ] = target ;
+				
+				sendNotification( ApplicationFacade.SET_MULTISELECTION_OBJECTS, multiSelectRenderers );
 			}
+			
+			
 		}
 		
 		private function renderer_multiSelectedMovedHandler( event : RendererEvent ) : void
@@ -1070,6 +1124,53 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 		}
 		
+		private function renderer_copyHandler( event : RendererEvent ) : void
+		{
+			var sourceID : String = "";
+			var rendererBase : RendererBase;
+			var renderVO : RenderVO;
+			var obj : ObjectVO;
+			var pg : PageVO;
+			
+			if ( multiSelectRenderers )
+			{
+				for each ( rendererBase in multiSelectRenderers )
+				{
+					renderVO = rendererBase.renderVO;
+					
+					if ( renderVO && renderVO.vdomObjectVO is ObjectVO )
+					{
+						obj = renderVO.vdomObjectVO as ObjectVO;
+						sourceID += "Vlt+VDOMIDE2+ " + obj.pageVO.applicationVO.id  + " " + obj.id + " 0^";
+					}
+					else if ( renderVO && renderVO.vdomObjectVO is PageVO )
+					{
+						pg = renderVO.vdomObjectVO as PageVO;
+						sourceID += "Vlt+VDOMIDE2+ " + pg.applicationVO.id  + " " + pg.id + " 1^";
+					}
+				}
+				sourceID = sourceID.substr(0, sourceID.length - 1 );
+			}
+			else
+			{
+				rendererBase = event.target as RendererBase;
+				renderVO = rendererBase.renderVO;
+				
+				if ( renderVO && renderVO.vdomObjectVO is ObjectVO )
+				{
+					obj = renderVO.vdomObjectVO as ObjectVO;
+					sourceID = "Vlt+VDOMIDE2+ " + obj.pageVO.applicationVO.id  + " " + obj.id + " 0";
+				}
+				else if ( renderVO && renderVO.vdomObjectVO is PageVO )
+				{
+					pg = renderVO.vdomObjectVO as PageVO;
+					sourceID = "Vlt+VDOMIDE2+ " + pg.applicationVO.id  + " " + pg.id + " 1";
+				}
+			}
+			
+			Clipboard.generalClipboard.setData( ClipboardFormats.TEXT_FORMAT, sourceID );
+		}
+		
 		private function renderer_pasteHandler( event : RendererEvent ) : void
 		{
 			var rend : RendererBase = event.target as RendererBase;
@@ -1078,25 +1179,32 @@ package net.vdombox.ide.modules.wysiwyg.view
 				return;
 			
 			var sourceID : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
-			var sourceInfo : Array = sourceID.split( " " );
+			
+			var sourceItems : Array = sourceID.split( "^" );
+			var sourceInfo : Array = sourceItems[0].split( " " );
+			
 			if ( sourceInfo.length != 4 || sourceInfo[0] != "Vlt+VDOMIDE2+" )
 				return;
 			
-			var sourceAppId : String = sourceInfo[1] as String;
-			var sourceObjId : String = sourceInfo[2] as String;
-			var typeObject : String = sourceInfo[3] as String;
-				
 			var object : IVDOMObjectVO = rend.vdomObjectVO;
 			if ( object is ObjectVO && 
 				(rend.typeVO.container != 2 || rend.typeVO.container == 2 && sourceObjId == object.id ) && rend.renderVO.parent )
 				object = rend.renderVO.parent.vdomObjectVO;
 			
-			if ( typeObject == "1" )
-				sendNotification( Notifications.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceID } );
-			else if ( object is PageVO )
-				sendNotification( Notifications.COPY_REQUEST, { pageVO : object, sourceID : sourceID } );
-			else if ( object is ObjectVO )
-				sendNotification( Notifications.COPY_REQUEST, {  objectVO : object, sourceID : sourceID } );
+			for each ( var sourceString : String in sourceItems )
+			{
+				sourceInfo = sourceString.split( " " );
+				var sourceAppId : String = sourceInfo[1] as String;
+				var sourceObjId : String = sourceInfo[2] as String;
+				var typeObject : String = sourceInfo[3] as String;
+					
+				if ( typeObject == "1" )
+					sendNotification( Notifications.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceString } );
+				else if ( object is PageVO )
+					sendNotification( Notifications.COPY_REQUEST, { pageVO : object, sourceID : sourceString } );
+				else if ( object is ObjectVO )
+					sendNotification( Notifications.COPY_REQUEST, {  objectVO : object, sourceID : sourceString } );
+			}
 		}
 
 		private function renderer_getResourseHandler( event : RendererEvent ) : void

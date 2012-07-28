@@ -34,6 +34,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		
 		public static var HTML_ADDED	: String = "rendererHTMLAdded";
 		
+		public static var COPY_SELECTED	: String = "copySelected";
+		
 		public static var PASTE_SELECTED	: String = "pasteSelected";
 		
 		public static var MULTI_SELECTED_MOVE	: String = "multiSelectedMove";
