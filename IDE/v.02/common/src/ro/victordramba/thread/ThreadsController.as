@@ -75,7 +75,8 @@ package ro.victordramba.thread
 		public function run(thread:IThread):void
 		{
 			if (list[thread]) throw new Error('Thread is already running');
-			stage.addEventListener(Event.ENTER_FRAME, doFrame);
+			if ( stage )
+				stage.addEventListener(Event.ENTER_FRAME, doFrame);
 			list[thread] = thread;
 		}
 		

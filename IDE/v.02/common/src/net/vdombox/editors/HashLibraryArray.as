@@ -5,7 +5,7 @@ package net.vdombox.editors
 	import net.vdombox.editors.parsers.BackwardsParser;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Token;
-	import net.vdombox.editors.parsers.python.Tokenizer;
+	import net.vdombox.editors.parsers.python.PythonTokenizer;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 
 	public class HashLibraryArray
@@ -48,7 +48,7 @@ package net.vdombox.editors
 			
 			var string : String = hashLibraries[ path[0] ].libraryVO.script;
 			
-			var tokenizer : Tokenizer = new Tokenizer( string );
+			var tokenizer : PythonTokenizer = new PythonTokenizer( string );
 			
 			while ( tokenizer.runSlice() )
 				;
@@ -94,7 +94,7 @@ package net.vdombox.editors
 			
 			var string : String = hashLibraries[ path[0] ].libraryVO.script;
 			
-			var tokenizer : Tokenizer = new Tokenizer( string );
+			var tokenizer : PythonTokenizer = new PythonTokenizer( string );
 			
 			while ( tokenizer.runSlice() )
 			{
@@ -156,7 +156,7 @@ package net.vdombox.editors
 			
 			var string : String = libraryVO.script;
 			
-			var tokenizer : Tokenizer = new Tokenizer( string );
+			var tokenizer : PythonTokenizer = new PythonTokenizer( string );
 			tokenizer.actionVO = hashLibraries[ path[0] ].libraryVO;
 			
 			while ( tokenizer.runSlice() )

@@ -10,6 +10,7 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.Location;
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Controller;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Token;
@@ -32,7 +33,7 @@ package net.vdombox.editors.parsers.python
 			
 			tc = new ThreadsController( stage );
 			
-			parser = new Parser;
+			parser = new PythonParser;
 			
 			tc.addEventListener( ThreadEvent.THREAD_READY, function( e : ThreadEvent ) : void
 			{
@@ -55,7 +56,7 @@ package net.vdombox.editors.parsers.python
 			} );
 		}
 
-		private var parser : Parser;
+		
 
 		public function saveTypeDB() : void
 		{
@@ -71,49 +72,39 @@ package net.vdombox.editors.parsers.python
 			ClassDB.setDB( 'restored', so.data.typeDB );
 		}
 
-		public function sourceChanged( source : String, fileName : String ) : void
-		{
-			t0 = getTimer();
-			parser.load( source, fileName );
-			if ( tc.isRunning( parser ) )
-				tc.kill( parser );
-			tc.run( parser );
-			status = 'Processing ...';
-		}
-
 		public override function getMemberList( index : int ) : Vector.<String>
 		{
-			return parser.newResolver().getMemberList( fld.text, index , _actionVO );
+			return PythonParser( parser ).newResolver().getMemberList( fld.text, index , _actionVO );
 		}
 
 		public function getFunctionDetails( index : int ) : String
 		{
-			return parser.newResolver().getFunctionDetails( fld.text, index );
+			return PythonParser( parser ).newResolver().getFunctionDetails( fld.text, index );
 		}
 
 		public override function getTypeOptions() : Vector.<String>
 		{
-			return parser.newResolver().getAllTypes();
+			return PythonParser( parser ).newResolver().getAllTypes();
 		}
 
 		public override function getAllOptions( index : int ) : Vector.<String>
 		{
-			return parser.newResolver().getAllOptions( index );
+			return PythonParser( parser ).newResolver().getAllOptions( index );
 		}
 
 		public function getMissingImports( name : String, pos : int ) : Vector.<String>
 		{
-			return parser.newResolver().getMissingImports( name, pos );
+			return PythonParser( parser ).newResolver().getMissingImports( name, pos );
 		}
 
 		public function isInScope( name : String, pos : int ) : Boolean
 		{
-			return parser.newResolver().isInScope( name, pos );
+			return PythonParser( parser ).newResolver().isInScope( name, pos );
 		}
 
 		public function findDefinition( index : int ) : Location
 		{
-			var field : Field = parser.newResolver().findDefinition( fld.text, index );
+			var field : Field = PythonParser( parser ).newResolver().findDefinition( fld.text, index );
 			if ( !field )
 				return null;
 			
@@ -136,6 +127,11 @@ package net.vdombox.editors.parsers.python
 		public override function getTokenByPos( pos : int ) : Token
 		{
 			return parser.getTokenByPos( pos );
+		}
+		
+		public override function get commentString() : String
+		{
+			return "#";
 		}
 	}
 }

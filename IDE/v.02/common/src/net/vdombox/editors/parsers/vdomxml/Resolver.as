@@ -3,6 +3,7 @@ package net.vdombox.editors.parsers.vdomxml
 
 	import net.vdombox.editors.parsers.BackwardsParser;
 	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.Token;
 	
 	import ro.victordramba.util.HashMap;
 
@@ -10,9 +11,9 @@ package net.vdombox.editors.parsers.vdomxml
 	internal class Resolver
 	{
 		private var typeDB : TypeDB;
-		private var tokenizer : Tokenizer;
+		private var tokenizer : VdomXMLTokenizer;
 
-		public function Resolver( tokenizer : Tokenizer )
+		public function Resolver( tokenizer : VdomXMLTokenizer )
 		{
 			this.tokenizer = tokenizer;
 			this.typeDB = TypeDB.inst;
@@ -22,7 +23,7 @@ package net.vdombox.editors.parsers.vdomxml
 		{
 			var result : Boolean = false;
 
-			var token : VdomXMLToken = tokenizer.tokenByPos( position );
+			var token : VdomXMLToken = tokenizer.tokenByPos( position ) as VdomXMLToken;
 
 			if ( token &&
 				( ( token.type == VdomXMLToken.TAGNAME && position <= token.pos + token.string.length ) ||
@@ -37,7 +38,7 @@ package net.vdombox.editors.parsers.vdomxml
 		{
 			var result : Boolean = false;
 
-			var token : VdomXMLToken = tokenizer.tokenByPos( position );
+			var token : VdomXMLToken = tokenizer.tokenByPos( position ) as VdomXMLToken;
 
 			if ( token && token.string != "<" )
 			{
@@ -66,7 +67,7 @@ package net.vdombox.editors.parsers.vdomxml
 		public function getAttributesList( pos : int ) : Vector.<Object>
 		{
 
-			var token : VdomXMLToken = tokenizer.tokenByPos( pos )
+			var token : VdomXMLToken = tokenizer.tokenByPos( pos ) as VdomXMLToken;
 			var typeName : String;
 			var type : Field;
 
@@ -164,7 +165,7 @@ package net.vdombox.editors.parsers.vdomxml
 		}
 
 		//find the imports for this token
-		private function findImports( token : VdomXMLToken ) : HashMap
+		private function findImports( token : Token ) : HashMap
 		{
 			do
 			{
@@ -184,7 +185,7 @@ package net.vdombox.editors.parsers.vdomxml
 			resolvedRef = null;
 			resolvedIsClass = false;
 
-			var t0 : VdomXMLToken = tokenizer.tokenByPos( pos );
+			var t0 : Token = tokenizer.tokenByPos( pos );
 			if ( t0.type == VdomXMLToken.COMMENT )
 				return;
 
@@ -195,7 +196,7 @@ package net.vdombox.editors.parsers.vdomxml
 			//debug('bp names: '+bp.names);
 
 			//find the scope
-			var t : VdomXMLToken = tokenizer.tokenByPos( bp.startPos );
+			var t : Token = tokenizer.tokenByPos( bp.startPos );
 			if ( !t )
 				return;
 
@@ -205,122 +206,8 @@ package net.vdombox.editors.parsers.vdomxml
 
 			var imports : HashMap = findImports( t );
 
-//			findScopeClass( t.scope );
-
 			//1. is it in function scope chain?
 			var isStatic : Boolean = false;
-//			for ( scope = t.scope; scope &&
-//				scope.fieldType == 'function' || scope.fieldType == 'get' || scope.fieldType == 'set'; scope = scope.parent )
-//			{
-//				if ( scope.isStatic )
-//					isStatic = true;
-//				if ( scope.members.hasKey( name ) )
-//				{
-//					resolved = scope.members.getValue( name );
-//					break;
-//				}
-//				if ( scope.params.hasKey( name ) )
-//				{
-//					resolved = scope.params.getValue( name );
-//					break;
-//				}
-//			}
-//
-//			var scope : Field;
-//
-//			//2. is it this or super?
-//			if ( !resolved )
-//			{
-//				//non-static instance context
-//				var cond : Boolean = t.scope.parent && t.scope.parent.fieldType == 'class' && !isStatic;
-//				if ( name == 'this' && cond )
-//					resolved = t.scope.parent;
-//				if ( name == 'super' && cond )
-//					resolved = typeDB.resolveName( t.scope.parent.extendz );
-//			}
-//
-//
-//			//3. or is it in the class/inheritance scope?
-//			for ( scope = tokenScopeClass; !resolved && scope; scope = typeDB.resolveName( scope.extendz ) )
-//			{
-//				var m : Field = scope.members.getValue( name );
-//				if ( !m )
-//					continue;
-//
-//				if ( scope != tokenScopeClass && m.access == 'private' )
-//					continue;
-//
-//				//skip constructors in inheritance chain
-//				if ( m.name == scope.name )
-//					continue;
-//
-//				if ( !isStatic || m.isStatic )
-//					resolved = m;
-//			}
-
-			//4. last, is it an imported thing?
-//			if ( !resolved && imports )
-//			{
-//				resolved = typeDB.resolveName( new Multiname( name, imports ) );
-//				if ( resolved && resolved.fieldType == 'class' && itemType == BackwardsParser.NAME )
-//					resolvedIsClass = true;
-//			}
-//
-//			//we didn't find the first name, we quit
-//			if ( !resolved )
-//				return;
-//			checkReturnType();
-//
-//
-//			var aM : HashMap;
-//			do
-//			{
-//				i++;
-//				if ( i > bp.names.length - 1 )
-//					break;
-//				aM = listMembers( resolved, resolvedIsClass );
-//				resolved = aM.getValue( bp.names[ i ] );
-//				resolvedIsClass = false;
-//				itemType = bp.types[ i ];
-//				if ( !resolved )
-//					return;
-//				checkReturnType();
-//			} while ( resolved );
-//
-//			//check return type or var type
-//			function checkReturnType() : void
-//			{
-//				//for function signature
-//				resolvedRef = resolved;
-//				if ( resolved.fieldType == 'class' && resolvedIsClass ) //return the constructor
-//				{
-//					var m : Field = resolved.members.getValue( resolved.name );
-//					if ( m )
-//						resolvedRef = m;
-//				}
-//
-//
-//				if ( resolved.fieldType == 'var' || resolved.fieldType == 'get' || resolved.fieldType == 'set' ||
-//					( itemType == BackwardsParser.FUNCTION && resolved.fieldType == 'function' ) )
-//				{
-//					resolved = typeDB.resolveName( resolved.type );
-//				}
-//				else if ( resolved.fieldType == 'function' && itemType != BackwardsParser.FUNCTION )
-//				{
-//					resolved = typeDB.resolveName( new Multiname( 'Function' ) );
-//				}
-//			}
 		}
-
-//		private function findScopeClass( scope : Field ) : void
-//		{
-//			//can we find a better way to set the scope?
-//			//we set the scope to be able to deal with private/protected, etc access
-//			for ( tokenScopeClass = scope; tokenScopeClass.fieldType != 'class' && tokenScopeClass.parent; tokenScopeClass = tokenScopeClass.parent )
-//			{
-//			}
-//			if ( tokenScopeClass.fieldType != 'class' )
-//				tokenScopeClass = null;
-//		}
 	}
 }

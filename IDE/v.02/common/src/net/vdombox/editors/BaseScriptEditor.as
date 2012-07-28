@@ -3,6 +3,7 @@ package net.vdombox.editors
 	import flash.events.Event;
 	
 	import net.vdombox.editors.parsers.AssistMenu;
+	import net.vdombox.editors.parsers.Controller;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	
@@ -15,6 +16,7 @@ package net.vdombox.editors
 		
 		protected var assistMenu : AssistMenu;
 		protected var _actionVO : IEventBaseVO;
+		protected var _controller : Controller;
 		
 		public function BaseScriptEditor()
 		{
@@ -28,6 +30,11 @@ package net.vdombox.editors
 		
 		public function set actionVO( actionVO : IEventBaseVO ) : void
 		{
+		}
+		
+		public function get controller( ) : Controller
+		{
+			return _controller;
 		}
 		
 		public function addedToStageHadler( event : Event ) : void

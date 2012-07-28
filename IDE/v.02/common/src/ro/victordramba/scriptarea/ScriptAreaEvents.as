@@ -590,6 +590,57 @@ package ro.victordramba.scriptarea
 				}
 				dipatchChange();
 			}
+			else if ( k == Keyboard.SLASH && e.ctrlKey )
+			{
+				//extend selection to full lines
+				end = _text.indexOf( NL, _selEnd - 1 );
+				if ( end == -1 )
+					end = _text.length - 1;
+				
+				begin = _text.lastIndexOf( NL, _selStart - 1 ) + 1;
+				str = _text.substring( begin, end );
+				
+				var t : Token;
+				var addComment : Boolean = false;
+				i = end;
+				
+				while ( !addComment && i > begin )
+				{
+					t = controller.getTokenByPos( i );
+					if ( !t )
+						return;
+					
+					if ( t.type != Token.COMMENT && t.type != Token.ENDLINE )
+					{
+						addComment = true;
+					}
+					i = t.pos - 1;
+				}
+				
+				var commentString : String = controller.commentString;
+				
+				if ( addComment )
+				{
+					var string : String = "\r" + commentString ;
+					str = commentString + str.replace( /\r/g, string );
+				}
+				else
+				{
+					var index1 : int = 0;
+					
+					while ( index1 < str.length && index1 != -1 )
+					{
+						var index2 : int = str.indexOf( commentString, index1 );
+						str = str.substring( 0, index2 ) + str.substring( index2 + 1, end );
+						index1 = str.indexOf( "\r", index2 );
+					}
+				}
+				
+				replaceText( begin, end, str );
+				_setSelection( begin, begin + str.length + 1, true );
+					
+				dipatchChange();
+			}			
 			else if ( k == Keyboard.ENTER )
 			{
 				i = _text.lastIndexOf( NL, _caret - 1 );

@@ -9,16 +9,16 @@ package net.vdombox.editors.parsers.vdomxml
 	import ro.victordramba.thread.IThread;
 	import ro.victordramba.util.HashMap;
 
-	public class Parser implements IThread
+	public class VdomXMLParser implements IThread
 	{
-		private var tokenizer : Tokenizer;
-		private var tokenizer2 : Tokenizer;
+		private var tokenizer : VdomXMLTokenizer;
+		private var tokenizer2 : VdomXMLTokenizer;
 
 
 		private var formats : HashMap = new HashMap;
 		private var fileName : String;
 
-		public function Parser()
+		public function VdomXMLParser()
 		{
 			//syntax highlighting
 			formats.setValue( 'default', new TextFormat( null, null, 0x111111, false, false ) );
@@ -38,7 +38,7 @@ package net.vdombox.editors.parsers.vdomxml
 		public static function addSourceFile( source : String, fileName : String, onComplete : Function ) : void
 		{
 			source = source.replace( /(\n|\r\n)/g, '\r' );
-			var parser : Parser = new Parser;
+			var parser : VdomXMLParser = new VdomXMLParser;
 			parser.load( source, fileName );
 			while ( parser.runSlice() )
 			{
@@ -54,7 +54,7 @@ package net.vdombox.editors.parsers.vdomxml
 
 		public function load( source : String, fileName : String ) : void
 		{
-			tokenizer2 = new Tokenizer( source );
+			tokenizer2 = new VdomXMLTokenizer( source );
 			this.fileName = fileName;
 		}
 

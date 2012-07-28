@@ -1,10 +1,12 @@
 package net.vdombox.editors.parsers
 {
 	import flash.events.EventDispatcher;
+	import flash.utils.getTimer;
 	
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
+	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
 	
 	import ro.victordramba.thread.ThreadsController;
 
@@ -18,6 +20,8 @@ package net.vdombox.editors.parsers
 		protected var t0 : Number;
 		
 		protected var _actionVO : Object;
+		
+		protected var parser : Parser;
 		
 		public function Controller()
 		{
@@ -51,6 +55,26 @@ package net.vdombox.editors.parsers
 		public function getTypeOptions() : Vector.<String>
 		{
 			return null;
+		}
+		
+		public function get commentString() : String
+		{
+			return null;
+		}
+		
+		public function sourceChanged( source : String, fileName : String ) : void
+		{
+			t0 = getTimer();
+			parser.load( source, fileName );
+			if ( tc.isRunning( parser ) )
+				tc.kill( parser );
+			tc.run( parser );
+			status = 'Processing ...';
+		}
+		
+		public function set colorScheme( colorSchemeVO : ColorSchemeVO ) : void
+		{
+			parser.colorScheme = colorSchemeVO;
 		}
 	}
 }

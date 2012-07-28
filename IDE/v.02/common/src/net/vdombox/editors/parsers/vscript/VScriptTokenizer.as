@@ -1,24 +1,19 @@
 package net.vdombox.editors.parsers.vscript
 {
+	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
+	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.editors.parsers.Tokenizer;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import ro.victordramba.util.HashMap;
 	
 	
-	public class Tokenizer
+	public class VScriptTokenizer extends Tokenizer
 	{
 		public var tree : VScriptToken;
 		
-		private var string : String;
-		private var pos : uint;
-		private var str : String;
-		private var prevStr : String;
-		
-		private var _members : HashMap;
-		
-		public var actionVO : Object;
 		private var newLogicBlock : Boolean = false;
 		
 		private static const keywordsA : Array = [
@@ -67,9 +62,9 @@ package net.vdombox.editors.parsers.vscript
 		} )();
 		
 		
-		public function Tokenizer( str : String )
+		public function VScriptTokenizer( str : String )
 		{
-			_typeDB = new ClassDB;
+			_classDB = new ClassDB;
 			
 			this.string = str;
 			pos = 0;
@@ -107,20 +102,20 @@ package net.vdombox.editors.parsers.vscript
 			if ( isNorR( c ) )
 			{
 				pos++;
-				return new VScriptToken( string.substring( start, pos ), VScriptToken.ENDLINE, pos );
+				return new VScriptToken( string.substring( start, pos ), Token.ENDLINE, pos );
 			}
 			
 			if ( isNumber( c ) )
 			{
 				skipToStringEnd();
 				str = string.substring( start, pos );
-				return new VScriptToken( str, VScriptToken.NUMBER, pos );
+				return new VScriptToken( str, Token.NUMBER, pos );
 			}
 			
 			if ( c == "'" || string.substr( pos, 3 ).toLowerCase() == "rem" )
 			{
 				skipUntilEnd();
-				return new VScriptToken( string.substring( start, pos ), VScriptToken.COMMENT, pos );
+				return new VScriptToken( string.substring( start, pos ), Token.COMMENT, pos );
 			}
 			
 			if ( isLetter( c ) )
@@ -130,31 +125,31 @@ package net.vdombox.editors.parsers.vscript
 				str = string.substring( start, pos );
 				var type : String;
 				if ( isKeyword( str ) )
-					type = VScriptToken.KEYWORD;
+					type = Token.KEYWORD;
 				else if ( isKeyword2( str ) )
-					type = VScriptToken.KEYWORD2;
+					type = Token.KEYWORD2;
 				else if ( tokens.length && tokens[ tokens.length - 1 ].string == "[" &&
 					( str == "Embed" || str == "Event" || str == "SWF" || str == "Bindable" ) )
-					type = VScriptToken.KEYWORD;
+					type = Token.KEYWORD;
 				else if ( prevStr && prevStr.toLowerCase() == "function" )
-					type = VScriptToken.NAMEFUNCTION;
+					type = Token.NAMEFUNCTION;
 				else if ( prevStr && prevStr.toLowerCase() == "class" )
-					type = VScriptToken.NAMECLASS;
+					type = Token.NAMECLASS;
 				else
-					type = VScriptToken.STRING_LITERAL;
+					type = Token.STRING_LITERAL;
 				return new VScriptToken( str, type, pos );
 			}
 			else if ( ( str = isSymbol( pos ) ) != null )
 			{
 				pos += str.length;
-				return new VScriptToken( str, VScriptToken.SYMBOL, pos );
+				return new VScriptToken( str, Token.SYMBOL, pos );
 			}
 			else if ( c == "\"" )
 			{ 
 				
 				skipUntilWithEscNL( c )
 				
-				return new VScriptToken( string.substring( start, pos ), VScriptToken.STRING, pos );
+				return new VScriptToken( string.substring( start, pos ), Token.STRING, pos );
 			}
 				
 			/*else if (  c == "'" )
@@ -165,7 +160,7 @@ package net.vdombox.editors.parsers.vscript
 			}*/
 			
 			//unknown
-			return new VScriptToken( c, VScriptToken.SYMBOL, ++pos );
+			return new VScriptToken( c, Token.SYMBOL, ++pos );
 		}
 		
 		private function currentChar() : String
@@ -309,7 +304,6 @@ package net.vdombox.editors.parsers.vscript
 		private var tp2 : VScriptToken;
 		private var tp3 : VScriptToken;
 		
-		internal var tokens : Array;
 		private var currentBlock : VScriptToken;
 		private var countSpaceToCurrentBlock : int;
 		private var countTabToCurrentBlock : int;
@@ -329,36 +323,11 @@ package net.vdombox.editors.parsers.vscript
 		private var access : String;
 		
 		internal var topScope : Field;
-		private var _typeDB : ClassDB;
 		private var newBlock : Boolean;
 		
 		private var error : Boolean = false;
 		
-		
-		internal function get typeDB() : ClassDB
-		{
-			return _typeDB;
-		}
-		
-		/*private function setMembers( scp : Field ) : void
-		{
-			if ( !scp.children )
-				return;
-			
-			for each ( var children : Field in scp.children )
-			{
-				if ( children.name == "none" )
-					children.selfMembers.mergeExcOneField( scp.selfMembers, children );
-				else
-					children.selfMembers.mergeExcOneField( scp.selfMembers.getNotVariableFields(), children );
-				
-				children.members.mergeExcOneField( scp.members, children );
-				
-				setMembers( children );
-			}
-		}*/
-		
-		public function runSlice() : Boolean
+		public override function runSlice() : Boolean
 		{
 			//init (first run)
 			if ( !tokens || error)
@@ -417,7 +386,7 @@ package net.vdombox.editors.parsers.vscript
 			var tpString : String = tp ? tp.string.toLowerCase() : "";
 			
 			
-			if ( ( tpString == "end" || tString == "next" || tString == "wend" || tString == "loop" ) && tp.type != VScriptToken.COMMENT )
+			if ( ( tpString == "end" || tString == "next" || tString == "wend" || tString == "loop" ) && tp.type != Token.COMMENT )
 			{
 				closeBlock( tString );
 			}
@@ -440,7 +409,7 @@ package net.vdombox.editors.parsers.vscript
 					systemName = tp2.string;
 				}
 				
-				if ( t.type != VScriptToken.SYMBOL )
+				if ( t.type != Token.SYMBOL )
 				{
 					imports[ imports.length - 1 ].setValue( tString, { name : tString, systemName : systemName, source : importFrom } );
 					
@@ -542,7 +511,7 @@ package net.vdombox.editors.parsers.vscript
 					_scope.type = new Multiname( "Class" );
 					try
 					{
-						_typeDB.addDefinition( scope.name, field );
+						_classDB.addDefinition( scope.name, field );
 					}
 					// failproof for syntax errors
 					catch ( e : Error )
@@ -614,7 +583,7 @@ package net.vdombox.editors.parsers.vscript
 						defParamValue += t.string;
 				}
 			}
-			if ( tp2 && tp2.string.toLowerCase() == "for" && tpString == "each" && t.type == VScriptToken.STRING_LITERAL  )
+			if ( tp2 && tp2.string.toLowerCase() == "for" && tpString == "each" && t.type == Token.STRING_LITERAL  )
 			{
 				field = new Field( "var", t.pos, t.string );
 				
@@ -629,7 +598,7 @@ package net.vdombox.editors.parsers.vscript
 				
 				field.parent = scope;
 			}
-			else if ( tString == "=" && tp.type == VScriptToken.STRING_LITERAL )
+			else if ( tString == "=" && tp.type == Token.STRING_LITERAL )
 			{
 				if ( !tp2 || ( tp2 && tp2.string != "." ) && tp.string != "this" )
 				{
@@ -848,7 +817,7 @@ package net.vdombox.editors.parsers.vscript
 				t.createConstruction = true;
 			}
 			
-			if ( t.type == VScriptToken.ENDLINE && newBlock )
+			if ( t.type == Token.ENDLINE && newBlock )
 			{
 				newBlock = false;
 			}
@@ -1065,7 +1034,7 @@ package net.vdombox.editors.parsers.vscript
 			tokens = null;
 		}
 		
-		public function tokenByPos( pos : uint ) : VScriptToken
+		public override function tokenByPos( pos : uint ) : Token
 		{
 			if ( !tokens /*|| tokens.length < 3 */)
 				return null;

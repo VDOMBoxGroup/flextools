@@ -2,13 +2,15 @@ package net.vdombox.editors.parsers.vdomxml
 {
 
 	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.editors.parsers.Tokenizer;
 	
 	import ro.victordramba.util.HashMap;
 
 
-	internal class Tokenizer
+	internal class VdomXMLTokenizer extends Tokenizer
 	{
-		public function Tokenizer( string : String )
+		public function VdomXMLTokenizer( string : String )
 		{
 			_typeDB = new TypeDB;
 
@@ -18,7 +20,6 @@ package net.vdombox.editors.parsers.vdomxml
 
 		public var tree : VdomXMLToken;
 
-		internal var tokens : Array;
 		internal var topScope : Field;
 
 		private var currentBlock : VdomXMLToken;
@@ -32,76 +33,10 @@ package net.vdombox.editors.parsers.vdomxml
 		private var isStatic : Boolean = false;
 		private var access : String;
 
-		private var _typeDB : TypeDB;
-
-		private var string : String;
 		private var position : uint;
 
 		private var isTagInside : Boolean;
-
-//		private static const keywordsA : Array = [
-//			"and", "as", "assert", "break", "class", "continue", "def", "del", "elif",
-//			"else", "except", "exec", "finally", "for", "from", "global", "if",
-//			"import", "is", "in", "lambda", "not", "or", "pass", "print", "raise",
-//			"return", "try", "while", "with", "yield",
-//			"False", "True", "None"
-//		];
-//
-//		private static const keywordsA:Array = [
-//			"as", "is", "in", "break", "case", "continue", "default", "do", "while", "else", "for", "in", "each",
-//			"if", "label", "return", "super", "switch", "throw", "try", "catch", "finally", "while",
-//			"with", "dynamic", "final", "internal", "native", "override", "private", "protected",
-//			"public", "static", "extends", "implements", "new",
-//			"interface", "namespace", "default xml namespace", "import",
-//			"include", "use", "delete", "use namespace", "false", "null", "this", "true", "undefined"];
-//
-//		private static const keywords2A : Array = [
-//			"const", "package", "var", "function", "get", "set", "class" 
-//			];
-
-//		private static const symbolsA : Array = [
-//			"+", "--", "/", "\\", "++", "%", "*", "-", "+=", "/=", "%=", "*=", "-=", "=", "&", "<<",
-//			"~", "|", ">>", ">>>", "^", "&=", "<<=", "|=", ">>=", ">>>=", "^=", "==", ">",
-//			">=", "!=", /*"<", special, can start an E4X*/ "<=", "===", "!==", "&&", "&&=", "!", "||", "||=", "[", "]",
-//			"as", ",", "?", ".", "instanceof", "::", "new", "{", "}",
-//			"(", ")", "typeof", ";", ":", "...", "..", "#", "`" /*just to unlock*/ ];
-//		private static const symbolsA : Array = [
-//			"+", "-", "/", "*", "=", "<", ">", "%", "!", "&", ";", "?", "`", ":", "," ];
-
-//		private static const keywords : HashMap = new HashMap();
-//		private static const keywords2 : HashMap = new HashMap();
-//		private static const symbols : HashMap = new HashMap();
-//		private static const symbolsLengths : Array = [];
-
-		//static class init
-//		private static var init : Boolean = ( function() : Boolean
-//		{
-//			var s : String;
-//			
-//			for each ( s in keywordsA )
-//			{
-//				keywords.setValue( s, true );
-//			}
-//			
-//			for each ( s in keywords2A )
-//			{
-//				keywords2.setValue( s, true );
-//			}
-//			
-//			for each ( s in symbolsA )
-//			{
-//				symbols.setValue( s, true );
-//				
-//				var len : uint = s.length;
-//				
-//				if ( symbolsLengths.indexOf( len ) == -1 )
-//					symbolsLengths.push( len );
-//			}
-//			symbolsLengths.sort( Array.DESCENDING + Array.NUMERIC );
-//
-//			return true;
-//		} )();
-
+		
 		public function get precentReady() : Number
 		{
 			return position / string.length;
@@ -262,7 +197,7 @@ package net.vdombox.editors.parsers.vdomxml
 			return new VdomXMLToken( char, VdomXMLToken.SYMBOL, ++position );
 		}
 
-		public function tokenByPos( pos : uint ) : VdomXMLToken
+		public override function tokenByPos( pos : uint ) : Token
 		{
 			if ( !tokens || tokens.length < 3 )
 				return null;
@@ -273,12 +208,7 @@ package net.vdombox.editors.parsers.vdomxml
 			return null;
 		}
 
-		internal function get typeDB() : TypeDB
-		{
-			return _typeDB;
-		}
-
-		internal function runSlice() : Boolean
+		public override function runSlice() : Boolean
 		{
 			//init (first run)
 			if ( !tokens )

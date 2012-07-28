@@ -5,22 +5,17 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
 	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.editors.parsers.Tokenizer;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import ro.victordramba.util.HashMap;
+	import net.vdombox.editors.parsers.ClassDB;
 
 
-	public class Tokenizer
+	public class PythonTokenizer extends Tokenizer
 	{
 		public var tree : PythonToken;
-
-		private var string : String;
-		private var pos : uint;
-		private var str : String;
-		private var prevStr : String;
-		
-		private var _members : HashMap;
 
 		private static const keywordsA : Array = [
 			"and", "as", "del", "for", "is", "raise", "assert", "elif", "from", "lambda", "return", "break", "else", "global", "None", "not", "try", "True", "False", "class", "except", "if", "or", "while", "continue", "exec", "import", "pass", "yield", "def", "finally", "in", "print"
@@ -37,8 +32,6 @@ package net.vdombox.editors.parsers.python
 		private static const keywords2 : HashMap = new HashMap();
 		private static const symbols : HashMap = new HashMap();
 		private static const symbolsLengths : Array = [];
-		
-		public var actionVO : Object;
 
 		//static class init
 		private static var init : Boolean = ( function() : Boolean
@@ -70,9 +63,9 @@ package net.vdombox.editors.parsers.python
 		} )();
 
 
-		public function Tokenizer( str : String )
+		public function PythonTokenizer( str : String )
 		{
-			_typeDB = new ClassDB;
+			_classDB = new ClassDB;
 
 			this.string = str;
 			pos = 0;
@@ -339,7 +332,6 @@ package net.vdombox.editors.parsers.python
 			return 0;
 		}
 
-		internal var tokens : Array;
 		private var currentBlock : PythonToken;
 		private var countSpaceToCurrentBlock : int;
 		private var countTabToCurrentBlock : int;
@@ -359,37 +351,13 @@ package net.vdombox.editors.parsers.python
 		private var access : String;
 
 		internal var topScope : Field;
-		private var _typeDB : ClassDB;
+		
 		private var newBlock : Boolean;
 		
 		private var tabOtstyp : int = 0;
 		private var spaceOtstyp : int = 0;
-		
 
-		internal function get typeDB() : ClassDB
-		{
-			return _typeDB;
-		}
-		
-		/*private function setMembers( scp : Field ) : void
-		{
-			if ( !scp.children )
-				return;
-			
-			for each ( var children : Field in scp.children )
-			{
-				if ( children.name == "none" || !( actionVO is ServerActionVO ) )
-					children.selfMembers.merge( scp.selfMembers );
-				else
-					children.selfMembers.merge( scp.selfMembers.getNotVariableFields() );
-				
-				children.members.merge( scp.members );
-				
-				setMembers( children );
-			}
-		}*/
-
-		public function runSlice() : Boolean
+		public override function runSlice() : Boolean
 		{
 			//init (first run)
 			if ( !tokens )
@@ -614,7 +582,7 @@ package net.vdombox.editors.parsers.python
 					_scope.type = new Multiname( "Class" );
 					try
 					{
-						_typeDB.addDefinition( scope.name, field );
+						_classDB.addDefinition( scope.name, field );
 					}
 					// failproof for syntax errors
 					catch ( e : Error )
@@ -699,102 +667,7 @@ package net.vdombox.editors.parsers.python
 			}
 			else if ( t.string == "=" && tp.type == PythonToken.STRING_LITERAL && !paramsBlock )
 			{
-				if ( !tp2 || ( tp2 && tp2.string != "." ) && tp.string != "self" )
-				{
-					field = new Field( "var", tp.pos, tp.string );
-					
-					if ( !scope.members.hasKey( tp.string ) )
-					{
-						scope.members.setValue( tp.string, field );
-						_members.setValue( tp.string, field );
-					}
-					
-					if ( tp.string.slice(0, 2) == "__" )
-						access = "private";
-					else if ( t.string.slice(0, 1) == "_" )
-						access = "protected";
-					else
-						access = "public";
-					
-					field.access = access;
-					
-					field.parent = scope;
-				}
-				else
-				{
-					var currentPos : int = tokens.length - 2;
-					var prevToken : PythonToken = tokens[currentPos - 1];
-					while ( prevToken && prevToken.string == "." )
-					{
-						currentPos -= 2;
-						prevToken = tokens[currentPos - 1];
-					}
-					var curToken : PythonToken = tokens[currentPos];
-					
-					if ( scope.members.hasKey( curToken.string ) )
-					{
-						field = scope.members.getValue( curToken.string );
-					} 
-					else 
-					{
-						field = new Field( "var", t.pos, curToken.string );
-						if ( curToken.string.slice(0, 2) == "__" )
-							access = "private";
-						else if ( curToken.string.slice(0, 1) == "_" )
-							access = "protected";
-						else
-							access = "public";
-						
-						field.access = access;
-						
-						field.parent = scope;
-						
-						if ( findClassParent( scope ) )
-						{
-							var scp : Field = findClassParent( scope );
-							if ( !scp.members.hasKey( tp.string ) )
-							{
-								field = scp;
-							}
-						}
-						else if ( !scope.members.hasKey( tp.string ) )
-						{
-							scope.members.setValue( curToken.string, field );
-						}
-					}
-					var tField : Field = field;
-					
-					while ( currentPos <= tokens.length - 4 )
-					{
-						currentPos += 2;
-						curToken = tokens[currentPos]
-						var tField2 : Field;
-						
-						if ( tField.members.hasKey( curToken.string ) )
-						{
-							tField2 = tField.members.getValue( curToken.string );
-						}
-						else 
-						{
-							tField2 = new Field( "var", curToken.pos, curToken.string );
-							if ( curToken.string.slice(0, 2) == "__" )
-								access = "private";
-							else if ( curToken.string.slice(0, 1) == "_" )
-								access = "protected";
-							else
-								access = "public";
-							
-							tField2.access = access;
-							tField2.parent = tField;
-							
-							if ( !tField.members.hasKey( curToken.string ) )
-								tField.members.setValue( curToken.string, tField2 );
-						}
-						
-						tField = tField2;
-					}
-				}
-				
+				parsingVariables( tp, tp2, tokens.length - 2 )
 			}
 
 			
@@ -860,6 +733,118 @@ package net.vdombox.editors.parsers.python
 			return true;
 		}
 		
+		private function parsingVariables( tp : PythonToken, tp2 : PythonToken, currentPos : int ) : void
+		{
+			var prevToken : PythonToken = tp2;
+			var curToken : PythonToken = tp;
+			
+			if ( !tp2 || ( tp2 && tp2.string != "." ) && tp.string != "self" )
+			{
+				field = new Field( "var", curToken.pos, curToken.string );
+				
+				if ( !scope.members.hasKey( curToken.string ) )
+				{
+					scope.members.setValue( curToken.string, field );
+					_members.setValue( curToken.string, field );
+				}
+				
+				if ( curToken.string.slice(0, 2) == "__" )
+					access = "private";
+				else if ( curToken.string.slice(0, 1) == "_" )
+					access = "protected";
+				else
+					access = "public";
+				
+				field.access = access;
+				
+				field.parent = scope;
+				
+				currentPos -= 2;
+					
+				if ( prevToken.string == "," )
+					parsingVariables( tokens[ currentPos ], tokens[ currentPos - 1 ], currentPos );
+			}
+			else
+			{
+				while ( prevToken && prevToken.string == "." )
+				{
+					currentPos -= 2;
+					prevToken = tokens[currentPos - 1];
+				}
+				curToken = tokens[currentPos];
+				
+				var field : Field;
+				
+				if ( scope.members.hasKey( curToken.string ) )
+				{
+					field = scope.members.getValue( curToken.string );
+				} 
+				else 
+				{
+					field = new Field( "var", curToken.pos, curToken.string );
+					if ( curToken.string.slice(0, 2) == "__" )
+						access = "private";
+					else if ( curToken.string.slice(0, 1) == "_" )
+						access = "protected";
+					else
+						access = "public";
+					
+					field.access = access;
+					
+					field.parent = scope;
+					
+					if ( findClassParent( scope ) )
+					{
+						var scp : Field = findClassParent( scope );
+						if ( !scp.members.hasKey( tp.string ) )
+						{
+							field = scp;
+						}
+					}
+					else if ( !scope.members.hasKey( tp.string ) )
+					{
+						scope.members.setValue( curToken.string, field );
+					}
+				}
+				var tField : Field = field;
+				
+				while ( currentPos <= tokens.length - 4 )
+				{
+					currentPos += 2;
+					curToken = tokens[currentPos]
+					var tField2 : Field;
+					
+					if ( tField.members.hasKey( curToken.string ) )
+					{
+						tField2 = tField.members.getValue( curToken.string );
+					}
+					else 
+					{
+						tField2 = new Field( "var", curToken.pos, curToken.string );
+						if ( curToken.string.slice(0, 2) == "__" )
+							access = "private";
+						else if ( curToken.string.slice(0, 1) == "_" )
+							access = "protected";
+						else
+							access = "public";
+						
+						tField2.access = access;
+						tField2.parent = tField;
+						
+						if ( !tField.members.hasKey( curToken.string ) )
+							tField.members.setValue( curToken.string, tField2 );
+					}
+					
+					tField = tField2;
+				}
+				
+				currentPos -= 2;
+				
+				if ( prevToken.string == "," )
+					parsingVariables( tokens[ currentPos ], tokens[ currentPos - 1 ], currentPos );
+			}
+		}
+		
 		private function findClassParent( scp : Field ):Field
 		{
 			for ( var _scp : Field = scp; _scp && _scp.fieldType != "class"; _scp = _scp.parent )
@@ -874,7 +859,7 @@ package net.vdombox.editors.parsers.python
 			tokens = null;
 		}
 
-		public function tokenByPos( pos : uint ) : Token
+		public override function tokenByPos( pos : uint ) : Token
 		{
 			if ( !tokens /*|| tokens.length < 3 */)
 				return null;

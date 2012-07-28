@@ -16,8 +16,6 @@ package net.vdombox.editors
 			
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
 		}
-		
-		private var controller : VScriptController;
 		private var fileName : String;
 		private var autoCompleteCodeBlock : AutoCompleteCodeBlockVScript;
 		
@@ -32,16 +30,16 @@ package net.vdombox.editors
 		
 		protected override function initiaize() : void
 		{
-			controller = new VScriptController( stage, scriptAreaComponent, _actionVO );
+			_controller = new VScriptController( stage, scriptAreaComponent, _actionVO );
 			
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
 			
 			if ( assistMenu )
 				assistMenu.clear();
 			
-			assistMenu = new AssistMenuVScript( scriptAreaComponent, controller, stage, assistCompleteHandler );
+			assistMenu = new AssistMenuVScript( scriptAreaComponent, controller as VScriptController, stage, assistCompleteHandler );
 			
-			autoCompleteCodeBlock = new AutoCompleteCodeBlockVScript( scriptAreaComponent, controller, assistMenu );
+			autoCompleteCodeBlock = new AutoCompleteCodeBlockVScript( scriptAreaComponent, controller as VScriptController, assistMenu );
 			
 			addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );

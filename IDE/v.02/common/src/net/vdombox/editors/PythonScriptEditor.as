@@ -15,8 +15,7 @@ package net.vdombox.editors
 			super();
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
 		}
-
-		private var controller : PythonController;
+		
 		private var fileName : String;
 
 		public override function loadSource( source : String, filePath : String ) : void
@@ -33,14 +32,14 @@ package net.vdombox.editors
 			/*if ( controller )
 				return;*/
 			
-			controller = new PythonController( stage, scriptAreaComponent, _actionVO );
+			_controller = new PythonController( stage, scriptAreaComponent, _actionVO );
 
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
 			
 			if ( assistMenu )
 				assistMenu.clear();
 
-			assistMenu = new AssistMenuPython( scriptAreaComponent, controller, stage, assistCompleteHandler );
+			assistMenu = new AssistMenuPython( scriptAreaComponent, controller as PythonController, stage, assistCompleteHandler );
 
 			addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );

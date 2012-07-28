@@ -10,6 +10,7 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.Location;
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Controller;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Token;
@@ -30,7 +31,7 @@ package net.vdombox.editors.parsers.vscript
 			
 			tc = new ThreadsController( stage );
 			
-			parser = new Parser;		
+			parser = new VScriptParser;		
 			
 			tc.addEventListener( ThreadEvent.THREAD_READY, function( e : ThreadEvent ) : void
 			{
@@ -53,8 +54,6 @@ package net.vdombox.editors.parsers.vscript
 			} );
 		}
 		
-		private var parser : Parser;		
-		
 		public function saveTypeDB() : void
 		{			
 			var file : FileReference = new FileReference;
@@ -70,49 +69,39 @@ package net.vdombox.editors.parsers.vscript
 			ClassDB.setDB( 'restored', so.data.typeDB );
 		}
 		
-		public function sourceChanged( source : String, fileName : String ) : void
-		{
-			t0 = getTimer();
-			parser.load( source, fileName );
-			if ( tc.isRunning( parser ) )
-				tc.kill( parser );
-			tc.run( parser );
-			status = 'Processing ...';
-		}
-		
 		public override function getMemberList( index : int ) : Vector.<String>
 		{
-			return parser.newResolver().getMemberList( fld.text, index , _actionVO );
+			return VScriptParser( parser ).newResolver().getMemberList( fld.text, index , _actionVO );
 		}
 		
 		public function getFunctionDetails( index : int ) : String
 		{
-			return parser.newResolver().getFunctionDetails( fld.text, index );
+			return VScriptParser( parser ).newResolver().getFunctionDetails( fld.text, index );
 		}
 		
 		public override function getTypeOptions() : Vector.<String>
 		{
-			return parser.newResolver().getAllTypes();
+			return VScriptParser( parser ).newResolver().getAllTypes();
 		}
 		
 		public override function getAllOptions( index : int ) : Vector.<String>
 		{
-			return parser.newResolver().getAllOptions( index );
+			return VScriptParser( parser ).newResolver().getAllOptions( index );
 		}
 		
 		public function getMissingImports( name : String, pos : int ) : Vector.<String>
 		{
-			return parser.newResolver().getMissingImports( name, pos );
+			return VScriptParser( parser ).newResolver().getMissingImports( name, pos );
 		}
 		
 		public function isInScope( name : String, pos : int ) : Boolean
 		{
-			return parser.newResolver().isInScope( name, pos );
+			return VScriptParser( parser ).newResolver().isInScope( name, pos );
 		}
 		
 		public function findDefinition( index : int ) : Location
 		{
-			var field : Field = parser.newResolver().findDefinition( fld.text, index );
+			var field : Field = VScriptParser( parser ).newResolver().findDefinition( fld.text, index );
 			if ( !field )
 				return null;
 			
@@ -134,6 +123,11 @@ package net.vdombox.editors.parsers.vscript
 		public function runSlice() : Boolean
 		{
 			return parser.runSlice();
+		}
+		
+		public override function get commentString() : String
+		{
+			return "'";
 		}
 	}
 }

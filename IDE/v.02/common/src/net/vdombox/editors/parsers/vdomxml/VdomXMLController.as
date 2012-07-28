@@ -9,6 +9,8 @@ package net.vdombox.editors.parsers.vdomxml
 	
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.Controller;
+	import net.vdombox.editors.parsers.vdomxml.TypeDB;
+	import net.vdombox.editors.parsers.vdomxml.VdomXMLParser;
 	
 	import ro.victordramba.thread.ThreadEvent;
 	import ro.victordramba.thread.ThreadsController;
@@ -29,30 +31,30 @@ package net.vdombox.editors.parsers.vdomxml
 					//TypeDB.setDB('playerglobal', TypeDB.formByteArray(new PlayerglobalAsset));
 			}
 
-			parser = new Parser;
+			_parser = new VdomXMLParser();
 
 			tc.addEventListener( ThreadEvent.THREAD_READY, function( e : ThreadEvent ) : void
 			{
-				if ( e.thread != parser )
+				if ( e.thread != _parser )
 					return;
 
-				parser.applyFormats( fld );
+				_parser.applyFormats( fld );
 				//cursorMoved(textField.caretIndex);
-				status = 'Parse time: ' + ( getTimer() - t0 ) + 'ms ' + parser.tokenCount + ' tokens';
+				status = 'Parse time: ' + ( getTimer() - t0 ) + 'ms ' + _parser.tokenCount + ' tokens';
 				dispatchEvent( new Event( 'status' ) );
 			} );
 
 			tc.addEventListener( ThreadEvent.PROGRESS, function( e : ThreadEvent ) : void
 			{
-				if ( e.thread != parser )
+				if ( e.thread != _parser )
 					return;
 				status = '';
-				percentReady = parser.percentReady;
+				percentReady = _parser.percentReady;
 				dispatchEvent( new Event( 'status' ) );
 			} );
 		}
 
-		private var parser : Parser;
+		private var _parser : VdomXMLParser;
 
 		public function restoreTypeDB() : void
 		{
@@ -61,34 +63,34 @@ package net.vdombox.editors.parsers.vdomxml
 			TypeDB.setDB( 'restored', so.data.typeDB );
 		}
 
-		public function sourceChanged( source : String, fileName : String ) : void
+		public override function sourceChanged( source : String, fileName : String ) : void
 		{
 			t0 = getTimer();
-			parser.load( source, fileName );
-			if ( tc.isRunning( parser ) )
-				tc.kill( parser );
-			tc.run( parser );
+			_parser.load( source, fileName );
+			if ( tc.isRunning( _parser ) )
+				tc.kill( _parser );
+			tc.run( _parser );
 			status = 'Processing ...';
 		}
 
 		public function getAttributesList( index : int ) : Vector.<Object>
 		{
-			return parser.newResolver().getAttributesList( index );
+			return _parser.newResolver().getAttributesList( index );
 		}
 
 		public function getAllTypes() : Vector.<Object>
 		{
-			return parser.newResolver().getAllTypes();
+			return _parser.newResolver().getAllTypes();
 		}
 
 		public function isInTag( pos : int ) : Boolean
 		{
-			return parser.newResolver().isInTag( pos );
+			return _parser.newResolver().isInTag( pos );
 		}
 
 		public function isInAttribute( pos : int ) : Boolean
 		{
-			return parser.newResolver().isInAttribute( pos );
+			return _parser.newResolver().isInAttribute( pos );
 		}
 	}
 }

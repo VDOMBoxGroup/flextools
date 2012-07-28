@@ -66,6 +66,8 @@ package ro.victordramba.scriptarea
 			ScriptCursor.height = letterBoxHeight;
 
 			addChild( cursor );
+			
+			blendMode = "darken";
 		}
 
 		protected var _caret : int;

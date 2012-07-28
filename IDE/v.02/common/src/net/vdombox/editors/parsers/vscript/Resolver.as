@@ -2,9 +2,11 @@ package net.vdombox.editors.parsers.vscript
 {
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.BackwardsParser;
+	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
 	import net.vdombox.editors.parsers.StructureDB;
+	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
@@ -15,13 +17,13 @@ package net.vdombox.editors.parsers.vscript
 	{
 		private var classDB : ClassDB;
 		private var typeDB : TypeDB;
-		private var tokenizer : Tokenizer;
+		private var tokenizer : VScriptTokenizer;
 		
 		private var tokenScopeClass : Field;
 		
 		private var a : Vector.<String>;
 		
-		public function Resolver( tokenizer : Tokenizer )
+		public function Resolver( tokenizer : VScriptTokenizer )
 		{
 			this.tokenizer = tokenizer;
 			this.classDB = ClassDB.inst;
@@ -35,7 +37,7 @@ package net.vdombox.editors.parsers.vscript
 		public function isInScope( name : String, pos : int ) : Boolean
 		{
 			//find the scope
-			var t : VScriptToken = tokenizer.tokenByPos( pos );
+			var t : Token = tokenizer.tokenByPos( pos );
 			if ( !t )
 				return false;
 			
@@ -79,7 +81,7 @@ package net.vdombox.editors.parsers.vscript
 		public function getMissingImports( name : String, pos : int ) : Vector.<String>
 		{
 			//find the scope
-			var t : VScriptToken = tokenizer.tokenByPos( pos );
+			var t : Token = tokenizer.tokenByPos( pos );
 			if ( !t )
 				return null;
 			var imports : HashMap = findImports( t );
@@ -111,9 +113,9 @@ package net.vdombox.editors.parsers.vscript
 			var f : Field;
 			
 			//all package level items
-			var t : VScriptToken = tokenizer.tokenByPos( pos );
+			var t : VScriptToken = tokenizer.tokenByPos( pos ) as VScriptToken;
 			
-			if ( t && ( t.type == VScriptToken.COMMENT || t.type == VScriptToken.STRING ) )
+			if ( t && ( t.type == Token.COMMENT || t.type == Token.STRING ) )
 				return null;
 			
 			if ( t && ( t.string == "from" || t.importZone && !t.importFrom ) )
@@ -308,11 +310,11 @@ package net.vdombox.editors.parsers.vscript
 		}
 		
 		//find the imports for this token
-		private function findImports( token : VScriptToken ) : HashMap
+		private function findImports( token : Token ) : HashMap
 		{
 			do
 			{
-				token = token.parent as VScriptToken;
+				token = token.parent;
 			} while ( token.parent && !token.imports );
 			return token.imports;
 		}
@@ -328,8 +330,8 @@ package net.vdombox.editors.parsers.vscript
 			resolvedRef = null;
 			resolvedIsClass = false;
 			
-			var t0 : VScriptToken = tokenizer.tokenByPos( pos );
-			if ( t0.type == VScriptToken.COMMENT || t0.type == VScriptToken.STRING )
+			var t0 : Token = tokenizer.tokenByPos( pos );
+			if ( t0.type == Token.COMMENT || t0.type == Token.STRING )
 				return false;
 			
 			var bp : BackwardsParser = new BackwardsParser;
@@ -337,7 +339,7 @@ package net.vdombox.editors.parsers.vscript
 				return false;
 			
 			//find the scope
-			var t : VScriptToken = tokenizer.tokenByPos( bp.startPos );
+			var t : Token = tokenizer.tokenByPos( bp.startPos );
 			if ( !t )
 				return false;
 			

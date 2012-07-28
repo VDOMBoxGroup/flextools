@@ -10,19 +10,20 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import ro.victordramba.util.HashMap;
+	import net.vdombox.editors.parsers.ClassDB;
 
 
 	internal class Resolver
 	{
 		private var classDB : ClassDB;
 		private var typeDB : TypeDB;
-		private var tokenizer : Tokenizer;
+		private var tokenizer : PythonTokenizer;
 
 		private var tokenScopeClass : Field;
 		
 		private var a : Vector.<String>;
 
-		public function Resolver( tokenizer : Tokenizer )
+		public function Resolver( tokenizer : PythonTokenizer )
 		{
 			this.tokenizer = tokenizer;
 			this.classDB = ClassDB.inst;

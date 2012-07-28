@@ -8,22 +8,7 @@ package net.vdombox.editors.parsers.vscript
 	import ro.victordramba.util.HashMap;
 
 	public class VScriptToken extends Token
-	{
-		public static const STRING_LITERAL:String = "stringLiteral";
-		public static const SYMBOL:String = "symbol";
-		public static const STRING:String = "string";
-		public static const NUMBER:String = "number";
-		public static const KEYWORD:String = "keyword";
-		public static const KEYWORD2:String = "keyword2";
-		public static const ENDLINE:String = "endLine";
-		public static const COMMENT:String = "comment";
-		public static const NAMEFUNCTION:String = "nameFunction";
-		public static const NAMECLASS:String = "nameClass";
-		
-		public static const REGEXP:String = "regexp";
-		
-		public static const E4X:String = "e4x";
-		
+	{		
 		public var fromZone:Boolean = false;
 		public var importZone:Boolean = false;
 		public var importFrom:String = "";
@@ -31,8 +16,6 @@ package net.vdombox.editors.parsers.vscript
 		public var mainBlockType : String = "";
 		public var blockClosed : Boolean = false;
 		public var createConstruction : Boolean = false;
-		
-		public var error : Boolean = false;
 		
 		public static const map:Dictionary = new Dictionary(true);
 		

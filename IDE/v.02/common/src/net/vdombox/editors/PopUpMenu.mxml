@@ -4,7 +4,8 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		maxHeight="300"
 		requireSelection="true"
-		doubleClickEnabled="true">
+		doubleClickEnabled="true"
+		arrowKeysWrapFocus="true">
 
 	<fx:Script>
 		<![CDATA[
