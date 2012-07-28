@@ -57,6 +57,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 		[SkinPart( required = "true" )]
 		public var textAreaContainer : RichEditableText;
+		
+		override public function stylesInitialized() : void
+		{
+			super.stylesInitialized();
+			this.setStyle( "skinClass", MultilineWindowSkin );
+		}
 
 		public function cancel_close_window( event: KeyboardEvent ) : void
 		{
@@ -86,12 +92,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function showResourceSelecterWindow() : void
 		{
 			dispatchEvent( new AttributeEvent( AttributeEvent.SELECT_RESOURCE ) );
-		}
-
-		override public function stylesInitialized() : void
-		{
-			super.stylesInitialized();
-			this.setStyle( "skinClass", MultilineWindowSkin );
 		}
 	}
 }
