@@ -29,7 +29,7 @@ package net.vdombox.ide.modules.events.model
 		
 		public function get showCurrent() : String
 		{	
-			return sharedObject.data.hasOwnProperty( "showCurrent" ) ? sharedObject.data["showCurrent"] : "Full View";
+			return sharedObject.data.hasOwnProperty( "showCurrent" ) ? sharedObject.data["showCurrent"] : "Full view";
 		}
 		
 		public function set showCurrent( value : String ) : void

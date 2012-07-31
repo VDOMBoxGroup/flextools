@@ -308,9 +308,9 @@ package net.vdombox.ide.modules.events.view
 		{
 			visibleElementProxy.showCurrent = value;
 			workArea.showElementsView = value;
-			if ( value == "Full View" )
+			if ( value == "Full view" )
 				workArea._showElementsView.toolTip = "ctrl + 1";
-			else if ( value == "Active + Embedded" )
+			else if ( value == "Active + embedded" )
 				workArea._showElementsView.toolTip = "ctrl + 2";
 			else if ( value == "Active" )
 				workArea._showElementsView.toolTip = "ctrl + 3";
@@ -384,9 +384,9 @@ package net.vdombox.ide.modules.events.view
 		private function setElementsCurrentVisibleState() : void
 		{
 			showElementsView = workArea.showElementsView ;
-			if ( workArea.showElementsView == "Full View" )
+			if ( workArea.showElementsView == "Full view" )
 				setVisibleElementsForAllObjects();
-			else if ( workArea.showElementsView == "Active + Embedded" )
+			else if ( workArea.showElementsView == "Active + embedded" )
 			{
 				if ( treePanelCreateCompleted )
 					sendNotification( Notifications.GET_CHILDREN_ELEMENTS );
@@ -435,12 +435,12 @@ package net.vdombox.ide.modules.events.view
 			
 			if ( event.keyCode == Keyboard.NUMBER_1 )
 			{
-				showElementsView = "Full View";
+				showElementsView = "Full view";
 				setVisibleElementsForAllObjects();
 			} 
 			else if ( event.keyCode == Keyboard.NUMBER_2 )
 			{
-				showElementsView = "Active + Embedded";
+				showElementsView = "Active + embedded";
 				sendNotification( Notifications.GET_CHILDREN_ELEMENTS );
 			}
 			else if ( event.keyCode == Keyboard.NUMBER_3 )
