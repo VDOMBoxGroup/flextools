@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.scripts.view
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	
+	import mx.collections.ArrayCollection;
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.editors.BaseScriptEditor;
@@ -10,7 +11,10 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.editors.PythonScriptEditor;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.FindBoxEvent;
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
+	import net.vdombox.ide.common.model.PreferencesProxy;
+	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
@@ -19,7 +23,9 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 	import net.vdombox.ide.modules.scripts.model.GoToPositionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.FindBox;
+	import net.vdombox.ide.modules.scripts.view.components.PreferencesWindow;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -38,7 +44,8 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private var isActive : Boolean;	
 		
-		private var goToDefenitionProxy : GoToPositionProxy;		
+		private var goToDefenitionProxy : GoToPositionProxy;
+		private var colorSchemeProxy : PreferencesProxy;
 		
 		public function get scriptEditor() : ScriptEditor
 		{
@@ -58,8 +65,12 @@ package net.vdombox.ide.modules.scripts.view
 		override public function onRegister() : void
 		{
 			goToDefenitionProxy = facade.retrieveProxy( GoToPositionProxy.NAME ) as GoToPositionProxy;
+			colorSchemeProxy = facade.retrieveProxy( PreferencesProxy.NAME ) as PreferencesProxy;
 			
 			scriptEditor.setActionVO();
+			
+			updateColorScheme();
+			updateFontSize();
 			
 			addHandlers();
 		}
@@ -70,6 +81,38 @@ package net.vdombox.ide.modules.scripts.view
 
 			clearData();
 		}
+		
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( PreferencesProxy.SELECTED_COLOR_SCHEME_CHANGE );
+			interests.push( PreferencesProxy.SELECTED_FONT_SIZE_CHANGE );
+			
+			return interests;
+		}
+		
+		override public function handleNotification( notification : INotification ) : void
+		{
+			var name : String = notification.getName();
+			
+			switch ( name )
+			{
+				case PreferencesProxy.SELECTED_COLOR_SCHEME_CHANGE:
+				{
+					updateColorScheme();
+					
+					break;
+				}
+					
+				case PreferencesProxy.SELECTED_FONT_SIZE_CHANGE:
+				{
+					updateFontSize();
+					
+					break;
+				}
+			}
+		}
 
 		private function addHandlers() : void
 		{
@@ -78,6 +121,30 @@ package net.vdombox.ide.modules.scripts.view
 			scriptEditor.addEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode, false, 0, true );
 			
 			scriptEditor.addEventListener( ScriptAreaComponenrEvent.GO_TO_DEFENITION, goToDefenitionHandler, true, 0, true );
+			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_PREFERENCES, openPreferences, false, 0, true );
+		}
+		
+		private function removeHandlers() : void
+		{
+			scriptEditor.removeEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler );
+			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_FIND, scriptEditor_openFindHandler );
+			scriptEditor.removeEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode );
+			
+			scriptEditor.removeEventListener( ScriptAreaComponenrEvent.GO_TO_DEFENITION, goToDefenitionHandler );
+			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_PREFERENCES, openPreferences);
+		}
+		
+		private function updateColorScheme() : void
+		{
+			scriptEditor.scriptEditor.controller.colorScheme = colorSchemeProxy.selectedColorScheme;
+			scriptEditor.scriptEditor.scriptAreaComponent.colorScheme = colorSchemeProxy.selectedColorScheme;
+			scriptEditor.scriptEditor.scriptAreaComponent.sendUpdate();
+		}
+		
+		private function updateFontSize() : void
+		{
+			scriptEditor.scriptEditor.scriptAreaComponent.fontSize = colorSchemeProxy.selectedFontSize;
+			scriptEditor.scriptEditor.scriptAreaComponent.sendUpdate();
 		}
 		
 		private function compliteSourceCode( event : FlexEvent = null ):void
@@ -100,23 +167,13 @@ package net.vdombox.ide.modules.scripts.view
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 		}
-
-		private function removeHandlers() : void
-		{
-			scriptEditor.removeEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler );
-		}
-
 		private function clearData() : void
 		{
 		}
 		
 		private function scriptEditor_saveHandler( event : ScriptEditorEvent ) : void
 		{
-			/*if( currentVO is ServerActionVO || currentVO is LibraryVO || currentVO is GlobalActionVO )
-				currentVO.script = scriptEditor.script;*/
-			
 			sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : currentVO, check : true } );
-			//sendNotification( Notifications.SAVE_SCRIPT_REQUEST, currentVO );
 		}
 		
 		private function scriptEditor_openFindHandler( event : ScriptEditorEvent ) : void
@@ -134,6 +191,33 @@ package net.vdombox.ide.modules.scripts.view
 			goToDefenitionProxy.add( detail.libraryVO, detail.position, detail.length );
 			
 			sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : detail.libraryVO, check : false } );
+		}
+		
+		private function openPreferences( event : ScriptEditorEvent ) : void
+		{
+			var preferencesWindow : PreferencesWindow = new PreferencesWindow();
+			
+			preferencesWindow.title = "Preferences";
+			preferencesWindow.colorShemesList = new ArrayCollection( colorSchemeProxy.colorSchemes );
+			preferencesWindow.fontSizeList = new ArrayCollection( colorSchemeProxy.fontSizes );
+			preferencesWindow.selectedColorSheme = colorSchemeProxy.selectedColorScheme;
+			preferencesWindow.selectedFontSize = colorSchemeProxy.selectedFontSize;
+			preferencesWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
+			preferencesWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
+			
+			WindowManager.getInstance().addWindow(preferencesWindow, scriptEditor, true);
+			
+			function applyHandler( event : PopUpWindowEvent ) : void
+			{
+				colorSchemeProxy.selectedColorScheme = event.detail.colorScheme as ColorSchemeVO;
+				colorSchemeProxy.selectedFontSize = event.detail.fontSize as uint;
+				WindowManager.getInstance().removeWindow( preferencesWindow );
+			}
+			
+			function cancelHandler( event : PopUpWindowEvent ) : void
+			{
+				WindowManager.getInstance().removeWindow( preferencesWindow );
+			}
 		}
 	}
 }

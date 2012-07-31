@@ -12,6 +12,8 @@ package net.vdombox.ide.modules.scripts.events
 		
 		public static var SCRIPT_EDITOR_ADDED : String = "scriptEditorAdded";
 		
+		public static var OPEN_PREFERENCES : String = "openPreferences";
+		
 		public function ScriptEditorEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);

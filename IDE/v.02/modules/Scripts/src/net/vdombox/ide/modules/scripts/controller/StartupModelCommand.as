@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.scripts.controller
 {
+	import net.vdombox.ide.common.model.PreferencesProxy;
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
@@ -16,6 +17,7 @@ package net.vdombox.ide.modules.scripts.controller
 			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new TypesProxy() );
 			facade.registerProxy( new GoToPositionProxy() );
+			facade.registerProxy( new PreferencesProxy() );
 		}
 	}
 }

@@ -38,6 +38,9 @@
 			
 			[Bindable]
 			private var _actionVO : Object;
+			
+			[Bindable]
+			public var backgroundColor : uint = 0xFFFFFF;
 
 			private var _syntax : String = "vscript";
 			
@@ -180,6 +183,11 @@
 				dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.SCRIPT_EDITOR_ADDED ) );
 			}
 			
+			protected function preferences_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.OPEN_PREFERENCES ) );
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -187,18 +195,6 @@
 		<s:State name="normal"/>
 		<s:State name="disabled"/>
 	</s:states>
-	
-	<s:Rect left="0" width="40" height="100%">
-		<s:fill>
-			<s:SolidColor color="#A0A1A1"/>
-		</s:fill>
-	</s:Rect>
-	
-	<s:Rect left="40" width="100%" height="100%">
-		<s:fill>
-			<s:SolidColor color="#FFFFFF"/>
-		</s:fill>
-	</s:Rect>
 	
 	<s:VGroup id="contetn" width="100%" height="100%" gap="0" visible="{_actionVO ? true : false}">
 		<s:Group width="100%" height="24">
@@ -228,6 +224,11 @@
 									   height="25" icon="{VDOMImage.Redo}"
 									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_redo' ) }"
 									   click="{scriptEditor.scriptAreaComponent.redo_fun()}"/>
+				
+				<button:WorkAreaButton id="preferences"
+									   height="25"
+									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_preferences' ) }"
+									   click="preferences_clickHandler(event)"/>
 				
 			</s:HGroup>
 			
