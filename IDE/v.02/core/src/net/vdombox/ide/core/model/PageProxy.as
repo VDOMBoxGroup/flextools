@@ -614,6 +614,7 @@ package net.vdombox.ide.core.model
 			structureObject.@id = rawXML.@ID;
 			structureObject.@name = rawXML.@Name;
 			structureObject.@typeID = rawXML.@Type;
+			structureObject.@pageID = pageVO.id;
 
 			if ( rawChildren.length() == 0 )
 				return structureObject;

@@ -129,7 +129,7 @@
 		<!-- close button -->
 		<s:Button id="logoutButton" 
 				  skinClass="net.vdombox.ide.common.view.skins.button.MainLogoutBtnSkin" verticalCenter="0"
-				  click="dispatchEvent( new MainWindowEvent( MainWindowEvent.LOGOUT ) )"/>	
+				  mouseDown="dispatchEvent( new MainWindowEvent( MainWindowEvent.LOGOUT ) )"/>	
 		
 		<!-- maximize button -->
 		<s:Button id="maximizeButton"
@@ -138,7 +138,7 @@
 		<!-- close button -->
 		<s:Button id="closeButton"
 				  skinClass="net.vdombox.ide.common.view.skins.button.MainCloseBtnSkin" verticalCenter="0"
-				  click="closeButton_clickHandler(event)"/>	
+				  mouseDown="closeButton_clickHandler(event)"/>	
 	</s:HGroup>
 	
 	

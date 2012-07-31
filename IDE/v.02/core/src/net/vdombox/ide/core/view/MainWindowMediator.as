@@ -33,6 +33,7 @@ package net.vdombox.ide.core.view
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.model.PreferencesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
@@ -126,6 +127,8 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.SHOW_MODULE_BODY:
 				{
 					mainWindow.addElement( body.component as IVisualElement );
+					
+					sendNotification( PreferencesProxy.SELECTED_COLOR_SCHEME_CHANGE );
 
 					setApplicationInfo();
 
