@@ -35,7 +35,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.controls.HScrollBar;
-	import mx.controls.HTML;
 	import mx.controls.Image;
 	import mx.controls.Text;
 	import mx.controls.ToolTip;
@@ -699,8 +698,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				html.height = contetntPart.@height;
 
 			html.setStyle( "borderVisible", false );
-			html.blendMode = "darken";
-
+			
+			html.blendMode = contetntPart.@blendMode;
+			
 			if ( contetntPart.@editable )
 				_editableComponent = html;
 
@@ -712,6 +712,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			parentContainer.addElement(html);
 			
+			var locked:String = contetntPart.@locked;
+			html.locked = locked.toLowerCase() == "true";
+				
 			dispatchEvent(new RendererEvent(RendererEvent.HTML_ADDED));
 
 		}
