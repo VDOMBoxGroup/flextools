@@ -1425,11 +1425,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var selecteRectDraw : Boolean = false;
 
 		private function mouseDownHandler( event : MouseEvent ) : void
-		{					
-			stage.focus = this;
+		{			
 			
 			if ( event.shiftKey )
 			{
+				stage.focus = this;
 				dispatchEvent( new RendererEvent ( RendererEvent.MOUSE_DOWN, false, true, true ) );
 				event.stopImmediatePropagation();
 				event.preventDefault();
