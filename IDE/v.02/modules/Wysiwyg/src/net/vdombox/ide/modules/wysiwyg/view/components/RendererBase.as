@@ -690,7 +690,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			html.x = contetntPart.@left;
 			html.y = contetntPart.@top;
 			html.width = contetntPart.@width;
-			html.height = contetntPart.@height;
 			
 			html.paintsDefaultBackground = true;
 
