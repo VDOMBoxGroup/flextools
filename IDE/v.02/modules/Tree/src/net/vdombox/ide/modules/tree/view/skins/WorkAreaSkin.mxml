@@ -261,13 +261,13 @@
 
 		<mx:Spacer width="100%"/>
 		
-		<button:WorkAreaButton id="setHome"
+		<!--<button:WorkAreaButton id="setHome"
 								   height="20" icon="@Embed('assets/home.png')" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_start' ) }"
 								   click="hostComponent.dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.SET_START ) )"/>
 
 		<button:WorkAreaButton id="newPageButton"
 								   height="20" icon="@Embed('assets/new.png')" label="{ resourceManager.getString( 'Tree_General', 'work_area_new_page' ) }"
-								   click="hostComponent.dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CREATE_PAGE ) )"/>
+								   click="hostComponent.dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CREATE_PAGE ) )"/> -->
 
 		<button:WorkAreaButton id="autoSpaceingButton"
 								   height="20" icon="@Embed('assets/spacing.png')" label="{ resourceManager.getString( 'Tree_General', 'work_area_auto_spacing' ) }"

@@ -230,8 +230,8 @@
 								   alpha=".5" mouseOver="{ arrowButton.alpha = 1 }" mouseOut="{ arrowButton.alpha = .5 }"
 								   click="hostComponent.dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE ) )"/>
 						
-						<mx:Image id="deleteButton" source="{VDOMImage.DeleteWhite}" 
-								   alpha=".5" mouseOver="{ deleteButton.alpha = 1 }" mouseOut="{ deleteButton.alpha = .5 }"/>
+						<!--<mx:Image id="deleteButton" source="{VDOMImage.DeleteWhite}" 
+								   alpha=".5" mouseOver="{ deleteButton.alpha = 1 }" mouseOut="{ deleteButton.alpha = .5 }"/> -->
 						
 					</s:HGroup>
 					

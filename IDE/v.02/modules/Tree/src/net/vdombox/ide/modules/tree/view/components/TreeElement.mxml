@@ -42,8 +42,8 @@
 			[SkinPart( required="true" )]
 			public var typeImage : SmoothImage;
 			
-			[SkinPart( required="true" )]
-			public var deleteButton : Image;
+			/*[SkinPart( required="true" )]
+			public var deleteButton : Image;*/
 
 			[Bindable]
 			private var _typeResource : ResourceVO;
@@ -209,8 +209,8 @@
 				if ( instance == typeImage )
 					typeImage.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
 				
-				if ( instance == deleteButton )
-					deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );
+				/*if ( instance == deleteButton )
+					deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );*/
 			}
 
 			private function sizeChanged( value : Object ) : void
@@ -260,7 +260,7 @@
 			
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
-				if( deleteButton !== event.target && !event.shiftKey && !multiSelected )
+				if( /*deleteButton !== event.target && */!event.shiftKey && !multiSelected )
 					dispatchEvent( new TreeElementEvent( TreeElementEvent.SELECTION ) );
 			}
 			
@@ -352,7 +352,7 @@
 //				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE_REQUEST ) );
 			}
 			
-			private function deleteButton_clickHandler( event : MouseEvent ) :void
+			/*private function deleteButton_clickHandler( event : MouseEvent ) :void
 			{
 				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 				
@@ -366,7 +366,7 @@
 					}
 				}
 				
-			}
+			}*/
 			
 			protected function textinput1_keyDownHandler(event:KeyboardEvent):void
 			{
