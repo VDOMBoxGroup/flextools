@@ -10,6 +10,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.core.UIComponent;
 	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
+	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
@@ -282,7 +283,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 			
-			Alert.Show( "Are you sure want to delete " + componentName + " ?",AlertButton.OK_No, objectAttributesPanel.parentApplication, closeHandler);
+			Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + componentName + " ?",AlertButton.OK_No, objectAttributesPanel.parentApplication, closeHandler);
+		
 		}
 		
 		private function closeHandler(event : CloseEvent) : void
@@ -337,7 +339,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			function applyHandler (event: Event):void
 			{
 				resourceSelector.value = (event.target as ResourceSelectorWindow).value;
-//				resourceSelectorWindow.dispatchEvent( new ResourceVOEvent( ResourceVOEvent.CLOSE ) );
 			}		
 		}
 		

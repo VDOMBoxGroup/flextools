@@ -2,7 +2,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
-	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.HelpPanel;
 	
@@ -87,7 +86,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 				case Notifications.CURRENT_ATTRIBUTE_CHANGED:
 				{
-					Alert
 					var currentAttribute : Object = body as Object;
 					var attributeDescription : AttributeDescriptionVO;
 					

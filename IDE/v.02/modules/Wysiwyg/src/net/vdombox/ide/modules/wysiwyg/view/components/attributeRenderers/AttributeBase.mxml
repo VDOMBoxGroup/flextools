@@ -23,8 +23,6 @@
 			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.common.model._vo.ObjectListVO;
 			import net.vdombox.ide.common.model._vo.PageVO;
-			import net.vdombox.ide.common.view.components.button.AlertButton;
-			import net.vdombox.ide.common.view.components.windows.Alert;
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;

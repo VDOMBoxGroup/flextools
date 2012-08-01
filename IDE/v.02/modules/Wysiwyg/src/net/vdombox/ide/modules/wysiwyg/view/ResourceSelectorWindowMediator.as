@@ -336,7 +336,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 
-			Alert.Show( "Are you sure want to delete\n " + componentName + " ?", 
+			Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + "\n" + componentName + " ?", 
 						AlertButton.OK_No, 
 						resourceSelectorWindow, deleteResourceCloseHandler);
 		}
