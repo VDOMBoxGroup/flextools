@@ -5,8 +5,6 @@ package net.vdombox.ide.modules.events.view
 	
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
-	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.view.components.Body;
 	
