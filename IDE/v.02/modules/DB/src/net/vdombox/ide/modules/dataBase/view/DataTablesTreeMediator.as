@@ -330,7 +330,7 @@ package net.vdombox.ide.modules.dataBase.view
 		private function createNew( object : Object ) : void
 		{
 			var createNewObjectWindow : NameObjectWindow = new NameObjectWindow( "", ResourceManager.getInstance().getString( "DataBase_General", "renaem_table_window_title" ) );	
-			createNewObjectWindow.title = "New database";
+			createNewObjectWindow.title = ResourceManager.getInstance().getString( 'DataBase_General', 'data_table_new_base' );
 			createNewObjectWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			createNewObjectWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 			

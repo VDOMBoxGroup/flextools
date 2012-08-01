@@ -241,7 +241,7 @@
 			{
 				var item : TypeVO;
 				
-				var newItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'DataBase_General', "data_table_tree_new_context" ));
+				var newItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'DataBase_General', "data_table_new_base" ));
 				
 				var newMenu : NativeMenu = new NativeMenu();
 				
@@ -299,7 +299,7 @@
 				 itemRenderer="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.ObjectTreePanelItemRenderer"/>
 		
 		<s:HGroup width="100%" height="40" verticalAlign="middle" horizontalAlign="center">
-			<button:VDOMButton id="newBase" label="New base" click="newBase_clickHandler(event)" />
+			<button:VDOMButton id="newBase" label="resourceManager.getString( 'DataBase_General', 'renaem_table_window_title' )" click="newBase_clickHandler(event)" />
 		</s:HGroup>
 	</s:VGroup>
 	
