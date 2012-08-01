@@ -396,7 +396,7 @@ package net.vdombox.ide.modules.events.view
 		private function openCreateServerActionWindow() : void
 		{
 			var renameWindow : NameObjectWindow = new NameObjectWindow( "", ResourceManager.getInstance().getString( "Scripts_General", "create_action_window_action_title" ) );	
-			renameWindow.title = "Add server action";
+			renameWindow.title = ResourceManager.getInstance().getString( "Scripts_General", "create_action_window_action_title" );
 			renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 			
