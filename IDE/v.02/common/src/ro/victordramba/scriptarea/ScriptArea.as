@@ -9,6 +9,7 @@ package ro.victordramba.scriptarea
 	
 	import net.vdombox.editors.parsers.Controller;
 	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.utils.StringUtils;
 
@@ -23,9 +24,12 @@ package ro.victordramba.scriptarea
 			buttonMode = true;
 			useHandCursor = false;
 			
+			backgroundShape = new Shape;
+			addChild( backgroundShape );
+			
 			selectionShapeRects = new Shape;
 			addChild( selectionShapeRects );
-
+			
 			selectionShape = new Shape;
 			addChild( selectionShape );
 			
@@ -35,6 +39,7 @@ package ro.victordramba.scriptarea
 			tf = new TextField;
 			tf.multiline = true;
 			tf.wordWrap = false;
+			//tf.background = true;
 
 			fmt = new TextFormat( "Courier New", 14, 0 );
 
@@ -66,8 +71,6 @@ package ro.victordramba.scriptarea
 			ScriptCursor.height = letterBoxHeight;
 
 			addChild( cursor );
-			
-			blendMode = "darken";
 		}
 
 		protected var _caret : int;
@@ -94,10 +97,17 @@ package ro.victordramba.scriptarea
 
 		private var _maxScrollH : int = 0;
 		private var _maxScrollV : int = 0;
+		
+		private var backgroundShape : Shape;
+		private var backgroundShapeColor : uint = 0xFFFFFF;
 
 		private var selectionShape : Shape;
+		private var selectionShapeColor : uint = 0x3399FF;
 		
 		private var selectionShapeRects : Shape;
+		private var selectionShapeRectsColor : uint = 0xD4D4D4
+		
+		private var needChangeColorSelected : Boolean = true;
 		
 		private var linesShape : Shape;
 
@@ -112,6 +122,40 @@ package ro.victordramba.scriptarea
 		private var savedUndoIndex : int = 0;
 		
 		public var controller : Controller;
+		
+		private var defaultColor : uint = 0xFFFFFF;
+		
+		public function set colorScheme( value : ColorSchemeVO ) : void
+		{
+			backgroundShapeColor = value.backGroundColor;
+			defaultColor = value.defaul_t;
+			selectionShapeColor = value.selectionColor;
+			selectionShapeRectsColor = value.selectionRectsColor;
+			needChangeColorSelected = value.needChangeColorSelected;
+			cursor.color= value.cursorColor;
+		}
+		
+		public function set fontSize( value : uint ) : void
+		{			
+			fmt = new TextFormat( "Courier New", value, 0 );
+			
+			tf.defaultTextFormat = fmt;
+			
+			var tmp : String = tf.text;
+				
+			tf.text = " ";
+			
+			letterBoxHeight = tf.getLineMetrics( 0 ).height;
+			letterBoxWidth = tf.getLineMetrics( 0 ).width;
+			
+			tf.text = tmp;
+			
+			ScriptCursor.height = letterBoxHeight;
+			
+			updateCaret();
+			updateScrollProps();
+			updateSize();
+		}
 
 		public function get textFormat() : TextFormat
 		{
@@ -273,7 +317,7 @@ package ro.victordramba.scriptarea
 			var g : Graphics = selectionShape.graphics;
 			g.clear();
 			
-			g.beginFill( 0x3399FF, 1 );
+			g.beginFill( selectionShapeColor, 1 );
 			
 			var p0 : Point = getPointForIndex( index );
 			var p1 : Point = getPointForIndex( index + _replaceText.length );
@@ -370,7 +414,7 @@ package ro.victordramba.scriptarea
 			var g : Graphics = selectionShape.graphics;
 			g.clear();
 			
-			g.beginFill( 0x3399FF, 1 );
+			g.beginFill( selectionShapeColor, 1 );
 			
 			var p0 : Point = getPointForIndex( _selStart );
 			var p1 : Point = getPointForIndex( _selEnd );
@@ -389,7 +433,7 @@ package ro.victordramba.scriptarea
 			
 			var g : Graphics = selectionShapeRects.graphics;
 			g.clear();
-			g.beginFill( 0xD4D4D4, .9 );
+			g.beginFill( selectionShapeRectsColor, .9 );
 			
 			var t : Token = controller.getTokenByPos( index );
 			while ( index != -1 )
@@ -439,7 +483,7 @@ package ro.victordramba.scriptarea
 			var index : int = text.indexOf( strFind );
 			var step : int = _end - _start;
 			
-			g.beginFill( 0xD4D4D4, 1 );
+			g.beginFill( selectionShapeRectsColor, 1 );
 			
 			while ( index != -1 )
 			{
@@ -497,7 +541,7 @@ package ro.victordramba.scriptarea
 
 			if ( _selStart != _selEnd && _selStart <= lastPos && _selEnd >= firstPos )
 			{
-				g.beginFill( 0x3399FF, 1 );
+				g.beginFill( selectionShapeColor, 1 );
 
 				if ( p0.y == p1.y )
 				{
@@ -787,7 +831,7 @@ package ro.victordramba.scriptarea
 			
 			//var newX : Number = tf.width - width;
 			
-			if( width == 0 )
+			if( width <= 0 )
 				return;
 			
 			var newX : Number = cursor.getX() - tf.x - width + 48;
@@ -841,6 +885,19 @@ package ro.victordramba.scriptarea
 			lastPos = position;
 
 			_replaceText( 0, 0, "" );
+		}
+		
+		private function setBackgroundSize() : void
+		{
+			backgroundShape.width = width;
+			backgroundShape.height = height;
+			
+			var g : Graphics = backgroundShape.graphics;
+			g.clear();
+			
+			g.beginFill( backgroundShapeColor, 1 );
+			
+			g.drawRect( 0, 0, width, height );
 		}
 
 		private function _replaceText( startIndex : int, endIndex : int, text : String ) : void
@@ -934,11 +991,13 @@ package ro.victordramba.scriptarea
 
 			tf.htmlText = visibleText;
 			
+			setBackgroundSize();
+			
 			function setColorForSpecialText() : String
 			{
 				var str : String;
 				
-				if ( o.begin >= _selStart && o.begin <= _selEnd )
+				if ( o.begin >= _selStart && o.begin <= _selEnd && needChangeColorSelected )
 				{
 					if ( o.end < _selEnd )
 						str = "<font color=\"#" + "ffffff" + "\">" + StringUtils.htmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
@@ -948,7 +1007,7 @@ package ro.victordramba.scriptarea
 						str += "<font color=\"#" + o.color + "\">" + StringUtils.htmlEnc( _text.substring( _selEnd, o.end ) ) + "</font>";
 					}
 				}
-				else if ( o.begin <= _selStart && o.end >= _selStart)
+				else if ( o.begin <= _selStart && o.end >= _selStart  && needChangeColorSelected )
 				{
 					if ( o.end <= _selEnd )
 					{
@@ -983,7 +1042,7 @@ package ro.victordramba.scriptarea
 			{
 				var str : String;
 				
-				if ( begin >= _selStart && begin <= _selEnd )
+				if ( begin >= _selStart && begin <= _selEnd  && needChangeColorSelected )
 				{
 					if ( end <= _selEnd )
 						str = "<font color=\"#" + "ffffff" + "\">" + StringUtils.htmlEnc( _text.substring( Math.max( begin, firstPos ), end ) ) + "</font>";
@@ -993,7 +1052,7 @@ package ro.victordramba.scriptarea
 						str += StringUtils.htmlEnc( _text.substring( _selEnd, end ) );
 					}
 				}
-				else if ( begin <= _selStart && end >= _selStart)
+				else if ( begin <= _selStart && end >= _selStart && needChangeColorSelected )
 				{
 					if ( end <= _selEnd )
 					{

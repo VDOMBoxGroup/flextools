@@ -11,6 +11,8 @@ package net.vdombox.ide.common.events
 		
 		public static const ITEM_CLICK : String = "findItemClick";
 		
+		public static const DOUBLE_CLICK : String = "findDoubleClick";
+		
 		public function FindBoxEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{
 			super( type, bubbles, cancelable );

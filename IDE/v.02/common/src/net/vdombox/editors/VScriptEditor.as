@@ -14,7 +14,7 @@ package net.vdombox.editors
 		{
 			setStyle( "skinClass", net.vdombox.editors.skins.ScriptEditorSkin );
 			
-			addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
+			//addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
 		}
 		private var fileName : String;
 		private var autoCompleteCodeBlock : AutoCompleteCodeBlockVScript;

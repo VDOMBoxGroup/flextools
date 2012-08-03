@@ -5,17 +5,18 @@ package net.vdombox.editors.parsers.python
 	import flash.utils.setTimeout;
 	
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Parser;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	
 	import ro.victordramba.thread.IThread;
 	import ro.victordramba.util.HashMap;
-	import net.vdombox.editors.parsers.ClassDB;
 
 	public class PythonParser extends Parser
 	{
 		public function PythonParser()
 		{
+			var tt : int = 0;
 		}
 
 		public static function addSourceFile( source : String, fileName : String, onComplete : Function ) : void

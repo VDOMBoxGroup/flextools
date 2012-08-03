@@ -42,6 +42,7 @@ package net.vdombox.ide.common.controller.names
 		 * @default 
 		 */
 		public static const SERVER_ACTIONS_LIST : String = "serverActionsList";
+		public static const SERVER_ACTIONS_LIST_FOR_FIND : String = "serverActionsListForFind";
 		/**
 		 * 
 		 * @default 
@@ -52,6 +53,7 @@ package net.vdombox.ide.common.controller.names
 		 * @default 
 		 */
 		public static const LIBRARIES : String = "libraries";
+		public static const LIBRARIES_FOR_FIND : String = "librariesForFind";
 		/**
 		 * 
 		 * @default 

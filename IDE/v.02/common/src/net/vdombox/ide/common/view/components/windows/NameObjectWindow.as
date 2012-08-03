@@ -75,7 +75,6 @@ package net.vdombox.ide.common.view.components.windows
 		public function no_close_window(event: KeyboardEvent = null ) : void
 		{
 			dispatchEvent( new PopUpWindowEvent( PopUpWindowEvent.CANCEL ) );
-			
 		}
 
 	}

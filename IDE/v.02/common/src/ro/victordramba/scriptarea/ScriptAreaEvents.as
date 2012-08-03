@@ -748,7 +748,7 @@ package ro.victordramba.scriptarea
 			lastCol = _caret - _text.lastIndexOf( NL, _caret - 1 ) - 1;
 		}
 
-		private function dipatchChange() : void
+		public function dipatchChange() : void
 		{
 			dispatchEvent( new Event( Event.CHANGE, true, false ) );
 		}

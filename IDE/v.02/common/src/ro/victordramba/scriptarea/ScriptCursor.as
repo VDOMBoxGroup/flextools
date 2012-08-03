@@ -16,6 +16,8 @@ package ro.victordramba.scriptarea
 		private var w : int;
 		private var h : int;
 		
+		private var _color : uint = 0x000000;
+		
 		public function ScriptCursor()
 		{
 			setInterval(redraw, 500);
@@ -29,9 +31,15 @@ package ro.victordramba.scriptarea
 			crs.graphics.clear();
 			if (b)
 			{
-				crs.graphics.beginFill(0, 1);
+				crs.graphics.beginFill(_color, 1);
 				crs.graphics.drawRect(0, 0, 2, ScriptCursor.height);
 			}
+		}
+		
+		public function set color( value : uint ) : void
+		{
+			_color = value;
+			redraw();
 		}
 		
 		public function pauseBlink():void

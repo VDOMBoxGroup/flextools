@@ -5,7 +5,9 @@ package net.vdombox.editors
 	import net.vdombox.editors.parsers.BackwardsParser;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.editors.parsers.Tokenizer;
 	import net.vdombox.editors.parsers.python.PythonTokenizer;
+	import net.vdombox.editors.parsers.vscript.VScriptTokenizer;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 
 	public class HashLibraryArray
@@ -37,7 +39,7 @@ package net.vdombox.editors
 			return a;
 		}
 		
-		public static function getImportToLibraty( importFrom : String ) : Vector.<String>
+		public static function getImportToLibraty( importFrom : String, lang : String ) : Vector.<String>
 		{
 			var a : Vector.<String> = new Vector.<String>();
 			
@@ -48,7 +50,11 @@ package net.vdombox.editors
 			
 			var string : String = hashLibraries[ path[0] ].libraryVO.script;
 			
-			var tokenizer : PythonTokenizer = new PythonTokenizer( string );
+			var tokenizer : Tokenizer;
+			if ( lang == "vscript" )
+				tokenizer = new VScriptTokenizer( string );
+			else
+				tokenizer = new PythonTokenizer( string );
 			
 			while ( tokenizer.runSlice() )
 				;
@@ -76,14 +82,14 @@ package net.vdombox.editors
 			return a;
 		}
 		
-		public static function getTokensToLibratyClass( importFrom : String, importToken : String, bp : BackwardsParser ) : Vector.<String>
+		public static function getTokensToLibratyClass( importFrom : String, importToken : String, bp : BackwardsParser, lang : String ) : Vector.<String>
 		{
 			var len : int = bp.names.length;
 			
 			bp.names[0] = importToken;
 			
 			if ( len == 1 && importFrom == importToken || len > 1 && importFrom == bp.names[len - 1] )
-				return getImportToLibraty( importFrom );
+				return getImportToLibraty( importFrom, lang );
 			
 			var a : Vector.<String> = new Vector.<String>();
 			
@@ -94,7 +100,11 @@ package net.vdombox.editors
 			
 			var string : String = hashLibraries[ path[0] ].libraryVO.script;
 			
-			var tokenizer : PythonTokenizer = new PythonTokenizer( string );
+			var tokenizer : Tokenizer;
+			if ( lang == "vscript" )
+				tokenizer = new VScriptTokenizer( string );
+			else
+				tokenizer = new PythonTokenizer( string );
 			
 			while ( tokenizer.runSlice() )
 			{

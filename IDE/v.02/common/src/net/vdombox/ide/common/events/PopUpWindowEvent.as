@@ -9,14 +9,17 @@ package net.vdombox.ide.common.events
 		public var base : PageVO;
 		public var name : String;
 		
+		public var detail : Object;
+		
 		public static var APPLY : String = "apply";
 		public static var CANCEL : String = "cancelw";
 		
 		
-		public function PopUpWindowEvent(type : String, _base : PageVO = null, _name : String = "" )
+		public function PopUpWindowEvent(type : String, _base : PageVO = null, _name : String = "", detail : Object = null )
 		{
 			base = _base;
 			name = _name;
+			this.detail = detail;
 			super( type, bubbles, cancelable );
 		}
 		

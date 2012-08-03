@@ -26,18 +26,21 @@ package net.vdombox.editors.parsers
 		
 		public function set colorScheme( colorSchemeVO : ColorSchemeVO ) : void
 		{
-			formats.setValue( 'default', new TextFormat( null, null, 0x111111, false, false ) );
-			formats.setValue( Token.KEYWORD, new TextFormat( null, null, 0x1039FF, true, false ) );
-			formats.setValue( Token.KEYWORD2, new TextFormat( null, null, 0x247ECE, true, false ) );
-			formats.setValue( Token.E4X, new TextFormat( null, null, 0x613BB9, false, false ) );
-			formats.setValue( Token.COMMENT, new TextFormat( null, null, 0x008000, false, true ) );
-			formats.setValue( Token.REGEXP, new TextFormat( null, null, 0xa3a020, false, false ) );
-			formats.setValue( Token.STRING, new TextFormat( null, null, 0x990000, false, false ) );
-			formats.setValue( Token.NUMBER, new TextFormat( null, null, 0x990099, false, false ) );
-			formats.setValue( Token.SYMBOL, new TextFormat( null, null, 0x006060, false, false ) );
-			formats.setValue( Token.NAMEFUNCTION, new TextFormat( null, null, 0xFF00FF, false, false ) );
-			formats.setValue( Token.NAMECLASS, new TextFormat( null, null, 0xFF7200, false, false ) );
-			formats.setValue( 'topType', new TextFormat( null, null, 0x981056, false, false ) );
+			formats = new HashMap();
+			formats.setValue( 'default', new TextFormat( null, null, colorSchemeVO.defaul_t, false, false ) );
+			formats.setValue( Token.KEYWORD, new TextFormat( null, null, colorSchemeVO.keyword, false, false ) );
+			formats.setValue( Token.KEYWORD2, new TextFormat( null, null, colorSchemeVO.keyword2, false, false ) );
+			formats.setValue( Token.KEYWORD3, new TextFormat( null, null, colorSchemeVO.keyword3, false, false ) );
+			formats.setValue( Token.E4X, new TextFormat( null, null, colorSchemeVO.e4x, false, false ) );
+			formats.setValue( Token.COMMENT, new TextFormat( null, null, colorSchemeVO.comment, false, true ) );
+			formats.setValue( Token.REGEXP, new TextFormat( null, null, colorSchemeVO.regExp, false, false ) );
+			formats.setValue( Token.STRING, new TextFormat( null, null, colorSchemeVO.string, false, false ) );
+			formats.setValue( Token.STRING_LITERAL, new TextFormat( null, null, colorSchemeVO.stringLiteral, false, false ) );
+			formats.setValue( Token.NUMBER, new TextFormat( null, null, colorSchemeVO.number, false, false ) );
+			formats.setValue( Token.SYMBOL, new TextFormat( null, null, colorSchemeVO.symbol, false, false ) );
+			formats.setValue( Token.NAMEFUNCTION, new TextFormat( null, null, colorSchemeVO.nameFunction, false, false ) );
+			formats.setValue( Token.NAMECLASS, new TextFormat( null, null, colorSchemeVO.nameClass, false, false ) );
+			formats.setValue( 'topType', new TextFormat( null, null, colorSchemeVO.topType, false, false ) );
 		}
 		
 		public function load( source : String, fileName : String ) : void

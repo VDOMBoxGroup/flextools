@@ -10,6 +10,7 @@ package net.vdombox.editors
 	
 	import net.vdombox.editors.parsers.Controller;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
+	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
 	
 	import ro.victordramba.scriptarea.ScriptAreaEvents;
 	
@@ -245,7 +246,7 @@ package net.vdombox.editors
 
 		private function updateNums() : void
 		{
-			lineNums.draw( area.scrollV, area.height / area.boxSize.y, 100000 );
+			lineNums.draw( area.scrollV, Number( area.height ) / area.boxSize.y, 100000 );
 		}
 
 		private function addedToStageHandler( event : Event ) : void
@@ -304,6 +305,11 @@ package net.vdombox.editors
 //				fireStateChanged( true );
 			}
 		}
+		
+		public function sendUpdate() : void
+		{
+			area.dipatchChange();
+		}
 
 		private function area_changeHandler( event : Event ) : void
 		{
@@ -332,6 +338,21 @@ package net.vdombox.editors
 		public function goToPos( pos : int, len : int ) : void
 		{
 			area.goToPos(pos, len);
+		}
+		
+		public function set colorScheme( value : ColorSchemeVO ) : void
+		{
+			area.colorScheme = value;
+		}
+		
+		public function set fontSize( value : uint ) : void
+		{
+			area.fontSize = value;
+			lineNums.box = area.boxSize;
+			lineNums.fmt = area.textFormat;
+			
+			lineNums.clearCache();
+			update()
 		}
 	}
 }

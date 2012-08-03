@@ -127,7 +127,7 @@
 
 	<s:HScrollBar id="hsb"
 				  minimum="0"
-				  bottom="0" left="40" right="{ vsb.width }"
+				  bottom="0" left="0" right="{ vsb.width }"
 				  change="hsb_changeHandler(event)"/>
 
 	<s:VScrollBar id="vsb"

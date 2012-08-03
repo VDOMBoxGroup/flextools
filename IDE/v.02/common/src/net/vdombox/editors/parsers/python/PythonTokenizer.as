@@ -18,18 +18,23 @@ package net.vdombox.editors.parsers.python
 		public var tree : PythonToken;
 
 		private static const keywordsA : Array = [
-			"and", "as", "del", "for", "is", "raise", "assert", "elif", "from", "lambda", "return", "break", "else", "global", "None", "not", "try", "True", "False", "class", "except", "if", "or", "while", "continue", "exec", "import", "pass", "yield", "def", "finally", "in", "print"
+			"and", "as", "del", "for", "is", "raise", "assert", "elif", "from", "lambda", "return", "break", "else", "global", "None", "not", "try", "True", "False", "except", "if", "or", "while", "continue", "exec", "import", "pass", "yield", "finally", "in", "print"
 		];
 
 		private static const keywords2A : Array = [
 			"self" 
-			];
+		];
+		
+		private static const keywords3A : Array = [
+			"class", "def"
+		];
 
 		private static const symbolsA : Array = [
 			"+", "-", "/", "*", "=", "<", ">", "%", "!", "&", ";", "?", "`", ":", ",", "." ];
 
 		private static const keywords : HashMap = new HashMap();
 		private static const keywords2 : HashMap = new HashMap();
+		private static const keywords3 : HashMap = new HashMap();
 		private static const symbols : HashMap = new HashMap();
 		private static const symbolsLengths : Array = [];
 
@@ -46,6 +51,11 @@ package net.vdombox.editors.parsers.python
 			for each ( s in keywords2A )
 			{
 				keywords2.setValue( s, true );
+			}
+			
+			for each ( s in keywords3A )
+			{
+				keywords3.setValue( s, true );
 			}
 			
 			for each ( s in symbolsA )
@@ -103,7 +113,7 @@ package net.vdombox.editors.parsers.python
 			if ( isNorR( c ) )
 			{
 				pos++;
-				return new PythonToken( string.substring( start, pos ), PythonToken.ENDLINE, pos );
+				return new PythonToken( string.substring( start, pos ), Token.ENDLINE, pos );
 			}
 			
 			if ( c == "*" && string.charAt( pos + 1 ) == "*" )
@@ -117,19 +127,19 @@ package net.vdombox.editors.parsers.python
 			{
 				skipToStringEnd();
 				str = string.substring( start, pos );
-				return new PythonToken( str, PythonToken.NUMBER, pos );
+				return new PythonToken( str, Token.NUMBER, pos );
 			}
 
 			if ( c == "#" )
 			{
 				skipUntilEnd();
-				return new PythonToken( string.substring( start, pos ), PythonToken.COMMENT, pos );
+				return new PythonToken( string.substring( start, pos ), Token.COMMENT, pos );
 			}
 			
 			if ( c == "'" && string.substr( pos, 3 ) == "'''" )
 			{
 				skipUntil( "'''" );
-				return new PythonToken( string.substring( start, pos ), PythonToken.COMMENT, pos );
+				return new PythonToken( string.substring( start, pos ), Token.COMMENT, pos );
 			}
 
 			if ( isLetter( c ) )
@@ -139,24 +149,26 @@ package net.vdombox.editors.parsers.python
 				str = string.substring( start, pos );
 				var type : String;
 				if ( isKeyword( str ) )
-					type = PythonToken.KEYWORD;
+					type = Token.KEYWORD;
 				else if ( isKeyword2( str ) )
-					type = PythonToken.KEYWORD2;
+					type = Token.KEYWORD2;
+				else if ( isKeyword3( str ) )
+					type = Token.KEYWORD3;
 				else if ( tokens.length && tokens[ tokens.length - 1 ].string == "[" &&
 					( str == "Embed" || str == "Event" || str == "SWF" || str == "Bindable" ) )
-					type = PythonToken.KEYWORD;
+					type = Token.KEYWORD;
 				else if ( prevStr == "def" )
-					type = PythonToken.NAMEFUNCTION;
+					type = Token.NAMEFUNCTION;
 				else if ( prevStr == "class" )
-					type = PythonToken.NAMECLASS;
+					type = Token.NAMECLASS;
 				else
-					type = PythonToken.STRING_LITERAL;
+					type = Token.STRING_LITERAL;
 				return new PythonToken( str, type, pos );
 			}
 			else if ( ( str = isSymbol( pos ) ) != null )
 			{
 				pos += str.length;
-				return new PythonToken( str, PythonToken.SYMBOL, pos );
+				return new PythonToken( str, Token.SYMBOL, pos );
 			}
 			else if ( c == "\"" )
 			{ 
@@ -169,18 +181,18 @@ package net.vdombox.editors.parsers.python
 					skipUntilWithEscNL( c )
 				}
 
-				return new PythonToken( string.substring( start, pos ), PythonToken.STRING, pos );
+				return new PythonToken( string.substring( start, pos ), Token.STRING, pos );
 			}
 			
 			else if (  c == "'" )
 			{
 				skipUntilWithEscNL( c )
 				
-				return new PythonToken( string.substring( start, pos ), PythonToken.STRING, pos );
+				return new PythonToken( string.substring( start, pos ), Token.STRING, pos );
 			}
 			
 			//unknown
-			return new PythonToken( c, PythonToken.SYMBOL, ++pos );
+			return new PythonToken( c, Token.SYMBOL, ++pos );
 		}
 
 		private function currentChar() : String
@@ -309,6 +321,11 @@ package net.vdombox.editors.parsers.python
 		{
 			return keywords2.getValue( str );
 		}
+		
+		private function isKeyword3( str : String ) : Boolean
+		{
+			return keywords3.getValue( str );
+		}
 
 		private function isSymbol( pos : uint ) : String
 		{
@@ -387,11 +404,8 @@ package net.vdombox.editors.parsers.python
 
 			var t : PythonToken = nextToken();
 			if ( !t )
-			{
-				//setMembers( topScope );
-				
 				return false;
-			}
+			
 			tokens.push( t );
 			
 			tabOtstyp = 0;
@@ -400,7 +414,7 @@ package net.vdombox.editors.parsers.python
 			
 			var position : int = pos - 1;
 			
-			if ( t.type == PythonToken.ENDLINE )
+			if ( t.type == Token.ENDLINE )
 			{
 				if ( currentBlock && tokens.length >= 2 /*&& tokens[ tokens.length - 2 ].type != Token.COMMENT */&& string.charAt( position + 1 ) != "\r" && string.charAt( position + 1 ) != "\n" )
 				{
@@ -463,7 +477,7 @@ package net.vdombox.editors.parsers.python
 					systemName = tp2.string;
 				}
 				
-				if ( t.type != PythonToken.SYMBOL )
+				if ( t.type != Token.SYMBOL )
 				{
 					imports[ imports.length - 1 ].setValue( t.string, { name : t.string, systemName : systemName, source : importFrom } );
 					
@@ -479,7 +493,7 @@ package net.vdombox.editors.parsers.python
 				}
 				else if ( t.string == "*" )
 				{
-					for each ( var name : String in HashLibraryArray.getImportToLibraty( importFrom ) )
+					for each ( var name : String in HashLibraryArray.getImportToLibraty( importFrom, "python" ) )
 					{
 						imports[ imports.length - 1 ].setValue( name, { name : name, systemName : name, source : importFrom } );
 					}
@@ -650,7 +664,7 @@ package net.vdombox.editors.parsers.python
 						defParamValue += t.string;
 				}
 			}
-			if ( tp && tp.string == "for" && t.type == PythonToken.STRING_LITERAL  )
+			if ( tp && tp.string == "for" && t.type == Token.STRING_LITERAL  )
 			{
 				field = new Field( "var", t.pos, t.string );
 				
@@ -665,7 +679,7 @@ package net.vdombox.editors.parsers.python
 				
 				field.parent = scope;
 			}
-			else if ( t.string == "=" && tp.type == PythonToken.STRING_LITERAL && !paramsBlock )
+			else if ( t.string == "=" && tp.type == Token.STRING_LITERAL && !paramsBlock )
 			{
 				parsingVariables( tp, tp2, tokens.length - 2 )
 			}
@@ -685,7 +699,7 @@ package net.vdombox.editors.parsers.python
 			}
 
 
-			if ( tp && tp.string == ":" && t.type == PythonToken.ENDLINE && _scope )
+			if ( tp && tp.string == ":" && t.type == Token.ENDLINE && _scope )
 			{	
 				currentBlock = t;
 				t.children = [];	
@@ -761,7 +775,7 @@ package net.vdombox.editors.parsers.python
 				
 				currentPos -= 2;
 					
-				if ( prevToken.string == "," )
+				if ( prevToken && prevToken.string == "," )
 					parsingVariables( tokens[ currentPos ], tokens[ currentPos - 1 ], currentPos );
 			}
 			else
@@ -840,7 +854,7 @@ package net.vdombox.editors.parsers.python
 				
 				currentPos -= 2;
 				
-				if ( prevToken.string == "," )
+				if ( prevToken && prevToken.string == "," )
 					parsingVariables( tokens[ currentPos ], tokens[ currentPos - 1 ], currentPos );
 			}
 		}

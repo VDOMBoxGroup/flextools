@@ -13,7 +13,7 @@ package net.vdombox.editors
 		public function PythonScriptEditor()
 		{
 			super();
-			addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
+			//addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
 		}
 		
 		private var fileName : String;

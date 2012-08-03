@@ -10,8 +10,8 @@ package net.vdombox.editors
 
 	public class LineNumbers extends Sprite
 	{
-		private var fmt : TextFormat;
-		private var box : Point;
+		public var fmt : TextFormat;
+		public var box : Point;
 		private static var cache : Array = [];
 		private var begin : int;
 		private var markLines : Array;
@@ -32,7 +32,7 @@ package net.vdombox.editors
 			numbers.mouseEnabled = false;
 		}
 
-		private function checkCreateItem( no : int ) : Bitmap
+		private function checkCreateItem( no : Number ) : Bitmap
 		{
 			if ( cache[ no ] )
 				return new Bitmap( cache[ no ] );
@@ -45,21 +45,25 @@ package net.vdombox.editors
 			tf.setTextFormat( fmt );
 			tf.setTextFormat( fmt2 );
 
-			var bd : BitmapData = new BitmapData( box.x * 5, box.y, true, 0x55CCCCCC );
+			var bd : BitmapData = new BitmapData( box.x * 5, box.y, true, 0xA0A0A1A1 );
 			bd.draw( tf, new Matrix( 1, 0, 0, 1, -1, -1 ) );
 			cache[ no ] = bd;
 			return new Bitmap( bd );
 		}
+		
+		public function clearCache() : void
+		{
+			cache = [];
+		}
 
-
-		public function draw( begin : int, size : int, max : int ) : void
+		public function draw( begin : int, size : Number, max : int ) : void
 		{
 			this.begin = begin;
 
 			while ( numbers.numChildren )
 				numbers.removeChildAt( 0 );
 
-			for ( var i : int = 0; i < size && ( i + begin ) < max; i++ )
+			for ( var i : Number = 0; i < size && ( i + begin ) < max; i++ )
 			{
 				var bmp : Bitmap = checkCreateItem( i + begin + 1 );
 				bmp.y = i * box.y;

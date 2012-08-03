@@ -10,6 +10,7 @@ package net.vdombox.editors.parsers
 		public static const NUMBER:String = "number";
 		public static const KEYWORD:String = "keyword";
 		public static const KEYWORD2:String = "keyword2";
+		public static const KEYWORD3:String = "keyword3";
 		public static const ENDLINE:String = "endLine";
 		public static const COMMENT:String = "comment";
 		public static const NAMEFUNCTION:String = "nameFunction";

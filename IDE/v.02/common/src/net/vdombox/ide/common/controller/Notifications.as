@@ -232,10 +232,12 @@ package net.vdombox.ide.common.controller
 		
 		public static const GET_STRUCTURE : String = "getStructure";
 		public static const STRUCTURE_GETTED : String = "structureGetted";
+		public static const STRUCTURE_FOR_FIND_GETTED : String = "structureForFindGetted";
 		public static const STRUCTURE_GETTED_REQUEST : String = "structureGettedRequest";
 		
 		public static const GET_GLOBAL_ACTIONS : String = "getGlobalActions";
 		public static const GLOBAL_ACTIONS_GETTED : String = "globalActionsGetted";
+		public static const GLOBAL_ACTIONS_GETTED_FOR_FIND : String = "globalActionsGettedForFind";
 		
 		public static const GET_SCRIPT_REQUEST : String = "getScriptRequest";
 		
@@ -268,6 +270,7 @@ package net.vdombox.ide.common.controller
 		
 		public static const GET_LIBRARIES : String = "getLibraries";
 		public static const LIBRARIES_GETTED : String = "librariesGetted";
+		public static const LIBRARIES_GETTED_FOR_FIND : String = "librariesGettedForFind";
 		
 		public static const SCRIPT_CHECKED: String = "scriptChecked";
 		
@@ -302,7 +305,9 @@ package net.vdombox.ide.common.controller
 		public static const OPEN_ONLOAD_SCRIPT : String = "openOnloadScript";
 		
 		public static const CHANGE_SELECTED_SCRIPT : String = "changeSelectedScript";
+		
 		public static const OPEN_FIND_SCRIPT : String = "openFindScript";
+		public static const OPEN_FIND_GLOBAL_SCRIPT : String = "openFindGlobalScript";
 		
 		public static const GET_PAGES_STRUCTURE : String = "getPagesStructure";
 		public static const PAGES_STRUCTURE_GETTED : String = "pagesStructureGetted";

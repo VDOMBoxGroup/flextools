@@ -1,5 +1,6 @@
 package net.vdombox.editors.parsers.vscript
 {
+	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
@@ -17,7 +18,7 @@ package net.vdombox.editors.parsers.vscript
 		private var newLogicBlock : Boolean = false;
 		
 		private static const keywordsA : Array = [
-			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "class", "clng", "const", "csng", "cstr", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "wend", "while", "with", "xor"
+			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "class", "clng", "const", "csng", "cstr", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "use", "wend", "while", "with", "xor"
 		];
 		
 		private static const keywords2A : Array = [
@@ -102,6 +103,7 @@ package net.vdombox.editors.parsers.vscript
 			if ( isNorR( c ) )
 			{
 				pos++;
+				str = "\r";
 				return new VScriptToken( string.substring( start, pos ), Token.ENDLINE, pos );
 			}
 			
@@ -343,9 +345,9 @@ package net.vdombox.editors.parsers.vscript
 				
 				currentBlock = tree;
 				
-				
 				//top scope
 				topScope = scope = new Field( "top", 0, "top" );
+				scope.children = [];
 				
 				pos = 0;
 				defParamValue = null;
@@ -361,11 +363,7 @@ package net.vdombox.editors.parsers.vscript
 			
 			t = nextToken();
 			if ( !t )
-			{
-				//setMembers( topScope );
-				
 				return false;
-			}
 			
 			tokens.push( t );
 			
@@ -395,6 +393,8 @@ package net.vdombox.editors.parsers.vscript
 			{
 				t.importZone = true;
 				
+				importFrom = tString;
+				
 				if ( !importFrom || importFrom == "" )
 					importFrom = tString;
 				
@@ -402,14 +402,22 @@ package net.vdombox.editors.parsers.vscript
 				
 				var systemName : String = tString;
 				
-				if ( tp.string == "as" )
+				for each ( var name : String in HashLibraryArray.getImportToLibraty( importFrom, "vscript" ) )
 				{
-					imports[ imports.length - 1 ].removeValue( tp.string );
-					imports[ imports.length - 1 ].removeValue( tp2.string );
-					systemName = tp2.string;
+					imports[ imports.length - 1 ].setValue( name, { name : name, systemName : name, source : importFrom } );
 				}
 				
-				if ( t.type != Token.SYMBOL )
+				position = t.pos + t.string.length;
+				while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
+					position++;
+				
+				if ( string.charAt( position ) == '\r' || string.charAt( position ) == '\n' )
+				{
+					importZone = false;
+					importFrom = "";
+				}
+				
+				/*if ( t.type != Token.SYMBOL )
 				{
 					imports[ imports.length - 1 ].setValue( tString, { name : tString, systemName : systemName, source : importFrom } );
 					
@@ -422,26 +430,14 @@ package net.vdombox.editors.parsers.vscript
 						importZone = false;
 						importFrom = "";
 					}
-				}
+				}*/
 				
 			}
-			else if ( t && tString == "from" )
+			else if ( t && tString == "use" )
 			{
-				fromZone = true;
+				importZone = true;
 				t.fromZone = true;
 				importFrom = "";
-			}
-			else if ( t && tString == "import" )
-			{
-				fromZone = false;
-				importZone = true;
-				t.importZone = true;
-				t.importFrom = importFrom;
-			}
-			else if ( fromZone )
-			{
-				t.fromZone = true;
-				importFrom += tString;
 			}
 			/*else if ( t.string == "@staticmethod" )
 			{
@@ -600,103 +596,8 @@ package net.vdombox.editors.parsers.vscript
 			}
 			else if ( tString == "=" && tp.type == Token.STRING_LITERAL )
 			{
-				if ( !tp2 || ( tp2 && tp2.string != "." ) && tp.string != "this" )
-				{
-					field = new Field( "var", tp.pos, tp.string );
-					
-					if ( !scope.members.hasKey( tpString ) )
-					{
-						scope.members.setValue( tpString, field );
-						_members.setValue( tp.string, field );
-					}
-					
-					access = "public";
-					
-					field.access = access;
-					
-					field.parent = scope;
-				}
-				else
-				{
-					var currentPos : int = tokens.length - 2;
-					var prevToken : VScriptToken = tokens[currentPos - 1];
-					while ( prevToken && prevToken.string == "." )
-					{
-						currentPos -= 2;
-						prevToken = tokens[currentPos - 1];
-					}
-					var curToken : VScriptToken = tokens[currentPos];
-					
-					if ( scope.members.hasKey( curToken.string.toLowerCase() ) )
-					{
-						field = scope.members.getValue( curToken.string.toLowerCase() );
-					}
-					else 
-					{
-						field = new Field( "var", t.pos, curToken.string );
-						/*if ( curToken.string.slice(0, 2) == "__" )
-							access = "private";
-						else if ( curToken.string.slice(0, 1) == "_" )
-							access = "protected";
-						else*/
-							access = "public";
-						
-						field.access = access;
-						
-						if ( !scope.members.hasKey( tpString ) )
-						{
-							scope.members.setValue( curToken.string.toLowerCase(), field );
-						}
-					}
-					var tField : Field = field;
-					
-					while ( currentPos <= tokens.length - 4 )
-					{
-						currentPos += 2;
-						curToken = tokens[currentPos]
-						var tField2 : Field;
-						
-						if ( tField.members.hasKey( curToken.string ) )
-						{
-							tField2 = tField.members.getValue( curToken.string );
-						}
-						else 
-						{
-							tField2 = new Field( "var", curToken.pos, curToken.string );
-							/*if ( curToken.string.slice(0, 2) == "__" )
-								access = "private";
-							else if ( curToken.string.slice(0, 1) == "_" )
-								access = "protected";
-							else*/
-								access = "public";
-							
-							tField2.access = access;
-							
-							if ( !tField.members.hasKey( curToken.string.toLowerCase() ) )
-								tField.members.setValue( curToken.string.toLowerCase(), tField2 );
-						}
-						
-						tField = tField2;
-					}
-					
-					
-					
-					/*if ( tp.string.slice(0, 2) == "__" )
-						access = "private";
-					else if ( t.string.slice(0, 1) == "_" )
-						access = "protected";
-					else*/
-						access = "public";
-					
-					field.access = access;
-					
-					field.parent = scope;
-				}
-				
+				parsingVariables( tp, tp2, tokens.length - 2 )
 			}
-			
-			
-			
 			if ( field && tp3 && tpString == ":" )
 			{
 				if ( tp3.string == "var" || tp3.string == "const" || tp2.string == ")" )
@@ -711,11 +612,14 @@ package net.vdombox.editors.parsers.vscript
 			
 			if( newLogicBlock )
 			{
-				_scope.pos = t.pos;
-				_scope.parent = scope;
-				scope = _scope;
-				
 				newLogicBlock = false;
+				
+				_scope.parent = scope;
+				_scope.children = [];
+				scope.children.push( _scope );
+				
+				scope = _scope;
+				t.scope = scope;
 				_scope = null;
 			}
 			
@@ -809,7 +713,15 @@ package net.vdombox.editors.parsers.vscript
 				currentBlock.imports = imports[ imports.length - 1 ];
 				currentBlock.scope = scope;
 				
+				/*_scope.parent = scope;
+				_scope.children = [];
+				scope.children.push( _scope );
+				
+				scope = _scope;*/
 				t.scope = scope;
+				
+				//info += pos + ")" + scope.parent.name + "->" + scope.name+"\n";
+				//_scope = null;
 			}
 			
 			if ( newBlock && ( tString == "then" ) )
@@ -840,16 +752,112 @@ package net.vdombox.editors.parsers.vscript
 			}
 		}
 		
-		private function findClassParent( scp : Field ):Boolean
+		private function parsingVariables( tp : VScriptToken, tp2 : VScriptToken, currentPos : int ) : void
+		{
+			var prevToken : VScriptToken = tp2;
+			var curToken : VScriptToken = tp;
+			
+			if ( !tp2 || ( tp2 && tp2.string != "." ) && tp.string != "self" )
+			{
+				field = new Field( "var", curToken.pos, curToken.string );
+				
+				if ( !scope.members.hasKey( curToken.string ) )
+				{
+					scope.members.setValue( curToken.string, field );
+					_members.setValue( curToken.string, field );
+				}
+				
+				access = "public";
+				
+				field.access = access;
+				
+				field.parent = scope;
+				
+				currentPos -= 2;
+				
+				if ( prevToken && prevToken.string == "," )
+					parsingVariables( tokens[ currentPos ], tokens[ currentPos - 1 ], currentPos );
+			}
+			else
+			{
+				while ( prevToken && prevToken.string == "." )
+				{
+					currentPos -= 2;
+					prevToken = tokens[currentPos - 1];
+				}
+				curToken = tokens[currentPos];
+				
+				var field : Field;
+				
+				if ( scope.members.hasKey( curToken.string ) )
+				{
+					field = scope.members.getValue( curToken.string );
+				} 
+				else 
+				{
+					field = new Field( "var", curToken.pos, curToken.string );
+					
+					access = "public";
+					
+					field.access = access;
+					
+					field.parent = scope;
+					
+					if ( findClassParent( scope ) )
+					{
+						var scp : Field = findClassParent( scope );
+						if ( !scp.members.hasKey( tp.string ) )
+						{
+							field = scp;
+						}
+					}
+					else if ( !scope.members.hasKey( tp.string ) )
+					{
+						scope.members.setValue( curToken.string, field );
+					}
+				}
+				var tField : Field = field;
+				
+				while ( currentPos <= tokens.length - 4 )
+				{
+					currentPos += 2;
+					curToken = tokens[currentPos]
+					var tField2 : Field;
+					
+					if ( tField.members.hasKey( curToken.string ) )
+					{
+						tField2 = tField.members.getValue( curToken.string );
+					}
+					else 
+					{
+						tField2 = new Field( "var", curToken.pos, curToken.string );
+						
+						access = "public";
+						
+						tField2.access = access;
+						tField2.parent = tField;
+						
+						if ( !tField.members.hasKey( curToken.string ) )
+							tField.members.setValue( curToken.string, tField2 );
+					}
+					
+					tField = tField2;
+				}
+				
+				currentPos -= 2;
+				
+				if ( prevToken && prevToken.string == "," )
+					parsingVariables( tokens[ currentPos ], tokens[ currentPos - 1 ], currentPos );
+			}
+		}
+		
+		private function findClassParent( scp : Field ):Field
 		{
 			for ( var _scp : Field = scp; _scp && _scp.fieldType != "class"; _scp = _scp.parent )
 			{
 				
 			}
-			if ( _scp )
-				return true;
-			else
-				return false;
+			return _scp;
 		}
 		
 		private function closeBlock( endString : String ) : void
@@ -1001,10 +1009,10 @@ package net.vdombox.editors.parsers.vscript
 		
 		private function checkNewBlock(value : String, prevValue : String) : Boolean
 		{
-			if ( value == "elseif" ||  value == "for" || value == "do" || ( value == "then" && currentBlock && currentBlock.blockType == BlockType.IF ) )
+			if ( value == "elseif" ||  (( value == "for"|| value == "do" ) && prevValue != "exit" ) || ( value == "then" && currentBlock && currentBlock.blockType == BlockType.IF ) )
 				return true;
 			
-			if ( ( value == "if" || value == "select" || value == "sub" || value == "class" || value == "function" ) && prevValue != "end"  )
+			if ( ( value == "if" || value == "select" || value == "class" || (( value == "function" || value == "sub") && prevValue != "exit" ) ) && prevValue != "end"  )
 				return true;
 			
 			if ( value == "else" && prevValue != "case" )
