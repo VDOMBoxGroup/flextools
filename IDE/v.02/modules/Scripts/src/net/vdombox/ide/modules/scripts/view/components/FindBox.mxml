@@ -10,6 +10,7 @@
 			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.events.FindBoxEvent;
 			import net.vdombox.ide.common.model._vo.LibraryVO;
+			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			
@@ -26,7 +27,9 @@
 			private var findResult : Boolean;
 			
 			private var serverActions : Array;
-			private var containerActions : Object;
+			private var containerActionsCode : Object;
+			private var _containerActions : Object;
+			private var _containerPages : Object;
 			
 			
 			
@@ -35,6 +38,28 @@
 			
 			
 			
+			public function get containerActions():Object
+			{
+				return _containerActions;
+			}
+
+			public function get containerPages():Object
+			{
+				return _containerPages;
+			}
+			
+			public function get lengthContainerPages():int
+			{
+				var count : int = 0;
+				
+				for each ( var obj : Object in _containerPages )
+				{
+					count++;
+				}
+				
+				return count;
+			}
+
 			protected function image1_clickHandler(event:MouseEvent):void
 			{
 				dispatchEvent( new FindBoxEvent ( FindBoxEvent.CLOSE ) );
@@ -44,7 +69,7 @@
 			{				
 				findResult = selectedScriptAreaComponent.findText( findText.text, 0 );
 				
-				if ( findResult || findText.text == "" )
+				if ( findResult || findText.text == "" || currentState == "global" )
 					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
 				else
 					findText.setStyle( "contentBackgroundColor", 0xFF0000 );
@@ -78,10 +103,17 @@
 			{
 				if ( event.keyCode == Keyboard.ENTER )
 				{
-					if ( lastButton == previous )
-						previous_clickHandler();
+					if ( currentState == "global" )
+					{
+						find_clickHandler();
+					}
 					else
-						next_clickHandler();
+					{
+						if ( lastButton == previous )
+							previous_clickHandler();
+						else
+							next_clickHandler();
+					}
 				}
 					
 			}
@@ -96,10 +128,12 @@
 				selectedScriptAreaComponent.replaceFind( findText.text, replaceText.text, true );
 			}
 			
-			protected function find_clickHandler(event:MouseEvent):void
+			protected function find_clickHandler(event:MouseEvent = null):void
 			{
 				scriptsXMLList = new XMLList();
-				containerActions = [];
+				containerActionsCode = [];
+				_containerPages = [];
+				_containerActions = [];
 				findString = findText.text;
 				
 				if ( findString == "" )
@@ -112,25 +146,13 @@
 			protected function group1_creationCompleteHandler(event:FlexEvent):void
 			{
 				dispatchEvent( new FindBoxEvent ( FindBoxEvent.CREATION_COMPLETE ) );
-				
-				addEventListener( FindBoxEvent.ITEM_CLICK, changeItem, true, 0, true );
 			}
 			
-			private function changeItem( event : FindBoxEvent ) : void
+			public function findStringInServerActions( body : Object ) : void
 			{
-				var objectID : String = FindTreeItemRenderer( event.target ).data.@id;
+				var pageVO : PageVO = body.pageVO;
+				var actions : Array = body.serverActions;
 				
-				/*if ( !containerActions.hasOwnProperty( objectID ) )
-				{
-					findStringTree.dataProvider = null;
-					return;
-				}
-				
-				findStringTree.dataProvider = containerActions[ objectID ];*/
-			}
-			
-			public function findStringInServerActions( actions : Array ) : void
-			{
 				var serverActionVO : ServerActionVO;
 				var script : String;
 				var index : int;
@@ -152,12 +174,12 @@
 					
 					serverActions.push( serverActionVO );
 					
-					var serverActionXML : XML = <script name={ serverActionVO.name } />;
+					var serverActionXML : XML = <script name={ serverActionVO.name } iconType={"serverScript"} />;
 					
 					var serverActionXMLList : XMLList;
 					
-					if ( containerActions.hasOwnProperty( serverActionVO.containerID ) )
-						serverActionXMLList = containerActions[ serverActionVO.containerID ];
+					if ( containerActionsCode.hasOwnProperty( serverActionVO.containerID ) )
+						serverActionXMLList = containerActionsCode[ serverActionVO.containerID ];
 					else
 						serverActionXMLList = new XMLList();
 					
@@ -165,7 +187,11 @@
 					
 					serverActionXML = serverActionXMLList.( @name == serverActionVO.name )[ 0 ];
 					
-					var serverActionXML2 : XML = <script name={ serverActionVO.name } />;
+					var serverActionXML2 : XML = <script name={ serverActionVO.name } iconType={"serverScript"}/>;
+					var actionID : String = serverActionVO.name + serverActionVO.objectID;
+					
+					_containerPages[ pageVO.id ] = pageVO;
+					_containerActions[ actionID ] = serverActionVO;
 					
 					while ( index != -1 )
 					{
@@ -175,17 +201,35 @@
 						while ( script.charAt( --start ) != '\n' && start >= 0 )
 							true;
 						
-						while ( script.charAt( ++end ) != '\n' && end < script.length - 1 )
+						while ( script.charAt( ++start ) == '\t' || script.charAt( ++start ) == ' ' )
 							true;
 						
-						serverActionXML2.appendChild( <text name={ script.slice( start+1, end ) } index={ index } />);
-						index = script.indexOf( findString, index + 1 );
+						while ( script.charAt( ++end ) != '\n' && end < script.length )
+							true;
+						
+						serverActionXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ getNumberLine( script, index ) } 
+														index={ index } actionID={ actionID } pageID={ pageVO.id } iconType={"script"}/>);
+						index = script.indexOf( findString, end );
 					}
 					
 					serverActionXML.appendChild( serverActionXML2.* );
 					
-					containerActions[ serverActionVO.containerID ] = serverActionXMLList;
+					containerActionsCode[ serverActionVO.containerID ] = serverActionXMLList;
 				}
+			}
+			
+			private function getNumberLine( script : String, index : int ) : int
+			{
+				var count : int = 0;
+				var i : int = -1;
+				do
+				{
+					i = script.indexOf( "\n", i + 1 );
+					count++;
+				}
+				while( i < index && i >= 0 );
+				
+				return count;
 			}
 			
 			public function findObjectsInStructure( structure : XMLList ) : void
@@ -200,7 +244,7 @@
 					
 					for ( i = 0; i < objects.length(); i++ )
 					{
-						if ( objects[i].children().length() == 0 && !containerActions.hasOwnProperty( objects[i].@id ))
+						if ( objects[i].children().length() == 0 && !containerActionsCode.hasOwnProperty( objects[i].@id ))
 						{
 							delete objects[i--];
 							completed = false;
@@ -211,17 +255,29 @@
 				
 				for ( i = 0; i < structure.length(); i++ )
 				{
-					if ( structure[i].children().length() == 0 && !containerActions.hasOwnProperty( structure[i].@id ) ) 
+					if ( structure[i].children().length() == 0 && !containerActionsCode.hasOwnProperty( structure[i].@id ) ) 
 						delete structure[i--];
 						
+				}
+				
+				for ( i = 0; i < objects.length(); i++ )
+				{
+					if ( containerActionsCode.hasOwnProperty( objects[i].@id ) )
+						objects[i].appendChild( containerActionsCode[ objects[i].@id ] );
+				}
+				
+				for ( i = 0; i < structure.length(); i++ )
+				{
+					if ( containerActionsCode.hasOwnProperty( structure[i].@id ) )
+						structure[i].appendChild( containerActionsCode[ structure[i].@id ] );
 				}
 				
 				scriptsXMLList = structure;
 			}
 			
-			public function addFindLibraries( libraries : Array ) : void
+			public function findStringInLibraries( libraries : Array, title : String ) : void
 			{
-				scriptsXMLList = new XMLList();
+				var libraryXMLList : XMLList = new XMLList();
 				
 				var libraryVO : LibraryVO;
 				var index : int = -1;
@@ -238,30 +294,48 @@
 					if ( index == -1 )
 						continue;
 					
-					var libraryXML : XML = <script name={ libraryVO.name } />;
-					scriptsXMLList += libraryXML;
+					_containerActions[ libraryVO.name ] = libraryVO;
 					
-					libraryXML = scriptsXMLList.( @name == libraryVO.name )[ 0 ];
+					var libraryXML : XML = <script name={ libraryVO.name } iconType={title}/>;
+					libraryXMLList += libraryXML;
+					
+					libraryXML = libraryXMLList.( @name == libraryVO.name )[ 0 ];
 										
-					var libraryXML2 : XML = <script name={ libraryVO.name } />;
+					var libraryXML2 : XML = <script name={ libraryVO.name } iconType={title}/>;
 					
 					while ( index != -1 )
 					{
 						start = index;
 						end = index;
 						
-						while ( script.charAt( --start ) != '\n' )
+						while ( script.charAt( --start ) != '\n' && start >= 0 )
 							true;
 						
-						while ( script.charAt( ++end ) != '\n' )
+						while ( script.charAt( ++start ) == '\t' || script.charAt( ++start ) == ' ' )
 							true;
 						
-						libraryXML2.appendChild( <text name={ script.slice( start+1, end ) } index={ index } />);
-						index = libraryVO.script.indexOf( findString, index + 1 );
+						while ( script.charAt( ++end ) != '\n' && end < script.length )
+							true;
+						
+						
+						
+						libraryXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ getNumberLine( script, index ) } index={ index }
+												iconType={"script"} actionID={ libraryVO.name }/>);
+						index = script.indexOf( findString, end );
 					}
 					
 					libraryXML.appendChild( libraryXML2.* );
-					
+				}				
+				var xml : XML = scriptsXMLList.( @name == title )[0];
+				if ( !xml )
+				{
+					xml = < object id={ title } name={ title } iconType={title}/>;
+					xml.appendChild( libraryXMLList );
+					scriptsXMLList += xml;
+				}
+				else
+				{
+					xml.appendChild( libraryXMLList );
 				}
 			}
 			
@@ -283,6 +357,8 @@
 		<s:State name="find" />
 		
 		<s:State name="replace" />
+		
+		<s:State name="global" />
 	</s:states>
 	
 	<s:Rect width="100%" height="100%">
@@ -296,7 +372,7 @@
 	
 	<s:VGroup width="100%" height="100%" paddingLeft="20" paddingTop="5" paddingBottom="5" verticalAlign="middle">
 		
-		<s:Group width="100%" height="100%">
+		<s:Group width="100%" height="35">
 			
 			<s:HGroup left="0" height="100%" verticalAlign="middle">
 				
@@ -310,30 +386,25 @@
 							 change="findText_changeHandler(event)" keyDown="findText_keyDownHandler(event)"/>
 					
 				<button:WorkAreaButton id="previous" icon="{VDOMImage.Arrow_Left}"
-									   click="previous_clickHandler(event)" />
+									   click="previous_clickHandler(event)" 
+									   includeIn="find, replace"/>
 					
 				<button:WorkAreaButton id="next" icon="{VDOMImage.Arrow_Right}"
-									   click="next_clickHandler(event)"/>
+									   click="next_clickHandler(event)"
+									   includeIn="find, replace"/>
 				
 				<button:WorkAreaButton id="findOrReplace" label.find="{ resourceManager.getString( 'Scripts_General', 'replace' ) }"
-									   label.replace="Find" click="findOrReplace_clickHandler(event)"/>
+									   label.replace="Find" click="findOrReplace_clickHandler(event)"
+									   includeIn="find, replace"/>
 				
-				<!--<button:WorkAreaButton id="find" label="Find" includeIn="other" 
-									   click="find_clickHandler(event)"/>-->
-				
-				<!--<mx:Spacer width="100%"/>
-				
-				<button:WorkAreaButton id="current" label="current" highlighted="{ findType == 'current' ? true : false }" 
-									   click="{ findType = 'current'; currentState='current' }"/>
-				
-				<button:WorkAreaButton id="inLibs" label="In Library" highlighted="{ findType == 'inLibs' ? true : false }" 
-									   click="{ findType = 'inLibs'; currentState='other' }"/>-->
+				<button:WorkAreaButton id="find" label="Find" includeIn="global"
+									   click="find_clickHandler(event)"/>
 				
 			</s:HGroup>
 			
 		</s:Group>
 		
-		<s:Group width="100%" height="100%" includeIn="replace">
+		<s:Group width="100%" height="35" includeIn="replace">
 			
 			<s:HGroup left="0" height="100%" verticalAlign="middle">
 				
@@ -353,15 +424,12 @@
 			
 		</s:Group>
 		
-		<!--<s:HGroup width="100%" height="100%">
+		<s:HGroup width="100%" height="100%" includeIn="global">
 			
-			<mx:Tree id="findResultTree" width="100%" height="150"
+			<mx:Tree id="findResultTree" width="100%" height="100%" minHeight="150"
 					 dataProvider="{scriptsXMLList}" labelField="@name"
 					 itemRenderer="net.vdombox.ide.modules.scripts.view.components.FindTreeItemRenderer"/>
-			
-			<mx:Tree id="findStringTree" width="100%" height="150"
-					 labelField="@name"/>
-		</s:HGroup>-->
+		</s:HGroup>
 		
 		
 		

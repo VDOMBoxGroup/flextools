@@ -151,6 +151,8 @@
 					scriptEditor_saveHandler();
 				else if ( e.ctrlKey && e.keyCode == Keyboard.F )
 					dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.OPEN_FIND ) );
+				else if ( e.ctrlKey && e.keyCode == Keyboard.H )
+					dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.OPEN_FIND_GLOBAL ) );
 			}
 			
 			protected function navigatorcontent2_removeHandler(event:FlexEvent):void

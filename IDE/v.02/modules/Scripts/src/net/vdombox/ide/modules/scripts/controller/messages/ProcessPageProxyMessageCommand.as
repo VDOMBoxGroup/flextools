@@ -29,6 +29,12 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					break;
 				}
 					
+				case PPMPageTargetNames.STRUCTURE_FOR_FIND:
+				{
+					sendNotification( Notifications.STRUCTURE_FOR_FIND_GETTED, body );
+					break;
+				}
+					
 				case PPMPageTargetNames.SERVER_ACTIONS:
 				{
 					if(  operation == PPMOperationNames.READ )

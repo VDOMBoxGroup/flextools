@@ -83,9 +83,23 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					break;
 				}
 					
+				case PPMApplicationTargetNames.LIBRARIES_FOR_FIND:
+				{
+					sendNotification( Notifications.LIBRARIES_GETTED_FOR_FIND, body.libraries );
+					
+					break;
+				}
+					
 				case PPMApplicationTargetNames.SERVER_ACTIONS_LIST:
 				{
 					sendNotification( Notifications.GLOBAL_ACTIONS_GETTED, body );
+					
+					break;
+				}
+					
+				case PPMApplicationTargetNames.SERVER_ACTIONS_LIST_FOR_FIND:
+				{
+					sendNotification( Notifications.GLOBAL_ACTIONS_GETTED_FOR_FIND, body );
 					
 					break;
 				}

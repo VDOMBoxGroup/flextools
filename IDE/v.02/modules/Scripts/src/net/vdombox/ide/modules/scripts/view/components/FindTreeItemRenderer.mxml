@@ -2,25 +2,67 @@
 <s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
-					  click="mxtreeitemrenderer1_clickHandler(event)">
+					  doubleClickEnabled="true"
+					  doubleClick="mxtreeitemrenderer1_clickHandler(event)">
 	
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.events.FindBoxEvent;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			
 			[Bindable]
 			private var _data : Object;
+			
+			[Bindable]
+			private var icon : Class;
 			
 			override public function set data( value : Object ) : void
 			{
 				super.data = value;
 				
 				_data = value as XML;
+				
+				if ( _data )
+				{
+					line.text = _data.@line;
+					switch(_data.@iconType.toString())
+					{
+						case "serverScript":
+						{
+							icon = VDOMImage.ServerActionIcon;
+							break;
+						}
+							
+						case "Libraries":
+						{
+							icon = VDOMImage.LibrariesIcon;
+							break;
+						}
+							
+						case "Global actions":
+						{
+							icon = VDOMImage.GlobalActionIcon;
+							break;
+						}
+							
+						case "script":
+						{
+							icon = VDOMImage.Arraw_Right_Yellow;
+							break;
+						}
+							
+						default:
+						{
+							icon = null;
+							break;
+						}
+					}
+				}
 			}
 			
 			protected function mxtreeitemrenderer1_clickHandler(event:MouseEvent):void
 			{
-				dispatchEvent( new FindBoxEvent( FindBoxEvent.ITEM_CLICK ) );
+				dispatchEvent( new FindBoxEvent( FindBoxEvent.DOUBLE_CLICK ) );
 			}
 			
 		]]>
@@ -42,8 +84,10 @@
 			<s:BitmapImage source="{treeListData.disclosureIcon}" visible="{treeListData.hasChildren}" />
 		</s:Group>
 		<s:Group>
-			<s:BitmapImage source="{treeListData.icon}" includeInLayout="{treeListData.hasChildren}" visible="{treeListData.hasChildren}"/>
+			<s:BitmapImage source="{icon}"/>
 		</s:Group>
+		
+		<s:Label id="line" />
 		
 		<s:Label id="labelField" text="{treeListData.label}" paddingTop="2"/>
 	</s:HGroup>

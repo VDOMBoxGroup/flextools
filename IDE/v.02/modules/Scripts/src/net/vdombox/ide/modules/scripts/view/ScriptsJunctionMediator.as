@@ -99,7 +99,11 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.BODY_STOP );
 			
 			interests.push( Notifications.LOAD_RESOURCE );
+			interests.push( Notifications.GET_PAGES_STRUCTURE );
+			
 			interests.push( TypesProxy.GET_TYPES );
+			
+			
 			
 
 			return interests;
@@ -294,7 +298,7 @@ package net.vdombox.ide.modules.scripts.view
 						placeName = PPMPlaceNames.PAGE;
 						targetName = PPMPageTargetNames.SERVER_ACTIONS;
 					}
-					else if ( body is ApplicationVO )
+					else if ( body is ApplicationVO || body.hasOwnProperty( "applicationVO" ) )
 					{
 						placeName = PPMPlaceNames.APPLICATION;
 						targetName = PPMApplicationTargetNames.SERVER_ACTIONS;
@@ -450,6 +454,15 @@ package net.vdombox.ide.modules.scripts.view
 				}
 					
 				case Notifications.LOAD_RESOURCE:
+				{
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case Notifications.GET_PAGES_STRUCTURE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
 					

@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.scripts.events
 	{
 		public static var SAVE : String = "save";
 		public static var OPEN_FIND : String = "openFind";
+		public static var OPEN_FIND_GLOBAL : String = "openFindGlobal";
 		
 		public static var SAVED : String = "actionSaved";
 		public static var NOT_SAVED : String = "actionNotSaved";

@@ -36,7 +36,7 @@ package net.vdombox.ide.modules.scripts.controller.messages
 				case PPMObjectTargetNames.ALL_SERVER_ACTIONS:
 				{
 					if( operation == PPMOperationNames.READ )
-						sendNotification( Notifications.ALL_SERVER_ACTIONS_GETTED, body.serverActions );
+						sendNotification( Notifications.ALL_SERVER_ACTIONS_GETTED, body );
 					
 					break;
 				}

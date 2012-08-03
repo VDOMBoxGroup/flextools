@@ -118,6 +118,7 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			scriptEditor.addEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler, false, 0, true );
 			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_FIND, scriptEditor_openFindHandler, false, 0, true );
+			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_FIND_GLOBAL, scriptEditor_openFindGlobalHandler, false, 0, true );
 			scriptEditor.addEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode, false, 0, true );
 			
 			scriptEditor.addEventListener( ScriptAreaComponenrEvent.GO_TO_DEFENITION, goToDefenitionHandler, true, 0, true );
@@ -128,6 +129,7 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			scriptEditor.removeEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler );
 			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_FIND, scriptEditor_openFindHandler );
+			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_FIND_GLOBAL, scriptEditor_openFindGlobalHandler );
 			scriptEditor.removeEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode );
 			
 			scriptEditor.removeEventListener( ScriptAreaComponenrEvent.GO_TO_DEFENITION, goToDefenitionHandler );
@@ -179,6 +181,11 @@ package net.vdombox.ide.modules.scripts.view
 		private function scriptEditor_openFindHandler( event : ScriptEditorEvent ) : void
 		{			
 			sendNotification( Notifications.OPEN_FIND_SCRIPT );
+		}
+		
+		private function scriptEditor_openFindGlobalHandler( event : ScriptEditorEvent ) : void
+		{			
+			sendNotification( Notifications.OPEN_FIND_GLOBAL_SCRIPT );
 		}
 		
 		private function goToDefenitionHandler( event : ScriptAreaComponenrEvent ):void
