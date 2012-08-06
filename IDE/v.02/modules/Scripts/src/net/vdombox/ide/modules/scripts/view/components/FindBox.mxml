@@ -5,6 +5,7 @@
 		 creationComplete="group1_creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.SortField;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.editors.ScriptAreaComponent;
@@ -13,6 +14,7 @@
 			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.utils.XMLUtils;
 			
 			import spark.events.TextOperationEvent;
 			
@@ -272,7 +274,10 @@
 						structure[i].appendChild( containerActionsCode[ structure[i].@id ] );
 				}
 				
-				scriptsXMLList = structure;
+				var sortField : SortField = new SortField( "@name" );
+				sortField.caseInsensitive = true;
+								
+				scriptsXMLList = XMLUtils.sortElementsInXMLList( structure, sortField );
 			}
 			
 			public function findStringInLibraries( libraries : Array, title : String ) : void
