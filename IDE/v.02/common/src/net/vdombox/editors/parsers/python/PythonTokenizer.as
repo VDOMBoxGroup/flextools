@@ -699,7 +699,8 @@ package net.vdombox.editors.parsers.python
 			}
 
 
-			if ( tp && tp.string == ":" && t.type == Token.ENDLINE && _scope )
+			if ( (( tp && tp.string == ":" && t.type == Token.ENDLINE )
+					|| ( tp2 && tp2.string == ":" && tp.type == Token.COMMENT && t.type == Token.ENDLINE )) && _scope )
 			{	
 				currentBlock = t;
 				t.children = [];	

@@ -20,9 +20,12 @@ package ro.victordramba.scriptarea
 	import net.vdombox.editors.parsers.BackwardsParser;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.common.view.components.windows.ScriptStructureWindow;
+	import net.vdombox.utils.WindowManager;
 
 	/*import flash.desktop.Clipboard;
 	   import flash.desktop.ClipboardFormats;
@@ -372,6 +375,24 @@ package ro.victordramba.scriptarea
 				
 				return;
 			}
+			else if ( e.ctrlKey  &&  ( c ==  'o' || c ==  'O') )
+			{
+				token = controller.getTokenByPos( 0 );
+				
+				if ( !token )
+					return;
+				
+				var scriptStructureWindow : ScriptStructureWindow = new ScriptStructureWindow();
+				scriptStructureWindow.structure = token.scope.members;
+				scriptStructureWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
+				scriptStructureWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
+				stage.addEventListener( MouseEvent.MOUSE_DOWN, closeScriptStructureWindowHandler );
+				
+				WindowManager.getInstance().addWindow( scriptStructureWindow, null, false );
+				
+				return;
+			}
+			
 			
 			
 			/*if (extChar==0 && e.charCode > 127)
@@ -721,7 +742,31 @@ package ro.victordramba.scriptarea
 						_setSelection( _caret, _selEnd );
 				}
 			}
+			
+			function applyHandler( event : PopUpWindowEvent ) : void
+			{
+				if ( event.detail )
+					goToPos( event.detail.pos, event.detail.len );
+				
+				WindowManager.getInstance().removeWindow( event.target );
+				stage.removeEventListener( MouseEvent.MOUSE_DOWN, closeScriptStructureWindowHandler );
+			}
+			
+			function cancelHandler( event : PopUpWindowEvent ) : void
+			{
+				WindowManager.getInstance().removeWindow( event.target );
+				stage.removeEventListener( MouseEvent.MOUSE_DOWN, closeScriptStructureWindowHandler );
+			}
+			
+			
+			function closeScriptStructureWindowHandler( event : MouseEvent ) : void
+			{
+				WindowManager.getInstance().removeWindow( scriptStructureWindow );
+			}
 		}
+		
+		
+		
 
 		private function captureInput() : void
 		{

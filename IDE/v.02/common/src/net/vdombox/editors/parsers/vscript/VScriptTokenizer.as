@@ -453,7 +453,7 @@ package net.vdombox.editors.parsers.vscript
 			}
 				
 			else if ( tp && ( tpString == "class" ||
-				tpString == "function" ) && ( !tp2 || tp2.string.toLowerCase() != "end" ) )
+				tpString == "function" || tpString == "sub" ) && ( !tp2 || tp2.string.toLowerCase() != "end" ) )
 			{
 				//for package, merge classes in the existing omonimus package
 				if ( tpString == "package" && scope.members.hasKey( tString ) )
@@ -462,7 +462,11 @@ package net.vdombox.editors.parsers.vscript
 				{
 					//debug("field-"+tp.string);
 					//TODO if is "set" make it "*set"
-					field = new Field( tpString, t.pos, t.string );
+					if ( tpString != "class" )
+						field = new Field( "def", t.pos, t.string );
+					else
+						field = new Field( tpString, t.pos, t.string );
+					
 					if ( tString != "(" ) //anonimus functions are not members
 					{
 						if ( !scope.members.hasKey( t.string ) )
@@ -944,7 +948,10 @@ package net.vdombox.editors.parsers.vscript
 				case "sub":
 				{
 					if ( currentBlock.blockType == BlockType.SUB )
+					{
 						currentBlock.blockClosed = true;
+						scope = scope.parent;
+					}
 					else
 						setError()
 					

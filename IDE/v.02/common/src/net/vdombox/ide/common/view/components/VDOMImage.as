@@ -86,5 +86,17 @@ package net.vdombox.ide.common.view.components
 		[Embed( source = "assets/vdomimage/arrow_right_yellow.png" )]
 		public static var Arraw_Right_Yellow : Class;
 		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/circleGreen.png" )]
+		public static var Circle_Green : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/circleGreenSmall.png" )]
+		public static var Circle_Green_Small : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/circleGreenPlus.png" )]
+		public static var Circle_Green_Plus : Class;
+		
 	}
 }

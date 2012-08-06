@@ -17,7 +17,6 @@ package net.vdombox.ide.common.view.components.windows.resourceBrowserWindow
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.view.skins.windows.ResourcePreviewWindowSkin;
-	import net.vdombox.utils.WindowManager;
 	
 	import spark.components.Label;
 	import spark.components.TextInput;

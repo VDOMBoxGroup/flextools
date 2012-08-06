@@ -4,7 +4,6 @@ package net.vdombox.ide.common.view.components.windows
 	import flash.events.KeyboardEvent;
 	
 	import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
-	import net.vdombox.utils.WindowManager;
 	import net.vdombox.ide.common.view.skins.windows.StringAttributeEditWindowSkin;
 	
 	import spark.components.RichEditableText;

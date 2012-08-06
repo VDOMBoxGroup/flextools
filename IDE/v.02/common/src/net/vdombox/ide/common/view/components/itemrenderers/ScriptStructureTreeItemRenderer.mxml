@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  doubleClickEnabled="true"
+					  doubleClick="mxtreeitemrenderer1_doubleClickHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.common.events.ItemRendererEvent;
+			import net.vdombox.ide.common.view.components.VDOMImage;
+			
+			[Bindable]
+			private var _data : Object;
+			
+			[Bindable]
+			private var icon : Class;
+			
+			override public function set data( value : Object ) : void
+			{
+				super.data = value;
+				
+				_data = value as XML;
+				
+				if ( _data )
+				{
+					switch(_data.@iconType.toString())
+					{
+						case "class":
+						{
+							icon = VDOMImage.Circle_Green_Plus;
+							break;
+						}
+							
+						case "def":
+						{
+							icon = VDOMImage.Circle_Green;
+							break;
+						}
+							
+						case "var":
+						{
+							icon = VDOMImage.Circle_Green_Small;
+							break;
+						}
+							
+						default:
+						{
+							icon = null;
+							break;
+						}
+					}
+				}
+			}
+			
+			protected function mxtreeitemrenderer1_doubleClickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new ItemRendererEvent( ItemRendererEvent.DOUBLE_CLICK ) );
+			}
+		]]>
+	</fx:Script>
+	
+	
+	<s:states>
+		<s:State name="normal" />            
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	<s:HGroup left="0" right="0" top="0" bottom="0" verticalAlign="middle">
+		<s:Rect id="indentationSpacer" width="{treeListData.indent}" percentHeight="100" alpha="0">
+			<s:fill>
+				<s:SolidColor color="0xFFFFFF" />
+			</s:fill>
+		</s:Rect>
+		<s:Group id="disclosureGroup">
+			<s:HGroup verticalAlign="middle" horizontalAlign="center">
+				<s:BitmapImage source="{treeListData.disclosureIcon}" visible="{treeListData.hasChildren}" />
+			</s:HGroup>	
+		</s:Group>
+		
+		<s:HGroup verticalAlign="middle" horizontalAlign="center">
+			<s:BitmapImage source="{icon}"/>
+		</s:HGroup>
+		
+		<s:Label id="labelField" text="{treeListData.label}" paddingTop="2"/>
+	</s:HGroup>
+</s:MXTreeItemRenderer>
