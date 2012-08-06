@@ -689,13 +689,18 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			html.x = contetntPart.@left;
 			html.y = contetntPart.@top;
-			html.width = contetntPart.@width;
 			
 			html.paintsDefaultBackground = true;
 
-			if ( contetntPart.@height[ 0 ] )
+			if ( contetntPart.@width[ 0 ] && contetntPart.@width[ 0 ]!="" )
+				html.width = contetntPart.@width;
+			
+			if ( contetntPart.@height[ 0 ] && contetntPart.@height[ 0 ]!="" )
 				html.height = contetntPart.@height;
-
+			
+			if ( contetntPart.@overflow[ 0 ] )
+				html.overflow = contetntPart.@overflow[ 0 ];
+						
 			html.setStyle( "borderVisible", false );
 			
 			html.blendMode = contetntPart.@blendMode;
@@ -957,7 +962,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			dispatchEvent( new RendererEvent( RendererEvent.CREATED ) );
 			createToolTip();
 		}
-
+		
 		private function dataLoaded( object : Object = null ) : void
 		{
 			loader = new Loader();
@@ -1691,6 +1696,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				SolidColor( backgroundRect.fill ).alpha = 1;
 				SolidColor( backgroundRect.fill ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
 			}
+			else
+				SolidColor( backgroundRect.fill ).alpha = 0;
 
 
 			attributeVO = _renderVO.getAttributeByName( "bordercolor" );
@@ -1704,6 +1711,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				if ( attributeVO )
 					SolidColorStroke( backgroundRect.stroke ).weight = uint( attributeVO.value );
 			}
+			else
+				SolidColorStroke( backgroundRect.stroke ).alpha = 0;
 
 			// Get BackgroundImage attribute
 			attributeVO = _renderVO.getAttributeByName( "backgroundimage" );
