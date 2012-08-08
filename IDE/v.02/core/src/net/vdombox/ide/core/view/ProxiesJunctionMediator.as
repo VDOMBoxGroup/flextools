@@ -166,7 +166,8 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.RESOURCES_PROXY_RESPONSE:
 				{
 					junction.sendMessage( PipeNames.PROXIESOUT, body as ProxyMessage );
-
+					var now:Date = new Date();
+					
 					break;
 				}
 			}
@@ -176,7 +177,7 @@ package net.vdombox.ide.core.view
 		{
 			var ppMessage : ProxyMessage = message as ProxyMessage;
 			var now:Date = new Date();
-			////trace("                                       " +now.toLocaleTimeString()+"  ->>  "+  ppMessage.proxy.toLocaleUpperCase() + "  " + ppMessage.operation.toLocaleUpperCase() +"  "+ppMessage.target.toLocaleUpperCase());
+			//trace("                                       " +now.toLocaleTimeString()+"  ->>  "+  ppMessage.proxy.toLocaleUpperCase() + "  " + ppMessage.operation.toLocaleUpperCase() +"  "+ppMessage.target.toLocaleUpperCase());
 			switch ( ppMessage.proxy )
 			{
 				case PPMPlaceNames.SERVER:

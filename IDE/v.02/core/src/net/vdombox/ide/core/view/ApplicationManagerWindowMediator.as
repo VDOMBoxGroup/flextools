@@ -118,7 +118,7 @@ package net.vdombox.ide.core.view
 
 		private function closeWindow() : void
 		{
-			if ( serverProxy.applications.length > 0 && statesProxy.selectedApplication )
+			if (serverProxy.applications && serverProxy.applications.length > 0 && statesProxy.selectedApplication )
 				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
 			else
 				NativeApplication.nativeApplication.exit();

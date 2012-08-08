@@ -86,6 +86,13 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				}
 					
+				case ApplicationFacade.APPLICATION_SERVER_ACTIONS_LIST_GETTED_FOR_FIND:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.SERVER_ACTIONS_LIST_FOR_FIND, body );
+					
+					break;
+				}
+					
 				case ApplicationFacade.APPLICATION_SERVER_ACTION_GETTED:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.SERVER_ACTION, body );
@@ -124,6 +131,13 @@ package net.vdombox.ide.core.controller.responses
 				case ApplicationFacade.APPLICATION_LIBRARIES_GETTED:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.LIBRARIES, body );
+					
+					break;
+				}
+					
+				case ApplicationFacade.APPLICATION_LIBRARIES_GETTED_FOR_FIND:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.LIBRARIES_FOR_FIND, body );
 					
 					break;
 				}
@@ -173,6 +187,13 @@ package net.vdombox.ide.core.controller.responses
 				case ApplicationFacade.APPLICATION_SET_SAVE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.SAVED, body );
+					
+					break;
+				}
+					
+				case ApplicationFacade.ERROR_TO_PASTE:
+				{
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.COPY_ERROR, body );
 					
 					break;
 				}

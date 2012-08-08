@@ -21,6 +21,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.vo.ErrorVO;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
+	import net.vdombox.utils.XMLUtils;
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -47,6 +48,7 @@ package net.vdombox.ide.core.model
 		private static const GET_OBJECT : String = "getObject";
 		private static const GET_OBJECTS : String = "getObjects";
 
+		private static const IS_FIND : String = "isFind";
 		private static const GET_STRUCTURE : String = "getStructure";
 		private static const GET_WYSIWYG : String = "getWYSIWYG";
 		
@@ -114,13 +116,15 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 		
-		public function getStructure() : AsyncToken
+		public function getStructure( isFind : Boolean = false ) : AsyncToken
 		{
 			var token : AsyncToken;
 
 			token = soap.get_child_objects_tree( pageVO.applicationVO.id, pageVO.id );
 			token.recipientName = proxyName;
-			token.requestFunctionName = GET_STRUCTURE;
+			
+			
+			token.requestFunctionName = isFind ? IS_FIND : GET_STRUCTURE;
 
 			return token;
 		}
@@ -639,26 +643,6 @@ package net.vdombox.ide.core.model
 			return token;
 			
 		}
-		
-		private function sortElementsTree( pageXML : XML ) : void
-		{
-			var objects : XMLList = pageXML.children();
-			
-			for ( var i : int = 0; i < objects.length(); i++ )
-			{
-				if ( objects[i].children() )
-					sortElementsTree( objects[i] );
-			}
-			
-			var sort:Sort = new Sort()
-			sort.fields = [new SortField("@name")];
-			
-			var xcoll:XMLListCollection = new XMLListCollection(pageXML.children());
-			xcoll.sort = sort;
-			xcoll.refresh();
-			pageXML.setChildren(xcoll.copy());
-			
-		}
 
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
@@ -689,6 +673,9 @@ package net.vdombox.ide.core.model
 			if ( result.hasOwnProperty( "Error" ) )
 			{
 				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
+				
+				if (  operationName == "copy_object" )
+					sendNotification( ApplicationFacade.ERROR_TO_PASTE, pageVO.applicationVO );
 				return;
 			}
 
@@ -699,23 +686,27 @@ package net.vdombox.ide.core.model
 				{
 
 					var structure : XML = generatePageStructure( result.Object[ 0 ] );
-
-					if ( token.requestFunctionName == GET_STRUCTURE )
-					{
-						if ( structure.children() )
-							sortElementsTree( structure );
-						
-						notification = new ProxyNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, structure )
-						notification.token = token;
-					}
-					else if ( token.requestFunctionName == GET_WYSIWYG )
+					
+					if ( token.requestFunctionName == GET_WYSIWYG )
 					{
 						token = soap.render_wysiwyg( pageVO.applicationVO.id, pageVO.id, "", 1 );
-
+						
 						token.structure =
 							<structure>{structure}</structure>;
 						token.recipientName = proxyName;
 						token.requestFunctionName = GET_WYSIWYG;
+					}
+					else 
+					{
+						if ( structure.children() )
+							 XMLUtils.sortElementsInXML( structure, new SortField( "@name" ) );
+						
+						if ( token.requestFunctionName == GET_STRUCTURE )
+							notification = new ProxyNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, structure );
+						else
+							notification = new ProxyNotification( ApplicationFacade.PAGE_STRUCTURE_FOR_FIND_GETTED, structure );
+							
+						notification.token = token;
 					}
 
 					break;
@@ -823,7 +814,7 @@ package net.vdombox.ide.core.model
 					serverActionXML = result.*[0];
 					
 					serverActionVO = new ServerActionVO();
-					serverActionVO.setContainerID( pageVO.id  );
+					serverActionVO.setContainerID( pageVO.id );
 					serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
 					serverActionVO.setProperties( serverActionXML )
 					serverActionVO.script = serverActionXML.children();
@@ -1108,6 +1099,13 @@ package net.vdombox.ide.core.model
 						
 						return;
 					}
+					
+					break;
+				}
+					
+				case "copy_object":
+				{
+					notification = new ProxyNotification( ApplicationFacade.ERROR_TO_PASTE, pageVO.applicationVO );
 					
 					break;
 				}

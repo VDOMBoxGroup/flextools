@@ -47,6 +47,11 @@ package net.vdombox.ide.core.model
 		
 		private static const CREATE_LIBRARY : String = "createLibrary";
 		
+		private static const IS_FIND : String = "isFind";
+		private static const GET_ACTIONS : String = "getActions";
+		
+		private static const GET_LIBRARIES : String = "getLibraries";
+		
 		private static const GET_PAGE : String = "getPage";
 		
 		private static const GET_EVENTS : String = "getEvents";
@@ -186,13 +191,14 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 		
-		public function getLibraries() : AsyncToken
+		public function getLibraries( isFind : Boolean = false ) : AsyncToken
 		{
 			var token : AsyncToken;
 			token = soap.get_libraries( applicationVO.id );
 			
 			token.recipientName = proxyName;
-			token.requestFunctionName = "";
+			
+			token.requestFunctionName = isFind ? IS_FIND : GET_LIBRARIES;
 			
 			return token;
 		}
@@ -236,7 +242,7 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 		
-		public function getServerActions( typeAction : String, globalActionVO : GlobalActionVO = null, check : Boolean = false ) : AsyncToken
+		public function getServerActions( typeAction : String, globalActionVO : GlobalActionVO = null, check : Boolean = false, isFind : Boolean = false ) : AsyncToken
 		{
 			var token : AsyncToken;
 			token = soap.get_server_actions( applicationVO.id, typeAction );
@@ -244,6 +250,8 @@ package net.vdombox.ide.core.model
 			token.recipientName = proxyName;
 			token.check = check;
 			token.globalActionVO = globalActionVO;
+			
+			token.requestFunctionName = isFind ? IS_FIND : GET_ACTIONS;
 			
 			return token;
 		}
@@ -789,6 +797,13 @@ package net.vdombox.ide.core.model
 					
 					return;
 				}
+					
+				case "copy_object":
+				{
+					sendNotification( ApplicationFacade.ERROR_TO_PASTE, applicationVO );
+					
+					break;
+				}
 			}
 			sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
 			
@@ -810,6 +825,9 @@ package net.vdombox.ide.core.model
 			if ( result.hasOwnProperty( "Error" ) )
 			{
 				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
+				
+				if (  operationName == "copy_object" )
+					sendNotification( ApplicationFacade.ERROR_TO_PASTE, applicationVO );
 				return;
 			}
 			
@@ -908,6 +926,11 @@ package net.vdombox.ide.core.model
 								break;
 							}
 						}
+					}
+					else if ( token.requestFunctionName == IS_FIND )
+					{
+						sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_LIST_GETTED_FOR_FIND,
+							{ applicationVO: applicationVO, globalActions: globalActions } );
 					}
 					else
 					{
@@ -1009,7 +1032,7 @@ package net.vdombox.ide.core.model
 				{
 					var libraries : Array = [];
 					
-					if ( token.requestFunctionName == "" )
+					if ( token.requestFunctionName == GET_LIBRARIES || token.requestFunctionName == IS_FIND )
 					{
 						for each ( libraryXML in result.Libraries.Library )
 						{
@@ -1019,7 +1042,10 @@ package net.vdombox.ide.core.model
 							libraries.push( libraryVO );
 						}
 						
-						sendNotification( ApplicationFacade.APPLICATION_LIBRARIES_GETTED, { applicationVO: applicationVO, libraries: libraries } );
+						if ( token.requestFunctionName == GET_LIBRARIES )
+							sendNotification( ApplicationFacade.APPLICATION_LIBRARIES_GETTED, { applicationVO: applicationVO, libraries: libraries } );
+						else
+							sendNotification( ApplicationFacade.APPLICATION_LIBRARIES_GETTED_FOR_FIND, { applicationVO: applicationVO, libraries: libraries } );
 					}
 					else
 					{

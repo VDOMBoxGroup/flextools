@@ -523,6 +523,10 @@ package net.vdombox.ide.core.model
 				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
 				if ( operationName == "remote_call" )
 					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_ERROR_GETTED, { objectVO: objectVO, error: "" } );
+				
+				if (  operationName == "copy_object" )
+					sendNotification( ApplicationFacade.ERROR_TO_PASTE, objectVO.pageVO.applicationVO );
+				
 				return;
 			}
 			
@@ -827,6 +831,13 @@ package net.vdombox.ide.core.model
 					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_ERROR_GETTED, { objectVO: objectVO, error: fault.detail } );
 					
 					return;
+				}
+					
+				case "copy_object":
+				{
+					notification = new ProxyNotification( ApplicationFacade.ERROR_TO_PASTE, objectVO.pageVO.applicationVO );
+					
+					break;
 				}
 			}
 			

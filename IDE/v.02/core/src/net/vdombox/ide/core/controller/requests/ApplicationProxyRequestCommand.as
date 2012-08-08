@@ -65,11 +65,13 @@ package net.vdombox.ide.core.controller.requests
 
 				case PPMApplicationTargetNames.SERVER_ACTIONS:
 				{
+					var isFind : Boolean = body.hasOwnProperty( "isFind" ) ? body.isFind : false;
+					
 					if ( operation == PPMOperationNames.READ )
 					{
-						applicationProxy.getServerActions("application");
-						applicationProxy.getServerActions("session");
-						applicationProxy.getServerActions("request");
+						applicationProxy.getServerActions("application", null, false, isFind);
+						applicationProxy.getServerActions("session", null, false, isFind);
+						applicationProxy.getServerActions("request", null, false, isFind);
 					}
 					break;
 				}
@@ -100,7 +102,8 @@ package net.vdombox.ide.core.controller.requests
 
 				case PPMApplicationTargetNames.LIBRARIES:
 				{
-					applicationProxy.getLibraries();
+					var isFind : Boolean = body.hasOwnProperty( "isFind" ) ? body.isFind : false;
+					applicationProxy.getLibraries( isFind );
 
 					break;
 				}

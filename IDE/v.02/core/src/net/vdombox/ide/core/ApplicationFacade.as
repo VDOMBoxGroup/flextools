@@ -265,9 +265,11 @@ package net.vdombox.ide.core
 		public static const APPLICATION_REMOTE_CALL_ERROR_GETTED : String = "applicationRemoteCallErrorGetted";
 		
 		public static const APPLICATION_SERVER_ACTIONS_LIST_GETTED : String = "applicationServerActionsGetted";
+		public static const APPLICATION_SERVER_ACTIONS_LIST_GETTED_FOR_FIND : String = "applicationServerActionsGettedForFind";
 		public static const APPLICATION_SERVER_ACTION_GETTED : String = "applicationServerActionGetted";
 		
 		public static const APPLICATION_LIBRARIES_GETTED : String = "applicationLibrariesGetted";
+		public static const APPLICATION_LIBRARIES_GETTED_FOR_FIND : String = "applicationLibrariesGettedForFind";
 		
 		public static const APPLICATION_LIBRARY_CREATED : String = "applicationLibraryCreated";
 		public static const APPLICATION_LIBRARY_UPDATED : String = "applicationLibraryUpdated";
@@ -287,6 +289,7 @@ package net.vdombox.ide.core
 		
 //		page		
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
+		public static const PAGE_STRUCTURE_FOR_FIND_GETTED : String = "pageStructureForFindGetted";
 		
 		public static const PAGE_ATTRIBUTES_GETTED : String = "pageAttributesGetted";
 		public static const PAGE_ATTRIBUTES_SETTED : String = "pageAttributesSetted";
@@ -387,6 +390,8 @@ package net.vdombox.ide.core
 		
 		public static const ALERT_WINDOW_CLOSE : String = "alertWindowClose";
 		
+		public static const ERROR_TO_PASTE : String = "errorToPaste";
+		
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -473,8 +478,10 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_PAGE_CREATED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_PAGE_DELETED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_SERVER_ACTIONS_LIST_GETTED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_SERVER_ACTIONS_LIST_GETTED_FOR_FIND, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_SERVER_ACTION_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARIES_GETTED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_LIBRARIES_GETTED_FOR_FIND, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARY_CREATED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARY_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARY_DELETED, ApplicationProxyResponseCommand );
@@ -485,6 +492,8 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_COPY_CREATED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_CHECK_SAVED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_SET_SAVE, ApplicationProxyResponseCommand );
+			registerCommand( ERROR_TO_PASTE, ApplicationProxyResponseCommand );
+			
 
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
 			
@@ -495,6 +504,7 @@ package net.vdombox.ide.core
 			registerCommand( PAGE_SET_AS_INDEX, SetIndexPageCommand );
 			
 			registerCommand( PAGE_STRUCTURE_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_STRUCTURE_FOR_FIND_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_ATTRIBUTES_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_ATTRIBUTES_SETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_NAME_SETTED, PageProxyResponseCommand );

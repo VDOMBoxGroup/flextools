@@ -57,7 +57,8 @@ package net.vdombox.ide.core.controller.requests
 
 				case PPMPageTargetNames.STRUCTURE:
 				{
-					pageProxy.getStructure();
+					var isFind : Boolean = body.hasOwnProperty( "isFind" ) ? body.isFind : false;
+					pageProxy.getStructure( isFind );
 
 					break;
 				}

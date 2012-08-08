@@ -58,6 +58,13 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				}
 					
+				case ApplicationFacade.PAGE_STRUCTURE_FOR_FIND_GETTED:
+				{
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE_FOR_FIND, body );
+					
+					break;
+				}
+					
 				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED:
 				{
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ATTRIBUTES, body );
