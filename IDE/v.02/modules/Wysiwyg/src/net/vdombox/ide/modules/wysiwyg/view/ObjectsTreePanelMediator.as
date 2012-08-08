@@ -31,6 +31,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
+	import net.vdombox.ide.modules.wysiwyg.model.MultiObjectsManipulationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.VisibleRendererProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer;
@@ -73,6 +74,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var requestQue : Object;
 
 		private var statesProxy : StatesProxy;
+		
+		private var multiObjectsManipulationProxy : MultiObjectsManipulationProxy;
 
 		private function get renderProxy() : RenderProxy
 		{
@@ -338,6 +341,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
 			visibleRendererProxy = facade.retrieveProxy( VisibleRendererProxy.NAME ) as VisibleRendererProxy;
+			
+			multiObjectsManipulationProxy = facade.retrieveProxy( MultiObjectsManipulationProxy.NAME ) as MultiObjectsManipulationProxy;
 
 			isActive = false;
 
@@ -535,32 +540,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			sourceID = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
 			
-			var sourceItems : Array = sourceID.split( "^" );
-			var sourceInfo : Array = sourceItems[0].split( " " );
+			var rendererBase : Object =  renderProxy.getRendererByID( containerID );
 			
-			if ( sourceInfo.length != 4 || sourceInfo[0] != "Vlt+VDOMIDE2+" )
-				return;
+			if ( !rendererBase )
+				rendererBase = _pages[ containerID ];
 			
-			if ( !sourceID || !containerID )
-				return;
-			
-			for each ( var sourceString : String in sourceItems )
-			{
-				sourceInfo = sourceString.split( " " );
-				var sourceAppId : String = sourceInfo[1] as String;
-				var sourceObjId : String = sourceInfo[2] as String;
-				var typeObject : String = sourceInfo[3] as String;
-				
-				if ( typeObject == "1" )
-					sendNotification( Notifications.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceString } );
-				else if ( containerID == event.pageID )
-					sendNotification( Notifications.COPY_REQUEST, { pageVO : _pages[containerID], sourceID : sourceString } );
-				else
-				{
-					var rendererBase : RendererBase =  renderProxy.getRendererByID( containerID );
-					sendNotification( Notifications.COPY_REQUEST, {  objectVO : rendererBase.vdomObjectVO, sourceID : sourceString } );
-				}
-			}
+			multiObjectsManipulationProxy.pasteObjects( sourceID.split( "^" ), rendererBase );
 		}
 		
 		private function keyDownDeleteHandler(event : ObjectsTreePanelEvent) : void

@@ -55,6 +55,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var isActive : Boolean;
 		
 		private var savedAttributesVO : VdomObjectAttributesVO;
+		private var isMultiSelect : Boolean = false;
 
 		public function get objectAttributesPanel() : ObjectAttributesPanel
 		{
@@ -164,6 +165,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case Notifications.PAGE_ATTRIBUTES_GETTED:
 				{
+					if ( isMultiSelect )
+						return;
+					
 					if ( statesProxy.selectedObject )
 						break;
 					
@@ -180,6 +184,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case Notifications.OBJECT_ATTRIBUTES_GETTED:
 				{
+					if ( isMultiSelect )
+						return;
+					
 					vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
 					if ( statesProxy.selectedObject && vdomObjectAttributesVO &&
@@ -210,12 +217,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 					    savedAttributesVO = objectAttributesPanel.attributesVO.clone();
 					    objectAttributesPanel.attributesVO = null;
 					}
+					
+					isMultiSelect = true;
 					break;
 				}
 					
 				case ApplicationFacade.MULTI_SELECT_END:
 				{
-					objectAttributesPanel.attributesVO = savedAttributesVO;;
+					objectAttributesPanel.attributesVO = savedAttributesVO;
+					isMultiSelect = false;
 					break;
 				}
 			}

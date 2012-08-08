@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
+	import net.vdombox.ide.modules.wysiwyg.model.MultiObjectsManipulationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	
@@ -89,9 +90,15 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					
 				case PPMPageTargetNames.COPY:
 				{
+					var multiObjectsManipulationProxy : MultiObjectsManipulationProxy = facade.retrieveProxy( MultiObjectsManipulationProxy.NAME ) as MultiObjectsManipulationProxy;
+					
+					if ( multiObjectsManipulationProxy.hasNextObjectForPaste() )
+						multiObjectsManipulationProxy.pasteNextObject();
+					
 					sendNotification( Notifications.GET_WYSIWYG, body.pageVO );
 					sendNotification( Notifications.GET_PAGE_SRUCTURE, body.pageVO );
 					sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, body.objectVO );
+					
 					
 					break;
 				}
@@ -104,6 +111,10 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					}
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
+						var multiObjectsManipulationProxy : MultiObjectsManipulationProxy = facade.retrieveProxy( MultiObjectsManipulationProxy.NAME ) as MultiObjectsManipulationProxy;
+						
+						multiObjectsManipulationProxy.saveNextObject();
+						
 						if ( pageVO )
 						{
 							sendNotification( Notifications.GET_WYSIWYG, pageVO )

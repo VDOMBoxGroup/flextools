@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
+	import net.vdombox.ide.modules.wysiwyg.model.MultiObjectsManipulationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -71,7 +72,11 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
 						sendNotification( Notifications.OBJECT_ATTRIBUTES_GETTED, vdomObjectAttributesVO );
+						
+						var multiObjectsManipulationProxy : MultiObjectsManipulationProxy = facade.retrieveProxy( MultiObjectsManipulationProxy.NAME ) as MultiObjectsManipulationProxy;
 
+						multiObjectsManipulationProxy.saveNextObject();
+						
 						for ( renderer in needForUpdateObject )
 						{
 							var vdomObjectVO : IVDOMObjectVO = IRenderer( renderer ).vdomObjectVO;
@@ -138,6 +143,11 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					
 				case PPMObjectTargetNames.COPY:
 				{
+					multiObjectsManipulationProxy = facade.retrieveProxy( MultiObjectsManipulationProxy.NAME ) as MultiObjectsManipulationProxy;
+					
+					if ( multiObjectsManipulationProxy.hasNextObjectForPaste() )
+						multiObjectsManipulationProxy.pasteNextObject();
+						
 					sendNotification( Notifications.GET_WYSIWYG, body.targetObject );
 					sendNotification( Notifications.GET_PAGE_SRUCTURE, body.targetObject.pageVO );
 					sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, body.newObject );

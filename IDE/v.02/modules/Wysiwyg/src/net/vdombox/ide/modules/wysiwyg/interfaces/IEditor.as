@@ -10,15 +10,15 @@ package net.vdombox.ide.modules.wysiwyg.interfaces
 
 	public interface IEditor extends IEventDispatcher
 	{
-		function get editorVO() : EditorVO
+		function get editorVO() : EditorVO;
 
-		function get status() : uint
-		function set status( value : uint ) : void
-		function set xmlPresentation(value: VdomObjectXMLPresentationVO): void
-		function get xmlPresentation(): VdomObjectXMLPresentationVO
-		function get state() : String
+		function get status() : uint;
+		function set status( value : uint ) : void;
+		function set xmlPresentation(value: VdomObjectXMLPresentationVO): void;
+		function get xmlPresentation(): VdomObjectXMLPresentationVO;
+		function get state() : String;
 			
-		function set selectedRenderer( value : IRenderer ):void
-		function get selectedRenderer( ) : IRenderer	
+		function set selectedRenderer( value : IRenderer ):void;
+		function get selectedRenderer( ) : IRenderer;
 	}
 }

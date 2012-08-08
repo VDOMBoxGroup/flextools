@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
+	import net.vdombox.ide.modules.wysiwyg.model.MultiObjectsManipulationProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -52,9 +53,22 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					
 				case PPMApplicationTargetNames.COPY:
 				{
+					var multiObjectsManipulationProxy : MultiObjectsManipulationProxy = facade.retrieveProxy( MultiObjectsManipulationProxy.NAME ) as MultiObjectsManipulationProxy;
+					
+					if ( multiObjectsManipulationProxy.hasNextObjectForPaste() )
+						multiObjectsManipulationProxy.pasteNextObject();
+					
 					sendNotification( Notifications.GET_PAGES, body );
 					
 					break;
+				}
+					
+				case PPMApplicationTargetNames.COPY_ERROR:
+				{
+					multiObjectsManipulationProxy = facade.retrieveProxy( MultiObjectsManipulationProxy.NAME ) as MultiObjectsManipulationProxy;
+					
+					if ( multiObjectsManipulationProxy.hasNextObjectForPaste() )
+						multiObjectsManipulationProxy.pasteNextObject();
 				}
 					
 				case PPMApplicationTargetNames.REMOTE_CALL:

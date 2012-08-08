@@ -20,6 +20,7 @@
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
+			
 			private function creationCompleteHandler() : void
 			{
 				currentState = "wysiwyg";
@@ -223,5 +224,11 @@
 	<s:Group id="contentGroup"
 			 height="100%" width="100%"
 			 top="29"/>
-
+	
+	<mx:Image id="spinner" source="@Embed('assets/spinner.swf')" right="10" top="30"
+			  height="30" width="30"
+			  verticalAlign="middle" horizontalAlign="center"  
+			  maintainAspectRatio="true"
+			  visible="false"
+			  />
 </s:SparkSkin>

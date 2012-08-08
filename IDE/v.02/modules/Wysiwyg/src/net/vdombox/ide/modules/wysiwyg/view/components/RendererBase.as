@@ -191,6 +191,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		 */
 		
 		private var beforeCreationComplete : Boolean = true;
+		
+		private var _move : Boolean = false;
 			
 		public function get data() : Object
 		{
@@ -538,7 +540,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			addEventListener( DragEvent.DRAG_EXIT, dragExitHandler, false, 0, true );
 			addEventListener( DragEvent.DRAG_DROP, dragDropHandler, false, 0, true );
 
-			addEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
+			addEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler, false, 0 , true);
 		}
 
 		protected function removeHandlers() : void
@@ -1391,6 +1393,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					var rendererEvent : RendererEvent = new RendererEvent( RendererEvent.MULTI_SELECTED_MOVE );
 					rendererEvent.object = { dx : dx, dy : dy };
 					dispatchEvent( rendererEvent );
+					
+					dispatchEvent( new RendererEvent ( RendererEvent.MULTI_SELECTED_MOVED ) );
 				}
 				else
 				{
@@ -1403,6 +1407,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					else
 						y = y + step;
 				}
+					
 			}
 			else
 			{
@@ -1414,7 +1419,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					if ( event.keyCode == Keyboard.C )
 						dispatchEvent( new RendererEvent( RendererEvent.COPY_SELECTED ) );
 					else if ( event.keyCode == Keyboard.V )
+					{
+						trace( vdomObjectVO.name );
 						dispatchEvent( new RendererEvent( RendererEvent.PASTE_SELECTED ) );
+					}
 					
 				}
 				return;
@@ -1430,11 +1438,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var selecteRectDraw : Boolean = false;
 
 		private function mouseDownHandler( event : MouseEvent ) : void
-		{			
+		{	
+			_move = false;
+			
+			trace( vdomObjectVO.name );
 			
 			if ( event.shiftKey )
 			{
-				stage.focus = this;
+				setFocus();
 				dispatchEvent( new RendererEvent ( RendererEvent.MOUSE_DOWN, false, true, true ) );
 				event.stopImmediatePropagation();
 				event.preventDefault();
@@ -1474,12 +1485,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			event.stopPropagation();
 			
 			if ( !isScroller( event.target as DisplayObjectContainer ) )
+			{
 				dispatchEvent( new RendererEvent( RendererEvent.CLICKED, false, true, event.shiftKey ) );
+			}
 		}
 		
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
+			_move = true;
+			
 			if ( !event.buttonDown )
 				return;
 			
@@ -1609,13 +1624,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				
 				dispatchEvent( new RendererEvent( RendererEvent.MOVE ) );
 				
-				stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
+				//stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
 			}
 		}
 
 		private function mouseUpHandler( event : MouseEvent ) : void
-		{					
-			dispatchEvent( new RendererEvent ( RendererEvent.MULTI_SELECTED_MOVED ) );
+		{		
+			if ( skin.currentState == "multiSelect" && _move )
+				dispatchEvent( new RendererEvent ( RendererEvent.MULTI_SELECTED_MOVED ) );
+			
 			if ( !stage )
 				return;
 			
@@ -1629,7 +1646,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				dispatchEvent( new RendererEvent( RendererEvent.MOVE ) );
 
-				stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
+				//stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
 			}
 
 			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );
@@ -1759,16 +1776,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			backgroundRefreshNeedFlag = true;
 			invalidateDisplayList();
 		}
-
-		private function stage_mouseClickHandler( event : MouseEvent ) : void
-		{
-			event.stopImmediatePropagation();
-			event.preventDefault();
-
-			if( stage )
-				stage.removeEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
-		}
-
 
 		private function svgGetResourseHendler( event : RendererEvent ) : void
 		{

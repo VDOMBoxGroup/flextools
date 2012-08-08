@@ -7,10 +7,11 @@
 					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.EditorSkin"
 					  preinitialize="skinnablecontainer1_preinitializeHandler(event)"
 					  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IEditor"
-					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)">
+					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
+			import mx.controls.Image;
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.events.StateChangeEvent;
@@ -48,6 +49,9 @@
 			
 			[SkinPart( required="true" )]
 			public var strYWritten : Label;
+			
+			[SkinPart( required="true" )]
+			public var spinner : Image;
 
 			private var _editorVO : EditorVO;
 
@@ -60,7 +64,6 @@
 			
 			[Bindable]
 			private var _value : VdomObjectXMLPresentationVO;
-
 			
 			public function get editorVO() : EditorVO
 			{
@@ -327,6 +330,13 @@
 				return editor.showLinking.selected;
 			}
 			
+			public function set visibleSpinner( value : Boolean ) : void
+			{
+				var editor : EditorSkin = skin as EditorSkin;
+				
+				editor.spinner.visible = value;
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -359,5 +369,4 @@
 							 includeInLayout="false" width="100%"
 							 selectedRenderer="{ selectedRenderer }"
 							 excludeFrom="xml, xmlDisabled"/>
-
 </s:SkinnableContainer>
