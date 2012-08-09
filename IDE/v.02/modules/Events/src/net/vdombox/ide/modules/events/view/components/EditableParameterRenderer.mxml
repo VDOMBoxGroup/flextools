@@ -12,6 +12,7 @@
 			import net.vdombox.ide.common.model._vo.ActionParameterVO;
 			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
+			import net.vdombox.utils.StringUtils;
 			import net.vdombox.utils.WindowManager;
 			
 			import spark.events.TextOperationEvent;
@@ -59,7 +60,7 @@
 			{
 				if ( text != actionText.text )
 				{
-					text = actionText.text;
+					text = /*StringUtils.getCDataParserString( */actionText.text /*)*/;
 					dispatchEvent( new ElementEvent ( ElementEvent.PARAMETER_EDIT ) );
 				}
 			}

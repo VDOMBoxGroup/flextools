@@ -169,8 +169,8 @@ package net.vdombox.ide.modules.events.view
 					}
 				
 					currentPageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
-					currentPageXML.setChildren( new XMLList() );
-					currentPageXML.appendChild( pageXMLTree.* );
+					currentPageXML.setChildren( pageXMLTree.* );
+					//currentPageXML.appendChild( pageXMLTree.* );
 
 					//objectsTree.validateNow();
 					selectCurrentPage( false );
