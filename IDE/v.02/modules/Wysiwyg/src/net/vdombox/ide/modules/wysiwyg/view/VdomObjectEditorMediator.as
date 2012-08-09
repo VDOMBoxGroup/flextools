@@ -221,10 +221,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 							editor.selectedRenderer = null;
 						
 						if (editor.selectedRenderer != null)
-						{
 							editor.selectedRenderer.setFocus();
-							trace( editor.selectedRenderer.vdomObjectVO.name );
-						}
 							
 					}
 					else if (editor.state.substr( 0, 3 ) == "xml")
@@ -272,7 +269,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					renderProxy.setNormalScinToRenderers();
 					
 					if ( !multiSelectRenderers )
-						sendNotification( ApplicationFacade.MULTI_SELECT_START );
+						sendNotification( ApplicationFacade.LOCKED_NULL );
 					
 					multiSelectRenderers = [];
 					
@@ -282,7 +279,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 						{
 							renderer = renderProxy.getRendererByID( object.objectID );
 							
-							if ( renderer && renderer.renderVO.vdomObjectVO.id == object.objectID )
+							if ( !renderer )
+								continue;
+							
+							if ( renderer.renderVO.vdomObjectVO.id == object.objectID )
 							{
 								renderer.setState = "multiSelect";
 								multiSelectRenderers[ object.objectID ] = renderer;
@@ -1070,7 +1070,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				//if (editor.selectedRenderer != null)
 					//editor.selectedRenderer.setFocus();
 				
-				sendNotification( ApplicationFacade.MULTI_SELECT_END, target );
+				sendNotification( ApplicationFacade.UNLOCKED_NULL, target );
 			}
 			
 			sendNotification( Notifications.RENDERER_CLICKED, target as IRenderer );
@@ -1095,7 +1095,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				if ( !multiSelectRenderers )
 				{
 					multiSelectRenderers = [];
-					sendNotification( ApplicationFacade.MULTI_SELECT_START );
+					sendNotification( ApplicationFacade.LOCKED_NULL );
 					
 					if ( statesProxy.selectedObject )
 					{

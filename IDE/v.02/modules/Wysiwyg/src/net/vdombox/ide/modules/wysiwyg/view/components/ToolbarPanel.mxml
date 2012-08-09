@@ -137,7 +137,7 @@
 			public function refresh( renderer : RendererBase ) : void 
 			{
 				//trace ('ToolbarPanel refresh: _currentToolbar = ' + _currentToolbar);
-				if (currentToolbar && renderer.vdomObjectVO.id == _selectedRenderer.vdomObjectVO.id )
+				if (currentToolbar && _selectedRenderer.vdomObjectVO && renderer.vdomObjectVO.id == _selectedRenderer.vdomObjectVO.id )
 					currentToolbar.refresh(_selectedRenderer);
 			}
 			

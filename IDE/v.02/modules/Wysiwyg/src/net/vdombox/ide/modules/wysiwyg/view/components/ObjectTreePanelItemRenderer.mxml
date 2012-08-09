@@ -8,7 +8,8 @@
 					  height="25"
 					  minWidth="200"
 					  contentBackgroundAlpha="0" 
-					  contextMenu="mxtreeitemrenderer1_contextMenuHandler(event)">
+					  contextMenu="mxtreeitemrenderer1_contextMenuHandler(event)"
+					  keyDown="mxtreeitemrenderer1_keyDownHandler(event)">
 
 	<s:states>
 		<s:State name="normal" />
@@ -63,6 +64,8 @@
 				
 				if ( _data )
 					createContextMenu();
+				else
+					trace("null");
 			}
 			
 			
@@ -285,6 +288,24 @@
 					pasteEvent.pageID = pasteEvent.objectID;
 				
 				dispatchEvent( pasteEvent );
+			}
+			
+			protected function mxtreeitemrenderer1_keyDownHandler(event:KeyboardEvent):void
+			{
+				if ( event.ctrlKey && event.keyCode == Keyboard.C )
+				{
+					copyContextMenuHandler( null );
+					event.stopImmediatePropagation();
+				}
+				else if ( event.ctrlKey && event.keyCode == Keyboard.V )
+				{
+					pasteContextMenuHandler( null );
+					event.stopImmediatePropagation();
+				}
+				else if ( event.keyCode == Keyboard.DELETE )
+				{
+					deleteContextMenuHandler( null );
+				}
 			}
 			
 		]]>

@@ -66,8 +66,9 @@ package net.vdombox.ide.modules.wysiwyg
 			sendNotification( Notifications.STARTUP, application );
 		}
 		
-		public static const MULTI_SELECT_START : String = "multiSelectStart";
-		public static const MULTI_SELECT_END : String = "multiSelectEnd";
+		public static const SET_NULL : String = "setNull";
+		public static const LOCKED_NULL : String = "lockedNull";
+		public static const UNLOCKED_NULL : String = "unlockedNull";
 		public static const SET_MULTISELECTION_OBJECTS : String = "setMultiselectionObjects";
 		public static const DRAW_MULTISELECTION_OBJECTS : String = "drawMultiselectionObjects";
 		

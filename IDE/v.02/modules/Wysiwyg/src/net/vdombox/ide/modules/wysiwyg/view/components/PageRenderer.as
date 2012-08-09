@@ -98,6 +98,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 //			background.addElement(lines);
 		}
 		
+		public function removeTransformMarket() : void
+		{
+			transformMarker.renderer = null;
+			transformMarker.visible = false;
+			transformMarker.includeInLayout = false;
+		}
+		
 		override protected function removeHandlers() : void
 		{
 			if ( !hasEventListener( FlexEvent.ADD))

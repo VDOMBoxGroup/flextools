@@ -132,7 +132,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( Notifications.PAGE_CREATED);
 			
 			interests.push( ApplicationFacade.SET_MULTISELECTION_OBJECTS);
-			interests.push( ApplicationFacade.MULTI_SELECT_END);
+			interests.push( ApplicationFacade.UNLOCKED_NULL);
 			
 			return interests;
 		}
@@ -196,11 +196,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 					{
 						pageXMLTree = new XML();
 					}
+					
+					/*objectsTreePanel.setPageStructure( pageXMLTree );
+					
+					objectsTreePanel.objectsTree.invalidateList();
+					objectsTreePanel.objectsTree.invalidateDisplayList();*/
 
 					pageXML = objectsTreePanel.pages.( @id == pageXMLTree.@id )[ 0 ];
 					
 					if (pageXML)
 					{
+						//objectsTreePanel.objectsTree.selectedIndex = -1;
 						pageXML.setChildren( new XMLList() ); //TODO: strange construction
 						pageXML.appendChild( pageXMLTree.* );
 					}
@@ -314,7 +320,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case ApplicationFacade.MULTI_SELECT_END:
+				case ApplicationFacade.UNLOCKED_NULL:
 				{
 					var renderer : RendererBase = body as RendererBase;
 					if ( !renderer )
@@ -550,7 +556,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function keyDownDeleteHandler(event : ObjectsTreePanelEvent) : void
 		{
-			
 			var objectID : String = event.objectID;
 			var pageID : String = event.pageID;
 			
@@ -558,7 +563,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			var textAlert : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' );
 			
-			if ( objectsTreePanel.selectedItems.length > 1 )
+			var flag : Boolean = false;
+			
+			for each( var item : XML in objectsTreePanel.selectedItems )
+			{
+				if ( item.@id == objectID )
+				{
+					flag = true;
+					break;
+				}
+			}
+			
+			if ( flag && objectsTreePanel.selectedItems.length > 1 )
 				textAlert += " " + objectsTreePanel.selectedItems.length.toString()+ " " + ResourceManager.getInstance().getString( 'Wysiwyg_General', 'elements' );
 			
 			Alert.Show( textAlert + " ?",AlertButton.OK_No, objectsTreePanel.parentApplication, closeHandler);
@@ -567,14 +583,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 			function closeHandler( event : CloseEvent ) : void
 			{
 				if (event.detail == Alert.YES)
-				{
-					for each ( var objectXML : XML in objectsTreePanel.selectedItems )
+				{					
+					if ( flag )
+					{						
+						for each ( var objectXML : XML in objectsTreePanel.selectedItems )
+						{
+							if ( objectXML.name().localName == "page" )
+								sendNotification( Notifications.DELETE_PAGE, { applicationVO: statesProxy.selectedApplication, pageVO: _pages[ objectXML.@id[0].toString() ] } );
+							else
+								sendNotification( Notifications.DELETE_OBJECT, { pageVO:  _pages[ objectXML.@pageID[0].toString() ], objectVO: renderProxy.getRendererByID( objectXML.@id[0].toString() ).renderVO.vdomObjectVO } );			
+						}		
+					}
+					else
 					{
-						if ( objectXML.name().localName == "page" )
-							sendNotification( Notifications.DELETE_PAGE, { applicationVO: statesProxy.selectedApplication, pageVO: _pages[ objectXML.@id[0].toString() ] } );
+						if ( pageID )
+							sendNotification( Notifications.DELETE_OBJECT, { pageVO: renderProxy.getRendererByID( pageID ).renderVO.vdomObjectVO, objectVO: renderProxy.getRendererByID( objectID ).renderVO.vdomObjectVO } );
 						else
-							sendNotification( Notifications.DELETE_OBJECT, { pageVO:  _pages[ objectXML.@pageID[0].toString() ], objectVO: renderProxy.getRendererByID( objectXML.@id[0].toString() ).renderVO.vdomObjectVO } );			
-					}						
+							sendNotification( Notifications.DELETE_PAGE, { applicationVO: statesProxy.selectedApplication, pageVO: _pages[objectID] } );
+					}
 				}
 			}
 		}

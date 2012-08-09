@@ -96,8 +96,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( Notifications.PAGE_NAME_SETTED );
 			interests.push( Notifications.OBJECT_NAME_SETTED );
 			
-			interests.push( ApplicationFacade.MULTI_SELECT_START );
-			interests.push( ApplicationFacade.MULTI_SELECT_END );
+			interests.push( ApplicationFacade.SET_NULL );
+			interests.push( ApplicationFacade.LOCKED_NULL );
+			interests.push( ApplicationFacade.UNLOCKED_NULL );
 
 			return interests;
 		}
@@ -143,6 +144,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case StatesProxy.SELECTED_OBJECT_CHANGED:
 				{
+					isMultiSelect = false;
 					if ( statesProxy.selectedObject )
 						sendNotification( Notifications.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
 					else if ( statesProxy.selectedPage )
@@ -155,6 +157,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
+					isMultiSelect = false;
 					if ( statesProxy.selectedPage  )
 						sendNotification( Notifications.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
 					else
@@ -210,7 +213,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case ApplicationFacade.MULTI_SELECT_START:
+				case ApplicationFacade.SET_NULL:
+				{
+					//objectAttributesPanel.attributesVO = null;
+					
+					break;
+				}
+					
+				case ApplicationFacade.LOCKED_NULL:
 				{
 					if ( objectAttributesPanel.attributesVO )
 					{
@@ -222,9 +232,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case ApplicationFacade.MULTI_SELECT_END:
+				case ApplicationFacade.UNLOCKED_NULL:
 				{
-					objectAttributesPanel.attributesVO = savedAttributesVO;
+					//objectAttributesPanel.attributesVO = savedAttributesVO;
 					isMultiSelect = false;
 					break;
 				}

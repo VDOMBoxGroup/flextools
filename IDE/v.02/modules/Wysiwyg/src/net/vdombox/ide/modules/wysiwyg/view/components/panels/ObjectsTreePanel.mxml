@@ -14,6 +14,7 @@
 			
 			import mx.collections.ArrayList;
 			import mx.collections.IList;
+			import mx.collections.SortField;
 			import mx.controls.listClasses.ListBaseContentHolder;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
@@ -21,6 +22,7 @@
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
+			import net.vdombox.utils.XMLUtils;
 			
 			import spark.components.IItemRenderer;
 			import spark.components.List;
@@ -40,6 +42,81 @@
 			public function set pages( value : XMLList ) : void
 			{
 				_pages = value;
+			}
+			
+			private function updateChildren( parent : XML, oldChild : XMLList, newChild : XMLList ) : void
+			{
+				if ( oldChild.length() == 0 && newChild.length() == 0 )
+					return;
+				
+				var i : int;
+				var oldItem : XML;
+				var newItem : XML;
+				
+				/*if ( newChild.length() != 0 )
+				{*/
+					for ( i = 0; i < oldChild.length(); i++ )
+					{
+						newItem = newChild.( @id == oldChild[i].@id )[ 0 ];
+						
+						if ( !newItem )
+							delete oldChild[i--];
+					}
+				/*}*/
+				
+				/*if ( oldChild.length() != 0 )
+				{*/
+					for ( i = 0; i < newChild.length(); i++ )
+					{
+						oldItem = oldChild.( @id == newChild[i].@id )[ 0 ];
+						
+						if ( !oldItem )
+						{
+							parent.appendChild( newChild[i] );
+							oldChild += newChild[i];
+							XMLUtils.sortElementsInXML( parent, new SortField("@name") );
+							
+						}
+					}
+				/*}*/
+				
+				/*if ( newChild.length() != 0 )
+				{*/
+					for ( i = 0; i < oldChild.length(); i++ )
+					{
+						newItem = newChild.( @id == oldChild[i].@id )[ 0 ];
+						if ( newItem )
+							updateChildren( oldChild[i], oldChild[i].*, newItem.* );
+					}
+				/*}*/
+				
+				
+			}
+			
+			public function setPageStructure( pageXMLTree : XML ) : void
+			{
+				if ( !pageXMLTree )
+					return;
+				
+				var pageXML : XML = _pages.( @id == pageXMLTree.@id )[ 0 ];
+				
+				if ( !pageXML )
+					return;
+				
+				var oldChild : XMLList = pageXML.*;
+				
+				if ( oldChild.length() == 0 )
+					pageXML.appendChild( pageXMLTree.* );
+				else 
+					updateChildren( pageXML ,pageXML.*, pageXMLTree.* );
+				
+				/*for( var i : int = 0; i < _pages.length(); i++ )
+				{
+					if ( _pages[i].@id == pageXMLTree.@id )
+						delete _pages[i];
+				}
+				
+				_pages += pageXMLTree;*/
 			}
 
 			public function get selectedObjectID() : String

@@ -147,10 +147,12 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					
 					if ( multiObjectsManipulationProxy.hasNextObjectForPaste() )
 						multiObjectsManipulationProxy.pasteNextObject();
-						
+					else
+					{
+						sendNotification( Notifications.GET_PAGE_SRUCTURE, body.targetObject.pageVO );
+						sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, body.newObject );
+					}
 					sendNotification( Notifications.GET_WYSIWYG, body.targetObject );
-					sendNotification( Notifications.GET_PAGE_SRUCTURE, body.targetObject.pageVO );
-					sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, body.newObject );
 					
 					break;
 				}

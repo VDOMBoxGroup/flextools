@@ -373,23 +373,23 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( !_selectedItem )
 				return;
+			
+			if ( !(_selectedItem as RendererBase).typeVO )
+				refresh();
+			
 			var editComponent : Object = (_selectedItem as RendererBase).editableComponent;
-			if (  editComponent &&( (_selectedItem as RendererBase).typeVO.name == "text" || (_selectedItem as RendererBase).typeVO.name == "richtext" ))
+			if (  editComponent && ( (_selectedItem as RendererBase).typeVO && (_selectedItem as RendererBase).typeVO.name == "text" || (_selectedItem as RendererBase).typeVO.name == "richtext" ))
 			{
-				
-				if ( editComponent )
+				if ( measuredWidth != editComponent.width )
 				{
-					if ( measuredWidth != editComponent.width )
-					{
-						measuredWidth = editComponent.width;
-						_selectedItem.width = measuredWidth;
-					}
-				
-					if ( measuredHeight != editComponent.height )
-					{
-						measuredHeight = editComponent.height;
-						_selectedItem.height = measuredHeight;
-					}
+					measuredWidth = editComponent.width;
+					_selectedItem.width = measuredWidth;
+				}
+			
+				if ( measuredHeight != editComponent.height )
+				{
+					measuredHeight = editComponent.height;
+					_selectedItem.height = measuredHeight;
 				}
 			}
 			else

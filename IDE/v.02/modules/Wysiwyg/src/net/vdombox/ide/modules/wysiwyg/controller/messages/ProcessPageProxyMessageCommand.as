@@ -8,9 +8,11 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.MultiObjectsManipulationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
+	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -54,8 +56,16 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						sendNotification( Notifications.OBJECT_GETTED, body.objectVO );
 					else if ( operation == PPMOperationNames.DELETE )
 					{
+						sendNotification( ApplicationFacade.UNLOCKED_NULL );
+						if ( statesProxy.selectedObject && body.objectVO.id == statesProxy.selectedObject.id )
+						{
+							sendNotification( ApplicationFacade.SET_NULL );
+							var rendererBase : RendererBase = renderProxy.getRendererByID( body.objectVO.pageVO.id );
+							( rendererBase as PageRenderer ).removeTransformMarket();
+						}
+						
 						sendNotification( Notifications.OBJECT_DELETED, body.objectVO );
-						var rendererBase : RendererBase = renderProxy.getRendererByID( body.objectVO.id );
+						rendererBase = renderProxy.getRendererByID( body.objectVO.id );
 						if ( rendererBase.renderVO.parent && rendererBase.renderVO.parent.vdomObjectVO is ObjectVO )
 						{
 							var objectVO : ObjectVO = rendererBase.renderVO.parent.vdomObjectVO as ObjectVO;
@@ -94,11 +104,12 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					
 					if ( multiObjectsManipulationProxy.hasNextObjectForPaste() )
 						multiObjectsManipulationProxy.pasteNextObject();
-					
+					else
+					{
+						sendNotification( Notifications.GET_PAGE_SRUCTURE, body.pageVO );
+						sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, body.objectVO );
+					}
 					sendNotification( Notifications.GET_WYSIWYG, body.pageVO );
-					sendNotification( Notifications.GET_PAGE_SRUCTURE, body.pageVO );
-					sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, body.objectVO );
-					
 					
 					break;
 				}
