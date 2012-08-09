@@ -69,8 +69,8 @@ package net.vdombox.ide.modules.scripts.view
 			
 			scriptEditor.setActionVO();
 			
-			updateColorScheme();
-			updateFontSize();
+			updateColorScheme(false);
+			updateFontSize(false);
 			
 			addHandlers();
 		}
@@ -136,17 +136,21 @@ package net.vdombox.ide.modules.scripts.view
 			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_PREFERENCES, openPreferences);
 		}
 		
-		private function updateColorScheme() : void
+		private function updateColorScheme( sendUpdate : Boolean = true ) : void
 		{
 			scriptEditor.scriptEditor.controller.colorScheme = colorSchemeProxy.selectedColorScheme;
 			scriptEditor.scriptEditor.scriptAreaComponent.colorScheme = colorSchemeProxy.selectedColorScheme;
-			scriptEditor.scriptEditor.scriptAreaComponent.sendUpdate();
+			
+			if ( sendUpdate )
+				scriptEditor.scriptEditor.scriptAreaComponent.sendUpdate();
 		}
 		
-		private function updateFontSize() : void
+		private function updateFontSize( sendUpdate : Boolean = true ) : void
 		{
 			scriptEditor.scriptEditor.scriptAreaComponent.fontSize = colorSchemeProxy.selectedFontSize;
-			scriptEditor.scriptEditor.scriptAreaComponent.sendUpdate();
+			
+			if ( sendUpdate )
+				scriptEditor.scriptEditor.scriptAreaComponent.sendUpdate();
 		}
 		
 		private function compliteSourceCode( event : FlexEvent = null ):void

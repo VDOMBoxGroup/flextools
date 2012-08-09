@@ -32,7 +32,6 @@
 			import net.vdombox.utils.WindowManager;
 			
 			import ro.victordramba.scriptarea.ScriptAreaEvents;
-			import ro.victordramba.util.HashMap;
 			
 			private var _unsaved : Boolean = false;
 			
@@ -139,8 +138,8 @@
 			
 			private function setStateInUnsave( event : Event = null ) : void
 			{
-				if ( !(event.target is ScriptAreaEvents) )
-					return;
+				/*if ( !(event.target is ScriptAreaEvents) )
+					return;*/
 				
 				unsaved = true;
 				
@@ -161,14 +160,14 @@
 			protected function navigatorcontent2_removeHandler(event:FlexEvent):void
 			{
 				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
-				removeEventListener(Event.CHANGE, setStateInUnsave, true );
+				removeEventListener(ScriptAreaComponenrEvent.TEXT_CHANGE, setStateInUnsave, true );
 				
 				scriptEditor.removeEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true );
 			}
 			
 			protected function navigatorcontent2_creationCompleteHandler(event:FlexEvent):void
 			{
-				addEventListener(Event.CHANGE, setStateInUnsave, true, 0, true );
+				addEventListener(ScriptAreaComponenrEvent.TEXT_CHANGE, setStateInUnsave, true, 0, true );
 			}
 			
 			public function setActionVO() : void

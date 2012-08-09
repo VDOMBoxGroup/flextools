@@ -156,8 +156,8 @@ package net.vdombox.ide.modules.scripts.view
 						setVisibleForElements( structure );
 						
 						var pageXML : XML = containersPanel.structure.( @id == structure.@id )[ 0 ];
-						pageXML.setChildren( new XMLList() ); //TODO: strange construction
-						pageXML.appendChild( structure.* );
+						pageXML.setChildren( structure.* ); //TODO: strange construction
+						//pageXML.appendChild( structure.* );
 						selectCurrentPage( false );
 					}
 					break;

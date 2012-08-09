@@ -161,6 +161,9 @@ package net.vdombox.ide.modules.scripts.view
 						{
 							sendNotification( Notifications.GET_STRUCTURE, { pageVO: pageVO, isFind : true } );
 						}
+						
+						sendNotification( Notifications.GET_LIBRARIES, { applicationVO : statesProxy.selectedApplication, isFind : true } );
+						
 						//findBox.findObjectsInStructure( pagesStructure );
 					}
 					
@@ -182,7 +185,6 @@ package net.vdombox.ide.modules.scripts.view
 					if ( pagesFindInput == findBox.lengthContainerPages )
 					{
 						findBox.findObjectsInStructure( pagesStructure );
-						sendNotification( Notifications.GET_LIBRARIES, { applicationVO : statesProxy.selectedApplication, isFind : true } );
 					}
 					
 					break;
