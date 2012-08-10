@@ -662,14 +662,15 @@ package net.vdombox.editors.parsers.vscript
 				}
 				else if ( tString == "catch" )
 				{
-					t.parent = currentBlock.parent;
 					if ( currentBlock.blockType == BlockType.CATCH )
 					{
+						t.parent = currentBlock.parent;
 						createBlock( BlockType.CATCH, tString );
 						currentBlock.mainBlockType = BlockType.TRY;
 					}
 					else if ( currentBlock.blockType == BlockType.TRY )
 					{
+						t.parent = currentBlock;
 						currentBlock = t;
 						t.children = [];
 						currentBlock.blockType = BlockType.CATCH;
