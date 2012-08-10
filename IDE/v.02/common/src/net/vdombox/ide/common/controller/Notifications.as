@@ -164,6 +164,11 @@ package net.vdombox.ide.common.controller
 		
 		public static const WRITE_ERROR : String = "writeError";
 		
+		//multiObjects
+		
+		public static const MULTI_OBJECTS_POSITION_SAVING : String = "multiObjectsStartPositionSaving";
+		public static const MULTI_OBJECTS_POSITION_SAVED : String = "multiObjectsStartPositionSaved";
+		
 		
 //////////////////////////////////////////////////TREE/////////////////////////////////////////////
 		

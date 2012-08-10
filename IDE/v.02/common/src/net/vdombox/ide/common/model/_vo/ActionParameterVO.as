@@ -4,6 +4,8 @@ package net.vdombox.ide.common.model._vo
 	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
+	
+	import net.vdombox.utils.StringUtils;
 
 	/**
 	 * The ActionParameterVO is Visual Object of VDOM Object.
@@ -95,7 +97,7 @@ package net.vdombox.ide.common.model._vo
 			
 			if( value.search( xmlCharRegExp ) != -1 )
 			{	
-				value = value.replace(/\]\]>/g, "]]]]"+"><![CDATA[>" );
+				value = StringUtils.getCDataParserString( value );
 				value = "<Parameter ScriptName=\""+ _name +"\"><![CDATA[" + value + "]" + "]></Parameter>"
 				result = new XML( value );
 			}

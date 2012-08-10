@@ -5,6 +5,7 @@ package net.vdombox.ide.common.events
 	public class ScriptAreaComponenrEvent extends Event
 	{
 		public static const TEXT_INPUT : String = "scriptAreaComponentTextInput";
+		public static const TEXT_CHANGE : String = "scriptAreaComponentTextChange";
 		public static const GO_TO_DEFENITION : String = "scriptAreaComponentGoToDefenition";
 		
 		public var detail : Object;

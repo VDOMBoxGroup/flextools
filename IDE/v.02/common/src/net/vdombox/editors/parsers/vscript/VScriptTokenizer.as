@@ -18,7 +18,7 @@ package net.vdombox.editors.parsers.vscript
 		private var newLogicBlock : Boolean = false;
 		
 		private static const keywordsA : Array = [
-			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "class", "clng", "const", "csng", "cstr", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "use", "wend", "while", "with", "xor"
+			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "catch", "class", "clng", "const", "csng", "cstr", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "try", "use", "wend", "while", "with", "xor"
 		];
 		
 		private static const keywords2A : Array = [
@@ -660,6 +660,27 @@ package net.vdombox.editors.parsers.vscript
 						error = true;
 					}
 				}
+				else if ( tString == "catch" )
+				{
+					t.parent = currentBlock.parent;
+					if ( currentBlock.blockType == BlockType.CATCH )
+					{
+						createBlock( BlockType.CATCH, tString );
+						currentBlock.mainBlockType = BlockType.TRY;
+					}
+					else if ( currentBlock.blockType == BlockType.TRY )
+					{
+						currentBlock = t;
+						t.children = [];
+						currentBlock.blockType = BlockType.CATCH;
+						currentBlock.mainBlockType = BlockType.TRY;
+					}
+					else
+					{
+						t.error = true;
+						error = true;
+					}
+				}
 				else 
 				{
 					currentBlock = t;
@@ -710,6 +731,11 @@ package net.vdombox.editors.parsers.vscript
 						currentBlock.blockType = BlockType.WHILE;
 						currentBlock.mainBlockType = BlockType.WHILE;
 					}
+					else if ( tString == "try" )
+					{
+						currentBlock.blockType = BlockType.TRY;
+						currentBlock.mainBlockType = BlockType.TRY;
+					}
 					
 				}
 				
@@ -741,7 +767,7 @@ package net.vdombox.editors.parsers.vscript
 			if ( newBlock )
 			{
 				if ( currentBlock.blockType != BlockType.IF && currentBlock.blockType != BlockType.ELSE
-					&& currentBlock.blockType != BlockType.ELSEIF )
+					&& currentBlock.blockType != BlockType.ELSEIF)
 					t.createConstruction = true;
 			}
 			
@@ -826,7 +852,7 @@ package net.vdombox.editors.parsers.vscript
 				{
 					currentPos += 2;
 					curToken = tokens[currentPos]
-					var tField2 : Field;
+					var tField2 : Field; 
 					
 					if ( tField.members.hasKey( curToken.string ) )
 					{
@@ -909,6 +935,30 @@ package net.vdombox.editors.parsers.vscript
 					if ( currentBlock.blockType == BlockType.CASE || currentBlock.blockType == BlockType.SELECT )
 					{
 						currentBlock.blockClosed = true;
+						
+						currentBlock = currentBlock.parent as VScriptToken;
+						imports.pop();
+						
+						currentBlock.blockClosed = true;
+					}
+					else
+					{
+						setError()
+					}
+					
+					
+					break;
+				}
+					
+					
+				case "try":
+				{
+					if ( currentBlock.blockType == BlockType.TRY || currentBlock.blockType == BlockType.CATCH )
+					{
+						currentBlock.blockClosed = true;
+						
+						if ( currentBlock.blockType == BlockType.TRY )
+							break;
 						
 						currentBlock = currentBlock.parent as VScriptToken;
 						imports.pop();
@@ -1019,13 +1069,13 @@ package net.vdombox.editors.parsers.vscript
 			if ( value == "elseif" ||  (( value == "for"|| value == "do" ) && prevValue != "exit" ) || ( value == "then" && currentBlock && currentBlock.blockType == BlockType.IF ) )
 				return true;
 			
-			if ( ( value == "if" || value == "select" || value == "class" || (( value == "function" || value == "sub") && prevValue != "exit" ) ) && prevValue != "end"  )
+			if ( ( value == "if" || value == "select" || value == "class" || value == "try" || (( value == "function" || value == "sub") && prevValue != "exit" ) ) && prevValue != "end"  )
 				return true;
 			
 			if ( value == "else" && prevValue != "case" )
 				return true;
 				
-			if ( value == "case" )
+			if ( value == "case" || value == "catch" )
 				return true;
 					
 			if ( value == "while" && prevValue != "do" )

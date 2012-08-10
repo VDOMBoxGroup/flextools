@@ -20,7 +20,7 @@ package net.vdombox.utils
 			return ch >= '0' && ch <= '9';
 		}
 		
-		public static function getCDataParserString( str : Object ) : String
+		public static function getCDataParserString( str : String ) : String
 		{
 			return str.replace(/]]>/g, "]]]]><![CDATA[>");
 		}

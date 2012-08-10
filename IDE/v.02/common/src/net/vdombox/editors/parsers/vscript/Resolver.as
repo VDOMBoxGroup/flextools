@@ -124,7 +124,7 @@ package net.vdombox.editors.parsers.vscript
 				return HashLibraryArray.getImportToLibraty( t.importFrom );*/
 			
 			// default keywords
-			var a : Vector.<String> = new <String>["And", "application", "As", "AsJSON", "Case", "Class", "Connection", "Const", "cstr", "Dim", "Do", "Each", "Else", "ElseIf", "Empty", "End", "Exit", "False", "For", "Function", "Generic", "If", "In", "Is", "IsNot", "Loop", "Match", "Matches", "Mismatch", "Mod", "New", "Next", "Not", "Nothing", "Null", "Or", "Preserve", "Print", "Proxy", "ReDim", "RegExp", "request", "Rem", "replace", "response", "Select", "server", "Session", "Set", "Step", "String", "Sub", "Then", "this", "To", "ToJSON", "True", "UBound", "Until", "Use", "VdomDbConnection", "VDOMDBRecordSet", "VDOMDBRow", "VDOMImaging", "Wend", "While", "XMLDocument", "XMLNode", "Xor"  ];
+			var a : Vector.<String> = new <String>["And", "application", "As", "AsJSON", "Case", "Catch", "Class", "Connection", "Const", "cstr", "Dim", "Do", "Each", "Else", "ElseIf", "Empty", "End", "Exit", "False", "For", "Function", "Generic", "If", "In", "Is", "IsNot", "Loop", "Match", "Matches", "Mismatch", "Mod", "New", "Next", "Not", "Nothing", "Null", "Or", "Preserve", "Print", "Proxy", "ReDim", "RegExp", "request", "Rem", "replace", "response", "Select", "server", "Session", "Set", "Step", "String", "Sub", "Then", "this", "To", "ToJSON", "True", "Try", "UBound", "Until", "Use", "VdomDbConnection", "VDOMDBRecordSet", "VDOMDBRow", "VDOMImaging", "Wend", "While", "XMLDocument", "XMLNode", "Xor"  ];
 						
 			//find the scope
 			if ( !t )

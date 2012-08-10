@@ -63,6 +63,7 @@ package net.vdombox.editors.parsers.vscript
 							
 							if ( !parentBlock || parentBlock.mainBlockType != block.mainBlockType )
 							{
+								//pasteCode2( block.blockType );
 								fld.replaceText( currentPos, currentPos, "\t" );
 								fld.caretIndex = currentPos + 1;
 								
@@ -71,10 +72,15 @@ package net.vdombox.editors.parsers.vscript
 							}
 						}
 						
+						
 							
 						if ( t.blockType == BlockType.DO )
 						{
 							pasteCode( "Loop" );
+						}
+						if ( t.blockType == BlockType.TRY )
+						{
+							pasteCode( "End Try" );
 						}
 						else if ( block.blockType == BlockType.IF )
 						{
@@ -142,6 +148,20 @@ package net.vdombox.editors.parsers.vscript
 								break;
 							}
 								
+							case "case":
+							{
+								pasteCode2( BlockType.CASE );
+								
+								break;
+							}
+								
+							case "catch":
+							{
+								pasteCode2( BlockType.CATCH );
+								
+								break;
+							}
+								
 							default:
 							{
 								break;
@@ -163,6 +183,13 @@ package net.vdombox.editors.parsers.vscript
 						case "elseif":
 						{
 							pasteCode2( BlockType.CASE );
+							
+							break;
+						}
+							
+						case "catch":
+						{
+							pasteCode2( BlockType.CATCH );
 							
 							break;
 						}

@@ -26,6 +26,11 @@ package ro.victordramba.util
 	{
 		private var data:Object = {};
 		
+		public function HashMap()
+		{
+			var tt : int = 0;
+		}
+		
 		public function setValue(key:String, value:*):void
 		{
 			data['$' + key] = value;
