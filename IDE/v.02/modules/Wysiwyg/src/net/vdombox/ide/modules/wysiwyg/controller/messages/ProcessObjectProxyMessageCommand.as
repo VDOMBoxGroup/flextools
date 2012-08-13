@@ -55,7 +55,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						sendNotification( Notifications.OBJECT_DELETED, body.objectVO );
 						sendNotification( Notifications.GET_WYSIWYG, statesProxy.selectedPage );
 						sendNotification( Notifications.GET_PAGE_SRUCTURE, statesProxy.selectedPage );
-						sendNotification( StatesProxy.SET_SELECTED_OBJECT, statesProxy.selectedPage );
+						//sendNotification( StatesProxy.SET_SELECTED_OBJECT, statesProxy.selectedPage );
 					}
 
 					break;

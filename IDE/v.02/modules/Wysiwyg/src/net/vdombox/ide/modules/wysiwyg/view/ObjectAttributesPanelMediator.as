@@ -215,7 +215,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 				case ApplicationFacade.SET_NULL:
 				{
-					//objectAttributesPanel.attributesVO = null;
+					objectAttributesPanel.attributesVO = null;
 					
 					break;
 				}

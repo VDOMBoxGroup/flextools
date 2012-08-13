@@ -76,7 +76,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 							sendNotification( Notifications.GET_WYSIWYG, pageVO );
 						}
 						sendNotification( Notifications.GET_PAGE_SRUCTURE, pageVO );
-						sendNotification( StatesProxy.SET_SELECTED_OBJECT, pageVO );
+						//sendNotification( StatesProxy.SET_SELECTED_OBJECT, pageVO );
 
 					}
 					break;
