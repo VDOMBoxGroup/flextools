@@ -45,6 +45,8 @@ package ro.victordramba.scriptarea
 		public var scriptLang : String = "pytnon";
 		
 		private var token : Token;
+		
+		public var assistMenuOpened : Boolean = false;
 
 		public function ScriptAreaEvents()
 		{
@@ -321,9 +323,25 @@ package ro.victordramba.scriptarea
 			dipatchChange();
 			dipatchChangeText();
 		}
+		
+		private var eventPressNavigetionKey : ScriptAreaComponenrEvent = new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.PRESS_NAVIGATION_KEY );
 
 		private function onKeyDown( e : KeyboardEvent ) : void
-		{
+		{	
+			if ( assistMenuOpened && ( e.keyCode == Keyboard.ENTER || e.keyCode == Keyboard.UP  || e.keyCode == Keyboard.DOWN ) )
+			{
+				if ( e.keyCode == Keyboard.ENTER )
+					eventPressNavigetionKey.detail = "Enter";
+				else if ( e.keyCode == Keyboard.UP )
+					eventPressNavigetionKey.detail = "Up";
+				else if ( e.keyCode == Keyboard.DOWN )
+					eventPressNavigetionKey.detail = "Down";
+				
+				dispatchEvent( eventPressNavigetionKey );
+				
+				e.stopImmediatePropagation();
+				return;
+			}		
 			
 			var c : String = String.fromCharCode( e.charCode );
 			var k : int = e.keyCode;

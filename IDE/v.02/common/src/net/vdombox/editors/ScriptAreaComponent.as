@@ -49,6 +49,16 @@ package net.vdombox.editors
 
 		private var viewPos : Point = new Point();
 		
+		public function get assistMenuOpened():Boolean
+		{
+			return area.assistMenuOpened;
+		}
+
+		public function set assistMenuOpened(value:Boolean):void
+		{
+			area.assistMenuOpened = value;
+		}
+
 		public function set controller( value : Controller ) : void
 		{
 			area.controller = value;

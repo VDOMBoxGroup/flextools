@@ -1,11 +1,16 @@
 package net.vdombox.editors.parsers
 {
+	import flash.desktop.Clipboard;
+	import flash.desktop.ClipboardFormats;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	import flash.utils.setTimeout;
+	
+	import mx.core.UIComponent;
 	
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
@@ -29,6 +34,12 @@ package net.vdombox.editors.parsers
 		protected var menuStr : String;
 		protected var tooltipCaret : int;
 		
+		
+		protected var tempForNikolas : String;
+		
+		protected var tempForNikolasArray1 : String = "";
+		protected var tempForNikolasArray2 : String = "";
+		
 		public function AssistMenu( field : ScriptAreaComponent, ctrl : Controller, stage : Stage, onComplete : Function )
 		{
 			fld = field;
@@ -40,7 +51,7 @@ package net.vdombox.editors.parsers
 			//restore the focus to the textfield, delayed			
 			_menu.addEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
 			//menu in action
-			_menu.addEventListener( KeyboardEvent.KEY_DOWN, onMenuKey );
+			//_menu.addEventListener( KeyboardEvent.KEY_DOWN, onMenuKey );
 			
 			_menu.addEventListener( MouseEvent.DOUBLE_CLICK, doubleClickMouseHandler );
 			/*menu.addEventListener(MouseEvent.DOUBLE_CLICK, function(e:Event):void {
@@ -55,6 +66,7 @@ package net.vdombox.editors.parsers
 			//used to close the tooltip
 			fld.addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 			fld.addEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, onTextInput );
+			fld.addEventListener( ScriptAreaComponenrEvent.PRESS_NAVIGATION_KEY, onPressNavigationKeyHandler, true, 0 , true );
 		}
 		
 		protected function onMenuRemoved( e : Event ) : void
@@ -70,6 +82,11 @@ package net.vdombox.editors.parsers
 		{
 			if ( e.keyCode == Keyboard.SPACE && e.ctrlKey )
 				triggerAssist(true);
+			else if ( e.keyCode == Keyboard.BACKSPACE || e.keyCode == Keyboard.DELETE || e.keyCode == Keyboard.LEFT || e.keyCode == Keyboard.RIGHT )
+			{
+				if ( menu.showed )
+					triggerAssist(false);
+			}
 		}
 		
 		protected function onTextInput( e : ScriptAreaComponenrEvent ) : void
@@ -77,16 +94,119 @@ package net.vdombox.editors.parsers
 			triggerAssist(false);
 		}	
 		
+		private function onPressNavigationKeyHandler( e : ScriptAreaComponenrEvent ) : void
+		{
+			var detail : String = e.detail as String;
+			
+			switch(detail)
+			{
+				case "Enter":
+				{
+					var c : int = fld.caretIndex;
+					
+					fldReplaceText( c - menuStr.length, c, menu.getSelectedValue() );
+					onComplete();
+					
+					menuDispose();
+					
+					break;
+				}
+					
+				case "Up":
+				{
+					if ( menu.selectedIndex > 0 )
+						menu.selectedIndex--;
+					else
+						menu.selectedIndex = menu.dataProvider.length - 1;
+					
+					break;
+				}
+					
+				case "Down":
+				{
+					if ( menu.selectedIndex < menu.dataProvider.length - 1 )
+						menu.selectedIndex++;
+					else
+						menu.selectedIndex = 0;
+					
+					break;
+				}
+					
+				default:
+				{
+					break;
+				}
+			}
+		}
+		
 		private function doubleClickMouseHandler( e : MouseEvent ) : void
 		{
 			fldReplaceText( fld.caretIndex - menuStr.length, fld.caretIndex, menu.getSelectedValue() );
 			onComplete();
 			
+			menuDispose();
+		}
+		
+		protected function menuDispose() : void
+		{
+			fld.assistMenuOpened = false;
+			
 			_menu.dispose();
 		}
 		
-		protected function onMenuKey( e : KeyboardEvent ) : void
-		{			
+		protected var menuRefY : int;
+		
+		protected function showMenu( index : int ) : void
+		{
+			fld.assistMenuOpened = true;
+			var p : Point = fld.getPointForIndex( index );
+			p.x += fld.scrollH;
+			
+			p = fld.localToGlobal( p );
+			menuRefY = p.y;
+			menu.show( fld, p.x, 0 );
+			
+			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
+			
+			rePositionMenu();
+		}
+		
+		protected function rePositionMenu() : void
+		{
+			var menuH : int = 8 //Math.min( 8, menu.getModel().getSize() ) * 17;
+			if ( menuRefY + 15 + menuH > fld.height )
+				menu.y = menuRefY - menuH - 2;
+			else
+				menu.y = menuRefY + 15;
+		}
+		
+		protected function stage_mouseDownHandler( event : MouseEvent ) : void
+		{
+			var parent : UIComponent = event.target as UIComponent;
+			var isMenu : Boolean;
+			
+			while ( parent )
+			{
+				if ( parent == menu )
+				{
+					isMenu = true;
+					break;
+				}
+				
+				parent = parent.parent as UIComponent;
+			}
+			
+			if ( !isMenu )
+			{
+				stage.removeEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler );
+				menuDispose();
+			}
+		}
+		
+		/*protected function onMenuKey( e : KeyboardEvent ) : void
+		{		
+			tempForNikolasArray1 += ( e.keyCode == Keyboard.PERIOD ).toString() + " " + e.keyCode + ":" + e.charCode + "     ";
+			
 			if ( e.charCode != 0 )
 			{
 				var c : int = fld.caretIndex;
@@ -113,6 +233,11 @@ package net.vdombox.editors.parsers
 				{
 					var ch : String = String.fromCharCode( e.charCode );
 					menuStr += ch.toLowerCase();
+					
+					tempForNikolasArray2 += ch;
+					if ( e.keyCode == Keyboard.PERIOD )
+						tempForNikolas = ch;
+					
 					fldReplaceText( c, c, ch );
 					if ( filterMenu() )
 						return;
@@ -128,7 +253,7 @@ package net.vdombox.editors.parsers
 				if ( e.keyCode == Keyboard.PERIOD )
 					triggerAssist( false );
 			}
-		}
+		}*/
 		
 		private function fldReplaceText( begin : int, end : int, text : String ) : void
 		{
@@ -146,10 +271,11 @@ package net.vdombox.editors.parsers
 		public function clear() : void
 		{
 			_menu.removeEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
-			_menu.removeEventListener( KeyboardEvent.KEY_DOWN, onMenuKey );
+			//_menu.removeEventListener( KeyboardEvent.KEY_DOWN, onMenuKey );
 			_menu.removeEventListener( MouseEvent.DOUBLE_CLICK, doubleClickMouseHandler );
 			fld.removeEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 			fld.removeEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, onTextInput );
+			fld.removeEventListener( ScriptAreaComponenrEvent.PRESS_NAVIGATION_KEY, onPressNavigationKeyHandler, true );
 		}
 		
 		public function triggerAssist( forced : Boolean = false ) : void

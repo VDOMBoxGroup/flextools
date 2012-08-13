@@ -104,7 +104,10 @@ package net.vdombox.editors.parsers.vscript
 			}*/
 			
 			if ( !menuDataStr || menuDataStr.length == 0 )
+			{
+				menuDispose();
 				return;
+			}
 			
 			menu.setListData( vectorToArray( menuDataStr ) );
 			menu.setSelectedIndex( 0 );
@@ -113,63 +116,16 @@ package net.vdombox.editors.parsers.vscript
 			if ( menuStr.length )
 				showingMenu = filterMenu();
 			else if ( !forced && trigger != '.'  )
+			{
+				menuDispose();
 				return;
+			}
 			
 			if ( showingMenu )
 				showMenu( pos + 1 );
-		}
-		
-		private var menuRefY : int;
-		
-		private function showMenu( index : int ) : void
-		{
-			var p : Point = fld.getPointForIndex( index );
-			p.x += fld.scrollH;
-			
-			p = fld.localToGlobal( p );
-			menuRefY = p.y;
-			
-			//menu.show(stage, p.x, p.y + 15);
-			menu.show( fld, p.x, 0 );
-			
-			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
-			
-			stage.focus = menu;
-			//			FocusManager.getManager( stage ).setFocusOwner( menu );
-			
-			rePositionMenu();
-		}
-		
-		private function rePositionMenu() : void
-		{
-			var menuH : int = 8 //Math.min( 8, menu.getModel().getSize() ) * 17;
-			if ( menuRefY + 15 + menuH > fld.height )
-				menu.y = menuRefY - menuH - 2;
 			else
-				menu.y = menuRefY + 15;
-		}
-		
-		private function stage_mouseDownHandler( event : MouseEvent ) : void
-		{
-			var parent : UIComponent = event.target as UIComponent;
-			var isMenu : Boolean;
-			
-			while ( parent )
-			{
-				if ( parent == menu )
-				{
-					isMenu = true;
-					break;
-				}
+				menuDispose();
 				
-				parent = parent.parent as UIComponent;
-			}
-			
-			if ( !isMenu )
-			{
-				stage.removeEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler );
-				menu.dispose();
-			}
 		}
 	}
 }

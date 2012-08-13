@@ -7,6 +7,7 @@ package net.vdombox.ide.common.events
 		public static const TEXT_INPUT : String = "scriptAreaComponentTextInput";
 		public static const TEXT_CHANGE : String = "scriptAreaComponentTextChange";
 		public static const GO_TO_DEFENITION : String = "scriptAreaComponentGoToDefenition";
+		public static const PRESS_NAVIGATION_KEY : String = "scriptAreaComponentPressNavigetionKey";
 		
 		public var detail : Object;
 		
@@ -18,7 +19,7 @@ package net.vdombox.ide.common.events
 		
 		override public function clone() : Event
 		{
-			return new ScriptAreaComponenrEvent( type, bubbles, cancelable );
+			return new ScriptAreaComponenrEvent( type, bubbles, cancelable, detail );
 		}
 	}
 }

@@ -1106,7 +1106,7 @@ package net.vdombox.editors.parsers.vscript
 				return null;
 			//TODO: binary search
 			for ( var i : int = tokens.length - 1; i >= 0; i-- )
-				if ( tokens[ i ] && pos >= tokens[ i ].pos )
+				if ( tokens[ i ] && pos > tokens[ i ].pos )
 					return VScriptToken.map[ tokens[ i ].id ];
 			return null;
 		}
