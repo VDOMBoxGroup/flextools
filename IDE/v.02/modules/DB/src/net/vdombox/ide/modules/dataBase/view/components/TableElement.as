@@ -44,15 +44,15 @@ package net.vdombox.ide.modules.dataBase.view.components
 			
 			contextMenu = new ContextMenu();
 			
-			var newItem : ContextMenuItem = new ContextMenuItem("resourceManager.getString( 'DataBase_General', 'table_element_rename' )");
+			var newItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'DataBase_General', 'table_element_rename' ));
 			newItem.addEventListener( Event.SELECT, newSubItemSelectHandler, false, 0, true );
 			contextMenu.addItem( newItem );
 			
-			var gotoItem : ContextMenuItem = new ContextMenuItem("resourceManager.getString( 'DataBase_General', 'table_element_go_to_table' )");
+			var gotoItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'DataBase_General', 'table_element_go_to_table' ));
 			gotoItem.addEventListener( Event.SELECT, gotoItemSelectHandler, false, 0, true );
 			contextMenu.addItem( gotoItem );
 			
-			var delItem : ContextMenuItem = new ContextMenuItem("resourceManager.getString( 'DataBase_General', 'table_element_delete' )");
+			var delItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'DataBase_General', 'table_element_delete' ));
 			delItem.addEventListener( Event.SELECT, delItemSelectHandler, false, 0, true );
 			contextMenu.addItem( delItem );
 		}
