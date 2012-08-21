@@ -34,6 +34,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
+	import mx.containers.Canvas;
 	import mx.controls.HScrollBar;
 	import mx.controls.Image;
 	import mx.controls.Text;
@@ -96,6 +97,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	 */
 	public class RendererBase extends SkinnableDataContainer implements IItemRenderer, IRenderer
 	{
+		private static var OVERFLOW_AUTO	: String = "auto";
+		private static var OVERFLOW_HIDDEN	: String = "hidden";
+		private static var OVERFLOW_SCROLL	: String = "scroll";
+		private static var OVERFLOW_VISIBLE	: String = "visible";
+		
+		private var overflow : String = OVERFLOW_AUTO;
 		/**
 		 *
 		 */
@@ -110,32 +117,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		}
 
 		[SkinPart( required = "true" )]
-		/**
-		 *
-		 * @default
-		 */
 		public var background : Group;
 
-
 		[SkinPart( required = "true" )]
-		/**
-		 *
-		 * @default
-		 */
 		public var backgroundRect : Rect;
 
 		[Embed( source = "assets/wysiwyg_icon.png" )]
-		/**
-		 *
-		 * @default
-		 */
 		public var blank_Icon : Class;
 
 		[SkinPart( required = "true" )]
-		/**
-		 *
-		 * @default
-		 */
 		public var locker : Group;
 
 		[SkinPart( required = "true" )]
@@ -745,6 +735,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			svg.addEventListener( RendererEvent.GET_RESOURCE, svgGetResourseHendler, false, 0, true );
 
 			parentContainer.addElement( svg );
+		}
+		
+		override protected function childrenCreated():void
+		{
+			super.childrenCreated();
 		}
 
 		private function caseText( contetntPart : XML, parentContainer : Group ) : void
@@ -1419,10 +1414,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					if ( event.keyCode == Keyboard.C )
 						dispatchEvent( new RendererEvent( RendererEvent.COPY_SELECTED ) );
 					else if ( event.keyCode == Keyboard.V )
-					{
-						trace( vdomObjectVO.name );
 						dispatchEvent( new RendererEvent( RendererEvent.PASTE_SELECTED ) );
-					}
 					
 				}
 				return;
@@ -1440,8 +1432,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{	
 			_move = false;
-			
-			trace( vdomObjectVO.name );
 			
 			if ( event.shiftKey )
 			{
@@ -1672,6 +1662,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				locker.visible = true;
 			
 			setState = "normal";
+			
+			dispatchEvent(new RendererEvent(RendererEvent.ATTRIBUTES_REFRESHED));
+			
+			if (!renderVO.children || renderVO.children.length == 0)
+				invalidateDisplayList();
 		}
 
 
@@ -1684,30 +1679,29 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			var attributeVO : AttributeVO;
 
-
 			attributeVO = _renderVO.getAttributeByName( "width" );
-
 			if ( attributeVO )
 				width = int( attributeVO.value );
 
 			attributeVO = _renderVO.getAttributeByName( "height" );
-
 			if ( attributeVO )
 				height = int( attributeVO.value );
 
+			overflow = OVERFLOW_AUTO;
+			attributeVO = _renderVO.getAttributeByName( "overflow" );
+			if ( attributeVO )
+				parseOverflowAttribute(attributeVO.value);
+			
 			attributeVO = _renderVO.getAttributeByName( "top" );
-
 			if ( attributeVO )
 				y = int( attributeVO.value );
 
 			attributeVO = _renderVO.getAttributeByName( "left" );
-
 			if ( attributeVO )
 				x = int( attributeVO.value );
 
 
 			attributeVO = _renderVO.getAttributeByName( "backgroundcolor" );
-
 			if ( attributeVO )
 			{
 				SolidColor( backgroundRect.fill ).alpha = 1;
@@ -1716,9 +1710,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			else
 				SolidColor( backgroundRect.fill ).alpha = 0;
 
-
 			attributeVO = _renderVO.getAttributeByName( "bordercolor" );
-
 			if ( attributeVO )
 			{
 				SolidColorStroke( backgroundRect.stroke ).alpha = 1;
@@ -1733,7 +1725,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			// Get BackgroundImage attribute
 			attributeVO = _renderVO.getAttributeByName( "backgroundimage" );
-
 			if ( attributeVO && attributeVO.value != "" )
 			{
 				_resourceID = attributeVO.value;
@@ -1743,10 +1734,35 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 			else
 				backgroundContentLoaded( new Event( "emptyResource" ) );
-
-
 		}
 
+		private var recalculateSkinMetrics : Boolean;
+		private function parseOverflowAttribute (overflow:String) : void
+		{
+			this.overflow = overflow;
+			
+			switch (overflow)
+			{
+				case OVERFLOW_VISIBLE:
+				case OVERFLOW_HIDDEN:
+					scroller.setStyle("verticalScrollPolicy", ScrollPolicy.OFF);
+					scroller.setStyle("horizontalScrollPolicy", ScrollPolicy.OFF);
+					break;
+				case OVERFLOW_SCROLL:
+					scroller.setStyle("verticalScrollPolicy", ScrollPolicy.ON);
+					scroller.setStyle("horizontalScrollPolicy", ScrollPolicy.ON);
+					break;
+				case OVERFLOW_AUTO:
+				default:
+					scroller.setStyle("verticalScrollPolicy", ScrollPolicy.AUTO);
+					scroller.setStyle("horizontalScrollPolicy", ScrollPolicy.AUTO);
+					break;
+			}
+			
+			recalculateSkinMetrics = true;
+			invalidateDisplayList();
+		}
+		
 		private function refreshContent() : void
 		{
 			background.removeAllElements();
@@ -1819,6 +1835,127 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( !tip.visible )
 				tip.visible = true;
 		}
+		
+		public var skinWidth	: Number = 0;
+		public var skinHeight	: Number = 0;
+		
+		private function get maxRightPosition () : Number
+		{
+			var maxRight : Number = 0;
+			
+			for each (var child:RenderVO in renderVO.children)
+			{
+				var attribute : AttributeVO;
+				
+				attribute = child.getAttributeByName("left");
+				var childLeft : Number =  attribute ? Number(attribute.value) : 0;
+				
+				attribute = child.getAttributeByName("width");
+				var childWidth : Number =  attribute ? Number(attribute.value) : 0;
+				
+				var childRightPosition : Number= childLeft + childWidth;
+				
+				if (childRightPosition > maxRight)
+					maxRight = childRightPosition;
+			}
+			
+			return maxRight;
+		}
+		
+		private function get maxBottomPosition () : Number
+		{
+			var maxBottom : Number = 0;
+			
+			for each (var child:RenderVO in renderVO.children)
+			{
+				var attribute : AttributeVO;
+				
+				attribute = child.getAttributeByName("top");
+				var childTop : Number =  attribute ? Number(attribute.value) : 0;
+				
+				attribute = child.getAttributeByName("height");
+				var childHeight : Number =  attribute ? Number(attribute.value) : 0;
+				
+				var childBottomPosition : Number= childTop + childHeight;
+				
+				if (childBottomPosition > maxBottom)
+					maxBottom = childBottomPosition;
+			}
+			
+			return maxBottom;
+		}
+		
+		protected function refreshSkinMetrics():void
+		{				
+			if (overflow != OVERFLOW_VISIBLE)
+				return;
+			
+			if (background.numChildren == 0)
+				return;
+			
+			var sizeChanged : Boolean = false;
+			
+			if (skinWidth < width) skinWidth = width;
+			if (skinHeight < height) skinHeight = height;
+			
+			var maxRightPos : Number = maxRightPosition;
+			var maxBottomPos : Number = maxBottomPosition;
+			
+			if (skinWidth != maxRightPos || skinHeight != maxBottomPos)
+				sizeChanged = true;
+			
+			skinWidth = maxRightPos;
+			skinHeight = maxBottomPos;
+			
+			if (sizeChanged)
+				invalidateDisplayList();
+		}
+		
+		public function refreshOnChildTransform (child : RendererBase, maxRightPos:Number, maxBottomPos:Number) : void
+		{
+			if (overflow != OVERFLOW_VISIBLE)
+				return;
+			
+			var childRightPosition:Number = child.x + child.width; 
+			var childBottomPosition:Number = child.y + child.height;
+			
+			if (childRightPosition > skinWidth || childRightPosition > maxRightPos)
+				skinWidth = childRightPosition;
+			else
+				skinWidth = maxRightPos;
+				
+			if (childBottomPosition > skinHeight || childBottomPosition > maxBottomPos)
+				skinHeight = childBottomPosition;
+			else
+				skinHeight = maxBottomPos;
+			
+			invalidateDisplayList();
+		}
+		
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			
+			if (overflow != OVERFLOW_VISIBLE)
+			{
+				skin.width = width;
+				skin.height = height;
+				return;
+			}
+			
+			if (recalculateSkinMetrics)
+			{
+				recalculateSkinMetrics = false;
+				refreshSkinMetrics();
+			}
+			
+			if (skinWidth < width) skinWidth = width;
+			if (skinHeight < height) skinHeight = height;
+			
+			skin.width = skinWidth;
+			skin.height = skinHeight;
+		}
+		
 	}
 }
 

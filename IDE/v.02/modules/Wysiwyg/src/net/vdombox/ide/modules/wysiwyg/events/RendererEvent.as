@@ -41,6 +41,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var MULTI_SELECTED_MOVE	: String = "multiSelectedMove";
 		
 		public static var MULTI_SELECTED_MOVED	: String = "multiSelectedMoved";
+		
+		public static var ATTRIBUTES_REFRESHED : String = "attributesRefreshed";
 
 		public var object : Object;
 		

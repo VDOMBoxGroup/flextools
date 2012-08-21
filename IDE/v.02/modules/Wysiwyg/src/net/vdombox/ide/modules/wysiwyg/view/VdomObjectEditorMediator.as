@@ -627,6 +627,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( RendererEvent.CLEAR_RENDERER, clearLineGroup, true );
 			
 			editor.addEventListener( RendererEvent.MOVE_MEDIATOR, moveRendererHandler, true );
+			editor.addEventListener( RendererEvent.ATTRIBUTES_REFRESHED, renderAttributesRefreshed, true);
 			
 			editor.addEventListener( RendererEvent.MOUSE_UP_MEDIATOR, clearLineGroup, true);
 			
@@ -670,6 +671,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 			component.addEventListener( Event.CHANGE, readLinkage);
 		}
 
+		private function renderAttributesRefreshed (event : Event) : void
+		{
+			element = event.target as RendererBase;
+			
+			if (!element.renderVO.parent)
+				return;
+			
+			parentRenderer = rendProxy.getRendererByVO( element.renderVO.parent.vdomObjectVO );
+			
+			if (!(parentRenderer is PageRenderer))
+			{
+				parentRenderer.refreshOnChildTransform(element, curMaxRightPosition, curMaxBottomPosition);
+			}
+
+		}
+		
 		private function removeHandlers() : void
 		{
 			var editor : IEventDispatcher = editor as IEventDispatcher;
@@ -682,6 +699,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 			
 			editor.removeEventListener( RendererEvent.MOVE_MEDIATOR, moveRendererHandler, true);
+			editor.removeEventListener( RendererEvent.ATTRIBUTES_REFRESHED, renderAttributesRefreshed, true);
+			
 			editor.removeEventListener( RendererEvent.MOUSE_UP_MEDIATOR, clearLineGroup, true);
 			
 			component.removeEventListener( MouseEvent.MOUSE_UP, clearLineGroup, true);
@@ -776,7 +795,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			if ( event.target is RendererBase )
 				element = event.target as RendererBase;
-			else
+			else 
 				return;
 			
 			offsetX = event.object.x;
@@ -866,9 +885,61 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 		}
 		
+		private function get curMaxRightPosition () : Number
+		{
+			var maxRight : Number = 0;
+			
+			if (!element || !parentRenderer)
+				return maxRight;
+			
+			for each (var child:RenderVO in parentRenderer.renderVO.children)
+			{
+				if (child == element.renderVO)
+					continue;
+				
+				var childElement : RendererBase = rendProxy.getRendererByVO( child.vdomObjectVO );
+				
+				var childRightPosition : Number= childElement.x + childElement.width;
+				
+				if (childRightPosition > maxRight)
+					maxRight = childRightPosition;
+			}
+			
+			return maxRight;
+		}
+		
+		private function get curMaxBottomPosition () : Number
+		{
+			var maxBottom : Number = 0;
+			
+			if (!element || !parentRenderer)
+				return maxBottom;
+			
+			for each (var child:RenderVO in parentRenderer.renderVO.children)
+			{
+				if (child == element.renderVO)
+					continue;
+				
+				var childElement : RendererBase = rendProxy.getRendererByVO( child.vdomObjectVO );
+				
+				var childBottomPosition : Number= childElement.y + childElement.height;
+				
+				if (childBottomPosition > maxBottom)
+					maxBottom = childBottomPosition;
+			}
+			
+			return maxBottom;
+		}
+		
 		private function renderer_movedHandler() : void
 		{
 			parentRenderer = rendProxy.getRendererByVO( element.renderVO.parent.vdomObjectVO );
+		
+			if (!(parentRenderer is PageRenderer))
+			{
+				parentRenderer.refreshOnChildTransform(element, curMaxRightPosition, curMaxBottomPosition);
+				return;
+			}
 			
 			transformrendererXY();
 			
@@ -886,6 +957,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			if ( rendererXY.x + offsetX - 10 < horizontalScrollPosition )
 				element.addEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft, false, 0, true );
+			
 		}
 		
 		private function keyDownDeleteHandler(event : KeyboardEvent) : void
@@ -1279,9 +1351,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 
 			vdomObjectAttributesVO.attributes = attributes;
-
+			
 			sendNotification( Notifications.RENDERER_TRANSFORMED, vdomObjectAttributesVO );
-			//sendNotification( Notifications.GET_WYSIWYG, vdomObjectAttributesVO.vdomObjectVO );
 		}
 
 		private function attributesChangeHandler( event : EditorEvent ) : void
