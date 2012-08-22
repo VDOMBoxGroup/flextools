@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.events.TabEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
+	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
@@ -29,7 +30,7 @@ package net.vdombox.ide.modules.scripts.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	public class WorkAreaMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "WorkAreaMediator";
@@ -40,7 +41,8 @@ package net.vdombox.ide.modules.scripts.view
 		private var libraryVO : LibraryVO;
 		private var globalActionVO : GlobalActionVO;
 		private var statesProxy : StatesProxy;
-
+		private var applicationVO : ApplicationVO;
+		
 		private var closedScript : Boolean = false;
 		
 		private var goToDefenitionProxy : GoToPositionProxy;
@@ -77,8 +79,10 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.LIBRARY_GETTED );
 			interests.push( Notifications.SERVER_ACTION_GETTED );
 			interests.push( Notifications.GLOBAL_ACTION_GETTED );
-
+			
 			interests.push( Notifications.SCRIPT_CHECKED );
+			
+			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
 			
 			return interests;
 		}
@@ -101,6 +105,11 @@ package net.vdombox.ide.modules.scripts.view
 				case Notifications.BODY_START:
 				{
 					isActive = true;
+					
+					if ( applicationVO && applicationVO.id != statesProxy.selectedApplication.id )
+						workArea.closeAllEditors();
+					
+					applicationVO = statesProxy.selectedApplication;
 					
 					break;
 				}
@@ -141,7 +150,7 @@ package net.vdombox.ide.modules.scripts.view
 					
 					break;
 				}
-
+					
 				case Notifications.SCRIPT_CHECKED:
 				{
 					var actionVO : Object = body;
@@ -180,8 +189,12 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
+				case StatesProxy.SELECTED_APPLICATION_CHANGED:
+				{
+					clearData();
+				}
 			}
-
+			
 			function saveActionRequest( event : CloseEvent ) : void 
 			{
 				if ( event.detail == Alert.NO )
@@ -227,11 +240,11 @@ package net.vdombox.ide.modules.scripts.view
 					goToPos( editor );
 				}
 			}
-		
+			
 			sendNotification( Notifications.CHANGE_SELECTED_SCRIPT, editor );
-
+			
 		}
-
+		
 		private function setMediator( event : FlexEvent ) : void
 		{			
 			var editor : ScriptEditor = event.target as ScriptEditor;
