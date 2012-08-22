@@ -8,7 +8,7 @@
 					  creationComplete="creationCompleteHandler()" 
 					  remove="removeHandler()"				 
 					  >
-
+	
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
@@ -35,33 +35,33 @@
 			
 			import spark.components.Group;
 			import spark.filters.DropShadowFilter;
-
+			
 			[SkinPart( required="true" )]
 			public var headerGroup : Group;
-
+			
 			[SkinPart( required="true" )]
 			public var typeImage : SmoothImage;
 			
-			/*[SkinPart( required="true" )]
-			public var deleteButton : Image;*/
-
+			[SkinPart( required="true" )]
+			public var deleteButton : Image;
+			
 			[Bindable]
 			private var _typeResource : ResourceVO;
-
+			
 			[Bindable]
 			private var _pageResource : ResourceVO
-
+			
 			[Bindable]
 			private var _treeElementVO : TreeElementVO;
-
+			
 			[Bindable]
 			private var _title : String;
 			
 			private var _nameAttribute : String;
-
+			
 			[Bindable]
 			private var _typeName : String;
-
+			
 			[Bindable]
 			public var isIndexPage : Boolean;
 			
@@ -69,9 +69,9 @@
 			
 			[Bindable]
 			public var multiSelected : Boolean = false;
-
+			
 			private var mouseOffcetX : int;
-
+			
 			private var mouseOffcetY : int;
 			
 			private var moved : Boolean = false;
@@ -83,12 +83,12 @@
 			
 			[Bindable]
 			private var descriptionAttributeVO : AttributeVO;
-
+			
 			public function get vdomObjectAttributesVO():VdomObjectAttributesVO
 			{
 				return _vdomObjectAttributesVO;
 			}
-
+			
 			public function set vdomObjectAttributesVO(value:VdomObjectAttributesVO):void
 			{
 				_vdomObjectAttributesVO = value;
@@ -96,18 +96,18 @@
 				_title = getAttributeValue( "title" );
 				
 			}
-
+			
 			[Bindable]
 			public function get typeResource() : ResourceVO
 			{
 				return _typeResource;
 			}
-
+			
 			public function set typeResource( value : ResourceVO ) : void
 			{
 				_typeResource = value;
 			}
-
+			
 			[Bindable]
 			public function get nameAttribute() : String
 			{
@@ -118,23 +118,23 @@
 			{
 				_nameAttribute = name;
 			}
-						
+			
 			[Bindable]
 			public function get typeName() : String
 			{
 				return _typeName;
 			}
-
+			
 			public function set typeName( value : String ) : void
 			{
 				_typeName = value;
 			}
-
+			
 			public function get treeElementVO() : TreeElementVO
 			{
 				return _treeElementVO;
 			}
-
+			
 			public function set treeElementVO( value : TreeElementVO ) : void
 			{
 				_treeElementVO = value;
@@ -149,17 +149,17 @@
 				
 				/*if ( image && !treeElementVO.resourceVO )
 				{
-					image.source = array;
-					rectImage.visible = true;
+				image.source = array;
+				rectImage.visible = true;
 				}*/
 			}
-
+			
 			[Bindable]
 			public function get selected() : Boolean
 			{
 				return _selected;
 			}
-
+			
 			public function set selected( value : Boolean ) : void
 			{
 				if ( _selected != value )
@@ -198,21 +198,21 @@
 				
 				return result;
 			}
-
+			
 			override protected function partAdded( partName : String, instance : Object ) : void
 			{
 				super.partAdded( partName, instance );
-
+				
 				if ( instance == headerGroup )
 					headerGroup.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
-
+				
 				if ( instance == typeImage )
 					typeImage.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
 				
-				/*if ( instance == deleteButton )
-					deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );*/
+				if ( instance == deleteButton )
+					deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );
 			}
-
+			
 			private function sizeChanged( value : Object ) : void
 			{
 				if( _treeElementVO )
@@ -235,10 +235,10 @@
 			private function creationCompleteHandler() : void
 			{
 				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATED ) );
-
+				
 				BindingUtils.bindSetter( sizeChanged, this, "width" );
 				BindingUtils.bindSetter( sizeChanged, this, "height" );
-								
+				
 				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0 , true );
 				skin.addEventListener( MouseEvent.MOUSE_DOWN, skinMouseDownHandler, true, 0 , true );
 				
@@ -246,13 +246,13 @@
 				
 				/*if ( !treeElementVO.resourceVO || !treeElementVO.resourceVO.data )
 				{
-					image.source = array;
-					rectImage.visible = true;
+				image.source = array;
+				rectImage.visible = true;
 				}*/
 				
-			
+				
 			}
-
+			
 			private function removeHandler() : void
 			{
 				dispatchEvent( new TreeElementEvent( TreeElementEvent.REMOVED ) );
@@ -260,7 +260,7 @@
 			
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
-				if( /*deleteButton !== event.target && */!event.shiftKey && !multiSelected )
+				if( deleteButton !== event.target && !event.shiftKey && !multiSelected )
 					dispatchEvent( new TreeElementEvent( TreeElementEvent.SELECTION ) );
 			}
 			
@@ -287,7 +287,7 @@
 				if ( !moved )
 					dispatchEvent( new TreeElementEvent ( TreeElementEvent.CLICK ) );
 			}
-
+			
 			private function header_mouseDownHandler( event : MouseEvent ) : void
 			{
 				moved = false;
@@ -295,21 +295,21 @@
 				stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
-
+				
 				mouseOffcetX = mouseX;
 				mouseOffcetY = mouseY;
 			}
-
+			
 			private function stage_mouseMoveHandler( event : MouseEvent ) : void
 			{
 				moved = true;
 				
 				var newX : int = parent.mouseX - mouseOffcetX;
 				var newY : int = parent.mouseY - mouseOffcetY;
-
+				
 				if ( newX < 0 )
 					newX = 0;
-
+				
 				if ( newY < 0 )
 					newY = 0;
 				
@@ -330,11 +330,11 @@
 					dispatchEvent( new TreeElementEvent( TreeElementEvent.MOVE, {x : mouseOffcetX, y :  mouseOffcetY, dx : dx, dy : dy} ) );
 				}
 				
-			/*	treeElementVO.left = x;
+				/*	treeElementVO.left = x;
 				treeElementVO.top = y;*/
-
+				
 			}
-
+			
 			private function stage_mouseMoveHandlerExt( event : MouseEvent ) : void
 			{
 				dispatchEvent( new TreeElementEvent( TreeElementEvent.MOVED ) );
@@ -346,13 +346,13 @@
 				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
 				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 			}
-
+			
 			private function setStartPageButton_clickHandler( event : MouseEvent ) : void
 			{
-//				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE_REQUEST ) );
+				//				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE_REQUEST ) );
 			}
 			
-			/*private function deleteButton_clickHandler( event : MouseEvent ) :void
+			private function deleteButton_clickHandler( event : MouseEvent ) :void
 			{
 				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 				
@@ -366,7 +366,7 @@
 					}
 				}
 				
-			}*/
+			}
 			
 			protected function textinput1_keyDownHandler(event:KeyboardEvent):void
 			{
@@ -478,14 +478,14 @@
 			
 		]]>
 	</fx:Script>
-
+	
 	<s:layout>
-
+		
 		<s:VerticalLayout gap="1"/>
 	</s:layout>
-
+	
 	<s:VGroup width="100%" gap="5">
-
+		
 		<s:HGroup width="100%" height="100%" paddingTop="5" gap="5">
 			
 			<s:Group width="100%" height="100%">
@@ -518,9 +518,9 @@
 					<s:Scroller id="scroll" width="100%" maxHeight="150">
 						<s:Group>
 							<s:RichEditableText id="txtDescription" text="@{ descriptionAttributeVO.value }" width="100%"
-										color="0x474747" paddingBottom="3" paddingLeft="8" paddingRight="8" paddingTop="3" 
-										focusIn="txtDescription_focusInHandler(event)"  focusOut="txtDescription_focusOutHandler(event)"
-										doubleClick="txtDescription_doubleClickHandler(event)" resize="txtDescription_resizeHandler(event)"/>
+												color="0x474747" paddingBottom="3" paddingLeft="8" paddingRight="8" paddingTop="3" 
+												focusIn="txtDescription_focusInHandler(event)"  focusOut="txtDescription_focusOutHandler(event)"
+												doubleClick="txtDescription_doubleClickHandler(event)" resize="txtDescription_resizeHandler(event)"/>
 							
 							<s:Group id="shadowDiscription" width="100%" height="100%" visible="false">
 								
@@ -547,12 +547,12 @@
 			
 		</s:HGroup>
 		
-
+		
 		<s:Label text="{_typeName.toUpperCase()}"
 				 bottom="3" color="0xC7C7C7" width="100%"
 				 textAlign="center"
 				 maxDisplayedLines="1"/>
-
+		
 	</s:VGroup>
-
+	
 </s:SkinnableContainer>
