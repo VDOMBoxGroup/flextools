@@ -34,7 +34,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
-	import mx.containers.Canvas;
 	import mx.controls.HScrollBar;
 	import mx.controls.Image;
 	import mx.controls.Text;
@@ -90,19 +89,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
 	import spark.skins.spark.ScrollerSkin;
-
+	
 	/**
 	 *
 	 * @author andreev ap
 	 */
 	public class RendererBase extends SkinnableDataContainer implements IItemRenderer, IRenderer
 	{
-		private static var OVERFLOW_AUTO	: String = "auto";
-		private static var OVERFLOW_HIDDEN	: String = "hidden";
-		private static var OVERFLOW_SCROLL	: String = "scroll";
-		private static var OVERFLOW_VISIBLE	: String = "visible";
-		
-		private var overflow : String = OVERFLOW_AUTO;
 		/**
 		 *
 		 */
@@ -112,69 +105,86 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			itemRendererFunction = chooseItemRenderer;
 			
 			ToolTip.maxWidth = 180;
-
+			
 			addHandlers();
 		}
-
+		
 		[SkinPart( required = "true" )]
+		/**
+		 *
+		 * @default
+		 */
 		public var background : Group;
-
+		
+		
 		[SkinPart( required = "true" )]
+		/**
+		 *
+		 * @default
+		 */
 		public var backgroundRect : Rect;
-
+		
 		[Embed( source = "assets/wysiwyg_icon.png" )]
+		/**
+		 *
+		 * @default
+		 */
 		public var blank_Icon : Class;
-
+		
 		[SkinPart( required = "true" )]
+		/**
+		 *
+		 * @default
+		 */
 		public var locker : Group;
-
+		
 		[SkinPart( required = "true" )]
 		/**
 		 *
 		 * @default
 		 */
 		public var scroller : Scroller;
-
+		
 		private var _data : Object;
-
+		
 		private var _editableComponent : Object;
-
+		
 		private var _isLocked : Boolean;
-
+		
 		private var _renderVO : RenderVO;
-
+		
 		private var _resourceID : String;
-
+		
 		private var _resourceVO : ResourceVO;
-
+		
 		// TODO: delete 
 		private var backgroundRefreshNeedFlag : Boolean = false;
-
+		
 		private var beforeX : uint;
-
+		
 		private var beforeY : uint;
-
+		
 		/**
 		 * Display image bitmap once bytes have loaded
 		 **/
-
+		
 		private var content : Bitmap;
-
+		
 		private var loader : Loader;
-
+		
 		private var mDeltaX : uint;
-
+		
 		private var mDeltaY : uint;
-
+		
 		private var needRefresh : Boolean               = false;
-
+		
 		private const styleList : Array                 = [ [ "opacity", "backgroundAlpha" ], [ "backgroundcolor", "backgroundColor" ],
-															[ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat", "backgroundRepeat" ],
-															[ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ], [ "color", "color" ],
-															[ "fontfamily", "fontFamily" ], [ "fontsize", "fontSize" ], [ "fontweight", "fontWeight" ],
-															[ "fontstyle", "fontStyle" ], [ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
-															[ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
-
+			[ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat", "backgroundRepeat" ],
+			[ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ], [ "color", "color" ],
+			[ "fontfamily", "fontFamily" ], [ "fontsize", "fontSize" ], [ "fontweight", "fontWeight" ],
+			[ "fontstyle", "fontStyle" ], [ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
+			[ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
+		
 		/**
 		 *
 		 * @return
@@ -183,12 +193,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var beforeCreationComplete : Boolean = true;
 		
 		private var _move : Boolean = false;
-			
+		
 		public function get data() : Object
 		{
 			return _data;
 		}
-
+		
 		/**
 		 *
 		 * @param value
@@ -196,12 +206,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set data( value : Object ) : void
 		{
 			_data = value;
-
+			
 			if ( !beforeCreationComplete )
 				renderVO = value as RenderVO;
 			
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -210,7 +220,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return false;
 		}
-
+		
 		/**
 		 *
 		 * @param value
@@ -218,7 +228,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set dragging( value : Boolean ) : void
 		{
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -238,7 +248,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return skin.currentState;
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -247,7 +257,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return _isLocked;
 		}
-
+		
 		/**
 		 *
 		 * @param value
@@ -256,7 +266,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			_isLocked = value;
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -265,7 +275,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return 0;
 		}
-
+		
 		/**
 		 *
 		 * @param value
@@ -273,7 +283,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set itemIndex( value : int ) : void
 		{
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -282,7 +292,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return null;
 		}
-
+		
 		/**
 		 *
 		 * @param value
@@ -290,7 +300,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set label( value : String ) : void
 		{
 		}
-
+		
 		/**
 		 *
 		 * @param isRemoveChildren
@@ -298,22 +308,22 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function lock( isRemoveChildren : Boolean = false ) : void
 		{
 			isLocked = true;
-
+			
 			setState = "locked";
-
+			
 			if ( isRemoveChildren )
 			{
 				if ( width > 0 )
 					width = width;
-
+				
 				if ( height > 0 )
 					height = height;
-
+				
 				background.removeAllElements();
 				dataProvider = null;
 			}
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -321,7 +331,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function get movable() : Boolean
 		{
 			var result : Boolean = false;
-
+			
 			if ( typeVO )
 			{
 				if ( typeVO.moveable == "0" )
@@ -329,11 +339,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				else if ( typeVO.moveable == "1" )
 					result = true;
 			}
-
+			
 			return result;
 		}
-
-
+		
+		
 		/**
 		 *
 		 * @return
@@ -342,31 +352,31 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return _renderVO;
 		}
-
+		
 		/**
 		 *
 		 * @param value
 		 */
-
+		
 		public function set renderVO( value : RenderVO ) : void
 		{
 			if ( _renderVO == value )
 				return;
-
+			
 			dispatchEvent( new RendererEvent( RendererEvent.RENDER_CHANGING ) );
-
+			
 			_renderVO = value;
-
+			
 			if ( _renderVO )
 				dataProvider = _renderVO.sortedChildren;
-
+			
 			dispatchEvent( new RendererEvent( RendererEvent.RENDER_CHANGED ) );
-
+			
 			needRefresh = true;
 			invalidateProperties()
-//			refresh();
+			//			refresh();
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -375,7 +385,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return typeVO ? uint( typeVO.resizable ) : 0;
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -384,7 +394,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return _resourceID;
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -393,7 +403,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return _resourceVO;
 		}
-
+		
 		/**
 		 *
 		 * @param value
@@ -401,16 +411,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set resourceVO( value : ResourceVO ) : void
 		{
 			_resourceVO = value;
-
+			
 			if ( !value.data )
 			{
 				BindingUtils.bindSetter( dataLoaded, value, "data", false, true  );
 				return;
 			}
-
+			
 			dataLoaded();
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -419,25 +429,25 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return true;
 		}
-
+		
 		/**
 		 *
 		 * @param value
 		 */
 		public function set selected( value : Boolean ) : void
 		{
-
+			
 		}
-
-
+		
+		
 		/**
 		 *
 		 * @param value
 		 */
-//		public function set selected( value : Boolean ) : void
-//		{
-//		}
-
+		//		public function set selected( value : Boolean ) : void
+		//		{
+		//		}
+		
 		/**
 		 *
 		 * @return
@@ -446,7 +456,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return false;
 		}
-
+		
 		/**
 		 *
 		 * @param value
@@ -454,13 +464,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set showsCaret( value : Boolean ) : void
 		{
 		}
-
+		
 		override public function stylesInitialized() : void
 		{
 			super.stylesInitialized();
 			setStyle("skinClass", Class(ObjectRendererSkin));
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -469,7 +479,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return _renderVO ? _renderVO.vdomObjectVO.typeVO : null;
 		}
-
+		
 		override public function validateDisplayList() : void
 		{
 			super.validateDisplayList();
@@ -482,28 +492,28 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				measuredWidth = editableComponent.width;
 				measuredHeight = editableComponent.height;
 			}
-
+			
 			if ( backgroundRefreshNeedFlag )
 			{
 				backgroundRefreshNeedFlag = false;
 				//refresh();
 				backgroundContentLoaded(null);
 			}
-
+			
 		}
-
+		
 		override public function validateProperties() : void
 		{
 			super.validateProperties();
-
+			
 			if ( !needRefresh )
 				return;
-
+			
 			needRefresh = false;
-
+			
 			refresh();
 		}
-
+		
 		/**
 		 *
 		 * @return
@@ -512,83 +522,83 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return _renderVO ? _renderVO.vdomObjectVO : null;
 		}
-
-
-
+		
+		
+		
 		protected function addHandlers() : void
 		{
 			addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
 			addEventListener( Event.REMOVED_FROM_STAGE, removeHandler, false, 0, true );
-
+			
 			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, false, 0, true );
 			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler, false, 0, true );
-
+			
 			addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
 			addEventListener( MouseEvent.CLICK, mouseClickHandler, false, 0, true );
-
+			
 			addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler, false, 0, true );
 			addEventListener( DragEvent.DRAG_EXIT, dragExitHandler, false, 0, true );
 			addEventListener( DragEvent.DRAG_DROP, dragDropHandler, false, 0, true );
-
+			
 			addEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler, false, 0 , true);
 		}
-
+		
 		protected function removeHandlers() : void
 		{
 			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			removeEventListener( Event.REMOVED_FROM_STAGE, removeHandler );
-
+			
 			removeEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
 			removeEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
-
-
+			
+			
 			removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-
-            removeEventListener( MouseEvent.CLICK, mouseClickHandler );
+			
+			removeEventListener( MouseEvent.CLICK, mouseClickHandler );
 			
 			removeEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
 			removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
 			removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
-
+			
 			removeEventListener( KeyboardEvent.KEY_DOWN , keyNavigationHandler);
 		}
-
+		
 		private function applyStyles( item : UIComponent, itemXMLDescription : XML ) : void
 		{
 			var _style : Object    = {};
 			var hasStyle : Boolean = false;
-
+			
 			var xmlList : XMLList;
-
+			
 			for each ( var attribute : Array in styleList )
 			{
 				xmlList = itemXMLDescription.attribute( attribute[ 0 ] );
-
+				
 				if ( xmlList.length() > 0 )
 				{
 					_style[ attribute[ 1 ] ] = xmlList[ 0 ].toString().toLowerCase();
 					hasStyle = true;
 				}
 			}
-
+			
 			if ( !hasStyle )
 				return;
-
+			
 			var styleName : String;
-
+			
 			for ( styleName in _style )
 			{
 				if ( styleName == "color" || styleName == "backgroundColor" || styleName == "borderColor" )
 					_style[ styleName ] = uint( "0x" + String( _style[ styleName ] ).substr( 1 ) );
-
+				
 				item.setStyle( styleName, _style[ styleName ] );
 			}
 		}
-
+		
 		private function backgroundContentLoaded( event : Event ) : void
 		{
 			loader = null;
-
+			
 			if ( event != null )
 			{
 				if ( event.type == IOErrorEvent.IO_ERROR )
@@ -598,34 +608,34 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				else if ( event.type != "resizeMainWindow" )
 					content = Bitmap( event.target.content );
 			}
-
+			
 			if ( _renderVO && content )
 			{
 				var backGrSprite : Sprite = new Sprite();
 				var bitmapWidth : Number, bitmapHeight : Number;
 				var rectangle : Rectangle;
-
+				
 				rectangle = getBackGroundRect( content );
 				
 				background.graphics.clear();
 				background.graphics.beginBitmapFill( content.bitmapData, null, true );
 				background.graphics.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
 				background.graphics.endFill();
-//				invalidateDisplayList();
+				//				invalidateDisplayList();
 			}
 			else if ( !content )
 				background.graphics.clear();
-
+			
 			function getBackGroundRect( content : Bitmap ) : Rectangle
 			{
 				var attributeVO : AttributeVO;
 				var rectangle : Rectangle = new Rectangle();
-
+				
 				attributeVO = _renderVO.getAttributeByName( "backgroundrepeat" );
-
+				
 				if ( !attributeVO )
 					return rectangle;
-
+				
 				switch ( attributeVO.value )
 				{
 					case "repeat":
@@ -653,18 +663,18 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 						break;
 					}
 				}
-
+				
 				return rectangle;
 			}
 		}
-
+		
 		private function caseContainer( contetnt : XML, parentContainer : Group ) : void
 		{
 			var conatiner : Group = getSubContainer( contetnt, parentContainer  );
-
+			
 			if ( !conatiner )
 				conatiner = parentContainer;
-
+			
 			// TODO: need sort 'contetnt.children()' by 'z-index'
 			
 			var childrenXMLList : XMLList = contetnt.children();
@@ -678,12 +688,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function caseHtmlText( contetntPart : XML, parentContainer : Group ) : void
 		{
 			var html : HTML = new HTML();
-
+			
 			html.x = contetntPart.@left;
 			html.y = contetntPart.@top;
 			
 			html.paintsDefaultBackground = true;
-
+			
 			if ( contetntPart.@width[ 0 ] && contetntPart.@width[ 0 ]!="" )
 				html.width = contetntPart.@width;
 			
@@ -692,28 +702,34 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			if ( contetntPart.@overflow[ 0 ] )
 				html.overflow = contetntPart.@overflow[ 0 ];
-						
+			
 			html.setStyle( "borderVisible", false );
 			
 			html.blendMode = contetntPart.@blendMode;
 			
 			if ( contetntPart.@editable )
 				_editableComponent = html;
-
+			
 			var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + "</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
-
+			
 			html.htmlText = htmlText;
 			
 			disableContainerScroller();
 			
 			parentContainer.addElement(html);
 			
-			var locked:String = contetntPart.@locked;
-			html.locked = locked.toLowerCase() == "true";
-				
+			var l:String = contetntPart.@locked;
+			html.locked = l.toLowerCase() == "true";
+			
 			dispatchEvent(new RendererEvent(RendererEvent.HTML_ADDED));
-
+			
+			//html.addEventListener( MouseEvent.MOUSE_DOWN, htmlMouseDownHandler, true, 0 , true );
 		}
+		
+		/*private function htmlMouseDownHandler( event : MouseEvent ) : void
+		{
+		mouseEnable = false;
+		}*/
 		
 		private function disableContainerScroller():void
 		{
@@ -724,28 +740,23 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			scroller.enabled = true;
 		}
-
+		
 		private function caseSVG( contetntPart : XML, parentContainer : Group ) : void
 		{
 			var svg : SVGViewer            = new SVGViewer();
 			var editableAttributes : Array = svg.setXML( contetntPart );
-
+			
 			if ( editableAttributes.length > 0 )
 				_editableComponent = editableAttributes[ 0 ].sourceObject;
 			svg.addEventListener( RendererEvent.GET_RESOURCE, svgGetResourseHendler, false, 0, true );
-
+			
 			parentContainer.addElement( svg );
 		}
 		
-		override protected function childrenCreated():void
-		{
-			super.childrenCreated();
-		}
-
 		private function caseText( contetntPart : XML, parentContainer : Group ) : void
 		{
 			var richText : UIComponent
-
+			
 			if ( contetntPart.@editable[0] && contetntPart.@editable )
 			{
 				if ( !_editableComponent || !(_editableComponent is RichEditableText) )
@@ -771,9 +782,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				richText.percentWidth = 100;
 			
 			richText.setStyle( "borderVisible", false );
-
+			
 			richText[ "text" ] = contetntPart[ 0 ];
-
+			
 			applyStyles( richText, contetntPart );
 			
 			parentContainer.addElement( richText );
@@ -830,7 +841,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 		
-
+		
 		private function choiceContentType( contetntPart : XML, parentContainer : Group ) : void
 		{
 			switch ( contetntPart.name().toString() )
@@ -845,7 +856,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					caseSVG( contetntPart, parentContainer );
 					break;
 				}
-
+					
 				case "text":
 				{
 					caseText( contetntPart, parentContainer );
@@ -882,7 +893,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				}
 			}
 		}
-
+		
 		/**
 		 *
 		 * @param renderVO
@@ -892,7 +903,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			var itemFactory : ClassFactory;
 			var layout : LayoutBase;
-
+			
 			switch ( renderVO.name )
 			{
 				case "container":
@@ -901,10 +912,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					layout = new BasicLayout();
 					layout.clipAndEnableScrolling = true;
 					itemFactory.properties = { layout: layout };
-
+					
 					break;
 				}
-
+					
 				case "table":
 				{
 					itemFactory = new ClassFactory( RendererBase );
@@ -912,10 +923,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					layout.clipAndEnableScrolling = true;
 					//VerticalLayout( layout ).gap = 0;
 					itemFactory.properties = { layout: layout };
-
+					
 					break;
 				}
-
+					
 				case "row":
 				{
 					itemFactory = new ClassFactory( RendererBase );
@@ -923,17 +934,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					layout.clipAndEnableScrolling = true;
 					//HorizontalLayout( layout ).gap = 0;
 					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
-
+					
 					break;
 				}
-
+					
 				case "cell":
 				{
 					itemFactory = new ClassFactory( RendererBase );
 					layout = new BasicLayout();
 					layout.clipAndEnableScrolling = true;
 					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
-
+					
 					break;
 				}
 				default:
@@ -942,14 +953,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					layout = new BasicLayout();
 					layout.clipAndEnableScrolling = false;
 					itemFactory.properties = { layout: layout };
-
+					
 					break;
 				}
 			}
-
+			
 			return itemFactory;
 		}
-
+		
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			beforeCreationComplete = false;
@@ -963,11 +974,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function dataLoaded( object : Object = null ) : void
 		{
 			loader = new Loader();
-
+			
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, backgroundContentLoaded );
 			parentApplication.addEventListener("resizeMainWindow", resizePageRenderer);
 			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, backgroundContentLoaded );
-
+			
 			try
 			{
 				loader.loadBytes( _resourceVO.data );
@@ -977,17 +988,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				// FIXME Сделать обработку исключения если не грузится изображение
 			}
 		}
-
-
-
+		
+		
+		
 		private function dragDropHandler( event : DragEvent ) : void
 		{
 			setState = "normal";
-
+			
 			var rde : RendererDropEvent = new RendererDropEvent( RendererDropEvent.DROP );
-
+			
 			var typeVO : TypeVO         = TypeItemRenderer( event.dragInitiator ).typeVO;
-
+			
 			var objectLeft : Number     = this.mouseX - 25 + this.layout.horizontalScrollPosition;
 			var objectTop : Number      = this.mouseY - 25 + this.layout.verticalScrollPosition;
 			
@@ -996,29 +1007,29 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			if ( objectTop < 0 )
 				objectTop = 0;
-
+			
 			var point : Point = new Point( objectLeft, objectTop );
-
+			
 			rde.typeVO = typeVO;
 			rde.point = point;
-
+			
 			dispatchEvent( rde );
 		}
-
+		
 		private function dragEnterHandler( event : DragEvent ) : void
 		{
 			var typeDescription : Object = event.dragSource.dataForFormat( "typeDescription" );
-
+			
 			if ( !typeDescription )
 				return;
-
+			
 			var containersRE : RegExp     = /(\w+)/g;
 			var aviableContainers : Array = typeDescription.aviableContainers.match( containersRE );
 			var currentItemName : String;
-
+			
 			if ( _renderVO )
 				currentItemName = _renderVO.vdomObjectVO.typeVO.name;
-
+			
 			var vdomDragManager : VdomDragManager = VdomDragManager.getInstance();;
 			if ( aviableContainers.indexOf( currentItemName ) != -1 )
 			{
@@ -1031,16 +1042,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				vdomDragManager.hitTarget( UIComponent( this ) );
 			}
 		}
-
+		
 		private function dragExitHandler( event : DragEvent ) : void
 		{
 			setState = "normal";
 		}
-
+		
 		private function findNearestItem( currentElement : DisplayObjectContainer ) : RendererBase
 		{
 			var result : RendererBase;
-
+			
 			while ( currentElement && currentElement.parent )
 			{
 				if ( currentElement is RendererBase )
@@ -1048,13 +1059,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					result = currentElement as RendererBase;
 					break;
 				}
-
+				
 				currentElement = currentElement.parent;
 			}
-
+			
 			return result;
 		}
-
+		
 		/**
 		 *
 		 * @param target
@@ -1064,7 +1075,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			var result : RendererBase;
 			var item : DisplayObjectContainer = target;
-
+			
 			while ( item && item.parent )
 			{
 				if ( item is RendererBase )
@@ -1072,55 +1083,55 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					result = item as RendererBase;
 					break;
 				}
-
+				
 				item = item.parent;
 			}
-
+			
 			return result;
 		}
-
+		
 		private function getSubContainer( contetnt : XML , parentContainer : Group ) : Group
 		{
 			var conatiner : Group;
-
+			
 			var param : Number;
-
+			
 			if ( !contetnt.@id[ 0 ] )
 				return null;
-
-
+			
+			
 			conatiner = new Group();
 			conatiner.clipAndEnableScrolling = true;
-
+			
 			parentContainer.addElement( conatiner );
-
-
+			
+			
 			if ( contetnt.@visible[ 0 ] == "0" )
 				conatiner.visible = false;
-
+			
 			param = Number( contetnt.@top[ 0 ] )
-
+			
 			if ( param )
 				conatiner.y = param;
-
+			
 			param = Number( contetnt.@left[ 0 ] )
-
+			
 			if ( param )
 				conatiner.x = param;
-
+			
 			param = Number( contetnt.@width[ 0 ] )
-
+			
 			if ( param )
 				conatiner.width = param;
 			else 
 				conatiner.percentWidth = 100;
-
+			
 			param = Number( contetnt.@height[ 0 ] )
-
+			
 			if ( param )
 				conatiner.height = param;
-
-
+			
+			
 			return conatiner;
 		}
 		
@@ -1149,7 +1160,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			scroll.focusEnabled = false;
 			
 			//conatiner2.addElement( scroll );
-		
+			
 			
 			parentContainer.addElement( conatiner );
 			
@@ -1171,7 +1182,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				conatiner.width = param;
 			else 
 				conatiner.percentWidth = 100;
-
+			
 			param = Number( contetnt.@height[ 0 ] )
 			
 			if ( param )
@@ -1195,7 +1206,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			var conatiner : Group;
 			var param : Number;
-
+			
 			conatiner = new Group();
 			
 			conatiner.clipAndEnableScrolling = true;
@@ -1213,7 +1224,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				conatiner.x = param;
 			
 			param = Number( contetnt.@width[ 0 ] )
-				
+			
 			if ( param )
 				conatiner.width = param;
 			else 
@@ -1240,15 +1251,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			conatiner2.percentWidth = 100;
 			conatiner2.percentHeight = 100;
 			
-//			conatiner2.left = 0;
-//			conatiner2.right = 0;
-//			conatiner2.top = 0;
-//			conatiner2.bottom = 0;
+			//			conatiner2.left = 0;
+			//			conatiner2.right = 0;
+			//			conatiner2.top = 0;
+			//			conatiner2.bottom = 0;
 			
 			conatiner.addElement( conatiner2 );
 			
 			
-
+			
 			
 			return conatiner2;
 		}
@@ -1324,7 +1335,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			return conatiner;
 		}
-
+		
 		private function isScroller( target : DisplayObjectContainer ) : Boolean
 		{
 			var result : Boolean = false;
@@ -1336,19 +1347,19 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					result = true;
 					break;
 				}
-
+				
 				if ( target == this )
 					break;
-
+				
 				if ( target.parent )
 					target = target.parent;
 				else
 					target = null;
 			}
-
+			
 			return result;
 		}
-
+		
 		private function isScrollBarObject(target : DisplayObjectContainer) : Boolean
 		{
 			return target is ScrollBarBase || target is HScrollBar || target is VScrollBar;
@@ -1360,10 +1371,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 			
 			var step : Number = 1;
-
+			
 			if ( event.shiftKey )
 				step = 10;
-
+			
 			if ( event.keyCode >= 37 && event.keyCode <= 40 )
 			{
 				if ( skin.currentState == "multiSelect" )
@@ -1402,7 +1413,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					else
 						y = y + step;
 				}
-					
+				
 			}
 			else
 			{
@@ -1414,24 +1425,29 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					if ( event.keyCode == Keyboard.C )
 						dispatchEvent( new RendererEvent( RendererEvent.COPY_SELECTED ) );
 					else if ( event.keyCode == Keyboard.V )
+					{
+						trace( vdomObjectVO.name );
 						dispatchEvent( new RendererEvent( RendererEvent.PASTE_SELECTED ) );
+					}
 					
 				}
 				return;
 			}
-
+			
 			mouseUpHandler( null );
-
+			
 			event.stopImmediatePropagation();
-
+			
 			dispatchEvent( new RendererEvent( RendererEvent.CLEAR_RENDERER ) );
 		}
 		
 		private var selecteRectDraw : Boolean = false;
-
+		
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{	
 			_move = false;
+			
+			trace( vdomObjectVO.name );
 			
 			if ( event.shiftKey )
 			{
@@ -1445,25 +1461,29 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 			}
 			
-			if ( !( editableComponent && editableComponent is RichEditableText && !( event.target is Group ) ) )
+			/*if ( !( editableComponent && editableComponent is RichEditableText && !( event.target is Group ) ) )
+			{*/
+			
+			if ( ( editableComponent && stage.focus != editableComponent ) || !( editableComponent is RichEditableText && !( event.target is Group ) ) )
 			{
 				setFocus();
 				var isScroller : Boolean = isScroller( event.target as DisplayObjectContainer ); 
-			
+				
 				if ( movable && !isScroller )
 				{
 					stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
 					stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
-
+					
 					mDeltaX = int(mouseX);
 					mDeltaY = int(mouseY);
-	
+					
 					beforeX = x;
 					beforeY = y;
 					
 					beforeLeft = x;
 					beforeTop = y;
 				}
+				//}
 			}
 			
 			event.stopImmediatePropagation();
@@ -1474,13 +1494,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			event.stopPropagation();
 			
+			//mouseEnable = true;
+			
 			if ( !isScroller( event.target as DisplayObjectContainer ) )
 			{
 				dispatchEvent( new RendererEvent( RendererEvent.CLICKED, false, true, event.shiftKey ) );
 			}
 		}
 		
-
+		
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
 			_move = true;
@@ -1504,15 +1526,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				//dispatchEvent( moveEvent );
 				return;
 			}
-
+			
 			x = x + dx > 0 ? x + dx : 0;
 			y = y + dy > 0 ? y + dy : 0;
-
+			
 			if ( event.shiftKey )
 			{
 				dx = x - beforeX;
 				dy = y - beforeY;
-
+				
 				if ( Math.abs( dx ) >= Math.abs( dy ) )
 				{
 					x = beforeX + dx > 0 ? beforeX + dx : 0;
@@ -1524,9 +1546,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					y = beforeY + dy > 0 ? beforeY + dy : 0;
 				}
 			}
-
+			
 			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
-
+			
 			dispatchEvent( moveEvent );
 		}
 		
@@ -1554,7 +1576,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
 			}
 		}
-
+		
 		public function moveTo( dx : int, dy : int, target : RendererBase = null ) : void
 		{
 			x += dx;
@@ -1577,12 +1599,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			else
 				hideToolTip();
 		}
-
+		
 		private function mouseOverHandler( event : MouseEvent ) : void
 		{
 			if ( skin.currentState == "highlighted" || skin.currentState == "notPackeg" || skin.currentState == "multiSelect")
 				return;
-
+			
 			invalidateDisplayList();
 			
 			if ( findNearestItem( event.target as DisplayObjectContainer ) == this )
@@ -1617,7 +1639,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				//stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
 			}
 		}
-
+		
 		private function mouseUpHandler( event : MouseEvent ) : void
 		{		
 			if ( skin.currentState == "multiSelect" && _move )
@@ -1628,20 +1650,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			stage.removeEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 			stage.removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler );
-
+			
 			if ( x != beforeX || y != beforeY )
 			{
 				beforeX = x;
 				beforeY = y;
-
+				
 				dispatchEvent( new RendererEvent( RendererEvent.MOVE ) );
-
+				
 				//stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
 			}
-
+			
 			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );
 		}
-
+		
 		/**
 		 * Refresh att.
 		 *
@@ -1654,23 +1676,18 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 			}
 			refreshAttributes();
-
+			
 			refreshContent();
-
-
+			
+			
 			if ( _renderVO.staticFlag )
 				locker.visible = true;
 			
 			setState = "normal";
-			
-			dispatchEvent(new RendererEvent(RendererEvent.ATTRIBUTES_REFRESHED));
-			
-			if (!renderVO.children || renderVO.children.length == 0)
-				invalidateDisplayList();
 		}
-
-
-
+		
+		
+		
 		/**
 		 * Refresh all atributes contens in  current RenderVO
 		 *
@@ -1678,30 +1695,31 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function refreshAttributes() : void
 		{
 			var attributeVO : AttributeVO;
-
+			
+			
 			attributeVO = _renderVO.getAttributeByName( "width" );
+			
 			if ( attributeVO )
 				width = int( attributeVO.value );
-
+			
 			attributeVO = _renderVO.getAttributeByName( "height" );
+			
 			if ( attributeVO )
 				height = int( attributeVO.value );
-
-			overflow = OVERFLOW_AUTO;
-			attributeVO = _renderVO.getAttributeByName( "overflow" );
-			if ( attributeVO )
-				parseOverflowAttribute(attributeVO.value);
 			
 			attributeVO = _renderVO.getAttributeByName( "top" );
+			
 			if ( attributeVO )
 				y = int( attributeVO.value );
-
+			
 			attributeVO = _renderVO.getAttributeByName( "left" );
+			
 			if ( attributeVO )
 				x = int( attributeVO.value );
-
-
+			
+			
 			attributeVO = _renderVO.getAttributeByName( "backgroundcolor" );
+			
 			if ( attributeVO )
 			{
 				SolidColor( backgroundRect.fill ).alpha = 1;
@@ -1709,22 +1727,25 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 			else
 				SolidColor( backgroundRect.fill ).alpha = 0;
-
+			
+			
 			attributeVO = _renderVO.getAttributeByName( "bordercolor" );
+			
 			if ( attributeVO )
 			{
 				SolidColorStroke( backgroundRect.stroke ).alpha = 1;
 				SolidColorStroke( backgroundRect.stroke ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
 				attributeVO = _renderVO.getAttributeByName( "borderwidth" );
-
+				
 				if ( attributeVO )
 					SolidColorStroke( backgroundRect.stroke ).weight = uint( attributeVO.value );
 			}
 			else
 				SolidColorStroke( backgroundRect.stroke ).alpha = 0;
-
+			
 			// Get BackgroundImage attribute
 			attributeVO = _renderVO.getAttributeByName( "backgroundimage" );
+			
 			if ( attributeVO && attributeVO.value != "" )
 			{
 				_resourceID = attributeVO.value;
@@ -1734,33 +1755,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 			else
 				backgroundContentLoaded( new Event( "emptyResource" ) );
-		}
-
-		private var recalculateSkinMetrics : Boolean;
-		private function parseOverflowAttribute (overflow:String) : void
-		{
-			this.overflow = overflow;
 			
-			switch (overflow)
-			{
-				case OVERFLOW_VISIBLE:
-				case OVERFLOW_HIDDEN:
-					scroller.setStyle("verticalScrollPolicy", ScrollPolicy.OFF);
-					scroller.setStyle("horizontalScrollPolicy", ScrollPolicy.OFF);
-					break;
-				case OVERFLOW_SCROLL:
-					scroller.setStyle("verticalScrollPolicy", ScrollPolicy.ON);
-					scroller.setStyle("horizontalScrollPolicy", ScrollPolicy.ON);
-					break;
-				case OVERFLOW_AUTO:
-				default:
-					scroller.setStyle("verticalScrollPolicy", ScrollPolicy.AUTO);
-					scroller.setStyle("horizontalScrollPolicy", ScrollPolicy.AUTO);
-					break;
-			}
 			
-			recalculateSkinMetrics = true;
-			invalidateDisplayList();
 		}
 		
 		private function refreshContent() : void
@@ -1768,13 +1764,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			background.removeAllElements();
 			
 			var contentXMLList : XMLList = _renderVO.content;
-
+			
 			for each ( var contetntPart : XML in contentXMLList )
 			{
 				choiceContentType( contetntPart, background );
 			}
 		}
-
+		
 		private function removeHandler( event : Event ) : void
 		{
 			if ( event.target == this )
@@ -1786,18 +1782,18 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				removeHandlers();
 			}
 		}
-
+		
 		private function resizePageRenderer(event : Event) : void
 		{
 			backgroundRefreshNeedFlag = true;
 			invalidateDisplayList();
 		}
-
+		
 		private function svgGetResourseHendler( event : RendererEvent ) : void
 		{
 			var renderEvent : RendererEvent = new RendererEvent( RendererEvent.GET_RESOURCE );
 			renderEvent.object = event.object;
-
+			
 			dispatchEvent( renderEvent );
 		}
 		
@@ -1820,7 +1816,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			addEventListener( MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler );
 			tip.text = text;
 		}
-	
+		
 		private function hideToolTip() : void
 		{
 			removeEventListener( MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler );
@@ -1836,126 +1832,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				tip.visible = true;
 		}
 		
-		public var skinWidth	: Number = 0;
-		public var skinHeight	: Number = 0;
-		
-		private function get maxRightPosition () : Number
-		{
-			var maxRight : Number = 0;
-			
-			for each (var child:RenderVO in renderVO.children)
+		private function set mouseEnable (value:Boolean) : void
+		{			
+			for (var i:uint=0; i<background.numChildren; i++)
 			{
-				var attribute : AttributeVO;
+				var child:* = background.getChildAt(i);
 				
-				attribute = child.getAttributeByName("left");
-				var childLeft : Number =  attribute ? Number(attribute.value) : 0;
-				
-				attribute = child.getAttributeByName("width");
-				var childWidth : Number =  attribute ? Number(attribute.value) : 0;
-				
-				var childRightPosition : Number= childLeft + childWidth;
-				
-				if (childRightPosition > maxRight)
-					maxRight = childRightPosition;
+				if ((child != null) && !(child is Scroller) && child.hasOwnProperty("mouseChildren"))
+					child.mouseChildren = value;
 			}
-			
-			return maxRight;
 		}
-		
-		private function get maxBottomPosition () : Number
-		{
-			var maxBottom : Number = 0;
-			
-			for each (var child:RenderVO in renderVO.children)
-			{
-				var attribute : AttributeVO;
-				
-				attribute = child.getAttributeByName("top");
-				var childTop : Number =  attribute ? Number(attribute.value) : 0;
-				
-				attribute = child.getAttributeByName("height");
-				var childHeight : Number =  attribute ? Number(attribute.value) : 0;
-				
-				var childBottomPosition : Number= childTop + childHeight;
-				
-				if (childBottomPosition > maxBottom)
-					maxBottom = childBottomPosition;
-			}
-			
-			return maxBottom;
-		}
-		
-		protected function refreshSkinMetrics():void
-		{				
-			if (overflow != OVERFLOW_VISIBLE)
-				return;
-			
-			if (background.numChildren == 0)
-				return;
-			
-			var sizeChanged : Boolean = false;
-			
-			if (skinWidth < width) skinWidth = width;
-			if (skinHeight < height) skinHeight = height;
-			
-			var maxRightPos : Number = maxRightPosition;
-			var maxBottomPos : Number = maxBottomPosition;
-			
-			if (skinWidth != maxRightPos || skinHeight != maxBottomPos)
-				sizeChanged = true;
-			
-			skinWidth = maxRightPos;
-			skinHeight = maxBottomPos;
-			
-			if (sizeChanged)
-				invalidateDisplayList();
-		}
-		
-		public function refreshOnChildTransform (child : RendererBase, maxRightPos:Number, maxBottomPos:Number) : void
-		{
-			if (overflow != OVERFLOW_VISIBLE)
-				return;
-			
-			var childRightPosition:Number = child.x + child.width; 
-			var childBottomPosition:Number = child.y + child.height;
-			
-			if (childRightPosition > skinWidth || childRightPosition > maxRightPos)
-				skinWidth = childRightPosition;
-			else
-				skinWidth = maxRightPos;
-				
-			if (childBottomPosition > skinHeight || childBottomPosition > maxBottomPos)
-				skinHeight = childBottomPosition;
-			else
-				skinHeight = maxBottomPos;
-			
-			invalidateDisplayList();
-		}
-		
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-		{
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			
-			if (overflow != OVERFLOW_VISIBLE)
-			{
-				skin.width = width;
-				skin.height = height;
-				return;
-			}
-			
-			if (recalculateSkinMetrics)
-			{
-				recalculateSkinMetrics = false;
-				refreshSkinMetrics();
-			}
-			
-			if (skinWidth < width) skinWidth = width;
-			if (skinHeight < height) skinHeight = height;
-			
-			skin.width = skinWidth;
-			skin.height = skinHeight;
-		}
-		
 	}
 }
 
