@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import flash.display.BlendMode;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	import mx.controls.HTML;
 	import mx.core.ScrollPolicy;
@@ -21,7 +22,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			return _overflow;
 		}
-
+		
 		public function set overflow(value:String):void
 		{
 			_overflow = value;
@@ -37,7 +38,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				case "hidden":
 					verticalScrollPolicy = horizontalScrollPolicy = ScrollPolicy.OFF;
 					break;
-					
+				
 				case "auto":
 				default:
 					verticalScrollPolicy = horizontalScrollPolicy = ScrollPolicy.AUTO;
@@ -45,7 +46,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				
 			}
 		}
-
+		
 		override public function set blendMode(value:String):void
 		{ 
 			super.blendMode = value || BlendMode.DARKEN;
