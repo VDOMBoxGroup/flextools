@@ -3,14 +3,19 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		maxHeight="300"
+		minWidth="300"
 		requireSelection="true"
 		doubleClickEnabled="true"
-		arrowKeysWrapFocus="true">
+		arrowKeysWrapFocus="true"
+		itemRenderer="net.vdombox.editors.AutoCompleteItemRenderer"
+		contentBackgroundColor="#555555">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import mx.managers.PopUpManager;
+			
+			import net.vdombox.editors.parsers.AutoCompleteItemVO;
 			
 			private var _showed : Boolean = false;
 
@@ -21,12 +26,21 @@
 
 			public function setListData( value : Array ) : void
 			{
-				if ( value.hasOwnProperty( "label" ) )
-					value.sortOn( "label" );
-				else
-					value.sort(Array.CASEINSENSITIVE);
-				
+				value.sort( comp );
 				dataProvider = new ArrayList( value );
+			}
+			
+			protected function comp(x:AutoCompleteItemVO, y:AutoCompleteItemVO):int
+			{
+				if ( x.value.toLowerCase() < y.value.toLowerCase() )
+					return -1;
+				else
+				{
+					if ( x.value.toLowerCase() === y.value.toLowerCase() )
+						return 0;
+					else
+						return 1;
+				}
 			}
 
 			public function setSelectedIndex( index : int ) : void

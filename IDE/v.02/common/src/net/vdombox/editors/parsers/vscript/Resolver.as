@@ -1,15 +1,18 @@
 package net.vdombox.editors.parsers.vscript
 {
 	import net.vdombox.editors.HashLibraryArray;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.BackwardsParser;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
+	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.StructureDB;
 	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	
 	import ro.victordramba.util.HashMap;
 
@@ -21,7 +24,7 @@ package net.vdombox.editors.parsers.vscript
 		
 		private var tokenScopeClass : Field;
 		
-		private var a : Vector.<String>;
+		private var a : Vector.<AutoCompleteItemVO>;
 		
 		public function Resolver( tokenizer : VScriptTokenizer )
 		{
@@ -107,7 +110,7 @@ package net.vdombox.editors.parsers.vscript
 			return null;
 		}
 		
-		public function getAllOptions( pos : int ) : Vector.<String>
+		public function getAllOptions( pos : int ) : Vector.<AutoCompleteItemVO>
 		{
 			
 			var f : Field;
@@ -124,8 +127,8 @@ package net.vdombox.editors.parsers.vscript
 				return HashLibraryArray.getImportToLibraty( t.importFrom );*/
 			
 			// default keywords
-			var a : Vector.<String> = new <String>["And", "application", "As", "AsJSON", "Case", "Catch", "Class", "Connection", "Const", "cstr", "Dim", "Do", "Each", "Else", "ElseIf", "Empty", "End", "Exit", "False", "For", "Function", "Generic", "If", "In", "Is", "IsNot", "Loop", "Match", "Matches", "Mismatch", "Mod", "New", "Next", "Not", "Nothing", "Null", "Or", "Preserve", "Print", "Proxy", "ReDim", "RegExp", "request", "Rem", "replace", "response", "Select", "server", "Session", "Set", "Step", "String", "Sub", "Then", "this", "To", "ToJSON", "True", "Try", "UBound", "Until", "Use", "VdomDbConnection", "VDOMDBRecordSet", "VDOMDBRow", "VDOMImaging", "Wend", "While", "XMLDocument", "XMLNode", "Xor"  ];
-						
+			StandardWordsProxy.setNullCurrentIndex();
+			a = StandardWordsProxy.vscriptWords;		
 			//find the scope
 			if ( !t )
 				return a;
@@ -136,7 +139,7 @@ package net.vdombox.editors.parsers.vscript
 			function addKeys( map : HashMap ) : void
 			{
 				for each ( var name : String in map.getKeys() )
-				a.push( name);
+				a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Parameter, name ) );
 			}
 			
 			//find items in function scope chain
@@ -157,25 +160,35 @@ package net.vdombox.editors.parsers.vscript
 			
 			//class scope
 			for each ( f in tokenizer.members.toArray() )
-				a.push( f.name );
+				a.push( StandardWordsProxy.getAutoCompleteItemVOByField( f ) );
 			
 			if ( t.parent.imports )
 			{
 				var ff : Object;
 				for each ( ff in t.parent.imports.toArray() )
-				a.push( ff.name );
+				{
+					var field : Field;
+					if ( ff.source != ff.systemName )
+					{
+						field = HashLibraryArray.getTokenToLibraty( ff.source, ff.systemName, "vscript" );
+						a.push( StandardWordsProxy.getAutoCompleteItemVOByField( field, true ) );
+					}
+					else
+						a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Library, ff.name ) );
+				}
 			}
 			
 			return a;
 		}
 		
 		
-		public function getAllTypes( isFunction : Boolean = true ) : Vector.<String>
+		public function getAllTypes( isFunction : Boolean = true ) : Vector.<AutoCompleteItemVO>
 		{
 			var lst : Vector.<Field> = classDB.listAllTypes();
-			var a : Vector.<String> = new <String>["Array", "Binary", "Boolean", "Date", "Dictionary", "Double", "Error", "Integer", ];
+			StandardWordsProxy.setNullCurrentIndex();
+			a = StandardWordsProxy.vscriptTypeWords;
 			for each ( var f : Field in lst )
-				a.push( f.name );
+				a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, f.name ) );
 			
 			/*if ( isFunction )
 				a.push( 'void' );*/
@@ -217,9 +230,11 @@ package net.vdombox.editors.parsers.vscript
 		/**
 		 * called when you enter a dot
 		 */
-		public function getMemberList( text : String, pos : int, actionVO : Object ) : Vector.<String>
+		public function getMemberList( text : String, pos : int, actionVO : Object ) : Vector.<AutoCompleteItemVO>
 		{
-			a = new Vector.<String>;
+			a = new Vector.<AutoCompleteItemVO>;
+			
+			StandardWordsProxy.setNullCurrentIndex();
 			
 			var flag : Boolean = resolve( text, pos, actionVO );
 			
@@ -239,7 +254,7 @@ package net.vdombox.editors.parsers.vscript
 			for each ( var m : Field in listMembers( resolved, resolvedIsClass ).toArray() )
 			{
 				if ( a.indexOf( m.name ) == -1 )
-					a.push(m.name );
+					a.push( StandardWordsProxy.getAutoCompleteItemVOByField( m ) );
 			}
 				
 			a.sort( Array.CASEINSENSITIVE );
@@ -487,6 +502,6 @@ package net.vdombox.editors.parsers.vscript
 			}
 			if ( tokenScopeClass.fieldType != 'class' )
 				tokenScopeClass = null;
-		}
+		}	
 	}
 }

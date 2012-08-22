@@ -2,15 +2,17 @@ package net.vdombox.editors.parsers.python
 {
 
 	import net.vdombox.editors.HashLibraryArray;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
+	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
+	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.editors.parsers.Tokenizer;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import ro.victordramba.util.HashMap;
-	import net.vdombox.editors.parsers.ClassDB;
 
 
 	public class PythonTokenizer extends Tokenizer
@@ -493,9 +495,9 @@ package net.vdombox.editors.parsers.python
 				}
 				else if ( t.string == "*" )
 				{
-					for each ( var name : String in HashLibraryArray.getImportToLibraty( importFrom, "python" ) )
+					for each ( var name : AutoCompleteItemVO in HashLibraryArray.getImportToLibraty( importFrom, "python" ) )
 					{
-						imports[ imports.length - 1 ].setValue( name, { name : name, systemName : name, source : importFrom } );
+						imports[ imports.length - 1 ].setValue( name.value, { name : name.value, systemName : name.value, source : importFrom } );
 					}
 					
 					position = t.pos + t.string.length;

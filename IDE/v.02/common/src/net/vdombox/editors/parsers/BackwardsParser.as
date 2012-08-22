@@ -109,5 +109,11 @@ package net.vdombox.editors.parsers
 			names.unshift( name );
 			types.unshift( type );
 		}
+		
+		public function toLowerCase() : void
+		{
+			for ( var i : int = 0; i < names.length; i++ )
+				names[i] = names[i].toLowerCase();
+		}
 	}
 }

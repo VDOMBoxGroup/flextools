@@ -261,10 +261,13 @@ package ro.victordramba.scriptarea
 			if ( !bp.parse( text, token.pos + token.string.length ) )
 				return false;
 			
+			if ( controller.lang == "vscript" )
+				bp.toLowerCase();
+			
 			if ( token.parent && token.parent.imports && token.parent.imports.hasKey( bp.names[0] ) )
 			{
 				var lib : Object = token.parent.imports.getValue( bp.names[0] );
-				var info : Object = HashLibraryArray.getPositionToken( lib.source, lib.systemName, bp );
+				var info : Object = HashLibraryArray.getPositionToken( lib.source, lib.systemName, bp, controller.lang );
 				if ( !info )
 					return false;
 				var position : int = info.position;
@@ -279,7 +282,7 @@ package ro.victordramba.scriptarea
 				}
 			}
 			
-			return getFiled( token.parent, bp, needGo );
+			return getFiled( token, bp, needGo );
 		}
 		
 		private function getFiled( t : Token, bp : BackwardsParser, needGo : Boolean ) : Boolean
@@ -299,7 +302,7 @@ package ro.victordramba.scriptarea
 				
 				scope = scope.getField( name );
 				
-				if ( !scope || ( t.scope.fieldType == "class" && scope.fieldType != "def" ) || ( t.scope != token.scope && t.scope.fieldType == "top" && controller.actionVO is ServerActionVO ) )
+				if ( !scope /*|| ( t.scope.fieldType == "class" && scope.fieldType != "def" ) */|| ( t.scope != token.scope && t.scope.fieldType == "top" && controller.actionVO is ServerActionVO ) )
 					return false;
 			}
 			
@@ -640,17 +643,21 @@ package ro.victordramba.scriptarea
 			else if ( k == Keyboard.SLASH && e.ctrlKey )
 			{
 				//extend selection to full lines
-				end = _text.indexOf( NL, _selEnd - 1 );
+				end = _text.indexOf( NL, _selEnd );
 				if ( end == -1 )
 					end = _text.length - 1;
 				
-				begin = _text.lastIndexOf( NL, _selStart - 1 ) + 1;
+				begin = _text.lastIndexOf( NL, _selStart ) + 1;
+				
+				if ( begin > end )
+					return;
+				
 				str = _text.substring( begin, end );
 				
 				var t : Token;
 				var addComment : Boolean = false;
 				i = end;
-				
+
 				while ( !addComment && i > begin )
 				{
 					t = controller.getTokenByPos( i );

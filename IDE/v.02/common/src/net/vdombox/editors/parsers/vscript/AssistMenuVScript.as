@@ -12,13 +12,14 @@ package net.vdombox.editors.parsers.vscript
 	
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AssistMenu;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	
 	import ro.victordramba.util.vectorToArray;
 
 	public class AssistMenuVScript extends AssistMenu
 	{		
-		private var menuDataStr : Vector.<String>;
+		private var menuDataStr : Vector.<AutoCompleteItemVO>;
 		
 		
 		public function AssistMenuVScript( field : ScriptAreaComponent, ctrl : VScriptController, stage : Stage, onComplete : Function )
@@ -76,13 +77,17 @@ package net.vdombox.editors.parsers.vscript
 			menuDataStr = null;
 			
 			var rt : String =  tmp.replace( /^\s+|\s+$/g, '' );
+			var tt : String = rt.substr( 3, 1 );
 			if ( rt.length > 3 )
 				rt = rt.substr( 0, 3 ).toLowerCase();
 			
-			if ( rt != "wen" )
+			if ( rt != "wen" || ( tt != " " && tt != "=" ) )
+			{
+				tt = rt.substr( 2, 1 );
 				rt = rt.substr( 0, 2 );
+			}
 				
-			if (rt == 'wen' || rt == 'sa' )
+			if (rt == 'wen' || rt == 'sa' && tt == " " || tt == "=" )
 				menuDataStr = ctrl.getTypeOptions();
 			else if (trigger == '.')
 				menuDataStr = ctrl.getMemberList(pos);

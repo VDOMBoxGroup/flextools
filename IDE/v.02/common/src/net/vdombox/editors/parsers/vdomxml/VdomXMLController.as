@@ -8,6 +8,7 @@ package net.vdombox.editors.parsers.vdomxml
 	import flash.utils.getTimer;
 	
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.Controller;
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
 	import net.vdombox.editors.parsers.vdomxml.VdomXMLParser;
@@ -73,12 +74,12 @@ package net.vdombox.editors.parsers.vdomxml
 			status = 'Processing ...';
 		}
 
-		public function getAttributesList( index : int ) : Vector.<Object>
+		public function getAttributesList( index : int ) : Vector.<AutoCompleteItemVO>
 		{
 			return _parser.newResolver().getAttributesList( index );
 		}
 
-		public function getAllTypes() : Vector.<Object>
+		public function getAllTypes() : Vector.<AutoCompleteItemVO>
 		{
 			return _parser.newResolver().getAllTypes();
 		}
@@ -91,6 +92,11 @@ package net.vdombox.editors.parsers.vdomxml
 		public function isInAttribute( pos : int ) : Boolean
 		{
 			return _parser.newResolver().isInAttribute( pos );
+		}
+		
+		public override function get lang() : String
+		{
+			return "vdomxml";
 		}
 	}
 }

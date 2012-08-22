@@ -13,7 +13,10 @@ package net.vdombox.editors.parsers.vdomxml
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AssistMenu;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
+	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	
 	import ro.victordramba.util.vectorToArray;
 
@@ -70,31 +73,31 @@ package net.vdombox.editors.parsers.vdomxml
 			{
 				menuData = VdomXMLController( ctrl ).getAllTypes();
 
-				if ( menuData && menuData.length > 0 )
+				/*if ( menuData && menuData.length > 0 )
 				{
 					for ( i = 0; i < menuData.length; i++ )
 					{
 						menuData[ i ] = { label: menuData[ i ], value: menuData[ i ].toUpperCase() };
 					}
-				}
+				}*/
 
 				if ( !menuData )
-					menuData = new Vector.<Object>;
+					menuData = new Vector.<AutoCompleteItemVO>;
 
-				menuData.push( { label: "attribute", value: "ATTRIBUTE" } );
+				menuData.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, "ATTRIBUTE" ) );
 			}
 			else if ( VdomXMLController( ctrl ).isInAttribute( pos ) )
 			{
 				menuData = VdomXMLController( ctrl ).getAttributesList( pos );
 				var eqStr : String = "=\"\"";
 
-				if ( menuData && menuData.length > 0 )
+				/*if ( menuData && menuData.length > 0 )
 				{
 					for ( i = 0; i < menuData.length; i++ )
 					{
-						menuData[ i ] = { label: menuData[ i ], value: menuData[ i ] /*+ eqStr*/ };
+						menuData[ i ] = { label: menuData[ i ], value: menuData[ i ] /*+ eqStr*//* };
 					}
-				}
+				}*/
 
 			}
 

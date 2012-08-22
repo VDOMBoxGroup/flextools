@@ -1,9 +1,12 @@
 package net.vdombox.editors.parsers.vdomxml
 {
 
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.BackwardsParser;
 	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	
 	import ro.victordramba.util.HashMap;
 
@@ -53,25 +56,27 @@ package net.vdombox.editors.parsers.vdomxml
 			return result;
 		}
 
-		public function getAllTypes() : Vector.<Object>
+		public function getAllTypes() : Vector.<AutoCompleteItemVO>
 		{
 			var lst : Vector.<Field> = typeDB.listAll();
-			var a : Vector.<Object> = new Vector.<Object>;
+			StandardWordsProxy.setNullCurrentIndex();
+			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>;
 
 			for each ( var f : Field in lst )
-				a.push( f.name );
+				a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, f.name.toUpperCase() ) );
 
 			return a;
 		}
 
-		public function getAttributesList( pos : int ) : Vector.<Object>
+		public function getAttributesList( pos : int ) : Vector.<AutoCompleteItemVO>
 		{
 
 			var token : VdomXMLToken = tokenizer.tokenByPos( pos ) as VdomXMLToken;
 			var typeName : String;
 			var type : Field;
 
-			var a : Vector.<Object>
+			StandardWordsProxy.setNullCurrentIndex();
+			var a : Vector.<AutoCompleteItemVO>
 
 			if ( token && token.parent )
 			{
@@ -90,13 +95,11 @@ package net.vdombox.editors.parsers.vdomxml
 
 			if ( type )
 			{
-				a = new Vector.<Object>;
+				a = new Vector.<AutoCompleteItemVO>;
 				
-				
-
 				for each ( var m : Field in type.members.toArray() )
 				{
-					a.push( m.name );
+					a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, m.name ) );
 				}
 			}
 

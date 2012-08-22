@@ -10,6 +10,7 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.Location;
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Controller;
 	import net.vdombox.editors.parsers.Field;
@@ -69,7 +70,7 @@ package net.vdombox.editors.parsers.vscript
 			ClassDB.setDB( 'restored', so.data.typeDB );
 		}
 		
-		public override function getMemberList( index : int ) : Vector.<String>
+		public override function getMemberList( index : int ) : Vector.<AutoCompleteItemVO>
 		{
 			return VScriptParser( parser ).newResolver().getMemberList( fld.text, index , _actionVO );
 		}
@@ -79,12 +80,12 @@ package net.vdombox.editors.parsers.vscript
 			return VScriptParser( parser ).newResolver().getFunctionDetails( fld.text, index );
 		}
 		
-		public override function getTypeOptions() : Vector.<String>
+		public override function getTypeOptions() : Vector.<AutoCompleteItemVO>
 		{
 			return VScriptParser( parser ).newResolver().getAllTypes();
 		}
 		
-		public override function getAllOptions( index : int ) : Vector.<String>
+		public override function getAllOptions( index : int ) : Vector.<AutoCompleteItemVO>
 		{
 			return VScriptParser( parser ).newResolver().getAllOptions( index );
 		}
@@ -128,6 +129,11 @@ package net.vdombox.editors.parsers.vscript
 		public override function get commentString() : String
 		{
 			return "'";
+		}
+		
+		public override function get lang() : String
+		{
+			return "vscript";
 		}
 	}
 }

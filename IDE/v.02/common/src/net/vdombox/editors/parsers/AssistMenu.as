@@ -18,7 +18,7 @@ package net.vdombox.editors.parsers
 
 	public class AssistMenu
 	{
-		protected var menuData : Vector.<Object>;
+		protected var menuData : Vector.<AutoCompleteItemVO>;
 		protected var fld : ScriptAreaComponent;
 		protected var ctrl : Controller;
 		protected var _menu : PopUpMenu;
@@ -33,12 +33,6 @@ package net.vdombox.editors.parsers
 		
 		protected var menuStr : String;
 		protected var tooltipCaret : int;
-		
-		
-		protected var tempForNikolas : String;
-		
-		protected var tempForNikolasArray1 : String = "";
-		protected var tempForNikolasArray2 : String = "";
 		
 		public function AssistMenu( field : ScriptAreaComponent, ctrl : Controller, stage : Stage, onComplete : Function )
 		{
@@ -119,6 +113,8 @@ package net.vdombox.editors.parsers
 					else
 						menu.selectedIndex = menu.dataProvider.length - 1;
 					
+					updateMenuScrollPosition();
+					
 					break;
 				}
 					
@@ -129,6 +125,8 @@ package net.vdombox.editors.parsers
 					else
 						menu.selectedIndex = 0;
 					
+					updateMenuScrollPosition();
+					
 					break;
 				}
 					
@@ -137,6 +135,16 @@ package net.vdombox.editors.parsers
 					break;
 				}
 			}
+		}
+		
+		private function updateMenuScrollPosition() : void
+		{
+			var currentPosition : int = menu.selectedIndex * 16;
+			if ( currentPosition < menu.scroller.viewport.verticalScrollPosition )
+				menu.scroller.viewport.verticalScrollPosition = currentPosition;
+			else if ( currentPosition > menu.scroller.viewport.verticalScrollPosition + menu.measuredHeight - 16)
+				menu.scroller.viewport.verticalScrollPosition = currentPosition - menu.measuredHeight + 16;
+			
 		}
 		
 		private function doubleClickMouseHandler( e : MouseEvent ) : void

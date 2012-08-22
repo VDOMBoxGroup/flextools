@@ -14,13 +14,14 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AssistMenu;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	
 	import ro.victordramba.util.vectorToArray;
 
 	public class AssistMenuPython extends AssistMenu
 	{
-		private var menuDataStr : Vector.<String>;
+		private var menuDataStr : Vector.<AutoCompleteItemVO>;
 
 		public function AssistMenuPython( field : ScriptAreaComponent, ctrl : PythonController, stage : Stage, onComplete : Function )
 		{
@@ -46,6 +47,7 @@ package net.vdombox.editors.parsers.python
 
 			if ( a.length == 0 )
 				return false;
+			
 			menu.setListData( a );
 			menu.setSelectedIndex( 0 );
 

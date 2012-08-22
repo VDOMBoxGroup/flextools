@@ -3,9 +3,12 @@ package net.vdombox.editors.parsers.vdomxml
 	import flash.net.registerClassAlias;
 	import flash.utils.ByteArray;
 	
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	
 	import ro.victordramba.util.HashMap;
 
@@ -104,7 +107,7 @@ package net.vdombox.editors.parsers.vdomxml
 			return typeField;
 		}
 		
-		public function getVectorByType( typeID : String ) : Vector.<String>
+		public function getVectorByType( typeID : String ) : Vector.<AutoCompleteItemVO>
 		{			
 			var typeField : Field;
 			for each( typeField in data.toArray() )
@@ -113,7 +116,7 @@ package net.vdombox.editors.parsers.vdomxml
 					break;
 			}
 			
-			var a : Vector.<String> = new Vector.<String>();
+			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
 			
 			if ( typeField.members.toArray().length == 1 )
 			{
@@ -122,7 +125,7 @@ package net.vdombox.editors.parsers.vdomxml
 				
 				for each ( attributeDescriptionVO in attributeDescriptions )
 				{
-					a.push( attributeDescriptionVO.name );
+					a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, attributeDescriptionVO.name ) );
 				}
 			}
 			

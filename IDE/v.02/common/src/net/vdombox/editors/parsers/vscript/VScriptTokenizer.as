@@ -1,6 +1,7 @@
 package net.vdombox.editors.parsers.vscript
 {
 	import net.vdombox.editors.HashLibraryArray;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
@@ -319,6 +320,7 @@ package net.vdombox.editors.parsers.vscript
 		private var importZone : Boolean = false;
 		private var fromZone : Boolean = false;
 		private var importFrom : String;
+		private var dimZone : Boolean = false;
 		private var scope : Field;
 		private var isStatic : Boolean = false;
 		private var isClassMethod : Boolean = false;
@@ -326,6 +328,7 @@ package net.vdombox.editors.parsers.vscript
 		
 		internal var topScope : Field;
 		private var newBlock : Boolean;
+		private var waitParams : Boolean;
 		
 		private var error : Boolean = false;
 		
@@ -402,9 +405,9 @@ package net.vdombox.editors.parsers.vscript
 				
 				var systemName : String = tString;
 				
-				for each ( var name : String in HashLibraryArray.getImportToLibraty( importFrom, "vscript" ) )
+				for each ( var name : AutoCompleteItemVO in HashLibraryArray.getImportToLibraty( importFrom, "vscript" ) )
 				{
-					imports[ imports.length - 1 ].setValue( name, { name : name, systemName : name, source : importFrom } );
+					imports[ imports.length - 1 ].setValue( name.value, { name : name.value, systemName : name.value, source : importFrom } );
 				}
 				
 				position = t.pos + t.string.length;
@@ -447,9 +450,31 @@ package net.vdombox.editors.parsers.vscript
 			{
 				isClassMethod = true;
 			}*/
-			else if ( tString == "get" || tString == "set" )
+			else if ( dimZone )
 			{
-				//do nothing
+				if ( t.type == Token.STRING_LITERAL )
+				{
+					field = new Field( "var", t.pos, t.string );
+					
+					if ( !scope.members.hasKey( tString ) )
+					{
+						scope.members.setValue( tString, field );
+						_members.setValue( t.string, field );
+					}
+					
+					access = "private";
+					field.access = access;
+					
+					field.parent = scope;
+				}
+				else if ( t.type == Token.ENDLINE )
+				{
+					dimZone = false;
+				}					
+			}
+			else if ( tString == "dim" )
+			{
+				dimZone = true;
 			}
 				
 			else if ( tp && ( tpString == "class" ||
@@ -469,10 +494,10 @@ package net.vdombox.editors.parsers.vscript
 					
 					if ( tString != "(" ) //anonimus functions are not members
 					{
-						if ( !scope.members.hasKey( t.string ) )
+						if ( !scope.members.hasKey( tString ) )
 						{
-							scope.members.setValue( t.string, field );
-							_members.setValue( t.string, field );
+							scope.members.setValue( tString, field );
+							_members.setValue( tString, field );
 						}
 					}
 					
@@ -535,7 +560,7 @@ package net.vdombox.editors.parsers.vscript
 			}
 				
 				//parse function params
-			else if ( _scope && ( _scope.fieldType == "function" || _scope.fieldType == "catch" || _scope.fieldType == "set" ) )
+			else if ( _scope && ( _scope.fieldType == "def" ) )
 			{
 				if ( tp && tpString == "(" && tString != ")" )
 					paramsBlock = true;
@@ -544,9 +569,9 @@ package net.vdombox.editors.parsers.vscript
 				{
 					if ( !param && t.string != "..." )
 					{
-						param = new Field( "var", pos, tString );
+						param = new Field( "var", t.pos, t.string );
 						t.scope = _scope;
-						_scope.params.setValue( param.name, param );
+						_scope.params.setValue( tString, param );
 						if ( tpString == "..." )
 						{
 							_scope.hasRestParams = true;
@@ -624,9 +649,9 @@ package net.vdombox.editors.parsers.vscript
 				
 				scope = _scope;
 				t.scope = scope;
-				_scope = null;
+				waitParams = true;
 			}
-			
+			//var tp2String : String = tp2 ? tp2.string.toLowerCase() : "";
 			//new block
 			if ( checkNewBlock( tString, tpString ) )
 			{	
@@ -765,10 +790,15 @@ package net.vdombox.editors.parsers.vscript
 				newBlock = false;
 			}
 			
+			if ( t.type == Token.ENDLINE && waitParams )
+			{
+				waitParams = false;
+				_scope = null;
+			}
+			
 			if ( newBlock )
 			{
-				if ( currentBlock.blockType != BlockType.IF && currentBlock.blockType != BlockType.ELSE
-					&& currentBlock.blockType != BlockType.ELSEIF)
+				if ( currentBlock.blockType != BlockType.IF && currentBlock.blockType != BlockType.ELSE )
 					t.createConstruction = true;
 			}
 			
@@ -790,12 +820,13 @@ package net.vdombox.editors.parsers.vscript
 			
 			if ( !tp2 || ( tp2 && tp2.string != "." ) && tp.string != "self" )
 			{
+				var curStr : String = curToken.string.toLowerCase()
 				field = new Field( "var", curToken.pos, curToken.string );
 				
-				if ( !scope.members.hasKey( curToken.string ) )
+				if ( !scope.members.hasKey( curStr ) )
 				{
-					scope.members.setValue( curToken.string, field );
-					_members.setValue( curToken.string, field );
+					scope.members.setValue( curStr, field );
+					_members.setValue( curStr, field );
 				}
 				
 				access = "public";
@@ -820,9 +851,11 @@ package net.vdombox.editors.parsers.vscript
 				
 				var field : Field;
 				
-				if ( scope.members.hasKey( curToken.string ) )
+				curStr = curToken.string.toLowerCase();
+				
+				if ( scope.members.hasKey( curStr ) )
 				{
-					field = scope.members.getValue( curToken.string );
+					field = scope.members.getValue( curStr );
 				} 
 				else 
 				{
@@ -837,14 +870,14 @@ package net.vdombox.editors.parsers.vscript
 					if ( findClassParent( scope ) )
 					{
 						var scp : Field = findClassParent( scope );
-						if ( !scp.members.hasKey( tp.string ) )
+						if ( !scp.members.hasKey( tp.string.toLowerCase() ) )
 						{
 							field = scp;
 						}
 					}
-					else if ( !scope.members.hasKey( tp.string ) )
+					else if ( !scope.members.hasKey( tp.string.toLowerCase() ) )
 					{
-						scope.members.setValue( curToken.string, field );
+						scope.members.setValue( curStr, field );
 					}
 				}
 				var tField : Field = field;
@@ -852,12 +885,13 @@ package net.vdombox.editors.parsers.vscript
 				while ( currentPos <= tokens.length - 4 )
 				{
 					currentPos += 2;
-					curToken = tokens[currentPos]
+					curToken = tokens[currentPos];
+					curStr = curToken.string.toLowerCase();
 					var tField2 : Field; 
 					
-					if ( tField.members.hasKey( curToken.string ) )
+					if ( tField.members.hasKey( curStr ) )
 					{
-						tField2 = tField.members.getValue( curToken.string );
+						tField2 = tField.members.getValue( curStr );
 					}
 					else 
 					{
@@ -868,8 +902,8 @@ package net.vdombox.editors.parsers.vscript
 						tField2.access = access;
 						tField2.parent = tField;
 						
-						if ( !tField.members.hasKey( curToken.string ) )
-							tField.members.setValue( curToken.string, tField2 );
+						if ( !tField.members.hasKey( curStr ) )
+							tField.members.setValue( curStr, tField2 );
 					}
 					
 					tField = tField2;
@@ -1106,7 +1140,7 @@ package net.vdombox.editors.parsers.vscript
 				return null;
 			//TODO: binary search
 			for ( var i : int = tokens.length - 1; i >= 0; i-- )
-				if ( tokens[ i ] && pos > tokens[ i ].pos )
+				if ( tokens[ i ] && pos >= tokens[ i ].pos )
 					return VScriptToken.map[ tokens[ i ].id ];
 			return null;
 		}

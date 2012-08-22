@@ -4,6 +4,7 @@ package net.vdombox.editors.parsers
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 
 	public class StructureDB
 	{
@@ -23,9 +24,9 @@ package net.vdombox.editors.parsers
 			_structure[ value.@id ] = value;
 		}
 		
-		static public function getChildrenForObject( selfObjectVO : IVDOMObjectVO, bp : BackwardsParser ) : Vector.<String>
+		static public function getChildrenForObject( selfObjectVO : IVDOMObjectVO, bp : BackwardsParser ) : Vector.<AutoCompleteItemVO>
 		{
-			var a : Vector.<String> = new Vector.<String>();
+			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
 			
 			var pageVO : PageVO = selfObjectVO is PageVO ? selfObjectVO as PageVO : ObjectVO( selfObjectVO ).pageVO;
 			
@@ -69,7 +70,7 @@ package net.vdombox.editors.parsers
 				
 				for each ( object in objects )
 				{
-					a.push( object.@name );
+					a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, object.@name ) );
 				}
 			}
 			else
@@ -115,7 +116,7 @@ package net.vdombox.editors.parsers
 				
 				for each ( object in objects )
 				{
-					a.push( object.@name );
+					a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, object.@name ) );
 				}
 			}
 			

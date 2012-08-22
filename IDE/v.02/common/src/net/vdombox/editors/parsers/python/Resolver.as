@@ -1,15 +1,18 @@
 package net.vdombox.editors.parsers.python
 {
 	import net.vdombox.editors.HashLibraryArray;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.BackwardsParser;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
+	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.StructureDB;
 	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	
 	import ro.victordramba.util.HashMap;
 
@@ -22,7 +25,7 @@ package net.vdombox.editors.parsers.python
 
 		private var tokenScopeClass : Field;
 		
-		private var a : Vector.<String>;
+		private var a : Vector.<AutoCompleteItemVO>;
 
 		public function Resolver( tokenizer : PythonTokenizer )
 		{
@@ -109,7 +112,7 @@ package net.vdombox.editors.parsers.python
 			return null;
 		}
 
-		public function getAllOptions( pos : int ) : Vector.<String>
+		public function getAllOptions( pos : int ) : Vector.<AutoCompleteItemVO>
 		{	
 			var f : Field;
 			
@@ -125,7 +128,8 @@ package net.vdombox.editors.parsers.python
 				return HashLibraryArray.getImportToLibraty( t.importFrom, "python" );
 			
 			// default keywords
-			var a : Vector.<String> = new <String>["abs", "and", "apply", "ArithmeticError", "array", "assert", "AssertionError", "AST", "atexit", "AttributeError", "BaseHTTPServer", "Bastion", "break", "callable", "CGIHTTPServer", "chr", "class", "cmd", "cmp", "codecs", "coerce", "commands", "compile", "compileall", "Complex", "complex", "continue", "copy", "dbhash", "def", "del", "delattr", "dir", "dircmp", "dis", "divmod", "dospath", "dumbdbm", "elif", "else", "emacs", "EOFError", "eval", "except", "Exception", "exec", "execfile", "filter", "finally", "find", "float", "FloatingPointError", "fmt", "fnmatch", "for", "from", "ftplib", "getattr", "getopt", "glob", "global", "globals", "gopherlib", "grep", "group", "hasattr", "hash", "hex", "htmllib", "httplib", "id", "if", "ihooks", "imghdr", "import", "ImportError","imputil", "in", "IndentationError", "IndexError", "input", "int", "intern", "IOError", "is", "isinstance", "issubclass", "joinfields", "KeyError", "KeyboardInterrupt", "lambda", "len", "linecache", "list", "local", "lockfile", "long", "LookupError", "macpath", "macurl2path", "mailbox", "mailcap", "map", "match", "math", "max", "MemoryError", "mimetools", "Mimewriter", "mimify", "min", "mutex", "NameError", "newdir", "ni", "nntplib", "None", "not", "ntpath", "nturl2path", "oct", "open", "or", "ord", "os", "ospath", "OverflowError", "Para", "pass", "pdb", "pickle", "pipes", "poly", "popen2", "posixfile", "posixpath", "pow", "print", "profile", "pstats", "pyclbr", "pyexpat", "Queue", "quopri", "raise", "rand", "random", "range", "raw_input", "reduce", "request", "regex", "regsub", "reload", "repr", "return", "rfc822", "round", "RuntimeError", "sched", "search", "self", "session", "setattr", "setdefault", "sgmllib", "shelve", "SimpleHTTPServer", "site", "slice", "sndhdr", "snmp", "SocketServer", "splitfields", "StandardError", "str", "string", "StringIO", "struct", "SyntaxError", "sys", "SystemError", "SystemExit", "TabError", "tb", "tempfile", "Tkinter", "toaiff", "token", "tokenize", "traceback", "try", "tty", "tuple", "type", "TypeError", "types", "tzparse", "unichr", "unicode", "unicodedata", "urllib", "urlparse", "UserDict", "UserList", "util", "uu", "ValueError", "vars", "wave", "webbrowser", "whatsound", "whichdb", "while", "whrandom", "xdrlib", "xml", "xmlpackage", "xrange", "ZeroDivisionError",  "zip", "zmod"];
+			StandardWordsProxy.setNullCurrentIndex();
+			a = StandardWordsProxy.pythonWords;
 			
 			/*for each ( f in classDB.listAll() )
 			{
@@ -141,7 +145,7 @@ package net.vdombox.editors.parsers.python
 			function addKeys( map : HashMap ) : void
 			{
 				for each ( var name : String in map.getKeys() )
-					a.push( name);
+					a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Parameter, name ));
 			}
 			
 			//find items in function scope chain
@@ -159,13 +163,22 @@ package net.vdombox.editors.parsers.python
 				//for static scope, add only static members
 				//current class
 			for each ( f in tokenizer.members.toArray() )
-				a.push( f.name );
+				a.push( StandardWordsProxy.getAutoCompleteItemVOByField( f ) );
 				
 			if ( t.parent.imports )
 			{
 				var ff : Object;
 				for each ( ff in t.parent.imports.toArray() )
-					a.push( ff.name );
+				{
+					var field : Field;
+					if ( ff.source != ff.systemName )
+					{
+						field = HashLibraryArray.getTokenToLibraty( ff.source, ff.systemName, "python" );
+						a.push( StandardWordsProxy.getAutoCompleteItemVOByField( field, true ) );
+					}
+					else
+						a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Library, ff.name ) );
+				}
 			}
 			
 			/*if ( t.scope.fieldType == "class" || t.scope.fieldType == "top" )
@@ -178,16 +191,13 @@ package net.vdombox.editors.parsers.python
 		}
 
 
-		public function getAllTypes( isFunction : Boolean = true ) : Vector.<String>
+		public function getAllTypes( isFunction : Boolean = true ) : Vector.<AutoCompleteItemVO>
 		{
 			var lst : Vector.<Field> = classDB.listAllTypes();
-			var a : Vector.<String> = new Vector.<String>;
+			a = new Vector.<AutoCompleteItemVO>;
 			for each ( var f : Field in lst )
-				a.push( f.name );
-
-			if ( isFunction )
-				a.push( 'void' );
-
+				a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, f.name ) );
+				
 			a.sort( Array.CASEINSENSITIVE );
 			return a;
 		}
@@ -225,9 +235,11 @@ package net.vdombox.editors.parsers.python
 		/**
 		 * called when you enter a dot
 		 */
-		public function getMemberList( text : String, pos : int, actionVO : Object ) : Vector.<String>
+		public function getMemberList( text : String, pos : int, actionVO : Object ) : Vector.<AutoCompleteItemVO>
 		{
-			a = new Vector.<String>;
+			a = new Vector.<AutoCompleteItemVO>;
+			
+			StandardWordsProxy.setNullCurrentIndex();
 			
 			var flag : Boolean = resolve( text, pos, actionVO );
 			
@@ -246,7 +258,7 @@ package net.vdombox.editors.parsers.python
 			for each ( var m : Field in listMembers( resolved, resolvedIsClass ).toArray() )
 			{
 				if ( a.indexOf( m.name ) == -1 )
-					a.push(m.name );
+					a.push( StandardWordsProxy.getAutoCompleteItemVOByField( m ) );
 			}
 			
 			a.sort( Array.CASEINSENSITIVE );
@@ -503,5 +515,6 @@ package net.vdombox.editors.parsers.python
 			if ( tokenScopeClass.fieldType != 'class' )
 				tokenScopeClass = null;
 		}
+		
 	}
 }

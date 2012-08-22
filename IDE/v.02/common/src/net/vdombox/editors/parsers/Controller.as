@@ -42,17 +42,17 @@ package net.vdombox.editors.parsers
 			return _actionVO;
 		}
 		
-		public function getAllOptions( index : int ) : Vector.<String>
+		public function getAllOptions( index : int ) : Vector.<AutoCompleteItemVO>
 		{
 			return null;
 		}
 		
-		public function getMemberList( index : int ) : Vector.<String>
+		public function getMemberList( index : int ) : Vector.<AutoCompleteItemVO>
 		{
 			return null;
 		}
 		
-		public function getTypeOptions() : Vector.<String>
+		public function getTypeOptions() : Vector.<AutoCompleteItemVO>
 		{
 			return null;
 		}
@@ -75,6 +75,11 @@ package net.vdombox.editors.parsers
 		public function set colorScheme( colorSchemeVO : ColorSchemeVO ) : void
 		{
 			parser.colorScheme = colorSchemeVO;
+		}
+		
+		public function get lang() : String
+		{
+			return "";
 		}
 	}
 }

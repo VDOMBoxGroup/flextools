@@ -98,5 +98,41 @@ package net.vdombox.ide.common.view.components
 		[Embed( source = "assets/vdomimage/circleGreenPlus.png" )]
 		public static var Circle_Green_Plus : Class;
 		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/standard.png" )]
+		public static var Standard : Class;  
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/parameter.png" )]
+		public static var Parameter : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/library.png" )]
+		public static var Library : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/variable.png" )]
+		public static var Variable : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/variable_import.png" )]
+		public static var Variable_Import : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/function.png" )]
+		public static var Function_ : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/function_import.png" )]
+		public static var Function_Import : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/class.png" )]
+		public static var Class_ : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/class_import.png" )]
+		public static var Class_Import : Class;
+		
 	}
 }

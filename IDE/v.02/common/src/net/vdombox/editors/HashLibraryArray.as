@@ -2,13 +2,16 @@ package net.vdombox.editors
 {
 	import flashx.textLayout.tlf_internal;
 	
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.BackwardsParser;
 	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.editors.parsers.Tokenizer;
 	import net.vdombox.editors.parsers.python.PythonTokenizer;
 	import net.vdombox.editors.parsers.vscript.VScriptTokenizer;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
+	import net.vdombox.ide.common.view.components.VDOMImage;
 
 	public class HashLibraryArray
 	{
@@ -28,20 +31,20 @@ package net.vdombox.editors
 			hashLibraries[ hashLibrary.name ] = hashLibrary;
 		}
 		
-		public static function getLibrariesName() : Vector.<String>
+		public static function getLibrariesName() : Vector.<AutoCompleteItemVO>
 		{
-			var a : Vector.<String> = new Vector.<String>();
+			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
 			
 			var hashLibrary : HashLibrary;
 			for each ( hashLibrary in hashLibraries )
-				a.push( hashLibrary.name );
+				a.push( new AutoCompleteItemVO( VDOMImage.Library, hashLibrary.name ) );
 				
 			return a;
 		}
 		
-		public static function getImportToLibraty( importFrom : String, lang : String ) : Vector.<String>
+		public static function getImportToLibraty( importFrom : String, lang : String ) : Vector.<AutoCompleteItemVO>
 		{
-			var a : Vector.<String> = new Vector.<String>();
+			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
 			
 			var path : Array = importFrom.split( "." );
 			
@@ -57,7 +60,9 @@ package net.vdombox.editors
 				tokenizer = new PythonTokenizer( string );
 			
 			while ( tokenizer.runSlice() )
-				;
+			{
+				
+			}
 			
 			var t : Token = tokenizer.tokenByPos(1);
 			
@@ -66,7 +71,7 @@ package net.vdombox.editors
 				var f : Field;
 				for each ( f in t.scope.members.toArray() )
 				{
-					a.push( f.name );
+					a.push( StandardWordsProxy.getAutoCompleteItemVOByField( f, true ) );
 				}
 			}
 			
@@ -75,14 +80,14 @@ package net.vdombox.editors
 				var importLibrary : Object;
 				for each ( importLibrary in t.parent.imports.toArray() )
 				{
-					a.push( importLibrary.name );
+					a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, importLibrary.name ) );
 				}
 			}
 			
 			return a;
 		}
 		
-		public static function getTokensToLibratyClass( importFrom : String, importToken : String, bp : BackwardsParser, lang : String ) : Vector.<String>
+		public static function getTokensToLibratyClass( importFrom : String, importToken : String, bp : BackwardsParser, lang : String ) : Vector.<AutoCompleteItemVO>
 		{
 			var len : int = bp.names.length;
 			
@@ -91,7 +96,7 @@ package net.vdombox.editors
 			if ( len == 1 && importFrom == importToken || len > 1 && importFrom == bp.names[len - 1] )
 				return getImportToLibraty( importFrom, lang );
 			
-			var a : Vector.<String> = new Vector.<String>();
+			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
 			
 			var path : Array = importFrom.split( "." );
 			
@@ -140,7 +145,7 @@ package net.vdombox.editors
 					for each ( f2 in scope.members.toArray() )
 					{
 						if ( f2.isStatic || f2.isClassMethod || ( f2.fieldType == "var" && f2.access == "public" && f2.parent && f2.parent.name == importToken ) )
-							a.push( f2.name );
+							a.push( StandardWordsProxy.getAutoCompleteItemVOByField( f2, true ) );
 					}
 				}
 			}
@@ -148,7 +153,52 @@ package net.vdombox.editors
 			return a;
 		}
 		
-		public static function getPositionToken( importFrom : String, importToken : String, bp : BackwardsParser ) : Object
+		public static function getTokenToLibraty( importFrom : String, importToken : String, lang : String ) : Field
+		{			
+			var path : Array = importFrom.split( "." );
+			
+			if ( !hashLibraries.hasOwnProperty( path[0] ) )
+				return null;
+			
+			var string : String = hashLibraries[ path[0] ].libraryVO.script;
+			
+			var tokenizer : Tokenizer;
+			if ( lang == "vscript" )
+				tokenizer = new VScriptTokenizer( string );
+			else
+				tokenizer = new PythonTokenizer( string );
+			
+			while ( tokenizer.runSlice() )
+			{
+				
+			}
+			
+			var t : Token = tokenizer.tokenByPos(1);
+			var scope : Field = t.scope;
+			
+			if ( t && t.scope && t.scope.members )
+			{	
+				var f : Field;
+				var flag : Boolean = false;
+				
+				for each ( f in scope.members.toArray() )
+				{
+					if ( f.name == importToken )
+					{
+						scope = f;
+						flag = true;
+						break;
+					}
+				}
+				
+				if ( flag )
+					return scope;
+			}
+			
+			return null;
+		}
+		
+		public static function getPositionToken( importFrom : String, importToken : String, bp : BackwardsParser, lang : String ) : Object
 		{
 			var len : int = bp.names.length;
 			
@@ -166,7 +216,12 @@ package net.vdombox.editors
 			
 			var string : String = libraryVO.script;
 			
-			var tokenizer : PythonTokenizer = new PythonTokenizer( string );
+			var tokenizer : Tokenizer;
+			if ( lang == "vscript" )
+				tokenizer = new VScriptTokenizer( string );
+			else
+				tokenizer = new PythonTokenizer( string );
+			
 			tokenizer.actionVO = hashLibraries[ path[0] ].libraryVO;
 			
 			while ( tokenizer.runSlice() )
@@ -176,8 +231,6 @@ package net.vdombox.editors
 			
 			var t : Token = tokenizer.tokenByPos(1);
 			var scope : Field = t.scope;
-			
-			
 			
 			if ( t && t.scope && t.scope.members )
 			{	

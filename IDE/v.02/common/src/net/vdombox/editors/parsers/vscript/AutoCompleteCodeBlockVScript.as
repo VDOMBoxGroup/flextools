@@ -125,6 +125,8 @@ package net.vdombox.editors.parsers.vscript
 							}
 							case "else":
 							{
+								
+								//pasteCode2( BlockType.ELSE, false );
 								if ( t.parent && t.parent.parent )
 								{
 									var i : int = t.parent.pos;
@@ -148,7 +150,7 @@ package net.vdombox.editors.parsers.vscript
 								break;
 							}
 								
-							case "case":
+							/*case "case":
 							{
 								pasteCode2( BlockType.CASE );
 								
@@ -160,7 +162,7 @@ package net.vdombox.editors.parsers.vscript
 								pasteCode2( BlockType.CATCH );
 								
 								break;
-							}
+							}*/
 								
 							default:
 							{
@@ -175,21 +177,21 @@ package net.vdombox.editors.parsers.vscript
 					{				
 						case "case":
 						{
-							pasteCode2( BlockType.CASE );
+							pasteCode2( BlockType.CASE, true );
 							
 							break;
 						}
 							
 						case "elseif":
 						{
-							pasteCode2( BlockType.CASE );
+							pasteCode2( BlockType.ELSEIF, false );
 							
 							break;
 						}
 							
 						case "catch":
 						{
-							pasteCode2( BlockType.CATCH );
+							pasteCode2( BlockType.CATCH, false );
 							
 							break;
 						}
@@ -216,15 +218,18 @@ package net.vdombox.editors.parsers.vscript
 				fld.dispatchEvent( new Event( Event.CHANGE, true, false ) );
 			}
 			
-			function pasteCode2( value : String ) : void
+			function pasteCode2( value : String, addTab : Boolean ) : void
 			{
 				if ( t.parent && t.parent.parent && t.blockType == value )
 				{
-					i = t.parent.pos;
+					var i : int = t.parent.pos;
 					i = fld.text.lastIndexOf( "\r", i );
-					str = fld.text.substring( i + 1, currentPos ).match( /^\s*/ )[ 0 ] + "\t";
+					var str : String = fld.text.substring( i + 1, currentPos ).match( /^\s*/ )[ 0 ];
 					
-					pos = t.pos - 1;
+					if ( addTab )
+						str += "\t";
+					
+					var pos : int = t.pos - 1;
 					while ( fld.text.charAt( pos ) == " " || fld.text.charAt( pos ) == "\t" )
 					{
 						pos--;
