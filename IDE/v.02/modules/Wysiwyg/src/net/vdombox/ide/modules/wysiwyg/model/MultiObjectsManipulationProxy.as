@@ -64,7 +64,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 				sendNotification( Notifications.MULTI_OBJECTS_POSITION_SAVED );
 		}
 		
-		public function pasteObjects( objects : Array, rend : Object ) : void
+		public function pasteObjects( objects : Array, rend : Object = null ) : void
 		{
 			if ( _objectsForPaste )
 				_objectsForPaste = new Array();
@@ -116,8 +116,6 @@ package net.vdombox.ide.modules.wysiwyg.model
 			var sourceObjId : String = sourceInfo[2] as String;
 			var typeObject : String = sourceInfo[3] as String;
 			
-			trace( "Name " + object.name );
-			
 			if ( typeObject == "1" )
 			{
 				var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
@@ -127,6 +125,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 				sendNotification( Notifications.COPY_REQUEST, { pageVO : object, sourceID : sourceString } );
 			else if ( object is ObjectVO )
 				sendNotification( Notifications.COPY_REQUEST, {  objectVO : object, sourceID : sourceString } );
+			else
+				pasteNextObject();
 		}
 	}
 }

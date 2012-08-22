@@ -608,7 +608,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function pastePageHandler( event : ObjectsTreePanelEvent ) : void
 		{
 			sourceID = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
-			sendNotification( Notifications.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceID } );
+			
+			multiObjectsManipulationProxy.pasteObjects( sourceID.split( "^" ) );
+			
+			//sendNotification( Notifications.COPY_REQUEST, { applicationVO : statesProxy.selectedApplication, sourceID : sourceID } );
 		}
 		
 		private function createNewPage( event : ObjectsTreePanelEvent ) : void
