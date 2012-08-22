@@ -37,7 +37,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	public class ResourcesAreaMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String               = "ResourcesAreaMediator";
@@ -129,7 +129,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					
 					break;
 				}
-				
+					
 				case Notifications.RESOURCES_GETTED:
 				{
 					if ( body.length == 0 )
@@ -148,7 +148,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				}
 			}
 		}
-
+		
 		
 		private function addHandlers() : void
 		{
@@ -198,7 +198,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			
 			/*for each ( var resVO : ResourceVO in resources )
 			{
-				addFilter(resVO.type);
+			addFilter(resVO.type);
 			}*/
 			
 			//resourcesArea.resources.addItemAt( null, 0 );
@@ -333,7 +333,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				resourceVO.setID( openFile.name ); //?
 				resourceVO.setData( openFile.data);
 				resourceVO.name = openFile.name;
-				resourceVO.type = openFile.type.slice(1); // type has "."
+				resourceVO.type = openFile.type ? openFile.type.slice(1) : ""; // type has "."
 				
 				sendNotification( Notifications.UPLOAD_RESOURCE, resourceVO );
 			}
@@ -367,9 +367,9 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			
 			/*if ( !showSpinnerOnListCreation )
 			{
-				showSpinnerOnListCreation = true;
-				
-				return;
+			showSpinnerOnListCreation = true;
+			
+			return;
 			}*/
 			
 			var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_create_resources' );
@@ -499,6 +499,6 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			
 			removeSpinnerPopup();
 		}
-
+		
 	}
 }
