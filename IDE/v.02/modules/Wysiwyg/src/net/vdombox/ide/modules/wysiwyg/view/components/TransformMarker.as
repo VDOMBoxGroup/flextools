@@ -346,14 +346,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				var transparentValue : Number = ( resizeMode ) ? .4 : .0;
 
-				if ( cc_box.visible )
+				/*if ( cc_box.visible )
 				{
 					var g : Graphics = cc_box.graphics;
 					g.clear();
 					g.lineStyle( 6, 0x333333, transparentValue, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER );
 					g.drawRect( 3, 3, realWidth - 6, realHeight - 6 );
 					g.endFill();
-				}
+				}*/
 
 				graphics.clear();
 				graphics.lineStyle( 1, 0, 1, false, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.MITER );

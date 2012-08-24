@@ -112,6 +112,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			itemRendererFunction = chooseItemRenderer;
 			
 			ToolTip.maxWidth = 180;
+			doubleClickEnabled = true;
 
 			addHandlers();
 		}
@@ -165,6 +166,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var mDeltaX : uint;
 
 		private var mDeltaY : uint;
+		
+		private var _selected : Boolean;
 
 		private var needRefresh : Boolean               = false;
 
@@ -417,7 +420,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		 */
 		public function get selected() : Boolean
 		{
-			return true;
+			return _selected;
 		}
 
 		/**
@@ -426,7 +429,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		 */
 		public function set selected( value : Boolean ) : void
 		{
-
+			_selected = value;
 		}
 
 
@@ -524,7 +527,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler, false, 0, true );
 
 			addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
+			addEventListener( MouseEvent.MOUSE_DOWN, mouseDownForEditableComponentHandler, true, 0, true );
 			addEventListener( MouseEvent.CLICK, mouseClickHandler, false, 0, true );
+			addEventListener( MouseEvent.DOUBLE_CLICK, mouse2ClickHandler, false, 0, true );
 
 			addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler, false, 0, true );
 			addEventListener( DragEvent.DRAG_EXIT, dragExitHandler, false, 0, true );
@@ -543,8 +548,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 
 			removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-
+			removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownForEditableComponentHandler, true );
             removeEventListener( MouseEvent.CLICK, mouseClickHandler );
+			removeEventListener( MouseEvent.DOUBLE_CLICK, mouse2ClickHandler );
 			
 			removeEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
 			removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
@@ -1445,7 +1451,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 			}
 			
-			if ( !( editableComponent && editableComponent is RichEditableText && !( event.target is Group ) ) )
+			if ( !( editableComponent && editableComponent is RichEditableText && !( event.target is Group ) && stage.focus == editableComponent ) )
 			{
 				setFocus();
 				var isScroller : Boolean = isScroller( event.target as DisplayObjectContainer ); 
@@ -1470,6 +1476,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			event.preventDefault();
 		}
 		
+		private function mouseDownForEditableComponentHandler( event : MouseEvent ) : void
+		{
+			if ( editableComponent is HTML && !selected )
+				mouseDownHandler( event );
+		}
+		
 		private function mouseClickHandler( event : MouseEvent ) : void
 		{
 			event.stopPropagation();
@@ -1478,8 +1490,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				dispatchEvent( new RendererEvent( RendererEvent.CLICKED, false, true, event.shiftKey ) );
 			}
+			
+			if( !editableComponent )
+				dispatchEvent( new RendererEvent( RendererEvent.EDITED ) );
 		}
 		
+		private function mouse2ClickHandler( event : MouseEvent ) : void
+		{
+			event.stopPropagation();
+			
+			if ( editableComponent )
+			{
+				dispatchEvent( new RendererEvent( RendererEvent.EDITED ) );
+			}
+		}
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{

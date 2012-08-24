@@ -19,6 +19,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var MOUSE_DOWN : String = "rendererMouseDown";
 
 		public static var CLICKED : String = "rendererClicked";
+		
+		public static var EDITED : String = "rendererEdited";
 
 		public static var MOVE : String = "rendererMove";
 		

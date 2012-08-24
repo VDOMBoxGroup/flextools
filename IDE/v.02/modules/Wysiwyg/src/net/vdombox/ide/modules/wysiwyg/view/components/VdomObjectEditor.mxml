@@ -162,6 +162,7 @@
 				addEventListener( TransformMarkerEvent.TRANSFORM_BEGIN, transformMarker_tansformBeginHandler, true, 0, true );
 				addEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformMarker_tansformCompleteHandler, true, 0, true );
 				
+				addEventListener( RendererEvent.EDITED, setTransformMarketHandler, true, 0, true );
 			}
 			
 
@@ -171,6 +172,8 @@
 				
 				removeEventListener( EditorEvent.UNDO, undo_fun );
 				removeEventListener( EditorEvent.REDO, redo_fun );
+				
+				removeEventListener( RendererEvent.EDITED, setTransformMarketHandler, true );
 
 				if ( skin )
 					skin.removeEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler );
@@ -271,6 +274,11 @@
 				ee.attributes = event.properties;
 
 				dispatchEvent( ee );
+			}
+			
+			private function setTransformMarketHandler( event : RendererEvent ) : void
+			{
+				toolbarPanel.setTransformMarket();
 			}
 			
 			protected function skinnablecontainer1_preinitializeHandler(event:FlexEvent):void

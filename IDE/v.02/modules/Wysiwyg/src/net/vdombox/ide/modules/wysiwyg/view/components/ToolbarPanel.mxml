@@ -29,12 +29,11 @@
 			{
 				if ( _selectedRenderer == value )
 					return;
-
+				
 				_selectedRenderer = value;
 
-				
 				isSelectedRendererChanged = true;
-				invalidateProperties();
+				//invalidateProperties();
 			}
 
 			public function get currentToolbar() : IToolbar
@@ -60,7 +59,10 @@
 			override protected function commitProperties() : void
 			{
 				super.commitProperties();
-				
+			}
+			
+			public function setTransformMarket() : void
+			{				
 				if( !isSelectedRendererChanged )
 					return;
 				
@@ -73,7 +75,7 @@
 					
 					removeAllElements();
 				}
-
+				
 				if( !_selectedRenderer || !_selectedRenderer.editableComponent )
 					return;
 				
@@ -137,7 +139,7 @@
 			public function refresh( renderer : RendererBase ) : void 
 			{
 				//trace ('ToolbarPanel refresh: _currentToolbar = ' + _currentToolbar);
-				if (currentToolbar && _selectedRenderer.vdomObjectVO && renderer.vdomObjectVO.id == _selectedRenderer.vdomObjectVO.id )
+				if (currentToolbar && _selectedRenderer && _selectedRenderer.vdomObjectVO && renderer.vdomObjectVO.id == _selectedRenderer.vdomObjectVO.id )
 					currentToolbar.refresh(_selectedRenderer);
 			}
 			

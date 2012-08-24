@@ -1,8 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
-	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.model._vo.ObjectVO;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.HelpPanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -51,6 +53,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( Notifications.BODY_STOP );
 			
 			interests.push( Notifications.CURRENT_ATTRIBUTE_CHANGED );
+			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
 			
 			return interests;
 		}
@@ -98,6 +101,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 					{
 						helpPanel.text = "";
 					}
+					
+					break;
+				}
+					
+				case StatesProxy.SELECTED_OBJECT_CHANGED:
+				{
+					var objectVO : ObjectVO = body as ObjectVO;
+					
+					if ( !objectVO )
+					{
+						helpPanel.text = "";
+						return;
+					}
+						
+					var typeVO : TypeVO = objectVO.typeVO;
+					helpPanel.text = typeVO.description;
 					
 					break;
 				}

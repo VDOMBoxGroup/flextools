@@ -116,14 +116,18 @@
 				visible = false;
 				includeInLayout = false;
 				
+				if ( _item )
+					_item.selected = false;
+				
 				try
 				{
+					
 				_item = item;
 					
-				elementForEditing.setStyle( "paddingTop", 5 );
+				/*elementForEditing.setStyle( "paddingTop", 5 );
 				elementForEditing.setStyle( "paddingBottom", 5 );
 				elementForEditing.setStyle( "paddingLeft", 5 );
-				elementForEditing.setStyle( "paddingRight", 5 );
+				elementForEditing.setStyle( "paddingRight", 5 );*/
 
 				attributesObject = extractAttributes( _item );
 
@@ -161,6 +165,8 @@
 				{
 					var t : int = 9;
 				}
+				
+				_item.selected = true;
 			}
 
 			public function refresh( item : IRenderer ) : void
@@ -188,13 +194,13 @@
 
 				var attributeValue : String;
 
-				elementForEditing.setStyle( "paddingTop", 0 );
+				/*elementForEditing.setStyle( "paddingTop", 0 );
 				elementForEditing.setStyle( "paddingBottom", 0 );
 				elementForEditing.setStyle( "paddingLeft", 0 );
-				elementForEditing.setStyle( "paddingRight", 0 );
+				elementForEditing.setStyle( "paddingRight", 0 );*/
 				elementForEditing.editable = false;
 				elementForEditing.selectable = false;
-
+				
 				UIComponent( item ).setFocus();
 			}
 			

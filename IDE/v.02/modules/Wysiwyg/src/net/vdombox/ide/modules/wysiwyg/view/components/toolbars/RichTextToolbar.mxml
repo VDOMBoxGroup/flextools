@@ -136,6 +136,9 @@
 					return;
 				}
 				
+				if ( _item )
+					_item.selected = false;
+				
 				_item = item_;
 				
 				try
@@ -152,7 +155,12 @@
 				if ( !editableHTML.loaded )
 					editableHTML.addEventListener( Event.COMPLETE, editableHTML_completeHandler );
 				else
+				{
+					editableHTML.setFocus();
 					editableHTML_completeHandler( new Event( "true" ) );
+				}
+				
+				_item.selected = true;
 				
 			}
 			
@@ -164,6 +172,8 @@
 			public function close() : void
 			{
 				removeAllHandlers();
+				
+				item.selected = false;
 				
 				bodyTag.innerText = saveValue();
 				
@@ -382,6 +392,8 @@
 				editableHTML.addEventListener( Event.HTML_DOM_INITIALIZE, onTinyHTMLDomInitalize );
 				
 				editableHTML.location = "app:/modules/wysiwyg/libs/tinymce/examples/full.html";
+				
+				editableHTML.setFocus();
 			}
 			
 			private function onTinyHTMLDomInitalize(event : Event):void
