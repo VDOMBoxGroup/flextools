@@ -33,7 +33,6 @@
 				_selectedRenderer = value;
 
 				isSelectedRendererChanged = true;
-				//invalidateProperties();
 			}
 
 			public function get currentToolbar() : IToolbar
@@ -59,10 +58,7 @@
 			override protected function commitProperties() : void
 			{
 				super.commitProperties();
-			}
-			
-			public function setTransformMarket() : void
-			{				
+				
 				if( !isSelectedRendererChanged )
 					return;
 				
@@ -124,6 +120,11 @@
 				
 				visible = currentToolbar ? true : false;
 				includeInLayout = currentToolbar ? true : false;
+			}
+			
+			public function setTransformMarket() : void
+			{			
+				invalidateProperties();
 			}
 			
 			private function toolbarChageHandle( event : Event ) : void

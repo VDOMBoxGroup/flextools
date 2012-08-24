@@ -7,7 +7,8 @@
 					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.EditorSkin"
 					  preinitialize="skinnablecontainer1_preinitializeHandler(event)"
 					  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IEditor"
-					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx">
+					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)"
+					  xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
@@ -363,7 +364,7 @@
 
 	<s:Group id="groupPageRenderer" height="100%" width="100%" clipAndEnableScrolling="false">
 		<components:PageRenderer id="renderer" 
-								 top="0" bottom="0" left="0" right="0"
+								 height="100%" width="100%"
 								 selectedRenderer="{ selectedRenderer }" includeIn="wysiwyg, wysiwygDisabled, normal, disabled" 
 								 mouseMove="mouseMoveOnPageRenderer(event)"/>
 
