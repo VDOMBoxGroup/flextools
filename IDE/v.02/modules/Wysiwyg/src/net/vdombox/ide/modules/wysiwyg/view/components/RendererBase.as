@@ -995,8 +995,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			var typeVO : TypeVO         = TypeItemRenderer( event.dragInitiator ).typeVO;
 
-			var objectLeft : Number     = this.mouseX - 25 + this.layout.horizontalScrollPosition;
-			var objectTop : Number      = this.mouseY - 25 + this.layout.verticalScrollPosition;
+			var objectLeft : Number     = this.mouseX - 25 + (this.dataGroup.parent as Group).horizontalScrollPosition;
+			var objectTop : Number      = this.mouseY - 25 + (this.dataGroup.parent as Group).verticalScrollPosition;
 			
 			if ( objectLeft < 0 )
 				objectLeft = 0;
