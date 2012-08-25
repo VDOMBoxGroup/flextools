@@ -97,12 +97,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	 */
 	public class RendererBase extends SkinnableDataContainer implements IItemRenderer, IRenderer
 	{
+		private static var OVERFLOW_NONE	: String = "none";
 		private static var OVERFLOW_AUTO	: String = "auto";
 		private static var OVERFLOW_HIDDEN	: String = "hidden";
 		private static var OVERFLOW_SCROLL	: String = "scroll";
 		private static var OVERFLOW_VISIBLE	: String = "visible";
 		
-		private var overflow : String = OVERFLOW_AUTO;
+		private var overflow : String = OVERFLOW_NONE;
 		/**
 		 *
 		 */
@@ -1711,7 +1712,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( attributeVO )
 				height = int( attributeVO.value );
 
-			overflow = OVERFLOW_AUTO;
+			overflow = OVERFLOW_NONE;
 			attributeVO = _renderVO.getAttributeByName( "overflow" );
 			if ( attributeVO )
 				parseOverflowAttribute(attributeVO.value);
@@ -1959,6 +1960,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			
+			if (overflow == OVERFLOW_NONE)
+				return;
 			
 			if (overflow != OVERFLOW_VISIBLE)
 			{
