@@ -279,6 +279,9 @@ package net.vdombox.ide.modules.tree.view.components
 
 			if ( specialObject.parentless.length == 0 )
 			{
+				if ( !elements[ 0 ] )
+					return;
+				
 				sortObject = new SortObject();
 				sortObject.element = elements[ 0 ];
 				currentDepthArray = [ sortObject ];
