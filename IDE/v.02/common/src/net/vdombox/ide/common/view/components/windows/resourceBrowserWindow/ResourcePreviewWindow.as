@@ -140,19 +140,16 @@ package net.vdombox.ide.common.view.components.windows.resourceBrowserWindow
 				event.stopImmediatePropagation();
 			}
 		}
-
 		
-
-
-
 		public function setDimentions(_width:Number, _height:Number, _isViewable:Boolean = true) : void
 		{
 			resourceDimentions.text = _isViewable ? _width.toString() + "x" + _height.toString() + " px" : "";
 		}
 
 		public function copyResourceID() : void
-		{
-			Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, resourceId.text);0
+		{			
+			Clipboard.generalClipboard.clear();
+			Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, resourceId.text);
 		}
 		
 		public function getResourceButton(  ) : void

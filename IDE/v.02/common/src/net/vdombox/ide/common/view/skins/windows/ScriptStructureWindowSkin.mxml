@@ -87,7 +87,7 @@
 				var sortField : SortField = new SortField( "@pos" );
 				sortField.numeric = true;
 				
-				structureXMLList = XMLUtils.sortElementsInXMLList( tempXMLList, sortField );
+				structureXMLList = XMLUtils.sortElementsInXMLList( tempXMLList, [ sortField ] );
 			    saveXMLList = structureXMLList.copy();
 			}
 			

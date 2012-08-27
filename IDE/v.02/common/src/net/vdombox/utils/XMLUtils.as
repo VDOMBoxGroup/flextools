@@ -6,19 +6,19 @@ package net.vdombox.utils
 
 	public class XMLUtils
 	{		
-		public static function sortElementsInXML( xml : XML, sortField : SortField ) : void
+		public static function sortElementsInXML( xml : XML, sortFields : Array ) : void
 		{
 			var objects : XMLList = xml.children();
 			
 			for ( var i : int = 0; i < objects.length(); i++ )
 			{
 				if ( objects[i].children() )
-					sortElementsInXML( objects[i], sortField );
+					sortElementsInXML( objects[i], sortFields );
 			}
 			
 			var sort:Sort = new Sort();
 			
-			sort.fields = [ sortField ];
+			sort.fields = sortFields;
 			
 			var xcoll:XMLListCollection = new XMLListCollection(xml.children());
 			xcoll.sort = sort;
@@ -26,13 +26,13 @@ package net.vdombox.utils
 			xml.setChildren(xcoll.copy());
 		}
 		
-		public static function sortElementsInXMLList( xmlList : XMLList, sortField : SortField ) : XMLList
+		public static function sortElementsInXMLList( xmlList : XMLList, sortFields : Array ) : XMLList
 		{	
 			var xcoll:XMLListCollection = new XMLListCollection(xmlList);
 			
 			var sort:Sort = new Sort();
 			
-			sort.fields = [ sortField ];
+			sort.fields = sortFields;
 			
 			xcoll.sort = sort;
 			xcoll.refresh();
@@ -41,7 +41,7 @@ package net.vdombox.utils
 			for ( var i : int = 0; i < xmlList.length(); i++ )
 			{
 				if ( xmlList[i].children() )
-					sortElementsInXML( xmlList[i], sortField );
+					sortElementsInXML( xmlList[i], sortFields );
 			}
 			
 			return xmlList;
