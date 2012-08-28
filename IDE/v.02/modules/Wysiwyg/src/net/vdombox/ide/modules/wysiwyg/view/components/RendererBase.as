@@ -34,6 +34,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
+	import mx.collections.SortField;
 	import mx.containers.Canvas;
 	import mx.controls.HScrollBar;
 	import mx.controls.Image;
@@ -68,6 +69,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.controls.ToolbarButton;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
+	import net.vdombox.utils.XMLUtils;
 	
 	import org.osmf.events.TimeEvent;
 	
@@ -116,6 +118,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			doubleClickEnabled = true;
 
 			addHandlers();
+			
+			doubleClickEnabled = true;
 		}
 
 		[SkinPart( required = "true" )]
@@ -674,7 +678,41 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			// TODO: need sort 'contetnt.children()' by 'z-index'
 			
-			var childrenXMLList : XMLList = contetnt.children();
+			var childrenXMLList : XMLList = contetnt.children().copy();
+			
+			var leng : int = childrenXMLList.length();
+			var temp : XML;
+			
+			for ( var i : int = 0; i < leng; i++ )
+			{
+				for ( var j : int = i+1; j < leng; j++ )
+				{
+					if ( childrenXMLList[i].@zindex === childrenXMLList[j].@zindex )
+					{
+						if ( int( childrenXMLList[i].@hierarchy ) === int( childrenXMLList[j].@hierarchy ) )
+						{
+							if ( int( childrenXMLList[i].@order ) > int( childrenXMLList[j].@order ) )
+							{
+								temp = childrenXMLList[i];
+								childrenXMLList[i] = childrenXMLList[j];
+								childrenXMLList[j] = temp;
+							}
+						}
+						else if ( int( childrenXMLList[i].@hierarchy ) > int( childrenXMLList[j].@hierarchy ) )
+						{
+							temp = childrenXMLList[i];
+							childrenXMLList[i] = childrenXMLList[j];
+							childrenXMLList[j] = temp;
+						}
+					}
+					else if ( int( childrenXMLList[i].@zindex ) > int( childrenXMLList[j].@zindex ) )
+					{
+						temp = childrenXMLList[i];
+						childrenXMLList[i] = childrenXMLList[j];
+						childrenXMLList[j] = temp;
+					}
+				}
+			}
 			
 			for each ( var contetntPart : XML in childrenXMLList )
 			{
@@ -795,8 +833,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			// TODO: need sort 'contetnt.children()' by 'z-index'
 			
-			var childrenXMLList : XMLList = contetnt.children();
-			
+			var childrenXMLList : XMLList = XMLUtils.sortElementsInXMLList( contetnt.children(), [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ] );
+				
 			for each ( var contetntPart : XML in childrenXMLList )
 			{
 				choiceContentType( contetntPart, conatiner );
@@ -813,7 +851,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			// TODO: need sort 'contetnt.children()' by 'z-index'
 			
-			var childrenXMLList : XMLList = contetnt.children();
+			var childrenXMLList : XMLList = XMLUtils.sortElementsInXMLList( contetnt.children(), [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ] );
 			
 			for each ( var contetntPart : XML in childrenXMLList )
 			{
@@ -829,7 +867,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				conatiner = parentContainer;
 			
 			// TODO: need sort 'contetnt.children()' by 'z-index'
-			var childrenXMLList : XMLList = contetnt.children();
+			var childrenXMLList : XMLList = XMLUtils.sortElementsInXMLList( contetnt.children(), [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ] );
 			
 			for each ( var contetntPart : XML in childrenXMLList )
 			{
@@ -1496,6 +1534,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				dispatchEvent( new RendererEvent( RendererEvent.EDITED ) );
 		}
 		
+
 		private function mouse2ClickHandler( event : MouseEvent ) : void
 		{
 			event.stopPropagation();

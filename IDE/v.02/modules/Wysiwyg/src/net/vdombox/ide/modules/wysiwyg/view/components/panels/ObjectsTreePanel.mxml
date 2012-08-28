@@ -74,7 +74,7 @@
 						{
 							parent.appendChild( newChild[i] );
 							oldChild += newChild[i];
-							XMLUtils.sortElementsInXML( parent, new SortField("@name") );
+							XMLUtils.sortElementsInXML( parent, [ new SortField("@name") ] );
 							
 						}
 					}

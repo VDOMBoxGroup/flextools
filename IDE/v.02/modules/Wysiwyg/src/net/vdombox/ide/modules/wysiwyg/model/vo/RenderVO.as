@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
+	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
@@ -28,16 +29,16 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 
 		public var visible : Boolean;
 		
-		public var zindex : uint;
-		public var hierarchy : uint;
-		public var order : uint;
+		public var zindex : int;
+		public var hierarchy : int;
+		public var order : int;
 		
 		public var attributes : Array;
 		private var _content : XMLList;
 		
 		
 		private var _vdomObjectVO : IVDOMObjectVO;
-		
+
 		public function get parent():RenderVO
 		{
 			return _parent;
@@ -103,18 +104,66 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		
 		public function get sortedChildren(): ArrayCollection
 		{
+			var childrenDataProvider : Array = new Array();
 			
-			var childrenDataProvider : ArrayCollection = new ArrayCollection( children );
+			for each ( var r : RenderVO in children )
+			{
+				childrenDataProvider.push( r );
+			}
 			
-			childrenDataProvider.sort = new Sort();
-			childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
-			childrenDataProvider.refresh();
+			var leng : int = childrenDataProvider.length;
+			var temp : RenderVO;
 			
-			return childrenDataProvider;
+			for ( var i : int = 0; i < leng; i++ )
+			{
+				for ( var j : int = i+1; j < leng; j++ )
+				{
+					if ( childrenDataProvider[i].zindex === childrenDataProvider[j].zindex )
+					{
+						if ( childrenDataProvider[i].hierarchy === childrenDataProvider[j].hierarchy )
+						{
+							if ( childrenDataProvider[i].order > childrenDataProvider[j].order )
+							{
+								temp = childrenDataProvider[i];
+								childrenDataProvider[i] = childrenDataProvider[j];
+								childrenDataProvider[j] = temp;
+							}
+						}
+						else if ( childrenDataProvider[i].hierarchy > childrenDataProvider[j].hierarchy )
+						{
+							temp = childrenDataProvider[i];
+							childrenDataProvider[i] = childrenDataProvider[j];
+							childrenDataProvider[j] = temp;
+						}
+					}
+					else if ( childrenDataProvider[i].zindex > childrenDataProvider[j].zindex )
+					{
+						temp = childrenDataProvider[i];
+						childrenDataProvider[i] = childrenDataProvider[j];
+						childrenDataProvider[j] = temp;
+					}
+				}
+			}
+			
+			//childrenDataProvider.sort( sortRender );
+			
+			/*childrenDataProvider.sort = new Sort();
+			
+			var zindexSort : SortField = new SortField( "zindex" );
+			zindexSort.numeric = true;
+			
+			var hierarchySort : SortField = new SortField( "hierarchy" );
+			hierarchySort.numeric = true;
+			
+			var orderSort : SortField = new SortField( "order" );
+			orderSort.numeric = true;
+			
+			childrenDataProvider.sort.fields = [ /*zindexSort, hierarchySort, orderSort ];
+			childrenDataProvider.sort.compareFunction = sortRender;
+			childrenDataProvider.refresh();*/
+			
+			return new ArrayCollection( childrenDataProvider );
 			 
 		}
-		
-		
-		
 	}
 }

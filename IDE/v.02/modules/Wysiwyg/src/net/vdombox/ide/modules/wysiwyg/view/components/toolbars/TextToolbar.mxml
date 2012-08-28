@@ -136,8 +136,6 @@
 
 				applyDefaultStates();
 
-
-				
 				elementForEditing.editable = true;
 				elementForEditing.selectable = true;
 
@@ -192,7 +190,7 @@
 					dispatchEvent( new Event( Event.CHANGE ) );
 				}
 
-				var attributeValue : String;
+			//	var attributeValue : String;
 
 				/*elementForEditing.setStyle( "paddingTop", 0 );
 				elementForEditing.setStyle( "paddingBottom", 0 );

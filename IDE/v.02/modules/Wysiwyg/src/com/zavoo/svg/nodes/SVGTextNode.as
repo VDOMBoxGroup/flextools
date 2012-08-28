@@ -79,6 +79,7 @@ package com.zavoo.svg.nodes
 				var fontSize:String = this.getStyle('font-size');
 				var fill:String = this.getStyle('fill');
 				var textWidth : Number = Number(this.getStyle('width'));
+				var textHeight : Number = Number(this.getStyle('height'));
 				var textAlign : String = this.getStyle('align');
 				
 				var textFormat:TextFormat = this._textField.getTextFormat();
@@ -103,6 +104,11 @@ package com.zavoo.svg.nodes
 				if (!isNaN(textWidth) && textWidth != 0)
 				{
 					this._textField.width = textWidth;
+				}
+				
+				if (!isNaN(textHeight) && textHeight != 0)
+				{
+					this._textField.height = textHeight;
 				}
 				
 				this._textField.defaultTextFormat = textFormat;

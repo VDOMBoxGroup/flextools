@@ -86,13 +86,13 @@
 					}
 				}
 			}
-			
-			private function keyDownEnterHandler( event : KeyboardEvent ) : void
+
+			protected function lbl_keyDownHandler(event:KeyboardEvent):void
 			{
 				if ( event.keyCode == Keyboard.ENTER )
 					changeHandler();
 			}
-
+			
 		]]>
 	</fx:Script>
 	<s:Group toolTip="{_value}">
@@ -104,7 +104,7 @@
 		
 		<s:TextInput id="lbl" textAlign="left"
 					 text="{_value}" width="100%" height="100%"
-					 keyDown="keyDownEnterHandler(event)" focusOut="changeHandler()"
+					 keyDown="lbl_keyDownHandler(event)" focusOut="changeHandler()"
 					 creationComplete="eventCompleleHandler(event)"/>
 	</s:Group>
 	
