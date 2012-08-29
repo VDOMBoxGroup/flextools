@@ -87,7 +87,8 @@
 			<ns2:LangTextInput id="fDisplayName" width="250" change="{viewChanged()}"/>
 		</mx:FormItem>
 		<mx:FormItem label="Description" toolTip="писание объекта и его использования">
-			<ns2:LangTextInput id="fDescription" width="250" change="{viewChanged()}" paddingRight="0"/>
+			<ns2:LangTextInput id="fDescription" width="250" change="{viewChanged()}" paddingRight="0"
+							   skinClass="net.vdombox.object_editor.view.TextInputSkin"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="ClassName" toolTip="Имя класса">

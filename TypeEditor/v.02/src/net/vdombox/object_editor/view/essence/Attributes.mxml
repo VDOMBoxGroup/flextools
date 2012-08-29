@@ -136,20 +136,23 @@
 			<mx:FormHeading fontSize="10"  label="Enter values into the form." paddingTop="0" />
 			
 			<mx:FormItem label="Name" toolTip="Имя объекта">
-				<mx:TextInput id="fname" width="250" change="{changeField()}"/>
+				<s:TextInput id="fname" width="250" change="{changeField()}"
+							 skinClass="net.vdombox.object_editor.view.TextInputSkin"/>
 			</mx:FormItem>
 			
 			<mx:FormItem label="DisplayName" >
-				<ns2:LangTextArea id="displayName" width="250" height="20" change="{changeField()}" />
+				<ns2:LangTextArea id="displayName" width="250" height="20" change="{changeField()}"/>
 			</mx:FormItem >
 			
 			<mx:FormItem label="DefaultValue" toolTip="Значение по умолчанию">
-				<mx:TextInput id="defaultValue" width="250" change="{changeField()}"/>
+				<s:TextInput id="defaultValue" width="250" change="{changeField()}"
+							 skinClass="net.vdombox.object_editor.view.TextInputSkin"/>
 			</mx:FormItem>
 						
 			<mx:FormItem label="RegExp" >
 				<s:HGroup>
-					<s:TextInput id="regExp" width="250"  change="{changeField()}"/>
+					<s:TextInput id="regExp" width="250"  change="{changeField()}"
+								 skinClass="net.vdombox.object_editor.view.TextInputSkin"/>
 					<!--s:Button label="..." width="30" click="{}" /-->
 				</s:HGroup>
 			</mx:FormItem>

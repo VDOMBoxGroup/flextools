@@ -88,7 +88,8 @@
 		
 		<mx:FormItem label="Help:" toolTip="Это Help">
 			<s:HGroup>
-				<ns1:LangTextInput id="parHelp" width="200" change="{changeField()}"/>
+				<ns1:LangTextInput id="parHelp" width="200" change="{changeField()}"
+								   skinClass="net.vdombox.object_editor.view.TextInputSkin"/>
 			</s:HGroup>
 		</mx:FormItem>
 		

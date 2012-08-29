@@ -270,6 +270,16 @@ package ro.victordramba.scriptarea
 				
 			}
 			
+			else if ( e.ctrlKey  &&  ( c ==  'd' || c ==  'D') )
+			{
+				var p : int = text.lastIndexOf( "\r", _caret - 1 );
+				
+				_selStart = p != -1 ? p + 1 : 0;
+				_selEnd = text.indexOf("\r", _caret ) + 1;
+				replaceSelection('');
+				
+				return;
+			}
 			
 			/*if (extChar==0 && e.charCode > 127)
 			{
