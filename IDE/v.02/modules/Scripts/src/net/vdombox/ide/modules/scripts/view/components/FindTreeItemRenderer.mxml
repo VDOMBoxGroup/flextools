@@ -47,7 +47,7 @@
 							
 						case "script":
 						{
-							icon = VDOMImage.Arraw_Right_Yellow;
+							icon = VDOMImage.Arraw_Right_Blue;
 							break;
 						}
 							

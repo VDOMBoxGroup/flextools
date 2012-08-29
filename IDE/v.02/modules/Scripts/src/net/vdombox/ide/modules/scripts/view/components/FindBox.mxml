@@ -372,26 +372,26 @@
 	
 	<s:Rect width="100%" height="100%">
 		<s:fill>
-			<s:SolidColor color="#999999" />
+			<s:SolidColor color="#b8d9f7" />
 		</s:fill>
 	</s:Rect>
 	
 	<mx:Image right="10" top="5"
-		source="{VDOMImage.Delete}" click="image1_clickHandler(event)"/>
+		source="{VDOMImage.DeleteBlack}" click="image1_clickHandler(event)"/>
 	
-	<s:VGroup width="100%" height="100%" paddingLeft="20" paddingTop="5" paddingBottom="5" verticalAlign="middle">
+	<s:VGroup width="100%" height="100%" paddingLeft="5" paddingTop="5" paddingBottom="5" paddingRight="5" verticalAlign="middle">
 		
 		<s:Group width="100%" height="35">
 			
-			<s:HGroup left="0" height="100%" verticalAlign="middle">
+			<s:HGroup left="0" height="100%" verticalAlign="middle" includeIn="find, replace">
 				
 				<s:Label text="{ resourceManager.getString( 'Scripts_General', 'find' ) }" />
 				
 			</s:HGroup>
 			
-			<s:HGroup left="100" width="100%" height="100%" verticalAlign="middle" paddingRight="50">
+			<s:HGroup left="100" left.global="0" width="100%" height="100%" verticalAlign="middle" paddingRight="50">
 				
-				<s:TextInput id="findText" width="200"
+				<s:TextInput id="findText" width="200" width.global="400"
 							 change="findText_changeHandler(event)" keyDown="findText_keyDownHandler(event)"/>
 					
 				<button:WorkAreaButton id="previous" icon="{VDOMImage.Arrow_Left}"
@@ -406,7 +406,8 @@
 									   label.replace="Find" click="findOrReplace_clickHandler(event)"
 									   includeIn="find, replace"/>
 				
-				<button:WorkAreaButton id="find" label="Find" includeIn="global"
+				<button:WorkAreaButton id="find" label="Find" icon="{ VDOMImage.Search }"
+									   includeIn="global"
 									   click="find_clickHandler(event)"/>
 				
 			</s:HGroup>
