@@ -39,6 +39,10 @@ package net.vdombox.ide.common.view.components
 		public static var DeleteWhite : Class;
 		
 		[Bindable]
+		[Embed( source = "assets/vdomimage/deleteBlack.png" )]
+		public static var DeleteBlack : Class;
+		
+		[Bindable]
 		[Embed( source = "assets/vdomimage/arrow.png" )]
 		public static var Arrow : Class;
 		
@@ -83,20 +87,8 @@ package net.vdombox.ide.common.view.components
 		public static var Arrow_Right : Class;
 		
 		[Bindable]
-		[Embed( source = "assets/vdomimage/arrow_right_yellow.png" )]
-		public static var Arraw_Right_Yellow : Class;
-		
-		[Bindable]
-		[Embed( source = "assets/vdomimage/circleGreen.png" )]
-		public static var Circle_Green : Class;
-		
-		[Bindable]
-		[Embed( source = "assets/vdomimage/circleGreenSmall.png" )]
-		public static var Circle_Green_Small : Class;
-		
-		[Bindable]
-		[Embed( source = "assets/vdomimage/circleGreenPlus.png" )]
-		public static var Circle_Green_Plus : Class;
+		[Embed( source = "assets/vdomimage/arrow_right_blue.png" )]
+		public static var Arraw_Right_Blue : Class;
 		
 		[Bindable]
 		[Embed( source = "assets/vdomimage/standard.png" )]
@@ -133,6 +125,10 @@ package net.vdombox.ide.common.view.components
 		[Bindable]
 		[Embed( source = "assets/vdomimage/class_import.png" )]
 		public static var Class_Import : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/vdomimage/search.png" )]
+		public static var Search : Class;
 		
 	}
 }

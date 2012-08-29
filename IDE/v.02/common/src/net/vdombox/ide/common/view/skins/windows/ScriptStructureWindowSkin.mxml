@@ -2,7 +2,8 @@
 <s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/mx"
-		creationComplete="skin1_creationCompleteHandler(event)">
+		creationComplete="skin1_creationCompleteHandler(event)"
+		>
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.common.view.components.windows.ScriptStructureWindow")]
@@ -13,6 +14,7 @@
 			import mx.collections.XMLListCollection;
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.editors.parsers.AutoCompleteItemVO;
 			import net.vdombox.editors.parsers.Field;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.utils.XMLUtils;
@@ -38,50 +40,51 @@
 				
 			    for each ( var field : Field in structureArray )
 			    {
-				     xml = <item name={ field.name } pos={ field.pos } len={field.name.length} iconType={ field.fieldType }/>;
-				     tempXMLList += xml;
-				     
-				     switch(field.fieldType)
-				     {
-					      case "class":
-					      {     
-						       xml = tempXMLList.( @name == field.name )[ 0 ];
-						       var xml2 : XML = <item name={ field.name } pos={ field.pos } len={field.name.length} iconType={ field.fieldType }/>;
+					
+					xml = <item name={ field.name } pos={ field.pos } len={field.name.length} iconType={ field.fieldType }/>;
+					tempXMLList += xml;
+					 
+					switch(field.fieldType)
+					{
+						 case "class":
+						 {     
+						      xml = tempXMLList.( @name == field.name )[ 0 ];
+						      var xml2 : XML = <item name={ field.name } pos={ field.pos } len={field.name.length} iconType={ field.fieldType }/>;
 						       
-						       xml2 = createXMLStructure( xml2, field.members );
+						      xml2 = createXMLStructure( xml2, field.members );
 						       
-						       xml.appendChild( xml2.* );
+						      xml.appendChild( xml2.* );
 						       
-						       break;
-					      }
+						      break;
+						 }
 							  
-						  case "def":
-						  {     
-							  xml = tempXMLList.( @name == field.name )[ 0 ];
-							  var defName : String = xml.@name + "(";
-							  
+						 case "def":
+						 {     
+						 	  xml = tempXMLList.( @name == field.name )[ 0 ];
+						 	  var defName : String = xml.@name + "(";
+							   
 							  var flag : Boolean = false;
 							  
 							  for each( var param : Field in field.params.toArray() )
 							  {
-								  defName += param.name + ", ";
-								  flag = true;
+							  	  defName += param.name + ", ";
+							  	  flag = true;
 							  }
 							  
 							  if ( flag )
-							  	  defName = defName.substr(0, defName.length - 2);
+							     defName = defName.substr(0, defName.length - 2);
 							  
 							  defName += ")";
 							  xml.@name = defName;
 							  
 							  break;
-						  }
-				       
-					      default:
-					      {
-					       		break;
-					      }
-					 }
+						 }
+						   
+						 default:
+						 {
+						 	 break;
+						 }
+					}
 			    }
 				
 				var sortField : SortField = new SortField( "@pos" );
@@ -179,7 +182,7 @@
 		
 		<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
 			<s:fill>
-				<s:SolidColor color="#ffffe1"/>
+				<s:SolidColor color="#555555"/>
 			</s:fill>
 		</s:Rect>
 		

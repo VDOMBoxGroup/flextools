@@ -3,7 +3,8 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
 					  doubleClickEnabled="true"
-					  doubleClick="mxtreeitemrenderer1_doubleClickHandler(event)">
+					  doubleClick="mxtreeitemrenderer1_doubleClickHandler(event)"
+					  contentBackgroundAlpha="0">
 	
 	<fx:Script>
 		<![CDATA[
@@ -28,19 +29,19 @@
 					{
 						case "class":
 						{
-							icon = VDOMImage.Circle_Green_Plus;
+							icon = VDOMImage.Class_;
 							break;
 						}
 							
 						case "def":
 						{
-							icon = VDOMImage.Circle_Green;
+							icon = VDOMImage.Function_;
 							break;
 						}
 							
 						case "var":
 						{
-							icon = VDOMImage.Circle_Green_Small;
+							icon = VDOMImage.Variable;
 							break;
 						}
 							
@@ -66,6 +67,13 @@
 		<s:State name="hovered" />
 		<s:State name="selected" />
 	</s:states>
+	
+	<s:Rect top="-2" left="-2" right="-2" bottom="-2">
+		<s:fill>
+			<s:SolidColor color="#555555" color.hovered="#4a4a4a" color.selected="#2a2a2a" />
+		</s:fill>
+	</s:Rect>
+	
 	<s:HGroup left="0" right="0" top="0" bottom="0" verticalAlign="middle">
 		<s:Rect id="indentationSpacer" width="{treeListData.indent}" percentHeight="100" alpha="0">
 			<s:fill>
@@ -82,6 +90,7 @@
 			<s:BitmapImage source="{icon}"/>
 		</s:HGroup>
 		
-		<s:Label id="labelField" text="{treeListData.label}" paddingTop="2"/>
+		<s:Label id="labelField" text="{treeListData.label}" paddingTop="2"
+				 color="#ebebeb"/>
 	</s:HGroup>
 </s:MXTreeItemRenderer>
