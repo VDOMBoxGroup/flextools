@@ -839,7 +839,7 @@
 										   icon="@Embed('assets/Add.png')" click="addRow_clickHandler(event)"/>
 					
 					<button:WorkAreaButton id="deleteRow" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_delete_row' ) }" 
-										   icon="@Embed('assets/delete.png')" click="deleteRow_clickHandler(event)"/>
+										   icon="{ VDOMImage.DeleteBlack }" click="deleteRow_clickHandler(event)"/>
 					
 					<button:WorkAreaButton id="commit" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_commit' ) }" 
 										   icon="@Embed('assets/commit.png')" click="commit_clickHandler(event)"/>
@@ -863,7 +863,7 @@
 										   icon="@Embed('assets/sort.png')" click="sort_clickHandler(event)" includeIn="Query"/>
 					
 					<button:WorkAreaButton id="search"  height="20" label="Search" 
-										   icon="@Embed('assets/search.png')" click="search_clickHandler(event)" includeIn="Query"/>
+										   icon="{ VDOMImage.Search }" click="search_clickHandler(event)" includeIn="Query"/>
 					
 				</s:HGroup>
 			</s:VGroup>

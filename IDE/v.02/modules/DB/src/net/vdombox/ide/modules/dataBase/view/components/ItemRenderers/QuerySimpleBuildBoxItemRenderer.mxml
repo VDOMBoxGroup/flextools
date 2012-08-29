@@ -8,6 +8,7 @@
 			import mx.collections.ArrayList;
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;
 			
 			[Bindable]
@@ -125,7 +126,7 @@
 		<button:WorkAreaButton id="down" width="20" icon="@Embed('assets/Arrow_Down.png')"
 							   click="down_clickHandler(event)"/>
 		
-		<button:WorkAreaButton id="delOld" width="20" icon="@Embed('assets/delete.png')"
+		<button:WorkAreaButton id="delOld" width="20" icon="{ VDOMImage.DeleteBlack }"
 							   click="delOld_clickHandler(event)"/>
 		
 	</s:HGroup>
