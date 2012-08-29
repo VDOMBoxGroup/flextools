@@ -293,7 +293,7 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 		
-		public function createObject( typeVO : TypeVO, attributes : Array ) : AsyncToken
+		public function createObject( typeVO : TypeVO, attributes : Array, objectName : String ) : AsyncToken
 		{
 			var token : AsyncToken;
 			
@@ -313,7 +313,7 @@ package net.vdombox.ide.core.model
 				}
 			}
 			
-			token = soap.create_object( objectVO.pageVO.applicationVO.id, objectVO.id, typeVO.id, "", attributesXML );
+			token = soap.create_object( objectVO.pageVO.applicationVO.id, objectVO.id, typeVO.id, objectName, attributesXML );
 			
 			token.recipientName = proxyName;
 			

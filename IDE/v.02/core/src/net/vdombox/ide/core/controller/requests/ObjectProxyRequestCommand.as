@@ -89,7 +89,7 @@ package net.vdombox.ide.core.controller.requests
 				case PPMObjectTargetNames.OBJECT:
 				{
 					if ( operation == PPMOperationNames.CREATE )
-						objectProxy.createObject( body.typeVO, body.attributes );
+						objectProxy.createObject( body.typeVO, body.attributes, body.name );
 
 					break;
 				}

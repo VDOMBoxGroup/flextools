@@ -68,7 +68,7 @@ package net.vdombox.ide.core.controller.requests
 					if( operation == PPMOperationNames.READ )
 						pageProxy.getObjectAt( body.objectID );
 					else if( operation == PPMOperationNames.CREATE )
-						pageProxy.createObject( body.typeVO, body.attributes );
+						pageProxy.createObject( body.typeVO, body.attributes, body.name );
 					else if( operation == PPMOperationNames.DELETE )
 					{
 						if ( body.objectVO is ObjectVO )

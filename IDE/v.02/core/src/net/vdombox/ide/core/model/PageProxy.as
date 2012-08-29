@@ -353,7 +353,7 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function createObject( typeVO : TypeVO, attributes : Array ) : AsyncToken
+		public function createObject( typeVO : TypeVO, attributes : Array, objectName : String ) : AsyncToken
 		{
 			var token : AsyncToken;
 
@@ -373,7 +373,7 @@ package net.vdombox.ide.core.model
 				}
 			}
 
-			token = soap.create_object( pageVO.applicationVO.id, pageVO.id, typeVO.id, "", attributesXML );
+			token = soap.create_object( pageVO.applicationVO.id, pageVO.id, typeVO.id, objectName, attributesXML );
 
 			token.recipientName = proxyName;
 
@@ -699,7 +699,7 @@ package net.vdombox.ide.core.model
 					else 
 					{
 						if ( structure.children() )
-							 XMLUtils.sortElementsInXML( structure, new SortField( "@name" ) );
+							 XMLUtils.sortElementsInXML( structure,  [ new SortField( "@name" ) ] );
 						
 						if ( token.requestFunctionName == GET_STRUCTURE )
 							notification = new ProxyNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, structure );
