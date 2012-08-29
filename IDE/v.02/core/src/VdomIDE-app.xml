@@ -26,9 +26,13 @@
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
 	
+	<version>2.3.7.8422</version>
 
+<<<<<<< .mine
+=======
 	<version>2.3.7.8419</version>
 
+>>>>>>> .r8426
 	<!-- versionNumber>2.0.2</versionNumber-->
 
 	<!-- Description, displayed in the AIR application installer.
@@ -48,7 +52,11 @@
 		<content>[Это значение будет перезаписано программой Flash Builder в выходном файле app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
+<<<<<<< .mine
+		 <title>Vdom IDE.v.2.3.7.8422</title> 
+=======
 		 <title>Vdom IDE.v.2.3.7.8419</title> 
+>>>>>>> .r8426
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
 		<!-- <systemChrome></systemChrome> -->
