@@ -90,7 +90,8 @@
 			<s:Label text="Server address" width="100%"
 					 fontFamily="Arial" fontSize="14" textAlign="left"/>
 			
-			<s:TextInput id="host" width="100%" height="31" text="{hostString}" change="host_changeHandler(event)"/>
+			<s:TextInput id="host" width="100%" height="31" text="{hostString}" change="host_changeHandler(event)"
+						 skinClass="spark.skins.spark.TextInputSkin"/>
 			
 		</s:VGroup>
 		
@@ -99,7 +100,8 @@
 			<s:Label text="username" width="100%"
 					 fontFamily="Arial" fontSize="14" textAlign="left" />
 			
-			<s:TextInput id="user" width="100%" height="31" text="{userString}" change="user_changeHandler(event)"/>
+			<s:TextInput id="user" width="100%" height="31" text="{userString}" change="user_changeHandler(event)"
+						 skinClass="spark.skins.spark.TextInputSkin"/>
 			
 		</s:VGroup>
 		
@@ -108,7 +110,8 @@
 			<s:Label text="password" width="100%"
 					 fontFamily="Arial" fontSize="14" textAlign="left"/>
 			
-			<s:TextInput id="pass" width="100%" height="31" text="{passString}" displayAsPassword="true" />
+			<s:TextInput id="pass" width="100%" height="31" text="{passString}" displayAsPassword="true" 
+						 skinClass="spark.skins.spark.TextInputSkin"/>
 			
 			
 		</s:VGroup>

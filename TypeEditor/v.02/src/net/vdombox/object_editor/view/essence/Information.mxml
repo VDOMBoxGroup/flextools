@@ -76,23 +76,22 @@
 		<mx:FormHeading fontSize="10"  label="Enter values into the form." paddingTop="0" />
 		
 		<mx:FormItem label="Name" toolTip="Имя объекта">
-			<mx:TextInput name="name" id="fname" width="250" change="{viewChanged()}"/>
+			<s:TextInput name="name" id="fname" width="250" change="{viewChanged()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="XMLScriptName" toolTip="Имя объекта в xml скриптах в редакторе (rtfm page 66)">
-			<mx:TextInput id="fXMLScriptName" width="250" change="{viewChanged()}"/>
+			<s:TextInput id="fXMLScriptName" width="250" change="{viewChanged()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="DisplayName" toolTip="писание объекта и его использования">	
 			<ns2:LangTextInput id="fDisplayName" width="250" change="{viewChanged()}"/>
 		</mx:FormItem>
 		<mx:FormItem label="Description" toolTip="писание объекта и его использования">
-			<ns2:LangTextInput id="fDescription" width="250" change="{viewChanged()}" paddingRight="0"
-							   skinClass="net.vdombox.object_editor.view.TextInputSkin"/>
+			<ns2:LangTextInput id="fDescription" width="250" change="{viewChanged()}" paddingRight="0"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="ClassName" toolTip="Имя класса">
-			<mx:TextInput id="fClassName" width="250" change="{viewChanged()}"/>
+			<s:TextInput id="fClassName" width="250" change="{viewChanged()}"/>
 		</mx:FormItem>
 		<mx:FormItem label="ID" toolTip="Уникальный идентификатор объекта"
 					 >
@@ -111,12 +110,12 @@
 				
 				<s:HGroup toolTip="">
 					<s:Label text="Major version"/>
-					<mx:TextInput id="fMajorVersion" width="170"  change="{viewChanged()}"/>
+					<s:TextInput id="fMajorVersion" width="170"  change="{viewChanged()}"/>
 				</s:HGroup>				
 			
 				<s:HGroup toolTip="">
 					<s:Label text="Minor version"/>
-					<mx:TextInput editable="false" id="fMinorVersion" width="170"  change="{viewChanged()}"/>
+					<s:TextInput editable="false" id="fMinorVersion" width="170"  change="{viewChanged()}"/>
 				</s:HGroup>	
 						
 				<s:HGroup toolTip="">
@@ -128,20 +127,20 @@
 		</mx:FormItem>	
 			
 		<mx:FormItem label="WCAG" toolTip="">
-			<mx:TextInput id="fWCAG" width="250"  change="{viewChanged()}"/>
+			<s:TextInput id="fWCAG" width="250"  change="{viewChanged()}"/>
 		</mx:FormItem>
 				
 		<mx:FormItem label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)">
-			<mx:TextArea id="fContainers" width="250" height="60"  change="{viewChanged()}"/>
+			<s:TextArea id="fContainers" width="250" height="60"  change="{viewChanged()}"/>
 			<s:Button id="editContainersBt" label="Edit" />
 		</mx:FormItem>	
 		
 		<mx:FormItem label="RemoteMethods" toolTip="список статических функций объекта, доступных через SOAP (execute_sql, get_data, ...)">
-			<mx:TextInput id="fRemoteMethods" width="250" change="{viewChanged()}" />
+			<s:TextInput id="fRemoteMethods" width="250" change="{viewChanged()}" />
 		</mx:FormItem>
 		
 		<mx:FormItem label="Handlers" toolTip="Список статических функций объекта - обработчиков событий (set_attr)">
-			<mx:TextInput id="fHandlers" width="250"  change="{viewChanged()}"/>
+			<s:TextInput id="fHandlers" width="250"  change="{viewChanged()}"/>
 		</mx:FormItem>			
 	</mx:Form>
 	
@@ -175,11 +174,11 @@
 			</mx:FormItem>
 			<mx:FormItem label="RenderType" toolTip="Для контейнеров верхнего уровня - формат, в котором контейнер отдает данные (например, HTML)"
 						 >
-				<mx:TextInput id="fRenderType" width="250"  enabled="{(fContainerI.selectedItem.data == '3')}" change="{viewChanged()}" />
+				<s:TextInput id="fRenderType" width="250"  enabled="{(fContainerI.selectedItem.data == '3')}" change="{viewChanged()}" />
 			</mx:FormItem>
 			<mx:FormItem label="HTTPContentType" toolTip="Для контейнеров верхнего уровня - формат,  (например, 'text/html')"
 						 >
-				<mx:TextInput id="fHTTPContentType" width="250"  enabled="{(fContainerI.selectedItem.data == '3')}" change="{viewChanged()}" />
+				<s:TextInput id="fHTTPContentType" width="250"  enabled="{(fContainerI.selectedItem.data == '3')}" change="{viewChanged()}" />
 			</mx:FormItem>
 			
 			<mx:FormItem label="OptimizationPriority" toolTip="Приоритет объекта при генерации его отображения в контейнере">

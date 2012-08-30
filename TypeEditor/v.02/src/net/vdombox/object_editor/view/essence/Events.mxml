@@ -59,7 +59,7 @@
 	<mx:Form  paddingTop="0" horizontalScrollPolicy="off" verticalScrollPolicy="off" enabled="{currentEvent}">
 		<mx:FormHeading fontSize="10"  label="Events details:" paddingTop="0" />
 		<mx:FormItem label="Name:" toolTip="Name">
-			<mx:TextInput id="eventName" width="150" change="{changeField()}"/>
+			<s:TextInput id="eventName" width="150" change="{changeField()}"/>
 		</mx:FormItem>
 		
 		<s:HGroup width="100%"/>
@@ -75,15 +75,15 @@
 		<mx:FormHeading fontSize="10"  label="Parameters detais:" paddingTop="0" />
 		
 		<mx:FormItem label="Name:" toolTip="Имя объекта">
-			<mx:TextInput id="parName" width="200" change="{changeField()}"/>
+			<s:TextInput id="parName" width="200" change="{changeField()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Order:" toolTip="Это ордер">
-			<mx:TextInput id="parOrder" width="200" change="{changeField()}"/>
+			<s:TextInput id="parOrder" width="200" change="{changeField()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="VbType:" toolTip="Это VbType">
-			<mx:TextInput id="parVbType" width="200" change="{changeField()}"/>
+			<s:TextInput id="parVbType" width="200" change="{changeField()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Help:" toolTip="Это Help">

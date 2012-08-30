@@ -46,7 +46,7 @@
 				<s:Label text="Target:" paddingTop="5"/>
 				<s:TextInput id="target" change="changeField()" />
 			</s:HGroup>
-			<mx:TextArea  id="code"  width="100%" height="100%" change="{changeField()}"/>
+			<s:TextArea  id="code"  width="100%" height="100%" change="{changeField()}"/>
 		</s:VGroup>	
 	</s:HGroup>
 </s:NavigatorContent>

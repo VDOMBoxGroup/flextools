@@ -136,8 +136,7 @@
 			<mx:FormHeading fontSize="10"  label="Enter values into the form." paddingTop="0" />
 			
 			<mx:FormItem label="Name" toolTip="Имя объекта">
-				<s:TextInput id="fname" width="250" change="{changeField()}"
-							 skinClass="net.vdombox.object_editor.view.TextInputSkin"/>
+				<s:TextInput id="fname" width="250" change="{changeField()}"/>
 			</mx:FormItem>
 			
 			<mx:FormItem label="DisplayName" >
@@ -145,14 +144,12 @@
 			</mx:FormItem >
 			
 			<mx:FormItem label="DefaultValue" toolTip="Значение по умолчанию">
-				<s:TextInput id="defaultValue" width="250" change="{changeField()}"
-							 skinClass="net.vdombox.object_editor.view.TextInputSkin"/>
+				<s:TextInput id="defaultValue" width="250" change="{changeField()}"/>
 			</mx:FormItem>
 						
 			<mx:FormItem label="RegExp" >
 				<s:HGroup>
-					<s:TextInput id="regExp" width="250"  change="{changeField()}"
-								 skinClass="net.vdombox.object_editor.view.TextInputSkin"/>
+					<s:TextInput id="regExp" width="250"  change="{changeField()}"/>
 					<!--s:Button label="..." width="30" click="{}" /-->
 				</s:HGroup>
 			</mx:FormItem>

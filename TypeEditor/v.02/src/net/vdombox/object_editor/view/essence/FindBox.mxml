@@ -134,7 +134,8 @@
 			<s:HGroup left="100" width="100%" height="100%" verticalAlign="middle" paddingRight="50">
 				
 				<s:TextInput id="findText" width="200"
-							 change="findText_changeHandler(event)" keyDown="findText_keyDownHandler(event)"/>
+							 change="findText_changeHandler(event)" keyDown="findText_keyDownHandler(event)"
+							 skinClass="spark.skins.spark.TextInputSkin"/>
 				
 				<s:Button id="previous" label="previous"
 									   click="previous_clickHandler(event)" />
@@ -159,7 +160,7 @@
 			
 			<s:HGroup left="100" width="100%" height="100%" verticalAlign="middle">
 				
-				<s:TextInput id="replaceText" width="200"/>
+				<s:TextInput id="replaceText" width="200" skinClass="spark.skins.spark.TextInputSkin"/>
 				
 				<s:Button id="replace" label="replace" click="replace_clickHandler(event)"/>
 				

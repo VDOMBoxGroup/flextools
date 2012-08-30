@@ -13,6 +13,25 @@
 		<!-- Place non-visual elements (e.g., services, value objects)  -->
 	</fx:Declarations>
 	
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		@namespace ns "net.vdombox.object_editor.view.essence.*";
+		@namespace vs "net.vdombox.object_editor.view.*";
+		@namespace local "*";
+		@namespace containers "flexlib.containers.*";
+		
+		s|TextInput
+		{
+			skinClass : ClassReference("net.vdombox.object_editor.view.TextInputSkin");
+		}
+		
+		s|TextArea
+		{
+			skinClass : ClassReference("net.vdombox.object_editor.view.TextAreaSkin");
+		}
+	</fx:Style>
+	
 <fx:Script>
 	<![CDATA[	
 		import org.puremvc.as3.patterns.facade.Facade;

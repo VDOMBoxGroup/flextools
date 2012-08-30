@@ -120,7 +120,8 @@
 			<s:TextInput id="typeFilter" width="100%" 
 						 text="Find type" fontStyle="italic"
 						 change="typeFilter_changeHandler(event)" 
-						 focusIn="typeFilter_focusInHandler(event)" focusOut="typeFilter_focusOutHandler(event)" />
+						 focusIn="typeFilter_focusInHandler(event)" focusOut="typeFilter_focusOutHandler(event)"
+						 skinClass="spark.skins.spark.TextInputSkin"/>
 			
 			<mx:Image id="cross" height="100%" verticalAlign="middle" right="4" visible="false" 
 					  source="@Embed('assets/cross.png')" click="cross_clickHandler(event)"/>
