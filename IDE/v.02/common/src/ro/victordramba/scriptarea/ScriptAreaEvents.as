@@ -190,6 +190,9 @@ package ro.victordramba.scriptarea
 				dragStart = getIndexForPoint( new Point( mouseX, mouseY ) );
 				_setSelection( dragStart, dragStart, true );
 			}
+			
+			ClearLineGoToToken();
+			selectedSkobki( dragStart );
 
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
 			stage.addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
@@ -225,6 +228,113 @@ package ro.victordramba.scriptarea
 					_setSelection( dragStart, getIndexForPoint( new Point( mouseX, mouseY ) ) );
 				}
 			}
+		}
+		
+		private function selectedSkobki( pos : int ) : void
+		{
+			var token1 : Token = controller.getTokenByPos( pos - 1 );
+			var token2 : Token;
+			
+			if ( !token1 || token1.type != Token.SYMBOL || token1.pos != pos - 1 )
+				return;
+			
+			var pos2 : int = pos - 1;
+			
+			var tempPos : int;
+			var tempPos2 : int;
+			var step : int = 0;
+			var flag : Boolean = false;
+			
+			if ( token1.string == "(" )
+			{
+				while ( true )
+				{
+					tempPos = text.indexOf( ")", pos2 + 1 );
+					tempPos2 = text.indexOf( "(", pos2 + 1 );
+					if ( tempPos < 0 )
+					{
+						flag = false;
+						break;
+					}
+					
+					if ( tempPos > tempPos2 && tempPos2 > 0 )
+					{
+						token2 = controller.getTokenByPos( tempPos2 );
+						pos2 = tempPos2;
+						if ( token2.type == Token.SYMBOL )
+							step++;
+						else
+						{
+							continue;
+						}
+					}
+					else
+						pos2 = tempPos;
+					
+					token2 = controller.getTokenByPos( pos2 );
+					if ( token2.type == Token.SYMBOL && token2.string == ")" )
+					{
+						if ( step == 0)
+						{
+							flag = true;
+							break;
+						}
+						else
+							step--;
+						
+					}
+				}
+			}
+			else if ( token1.string == ")" )
+			{
+				while ( true )
+				{					
+					tempPos = text.lastIndexOf( "(", pos2 - 1 );
+					tempPos2 = text.lastIndexOf( ")", pos2 - 1 );
+					
+					if ( tempPos < 0 )
+					{
+						flag = false;
+						break;
+					}
+					
+					if ( tempPos < tempPos2 )
+					{
+						token2 = controller.getTokenByPos( tempPos2 );
+						pos2 = tempPos2;
+						if ( token2.type == Token.SYMBOL )
+							step++;
+						else
+						{
+							continue;
+						}
+					}
+					else
+						pos2 = tempPos;
+					
+					token2 = controller.getTokenByPos( pos2 );
+					if ( token2.type == Token.SYMBOL && token2.string == "("  )
+					{
+						if ( step == 0)
+						{
+							flag = true;
+							break;
+						}
+						else
+							step--;
+					}
+				}
+				
+			}
+			else
+				return;
+			
+			if (!flag)
+				return;
+			
+			drawSkobki( pos-1, pos2 );
+			
+			
 		}
 		
 		public function onMouseClick( e : MouseEvent ) : void

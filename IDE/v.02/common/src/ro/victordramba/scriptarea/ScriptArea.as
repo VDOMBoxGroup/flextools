@@ -106,6 +106,8 @@ package ro.victordramba.scriptarea
 		
 		private var selectionShapeRects : Shape;
 		private var selectionShapeRectsColor : uint = 0xD4D4D4
+			
+		private var selectionSkobkiColor : uint = 0xc0c0c0;
 		
 		private var needChangeColorSelected : Boolean = true;
 		
@@ -172,7 +174,7 @@ package ro.victordramba.scriptarea
 			if ( -tf.x == value )
 				return;
 
-			tf.x = selectionShape.x = selectionShapeRects.x = -value;
+			tf.x = selectionShape.x = selectionShapeRects.x = linesShape.x = -value;
 
 			updateCaret();
 			dispatchEvent( new Event( Event.SCROLL, true ) );
@@ -195,6 +197,8 @@ package ro.victordramba.scriptarea
 			updateCaret();
 
 			_setSelection( _selStart, _selEnd );
+			
+			ClearLineGoToToken();
 
 			dispatchEvent( new Event( Event.SCROLL, true ) );
 		}
@@ -841,7 +845,7 @@ package ro.victordramba.scriptarea
 				if ( newX < 0 )
 					newX = 0;
 				tf.x = -newX;
-				selectionShape.x = selectionShapeRects.x = -newX;
+				selectionShape.x = selectionShapeRects.x = linesShape.x = -newX;
 			} 
 			else if ( cursor.getX() < 0 )
 			{
@@ -856,6 +860,7 @@ package ro.victordramba.scriptarea
 					tf.x -= getX;
 					selectionShape.x -= getX;
 					selectionShapeRects.x -= getX;
+					linesShape.x -= getX;
 				}
 			}
 
@@ -1092,6 +1097,21 @@ package ro.victordramba.scriptarea
 		{
 			var g : Graphics = linesShape.graphics;
 			g.clear();
+		}
+		
+		protected function drawSkobki( pos1 : int, pos2 : int ) : void
+		{
+			var g : Graphics = linesShape.graphics;
+			
+			g.beginFill( selectionSkobkiColor, 0.8 );
+			
+			var p : Point = getPointForIndex( pos1 );
+			
+			g.drawRect( p.x, p.y, letterBoxWidth, letterBoxHeight );
+			
+			p = getPointForIndex( pos2 );
+			
+			g.drawRect( p.x, p.y, letterBoxWidth, letterBoxHeight );
 		}
 	}
 }

@@ -91,6 +91,7 @@ package net.vdombox.ide.common.model
 			shObjData.data["symbol" + name] 		= colorSchemeVO.symbol;
 			shObjData.data["topType" + name] 		= colorSchemeVO.topType;
 			shObjData.data["backGroundColor" + name] = colorSchemeVO.backGroundColor;
+			shObjData.data["skobkiColor" + name] = colorSchemeVO.skobkiColor;
 			
 			shObjData.data["names"] = shObjData.data["names"] ? shObjData.data["names"] + " " + name : name;
 			shObjData.data["nameSelectColorScheme"] = name;
@@ -143,6 +144,7 @@ package net.vdombox.ide.common.model
 			colorSchemeVO.symbol 		= shObjData.data["symbol" + name];
 			colorSchemeVO.topType 		= shObjData.data["topType" + name];
 			colorSchemeVO.backGroundColor = shObjData.data["backGroundColor" + name];
+			colorSchemeVO.skobkiColor = shObjData.data["skobkiColor" + name];
 			
 			return colorSchemeVO;
 		}
@@ -169,6 +171,7 @@ package net.vdombox.ide.common.model
 			colorSchemeVO.selectionColor 		= 0x3399FF;
 			colorSchemeVO.selectionRectsColor	= 0xD4D4D4;
 			colorSchemeVO.cursorColor			= 0;
+			colorSchemeVO.skobkiColor			= 0xc0c0c0;
 			
 			colorSchemeVO.needChangeColorSelected = true;
 			
@@ -197,6 +200,7 @@ package net.vdombox.ide.common.model
 			colorSchemeVO.selectionColor 		= 0x506064;
 			colorSchemeVO.selectionRectsColor	= 0x404E51;
 			colorSchemeVO.cursorColor			= 0xFFFFFF;
+			colorSchemeVO.skobkiColor			= 0xc0c0c0;
 			
 			colorSchemeVO.needChangeColorSelected = false;
 			
@@ -225,6 +229,7 @@ package net.vdombox.ide.common.model
 			colorSchemeVO.selectionColor 		= 0x9d550f;
 			colorSchemeVO.selectionRectsColor	= 0x404E51;
 			colorSchemeVO.cursorColor			= 0xFFFFFF;
+			colorSchemeVO.skobkiColor			= 0xc0c0c0;
 			
 			colorSchemeVO.needChangeColorSelected = false;
 			
@@ -253,6 +258,7 @@ package net.vdombox.ide.common.model
 			colorSchemeVO.selectionColor 		= 0x4a3b4e;
 			colorSchemeVO.selectionRectsColor	= 0x404E51;
 			colorSchemeVO.cursorColor			= 0xDDDDDD;
+			colorSchemeVO.skobkiColor			= 0xc0c0c0;
 			
 			colorSchemeVO.needChangeColorSelected = false;
 			

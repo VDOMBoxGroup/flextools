@@ -25,11 +25,23 @@ package net.vdombox.ide.common.model._vo
 		private var _cursorColor : uint;
 		private var _lineNumberColor : uint;
 		
+		private var _skobkiColor : uint;
+		
 		private var _needChangeColorSelected : Boolean;
 		
 		public function ColorSchemeVO( name : String )
 		{
 			this.name = name;
+		}
+
+		public function get skobkiColor():uint
+		{
+			return _skobkiColor;
+		}
+
+		public function set skobkiColor(value:uint):void
+		{
+			_skobkiColor = value;
 		}
 
 		public function get lineNumberColor():uint
