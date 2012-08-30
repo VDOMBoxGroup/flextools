@@ -200,6 +200,12 @@
 		<s:State name="disabled"/>
 	</s:states>
 	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor color="#FFFFFF"/>
+		</s:fill>
+	</s:Rect>
+	
 	<s:VGroup id="contetn" width="100%" height="100%" gap="0" visible="{_actionVO ? true : false}">
 		<s:Group width="100%" height="24">
 			<s:Rect width="100%" height="100%">
