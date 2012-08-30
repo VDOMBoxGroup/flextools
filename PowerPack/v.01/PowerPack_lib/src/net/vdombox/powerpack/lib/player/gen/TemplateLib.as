@@ -39,6 +39,7 @@ import mx.events.CloseEvent;
 import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
 import mx.managers.PopUpManager;
+import mx.utils.Base64Decoder;
 import mx.utils.Base64Encoder;
 import mx.utils.UIDUtil;
 
@@ -108,6 +109,7 @@ public dynamic class TemplateLib extends EventDispatcher
 		
 		// pass the post data
 		request.data = vars;
+		request.method = URLRequestMethod.POST;
 		
 		// Add Handlers
 		loader.addEventListener ( Event.COMPLETE, loaderHandler, false, 0, true );
@@ -135,7 +137,7 @@ public dynamic class TemplateLib extends EventDispatcher
 			{
 				setTransition( "Success" );
 				
-				setReturnValue( "[ 'Success' "+ event.target.data.toString() +" ]" );
+				setReturnValue( '[ "Success" "'+ event.target.data.toString() +'" ]' );
 			}
 			else
 			{
@@ -561,10 +563,16 @@ public dynamic class TemplateLib extends EventDispatcher
 		}
 		else if ( value && type.toLowerCase() == "base64" )
 		{
+			var base64Data : Base64Encoder = new Base64Encoder();
+			base64Data.insertNewLines = false;
+			base64Data.encodeUTFBytes( value.toString() );
+			
+			
+			result = base64Data.toString();
 			//		var fileToBase64 : FileToBase64 = new FileToBase64( value.toString() );
 			//		fileToBase64.addEventListener( "dataConverted", completeConvertHandler );
 			//		fileToBase64.loadAndConvert();
-			return completeConvertHandler;
+//			return completeConvertHandler;
 			
 			function completeConvertHandler( event : Event ) : void
 			{
