@@ -54,6 +54,13 @@ package net.vdombox.ide.modules.dataBase.model
 			isSelectedObjectChanged = false;
 		}
 		
+		public override function set selectedApplication( value : ApplicationVO ) : void
+		{
+			super.selectedApplication =  value;
+			
+			data[ SELECTED_PAGE ] = null;
+		}
+		
 		public override function set selectedPage( value : PageVO ) : void
 		{
 			if ( value && value.typeVO.id != "753ea72c-475d-4a29-96be-71c522ca2097" )

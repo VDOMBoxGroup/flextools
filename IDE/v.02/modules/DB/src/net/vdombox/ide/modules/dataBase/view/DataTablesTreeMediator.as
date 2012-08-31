@@ -146,7 +146,7 @@ package net.vdombox.ide.modules.dataBase.view
 					
 					sendNotification( Notifications.GET_DATA_BASE_TABLES, statesProxy.selectedPage );
 					
-					if ( !statesProxy.selectedPage )
+					if ( !statesProxy.selectedPage || statesProxy.selectedPage.applicationVO.id != statesProxy.selectedApplication.id )
 					{
 						for each ( var pageVO : PageVO in _dataBases )
 						{
