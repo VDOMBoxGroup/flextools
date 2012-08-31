@@ -10,11 +10,15 @@ package ro.victordramba.scriptarea
 	import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
+	import flash.ui.ContextMenu;
+	import flash.ui.ContextMenuItem;
 	import flash.ui.Keyboard;
 	import flash.ui.Mouse;
 	import flash.ui.MouseCursor;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
+	
+	import mx.resources.ResourceManager;
 	
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.BackwardsParser;
@@ -109,6 +113,49 @@ package ro.victordramba.scriptarea
 			{
 				Mouse.cursor = MouseCursor.AUTO;
 			} );
+			
+			addEventListener( MouseEvent.CONTEXT_MENU, contextMenuHandler, false, 0 , true );
+		}
+		
+		private function contextMenuHandler( event : MouseEvent ) : void
+		{
+			if ( !contextMenu )
+				contextMenu = new ContextMenu();
+			
+			contextMenu.removeAllItems();
+			
+			var copyItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_copy' ));
+			copyItem.addEventListener( Event.SELECT, copyContextMenuHandler, false, 0, true );
+			contextMenu.addItem( copyItem );
+			
+			var cutItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_cut' ));
+			cutItem.addEventListener( Event.SELECT, cutContextMenuHandler, false, 0, true );
+			contextMenu.addItem( cutItem );
+			
+			if ( _selStart == _selEnd )
+			{
+				copyItem.enabled = false;
+				cutItem.enabled = false;
+			}
+			
+			var pasteItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_paste' ));
+			pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
+			contextMenu.addItem( pasteItem );
+		}
+		
+		private function copyContextMenuHandler( event : Event ) : void
+		{
+			onCopy();
+		}
+		
+		private function cutContextMenuHandler( event : Event ) : void
+		{
+			onCut();
+		}
+		
+		private function pasteContextMenuHandler( event : Event ) : void
+		{
+			onPaste();
 		}
 
 		private function findWordBound( start : int, left : Boolean ) : int

@@ -7,6 +7,8 @@ package ro.victordramba.scriptarea
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
+	import mx.utils.OnDemandEventDispatcher;
+	
 	import net.vdombox.editors.parsers.Controller;
 	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
