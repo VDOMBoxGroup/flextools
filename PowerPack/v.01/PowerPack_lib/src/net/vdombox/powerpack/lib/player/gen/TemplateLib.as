@@ -137,7 +137,7 @@ public dynamic class TemplateLib extends EventDispatcher
 			{
 				setTransition( "Success" );
 				
-				setReturnValue( '[ "Success" "'+ event.target.data.toString() +'" ]' );
+				setReturnValue(  event.target.data.toString()  );
 			}
 			else
 			{
@@ -145,7 +145,7 @@ public dynamic class TemplateLib extends EventDispatcher
 				
 				setTransition( "Error" ); 
 				
-				setReturnValue( "[ 'Error' "+ errorStr +" ]" );
+				setReturnValue( errorStr );
 			}
 		}
 		
