@@ -39,6 +39,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				var eventVO:EventVO = eventObj.data;
 				var eventXML:XML 	  = <Event/>;
 				eventXML.@Name		  = eventVO.name;
+				eventXML.@Help 		  = eventVO.help;
 				var parametersXML:XML = <Parameters/>;
 				
 				for each (var evParameterObj:Object in eventVO.parameters)
@@ -67,6 +68,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				{
 					var eventVO:EventVO = new EventVO();
 					eventVO.name = eventXML.@Name;
+					eventVO.help = eventXML.@Help;
 					
 					for each (var parameterXML : XML in eventXML.descendants("Parameter"))
 					{

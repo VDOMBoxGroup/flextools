@@ -43,7 +43,7 @@
 				methodName.text		   = "";
 				sourceCode.text		   = "";
 				interfaceName.clearTextArea();
-				description.clearTextArea();				
+				help.clearTextArea();				
 				
 				parametersList.dataProvider = null;
 				clearParameterFields();
@@ -83,15 +83,14 @@
 				</s:HGroup>
 			</s:VGroup >
 			<s:VGroup >
-				<s:Label paddingLeft="10" text="Details:" fontSize="15" fontWeight="bold"/>
 				<s:HGroup enabled="{currentAction}">
 					<mx:Form  width="100%" height="100%"  paddingTop="0" paddingLeft="0" >
-						
+						<s:Label paddingLeft="10" text="Details:" fontSize="15" fontWeight="bold"/>
 						<mx:FormItem label="MethodName:" toolTip="Name">
 							<s:TextInput id="methodName" width="150" change="{changeField()}"/>
 						</mx:FormItem>				
-						<mx:FormItem label="Description:" toolTip="Name">
-							<ns2:LangTextArea id="description" width="150" height="40" change="{changeField()}"/>
+						<mx:FormItem label="Help:" toolTip="Help">
+							<ns2:LangTextArea id="help" width="150" height="40" change="{changeField()}"/>
 						</mx:FormItem>
 						<mx:FormItem label="InterfaceName:" toolTip="Name">
 							<ns2:LangTextArea id="interfaceName" width="150" height="40" change="{changeField()}"/>
@@ -100,14 +99,14 @@
 							<mx:ComboBox id="currentLocation" width="150" color="0x000000" />
 						</mx:FormItem>	
 					</mx:Form>
-					<s:VGroup >
+					<s:VGroup width="100%" height="100%"  paddingTop="0" paddingLeft="0" >
 						<s:Label paddingLeft="10" text="Source Code:"/>
-						<s:TextArea  id="sourceCode"  width="305" height="100" change="{changeField()}"/>
+						<s:TextArea  id="sourceCode"  width="305" height="100%" change="{changeField()}"/>
 					</s:VGroup>									
 				</s:HGroup >
 				<s:HGroup enabled="{currentAction}">
 					<s:Label text="Parameters:" width="95" paddingLeft="16"/>
-					<s:VGroup color="#1100ff">
+					<s:VGroup>
 						
 						<s:List id="parametersList" width="100%" height="{155}" change="this.currentParameter=List(event.target).selectedItem" />
 						<s:HGroup width="100%" >

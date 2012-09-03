@@ -175,6 +175,7 @@ package net.vdombox.object_editor.view.mediators
 		private function fillEventFilds(eventVO:EventVO):void
 		{
 			view.eventName.text	= eventVO.name;
+			view.eventHelp.completeStructure    ( objectTypeVO.languages, eventVO.help );
 			view.parametersList.dataProvider = eventVO.parameters; 
 		}
 
@@ -198,6 +199,7 @@ package net.vdombox.object_editor.view.mediators
 			currentEventVO    = view.currentEvent.data;
 
 			view.eventsList.selectedItem = view.currentEvent;
+			view.eventHelp.completeStructure   ( objectTypeVO.languages, currentEventVO.help);		
 			view.eventsList.validateNow();
 			
 //todo		view.attributesList.scrollToIndex(view.languagesDataGrid.selectedIndex);
@@ -309,6 +311,12 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function changeFildWithCurrentLanguage( index:int ):void
 		{
+			if ( currentEventVO )
+			{
+				view.eventHelp.currentLanguage = objectTypeVO.languages.currentLocation;
+				view.eventHelp.apdateFild();
+			}
+			
 			if (view.parHelp.words)
 			{
 				view.parHelp.currentLanguage = objectTypeVO.languages.currentLocation;

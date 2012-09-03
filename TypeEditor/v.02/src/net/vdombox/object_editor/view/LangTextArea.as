@@ -23,7 +23,8 @@ package net.vdombox.object_editor.view
 		
 		private function newValue( event: Event ):void
 		{
-			words[currentLanguage] = text;
+			if ( words )
+				words[currentLanguage] = text;
 		}
 		
 		public function apdateFild( ):void

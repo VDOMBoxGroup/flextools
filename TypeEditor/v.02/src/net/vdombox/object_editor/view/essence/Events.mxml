@@ -19,7 +19,8 @@
 						
 			public function clearEventFields():void
 			{
-				eventName.text				= null;				
+				eventName.text				= null;
+				eventHelp.clearTextArea();			
 				parametersList.dataProvider = null;
 				clearParameterFields();
 			}
@@ -60,6 +61,10 @@
 		<mx:FormHeading fontSize="10"  label="Events details:" paddingTop="0" />
 		<mx:FormItem label="Name:" toolTip="Name">
 			<s:TextInput id="eventName" width="150" change="{changeField()}"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Help:" toolTip="Help">
+			<ns1:LangTextArea id="eventHelp" width="150" height="40" change="{changeField()}"/>
 		</mx:FormItem>
 		
 		<s:HGroup width="100%"/>

@@ -7,8 +7,7 @@ package net.vdombox.object_editor.model.vo
 		public var filePath:String;
 		public var sourceCode:String;
 
-		[Bindable]
-		public var events     : ArrayCollection = new ArrayCollection();
+		private var _events     : ArrayCollection = new ArrayCollection();
 		[Bindable]
 		public var actionContainers    : ArrayCollection = new ArrayCollection();
 
@@ -77,6 +76,18 @@ package net.vdombox.object_editor.model.vo
 		{	
 
 		}		
+
+		[Bindable]
+		public function get events():ArrayCollection
+		{
+			return _events;
+		}
+
+		public function set events(value:ArrayCollection):void
+		{
+			_events = value;
+		}
+
 	}
 }
 

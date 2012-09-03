@@ -38,7 +38,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				{	
 					var actVO:ActionVO = actObj.data;
 					var actXML:XML = <Action/>;
-					actXML.@Description			= actVO.description;
+					actXML.@Help				= actVO.help;
 					actXML.@InterfaceName		= actVO.interfaceName;
 					actXML.@MethodName			= actVO.methodName;
 					
@@ -52,7 +52,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 						parameterXML.@Interface 	= actParameterVO.interfacePar;
 						parameterXML.@InterfaceName = actParameterVO.interfaceName;					
 						parameterXML.@ScriptName 	= actParameterVO.scriptName;
-						parameterXML.@Help 			= actParameterVO.help;
+						parameterXML.@Help			= actParameterVO.help;
 						parameterXML.@RegularExpressionValidation = actParameterVO.regExp;
 						parametersXML.appendChild( parameterXML );
 					}
@@ -83,7 +83,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					for each (var actXML : XML in contXML.descendants("Action"))
 					{
 						var actVO:ActionVO  = new ActionVO();
-						actVO.description	= actXML.@Description;
+						actVO.help			= actXML.@Help[0] ? actXML.@Help : actXML.@Description;
 						actVO.interfaceName	= actXML.@InterfaceName;
 						actVO.methodName	= actXML.@MethodName;
 						actVO.code			= getSourceCode(actXML);

@@ -87,13 +87,20 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			for each (var eventObj:Object in objTypeVO.events)
 			{
+				var eventVO:EventVO = eventObj.data;
+				
+				if (eventVO.help == "") 
+					eventVO.help   = "#Lang(500)";				
+				
+				eventVO.help   = languagesProxy.used(objTypeVO.languages, 5, eventVO.help,   "Events."+ eventVO.name +".Help");
+				
 				var event:EventVO = eventObj.data;
 				for each (var parObj:Object in event.parameters)
 				{
 					var eventPar:EventParameterVO = parObj.data;
 					if (eventPar.help == "") 
 						eventPar.help = "#Lang(905)";
-					eventPar.help = languagesProxy.used(objTypeVO.languages, 9, eventPar.help, "Events."+ event.name +"."+ eventPar.name +".Help");
+					eventPar.help = languagesProxy.used(objTypeVO.languages, 9, eventPar.help, "Events.Parametr"+ event.name +"."+ eventPar.name +".Help");
 				}
 			}
 		}
@@ -179,15 +186,20 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				for each (var actObj:Object in cont.actionsCollection)
 				{
 					var act:ActionVO = actObj.data;
-					if (act.description == "")   act.description   = "#Lang(500)";
+					if (act.help == "")   act.help   = "#Lang(500)";
 					if (act.interfaceName == "") act.interfaceName = "#Lang(600)";					
-					act.description   = languagesProxy.used(objTypeVO.languages, 5, act.description,   "Actions."+ act.methodName +".Description");
+					act.help   = languagesProxy.used(objTypeVO.languages, 5, act.help,   "Actions."+ act.methodName +".Help");
 					act.interfaceName = languagesProxy.used(objTypeVO.languages, 6, act.interfaceName, "Actions."+ act.methodName +".InterfaceName");
 					for each (var parObj:Object in act.parameters)
 					{
 						var actPar:ActionParameterVO = parObj.data;
-						if (actPar.interfaceName == "") actPar.interfaceName = "#Lang(700)";
-						if (actPar.help          == "") actPar.help          = "#Lang(800)";
+						
+						if ( actPar.interfaceName == "" ) 
+							actPar.interfaceName = "#Lang(700)";
+						
+						if (actPar.help == "") 
+							actPar.help = "#Lang(800)";
+						
 						actPar.interfaceName = languagesProxy.used(objTypeVO.languages, 7, actPar.interfaceName, "Actions.Parameter."+ actPar.scriptName +".InterfaceName");
 						actPar.help			 = languagesProxy.used(objTypeVO.languages, 8, actPar.help, "Actions.Parameter."+ actPar.scriptName +".Help");
 					}

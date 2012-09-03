@@ -41,6 +41,8 @@
 			import net.vdombox.object_editor.Utils.WindowManager;
 			import net.vdombox.object_editor.event.StringAttributeEditWindowEvent;
 			import net.vdombox.object_editor.view.popups.StringAttributeEditWindow;
+			
+			import spark.events.TextOperationEvent;
 
         private var lineBreakChanged:Boolean;
         private var paddingChanged:Boolean;
@@ -256,6 +258,7 @@
 				function applyHandler( event : StringAttributeEditWindowEvent ) : void
 				{
 					hostComponent.text = event.value;
+					hostComponent.dispatchEvent( new TextOperationEvent ( Event.CHANGE ) );
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
 				}
 				

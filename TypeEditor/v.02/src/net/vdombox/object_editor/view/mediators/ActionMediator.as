@@ -119,7 +119,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function changeMethodName ( event:Event ):void
 		{ 
-			languagesProxy.changeWordsOwner(objectTypeVO, [currentActionVO.description, currentActionVO.interfaceName], "Actions."+event.target.text);
+			languagesProxy.changeWordsOwner(objectTypeVO, [currentActionVO.help, currentActionVO.interfaceName], "Actions."+event.target.text);
 			
 			view.currentAction.label   = event.target.text;
 			currentActionVO.methodName = view.methodName.text;
@@ -153,7 +153,7 @@ package net.vdombox.object_editor.view.mediators
 			view.sourceCode.text			 = actVO.code;
 			view.parametersList.dataProvider = actVO.parameters; 
 
-			view.description.completeStructure    ( objectTypeVO.languages, actVO.description );
+			view.help.completeStructure    ( objectTypeVO.languages, actVO.help );
 			view.interfaceName.completeStructure  ( objectTypeVO.languages, actVO.interfaceName );
 		}
 
@@ -234,7 +234,7 @@ package net.vdombox.object_editor.view.mediators
 			addStar();
 			currentActionVO = new ActionVO();
 			currentActionVO.methodName 	  = ( "methodName" + currentContainerVO.actionsCollection.length );
-			currentActionVO.description   = languagesProxy.newWords(objectTypeVO.languages, "5", "Actions."+currentActionVO.methodName+".Description",currentActionVO.methodName);
+			currentActionVO.help   = languagesProxy.newWords(objectTypeVO.languages, "5", "Actions."+currentActionVO.methodName+".Help",currentActionVO.methodName);
 			currentActionVO.interfaceName = languagesProxy.newWords(objectTypeVO.languages, "6", "Actions."+currentActionVO.methodName+".InterfaceName",currentActionVO.methodName);
 			
 			currentContainerVO.actionsCollection.addItem( {label:currentActionVO.methodName, data:currentActionVO} );
@@ -243,7 +243,7 @@ package net.vdombox.object_editor.view.mediators
 			fillActionFilds(currentActionVO);
 			view.currentAction = getCurrentAction(currentActionVO.methodName);
 			view.actionsList.selectedItem = view.currentAction;
-			view.description.completeStructure   ( objectTypeVO.languages, currentActionVO.description);		
+			view.help.completeStructure   ( objectTypeVO.languages, currentActionVO.help);		
 			view.interfaceName.completeStructure ( objectTypeVO.languages, currentActionVO.interfaceName);
 
 			view.actionsList.validateNow();			
@@ -286,7 +286,7 @@ package net.vdombox.object_editor.view.mediators
 		{
 			addStar();
 			var selectInd:uint = view.actionsList.selectedIndex;
-			languagesProxy.deleteWord(objectTypeVO, currentActionVO.description);
+			languagesProxy.deleteWord(objectTypeVO, currentActionVO.help);
 			languagesProxy.deleteWord(objectTypeVO, currentActionVO.interfaceName);
 			var parsCount:int = currentActionVO.parameters.length
 			for (var i:int; i < parsCount; i++)
@@ -379,8 +379,8 @@ package net.vdombox.object_editor.view.mediators
 		{
 			if (currentActionVO)
 			{
-				view.description.currentLanguage = objectTypeVO.languages.currentLocation;
-				view.description.apdateFild();
+				view.help.currentLanguage = objectTypeVO.languages.currentLocation;
+				view.help.apdateFild();
 
 				view.interfaceName.currentLanguage = objectTypeVO.languages.currentLocation;
 				view.interfaceName.apdateFild();
@@ -543,7 +543,7 @@ package net.vdombox.object_editor.view.mediators
 					
 				case ApplicationFacade.CHANGE_CURRENT_LANGUAGE:
 				{
-					if( view.description) 
+					if( view.help ) 
 						changeFildWithCurrentLanguage(note.getBody() as int);
 					break;
 				}
