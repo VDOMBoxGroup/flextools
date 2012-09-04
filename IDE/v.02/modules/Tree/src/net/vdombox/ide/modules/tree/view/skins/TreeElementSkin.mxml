@@ -227,10 +227,12 @@
 					<s:HGroup id="imageGroup" height="100%" horizontalAlign="right" verticalAlign="middle" paddingRight="5" gap="1">
 						
 						<mx:Image id="arrowButton" source="{VDOMImage.Arrow}" 
+								  width="16" height="16" smoothBitmapContent="true"
 								  alpha=".5" mouseOver="{ arrowButton.alpha = 1 }" mouseOut="{ arrowButton.alpha = .5 }"
 								  click="hostComponent.dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE ) )"/>
 						
 						<mx:Image id="deleteButton" source="{VDOMImage.DeleteWhite}" 
+								  width="16" height="16" smoothBitmapContent="true"
 								  alpha=".5" mouseOver="{ deleteButton.alpha = 1 }" mouseOut="{ deleteButton.alpha = .5 }"/>
 						
 					</s:HGroup>
