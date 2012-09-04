@@ -3,7 +3,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
 		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
-		 xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*">
+		 xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.CloseEvent;
@@ -13,6 +13,7 @@
 			import mx.utils.UIDUtil;
 			
 			import net.vdombox.ide.common.model._vo.ObjectVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.components.button.AlertButton;
 			import net.vdombox.ide.common.view.components.windows.Alert;
 			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
@@ -376,13 +377,17 @@
 			
 			<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="middle" paddingLeft="10">
 			
-				<s:Button id="commit" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_commit' ) }" click="applyBtnClickHandler()" />
+				<button:WorkAreaButton id="commit" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_commit' ) }" 
+									   icon="@Embed('assets/commit.png')" click="applyBtnClickHandler()" />
 			
-				<s:Button id="addNew" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_add' ) }" click="addBtnHandler()" />
+				<button:WorkAreaButton id="addNew" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_add' ) }" 
+									   icon="@Embed('assets/Add.png')" click="addBtnHandler()" />
 			
-				<s:Button id="deleteCol" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_delete' ) }" click="removeBtnHandler()" />
+				<button:WorkAreaButton id="deleteCol" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_delete' ) }" 
+									   icon="{ VDOMImage.DeleteBlack }" click="removeBtnHandler()" />
 				
-				<s:Button id="discard" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_discard' ) }" click="discardChanges()" />
+				<button:WorkAreaButton id="discard" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_discard' ) }" 
+									   icon="@Embed('assets/discard.png')" click="discardChanges()" />
 				
 				<s:Label id="commitLabel" color="#FF0000" />
 			</s:HGroup>
