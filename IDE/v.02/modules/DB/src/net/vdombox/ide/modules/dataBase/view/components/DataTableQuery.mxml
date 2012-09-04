@@ -211,7 +211,7 @@
 				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
 					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_query_sql_string' ) }" includeIn="all"/>
 					<mx:Spacer width="100%"/>
-					<mx:Image source.all="@Embed('assets/arr_2.png')" source.short="@Embed('assets/arr_1.png')" click="image1_clickHandler(event)"/>
+					<mx:Image source.all="{ VDOMImage.ArrClose }" source.short="@Embed('assets/arr_1.png')" click="image1_clickHandler(event)"/>
 					<mx:Spacer width="8"/>
 				</s:HGroup>		
 				

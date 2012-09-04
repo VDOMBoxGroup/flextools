@@ -141,7 +141,7 @@
 			
 			<mx:Spacer width="100%"/>
 			
-			<button:WorkAreaButton id="newTable" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_table' ) }" icon="@Embed('assets/expand.png')" height="20" click="newTable_clickHandler(event)" includeIn="baseVisual"/>
+			<button:WorkAreaButton id="newTable" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_table' ) }" icon="@Embed('assets/Add.png')" height="20" click="newTable_clickHandler(event)" includeIn="baseVisual"/>
 			
 			<!--<components1:WorkAreaButton id="newBase" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_base' ) }" height="20" click="newBase_clickHandler(event)" includeIn="baseVisual"/>-->
 			
