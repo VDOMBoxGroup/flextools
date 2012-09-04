@@ -163,7 +163,7 @@
 					
 					<button:VDOMButton id="cancelButton" width="48"
 							  click="hostComponent.close()"
-							  icon="@Embed(source='assets/Cancel.png')"
+							  icon="{ VDOMImage.DeleteBlack }"
 							  focusColor.normal="#CCCCCC"/>
 					
 					<button:VDOMButton focusColor.normal="#CCCCCC"

@@ -86,7 +86,7 @@
 				<mx:Spacer width="100%"/>
 				
 				<button:VDOMButton width="48"
-						  icon="@Embed(source='assets/Cancel.png')"
+						  icon="{ VDOMImage.DeleteBlack }"
 						  click="{hostComponent.close()}"/>
 				
 				<button:VDOMButton label="{ resourceManager.getString( 'Wysiwyg_General', 'multiline_window_save' ) }"
