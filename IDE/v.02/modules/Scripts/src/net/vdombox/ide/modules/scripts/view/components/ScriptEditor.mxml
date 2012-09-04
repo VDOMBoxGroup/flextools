@@ -207,7 +207,7 @@
 	</s:Rect>
 	
 	<s:VGroup id="contetn" width="100%" height="100%" gap="0" visible="{_actionVO ? true : false}">
-		<s:Group width="100%" height="24">
+		<s:Group width="100%" height="30">
 			<s:Rect width="100%" height="100%">
 				<s:fill>
 					<s:LinearGradient rotation="90">
@@ -217,7 +217,7 @@
 				</s:fill>
 			</s:Rect>
 			
-			<s:HGroup width="100%" height="100%" horizontalAlign="left" 
+			<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="middle"
 					  paddingLeft="10" paddingTop="2" paddingBottom="2">
 				
 				<button:WorkAreaButton id="saveButton"
@@ -226,17 +226,17 @@
 										   highlighted="{unsaved}" downColor="#D20000"/>
 				
 				<button:WorkAreaButton id="undoButton"
-									   height="25" icon="{VDOMImage.Undo}"
+									   height="20" icon="{VDOMImage.Undo}"
 									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_undo' ) }"
 									   click="{scriptEditor.scriptAreaComponent.undo_fun()}"/>
 				
 				<button:WorkAreaButton id="redoButton"
-									   height="25" icon="{VDOMImage.Redo}"
+									   height="20" icon="{VDOMImage.Redo}"
 									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_redo' ) }"
 									   click="{scriptEditor.scriptAreaComponent.redo_fun()}"/>
 				
 				<button:WorkAreaButton id="preferences"
-									   height="25"
+									   height="20"
 									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_preferences' ) }"
 									   click="preferences_clickHandler(event)"/>
 				

@@ -163,8 +163,8 @@ package net.vdombox.ide.modules.scripts.view
 						index = editorScript.indexOf( "]]]]><![CDATA[>" );
 					}
 					
-					if ( actionVO.script == editorScript )
-					{
+					/*if ( actionVO.script == editorScript )
+					{*/
 						var script : String = editor.script;
 						script = StringUtils.getCDataParserString( script );
 						while ( script.slice( script.length - 1 ) == "\r" || script.slice( script.length - 1 ) == " " || script.slice( script.length - 1 ) == "\t" )
@@ -179,12 +179,12 @@ package net.vdombox.ide.modules.scripts.view
 							workArea.closeTabByAction( actionVO );
 							sendNotification( Notifications.DELETE_TAB_BY_ACTIONVO, actionVO );
 						}
-					}
+					/*}
 					else
 					{
 						Alert.setPatametrs( "Save", "Load" );
 						Alert.Show(	"Server action 'Maks' has been modified on the server and is in the conflict with your changes.\nDo you want to load from server or save your modification?", AlertButton.OK_No_Cancel, workArea.parentApplication, saveActionRequest );
-					}
+					}*/
 					
 					break;
 				}
