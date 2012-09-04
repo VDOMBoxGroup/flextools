@@ -16,6 +16,9 @@ package net.vdombox.ide.common.view.components.button
 		[Bindable]
 		public var icon : Object;
 		
+		[Bindable]
+		public var downColor : uint = 0xd2d2d2;
+		
 		private var _highlighted : Boolean;
 		
 		public function get highlighted() : Boolean

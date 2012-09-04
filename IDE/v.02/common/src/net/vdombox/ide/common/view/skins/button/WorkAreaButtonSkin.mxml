@@ -3,7 +3,8 @@
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 minHeight="10" minWidth="10"
-			 alpha.disabled="0.5">
+			 alpha.disabled="0.5"
+			 >
 
 	<!-- host component -->
 	<fx:Metadata>
@@ -17,6 +18,7 @@
 
 	<fx:Script>
 		<![CDATA[
+			import spark.filters.DropShadowFilter;
 			/* Define the skin elements that should not be colorized.
 			 For button, the graphics are colorized but the label is not. */
 			static private const exclusions : Array = [ "labelDisplay" ];
@@ -32,6 +34,7 @@
 			/**
 			 *  @private
 			 */
+			
 			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 			{
 				var cr : Number = getStyle( "cornerRadius" );
@@ -40,6 +43,28 @@
 					cornerRadius = cr;
 
 				super.updateDisplayList( unscaledWidth, unscaledHeight );
+			}
+			
+			override protected function stateChanged(oldState:String, newState:String, recursive:Boolean):void
+			{
+				if ( newState == "over" )
+				{
+					this.graphics.lineStyle(1, 0xa3a9a9 );
+					this.graphics.moveTo( 2, this.height );
+					this.graphics.lineTo( this.width - 2, this.height );
+					this.graphics.curveTo( this.width, this.height, this.width, this.height - 2 );
+					this.graphics.lineTo( this.width, 2 );
+					
+					this.graphics.lineStyle(1, 0xFAFAFA, 0.7 );
+					this.graphics.curveTo( this.width, 0, this.width - 2, 0 );
+					this.graphics.lineTo( 2, 0 );
+					this.graphics.curveTo( 0, 0, 0, 2 );
+					this.graphics.lineTo( 0, this.height - 2 );
+					this.graphics.curveTo( 0, this.height, 2, this.height );
+					
+				}
+				else
+					this.graphics.clear();
 			}
 
 			[Bindable]
@@ -62,19 +87,33 @@
 	</s:states>
 
 	<!-- layer 2: fill -->
+	
+	<!--<s:Line id="line1" bottom="-1" left="0" right="2" height="1" includeIn="over">
+		<s:stroke>
+			<s:SolidColorStroke color="0xa3a9a9" weight="1"/>
+		</s:stroke>
+	</s:Line>
+	
+	<s:Line id="line2" bottom="2" right="-1" top="0" width="1" includeIn="over">
+		<s:stroke>
+			<s:SolidColorStroke color="0xa3a9a9" weight="1"/>
+		</s:stroke>
+	</s:Line> -->
 
-	<s:Rect bottom="0" left="0" right="0" top="0">
+	<s:Rect bottom="0" left="0" right="0" top="0"
+			radiusX="2" radiusY="2" 
+			filters="{[ new spark.filters.DropShadowFilter(2, 45, 0x929292, 1,4,4,1,1,true,false) ]}">
 
 		<s:fill>
 			<s:LinearGradient rotation="90">
 
-				<s:GradientEntry color.disabledAndHighlighted="0x900000" color.down="0x900000" color.downAndHighlighted="0x900000" color.over="0xBBBDBD" color.overAndHighlighted="0x900000"
-								 color.up="0xEAEAE8" color.upAndHighlighted="0x900000"
-								 alpha="0" alpha.over=".5" alpha.down="1" alpha.upAndHighlighted="1" alpha.overAndHighlighted=".5" alpha.downAndHighlighted="1" alpha.disabledAndHighlighted="1"/>
+				<s:GradientEntry color.disabledAndHighlighted="0x900000" color.down="{hostComponent.downColor}" color.downAndHighlighted="{hostComponent.downColor}" color.overAndHighlighted="{hostComponent.downColor}"
+								 color.up="0xEAEAE8" color.upAndHighlighted="{hostComponent.downColor}"
+								 alpha="0" alpha.over="0" alpha.down="1" alpha.upAndHighlighted="1" alpha.overAndHighlighted="1" alpha.downAndHighlighted="1" alpha.disabledAndHighlighted="1"/>
 
-				<s:GradientEntry color.disabledAndHighlighted="0xD20000" color.down="0xD20000" color.downAndHighlighted="0xD20000" color.over="0x9FA0A1" color.overAndHighlighted="0xD20000"
-								 color.up="0xCCCCCC" color.upAndHighlighted="0xD20000"
-								 alpha="0" alpha.over=".5" alpha.down="1" alpha.upAndHighlighted="1" alpha.overAndHighlighted=".5" alpha.downAndHighlighted="1" alpha.disabledAndHighlighted="1"/>
+				<s:GradientEntry color.disabledAndHighlighted="0xD20000" color.down="{hostComponent.downColor}" color.downAndHighlighted="{hostComponent.downColor}" color.overAndHighlighted="{hostComponent.downColor}"
+								 color.up="0xCCCCCC" color.upAndHighlighted="{hostComponent.downColor}"
+								 alpha="0" alpha.over="0" alpha.down="1" alpha.upAndHighlighted="1" alpha.overAndHighlighted="1" alpha.downAndHighlighted="1" alpha.disabledAndHighlighted="1"/>
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
@@ -83,12 +122,13 @@
 			  paddingLeft="5" paddingRight="5" verticalAlign="middle" verticalCenter="0">
 
 		<mx:Image id="buttonIcon"
-				  height="11" includeInLayout="{ hostComponent.icon ? true : false }" source="{ hostComponent.icon }" width="11"
-				  visible="{ hostComponent.icon ? true : false }"/>
+				  includeInLayout="{ hostComponent.icon ? true : false }" source="{ hostComponent.icon }"
+				  visible="{ hostComponent.icon ? true : false }"
+				  smoothBitmapContent="true"/>
 
 		<s:Label id="labelDisplay"
 				 width="100%"
-				 color.disabledAndHighlighted="white" color.downAndHighlighted="white" color.overAndHighlighted="white" color.upAndHighlighted="white" textAlign="left" verticalAlign="middle"
+				 textAlign="left" verticalAlign="middle"
 				 maxDisplayedLines="1"/>
 	</s:HGroup>
 </s:SparkSkin>

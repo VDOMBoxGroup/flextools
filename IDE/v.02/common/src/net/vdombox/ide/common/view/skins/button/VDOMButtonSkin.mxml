@@ -187,7 +187,7 @@
 	<!--- @copy spark.components.supportClasses.ButtonBase#labelDisplay -->
 	<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle"
 			  paddingRight="15" paddingLeft="15" gap="2">
-		<mx:Image id="icon" height="15" width="15"/>
+		<mx:Image id="icon" height="16" width="16"/>
 		
 		<s:Label id="labelDisplay" fontFamily="Arial" fontSize="18" paddingTop="2"
 				 textAlign="center"
