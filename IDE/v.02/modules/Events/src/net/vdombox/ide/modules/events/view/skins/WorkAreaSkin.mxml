@@ -243,7 +243,8 @@
 		<button:WorkAreaButton id="saveButton"
 								   enabled="true" enabled.disabled="false" height="20" icon="{VDOMImage.Save}"
 								   label="{ resourceManager.getString( 'Events_General', 'work_area_save' ) }"
-								   highlighted="false" highlighted.unsaved="true"/>
+								   highlighted="false" highlighted.unsaved="true"
+								   downColor="#D20000"/>
 		
 		<button:WorkAreaButton id="undoButton"
 							   height="20" icon="{VDOMImage.Undo}"
