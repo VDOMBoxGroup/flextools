@@ -1,10 +1,15 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.events.Event;
+	
+	import mx.events.FlexEvent;
+	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.modules.wysiwyg.model.SettingsApplicationProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.HelpPanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -22,6 +27,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private var statesProxy : StatesProxy;
 		
+		private var sharedObjectProxy : SettingsApplicationProxy;
+		
 		private var isActive : Boolean;
 		
 		public function get helpPanel() : HelpPanel
@@ -33,9 +40,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			
+			sharedObjectProxy = facade.retrieveProxy( SettingsApplicationProxy.NAME ) as SettingsApplicationProxy;
+			
 			isActive = false;
 			
 			addHandlers();
+			
+			writeHelp();
 		}
 		
 		override public function onRemove() : void
@@ -125,15 +136,27 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function addHandlers() : void
 		{
+			helpPanel.addEventListener( Event.CHANGE, readHelp );
 		}
 		
 		private function removeHandlers() : void
 		{
+			helpPanel.removeEventListener( Event.CHANGE, readHelp );
 		}
 		
 		private function clearData() : void
 		{
 			helpPanel.text = "";
+		}
+		
+		private function writeHelp() :void
+		{
+			helpPanel.showHelp = sharedObjectProxy.showHelp;
+		}
+		
+		private function readHelp( event : Event = null ) :void
+		{
+			sharedObjectProxy.showHelp = helpPanel.showHelp;
 		}
 	}
 }

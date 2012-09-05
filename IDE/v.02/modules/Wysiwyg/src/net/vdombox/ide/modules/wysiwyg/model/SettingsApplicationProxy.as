@@ -33,5 +33,18 @@ package net.vdombox.ide.modules.wysiwyg.model
 		{
 			shObjData.data.showLinking = value;
 		}
+		
+		public function get showHelp() : Boolean
+		{
+			if ( shObjData.data.showHelp != null )
+				return shObjData.data.showHelp;
+			else
+				return true;
+		}
+		
+		public function set showHelp( value : Boolean ) : void
+		{
+			shObjData.data.showHelp = value;
+		}
 	}
 }
