@@ -236,7 +236,7 @@
 		</s:stroke>
 	</s:Rect>
 	
-	<s:Rect height="20"
+	<s:Rect height="28"
 			left="1" right="1" top="1">
 		<s:fill>
 			<s:LinearGradient rotation="90">
@@ -246,14 +246,14 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:HGroup height="20"
+	<s:HGroup height="30"
 			  left="1" right="1" top="1"
-			  gap="0">
+			  paddingRight="5" gap="0" verticalAlign="middle">
 		
 		<button:WorkAreaButton id="saveButton"
 							   enabled="true" enabled.disabled="false" height="20" icon="{VDOMImage.Save}"
 							   label="{ resourceManager.getString( 'Tree_General', 'work_area_save' ) }"
-							   highlighted="false" highlighted.unsaved="true"/>
+							   highlighted="false" highlighted.unsaved="true" downColor="#D20000"/>
 		
 		<button:WorkAreaButton id="undoButton"
 							   enabled="false" enabled.unsaved="true" height="20" icon="{VDOMImage.Undo}" visible="false"
@@ -283,7 +283,7 @@
 	</s:HGroup>
 	
 	<s:Group id="workLayers"
-			 bottom="0" left="0" right="0" top="22">
+			 bottom="0" left="0" right="0" top="30">
 		<s:Rect height="100%" width="100%">
 			<s:fill>
 				<s:BitmapFill source = "{VDOMImage.BG_WorkArea}" smooth="true" fillMode="repeat"/>
