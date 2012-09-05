@@ -47,6 +47,10 @@ package net.vdombox.ide.common.view.components
 		public static var Arrow : Class;
 		
 		[Bindable]
+		[Embed( source = "assets/vdomimage/arr_1.png" )]
+		public static var ArrOpen : Class;
+				
+		[Bindable]
 		[Embed( source = "assets/vdomimage/arr_2.png" )]
 		public static var ArrClose : Class;
 		

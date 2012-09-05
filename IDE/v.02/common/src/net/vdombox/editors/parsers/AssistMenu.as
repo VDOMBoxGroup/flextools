@@ -111,7 +111,7 @@ package net.vdombox.editors.parsers
 					if ( menu.selectedIndex > 0 )
 						menu.selectedIndex--;
 					else
-						menu.selectedIndex = menu.dataProvider.length - 1;
+						menu.selectedIndex = menu.length - 1;
 					
 					updateMenuScrollPosition();
 					
@@ -120,7 +120,7 @@ package net.vdombox.editors.parsers
 					
 				case "Down":
 				{
-					if ( menu.selectedIndex < menu.dataProvider.length - 1 )
+					if ( menu.selectedIndex < menu.length - 1 )
 						menu.selectedIndex++;
 					else
 						menu.selectedIndex = 0;
@@ -139,11 +139,11 @@ package net.vdombox.editors.parsers
 		
 		private function updateMenuScrollPosition() : void
 		{
-			var currentPosition : int = menu.selectedIndex * 16;
+			var currentPosition : int = menu.selectedIndex * 20;
 			if ( currentPosition < menu.scroller.viewport.verticalScrollPosition )
 				menu.scroller.viewport.verticalScrollPosition = currentPosition;
-			else if ( currentPosition > menu.scroller.viewport.verticalScrollPosition + menu.measuredHeight - 16)
-				menu.scroller.viewport.verticalScrollPosition = currentPosition - menu.measuredHeight + 16;
+			else if ( currentPosition > menu.scroller.viewport.verticalScrollPosition + menu.measuredHeight - 20)
+				menu.scroller.viewport.verticalScrollPosition = currentPosition - menu.measuredHeight + 20;
 			
 		}
 		

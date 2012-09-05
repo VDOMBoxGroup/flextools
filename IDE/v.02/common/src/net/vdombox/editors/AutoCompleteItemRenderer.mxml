@@ -2,10 +2,13 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				autoDrawBackground="true">
+				autoDrawBackground="true"
+				height="20">
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.editors.parsers.AutoCompleteItemVO;
+			
+			import spark.filters.DropShadowFilter;
 			
 			private var _data : AutoCompleteItemVO;
 			
@@ -43,6 +46,17 @@
 		<s:Label id="labelField" color="#ebebeb"/>
 	</s:HGroup>
 	
+	<s:Rect right="0" height="100%" width="40">
+		<s:fill>
+			<s:LinearGradient>
+				<s:GradientEntry color="#555555" alpha="0"/>
+				<s:GradientEntry color="#555555" alpha="0.5"/>
+				<s:GradientEntry color="#555555" alpha="0.9"/>
+				<s:GradientEntry color="#555555" alpha="1"/>
+				<s:GradientEntry color="#555555" alpha="1" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
 	
 	
 </s:ItemRenderer>

@@ -204,7 +204,10 @@ package ro.victordramba.scriptarea
 		private function onCopy( e : Event = null ) : void
 		{
 			if ( _selStart != _selEnd )
+			{
+				Clipboard.generalClipboard.clear();
 				Clipboard.generalClipboard.setData( ClipboardFormats.TEXT_FORMAT, _text.substring( _selStart, _selEnd ) );
+			}
 		}
 
 		private function onCut( e : Event = null ) : void

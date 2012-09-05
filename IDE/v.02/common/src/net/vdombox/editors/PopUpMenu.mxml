@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:List xmlns:fx="http://ns.adobe.com/mxml/2009"
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:s="library://ns.adobe.com/flex/spark"
-		maxHeight="300"
-		minWidth="300"
-		requireSelection="true"
-		doubleClickEnabled="true"
-		arrowKeysWrapFocus="true"
-		itemRenderer="net.vdombox.editors.AutoCompleteItemRenderer"
-		contentBackgroundColor="#555555">
+		>
 
 	<fx:Script>
 		<![CDATA[
@@ -16,6 +10,9 @@
 			import mx.managers.PopUpManager;
 			
 			import net.vdombox.editors.parsers.AutoCompleteItemVO;
+			
+			import spark.components.Scroller;
+			import spark.filters.DropShadowFilter;
 			
 			private var _showed : Boolean = false;
 
@@ -27,7 +24,7 @@
 			public function setListData( value : Array ) : void
 			{
 				value.sort( comp );
-				dataProvider = new ArrayList( value );
+				menu.dataProvider = new ArrayList( value );
 			}
 			
 			protected function comp(x:AutoCompleteItemVO, y:AutoCompleteItemVO):int
@@ -45,12 +42,12 @@
 
 			public function setSelectedIndex( index : int ) : void
 			{
-				selectedIndex = index;
+				menu.selectedIndex = index;
 			}
 
 			public function getSelectedValue() : String
 			{
-				return selectedItem.hasOwnProperty( "value" )? selectedItem.value : selectedItem;
+				return menu.selectedItem.hasOwnProperty( "value" )? menu.selectedItem.value : menu.selectedItem;
 			}
 
 			public function show( owner : DisplayObjectContainer, x : int, y : int ) : void
@@ -69,7 +66,45 @@
 				_showed = false;
 				PopUpManager.removePopUp( this );
 			}
+			
+			public function set selectedIndex( value : int ) : void
+			{
+				menu.selectedIndex = value;
+			}
+			
+			public function get selectedIndex() : int
+			{
+				return menu.selectedIndex;
+			}
+			
+			public function get length() : int
+			{
+				return menu.dataProvider.length;
+			}
+			
+			public function get scroller() : Scroller
+			{
+				return menu.scroller;
+			}
 		]]>
 	</fx:Script>
+	
+	<s:Rect left="0" top="0" right="0" bottom="0"
+			radiusX="6" radiusY="6">
+		<s:fill>
+			<s:SolidColor color="#555555" />
+		</s:fill>
+		
+	</s:Rect>
+	
+	<s:List id="menu" 
+			left="5" top="5" right="3" bottom="5"
+			maxHeight="300"
+			minWidth="300"
+			requireSelection="true"
+			doubleClickEnabled="true"
+			arrowKeysWrapFocus="true"
+			itemRenderer="net.vdombox.editors.AutoCompleteItemRenderer"
+			contentBackgroundColor="#555555" borderVisible="false"/>
 
-</s:List>
+</s:Group>
