@@ -8,6 +8,8 @@
 			
 			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			
 			private var _objectVO : PageVO;
 			
@@ -33,13 +35,8 @@
 			
 			protected function scroller_creationCompleteHandler(event:FlexEvent):void
 			{
-				scroller.horizontalScrollBar.height = 12;
-				
-				scroller.horizontalScrollBar.thumb.height = 12;
-				scroller.verticalScrollBar.thumb.width = 12;
-				
-				scroller.horizontalScrollBar.track.height = 12;
-				scroller.verticalScrollBar.track.width = 12;
+				scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
+				scroller.horizontalScrollBar.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
 			}
 			
 		]]>
