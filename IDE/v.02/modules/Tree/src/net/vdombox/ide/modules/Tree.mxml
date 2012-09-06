@@ -46,12 +46,12 @@
 		
 		s|VScrollBar
 		{	
-			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin");  
+			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMVScrollBarSkin");  
 		}
 		
 		s|HScrollBar
 		{	
-			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin");  
+			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMHScrollBarSkin");  
 		}
 	</fx:Style>
 	

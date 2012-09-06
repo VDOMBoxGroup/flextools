@@ -20,8 +20,8 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			import net.vdombox.ide.modules.tree.events.WorkAreaEvent;
 			
 			private var isExpanded : Boolean;
@@ -89,16 +89,8 @@
 			{
 				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 				
-				scroller.verticalScrollBar.setStyle( "SkinClass", VDOMWorkAreaVScrollBarSkin );
+				scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
 				scroller.horizontalScrollBar.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
-				
-				scroller.horizontalScrollBar.height = 12;
-				
-				scroller.horizontalScrollBar.thumb.height = 12;
-				scroller.verticalScrollBar.thumb.width = 12;
-				
-				scroller.horizontalScrollBar.track.height = 12;
-				scroller.verticalScrollBar.track.width = 12;
 			}
 			
 			private function mouseWheelHandler( event : MouseEvent ) : void
