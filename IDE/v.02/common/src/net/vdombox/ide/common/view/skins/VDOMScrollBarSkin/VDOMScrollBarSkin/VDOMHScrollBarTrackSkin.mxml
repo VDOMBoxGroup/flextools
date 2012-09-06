@@ -11,9 +11,9 @@
 
 -->
 
-<!--- The default skin class for the track of a Spark VScrollBar component.  
+<!--- The default skin class for the track on a Spark HScrollBar component.  
 
-       @see spark.components.VScrollBar
+       @see spark.components.HScrollBar
         
       @langversion 3.0
       @playerversion Flash 10
@@ -21,7 +21,7 @@
       @productversion Flex 4
 -->
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
-    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" alpha="0.5">
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009">
 
     <fx:Metadata>
     <![CDATA[ 
@@ -50,11 +50,6 @@
         <s:State name="disabled" />
     </s:states>
 
-    <!-- border/fill -->
-    <s:Rect top="0" bottom="0" left="0" right="0" width="100%" minHeight="30" alpha="0">
-		<s:fill>
-			<s:BitmapFill source = "@Embed('assets/vdomscrollbar/vertical-bg.png')" smooth="true" fillMode="repeat"/>
-		</s:fill>
-    </s:Rect>
-	
+	<!-- border/fill -->
+	<s:Rect top="0" bottom="0" left="0" right="0" minWidth="30" height="100%" alpha="0"/>
 </s:SparkSkin>

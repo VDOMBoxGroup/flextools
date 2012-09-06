@@ -13,8 +13,8 @@
 			import mx.events.ResizeEvent;
 			
 			import net.vdombox.editors.ScriptAreaComponent;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 
 
 			private var hcw : ChangeWatcher;

@@ -13,7 +13,7 @@
 			
 			import net.vdombox.ide.common.events.WindowEvent;
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
 			{
@@ -64,7 +64,8 @@
 					dataProvider="{ hostComponent._pagesDataProvider}" height="100%" width="100%"
 					itemRenderer="net.vdombox.ide.common.view.components.itemrenderers.PageTypeItemRenderer"
 					requireSelection="true" useVirtualLayout="false"
-					creationComplete="pageTypeList_creationCompleteHandler(event)" borderVisible="false"/>
+					creationComplete="pageTypeList_creationCompleteHandler(event)" borderVisible="false"
+					contentBackgroundAlpha="0"/>
 			
 			<s:Group width="100%" height="54">
 				

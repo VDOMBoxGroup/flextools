@@ -51,7 +51,7 @@
 
 			<s:Label text="{ data.displayName }" fontWeight="bold" fontSize="14" color="#FFFFFF"/>
 
-			<s:RichText height="100%" text="{ data.description }" fontSize="12" width="100%" color="#FFFFFF"/>
+			<s:RichText height="100%" text="{ data.description }" fontSize="12" width="285" color="#FFFFFF"/>
 		</s:VGroup>
 	</s:HGroup>
 	
