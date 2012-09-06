@@ -19,7 +19,7 @@
 			import net.vdombox.ide.common.model._vo.TypeVO;
 			import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 
 			private var _attributesVO : VdomObjectAttributesVO;
@@ -217,7 +217,7 @@
 			protected function attributesList_creationCompleteHandler(event:FlexEvent):void
 			{
 				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
-				attributesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
+				attributesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 			}
 			
 			protected function attributesList_updateCompleteHandler(event:FlexEvent):void
