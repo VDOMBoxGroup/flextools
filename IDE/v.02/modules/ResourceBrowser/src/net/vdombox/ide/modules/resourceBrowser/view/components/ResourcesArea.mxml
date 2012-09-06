@@ -12,6 +12,7 @@
 			import net.vdombox.ide.common.events.ResourceVOEvent;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			
 			private var _resources : ArrayList;
 			
@@ -123,6 +124,12 @@
 				dispatchEvent(new Event(ResourceVOEvent.PREVIEW_RESOURCE));
 			}
 			
+			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				resourcesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -197,7 +204,8 @@
 							symbolColor="#383838"
 							enabled="true" focusColor="#CCCCCC"
 							dataProvider="{resources}"
-							itemRenderer="net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItem">
+							itemRenderer="net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItem"
+							creationComplete="resourcesList_creationCompleteHandler(event)">
 						<s:layout>
 							<s:TileLayout horizontalGap="4" verticalGap="8" requestedColumnCount="-1"  requestedRowCount="-1"
 										  >
