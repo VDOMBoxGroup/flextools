@@ -836,7 +836,7 @@
 				<s:HGroup width="100%" height="50" verticalAlign="top" horizontalAlign="left" paddingLeft="10" paddingTop="5" paddingRight="10">
 					
 					<button:WorkAreaButton id="addRow" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_add_row' ) }" 
-										   icon="@Embed('assets/Add.png')" click="addRow_clickHandler(event)"/>
+										   icon="{ VDOMImage.Add }" click="addRow_clickHandler(event)"/>
 					
 					<button:WorkAreaButton id="deleteRow" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_delete_row' ) }" 
 										   icon="{ VDOMImage.DeleteBlack }" click="deleteRow_clickHandler(event)"/>

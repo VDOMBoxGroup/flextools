@@ -11,6 +11,7 @@
 			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
 			import mx.events.FlexEvent;
 			
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;
 			import net.vdombox.ide.modules.dataBase.view.components.VDOMAdvancedDataGrid;
 			
@@ -172,7 +173,7 @@
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Button id="apply" label="Apply" click="apply_clickHandler(event)"/>
 			
-			<button:WorkAreaButton id="addNew" width="20" icon="@Embed('assets/Add.png')"
+			<button:WorkAreaButton id="addNew" width="20" icon="{ VDOMImage.Add }"
 								   click="addQuerySimple(event)"/>
 		</s:HGroup>
 	</s:VGroup>

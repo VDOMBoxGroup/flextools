@@ -381,7 +381,7 @@
 									   icon="@Embed('assets/commit.png')" click="applyBtnClickHandler()" />
 			
 				<button:WorkAreaButton id="addNew" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_add' ) }" 
-									   icon="@Embed('assets/Add.png')" click="addBtnHandler()" />
+									   icon="{ VDOMImage.Add }" click="addBtnHandler()" />
 			
 				<button:WorkAreaButton id="deleteCol" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_delete' ) }" 
 									   icon="{ VDOMImage.DeleteBlack }" click="removeBtnHandler()" />

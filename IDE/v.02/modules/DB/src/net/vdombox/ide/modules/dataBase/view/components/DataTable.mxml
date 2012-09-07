@@ -25,6 +25,7 @@
 			import net.vdombox.ide.common.events.EditorEvent;
 			import net.vdombox.ide.common.model._vo.ObjectVO;
 			import net.vdombox.ide.common.model._vo.PageVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 			
 			[Bindable]
@@ -141,7 +142,7 @@
 			
 			<mx:Spacer width="100%"/>
 			
-			<button:WorkAreaButton id="newTable" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_table' ) }" icon="@Embed('assets/Add.png')" height="20" click="newTable_clickHandler(event)" includeIn="baseVisual"/>
+			<button:WorkAreaButton id="newTable" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_table' ) }" icon="{ VDOMImage.Add }" height="20" click="newTable_clickHandler(event)" includeIn="baseVisual"/>
 			
 			<!--<components1:WorkAreaButton id="newBase" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_base' ) }" height="20" click="newBase_clickHandler(event)" includeIn="baseVisual"/>-->
 			

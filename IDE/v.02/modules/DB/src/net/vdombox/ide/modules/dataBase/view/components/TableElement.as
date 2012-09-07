@@ -42,6 +42,9 @@ package net.vdombox.ide.modules.dataBase.view.components
 			alpha = 0;
 			_objectVO = object;
 			
+			minHeight = 200;
+			minWidth = 150;
+			
 			contextMenu = new ContextMenu();
 			
 			var newItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'DataBase_General', 'table_element_rename' ));
@@ -213,12 +216,12 @@ package net.vdombox.ide.modules.dataBase.view.components
 			var newW : Number = parent.mouseX - x + mouseOffcetX;
 			var newH : Number = parent.mouseY - y + mouseOffcetY;
 			
-			if ( newW < 1 )
-				newW = 1;
+			if ( newW < 150 )
+				newW = 150;
 			width = newW;
 			
-			if ( newH < 1 )
-				newH = 1;
+			if ( newH < 120 )
+				newH = 120;
 			height = newH;
 			
 			attributesVO.getAttributeVOByName("width").value = width.toString();
