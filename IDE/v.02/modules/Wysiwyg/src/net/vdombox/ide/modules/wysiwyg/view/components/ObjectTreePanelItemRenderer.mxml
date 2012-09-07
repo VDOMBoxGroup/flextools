@@ -368,8 +368,8 @@
 			</s:fill>
 		</s:Rect>
 
-		<s:VGroup width="22" height="100%" verticalAlign="middle" horizontalAlign="center">
-			<components:EyeImage id="eyes" width="16" height="14" />
+		<s:VGroup left="9" width="22" height="100%" verticalAlign="middle" horizontalAlign="center">
+			<components:EyeImage id="eyes" width="16" height="16" />
 		</s:VGroup>
 
 	</s:Group>
