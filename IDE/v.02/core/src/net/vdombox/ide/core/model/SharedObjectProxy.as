@@ -173,6 +173,36 @@ package net.vdombox.ide.core.model
 				delete shObjData.data["localdescription" + strI];
 			}
 		}
+		
+		public function set lastHost( value : HostVO ) : void
+		{
+			shObjData.data["lasthost"] = value.host;
+			shObjData.data["lastuser"] = value.user;
+			shObjData.data["lastpassword"] = value.password;
+			shObjData.data["lastlocalcode"] = value.local.code;
+			shObjData.data["lastlocaldescription"] = value.local.description;
+		}
+		
+		public function get lastHost() : HostVO
+		{
+			if ( shObjData.data["lasthost"] )
+			{
+				var host : String = shObjData.data["lasthost"] as String;
+				var user : String = shObjData.data["lastuser"] as String;
+				var password : String = shObjData.data["lastpassword"] as String;
+				var local : LocaleVO = new LocaleVO( shObjData.data["lastlocalcode"] as String, shObjData.data["lastlocaldescription"] as String );
+				
+				return new HostVO( host, user, password, local);
+			}
+			else
+				return null;
+			
+		}
+		
+		public function clearLastHost() : void
+		{
+			shObjData.data["lasthost"] = null;
+		}
 
 	}
 }

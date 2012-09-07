@@ -13,24 +13,28 @@
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			
+			[Bindable]
 			[Embed( source = "assets/Warning.png" )]
 			public var wanted : Class;
 			
-			[Embed( source = "assets/Question.png" )]
-			public var question : Class;
+			[Embed( source = "assets/no_warning.png" )]
+			public var no_warning : Class;
 			
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
 			{
 				if ( hostComponent.state == "question" )
 				{
-					image.source = question;
-					okButton.visible = true;
-					noButton.label = "No";
+					/*okButton.visible = true;
+					okButton.includeInLayout = true;
+					cancelButton.visible = true;*/
+					noButton.label = resourceManager.getString( 'Core_General', 'error_no' );
+					noButton.icon = no_warning;
 				}
 				else
 				{
-					image.source = wanted;
 					okButton.visible = false;
+					okButton.includeInLayout = false;
+					cancelButton.visible = false;
 				}
 			}
 			
@@ -64,15 +68,18 @@
 				
 			<s:Rect width="100%" height="100%">
 				<s:fill>
-					<s:SolidColor color="#3A3A3A" />
+					<s:SolidColor color="#2f2f2f" />
 				</s:fill>
 			</s:Rect>
 			
-			<s:HGroup width="100%" height="100%" paddingLeft="15" paddingRight="15" paddingTop="10" paddingBottom="10">
+			<s:HGroup width="100%" height="100%" 
+					  paddingLeft="15" paddingRight="15" paddingTop="10" paddingBottom="10"
+					  verticalAlign="middle">
 					
-				<mx:Image id="image"/>
+				<mx:Image id="image" width="48" height="48" 
+						  source="{ wanted }"/>
 					
-				<s:TextArea text="{hostComponent.content}"
+				<s:TextArea text="{hostComponent.content}" verticalAlign="middle"
 							width="100%" height="100%" paddingTop="5"
 							editable="false" contentBackgroundAlpha="0" borderVisible="false" color="#FFFFFF"/>
 					
@@ -84,15 +91,22 @@
 				
 			<s:Rect width="100%" height="100%">
 				<s:fill>
-					<s:BitmapFill source="{VDOMImage.Fon_Texture}" />
+					<s:SolidColor color="#3a3a3a" />
 				</s:fill>
 			</s:Rect>
 				
 			<s:HGroup width="100%" height="100%" horizontalAlign="right" verticalAlign="middle" paddingRight="10">
 				
-				<button:VDOMButton id="okButton" label="OK" click="{hostComponent.okClose()}"/>
+				<button:VDOMButton id="cancelButton" 
+								   label="{ resourceManager.getString( 'Core_General', 'error_cancel' ) }" click="{ hostComponent.cancelClose() }"/>
 				
-				<button:VDOMButton id="noButton" label="Close" click="{hostComponent.noClose()}"/>
+				<mx:Spacer width="100%"/>
+				
+				<button:VDOMButton id="noButton"
+								   label="{ resourceManager.getString( 'Core_General', 'error_Close' ) }" click="{hostComponent.noClose()}"/>
+				
+				<button:VDOMButton id="okButton" icon="{ VDOMImage.Save }"
+								   label="{ resourceManager.getString( 'Core_General', 'error_save' ) }" click="{hostComponent.okClose()}"/>
 				
 			</s:HGroup>
 				

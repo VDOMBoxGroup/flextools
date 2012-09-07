@@ -7,6 +7,7 @@ package net.vdombox.ide.core.view.components
 	
 	import net.vdombox.ide.core.events.AlertWindowEvent;
 	import net.vdombox.ide.core.view.skins.AlertWindowSkin;
+	import net.vdombox.utils.WindowManager;
 	
 	import spark.components.Window;
 
@@ -45,6 +46,11 @@ package net.vdombox.ide.core.view.components
 		public function noClose() : void
 		{
 			dispatchEvent( new AlertWindowEvent ( AlertWindowEvent.NO ) );
+		}
+		
+		public function cancelClose() : void
+		{
+			WindowManager.getInstance().removeWindow( this );
 		}
 		
 	}

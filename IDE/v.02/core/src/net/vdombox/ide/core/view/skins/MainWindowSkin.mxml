@@ -3,7 +3,7 @@
 			 xmlns:mx="library://ns.adobe.com/flex/mx" 
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 creationComplete="sparkskin1_creationCompleteHandler(event)"
-			 height="600" width="800">
+			 height="600" width="1000">
 
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.core.view.components.MainWindow")]

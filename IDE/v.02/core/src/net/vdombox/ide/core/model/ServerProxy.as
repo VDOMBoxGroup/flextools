@@ -112,6 +112,8 @@ package net.vdombox.ide.core.model
 
 			_authInfo.setHostname( hostVO.host );
 			_authInfo.setUsername( hostVO.user );
+			
+			sharedObjectProxy.lastHost = hostVO;
 
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_START );
 
@@ -295,8 +297,11 @@ package net.vdombox.ide.core.model
 		{
 			if ( !hostVO.save )
 				hostVO.password = "";
-			if ( !sharedObjectProxy.equalHost( hostVO ) )	
-				sharedObjectProxy.setHost( hostVO );
+			//if ( !sharedObjectProxy.equalHost( hostVO ) )	
+			
+			sharedObjectProxy.setHost( hostVO );
+			
+			sharedObjectProxy.clearLastHost();
 		}
 				
 		private function startInfiniteSession() : void

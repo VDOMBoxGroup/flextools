@@ -234,15 +234,34 @@ package net.vdombox.ide.core.view
 			selectedHost = null;
 			selectedHostIndex = -1;
 			
-			if ( sharedObjectProxy.selectedHost != -1 )
+			if ( sharedObjectProxy.lastHost && sharedObjectProxy.lastHost.host != ""  )
+			{
+				var flag : Boolean = false;
+				
+				for each ( var h : HostVO in loginView.host.dataProvider )
+				{
+					if ( h.host ==  sharedObjectProxy.lastHost.host )
+					{
+						flag = true;
+						loginView.host.selectedItem = h;
+						selectedHost = h;
+						break;
+					}
+				}
+				
+				if ( !flag )
+				{
+					selectedHost = sharedObjectProxy.lastHost;
+					loginView.host.dataProvider.addItem( selectedHost );
+					loginView.host.selectedItem = selectedHost;
+				}
+			}
+			else if ( sharedObjectProxy.selectedHost != -1 )
 			{
 				loginView.host.selectedIndex = sharedObjectProxy.selectedHost;
 				selectedHost = loginView.host.selectedItem as HostVO;
 				selectedHostIndex = sharedObjectProxy.selectedHost;
-				
-				loginView.host.addEventListener( Event.CHANGE, setLoginInformation);
 			}
-			
 			
 			if ( selectedHost )
 			{
@@ -268,9 +287,9 @@ package net.vdombox.ide.core.view
 				loginView.password = "";
 				
 				loginView.saveButton.currentState = "notsave";
-				
-				loginView.host.addEventListener( Event.CHANGE, setLoginInformation);
 			}
+			
+			loginView.host.addEventListener( Event.CHANGE, setLoginInformation);
 
 			loginView.languages = new ArrayList( localeProxy.locales );
 			

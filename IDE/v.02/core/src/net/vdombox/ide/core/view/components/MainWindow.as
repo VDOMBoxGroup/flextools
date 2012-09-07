@@ -57,9 +57,9 @@ package net.vdombox.ide.core.view.components
 			systemChrome = NativeWindowSystemChrome.NONE;
 			transparent = true;
 			width = 1000;
-			height = 800;
+			height = 600;
 			minWidth = 1000;
-			minHeight = 800;
+			minHeight = 600;
 			
 			addEventListener( Event.CLOSING, saveAppPosition, false, 0, true );
 		}
