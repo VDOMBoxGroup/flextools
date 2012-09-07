@@ -48,6 +48,7 @@ package net.vdombox.ide.common.view.components.button
 		public function set icon( value : Object ) : void
 		{
 			_icon = value;
+			setIcon();
 		}
 
 		public function setIcon() : void
@@ -56,7 +57,10 @@ package net.vdombox.ide.common.view.components.button
 				return;
 
 			if ( _icon )
+			{
+				vdomButtonSkin.icon.includeInLayout = true;
 				vdomButtonSkin.icon.source = _icon;
+			}
 			else
 				vdomButtonSkin.icon.includeInLayout = false;
 		}
