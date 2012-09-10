@@ -165,11 +165,11 @@ package net.vdombox.ide.modules.scripts.view
 					serverScriptsPanel.scripts = body.serverActions as Array;
 					
 					
-					if ( onloadScriptOpening != "" )
+					/*if ( onloadScriptOpening != "" )
 					{
 						onloadScriptOpen( onloadScriptOpening );
 						onloadScriptOpening = "";
-					}
+					}*/
 					
 					break;
 						
