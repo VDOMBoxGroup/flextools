@@ -46,8 +46,8 @@
 			bottom="0" left="0" right="0" top="0">
 		<s:fill>
 			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="#b70000" />
-				<s:GradientEntry color="#a00000" />
+				<s:GradientEntry color="#b70000" color.selectedStates="#959595"/>
+				<s:GradientEntry color="#a00000" color.selectedStates="#959595"/>
 			</s:LinearGradient>
 		</s:fill>
 		

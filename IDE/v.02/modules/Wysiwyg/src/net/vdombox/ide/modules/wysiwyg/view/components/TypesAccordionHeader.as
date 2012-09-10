@@ -54,8 +54,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			super.selected = value;
 			
-			setStyle( "color", "white");
+			if ( value )
+				setStyle( "color", "0x606060");
+			else
+				setStyle( "color", "white");
 		}
-		
 	}
 }
