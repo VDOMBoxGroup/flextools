@@ -6,6 +6,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
 	import net.vdombox.ide.core.view.ApplicationPropertiesViewMediator;
 	import net.vdombox.ide.core.view.ApplicationsViewMediator;
+	import net.vdombox.ide.core.view.MainWindowMediator;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -34,8 +35,18 @@ package net.vdombox.ide.core.controller
 				facade.removeMediator( ApplicationManagerWindowMediator.NAME );
 				windowManager.removeWindow(applicationManagerWindowMediator.applicationManagerWindow);
 			}
+			
+			var logOff : Boolean = notification.getBody() as Boolean;
 		
-			sendNotification(ApplicationFacade.OPEN_MAIN_WINDOW);
+			if ( !logOff )
+				sendNotification(ApplicationFacade.OPEN_MAIN_WINDOW);
+			else
+			{
+				if ( facade.hasMediator( MainWindowMediator.NAME ) )
+					sendNotification( ApplicationFacade.SIGNOUT );
+				else
+					sendNotification( ApplicationFacade.REQUEST_FOR_SIGNOUT );
+			}
 			
 			
 		}

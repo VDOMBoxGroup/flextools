@@ -110,16 +110,14 @@ package net.vdombox.ide.core.view
 		
 		private function logoutHandler( event : * ) : void
 		{
-			closeWindow();
-			sendNotification( ApplicationFacade.SIGNOUT );
-			
+			closeWindow(true);
 		}
 
 
-		private function closeWindow() : void
+		private function closeWindow( logOff : Boolean = false) : void
 		{
-			if (serverProxy.applications && serverProxy.applications.length > 0 && statesProxy.selectedApplication )
-				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+			if (serverProxy.applications && serverProxy.applications.length > 0 )
+				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, logOff );
 			else
 				NativeApplication.nativeApplication.exit();
 		}
@@ -128,7 +126,7 @@ package net.vdombox.ide.core.view
 		{
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			
-			applicationManagerWindow.title += "  |  " + serverProxy.authInfo.serverVersion; 
+			applicationManagerWindow.title += "  |  " + serverProxy.authInfo.hostname; 
 			
 			registerMediators();
 			openNecessaryView();

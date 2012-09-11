@@ -70,6 +70,7 @@
 				height="100%"
 				itemRenderer="net.vdombox.ide.core.view.components.ApplicationListItemRenderer"
 				creationComplete="applicationList_creationCompleteHandler(event)"
+				borderVisible="false"
 				/>
 
 		<s:Group width="100%" height="40">
@@ -78,6 +79,12 @@
 					<s:SolidColor color="#3a3a3a"/>
 				</s:fill>
 			</s:Rect>
+			
+			<s:Line left="0" right="0" top="0">
+				<s:stroke>
+					<s:SolidColorStroke color="#555555" weight="2"/>
+				</s:stroke>
+			</s:Line>
 			
 			<s:HGroup width="100%" height="100%"
 					  paddingLeft="10" paddingRight="10"

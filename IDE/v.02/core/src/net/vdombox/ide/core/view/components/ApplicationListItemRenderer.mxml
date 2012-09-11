@@ -197,7 +197,7 @@
 		<s:VGroup width="120" height="100%" gap="0">
 			
 			<s:Label id="nameLabel"  width="120"
-					 fontSize="15" color="#FFFFFF"/>
+					 fontSize="15" color="#fffafc"/>
 			
 			<mx:Spacer height="100%" />
 			
@@ -207,9 +207,9 @@
 		
 		<s:VGroup width="50%" height="100%" gap="2">
 			<s:HGroup width="100%">
-				<s:Label id="pages" color="#ffffff"/>
+				<s:Label id="pages" fontSize="10" color="#fffafc"/>
 				
-				<s:Label id="objects" color="#ffffff"/>
+				<s:Label id="objects" fontSize="10" color="#fffafc"/>
 			</s:HGroup>
 			
 			<s:TextArea id="applicationDescription"
