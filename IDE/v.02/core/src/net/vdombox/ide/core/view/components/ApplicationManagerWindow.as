@@ -22,11 +22,11 @@ package net.vdombox.ide.core.view.components
 			systemChrome = NativeWindowSystemChrome.NONE;
 			transparent = true;
 			width = 550;
-			height = 340;
+			height = 450;
 			minWidth = 550;
-			minHeight = 340;
+			minHeight = 450;
 			maxWidth = 550;
-			maxHeight = 340;
+			maxHeight = 450;
 			title = resourceManager.getString( 'Core_General', 'application_manager_window_title' ) ;
 		}
 		

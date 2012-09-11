@@ -126,6 +126,10 @@ package net.vdombox.ide.core.view
 
 		private function createCompleteHandler( event : FlexEvent ) : void
 		{
+			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			
+			applicationManagerWindow.title += "  |  " + serverProxy.authInfo.serverVersion; 
+			
 			registerMediators();
 			openNecessaryView();
 		}

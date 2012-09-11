@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:components="net.vdombox.ide.core.view.components" 
-		 width="100%" height="100%" gap="2" xmlns:components1="net.vdombox.ide.core.view.components.*"
-		 paddingBottom="10" paddingRight="10" xmlns:components2="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+		 width="100%" height="100%" gap="2" 
+		 paddingRight="20" paddingTop="10" paddingLeft="20"
+		 xmlns:components1="net.vdombox.ide.core.view.components.*"
+		 xmlns:components2="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
@@ -23,73 +25,95 @@
 		<s:RadioButtonGroup id="languageRBGroup" />
 	</fx:Declarations>
 	
-	<s:VGroup width="65%" height="100%" gap="2" 
-			  paddingTop="10" paddingLeft="20">
-		
-		<s:Label id="lblapplicationName" color="#FFFFFF" 
-				 text="{getLocalesWord('create_edit_application_name' )}"/>
-		<s:TextInput id="txtapplicationName" 
-					 width="100%" color="#FFFFFF"/>
-		
-		<mx:Spacer height="10" />
-		
-		<s:Label id="lblapplicationDescription" color="#FFFFFF" 
-				 text="{getLocalesWord( 'create_edit_application_description' )}"/>
-		<s:TextArea id="txtapplicationDescription" 
-					height="100%" width="100%" color="#FFFFFF"/>
-		
-		<mx:Spacer height="10" />
-		
-		<s:HGroup width="100%" verticalAlign="middle">
-			
-			<s:Label id="lblapplicationVersion" color="#FFFFFF"
-					 text="{getLocalesWord( 'create_edit_application_version' )}"/>
-			<s:TextInput id="txtapplicationVersion" 
-						 width="100%" color="#FFFFFF"/> 
-			
-		</s:HGroup>
-		
-		
-		<mx:Spacer height="15" />
-		
-		<s:Label buttonMode="true" text="{getLocalesWord('create_edit_application_script_language')}"
-				 fontFamily="Verdana" fontSize="14"
-				 color="#FFFFFF" />
-		
-		<s:HGroup width="100%" paddingBottom="10">
-			
-			<s:RadioButton id="vscript"
-						   label="vscript" value="vscript" color="#FFFFFF"
-						   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
-			
-			<s:RadioButton id="python"
-						   label="python" value="python" color="#FFFFFF"
-						   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
-			
-		</s:HGroup>
-	</s:VGroup>
+	<s:Label id="nameEditedApplication" color="#8b8787"/>
 	
-	<s:VGroup width="35%" height="100%" gap="2" 
-			  paddingTop="10" paddingLeft="20" >
+	<mx:Spacer height="5"/>
+	
+	<s:Line width="100%">
+		<s:stroke>
+			<s:SolidColorStroke color="#707070" weight="1"/>
+		</s:stroke>
+	</s:Line>
+	
+	<s:HGroup width="100%" height="100%" gap="2">
 		
-		<components1:ApplicationsIconView id="iconChooser"  />
+		<s:VGroup width="60%" height="100%" gap="5" 
+				  paddingTop="10">
+			
+			<s:Label id="lblapplicationName" color="#FFFFFF" fontSize="14"
+					 text="{getLocalesWord('create_edit_application_name' )}"/>
+			<s:TextInput id="txtapplicationName" fontSize="14"
+						 width="100%" color="#FFFFFF"/>
+			
+			<mx:Spacer height="15" />
+			
+			<s:Label id="lblapplicationDescription" color="#FFFFFF" fontSize="14"
+					 text="{getLocalesWord( 'create_edit_application_description' )}"/>
+			<s:TextArea id="txtapplicationDescription" 
+						height="100%" width="100%" color="#FFFFFF"/>
+			
+			<mx:Spacer height="15" />
+			
+			<s:Label buttonMode="true" text="{getLocalesWord('create_edit_application_script_language')}"
+					 fontFamily="Verdana" fontSize="14"
+					 color="#FFFFFF" />
+			
+			<s:HGroup width="100%" paddingBottom="10">
+				
+				<s:RadioButton id="vscript"
+							   label="vscript" value="vscript" color="#FFFFFF"
+							   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
+				
+				<s:RadioButton id="python"
+							   label="python" value="python" color="#FFFFFF"
+							   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
+				
+			</s:HGroup>
+		</s:VGroup>
 		
-		<s:Label id="selectIcon" buttonMode="true" text="{getLocalesWord( 'iconchooser_select_icon' ) }"
-				 fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF" />
-		
-		<mx:Spacer height="100%" />
-		
-		
+		<s:VGroup width="40%" height="100%" gap="2" 
+				  paddingTop="30" paddingLeft="50" paddingBottom="10">
+			
+			<s:Label id="selectIcon" buttonMode="true" text="{getLocalesWord( 'iconchooser_select_icon' ) }"
+					fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF" />
+				
+			<components1:ApplicationsIconView id="iconChooser"  />
+			
+			<mx:Spacer height="100%" />
+			
+			<s:VGroup width="100%">
+				
+				<s:Label id="lblapplicationVersion" color="#FFFFFF" fontSize="14"
+						 text="{getLocalesWord( 'create_edit_application_version' )}"/>
+				<s:TextInput id="txtapplicationVersion" 
+							 width="100%" color="#FFFFFF" fontSize="14"/> 
+				
+			</s:VGroup>
+			
+		</s:VGroup>
+	</s:HGroup>
+	
+	<s:Group width="100%" height="40">
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="#3a3a3a"/>
+			</s:fill>
+		</s:Rect>
 		<s:HGroup width="100%" horizontalAlign="right" >
 			
 			<button:VDOMButton id="btnCancel"
-					  label="{getLocalesWord('create_edit_application_cancel' )}"
-					  click="{dispatchEvent( new ApplicationManagerEvent( ApplicationManagerEvent.CANCEL ) ) }"/>
-
+							   icon="@Embed('assets/back.png')"
+							   label="{getLocalesWord('create_edit_application_back' )}"
+							   click="{dispatchEvent( new ApplicationManagerEvent( ApplicationManagerEvent.CANCEL ) ) }"/>
+			
+			<mx:Spacer width="100%"/>
+			
 			<button:VDOMButton id="btnSave" 
-					  label="{getLocalesWord('create_edit_application_save' )}"
-					  click="{dispatchEvent( new ApplicationManagerEvent( ApplicationManagerEvent.SAVE_INFORMATION ) ) }"/>
+							   label="{getLocalesWord('create_edit_application_ok' )}"
+							   click="{dispatchEvent( new ApplicationManagerEvent( ApplicationManagerEvent.SAVE_INFORMATION ) ) }"/>
 			
 		</s:HGroup>
-	</s:VGroup>
-</s:HGroup>
+	</s:Group>
+	
+	
+</s:VGroup>

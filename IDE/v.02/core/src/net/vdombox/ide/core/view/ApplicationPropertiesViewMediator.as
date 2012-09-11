@@ -12,12 +12,13 @@ package net.vdombox.ide.core.view
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.utils.ByteArray;
-
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
 	import mx.events.FlexEvent;
+	import mx.resources.ResourceManager;
 	import mx.utils.ObjectUtil;
-
+	
 	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
@@ -30,7 +31,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.components.ApplicationPropertiesView;
 	import net.vdombox.ide.core.view.components.ApplicationsIconsChoosWindow;
 	import net.vdombox.utils.WindowManager;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -240,8 +241,9 @@ package net.vdombox.ide.core.view
 			applicationsIconsChoosWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
 		}
 
-		private function commitProperties() : void
+		private function commitProperties() : void 
 		{
+			applicationPropertiesView.nameEditedApplication.text =  applicationVO ? ( ResourceManager.getInstance().getString( 'Core_General', 'change_application_edit' )+ ": " + applicationVO.name ) : "";
 			applicationPropertiesView.txtapplicationName.text = applicationVO ? applicationVO.name : "";
 			applicationPropertiesView.txtapplicationDescription.text = applicationVO ? applicationVO.description : "";
 			applicationPropertiesView.txtapplicationVersion.text = applicationVO ? applicationVO.version : "";

@@ -4,7 +4,6 @@
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  width="100%"
 		  height="100%"
-		  paddingBottom="10"
 		  paddingRight="10"
 		  xmlns:components="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 
@@ -13,6 +12,7 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.ApplicationVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.core.events.ApplicationManagerEvent;
 			
 			import spark.components.Application;
@@ -61,7 +61,7 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 
-	<s:VGroup width="50%" 
+	<s:VGroup width="100%" 
 			  minWidth="25" 
 			  height="100%" 
 			  gap="2">
@@ -72,42 +72,32 @@
 				creationComplete="applicationList_creationCompleteHandler(event)"
 				/>
 
-		<button:VDOMButton id="addApplication" label="{getLocalesWord( 'change_application_add_new_application' )}" />
-
-	</s:VGroup>
-
-	<s:VGroup width="50%" height="100%" paddingTop="12" gap="10">
-		<s:TextInput id="applicationName"
-					 width="100%"
-					 borderVisible="false"
-					 editable="false"
-					 selectable="false"
-					 fontFamily="Arial"
-					 fontSize="18"
-					 color="#FFFFFF"
-					 fontWeight="bold" 
-					 />
-		<s:TextArea id="applicationDescription"
-					width="100%"
-					height="100%"
-					editable="false"
-					selectable="false"
-					borderVisible="false"
-					color="#CACACA"
-					fontFamily="Arial"
-					fontSize="10" 
-					/>
-		<mx:Spacer height="20" />
-
-		<s:HGroup horizontalAlign="right" 
-				  gap="10" 
-				  width="100%">
-			<button:VDOMButton id="changeApplication" 
+		<s:Group width="100%" height="40">
+			<s:Rect width="100%" height="100%">
+				<s:fill>
+					<s:SolidColor color="#3a3a3a"/>
+				</s:fill>
+			</s:Rect>
+			
+			<s:HGroup width="100%" height="100%"
+					  paddingLeft="10" paddingRight="10"
+					  verticalAlign="middle">
+				
+				<button:VDOMButton id="addApplication" 
+								   icon="{ VDOMImage.Add }"
+								   label="{getLocalesWord( 'change_application_add_new_application' )}" />
+				
+				<mx:Spacer width="100%"/>
+				
+				<button:VDOMButton id="changeApplication" 
+								   icon="@Embed('assets/edit.png')"
 								   label="{getLocalesWord('change_application_edit')}" />
-
-			<button:VDOMButton id="setSelectApplication" 
+				
+				<button:VDOMButton id="setSelectApplication" 
+								   icon="@Embed('assets/open.png')"
 								   label="{getLocalesWord('change_application_open_in_editor' )}" />
-		</s:HGroup>
-
+			</s:HGroup>
+		</s:Group>
+		
 	</s:VGroup>
 </s:HGroup>

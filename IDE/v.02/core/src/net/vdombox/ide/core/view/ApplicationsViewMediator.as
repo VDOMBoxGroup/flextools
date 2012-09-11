@@ -178,10 +178,6 @@ package net.vdombox.ide.core.view
 			_selectedApplicationVO = value;
 
 			applicationsView.selectedApplication = _selectedApplicationVO;
-
-			applicationsView.applicationName.text = value ? selectedApplicationVO.name : "";
-
-			applicationsView.applicationDescription.text = value ? selectedApplicationDescriptions : "";
 		}
 
 		/**

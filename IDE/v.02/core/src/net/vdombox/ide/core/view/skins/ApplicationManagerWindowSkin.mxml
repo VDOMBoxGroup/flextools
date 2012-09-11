@@ -4,7 +4,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:component="net.vdombox.ide.core.view.components"
 		
-		width="550" height="340" minWidth="550" minHeight="340" xmlns:components="net.vdombox.ide.core.view.components.*"
+		width="550" height="450" minWidth="550" minHeight="450" xmlns:components="net.vdombox.ide.core.view.components.*"
 		contentBackgroundAlpha="0" >
 	<!-- host component -->
 	<fx:Metadata>
@@ -50,11 +50,11 @@
 			<s:TitleBar id="titleBar" width="100%"					
 						skinClass="net.vdombox.ide.common.view.skins.PopupWindowTitleBarSkin"/>
 			
-			<!--<s:VGroup right="30" height="100%" verticalAlign="middle" >
+			<s:VGroup right="30" height="100%" verticalAlign="middle" >
 				<s:Button id="closeButton"
 					skinClass="net.vdombox.ide.common.view.skins.button.MainLogoutBtnSkin"
 					click="hostComponent.dispatchEvent( new ApplicationManagerEvent( ApplicationManagerEvent.LOGOUT ) )"/>	
-			</s:VGroup>-->
+			</s:VGroup>
 		</s:Group>
 			
 			
