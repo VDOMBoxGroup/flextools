@@ -49,15 +49,5 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( typeItemRenderer )
 				typeItemRenderer.dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.ADD_IN_USER_CATIGORY ) );
 		}
-		
-		override public function set selected( value : Boolean ) : void
-		{
-			super.selected = value;
-			
-			if ( value )
-				setStyle( "color", "0x606060");
-			else
-				setStyle( "color", "white");
-		}
 	}
 }

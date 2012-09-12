@@ -71,6 +71,13 @@
 				
 				var typeVO : TypeVO = _selectedRenderer.typeVO;
 				
+				if ( !typeVO )
+				{
+					visible = false;
+					includeInLayout = false;
+					return;
+				}
+				
 				switch ( typeVO.interfaceType )
 				{
 					case TypeInterface.RICH_TEXT_EDITOR:
