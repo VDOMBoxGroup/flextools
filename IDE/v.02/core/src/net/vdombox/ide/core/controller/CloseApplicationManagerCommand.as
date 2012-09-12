@@ -1,6 +1,8 @@
 package net.vdombox.ide.core.controller
 {
 	
+	import flash.desktop.NativeApplication;
+	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.GalleryProxy;
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
@@ -36,10 +38,16 @@ package net.vdombox.ide.core.controller
 				windowManager.removeWindow(applicationManagerWindowMediator.applicationManagerWindow);
 			}
 			
-			var logOff : Boolean = notification.getBody() as Boolean;
+			var logOff : Boolean = notification.getBody().logOff as Boolean;
+			var close : Boolean = notification.getBody().close as Boolean;
 		
 			if ( !logOff )
-				sendNotification(ApplicationFacade.OPEN_MAIN_WINDOW);
+			{
+				if ( !close || facade.hasMediator( MainWindowMediator.NAME ) )
+					sendNotification(ApplicationFacade.OPEN_MAIN_WINDOW);
+				else
+					NativeApplication.nativeApplication.exit();
+			}
 			else
 			{
 				if ( facade.hasMediator( MainWindowMediator.NAME ) )

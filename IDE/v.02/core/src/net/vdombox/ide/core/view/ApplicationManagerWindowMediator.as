@@ -96,28 +96,33 @@ package net.vdombox.ide.core.view
 		{
 			applicationManagerWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHandler );
 		
-			applicationManagerWindow.addEventListener( FlexEvent.REMOVE, closeHandler );
+			applicationManagerWindow.addEventListener( FlexEvent.REMOVE, removeHandler );
 			
 			applicationManagerWindow.addEventListener( Event.CLOSE, closeHandler );
 			
 			applicationManagerWindow.addEventListener( ApplicationManagerEvent.LOGOUT, logoutHandler );
 		}
+		
+		private function removeHandler( event : FlexEvent ) : void
+		{
+			closeWindow( false, true );
+		}
 
-		private function closeHandler( event : * ) : void
+		private function closeHandler( event : Event ) : void
 		{
 			closeWindow();
 		}
 		
-		private function logoutHandler( event : * ) : void
+		private function logoutHandler( event : ApplicationManagerEvent ) : void
 		{
 			closeWindow(true);
 		}
 
 
-		private function closeWindow( logOff : Boolean = false) : void
+		private function closeWindow( logOff : Boolean = false, close : Boolean = false ) : void
 		{
 			if (serverProxy.applications && serverProxy.applications.length > 0 )
-				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, logOff );
+				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff : logOff, close : close } );
 			else
 				NativeApplication.nativeApplication.exit();
 		}

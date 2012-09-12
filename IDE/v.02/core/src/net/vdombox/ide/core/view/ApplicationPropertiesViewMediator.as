@@ -240,18 +240,34 @@ package net.vdombox.ide.core.view
 
 			applicationsIconsChoosWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
 		}
+		
+		[Bindable]
+		[Embed( source = "assets/radio_Off.png" )]
+		public static var radio_Off : Class;
+		
+		[Bindable]
+		[Embed( source = "assets/radio_On.png" )]
+		public static var radio_On : Class;
 
 		private function commitProperties() : void 
 		{
-			applicationPropertiesView.nameEditedApplication.text =  applicationVO ? ( ResourceManager.getInstance().getString( 'Core_General', 'change_application_edit' )+ ": " + applicationVO.name ) : "";
+			applicationPropertiesView.nameEditedApplication.text =  applicationVO ? ( ResourceManager.getInstance().getString( 'Core_General', 'change_application_edit' )+ ": " + applicationVO.name ) : ResourceManager.getInstance().getString( 'Core_General', 'change_application_add_new_application' );
 			applicationPropertiesView.txtapplicationName.text = applicationVO ? applicationVO.name : "";
 			applicationPropertiesView.txtapplicationDescription.text = applicationVO ? applicationVO.description : "";
 			applicationPropertiesView.txtapplicationVersion.text = applicationVO ? applicationVO.version : "";
 
 			if ( applicationVO && applicationVO.scriptingLanguage == "python" )
-				applicationPropertiesView.python.selected = true;
+			{
+				applicationPropertiesView.python.source = radio_On;
+				applicationPropertiesView.vscript.source = radio_Off;
+				applicationPropertiesView.languageRBGroup.selectedValue = "python";
+			}
 			else
-				applicationPropertiesView.vscript.selected = true;
+			{
+				applicationPropertiesView.vscript.source = radio_On;
+				applicationPropertiesView.python.source = radio_Off;
+				applicationPropertiesView.languageRBGroup.selectedValue = "vscript";
+			}
 
 			// set icon 
 //			applicationPropertiesView.iconChooser.source = defaultIcon;
@@ -368,7 +384,7 @@ package net.vdombox.ide.core.view
 			appInfVO.name = applicationPropertiesView.txtapplicationName.text;
 			appInfVO.description = applicationPropertiesView.txtapplicationDescription.text;
 			appInfVO.version = applicationPropertiesView.txtapplicationVersion.text;
-			appInfVO.scriptingLanguage = applicationPropertiesView.languageRBGroup.selectedValue.toString();
+			appInfVO.scriptingLanguage = applicationPropertiesView.vscript.source == radio_On ? "vscript" : "python";
 
 			return appInfVO;
 		}

@@ -252,7 +252,7 @@ package net.vdombox.ide.core.view
 
 				sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applicationListItemRenderer.applicationVO );
 				
-				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff : false, close : false } );
 			}
 		}
 
@@ -320,7 +320,7 @@ package net.vdombox.ide.core.view
 		{
 			sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
 			
-			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER );
+			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff : false, close : false } );
 		}
 	}
 }

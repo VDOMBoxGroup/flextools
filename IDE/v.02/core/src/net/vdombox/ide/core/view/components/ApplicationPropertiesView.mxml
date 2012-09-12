@@ -3,8 +3,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:components="net.vdombox.ide.core.view.components" 
-		 width="100%" height="100%" gap="2" 
-		 paddingRight="20" paddingTop="10" paddingLeft="20"
+		 width="100%" height="100%" gap="2" paddingTop="10"
 		 xmlns:components1="net.vdombox.ide.core.view.components.*"
 		 xmlns:components2="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
@@ -13,9 +12,29 @@
 			
 			import net.vdombox.ide.core.events.ApplicationManagerEvent;
 			
+			[Bindable]
+			[Embed( source = "assets/radio_Off.png" )]
+			public static var radio_Off : Class;
+			
+			[Bindable]
+			[Embed( source = "assets/radio_On.png" )]
+			public static var radio_On : Class;
+			
 			private function getLocalesWord( word : String): String
 			{
 				return resourceManager.getString( 'Core_General', word );
+			}
+			
+			protected function vscript_clickHandler(event:MouseEvent):void
+			{
+				vscript.source = radio_On;
+				python.source = radio_Off;
+			}
+			
+			protected function python_clickHandler(event:MouseEvent):void
+			{
+				python.source = radio_On;
+				vscript.source = radio_Off;
 			}
 			
 		]]>
@@ -25,73 +44,101 @@
 		<s:RadioButtonGroup id="languageRBGroup" />
 	</fx:Declarations>
 	
-	<s:Label id="nameEditedApplication" color="#8b8787"/>
-	
-	<mx:Spacer height="5"/>
-	
-	<s:Line width="100%">
-		<s:stroke>
-			<s:SolidColorStroke color="#707070" weight="1"/>
-		</s:stroke>
-	</s:Line>
-	
-	<s:HGroup width="100%" height="100%" gap="2">
+	<s:VGroup width="100%" height="100%"
+			  paddingLeft="20" paddingRight="20">
 		
-		<s:VGroup width="60%" height="100%" gap="5" 
-				  paddingTop="10">
-			
-			<s:Label id="lblapplicationName" color="#FFFFFF" fontSize="14"
-					 text="{getLocalesWord('create_edit_application_name' )}"/>
-			<s:TextInput id="txtapplicationName" fontSize="14"
-						 width="100%" color="#FFFFFF"/>
-			
-			<mx:Spacer height="15" />
-			
-			<s:Label id="lblapplicationDescription" color="#FFFFFF" fontSize="14"
-					 text="{getLocalesWord( 'create_edit_application_description' )}"/>
-			<s:TextArea id="txtapplicationDescription" 
-						height="100%" width="100%" color="#FFFFFF"/>
-			
-			<mx:Spacer height="15" />
-			
-			<s:Label buttonMode="true" text="{getLocalesWord('create_edit_application_script_language')}"
-					 fontFamily="Verdana" fontSize="14"
-					 color="#FFFFFF" />
-			
-			<s:HGroup width="100%" paddingBottom="10">
-				
-				<s:RadioButton id="vscript"
-							   label="vscript" value="vscript" color="#FFFFFF"
-							   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
-				
-				<s:RadioButton id="python"
-							   label="python" value="python" color="#FFFFFF"
-							   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
-				
-			</s:HGroup>
-		</s:VGroup>
+		<s:Label id="nameEditedApplication" color="#8b8787"/>
 		
-		<s:VGroup width="40%" height="100%" gap="2" 
-				  paddingTop="30" paddingLeft="50" paddingBottom="10">
+		<mx:Spacer height="5"/>
+		
+		<s:Line width="100%">
+			<s:stroke>
+				<s:SolidColorStroke color="#707070" weight="1"/>
+			</s:stroke>
+		</s:Line>
+		
+		<s:HGroup width="100%" height="100%" gap="2">
 			
-			<s:Label id="selectIcon" buttonMode="true" text="{getLocalesWord( 'iconchooser_select_icon' ) }"
-					fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF" />
+			<s:VGroup width="60%" height="100%" gap="5" 
+					  paddingTop="10">
 				
-			<components1:ApplicationsIconView id="iconChooser"  />
-			
-			<mx:Spacer height="100%" />
-			
-			<s:VGroup width="100%">
+				<s:Label id="lblapplicationName" color="#FFFFFF" fontSize="14"
+						 text="{getLocalesWord('create_edit_application_name' )}"/>
+				<s:TextInput id="txtapplicationName" fontSize="14"
+							 width="100%" color="#FFFFFF"/>
 				
-				<s:Label id="lblapplicationVersion" color="#FFFFFF" fontSize="14"
-						 text="{getLocalesWord( 'create_edit_application_version' )}"/>
-				<s:TextInput id="txtapplicationVersion" 
-							 width="100%" color="#FFFFFF" fontSize="14"/> 
+				<mx:Spacer height="15" />
+				
+				<s:Label id="lblapplicationDescription" color="#FFFFFF" fontSize="14"
+						 text="{getLocalesWord( 'create_edit_application_description' )}"/>
+				<s:TextArea id="txtapplicationDescription" 
+							height="120" width="100%" color="#FFFFFF"/>
+				
+				<mx:Spacer height="15" />
+				
+				<s:Label buttonMode="true" text="{getLocalesWord('create_edit_application_script_language')}"
+						 fontFamily="Verdana" fontSize="14"
+						 color="#FFFFFF" />
+				
+				<s:Group width="100%" height="30">
+					
+					<s:Rect width="100%" height="100%">
+						<s:fill>
+							<s:SolidColor color="#252525"/>
+						</s:fill>
+					</s:Rect>
+					
+					<s:HGroup width="100%" height="100%"
+							  paddingLeft="10"
+							  verticalAlign="middle">
+						
+						<mx:Image id="vscript"
+								  source="{ radio_On }"
+								  click="vscript_clickHandler(event)"/>
+						
+						<s:Label text="vscript" color="#FFFFFF"
+								 fontSize="14"
+								 click="vscript_clickHandler(event)"/>
+						
+						<mx:Spacer width="5"/>
+						
+						<mx:Image id="python" 
+								  source="{ radio_Off }"
+								  click="python_clickHandler(event)"/>
+						
+						<s:Label text="python" color="#FFFFFF"
+								 fontSize="14"
+								 click="python_clickHandler(event)"/>
+						
+					</s:HGroup>
+					
+				</s:Group>
 				
 			</s:VGroup>
 			
-		</s:VGroup>
-	</s:HGroup>
+			<s:VGroup width="40%" height="100%" gap="2" 
+					  paddingTop="30" paddingLeft="50" paddingBottom="10">
+				
+				<s:Label id="selectIcon" buttonMode="true" text="{getLocalesWord( 'iconchooser_select_icon' ) }"
+						 fontFamily="Verdana" fontSize="14" textDecoration="underline" color="#FFFFFF" />
+				
+				<components1:ApplicationsIconView id="iconChooser"  />
+				
+				<mx:Spacer height="130" />
+				
+				<s:VGroup width="100%">
+					
+					<s:Label id="lblapplicationVersion" color="#FFFFFF" fontSize="14"
+							 text="{getLocalesWord( 'create_edit_application_version' )}"/>
+					<s:TextInput id="txtapplicationVersion" 
+								 width="100%" color="#FFFFFF" fontSize="14"/> 
+					
+				</s:VGroup>
+				
+			</s:VGroup>
+		</s:HGroup>
+		
+	</s:VGroup>
 	
 	<s:Group width="100%" height="40">
 		<s:Rect width="100%" height="100%">
@@ -99,7 +146,16 @@
 				<s:SolidColor color="#3a3a3a"/>
 			</s:fill>
 		</s:Rect>
-		<s:HGroup width="100%" horizontalAlign="right" >
+		
+		<s:Line left="0" right="0" top="0">
+			<s:stroke>
+				<s:SolidColorStroke color="#555555" weight="2"/>
+			</s:stroke>
+		</s:Line>
+		
+		<s:HGroup width="100%" height="100%" 
+				  paddingLeft="10" paddingRight="10"
+				  horizontalAlign="right" verticalAlign="middle">
 			
 			<button:VDOMButton id="btnCancel"
 							   icon="@Embed('assets/back.png')"
