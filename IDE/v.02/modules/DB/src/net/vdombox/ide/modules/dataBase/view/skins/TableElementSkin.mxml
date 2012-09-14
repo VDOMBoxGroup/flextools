@@ -134,11 +134,9 @@
 			</s:Rect>
 			
 		</s:Group>
-		
-		
 	</s:VGroup>
 	
 	<mx:Image id="angle" bottom="7" right="7" width="8" height="8"
-			  source="@Embed('assets/cornertable.png')" mouseDown="angle_mouseDownHandler(event)" />
-	
+			  source="{ VDOMImage.Cornertable }" mouseDown="angle_mouseDownHandler(event)" />
+	 
 </s:SparkSkin>
