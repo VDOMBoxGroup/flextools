@@ -134,5 +134,31 @@ package net.vdombox.ide.common.view.components
 		[Embed( source = "assets/vdomimage/search.png" )]
 		public static var Search : Class;
 		
+		[Bindable]
+		[Embed( source="assets/vdomimage/theme.swf", symbol="LeftRight" )]
+		public static var leftRightCursor : Class;
+		
+		[Bindable]
+		[Embed( source="assets/vdomimage/theme.swf", symbol="TopDown" )]
+		public static var topDownCursor : Class;
+		
+		[Bindable]
+		[Embed( source="assets/vdomimage/theme.swf", symbol="Move" )]
+		public static var moveCursor : Class;
+		
+		[Bindable]
+		[Embed( source="assets/vdomimage/theme.swf", symbol="TopLDownR" )]
+		public static var topLDownRCursor : Class;
+		
+		[Bindable]
+		[Embed( source="assets/vdomimage/theme.swf", symbol="TopRDownL" )]
+		public static var topRDownLCursor : Class;
+		
+		[Bindable]
+		[Embed( source="assets/vdomimage/cornertable.png" )]
+		public static var Cornertable : Class;
+		
+		
+		
 	}
 }

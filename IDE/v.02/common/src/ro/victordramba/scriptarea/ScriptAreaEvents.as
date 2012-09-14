@@ -154,7 +154,7 @@ package ro.victordramba.scriptarea
 			pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
 			contextMenu.addItem( pasteItem );
 			
-			str = text.substring( _selStart, _selEnd );
+			/*str = text.substring( _selStart, _selEnd );
 			token = controller.getTokenByPos( _selStart );
 			
 			if ( token.scope.members.hasKey( str ) )
@@ -162,7 +162,7 @@ package ro.victordramba.scriptarea
 				var renameItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_rename' ));
 				renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );
 				contextMenu.addItem( renameItem );
-			}
+			}*/
 		}
 		
 		private function copyContextMenuHandler( event : Event ) : void
