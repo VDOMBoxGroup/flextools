@@ -16,6 +16,7 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.ResourceVO;
+			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.core.events.MainWindowEvent;
 			static private const exclusions : Array = [ "backgroundRect", "contentGroup", "titleBar",
 														"titleBarBackgroundRect", "statusText", "borderBgFill" ];
@@ -28,6 +29,17 @@
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
 			{
 				hostComponent.gotoLastPosition();
+			}
+			
+			protected function gripper_mouseOverHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				parentApplication.cursorManager.setCursor( VDOMImage.topLDownRCursor, 2, -8, -6 );
+			}
+			
+			protected function gripper_mouseOutHandler(event:MouseEvent):void
+			{
+				parentApplication.cursorManager.removeAllCursors();
 			}
 			
 		]]>
@@ -184,6 +196,9 @@
 	
 	<!-- layer 3: gripper -->
 	<s:Button id="gripper" right="3" bottom="3"
-			  skinClass="spark.skins.spark.windowChrome.GripperSkin" tabEnabled="false"
-			  right.normal="8" bottom.normal="8"/>
+			  skinClass="net.vdombox.ide.common.view.skins.PopupWindowGripperSkin" tabEnabled="false"
+			  right.normal="8" bottom.normal="8"
+			  mouseOver="gripper_mouseOverHandler(event)"
+			  mouseOut="gripper_mouseOutHandler(event)"
+			  />
 </s:SparkSkin>
