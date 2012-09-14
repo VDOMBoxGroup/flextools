@@ -16,6 +16,7 @@
 			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.utils.StringUtils;
 			import net.vdombox.utils.XMLUtils;
 			
 			import spark.events.TextOperationEvent;
@@ -211,7 +212,7 @@
 						while ( script.charAt( ++end ) != '\n' && end < script.length )
 							true;
 						
-						serverActionXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ getNumberLine( script, index ) } 
+						serverActionXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ StringUtils.getNumberLine( script, index ) } 
 														index={ index } actionID={ actionID } pageID={ pageVO.id } iconType={"script"}/>);
 						index = script.indexOf( findString, end );
 					}
@@ -220,20 +221,6 @@
 					
 					containerActionsCode[ serverActionVO.containerID ] = serverActionXMLList;
 				}
-			}
-			
-			private function getNumberLine( script : String, index : int ) : int
-			{
-				var count : int = 0;
-				var i : int = -1;
-				do
-				{
-					i = script.indexOf( "\n", i + 1 );
-					count++;
-				}
-				while( i < index && i >= 0 );
-				
-				return count;
 			}
 			
 			public function findObjectsInStructure( structure : XMLList ) : void
@@ -328,7 +315,7 @@
 						
 						
 						
-						libraryXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ getNumberLine( script, index ) } index={ index }
+						libraryXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ StringUtils.getNumberLine( script, index ) } index={ index }
 												iconType={"script"} actionID={ libraryVO.name }/>);
 						index = script.indexOf( findString, end );
 					}

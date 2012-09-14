@@ -43,6 +43,8 @@
 		<components:WorkArea id="workArea"
 							 height="100%" width="100%"/>
 		
+		<!--<components:RenameBox id="renameBox" width="100%"/>-->
+		
 		<components:FindBox id="findBox" width="100%"
 							includeIn="find, findG" creationComplete="findBox_creationCompleteHandler(event)"/>
 	</mx:VDividedBox>
