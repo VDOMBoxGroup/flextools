@@ -22,12 +22,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.events.IOErrorEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-	import flash.events.TimerEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
-	import flash.utils.Timer;
 	
 	import flashx.textLayout.factory.TruncationOptions;
 	
