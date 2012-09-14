@@ -18,6 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.FlexEvent;
 	import mx.events.ScrollEvent;
 	
+	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
@@ -49,21 +50,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
 		}
-
-		[Embed( source="../assets/theme/theme.swf", symbol="LeftRight" )]
-		private var leftRightCursor : Class;
-
-		[Embed( source="../assets/theme/theme.swf", symbol="TopDown" )]
-		private var topDownCursor : Class;
-
-		[Embed( source="../assets/theme/theme.swf", symbol="Move" )]
-		private var moveCursor : Class;
-
-		[Embed( source="../assets/theme/theme.swf", symbol="TopLDownR" )]
-		private var topLDownRCursor : Class;
-
-		[Embed( source="../assets/theme/theme.swf", symbol="TopRDownL" )]
-		private var topRDownLCursor : Class;
 
 		private var tl_box : Sprite;
 		private var tc_box : Sprite;
@@ -499,30 +485,30 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					case "bc":
 					case "tc":
 					{
-						CursorID = parentApplication.cursorManager.setCursor( topDownCursor, 2, -6, -8 );
+						CursorID = parentApplication.cursorManager.setCursor( VDOMImage.topDownCursor, 2, -6, -8 );
 						break;
 					}
 					case "cl":
 					case "cr":
 					{
-						CursorID = parentApplication.cursorManager.setCursor( leftRightCursor, 2, -8, -4 );
+						CursorID = parentApplication.cursorManager.setCursor( VDOMImage.leftRightCursor, 2, -8, -4 );
 						break;
 					}
 					case "tl":
 					case "br":
 					{
-						CursorID = parentApplication.cursorManager.setCursor( topLDownRCursor, 2, -8, -6 );
+						CursorID = parentApplication.cursorManager.setCursor( VDOMImage.topLDownRCursor, 2, -8, -6 );
 						break;
 					}
 					case "tr":
 					case "bl":
 					{
-						CursorID = parentApplication.cursorManager.setCursor( topRDownLCursor, 2, -6, -10 );
+						CursorID = parentApplication.cursorManager.setCursor( VDOMImage.topRDownLCursor, 2, -6, -10 );
 						break;
 					}
 					case "cc":
 					{
-						CursorID = parentApplication.cursorManager.setCursor( moveCursor, 2, -10, -10 );
+						CursorID = parentApplication.cursorManager.setCursor( VDOMImage.moveCursor, 2, -10, -10 );
 						break;
 					}
 					default:
