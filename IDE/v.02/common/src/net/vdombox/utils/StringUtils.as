@@ -29,5 +29,19 @@ package net.vdombox.utils
 		{
 			return str.replace( /&/g, "&amp;" ).replace( /\</g, "&lt;" ).replace( /\>/g, "&gt;" );
 		}
+		
+		public static  function getNumberLine( script : String, index : int ) : int
+		{
+			var count : int = 0;
+			var i : int = -1;
+			do
+			{
+				i = script.indexOf( "\n", i + 1 );
+				count++;
+			}
+			while( i < index && i >= 0 );
+			
+			return count;
+		}
 	}
 }

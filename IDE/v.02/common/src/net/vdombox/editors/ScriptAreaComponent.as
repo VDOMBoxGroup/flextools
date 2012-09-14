@@ -364,5 +364,10 @@ package net.vdombox.editors
 			lineNums.clearCache();
 			update()
 		}
+		
+		public function findName( findName : String ) : Array
+		{
+			return area.findName( findName );
+		}
 	}
 }

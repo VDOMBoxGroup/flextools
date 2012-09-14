@@ -7,6 +7,7 @@ package ro.victordramba.scriptarea
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
@@ -15,6 +16,7 @@ package ro.victordramba.scriptarea
 	import flash.ui.Keyboard;
 	import flash.ui.Mouse;
 	import flash.ui.MouseCursor;
+	import flash.utils.Timer;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
 	
@@ -28,6 +30,7 @@ package ro.victordramba.scriptarea
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 	import net.vdombox.ide.common.view.components.windows.ScriptStructureWindow;
 	import net.vdombox.utils.WindowManager;
 
@@ -51,6 +54,11 @@ package ro.victordramba.scriptarea
 		private var token : Token;
 		
 		public var assistMenuOpened : Boolean = false;
+		
+		private var str : String;
+		
+		private var t : Timer;
+		private var blocked : Boolean = false;
 
 		public function ScriptAreaEvents()
 		{
@@ -115,6 +123,10 @@ package ro.victordramba.scriptarea
 			} );
 			
 			addEventListener( MouseEvent.CONTEXT_MENU, contextMenuHandler, false, 0 , true );
+			
+			t = new Timer( 2500, 1 );
+			
+			t.addEventListener( TimerEvent.TIMER, timerHandler, false, 0, true );
 		}
 		
 		private function contextMenuHandler( event : MouseEvent ) : void
@@ -141,6 +153,16 @@ package ro.victordramba.scriptarea
 			var pasteItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_paste' ));
 			pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
 			contextMenu.addItem( pasteItem );
+			
+			str = text.substring( _selStart, _selEnd );
+			token = controller.getTokenByPos( _selStart );
+			
+			if ( token.scope.members.hasKey( str ) )
+			{
+				var renameItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_rename' ));
+				renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );
+				contextMenu.addItem( renameItem );
+			}
 		}
 		
 		private function copyContextMenuHandler( event : Event ) : void
@@ -156,6 +178,29 @@ package ro.victordramba.scriptarea
 		private function pasteContextMenuHandler( event : Event ) : void
 		{
 			onPaste();
+		}
+		
+		private function renameContextMenuHandler( event : Event ) : void
+		{
+			dispatchEvent( new ScriptAreaComponenrEvent ( ScriptAreaComponenrEvent.RENAME, false, false, str ) );
+		}
+		
+		public function findName( findName : String ) : Array
+		{
+			var words : Array = new Array();
+			var index : int = text.lastIndexOf( findName );
+			
+			while ( index != -1 )
+			{
+				token = controller.getTokenByPos( index );
+				if ( token.type == Token.STRING_LITERAL )
+				{
+					words.push( index );
+				}
+				index = text.lastIndexOf( findName, index - 1 );
+			}
+			
+			return words;
 		}
 
 		private function findWordBound( start : int, left : Boolean ) : int
@@ -972,7 +1017,7 @@ package ro.victordramba.scriptarea
 		private function onInputText( e : TextEvent ) : void
 		{
 			replaceSelection( e.text );
-			_setSelection( _caret, _caret );
+			//_setSelection( _caret, _caret );
 			updateCaret();
 			saveLastCol();
 			checkScrollToCursor();
@@ -991,7 +1036,18 @@ package ro.victordramba.scriptarea
 
 		public function dipatchChange() : void
 		{
+			if ( !blocked )
+			{
+				blocked = true;
+				t.start();
+			}
+			
+		}
+		
+		private function timerHandler( event : TimerEvent ) : void
+		{
 			dispatchEvent( new Event( Event.CHANGE, true, false ) );
+			blocked = false;
 		}
 		
 		public function dipatchChangeText() : void

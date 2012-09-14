@@ -32,6 +32,11 @@ package net.vdombox.editors.parsers
 			return null
 		}
 		
+		public function getTokens() : Array
+		{
+			return parser.getTokens();
+		}
+		
 		public function set actionVO( actVO : Object ) : void
 		{
 			_actionVO = actVO;

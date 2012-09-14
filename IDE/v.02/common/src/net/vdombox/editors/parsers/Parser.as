@@ -112,5 +112,13 @@ package net.vdombox.editors.parsers
 			else
 				return tokenizer2.tokenByPos( pos ) as Token;
 		}
+		
+		public function getTokens() : Array
+		{	
+			if ( tokenizer )
+				return tokenizer.tokens;
+			else
+				return tokenizer2.tokens;
+		}
 	}
 }
