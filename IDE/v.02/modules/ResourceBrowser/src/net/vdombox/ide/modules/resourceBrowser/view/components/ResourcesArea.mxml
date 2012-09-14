@@ -224,11 +224,11 @@
 				
 			</s:VGroup>
 			
-			<s:Button id="gripper" 
+			<!--<s:Button id="gripper" 
 					  right="0" bottom="0"
 					  tabEnabled="false"
 					  skinClass="net.vdombox.ide.common.view.skins.PopupWindowGripperSkin"
-					  alpha="0.9"/>
+					  alpha="0.9"/> -->
 		</s:Group>
 	</s:VGroup>
 	
