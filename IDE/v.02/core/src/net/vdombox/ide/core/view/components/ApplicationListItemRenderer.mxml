@@ -194,7 +194,7 @@
 		<mx:Image id="imageHolder"
 				  width="40" height="40"/>
 		
-		<s:VGroup width="120" height="100%" gap="0">
+		<s:VGroup width="45%" height="100%" gap="0">
 			
 			<s:Label id="nameLabel"  width="120"
 					 fontSize="15" color="#fffafc"/>
@@ -205,7 +205,7 @@
 			
 		</s:VGroup>
 		
-		<s:VGroup width="50%" height="100%" gap="2">
+		<s:VGroup width="55%" height="100%" gap="2">
 			<s:HGroup width="100%">
 				<s:Label id="pages" fontSize="10" color="#fffafc"/>
 				
