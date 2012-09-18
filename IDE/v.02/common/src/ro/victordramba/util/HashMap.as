@@ -50,6 +50,13 @@ package ro.victordramba.util
 		{
 			return ('$' + key) in data;
 		}
+		
+		public function removeAll() : void
+		{
+			var item:String;
+			for (item in data)
+				delete data[ '$' + item.substr(1)];
+		}
 
 		public function toArray():Array
 		{

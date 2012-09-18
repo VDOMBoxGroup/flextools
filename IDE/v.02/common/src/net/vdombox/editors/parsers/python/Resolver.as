@@ -128,7 +128,6 @@ package net.vdombox.editors.parsers.python
 				return HashLibraryArray.getImportToLibraty( t.importFrom, "python" );
 			
 			// default keywords
-			StandardWordsProxy.setNullCurrentIndex();
 			a = StandardWordsProxy.pythonWords;
 			
 			/*for each ( f in classDB.listAll() )
@@ -145,7 +144,7 @@ package net.vdombox.editors.parsers.python
 			function addKeys( map : HashMap ) : void
 			{
 				for each ( var name : String in map.getKeys() )
-					a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Parameter, name ));
+					a.push( new AutoCompleteItemVO( VDOMImage.Parameter, name ));
 			}
 			
 			//find items in function scope chain
@@ -177,7 +176,7 @@ package net.vdombox.editors.parsers.python
 						a.push( StandardWordsProxy.getAutoCompleteItemVOByField( field, true ) );
 					}
 					else
-						a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Library, ff.name ) );
+						a.push( new AutoCompleteItemVO( VDOMImage.Library, ff.name ) );
 				}
 			}
 			
@@ -196,7 +195,7 @@ package net.vdombox.editors.parsers.python
 			var lst : Vector.<Field> = classDB.listAllTypes();
 			a = new Vector.<AutoCompleteItemVO>;
 			for each ( var f : Field in lst )
-				a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, f.name ) );
+				a.push( new AutoCompleteItemVO( VDOMImage.Standard, f.name ) );
 				
 			a.sort( Array.CASEINSENSITIVE );
 			return a;
@@ -238,8 +237,6 @@ package net.vdombox.editors.parsers.python
 		public function getMemberList( text : String, pos : int, actionVO : Object ) : Vector.<AutoCompleteItemVO>
 		{
 			a = new Vector.<AutoCompleteItemVO>;
-			
-			StandardWordsProxy.setNullCurrentIndex();
 			
 			var flag : Boolean = resolve( text, pos, actionVO );
 			

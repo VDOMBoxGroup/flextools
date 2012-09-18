@@ -70,7 +70,7 @@ package net.vdombox.editors.parsers
 				
 				for each ( object in objects )
 				{
-					a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, object.@name ) );
+					a.push( new AutoCompleteItemVO( VDOMImage.Standard, object.@name ) );
 				}
 			}
 			else
@@ -116,7 +116,7 @@ package net.vdombox.editors.parsers
 				
 				for each ( object in objects )
 				{
-					a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, object.@name ) );
+					a.push( new AutoCompleteItemVO( VDOMImage.Standard, object.@name ) );
 				}
 			}
 			

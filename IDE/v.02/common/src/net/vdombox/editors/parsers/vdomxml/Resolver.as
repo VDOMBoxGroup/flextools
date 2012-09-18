@@ -59,11 +59,10 @@ package net.vdombox.editors.parsers.vdomxml
 		public function getAllTypes() : Vector.<AutoCompleteItemVO>
 		{
 			var lst : Vector.<Field> = typeDB.listAll();
-			StandardWordsProxy.setNullCurrentIndex();
 			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>;
 
 			for each ( var f : Field in lst )
-				a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, f.name.toUpperCase() ) );
+				a.push( new AutoCompleteItemVO( VDOMImage.Standard, f.name.toUpperCase() ) );
 
 			return a;
 		}
@@ -74,8 +73,6 @@ package net.vdombox.editors.parsers.vdomxml
 			var token : VdomXMLToken = tokenizer.tokenByPos( pos ) as VdomXMLToken;
 			var typeName : String;
 			var type : Field;
-
-			StandardWordsProxy.setNullCurrentIndex();
 			var a : Vector.<AutoCompleteItemVO>
 
 			if ( token && token.parent )
@@ -99,7 +96,7 @@ package net.vdombox.editors.parsers.vdomxml
 				
 				for each ( var m : Field in type.members.toArray() )
 				{
-					a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, m.name ) );
+					a.push( new AutoCompleteItemVO( VDOMImage.Standard, m.name ) );
 				}
 			}
 

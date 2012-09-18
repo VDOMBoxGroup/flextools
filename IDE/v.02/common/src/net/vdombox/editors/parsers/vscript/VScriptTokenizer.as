@@ -5,6 +5,7 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Field;
 	import net.vdombox.editors.parsers.Multiname;
+	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.editors.parsers.Tokenizer;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
@@ -362,6 +363,7 @@ package net.vdombox.editors.parsers.vscript
 				currentBlock.scope = scope;
 				
 				_members = new HashMap();
+				
 			}
 			
 			t = nextToken();
@@ -407,7 +409,7 @@ package net.vdombox.editors.parsers.vscript
 				
 				for each ( var name : AutoCompleteItemVO in HashLibraryArray.getImportToLibraty( importFrom, "vscript" ) )
 				{
-					imports[ imports.length - 1 ].setValue( name.value, { name : name.value, systemName : name.value, source : importFrom } );
+					imports[ imports.length - 1 ].setValue( name.value.toLowerCase(), { name : name.value, systemName : name.value, source : importFrom } );
 				}
 				
 				position = t.pos + t.string.length;
@@ -441,6 +443,10 @@ package net.vdombox.editors.parsers.vscript
 				importZone = true;
 				t.fromZone = true;
 				importFrom = "";
+			}
+			else if ( tp && tpString == "new" && tp3)
+			{
+				tp3.className = t.string;
 			}
 			/*else if ( t.string == "@staticmethod" )
 			{

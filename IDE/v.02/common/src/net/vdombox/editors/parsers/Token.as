@@ -37,6 +37,8 @@ package net.vdombox.editors.parsers
 		
 		public var error : Boolean = false;
 		
+		public var className : String;
+		
 		public function Token()
 		{
 		}

@@ -84,7 +84,7 @@ package net.vdombox.editors.parsers.vdomxml
 				if ( !menuData )
 					menuData = new Vector.<AutoCompleteItemVO>;
 
-				menuData.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, "ATTRIBUTE" ) );
+				menuData.push( new AutoCompleteItemVO( VDOMImage.Standard, "ATTRIBUTE" ) );
 			}
 			else if ( VdomXMLController( ctrl ).isInAttribute( pos ) )
 			{

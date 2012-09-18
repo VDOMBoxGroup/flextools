@@ -127,7 +127,6 @@ package net.vdombox.editors.parsers.vscript
 				return HashLibraryArray.getImportToLibraty( t.importFrom );*/
 			
 			// default keywords
-			StandardWordsProxy.setNullCurrentIndex();
 			a = StandardWordsProxy.vscriptWords;		
 			//find the scope
 			if ( !t )
@@ -139,7 +138,7 @@ package net.vdombox.editors.parsers.vscript
 			function addKeys( map : HashMap ) : void
 			{
 				for each ( var name : String in map.getKeys() )
-				a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Parameter, name ) );
+				a.push( new AutoCompleteItemVO( VDOMImage.Parameter, name ) );
 			}
 			
 			//find items in function scope chain
@@ -174,7 +173,7 @@ package net.vdombox.editors.parsers.vscript
 						a.push( StandardWordsProxy.getAutoCompleteItemVOByField( field, true ) );
 					}
 					else
-						a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Library, ff.name ) );
+						a.push( new AutoCompleteItemVO( VDOMImage.Library, ff.name ) );
 				}
 			}
 			
@@ -185,10 +184,9 @@ package net.vdombox.editors.parsers.vscript
 		public function getAllTypes( isFunction : Boolean = true ) : Vector.<AutoCompleteItemVO>
 		{
 			var lst : Vector.<Field> = classDB.listAllTypes();
-			StandardWordsProxy.setNullCurrentIndex();
 			a = StandardWordsProxy.vscriptTypeWords;
 			for each ( var f : Field in lst )
-				a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, f.name ) );
+				a.push( new AutoCompleteItemVO( VDOMImage.Standard, f.name ) );
 			
 			/*if ( isFunction )
 				a.push( 'void' );*/
@@ -233,8 +231,6 @@ package net.vdombox.editors.parsers.vscript
 		public function getMemberList( text : String, pos : int, actionVO : Object ) : Vector.<AutoCompleteItemVO>
 		{
 			a = new Vector.<AutoCompleteItemVO>;
-			
-			StandardWordsProxy.setNullCurrentIndex();
 			
 			var flag : Boolean = resolve( text, pos, actionVO );
 			

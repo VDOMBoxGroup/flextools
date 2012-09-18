@@ -125,7 +125,7 @@ package net.vdombox.editors.parsers.vdomxml
 				
 				for each ( attributeDescriptionVO in attributeDescriptions )
 				{
-					a.push( StandardWordsProxy.getAutoCompleteItemVO( VDOMImage.Standard, attributeDescriptionVO.name ) );
+					a.push( new AutoCompleteItemVO( VDOMImage.Standard, attributeDescriptionVO.name ) );
 				}
 			}
 			

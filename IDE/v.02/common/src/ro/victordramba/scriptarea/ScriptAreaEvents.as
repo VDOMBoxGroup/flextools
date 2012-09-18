@@ -1016,6 +1016,8 @@ package ro.victordramba.scriptarea
 
 		private function onInputText( e : TextEvent ) : void
 		{
+			var d : Date = new Date();
+			trace( "text - " + d.time );
 			replaceSelection( e.text );
 			//_setSelection( _caret, _caret );
 			updateCaret();
