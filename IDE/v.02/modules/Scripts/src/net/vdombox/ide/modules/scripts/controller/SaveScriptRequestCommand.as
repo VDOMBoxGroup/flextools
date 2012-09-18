@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.scripts.controller
 	import mx.utils.ObjectUtil;
 	import mx.utils.UIDUtil;
 	
+	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
@@ -55,6 +56,7 @@ package net.vdombox.ide.modules.scripts.controller
 			
 			else if ( actionVO is LibraryVO )
 			{
+				HashLibraryArray.removeLibrary( LibraryVO( actionVO ).name );
 				sendNotification( Notifications.SAVE_LIBRARY, { applicationVO: selectedApplicationVO, libraryVO : actionVO as LibraryVO } );
 			}
 			

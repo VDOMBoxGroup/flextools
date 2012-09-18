@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.scripts.view
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.PythonScriptEditor;
 	import net.vdombox.editors.VScriptEditor;
 	import net.vdombox.ide.common.controller.Notifications;
@@ -117,6 +118,7 @@ package net.vdombox.ide.modules.scripts.view
 				case Notifications.BODY_STOP:
 				{
 					isActive = false;
+					HashLibraryArray.removeAll();
 					
 					break;
 				}
