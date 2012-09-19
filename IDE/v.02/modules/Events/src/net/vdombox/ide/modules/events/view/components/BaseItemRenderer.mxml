@@ -81,15 +81,16 @@
 			
 			<mx:Image height="14" width="5" source="@Embed('assets/divider_v.png')"/>
 			
-			<s:HGroup height="22"
+			<s:HGroup height="22" width="100%"
 					  left="0" right="0" verticalAlign="middle">
 				
 				<mx:Image height="16" source="{currentIcon}" width="16" />
 				
-				<s:Label id="labelDisplay" color="#FFFFFF" />
+				<s:TextInput text="{ data.name }" width="100%"
+							 borderVisible="false" contentBackgroundAlpha="0"
+							 editable="false" selectable="false"
+							 color="#FFFFFF" />
 			</s:HGroup>
-			
-			<mx:Spacer width="100%" />
 			
 		</s:HGroup>
 		
