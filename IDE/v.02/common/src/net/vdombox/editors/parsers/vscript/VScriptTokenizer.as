@@ -484,7 +484,7 @@ package net.vdombox.editors.parsers.vscript
 			}
 				
 			else if ( tp && ( tpString == "class" ||
-				tpString == "function" || tpString == "sub" ) && ( !tp2 || tp2.string.toLowerCase() != "end" ) )
+				tpString == "function" || tpString == "sub" ) && ( !tp2 || ( tp2.string.toLowerCase() != "end" && tp2.string.toLowerCase() != "exit" ) ) )
 			{
 				//for package, merge classes in the existing omonimus package
 				if ( tpString == "package" && scope.members.hasKey( tString ) )
