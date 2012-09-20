@@ -57,6 +57,7 @@ package net.vdombox.ide.modules.scripts.controller
 			else if ( actionVO is LibraryVO )
 			{
 				HashLibraryArray.removeLibrary( LibraryVO( actionVO ).name );
+				HashLibraryArray.updateLibrary( actionVO as LibraryVO );
 				sendNotification( Notifications.SAVE_LIBRARY, { applicationVO: selectedApplicationVO, libraryVO : actionVO as LibraryVO } );
 			}
 			
