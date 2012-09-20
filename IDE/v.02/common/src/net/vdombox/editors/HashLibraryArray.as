@@ -36,6 +36,11 @@ package net.vdombox.editors
 			hashLibraries[ hashLibrary.name ] = hashLibrary;
 		}
 		
+		public static function updateLibrary( libraryVO : LibraryVO ) : void
+		{
+			Add( new HashLibrary( libraryVO ) );
+		}
+		
 		public static function getLibrariesName() : Vector.<AutoCompleteItemVO>
 		{
 			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
@@ -102,7 +107,7 @@ package net.vdombox.editors
 			}
 		}
 		
-		public static function getTokensToLibratyClass( importFrom : String, importToken : String, bp : BackwardsParser, lang : String ) : Vector.<AutoCompleteItemVO>
+		public static function getTokensToLibratyClass( importFrom : String, importToken : String, bp : BackwardsParser, lang : String, all : Boolean = false ) : Vector.<AutoCompleteItemVO>
 		{
 			var len : int = bp.names.length;
 			
@@ -171,7 +176,7 @@ package net.vdombox.editors
 					var f2 : Field;
 					for each ( f2 in scope.members.toArray() )
 					{
-						if ( f2.isStatic || f2.isClassMethod || ( f2.fieldType == "var" && f2.access == "public" && f2.parent && f2.parent.name == importToken ) )
+						if ( all || f2.isStatic || f2.isClassMethod || ( f2.fieldType == "var" && f2.access == "public" && f2.parent && f2.parent.name == importToken ) )
 							a.push( StandardWordsProxy.getAutoCompleteItemVOByField( f2, true ) );
 					}
 				}
@@ -241,7 +246,7 @@ package net.vdombox.editors
 		{
 			var len : int = bp.names.length;
 			
-			bp.names[0] = importToken;
+			bp.names[0] = lang == "vscript" ? importToken.toLowerCase() : importToken;
 			
 			if ( len == 1 && importFrom == importToken || len > 1 && importFrom == bp.names[len - 1] )
 				return null;//getImportToLibraty( importFrom );
@@ -280,7 +285,16 @@ package net.vdombox.editors
 					flag = false;
 					for each ( f in scope.members.toArray() )
 					{
-						if ( f.name == bp.names[i] )
+						if ( lang == "vscript" )
+						{
+							if ( f.name.toLowerCase() == bp.names[i] )
+							{
+								scope = f;
+								flag = true;
+								break;
+							}
+						}
+						else if ( f.name == bp.names[i]  )
 						{
 							scope = f;
 							flag = true;

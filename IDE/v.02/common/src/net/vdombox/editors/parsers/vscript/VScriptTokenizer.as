@@ -446,7 +446,11 @@ package net.vdombox.editors.parsers.vscript
 			}
 			else if ( tp && tpString == "new" && tp3)
 			{
-				tp3.className = t.string;
+				var f : Field = scope.getLastRecursionField( tp3.string.toLowerCase() );
+				if ( f )
+				{
+					f.className = t.string;
+				}
 			}
 			/*else if ( t.string == "@staticmethod" )
 			{
@@ -468,7 +472,7 @@ package net.vdombox.editors.parsers.vscript
 						_members.setValue( t.string, field );
 					}
 					
-					access = "private";
+					access = "public";
 					field.access = access;
 					
 					field.parent = scope;
@@ -542,7 +546,7 @@ package net.vdombox.editors.parsers.vscript
 					_scope.type = new Multiname( "Class" );
 					try
 					{
-						_classDB.addDefinition( scope.name, field );
+						_classDB.addDefinition( _scope.name, field );
 					}
 					// failproof for syntax errors
 					catch ( e : Error )

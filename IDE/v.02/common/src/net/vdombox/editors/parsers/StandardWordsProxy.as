@@ -3,6 +3,8 @@ package net.vdombox.editors.parsers
 	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.ide.common.view.components.VDOMImage;
+	
+	import ro.victordramba.util.HashMap;
 
 	public class StandardWordsProxy
 	{
@@ -92,6 +94,46 @@ package net.vdombox.editors.parsers
 			}
 			
 			return _pythonWords;
+		}
+		
+		public static function get standardVScriptObjects() : HashMap
+		{
+			var a : HashMap = new HashMap();
+			
+			
+			//RegExp
+			var field : Field = new Field( "class", 0, "RegExp" );
+			field.members.setValue( "ignorecase", new Field( "var", 0 , "IgnoreCase" ) );
+			field.members.setValue( "global", new Field( "var", 0 , "Global" ) );
+			field.members.setValue( "test", new Field( "def", 0 , "Test" ) );
+			field.members.setValue( "replace", new Field( "def", 0 , "Replace" ) );
+			field.members.setValue( "execute", new Field( "def", 0 , "Execute" ) );
+			a.setValue("regexp", field );
+			
+			
+			//Connection
+			field = new Field( "class", 0, "Connection" );
+			field.members.setValue( "encoding", new Field( "var", 0 , "Encoding" ) );
+			field.members.setValue( "proxy", new Field( "var", 0 , "Proxy" ) );
+			field.members.setValue( "isconnected", new Field( "var", 0 , "IsConnected" ) );
+			field.members.setValue( "open", new Field( "def", 0 , "Open" ) );
+			field.members.setValue( "read", new Field( "def", 0 , "Read" ) );
+			field.members.setValue( "write", new Field( "def", 0 , "Write" ) );
+			field.members.setValue( "close", new Field( "def", 0 , "Close" ) );
+			a.setValue("connection", field );
+			
+			
+			//VDOMDBConnection
+			field = new Field( "class", 0, "VDOMDBConnection" );
+			field.members.setValue( "close", new Field( "def", 0 , "Close" ) );
+			field.members.setValue( "execute", new Field( "def", 0 , "Execute" ) );
+			field.members.setValue( "open", new Field( "def", 0 , "Open" ) );
+			field.members.setValue( "query", new Field( "def", 0 , "Query" ) );
+			
+			a.setValue("vdomdbconnection", field );
+			
+			
+			return a;
 		}
 		
 		

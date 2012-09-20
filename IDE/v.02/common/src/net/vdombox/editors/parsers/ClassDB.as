@@ -3,7 +3,6 @@ package net.vdombox.editors.parsers
 	import flash.net.registerClassAlias;
 	import flash.utils.ByteArray;
 	
-	
 	import ro.victordramba.util.HashMap;
 
 	public class ClassDB
@@ -62,9 +61,7 @@ package net.vdombox.editors.parsers
 			if (packageName == '') packageName = '-';//toplevel name is '-'
 			
 			if (!data.hasKey(packageName))
-				data.setValue(packageName, new HashMap);
-				
-			(data.getValue(packageName) as HashMap).setValue(classField.name, classField);
+				data.setValue(packageName, classField);
 		}
 		
 		/*public function listTypes(imports:HashMap):Vector.<Field>
@@ -108,14 +105,11 @@ package net.vdombox.editors.parsers
 		public function listAllTypes():Vector.<Field>
 		{
 			var a:Vector.<Field> = parentDB ? parentDB.listAllTypes() : new Vector.<Field>;
-			var pack:HashMap;
+			var pack:Field;
 			for each (pack in data.toArray())
 			{
-				for each (var field:Field in pack.toArray())
-				{
-					if (field.fieldType=='class' || field.fieldType=='interface')
-						a.push(field);
-				}
+				if (pack.fieldType=='class' || pack.fieldType=='interface')
+					a.push(pack);
 			}
 			return a;
 		}

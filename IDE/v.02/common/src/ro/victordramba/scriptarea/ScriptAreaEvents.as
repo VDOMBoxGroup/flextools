@@ -124,7 +124,7 @@ package ro.victordramba.scriptarea
 			
 			addEventListener( MouseEvent.CONTEXT_MENU, contextMenuHandler, false, 0 , true );
 			
-			t = new Timer( 2500, 1 );
+			t = new Timer( 500, 1 );
 			
 			t.addEventListener( TimerEvent.TIMER, timerHandler, false, 0, true );
 		}
@@ -469,13 +469,62 @@ package ro.victordramba.scriptarea
 			if ( controller.lang == "vscript" )
 				bp.toLowerCase();
 			
+			var f : Field = token.scope.getLastRecursionField( bp.names[0] );
+			
+			var info : Object;
+			var position : int;
+			
+			if ( f && f.className)
+			{
+				var className : String = f.className.toLowerCase();
+				var f2 : Field = token.scope.getRecursionField( className );
+				if ( !f2 )
+				{
+					var importField : Object = token.findImport( className );
+					if ( importField )
+					{
+						info = HashLibraryArray.getPositionToken( importField.source, importField.systemName, bp, controller.lang );
+						if ( !info )
+							return false;
+						position = info.position;
+						
+						if ( position != -1 )
+						{
+							if ( needGo )
+								dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.GO_TO_DEFENITION, false, false, info ) );
+							else
+								drawGoToToken( token.pos, token.string.length );
+							return true;
+						}
+					}
+				}
+				else
+				{
+					for ( var i : int = 1; i < bp.names.length; i++ )
+					{
+						name = bp.names[i];
+						
+						f2 = f2.getField( name );
+						
+						if ( !f2 || ( f2 != token.scope && f2.fieldType == "top" && controller.actionVO is ServerActionVO ) )
+							return false;
+					}
+					
+					if ( needGo )
+						goToPos( f2.pos, token.string.length );
+					else
+						drawGoToToken( token.pos, token.string.length );
+					return true;
+				}
+			}
+			
 			if ( token.parent && token.parent.imports && token.parent.imports.hasKey( bp.names[0] ) )
 			{
 				var lib : Object = token.parent.imports.getValue( bp.names[0] );
-				var info : Object = HashLibraryArray.getPositionToken( lib.source, lib.systemName, bp, controller.lang );
+				info = HashLibraryArray.getPositionToken( lib.source, lib.systemName, bp, controller.lang );
 				if ( !info )
 					return false;
-				var position : int = info.position;
+				position = info.position;
 				
 				if ( position != -1 )
 				{
@@ -1016,8 +1065,6 @@ package ro.victordramba.scriptarea
 
 		private function onInputText( e : TextEvent ) : void
 		{
-			var d : Date = new Date();
-			trace( "text - " + d.time );
 			replaceSelection( e.text );
 			//_setSelection( _caret, _caret );
 			updateCaret();
@@ -1026,7 +1073,7 @@ package ro.victordramba.scriptarea
 			e.preventDefault();
 			if ( stage )
 				stage.focus = this;
-			dipatchChange();
+			dipatchChange(e.text);
 			dipatchChangeText();
 			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_INPUT ) );
 		}
@@ -1036,14 +1083,17 @@ package ro.victordramba.scriptarea
 			lastCol = _caret - _text.lastIndexOf( NL, _caret - 1 ) - 1;
 		}
 
-		public function dipatchChange() : void
+		public function dipatchChange(text : String = "") : void
 		{
-			if ( !blocked )
+			if ( text == "." )
+			{
+				timerHandler( null );
+			}
+			else if ( !blocked )
 			{
 				blocked = true;
 				t.start();
 			}
-			
 		}
 		
 		private function timerHandler( event : TimerEvent ) : void

@@ -1,5 +1,7 @@
 package net.vdombox.editors.parsers
 {
+	import flash.filesystem.File;
+	
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	
 	import ro.victordramba.util.HashList;
@@ -55,7 +57,7 @@ package net.vdombox.editors.parsers
 		/**
 		* public, private, protected, internal or namespace
 		*/
-		public var access:String = 'internal';
+		public var access:String = 'public';
 		
 		public function addMember(field:Field, isStatic:Boolean):void
 		{
@@ -88,6 +90,8 @@ package net.vdombox.editors.parsers
 		
 		public var defaultValue:String = '';
 		
+		public var className : String;
+		
 		public function isAnnonimus():Boolean
 		{
 			return name == '(';
@@ -103,6 +107,34 @@ package net.vdombox.editors.parsers
 		{
 			if ( params.hasKey( name ) )
 				return params.getValue( name );
+			else if ( members.hasKey( name ) )
+				return members.getValue( name );
+			else
+				return null;
+		}
+		
+		public function getRecursionField( name : String ) : Field
+		{
+			if ( members.hasKey( name ) )
+				return members.getValue( name );
+			else
+			{
+				if ( parent )
+					return parent.getRecursionField( name );
+				else
+					return null;
+			}
+		}
+		
+		public function getLastRecursionField( name : String ) : Field
+		{
+			var f : Field;
+			
+			if ( parent )
+				f =  parent.getLastRecursionField( name );
+			
+			if ( f )
+				return f;
 			else if ( members.hasKey( name ) )
 				return members.getValue( name );
 			else

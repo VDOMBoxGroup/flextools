@@ -16,6 +16,7 @@ package net.vdombox.editors.parsers.vscript
 		public var mainBlockType : String = "";
 		public var blockClosed : Boolean = false;
 		public var createConstruction : Boolean = false;
+		public var className : String;
 		
 		public static const map:Dictionary = new Dictionary(true);
 		

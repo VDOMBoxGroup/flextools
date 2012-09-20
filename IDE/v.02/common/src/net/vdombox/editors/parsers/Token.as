@@ -37,10 +37,18 @@ package net.vdombox.editors.parsers
 		
 		public var error : Boolean = false;
 		
-		public var className : String;
-		
 		public function Token()
 		{
+		}
+		
+		public function findImport( name : String ) : Object
+		{
+			if ( imports && imports.hasKey( name ) )
+				return imports.getValue( name );
+			else if ( parent )
+				return parent.findImport( name );
+			else
+				return null;
 		}
 	}
 }
