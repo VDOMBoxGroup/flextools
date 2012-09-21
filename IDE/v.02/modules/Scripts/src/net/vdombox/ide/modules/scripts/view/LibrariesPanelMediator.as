@@ -122,6 +122,7 @@ package net.vdombox.ide.modules.scripts.view
 					{
 						libraries.push( body as LibraryVO );
 						librariesPanel.libraries = libraries.slice();
+						HashLibraryArray.setLibraries( libraries.slice() );
 					}
 
 					break;
@@ -144,6 +145,7 @@ package net.vdombox.ide.modules.scripts.view
 					}
 
 					librariesPanel.libraries = libraries.slice();
+					HashLibraryArray.setLibraries( libraries.slice() );
 
 					break;
 				}
