@@ -77,7 +77,7 @@ package ro.victordramba.scriptarea
 			} );
 
 
-			addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
+			addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown);
 			addEventListener( FocusEvent.KEY_FOCUS_CHANGE, function( e : FocusEvent ) : void
 			{
 				e.preventDefault();
@@ -124,7 +124,7 @@ package ro.victordramba.scriptarea
 			
 			addEventListener( MouseEvent.CONTEXT_MENU, contextMenuHandler, false, 0 , true );
 			
-			t = new Timer( 500, 1 );
+			t = new Timer( 1200, 1 );
 			
 			t.addEventListener( TimerEvent.TIMER, timerHandler, false, 0, true );
 		}
@@ -1085,7 +1085,7 @@ package ro.victordramba.scriptarea
 
 		public function dipatchChange(text : String = "") : void
 		{
-			if ( text == "." )
+			if ( text == ".")
 			{
 				timerHandler( null );
 			}

@@ -8,7 +8,7 @@ package net.vdombox.editors.parsers.vdomxml
 	import ro.victordramba.util.HashMap;
 
 
-	internal class VdomXMLTokenizer extends Tokenizer
+	public class VdomXMLTokenizer extends Tokenizer
 	{
 		public function VdomXMLTokenizer( string : String )
 		{

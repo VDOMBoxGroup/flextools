@@ -669,7 +669,6 @@ package ro.victordramba.scriptarea
 				endIndex = _selStart;
 			}
 				
-				
 			runs.push( { begin: beginIndex, end: endIndex, color: color, bold: bold, italic: italic, error : error } );
 		}
 

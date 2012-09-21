@@ -4,7 +4,10 @@ package net.vdombox.editors
 	
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.BackwardsParser;
+	import net.vdombox.editors.parsers.FactoryTokenizers;
 	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.ImportItemVO;
+	import net.vdombox.editors.parsers.LanguageVO;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.Token;
 	import net.vdombox.editors.parsers.Tokenizer;
@@ -21,6 +24,7 @@ package net.vdombox.editors
 		
 		private static var importToLibraries : HashMap = new HashMap();
 		private static var fieldToLibraries : HashMap = new HashMap();
+		private static var librariesName : Vector.<AutoCompleteItemVO>;
 		
 		public static function setLibraries( libraries : Array ) : void
 		{
@@ -29,6 +33,8 @@ package net.vdombox.editors
 			
 			for each ( library in libraries )
 				Add( new HashLibrary( library ) );
+				
+			librariesName = null;
 		}
 		
 		public static function Add( hashLibrary : HashLibrary ) : void
@@ -43,12 +49,16 @@ package net.vdombox.editors
 		
 		public static function getLibrariesName() : Vector.<AutoCompleteItemVO>
 		{
+			if ( librariesName )
+				return librariesName;
+			
 			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
 			
 			var hashLibrary : HashLibrary;
 			for each ( hashLibrary in hashLibraries )
 				a.push( new AutoCompleteItemVO( VDOMImage.Library, hashLibrary.name ) );
 				
+			librariesName = a;
 			return a;
 		}
 		
@@ -69,11 +79,7 @@ package net.vdombox.editors
 				
 				var string : String = hashLibraries[ path[0] ].libraryVO.script;
 				
-				var tokenizer : Tokenizer;
-				if ( lang == "vscript" )
-					tokenizer = new VScriptTokenizer( string );
-				else
-					tokenizer = new PythonTokenizer( string );
+				var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( lang, string );;
 				
 				while ( tokenizer.runSlice() )
 				{
@@ -93,7 +99,7 @@ package net.vdombox.editors
 				
 				if ( t && t.parent && t.parent.imports )
 				{
-					var importLibrary : Object;
+					var importLibrary : ImportItemVO;
 					for each ( importLibrary in t.parent.imports.toArray() )
 					{
 						a.push( new AutoCompleteItemVO( VDOMImage.Standard, importLibrary.name ) );
@@ -115,29 +121,24 @@ package net.vdombox.editors
 			
 			if ( len == 1 && importFrom == importToken || len > 1 && importFrom == bp.names[len - 1] )
 				return getImportToLibraty( importFrom, lang );
-			
-			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
-			
+		
 			var path : Array = importFrom.split( "." );
+			var path0 : String = path[0];
 			
-			if ( !hashLibraries.hasOwnProperty( path[0] ) )
+			if ( !hashLibraries.hasOwnProperty( path0 ) )
 				return null;
 			
 			var t : Token;
 			
-			if ( fieldToLibraries.hasKey( path[0] ) )
+			if ( fieldToLibraries.hasKey( path0 ) )
 			{
-				t = fieldToLibraries.getValue( path[0] ) as Token;;
+				t = fieldToLibraries.getValue( path0 ) as Token;;
 			}
 			else
 			{
-				var string : String = hashLibraries[ path[0] ].libraryVO.script;
+				var string : String = hashLibraries[ path0 ].libraryVO.script;
 				
-				var tokenizer : Tokenizer;
-				if ( lang == "vscript" )
-					tokenizer = new VScriptTokenizer( string );
-				else
-					tokenizer = new PythonTokenizer( string );
+				var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( lang, string );
 				
 				while ( tokenizer.runSlice() )
 				{
@@ -145,13 +146,13 @@ package net.vdombox.editors
 				}
 				
 				t = tokenizer.tokenByPos(1);
-				fieldToLibraries.setValue( path[0], t );
+				fieldToLibraries.setValue( path0, t );
 			}
 			
 			
 			var scope : Field = t.scope;
 			
-			
+			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
 			
 			if ( t && t.scope && t.scope.members )
 			{	
@@ -188,25 +189,22 @@ package net.vdombox.editors
 		public static function getTokenToLibraty( importFrom : String, importToken : String, lang : String ) : Field
 		{			
 			var path : Array = importFrom.split( "." );
+			var path0 : String = path[0];
 			
-			if ( !hashLibraries.hasOwnProperty( path[0] ) )
+			if ( !hashLibraries.hasOwnProperty( path0 ) )
 				return null;
 			
 			var t : Token;
 			
-			if ( fieldToLibraries.hasKey( path[0] ) )
+			if ( fieldToLibraries.hasKey( path0 ) )
 			{
-				t = fieldToLibraries.getValue( path[0] ) as Token;;
+				t = fieldToLibraries.getValue( path0 ) as Token;;
 			}
 			else
 			{
-				var string : String = hashLibraries[ path[0] ].libraryVO.script;
+				var string : String = hashLibraries[ path0 ].libraryVO.script;
 				
-				var tokenizer : Tokenizer;
-				if ( lang == "vscript" )
-					tokenizer = new VScriptTokenizer( string );
-				else
-					tokenizer = new PythonTokenizer( string );
+				var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( lang, string );
 				
 				while ( tokenizer.runSlice() )
 				{
@@ -214,7 +212,7 @@ package net.vdombox.editors
 				}
 				
 				t = tokenizer.tokenByPos(1);
-				fieldToLibraries.setValue( path[0], t );
+				fieldToLibraries.setValue( path0, t );
 			}
 			
 			
@@ -260,11 +258,7 @@ package net.vdombox.editors
 			
 			var string : String = libraryVO.script;
 			
-			var tokenizer : Tokenizer;
-			if ( lang == "vscript" )
-				tokenizer = new VScriptTokenizer( string );
-			else
-				tokenizer = new PythonTokenizer( string );
+			var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( lang, string );
 			
 			tokenizer.actionVO = hashLibraries[ path[0] ].libraryVO;
 			
@@ -285,7 +279,7 @@ package net.vdombox.editors
 					flag = false;
 					for each ( f in scope.members.toArray() )
 					{
-						if ( lang == "vscript" )
+						if ( lang == LanguageVO.vscript )
 						{
 							if ( f.name.toLowerCase() == bp.names[i] )
 							{

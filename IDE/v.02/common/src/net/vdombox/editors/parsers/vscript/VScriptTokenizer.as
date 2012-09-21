@@ -4,6 +4,8 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.ImportItemVO;
+	import net.vdombox.editors.parsers.LanguageVO;
 	import net.vdombox.editors.parsers.Multiname;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.Token;
@@ -324,7 +326,6 @@ package net.vdombox.editors.parsers.vscript
 		private var dimZone : Boolean = false;
 		private var scope : Field;
 		private var isStatic : Boolean = false;
-		private var isClassMethod : Boolean = false;
 		private var access : String;
 		
 		internal var topScope : Field;
@@ -363,7 +364,6 @@ package net.vdombox.editors.parsers.vscript
 				currentBlock.scope = scope;
 				
 				_members = new HashMap();
-				
 			}
 			
 			t = nextToken();
@@ -387,6 +387,7 @@ package net.vdombox.editors.parsers.vscript
 			
 			var tString : String = t.string.toLowerCase();
 			var tpString : String = tp ? tp.string.toLowerCase() : "";
+			var tp2String : String = tp2 ? tp2.string.toLowerCase() : "";
 			
 			
 			if ( ( tpString == "end" || tString == "next" || tString == "wend" || tString == "loop" ) && tp.type != Token.COMMENT )
@@ -407,9 +408,9 @@ package net.vdombox.editors.parsers.vscript
 				
 				var systemName : String = tString;
 				
-				for each ( var name : AutoCompleteItemVO in HashLibraryArray.getImportToLibraty( importFrom, "vscript" ) )
+				for each ( var name : AutoCompleteItemVO in HashLibraryArray.getImportToLibraty( importFrom, LanguageVO.vscript ) )
 				{
-					imports[ imports.length - 1 ].setValue( name.value.toLowerCase(), { name : name.value, systemName : name.value, source : importFrom } );
+					imports[ imports.length - 1 ].setValue( name.value.toLowerCase(), new ImportItemVO( name.value, name.value, importFrom ) );
 				}
 				
 				position = t.pos + t.string.length;
@@ -419,23 +420,7 @@ package net.vdombox.editors.parsers.vscript
 				if ( string.charAt( position ) == '\r' || string.charAt( position ) == '\n' )
 				{
 					importZone = false;
-					importFrom = "";
 				}
-				
-				/*if ( t.type != Token.SYMBOL )
-				{
-					imports[ imports.length - 1 ].setValue( tString, { name : tString, systemName : systemName, source : importFrom } );
-					
-					position = t.pos + tString.length;
-					while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
-						position++;
-					
-					if ( string.charAt( position ) == '\r' || string.charAt( position ) == '\n' )
-					{
-						importZone = false;
-						importFrom = "";
-					}
-				}*/
 				
 			}
 			else if ( t && tString == "use" )
@@ -448,18 +433,8 @@ package net.vdombox.editors.parsers.vscript
 			{
 				var f : Field = scope.getLastRecursionField( tp3.string.toLowerCase() );
 				if ( f )
-				{
 					f.className = t.string;
-				}
 			}
-			/*else if ( t.string == "@staticmethod" )
-			{
-				isStatic = true;
-			}
-			else if ( t.string == "@classmethod" )
-			{
-				isClassMethod = true;
-			}*/
 			else if ( dimZone )
 			{
 				if ( t.type == Token.STRING_LITERAL )
@@ -488,15 +463,13 @@ package net.vdombox.editors.parsers.vscript
 			}
 				
 			else if ( tp && ( tpString == "class" ||
-				tpString == "function" || tpString == "sub" ) && ( !tp2 || ( tp2.string.toLowerCase() != "end" && tp2.string.toLowerCase() != "exit" ) ) )
+				tpString == "function" || tpString == "sub" ) && ( !tp2 || ( tp2String != "end" && tp2String != "exit" ) ) )
 			{
 				//for package, merge classes in the existing omonimus package
 				if ( tpString == "package" && scope.members.hasKey( tString ) )
 					_scope = scope.members.getValue( tString );
 				else
 				{
-					//debug("field-"+tp.string);
-					//TODO if is "set" make it "*set"
 					if ( tpString != "class" )
 						field = new Field( "def", t.pos, t.string );
 					else
@@ -510,7 +483,7 @@ package net.vdombox.editors.parsers.vscript
 							_members.setValue( tString, field );
 						}
 					}
-					
+
 					_scope = field;
 					newLogicBlock = true;
 					
@@ -520,24 +493,10 @@ package net.vdombox.editors.parsers.vscript
 						isStatic = false;
 					}
 					
-					if ( isClassMethod ) 
-					{
-						field.isClassMethod = true;
-						isClassMethod = false;
-					}
-					
-					/*if ( t.string.slice(0, 2) == "__" )
-						access = "private";
-					else if ( t.string.slice(0, 1) == "_" )
-						access = "protected";
-					else*/
-						access = "public";
+					access = "public";
 					
 					field.access = access;
 					
-					//all interface methods are public
-					if ( scope.fieldType == "interface" )
-						field.access = "public";
 					//this is so members will have the parent set to the scope
 					field.parent = scope;
 				}
@@ -553,20 +512,6 @@ package net.vdombox.editors.parsers.vscript
 					{
 					}
 				}
-				//add current package to imports
-				if ( tp.string == "package" )
-					imports.setValue( tString + ".*", tString + ".*" );
-			}
-			/*else if ( checkNewBlock( tString, tpString ) )
-			{
-				_scope = new Field( tpString, t.pos, tString );
-			}*/
-			
-			if ( tString == ";" )
-			{
-				field = null;
-				_scope = null;
-				isStatic = false;
 			}
 				
 				//parse function params
@@ -618,7 +563,7 @@ package net.vdombox.editors.parsers.vscript
 						defParamValue += t.string;
 				}
 			}
-			if ( tp2 && tp2.string.toLowerCase() == "for" && tpString == "each" && t.type == Token.STRING_LITERAL  )
+			if ( tp2 && tp2String == "for" && tpString == "each" && t.type == Token.STRING_LITERAL  )
 			{
 				field = new Field( "var", t.pos, t.string );
 				
@@ -636,17 +581,6 @@ package net.vdombox.editors.parsers.vscript
 			else if ( tString == "=" && tp.type == Token.STRING_LITERAL )
 			{
 				parsingVariables( tp, tp2, tokens.length - 2 )
-			}
-			if ( field && tp3 && tpString == ":" )
-			{
-				if ( tp3.string == "var" || tp3.string == "const" || tp2.string == ")" )
-				{
-					if ( field.fieldType != "set" )
-					{
-						field.type = new Multiname( tString, imports[ imports.length - 1 ] );
-					}
-					field = null;
-				}
 			}
 			
 			if( newLogicBlock )
@@ -779,15 +713,7 @@ package net.vdombox.editors.parsers.vscript
 				currentBlock.imports = imports[ imports.length - 1 ];
 				currentBlock.scope = scope;
 				
-				/*_scope.parent = scope;
-				_scope.children = [];
-				scope.children.push( _scope );
-				
-				scope = _scope;*/
 				t.scope = scope;
-				
-				//info += pos + ")" + scope.parent.name + "->" + scope.name+"\n";
-				//_scope = null;
 			}
 			
 			if ( newBlock && ( tString == "then" ) )
@@ -828,7 +754,7 @@ package net.vdombox.editors.parsers.vscript
 			var prevToken : VScriptToken = tp2;
 			var curToken : VScriptToken = tp;
 			
-			if ( !tp2 || ( tp2 && tp2.string != "." ) && tp.string != "self" )
+			if ( !tp2 || ( tp2 && tp2.string != "." ) && tp.string != "this" )
 			{
 				var curStr : String = curToken.string.toLowerCase()
 				field = new Field( "var", curToken.pos, curToken.string );
@@ -963,6 +889,8 @@ package net.vdombox.editors.parsers.vscript
 				{
 					if ( currentBlock.blockType == BlockType.IF || currentBlock.blockType == BlockType.ELSE || currentBlock.blockType == BlockType.ELSEIF )
 						currentBlock.blockClosed = true;
+					else
+						setError()
 					
 					break;
 				}
@@ -971,6 +899,8 @@ package net.vdombox.editors.parsers.vscript
 				{
 					if ( currentBlock.blockType == BlockType.IF || currentBlock.blockType == BlockType.ELSE || currentBlock.blockType == BlockType.ELSEIF )
 						currentBlock.blockClosed = true;
+					else
+						setError()
 					
 					break;
 				}

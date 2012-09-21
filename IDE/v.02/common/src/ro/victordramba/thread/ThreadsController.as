@@ -113,7 +113,7 @@ package ro.victordramba.thread
 					{
 						//debug('th ready');
 						dispatchEvent(new ThreadEvent(ThreadEvent.PROGRESS, thread));
-						dispatchEvent(new ThreadEvent('threadReady', thread));
+						dispatchEvent(new ThreadEvent( ThreadEvent.THREAD_READY, thread));
 						delete list[thread];
 					}
 				}

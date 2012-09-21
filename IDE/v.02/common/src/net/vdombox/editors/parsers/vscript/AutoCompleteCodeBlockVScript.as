@@ -7,6 +7,7 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AssistMenu;
+	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 
 	public class AutoCompleteCodeBlockVScript
 	{
@@ -26,9 +27,10 @@ package net.vdombox.editors.parsers.vscript
 		
 		private function onKeyDown( e : KeyboardEvent ) : void
 		{
-			if ( e.keyCode == Keyboard.ENTER || e.keyCode == Keyboard.SPACE )
+			if ( e.keyCode == Keyboard.ENTER )
 			{
-				var currentPos : int = fld.caretIndex;
+				var currentPos : int = fld.caretIndex;				
+				
 				var curPos : int = currentPos;
 				var char : String = fld.text.charAt( curPos );
 				
@@ -41,10 +43,21 @@ package net.vdombox.editors.parsers.vscript
 					char = fld.text.charAt( --curPos );
 				}
 				
-				var t : VScriptToken = ctrl.getTokenByPos( curPos ) as VScriptToken;
+				var tokenizer : VScriptTokenizer = new VScriptTokenizer( fld.text );
+				
+				while ( tokenizer.runSlice() )
+				{
+					
+				}
+				
+				//var t : VScriptToken = ctrl.getTokenByPos( curPos ) as VScriptToken;
+				var t : VScriptToken = tokenizer.tokenByPos( currentPos ) as VScriptToken;
+				t = tokenizer.tokenByPos( t.pos - 1 ) as VScriptToken;
+				t = tokenizer.tokenByPos( t.pos - 1 ) as VScriptToken;
 				
 				if ( !t )
 					return;
+				
 				if ( e.keyCode == Keyboard.ENTER && !( e.target is PopUpMenu ) )
 				{
 					if ( t.createConstruction )
@@ -244,6 +257,11 @@ package net.vdombox.editors.parsers.vscript
 					fld.dispatchEvent( new Event( Event.CHANGE, true, false ) );
 				}
 			}
+		}
+		
+		private function applyAutocompleteCodeRun( event : ScriptAreaComponenrEvent ) : void
+		{
+			
 		}
 	}
 }
