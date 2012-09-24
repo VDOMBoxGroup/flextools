@@ -243,9 +243,9 @@
 			  paddingRight="5" gap="0" verticalAlign="middle">
 		
 		<button:WorkAreaButton id="saveButton"
-							   enabled="true" enabled.disabled="false" height="20" icon="{VDOMImage.Save}"
+							   enabled="true" enabled.disabled="false" height="20" icon="{VDOMImage.Save_White}"
 							   label="{ resourceManager.getString( 'Tree_General', 'work_area_save' ) }"
-							   highlighted="false" highlighted.unsaved="true" downColor="#D20000"/>
+							   highlighted="false" highlighted.unsaved="true" downColor="#daa440"/>
 		
 		<button:WorkAreaButton id="undoButton"
 							   enabled="false" enabled.unsaved="true" height="20" icon="{VDOMImage.Undo}" visible="false"
