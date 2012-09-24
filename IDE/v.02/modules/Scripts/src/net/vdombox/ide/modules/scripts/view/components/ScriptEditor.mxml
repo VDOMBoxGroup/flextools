@@ -298,9 +298,9 @@
 					  paddingLeft="10" paddingTop="2" paddingBottom="2">
 				
 				<button:WorkAreaButton id="saveButton"
-										   enabled="{unsaved}" height="20" icon="{VDOMImage.Save}"
+										   enabled="{unsaved}" height="20" icon="{VDOMImage.Save_White}"
 										   label="{ resourceManager.getString( 'Scripts_General', 'save' ) }" click="scriptEditor_saveHandler( event )"
-										   highlighted="{unsaved}" downColor="#D20000"/>
+										   highlighted="{unsaved}" downColor="#daa440"/>
 				
 				<button:WorkAreaButton id="undoButton"
 									   height="20" icon="{VDOMImage.Undo}"
