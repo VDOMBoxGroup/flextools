@@ -6,7 +6,7 @@ package net.vdombox.editors.parsers.vscript
 	
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
-	import net.vdombox.editors.parsers.AssistMenu;
+	import net.vdombox.editors.parsers.base.AssistMenu;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 
 	public class AutoCompleteCodeBlockVScript
@@ -51,9 +51,7 @@ package net.vdombox.editors.parsers.vscript
 				}
 				
 				//var t : VScriptToken = ctrl.getTokenByPos( curPos ) as VScriptToken;
-				var t : VScriptToken = tokenizer.tokenByPos( currentPos ) as VScriptToken;
-				t = tokenizer.tokenByPos( t.pos - 1 ) as VScriptToken;
-				t = tokenizer.tokenByPos( t.pos - 1 ) as VScriptToken;
+				var t : VScriptToken = tokenizer.token2prevByPos( currentPos ) as VScriptToken;
 				
 				if ( !t )
 					return;

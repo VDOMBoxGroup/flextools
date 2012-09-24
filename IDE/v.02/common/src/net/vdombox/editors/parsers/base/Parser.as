@@ -1,4 +1,4 @@
-package net.vdombox.editors.parsers
+package net.vdombox.editors.parsers.base
 {
 	import flash.text.TextFormat;
 	import flash.utils.ByteArray;
@@ -9,6 +9,7 @@ package net.vdombox.editors.parsers
 	
 	import ro.victordramba.thread.IThread;
 	import ro.victordramba.util.HashMap;
+	import net.vdombox.editors.parsers.ClassDB;
 
 	public class Parser implements IThread
 	{

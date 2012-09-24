@@ -1,4 +1,4 @@
-package net.vdombox.editors.parsers
+package net.vdombox.editors.parsers.base
 {
 	import flash.desktop.Clipboard;
 	import flash.desktop.ClipboardFormats;
@@ -15,6 +15,7 @@ package net.vdombox.editors.parsers
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 
 	public class AssistMenu
 	{

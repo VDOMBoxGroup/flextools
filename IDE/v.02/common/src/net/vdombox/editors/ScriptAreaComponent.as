@@ -8,7 +8,7 @@ package net.vdombox.editors
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import net.vdombox.editors.parsers.Controller;
+	import net.vdombox.editors.parsers.base.Controller;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
 	

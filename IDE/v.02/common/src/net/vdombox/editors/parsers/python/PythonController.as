@@ -8,13 +8,12 @@ package net.vdombox.editors.parsers.python
 	import flash.utils.getTimer;
 	
 	import net.vdombox.editors.HashLibraryArray;
-	import net.vdombox.editors.Location;
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
-	import net.vdombox.editors.parsers.Controller;
-	import net.vdombox.editors.parsers.Field;
-	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.editors.parsers.base.Controller;
+	import net.vdombox.editors.parsers.base.Field;
+	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
@@ -101,22 +100,6 @@ package net.vdombox.editors.parsers.python
 		public function isInScope( name : String, pos : int ) : Boolean
 		{
 			return PythonParser( parser ).newResolver().isInScope( name, pos );
-		}
-
-		public function findDefinition( index : int ) : Location
-		{
-			var field : Field = PythonParser( parser ).newResolver().findDefinition( fld.text, index );
-			if ( !field )
-				return null;
-			
-			for ( var parent : Field = field, i : int = 0; parent && i < 10; parent = parent.parent, i++ )
-			{
-				if ( parent.sourcePath )
-				{
-					return new Location( parent.sourcePath, field.pos );
-				}
-			}
-			return new Location( null, field.pos );
 		}
 		
 		public override function set actionVO( actVO : Object ) : void

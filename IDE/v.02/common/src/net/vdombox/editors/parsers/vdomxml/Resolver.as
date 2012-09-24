@@ -2,10 +2,10 @@ package net.vdombox.editors.parsers.vdomxml
 {
 
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
-	import net.vdombox.editors.parsers.BackwardsParser;
-	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.base.BackwardsParser;
+	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
-	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	
 	import ro.victordramba.util.HashMap;

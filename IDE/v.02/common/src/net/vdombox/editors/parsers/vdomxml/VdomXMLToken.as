@@ -2,7 +2,7 @@ package net.vdombox.editors.parsers.vdomxml
 {
 	import flash.utils.Dictionary;
 	
-	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.editors.parsers.base.Token;
 	
 	import ro.victordramba.util.HashMap;
 

@@ -1,4 +1,4 @@
-package net.vdombox.editors.parsers
+package net.vdombox.editors.parsers.base
 {
 	import flash.events.EventDispatcher;
 	import flash.utils.getTimer;
@@ -9,6 +9,7 @@ package net.vdombox.editors.parsers
 	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
 	
 	import ro.victordramba.thread.ThreadsController;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 
 	public class Controller extends EventDispatcher
 	{

@@ -12,7 +12,7 @@ package net.vdombox.editors.parsers.vdomxml
 	
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
-	import net.vdombox.editors.parsers.AssistMenu;
+	import net.vdombox.editors.parsers.base.AssistMenu;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;

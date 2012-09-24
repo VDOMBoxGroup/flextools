@@ -20,7 +20,7 @@ Author: Victor Dramba
 
 package ro.victordramba.util
 {
-	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.base.Field;
 
 	public class HashMap
 	{

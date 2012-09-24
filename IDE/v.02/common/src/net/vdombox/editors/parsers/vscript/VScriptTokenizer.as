@@ -3,13 +3,13 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
-	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.ImportItemVO;
 	import net.vdombox.editors.parsers.LanguageVO;
-	import net.vdombox.editors.parsers.Multiname;
+	import net.vdombox.editors.parsers.base.Multiname;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
-	import net.vdombox.editors.parsers.Token;
-	import net.vdombox.editors.parsers.Tokenizer;
+	import net.vdombox.editors.parsers.base.Token;
+	import net.vdombox.editors.parsers.base.Tokenizer;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import ro.victordramba.util.HashMap;
@@ -1082,6 +1082,17 @@ package net.vdombox.editors.parsers.vscript
 			for ( var i : int = tokens.length - 1; i >= 0; i-- )
 				if ( tokens[ i ] && pos >= tokens[ i ].pos )
 					return VScriptToken.map[ tokens[ i ].id ];
+			return null;
+		}
+		
+		public function token2prevByPos( pos : uint ) : Token
+		{
+			if ( !tokens /*|| tokens.length < 3 */)
+				return null;
+			//TODO: binary search
+			for ( var i : int = tokens.length - 1; i >= 0; i-- )
+				if ( tokens[ i ] && pos >= tokens[ i ].pos )
+					return VScriptToken.map[ tokens[ i - 2].id ];
 			return null;
 		}
 	}

@@ -11,7 +11,7 @@ package net.vdombox.editors.parsers.vscript
 	import mx.core.UIComponent;
 	
 	import net.vdombox.editors.ScriptAreaComponent;
-	import net.vdombox.editors.parsers.AssistMenu;
+	import net.vdombox.editors.parsers.base.AssistMenu;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	

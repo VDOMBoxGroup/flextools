@@ -6,7 +6,7 @@ package net.vdombox.editors.parsers.python
 	
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.ClassDB;
-	import net.vdombox.editors.parsers.Parser;
+	import net.vdombox.editors.parsers.base.Parser;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	
 	import ro.victordramba.thread.IThread;

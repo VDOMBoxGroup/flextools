@@ -1,9 +1,9 @@
 package net.vdombox.editors.parsers.vdomxml
 {
 
-	import net.vdombox.editors.parsers.Field;
-	import net.vdombox.editors.parsers.Token;
-	import net.vdombox.editors.parsers.Tokenizer;
+	import net.vdombox.editors.parsers.base.Field;
+	import net.vdombox.editors.parsers.base.Token;
+	import net.vdombox.editors.parsers.base.Tokenizer;
 	
 	import ro.victordramba.util.HashMap;
 

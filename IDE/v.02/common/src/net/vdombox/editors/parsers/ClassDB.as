@@ -4,6 +4,8 @@ package net.vdombox.editors.parsers
 	import flash.utils.ByteArray;
 	
 	import ro.victordramba.util.HashMap;
+	import net.vdombox.editors.parsers.base.Field;
+	import net.vdombox.editors.parsers.base.Multiname;
 
 	public class ClassDB
 	{

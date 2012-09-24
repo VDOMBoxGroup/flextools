@@ -4,7 +4,7 @@ package net.vdombox.editors.parsers.vdomxml
 	import flash.utils.ByteArray;
 	
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
-	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;

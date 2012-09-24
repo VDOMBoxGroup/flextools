@@ -1,4 +1,4 @@
-package net.vdombox.editors.parsers
+package net.vdombox.editors.parsers.base
 {
 	public class BackwardsParser
 	{

@@ -9,8 +9,8 @@ package ro.victordramba.scriptarea
 	
 	import mx.utils.OnDemandEventDispatcher;
 	
-	import net.vdombox.editors.parsers.Controller;
-	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.editors.parsers.base.Controller;
+	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.utils.StringUtils;

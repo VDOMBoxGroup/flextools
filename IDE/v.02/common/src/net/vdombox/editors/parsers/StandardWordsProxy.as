@@ -5,6 +5,7 @@ package net.vdombox.editors.parsers
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	
 	import ro.victordramba.util.HashMap;
+	import net.vdombox.editors.parsers.base.Field;
 
 	public class StandardWordsProxy
 	{

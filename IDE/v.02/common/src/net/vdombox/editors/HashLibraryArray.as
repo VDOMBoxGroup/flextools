@@ -3,14 +3,14 @@ package net.vdombox.editors
 	import flashx.textLayout.tlf_internal;
 	
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
-	import net.vdombox.editors.parsers.BackwardsParser;
+	import net.vdombox.editors.parsers.base.BackwardsParser;
 	import net.vdombox.editors.parsers.FactoryTokenizers;
-	import net.vdombox.editors.parsers.Field;
+	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.ImportItemVO;
 	import net.vdombox.editors.parsers.LanguageVO;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
-	import net.vdombox.editors.parsers.Token;
-	import net.vdombox.editors.parsers.Tokenizer;
+	import net.vdombox.editors.parsers.base.Token;
+	import net.vdombox.editors.parsers.base.Tokenizer;
 	import net.vdombox.editors.parsers.python.PythonTokenizer;
 	import net.vdombox.editors.parsers.vscript.VScriptTokenizer;
 	import net.vdombox.ide.common.model._vo.LibraryVO;

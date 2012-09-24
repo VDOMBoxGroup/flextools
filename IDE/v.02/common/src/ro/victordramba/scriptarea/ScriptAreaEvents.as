@@ -23,9 +23,9 @@ package ro.victordramba.scriptarea
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.editors.HashLibraryArray;
-	import net.vdombox.editors.parsers.BackwardsParser;
-	import net.vdombox.editors.parsers.Field;
-	import net.vdombox.editors.parsers.Token;
+	import net.vdombox.editors.parsers.base.BackwardsParser;
+	import net.vdombox.editors.parsers.base.Field;
+	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.model._vo.LibraryVO;

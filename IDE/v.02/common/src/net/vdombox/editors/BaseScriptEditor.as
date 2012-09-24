@@ -2,8 +2,8 @@ package net.vdombox.editors
 {
 	import flash.events.Event;
 	
-	import net.vdombox.editors.parsers.AssistMenu;
-	import net.vdombox.editors.parsers.Controller;
+	import net.vdombox.editors.parsers.base.AssistMenu;
+	import net.vdombox.editors.parsers.base.Controller;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	

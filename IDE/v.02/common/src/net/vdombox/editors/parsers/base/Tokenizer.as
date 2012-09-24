@@ -1,8 +1,9 @@
-package net.vdombox.editors.parsers
+package net.vdombox.editors.parsers.base
 {
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
 	
 	import ro.victordramba.util.HashMap;
+	import net.vdombox.editors.parsers.ClassDB;
 
 	public class Tokenizer
 	{
