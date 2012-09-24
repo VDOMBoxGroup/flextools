@@ -27,6 +27,10 @@ package net.vdombox.ide.common.view.components
 		public static var Save : Class;
 		
 		[Bindable]
+		[Embed( source = "assets/vdomimage/saveWhite.png" )]
+		public static var Save_White : Class;
+		
+		[Bindable]
 		[Embed( source = "assets/vdomimage/redo.png" )]
 		public static var Redo : Class;
 		

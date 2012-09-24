@@ -2,12 +2,12 @@ package net.vdombox.editors.parsers.python
 {
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
-	import net.vdombox.editors.parsers.base.BackwardsParser;
 	import net.vdombox.editors.parsers.ClassDB;
-	import net.vdombox.editors.parsers.base.Field;
-	import net.vdombox.editors.parsers.base.Multiname;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.StructureDB;
+	import net.vdombox.editors.parsers.base.BackwardsParser;
+	import net.vdombox.editors.parsers.base.Field;
+	import net.vdombox.editors.parsers.base.Multiname;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.editors.parsers.vdomxml.TypeDB;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
@@ -367,95 +367,103 @@ package net.vdombox.editors.parsers.python
 			var t : PythonToken = PythonToken( tokenizer.tokenByPos( bp.startPos ) );
 			if ( !t )
 				return false;
-
-			var i : int = 0;
-			var name : String = bp.names[ 0 ];
-			var itemType : String = bp.types[ 0 ];
-
-			var imports : HashMap = findImports( t );
-
-			findScopeClass( t.scope );
-
-			//1. is it in function scope chain?
-			var isStatic : Boolean = false;
-			for ( scope = t.scope; scope && ( scope.fieldType == 'def' || scope.fieldType == 'top' || scope.fieldType == 'class' ); scope = scope.parent )
+			
+			if ( StandardWordsProxy.standardPythonObjects.hasKey( t.string ) )
 			{
-				if ( scope.isStatic )
-					isStatic = true;
-				if ( scope.members.hasKey( name ) )
+				resolved = StandardWordsProxy.standardPythonObjects.getValue( t.string );
+			}
+			else
+			{
+				var i : int = 0;
+				var name : String = bp.names[ 0 ];
+				var itemType : String = bp.types[ 0 ];
+	
+				var imports : HashMap = findImports( t );
+	
+				findScopeClass( t.scope );
+	
+				//1. is it in function scope chain?
+				var isStatic : Boolean = false;
+				for ( scope = t.scope; scope && ( scope.fieldType == 'def' || scope.fieldType == 'top' || scope.fieldType == 'class' ); scope = scope.parent )
 				{
-					resolved = scope.members.getValue( name );
-					break;
+					if ( scope.isStatic )
+						isStatic = true;
+					if ( scope.members.hasKey( name ) )
+					{
+						resolved = scope.members.getValue( name );
+						break;
+					}
+					if ( scope.params.hasKey( name ) )
+					{
+						resolved = scope.params.getValue( name );
+						break;
+					}
+					if ( t.parent.imports.hasKey( name ) )
+					{
+						var impotrElement : Object = t.parent.imports.getValue( name );
+						a = HashLibraryArray.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp, "python" );
+						return true;
+						//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );
+					}
+						
 				}
-				if ( scope.params.hasKey( name ) )
+	
+				var scope : Field;
+	
+				//2. is it this or super?
+				
+				if ( name == 'self' && tokenScopeClass )
 				{
-					resolved = scope.params.getValue( name );
-					break;
-				}
-				if ( t.parent.imports.hasKey( name ) )
-				{
-					var impotrElement : Object = t.parent.imports.getValue( name );
-					a = HashLibraryArray.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp, "python" );
-					return true;
-					//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );
-				}
+					if ( resolved )
+						tokenScopeClass.members.merge( resolved.members );
+					resolved = tokenScopeClass;
 					
-			}
-
-			var scope : Field;
-
-			//2. is it this or super?
-			
-			if ( name == 'self' && tokenScopeClass )
-			{
-				if ( resolved )
-					tokenScopeClass.members.merge( resolved.members );
-				resolved = tokenScopeClass;
-				
-				for each( var field : Field in tokenScopeClass.members.toArray() )
-				{
-					if ( field.parent.name == tokenScopeClass.name )
-						resolved.members.setValue( field.name, field );
+					for each( var field : Field in tokenScopeClass.members.toArray() )
+					{
+						if ( field.parent.name == tokenScopeClass.name )
+							resolved.members.setValue( field.name, field );
+					}
 				}
-			}
-			
-			
-			if ( name == 'self' && actionVO is ServerActionVO && !tokenScopeClass )
-			{
-				a = StructureDB.getChildrenForObject( ServerActionVO( actionVO ).containerVO, bp );
-			}
-
-
-			//3. or is it in the class/inheritance scope?
-			for ( scope = tokenScopeClass; !resolved && scope; scope = classDB.resolveName(scope.extendz) )
-			{
-				var m : Field = scope.members.getValue( name );
-				if ( !m )
-					continue;
-
-				if ( scope != tokenScopeClass && m.access == 'private' )
-					continue;
-
-				//skip constructors in inheritance chain
-				if ( m.name == scope.name )
-					continue;
-
-				if ( !isStatic || m.isStatic )
-					resolved = m;
-			}
-
-			//4. last, is it an imported thing?
-			if ( !resolved && imports )
-			{
-				resolved = classDB.resolveName( new Multiname( name, imports ) );
 				
+				
+				if ( name == 'self' && actionVO is ServerActionVO && !tokenScopeClass )
+				{
+					a = StructureDB.getChildrenForObject( ServerActionVO( actionVO ).containerVO, bp );
+				}
+	
+	
+				//3. or is it in the class/inheritance scope?
+				for ( scope = tokenScopeClass; !resolved && scope; scope = classDB.resolveName(scope.extendz) )
+				{
+					var m : Field = scope.members.getValue( name );
+					if ( !m )
+						continue;
+	
+					if ( scope != tokenScopeClass && m.access == 'private' )
+						continue;
+	
+					//skip constructors in inheritance chain
+					if ( m.name == scope.name )
+						continue;
+	
+					if ( !isStatic || m.isStatic )
+						resolved = m;
+				}
+	
+				//4. last, is it an imported thing?
+				if ( !resolved && imports )
+				{
+					resolved = classDB.resolveName( new Multiname( name, imports ) );
+					
+				}
+	
+				//we didn't find the first name, we quit
+				if ( !resolved )
+					return false;
+				else if ( resolved.fieldType == 'class' && itemType == BackwardsParser.NAME && name != 'self' )
+					resolvedIsClass = true;
+			
 			}
-
-			//we didn't find the first name, we quit
-			if ( !resolved )
-				return false;
-			else if ( resolved.fieldType == 'class' && itemType == BackwardsParser.NAME && name != 'self' )
-				resolvedIsClass = true;
 			
 			checkReturnType();
 
