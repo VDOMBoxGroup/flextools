@@ -131,8 +131,9 @@
 				
 				<s:HGroup includeIn="xml, xmlDisabled">
 					<button:WorkAreaButton id="saveXMLButton"
-										   height="25" icon="{VDOMImage.Save}"
-										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_save_button_label' ) }"/>
+										   height="25" icon="{VDOMImage.Save_White}"
+										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_save_button_label' ) }"
+										   downColor="#daa440"/>
 					
 					<mx:Spacer width="5"/>
 					
