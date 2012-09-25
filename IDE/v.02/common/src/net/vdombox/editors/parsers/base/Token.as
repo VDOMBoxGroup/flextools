@@ -25,8 +25,6 @@ package net.vdombox.editors.parsers.base
 		public var pos:uint;
 		public var id:uint;
 		
-		public var posVariable:int = -1;
-		
 		public var children:Array/*of Token*/;
 		
 		public var scope:Field;//lexical scope

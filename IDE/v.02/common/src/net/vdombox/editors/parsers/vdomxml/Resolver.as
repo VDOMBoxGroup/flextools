@@ -9,6 +9,7 @@ package net.vdombox.editors.parsers.vdomxml
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	
 	import ro.victordramba.util.HashMap;
+	import net.vdombox.editors.parsers.TypeDB;
 
 
 	internal class Resolver

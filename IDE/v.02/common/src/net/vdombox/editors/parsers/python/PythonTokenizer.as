@@ -4,9 +4,10 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
+	import net.vdombox.editors.parsers.ImportItemVO;
+	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.base.Multiname;
-	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.editors.parsers.base.Tokenizer;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
@@ -481,7 +482,7 @@ package net.vdombox.editors.parsers.python
 				
 				if ( t.type != Token.SYMBOL )
 				{
-					imports[ imports.length - 1 ].setValue( t.string, { name : t.string, systemName : systemName, source : importFrom } );
+					imports[ imports.length - 1 ].setValue( t.string, new ImportItemVO( t.string, systemName, importFrom ) );
 					
 					position = t.pos + t.string.length;
 					while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
@@ -497,7 +498,8 @@ package net.vdombox.editors.parsers.python
 				{
 					for each ( var name : AutoCompleteItemVO in HashLibraryArray.getImportToLibraty( importFrom, "python" ) )
 					{
-						imports[ imports.length - 1 ].setValue( name.value, { name : name.value, systemName : name.value, source : importFrom } );
+						
+						imports[ imports.length - 1 ].setValue( name.value, new ImportItemVO( name.value, name.value, importFrom ) );
 					}
 					
 					position = t.pos + t.string.length;

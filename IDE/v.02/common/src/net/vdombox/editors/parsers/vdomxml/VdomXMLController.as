@@ -10,11 +10,12 @@ package net.vdombox.editors.parsers.vdomxml
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.base.Controller;
-	import net.vdombox.editors.parsers.vdomxml.TypeDB;
+	import net.vdombox.editors.parsers.TypeDB;
 	import net.vdombox.editors.parsers.vdomxml.VdomXMLParser;
 	
 	import ro.victordramba.thread.ThreadEvent;
 	import ro.victordramba.thread.ThreadsController;
+	import net.vdombox.editors.parsers.TypeDB;
 
 	[Event( type="flash.events.Event", name="change" )]
 

@@ -6,6 +6,7 @@ package net.vdombox.editors.parsers.vdomxml
 	import net.vdombox.editors.parsers.base.Tokenizer;
 	
 	import ro.victordramba.util.HashMap;
+	import net.vdombox.editors.parsers.TypeDB;
 
 
 	public class VdomXMLTokenizer extends Tokenizer
@@ -28,7 +29,6 @@ package net.vdombox.editors.parsers.vdomxml
 		private var param : Field;
 		private var defParamValue : String;
 		private var paramsBlock : Boolean;
-		private var imports : HashMap;
 		private var scope : Field;
 		private var isStatic : Boolean = false;
 		private var access : String;

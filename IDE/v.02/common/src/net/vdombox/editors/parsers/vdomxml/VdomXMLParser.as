@@ -8,6 +8,7 @@ package net.vdombox.editors.parsers.vdomxml
 	
 	import ro.victordramba.thread.IThread;
 	import ro.victordramba.util.HashMap;
+	import net.vdombox.editors.parsers.TypeDB;
 
 	public class VdomXMLParser implements IThread
 	{

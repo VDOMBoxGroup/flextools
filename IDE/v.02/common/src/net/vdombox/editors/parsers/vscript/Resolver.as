@@ -9,7 +9,7 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.StructureDB;
 	import net.vdombox.editors.parsers.base.Token;
-	import net.vdombox.editors.parsers.vdomxml.TypeDB;
+	import net.vdombox.editors.parsers.TypeDB;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.view.components.VDOMImage;

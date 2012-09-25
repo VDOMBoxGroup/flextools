@@ -19,7 +19,7 @@ package net.vdombox.editors.parsers.base
 		public var pos:uint;
 		
 		/**
-		 * can be: top,package,class,function,get,set,var
+		 * can be: top,class,def,var
 		 */
 		
 		public var fieldType : String;
@@ -59,13 +59,6 @@ package net.vdombox.editors.parsers.base
 		*/
 		public var access:String = 'public';
 		
-		public function addMember(field:Field, isStatic:Boolean):void
-		{
-			field.isStatic = isStatic;
-			members.setValue(field.name, field);
-		}
-		
-		
 		/**
 		 * function parameters
 		 */
@@ -91,6 +84,12 @@ package net.vdombox.editors.parsers.base
 		public var defaultValue:String = '';
 		
 		public var className : String;
+		
+		public function addMember(field:Field, isStatic:Boolean):void
+		{
+			field.isStatic = isStatic;
+			members.setValue(field.name, field);
+		}
 		
 		public function isAnnonimus():Boolean
 		{
