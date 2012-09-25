@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
-					  xmlns:editors="net.vdombox.editors.*"
 					  xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  height="100%" width="100%"
@@ -8,7 +7,7 @@
 					  preinitialize="skinnablecontainer1_preinitializeHandler(event)"
 					  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IEditor"
 					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)"
-					  xmlns:mx="library://ns.adobe.com/flex/mx">
+					  xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:vdomxml="net.vdombox.editors.parsers.vdomxml.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
@@ -368,7 +367,7 @@
 								 selectedRenderer="{ selectedRenderer }" includeIn="wysiwyg, wysiwygDisabled, normal, disabled" 
 								 mouseMove="mouseMoveOnPageRenderer(event)"/>
 
-		<editors:XMLScriptEditor id="xmlScriptEditor"
+		<vdomxml:XMLScriptEditor id="xmlScriptEditor"
 								 height="100%" width="100%"
 								 includeIn="xml, xmlDisabled"/>
 
