@@ -6,9 +6,9 @@ package net.vdombox.ide.modules.scripts.view
 	import mx.collections.ArrayCollection;
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.editors.BaseScriptEditor;
+	import net.vdombox.editors.parsers.base.BaseScriptEditor;
 	import net.vdombox.editors.HashLibraryArray;
-	import net.vdombox.editors.PythonScriptEditor;
+	import net.vdombox.editors.parsers.python.PythonScriptEditor;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.FindBoxEvent;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;

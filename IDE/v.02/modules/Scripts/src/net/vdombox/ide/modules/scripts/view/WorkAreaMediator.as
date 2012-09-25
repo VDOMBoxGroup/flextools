@@ -6,8 +6,8 @@ package net.vdombox.ide.modules.scripts.view
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.editors.HashLibraryArray;
-	import net.vdombox.editors.PythonScriptEditor;
-	import net.vdombox.editors.VScriptEditor;
+	import net.vdombox.editors.parsers.python.PythonScriptEditor;
+	import net.vdombox.editors.parsers.vscript.VScriptEditor;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.EditorEvent;
 	import net.vdombox.ide.common.events.TabEvent;
