@@ -1771,6 +1771,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 			else
 				SolidColor( backgroundRect.fill ).alpha = 0;
+			
+			attributeVO = _renderVO.getAttributeByName( "alpha" );
+			if ( attributeVO )
+				alpha = Number(attributeVO.value);
+			else
+				alpha = 1;
 
 			attributeVO = _renderVO.getAttributeByName( "bordercolor" );
 			if ( attributeVO )
