@@ -38,7 +38,7 @@ package net.vdombox.ide.core.controller
 					
 					if ( label == "Session ID error" )
 					{
-						alertWindow.state = "question";	
+						alertWindow.state = "question2";	
 						alertWindow.content += " Do you want to reconnect?"
 					}
 					else
@@ -50,7 +50,7 @@ package net.vdombox.ide.core.controller
 				case ApplicationFacade.WRITE_QUESTION:
 				{
 					alertWindow.title = ResourceManager.getInstance().getString( 'Core_General', 'wanted' );
-					alertWindow.state = "question";
+					alertWindow.state = "question3";
 					break;
 				}
 			}

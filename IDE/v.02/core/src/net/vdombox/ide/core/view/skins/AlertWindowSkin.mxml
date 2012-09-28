@@ -22,19 +22,26 @@
 			
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
 			{
-				if ( hostComponent.state == "question" )
+				if ( hostComponent.state == "question3" )
 				{
-					/*okButton.visible = true;
-					okButton.includeInLayout = true;
-					cancelButton.visible = true;*/
 					noButton.label = resourceManager.getString( 'Core_General', 'error_no' );
 					noButton.icon = no_warning;
+					okButton.icon = VDOMImage.Save;
+				}
+				else if ( hostComponent.state == "question2" )
+				{
+					cancelButton.visible = false;
+					cancelButton.includeInLayout = false;
+					noButton.label = resourceManager.getString( 'Core_General', 'error_no' );
+					okButton.label = resourceManager.getString( 'Core_General', 'error_ok' );
 				}
 				else
 				{
+					cancelButton.visible = false;
+					cancelButton.includeInLayout = false;
 					okButton.visible = false;
 					okButton.includeInLayout = false;
-					cancelButton.visible = false;
+					noButton.label = resourceManager.getString( 'Core_General', 'error_Close' );
 				}
 			}
 			
@@ -47,7 +54,8 @@
 		<s:State name="normalAndInactive" />
 		<s:State name="disabled" />
 		<s:State name="normal" />
-		<s:State name="question" />
+		<s:State name="question2" />
+		<s:State name="question3" />
 	</s:states>
 	
 	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
@@ -105,7 +113,7 @@
 				<button:VDOMButton id="noButton"
 								   label="{ resourceManager.getString( 'Core_General', 'error_Close' ) }" click="{hostComponent.noClose()}"/>
 				
-				<button:VDOMButton id="okButton" icon="{ VDOMImage.Save }"
+				<button:VDOMButton id="okButton"
 								   label="{ resourceManager.getString( 'Core_General', 'error_save' ) }" click="{hostComponent.okClose()}"/>
 				
 			</s:HGroup>

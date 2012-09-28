@@ -192,7 +192,8 @@
 			  paddingTop="12" paddingBottom="12"
 			  gap="10">
 		<mx:Image id="imageHolder"
-				  width="40" height="40"/>
+				  width="40" height="40"
+				  smoothBitmapContent="true"/>
 		
 		<s:VGroup width="45%" height="100%" gap="0">
 			
