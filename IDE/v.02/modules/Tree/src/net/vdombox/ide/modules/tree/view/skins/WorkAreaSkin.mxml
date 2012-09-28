@@ -242,10 +242,12 @@
 			  left="1" right="1" top="1"
 			  paddingRight="5" gap="0" verticalAlign="middle">
 		
-		<button:WorkAreaButton id="saveButton"
-							   enabled="true" enabled.disabled="false" height="20" icon="{VDOMImage.Save_White}"
+		<button:WorkAreaButton id="saveButton" height="20"
+							   enabled="true" enabled.disabled="false" 
+							   icon="{VDOMImage.Save}" iconDown="{VDOMImage.Save_White}"
 							   label="{ resourceManager.getString( 'Tree_General', 'work_area_save' ) }"
-							   highlighted="false" highlighted.unsaved="true" downColor="#daa440"/>
+							   highlighted="false" highlighted.unsaved="true" 
+							   backgroundDownColor="#daa440" textDownColor="#F0F0F0"/>
 		
 		<button:WorkAreaButton id="undoButton"
 							   enabled="false" enabled.unsaved="true" height="20" icon="{VDOMImage.Undo}" visible="false"
