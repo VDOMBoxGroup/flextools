@@ -22,7 +22,7 @@
 			import net.vdombox.editors.parsers.python.PythonScriptEditor;
 			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.events.EditorEvent;
-			import net.vdombox.ide.common.events.FindBoxEvent;
+			import net.vdombox.ide.modules.scripts.events.FindBoxEvent;
 			import net.vdombox.ide.common.events.PopUpWindowEvent;
 			import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 			import net.vdombox.ide.common.interfaces.IEventBaseVO;
@@ -171,7 +171,6 @@
 			protected function navigatorcontent2_creationCompleteHandler(event:FlexEvent):void
 			{
 				addEventListener(ScriptAreaComponenrEvent.TEXT_CHANGE, setStateInUnsave, true, 0, true );
-				addEventListener(ScriptAreaComponenrEvent.RENAME, renameHandler, true, 0, true );
 			}
 			
 			public function setActionVO() : void
@@ -195,79 +194,6 @@
 			{
 				dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.OPEN_PREFERENCES ) );
 			}
-			
-			private function renameHandler( event : ScriptAreaComponenrEvent ) : void
-			{
-				var oldName : String = event.detail as String;
-				var renameWindow : NameObjectWindow = new NameObjectWindow( oldName, resourceManager.getString( "Scripts_General", "create_action_window_action_title" ) );	
-				renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
-				renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
-				WindowManager.getInstance().addWindow(renameWindow, null, true);
-				
-				var words : Array;
-				
-				function applyHandler( event : PopUpWindowEvent ) : void
-				{
-					var newName : String = event.name;
-					
-					words = scriptEditor.scriptAreaComponent.findName( oldName );
-					
-					WindowManager.getInstance().removeWindow( renameWindow );
-					
-					findStringInServerActions( words )
-				}
-				
-				function cancelHandler( event : PopUpWindowEvent ) : void
-				{
-					WindowManager.getInstance().removeWindow( renameWindow );
-				}
-				
-				function findStringInServerActions( words : Array ) : void
-				{				
-					var script : String;
-					var index : int;
-					
-					var start : int = 0;
-					var end : int = 0;
-					
-					if ( actionVO.script == "" )
-						return;
-					
-					script = actionVO.script;
-					
-					var serverActionXML : XML = <script name='Find' />;
-					
-					var serverActionXMLList : XMLList = new XMLList();
-					
-					serverActionXMLList += serverActionXML;
-					
-					serverActionXML = serverActionXMLList.( @name == serverActionVO.name )[ 0 ];
-					
-					var serverActionXML2 : XML = <script name='find' />;
-					
-					for each ( index in words )  
-					{
-						start = index;
-						end = index;
-						
-						while ( script.charAt( --start ) != '\n' && start >= 0 )
-							true;
-						
-						while ( script.charAt( ++start ) == '\t' || script.charAt( ++start ) == ' ' )
-							true;
-						
-						while ( script.charAt( ++end ) != '\n' && end < script.length )
-							true;
-						
-						serverActionXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ StringUtils.getNumberLine( script, index ) } 
-							index={ index } iconType={"script"}/>);
-					}
-					
-					serverActionXML.appendChild( serverActionXML2.* );
-				}
-			}
-			
-			
 			
 		]]>
 	</fx:Script>
@@ -298,9 +224,11 @@
 					  paddingLeft="10" paddingTop="2" paddingBottom="2">
 				
 				<button:WorkAreaButton id="saveButton"
-										   enabled="{unsaved}" height="20" icon="{VDOMImage.Save_White}"
+										   enabled="{unsaved}" height="20" 
+										   icon="{VDOMImage.Save}" iconDown="{VDOMImage.Save_White}"
 										   label="{ resourceManager.getString( 'Scripts_General', 'save' ) }" click="scriptEditor_saveHandler( event )"
-										   highlighted="{unsaved}" downColor="#daa440"/>
+										   highlighted="{unsaved}" 
+										   backgroundDownColor="#daa440" textDownColor="#F0F0F0"/>
 				
 				<button:WorkAreaButton id="undoButton"
 									   height="20" icon="{VDOMImage.Undo}"
@@ -332,12 +260,6 @@
 			</s:Line>
 			
 		</s:Group>
-		
-		<!--<editors:PythonScriptEditor id="pythonScriptEditor"
-									height="100%" width="100%"
-									scriptAreaComponent="{new ScriptAreaComponent()}"/> -->
-		
-		
 		
 	</s:VGroup>
 

@@ -7,7 +7,7 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.common.events.FindBoxEvent;
+			import net.vdombox.ide.modules.scripts.events.FindBoxEvent;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			
 			[Bindable]

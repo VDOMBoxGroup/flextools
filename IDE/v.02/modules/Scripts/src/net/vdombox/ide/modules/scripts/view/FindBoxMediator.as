@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.scripts.view
 	
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.ide.common.controller.Notifications;
-	import net.vdombox.ide.common.events.FindBoxEvent;
+	import net.vdombox.ide.modules.scripts.events.FindBoxEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -147,6 +147,8 @@ package net.vdombox.ide.modules.scripts.view
 					
 				case Notifications.ALL_SERVER_ACTIONS_GETTED:
 				{
+					if ( scriptArea.currentState != "findG" )
+						return;
 					
 					findBox.findStringInServerActions( body );
 					

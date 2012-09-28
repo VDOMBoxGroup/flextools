@@ -8,7 +8,8 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.events.FindBoxEvent;
+			import net.vdombox.ide.modules.scripts.events.FindBoxEvent;
+			import net.vdombox.ide.modules.scripts.events.RenameBoxEvent;
 			
 			protected function findBox_creationCompleteHandler(event:FlexEvent):void
 			{
@@ -17,7 +18,7 @@
 				findBox.findText.setFocus();
 			}
 			
-			private function setNormalState( event : FindBoxEvent ) : void
+			private function setNormalState( event : * ) : void
 			{
 				currentState = "normal";
 			}
@@ -25,6 +26,11 @@
 			protected function group1_removeHandler(event:FlexEvent):void
 			{
 				findBox.removeEventListener( FindBoxEvent.CLOSE, setNormalState );
+			}
+			
+			protected function renameBox_creationCompleteHandler(event:FlexEvent):void
+			{
+				renameBox.addEventListener( RenameBoxEvent.CLOSE, setNormalState, false, 0 , true );
 			}
 			
 		]]>
@@ -36,6 +42,7 @@
 		<s:State name="normal"/>
 		<s:State name="find"/>
 		<s:State name="findG"/>
+		<s:State name="rename"/>
 	</s:states>
 	
 	<mx:VDividedBox width="100%" height="100%">	
@@ -43,7 +50,8 @@
 		<components:WorkArea id="workArea"
 							 height="100%" width="100%"/>
 		
-		<!--<components:RenameBox id="renameBox" width="100%"/>-->
+		<components:RenameBox id="renameBox" width="100%"
+							  includeIn="rename" creationComplete="renameBox_creationCompleteHandler(event)"/>
 		
 		<components:FindBox id="findBox" width="100%"
 							includeIn="find, findG" creationComplete="findBox_creationCompleteHandler(event)"/>

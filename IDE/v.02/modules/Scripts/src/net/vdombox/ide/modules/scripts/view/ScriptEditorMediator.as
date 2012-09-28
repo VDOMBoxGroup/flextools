@@ -6,11 +6,10 @@ package net.vdombox.ide.modules.scripts.view
 	import mx.collections.ArrayCollection;
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.editors.parsers.base.BaseScriptEditor;
 	import net.vdombox.editors.HashLibraryArray;
+	import net.vdombox.editors.parsers.base.BaseScriptEditor;
 	import net.vdombox.editors.parsers.python.PythonScriptEditor;
 	import net.vdombox.ide.common.controller.Notifications;
-	import net.vdombox.ide.common.events.FindBoxEvent;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.model.PreferencesProxy;
@@ -20,6 +19,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.modules.scripts.events.FindBoxEvent;
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 	import net.vdombox.ide.modules.scripts.model.GoToPositionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.FindBox;
@@ -88,6 +88,7 @@ package net.vdombox.ide.modules.scripts.view
 			
 			interests.push( PreferencesProxy.SELECTED_COLOR_SCHEME_CHANGE );
 			interests.push( PreferencesProxy.SELECTED_FONT_SIZE_CHANGE );
+			interests.push( Notifications.RENAME_IN_ACTION );
 			
 			return interests;
 		}
@@ -95,6 +96,7 @@ package net.vdombox.ide.modules.scripts.view
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var name : String = notification.getName();
+			var body : Object = notification.getBody();
 			
 			switch ( name )
 			{
@@ -111,6 +113,16 @@ package net.vdombox.ide.modules.scripts.view
 					
 					break;
 				}
+					
+				case Notifications.RENAME_IN_ACTION:
+				{
+					if ( scriptEditor.actionVO != body.actionVO )
+						return;
+					
+					scriptEditor.scriptEditor.scriptAreaComponent.renameByArray( body.words as Array, body.oldName as String, body.newName as String );
+					
+					break;
+				}
 			}
 		}
 
@@ -120,6 +132,7 @@ package net.vdombox.ide.modules.scripts.view
 			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_FIND, scriptEditor_openFindHandler, false, 0, true );
 			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_FIND_GLOBAL, scriptEditor_openFindGlobalHandler, false, 0, true );
 			scriptEditor.addEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode, false, 0, true );
+			scriptEditor.addEventListener( ScriptAreaComponenrEvent.RENAME, renameHandler, true, 0, true );
 			
 			scriptEditor.addEventListener( ScriptAreaComponenrEvent.GO_TO_DEFENITION, goToDefenitionHandler, true, 0, true );
 			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_PREFERENCES, openPreferences, false, 0, true );
@@ -131,6 +144,7 @@ package net.vdombox.ide.modules.scripts.view
 			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_FIND, scriptEditor_openFindHandler );
 			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_FIND_GLOBAL, scriptEditor_openFindGlobalHandler );
 			scriptEditor.removeEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode );
+			scriptEditor.removeEventListener( ScriptAreaComponenrEvent.RENAME, renameHandler, true );
 			
 			scriptEditor.removeEventListener( ScriptAreaComponenrEvent.GO_TO_DEFENITION, goToDefenitionHandler );
 			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_PREFERENCES, openPreferences);
@@ -168,6 +182,8 @@ package net.vdombox.ide.modules.scripts.view
 			
 		}	
 		
+		
+		
 		private function keyDownHandler(event:KeyboardEvent):void
 		{
 			event.stopPropagation();
@@ -190,6 +206,11 @@ package net.vdombox.ide.modules.scripts.view
 		private function scriptEditor_openFindGlobalHandler( event : ScriptEditorEvent ) : void
 		{			
 			sendNotification( Notifications.OPEN_FIND_GLOBAL_SCRIPT );
+		}
+		
+		private function renameHandler( event : ScriptAreaComponenrEvent ) : void
+		{
+			sendNotification( Notifications.OPEN_RENAME_IN_SCRIPT, { oldName : event.detail.oldName, actionVO : scriptEditor.actionVO, lang : event.detail.lang } );
 		}
 		
 		private function goToDefenitionHandler( event : ScriptAreaComponenrEvent ):void
