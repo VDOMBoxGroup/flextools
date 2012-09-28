@@ -365,9 +365,9 @@ package net.vdombox.editors
 			update()
 		}
 		
-		public function findName( findName : String ) : Array
+		public function renameByArray( words : Array, oldName : String, newName : String ) : void
 		{
-			return area.findName( findName );
+			area.renameByArray( words, oldName, newName );
 		}
 	}
 }

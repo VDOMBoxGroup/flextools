@@ -7,6 +7,7 @@ package net.vdombox.ide.common.view.components.windows
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.view.skins.windows.NameObjectWindowSkin;
 	
+	import spark.components.CheckBox;
 	import spark.components.TextInput;
 	import spark.components.Window;
 
@@ -17,9 +18,16 @@ package net.vdombox.ide.common.view.components.windows
 		[SkinPart( required="true" )]
 		public var tableName : TextInput;
 		
-		public function NameObjectWindow( __nameTable : String, __nameWindow : String )
+		[SkinPart( required="true" )]
+		public var check : CheckBox;
+		
+		public var checkNeed : Boolean;
+		
+		public function NameObjectWindow( __nameTable : String, __nameWindow : String, checkNeed : Boolean = false )
 		{
 			super();
+			
+			this.checkNeed = checkNeed;
 			
 			systemChrome	= NativeWindowSystemChrome.NONE;
 			transparent 	= true;
@@ -69,7 +77,10 @@ package net.vdombox.ide.common.view.components.windows
 		
 		public function ok_close_window(event: KeyboardEvent = null ) : void
 		{
-			dispatchEvent( new PopUpWindowEvent( PopUpWindowEvent.APPLY, null, tableName.text ) );
+			if ( check )
+				dispatchEvent( new PopUpWindowEvent( PopUpWindowEvent.APPLY, null, tableName.text, { check : check.selected } ) );
+			else
+				dispatchEvent( new PopUpWindowEvent( PopUpWindowEvent.APPLY, null, tableName.text ) );
 		}
 		
 		public function no_close_window(event: KeyboardEvent = null ) : void

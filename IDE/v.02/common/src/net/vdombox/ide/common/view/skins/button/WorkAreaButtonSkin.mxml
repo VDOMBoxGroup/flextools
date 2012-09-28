@@ -75,15 +75,15 @@
 
 	<s:states>
 
-		<s:State name="up"/>
-		<s:State name="over"/>
-		<s:State name="down"/>
-		<s:State name="disabled"/>
+		<s:State name="up" stateGroups="noHighlighted"/>
+		<s:State name="over" stateGroups="noHighlighted"/>
+		<s:State name="down" stateGroups="noHighlighted"/>
+		<s:State name="disabled" stateGroups="noHighlighted"/>
 
-		<s:State name="upAndHighlighted"/>
-		<s:State name="overAndHighlighted"/>
-		<s:State name="downAndHighlighted"/>
-		<s:State name="disabledAndHighlighted"/>
+		<s:State name="upAndHighlighted" stateGroups="highlighted"/>
+		<s:State name="overAndHighlighted" stateGroups="highlighted"/>
+		<s:State name="downAndHighlighted" stateGroups="highlighted"/>
+		<s:State name="disabledAndHighlighted" stateGroups="highlighted"/>
 	</s:states>
 
 	<!-- layer 2: fill -->
@@ -107,12 +107,12 @@
 		<s:fill>
 			<s:LinearGradient rotation="90">
 
-				<s:GradientEntry color.disabledAndHighlighted="0x900000" color.down="{hostComponent.downColor}" color.downAndHighlighted="{hostComponent.downColor}" color.overAndHighlighted="{hostComponent.downColor}"
-								 color.up="0xEAEAE8" color.upAndHighlighted="{hostComponent.downColor}"
+				<s:GradientEntry color.disabledAndHighlighted="0x900000" color.down="{hostComponent.backgroundDownColor}" color.downAndHighlighted="{hostComponent.backgroundDownColor}" color.overAndHighlighted="{hostComponent.backgroundDownColor}"
+								 color.up="0xEAEAE8" color.upAndHighlighted="{hostComponent.backgroundDownColor}"
 								 alpha="0" alpha.over="0" alpha.down="1" alpha.upAndHighlighted="1" alpha.overAndHighlighted="1" alpha.downAndHighlighted="1" alpha.disabledAndHighlighted="1"/>
 
-				<s:GradientEntry color.disabledAndHighlighted="0xD20000" color.down="{hostComponent.downColor}" color.downAndHighlighted="{hostComponent.downColor}" color.overAndHighlighted="{hostComponent.downColor}"
-								 color.up="0xCCCCCC" color.upAndHighlighted="{hostComponent.downColor}"
+				<s:GradientEntry color.disabledAndHighlighted="0xD20000" color.down="{hostComponent.backgroundDownColor}" color.downAndHighlighted="{hostComponent.backgroundDownColor}" color.overAndHighlighted="{hostComponent.backgroundDownColor}"
+								 color.up="0xCCCCCC" color.upAndHighlighted="{hostComponent.backgroundDownColor}"
 								 alpha="0" alpha.over="0" alpha.down="1" alpha.upAndHighlighted="1" alpha.overAndHighlighted="1" alpha.downAndHighlighted="1" alpha.disabledAndHighlighted="1"/>
 			</s:LinearGradient>
 		</s:fill>
@@ -122,12 +122,15 @@
 			  paddingLeft="5" paddingRight="5" verticalAlign="middle" verticalCenter="0">
 
 		<mx:Image id="buttonIcon"
-				  includeInLayout="{ hostComponent.icon ? true : false }" source="{ hostComponent.icon }"
+				  includeInLayout="{ hostComponent.icon ? true : false }" 
+				  source="{ hostComponent.icon }" 
+				  source.highlighted="{ hostComponent.iconDown ? hostComponent.iconDown : hostComponent.icon }"
 				  visible="{ hostComponent.icon ? true : false }"
 				  smoothBitmapContent="true"/>
 
-		<s:Label id="labelDisplay"
-				 width="100%"
+		<s:Label id="labelDisplay" width="100%"
+				 color="#000000" 
+				 color.highlighted="{ hostComponent.textDownColor }"
 				 textAlign="left" verticalAlign="middle"
 				 maxDisplayedLines="1"/>
 	</s:HGroup>

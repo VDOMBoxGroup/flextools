@@ -17,7 +17,13 @@ package net.vdombox.ide.common.view.components.button
 		public var icon : Object;
 		
 		[Bindable]
-		public var downColor : uint = 0xd2d2d2;
+		public var backgroundDownColor : uint = 0xd2d2d2;
+		
+		[Bindable]
+		public var iconDown : Class;
+		
+		[Bindable]
+		public var textDownColor : uint = 0x000000;
 		
 		private var _highlighted : Boolean;
 		

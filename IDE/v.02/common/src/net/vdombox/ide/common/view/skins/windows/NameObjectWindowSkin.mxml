@@ -21,6 +21,9 @@
 				tableName.text = hostComponent.nameTable;
 				tableName.selectAll();
 				tableName.setFocus();
+				
+				check.visible = hostComponent.checkNeed;
+				check.includeInLayout = hostComponent.checkNeed;
 			}
 			
 		]]>
@@ -65,6 +68,9 @@
 					<s:TextInput id="tableName"  width="100%" creationComplete="tableName_creationCompleteHandler(event)"
 								 color="#fffafc"
 								 skinClass="net.vdombox.ide.common.view.skins.TextInputBlackSkin"/>
+					
+					<s:CheckBox id="check" label="Update references" color="#999999"
+								skinClass="spark.skins.spark.CheckBoxSkin"/>
 					
 				</s:VGroup>
 				

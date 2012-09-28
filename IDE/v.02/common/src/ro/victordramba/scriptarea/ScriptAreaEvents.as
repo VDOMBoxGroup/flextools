@@ -154,7 +154,7 @@ package ro.victordramba.scriptarea
 			pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
 			contextMenu.addItem( pasteItem );
 			
-			/*str = text.substring( _selStart, _selEnd );
+			str = text.substring( _selStart, _selEnd );
 			token = controller.getTokenByPos( _selStart );
 			
 			if ( token.scope.members.hasKey( str ) )
@@ -162,7 +162,7 @@ package ro.victordramba.scriptarea
 				var renameItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_rename' ));
 				renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );
 				contextMenu.addItem( renameItem );
-			}*/
+			}
 		}
 		
 		private function copyContextMenuHandler( event : Event ) : void
@@ -182,27 +182,9 @@ package ro.victordramba.scriptarea
 		
 		private function renameContextMenuHandler( event : Event ) : void
 		{
-			dispatchEvent( new ScriptAreaComponenrEvent ( ScriptAreaComponenrEvent.RENAME, false, false, str ) );
+			dispatchEvent( new ScriptAreaComponenrEvent ( ScriptAreaComponenrEvent.RENAME, false, false, { oldName : str, lang : controller.lang } ) );
 		}
 		
-		public function findName( findName : String ) : Array
-		{
-			var words : Array = new Array();
-			var index : int = text.lastIndexOf( findName );
-			
-			while ( index != -1 )
-			{
-				token = controller.getTokenByPos( index );
-				if ( token.type == Token.STRING_LITERAL )
-				{
-					words.push( index );
-				}
-				index = text.lastIndexOf( findName, index - 1 );
-			}
-			
-			return words;
-		}
-
 		private function findWordBound( start : int, left : Boolean ) : int
 		{
 			if ( left )
@@ -1105,6 +1087,20 @@ package ro.victordramba.scriptarea
 		public function dipatchChangeText() : void
 		{
 			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_CHANGE, true, false ) );
+		}
+		
+		public function renameByArray( words : Array, oldName : String, newName : String ) : void
+		{
+			var oldNameLength : int = oldName.length;
+			var index : int;
+			for each ( var xml : XML in words )
+			{
+				index = xml.@index;
+				replaceText( index, index + oldNameLength, newName );
+			}
+			
+			dipatchChange();
+			dipatchChangeText();
 		}
 	}
 }

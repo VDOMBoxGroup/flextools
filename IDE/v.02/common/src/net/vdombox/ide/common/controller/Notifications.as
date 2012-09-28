@@ -313,6 +313,9 @@ package net.vdombox.ide.common.controller
 		
 		public static const OPEN_FIND_SCRIPT : String = "openFindScript";
 		public static const OPEN_FIND_GLOBAL_SCRIPT : String = "openFindGlobalScript";
+		public static const OPEN_RENAME_IN_SCRIPT : String = "openRenameInScript";
+		
+		public static const RENAME_IN_ACTION : String = "renameInAction";
 		
 		public static const GET_PAGES_STRUCTURE : String = "getPagesStructure";
 		public static const PAGES_STRUCTURE_GETTED : String = "pagesStructureGetted";
