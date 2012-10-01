@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.desktop.Clipboard;
 	import flash.desktop.ClipboardFormats;
 	import flash.display.DisplayObject;
+	import flash.display.Graphics;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.events.KeyboardEvent;
@@ -85,6 +86,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var statesProxy : StatesProxy;
 		private var sharedObjectProxy : SettingsApplicationProxy;
 		private var multiObjectsManipulationProxy : MultiObjectsManipulationProxy;
+		
+		private var g : Graphics;
 		
 		public function get component() : VdomObjectEditor
 		{
@@ -374,11 +377,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var listLines : Array = body.listLines as Array;
 			var element : UIComponent = body.component as UIComponent;
 			var lineVO : LineVO;
-			var line : Line;
 			
 			selectPage = statesProxy.selectedPage as IVDOMObjectVO;
 			pageRender = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
-			pageRender.linegroup.removeAllElements();
+			g = pageRender.linegroup.graphics;
+			g.clear();
+			g.lineStyle( 1, 0x0000FF );
 			
 			var strokeColor : SolidColorStroke = new SolidColorStroke();
 			strokeColor.color = 0x0000FF;
@@ -496,22 +500,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 						 || lineVO.orientationH && !needDrawHLine )
 							continue;
 					
-					line = new Line();
 					if ( lineVO.orientationH )
-					{
-						line.xFrom = lineVO.x1 - stepX;
-						line.yFrom = lineVO.y1;
-					}
+						g.moveTo( lineVO.x1 - stepX, lineVO.y1 );
 					else
-					{
-						line.xFrom = lineVO.x1;
-						line.yFrom = lineVO.y1 - stepY;
-					}
-					line.xTo = lineVO.x2;
-					line.yTo = lineVO.y2;
+						g.moveTo( lineVO.x1, lineVO.y1 - stepY );
+					
+					g.lineTo( lineVO.x2, lineVO.y2 )
 					lineVO.renderTo.setState = "select";
-					line.stroke = strokeColor;
-					pageRender.linegroup.addElement( line );
 				}
 				else
 				{
@@ -524,38 +519,27 @@ package net.vdombox.ide.modules.wysiwyg.view
 						if ( y1 < y2 )
 						{
 							for ( y1 -= stepY; y1 < y2; y1 += step + delta)
-							{
-								line = new Line();
-								line.xFrom = lineVO.x2;
-								line.yFrom = y1;
-								line.xTo = lineVO.x2;
+							{								
+								g.moveTo( lineVO.x2, y1 );
+								
 								if ( y1 < (y2 - step - delta))
-									line.yTo = y1 + step;
+									g.lineTo( lineVO.x2, y1 + step );
 								else
-									line.yTo = y2;
-								line.stroke = strokeColor;
-								pageRender.linegroup.addElement( line );
+									g.lineTo( lineVO.x2, y2 );
 							}
 						}
 						else
 						{
 							for ( y1 -= stepY; y2 < y1; y1 -= step + delta)
-							{
-								line = new Line();
-								line.xFrom = lineVO.x2;
-								line.yFrom = y1;
-								line.xTo = lineVO.x2;
+							{								
+								g.moveTo( lineVO.x2, y1 );
+								
 								if ( y1 > (y2 + step + delta))
-									line.yTo = y1 - step;
+									g.lineTo( lineVO.x2, y1 - step );
 								else
-									line.yTo = y2;
-								line.stroke = strokeColor;
-								pageRender.linegroup.addElement( line );
+									g.lineTo( lineVO.x2, y2 );
 							}
 						}
-						
-						
-						
 					}
 					else
 					{
@@ -564,33 +548,25 @@ package net.vdombox.ide.modules.wysiwyg.view
 						if ( x1 < x2 )
 						{
 							for ( x1 -= stepX ; x1 < x2; x1 += step + delta)
-							{
-								line = new Line();
-								line.xFrom = x1;
-								line.yFrom = lineVO.y2;
+							{								
+								g.moveTo( x1, lineVO.y2 );
+								
 								if ( x1 < (x2 - step - delta))
-									line.xTo = x1 + step;
+									g.lineTo( x1 + step, lineVO.y2 );
 								else
-									line.xTo = x2;
-								line.yTo = lineVO.y2;
-								line.stroke = strokeColor;
-								pageRender.linegroup.addElement( line );
+									g.lineTo( x2, lineVO.y2 );
 							}
 						}
 						else
 						{
 							for ( x1 -= stepX; x2 < x1; x1 -= step + delta)
-							{
-								line = new Line();
-								line.xFrom = x1;
-								line.yFrom = lineVO.y2;
+							{								
+								g.moveTo( x1, lineVO.y2 );
+								
 								if ( x1 > (x2 + step + delta))
-									line.xTo = x1 - step;
+									g.lineTo( x1 - step, lineVO.y2 );
 								else
-									line.xTo = x2;
-								line.yTo = lineVO.y2;
-								line.stroke = strokeColor;
-								pageRender.linegroup.addElement( line );
+									g.lineTo( x2, lineVO.y2 );
 							}
 						}
 					}
@@ -779,7 +755,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( !pageRender )
 				return;
 			
-			pageRender.linegroup.removeAllElements();
+			pageRender.linegroup.graphics.clear();
 			
 			for ( var i : int = 0; i < listStates.length; i++ )
 			{

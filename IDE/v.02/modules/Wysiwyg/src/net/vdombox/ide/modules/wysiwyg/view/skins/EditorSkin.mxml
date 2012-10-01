@@ -123,14 +123,14 @@
 							 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"/>
 					<mx:Spacer height="100%"/>
 					<s:HGroup>
-						<mx:Image source="@Embed('assets/triangle.png')" 
+						<mx:Image source="@Embed('assets/triangle.png')"
 								  smoothBitmapContent="true" 
 								  visible.xml="true" visible.wysiwyg="false"/>
 					</s:HGroup>
 				</s:VGroup>
 				
-				<s:HGroup includeIn="xml, xmlDisabled">
-					<button:WorkAreaButton id="saveXMLButton" height="25" 
+				<s:HGroup includeIn="xml, xmlDisabled" verticalAlign="middle">
+					<button:WorkAreaButton id="saveXMLButton" height="20" 
 										   icon="{VDOMImage.Save}" iconDown="{VDOMImage.Save_White}"
 										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_save_button_label' ) }"
 										   backgroundDownColor="#daa440" textDownColor="#F0F0F0"/>
@@ -142,15 +142,15 @@
 							 color="gray" verticalAlign="middle"/>
 				</s:HGroup>
 				
-				<s:HGroup gap="2">
+				<s:HGroup gap="2" verticalAlign="middle">
 					
 					<button:WorkAreaButton id="undoButton"
-										   height="25" icon="{VDOMImage.Undo}"
+										   height="20" icon="{VDOMImage.Undo}"
 										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_undo' ) }"
 										   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.UNDO ) )"/>
 					
 					<button:WorkAreaButton id="redoButton"
-										   height="25" icon="{VDOMImage.Redo}"
+										   height="20" icon="{VDOMImage.Redo}"
 										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_redo' ) }"
 										   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.REDO ) )"/>
 					
