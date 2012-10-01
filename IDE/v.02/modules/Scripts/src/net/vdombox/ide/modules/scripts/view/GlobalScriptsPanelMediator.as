@@ -79,10 +79,12 @@ package net.vdombox.ide.modules.scripts.view
 					
 				case Notifications.GLOBAL_ACTIONS_GETTED:
 				{
+					var globalActions : Array = body.globalActions as Array;
 					
-					var globalActions : Array = body.globalActions as Array
+					if ( !globalActions || globalActions.length == 0 )
+						return;
+					
 					var _applicationVO : ApplicationVO = body.applicationVO as ApplicationVO;
-					//globalScriptsPanel.actions
 					
 					var pagesXMLList : XMLList = globalScriptsPanel.actions;
 					if ( !pagesXMLList )
