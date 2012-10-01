@@ -743,7 +743,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( contetntPart.@editable )
 				_editableComponent = html;
 
-			var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + "</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
+			var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + "</head>" + "<body style=\"margin : 0px;\" >" + contetntPart.children().toString() + "</body>" + "</html>";
 
 			html.htmlText = htmlText;
 			
