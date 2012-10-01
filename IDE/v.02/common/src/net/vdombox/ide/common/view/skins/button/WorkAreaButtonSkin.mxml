@@ -119,7 +119,7 @@
 	</s:Rect>
 
 	<s:HGroup gap="5" width="100%"
-			  paddingLeft="5" paddingRight="5" verticalAlign="middle" verticalCenter="0">
+			  paddingLeft="5" paddingRight="5" verticalAlign="middle">
 
 		<mx:Image id="buttonIcon"
 				  includeInLayout="{ hostComponent.icon ? true : false }" 
@@ -128,10 +128,9 @@
 				  visible="{ hostComponent.icon ? true : false }"
 				  smoothBitmapContent="true"/>
 
-		<s:Label id="labelDisplay" width="100%"
+		<s:Label id="labelDisplay" width="100%" paddingTop="2"
 				 color="#000000" 
 				 color.highlighted="{ hostComponent.textDownColor }"
-				 textAlign="left" verticalAlign="middle"
-				 maxDisplayedLines="1"/>
+				 textAlign="left" verticalAlign="middle"/>
 	</s:HGroup>
 </s:SparkSkin>
