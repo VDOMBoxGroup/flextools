@@ -30,7 +30,6 @@ package ro.victordramba.scriptarea
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 	import net.vdombox.ide.common.view.components.windows.ScriptStructureWindow;
 	import net.vdombox.utils.WindowManager;
 

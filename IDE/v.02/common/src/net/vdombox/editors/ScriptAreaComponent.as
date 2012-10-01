@@ -206,9 +206,9 @@ package net.vdombox.editors
 			area.setSelection( beginIndex, endIndex );
 		}
 		
-		public function findText( findText : String, type : int ) : Boolean
+		public function findText( findText : String, type : int, caseSensitive : Boolean ) : Boolean
 		{
-			return area.findText( findText, type );
+			return area.findText( findText, type, caseSensitive );
 		}
 		
 		public function replaceFind( findText : String, replaceText : String, replaceAll : Boolean = false ) : void

@@ -346,7 +346,7 @@ package ro.victordramba.scriptarea
 			g.clear();
 		}
 		
-		public function findText( findText : String, type : int ) : Boolean
+		public function findText( findText : String, type : int, caseSensitive : Boolean ) : Boolean
 		{
 			clearRect();
 			
@@ -354,19 +354,20 @@ package ro.victordramba.scriptarea
 				return false;
 			
 			var index : int;
+			var string : String = caseSensitive ? text.toLocaleLowerCase() : text;
 			
 			if ( type == 0 )
 			{
-				index = text.indexOf( findText, _caret );
+				index = string.indexOf( findText, _caret );
 				
 				if ( index == -1 )
-					index = text.indexOf( findText );
+					index = string.indexOf( findText );
 			}
 			
 			else if ( type == 1 )
 			{
 				var saveInd : int = -1;
-				var ind : int = text.indexOf( findText );
+				var ind : int = string.indexOf( findText );
 				var car : int = _caret;
 				
 				while ( saveInd == -1 && ind != -1)
@@ -374,7 +375,7 @@ package ro.victordramba.scriptarea
 					while ( ind < car && ind != -1 )
 					{
 						saveInd = ind;
-						ind = text.indexOf( findText, ind + 1 );
+						ind = string.indexOf( findText, ind + 1 );
 					}
 					
 					if ( saveInd == -1 )
@@ -385,13 +386,13 @@ package ro.victordramba.scriptarea
 			}
 			else if ( type == 2 )
 			{
-				index = text.indexOf( findText, _caret );
+				index = string.indexOf( findText, _caret );
 				
 				if ( index == _caret )
-					index = text.indexOf( findText, _caret + 1 );
+					index = string.indexOf( findText, _caret + 1 );
 				
 				if ( index == -1 )
-					index = text.indexOf( findText );
+					index = string.indexOf( findText );
 			}
 			
 			if ( index == -1 )
