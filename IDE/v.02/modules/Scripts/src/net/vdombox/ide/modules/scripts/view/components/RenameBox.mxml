@@ -45,8 +45,8 @@
 				while ( index != -1 )
 				{
 					token = tokenizer.tokenByPos( index );
-					if ( token.type == Token.STRING_LITERAL || token.type == Token.NAMECLASS ||
-						token.type == Token.NAMEFUNCTION )
+					if ( token.string == findName && ( token.type == Token.STRING_LITERAL || token.type == Token.NAMECLASS ||
+						token.type == Token.NAMEFUNCTION ) )
 					{
 						words.push( index );
 					}
@@ -112,7 +112,7 @@
 			
 			protected function renameButton_clickHandler(event:MouseEvent):void
 			{
-				var renameWindow : NameObjectWindow = new NameObjectWindow( oldName, resourceManager.getString( "Scripts_General", "create_action_window_action_title" ) );	
+				var renameWindow : NameObjectWindow = new NameObjectWindow( oldName, resourceManager.getString( "Scripts_General", "rename_variable_window_action_title" ) );	
 				renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 				renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 				WindowManager.getInstance().addWindow(renameWindow, this, true);

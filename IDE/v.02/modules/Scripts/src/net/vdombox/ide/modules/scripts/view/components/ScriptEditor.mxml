@@ -28,7 +28,6 @@
 			import net.vdombox.ide.common.interfaces.IEventBaseVO;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 			import net.vdombox.ide.modules.scripts.events.EditAreaEvent;
 			import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 			import net.vdombox.utils.StringUtils;

@@ -72,7 +72,9 @@
 			
 			protected function findText_changeHandler(event:TextOperationEvent):void
 			{				
-				findResult = selectedScriptAreaComponent.findText( findText.text, 0 );
+				findString = caseSensitive.selected ? findText.text.toLocaleLowerCase() : findText.text;
+				
+				findResult = selectedScriptAreaComponent.findText( findString, 0, caseSensitive.selected );
 				
 				if ( findResult || findText.text == "" || currentState == "global" )
 					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
@@ -84,7 +86,9 @@
 			{
 				lastButton = previous;
 				
-				findResult = selectedScriptAreaComponent.findText( findText.text, 1 );
+				findString = caseSensitive.selected ? findText.text.toLocaleLowerCase() : findText.text;
+				
+				findResult = selectedScriptAreaComponent.findText( findText.text, 1, caseSensitive.selected );
 				
 				if ( findResult || findText.text == "" )
 					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
@@ -96,7 +100,9 @@
 			{
 				lastButton = next;
 				
-				findResult = selectedScriptAreaComponent.findText( findText.text, 2 );
+				findString = caseSensitive.selected ? findText.text.toLocaleLowerCase() : findText.text;
+				
+				findResult = selectedScriptAreaComponent.findText( findText.text, 2, caseSensitive.selected );
 				
 				if ( findResult || findText.text == "" )
 					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
@@ -139,7 +145,7 @@
 				containerActionsCode = [];
 				_containerPages = [];
 				_containerActions = [];
-				findString = findText.text;
+				findString = caseSensitive.selected ? findText.text.toLowerCase() : findText.text;
 				
 				if ( findString == "" )
 					return;
@@ -160,6 +166,7 @@
 				
 				var serverActionVO : ServerActionVO;
 				var script : String;
+				var scriptLower : String;
 				var index : int;
 				
 				var start : int = 0;
@@ -171,8 +178,9 @@
 						continue;
 					
 					script = serverActionVO.script;
+					scriptLower = caseSensitive.selected ? serverActionVO.script.toLocaleLowerCase() : serverActionVO.script;
 					
-					index = script.indexOf( findString );
+					index = scriptLower.indexOf( findString );
 					
 					if ( index == -1 )
 						continue;
@@ -214,7 +222,7 @@
 						
 						serverActionXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ StringUtils.getNumberLine( script, index ) } 
 														index={ index } actionID={ actionID } pageID={ pageVO.id } iconType={"script"}/>);
-						index = script.indexOf( findString, end );
+						index = scriptLower.indexOf( findString, end );
 					}
 					
 					serverActionXML.appendChild( serverActionXML2.* );
@@ -281,11 +289,14 @@
 				var start : int = 0;
 				var end : int = 0;
 				var script: String;
+				var scriptLower: String;
 				
 				for each ( libraryVO in libraries )
 				{
 					script = libraryVO.script;
-					index = script.indexOf( findString );
+					scriptLower = caseSensitive.selected ? libraryVO.script.toLocaleLowerCase() : libraryVO.script;
+					
+					index = scriptLower.indexOf( findString );
 					
 					if ( index == -1 )
 						continue;
@@ -317,7 +328,7 @@
 						
 						libraryXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ StringUtils.getNumberLine( script, index ) } index={ index }
 												iconType={"script"} actionID={ libraryVO.name }/>);
-						index = script.indexOf( findString, end );
+						index = scriptLower.indexOf( findString, end );
 					}
 					
 					libraryXML.appendChild( libraryXML2.* );
@@ -396,6 +407,8 @@
 				<button:WorkAreaButton id="find" label="Find" icon="{ VDOMImage.Search }"
 									   includeIn="global"
 									   click="find_clickHandler(event)"/>
+				
+				<s:CheckBox id="caseSensitive" label="{ resourceManager.getString( 'Scripts_General', 'caseSensitive' ) }"/>
 				
 			</s:HGroup>
 			
