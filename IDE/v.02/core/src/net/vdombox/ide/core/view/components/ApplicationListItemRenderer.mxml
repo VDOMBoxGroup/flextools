@@ -202,7 +202,7 @@
 			
 			<mx:Spacer height="100%" />
 			
-			<s:Label id="version" color="#8b8787"/>
+			<s:Label id="version" color="#fffafc"/>
 			
 		</s:VGroup>
 		
@@ -219,7 +219,7 @@
 						editable="false"
 						selectable="false"
 						borderVisible="false"
-						color="#8b8787"
+						color="#fffafc"
 						fontFamily="Arial"
 						fontSize="10" 
 						paddingLeft="0"

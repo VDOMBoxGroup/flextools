@@ -4,7 +4,6 @@
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  width="100%"
 		  height="100%"
-		  paddingRight="10"
 		  xmlns:components="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 
 	<fx:Script>
