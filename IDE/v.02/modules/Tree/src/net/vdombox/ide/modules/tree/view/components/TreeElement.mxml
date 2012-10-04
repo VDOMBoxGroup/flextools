@@ -15,10 +15,10 @@
 			import mx.binding.utils.ChangeWatcher;
 			import mx.controls.Image;
 			import mx.core.UIComponent;
-			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.events.ResizeEvent;
 			
+			import net.vdombox.ide.common.events.PopUpWindowEvent;
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
@@ -356,9 +356,9 @@
 			{
 				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 				
-				Alert.Show( "Are you sure want to delete " + nameAttribute + " ?",AlertButton.OK_No, this.parentApplication, deleteHandler);
+				Alert.Show( "Delete page", "Are you sure want to delete " + nameAttribute + " ?",AlertButton.OK_No, this.parentApplication, deleteHandler);
 				
-				function deleteHandler(event : CloseEvent) : void
+				function deleteHandler(event : PopUpWindowEvent) : void
 				{
 					if (event.detail == Alert.YES)
 					{
