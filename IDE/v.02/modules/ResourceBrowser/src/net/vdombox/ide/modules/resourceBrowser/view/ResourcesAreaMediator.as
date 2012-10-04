@@ -15,12 +15,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.view.components.VDOMImage;
@@ -262,11 +262,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			
 			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 			
-			Alert.Show( "Are you sure want to delete\n " + componentName + " ?", 
+			Alert.Show( ResourceManager.getInstance().getString( 'ResourceBrowser_General', 'delete_Resource' ),
+				ResourceManager.getInstance().getString( 'ResourceBrowser_General', 'delete_Renderer' ) + "\n" + componentName + " ?", 
 				AlertButton.OK_No, 
 				resourcesArea, deleteResourceCloseHandler);
 			
-			function deleteResourceCloseHandler(event2 : CloseEvent) : void
+			function deleteResourceCloseHandler(event2 : PopUpWindowEvent) : void
 			{
 				if ( event2.detail == Alert.YES )
 				{
