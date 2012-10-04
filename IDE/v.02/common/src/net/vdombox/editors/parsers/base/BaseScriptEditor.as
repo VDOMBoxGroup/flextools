@@ -2,11 +2,11 @@ package net.vdombox.editors.parsers.base
 {
 	import flash.events.Event;
 	
+	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	
 	import spark.components.SkinnableContainer;
-	import net.vdombox.editors.ScriptAreaComponent;
 
 	public class BaseScriptEditor extends SkinnableContainer
 	{
@@ -45,6 +45,11 @@ package net.vdombox.editors.parsers.base
 		protected function initiaize() : void
 		{
 			
+		}
+		
+		public function set autoShowAutoComplete( value : Boolean ) : void
+		{
+			assistMenu.autoShowAutoComplete = value;
 		}
 	}
 }

@@ -1,7 +1,9 @@
 package net.vdombox.ide.common.view.components.windows
 {
 	import flash.desktop.Icon;
+	import flash.display.NativeWindowSystemChrome;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.EventPhase;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
@@ -11,19 +13,20 @@ package net.vdombox.ide.common.view.components.windows
 	import mx.core.FlexGlobals;
 	import mx.core.IFlexDisplayObject;
 	import mx.core.UIComponent;
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.ISystemManager;
 	import mx.managers.PopUpManager;
 	
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.button.VDOMButton;
 	import net.vdombox.ide.common.view.skins.windows.AlertSkin;
+	import net.vdombox.utils.WindowManager;
 	
 	import spark.components.Label;
-	import spark.components.TitleWindow;
+	import spark.components.Window;
 
-	public class Alert extends TitleWindow
+	public class Alert extends Window
 	{
 		
 		[SkinPart( required="true" )]
@@ -125,6 +128,16 @@ package net.vdombox.ide.common.view.components.windows
 				if ( !instance )
 				{
 					super();
+					
+					width = 400;
+					height = 150;
+					minWidth = 400;
+					minHeight = 150;
+					maxWidth = 400;
+					maxHeight = 150;
+					systemChrome = NativeWindowSystemChrome.NONE;
+					transparent = true;
+					
 					this.setFocus();
 				}
 				else
@@ -139,7 +152,8 @@ package net.vdombox.ide.common.view.components.windows
 			this.setStyle( "skinClass", AlertSkin );
 		}
 		
-		public static function Show( label:String = "",
+		public static function Show( title : String = "",
+							  label:String = "",
 						      buttonView : uint = 0x0256, 
 							  parent:Object = null, 
 							  closeHandler:Function = null): net.vdombox.ide.common.view.components.windows.Alert
@@ -156,16 +170,18 @@ package net.vdombox.ide.common.view.components.windows
 			
 			var alert : Alert = Alert.getInstance();
 			
-			
+			alert.title = title;
 			alert.text = label;
 			
 			if (closeHandler != null)
-				alert.addEventListener(CloseEvent.CLOSE, closeHandler);
+				alert.addEventListener(PopUpWindowEvent.CLOSE, closeHandler);
 			
 			alert.addEventListener(FlexEvent.CREATION_COMPLETE, static_creationCompleteHandler);
-			alert.addEventListener(CloseEvent.CLOSE, removeAlert);
+			alert.addEventListener(PopUpWindowEvent.CLOSE, removeAlert);
+			alert.addEventListener(Event.CLOSE, clearAlert);
 			alert.addEventListener(KeyboardEvent.KEY_DOWN, keysHandler);
-			PopUpManager.addPopUp( alert, parent as UIComponent, true);
+			//PopUpManager.addPopUp( alert, parent as UIComponent, true);
+			WindowManager.getInstance().addWindow( alert, parent as UIComponent, true );
 			return alert;
 		}
 		
@@ -185,14 +201,25 @@ package net.vdombox.ide.common.view.components.windows
 				
 				alert.setActualSize(alert.getExplicitOrMeasuredWidth(),
 					alert.getExplicitOrMeasuredHeight());
-				PopUpManager.centerPopUp(IFlexDisplayObject(alert));
 			}
 		}
 		
-		private static function removeAlert(event : CloseEvent) : void
+		private static function removeAlert(event : PopUpWindowEvent) : void
 		{
 			var alert : Alert = Alert.getInstance();
-			mx.managers.PopUpManager.removePopUp(alert);
+			
+			WindowManager.getInstance().removeWindow( alert );
+			
+			clearAlert();
+		}
+		
+		private static function clearAlert(event : Event = null) : void
+		{
+			var alert : Alert = Alert.getInstance();
+			alert.removeEventListener( Event.CLOSE, clearAlert );
+			alert.removeEventListener(PopUpWindowEvent.CLOSE, removeAlert);
+			alert.removeEventListener(KeyboardEvent.KEY_DOWN, keysHandler);
+			
 			instance = null;
 			
 			_yesLabel = "Yes";
@@ -202,6 +229,8 @@ package net.vdombox.ide.common.view.components.windows
 			_noImage = null;
 			_cancelImage = null;
 		}
+		
+		
 			
 		public function keyNoPush(event : KeyboardEvent) : void
 		{
@@ -226,9 +255,9 @@ package net.vdombox.ide.common.view.components.windows
 			var alert : Alert = Alert.getInstance();
 			alert.visible = false;
 			
-			var closeEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
-			closeEvent.detail = type;
-			alert.dispatchEvent(closeEvent);
+			var popUpWindowEvent:PopUpWindowEvent = new PopUpWindowEvent(PopUpWindowEvent.CLOSE);
+			popUpWindowEvent.detail = type;
+			alert.dispatchEvent(popUpWindowEvent);
 		}
 
 	}

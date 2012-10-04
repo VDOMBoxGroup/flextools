@@ -455,7 +455,7 @@ package ro.victordramba.scriptarea
 			var info : Object;
 			var position : int;
 			
-			if ( f && f.className)
+			if ( f && f.className && bp.names.length > 1 )
 			{
 				var className : String = f.className.toLowerCase();
 				var f2 : Field = token.scope.getRecursionField( className );

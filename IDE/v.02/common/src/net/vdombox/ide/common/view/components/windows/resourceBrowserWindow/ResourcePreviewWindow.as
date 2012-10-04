@@ -11,7 +11,6 @@ package net.vdombox.ide.common.view.components.windows.resourceBrowserWindow
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
 	import mx.core.FlexSprite;
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	

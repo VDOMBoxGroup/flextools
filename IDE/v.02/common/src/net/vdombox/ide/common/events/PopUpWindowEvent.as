@@ -13,6 +13,7 @@ package net.vdombox.ide.common.events
 		
 		public static var APPLY : String = "apply";
 		public static var CANCEL : String = "cancelw";
+		public static var CLOSE : String = "popUpClose";
 		
 		
 		public function PopUpWindowEvent(type : String, _base : PageVO = null, _name : String = "", detail : Object = null )

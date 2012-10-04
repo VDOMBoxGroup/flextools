@@ -4,7 +4,6 @@ package net.vdombox.ide.common.view.components.windows
 	import flash.ui.Keyboard;
 	
 	import mx.core.Window;
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	

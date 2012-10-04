@@ -2,7 +2,7 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/mx"
-		maxWidth="450" xmlns:components="net.vdombox.components.*"
+		maxWidth="400" xmlns:components="net.vdombox.components.*"
 		creationComplete="sparkskin2_creationCompleteHandler(event)"
 		removedFromStage="sparkskin2_removedFromStageHandler(event)" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<!-- host component -->
@@ -53,6 +53,8 @@
 	
 	<!-- states -->
 	<s:states>
+		<s:State name="disabledAndInactive"/>
+		<s:State name="normalAndInactive" />
 		<s:State name="inactiveWithControlBar" />
 		<s:State name="inactive" />
 		<s:State name="disabledWithControlBar" />
@@ -67,37 +69,53 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:Group left="9" top="9" right="9" bottom="9">
-		<s:Rect width="100%" height="100%">
-			<s:fill>
-				<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
-			</s:fill>
-		</s:Rect>
+	<s:VGroup left="9" top="9" right="9" bottom="9">
+		<s:Group width="100%" minHeight="32">
+			<s:TitleBar id="titleBar"
+						minHeight="32" width="100%"
+						skinClass="net.vdombox.ide.common.view.skins.PopupWindowTitleBarSkin"/>
+		</s:Group>	
 		
-		<s:VGroup width="100%" height="100%" maxWidth="320" 
-				  paddingTop="20" paddingBottom="10" paddingLeft="20" paddingRight="20" gap="30" horizontalAlign="center">
-			<s:Label id="lbltext" maxWidth="320" textAlign="center"
-					 fontSize="16" color="#FFFFFF" text="{hostComponent.text}"/>
+		<s:Group width="100%" height="100%">
 			
-			<s:HGroup height="29" width="100%" horizontalAlign="center" gap="40">
-				<button:VDOMButton  id="noButton" tabIndex="-1" select="true"
-							icon="{hostComponent.getNoImage()}" label="{hostComponent.getNoLabel()}"
-							visible="{hostComponent.getVisibleTypeButton() == 'ok' ? false : true}" includeInLayout="{hostComponent.getVisibleTypeButton() == 'ok' ? false : true}"
-							click="hostComponent.btnClickHandler(Alert.NO)" keyDown="hostComponent.keyNoPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
-				<button:VDOMButton  id="yesButton" tabIndex="-1"
-							icon="{hostComponent.getYesImage()}" label="{hostComponent.getYesLabel()}"
-							click="hostComponent.btnClickHandler(Alert.YES)" keyDown="hostComponent.keyYesPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
-				<button:VDOMButton  id="cancelButton" tabIndex="-1" select="true"
-									icon="{hostComponent.getCancelImage()}" label="{hostComponent.getCancelLabel()}"
-									visible="{hostComponent.getVisibleTypeButton() == 'okNoCancel' ? true : false}" includeInLayout="{hostComponent.getVisibleTypeButton() == 'okNoCancel' ? true : false}"
-									click="hostComponent.btnClickHandler(Alert.CANCEL)" keyDown="hostComponent.keyNoPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
-			</s:HGroup>
-		</s:VGroup>
+			<s:Rect width="100%" height="100%">
+				<s:fill>
+					<s:SolidColor color="#2f2f2f" />
+				</s:fill>
+			</s:Rect>
 		
-	</s:Group>
-	
-	
-	
-	
-	
+			<s:VGroup width="100%" height="100%"
+					  paddingTop="20" horizontalAlign="center">
+				<s:Label id="lbltext" maxWidth="382" textAlign="center"
+						 fontSize="16" color="#FFFFFF" text="{hostComponent.text}"/>
+				
+				<mx:Spacer height="100%"/>
+				
+				<s:Group width="100%" height="36">
+					
+					<s:Rect width="100%" height="100%">
+						<s:fill>
+							<s:SolidColor color="#3a3a3a" />
+						</s:fill>
+					</s:Rect>
+					
+					<s:HGroup height="36" width="100%" horizontalAlign="center" gap="40">
+						<button:VDOMButton  id="noButton" tabIndex="-1" select="true"
+									icon="{hostComponent.getNoImage()}" label="{hostComponent.getNoLabel()}"
+									visible="{hostComponent.getVisibleTypeButton() == 'ok' ? false : true}" includeInLayout="{hostComponent.getVisibleTypeButton() == 'ok' ? false : true}"
+									click="hostComponent.btnClickHandler(Alert.NO)" keyDown="hostComponent.keyNoPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
+						<button:VDOMButton  id="yesButton" tabIndex="-1"
+									icon="{hostComponent.getYesImage()}" label="{hostComponent.getYesLabel()}"
+									click="hostComponent.btnClickHandler(Alert.YES)" keyDown="hostComponent.keyYesPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
+						<button:VDOMButton  id="cancelButton" tabIndex="-1" select="true"
+											icon="{hostComponent.getCancelImage()}" label="{hostComponent.getCancelLabel()}"
+											visible="{hostComponent.getVisibleTypeButton() == 'okNoCancel' ? true : false}" includeInLayout="{hostComponent.getVisibleTypeButton() == 'okNoCancel' ? true : false}"
+											click="hostComponent.btnClickHandler(Alert.CANCEL)" keyDown="hostComponent.keyNoPush(event)" tabFocusEnabled="false" tabEnabled="false"/>
+					</s:HGroup>
+					
+				</s:Group>	
+			</s:VGroup>
+		</s:Group>	
+		
+	</s:VGroup>
 </s:SparkSkin>

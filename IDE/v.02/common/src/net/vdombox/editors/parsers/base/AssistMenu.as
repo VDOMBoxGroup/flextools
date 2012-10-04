@@ -14,8 +14,8 @@ package net.vdombox.editors.parsers.base
 	
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
-	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
+	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 
 	public class AssistMenu
 	{
@@ -34,6 +34,8 @@ package net.vdombox.editors.parsers.base
 		
 		protected var menuStr : String;
 		protected var tooltipCaret : int;
+		
+		public var autoShowAutoComplete : Boolean = true;
 		
 		public function AssistMenu( field : ScriptAreaComponent, ctrl : Controller, stage : Stage, onComplete : Function )
 		{
@@ -85,8 +87,9 @@ package net.vdombox.editors.parsers.base
 		}
 		
 		protected function onTextInput( e : ScriptAreaComponenrEvent ) : void
-		{				
-			triggerAssist(false);
+		{			
+			if ( autoShowAutoComplete )
+				triggerAssist(false);
 		}	
 		
 		private function onPressNavigationKeyHandler( e : ScriptAreaComponenrEvent ) : void
