@@ -6,7 +6,6 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import flash.ui.ContextMenuItem;
 	
 	import mx.collections.ArrayList;
-	import mx.events.CloseEvent;
 	
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
@@ -74,9 +73,11 @@ package net.vdombox.ide.modules.dataBase.view.components
 		{
 			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 			
-			Alert.Show(resourceManager.getString( "DataBase_General", "delete_table" ) + "?" ,AlertButton.OK_No, parentApplication, closeHandler);
+			Alert.Show(resourceManager.getString( "DataBase_General", "delete_table" ),
+					   resourceManager.getString( "DataBase_General", "delete_Renderer" ),
+					   AlertButton.OK_No, parentApplication, closeHandler);
 			
-			function closeHandler( event : CloseEvent ) : void
+			function closeHandler( event : PopUpWindowEvent ) : void
 			{
 				if (event.detail == Alert.YES)
 					dispatchEvent( new TableElementEvent ( TableElementEvent.DELETE ) );

@@ -6,12 +6,12 @@
 		 xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
 		<![CDATA[
-			import mx.events.CloseEvent;
 			import mx.events.DataGridEvent;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
 			import mx.utils.UIDUtil;
 			
+			import net.vdombox.ide.common.events.PopUpWindowEvent;
 			import net.vdombox.ide.common.model._vo.ObjectVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.components.button.AlertButton;
@@ -136,7 +136,9 @@
 				{
 					if( newStructureVO.name.indexOf( " " ) != -1 )
 					{
-						Alert.Show( resourceManager.getString( 'DataBase_General', 'data_table_structure_space_in_name_column_dialog' ), AlertButton.OK, this, null );
+						Alert.Show( resourceManager.getString( 'DataBase_General', 'data_table_structure_space_in_name_column_dialog_title' ), 
+									resourceManager.getString( 'DataBase_General', 'data_table_structure_space_in_name_column_dialog' ), 
+									AlertButton.OK, this, null );
 						return;
 					}
 					
@@ -220,10 +222,12 @@
 				if ( selectedItem.name == "id" )
 					return;
 				
-				Alert.Show( resourceManager.getString( 'DataBase_General', 'data_table_structure_delete_dialog' ), AlertButton.OK_No, this, removeSelectedColRequest );
+				Alert.Show( resourceManager.getString( 'DataBase_General', 'data_table_structure_delete_dialog_title' ),
+					resourceManager.getString( 'DataBase_General', 'data_table_structure_delete_dialog' ), 
+					AlertButton.OK_No, this, removeSelectedColRequest );
 			}
 			
-			private function removeSelectedColRequest( event : CloseEvent ) : void 
+			private function removeSelectedColRequest( event : PopUpWindowEvent ) : void 
 			{
 				/* Applying changes */
 				if ( event.detail == Alert.NO )

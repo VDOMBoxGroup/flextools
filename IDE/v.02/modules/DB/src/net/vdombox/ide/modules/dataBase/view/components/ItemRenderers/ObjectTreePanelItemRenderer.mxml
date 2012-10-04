@@ -8,7 +8,6 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
-			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
@@ -157,9 +156,11 @@
 			{
 				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 				
-				Alert.Show(resourceManager.getString( "DataBase_General", "delete_table" ) + "?" ,AlertButton.OK_No, parentApplication, closeHandler);
+				Alert.Show(resourceManager.getString( "DataBase_General", "delete_table" ),
+						   resourceManager.getString( "DataBase_General", "delete_Renderer" ),
+						   AlertButton.OK_No, parentApplication, closeHandler);
 				
-				function closeHandler( event : CloseEvent ) : void
+				function closeHandler( event : PopUpWindowEvent ) : void
 				{
 					if (event.detail == Alert.YES)
 					{
