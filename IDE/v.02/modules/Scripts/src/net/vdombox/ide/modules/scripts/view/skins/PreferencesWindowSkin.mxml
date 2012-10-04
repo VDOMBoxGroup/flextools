@@ -41,6 +41,11 @@
 				}
 			}
 			
+			protected function autocompleteAutoShow_creationCompleteHandler(event:FlexEvent):void
+			{
+				autocompleteAutoShow.selected = hostComponent.autoShowAutocomplete
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -92,6 +97,17 @@
 							creationComplete="colorShemes_creationCompleteHandler(event)"/>
 			
 		</s:HGroup>
+		
+		<s:HGroup width="100%" paddingLeft="10" paddingRight="10" verticalAlign="middle">
+			
+			<s:CheckBox id="autocompleteAutoShow" 
+						label="Shows an autocomplete only by pressing Ctrl+Space" color="#EEEEEE"
+						skinClass="spark.skins.spark.CheckBoxSkin"
+						selected="{ hostComponent.autoShowAutocomplete }"
+						creationComplete="autocompleteAutoShow_creationCompleteHandler(event)"/>
+			
+		</s:HGroup>
+		
 		
 		<mx:Spacer height="100%"/>
 		

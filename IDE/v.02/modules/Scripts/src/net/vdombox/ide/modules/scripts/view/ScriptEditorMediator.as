@@ -71,6 +71,7 @@ package net.vdombox.ide.modules.scripts.view
 			
 			updateColorScheme(false);
 			updateFontSize(false);
+			updateAutoShowAutoComplete();
 			
 			addHandlers();
 		}
@@ -88,6 +89,7 @@ package net.vdombox.ide.modules.scripts.view
 			
 			interests.push( PreferencesProxy.SELECTED_COLOR_SCHEME_CHANGE );
 			interests.push( PreferencesProxy.SELECTED_FONT_SIZE_CHANGE );
+			interests.push( PreferencesProxy.AUTO_SHOW_AUTOCOMPLETE_CHANGE );
 			interests.push( Notifications.RENAME_IN_ACTION );
 			
 			return interests;
@@ -110,6 +112,13 @@ package net.vdombox.ide.modules.scripts.view
 				case PreferencesProxy.SELECTED_FONT_SIZE_CHANGE:
 				{
 					updateFontSize();
+					
+					break;
+				}
+					
+				case PreferencesProxy.AUTO_SHOW_AUTOCOMPLETE_CHANGE:
+				{
+					updateAutoShowAutoComplete();
 					
 					break;
 				}
@@ -165,6 +174,11 @@ package net.vdombox.ide.modules.scripts.view
 			
 			if ( sendUpdate )
 				scriptEditor.scriptEditor.scriptAreaComponent.sendUpdate();
+		}
+		
+		private function updateAutoShowAutoComplete() : void
+		{
+			scriptEditor.scriptEditor.autoShowAutoComplete = colorSchemeProxy.autoShowAutoComplete;
 		}
 		
 		private function compliteSourceCode( event : FlexEvent = null ):void
@@ -234,6 +248,7 @@ package net.vdombox.ide.modules.scripts.view
 			preferencesWindow.fontSizeList = new ArrayCollection( colorSchemeProxy.fontSizes );
 			preferencesWindow.selectedColorSheme = colorSchemeProxy.selectedColorScheme;
 			preferencesWindow.selectedFontSize = colorSchemeProxy.selectedFontSize;
+			preferencesWindow.autoShowAutocomplete = !colorSchemeProxy.autoShowAutoComplete;
 			preferencesWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			preferencesWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 			
@@ -243,6 +258,7 @@ package net.vdombox.ide.modules.scripts.view
 			{
 				colorSchemeProxy.selectedColorScheme = event.detail.colorScheme as ColorSchemeVO;
 				colorSchemeProxy.selectedFontSize = event.detail.fontSize as uint;
+				colorSchemeProxy.autoShowAutoComplete = !event.detail.autoShowAutoComplete;
 				WindowManager.getInstance().removeWindow( preferencesWindow );
 			}
 			

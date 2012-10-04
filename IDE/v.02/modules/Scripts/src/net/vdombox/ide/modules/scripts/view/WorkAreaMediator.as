@@ -2,7 +2,6 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import flash.events.Event;
 	
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.editors.HashLibraryArray;
@@ -10,6 +9,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.editors.parsers.vscript.VScriptEditor;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.EditorEvent;
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.TabEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
@@ -197,7 +197,7 @@ package net.vdombox.ide.modules.scripts.view
 				}
 			}
 			
-			function saveActionRequest( event : CloseEvent ) : void 
+			function saveActionRequest( event : PopUpWindowEvent ) : void 
 			{
 				if ( event.detail == Alert.NO )
 				{
@@ -320,12 +320,12 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private function removeTabHandler( event : TabEvent ) : void
 		{
-			Alert.Show( "Script has been modified. Save changes?", AlertButton.OK_No_Cancel, workArea.parentApplication, chackActionRequest );
+			Alert.Show( "Ololo!!", "Script has been modified. Save changes?", AlertButton.OK_No_Cancel, workArea.parentApplication, chackActionRequest );
 			
 			var actionVO : Object = ScriptEditor( event.element ).actionVO;
 			var index : int = event.index;
 			
-			function chackActionRequest( event : CloseEvent ) : void 
+			function chackActionRequest( event : PopUpWindowEvent ) : void 
 			{
 				if ( event.detail == Alert.YES )
 				{

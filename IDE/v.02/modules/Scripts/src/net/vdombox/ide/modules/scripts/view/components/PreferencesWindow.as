@@ -13,6 +13,7 @@ package net.vdombox.ide.modules.scripts.view.components
 	import net.vdombox.utils.WindowManager;
 	
 	import spark.components.Button;
+	import spark.components.CheckBox;
 	import spark.components.DropDownList;
 	import spark.components.Window;
 
@@ -24,11 +25,17 @@ package net.vdombox.ide.modules.scripts.view.components
 		[SkinPart( required = "true" )]
 		public var fontSize : DropDownList;
 		
+		[SkinPart( required = "true" )]
+		public var autocompleteAutoShow : CheckBox;
+		
 		[Bindable]
 		public var colorShemesList : ArrayCollection;
 		
 		[Bindable]
 		public var fontSizeList : ArrayCollection;
+		
+		[Bindable]
+		public var autoShowAutocomplete : Boolean;
 		
 		public var selectedColorSheme: ColorSchemeVO;
 		
@@ -47,11 +54,11 @@ package net.vdombox.ide.modules.scripts.view.components
 			systemChrome = NativeWindowSystemChrome.NONE;
 			transparent = true;
 			
-			width = 300;
-			height = 150;
+			width = 350;
+			height = 170;
 			
-			minWidth = 300;
-			minHeight = 150;
+			minWidth = 350;
+			minHeight = 170;
 			
 			this.setFocus();
 			
@@ -80,7 +87,8 @@ package net.vdombox.ide.modules.scripts.view.components
 		}
 		public function ok_close_window(event: KeyboardEvent = null ) : void
 		{
-			dispatchEvent( new PopUpWindowEvent( PopUpWindowEvent.APPLY, null, "", { colorScheme : colorSchemes.selectedItem, fontSize : int( fontSize.selectedItem.toString() ) } ) );
+			dispatchEvent( new PopUpWindowEvent( PopUpWindowEvent.APPLY, null, "", { colorScheme : colorSchemes.selectedItem, fontSize : int( fontSize.selectedItem.toString() ),
+																					autoShowAutoComplete : autocompleteAutoShow.selected } ) );
 		}
 		
 		public function no_close_window(event: KeyboardEvent = null ) : void
