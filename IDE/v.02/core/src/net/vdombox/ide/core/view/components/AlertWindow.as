@@ -16,9 +16,6 @@ package net.vdombox.ide.core.view.components
 		[Bindable]
 		public var content : String = "";
 		
-		[Bindable]
-		public var titleString : String = "";
-		
 		public var state : String;
 		
 		public function AlertWindow()

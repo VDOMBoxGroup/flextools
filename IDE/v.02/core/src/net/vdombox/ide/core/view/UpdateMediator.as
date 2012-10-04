@@ -13,7 +13,6 @@ package net.vdombox.ide.core.view
 	import mx.controls.Alert;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.core.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -34,31 +33,6 @@ package net.vdombox.ide.core.view
 			super(NAME, viewComponent);
 		}
 		
-		override public function handleNotification( notification : INotification ) : void
-		{
-			var body : Object = notification.getBody();
-			
-			switch ( notification.getName() )
-			{
-				case ApplicationFacade.CHECK_UPDATE:
-				{
-//					if ( initialized ) 
-//						applicationUpdater.checkNow();
-//					
-					break;
-				}
-			}
-		}
-		
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-			
-			interests.push( ApplicationFacade.CHECK_UPDATE );
-			
-			return interests;
-		}
-		
 		override public function onRegister() : void
 		{
 			initialize();	
@@ -72,11 +46,11 @@ package net.vdombox.ide.core.view
 		}
 		
 		private function initialize():void
-		{
-			//applicationUpdater.updateURL = "http://ehb.tomsk.ru/maks/update.xml"; 
+		{		
+			if (! applicationUpdater )
+				applicationUpdater = new ApplicationUpdaterUI();
 			
 			applicationUpdater.updateURL = "http://update.vdombox.ru/ide/update.xml"
-			//applicationUpdater.updateURL = "http://83.172.38.197:82/updaterLink/updateRelise.xml"
 			
 			applicationUpdater.isCheckForUpdateVisible = false; // We won't ask permission to check for an update
 			
@@ -101,22 +75,32 @@ package net.vdombox.ide.core.view
 			applicationUpdater.removeEventListener( UpdateEvent.INITIALIZED, onUpdate ); // Once initialized, run onUpdate
 			
 			applicationUpdater.removeEventListener( ErrorEvent.ERROR, onError );
-			
 		}
 		
 		
 		
 		private function onUpdate( event : UpdateEvent ) : void
 		{
-			removeHandlers();
-			
-			applicationUpdater.checkNow();
+			try
+			{
+				if ( applicationUpdater )
+				{
+					removeHandlers();
+					
+					applicationUpdater.checkNow();
+				}
+			}
+			catch ( e : Error )
+			{
+				
+			}
 		}
 		
 		private function onError( event : ErrorEvent ) : void
 		{
 			removeHandlers();
-//			Alert.show( event.toString(), AlertButton.OK );
+			
+			Alert.show( event.toString(), event.toString() );
 		}
 		
 		

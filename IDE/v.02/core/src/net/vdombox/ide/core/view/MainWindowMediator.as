@@ -26,7 +26,6 @@ package net.vdombox.ide.core.view
 	import mx.core.IVisualElement;
 	import mx.core.mx_internal;
 	import mx.events.AIREvent;
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	import mx.managers.SystemManager;
@@ -210,11 +209,6 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}
-			}
-			
-			function alertResultHandler( event : CloseEvent ) : void
-			{
-				
 			}
 			
 		}

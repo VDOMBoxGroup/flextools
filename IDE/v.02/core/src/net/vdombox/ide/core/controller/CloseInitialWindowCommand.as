@@ -4,7 +4,6 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.view.InitialWindowMediator;
 	import net.vdombox.ide.core.view.LoginViewMediator;
 	import net.vdombox.ide.core.view.ProgressViewMediator;
-	import net.vdombox.ide.core.view.UpdateMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -33,9 +32,6 @@ package net.vdombox.ide.core.controller
 				facade.removeMediator( InitialWindowMediator.NAME );
 				initialWindowMediator.closeWindow();
 			}
-			
-//			if ( facade.hasMediator( UpdateMediator.NAME ) )
-//				facade.removeMediator( UpdateMediator.NAME);
 		}
 	}
 }

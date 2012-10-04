@@ -27,7 +27,6 @@ package net.vdombox.ide.core.view.components
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
 	import mx.core.FlexGlobals;
-	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;

@@ -38,7 +38,7 @@ package net.vdombox.ide.core.controller
 
 			function onError( event : ErrorEvent ) : void
 			{
-				Alert.Show( event.toString(), AlertButton.OK );
+				Alert.Show( event.toString(), event.toString(), AlertButton.OK );
 			}
 
 			function onUpdate( event : UpdateEvent ) : void
