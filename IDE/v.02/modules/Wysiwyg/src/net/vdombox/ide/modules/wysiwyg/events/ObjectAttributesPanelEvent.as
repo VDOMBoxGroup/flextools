@@ -4,7 +4,6 @@ package net.vdombox.ide.modules.wysiwyg.events
 	
 	public class ObjectAttributesPanelEvent extends Event
 	{
-		public static var DELETE_REQUEST : String = "deleteRequest";
 		public static var SAVE_REQUEST : String = "saveRequest";
 		public static var CURRENT_ATTRIBUTE_CHANGED : String = "currentAttributeChanged";
 		

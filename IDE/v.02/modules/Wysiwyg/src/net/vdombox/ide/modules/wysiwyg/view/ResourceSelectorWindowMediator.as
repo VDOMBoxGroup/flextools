@@ -20,17 +20,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	import mx.core.UIComponent;
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	import mx.managers.PopUpManagerChildList;
 	import mx.resources.ResourceManager;
 	import mx.validators.Validator;
+	
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
@@ -43,6 +45,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.utils.WindowManager;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -308,7 +311,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			PopUpManager.addPopUp(spinnerPopup, DisplayObject(resourceSelectorWindow), true);
 		}
 
-		private function deleteResourceCloseHandler(event : CloseEvent) : void
+		private function deleteResourceCloseHandler(event : PopUpWindowEvent) : void
 		{
 			if ( event.detail == Alert.YES )
 			{
@@ -336,7 +339,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 
-			Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + "\n" + componentName + " ?", 
+			Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Resource' ),
+						ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + "\n" + componentName + " ?", 
 						AlertButton.OK_No, 
 						resourceSelectorWindow, deleteResourceCloseHandler);
 		}

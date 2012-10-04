@@ -13,12 +13,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.Event;
 	
 	import mx.controls.Tree;
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
@@ -562,6 +562,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 			
 			var textAlert : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' );
+			var titleAlert : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Object' );
 			
 			var flag : Boolean = false;
 			
@@ -575,12 +576,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 			
 			if ( flag && objectsTreePanel.selectedItems.length > 1 )
+			{
 				textAlert += " " + objectsTreePanel.selectedItems.length.toString()+ " " + ResourceManager.getInstance().getString( 'Wysiwyg_General', 'elements' );
+				titleAlert = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Objects' );
+			}
 			
-			Alert.Show( textAlert + " ?",AlertButton.OK_No, objectsTreePanel.parentApplication, closeHandler);
+			Alert.Show( titleAlert, textAlert + " ?",AlertButton.OK_No, objectsTreePanel.parentApplication, closeHandler);
 					
 				
-			function closeHandler( event : CloseEvent ) : void
+			function closeHandler( event : PopUpWindowEvent ) : void
 			{
 				if (event.detail == Alert.YES)
 				{					

@@ -8,7 +8,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.collections.ArrayCollection;
 	import mx.collections.IList;
 	import mx.core.UIComponent;
-	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	import mx.resources.ResourceManager;
 	
@@ -244,7 +243,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function addHandlers() : void
 		{
 			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.SAVE_REQUEST, saveRequestHandler, true, 0, true );
-			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.DELETE_REQUEST, deleteRequestHandler, false, 0, true );
 			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler, true, 0,
 				true );
 			objectAttributesPanel.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true, 0, true );
@@ -256,7 +254,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function removeHandlers() : void
 		{
 			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.SAVE_REQUEST, saveRequestHandler, true );
-			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.DELETE_REQUEST, deleteRequestHandler );
 			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler, true );
 			objectAttributesPanel.removeEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true );
 			objectAttributesPanel.removeEventListener( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE, getResourcesAndPagesHandler, true );
@@ -295,25 +292,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 				sendNotification( Notifications.SET_OBJECT_NAME, attributeRander.objectVO );
 			else
 				sendNotification( Notifications.SAVE_ATTRIBUTES_REQUEST, objectAttributesPanel.attributesVO );
-		}
-
-		private function deleteRequestHandler( event : ObjectAttributesPanelEvent ) : void
-		{
-			var componentName : String = statesProxy.selectedObject.typeVO.displayName;
-			
-			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
-			
-			Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + componentName + " ?",AlertButton.OK_No, objectAttributesPanel.parentApplication, closeHandler);
-		
-		}
-		
-		private function closeHandler(event : CloseEvent) : void
-		{
-			if (event.detail == Alert.YES)
-			{
-				if ( statesProxy.selectedPage && statesProxy.selectedObject )
-					sendNotification( Notifications.DELETE_OBJECT, { pageVO: statesProxy.selectedPage, objectVO: statesProxy.selectedObject } );
-			}
 		}
 
 		private function currentAttributeChangedHandler( event : ObjectAttributesPanelEvent ) : void

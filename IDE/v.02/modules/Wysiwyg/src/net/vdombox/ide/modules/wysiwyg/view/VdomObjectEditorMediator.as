@@ -15,13 +15,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.collections.ArrayList;
 	import mx.controls.CheckBox;
 	import mx.core.UIComponent;
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColorStroke;
 	import mx.resources.ResourceManager;
 	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
@@ -946,7 +946,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 					arr.push( renderer.vdomObjectVO );
 				
 				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
-				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + arr.length.toString() + " " + ResourceManager.getInstance().getString( 'Wysiwyg_General', 'elements' ) + " ?",AlertButton.OK_No, component.parentApplication, closeHandler);
+				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Objects' ),
+							ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + arr.length.toString() + " " + ResourceManager.getInstance().getString( 'Wysiwyg_General', 'elements' ) + " ?",
+							AlertButton.OK_No, component.parentApplication, closeHandler);
 			}
 			else if ( statesProxy.selectedObject != null)
 			{
@@ -954,10 +956,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 				
 				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 				
-				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + componentName + " ?",AlertButton.OK_No, component.parentApplication, closeHandler);
+				Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Object' ), 
+							ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + componentName + " ?",
+							AlertButton.OK_No, component.parentApplication, closeHandler);
 			}
 			
-			function closeHandler(event : CloseEvent) : void
+			function closeHandler(event : PopUpWindowEvent) : void
 			{
 				if (event.detail == Alert.YES)
 				{

@@ -14,7 +14,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.ui.Keyboard;
 	import flashx.textLayout.elements.TextFlow;
 	import mx.controls.ComboBox;
-	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
