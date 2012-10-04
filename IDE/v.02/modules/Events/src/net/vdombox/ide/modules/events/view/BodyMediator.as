@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.events.view
 {
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.model.StatesProxy;

@@ -421,7 +421,7 @@ package net.vdombox.ide.modules.events.view
 				if ( workArea.skin.currentState == "unsaved" )
 				{
 					Alert.setPatametrs( "Ok" );
-					Alert.Show( "First press to Save!!", AlertButton.OK, workArea.parentApplication, null );
+					Alert.Show( "Attention!", "First press to Save!!", AlertButton.OK, workArea.parentApplication, null );
 				}
 				else
 				{

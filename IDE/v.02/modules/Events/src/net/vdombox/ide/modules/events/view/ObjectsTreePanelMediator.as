@@ -5,11 +5,12 @@ package net.vdombox.ide.modules.events.view
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Tree;
-	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
@@ -18,7 +19,6 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.model.MessageProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.EventElement;
@@ -209,7 +209,9 @@ package net.vdombox.ide.modules.events.view
 						changeFunction();
 					else
 					{
-						Alert.Show( ResourceManager.getInstance().getString( 'Events_General', 'save_the_changes' ), AlertButton.OK_No, objectsTreePanel.parentApplication, alertHandler );
+						Alert.Show( ResourceManager.getInstance().getString( 'Events_General', 'save_the_changes_title' ),
+									ResourceManager.getInstance().getString( 'Events_General', 'save_the_changes' ), 
+									AlertButton.OK_No, objectsTreePanel.parentApplication, alertHandler );
 					}
 					return;
 				}
@@ -229,7 +231,7 @@ package net.vdombox.ide.modules.events.view
 		
 		private var needChangePage : Boolean = false;
 		
-		private function alertHandler( event : CloseEvent ) : void
+		private function alertHandler( event : PopUpWindowEvent ) : void
 		{
 			if (event.detail == Alert.YES)
 			{

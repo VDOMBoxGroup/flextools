@@ -162,7 +162,7 @@ package net.vdombox.ide.modules.events.view
 					else
 					{
 						Alert.setPatametrs( "Ok" );
-						Alert.Show( "First press to Save!!", AlertButton.OK, eventsPanel.parentApplication, null );
+						Alert.Show( "Attantion!", "First press to Save!!", AlertButton.OK, eventsPanel.parentApplication, null );
 					}
 					return;
 				}

@@ -8,7 +8,6 @@ package net.vdombox.ide.modules.events.view.components
 	import flash.ui.Keyboard;
 	
 	import mx.core.DragSource;
-	import mx.events.CloseEvent;
 	import mx.events.DragEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
@@ -809,7 +808,7 @@ package net.vdombox.ide.modules.events.view.components
 			Alert.Show( resourceManager.getString( 'Wysiwyg_General', 'delete_Renderer' ) + strName + " ?",AlertButton.OK_No, undoButton.parentApplication, deleteHandler);
 				
 			
-			function deleteHandler(_event : CloseEvent) : void
+			function deleteHandler(_event : PopUpWindowEvent) : void
 			{
 				if (_event.detail == Alert.YES)
 				{*/
