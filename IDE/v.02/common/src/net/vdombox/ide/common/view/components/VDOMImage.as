@@ -162,6 +162,10 @@ package net.vdombox.ide.common.view.components
 		[Embed( source="assets/vdomimage/cornertable.png" )]
 		public static var Cornertable : Class;
 		
+		[Bindable]
+		[Embed( source="assets/vdomimage/refresh.png" )]
+		public static var Refresh : Class;
+		
 		
 		
 	}

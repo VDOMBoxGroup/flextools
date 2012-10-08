@@ -42,7 +42,6 @@
    
  
     <s:Button id="track" top="0" bottom="0" height="100%" width="6"
-              focusEnabled="false" 
               skinClass="net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMVScrollBarTrackSkin" />
     
 

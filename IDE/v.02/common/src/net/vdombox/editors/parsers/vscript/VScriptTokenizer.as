@@ -22,7 +22,7 @@ package net.vdombox.editors.parsers.vscript
 		private var newLogicBlock : Boolean = false;
 		
 		private static const keywordsA : Array = [
-			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "catch", "class", "clng", "const", "csng", "cstr", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "try", "until", "use", "wend", "while", "with", "xor"
+			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "catch", "class", "clng", "const", "csng", "cstr", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "finally", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "try", "until", "use", "wend", "while", "with", "xor"
 		];
 		
 		private static const keywords2A : Array = [
@@ -134,9 +134,6 @@ package net.vdombox.editors.parsers.vscript
 					type = Token.KEYWORD;
 				else if ( isKeyword2( str ) )
 					type = Token.KEYWORD2;
-				else if ( tokens.length && tokens[ tokens.length - 1 ].string == "[" &&
-					( str == "Embed" || str == "Event" || str == "SWF" || str == "Bindable" ) )
-					type = Token.KEYWORD;
 				else if ( prevStr && prevStr.toLowerCase() == "function" )
 					type = Token.NAMEFUNCTION;
 				else if ( prevStr && prevStr.toLowerCase() == "class" )
@@ -651,6 +648,28 @@ package net.vdombox.editors.parsers.vscript
 						error = true;
 					}
 				}
+				else if ( tString == "finally" )
+				{
+					if ( currentBlock.blockType == BlockType.CATCH )
+					{
+						t.parent = currentBlock.parent;
+						createBlock( BlockType.FINALLY, tString );
+						currentBlock.mainBlockType = BlockType.TRY;
+					}
+					else if ( currentBlock.blockType == BlockType.TRY )
+					{
+						t.parent = currentBlock;
+						currentBlock = t;
+						t.children = [];
+						currentBlock.blockType = BlockType.FINALLY;
+						currentBlock.mainBlockType = BlockType.TRY;
+					}
+					else
+					{
+						t.error = true;
+						error = true;
+					}
+				}
 				else 
 				{
 					currentBlock = t;
@@ -928,7 +947,7 @@ package net.vdombox.editors.parsers.vscript
 					
 				case "try":
 				{
-					if ( currentBlock.blockType == BlockType.TRY || currentBlock.blockType == BlockType.CATCH )
+					if ( currentBlock.blockType == BlockType.TRY || currentBlock.blockType == BlockType.CATCH || currentBlock.blockType == BlockType.FINALLY )
 					{
 						currentBlock.blockClosed = true;
 						
@@ -1050,7 +1069,7 @@ package net.vdombox.editors.parsers.vscript
 			if ( value == "else" && prevValue != "case" )
 				return true;
 				
-			if ( value == "case" || value == "catch" )
+			if ( value == "case" || value == "catch" || value == "finally" )
 				return true;
 					
 			if ( value == "while" && prevValue != "do" )
@@ -1087,12 +1106,18 @@ package net.vdombox.editors.parsers.vscript
 		
 		public function token2prevByPos( pos : uint ) : Token
 		{
-			if ( !tokens /*|| tokens.length < 3 */)
+			if ( !tokens || tokens.length < 3 )
 				return null;
 			//TODO: binary search
 			for ( var i : int = tokens.length - 1; i >= 0; i-- )
 				if ( tokens[ i ] && pos >= tokens[ i ].pos )
-					return VScriptToken.map[ tokens[ i - 2].id ];
+				{
+					if ( tokens[ i ] && pos == tokens[ i ].pos )
+						return VScriptToken.map[ tokens[ i - 2].id ];
+					else
+						return VScriptToken.map[ tokens[ i - 1].id ];
+				}
+					
 			return null;
 		}
 	}

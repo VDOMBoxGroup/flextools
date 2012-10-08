@@ -51,5 +51,9 @@
     </s:states>
 
 	<!-- border/fill -->
-	<s:Rect top="0" bottom="0" left="0" right="0" minWidth="30" height="100%" alpha="0"/>
+	<s:Rect top="0" bottom="0" left="0" right="0" minWidth="30" height="100%" alpha="0">
+		<s:fill>
+			<s:SolidColor color="#000000"/>
+		</s:fill>
+	</s:Rect>
 </s:SparkSkin>

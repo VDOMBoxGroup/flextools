@@ -99,7 +99,7 @@
 						</s:fill>
 					</s:Rect>
 					
-					<s:HGroup height="36" width="100%" horizontalAlign="center" gap="40">
+					<s:HGroup height="36" width="100%" horizontalAlign="center" verticalAlign="middle" gap="40">
 						<button:VDOMButton  id="noButton" tabIndex="-1" select="true"
 									icon="{hostComponent.getNoImage()}" label="{hostComponent.getNoLabel()}"
 									visible="{hostComponent.getVisibleTypeButton() == 'ok' ? false : true}" includeInLayout="{hostComponent.getVisibleTypeButton() == 'ok' ? false : true}"

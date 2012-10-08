@@ -16,5 +16,6 @@ package net.vdombox.editors.parsers.vscript
 		public static const CLASS:String = "class";
 		public static const TRY:String = "try";
 		public static const CATCH:String = "catch";
+		public static const FINALLY:String = "finally";
 	}
 }
