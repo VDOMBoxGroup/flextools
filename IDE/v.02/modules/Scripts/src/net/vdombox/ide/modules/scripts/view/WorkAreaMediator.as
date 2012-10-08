@@ -320,7 +320,7 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private function removeTabHandler( event : TabEvent ) : void
 		{
-			Alert.Show( "Ololo!!", "Script has been modified. Save changes?", AlertButton.OK_No_Cancel, workArea.parentApplication, chackActionRequest );
+			Alert.Show( "Save", "Script has been modified. Save changes?", AlertButton.OK_No_Cancel, workArea.parentApplication, chackActionRequest );
 			
 			var actionVO : Object = ScriptEditor( event.element ).actionVO;
 			var index : int = event.index;
