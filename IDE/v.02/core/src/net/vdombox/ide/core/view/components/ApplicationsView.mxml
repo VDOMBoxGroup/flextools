@@ -72,7 +72,7 @@
 				borderVisible="false"
 				/>
 
-		<s:Group width="100%" height="40">
+		<s:Group width="100%" height="56">
 			<s:Rect width="100%" height="100%">
 				<s:fill>
 					<s:SolidColor color="#3a3a3a"/>
@@ -81,7 +81,7 @@
 			
 			<s:Line left="0" right="0" top="0">
 				<s:stroke>
-					<s:SolidColorStroke color="#555555" weight="2"/>
+					<s:SolidColorStroke color="#555555" weight="1"/>
 				</s:stroke>
 			</s:Line>
 			

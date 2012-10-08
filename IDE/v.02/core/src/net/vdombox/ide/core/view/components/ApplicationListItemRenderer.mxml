@@ -140,7 +140,7 @@
 			protected function itemrenderer1_creationCompleteHandler(event:FlexEvent):void
 			{
 				var _w : int = this.width;
-				var _h : int = this.height - 2;
+				var _h : int = this.height;
 				
 				var strokeColor : SolidColorStroke = new SolidColorStroke();
 				strokeColor.color = 0x484848;
@@ -195,7 +195,7 @@
 				  width="40" height="40"
 				  smoothBitmapContent="true"/>
 		
-		<s:VGroup width="45%" height="100%" gap="0">
+		<s:VGroup width="55%" height="100%" gap="0">
 			
 			<s:Label id="nameLabel"  width="120"
 					 fontSize="15" color="#fffafc"/>
@@ -206,7 +206,7 @@
 			
 		</s:VGroup>
 		
-		<s:VGroup width="55%" height="100%" gap="2">
+		<s:VGroup width="45%" height="100%" gap="2">
 			<s:HGroup width="100%">
 				<s:Label id="pages" fontSize="10" color="#fffafc"/>
 				
@@ -230,6 +230,25 @@
 	
 	<s:Group id="lineGroup" width="100%" height="100%"/>
 	
-	
+	<s:Rect right="0" height="100%" width="50">
+		<s:fill>
+			<s:LinearGradient>
+				<s:GradientEntry color="#2f2f2f" alpha="0"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.02"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.08"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.1"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.15"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.2"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.3"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.4"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.5"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.6"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.7"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.9"/>
+				<s:GradientEntry color="#2f2f2f" alpha="1"/>
+				<s:GradientEntry color="#2f2f2f" alpha="1" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
 	
 </s:ItemRenderer>

@@ -4,7 +4,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:component="net.vdombox.ide.core.view.components"
 		
-		width="550" height="450" minWidth="550" minHeight="450" xmlns:components="net.vdombox.ide.core.view.components.*"
+		width="600" height="450" minWidth="600" minHeight="450" xmlns:components="net.vdombox.ide.core.view.components.*"
 		contentBackgroundAlpha="0" >
 	<!-- host component -->
 	<fx:Metadata>
