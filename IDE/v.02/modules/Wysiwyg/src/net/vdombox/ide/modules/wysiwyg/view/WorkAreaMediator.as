@@ -13,11 +13,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.WorkAreaEvent;
@@ -211,6 +211,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			workArea.addEventListener( EditorEvent.UNDO, undoHandler, true, 0, true );
 			workArea.addEventListener( EditorEvent.REDO, redoHandler, true, 0, true );
+			workArea.addEventListener( EditorEvent.REFRESH, refreshHandler, true, 0, true );
 
 			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
 
@@ -270,6 +271,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			workArea.removeEventListener( EditorEvent.UNDO, undoHandler, true );
 			workArea.removeEventListener( EditorEvent.REDO, redoHandler, true );
+			workArea.removeEventListener( EditorEvent.REFRESH, refreshHandler, true );
 
 			workArea.removeEventListener( EditorEvent.PREINITIALIZED, editor_preinitializedHandler, true );
 			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
@@ -290,6 +292,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{			
 			if ( event.target.skin.currentState == "wysiwyg" || event.target.skin.currentState == "wysiwygDisabled" )
 				sendNotification( Notifications.REDO, statesProxy.selectedPage );
+		}
+		
+		private function refreshHandler( event : EditorEvent ) : void
+		{			
+			if ( event.target.skin.currentState == "wysiwyg" || event.target.skin.currentState == "wysiwygDisabled" )
+			{				
+				sendNotification( Notifications.GET_WYSIWYG, statesProxy.selectedPage );
+				sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
+				
+				if ( statesProxy.selectedObject )
+					sendNotification( Notifications.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
+				else if ( statesProxy.selectedPage )
+					sendNotification( Notifications.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
+			}
 		}
 	}
 }

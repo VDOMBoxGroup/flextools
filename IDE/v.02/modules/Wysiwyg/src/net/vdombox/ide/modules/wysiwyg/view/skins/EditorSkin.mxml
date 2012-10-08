@@ -154,15 +154,20 @@
 										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_redo' ) }"
 										   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.REDO ) )"/>
 					
+					<button:WorkAreaButton id="refreshButton"
+										   height="20" icon="{VDOMImage.Refresh}"
+										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_refresh' ) }"
+										   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.REFRESH ) )"/>
+					
 				</s:HGroup>
 				
 			</s:HGroup>
 			
-			<s:Line height="25" width="1">
+			<!--<s:Line height="25" width="1">
 				<s:stroke>
 					<s:SolidColorStroke color="#D9DCDC"/>
 				</s:stroke>
-			</s:Line>
+			</s:Line>-->
 			
 			<s:Group width="50%" visible.wysiwyg="true" visible.xml="false">
 				

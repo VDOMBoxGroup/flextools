@@ -21,6 +21,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 		
 		public static var UNDO : String = "undo";
 		public static var REDO : String = "redo";
+		public static var REFRESH : String = "refresh";
 		
 		public static var RENDERER_TRANSFORMED	: String = "editorRendererTransformed";
 		

@@ -21,6 +21,7 @@
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase;
 
 			private var _attributesVO : VdomObjectAttributesVO;
 			private var _typeVO : TypeVO;
@@ -212,6 +213,13 @@
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				tbFill.minHeight = 41;
+				addEventListener( ObjectAttributesPanelEvent.SELECTED_ATTRIBUTE_CHANGED, changeSelectedAttributeHandler, true, 0, true );
+			}
+			
+			private function changeSelectedAttributeHandler( event : ObjectAttributesPanelEvent ) : void
+			{
+				attributesList.selectedIndex++;
+				//var index : int = attributesList.selectedIndex;
 			}
 			
 			protected function attributesList_creationCompleteHandler(event:FlexEvent):void
