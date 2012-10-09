@@ -107,8 +107,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case Notifications.RESOURCE_SETTED:
 				{
-					addNewResourceInList( body as ResourceVO );
-
+					var resVO : ResourceVO = body as ResourceVO;
+					
+					if ( resVO.status == ResourceVO.LOAD_ERROR )
+					{
+						removeSpinnerPopup();
+					}
+					else
+					{
+						addNewResourceInList( resVO );
+					}
+			
 					break;
 				}
 			}
@@ -414,7 +423,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_new_resource' );
 				createSpinnerPopup(spinnerTxt);
-
+				
 				openFile.removeEventListener(Event.SELECT, fileSelected);
 
 				openFile.addEventListener(Event.COMPLETE, fileDownloaded);

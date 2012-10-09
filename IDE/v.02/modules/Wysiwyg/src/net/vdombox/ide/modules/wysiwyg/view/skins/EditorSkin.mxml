@@ -170,17 +170,7 @@
 			</s:Line>-->
 			
 			<s:Group width="50%" visible.wysiwyg="true" visible.xml="false">
-				
-				<s:Rect height="25"
-						left="0" right="0" top="0">
-					<s:fill>
-						<s:LinearGradient rotation="90">
-							<s:GradientEntry color="0xFFFFFF"/>
-							<s:GradientEntry color="0xFEFEFE"/>
-						</s:LinearGradient>
-					</s:fill>
-				</s:Rect>
-				
+		
 				<s:HGroup height="25" width="100%"
 						  paddingRight="0" paddingLeft="15" paddingTop="2" 
 						  verticalAlign="middle" horizontalAlign="right"
