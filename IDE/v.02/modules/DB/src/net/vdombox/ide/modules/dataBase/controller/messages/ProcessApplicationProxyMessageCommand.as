@@ -38,8 +38,9 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 						sendNotification( Notifications.PAGE_GETTED, body );
 					else if ( operation == PPMOperationNames.DELETE )
 					{
-						sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, null );
-						sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, null );
+						var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+						statesProxy.selectedObject = null;
+						statesProxy.selectedPage = null;
 						sendNotification( Notifications.PAGE_DELETED, body.pageVO );
 					}
 					
