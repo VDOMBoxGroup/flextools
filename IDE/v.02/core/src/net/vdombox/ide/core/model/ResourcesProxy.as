@@ -8,12 +8,14 @@ package net.vdombox.ide.core.model
 	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
+	import mx.resources.ResourceManager;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
 	import mx.utils.Base64Decoder;
 	import mx.utils.Base64Encoder;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -391,8 +393,13 @@ package net.vdombox.ide.core.model
 			}
 
 			if ( !data || data.bytesAvailable == 0 )
+			{
+				sendNotification( ApplicationFacade.WRITE_ERROR, ResourceManager.getInstance().getString( 'Core_General', 'error_0_bytes' ) );
+				resourceVO.setStatus( ResourceVO.LOAD_ERROR );
+				sendNotification( ApplicationFacade.RESOURCE_SETTED_ERROR, resourceVO );
 				return;
-
+			}
+				
 			data.compress();
 
 			data.position = 0;
@@ -428,6 +435,10 @@ package net.vdombox.ide.core.model
 			if ( result.hasOwnProperty( "Error" ) )
 			{
 				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
+				
+				resourceVO = new ResourceVO("");
+				resourceVO.setStatus( ResourceVO.LOAD_ERROR );
+				sendNotification( ApplicationFacade.RESOURCE_SETTED_ERROR, resourceVO );
 				return;
 			}
 

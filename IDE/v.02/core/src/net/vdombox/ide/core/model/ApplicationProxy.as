@@ -418,6 +418,9 @@ package net.vdombox.ide.core.model
 		
 		private function createPagesList( pages : XML ) : void
 		{
+			if ( !pages )
+				return;
+			
 			var pageVO : PageVO;
 			var pageVOInd : Number = -1;
 			
@@ -432,6 +435,9 @@ package net.vdombox.ide.core.model
 			
 			for each ( var page : XML in pages.* )
 			{
+				if ( !page )
+					continue;
+				
 				pageID = page.@ID[ 0 ];
 				
 				typeID = page.@Type[ 0 ];

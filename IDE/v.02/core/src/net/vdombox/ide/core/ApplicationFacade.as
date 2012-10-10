@@ -552,6 +552,7 @@ package net.vdombox.ide.core
 			registerCommand( RESOURCES_GETTED,		 	ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_LOADED, 			ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_SETTED, 			ResourcesProxyResponseCommand );
+			registerCommand( RESOURCE_SETTED_ERROR, 	ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_DELETED,			ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_MODIFIED, 		ResourcesProxyResponseCommand );
 

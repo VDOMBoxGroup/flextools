@@ -1,9 +1,9 @@
 package net.vdombox.ide.core.controller.responses
 {
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPlaceNames;
 	import net.vdombox.ide.common.controller.names.PPMResourcesTargetNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	
@@ -22,6 +22,8 @@ package net.vdombox.ide.core.controller.responses
 			var message : ProxyMessage;
 			
 			var resourceVO : ResourceVO;
+			if ( body is ResourceVO )
+				resourceVO = body as ResourceVO;;
 			
 			switch ( notification.getName() )
 			{
@@ -37,8 +39,6 @@ package net.vdombox.ide.core.controller.responses
 					
 				case ApplicationFacade.RESOURCE_LOADED:
 				{
-					resourceVO = body as ResourceVO;
-					
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, 
 						PPMResourcesTargetNames.RESOURCE, resourceVO );
 					
@@ -46,9 +46,7 @@ package net.vdombox.ide.core.controller.responses
 				}
 					
 				case ApplicationFacade.ICON_GETTED:
-				{
-					resourceVO = body as ResourceVO;
-					
+				{					
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, 
 						PPMResourcesTargetNames.ICON, resourceVO );
 					
@@ -56,9 +54,7 @@ package net.vdombox.ide.core.controller.responses
 				}
 					
 				case ApplicationFacade.RESOURCE_SETTED:
-				{
-					resourceVO = body as ResourceVO;
-					
+				{					
 					if( !resourceVO )
 					{
 						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyResponseCommand: RESOURCE_SETTED resourceVO is null." );
@@ -70,11 +66,17 @@ package net.vdombox.ide.core.controller.responses
 					
 					break;
 				}
+					
+				case ApplicationFacade.RESOURCE_SETTED_ERROR:
+				{
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE, 
+						PPMResourcesTargetNames.RESOURCE, resourceVO );
+					
+					break;
+				}
 				
 				case ApplicationFacade.RESOURCE_MODIFIED:
 				{
-					resourceVO = body as ResourceVO;
-					
 					if( !resourceVO )
 					{
 						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyResponseCommand: RESOURCE_UPDATE resourceVO is null." );
@@ -88,9 +90,7 @@ package net.vdombox.ide.core.controller.responses
 				}
 					
 				case ApplicationFacade.RESOURCE_DELETED:
-				{
-					resourceVO = body as ResourceVO;
-					
+				{					
 					if( !resourceVO )
 					{
 						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyResponseCommand: RESOURCE_DELETED resourceVO is null." );

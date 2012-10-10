@@ -10,8 +10,15 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var updateMediator : UpdateMediator = new UpdateMediator( );
-			facade.registerMediator( updateMediator );
+			try
+			{
+				var updateMediator : UpdateMediator = new UpdateMediator( );
+				facade.registerMediator( updateMediator );
+			}
+			catch ( e : Error )
+			{
+				
+			}
 			
 			sendNotification( ApplicationFacade.OPEN_INITIAL_WINDOW );
 		}

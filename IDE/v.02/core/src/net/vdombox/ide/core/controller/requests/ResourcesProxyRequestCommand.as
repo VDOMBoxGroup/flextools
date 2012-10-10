@@ -95,12 +95,7 @@ package net.vdombox.ide.core.controller.requests
 			switch ( operation )
 			{
 				case PPMOperationNames.READ:
-				{	
-					if( body is ResourceVO )
-						resourceVO = body as ResourceVO;
-					else if( body.hasOwnProperty( "resourceVO" ) )
-						resourceVO = body.resourceVO;
-					
+				{						
 					if( resourceVO )
 						resourcesProxy.loadResource( resourceVO ); 
 					
@@ -108,12 +103,7 @@ package net.vdombox.ide.core.controller.requests
 				}
 					
 				case PPMOperationNames.CREATE:
-				{
-					if( body is ResourceVO )
-						resourceVO = body as ResourceVO;
-					else if( body.hasOwnProperty( "resourceVO" ) )
-						resourceVO = body.resourceVO;
-					
+				{					
 					if ( !resourceVO )
 					{
 						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyRequestCommand: Set resource error." );
@@ -127,7 +117,6 @@ package net.vdombox.ide.core.controller.requests
 					
 				case PPMOperationNames.DELETE:
 				{
-					resourceVO = body.resourceVO as ResourceVO;
 					applicationVO = body.applicationVO;
 					
 					if ( !applicationVO && !resourceVO )
@@ -143,7 +132,6 @@ package net.vdombox.ide.core.controller.requests
 					
 				case PPMOperationNames.UPDATE:
 				{
-					resourceVO = body.resourceVO as ResourceVO;
 					applicationVO = body.applicationVO;
 					
 					if ( !applicationVO && !resourceVO )
