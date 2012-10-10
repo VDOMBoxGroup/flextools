@@ -63,6 +63,7 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( Notifications.OBJECT_DELETED);
 			
 			interests.push( Notifications.OBJECT_NAME_SETTED );
+			interests.push( Notifications.PAGE_NAME_SETTED );
 			
 			interests.push( Notifications.PAGE_DELETED );
 			
@@ -156,6 +157,16 @@ package net.vdombox.ide.modules.dataBase.view
 				case Notifications.OBJECT_NAME_SETTED:
 				{
 					var tab : Tab = workArea.getTabByID( body.id );
+					
+					if ( tab )
+						tab.label = body.name;
+					
+					break;
+				}
+					
+				case Notifications.PAGE_NAME_SETTED:
+				{
+					tab = workArea.getTabByID( body.id );
 					
 					if ( tab )
 						tab.label = body.name;
