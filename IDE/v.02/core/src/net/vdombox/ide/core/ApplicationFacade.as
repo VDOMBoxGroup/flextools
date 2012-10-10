@@ -11,6 +11,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.CloseMainWindowCommand;
 	import net.vdombox.ide.core.controller.CreateApplicationCommand;
 	import net.vdombox.ide.core.controller.CreateFirstPageCommand;
+	import net.vdombox.ide.core.controller.DisconnectToServerCommand;
 	import net.vdombox.ide.core.controller.EditApplicationInformationCommand;
 	import net.vdombox.ide.core.controller.ErrorMacroCommand;
 	import net.vdombox.ide.core.controller.GetApplicationListCommand;
@@ -111,6 +112,9 @@ package net.vdombox.ide.core
 		public static const REQUEST_FOR_SIGNOUT : String = "requestForSignOut";
 		
 		public static const SIGNOUT : String = "signOut";
+		
+		public static const DISCONNECT_TO_SERVER : String = "disconnectToServer";
+		public static const BACK_TO_INITIAL_WINDOW : String = "backToInitialWindow";
 		
 		public static const CHANGE_LOCALE : String = "changeLocale";
 
@@ -425,6 +429,8 @@ package net.vdombox.ide.core
 			registerCommand( CLOSE_IDE, CloseIDECommand ); 
 			registerCommand( PREINITALIZE, PreinitalizeMacroCommand );
 			registerCommand( STARTUP, StartupCommand );
+			
+			registerCommand( DISCONNECT_TO_SERVER, DisconnectToServerCommand );
 
 			registerCommand( INITIAL_WINDOW_CREATED, InitialWindowCreatedCommand );
 

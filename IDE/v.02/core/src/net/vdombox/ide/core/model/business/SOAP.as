@@ -5,7 +5,7 @@ package net.vdombox.ide.core.model.business
 	import flash.events.IEventDispatcher;
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
-
+	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	import mx.rpc.AsyncToken;
@@ -16,7 +16,7 @@ package net.vdombox.ide.core.model.business
 	import mx.rpc.soap.Operation;
 	import mx.rpc.soap.SOAPFault;
 	import mx.rpc.soap.WebService;
-
+	
 	import net.vdombox.ide.core.events.SOAPErrorEvent;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.protect.Code;
@@ -42,6 +42,8 @@ package net.vdombox.ide.core.model.business
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
 		private var isLoadWSDLProcess : Boolean;
+		
+		public var cancelConnected : Boolean = false;
 
 		public function SOAP()
 		{			
@@ -56,6 +58,9 @@ package net.vdombox.ide.core.model.business
 
 		public function connect( wsdl : String ) : void
 		{
+			cancelConnected = false;
+			
+			webService = new WebService();
 			webService.wsdl = wsdl;
 			webService.useProxy = false;
 
@@ -78,7 +83,7 @@ package net.vdombox.ide.core.model.business
 		}
 
 		public function disconnect() : void
-		{
+		{			
 			if ( webService )
 				webService.disconnect();
 
@@ -264,8 +269,10 @@ package net.vdombox.ide.core.model.business
 		 */
 		public function dispatchEvent( event : Event ) : Boolean
 		{
-			
-			return dispatcher.dispatchEvent( event );
+			if ( !cancelConnected || event.type == SOAPEvent.DISCONNECTON_OK)
+				return dispatcher.dispatchEvent( event );
+			else
+				return false;
 		}
 
 		/**

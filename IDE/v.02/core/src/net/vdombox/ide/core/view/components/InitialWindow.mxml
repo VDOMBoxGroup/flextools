@@ -47,6 +47,12 @@
 			{
 				dispatchEvent( new InitialWindowEvent( InitialWindowEvent.SUBMIT ) );
 			}
+			
+			protected function cancelButton_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new InitialWindowEvent( InitialWindowEvent.CANCEL ) );
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -70,7 +76,11 @@
 		
 	<s:HGroup width="100%" horizontalAlign="right" paddingRight="40" gap="10" bottom="37">
 			
-		<button:VDOMButton id="exitButton" includeIn="loginView, progressView" 
+		<button:VDOMButton id="cancelButton" includeIn="progressView" 
+						   label="{ resourceManager.getString( 'LoginForm', 'cancel_button' ) }" minWidth="100"
+						   click="cancelButton_clickHandler(event)"/>
+		
+		<button:VDOMButton id="exitButton" includeIn="loginView" 
 				label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }" minWidth="100"
 				click="exitButton_clickHandler(event)"/>
 			

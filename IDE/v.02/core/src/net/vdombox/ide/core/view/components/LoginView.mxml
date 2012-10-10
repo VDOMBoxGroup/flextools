@@ -35,7 +35,12 @@
 
 			public function get selectedLanguage() : LocaleVO
 			{
-				return _selectedLanguage as LocaleVO;
+				if ( _selectedLanguage )
+					return _selectedLanguage as LocaleVO;
+				else if ( selectLang.selectedItem )
+					return selectLang.selectedItem as LocaleVO;
+				else
+					return ( selectLang.dataProvider as ArrayList ).source[0] as LocaleVO;
 			}
 
 			public function set selectedLanguage( value : LocaleVO ) : void
@@ -147,8 +152,6 @@
 				
 				
 			</s:VGroup>
-			
-			
 			
 			<s:VGroup gap="3" width="100%">
 				

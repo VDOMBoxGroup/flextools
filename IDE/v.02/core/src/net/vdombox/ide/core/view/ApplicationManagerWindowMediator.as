@@ -139,10 +139,10 @@ package net.vdombox.ide.core.view
 
 		private function openNecessaryView() : void
 		{
-			if ( serverProxy.applications && serverProxy.applications.length > 0 )
+			//if ( serverProxy.applications && serverProxy.applications.length > 0 )
 				sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
-			else
-				sendNotification( ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW );
+			/*else
+				sendNotification( ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW );*/
 		}
 
 		private function registerMediators() : void

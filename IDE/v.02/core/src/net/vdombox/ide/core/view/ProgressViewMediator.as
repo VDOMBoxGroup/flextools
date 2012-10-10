@@ -54,6 +54,8 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SERVER_LOGIN_START );
 			interests.push( ApplicationFacade.SERVER_LOGIN_SUCCESSFUL );
 			interests.push( ApplicationFacade.SERVER_LOGIN_ERROR );
+			
+			interests.push( ApplicationFacade.BACK_TO_INITIAL_WINDOW );
 
 			interests.push( TypesProxy.TYPES_LOADING );
 			interests.push( TypesProxy.TYPES_LOADED );
@@ -149,6 +151,13 @@ package net.vdombox.ide.core.view
 						task.status = "OK";
 					}
 
+					break;
+				}
+					
+				case ApplicationFacade.BACK_TO_INITIAL_WINDOW:
+				{
+					cleanup();
+					
 					break;
 				}
 

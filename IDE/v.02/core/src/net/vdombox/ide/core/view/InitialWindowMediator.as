@@ -128,7 +128,9 @@ package net.vdombox.ide.core.view
 			
 			initialWindow.addEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler, false, 0, true );
 			
-			initialWindow.addEventListener( InitialWindowEvent.EXIT, exitHandler, false  );
+			initialWindow.addEventListener( InitialWindowEvent.EXIT, exitHandler );
+			
+			initialWindow.addEventListener( InitialWindowEvent.CANCEL, cancelHandler );
 			
 			initialWindow.addEventListener( InitialWindowEvent.SUBMIT, submitHandler);
 			
@@ -155,6 +157,15 @@ package net.vdombox.ide.core.view
 			removeHandlers();
 			
 			sendNotification( ApplicationFacade.CLOSE_IDE );
+		}
+		
+		private function cancelHandler( event : InitialWindowEvent ) : void
+		{			
+			sendNotification( ApplicationFacade.DISCONNECT_TO_SERVER );
+			
+			sendNotification( ApplicationFacade.SHOW_LOGIN_VIEW_REQUEST );
+			
+			sendNotification( ApplicationFacade.BACK_TO_INITIAL_WINDOW );
 		}
 		
 		private function initTitle():void

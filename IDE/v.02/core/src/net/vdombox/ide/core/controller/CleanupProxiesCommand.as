@@ -26,7 +26,7 @@ package net.vdombox.ide.core.controller
 			
 			var instanceName : String;
 			
-			serverProxy.disconnect();
+			serverProxy.logout();
 			
 			modulesProxy.unloadAllModules();
 			

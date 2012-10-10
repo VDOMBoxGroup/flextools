@@ -120,14 +120,20 @@ package net.vdombox.ide.core.model
 			soap.connect( _authInfo.WSDLFilePath );				
 		}
 		
-		public function reconnect( ) : void
+		public function reconnect() : void
 		{
 			reconected = true;
 			
 			soap.connect( _authInfo.WSDLFilePath );					
 		}
-
+		
 		public function disconnect() : void
+		{
+			soap.cancelConnected = true;
+			soap.disconnect();
+		}
+
+		public function logout() : void
 		{
 			_pingServerTimer.stop();
 			
