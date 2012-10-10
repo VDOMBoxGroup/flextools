@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.events.TypeItemRendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.AccordionHeaderSkin;
+	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.TypeItemRenderer;
 
 	public class TypesAccordionHeader extends AccordionHeader
 	{

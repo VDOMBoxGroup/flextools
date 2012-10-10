@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.TypeItemRendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.UserTypesProxy;
-	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
+	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypesCategory;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ToolBoxPanel;
 	

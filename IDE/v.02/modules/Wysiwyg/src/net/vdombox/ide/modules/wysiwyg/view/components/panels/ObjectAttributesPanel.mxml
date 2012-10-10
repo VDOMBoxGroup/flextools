@@ -259,7 +259,8 @@
 	<s:HGroup height="100%" width="100%" gap="0">
 		<s:List id="attributesList" height="100%" width="100%"  borderVisible="false" updateComplete="attributesList_updateCompleteHandler(event)"
 				useVirtualLayout="false" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase"
-				contentBackgroundAlpha="0" creationComplete="attributesList_creationCompleteHandler(event)">
+				contentBackgroundAlpha="0" creationComplete="attributesList_creationCompleteHandler(event)"
+				hasFocusableChildren="true">
 			
 			<s:layout>
 				<s:VerticalLayout gap="0"

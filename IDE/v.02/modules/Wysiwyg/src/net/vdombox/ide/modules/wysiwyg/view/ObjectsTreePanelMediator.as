@@ -34,7 +34,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.MultiObjectsManipulationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.VisibleRendererProxy;
-	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer;
+	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.ObjectTreePanelItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectsTreePanel;
 	

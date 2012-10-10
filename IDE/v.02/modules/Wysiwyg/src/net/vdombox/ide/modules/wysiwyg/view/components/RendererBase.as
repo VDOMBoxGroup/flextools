@@ -90,6 +90,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
 	import spark.skins.spark.ScrollerSkin;
+	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.TypeItemRenderer;
 
 	/**
 	 *

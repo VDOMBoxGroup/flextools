@@ -70,6 +70,7 @@
 					value = event.hexcolor;
 					dispatchEvent(new ColorPickerEvent(ColorPickerEvent.CHANGE, event.color, value));
 			}
+			
 		]]>
 	</fx:Script>
 	<s:Group width="100%" height="100%" toolTip="{_color}">
@@ -88,6 +89,7 @@
 	</s:Group>
 	
 		
-	<mx:Image source="@Embed('assets/colorpicker.png')" smoothBitmapContent="true"/>
+	<s:Button skinClass="net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.ColorPickerButtonSkin"
+			  click="mouseClickandler(event)"/>
 
 </s:HGroup>

@@ -5,8 +5,7 @@
 				width="100%"
 				minHeight="23"
 				contentBackgroundAlpha="0"
-				click="itemrenderer1_clickHandler(event)"
-				creationComplete="itemrenderer1_creationCompleteHandler(event)">
+				click="itemrenderer1_clickHandler(event)">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -460,21 +459,6 @@
 			protected function itemrenderer1_clickHandler(event:MouseEvent):void
 			{
 				dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED ))
-			}
-			
-			protected function itemrenderer1_creationCompleteHandler(event:FlexEvent):void
-			{
-				addEventListener( KeyboardEvent.KEY_DOWN, keyHandler, true, 0, true );
-			}
-			
-			private function keyHandler( event : KeyboardEvent ) : void
-			{
-				if ( event.keyCode == Keyboard.TAB )
-				{
-					dispatchEvent( new ObjectAttributesPanelEvent ( ObjectAttributesPanelEvent.SELECTED_ATTRIBUTE_CHANGED ) );
-					event.stopImmediatePropagation();
-					event.stopPropagation();
-				}
 			}
 			
 		]]>

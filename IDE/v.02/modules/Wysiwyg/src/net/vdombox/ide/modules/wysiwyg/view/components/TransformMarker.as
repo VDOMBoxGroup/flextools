@@ -157,6 +157,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 
 			_selectedItem = item as UIComponent;
+			
+			if ( !_selectedItem )
+				return;
 
 			moving = cc_box;
 
@@ -166,9 +169,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			moveMode = item.movable;
 
 			addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-			stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
-			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
-
+			
+			if ( stage )
+			{
+				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
+				stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
+			}
+			
 			_selectedItem.addEventListener( FlexEvent.UPDATE_COMPLETE, refreshCompleteHandler );
 			
 			beforeTransform = { x: _selectedItem.x, y: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };

@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.model.ResourcesProxy;
-	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectTreePanelItemRenderer;
+	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.ObjectTreePanelItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
