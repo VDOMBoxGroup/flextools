@@ -816,7 +816,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			richText.setStyle( "borderVisible", false );
 
-			richText[ "text" ] = contetntPart[ 0 ];
+			if (richText is RichEditableText)
+				richText[ "text" ] = contetntPart[ 0 ];
+			else
+				richText[ "htmlText" ] = contetntPart[ 0 ];
 
 			applyStyles( richText, contetntPart );
 			
