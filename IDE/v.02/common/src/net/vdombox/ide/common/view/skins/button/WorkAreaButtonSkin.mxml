@@ -130,7 +130,7 @@
 				  visible="{ hostComponent.icon ? true : false }"
 				  smoothBitmapContent="true"/>
 
-		<s:Label id="labelDisplay" width="100%" paddingTop="5"
+		<s:Label id="labelDisplay" width="100%" paddingTop="4"
 				 color="#000000" 
 				 color.highlighted="{ hostComponent.textDownColor }"
 				 textAlign="left" verticalAlign="middle"/>
