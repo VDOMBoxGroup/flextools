@@ -8,8 +8,12 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.graphics.SolidColorStroke;
+			
 			import net.vdombox.ide.common.events.ItemRendererEvent;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
+			
+			import spark.primitives.Line;
 
 			[Bindable]
 			private var _typeResource : ResourceVO;
@@ -22,6 +26,43 @@
 			private function creationCompleteHandler() : void
 			{
 				dispatchEvent( new ItemRendererEvent( ItemRendererEvent.CREATED ) );
+				
+				var _w : int = this.width - 2;
+				var _h : int = this.height;
+				
+				var strokeColor : SolidColorStroke = new SolidColorStroke();
+				strokeColor.color = 0x484848;
+				strokeColor.weight = 2;
+				
+				for ( var i : int = 0; i < _w; i += 5 )
+				{
+					var line : Line = new Line();
+					line.xFrom = i;
+					line.yFrom = _h;
+					line.xTo = i + 2;
+					line.yTo = _h;
+					line.stroke = strokeColor;
+					lineGroup.addElement( line );
+				}
+				
+				setVisinleLine( currentState );
+			}
+			
+			override protected function stateChanged( oldState : String, newState : String, recursive : Boolean ) : void
+			{
+				setVisinleLine( newState );
+			}
+			
+			private function setVisinleLine( state : String ) : void
+			{
+				var line : Line;
+				var _visible : Boolean = state == "normal" ? true : false;
+				
+				for ( var i : int = 0; i < lineGroup.numElements; i++ )
+				{
+					line = lineGroup.getElementAt( i ) as Line;
+					line.visible = _visible;
+				}
 			}
 			
 			override public function set selected( value : Boolean ) : void
@@ -46,7 +87,7 @@
 
 	<s:Rect bottom="0" left="0" right="0" top="0">
 		<s:fill>
-			<s:SolidColor color.normal="#3A3A3A" color.selected="#4E4E4E" />
+			<s:SolidColor color.normal="#2f2f2f" color.selected="#39829d" />
 		</s:fill>
 	</s:Rect>
 
@@ -56,15 +97,35 @@
 
 		<s:VGroup height="100%" width="100%" paddingTop="10" gap="8">
 
-			<s:Label text="{ data.displayName }" fontWeight="bold" fontSize="14" color="#FFFFFF"/>
+			<s:Label text="{ data.displayName }" fontWeight="bold" fontSize="14" color="#fffafc"/>
 
-			<s:RichText height="100%" text="{ data.description }" fontSize="12" width="285" color="#FFFFFF"/>
+			<s:RichText height="100%" text="{ data.description }" 
+						fontSize="12" width="285" 
+						color="#8b8787" color.selected="#fffafc"/>
 		</s:VGroup>
 	</s:HGroup>
 	
-	<s:Rect width="100%" top="0" height="24">
+	<s:Group id="lineGroup" width="100%" height="100%"/>
+	
+	<s:Rect right="0" height="100%" width="50">
 		<s:fill>
-			<s:BitmapFill source = "@Embed('assets/ide-new-page-divider-shadow.png')" smooth="true" fillMode="repeat"/>
+			<s:LinearGradient>
+				<s:GradientEntry color="#2f2f2f" alpha="0"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.02"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.08"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.1"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.15"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.2"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.3"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.4"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.5"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.6"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.7"/>
+				<s:GradientEntry color="#2f2f2f" alpha="0.9"/>
+				<s:GradientEntry color="#2f2f2f" alpha="1"/>
+				<s:GradientEntry color="#2f2f2f" alpha="1" />
+			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
+	
 </s:ItemRenderer>

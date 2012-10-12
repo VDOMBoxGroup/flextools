@@ -70,13 +70,14 @@
 					itemRenderer="net.vdombox.ide.common.view.components.itemrenderers.PageTypeItemRenderer"
 					requireSelection="true" useVirtualLayout="false"
 					creationComplete="pageTypeList_creationCompleteHandler(event)" borderVisible="false"
-					contentBackgroundAlpha="0"/>
+					contentBackgroundAlpha="0"
+					/>
 			
 			<s:Group width="100%" height="54">
 				
 				<s:Rect width="100%" height="100%">
 					<s:fill>
-						<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
+						<s:SolidColor color="#3a3a3a"/>
 					</s:fill>
 				</s:Rect>
 				

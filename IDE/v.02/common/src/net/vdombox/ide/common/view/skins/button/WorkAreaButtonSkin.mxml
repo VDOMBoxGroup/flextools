@@ -49,18 +49,20 @@
 			{
 				if ( newState == "over" )
 				{
+					var _h : int = this.height - 1;
+					var _w : int = this.width - 1;
 					this.graphics.lineStyle(1, 0xa3a9a9 );
-					this.graphics.moveTo( 2, this.height );
-					this.graphics.lineTo( this.width - 2, this.height );
-					this.graphics.curveTo( this.width, this.height, this.width, this.height - 2 );
-					this.graphics.lineTo( this.width, 2 );
+					this.graphics.moveTo( 2, _h );
+					this.graphics.lineTo( _w - 2, _h );
+					this.graphics.curveTo( _w, _h, _w, _h - 2 );
+					this.graphics.lineTo( _w, 2 );
 					
 					this.graphics.lineStyle(1, 0xFAFAFA, 0.7 );
-					this.graphics.curveTo( this.width, 0, this.width - 2, 0 );
-					this.graphics.lineTo( 2, 0 );
-					this.graphics.curveTo( 0, 0, 0, 2 );
-					this.graphics.lineTo( 0, this.height - 2 );
-					this.graphics.curveTo( 0, this.height, 2, this.height );
+					this.graphics.curveTo( _w, -1, _w - 2, -1 );
+					this.graphics.lineTo( 2, -1 );
+					this.graphics.curveTo( -1, -1, -1, 2 );
+					this.graphics.lineTo( -1, _h - 2 );
+					this.graphics.curveTo( -1, _h, 2, _h );
 					
 				}
 				else
@@ -121,14 +123,14 @@
 	<s:HGroup gap="5" width="100%"
 			  paddingLeft="5" paddingRight="5" verticalAlign="middle">
 
-		<mx:Image id="buttonIcon"
+		<mx:Image id="buttonIcon" verticalAlign="middle"
 				  includeInLayout="{ hostComponent.icon ? true : false }" 
 				  source="{ hostComponent.icon }" 
 				  source.highlighted="{ hostComponent.iconDown ? hostComponent.iconDown : hostComponent.icon }"
 				  visible="{ hostComponent.icon ? true : false }"
 				  smoothBitmapContent="true"/>
 
-		<s:Label id="labelDisplay" width="100%" paddingTop="2"
+		<s:Label id="labelDisplay" width="100%" paddingTop="5"
 				 color="#000000" 
 				 color.highlighted="{ hostComponent.textDownColor }"
 				 textAlign="left" verticalAlign="middle"/>
