@@ -125,8 +125,11 @@ package net.vdombox.ide.core.model
 				shObjData.data["host" + strI] = value.host;
 				shObjData.data["user" + strI] = value.user;
 				shObjData.data["password" + strI] = value.password;
-				shObjData.data["localcode" + strI] = value.local.code;
-				shObjData.data["localdescription" + strI] = value.local.description;
+				if ( value.local )
+				{
+					shObjData.data["localcode" + strI] = value.local.code;
+					shObjData.data["localdescription" + strI] = value.local.description;
+				}
 				shObjData.data.selectHost = strI;
 			}
 		}

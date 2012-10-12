@@ -32,8 +32,6 @@ package net.vdombox.ide.core.view
 		
 		private var applicationUpdater : ApplicationUpdaterUI;
 		
-		private var ativeApplication : NativeApplication = NativeApplication.nativeApplication;
-		
 		private var dataXML : XML;
 		
 		public function UpdateMediator( viewComponent:Object=null)
@@ -69,12 +67,11 @@ package net.vdombox.ide.core.view
 			loader.addEventListener ( SecurityErrorEvent.SECURITY_ERROR, on_error );
 			loader.load ( request );
 			
-			
 		}
 		
 		private function on_error( evt:Event ):void
 		{
-			
+			facade.removeMediator( UpdateMediator.NAME );
 		}
 		
 		private function on_complete( evt:Event ):void
@@ -88,10 +85,15 @@ package net.vdombox.ide.core.view
 				var currentVersion : String = VersionUtils.getApplicationVersion();
 				
 				if ( ftpVersion <= currentVersion )
+				{
+					facade.removeMediator( UpdateMediator.NAME );
 					return;
+				}
+					
 			}
 			catch( e : Error )
 			{
+				facade.removeMediator( UpdateMediator.NAME );
 				return;
 			}
 			
@@ -113,16 +115,17 @@ package net.vdombox.ide.core.view
 			applicationUpdater.addEventListener( UpdateEvent.INITIALIZED, onUpdate, false, 0, true ); // Once initialized, run onUpdate
 		
 			applicationUpdater.addEventListener( ErrorEvent.ERROR, onError, false, 0, true );
-			
-			
-			
+						
 		}
 		
 		private function removeHandlers() : void
 		{
-			applicationUpdater.removeEventListener( UpdateEvent.INITIALIZED, onUpdate ); // Once initialized, run onUpdate
-			
-			applicationUpdater.removeEventListener( ErrorEvent.ERROR, onError );
+			if ( applicationUpdater )
+			{
+				applicationUpdater.removeEventListener( UpdateEvent.INITIALIZED, onUpdate ); // Once initialized, run onUpdate
+				
+				applicationUpdater.removeEventListener( ErrorEvent.ERROR, onError );
+			}
 		}
 		
 		

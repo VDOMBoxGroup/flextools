@@ -39,8 +39,9 @@
 					return _selectedLanguage as LocaleVO;
 				else if ( selectLang.selectedItem )
 					return selectLang.selectedItem as LocaleVO;
-				else
+				else if ( selectLang.dataProvider )
 					return ( selectLang.dataProvider as ArrayList ).source[0] as LocaleVO;
+				return null;
 			}
 
 			public function set selectedLanguage( value : LocaleVO ) : void

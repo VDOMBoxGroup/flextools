@@ -146,7 +146,7 @@
 				strokeColor.color = 0x484848;
 				strokeColor.weight = 2;
 				
-				for ( var i : int = 0; i < _w; i += 5 )
+				for ( var i : int = 0; i < _w - 2; i += 5 )
 				{
 					var line : Line = new Line();
 					line.xFrom = i;
@@ -202,7 +202,8 @@
 			
 			<mx:Spacer height="100%" />
 			
-			<s:Label id="version" color="#fffafc"/>
+			<s:Label id="version" 
+					 color="#8b8787" color.selected="#fffafc"/>
 			
 		</s:VGroup>
 		
@@ -219,7 +220,7 @@
 						editable="false"
 						selectable="false"
 						borderVisible="false"
-						color="#fffafc"
+						color="#8b8787" color.selected="#fffafc"
 						fontFamily="Arial"
 						fontSize="10" 
 						paddingLeft="0"
