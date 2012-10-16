@@ -5,6 +5,8 @@ package net.vdombox.ide.modules.tree.view.components
 	import flash.events.MouseEvent;
 	import flash.net.sendToURL;
 	
+	import mx.events.FlexEvent;
+	
 	import net.vdombox.ide.common.view.components.button.WorkAreaButton;
 	import net.vdombox.ide.modules.tree.events.LinkageEvent;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
@@ -48,6 +50,8 @@ package net.vdombox.ide.modules.tree.view.components
 			addEventListener( TreeElementEvent.MULTI_SELECT_MOVED, elementMultiSelectMovedHandler, true, 0, true );
 			
 			addEventListener( TreeElementEvent.MOVE, moveElementHandler, true, 0, true );
+			
+			addEventListener( FlexEvent.CREATION_COMPLETE, addHandlersShadow );
 		}
 
 		[SkinPart( required="true" )]
@@ -1074,6 +1078,25 @@ package net.vdombox.ide.modules.tree.view.components
 			}
 			
 			link.signatureGroup.openIndexList( sourceLinkages, coordinates );
+		}
+		
+		private function addHandlersShadow( event : FlexEvent ) : void
+		{
+			if ( !stage )
+				return;
+			
+			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0 , false );
+		}
+		
+		private function mouseUpHandler( event : MouseEvent ) : void
+		{
+			if ( hasEventListener( Event.ENTER_FRAME ) )
+			{
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom );
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToRight );
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToTop );
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft );
+			}
 		}
 			
 	}
