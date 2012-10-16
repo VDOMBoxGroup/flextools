@@ -58,6 +58,7 @@ package net.vdombox.ide.core.model
 		}
 		
 		private var typesProxy : TypesProxy;
+		private var serverProxy : ServerProxy;
 		
 		public function get objectVO() : ObjectVO
 		{
@@ -67,6 +68,8 @@ package net.vdombox.ide.core.model
 		override public function onRegister() : void
 		{
 			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
+			
+			serverProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			
 			addHandlers();
 		}
@@ -764,7 +767,7 @@ package net.vdombox.ide.core.model
 					
 				case "remote_call":
 				{
-					sendNotification( ApplicationFacade.OBJECT_REMOTE_CALL_GETTED, { objectVO: objectVO, result: result } );
+					sendNotification( ApplicationFacade.OBJECT_REMOTE_CALL_GETTED, { objectVO: objectVO, result: result, serverVersion : serverProxy.authInfo.serverVersion } );
 					
 					break;
 				}
