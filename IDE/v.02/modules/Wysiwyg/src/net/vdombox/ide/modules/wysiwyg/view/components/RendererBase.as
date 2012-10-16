@@ -66,6 +66,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.controls.ToolbarButton;
+	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
 	import net.vdombox.utils.XMLUtils;
 	
@@ -90,7 +91,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
 	import spark.skins.spark.ScrollerSkin;
-	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.TypeItemRenderer;
 
 	/**
 	 *
@@ -744,7 +744,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( contetntPart.@editable )
 				_editableComponent = html;
 
-			var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + "</head>" + "<body style=\"margin : 0px;\" >" + contetntPart.children().toString() + "</body>" + "</html>";
+			var body_content :String = contetntPart.children().toXMLString();
+			if (isRichtextWithCdata)
+				body_content = contetntPart[0]
+			
+			var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + "</head>" + "<body style=\"margin : 0px;\" >" + body_content + "</body>" + "</html>";
 
 			html.htmlText = htmlText;
 			
@@ -757,6 +761,33 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				
 			dispatchEvent(new RendererEvent(RendererEvent.HTML_ADDED));
 
+		}
+		
+		private function get isRichtextWithCdata () : Boolean
+		{
+			try
+			{
+				var typeVO : TypeVO = _renderVO.vdomObjectVO.typeVO;
+				
+				if (typeVO.name != "richtext")
+					return false;
+				
+				if (typeVO.versionFirstNumber > 2)
+					return false;
+				else if (typeVO.versionFirstNumber < 2)
+					return true;
+				else 
+				{
+					if (typeVO.versionSecondNumber <= 7)
+						return true;
+				}
+			}
+			catch(e:Error)
+			{
+				return false;
+			}
+			
+			return false;
 		}
 		
 		private function disableContainerScroller():void
