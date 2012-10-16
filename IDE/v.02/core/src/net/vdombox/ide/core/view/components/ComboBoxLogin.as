@@ -51,11 +51,11 @@ package net.vdombox.ide.core.view.components
 			}
 		}
 		
-		override protected function item_mouseDownHandler(event:MouseEvent):void
+		/*override protected function item_mouseDownHandler(event:MouseEvent):void
 		{
 			super.item_mouseDownHandler(event);
-			event.stopImmediatePropagation();
-		}
+			//event.stopImmediatePropagation();
+		}*/
 		
 		override protected function capture_keyDownHandler(event:KeyboardEvent):void
 		{

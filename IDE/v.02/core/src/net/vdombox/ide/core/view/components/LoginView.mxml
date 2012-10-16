@@ -107,8 +107,7 @@
 			}
 			
 		]]>
-	</fx:Script>
-	
+	</fx:Script>	
 	
 		<s:VGroup gap="20" styleName="loginForm"
 				  height="100%" left="180" right="40" top="34">

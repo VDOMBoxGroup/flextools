@@ -124,7 +124,7 @@ package net.vdombox.ide.core.view
 		private function addHandlers() : void
 		{
 			initialWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
-			initialWindow.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
+			//initialWindow.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
 			
 			initialWindow.addEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler, false, 0, true );
 			
@@ -173,20 +173,20 @@ package net.vdombox.ide.core.view
 			initialWindow.title = VersionUtils.getApplicationName();
 		}
 		
-		private function mouseDownHandler( event : MouseEvent ) : void
+		/*private function mouseDownHandler( event : MouseEvent ) : void
 		{
 			if ( event.target is Button || event.target is RichEditableText || event.target.parent is ComboBox )
 				return;
 			
 			initialWindow.nativeWindow.startMove();
 			
-			event.stopImmediatePropagation();
-		}
+			//event.stopImmediatePropagation();
+		}*/
 		
 		private function removeHandlers() : void
 		{
 			initialWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-			initialWindow.removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
+			//initialWindow.removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 			
 			initialWindow.removeEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler );
 			

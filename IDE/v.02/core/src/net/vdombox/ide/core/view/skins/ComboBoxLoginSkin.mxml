@@ -182,8 +182,12 @@ is defined by the ComboBoxTextInputSkin class.
         <p>In a custom skin class that uses transitions, set the 
         <code>itemDestructionPolicy</code> property to <code>none</code>.</p>
     -->
-    <s:PopUpAnchor id="popUp"  displayPopUp.normal="false" displayPopUp.open="true" includeIn="open"
-                   left="0" right="0" top="0" bottom="0" itemDestructionPolicy="auto"
+    <s:PopUpAnchor id="popUp"  
+				   includeIn="open"
+				   left="0" right="0" top="0" bottom="0"
+				   displayPopUp.normal="false" 
+				   displayPopUp.open="true" 
+                   itemDestructionPolicy="auto"
                    popUpPosition="below" popUpWidthMatchesAnchorWidth="true">
         
         <!--- 
@@ -220,7 +224,7 @@ is defined by the ComboBoxTextInputSkin class.
             </s:Rect>
             
             <!--- @private -->
-            <s:Scroller id="scroller" left="0" top="0" right="0" bottom="0" hasFocusableChildren="false" minViewportInset="1"
+            <s:Scroller id="scroller" left="0" top="0" right="0" bottom="0"
 						mouseWheel="scroller_mouseWheelHandler(event)">
                 <!--- @copy spark.components.SkinnableDataContainer#dataGroup-->
                 <s:DataGroup id="dataGroup" itemRenderer="spark.skins.spark.DefaultItemRenderer">

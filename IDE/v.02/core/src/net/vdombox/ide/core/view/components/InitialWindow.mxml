@@ -29,13 +29,20 @@
 				var target : Object = event.target;
 
 				if ( target is RichEditableText || target is Button || target is TextLine )
-				{
-					event.stopImmediatePropagation();
 					return;
-				}
 
 				nativeWindow.startMove();
-				event.stopImmediatePropagation();
+				event.stopPropagation();
+				
+				if ( loginView )
+				{
+					if ( loginView.host.skin && loginView.host.skin.currentState != "normal" )
+						loginView.host.skin.currentState = "normal";
+					
+					if ( loginView.selectLang.skin && loginView.selectLang.skin.currentState != "normal" )
+						loginView.selectLang.skin.currentState = "normal";
+					
+				}
 			}
 
 			private function exitButton_clickHandler( event : MouseEvent ) : void
