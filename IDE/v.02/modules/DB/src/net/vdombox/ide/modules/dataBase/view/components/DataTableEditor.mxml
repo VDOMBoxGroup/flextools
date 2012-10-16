@@ -522,7 +522,7 @@
 				{
 					xmlRow.appendChild(
 						<cell name={dataGridCell.dataField}>
-						{StringUtils.getCDataParserString( item[dataGridCell.dataField] )}
+						{item[dataGridCell.dataField]}
 						</cell> );
 				}
 				
@@ -554,7 +554,7 @@
 								break;
 							}
 						}
-						else
+						else 
 						{
 							queue.addRequest(
 								item['GUID'],
