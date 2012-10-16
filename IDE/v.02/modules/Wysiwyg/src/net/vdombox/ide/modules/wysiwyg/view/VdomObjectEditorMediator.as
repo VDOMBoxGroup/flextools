@@ -581,6 +581,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function writeLinkage( event : Event ) :void
 		{
 			component.showLinking = sharedObjectProxy.showLinking;
+			
+			component.stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0 , true );
+		}
+		
+		private function mouseUpHandler( event : MouseEvent ) : void
+		{
+			if ( element && element.hasEventListener( Event.ENTER_FRAME ) )
+			{
+				element.removeEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom );
+				element.removeEventListener( Event.ENTER_FRAME, changeSizeGroupToRight );
+				element.removeEventListener( Event.ENTER_FRAME, changeSizeGroupToTop );
+				element.removeEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft );
+			}
 		}
 		
 		private function readLinkage( event : Event = null ) :void
