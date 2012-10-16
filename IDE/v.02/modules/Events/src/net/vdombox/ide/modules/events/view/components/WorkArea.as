@@ -488,6 +488,7 @@ package net.vdombox.ide.modules.events.view.components
 			
 			workLayers.addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler, false, 0, true );
 			workLayers.addEventListener( DragEvent.DRAG_DROP, dragDropHandler, false, 0, true );
+			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0 , true );
 		}
 
 		private function dragEnterHandler( event : DragEvent ) : void
@@ -735,6 +736,17 @@ package net.vdombox.ide.modules.events.view.components
 			
 			if ( element.x + offsetX  < horizontalScrollPosition + 10 )
 				addEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft, false, 0, true );
+		}
+		
+		private function mouseUpHandler( event : MouseEvent ) : void
+		{
+			if ( hasEventListener( Event.ENTER_FRAME ) )
+			{
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom );
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToRight );
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToTop );
+				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft );
+			}
 		}
 		
 		private function unsaveHandler( event : ElementEvent = null ) : void
