@@ -5,10 +5,10 @@ package net.vdombox.ide.modules.dataBase.view
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.ExternalManagerEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTableEditor;
 	
@@ -77,6 +77,9 @@ package net.vdombox.ide.modules.dataBase.view
 				{
 					var event : ExternalManagerEvent = new ExternalManagerEvent( ExternalManagerEvent.CALL_COMPLETE );
 					event.result = body.result;
+					
+					dataTableEditor.serverVersion = body.serverVersion;
+					
 					dispatchEvent( event );
 					
 					break;

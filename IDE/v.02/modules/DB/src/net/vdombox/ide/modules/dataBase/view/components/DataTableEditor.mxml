@@ -74,6 +74,8 @@
 			
 			private var endMessage : String = "</getdata>";
 			
+			public var serverVersion : String;
+			
 			
 			private function get defaultMessage():String
 			{
@@ -318,7 +320,11 @@
 					cellIndex = 0;
 					for each ( var xmlCell:XML in xmlRow.cell ) 
 					{
-						tableRow[ dataGridColumns[ cellIndex ].dataField ] = xmlCell.toString();
+						if ( serverVersion && serverVersion > "1.3.8531" )
+							tableRow[ dataGridColumns[ cellIndex ].dataField ] = xmlCell.toString();
+						else
+							tableRow[ dataGridColumns[ cellIndex ].dataField ] = StringUtils.toHtmlEnc( xmlCell.toString() );
+						
 						cellIndex++;
 					}
 					
@@ -522,7 +528,7 @@
 				{
 					xmlRow.appendChild(
 						<cell name={dataGridCell.dataField}>
-						{item[dataGridCell.dataField]}
+						{StringUtils.getCDataParserString( item[dataGridCell.dataField] )}
 						</cell> );
 				}
 				

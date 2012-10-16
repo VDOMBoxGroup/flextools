@@ -26,7 +26,7 @@
 				
 				super.data = value;
 				
-				textArea.text = value[DataGridListData(listData).dataField];
+				textArea.htmlText = value[DataGridListData(listData).dataField];
 			}
 			
 			override public function validateProperties():void
