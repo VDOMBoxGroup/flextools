@@ -12,10 +12,8 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
-			import mx.binding.utils.ChangeWatcher;
 			import mx.controls.Image;
 			import mx.core.UIComponent;
-			import mx.events.FlexEvent;
 			import mx.events.ResizeEvent;
 			
 			import net.vdombox.ide.common.events.PopUpWindowEvent;
@@ -29,12 +27,10 @@
 			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
-			import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
 			import net.vdombox.utils.WindowManager;
 			
 			import spark.components.Group;
-			import spark.filters.DropShadowFilter;
 			
 			[SkinPart( required="true" )]
 			public var headerGroup : Group;

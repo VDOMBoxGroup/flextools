@@ -1,10 +1,5 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
-	import flash.display.DisplayObject;
-	
-	import mx.managers.PopUpManager;
-	
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.view.ResourceSelectorWindowMediator;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelector;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelectorWindow;

@@ -1,10 +1,7 @@
 package net.vdombox.ide.modules.tree.controller
 {
-	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
-	import net.vdombox.ide.modules.tree.model.StructureProxy;
-	import net.vdombox.ide.modules.tree.view.WorkAreaMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

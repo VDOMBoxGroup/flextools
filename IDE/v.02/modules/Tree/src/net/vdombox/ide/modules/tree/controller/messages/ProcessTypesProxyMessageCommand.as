@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.tree.controller.messages
 {
-	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
-	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.model.TypesProxy;
+	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

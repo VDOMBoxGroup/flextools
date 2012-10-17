@@ -11,7 +11,6 @@ package net.vdombox.ide.modules.tree.model
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
-	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;

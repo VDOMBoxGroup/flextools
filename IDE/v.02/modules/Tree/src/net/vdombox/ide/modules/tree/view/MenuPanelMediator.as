@@ -1,7 +1,6 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import net.vdombox.ide.common.controller.Notifications;
-	import net.vdombox.ide.modules.tree.events.MenuPanelEvent;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

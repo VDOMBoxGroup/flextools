@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.tree.view.components
 {
 	import flash.display.Bitmap;
+	
 	import mx.controls.Image;
 
 	public class SmoothImage extends Image

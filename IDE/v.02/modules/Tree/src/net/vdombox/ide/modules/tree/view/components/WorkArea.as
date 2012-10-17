@@ -3,12 +3,10 @@ package net.vdombox.ide.modules.tree.view.components
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.net.sendToURL;
 	
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.view.components.button.WorkAreaButton;
-	import net.vdombox.ide.modules.tree.events.LinkageEvent;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;

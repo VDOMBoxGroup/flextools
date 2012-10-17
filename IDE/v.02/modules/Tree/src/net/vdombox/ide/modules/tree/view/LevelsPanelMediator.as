@@ -1,13 +1,12 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import flash.events.Event;
-
+	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
-	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
 	import net.vdombox.ide.modules.tree.view.components.LevelsFilterPanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;

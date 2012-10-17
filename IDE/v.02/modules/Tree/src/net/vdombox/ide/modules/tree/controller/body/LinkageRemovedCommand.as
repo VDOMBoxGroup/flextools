@@ -2,7 +2,6 @@ package net.vdombox.ide.modules.tree.controller.body
 {
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;
-	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.view.LinkageMediator;
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	

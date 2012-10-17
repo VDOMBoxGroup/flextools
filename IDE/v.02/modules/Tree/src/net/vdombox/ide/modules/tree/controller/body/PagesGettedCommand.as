@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StructureProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

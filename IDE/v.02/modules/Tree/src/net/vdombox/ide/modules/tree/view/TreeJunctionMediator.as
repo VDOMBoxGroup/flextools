@@ -1,10 +1,9 @@
 package net.vdombox.ide.modules.tree.view
 {
-	import flash.utils.Dictionary;
-	
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.SimpleMessageHeaders;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.messages.SimpleMessage;
@@ -23,7 +22,6 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

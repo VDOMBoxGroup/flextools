@@ -7,13 +7,10 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayList;
-			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
-			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
 			
 			import spark.events.IndexChangeEvent;

@@ -1,7 +1,6 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
 	import net.vdombox.ide.common.controller.Notifications;
-	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.view.BodyMediator;
 	import net.vdombox.ide.modules.tree.view.TreeMediator;
 	import net.vdombox.ide.modules.tree.view.components.Body;

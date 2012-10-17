@@ -5,13 +5,11 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.Tree;
 	import net.vdombox.ide.modules.tree.controller.BodyStopCommand;
-	import net.vdombox.ide.modules.tree.controller.CreateLinkageCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.GetTreeLevelsCommand;
 	import net.vdombox.ide.modules.tree.controller.SaveRequestCommand;
-	import net.vdombox.ide.modules.tree.controller.SelectedPageGettedCommand;
 	import net.vdombox.ide.modules.tree.controller.StartupCommand;
 	import net.vdombox.ide.modules.tree.controller.TearDownCommand;
 	import net.vdombox.ide.modules.tree.controller.UndoRequestCommand;
@@ -20,7 +18,6 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.body.CreateBodyCommand;
 	import net.vdombox.ide.modules.tree.controller.body.CreatePageRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.body.DeletePageRequestCommand;
-	import net.vdombox.ide.modules.tree.controller.body.ExpandAllRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.body.LinkageCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.LinkageRemovedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.OpenCreatePageWindowRequestCommand;

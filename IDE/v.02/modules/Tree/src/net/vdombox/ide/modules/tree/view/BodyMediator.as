@@ -1,29 +1,14 @@
 package net.vdombox.ide.modules.tree.view
 {
-	import flash.display.DisplayObjectContainer;
-	import flash.events.MouseEvent;
-	
 	import mx.events.FlexEvent;
-	import mx.managers.PopUpManager;
 	
-	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
-	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
-	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
-	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
 	import net.vdombox.ide.modules.tree.view.components.Body;
-	import net.vdombox.ide.modules.tree.view.components.Linkage;
-	import net.vdombox.ide.modules.tree.view.components.TreeElement;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.components.Group;
-	import spark.effects.Move;
-	import spark.effects.easing.EaseInOutBase;
 
 	public class BodyMediator extends Mediator implements IMediator
 	{

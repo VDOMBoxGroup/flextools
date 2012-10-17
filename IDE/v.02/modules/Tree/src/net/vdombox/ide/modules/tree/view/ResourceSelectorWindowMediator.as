@@ -1,12 +1,8 @@
 package net.vdombox.ide.modules.tree.view
 {
-	import flash.events.Event;
-	
-	import mx.managers.PopUpManager;
-	
-	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.WindowEvent;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelector;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelectorWindow;

@@ -1,10 +1,9 @@
 package net.vdombox.ide.modules.tree.view
 {
-	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.events.AttributeEvent;
 	import net.vdombox.ide.modules.tree.events.PropertiesPanelEvent;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;

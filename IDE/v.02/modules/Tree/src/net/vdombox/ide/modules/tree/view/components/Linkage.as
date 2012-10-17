@@ -4,7 +4,6 @@ package net.vdombox.ide.modules.tree.view.components
 	import flash.display.Graphics;
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
@@ -19,7 +18,6 @@ package net.vdombox.ide.modules.tree.view.components
 	
 	import spark.components.Button;
 	import spark.components.DropDownList;
-	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
 
 	public class Linkage extends UIComponent

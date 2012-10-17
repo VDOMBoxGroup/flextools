@@ -1,13 +1,12 @@
 package net.vdombox.ide.modules.tree.view
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;

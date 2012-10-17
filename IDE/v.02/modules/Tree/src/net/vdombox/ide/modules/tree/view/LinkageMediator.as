@@ -1,16 +1,7 @@
 package net.vdombox.ide.modules.tree.view
 {
-	import flash.display.CapsStyle;
-	import flash.display.Graphics;
-	import flash.display.JointStyle;
-	import flash.display.LineScaleMode;
-	import flash.geom.Point;
-	
-	import mx.binding.utils.BindingUtils;
-	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
-	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

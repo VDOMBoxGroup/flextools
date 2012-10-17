@@ -1,15 +1,8 @@
 package net.vdombox.ide.modules.tree.model
 {
 	import net.vdombox.ide.common.model.StatesProxy;
-	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
-	
-	import org.puremvc.as3.multicore.interfaces.IProxy;
-	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class StatesProxy extends net.vdombox.ide.common.model.StatesProxy
 	{

@@ -1,9 +1,6 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.view.LevelsPanelMediator;
-	import net.vdombox.ide.modules.tree.view.MenuPanelMediator;
-	import net.vdombox.ide.modules.tree.view.PropertiesPanelMediator;
 	import net.vdombox.ide.modules.tree.view.WorkAreaMediator;
 	import net.vdombox.ide.modules.tree.view.components.Body;
 	
