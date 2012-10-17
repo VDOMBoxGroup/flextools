@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.scripts.controller
 {
-	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

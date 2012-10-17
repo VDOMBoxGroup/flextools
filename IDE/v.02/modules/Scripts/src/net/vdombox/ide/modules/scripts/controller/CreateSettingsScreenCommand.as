@@ -1,11 +1,9 @@
 package net.vdombox.ide.modules.scripts.controller
 {
-	import mx.controls.CheckBox;
-
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.view.SettingsScreenMediator;
 	import net.vdombox.ide.modules.scripts.view.components.SettingsScreen;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 

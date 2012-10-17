@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.scripts.controller.messages
 {
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
 	import net.vdombox.ide.common.model.StatesProxy;

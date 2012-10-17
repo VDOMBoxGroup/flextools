@@ -7,12 +7,10 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
 			import mx.events.FlexEvent;
-			import mx.resources.ResourceManager;
 			
 			import net.vdombox.ide.common.events.PopUpWindowEvent;
 			import net.vdombox.ide.common.model._vo.LibraryVO;
@@ -21,8 +19,6 @@
 			import net.vdombox.ide.common.view.components.windows.Alert;
 			import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
 			import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
-			
-			import spark.events.IndexChangeEvent;
 
 			[Bindable]
 			private var _libraries : ArrayCollection;

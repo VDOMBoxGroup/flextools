@@ -8,12 +8,9 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
-			import mx.managers.DragManager;
 			
-			import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
 

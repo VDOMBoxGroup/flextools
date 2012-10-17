@@ -1,28 +1,18 @@
 package net.vdombox.ide.modules.scripts.view
 {
-	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	
 	import mx.collections.ArrayCollection;
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.base.BaseScriptEditor;
-	import net.vdombox.editors.parsers.python.PythonScriptEditor;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.model.PreferencesProxy;
 	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
-	import net.vdombox.ide.common.model._vo.GlobalActionVO;
-	import net.vdombox.ide.common.model._vo.LibraryVO;
-	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	import net.vdombox.ide.modules.scripts.events.FindBoxEvent;
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 	import net.vdombox.ide.modules.scripts.model.GoToPositionProxy;
-	import net.vdombox.ide.modules.scripts.view.components.FindBox;
 	import net.vdombox.ide.modules.scripts.view.components.PreferencesWindow;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	import net.vdombox.utils.WindowManager;

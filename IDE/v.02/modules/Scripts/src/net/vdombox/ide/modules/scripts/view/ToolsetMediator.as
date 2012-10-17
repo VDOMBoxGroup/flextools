@@ -1,13 +1,13 @@
 package net.vdombox.ide.modules.scripts.view
 {
 	import flash.events.MouseEvent;
-
+	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.view.components.Toolset;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;

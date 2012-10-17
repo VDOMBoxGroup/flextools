@@ -1,7 +1,5 @@
 package net.vdombox.ide.modules.scripts.view
 {
-	import flash.events.Event;
-	
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.editors.HashLibraryArray;
@@ -16,13 +14,9 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
-	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.modules.scripts.ApplicationFacade;
-	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
 	import net.vdombox.ide.modules.scripts.model.GoToPositionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
 	import net.vdombox.ide.modules.scripts.view.components.WorkArea;

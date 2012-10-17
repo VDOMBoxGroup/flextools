@@ -1,9 +1,8 @@
 package net.vdombox.ide.modules.scripts.controller.settings
 {
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 

@@ -2,9 +2,9 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

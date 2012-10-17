@@ -4,7 +4,6 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
-	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.modules.scripts.events.GlobalScriptsPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.GlobalScriptsPanel;
 	

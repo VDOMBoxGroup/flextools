@@ -5,8 +5,6 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model.StatesProxy;
-	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 	import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;

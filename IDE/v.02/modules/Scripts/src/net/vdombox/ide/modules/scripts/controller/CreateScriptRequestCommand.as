@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.scripts.controller
 {
-	import mx.utils.ObjectUtil;
 	import mx.utils.UIDUtil;
 	
 	import net.vdombox.ide.common.controller.Notifications;

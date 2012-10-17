@@ -4,7 +4,6 @@ package net.vdombox.ide.modules.scripts.controller.messages
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
-	import net.vdombox.ide.common.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

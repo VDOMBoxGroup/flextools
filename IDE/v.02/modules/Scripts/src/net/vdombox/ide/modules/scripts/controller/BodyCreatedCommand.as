@@ -1,17 +1,13 @@
 package net.vdombox.ide.modules.scripts.controller
 {
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.scripts.view.ContainersPanelMediator;
 	import net.vdombox.ide.modules.scripts.view.FindBoxMediator;
 	import net.vdombox.ide.modules.scripts.view.GlobalScriptsPanelMediator;
 	import net.vdombox.ide.modules.scripts.view.LibrariesPanelMediator;
 	import net.vdombox.ide.modules.scripts.view.RenameBoxMediator;
-	import net.vdombox.ide.modules.scripts.view.ScriptEditorMediator;
 	import net.vdombox.ide.modules.scripts.view.ServerScriptsPanelMediator;
-	import net.vdombox.ide.modules.scripts.view.TabsPanelMediator;
 	import net.vdombox.ide.modules.scripts.view.WorkAreaMediator;
 	import net.vdombox.ide.modules.scripts.view.components.Body;
-	import net.vdombox.ide.modules.scripts.view.components.FindBox;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

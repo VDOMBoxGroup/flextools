@@ -1,7 +1,5 @@
 package net.vdombox.ide.modules.scripts.view
 {
-	import flash.utils.flash_proxy;
-	
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.SimpleMessageHeaders;

@@ -4,7 +4,6 @@ package net.vdombox.ide.modules.scripts.view
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.events.RenameBoxEvent;
 	import net.vdombox.ide.modules.scripts.model.GoToPositionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.RenameBox;

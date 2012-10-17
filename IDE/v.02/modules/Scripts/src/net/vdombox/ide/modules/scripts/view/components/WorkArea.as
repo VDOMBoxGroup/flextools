@@ -11,7 +11,6 @@ package net.vdombox.ide.modules.scripts.view.components
 	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
 	import net.vdombox.ide.common.view.components.tabnavigator.TabNavigator;
 	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
-	import net.vdombox.ide.modules.scripts.view.ScriptsMediator;
 	
 	public class WorkArea extends TabNavigator
 	{

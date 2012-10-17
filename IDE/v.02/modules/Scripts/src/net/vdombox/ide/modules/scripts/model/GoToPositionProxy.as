@@ -1,7 +1,5 @@
 package net.vdombox.ide.modules.scripts.model
 {
-	import net.vdombox.ide.common.model._vo.LibraryVO;
-	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
