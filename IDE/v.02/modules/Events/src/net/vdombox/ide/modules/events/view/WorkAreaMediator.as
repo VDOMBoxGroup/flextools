@@ -1,11 +1,8 @@
 package net.vdombox.ide.modules.events.view
 {
 	import flash.desktop.NativeApplication;
-	import flash.display.NativeWindow;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	
-	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
@@ -13,17 +10,12 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.ClientActionVO;
 	import net.vdombox.ide.common.model._vo.EventVO;
-	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.events.model.MessageStackProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
-	import net.vdombox.ide.modules.events.view.components.ActionElement;
 	import net.vdombox.ide.modules.events.view.components.BaseElement;
-	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.WorkArea;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

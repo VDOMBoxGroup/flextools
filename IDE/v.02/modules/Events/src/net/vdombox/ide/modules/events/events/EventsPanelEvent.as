@@ -1,8 +1,6 @@
 package net.vdombox.ide.modules.events.events
 {
 	import flash.events.Event;
-	
-	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 
 	public class EventsPanelEvent extends Event
 	{

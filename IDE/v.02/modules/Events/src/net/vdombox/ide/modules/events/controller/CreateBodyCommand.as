@@ -1,9 +1,5 @@
 package net.vdombox.ide.modules.events.controller
 {
-	import flash.events.Event;
-	
-	import mx.modules.Module;
-	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.view.BodyMediator;
 	import net.vdombox.ide.modules.events.view.EventsMediator;
@@ -11,7 +7,6 @@ package net.vdombox.ide.modules.events.controller
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
-	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
 	
 	/**

@@ -8,10 +8,7 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.binding.utils.BindingUtils;
-			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.model._vo.EventVO;
 			
 			[Embed(source='assets/events.png')]
 			public var EventsIcon:Class;

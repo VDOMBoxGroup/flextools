@@ -15,7 +15,6 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
-			import mx.binding.utils.ChangeWatcher;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.EventVO;

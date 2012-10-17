@@ -9,13 +9,9 @@ package net.vdombox.ide.modules.events.view.components
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
-	import mx.core.BitmapAsset;
 	import mx.core.UIComponent;
-	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.modules.events.events.ElementEvent;
-	
-	import spark.components.Group;
 
 	public class Linkage extends UIComponent
 	{

@@ -1,19 +1,13 @@
 package net.vdombox.ide.modules.events.view
 {
-	import flash.display.DisplayObject;
-	import flash.events.Event;
-	import flash.filters.DisplacementMapFilter;
-	
 	import mx.collections.ArrayList;
 	import mx.core.DragSource;
 	import mx.events.DragEvent;
-	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
-	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ClientActionVO;
 	import net.vdombox.ide.common.model._vo.EventVO;
@@ -23,15 +17,10 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.common.view.components.windows.CreateActionWindow;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 	import net.vdombox.ide.modules.events.events.EventsPanelEvent;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
-	import net.vdombox.ide.modules.events.view.components.ActionElement;
-	import net.vdombox.ide.modules.events.view.components.BaseElement;
 	import net.vdombox.ide.modules.events.view.components.BaseItemRenderer;
-	import net.vdombox.ide.modules.events.view.components.EventElement;
-	import net.vdombox.ide.modules.events.view.components.EventItemRenderer;
 	import net.vdombox.ide.modules.events.view.components.EventsPanel;
 	import net.vdombox.utils.WindowManager;
 	

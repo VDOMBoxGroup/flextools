@@ -1,11 +1,6 @@
 package net.vdombox.ide.modules.events.view
 {
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	
-	import mx.binding.utils.BindingUtils;
 	import mx.controls.Tree;
-	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	import mx.resources.ResourceManager;
 	
@@ -21,7 +16,6 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.events.model.MessageProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
-	import net.vdombox.ide.modules.events.view.components.EventElement;
 	import net.vdombox.ide.modules.events.view.components.ObjectsTreePanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

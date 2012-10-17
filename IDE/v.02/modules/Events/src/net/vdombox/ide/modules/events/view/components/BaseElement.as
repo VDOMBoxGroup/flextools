@@ -1,13 +1,10 @@
 package net.vdombox.ide.modules.events.view.components
 {
 	import flash.events.MouseEvent;
-	import flash.system.Capabilities;
 	
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
-	import net.vdombox.ide.common.model._vo.EventVO;
-	import net.vdombox.ide.common.view.components.EyeImage;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	
 	import spark.components.RichEditableText;

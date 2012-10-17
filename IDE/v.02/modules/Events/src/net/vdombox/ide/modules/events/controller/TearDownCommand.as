@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.events.controller
 {
 	import net.vdombox.ide.modules.events.view.EventsJunctionMediator;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;

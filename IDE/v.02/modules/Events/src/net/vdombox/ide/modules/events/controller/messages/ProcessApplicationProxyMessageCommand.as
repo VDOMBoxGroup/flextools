@@ -1,11 +1,11 @@
 package net.vdombox.ide.modules.events.controller.messages
 {
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

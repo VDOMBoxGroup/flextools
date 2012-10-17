@@ -10,7 +10,6 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.controls.treeClasses.TreeItemRenderer;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;

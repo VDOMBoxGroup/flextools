@@ -12,32 +12,24 @@ package net.vdombox.ide.modules.events.view.components
 	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
 	import mx.utils.NameUtil;
-	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.ClientActionVO;
 	import net.vdombox.ide.common.model._vo.EventVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.VDOMScroller;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.button.WorkAreaButton;
-	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.events.view.skins.WorkAreaSkin;
 	
-	import spark.components.Button;
 	import spark.components.CheckBox;
 	import spark.components.DropDownList;
 	import spark.components.Group;
-	import spark.components.Label;
-	import spark.components.List;
 	import spark.components.RichEditableText;
 	import spark.components.SkinnableContainer;
 	import spark.components.TextInput;
-	import spark.skins.spark.PanelSkin;
 
 	public class WorkArea extends SkinnableContainer
 	{

@@ -8,9 +8,6 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.Image;
-			import mx.core.DragSource;
-			import mx.events.DragEvent;
-			import mx.managers.DragManager;
 			
 			import spark.components.List;
 

@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.events.model
 {
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	

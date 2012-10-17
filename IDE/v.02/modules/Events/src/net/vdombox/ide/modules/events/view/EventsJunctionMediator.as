@@ -1,10 +1,9 @@
 package net.vdombox.ide.modules.events.view
 {
-	import flashx.textLayout.elements.BreakElement;
-	
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.SimpleMessageHeaders;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.messages.SimpleMessage;
@@ -27,7 +26,6 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.events.model.MessageProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

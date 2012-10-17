@@ -9,8 +9,6 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.binding.utils.BindingUtils;
-			
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			
 			[Embed(source='assets/action.png')]
