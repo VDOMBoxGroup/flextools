@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.resourceBrowser.controller
 {
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 	

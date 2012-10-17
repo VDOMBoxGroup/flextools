@@ -1,11 +1,10 @@
 package net.vdombox.ide.modules.resourceBrowser.controller.messages
 {
-	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
+	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

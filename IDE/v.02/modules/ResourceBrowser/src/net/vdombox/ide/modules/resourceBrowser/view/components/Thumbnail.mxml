@@ -9,10 +9,8 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
-			import mx.events.FlexEvent;
 			import mx.utils.ObjectUtil;
 			
-			import net.vdombox.ide.common.events.WorkAreaEvent;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			
 			import spark.filters.DropShadowFilter;

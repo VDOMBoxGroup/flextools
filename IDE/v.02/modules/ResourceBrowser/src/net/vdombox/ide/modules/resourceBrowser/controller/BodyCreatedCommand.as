@@ -1,11 +1,6 @@
 package net.vdombox.ide.modules.resourceBrowser.controller
 {
-	import net.vdombox.ide.modules.resourceBrowser.view.InfoAreaMediator;
-	import net.vdombox.ide.modules.resourceBrowser.view.PreviewAreaMediator;
 	import net.vdombox.ide.modules.resourceBrowser.view.ResourcesAreaMediator;
-	import net.vdombox.ide.modules.resourceBrowser.view.ResourcesListMediator;
-	import net.vdombox.ide.modules.resourceBrowser.view.ResourcesLoaderMediator;
-	import net.vdombox.ide.modules.resourceBrowser.view.WorkAreaMediator;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

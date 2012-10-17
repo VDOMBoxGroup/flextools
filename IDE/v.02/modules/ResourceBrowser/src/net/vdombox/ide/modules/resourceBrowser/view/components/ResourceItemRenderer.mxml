@@ -14,10 +14,10 @@
 	<fx:Script>
 		<![CDATA[
 			import flash.filesystem.File;
-
+			
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
-
+			
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderItemRendererEvent;
 

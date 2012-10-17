@@ -7,15 +7,10 @@
 
 	<fx:Script>
 		<![CDATA[
-			import flash.filesystem.File;
-			
 			import mx.binding.utils.BindingUtils;
-			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.resourceBrowser.events.WorkAreaEvent;
-			import net.vdombox.ide.common.view.components.windows.Alert;
-			import net.vdombox.ide.common.view.components.button.AlertButton;
 
 			[SkinPart( required="true" )]
 			public var deleteButton : WorkAreaButton;

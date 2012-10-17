@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
-	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.InfoArea;
 	

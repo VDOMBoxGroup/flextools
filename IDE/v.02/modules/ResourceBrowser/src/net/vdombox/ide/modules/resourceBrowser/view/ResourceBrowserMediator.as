@@ -2,11 +2,10 @@ package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import flash.events.Event;
 	
-	import net.vdombox.ide.modules.ResourceBrowser;
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.modules.ResourceBrowser;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
-	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
 	public class ResourceBrowserMediator extends Mediator implements IMediator

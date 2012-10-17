@@ -2,7 +2,6 @@ package net.vdombox.ide.modules.resourceBrowser
 {
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.SettingsProxy;
-	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.ResourceBrowser;
 	import net.vdombox.ide.modules.resourceBrowser.controller.BodyCreatedCommand;
 	import net.vdombox.ide.modules.resourceBrowser.controller.ChangeSelectedObjectRequestCommand;

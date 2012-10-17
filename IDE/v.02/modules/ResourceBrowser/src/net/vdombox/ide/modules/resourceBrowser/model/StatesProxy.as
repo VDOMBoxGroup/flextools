@@ -1,14 +1,7 @@
 package net.vdombox.ide.modules.resourceBrowser.model
 {
 	import net.vdombox.ide.common.model.StatesProxy;
-	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.common.controller.Notifications;
-	
-	import org.puremvc.as3.multicore.interfaces.IProxy;
-	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class StatesProxy extends net.vdombox.ide.common.model.StatesProxy
 	{

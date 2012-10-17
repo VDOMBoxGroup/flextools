@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.SimpleMessageHeaders;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.messages.SimpleMessage;
@@ -17,11 +18,9 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.controller.names.PipeNames;
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
 	import net.vdombox.ide.common.model.SettingsProxy;
-	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

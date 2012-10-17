@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.resourceBrowser.controller
 {
-	import net.vdombox.ide.modules.ResourceBrowser;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.view.BodyMediator;
 	import net.vdombox.ide.modules.resourceBrowser.view.ResourceBrowserMediator;

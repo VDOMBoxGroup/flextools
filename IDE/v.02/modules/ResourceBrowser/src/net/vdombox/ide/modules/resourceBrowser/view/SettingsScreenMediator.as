@@ -6,7 +6,6 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	
 	import net.vdombox.ide.common.model.SettingsProxy;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.SettingsScreen;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
