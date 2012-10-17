@@ -311,7 +311,7 @@
 					cellIndex = 0;
 					for each ( var xmlCell:XML in xmlRow.cell ) 
 					{
-						if ( serverVersion && serverVersion > "1.3.8531" )
+						if ( serverVersion && serverVersion >= "1.3.8535" )
 							tableRow[ dataGridColumns[ cellIndex ].dataField ] = xmlCell.toString();
 						else
 							tableRow[ dataGridColumns[ cellIndex ].dataField ] = StringUtils.toHtmlEnc( xmlCell.toString() );
@@ -519,7 +519,7 @@
 				{
 					xmlRow.appendChild(
 						<cell name={dataGridCell.dataField}>
-						{StringUtils.getCDataParserString( item[dataGridCell.dataField] )}
+						{item[dataGridCell.dataField]}
 						</cell> );
 				}
 				

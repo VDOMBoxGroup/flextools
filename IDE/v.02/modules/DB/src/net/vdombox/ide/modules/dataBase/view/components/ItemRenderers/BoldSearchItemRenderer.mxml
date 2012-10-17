@@ -11,6 +11,7 @@
 			
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
+			import net.vdombox.utils.StringUtils;
 			import net.vdombox.utils.WindowManager;
 			
 			
@@ -21,7 +22,7 @@
 				
 				super.data = value;
 				
-				textArea.htmlText = value[DataGridListData(listData).dataField];
+				textArea.text = StringUtils.fromHtmlEnc( value[DataGridListData(listData).dataField] );
 			}
 			
 			override public function validateProperties():void
