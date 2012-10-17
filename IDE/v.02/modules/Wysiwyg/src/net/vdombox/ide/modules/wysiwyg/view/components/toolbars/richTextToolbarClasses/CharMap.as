@@ -13,10 +13,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbar
 	import mx.controls.Label;
 	import mx.controls.Text;
 	import mx.managers.PopUpManager;
-	import mx.states.OverrideBase;
 	
 	import spark.components.TitleWindow;
-	import spark.components.VGroup;
 	
 
 

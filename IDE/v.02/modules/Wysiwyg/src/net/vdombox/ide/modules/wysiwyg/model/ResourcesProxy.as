@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.model
 {
 	import com.zavoo.svg.nodes.SVGImageNode;
-
+	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 

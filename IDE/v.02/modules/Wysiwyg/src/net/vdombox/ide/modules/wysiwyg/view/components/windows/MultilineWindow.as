@@ -12,18 +12,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	import flashx.textLayout.elements.TextFlow;
-	import mx.controls.ComboBox;
-	import mx.managers.PopUpManager;
-	import net.vdombox.ide.common.controller.Notifications;
-	import net.vdombox.ide.common.model._vo.ResourceVO;
+	
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	import net.vdombox.utils.WindowManager;
-	import spark.components.ComboBox;
+	
 	import spark.components.RichEditableText;
-	import spark.components.TitleWindow;
 	import spark.components.Window;
 
 	public class MultilineWindow extends Window

@@ -10,11 +10,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.desktop.Clipboard;
 	import flash.desktop.ClipboardFormats;
-	import flash.events.Event;
 	
-	import mx.controls.Tree;
-	import mx.events.FlexEvent;
-	import mx.events.ListEvent;
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.controller.Notifications;
@@ -24,7 +20,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
@@ -34,8 +29,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.MultiObjectsManipulationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.VisibleRendererProxy;
-	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.ObjectTreePanelItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
+	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.ObjectTreePanelItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectsTreePanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

@@ -1,7 +1,6 @@
 package com.zavoo.svg.nodes
 {
-	import mx.controls.TextArea;
-	import mx.utils.StringUtil;
+	
 	
 	/**
 	 * Acts as a container for other nodes

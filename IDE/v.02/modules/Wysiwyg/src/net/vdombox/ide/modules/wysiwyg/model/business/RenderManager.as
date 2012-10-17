@@ -1,7 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.model.business
 {
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
 	import mx.collections.ArrayCollection;
@@ -13,9 +12,6 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 	import mx.rpc.events.FaultEvent;
 	import mx.utils.StringUtil;
 	import mx.utils.UIDUtil;
-	
-	import net.vdombox.ide.modules.wysiwyg.view.components.IItem;
-	import net.vdombox.ide.modules.wysiwyg.view.components.ItemDescription;
 	/**
 	 * Dos not used !?! 
 	 * @author andreev ap

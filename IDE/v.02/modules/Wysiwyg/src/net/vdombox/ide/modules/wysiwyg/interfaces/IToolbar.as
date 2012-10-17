@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.wysiwyg.interfaces
 {
-	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 
 	public interface IToolbar

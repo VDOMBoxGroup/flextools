@@ -2,7 +2,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.desktop.Clipboard;
 	import flash.desktop.ClipboardFormats;
-	import flash.display.DisplayObject;
 	import flash.display.Graphics;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -10,15 +9,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
-	import flash.utils.getQualifiedClassName;
 	
-	import mx.collections.ArrayList;
-	import mx.controls.CheckBox;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColorStroke;
 	import mx.resources.ResourceManager;
-	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
@@ -54,10 +49,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.components.Application;
-	import spark.primitives.Line;
-	import spark.primitives.Rect;
 
 
 	/**

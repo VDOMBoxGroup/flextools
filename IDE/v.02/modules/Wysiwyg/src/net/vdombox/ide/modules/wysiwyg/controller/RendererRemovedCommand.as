@@ -2,7 +2,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

@@ -1,7 +1,5 @@
 package net.vdombox.ide.modules.wysiwyg.model
 {
-	import flash.utils.Dictionary;
-	
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;

@@ -13,25 +13,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
-	import mx.binding.utils.BindingUtils;
+	
 	import mx.collections.ArrayList;
-	import mx.controls.TileList;
-	import mx.events.FlexEvent;
-	import mx.managers.PopUpManager;
-	import net.vdombox.ide.common.controller.Notifications;
+	
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItem;
-	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItemNotEmptyContent;
-	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.SmoothImage;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
 	import net.vdombox.utils.WindowManager;
-	import spark.components.ComboBox;
-	import spark.components.Label;
+	
 	import spark.components.List;
-	import spark.components.TextArea;
 	import spark.components.TextInput;
-	import spark.components.TitleWindow;
 	import spark.components.Window;
 
 	public class ResourceSelectorWindow extends Window

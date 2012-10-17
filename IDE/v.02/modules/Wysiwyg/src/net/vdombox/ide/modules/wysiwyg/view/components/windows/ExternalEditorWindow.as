@@ -7,7 +7,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.events.FlexEvent;
-	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.interfaces.IExternalManager;
 	import net.vdombox.ide.common.model._vo.ResourceVO;

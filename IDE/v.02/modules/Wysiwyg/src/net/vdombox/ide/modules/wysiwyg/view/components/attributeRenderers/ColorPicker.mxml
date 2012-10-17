@@ -15,10 +15,6 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import mx.core.UIComponent;
-			import mx.managers.PopUpManager;
-			
-			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.windows.ColorPickerWindow;
 			[Bindable]

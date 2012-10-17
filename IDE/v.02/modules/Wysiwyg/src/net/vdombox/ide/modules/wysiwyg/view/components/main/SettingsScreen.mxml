@@ -10,8 +10,6 @@
 		<![CDATA[
 			import net.vdombox.ide.common.interfaces.ISettingsScreen;
 
-			import spark.skins.spark.CheckBoxSkin;
-
 			public function performOK() : void
 			{
 				dispatchEvent( new Event( "performOK" ) );

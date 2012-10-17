@@ -7,8 +7,7 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.controls.Button;
-			import mx.events.FlexEvent;
+			
 			/* Define the border items.*/
 			static private const borderItem : Array = [ "borderEntry1", "borderEntry2" ];
 

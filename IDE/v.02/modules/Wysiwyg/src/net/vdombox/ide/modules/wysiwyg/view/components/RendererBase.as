@@ -10,54 +10,36 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
 	
-	import flash.desktop.Clipboard;
-	import flash.desktop.ClipboardFormats;
 	import flash.display.Bitmap;
-	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
-	import flash.display.Graphics;
 	import flash.display.Loader;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	
-	import flashx.textLayout.factory.TruncationOptions;
-	
 	import mx.binding.utils.BindingUtils;
-	import mx.collections.ArrayCollection;
-	import mx.collections.Sort;
 	import mx.collections.SortField;
-	import mx.containers.Canvas;
 	import mx.controls.HScrollBar;
-	import mx.controls.Image;
 	import mx.controls.Text;
 	import mx.controls.ToolTip;
 	import mx.controls.VScrollBar;
-	import mx.core.Application;
 	import mx.core.ClassFactory;
 	import mx.core.IFactory;
-	import mx.core.IVisualElement;
 	import mx.core.ScrollPolicy;
 	import mx.core.UIComponent;
-	import mx.core.mx_internal;
 	import mx.events.DragEvent;
 	import mx.events.FlexEvent;
-	import mx.events.ResizeEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
-	import mx.managers.SystemManager;
 	import mx.managers.ToolTipManager;
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
-	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
@@ -65,32 +47,21 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-	import net.vdombox.ide.modules.wysiwyg.view.components.controls.ToolbarButton;
 	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
 	import net.vdombox.utils.XMLUtils;
 	
-	import org.osmf.events.TimeEvent;
-	
-	import spark.components.Application;
-	import spark.components.Button;
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.RichEditableText;
 	import spark.components.Scroller;
 	import spark.components.SkinnableDataContainer;
-	import spark.components.TextArea;
-	import spark.components.VGroup;
-	import spark.components.supportClasses.GroupBase;
 	import spark.components.supportClasses.ScrollBarBase;
-	import spark.components.supportClasses.Skin;
 	import spark.layouts.BasicLayout;
 	import spark.layouts.HorizontalLayout;
-	import spark.layouts.RowAlign;
 	import spark.layouts.VerticalLayout;
 	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
-	import spark.skins.spark.ScrollerSkin;
 
 	/**
 	 *

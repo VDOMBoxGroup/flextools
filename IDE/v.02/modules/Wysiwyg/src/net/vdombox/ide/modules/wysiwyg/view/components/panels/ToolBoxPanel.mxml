@@ -4,13 +4,9 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300">
 	<fx:Script>
 		<![CDATA[
-			import mx.events.DragEvent;
-			import mx.events.FlexEvent;
-			
 			import net.vdombox.ide.common.model._vo.TypeVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
-			import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 			import net.vdombox.ide.modules.wysiwyg.view.components.TypesAccordionHeader;
 			import net.vdombox.ide.modules.wysiwyg.view.components.TypesCategory;
 			

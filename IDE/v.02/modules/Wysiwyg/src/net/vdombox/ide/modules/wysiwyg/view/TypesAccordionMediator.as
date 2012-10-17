@@ -1,7 +1,5 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import flash.display.DisplayObject;
-	import flash.events.Event;
 	import flash.geom.Point;
 	
 	import mx.containers.Accordion;
@@ -16,14 +14,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.TypeItemRendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.UserTypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.TypeItemRenderer;
-	import net.vdombox.ide.modules.wysiwyg.view.components.TypesCategory;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ToolBoxPanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.components.Label;
 
 	public class TypesAccordionMediator extends Mediator implements IMediator
 	{

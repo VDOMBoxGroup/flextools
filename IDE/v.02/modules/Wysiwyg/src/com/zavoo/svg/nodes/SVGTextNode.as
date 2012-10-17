@@ -9,8 +9,6 @@ package com.zavoo.svg.nodes
 	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
 	
-	import flashx.textLayout.formats.TextAlign;
-	
 	/** SVG Text element node **/
 	public class SVGTextNode extends SVGNode
 	{	

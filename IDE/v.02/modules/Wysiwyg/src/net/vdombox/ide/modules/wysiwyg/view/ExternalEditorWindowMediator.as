@@ -2,8 +2,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.Event;
 	
-	import mx.managers.PopUpManager;
-	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;

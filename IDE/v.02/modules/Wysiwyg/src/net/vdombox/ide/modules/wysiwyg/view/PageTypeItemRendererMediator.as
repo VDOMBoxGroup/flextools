@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import net.vdombox.ide.common.view.components.itemrenderers.PageTypeItemRenderer;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.ItemRendererEvent;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.view.components.itemrenderers.PageTypeItemRenderer;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

@@ -2,7 +2,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.StatesProxy;
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	

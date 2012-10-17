@@ -3,28 +3,15 @@ package com.zavoo.svg.nodes
 	import com.zavoo.svg.SVGViewer;
 	
 	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.DisplayObject;
 	import flash.display.Loader;
-	import flash.display.PixelSnapping;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.geom.Matrix;
-	import flash.geom.Rectangle;
-	import flash.utils.ByteArray;
 	
 	import mx.binding.utils.BindingUtils;
-	import mx.containers.Canvas;
-	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
-	import mx.graphics.SolidColor;
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
-	
-	import spark.components.Group;
-	import spark.primitives.Rect;
-	import spark.primitives.supportClasses.FilledElement;
 
 	public class SVGImageNode extends SVGNode
 	{

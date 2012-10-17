@@ -2,9 +2,6 @@ package net.vdombox.ide.modules.wysiwyg.interfaces
 {
 	import flash.events.IEventDispatcher;
 	
-	import mx.core.IUIComponent;
-	
-	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 
@@ -12,7 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.interfaces
 	{
 		function get editorVO() : EditorVO;
 
-		function get status() : uint;
+		function get status() : uint;	
 		function set status( value : uint ) : void;
 		function set xmlPresentation(value: VdomObjectXMLPresentationVO): void;
 		function get xmlPresentation(): VdomObjectXMLPresentationVO;

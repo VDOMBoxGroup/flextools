@@ -3,7 +3,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.display.CapsStyle;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
-	import flash.display.Graphics;
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
 	import flash.display.Sprite;
@@ -16,15 +15,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.core.UIComponent;
 	import mx.core.mx_internal;
 	import mx.events.FlexEvent;
-	import mx.events.ScrollEvent;
 	
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	
-	import spark.components.RichEditableText;
-	import spark.components.VScrollBar;
 	import spark.components.supportClasses.ScrollBarBase;
 
 	use namespace mx_internal;

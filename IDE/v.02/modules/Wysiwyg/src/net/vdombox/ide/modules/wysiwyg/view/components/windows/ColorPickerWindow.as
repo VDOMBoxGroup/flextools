@@ -20,7 +20,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ColorPickerCanvas;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ColorPickerWindowSkin;
 	
-	import spark.components.NumericStepper;
 	import spark.components.RadioButton;
 	import spark.components.TextInput;
 	import spark.components.TitleWindow;

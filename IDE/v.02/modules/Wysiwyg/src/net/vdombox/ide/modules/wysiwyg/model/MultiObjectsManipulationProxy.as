@@ -1,7 +1,5 @@
 package net.vdombox.ide.modules.wysiwyg.model
 {
-	import flash.system.System;
-	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.StatesProxy;

@@ -1,8 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers
 {
-	import mx.core.UIComponent;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	
+	import mx.core.UIComponent;
 
 	public class ColorPickerCanvas extends UIComponent
 	{

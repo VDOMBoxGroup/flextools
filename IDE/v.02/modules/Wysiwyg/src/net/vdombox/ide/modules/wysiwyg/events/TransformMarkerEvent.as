@@ -2,7 +2,6 @@ package net.vdombox.ide.modules.wysiwyg.events
 {
 
 	import flash.events.Event;
-	import flash.geom.Rectangle;
 	
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 

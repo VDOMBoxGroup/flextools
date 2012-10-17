@@ -10,10 +10,7 @@
 		<![CDATA[
 			import flash.desktop.Clipboard;
 			import flash.desktop.ClipboardFormats;
-			import flash.sampler.NewObjectSample;
 			
-			import mx.collections.ArrayList;
-			import mx.collections.IList;
 			import mx.collections.SortField;
 			import mx.controls.listClasses.ListBaseContentHolder;
 			import mx.events.FlexEvent;
@@ -23,9 +20,6 @@
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 			import net.vdombox.utils.XMLUtils;
-			
-			import spark.components.IItemRenderer;
-			import spark.components.List;
 
 			[Bindable]
 			private var _pages : XMLList;

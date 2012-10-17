@@ -2,8 +2,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import flash.geom.Point;
 	
-	import mx.collections.ArrayList;
-	import mx.core.Container;
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.controller.Notifications;
@@ -12,15 +10,12 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.model.vo.LineVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.utils.DisplayUtils;
-	import net.vdombox.ide.modules.wysiwyg.utils.PointCoordinateComponent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
-	
-	import spark.primitives.Line;
 
 	public class CreateLineLinkingCommand extends SimpleCommand
 	{

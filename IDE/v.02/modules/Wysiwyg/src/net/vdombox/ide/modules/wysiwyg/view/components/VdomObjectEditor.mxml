@@ -15,7 +15,6 @@
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.events.StateChangeEvent;
-			import mx.utils.DisplayUtil;
 			
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 			import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
@@ -29,7 +28,6 @@
 			import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.EditorSkin;
 			
-			import spark.components.CheckBox;
 			import spark.components.Label;
 
 			public static const STATUS_NULL : uint = 0;

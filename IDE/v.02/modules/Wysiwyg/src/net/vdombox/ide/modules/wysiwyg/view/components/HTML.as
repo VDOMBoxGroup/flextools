@@ -1,8 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import flash.display.BlendMode;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
 	
 	import mx.controls.HTML;
 	import mx.core.ScrollPolicy;

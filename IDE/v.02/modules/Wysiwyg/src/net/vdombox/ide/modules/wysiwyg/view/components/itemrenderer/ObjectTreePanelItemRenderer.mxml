@@ -25,15 +25,10 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.XMLListCollection;
 			import mx.controls.Tree;
-			import mx.events.FlexEvent;
-			import mx.events.ResourceEvent;
 			
 			import net.vdombox.ide.common.events.ResourceVOEvent;
-			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
-			
-			import spark.components.Button;
 
 			private var _eyeOpened : Boolean  = true;
 

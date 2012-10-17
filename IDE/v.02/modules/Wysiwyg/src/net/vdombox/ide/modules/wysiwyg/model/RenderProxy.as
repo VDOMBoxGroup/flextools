@@ -8,14 +8,11 @@
 
 package net.vdombox.ide.modules.wysiwyg.model
 {
-	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
 	
-	import mx.collections.XMLListCollection;
 	import mx.core.IUIComponent;
 	
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;

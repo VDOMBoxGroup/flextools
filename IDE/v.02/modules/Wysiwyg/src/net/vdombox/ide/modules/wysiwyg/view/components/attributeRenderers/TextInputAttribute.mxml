@@ -7,8 +7,6 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
-			import flash.utils.flash_proxy;
-			
 			import mx.events.ValidationResultEvent;
 			
 			import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;

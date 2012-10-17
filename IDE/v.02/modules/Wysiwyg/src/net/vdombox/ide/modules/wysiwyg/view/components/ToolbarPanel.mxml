@@ -6,8 +6,6 @@
 
 	<fx:Script>
 		<![CDATA[
-			import com.zavoo.svg.nodes.SVGNode;
-			
 			import mx.core.IVisualElement;
 			
 			import net.vdombox.ide.common.TypeInterface;

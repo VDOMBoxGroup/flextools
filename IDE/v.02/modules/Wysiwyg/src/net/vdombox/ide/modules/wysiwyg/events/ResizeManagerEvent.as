@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 {
 
 	import flash.events.Event;
-
+	
 	import mx.core.Container;
 
 	public class ResizeManagerEvent extends Event

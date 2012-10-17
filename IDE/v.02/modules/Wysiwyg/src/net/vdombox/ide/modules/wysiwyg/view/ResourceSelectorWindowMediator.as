@@ -24,12 +24,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
-	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
-	import mx.managers.PopUpManagerChildList;
 	import mx.resources.ResourceManager;
-	import mx.validators.Validator;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;

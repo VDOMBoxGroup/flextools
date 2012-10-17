@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view.components.controls
 {
 	import mx.controls.Image;
-
+	
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarButtonSkin;
-
+	
 	import spark.components.ToggleButton;
 
 	public class ToolbarButton extends ToggleButton

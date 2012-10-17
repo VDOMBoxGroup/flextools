@@ -16,8 +16,6 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.events.StateChangeEvent;
-			
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 			

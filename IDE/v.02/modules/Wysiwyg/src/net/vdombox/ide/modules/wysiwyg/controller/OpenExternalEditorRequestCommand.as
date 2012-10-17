@@ -1,9 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
-	import flash.display.DisplayObject;
-	
 	import mx.core.UIComponent;
-	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.modules.wysiwyg.view.ExternalEditorWindowMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;

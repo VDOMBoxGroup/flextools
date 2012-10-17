@@ -9,7 +9,7 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import flash.display.Sprite;
-
+	
 	import mx.core.UIComponent;
 
 

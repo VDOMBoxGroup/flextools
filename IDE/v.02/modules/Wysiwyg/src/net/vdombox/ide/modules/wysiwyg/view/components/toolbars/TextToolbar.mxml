@@ -9,15 +9,12 @@
 
 	<fx:Script>
 		<![CDATA[
-			import com.zavoo.svg.nodes.SVGNode;
-			
 			import mx.collections.ArrayCollection;
 			import mx.collections.IViewCursor;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
 			import mx.core.UIComponent;
 			import mx.events.ColorPickerEvent;
-			import mx.managers.FocusManager;
 			import mx.managers.IFocusManagerComponent;
 			import mx.utils.StringUtil;
 			

@@ -9,11 +9,7 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import flash.html.HTMLLoader;
-			
 			import mx.controls.HTML;
-			import mx.core.IUIComponent;
-			import mx.core.IVisualElement;
 			import mx.core.ScrollPolicy;
 			import mx.core.UIComponent;
 			import mx.events.ColorPickerEvent;

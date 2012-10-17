@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.collections.Sort;
 	import mx.collections.SortField;
 	import mx.containers.Accordion;
-
+	
 	import spark.components.NavigatorContent;
 
 	public class TypesAccordion extends Accordion

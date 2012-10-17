@@ -2,8 +2,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.Event;
 	
-	import mx.events.FlexEvent;
-	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;

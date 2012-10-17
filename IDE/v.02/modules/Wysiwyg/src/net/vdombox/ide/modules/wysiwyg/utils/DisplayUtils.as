@@ -7,7 +7,6 @@ package net.vdombox.ide.modules.wysiwyg.utils
 	import flash.utils.getDefinitionByName;
 	
 	import mx.controls.scrollClasses.ScrollBar;
-	import mx.core.Container;
 	import mx.core.FlexGlobals;
 	import mx.core.UIComponent;
 	
@@ -15,7 +14,6 @@ package net.vdombox.ide.modules.wysiwyg.utils
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
 	
 	import spark.components.Application;
-	import spark.components.supportClasses.GroupBase;
 
 	public class DisplayUtils
 	{

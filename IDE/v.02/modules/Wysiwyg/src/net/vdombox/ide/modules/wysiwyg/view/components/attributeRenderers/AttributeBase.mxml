@@ -12,20 +12,11 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
-			import mx.collections.Sort;
-			import mx.controls.ComboBox;
 			import mx.core.UIComponent;
-			import mx.events.FlexEvent;
-			import mx.skins.halo.ComboBoxArrowSkin;
-			import mx.skins.spark.ComboBoxSkin;
 			
 			import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.model._vo.AttributeVO;
-			import net.vdombox.ide.common.model._vo.ObjectListVO;
-			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
-			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
 			import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;

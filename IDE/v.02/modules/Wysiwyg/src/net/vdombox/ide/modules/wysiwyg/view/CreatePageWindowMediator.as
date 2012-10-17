@@ -2,12 +2,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.common.view.components.windows.CreatePageWindow;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.ItemRendererEvent;
 	import net.vdombox.ide.common.events.WindowEvent;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.view.components.windows.CreatePageWindow;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

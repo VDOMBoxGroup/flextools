@@ -1,25 +1,15 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import flash.display.DisplayObject;
-	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.IList;
 	import mx.core.UIComponent;
-	import mx.managers.PopUpManager;
-	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
-	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
-	import net.vdombox.ide.common.view.components.VDOMImage;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
-	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
@@ -29,7 +19,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectAttributesPanel;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
-	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

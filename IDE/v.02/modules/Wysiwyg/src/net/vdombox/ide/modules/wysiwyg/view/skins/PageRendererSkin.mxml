@@ -10,8 +10,6 @@
 			import net.vdombox.ide.common.view.components.VDOMScroller;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
-			import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
-			import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 			
 			[Bindable]
 			private var scale : Number = 1;

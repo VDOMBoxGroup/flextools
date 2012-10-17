@@ -8,16 +8,12 @@
 
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import flash.desktop.NativeApplication;
 	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.ui.Keyboard;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.WorkAreaEvent;
