@@ -3,7 +3,6 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
-	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.GlobalActionVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;

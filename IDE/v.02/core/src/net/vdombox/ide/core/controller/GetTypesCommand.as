@@ -4,7 +4,6 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPlaceNames;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
-	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.TypesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

@@ -8,58 +8,34 @@
 
 package net.vdombox.ide.core.view
 {
-	import flash.desktop.NativeApplication;
-	import flash.display.Bitmap;
-	import flash.display.DisplayObject;
-	import flash.display.Loader;
-	import flash.display.Screen;
-	import flash.display.Stage;
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
-	import flash.net.SharedObject;
 	
-	import flashx.textLayout.elements.BreakElement;
-	
-	import mx.binding.utils.BindingUtils;
-	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.core.mx_internal;
-	import mx.events.AIREvent;
 	import mx.events.FlexEvent;
-	import mx.managers.PopUpManager;
-	import mx.managers.SystemManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.model.PreferencesProxy;
-	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
-	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
-	import net.vdombox.ide.core.model.SessionProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.view.components.MainWindow;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
-	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
-	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
 	
-	import org.osmf.utils.Version;
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
-	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
-	import spark.skins.spark.ButtonSkin;
 
 	use namespace mx_internal;
 
@@ -228,6 +204,25 @@ package net.vdombox.ide.core.view
 			
 			return interests;
 		}
+		
+		private function addHandlers() : void
+		{
+			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler, false, 0, true );
+			mainWindow.addEventListener( MainWindowEvent.LOGOUT, logoutHandler, true, 0, true );
+			mainWindow.addEventListener( MainWindowEvent.CLOSE, closeHandler, true, 0, true );
+			mainWindow.addEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true, 0, true );
+			mainWindow.addEventListener( Event.CLOSE, closeWindowHandler, false, 0, true );
+		}
+		
+		
+		private function removeHandlers() : void
+		{
+			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
+			mainWindow.removeEventListener( MainWindowEvent.LOGOUT, logoutHandler, true );
+			mainWindow.removeEventListener( MainWindowEvent.CLOSE, closeHandler, true );
+			mainWindow.removeEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true );
+			mainWindow.removeEventListener( Event.CLOSE, closeWindowHandler );
+		}
 
 
 
@@ -267,17 +262,6 @@ package net.vdombox.ide.core.view
 			return facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 		}
 
-		private function addHandlers() : void
-		{
-			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler, false, 0, true );
-
-			mainWindow.addEventListener( MainWindowEvent.LOGOUT, logoutHandler, true, 0, true );
-
-			mainWindow.addEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true, 0, true );
-
-			mainWindow.addEventListener( Event.CLOSE, closeWindowHandler, false, 0, true );
-		}
-
 		private function appManagerHandler( event : MainWindowEvent ) : void
 		{
 			if ( currentModule.moduleID == "net.vdombox.ide.modules.Events" ||
@@ -304,9 +288,9 @@ package net.vdombox.ide.core.view
 
 		private function closeWindowHandler( event : Event ) : void
 		{
+			cleanup();
+			
 			removeHandlers();
-
-			NativeApplication.nativeApplication.exit();
 		}
 
 		private function get currentModule() : ModuleVO
@@ -333,10 +317,14 @@ package net.vdombox.ide.core.view
 
 			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNOUT );
 		}
+		
+		private function closeHandler( event : MainWindowEvent = null ) : void
+		{			
+			sendNotification( ApplicationFacade.CLOSE_IDE );
+		}
 
 		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
 		{
-
 			showModules();
 			selectModule();
 
@@ -358,14 +346,6 @@ package net.vdombox.ide.core.view
 				if ( moduleVO.module.hasToolset )
 					moduleVO.module.getToolset();
 			}
-		}
-
-		private function removeHandlers() : void
-		{
-			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
-			mainWindow.removeEventListener( MainWindowEvent.LOGOUT, logoutHandler, true );
-			mainWindow.removeEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true );
-			mainWindow.removeEventListener( Event.CLOSE, closeWindowHandler );
 		}
 
 		private function selectModule( moduleVO : ModuleVO = null ) : void

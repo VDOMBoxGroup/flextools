@@ -1,12 +1,5 @@
 package net.vdombox.ide.core.controller
 {
-	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
-	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.model.ApplicationProxy;
-	import net.vdombox.ide.core.model.ServerProxy;
-	import net.vdombox.ide.core.model.SessionProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

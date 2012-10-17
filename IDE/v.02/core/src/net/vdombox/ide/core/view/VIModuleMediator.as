@@ -1,7 +1,7 @@
 package net.vdombox.ide.core.view
 {
-	import net.vdombox.ide.common.interfaces.IVIModule;
 	import net.vdombox.ide.common.VIModule;
+	import net.vdombox.ide.common.interfaces.IVIModule;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;

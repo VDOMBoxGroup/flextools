@@ -30,7 +30,7 @@ package net.vdombox.ide.core.model.business.protect
 	   Next session:  1629876353
 	 */
 
-	import mx.controls.Alert;
+	
 
 	public class VDOMSessionProtector
 	{

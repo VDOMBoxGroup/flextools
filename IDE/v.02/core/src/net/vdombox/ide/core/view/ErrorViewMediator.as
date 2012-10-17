@@ -2,8 +2,6 @@ package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
 	
-	import mx.events.FlexEvent;
-	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.SessionProxy;
 	import net.vdombox.ide.core.view.components.ErrorView;

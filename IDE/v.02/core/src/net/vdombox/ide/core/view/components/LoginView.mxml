@@ -14,9 +14,6 @@
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.core.events.LoginViewEvent;
 			import net.vdombox.ide.core.model.vo.LocaleVO;
-			
-			import spark.events.IndexChangeEvent;
-			import spark.events.TextOperationEvent;
 
 			[Bindable]
 			public var languages : ArrayList;

@@ -1,11 +1,11 @@
 package net.vdombox.ide.core.controller
 {
 	import mx.core.UIComponent;
-
+	
 	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
 	import net.vdombox.ide.core.ApplicationFacade;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 

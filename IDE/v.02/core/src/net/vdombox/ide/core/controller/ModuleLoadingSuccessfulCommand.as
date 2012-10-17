@@ -1,6 +1,5 @@
 package net.vdombox.ide.core.controller
 {
-	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.view.VIModuleMediator;

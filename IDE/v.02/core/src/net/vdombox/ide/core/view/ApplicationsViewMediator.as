@@ -10,27 +10,22 @@ package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-
+	
 	import mx.collections.ArrayList;
-	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.events.ApplicationManagerEvent;
 	import net.vdombox.ide.core.model.SettingsProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.vo.SettingsVO;
 	import net.vdombox.ide.core.view.components.ApplicationListItemRenderer;
 	import net.vdombox.ide.core.view.components.ApplicationsView;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
-	import spark.components.Application;
+	
 	import spark.components.List;
-	import spark.events.IndexChangeEvent;
 
 	/**
 	 * <P>
@@ -97,6 +92,16 @@ package net.vdombox.ide.core.view
 		{
 			return viewComponent as ApplicationsView;
 		}
+		
+		override public function onRegister() : void
+		{
+			addHandlers();
+		}
+		
+		override public function onRemove() : void
+		{
+			removeHandlers();
+		}
 
 		override public function handleNotification( notification : INotification ) : void
 		{
@@ -148,16 +153,6 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
 
 			return interests;
-		}
-
-		override public function onRegister() : void
-		{
-			addHandlers();
-		}
-
-		override public function onRemove() : void
-		{
-			removeHandlers();
 		}
 		
 		/**

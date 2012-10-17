@@ -11,9 +11,9 @@ package net.vdombox.ide.core.model.managers
 	import flash.filesystem.FileStream;
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
-
+	
 	import mx.graphics.codec.PNGEncoder;
-
+	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 
 	public class IconManager extends EventDispatcher

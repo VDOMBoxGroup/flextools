@@ -8,35 +8,22 @@
 
 package net.vdombox.ide.core.view.components
 {
-	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.display.NativeWindowSystemChrome;
 	import flash.display.Screen;
-	import flash.display.StageAlign;
-	import flash.display.StageDisplayState;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
-	import flash.events.MouseEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileStream;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.system.LoaderContext;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
-	import mx.core.FlexGlobals;
-	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.common.view.components.button.AlertButton;
-	import net.vdombox.ide.common.view.components.windows.Alert;
-	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 	
 	import spark.components.Group;
-	import spark.components.Label;
 	import spark.components.TextInput;
 	import spark.components.Window;
 
@@ -95,10 +82,7 @@ package net.vdombox.ide.core.view.components
 		}
 		
 		public function gotoLastPosition():void
-		{
-			//stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
-			//nativeWindow.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
-			
+		{			
 			var f:File = File.applicationStorageDirectory.resolvePath("appPosition.xml");   
 			if(f.exists)
 			{
@@ -130,8 +114,8 @@ package net.vdombox.ide.core.view.components
 			if ( width < 1000 )
 				width = 1000;
 			
-			if ( height < 800 )
-				height = 800;
+			if ( height < 600 )
+				height = 600;
 		}
 
 		[SkinPart( required = "true" )]

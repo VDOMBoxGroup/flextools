@@ -1,18 +1,14 @@
 package net.vdombox.ide.core.controller
 {
-	import air.update.ApplicationUpdater;
 	import air.update.ApplicationUpdaterUI;
-	import air.update.events.StatusUpdateEvent;
 	import air.update.events.UpdateEvent;
-
-	import flash.desktop.NativeApplication;
+	
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
-	import flash.filesystem.File;
-
-	import net.vdombox.ide.common.view.components.windows.Alert;
+	
 	import net.vdombox.ide.common.view.components.button.AlertButton;
-
+	import net.vdombox.ide.common.view.components.windows.Alert;
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 

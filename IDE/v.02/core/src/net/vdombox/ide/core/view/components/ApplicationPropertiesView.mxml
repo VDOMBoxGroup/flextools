@@ -8,8 +8,6 @@
 		 xmlns:components2="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
 		<![CDATA[
-			import mx.events.FlexEvent;
-			
 			import net.vdombox.ide.core.events.ApplicationManagerEvent;
 			
 			[Bindable]

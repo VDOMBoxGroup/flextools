@@ -38,8 +38,6 @@ is defined by the ComboBoxTextInputSkin class.
     <fx:Script fb:purpose="styling">
         <![CDATA[       
 			import mx.events.FlexEvent;
-			
-			import spark.filters.DropShadowFilter;
             private var paddingChanged:Boolean;
             private var cornerRadiusChanged:Boolean;
             private var cornerRadius:Number = 0;            

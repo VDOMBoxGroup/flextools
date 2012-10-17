@@ -3,7 +3,6 @@ package net.vdombox.ide.core.model
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
-	import flash.utils.ByteArray;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -27,11 +26,6 @@ package net.vdombox.ide.core.model
 		public function saveSettings( settingsID : String, settingsValue : Object ) : void
 		{
 			writeObjectToFile( settingsValue, "settings/" + settingsID );
-		}
-
-		override public function onRegister() : void
-		{
-			var path : String = File.applicationStorageDirectory.nativePath;
 		}
 
 		private function writeObjectToFile( object : Object, fname : String ) : void

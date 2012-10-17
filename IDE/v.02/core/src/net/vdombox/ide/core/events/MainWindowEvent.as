@@ -4,6 +4,7 @@ package net.vdombox.ide.core.events
 	
 	public class MainWindowEvent extends Event
 	{
+		public static var CLOSE : String = "mainWindowClose";
 		public static var LOGOUT : String = "logout";
 		public static var SHOW_APP_MANAGER : String = "showAppManager";
 		

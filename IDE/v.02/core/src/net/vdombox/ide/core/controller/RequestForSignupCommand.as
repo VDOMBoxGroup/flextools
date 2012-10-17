@@ -3,7 +3,6 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	import net.vdombox.ide.core.model.vo.HostVO;
-	import net.vdombox.ide.core.view.InitialWindowMediator;
 	import net.vdombox.ide.core.view.LoginViewMediator;
 	import net.vdombox.utils.MD5Utils;
 	

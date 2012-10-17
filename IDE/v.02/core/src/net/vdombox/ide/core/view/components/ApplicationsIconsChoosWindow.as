@@ -10,7 +10,6 @@ package net.vdombox.ide.core.view.components
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.NativeWindowSystemChrome;
 	import flash.display.PixelSnapping;

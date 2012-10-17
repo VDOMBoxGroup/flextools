@@ -1,8 +1,8 @@
 package net.vdombox.ide.core.controller
 {	
-	import net.vdombox.ide.core.view.VdomIDEMediator;
 	import net.vdombox.ide.core.view.CoreJunctionMediator;
 	import net.vdombox.ide.core.view.ProxiesJunctionMediator;
+	import net.vdombox.ide.core.view.VdomIDEMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

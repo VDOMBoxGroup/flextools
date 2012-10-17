@@ -26,7 +26,7 @@ package net.vdombox.ide.core.model
 		}
 
 		private var sharedObjectProxy : SharedObjectProxy;
-		private var resourceManager : IResourceManager = ResourceManager.getInstance();
+		private var resourceManager : IResourceManager;
 
 		private var _locales : Array;
 
@@ -52,6 +52,8 @@ package net.vdombox.ide.core.model
 		override public function onRegister() : void
 		{
 			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
+			
+			resourceManager = ResourceManager.getInstance();
 			
 			_locales = [];
 			
@@ -109,7 +111,6 @@ package net.vdombox.ide.core.model
 					resourceManager.localeChain = [ local.code, defaultLocale.code ];
 				
 				_currentLocale = local;
-				//sharedObjectProxy.localeCode = localeVO.code;
 			}
 
 		}

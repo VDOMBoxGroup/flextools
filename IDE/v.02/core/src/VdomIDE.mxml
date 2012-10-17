@@ -53,10 +53,6 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import mx.containers.Accordion;
-			import mx.controls.Alert;
-			import mx.core.FlexGlobals;
-			import mx.core.UIComponentGlobals;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.core.ApplicationFacade;

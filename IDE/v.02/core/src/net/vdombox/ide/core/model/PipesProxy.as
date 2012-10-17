@@ -22,7 +22,7 @@ package net.vdombox.ide.core.model
 
 		override public function onRemove() : void
 		{
-			_storage = {};
+			_storage = null;
 		}
 
 		public function savePipe( moduleID : String, pipeName : String, pipe : Pipe ) : void

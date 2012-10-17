@@ -2,17 +2,8 @@ package net.vdombox.ide.core.controller
 {
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.common.view.components.button.AlertButton;
-	import net.vdombox.ide.common.view.components.windows.Alert;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.AlertWindowEvent;
-	import net.vdombox.ide.core.model.ApplicationProxy;
-	import net.vdombox.ide.core.model.GalleryProxy;
-	import net.vdombox.ide.core.model.ObjectProxy;
-	import net.vdombox.ide.core.model.PageProxy;
-	import net.vdombox.ide.core.model.ResourcesProxy;
-	import net.vdombox.ide.core.model.ServerProxy;
-	import net.vdombox.ide.core.model.TypesProxy;
 	import net.vdombox.ide.core.view.components.AlertWindow;
 	import net.vdombox.utils.WindowManager;
 	

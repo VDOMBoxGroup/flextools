@@ -11,11 +11,8 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.binding.utils.BindingUtils;
-			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.core.events.MainWindowEvent;
 			static private const exclusions : Array = [ "backgroundRect", "contentGroup", "titleBar",

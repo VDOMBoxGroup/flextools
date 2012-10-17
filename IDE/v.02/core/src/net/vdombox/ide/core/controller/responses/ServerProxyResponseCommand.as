@@ -1,15 +1,12 @@
 package net.vdombox.ide.core.controller.responses
 {
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPlaceNames;
 	import net.vdombox.ide.common.controller.names.PPMServerTargetNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.model.SettingsProxy;
-	import net.vdombox.ide.core.model.SettingsStorageProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
-	import net.vdombox.ide.core.model.vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

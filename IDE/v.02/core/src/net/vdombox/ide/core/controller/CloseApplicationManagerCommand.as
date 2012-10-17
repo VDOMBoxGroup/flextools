@@ -1,8 +1,6 @@
 package net.vdombox.ide.core.controller
 {
 	
-	import flash.desktop.NativeApplication;
-	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.GalleryProxy;
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
@@ -46,7 +44,7 @@ package net.vdombox.ide.core.controller
 				if ( !close || facade.hasMediator( MainWindowMediator.NAME ) )
 					sendNotification(ApplicationFacade.OPEN_MAIN_WINDOW);
 				else
-					NativeApplication.nativeApplication.exit();
+					sendNotification(ApplicationFacade.CLOSE_IDE);
 			}
 			else
 			{

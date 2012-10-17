@@ -7,17 +7,13 @@
 		  skinClass="net.vdombox.ide.core.view.skins.InitialWindowSkin"
 		  minHeight="410" minWidth="580"
 		  mouseDown="window_mouseDownHandler( event )"
-		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true" xmlns:components1="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+		  resizable="false" showStatusBar="false" 
+		  systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true" 
+		  xmlns:components1="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 
 	<fx:Script>
 		<![CDATA[
-			import flash.display.NativeWindowSystemChrome;
-			import flash.events.MouseEvent;
 			import flash.text.engine.TextLine;
-			
-			import mx.controls.SWFLoader;
-			import mx.modules.ModuleLoader;
-			import mx.modules.ModuleManager;
 			
 			import net.vdombox.ide.core.events.InitialWindowEvent;
 			

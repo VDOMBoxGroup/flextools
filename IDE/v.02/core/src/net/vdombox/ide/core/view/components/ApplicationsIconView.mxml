@@ -8,7 +8,6 @@
 			import mx.utils.ObjectUtil;
 			
 			import net.vdombox.ide.common.model._vo.ResourceVO;
-			import net.vdombox.ide.core.events.IconChooserEvent;
 			
 			private var _resourceVO : ResourceVO;
 

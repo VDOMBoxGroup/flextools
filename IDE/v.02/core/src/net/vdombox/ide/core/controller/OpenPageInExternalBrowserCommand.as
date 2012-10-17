@@ -2,10 +2,10 @@ package net.vdombox.ide.core.controller
 {
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
-
+	
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 

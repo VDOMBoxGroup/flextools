@@ -12,11 +12,7 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var loginViewMediator : LoginViewMediator;
-			var errorViewMediator : ErrorViewMediator;
-			var progressViewMediator : ProgressViewMediator;
-			var initialWindowMediator : InitialWindowMediator;
-
+			
 			if ( facade.hasMediator( LoginViewMediator.NAME ) )
 				facade.removeMediator( LoginViewMediator.NAME );
 			
@@ -28,10 +24,11 @@ package net.vdombox.ide.core.controller
 			
 			if ( facade.hasMediator( InitialWindowMediator.NAME ) )
 			{
-				initialWindowMediator = facade.retrieveMediator( InitialWindowMediator.NAME ) as InitialWindowMediator;
+				var initialWindowMediator : InitialWindowMediator = facade.retrieveMediator( InitialWindowMediator.NAME ) as InitialWindowMediator;
 				facade.removeMediator( InitialWindowMediator.NAME );
 				initialWindowMediator.closeWindow();
 			}
+			
 		}
 	}
 }

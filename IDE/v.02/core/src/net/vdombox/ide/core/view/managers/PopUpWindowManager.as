@@ -461,6 +461,7 @@ package net.vdombox.ide.core.view.managers
 	}
 }
 	import flash.display.NativeWindow;
+	
 	import mx.core.UIComponent;
 	
 

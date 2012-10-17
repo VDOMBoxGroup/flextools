@@ -14,9 +14,7 @@ package net.vdombox.ide.core.controller
 			sendNotification( ApplicationFacade.CLOSE_INITIAL_WINDOW );
 			sendNotification( ApplicationFacade.CLOSE_MAIN_WINDOW );
 			
-			var initialWindowMediator : InitialWindowMediator;
-			
-			initialWindowMediator = new InitialWindowMediator( new InitialWindow() );
+			var initialWindowMediator : InitialWindowMediator = new InitialWindowMediator( new InitialWindow() );
 			facade.registerMediator( initialWindowMediator );
 			initialWindowMediator.openWindow();
 		}

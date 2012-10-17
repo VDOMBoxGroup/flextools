@@ -1,7 +1,7 @@
 package net.vdombox.ide.core.patterns.observer
 {
 	import mx.rpc.AsyncToken;
-
+	
 	import org.puremvc.as3.multicore.patterns.observer.Notification;
 
 	public class ProxyNotification extends Notification

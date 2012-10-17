@@ -1,8 +1,8 @@
 package net.vdombox.ide.core.controller.requests
 {
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMResourcesTargetNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;

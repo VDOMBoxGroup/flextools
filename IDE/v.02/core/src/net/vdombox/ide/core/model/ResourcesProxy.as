@@ -15,7 +15,6 @@ package net.vdombox.ide.core.model
 	import mx.utils.Base64Decoder;
 	import mx.utils.Base64Encoder;
 	
-	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -43,9 +42,14 @@ package net.vdombox.ide.core.model
 		 */
 		public static const NAME : String = "ResourcesProxy";
 
-		/**
-		 *
-		 */
+		private var soap : SOAP;
+		
+		private var cacheManager : CacheManager;
+		
+		private var upLoadQue : Array;
+		private var loadQue : Dictionary = new Dictionary();
+		
+		
 		public function ResourcesProxy()
 		{
 			super( NAME, data );
@@ -53,6 +57,8 @@ package net.vdombox.ide.core.model
 
 		override public function onRegister() : void
 		{
+			soap = SOAP.getInstance();
+			cacheManager = CacheManager.getInstance();
 			
 			if ( soap.ready )
 				addHandlers();
@@ -69,15 +75,7 @@ package net.vdombox.ide.core.model
 			removeHandlers();
 		}
 
-		private var soap : SOAP = SOAP.getInstance();
-
-		private var cacheManager : CacheManager = CacheManager.getInstance();
-
-		private var upLoadQue : Array;
-		private var loadQue : Dictionary = new Dictionary();
 		
-
-//		private var loadableTypesIcons : ArrayCollection = new ArrayCollection();
 
 		/**
 		 *
@@ -246,11 +244,6 @@ package net.vdombox.ide.core.model
 			}
 
 		}
-		
-		public function reAddHandlers() : void
-		{
-			addHandlers();
-		}
 
 		private function addHandlers() : void
 		{
@@ -417,7 +410,7 @@ package net.vdombox.ide.core.model
 
 		}
 
-		private var loadableResources : ArrayCollection = new ArrayCollection;
+		private var loadableResources : ArrayCollection = new ArrayCollection();
 
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
@@ -547,7 +540,7 @@ package net.vdombox.ide.core.model
 			
 			
 			var operationName : String = operation.name;
-			var resourceVO : ResourceVO;
+			/*var resourceVO : ResourceVO;
 
 			switch ( operationName )
 			{
@@ -558,7 +551,7 @@ package net.vdombox.ide.core.model
 //					soap_setResource();
 					break;
 				}
-			}
+			}*/
 
 			sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxy | soap_faultHandler | " + event.currentTarget.name );
 			//sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );

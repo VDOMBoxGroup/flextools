@@ -1,9 +1,9 @@
 package net.vdombox.ide.core.controller.responses
 {
+	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMPlaceNames;
-	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.core.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

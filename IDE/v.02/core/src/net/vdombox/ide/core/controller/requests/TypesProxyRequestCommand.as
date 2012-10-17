@@ -1,13 +1,11 @@
 package net.vdombox.ide.core.controller.requests
 {
-	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 	
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.TypesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;

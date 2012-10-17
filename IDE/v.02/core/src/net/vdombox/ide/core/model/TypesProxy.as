@@ -8,9 +8,6 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.managers.TypesManager;
-	
-	import org.puremvc.as3.multicore.interfaces.IProxy;
-	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	/**
 	 * ObjectProxy is wrapper on VDOM Object.   
@@ -40,7 +37,7 @@ package net.vdombox.ide.core.model
 			super( data );
 		}
 
-		private var soap : SOAP = SOAP.getInstance();
+		private var soap : SOAP;
 
 		private var _types : Array;
 		private var _topLevelTypes : Array;
@@ -59,6 +56,7 @@ package net.vdombox.ide.core.model
 		
 		override public function onRegister() : void
 		{
+			soap = SOAP.getInstance();
 			
 			if ( soap.ready )
 			{
@@ -291,7 +289,7 @@ package net.vdombox.ide.core.model
 		
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{	
-				sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
+			sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
 		}
 	}
 }

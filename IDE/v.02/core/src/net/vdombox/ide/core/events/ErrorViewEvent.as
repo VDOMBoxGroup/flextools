@@ -2,8 +2,6 @@ package net.vdombox.ide.core.events
 {
 	import flash.events.Event;
 	
-	import mx.controls.Image;
-	
 	public class ErrorViewEvent extends Event
 	{
 		public static var BACK : String = "back";
@@ -16,7 +14,6 @@ package net.vdombox.ide.core.events
 		override public function clone() : Event
 		{
 			return new InitialWindowEvent( type, bubbles, cancelable );
-			Image
 		}
 	}
 }

@@ -1,10 +1,8 @@
 package net.vdombox.ide.core.controller
 {
 	import flash.desktop.NativeApplication;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
-	
-	import net.vdombox.ide.core.ApplicationFacade;
+	import flash.display.NativeWindow;
+	import flash.events.Event;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -13,31 +11,37 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var opened : Array = NativeApplication.nativeApplication.openedWindows;
+			var exitingEvent : Event = new Event( Event.EXITING, false, true );
+			NativeApplication.nativeApplication.addEventListener( Event.EXITING, exitingHandler );
 			
-			for ( var i : int = 0; i < opened.length; i++ )
-			{
-				opened[ i ].close();
-			}
+			NativeApplication.nativeApplication.dispatchEvent(exitingEvent);
 			
-			var t : Timer = new Timer( 100, 1 );
-			
-			t.addEventListener( TimerEvent.TIMER, closeNativeAplication );
-			
-			t.start();
+			if (!exitingEvent.isDefaultPrevented()) 
+				NativeApplication.nativeApplication.exit();
 		}
-
-
-		private function closeNativeAplication( event : TimerEvent ) : void
+		
+		private function exitingHandler( event : Event ) : void
 		{
+			NativeApplication.nativeApplication.removeEventListener( Event.EXITING, exitingHandler );
+			
+			var winClosingEvent:Event;
 			var opened : Array = NativeApplication.nativeApplication.openedWindows;
-
-			for ( var i : int = 0; i < opened.length; i++ )
+			
+			for each (var win : NativeWindow in opened ) 
 			{
-				opened[ i ].close();
+				winClosingEvent = new Event(Event.CLOSING,false,true);
+				win.dispatchEvent(winClosingEvent);
+				
+				if (!winClosingEvent.isDefaultPrevented()) 
+					win.close();
+				else 
+					event.preventDefault();
 			}
 			
-			NativeApplication.nativeApplication.exit();
+			if (!event.isDefaultPrevented()) 
+			{
+				//perform cleanup
+			}
 		}
 	}
 }

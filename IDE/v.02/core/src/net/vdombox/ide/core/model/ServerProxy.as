@@ -3,16 +3,12 @@ package net.vdombox.ide.core.model
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
-	import mx.events.StateChangeEvent;
-	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
 	
-	import net.vdombox.editors.parsers.vdomxml.AssistMenuVdomXML;
 	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.events.SOAPErrorEvent;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
@@ -199,6 +195,8 @@ package net.vdombox.ide.core.model
 
 		private function removeHandlers() : void
 		{
+			soap.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 			soap.removeEventListener( SOAPEvent.CONNECTION_OK, soap_connectionOKHandler );
 			soap.removeEventListener( SOAPErrorEvent.CONNECTION_ERROR, soap_connectionErrorHandler );
 
@@ -268,8 +266,8 @@ package net.vdombox.ide.core.model
 
 			if ( soap.ready )
 			{
-				soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-				soap.create_application.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+				soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0 , true );
+				soap.create_application.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0 , true );
 			}
 
 			//only for ProgressViewMediator

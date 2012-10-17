@@ -1,14 +1,9 @@
 package net.vdombox.ide.core.view
 {
-	import flash.desktop.NativeApplication;
 	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.events.MouseEvent;
 	
-	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
-	import mx.events.ListEvent;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.LoginViewEvent;
@@ -21,8 +16,6 @@ package net.vdombox.ide.core.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.events.IndexChangeEvent;
 
 	public class LoginViewMediator extends Mediator implements IMediator
 	{

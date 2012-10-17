@@ -5,10 +5,8 @@
 
 	<fx:Script>
 		<![CDATA[
-			import flash.events.Event;
-
 			import net.vdombox.ide.core.model.vo.ErrorVO;
-
+			
 			import spark.components.Button;
 
 			[Bindable]

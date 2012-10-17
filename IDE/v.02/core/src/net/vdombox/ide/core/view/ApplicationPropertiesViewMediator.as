@@ -8,13 +8,10 @@
 
 package net.vdombox.ide.core.view
 {
-	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.utils.ByteArray;
 	
-	import mx.binding.utils.BindingUtils;
-	import mx.controls.Image;
 	import mx.events.FlexEvent;
 	import mx.resources.ResourceManager;
 	import mx.utils.ObjectUtil;
@@ -113,6 +110,16 @@ package net.vdombox.ide.core.view
 
 			return ObjectUtil.copy( galleryItemVO.content ) as ByteArray;
 		}
+		
+		override public function onRegister() : void
+		{
+			addHandlers();
+		}
+		
+		override public function onRemove() : void
+		{
+			removeHandlers();
+		}
 
 		override public function handleNotification( notification : INotification ) : void
 		{
@@ -200,16 +207,6 @@ package net.vdombox.ide.core.view
 			return interests;
 		}
 
-		override public function onRegister() : void
-		{
-			addHandlers();
-		}
-
-		override public function onRemove() : void
-		{
-			removeHandlers();
-		}
-
 		private function addHandlers() : void
 		{
 			applicationPropertiesView.addEventListener( ApplicationManagerEvent.CANCEL, cancelInformationHandler );
@@ -229,7 +226,7 @@ package net.vdombox.ide.core.view
 			if ( serverProxy.applications && serverProxy.applications.length > 0 )
 				sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
 			else
-				NativeApplication.nativeApplication.exit();
+				sendNotification( ApplicationFacade.CLOSE_IDE );
 		}
 
 		private function closeIconListHandler( event : Event ) : void

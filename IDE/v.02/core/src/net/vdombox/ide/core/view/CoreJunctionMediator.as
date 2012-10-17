@@ -1,12 +1,11 @@
 package net.vdombox.ide.core.view
 {
-	import net.vdombox.ide.common.controller.messages.LogMessage;
-	import net.vdombox.ide.common.view.LoggingJunctionMediator;
-	import net.vdombox.ide.common.controller.names.PipeNames;
-	import net.vdombox.ide.common.controller.messages.SimpleMessage;
 	import net.vdombox.ide.common.SimpleMessageHeaders;
+	import net.vdombox.ide.common.controller.messages.LogMessage;
+	import net.vdombox.ide.common.controller.messages.SimpleMessage;
 	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
-	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
+	import net.vdombox.ide.common.controller.names.PipeNames;
+	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;

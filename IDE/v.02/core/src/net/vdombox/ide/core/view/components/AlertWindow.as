@@ -1,9 +1,6 @@
 package net.vdombox.ide.core.view.components
 {
 	import flash.display.NativeWindowSystemChrome;
-	import flash.events.MouseEvent;
-	
-	import mx.controls.Image;
 	
 	import net.vdombox.ide.core.events.AlertWindowEvent;
 	import net.vdombox.ide.core.view.skins.AlertWindowSkin;

@@ -8,21 +8,15 @@
 
 package net.vdombox.ide.core.controller
 {
-	import mx.core.UIComponent;
-	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.GalleryProxy;
-	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
 	import net.vdombox.ide.core.view.components.ApplicationManagerWindow;
 	import net.vdombox.ide.core.view.components.MainWindow;
-	import net.vdombox.ide.core.view.skins.ApplicationManagerWindowSkin;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
-	
-	import spark.components.Button;
 
 	/**
 	 *  registred on ApplicationFacade.OPEN_APPLICATION_MANAGER command

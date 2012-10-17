@@ -6,13 +6,10 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.TypesProxy;
-	import net.vdombox.ide.core.view.components.InitialWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.components.Window;
 
 	/**
 	 * @flowerModelElementId _DGeLQEomEeC-JfVEe_-0Aw
@@ -40,7 +37,6 @@ package net.vdombox.ide.core.view
 
 			interests.push( ApplicationFacade.INITIAL_WINDOW_OPENED );
 
-//			interests.push( ApplicationFacade.MAIN_WINDOW_OPENED );
 			interests.push( TypesProxy.TYPES_LOADED );
 			
 			return interests;
@@ -54,9 +50,6 @@ package net.vdombox.ide.core.view
 			{
 				case TypesProxy.TYPES_LOADED:
 				{
-//					if (statesProxy.selectedApplication)
-//						sendNotification( ApplicationFacade.OPEN_MAIN_WINDOW );
-//					else
 					var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 					if ( !serverProxy.reconected )
 						sendNotification( ApplicationFacade.OPEN_APPLICATION_MANAGER );
@@ -71,12 +64,6 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-//				case ApplicationFacade.MAIN_WINDOW_OPENED:
-//					{
-//						sendNotification( ApplicationFacade.LOAD_MODULES );
-//
-//						break;
-//					}
 			}
 			
 		}

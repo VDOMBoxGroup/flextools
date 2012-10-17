@@ -12,10 +12,7 @@
 			
 			import net.vdombox.ide.common.model._vo.ApplicationVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			import net.vdombox.ide.core.events.ApplicationManagerEvent;
 			
-			import spark.components.Application;
-			import spark.components.Scroller;
 			import spark.components.VScrollBar;
 
 

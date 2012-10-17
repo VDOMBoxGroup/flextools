@@ -1,12 +1,8 @@
 package net.vdombox.ide.core.view
 {
 	import air.update.ApplicationUpdaterUI;
-	import air.update.events.DownloadErrorEvent;
-	import air.update.events.StatusUpdateEvent;
 	import air.update.events.UpdateEvent;
 	
-	import flash.desktop.NativeApplication;
-	import flash.display.NativeWindow;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -16,13 +12,10 @@ package net.vdombox.ide.core.view
 	import flash.net.URLRequestMethod;
 	
 	import mx.controls.Alert;
-	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.utils.VersionUtils;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
-	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
 	public class UpdateMediator extends Mediator implements IMediator

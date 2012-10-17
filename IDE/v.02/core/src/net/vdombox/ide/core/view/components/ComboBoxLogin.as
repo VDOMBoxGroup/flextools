@@ -1,15 +1,11 @@
 package net.vdombox.ide.core.view.components
 {
 	import flash.events.KeyboardEvent;
-	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
-	
-	import mx.states.OverrideBase;
 	
 	import net.vdombox.ide.core.view.skins.ComboBoxLoginSkin;
 	
 	import spark.components.ComboBox;
-	import spark.components.TextInput;
 
 	public class ComboBoxLogin extends ComboBox
 	{

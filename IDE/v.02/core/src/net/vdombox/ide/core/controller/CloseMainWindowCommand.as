@@ -8,12 +8,10 @@ package net.vdombox.ide.core.controller
 	public class CloseMainWindowCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
-		{
-			var mainWindowMediator : MainWindowMediator;
-			
+		{			
 			if( facade.hasMediator( MainWindowMediator.NAME ) )
 			{
-				mainWindowMediator = facade.retrieveMediator( MainWindowMediator.NAME ) as MainWindowMediator;
+				var mainWindowMediator : MainWindowMediator = facade.retrieveMediator( MainWindowMediator.NAME ) as MainWindowMediator;
 				mainWindowMediator.closeWindow();
 				facade.removeMediator( MainWindowMediator.NAME );
 			}

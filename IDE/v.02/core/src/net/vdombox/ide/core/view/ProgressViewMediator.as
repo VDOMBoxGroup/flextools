@@ -1,7 +1,5 @@
 package net.vdombox.ide.core.view
 {
-	import flash.events.Event;
-	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.TypesProxy;
 	import net.vdombox.ide.core.view.components.ProgressView;

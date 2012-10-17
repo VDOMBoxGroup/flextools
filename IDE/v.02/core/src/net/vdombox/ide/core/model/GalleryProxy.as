@@ -8,20 +8,13 @@
 
 package net.vdombox.ide.core.model
 {
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.display.Loader;
-	import flash.display.PixelSnapping;
-	import flash.errors.IOError;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
-	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
-	
-	import mx.graphics.codec.PNGEncoder;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.vo.GalleryItemVO;

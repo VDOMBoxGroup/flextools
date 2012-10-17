@@ -8,20 +8,15 @@
 
 package net.vdombox.ide.core.view
 {
-	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.ApplicationManagerEvent;
-	import net.vdombox.ide.core.model.GalleryProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
-	import net.vdombox.ide.core.model.SettingsProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.view.components.ApplicationManagerWindow;
-	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -124,7 +119,7 @@ package net.vdombox.ide.core.view
 			if (serverProxy.applications && serverProxy.applications.length > 0 )
 				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff : logOff, close : close } );
 			else
-				NativeApplication.nativeApplication.exit();
+				sendNotification( ApplicationFacade.CLOSE_IDE );
 		}
 
 		private function createCompleteHandler( event : FlexEvent ) : void
@@ -154,6 +149,10 @@ package net.vdombox.ide.core.view
 
 		private function removeHandlers() : void
 		{
+			applicationManagerWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHandler );
+			
+			applicationManagerWindow.removeEventListener( FlexEvent.REMOVE, removeHandler );
+			
 			applicationManagerWindow.removeEventListener( Event.CLOSE, closeHandler );
 			
 			applicationManagerWindow.removeEventListener( ApplicationManagerEvent.LOGOUT, logoutHandler );

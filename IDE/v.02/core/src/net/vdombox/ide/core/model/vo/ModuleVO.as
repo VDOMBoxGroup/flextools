@@ -7,15 +7,13 @@ package net.vdombox.ide.core.model.vo
 	 */
 	public class ModuleVO
 	{
+		private var _module : VIModule;
+		private var _path : String;
+		
 		public function ModuleVO(  path : String )
 		{
 			_path = path;
 		}
-
-		private var _module : VIModule;
-
-
-		private var _path : String;
 
 		public function get module() : VIModule
 		{

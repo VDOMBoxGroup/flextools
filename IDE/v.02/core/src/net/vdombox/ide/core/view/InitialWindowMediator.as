@@ -8,27 +8,21 @@
 
 package net.vdombox.ide.core.view
 {
-	import flash.desktop.NativeApplication;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import mx.controls.ComboBox;
-	import mx.core.INavigatorContent;
+	
 	import mx.events.AIREvent;
 	import mx.events.FlexEvent;
+	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.InitialWindowEvent;
-	import net.vdombox.ide.core.model.LocalesProxy;
 	import net.vdombox.ide.core.model.SessionProxy;
-	import net.vdombox.ide.core.model.SharedObjectProxy;
-	import net.vdombox.ide.core.model.vo.LocaleVO;
 	import net.vdombox.ide.core.view.components.InitialWindow;
 	import net.vdombox.utils.VersionUtils;
 	import net.vdombox.utils.WindowManager;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	import spark.components.Button;
-	import spark.components.RichEditableText;
 	public class InitialWindowMediator extends Mediator implements IMediator
 	{
 		public static const ERROR_VIEW_STATE_NAME : String = "errorView";
@@ -37,18 +31,43 @@ package net.vdombox.ide.core.view
 		
 		public static const PROGRESS_VIEW_STATE_NAME : String = "progressView";
 		
+		private var sessionProxy : SessionProxy;
+		private var windowManager : WindowManager;
+		
 		public function InitialWindowMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
 		}
 		
-		private var sessionProxy : SessionProxy;
-		
-		private var windowManager : WindowManager = WindowManager.getInstance();
-		
-		public function closeWindow() : void
+		public function get initialWindow() : InitialWindow
 		{
-			windowManager.removeWindow( initialWindow );
+			return viewComponent as InitialWindow;
+		}
+		
+		override public function onRegister() : void
+		{
+			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			windowManager = WindowManager.getInstance();
+			
+			addHandlers();
+		}
+		
+		override public function onRemove() : void
+		{
+			removeHandlers();
+		}
+		
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
+			
+			interests.push( ApplicationFacade.SHOW_LOGIN_VIEW_REQUEST );
+			
+			interests.push( ApplicationFacade.REQUEST_FOR_SIGNUP );
+			
+			return interests;
 		}
 		
 		override public function handleNotification( notification : INotification ) : void
@@ -80,34 +99,32 @@ package net.vdombox.ide.core.view
 			initialWindow.validateNow();
 		}
 		
-		public function get initialWindow() : InitialWindow
+		private function addHandlers() : void
 		{
-			return viewComponent as InitialWindow;
+			initialWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
+			
+			initialWindow.addEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler, false, 0, true );
+			
+			initialWindow.addEventListener( InitialWindowEvent.EXIT, exitHandler, false, 0, true );
+			
+			initialWindow.addEventListener( InitialWindowEvent.CANCEL, cancelHandler, false, 0, true );
+			
+			initialWindow.addEventListener( InitialWindowEvent.SUBMIT, submitHandler, false, 0, true);
+			
+			initialWindow.addEventListener( Event.CLOSE, closeHandler, false, 0, true  ); 
 		}
 		
-		override public function listNotificationInterests() : Array
+		private function removeHandlers() : void
 		{
-			var interests : Array = super.listNotificationInterests();
+			initialWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			
-			interests.push( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
+			initialWindow.removeEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler );
 			
-			interests.push( ApplicationFacade.SHOW_LOGIN_VIEW_REQUEST );
+			initialWindow.removeEventListener( InitialWindowEvent.EXIT, exitHandler );
 			
-			interests.push( ApplicationFacade.REQUEST_FOR_SIGNUP );
+			initialWindow.removeEventListener( InitialWindowEvent.SUBMIT, submitHandler );
 			
-			return interests;
-		}
-		
-		override public function onRegister() : void
-		{
-			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			
-			addHandlers();
-		}
-		
-		override public function onRemove() : void
-		{
-			removeHandlers();
+			initialWindow.removeEventListener( Event.CLOSE, closeHandler ); 
 		}
 		
 		public function openViewState( viewStateName : String ) : void
@@ -121,27 +138,14 @@ package net.vdombox.ide.core.view
 			initialWindow.activate();
 		}
 		
-		private function addHandlers() : void
+		public function closeWindow() : void
 		{
-			initialWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
-			//initialWindow.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
-			
-			initialWindow.addEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler, false, 0, true );
-			
-			initialWindow.addEventListener( InitialWindowEvent.EXIT, exitHandler );
-			
-			initialWindow.addEventListener( InitialWindowEvent.CANCEL, cancelHandler );
-			
-			initialWindow.addEventListener( InitialWindowEvent.SUBMIT, submitHandler);
-			
-			initialWindow.addEventListener(Event.CLOSE, closeHandler, false, 0, true  ); 
+			windowManager.removeWindow( initialWindow );
 		}
 		
 		private function closeHandler( event : Event ) : void
 		{
 			removeHandlers();
-			
-			NativeApplication.nativeApplication.exit();
 			
 			sendNotification( ApplicationFacade.CLOSE_IDE );
 		}
@@ -171,30 +175,6 @@ package net.vdombox.ide.core.view
 		private function initTitle():void
 		{
 			initialWindow.title = VersionUtils.getApplicationName();
-		}
-		
-		/*private function mouseDownHandler( event : MouseEvent ) : void
-		{
-			if ( event.target is Button || event.target is RichEditableText || event.target.parent is ComboBox )
-				return;
-			
-			initialWindow.nativeWindow.startMove();
-			
-			//event.stopImmediatePropagation();
-		}*/
-		
-		private function removeHandlers() : void
-		{
-			initialWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-			//initialWindow.removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-			
-			initialWindow.removeEventListener( AIREvent.WINDOW_COMPLETE, windowCompleteHandler );
-			
-			initialWindow.removeEventListener( InitialWindowEvent.EXIT, exitHandler );
-			
-			initialWindow.removeEventListener( InitialWindowEvent.SUBMIT, submitHandler );
-			
-			initialWindow.removeEventListener( Event.CLOSE, closeHandler ); 
 		}
 		
 		private function submitHandler( event : InitialWindowEvent ) : void

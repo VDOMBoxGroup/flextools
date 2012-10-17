@@ -10,7 +10,6 @@ package net.vdombox.ide.core.controller
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
-	import org.puremvc.as3.multicore.patterns.facade.Facade;
 
 	public class SetSelectedApplicationCommand extends SimpleCommand
 	{
