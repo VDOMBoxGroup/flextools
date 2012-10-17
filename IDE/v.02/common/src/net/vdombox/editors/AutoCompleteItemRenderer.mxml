@@ -8,8 +8,6 @@
 		<![CDATA[
 			import net.vdombox.editors.parsers.AutoCompleteItemVO;
 			
-			import spark.filters.DropShadowFilter;
-			
 			private var _data : AutoCompleteItemVO;
 			
 			override public function set data( value : Object ) : void

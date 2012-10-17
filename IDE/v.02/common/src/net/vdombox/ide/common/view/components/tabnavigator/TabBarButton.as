@@ -1,14 +1,10 @@
 package net.vdombox.ide.common.view.components.tabnavigator
 {
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.binding.utils.ChangeWatcher;
-	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
-	
-	import net.vdombox.ide.common.view.skins.button.TabBarButtonSkin;
 	
 	import spark.components.Button;
 	import spark.components.ButtonBarButton;

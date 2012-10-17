@@ -12,7 +12,6 @@
 			import net.vdombox.editors.parsers.AutoCompleteItemVO;
 			
 			import spark.components.Scroller;
-			import spark.filters.DropShadowFilter;
 			
 			private var _showed : Boolean = false;
 

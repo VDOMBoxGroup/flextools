@@ -7,10 +7,9 @@ package net.vdombox.ide.common.view.components.windows.resourceBrowserWindow
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.events.Event;
+	
 	import mx.controls.Image;
 	import mx.core.mx_internal;
-	import mx.styles.CSSStyleDeclaration;
-	import mx.styles.StyleManager;
 
 	use namespace mx_internal;
 

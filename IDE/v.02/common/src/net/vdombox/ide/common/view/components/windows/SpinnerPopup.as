@@ -3,7 +3,6 @@ package net.vdombox.ide.common.view.components.windows
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
-	import mx.core.Window;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	

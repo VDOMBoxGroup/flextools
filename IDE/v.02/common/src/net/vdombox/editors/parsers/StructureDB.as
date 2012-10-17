@@ -1,10 +1,10 @@
 package net.vdombox.editors.parsers
 {
+	import net.vdombox.editors.parsers.base.BackwardsParser;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.VDOMImage;
-	import net.vdombox.editors.parsers.base.BackwardsParser;
 
 	public class StructureDB
 	{

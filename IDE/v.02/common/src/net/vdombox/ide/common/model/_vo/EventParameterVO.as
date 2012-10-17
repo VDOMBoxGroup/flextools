@@ -1,7 +1,6 @@
 package net.vdombox.ide.common.model._vo
 {
-	import mx.resources.IResourceManager;
-	import mx.resources.ResourceManager;
+	
 
 	public class EventParameterVO
 	{

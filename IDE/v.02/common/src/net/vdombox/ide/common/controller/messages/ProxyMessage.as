@@ -1,7 +1,8 @@
 package net.vdombox.ide.common.controller.messages
 {
-	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 	import net.vdombox.ide.common.MessageTypes;
+	
+	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 
 	public class ProxyMessage extends Message
 	{

@@ -1,7 +1,7 @@
 package net.vdombox.ide.common.model
 {
-	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.TypeDB;
+	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	

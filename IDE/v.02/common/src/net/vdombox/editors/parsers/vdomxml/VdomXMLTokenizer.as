@@ -1,12 +1,10 @@
 package net.vdombox.editors.parsers.vdomxml
 {
 
+	import net.vdombox.editors.parsers.TypeDB;
 	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.editors.parsers.base.Tokenizer;
-	
-	import ro.victordramba.util.HashMap;
-	import net.vdombox.editors.parsers.TypeDB;
 
 
 	public class VdomXMLTokenizer extends Tokenizer

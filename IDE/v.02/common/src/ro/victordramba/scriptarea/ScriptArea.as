@@ -7,12 +7,9 @@ package ro.victordramba.scriptarea
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
-	import mx.utils.OnDemandEventDispatcher;
-	
 	import net.vdombox.editors.parsers.base.Controller;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
-	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.utils.StringUtils;
 
 	public class ScriptArea extends Base
@@ -1007,30 +1004,30 @@ package ro.victordramba.scriptarea
 				if ( o.begin >= _selStart && o.begin <= _selEnd && needChangeColorSelected )
 				{
 					if ( o.end < _selEnd )
-						str = "<font color=\"#" + "ffffff" + "\">" + StringUtils.htmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
+						str = "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
 					else
 					{
-						str = "<font color=\"#" + "ffffff" + "\">" + StringUtils.htmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selEnd ) ) + "</font>";
-						str += "<font color=\"#" + o.color + "\">" + StringUtils.htmlEnc( _text.substring( _selEnd, o.end ) ) + "</font>";
+						str = "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selEnd ) ) + "</font>";
+						str += "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( _selEnd, o.end ) ) + "</font>";
 					}
 				}
 				else if ( o.begin <= _selStart && o.end >= _selStart  && needChangeColorSelected )
 				{
 					if ( o.end <= _selEnd )
 					{
-						str = "<font color=\"#" + o.color + "\">" + StringUtils.htmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selStart ) ) + "</font>";
-						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.htmlEnc( _text.substring( _selStart, o.end ) ) + "</font>";
+						str = "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selStart ) ) + "</font>";
+						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( _selStart, o.end ) ) + "</font>";
 					}
 					else
 					{
-						str = "<font color=\"#" + o.color + "\">" + StringUtils.htmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selStart ) ) + "</font>";
-						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.htmlEnc( _text.substring( _selStart, _selEnd ) ) + "</font>";
-						str += "<font color=\"#" + o.color + "\">" + StringUtils.htmlEnc( _text.substring( _selEnd, o.end ) ) + "</font>";
+						str = "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selStart ) ) + "</font>";
+						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( _selStart, _selEnd ) ) + "</font>";
+						str += "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( _selEnd, o.end ) ) + "</font>";
 					}
 				}
 				else
 				{
-					str = "<font color=\"#" + o.color + "\">" + StringUtils.htmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
+					str = "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
 					
 					if ( o.bold )
 						str = "<b>" + str + "</b>";
@@ -1052,30 +1049,30 @@ package ro.victordramba.scriptarea
 				if ( begin >= _selStart && begin <= _selEnd  && needChangeColorSelected )
 				{
 					if ( end <= _selEnd )
-						str = "<font color=\"#" + "ffffff" + "\">" + StringUtils.htmlEnc( _text.substring( Math.max( begin, firstPos ), end ) ) + "</font>";
+						str = "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( begin, firstPos ), end ) ) + "</font>";
 					else
 					{
-						str = "<font color=\"#" + "ffffff" + "\">" + StringUtils.htmlEnc( _text.substring( Math.max( begin, firstPos ), _selEnd ) ) + "</font>";
-						str += StringUtils.htmlEnc( _text.substring( _selEnd, end ) );
+						str = "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( begin, firstPos ), _selEnd ) ) + "</font>";
+						str += StringUtils.toHtmlEnc( _text.substring( _selEnd, end ) );
 					}
 				}
 				else if ( begin <= _selStart && end >= _selStart && needChangeColorSelected )
 				{
 					if ( end <= _selEnd )
 					{
-						str = StringUtils.htmlEnc( _text.substring( Math.max( begin, firstPos ), _selStart ) );
-						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.htmlEnc( _text.substring( _selStart, end ) ) + "</font>";
+						str = StringUtils.toHtmlEnc( _text.substring( Math.max( begin, firstPos ), _selStart ) );
+						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( _selStart, end ) ) + "</font>";
 					}
 					else
 					{
-						str = StringUtils.htmlEnc( _text.substring( Math.max( begin, firstPos ), _selStart ) );
-						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.htmlEnc( _text.substring( _selStart, _selEnd ) ) + "</font>";
-						str += StringUtils.htmlEnc( _text.substring( _selEnd, end ) );
+						str = StringUtils.toHtmlEnc( _text.substring( Math.max( begin, firstPos ), _selStart ) );
+						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( _selStart, _selEnd ) ) + "</font>";
+						str += StringUtils.toHtmlEnc( _text.substring( _selEnd, end ) );
 					}
 				}
 				else
 				{
-					str = StringUtils.htmlEnc( _text.substring( Math.max( begin, firstPos ), end ) );
+					str = StringUtils.toHtmlEnc( _text.substring( Math.max( begin, firstPos ), end ) );
 				}
 				
 				return str;

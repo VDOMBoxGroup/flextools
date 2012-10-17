@@ -1,16 +1,10 @@
 package net.vdombox.editors.parsers.vscript
 {
 	import flash.text.*;
-	import flash.utils.ByteArray;
 	import flash.utils.setTimeout;
 	
-	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.base.Parser;
-	import net.vdombox.editors.parsers.base.Token;
-	
-	import ro.victordramba.thread.IThread;
-	import ro.victordramba.util.HashMap;
 	
 	public class VScriptParser extends Parser
 	{				

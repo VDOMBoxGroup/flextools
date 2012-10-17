@@ -3,13 +3,11 @@ package net.vdombox.editors.parsers.base
 	import flash.events.EventDispatcher;
 	import flash.utils.getTimer;
 	
-	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.ScriptAreaComponent;
-	import net.vdombox.ide.common.interfaces.IEventBaseVO;
+	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
 	
 	import ro.victordramba.thread.ThreadsController;
-	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 
 	public class Controller extends EventDispatcher
 	{

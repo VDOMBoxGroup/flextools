@@ -2,10 +2,7 @@ package net.vdombox.editors.parsers.vscript
 {
 	import flash.utils.Dictionary;
 	
-	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.base.Token;
-	
-	import ro.victordramba.util.HashMap;
 
 	public class VScriptToken extends Token
 	{		

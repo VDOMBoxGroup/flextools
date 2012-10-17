@@ -6,15 +6,10 @@ package net.vdombox.editors.parsers.vdomxml
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
-	import flash.utils.setTimeout;
 	
-	import mx.core.UIComponent;
-	
-	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
-	import net.vdombox.editors.parsers.base.AssistMenu;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
-	import net.vdombox.editors.parsers.StandardWordsProxy;
+	import net.vdombox.editors.parsers.base.AssistMenu;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	

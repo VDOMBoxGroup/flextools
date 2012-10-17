@@ -1,7 +1,6 @@
 package net.vdombox.utils
 {
 	import mx.collections.Sort;
-	import mx.collections.SortField;
 	import mx.collections.XMLListCollection;
 
 	public class XMLUtils

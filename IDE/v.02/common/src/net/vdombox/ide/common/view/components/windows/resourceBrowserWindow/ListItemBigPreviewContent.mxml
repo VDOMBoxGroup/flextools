@@ -16,8 +16,6 @@
 			import net.vdombox.ide.common.events.ResourceVOEvent;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			
-			import spark.effects.AnimateTransform;
-			
 			public var resourceVO					: ResourceVO;
 			public var prevResVO					: ResourceVO;
 			

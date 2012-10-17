@@ -2,7 +2,6 @@ package net.vdombox.ide.common.controller.messages
 {
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
 	import org.puremvc.as3.multicore.utilities.pipes.messages.FilterControlMessage;
-	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 
 	public class LogFilterMessage extends FilterControlMessage
 	{

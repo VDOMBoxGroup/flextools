@@ -10,16 +10,13 @@ package net.vdombox.ide.common.view.components.windows.resourceBrowserWindow
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
-	import mx.core.FlexSprite;
 	import mx.events.FlexEvent;
-	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.common.view.skins.windows.ResourcePreviewWindowSkin;
 	
 	import spark.components.Label;
 	import spark.components.TextInput;
-	import spark.components.TitleWindow;
 	import spark.components.Window;
 
 	public class ResourcePreviewWindow extends Window

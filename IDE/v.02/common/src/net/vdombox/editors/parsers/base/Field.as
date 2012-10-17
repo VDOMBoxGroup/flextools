@@ -1,7 +1,5 @@
 package net.vdombox.editors.parsers.base
 {
-	import flash.filesystem.File;
-	
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	
 	import ro.victordramba.util.HashList;

@@ -1,16 +1,10 @@
 package net.vdombox.editors.parsers.python
 {
 	import flash.text.*;
-	import flash.utils.ByteArray;
 	import flash.utils.setTimeout;
 	
-	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.base.Parser;
-	import net.vdombox.ide.common.interfaces.IEventBaseVO;
-	
-	import ro.victordramba.thread.IThread;
-	import ro.victordramba.util.HashMap;
 
 	public class PythonParser extends Parser
 	{

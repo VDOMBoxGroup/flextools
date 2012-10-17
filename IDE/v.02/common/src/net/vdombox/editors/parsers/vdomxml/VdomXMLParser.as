@@ -1,14 +1,13 @@
 package net.vdombox.editors.parsers.vdomxml
 {
 	import flash.text.*;
-	import flash.utils.ByteArray;
 	import flash.utils.setTimeout;
 	
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.editors.parsers.TypeDB;
 	
 	import ro.victordramba.thread.IThread;
 	import ro.victordramba.util.HashMap;
-	import net.vdombox.editors.parsers.TypeDB;
 
 	public class VdomXMLParser implements IThread
 	{

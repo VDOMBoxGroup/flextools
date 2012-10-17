@@ -12,8 +12,6 @@
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			
-			import spark.events.TextOperationEvent;
-			
 			
 			protected function tableName_creationCompleteHandler(event:FlexEvent):void
 			{

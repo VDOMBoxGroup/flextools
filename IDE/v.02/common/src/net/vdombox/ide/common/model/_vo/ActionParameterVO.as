@@ -1,7 +1,5 @@
 package net.vdombox.ide.common.model._vo
 {
-	import flash.net.dns.AAAARecord;
-	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	

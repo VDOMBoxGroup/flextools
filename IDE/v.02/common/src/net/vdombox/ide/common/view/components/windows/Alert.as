@@ -1,21 +1,14 @@
 package net.vdombox.ide.common.view.components.windows
 {
-	import flash.desktop.Icon;
 	import flash.display.NativeWindowSystemChrome;
-	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventPhase;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	
-	import mx.binding.utils.BindingUtils;
-	import mx.controls.Button;
-	import mx.core.FlexGlobals;
 	import mx.core.IFlexDisplayObject;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
-	import mx.managers.ISystemManager;
-	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.view.components.button.AlertButton;

@@ -20,7 +20,7 @@ Author: Victor Dramba
 
 package ro.victordramba.util
 {
-	import mx.utils.ObjectUtil;
+	
 
 	public function vectorToArray(v:Object):Array
 	{

@@ -1,19 +1,10 @@
 package net.vdombox.editors.parsers.vscript
 {
 	import flash.display.Stage;
-	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.events.MouseEvent;
-	import flash.geom.Point;
-	import flash.ui.Keyboard;
-	import flash.utils.setTimeout;
-	
-	import mx.core.UIComponent;
 	
 	import net.vdombox.editors.ScriptAreaComponent;
-	import net.vdombox.editors.parsers.base.AssistMenu;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
-	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
+	import net.vdombox.editors.parsers.base.AssistMenu;
 	
 	import ro.victordramba.util.vectorToArray;
 

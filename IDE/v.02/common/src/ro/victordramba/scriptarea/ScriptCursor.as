@@ -5,8 +5,6 @@ package ro.victordramba.scriptarea
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.utils.setInterval;
-	
-	import mx.states.OverrideBase;
 
 	internal class ScriptCursor extends Sprite
 	{

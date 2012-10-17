@@ -1,7 +1,5 @@
 package net.vdombox.ide.common.model._vo
 {
-	import mx.utils.ObjectUtil;
-	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 
 	/**

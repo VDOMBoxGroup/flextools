@@ -10,7 +10,6 @@ package net.vdombox.ide.common.view.components.resize
 	import mx.core.FlexGlobals;
 	import mx.core.UIComponent;
 	import mx.events.ResizeEvent;
-	import mx.managers.CursorManager;
 
 	[Style(name="resizeDirection", type="String", enumeration="both,vertical,horizontal", inherit="no")]
 	

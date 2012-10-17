@@ -7,12 +7,10 @@ package net.vdombox.editors.parsers.vscript
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
 	
-	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.base.Controller;
-	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	

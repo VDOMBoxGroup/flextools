@@ -7,7 +7,6 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			import mx.events.ResizeEvent;
 
 			protected function creationCompleteHandler() : void
 			{

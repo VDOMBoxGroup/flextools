@@ -3,7 +3,6 @@ package net.vdombox.editors
 	import flash.display.InteractiveObject;
 	import flash.events.Event;
 	import flash.events.FocusEvent;
-	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;

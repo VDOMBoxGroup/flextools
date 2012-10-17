@@ -2,10 +2,8 @@ package net.vdombox.editors.parsers.python
 {
 	import flash.events.Event;
 	
-	import net.vdombox.editors.parsers.vdomxml.AssistMenuVdomXML;
-	import net.vdombox.editors.skins.ScriptEditorSkin;
-	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.editors.parsers.base.BaseScriptEditor;
+	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 
 	public class PythonScriptEditor extends BaseScriptEditor
 	{

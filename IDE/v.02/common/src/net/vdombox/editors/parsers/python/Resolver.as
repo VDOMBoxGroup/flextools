@@ -5,12 +5,11 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.StructureDB;
+	import net.vdombox.editors.parsers.TypeDB;
 	import net.vdombox.editors.parsers.base.BackwardsParser;
 	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.base.Multiname;
 	import net.vdombox.editors.parsers.base.Token;
-	import net.vdombox.editors.parsers.TypeDB;
-	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	

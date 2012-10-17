@@ -1,9 +1,9 @@
 package net.vdombox.editors.parsers
 {
+	import net.vdombox.editors.parsers.base.Tokenizer;
 	import net.vdombox.editors.parsers.python.PythonTokenizer;
 	import net.vdombox.editors.parsers.vdomxml.VdomXMLTokenizer;
 	import net.vdombox.editors.parsers.vscript.VScriptTokenizer;
-	import net.vdombox.editors.parsers.base.Tokenizer;
 
 	public class FactoryTokenizers
 	{

@@ -1,7 +1,5 @@
 package net.vdombox.editors.parsers.base
 {
-	import flash.desktop.Clipboard;
-	import flash.desktop.ClipboardFormats;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;

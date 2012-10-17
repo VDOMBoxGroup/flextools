@@ -5,10 +5,9 @@ package net.vdombox.ide.common.view.components.windows
 	
 	import mx.collections.ArrayList;
 	
-	import net.vdombox.ide.common.view.skins.windows.CreatePageWindowSkin;
 	import net.vdombox.ide.common.model._vo.TypeVO;
+	import net.vdombox.ide.common.view.skins.windows.CreatePageWindowSkin;
 	
-	import spark.components.Button;
 	import spark.components.List;
 	import spark.components.Window;
 

@@ -1,11 +1,9 @@
 package net.vdombox.editors.parsers
 {
-	import mx.utils.ObjectUtil;
-	
+	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	
 	import ro.victordramba.util.HashMap;
-	import net.vdombox.editors.parsers.base.Field;
 
 	public class StandardWordsProxy
 	{

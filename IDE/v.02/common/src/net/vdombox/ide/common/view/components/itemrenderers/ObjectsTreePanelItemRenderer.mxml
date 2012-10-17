@@ -7,7 +7,6 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
-			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.events.ObjectsTreePanelEvent;
 			import net.vdombox.ide.common.events.ResourceVOEvent;

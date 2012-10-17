@@ -2,20 +2,16 @@ package net.vdombox.editors.parsers.vdomxml
 {
 	import flash.display.Stage;
 	import flash.events.Event;
-	import flash.net.FileReference;
 	import flash.net.SharedObject;
-	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
 	
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
-	import net.vdombox.editors.parsers.base.Controller;
 	import net.vdombox.editors.parsers.TypeDB;
-	import net.vdombox.editors.parsers.vdomxml.VdomXMLParser;
+	import net.vdombox.editors.parsers.base.Controller;
 	
 	import ro.victordramba.thread.ThreadEvent;
 	import ro.victordramba.thread.ThreadsController;
-	import net.vdombox.editors.parsers.TypeDB;
 
 	[Event( type="flash.events.Event", name="change" )]
 

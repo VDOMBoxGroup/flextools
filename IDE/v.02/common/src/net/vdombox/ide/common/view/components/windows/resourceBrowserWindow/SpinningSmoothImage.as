@@ -3,15 +3,8 @@ package net.vdombox.ide.common.view.components.windows.resourceBrowserWindow
 	import flash.events.Event;
 	
 	import mx.effects.Rotate;
-	import mx.effects.Tween;
 	import mx.effects.easing.Linear;
-	import mx.events.EffectEvent;
 	import mx.events.FlexEvent;
-	
-	import spark.components.Group;
-	import spark.effects.animation.RepeatBehavior;
-	import spark.effects.easing.EaseInOutBase;
-	import spark.effects.easing.EasingFraction;
 	
 
 	public class SpinningSmoothImage extends SmoothImage

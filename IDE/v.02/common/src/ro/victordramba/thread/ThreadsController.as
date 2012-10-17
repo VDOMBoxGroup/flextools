@@ -32,7 +32,6 @@ package ro.victordramba.thread
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.KeyboardEvent;
-	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	import flash.utils.clearTimeout;
 	import flash.utils.getTimer;

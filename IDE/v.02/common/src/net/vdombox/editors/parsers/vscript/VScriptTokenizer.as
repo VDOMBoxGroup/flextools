@@ -3,14 +3,12 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
-	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.ImportItemVO;
 	import net.vdombox.editors.parsers.LanguageVO;
+	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.base.Multiname;
-	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.editors.parsers.base.Tokenizer;
-	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import ro.victordramba.util.HashMap;
 	

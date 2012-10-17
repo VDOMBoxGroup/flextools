@@ -1,14 +1,11 @@
 package net.vdombox.ide.common.view.components.tabnavigator
 {
-	import flash.display.DisplayObject;
 	import flash.events.EventDispatcher;
 	
 	import mx.core.IVisualElement;
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.events.TabEvent;
-	
-	import spark.components.Group;
 
 	public class Tab extends EventDispatcher
 	{

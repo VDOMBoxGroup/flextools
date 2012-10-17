@@ -3,8 +3,6 @@ package net.vdombox.ide.common.view.components.tabnavigator
 	import flash.events.Event;
 	
 	import mx.collections.ArrayList;
-	import mx.core.ClassFactory;
-	import mx.core.IFactory;
 	import mx.core.IVisualElement;
 	import mx.events.ListEvent;
 	

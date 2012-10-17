@@ -14,16 +14,10 @@
 				hide="hideHandler(event)">
 	<fx:Script>
 		<![CDATA[
-			import flash.utils.setTimeout;
-			
-			import mx.binding.utils.BindingUtils;
-			import mx.core.UIComponentCachePolicy;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.events.ResourceVOEvent;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
-			
-			import spark.events.ElementExistenceEvent;
 
 			public static var ITEM_DOUBLE_CLICKED : String = "itemDoubleClicked";
 

@@ -13,7 +13,6 @@
 			
 			import net.vdombox.ide.common.events.ItemRendererEvent;
 			import net.vdombox.ide.common.events.WindowEvent;
-			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void

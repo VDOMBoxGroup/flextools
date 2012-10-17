@@ -25,9 +25,14 @@ package net.vdombox.utils
 			return str.replace(/]]>/g, "]]]]><![CDATA[>");
 		}
 		
-		public static function htmlEnc( str : String ) : String
+		public static function toHtmlEnc( str : String ) : String
 		{
 			return str.replace( /&/g, "&amp;" ).replace( /\</g, "&lt;" ).replace( /\>/g, "&gt;" );
+		}
+		
+		public static function fromHtmlEnc( str : String ) : String
+		{
+			return str.replace( /&amp;/g, "&" ).replace( /&lt;/g, "<" ).replace( /&gt;/g, ">" );
 		}
 		
 		public static  function getNumberLine( script : String, index : int ) : int

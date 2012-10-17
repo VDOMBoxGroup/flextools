@@ -3,15 +3,14 @@ package net.vdombox.ide.common.view.components.tabnavigator
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-
+	
 	import mx.core.EventPriority;
-	import mx.core.IInvalidating;
 	import mx.core.mx_internal;
 	import mx.events.FlexEvent;
 	import mx.events.PropertyChangeEvent;
 	import mx.events.ResizeEvent;
 	import mx.events.SandboxMouseEvent;
-
+	
 	import spark.components.supportClasses.ScrollBarBase;
 	import spark.core.IViewport;
 	import spark.core.NavigationUnit;

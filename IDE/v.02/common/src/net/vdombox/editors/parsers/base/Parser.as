@@ -4,12 +4,11 @@ package net.vdombox.editors.parsers.base
 	import flash.utils.ByteArray;
 	
 	import net.vdombox.editors.ScriptAreaComponent;
-	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
+	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
 	
 	import ro.victordramba.thread.IThread;
 	import ro.victordramba.util.HashMap;
-	import net.vdombox.editors.parsers.ClassDB;
 
 	public class Parser implements IThread
 	{

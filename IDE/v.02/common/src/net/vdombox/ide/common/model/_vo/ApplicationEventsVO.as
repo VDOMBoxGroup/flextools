@@ -1,6 +1,6 @@
 package net.vdombox.ide.common.model._vo
 {
-	import mx.utils.ObjectUtil;
+	
 
 	/**
 	* The ApplicationEventsVO is Visual Object of VDOM Application.

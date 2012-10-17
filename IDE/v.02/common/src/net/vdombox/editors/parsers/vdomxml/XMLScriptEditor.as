@@ -2,10 +2,10 @@ package net.vdombox.editors.parsers.vdomxml
 {
 	import flash.events.Event;
 	
+	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
 	
 	import spark.components.SkinnableContainer;
-	import net.vdombox.editors.ScriptAreaComponent;
 
 	public class XMLScriptEditor extends SkinnableContainer
 	{

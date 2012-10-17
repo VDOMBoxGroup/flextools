@@ -7,15 +7,12 @@ package net.vdombox.editors.parsers.python
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
 	
-	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.base.Controller;
-	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
-	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	
 	import ro.victordramba.thread.ThreadEvent;
 	import ro.victordramba.thread.ThreadsController;

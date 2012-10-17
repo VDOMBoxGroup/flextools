@@ -11,10 +11,8 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.SortField;
-			import mx.collections.XMLListCollection;
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.editors.parsers.AutoCompleteItemVO;
 			import net.vdombox.editors.parsers.base.Field;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.utils.XMLUtils;

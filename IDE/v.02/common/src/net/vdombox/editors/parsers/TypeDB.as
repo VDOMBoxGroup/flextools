@@ -1,10 +1,6 @@
 package net.vdombox.editors.parsers
 {
-	import flash.net.registerClassAlias;
-	import flash.utils.ByteArray;
-	
 	import net.vdombox.editors.parsers.base.Field;
-	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	
