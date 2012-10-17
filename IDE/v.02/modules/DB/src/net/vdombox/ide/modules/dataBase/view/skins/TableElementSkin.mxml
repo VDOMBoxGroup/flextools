@@ -15,10 +15,8 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			import net.vdombox.ide.modules.dataBase.events.TableElementEvent;
 			
 			import spark.components.Button;
-			import spark.components.RichEditableText;
 			
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
 			{

@@ -15,7 +15,6 @@
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.interfaces.IToolset;
-			import net.vdombox.ide.modules.dataBase.events.ToolsetEvent;
 		]]>
 	</fx:Script>
 

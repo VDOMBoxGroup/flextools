@@ -8,15 +8,10 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.dataGridClasses.DataGridListData;
-			import mx.controls.textClasses.TextRange;
 			
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
-			import net.vdombox.ide.modules.dataBase.interfaces.ISearchable;
-			import net.vdombox.utils.StringUtils;
 			import net.vdombox.utils.WindowManager;
-			
-			import spark.events.TextOperationEvent;
 			
 			
 			override public function set data( value : Object ) : void

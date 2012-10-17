@@ -3,8 +3,6 @@ package net.vdombox.ide.modules.dataBase.view
 	import flash.events.Event;
 	import flash.utils.Dictionary;
 	
-	import mx.utils.ObjectUtil;
-	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.EditorEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
@@ -15,7 +13,6 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.modules.dataBase.interfaces.IEditor;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
-	import net.vdombox.ide.modules.dataBase.view.components.DataTableEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.WorkArea;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

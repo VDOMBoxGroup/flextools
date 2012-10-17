@@ -11,10 +11,6 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			import net.vdombox.ide.common.model._vo.TypeVO;
-			
-			import spark.events.IndexChangeEvent;
-			
 			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
 			{
 				if ( baseName.dataProvider.length > 0 )

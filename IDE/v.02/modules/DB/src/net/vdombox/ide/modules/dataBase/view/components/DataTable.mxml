@@ -18,8 +18,6 @@
 	</s:states>
 	<fx:Script>
 		<![CDATA[
-			import flash.desktop.NativeApplication;
-			
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.events.EditorEvent;

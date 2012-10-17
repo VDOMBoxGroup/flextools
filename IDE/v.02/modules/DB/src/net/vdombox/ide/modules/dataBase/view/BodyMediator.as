@@ -1,22 +1,17 @@
 package net.vdombox.ide.modules.dataBase.view
 {
-	import flash.events.Event;
-	
-	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.events.IndexChangeEvent;
 
 	public class BodyMediator extends Mediator implements IMediator
 	{

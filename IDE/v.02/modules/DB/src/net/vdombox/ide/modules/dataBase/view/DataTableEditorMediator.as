@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.dataBase.view
 {
-	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;

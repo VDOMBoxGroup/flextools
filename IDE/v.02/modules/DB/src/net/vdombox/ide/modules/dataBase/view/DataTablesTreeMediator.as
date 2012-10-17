@@ -1,17 +1,11 @@
 package net.vdombox.ide.modules.dataBase.view
 {
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.ui.ContextMenu;
-	
-	import mx.core.UIComponent;
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model.TypesProxy;
-	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.TypeVO;
@@ -21,7 +15,6 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.modules.dataBase.events.TableElementEvent;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTablesTree;
-	import net.vdombox.ide.modules.dataBase.view.components.windows.CreateNewObjectWindow;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;

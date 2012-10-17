@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.dataBase.view.components.Queue
 {
 	import flash.events.EventDispatcher;
-
+	
 	import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 
 	public class QueueManager extends EventDispatcher

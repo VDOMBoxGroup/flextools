@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.dataBase.view.components
 {
-	import flash.display.Sprite;
 	import flash.events.Event;
 	
 	import mx.collections.CursorBookmark;
@@ -14,7 +13,6 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import mx.skins.spark.DataGridHeaderBackgroundSkin;
 	import mx.skins.spark.DataGridSortArrow;
 	
-	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.modules.dataBase.interfaces.ISearchable;
 	import net.vdombox.ide.modules.dataBase.utils.WildcardUtils;
 

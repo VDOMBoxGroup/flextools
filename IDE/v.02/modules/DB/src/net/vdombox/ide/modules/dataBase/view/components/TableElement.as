@@ -5,8 +5,6 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
-	import mx.collections.ArrayList;
-	
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
@@ -19,7 +17,6 @@ package net.vdombox.ide.modules.dataBase.view.components
 	import net.vdombox.ide.modules.dataBase.view.skins.TableElementSkin;
 	import net.vdombox.utils.WindowManager;
 	
-	import spark.components.Label;
 	import spark.components.SkinnableContainer;
 	import spark.components.VGroup;
 

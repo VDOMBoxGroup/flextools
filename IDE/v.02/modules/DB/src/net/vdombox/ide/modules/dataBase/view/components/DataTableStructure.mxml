@@ -6,8 +6,6 @@
 		 xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
 		<![CDATA[
-			import mx.events.DataGridEvent;
-			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
 			import mx.utils.UIDUtil;
 			
@@ -16,7 +14,6 @@
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.components.button.AlertButton;
 			import net.vdombox.ide.common.view.components.windows.Alert;
-			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;

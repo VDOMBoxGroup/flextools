@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.dataBase.controller
 {
-	import net.vdombox.ide.modules.DataBase;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.view.BodyMediator;
 	import net.vdombox.ide.modules.dataBase.view.DataBaseMediator;

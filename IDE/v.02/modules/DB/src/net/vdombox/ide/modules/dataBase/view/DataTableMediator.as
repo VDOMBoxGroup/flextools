@@ -1,7 +1,5 @@
 package net.vdombox.ide.modules.dataBase.view
 {
-	import flash.events.Event;
-	
 	import mx.events.FlexEvent;
 	import mx.resources.ResourceManager;
 	
@@ -10,11 +8,8 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
-	import net.vdombox.ide.common.model._vo.PageVO;
-	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 	import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
-	import net.vdombox.ide.modules.dataBase.view.components.BaseVisualEditor;
 	import net.vdombox.ide.modules.dataBase.view.components.DataTable;
 	import net.vdombox.utils.WindowManager;
 	

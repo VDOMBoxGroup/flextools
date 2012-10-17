@@ -1,7 +1,5 @@
 package net.vdombox.ide.modules.dataBase.controller
 {
-	import mx.controls.CheckBox;
-	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.dataBase.view.SettingsScreenMediator;
 	import net.vdombox.ide.modules.dataBase.view.components.SettingsScreen;

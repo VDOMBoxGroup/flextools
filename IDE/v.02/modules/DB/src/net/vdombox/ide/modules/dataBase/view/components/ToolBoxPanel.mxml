@@ -7,8 +7,6 @@
 		 creationComplete="group1_creationCompleteHandler(event)" xmlns:components1="net.vdombox.ide.common.view.components.*">
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayList;
-			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;

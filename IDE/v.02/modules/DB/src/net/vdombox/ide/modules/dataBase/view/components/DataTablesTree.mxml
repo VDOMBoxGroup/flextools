@@ -5,8 +5,6 @@
 		 creationComplete="creationCompleteHandler(event)" xmlns:components="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
-			import mx.core.INavigatorContent;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
 			

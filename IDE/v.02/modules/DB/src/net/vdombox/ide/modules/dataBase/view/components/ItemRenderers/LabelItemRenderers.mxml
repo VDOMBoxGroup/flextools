@@ -12,8 +12,6 @@
 			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.utils.WindowManager;
 			
-			import spark.events.TextOperationEvent;
-			
 			override public function set data( value : Object ) : void
 			{
 				if ( !value )
