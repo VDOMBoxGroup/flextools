@@ -1,17 +1,14 @@
 package net.vdombox.ide.modules.preview.view
 {
 	import flash.events.MouseEvent;
-	import flash.net.URLRequest;
-	import flash.net.navigateToURL;
 	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.common.controller.Notifications; 
+	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.preview.view.components.Toolset;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
-	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
 	public class ToolsetMediator extends Mediator implements IMediator
