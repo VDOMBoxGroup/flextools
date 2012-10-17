@@ -280,6 +280,21 @@ package net.vdombox.ide.common.model._vo
 		{
 			return getInformationProperty( "version" );
 		}
+		
+		public function get versionFirstNumber () : Number
+		{
+			var firstDotIndex : int = version.indexOf(".");
+			
+			return Number(version.substr(0, firstDotIndex)); 
+		}
+		
+		public function get versionSecondNumber () : Number
+		{
+			var firstDotIndex : int = version.indexOf(".");
+			var lastDotIndex : int = version.lastIndexOf(".");
+			
+			return Number(version.substr(firstDotIndex+1, lastDotIndex)); 
+		}
 
 		public function get interfaceType() : String
 		{
