@@ -22,7 +22,7 @@
 				
 				super.data = value;
 				
-				textArea.text = StringUtils.fromHtmlEnc( value[DataGridListData(listData).dataField] );
+				textArea.text = value[DataGridListData(listData).dataField];
 			}
 			
 			override public function validateProperties():void

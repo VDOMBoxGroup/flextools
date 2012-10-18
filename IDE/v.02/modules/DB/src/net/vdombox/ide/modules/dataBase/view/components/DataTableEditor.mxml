@@ -312,7 +312,7 @@
 					for each ( var xmlCell:XML in xmlRow.cell ) 
 					{
 						if ( serverVersion && serverVersion >= "1.3.8535" )
-							tableRow[ dataGridColumns[ cellIndex ].dataField ] = xmlCell.toString();
+							tableRow[ dataGridColumns[ cellIndex ].dataField ] = StringUtils.fromHtmlEnc(  xmlCell.toString() );
 						else
 							tableRow[ dataGridColumns[ cellIndex ].dataField ] = StringUtils.toHtmlEnc( xmlCell.toString() );
 						
@@ -536,6 +536,7 @@
 				for each ( item in dataGridProvider )
 				{
 					requestXMLParam = getXMLByRow( item );
+					
 					for  ( var tt : String in item )
 					{
 						
