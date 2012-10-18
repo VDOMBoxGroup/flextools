@@ -88,8 +88,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			doubleClickEnabled = true;
 
 			addHandlers();
-			
-			doubleClickEnabled = true;
 		}
 
 		[SkinPart( required = "true" )]
