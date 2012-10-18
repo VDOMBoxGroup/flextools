@@ -290,7 +290,7 @@
 			
 			private function showPageData() : void 
 			{
-				if ( !pages[ currentPage ] ) 
+				if ( !pages[ currentPage ] )
 				{
 					getPageRequest();
 					return;		
@@ -323,7 +323,7 @@
 //					tableRow["changed"] = false;
 					tableRow["GUID"] = UIDUtil.createUID(); 
 					dataGridProvider.addItem( tableRow );
-					dataGridProviderOld[ tableRow["id"] ] = ObjectUtil.copy( tableRow );
+					dataGridProviderOld[ tableRow["GUID"] ] = ObjectUtil.copy( tableRow );
 				}
 				
 				buildPagesTickets();
@@ -482,7 +482,7 @@
 				var columnIndex:int = 0;
 				for each ( var dgColumn:AdvancedDataGridColumn in dataGridColumns ) 
 				{
-					if ( !dataGridColumnsProps[columnIndex].aincrement ) 
+					/*if ( !dataGridColumnsProps[columnIndex].aincrement ) 
 					{
 						if ( dataGridColumnsProps[columnIndex].notnull )
 							tableRow[ dgColumn.dataField ] = 'REQUIRED';
@@ -490,9 +490,9 @@
 							tableRow[ dgColumn.dataField ] = 'NULL';
 					} 
 					else 
-					{
+					{*/
 						tableRow[ dgColumn.dataField ] = 'NULL';
-					}
+					//}
 					columnIndex++;
 				}
 				
@@ -540,10 +540,13 @@
 					for  ( var tt : String in item )
 					{
 						
-						if ( dataGridProviderOld[item["id"]] )
+						if ( dataGridProviderOld[item["GUID"]] )
 						{
-							if ( dataGridProviderOld[item["id"]][tt] && item[tt] != dataGridProviderOld[item["id"]][tt] )
+							if ( dataGridProviderOld[item["GUID"]][tt] && item[tt] != dataGridProviderOld[item["GUID"]][tt] )
 							{
+								if ( tt == "id" )
+									requestXMLParam.row.@id = dataGridProviderOld[item["GUID"]][tt];
+								
 								queue.addRequest(
 									item['GUID'],
 									'update_row',
