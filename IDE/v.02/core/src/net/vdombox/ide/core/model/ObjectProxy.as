@@ -89,6 +89,8 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken;
 			
+			trace( "in " + value );
+			
 			token = soap.remote_call( objectVO.pageVO.applicationVO.id, objectVO.id, functionName, rmcXML, value );
 			
 			token.recipientName = proxyName;
