@@ -691,6 +691,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function caseHtmlText( contetntPart : XML, parentContainer : Group ) : void
 		{
 			var html : HTML = new HTML();
+			var bodyContent : String = "";
 
 			html.x = contetntPart.@left;
 			html.y = contetntPart.@top;
@@ -713,11 +714,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( contetntPart.@editable )
 				_editableComponent = html;
 
-			var body_content :String = contetntPart.children().toXMLString();
-			if (isRichtextWithCdata)
-				body_content = contetntPart[0]
+			bodyContent = contetntPart.children().toXMLString();
+			bodyContent = clearCDATA(bodyContent);
 			
-			var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + "</head>" + "<body style=\"margin : 0px;\" >" + body_content + "</body>" + "</html>";
+			var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + "</head>" + "<body style=\"margin : 0px;\" >" + bodyContent + "</body>" + "</html>";
 
 			html.htmlText = htmlText;
 			
@@ -732,31 +732,23 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		}
 		
-		private function get isRichtextWithCdata () : Boolean
+		/**
+		 * 
+		 * Get html body content without CDATA
+		 *
+		 */
+		private function clearCDATA(bodyContent : String) : String
 		{
-			try
+			var cdataBeginRegExp : RegExp = /^[\s]*<!\[CDATA\[/;
+			var cdataEndRegExp : RegExp = /\]\]>[\s]*$/;
+			
+			if (cdataBeginRegExp.test(bodyContent) && cdataEndRegExp.test(bodyContent))
 			{
-				var typeVO : TypeVO = _renderVO.vdomObjectVO.typeVO;
-				
-				if (typeVO.name != "richtext")
-					return false;
-				
-				if (typeVO.versionFirstNumber > 2)
-					return false;
-				else if (typeVO.versionFirstNumber < 2)
-					return true;
-				else 
-				{
-					if (typeVO.versionSecondNumber <= 7)
-						return true;
-				}
-			}
-			catch(e:Error)
-			{
-				return false;
+				bodyContent = bodyContent.replace(cdataBeginRegExp, "");
+				bodyContent = bodyContent.replace(cdataEndRegExp, "");
 			}
 			
-			return false;
+			return bodyContent;
 		}
 		
 		private function disableContainerScroller():void
