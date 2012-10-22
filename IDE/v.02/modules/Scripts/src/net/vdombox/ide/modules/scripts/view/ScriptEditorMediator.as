@@ -132,6 +132,7 @@ package net.vdombox.ide.modules.scripts.view
 			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_FIND_GLOBAL, scriptEditor_openFindGlobalHandler, false, 0, true );
 			scriptEditor.addEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode, false, 0, true );
 			scriptEditor.addEventListener( ScriptAreaComponenrEvent.RENAME, renameHandler, true, 0, true );
+			scriptEditor.addEventListener( ScriptAreaComponenrEvent.GLOBAL_RENAME, globalRenameHandler, true, 0, true );
 			
 			scriptEditor.addEventListener( ScriptAreaComponenrEvent.GO_TO_DEFENITION, goToDefenitionHandler, true, 0, true );
 			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_PREFERENCES, openPreferences, false, 0, true );
@@ -144,6 +145,7 @@ package net.vdombox.ide.modules.scripts.view
 			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_FIND_GLOBAL, scriptEditor_openFindGlobalHandler );
 			scriptEditor.removeEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode );
 			scriptEditor.removeEventListener( ScriptAreaComponenrEvent.RENAME, renameHandler, true );
+			scriptEditor.removeEventListener( ScriptAreaComponenrEvent.GLOBAL_RENAME, globalRenameHandler, true);
 			
 			scriptEditor.removeEventListener( ScriptAreaComponenrEvent.GO_TO_DEFENITION, goToDefenitionHandler );
 			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_PREFERENCES, openPreferences);
@@ -214,7 +216,12 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private function renameHandler( event : ScriptAreaComponenrEvent ) : void
 		{
-			sendNotification( Notifications.OPEN_RENAME_IN_SCRIPT, { oldName : event.detail.oldName, actionVO : scriptEditor.actionVO, lang : event.detail.lang } );
+			sendNotification( Notifications.OPEN_RENAME_IN_SCRIPT, { oldName : event.detail.oldName, actionVO : scriptEditor.actionVO, controller : event.detail.controller, global : false } );
+		}
+		
+		private function globalRenameHandler( event : ScriptAreaComponenrEvent ) : void
+		{
+			sendNotification( Notifications.OPEN_RENAME_IN_SCRIPT, { oldName : event.detail.oldName, actionVO : scriptEditor.actionVO, controller : event.detail.controller, global : true} );
 		}
 		
 		private function goToDefenitionHandler( event : ScriptAreaComponenrEvent ):void

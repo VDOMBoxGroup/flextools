@@ -10,9 +10,13 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.editors.parsers.FactoryTokenizers;
+			import net.vdombox.editors.parsers.base.Controller;
+			import net.vdombox.editors.parsers.base.Field;
 			import net.vdombox.editors.parsers.base.Token;
 			import net.vdombox.editors.parsers.base.Tokenizer;
 			import net.vdombox.ide.common.events.PopUpWindowEvent;
+			import net.vdombox.ide.common.model._vo.PageVO;
+			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.common.view.components.windows.NameObjectWindow;
 			import net.vdombox.ide.modules.scripts.events.RenameBoxEvent;
 			import net.vdombox.utils.StringUtils;
@@ -23,7 +27,17 @@
 			public var scriptsXMLList : XMLList = null;
 			
 			private var newName : String;
-			private var oldName : String;
+			public var oldName : String;
+			
+			public var actionVO : Object;
+			public var controller : Controller;
+			
+			private var tokens : Array;
+			private var containerActionsCode : Object;
+			private var _containerActions : Object;
+			private var _containerPages : Object;
+			
+			private var serverActions : Array;
 			
 			private function findName( findName : String, script : String, lang : String ) : Array
 			{
@@ -52,18 +66,24 @@
 				return words;
 			}
 			
-			public function getRenameData( oldName : String, actionVO : Object, lang : String ) : void
+			public function getRenameData() : void
 			{
-				this.oldName = oldName;
-				var words : Array = findName( oldName, actionVO.script, lang );
+				serverActions = new Array();
+				containerActionsCode = [];
+				_containerPages = [];
+				_containerActions = [];
 				
-				var script : String;
+				var lang : String = controller.lang;
+				var script : String = controller.getRegisterWord( actionVO.script );
+				
+				var words : Array = findName( oldName, script, lang );
+				
 				var index : int;
 				
 				var start : int = 0;
 				var end : int = 0;
 				
-				if ( actionVO.script == "" )
+				if ( script == "" )
 					return;
 				
 				script = actionVO.script;
@@ -105,6 +125,110 @@
 				
 				scriptsXMLList = XMLUtils.sortElementsInXMLList( serverActionXMLList, [ sortField ] );
 			}
+			
+			public function findStringInServerActions( body : Object ) : void
+			{
+				var pageVO : PageVO = body.pageVO;
+				var actions : Array = body.serverActions;
+				
+				var serverActionVO : ServerActionVO;
+				var script : String;
+				var scriptLower : String;
+				
+				var start : int = 0;
+				var end : int = 0;
+				
+				for each ( serverActionVO in actions )
+				{
+					if ( serverActionVO.script == "" )
+						continue;
+					
+					script = serverActionVO.script;
+					
+					var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( controller.lang, script );
+					
+					while( tokenizer.runSlice() )
+					{
+						
+					}
+					
+					tokens = tokenizer.tokens;
+					if ( tokens.length == 0 )
+						continue;
+					
+					var token : Token = tokens[0];
+					findScope( token.scope);
+					
+					
+					
+				}
+				
+				function findScope( scope : Field ) : void
+				{
+					if ( scope.imports.hasKey( oldName ) )
+					{
+						for each( var token : Token in tokens )
+						{
+							if ( token.scope != scope )
+								continue;
+							
+							if ( token.string == oldName )
+							{
+								var index : int = token.pos;
+								
+								serverActions.push( serverActionVO );
+								
+								var serverActionXML : XML = <script name={ serverActionVO.name } iconType={"serverScript"} />;
+								
+								var serverActionXMLList : XMLList;
+								
+								if ( containerActionsCode.hasOwnProperty( serverActionVO.containerID ) )
+									serverActionXMLList = containerActionsCode[ serverActionVO.containerID ];
+								else
+									serverActionXMLList = new XMLList();
+								
+								serverActionXMLList += serverActionXML;
+								
+								serverActionXML = serverActionXMLList.( @name == serverActionVO.name )[ 0 ];
+								
+								var serverActionXML2 : XML = <script name={ serverActionVO.name } iconType={"serverScript"}/>;
+								var actionID : String = serverActionVO.name + serverActionVO.objectID;
+								
+								_containerPages[ pageVO.id ] = pageVO;
+								_containerActions[ actionID ] = serverActionVO;
+								
+								start = index;
+								end = index;
+								
+								while ( script.charAt( --start ) != '\n' && start >= 0 )
+									true;
+								
+								while ( script.charAt( ++start ) == '\t' || script.charAt( ++start ) == ' ' )
+									true;
+								
+								while ( script.charAt( ++end ) != '\n' && end < script.length )
+									true;
+								
+								serverActionXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ StringUtils.getNumberLine( script, index ) } 
+									index={ index } actionID={ actionID } pageID={ pageVO.id } iconType={"script"}/>);
+								
+								serverActionXML.appendChild( serverActionXML2.* );
+								
+								containerActionsCode[ serverActionVO.containerID ] = serverActionXMLList;
+							}
+						}
+					}
+					else
+					{
+						for each( var scp : Field in scope.children )
+						{
+							findScope( scp );
+						}
+					}
+				}
+			}
+			
+			
 			
 			protected function renameButton_clickHandler(event:MouseEvent):void
 			{

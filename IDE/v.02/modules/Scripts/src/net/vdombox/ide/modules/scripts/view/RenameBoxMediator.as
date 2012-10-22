@@ -2,7 +2,9 @@ package net.vdombox.ide.modules.scripts.view
 {
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.editors.parsers.base.Controller;
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.scripts.events.RenameBoxEvent;
 	import net.vdombox.ide.modules.scripts.model.GoToPositionProxy;
@@ -20,8 +22,8 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private var pages : Array;
 		
-		private var oldName : String;
-		private var actionVO : Object;
+		private var findProgress : Boolean;
+		private var pagesCountInput : int;
 		
 		private var goToDefenitionProxy : GoToPositionProxy;
 		
@@ -57,6 +59,9 @@ package net.vdombox.ide.modules.scripts.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( Notifications.OPEN_RENAME_IN_SCRIPT);
+			interests.push( Notifications.PAGES_GETTED );
+			
+			interests.push( Notifications.ALL_SERVER_ACTIONS_GETTED );
 			
 			return interests;
 		}
@@ -65,10 +70,6 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
-			
-			oldName = body.oldName;
-			actionVO = body.actionVO;
-			var lang : String = body.lang;
 			
 			switch ( name )
 			{
@@ -79,7 +80,56 @@ package net.vdombox.ide.modules.scripts.view
 						scriptArea.currentState = "rename";
 					}
 					
-					renameBox.getRenameData( oldName, actionVO, lang );
+					renameBox.oldName = body.oldName;
+					renameBox.actionVO = body.actionVO;
+					renameBox.controller = body.controller;
+					
+					var global : Boolean = body.global;
+					
+					if ( global )
+					{
+						findProgress = true;
+						pagesCountInput = 0;
+						
+						var pageVO : PageVO;
+						for each ( pageVO in pages )
+						{
+							sendNotification( Notifications.GET_ALL_SERVER_ACTIONS, pageVO );
+						}
+					}
+					else
+					{
+						renameBox.getRenameData();
+					}
+					
+					break;
+				}
+					
+				case Notifications.PAGES_GETTED:
+				{
+					pages = body as Array;
+					
+					break;
+				}
+					
+				case Notifications.ALL_SERVER_ACTIONS_GETTED:
+				{					
+					renameBox.findStringInServerActions( body );
+					
+					pagesCountInput++;
+					
+					/*if ( pagesCountInput == pages.length )
+					{
+						pagesFindInput = 0;
+						pagesStructure = new XMLList();
+						
+						for each ( var pageVO : PageVO in findBox.containerPages )
+						{
+							sendNotification( Notifications.GET_STRUCTURE, { pageVO: pageVO, isFind : true } );
+						}
+						
+						sendNotification( Notifications.GET_LIBRARIES, { applicationVO : statesProxy.selectedApplication, isFind : true } );
+					}*/
 					
 					break;
 				}
@@ -112,7 +162,7 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private function renameInActionHandler( event : RenameBoxEvent ) : void
 		{
-			sendNotification( Notifications.RENAME_IN_ACTION, { actionVO : actionVO, words : event.detail.words, oldName : oldName, newName : event.detail.newName } );
+			sendNotification( Notifications.RENAME_IN_ACTION, { actionVO : renameBox.actionVO, words : event.detail.words, oldName : renameBox.oldName, newName : event.detail.newName } );
 		}
 		
 		private function getServerActionsHandler( event : RenameBoxEvent ) : void
@@ -130,13 +180,13 @@ package net.vdombox.ide.modules.scripts.view
 			
 			var detail : XML = findTreeCodeItemRenderer.data as XML;
 			
-			if ( !actionVO )
+			if ( !renameBox.actionVO )
 				return;
 			
 			
-			goToDefenitionProxy.add( actionVO, detail.@index, oldName.length );
+			goToDefenitionProxy.add( renameBox.actionVO, detail.@index, renameBox.oldName.length );
 			
-			sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : actionVO, check : false } );
+			sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : renameBox.actionVO, check : false } );
 		}
 	}
 }
