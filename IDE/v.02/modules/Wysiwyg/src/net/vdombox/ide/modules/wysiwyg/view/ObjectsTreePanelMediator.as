@@ -29,6 +29,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.MultiObjectsManipulationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.VisibleRendererProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.business.PagesManager;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.ObjectTreePanelItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectsTreePanel;
@@ -167,6 +168,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case Notifications.PAGES_GETTED:
 				{
+					PagesManager.pages = notification.getBody() as Array
+					
 					showPages( notification.getBody() as Array );
 					
 					selectCurrentPage();

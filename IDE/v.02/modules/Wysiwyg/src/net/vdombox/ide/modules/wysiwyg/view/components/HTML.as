@@ -47,7 +47,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		
 		override public function set blendMode(value:String):void
 		{ 
-			super.blendMode = value || BlendMode.DARKEN;
+			super.blendMode = value || BlendMode.NORMAL;
 		}
 		
 		/**

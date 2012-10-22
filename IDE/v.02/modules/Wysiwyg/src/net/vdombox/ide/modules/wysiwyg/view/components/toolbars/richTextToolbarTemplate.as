@@ -11,7 +11,6 @@ private var template:String =
 				"browsers: \"gecko\", " + 
 				"dialog_type : \"modal\", " + 
 				"src_mode: \"_src\", " + 
-				
 				"height:\"100%\",  " + 
 				"width:\"100%\"" + 
 			"});" + 

@@ -696,7 +696,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			html.x = contetntPart.@left;
 			html.y = contetntPart.@top;
 			
-			html.paintsDefaultBackground = true;
+			html.setStyle( "contentBackgroundAlpha", 0 );
+			
+			html.paintsDefaultBackground = false;
 
 			if ( contetntPart.@width[ 0 ] && contetntPart.@width[ 0 ]!="" )
 				html.width = contetntPart.@width;

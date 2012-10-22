@@ -20,6 +20,9 @@
 	<![CDATA[
 		import mx.managers.PopUpManager;
 		
+		import net.vdombox.ide.common.model._vo.PageVO;
+		import net.vdombox.ide.modules.wysiwyg.model.business.PagesManager;
+		
 		private var currentValue:String;
 		private var _hostName : String;
 		
@@ -128,20 +131,20 @@
 			setFocus();
 			addHandlers();
 			
-//			var dataProvider:XMLList =  new XMLList();
-//			
-//			var lp:XMLList = dataManager.listPages;
-//			for each(var elem:XML in lp)
-//			{
-//				dataProvider += <element label={elem.@Name} data={elem.@ID} />
-//			}
-//			
-//			pageURL.dataProvider = dataProvider;
+			var dataProvider:XMLList =  new XMLList();
+			
+			var pages:Array = PagesManager.pages;
+			for each(var page:PageVO in pages)
+			{
+				dataProvider += <element label={page.name} data={page.id} />
+			}
+			
+			pageURL.dataProvider = dataProvider;
 		}
 	]]>
 </mx:Script>
 
-<mx:Form width="100%">
+<mx:Form width="100%" paddingLeft="5" paddingRight="5">
 
 	<mx:HBox width="100%"  label="Link URL" horizontalGap="0" verticalAlign="middle">
 		<mx:RadioButton label="Link URL" groupName="rGroup" selected="true" width="100%"
