@@ -31,8 +31,6 @@ package net.vdombox.editors.parsers.base
 		
 		public var parent:Token;
 		
-		public var imports:HashMap;//used to solve names and types
-		
 		public var error : Boolean = false;
 		
 		public function Token()
@@ -41,12 +39,23 @@ package net.vdombox.editors.parsers.base
 		
 		public function findImport( name : String ) : Object
 		{
-			if ( imports && imports.hasKey( name ) )
-				return imports.getValue( name );
+			if ( !scope )
+				return null;
+			
+			if ( scope.imports && scope.imports.hasKey( name ) )
+				return scope.imports.getValue( name );
 			else if ( parent )
 				return parent.findImport( name );
 			else
 				return null;
+		}
+		
+		public function hasMember( name : String ) : Boolean
+		{
+			if ( !scope )
+				return false;
+			
+			return scope.members.hasKey( name );
 		}
 	}
 }

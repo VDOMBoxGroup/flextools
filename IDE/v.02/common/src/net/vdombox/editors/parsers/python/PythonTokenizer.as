@@ -396,7 +396,7 @@ package net.vdombox.editors.parsers.python
 
 				imports = new Array();
 				imports.push( new HashMap() );
-				currentBlock.imports = imports[0];
+				scope.imports = imports[0];
 				currentBlock.scope = scope;
 				
 				_members = new HashMap();
@@ -728,13 +728,14 @@ package net.vdombox.editors.parsers.python
 				currentBlock.otstyp = { tabs : countTabToCurrentBlock, spaces : countSpaceToCurrentBlock };
 				
 				imports.push( imports[ imports.length - 1 ].clone() );
-				currentBlock.imports = imports[ imports.length - 1 ];
+				
+				scope.imports = imports[ imports.length - 1 ];
 				currentBlock.scope = scope;
 				
 				/*if ( !_scope )
 					_scope = new Field( scope.fieldType, t.pos, "none" );*/
 				
-				
+				_scope.imports = imports[ imports.length - 1 ];
 				_scope.parent = scope;
 				_scope.children = [];
 				scope.children.push( _scope );

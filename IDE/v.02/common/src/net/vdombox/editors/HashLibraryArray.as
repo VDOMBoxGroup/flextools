@@ -93,10 +93,10 @@ package net.vdombox.editors
 					}
 				}
 				
-				if ( t && t.parent && t.parent.imports )
+				if ( t && t.parent && t.parent.scope.imports )
 				{
 					var importLibrary : ImportItemVO;
-					for each ( importLibrary in t.parent.imports.toArray() )
+					for each ( importLibrary in t.parent.scope.imports.toArray() )
 					{
 						a.push( new AutoCompleteItemVO( VDOMImage.Standard, importLibrary.name ) );
 					}

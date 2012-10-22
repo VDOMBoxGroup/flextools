@@ -170,8 +170,8 @@ package net.vdombox.editors.parsers.vdomxml
 			do
 			{
 				token = token.parent as VdomXMLToken;
-			} while ( token.parent && !token.imports );
-			return token.imports;
+			} while ( token.parent && !token.scope.imports );
+			return token.scope.imports;
 		}
 
 

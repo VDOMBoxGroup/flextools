@@ -116,5 +116,10 @@ package net.vdombox.editors.parsers.vscript
 		{
 			return "vscript";
 		}
+		
+		public override function getRegisterWord( string : String ) : String
+		{
+			return string.toLowerCase();
+		}
 	}
 }

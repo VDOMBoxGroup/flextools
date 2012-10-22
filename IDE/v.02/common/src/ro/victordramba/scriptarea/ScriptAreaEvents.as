@@ -28,6 +28,7 @@ package ro.victordramba.scriptarea
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
+	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.view.components.windows.ScriptStructureWindow;
 	import net.vdombox.utils.WindowManager;
@@ -153,14 +154,23 @@ package ro.victordramba.scriptarea
 			contextMenu.addItem( pasteItem );
 			
 			str = text.substring( _selStart, _selEnd );
+			str = controller.getRegisterWord( str );
 			token = controller.getTokenByPos( _selStart );
 			
-			if ( token.scope.members.hasKey( str ) )
+			if ( token.hasMember( str ) )
 			{
 				var renameItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_rename' ));
 				renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );
 				contextMenu.addItem( renameItem );
+				
+				if ( ( controller.actionVO is LibraryVO ) && !token.scope.parent || ( token.scope.parent.name == "top" && token.string == token.scope.name ) )
+				{
+					var globalRenameItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_global_rename' ));
+					globalRenameItem.addEventListener( Event.SELECT, globalRenameContextMenuHandler, false, 0, true );
+					contextMenu.addItem( globalRenameItem );
+				}
 			}
+			
 		}
 		
 		private function copyContextMenuHandler( event : Event ) : void
@@ -180,7 +190,12 @@ package ro.victordramba.scriptarea
 		
 		private function renameContextMenuHandler( event : Event ) : void
 		{
-			dispatchEvent( new ScriptAreaComponenrEvent ( ScriptAreaComponenrEvent.RENAME, false, false, { oldName : str, lang : controller.lang } ) );
+			dispatchEvent( new ScriptAreaComponenrEvent ( ScriptAreaComponenrEvent.RENAME, false, false, { oldName : str, controller : controller } ) );
+		}
+		
+		private function globalRenameContextMenuHandler( event : Event ) : void
+		{
+			dispatchEvent( new ScriptAreaComponenrEvent ( ScriptAreaComponenrEvent.GLOBAL_RENAME, false, false, { oldName : str, controller : controller } ) );
 		}
 		
 		private function findWordBound( start : int, left : Boolean ) : int
@@ -498,9 +513,9 @@ package ro.victordramba.scriptarea
 				}
 			}
 			
-			if ( token.parent && token.parent.imports && token.parent.imports.hasKey( bp.names[0] ) )
+			if ( token.parent && token.parent.scope.imports && token.parent.scope.imports.hasKey( bp.names[0] ) )
 			{
-				var lib : Object = token.parent.imports.getValue( bp.names[0] );
+				var lib : Object = token.parent.scope.imports.getValue( bp.names[0] );
 				info = HashLibraryArray.getPositionToken( lib.source, lib.systemName, bp, controller.lang );
 				if ( !info )
 					return false;

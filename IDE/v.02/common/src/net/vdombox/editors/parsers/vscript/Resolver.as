@@ -160,10 +160,10 @@ package net.vdombox.editors.parsers.vscript
 			for each ( f in tokenizer.members.toArray() )
 				a.push( StandardWordsProxy.getAutoCompleteItemVOByField( f ) );
 			
-			if ( t.parent.imports )
+			if ( t.parent.scope.imports )
 			{
 				var ff : Object;
-				for each ( ff in t.parent.imports.toArray() )
+				for each ( ff in t.parent.scope.imports.toArray() )
 				{
 					var field : Field;
 					if ( ff.source != ff.systemName )
@@ -325,8 +325,8 @@ package net.vdombox.editors.parsers.vscript
 			do
 			{
 				token = token.parent;
-			} while ( token.parent && !token.imports );
-			return token.imports;
+			} while ( token.parent && !token.scope.imports );
+			return token.scope.imports;
 		}
 		
 		
@@ -408,9 +408,9 @@ package net.vdombox.editors.parsers.vscript
 						resolved = scope.params.getValue( name );
 						break;
 					}
-					if ( t.parent.imports.hasKey( name ) )
+					if ( t.parent.scope.imports.hasKey( name ) )
 					{
-						var impotrElement : Object = t.parent.imports.getValue( name );
+						var impotrElement : Object = t.parent.scope.imports.getValue( name );
 						a = HashLibraryArray.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp, "vscript" );
 						return true;
 						//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );

@@ -50,6 +50,10 @@ package net.vdombox.editors.parsers.base
 		
 		public var children:Array;
 		
+		
+		
+		public var imports:HashMap;//used to solve names and types
+		
 		/*
 		
 		/**

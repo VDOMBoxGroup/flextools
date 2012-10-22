@@ -8,6 +8,7 @@ package net.vdombox.ide.common.events
 		public static const TEXT_CHANGE : String = "scriptAreaComponentTextChange";
 		public static const GO_TO_DEFENITION : String = "scriptAreaComponentGoToDefenition";
 		public static const RENAME : String = "scriptAreaComponentRename";
+		public static const GLOBAL_RENAME : String = "scriptAreaComponentGlobalRename";
 		public static const PRESS_NAVIGATION_KEY : String = "scriptAreaComponentPressNavigetionKey";
 		
 		public var detail : Object;

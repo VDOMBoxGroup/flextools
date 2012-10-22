@@ -33,5 +33,16 @@ package net.vdombox.editors.parsers.vscript
 		{
 			return string;
 		}
+		
+		public override function hasMember( name : String ) : Boolean
+		{
+			if ( !scope )
+				return false;
+			
+			if ( scope.name.toLowerCase() == name && scope.parent )
+				return scope.parent.members.hasKey( name );
+			else
+				return scope.members.hasKey( name );
+		}
 	}
 }

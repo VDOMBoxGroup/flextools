@@ -85,5 +85,10 @@ package net.vdombox.editors.parsers.base
 		{
 			return "";
 		}
+		
+		public function getRegisterWord( string : String ) : String
+		{
+			return string;
+		}
 	}
 }

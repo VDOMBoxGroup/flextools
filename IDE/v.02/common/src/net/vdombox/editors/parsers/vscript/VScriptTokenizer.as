@@ -355,7 +355,7 @@ package net.vdombox.editors.parsers.vscript
 				
 				imports = new Array();
 				imports.push( new HashMap() );
-				currentBlock.imports = imports[0];
+				scope.imports = imports[0];
 				currentBlock.scope = scope;
 				
 				_members = new HashMap();
@@ -727,7 +727,7 @@ package net.vdombox.editors.parsers.vscript
 				}
 				
 				imports.push( imports[ imports.length - 1 ].clone() );
-				currentBlock.imports = imports[ imports.length - 1 ];
+				scope.imports = imports[ imports.length - 1 ];
 				currentBlock.scope = scope;
 				
 				t.scope = scope;
