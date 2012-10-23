@@ -9,7 +9,7 @@ package ro.victordramba.scriptarea
 
 	public class ScriptArea extends Base
 	{
-		static protected var NL : String = "\r";
+		static protected var NL : String = "\n";
 
 		public function ScriptArea()
 		{
@@ -516,7 +516,7 @@ package ro.victordramba.scriptarea
 				text = "";
 			
 			text = text.replace( /\r\n/g, NL );
-			text = text.replace( /\n/g, NL );
+			text = text.replace( /\r/g, NL );
 			
 			if ( _text == text )
 				return;

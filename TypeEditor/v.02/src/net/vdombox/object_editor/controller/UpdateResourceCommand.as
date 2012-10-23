@@ -34,7 +34,7 @@ package net.vdombox.object_editor.controller
 			function fileDounloaded(event:Event):void
 			{				
 				var resourcesProxy:ResourcesProxy = facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
-				resourcesProxy.changeContent(id, fileRef);
+				resourcesProxy.changeContent(fileRef);
 				facade.sendNotification(Information.INFORMATION_CHANGED);
 				facade.sendNotification(Resourses.RESOURCES_CHANGED);	
 			}

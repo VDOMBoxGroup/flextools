@@ -89,10 +89,11 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function createResFromFile(fileRef: FileReference):ResourceVO
 		{
 			var id:String = UIDUtil.createUID().toLowerCase();
-			var b64:Base64Encoder = new Base64Encoder();
-
-			b64.encodeBytes(fileRef.data);
-			writeResoucetoFileSystem(id, b64.toString());
+			var base64Data:Base64Encoder = new Base64Encoder();
+			
+			base64Data.insertNewLines = false;
+			base64Data.encodeBytes(fileRef.data);
+			writeResoucetoFileSystem(id, base64Data.toString());
 
 			return new ResourceVO(id, fileRef.name, fileRef.extension);
 		}
@@ -102,12 +103,14 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		 * @param resVO
 		 * @param fileRef
 		 */
-		public function changeContent(id:String, fileRef: FileReference):void
+		public function changeContent(fileRef: FileReference):void
 		{
-			var b64:Base64Encoder = new Base64Encoder();
-			b64.encodeBytes(fileRef.data);
+			var id:String = UIDUtil.createUID().toLowerCase();
+			var base64Data:Base64Encoder = new Base64Encoder();
+			base64Data.insertNewLines = false;
+			base64Data.encodeBytes(fileRef.data);
 
-			writeResoucetoFileSystem(id, b64.toString());
+			writeResoucetoFileSystem(id, base64Data.toString());
 		}
 
 		/**

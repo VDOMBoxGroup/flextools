@@ -21,7 +21,6 @@ package net.vdombox.object_editor.view.mediators
 	import mx.controls.Alert;
 	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
-	import mx.utils.Base64Encoder;
 	import mx.utils.ObjectProxy;
 	
 	import net.vdombox.object_editor.event.PopupEvent;
