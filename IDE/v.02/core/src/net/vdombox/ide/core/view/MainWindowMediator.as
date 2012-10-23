@@ -78,6 +78,8 @@ package net.vdombox.ide.core.view
 		private var moduleVO : ModuleVO;
 		
 		private var typeCheckSaved : String = "";
+		
+		private var logOut : Boolean = false;
 		/**
 		 *
 		 */
@@ -210,6 +212,7 @@ package net.vdombox.ide.core.view
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler, false, 0, true );
 			mainWindow.addEventListener( MainWindowEvent.LOGOUT, logoutHandler, true, 0, true );
 			mainWindow.addEventListener( MainWindowEvent.CLOSE, closeHandler, true, 0, true );
+			mainWindow.addEventListener( Event.CLOSING, closeHandler, false, 0, true );
 			mainWindow.addEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true, 0, true );
 			mainWindow.addEventListener( Event.CLOSE, closeWindowHandler, false, 0, true );
 		}
@@ -219,7 +222,8 @@ package net.vdombox.ide.core.view
 		{
 			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 			mainWindow.removeEventListener( MainWindowEvent.LOGOUT, logoutHandler, true );
-			mainWindow.removeEventListener( MainWindowEvent.CLOSE, closeHandler, true );
+			mainWindow.removeEventListener( MainWindowEvent.CLOSE, closeHandler, false );
+			mainWindow.removeEventListener( Event.CLOSING, closeHandler, false );
 			mainWindow.removeEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true );
 			mainWindow.removeEventListener( Event.CLOSE, closeWindowHandler );
 		}
@@ -314,13 +318,21 @@ package net.vdombox.ide.core.view
 		private function logoutHandler( event : MainWindowEvent = null ) : void
 		{
 			cleanup();
+			
+			logOut = true;
 
 			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNOUT );
 		}
 		
-		private function closeHandler( event : MainWindowEvent = null ) : void
+		private function closeHandler( event : * = null ) : void
 		{			
-			sendNotification( ApplicationFacade.CLOSE_IDE );
+			if ( logOut )
+				logOut = false
+			else
+			{
+				mainWindow.removeEventListener( Event.CLOSING, closeHandler, false );
+				sendNotification( ApplicationFacade.CLOSE_IDE );
+			}
 		}
 
 		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
@@ -334,6 +346,9 @@ package net.vdombox.ide.core.view
 
 		private function placeToolsets() : void
 		{
+			if ( !toolsetBar || !modulesList )
+				return;
+			
 			toolsetBar.removeAllElements();
 
 			if ( modulesList.length == 0 )

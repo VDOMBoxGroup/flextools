@@ -21,6 +21,7 @@ package net.vdombox.ide.core.view.components
 	import mx.controls.Image;
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
+	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 	
 	import spark.components.Group;
