@@ -16,6 +16,14 @@
 		<s:SolidColorStroke id="stroke2"
 							color="#ffffff"
 							weight="1"/>
+		
+		<s:SolidColorStroke id="stroke12"
+							color="#ffff00"
+							weight="1.7"/>
+		
+		<s:SolidColorStroke id="stroke22"
+							color="#ffff00"
+							weight="1"/>
 	</fx:Declarations>
 	
 	<s:states>
@@ -34,21 +42,21 @@
 	
 	<!-- back rect ... -->
 	<!-- vertical lines -->
-	<s:Line xFrom="10.5" yFrom="2" xTo="10.5" yTo="8" stroke="{stroke2}"/>		<!-- right -->
-	<s:Line xFrom="3.5" yFrom="2" xTo="3.5" yTo="8" stroke="{stroke2}"/>		<!-- left -->
+	<s:Line xFrom="10.5" yFrom="2" xTo="10.5" yTo="8" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- right -->
+	<s:Line xFrom="3.5" yFrom="2" xTo="3.5" yTo="8" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- left -->
 	
 	<!-- horizontal lines -->
-	<s:Line xFrom="3.5" yFrom="1" xTo="10" yTo="1" stroke="{stroke1}"/> 			<!-- top -->
-	<s:Line xFrom="3.5" yFrom="7" xTo="10.5" yTo="7" stroke="{stroke2}"/>		<!-- bottom -->
+	<s:Line xFrom="3.5" yFrom="1" xTo="10" yTo="1" stroke="{stroke1}" stroke.over="{stroke12}"/> 			<!-- top -->
+	<s:Line xFrom="3.5" yFrom="7" xTo="10.5" yTo="7" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- bottom -->
 	<!-- ... back rect -->
 	
 	<!-- front rect ... -->
 	<!-- vertical lines -->
-	<s:Line xFrom="7.5" yFrom="5" xTo="7.5" yTo="11" stroke="{stroke2}"/>		<!-- right -->
-	<s:Line xFrom="0.5" yFrom="5" xTo="0.5" yTo="11" stroke="{stroke2}"/>		<!-- left -->
+	<s:Line xFrom="7.5" yFrom="5" xTo="7.5" yTo="11" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- right -->
+	<s:Line xFrom="0.5" yFrom="5" xTo="0.5" yTo="11" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- left -->
 	
 	<!-- horizontal lines -->
-	<s:Line xFrom="0.5" yFrom="4" xTo="7" yTo="4" stroke="{stroke1}"/> 			<!-- top -->
-	<s:Line xFrom="0.5" yFrom="10" xTo="7.5" yTo="10" stroke="{stroke2}"/>		<!-- bottom -->
+	<s:Line xFrom="0.5" yFrom="4" xTo="7" yTo="4" stroke="{stroke1}" stroke.over="{stroke12}"/> 			<!-- top -->
+	<s:Line xFrom="0.5" yFrom="10" xTo="7.5" yTo="10" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- bottom -->
 	<!-- ... front rect -->
 </s:SparkSkin>

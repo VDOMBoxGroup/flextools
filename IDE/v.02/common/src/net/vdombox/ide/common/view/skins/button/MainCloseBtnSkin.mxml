@@ -12,6 +12,10 @@
 		<s:SolidColorStroke id="stroke1"
 							color="#ffffff"
 							weight="2.5"/>
+		
+		<s:SolidColorStroke id="stroke2"
+							color="#ffff00"
+							weight="2.5"/>
 	</fx:Declarations>
 	
 	<s:states>
@@ -28,7 +32,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:Line xFrom="1.5" yFrom="1.5" xTo="8.5" yTo="8.5" stroke="{stroke1}"/>
-	<s:Line xFrom="8.5" yFrom="1.5" xTo="1.5" yTo="8.5" stroke="{stroke1}"/>
+	<s:Line xFrom="1.5" yFrom="1.5" xTo="8.5" yTo="8.5" stroke="{stroke1}" stroke.over="{stroke2}"/>
+	<s:Line xFrom="8.5" yFrom="1.5" xTo="1.5" yTo="8.5" stroke="{stroke1}" stroke.over="{stroke2}"/>
 	
 </s:SparkSkin>
