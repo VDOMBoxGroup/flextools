@@ -1102,6 +1102,14 @@ package ro.victordramba.scriptarea
 			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_CHANGE, true, false ) );
 		}
 		
+		public override function replaceFind( findText : String, reText : String, replaceAll : Boolean = false ) : void
+		{
+			super.replaceFind( findText, reText, replaceAll );
+			
+			dipatchChange();
+			dipatchChangeText();
+		}
+		
 		public function renameByArray( words : Array, oldName : String, newName : String ) : void
 		{
 			var oldNameLength : int = oldName.length;

@@ -246,6 +246,11 @@ package ro.victordramba.scriptarea
 		{
 			return _selEnd;
 		}
+		
+		public function get selectionText() : String
+		{
+			return _text.substring( _selStart, _selEnd );
+		}
 
 		public function get text() : String
 		{

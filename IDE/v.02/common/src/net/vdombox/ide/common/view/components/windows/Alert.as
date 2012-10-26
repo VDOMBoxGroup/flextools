@@ -17,6 +17,7 @@ package net.vdombox.ide.common.view.components.windows
 	import net.vdombox.utils.WindowManager;
 	
 	import spark.components.Label;
+	import spark.components.TextArea;
 	import spark.components.Window;
 
 	public class Alert extends Window

@@ -205,6 +205,11 @@ package net.vdombox.editors
 			area.setSelection( beginIndex, endIndex );
 		}
 		
+		public function get selectionText() : String
+		{
+			return area.selectionText;
+		}
+		
 		public function findText( findText : String, type : int, caseSensitive : Boolean ) : Boolean
 		{
 			return area.findText( findText, type, caseSensitive );
