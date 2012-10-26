@@ -669,7 +669,7 @@ package net.vdombox.ide.core.model
 			
 			if ( result.hasOwnProperty( "Error" ) )
 			{
-				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
+				sendNotification( ApplicationFacade.WRITE_ERROR, { text : result.Error.toString() }  );
 				
 				if (  operationName == "copy_object" )
 					sendNotification( ApplicationFacade.ERROR_TO_PASTE, pageVO.applicationVO );
@@ -1108,7 +1108,7 @@ package net.vdombox.ide.core.model
 				}
 
 			}
-			sendNotification( ApplicationFacade.WRITE_ERROR, faultString );
+			sendNotification( ApplicationFacade.WRITE_ERROR, { text: faultString, detail : fault.detail } );
 			if ( notification )
 				facade.notifyObservers( notification );
 		}

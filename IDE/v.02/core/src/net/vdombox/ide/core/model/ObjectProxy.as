@@ -525,7 +525,7 @@ package net.vdombox.ide.core.model
 			
 			if ( result.hasOwnProperty( "Error" ) )
 			{
-				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
+				sendNotification( ApplicationFacade.WRITE_ERROR, { text : result.Error.toString() }  );
 				if ( operationName == "remote_call" )
 					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_ERROR_GETTED, { objectVO: objectVO, error: "" } );
 				
@@ -817,7 +817,7 @@ package net.vdombox.ide.core.model
 			var operationName : String = operation.name;
 			var notification : ProxyNotification;
 			
-			sendNotification( ApplicationFacade.WRITE_ERROR, fault.faultString );
+			sendNotification( ApplicationFacade.WRITE_ERROR, { text: fault.faultString, detail : fault.detail } );
 			
 			switch ( operationName )
 			{

@@ -12,6 +12,7 @@ package net.vdombox.ide.core.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var exitingEvent : Event = new Event( Event.EXITING, false, true );
+			NativeApplication.nativeApplication.autoExit = true;
 			NativeApplication.nativeApplication.addEventListener( Event.EXITING, exitingHandler );
 			
 			NativeApplication.nativeApplication.dispatchEvent(exitingEvent);

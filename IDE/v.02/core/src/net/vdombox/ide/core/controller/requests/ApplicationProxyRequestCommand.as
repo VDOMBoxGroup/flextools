@@ -184,7 +184,7 @@ package net.vdombox.ide.core.controller.requests
 					
 				case PPMApplicationTargetNames.ERROR:
 				{
-					sendNotification( ApplicationFacade.WRITE_ERROR, body.content );
+					sendNotification( ApplicationFacade.WRITE_ERROR, { text : body.content }  );
 					
 					break;
 				}

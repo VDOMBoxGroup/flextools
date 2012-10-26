@@ -289,7 +289,7 @@ package net.vdombox.ide.core.model
 		
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{	
-			sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
+			sendNotification( ApplicationFacade.WRITE_ERROR, { text: event.fault.faultString, detail : event.fault.faultDetail } );
 		}
 	}
 }

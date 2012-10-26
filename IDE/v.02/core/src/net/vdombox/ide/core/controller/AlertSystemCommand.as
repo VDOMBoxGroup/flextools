@@ -15,11 +15,13 @@ package net.vdombox.ide.core.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
-			var label : String = body as String;
+			var label : String = body.text as String;
+			var detail : String = body.detail as String;
 
 			var alertWindow : AlertWindow = new AlertWindow();
 
 			alertWindow.content = label;
+			alertWindow.detail = detail;
 			
 			switch ( notification.getName() )
 			{

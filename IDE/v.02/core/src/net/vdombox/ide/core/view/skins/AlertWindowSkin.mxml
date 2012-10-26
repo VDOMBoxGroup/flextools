@@ -12,6 +12,8 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.common.view.components.button.AlertButton;
+			import net.vdombox.ide.common.view.components.windows.Alert;
 			
 			[Bindable]
 			[Embed( source = "assets/Warning.png" )]
@@ -27,6 +29,7 @@
 					noButton.label = resourceManager.getString( 'Core_General', 'error_no' );
 					noButton.icon = no_warning;
 					okButton.icon = VDOMImage.Save;
+					showDetailBlock.visible = false;
 				}
 				else if ( hostComponent.state == "question2" )
 				{
@@ -43,6 +46,16 @@
 					okButton.includeInLayout = false;
 					noButton.label = resourceManager.getString( 'Core_General', 'error_Close' );
 				}
+			}
+			
+			protected function textarea1_clickHandler(event:MouseEvent):void
+			{
+				hostComponent.maxHeight = 250;
+				hostComponent.height = 250;
+				showDetailBlock.visible = false;
+				showDetailBlock.includeInLayout = false;
+				detailText.includeInLayout = true;
+				detailText.visible = true;
 			}
 			
 		]]>
@@ -94,6 +107,17 @@
 			</s:HGroup>
 				
 		</s:Group>
+		
+		<s:HGroup id="showDetailBlock" 
+				  width="100%" horizontalAlign="right" paddingRight="5">
+			
+			<s:Label text="Show Detail" color="#FFFFFF" click="textarea1_clickHandler(event)"/>
+			
+		</s:HGroup>
+		
+		<s:TextArea id="detailText" text="{hostComponent.detail}" verticalAlign="middle" visible="false" includeInLayout="false"
+					width="100%" height="100%" paddingTop="2"
+					editable="false" contentBackgroundAlpha="0" borderVisible="false" color="#FFFFFF"/>
 			
 		<s:Group width="100%" height="36">
 				

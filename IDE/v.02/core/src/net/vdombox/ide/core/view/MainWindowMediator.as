@@ -160,7 +160,7 @@ package net.vdombox.ide.core.view
 					}
 					else
 					{
-						sendNotification( ApplicationFacade.WRITE_QUESTION, ResourceManager.getInstance().getString( 'Core_General', 'save_the_changes' ) );
+						sendNotification( ApplicationFacade.WRITE_QUESTION, { text : ResourceManager.getInstance().getString( 'Core_General', 'save_the_changes' ) }  );
 					}
 					
 					break;

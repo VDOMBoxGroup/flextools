@@ -811,7 +811,7 @@ package net.vdombox.ide.core.model
 					break;
 				}
 			}
-			sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
+			sendNotification( ApplicationFacade.WRITE_ERROR,  { text: fault.faultString, detail : fault.detail } );
 			
 		}
 		
@@ -830,7 +830,7 @@ package net.vdombox.ide.core.model
 			
 			if ( result.hasOwnProperty( "Error" ) )
 			{
-				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
+				sendNotification( ApplicationFacade.WRITE_ERROR, { text : result.Error.toString() } );
 				
 				if (  operationName == "copy_object" )
 					sendNotification( ApplicationFacade.ERROR_TO_PASTE, applicationVO );

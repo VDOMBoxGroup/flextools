@@ -387,7 +387,7 @@ package net.vdombox.ide.core.model
 
 			if ( !data || data.bytesAvailable == 0 )
 			{
-				sendNotification( ApplicationFacade.WRITE_ERROR, ResourceManager.getInstance().getString( 'Core_General', 'error_0_bytes' ) );
+				sendNotification( ApplicationFacade.WRITE_ERROR, { text : ResourceManager.getInstance().getString( 'Core_General', 'error_0_bytes' ) } );
 				resourceVO.setStatus( ResourceVO.LOAD_ERROR );
 				sendNotification( ApplicationFacade.RESOURCE_SETTED_ERROR, resourceVO );
 				return;
@@ -427,7 +427,7 @@ package net.vdombox.ide.core.model
 			
 			if ( result.hasOwnProperty( "Error" ) )
 			{
-				sendNotification( ApplicationFacade.WRITE_ERROR, result.Error.toString() );
+				sendNotification( ApplicationFacade.WRITE_ERROR, { text : result.Error.toString() } );
 				
 				resourceVO = new ResourceVO("");
 				resourceVO.setStatus( ResourceVO.LOAD_ERROR );

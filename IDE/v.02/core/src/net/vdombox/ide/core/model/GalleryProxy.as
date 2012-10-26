@@ -66,7 +66,7 @@ package net.vdombox.ide.core.model
 
 		private function fileStream_ioErrorHandler( event : IOErrorEvent ) : void
 		{
-				sendNotification( ApplicationFacade.WRITE_ERROR, event.text );
+				sendNotification( ApplicationFacade.WRITE_ERROR, { text : event.text }  );
 		}
 
 		private function init() : void
