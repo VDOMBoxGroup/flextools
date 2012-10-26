@@ -660,6 +660,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			parentRenderer = rendProxy.getRendererByVO( element.renderVO.parent.vdomObjectVO );
 			
+			if ( !parentRenderer )
+				return;
+			
 			if (!(parentRenderer is PageRenderer))
 			{
 				parentRenderer.refreshOnChildTransform(element, curMaxRightPosition, curMaxBottomPosition);
@@ -1013,7 +1016,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function partOpenedHandler( event : EditorEvent ) : void
 		{
 			if ( event.type == EditorEvent.WYSIWYG_OPENED && editor.editorVO.vdomObjectVO )
-				sendNotification( Notifications.GET_WYSIWYG, editor.editorVO.vdomObjectVO );
+				updateData();
+				//sendNotification( Notifications.GET_WYSIWYG, editor.editorVO.vdomObjectVO );
 			else if ( event.type == EditorEvent.XML_EDITOR_OPENED )
 			{
 				var selectedPage : IVDOMObjectVO = statesProxy.selectedPage as IVDOMObjectVO;
@@ -1345,6 +1349,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sendNotification( Notifications.SAVE_ATTRIBUTES_REQUEST, event.vdomObjectAttributesVO );
 		}
 		
+		private function updateData() : void
+		{
+			sendNotification( Notifications.GET_WYSIWYG, statesProxy.selectedPage );
+			sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
+			
+			if ( statesProxy.selectedObject )
+				sendNotification( Notifications.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
+			else if ( statesProxy.selectedPage )
+				sendNotification( Notifications.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
+		}
+		
 		private function keyHandler( event : KeyboardEvent ) : void
 		{
 			if ( !component.skin || component.skin.currentState == "xml" || component.skin.currentState == "xmlDisabled" )
@@ -1352,13 +1367,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			if ( event.keyCode == Keyboard.F5 )
 			{
-				sendNotification( Notifications.GET_WYSIWYG, statesProxy.selectedPage );
-				sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
-				
-				if ( statesProxy.selectedObject )
-					sendNotification( Notifications.GET_OBJECT_ATTRIBUTES, statesProxy.selectedObject );
-				else if ( statesProxy.selectedPage )
-					sendNotification( Notifications.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
+				updateData();
 			}
 			else if ( event.ctrlKey )
 			{

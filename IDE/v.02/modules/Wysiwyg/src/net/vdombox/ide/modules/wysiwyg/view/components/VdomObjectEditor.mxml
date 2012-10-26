@@ -16,6 +16,7 @@
 			import mx.events.FlexEvent;
 			import mx.events.StateChangeEvent;
 			
+			import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 			import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
 			import net.vdombox.ide.common.view.components.button.WorkAreaButton;
@@ -62,6 +63,9 @@
 			
 			[Bindable]
 			private var _value : VdomObjectXMLPresentationVO;
+			
+			[Bindable]
+			private var unsaved : Boolean = false;
 			
 			public function get editorVO() : EditorVO
 			{
@@ -234,10 +238,12 @@
 				dispatchStateEvent();
 			}
 
-			private function saveXMLButton_clickHandler( event : MouseEvent ) : void
+			private function saveXMLButton_clickHandler( event : MouseEvent = null ) : void
 			{
 				if( xmlPresentation )
 				{
+					saveXMLButton.highlighted = false;
+					
 					_value.xmlPresentation = xmlScriptEditor.scriptAreaComponent.text;
 					dispatchEvent( new EditorEvent( EditorEvent.XML_SAVE ) );
 				}
@@ -343,6 +349,22 @@
 				editor.spinner.visible = value;
 			}
 			
+			private function xmlScriptEditorKeyDownHandler( event : KeyboardEvent ) : void
+			{
+				if ( event.keyCode == Keyboard.S && event.ctrlKey )
+					saveXMLButton_clickHandler();
+			}
+			
+			protected function xmlScriptEditor_creationCompleteHandler(event:FlexEvent):void
+			{
+				xmlScriptEditor.addEventListener(ScriptAreaComponenrEvent.TEXT_CHANGE, setStateInUnsave, true, 0, true );
+			}
+			
+			private function setStateInUnsave( event : Event = null ) : void
+			{				
+				saveXMLButton.highlighted = true;
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -367,7 +389,9 @@
 
 		<vdomxml:XMLScriptEditor id="xmlScriptEditor"
 								 height="100%" width="100%"
-								 includeIn="xml, xmlDisabled"/>
+								 includeIn="xml, xmlDisabled"
+								 keyDown="xmlScriptEditorKeyDownHandler(event)"
+								 creationComplete="xmlScriptEditor_creationCompleteHandler(event)"/>
 
 	</s:Group>
 

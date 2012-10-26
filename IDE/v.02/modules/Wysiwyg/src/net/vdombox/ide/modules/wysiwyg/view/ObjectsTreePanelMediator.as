@@ -470,7 +470,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				if ( page.@id == id )
 					return page;
-			}
+			} 
 
 			return null;
 		}
