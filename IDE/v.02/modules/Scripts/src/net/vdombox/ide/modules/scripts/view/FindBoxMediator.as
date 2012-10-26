@@ -99,8 +99,10 @@ package net.vdombox.ide.modules.scripts.view
 						if ( findBox.currentState == "global" )
 							findBox.currentState = "find"
 					}
-					else
-						findBox.findText.setFocus();
+					
+					findBox.findText.text = body as String;
+						
+					findBox.findText.setFocus();
 					
 					break;
 				}
@@ -112,8 +114,10 @@ package net.vdombox.ide.modules.scripts.view
 						scriptArea.currentState = "findG";
 						findBox.currentState = "global"
 					}
-					else
-						findBox.findText.setFocus();
+						
+					findBox.findText.text = body as String;
+					
+					findBox.findText.setFocus();
 					
 					break;
 				}

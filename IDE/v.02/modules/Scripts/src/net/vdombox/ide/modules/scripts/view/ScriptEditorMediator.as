@@ -206,12 +206,12 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private function scriptEditor_openFindHandler( event : ScriptEditorEvent ) : void
 		{			
-			sendNotification( Notifications.OPEN_FIND_SCRIPT );
+			sendNotification( Notifications.OPEN_FIND_SCRIPT, scriptEditor.scriptEditor.scriptAreaComponent.selectionText );
 		}
 		
 		private function scriptEditor_openFindGlobalHandler( event : ScriptEditorEvent ) : void
 		{			
-			sendNotification( Notifications.OPEN_FIND_GLOBAL_SCRIPT );
+			sendNotification( Notifications.OPEN_FIND_GLOBAL_SCRIPT, scriptEditor.scriptEditor.scriptAreaComponent.selectionText );
 		}
 		
 		private function renameHandler( event : ScriptAreaComponenrEvent ) : void
