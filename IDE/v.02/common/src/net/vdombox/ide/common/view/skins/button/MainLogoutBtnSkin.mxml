@@ -17,11 +17,30 @@
 		<s:State name="up" />
 	</s:states>
 	
-	<mx:Image source="@Embed(source='assets/logout_but.png')" />
-	<!-- SkinParts
-	name=labelDisplay, type=spark.components.supportClasses.TextBase, required=false
-	-->
+	<fx:Declarations>
+		<s:SolidColorStroke id="stroke1"
+							color="#ffffff"
+							weight="2"/>
+		
+		<s:SolidColorStroke id="stroke2"
+							color="#ffff00"
+							weight="2"/>
+	</fx:Declarations>
 	
+	<!-- vertical lines -->
+	<s:Line xFrom="0.5" yFrom="2" xTo="0.5" yTo="8" stroke="{stroke1}" stroke.over="{stroke2}"/>		
+	
+	<!-- horizontal lines -->
+	<s:Line xFrom="0.5" yFrom="1" xTo="6" yTo="1" stroke="{stroke1}" stroke.over="{stroke2}"/> 			<!-- top -->
+	<s:Line xFrom="0.5" yFrom="9" xTo="6" yTo="9" stroke="{stroke1}" stroke.over="{stroke2}"/>		<!-- bottom -->
+	
+	
+	<!-- arrow -->
+	
+	<s:Line xFrom="5" yFrom="5" xTo="12" yTo="5" stroke="{stroke1}" stroke.over="{stroke2}"/>		<!-- medium -->
+	
+	<s:Line xFrom="9" yFrom="2" xTo="12" yTo="5" stroke="{stroke1}" stroke.over="{stroke2}"/>		<!-- arrow top -->
+	<s:Line xFrom="9" yFrom="8" xTo="12" yTo="5" stroke="{stroke1}" stroke.over="{stroke2}"/>		<!-- arrow bottom -->
 	
 	
 </s:SparkSkin>

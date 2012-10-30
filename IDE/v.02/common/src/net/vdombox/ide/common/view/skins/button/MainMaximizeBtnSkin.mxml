@@ -16,6 +16,14 @@
 		<s:SolidColorStroke id="stroke2"
 							color="#ffffff"
 							weight="1"/>
+		
+		<s:SolidColorStroke id="stroke12"
+							color="#ffff00"
+							weight="2"/>
+		
+		<s:SolidColorStroke id="stroke22"
+							color="#ffff00"
+							weight="1"/>
 	</fx:Declarations>
 	
 	<s:states>
@@ -33,11 +41,11 @@
 	</s:Rect>
 	
 	<!-- vertical lines -->
-	<s:Line xFrom="9.5" yFrom="2" xTo="9.5" yTo="10" stroke="{stroke2}"/>		<!-- right -->
-	<s:Line xFrom="0.5" yFrom="2" xTo="0.5" yTo="10" stroke="{stroke2}"/>		<!-- left -->
+	<s:Line xFrom="9.5" yFrom="2" xTo="9.5" yTo="10" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- right -->
+	<s:Line xFrom="0.5" yFrom="2" xTo="0.5" yTo="10" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- left -->
 	
 	<!-- horizontal lines -->
-	<s:Line xFrom="0.5" yFrom="1" xTo="9" yTo="1" stroke="{stroke1}"/> 			<!-- top -->
-	<s:Line xFrom="0.5" yFrom="9" xTo="9.5" yTo="9" stroke="{stroke2}"/>		<!-- bottom -->
+	<s:Line xFrom="0.5" yFrom="1" xTo="9" yTo="1" stroke="{stroke1}" stroke.over="{stroke12}"/> 			<!-- top -->
+	<s:Line xFrom="0.5" yFrom="9" xTo="9.5" yTo="9" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- bottom -->
 	
 </s:SparkSkin>
