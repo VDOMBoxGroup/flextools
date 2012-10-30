@@ -880,10 +880,15 @@ package net.vdombox.ide.core.model
 				{
 					createPagesList( result.Objects[ 0 ] );
 					
-					sendNotification( ApplicationFacade.APPLICATION_PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice() } );
+					if ( _pages )
+					{
 					
-					sendNotification( ApplicationFacade.PAGE_CHECK_SELECTED, { pagesVO: _pages.slice() } );
-					sendNotification( ApplicationFacade.PAGE_CHECK_INDEX, { pagesVO: _pages.slice() } );
+						sendNotification( ApplicationFacade.APPLICATION_PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice() } );
+						
+						sendNotification( ApplicationFacade.PAGE_CHECK_SELECTED, { pagesVO: _pages.slice() } );
+						sendNotification( ApplicationFacade.PAGE_CHECK_INDEX, { pagesVO: _pages.slice() } );
+					
+					}
 					break;
 				}
 					
