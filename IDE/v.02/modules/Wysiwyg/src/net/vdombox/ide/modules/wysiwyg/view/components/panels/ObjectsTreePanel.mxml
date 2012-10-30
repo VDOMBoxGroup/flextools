@@ -21,13 +21,13 @@
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 			import net.vdombox.utils.XMLUtils;
 
-			[Bindable]
 			private var _pages : XMLList;
 
 			private var lastHighlightedItem : XML;
 
 			private var isMiddleDown : Boolean;
 
+			[Bindable]
 			public function get pages() : XMLList
 			{
 				return _pages;
@@ -92,7 +92,7 @@
 				if ( !pageXMLTree )
 					return;
 				
-				var pageXML : XML = _pages.( @id == pageXMLTree.@id )[ 0 ];
+				var pageXML : XML = pages.( @id == pageXMLTree.@id )[ 0 ];
 				
 				if ( !pageXML )
 					return;
@@ -130,7 +130,7 @@
 			{
 				var currentID : String;
 
-				if ( !_pages )
+				if ( !pages )
 					return;
 
 				try
@@ -183,7 +183,7 @@
 			{
 				var currentID : String;
 
-				if ( !_pages )
+				if ( !pages )
 					return;
 				
 				try
@@ -219,10 +219,10 @@
 			{
 				try
 				{
-					elementForSelection = _pages.( @id == id )[ 0 ];
+					elementForSelection = pages.( @id == id )[ 0 ];
 
 					if ( !elementForSelection )
-						elementForSelection = _pages..object.( @id == id )[ 0 ];
+						elementForSelection = pages..object.( @id == id )[ 0 ];
 				}
 				catch ( error : Error )
 				{
@@ -243,10 +243,10 @@
 				var id : String = object.id;
 				try
 				{
-					element = _pages.( @id == id )[ 0 ];
+					element = pages.( @id == id )[ 0 ];
 					
 					if ( !element )
-						element = _pages..object.( @id == id)[ 0 ];
+						element = pages..object.( @id == id)[ 0 ];
 				}
 				catch ( error : Error )
 				{
@@ -469,7 +469,7 @@
 			  click="image1_clickHandler(event)"/>
 	
 	<mx:Tree id="objectsTree" borderVisible="false" maxHorizontalScrollPosition="140" horizontalScrollPolicy="auto"
-			 dataProvider="{ _pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"
+			 dataProvider="{ pages }" doubleClickEnabled="true" height="100%" labelField="@name" showRoot="true" width="100%"
 			 allowMultipleSelection="true"
 			 contentBackgroundAlpha="0" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.ObjectTreePanelItemRenderer"
 			 contextMenu="objectsTree_contextMenuHandler(event)"/>

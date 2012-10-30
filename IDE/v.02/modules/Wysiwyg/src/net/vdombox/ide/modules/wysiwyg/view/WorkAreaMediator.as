@@ -105,6 +105,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
 					vdomObjectVO = body as IVDOMObjectVO;
+					
+					if ( !vdomObjectVO )
+					{
+						workArea.closeAllEditors();
+						break;
+					}
+					
 					editor = workArea.getEditorByVO( vdomObjectVO );
 
 					if ( editor )

@@ -205,8 +205,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if (pageXML)
 					{
 						//objectsTreePanel.objectsTree.selectedIndex = -1;
+						
+						var sourceXMLList : XMLList = pageXMLTree.*;
+						
 						pageXML.setChildren( new XMLList() ); //TODO: strange construction
-						pageXML.appendChild( pageXMLTree.* );
+						pageXML.appendChild( sourceXMLList );
+						
+						if ( sourceXMLList.length() == 0 )
+							objectsTreePanel.pages = objectsTreePanel.pages.copy();
 					}
 
 					selectCurrentPage( false );
