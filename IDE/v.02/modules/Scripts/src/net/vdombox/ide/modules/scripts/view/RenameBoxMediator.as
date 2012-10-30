@@ -59,9 +59,9 @@ package net.vdombox.ide.modules.scripts.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( Notifications.OPEN_RENAME_IN_SCRIPT);
-			interests.push( Notifications.PAGES_GETTED );
+			//interests.push( Notifications.PAGES_GETTED );
 			
-			interests.push( Notifications.ALL_SERVER_ACTIONS_GETTED );
+			//interests.push( Notifications.ALL_SERVER_ACTIONS_GETTED );
 			
 			return interests;
 		}
