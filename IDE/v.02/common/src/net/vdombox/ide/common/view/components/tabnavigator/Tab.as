@@ -103,6 +103,11 @@ package net.vdombox.ide.common.view.components.tabnavigator
 			
 			return element;
 		}
+		
+		public function removeAllElements() : void
+		{
+			_objects.splice( 0, _objects.length );;
+		}
 
 		private function checkForRangeError( index : int, addingElement : Boolean = false ) : void
 		{

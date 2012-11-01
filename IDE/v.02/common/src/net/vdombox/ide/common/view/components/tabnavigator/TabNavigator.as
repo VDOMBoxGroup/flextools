@@ -111,6 +111,10 @@ package net.vdombox.ide.common.view.components.tabnavigator
 					removeElement( element );
 			}
 			
+			tab.removeAllElements();
+			tab.removeEventListener( TabEvent.ELEMENT_ADD, tab_elementAdd );
+			tab.removeEventListener( TabEvent.ELEMENT_REMOVE, tab_elementRemove );
+			
 			if ( historyStack && historyStack.length > 0 )
 			{
 				var historyIndex : int = historyStack.indexOf( tab );
@@ -228,6 +232,8 @@ package net.vdombox.ide.common.view.components.tabnavigator
 		protected function closeTabHandler( event : ListEvent ) : void
 		{
 			var index : int = event.rowIndex;
+			
+			var tab : Tab = getTabAt( index );
 			
 			if ( index >= 0 )
 				removeTabAt( index );

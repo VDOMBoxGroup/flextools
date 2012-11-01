@@ -15,6 +15,11 @@
 		<s:State name="down" />
 		<s:State name="over" />
 		<s:State name="up" />
+		<fx:Script>
+			<![CDATA[
+				import net.vdombox.ide.common.view.components.VDOMImage;
+			]]>
+		</fx:Script>
 	</s:states>
 	
 	<fx:Declarations>
@@ -26,6 +31,8 @@
 							color="#ffff00"
 							weight="2"/>
 	</fx:Declarations>
+	
+	<mx:Image width="100%" height="100%" source="{ VDOMImage.Clear }"/>
 	
 	<!-- vertical lines -->
 	<s:Line xFrom="0.5" yFrom="2" xTo="0.5" yTo="8" stroke="{stroke1}" stroke.over="{stroke2}"/>		

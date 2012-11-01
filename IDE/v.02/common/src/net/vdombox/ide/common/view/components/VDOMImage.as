@@ -166,7 +166,9 @@ package net.vdombox.ide.common.view.components
 		[Embed( source="assets/vdomimage/refresh.png" )]
 		public static var Refresh : Class;
 		
-		
+		[Bindable]
+		[Embed( source="assets/vdomimage/clear.png" )]
+		public static var Clear : Class;
 		
 	}
 }
